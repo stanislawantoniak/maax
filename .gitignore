@@ -1,0 +1,9 @@
+/var/*
+/media/*
+/app/etc/local.xml
+/.htaccess
+/nbproject/*
+/sitemap.xml
+/catalog.xml
+*.orig
+/phpinfo.php
