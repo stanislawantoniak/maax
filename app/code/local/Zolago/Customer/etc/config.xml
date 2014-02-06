@@ -56,6 +56,13 @@
                     <frontName>zolagocustomer</frontName>
                 </args>
             </zolagocustomer>
+            <customer>  
+                <args>  
+                    <modules>  
+                        <Zolago_Customer before="Mage_Customer">Zolago_Customer</Zolago_Customer>  
+                    </modules>  
+                </args>  
+            </customer> 
         </routers>
         <translate>
             <modules>
