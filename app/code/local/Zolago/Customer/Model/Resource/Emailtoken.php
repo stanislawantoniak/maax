@@ -1,7 +1,7 @@
 <?php
 class Zolago_Customer_Model_Resource_Emailtoken extends Mage_Core_Model_Resource_Db_Abstract{
     protected function _construct() {
-        $this->_init('zolagocustomer/emailtoken', "auction_id");
+        $this->_init('zolagocustomer/emailtoken', "token_id");
     }
     /**
      * Set times
