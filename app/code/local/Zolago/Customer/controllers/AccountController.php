@@ -54,6 +54,7 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
         if(!$model->sendMessage()){
             throw new Exception(Mage::helper("customer")->__('Cannot send email'));
         }
+        die("TAK");
         
     }
    

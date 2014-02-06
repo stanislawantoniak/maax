@@ -1,5 +1,9 @@
 <?php
 class Zolago_Customer_Model_Emailtoken extends Mage_Core_Model_Abstract{
+    
+    const EMAIL_TEMPLATE = "zolagocustomer_confirmemail"; // Fixed @todo Move config configurbale emali
+    const CONFIRM_PATH = "zolagocustomer/confirm/confirm";
+    
     protected function _construct() {
         $this->_init('zolagocustomer/emailtoken');
     }
@@ -19,22 +23,59 @@ class Zolago_Customer_Model_Emailtoken extends Mage_Core_Model_Abstract{
             return false;
         }
         
-        $variables = array(
-            "customer" => Mage::getModel("customer/customer")->load($this->getCustomerId()),
+        $store = $customer->getStore();
+        
+        $templateParams = array(
+            "customer" => $customer,
             "new_email" => $this->getNewEmail(),
-            "store" => $customer->getStore(),
+            "store" => $store,
+            "confirm_link" => $this->getConfirmLink()
             
         );
         
-        $emailModel = Mage::getModel("core/email_template");
-        /* @var $emailModel Mage_Core_Model_Email_Template */
-        $filter = $emailModel->getTemplateFilter();
-        /* @var $filter Mage_Core_Model_Email_Template_Filter */
-        $filter->setVariables($variables);
-        $filter->setStoreId($customer->getStoreId());
+        return $this->_sendEmailTemplate($customer, self::EMAIL_TEMPLATE, $templateParams, $store->getId());
+    }
+    
+    public function getConfirmLink($token=null) {
+        if($token===null){
+            $token = $this->getToken();
+        }
+        return Mage::getUrl(self::CONFIRM_PATH, array("token"=>$token));
+    }
+    
+    protected function _sendEmailTemplate($customer, $template, $templateParams = array(), $storeId = null)
+    {
+        $emailTemplate = Mage::getModel("core/email_template");
+        /* @var $emailTempalte Mage_Core_Model_Email_Template */
+       
         
-        $emailModel->setTemplateCode("zolagocustomer_confirmemail");
-        return $emailModel->send($this->getNewEmail());
+        // Set required design parameters and delegate email sending to Mage_Core_Model_Email_Template
+        $emailTemplate->
+            setDesignConfig(array('area' => 'frontend', 'store' => $storeId));
+        
+        if (is_numeric($template)) {
+            $emailTemplate->load($template);
+        } else {
+            $localeCode = Mage::getStoreConfig('general/locale/code', $storeId);
+            $emailTemplate->loadDefault($template, $localeCode);
+        }
+
+        $senderName = Mage::getStoreConfig('trans_email/ident_support/name', $storeId);
+        $senderEmail = Mage::getStoreConfig('trans_email/ident_support/email', $storeId);
+        
+        $emailTemplate->setSenderEmail($senderEmail);
+        $emailTemplate->setSenderName($senderName);
+        
+        if(!$emailTemplate->getTemplateSubject()){
+            $emailTemplate->setTemplateSubject(Mage::helper("zolagocustomer")->__("Confirm new Email address"));
+        }
+        
+        return $emailTemplate->send(
+            $this->getNewEmail(), 
+            $customer->getName(),
+            $templateParams
+        );
+            
     }
 }
 
