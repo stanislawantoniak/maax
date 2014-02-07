@@ -34,7 +34,6 @@ class Zolago_Customer_ConfirmController extends Mage_Core_Controller_Front_Actio
         $modelUser->setEmail($email);        
         $modelUser->save();
         
-        return;
     }
 
     /**
