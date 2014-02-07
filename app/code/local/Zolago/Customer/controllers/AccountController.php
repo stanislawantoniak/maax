@@ -15,6 +15,11 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
             $origEmail = trim($customer->getEmail());
             $postEmail = trim($this->getRequest()->getParam('email'));
             
+            if(empty($postEmail)){
+                $postEmail = $origEmail;
+                $this->getRequest()->setParam("email", $origEmail);
+            }
+            
             if($origEmail==$postEmail){
                 return parent::editPostAction();
             }
@@ -54,7 +59,6 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
         if(!$model->sendMessage()){
             throw new Exception(Mage::helper("customer")->__('Cannot send email'));
         }
-        die("TAK");
         
     }
    

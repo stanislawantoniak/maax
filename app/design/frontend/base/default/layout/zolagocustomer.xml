@@ -1,6 +1,10 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
-<!--    <zolagocustomer_confirm_confirm>
-        <update handle="page_one_column" />
-    </zolagocustomer_confirm_confirm>-->
+    <customer_account_edit>
+        <reference name="customer_edit">
+            <action method="setTemplate">
+                <template>zolagocustomer/form/edit.phtml</template>
+            </action>
+        </reference>
+    </customer_account_edit>
 </layout>
