@@ -7,5 +7,13 @@ class Zolago_Customer_Model_Resource_Emailtoken_Collection
         parent::_construct();
         $this->_init('zolagocustomer/emailtoken');
     }
-
+    
+    /**
+     * filtrowanie po tokenie
+     */
+    public function setFilterToken($token) {	
+        $this->getSelect()
+            ->where('token = \''.$token.'\'');
+        return $this;
+    }
 }
