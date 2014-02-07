@@ -1,0 +1,8 @@
+"Error: Empty token","Błąd: Brak tokenu"
+"Error: Wrong token","Błąd: Nieprawidłowy lub wykorzystany token"
+"Error: System error during request":"Wystąpił błąd systemu! Spróbuj ponownie później."
+"Info: Email changed","Adres email został zmieniony"
+"New email address will be set after confirmation. Check your new-email account. Change request expires after %s hours.","Nowy adres email zostanie ustawiony po jego potwierdzeniu. Sprawdź wiadomości na nowo podanym koncie pocztowym. Link potwierdzający zostanie unieważniony po %s godzinach."
+"Cannot save the customer.","Nie można zapisać zmian."
+"Cannot send email","Błąd przy wysyłaniu wiadomości email"
+"Confirm new Email address","Potwierdź zmianę adresu email"
