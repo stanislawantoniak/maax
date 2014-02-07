@@ -34,7 +34,9 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
                 $this->getRequest()->setParam("email", $origEmail);
                 $this->_registerEmailToken($customer, $postEmail);
                 $this->_getSession()->addSuccess(
-                        Mage::helper("zolagocustomer")->__("New email address will be set after confirmation. Check your new-email account. Change request expires after %s hours.", Zolago_Customer_Model_Emailtoken::HOURS_EXPIRE)
+                        Mage::helper("zolagocustomer")
+                            ->__("New email address will be set after confirmation. Check your new-email account. Change request expires after %s hours.", 
+                                Zolago_Customer_Model_Emailtoken::HOURS_EXPIRE)
                 );
             }catch(Exception $e){
                 Mage::logException($e);
