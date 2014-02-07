@@ -13,8 +13,7 @@ class Zolago_Customer_Model_Resource_Emailtoken_Collection
      */
     public function setFilterToken($token) {	
         $this->getSelect()
-            ->addFieldToFilter('token',
-                array('eq',$token));
+            ->where('token = \''.$token.'\'');
         return $this;
     }
 }

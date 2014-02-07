@@ -19,12 +19,18 @@ class Zolago_Customer_ConfirmController extends Mage_Core_Controller_Front_Actio
         }        
         $model = Mage::getModel('zolagocustomer/emailtoken');
         $collection = $model->getCollection();
-        echo 'c:';
-        print_R($collection);
-        die();
         $collection->setFilterToken($params['token']);
-        print_R($collection);
-        die();        
+        if (!count($collection)) {
+            Mage::throwException($this->__('Error: Wrong token'));
+        }
+        $searchModel = $collection->getFirstItem();
+        $email = $searchModel->getNewEmail();
+        $customerId = $searchModel->getCustomerId();
+        $searchModel->delete();
+        $modelUser = Mage::getModel('customer/customer');
+        $modelUser->load($customerId);
+        $modelUser->setEmail($email);        
+        $modelUser->save();
         return;
     }
 
@@ -39,6 +45,7 @@ class Zolago_Customer_ConfirmController extends Mage_Core_Controller_Front_Actio
         } catch (Mage_Core_Exception $e) {
             $error = $e->getMessage();
         } catch (Exception $e) {
+            Mage::logException($e);
             $error = Mage::helper('zolagocustomer')->__('Error: System error during request');
         }
         if ($error) {
