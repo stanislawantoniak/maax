@@ -3,6 +3,7 @@ class Zolago_Customer_Model_Emailtoken extends Mage_Core_Model_Abstract{
     
     const EMAIL_TEMPLATE = "zolagocustomer_confirmemail"; // Fixed @todo Move config configurbale emali
     const CONFIRM_PATH = "zolagocustomer/confirm/confirm";
+    const HOURS_EXPIRE = 24;
     
     protected function _construct() {
         $this->_init('zolagocustomer/emailtoken');
