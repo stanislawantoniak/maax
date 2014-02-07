@@ -1,5 +1,6 @@
 <?php
-class Zolago_Customer_Model_Resource_Emailtoken extends Mage_Core_Model_Resource_Db_Abstract{
+class Zolago_Customer_Model_Resource_Emailtoken 
+    extends Mage_Core_Model_Resource_Db_Abstract{
     
 
     protected function _construct() {
@@ -14,7 +15,10 @@ class Zolago_Customer_Model_Resource_Emailtoken extends Mage_Core_Model_Resource
     {
         // Times
         $currentTime = Varien_Date::now();
-        if ((!$object->getId() || $object->isObjectNew()) && !$object->getCreatedAt()) {
+        if ((!$object->getId() 
+            || $object->isObjectNew()) 
+            && !$object->getCreatedAt()) {
+            
             $object->setCreatedAt($currentTime);
         }
         $object->setUpdatedAt($currentTime);
@@ -27,7 +31,8 @@ class Zolago_Customer_Model_Resource_Emailtoken extends Mage_Core_Model_Resource
      */
     public function cleanOldTokens(Zend_Date $date) {
         $write = $this->_getWriteAdapter();
-        $whereCond = $write->quoteInto("created_at<?", $date->toString(Varien_Date::DATE_INTERNAL_FORMAT));
+        $whereCond = $write->quoteInto("created_at<?", 
+            $date->toString(Varien_Date::DATE_INTERNAL_FORMAT));
         return $write->delete($this->getMainTable(), $whereCond);
     }
     

@@ -40,7 +40,9 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
                 );
             }catch(Exception $e){
                 Mage::logException($e);
-                $this->_getSession()->addError(Mage::helper("customer")->__('Cannot save the customer.'));
+                $this->_getSession()->addError(Mage::helper("customer")
+                    ->__('Cannot save the customer.'));
+                    
                 return $this->_redirectReferer();
             }
         }
@@ -48,7 +50,9 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
         return parent::editPostAction();
     }
     
-    protected function _registerEmailToken(Mage_Customer_Model_Customer $customer, $newEmail){
+    protected function _registerEmailToken(
+        Mage_Customer_Model_Customer $customer, $newEmail
+    ){
         // Save Model
         $model = Mage::getModel("zolagocustomer/emailtoken");
         $model->setData(array(
@@ -59,7 +63,8 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
         $model->save();
         
         if(!$model->sendMessage()){
-            throw new Exception(Mage::helper("customer")->__('Cannot send email'));
+            throw new Exception(Mage::helper("customer")
+                ->__('Cannot send email'));
         }
         
     }

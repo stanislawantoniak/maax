@@ -1,7 +1,8 @@
 <?php
 class Zolago_Customer_Model_Emailtoken extends Mage_Core_Model_Abstract{
     
-    const EMAIL_TEMPLATE = "zolagocustomer_confirmemail"; // Fixed @todo Move config configurbale emali
+    const EMAIL_TEMPLATE = "zolagocustomer_confirmemail"; 
+        // Fixed @todo Move config configurbale emali
     const CONFIRM_PATH = "zolagocustomer/confirm/confirm";
     const HOURS_EXPIRE = 24;
     
@@ -13,11 +14,13 @@ class Zolago_Customer_Model_Emailtoken extends Mage_Core_Model_Abstract{
      * @return boolean
      */
     public function sendMessage() {
-        if(!($this->getId() && $this->getNewEmail() && $this->getToken() && $this->getCustomerId())){
+        if(!($this->getId() && $this->getNewEmail() 
+            && $this->getToken() && $this->getCustomerId())){
             return;
         }
         
-        $customer = Mage::getModel("customer/customer")->load($this->getCustomerId());
+        $customer = Mage::getModel("customer/customer")
+            ->load($this->getCustomerId());
         /* @var $customer Mage_Customer_Model_Customer */
         
         if(!$customer->getId()){
@@ -34,7 +37,8 @@ class Zolago_Customer_Model_Emailtoken extends Mage_Core_Model_Abstract{
             
         );
         
-        return $this->_sendEmailTemplate($customer, self::EMAIL_TEMPLATE, $templateParams, $store->getId());
+        return $this->_sendEmailTemplate($customer, 
+            self::EMAIL_TEMPLATE, $templateParams, $store->getId());
     }
     
     public function getConfirmLink($token=null) {
@@ -44,13 +48,15 @@ class Zolago_Customer_Model_Emailtoken extends Mage_Core_Model_Abstract{
         return Mage::getUrl(self::CONFIRM_PATH, array("token"=>$token));
     }
     
-    protected function _sendEmailTemplate($customer, $template, $templateParams = array(), $storeId = null)
+    protected function _sendEmailTemplate($customer, 
+        $template, $templateParams = array(), $storeId = null)
     {
         $emailTemplate = Mage::getModel("core/email_template");
         /* @var $emailTempalte Mage_Core_Model_Email_Template */
        
         
-        // Set required design parameters and delegate email sending to Mage_Core_Model_Email_Template
+        // Set required design parameters 
+        // and delegate email sending to Mage_Core_Model_Email_Template
         $emailTemplate->
             setDesignConfig(array('area' => 'frontend', 'store' => $storeId));
         
@@ -61,14 +67,17 @@ class Zolago_Customer_Model_Emailtoken extends Mage_Core_Model_Abstract{
             $emailTemplate->loadDefault($template, $localeCode);
         }
 
-        $senderName = Mage::getStoreConfig('trans_email/ident_support/name', $storeId);
-        $senderEmail = Mage::getStoreConfig('trans_email/ident_support/email', $storeId);
+        $senderName = Mage::getStoreConfig('trans_email/ident_support/name', 
+                                                                    $storeId);
+        $senderEmail = Mage::getStoreConfig('trans_email/ident_support/email', 
+                                                                    $storeId);
         
         $emailTemplate->setSenderEmail($senderEmail);
         $emailTemplate->setSenderName($senderName);
         
         if(!$emailTemplate->getTemplateSubject()){
-            $emailTemplate->setTemplateSubject(Mage::helper("zolagocustomer")->__("Confirm new Email address"));
+            $emailTemplate->setTemplateSubject(Mage::helper("zolagocustomer")
+                ->__("Confirm new Email address"));
         }
         
         return $emailTemplate->send(

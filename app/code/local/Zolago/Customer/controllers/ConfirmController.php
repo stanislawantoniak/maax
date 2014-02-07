@@ -1,5 +1,6 @@
 <?php
-class Zolago_Customer_ConfirmController extends Mage_Core_Controller_Front_Action
+class Zolago_Customer_ConfirmController 
+    extends Mage_Core_Controller_Front_Action
 {
 
     protected function _getSession()
@@ -49,13 +50,15 @@ class Zolago_Customer_ConfirmController extends Mage_Core_Controller_Front_Actio
             $error = $e->getMessage();
         } catch (Exception $e) {
             Mage::logException($e);
-            $error = Mage::helper('zolagocustomer')->__('Error: System error during request');
+            $error = Mage::helper('zolagocustomer')
+                ->__('Error: System error during request');
         }
         
         if ($error) {
             $this->_getSession()->addError($error);
         } else {
-            $this->_getSession()->addSuccess(Mage::helper('zolagocustomer')->__('Info: Email changed'));            
+            $this->_getSession()->addSuccess(Mage::helper('zolagocustomer')
+                ->__('Info: Email changed'));            
         }
         return $this->_redirect('customer/account/login');
     }
