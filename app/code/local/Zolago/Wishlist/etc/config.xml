@@ -27,6 +27,14 @@
                     </zolagowishlist>
                 </observers>
             </wishlist_product_add_after>
+            <wishlist_item_delete_before>
+                <observers>
+                    <zolagowishlist>
+                        <class>zolagowishlist/observer</class>
+                        <method>wishlistDelAfter</method>
+                    </zolagowishlist>
+                </observers>
+            </wishlist_item_delete_before>
         </events>
     </global>
     <frontend>
