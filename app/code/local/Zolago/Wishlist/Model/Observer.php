@@ -12,4 +12,5 @@ class Zolago_Wishlist_Model_Observer{
 //         Mage::log("TAAAAK");
 //         die('obserwer zadziałał');
      }
+
 }
