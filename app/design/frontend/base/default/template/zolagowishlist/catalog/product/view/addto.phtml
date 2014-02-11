@@ -29,11 +29,17 @@
 <?php $_wishlistSubmitUrl = $this->helper('wishlist')->getAddUrl($_product); ?>
 
 <ul class="add-to-links">
-<?php if(!Mage::helper("zolagowishlist")->productBelongsToMyWishlist($_product)):?>    
+  
     <?php if ($this->helper('wishlist')->isAllow()) : ?>
-        <li><a href="<?php echo $_wishlistSubmitUrl ?>" onclick="productAddToCartForm.submitLight(this, this.href); return false;" class="link-wishlist"><?php echo $this->__('Add to Wishlist') ?></a></li>
-    <?php endif; ?>
-<?php endif;?>
+        <li>
+            <?php if(!Mage::helper("zolagowishlist")->productBelongsToMyWishlist($_product)):?>  
+                  <a href="<?php echo $_wishlistSubmitUrl ?>" onclick="productAddToCartForm.submitLight(this, this.href); return false;" class="link-wishlist"><?php echo $this->__('Add to Wishlist') ?></a>
+            <?php else:?>
+                  <span><?php echo $this->__('Already in favourites') ?></span>
+            <?php endif;?>
+        </li>
+ <?php endif; ?>
+
 <?php
     $_compareUrl = $this->helper('catalog/product_compare')->getAddUrl($_product);
 ?>
