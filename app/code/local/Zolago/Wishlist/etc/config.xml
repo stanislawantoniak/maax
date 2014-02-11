@@ -5,4 +5,31 @@
             <version>0.0.1</version>
         </Zolago_Wishlist>
     </modules>
+    <global>
+    	<resources>
+    		<zolagowishlist_setup>
+    			<setup>
+    				<module>Zolago_Wishlist</module>
+    			</setup>
+    		</zolagowishlist_setup>
+    	</resources>
+    </global>
+    <frontend>
+    	<routers>
+    		<zolagowishlist>
+    			<use>standard</use>
+    			<args>
+    				<module>Zolago_Wishlist</module>
+    				<frontName>zolagowishlist</frontName>
+    			</args>
+    		</zolagowishlist>
+    		<wishlist>
+    			<args>
+    				<modules>
+    					<Zolago_Wishlist before="Mage_Wishlist">Zolago_Wishlist</Zolago_Wishlist>
+    				</modules>
+    			</args>
+    		</wishlist>
+    	</routers>
+    </frontend>
 </config>
