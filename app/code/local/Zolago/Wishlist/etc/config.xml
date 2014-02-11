@@ -11,6 +11,11 @@
                 <class>Zolago_Wishlist_Model</class>
             </zolagowishlist>
         </models>
+        <helpers>
+            <zolagowishlist>
+                <class>Zolago_Wishlist_Helper</class>
+            </zolagowishlist>
+        </helpers>
         <resources>
             <zolagowishlist_setup>
                 <setup>

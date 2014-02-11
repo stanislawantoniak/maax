@@ -20,5 +20,10 @@
                 <template>zolagowishlist/catalog/product/view.phtml</template>
             </action>
         </reference>
+        <reference name="product.info.addto">
+            <action method="setTemplate">
+                <template>zolagowishlist/catalog/product/view/addto.phtml</template>
+            </action>
+        </reference>
     </catalog_product_view>
 </layout>
