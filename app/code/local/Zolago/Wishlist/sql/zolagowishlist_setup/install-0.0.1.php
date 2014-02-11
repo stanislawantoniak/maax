@@ -38,7 +38,7 @@ $catalogInstaller->addAttribute(
              array(
                "type"              => "int",
                "input"             => "text",
-               "is_required"       => 0,
+               "required"          => 0,
                "frontend_class"    => "validate-digits",
                "filterable"        => 1,
                "comparable"        => 1,
@@ -46,7 +46,7 @@ $catalogInstaller->addAttribute(
                "used_in_product_listing" => 1,
                "used_for_sort_by" => 1,
                "label"             => "Wishlist item count",
-               "default"           => 0,
+               "default"           => "0",
                "position"          => 900,
                "group"             => "General"
            )

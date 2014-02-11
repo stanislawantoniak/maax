@@ -46,5 +46,12 @@
                 </args>
             </wishlist>
         </routers>
+        <layout>
+            <updates>
+                <zolagowishlist>
+                    <file>zolagowishlist.xml</file>
+                </zolagowishlist>
+            </updates>
+        </layout>
     </frontend>
 </config>
