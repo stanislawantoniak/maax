@@ -3,12 +3,13 @@
  * zolago wishlist observer
  */
 
-class Zolago_Wishlist_Model_Observer extends Mage_Wishlist_Model_Observer {
+class Zolago_Wishlist_Model_Observer{
     
     /**
      * increase favourite flag
      */
      public function wishlistAddAfter() {
-         die('obserwer zadziałał');
+//         Mage::log("TAAAAK");
+//         die('obserwer zadziałał');
      }
 }
