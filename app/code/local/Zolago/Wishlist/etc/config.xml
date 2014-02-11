@@ -13,6 +13,16 @@
     			</setup>
     		</zolagowishlist_setup>
     	</resources>
+    	<events>
+    		<wishlist_product_add_after>
+    			<observers>
+    				<zolagowishlist>
+    					<class>zolagowishlist/observer</class>
+    					<method>wishlistAddAfter</method>
+    				</zolagowishlist>
+    			</observers>
+    		</wishlist_product_add_after>
+    	</events>
     </global>
     <frontend>
     	<routers>
