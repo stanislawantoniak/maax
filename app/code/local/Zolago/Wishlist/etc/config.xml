@@ -27,14 +27,14 @@
                     </zolagowishlist>
                 </observers>
             </wishlist_product_add_after>
-            <catalog_product_collection_load_before>
+            <wishlist_item_delete_before>
                 <observers>
                     <zolagowishlist>
                         <class>zolagowishlist/observer</class>
-                        <method>addUserHasAtWishlistToCollection</method>
+                        <method>wishlistDelAfter</method>
                     </zolagowishlist>
                 </observers>
-            </catalog_product_collection_load_before>
+            </wishlist_item_delete_before>
         </events>
     </global>
     <frontend>
