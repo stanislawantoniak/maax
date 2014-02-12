@@ -1,0 +1,20 @@
+<?php $_shipments = $this->getShipments();?>
+<?php if (!count($_shipments)):?>
+    <h3><?php echo $this->__('No Pending Reviews') ?></h3>
+<?php else:?>
+<?php foreach ($_shipments as $_shipment): $_order = $_shipment->getOrder()?>
+<tr>
+    <td>
+        <h2 style="font-size:18px; font-weight:normal; margin:0;">Your Shipment #<?php echo $_shipment->getIncrementId() ?> for Order #<?php echo $_order->getIncrementId() ?></h2>
+        <br />
+        <h2 style="font-size:18px; font-weight:normal; margin:0;"><a href="<?php echo Mage::helper('umicrosite')->getVendorUrl($_shipment->getUdropshipVendor())?>"><?php echo Mage::helper('udropship')->getVendor($_shipment->getUdropshipVendor())->getVendorName()?></a></h2>
+        <?php echo Mage::helper('udratings')->getReviewsSummaryHtml($_shipment->getUdropshipVendor()); ?>
+    </td>
+</tr>
+<tr>
+    <td>
+        <?php echo $this->getChild('items')->setShipment($_shipment)->setOrder($_order)->toHtml()?>
+    </td>
+</tr>
+<?php endforeach; ?>
+<?php endif;?>

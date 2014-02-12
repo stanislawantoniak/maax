@@ -1,0 +1,67 @@
+<div class="page-title title-buttons">
+    <h1><?php echo $this->__('My Vendor Pending Reviews') ?></h1>
+</div>
+
+<?php $_items = $this->getReviewsCollection()->getItems();?>
+    <?php if (!count($_items)):?>
+        <h2><?php echo $this->__('No Reviews') ?></h2>
+    <?php else:?>
+        <?php echo $this->getChildHtml('toolbar') ?>
+        <dl>
+        <?php foreach ($_items as $_review):?>
+            <dt>
+                <?php echo $this->htmlEscape($_review->getTitle()) ?> <?php echo $this->__('Review by <span>%s</span>', $this->htmlEscape($_review->getNickname())) ?>
+            </dt>
+            <dd>
+                <?php
+                    $_naVotes = $_votes = array();
+                    foreach ($_review->getRatingVotes() as $_vote) {
+                        if ($_vote->getIsAggregate()) {
+                            $_votes[] = $_vote;
+                        } else {
+                            $_naVotes[] = $_vote;
+                        }
+                    }
+                ?>
+                <?php if (count($_votes)): ?>
+                <table class="ratings-table">
+                    <col width="150" />
+                    <col />
+                    <tbody>
+                        <?php foreach ($_votes as $_vote): ?>
+                        <tr>
+                            <th><?php echo $this->escapeHtml($_vote->getRatingCode()) ?></th>
+                            <td>
+                                <div class="rating-box">
+                                    <div class="rating" style="width:<?php echo $_vote->getPercent() ?>%;"></div>
+                                </div>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+                <?php endif; ?>
+                <?php if (count($_naVotes)): ?>
+                <table class="ratings-table">
+                    <col width="150" />
+                    <col />
+                    <tbody>
+                        <?php foreach ($_naVotes as $_vote): ?>
+                        <tr>
+                            <th><?php echo $this->escapeHtml($_vote->getRatingCode()) ?></th>
+                            <td>
+                                <?php echo $_vote->getValue() ? $this->__('Yes') : $this->__('No')?>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+                <?php endif; ?>
+                <?php echo nl2br($this->htmlEscape($_review->getDetail())) ?>
+                <small class="date"><?php echo $this->__('(Posted on %s)', $this->formatDate($_review->getCreatedAt()), 'long') ?></small>
+                <br /><br />
+            </dd>
+        <?php endforeach; ?>
+        </dl>
+        <?php echo $this->getChildHtml('toolbar') ?>
+    <?php endif;?>

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<layout>
+
+    <umicrosite_vendor_register>
+        <reference name="head">
+            <action method="addItem"><type>js_css</type><name>calendar/calendar-win2k-1.css</name></action>
+            <action method="addItem"><type>js</type><name>calendar/calendar.js</name></action>
+            <action method="addItem"><type>js</type><name>calendar/lang/calendar-en.js</name></action>
+            <action method="addItem"><type>js</type><name>calendar/calendar-setup.js</name></action>
+        </reference>
+        <reference name="content">
+            <block type="core/html_calendar" name="head.calendar" as="calendar" template="page/js/calendar.phtml"/>
+            <remove name="register" />
+            <block type="udmspro/vendor_register" template="unirgy/udmspro/vendor/register.phtml" name="udmspro_register" />
+        </reference>
+    </umicrosite_vendor_register>
+
+</layout>

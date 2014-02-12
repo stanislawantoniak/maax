@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+
+<layout version="0.1.0">
+
+    <customer_account>
+        <reference name="customer_account_navigation">
+            <action method="addLink" translate="label" module="udratings"><name>udpreviews</name><path>udratings/customer/pending</path><label>My Vendor Pending Reviews</label></action>
+            <action method="addLink" translate="label" module="udratings"><name>udratings</name><path>udratings/customer</path><label>My Vendor Reviews</label></action>
+        </reference>
+    </customer_account>
+
+    <udratings_customer_pending translate="label">
+        <label>Customer My Account Vendor Pending Reviews</label>
+        <update handle="customer_account"/>
+        <reference name="my.account.wrapper">
+            <block type="page/html_pager" name="udratings_list.toolbar" />
+            <block type="udratings/customer_list_pending" name="udratings_list_pending" template="unirgy/ratings/customer/list/pending.phtml">
+                <block type="udratings/reviewForm" name="udratings.form" as="review_form" />
+            </block>
+        </reference>
+    </udratings_customer_pending>
+
+    <udratings_customer_index translate="label">
+        <label>Customer My Account Vendor Reviews</label>
+        <update handle="customer_account"/>
+        <reference name="my.account.wrapper">
+            <block type="page/html_pager" name="udratings_list.toolbar" />
+            <block type="udratings/customer_list" name="udratings_list" template="unirgy/ratings/customer/list.phtml" />
+        </reference>
+    </udratings_customer_index>
+
+    <udratings_vendor_index>
+        <reference name="root">
+            <action method="setTemplate"><template>page/2columns-right.phtml</template></action>
+            <action method="setLayoutCode"><code>two_columns_right</code></action>
+        </reference>
+        <reference name="content">
+            <block type="udratings/vendor_list" name="udratings_list" template="unirgy/ratings/vendor/list.phtml" >
+                <block type="page/html_pager" name="udratings_list.toolbar" as="toolbar" />
+            </block>
+        </reference>
+    </udratings_vendor_index>
+
+    <udrating_pending_shipments>
+        <block type="core/template" name="udratings.email.pending_shipments" template="unirgy/ratings/email/pending_shipments.phtml">
+            <block type="sales/order_email_shipment_items" name="items" template="email/order/shipment/items.phtml">
+                <action method="addItemRender"><type>default</type><block>sales/order_email_items_default</block><template>email/order/items/shipment/default.phtml</template></action>
+                <action method="addItemRender"><type>bundle</type><block>bundle/sales_order_items_renderer</block><template>bundle/email/order/items/shipment/default.phtml</template></action>
+            </block>
+            <block type="core/text_list" name="additional.product.info" />
+        </block>
+    </udrating_pending_shipments>
+
+</layout>

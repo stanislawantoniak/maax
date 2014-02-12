@@ -1,0 +1,114 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category   design_default
+ * @package    Mage
+ * @copyright  Copyright (c) 2008 Irubin Consulting Inc. DBA Varien (http://www.varien.com)
+ * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+$_hasRates = false;
+?>
+<?php if ($_shippingRateGroups = $this->getShippingRates()): ?>
+    <div id="order-shipping-method-choose" style="display:none">
+    <?php foreach ($_shippingRateGroups as $_vId => $_vendorData): ?>
+    <?php $_v = Mage::helper('udropship')->getVendor($_vId); ?>
+        <h4><?php echo $_v->getVendorName(); ?></h4>
+        <ul>
+        <?php foreach ($_vendorData['items'] as $_item): ?>
+            <li><?php echo $_item->getName() ?></li>
+        <?php endforeach ?>
+        </ul>
+        <?php if (!empty($_vendorData['rates'])): $_hasRates = true; ?>
+        <select name="order[shipping_method][<?php echo $_vId ?>]" id="order-shipping_method-<?php echo $_vId ?>" class="shipment-methods">
+        <?php foreach ($_vendorData['rates'] as $_cCode => $_rates): ?>
+            <optgroup label="<?php echo $this->getCarrierName($_cCode) ?>">
+            <?php foreach ($_rates as $_rate): ?>
+                <?php $_code=$_rate->getCode() ?>
+                <?php if ($_rate->getErrorMessage()): ?>
+                    <option value=""><?php echo $_rate->getErrorMessage() ?></option>
+                <?php else: ?>
+                    <option value="<?php echo $_code ?>" <?php if ($_rate->getIsSelected()): ?>selected="selected"<?php endif ?>>
+<?php
+$_price = $this->getShippingPrice($_rate->getPrice(), $this->helper('tax')->displayShippingPriceIncludingTax());
+$_incl = $this->getShippingPrice($_rate->getPrice(), true);
+if ($this->helper('tax')->displayShippingBothPrices() && $_incl != $_price) {
+    $_price .= ' ('.$this->__('Incl. Tax ').$_incl.')';
+}
+?>
+                        <?php echo $_rate->getMethodTitle() ? $_rate->getMethodTitle() : $_rate->getMethodDescription()?> - <?php echo $_price ?>
+                    </option>
+                    <?php endif ?>
+            <?php endforeach; ?>
+            </optgroup>
+        <?php endforeach; ?>
+        </select>
+        <?php endif ?>
+        <hr style="margin:10px 0"/>
+    <?php endforeach ?>
+        <button type="button" onclick="udsplitSetShippingMethod()"><?php echo $this->__('Update Shipping Methods')?></button> <input type="checkbox" id="collect_shipping_rates" value="1" <?php if (!$_hasRates): ?>checked="checked"<?php endif ?> /> <label for="collect_shipping_rates"><?php echo $this->__('Refresh Rates') ?></label>
+    </div>
+    <?php if (false && $_rate = $this->getActiveMethodRate()): ?>
+        <div id="order-shipping-method-info">
+            <strong><?php echo $this->getCarrierName($_rate->getCarrier()) ?></strong><br/>
+            <?php echo $_rate->getMethodTitle() ? $_rate->getMethodTitle() : $_rate->getMethodDescription() ?> -
+            <strong>
+                <?php $_excl = $this->getShippingPrice($_rate->getPrice(), $this->helper('tax')->displayShippingPriceIncludingTax()); ?>
+                <?php $_incl = $this->getShippingPrice($_rate->getPrice(), true); ?>
+
+                <?php echo $_excl; ?>
+                <?php if ($this->helper('tax')->displayShippingBothPrices() && $_incl != $_excl): ?>
+                    (<?php echo $this->__('Incl. Tax'); ?> <?php echo $_incl; ?>)
+                <?php endif; ?>
+            </strong>
+            <!--input type="text" class="input-text" style="width:70px"/-->
+            <br/>
+            <a href="#" onclick="$('order-shipping-method-info').hide();$('order-shipping-method-choose').show();return false">
+                <?php echo Mage::helper('sales')->__('Click to change shipping method') ?>
+            </a>
+        </div>
+    <?php else: ?>
+        <script type="text/javascript">$('order-shipping-method-choose').show();</script>
+    <?php endif; ?>
+<?php elseif($this->getIsRateRequest()): ?>
+    <strong><?php echo Mage::helper('sales')->__('Sorry, no quotes are available for this order at this time.') ?></strong>
+<?php else: ?>
+    <div id="order-shipping-method-summary">
+        <a href="#" onclick="order.loadShippingRates();return false">
+            <?php echo Mage::helper('sales')->__('Get shipping methods and rates') ?>
+        </a>
+    </div>
+<?php endif; ?>
+<div style="display:none;" id="shipping-method-overlay" class="overlay"><span><?php echo $this->__('Shipping method selection is not applicable') ?></span></div>
+<script type="text/javascript">
+order.overlay('shipping-method-overlay', <?php echo $this->getQuote()->isVirtual() ? 'false' : 'true' ?>);
+order.overlay('address-shipping-overlay', <?php echo $this->getQuote()->isVirtual() ? 'false' : 'true' ?>);
+
+function udsplitSetShippingMethod()
+{
+    var data = {
+        collect_shipping_rates:$('collect_shipping_rates').checked
+    };
+    $$('select.shipment-methods').each(function (el) {
+        data[el.name] = el.value;
+    });
+    order.loadArea(['shipping_method', 'totals', 'billing_method'], true, data);
+}
+</script>
