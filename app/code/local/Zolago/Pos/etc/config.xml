@@ -6,12 +6,24 @@
         </Zolago_Pos>
     </modules>
     <global>
-        <!--
         <models>
             <zolagopos>
                 <class>Zolago_Pos_Model</class>
+                <resourceModel>zolagopos_resource</resourceModel>
             </zolagopos>
+            <zolagopos_resource>
+                <class>Zolago_Pos_Model_Resource</class>
+                <entities>
+                    <pos>
+                        <table>zolago_pos</table>
+                    </pos>
+                    <pos_vendor>
+                        <table>zolago_pos_vendor</table>
+                    </pos_vendor>
+                </entities>
+            </zolagopos_resource>
         </models>
+        <!-- 
         <helpers>
             <zolagopos>
                 <class>Zolago_Pos_Helper</class>
@@ -36,7 +48,17 @@
                 </args>
             </zolagopos>
         </routers>
-        <!--
+    </frontend>
+    <adminhtml>
+        <translate>
+            <modules>
+                <Zolago_Pos.csv>
+                    <files>
+                        <default>Zolago_Pos.csv</default>
+                    </files>
+                </Zolago_Pos.csv>
+            </modules>
+        </translate>
         <layout>
             <updates>
                 <zolagopos>
@@ -44,6 +66,16 @@
                 </zolagopos>
             </updates>
         </layout>
-        -->
-    </frontend>
+    </adminhtml>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <zolagopos before="Mage_Adminhtml">Zolago_Pos_Adminhtml</zolagopos>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
 </config>

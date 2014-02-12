@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Zolago_Common>
+            <version>0.0.1</version>
+        </Zolago_Common>
+    </modules>
+    <global>
+        <!-- 
+        <helpers>
+            <zolagocommon>
+                <class>Zolago_Common_Helper</class>
+            </zolagocommon>
+        </helpers>
+        -->
+        <resources>
+            <zolagocommon_setup>
+                <setup>
+                    <module>Zolago_Common</module>
+                </setup>
+            </zolagocommon_setup>
+        </resources>
+    </global>
+</config>
