@@ -5,7 +5,8 @@
  * Compilation includes configuration file
  */
 
-define('MAGENTO_ROOT', getenv('MAGENTO_ROOT')? getenv('MAGENTO_ROOT'):getcwd().'/..');
+!defined('MAGENTO_ROOT') 
+    && define('MAGENTO_ROOT', getenv('MAGENTO_ROOT')? getenv('MAGENTO_ROOT'):getcwd().'/..');
 
 $mageFilename = MAGENTO_ROOT . '/app/Mage.php';
 
