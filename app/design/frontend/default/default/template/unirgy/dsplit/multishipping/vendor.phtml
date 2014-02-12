@@ -1,0 +1,86 @@
+<?php
+$_v = $this->getVendor();
+$_a = $this->getAddress();
+?>
+<?php switch ($this->getPart()): case 'header': ?>
+
+<?php if (Mage::helper('udropship')->compareMageVer('1.4.1.0', '1.8.0.0')): ?>
+<tr>
+    <td colspan="<?php if ($this->helper('tax')->displayCartBothPrices()) {echo '6';} else {echo '4';}?>">
+<?php endif ?>
+
+<?php if ($_v->getId()): ?>
+    <h4><?php echo $_v->getVendorName() ?> - <?php echo $_v->getCity().', '.$_v->getRegionCode() ?></h4>
+<?php else: ?>
+    <h4><?php echo $this->__('Unknown vendor')?></h4>
+<?php endif ?>
+
+<?php if (Mage::helper('udropship')->compareMageVer('1.4.1.0', '1.8.0.0')): ?>
+</td></tr>
+<?php endif ?>
+
+<?php break; case 'footer':
+
+$_shippingRateGroups = $this->getEstimateRates();
+$_error = false;
+foreach ($_shippingRateGroups as $code => $_rates) {
+    foreach ($_rates as $_rate) {
+        if ($_rate->getErrorMessage()) {
+            $_error = $_rate->getErrorMessage();
+        }
+    }
+}
+if (!$_error && $this->getErrorsOnly()) {
+    $_error = Mage::getStoreConfig('carriers/udsplit/specificerrmsg');
+}
+?>
+
+<?php if (Mage::helper('udropship')->compareMageVer('1.4.1.0', '1.8.0.0')): ?>
+<tr>
+    <td colspan="<?php if ($this->helper('tax')->displayCartBothPrices()) {echo '6';} else {echo '4';}?>">
+<?php endif ?>
+
+
+<div style="float:right">
+    <?php echo $this->__('Subtotal:')?>
+    <strong><?php echo Mage::helper('core')->formatPrice($this->getSubtotal()) ?></strong>
+</div>
+<?php if (!$this->isVirtual()): ?>
+<?php if ($this->getShowDropdowns()): ?>
+<?php if ($_error): ?>
+    <?php echo $this->htmlEscape($_error) ?>
+<?php else: ?>
+    <?php echo $this->__('Select Shipping:')?>
+    <select name="vendor_shipping_method[<?php echo $_a->getId() ?>][<?php echo $_v->getId()?>]" class="shipment-methods" style="width:auto">
+    <?php foreach ($_shippingRateGroups as $code => $_rates): ?>
+        <optgroup label="<?php echo $this->getCarrierName($code) ?>">
+        <?php foreach ($_rates as $_rate): ?>
+        <?php if ($_rate->getErrorMessage()): ?>
+            <?php //echo $_rate->getErrorMessage() ?>
+        <?php else:
+            $_price = $this->getShippingPrice($_rate->getPrice(), $this->helper('tax')->displayShippingPriceIncludingTax());
+            $_incl = $this->getShippingPrice($_rate->getPrice(), true);
+            if ($this->helper('tax')->displayShippingBothPrices() && $_incl != $_price) {
+                $_price .= ' ('.$this->__('Incl. Tax ').$_incl.')';
+            }
+        ?>
+            <option value="<?php echo $this->htmlEscape($_rate->getCode()) ?>" <?php if($_rate->getCode()===$this->getShippingMethod('code')) echo ' selected="selected"' ?>>
+                <?php echo $_rate->getMethodTitle() ?> - <?php echo $_price ?>
+            </option>
+        <?php endif ?>
+        <?php endforeach; ?>
+        </optgroup>
+    <?php endforeach; ?>
+    </select>
+<?php endif; ?>
+<?php else: ?>
+    <?php echo $this->getShippingMethod('carrier_title').' - '.$this->getShippingMethod('method_title') ?>
+    (<strong><?php echo $this->getShippingPrice($this->getShippingMethod('price'), $this->helper('tax')->displayShippingPriceIncludingTax()) ?></strong>)
+<?php endif; ?>
+<?php endif; ?>
+
+<?php if (Mage::helper('udropship')->compareMageVer('1.4.1.0', '1.8.0.0')): ?>
+</td></tr>
+<?php endif ?>
+
+<?php endswitch ?>

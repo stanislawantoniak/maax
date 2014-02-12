@@ -1,0 +1,48 @@
+<?php Mage::helper('udropship')->applyItemRenderers('sales_order_shipment', $this, '/checkout/', false);?>
+
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+
+<div class="page-title title-buttons">
+    <h1><?php echo $this->__('My Vendor Pending Reviews') ?></h1>
+</div>
+<div>
+<?php $_shipments = $this->getReviewsCollection()->getItems();?>
+    <?php if (!count($_shipments)):?>
+        <h3><?php echo $this->__('No Pending Reviews') ?></h3>
+    <?php else:?>
+        <?php echo $this->getChildHtml('toolbar') ?>
+        <?php foreach ($_shipments as $_shipment):?>
+        <h3><?php echo $this->__('Shipment #') ?><?php echo $_shipment->getIncrementId(); ?></h3>
+        <h3><a href="<?php echo Mage::helper('umicrosite')->getVendorUrl($_shipment->getUdropshipVendor())?>"><?php echo Mage::helper('udropship')->getVendor($_shipment->getUdropshipVendor())->getVendorName()?></a></h3>
+        <?php echo Mage::helper('udratings')->getReviewsSummaryHtml($_shipment->getUdropshipVendor()); ?>
+        <table class="data-table" id="my-shipment-table-<?php echo $_shipment->getId(); ?>">
+        <col />
+        <col width="1" />
+        <col width="1" />
+        <thead>
+            <tr>
+                <th><?php echo $this->__('Product Name') ?></th>
+                <th><?php echo $this->__('SKU') ?></th>
+                <th class="a-center"><span class="nobr"><?php echo $this->__('Qty Shipped') ?></span></th>
+            </tr>
+        </thead>
+        <?php $_items = $_shipment->getAllItems(); ?>
+        <?php $_count = count($_items) ?>
+        <?php foreach ($_items as $_item): ?>
+        <?php if ($_item->getOrderItem()->getParentItem()) continue; ?>
+        <tbody>
+            <?php echo $this->getItemHtml($_item) ?>
+        </tbody>
+        <?php endforeach; ?>
+    </table>
+    <script type="text/javascript">decorateTable('my-shipment-table-<?php echo $_shipment->getId(); ?>', {'tbody' : ['odd', 'even'], 'tbody tr' : ['first', 'last']})</script>
+        <?php echo $this->getChild('review_form')
+                  ->setEntityPkValue($_shipment->getUdropshipVendor())
+                  ->setRelEntityPkValue($_shipment->getId())
+                  ->toHtml();
+        ?>
+        <?php endforeach; ?>
+        <?php echo $this->getChildHtml('toolbar') ?>
+    <?php endif;?>
+</div>
+
