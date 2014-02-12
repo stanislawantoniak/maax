@@ -51,6 +51,10 @@
             <directory suffix="Test.php">.</directory>
         </testsuite>
     </testsuites>
+    <listeners>
+         <listener class="PHPUnit_Util_Log_JSON"></listener>
+    </listeners>
+
     <logging>
         <log type="json" target="../var/logs/logfile.json"/>
         <log type="tap" target="../var/logs/logfile.tap"/>
