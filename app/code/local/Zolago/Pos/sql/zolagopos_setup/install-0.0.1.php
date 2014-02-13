@@ -31,6 +31,7 @@ $table = $installer->getConnection()
     ->addColumn('company',          Varien_Db_Ddl_Table::TYPE_TEXT, 150)
     ->addColumn("country_id",       Varien_Db_Ddl_Table::TYPE_TEXT, 2, array('nullable'  => false))
     ->addColumn("region_id",        Varien_Db_Ddl_Table::TYPE_INTEGER)
+    ->addColumn("region",           Varien_Db_Ddl_Table::TYPE_TEXT, 100)
     ->addColumn('postcode',         Varien_Db_Ddl_Table::TYPE_TEXT, 20)
     ->addColumn('street',           Varien_Db_Ddl_Table::TYPE_TEXT, 150, array('nullable'  => false))
     ->addColumn('city',             Varien_Db_Ddl_Table::TYPE_TEXT, 100, array('nullable'  => false))
@@ -57,7 +58,8 @@ $table = $installer->getConnection()
         'country_id', $installer->getTable('directory/country'), 'country_id')
     ->addForeignKey(
         $installer->getFkName('zolagopos/pos', 'region_id', 'directory/country_region', 'region_id'),
-        'region_id', $installer->getTable('directory/country_region'), 'region_id');
+        'region_id', $installer->getTable('directory/country_region'), 'region_id',
+        Varien_Db_Ddl_Table::ACTION_SET_NULL, Varien_Db_Ddl_Table::ACTION_NO_ACTION);
 
 $installer->getConnection()->createTable($table);
 
@@ -69,8 +71,8 @@ $table = $installer->getConnection()
     ->newTable($posVendorTable)
 
     // Struct
-    ->addColumn("pos_id",       Varien_Db_Ddl_Table::TYPE_INTEGER)
-    ->addColumn("vendor_id",    Varien_Db_Ddl_Table::TYPE_INTEGER)
+    ->addColumn("pos_id",       Varien_Db_Ddl_Table::TYPE_INTEGER, null, array('nullable' => false))
+    ->addColumn("vendor_id",    Varien_Db_Ddl_Table::TYPE_INTEGER, null, array('nullable' => false))
     ->addColumn('is_owner',     Varien_Db_Ddl_Table::TYPE_INTEGER, 1, array('default'=>0, 'nullable' => false))
         
     // Indexes

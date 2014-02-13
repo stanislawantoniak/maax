@@ -23,13 +23,16 @@
                 </entities>
             </zolagopos_resource>
         </models>
-        <!-- 
+        <blocks>
+            <zolagopos>
+                <class>Zolago_Pos_Block</class>
+            </zolagopos>
+        </blocks>
         <helpers>
             <zolagopos>
                 <class>Zolago_Pos_Helper</class>
             </zolagopos>
         </helpers>
-        -->
         <resources>
             <zolagopos_setup>
                 <setup>
