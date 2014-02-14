@@ -97,6 +97,7 @@ class Zolago_Pos_Block_Adminhtml_Pos_Edit_Tab_General extends Mage_Adminhtml_Blo
                     "label" => $region->getName()
                 );
             }
+            array_unshift($regionOpts, array("value"=>"", "label"=>Mage::helper("adminhtml")->__("-- Please select --")));
         }
         $address->addField('region_id', 'select', array(
             'name'          => 'region_id',

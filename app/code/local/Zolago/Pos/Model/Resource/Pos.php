@@ -54,11 +54,12 @@ class Zolago_Pos_Model_Resource_Pos
      */
     protected function _prepareDataForSave(Mage_Core_Model_Abstract $object)
     {
-        if(trim($object->getRegion())){
+        if(trim($object->getRegion()) || $object->getRegionId()===""){
             $object->setRegionId(null);
         }elseif($object->getRegionId()){
             $object->setRegion(null);
         }
+        
         // Times
         $currentTime = Varien_Date::now();
         if ((!$object->getId() 
