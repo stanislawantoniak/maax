@@ -32,6 +32,11 @@
     </resources>
   </global>
   <frontend>
+    <block>
+        <zolagodropship>
+            <class>Zolago_Dropship_Block_Pos</class>
+        </zolagodropship>
+    </block>
     <routers>
       <zolagodropship>
         <use>standard</use>

@@ -76,7 +76,7 @@ $_isTierShip = $_session->getVendor()->getAllowTiershipModify();
 <?php endif ?>
 <?php if (Mage::helper('udropship')->isModuleActive('zolagopos')
     && $_session->isLoggedIn()): ?>
-        <li <?php if ($_active=='zolagopos'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('zolagopos/dropship/list')?>"><?php echo $this->__('Edit POS')?></a></li>
+        <li <?php if ($_active=='zolagopos'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('udropship/pos/list')?>"><?php echo $this->__('Edit POS')?></a></li>
 <?php endif ?>
 <?php if (Mage::helper('udropship')->isModuleActive('udsell')): ?>
     <li <?php if ($_active=='myudsell'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('udsell/index/mysellSearch')?>"><?php echo $this->__('My Sell List')?></a></li>
