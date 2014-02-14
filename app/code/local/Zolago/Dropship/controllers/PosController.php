@@ -1,6 +1,6 @@
 <?php
 class Zolago_Dropship_PosController 
-    extends Mage_Core_Controller_Front_Action
+    extends Zolago_Dropship_Controller_Abstract
 {
     
     /**
@@ -9,6 +9,9 @@ class Zolago_Dropship_PosController
     public function listAction() {
         Mage::getSingleton('udropship/session')->addError(Mage::helper("zolagopos")
                 ->__('EDIT POS is not implemented yet!!!!'));                            
-        return $this->_redirectReferer();
+        $this->_setTheme();
+        $this->loadLayout();
+        $this->renderLayout();
+                        
     }
 }
