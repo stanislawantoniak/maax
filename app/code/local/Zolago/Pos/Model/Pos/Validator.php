@@ -59,7 +59,7 @@ class Zolago_Pos_Model_Pos_Validator{
         }
         
         if (!Zend_Validate::is($data['postcode'], 'PostCode', array("format"=>"\d\d-\d\d\d"))) {
-            $errors[] = $helper->__('%s is not postcode', $helper->__('Postcode'));
+            $errors[] = $helper->__('%s has not valid format (ex.12-345)', $helper->__('Postcode'));
         }
         
         if (!Zend_Validate::is($data['street'], 'NotEmpty')) {
