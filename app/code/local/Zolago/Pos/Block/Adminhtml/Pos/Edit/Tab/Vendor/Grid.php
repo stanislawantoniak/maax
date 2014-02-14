@@ -8,13 +8,14 @@ class Zolago_Pos_Block_Adminhtml_Pos_Edit_Tab_Vendor_Grid extends Mage_Adminhtml
         $this->setDefaultSort('vendor_id');
         $this->setDefaultDir('desc');
         $this->setUseAjax(true);
-
+        if(count($this->getSelectedIds())){
+            $this->setDefaultFilter(array('in_pos'=>1));
+        }
     }
     
 
     protected function _prepareCollection(){
-        $collection = $this->_getCollection();
-        $this->setCollection($collection);
+        $this->setCollection($this->_getCollection());
         return parent::_prepareCollection();
     }
     
@@ -28,63 +29,32 @@ class Zolago_Pos_Block_Adminhtml_Pos_Edit_Tab_Vendor_Grid extends Mage_Adminhtml
     }
 
     public function getGridUrl() {
-        return $this->getUrl("*/*/vendorgrid");
+        return $this->getUrl("*/*/vendorgrid", array("_current"=>true));
+    }
+    
+    public function getPostSelectedIds(){
+        return Mage::app()->getRequest()->getParam("entityCollection");
+    }
+    
+    public function getSelectedVendors(){
+        return $this->getSelectedIds();
     }
 
-    protected function _getInPosIds() {
-        $postData = Mage::app()->getRequest()->getParam("entityCollection");
+    public function getSelectedIds() {
+        $postData = $this->getPostSelectedIds();
         if(is_array($postData)){
             return $postData;
         }
-        return array_keys($this->getInPos());
+        return $this->getModel()->getVendorCollection()->getAllIds();
     }
     
-    public function getInPos() {
-        return $this->getVendors();
-    }
     
-    protected function _getIsOwnerIds() {
-        $postData = Mage::app()->getRequest()->getParam("entityCollection");
-        if(is_array($postData)){
-            return $postData;
-        }
-        return array_keys($this->getIsOwner());
-    }
-    
-    public function getIsOwner() {
-        $out = array();
-        foreach($this->getVendors() as $key=>$vendor){
-            if($vendor['is_owner']){
-                $out[$key] = $vendor;
-            }
-        }
-        return $out;
-    }
-
-
-    public function getVendors()
-    {
-        $collection = $this->_getCollection();
-        $collection->addFieldToFilter("pos_id", array("notnull"=>true));
-        $vendors = array();
-        foreach ($collection as $vendor) {
-            $vendors[$vendor->getId()] = array('in_pos' => 1, "is_owner"=>$vendor->getIsOwner());
-        }
-        return $vendors;
-    }
-    
-    public function getCollectionData() {
-        return $this->getVendors();
-    }
-
-
-
 
     protected function _addColumnFilterToCollection($column)
     {
         switch ($column->getId()) {
             case "in_pos":
-                $vendorIds = $this->_getInPosIds();
+                $vendorIds = $this->getSelectedIds();
                 if (empty($vendorIds)) {
                     $vendorIds = 0;
                 }
@@ -95,18 +65,6 @@ class Zolago_Pos_Block_Adminhtml_Pos_Edit_Tab_Vendor_Grid extends Mage_Adminhtml
                     $this->getCollection()->addFieldToFilter('main_table.vendor_id', array('nin'=>$vendorIds));
                 }
             break;
-            case "is_owner":
-                $ownerIds = $this->_getIsOwnerIds();
-                if (empty($ownerIds)) {
-                    $ownerIds = 0;
-                }
-                if ($column->getFilter()->getValue()) {
-                    $this->getCollection()->addFieldToFilter('pos_vendor.vendor_id', array('in'=>$ownerIds));
-                }
-                elseif(!empty($ownerIds)) {
-                    $this->getCollection()->addFieldToFilter('main_table.vendor_id', array('nin'=>$ownerIds));
-                }
-            break;
             default:
                 parent::_addColumnFilterToCollection($column);
             break;
@@ -115,33 +73,29 @@ class Zolago_Pos_Block_Adminhtml_Pos_Edit_Tab_Vendor_Grid extends Mage_Adminhtml
     }
     
     protected function _prepareColumns() {
-        if ($this->getModel()->getId()) {
-            $this->setDefaultFilter(array('in_pos'=>1));
-        }
         $this->addColumn('in_pos', array(
-            'header' => Mage::helper('zolagopos')->__('Assign'),
             'type'   => 'checkbox',
+            'header_css_class'  => 'a-center',
+            'align'  => 'center',
             'index'  => 'vendor_id',
             'name'   => 'in_pos',
-            'html_name' => 'is_pos',
-            'align'  => 'center',
-            'values' => $this->_getInPosIds()
+            'editable' => true,
+            'values' => $this->getSelectedIds()
         ));
-        
-        $this->addColumn('is_owner', array(
-            'header'    => Mage::helper('adminhtml')->__('Is owner'),
-            'type'      => 'radio',
-            'name'      => 'is_owner',
-            'html_name' => 'is_owner',
-            'values'    => $this->_getIsOwnerIds(),
-            'align'     => 'center',
-            'index'     => 'is_owner'
-        ));
-
         
         $this->addColumn('vendor_name', array(
             'header' => Mage::helper('zolagopos')->__('Vendor Name'),
             'index' => 'vendor_name',
+        ));
+        $this->addColumn('grid_email', array(
+            'header'    =>  Mage::helper('zolagopos')->__('Email'),
+            'index'     => 'email',
+        ));
+        $this->addColumn('status', array(
+            'header'    => Mage::helper('zolagopos')->__('Status'),
+            'index'     => 'status',
+            'type'      => 'options',
+            'options'   => Mage::getSingleton('udropship/source')->setPath('vendor_statuses')->toOptionHash(),
         ));
         
         return parent::_prepareColumns();

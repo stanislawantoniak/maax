@@ -76,12 +76,12 @@ class Zolago_Pos_Block_Adminhtml_Pos_Grid extends Mage_Adminhtml_Block_Widget_Gr
             'getter'    => 'getId',
             'actions'   => array(
                 array(
-                    'caption'   => Mage::helper('zolagopos')->__('Edit'),
+                    'caption'   => Mage::helper('zolagopos')->__('View'),
                     'url'       => array(
                             'base'  => '*/*/edit'
                     ),
                     'field'     => 'pos_id'
-                )
+                ),
             ),
             'filter' => false,
             'sortable' => false,

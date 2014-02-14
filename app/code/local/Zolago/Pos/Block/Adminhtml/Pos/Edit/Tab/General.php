@@ -41,6 +41,12 @@ class Zolago_Pos_Block_Adminhtml_Pos_Edit_Tab_General extends Mage_Adminhtml_Blo
             'options'       => Mage::getSingleton("adminhtml/system_config_source_yesno")->toArray()
         ));
         
+        $settings->addField('vendor_owner_id', 'select', array(
+            'name'          => 'vendor_owner_id',
+            'label'         => $helper->__('Vendor owner'),
+            'values'        => Mage::getSingleton("udropship/vendor_source")->getAllOptions(),
+        ));
+        
         $settings->addField('minimal_stock', 'text', array(
             'name'          => 'minimal_stock',
             'label'         => $helper->__('Minimal stock'),
@@ -63,6 +69,7 @@ class Zolago_Pos_Block_Adminhtml_Pos_Edit_Tab_General extends Mage_Adminhtml_Blo
         
         
         $address = $form->addFieldset('address', array('legend'=>$helper->__('Address')));
+        
         
         $address->addField('city', 'text', array(
             'name'          => 'city',
@@ -92,7 +99,7 @@ class Zolago_Pos_Block_Adminhtml_Pos_Edit_Tab_General extends Mage_Adminhtml_Blo
             }
         }
         $address->addField('region_id', 'select', array(
-            'name'          => 'region_code',
+            'name'          => 'region_id',
             'label'         => $helper->__('Region'),
             'class'         => 'countries',
             'values'        => $regionOpts
@@ -111,6 +118,12 @@ class Zolago_Pos_Block_Adminhtml_Pos_Edit_Tab_General extends Mage_Adminhtml_Blo
             'label'         => $helper->__('Postcode'),
             'required'      => true,
             "maxlength"     => 6
+        ));
+        
+        $address->addField('company', 'text', array(
+            'name'          => 'company',
+            'label'         => $helper->__('Company'),
+            "maxlength"     => 100
         ));
         
         $contact = $form->addFieldset('contact', array('legend'=>$helper->__('Contact')));

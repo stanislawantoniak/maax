@@ -33,8 +33,7 @@ class Zolago_Pos_Block_Adminhtml_Pos_Edit_Tab_Vendor
         // Grid serializer
         $serializer = $this->getLayout()->createBlock("adminhtml/widget_grid_serializer", "zolagopos_pos_edit_vendor_serializer");
         /* @var $serializer Mage_Adminhtml_Block_Widget_Grid_Serializer */
-        $serializer->initSerializerBlock($grid, "getCollectionData", "vendor");
-        $serializer->addColumnInputName(array("in_pos", "is_owner"));
+        $serializer->initSerializerBlock($grid, "getSelectedVendors", "post_vendor_ids");
         
         $this->setChild('zolagopos_pos_vendor_grid_serializer', $serializer);
         parent::_prepareLayout();

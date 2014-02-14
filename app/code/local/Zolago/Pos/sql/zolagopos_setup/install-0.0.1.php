@@ -21,6 +21,7 @@ $table = $installer->getConnection()
     ))
         
     // Struct
+    ->addColumn('vendor_owner_id',  Varien_Db_Ddl_Table::TYPE_INTEGER)
     ->addColumn('external_id',      Varien_Db_Ddl_Table::TYPE_TEXT, 100)
     ->addColumn('is_active',        Varien_Db_Ddl_Table::TYPE_INTEGER, 1, array('default'=>0, 'nullable' => false))
     ->addColumn('client_number',    Varien_Db_Ddl_Table::TYPE_TEXT, 100)
@@ -45,6 +46,8 @@ $table = $installer->getConnection()
     // Indexes
     ->addIndex($installer->getIdxName('zolagopos/pos', array('external_id')),
         array('external_id'))
+    ->addIndex($installer->getIdxName('zolagopos/pos', array('vendor_owner_id')),
+        array('vendor_owner_id'))
     ->addIndex($installer->getIdxName('zolagopos/pos', array('client_number')),
         array('client_number'))
     ->addIndex($installer->getIdxName('zolagopos/pos', array('country_id')),
@@ -59,7 +62,12 @@ $table = $installer->getConnection()
     ->addForeignKey(
         $installer->getFkName('zolagopos/pos', 'region_id', 'directory/country_region', 'region_id'),
         'region_id', $installer->getTable('directory/country_region'), 'region_id',
-        Varien_Db_Ddl_Table::ACTION_SET_NULL, Varien_Db_Ddl_Table::ACTION_NO_ACTION);
+         Varien_Db_Ddl_Table::ACTION_SET_NULL, Varien_Db_Ddl_Table::ACTION_CASCADE)
+    ->addForeignKey(
+        $installer->getFkName('zolagopos/pos', 'vendor_owner_id', 'udropship/vendor', 'vendor_id'),
+        'vendor_owner_id', $installer->getTable('udropship/vendor'), 'vendor_id', 
+         Varien_Db_Ddl_Table::ACTION_SET_NULL, Varien_Db_Ddl_Table::ACTION_CASCADE
+     );
 
 $installer->getConnection()->createTable($table);
 
@@ -73,8 +81,7 @@ $table = $installer->getConnection()
     // Struct
     ->addColumn("pos_id",       Varien_Db_Ddl_Table::TYPE_INTEGER, null, array('nullable' => false))
     ->addColumn("vendor_id",    Varien_Db_Ddl_Table::TYPE_INTEGER, null, array('nullable' => false))
-    ->addColumn('is_owner',     Varien_Db_Ddl_Table::TYPE_INTEGER, 1, array('default'=>0, 'nullable' => false))
-        
+       
     // Indexes
     ->addIndex($installer->getIdxName('zolagopos/pos_vendor', array('pos_id', 'vendor_id')),
         array('pos_id', 'vendor_id'), Varien_Db_Adapter_Interface::INDEX_TYPE_UNIQUE)
