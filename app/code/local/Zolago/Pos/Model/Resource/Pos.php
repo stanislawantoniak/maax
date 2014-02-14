@@ -60,6 +60,10 @@ class Zolago_Pos_Model_Resource_Pos
             $object->setRegion(null);
         }
         
+        if($object->getVendorOwnerId()===""){
+            $object->setVendorOwnerId(null);
+        }
+        
         // Times
         $currentTime = Varien_Date::now();
         if ((!$object->getId() 
