@@ -1,80 +1,28 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
-  <default>
-    <block type="page/html" name="root" output="toHtml" template="page.phtml">
-      <block type="page/html_head" name="head" as="head">
-        <action method="addJs">
-          <script>prototype/prototype.js</script>
-        </action>
-        <action method="addJs" ifconfig="dev/js/deprecation">
-          <script>prototype/deprecation.js</script>
-        </action>
-        <action method="addJs">
-          <script>prototype/validation.js</script>
-        </action>
-        <action method="addJs">
-          <script>scriptaculous/builder.js</script>
-        </action>
-        <action method="addJs">
-          <script>scriptaculous/effects.js</script>
-        </action>
-        <action method="addJs">
-          <script>scriptaculous/dragdrop.js</script>
-        </action>
-        <action method="addJs">
-          <script>scriptaculous/controls.js</script>
-        </action>
-        <action method="addJs">
-          <script>scriptaculous/slider.js</script>
-        </action>
-        <action method="addJs">
-          <script>varien/js.js</script>
-        </action>
-        <action method="addJs">
-          <script>varien/form.js</script>
-        </action>
-        <action method="addJs">
-          <script>varien/menu.js</script>
-        </action>
-        <action method="addJs">
-          <script>mage/translate.js</script>
-        </action>
-        <action method="addJs">
-          <script>mage/cookies.js</script>
-        </action>
-        <action method="addCss">
-          <stylesheet>css/udropship.css</stylesheet>
-        </action>
-        <action method="addItem">
-          <type>skin_css</type>
-          <name>css/styles-ie.css</name>
-          <params/>
-          <if>lt IE 8</if>
-        </action>
-      </block>
-      <block type="core/template" name="header" template="unirgy/dropship/vendor/header.phtml"/>
-      <block type="page/html_breadcrumbs" name="breadcrumbs" as="breadcrumbs"/>
-      <block type="core/messages" name="global_messages" as="global_messages"/>
-      <block type="core/messages" name="messages" as="messages"/>
-      <block type="core/text_list" name="content" as="content"/>
-      <block type="core/template" name="footer" template="unirgy/dropship/vendor/footer.phtml"/>
-      <block type="core/text_list" name="before_body_end" as="before_body_end"/>
-    </block>
-    <block type="core/profiler" name="debug_profiler" output="toHtml"/>
-  </default>
-  <udropship_vendor>
-    <reference name="head">
-      <action method="setTitle">
-        <title>Dropship Vendor Interface - modified by Zolago</title>
-        <action method="addCss">
-          <stylesheet>css/udropship.css</stylesheet>
-        </action>
-      </action>
-    </reference>
-    <reference name="header">
-      <action method="setTemplate">
-        <template>zolago/dropship/vendor/header.phtml</template>
-      </action>
-    </reference>
-  </udropship_vendor>
+	<udropship_vendor>
+		<reference name="head">
+			<action method="setTitle">
+				<title>Dropship Vendor Interface - modified by Zolago</title>
+				<action method="addCss">
+					<stylesheet>css/udropship.css</stylesheet>
+				</action>
+			</action>
+		</reference>
+		<reference name="header">
+			<action method="setTemplate">
+				<template>zolago/dropship/vendor/header.phtml</template>
+			</action>
+		</reference>
+	</udropship_vendor>
+	<udropship_pos_test>
+        <update handle="udropship_vendor" />
+        <reference name="content">
+            <block type="core/template" template="zolago/dropship/pos/test.phtml"/>
+        </reference>
+    </udropship_pos_test>
+	
+	<udropship_pos_text>
+		<update handle="udropship_vendor" />    
+	</udropship_pos_text>
 </layout>

@@ -14,4 +14,12 @@ class Zolago_Dropship_PosController
         $this->renderLayout();
                         
     }
+	
+	public function testAction(){
+		
+		$this->_renderPage();
+		
+		
+
+	}
 }
