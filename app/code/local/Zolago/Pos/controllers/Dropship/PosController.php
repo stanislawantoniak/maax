@@ -6,7 +6,7 @@ class Zolago_Pos_Dropship_PosController
 	 * Pos listing action
 	 */
 	public function indexAction(){
-		$this->_renderPage();
+		$this->_renderPage(null,'zolagopos');
 	}
 	
 	/**
@@ -14,7 +14,7 @@ class Zolago_Pos_Dropship_PosController
 	 */
 	public function editAction(){
 		$this->_registerModel();
-		$this->_renderPage();
+		$this->_renderPage(null,'zolagopos');
 	}
 	
 	/**
