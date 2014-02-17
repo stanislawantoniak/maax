@@ -5,7 +5,8 @@ class Zolago_Pos_Block_Dropship_Pos_Edit extends Mage_Core_Block_Template {
 		parent::_construct();
 		$helper = Mage::helper('zolagopos');
         $form = new Varien_Data_Form();
-        
+        $form->setAction($this->getUrl("udropship/pos/save"));
+		
         $settings = $form->addFieldset('setting', array('legend'=>$helper->__('POS Settings')));
         
         $settings->addField('name', 'text', array(
@@ -125,7 +126,6 @@ class Zolago_Pos_Block_Dropship_Pos_Edit extends Mage_Core_Block_Template {
         ));
         
         $form->setValues($this->getModel()->getData());
-        
         $this->setForm($form);
 	}
 

@@ -1,6 +1,26 @@
 <?php $_helper = Mage::helper("zolagopos");?>
 <?php $_pos = $this->getModel();?>
-<fieldset class="generic-box">
+<div class="page-title">
+	<h1>
+		<?php if($this->getIsNew()):?>
+			<?php echo $_helper->__("Edit POS");?> <?php echo $this->escapeHtml($_pos->getName());?>
+		<?php else:?>
+			<?php echo $_helper->__("Create POS");?>
+		<?php endif;?>
+	</h1>
+</div>
+<div>
+	<form id="edit-pos" action="<?php echo $this->getForm()->getAction();?>" method="POST">
+		<?php echo $this->getForm()->toHtml();?>
+		<div>
+			<button class="form-button" type="submit"><span><?php echo $_helper->__("Save POS");?></span></button>
+		</div>
+	</form>
+	<script type="text/javascript">
+		new VarienForm("edit-pos");
+	</script>
+</div>
+<!--<fieldset class="generic-box">
 	<div class="box-head">
 		<h3>
 			<?php if($this->getIsNew()):?>
@@ -10,5 +30,5 @@
 			<?php endif;?>
 		</h3>
 	</div>
-	<?php echo $this->getForm()->toHtml();?>
-</fieldset>
+	
+</fieldset>-->
