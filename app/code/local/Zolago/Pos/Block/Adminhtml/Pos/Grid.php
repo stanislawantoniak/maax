@@ -18,27 +18,24 @@ class Zolago_Pos_Block_Adminhtml_Pos_Grid extends Mage_Adminhtml_Block_Widget_Gr
     }
 
     protected function _prepareColumns() {
-        $this->addColumn("pos_id", array(
+        $data = array (
             "index"     =>"pos_id",
             "header"    => Mage::helper("zolagopos")->__("Pos ID"),
             "align"     => "right",
             "type"      => "number",
             "width"     => "100px"
-        ));
-        $this->addColumn("client_number", array(
-            "index"     =>"client_number",
-            "header"    => Mage::helper("zolagopos")->__("Client number"),
-            "align"     => "right",
-            "type"      => "number",
-            "width"     => "100px"
-        ));
-        $this->addColumn("external_id", array(
-            "index"     =>"external_id",
-            "header"    => Mage::helper("zolagopos")->__("External ID"),
-            "align"     => "right",
-            "type"      => "number",
-            "width"     => "100px"
-        ));
+        );
+        $this->addColumn("pos_id", $data);
+        $data['index'] = 'client_number';
+        $data['header'] = Mage::helper("zolagopos")->__("Client number");
+        
+        $this->addColumn("client_number", $data);
+        $data['index'] = 'external_id';
+        $data['header'] = Mage::helper("zolagopos")->__("External ID");
+        
+        $this->addColumn("external_id", $data);
+        
+        
         $this->addColumn("name", array(
             "index"     =>"name",
             "header"    => Mage::helper("zolagopos")->__("Name"),

@@ -47,7 +47,7 @@ class Zolago_Pos_Model_Pos extends Mage_Core_Model_Abstract{
     
     public function getRegionText() {
         if($this->getRegionId()){
-            Mage::getModel("direcotry/country_region")->load($this->getRegionId())->getName();
+            return Mage::getModel("directory/region")->load($this->getRegionId())->getName();
         }
         return $this->getRegion();
     }
@@ -61,4 +61,3 @@ class Zolago_Pos_Model_Pos extends Mage_Core_Model_Abstract{
     
 }
 
-?>

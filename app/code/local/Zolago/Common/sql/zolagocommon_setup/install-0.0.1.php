@@ -7,4 +7,3 @@ $installer->startSetup();
 // N/O
 $installer->endSetup();
 
-?>

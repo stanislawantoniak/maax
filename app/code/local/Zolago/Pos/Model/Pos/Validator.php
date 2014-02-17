@@ -1,102 +1,82 @@
 <?php
 
 class Zolago_Pos_Model_Pos_Validator {
-
+	
+	protected $_errors = array();
+	
+	protected $_data;
+	
+	protected $_helper;
+	
+    /**
+     * not empty 
+     */
+    protected function _notEmpty($field,$message) {
+		if (!Zend_Validate::is($this->_data[$field], 'NotEmpty')) {
+			$this->_errors[] = $this->_helper->__('%s is required', $this->_helper->__($message));
+		}
+    }
+	
+    /**
+     * string length
+     */
+     
+    protected function _stringLength($field,$message,$max) {
+		if (!empty($this->_data[$field]) &&
+				!Zend_Validate::is($this->_data[$field], "StringLength", array("max" => $max))) {
+			$this->_errors[] = $this->_helper->__('Max length of %s is %d', $this->_helper->__($message), $max);
+		}
+    }
 	public function validate($data) {
 
-		$errors = array();
+		$this->_errors = array();
 
-		$helper = Mage::helper('zolagopos');
+		$this->_helper = Mage::helper('zolagopos');
 
-		if (isset($data['external_id']) && $data['external_id'] &&
-				!Zend_Validate::is($data['external_id'], "StringLength", array("max" => 100))) {
-			$errors[] = $helper->__('Max length of %s is %d', $helper->__('External id'), 100);
+		$this->_data = $data;
+
+		$this->_stringLength('external_id','External id',100);
+
+		$this->_notEmpty('is_active','Is active');
+
+		$this->_stringLength('client_number','Client number',100);
+
+		$this->_notEmpty('minimal_stock','Minimal stock');
+
+		if (!Zend_Validate::is($this->_data['minimal_stock'], 'Digits')) {
+			$this->_errors[] = $this->_helper->__('%s is not number', $this->_helper->__('Minimal stock'));
 		}
+		$this->_notEmpty('name','Name');
+		$this->_stringLength('name','Name',100);
+		
+		$this->_stringLength('company','Company',150);
 
-		if (!Zend_Validate::is($data['is_active'], 'NotEmpty')) {
-			$errors[] = $helper->__('%s is required', $helper->__('Is active'));
+		$this->_notEmpty('country_id','Country');
+
+		if (!empty($this->_data['region_id']) &&
+				!Zend_Validate::is($this->_data['region_id'], 'Digits')) {
+			$this->_errors[] = $this->_helper->__('%s is not number', $this->_helper->__('Region'));
 		}
+		$this->_stringLength('region','Region',100);
 
-		if (isset($data['client_number']) && $data['client_number'] &&
-				!Zend_Validate::is($data['client_number'], "StringLength", array("max" => 100))) {
-			$errors[] = $helper->__('Max length of %s is %d', $helper->__('Client number'), 100);
+		$this->_notEmpty('postcode','Postcode');
+
+		if (!Zend_Validate::is($this->_data['postcode'], 'PostCode', array("format" => "\d\d-\d\d\d"))) {
+			$this->_errors[] = $this->_helper->__('%s has not valid format (ex.12-345)', $this->_helper->__('Postcode'));
 		}
+		$this->_notEmpty('street','Street');
+		$this->_stringLength('street','Street',150);
 
-		if (!Zend_Validate::is($data['minimal_stock'], 'NotEmpty')) {
-			$errors[] = $helper->__('%s is required', $helper->__('Minimal stock'));
-		}
+		
+		$this->_notEmpty('city','City');
+		$this->_stringLength('city','City',100);
 
-		if (!Zend_Validate::is($data['minimal_stock'], 'Digits')) {
-			$errors[] = $helper->__('%s is not number', $helper->__('Minimal stock'));
-		}
+		$this->_stringLength('email','Email',100);
 
-		if (!Zend_Validate::is($data['name'], 'NotEmpty')) {
-			$errors[] = $helper->__('%s is required', $helper->__('Name'));
-		}
+		$this->_notEmpty('phone','Phone');
+		$this->_stringLength('phone','Phone',50);
 
-		if (!Zend_Validate::is($data['name'], "StringLength", array("max" => 100))) {
-			$errors[] = $helper->__('Max length of %s is %d', $helper->__('Name'), 100);
-		}
-
-		if (isset($data['company']) && $data['company'] && 
-				!Zend_Validate::is($data['company'], "StringLength", array("max" => 150))) {
-			$errors[] = $helper->__('Max length of %s is %d', $helper->__('Company'), 150);
-		}
-
-		if (!Zend_Validate::is($data['country_id'], 'NotEmpty')) {
-			$errors[] = $helper->__('%s is required', $helper->__('Country'));
-		}
-
-		if (isset($data['region_id']) && $data['region_id'] &&
-				!Zend_Validate::is($data['region_id'], 'Digits')) {
-			$errors[] = $helper->__('%s is not number', $helper->__('Region'));
-		}
-
-		if (isset($data['region']) && $data['region'] &&
-				!Zend_Validate::is($data['region'], "StringLength", array("max" => 100))) {
-			$errors[] = $helper->__('Max length of %s is %d', $helper->__('Region'), 100);
-		}
-
-		if (!Zend_Validate::is($data['postcode'], 'NotEmpty')) {
-			$errors[] = $helper->__('%s is required', $helper->__('Postcode'));
-		}
-
-		if (!Zend_Validate::is($data['postcode'], 'PostCode', array("format" => "\d\d-\d\d\d"))) {
-			$errors[] = $helper->__('%s has not valid format (ex.12-345)', $helper->__('Postcode'));
-		}
-
-		if (!Zend_Validate::is($data['street'], 'NotEmpty')) {
-			$errors[] = $helper->__('%s is required', $helper->__('Street'));
-		}
-
-		if (!Zend_Validate::is($data['street'], "StringLength", array("max" => 150))) {
-			$errors[] = $helper->__('Max length of %s is %d', $helper->__('Street'), 150);
-		}
-
-		if (!Zend_Validate::is($data['city'], 'NotEmpty')) {
-			$errors[] = $helper->__('%s is required', $helper->__('City'));
-		}
-
-		if (!Zend_Validate::is($data['city'], "StringLength", array("max" => 100))) {
-			$errors[] = $helper->__('Max length of %s is %d', $helper->__('City'), 100);
-		}
-
-		if (isset($data['email']) && $data['email'] &&
-				!Zend_Validate::is($data['email'], "StringLength", array("max" => 100))) {
-			$errors[] = $helper->__('Max length of %s is %d', $helper->__('Email'), 100);
-		}
-
-		if (!Zend_Validate::is($data['phone'], 'NotEmpty')) {
-			$errors[] = $helper->__('%s is required', $helper->__('City'));
-		}
-
-		if (!Zend_Validate::is($data['phone'], "StringLength", array("max" => 50))) {
-			$errors[] = $helper->__('Max length of %s is %d', $helper->__('Phone'), 50);
-		}
-
-		return $errors;
+		return $this->_errors;
 	}
 
 }
-
-?>

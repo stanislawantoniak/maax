@@ -28,5 +28,3 @@ $regionData = array(
 
 $installer->getConnection()->
         insertMultiple($installer->getTable("directory/country_region"), $regionData);
-
-?>

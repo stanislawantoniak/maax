@@ -37,5 +37,3 @@ class Zolago_Customer_Model_Resource_Emailtoken
     }
     
 }
-
-?>
