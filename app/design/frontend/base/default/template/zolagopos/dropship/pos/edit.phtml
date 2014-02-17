@@ -1,0 +1,14 @@
+<?php $_helper = Mage::helper("zolagopos");?>
+<?php $_pos = $this->getModel();?>
+<fieldset class="generic-box">
+	<div class="box-head">
+		<h3>
+			<?php if($this->getIsNew()):?>
+				<?php echo $_helper->__("Edit POS");?> <?php echo $this->escapeHtml($_pos->getName());?>
+			<?php else:?>
+				<?php echo $_helper->__("Create POS");?>
+			<?php endif;?>
+		</h3>
+	</div>
+	
+</fieldset>

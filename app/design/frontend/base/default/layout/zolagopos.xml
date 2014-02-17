@@ -6,4 +6,10 @@
             <block type="zolagopos/dropship_pos" template="zolagopos/dropship/pos.phtml"/>
         </reference>
 	</udropship_pos_index>
+	<udropship_pos_edit>
+        <update handle="udropship_vendor" />
+        <reference name="content">
+            <block type="zolagopos/dropship_pos_edit" template="zolagopos/dropship/pos/edit.phtml"/>
+        </reference>
+	</udropship_pos_edit>
 </layout>
