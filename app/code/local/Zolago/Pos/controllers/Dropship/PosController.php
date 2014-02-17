@@ -69,19 +69,29 @@ class Zolago_Pos_Dropship_PosController extends Zolago_Dropship_Controller_Vendo
 		}
 
 		// Try save
-
 		$this->_getSession()->setFormData(null);
 		$data = $this->getRequest()->getParams();
 		$modelId = $this->getRequest()->getParam("pos_id");
 
 		try {
 			// Edit ?
-			if ($modelId !== null && !$pos->getId()) {
+			if (!empty($modelId) && !$pos->getId()) {
 				throw new Mage_Core_Exception($helper->__("POS not found"));
 			}
 			$pos->setData($data);
 			$validErrors = $pos->validate();
 			if ($validErrors === true) {
+				// Fix empty value
+				if($pos->getId()==""){
+					$pos->setId(null);
+				}
+				// Add stuff for new POS
+				if(!$pos->getId()){
+					// Set Vendor Owner
+					$pos->setVendorOwnerId($vendor->getId());
+					// Add relation
+					$pos->setPostVendorIds(array($vendor->getId()));
+				}
 				$pos->save();
 			} else {
 				$this->_getSession()->setFormData($data);
