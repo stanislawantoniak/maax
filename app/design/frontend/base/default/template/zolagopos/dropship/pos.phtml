@@ -19,14 +19,14 @@
 		</colgroup>
 		<thead>
 			<tr>
-				<th><?php echo $_helper->__("Name");?></th>
-				<th><?php echo $_helper->__("City");?></th>
+				<th><?php echo $_helper->__("POS Name");?></th>
+				<th><?php echo $_helper->__("POS City");?></th>
 				<th><?php echo $_helper->__("Client number");?></th>
 				<th><?php echo $_helper->__("Phone");?></th>
 				<th><?php echo $_helper->__("External ID");?></th>
 				<th><?php echo $_helper->__("Minimal stock");?></th>
 				<th><?php echo $_helper->__("Is active");?></th></th>
-				<th><?php echo $_helper->__("Edit");?></th></th>
+				<th><?php echo $_helper->__("Edit POS");?></th></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -39,7 +39,7 @@
 				<td><?php echo $this->escapeHtml($_pos->getExternalId())?></td>
 				<td><?php echo $_pos->getMinimalStock();?></td>
 				<td><?php echo $_helper->__((int)$_pos->getIsActive() ? "Yes" : "No");?></td>
-				<td><a href="<?php echo Mage::getUrl("udropship/pos/edit", array("pos_id"=>$_pos->getId()));?>"><?php echo $_helper->__("Edit");?></a></td>
+				<td><a href="<?php echo Mage::getUrl("udropship/pos/edit", array("pos_id"=>$_pos->getId()));?>"><?php echo $_helper->__("Edit POS");?></a></td>
 			</tr>
 		<?php endforeach; ?>
         </tbody>
