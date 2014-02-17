@@ -19,5 +19,26 @@ class Zolago_Pos_Model_Resource_Pos_Collection
         );
         return $this;
     }
+	
+	/**
+	 * @param Unirgy_Dropship_Model_Vendor|int $vendor
+	 * @return Zolago_Pos_Model_Resource_Pos_Collection
+	 */
+	public function addVendorFilter($vendor){
+		if($vendor instanceof Unirgy_Dropship_Model_Vendor){
+			$vendor = $vendor->getId();
+		}
+		$condition = $this->getConnection()->quoteInto(
+				"pos_vendor.pos_id=main_table.pos_id AND pos_vendor.vendor_id=?", 
+				$vendor
+		);
+		$this->getSelect()->join(
+            array("pos_vendor"=>$this->getTable('zolagopos/pos_vendor')), 
+            $condition,
+            array()
+        );
+		$this->getSelect()->group('main_table.pos_id');
+		return $this;
+	}
     
 }
