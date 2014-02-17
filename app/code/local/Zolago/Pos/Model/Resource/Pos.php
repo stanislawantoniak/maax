@@ -6,6 +6,23 @@ class Zolago_Pos_Model_Resource_Pos extends Mage_Core_Model_Resource_Db_Abstract
 		$this->_init('zolagopos/pos', "pos_id");
 	}
 
+	/**
+	 * @param Varien_Object $pos
+	 * @param int $vendorId
+	 * @return boolean
+	 */
+	public function isAssignedToVendor(Varien_Object $pos, $vendorId) {
+		$select = $this->getReadConnection()->select();
+		$select->from(
+				array("pos_vendor"=>$this->getTable("zolagopos/pos_vendor")), 
+				array(new Zend_Db_Expr("COUNT(*)"))
+		);
+		$select->where("pos_vendor.pos_id=?", $pos->getId());
+		$select->where("pos_vendor.vendor_id=?", $vendorId);
+		return (bool)$this->getReadConnection()->fetchOne($select);
+	}
+
+
 	public function addPosToVendorCollection(Mage_Core_Model_Resource_Db_Collection_Abstract $collection) {
 		$collection->getSelect()->joinLeft(
 				array("pos_vendor" => $this->getTable('zolagopos/pos_vendor')), "main_table.vendor_id=pos_vendor.vendor_id", array("pos_id")

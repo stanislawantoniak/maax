@@ -9,6 +9,8 @@ class Zolago_Pos_Block_Dropship_Pos_Edit extends Mage_Core_Block_Template {
 		
         $settings = $form->addFieldset('setting', array('legend'=>$helper->__('POS Settings')));
         
+		$settings->addField("pos_id", "hidden", array("name"=>"pos_id"));
+		
         $settings->addField('name', 'text', array(
             'name'          => 'name',
             'label'         => $helper->__('Name'),

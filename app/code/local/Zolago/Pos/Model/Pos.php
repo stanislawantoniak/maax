@@ -4,8 +4,20 @@ class Zolago_Pos_Model_Pos extends Mage_Core_Model_Abstract{
     protected function _construct() {
         $this->_init('zolagopos/pos');
     }
-    
-    /**
+	
+	/**
+	 * @param Unirgy_Dropship_Model_Vendor|int $vendor
+	 * @return boolean
+	 */
+	public function isAssignedToVendor($vendor) {
+		if($vendor instanceof Unirgy_Dropship_Model_Vendor){
+			$vendor = $vendor->getId();
+		}
+		return $this->getResource()->isAssignedToVendor($this, $vendor);
+	}
+
+
+	/**
      * @return Unirgy_Dropship_Model_Mysql4_Vendor_Collection
      */
     public function getVendorCollection() {
