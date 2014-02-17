@@ -117,6 +117,17 @@ class Zolago_Pos_Model_PosTest extends Zolago_TestCase {
         $this->assertTrue($validator);
         $model->save();
         $this->assertNotEmpty($model->getId());
+        // vendor collection
+        $collection = $model->getVendorCollection();
+        $this->assertEquals(0,count($collection));
+        
+        $vendor = Zolago_Pos_Helper_Test::getVendor();
+        $id = $vendor->getId();
+        $model->setPostVendorIds(array($id));
+        $model->save();
+        
+        $collection = $model->getVendorCollection();
+        $this->assertEquals(1,count($collection));
         
         $transaction->rollback();       
      }
