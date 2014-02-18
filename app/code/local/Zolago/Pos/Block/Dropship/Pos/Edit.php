@@ -133,7 +133,14 @@ class Zolago_Pos_Block_Dropship_Pos_Edit extends Mage_Core_Block_Template {
         $this->setForm($form);
 	}
 
-
+	protected function _beforeToHtml() {
+	    $form = $this->getForm();
+	    $block = $this->getLayout()->createBlock('zolagodropship/form_renderer_fieldset');
+	    die(print_R(get_class($block),1));
+        $form::setFieldsetRenderer($block);
+	    parent::_beforeToHtml();
+	    
+	}
 	/**
 	 * @return Zolago_Pos_Model_Pos
 	 */
