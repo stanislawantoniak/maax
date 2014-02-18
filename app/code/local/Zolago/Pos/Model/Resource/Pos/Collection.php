@@ -7,8 +7,16 @@ class Zolago_Pos_Model_Resource_Pos_Collection
         parent::_construct();
         $this->_init('zolagopos/pos');
     }
-    
-    /**
+	
+	/**
+	 * @return Zolago_Pos_Model_Resource_Pos_Collection
+	 */
+	public function addActiveFilter() {
+		$this->addFieldToFilter("is_active", 1);
+		return $this;
+	}
+
+	/**
      * @return Zolago_Pos_Model_Resource_Pos_Collection
      */
     public function addVendorOwnerName(){
