@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+	<udpoadmin_order_po_view>
+		<reference name="order_info">
+			<action method="setTemplate">
+				<template>zolagodropship/sales/order/view/info.phtml</template>
+			</action>
+		</reference>
+	</udpoadmin_order_po_view>
+</layout>

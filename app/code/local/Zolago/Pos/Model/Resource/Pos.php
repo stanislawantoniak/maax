@@ -5,6 +5,19 @@ class Zolago_Pos_Model_Resource_Pos extends Mage_Core_Model_Resource_Db_Abstract
 	protected function _construct() {
 		$this->_init('zolagopos/pos', "pos_id");
 	}
+	
+	/**
+	 * @param Mage_Core_Model_Resource_Db_Collection_Abstract $collection
+	 * @return Mage_Core_Model_Resource_Db_Collection_Abstract
+	 */
+	public function addPosNameToPoCollection(Mage_Core_Model_Resource_Db_Collection_Abstract $collection) {
+		$collection->getSelect()->joinLeft(
+				array("pos"=>$this->getMainTable()), 
+				"main_table.default_pos_id=pos.pos_id", 
+				array("default_pos_name"=>"pos.name")
+		);
+		return $collection;
+	}
 
 	/**
 	 * @param Varien_Object $pos
