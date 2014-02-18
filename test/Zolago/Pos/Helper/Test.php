@@ -46,6 +46,7 @@ class Zolago_Pos_Helper_Test {
             'city' => 'Bździszewo',
             'postcode' => '00-009',
             'phone' => '999888777',
+            'priority' => 0,
         );
         return $data;
     }

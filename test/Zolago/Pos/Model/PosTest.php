@@ -96,7 +96,10 @@ class Zolago_Pos_Model_PosTest extends Zolago_TestCase {
         $this->_validateTest('phone',null,Mage::helper('zolagopos')->__('Phone is required'));        
         // too long phone
         $this->_validateTest('phone',str_repeat('ab',100),Mage::helper('zolagopos')->__('Max length of Phone is 50'));        
-        
+        // no priority
+        $this->_validateTest('priority',null,Mage::helper('zolagopos')->__('Priority is required'));
+        // no numeric priority
+        $this->_validateTest('priority','9ads',Mage::helper('zolagopos')->__('Priority is not number'));        
         $transaction->rollback();
     }
     
