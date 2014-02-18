@@ -4,7 +4,9 @@ class Zolago_Pos_Block_Dropship_Pos_Edit extends Mage_Core_Block_Template {
 	protected function _construct() {
 		parent::_construct();
 		$helper = Mage::helper('zolagopos');
-        $form = new Varien_Data_Form();
+        $form = new Zolago_Dropship_Block_Form();
+
+		
         $form->setAction($this->getUrl("udropship/pos/save"));
 		
         $settings = $form->addFieldset('setting', array('legend'=>$helper->__('POS Settings')));
@@ -128,19 +130,17 @@ class Zolago_Pos_Block_Dropship_Pos_Edit extends Mage_Core_Block_Template {
             'class'         => 'validate-email',
             "maxlength"     => 100
         ));
-        
+
+
+		
         $form->setValues($this->getModel()->getData());
         $this->setForm($form);
 	}
 
-	protected function _beforeToHtml() {
-	    $form = $this->getForm();
-	    $block = $this->getLayout()->createBlock('zolagodropship/form_renderer_fieldset');
-	    die(print_R(get_class($block),1));
-        $form::setFieldsetRenderer($block);
-	    parent::_beforeToHtml();
-	    
+	public function getFormHtml() {
+		return $this->getForm()->toHtml();
 	}
+	
 	/**
 	 * @return Zolago_Pos_Model_Pos
 	 */

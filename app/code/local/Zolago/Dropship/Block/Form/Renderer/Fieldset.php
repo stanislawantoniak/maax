@@ -2,9 +2,12 @@
 /**
  * fieldset renderer
  */
-class Zolago_Dropship_Block_Form_Renderer_Fieldset extends Mage_Core_Block_Template {
+class Zolago_Dropship_Block_Form_Renderer_Fieldset 
+	extends Mage_Core_Block_Template 
+	implements Varien_Data_Form_Element_Renderer_Interface{
+	
     protected function _construct() {
-        $this->setTemplate('form/renderer/fieldset.phtml');
+        $this->setTemplate('zolagodropship/form/renderer/fieldset.phtml');
     }
 
     public function getElement()
@@ -12,7 +15,7 @@ class Zolago_Dropship_Block_Form_Renderer_Fieldset extends Mage_Core_Block_Templ
         return $this->_element;
     }
 
-    public function render(Mage_Core_Block_Template $element)
+    public function render(Varien_Data_Form_Element_Abstract $element)
     {
         $this->_element = $element;
         return $this->toHtml();
