@@ -39,5 +39,3 @@ $installer->getConnection()->addIndex(
 
 
 $installer->endSetup();
-
-?>

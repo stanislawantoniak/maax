@@ -12,8 +12,6 @@ class Zolago_Pos_Model_Observer {
 	}
 	
 	public function udpoOrderSaveBefore($observer) { // After
-		$order = $observer->getOrder();
-		/* @var $order Unirgy_DropshipPo_Model_SalesOrder */
 		$udpos = $observer->getUdpos();
 		foreach($udpos as $udpo){
 			/* @var $udpo Unirgy_DropshipPo_Model_Po */
