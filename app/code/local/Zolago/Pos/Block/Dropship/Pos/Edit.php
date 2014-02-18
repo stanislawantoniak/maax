@@ -158,4 +158,3 @@ class Zolago_Pos_Block_Dropship_Pos_Edit extends Mage_Core_Block_Template {
 	
 }
 
-?>
