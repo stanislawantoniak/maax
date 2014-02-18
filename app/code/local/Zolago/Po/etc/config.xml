@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Zolago_Po>
+            <version>0.0.1</version>
+        </Zolago_Po>
+    </modules>
+    <global>
+        <models>
+            <zolagopo>
+                <class>Zolago_Po_Model</class>
+            </zolagopo>
+        </models>
+        <helpers>
+            <zolagopo>
+                <class>Zolago_Po_Helper</class>
+            </zolagopo>
+        </helpers>
+<!--        <resources>
+            <zolagopo_setup>
+                <setup>
+                    <module>Zolago_Po</module>
+                </setup>
+            </zolagopo_setup>
+        </resources>-->
+    </global>
+    <adminhtml>
+        <layout>
+            <updates>
+                <zolagopo>
+                    <file>zolagopo.xml</file>
+                </zolagopo>
+            </updates>
+        </layout>
+    </adminhtml>
+</config>
