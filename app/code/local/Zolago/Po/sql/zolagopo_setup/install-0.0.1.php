@@ -30,5 +30,3 @@ $installer->getConnection()->addForeignKey(
 );
 
 $installer->endSetup();
-
-?>
