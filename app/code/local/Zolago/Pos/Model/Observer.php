@@ -40,6 +40,7 @@ class Zolago_Pos_Model_Observer {
 		$collection = Mage::getResourceModel("zolagopos/pos_collection");
 		/* @var $collection Zolago_Pos_Model_Resource_Pos_Collection */
 		$collection->addVendorFilter($vendor);
+		$collection->addActiveFilter();
 		$collection->setOrder("priority", "DESC");
 		$collection->setPageSize(1);
 		return $collection->getFirstItem();
