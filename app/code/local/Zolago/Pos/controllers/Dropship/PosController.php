@@ -33,7 +33,7 @@ class Zolago_Pos_Dropship_PosController extends Zolago_Dropship_Controller_Vendo
 			$this->_getSession()->setFormData(null);
 		}
 
-		$this->_renderPage();
+		$this->_renderPage(null,'zolagopos');
 	}
 
 	/**
