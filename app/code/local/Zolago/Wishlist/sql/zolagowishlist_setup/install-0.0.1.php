@@ -53,5 +53,3 @@ $catalogInstaller->addAttribute(
     );
 
 $installer->endSetup();
-
-?>

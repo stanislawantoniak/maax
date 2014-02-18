@@ -88,5 +88,3 @@ class Zolago_Customer_Model_Emailtoken extends Mage_Core_Model_Abstract{
             
     }
 }
-
-?>

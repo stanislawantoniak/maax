@@ -1,0 +1,62 @@
+<?php $_helper = Mage::helper("zolagopos");?>
+<?php $_collection = $this->getCollection();?>
+<?php echo $this->getMessagesBlock()->getGroupedHtml(); ?>
+<fieldset class="generic-box">
+	<div class="box-head">
+		<h3 class="left"><?php echo $_helper->__("POS List");?></h3>
+		<button class="right form-button" type="button" id="new-pos"><span><?php echo $_helper->__("Create POS");?></span></button>
+	</div>
+	<?php if($_collection && $_collection->count()):?>
+	<table cellspacing="0" class="data-table" id="udpo-grid">
+		<colgroup>
+			<col>
+			<col>
+			<col>
+			<col>
+			<col>
+			<col>
+			<col>
+			<col width="1">
+			<col width="1">
+		</colgroup>
+		<thead>
+			<tr>
+				<th><?php echo $_helper->__("POS Name");?></th>
+				<th><?php echo $_helper->__("POS City");?></th>
+				<th><?php echo $_helper->__("Client number");?></th>
+				<th><?php echo $_helper->__("Phone");?></th>
+				<th><?php echo $_helper->__("External ID");?></th>
+				<th><?php echo $_helper->__("Priority");?></th>
+				<th><?php echo $_helper->__("Minimal stock");?></th>
+				<th><?php echo $_helper->__("Is active");?></th></th>
+				<th><?php echo $_helper->__("Edit POS");?></th></th>
+			</tr>
+		</thead>
+		<tbody>
+		<?php foreach($_collection as $_pos):?>
+			<tr>
+				<td><?php echo $this->escapeHtml($_pos->getName())?></td>
+				<td><?php echo $this->escapeHtml($_pos->getCity())?></td>
+				<td><?php echo $this->escapeHtml($_pos->getClientNumber())?></td>
+				<td><?php echo $this->escapeHtml($_pos->getPhone())?></td>
+				<td><?php echo $this->escapeHtml($_pos->getExternalId())?></td>
+				<td><?php echo $_pos->getPriority();?></td>
+				<td><?php echo $_pos->getMinimalStock();?></td>
+				<td><?php echo $_helper->__((int)$_pos->getIsActive() ? "Yes" : "No");?></td>
+				<td><a href="<?php echo Mage::getUrl("udropship/pos/edit", array("pos_id"=>$_pos->getId()));?>"><?php echo $_helper->__("Edit POS");?></a></td>
+			</tr>
+		<?php endforeach; ?>
+        </tbody>
+	</table>
+	<?php else:?>
+	<p class="warning"><?php echo $_helper->__("There is no POS");?></p>
+	<?php endif;?>
+	</div>
+</fieldset>
+<script type="text/javascript">
+document.observe("dom:loaded", function() {
+  $('new-pos').observe('click', function(){
+	  document.location.href = '<?php echo Mage::getUrl('udropship/pos/new');?>';
+  });
+});
+</script>
