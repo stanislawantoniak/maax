@@ -39,4 +39,3 @@ $installer->startSetup();
  
 $installer->getConnection()->createTable($table);
 $installer->endSetup();
-?>

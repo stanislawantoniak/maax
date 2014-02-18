@@ -1,0 +1,38 @@
+<?php $_helper = Mage::helper("zolagopos");?>
+<?php $_pos = $this->getModel();?>
+<?php echo $this->getMessagesBlock()->getGroupedHtml(); ?>
+<div class="page-title">
+	<h1>
+		<?php if($this->getIsNew()):?>
+			<?php echo $_helper->__("Edit POS");?> <?php echo $this->escapeHtml($_pos->getName());?>
+		<?php else:?>
+			<?php echo $_helper->__("Create POS");?>
+		<?php endif;?>
+	</h1>
+</div>
+<div>
+	<form id="edit-pos" action="<?php echo $this->getForm()->getAction();?>" method="POST">
+		<?php echo $this->getLayout()->getBlock('formkey')->toHtml();?>
+		<?php echo $this->getFormHtml();?>
+		<div>
+			<button class="form-button" type="submit"><span><?php echo $_helper->__("Save POS");?></span></button>
+		</div>
+	</form>
+	<script type="text/javascript">
+		var posForm = new VarienForm('edit-pos');
+		var posControl = {
+			init: function () {
+				var regionSelect= $('region_id');
+				var regionText = new Element("input", {"type": "text", "id": "region", "class": "input-text", "name": "region", "value": "<?php echo $this->escapeHtml($this->getModel()->getRegion());?>"});
+				regionText.hide();
+				regionSelect.insert({before: regionText});
+
+				var updater = new RegionUpdater('country_id', 'region', 'region_id', <?php echo $this->helper('directory')->getRegionJson() ?>, undefined);
+
+			},
+		};
+		document.observe("dom:loaded", function() {
+			posControl.init();
+		});
+	</script>
+</div>
