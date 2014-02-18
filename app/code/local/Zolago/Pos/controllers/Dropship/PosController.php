@@ -127,9 +127,7 @@ class Zolago_Pos_Dropship_PosController extends Zolago_Dropship_Controller_Vendo
 		}
 		// Default values for new model
 		if (!$pos->getId()) {
-			$pos->setIsActive(1);
-			$pos->setMinimalStock(1);
-			$pos->setCountryId("PL");
+			$pos->setDefaults();
 		}
 		Mage::register("current_pos", $pos);
 		return $pos;

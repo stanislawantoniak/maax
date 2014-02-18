@@ -17,9 +17,7 @@ class Zolago_Pos_Adminhtml_PosController extends Mage_Adminhtml_Controller_Actio
             $model = Mage::getModel("zolagopos/pos")->load($posId);
             if(!$model->getId()){
                 // Default values for form
-                $model->setIsActive(1);
-                $model->setMinimalStock(1);
-                $model->setCountryId("PL");
+				$model->setDefaults();
             }
             $sessionData = $this->_getSession()->getFormData();
             if(!empty($sessionData)){

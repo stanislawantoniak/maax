@@ -25,12 +25,6 @@ class Zolago_Pos_Block_Dropship_Pos_Edit extends Mage_Core_Block_Template {
             'options'       => Mage::getSingleton("adminhtml/system_config_source_yesno")->toArray()
         ));
         
-        $settings->addField('vendor_owner_id', 'select', array(
-            'name'          => 'vendor_owner_id',
-            'label'         => $helper->__('Vendor owner'),
-            'values'        => Mage::getSingleton("udropship/vendor_source")->getAllOptions(),
-        ));
-        
         $settings->addField('minimal_stock', 'text', array(
             'name'          => 'minimal_stock',
             'label'         => $helper->__('Minimal stock'),
@@ -39,6 +33,14 @@ class Zolago_Pos_Block_Dropship_Pos_Edit extends Mage_Core_Block_Template {
             "maxlength"     => 3
         ));
         
+		$settings->addField('priority', 'text', array(
+            'name'          => 'priority',
+            'label'         => $helper->__('Priority'),
+            'required'      => true,
+            "class"         => "validate-digits",
+            "maxlength"     => 3
+        ));
+		
         $settings->addField('external_id', 'text', array(
             'name'          => 'external_id',
             'label'         => $helper->__('External ID'),

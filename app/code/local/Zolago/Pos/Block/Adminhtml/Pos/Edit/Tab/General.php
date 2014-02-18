@@ -54,6 +54,14 @@ class Zolago_Pos_Block_Adminhtml_Pos_Edit_Tab_General extends Mage_Adminhtml_Blo
             "class"         => "validate-digits",
             "maxlength"     => 3
         ));
+		
+        $settings->addField('priority', 'text', array(
+            'name'          => 'priority',
+            'label'         => $helper->__('Priority'),
+            'required'      => true,
+            "class"         => "validate-digits",
+            "maxlength"     => 3
+        ));
         
         $settings->addField('external_id', 'text', array(
             'name'          => 'external_id',

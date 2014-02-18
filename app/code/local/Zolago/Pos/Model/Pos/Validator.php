@@ -27,6 +27,7 @@ class Zolago_Pos_Model_Pos_Validator {
 			$this->_errors[] = $this->_helper->__('Max length of %s is %d', $this->_helper->__($message), $max);
 		}
     }
+	
 	public function validate($data) {
 
 		$this->_errors = array();
@@ -46,6 +47,13 @@ class Zolago_Pos_Model_Pos_Validator {
 		if (!Zend_Validate::is($this->_data['minimal_stock'], 'Digits')) {
 			$this->_errors[] = $this->_helper->__('%s is not number', $this->_helper->__('Minimal stock'));
 		}
+		
+		$this->_notEmpty('priority','Priority');
+
+		if (!Zend_Validate::is($this->_data['priority'], 'Digits')) {
+			$this->_errors[] = $this->_helper->__('%s is not number', $this->_helper->__('Priority'));
+		}
+		
 		$this->_notEmpty('name','Name');
 		$this->_stringLength('name','Name',100);
 		

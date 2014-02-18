@@ -70,6 +70,17 @@ class Zolago_Pos_Model_Pos extends Mage_Core_Model_Abstract{
     public function getValidator() {
         return Mage::getSingleton("zolagopos/pos_validator");
     }
+	
+	/**
+	 * @return Zolago_Pos_Model_Pos
+	 */
+	public function setDefaults() {
+		$this->setIsActive(1);
+		$this->setMinimalStock(1);
+		$this->setCountryId("PL");
+		$this->setPriority(1);
+		return $this;
+	}
     
 }
 
