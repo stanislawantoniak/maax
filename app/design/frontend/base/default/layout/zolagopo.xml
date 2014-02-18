@@ -1,4 +1,10 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
-    
+    <udpo_vendor_index>
+		<reference name="udpo.grid">
+			<action method="setTemplate">
+				<template>zolagopo/vendor/po/grid.phtml</template>
+			</action>
+		</reference>
+    </udpo_vendor_index>
 </layout>

@@ -2,20 +2,10 @@
 <config>
     <modules>
         <Zolago_Po>
-            <version>0.0.1</version>
+            <version>0.0.2</version>
         </Zolago_Po>
     </modules>
     <global>
-        <models>
-            <zolagopo>
-                <class>Zolago_Po_Model</class>
-            </zolagopo>
-        </models>
-        <helpers>
-            <zolagopo>
-                <class>Zolago_Po_Helper</class>
-            </zolagopo>
-        </helpers>
        <resources>
             <zolagopo_setup>
                 <setup>
@@ -23,18 +13,24 @@
                 </setup>
             </zolagopo_setup>
         </resources>
-        <events>
-            <udpo_order_save_after>
-                <observers>
-                    <udpo>
-                        <type>singleton</type>
-                        <class>zolagopo/observer</class>
-                        <method>udpoOrderSaveAfter</method>
-                    </udpo>
-                </observers>
-            </udpo_order_save_after>
-		</events>
+		<blocks>
+			<udpo>
+				<rewrite>
+					<adminhtml_po_grid>Zolago_Po_Block_Adminhtml_Po_Grid</adminhtml_po_grid>
+					<adminhtml_salesOrderViewTab_udpos>Zolago_Po_Block_Adminhtml_SalesOrderViewTab_Udpos</adminhtml_salesOrderViewTab_udpos>
+				</rewrite>
+			</udpo>
+		</blocks>
     </global>
+    <frontend>
+        <layout>
+            <updates>
+                <zolagopo>
+                    <file>zolagopo.xml</file>
+                </zolagopo>
+            </updates>
+        </layout>
+	</frontend>
     <adminhtml>
         <layout>
             <updates>
