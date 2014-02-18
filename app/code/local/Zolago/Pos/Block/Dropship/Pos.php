@@ -10,7 +10,7 @@ class Zolago_Pos_Block_Dropship_Pos extends Mage_Core_Block_Template {
 		$collection = Mage::getResourceModel("zolagopos/pos_collection");
 		/* @var $collection Zolago_Pos_Model_Resource_Pos_Collection */
 		$collection->addVendorFilter($vendor);
-		
+		$collection->setOrder("priority", "DESC");
 		return $collection;
 	}
 	
