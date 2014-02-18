@@ -1,2 +1,14 @@
+<?php
+$element = $this->getElement(); //->getElements()->getIterator();
+?>
+<fieldset class="generic-box">
+<div class="box-head"><h3><?php echo $this->getElement()->getLegend() ?></h3></div>
+<table>
+<tbody>
 
-adsflakdsmfklamdslfmaklsdmf
+
+<?php echo $element->getChildrenHtml();?>
+
+</tbody></table>
+
+</div>

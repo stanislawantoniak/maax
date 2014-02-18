@@ -6,5 +6,8 @@ class Zolago_Dropship_Block_Form extends Varien_Data_Form{
 		$block = Mage::getSingleton('core/layout')->
 			createBlock('zolagodropship/form_renderer_fieldset');
 		self::setFieldsetRenderer($block);
+		$block = Mage::getSingleton('core/layout')->
+			createBlock('zolagodropship/form_renderer_fieldset_element');
+		self::setFieldsetElementRenderer($block);
 	}
 }
