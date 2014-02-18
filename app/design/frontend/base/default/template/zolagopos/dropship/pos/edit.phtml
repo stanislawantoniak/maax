@@ -13,7 +13,7 @@
 <div>
 	<form id="edit-pos" action="<?php echo $this->getForm()->getAction();?>" method="POST">
 		<?php echo $this->getLayout()->getBlock('formkey')->toHtml();?>
-		<?php echo $this->getForm()->toHtml();?>
+		<?php echo $this->getFormHtml();?>
 		<div>
 			<button class="form-button" type="submit"><span><?php echo $_helper->__("Save POS");?></span></button>
 		</div>
