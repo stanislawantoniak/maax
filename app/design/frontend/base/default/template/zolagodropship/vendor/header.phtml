@@ -78,6 +78,10 @@ $_isTierShip = $_session->getVendor()->getAllowTiershipModify();
     && $_session->isLoggedIn()): ?>
         <li <?php if ($_active=='zolagopos'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('udropship/pos')?>"><?php echo $this->__('POS')?></a></li>
 <?php endif ?>
+<?php if (Mage::helper('udropship')->isModuleActive('zolagooperator')
+    && $_session->isLoggedIn()): ?>
+        <li <?php if ($_active=='zolagooperator'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('udropship/operator')?>"><?php echo $this->__('Operators')?></a></li>
+<?php endif ?>
 <?php if (Mage::helper('udropship')->isModuleActive('udsell')): ?>
     <li <?php if ($_active=='myudsell'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('udsell/index/mysellSearch')?>"><?php echo $this->__('My Sell List')?></a></li>
     <li <?php if ($_active=='udsell'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('udsell/index/sellSearch')?>"><?php echo $this->__('Select &amp; Sell')?></a></li>
