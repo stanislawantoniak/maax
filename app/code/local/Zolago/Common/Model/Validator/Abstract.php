@@ -2,7 +2,7 @@
 /**
  * abstract for validators
  */
-abstract class Zolago_Common_Helper_Validator_Abstract {
+abstract class Zolago_Common_Model_Validator_Abstract {
 	protected $_errors = array();
 	
 	protected $_data;

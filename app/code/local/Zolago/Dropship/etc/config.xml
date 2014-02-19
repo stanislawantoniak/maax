@@ -7,9 +7,9 @@
 	</modules>
 	<global>
 		<models>
-			<zolagaodropship>
+			<zolagodropship>
 				<class>Zolago_Dropship_Model</class>
-			</zolagaodropship>
+			</zolagodropship>
 			<udropship>
 				<rewrite>
 					<session>Zolago_Dropship_Model_Session</session>

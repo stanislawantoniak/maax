@@ -2,7 +2,7 @@
 /**
  * creating form fieldset 
  */
-abstract class Zolago_Common_Helper_Form_Fieldset_Abstract extends Mage_Core_Helper_Abstract {
+abstract class Zolago_Common_Model_Form_Fieldset_Abstract  {
 
     protected $_fieldset;
     protected $_model;

@@ -4,14 +4,15 @@ class Zolago_Pos_Block_Dropship_Pos_Edit extends Mage_Core_Block_Template {
 	protected function _construct() {
 		parent::_construct();
 		$helper = Mage::helper('zolagopos');
-        $form = new Zolago_Dropship_Block_Form();
+        $form = Mage::getModel('zolagodropship/form');
 
 		
         $form->setAction($this->getUrl("udropship/pos/save"));
 		
         $settings = $form->addFieldset('setting', array('legend'=>$helper->__('POS Settings')));
         
-        $builder = new Zolago_Pos_Helper_Form_Fieldset_Settings($settings);
+        $builder = Mage::getModel('zolagopos/form_fieldset_settings'); 
+        $builder->setFieldset($settings);
         
         $builder->prepareForm(array(
             'name',
@@ -25,7 +26,8 @@ class Zolago_Pos_Block_Dropship_Pos_Edit extends Mage_Core_Block_Template {
 		$settings->addField("pos_id", "hidden", array("name"=>"pos_id"));
 		        
         $address = $form->addFieldset('address', array('legend'=>$helper->__('Address')));
-        $builder = new Zolago_Pos_Helper_Form_Fieldset_Address($address);
+        $builder = Mage::getModel('zolagopos/form_fieldset_address'); 
+        $builder->setFieldset($address);
         $builder->setModel($this->getModel());
         $builder->prepareForm(array(
             'city',
@@ -37,7 +39,8 @@ class Zolago_Pos_Block_Dropship_Pos_Edit extends Mage_Core_Block_Template {
         ));
                             
         $contact = $form->addFieldset('contact', array('legend'=>$helper->__('Contact')));
-        $builder = new Zolago_Pos_Helper_Form_Fieldset_Contact($contact);
+        $builder = Mage::getModel('zolagopos/form_fieldset_contact'); 
+        $builder->setFieldset($contact);
         $builder->prepareForm(array(
             'phone',
             'email',

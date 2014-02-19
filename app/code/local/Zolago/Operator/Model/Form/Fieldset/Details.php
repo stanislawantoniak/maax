@@ -2,7 +2,7 @@
 /**
  * building form edit helper
  */
-class Zolago_Operator_Helper_Form_Fieldset_Details extends Zolago_Common_Helper_Form_Fieldset_Abstract {
+class Zolago_Operator_Model_Form_Fieldset_Details extends Zolago_Common_Model_Form_Fieldset_Abstract {
     protected function _getHelper() {
         return Mage::helper('zolagooperator');
     }

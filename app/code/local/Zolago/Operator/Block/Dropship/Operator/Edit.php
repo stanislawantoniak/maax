@@ -4,14 +4,14 @@ class Zolago_Operator_Block_Dropship_Operator_Edit extends Mage_Core_Block_Templ
 	protected function _construct() {
 		parent::_construct();
 		$helper = Mage::helper('zolagooperator');
-        $form = new Zolago_Dropship_Block_Form();
-
+        $form = Mage::getModel('zolagodropship/form'); 
 		
         $form->setAction($this->getUrl("udropship/operator/save"));
 		
                             
         $contact = $form->addFieldset('contact', array('legend'=>$helper->__('Details')));
-        $builder = new Zolago_Operator_Helper_Form_Fieldset_Details($contact);
+        $builder = Mage::getModel('zolagooperator/form_fieldset_details');
+        $builder->setFieldset($contact);
         $builder->prepareForm(array(
             'email',
             'password',

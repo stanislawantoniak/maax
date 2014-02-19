@@ -27,7 +27,8 @@ class Zolago_Pos_Block_Adminhtml_Pos_Edit_Tab_General extends Mage_Adminhtml_Blo
         
         $settings = $form->addFieldset('setting', array('legend'=>$helper->__('POS Settings')));
 
-        $builder = new Zolago_Pos_Helper_Form_Fieldset_Settings($settings);
+        $builder = Mage::getModel('zolagopos/form_fieldset_settings'); 
+        $builder->setFieldset($settings);
         
         
         $builder->prepareForm(array(
@@ -44,7 +45,8 @@ class Zolago_Pos_Block_Adminhtml_Pos_Edit_Tab_General extends Mage_Adminhtml_Blo
         
         
         $address = $form->addFieldset('address', array('legend'=>$helper->__('Address')));
-        $builder = new Zolago_Pos_Helper_Form_Fieldset_Address($address);
+        $builder = Mage::getModel('zolagopos/form_fieldset_address'); 
+        $builder->setFieldset($address);
         $builder->setModel($this->_getModel());
         $builder->prepareForm(array(
             'city',
@@ -57,7 +59,8 @@ class Zolago_Pos_Block_Adminhtml_Pos_Edit_Tab_General extends Mage_Adminhtml_Blo
                     
         
         $contact = $form->addFieldset('contact', array('legend'=>$helper->__('Contact')));
-        $builder = new Zolago_Pos_Helper_Form_Fieldset_Contact($contact);        
+        $builder = Mage::getModel('zolagopos/form_fieldset_contact');
+        $builder->setFieldset($contact);
         $builder->prepareForm(array(
             'phone',
             'email',

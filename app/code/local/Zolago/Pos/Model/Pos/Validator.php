@@ -1,6 +1,6 @@
 <?php
 
-class Zolago_Pos_Model_Pos_Validator extends Zolago_Common_Helper_Validator_Abstract {
+class Zolago_Pos_Model_Pos_Validator extends Zolago_Common_Model_Validator_Abstract {
 	
 	protected function _getHelper() {
 		return Mage::helper('zolagopos');
