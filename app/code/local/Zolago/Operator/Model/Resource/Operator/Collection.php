@@ -15,6 +15,16 @@ class Zolago_Operator_Model_Resource_Operator_Collection
 		$this->addFieldToFilter("is_active", 1);
 		return $this;
 	}
-
+	
+    /**
+     * vendor filter
+     */
+    public function addVendorFilter($vendor) {
+		if($vendor instanceof Unirgy_Dropship_Model_Vendor){
+			$vendor = $vendor->getId();
+		}
+		$this->addFieldToFilter('vendor_id',$vendor);
+		return $this;
+    }
     
 }

@@ -2,22 +2,18 @@
 /**
  * builder for settings fieldset
  */
-class Zolago_Pos_Helper_Form_Fieldset_Settings extends Zolago_Pos_Helper_Form_Fieldset {
+class Zolago_Pos_Helper_Form_Fieldset_Settings extends Zolago_Common_Helper_Form_Fieldset_Abstract {
+    
+    protected function _getHelper() {
+        return Mage::helper('zolagopos');
+    }
+
     protected function _addFieldName() {
         $this->_fieldset->addField('name', 'text', array(
                                        'name'          => 'name',
                                        'label'         => $this->_helper->__('Name'),
                                        'required'      => true,
                                        "maxlength"     => 100
-                                   ));
-
-    }
-    protected function _addFieldIsActive() {
-        $this->_fieldset->addField('is_active', 'select', array(
-                                       'name'          => 'is_active',
-                                       'label'         => $this->_helper->__('Is active'),
-                                       'required'      => true,
-                                       'options'       => Mage::getSingleton("adminhtml/system_config_source_yesno")->toArray()
                                    ));
 
     }

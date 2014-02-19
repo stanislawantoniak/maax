@@ -2,27 +2,9 @@
 /**
  * builder for contact fieldset
  */
-class Zolago_Pos_Helper_Form_Fieldset_Contact extends Zolago_Pos_Helper_Form_Fieldset 
+class Zolago_Pos_Helper_Form_Fieldset_Contact extends Zolago_Common_Helper_Form_Fieldset_Abstract
 {
-    protected function _addFieldPhone() {
-        $this->_fieldset->addField('phone', 'text', array(
-                                       'name'          => 'phone',
-                                       'label'         => $this->_helper->__('Phone'),
-                                       'required'      => true,
-                                       'class'         => 'validate-phone-number',
-                                       "maxlength"     => 50
-                                   ));
-
+    protected function _getHelper() {
+        return Mage::helper('zolagopos');
     }
-    protected function _addFieldEmail() {
-        $this->_fieldset->addField('email', 'text', array(
-                                       'name'          => 'email',
-                                       'label'         => $this->_helper->__('Email'),
-                                       'class'         => 'validate-email',
-                                       "maxlength"     => 100
-                                   ));
-
-
-    }
-
 }

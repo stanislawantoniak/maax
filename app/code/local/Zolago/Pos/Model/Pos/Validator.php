@@ -1,38 +1,15 @@
 <?php
 
-class Zolago_Pos_Model_Pos_Validator {
+class Zolago_Pos_Model_Pos_Validator extends Zolago_Common_Helper_Validator_Abstract {
 	
-	protected $_errors = array();
-	
-	protected $_data;
-	
-	protected $_helper;
-	
-    /**
-     * not empty 
-     */
-    protected function _notEmpty($field,$message) {
-		if (!Zend_Validate::is($this->_data[$field], 'NotEmpty')) {
-			$this->_errors[] = $this->_helper->__('%s is required', $this->_helper->__($message));
-		}
-    }
-	
-    /**
-     * string length
-     */
-     
-    protected function _stringLength($field,$message,$max) {
-		if (!empty($this->_data[$field]) &&
-				!Zend_Validate::is($this->_data[$field], "StringLength", array("max" => $max))) {
-			$this->_errors[] = $this->_helper->__('Max length of %s is %d', $this->_helper->__($message), $max);
-		}
-    }
+	protected function _getHelper() {
+		return Mage::helper('zolagopos');
+	}
 	
 	public function validate($data) {
 
 		$this->_errors = array();
 
-		$this->_helper = Mage::helper('zolagopos');
 
 		$this->_data = $data;
 
