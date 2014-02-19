@@ -49,7 +49,6 @@ class Zolago_Dropship_Model_Session extends Unirgy_Dropship_Model_Session
 		return !$this->isOperatorMode();
 	}
 	
-	
 	/**
 	 * @param Varien_Object $operator
 	 * @return Zolago_Dropship_Model_Session
@@ -87,11 +86,13 @@ class Zolago_Dropship_Model_Session extends Unirgy_Dropship_Model_Session
 		return false;
     }
 	
-
+	/**
+	 * @return Zolago_Dropship_Model_Session
+	 */
 	public function logout()
     {
 		$this->setOperatorId(null);
 		$this->setOperatorMode(null);
-		parent::logout();
+		return parent::logout();
 	}
 }
