@@ -22,7 +22,7 @@ class Zolago_Operator_Block_Dropship_Operator_Edit extends Mage_Core_Block_Templ
             'phone',
         ));
         
-		
+        $contact->addField("operator_id", "hidden", array("name"=>"operator_id"));		
         $form->setValues($this->getModel()->getData());
         $this->setForm($form);
 	}
