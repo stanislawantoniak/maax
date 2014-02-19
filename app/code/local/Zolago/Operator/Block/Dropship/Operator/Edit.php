@@ -15,7 +15,7 @@ class Zolago_Operator_Block_Dropship_Operator_Edit extends Mage_Core_Block_Templ
         $builder->prepareForm(array(
             'email',
             'password',
-            'password_confirm',
+            'confirmation',
             'is_active',
             'firstname',
             'lastname',

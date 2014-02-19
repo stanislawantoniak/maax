@@ -38,16 +38,18 @@ class Zolago_Operator_Model_Form_Fieldset_Details extends Zolago_Common_Model_Fo
         $this->_fieldset->addField('password', 'password', array(
                                        'name'          => 'password',
                                        'label'         => $this->_helper->__('Password'),
+									   'class'		   => 'validate-password',
                                        "maxlength"     => 50
                                    ));
     }
     /**
      * field password confirm
      */
-    protected function _addFieldPasswordConfirm() {
+    protected function _addFieldConfirmation() {
         $this->_fieldset->addField('password_confirm', 'password', array(
-                                       'name'          => 'password_confirm',
+                                       'name'          => 'confirmation',
                                        'label'         => $this->_helper->__('Confirm password'),
+									   'class'		   => 'validate-cpassword',
                                        "maxlength"     => 50
                                    ));
 

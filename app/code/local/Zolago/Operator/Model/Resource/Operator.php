@@ -27,7 +27,7 @@ class Zolago_Operator_Model_Resource_Operator extends Mage_Core_Model_Resource_D
 			$helper = Mage::helper('core');
 			/* @var $helper Mage_Core_Helper_Data */
 			$hash = $helper->getHash($object->getPostPassword());
-			$object-setPassword($hash);
+			$object->setPassword($hash);
 			$object->setPostPassword(null);
 		}
 		

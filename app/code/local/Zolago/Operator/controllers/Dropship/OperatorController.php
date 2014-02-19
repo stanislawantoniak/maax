@@ -75,13 +75,13 @@ class Zolago_Operator_Dropship_OperatorController extends Zolago_Dropship_Contro
 		$data = $this->getRequest()->getParams();
 		
 		// Check password and confirm
-		if (isset($data['password']) && !empty($data['password']) && 
-			$data['password'] !== $data['password_confirm']) {
+		if (isset($data['password']) && isset($data['confirmation']) && !empty($data['password']) && 
+			$data['password'] !== $data['confirmation']) {
 				$this->_getSession()->setFormData($data);
 				$this->_getSession()->addError($helper->__("Password does not match the confirm password"));
 				return $this->_redirectReferer();
-			
 		}
+		
 		$this->_getSession()->setFormData(null);
 		$modelId = $this->getRequest()->getParam("operator_id");
 
@@ -93,9 +93,9 @@ class Zolago_Operator_Dropship_OperatorController extends Zolago_Dropship_Contro
 			if(!empty($data['password'])){
 				$operator->setPostPassword($data['password']);
 				unset($data['password']);
-				unset($data['password_confirm']);
+				unset($data['confirmation']);
 			}
-			$operator->setData($data);
+			$operator->addData($data);
 			$validErrors = $operator->validate();
 			if ($validErrors === true) {
 				// Fix empty value
