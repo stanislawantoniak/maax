@@ -18,6 +18,10 @@ class Zolago_Operator_Model_Operator extends Mage_Core_Model_Abstract {
         return $this->getData('vendor');
     }
 
+	/**
+	 * @param array $data
+	 * @return boolean|array
+	 */
     public function validate($data = null) {
         if($data===null){
             $data = $this->getData();
@@ -29,8 +33,7 @@ class Zolago_Operator_Model_Operator extends Mage_Core_Model_Abstract {
         if(!is_array($data)){
             return false;
         }
-        
-        
+		
         $errors = Mage::getSingleton("zolagooperator/operator_validator")->validate($data);
 
         if (empty($errors)) {
@@ -75,7 +78,7 @@ class Zolago_Operator_Model_Operator extends Mage_Core_Model_Abstract {
 	 * @return array
 	 */
 	public function getRoles() {
-		return array("order_operator");
+		return array("order_operator"); // @todo cooroect values
 	}
 	
 	/**

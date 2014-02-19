@@ -73,8 +73,10 @@ class Zolago_Operator_Dropship_OperatorController extends Zolago_Dropship_Contro
 
 		// Try save
 		$data = $this->getRequest()->getParams();
+		
 		// Check password and confirm
-		if ($data['password'] !== $data['password_confirm']) {
+		if (isset($data['password']) && !empty($data['password']) && 
+			$data['password'] !== $data['password_confirm']) {
 				$this->_getSession()->setFormData($data);
 				$this->_getSession()->addError($helper->__("Password does not match the confirm password"));
 				return $this->_redirectReferer();
@@ -88,7 +90,11 @@ class Zolago_Operator_Dropship_OperatorController extends Zolago_Dropship_Contro
 			if (!empty($modelId) && !$operator->getId()) {
 				throw new Mage_Core_Exception($helper->__("Operator not found"));
 			}
-			unset($data['password_confirm']);
+			if(!empty($data['password'])){
+				$operator->setPostPassword($data['password']);
+				unset($data['password']);
+				unset($data['password_confirm']);
+			}
 			$operator->setData($data);
 			$validErrors = $operator->validate();
 			if ($validErrors === true) {
@@ -134,10 +140,7 @@ class Zolago_Operator_Dropship_OperatorController extends Zolago_Dropship_Contro
 		if ($operatorId) {
 			$operator->load($operatorId);
 		}
-		// Default values for new model
-		if (!$operator->getId()) {
-			$operator->setDefaults();
-		}
+		$operator->setPassword(null);
 		Mage::register("current_operator", $operator);
 		return $operator;
 	}

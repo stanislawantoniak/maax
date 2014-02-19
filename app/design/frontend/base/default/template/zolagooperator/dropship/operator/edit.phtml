@@ -3,7 +3,7 @@
 <?php echo $this->getMessagesBlock()->getGroupedHtml(); ?>
 <div class="page-title">
 	<h1>
-		<?php if($this->getIsNew()):?>
+		<?php if(!$this->getIsNew()):?>
 			<?php echo $_helper->__("Edit operator");?> <?php echo $this->escapeHtml($_pos->getEmail());?>
 		<?php else:?>
 			<?php echo $_helper->__("Create operator");?>

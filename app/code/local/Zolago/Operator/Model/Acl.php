@@ -18,12 +18,6 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		self::ROLE_ORDER_OPERATOR => "Order operator",	
 	);
 	
-	/**
-	 * @return array
-	 */
-	public static function getAllRoles() {
-		return self::$_currentRoles;
-	}
 	
 	public function __construct() {
 		// Set resources
@@ -37,5 +31,12 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		
 		// Build ACL Rules
 		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_ORDER_OPERATOR, self::RES_ORDER);
+	}
+	
+	/**
+	 * @return array
+	 */
+	public static function getAllRoles() {
+		return self::$_currentRoles;
 	}
 }

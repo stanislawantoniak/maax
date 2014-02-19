@@ -29,8 +29,6 @@ class Zolago_Operator_Helper_Form_Fieldset_Details extends Zolago_Common_Helper_
                                        'required'      => true,
                                        "maxlength"     => 100
                                    ));
-
-
     }
 
     /**
@@ -40,7 +38,6 @@ class Zolago_Operator_Helper_Form_Fieldset_Details extends Zolago_Common_Helper_
         $this->_fieldset->addField('password', 'password', array(
                                        'name'          => 'password',
                                        'label'         => $this->_helper->__('Password'),
-                                       'required'      => true,
                                        "maxlength"     => 50
                                    ));
     }
@@ -51,7 +48,6 @@ class Zolago_Operator_Helper_Form_Fieldset_Details extends Zolago_Common_Helper_
         $this->_fieldset->addField('password_confirm', 'password', array(
                                        'name'          => 'password_confirm',
                                        'label'         => $this->_helper->__('Confirm password'),
-                                       'required'      => true,
                                        "maxlength"     => 50
                                    ));
 

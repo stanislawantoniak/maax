@@ -21,6 +21,11 @@ class Zolago_Operator_Block_Dropship_Operator_Edit extends Mage_Core_Block_Templ
             'lastname',
             'phone',
         ));
+		
+		if($this->getIsNew()){
+			$form->getElement("password")->setRequired(true);
+			$form->getElement("password_confirm")->setRequired(true);
+		}
         
 		
         $form->setValues($this->getModel()->getData());
@@ -42,7 +47,7 @@ class Zolago_Operator_Block_Dropship_Operator_Edit extends Mage_Core_Block_Templ
 	}
 	
 	public function getIsNew() {
-		return $this->getModel()->getId();
+		return !(bool)$this->getModel()->getId();
 	}
 	
 	
