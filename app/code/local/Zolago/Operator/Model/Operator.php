@@ -7,9 +7,13 @@ class Zolago_Operator_Model_Operator extends Mage_Core_Model_Abstract {
     protected function _construct() {   
         $this->_init('zolagooperator/operator');
     }
+	
+	/**
+	 * @return Unirgy_Dropship_Model_Vendor
+	 */
     public function getVendor() {
         if (!$this->hasData('vendor')) {            
-            $this->setData('vendor',Mage::getModel('udropship/vendor')->load($this->vendor_id));
+            $this->setData('vendor',Mage::getModel('udropship/vendor')->load($this->getVendorId()));
         }
         return $this->getData('vendor');
     }
@@ -24,7 +28,7 @@ class Zolago_Operator_Model_Operator extends Mage_Core_Model_Abstract {
         $collection = $this->getCollection();
         $collection->addLoginFilter($username);
         foreach ($collection as $candidate) {
-            if (!Mage::helper('core')->validateHash($password, $candidate->getPasswordHash())) {
+            if (!Mage::helper('core')->validateHash($password, $candidate->getPassword())) {
                 continue;
             }
             $this->load($candidate->getId());

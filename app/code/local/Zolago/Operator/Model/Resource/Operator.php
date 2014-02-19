@@ -9,7 +9,7 @@ class Zolago_Operator_Model_Resource_Operator extends Mage_Core_Model_Resource_D
     /**
      * fill times
      */	
-     protected function _prepareDataForSave(Mage_Core_Abstract_Object $object) {
+     protected function _prepareDataForSave(Mage_Core_Model_Abstract $object) {
  		// Times
 		$currentTime = Varien_Date::now();
 		if ((!$object->getId() || $object->isObjectNew()) && !$object->getCreatedAt()) {

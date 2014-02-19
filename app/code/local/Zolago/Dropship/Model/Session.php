@@ -32,7 +32,7 @@ class Zolago_Dropship_Model_Session extends Unirgy_Dropship_Model_Session
         }
         $this->setOperator($operator);
 
-        return $this->_vendor;
+        return $this->_operator;
     }
 	
 	/**
@@ -88,12 +88,10 @@ class Zolago_Dropship_Model_Session extends Unirgy_Dropship_Model_Session
     }
 	
 
-	/**
-	 * @return bool
-	 */
-    public function isLoggedIn()
+	public function logout()
     {
-        return parent::isLoggedIn() || 
-				($this->isOperatorMode() && $this->getOperatorId() && $this->getOperator()->getId());
-    }
+		$this->setOperatorId(null);
+		$this->setOperatorMode(null);
+		parent::logout();
+	}
 }
