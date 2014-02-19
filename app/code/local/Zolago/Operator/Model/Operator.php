@@ -74,12 +74,6 @@ class Zolago_Operator_Model_Operator extends Mage_Core_Model_Abstract {
         return false;
     }
 	
-	/**
-	 * @return array
-	 */
-	public function getRoles() {
-		return array("order_operator"); // @todo cooroect values
-	}
 	
 	/**
 	 * @return Zolago_Operator_Model_Acl
