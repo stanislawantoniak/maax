@@ -26,5 +26,15 @@ class Zolago_Operator_Model_Resource_Operator_Collection
 		$this->addFieldToFilter('vendor_id',$vendor);
 		return $this;
     }
+	/**
+	 * @param string $login
+	 * @return Zolago_Operator_Model_Resource_Operator_Collection
+	 */
+	public function	addLoginFilter($login){
+		$this->addFieldToFilter("email", $login);
+		$this->addActiveFilter();
+		return $this;
+	}
+
     
 }
