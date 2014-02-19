@@ -70,4 +70,47 @@ class Zolago_Operator_Model_Operator extends Mage_Core_Model_Abstract {
         }
         return false;
     }
+	
+	/**
+	 * @return array
+	 */
+	public function getRoles() {
+		return array("order_operator");
+	}
+	
+	/**
+	 * @return Zolago_Operator_Model_Acl
+	 */
+	public function getAcl() {
+		if(!$this->hasData("acl")){
+			$acl = Mage::getModel("zolagooperator/acl");
+			/* @var $acl Zolago_Operator_Model_Acl */
+			$this->setData("acl", $acl);
+		}
+		return $this->getData("acl");
+	}
+	
+	/**
+	 * @param type $resource
+	 * @return boolean
+	 */
+	public function isAllowed($resource) {
+		foreach($this->getRoles() as $role){
+			if(!$this->_isCorrectRole($role)){
+				continue;
+			}
+			if($this->getAcl()->isAllowed($role, $resource)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * @param string $role
+	 * @return bool
+	 */
+	protected function _isCorrectRole($role) {
+		return $this->getAcl()->hasRole($role);
+	}
 }

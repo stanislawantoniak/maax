@@ -95,4 +95,15 @@ class Zolago_Dropship_Model_Session extends Unirgy_Dropship_Model_Session
 		$this->setOperatorMode(null);
 		return parent::logout();
 	}
+	
+	/**
+	 * @param string $resource
+	 * @return boolean
+	 */
+	public function	isAllowed($resource){
+		if($this->isVendorMode()){
+			return true;
+		}
+		return $this->getOperator()->isAllowed($resource);
+	}
 }
