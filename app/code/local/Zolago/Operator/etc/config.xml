@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Zolago_Operator>
-			<version>0.0.1</version>
+			<version>0.0.2</version>
 		</Zolago_Operator>
 	</modules>
 	<global>
@@ -74,5 +74,16 @@
 				</Zolago_Operator.csv>
 			</modules>
 		</translate>
+		<events>
+            <controller_action_predispatch>
+                <observers>
+                    <zolagooperator>
+                        <type>singleton</type>
+                        <class>zolagooperator/observer</class>
+                        <method>handleControllerActionPredispatch</method>
+                    </zolagooperator>
+                </observers>
+            </controller_action_predispatch>
+		</events>
 	</frontend>
 </config>

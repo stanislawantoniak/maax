@@ -17,7 +17,40 @@ class Zolago_Operator_Model_Resource_Operator extends Mage_Core_Model_Resource_D
 			$object->setCreatedAt($currentTime);
 		}
 		$object->setUpdatedAt($currentTime);
+		
+		// Do not modify passwd hash - return orig passwd
+		if($object->getId()){
+			$object->setPassword($object->getOrigData('password'));
+		}
+		// Modify passwd hash by special param
+		if($object->getPostPassword()){
+			$helper = Mage::helper('core');
+			/* @var $helper Mage_Core_Helper_Data */
+			$hash = $helper->getHash($object->getPostPassword());
+			$object->setPassword($hash);
+			$object->setPostPassword(null);
+		}
+		
+		
+		 $acl = $object->getAcl();
+		 $roles = $object->getRoles();
+		 $rolesToSave = array();
+		 if(is_array($roles)){
+			 foreach($roles as $role){
+				 if($acl->hasRole($role)){
+					 $rolesToSave[] = $role;
+				 }
+			 }
+		 }
+		
+		$object->setRoles(implode(",", $rolesToSave));
+		
 		return parent::_prepareDataForSave($object);     	
      }
+	 
+	 protected function _afterLoad(Mage_Core_Model_Abstract $object) {
+		 $object->setRoles(explode(",", $object->getData("roles")));
+		 return parent::_afterLoad($object);
+	 }
 }
 

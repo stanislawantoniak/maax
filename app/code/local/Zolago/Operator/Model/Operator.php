@@ -18,6 +18,10 @@ class Zolago_Operator_Model_Operator extends Mage_Core_Model_Abstract {
         return $this->getData('vendor');
     }
 
+	/**
+	 * @param array $data
+	 * @return boolean|array
+	 */
     public function validate($data = null) {
         if($data===null){
             $data = $this->getData();
@@ -29,8 +33,7 @@ class Zolago_Operator_Model_Operator extends Mage_Core_Model_Abstract {
         if(!is_array($data)){
             return false;
         }
-        
-        
+		
         $errors = Mage::getSingleton("zolagooperator/operator_validator")->validate($data);
 
         if (empty($errors)) {
@@ -51,6 +54,12 @@ class Zolago_Operator_Model_Operator extends Mage_Core_Model_Abstract {
         $collection = $this->getCollection();
         $collection->addLoginFilter($username);
         foreach ($collection as $candidate) {
+			/* @var $candidate Zolago_Operator_Model_Operator */
+			// Only active context-vendor
+            if ($candidate->getVendor()->getStatus()!="A") {
+                continue;
+            }
+			// Passwd match
             if (!Mage::helper('core')->validateHash($password, $candidate->getPassword())) {
                 continue;
             }
@@ -71,12 +80,6 @@ class Zolago_Operator_Model_Operator extends Mage_Core_Model_Abstract {
         return false;
     }
 	
-	/**
-	 * @return array
-	 */
-	public function getRoles() {
-		return array("order_operator");
-	}
 	
 	/**
 	 * @return Zolago_Operator_Model_Acl
@@ -95,6 +98,9 @@ class Zolago_Operator_Model_Operator extends Mage_Core_Model_Abstract {
 	 * @return boolean
 	 */
 	public function isAllowed($resource) {
+		if(!$this->getAcl()->has($resource)){
+			return false;
+		}
 		foreach($this->getRoles() as $role){
 			if(!$this->_isCorrectRole($role)){
 				continue;
