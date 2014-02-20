@@ -74,5 +74,16 @@
 				</Zolago_Operator.csv>
 			</modules>
 		</translate>
+		<events>
+            <udpo_order_save_before>
+                <observers>
+                    <zolagopos>
+                        <type>singleton</type>
+                        <class>zolagopos/observer</class>
+                        <method>udpoOrderSaveBefore</method>
+                    </zolagopos>
+                </observers>
+            </udpo_order_save_before>
+		</events>
 	</frontend>
 </config>
