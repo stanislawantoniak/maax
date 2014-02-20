@@ -21,6 +21,13 @@
 				</rewrite>
 			</udpo>
 		</blocks>
+		<helpers>
+			<udpo>
+				<rewrite>
+					<data>Zolago_Po_Helper_Data</data>
+				</rewrite>
+			</udpo>
+		</helpers>
     </global>
     <frontend>
         <layout>
