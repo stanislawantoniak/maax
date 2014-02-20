@@ -18,7 +18,7 @@ class Zolago_Operator_Model_Resource_Operator extends Mage_Core_Model_Resource_D
 				array(new Zend_Db_Expr("COUNT(*)"))
 		);
 		$cond = $this->getReadConnection()->quoteInto(
-				"po.default_po_id=operator_pos.pos_id AND po.entity_id=?", 
+				"po.default_pos_id=operator_pos.pos_id AND po.entity_id=?", 
 				$poId
 		);
 		$select->join(
@@ -28,7 +28,7 @@ class Zolago_Operator_Model_Resource_Operator extends Mage_Core_Model_Resource_D
 		);
 		$select->where("operator_pos.operator_id=?", $object->getId());
 		
-		return (int)$this->getReadConnection()->fetchOne($select) > 0;
+		return (bool)$this->getReadConnection()->fetchOne($select);
 		
 	}
 	
