@@ -136,7 +136,9 @@ class Zolago_Operator_Model_Resource_Operator extends Mage_Core_Model_Resource_D
 	  * @param int|Zolago_Operator_Model_Operator $operator
 	  * @return Zolago_Operator_Model_Resource_Operator
 	  */
-	 public function addOperatorFilterToPoCollection(Mage_Core_Model_Resource_Db_Collection_Abstract $collection, $operator) {
+	 public function addOperatorFilterToPoCollection(
+			 Mage_Core_Model_Resource_Db_Collection_Abstract $collection, $operator) {
+		 
 		 if(!($operator instanceof Zolago_Operator_Model_Operator)){
 			 $operator = Mage::getModel("zolagooperator/operator");
 		 }
