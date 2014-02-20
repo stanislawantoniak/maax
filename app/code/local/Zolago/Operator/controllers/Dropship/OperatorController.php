@@ -80,6 +80,13 @@ class Zolago_Operator_Dropship_OperatorController extends Zolago_Dropship_Contro
 				return $this->_redirectReferer();
 		}
 		
+		// Check email unique
+		if(isset($data['email']) && !$this->_checkEmailUnique($data['email'], $operator)){
+			$this->_getSession()->setFormData($data);
+			$this->_getSession()->addError($helper->__("Email is currently in use"));
+			return $this->_redirectReferer();
+		}
+		
 		$this->_getSession()->setFormData(null);
 		$modelId = $this->getRequest()->getParam("operator_id");
 
@@ -133,6 +140,32 @@ class Zolago_Operator_Dropship_OperatorController extends Zolago_Dropship_Contro
 		return $this->_redirect("*/*");
 		
 	}
+
+	protected function _checkEmailUnique($email, Zolago_Operator_Model_Operator $operator) {
+		////////////////////////////////////////////////////////////////////////
+		// Email not changed for existing customer
+		////////////////////////////////////////////////////////////////////////
+		if($operator->getId() && trim($operator->getEmail())==trim($email)){
+			return true;
+		}
+		////////////////////////////////////////////////////////////////////////
+		// Email changed or insert new one
+		////////////////////////////////////////////////////////////////////////
+		$vendorCollection = Mage::getResourceModel('udropship/vendor_collection');
+		/* @var $vendorCollection Unirgy_Dropship_Model_Mysql4_Vendor_Collection */
+		
+		$vendorCollection->addFieldToFilter("email", $email);
+		if($vendorCollection->count()>0){
+			return false;
+		}
+		
+		$operatorCollection = Mage::getResourceModel("zolagooperator/operator_collection");
+		/* @var $operatorCollection Zolago_Operator_Model_Resource_Operator_Collection */
+		$operatorCollection->addFieldToFilter("email", $email);
+		
+		return $operatorCollection->count()==0;
+	}
+
 
 	/**
 	 * Register current model to use by blocks
