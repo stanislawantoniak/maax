@@ -24,7 +24,7 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		self::RES_UDROPSHIP_VENDOR_INDEX			=> "Vendor index",	
 		self::RES_UDROPSHIP_VENDOR_LOGIN			=> "Vendor login",	
 		self::RES_UDROPSHIP_VENDOR_LOGOUT			=> "Vendor logout",
-		self::RES_UDROPSHIP_VENDOR_PASSWORD		=> "Vendor logout",
+		self::RES_UDROPSHIP_VENDOR_PASSWORD		=> "Vendor pasword",
 		self::RES_UDROPSHIP_VENDOR_PASSWORD_POST	=> "Cendor password post",
         // PO
 		self::RES_UDPO_VENDOR						=> "Orders"
@@ -64,5 +64,16 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 	 */
 	public static function getAllRoles() {
 		return self::$_currentRoles;
+	}
+	
+	public static function getAllRolesOptions() {
+		$out = array();
+		foreach(self::getAllRoles() as $value=>$label){
+			$out[] = array(
+				"label"	=>	Mage::helper('zolagooperator')->__($label),
+				"value" =>	$value
+			);
+		}
+		return $out;
 	}
 }

@@ -5,11 +5,12 @@ class Zolago_Operator_Block_Dropship_Operator_Edit extends Mage_Core_Block_Templ
 		parent::_construct();
 		$helper = Mage::helper('zolagooperator');
         $form = Mage::getModel('zolagodropship/form'); 
-		
+		/* @var $form Zolago_Dropship_Model_Form */
         $form->setAction($this->getUrl("udropship/operator/save"));
 		
                             
         $contact = $form->addFieldset('contact', array('legend'=>$helper->__('Details')));
+        $contact->addField("operator_id", "hidden", array("name"=>"operator_id"));		
         $builder = Mage::getModel('zolagooperator/form_fieldset_details');
         $builder->setFieldset($contact);
         $builder->prepareForm(array(
@@ -21,13 +22,32 @@ class Zolago_Operator_Block_Dropship_Operator_Edit extends Mage_Core_Block_Templ
             'lastname',
             'phone',
         ));
+		$acl = $this->getModel()->getAcl();
+		
+		$roles = $form->addFieldset("privileges", array("legend"=>$helper->__('Privileges')));
+		$roles->addField("roles", "multiselect", array(
+			"name"	 => "roles",
+			"label"  => $helper->__('Roles'),
+			"values" => $acl::getAllRolesOptions()
+		));
+		
+		// POS
+		$posColection = Mage::getResourceModel("zolagopos/pos_collection");
+		/* @var $posColection Zolago_Pos_Model_Resource_Pos_Collection */
+		$posColection->
+				addVendorFilter(Mage::getSingleton('udropship/session')->getVendor())->
+				addActiveFilter();
+		
+		$roles->addField("pos", "multiselect", array(
+			"name"	 => "pos",
+			"values" => $posColection->toOptionArray()
+		));
 		
 		if($this->getIsNew()){
 			$form->getElement("password")->setRequired(true);
 			$form->getElement("password_confirm")->setRequired(true);
 		}
         
-        $contact->addField("operator_id", "hidden", array("name"=>"operator_id"));		
         $form->setValues($this->getModel()->getData());
         $this->setForm($form);
 	}

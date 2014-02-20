@@ -95,6 +95,9 @@ class Zolago_Operator_Dropship_OperatorController extends Zolago_Dropship_Contro
 				unset($data['password']);
 				unset($data['confirmation']);
 			}
+			if(!isset($data['roles']) || !is_array($data['roles'])){
+				$data['roles'] = array();
+			}
 			$operator->addData($data);
 			$validErrors = $operator->validate();
 			if ($validErrors === true) {
