@@ -8,6 +8,32 @@ class Zolago_Operator_Model_Resource_Operator extends Mage_Core_Model_Resource_D
 
 	/**
 	 * @param Mage_Core_Model_Abstract $object
+	 * @param int $poId
+	 * @return bool
+	 */
+	public function isAllowedToPo(Mage_Core_Model_Abstract $object, $poId) {
+		$select = $this->getReadConnection()->select();
+		$select->from(
+				array("operator_pos"=>$this->getTable("zolagooperator/operator_pos")), 
+				array(new Zend_Db_Expr("COUNT(*)"))
+		);
+		$cond = $this->getReadConnection()->quoteInto(
+				"po.default_po_id=operator_pos.pos_id AND po.entity_id=?", 
+				$poId
+		);
+		$select->join(
+				array("po"=>$this->getTable("udpo/po")),
+				$cond,
+				array()
+		);
+		$select->where("operator_pos.operator_id=?", $object->getId());
+		
+		return (int)$this->getReadConnection()->fetchOne($select) > 0;
+		
+	}
+	
+	/**
+	 * @param Mage_Core_Model_Abstract $object
 	 * @return type
 	 */
 	public function getAllowedPos(Mage_Core_Model_Abstract $object) {
@@ -58,11 +84,7 @@ class Zolago_Operator_Model_Resource_Operator extends Mage_Core_Model_Resource_D
 		 }
 		
 		$object->setRoles(implode(",", $rolesToSave));
-		
-		// POS Assigment
-		if($object->hasData("allowed_pos")){	
-			$this->_setAllowedPos($object, $object->getData("allowed_pos"));
-		}
+	
 		
 		return parent::_prepareDataForSave($object);     	
      }
@@ -75,6 +97,18 @@ class Zolago_Operator_Model_Resource_Operator extends Mage_Core_Model_Resource_D
 		 $object->setRoles(explode(",", $object->getData("roles")));
 		 return parent::_afterLoad($object);
 	 }
+	 
+	 /**
+	  * @param Mage_Core_Model_Abstract $param
+	  * @return Zolago_Operator_Model_Resource_Operator
+	  */
+	 protected function _afterSave(Mage_Core_Model_Abstract $object) {
+		// POS Assigment
+		if ($object->hasData("allowed_pos")) {
+			$this->_setAllowedPos($object, $object->getData("allowed_pos"));
+		}
+		return parent::_afterSave($object);
+	}
 	 
 	 /**
 	  * @param Mage_Core_Model_Abstract $object

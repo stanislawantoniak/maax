@@ -26,6 +26,7 @@ class Zolago_Operator_Model_Observer {
 			$session = Mage::getSingleton("udropship/session");
 			/* @var $session Zolago_Dropship_Model_Session */
 			if($session->isOperatorMode()){
+				$operator = $session->getOperator();
 				// Apply ACL
 				$controllerName = $request->getControllerName();
 				$module = $request->getModuleName();
@@ -52,10 +53,27 @@ class Zolago_Operator_Model_Observer {
 					$isAllowed = true;
 				}
 				
+				// Check operator - pos - order assigment
+				if($isAllowed && $controller instanceof Unirgy_DropshipPo_VendorController){
+					$isAllowed = $this->_checkForUdpo($action, $operator);
+				}
+				
 				if(!$isAllowed){
 					$this->_redirectNotAllowed($response, $request);
 				}
 			}
+		}
+	}
+	
+	protected function _checkForUdpo($action, Zolago_Operator_Model_Operator $operator) {
+		switch ($action) {
+			case "udpoInfo":
+				return true;
+			break;
+
+			default:
+				return true;
+			break;
 		}
 	}
 	
