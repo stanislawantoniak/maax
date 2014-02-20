@@ -1,12 +1,7 @@
 <?php
 class Zolago_Operator_Model_Observer {
 	
-	protected $_safeActions = array(
-		"login",
-		"logout",
-		"password",
-		"passwordPost",
-	);
+
 	
 	/**
 	 * @param type $observer
@@ -31,33 +26,34 @@ class Zolago_Operator_Model_Observer {
 				$controllerName = $request->getControllerName();
 				$module = $request->getModuleName();
 				$action = $request->getActionName();
-				// Allow safe actions
-				if(in_array($action, $this->_safeActions)){
-					return;
-				}
-				// Check action
-				$resourceModuleLevel = $module;
-				$resourceControllerLevel = $resourceModuleLevel . "/" . $controllerName;
-				$resourceActionLevel = $resourceControllerLevel . "/" . $action;
+
+				
 				$isAllowed = false;
 				
+				// Check resource level
+				$resourceModuleLevel = $module;
 				if($session->isAllowed($resourceModuleLevel)){
 					$isAllowed = true;
 				}
 				
+				// Check controller level
+				$resourceControllerLevel = $resourceModuleLevel . "/" . $controllerName;
 				if(!$isAllowed && $session->isAllowed($resourceControllerLevel)){
 					$isAllowed = true;
 				}
 				
+				// Check action level
+				$resourceActionLevel = $resourceControllerLevel . "/" . $action;
 				if(!$isAllowed && $session->isAllowed($resourceActionLevel)){
 					$isAllowed = true;
 				}
 				
-				// Check operator - pos - order assigment
+				// Check additional asserts
 				if($isAllowed && $controller instanceof Unirgy_DropshipPo_VendorController){
 					$isAllowed = $this->_checkForUdpo($request, $operator);
 				}
 				
+				// Process access-denied if not allowed
 				if(!$isAllowed){
 					$this->_redirectNotAllowed($response, $request);
 				}
