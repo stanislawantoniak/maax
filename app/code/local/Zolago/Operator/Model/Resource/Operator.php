@@ -145,7 +145,7 @@ class Zolago_Operator_Model_Resource_Operator extends Mage_Core_Model_Resource_D
 		 /* @var $operator Zolago_Operator_Model_Operator */
 		 $allowedPos = $operator->getAllowedPos();
 		 if(count($allowedPos)){
-			 $collection->addFieldToFilter("default_pos_id", array("in"=>$operator->getAllowedPos()));
+			 $collection->addFieldToFilter("default_pos_id", array("in"=>$allowedPos));
 		 }else{
 			 $collection->addFieldToFilter("entity_id", -1); // Empty
 		 }
