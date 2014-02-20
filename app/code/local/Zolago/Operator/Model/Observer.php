@@ -1,12 +1,7 @@
 <?php
 class Zolago_Operator_Model_Observer {
 	
-	protected $_safeActions = array(
-		"login",
-		"logout",
-		"password",
-		"passwordPost",
-	);
+
 	
 	/**
 	 * @param type $observer
@@ -31,33 +26,34 @@ class Zolago_Operator_Model_Observer {
 				$controllerName = $request->getControllerName();
 				$module = $request->getModuleName();
 				$action = $request->getActionName();
-				// Allow safe actions
-				if(in_array($action, $this->_safeActions)){
-					return;
-				}
-				// Check action
-				$resourceModuleLevel = $module;
-				$resourceControllerLevel = $resourceModuleLevel . "/" . $controllerName;
-				$resourceActionLevel = $resourceControllerLevel . "/" . $action;
+
+				
 				$isAllowed = false;
 				
+				// Check resource level
+				$resourceModuleLevel = $module;
 				if($session->isAllowed($resourceModuleLevel)){
 					$isAllowed = true;
 				}
 				
+				// Check controller level
+				$resourceControllerLevel = $resourceModuleLevel . "/" . $controllerName;
 				if(!$isAllowed && $session->isAllowed($resourceControllerLevel)){
 					$isAllowed = true;
 				}
 				
+				// Check action level
+				$resourceActionLevel = $resourceControllerLevel . "/" . $action;
 				if(!$isAllowed && $session->isAllowed($resourceActionLevel)){
 					$isAllowed = true;
 				}
 				
-				// Check operator - pos - order assigment
+				// Check additional asserts
 				if($isAllowed && $controller instanceof Unirgy_DropshipPo_VendorController){
-					$isAllowed = $this->_checkForUdpo($action, $operator);
+					$isAllowed = $this->_checkForUdpo($request, $operator);
 				}
 				
+				// Process access-denied if not allowed
 				if(!$isAllowed){
 					$this->_redirectNotAllowed($response, $request);
 				}
@@ -65,26 +61,50 @@ class Zolago_Operator_Model_Observer {
 		}
 	}
 	
-	protected function _checkForUdpo($action, Zolago_Operator_Model_Operator $operator) {
-		switch ($action) {
+	/**
+	 * @param Mage_Core_Controller_Request_Http $request
+	 * @param Zolago_Operator_Model_Operator $operator
+	 * @return boolean
+	 */
+	protected function _checkForUdpo(Mage_Core_Controller_Request_Http $request, 
+			Zolago_Operator_Model_Operator $operator) {
+		
+		$poId = null;
+		switch ($request->getActionName()) {
+			// Mass actions are prepared via Zolago_Po_Helper_Data::getVendorPoColleciton()
+			// with operator filter applayed
+			case "udpoDeleteTrack":
+			case "addUdpoComment":
+			case "shipmentInfo":
 			case "udpoInfo":
-				return true;
+			case "udpoPost":
+				$poId = $request->getParam("id");
 			break;
-
-			default:
-				return true;
+			case "udpoPdf":
+				$poId = $request->getParam("udpo_id");
 			break;
 		}
+		if($poId!==null){
+			return $operator->isAllowedToPo($poId);
+		}
+		return true;
 	}
 	
-	
+	/**
+	 * @param Mage_Core_Controller_Response_Http $response
+	 * @param Mage_Core_Controller_Request_Http $request
+	 */
 	protected function _redirectNotAllowed(
 			Mage_Core_Controller_Response_Http $response, 
 			Mage_Core_Controller_Request_Http $request) {
 
 			$request->setDispatched(true);
 			// Mage::getSingleton("udropship/session")->addError("No privilages");
-			$response->setRedirect(Mage::getUrl("udropship/index"));
+			if(!$request->isAjax()){
+				$response->setRedirect(Mage::getUrl("udropship/index"));
+			}else{
+				$response->setBody("Your request has been rejected");
+			}
 			$response->sendResponse();
 			exit;
 	}
