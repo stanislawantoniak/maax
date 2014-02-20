@@ -75,8 +75,8 @@ class Zolago_Operator_Model_Observer {
 		
 		$poId = null;
 		switch ($request->getActionName()) {
-			// Mass actions are prepared via helper::getVendorPoColleciton
-			// with operator filter also
+			// Mass actions are prepared via Zolago_Po_Helper_Data::getVendorPoColleciton()
+			// with operator filter applayed
 			case "udpoDeleteTrack":
 			case "addUdpoComment":
 			case "shipmentInfo":
