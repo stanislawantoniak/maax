@@ -19,14 +19,12 @@ class Zolago_Operator_Dropship_OperatorController extends Zolago_Dropship_Contro
 		// Existing operator
 		if ($operator->getId()) {
 			if ($operator->getVendorId() != $vendor->getId()) {
-				$this->_getSession()->addError(Mage::helper('zolagooperator')->__("Access denied"));				
+				$this->_getSession()->addError(Mage::helper('zolagooperator')->__("Operator does not exists"));				
 				return $this->_redirect("*/*");
 			}
-		} else {
-			if ($this->getRequest()->getParam('operator_id',null) !== null) {
-				$this->_getSession()->addError(Mage::helper('zolagooperator')->__("Operator does not exists"));
-				return $this->_redirect("*/*");
-			}
+		} elseif($this->getRequest()->getParam('operator_id',null) !== null) {
+			$this->_getSession()->addError(Mage::helper('zolagooperator')->__("Operator does not exists"));
+			return $this->_redirect("*/*");
 		}
 		// Process request & session data 
 		$sessionData = $this->_getSession()->getFormData();
@@ -98,6 +96,9 @@ class Zolago_Operator_Dropship_OperatorController extends Zolago_Dropship_Contro
 			if(!isset($data['roles']) || !is_array($data['roles'])){
 				$data['roles'] = array();
 			}
+			if(!isset($data['allowed_pos']) || !is_array($data['allowed_pos'])){
+				$data['allowed_pos'] = array();
+			}
 			$operator->addData($data);
 			$validErrors = $operator->validate();
 			if ($validErrors === true) {
@@ -144,6 +145,7 @@ class Zolago_Operator_Dropship_OperatorController extends Zolago_Dropship_Contro
 			$operator->load($operatorId);
 		}
 		$operator->setPassword(null);
+		$operator->getAllowedPos(); // Force POS laod
 		Mage::register("current_operator", $operator);
 		return $operator;
 	}

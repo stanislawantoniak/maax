@@ -75,16 +75,16 @@ $_isTierShip = $_session->getVendor()->getAllowTiershipModify();
 <?php if (false && $_session->getVendor()->getLabelType()): ?>
         <li <?php if ($_active=='batches'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('udropship/vendor/batches')?>"><?php echo $this->__('Label Batches')?></a></li>
 <?php endif ?>
-		<?php if($_session->isAllowed("udropship/vendor/preferences")):?>
+		<?php if($_session->isAllowed("udropship/vendor/preferences") && $_session->isLoggedIn() ):?>
         <li <?php if ($_active=='preferences'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('udropship/vendor/preferences')?>"><?php echo $this->__('Settings')?></a></li>
         <?php endif;?>
 		<?php if (Mage::helper('udropship')->isModuleActive('Unirgy_DropshipBatch')): ?>
 			<li <?php if ($_active=='importstock'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('udbatch/vendor_batch/importStock') ?>" ><?php echo $this->__('Import Stock')?></a></li>
 			<li <?php if ($_active=='importorders'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('udbatch/vendor_batch/importOrders') ?>" ><?php echo $this->__('Import Tracking')?></a></li>
         <?php endif ?>
-<?php if (Mage::helper('udropship')->isModuleActive('modules/Unirgy_DropshipMulti')): ?>
+<?php if (Mage::helper('udropship')->isModuleActive('modules/Unirgy_DropshipMulti') && $_session->isLoggedIn() ): ?>
         <li <?php if ($_active=='stockprice'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('udmulti/vendor_product')?>"><?php echo $this->__('Stock And Price')?></a></li>
-<?php elseif($_session->isAllowed("udropship/vendor/product")): ?>
+<?php elseif($_session->isAllowed("udropship/vendor/product") && $_session->isLoggedIn()): ?>
         <li <?php if ($_active=='stockprice'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('udropship/vendor/product')?>"><?php echo $this->__('Stock')?></a></li>
 <?php endif ?>
 <?php if (Mage::helper('udropship')->isModuleActive('udprod')

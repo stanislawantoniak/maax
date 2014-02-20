@@ -9,6 +9,14 @@ class Zolago_Pos_Model_Resource_Pos_Collection
     }
 	
 	/**
+	 * @return array
+	 */
+	public function toOptionArray()
+    {
+        return $this->_toOptionArray("pos_id", "name");
+    }
+
+	/**
 	 * @return Zolago_Pos_Model_Resource_Pos_Collection
 	 */
 	public function addActiveFilter() {

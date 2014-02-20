@@ -17,7 +17,35 @@ class Zolago_Operator_Model_Operator extends Mage_Core_Model_Abstract {
         }
         return $this->getData('vendor');
     }
+	
+	/**
+	 * @return array
+	 */
+	public function getAllowedPos() {
+		if(!$this->hasData("allowed_pos")){
+			$allowedPos = array();
+			if($this->getId()){
+				$allowedPos = $this->getResource()->getAllowedPos($this);
+			}
+			$this->setData("allowed_pos", $allowedPos);
+		}
+		return $this->getData("allowed_pos");
+	}
 
+	/**
+	 * @return Zolago_Pos_Model_Resource_Pos_Collection
+	 */
+	public function getAllowedPosCollection() {
+		$collection = Mage::getResourceModel("zolagopos/pos_collection");
+		/* @var $collection Zolago_Pos_Model_Resource_Pos_Collection */
+		if(count($this->getAllowedPos())){
+			$collection->addFieldToFilter("pos_id", array("in"=>$this->getAllowedPos()));
+		}else{
+			$collection->addFieldToFilter("pos_id", -1); // empty result
+		}
+		return $collection;
+	}
+	
 	/**
 	 * @param array $data
 	 * @return boolean|array

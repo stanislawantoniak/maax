@@ -6,6 +6,20 @@ class Zolago_Operator_Model_Resource_Operator extends Mage_Core_Model_Resource_D
 		$this->_init('zolagooperator/operator', "operator_id");
 	}
 
+	/**
+	 * @param Mage_Core_Model_Abstract $object
+	 * @return type
+	 */
+	public function getAllowedPos(Mage_Core_Model_Abstract $object) {
+		if(!$object->getId()){
+			return array();
+		}
+		$select = $this->getReadConnection()->select();
+		$select->from(array("operator_pos"=>$this->getTable("zolagooperator/operator_pos")), array("pos_id"));
+		$select->where("operator_pos.operator_id=?", $object->getId());
+		return $this->getReadConnection()->fetchCol($select);
+	}
+	
     /**
      * fill times
      */	
@@ -31,7 +45,7 @@ class Zolago_Operator_Model_Resource_Operator extends Mage_Core_Model_Resource_D
 			$object->setPostPassword(null);
 		}
 		
-		
+		// ACl roles
 		 $acl = $object->getAcl();
 		 $roles = $object->getRoles();
 		 $rolesToSave = array();
@@ -45,12 +59,59 @@ class Zolago_Operator_Model_Resource_Operator extends Mage_Core_Model_Resource_D
 		
 		$object->setRoles(implode(",", $rolesToSave));
 		
+		// POS Assigment
+		if($object->hasData("allowed_pos")){	
+			$this->_setAllowedPos($object, $object->getData("allowed_pos"));
+		}
+		
 		return parent::_prepareDataForSave($object);     	
      }
 	 
+	 /**
+	  * @param Mage_Core_Model_Abstract $object
+	  * @return Zolago_Operator_Model_Resource_Operator
+	  */
 	 protected function _afterLoad(Mage_Core_Model_Abstract $object) {
 		 $object->setRoles(explode(",", $object->getData("roles")));
 		 return parent::_afterLoad($object);
+	 }
+	 
+	 /**
+	  * @param Mage_Core_Model_Abstract $object
+	  * @param array $allowedPos
+	  * @return Zolago_Operator_Model_Resource_Operator
+	  */
+	 protected function _setAllowedPos(Mage_Core_Model_Abstract $object, array $allowedPos) {
+		 $table = $this->getTable("zolagooperator/operator_pos");
+		 $where = $this->getReadConnection()
+				 ->quoteInto("operator_id=?", $object->getId());
+		 $this->_getWriteAdapter()->delete($table, $where);
+		 
+		 $toInsert = array();
+		 foreach($allowedPos as $posId){
+			 $toInsert[] = array("pos_id"=>$posId, "operator_id"=>$object->getId());
+		 }
+		 if(count($toInsert)){
+			 $this->_getWriteAdapter()->insertMultiple($table, $toInsert);
+		 }
+		 return $this;
+	 }
+	 
+	 public function addOperatorFilterToPoCollection(Mage_Core_Model_Resource_Db_Collection_Abstract $collection, $operator) {
+		 if($operator instanceof Zolago_Operator_Model_Operator){
+			 $operator = $operator->getId();
+		 }
+		 $cond = $this->getReadConnection()->quoteInto(
+				 "main_table.default_pos_id=operator_pos.pos_id AND operator_pos.operator_id=?", 
+				 $operator
+		 );
+		 $collection->getSelect()->
+			join(
+				 array("operator_pos"=>$this->getTable("zolagooperator/operator_pos")), 
+			     $cond, 
+				 array()
+			)->
+			group("main_table.entity_id");
 	 }
 }
 

@@ -31,15 +31,16 @@ class Zolago_Operator_Block_Dropship_Operator_Edit extends Mage_Core_Block_Templ
 			"values" => $acl::getAllRolesOptions()
 		));
 		
-		// POS
+		// Allowed POS
+		
 		$posColection = Mage::getResourceModel("zolagopos/pos_collection");
 		/* @var $posColection Zolago_Pos_Model_Resource_Pos_Collection */
 		$posColection->
-				addVendorFilter(Mage::getSingleton('udropship/session')->getVendor())->
-				addActiveFilter();
+				addVendorFilter(Mage::getSingleton('udropship/session')->getVendor());
 		
-		$roles->addField("pos", "multiselect", array(
-			"name"	 => "pos",
+		$roles->addField("allowed_pos", "multiselect", array(
+			"name"	 => "allowed_pos",
+			"label"  => $helper->__('Allowed POS'),
 			"values" => $posColection->toOptionArray()
 		));
 		
@@ -57,7 +58,7 @@ class Zolago_Operator_Block_Dropship_Operator_Edit extends Mage_Core_Block_Templ
 	}
 	
 	/**
-	 * @return Zolago_Pos_Model_Pos
+	 * @return Zolago_Operator_Model_Operator
 	 */
 	public function getModel() {
 		if(!Mage::registry("current_operator")){
