@@ -75,15 +75,15 @@
 			</modules>
 		</translate>
 		<events>
-            <udpo_order_save_before>
+            <controller_action_predispatch>
                 <observers>
-                    <zolagopos>
+                    <zolagooperator>
                         <type>singleton</type>
-                        <class>zolagopos/observer</class>
-                        <method>udpoOrderSaveBefore</method>
-                    </zolagopos>
+                        <class>zolagooperator/observer</class>
+                        <method>handleControllerActionPredispatch</method>
+                    </zolagooperator>
                 </observers>
-            </udpo_order_save_before>
+            </controller_action_predispatch>
 		</events>
 	</frontend>
 </config>

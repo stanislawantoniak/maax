@@ -98,6 +98,9 @@ class Zolago_Operator_Model_Operator extends Mage_Core_Model_Abstract {
 	 * @return boolean
 	 */
 	public function isAllowed($resource) {
+		if(!$this->getAcl()->has($resource)){
+			return false;
+		}
 		foreach($this->getRoles() as $role){
 			if(!$this->_isCorrectRole($role)){
 				continue;
