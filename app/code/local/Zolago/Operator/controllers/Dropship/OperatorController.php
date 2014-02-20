@@ -141,6 +141,11 @@ class Zolago_Operator_Dropship_OperatorController extends Zolago_Dropship_Contro
 		
 	}
 
+	/**
+	 * @param string $email
+	 * @param Zolago_Operator_Model_Operator $operator
+	 * @return boolean
+	 */
 	protected function _checkEmailUnique($email, Zolago_Operator_Model_Operator $operator) {
 		////////////////////////////////////////////////////////////////////////
 		// Email not changed for existing customer
