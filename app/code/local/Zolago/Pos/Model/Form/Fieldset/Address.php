@@ -2,10 +2,11 @@
 /**
  * address field builder
  */
-class Zolago_Pos_Helper_Form_Fieldset_Address extends Zolago_Pos_Helper_Form_Fieldset 
+class Zolago_Pos_Model_Form_Fieldset_Address extends Zolago_Common_Model_Form_Fieldset_Abstract 
 {
-
-
+    protected function _getHelper() {
+        return Mage::helper('zolagopos');
+    }
     protected function _addFieldCity() {
         $this->_fieldset->addField('city', 'text', array(
                                        'name'          => 'city',

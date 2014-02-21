@@ -15,20 +15,22 @@ class Foo  {
 }
 class Zolago_Wishlist_Model_ObserverTest extends Zolago_TestCase {
 
+    protected $_observer;
+    protected $_productId;
     /**
      * get tested object
      */
     protected function _getObserver() {
-        if (!$this->observer) {
-            $this->observer = Mage::getSingleton('zolagowishlist/observer');
+        if (!$this->_observer) {
+            $this->_observer = Mage::getSingleton('zolagowishlist/observer');
         };
-        return $this->observer;
+        return $this->_observer;
     }
     /**
      * get existing product id
      */
     protected function _getFirstProductId() {
-        if (!$this->productId) {
+        if (!$this->_productId) {
             $model = Mage::getModel('catalog/product');
             $collection = $model->getCollection();
             $collection->setPageSize(1);
@@ -36,9 +38,9 @@ class Zolago_Wishlist_Model_ObserverTest extends Zolago_TestCase {
             $product = $collection->getFirstItem();
             $productId = $product->getId();
             $this->assertNotEmpty($productId);
-            $this->productId = $productId;
+            $this->_productId = $productId;
         }
-        return $this->productId;
+        return $this->_productId;
     }
     /**
      * constructor test

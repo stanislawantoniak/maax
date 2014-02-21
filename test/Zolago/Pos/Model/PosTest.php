@@ -38,25 +38,13 @@ class Zolago_Pos_Model_PosTest extends Zolago_TestCase {
     
     
     /**
-     * validator test     
-     */
-    protected function _validateTest($testKey,$testField,$expected) {
-        $model = $this->_getModel();
-        $posData = Zolago_Pos_Helper_Test::getPosData();
-        $testData = $posData;
-        $testData[$testKey] = $testField;
-        $model->setData($testData);
-        $validator = $model->validate();
-        $this->assertContains($expected,$validator);
-    }
-    /**
      * vendor collection test
      */
     public function testPosFunctions() {
         // transaction
         $transaction = Mage::getSingleton('core/resource')->getConnection('core_write');
         $transaction->beginTransaction();
-                               
+        $this->_testData = Zolago_Pos_Helper_Test::getPosData();                                
         // too long client_number
         $this->_validateTest('client_number',str_repeat('ab',100),Mage::helper('zolagopos')->__('Max length of Client number is 100'));        
         //  empty minimal_stock

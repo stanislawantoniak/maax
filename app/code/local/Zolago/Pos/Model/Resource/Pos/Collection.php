@@ -9,6 +9,14 @@ class Zolago_Pos_Model_Resource_Pos_Collection
     }
 	
 	/**
+	 * @return array
+	 */
+	public function toOptionArray()
+    {
+        return $this->_toOptionArray("pos_id", "name");
+    }
+
+	/**
 	 * @return Zolago_Pos_Model_Resource_Pos_Collection
 	 */
 	public function addActiveFilter() {
@@ -32,7 +40,7 @@ class Zolago_Pos_Model_Resource_Pos_Collection
 	 * @param Unirgy_Dropship_Model_Vendor|int $vendor
 	 * @return Zolago_Pos_Model_Resource_Pos_Collection
 	 */
-	public function addVendorFilter($vendor){
+public function addVendorFilter($vendor){
 		if($vendor instanceof Unirgy_Dropship_Model_Vendor){
 			$vendor = $vendor->getId();
 		}

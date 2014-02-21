@@ -21,6 +21,13 @@
 				</rewrite>
 			</udpo>
 		</blocks>
+		<helpers>
+			<udpo>
+				<rewrite>
+					<data>Zolago_Po_Helper_Data</data>
+				</rewrite>
+			</udpo>
+		</helpers>
     </global>
     <frontend>
         <layout>
@@ -30,6 +37,15 @@
                 </zolagopo>
             </updates>
         </layout>
+		<routers>
+			<udpo>
+				<args>
+					<modules>
+						<Zolago_Pos before="Unirgy_DropshipPo">Zolago_Po</Zolago_Pos>
+					</modules>
+				</args>
+			</udpo>
+		</routers>
 	</frontend>
     <adminhtml>
         <layout>

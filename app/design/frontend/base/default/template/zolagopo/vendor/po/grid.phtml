@@ -195,7 +195,7 @@ $_dateFormat = Varien_Date::convertZendToStrFtime(Mage::app()->getLocale()->getD
             <td><a class="action" href="#" onclick="return false"><span></span></a></td>
             <td><?php echo $_po->getIncrementId() ?></td>
             <td><?php echo $_po->getOrder()->getIncrementId() ?></td>
-			<td><?php echo $_po->getDefaultPosName();?></td>
+			<td class="pos"><?php echo $_po->getDefaultPosName();?></td>
             <td><?php echo Mage::helper('core')->formatDate($_po->getOrder()->getCreatedAt(), 'short', true) ?></td>
             <td><?php echo Mage::helper('core')->formatDate($_po->getCreatedAt(), 'short', true) ?></td>
             <td>
