@@ -24,9 +24,23 @@ require_once $mageFilename;
 
 // parent zolago test class
 class Zolago_TestCase extends PHPUnit_Framework_TestCase {
+    protected $_testData;
+    /**
+     * validator test     
+     */
+    protected function _validateTest($testKey,$testField,$expected) {
+        $model = $this->_getModel();
+        $testData = $this->_testData; //Zolago_Pos_Helper_Test::getPosData();
+        $testData[$testKey] = $testField;
+        $model->setData($testData);
+        $validator = $model->validate();
+        $this->assertContains($expected,$validator);
+    }
+
     public function __construct() {
         Mage::app('default');
         return parent::__construct();
     }
+    // 
 }
 ?>
