@@ -186,16 +186,19 @@ $fcBlock->setFieldValue(array(
         <div class="col-1">
             <div class="content">
                 <div class="col2-set">
+					<div style="float: right;">
+							<select name="pos" id="pos-<?php echo $_id;?>">
+								<?php foreach($_posCollection->toOptionArray() as $option):?>
+								<option <?php if($option['value']==$_po->getDefaultPosId()):?>selected="selected"<?php endif;?> value="<?php echo $this->htmlEscape($option['value']);?>"><?php echo $this->htmlEscape($option['label']);?></option>
+								<?php endforeach;?>
+							</select>
+							<button class="form-button" type="button" id="change-pos-<?php echo $_po->getId();?>"><span><?php echo $_hlp->__('Change')?></span></button>
+					</div>
                     <div class="col-1">
                         <strong><?php echo $_hlp->__('Current POS')?></strong><br/>
                     </div>
                     <div class="col-2 a-right">
-						<select name="pos" id="pos-<?php echo $_id;?>">
-							<?php foreach($_posCollection->toOptionArray() as $option):?>
-							<option <?php if($option['value']==$_po->getDefaultPosId()):?>selected="selected"<?php endif;?> value="<?php echo $this->htmlEscape($option['value']);?>"><?php echo $this->htmlEscape($option['label']);?></option>
-							<?php endforeach;?>
-						</select>
-						<button class="form-button" type="button" id="change-pos-<?php echo $_po->getId();?>"><span><?php echo $_hlp->__('Save')?></span></button>
+						
                     </div>
 					<script type="text/javascript">
 						$("change-pos-<?php echo $_id;?>").observe("click", function(){
@@ -205,6 +208,10 @@ $fcBlock->setFieldValue(array(
 								parameters: {pos_id: $F("pos-<?php echo $_id;?>")},
 								method: "post",
 								onSuccess: function(respo){
+									if(!respo.responseJSON.status){
+										alert(respo.responseJSON.message);
+										return;
+									}
 									if(respo.responseJSON.reload){
 										document.location.reload();
 									}else{

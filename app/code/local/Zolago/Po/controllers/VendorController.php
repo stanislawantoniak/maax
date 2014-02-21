@@ -17,7 +17,10 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 		
 		$this->getResponse()->setHeader("content-type", "application/json");
 		
-		if($po->getId() && $pos->getId() && $pos->isAssignedToVendor($session->getVendor())){
+		if($po->getId() && $pos->getId() && 
+				$po->getVendor()->getId()==$session->getVendor()->getId() &&
+				$pos->isAssignedToVendor($session->getVendor())){
+			
 			$po->setDefaultPosId($pos->getId());
 			$po->setDefaultPosName($pos->getName());
 			if($session->isOperatorMode()){

@@ -144,7 +144,6 @@ class Zolago_Operator_Model_Operator extends Mage_Core_Model_Abstract {
 		if($po instanceof Unirgy_DropshipPo_Model_Po){
 			$po = $po->getId();
 		}
-		Mage::log($this->getResource()->isAllowedToPo($this, $po));
 		return $this->getResource()->isAllowedToPo($this, $po);
 	}
 	
