@@ -7,4 +7,11 @@
 			</action>
 		</reference>
     </udpo_vendor_index>
+	<udpo_vendor_udpoinfo>
+		<reference name="info">
+			<action method="setTemplate">
+				<template>zolagopo/vendor/po/info.phtml</template>
+			</action>
+		</reference>    
+	</udpo_vendor_udpoinfo>
 </layout>

@@ -5,6 +5,7 @@ class Zolago_Pos_Model_Pos extends Mage_Core_Model_Abstract{
         $this->_init('zolagopos/pos');
     }
 	
+	
 	/**
 	 * @param Unirgy_Dropship_Model_Vendor|int $vendor
 	 * @return boolean

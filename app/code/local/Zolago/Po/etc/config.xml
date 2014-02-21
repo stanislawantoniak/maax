@@ -37,6 +37,15 @@
                 </zolagopo>
             </updates>
         </layout>
+		<routers>
+			<udpo>
+				<args>
+					<modules>
+						<Zolago_Pos before="Unirgy_DropshipPo">Zolago_Po</Zolago_Pos>
+					</modules>
+				</args>
+			</udpo>
+		</routers>
 	</frontend>
     <adminhtml>
         <layout>

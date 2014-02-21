@@ -49,7 +49,7 @@ class Zolago_Operator_Model_Observer {
 				}
 				
 				// Check additional asserts
-				if($isAllowed && $controller instanceof Unirgy_DropshipPo_VendorController){
+				if($isAllowed && $request->getModuleName()=="udpo"){
 					$isAllowed = $this->_checkForUdpo($request, $operator);
 				}
 				
@@ -74,6 +74,7 @@ class Zolago_Operator_Model_Observer {
 			// Mass actions are prepared via Zolago_Po_Helper_Data::getVendorPoColleciton()
 			// with operator filter applayed
 			case "udpoDeleteTrack":
+			case "updatePos":
 			case "addUdpoComment":
 			case "shipmentInfo":
 			case "udpoInfo":
@@ -101,9 +102,11 @@ class Zolago_Operator_Model_Observer {
 			$request->setDispatched(true);
 			// Mage::getSingleton("udropship/session")->addError("No privilages");
 			if(!$request->isAjax()){
-				$response->setRedirect(Mage::getUrl("udropship/index"));
+				$response->setRedirect(Mage::getUrl("udropship/vendor/dashboard"));
+				//$response->setBody("ACL Denied");
 			}else{
-				$response->setBody("Your request has been rejected");
+				$response->setHeader("content-type", "application/json");
+				$response->setBody(Zend_Json::encode(array("status"=>0, "message"=>"ACL Denied")));
 			}
 			$response->sendResponse();
 			exit;
