@@ -7,11 +7,11 @@ class Zolago_Dropship_VendorController extends Unirgy_Dropship_VendorController 
 	 * Index
 	 */
 	public function indexAction() {
-		if (Mage::helper('udropship')->isUdpoActive() && !$this instanceof Unirgy_DropshipPo_VendorController) {
+		if (Mage::helper('udropship')->isUdpoActive()) {
 			$session = $this->_getSession();
 			if($session->isOperatorMode()){
 				$operator = $session->getOperator();
-				if($operator->isAllowed("udpo")){
+				if($operator->isAllowed("udpo/vendor")){
 					return parent::indexAction();
 				}
 			}
@@ -24,10 +24,14 @@ class Zolago_Dropship_VendorController extends Unirgy_Dropship_VendorController 
 	 * Dasboard - move index if possible
 	 */
 	public function dashboardAction(){
-		$_hlp = Mage::helper('udropship');
-        if ($_hlp->isUdpoActive() && !$this instanceof Unirgy_DropshipPo_VendorController) {
-            $this->_forward('index', 'vendor', 'udpo');
-            return;
+        if (Mage::helper('udropship')->isUdpoActive() ) {
+			$session = $this->_getSession();
+			if($session->isOperatorMode()){
+				$operator = $session->getOperator();
+				if($operator->isAllowed("udpo/vendor")){
+					return $this->_forward('index', 'vendor', 'udpo');
+				}
+			}
         }
 		$this->_renderPage(null, "dashboard");
 	}
