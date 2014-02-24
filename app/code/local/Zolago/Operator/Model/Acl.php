@@ -12,6 +12,7 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 	// Reousrce definition
 	
 	// Vendro controller for all
+	const RES_UDROPSHIP_VENDOR_SET_LOCALE			= "udropship/vendor/setlocale";
 	const RES_UDROPSHIP_VENDOR_WYSIWYG				= "udropship/vendor/wysiwyg";
 	const RES_UDROPSHIP_VENDOR_DASHBOARD			= "udropship/vendor/dashboard";
 	const RES_UDROPSHIP_VENDOR_INDEX				= "udropship/vendor/index";
@@ -28,6 +29,7 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 
 	// Resources as array
 	protected static $_currentResources = array(
+		self::RES_UDROPSHIP_VENDOR_SET_LOCALE		=> "Vendor Set locale",	
 		self::RES_UDROPSHIP_VENDOR_WYSIWYG			=> "Vendor wysiwyg",	
 		self::RES_UDROPSHIP_VENDOR_DASHBOARD		=> "Vendor dashboard",	
 		self::RES_UDROPSHIP_VENDOR_INDEX			=> "Vendor index",	
@@ -61,6 +63,7 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		}
 		
 		// Build ACL Rules - Vendor for all
+		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, null, self::RES_UDROPSHIP_VENDOR_SET_LOCALE);
 		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, null, self::RES_UDROPSHIP_VENDOR_WYSIWYG);
 		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, null, self::RES_UDROPSHIP_VENDOR_DASHBOARD);
 		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, null, self::RES_UDROPSHIP_VENDOR_INDEX);
