@@ -8,6 +8,11 @@ class Zolago_Operator_Block_Dropship_OperatorTest extends Zolago_TestCase {
      * @requires function no_coverage
      */
     public function testBlockList() {
+        if (!no_coverage()) {
+            $this->markTestSkipped(
+                          'Coverage test');
+            return;
+        }
         $layout = Mage::app()->getLayout();
         $block = $layout->createBlock('zolagooperator/dropship_operator',null,array('template'=>'zolagooperator/dropship/operator.phtml'));
         $this->assertNotEmpty($block);                
@@ -19,6 +24,11 @@ class Zolago_Operator_Block_Dropship_OperatorTest extends Zolago_TestCase {
      * @requires function no_coverage
      */
     public function testBlockEdit() {        
+        if (!no_coverage()) {
+            $this->markTestSkipped(
+                          'Coverage test');
+            return;
+        }
         $layout = Mage::app()->getLayout();
         $block = $layout->createBlock('zolagooperator/dropship_operator_edit',null,array('template'=>'zolagooperator/dropship/operator/edit.phtml'));
         $this->assertNotEmpty($block);                

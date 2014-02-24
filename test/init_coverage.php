@@ -18,7 +18,9 @@ if (!file_exists($mageFilename)) {
     }
     exit;
 }
-
+function no_coverage() {
+    return false;
+}
 
 require_once $mageFilename;
 
