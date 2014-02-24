@@ -45,6 +45,14 @@
                     </zolagowishlist>
                 </observers>
             </wishlist_item_delete_before>
+			<customer_login>
+				<observers>
+					<zolagowishlist>
+						<class>zolagowishlist/observer</class>
+						<method>handleCustomerLogin</method>
+					</zolagowishlist>
+				</observers>
+			</customer_login>
         </events>
     </global>
     <frontend>

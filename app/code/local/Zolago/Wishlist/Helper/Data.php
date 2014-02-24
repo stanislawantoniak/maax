@@ -13,10 +13,38 @@ class Zolago_Wishlist_Helper_Data extends Mage_Wishlist_Helper_Data{
 	}
 
 
+	/**
+	 * @return Mage_Customer_Model_Customer
+	 */
 	public function getCustomer() {
-		return parent::getCustomer() || Mage::helper('zolagocustomer/ghost')->getCustomer();
+		$parent = parent::getCustomer() ;
+		if($parent){
+			return $parent;
+		}
+		return Mage::helper('zolagocustomer/ghost')->getCustomer();
 	}
-    
+	
+	/**
+	 * Get anonymous wishlist
+	 * @return Mage_Wishlist_Model_Wishlist
+	 */
+	public function getCookieWishlist() {
+			$wishlist = Mage::getModel("wishlist/wishlist");
+			/* @var $wishlist Mage_Wishlist_Model_Wishlist */
+			
+			$cookie = $this->_cookie->get(self::COOKIE_NAME);
+			
+			if($cookie){
+				$wishlist->load($cookie, "sharing_code");
+			}
+			return $wishlist;
+	}
+	
+	
+	/**
+	 * Get avaiable wishlist
+	 * @return Mage_Wishlist_Model_Wishlist
+	 */
 	public function getWishlist() {
 		$session = Mage::getSingleton("customer/session");
 		/* @var $session Mage_Customer_Model_Session */
@@ -37,15 +65,13 @@ class Zolago_Wishlist_Helper_Data extends Mage_Wishlist_Helper_Data{
 					$wishlist->setSharingCode($cookie);
 				}else{
 					$wishlist->generateSharingCode();
+					$this->_cookie->set(self::COOKIE_NAME, $wishlist->getSharingCode());
 				}
-				$wishlist->save();
-				$this->_cookie->set(self::COOKIE_NAME, $wishlist->getSharingCode());
 			}
 			
 			
 			return $wishlist;
 		}
-		// Logged customer 
 		return parent::getWishlist();
 	}
 	

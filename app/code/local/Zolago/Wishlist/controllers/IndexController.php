@@ -34,11 +34,15 @@ class Zolago_Wishlist_IndexController extends Mage_Wishlist_IndexController
 				$wishlist = Mage::helper('wishlist')->getWishlist();
 			}
 			
-            if (!$wishlist->getId()) {
-                Mage::throwException(
-                    Mage::helper('wishlist')->__("Requested wishlist doesn't exist")
-                );
-            }
+			// Loged in session - Load by customer
+			if($session->isLoggedIn()){
+				$wishlist->loadByCustomer($session->getCustomer());
+				// Not exist? Save.
+				if(!$wishlist->getId()){
+					$wishlist->setCustomerId($session->getCustomerId());
+					$wishlist->save();
+				}
+			}
 			
             if ($session->isLoggedIn() && $session->getCustomerId()!=$wishlist->getCustomerId()) {
                 Mage::throwException(
@@ -59,4 +63,18 @@ class Zolago_Wishlist_IndexController extends Mage_Wishlist_IndexController
 
         return $wishlist;
     }
+	
+	/**
+	 * force save wishlist before add item
+	 * @return void
+	 */
+	protected function _addItemToWishList() {
+		$wishlist = $this->_getWishlist();
+		if(!$wishlist->getId()){
+			$wishlist->save();
+		}
+		return parent::_addItemToWishList();
+	}
+	
+	
 }
