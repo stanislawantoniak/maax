@@ -76,5 +76,16 @@ class Zolago_Wishlist_IndexController extends Mage_Wishlist_IndexController
 		return parent::_addItemToWishList();
 	}
 	
+	/**
+	 * force save wishlist before add item
+	 * @return type
+	 */
+	public function fromcartAction() {
+		$wishlist = $this->_getWishlist();
+		if(!$wishlist->getId()){
+			$wishlist->save();
+		}
+		return parent::fromcartAction();
+	}
 	
 }

@@ -75,16 +75,15 @@ class Zolago_Wishlist_Model_Observer {
 				$cookieItem->save();
 			}
 			
-			$cookie = Mage::getModel('core/cookie');
-			/* @var $cookie Mage_Core_Model_Cookie */
-			$cookie->delete(Zolago_Wishlist_Helper_Data::COOKIE_NAME);
-			
-			
 			// Remove anonyous wishlist
 			$cookieWishlist->delete();
 			
 			// Recalculate 
 			Mage::helper("wishlist")->calculate();
 		}
+		
+		$cookie = Mage::getModel('core/cookie');
+		/* @var $cookie Mage_Core_Model_Cookie */
+		$cookie->delete(Zolago_Wishlist_Helper_Data::COOKIE_NAME);
 	}
 }
