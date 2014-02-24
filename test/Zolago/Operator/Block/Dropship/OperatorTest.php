@@ -2,7 +2,7 @@
 /**
  * block test
  */
-class Zolago_Operator_Dropship_OperatorTest extends Zolago_TestCase {
+class Zolago_Operator_Block_Dropship_OperatorTest extends Zolago_TestCase {
     
     /**
      * @requires function no_coverage
