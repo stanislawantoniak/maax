@@ -13,10 +13,11 @@ class Zolago_Dropship_VendorController extends Unirgy_Dropship_VendorController 
 				$operator = $session->getOperator();
 				if($operator->isAllowed("udpo/vendor")){
 					return parent::indexAction();
+				}else{
+					return $this->_forward('dashboard');
 				}
 			}
-            return $this->_forward('dashboard');
-        }
+		}
 		return parent::indexAction();
 	}
 	
