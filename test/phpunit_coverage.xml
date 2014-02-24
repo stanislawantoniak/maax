@@ -29,7 +29,7 @@
 -->
 <phpunit backupGlobals="true" 
     backupStaticAttributes="false" 
-    bootstrap="init.php" 
+    bootstrap="init_coverage.php" 
     cacheTokens="true" 
     colors="true" 
     convertErrorsToExceptions="true" 
@@ -62,6 +62,19 @@
   <listeners>
     <listener class="PHPUnit_Util_Log_JSON"/>
   </listeners>
+  <filter>
+    <blacklist>
+        <directory suffix=".php">../app/code/core</directory>
+        <directory suffix=".php">../app/code/community</directory>
+        <directory suffix=".php">../lib/</directory>
+        <directory suffix=".php">../test/</directory>
+    </blacklist>
+    <!--
+    <whitelist processUncoveredFilesFromWhitelist="true">
+        <directory suffix=".php">../app/code/local/Zolago</directory>
+    </whitelist>
+    -->
+  </filter>
   <logging>
     <log type="json" target="../var/logs/logfile.json"/>
     <log type="tap" target="../var/logs/logfile.tap"/>
