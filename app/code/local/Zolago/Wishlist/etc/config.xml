@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Wishlist>
-            <version>0.0.1</version>
+            <version>0.0.2</version>
         </Zolago_Wishlist>
     </modules>
     <global>
@@ -15,6 +15,11 @@
             <zolagowishlist>
                 <class>Zolago_Wishlist_Helper</class>
             </zolagowishlist>
+			<wishlist>
+				<rewrite>
+					<data>Zolago_Wishlist_Helper_Data</data>
+				</rewrite>
+			</wishlist>
         </helpers>
         <resources>
             <zolagowishlist_setup>
@@ -40,6 +45,14 @@
                     </zolagowishlist>
                 </observers>
             </wishlist_item_delete_before>
+			<customer_login>
+				<observers>
+					<zolagowishlist>
+						<class>zolagowishlist/observer</class>
+						<method>handleCustomerLogin</method>
+					</zolagowishlist>
+				</observers>
+			</customer_login>
         </events>
     </global>
     <frontend>

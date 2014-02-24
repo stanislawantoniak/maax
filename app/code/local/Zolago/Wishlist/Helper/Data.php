@@ -1,20 +1,90 @@
 <?php
-class Zolago_Wishlist_Helper_Data extends Mage_Core_Helper_Abstract{
+class Zolago_Wishlist_Helper_Data extends Mage_Wishlist_Helper_Data{
     
+	const COOKIE_NAME = "wishlist_code";
+	
     protected $_wishlist;
-    
+	
+	/* @var $_cookie Mage_Core_Model_Cookie */
+	protected $_cookie;
+	
+	public function __construct() {
+		$this->_cookie = Mage::getModel('core/cookie');
+	}
+
+
+	/**
+	 * @return Mage_Customer_Model_Customer
+	 */
+	public function getCustomer() {
+		$parent = parent::getCustomer() ;
+		if($parent){
+			return $parent;
+		}
+		return Mage::helper('zolagocustomer/ghost')->getCustomer();
+	}
+	
+	/**
+	 * Get anonymous wishlist
+	 * @return Mage_Wishlist_Model_Wishlist
+	 */
+	public function getCookieWishlist() {
+			$wishlist = Mage::getModel("wishlist/wishlist");
+			/* @var $wishlist Mage_Wishlist_Model_Wishlist */
+			
+			$cookie = $this->_cookie->get(self::COOKIE_NAME);
+			
+			if($cookie){
+				$wishlist->load($cookie, "sharing_code");
+			}
+			return $wishlist;
+	}
+	
+	
+	/**
+	 * Get avaiable wishlist
+	 * @return Mage_Wishlist_Model_Wishlist
+	 */
+	public function getWishlist() {
+		$session = Mage::getSingleton("customer/session");
+		/* @var $session Mage_Customer_Model_Session */
+		if(!$session->isLoggedIn()){
+			$wishlist = Mage::getModel("wishlist/wishlist");
+			/* @var $wishlist Mage_Wishlist_Model_Wishlist */
+			
+			$cookie = $this->_cookie->get(self::COOKIE_NAME);
+			
+			if($cookie){
+				$wishlist->load($cookie, "sharing_code");
+			}
+			
+			if(!$wishlist->getId()){
+				$ghost = Mage::helper('zolagocustomer/ghost')->getCustomer();
+				$wishlist->setCustomerId($ghost->getId());
+				if($cookie){
+					$wishlist->setSharingCode($cookie);
+				}else{
+					$wishlist->generateSharingCode();
+					$this->_cookie->set(self::COOKIE_NAME, $wishlist->getSharingCode());
+				}
+			}
+			
+			
+			return $wishlist;
+		}
+		return parent::getWishlist();
+	}
+	
+	/**
+	 * @param Mage_Catalog_Model_Product $product
+	 * @return boolean
+	 */
     public function productBelongsToMyWishlist(Mage_Catalog_Model_Product $product) {
-        $session = Mage::getSingleton("customer/session");
-        $customerId = $session->getCustomerId();
-        
-        if(!$customerId){
-            return false;
-        }
-        
+		
         $coll = Mage::getResourceModel("wishlist/item_collection");
         /* @var $coll Mage_Wishlist_Model_Resource_Item_Collection */
         
-        $coll->addCustomerIdFilter($customerId);
+        $coll->addWishlistFilter($this->getWishlist());
         $coll->addFieldToFilter("product_id", $product->getId());
         
         return (bool)$coll->count();
