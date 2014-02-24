@@ -201,7 +201,7 @@ class Unirgy_DropshipTierShipping_Model_V2_Carrier
             } else {
                 $totalQty += $_qty;
                 $totalWeight += ($_qty&&$_qtyTotal ? $item->getFullRowWeight()/$_qtyTotal*$_qty : 0);
-                $totalValue += ($_qty&&$_qtyTotal ? $item->getBaseRowTotal()/$_qtyTotal*$_qty : 0);
+                $totalValue += ($_qty&&$_qtyTotal ? ($item->getBaseRowTotal()+$item->getBaseTaxAmount())/$_qtyTotal*$_qty : 0);
             }
         }
 
