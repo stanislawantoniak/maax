@@ -23,6 +23,13 @@ class Zolago_Operator_Helper_Test {
     static public function getVendor() {
         return static::getItem('udropship/vendor');
     }
+    static public function getFakeVendor() {
+        $vendor = Mage::getModel('udropship/vendor');
+        $data = self::getVendorData();
+        $vendor->setData($data);
+        $vendor->setId(1);
+        return $vendor;
+    }
     static public function getVendorData() {
         $data = array (
             'name' => 'vendorTest',

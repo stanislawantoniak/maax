@@ -10,10 +10,6 @@
 
 $mageFilename = MAGENTO_ROOT . '/app/Mage.php';
 
-function no_coverage() {
-    return true;
-}
-
 if (!file_exists($mageFilename)) {
     if (is_dir('downloader')) {
         header("Location: downloader");
@@ -22,7 +18,9 @@ if (!file_exists($mageFilename)) {
     }
     exit;
 }
-
+function no_coverage() {
+    return false;
+}
 
 require_once $mageFilename;
 

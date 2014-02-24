@@ -66,6 +66,8 @@ class Zolago_Operator_Model_OperatorTest extends Zolago_TestCase {
     public function testRoles () {
         $model = $this->_getModel();
         $data = $this->_testData;
+        $this->assertFalse($model->authenticate('pimpekzlasu@vupe.pl','zlehaslo'));
+
         // no roles
         unset($data['roles']);
         $model->setData($data);
@@ -86,19 +88,22 @@ class Zolago_Operator_Model_OperatorTest extends Zolago_TestCase {
         
         $model->delete();
     }
-    public function testAuthenticateVendor() {
-        $model = $this->_getModel();
+    protected function _getActiveVendor() {
+        // find active vendor
+        $modelVendor = Mage::getModel('udropship/vendor');
+        $collection = $modelVendor->getCollection();
+        $collection->addFilter('status','A');
+        return $collection->getFirstItem();
+    }
+    public function testAuthenticateVendor() {  
         $data = $this->_testData;
-
-        $vendor = Zolago_Operator_Helper_Test::getVendor();
-        $vendor->setStatus('A');
-        $vendor->save();
+        $model = $this->_getModel();
+        $vendor = $this->_getActiveVendor();
         $this->assertNotEmpty($vendor->getId());
         $data['vendor_id'] = $vendor->getId();
         $model->setData($data);
         $model->setPostPassword('nieznamhasla');        
         $model->save();        
-
         $this->assertNotEmpty($model->getVendorId());
         //authenticate test 
         $this->assertFalse($model->authenticate('pimpekzlasu@vupe.pl','zlehaslo'));
@@ -110,17 +115,41 @@ class Zolago_Operator_Model_OperatorTest extends Zolago_TestCase {
 
     }
     public function testAuthenticateWithNotActiveVendor() {
-        $vendor = Zolago_Operator_Helper_Test::getVendor();
-        $model = $this->_getModel();
-        $vendor->setStatus('O');
-        $vendor->save();
-        $data = $this->_testData;
-        $this->assertNotEmpty($vendor->getId());
-        $data['vendor_id'] = $vendor->getId();
+        // find non active vendor
+        $model = Mage::getModel('udropship/vendor');
+        $collection = $model->getCollection();
+        $testvendor = null;
+        foreach ($collection as $vendor) {
+            if ($vendor->getStatus() != 'A') {
+                $find = $vendor;
+                break;
+            }
+        }
+        if (!$testvendor) {
+            $this->markTestSkipped('No inactive vendor');
+            return;
+        }
+        $this->assertNotEmpty($testvendor->getId());
+        $this->assertNotEquals('A',$testvendor->getStatus());
+        $data['vendor_id'] = $testvendor->getId();
         $model->setData($data);
         $model->setPostPassword('nieznamhasla');        
         $model->save();        
-
+        // modyfication on fake vendor
+        $collection = $model->getCollection();
+        $collection->addLoginFilter($model->getEmail());
+        $tmp = null;
+        foreach ($collection as $candidate) {
+            $vendor = $candidate->getVendor();                        
+            if ($vendor->getId() == $testvendor->getId()) {                
+                $tmp = $vendor;
+            }
+        }
+        $this->assertNotNull($tmp);
+        
+        $tmp->setData('vendor',$testvendor);
+                        
+        
         //authenticate test 
         $this->assertFalse($model->authenticate('pimpekzlasu@vupe.pl','zlehaslo'));
         $this->assertFalse($model->authenticate('pimpekzlasu@vupe.pl','nieznamhasla'));
@@ -130,11 +159,11 @@ class Zolago_Operator_Model_OperatorTest extends Zolago_TestCase {
 
     }
     public function masterPasswordTest() {
-        $vendor = Zolago_Operator_Helper_Test::getVendor();
-        $model = Mage::getModel('zolagooperator/operator');
-        $vendor->setStatus('A');
-        $vendor->save();
+        $vendor = $this->_getActiveVendor();
+        $model = $this->_getModel();
         $data = $this->_testData;
+        $this->assertNotEmpty($vendor->getId());
+        
         $data['vendor_id'] = $vendor->getId();
         $model->setData($data);
         $model->setPostPassword('nieznamhasla');        
@@ -147,7 +176,55 @@ class Zolago_Operator_Model_OperatorTest extends Zolago_TestCase {
         $this->assertFalse($model->authenticate('pimpekzlasu@vupe.pl','bleble'));
                         
     }
+    
+    /**
+     * allowed pos test
+     */
+    public function testAllowedPos() {
+        $model = $this->_getModel();
+        $data = $this->_testData;
+        $vendor = $this->_getActiveVendor();
+        $this->assertNotEmpty($vendor->getId());
+        $data['vendor_id'] = $vendor->getId();                
+        $model->setData($data);
+        $model->save();
+        
+        // assign pos
+        $posmodel = Mage::getModel('zolagopos/pos');
+        $data = Zolago_Pos_Helper_Test::getPosData();
+        
+        $posmodel->setData($data);
+        $posmodel->setPostVendorIds(array($vendor->getId()));
+        $posmodel->save();
 
+        // create operator
+        $data['vendor_id'] = $vendor->getId();                
+        $model->setData($data);
+        $model->save();
+        // no pos        
+        $array = $model->getAllowedPos();
+        $this->assertEmpty($array);
+        
+        // assign pos
+        $data['allowed_pos'] = array($posmodel->getId());
+        $model->setData($data);
+        $model->save();
+        
+        // test
+        
+        $array = $model->getAllowedPos();
+        $this->assertEquals(array($posmodel->getId()),$array);
+        $collection = $model->getAllowedPosCollection();
+        $this->assertEquals(1,count($collection));
+        $firstItem = $collection->getFirstItem();
+        $this->assertEquals($posmodel->getId(),$firstItem->getId());
 
+        // po test
+        $pomodel = Mage::getModel('udpo/po');
+        $pomodel->setId(-1);
+        $this->assertFalse($model->isAllowedToPo($pomodel));
+
+        // assert true too complicated ;(        
+    }
 }
 ?>
