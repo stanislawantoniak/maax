@@ -37,7 +37,6 @@ class Zolago_Operator_Model_Observer {
         $isAllowed = false;
 
         // Check resource level
-        $resourceModuleLevel = $module;
         if ($this->_checkAllow($session,$module) 
          || $this->_checkAllow($session,$module . "/" . $controllerName)
          || $this->_checkAllow($session,$module . "/" . $controllerName . "/" . $action)) {
