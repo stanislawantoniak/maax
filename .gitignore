@@ -7,3 +7,4 @@
 /catalog.xml
 *.orig
 /phpinfo.php
+/testResult/*
