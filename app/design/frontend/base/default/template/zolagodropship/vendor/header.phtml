@@ -85,7 +85,7 @@ $_isTierShip = $_session->getVendor()->getAllowTiershipModify();
 <?php if ($_isUstockPoActive && $_session->isAllowed("ustockpos")): ?>
         <li <?php if ($_active=='pending_ustockpo'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('ustockpo/vendor/pendingUstockpo') ?>"><?php echo $this->__('Pending Stock PO')?></a></li>
 <?php endif ?>
-<?php if ($_isTierShip): ?>
+<?php if ($_isTierShip && $_session->isAllowed("udtiership")): ?>
     <li <?php if ($_active=='tiership_rates'): ?>class="active"<?php endif ?>><a href="<?php echo Mage::helper('udtiership')->getVendorEditUrl()?>"><?php echo $this->__('Shipping Rates')?></a></li>
 <?php endif ?>
 <?php if (0&&Mage::helper('udropship')->isModuleActive('udtiercom')): ?>
