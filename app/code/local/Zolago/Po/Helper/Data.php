@@ -3,6 +3,9 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 {
 	protected $_condJoined = false;
 	
+	public function setCondJoined($flag) {
+		$this->_condJoined = $flag;
+	}
 	/**
 	 * Add operator filter if session is in operator mode
 	 * @return Unirgy_DropshipPo_Model_Mysql4_Po_Collection

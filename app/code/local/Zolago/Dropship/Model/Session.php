@@ -7,6 +7,7 @@ class Zolago_Dropship_Model_Session extends Unirgy_Dropship_Model_Session
 	 */
 	protected $_operator;
 
+	
 	/**
 	 * @param Zolago_Operator_Model_Operator $operator
 	 * @return Zolago_Dropship_Model_Session

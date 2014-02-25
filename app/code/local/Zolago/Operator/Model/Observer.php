@@ -14,6 +14,8 @@ class Zolago_Operator_Model_Observer {
         $controller = $event->getControllerAction();
         /* @var $controller Mage_Core_Controller_Front_Action */
 
+        /* @var $session Zolago_Dropship_Model_Session */
+        $session = Mage::getSingleton("udropship/session");
         // Apply only for dropship conntrollers
         if(!($controller instanceof Unirgy_Dropship_Controller_VendorAbstract)) {
             return;
@@ -22,8 +24,6 @@ class Zolago_Operator_Model_Observer {
         /* @var $request Mage_Core_Controller_Request_Http */
         $response = $controller->getResponse();
         /* @var $response Mage_Core_Controller_Response_Http */
-        $session = Mage::getSingleton("udropship/session");
-        /* @var $session Zolago_Dropship_Model_Session */
         if(!$session->isOperatorMode()) {
             return;
         }

@@ -90,7 +90,6 @@
 				</fields>
 			</vendor>
 		</udropship>
-		
 	</global>
 	<frontend>
 		<block>
@@ -98,6 +97,16 @@
 				<class>Zolago_Dropship_Block_Pos</class>
 			</zolagodropship>
 		</block>
+		<events>
+			<core_locale_set_locale>
+                <observers>
+                    <bind_locale>
+                        <class>zolagodropship/observer</class>
+                        <method>bindLocale</method>
+                    </bind_locale>
+                </observers>
+            </core_locale_set_locale>
+		</events>
 		<routers>
 			<zolagodropship>
 				<use>standard</use>

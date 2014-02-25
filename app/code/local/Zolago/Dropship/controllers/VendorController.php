@@ -13,10 +13,11 @@ class Zolago_Dropship_VendorController extends Unirgy_Dropship_VendorController 
 				$operator = $session->getOperator();
 				if($operator->isAllowed("udpo/vendor")){
 					return parent::indexAction();
+				}else{
+					return $this->_forward('dashboard');
 				}
 			}
-            return $this->_forward('dashboard');
-        }
+		}
 		return parent::indexAction();
 	}
 	
@@ -41,6 +42,16 @@ class Zolago_Dropship_VendorController extends Unirgy_Dropship_VendorController 
 	 */
 	public function deniedAction(){
 		die("Access denied");
+	}
+	
+	/**
+	 * Set locale
+	 */
+	public function setLocaleAction(){
+		$locale = $this->getRequest()->getParam("locale", 
+				Mage::app()->getLocale()->getLocaleCode());
+		$this->_getSession()->setLocale($locale);
+		return $this->_redirectReferer();
 	}
 }
 

@@ -16,7 +16,12 @@
  */
 ?>
 <?php
+$_allowedLocale = array(
+	"pl_PL"=>$this->__("PL"), 
+	"en_US"=>$this->__("EN")
+);
 $_session = Mage::getSingleton('udropship/session');
+$_currentLocale = Mage::app()->getLocale()->getLocaleCode();
 $_isUdpo = Mage::helper('udropship')->isUdpoActive();
 $_isUdreport = Mage::helper('udropship')->isModuleActive('Unirgy_DropshipVendorReport');
 $_dashboardUrl = $_isUdpo ? $this->getUrl('udpo/vendor') : $this->getUrl('udropship/vendor');
@@ -46,11 +51,20 @@ $_isTierShip = $_session->getVendor()->getAllowTiershipModify();
 			<?php endif;?>
 		
 			<span class="pipe">|</span>
-			<a href="http://unirgy.com/products/udropship/help.php" onclick="this.target='_blank'"><?php echo $this->__('Help')?></a><span class="pipe">|</span>
 			<a href="<?php echo $this->getUrl('udropship/vendor/logout')?>"><?php echo $this->__('Log out')?></a>
 			<?php else: ?>
 			<?php echo $this->__('Welcome to Dropship Vendor Interface') ?>
 			<?php endif ?>
+			| <select id="locale-change">
+				<?php foreach($_allowedLocale as $locale=>$label):?>
+				<option value="<?php echo $locale;?>"<?php if($locale==$_currentLocale):?> selected="selected"<?php endif;?>><?php echo $this->escapeHtml($label);?></option>
+				<?php endforeach;?>
+			</select>
+			<script type="text/javascript">
+			  $('locale-change').observe('change', function(){
+				  document.location.href = '<?php echo Mage::getUrl('udropship/vendor/setlocale');?>locale/' + $F('locale-change');
+			  });
+			</script>
     </div>
     <div class="clear"></div>
     <ul class="main-nav">
