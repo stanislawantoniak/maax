@@ -4,6 +4,22 @@
  */
 
 class Zolago_Wishlist_Model_Observer {
+	
+	/* @var $_cookie Mage_Core_Model_Cookie */
+	protected $_cookie;
+
+
+	public function setCookieModel($cookie) {
+		$this->_cookie = $cookie;
+		return $this;
+	}
+	
+	public function getCookieModel() {
+		if(!$this->_cookie){
+			$this->_cookie = Mage::getModel('core/cookie');
+		}
+		return $this->_cookie;
+	}
 
     /**
      * increase favourite flag
@@ -82,8 +98,8 @@ class Zolago_Wishlist_Model_Observer {
 			Mage::helper("wishlist")->calculate();
 		}
 		
-		$cookie = Mage::getModel('core/cookie');
-		/* @var $cookie Mage_Core_Model_Cookie */
-		$cookie->delete(Zolago_Wishlist_Helper_Data::COOKIE_NAME);
+		$this->getCookieModel()->delete(
+				Zolago_Wishlist_Helper_Data::COOKIE_NAME
+		);
 	}
 }

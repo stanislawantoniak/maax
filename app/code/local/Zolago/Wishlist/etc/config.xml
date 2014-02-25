@@ -34,6 +34,7 @@
                     <zolagowishlist>
                         <class>zolagowishlist/observer</class>
                         <method>wishlistAddAfter</method>
+						<type>singleton</type>
                     </zolagowishlist>
                 </observers>
             </wishlist_product_add_after>
@@ -42,6 +43,7 @@
                     <zolagowishlist>
                         <class>zolagowishlist/observer</class>
                         <method>wishlistDelAfter</method>
+						<type>singleton</type>
                     </zolagowishlist>
                 </observers>
             </wishlist_item_delete_before>
@@ -50,6 +52,7 @@
 					<zolagowishlist>
 						<class>zolagowishlist/observer</class>
 						<method>handleCustomerLogin</method>
+						<type>singleton</type>
 					</zolagowishlist>
 				</observers>
 			</customer_login>
