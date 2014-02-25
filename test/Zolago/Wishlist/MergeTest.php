@@ -60,6 +60,7 @@ class Zolago_Wishlist_MergeTest extends ZolagoDb_TestCase{
 		}
 		
 		$afterMergeQty = -1;
+
 		foreach($wishlistCompare->getItemCollection() as $item){
 			/* @var $item Mage_Wishlist_Model_Item */
 			if($item->getProductId()==$product->getId()){
