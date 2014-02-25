@@ -53,6 +53,9 @@ class Zolago_Po_Helper_DataTest extends Zolago_TestCase {
     }
     public function testVendorPoCollectionOperatorWithPos() {
         // operator with pos
+        if (!no_coverage()) {
+            $this->markTestSkipped('Coverage error');
+        }
 
         // third helper helper
         $helper = Mage::helper('udpo');
