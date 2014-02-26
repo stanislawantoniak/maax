@@ -7,11 +7,19 @@ class Zolago_Wishlist_Helper_Data extends Mage_Wishlist_Helper_Data{
 	
 	/* @var $_cookie Mage_Core_Model_Cookie */
 	protected $_cookie;
-	
-	public function __construct() {
-		$this->_cookie = Mage::getModel('core/cookie');
-	}
 
+
+	public function setCookieModel($cookie) {
+		$this->_cookie = $cookie;
+		return $this;
+	}
+	
+	public function getCookieModel() {
+		if(!$this->_cookie){
+			$this->_cookie = Mage::getModel('core/cookie');
+		}
+		return $this->_cookie;
+	}
 
 	/**
 	 * @return Mage_Customer_Model_Customer
@@ -32,7 +40,7 @@ class Zolago_Wishlist_Helper_Data extends Mage_Wishlist_Helper_Data{
 			$wishlist = Mage::getModel("wishlist/wishlist");
 			/* @var $wishlist Mage_Wishlist_Model_Wishlist */
 			
-			$cookie = $this->_cookie->get(self::COOKIE_NAME);
+			$cookie = $this->getCookieModel()->get(self::COOKIE_NAME);
 			
 			if($cookie){
 				$wishlist->load($cookie, "sharing_code");
@@ -52,7 +60,7 @@ class Zolago_Wishlist_Helper_Data extends Mage_Wishlist_Helper_Data{
 			$wishlist = Mage::getModel("wishlist/wishlist");
 			/* @var $wishlist Mage_Wishlist_Model_Wishlist */
 			
-			$cookie = $this->_cookie->get(self::COOKIE_NAME);
+			$cookie = $this->getCookieModel()->get(self::COOKIE_NAME);
 			
 			if($cookie){
 				$wishlist->load($cookie, "sharing_code");
@@ -65,7 +73,7 @@ class Zolago_Wishlist_Helper_Data extends Mage_Wishlist_Helper_Data{
 					$wishlist->setSharingCode($cookie);
 				}else{
 					$wishlist->generateSharingCode();
-					$this->_cookie->set(self::COOKIE_NAME, $wishlist->getSharingCode());
+					$this->getCookieModel()->set(self::COOKIE_NAME, $wishlist->getSharingCode());
 				}
 			}
 			
