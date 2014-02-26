@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<layout>
+    
+    <zolagopos_update_menu>      
+        <reference name="menu">
+            <action method="setActive"><menupath>vendors/pos</menupath></action>
+        </reference>
+    </zolagopos_update_menu>
+    <adminhtml_pos_index>
+        <update handle="zolagopos_update_menu"/>
+        <reference name="content">
+            <block type="zolagopos/adminhtml_pos" name="zolagopos_pos" template="zolagopos/pos.phtml">
+                <block type="zolagopos/adminhtml_pos_grid" name="zolagopos_pos_grid"/>
+            </block>
+        </reference>
+    </adminhtml_pos_index>
+    <adminhtml_pos_edit>
+        <update handle="zolagopos_update_menu"/>
+        <reference name="content">
+            <block type="zolagopos/adminhtml_pos_edit" name="zolagopos_pos_edit" template="zolagopos/pos/edit.phtml"/>
+
+        </reference>
+        <reference name="left">
+            <block type="zolagopos/adminhtml_pos_edit_tabs" name="zolagopos_pos_edit_tabs">
+                <!-- General tab -->
+                <action method="addTab">
+                    <name>group_general</name>
+                    <block>zolagopos/adminhtml_pos_edit_tab_general</block>
+                </action>
+                <!-- Vendors Tab -->
+                <action method="addTab">
+                    <name>group_vendor</name>
+                    <block>zolagopos/adminhtml_pos_edit_tab_vendor</block>
+                </action>
+            </block>
+        </reference>
+    </adminhtml_pos_edit>
+    <adminhtml_pos_vendorgrid>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="zolagopos/adminhtml_pos_edit_tab_vendor_grid" name="zolagopos_pos_edit_tab_vendor_grid"/>
+        </block>
+    </adminhtml_pos_vendorgrid>
+</layout>

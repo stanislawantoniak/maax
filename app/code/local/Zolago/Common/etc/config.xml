@@ -5,6 +5,17 @@
             <version>0.0.1</version>
         </Zolago_Common>
     </modules>
+	<frontend>
+		<routers>
+            <zolagocommon>
+                <use>standard</use>
+                <args>
+                    <module>Zolago_Common</module>
+                    <frontName>zolagocommon</frontName>
+                </args>
+            </zolagocommon>
+		</routers>
+	</frontend>
     <global>
         <!-- 
         <helpers>
@@ -21,4 +32,16 @@
             </zolagocommon_setup>
         </resources>
     </global>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <!-- fix currency symbol routing / its local module depandency is not requored-->
+                        <currencysymbol before="Mage_Adminhtml">Mage_CurrencySymbol_Adminhtml</currencysymbol>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
 </config>

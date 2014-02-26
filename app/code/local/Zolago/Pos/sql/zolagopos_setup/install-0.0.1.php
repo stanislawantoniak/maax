@@ -21,6 +21,7 @@ $table = $installer->getConnection()
     ))
         
     // Struct
+    ->addColumn('vendor_owner_id',  Varien_Db_Ddl_Table::TYPE_INTEGER)
     ->addColumn('external_id',      Varien_Db_Ddl_Table::TYPE_TEXT, 100)
     ->addColumn('is_active',        Varien_Db_Ddl_Table::TYPE_INTEGER, 1, array('default'=>0, 'nullable' => false))
     ->addColumn('client_number',    Varien_Db_Ddl_Table::TYPE_TEXT, 100)
@@ -31,6 +32,7 @@ $table = $installer->getConnection()
     ->addColumn('company',          Varien_Db_Ddl_Table::TYPE_TEXT, 150)
     ->addColumn("country_id",       Varien_Db_Ddl_Table::TYPE_TEXT, 2, array('nullable'  => false))
     ->addColumn("region_id",        Varien_Db_Ddl_Table::TYPE_INTEGER)
+    ->addColumn("region",           Varien_Db_Ddl_Table::TYPE_TEXT, 100)
     ->addColumn('postcode',         Varien_Db_Ddl_Table::TYPE_TEXT, 20)
     ->addColumn('street',           Varien_Db_Ddl_Table::TYPE_TEXT, 150, array('nullable'  => false))
     ->addColumn('city',             Varien_Db_Ddl_Table::TYPE_TEXT, 100, array('nullable'  => false))
@@ -44,6 +46,8 @@ $table = $installer->getConnection()
     // Indexes
     ->addIndex($installer->getIdxName('zolagopos/pos', array('external_id')),
         array('external_id'))
+    ->addIndex($installer->getIdxName('zolagopos/pos', array('vendor_owner_id')),
+        array('vendor_owner_id'))
     ->addIndex($installer->getIdxName('zolagopos/pos', array('client_number')),
         array('client_number'))
     ->addIndex($installer->getIdxName('zolagopos/pos', array('country_id')),
@@ -57,7 +61,13 @@ $table = $installer->getConnection()
         'country_id', $installer->getTable('directory/country'), 'country_id')
     ->addForeignKey(
         $installer->getFkName('zolagopos/pos', 'region_id', 'directory/country_region', 'region_id'),
-        'region_id', $installer->getTable('directory/country_region'), 'region_id');
+        'region_id', $installer->getTable('directory/country_region'), 'region_id',
+         Varien_Db_Ddl_Table::ACTION_SET_NULL, Varien_Db_Ddl_Table::ACTION_CASCADE)
+    ->addForeignKey(
+        $installer->getFkName('zolagopos/pos', 'vendor_owner_id', 'udropship/vendor', 'vendor_id'),
+        'vendor_owner_id', $installer->getTable('udropship/vendor'), 'vendor_id', 
+         Varien_Db_Ddl_Table::ACTION_SET_NULL, Varien_Db_Ddl_Table::ACTION_CASCADE
+     );
 
 $installer->getConnection()->createTable($table);
 
@@ -69,10 +79,9 @@ $table = $installer->getConnection()
     ->newTable($posVendorTable)
 
     // Struct
-    ->addColumn("pos_id",       Varien_Db_Ddl_Table::TYPE_INTEGER)
-    ->addColumn("vendor_id",    Varien_Db_Ddl_Table::TYPE_INTEGER)
-    ->addColumn('is_owner',     Varien_Db_Ddl_Table::TYPE_INTEGER, 1, array('default'=>0, 'nullable' => false))
-        
+    ->addColumn("pos_id",       Varien_Db_Ddl_Table::TYPE_INTEGER, null, array('nullable' => false))
+    ->addColumn("vendor_id",    Varien_Db_Ddl_Table::TYPE_INTEGER, null, array('nullable' => false))
+       
     // Indexes
     ->addIndex($installer->getIdxName('zolagopos/pos_vendor', array('pos_id', 'vendor_id')),
         array('pos_id', 'vendor_id'), Varien_Db_Adapter_Interface::INDEX_TYPE_UNIQUE)
@@ -95,5 +104,3 @@ $table = $installer->getConnection()
 $installer->getConnection()->createTable($table);
 
 $installer->endSetup();
-
-?>
