@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Zolago_Common>
+            <version>0.0.1</version>
+        </Zolago_Common>
+    </modules>
+	<frontend>
+		<routers>
+            <zolagocommon>
+                <use>standard</use>
+                <args>
+                    <module>Zolago_Common</module>
+                    <frontName>zolagocommon</frontName>
+                </args>
+            </zolagocommon>
+		</routers>
+	</frontend>
+    <global>
+        <!-- 
+        <helpers>
+            <zolagocommon>
+                <class>Zolago_Common_Helper</class>
+            </zolagocommon>
+        </helpers>
+        -->
+        <resources>
+            <zolagocommon_setup>
+                <setup>
+                    <module>Zolago_Common</module>
+                </setup>
+            </zolagocommon_setup>
+        </resources>
+    </global>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <!-- fix currency symbol routing / its local module depandency is not requored-->
+                        <currencysymbol before="Mage_Adminhtml">Mage_CurrencySymbol_Adminhtml</currencysymbol>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+</config>

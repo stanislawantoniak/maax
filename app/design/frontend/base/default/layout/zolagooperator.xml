@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+	<udropship_operator_index>
+        <update handle="udropship_vendor" />
+        <reference name="content">
+            <block name="zolagooperator_dropship_operator" type="zolagooperator/dropship_operator" template="zolagooperator/dropship/operator.phtml"/>
+        </reference>
+	</udropship_operator_index>
+	<udropship_operator_edit>
+        <update handle="udropship_vendor" />
+        <reference name="content">
+            <block name="zolagooperator_dropship_operator_edit" type="zolagooperator/dropship_operator_edit" template="zolagooperator/dropship/operator/edit.phtml"/>
+        </reference>
+	</udropship_operator_edit>
+</layout>
