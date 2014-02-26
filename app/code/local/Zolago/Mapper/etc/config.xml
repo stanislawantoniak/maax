@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Zolago_Mapper>
+            <version>0.0.1</version>
+        </Zolago_Mapper>
+    </modules>
+	<admin>
+		<routers>
+			<adminhtml>
+				<args>
+					<modules>
+						<Zolago_Mappers before="Mage_Adminhtml">Zolago_Mapper_Adminhtml</Zolago_Mappers>
+					</modules>
+				</args>
+			</adminhtml>
+		</routers>
+	</admin>
+    <global>
+       <resources>
+            <zolagomapper_setup>
+                <setup>
+                    <module>Zolago_Mapper</module>
+                </setup>
+            </zolagomapper_setup>
+        </resources>
+		<helpers>
+			<zolagomapper>
+				<class>Zolago_Mapper_Helper_Data</class>
+			</zolagomapper>
+		</helpers>
+    </global>
+    <adminhtml>
+        <layout>
+            <updates>
+                <zolagomapper>
+                    <file>zolagomapper.xml</file>
+                </zolagomapper>
+            </updates>
+        </layout>
+    </adminhtml>
+</config>
