@@ -5,6 +5,25 @@
             <version>0.0.1</version>
         </Zolago_Mapper>
     </modules>
+    <global>
+       <resources>
+            <zolagomapper_setup>
+                <setup>
+                    <module>Zolago_Mapper</module>
+                </setup>
+            </zolagomapper_setup>
+        </resources>
+		<helpers>
+			<zolagomapper>
+				<class>Zolago_Mapper_Helper</class>
+			</zolagomapper>
+		</helpers>
+		<blocks>
+			<zolagomapper>
+				<class>Zolago_Mapper_Block</class>
+			</zolagomapper>
+		</blocks>
+    </global>
 	<admin>
 		<routers>
 			<adminhtml>
@@ -16,27 +35,22 @@
 			</adminhtml>
 		</routers>
 	</admin>
-    <global>
-       <resources>
-            <zolagomapper_setup>
-                <setup>
-                    <module>Zolago_Mapper</module>
-                </setup>
-            </zolagomapper_setup>
-        </resources>
-		<helpers>
-			<zolagomapper>
-				<class>Zolago_Mapper_Helper_Data</class>
-			</zolagomapper>
-		</helpers>
-    </global>
-    <adminhtml>
-        <layout>
-            <updates>
-                <zolagomapper>
-                    <file>zolagomapper.xml</file>
-                </zolagomapper>
-            </updates>
-        </layout>
-    </adminhtml>
+	<adminhtml>
+		<layout>
+			<updates>
+				<zolagomapper>
+					<file>zolagomapper.xml</file>
+				</zolagomapper>
+			</updates>
+		</layout>
+		<translate>
+			<modules>
+				<zolagomapper>
+					<files>
+						<default>Zolago_Mapper.csv</default>
+					</files>
+				</zolagomapper>
+			</modules>
+		</translate>
+	</adminhtml>
 </config>
