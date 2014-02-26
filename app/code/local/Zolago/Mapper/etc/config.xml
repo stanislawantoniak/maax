@@ -13,6 +13,24 @@
                 </setup>
             </zolagomapper_setup>
         </resources>
+		
+		<models>
+			<zolagomapper>
+				<class>Zolago_Mapper_Model</class>
+				<resourceModel>zolagomapper_resource</resourceModel>
+			</zolagomapper>
+			<zolagomapper_resource>
+				<class>Zolago_Mapper_Model_Resource</class>
+				<entities>
+					<mapper>
+						<table>zolago_mapper</table>
+					</mapper>
+					<mapper_category>
+						<table>zolago_mapper_category</table>
+					</mapper_category>
+				</entities>
+			</zolagomapper_resource>
+		</models>
 		<helpers>
 			<zolagomapper>
 				<class>Zolago_Mapper_Helper</class>

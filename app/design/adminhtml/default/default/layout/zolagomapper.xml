@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<layout>
+    
+    <zolagomapper_update_menu>      
+        <reference name="menu">
+            <action method="setActive"><menupath>catalog/zolagomapper</menupath></action>
+        </reference>
+    </zolagomapper_update_menu>
+    <adminhtml_mapper_index>
+        <update handle="zolagomapper_update_menu"/>
+        <reference name="content">
+            <block type="zolagomapper/adminhtml_mapper" name="zolagomapper_mapper" template="zolagomapper/mapper.phtml">
+                <block type="zolagomapper/adminhtml_mapper_grid" name="zolagomapper_mapper_grid"/>
+            </block>
+        </reference>
+    </adminhtml_mapper_index>
+<!--    <adminhtml_pos_edit>
+        <update handle="zolagopos_update_menu"/>
+        <reference name="content">
+            <block type="zolagopos/adminhtml_pos_edit" name="zolagopos_pos_edit" template="zolagopos/pos/edit.phtml"/>
+
+        </reference>
+        <reference name="left">
+            <block type="zolagopos/adminhtml_pos_edit_tabs" name="zolagopos_pos_edit_tabs">
+                 General tab 
+                <action method="addTab">
+                    <name>group_general</name>
+                    <block>zolagopos/adminhtml_pos_edit_tab_general</block>
+                </action>
+                 Vendors Tab 
+                <action method="addTab">
+                    <name>group_vendor</name>
+                    <block>zolagopos/adminhtml_pos_edit_tab_vendor</block>
+                </action>
+            </block>
+        </reference>
+    </adminhtml_pos_edit>
+    <adminhtml_pos_vendorgrid>
+        <block type="core/text_list" name="root" output="toHtml">
+            <block type="zolagopos/adminhtml_pos_edit_tab_vendor_grid" name="zolagopos_pos_edit_tab_vendor_grid"/>
+        </block>
+    </adminhtml_pos_vendorgrid>-->
+</layout>
