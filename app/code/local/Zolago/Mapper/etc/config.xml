@@ -28,14 +28,23 @@
 					<mapper_category>
 						<table>zolago_mapper_category</table>
 					</mapper_category>
-					<mapper_queue_mapper>
-						<table>zolago_mapper_queue_mapper</table>
-					</mapper_queue_mapper>
-					<mapper_queue_product>
-						<table>zolago_mapper_queue_product</table>
-					</mapper_queue_product>
 				</entities>
 			</zolagomapper_resource>
+			<zolagomapper_queue_item>
+			    <class>Zolago_Mapper_Model_Queue_Item</class>
+				<resourceModel>zolagomapper_queue_item_resource</resourceModel>
+			</zolagomapper_queue_item>
+			<zolagomapper_queue_item_resource>
+				<class>Zolago_Mapper_Model_Resource_Queue</class>
+				<entities>
+					<mapper>
+						<table>zolago_mapper_queue_mapper</table>
+					</mapper>
+					<product>
+						<table>zolago_mapper_queue_product</table>
+					</product>		
+				</entities>	    
+			</zolagomapper_queue_item_resource>
 		</models>
 		<helpers>
 			<zolagomapper>

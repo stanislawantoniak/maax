@@ -58,6 +58,9 @@
     <testsuite name="Wishlist">
       <directory suffix="Test.php">./Zolago/Wishlist/</directory>
     </testsuite>
+    <testsuite name="Mapper">
+      <directory suffix="Test.php">./Zolago/Mapper/</directory>
+    </testsuite>
   </testsuites>
   <listeners>
     <listener class="PHPUnit_Util_Log_JSON"/>
