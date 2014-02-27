@@ -28,12 +28,12 @@
 					<mapper_category>
 						<table>zolago_mapper_category</table>
 					</mapper_category>
-					<mapper_queue>
+					<mapper_queue_mapper>
 						<table>zolago_mapper_queue_mapper</table>
-					</mapper_queue>
-					<mapper_product_queue>
+					</mapper_queue_mapper>
+					<mapper_queue_product>
 						<table>zolago_mapper_queue_product</table>
-					</mapper_product_queue>
+					</mapper_queue_product>
 				</entities>
 			</zolagomapper_resource>
 		</models>
