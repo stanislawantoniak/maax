@@ -1,73 +1,48 @@
 <?php
-class Zolago_Pos_Block_Adminhtml_Pos_Edit extends Mage_Adminhtml_Block_Widget {
+class Zolago_Mapper_Block_Adminhtml_Mapper_Edit extends Mage_Adminhtml_Block_Widget_Form_Container {
 
-    /**
-     *  @return Zolago_Pos_Model_Pos
+	
+	/**
+     *  @return Zolago_Mapper_Model_Mapper
      */
     public function getModel() {
-        return Mage::registry('zolagopos_current_pos');
+        return Mage::registry('zolagomapper_current_mapper');
     }
 
+	
+	public function __construct()
+    {
+        $this->_objectId = 'mapper_id';
+        $this->_blockGroup = 'zolagomapper';
+        $this->_controller = 'adminhtml_mapper';
+				
+		parent::__construct();
+		
+
+	}
+	
     protected function _prepareLayout() {
-        $this->setChild('back_button',
-            $this->getLayout()->createBlock('adminhtml/widget_button')
-                ->setData(array(
-                    'label' => Mage::helper('zolagopos')->__('Back'),
-                    'onclick' => "window.location.href = '" . $this->getUrl('*/*') . "'",
-                    'class' => 'back'
-                ))
-        );
-        $this->setChild('reset_button',
-            $this->getLayout()->createBlock('adminhtml/widget_button')
-                ->setData(array(
-                    'label' => Mage::helper('zolagopos')->__('Reset'),
-                    'onclick' => 'window.location.href = window.location.href'
-                ))
-        );
-        $this->setChild('save_button',
-            $this->getLayout()->createBlock('adminhtml/widget_button')
-                ->setData(array(
-                    'label' => Mage::helper('zolagopos')->__('Save'),
-                    'onclick' => 'posControl.save();',
-                    'class' => 'save'
-                ))
-        );
-        $this->setChild('delete_button',
-            $this->getLayout()->createBlock('adminhtml/widget_button')
-                ->setData(array(
-                    'label' => Mage::helper('zolagopos')->__('Delete'),
-                    'onclick' => 'posControl.remove();',
-                    'class' => 'delete'
-                ))
-        );
-        return parent::_prepareLayout();
+        $ret = parent::_prepareLayout();
+		if(!$this->getIsNew()){
+			$this->_addButton('run', array(
+				'label'     => Mage::helper('adminhtml')->__('Run'),
+				'onclick'   => 'setLocation(\'' .Mage::getUrl("*/*/run", array("mapper_id"=>$this->getModel()->getId())) . '\')',
+				'class'     => 'go',
+			), -1);
+		}
+		$this->setDataObject($this->getModel());
+		return $ret;
     }
-
-    public function getBackButtonHtml() {
-        return $this->getChildHtml('back_button');
-    }
-
-    public function getResetButtonHtml() {
-        return $this->getChildHtml('reset_button');
-    }
-
-    public function getSaveButtonHtml() {
-        return $this->getChildHtml('save_button');
-    }
-
-    public function getDeleteButtonHtml() {
-        return $this->getChildHtml('delete_button');
-    }
-
+	
     public function getIsNew() {
-        return $this->getModel()->getId();
+        return !(int)$this->getModel()->getId();
     }
     
     public function getHeaderText() {
         if ($this->getIsNew()) {
-            return Mage::helper('zolagopos')->__('Edit POS');
+            return Mage::helper('zolagomapper')->__('Edit mapper');
         }
-        return  Mage::helper('zolagopos')->__('New POS');
+        return  Mage::helper('zolagomapper')->__('New mapper');
     }
 
     public function getSaveUrl() {
