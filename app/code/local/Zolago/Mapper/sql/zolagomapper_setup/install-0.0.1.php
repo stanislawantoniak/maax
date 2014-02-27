@@ -80,7 +80,7 @@ $installer->getConnection()->createTable($table);
  * Mapper queue
  */
 $table = $installer->getConnection()
-    ->newTable($installer->getTable('zolagomapper/mapper_queue'))
+    ->newTable($installer->getTable('zolagomapper/mapper_queue_mapper'))
     ->addColumn('queue_id', Varien_Db_Ddl_Table::TYPE_INTEGER, null, array( 
             'identity'  => true,
             'nullable'  => false,
@@ -99,12 +99,12 @@ $table = $installer->getConnection()
     ->addColumn('mapper_id',Varien_Db_Ddl_Table::TYPE_INTEGER, null, array (
         'nullable' => false,
     ))
-    ->addIndex($installer->getIdxName('zolagomapper/mapper_queue', array ('insert_date')), array('insert_date'))
-    ->addIndex($installer->getIdxName('zolagomapper/mapper_queue', array ('status')), array('status'))
-    ->addIndex($installer->getIdxName('zolagomapper/mapper_queue', array ('mapper_id')), array('mapper_id'),
+    ->addIndex($installer->getIdxName('zolagomapper/mapper_queue_mapper', array ('insert_date')), array('insert_date'))
+    ->addIndex($installer->getIdxName('zolagomapper/mapper_queue_mapper', array ('status')), array('status'))
+    ->addIndex($installer->getIdxName('zolagomapper/mapper_queue_mapper', array ('mapper_id')), array('mapper_id'),
         array('type'=>Varien_Db_Adapter_Interface::INDEX_TYPE_UNIQUE))
     ->addForeignKey(
-        $installer->getFkName('zolagomapper/mapper_queue', 'mapper_id', 'zolagomapper/mapper', 'mapper_id'),
+        $installer->getFkName('zolagomapper/mapper_queue_mapper', 'mapper_id', 'zolagomapper/mapper', 'mapper_id'),
         'mapper_id', $installer->getTable('zolagomapper/mapper'), 'mapper_id',
         Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE);
 
@@ -113,7 +113,7 @@ $installer->getConnection()->createTable($table);
  * Map product queue
  */
 $table = $installer->getConnection()
-    ->newTable($installer->getTable('zolagomapper/mapper_product_queue'))
+    ->newTable($installer->getTable('zolagomapper/mapper_queue_product'))
     ->addColumn('queue_id', Varien_Db_Ddl_Table::TYPE_INTEGER, null, array( 
             'identity'  => true,
             'nullable'  => false,
@@ -132,12 +132,12 @@ $table = $installer->getConnection()
     ->addColumn('product_id',Varien_Db_Ddl_Table::TYPE_INTEGER, null, array (
         'nullable' => false,
     ))
-    ->addIndex($installer->getIdxName('zolagomapper/mapper_queue', array ('insert_date')), array('insert_date'))
-    ->addIndex($installer->getIdxName('zolagomapper/mapper_queue', array ('status')), array('status'))
-    ->addIndex($installer->getIdxName('zolagomapper/mapper_queue', array ('product_id')), array('product_id'),
+    ->addIndex($installer->getIdxName('zolagomapper/mapper_queue_product', array ('insert_date')), array('insert_date'))
+    ->addIndex($installer->getIdxName('zolagomapper/mapper_queue_product', array ('status')), array('status'))
+    ->addIndex($installer->getIdxName('zolagomapper/mapper_queue_product', array ('product_id')), array('product_id'),
         array('type'=>Varien_Db_Adapter_Interface::INDEX_TYPE_UNIQUE))
     ->addForeignKey(
-        $installer->getFkName('zolagomapper/mapper_product_queue', 'product_id', 'catalog/product', 'entity_id'),
+        $installer->getFkName('zolagomapper/mapper_queue_product', 'product_id', 'catalog/product', 'entity_id'),
         'product_id', $installer->getTable('catalog/product'), 'entity_id',
         Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE);
 
