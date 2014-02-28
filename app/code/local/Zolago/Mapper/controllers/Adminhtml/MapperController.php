@@ -2,6 +2,39 @@
 class Zolago_Mapper_Adminhtml_MapperController 
 	extends Mage_Adminhtml_Controller_Action{
 	
+	public function runAction() {
+		$model = $this->_registerModel();
+		
+		$mathedIds = $model->getMatchingProductIds();
+		$storeId = $model->getDefaultStoreId();
+		$productColl = Mage::getResourceModel('catalog/product_collection');
+		
+		Varien_Profiler::start("ZolagoMapper::Run");
+		/* @var $productColl Mage_Catalog_Model_Resource_Product_Collection */
+		$productColl->setStoreId($storeId);
+		$productColl->addIdFilter($mathedIds);
+		$productColl->addAttributeToSelect("price");
+		$productColl->addAttributeToSelect("name");
+		
+		$categoryColl = Mage::getResourceModel('catalog/category_collection');
+		/* @var $categoryColl Mage_Catalog_Model_Resource_Category_Collection */
+		$categoryColl->addAttributeToSelect("name");
+		$categoryColl->addFieldToFilter('entity_id', $model->getCategoryIds());
+		
+		$categoryNames = array();
+		foreach($categoryColl as $category){
+			$categoryNames[] = $category->getName();
+		}
+		$categoryNames = implode(", ", $categoryNames);
+		$this->loadLayout();
+		echo "Matched by store ".Mage::app()->getStore($storeId)->getName()." values:<br/>";
+		foreach($productColl as $product){
+			echo $product->getName() . " (" . $product->getPrice() . ")" . " -> " . $categoryNames . "<br/>";
+		}
+		Varien_Profiler::stop("ZolagoMapper::Run");
+		$this->renderLayout();
+	}
+	
 	public function saveAction(){
         $request = $this->getRequest();
 		if (!$request->isPost()) {

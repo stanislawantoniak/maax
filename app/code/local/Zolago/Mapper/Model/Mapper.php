@@ -43,9 +43,16 @@ class Zolago_Mapper_Model_Mapper extends Mage_Rule_Model_Rule{
     }
 
     public function getMatchingProductIds() {
+		
+		Varien_Profiler::start("ZolagoMapper::Matching");
         $this->_productIds = array();
         $this->setCollectedAttributes(array());
+		
         $productCollection = Mage::getResourceModel('catalog/product_collection');
+		/* @var $productCollection Mage_Catalog_Model_Resource_Product_Collection */
+		$productCollection->addAttributeToFilter("attribute_set_id", $this->getAttributeSetId());
+		$productCollection->addWebsiteFilter($this->getWebsiteId());
+
         $this->getConditions()->collectValidatedAttributes($productCollection);
         Mage::getSingleton('core/resource_iterator')->walk(
             $productCollection->getSelect(), array(array($this, 'callbackValidateProduct')), array(
@@ -54,12 +61,14 @@ class Zolago_Mapper_Model_Mapper extends Mage_Rule_Model_Rule{
             )
         );
         unset($productCollection);
+		Varien_Profiler::stop("ZolagoMapper::Matching");
         return $this->_productIds;
     }
 
     public function callbackValidateProduct($args) {
         $product = clone $args['product'];
         $product->setData($args['row']);
+		$product->setStoreId($this->getDefaultStoreId());
         if ($this->getConditions()->validate($product)) {
             $this->_productIds[] = $product->getId();
         }
@@ -67,27 +76,20 @@ class Zolago_Mapper_Model_Mapper extends Mage_Rule_Model_Rule{
         unset($args);
     }
 
-    public function run($load = false, $reindex = true) {
-        ini_set('max_execution_time', 0);
-        if ($this->getId()) {
-            $matched_product_ids = $this->getMatchingProductIds();
-           
-            return true;
-        }
-        return false;
-    }
+	/**
+	 * @return int
+	 */
+	public function getDefaultStoreId() {
+		if(!$this->hasData("default_store_id")){
+			$this->setData("default_store_id", Mage::app()->getWebsite($this->getWebsiteId())->getDefaultStore()->getId());
+		}
+		return $this->getData("default_store_id");
+	}
 
 	public function setDefaults(){
 		$this->setIsActive(1);
 	}
   
-
-    /**
-     * @return Orba_Allegro_Model_Resource_Mapping_Collection
-     */
-    public function getCollection() {
-       return parent::getCollection();
-    }
     
 }
 
