@@ -30,7 +30,7 @@ class Zolago_Wishlist_IndexController extends Mage_Wishlist_IndexController
 				$wishlist = Mage::getModel('wishlist/wishlist');
             if ($wishlistId) {
                 $wishlist->load($wishlistId);
-            }else{
+            } else {
 				$wishlist = Mage::helper('wishlist')->getWishlist();
 			}
 			

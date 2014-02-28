@@ -101,8 +101,7 @@ $table = $installer->getConnection()
     ))
     ->addIndex($installer->getIdxName('zolagomapper/mapper_queue_mapper', array ('insert_date')), array('insert_date'))
     ->addIndex($installer->getIdxName('zolagomapper/mapper_queue_mapper', array ('status')), array('status'))
-    ->addIndex($installer->getIdxName('zolagomapper/mapper_queue_mapper', array ('mapper_id')), array('mapper_id'),
-        array('type'=>Varien_Db_Adapter_Interface::INDEX_TYPE_UNIQUE))
+    ->addIndex($installer->getIdxName('zolagomapper/mapper_queue_mapper', array ('mapper_id')), array('mapper_id'))
     ->addForeignKey(
         $installer->getFkName('zolagomapper/mapper_queue_mapper', 'mapper_id', 'zolagomapper/mapper', 'mapper_id'),
         'mapper_id', $installer->getTable('zolagomapper/mapper'), 'mapper_id',
@@ -134,8 +133,7 @@ $table = $installer->getConnection()
     ))
     ->addIndex($installer->getIdxName('zolagomapper/mapper_queue_product', array ('insert_date')), array('insert_date'))
     ->addIndex($installer->getIdxName('zolagomapper/mapper_queue_product', array ('status')), array('status'))
-    ->addIndex($installer->getIdxName('zolagomapper/mapper_queue_product', array ('product_id')), array('product_id'),
-        array('type'=>Varien_Db_Adapter_Interface::INDEX_TYPE_UNIQUE))
+    ->addIndex($installer->getIdxName('zolagomapper/mapper_queue_product', array ('product_id')), array('product_id'))
     ->addForeignKey(
         $installer->getFkName('zolagomapper/mapper_queue_product', 'product_id', 'catalog/product', 'entity_id'),
         'product_id', $installer->getTable('catalog/product'), 'entity_id',

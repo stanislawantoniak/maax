@@ -49,6 +49,9 @@
     <testsuite name="All Tests">
       <directory suffix="Test.php">.</directory>
     </testsuite>
+    <testsuite name="Po">
+      <directory suffix="Test.php">./Zolago/Po/</directory>
+    </testsuite>
     <testsuite name="Operator">
       <directory suffix="Test.php">./Zolago/Operator/</directory>
     </testsuite>
@@ -57,6 +60,9 @@
     </testsuite>
     <testsuite name="Wishlist">
       <directory suffix="Test.php">./Zolago/Wishlist/</directory>
+    </testsuite>
+    <testsuite name="Mapper">
+      <directory suffix="Test.php">./Zolago/Mapper/</directory>
     </testsuite>
   </testsuites>
   <listeners>
