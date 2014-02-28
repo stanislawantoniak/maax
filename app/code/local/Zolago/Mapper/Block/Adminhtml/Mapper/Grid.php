@@ -12,27 +12,39 @@ class Zolago_Mapper_Block_Adminhtml_Mapper_Grid extends Mage_Adminhtml_Block_Wid
     protected function _prepareCollection(){
         $collection = Mage::getResourceModel('zolagomapper/mapper_collection');
         /* @var $collection Zolago_Mapper_Model_Resource_Mapper_Collection */
+		$collection->setFlag('abstract', true);
 		$collection->joinAttributeSet();
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
 
     protected function _prepareColumns() {
-        $this->addColumn("name", array(
-            "index"     =>"name",
-            "header"    => Mage::helper("zolagopos")->__("Name"),
-        ));
-        $this->addColumn("attribute_set_id", array(
-            "index"     =>"attribute_set_id",
+
+		
+        $this->addColumn("attribute_set_name", array(
+            "index"     =>"attribute_set_name",
             "header"    => Mage::helper("zolagomapper")->__("Attribute set"),
         ));
-        $this->addColumn("website_id", array(
-            "index"     =>"website_id",
-            "header"    => Mage::helper("zolagomapper")->__("Website"),
+		
+		        $this->addColumn("name", array(
+            "index"     =>"name",
+            "header"    => Mage::helper("zolagomapper")->__("Name"),
         ));
+		
+        if (!Mage::app()->isSingleStoreMode()) {
+            $this->addColumn('website_id', array(
+                'header'    => Mage::helper('zolagomapper')->__('Website'),
+                'align'     => 'center',
+                'width'     => '150px',
+                'type'      => 'options',
+                'options'   => Mage::getSingleton('adminhtml/system_store')->getWebsiteOptionHash(true),
+                'index'     => 'website_id',
+            ));
+        }
         $this->addColumn("is_active", array(
             "index"     =>"is_active",
             'type'      => 'options',
+			'align'		=> 'center',
             "options"   => Mage::getSingleton("adminhtml/system_config_source_yesno")->toArray(),
             "header"    => Mage::helper("zolagomapper")->__("Is active"),
             'width'     => '100px',
@@ -41,7 +53,7 @@ class Zolago_Mapper_Block_Adminhtml_Mapper_Grid extends Mage_Adminhtml_Block_Wid
             'header'    => Mage::helper('zolagomapper')->__('Action'),
             'width'     => '100px',
             'type'      => 'action',
-            'getter'    => 'getId',
+			"renderer"	=> Mage::getConfig()->getBlockClassName("zolagomapper/adminhtml_mapper_grid_column_renderer_action"),
             'actions'   => array(
                 array(
                     'caption'   => Mage::helper('zolagomapper')->__('View'),
@@ -58,16 +70,29 @@ class Zolago_Mapper_Block_Adminhtml_Mapper_Grid extends Mage_Adminhtml_Block_Wid
                     'field'     => 'mapper_id'
                 ),
             ),
+			'alt_actions' => array(
+				 array(
+                    'caption'   => Mage::helper('zolagomapper')->__('Create'),
+                    'url'       => array(
+                            'base'  => '*/*/new'
+                    ),
+                    'field'     => 'attribute_set_id'
+                ),
+			),
+            'index' => 'mapper_id',
+            'alt_index' => 'attribute_set_id',
             'filter' => false,
             'sortable' => false,
-            'index' => 'action',
         ));
         return parent::_prepareColumns();
     }
 
 
     public function getRowUrl($row){
-        return $this->getUrl('*/*/edit', array('mapper_id'=>$row->getId()));
+		if($row->getId()){
+			return $this->getUrl('*/*/edit', array('mapper_id'=>$row->getId()));
+		}
+        return $this->getUrl('*/*/new', array('attribute_set_id'=>$row->getAttributeSetId()));
     }
     
 

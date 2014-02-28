@@ -12,7 +12,32 @@ class Zolago_Mapper_Model_Resource_Mapper_Collection
 	 * @return Zolago_Mapper_Model_Resource_Mapper_Collection
 	 */
 	public function joinAttributeSet() {
+		$eavConfig = Mage::getSingleton('eav/config');
+		/* @var $eavConfig Mage_Eav_Model_Config */
+		$productEntityType = $eavConfig->getEntityType(Mage_Catalog_Model_Product::ENTITY);
+		
+		$this->getSelect()->
+			joinRight(
+				array("attribute_set"=>$this->getTable("eav/attribute_set")), 
+				"main_table.attribute_set_id=attribute_set.attribute_set_id",
+				array("attribute_set_name", "attribute_set_id")
+			)->
+			where("attribute_set.entity_type_id=?", $productEntityType->getId());
 		return $this;
+	}
+	
+	public function getIdFieldName() {
+		if($this->getFlag('abstract')){
+			return null;
+		}
+		return parent::getIdFieldName();
+	}
+	
+	protected function _getItemId(Varien_Object $item) {		
+		if($this->getFlag('abstract')){
+			return null;
+		}
+		return parent::_getItemId($item);
 	}
 	
 }
