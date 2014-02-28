@@ -77,6 +77,9 @@ class Zolago_Mapper_Model_Mapper extends Mage_Rule_Model_Rule{
         return false;
     }
 
+	public function setDefaults(){
+		$this->setIsActive(1);
+	}
   
 
     /**

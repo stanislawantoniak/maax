@@ -94,18 +94,21 @@ class Zolago_Mapper_Block_Adminhtml_Mapper_Edit_Form extends Mage_Adminhtml_Bloc
 
 
 			$fieldset = $form->addFieldset('conditions_fieldset', array(
-				'legend'=>Mage::helper('catalogrule')->__('Conditions (leave blank for all products)'))
-			)->setRenderer($renderer);
-			$fieldset->addField('conditions', 'text', array(
+				'legend'=>$helper->__('Conditions (leave blank for all products of attribute set)'))
+			);
+			$fieldset->setRenderer($renderer);
+			
+			$rules = $fieldset->addField('conditions', 'text', array(
 				'name' => 'conditions',
-				'label' => Mage::helper('catalogrule')->__('Conditions'),
-				'title' => Mage::helper('catalogrule')->__('Conditions'),
+				'label' => $helper->__('Conditions'),
 				'required' => true,
-			))->setRule($model)->setRenderer(Mage::getBlockSingleton('rule/conditions'));
+			));
+			$rules->setRule($model);
+			$rules->setRenderer(Mage::getBlockSingleton('rule/conditions'));
 
 			// Category
 			$fieldset = $form->addFieldset('action_fieldset', array(
-				'legend' => $helper->__('Actions'),
+				'legend' => $helper->__('Categories to be assigned'),
 			));
 			$categoryHtml = $this->getLayout()->
 					createBlock('zolagomapper/adminhtml_mapper_edit_form_categories')->
@@ -114,7 +117,6 @@ class Zolago_Mapper_Block_Adminhtml_Mapper_Edit_Form extends Mage_Adminhtml_Bloc
 
 			$categories = $fieldset->addField('category_ids_as_string', 'hidden', array(
 				'name' => 'category_ids_as_string',
-				'label' => Mage::helper('catalogrule')->__('Categories'),
 				'after_element_html' => $categoryHtml
 			));
 		}

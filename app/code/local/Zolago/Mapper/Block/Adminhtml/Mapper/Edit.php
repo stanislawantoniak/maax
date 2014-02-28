@@ -26,7 +26,7 @@ class Zolago_Mapper_Block_Adminhtml_Mapper_Edit extends Mage_Adminhtml_Block_Wid
 		if(!$this->getIsNew()){
 			$this->_addButton('run', array(
 				'label'     => Mage::helper('zolagomapper')->__('Run'),
-				'onclick'   => 'setLocation(\'' .Mage::getUrl("*/*/run", array("mapper_id"=>$this->getModel()->getId())) . '\')',
+				'onclick'   => 'setLocation(\'' .$this->getUrl("*/*/run", array("mapper_id"=>$this->getModel()->getId())) . '\')',
 				'class'     => 'go',
 			), -1);
 		}
@@ -35,6 +35,10 @@ class Zolago_Mapper_Block_Adminhtml_Mapper_Edit extends Mage_Adminhtml_Block_Wid
 			$this->_updateButton("save", "class", "");
 			$this->_updateButton("save", "onclick", "mapperControl.next();");
 			$this->_removeButton("reset");
+		}else{
+			if($this->getIsNew()){
+				$this->_updateButton("back", "onclick", 'setLocation(\'' .$this->getUrl("*/*/new") . '\')');
+			}
 		}
 		$this->setDataObject($this->getModel());
 		return $ret;

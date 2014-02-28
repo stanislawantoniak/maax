@@ -47,7 +47,15 @@ class Zolago_Mapper_Adminhtml_MapperController
 		}
 		
 		if ($values = $this->_getSession()->getData('mapper_form_data', true)) {
-            $model->addData($values);
+			if(isset($values['category_ids_as_string'])){
+				$model->setCategoryIds(explode(",",$values['category_ids_as_string']));
+			}
+			if(isset($values['rule']['conditions'])){
+				$values['conditions'] = $values['rule']['conditions'];
+				unset($values['rule']);
+				$model->loadPost($values);
+			}
+			$model->addData($values);
         }
 		
 		$this->loadLayout();
@@ -61,6 +69,25 @@ class Zolago_Mapper_Adminhtml_MapperController
 				setCanLoadRulesJs(true);
 		$this->renderLayout();
 	}
+	
+	public function deleteAction() {
+        $model = $this->_registerModel();
+        if ($model->getId()) {
+            $success = false;
+            try {
+                $model->delete();
+                $success = true;
+            } catch (Mage_Core_Exception $e) {
+                $this->_getSession()->addError($e->getMessage());
+            } catch (Exception $e) {
+                $this->_getSession()->addException($e, Mage::helper('zolagomapper')->__('An error occurred while deleting this mapping.'));
+            }
+            if ($success) {
+                $this->_getSession()->addSuccess(Mage::helper('zolagomapper')->__('The mapper has been deleted.'));
+            }
+        }
+        $this->_redirect('*/*/index');
+    }
 	
 	public function newAction() {
 		return $this->_forward("edit");
@@ -142,6 +169,8 @@ class Zolago_Mapper_Adminhtml_MapperController
 			$model = Mage::getModel("zolagomapper/mapper");
 			if($id = $this->_getId()){
 				$model->load($id);
+			}else{
+				$model->setDefaults();
 			}
 			Mage::register("zolagomapper_current_mapper", $model);
 		}
