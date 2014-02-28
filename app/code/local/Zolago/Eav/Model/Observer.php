@@ -5,11 +5,11 @@ class Zolago_Eav_Model_Observer
 	{
 		$fieldset = $observer->getForm()->getElement('base_fieldset');
 		$yesnoSource = Mage::getModel('adminhtml/system_config_source_yesno')->toOptionArray();
-		
+
 		$fieldset->addField('set_id', 'select', array(
 			'name'      => 'set_id',
-			'label'     => Mage::helper('zolagoeav')->__('Attribute Set'),
-			'title'     => Mage::helper('zolagoeav')->__('Attribute Set'),
+			'label'     => Mage::helper('zolagoeav')->__('Default Attribute Set'),
+			'title'     => Mage::helper('zolagoeav')->__('Default Attribute Set'),
 			'values'    => Mage::getModel('zolagoeav/entity_attribute_source_set')->getAllOptions(),
 			'required'	=> true,
 		));

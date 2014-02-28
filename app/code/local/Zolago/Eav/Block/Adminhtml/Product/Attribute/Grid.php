@@ -12,7 +12,7 @@ class Zolago_Eav_Block_Adminhtml_Product_Attribute_Grid extends Mage_Adminhtml_B
 		
 
         $this->addColumn('set_id', array(
-                'header'	=> Mage::helper('zolagoeav')->__('Attribute Set'),
+                'header'	=> Mage::helper('zolagoeav')->__('Default Attribute Set'),
                 'index'		=> 'set_id',
                 'type'		=> 'options',
 				'options'	=> $setsArray,

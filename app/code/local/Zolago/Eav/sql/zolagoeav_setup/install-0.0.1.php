@@ -6,7 +6,6 @@ $installer = $this;
 $installer->startSetup();
 $eavTable = $installer->getTable('catalog/eav_attribute');
 
-Mage::log('Start Setup');
 $installer->getConnection()->addColumn(
     $eavTable,
     'set_id',
@@ -26,6 +25,6 @@ $installer->getConnection()->addColumn(
 		'comment'	=> 'Used in Mapping'
     )
 );
-Mage::log('End Setup');
+
 $installer->endSetup();
 
