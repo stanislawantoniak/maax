@@ -5,6 +5,7 @@ class Zolago_Mapper_Model_Mapper_Condition_Product extends Mage_CatalogRule_Mode
 
 
 	public function loadAttributeOptions() {
+		$attributeSetId = $this->getAttributeSetId();
         $productAttributes = Mage::getResourceModel('catalog/product_attribute_collection');
 		/* @var $attrCollection Mage_Catalog_Model_Resource_Product_Attribute_Collection */
 

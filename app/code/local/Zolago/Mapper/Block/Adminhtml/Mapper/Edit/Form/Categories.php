@@ -1,5 +1,5 @@
 <?php
-class Zolago_Mapper_Block_Adminhtml_Mapper_Edit_Categories 
+class Zolago_Mapper_Block_Adminhtml_Mapper_Edit_Form_Categories 
 	extends Mage_Adminhtml_Block_Catalog_Category_Tree
 {
 	protected $_categoryIds;
@@ -11,19 +11,24 @@ class Zolago_Mapper_Block_Adminhtml_Mapper_Edit_Categories
     public function __construct()
     {
         parent::__construct();
-        $this->setTemplate("zolagomapper/mapper/edit/categories.phtml");
+        $this->setTemplate("zolagomapper/mapper/edit/form/categories.phtml");
     }
 
     protected function getCategoryIds()
     {
-        return $this->getMapper()->getCategoryIdsAsArray();
+        return $this->getModel()->getCategoryIds();
     }
 
+	/**
+     *  @return Zolago_Mapper_Model_Mapper
+     */
+    public function getModel() {
+        return Mage::registry('zolagomapper_current_mapper');
+    }
+	
     protected function isReadonly() {
         return false;
     }
-
- 
 
     /**
      * Forms string out of getCategoryIds()

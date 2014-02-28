@@ -20,15 +20,18 @@ class Zolago_Mapper_Model_Mapper extends Mage_Rule_Model_Rule{
         return $this->_conditions;
     }
 	
-	public function getCategoryIds() {
-		return implode(",", $this->getCategoryIdsAsArray());
+	public function getCategoryIdsAsString() {
+		if(!$this->hasData('category_ids_as_string')){
+			$this->setData('category_ids_as_string', implode(",", $this->getCategoryIdsAsArray()));
+		}
+		return $this->getData("category_ids_as_string");
 	}
 	
-	public function getCategoryIdsAsArray() {
-		if(!$this->hasData('category_ids_as_array')){
-			$this->setData('category_ids_as_array', array()); //@todo implement
+	public function getCategoryIds() {
+		if(!$this->hasData('category_ids')){
+			$this->setData('category_ids', $this->getResource()->getCategoryIds($this)); //@todo implement
 		}
-		return $this->getData("category_ids_as_array");
+		return $this->getData("category_ids");
 	}
 
     protected function _afterLoad() {

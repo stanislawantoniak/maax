@@ -2,12 +2,25 @@
 class Zolago_Mapper_Adminhtml_MapperController 
 	extends Mage_Adminhtml_Controller_Action{
 	
+	public function saveAction(){
+		var_export($this->getRequest()->getParams());
+//		$data = $request->getPost();
+//		$data['conditions'] = $data['rule']['conditions'];
+//		unset($data['rule']);
+//		$mapping->addData($data);
+//		$mapping->loadPost($data);
+	}
+	
 	public function editAction() {
 		$model = $this->_registerModel();
 		if(!$model->getId() && $this->_getId()){
 			$this->_getSession()->addError(Mage::helper("zolagomapper")->__("Invaild mapper Id"));
 			return $this->_redirectReferer();
 		}
+		$model->
+				getConditions()->
+				setJsFormObject('conditions_fieldset');
+		
 		$this->loadLayout();
 		$this->getLayout()->getBlock('head')->
 				setCanLoadExtJs(true)->
@@ -67,6 +80,32 @@ class Zolago_Mapper_Adminhtml_MapperController
             $html = '';
         }
         $this->getResponse()->setBody($html);
+    }
+	
+	/**
+     * Get tree node (Ajax version)
+     */
+    public function categoriesJsonAction()
+    {
+        $this->_registerModel();
+        if ($this->getRequest()->getParam('expand_all')) {
+            Mage::getSingleton('admin/session')->setIsTreeWasExpanded(true);
+        } else {
+            Mage::getSingleton('admin/session')->setIsTreeWasExpanded(false);
+        }
+        if ($categoryId = (int) $this->getRequest()->getPost('category')) {
+            
+            $category= Mage::getModel("catalog/category")->load($categoryId);
+
+            if (!$category->getId()) {
+                return;
+            }
+            
+            $this->getResponse()->setBody(
+                $this->getLayout()->createBlock('zolagomapper/adminhtml_mapper_edit_form_categories')
+                    ->getCategoryChildrenJson($category)
+            );
+        }
     }
 	
 }

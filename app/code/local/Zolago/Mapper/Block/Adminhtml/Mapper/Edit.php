@@ -25,10 +25,16 @@ class Zolago_Mapper_Block_Adminhtml_Mapper_Edit extends Mage_Adminhtml_Block_Wid
         $ret = parent::_prepareLayout();
 		if(!$this->getIsNew()){
 			$this->_addButton('run', array(
-				'label'     => Mage::helper('adminhtml')->__('Run'),
+				'label'     => Mage::helper('zolagomapper')->__('Run'),
 				'onclick'   => 'setLocation(\'' .Mage::getUrl("*/*/run", array("mapper_id"=>$this->getModel()->getId())) . '\')',
 				'class'     => 'go',
 			), -1);
+		}
+		if(!$this->getAttributeSetId()){
+			$this->_updateButton("save", "label", Mage::helper('zolagomapper')->__('Next'));
+			$this->_updateButton("save", "class", "");
+			$this->_updateButton("save", "onclick", "mapperControl.next();");
+			$this->_removeButton("reset");
 		}
 		$this->setDataObject($this->getModel());
 		return $ret;
@@ -37,9 +43,16 @@ class Zolago_Mapper_Block_Adminhtml_Mapper_Edit extends Mage_Adminhtml_Block_Wid
     public function getIsNew() {
         return !(int)$this->getModel()->getId();
     }
+	
+    public function getAttributeSetId() {
+		if($this->getIsNew()){
+			return Mage::app()->getRequest()->getParam("attribute_set_id");
+		}
+		return $this->getModel()->getAttributeSetId();
+    }
     
     public function getHeaderText() {
-        if ($this->getIsNew()) {
+        if (!$this->getIsNew()) {
             return Mage::helper('zolagomapper')->__('Edit mapper');
         }
         return  Mage::helper('zolagomapper')->__('New mapper');
