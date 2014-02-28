@@ -19,4 +19,10 @@
             <block type="zolagomapper/adminhtml_mapper_edit" name="zolagomapper_mapper" template="zolagomapper/mapper/edit.phtml"/>
         </reference>
     </adminhtml_mapper_edit>
+    <adminhtml_mapper_run>
+        <update handle="zolagomapper_update_menu"/>
+        <reference name="content">
+            <block type="core/template" name="zolagomapper_mapper" template="zolagomapper/mapper/run.phtml"/>
+        </reference>
+    </adminhtml_mapper_run>
 </layout>

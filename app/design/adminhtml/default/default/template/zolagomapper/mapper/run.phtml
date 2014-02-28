@@ -1,0 +1,18 @@
+<div class="content-header">
+   <h3>Run tset</h3>
+</div>
+<div>
+	<dl>
+	<?php foreach($this->getProducts() as $prodcut):?>	
+			<dt><?php echo $prodcut->getName();?> (<?php echo Mage::helper("core")->currency($prodcut->getPrice());?>)</dt>
+			<?php foreach ($this->getCategories() as $category):?>
+			<dd><?php echo $category->getName();?></dd>
+			<?php endforeach;?>
+		</tr>
+	<?php endforeach;?>
+	</dl>
+</div>
+<style type="text/css">
+dt{font-weight: bold;}
+dd{margin-left: 20px;}
+</style>

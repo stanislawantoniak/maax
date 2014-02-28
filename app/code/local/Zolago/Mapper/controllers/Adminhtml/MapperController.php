@@ -20,17 +20,13 @@ class Zolago_Mapper_Adminhtml_MapperController
 		/* @var $categoryColl Mage_Catalog_Model_Resource_Category_Collection */
 		$categoryColl->addAttributeToSelect("name");
 		$categoryColl->addFieldToFilter('entity_id', $model->getCategoryIds());
-		
-		$categoryNames = array();
-		foreach($categoryColl as $category){
-			$categoryNames[] = $category->getName();
-		}
-		$categoryNames = implode(", ", $categoryNames);
 		$this->loadLayout();
-		echo "Matched by store ".Mage::app()->getStore($storeId)->getName()." values:<br/>";
-		foreach($productColl as $product){
-			echo $product->getName() . " (" . $product->getPrice() . ")" . " -> " . $categoryNames . "<br/>";
-		}
+		$this->getLayout()->
+				getBlock("zolagomapper_mapper")->
+				setProducts($productColl)->
+				setCategories($categoryColl)->
+				setStore(Mage::app()->getStore($storeId));
+		
 		Varien_Profiler::stop("ZolagoMapper::Run");
 		$this->renderLayout();
 	}
