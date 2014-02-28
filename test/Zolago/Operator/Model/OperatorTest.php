@@ -9,12 +9,12 @@ class Zolago_Operator_Model_OperatorTest extends Zolago_TestCase {
         $this->_transaction = Mage::getSingleton('core/resource')->getConnection('core_write');
         $this->_transaction->beginTransaction();
         $this->_testData = Zolago_Operator_Helper_Test::getOperatorData();
-        
+
     }
     public function __destruct() {
         $this->_transaction->rollback();
     }
-    
+
     protected function _getModel() {
         if (empty($this->_model)) {
             $this->_model = Mage::getModel('zolagooperator/operator');
@@ -71,8 +71,8 @@ class Zolago_Operator_Model_OperatorTest extends Zolago_TestCase {
         // no roles
         unset($data['roles']);
         $model->setData($data);
-        $model->setPostPassword('nieznamhasla');        
-        $model->save();        
+        $model->setPostPassword('nieznamhasla');
+        $model->save();
         //authenticate test without vendor and roles
         $this->assertFalse($model->authenticate('pimpekzlasu@vupe.pl','zlehaslo'));
         $this->assertFalse($model->authenticate('pimpekzlasu@vupe.pl','nieznamhasla'));
@@ -85,7 +85,7 @@ class Zolago_Operator_Model_OperatorTest extends Zolago_TestCase {
         $this->assertFalse($model->authenticate('pimpekzlasu@vupe.pl','nieznamhasla'));
         // allow test
         $this->assertTrue($model->isAllowed('udropship/vendor/index'));
-        
+
         $model->delete();
     }
     protected function _getActiveVendor() {
@@ -95,17 +95,17 @@ class Zolago_Operator_Model_OperatorTest extends Zolago_TestCase {
         $collection->addFilter('status','A');
         return $collection->getFirstItem();
     }
-    public function testAuthenticateVendor() {  
+    public function testAuthenticateVendor() {
         $data = $this->_testData;
         $model = $this->_getModel();
         $vendor = $this->_getActiveVendor();
         $this->assertNotEmpty($vendor->getId());
         $data['vendor_id'] = $vendor->getId();
         $model->setData($data);
-        $model->setPostPassword('nieznamhasla');        
-        $model->save();        
+        $model->setPostPassword('nieznamhasla');
+        $model->save();
         $this->assertNotEmpty($model->getVendorId());
-        //authenticate test 
+        //authenticate test
         $this->assertFalse($model->authenticate('pimpekzlasu@vupe.pl','zlehaslo'));
         $this->assertTrue($model->authenticate('pimpekzlasu@vupe.pl','nieznamhasla'));
         // allow test
@@ -116,14 +116,21 @@ class Zolago_Operator_Model_OperatorTest extends Zolago_TestCase {
     }
     public function testAuthenticateWithNotActiveVendor() {
         // find non active vendor
-        $model = Mage::getModel('udropship/vendor');
-        $collection = $model->getCollection();
+        $vendor = Mage::getModel('udropship/vendor');
+        $collection = $vendor->getCollection();
+        $this->assertNotEmpty($collection);
         $testvendor = null;
-        foreach ($collection as $vendor) {
-            if ($vendor->getStatus() != 'A') {
-                $find = $vendor;
-                break;
+        if (!no_coverage()) {
+            foreach ($collection as $vendor) {
+                if ($vendor->getStatus() != 'A') {
+                    $testvendor = $vendor;
+                    break;
+                }
             }
+        } else {
+            $testvendor = Zolago_Operator_Helper_Test::getVendor();
+            $testvendor->setStatus('U');
+            $testvendor->save();
         }
         if (!$testvendor) {
             $this->markTestSkipped('No inactive vendor');
@@ -131,26 +138,26 @@ class Zolago_Operator_Model_OperatorTest extends Zolago_TestCase {
         }
         $this->assertNotEmpty($testvendor->getId());
         $this->assertNotEquals('A',$testvendor->getStatus());
+        
+        $model = $this->_getModel();
+        $data = $this->_testData;
         $data['vendor_id'] = $testvendor->getId();
         $model->setData($data);
-        $model->setPostPassword('nieznamhasla');        
-        $model->save();        
-        // modyfication on fake vendor
-        $collection = $model->getCollection();
-        $collection->addLoginFilter($model->getEmail());
+        $model->setPostPassword('nieznamhasla');
+        $model->save();
         $tmp = null;
+        $collection = $model->getCollection();
+        
         foreach ($collection as $candidate) {
-            $vendor = $candidate->getVendor();                        
-            if ($vendor->getId() == $testvendor->getId()) {                
+            $vendor = $candidate->getVendor();
+            if ($vendor->getId() == $testvendor->getId()) {
                 $tmp = $vendor;
             }
         }
         $this->assertNotNull($tmp);
-        
-        $tmp->setData('vendor',$testvendor);
-                        
-        
-        //authenticate test 
+
+
+        //authenticate test
         $this->assertFalse($model->authenticate('pimpekzlasu@vupe.pl','zlehaslo'));
         $this->assertFalse($model->authenticate('pimpekzlasu@vupe.pl','nieznamhasla'));
         // allow test
@@ -163,55 +170,67 @@ class Zolago_Operator_Model_OperatorTest extends Zolago_TestCase {
         $model = $this->_getModel();
         $data = $this->_testData;
         $this->assertNotEmpty($vendor->getId());
-        
+
         $data['vendor_id'] = $vendor->getId();
         $model->setData($data);
-        $model->setPostPassword('nieznamhasla');        
-        $model->save();        
-        
+        $model->setPostPassword('nieznamhasla');
+        $model->save();
+
         // password test
         $masterPassword = Mage::getStoreConfig('udropship/vendor/master_password');
         $this->assertTrue($model->authenticate('pimpekzlasu@vupe.pl','nieznamhasla'));
         $this->assertTrue($model->authenticate('pimpekzlasu@vupe.pl',$masterPassword));
         $this->assertFalse($model->authenticate('pimpekzlasu@vupe.pl','bleble'));
-                        
+
     }
-    
+
     /**
      * allowed pos test
      */
     public function testAllowedPos() {
         $model = $this->_getModel();
         $data = $this->_testData;
-        $vendor = $this->_getActiveVendor();
+        if (no_coverage()) {
+            $vendor = Zolago_Pos_Helper_Test::getVendor();
+            $vendor->setStatus('A');
+            $vendor->save();
+        } else {
+            $vendor = $this->_getActiveVendor();
+            if (!$vendor->getId()) { 
+                //no active vendor - skipped test
+                $this->markTestSkipped('No active vendors');
+                return;
+            }
+        }
         $this->assertNotEmpty($vendor->getId());
-        $data['vendor_id'] = $vendor->getId();                
+        $this->assertEquals('A',$vendor->getStatus());
+        $data['vendor_id'] = $vendor->getId();
         $model->setData($data);
         $model->save();
-        
+
         // assign pos
         $posmodel = Mage::getModel('zolagopos/pos');
         $data = Zolago_Pos_Helper_Test::getPosData();
-        
+
         $posmodel->setData($data);
         $posmodel->setPostVendorIds(array($vendor->getId()));
         $posmodel->save();
 
         // create operator
-        $data['vendor_id'] = $vendor->getId();                
+        $data['vendor_id'] = $vendor->getId();
         $model->setData($data);
         $model->save();
-        // no pos        
+        // no pos
         $array = $model->getAllowedPos();
         $this->assertEmpty($array);
-        
+
         // assign pos
         $data['allowed_pos'] = array($posmodel->getId());
         $model->setData($data);
         $model->save();
-        
+
         // test
-        
+
         $array = $model->getAllowedPos();
         $this->assertEquals(array($posmodel->getId()),$array);
         $collection = $model->getAllowedPosCollection();
@@ -224,7 +243,7 @@ class Zolago_Operator_Model_OperatorTest extends Zolago_TestCase {
         $pomodel->setId(-1);
         $this->assertFalse($model->isAllowedToPo($pomodel));
 
-        // assert true too complicated ;(        
+        // assert true too complicated ;(
     }
 }
 ?>

@@ -8,3 +8,5 @@
 *.orig
 /phpinfo.php
 /testResult/*
+/phpmyadmin
+/dev/*
