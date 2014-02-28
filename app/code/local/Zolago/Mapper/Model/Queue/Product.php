@@ -10,4 +10,7 @@ class Zolago_Mapper_Model_Queue_Product extends Zolago_Common_Model_Queue_Abstra
     protected function _getItem() {
         return Mage::getModel('zolagomapper_queue_item/product');
     }
+    protected function _execute() {
+        // do nothing
+    }
 }

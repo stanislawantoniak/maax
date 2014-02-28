@@ -55,7 +55,6 @@ abstract class Zolago_Common_Model_Queue_Abstract extends Mage_Core_Model_Abstra
           $this->_execute();
           $this->_setDoneRecords();
      }
-     abstract protected function _execute() {
-     }
+     abstract protected function _execute();
 }
  
