@@ -10,7 +10,7 @@ class Zolago_Mapper_Model_Mapper extends Mage_Rule_Model_Rule{
     protected $_product;
 
     public function getConditionsInstance() {
-        return Mage::getModel('zolagomapper/mapper_condition_combine');
+        return Mage::getModel('zolagomapper/mapper_condition_combine', $this);
     }
 
     public function getConditions() {
@@ -22,7 +22,7 @@ class Zolago_Mapper_Model_Mapper extends Mage_Rule_Model_Rule{
 	
 	public function getCategoryIdsAsString() {
 		if(!$this->hasData('category_ids_as_string')){
-			$this->setData('category_ids_as_string', implode(",", $this->getCategoryIdsAsArray()));
+			$this->setData('category_ids_as_string', implode(",", $this->getCategoryIds()));
 		}
 		return $this->getData("category_ids_as_string");
 	}
@@ -35,7 +35,7 @@ class Zolago_Mapper_Model_Mapper extends Mage_Rule_Model_Rule{
 	}
 
     protected function _afterLoad() {
-        $conditions_arr = unserialize($this->getConditionsSerialized());
+        $conditions_arr = unserialize($this->getData("conditions_serialized"));
         if (!empty($conditions_arr) && is_array($conditions_arr)) {
             $this->getConditions()->loadArray($conditions_arr);
         }

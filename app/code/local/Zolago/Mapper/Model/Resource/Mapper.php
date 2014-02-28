@@ -35,6 +35,28 @@ class Zolago_Mapper_Model_Resource_Mapper extends Mage_Core_Model_Resource_Db_Ab
 		$object->setUpdatedAt($currentTime);
 		return parent::_prepareDataForSave($object);
 	}
+	
+	protected function _afterSave(Mage_Core_Model_Abstract $object) {
+		$this->_setCategoryIds($object->getCategoryIds(), $object);
+		return parent::_afterSave($object);
+	}
+	
+	protected function _setCategoryIds(array $categoryIds, Mage_Core_Model_Abstract $object) {
+		$wConn = $this->_getWriteAdapter();
+		$catMapTable = $this->getTable("zolagomapper/mapper_category");
+		$wConn->delete(
+				$catMapTable, 
+				$wConn->quoteInto("mapper_id=?", $object->getId())
+		);
+		$toInsert = array();
+		foreach($categoryIds as $cId){
+			$toInsert[] = array("mapper_id"=>$object->getId(), "category_id"=>$cId);
+		}
+		if(count($toInsert)){
+			$wConn->insertMultiple($catMapTable, $toInsert);
+		}
+		return $this;
+	}
 
 }
 

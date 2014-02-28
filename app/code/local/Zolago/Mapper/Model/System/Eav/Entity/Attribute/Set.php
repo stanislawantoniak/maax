@@ -17,7 +17,7 @@ class Zolago_Mapper_Model_System_Eav_Entity_Attribute_Set {
 	 */
 	public function getCollection() {
 		if(!$this->_collection){
-			$entity = Mage::getModel("eav/config")->getEntityType(Mage_Catalog_Model_Product::ENTITY);
+			$entity = Mage::getSingleton("eav/config")->getEntityType(Mage_Catalog_Model_Product::ENTITY);
 			$this->_collection = Mage::getResourceModel("eav/entity_attribute_set_collection");
 			$this->_collection->setEntityTypeFilter($entity->getId());
 		}
