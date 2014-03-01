@@ -143,7 +143,7 @@ class Zolago_Mapper_Adminhtml_MapperController
 		
 		// Register for below constructor...
 		if($this->getRequest()->getParam("attribute_set_id")){
-			Mage::register("zolagomapper_attribute_set_id", $this->getRequest()->getParam("attribute_set_id"));
+			$ruleModel->setAttributeSetId($this->getRequest()->getParam("attribute_set_id"));
 		}
 		
         $model = Mage::getModel($type, $ruleModel)
