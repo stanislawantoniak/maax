@@ -165,6 +165,10 @@ class Unirgy_DropshipPo_Helper_Data extends Mage_Core_Helper_Abstract
                     }}
                     $vIds[$udpoKey] = $vId;
                 }
+                if (empty($vIds)) {
+                    $udpoKey = $vId;
+                    $vIds[$udpoKey] = $vId;
+                }
             } else {
                 $udpoKey = $vId;
                 $oiParent = $orderItem->getParentItem();

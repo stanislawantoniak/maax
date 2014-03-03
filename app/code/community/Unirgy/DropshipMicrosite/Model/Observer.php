@@ -35,7 +35,45 @@ class Unirgy_DropshipMicrosite_Model_Observer
                 Mage::getConfig()->setNode('default/web/default/front', 'umicrosite');
             }
         }
+        $this->_initConfigRewrites();
 
+    }
+
+    public function udropship_init_config_rewrites()
+    {
+        $this->_initConfigRewrites();
+    }
+    protected function _initConfigRewrites()
+    {
+        if (Mage::getStoreConfigFlag('udropship/microsite/filter_vendor_categories')) {
+            Mage::getConfig()->setNode('global/models/catalog_resource/rewrite/category_tree', 'Unirgy_DropshipMicrosite_Model_Mysql4_CategoryTree');
+            Mage::getConfig()->setNode('global/models/catalog_resource/rewrite/category_flat', 'Unirgy_DropshipMicrosite_Model_Mysql4_CategoryFlat');
+        }
+    }
+
+    protected function _getAccessAllowOrigin()
+    {
+        $url = Mage::helper('core/http')->getHttpReferer();
+        $parsed = @parse_url($url);
+        if (isset($parsed['scheme']) && isset($parsed['host']) && ($vendor = Mage::helper('umicrosite')->getUrlFrontendVendor($url))) {
+            return sprintf('%s://%s', $parsed['scheme'], $parsed['host']);
+        }
+        return false;
+    }
+
+    public function checkout_cart_add_product_complete($observer)
+    {
+        if (($allowOrigin = $this->_getAccessAllowOrigin())) {
+            Mage::app()->getResponse()->setHeader('Access-Control-Allow-Origin', $allowOrigin);
+            Mage::app()->getResponse()->setHeader('Access-Control-Allow-Headers', 'X-Prototype-Version, X-Requested-With');
+        }
+    }
+    public function controller_action_predispatch_ajaxcart_cart_add($observer)
+    {
+        if (($allowOrigin = $this->_getAccessAllowOrigin())) {
+            header('Access-Control-Allow-Headers: X-Prototype-Version, X-Requested-With');
+            header('Access-Control-Allow-Origin: '.$allowOrigin);
+        }
     }
 
     /**
@@ -213,9 +251,10 @@ echo 2;
         }
 
         if ($vendor->getRegId()) {
-            if (!Mage::helper('udropship')->isModuleActive('udmspro')
+            if ((!Mage::helper('udropship')->isModuleActive('udmspro')
                 || Mage::getStoreConfigFlag('udropship/microsite/skip_confirmation')
                 || !$vendor->getSendConfirmationEmail()
+                ) && $vendor->getStatus()!=Unirgy_Dropship_Model_Source::VENDOR_STATUS_REJECTED
             ) {
                 $vendor->setPassword($this->_vendorPassword);
                 Mage::helper('umicrosite')->sendVendorWelcomeEmail($vendor);

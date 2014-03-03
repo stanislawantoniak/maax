@@ -36,6 +36,7 @@ class Unirgy_Dropship_Block_Categories extends Mage_Adminhtml_Block_Catalog_Prod
         if (!isset($params['_store']) && $this->_oldStoreId) {
             $params['_store'] = $this->_oldStoreId;
         }
+        $params['_store'] = Mage::app()->getDefaultStoreView()->getId();
         return parent::getUrl($route, $params);
     }
     protected function _afterToHtml($html)
@@ -82,9 +83,7 @@ class Unirgy_Dropship_Block_Categories extends Mage_Adminhtml_Block_Catalog_Prod
 
     public function getCategoryChildrenJson($categoryId)
     {
-        if (Mage::getStoreConfigFlag('udprod/general/show_hidden_categories')
-            || !Mage::getSingleton('udropship/session')->isLoggedIn()
-        ) {
+        if (!Mage::getSingleton('udropship/session')->isLoggedIn()) {
             return parent::getCategoryChildrenJson($categoryId);
         }
         $category = Mage::getModel('catalog/category')->load($categoryId);
@@ -96,10 +95,51 @@ class Unirgy_Dropship_Block_Categories extends Mage_Adminhtml_Block_Catalog_Prod
 
         $children = array();
         foreach ($node->getChildren() as $child) {
-            if (!$child->getIsActive()) continue;
+            if (!$child->getIsActive() && !Mage::getStoreConfigFlag('udprod/general/show_hidden_categories')) continue;
+            if (!$this->isVendorEnabled($child->getId())) continue;
             $children[] = $this->_getNodeJson($child);
         }
 
         return Mage::helper('core')->jsonEncode($children);
+    }
+
+    public function isVendorEnabled($cId=null)
+    {
+        $flag = !($v = Mage::getSingleton('udropship/session')->getVendor()) || !$v->getIsLimitCategories();
+        if (!$flag && !is_null($cId)) {
+            if ($v->getIsLimitCategories() == 1) {
+                $flag = in_array($cId, $this->getVendorCategoryIds());
+            } elseif ($v->getIsLimitCategories() == 2) {
+                $flag = !in_array($cId, $this->getVendorCategoryIds());
+            }
+        }
+        return $flag;
+    }
+    protected $_vendorCatIds;
+    public function getVendorCategoryIds()
+    {
+        if (is_null($this->_vendorCatIds)) {
+            $this->_vendorCatIds = array();
+            if (($v = Mage::getSingleton('udropship/session')->getVendor()) && $v->getIsLimitCategories()) {
+                $this->_vendorCatIds = explode(',', implode(',', (array)$v->getLimitCategories()));
+            }
+        }
+        return $this->_vendorCatIds;
+    }
+    public function getRoot($parentNodeCategory=null, $recursionLevel=3)
+    {
+        $root = parent::getRoot($parentNodeCategory, $recursionLevel);
+        if (!$this->isVendorEnabled($root->getId())) {
+            $root->setDisabled(true);
+        }
+        return $root;
+    }
+    protected function _getNodeJson($node, $level=1)
+    {
+        $item = parent::_getNodeJson($node, $level);
+        if (!$this->isVendorEnabled($item['id'])) {
+            $item['disabled'] = true;
+        }
+        return $item;
     }
 }

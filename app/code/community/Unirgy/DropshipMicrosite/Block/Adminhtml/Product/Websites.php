@@ -7,12 +7,15 @@ class Unirgy_DropshipMicrosite_Block_Adminhtml_Product_Websites
     {
         $staging = Mage::getStoreConfig('udropship/microsite/staging_website');
         if (!($v = Mage::helper('umicrosite')->getCurrentVendor()) || !$staging) {
-            if ($v && ($lw = $v->getLimitWebsites())) {
-                return is_array($lw) ? $lw : explode(',', $lw);
+            if ($v && ($lw = array_filter((array)$v->getLimitWebsites()))) {
+                $res = is_array($lw) ? $lw : explode(',', $lw);
             } else {
-                return $this->getData('website_ids');
+                $res = $this->getData('website_ids');
             }
+        } else {
+            $res = $staging;
         }
-        return (array)$staging;
+        $res = array_filter((array)$res);
+        return empty($res) ? null : $res;
     }
 }
