@@ -69,7 +69,6 @@ class Zolago_Mapper_Model_Resource_Index extends Mage_Core_Model_Resource_Db_Abs
 				$new = $currentIndexAssign[$productId];
 			}
 			
-			echo $productId ." -> " . implode(",",$new) . "<br/>";
 			$toDelete = array_diff($old, $new);
 			$toInsert = array_diff($new, $old);
 			
