@@ -11,7 +11,38 @@ class Zolago_Mapper_Model_Resource_Index extends Mage_Core_Model_Resource_Db_Abs
 		// Mapper id is not primary, but there is no id-required
         $this->_init('zolagomapper/index','mapper_id');
     }
+
+
 	
+    /**
+     *  reindex by mapper list
+     */	
+    public function reindexForMappers($mappers = null, $websiteId = null) {
+		// Step 1: get mapper ids
+		if (!is_array($mappers) && $mappers!==null) {
+			$mappers = array($mappers);
+		}
+		// Step 2: Clear index
+		$conds = array();
+		if ($mappers) {
+			$conds[] = array('mapper_id' => $mappers);
+		}
+		if ($websiteId) {
+			$conds[] = array('website_id' => $websiteId);
+		}
+		
+		$this->_clearIndex($conds? $conds:null);
+		$mapperCollection = $this->_getMapperCollection();
+		if ($websiteId) {
+			$mapperCollection->addFieldToFilter("website_id", $websiteId);
+		}
+		if ($mappers) {
+			$mapperCollection->addFieldToFilter("mapper_id", array("in"=>array_values($mappers)));
+		}
+		$this->_mapperCollection = $mapperCollection;
+		return $this->_reindexMappers();
+		
+    }
 	/**
 	 * @param Mage_Catalog_Model_Resource_Product_Collection | array | int | null
 	 */
@@ -24,7 +55,15 @@ class Zolago_Mapper_Model_Resource_Index extends Mage_Core_Model_Resource_Db_Abs
 		}
 		
 		// Step 2: Clear index
-		$this->_clearIndex($products ? array("product_id"=>$products) : null);
+		$conds = array();
+		if ($products) {
+			$conds[] = array('product_id' => $products);
+		}
+		if ($websiteId) {
+			$conds[] = array('website_id' => $websiteId);
+		}
+		
+		$this->_clearIndex($conds? $conds:null);
 		
 		// Step 3: Load product-attribute set relations
 		$productAttributeSet = $this->_getProductsAttributeSets($products);
@@ -52,7 +91,7 @@ class Zolago_Mapper_Model_Resource_Index extends Mage_Core_Model_Resource_Db_Abs
 					$filterAttributeSet[$productAttributeSet[$productId]] = true;
 				}
 			}
-			$filterWebsite[$filterWebsite] = true;
+			$filterWebsite[$websiteId] = true;
 		}
 		
 		$mapperCollection = $this->_getMapperCollection();
@@ -65,8 +104,16 @@ class Zolago_Mapper_Model_Resource_Index extends Mage_Core_Model_Resource_Db_Abs
 		if($productAttributeSet){
 			$mapperCollection->addFieldToFilter("attribute_set_id", array("in"=>array_keys($filterAttributeSet)));
 		}
-		
-		
+		$this->_mapperCollection = $mapperCollection;
+		return $this->_reindexMappers();		
+	}
+	
+    /**
+     * reindex mappers
+     */
+    protected function _reindexMappers() {
+    	
+		$mapperCollection = $this->_mapperCollection;
 		// Step 5: Start mappers and prepare index data
 		$this->_resetData();
 		foreach($mapperCollection as $mapper){
@@ -82,8 +129,7 @@ class Zolago_Mapper_Model_Resource_Index extends Mage_Core_Model_Resource_Db_Abs
 		}
 		
 		return $this->_saveData();
-	}
-	
+    }
 	/**
 	 * @return insert index values
 	 */

@@ -11,6 +11,15 @@ class Zolago_Mapper_Model_Queue_Product extends Zolago_Common_Model_Queue_Abstra
         return Mage::getModel('zolagomapper/queue_item_product');
     }
     protected function _execute() {
-        // do nothing
+        $productList = array();
+        foreach ($this->_collection as $item) {
+            $productList[$item->getWebsiteId()][$this->getProductId()] 
+                = $this->getProductId();
+        }
+        $indexer = Mage::getResourceModel('zolagomapper/index');
+        foreach ($productList as $websiteId=>$productList) {
+            $indexer->reindexForProducts($productList,$websiteId);        
+        }
+
     }
 }
