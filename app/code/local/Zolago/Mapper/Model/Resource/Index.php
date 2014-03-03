@@ -70,12 +70,8 @@ class Zolago_Mapper_Model_Resource_Index extends Mage_Core_Model_Resource_Db_Abs
 		// Step 5: Start mappers and prepare index data
 		$this->_resetData();
 		foreach($mapperCollection as $mapper){
-			
 			/* @var $mapper Zolago_Mapper_Model_Mapper */
 			$productIds = $mapper->getMatchingProductIds();
-			echo $mapper->getName();
-			echo "<br/>Cats: ";
-			var_dump($productIds);
 			$categoryIds = $mapper->getCategoryIds();
 			$websiteId = $mapper->getWebsiteId();
 			foreach ($categoryIds as $categoryId){
