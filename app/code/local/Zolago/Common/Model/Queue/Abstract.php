@@ -15,8 +15,7 @@ abstract class Zolago_Common_Model_Queue_Abstract extends Mage_Core_Model_Abstra
      */   
      public function push($itemId) {
           $model = $this->_getItem();
-          $model->setItemId($itemId);                    
-          
+          $model->setItemId($itemId);                              
           $model->save();
      }
     protected function _getCollection() {

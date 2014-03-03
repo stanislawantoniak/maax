@@ -13,7 +13,7 @@ class Zolago_Mapper_Model_Queue_ProductTest extends ZolagoDb_TestCase {
     protected function _setQuery($query) {
         $resource = Mage::getSingleton('core/resource');
         $readConnection = $resource->getConnection('core_read');
-        $table = $resource->getTableName('zolagomapper_queue_item/product');
+        $table = $resource->getTableName('zolagomapper/queue_product');
         $resource = $readConnection->query(sprintf($query,$table));
         $row = $resource->fetch();
         return $row;
