@@ -10,7 +10,7 @@ class Zolago_Mapper_Model_Mapper extends Mage_Rule_Model_Rule{
     protected $_product;
 
     public function getConditionsInstance() {
-        return Mage::getModel('zolagomapper/mapper_condition_combine');
+        return Mage::getModel('zolagomapper/mapper_condition_combine', $this);
     }
 
     public function getConditions() {
@@ -22,7 +22,7 @@ class Zolago_Mapper_Model_Mapper extends Mage_Rule_Model_Rule{
 	
 	public function getCategoryIdsAsString() {
 		if(!$this->hasData('category_ids_as_string')){
-			$this->setData('category_ids_as_string', implode(",", $this->getCategoryIdsAsArray()));
+			$this->setData('category_ids_as_string', implode(",", $this->getCategoryIds()));
 		}
 		return $this->getData("category_ids_as_string");
 	}
@@ -35,7 +35,7 @@ class Zolago_Mapper_Model_Mapper extends Mage_Rule_Model_Rule{
 	}
 
     protected function _afterLoad() {
-        $conditions_arr = unserialize($this->getConditionsSerialized());
+        $conditions_arr = unserialize($this->getData("conditions_serialized"));
         if (!empty($conditions_arr) && is_array($conditions_arr)) {
             $this->getConditions()->loadArray($conditions_arr);
         }
@@ -43,9 +43,16 @@ class Zolago_Mapper_Model_Mapper extends Mage_Rule_Model_Rule{
     }
 
     public function getMatchingProductIds() {
+		
+		Varien_Profiler::start("ZolagoMapper::Matching");
         $this->_productIds = array();
         $this->setCollectedAttributes(array());
+		
         $productCollection = Mage::getResourceModel('catalog/product_collection');
+		/* @var $productCollection Mage_Catalog_Model_Resource_Product_Collection */
+		$productCollection->addAttributeToFilter("attribute_set_id", $this->getAttributeSetId());
+		$productCollection->addWebsiteFilter($this->getWebsiteId());
+
         $this->getConditions()->collectValidatedAttributes($productCollection);
         Mage::getSingleton('core/resource_iterator')->walk(
             $productCollection->getSelect(), array(array($this, 'callbackValidateProduct')), array(
@@ -54,12 +61,14 @@ class Zolago_Mapper_Model_Mapper extends Mage_Rule_Model_Rule{
             )
         );
         unset($productCollection);
+		Varien_Profiler::stop("ZolagoMapper::Matching");
         return $this->_productIds;
     }
 
     public function callbackValidateProduct($args) {
         $product = clone $args['product'];
         $product->setData($args['row']);
+		$product->setStoreId($this->getDefaultStoreId());
         if ($this->getConditions()->validate($product)) {
             $this->_productIds[] = $product->getId();
         }
@@ -67,24 +76,20 @@ class Zolago_Mapper_Model_Mapper extends Mage_Rule_Model_Rule{
         unset($args);
     }
 
-    public function run($load = false, $reindex = true) {
-        ini_set('max_execution_time', 0);
-        if ($this->getId()) {
-            $matched_product_ids = $this->getMatchingProductIds();
-           
-            return true;
-        }
-        return false;
-    }
+	/**
+	 * @return int
+	 */
+	public function getDefaultStoreId() {
+		if(!$this->hasData("default_store_id")){
+			$this->setData("default_store_id", Mage::app()->getWebsite($this->getWebsiteId())->getDefaultStore()->getId());
+		}
+		return $this->getData("default_store_id");
+	}
 
+	public function setDefaults(){
+		$this->setIsActive(1);
+	}
   
-
-    /**
-     * @return Orba_Allegro_Model_Resource_Mapping_Collection
-     */
-    public function getCollection() {
-       return parent::getCollection();
-    }
     
 }
 
