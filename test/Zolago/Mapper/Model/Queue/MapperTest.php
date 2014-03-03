@@ -95,11 +95,28 @@ class Zolago_Mapper_Model_Queue_MapperTest extends ZolagoDb_TestCase {
         $this->assertNotEquals($old,$return);
     }
     public function testProcess() {
+        $this->_addMapper();
         $queue = $this->_getModel();
+        $mapperId = $this->_getMapperId();
+        // before push
+        $row = $this->_checkQueueLength(0);
+        $countNew = $row['counter'];
         $row = $this->_checkQueueLength(1);
-        $count = $row['counter'];
+        $countProcess = $row['counter'];
+        
+        $queue->push($mapperId);
+        // check after push
+        $row = $this->_checkQueueLength(1);
+        $this->assertEquals($countProcess,$row['counter']);
+        $row = $this->_checkQueueLength(0);
+        $this->assertEquals($countNew+1,$row['counter']);
+
         $queue->process();
+        // after process
+        $row = $this->_checkQueueLength(0);
+        $this->assertLessThanOrEqual($countNew,$row['counter']);
+
         $row = $this->_checkQueueLength(1);
-        $this->assertGreaterThan($counter,$row['counter']);
+        $this->assertGreaterThanOrEqual($countProcess+1,$row['counter']);
     }
 }

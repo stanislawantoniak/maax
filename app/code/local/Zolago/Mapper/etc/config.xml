@@ -28,6 +28,9 @@
 					<mapper_category>
 						<table>zolago_mapper_category</table>
 					</mapper_category>
+					<mapper_index>
+						<table>zolago_mapper_index</table>
+					</mapper_index>
 				</entities>
 			</zolagomapper_resource>
 			<zolagomapper_queue_item>

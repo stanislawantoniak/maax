@@ -59,7 +59,7 @@ class Zolago_Mapper_Model_Queue_ProductTest extends ZolagoDb_TestCase {
                                          'status' => 0
                                      ));
         if (!$return) {
-            $model->push($productId);
+            $model->push(array('product_id' => $productId));
             // check again
             $return = $this->_checkQueue(array (
                                              'product_id' => $productId,
@@ -70,7 +70,7 @@ class Zolago_Mapper_Model_Queue_ProductTest extends ZolagoDb_TestCase {
 
         // check difference
         $old = $return;
-        $model->push($productId);
+        $model->push(array('product_id'=>$productId));
         // check again
         $return = $this->_checkQueue(array (
                                          'product_id' => $productId,
@@ -80,11 +80,24 @@ class Zolago_Mapper_Model_Queue_ProductTest extends ZolagoDb_TestCase {
     }
     public function testProcess() {
         $queue = $this->_getModel();
+        $row = $this->_checkQueueLength(0);
+        $countNew = $row['counter'];
         $row = $this->_checkQueueLength(1);
-        $count = $row['counter'];
+        $countProcess = $row['counter'];
+        
+        $productId = $this->_getProductId();
+        $queue->push(array('product_id'=>$productId));
+        $row = $this->_checkQueueLength(0);
+        $this->assertEquals($countNew+1,$row['counter']);
+        $row = $this->_checkQueueLength(1);
+        $this->assertEquals($countProcess,$row['counter']);
+        
         $queue->process();
+        $row = $this->_checkQueueLength(0);
+        $this->assertLessThanOrEqual($countNew,$row['counter']);
+
         $row = $this->_checkQueueLength(1);
-        $this->assertGreaterThan($counter,$row['counter']);
+        $this->assertGreaterThanOrEqual($countProcess+1,$row['counter']);
     }
 }
 ?>

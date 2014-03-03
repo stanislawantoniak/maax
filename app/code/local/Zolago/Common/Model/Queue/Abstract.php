@@ -8,7 +8,11 @@ abstract class Zolago_Common_Model_Queue_Abstract extends Mage_Core_Model_Abstra
      protected $_collection;
    
      abstract protected function _getItem();
-   
+
+    /**
+     * push into queue
+     * @param mixed $itemId 
+     */   
      public function push($itemId) {
           $model = $this->_getItem();
           $model->setItemId($itemId);                    
@@ -19,41 +23,27 @@ abstract class Zolago_Common_Model_Queue_Abstract extends Mage_Core_Model_Abstra
           $model = $this->_getItem();
           $collection = $model->getCollection();
           $collection->setPageSize($limit);
-          $collection->addFilter('status = 0');
+          $collection->addFilter('status','0');
           $collection->setOrder('insert_date');
           $this->_collection = $collection;
     }
     
     
-    /**
-     * change status after get
-     */
-     protected function _setLockRecords() {
-          foreach ($this->_collection as $item) {
-               $item->setStatus(-1);
-               $item->setProcessDate(Varien_Date::now());          
-          }
-          $this->_collection->save();
-     }
      
-    /**
-     * changing status after execute
-     */     
-     protected function _setDoneRecords() {
-          foreach ($this->_collection as $item) {
-               $item->setStatus(1);
-          }
-          $this->_collection->save();
-     }
     /**
      * processing queue
      */
      public function process($limit = 0) {
           $limit = $limit? $limit:$this->_limit;
           $this->_getCollection();
-          $this->_setLockRecords();
+          if (!count($this->_collection)) { 
+              // empty queue
+              return 0;
+          }
+          $this->_collection->setLockRecords();
           $this->_execute();
-          $this->_setDoneRecords();
+          $this->_collection->setDoneRecords();
+          return count($this->_collection);
      }
      abstract protected function _execute();
 }

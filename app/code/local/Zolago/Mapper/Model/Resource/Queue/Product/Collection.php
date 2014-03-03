@@ -1,6 +1,6 @@
 <?php
-class Zolago_Mapper_Model_Resource_Queue_Product_Collection extends Mage_Core_Model_Resource_Db_Collection_Abstract {
-    protected function _construct() {
-        $this->_init('zolagomapper_queue_item/product');
-    }
+class Zolago_Mapper_Model_Resource_Queue_Product_Collection 
+    extends Zolago_Common_Model_Resource_Queue_Collection_Abstract {
+    
+    protected $_tableName = 'zolagomapper_queue_item/product';
 }

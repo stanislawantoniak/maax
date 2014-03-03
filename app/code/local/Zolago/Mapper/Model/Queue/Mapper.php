@@ -13,5 +13,11 @@ class Zolago_Mapper_Model_Queue_Mapper extends Zolago_Common_Model_Queue_Abstrac
     }
     
     protected function _execute() {
+        $mapperList = array();
+        foreach ($this->_collection as $item) {
+            $mapperList[$item->getMapperId()] = $item->getMapperId();
+        }
+        
+        $this->_cleanMapperIndex();
     }
 }
