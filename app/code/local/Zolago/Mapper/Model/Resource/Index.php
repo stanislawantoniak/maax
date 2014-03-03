@@ -13,6 +13,128 @@ class Zolago_Mapper_Model_Resource_Index extends Mage_Core_Model_Resource_Db_Abs
     }
 	
 	/**
+	 * @param mixed $params
+	 */
+	public function assignWithCatalog($productsIds=null) {
+		
+		$filter = $productsIds ? array("product_id"=>$productsIds) : null;
+		$templateProd = Mage::getModel("catalog/product");
+		$currentIndexAssign = $this->getCurrentIndexAssign($filter);
+		$currentCatalogAssign = $this->getCurrentCatalogAssign($filter);
+		$indexer = Mage::getSingleton("index/indexer");
+		/* @var $indexer Mage_Index_Model_Indexer */
+		
+		if(!$productsIds){
+			$productsIds = Mage::getResourceModel("catalog/product_collection")->getAllIds();
+		}
+		
+		foreach($productsIds as $productId){
+			$old = array();
+			if(isset($currentCatalogAssign[$productId])){
+				$old = $currentCatalogAssign[$productId];
+			}
+			$new = array();
+			if(isset($currentIndexAssign[$productId])){
+				$new = $currentIndexAssign[$productId];
+			}
+			
+			echo $productId ." -> " . implode(",",$new) . "<br/>";
+			$toDelete = array_diff($old, $new);
+			$toInsert = array_diff($new, $old);
+			
+			// No changes
+			if(empty($toDelete) && empty($toInsert)){
+				continue;
+			}
+			
+			
+			if(!empty($toDelete)){
+				$this->getReadConnection()->delete(
+					$this->getTable('catalog/category_product'),
+						$this->getReadConnection()->quoteInto("product_id=?", $productId) .
+						" AND ".
+						$this->getReadConnection()->quoteInto("category_id=?", $toDelete) 
+				);
+			}
+			foreach($toInsert as $insertId){
+				$this->getReadConnection()->insert(
+					$this->getTable('catalog/category_product'),
+					array("product_id"=>$productId, "category_id"=>$insertId, "position"=>1)
+				);
+			}
+			
+			// Run indexer if nessesery
+			if (!empty($toInsert) || !empty($toDelete)) {
+				$templateProd->setId($productId);
+				$templateProd->setCategoryIds($new);
+				//$object->setAffectedCategoryIds(array_merge($toInsert, $toDelete));
+				$templateProd->setIsChangedCategories(true);
+				
+				// Process event index
+				$indexer->processEntityAction(
+						$templateProd, 
+						Mage_Catalog_Model_Product::ENTITY, 
+						Mage_Index_Model_Event::TYPE_SAVE
+				);
+			}
+		}
+		return true;
+		
+	}
+	
+
+	/**
+	 * @param type $filter
+	 * @return array - array(prodId=>array(catId1, catId2, ...);
+	 */
+	protected function getCurrentCatalogAssign($filter){
+		$adapter = $this->getReadConnection();
+		$select = $adapter->select()->from(
+				$this->getTable('catalog/category_product'), 
+				array('product_id', 'category_id'
+		));
+		if($filter && isset($filter['product_id'])){
+            $select->where('product_id IN (?)', $filter['product_id']);
+		}
+		$out = array();
+		foreach($this->getReadConnection()->fetchAssoc($select) as $item){
+			if(!isset($out[$item['product_id']])){
+				$out[$item['product_id']] = array();
+			}
+			$out[$item['product_id']][] = $item['category_id'];
+		}
+		return $out;
+	}
+	
+
+	/**
+	 * @param mixed $params
+	 * @return array - array(prodId=>array(catId1, catId2, ...);
+	 */
+	public function getCurrentIndexAssign($params=null) {
+		$select = $this->getReadConnection()->select();
+		$select->from($this->getMainTable(), array("product_id", "category_id"));
+		
+		if(is_array($params)){
+			foreach($params as $field=>$value){
+				$select->where($this->getReadConnection()->quoteInto(
+					$field . " " . (is_scalar($value) ? "=?" : "IN(?)"), $value)
+				);
+			}
+		}
+		$select->group(array("product_id", "category_id"));
+		
+		$out = array();
+		foreach($this->getReadConnection()->fetchAssoc($select) as $item){
+			if(!isset($out[$item['product_id']])){
+				$out[$item['product_id']] = array();
+			}
+			$out[$item['product_id']][] = $item['category_id'];
+		}
+		return $out;
+	}
+	
+	/**
 	 * @param Mage_Catalog_Model_Resource_Product_Collection | array | int | null
 	 */
 	public function reindexForProducts($products=null, $websiteId=null) {
@@ -23,8 +145,10 @@ class Zolago_Mapper_Model_Resource_Index extends Mage_Core_Model_Resource_Db_Abs
 			$products = array($products);
 		}
 		
+		$filterParams = $products ? array("product_id"=>$products) : null;
+		
 		// Step 2: Clear index
-		$this->_clearIndex($products ? array("product_id"=>$products) : null);
+		$this->_clearIndex($filterParams);
 		
 		// Step 3: Load product-attribute set relations
 		$productAttributeSet = $this->_getProductsAttributeSets($products);
@@ -60,18 +184,23 @@ class Zolago_Mapper_Model_Resource_Index extends Mage_Core_Model_Resource_Db_Abs
 		$mapperCollection->addIsActiveFilter();
 		
 		if($filterWebsite){
-			$mapperCollection->addFieldToFilter("website_id", array("in"=>array_keys($filterWebsite)));
+			$mapperCollection->addFieldToFilter("website_id", 
+				array("in"=>array_keys($filterWebsite))
+			);
 		}
 		if($productAttributeSet){
-			$mapperCollection->addFieldToFilter("attribute_set_id", array("in"=>array_keys($filterAttributeSet)));
+			$mapperCollection->addFieldToFilter("attribute_set_id", 
+				array("in"=>array_keys($filterAttributeSet))
+			);
 		}
-		
 		
 		// Step 5: Start mappers and prepare index data
 		$this->_resetData();
+		$affectedIds = array();
 		foreach($mapperCollection as $mapper){
 			/* @var $mapper Zolago_Mapper_Model_Mapper */
 			$productIds = $mapper->getMatchingProductIds();
+			$affectedIds = array_merge($productIds, $affectedIds);
 			$categoryIds = $mapper->getCategoryIds();
 			$websiteId = $mapper->getWebsiteId();
 			foreach ($categoryIds as $categoryId){
@@ -80,8 +209,8 @@ class Zolago_Mapper_Model_Resource_Index extends Mage_Core_Model_Resource_Db_Abs
 				}
 			}
 		}
-		
-		return $this->_saveData();
+		$this->_saveData();
+		return array_unique($affectedIds);
 	}
 	
 	/**
