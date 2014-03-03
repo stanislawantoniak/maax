@@ -5,20 +5,12 @@ class Zolago_Mapper_Model_Mapper extends Mage_Rule_Model_Rule{
         $this->_init('zolagomapper/mapper');
     }
     
-    protected $_conditions;
     protected $_productIds;
-    protected $_product;
 
     public function getConditionsInstance() {
         return Mage::getModel('zolagomapper/mapper_condition_combine', $this);
     }
 
-    public function getConditions() {
-        if (empty($this->_conditions)) {
-            $this->_resetConditions();
-        }
-        return $this->_conditions;
-    }
 	
 	public function getCategoryIdsAsString() {
 		if(!$this->hasData('category_ids_as_string')){
@@ -33,14 +25,6 @@ class Zolago_Mapper_Model_Mapper extends Mage_Rule_Model_Rule{
 		}
 		return $this->getData("category_ids");
 	}
-
-    protected function _afterLoad() {
-        $conditions_arr = unserialize($this->getData("conditions_serialized"));
-        if (!empty($conditions_arr) && is_array($conditions_arr)) {
-            $this->getConditions()->loadArray($conditions_arr);
-        }
-        return parent::_afterLoad();
-    }
 
     public function getMatchingProductIds() {
 		
@@ -88,6 +72,11 @@ class Zolago_Mapper_Model_Mapper extends Mage_Rule_Model_Rule{
 
 	public function setDefaults(){
 		$this->setIsActive(1);
+	}
+	
+		
+	public function getWebsiteIds() {
+		return array($this->getWebsiteId());
 	}
   
     

@@ -2,6 +2,10 @@
 class Zolago_Mapper_Adminhtml_MapperController 
 	extends Mage_Adminhtml_Controller_Action{
 	
+	public function runAllAction() {
+		echo Mage::getResourceSingleton("zolagomapper/index")->reindexForProducts();
+	}
+	
 	public function runAction() {
 		$model = $this->_registerModel();
 		

@@ -5,6 +5,7 @@ class Zolago_Mapper_Model_Resource_Mapper extends Mage_Core_Model_Resource_Db_Ab
 	protected function _construct() {
 		$this->_init('zolagomapper/mapper', "mapper_id");
 	}
+
 	
 	/**
 	 * @param Mage_Core_Model_Abstract $object

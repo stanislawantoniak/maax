@@ -9,6 +9,15 @@ class Zolago_Mapper_Model_Resource_Mapper_Collection
     }
 	
 	/**
+	 * @param int $mode
+	 * @return Zolago_Mapper_Model_Resource_Mapper_Collection
+	 */
+	public function addIsActiveFilter($mode=1) {
+		$this->addFieldToFilter("is_active", (int)$mode);
+		return $this;
+	}
+	
+	/**
 	 * @return Zolago_Mapper_Model_Resource_Mapper_Collection
 	 */
 	public function joinAttributeSet() {
