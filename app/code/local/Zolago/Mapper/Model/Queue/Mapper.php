@@ -19,6 +19,7 @@ class Zolago_Mapper_Model_Queue_Mapper extends Zolago_Common_Model_Queue_Abstrac
             $mapperList[$item->getMapperId()] = $item->getMapperId();
         }
         $indexer = Mage::getResourceModel('zolagomapper/index');
-        $indexer->reindexForMappers($mapperList);        
+        $productIds = $indexer->reindexForMappers($mapperList);        
+        $indexer->assignWithCatalog($productIds);
     }
 }

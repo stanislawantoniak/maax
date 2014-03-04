@@ -28,6 +28,7 @@ class Zolago_Mapper_Adminhtml_MapperController
 		Varien_Profiler::start("ZolagoMapper::Run");
 		$indexer = Mage::getResourceModel('zolagomapper/index');
 		$mathedIds = $indexer->reindexForMappers($id);
+		$indexer->assignWithCatalog($mathedIds);
 		$storeId = $model->getDefaultStoreId();
         	    
 		$productColl = Mage::getResourceModel('catalog/product_collection');
