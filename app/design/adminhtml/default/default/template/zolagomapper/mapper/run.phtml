@@ -1,6 +1,10 @@
 <div class="content-header">
-   <h3>Run tset</h3>
+   <h3><?php echo Mage::helper('zolagomapper')->__('Mapper index'); ?></h3>
+      <p class="content-buttons form-buttons">
+        <?php echo $this->getButtonsHtml(); ?>
+      </p>
 </div>
+<?php if (count($this->getProducts())) { ?>
 <div>
 	<dl>
 	<?php foreach($this->getProducts() as $prodcut):?>	
@@ -16,3 +20,8 @@
 dt{font-weight: bold;}
 dd{margin-left: 20px;}
 </style>
+<?php 
+} else { 
+    echo Mage::helper('zolagomapper')->__('No products');
+}
+?>
