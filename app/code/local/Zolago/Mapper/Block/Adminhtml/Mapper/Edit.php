@@ -29,6 +29,11 @@ class Zolago_Mapper_Block_Adminhtml_Mapper_Edit extends Mage_Adminhtml_Block_Wid
 				'onclick'   => 'setLocation(\'' .$this->getUrl("*/*/run", array("mapper_id"=>$this->getModel()->getId())) . '\')',
 				'class'     => 'go',
 			), -1);
+			$this->_addButton('queue', array(
+				'label'     => Mage::helper('zolagomapper')->__('Add to queue'),
+				'onclick'   => 'setLocation(\'' .$this->getUrl("*/*/queue", array("mapper_id"=>$this->getModel()->getId())) . '\')',
+				'class'     => 'go',
+			), -1);
 		}
 		if(!$this->getAttributeSetId()){
 			$this->_updateButton("save", "label", Mage::helper('zolagomapper')->__('Next'));
