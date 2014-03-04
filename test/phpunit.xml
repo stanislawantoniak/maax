@@ -61,6 +61,9 @@
     <testsuite name="Wishlist">
       <directory suffix="Test.php">./Zolago/Wishlist/</directory>
     </testsuite>
+    <testsuite name="Mapper">
+      <directory suffix="Test.php">./Zolago/Mapper/</directory>
+    </testsuite>
     <testsuite name="Adminhtml">
       <directory suffix="Test.php">./Zolago/Adminhtml/</directory>
     </testsuite>

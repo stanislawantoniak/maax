@@ -20,7 +20,7 @@
 <config>
     <modules>
         <Unirgy_DropshipVendorProduct>
-            <version>1.2.7</version>
+            <version>1.2.8</version>
         </Unirgy_DropshipVendorProduct>
     </modules>
 
@@ -237,6 +237,29 @@
                         <position>190</position>
                         <default>0</default>
                     </udprod_max_sale_qty>
+
+                    <is_limit_categories>
+                        <label>Limit Categories</label>
+                        <type>select</type>
+                        <frontend_model>udropship/adminhtml_vendor_helper_form_dependSelect</frontend_model>
+                        <depend_fields>
+                            <limit_categories>1,2</limit_categories>
+                        </depend_fields>
+                        <fieldset>udprod</fieldset>
+                        <source_model>udprod/source</source_model>
+                        <source>is_limit_categories</source>
+                        <position>500</position>
+                        <default></default>
+                    </is_limit_categories>
+                    <limit_categories>
+                        <label>Limit Categories</label>
+                        <type>text</type>
+                        <frontend_model>udprod/adminhtml_vendor_helper_form_categoriesCheckboxes</frontend_model>
+                        <fieldset>udprod</fieldset>
+                        <source>yesno</source>
+                        <position>600</position>
+                        <default></default>
+                    </limit_categories>
                 </fields>
             </vendor>
         </udropship>

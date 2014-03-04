@@ -28,6 +28,11 @@
 				<class>Zolago_Dropship_Block</class>
 			</zolagodropship>
 		</blocks>
+		<helpers>
+			<zolagodropship>
+				<class>Zolago_Dropship_Helper</class>
+			</zolagodropship>
+		</helpers>
 		<resources>
 			<zolagodropship_setup>
 				<setup>
@@ -131,4 +136,15 @@
 			</updates>
 		</layout>
 	</frontend>
+	<adminhtml>
+		<translate>
+			<modules>
+				<zolagodropship>
+					<files>
+						<default>Zolago_Dropship.csv</default>
+					</files>
+				</zolagodropship>
+			</modules>
+		</translate>
+	</adminhtml>
 </config>

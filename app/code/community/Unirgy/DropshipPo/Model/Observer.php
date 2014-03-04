@@ -168,9 +168,9 @@ class Unirgy_DropshipPo_Model_Observer
                 && in_array($po->getUdropshipStatus(), $notifyOnPoStatus)
                 && !$po->getData('is_vendor_notified')
             ) {
+                $po->setData('is_vendor_notified', 1);
                 Mage::helper('udpo')->sendNewPoNotificationEmail($po);
                 Mage::helper('udropship')->processQueue();
-                $po->setData('is_vendor_notified', 1);
                 $po->getResource()->saveAttribute($po, 'is_vendor_notified');
             }
         } catch (Exception $e) {
