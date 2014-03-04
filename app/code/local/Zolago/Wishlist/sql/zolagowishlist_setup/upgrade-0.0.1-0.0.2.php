@@ -14,5 +14,3 @@ $idxName = $installer->getIdxName('wishlist/wishlist', 'customer_id',
 $installer->getConnection()->dropIndex($wishlistTable, $idxName);
 
 $installer->endSetup();
-
-?>
