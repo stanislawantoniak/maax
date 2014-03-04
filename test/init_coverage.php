@@ -45,4 +45,22 @@ class Zolago_TestCase extends PHPUnit_Framework_TestCase {
     }
     // 
 }
+class ZolagoDb_TestCase extends Zolago_TestCase{
+	/**
+	 * @var Varien_Db_Adapter_Interface
+	 */
+	protected $_conn;
+
+	public function __construct() {
+		parent::__construct();
+		$this->_conn = Mage::getSingleton('core/resource')->
+				getConnection('core_write');
+		$this->_conn->beginTransaction();
+	}
+	
+	public function __destruct() {
+		$this->_conn->rollBack();
+	}
+	
+}
 ?>

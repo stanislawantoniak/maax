@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<layout>
+    <zolagomapper_update_menu>      
+        <reference name="menu">
+            <action method="setActive"><menupath>catalog/zolagomapper</menupath></action>
+        </reference>
+    </zolagomapper_update_menu>
+    <adminhtml_mapper_index>
+        <update handle="zolagomapper_update_menu"/>
+        <reference name="content">
+            <block type="zolagomapper/adminhtml_mapper" name="zolagomapper_mapper" template="zolagomapper/mapper.phtml">
+                <block type="zolagomapper/adminhtml_mapper_grid" name="zolagomapper_mapper_grid"/>
+            </block>
+        </reference>
+    </adminhtml_mapper_index>
+    <adminhtml_mapper_edit>
+        <update handle="zolagomapper_update_menu"/>
+        <reference name="content">
+            <block type="zolagomapper/adminhtml_mapper_edit" name="zolagomapper_mapper" template="zolagomapper/mapper/edit.phtml"/>
+        </reference>
+    </adminhtml_mapper_edit>
+    <adminhtml_mapper_run>
+        <update handle="zolagomapper_update_menu"/>
+        <reference name="content">
+            <block type="zolagomapper/adminhtml_mapper_run" name="zolagomapper_mapper" template="zolagomapper/mapper/run.phtml"/>
+        </reference>
+    </adminhtml_mapper_run>
+</layout>

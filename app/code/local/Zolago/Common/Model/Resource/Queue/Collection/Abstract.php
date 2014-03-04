@@ -1,0 +1,48 @@
+<?php
+/**
+ * abstract for queue items collection
+ */
+class Zolago_Common_Model_Resource_Queue_Collection_Abstract
+    extends Mage_Core_Model_Resource_Db_Collection_Abstract {
+    
+    protected $_lockedRecords; 
+    
+    protected function _construct() {   
+        $this->_init($this->_tableName);
+    }
+ 
+    protected function _update($bind) { 
+        $ids = $this->_lockedRecords;
+        if (!$ids) {
+            return;
+        }
+        $connection = $this->getConnection();
+        $table = $this->getTable($this->_tableName);
+        $where = ' queue_id in (\''.implode('\',\'',$ids).'\')';
+ 
+        $connection->update($table,$bind,$where);
+        
+    }
+    /**
+     * mark records as locked
+     */
+     
+    public function setLockRecords() {
+        $this->_lockedRecords = $this->getAllIds();
+        $bind = array (
+            'status' => -1
+        );
+        $this->_update($bind);
+    }
+    
+    /**
+     * set records status as done
+     */
+     public function setDoneRecords() {
+         $bind = array (
+             'status' => 1,
+             'process_date' => Varien_Date::now(),
+         );
+         $this->_update($bind);
+     }
+}

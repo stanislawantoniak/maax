@@ -1,3 +1,9 @@
+===== 2.1.11 =====
+  * Added enable/disable categories on frontend option
+  * Fixed website tab in vendor portal manage products
+  * Fixed welcome email sent with refect email during vendor refect
+  * Added compatibility with ajaxcart when landing page is subdomain
+
 ===== 2.1.10 =====
   * Added log license exceptions
 
