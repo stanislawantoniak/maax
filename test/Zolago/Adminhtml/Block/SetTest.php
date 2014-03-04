@@ -8,11 +8,6 @@ class Zolago_Adminhtml_Block_SetTest extends Zolago_TestCase
      * @requires function no_coverage
      */
     public function testExtendedAttributeTreeJson() {
-        if (!no_coverage()) {
-            $this->markTestSkipped(
-                          'Coverage test');
-            return;
-        }
 		
 		static::setAttributeSet();
 		$layout = Mage::app()->getLayout();
