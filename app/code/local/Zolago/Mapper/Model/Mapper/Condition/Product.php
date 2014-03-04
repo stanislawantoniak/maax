@@ -71,6 +71,7 @@ class Zolago_Mapper_Model_Mapper_Condition_Product extends Mage_CatalogRule_Mode
 		
 	}
 	
+	
 	public function _getExcludedAttributes() {
 		return $this->_excludedAttributes;
 	}

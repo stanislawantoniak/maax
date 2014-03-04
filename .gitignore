@@ -10,3 +10,4 @@
 /testResult/*
 /phpmyadmin
 /dev/*
+*.DS_Store

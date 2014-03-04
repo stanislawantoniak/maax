@@ -50,6 +50,26 @@
 				<class>Zolago_Mapper_Block</class>
 			</zolagomapper>
 		</blocks>
+		<events>
+            <zolago_mapper_save_after>
+                <observers>
+                    <zolagomapper>
+                        <type>singleton</type>
+                        <class>zolagomapper/observer</class>
+                        <method>zolagoMapperSaveAfter</method>
+                    </zolagomapper>
+                </observers>
+            </zolago_mapper_save_after>
+            <catalog_product_save_after>
+                <observers>
+                    <zolagomapper>
+                        <type>singleton</type>
+                        <class>zolagomapper/observer</class>
+                        <method>catalogProductSaveAfter</method>
+                    </zolagomapper>
+                </observers>
+            </catalog_product_save_after>
+		</events>
     </global>
 	<admin>
 		<routers>

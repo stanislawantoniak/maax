@@ -4,7 +4,7 @@ class Zolago_Mapper_Model_Mapper extends Mage_Rule_Model_Rule{
     protected function _construct() {
         $this->_init('zolagomapper/mapper');
     }
-    
+    protected $_eventPrefix = "zolago_mapper";
     protected $_productIds;
 
     public function getConditionsInstance() {
@@ -52,8 +52,10 @@ class Zolago_Mapper_Model_Mapper extends Mage_Rule_Model_Rule{
 		Varien_Profiler::stop("ZolagoMapper::Matching");
         return $this->_productIds;
     }
+	
 
-    public function callbackValidateProduct($args) {
+
+	public function callbackValidateProduct($args) {
         $product = clone $args['product'];
         $product->setData($args['row']);
 		$product->setStoreId($this->getDefaultStoreId());

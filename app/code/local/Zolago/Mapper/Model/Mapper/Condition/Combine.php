@@ -57,4 +57,5 @@ class Zolago_Mapper_Model_Mapper_Condition_Combine extends Mage_Rule_Model_Condi
         }
         return $this;
     }
+	
 }
