@@ -112,7 +112,28 @@ class Zolago_Mapper_Model_Resource_Index extends Mage_Core_Model_Resource_Db_Abs
 		
 	}
 	
-
+	
+    /**
+     * @param array $mappers set of mappers 
+     */
+    public function getAssignedProducts($mapper) {
+    	if (!is_array($mapper) && !empty($mapper)) {
+    		$mapper = array($mapper);
+    	}
+    	$adapter = $this->getReadConnection();
+    	$select = $adapter->select()
+						  ->distinct()
+						  ->from(
+						  	$this->getTable('zolagomapper/index'),
+				    		array('product_id')
+						  )
+						  ->where('mapper_id in (?)',implode(',',$mapper));
+		$out = array();
+		foreach ($adapter->fetchAssoc($select) as $item) {
+			$out[$item['product_id']] = $item['product_id'];
+		}
+		return $out;
+    }
 	/**
 	 * @param type $filter
 	 * @return array - array(prodId=>array(catId1, catId2, ...);

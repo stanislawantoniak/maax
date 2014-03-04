@@ -2,10 +2,6 @@
 class Zolago_Mapper_Adminhtml_MapperController 
 	extends Mage_Adminhtml_Controller_Action{
 	
-	public function runAllAction() {
-	    var_export(Mage::getResourceSingleton("zolagomapper/index")->reindexForProducts());
-		Mage::getResourceSingleton("zolagomapper/index")->assignWithCatalog();
-	}
 	public function queueAction() {
 	    $queue = Mage::getModel('zolagomapper/queue_mapper');
 	    $model = $this->_registerModel();
@@ -27,8 +23,11 @@ class Zolago_Mapper_Adminhtml_MapperController
 
 		Varien_Profiler::start("ZolagoMapper::Run");
 		$indexer = Mage::getResourceModel('zolagomapper/index');
+		$oldProducts = $indexer->getAssignedProducts(array($id),$model->getWebsiteId());
 		$mathedIds = $indexer->reindexForMappers($id);
-		$indexer->assignWithCatalog($mathedIds);
+		$final = array_merge($oldProducts,$mathedIds);
+		$final = array_unique($final);
+		$indexer->assignWithCatalog($final);
 		$storeId = $model->getDefaultStoreId();
         	    
 		$productColl = Mage::getResourceModel('catalog/product_collection');
