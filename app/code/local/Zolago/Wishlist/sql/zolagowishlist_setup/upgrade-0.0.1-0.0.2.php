@@ -19,5 +19,3 @@ $idxName = $installer->getIdxName('wishlist/wishlist', 'customer_id');
 $installer->getConnection()->addIndex($wishlistTable, $idxName, array("customer_id"));
 
 $installer->endSetup();
-
-?>
