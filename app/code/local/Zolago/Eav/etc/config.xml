@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Eav>
-            <version>0.0.2</version>
+            <version>0.0.1</version>
         </Zolago_Eav>
     </modules>
 	<frontend>
@@ -65,6 +65,18 @@
 			</catalog_entity_attribute_save_after>
 		</events>
     </global>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <!-- fix currency symbol routing / its local module depandency is not requored-->
+                        <currencysymbol before="Mage_Adminhtml">Mage_CurrencySymbol_Adminhtml</currencysymbol>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
 	<adminhtml>
 		<translate>
 			<modules>
