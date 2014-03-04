@@ -12,12 +12,16 @@ class Zolago_Mapper_Model_Queue_Product extends Zolago_Common_Model_Queue_Abstra
     }
     protected function _execute() {
         $productList = array();
+		
         foreach ($this->_collection as $item) {
-            $productList[$item->getWebsiteId()][$this->getProductId()] 
-                = $this->getProductId();
+            $productList[$item->getWebsiteId()][$item->getProductId()] 
+                = $item->getProductId();
         }
+		
         $indexer = Mage::getResourceModel('zolagomapper/index');
         $fullList = array();
+		
+		
         foreach ($productList as $websiteId=>$productList) {
             $indexer->reindexForProducts($productList,$websiteId);        
             $fullList = array_merge($fullList,$productList);
