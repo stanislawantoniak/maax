@@ -21,7 +21,7 @@ class Zolago_Mapper_Model_Mapper extends Mage_Rule_Model_Rule{
 	
 	public function getCategoryIds() {
 		if(!$this->hasData('category_ids')){
-			$this->setData('category_ids', $this->getResource()->getCategoryIds($this)); //@todo implement
+			$this->setData('category_ids', $this->getResource()->getCategoryIds($this));
 		}
 		return $this->getData("category_ids");
 	}
