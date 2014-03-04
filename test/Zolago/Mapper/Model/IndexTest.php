@@ -1,5 +1,5 @@
 <?php
-class Zolago_Mapper_Model_IndexTest extends Zolago_TestCase {
+class Zolago_Mapper_Model_IndexTest extends ZolagoDb_TestCase {
 	
 	public function testScenario() {
 		
