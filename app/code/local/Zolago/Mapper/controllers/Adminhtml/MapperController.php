@@ -70,9 +70,10 @@ class Zolago_Mapper_Adminhtml_MapperController
             unset($data['rule']);
 			$categoryIds = array();
 			// Set category Ids
-			if(isset($data['category_ids_as_string'])){
+			if(isset($data['category_ids_as_string']) && !empty($data['category_ids_as_string'])){
 				$categoryIds = explode(",", $data['category_ids_as_string']);
 			}
+			
 			$data['category_ids'] = $categoryIds;
             $mapper->addData($data);
             $mapper->loadPost($data);
