@@ -206,15 +206,13 @@ class Zolago_Mapper_Model_Resource_Index extends Mage_Core_Model_Resource_Db_Abs
 			$products = array($products);
 		}
 		
-		$filterParams = $products ? array("product_id"=>$products) : null;
-		
 		// Step 2: Clear index
 		$conds = array();
 		if ($products) {
-			$conds[] = array('product_id' => $products);
+			$conds["product_id"] = $products;
 		}
 		if ($websiteId) {
-			$conds[] = array('website_id' => $websiteId);
+			$conds["website_id"] = $websiteId;
 		}
 		
 		$this->_clearIndex($conds ? $conds:null);
