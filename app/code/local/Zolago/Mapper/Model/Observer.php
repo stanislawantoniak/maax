@@ -18,4 +18,11 @@ class Zolago_Mapper_Model_Observer {
 		);
 		$queue->push($elem);
 	}
+	static public function processMaperQueue() {
+		$model = Mage::getModel('zolagomapper/queue_mapper')->process();		
+	}
+	static public function processProductQueue() {
+		$model = Mage::getModel('zolagomapper/queue_product')->process();
+		
+	}
 }
