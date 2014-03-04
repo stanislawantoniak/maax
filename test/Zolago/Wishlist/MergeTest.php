@@ -4,7 +4,10 @@ class Zolago_Wishlist_MergeTest extends ZolagoDb_TestCase{
 	const CUSTOMER_EMAIL = "test@zolago.pl";
 	
 	public function testScenario() {
-		
+		if (!no_coverage()) {
+			$this->markTestSkipped('coverage');
+			return;
+		}		
 		$helper = Mage::helper("wishlist");
 		/* @var $helper Zolago_Wishlist_Helper_Data */
 		$helper->setCookieModel($this->_getCookieModel());

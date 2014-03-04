@@ -8,7 +8,11 @@ class Zolago_Adminhtml_Block_SetTest extends Zolago_TestCase
      * @requires function no_coverage
      */
     public function testExtendedAttributeTreeJson() {
-		
+        if (!no_coverage()) { 
+            $this->markTestSkipped('Coverage');
+            
+            return;
+        }		
 		static::setAttributeSet();
 		$layout = Mage::app()->getLayout();
 		$block = $layout->createBlock('zolagoadminhtml/catalog_product_attribute_set_main', null, array('template'=>'zolagoadminhtml/catalog/product/attribute/set/main.phtml'));
