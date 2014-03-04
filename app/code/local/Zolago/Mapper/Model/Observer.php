@@ -7,6 +7,24 @@ class Zolago_Mapper_Model_Observer {
 		$queue = Mage::getModel('zolagomapper/queue_mapper');
 		$queue->push($id);
 	}
+	public function zolagoMapperDeleteBefore($observer) {
+		$event = $observer->getEvent();
+		$object = $event->getDataObject();
+		if($object->getId()){
+			$productIds = Mage::getResourceModel("zolagomapper/index")
+					->getProductIdsByMapper($object);
+			$object->setData("affected_products_ids", $productIds);
+		}
+	}
+	public function zolagoMapperDeleteAfter($observer) {
+		$event = $observer->getEvent();
+		$object = $event->getDataObject();
+		if($object->getData("affected_products_ids")){
+			Mage::getResourceModel("zolagomapper/index")->assignWithCatalog(
+				$object->getData("affected_products_ids")
+			);
+		}
+	}
 	public function catalogProductSaveAfter($observer) {
 		$id = $observer->getEvent()
 						   ->getDataObject()

@@ -12,7 +12,17 @@ class Zolago_Mapper_Model_Resource_Index extends Mage_Core_Model_Resource_Db_Abs
         $this->_init('zolagomapper/index','mapper_id');
     }
 
-
+	/**
+	 * @param Zolago_Mapper_Model_Mapper $mapper
+	 * @return array
+	 */
+	public function getProductIdsByMapper(Zolago_Mapper_Model_Mapper $mapper) {
+		$select = $this->getReadConnection()->select()
+				->from($this->getMainTable(), array("product_id"))
+				->where("mapper_id=?", $mapper->getId())
+				->group("product_id");
+		return $this->getReadConnection()->fetchCol($select);
+	}
 	
     /**
      *  reindex by mapper list
@@ -47,7 +57,7 @@ class Zolago_Mapper_Model_Resource_Index extends Mage_Core_Model_Resource_Db_Abs
 	 * @param mixed $params
 	 */
 	public function assignWithCatalog($productsIds=null) {
-		
+		$productsIds = null;
 		$filter = $productsIds ? array("product_id"=>$productsIds) : null;
 		$templateProd = Mage::getModel("catalog/product");
 		$currentIndexAssign = $this->getCurrentIndexAssign($filter);
@@ -68,7 +78,6 @@ class Zolago_Mapper_Model_Resource_Index extends Mage_Core_Model_Resource_Db_Abs
 			if(isset($currentIndexAssign[$productId])){
 				$new = $currentIndexAssign[$productId];
 			}
-			
 			$toDelete = array_diff($old, $new);
 			$toInsert = array_diff($new, $old);
 			
@@ -148,7 +157,8 @@ class Zolago_Mapper_Model_Resource_Index extends Mage_Core_Model_Resource_Db_Abs
             $select->where('product_id IN (?)', $filter['product_id']);
 		}
 		$out = array();
-		foreach($this->getReadConnection()->fetchAssoc($select) as $item){
+		$result = $this->getReadConnection()->fetchAll($select);
+		foreach($result as $item){
 			if(!isset($out[$item['product_id']])){
 				$out[$item['product_id']] = array();
 			}
@@ -164,8 +174,7 @@ class Zolago_Mapper_Model_Resource_Index extends Mage_Core_Model_Resource_Db_Abs
 	 */
 	public function getCurrentIndexAssign($params=null) {
 		$select = $this->getReadConnection()->select();
-		$select->from($this->getMainTable(), array("product_id", "category_id"));
-		
+		$select->from($this->getMainTable(), array("*"));
 		if(is_array($params)){
 			foreach($params as $field=>$value){
 				$select->where($this->getReadConnection()->quoteInto(
@@ -176,7 +185,9 @@ class Zolago_Mapper_Model_Resource_Index extends Mage_Core_Model_Resource_Db_Abs
 		$select->group(array("product_id", "category_id"));
 		
 		$out = array();
-		foreach($this->getReadConnection()->fetchAssoc($select) as $item){
+		$result = $this->getReadConnection()->fetchAll($select);
+		foreach($result as $item){
+			
 			if(!isset($out[$item['product_id']])){
 				$out[$item['product_id']] = array();
 			}
