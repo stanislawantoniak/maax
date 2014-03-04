@@ -43,8 +43,13 @@ class Zolago_Mapper_Adminhtml_MapperController
         $categoryColl = Mage::getResourceModel('catalog/category_collection');
         /* @var $categoryColl Mage_Catalog_Model_Resource_Category_Collection */
         $categoryColl->addAttributeToSelect("name");
-        $categoryColl->addFieldToFilter('entity_id', $model->getCategoryIds());
- 
+        if (count($model->getCategoryIds()) > 0) {            
+            $categoryColl->addFieldToFilter('entity_id', array('in' => $model->getCategoryIds()));
+        } else {
+            $categoryColl->addFieldToFilter('entity_id',-1);
+        }
+        
+        
 
 		$this->loadLayout();
 		$this->getLayout()->
