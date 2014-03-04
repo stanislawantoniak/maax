@@ -32,7 +32,7 @@ class Zolago_Mapper_Model_Observer {
 		$queue = Mage::getModel('zolagomapper/queue_product');
 		$elem = array ( 
 			'product_id' => $id,
-			'website_id' => Mage::app()->getStore(true)->getWebsite()->getId(),
+			'website_id' => Mage::app()->getStore($observer->getEvent()->getDataObject()->getStoreId())->getWebsiteId()
 		);
 		$queue->push($elem);
 	}
