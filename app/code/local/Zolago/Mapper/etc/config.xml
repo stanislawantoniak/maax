@@ -60,6 +60,24 @@
                     </zolagomapper>
                 </observers>
             </zolago_mapper_save_after>
+            <zolago_mapper_delete_before>
+                <observers>
+                    <zolagomapper>
+                        <type>singleton</type>
+                        <class>zolagomapper/observer</class>
+                        <method>zolagoMapperDeleteBefore</method>
+                    </zolagomapper>
+                </observers>
+            </zolago_mapper_delete_before>
+            <zolago_mapper_delete_after>
+                <observers>
+                    <zolagomapper>
+                        <type>singleton</type>
+                        <class>zolagomapper/observer</class>
+                        <method>zolagoMapperDeleteAfter</method>
+                    </zolagomapper>
+                </observers>
+            </zolago_mapper_delete_after>
             <catalog_product_save_after>
                 <observers>
                     <zolagomapper>
