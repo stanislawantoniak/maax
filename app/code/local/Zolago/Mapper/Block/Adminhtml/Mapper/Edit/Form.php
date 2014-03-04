@@ -70,9 +70,9 @@ class Zolago_Mapper_Block_Adminhtml_Mapper_Edit_Form extends Mage_Adminhtml_Bloc
 			} else {
 				$fieldset->addField('website_id', 'hidden', array(
 					'name' => 'website_id',
-					'value' => Mage::app()->getStore(true)->getId()
+					'value' => Mage::app()->getStore(true)->getWebsite()->getId()
 				));
-				$model->setStoreId(Mage::app()->getStore(true)->getId());
+				$model->setWebsiteId(Mage::app()->getStore(true)->getWebsite()->getId());
 			}
 
 			$fieldset->addField('priority', 'text', array(
