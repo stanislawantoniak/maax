@@ -35,10 +35,10 @@ class Zolago_Mapper_Model_Resource_Index extends Mage_Core_Model_Resource_Db_Abs
 		// Step 2: Clear index
 		$conds = array();
 		if ($mappers) {
-			$conds[] = array('mapper_id' => $mappers);
+			$conds['mapper_id'] = $mappers;
 		}
 		if ($websiteId) {
-			$conds[] = array('website_id' => $websiteId);
+			$conds['website_id'] = $websiteId;
 		}
 		
 		$this->_clearIndex($conds? $conds:null);
@@ -57,7 +57,6 @@ class Zolago_Mapper_Model_Resource_Index extends Mage_Core_Model_Resource_Db_Abs
 	 * @param mixed $params
 	 */
 	public function assignWithCatalog($productsIds=null) {
-		$productsIds = null;
 		$filter = $productsIds ? array("product_id"=>$productsIds) : null;
 		$templateProd = Mage::getModel("catalog/product");
 		$currentIndexAssign = $this->getCurrentIndexAssign($filter);
