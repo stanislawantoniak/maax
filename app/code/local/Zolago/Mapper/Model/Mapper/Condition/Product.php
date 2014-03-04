@@ -27,6 +27,15 @@ class Zolago_Mapper_Model_Mapper_Condition_Product extends Mage_CatalogRule_Mode
         return $this;
     }
    
+	// Is valid to display?
+	public function asHtml(){
+		if($this->getAttributeName()){
+			return parent::asHtml();
+		}
+		return null;
+	}
+
+
 	public function getAttribuesCollection($attributeSetId=null){
 		
 		if(!$this->getData("attributes_collection")){
@@ -55,11 +64,9 @@ class Zolago_Mapper_Model_Mapper_Condition_Product extends Mage_CatalogRule_Mode
 			);
 			// Attr set id
 			$productAttributes->addFieldToFilter("attribute_set_id", 
-					$attributeSetId ? $attributeSetId : -1);		
-			// Visable attribute
-			$productAttributes->addFieldToFilter("is_visible", 1);
+					$attributeSetId ? $attributeSetId : -1);	
 			// Mapped attribute
-			//$productAttributes->addFieldToFilter("is_mappable", 1);
+			$productAttributes->addFieldToFilter("is_mappable", 1);
 			// Exclude attributes
 			$productAttributes->addFieldToFilter("attribute_code", 
 					array("nin"=>$this->_getExcludedAttributes()));
