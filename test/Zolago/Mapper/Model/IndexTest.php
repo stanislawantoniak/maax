@@ -2,6 +2,10 @@
 class Zolago_Mapper_Model_IndexTest extends ZolagoDb_TestCase {
 	
 	public function testScenario() {
+	    if (!no_coverage()) {
+	        $this->markTestSkipped('Coverage');
+	        return;
+	    }
 		
 		$attributeSetName = "My test attribute set ";
 		$attributeCode = "my_test";
