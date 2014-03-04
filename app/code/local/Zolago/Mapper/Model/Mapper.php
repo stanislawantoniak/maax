@@ -26,7 +26,7 @@ class Zolago_Mapper_Model_Mapper extends Mage_Rule_Model_Rule{
 		return $this->getData("category_ids");
 	}
 
-    public function getMatchingProductIds() {
+    public function getMatchingProductIds($productsIds=null) {
 		
 		Varien_Profiler::start("ZolagoMapper::Matching");
         $this->_productIds = array();
@@ -36,7 +36,11 @@ class Zolago_Mapper_Model_Mapper extends Mage_Rule_Model_Rule{
 		/* @var $productCollection Mage_Catalog_Model_Resource_Product_Collection */
 		$productCollection->addAttributeToFilter("attribute_set_id", $this->getAttributeSetId());
 		$productCollection->addWebsiteFilter($this->getWebsiteId());
-
+		// Add pre match ids
+		if(is_array($productsIds)){
+			$productCollection->addIdFilter($productsIds);
+		}
+		
         $this->getConditions()->collectValidatedAttributes($productCollection);
         Mage::getSingleton('core/resource_iterator')->walk(
             $productCollection->getSelect(), array(array($this, 'callbackValidateProduct')), array(
