@@ -79,6 +79,10 @@ class Zolago_Mapper_Model_Queue_ProductTest extends ZolagoDb_TestCase {
         $this->assertNotEquals($old,$return);
     }
     public function testProcess() {
+        if (!no_coverage()) {
+            $this->markTestSkipped('coverage');
+            return;
+        }
         $queue = $this->_getModel();
         $row = $this->_checkQueueLength(0);
         $countNew = $row['counter'];
