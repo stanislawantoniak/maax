@@ -1,5 +1,5 @@
 <?php
-class Zolago_Eav_Block_Adminhtml_Product_Attribute_Grid extends Mage_Adminhtml_Block_Catalog_Product_Attribute_Grid
+class Zolago_Adminhtml_Block_Catalog_Product_Attribute_Grid extends Mage_Adminhtml_Block_Catalog_Product_Attribute_Grid
 {
     protected function _prepareColumns()
     {

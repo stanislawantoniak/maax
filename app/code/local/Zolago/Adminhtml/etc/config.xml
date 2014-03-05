@@ -12,6 +12,7 @@
 			</zolagoadminhtml>
             <adminhtml>
                 <rewrite>
+					<catalog_product_attribute_grid>Zolago_Adminhtml_Block_Catalog_Product_Attribute_Grid</catalog_product_attribute_grid>
                     <catalog_product_attribute_set_main>Zolago_Adminhtml_Block_Catalog_Product_Attribute_Set_Main</catalog_product_attribute_set_main>
                 </rewrite>
             </adminhtml>
@@ -43,6 +44,18 @@
 					</files>
 				</zolagoadminhtml>
 			</modules>
-		</translate>
+		</translate>	
 	</adminhtml>
+	<admin>
+        <routers>
+            <adminhtml>
+				<use>admin</use>
+                <args>
+                    <modules>
+                        <Zolago_Adminhtml before="Mage_Adminhtml">Zolago_Adminhtml</Zolago_Adminhtml>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>		
+	</admin>
 </config>
