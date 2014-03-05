@@ -26,7 +26,7 @@ class Zolago_Mapper_Block_Adminhtml_Mapper_Edit extends Mage_Adminhtml_Block_Wid
 		if(!$this->getIsNew()){
 			$this->_addButton('run', array(
 				'label'     => Mage::helper('zolagomapper')->__('Run'),
-				'onclick'   => 'setLocation(\'' .$this->getUrl("*/*/run", array("mapper_id"=>$this->getModel()->getId())) . '\')',
+				'onclick'   => 'mapperControl.run();',
 				'class'     => 'go',
 			), -1);
 			$this->_addButton('queue', array(
@@ -40,14 +40,21 @@ class Zolago_Mapper_Block_Adminhtml_Mapper_Edit extends Mage_Adminhtml_Block_Wid
 			$this->_updateButton("save", "class", "");
 			$this->_updateButton("save", "onclick", "mapperControl.next();");
 			$this->_removeButton("reset");
-		}else{
-			if($this->getIsNew()){
-				$this->_updateButton("back", "onclick", 'setLocation(\'' .$this->getUrl("*/*/new") . '\')');
-			}
 		}
 		$this->setDataObject($this->getModel());
 		return $ret;
     }
+	
+	public function getBackUrl() {
+		if(Mage::app()->getRequest()->getParam("back")=="list"){
+			return parent::getBackUrl();
+		}
+		if($this->getIsNew() && $this->getAttributeSetId()){
+			return $this->getUrl("*/*/new");
+		}
+		return parent::getBackUrl();
+
+	}
 	
     public function getIsNew() {
         return !(int)$this->getModel()->getId();

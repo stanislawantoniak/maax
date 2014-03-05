@@ -54,33 +54,6 @@ class Zolago_Mapper_Block_Adminhtml_Mapper_Grid extends Mage_Adminhtml_Block_Wid
             'width'     => '100px',
             'type'      => 'action',
 			"renderer"	=> Mage::getConfig()->getBlockClassName("zolagomapper/adminhtml_mapper_grid_column_renderer_action"),
-            'actions'   => array(
-                array(
-                    'caption'   => Mage::helper('zolagomapper')->__('View'),
-                    'url'       => array(
-                            'base'  => '*/*/edit'
-                    ),
-                    'field'     => 'mapper_id'
-                ),
-                array(
-                    'caption'   => Mage::helper('zolagomapper')->__('Run'),
-                    'url'       => array(
-                            'base'  => '*/*/run'
-                    ),
-                    'field'     => 'mapper_id'
-                ),
-            ),
-			'alt_actions' => array(
-				 array(
-                    'caption'   => Mage::helper('zolagomapper')->__('Create'),
-                    'url'       => array(
-                            'base'  => '*/*/new'
-                    ),
-                    'field'     => 'attribute_set_id'
-                ),
-			),
-            'index' => 'mapper_id',
-            'alt_index' => 'attribute_set_id',
             'filter' => false,
             'sortable' => false,
         ));
@@ -92,7 +65,7 @@ class Zolago_Mapper_Block_Adminhtml_Mapper_Grid extends Mage_Adminhtml_Block_Wid
 		if($row->getId()){
 			return $this->getUrl('*/*/edit', array('mapper_id'=>$row->getId()));
 		}
-        return $this->getUrl('*/*/new', array('attribute_set_id'=>$row->getAttributeSetId()));
+        return $this->getUrl('*/*/new', array('back'=>'list', 'attribute_set_id'=>$row->getAttributeSetId()));
     }
     
 
