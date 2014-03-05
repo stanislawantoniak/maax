@@ -91,7 +91,7 @@ class Zolago_Mapper_Model_Resource_Index extends Mage_Core_Model_Resource_Db_Abs
 					$this->getTable('catalog/category_product'),
 						$this->getReadConnection()->quoteInto("product_id=?", $productId) .
 						" AND ".
-						$this->getReadConnection()->quoteInto("category_id in (?)", $toDelete) 
+						$this->getReadConnection()->quoteInto("category_id IN (?)", $toDelete) 
 				);
 			}
 			foreach($toInsert as $insertId){
