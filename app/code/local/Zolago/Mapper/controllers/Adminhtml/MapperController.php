@@ -82,10 +82,20 @@ class Zolago_Mapper_Adminhtml_MapperController
             $mapper->addData($data);
             $mapper->loadPost($data);
             $mapper->save();
-            $this->_getSession()->addSuccess(
-					Mage::helper('zolagomapper')->__('The mapper has been saved.'));
 			$this->_getSession()->setData('mapper_form_data', null);
-			return $this->_redirect('*/*/index');
+			
+			// Forward run or index
+			$doRun = $request->getParam("do_run");
+			if(!$doRun){
+				$this->_getSession()->addSuccess(
+					Mage::helper('zolagomapper')->__('The mapper has been saved.'));
+				$backUrl = $this->getUrl("*/*");
+			}else{
+				$backUrl = $this->getUrl("*/*/run", array("mapper_id"=>$mapper->getId()));
+			}
+	
+			
+			return $this->_redirectUrl($backUrl);
    
         } catch (Exception $e) {
             $this->_getSession()->addException($e, $e->getMessage());

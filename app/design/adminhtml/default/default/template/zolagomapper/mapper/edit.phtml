@@ -21,7 +21,11 @@
             }
             editForm.submit();
             return false;
-        },
+        },	
+		run: function(){
+			$("do_run").value = 1;
+			editForm.submit();
+		},
 		next: function(){
 			var attributeSetId = $F("attribute_set_id");
 			if(!attributeSetId){
