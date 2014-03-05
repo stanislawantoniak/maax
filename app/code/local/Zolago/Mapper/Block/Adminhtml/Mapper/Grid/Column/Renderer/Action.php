@@ -1,35 +1,36 @@
 <?php
 
 class Zolago_Mapper_Block_Adminhtml_Mapper_Grid_Column_Renderer_Action
-    extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Action
+    extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Text
 {
 	/**
 	 * @param Varien_Object $row
 	 * @return string
 	 */
     public function render(Varien_Object $row){
+		$urls = array();
 		if($row->getId()){
-			return parent::render($row);
+			$urls[] = array(
+				"label"=>Mage::helper('zolagomapper')->__('View'),
+				"url" => $this->getUrl('*/*/edit', array("mapper_id"=>$row->getId()))
+			);
+			$urls[] = array(
+				"label"=>Mage::helper('zolagomapper')->__('Run'),
+				"url" => $this->getUrl('*/*/run', array("back"=>"list", "mapper_id"=>$row->getId()))
+			);
+		}else{
+			$urls[] = array(
+				"label" => Mage::helper('zolagomapper')->__('Create'),
+				"url"=> $this->getUrl('*/*/new', array("back"=>"list"))
+			);
 		}
-		$oldActions = $this->getColumn()->getActions();
-		$this->getColumn()->setActions($this->getColumn()->getAltActions());
-		$render = parent::render($row);
-		$this->getColumn()->setActions($oldActions);
-		return $render;
+		$toImplode = array();
+		foreach ($urls as $url){
+			$toImplode[] = '<a href="'.$url['url'].'">'.$this->escapeHtml($url['label']).'</a>';
+		}
+		return implode(" | ", $toImplode);
+		
 	}
 	
-	/**
-	 * @param Varien_Object $row
-	 * @return string
-	 */
-	public function _getValue(Varien_Object $row) {
-		if($row->getId()){
-			return parent::_getValue($row);
-		}
-		$oldIndex = $this->getColumn()->getIndex();
-		$this->getColumn()->setIndex($this->getColumn()->getData("alt_index"));
-		$render = parent::_getValue($row);
-		$this->getColumn()->setIndex($oldIndex);
-		return $render;
-	}
+	
 }

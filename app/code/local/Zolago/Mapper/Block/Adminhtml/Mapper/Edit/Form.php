@@ -43,6 +43,11 @@ class Zolago_Mapper_Block_Adminhtml_Mapper_Edit_Form extends Mage_Adminhtml_Bloc
 			$fieldset->addField('attribute_set_id', 'hidden', array(
 				'name' => 'attribute_set_id'
 			));
+			
+			$fieldset->addField('do_run', 'hidden', array(
+				'name' => 'do_run',
+				'value' => 0
+			));
 
 			$fieldset->addField('name', 'text', array(
 				'name' => 'name',
