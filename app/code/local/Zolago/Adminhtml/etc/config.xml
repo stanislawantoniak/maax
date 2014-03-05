@@ -53,4 +53,15 @@
 			</updates>
 		</layout>
 	</adminhtml>
+	<admin>
+		<routers>
+			<adminhtml>
+				<args>
+					<modules>
+						<zolagoadminhtml before="Mage_Adminhtml">Zolago_Adminhtml</zolagoadminhtml>
+					</modules>
+				</args>
+			</adminhtml>
+		</routers>
+	</admin>
 </config>
