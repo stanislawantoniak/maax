@@ -1,5 +1,6 @@
 <?php
 	$helper = Mage::helper('zolagoadminhtml');
+	$filterCollection = $this->getFilterCollection();
 ?>
 <div class="content-header">
    <h3><?php echo $this->getHeaderText() ?></h3>
@@ -38,18 +39,17 @@
 			<tbody class='fieldset_config_body'>
 				<tr id='rowTpl' style='display:none'>
 					<td class="a-left">
-						Attribute
 					</td>
 					<td class="a-left">
-						Position
+						<input alt="sort_order" value="$$SORT_ORDER" name="[$$ROW][sort_order]" style="width:70px" type="input" />
 					</td>
 					<td class="a-left">
-						<input alt="attribute_values" value="1" name="<?php echo $this->getFieldName()?>[$ROW][attribute_values]" style="width:20px" type="checkbox" />
+						<input alt="show_multiple" value="0" name="<?php echo $this->getFieldName()?>[$ROW][attribute_values]" style="width:20px" type="checkbox" />
 						<span><?php echo $helper->__('Show All')?></span>
 						<br />
-						<input alt="attribute_values_selected" value="1" name="<?php echo $this->getFieldName()?>[$ROW][attribute_values_selected]" style="width:20px" type="checkbox" onclick="$('<?php echo $this->suffixId('attribute_values_selected_$ROW') ?>').toggle()" />
+						<input alt="show_multiple" value="1" name="<?php echo $this->getFieldName()?>[$ROW][attribute_values_selected]" style="width:20px" type="checkbox" onclick="$('<?php echo $this->suffixId('attribute_values_selected_$ROW') ?>').toggle()" />
 						<span><?php echo $helper->__('Show Selected')?></span>
-						<input name="<?php echo $this->getFieldName()?>[$ROW][attribute_values_selected]" value="" style="width: 250px" />						
+						<input name="<?php echo $this->getFieldName()?>[$ROW][attribute_values_selected]" value="" style="width: 250px" />
 					</td>
 					<td class="a-left">
 						<?php echo $this->getRenderSelectHtml("render_1");?>
@@ -59,13 +59,15 @@
 					<td class="a-left">
 					</td>
 					<td class="a-right">
-						<button type="button" class="scalable delete"><span><?php echo $this->__('Remove') ?></span></button>
+						<button type="button" class="scalable delete delete-attribute"><span><?php echo $this->__('Remove') ?></span></button>
 					</td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
 </form>
+
+
 
 <script type="text/javascript">
 //<![CDATA[
@@ -78,8 +80,13 @@
     {
         var rowHtml = $('rowTpl').innerHTML
         var data = {
-            title: '',
-            sort_order: '0'
+            attribute_name:			'',
+            sort_order:				'0',
+			show_multiple:			'0',
+			use_specified_options:	'',
+			use_specified_options:	'0',
+			frontend_renderer:		'',
+			
         }
         Object.extend(data, inData);
         data.row = ++lastRowNum;
@@ -111,7 +118,7 @@
         var trs = tbody.childElements()
         var tr = trs[trs.length-1]
         tr.addClassName(lastRowNum%2 ? 'odd' : 'even')
-        var del = $(tr).select('button.delete-fieldset')[0];
+        var del = $(tr).select('button.delete-attribute')[0];
         if (del) {
             $(del).observe('click', function(e) { e.stop(); $(del.parentNode.parentNode).remove() })
         }
@@ -129,9 +136,23 @@
 
     $('addBtn').observe('click', function(e) { e.stop(); addRow() });
 
-<?php if (is_array($fValue)): foreach ($fValue as $fV): ?>
-    addRow(<?php echo Zend_Json::encode($fV) ?>);
-<?php endforeach; endif; ?>
+<?php
+	if (count($filterCollection)):
+		foreach ($filterCollection as $filterValue): ?>
+			addRow(<?php echo Zend_Json::encode($filterValue->getData()); ?>);
+<?php
+		endforeach;
+	endif;
+?>
 })();
 //]]>
 </script>
+
+<?php
+	echo '<pre>';
+	if (count($filterCollection)):
+		foreach ($filterCollection as $filterValue):
+//var_dump($filterValue->getData());
+		endforeach;
+	endif;
+	echo '</pre>';
