@@ -41,7 +41,12 @@ class Zolago_Adminhtml_Block_Catalog_Category_Filters extends Mage_Adminhtml_Blo
 	public function getPossibleAttributes() {
 		$resMapper = Mage::getResourceModel('zolagomapper/mapper');
 		/* @var $resMapper Zolago_Mapper_Model_Resource_Mapper */
-		return $resMapper->getAttributesByCategory($this->getCategory()->getId());
+		
+		$values = $resMapper->getAttributesByCategory($this->getCategory()->getId());
+		arsort($values);
+		$values['']='';
+		asort($values);
+		return $values;
 	}
 	
 	public function getAddButtonHtml($id) {
@@ -127,4 +132,8 @@ class Zolago_Adminhtml_Block_Catalog_Category_Filters extends Mage_Adminhtml_Blo
     {
         return $id.$this->getIdSuffix();
     }
+	
+	public function getAttributeOptionsUrl() {
+		return $this->getUrl("*/*/getAttributeOptions");
+	}
 }

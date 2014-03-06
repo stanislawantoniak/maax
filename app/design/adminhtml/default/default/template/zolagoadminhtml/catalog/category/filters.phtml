@@ -139,11 +139,30 @@
         }).defer();
     }
 
-    $('addBtn').observe('click', function(e) { e.stop(); addRow() });
+	function prepareNewItem(attributeId){
+		var valuesUrl = '<?php echo $this->getAttributeOptionsUrl();?>';
+		new Ajax.Request(valuesUrl, {
+		  onSuccess: function(response) {
+			  var json = response.responseJSON;
+			  if(json.status!=1){
+				  alert(json.content);
+				  return;
+			  }
+			  console.log(json.content);
+				//addRow({row:1}) 
+		  },
+		  parameters: {attribute_id:attributeId}
+		});
+	}
 
-<?php if (is_array($fValue)): foreach ($fValue as $fV): ?>
-    addRow(<?php echo Zend_Json::encode($fV) ?>);
-<?php endforeach; endif; ?>
+    $('addBtn').observe('click', function(e) { 
+		if($F("selectAttribute")){
+			prepareNewItem($F("selectAttribute"));
+		}
+		e.stop(); 
+	});
+
+
 })();
 //]]>
 </script>

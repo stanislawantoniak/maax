@@ -22,7 +22,7 @@ class Zolago_Mapper_Model_Resource_Mapper extends Mage_Core_Model_Resource_Db_Ab
 		// Attribute
 		$select->from(
 				array("attribute"=>$this->getTable("eav/attribute")), 
-				array("attribute_id", "frontend_label")
+				array("attribute.attribute_id", "attribute.frontend_label")
 		);
 		
 		// Catalog Attribute
@@ -72,7 +72,6 @@ class Zolago_Mapper_Model_Resource_Mapper extends Mage_Core_Model_Resource_Db_Ab
 		$select->where("catalog_attribute.is_filterable>?", 0);
 		$select->order("attribute.frontend_label");
 		$select->distinct();
-		
 		
 		return $adapter->fetchPairs($select);
 	}
