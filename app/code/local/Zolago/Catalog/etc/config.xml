@@ -2,13 +2,13 @@
 <config>
     <modules>
         <Zolago_Catalog>
-            <version>0.0.2</version>
+            <version>0.0.3</version>
         </Zolago_Catalog>
     </modules>
     <global>
         <models>
             <zolagocatalog>
-                <class>Zolago_Customer_Model</class>
+                <class>Zolago_Catalog_Model</class>
                 <resourceModel>zolagocatalog_resource</resourceModel>
             </zolagocatalog>
             <zolagocatalog_resource>

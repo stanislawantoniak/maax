@@ -44,31 +44,49 @@ class Zolago_Adminhtml_Block_Catalog_Category_Filters extends Mage_Adminhtml_Blo
 		return $resMapper->getAttributesByCategory($this->getCategory()->getId());
 	}
 	
-	public function getAddButtonHtml($id=null) {
+	public function getAddButtonHtml($id) {
 		$btn = $this->getLayout()->createBlock('adminhtml/widget_button');
 		$btn->addData(array(
 			"label"	=>	Mage::helper("zolagoadminhtml")->__("Add"),
 			"class" => "add",
-			"type"	=> "button",
-			"id"	=> $id
+			"type"	=> "button"
 		));
+		$btn->setId($id);
 		return $btn->toHtml();
 	}
 
 
-	public function getAttributesSelectHtml($id=null) {
+	public function getAttributesSelectHtml($id) {
 		$conf = array(
-			"values" => $this->getPossibleAttributes()
+			"values" => $this->getPossibleAttributes(),
 		);
-		if($id){
-			$conf['id'] = $id;
-		}
+		
 		$select = new Varien_Data_Form_Element_Select($conf);
+		$select->setId($id);
 		$this->getForm()->addElement($select);
 		
 		return $select->getElementHtml();
 	}
 	
+	public function getRenderSelectHtml($id) {
+		$conf = array(
+			"values" => $this->getRendererValues(),
+		);
+		$select = new Varien_Data_Form_Element_Select($conf);
+		$select->setId($id);
+		$this->getForm()->addElement($select);
+		
+		return $select->getElementHtml();
+	}
+	
+	/**
+	 * @return array
+	 */
+	public function getRendererValues() {
+		return Mage::getSingleton("zolagocatalog/system_layer_filter_source")->toOptionHash(true);
+	}
+
+
 	/**
 	 * @return Mage_Catalog_Model_Category
 	 */

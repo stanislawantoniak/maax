@@ -22,7 +22,7 @@ $installer->startSetup();
     ->addColumn('show_multiple', Varien_Db_Ddl_Table::TYPE_SMALLINT, null, array("nullable"=>false, "default"=>0))
     ->addColumn('use_specified_options', Varien_Db_Ddl_Table::TYPE_SMALLINT, null, array("nullable"=>false, "default"=>0))    
     ->addColumn('specified_options', Varien_Db_Ddl_Table::TYPE_TEXT, 1024*4 /*4kb field */)
-    ->addColumn('frontend_renderer', Varien_Db_Ddl_Table::TYPE_SMALLINT)
+    ->addColumn('frontend_renderer', Varien_Db_Ddl_Table::TYPE_TEXT, 255)
 		 
     ->addColumn('created_at', Varien_Db_Ddl_Table::TYPE_TIMESTAMP, null, array(
         ), 'Creation Time')
