@@ -44,11 +44,11 @@
 						Position
 					</td>
 					<td class="a-left">
-						<span><?php echo $helper->__('Show All')?></span>
 						<input alt="attribute_values" value="1" name="<?php echo $this->getFieldName()?>[$ROW][attribute_values]" style="width:20px" type="checkbox" />
+						<span><?php echo $helper->__('Show All')?></span>
 						<br />
-						<span><?php echo $helper->__('Show Selected')?></span>
 						<input alt="attribute_values_selected" value="1" name="<?php echo $this->getFieldName()?>[$ROW][attribute_values_selected]" style="width:20px" type="checkbox" onclick="$('<?php echo $this->suffixId('attribute_values_selected_$ROW') ?>').toggle()" />
+						<span><?php echo $helper->__('Show Selected')?></span>
 						<input name="<?php echo $this->getFieldName()?>[$ROW][attribute_values_selected]" value="" style="width: 250px" />						
 					</td>
 					<td class="a-left">
@@ -66,18 +66,6 @@
 		</table>
 	</div>
 </form>
-<?php echo count($this->getFilterCollection()); ?>
-<ul>
-	<?php foreach($this->getFilterCollection() as $filter):?>
-	<li>
-		ID: <?php echo $filter->getId();?>,
-		<?php if($_attribute = $filter->getAttribute()):?>
-			ATTR: <?php echo $_attribute->getFrontendLabel();?>,
-			All Values: <?php echo var_export($_attribute->getSource()->getAllOptions());?>
-		<?php endif;?>
-	</li>
-	<?php endforeach;?>
-</ul>
 
 <script type="text/javascript">
 //<![CDATA[
