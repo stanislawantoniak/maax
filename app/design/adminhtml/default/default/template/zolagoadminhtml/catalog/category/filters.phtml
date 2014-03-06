@@ -61,3 +61,14 @@
 	</div>
 	
 </form>
+<ul>
+	<?php foreach($this->getFilterCollection() as $filter):?>
+	<li>
+		ID: <?php echo $filter->getId();?>,
+		<?php if($_attribute = $filter->getAttribute()):?>
+			ATTR: <?php echo $_attribute->getFrontendLabel();?>,
+			All Values: <?php echo var_export($_attribute->getSource()->getAllOptions());?>
+		<?php endif;?>
+	</li>
+	<?php endforeach;?>
+</ul>

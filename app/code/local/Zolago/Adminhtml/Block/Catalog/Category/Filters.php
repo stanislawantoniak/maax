@@ -85,6 +85,16 @@ class Zolago_Adminhtml_Block_Catalog_Category_Filters extends Mage_Adminhtml_Blo
 	public function getRendererValues() {
 		return Mage::getSingleton("zolagocatalog/system_layer_filter_source")->toOptionHash(true);
 	}
+	
+	/**
+	 * return Zolago_Catalog_Model_Resource_Category_Filter_Collection
+	 */
+	public function getFilterCollection(){
+		$collection = Mage::getResourceModel('zolagocatalog/category_filter_collection');
+		/* @var $collection Zolago_Catalog_Model_Resource_Category_Filter_Collection */
+		$collection->addCategoryFilter($this->getCategory());
+		return $collection;
+	}
 
 
 	/**
