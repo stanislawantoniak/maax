@@ -39,11 +39,13 @@
 			<tbody class='fieldset_config_body'>
 				<tr id='rowTpl' style='display:none'>
 					<td class="a-left">
+						<input alt="attribute_name" value="$$ATTRIBUTE_NAME" name="[$$ROW][attribute_name]" style="width:120px" type="input" disabled='disabled' />
 					</td>
 					<td class="a-left">
 						<input alt="sort_order" value="$$SORT_ORDER" name="[$$ROW][sort_order]" style="width:70px" type="input" />
 					</td>
 					<td class="a-left">
+						<input alt="" value="$$USE_SPECIFIED_OPTIONS" name="[$$ROW][use_specified_options]" style="width:70px" type="input" />
 					</td>
 					<td class="a-left">
 						<?php echo $this->getRenderSelectHtml("render_1");?>
@@ -77,10 +79,10 @@
             attribute_name:			'',
             sort_order:				'0',
 			show_multiple:			'0',
-			use_specified_options:	'',
 			use_specified_options:	'0',
+			specified_options:		'0',
+			can_show_more:			'0',
 			frontend_renderer:		'',
-			
         }
         Object.extend(data, inData);
         data.row = ++lastRowNum;
@@ -156,8 +158,14 @@
 
 <?php
 	if (count($filterCollection)):
-		foreach ($filterCollection as $filterValue): ?>
-			addRow(<?php echo Zend_Json::encode($filterValue->getData()); ?>);
+		foreach ($filterCollection as $filter):
+			$attributeData = array_merge(
+				$filter->getData(),
+				array(
+					'attribute_name' => $filter->getAttribute()->getFrontendLabel()
+				)
+			); ?>
+			addRow(<?php echo Zend_Json::encode($attributeData); ?>);
 <?php
 		endforeach;
 	endif;
