@@ -158,6 +158,8 @@
     $('addBtn').observe('click', function(e) { 
 		if($F("selectAttribute")){
 			prepareNewItem($F("selectAttribute"));
+		}else{
+			alert("<?php echo Mage::helper("zolagoadminhtml")->__("Select attribute");?>")
 		}
 		e.stop(); 
 	});

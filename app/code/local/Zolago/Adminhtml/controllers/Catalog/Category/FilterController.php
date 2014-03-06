@@ -16,9 +16,9 @@ class Zolago_Adminhtml_Catalog_Category_FilterController
     }
 	
 	public function getAttributeOptionsAction(){
+		
 		$attributeId = $this->getRequest()->getParam("attribute_id");
-		
-		
+
 		$responseError = array(
 			"status"=>0,
 			"content" => ""
