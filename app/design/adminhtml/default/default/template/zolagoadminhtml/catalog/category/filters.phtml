@@ -22,6 +22,16 @@
 					<th class="no-link a-right"><span class="nobr">Remove</span></th>
 				</tr>
 			</thead>
+			<tfoot>
+				<tr>
+					<th colspan="7">
+						<div class="a-right">
+							<?php echo $this->getAttributesSelectHtml("test_id");?>
+							<?php echo $this->getAddButtonHtml("test2_id");?>
+						</div>
+					</th>
+				</tr>
+			</tfoot>
 			<tbody>
 				<tr>
 					<td class="a-left">
@@ -49,8 +59,5 @@
 			</tbody>
 		</table>
 	</div>
-	<div class="a-right">
-		<?php echo $this->getAttributesSelectHtml("test_id");?>
-		<?php echo $this->getAddButtonHtml("test2_id");?>
-	</div>
+	
 </form>
