@@ -65,5 +65,5 @@
 				</args>
 			</adminhtml>
 		</routers>
-	</adminhtml>
+	</admin>
 </config>
