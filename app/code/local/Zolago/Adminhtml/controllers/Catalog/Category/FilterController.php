@@ -49,16 +49,11 @@ class Zolago_Adminhtml_Catalog_Category_FilterController
 			return $this->_sendJson($responseError);
 		}
 		
-		$hashOptions = array();
-		foreach($model->getSource()->getAllOptions(false) as $option){
-			$hashOptions[$option['value']] = $option['label'];
-		}
-		
 		$responseSuccess = array(
 			"status"=>1,
 			"content" => array(
 				"attribute_id"	=> $attributeId,
-				"options"		=> $hashOptions
+				"options"		=> $model->getSource()->getAllOptions(false)
 			)
 		);
 		return $this->_sendJson($responseSuccess);
