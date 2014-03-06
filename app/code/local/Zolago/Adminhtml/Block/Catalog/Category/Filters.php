@@ -41,7 +41,12 @@ class Zolago_Adminhtml_Block_Catalog_Category_Filters extends Mage_Adminhtml_Blo
 	public function getPossibleAttributes() {
 		$resMapper = Mage::getResourceModel('zolagomapper/mapper');
 		/* @var $resMapper Zolago_Mapper_Model_Resource_Mapper */
-		return $resMapper->getAttributesByCategory($this->getCategory()->getId());
+		
+		$values = $resMapper->getAttributesByCategory($this->getCategory()->getId());
+		arsort($values);
+		$values['']='';
+		asort($values);
+		return $values;
 	}
 	
 	public function getAddButtonHtml($id) {
@@ -104,27 +109,7 @@ class Zolago_Adminhtml_Block_Catalog_Category_Filters extends Mage_Adminhtml_Blo
 		return Mage::registry("current_category");
 	}
 	
-    protected $_idSuffix;
-    public function resetIdSuffix()
-    {
-        $this->_idSuffix = null;
-        return $this;
-    }
-    public function getIdSuffix()
-    {
-        if ($this->_idSuffix === null) {
-            $this->_idSuffix = $this->prepareIdSuffix($this->getFieldName());
-        }
-        return $this->_idSuffix;
-    }
-
-    public function prepareIdSuffix($id)
-    {
-        return preg_replace('/[^a-zA-Z0-9\$]/', '_', $id);
-    }
-
-    public function suffixId($id)
-    {
-        return $id.$this->getIdSuffix();
-    }
+	public function getAttributeOptionsUrl() {
+		return $this->getUrl("*/*/getAttributeOptions");
+	}
 }

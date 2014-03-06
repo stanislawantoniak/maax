@@ -44,12 +44,6 @@
 						<input alt="sort_order" value="$$SORT_ORDER" name="[$$ROW][sort_order]" style="width:70px" type="input" />
 					</td>
 					<td class="a-left">
-						<input alt="show_multiple" value="0" name="<?php echo $this->getFieldName()?>[$ROW][attribute_values]" style="width:20px" type="checkbox" />
-						<span><?php echo $helper->__('Show All')?></span>
-						<br />
-						<input alt="show_multiple" value="1" name="<?php echo $this->getFieldName()?>[$ROW][attribute_values_selected]" style="width:20px" type="checkbox" onclick="$('<?php echo $this->suffixId('attribute_values_selected_$ROW') ?>').toggle()" />
-						<span><?php echo $helper->__('Show Selected')?></span>
-						<input name="<?php echo $this->getFieldName()?>[$ROW][attribute_values_selected]" value="" style="width: 250px" />
 					</td>
 					<td class="a-left">
 						<?php echo $this->getRenderSelectHtml("render_1");?>
@@ -134,7 +128,31 @@
         }).defer();
     }
 
-    $('addBtn').observe('click', function(e) { e.stop(); addRow() });
+	function prepareNewItem(attributeId){
+		var valuesUrl = '<?php echo $this->getAttributeOptionsUrl();?>';
+		new Ajax.Request(valuesUrl, {
+		  onSuccess: function(response) {
+			  var json = response.responseJSON;
+			  if(json.status!=1){
+				  alert(json.content);
+				  return;
+			  }
+			  console.log(json.content);
+				//addRow({row:1}) 
+		  },
+		  parameters: {attribute_id:attributeId}
+		});
+	}
+
+    $('addBtn').observe('click', function(e) { 
+		if($F("selectAttribute")){
+			prepareNewItem($F("selectAttribute"));
+		}else{
+			alert("<?php echo Mage::helper("zolagoadminhtml")->__("Select attribute");?>")
+		}
+		e.stop(); 
+	});
+
 
 <?php
 	if (count($filterCollection)):
@@ -147,12 +165,3 @@
 })();
 //]]>
 </script>
-
-<?php
-	echo '<pre>';
-	if (count($filterCollection)):
-		foreach ($filterCollection as $filterValue):
-//var_dump($filterValue->getData());
-		endforeach;
-	endif;
-	echo '</pre>';
