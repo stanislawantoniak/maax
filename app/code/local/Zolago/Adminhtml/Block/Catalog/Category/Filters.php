@@ -5,7 +5,7 @@ class Zolago_Adminhtml_Block_Catalog_Category_Filters extends Mage_Adminhtml_Blo
 		$this->_addButton("back", array(
 			"label" => Mage::helper('zolagoadminhtml')->__("Back"),
 			"class" => "back",
-			"onclick" => "setLocation('".$this->getUrl("*/catalog_category/edit", array("id"=>  $this->getCategory()->getId()))."')"
+			"onclick" => "setLocation('".$this->getUrl("*/catalog_category/index", array("id"=>  $this->getCategory()->getId()))."')"
 		));
 		$this->_addButton("save", array(
 			"label" => Mage::helper('zolagoadminhtml')->__("Save"),

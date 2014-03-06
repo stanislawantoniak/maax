@@ -14,6 +14,7 @@
                 <rewrite>
 					<catalog_category_edit_form>Zolago_Adminhtml_Block_Catalog_Category_Edit_Form</catalog_category_edit_form>
 					<catalog_category_tree>Zolago_Adminhtml_Block_Catalog_Category_Tree</catalog_category_tree>
+					<catalog_product_attribute_grid>Zolago_Adminhtml_Block_Catalog_Product_Attribute_Grid</catalog_product_attribute_grid>
                     <catalog_product_attribute_set_main>Zolago_Adminhtml_Block_Catalog_Product_Attribute_Set_Main</catalog_product_attribute_set_main>
                 </rewrite>
             </adminhtml>
@@ -64,5 +65,5 @@
 				</args>
 			</adminhtml>
 		</routers>
-	</admin>
+	</adminhtml>
 </config>

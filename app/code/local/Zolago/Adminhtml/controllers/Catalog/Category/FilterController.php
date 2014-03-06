@@ -4,7 +4,11 @@ class Zolago_Adminhtml_Catalog_Category_FilterController
 {
     
     public function editAction(){
-		$this->_registerObject();
+		$category=$this->_registerObject();
+		$resMapper = Mage::getResourceModel('zolagomapper/mapper');
+		/* @var $resMapper Zolago_Mapper_Model_Resource_Mapper */
+		var_dump($resMapper->getAttributesByCategory($category->getId()));
+		die;
         $this->loadLayout();
         $this->renderLayout();
     }
@@ -20,6 +24,7 @@ class Zolago_Adminhtml_Catalog_Category_FilterController
 			if($paramId){
 				$category->load($paramId);
 			}
+			
 			Mage::register("current_category", $category);
 		}
 		return Mage::registry("current_category");

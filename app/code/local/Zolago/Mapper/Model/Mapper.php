@@ -10,7 +10,6 @@ class Zolago_Mapper_Model_Mapper extends Mage_Rule_Model_Rule{
     public function getConditionsInstance() {
         return Mage::getModel('zolagomapper/mapper_condition_combine', $this);
     }
-
 	
 	public function getCategoryIdsAsString() {
 		if(!$this->hasData('category_ids_as_string')){

@@ -21,11 +21,6 @@
 			<zolagoeav>
 				<class>Zolago_Eav_Block</class>
 			</zolagoeav>
-            <adminhtml>
-                <rewrite>
-                    <catalog_product_attribute_grid>Zolago_Eav_Block_Adminhtml_Product_Attribute_Grid</catalog_product_attribute_grid>
-                </rewrite>
-            </adminhtml>
         </blocks>
         <helpers>
             <zolagoeav>

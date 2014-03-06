@@ -6,6 +6,67 @@ class Zolago_Mapper_Model_Resource_Mapper extends Mage_Core_Model_Resource_Db_Ab
 		$this->_init('zolagomapper/mapper', "mapper_id");
 	}
 
+	/**
+	 * @param int|array $categoryIds
+	 * @return array (attributeId=>attributeName,...)
+	 */
+	public function getAttributesByCategory($categoryIds) {
+		if(!is_array($categoryIds)){
+			$categoryIds = array($categoryIds);
+		}
+		$inputTypes = array("select", "boolean", "multiselect");
+		
+		$adapter = $this->getReadConnection();
+		$select = $adapter->select();
+		
+		// Attribute
+		$select->from(
+				array("attribute"=>$this->getTable("eav/attribute")), 
+				array("attribute_id", "frontend_label")
+		);
+		
+		// Group
+		$select->join(
+				array("entity_attribute"=>$this->getTable("eav/entity_attribute")), 
+				"entity_attribute.attribute_id=attribute.attribute_id",
+				array()
+		);
+		
+		// Set
+		$select->join(
+				array("attribute_set"=>$this->getTable("eav/attribute_set")), 
+				"attribute_set.attribute_set_id=entity_attribute.attribute_set_id",
+				array()
+		);
+		
+		// Mapper
+		$select->join(
+				array("mapper"=>$this->getMainTable()), 
+				"mapper.attribute_set_id=attribute_set.attribute_set_id",
+				array()
+		);
+		
+		// Mapper categories
+				$select->join(
+				array("mapper_category"=>$this->getTable("zolagomapper/mapper_category")), 
+				"mapper_category.mapper_id=mapper.mapper_id",
+				array()
+		);
+				
+		// Categories
+		$select->join(
+				array("category"=>$this->getTable("catalog/category")), 
+				"mapper_category.category_id=category.entity_id",
+				array()
+		);
+		
+		$select->where("attribute.frontend_input IN (?)", $inputTypes);
+		$select->where("category.entity_id IN (?)", $categoryIds);
+		$select->distinct();
+		
+		
+		return $adapter->fetchPairs($select);
+	}
 	
 	/**
 	 * @param Mage_Core_Model_Abstract $object
