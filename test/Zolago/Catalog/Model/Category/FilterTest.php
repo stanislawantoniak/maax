@@ -50,6 +50,7 @@ class Zolago_Catalog_Model_Category_FilterTest extends ZolagoDb_TestCase {
         $this->assertGreaterThan(0,count($collection));        
     }
     public function testAttributeList() {
+        // create mapper
         
     }
 
