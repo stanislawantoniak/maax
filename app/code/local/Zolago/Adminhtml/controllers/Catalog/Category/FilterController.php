@@ -125,6 +125,8 @@ class Zolago_Adminhtml_Catalog_Category_FilterController
 			"content" => array(
 				"attribute_id"	=> $attributeId,
 				"frontend_label"=> $model->getFrontendLabel(),
+				"attribute_code"=> $model->getAttributeCode(),
+				"default_value"	=> $model->getDefaultValue(),
 				"options"		=> $model->getSource()->getAllOptions(false)
 			)
 		);
