@@ -1,3 +1,6 @@
+<?php
+	$helper = Mage::helper('zolagoadminhtml');
+?>
 <div class="content-header">
    <h3><?php echo $this->getHeaderText() ?></h3>
    <p class="content-buttons form-buttons">
@@ -13,54 +16,57 @@
 		<table class="data" cellspacing="0">
 			<thead>
 				<tr class="headings">
-					<th class="no-link"><span class="nobr">Attr</span></th>
-					<th class="no-link"><span class="nobr">Sortorder</span></th>
-					<th class="no-link"><span class="nobr">Options</span></th>
-					<th class="no-link"><span class="nobr">Renderer</span></th>
-					<th class="no-link"><span class="nobr">Depends</span></th>
-					<th class="no-link"><span class="nobr">Lonley</span></th>
-					<th class="no-link a-right"><span class="nobr">Remove</span></th>
+					<th class="no-link"><span class="nobr"><?php echo $helper->__('Attribute') ?></span></th>
+					<th class="no-link"><span class="nobr"><?php echo $helper->__('Sort Order') ?></span></th>
+					<th class="no-link"><span class="nobr"><?php echo $helper->__('Options') ?></span></th>
+					<th class="no-link"><span class="nobr"><?php echo $helper->__('Renderer') ?></span></th>
+					<th class="no-link"><span class="nobr"><?php echo $helper->__('Depends') ?></span></th>
+					<th class="no-link"><span class="nobr"><?php echo $helper->__('Lonley') ?></span></th>
+					<th class="no-link a-right"><span class="nobr"><?php echo $helper->__('Remove') ?></span></th>
 				</tr>
 			</thead>
 			<tfoot>
 				<tr>
 					<th colspan="7">
 						<div class="a-right">
-							<?php echo $this->getAttributesSelectHtml("test_id");?>
-							<?php echo $this->getAddButtonHtml("test2_id");?>
+							<?php echo $this->getAttributesSelectHtml('selectAttribute');?>
+							<?php echo $this->getAddButtonHtml('addBtn');?>
 						</div>
 					</th>
 				</tr>
 			</tfoot>
-			<tbody>
-				<tr>
+			<tbody class='fieldset_config_body'>
+				<tr id='rowTpl' style='display:none'>
 					<td class="a-left">
-						content
+						Attribute
 					</td>
 					<td class="a-left">
-						content
+						Position
 					</td>
 					<td class="a-left">
-						content
+						<span><?php echo $helper->__('Show All')?></span>
+						<input alt="attribute_values" value="1" name="<?php echo $this->getFieldName()?>[$ROW][attribute_values]" style="width:20px" type="checkbox" />
+						<br />
+						<span><?php echo $helper->__('Show Selected')?></span>
+						<input alt="attribute_values_selected" value="1" name="<?php echo $this->getFieldName()?>[$ROW][attribute_values_selected]" style="width:20px" type="checkbox" onclick="$('<?php echo $this->suffixId('attribute_values_selected_$ROW') ?>').toggle()" />
+						<input name="<?php echo $this->getFieldName()?>[$ROW][attribute_values_selected]" value="" style="width: 250px" />						
 					</td>
 					<td class="a-left">
 						<?php echo $this->getRenderSelectHtml("render_1");?>
 					</td>
 					<td class="a-left">
-						content
 					</td>
 					<td class="a-left">
-						content
 					</td>
 					<td class="a-right">
-						rm button
+						<button type="button" class="scalable delete"><span><?php echo $this->__('Remove') ?></span></button>
 					</td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
-	
 </form>
+<?php echo count($this->getFilterCollection()); ?>
 <ul>
 	<?php foreach($this->getFilterCollection() as $filter):?>
 	<li>
@@ -72,3 +78,72 @@
 	</li>
 	<?php endforeach;?>
 </ul>
+
+<script type="text/javascript">
+//<![CDATA[
+(function ()
+{
+    var lastRowNum = 0;
+    var tbody = $$('tbody.fieldset_config_body')[0]
+
+    function addRow(inData)
+    {
+        var rowHtml = $('rowTpl').innerHTML
+        var data = {
+            title: '',
+            sort_order: '0'
+        }
+        Object.extend(data, inData);
+        data.row = ++lastRowNum;
+
+        var isIE = (/msie [1-8]\./i).test(navigator.userAgent);
+        var numericVars = ['sort_order'];
+        var forcedNumericVars = [];
+        var keys = $H(data).keys().sortBy(function(s){return (''+s).length}).reverse();
+        for (j=0; j<keys.length; j++) {
+            var i=keys[j];
+            value = data[i] || ''
+            if (-1 != numericVars.indexOf(i) && data[i]
+                || -1 != forcedNumericVars.indexOf(i)
+            ) {
+                value *= 1;
+                data[i] = value;
+            }
+            if (i!=='row' && isIE) value = '"'+value+'"';
+            rowHtml = rowHtml.replace(new RegExp('\\$\\$'+i.toUpperCase(), 'g'), value)
+        }
+        var regExTpl = [
+            new Template('<option (([^>]*(alt="?#{key}"?|value="?#{value}"?(?=[\\s>]))){2})'),
+            new Template('<option $1 selected="selected"'),
+            new Template('<input (([^>]*(alt="?#{key}"?|value="?#{value}"?(?=[\\s>])|type="?checkbox"?)){3})'),
+            new Template('<input $1 checked="checked"')
+        ];
+		
+        tbody.insert('<tr>'+rowHtml+'</tr>')
+        var trs = tbody.childElements()
+        var tr = trs[trs.length-1]
+        tr.addClassName(lastRowNum%2 ? 'odd' : 'even')
+        var del = $(tr).select('button.delete-fieldset')[0];
+        if (del) {
+            $(del).observe('click', function(e) { e.stop(); $(del.parentNode.parentNode).remove() })
+        }
+        (function () {
+        $A(['top_columns_def','bottom_columns_def','left_columns_def','right_columns_def']).each(function(colKey){
+            if (Object.isArray(data[colKey]) && data[colKey].length>0) {
+                var colAddBtnId = tr.down('.'+colKey+'-fieldset button.add').id;
+                $A((data[colKey])).each(function(colRowData){
+                    window[colAddBtnId+'udpAddRow'](colRowData);
+                });
+            }
+        });
+        }).defer();
+    }
+
+    $('addBtn').observe('click', function(e) { e.stop(); addRow() });
+
+<?php if (is_array($fValue)): foreach ($fValue as $fV): ?>
+    addRow(<?php echo Zend_Json::encode($fV) ?>);
+<?php endforeach; endif; ?>
+})();
+//]]>
+</script>

@@ -104,4 +104,27 @@ class Zolago_Adminhtml_Block_Catalog_Category_Filters extends Mage_Adminhtml_Blo
 		return Mage::registry("current_category");
 	}
 
+    protected $_idSuffix;
+    public function resetIdSuffix()
+    {
+        $this->_idSuffix = null;
+        return $this;
+    }
+    public function getIdSuffix()
+    {
+        if ($this->_idSuffix === null) {
+            $this->_idSuffix = $this->prepareIdSuffix($this->getFieldName());
+        }
+        return $this->_idSuffix;
+    }
+
+    public function prepareIdSuffix($id)
+    {
+        return preg_replace('/[^a-zA-Z0-9\$]/', '_', $id);
+    }
+
+    public function suffixId($id)
+    {
+        return $id.$this->getIdSuffix();
+    }
 }
