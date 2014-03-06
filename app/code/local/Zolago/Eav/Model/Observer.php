@@ -42,7 +42,7 @@ class Zolago_Eav_Model_Observer
 			$attributeSetId = $attribute->getSetId();
 
 			//Get "General" attribute group info
-			$attributeGroupId = $setup->getAttributeGroup('catalog_product', $attributeSetId, 'General');
+			$attributeGroupId = $setup->getAttributeGroupId('catalog_product', $attributeSetId, 'General');
 			try {
 				$setup->addAttributeToSet('catalog_product', $attributeSetId, $attributeGroupId, $attributeId);
 			} catch (Exception $e) {

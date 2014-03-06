@@ -25,6 +25,51 @@ class Zolago_Adminhtml_Block_Catalog_Category_Filters extends Mage_Adminhtml_Blo
 	}
 	
 	/**
+	 * @return Varien_Data_Form
+	 */
+	public function getForm() {
+		if(!$this->getData("form")){
+			$form = new Varien_Data_Form();
+			$form->setAction($this->getSaveUrl());
+			$this->setData("form", $form);
+			
+		}
+		return $this->getData("form");
+	}
+
+
+	public function getPossibleAttributes() {
+		$resMapper = Mage::getResourceModel('zolagomapper/mapper');
+		/* @var $resMapper Zolago_Mapper_Model_Resource_Mapper */
+		return $resMapper->getAttributesByCategory($this->getCategory()->getId());
+	}
+	
+	public function getAddButtonHtml($id=null) {
+		$btn = $this->getLayout()->createBlock('adminhtml/widget_button');
+		$btn->addData(array(
+			"label"	=>	Mage::helper("zolagoadminhtml")->__("Add"),
+			"class" => "add",
+			"type"	=> "button",
+			"id"	=> $id
+		));
+		return $btn->toHtml();
+	}
+
+
+	public function getAttributesSelectHtml($id=null) {
+		$conf = array(
+			"values" => $this->getPossibleAttributes()
+		);
+		if($id){
+			$conf['id'] = $id;
+		}
+		$select = new Varien_Data_Form_Element_Select($conf);
+		$this->getForm()->addElement($select);
+		
+		return $select->getElementHtml();
+	}
+	
+	/**
 	 * @return Mage_Catalog_Model_Category
 	 */
 	public function getCategory(){

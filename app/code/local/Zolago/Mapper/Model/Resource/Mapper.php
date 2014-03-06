@@ -25,6 +25,13 @@ class Zolago_Mapper_Model_Resource_Mapper extends Mage_Core_Model_Resource_Db_Ab
 				array("attribute_id", "frontend_label")
 		);
 		
+		// Catalog Attribute
+		$select->join(
+				array("catalog_attribute"=>$this->getTable("catalog/eav_attribute")), 
+				"catalog_attribute.attribute_id=attribute.attribute_id",
+				array()
+		);
+		
 		// Group
 		$select->join(
 				array("entity_attribute"=>$this->getTable("eav/entity_attribute")), 
@@ -62,6 +69,8 @@ class Zolago_Mapper_Model_Resource_Mapper extends Mage_Core_Model_Resource_Db_Ab
 		
 		$select->where("attribute.frontend_input IN (?)", $inputTypes);
 		$select->where("category.entity_id IN (?)", $categoryIds);
+		$select->where("catalog_attribute.is_filterable>?", 0);
+		$select->order("attribute.frontend_label");
 		$select->distinct();
 		
 		

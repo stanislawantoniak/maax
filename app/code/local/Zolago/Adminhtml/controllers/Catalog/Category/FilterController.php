@@ -4,11 +4,7 @@ class Zolago_Adminhtml_Catalog_Category_FilterController
 {
     
     public function editAction(){
-		$category=$this->_registerObject();
-		$resMapper = Mage::getResourceModel('zolagomapper/mapper');
-		/* @var $resMapper Zolago_Mapper_Model_Resource_Mapper */
-		var_dump($resMapper->getAttributesByCategory($category->getId()));
-		die;
+		$this->_registerObject();
         $this->loadLayout();
         $this->renderLayout();
     }
