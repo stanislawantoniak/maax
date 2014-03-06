@@ -5,7 +5,6 @@ class Zolago_Adminhtml_Catalog_Category_FilterController
     
     public function editAction(){
 		$category = $this->_registerObject();
-		
 		if(!$category->getId()){
 			$this->_getSession()->addError(Mage::helper("zolagoadminhtml")->__("Category doesn't exists"));
 			return $this->_redirectReferer();
@@ -14,6 +13,78 @@ class Zolago_Adminhtml_Catalog_Category_FilterController
         $this->loadLayout();
         $this->renderLayout();
     }
+	
+	public function saveAction() {
+		$category = $this->_registerObject();
+		
+		if(!$category->getId()){
+			$this->_getSession()->addError(Mage::helper("zolagoadminhtml")->__("Category doesn't exists"));
+			return $this->_redirectReferer();
+		}
+		
+		if(!$this->getRequest()->isPost()){
+			$this->_getSession()->addError(Mage::helper("zolagoadminhtml")->__("No POST request"));
+			return $this->_redirectReferer();
+		}
+		
+		$data = $this->getRequest()->getPost();
+		
+		$filters = array();
+		if(isset($data['filters']) && is_array($data['filters'])){
+			$filters = $data['filters'];
+		}
+		
+		$connection = Mage::getModel('core/resource')->getConnection("core_write");
+		/* @var $connection Varien_Db_Adapter_Interface */
+		
+		$newFilters = array();
+		$newFiltersIds = array();
+		
+		$oldFilters = Mage::getResourceModel('zolagocatalog/category_filter_collection');
+		/* @var $oldFilters Zolago_Catalog_Model_Resource_Category_Filter_Collection */
+		$oldFilters->addCategoryFilter($category);
+		$oldFiltersIds = $oldFilters->getAllIds();
+		
+		$connection->beginTransaction();
+		
+		try{
+			foreach($filters as $filter){
+				if(is_array($filter)){
+					$model = Mage::getModel("olagocatalog/category_filter");
+					if(!isset($filter['filter_id']) || empty($filter['filter_id'])){
+						$newFilters[] = $model;
+					}
+					else{
+						$model->setId($filter['filter_id']);
+						$newFiltersIds[] = $model->getId();
+					}
+					$model->addData($filter);
+					$model->save();
+					$model->clearInstance();
+				}
+			}
+			$toDelete = array_diff($oldFiltersIds, $newFiltersIds);
+			// Sth to remove?
+			if(count($toDelete)){
+				Mage::getResourceModel("zolagocatalog/category_filter")->deleteMultitply($toDelete);
+			}
+			$connection->commit();
+		}  catch (Exception $e){
+			$this->_getSession()->addException($e, Mage::helper("zolagoadminhtml")->__("Some error occure"));
+			$connection->rollBack();
+			return $this->_redirectReferer();
+		}
+		
+		$this->_getSession()->addSuccess(Mage::helper("zolagoadminhtml")->__("Filters saved"));
+		
+		$backUrl = $this->getUrl("*/catalog_category");
+		if($this->getRequest()->getParam('save_and_edit')){
+			$backUrl = $this->getUrl("*/*/edit", array("_current"=>true));
+		}
+		
+		return $this->_redirectUrl($backUrl);
+		
+	}
 	
 	public function getAttributeOptionsAction(){
 		
@@ -53,6 +124,7 @@ class Zolago_Adminhtml_Catalog_Category_FilterController
 			"status"=>1,
 			"content" => array(
 				"attribute_id"	=> $attributeId,
+				"frontend_label"=> $model->getFrontendLabel(),
 				"options"		=> $model->getSource()->getAllOptions(false)
 			)
 		);

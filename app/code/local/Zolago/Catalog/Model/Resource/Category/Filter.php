@@ -11,6 +11,17 @@ class Zolago_Catalog_Model_Resource_Category_Filter extends Mage_Core_Model_Reso
 	}
 
 	/**
+	 * @param array $ids
+	 * @return Zolago_Catalog_Model_Resource_Category_Filter
+	 */
+	public function deleteMultitply($ids) {
+		$adapter = $this->_getWriteAdapter();
+		$where = $adapter->quoteInto("filter_id IN (?)", $ids);
+		$this->_getWriteAdapter()->delete($this->getMainTable(), $where);
+		return $this;
+	}
+	
+	/**
 	 * Set times
 	 * @param Mage_Core_Model_Abstract $object
 	 * @return type
