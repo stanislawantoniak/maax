@@ -40,7 +40,7 @@
 			<tbody class='fieldset_config_body'>
 				<tr id='rowTpl' style='display:none'>
 					<td class="a-left">
-						<input alt="attribute_id" value="$$ATTRIBUTE_ID" name="[$$ROW][attribute_id]" type="hidden" />
+						<input alt="attribute_id" value="$$ATTRIBUTE_ID" class="attribute_id" name="[$$ROW][attribute_id]" type="hidden" />
 						<input alt="frontend_label" value="$$FRONTEND_LABEL" name="[$$ROW][frontend_label]" style="width:120px" type="input" disabled='disabled' />
 					</td>
 					<td class="a-left">
@@ -62,11 +62,11 @@
 						<?php echo $this->getRenderSelectHtml('renderer_id'); ?>
 					</td>
 					<td class="a-left">
-						<input alt="parent_filter_id" value="$$PARENT_FILTER_ID" name="[$$ROW][parent_filter_id]" style="width:100px" type="checkbox" onclick="$('yes__use_parent_filter_$$ROW').toggle()" />
+						<input name="[$$ROW][use_parent_attribute]" class="use_parent_attribute" type="checkbox" onclick="$('yes__use_parent_attribute_$$ROW').toggle()" />
 						<span><?php echo $helper->__('Use Parent Attribute'); ?></span>
-						<div id="<?php echo 'yes__use_parent_filter_$$ROW'; ?>" class="<?php echo 'yes__use_parent_filter_$$ROW'; ?>">
+						<div id="<?php echo 'yes__use_parent_attribute_$$ROW'; ?>" class="<?php echo 'yes__use_parent_attribute_$$ROW'; ?>">
 							<span><?php echo $helper->__('Select Attribute'); ?></span>
-							<?php echo $this->getAttributesSelectHtml('parent_filter_id'); ?>
+							<select name="[$$ROW][parent_attribute_id]" class="parent_attribute_id"></select>
 						</div>	
 					</td>
 					<td class="a-left">
@@ -95,16 +95,16 @@
     {
         var rowHtml = $('rowTpl').innerHTML
         var data = {
-            frontend_label:			'',
-			attribute_id:			'',
-			attribute_options:		'',
-			parent_filter_id:		'',
-            sort_order:				'0',
-			show_multiple:			'0',
-			use_specified_options:	'0',
-			specified_options:		'0',
-			can_show_more:			'0',
-			frontend_renderer:		'',
+            frontend_label:				'',
+			attribute_id:				'',
+			attribute_options:			'',
+			parent_filter_id:			'',
+            sort_order:					'0',
+			show_multiple:				'0',
+			use_specified_options:		'0',
+			specified_options:			'0',
+			can_show_more:				'0',
+			frontend_renderer:			''
         }
         Object.extend(data, inData);
 		console.log(data);
@@ -170,7 +170,7 @@
             }
         });		
 		
-        var toggleFields = ['use_specified_options', 'use_parent_filter'];
+        var toggleFields = ['use_specified_options', 'use_parent_attribute'];
         toggleFields.each(function(key){
             var yesKey = suffixTpl.evaluate({key: 'yes__'+key+'_'+data.row});
             var noKey = suffixTpl.evaluate({key: 'no__'+key+'_'+data.row});
@@ -225,6 +225,34 @@
 		}
 	}
 	
+	function refreshParentSelects(){
+		$$(".parent_attribute_id").each(function(el){
+			var row = el.up("tr");
+			if(row.id!="rowTpl"){
+				var selfId = $(row).down(".attribute_id").value;
+				var oldSelectId = $F(el);
+				el.innerHTML = "";
+				el.insert(
+					new Element('option', {
+						'value': ''
+					}).
+					update("<?php echo Mage::helper('zolagoadminhtml')->__("--- Select ---");?>")
+				);
+				for(var i=0; i<attributesInUse.length; i++){
+					if(attributesInUse[i]!=selfId){
+						el.insert(
+							new Element('option', {
+								'value': attributesInUse[i],
+								'selected': oldSelectId==attributesInUse[i]
+							}).
+							update(allAttributes[attributesInUse[i]])
+						);
+					}
+				}
+			}
+		})
+	}
+	
 	function removeAttribute(attribute_id){
 		var index = attributesInUse.indexOf(attribute_id);
 		var ret;
@@ -232,6 +260,7 @@
 			ret  = attributesInUse[index];
 			attributesInUse.splice(index, 1);
 			refreshAttributeSelect();
+			refreshParentSelects();
 		}
 		return ret;
 	}
@@ -240,6 +269,7 @@
 		if(attributesInUse.indexOf(attribute_id)<0){
 			attributesInUse.push(attribute_id);
 			refreshAttributeSelect();
+			refreshParentSelects();
 		}
 	}
 
