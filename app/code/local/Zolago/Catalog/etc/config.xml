@@ -19,6 +19,11 @@
                     </category_filter>
                 </entities>
             </zolagocatalog_resource>
+			<catalog>
+				<rewrite>
+					<product_action>Zolago_Catalog_Model_Product_Action</product_action>
+				</rewrite>
+			</catalog>
         </models>
         <helpers>
             <zolagocatalog>

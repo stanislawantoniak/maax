@@ -48,12 +48,14 @@ class Zolago_Adminhtml_Block_Catalog_Category_Filters extends Mage_Adminhtml_Blo
 		/* @var $resMapper Zolago_Mapper_Model_Resource_Mapper */
 		
 		$values = $resMapper->getAttributesByCategory($this->getCategory()->getId());
-		arsort($values);
-		$values['']='';
-		asort($values);
 		return $values;
 	}
 	
+	public function getPossibleAttributesJson() {
+		return Zend_Json::encode($this->getPossibleAttributes());
+	}
+
+
 	public function getAddButtonHtml($id) {
 		$btn = $this->getLayout()->createBlock('adminhtml/widget_button');
 		$btn->addData(array(
@@ -67,9 +69,7 @@ class Zolago_Adminhtml_Block_Catalog_Category_Filters extends Mage_Adminhtml_Blo
 
 
 	public function getAttributesSelectHtml($id) {
-		$conf = array(
-			"values" => $this->getPossibleAttributes(),
-		);
+		$conf = array();
 		
 		$select = new Varien_Data_Form_Element_Select($conf);
 		$select->setId($id);
