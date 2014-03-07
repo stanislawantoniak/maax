@@ -47,8 +47,8 @@
 						<input alt="sort_order" value="$$SORT_ORDER" name="[$$ROW][sort_order]" style="width:30px" type="input" />
 					</td>
 					<td class="a-left">
-						<input alt="use_specified_options" value="$$USE_SPECIFIED_OPTIONS" name="[$$ROW][use_specified_options]" style="width:100px" type="checkbox" onclick="$('yes__use_specified_options_$$ROW').toggle()" />
-						<span><?php echo $helper->__('Multiple Values'); ?></span>
+						<input alt="use_specified_options" value="$$USE_SPECIFIED_OPTIONS" name="[$$ROW][use_specified_options]" class="use_specified_options" style="width:100px" type="checkbox" onclick="$('yes__use_specified_options_$$ROW').toggle()" />
+						<span><?php echo $helper->__('Show Selected Values'); ?></span>
 						<div id="<?php echo 'yes__use_specified_options_$$ROW'; ?>" class="<?php echo 'yes__use_specified_options_$$ROW'; ?>">
 							<select multiple name="[$$ROW][options]" style="width:295px; height: 150px" class="attributeOptions">
 							</select>
@@ -61,7 +61,7 @@
 						<?php echo $this->getRenderSelectHtml('renderer_id'); ?>
 					</td>
 					<td class="a-left">
-						<input alt="parent_filter_id" value="$$PARENT_FILTER_ID" name="[$$ROW][parent_filter_id]" style="width:100px" type="checkbox" onclick="$('yes__use_parent_filter_$$ROW').toggle()" />
+						<input alt="parent_attribute_id" value="$$PARENT_ATTRIBUTE_ID" name="[$$ROW][parent_attribute_id]" style="width:100px" class="use_parent_filter" type="checkbox" onclick="$('yes__use_parent_filter_$$ROW').toggle()" />
 						<span><?php echo $helper->__('Use Parent Attribute'); ?></span>
 						<div id="<?php echo 'yes__use_parent_filter_$$ROW'; ?>" class="<?php echo 'yes__use_parent_filter_$$ROW'; ?>">
 							<span><?php echo $helper->__('Select Attribute'); ?></span>
@@ -69,7 +69,8 @@
 						</div>	
 					</td>
 					<td class="a-left">
-						<input alt="show_multiple" value="$$SHOW_MULTIPLE" name="[$$ROW][show_multiple]" style="width:70px" type="checkbox" />
+						<input alt="show_multiple" value="$$SHOW_MULTIPLE" name="[$$ROW][show_multiple]" class="show_multiple" style="width:70px" type="checkbox" />
+						<span><?php echo $helper->__('Show Multiple Values'); ?></span>
 					</td>
 					<td class="a-right">
 						<button type="button" class="scalable delete delete-attribute"><span>&nbsp;</span></button>
@@ -97,7 +98,7 @@
             frontend_label:			'',
 			attribute_id:			'',
 			options:		'',
-			parent_filter_id:		'',
+			parent_attribute_id:		'',
             sort_order:				'0',
 			show_multiple:			'0',
 			use_specified_options:	'0',
@@ -107,7 +108,7 @@
         }
         Object.extend(data, inData);
         data.row = ++lastRowNum;
-
+		
         var isIE = (/msie [1-8]\./i).test(navigator.userAgent);
         var numericVars = ['sort_order', 'show_multiple', 'use_specified_options', 'can_show_more'];
         var forcedNumericVars = [];
@@ -122,7 +123,7 @@
                 data[i] = value;
             }
             if (i!=='row' && isIE) value = '"'+value+'"';
-            rowHtml = rowHtml.replace(new RegExp('\\$\\$'+i.toUpperCase(), 'g'), value);
+            rowHtml = rowHtml.replace(new RegExp('\\$\\$'+i.toUpperCase(), 'g'), value);		
         }
         var regExTpl = [
             new Template('<option (([^>]*(alt="?#{key}"?|value="?#{value}"?(?=[\\s>]))){2})'),
@@ -144,7 +145,17 @@
 			});
         }
 		
-        var selectFields = $H({use_specified_options: 0, can_show_more: 0, show_multiple: 0, parent_filter_id: 0});
+		var checkboxFields = ['use_specified_options', 'use_parent_filter', 'show_multiple'];
+		checkboxFields.each(function(key) {
+			var checkboxElements = $(tr).select('input.'+key);
+			checkboxElements.each(function(element) {
+				if (element.value === '1') {
+					element.setAttribute('checked', 'checked');
+				}
+			});
+		});
+		
+        var selectFields = $H({use_specified_options: 0, can_show_more: 0, show_multiple: 0, parent_attribute_id: 0});
         selectFields.each(function(pair){
             var varsForEval, value=data[pair.key], key=pair.key;
             for (var rxIdx=0; rxIdx<regExTpl.length; rxIdx+=2) {
@@ -179,7 +190,7 @@
                 $$('.'+yesKey).invoke('show');
                 $$('.'+noKey).invoke('hide');
             }
-        });		
+        });
 		addAttribute(data.attribute_id);
 		
 		var attributeOptionsHTML = $(tr).select('select.attributeOptions')[0];
