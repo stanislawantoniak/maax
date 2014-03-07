@@ -1,3 +1,6 @@
+===== 2.2.17 =====
+  * Added support for categories limitation in marketplace and microsite
+
 ===== 2.2.16 =====
   * Added fedex third-party billing
   * Fixed intermittent errors in batch export

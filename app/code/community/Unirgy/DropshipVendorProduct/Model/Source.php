@@ -41,6 +41,14 @@ class Unirgy_DropshipVendorProduct_Model_Source extends Unirgy_Dropship_Model_So
 
         switch ($this->getPath()) {
 
+        case 'is_limit_categories':
+            $options = array(
+                0 => $hlp->__('No'),
+                1 => $hlp->__('Enable Selected'),
+                2 => $hlp->__('Disable Selected'),
+            );
+            break;
+
         case 'udprod/general/cfg_show_media_gallery':
             $options = array(
                 0 => $hlp->__('No'),

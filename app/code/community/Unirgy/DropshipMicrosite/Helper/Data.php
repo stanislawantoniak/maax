@@ -274,4 +274,38 @@ class Unirgy_DropshipMicrosite_Helper_Data extends Mage_Core_Helper_Abstract
         }
         return $this;
     }
+    protected $_vendorCatIds;
+    public function getVendorCategoryIds()
+    {
+        if (is_null($this->_vendorCatIds)) {
+            $this->_vendorCatIds = array();
+            if (($v = $this->getCurrentVendor()) && $v->getIsLimitCategories()) {
+                $this->_vendorCatIds = explode(',', implode(',', (array)$v->getLimitCategories()));
+            }
+        }
+        return $this->_vendorCatIds;
+    }
+    public function getVendorEnableCategories()
+    {
+        $v = $this->getCurrentVendor();
+        if ($v && $v->getIsLimitCategories() == 1) {
+            return $this->getVendorCategoryIds();
+        } else {
+            return false;
+        }
+    }
+    public function getVendorDisableCategories()
+    {
+        $v = $this->getCurrentVendor();
+        if ($v && $v->getIsLimitCategories() == 2) {
+            return $this->getVendorCategoryIds();
+        } else {
+            return false;
+        }
+    }
+    public function useVendorCategoriesFilter()
+    {
+        return ($v = $this->getCurrentVendor()) && $v->getIsLimitCategories();
+    }
+
 }

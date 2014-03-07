@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<config>
+    <menu>
+        <catalog>
+            <children>
+                <zolagomapper>
+                    <title>Category Mapper</title>
+                    <sort_order>15</sort_order>
+                    <action>adminhtml/mapper/index</action>
+                </zolagomapper>
+            </children>
+        </catalog>
+    </menu>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <catalog>
+                        <children>
+                            <zolagomapper translate="title" module="zolagomapper">
+                                <title>Category Mapper</title>
+                                <sort_order>15</sort_order>
+                            </zolagomapper>
+                        </children>
+                    </catalog>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

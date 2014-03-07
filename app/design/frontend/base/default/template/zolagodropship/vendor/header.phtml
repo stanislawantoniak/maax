@@ -76,16 +76,16 @@ $_isTierShip = $_session->getVendor()->getAllowTiershipModify();
 				<li class="first <?php if ($_active=='dashboard'): ?>active<?php endif ?>"><a href="<?php echo Mage::getUrl("udropship/vendor/login");?>"><?php echo $this->__("Login"); ?></a></li>
 		<?php endif;?>
 		
-<?php if ($_isUrmaActive): ?>
+<?php if ($_isUrmaActive && $_session->isAllowed("urma") && $_session->isLoggedIn()): ?>
     <li <?php if ($_active=='urmas'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('urma/vendor/') ?>"><?php echo $this->__('Returns')?></a></li>
 <?php endif ?>
-<?php if ($_isUstockPoActive & $_session->isAllowed("ustockpos")): ?>
+<?php if ($_isUstockPoActive && $_session->isAllowed("ustockpos") && $_session->isLoggedIn()): ?>
         <li <?php if ($_active=='ustockpos'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('ustockpo/vendor/') ?>"><?php echo $this->__('Stock POs')?></a></li>
 <?php endif ?>
-<?php if ($_isUstockPoActive && $_session->isAllowed("ustockpos")): ?>
+<?php if ($_isUstockPoActive && $_session->isAllowed("ustockpos") && $_session->isLoggedIn()): ?>
         <li <?php if ($_active=='pending_ustockpo'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('ustockpo/vendor/pendingUstockpo') ?>"><?php echo $this->__('Pending Stock PO')?></a></li>
 <?php endif ?>
-<?php if ($_isTierShip): ?>
+<?php if ($_isTierShip && $_session->isAllowed("udtiership") && $_session->isLoggedIn()): ?>
     <li <?php if ($_active=='tiership_rates'): ?>class="active"<?php endif ?>><a href="<?php echo Mage::helper('udtiership')->getVendorEditUrl()?>"><?php echo $this->__('Shipping Rates')?></a></li>
 <?php endif ?>
 <?php if (0&&Mage::helper('udropship')->isModuleActive('udtiercom')): ?>
@@ -110,12 +110,10 @@ $_isTierShip = $_session->getVendor()->getAllowTiershipModify();
     && $_session->isLoggedIn() && $_session->isAllowed("udprod")): ?>
         <li <?php if ($_active=='udprod'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('udprod/vendor/products')?>"><?php echo $this->__('Products Edit')?></a></li>
 <?php endif ?>
-<?php if (Mage::helper('udropship')->isModuleActive('zolagopos') && $_session->isAllowed("pos")
-    && $_session->isLoggedIn()): ?>
+<?php if (Mage::helper('udropship')->isModuleActive('zolagopos') && $_session->isAllowed("pos") && $_session->isLoggedIn()): ?>
         <li <?php if ($_active=='zolagopos'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('udropship/pos')?>"><?php echo $this->__('POS')?></a></li>
 <?php endif ?>
-<?php if (Mage::helper('udropship')->isModuleActive('zolagooperator') && $_session->isAllowed("zolagooperator")
-    && $_session->isLoggedIn()): ?>
+<?php if (Mage::helper('udropship')->isModuleActive('zolagooperator') && $_session->isAllowed("zolagooperator") && $_session->isLoggedIn()): ?>
         <li <?php if ($_active=='zolagooperator'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('udropship/operator')?>"><?php echo $this->__('Operators')?></a></li>
 <?php endif ?>
 <?php if (Mage::helper('udropship')->isModuleActive('udsell')): ?>
@@ -129,15 +127,18 @@ $_isTierShip = $_session->getVendor()->getAllowTiershipModify();
     <?php endif ?>
 <?php endif ?>
 <?php if (Mage::helper('udropship')->isModuleActive('Unirgy_DropshipManualLabel')
+	&& $_session->isAllowed("umanlabel")
     && $_session->isLoggedIn()): ?>
     <li <?php if ($_active=='umanlabels'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('umanlabel/vendor')?>"><?php echo $this->__('Manual Labels')?></a></li>
 <?php endif ?>
 <?php if (Mage::helper('udropship')->isModuleActive('udqa')
-&& $_session->isLoggedIn()): ?>
-<li <?php if ($_active=='udqa'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('udqa/vendor/questions')?>"><?php echo $this->__('Customer Questions')?></a></li>
+		&& $_session->isAllowed("udqa")
+		&& $_session->isLoggedIn()): ?>
+		<li <?php if ($_active=='udqa'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('udqa/vendor/questions')?>"><?php echo $this->__('Customer Questions')?></a></li>
 <?php endif ?>
 <?php if (Mage::helper('udropship')->isModuleActive('Unirgy_DropshipMicrosite')
     && $_session->isLoggedIn()
+	&& $_session->isAllowed("umicrosite")
     && $_session->getVendor()->getShowProductsMenuItem()): ?>
         <li><a href="<?php echo Mage::helper('umicrosite')->getManageProductsUrl() ?>" onclick="this.target='VendorAdmin'"><?php echo $this->__('System View')?></a></li>
 <?php endif ?>
