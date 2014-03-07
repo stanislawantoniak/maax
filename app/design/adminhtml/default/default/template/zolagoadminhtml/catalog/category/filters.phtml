@@ -8,10 +8,11 @@
         <?php echo $this->getButtonsHtml(); ?>
     </p>
 </div>
-<form action="<?php echo $this->getForm()->getAction() ?>" method="post" id="mapper_edit_form">
+<form action="<?php echo $this->getForm()->getAction() ?>" method="post" id="filter_edit_form">
     <?php echo $this->getBlockHtml('formkey')?>
     <div class="no-display">
         <input type="hidden" id="change_flag_element" name="_change_type_flag" value="" />
+        <input type="hidden" id="save_and_edit" name="save_and_edit" value="" />
     </div>
 	<div class="grid">
 		<table class="data" cellspacing="0">
@@ -19,11 +20,11 @@
 				<tr class="headings">
 					<th class="no-link"><span class="nobr"><?php echo $helper->__('Attribute') ?></span></th>
 					<th class="no-link"><span class="nobr"><?php echo $helper->__('Sort Order') ?></span></th>
-					<th class="no-link"><span class="nobr"><?php echo $helper->__('Options') ?></span></th>
+					<th class="no-link" style="width:300px"><span class="nobr"><?php echo $helper->__('Options') ?></span></th>
 					<th class="no-link"><span class="nobr"><?php echo $helper->__('Renderer') ?></span></th>
-					<th class="no-link"><span class="nobr"><?php echo $helper->__('Depends') ?></span></th>
+					<th class="no-link" style="width:300px"><span class="nobr"><?php echo $helper->__('Depends') ?></span></th>
 					<th class="no-link"><span class="nobr"><?php echo $helper->__('Lonley') ?></span></th>
-					<th class="no-link a-right"><span class="nobr"><?php echo $helper->__('Remove') ?></span></th>
+					<th class="no-link a-right" style="width: 50px;"><span class="nobr"><?php echo $helper->__('Remove') ?></span></th>
 				</tr>
 			</thead>
 			<tfoot>
@@ -39,21 +40,40 @@
 			<tbody class='fieldset_config_body'>
 				<tr id='rowTpl' style='display:none'>
 					<td class="a-left">
+						<input alt="attribute_id" value="$$ATTRIBUTE_ID" name="[$$ROW][attribute_id]" type="hidden" />
+						<input alt="frontend_label" value="$$FRONTEND_LABEL" name="[$$ROW][frontend_label]" style="width:120px" type="input" disabled='disabled' />
 					</td>
 					<td class="a-left">
 						<input alt="sort_order" value="$$SORT_ORDER" name="[$$ROW][sort_order]" style="width:70px" type="input" />
 					</td>
 					<td class="a-left">
+						<input alt="use_specified_options" value="$$USE_SPECIFIED_OPTIONS" name="[$$ROW][use_specified_options]" style="width:100px" type="checkbox" onclick="$('yes__use_specified_options_$$ROW').toggle()" />
+						<span><?php echo $helper->__('Multiple Values'); ?></span>
+						<div id="<?php echo 'yes__use_specified_options_$$ROW'; ?>" class="<?php echo 'yes__use_specified_options_$$ROW'; ?>">
+							<select multiple name="[$$ROW][attribute_options]" style="width:295px">
+								<option alt="column_field" value="$$ATTRIBUTE_OPTIONS">Fetch Attribute Values from JS Objects</option>
+							</select>
+							<br />
+							<input alt="can_show_more" value="$$CAN_SHOW_MORE" name="[$$ROW][can_show_more]" style="width:70px" type="checkbox" />
+							<span><?php echo $helper->__('Use "Show More" Link'); ?></span>
+						</div>
 					</td>
 					<td class="a-left">
-						<?php echo $this->getRenderSelectHtml("render_1");?>
+						<?php echo $this->getRenderSelectHtml('renderer_id'); ?>
 					</td>
 					<td class="a-left">
+						<input alt="parent_filter_id" value="$$PARENT_FILTER_ID" name="[$$ROW][parent_filter_id]" style="width:100px" type="checkbox" onclick="$('yes__use_parent_filter_$$ROW').toggle()" />
+						<span><?php echo $helper->__('Use Parent Attribute'); ?></span>
+						<div id="<?php echo 'yes__use_parent_filter_$$ROW'; ?>" class="<?php echo 'yes__use_parent_filter_$$ROW'; ?>">
+							<span><?php echo $helper->__('Select Attribute'); ?></span>
+							<?php echo $this->getAttributesSelectHtml('parent_filter_id'); ?>
+						</div>	
 					</td>
 					<td class="a-left">
+						<input alt="show_multiple" value="$$SHOW_MULTIPLE" name="[$$ROW][show_multiple]" style="width:70px" type="checkbox" />
 					</td>
 					<td class="a-right">
-						<button type="button" class="scalable delete delete-attribute"><span><?php echo $this->__('Remove') ?></span></button>
+						<button type="button" class="scalable delete delete-attribute"><span>&nbsp;</span></button>
 					</td>
 				</tr>
 			</tbody>
@@ -68,25 +88,30 @@
 (function ()
 {
     var lastRowNum = 0;
-    var tbody = $$('tbody.fieldset_config_body')[0]
+    var tbody = $$('tbody.fieldset_config_body')[0];
+	var suffixTpl = new Template('#{key}');
 
     function addRow(inData)
     {
         var rowHtml = $('rowTpl').innerHTML
         var data = {
-            attribute_name:			'',
+            frontend_label:			'',
+			attribute_id:			'',
+			attribute_options:		'',
+			parent_filter_id:		'',
             sort_order:				'0',
 			show_multiple:			'0',
-			use_specified_options:	'',
 			use_specified_options:	'0',
+			specified_options:		'0',
+			can_show_more:			'0',
 			frontend_renderer:		'',
-			
         }
         Object.extend(data, inData);
+		console.log(data);
         data.row = ++lastRowNum;
 
         var isIE = (/msie [1-8]\./i).test(navigator.userAgent);
-        var numericVars = ['sort_order'];
+        var numericVars = ['sort_order', 'show_multiple', 'use_specified_options', 'can_show_more'];
         var forcedNumericVars = [];
         var keys = $H(data).keys().sortBy(function(s){return (''+s).length}).reverse();
         for (j=0; j<keys.length; j++) {
@@ -116,29 +141,56 @@
         if (del) {
             $(del).observe('click', function(e) { e.stop(); $(del.parentNode.parentNode).remove() })
         }
-        (function () {
-        $A(['top_columns_def','bottom_columns_def','left_columns_def','right_columns_def']).each(function(colKey){
-            if (Object.isArray(data[colKey]) && data[colKey].length>0) {
-                var colAddBtnId = tr.down('.'+colKey+'-fieldset button.add').id;
-                $A((data[colKey])).each(function(colRowData){
-                    window[colAddBtnId+'udpAddRow'](colRowData);
-                });
+		
+        var selectFields = $H({use_specified_options: 0, can_show_more: 0, show_multiple: 0, parent_filter_id: 0});
+        selectFields.each(function(pair){
+            var varsForEval, value=data[pair.key], key=pair.key;
+            for (var rxIdx=0; rxIdx<regExTpl.length; rxIdx+=2) {
+                varsForEval = [];
+                if (value) {
+                    if (!Object.isArray(value)) {
+                        value = String.interpret(value).split(',');
+                    }
+                    value.each(function(val){
+                        varsForEval.push({key: key, value: val});
+                    })
+                } else {
+                    varsForEval.push({key: key, value: value});
+                }
+                for (var vfeIdx=0; vfeIdx<varsForEval.length; vfeIdx++) {
+                    var varForEval = varsForEval[vfeIdx];
+                    var rxFind = regExTpl[rxIdx].evaluate(varForEval);
+                    var rxReplace = regExTpl[rxIdx+1].evaluate(varForEval);
+                    rowHtml = rowHtml.replace(new RegExp(rxFind, 'i'), rxReplace);
+                }
             }
-        });
-        }).defer();
+        });		
+		
+        var toggleFields = ['use_specified_options', 'use_parent_filter'];
+        toggleFields.each(function(key){
+            var yesKey = suffixTpl.evaluate({key: 'yes__'+key+'_'+data.row});
+            var noKey = suffixTpl.evaluate({key: 'no__'+key+'_'+data.row});
+            if (!data[key]) {
+                $$('.'+yesKey).invoke('hide');
+                $$('.'+noKey).invoke('show');
+            } else {
+                $$('.'+yesKey).invoke('show');
+                $$('.'+noKey).invoke('hide');
+            }
+        });		
     }
 
 	function prepareNewItem(attributeId){
 		var valuesUrl = '<?php echo $this->getAttributeOptionsUrl();?>';
 		new Ajax.Request(valuesUrl, {
 		  onSuccess: function(response) {
-			  var json = response.responseJSON;
-			  if(json.status!=1){
-				  alert(json.content);
-				  return;
-			  }
-			  console.log(json.content);
-				//addRow({row:1}) 
+				var json = response.responseJSON;
+				if(json.status!=1){
+					alert(json.content);
+					return;
+				}
+				//console.log(json.content);
+				addRow(json.content) 
 		  },
 		  parameters: {attribute_id:attributeId}
 		});
@@ -153,11 +205,20 @@
 		e.stop(); 
 	});
 
-
+	editForm = $("filter_edit_form");
+	formControl = {
+		save: function(){
+			editForm.submit();
+		},
+	    saveAndEdit: function(){
+			$("save_and_edit").value = 1;
+			editForm.submit();
+		}
+	}
 <?php
 	if (count($filterCollection)):
-		foreach ($filterCollection as $filterValue): ?>
-			addRow(<?php echo Zend_Json::encode($filterValue->getData()); ?>);
+		foreach ($filterCollection as $filter): ?>
+			addRow(<?php echo $this->getFilterJsonData($filter); ?>);
 <?php
 		endforeach;
 	endif;
