@@ -59,7 +59,7 @@
 						</div>
 					</td>
 					<td class="a-left">
-						<?php echo $this->getRenderSelectHtml();?>
+						<?php echo $this->getRenderSelectHtml('renderer_id'); ?>
 					</td>
 					<td class="a-left">
 						<input alt="parent_filter_id" value="$$PARENT_FILTER_ID" name="[$$ROW][parent_filter_id]" style="width:100px" type="checkbox" onclick="$('yes__use_parent_filter_$$ROW').toggle()" />
@@ -96,8 +96,8 @@
         var rowHtml = $('rowTpl').innerHTML
         var data = {
             frontend_label:			'',
-			attribute_id:		'',
-			attribute_options:		new Array(),
+			attribute_id:			'',
+			attribute_options:		'',
 			parent_filter_id:		'',
             sort_order:				'0',
 			show_multiple:			'0',
