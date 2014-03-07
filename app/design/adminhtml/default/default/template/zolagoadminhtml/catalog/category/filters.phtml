@@ -1,6 +1,13 @@
 <?php
 	$helper = Mage::helper('zolagoadminhtml');
 	$filterCollection = $this->getFilterCollection();
+//	foreach ($filterCollection as $filter):
+//		echo '<pre>';
+//		var_dump($this->getFilterJsonData($filter));
+//		echo '</pre>';
+//		die;
+//	endforeach;
+	
 ?>
 <div class="content-header">
    <h3><?php echo $this->getHeaderText() ?></h3>
@@ -201,13 +208,21 @@
 		addAttribute(data.attribute_id);
 		
 		var attributeOptionsHTML = $(tr).select('select.attributeOptions')[0];
-		var attributeOptions = data.options;	
+		var attributeOptions			= data.options;
+		var attributeSpecifiedOptions	= data.specified_options;
+		
 		attributeOptionsHTML.innerHTML = "";
 		attributeOptions.forEach(function(singleOption) {
 			if (singleOption.value) {
+				var selected = false;				
+				if (attributeSpecifiedOptions.indexOf(parseInt(singleOption.value)) > -1) {
+					selected = true;
+				}
+				
 				attributeOptionsHTML.insert(
 					new Element('option', {
-						'value': singleOption.value
+						'value': singleOption.value,
+						'selected': selected
 					}).
 					update(singleOption.label)
 				);
