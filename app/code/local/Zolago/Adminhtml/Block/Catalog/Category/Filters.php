@@ -125,7 +125,7 @@ class Zolago_Adminhtml_Block_Catalog_Category_Filters extends Mage_Adminhtml_Blo
 				$filter->getData(),
 				array(
 					'frontend_label'	=> $attribute->getFrontendLabel(),
-					'attribute_options' => $attribute->getSource()->getAllOptions()
+					'options' => $attribute->getSource()->getAllOptions()
 				)
 			);
 		return Mage::helper('core')->jsonEncode($attributeData);

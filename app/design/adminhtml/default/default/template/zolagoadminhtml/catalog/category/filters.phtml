@@ -18,8 +18,8 @@
 		<table class="data" cellspacing="0">
 			<thead>
 				<tr class="headings">
-					<th class="no-link"><span class="nobr"><?php echo $helper->__('Attribute') ?></span></th>
-					<th class="no-link"><span class="nobr"><?php echo $helper->__('Sort Order') ?></span></th>
+					<th class="no-link" style="width:150px"><span class="nobr"><?php echo $helper->__('Attribute') ?></span></th>
+					<th class="no-link" style="width:50px"><span class="nobr"><?php echo $helper->__('Sort Order') ?></span></th>
 					<th class="no-link" style="width:300px"><span class="nobr"><?php echo $helper->__('Options') ?></span></th>
 					<th class="no-link"><span class="nobr"><?php echo $helper->__('Renderer') ?></span></th>
 					<th class="no-link" style="width:300px"><span class="nobr"><?php echo $helper->__('Depends') ?></span></th>
@@ -44,14 +44,13 @@
 						<input alt="frontend_label" value="$$FRONTEND_LABEL" name="[$$ROW][frontend_label]" style="width:120px" type="input" disabled='disabled' />
 					</td>
 					<td class="a-left">
-						<input alt="sort_order" value="$$SORT_ORDER" name="[$$ROW][sort_order]" style="width:70px" type="input" />
+						<input alt="sort_order" value="$$SORT_ORDER" name="[$$ROW][sort_order]" style="width:30px" type="input" />
 					</td>
 					<td class="a-left">
 						<input alt="use_specified_options" value="$$USE_SPECIFIED_OPTIONS" name="[$$ROW][use_specified_options]" style="width:100px" type="checkbox" onclick="$('yes__use_specified_options_$$ROW').toggle()" />
 						<span><?php echo $helper->__('Multiple Values'); ?></span>
 						<div id="<?php echo 'yes__use_specified_options_$$ROW'; ?>" class="<?php echo 'yes__use_specified_options_$$ROW'; ?>">
-							<select multiple name="[$$ROW][attribute_options]" style="width:295px">
-								<option alt="column_field" value="$$ATTRIBUTE_OPTIONS">Fetch Attribute Values from JS Objects</option>
+							<select multiple name="[$$ROW][options]" style="width:295px; height: 150px" class="attributeOptions">
 							</select>
 							<br />
 							<input alt="can_show_more" value="$$CAN_SHOW_MORE" name="[$$ROW][can_show_more]" style="width:70px" type="checkbox" />
@@ -66,7 +65,7 @@
 						<span><?php echo $helper->__('Use Parent Attribute'); ?></span>
 						<div id="<?php echo 'yes__use_parent_filter_$$ROW'; ?>" class="<?php echo 'yes__use_parent_filter_$$ROW'; ?>">
 							<span><?php echo $helper->__('Select Attribute'); ?></span>
-							<?php echo $this->getAttributesSelectHtml('parent_filter_id'); ?>
+							<?php echo $this->getAttributesSelectHtml('selectAttributeRow'); ?>
 						</div>	
 					</td>
 					<td class="a-left">
@@ -97,7 +96,7 @@
         var data = {
             frontend_label:			'',
 			attribute_id:			'',
-			attribute_options:		'',
+			options:		'',
 			parent_filter_id:		'',
             sort_order:				'0',
 			show_multiple:			'0',
@@ -107,7 +106,6 @@
 			frontend_renderer:		'',
         }
         Object.extend(data, inData);
-		console.log(data);
         data.row = ++lastRowNum;
 
         var isIE = (/msie [1-8]\./i).test(navigator.userAgent);
@@ -124,7 +122,7 @@
                 data[i] = value;
             }
             if (i!=='row' && isIE) value = '"'+value+'"';
-            rowHtml = rowHtml.replace(new RegExp('\\$\\$'+i.toUpperCase(), 'g'), value)
+            rowHtml = rowHtml.replace(new RegExp('\\$\\$'+i.toUpperCase(), 'g'), value);
         }
         var regExTpl = [
             new Template('<option (([^>]*(alt="?#{key}"?|value="?#{value}"?(?=[\\s>]))){2})'),
@@ -183,6 +181,20 @@
             }
         });		
 		addAttribute(data.attribute_id);
+		
+		var attributeOptionsHTML = $(tr).select('select.attributeOptions')[0];
+		var attributeOptions = data.options;	
+		attributeOptionsHTML.innerHTML = "";
+		attributeOptions.forEach(function(singleOption) {
+			if (singleOption.value) {
+				attributeOptionsHTML.insert(
+					new Element('option', {
+						'value': singleOption.value
+					}).
+					update(singleOption.label)
+				);
+			}
+		});
     }
 
 	function prepareNewItem(attributeId){
@@ -268,7 +280,7 @@
 	
 <?php if (count($filterCollection)): ?>
 	<?php foreach ($filterCollection as $filter): ?>
-			addRow(<?php echo $this->getFilterJsonData($filter); ?>);
+		addRow(<?php echo $this->getFilterJsonData($filter); ?>);
 	<?php endforeach ;?>
 <?php else:?>
 	refreshAttributeSelect();
