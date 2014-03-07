@@ -195,6 +195,43 @@
 		  parameters: {attribute_id:attributeId}
 		});
 	}
+	
+	allAttributes = '<?php echo $this->getPossibleAttributesJson();?>';
+	attributesInUse = [];
+	
+	function refreshSelect(){
+		var field = $("selectAttribute");
+		field.innerHTML = "";
+		for(var key in allAttributes){
+			key = key + 0;
+			if(attributesInUse.indexOf(key)>0){
+                field.insert(
+                    new Element('option', {
+                        'value': key
+                    }).
+                    update(allAttributes[k])
+                );
+			}
+		}
+	}
+	
+	function removeAttribute(attribute_id){
+		var index = attributesInUse.indexOf(attribute_id);
+		var ret;
+		if(index>-1){
+			ret  = attributesInUse[index];
+			attributesInUse.splice(index, 1);
+			refreshSelect();
+		}
+		return ret;
+	}
+	
+	function addAttribute(attribute_id){
+		if(attributesInUse.indexOf(attribute_id)<0){
+			attributesInUse.push(attribute_id);
+			refreshSelect();
+		}
+	}
 
     $('addBtn').observe('click', function(e) { 
 		if($F("selectAttribute")){
@@ -205,7 +242,10 @@
 		e.stop(); 
 	});
 
+
+
 	editForm = $("filter_edit_form");
+	
 	formControl = {
 		save: function(){
 			editForm.submit();
@@ -215,6 +255,7 @@
 			editForm.submit();
 		}
 	}
+	
 <?php
 	if (count($filterCollection)):
 		foreach ($filterCollection as $filter): ?>
