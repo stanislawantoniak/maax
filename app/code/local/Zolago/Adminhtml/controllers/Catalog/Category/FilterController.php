@@ -29,6 +29,7 @@ class Zolago_Adminhtml_Catalog_Category_FilterController
 		
 		$data = $this->getRequest()->getPost();
 		
+		
 		$filters = array();
 		if(isset($data['filters']) && is_array($data['filters'])){
 			$filters = $data['filters'];
@@ -125,6 +126,8 @@ class Zolago_Adminhtml_Catalog_Category_FilterController
 			"content" => array(
 				"attribute_id"	=> $attributeId,
 				"frontend_label"=> $model->getFrontendLabel(),
+				"attribute_code"=> $model->getAttributeCode(),
+				"default_value"	=> $model->getDefaultValue(),
 				"options"		=> $model->getSource()->getAllOptions(false)
 			)
 		);
