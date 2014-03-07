@@ -149,7 +149,7 @@
         if (del) {
             $(del).observe('click', function(e) { 
 				e.stop();
-				if(!checkCanRemove(e)){
+				if(!checkCanRemove(data.attribute_id)){
 					alert("<?php echo Mage::helper('zolagoadminhtml')->__("Element is set as parent of another filter");?>");
 					return;
 				}
@@ -247,8 +247,20 @@
 		});
 	}
 	
-	function checkCanRemove(item){
-		return false;
+	function checkCanRemove(attributeId){
+		//return true;
+		var found = false;
+		$$(".parent_attribute_id").each(function(el){
+			var value = $F(el);
+			el.style.color='';
+			el.style.fontWeight='';
+			if(parseInt(value)==parseInt(attributeId)){
+				el.style.color='#f00';
+			el.style.fontWeight='bold';
+				found = true;
+			}
+		});
+		return !found;
 	}
 	
 	allAttributes = <?php echo $this->getPossibleAttributesJson();?>;
