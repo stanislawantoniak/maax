@@ -221,7 +221,8 @@
 					return;
 				}
 				//console.log(json.content);
-				addRow(json.content) 
+				addRow(json.content);
+				refreshGridClasses();
 		  },
 		  parameters: {attribute_id:attributeId}
 		});
@@ -300,19 +301,24 @@
 	}
 	
 	function refreshGridClasses() {
+		var lastRowNum = 0;
 		var tbody = $$('tbody.fieldset_config_body')[0];
         var trs = tbody.childElements();
 		trs.forEach(function(singleTr) {
+			$(singleTr).removeClassName('odd');
+			$(singleTr).removeClassName('even');
+			$(singleTr).addClassName(lastRowNum%2 ? 'odd' : 'even');
+			lastRowNum++;
 		});
 	}
 
-    $('addBtn').observe('click', function(e) { 
+    $('addBtn').observe('click', function(e) {
 		if($F("selectAttribute")){
 			prepareNewItem($F("selectAttribute"));
 		}else{
 			alert("<?php echo Mage::helper("zolagoadminhtml")->__("Select attribute");?>")
 		}
-		e.stop(); 
+		e.stop();
 	});
 
 
