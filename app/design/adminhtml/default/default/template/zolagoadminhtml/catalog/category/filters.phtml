@@ -142,6 +142,10 @@
         if (del) {
             $(del).observe('click', function(e) { 
 				e.stop();
+				if(!checkCanRemove(e)){
+					alert("<?php echo Mage::helper('zolagoadminhtml')->__("Element is set as parent of another filter");?>");
+					return;
+				}
 				$(del.parentNode.parentNode).remove();
 				removeAttribute(data.attribute_id);
 				refreshGridClasses();
@@ -226,6 +230,10 @@
 		  },
 		  parameters: {attribute_id:attributeId}
 		});
+	}
+	
+	function checkCanRemove(item){
+		return false;
 	}
 	
 	allAttributes = <?php echo $this->getPossibleAttributesJson();?>;
