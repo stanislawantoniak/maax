@@ -55,7 +55,7 @@ class Zolago_Adminhtml_Block_Catalog_Category_Filters extends Mage_Adminhtml_Blo
 	}
 	
 	public function getPossibleAttributesJson() {
-		return Zend_Json::encode($this->getPossibleAttributes());
+		return Mage::helper('core')->jsonEncode($this->getPossibleAttributes());
 	}
 
 
@@ -137,7 +137,7 @@ class Zolago_Adminhtml_Block_Catalog_Category_Filters extends Mage_Adminhtml_Blo
     public function getPrefix()
     {
         if (null === $this->_idPrefix) {
-            $this->_idPrefix = 'filter_';
+            $this->_idPrefix = 'filter';
         }
         return $this->_idPrefix;
     }	
