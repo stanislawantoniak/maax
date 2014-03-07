@@ -11,8 +11,8 @@
 <form action="<?php echo $this->getForm()->getAction() ?>" method="post" id="filter_edit_form">
     <?php echo $this->getBlockHtml('formkey')?>
     <div class="no-display">
-        <input type="hidden" id="change_flag_element" name="_change_type_flag" value="" />
-        <input type="hidden" id="save_and_edit" name="save_and_edit" value="" />
+        <input type="hidden" id="change_flag_element" name="<?php echo $this->getPrefix(); ?>_change_type_flag" value="" />
+        <input type="hidden" id="save_and_edit" name="<?php echo $this->getPrefix(); ?>save_and_edit" value="" />
     </div>
 	<div class="grid">
 		<table class="data" cellspacing="0">
@@ -40,20 +40,20 @@
 			<tbody class='fieldset_config_body'>
 				<tr id='rowTpl' style='display:none'>
 					<td class="a-left">
-						<input alt="attribute_id" value="$$ATTRIBUTE_ID" class="attribute_id" name="[$$ROW][attribute_id]" type="hidden" />
-						<input alt="frontend_label" value="$$FRONTEND_LABEL" name="[$$ROW][frontend_label]" style="width:120px" type="input" disabled='disabled' />
+						<input alt="attribute_id" value="$$ATTRIBUTE_ID" class="attribute_id" name="<?php echo $this->getPrefix(); ?>[$$ROW][attribute_id]" type="hidden" />
+						<input alt="frontend_label" value="$$FRONTEND_LABEL" name="<?php echo $this->getPrefix(); ?>[$$ROW][frontend_label]" style="width:120px" type="input" disabled='disabled' />
 					</td>
 					<td class="a-left">
-						<input alt="sort_order" value="$$SORT_ORDER" name="[$$ROW][sort_order]" style="width:30px" type="input" />
+						<input alt="sort_order" value="$$SORT_ORDER" name="<?php echo $this->getPrefix(); ?>[$$ROW][sort_order]" style="width:30px" type="input" />
 					</td>
 					<td class="a-left">
-						<input alt="use_specified_options" value="$$USE_SPECIFIED_OPTIONS" name="[$$ROW][use_specified_options]" class="use_specified_options" style="width:100px" type="checkbox" onclick="$('yes__use_specified_options_$$ROW').toggle()" />
+						<input alt="use_specified_options" value="$$USE_SPECIFIED_OPTIONS" name="<?php echo $this->getPrefix(); ?>[$$ROW][use_specified_options]" class="use_specified_options" style="width:100px" type="checkbox" onclick="$('yes__use_specified_options_$$ROW').toggle()" />
 						<span><?php echo $helper->__('Show Selected Values'); ?></span>
 						<div id="<?php echo 'yes__use_specified_options_$$ROW'; ?>" class="<?php echo 'yes__use_specified_options_$$ROW'; ?>">
-							<select multiple name="[$$ROW][options]" style="width:295px; height: 150px" class="attributeOptions">
+							<select multiple name="<?php echo $this->getPrefix(); ?>[$$ROW][options]" style="width:295px; height: 150px" class="attributeOptions">
 							</select>
 							<br />
-							<input alt="can_show_more" value="$$CAN_SHOW_MORE" name="[$$ROW][can_show_more]" style="width:70px" type="checkbox" />
+							<input alt="can_show_more" value="$$CAN_SHOW_MORE" name="<?php echo $this->getPrefix(); ?>[$$ROW][can_show_more]" style="width:70px" type="checkbox" />
 							<span><?php echo $helper->__('Use "Show More" Link'); ?></span>
 						</div>
 					</td>
@@ -61,15 +61,15 @@
 						<?php echo $this->getRenderSelectHtml('renderer_id'); ?>
 					</td>
 					<td class="a-left">
-						<input name="[$$ROW][use_parent_attribute]" class="use_parent_attribute" type="checkbox" onclick="$('yes__use_parent_attribute_$$ROW').toggle()" />
+						<input name="<?php echo $this->getPrefix(); ?>[$$ROW][use_parent_attribute]" class="use_parent_attribute" type="checkbox" onclick="$('yes__use_parent_attribute_$$ROW').toggle()" />
 						<span><?php echo $helper->__('Use Parent Attribute'); ?></span>
 						<div id="<?php echo 'yes__use_parent_attribute_$$ROW'; ?>" class="<?php echo 'yes__use_parent_attribute_$$ROW'; ?>">
 							<span><?php echo $helper->__('Select Attribute'); ?></span>
-							<select name="[$$ROW][parent_attribute_id]" class="parent_attribute_id"></select>
+							<select name="<?php echo $this->getPrefix(); ?>[$$ROW][parent_attribute_id]" class="parent_attribute_id"></select>
 						</div>	
 					</td>
 					<td class="a-left">
-						<input alt="show_multiple" value="$$SHOW_MULTIPLE" name="[$$ROW][show_multiple]" class="show_multiple" style="width:70px" type="checkbox" />
+						<input alt="show_multiple" value="$$SHOW_MULTIPLE" name="<?php echo $this->getPrefix(); ?>[$$ROW][show_multiple]" class="show_multiple" style="width:70px" type="checkbox" />
 						<span><?php echo $helper->__('Show Multiple Values'); ?></span>
 					</td>
 					<td class="a-right">
@@ -142,6 +142,7 @@
 				e.stop();
 				$(del.parentNode.parentNode).remove();
 				removeAttribute(data.attribute_id);
+				refreshGridClasses();
 			});
         }
 		
@@ -294,6 +295,13 @@
 			refreshAttributeSelect();
 			refreshParentSelects();
 		}
+	}
+	
+	function refreshGridClasses() {
+		var tbody = $$('tbody.fieldset_config_body')[0];
+        var trs = tbody.childElements();
+		trs.forEach(function(singleTr) {
+		});
 	}
 
     $('addBtn').observe('click', function(e) { 
