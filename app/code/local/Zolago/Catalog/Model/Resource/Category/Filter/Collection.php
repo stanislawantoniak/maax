@@ -23,4 +23,11 @@ class Zolago_Catalog_Model_Resource_Category_Filter_Collection
 		return $this;
 	}
 	
+	protected function _afterLoad() {
+		foreach($this->_items as $item){
+			$item->getResource()->unserializeFields($item);
+		}
+		return parent::_afterLoad();
+	}
+	
 }

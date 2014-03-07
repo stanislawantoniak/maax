@@ -29,6 +29,8 @@ class Zolago_Adminhtml_Catalog_Category_FilterController
 		
 		$data = $this->getRequest()->getPost();
 		
+		var_dump($data);
+		die;
 		
 		$filters = array();
 		if(isset($data['filters']) && is_array($data['filters'])){

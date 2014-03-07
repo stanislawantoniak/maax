@@ -13,7 +13,7 @@ class Zolago_Catalog_Model_System_Layer_Filter_Source {
 		$out = array();
 		
 		if($withEmpty){
-			 $out['']='';
+			 $out['']='--- Select ---';
 		}
 		
 		foreach($this->_options as $k=>$option){
