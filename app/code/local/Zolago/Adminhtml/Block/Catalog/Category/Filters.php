@@ -118,4 +118,16 @@ class Zolago_Adminhtml_Block_Catalog_Category_Filters extends Mage_Adminhtml_Blo
 	public function getAttributeOptionsUrl() {
 		return $this->getUrl("*/*/getAttributeOptions");
 	}
+	
+	public function getFilterJsonData($filter) {
+		$attribute = $filter->getAttribute();
+		$attributeData = array_merge(
+				$filter->getData(),
+				array(
+					'frontend_label'	=> $attribute->getFrontendLabel(),
+					'attribute_options' => $attribute->getSource()->getAllOptions()
+				)
+			);
+		return Mage::helper('core')->jsonEncode($attributeData);
+	}
 }
