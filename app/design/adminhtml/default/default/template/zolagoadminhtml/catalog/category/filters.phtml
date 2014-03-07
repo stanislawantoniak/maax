@@ -139,7 +139,11 @@
         tr.addClassName(lastRowNum%2 ? 'odd' : 'even')
         var del = $(tr).select('button.delete-attribute')[0];
         if (del) {
-            $(del).observe('click', function(e) { e.stop(); $(del.parentNode.parentNode).remove() })
+            $(del).observe('click', function(e) { 
+				e.stop();
+				$(del.parentNode.parentNode).remove();
+				removeAttribute(data.attribute_id);
+			});
         }
 		
         var selectFields = $H({use_specified_options: 0, can_show_more: 0, show_multiple: 0, parent_filter_id: 0});
@@ -178,6 +182,7 @@
                 $$('.'+noKey).invoke('hide');
             }
         });		
+		addAttribute(data.attribute_id);
     }
 
 	function prepareNewItem(attributeId){
@@ -196,20 +201,25 @@
 		});
 	}
 	
-	allAttributes = '<?php echo $this->getPossibleAttributesJson();?>';
+	allAttributes = <?php echo $this->getPossibleAttributesJson();?>;
 	attributesInUse = [];
 	
-	function refreshSelect(){
+	function refreshAttributeSelect(){
 		var field = $("selectAttribute");
 		field.innerHTML = "";
+		field.insert(
+			new Element('option', {
+				'value': ''
+			}).
+			update("<?php echo Mage::helper('zolagoadminhtml')->__("--- Select ---");?>")
+		);
 		for(var key in allAttributes){
-			key = key + 0;
-			if(attributesInUse.indexOf(key)>0){
-                field.insert(
+			if(attributesInUse.indexOf(key)<0){ 
+				field.insert(
                     new Element('option', {
                         'value': key
                     }).
-                    update(allAttributes[k])
+                    update(allAttributes[key])
                 );
 			}
 		}
@@ -221,7 +231,7 @@
 		if(index>-1){
 			ret  = attributesInUse[index];
 			attributesInUse.splice(index, 1);
-			refreshSelect();
+			refreshAttributeSelect();
 		}
 		return ret;
 	}
@@ -229,7 +239,7 @@
 	function addAttribute(attribute_id){
 		if(attributesInUse.indexOf(attribute_id)<0){
 			attributesInUse.push(attribute_id);
-			refreshSelect();
+			refreshAttributeSelect();
 		}
 	}
 
@@ -256,14 +266,13 @@
 		}
 	}
 	
-<?php
-	if (count($filterCollection)):
-		foreach ($filterCollection as $filter): ?>
+<?php if (count($filterCollection)): ?>
+	<?php foreach ($filterCollection as $filter): ?>
 			addRow(<?php echo $this->getFilterJsonData($filter); ?>);
-<?php
-		endforeach;
-	endif;
-?>
+	<?php endforeach ;?>
+<?php else:?>
+	refreshAttributeSelect();
+<?php endif;?>
 })();
 //]]>
 </script>
