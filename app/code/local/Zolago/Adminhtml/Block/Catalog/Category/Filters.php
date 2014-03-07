@@ -130,4 +130,6 @@ class Zolago_Adminhtml_Block_Catalog_Category_Filters extends Mage_Adminhtml_Blo
 			);
 		return Mage::helper('core')->jsonEncode($attributeData);
 	}
+	
+
 }

@@ -3,7 +3,7 @@
 class Zolago_Catalog_Model_Resource_Category_Filter extends Mage_Core_Model_Resource_Db_Abstract {
     
 	protected $_serializableFields   = array(
-        'option_ids' => array(null, array())
+        'specified_options' => array(null, array())
     );
 	
 	protected function _construct() {
