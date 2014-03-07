@@ -8,10 +8,11 @@
         <?php echo $this->getButtonsHtml(); ?>
     </p>
 </div>
-<form action="<?php echo $this->getForm()->getAction() ?>" method="post" id="mapper_edit_form">
+<form action="<?php echo $this->getForm()->getAction() ?>" method="post" id="filter_edit_form">
     <?php echo $this->getBlockHtml('formkey')?>
     <div class="no-display">
         <input type="hidden" id="change_flag_element" name="_change_type_flag" value="" />
+        <input type="hidden" id="save_and_edit" name="save_and_edit" value="" />
     </div>
 	<div class="grid">
 		<table class="data" cellspacing="0">
@@ -23,7 +24,7 @@
 					<th class="no-link"><span class="nobr"><?php echo $helper->__('Renderer') ?></span></th>
 					<th class="no-link"><span class="nobr"><?php echo $helper->__('Depends') ?></span></th>
 					<th class="no-link"><span class="nobr"><?php echo $helper->__('Lonley') ?></span></th>
-					<th class="no-link a-right"><span class="nobr"><?php echo $helper->__('Remove') ?></span></th>
+					<th class="no-link a-right" style="width: 50px;"><span class="nobr"><?php echo $helper->__('Remove') ?></span></th>
 				</tr>
 			</thead>
 			<tfoot>
@@ -53,7 +54,7 @@
 					<td class="a-left">
 					</td>
 					<td class="a-right">
-						<button type="button" class="scalable delete delete-attribute"><span><?php echo $this->__('Remove') ?></span></button>
+						<button type="button" class="scalable delete delete-attribute"><span>&nbsp;</span></button>
 					</td>
 				</tr>
 			</tbody>
@@ -153,7 +154,16 @@
 		e.stop(); 
 	});
 
-
+	editForm = $("filter_edit_form");
+	formControl = {
+		save: function(){
+			editForm.submit();
+		},
+	    saveAndEdit: function(){
+			$("save_and_edit").value = 1;
+			editForm.submit();
+		}
+	}
 <?php
 	if (count($filterCollection)):
 		foreach ($filterCollection as $filterValue): ?>
