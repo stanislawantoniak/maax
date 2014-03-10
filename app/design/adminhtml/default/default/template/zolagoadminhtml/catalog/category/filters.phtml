@@ -45,7 +45,7 @@
 						<input value="$$FRONTEND_LABEL" class="input-text" name="<?php echo $this->getPrefix(); ?>[$$ROW][frontend_label]" style="width:98%;" type="input" disabled='disabled' />
 					</td>
 					<td class="a-left">
-						<input alt="sort_order" value="$$SORT_ORDER" class="input-text a-right" name="<?php echo $this->getPrefix(); ?>[$$ROW][sort_order]" style="width:94%;" type="input" />
+						<input alt="sort_order" value="$$SORT_ORDER" class="input-text a-right sort_order" name="<?php echo $this->getPrefix(); ?>[$$ROW][sort_order]" style="width:94%;" type="input" />
 					</td>
 					<td class="a-left">
 						<input value="0" name="<?php echo $this->getPrefix(); ?>[$$ROW][use_specified_options]"  type="hidden" />
@@ -103,7 +103,7 @@
 			attribute_id:			'',
 			options:				'',
 			parent_attribute_id:	'',
-            sort_order:				'0',
+            sort_order:				getMaxSortOrder(),
 			show_multiple:			'0',
 			use_specified_options:	'0',
 			specified_options:		'0',
@@ -235,12 +235,7 @@
 		
 		var dependsHTML		= $(tr).select('select.parent_attribute_id')[0];
 		var dependsValue	= data.parent_attribute_id;
-		
-		dependsHTML.select('option').forEach(function(dependsOption) {
-			if (dependsOption.value === dependsValue) {
-				dependsOption.selected = true;
-			}
-		});		
+		dependsHTML.setAttribute('depends', dependsValue);
     }
 
 	function prepareNewItem(attributeId){
@@ -359,6 +354,35 @@
 			lastRowNum++;
 		});
 	}
+	
+	function refreshDependsSelects() {
+		var dependsElement = $$(".parent_attribute_id");
+		dependsElement.each(function(element) {
+			if (element.hasAttribute('depends')) {
+				var dependsOptionId = element.readAttribute('depends');
+				element.select('option').forEach(function(dependsOption) {
+					if (dependsOption.value === dependsOptionId) {
+						dependsOption.selected = true;
+					}
+				});				
+			}
+		});
+	}
+	
+	function getMaxSortOrder() {
+		var maxSortOrder = 0;
+		var tbody = $$('tbody.fieldset_config_body')[0];
+        var trs = tbody.childElements();
+		
+		trs.forEach(function(singleTr) {
+			var sortOrder = singleTr.select('input.sort_order')[0];
+			if (sortOrder.value !== '$$SORT_ORDER') {
+				maxSortOrder = Math.max(parseInt(sortOrder.value), maxSortOrder);
+			}
+		});
+
+		return Math.ceil((maxSortOrder+1)/10)*10;
+	}
 
     $('addBtn').observe('click', function(e) {
 		if($F("selectAttribute")){
@@ -387,6 +411,7 @@
 	<?php foreach ($filterCollection as $filter): ?>
 		addRow(<?php echo $this->getFilterJsonData($filter); ?>);
 	<?php endforeach ;?>
+	refreshDependsSelects();
 <?php else:?>
 	refreshAttributeSelect();
 <?php endif;?>
