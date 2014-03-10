@@ -23,6 +23,15 @@
                 </setup>
             </zolagodhl_setup>
         </resources>
+		
+        <udropship>
+            <track_api>
+                <zolagodhl>
+                    <model>Zolago_Dhl_Model_Carrier_Tracking</model>
+                    <label>Zolago DHL</label>
+                </zolagodhl>
+			</track_api>
+		</udropship>
     </global>
     <frontend>
         <routers>
@@ -49,4 +58,15 @@
             </updates>
         </layout>
     </frontend>
+	<default>
+		 <carriers>
+            <zolagodhl>
+                <active>1</active>
+                <sallowspecific>0</sallowspecific>
+                <model>zolagodhl/carrier</model>
+                <title>Zolago DHL</title>
+                <specificerrmsg>This shipping method is currently unavailable.</specificerrmsg>
+            </zolagodhl>
+        </carriers>
+	</default>
 </config>
