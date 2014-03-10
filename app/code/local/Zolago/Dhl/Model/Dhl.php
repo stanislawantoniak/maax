@@ -2,7 +2,7 @@
 /**
  * dhl 
  */
-class Zolago_DHL_Model_DHL extends Mage_Core_Model_Abstract {
+class Zolago_Dhl_Model_Dhl extends Mage_Core_Model_Abstract {
     protected $_auth;
     
     public function setAuth($user,$password) {

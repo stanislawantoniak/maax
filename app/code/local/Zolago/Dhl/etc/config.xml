@@ -1,25 +1,25 @@
 <?xml version="1.0"?>
 <config>
     <modules>
-        <Zolago_DHL>
+        <Zolago_Dhl>
             <version>0.0.1</version>
-        </Zolago_DHL>
+        </Zolago_Dhl>
     </modules>
     <global>
         <models>
             <zolagodhl>
-                <class>Zolago_DHL_Model</class>
+                <class>Zolago_Dhl_Model</class>
             </zolagodhl>
         </models>
         <helpers>
             <zolagodhl>
-                <class>Zolago_DHL_Helper</class>
+                <class>Zolago_Dhl_Helper</class>
             </zolagodhl>
         </helpers>
         <resources>
             <zolagodhl_setup>
                 <setup>
-                    <module>Zolago_DHL</module>
+                    <module>Zolago_Dhl</module>
                 </setup>
             </zolagodhl_setup>
         </resources>
@@ -29,14 +29,14 @@
             <zolagodhl>
                 <use>standard</use>
                 <args>
-                    <module>Zolago_DHL</module>
+                    <module>Zolago_Dhl</module>
                     <frontName>zolagodhl</frontName>
                 </args>
             </zolagodhl>
 			<udropship>
 				<args>
 					<modules>
-						<Zolago_DHL before="Unirgy_Dropship">Zolago_DHL_Dropship</Zolago_DHL>
+						<Zolago_Dhl before="Unirgy_Dropship">Zolago_Dhl_Dropship</Zolago_Dhl>
 					</modules>
 				</args>
 			</udropship>
