@@ -29,9 +29,6 @@ class Zolago_Adminhtml_Catalog_Category_FilterController
 		
 		$data = $this->getRequest()->getPost();
 		
-		var_dump($data);
-		die;
-		
 		$filters = array();
 		if(isset($data['filters']) && is_array($data['filters'])){
 			$filters = $data['filters'];
@@ -51,7 +48,7 @@ class Zolago_Adminhtml_Catalog_Category_FilterController
 		$connection->beginTransaction();
 		
 		try{
-			foreach($filters as $filter){
+			foreach($filters as $filter){			
 				if(is_array($filter)){
 					$model = Mage::getModel("olagocatalog/category_filter");
 					if(!isset($filter['filter_id']) || empty($filter['filter_id'])){
