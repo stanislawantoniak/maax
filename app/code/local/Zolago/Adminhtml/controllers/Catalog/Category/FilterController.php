@@ -52,8 +52,10 @@ class Zolago_Adminhtml_Catalog_Category_FilterController
 		$connection->beginTransaction();
 		
 		try{
-			$i=0;
 			foreach($filters as $filter){
+				if(!is_array($filter)){
+					throw new Mage_Core_Exception(Mage::helper("zolagoadminhtml")->__("Wrong input format"));
+				}
 				if(isset($filter['specified_options']) && empty($filter['specified_options'])){
 					$filter['specified_options'] = null;
 				}
@@ -69,22 +71,18 @@ class Zolago_Adminhtml_Catalog_Category_FilterController
 					);
 				}
 				
-				if(is_array($filter)){
-					$model = Mage::getModel("zolagocatalog/category_filter");
+				$model = Mage::getModel("zolagocatalog/category_filter");
+				$model->addData($filter);
+				$model->setCategoryId($category->getId());
 
-					$model->addData($filter);
-					$model->setCategoryId($category->getId());
-					
-					if(isset($filter['filter_id']) && !empty($filter['filter_id'])){
-						$model->setId($filter['filter_id']);
-						$newFiltersIds[] = $model->getId();
-					}else{
-						$model->setId(null);
-					}
-					
-					$model->save();
-					Mage::log($i++);
+				if(isset($filter['filter_id']) && !empty($filter['filter_id'])){
+					$model->setId($filter['filter_id']);
+					$newFiltersIds[] = $model->getId();
+				}else{
+					$model->setId(null);
 				}
+
+				$model->save();
 			}
 			$toDelete = array_diff($oldFiltersIds, $newFiltersIds);
 			// Sth to remove?

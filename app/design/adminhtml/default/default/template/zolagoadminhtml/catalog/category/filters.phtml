@@ -1,13 +1,6 @@
 <?php
 	$helper = Mage::helper('zolagoadminhtml');
 	$filterCollection = $this->getFilterCollection();
-//	foreach ($filterCollection as $filter):
-//		echo '<pre>';
-//		var_dump($this->getFilterJsonData($filter));
-//		echo '</pre>';
-//		die;
-//	endforeach;
-	
 ?>
 <div class="content-header">
    <h3><?php echo $this->getHeaderText() ?></h3>
@@ -63,19 +56,19 @@
 							<select multiple name="<?php echo $this->getPrefix(); ?>[$$ROW][specified_options][]" style="width:100%; height: 150px" class="attributeOptions"></select>
 							<br />
 							<input alt="can_show_more" value="0" name="<?php echo $this->getPrefix(); ?>[$$ROW][can_show_more]" type="hidden" />
-							<input alt="can_show_more" value="1" name="<?php echo $this->getPrefix(); ?>[$$ROW][can_show_more]" style="width:20px" type="checkbox" />
+							<input alt="can_show_more" value="1" name="<?php echo $this->getPrefix(); ?>[$$ROW][can_show_more]" class="can_show_more" style="width:20px" type="checkbox" />
 							<span><?php echo $helper->__('Use "Show More" Link'); ?></span>
 						</div>
 					</td>
 					<td class="a-left">
-						<select  name="<?php echo $this->getPrefix(); ?>[$$ROW][frontend_renderer]" style="width: 100%;" class="select">
+						<select name="<?php echo $this->getPrefix(); ?>[$$ROW][frontend_renderer]" style="width: 100%;" class="select rendererOptions">
 							<?php foreach($this->getRendererValues() as $key=>$value):?>
 								<option value="<?php echo $key;?>"><?php echo $value;?></option>
 							<?php endforeach;?>
 						</select>
 					</td>
 					<td class="a-left">
-						<select  style="width: 100%;"  name="<?php echo $this->getPrefix(); ?>[$$ROW][parent_attribute_id]" class="parent_attribute_id"></select>
+						<select  style="width: 100%;" name="<?php echo $this->getPrefix(); ?>[$$ROW][parent_attribute_id]" class="parent_attribute_id"></select>
 					</td>
 					<td class="a-left">
 						<input alt="show_multiple" value="0" name="<?php echo $this->getPrefix(); ?>[$$ROW][show_multiple]" type="hidden" />
@@ -161,7 +154,7 @@
 			});
         }
 		
-		var checkboxFields = ['use_specified_options', 'use_parent_filter', 'show_multiple'];
+		var checkboxFields = ['use_specified_options', 'use_parent_filter', 'show_multiple', 'can_show_more'];
 		checkboxFields.each(function(key) {
 			var checkboxElements = $(tr).select('input.'+key);
 			checkboxElements.each(function(element) {
@@ -209,7 +202,7 @@
         });
 		addAttribute(data.attribute_id);
 		
-		var attributeOptionsHTML = $(tr).select('select.attributeOptions')[0];
+		var attributeOptionsHTML		= $(tr).select('select.attributeOptions')[0];
 		var attributeOptions			= data.options;
 		var attributeSpecifiedOptions	= data.specified_options;
 		
@@ -230,6 +223,24 @@
 				);
 			}
 		});
+		
+		var rendererHTML	= $(tr).select('select.rendererOptions')[0];
+		var rendererValue	= data.frontend_renderer;
+		
+		rendererHTML.select('option').forEach(function(rendererOption) {
+			if (rendererOption.value === rendererValue) {
+				rendererOption.selected = true;
+			}
+		});
+		
+		var dependsHTML		= $(tr).select('select.parent_attribute_id')[0];
+		var dependsValue	= data.parent_attribute_id;
+		
+		dependsHTML.select('option').forEach(function(dependsOption) {
+			if (dependsOption.value === dependsValue) {
+				dependsOption.selected = true;
+			}
+		});		
     }
 
 	function prepareNewItem(attributeId){
