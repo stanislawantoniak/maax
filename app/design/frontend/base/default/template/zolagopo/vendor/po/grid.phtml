@@ -37,10 +37,6 @@ $_filterMethods = $this->getRequest()->getParam('filter_method');
 $_filterStatuses = $this->getRequest()->getParam('filter_status');
 $_dateFormat = Varien_Date::convertZendToStrFtime(Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT), true, false);
 ?>
-<div class="a-right generic-box">
-	<button class="form-button"  type="button" id="order-courier"><span><?php echo $_hlp->__('Order courier') ?></span></button>
-	<button class="form-button"  type="button" id="courier-list" ><span><?php echo $_hlp->__('Courier list') ?></span></button>
-</div>
 <form method="get" id="udpo-filter-form">
     <div class="generic-box filter">
     	<div class="box-head">
