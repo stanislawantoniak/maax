@@ -137,7 +137,7 @@ class Zolago_Adminhtml_Block_Catalog_Category_Filters extends Mage_Adminhtml_Blo
     public function getPrefix()
     {
         if (null === $this->_idPrefix) {
-            $this->_idPrefix = 'filter';
+            $this->_idPrefix = 'filters';
         }
         return $this->_idPrefix;
     }	
