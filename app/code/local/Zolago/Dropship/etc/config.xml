@@ -47,6 +47,10 @@
                         <legend>Marketing content</legend>
                         <position>120</position>
                     </marketing>
+                    <dhl>
+                        <legend>DHL</legend>
+                        <position>140</position>
+                    </dhl>
                 </fieldsets>
 
                 <fields>
@@ -92,6 +96,31 @@
                         <fieldset>marketing</fieldset>
                         <position>70</position>
                     </product_short_information>
+					<!-- DHL -->
+                	<use_dhl>
+                        <label>Use DHL</label>
+                        <type>select</type>
+                        <fieldset>dhl</fieldset>
+                        <source>yesno</source>
+						<frontend_model>udropship/adminhtml_vendor_helper_form_dependSelect</frontend_model>
+						<depend_fields>
+                            <dhl_login>1</dhl_login>
+                            <dhl_password>1</dhl_password>
+                        </depend_fields>
+                        <position>10</position>
+                    </use_dhl>
+                	<dhl_login>
+                        <label>Dhl login</label>
+                        <type>text</type>
+                        <fieldset>dhl</fieldset>
+                        <position>20</position>
+                    </dhl_login>
+                	<dhl_password>
+                        <label>Dhl password</label>
+                        <type>password</type>
+                        <fieldset>dhl</fieldset>
+                        <position>30</position>
+                    </dhl_password>
 				</fields>
 			</vendor>
 		</udropship>
