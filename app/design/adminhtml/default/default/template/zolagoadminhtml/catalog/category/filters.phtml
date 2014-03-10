@@ -45,10 +45,11 @@
 				</tr>
 			</tfoot>
 			<tbody class='fieldset_config_body'>
-				<tr id='rowTpl' style='display:none'>
+				<tr id="rowTpl" style='display:none'>
 					<td class="a-left">
-						<input alt="attribute_id" value="$$ATTRIBUTE_ID" class="attribute_id" name="<?php echo $this->getPrefix(); ?>[$$ROW][attribute_id]" type="hidden" />
-						<input alt="frontend_label" class="input-text" value="$$FRONTEND_LABEL" name="<?php echo $this->getPrefix(); ?>[$$ROW][frontend_label]" style="width:98%;" type="input" disabled='disabled' />
+						<input value="$$FILTER_ID" class="filter_id" name="<?php echo $this->getPrefix(); ?>[$$ROW][filter_id]" type="hidden" />
+						<input value="$$ATTRIBUTE_ID" class="attribute_id" name="<?php echo $this->getPrefix(); ?>[$$ROW][attribute_id]" type="hidden" />
+						<input value="$$FRONTEND_LABEL" class="input-text" name="<?php echo $this->getPrefix(); ?>[$$ROW][frontend_label]" style="width:98%;" type="input" disabled='disabled' />
 					</td>
 					<td class="a-left">
 						<input alt="sort_order" value="$$SORT_ORDER" class="input-text a-right" name="<?php echo $this->getPrefix(); ?>[$$ROW][sort_order]" style="width:94%;" type="input" />
@@ -104,6 +105,7 @@
     {
         var rowHtml = $('rowTpl').innerHTML
         var data = {
+			filter_id:				'',
             frontend_label:			'',
 			attribute_id:			'',
 			options:				'',
@@ -163,7 +165,7 @@
 		checkboxFields.each(function(key) {
 			var checkboxElements = $(tr).select('input.'+key);
 			checkboxElements.each(function(element) {
-				if (element.value === '1') {
+				if (data[key] == 1) {
 					element.setAttribute('checked', 'checked');
 				}
 			});

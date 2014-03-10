@@ -29,13 +29,17 @@ class Zolago_Adminhtml_Catalog_Category_FilterController
 		
 		$data = $this->getRequest()->getPost();
 		
-		var_dump($data);
-		die;
-		
 		$filters = array();
 		if(isset($data['filters']) && is_array($data['filters'])){
 			$filters = $data['filters'];
 		}
+		
+		if(isset($filters['$$ROW'])){
+			unset($filters['$$ROW']);
+		}
+		
+		var_dump($filters);
+		die;
 		
 		$connection = Mage::getModel('core/resource')->getConnection("core_write");
 		/* @var $connection Varien_Db_Adapter_Interface */
