@@ -56,7 +56,7 @@
 							<select multiple name="<?php echo $this->getPrefix(); ?>[$$ROW][specified_options][]" style="width:100%; height: 150px" class="attributeOptions"></select>
 							<br />
 							<input alt="can_show_more" value="0" name="<?php echo $this->getPrefix(); ?>[$$ROW][can_show_more]" type="hidden" />
-							<input alt="can_show_more" value="1" name="<?php echo $this->getPrefix(); ?>[$$ROW][can_show_more]" style="width:20px" type="checkbox" />
+							<input alt="can_show_more" value="1" name="<?php echo $this->getPrefix(); ?>[$$ROW][can_show_more]" class="can_show_more" style="width:20px" type="checkbox" />
 							<span><?php echo $helper->__('Use "Show More" Link'); ?></span>
 						</div>
 					</td>
@@ -154,7 +154,7 @@
 			});
         }
 		
-		var checkboxFields = ['use_specified_options', 'use_parent_filter', 'show_multiple'];
+		var checkboxFields = ['use_specified_options', 'use_parent_filter', 'show_multiple', 'can_show_more'];
 		checkboxFields.each(function(key) {
 			var checkboxElements = $(tr).select('input.'+key);
 			checkboxElements.each(function(element) {
@@ -232,6 +232,15 @@
 				rendererOption.selected = true;
 			}
 		});
+		
+		var dependsHTML		= $(tr).select('select.parent_attribute_id')[0];
+		var dependsValue	= data.parent_attribute_id;
+		
+		dependsHTML.select('option').forEach(function(dependsOption) {
+			if (dependsOption.value === dependsValue) {
+				dependsOption.selected = true;
+			}
+		});		
     }
 
 	function prepareNewItem(attributeId){
