@@ -49,8 +49,9 @@ class Zolago_Adminhtml_Block_Catalog_Category_Filters extends Mage_Adminhtml_Blo
 	public function getPossibleAttributes() {
 		$resMapper = Mage::getResourceModel('zolagomapper/mapper');
 		/* @var $resMapper Zolago_Mapper_Model_Resource_Mapper */
-		
-		$values = $resMapper->getAttributesByCategory($this->getCategory()->getId());
+		$ids = $this->getCategory()->getResource()->getChildrenIds($this->getCategory());
+		$ids = array_merge($ids,array($this->getCategory()->getId()));
+		$values = $resMapper->getAttributesByCategory($ids);
 		return $values;
 	}
 	
