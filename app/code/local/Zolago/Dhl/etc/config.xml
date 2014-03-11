@@ -62,6 +62,7 @@
 		 <carriers>
             <zolagodhl>
                 <active>1</active>
+                <gateway>https://testowy.dhl24.com.pl/webapi</gateway>
                 <sallowspecific>0</sallowspecific>
                 <model>zolagodhl/carrier</model>
                 <title>Zolago DHL</title>
