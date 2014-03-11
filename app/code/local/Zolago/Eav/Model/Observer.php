@@ -35,14 +35,13 @@ class Zolago_Eav_Model_Observer
 		/** @var $session Mage_Admin_Model_Session */
 		$session = Mage::getSingleton('adminhtml/session');
 		$attribute = $observer->getAttribute();
-		
 		if ($attribute->getAddToSet() && $attribute->getSetId()) {
 			$setup = Mage::getModel('eav/entity_setup', 'core_setup');
 			$attributeId	= $attribute->getId();
 			$attributeSetId = $attribute->getSetId();
 
 			//Get "General" attribute group info
-			$attributeGroupId = $setup->getAttributeGroup('catalog_product', $attributeSetId, 'General');
+			$attributeGroupId = $setup->getAttributeGroupId('catalog_product', $attributeSetId, 'General');
 			try {
 				$setup->addAttributeToSet('catalog_product', $attributeSetId, $attributeGroupId, $attributeId);
 			} catch (Exception $e) {
