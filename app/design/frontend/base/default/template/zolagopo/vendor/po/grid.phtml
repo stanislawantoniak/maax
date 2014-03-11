@@ -875,12 +875,26 @@ var poItemsJson = {};
 
 function selectCarrier(elem, titleId) {
     option = elem.options[elem.selectedIndex];
+	var form = elem.up("form");
+	form.select(".specify-params").invoke("hide");
     if (option.value && option.value != 'custom') {
         $(titleId).value = option.text;
+		form.select(".specify-"+option.value).invoke("show");
+		dhlSelectTypeChange(form.select(".specify-zolagodhl-type-select")[0]);
     }
     else {
         $(titleId).value = '';
     }
+}
+
+function dhlSelectTypeChange(elem){
+	var option = elem.options[elem.selectedIndex];
+	var depends = elem.up("form").select(".specify-zolagodhl-type");
+	if(option.value=="PACKAGE"){
+		depends.invoke("show");
+	}else{
+		depends.invoke("hide");
+	}
 }
 
 function syncUseCustomWeight(el, poId)
