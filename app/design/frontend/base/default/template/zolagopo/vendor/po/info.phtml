@@ -554,6 +554,7 @@ $fcBlock->setFieldValue(array(
                     </li>
 					
 					<?php if ($_po->canCreateShipment()): ?>
+
                     <li id="shipping_amount-1-<?php echo $_id?>">
                         <nobr>
                         <label for="shipping_amount-<?php echo $_id?>"><?php echo $_hlp->__('Shipping Amount') ?></label>
@@ -562,7 +563,7 @@ $fcBlock->setFieldValue(array(
                     </li>
                     <li id="tracking_id-3-<?php echo $_id?>">
                         <label for="carrier-<?php echo $_id?>"><?php echo $_hlp->__('Carrier') ?></label>
-                        <select id="carrier-<?php echo $_id?>" name="carrier" class="select" style="width:250px" onchange="selectCarrier(this, 'carrier_title-<?php echo $_id?>')">
+                        <select id="carrier-<?php echo $_id?>" name="carrier" class="select carrier" style="width:250px" onchange="selectCarrier(this)">
                             <?php foreach ($this->getCarriers() as $_code=>$_name): ?>
                             <option value="<?php echo $_code ?>"><?php echo $_name ?></option>
                             <?php endforeach; ?>
@@ -570,12 +571,44 @@ $fcBlock->setFieldValue(array(
                     </li>
                     <li id="tracking_id-4-<?php echo $_id?>">
                         <label for="carrier_title-<?php echo $_id?>"><?php echo $_hlp->__('Carrier Title') ?></label>
-                        <input id="carrier_title-<?php echo $_id?>" name="carrier_title" value="" title="<?php echo $_hlp->__('Carrier Title') ?>" type="text" class="input-text" style="width:250px;" />
+                        <input id="carrier_title-<?php echo $_id?>" name="carrier_title" value="" title="<?php echo $_hlp->__('Carrier Title') ?>" type="text" class="input-text carrier-title" style="width:250px;" />
                     </li>
                     <li id="tracking_id-1-<?php echo $_id?>">
                         <label for="tracking_id-<?php echo $_id?>"><?php echo $_hlp->__('Add Tracking ID') ?></label>
-                        <input id="tracking_id-<?php echo $_id?>" name="tracking_id" value="" title="<?php echo $_hlp->__('Add Tracking ID') ?>" type="text" class="input-text" style="width:250px;" />
-                    </li>
+                        <input id="tracking_id-<?php echo $_id?>" name="tracking_id" value="" title="<?php echo $_hlp->__('Add Tracking ID') ?>" type="text" class="input-text tracking-id" style="width:250px;" />
+						</br>
+                        <label for="auto-tracking-<?php echo $_id?>">
+							<input type="checkbox" class="auto-tracking" onchange="changeAutoTrack(this);" id="auto-tracking-<?php echo $_id?>" name="auto_trakcing"/>
+							<?php echo $_hlp->__('I have no Track ID')?><br/>
+						</label>
+					</li>
+					<li id="specify-zolagodhl-2-<?php echo $_id?>" class="specify-params specify-zolagodhl" style="display: none;">
+                        <label for="specify-zolagodhl-pkg-type-<?php echo $_id?>">
+							<?php echo $_hlp->__('Pkg. type')?><br/>
+						</label>
+						<select id="specify-dhl-pkg-type-<?php echo $_id?>" name="specify_zolagodhl_type" class="select specify-zolagodhl-type-select" style="width:250px" onchange="dhlSelectTypeChange(this)">
+                            <?php foreach(Mage::getSingleton('zolagodhl/system_source_pkgtype')->toOptionHash() as $value=>$label):?>
+							<option value="<?php echo $this->escapeHtml($value);?>"><?php echo $this->escapeHtml($label);?></option>
+							<?php endforeach;?>
+                        </select>
+					</li>
+					<li id="specify-zolagodhl-1-<?php echo $_id?>" class="specify-params specify-zolagodhl specify-zolagodhl-type" style="display: none;">
+                        <label>
+							<?php echo $_hlp->__('Pkg. Dimensions')?><br/>
+						</label>
+						<?php echo Mage::helper("zolagodropship")->__("W:");?>
+                        <input name="specify_zolagodhl_width" value="<?php echo (float)$_vendor->getDefaultPkgWidth()?>" title="<?php echo $_hlp->__('Width') ?>" type="text" class="input-text" style="width:30px;" />			
+						&nbsp;<?php echo Mage::helper("zolagodropship")->__("H:");?>
+                        <input name="specify_zolagodhl_height" value="<?php echo (float)$_vendor->getDefaultPkgHeight()?>" title="<?php echo $_hlp->__('Height') ?>" type="text" class="input-text" style="width:30px;" />
+						&nbsp;<?php echo Mage::helper("zolagodropship")->__("L:");?>
+						<input name="specify_zolagodhl_length" value="<?php echo (float)$_vendor->getDefaultPkgLength()?>" title="<?php echo $_hlp->__('Length') ?>" type="text" class="input-text" style="width:30px;" />
+					</li>
+					<li id="specify-zolagodhl-3-<?php echo $_id?>" class="specify-params specify-zolagodhl specify-zolagodhl-type" style="display: none;">
+                        <label for="specify-zolagodhl-custom-dim-<?php echo $_id?>">
+							<?php echo $_hlp->__('Custom dim.')?><br/>
+						</label>
+						<input type="checkbox" id="specify-zolagodhl-custom-pkg-<?php echo $_id?>" name="specify_zolagodhl_custom_dim"/>
+					</li>
 					<?php endif ?>
 					
                     <li>
@@ -625,11 +658,6 @@ $fcBlock->setFieldValue(array(
                         <label for="full-cancel-cb-<?php echo $_id?>"><?php echo $this->__('Full Cancel')?></label> <input id="full-cancel-cb-<?php echo $_id?>" type="checkbox" name="full_cancel" value="1" /> <br/>
                         <small><?php echo $this->__('This will cancel even shipped shipments')?></small>
                     </li>
-					<?php if ($_po->canCreateShipment()): ?>
-					<script type="text/javascript">
-						syncExtraLabelForm('<?php echo $_id?>');
-					</script>
-					<?php endif?>
 					<?php endif ?>
                     <li>
                         <label>&nbsp;</label>

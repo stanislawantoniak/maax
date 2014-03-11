@@ -34,7 +34,7 @@ class Zolago_Catalog_Model_Category_FilterTest extends ZolagoDb_TestCase {
     public function testSave() {
         $model = $this->_getModel();
         $newAttribute = $model->getAttribute();
-        $attribureId = $model->getAttributeId(); 
+        $attributeId = $model->getAttributeId(); 
         $this->assertNotEmpty($newAttribute,$attributeId);
     }
     public function testCollection() {
