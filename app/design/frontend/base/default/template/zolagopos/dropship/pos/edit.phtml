@@ -28,8 +28,20 @@
 				regionSelect.insert({before: regionText});
 
 				var updater = new RegionUpdater('country_id', 'region', 'region_id', <?php echo $this->helper('directory')->getRegionJson() ?>, undefined);
-
+				$("use_dhl").observe("change", function(e){
+					posControl.enableDhl($F(e.target)=="1");
+				});
+				posControl.enableDhl($F("use_dhl")=="1");
 			},
+			enableDhl: function(state){
+				if(!!state){
+					$("dhl_login").up('tr').show();
+					$("dhl_password").up('tr').show();
+				}else{
+					$("dhl_login").up('tr').hide();
+					$("dhl_password").up('tr').hide();
+				}
+			}
 		};
 		document.observe("dom:loaded", function() {
 			posControl.init();

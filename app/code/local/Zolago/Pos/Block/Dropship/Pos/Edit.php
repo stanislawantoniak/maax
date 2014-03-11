@@ -5,7 +5,7 @@ class Zolago_Pos_Block_Dropship_Pos_Edit extends Mage_Core_Block_Template {
 		parent::_construct();
 		$helper = Mage::helper('zolagopos');
         $form = Mage::getModel('zolagodropship/form');
-
+		/* @var $form Zolago_Dropship_Model_Form */
 		
         $form->setAction($this->getUrl("udropship/pos/save"));
 		
@@ -44,6 +44,15 @@ class Zolago_Pos_Block_Dropship_Pos_Edit extends Mage_Core_Block_Template {
         $builder->prepareForm(array(
             'phone',
             'email',
+        ));
+		
+        $dhl = $form->addFieldset('dhl', array('legend'=>$helper->__('DHL Settings')));
+        $builder = Mage::getModel('zolagopos/form_fieldset_dhl'); 
+        $builder->setFieldset($dhl);
+        $builder->prepareForm(array(
+            'use_dhl',
+            'dhl_login',
+            'dhl_password',
         ));
         
 		

@@ -61,16 +61,28 @@
     <testsuite name="Adminhtml">
       <directory suffix="Test.php">./Zolago/Adminhtml/</directory>
     </testsuite>
+    <testsuite name="Mapper">
+      <directory suffix="Test.php">./Zolago/Mapper/</directory>
+    </testsuite>
+    <testsuite name="Catalog">
+      <directory suffix="Test.php">./Zolago/Catalog/</directory>
+    </testsuite>
+    <testsuite name="Dhl">
+      <directory suffix="Test.php">./Zolago/Dhl/</directory>
+    </testsuite>	
   </testsuites>
+  <!--
   <listeners>
     <listener class="PHPUnit_Util_Log_JSON"/>
   </listeners>
+  -->
   <filter>
     <blacklist>
         <directory suffix=".php">../app/code/core</directory>
         <directory suffix=".php">../app/code/community</directory>
         <directory suffix=".php">../lib/</directory>
         <directory suffix=".php">../test/</directory>
+        <file>../app/Mage.php</file>
     </blacklist>
     <!--
     <whitelist processUncoveredFilesFromWhitelist="true">

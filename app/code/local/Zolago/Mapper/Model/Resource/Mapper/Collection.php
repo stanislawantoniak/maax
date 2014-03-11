@@ -7,6 +7,7 @@ class Zolago_Mapper_Model_Resource_Mapper_Collection
         parent::_construct();
         $this->_init('zolagomapper/mapper');
     }
+
 	
 	/**
 	 * @param int $mode
