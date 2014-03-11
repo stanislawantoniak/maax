@@ -33,7 +33,8 @@ class Zolago_Dropship_Model_Observer {
 		
 		if ($carrierCode == 'zolagodhl'
 			&& Mage::getSingleton('shipping/config')->getCarrierInstance($carrierCode)->isTrackingAvailable()) {
-			$track->setNextCheck(date('Y-m-d H:i:s', time()));
+				$track->setNextCheck(date('Y-m-d H:i:s', time()));
+				$track->setUdropshipStatus(Unirgy_Dropship_Model_Source::TRACK_STATUS_PENDING);
 		}
 
 		return $this;
