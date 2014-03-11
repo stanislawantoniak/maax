@@ -1,0 +1,53 @@
+<?php
+
+class Zolago_Mapper_Model_Resource_Mapper_Collection
+    extends Mage_Core_Model_Resource_Db_Collection_Abstract {
+  
+    protected function _construct() {
+        parent::_construct();
+        $this->_init('zolagomapper/mapper');
+    }
+
+	
+	/**
+	 * @param int $mode
+	 * @return Zolago_Mapper_Model_Resource_Mapper_Collection
+	 */
+	public function addIsActiveFilter($mode=1) {
+		$this->addFieldToFilter("is_active", (int)$mode);
+		return $this;
+	}
+	
+	/**
+	 * @return Zolago_Mapper_Model_Resource_Mapper_Collection
+	 */
+	public function joinAttributeSet() {
+		$eavConfig = Mage::getSingleton('eav/config');
+		/* @var $eavConfig Mage_Eav_Model_Config */
+		$productEntityType = $eavConfig->getEntityType(Mage_Catalog_Model_Product::ENTITY);
+		
+		$this->getSelect()->
+			joinRight(
+				array("attribute_set"=>$this->getTable("eav/attribute_set")), 
+				"main_table.attribute_set_id=attribute_set.attribute_set_id",
+				array("attribute_set_name", "attribute_set_id")
+			)->
+			where("attribute_set.entity_type_id=?", $productEntityType->getId());
+		return $this;
+	}
+	
+	public function getIdFieldName() {
+		if($this->getFlag('abstract')){
+			return null;
+		}
+		return parent::getIdFieldName();
+	}
+	
+	protected function _getItemId(Varien_Object $item) {		
+		if($this->getFlag('abstract')){
+			return null;
+		}
+		return parent::_getItemId($item);
+	}
+	
+}

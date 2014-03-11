@@ -1,0 +1,395 @@
+<?php
+	$helper = Mage::helper('zolagoadminhtml');
+	$filterCollection = $this->getFilterCollection();
+?>
+<div class="content-header">
+   <h3><?php echo $this->getHeaderText() ?></h3>
+   <p class="content-buttons form-buttons">
+        <?php echo $this->getButtonsHtml(); ?>
+    </p>
+</div>
+<form action="<?php echo $this->getForm()->getAction() ?>" method="post" id="filter_edit_form">
+    <?php echo $this->getBlockHtml('formkey')?>
+    <div class="no-display">
+        <input type="hidden" id="change_flag_element" name="_change_type_flag" value="" />
+        <input type="hidden" id="save_and_edit" name="save_and_edit" value="" />
+    </div>
+	<div class="grid">
+		<table class="data" cellspacing="0">
+			<thead>
+				<tr class="headings">
+					<th class="no-link" style="width:20%"><span class="nobr"><?php echo $helper->__('Attribute') ?></span></th>
+					<th class="no-link a-right" style="width:5%"><span class="nobr"><?php echo $helper->__('Sort Order') ?></span></th>
+					<th class="no-link" style="width:25%"><span class="nobr"><?php echo $helper->__('Field options') ?></span></th>
+					<th class="no-link" style="width:10%"><span class="nobr"><?php echo $helper->__('Custom Renderer') ?></span></th>
+					<th class="no-link" style="width:10%"><span class="nobr"><?php echo $helper->__('Depends') ?></span></th>
+					<th class="no-link" style="width:15%"><span class="nobr"><?php echo $helper->__('Is multiple') ?></span></th>
+					<th class="no-link a-right" style="width: 5%;"><span class="nobr"><?php echo $helper->__('Remove') ?></span></th>
+				</tr>
+			</thead>
+			<tfoot>
+				<tr>
+					<th colspan="7">
+						<div class="a-right">
+							<?php echo $this->getAttributesSelectHtml('selectAttribute');?>
+							<?php echo $this->getAddButtonHtml('addBtn');?>
+						</div>
+					</th>
+				</tr>
+			</tfoot>
+			<tbody class='fieldset_config_body'>
+				<tr id="rowTpl" style='display:none'>
+					<td class="a-left">
+						<input value="$$FILTER_ID" class="filter_id" name="<?php echo $this->getPrefix(); ?>[$$ROW][filter_id]" type="hidden" />
+						<input value="$$ATTRIBUTE_ID" class="attribute_id" name="<?php echo $this->getPrefix(); ?>[$$ROW][attribute_id]" type="hidden" />
+						<input value="$$FRONTEND_LABEL" class="input-text" name="<?php echo $this->getPrefix(); ?>[$$ROW][frontend_label]" style="width:98%;" type="input" disabled='disabled' />
+					</td>
+					<td class="a-left">
+						<input alt="sort_order" value="$$SORT_ORDER" class="input-text a-right" name="<?php echo $this->getPrefix(); ?>[$$ROW][sort_order]" style="width:94%;" type="input" />
+					</td>
+					<td class="a-left">
+						<input value="0" name="<?php echo $this->getPrefix(); ?>[$$ROW][use_specified_options]"  type="hidden" />
+						<input value="1" name="<?php echo $this->getPrefix(); ?>[$$ROW][use_specified_options]" class="use_specified_options" style="width:20px" type="checkbox" onclick="$('yes__use_specified_options_$$ROW').toggle()" />
+						<span><?php echo $helper->__('Show Selected Values'); ?></span>
+						<div id="<?php echo 'yes__use_specified_options_$$ROW'; ?>" class="<?php echo 'yes__use_specified_options_$$ROW'; ?>">
+							<input type="hidden" name="<?php echo $this->getPrefix(); ?>[$$ROW][specified_options]" value=""/>
+							<select multiple name="<?php echo $this->getPrefix(); ?>[$$ROW][specified_options][]" style="width:100%; height: 150px" class="attributeOptions"></select>
+							<br />
+							<input alt="can_show_more" value="0" name="<?php echo $this->getPrefix(); ?>[$$ROW][can_show_more]" type="hidden" />
+							<input alt="can_show_more" value="1" name="<?php echo $this->getPrefix(); ?>[$$ROW][can_show_more]" class="can_show_more" style="width:20px" type="checkbox" />
+							<span><?php echo $helper->__('Use "Show More" Link'); ?></span>
+						</div>
+					</td>
+					<td class="a-left">
+						<select name="<?php echo $this->getPrefix(); ?>[$$ROW][frontend_renderer]" style="width: 100%;" class="select rendererOptions">
+							<?php foreach($this->getRendererValues() as $key=>$value):?>
+								<option value="<?php echo $key;?>"><?php echo $value;?></option>
+							<?php endforeach;?>
+						</select>
+					</td>
+					<td class="a-left">
+						<select  style="width: 100%;" name="<?php echo $this->getPrefix(); ?>[$$ROW][parent_attribute_id]" class="parent_attribute_id"></select>
+					</td>
+					<td class="a-left">
+						<input alt="show_multiple" value="0" name="<?php echo $this->getPrefix(); ?>[$$ROW][show_multiple]" type="hidden" />
+						<input alt="show_multiple" value="1" name="<?php echo $this->getPrefix(); ?>[$$ROW][show_multiple]" class="show_multiple" style="width:20px" type="checkbox" />
+						<span><?php echo $helper->__('Show Multiple Values'); ?></span>
+					</td>
+					<td class="a-right">
+						<button type="button" class="scalable delete delete-attribute"><span>&nbsp;</span></button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</form>
+
+
+
+<script type="text/javascript">
+//<![CDATA[
+(function ()
+{
+    var lastRowNum = 0;
+    var tbody = $$('tbody.fieldset_config_body')[0];
+	var suffixTpl = new Template('#{key}');
+
+    function addRow(inData)
+    {
+        var rowHtml = $('rowTpl').innerHTML
+        var data = {
+			filter_id:				'',
+            frontend_label:			'',
+			attribute_id:			'',
+			options:				'',
+			parent_attribute_id:	'',
+            sort_order:				'0',
+			show_multiple:			'0',
+			use_specified_options:	'0',
+			specified_options:		'0',
+			can_show_more:			'0',
+			frontend_renderer:		'',
+        }
+        Object.extend(data, inData);
+        data.row = ++lastRowNum;
+		
+        var isIE = (/msie [1-8]\./i).test(navigator.userAgent);
+        var numericVars = ['sort_order', 'show_multiple', 'use_specified_options', 'can_show_more'];
+        var forcedNumericVars = [];
+        var keys = $H(data).keys().sortBy(function(s){return (''+s).length}).reverse();
+        for (j=0; j<keys.length; j++) {
+            var i=keys[j];
+            value = data[i] || ''
+            if (-1 != numericVars.indexOf(i) && data[i]
+                || -1 != forcedNumericVars.indexOf(i)
+            ) {
+                value *= 1;
+                data[i] = value;
+            }
+            if (i!=='row' && isIE) value = '"'+value+'"';
+            rowHtml = rowHtml.replace(new RegExp('\\$\\$'+i.toUpperCase(), 'g'), value);		
+        }
+        var regExTpl = [
+            new Template('<option (([^>]*(alt="?#{key}"?|value="?#{value}"?(?=[\\s>]))){2})'),
+            new Template('<option $1 selected="selected"'),
+            new Template('<input (([^>]*(alt="?#{key}"?|value="?#{value}"?(?=[\\s>])|type="?checkbox"?)){3})'),
+            new Template('<input $1 checked="checked"')
+        ];
+		
+        tbody.insert('<tr>'+rowHtml+'</tr>')
+        var trs = tbody.childElements()
+        var tr = trs[trs.length-1]
+        tr.addClassName(lastRowNum%2 ? 'odd' : 'even')
+        var del = $(tr).select('button.delete-attribute')[0];
+        if (del) {
+            $(del).observe('click', function(e) { 
+				e.stop();
+				if(!checkCanRemove(data.attribute_id)){
+					alert("<?php echo Mage::helper('zolagoadminhtml')->__("Element is set as parent of another filter");?>");
+					return;
+				}
+				$(del.parentNode.parentNode).remove();
+				removeAttribute(data.attribute_id);
+				refreshGridClasses();
+			});
+        }
+		
+		var checkboxFields = ['use_specified_options', 'use_parent_filter', 'show_multiple', 'can_show_more'];
+		checkboxFields.each(function(key) {
+			var checkboxElements = $(tr).select('input.'+key);
+			checkboxElements.each(function(element) {
+				if (data[key] == 1) {
+					element.setAttribute('checked', 'checked');
+				}
+			});
+		});
+		
+        var selectFields = $H({use_specified_options: 0, can_show_more: 0, show_multiple: 0});
+        selectFields.each(function(pair){
+            var varsForEval, value=data[pair.key], key=pair.key;
+            for (var rxIdx=0; rxIdx<regExTpl.length; rxIdx+=2) {
+                varsForEval = [];
+                if (value) {
+                    if (!Object.isArray(value)) {
+                        value = String.interpret(value).split(',');
+                    }
+                    value.each(function(val){
+                        varsForEval.push({key: key, value: val});
+                    })
+                } else {
+                    varsForEval.push({key: key, value: value});
+                }
+                for (var vfeIdx=0; vfeIdx<varsForEval.length; vfeIdx++) {
+                    var varForEval = varsForEval[vfeIdx];
+                    var rxFind = regExTpl[rxIdx].evaluate(varForEval);
+                    var rxReplace = regExTpl[rxIdx+1].evaluate(varForEval);
+                    rowHtml = rowHtml.replace(new RegExp(rxFind, 'i'), rxReplace);
+                }
+            }
+        });		
+		
+        var toggleFields = ['use_specified_options', 'use_parent_attribute'];
+        toggleFields.each(function(key){
+            var yesKey = suffixTpl.evaluate({key: 'yes__'+key+'_'+data.row});
+            var noKey = suffixTpl.evaluate({key: 'no__'+key+'_'+data.row});
+            if (!data[key]) {
+                $$('.'+yesKey).invoke('hide');
+                $$('.'+noKey).invoke('show');
+            } else {
+                $$('.'+yesKey).invoke('show');
+                $$('.'+noKey).invoke('hide');
+            }
+        });
+		addAttribute(data.attribute_id);
+		
+		var attributeOptionsHTML		= $(tr).select('select.attributeOptions')[0];
+		var attributeOptions			= data.options;
+		var attributeSpecifiedOptions	= data.specified_options;
+		
+		attributeOptionsHTML.innerHTML = "";
+		attributeOptions.forEach(function(singleOption) {
+			if (singleOption.value) {
+				var selected = false;				
+				if (attributeSpecifiedOptions.indexOf(parseInt(singleOption.value)) > -1) {
+					selected = true;
+				}
+				
+				attributeOptionsHTML.insert(
+					new Element('option', {
+						'value': singleOption.value,
+						'selected': selected
+					}).
+					update(singleOption.label)
+				);
+			}
+		});
+		
+		var rendererHTML	= $(tr).select('select.rendererOptions')[0];
+		var rendererValue	= data.frontend_renderer;
+		
+		rendererHTML.select('option').forEach(function(rendererOption) {
+			if (rendererOption.value === rendererValue) {
+				rendererOption.selected = true;
+			}
+		});
+		
+		var dependsHTML		= $(tr).select('select.parent_attribute_id')[0];
+		var dependsValue	= data.parent_attribute_id;
+		
+		dependsHTML.select('option').forEach(function(dependsOption) {
+			if (dependsOption.value === dependsValue) {
+				dependsOption.selected = true;
+			}
+		});		
+    }
+
+	function prepareNewItem(attributeId){
+		var valuesUrl = '<?php echo $this->getAttributeOptionsUrl();?>';
+		new Ajax.Request(valuesUrl, {
+		  onSuccess: function(response) {
+				var json = response.responseJSON;
+				if(json.status!=1){
+					alert(json.content);
+					return;
+				}
+				//console.log(json.content);
+				addRow(json.content);
+				refreshGridClasses();
+		  },
+		  parameters: {attribute_id:attributeId}
+		});
+	}
+	
+	function checkCanRemove(attributeId){
+		//return true;
+		var found = false;
+		$$(".parent_attribute_id").each(function(el){
+			var value = $F(el);
+			el.style.color='';
+			el.style.fontWeight='';
+			if(parseInt(value)==parseInt(attributeId)){
+				el.style.color='#f00';
+			el.style.fontWeight='bold';
+				found = true;
+			}
+		});
+		return !found;
+	}
+	
+	allAttributes = <?php echo $this->getPossibleAttributesJson();?>;
+	attributesInUse = [];
+	
+	function refreshAttributeSelect(){
+		var field = $("selectAttribute");
+		field.innerHTML = "";
+		field.insert(
+			new Element('option', {
+				'value': ''
+			}).
+			update("<?php echo Mage::helper('zolagoadminhtml')->__("--- Select ---");?>")
+		);
+		for(var key in allAttributes){
+			if(attributesInUse.indexOf(key)<0){ 
+				field.insert(
+                    new Element('option', {
+                        'value': key
+                    }).
+                    update(allAttributes[key])
+                );
+			}
+		}
+	}
+	
+	function refreshParentSelects(){
+		$$(".parent_attribute_id").each(function(el){
+			var row = el.up("tr");
+			if(row.id!="rowTpl"){
+				var selfId = $(row).down(".attribute_id").value;
+				var oldSelectId = $F(el);
+				el.innerHTML = "";
+				el.insert(
+					new Element('option', {
+						'value': ''
+					}).
+					update("<?php echo Mage::helper('zolagoadminhtml')->__("--- Select ---");?>")
+				);
+				for(var i=0; i<attributesInUse.length; i++){
+					if(attributesInUse[i]!=selfId){
+						el.insert(
+							new Element('option', {
+								'value': attributesInUse[i],
+								'selected': oldSelectId==attributesInUse[i]
+							}).
+							update(allAttributes[attributesInUse[i]])
+						);
+					}
+				}
+			}
+		})
+	}
+	
+	function removeAttribute(attribute_id){
+		var index = attributesInUse.indexOf(attribute_id);
+		var ret;
+		if(index>-1){
+			ret  = attributesInUse[index];
+			attributesInUse.splice(index, 1);
+			refreshAttributeSelect();
+			refreshParentSelects();
+		}
+		return ret;
+	}
+	
+	function addAttribute(attribute_id){
+		if(attributesInUse.indexOf(attribute_id)<0){
+			attributesInUse.push(attribute_id);
+			refreshAttributeSelect();
+			refreshParentSelects();
+		}
+	}
+	
+	function refreshGridClasses() {
+		var lastRowNum = 0;
+		var tbody = $$('tbody.fieldset_config_body')[0];
+        var trs = tbody.childElements();
+		trs.forEach(function(singleTr) {
+			$(singleTr).removeClassName('odd');
+			$(singleTr).removeClassName('even');
+			$(singleTr).addClassName(lastRowNum%2 ? 'odd' : 'even');
+			lastRowNum++;
+		});
+	}
+
+    $('addBtn').observe('click', function(e) {
+		if($F("selectAttribute")){
+			prepareNewItem($F("selectAttribute"));
+		}else{
+			alert("<?php echo Mage::helper("zolagoadminhtml")->__("Select attribute");?>")
+		}
+		e.stop();
+	});
+
+
+
+	editForm = $("filter_edit_form");
+	
+	formControl = {
+		save: function(){
+			editForm.submit();
+		},
+	    saveAndEdit: function(){
+			$("save_and_edit").value = 1;
+			editForm.submit();
+		}
+	}
+	
+<?php if (count($filterCollection)): ?>
+	<?php foreach ($filterCollection as $filter): ?>
+		addRow(<?php echo $this->getFilterJsonData($filter); ?>);
+	<?php endforeach ;?>
+<?php else:?>
+	refreshAttributeSelect();
+<?php endif;?>
+})();
+//]]>
+</script>

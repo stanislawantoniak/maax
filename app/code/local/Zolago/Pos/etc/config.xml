@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Zolago_Pos>
-			<version>0.0.2</version>
+			<version>0.0.3</version>
 		</Zolago_Pos>
 	</modules>
 	<global>
@@ -40,6 +40,17 @@
 				</setup>
 			</zolagopos_setup>
 		</resources>
+		<events>
+            <udpo_order_save_before>
+                <observers>
+                    <zolagopos>
+                        <type>singleton</type>
+                        <class>zolagopos/observer</class>
+                        <method>udpoOrderSaveBefore</method>
+                    </zolagopos>
+                </observers>
+            </udpo_order_save_before>
+		</events>
 	</global>
 	<frontend>
 		<routers>
@@ -93,6 +104,17 @@
 				</zolagopos>
 			</updates>
 		</layout>
+		<events>
+			<controller_action_layout_render_before_udpoadmin_order_po_view>
+                <observers>
+					<zolagopos>
+						<type>singleton</type>
+						<class>zolagopos/observer</class>
+						<method>addPosInfoToOrderInfo</method>
+					</zolagopos>
+				</observers>
+            </controller_action_layout_render_before_udpoadmin_order_po_view>
+		</events>
 	</adminhtml>
 	<admin>
 		<routers>

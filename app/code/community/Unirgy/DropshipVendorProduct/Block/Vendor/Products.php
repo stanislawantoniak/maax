@@ -21,6 +21,14 @@ class Unirgy_DropshipVendorProduct_Block_Vendor_Products extends Mage_Core_Block
             $toolbar->setCollection($this->getProductCollection());
         }
 
+        foreach ($this->getProductCollection() as $p) {
+            if (!Mage::helper('udropship')->isUdmultiAvailable()) {
+                if (($vsAttrCode = Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute')) && Mage::helper('udropship')->checkProductAttribute($vsAttrCode)) {
+                    $p->setVendorSku($p->getData($vsAttrCode));
+                }
+            }
+        }
+
         return $this;
     }
 

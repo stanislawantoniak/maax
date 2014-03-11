@@ -1,3 +1,7 @@
+===== 1.2.8 =====
+  * Added limit categories option
+  * Fixed "Type of product" selector in "Configuration > Vendor Products Edit > Template Sku" when type of product contain slash char
+
 ===== 1.2.7 =====
   * Added optimization in product edit form configuration via usage of select2.js
 

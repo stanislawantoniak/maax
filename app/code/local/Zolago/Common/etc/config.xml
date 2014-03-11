@@ -5,6 +5,17 @@
             <version>0.0.1</version>
         </Zolago_Common>
     </modules>
+	<frontend>
+		<routers>
+            <zolagocommon>
+                <use>standard</use>
+                <args>
+                    <module>Zolago_Common</module>
+                    <frontName>zolagocommon</frontName>
+                </args>
+            </zolagocommon>
+		</routers>
+	</frontend>
     <global>
         <!-- 
         <helpers>

@@ -41,7 +41,7 @@ class Zolago_Pos_Block_Adminhtml_Pos_Grid extends Mage_Adminhtml_Block_Widget_Gr
             "header"    => Mage::helper("zolagopos")->__("Name"),
         ));
         $this->addColumn("city", array(
-            "index"     =>"name",
+            "index"     =>"city",
             "header"    => Mage::helper("zolagopos")->__("City"),
         ));
         $this->addColumn("phone", array(

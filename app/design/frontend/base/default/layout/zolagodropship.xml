@@ -1,18 +1,16 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
 	<udropship_vendor>
-<!--		<reference name="head">
-			<action method="setTitle">
-				<title>Dropship Vendor Interface - modified by Zolago</title>
-				<action method="addCss">
-					<stylesheet>css/udropship.css</stylesheet>
-				</action>
-			</action>
-		</reference>-->
 		<reference name="header">
 			<action method="setTemplate">
 				<template>zolagodropship/vendor/header.phtml</template>
 			</action>
 		</reference>
 	</udropship_vendor>
+	<udropship_vendor_dashboard>
+		<update handle="udropship_vendor" />
+        <reference name="content">
+            <block type="core/template" template="zolagodropship/vendor/dashboard.phtml"/>
+        </reference>
+	</udropship_vendor_dashboard>
 </layout>

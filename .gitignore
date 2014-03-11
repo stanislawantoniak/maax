@@ -7,3 +7,7 @@
 /catalog.xml
 *.orig
 /phpinfo.php
+/testResult/*
+/phpmyadmin
+/dev/*
+*.DS_Store
