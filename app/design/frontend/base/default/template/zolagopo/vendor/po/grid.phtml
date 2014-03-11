@@ -880,7 +880,9 @@ function selectCarrier(elem, titleId) {
     if (option.value && option.value != 'custom') {
         $(titleId).value = option.text;
 		form.select(".specify-"+option.value).invoke("show");
-		dhlSelectTypeChange(form.select(".specify-zolagodhl-type-select")[0]);
+		if(form.select(".specify-zolagodhl-type-select").length){
+			dhlSelectTypeChange(form.select(".specify-zolagodhl-type-select")[0]);
+		}
     }
     else {
         $(titleId).value = '';
