@@ -132,6 +132,16 @@
 				</fields>
 			</vendor>
 		</udropship>
+		<events>
+			<sales_order_shipment_track_save_before>
+				<observers>
+					<add_zolago_dhl_data>
+						<class>zolagodropship/observer</class>
+						<method>addZolagoDhlData</method>
+					</add_zolago_dhl_data>
+				</observers>				
+			</sales_order_shipment_track_save_before>
+		</events>		
 	</global>
 	<frontend>
 		<block>
