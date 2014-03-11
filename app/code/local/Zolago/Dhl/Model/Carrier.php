@@ -14,10 +14,12 @@ class Zolago_Dhl_Model_Carrier extends
 	 * @return type
 	 */
 	public function collectRates(Mage_Shipping_Model_Rate_Request $request) {
-		$result = Mage::getModel('shipping/rate_result');
-        return $result;
+        return  Mage::getModel('shipping/rate_result');
 	}
 	
+	/**
+	 * @return array
+	 */
 	public function getAllowedMethods() {
 		return array();
 	}   
