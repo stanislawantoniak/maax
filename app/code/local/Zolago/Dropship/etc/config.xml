@@ -16,17 +16,25 @@
 				</rewrite>
 			</udropship>
 		</models>
-		<!--
 		<helpers>
-		  <zolagowishlist>
-			<class>Zolago_Wishlist_Helper</class>
-		  </zolagowishlist>
+		  <zolagodropship>
+			<class>Zolago_Dropship_Helper</class>
+		  </zolagodropship>
+			<udropship>
+				<rewrite>
+					<data>Zolago_Dropship_Helper_Data</data>
+				</rewrite>
+			</udropship>
 		</helpers>
-		-->
 		<blocks>
 			<zolagodropship>
 				<class>Zolago_Dropship_Block</class>
 			</zolagodropship>
+			<udropship>
+				<rewrite>
+					<vendor_shipment_info>Zolago_Dropship_Block_Vendor_Shipment_Info</vendor_shipment_info>
+				</rewrite>
+			</udropship>
 		</blocks>
 		<helpers>
 			<zolagodropship>

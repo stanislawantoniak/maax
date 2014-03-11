@@ -9,7 +9,7 @@ class Zolago_Helper_Test {
      * @param string $modelName 
      */
     static public function getItem($modelName) { 
-        $model = Mage::getModel('eav/entity_type');
+        $model = Mage::getModel($modelName);
         $collection = $model->getCollection();        
         $collection->setPageSize(1);
         $item = $collection->getFirstItem();

@@ -13,6 +13,15 @@ $configData = array(
         'path' => 'zolagodhl/wsdl_path',
         'value' => 'https://testowy.dhl24.com.pl/webapi',
         );
+$installer->getConnection()->
+        insert($installer->getTable("core/config_data"), $configData);
+
+$configData = array(
+        'scope' => 'default',
+        'scope_id' => 0,
+        'path' => 'zolagodhl/receiver_sap',
+        'value' => '6000000',
+        );
 
 $installer->getConnection()->
         insert($installer->getTable("core/config_data"), $configData);

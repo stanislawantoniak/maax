@@ -8,32 +8,34 @@ class Zolago_Dhl_Model_Carrier extends
 			
     protected $_code = "zolagodhl";
 	
+	/**
+	 * Empyt collect
+	 * @param Mage_Shipping_Model_Rate_Request $request
+	 * @return type
+	 */
 	public function collectRates(Mage_Shipping_Model_Rate_Request $request) {
-		$result = Mage::getModel('shipping/rate_result');
-		
-		foreach($this->getAllowedMethods() as $key=>$method){
-			$method = Mage::getModel('shipping/rate_result_method');
-			$method->setCarrier($this->_code);
-			$method->setCarrierTitle($this->getConfigData('title'));
-			$method->setMethod($key);
-			$method->setMethodTitle($method);
-			$method->setPrice(0);
-			$method->setCost(0);
-			$result->append($method);
-
-		}
-
-        return $result;
+        return  Mage::getModel('shipping/rate_result');
 	}
 	
+	/**
+	 * @return array
+	 */
 	public function getAllowedMethods() {
-		return array("method1"=>"DHL");
+		return array();
 	}   
+	/**
+	 * Always disabled
+	 * @return boolean
+	 */
 	public function isActive() {
 		return false;
 	}
+	/**
+	 * Trackable
+	 * @return boolean
+	 */
 	public function isTrackingAvailable(){
-        return true; /** @todo Impelment */
+        return true; 
     }
     
 }
