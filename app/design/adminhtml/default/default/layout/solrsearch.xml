@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+	<default>
+		<reference name="head">
+			<action method="addCss"><stylesheet>solrbridge/style.css</stylesheet></action>
+        </reference>
+	</default>
+	<solrbridge_admin_adminhtml_solrsearch_index>
+		<reference name="content">
+			<block type="solrsearch/adminhtml_solrsearch" name="adminhtml_solrsearch" />
+		</reference>
+	</solrbridge_admin_adminhtml_solrsearch_index>
+	<solrbridge_admin_adminhtml_solrsearch_logs>
+		<reference name="content">
+			<block type="solrsearch/adminhtml_logs" name="adminhtml_logs" />
+		</reference>
+	</solrbridge_admin_adminhtml_solrsearch_logs>
+</layout>

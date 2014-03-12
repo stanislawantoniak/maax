@@ -1,0 +1,30 @@
+<?php
+$_solrDataArray = $this->getSolrData();
+
+$q = "";
+$params = $this->getRequest()->getParams();
+if (!empty($params['q'])){
+	$q = $params['q'];
+}
+//print_r($this->getSuggestions());
+?>
+<div class="page-title">
+	<?php if(strtolower($q) == $_solrDataArray['responseHeader']['params']['q']):?>
+	<h1>
+		<?php echo $this->__("Search results for %s", '<em id=\"text_keyword\">'.$q.'</em>');?>
+	</h1>
+	<?php else: ?>
+	<?php if(count($suggests = $this->getSuggestions()) > 0):?>
+		<div class="did-you-mean">
+		<i><?php echo $this->__('Did you mean:')?></i>
+		<?php foreach ($suggests as $item):?>
+		<?php $item = Mage::helper('solrsearch')->getEscapedQueryText($item)?>
+			<span><a href="<?php echo $this->helper('solrsearch')->getDidYouMeanUrl($item) ?>"><?php echo $item?></a></span>&nbsp;
+		<?php endforeach;?>
+		</div>
+	<?php endif;?>
+	<h1>
+		<?php echo $this->__("Display search results for %s instead", '<em id=\"text_keyword\">'.$_solrDataArray['responseHeader']['params']['q'].'</em>'); ?>
+	</h1>
+	<?php endif;?>
+</div>
