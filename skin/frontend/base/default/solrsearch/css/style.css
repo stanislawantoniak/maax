@@ -1,0 +1,15 @@
+#solr_search_facets li a.facet-item {
+	background: url("../images/master-sprite-8.png") no-repeat scroll -297px -245px transparent;
+    clear: both;
+    color: #666666;
+    display: inline;
+    float: left;
+    font-size: 1.3em;
+    line-height: 1.1em;
+    padding-top: 10px !important;
+    padding-left: 20px;
+}
+
+#solr_search_facets li a.active {
+    background: url("../images/master-sprite-8.png") no-repeat scroll -297px -362px transparent;
+}
