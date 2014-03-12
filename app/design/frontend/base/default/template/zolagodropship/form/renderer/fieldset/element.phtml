@@ -1,5 +1,5 @@
 <?php $element = $this->getElement(); ?>
-<tr>
+<tr<?php echo ($element->getType()=="hidden" ? " style=\"display:none;\"" : "") ?>>
 <th><label for="<?php echo $element->getLabelName();?>"><?php echo $element->getLabelHtml();?></label></th>
 <td><?php echo $element->getElementHtml(); ?></td>
 </tr>

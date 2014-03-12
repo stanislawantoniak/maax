@@ -10,6 +10,7 @@
                 <?php echo $this->getResetButtonHtml() ?>
                 <?php echo $this->getDeleteButtonHtml() ?>
                 <?php echo $this->getSaveButtonHtml() ?>
+				<?php echo $this->getSaveAndEditButtonHtml() ?>
             </td>
         </tr>
     </table>
@@ -146,7 +147,7 @@
                         this.root2.addListener('beforeappend', editSet.rightBeforeAppend);
 
                         this.root2.addListener('append', editSet.rightAppend);
-						this.root2.addListener('append', editSet.rightDisableSetSelection);
+						this.root2.addListener('beforeinsert', editSet.rightDisableSetSelection);
                         this.root2.addListener('remove', editSet.rightRemove);
 						this.root2.addListener('remove', editSet.rightDisableSetSelection);
                         // render the tree
@@ -445,9 +446,27 @@
 					rightDisableSetSelection: function() {
 						Form.Element.disable(searchFilterAttributeSet);
 						$('searchFilterAttributeSetInfo').update('<em>*</em><?php echo Mage::helper('zolagoadminhtml')->__('Save current changes in order to change attribute set'); ?>');
-						return false;
+						return;
+					},
+					
+					saveAndContinueEdit: function() {
+						$('searchFilterAttributeSetInfo').update();
+						Form.Element.enable(searchFilterAttributeSet);
+
+						$('messages').update();
+						TreePanels.rebuildTrees();
+						var _validator = new Validation('set_prop_form', {onSubmit:false});
+						if( !_validator.validate() ) {
+							return;
+						}
+						editSet.req.attribute_set_name = $('attribute_set_name').value;
+						if (!editSet.req.form_key) {
+							editSet.req.form_key = FORM_KEY;
+						}
+						var req = {data : Ext.util.JSON.encode(editSet.req)};
+						var con = new Ext.lib.Ajax.request('POST', '<?php echo $this->getMoveAndContinueUrl() ?>', {success:editSet.success,failure:editSet.failure}, req);
 					}
-                }
+				};
             }();
 
             function initVars() {
@@ -493,11 +512,6 @@
 								display: 'none'
 							});
 						}
-//						if (attributeCode !== searchValue) {
-//							subElement.setStyle({
-//								display: 'none'
-//							});
-//						}
 					}.bind(this));
 				}
 			}
@@ -546,7 +560,7 @@
 				search = search.replace(/%/g, '.*').replace(/_/g, '.');
 				// Check matches
 				return RegExp('^' + search + '$', 'gi').test(this);
-			}			
+			};
             //]]>
             </script>
         </td>

@@ -87,6 +87,15 @@
                     </zolagomapper>
                 </observers>
             </catalog_product_save_after>
+            <catalog_product_attribute_update_after>
+                <observers>
+                    <zolagomapper>
+                        <type>singleton</type>
+                        <class>zolagomapper/observer</class>
+                        <method>catalogProductAttributeUpdateAfter</method>
+                    </zolagomapper>
+                </observers>
+            </catalog_product_attribute_update_after>
 		</events>
     </global>
 	<admin>

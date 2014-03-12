@@ -6,6 +6,48 @@ class Zolago_Adminhtml_Block_Catalog_Product_Attribute_Set_Main extends Mage_Adm
         $this->setTemplate('zolagoadminhtml/catalog/product/attribute/set/main.phtml');
     }
 	
+    /**
+     * Prepare Global Layout
+     *
+     * @return Zolago_Adminhtml_Block_Catalog_Product_Attribute_Set_Main
+     */
+    protected function _prepareLayout()
+    {
+		$this->setChild('save_and_edit_button',
+			$this->getLayout()->createBlock('adminhtml/widget_button')
+				->setData(array(
+					'label'     => Mage::helper('zolagoadminhtml')->__('Save and Continue'),
+					'onclick'   => 'editSet.saveAndContinueEdit(\''.$this->getSaveAndContinueUrl().'\')',
+					'class' => 'save'
+				))
+		);
+		
+		parent::_prepareLayout();
+	}
+	
+    public function getSaveAndEditButtonHtml()
+    {
+        return $this->getChildHtml('save_and_edit_button');
+    }	
+	
+    public function getSaveAndContinueUrl()
+    {
+        return $this->getUrl('*/*/save');
+    }
+	
+    /**
+     * Retrieve Attribute Set Save URL
+     *
+     * @return string
+     */
+    public function getMoveAndContinueUrl()
+    {
+        return $this->getUrl('*/catalog_product_set/save', array(
+			'id'		=> $this->_getSetId(),
+			'saveAndEdit'	=> true)
+		);
+    }	
+	
 	public function getAllAttributeSets($withEmpty = true)
 	{
 		return Mage::getModel('zolagoeav/entity_attribute_source_set')->getAllOptions($withEmpty);
