@@ -873,30 +873,46 @@ function showUdpoInfo(udpoId) {
 
 var poItemsJson = {};
 
-function selectCarrier(elem, titleId) {
+function selectCarrier(elem) {
     option = elem.options[elem.selectedIndex];
 	var form = elem.up("form");
+	var autoTrack = form.select(".auto-tracking");
+	var title = form.select(".carrier-title")[0];
+	autoTrack = autoTrack.length ? autoTrack[0].checked : null;
+	
 	form.select(".specify-params").invoke("hide");
     if (option.value && option.value != 'custom') {
-        $(titleId).value = option.text;
-		form.select(".specify-"+option.value).invoke("show");
+        title.value = option.text;
+		if(autoTrack){
+			form.select(".specify-"+option.value).invoke("show");
+		}
 		if(form.select(".specify-zolagodhl-type-select").length){
 			dhlSelectTypeChange(form.select(".specify-zolagodhl-type-select")[0]);
 		}
     }
     else {
-        $(titleId).value = '';
+        title.value = '';
     }
 }
 
 function dhlSelectTypeChange(elem){
 	var option = elem.options[elem.selectedIndex];
 	var depends = elem.up("form").select(".specify-zolagodhl-type");
-	if(option.value=="PACKAGE"){
+	var autoTrack = elem.up("form").select(".auto-tracking");
+	
+	autoTrack = autoTrack.length ? autoTrack[0].checked : null;
+	
+	if(option.value=="PACKAGE" && autoTrack){
 		depends.invoke("show");
 	}else{
 		depends.invoke("hide");
 	}
+}
+
+function changeAutoTrack(elem){
+		var form = elem.up("form");
+		form.select(".tracking-id")[0].disabled = elem.checked;
+		selectCarrier(form.select(".carrier")[0]);
 }
 
 function syncUseCustomWeight(el, poId)

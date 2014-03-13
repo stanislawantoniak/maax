@@ -563,12 +563,25 @@ $fcBlock->setFieldValue(array(
                     </li>
                     <li id="tracking_id-3-<?php echo $_id?>">
                         <label for="carrier-<?php echo $_id?>"><?php echo $_hlp->__('Carrier') ?></label>
-                        <select id="carrier-<?php echo $_id?>" name="carrier" class="select" style="width:250px" onchange="selectCarrier(this, 'carrier_title-<?php echo $_id?>')">
+                        <select id="carrier-<?php echo $_id?>" name="carrier" class="select carrier" style="width:250px" onchange="selectCarrier(this)">
                             <?php foreach ($this->getCarriers() as $_code=>$_name): ?>
                             <option value="<?php echo $_code ?>"><?php echo $_name ?></option>
                             <?php endforeach; ?>
                         </select>
                     </li>
+                    <li id="tracking_id-4-<?php echo $_id?>">
+                        <label for="carrier_title-<?php echo $_id?>"><?php echo $_hlp->__('Carrier Title') ?></label>
+                        <input id="carrier_title-<?php echo $_id?>" name="carrier_title" value="" title="<?php echo $_hlp->__('Carrier Title') ?>" type="text" class="input-text carrier-title" style="width:250px;" />
+                    </li>
+                    <li id="tracking_id-1-<?php echo $_id?>">
+                        <label for="tracking_id-<?php echo $_id?>"><?php echo $_hlp->__('Add Tracking ID') ?></label>
+                        <input id="tracking_id-<?php echo $_id?>" name="tracking_id" value="" title="<?php echo $_hlp->__('Add Tracking ID') ?>" type="text" class="input-text tracking-id" style="width:250px;" />
+						</br>
+                        <label for="auto-tracking-<?php echo $_id?>">
+							<input type="checkbox" class="auto-tracking" onchange="changeAutoTrack(this);" id="auto-tracking-<?php echo $_id?>" name="auto_trakcing"/>
+							<?php echo $_hlp->__('I have no Track ID')?><br/>
+						</label>
+					</li>
 					<li id="specify-zolagodhl-2-<?php echo $_id?>" class="specify-params specify-zolagodhl" style="display: none;">
                         <label for="specify-zolagodhl-pkg-type-<?php echo $_id?>">
 							<?php echo $_hlp->__('Pkg. type')?><br/>
@@ -596,14 +609,6 @@ $fcBlock->setFieldValue(array(
 						</label>
 						<input type="checkbox" id="specify-zolagodhl-custom-pkg-<?php echo $_id?>" name="specify_zolagodhl_custom_dim"/>
 					</li>
-                    <li id="tracking_id-4-<?php echo $_id?>">
-                        <label for="carrier_title-<?php echo $_id?>"><?php echo $_hlp->__('Carrier Title') ?></label>
-                        <input id="carrier_title-<?php echo $_id?>" name="carrier_title" value="" title="<?php echo $_hlp->__('Carrier Title') ?>" type="text" class="input-text" style="width:250px;" />
-                    </li>
-                    <li id="tracking_id-1-<?php echo $_id?>">
-                        <label for="tracking_id-<?php echo $_id?>"><?php echo $_hlp->__('Add Tracking ID') ?></label>
-                        <input id="tracking_id-<?php echo $_id?>" name="tracking_id" value="" title="<?php echo $_hlp->__('Add Tracking ID') ?>" type="text" class="input-text" style="width:250px;" />
-                    </li>
 					<?php endif ?>
 					
                     <li>

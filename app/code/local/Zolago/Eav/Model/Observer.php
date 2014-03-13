@@ -35,7 +35,6 @@ class Zolago_Eav_Model_Observer
 		/** @var $session Mage_Admin_Model_Session */
 		$session = Mage::getSingleton('adminhtml/session');
 		$attribute = $observer->getAttribute();
-		
 		if ($attribute->getAddToSet() && $attribute->getSetId()) {
 			$setup = Mage::getModel('eav/entity_setup', 'core_setup');
 			$attributeId	= $attribute->getId();
