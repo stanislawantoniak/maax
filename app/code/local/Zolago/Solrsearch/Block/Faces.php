@@ -13,6 +13,98 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 		$this->setTemplate('zolagosolrsearch/standard/searchfaces.phtml');
 	}
 	
+	
+	protected function _checkFilterDepedncy($filter) {
+
+		if(!($parentAttributeId = $filter->getParentAttributeId())){
+			return true;
+		}
+		if($parentAttributeCode = $this->getAttributeCodeById($parentAttributeId)){
+			return $this->_isFilterActive($parentAttributeCode);
+		}
+		return false;
+	}
+	
+	protected function _isFilterActive($attrCode) {
+		$filterQuery = $this->getFilterQuery();
+		if (isset($filterQuery[$attrCode."_facet"])) {
+			return true;
+		}
+		return false;
+	}
+	
+	public function getDependAttributes($attributeCode) {
+		$depends = array();
+		$attributeId = $this->getAttributeIdByCode($attributeCode);
+		foreach($this->getFilterCollection() as $fiter){
+			if($fiter->getParentAttributeId()==$attributeId){
+				$depends[] = $this->getAttributeCodeById($fiter->getAttributeId());
+			}
+		}
+		return $depends;
+	}
+	
+  public function getRemoveFacesUrl($key,$value)
+    {
+        $paramss = $this->getRequest()->getParams();
+
+        $finalParams = $paramss;
+
+		if (!(is_array($key) && is_array($value) && count($key) == count($value))){
+			$key = array($key);
+			$value = array($value);
+		}
+		
+
+		foreach ($key as $item)
+		{
+			if (isset($finalParams['fq'][$item]) && !is_array($finalParams['fq'][$item]) && !empty($finalParams['fq'][$item])) {
+				unset($finalParams['fq'][$item]);
+				if ($item == 'category' && isset($finalParams['fq'][$item.'_id'])) {
+					unset($finalParams['fq'][$item.'_id']);
+				}
+			}else if (isset($finalParams['fq'][$item]) && is_array($finalParams['fq'][$item]) && count($finalParams['fq'][$item]) > 0) {
+				foreach ($finalParams['fq'][$item] as $k=>$v) {
+					if ($v == $value) {
+						unset($finalParams['fq'][$item][$k]);
+						if ($item == 'category' && isset($finalParams['fq'][$item.'_id']) && isset($finalParams['fq'][$item.'_id'][$k])) {
+							unset($finalParams['fq'][$item.'_id'][$k]);
+						}
+					}
+				}
+			}			
+
+			// Unset all depended fileds
+			foreach($this->getDependAttributes($item) as $depend){
+				if(isset($finalParams['fq'][$depend])){
+					unset($finalParams['fq'][$depend]);
+				}
+			}
+		}
+		
+
+
+    	$urlParams = array();
+        $urlParams['_current']  = true;
+        $urlParams['_escape']   = true;
+        $urlParams['_use_rewrite']   = true;
+
+    	if (isset($finalParams)) {
+    		if (Mage::app()->getRequest()->getRouteName() == 'catalog') {
+    			if (isset($finalParams['q'])) {
+    				unset($finalParams['q']);
+    			}
+    			if (isset($finalParams['id'])) {
+    				unset($finalParams['id']);
+    			}
+    		}
+
+        	$urlParams['_query']    = $finalParams;
+        }
+
+        return Mage::getUrl('*/*/*', $urlParams);
+    }
+	
 	/**
 	 * @return array(attrCode=>blockObject, ...)
 	 */
@@ -41,14 +133,22 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 			
 			if($this->getMode()==self::MODE_CATEGORY){
 				$filter = $this->getFilterByAttribute($attrCode);
+				
+				// Skip attribs with no custom filter
 				if(!$filter || !$filter->getId()){
-					continue;// Skip attribs with no custom filter
+					continue;
+				}
+				
+				// Check is filter depended - if not - skip
+				if($filter->getParentAttributeId() && !$this->_checkFilterDepedncy($filter)){
+					continue;
 				}
 				
 				// Is multiple values
 				if($filter->getShowMultiple()){
 					$data = $this->_prepareMultiValues($facetFileds, $key);
 				}
+				
 				
 				$renderer = $this->getDefaultRenderer();
 				if($filter->getCustomRender()){
@@ -141,6 +241,28 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 			$this->setData("filter_by_attribute", $attributeByCode);
 		}
 		return $this->getData("filter_by_attribute", $attrCode);
+	}
+	
+	public function getAttributeCodeById($attrCode) {
+		if(!$this->hasData("attribute_code_by_id")){
+			$attributeCodeById = array();
+			foreach($this->getFilterCollection() as $filter){
+				$attributeCodeById[$filter->getAttributeId()] = $filter->getAttributeCode();
+			}
+			$this->setData("attribute_code_by_id", $attributeCodeById);
+		}
+		return $this->getData("attribute_code_by_id", $attrCode);
+	}
+	
+	public function getAttributeIdByCode($attrCode) {
+		if(!$this->hasData("attribute_id_by_code")){
+			$attributeCodeById = array();
+			foreach($this->getFilterCollection() as $filter){
+				$attributeCodeById[$filter->getAttributeCode()] = $filter->getAttributeId();
+			}
+			$this->setData("attribute_id_by_code", $attributeCodeById);
+		}
+		return $this->getData("attribute_id_by_code", $attrCode);
 	}
 	
 	
