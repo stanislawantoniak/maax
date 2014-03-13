@@ -9,6 +9,17 @@ class Zolago_Catalog_Model_Resource_Category_Filter_Collection
     }
 
 	/**
+	 * @return Zolago_Catalog_Model_Resource_Category_Filter_Collection
+	 */
+	public function joinAttributeCode() {
+		$this->getSelect()->join(
+				array("eav_attribute"=>  $this->getTable("eav/attribute")),
+				"eav_attribute.attribute_id=main_table.attribute_id",
+				array("attribute_code")
+		);
+		return $this;
+	}
+	/**
 	 * @param Mage_Catalog_Model_Category|int|array $category
 	 * @return Zolago_Catalog_Model_Resource_Category_Filter_Collection
 	 */
