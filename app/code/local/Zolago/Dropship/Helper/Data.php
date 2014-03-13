@@ -177,16 +177,17 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
 	}
 	
 	protected function _processDhlTrackStatus($track, $dhlResult) {
-		$saveAction = false;
 		$dhlMessage = array();
 		$comment = $this->__(self::DHL_HEADER) . PHP_EOL;
 		/* @var $shipment Mage_Sales_Model_Order_Shipment */
 		$shipment		= $track->getShipment();
 		$poId			= $shipment->getUdpoId();
 		$dhlComment		= $this->_getPoOrderCommentsHistory($poId);
+		$status			= $this->__('Ready to Ship');
 
 		if (is_array($dhlResult) && array_key_exists('error', $dhlResult)) {
 			$this->_log('DHL Service Error: ' .$dhlResult['error']);
+			$dhlMessage[] = 'DHL Service Error: ' .$dhlResult['error'];
 		} elseif (property_exists($dhlResult, 'getTrackAndTraceInfoResult') && property_exists($dhlResult->getTrackAndTraceInfoResult, 'events') && property_exists($dhlResult->getTrackAndTraceInfoResult->events, 'item')) {
 			$events = $dhlResult->getTrackAndTraceInfoResult->events;
 			foreach ($events->item as $singleEvent) {
@@ -198,41 +199,55 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
 
 				switch ($singleEvent->status) {
 					case self::DHL_STATUS_DELIVERED:
-						$status = Mage::helper('udpo')->__('Delivered');
+						$status = $this->__('Delivered');
 						$track->setUdropshipStatus(Unirgy_Dropship_Model_Source::TRACK_STATUS_DELIVERED);
 						break;
 					case self::DHL_STATUS_RETURNED:
-						$status = Mage::helper('udpo')->__('Returned');
+						$status = $this->__('Returned');
 						$track->setUdropshipStatus(Unirgy_Dropship_Model_Source::TRACK_STATUS_CANCELED);
+						break;
 					case self::DHL_STATUS_WRONG:
-						$status = Mage::helper('udpo')->__('Canceled');
+						$status = $this->__('Canceled');
 						$track->setUdropshipStatus(Unirgy_Dropship_Model_Source::TRACK_STATUS_CANCELED);
+						break;
 					default:
-						$status = Mage::helper('udpo')->__('Ready to Ship');				
 						break;
 				}
-				$saveAction = true;
 			}
 		} else {
 			$this->_log('DHL Service Error: Missing Track and Trace Data');
+			$dhlMessage[] = $this->__('DHL Service Error: Missing Track and Trace Data');
 		}
 
-		if ($saveAction) {
-			$dhlMessage = array_unique($dhlMessage);
-			foreach ($dhlMessage as $singleMessage) {
-				$comment .= $singleMessage;
-			}
-				
-			$dhlComment->setParentId($poId)
-					->setComment(trim($comment))
-					->setCreatedAt(now())
-					->setIsVisibleToVendor(1)
-					->setUdropshipStatus($status)
-					->setUsername('API');
-			
+		$dhlMessage = array_reverse(array_unique($dhlMessage));
+		foreach ($dhlMessage as $singleMessage) {
+			$comment .= $singleMessage;
+		}
+
+		$dhlComment->setParentId($poId)
+				->setComment(trim($comment))
+				->setCreatedAt(now())
+				->setIsVisibleToVendor(1)
+				->setUdropshipStatus($status)
+				->setUsername('API');
+		
+		if (!in_array($status, array($this->__('Delivered'), $this->__('Returned'), $this->__('Canceled')))) {
 			$track->setNextCheck($this->getNextDhlCheck($shipment->getOrder()->getStoreId()));
-//			$dhlComment->save();
-//			$track->save();
+		}
+
+		try {
+			$track->setWebApi(true);
+			$track->save();
+		} catch (Exception $e) {
+			Mage::logException($e);
+			return false;
+		}
+
+		try {
+			$dhlComment->save();
+		} catch (Exception $e) {
+			Mage::logException($e);
+			return false;
 		}
 		return true;
 	}
@@ -241,7 +256,7 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
 		$comments = Mage::getModel('udpo/po_comment')
 						->getCollection()
 						->setPoFilter($poId)
-						->addFieldToFilter('comment', array('like' => self::DHL_HEADER));
+						->addFieldToFilter('comment', array('like' => '%'. self::DHL_HEADER . '%'));
 				
 		if ($firstItem) {
 			$comments = $comments->getFirstItem();
