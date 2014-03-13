@@ -113,7 +113,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
     	$solrData = $this->getSolrData();
     	$priceFieldName = Mage::helper('solrsearch')->getPriceFieldName();
     	$facetFileds = array();
-		$blocks = array();
+		$sorted = array();
 		
     	if (isset($solrData['facet_counts']['facet_fields']) && is_array($solrData['facet_counts']['facet_fields'])) {
     		$facetFileds = $solrData['facet_counts']['facet_fields'];
@@ -174,12 +174,22 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 			$block->setAllItems($data);
 			$block->setAttributeCode($attrCode);
 			$block->setFacetKey($key);
-			$blocks[] = $block;
+			$sortOrder = $filter->getSortOrder();
+			if(!isset($sorted[$sortOrder])){
+				$sorted[$sortOrder] = array();
+			}
+			$sorted[$sortOrder][] = $block;
 		}
 		
-		foreach($blocks as $block){
-			$block->setFilterContainer($this);
-			$block->setSolrModel($this->solrModel);
+		ksort($sorted);
+		
+		$blocks = array();
+		foreach($sorted as $ordered){
+			foreach($ordered as $block){
+				$block->setFilterContainer($this);
+				$block->setSolrModel($this->solrModel);
+				$blocks[] = $block;
+			}
 		}
 		
     	return $blocks;
