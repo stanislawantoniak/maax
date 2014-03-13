@@ -167,12 +167,12 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
 		}
 		
 		foreach ($trackIds as $_trackId => $_tracks) {
-			foreach ($_tracks as $_track) {			
+			foreach ($_tracks as $_track) {
 				$result = $this->_dhlClient->getTrackAndTraceInfo($_track->getTrackNumber());
-				$this->_processDhlTrackStatus($_track, $result);				
+				$this->_processDhlTrackStatus($_track, $result);
 			}
-		}		
-
+		}
+		
 		return true;
 	}
 	
@@ -189,6 +189,7 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
 			$this->_log('DHL Service Error: ' .$dhlResult['error']);
 			$dhlMessage[] = 'DHL Service Error: ' .$dhlResult['error'];
 		} elseif (property_exists($dhlResult, 'getTrackAndTraceInfoResult') && property_exists($dhlResult->getTrackAndTraceInfoResult, 'events') && property_exists($dhlResult->getTrackAndTraceInfoResult->events, 'item')) {
+			$shipmentIdMessage = $this->__('Tracking ID') . ': '. $dhlResult->getTrackAndTraceInfoResult->shipmentId . PHP_EOL;
 			$events = $dhlResult->getTrackAndTraceInfoResult->events;
 			foreach ($events->item as $singleEvent) {
 				$dhlMessage[$singleEvent->status] = 
@@ -219,17 +220,24 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
 			$dhlMessage[] = $this->__('DHL Service Error: Missing Track and Trace Data');
 		}
 
+		$comment .= $shipmentIdMessage;
 		$dhlMessage = array_reverse(array_unique($dhlMessage));
 		foreach ($dhlMessage as $singleMessage) {
 			$comment .= $singleMessage;
 		}
-
+		
+		$comment = trim($comment);
 		$dhlComment->setParentId($poId)
-				->setComment(trim($comment))
+				->setComment($comment)
 				->setCreatedAt(now())
-				->setIsVisibleToVendor(1)
-				->setUdropshipStatus($status)
+				->setIsVisibleToVendor(true)
 				->setUsername('API');
+		
+		$this->addDhlShipmentComment(
+			$track->getShipment(),
+			$comment,
+			$status
+		);
 		
 		if (!in_array($status, array($this->__('Delivered'), $this->__('Returned'), $this->__('Canceled')))) {
 			$track->setNextCheck($this->getNextDhlCheck($shipment->getOrder()->getStoreId()));
@@ -238,6 +246,7 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
 		try {
 			$track->setWebApi(true);
 			$track->save();
+			$track->getShipment()->save();			
 		} catch (Exception $e) {
 			Mage::logException($e);
 			return false;
@@ -264,4 +273,22 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
 		
 		return $comments;
 	}
+	
+    public function addDhlShipmentComment($shipment, $comment, $status = false, $visibleToVendor=true, $isVendorNotified=false, $isCustomerNotified=false)
+    {		
+		$commentModel = Mage::getResourceModel('sales/order_shipment_comment_collection')
+			->setShipmentFilter($shipment->getId())
+			->addFieldToFilter('comment', array('like' => '%'. self::DHL_HEADER . '%'))
+			->getFirstItem();
+
+		$commentModel->setParentId($shipment->getId())
+			->setComment($comment)
+			->setIsCustomerNotified($isCustomerNotified)
+			->setIsVendorNotified($isVendorNotified)
+			->setIsVisibleToVendor($visibleToVendor)
+			->setUdropshipStatus($status)
+			->setCreatedAt(now());
+        $commentModel->save();
+        return $commentModel;
+    }	
 }
