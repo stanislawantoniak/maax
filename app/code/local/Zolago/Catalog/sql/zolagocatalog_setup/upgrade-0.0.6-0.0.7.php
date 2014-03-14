@@ -1,31 +1,16 @@
 <?php
 
-$installer = new Mage_Eav_Model_Entity_Setup('core_setup');;
+$installer = new Mage_Catalog_Model_Resource_Setup('core_setup');
 /* @var $installer Mage_Eav_Model_Entity_Setup */
 
 $installer->startSetup();
 
-$installer->addAttribute('catalog_category', 'price_filter_settings', array(
-                             'group'                     => 'Display Settings',
-                             'input'                     => 'text',
-                             'type'                      => 'varchar',
-                             'label'                     => 'Price Filter Settings',
-                             'source'            		=> null,
-                             'backend'                   => '',
-                             'visible'                   => true,
-                             'required'                  => false,
-                             'visible_on_front'          => false,
-                             'global'                    => Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_GLOBAL,
-                             'user_defined'      		=> true,
-                             'default'           		=> '100;300',
-                             'position'            		=> 100
-                         ));
 
 // new attributes (flags, reviews)
 $installer->addAttribute('catalog_product','product_flag', array (
                              'label' => 'Product Flags',
-                             'type' => 'varchar',
                              'group' => 'General',
+                             'type' => 'varchar',
                              'input' => 'multiselect',
                              'backend' => 'eav/entity_attribute_backend_array',
                              
@@ -33,9 +18,14 @@ $installer->addAttribute('catalog_product','product_flag', array (
                              'source' => 'zolagocatalog/product_source_flag',
                              'global'                    => Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_GLOBAL,
                              'visible' => true,
+                             'is_filterable' => 1,
+                             'used_in_product_listing' => 1,
+                             'is_used_for_promo_rules' => 1,
+                             'used_for_sort_by' => 1,
                              'required' => false,
                              'user_defined'              => true,
                              'searchable' => false,
+                             'backend_type' => 'static',
                              'filterable' => false,
                              'comparable' => false,                                                     
                              'visible_on_front' => true,
@@ -43,14 +33,18 @@ $installer->addAttribute('catalog_product','product_flag', array (
 
                          ));
 $installer->addAttribute('catalog_product','product_rating', array (
+                             'label' => 'Product Rating',
                              'group' => 'General',
                              'input' => 'select',
                              'source' => 'zolagocatalog/product_source_rating',
                              'frontend' => '',
-                             'backend' => 'eav/entity_attribute_backend_array',
-                             'type' => 'decimal',
-                             'backend_type' => 'decimal',
-                             'label' => 'Product Rating',
+                             'backend' => '',
+                             'type' => 'int',
+                             'backend_type' => 'static',
+                             'is_filterable' => 1,
+                             'used_in_product_listing' => 1,
+                             'is_used_for_promo_rules' => 1,
+                             'used_for_sort_by' => 1,
                              'visible' => true,
                              'required' => false,
                              'visible_on_front' => true,
