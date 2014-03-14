@@ -35,13 +35,15 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 	public function getItems() {
 		if(!$this->hasData("items")){
 			$hiddenItems = array();
+			$items = $this->getAllItems();
 			
-			$items =  $this->filterAndSortOptions(
-					$this->getAllItems(), 
-					$this->getFilterModel(), 
-					$hiddenItems
-			);
-			
+			if($this->getFilterModel()){
+				$items =  $this->filterAndSortOptions(
+						$this->getAllItems(), 
+						$this->getFilterModel(), 
+						$hiddenItems
+				);
+			}
 			//ksort($items);
 			//ksort($hiddenItems);
 			$this->setData("items", $items);
@@ -113,7 +115,7 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 			
 			// Force show all items is filter is active and multiple
 
-			if($filter->getUseSpecifiedOptions()){
+			if($filter && $filter->getUseSpecifiedOptions()){
 				$specifiedIds = $filter->getSpecifiedOptions();
 				// Option specified - move to items
 				if(in_array($option['value'], $specifiedIds)){
