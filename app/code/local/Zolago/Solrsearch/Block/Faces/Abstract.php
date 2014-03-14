@@ -13,6 +13,25 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 		$this->setTemplate('zolagosolrsearch/standard/searchfaces/enum.phtml');
 	}
 	
+	public function getAllItems() {
+		$data = parent::getAllItems();
+		foreach($this->getActiveItems() as $item){
+			if(!isset($data[$item])){
+				$data[$item] = 0;
+			}
+		}
+		return $data;
+	}
+	
+	public function getActiveItems() {
+		$filterQuery = $this->getFilterQuery();
+		if(isset($filterQuery[$this->getFacetKey()])){
+			return $filterQuery[$this->getFacetKey()];
+		}
+		return array();
+	}
+
+
 	public function getItems() {
 		if(!$this->hasData("items")){
 			$items = $this->getAllItems();
@@ -21,6 +40,8 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 			if($filterModel && $filterModel->getUseSpecifiedOptions()){
 				$items =  $this->filterOptions($items, $filterModel->getSpecifiedOptions(), $hiddenItems);
 			}
+			ksort($items);
+			ksort($hiddenItems);
 			$this->setData("items", $items);
 			$this->setData("hidden_items", $hiddenItems);
 		}
@@ -130,6 +151,10 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 	public function getCanShowHidden() {
 		$this->getItems();
 		return $this->_getCanShow($this->getHiddenItems());
+	}
+	// Can show item
+	public function getCanShowItem($item, $count) {
+		return $count>0 /*|| $this->isItemActive($item)*/;
 	}
 	
 	protected function _getCanShow(array $what) {

@@ -50,8 +50,11 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 
         $finalParams = $paramss;
 
-		if (!(is_array($key) && is_array($value) && count($key) == count($value))){
+		if (!is_array($key)){
 			$key = array($key);
+		}
+		
+		if (!is_array($value)){
 			$value = array($value);
 		}
 		
@@ -65,19 +68,23 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 				}
 			}else if (isset($finalParams['fq'][$item]) && is_array($finalParams['fq'][$item]) && count($finalParams['fq'][$item]) > 0) {
 				foreach ($finalParams['fq'][$item] as $k=>$v) {
-					if ($v == $value) {
-						unset($finalParams['fq'][$item][$k]);
-						if ($item == 'category' && isset($finalParams['fq'][$item.'_id']) && isset($finalParams['fq'][$item.'_id'][$k])) {
-							unset($finalParams['fq'][$item.'_id'][$k]);
+					foreach($value as $_value){
+						if ($v == $_value) {
+							unset($finalParams['fq'][$item][$k]);
+							if ($item == 'category' && isset($finalParams['fq'][$item.'_id']) && isset($finalParams['fq'][$item.'_id'][$k])) {
+								unset($finalParams['fq'][$item.'_id'][$k]);
+							}
 						}
 					}
 				}
 			}			
 
-			// Unset all depended fileds
+//			// Unset all depended fileds
 			foreach($this->getDependAttributes($item) as $depend){
 				if(isset($finalParams['fq'][$depend])){
-					unset($finalParams['fq'][$depend]);
+					if((is_array($paramss['fq'][$item]) && count($paramss['fq'][$item])<2) || !is_array($paramss['fq'][$item])){
+						unset($finalParams['fq'][$depend]);
+					}
 				}
 			}
 		}
@@ -146,13 +153,14 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 				
 				// Is multiple values
 				if($filter->getShowMultiple()){
-					$data = $this->_prepareMultiValues($facetFileds, $key);
+					$data = $this->_prepareMultiValues($key);
+					//Mage::log(print_r($data,1));
 				}
 				
 				
 				$renderer = $this->getDefaultRenderer();
-				if($filter->getCustomRender()){
-					$renderer = $filter->getCustomRender();
+				if($filter->getFrontendRenderer()){
+					$renderer = $filter->getFrontendRenderer();
 				}
 				
 				$block = $this->getLayout()->createBlock($renderer);
@@ -275,27 +283,42 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 		return $this->getData("attribute_id_by_code", $attrCode);
 	}
 	
-	
-
-
-	protected function _prepareMultiValues(&$facetData, $facetkey) {
-		
-		$queryText = Mage::helper('solrsearch')->getParam('q');
-
-		$key = Mage::helper('solrsearch')->getKeywordCachedKey($queryText);
-
-		$originalSolrData = Mage::getSingleton('core/session')->getOriginSolrFacetData();
-
-		if (isset($originalSolrData) && isset($originalSolrData[$key])) {
-
-			if (isset($originalSolrData[$key]['facet_counts']['facet_fields'][$facetkey]) && !empty($originalSolrData[$key]['facet_counts']['facet_fields'][$facetkey])) {
-				$facetData[$facetkey] = $originalSolrData[$key]['facet_counts']['facet_fields'][$facetkey];
-			}
-
+	/**
+	 * @return SolrBridge_Solrsearch_Model_Solr
+	 */
+	protected function _getHelpedSolrModel() {
+		if(!$this->getData("helped_solr_model")){
+			$this->setData("helped_solr_model", Mage::getModel('solrsearch/solr'));		
 		}
-		//Update original facet data
-		$originalSolrData[$key]['facet_counts']['facet_fields'] = $facetData;
-		Mage::getSingleton('core/session')->setOriginSolrFacetData($originalSolrData);
-		return $facetData[$facetkey];
+		return $this->getData("helped_solr_model");
+	}
+
+
+
+
+	protected function _prepareMultiValues($facetkey) {
+		// Remove this key from query params\
+		$req = Mage::app()->getRequest();
+		
+		$oldParams = $req->getParams();
+		$params = $oldParams;
+		$paramKey = $this->_extractAttributeCode($facetkey);
+		
+		if(isset($params['fq'][$paramKey])){
+			unset($params['fq'][$paramKey]);
+		}
+		
+		$model = $this->_getHelpedSolrModel();
+		$queryText = Mage::helper('solrsearch')->getParam('q');
+		
+		$req->setParams($params);
+		$result = $model->query($queryText);
+		$req->setParams($oldParams);
+		
+		if(isset($result['facet_counts']['facet_fields'][$facetkey])){
+			return $result['facet_counts']['facet_fields'][$facetkey];
+		}
+		
+		return array();
 	}
 }
