@@ -16,9 +16,6 @@
 			<?php endforeach; ?>
 		</ol>
 		<?php if ($this->getCanShowHidden()): ?>
-			<a href="#" id="solr_search_hidden_<?php echo $key ?>_expander" onclick="Effect.toggle('content_hidden_holder_<?php echo $key ?>', 'slide', {duration: 0.3});
-			$('solr_search_hidden_<?php echo $key ?>_expander').toggleClassName('collapsed');
-			return false;"><?php echo $this->__("show more");?></a>
 			<ol style="display: none;" id="content_hidden_holder_<?php echo $key ?>">
 				<?php foreach ($this->getHiddenItems() as $item => $count): ?>
 					<li>
@@ -26,6 +23,11 @@
 					</li>
 				<?php endforeach; ?>
 			</ol>
+			<div id="solr_search_hidden_<?php echo $key ?>_expander">
+				<a href="#"  onclick="Effect.toggle('content_hidden_holder_<?php echo $key ?>', 'slide', {duration: 0.3});
+				$('solr_search_hidden_<?php echo $key ?>_expander').toggleClassName('collapsed').hide();
+				return false;"><?php echo $this->__("show more");?></a>
+			</div>
 		<?php endif; ?>
 	</dd>
 <?php endif; ?>

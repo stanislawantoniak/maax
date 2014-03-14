@@ -20,12 +20,12 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 			return true;
 		}
 		if($parentAttributeCode = $this->getAttributeCodeById($parentAttributeId)){
-			return $this->_isFilterActive($parentAttributeCode);
+			return $this->isFilterActive($parentAttributeCode);
 		}
 		return false;
 	}
 	
-	protected function _isFilterActive($attrCode) {
+	public function isFilterActive($attrCode) {
 		$filterQuery = $this->getFilterQuery();
 		if (isset($filterQuery[$attrCode."_facet"])) {
 			return true;
@@ -79,7 +79,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 				}
 			}			
 
-//			// Unset all depended fileds
+			// Unset all depended fileds
 			foreach($this->getDependAttributes($item) as $depend){
 				if(isset($finalParams['fq'][$depend])){
 					if((is_array($paramss['fq'][$item]) && count($paramss['fq'][$item])<2) || !is_array($paramss['fq'][$item])){
@@ -172,17 +172,18 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 				}
 				
 				$block->setFilterModel($filter);
+				$sortOrder = $filter->getSortOrder();
 			}else{
 				// Search mode - unknow category filters
 				$block= $this->getLayout()->createBlock(
 						$this->getDefaultRenderer()
 				);
+				$sortOrder = 0;
 			}
 			
 			$block->setAllItems($data);
 			$block->setAttributeCode($attrCode);
 			$block->setFacetKey($key);
-			$sortOrder = $filter->getSortOrder();
 			if(!isset($sorted[$sortOrder])){
 				$sorted[$sortOrder] = array();
 			}

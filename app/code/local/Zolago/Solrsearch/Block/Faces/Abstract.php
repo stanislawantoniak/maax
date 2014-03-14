@@ -34,14 +34,16 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 
 	public function getItems() {
 		if(!$this->hasData("items")){
-			$items = $this->getAllItems();
 			$hiddenItems = array();
-			$filterModel = $this->getFilterModel();
-			if($filterModel && $filterModel->getUseSpecifiedOptions()){
-				$items =  $this->filterOptions($items, $filterModel->getSpecifiedOptions(), $hiddenItems);
-			}
-			ksort($items);
-			ksort($hiddenItems);
+			
+			$items =  $this->filterAndSortOptions(
+					$this->getAllItems(), 
+					$this->getFilterModel(), 
+					$hiddenItems
+			);
+			
+			//ksort($items);
+			//ksort($hiddenItems);
 			$this->setData("items", $items);
 			$this->setData("hidden_items", $hiddenItems);
 		}
@@ -87,9 +89,11 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 		return $facetUrl;
 	}
 	
-
+	public function isFilterActive() {
+		return $this->getFilterContainer()->isFilterActive($this->getAttributeCode());
+	}
 	
-	public function filterOptions(array $allItems, array $specifiedIds, array &$hiddenItems) {
+	public function filterAndSortOptions(array $allItems, $filter, array &$hiddenItems) {
 		$attrCode = $this->getAttributeCode();
 		$source = $this->getAttributeSource($attrCode);
 		$out = array();
@@ -99,31 +103,39 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 		}
 		
 		$allSourceOptions = $source->getAllOptions(false);
-		
+		$extraAdded = array();
+		// Options are sorted via admin panel
 		foreach($allSourceOptions as $option){
+			// Option not in available result colleciotn
 			if(!isset($allItems[$option['label']])){
 				continue;
 			}
 			
-			// Force add active items
-			if($this->isItemActive($option['label'])){
-				$out[$option['label']] = $allItems[$option['label']];
-				continue;
-			}
-			
-			// Option specified - move to items
-			if(in_array($option['value'], $specifiedIds)){
-				$out[$option['label']] = $allItems[$option['label']];
-		    // Option non specified move to hidden
+			// Force show all items is filter is active and multiple
+
+			if($filter->getUseSpecifiedOptions()){
+				$specifiedIds = $filter->getSpecifiedOptions();
+				// Option specified - move to items
+				if(in_array($option['value'], $specifiedIds)){
+					$out[$option['label']] = $allItems[$option['label']];
+				// Multiselect active - show all fileds, after specified fields
+				}elseif($this->isFilterActive() && $filter->getShowMultiple()){
+					$extraAdded[$option['label']] = $allItems[$option['label']];
+					continue;
+				// Option non specified move to hidden
+				}else{
+					$hiddenItems[$option['label']] = $allItems[$option['label']];
+				}
 			}else{
-				$hiddenItems[$option['label']] = $allItems[$option['label']];
+				$out[$option['label']] = $allItems[$option['label']];
 			}
 		}
-		return $out;
+		return array_merge($out, $extraAdded);
 		
 	}
 	
 	/**
+	 * @todo optymalize
 	 * @param string $code
 	 * @return Mage_Eav_Model_Entity_Attribute_Source_Interface | null
 	 */
@@ -154,7 +166,7 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 	}
 	// Can show item
 	public function getCanShowItem($item, $count) {
-		return $count>0 /*|| $this->isItemActive($item)*/;
+		return $count>0 || $this->isItemActive($item);
 	}
 	
 	protected function _getCanShow(array $what) {
