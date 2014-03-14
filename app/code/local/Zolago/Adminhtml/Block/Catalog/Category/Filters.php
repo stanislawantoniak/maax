@@ -97,7 +97,7 @@ class Zolago_Adminhtml_Block_Catalog_Category_Filters extends Mage_Adminhtml_Blo
 	 * @return array
 	 */
 	public function getRendererValues() {
-		return Mage::getSingleton("zolagocatalog/system_layer_filter_source")->toOptionHash(true);
+		return Mage::getSingleton("zolagosolrsearch/system_faces_enum_source")->toOptionHash(true);
 	}
 	
 	/**
