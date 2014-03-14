@@ -208,7 +208,7 @@
 		
 		attributeOptionsHTML.innerHTML = "";
 		attributeOptions.forEach(function(singleOption) {
-			if (singleOption.value) {
+			if (singleOption.value !== null) {
 				var selected = false;				
 				if (attributeSpecifiedOptions.indexOf(parseInt(singleOption.value)) > -1) {
 					selected = true;
