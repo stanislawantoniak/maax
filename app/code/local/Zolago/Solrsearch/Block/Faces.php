@@ -202,8 +202,12 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
     	}
 		if(isset($facetFileds['product_rating_facet'])){
 			$data = $facetFileds['product_rating_facet'];
+
 			if($this->getSpecialMultiple()){
 				$data = $this->_prepareMultiValues('product_rating_facet');
+			}			
+			if(isset($data['No rating'])){
+				unset($data['No rating']);
 			}
 			$block = $this->getLayout()->createBlock($this->_getRatingRenderer());
 			$block->setParentBlock($this);
