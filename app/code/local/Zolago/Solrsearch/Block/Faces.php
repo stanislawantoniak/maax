@@ -126,6 +126,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 			$this->getFlagBlock($solrData),
 			$this->getRatingBlock($solrData),
 		);
+		$additionalBlocks = array_reverse($additionalBlocks);
 		foreach($additionalBlocks as $block){
 			if($block){
 				array_unshift($outBlock, $block);
@@ -138,26 +139,111 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 		return $outBlock;
 	}
 	
+
+	
 	public function getCategoryBlock($solrData) {
-//		$facetFileds = array();
-//    	if (isset($solrData['facet_counts']['facet_fields']) && is_array($solrData['facet_counts']['facet_fields'])) {
-//    		$facetFileds = $solrData['facet_counts']['facet_fields'];
-//    	}
-//		if(isset($facetFileds['category_path'])){
-//			$block = $this->getLayout()->createBlock($this->_getCategoryRenderer());
-//			
-//			$block->setAllItems($facetFileds['category_path']);
-//			$block->setAttributeCode("category_path");
-//			$block->setFacetKey("category_path_facet");
-//			return $block;
-//		}
+		$facetFileds = array();
+    	if (isset($solrData['facet_counts']['facet_fields']) && is_array($solrData['facet_counts']['facet_fields'])) {
+    		$facetFileds = $solrData['facet_counts']['facet_fields'];
+    	}
+		if(isset($facetFileds['category_path'])){
+			$data = $facetFileds['category_path'];
+			if($this->getSpecialMultiple()){
+				$data = $this->_prepareMultiValues('product_flag_facet');
+			}
+			$block = $this->getLayout()->createBlock($this->_getCategoryRenderer());
+			$block->setParentBlock($this);
+			$block->setAllItems($facetFileds['category_path']);
+			$block->setAttributeCode("category_path");
+			$block->setFacetKey("category_path_facet");
+			return $block;
+		}
 		return null;
+	}
+	
+	public function getPriceBlock($solrData) {
+		if($this->getMode()==self::MODE_CATEGORY&& !$this->getCurrentCategory()->getUsePriceFilter()){
+			return null;
+		}
+		$block = $this->getLayout()->createBlock($this->_getPriceRenderer());
+		$block->setParentBlock($this);
+		return $block;
+	}
+	
+	public function getFlagBlock($solrData) {
+		if($this->getMode()==self::MODE_CATEGORY&& !$this->getCurrentCategory()->getUseFlagFilter()){
+			return null;
+		}
+		$facetFileds = array();
+    	if (isset($solrData['facet_counts']['facet_fields']) && is_array($solrData['facet_counts']['facet_fields'])) {
+    		$facetFileds = $solrData['facet_counts']['facet_fields'];
+    	}
+		if(isset($facetFileds['product_flag_facet'])){
+			$data = $facetFileds['product_flag_facet'];
+			if($this->getSpecialMultiple()){
+				$data = $this->_prepareMultiValues('product_flag_facet');
+			}
+			$block = $this->getLayout()->createBlock($this->_getFlagRenderer());
+			$block->setParentBlock($this);
+			$block->setAllItems($data);
+			$block->setAttributeCode("product_flag");
+			$block->setFacetKey("product_flag_facet");
+			return $block;
+		}
+	}
+	
+	public function getRatingBlock($solrData) {
+		if($this->getMode()==self::MODE_CATEGORY&& !$this->getCurrentCategory()->getUseReviewFilter()){
+			return null;
+		}
+		$facetFileds = array();
+    	if (isset($solrData['facet_counts']['facet_fields']) && is_array($solrData['facet_counts']['facet_fields'])) {
+    		$facetFileds = $solrData['facet_counts']['facet_fields'];
+    	}
+		if(isset($facetFileds['product_rating_facet'])){
+			$data = $facetFileds['product_rating_facet'];
+			if($this->getSpecialMultiple()){
+				$data = $this->_prepareMultiValues('product_rating_facet');
+			}
+			$block = $this->getLayout()->createBlock($this->_getRatingRenderer());
+			$block->setParentBlock($this);
+			$block->setAllItems($data);
+			$block->setAttributeCode("product_rating");
+			$block->setFacetKey("product_rating_facet");
+			return $block;
+		}
+	}
+
+
+	/**
+	 * @return string
+	 */
+	protected function _getRatingRenderer() {
+		return $this->getDefaultRenderer();
+	}
+	/**
+	 * @return string
+	 */
+	protected function _getFlagRenderer() {
+		return $this->getDefaultRenderer();
+	}
+	/**
+	 * @return string
+	 */
+	protected function _getPriceRenderer() {
+		return "zolagosolrsearch/faces_price";
 	}
 	/**
 	 * @return string
 	 */
 	protected function _getCategoryRenderer() {
-		return $this->getDefaultRenderer();
+		return "zolagosolrsearch/faces_category";
+	}
+	/**
+	 * @return boolean
+	 */
+	public function getSpecialMultiple() {
+		return Mage::helper('solrsearch')->getSetting('allow_multiple_filter') > 0;
 	}
 	
 	/**
@@ -188,6 +274,9 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 			switch ($key) {
 				// Skip special facets
 				case "category_path":
+				case "category_id":
+				case "product_flag":
+				case "product_rating":
 					continue 2;
 				break;
 			}
