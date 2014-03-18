@@ -4,6 +4,14 @@
 			$('solr_search_<?php echo $key ?>_expander').toggleClassName('collapsed');
 			return false;"><?php echo $this->getFacetLabel(); ?></dt>
 	<dd id="content_holder_<?php echo $key ?>">
-		<?php echo $this->getParsedCategories();?>
+		<ol>
+		<?php foreach ($this->getAllItems() as $item=>$count):?>
+			<?php if ($this->getCanShowItem($item, $count)): ?>
+			<li>					
+				<a href="<?php echo $this->getItemUrl($item) ?>" class="facet-item <?php echo $this->getItemClass($item); ?>"><?php echo $this->getItemText($item); ?>&nbsp;<span>(<?php echo $count ?>)</span></a>
+			</li>
+			<?php endif;?>
+		<?php endforeach;?>
+		</ol>
 	</dd>
 <?php endif; ?>

@@ -149,13 +149,12 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 		if(isset($facetFileds['category_path'])){
 			$data = $facetFileds['category_path'];
 			if($this->getSpecialMultiple()){
-				$data = $this->_prepareMultiValues('product_flag_facet');
+				$data = $this->_prepareMultiValues('category_path', $data);
 			}
 			$block = $this->getLayout()->createBlock($this->_getCategoryRenderer());
 			$block->setParentBlock($this);
-			$block->setAllItems($facetFileds['category_path']);
-			$block->setAttributeCode("category_path");
-			$block->setFacetKey("category_path_facet");
+			$block->setAllItems($data);
+			$block->setFacetKey("category_path");
 			return $block;
 		}
 		return null;
@@ -181,7 +180,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 		if(isset($facetFileds['product_flag_facet'])){
 			$data = $facetFileds['product_flag_facet'];
 			if($this->getSpecialMultiple()){
-				$data = $this->_prepareMultiValues('product_flag_facet');
+				$data = $this->_prepareMultiValues('product_flag_facet', $data);
 			}
 			$block = $this->getLayout()->createBlock($this->_getFlagRenderer());
 			$block->setParentBlock($this);
@@ -204,7 +203,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 			$data = $facetFileds['product_rating_facet'];
 
 			if($this->getSpecialMultiple()){
-				$data = $this->_prepareMultiValues('product_rating_facet');
+				$data = $this->_prepareMultiValues('product_rating_facet', $data);
 			}			
 			if(isset($data['No rating'])){
 				unset($data['No rating']);
@@ -301,7 +300,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 
 				// Is multiple values
 				if($filter->getShowMultiple()){
-					$data = $this->_prepareMultiValues($key);
+					$data = $this->_prepareMultiValues($key, $data);
 				}
 
 				if(count($data)){
@@ -446,29 +445,129 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 
 
 
-	protected function _prepareMultiValues($facetkey) {
+	protected function _prepareMultiValues($facetkey, $fallbackData=array()) {
+		// @todo check is filter already active?
+		// If not dont try re-request
+		// 
 		// Remove this key from query params\
 		$req = Mage::app()->getRequest();
 		
 		$oldParams = $req->getParams();
 		$params = $oldParams;
+		
 		$paramKey = $this->_extractAttributeCode($facetkey);
 		
 		if(isset($params['fq'][$paramKey])){
 			unset($params['fq'][$paramKey]);
 		}
 		
-		$model = $this->_getHelpedSolrModel();
-		$queryText = Mage::helper('solrsearch')->getParam('q');
+		$filters = $this->getFilterQuery();
 		
-		$req->setParams($params);
-		$result = $model->query($queryText);
-		$req->setParams($oldParams);
+
 		
-		if(isset($result['facet_counts']['facet_fields'][$facetkey])){
-			return $result['facet_counts']['facet_fields'][$facetkey];
+		// Force unset category id
+		if($paramKey=="category_path"){
+			if(!isset($filters['category_id'])){
+				return $fallbackData;
+			}
+			if(isset($params['fq']['category_id'])){
+				unset($params['fq']['category_id']);
+			}
+			if(isset($params['fq']['category'])){
+				unset($params['fq']['category']);
+			}
+		// No data changed
+		}elseif(!isset($filters[$facetkey])){
+			return $fallbackData;
 		}
 		
-		return array();
+		try{
+			$model = $this->_getHelpedSolrModel();
+			$queryText = Mage::helper('solrsearch')->getParam('q');
+
+			$req->setParams($params);
+			$result = $model->query($queryText);
+			$req->setParams($oldParams);
+
+			if(isset($result['facet_counts']['facet_fields'][$facetkey])){
+				return $result['facet_counts']['facet_fields'][$facetkey];
+		}
+		
+		}catch(Exception $e){
+			Mage::logException($e);
+		}
+		
+		return $fallbackData;
+		
 	}
+	
+	public function getFacesUrl($params=array())
+    {
+    	$_solrDataArray = $this->getSolrData();
+
+    	$paramss = $this->getRequest()->getParams();
+
+    	if( isset($_solrDataArray['responseHeader']['params']['q']) && !empty($_solrDataArray['responseHeader']['params']['q']) ) {
+        	if (isset($paramss['q']) && $paramss['q'] != $_solrDataArray['responseHeader']['params']['q']) {
+        		$paramss['q'] = $_solrDataArray['responseHeader']['params']['q'];
+        	}
+        }
+
+        foreach ($params as $key=>$item) {
+        	$key = trim($key);
+
+        	if( in_array($key, array('min', 'max')) ) {
+        		if (isset($paramss[$key])) {
+        			unset($paramss[$key]);
+        			$finalParams = array_merge_recursive($params, $paramss);
+        		}
+        	}
+
+        	if ($key == 'fq') {
+        		foreach ($item as $k=>$v) {
+        			if (isset($paramss[$key][$k]) && $v == $paramss[$key][$k]){
+
+        			}else{
+        				if( $k == 'price' && isset($paramss[$key][$k])/* || $k == 'category' || $k == 'category_id'*/){
+        					unset($paramss[$key][$k]);
+        				}
+						
+        				$finalParams = array_merge_recursive($params, $paramss);
+						
+        			}
+        		}
+        	}
+        }
+
+        if (isset($finalParams['p'])) {
+        	$finalParams['p'] = 1;
+        }
+        if (isset($finalParams['fq'])){
+			if(isset($finalParams['fq']['category_id']) && is_array($finalParams['fq']['category_id'])) {
+				$finalParams['fq']['category_id'] = array_unique($finalParams['fq']['category_id']);
+			}
+			if(isset($finalParams['fq']['category']) && is_array($finalParams['fq']['category'])) {
+				$finalParams['fq']['category'] = array_unique($finalParams['fq']['category']);
+			}
+        }
+
+    	$urlParams = array();
+        $urlParams['_current']  = true;
+        $urlParams['_escape']   = true;
+        $urlParams['_use_rewrite']   = true;
+        if (isset($finalParams)) {
+
+        	if (Mage::app()->getRequest()->getRouteName() == 'catalog') {
+        		if (isset($finalParams['q'])) {
+        			unset($finalParams['q']);
+        		}
+        		if (isset($finalParams['id'])) {
+        			unset($finalParams['id']);
+        		}
+        	}
+
+        	$urlParams['_query']    = $finalParams;
+        }
+        return $this->getUrl('*/*/*', $urlParams);
+    }
 }

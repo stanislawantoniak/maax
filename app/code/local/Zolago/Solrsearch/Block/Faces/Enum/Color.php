@@ -24,7 +24,7 @@ class Zolago_Solrsearch_Block_Faces_Enum_Color
 	
 	
 	public function getByOptionIdMap($idx=null) {
-		if(!$this->getData("by_option_id_map")){
+		if(!$this->getData("by_option_id_map", $idx)){
 			$out = array();
 			foreach($this->getValuesCollection() as $value){
 				if($value->getOptionId()){
