@@ -111,7 +111,7 @@ class Zolago_Solrsearch_Block_Faces_Price extends Zolago_Solrsearch_Block_Faces_
 
 			$index++;
 		}
-		return $returnPriceRanges;
+		return (count($returnPriceRanges)>1)? $returnPriceRanges:array();
 	}
 
 	protected function applyPriceRangeProductCount(){
