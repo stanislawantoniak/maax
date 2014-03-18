@@ -52,7 +52,7 @@ class Zolago_Adminhtml_Block_Catalog_Category_Filters extends Mage_Adminhtml_Blo
 		$ids = $this->getCategory()->getResource()->getChildrenIds($this->getCategory());
 		$ids = array_merge($ids,array($this->getCategory()->getId()));
 		$exclude = array("product_rating", "product_flag");
-		$values = $resMapper->getAttributesByCategory($ids/*, $exclude*/);
+		$values = $resMapper->getAttributesByCategory($ids, $exclude);
 		return $values;
 	}
 	
