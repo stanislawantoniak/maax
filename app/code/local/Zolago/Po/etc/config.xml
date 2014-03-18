@@ -47,6 +47,15 @@
 				</args>
 			</udpo>
 		</routers>
+		<translate>
+			<modules>
+				<Zolago_Po>
+					<files>
+						<default>Zolago_Po.csv</default>
+					</files>
+				</Zolago_Po>
+			</modules>
+		</translate>
 	</frontend>
     <adminhtml>
         <layout>
@@ -56,5 +65,14 @@
                 </zolagopo>
             </updates>
         </layout>
+		<translate>
+			<modules>
+				<Zolago_Po>
+					<files>
+						<default>Zolago_Po.csv</default>
+					</files>
+				</Zolago_Po>
+			</modules>
+		</translate>		
     </adminhtml>
 </config>
