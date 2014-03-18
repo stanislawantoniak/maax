@@ -95,16 +95,28 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 		return $this->getFilterContainer()->isFilterActive($this->getAttributeCode());
 	}
 	
+	public function getAllOptions() {
+		if(!$this->hasData("all_options"))
+		{
+			$source = $this->getAttributeSource($this->getAttributeCode());
+			if($source){
+				$this->setData("all_options", $source->getAllOptions(true));
+			}else{
+				$this->setData("all_options", array());
+			}
+		}
+		return $this->getData("all_options");
+	}
+
+
 	public function filterAndSortOptions(array $allItems, $filter, array &$hiddenItems) {
-		$attrCode = $this->getAttributeCode();
-		$source = $this->getAttributeSource($attrCode);
-		$out = array();
 		
-		if(!$source){
+		if(!$this->getAllOptions()){
 			return $allItems;
 		}
 		
-		$allSourceOptions = $source->getAllOptions(false);
+		$out = array();
+		$allSourceOptions = $this->getAllOptions();
 		$extraAdded = array();
 		// Options are sorted via admin panel
 		foreach($allSourceOptions as $option){
