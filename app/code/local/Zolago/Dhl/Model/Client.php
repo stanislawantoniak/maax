@@ -7,6 +7,14 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
     protected $_pos;
     protected $_operator;   
 
+	const ADDRESS_HOUSE_NUMBER		= '.';
+	const SHIPMENT_TYPE_PACKAGE		= 'PACKAGE';
+	const SHIPMENT_TYPE_ENVELOPE	= 'ENVELOPE';
+	const SHIPMENT_QTY				= 1;
+	const SHIPMENT_DOMESTIC			= 'AH';
+	
+	const PAYMENT_TYPE				= 'BANK_TRANSFER';
+	const PAYER_TYPE				= 'SHIPPER';
 
     /**
      * @param Zolago_Pos_Model_Pos $pos
@@ -80,20 +88,18 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
          $shipper = new StdClass();
          // todo                  
      }
-    protected function _createShipper($vendorId) {
-        $out = array();
+    protected function _createShipper() {
         $data = $this->_pos->getData();
         $obj = new StdClass();
         $obj->name = $data['name'];
-        $obj->postalCode = $data['postcode'];
+        $obj->postalCode = $this->formatDhlPostCode($data['postcode']);
         $obj->city = $data['city'];
         $obj->street = $data['street'];
+		$obj->houseNumber = self::ADDRESS_HOUSE_NUMBER;
         $obj->contactPhone = $data['phone'];
-        return $out;
+        return $obj;
     }     
     protected function _createReceiver($orderId) {
-        // WARNING!!! HARDCODE!
-        // ONLY FOR TESTING
         $model = Mage::getModel('udpo/po');
         $collection = $model->getCollection();
         $collection->addFieldToFilter('order_id',$orderId);
@@ -104,74 +110,85 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
         
         $obj = new StdClass();
         $data = $address->getData();
-        $obj->name = $data['firstname'].' '.$data['lastname'].($data['company']? ' '.$data['company']:'');
-        $obj->postalCode = $data['postcode'];
+        $obj->name = $data['firstname'].' '.$data['lastname'].($data['company'] ? ' '.$data['company'] : '');
+        $obj->postalCode = $this->formatDhlPostCode($data['postcode']);
         $obj->city = $data['city'];
         $obj->street = $data['street'];
+		$obj->houseNumber = self::ADDRESS_HOUSE_NUMBER;
         $obj->contactPerson = $data['firstname'].' '.$data['lastname'];
         $obj->contactPhone = $data['telephone'];
         $obj->contactEmail = $data['email'];
         return $obj;
     }     
-    protected function _createPieceList($orderId) {
-        // WARNING!!! HARDCODE!
+    protected function _createPieceList($shipmentSettings) {
         $obj = new StdClass();
-        $obj->type = 'PACKAGE';
-        $obj->widht = 80;
-        $obj->height = 40;
-        $obj->length = 40;
-        $obj->quantity = 1;
-        $obj->nonStandard = 'false';
+        $obj->type				= $shipmentSettings['type'];
+		switch ($shipmentSettings['type']) {
+			case self::SHIPMENT_TYPE_PACKAGE:
+				$obj->width		= $shipmentSettings['width'];
+				$obj->height	= $shipmentSettings['height'];
+				$obj->length	= $shipmentSettings['length'];
+				$obj->weight	= $shipmentSettings['weight'];
+				$obj->quantity	= $shipmentSettings['quantity'];				
+				break;
+			default:
+				$obj->quantity	= $shipmentSettings['quantity'];
+				break;
+		}
+		$obj->nonStandard = $shipmentSettings['nonStandard'];
         $ret = new StdClass();
         $ret->item[] = $obj;
         return $ret;
     }     
-    protected function _createPayment($orderId) {
-        // WARNING!!! HARDCODE!
+    protected function _createPayment() {
         $obj = new StdClass();
-        $obj->paymentMethod = 'BANK_TRANSFER';
-        $obj->payerType = 'SHIPPER';
-        $obj->accountNumber = null;
+        $obj->paymentMethod = self::PAYMENT_TYPE;
+        $obj->payerType		= self::PAYER_TYPE;
+        $obj->accountNumber = Mage::helper('zolagodhl')->getDhlAccount();
         $obj->costsCenter = null;
         return $obj;
     }     
-    protected function _createService($orderId) {
+    protected function _createService($shipment) {
+		$order = $shipment->getOrder();
+		$collectOnDeliveryValue = $this->_getCollectOnDeliveryValue($shipment);
         $obj = new StdClass();
-        
-        
-        
-        return $out;
+        $obj->product = self::SHIPMENT_DOMESTIC;
+		if ($order->getPayment()->getMethod() == 'cashondelivery') {
+			$obj->collectOnDelivery			= true;
+			$obj->collectOnDeliveryValue	= $collectOnDeliveryValue;
+			$obj->collectOnDeliveryForm		= self::PAYMENT_TYPE;
+			$obj->insurance					= true;
+			$obj->insuranceValue			= $collectOnDeliveryValue;
+		}
+        return $obj;
     }     
     /**
-     * create shipments
+     * Create Shipments
      *
-     * @param array Mage_Sales_Model_Order_Shipment_Track
-     * @todo: not finish yet
+     * @param array Mage_Sales_Model_Order_Shipment
      */
-    public function createShipment($track) {
-        if (empty($track)) {
+    public function createShipments($shipment, $shipmentSettings) {
+        if (empty($shipment)) {
             return false;
         }
-        if (!is_array($track)) {
-            $track = array($track);
-        }
+		
         $message = new StdClass();
         $message->authData = $this->_auth;        
-        $shipment = new StdClass();
-        foreach ($track as $elem) {
-           $obj = new StdClass();
-           $shipment = $elem->getShipment();
-           $orderId = $elem->getOrderId();
-           $vendorId = $elem->getShipment()->getUdropshipVendor();
-           $obj->shipper = $this->_createShipper($vendorId);
-           $obj->receiver = $this->_createReceiver($orderId);
-           $obj->pieceList = $this->_createPieceList($orderId);
-           $obj->payment = $this->_createPayment($orderId);
-           $obj->service = $this->_createService($orderId);
-           $shipment->item[] = $obj;
-        }
-        $message->shipments = $shipment;
-        $return = $this->_sendMessage('createShipment',$message);
+        $shipmentObject = new StdClass();
+		$obj = new StdClass();
+		$orderId = $shipment->getOrderId();
+		$obj->shipper = $this->_createShipper();
+		$obj->receiver = $this->_createReceiver($orderId);
+		$obj->pieceList = $this->_createPieceList($shipmentSettings);
+		$obj->payment = $this->_createPayment();
+		$obj->service = $this->_createService($shipment);
+		$obj->shipmentDate = date('Y-m-d', strtotime('tomorrow'));
+		$obj->content = $shipment->getUdpoIncrementId();
+		$shipmentObject->item[] = $obj;
+		
+        $message->shipments = $shipmentObject;
+		
+        return $this->_sendMessage('createShipments', $message);
     }
     /**
      * booking courier
@@ -224,5 +241,61 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
           $return = $this->_sendMessage('getLabels',$message);
           print_R($return);
      }
-     
+    
+	/**
+	 * Prepare Post Code - DHL Format
+	 * 
+	 * @param string $postCode Input Post Code
+	 * 
+	 * @return string Formated Post Code
+	 */
+	public function formatDhlPostCode($postCode)
+	{
+		return preg_replace('/[^0-9,]|,[0-9]*$/','',$postCode);
+	}
+	
+	/**
+	 * Process DHL Web API Shipments Result
+	 * 
+	 * @param string $method
+	 * @param object $dhlResult
+	 * 
+	 * @return array $result Default: array('shipmentId' => false, 'message' => '');
+	 */
+	public function processDhlShipmentsResult($method, $dhlResult)
+	{
+		$result = array(
+			'shipmentId'	=> false,
+			'message'		=> ''
+		);
+		
+		if (is_array($dhlResult) && array_key_exists('error', $dhlResult)) {
+			//Dhl Error Scenario
+			Mage::helper('zolagodhl')->_log('DHL Service Error: ' .$dhlResult['error']);
+			$result['shipmentId']	= false;
+			$result['message']		= 'DHL Service Error: ' .$dhlResult['error'];
+		} elseif (property_exists($dhlResult, 'createShipmentsResult') && property_exists($dhlResult->createShipmentsResult, 'item')) {
+			$item = $dhlResult->createShipmentsResult->item;
+			$result['shipmentId']	= $item->shipmentId;
+			$result['message']		= 'Tracking ID: ' . $item->shipmentId;
+		} else {
+			Mage::helper('zolagodhl')->_log('DHL Service Error: ' .$method);
+			$result['shipmentId']	= false;
+			$result['message']		= 'DHL Service Error: ' .$method;
+		}
+		
+		return array_unique($result);
+	}
+	
+	/**
+	 * Get COD Value for DHL Service per Shipment
+	 * 
+	 * @param type $shipment
+	 * 
+	 * @return float COD Value
+	 */
+	protected function _getCollectOnDeliveryValue($shipment)
+	{
+		return $shipment->getTotalValue() + $shipment->getBaseTaxAmount() + $shipment->getShippingAmountIncl();	
+	}
 }
