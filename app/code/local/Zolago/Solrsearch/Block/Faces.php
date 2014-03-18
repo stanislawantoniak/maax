@@ -491,7 +491,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 
 			if(isset($result['facet_counts']['facet_fields'][$facetkey])){
 				return $result['facet_counts']['facet_fields'][$facetkey];
-		}
+			}
 		
 		}catch(Exception $e){
 			Mage::logException($e);
