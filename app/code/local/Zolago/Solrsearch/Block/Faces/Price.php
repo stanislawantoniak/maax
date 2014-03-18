@@ -35,16 +35,22 @@ class Zolago_Solrsearch_Block_Faces_Price extends Zolago_Solrsearch_Block_Faces_
 	protected function calculatePriceRanges()
 	{
 
+		
 		$solrData = $this->getSolrData();
 
 		$priceFieldName = Mage::helper('solrsearch')->getPriceFieldName();
 
 		$priceRanges = array();
-
-		if ( isset($solrData['facet_counts']['facet_ranges'][$priceFieldName]['counts']) && is_array($solrData['facet_counts']['facet_ranges'][$priceFieldName]['counts'])) {
-			$priceRanges = $solrData['facet_counts']['facet_ranges'][$priceFieldName]['counts'];
+		
+				
+		// category
+		$category = Mage::registry('current_category');
+		
+		$data = $category->getData();
+		$range = 0;
+		if (!empty($data['filter_price_range'])) {
+			$range = $data['filter_price_range'];
 		}
-
 		$min = 0.0;
 		if (isset($solrData['stats']['stats_fields'][$priceFieldName]['min'])) {
 			$min = $solrData['stats']['stats_fields'][$priceFieldName]['min'];
@@ -54,6 +60,25 @@ class Zolago_Solrsearch_Block_Faces_Price extends Zolago_Solrsearch_Block_Faces_
 		if (isset($solrData['stats']['stats_fields'][$priceFieldName]['max'])) {
 			$max = $solrData['stats']['stats_fields'][$priceFieldName]['max'];
 		}
+		if ($range) {
+			$returnPriceRanges = array();
+			$start = $min;
+			$elem = array();
+			while ($start < $max) {
+				$elem['start'] = floor($start);
+				$elem['end'] = floor($start+$range);
+				if ($elem['end'] > $max) {
+					$elem['end'] = ceil($max);					
+				}
+				$start += $range;
+				$returnPriceRanges[] = $elem;
+			}
+			return (count($returnPriceRanges)>1)? $returnPriceRanges:array();
+		}
+		if ( isset($solrData['facet_counts']['facet_ranges'][$priceFieldName]['counts']) && is_array($solrData['facet_counts']['facet_ranges'][$priceFieldName]['counts'])) {
+			$priceRanges = $solrData['facet_counts']['facet_ranges'][$priceFieldName]['counts'];
+		}
+
 
 		$tempPriceRanges = array();
 		$tempPriceRanges[] = $min;
@@ -86,11 +111,10 @@ class Zolago_Solrsearch_Block_Faces_Price extends Zolago_Solrsearch_Block_Faces_
 
 			$index++;
 		}
-		return $returnPriceRanges;
+		return (count($returnPriceRanges)>1)? $returnPriceRanges:array();
 	}
 
 	protected function applyPriceRangeProductCount(){
-
 		$priceFieldName = Mage::helper('solrsearch')->getPriceFieldName();
 
 		$priceRanges = $this->calculatePriceRanges();
