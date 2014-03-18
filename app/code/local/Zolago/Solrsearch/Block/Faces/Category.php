@@ -60,4 +60,42 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
     	return $result;
     }
 	
+	/**
+	 * Hide current category
+	 * @param type $item
+	 * @param type $count
+	 * @return boolean
+	 */
+	
+	public function getCanShowItem($item, $count) {
+		if($this->getParentBlock()->getMode()==Zolago_Solrsearch_Block_Faces::MODE_CATEGORY){
+			$category = $this->getParentBlock()->getCurrentCategory();
+			$array = $this->pathToArray($item);
+			$last = array_pop($array);
+			if($last['id']==$category->getId()){
+				return false;
+			}
+		}
+		return parent::getCanShowItem($item, $count);
+	}
+	
+	public function getCanShow() {
+		if($this->getParentBlock()->getMode()==Zolago_Solrsearch_Block_Faces::MODE_CATEGORY){
+			$category = $this->getParentBlock()->getCurrentCategory();
+			$all = $this->getAllItems();
+			// One item with couurent cat
+			if(count($all)==1){
+				list($item, $count) = each($all);
+				$array = $this->pathToArray($item);
+				$last = array_pop($array);
+				Mage::log($last);
+				if($last['id']==$category->getId()){
+					return false;
+				}
+			}
+		}	
+		
+		return parent::getCanShow();
+	}
+	
 }

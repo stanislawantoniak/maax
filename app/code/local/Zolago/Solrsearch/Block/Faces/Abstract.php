@@ -167,6 +167,17 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 
 	// Can show filter block
 	public function getCanShow() {
+		if($this->getFilterModel()){
+			// Has visible items
+			if($this->getCanShowItems()){
+				return true;
+			}
+			// Have some hiddne items
+			if($this->getFilterModel()->getCanShowMore()){
+				return $this->getCanShowHidden();
+			}
+		}
+		// No filter - show items if have
 		return $this->_getCanShow($this->getAllItems());
 	}
 	// Can show visible items list
