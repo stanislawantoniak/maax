@@ -5,6 +5,34 @@
 class Zolago_Catalog_Model_Product_Source_Flag 
         extends Mage_Eav_Model_Entity_Attribute_Source_Abstract {
 
+	public function getOptionText($value)
+    {
+        $isMultiple = false;
+        if (strpos($value, ',')) {
+            $isMultiple = true;
+            $value = explode(',', $value);
+        }
+
+        $options = $this->getAllOptions(false);
+
+        if ($isMultiple) {
+            $values = array();
+            foreach ($options as $item) {
+                if (in_array($item['value'], $value)) {
+                    $values[] = $item['label'];
+                }
+            }
+            return $values;
+        }
+
+        foreach ($options as $item) {
+            if ($item['value'] == $value) {
+                return $item['label'];
+            }
+        }
+        return false;
+    }
+	
     public function getAllOptions() {
         if (!$this->_options) {
             $this->_options = array (
