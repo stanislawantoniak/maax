@@ -193,7 +193,7 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
      public function getTrackAndTraceInfo($shipmentId) {
          $message = new StdClass();
          $message->authData = $this->_auth;
-         $message->shipmentId($shipmentId);
+         $message->shipmentId = $shipmentId;
          $return = $this->_sendMessage('getTrackAndTraceInfo',$message);
          return $return;
      }
