@@ -65,6 +65,16 @@ class Zolago_Pos_Block_Adminhtml_Pos_Edit_Tab_General extends Mage_Adminhtml_Blo
             'phone',
             'email',
         ));        
+		
+		$dhl = $form->addFieldset('dhl', array('legend'=>$helper->__('DHL Settings')));
+        $builder = Mage::getModel('zolagopos/form_fieldset_dhl'); 
+        $builder->setFieldset($dhl);
+        $builder->prepareForm(array(
+            'use_dhl',
+            'dhl_login',
+            'dhl_password',
+        ));
+        
         
         $form->setValues($this->_getValues());
         

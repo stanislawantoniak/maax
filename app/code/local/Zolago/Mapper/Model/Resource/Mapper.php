@@ -10,7 +10,7 @@ class Zolago_Mapper_Model_Resource_Mapper extends Mage_Core_Model_Resource_Db_Ab
 	 * @param int|array $categoryIds
 	 * @return array (attributeId=>attributeName,...)
 	 */
-	public function getAttributesByCategory($categoryIds) {
+	public function getAttributesByCategory($categoryIds, $excludeCodes=array()) {
 		if(!is_array($categoryIds)){
 			$categoryIds = array($categoryIds);
 		}
@@ -67,8 +67,13 @@ class Zolago_Mapper_Model_Resource_Mapper extends Mage_Core_Model_Resource_Db_Ab
 				array()
 		);
 		
+		if(count($excludeCodes)){
+			$select->where("attribute.attribute_code NOT IN (?)", $excludeCodes);
+		}
+		
 		$select->where("attribute.frontend_input IN (?)", $inputTypes);
 		$select->where("category.entity_id IN (?)", $categoryIds);
+		$select->where("catalog_attribute.is_filterable>?", 0);
 		$select->where("catalog_attribute.is_filterable>?", 0);
 		$select->order("attribute.frontend_label");
 		$select->distinct();

@@ -7,10 +7,25 @@
 			</action>
 		</reference>
 	</udropship_vendor>
+	
 	<udropship_vendor_dashboard>
 		<update handle="udropship_vendor" />
         <reference name="content">
             <block type="core/template" template="zolagodropship/vendor/dashboard.phtml"/>
         </reference>
 	</udropship_vendor_dashboard>
+	<udropship_vendor_shipmentinfo>
+		<reference name="info">
+			<action method="setTemplate">
+				<template>zolagodropship/vendor/shipment/info.phtml</template>
+			</action>
+		</reference>
+    </udropship_vendor_shipmentinfo>
+	<udpo_vendor_shipmentinfo>
+		<reference name="info">
+			<action method="setTemplate">
+				<template>zolagodropship/vendor/shipment/info.phtml</template>
+			</action>
+		</reference>
+    </udpo_vendor_shipmentinfo>
 </layout>

@@ -49,8 +49,10 @@ class Zolago_Adminhtml_Block_Catalog_Category_Filters extends Mage_Adminhtml_Blo
 	public function getPossibleAttributes() {
 		$resMapper = Mage::getResourceModel('zolagomapper/mapper');
 		/* @var $resMapper Zolago_Mapper_Model_Resource_Mapper */
-		
-		$values = $resMapper->getAttributesByCategory($this->getCategory()->getId());
+		$ids = $this->getCategory()->getResource()->getChildrenIds($this->getCategory());
+		$ids = array_merge($ids,array($this->getCategory()->getId()));
+		$exclude = array("product_rating", "product_flag");
+		$values = $resMapper->getAttributesByCategory($ids, $exclude);
 		return $values;
 	}
 	
@@ -96,7 +98,7 @@ class Zolago_Adminhtml_Block_Catalog_Category_Filters extends Mage_Adminhtml_Blo
 	 * @return array
 	 */
 	public function getRendererValues() {
-		return Mage::getSingleton("zolagocatalog/system_layer_filter_source")->toOptionHash(true);
+		return Mage::getSingleton("zolagosolrsearch/system_faces_enum_source")->toOptionHash(true);
 	}
 	
 	/**

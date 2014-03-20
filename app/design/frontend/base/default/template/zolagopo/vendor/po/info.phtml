@@ -174,6 +174,14 @@ $fcBlock->setFieldValue(array(
     'remaining_value' => $this->getRemainingValue(),
 ))->setPo($_po)->setMasterId($_id)->setFieldName('mps_config_'.$_id)->setUseDisabled(true);
 ?>
+
+<?php
+/*
+ * DHL Settings
+ */
+$dhlSettings = $_poHlp->getDhlSettings($_vendor, $_po->getDefaultPosId());
+?>
+
 <?php if ($this->getRequest()->isPost()): ?>
     <span id="status-update-<?php echo $_id ?>" style="display:none"><?php echo $_poHlp->getUdpoStatusName($_po) ?></span>
 <?php endif ?>
@@ -405,6 +413,7 @@ $fcBlock->setFieldValue(array(
                     </li>
                     <?php endif ?>
                     <?php if (!Mage::helper('udropship')->isUdpoMpsAvailable($carrierCode)): ?>
+					
                     <li id="label_info-1-<?php echo $_id?>" class="no-mps-specific" style="display:none">
                         <label for="weight-<?php echo $_id?>"><?php echo $_hlp->__('Shipment Info')?></label>
                         <div style="float: left">
@@ -551,7 +560,9 @@ $fcBlock->setFieldValue(array(
                         <input id="use_label_shipping_amount-<?php echo $_id?>" name="use_label_shipping_amount" value="1" title="<?php echo $_hlp->__('Use Label Shipping Amount') ?>" type="checkbox" class="input-checkbox" onchange="useLabelShippingAmountChanged(this)" />
                         <br />
                     </li>
-<?php if ($_po->canCreateShipment()): ?>
+					
+					<?php if ($_po->canCreateShipment()): ?>
+
                     <li id="shipping_amount-1-<?php echo $_id?>">
                         <nobr>
                         <label for="shipping_amount-<?php echo $_id?>"><?php echo $_hlp->__('Shipping Amount') ?></label>
@@ -560,7 +571,7 @@ $fcBlock->setFieldValue(array(
                     </li>
                     <li id="tracking_id-3-<?php echo $_id?>">
                         <label for="carrier-<?php echo $_id?>"><?php echo $_hlp->__('Carrier') ?></label>
-                        <select id="carrier-<?php echo $_id?>" name="carrier" class="select" style="width:250px" onchange="selectCarrier(this, 'carrier_title-<?php echo $_id?>')">
+                        <select id="carrier-<?php echo $_id?>" name="carrier" class="select carrier" style="width:250px" onchange="selectCarrier(this)">
                             <?php foreach ($this->getCarriers() as $_code=>$_name): ?>
                             <option value="<?php echo $_code ?>"><?php echo $_name ?></option>
                             <?php endforeach; ?>
@@ -568,18 +579,59 @@ $fcBlock->setFieldValue(array(
                     </li>
                     <li id="tracking_id-4-<?php echo $_id?>">
                         <label for="carrier_title-<?php echo $_id?>"><?php echo $_hlp->__('Carrier Title') ?></label>
-                        <input id="carrier_title-<?php echo $_id?>" name="carrier_title" value="" title="<?php echo $_hlp->__('Carrier Title') ?>" type="text" class="input-text" style="width:250px;" />
+                        <input id="carrier_title-<?php echo $_id?>" name="carrier_title" value="" title="<?php echo $_hlp->__('Carrier Title') ?>" type="text" class="input-text carrier-title" style="width:250px;" />
                     </li>
                     <li id="tracking_id-1-<?php echo $_id?>">
                         <label for="tracking_id-<?php echo $_id?>"><?php echo $_hlp->__('Add Tracking ID') ?></label>
-                        <input id="tracking_id-<?php echo $_id?>" name="tracking_id" value="" title="<?php echo $_hlp->__('Add Tracking ID') ?>" type="text" class="input-text" style="width:250px;" />
-                    </li>
-<?php endif ?>
+                        <input id="tracking_id-<?php echo $_id?>" name="tracking_id" value="" title="<?php echo $_hlp->__('Add Tracking ID') ?>" type="text" class="input-text tracking-id" style="width:250px;" />
+						</br>
+						<?php if ($dhlSettings): ?>
+							<label for="auto-tracking-<?php echo $_id?>" style="width:250px">
+							<input type="checkbox" class="auto-tracking" onchange="changeAutoTrack(this);" id="auto-tracking-<?php echo $_id?>" name="auto_trakcing"/>
+								<?php echo $_hlp->__('I have no Track ID')?><br/>
+							</label>
+						<?php else: ?>
+							<label for="auto-tracking-<?php echo $_id?>" style="width:250px">
+								<?php echo $this->__('Lack of DHL Settings'); ?>
+							</label>
+						<?php endif; ?>
+					</li>
+					<li id="specify-zolagodhl-2-<?php echo $_id?>" class="specify-params specify-zolagodhl" style="display: none;">
+                        <label for="specify-zolagodhl-pkg-type-<?php echo $_id?>">
+							<?php echo $_hlp->__('Pkg. type')?><br/>
+						</label>
+						<select id="specify-dhl-pkg-type-<?php echo $_id?>" name="specify_zolagodhl_type" class="select specify-zolagodhl-type-select" style="width:250px" onchange="dhlSelectTypeChange(this)">
+                            <?php foreach(Mage::getSingleton('zolagodhl/system_source_pkgtype')->toOptionHash() as $value=>$label):?>
+							<option value="<?php echo $this->escapeHtml($value);?>"><?php echo $this->escapeHtml($label);?></option>
+							<?php endforeach;?>
+                        </select>
+					</li>
+					<li id="specify-zolagodhl-1-<?php echo $_id?>" class="specify-params specify-zolagodhl specify-zolagodhl-type" style="display: none;">
+                        <label>
+							<?php echo $_hlp->__('Pkg. Dimensions')?><br/>
+						</label>
+						<?php echo Mage::helper("zolagodropship")->__("W (cm):");?>
+                        <input name="specify_zolagodhl_width" value="<?php echo (float)$_vendor->getDefaultPkgWidth()?>" title="<?php echo $_hlp->__('Width') ?>" type="text" class="input-text" style="width:30px;" />			
+						&nbsp;<?php echo Mage::helper("zolagodropship")->__("H (cm):");?>
+                        <input name="specify_zolagodhl_height" value="<?php echo (float)$_vendor->getDefaultPkgHeight()?>" title="<?php echo $_hlp->__('Height') ?>" type="text" class="input-text" style="width:30px;" />
+						&nbsp;<?php echo Mage::helper("zolagodropship")->__("L (cm):");?>
+						<input name="specify_zolagodhl_length" value="<?php echo (float)$_vendor->getDefaultPkgLength()?>" title="<?php echo $_hlp->__('Length') ?>" type="text" class="input-text" style="width:30px;" />
+					</li>
+					<li id="specify-zolagodhl-3-<?php echo $_id?>" class="specify-params specify-zolagodhl specify-zolagodhl-type" style="display: none;">
+                        <label for="specify-zolagodhl-custom-dim-<?php echo $_id?>">
+							<?php echo $_hlp->__('Custom dim.')?><br/>
+						</label>
+						<input type="hidden" id="specify-zolagodhl-custom-pkg-<?php echo $_id?>" name="specify_zolagodhl_custom_dim" value="0"/>
+						<input type="checkbox" id="specify-zolagodhl-custom-pkg-<?php echo $_id?>" name="specify_zolagodhl_custom_dim" value="1"/>
+					</li>
+					<?php endif ?>
+					
                     <li>
                         <label for="comment-<?php echo $_id?>"><?php echo $_hlp->__('Add Comment<br/>(for retailer)') ?></label>
                         <textarea id="comment-<?php echo $_id?>" name="comment" class="textarea" style="width:250px; height:70px;" title="<?php echo $_hlp->__('Add Comment') ?>" ></textarea>
                     </li>
-<?php if (Mage::getStoreConfigFlag('udropship/vendor/manual_shipment_status')): ?>
+					
+					<?php if (Mage::getStoreConfigFlag('udropship/vendor/manual_shipment_status')): ?>
                     <li id="label_info-5-<?php echo $_id?>" style="display:none">
                         <label for="is_shipped-<?php echo $_id?>"><?php echo $_hlp->__('Mark as Shipped') ?></label>
                         <input id="is_shipped-<?php echo $_id?>" name="is_shipped" value="1" title="<?php echo $_hlp->__('Mark as Shipped') ?>" type="checkbox" class="input-checkbox" <?php if (Mage::getStoreConfigFlag('udropship/vendor/auto_shipment_complete')): ?>checked="checked"<?php endif ?>/>
@@ -621,7 +673,7 @@ $fcBlock->setFieldValue(array(
                         <label for="full-cancel-cb-<?php echo $_id?>"><?php echo $this->__('Full Cancel')?></label> <input id="full-cancel-cb-<?php echo $_id?>" type="checkbox" name="full_cancel" value="1" /> <br/>
                         <small><?php echo $this->__('This will cancel even shipped shipments')?></small>
                     </li>
-<?php endif ?>
+					<?php endif ?>
                     <li>
                         <label>&nbsp;</label>
                         <?php if ($_po->canCreateShipment()): ?>

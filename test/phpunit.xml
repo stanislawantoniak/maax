@@ -70,6 +70,9 @@
     <testsuite name="Catalog">
       <directory suffix="Test.php">./Zolago/Catalog/</directory>
     </testsuite>
+    <testsuite name="Dhl">
+      <directory suffix="Test.php">./Zolago/Dhl/</directory>
+    </testsuite>	
   </testsuites>
   <logging>
     <log type="json" target="../var/logs/logfile.json"/>

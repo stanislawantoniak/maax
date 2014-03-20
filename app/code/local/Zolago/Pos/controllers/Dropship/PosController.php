@@ -78,7 +78,7 @@ class Zolago_Pos_Dropship_PosController extends Zolago_Dropship_Controller_Vendo
 			if (!empty($modelId) && !$pos->getId()) {
 				throw new Mage_Core_Exception($helper->__("POS not found"));
 			}
-			$pos->setData($data);
+			$pos->addData($data);
 			$validErrors = $pos->validate();
 			if ($validErrors === true) {
 				// Fix empty value

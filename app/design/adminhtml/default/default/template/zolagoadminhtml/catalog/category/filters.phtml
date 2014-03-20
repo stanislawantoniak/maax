@@ -284,13 +284,15 @@
 			update("<?php echo Mage::helper('zolagoadminhtml')->__("--- Select ---");?>")
 		);
 		for(var key in allAttributes){
-			if(attributesInUse.indexOf(key)<0){ 
-				field.insert(
-                    new Element('option', {
-                        'value': key
-                    }).
-                    update(allAttributes[key])
-                );
+            if (allAttributes.hasOwnProperty(key)) {
+    			if(attributesInUse.indexOf(key)<0){ 
+	    			field.insert(
+                        new Element('option', {
+                            'value': key
+                        }).
+                        update(allAttributes[key])
+                    );
+		    	}
 			}
 		}
 	}

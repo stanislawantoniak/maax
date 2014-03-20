@@ -141,7 +141,7 @@
     </sales_order_shipment>
 
     <udropship_vendor_shipmentinfo>
-        <block type="udropship/vendor_shipment_info" template="unirgy/dropship/vendor/shipment/info.phtml" name="info"/>
+        <block type="udropship/vendor_shipment_info" template="zolagodropship/vendor/shipment/info.phtml" name="info"/>
     </udropship_vendor_shipmentinfo>
 
     <udropship_vendor_preferences>
