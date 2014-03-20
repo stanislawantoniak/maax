@@ -60,12 +60,19 @@
             }
         },			
 		enableDhl: function(state){
+				var login = $("dhl_login"),
+					password = $("dhl_password");
+			
 				if(!!state){
-					$("dhl_login").up('tr').show();
-					$("dhl_password").up('tr').show();
+					login.className += " required-entry";
+					login.up('tr').show();
+					password.className += " required-entry";
+					password.up('tr').show();
 				}else{
-					$("dhl_login").up('tr').hide();
-					$("dhl_password").up('tr').hide();
+					login.className = login.className.replace(/\srequired-entry/g, "");
+					login.up('tr').hide();
+					password.className = password.className.replace(/\srequired-entry/g, "");
+					password.up('tr').hide();
 				}
 			}
     };

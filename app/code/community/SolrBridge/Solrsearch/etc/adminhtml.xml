@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<config>
+	<translate>
+		<modules>
+			<SolrBridge_Solrsearch>
+				<files>
+					<default>SolrBridge_Solrsearch.csv</default>
+				</files>
+			</SolrBridge_Solrsearch>
+		</modules>
+	</translate>
+	<menu>
+		<solrbridge module="solrsearch">
+			<title>SolrBridge</title>
+			<sort_order>71</sort_order>
+			<depends>
+                <module>SolrBridge_Solrsearch</module>
+            </depends>
+			<children>
+				<general_settings translate="title" module="solrsearch">
+					<title>General settings</title>
+					<sort_order>1</sort_order>
+					<action>adminhtml/system_config/edit/section/solrbridge
+					</action>
+				</general_settings>
+				<indices_settings translate="title" module="solrsearch">
+					<title>Indices settings</title>
+					<sort_order>2</sort_order>
+					<action>adminhtml/system_config/edit/section/solrbridgeindices
+					</action>
+				</indices_settings>
+				<indices translate="title" module="solrsearch">
+					<title>Indices management</title>
+					<sort_order>3</sort_order>
+					<action>solrbridge_admin/adminhtml_solrsearch/index</action>
+					admin/system_config/index
+				</indices>
+				<logs translate="title" module="solrsearch">
+					<title>Logs</title>
+					<sort_order>4</sort_order>
+					<action>solrbridge_admin/adminhtml_solrsearch/logs</action>
+				</logs>
+			</children>
+		</solrbridge>
+	</menu>
+	<acl>
+		<resources>
+			<admin>
+				<children>
+					<system>
+						<children>
+							<config>
+								<children>
+									<solrbridge translate="title" module="solrsearch">
+										<title>Solr Bridge - General settings</title>
+										<sort_order>99</sort_order>
+									</solrbridge>
+									<solrbridgeindices translate="title" module="solrsearch">
+										<title>Solr Bridge - Indies settings</title>
+										<sort_order>100</sort_order>
+									</solrbridgeindices>
+								</children>
+							</config>
+						</children>
+					</system>
+					<solrbridge translate="title" module="solrsearch">
+                        <title>SolrBridge</title>
+                        <sort_order>30</sort_order>
+                        <children>
+                        	<general_settings translate="title">
+                        		<title>General settings</title>
+                        	</general_settings>
+                        	<indices_settings translate="title">
+                        		<title>Indices settings</title>
+                        	</indices_settings>
+                            <indices translate="title">
+                                <title>Index management</title>
+                            </indices>
+                            <logs translate="title">
+                                <title>Logs</title>
+                            </logs>
+                        </children>
+                    </solrbridge>
+				</children>
+			</admin>
+		</resources>
+	</acl>
+</config>
