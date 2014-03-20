@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Catalog>
-            <version>0.0.7</version>
+            <version>0.0.8</version>
         </Zolago_Catalog>
     </modules>
     <global>
@@ -54,4 +54,15 @@
             </catalog> 
         </routers>
     </frontend>-->
+    <adminhtml>
+		<translate>
+			<modules>
+				<Zolago_Catalog>
+					<files>
+						<default>Zolago_Catalog.csv</default>
+					</files>
+				</Zolago_Catalog>
+			</modules>
+		</translate>		
+    </adminhtml>	
 </config>

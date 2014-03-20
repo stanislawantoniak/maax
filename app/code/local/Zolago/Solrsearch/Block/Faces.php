@@ -126,6 +126,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 			$this->getFlagBlock($solrData),
 			$this->getRatingBlock($solrData),
 		);
+		$additionalBlocks = array_reverse($additionalBlocks);
 		foreach($additionalBlocks as $block){
 			if($block){
 				array_unshift($outBlock, $block);
@@ -138,26 +139,114 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 		return $outBlock;
 	}
 	
+
+	
 	public function getCategoryBlock($solrData) {
-//		$facetFileds = array();
-//    	if (isset($solrData['facet_counts']['facet_fields']) && is_array($solrData['facet_counts']['facet_fields'])) {
-//    		$facetFileds = $solrData['facet_counts']['facet_fields'];
-//    	}
-//		if(isset($facetFileds['category_path'])){
-//			$block = $this->getLayout()->createBlock($this->_getCategoryRenderer());
-//			
-//			$block->setAllItems($facetFileds['category_path']);
-//			$block->setAttributeCode("category_path");
-//			$block->setFacetKey("category_path_facet");
-//			return $block;
-//		}
+		$facetFileds = array();
+    	if (isset($solrData['facet_counts']['facet_fields']) && is_array($solrData['facet_counts']['facet_fields'])) {
+    		$facetFileds = $solrData['facet_counts']['facet_fields'];
+    	}
+		if(isset($facetFileds['category_path'])){
+			$data = $facetFileds['category_path'];
+			if($this->getSpecialMultiple()){
+				$data = $this->_prepareMultiValues('category_path', $data);
+			}
+			$block = $this->getLayout()->createBlock($this->_getCategoryRenderer());
+			$block->setParentBlock($this);
+			$block->setAllItems($data);
+			$block->setFacetKey("category_path");
+			return $block;
+		}
 		return null;
+	}
+	
+	public function getPriceBlock($solrData) {
+		if($this->getMode()==self::MODE_CATEGORY&& !$this->getCurrentCategory()->getUsePriceFilter()){
+			return null;
+		}
+		$block = $this->getLayout()->createBlock($this->_getPriceRenderer());
+		$block->setParentBlock($this);
+		return $block;
+	}
+	
+	public function getFlagBlock($solrData) {
+		if($this->getMode()==self::MODE_CATEGORY&& !$this->getCurrentCategory()->getUseFlagFilter()){
+			return null;
+		}
+		$facetFileds = array();
+    	if (isset($solrData['facet_counts']['facet_fields']) && is_array($solrData['facet_counts']['facet_fields'])) {
+    		$facetFileds = $solrData['facet_counts']['facet_fields'];
+    	}
+		if(isset($facetFileds['product_flag_facet'])){
+			$data = $facetFileds['product_flag_facet'];
+			if($this->getSpecialMultiple()){
+				$data = $this->_prepareMultiValues('product_flag_facet', $data);
+			}
+			$block = $this->getLayout()->createBlock($this->_getFlagRenderer());
+			$block->setParentBlock($this);
+			$block->setAllItems($data);
+			$block->setAttributeCode("product_flag");
+			$block->setFacetKey("product_flag_facet");
+			return $block;
+		}
+	}
+	
+	public function getRatingBlock($solrData) {
+		if($this->getMode()==self::MODE_CATEGORY&& !$this->getCurrentCategory()->getUseReviewFilter()){
+			return null;
+		}
+		$facetFileds = array();
+    	if (isset($solrData['facet_counts']['facet_fields']) && is_array($solrData['facet_counts']['facet_fields'])) {
+    		$facetFileds = $solrData['facet_counts']['facet_fields'];
+    	}
+		if(isset($facetFileds['product_rating_facet'])){
+			$data = $facetFileds['product_rating_facet'];
+
+			if($this->getSpecialMultiple()){
+				$data = $this->_prepareMultiValues('product_rating_facet', $data);
+			}			
+			if(isset($data['No rating'])){
+				unset($data['No rating']);
+			}
+			$block = $this->getLayout()->createBlock($this->_getRatingRenderer());
+			$block->setParentBlock($this);
+			$block->setAllItems($data);
+			$block->setAttributeCode("product_rating");
+			$block->setFacetKey("product_rating_facet");
+			return $block;
+		}
+	}
+
+
+	/**
+	 * @return string
+	 */
+	protected function _getRatingRenderer() {
+		return $this->getDefaultRenderer();
+	}
+	/**
+	 * @return string
+	 */
+	protected function _getFlagRenderer() {
+		return $this->getDefaultRenderer();
+	}
+	/**
+	 * @return string
+	 */
+	protected function _getPriceRenderer() {
+		return "zolagosolrsearch/faces_price";
 	}
 	/**
 	 * @return string
 	 */
 	protected function _getCategoryRenderer() {
-		return $this->getDefaultRenderer();
+		return "zolagosolrsearch/faces_category";
+	}
+	/**
+	 * @return boolean
+	 */
+	public function getSpecialMultiple() {
+		return Mage::helper('solrsearch')->getSetting('allow_multiple_filter') > 0;
 	}
 	
 	/**
@@ -188,6 +277,9 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 			switch ($key) {
 				// Skip special facets
 				case "category_path":
+				case "category_id":
+				case "product_flag":
+				case "product_rating":
 					continue 2;
 				break;
 			}
@@ -208,7 +300,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 
 				// Is multiple values
 				if($filter->getShowMultiple()){
-					$data = $this->_prepareMultiValues($key);
+					$data = $this->_prepareMultiValues($key, $data);
 				}
 
 				if(count($data)){
@@ -353,29 +445,129 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 
 
 
-	protected function _prepareMultiValues($facetkey) {
+	protected function _prepareMultiValues($facetkey, $fallbackData=array()) {
+		// @todo check is filter already active?
+		// If not dont try re-request
+		// 
 		// Remove this key from query params\
 		$req = Mage::app()->getRequest();
 		
 		$oldParams = $req->getParams();
 		$params = $oldParams;
+		
 		$paramKey = $this->_extractAttributeCode($facetkey);
 		
 		if(isset($params['fq'][$paramKey])){
 			unset($params['fq'][$paramKey]);
 		}
 		
-		$model = $this->_getHelpedSolrModel();
-		$queryText = Mage::helper('solrsearch')->getParam('q');
+		$filters = $this->getFilterQuery();
 		
-		$req->setParams($params);
-		$result = $model->query($queryText);
-		$req->setParams($oldParams);
+
 		
-		if(isset($result['facet_counts']['facet_fields'][$facetkey])){
-			return $result['facet_counts']['facet_fields'][$facetkey];
+		// Force unset category id
+		if($paramKey=="category_path"){
+			if(!isset($filters['category_id'])){
+				return $fallbackData;
+			}
+			if(isset($params['fq']['category_id'])){
+				unset($params['fq']['category_id']);
+			}
+			if(isset($params['fq']['category'])){
+				unset($params['fq']['category']);
+			}
+		// No data changed
+		}elseif(!isset($filters[$facetkey])){
+			return $fallbackData;
 		}
 		
-		return array();
+		try{
+			$model = $this->_getHelpedSolrModel();
+			$queryText = Mage::helper('solrsearch')->getParam('q');
+
+			$req->setParams($params);
+			$result = $model->query($queryText);
+			$req->setParams($oldParams);
+
+			if(isset($result['facet_counts']['facet_fields'][$facetkey])){
+				return $result['facet_counts']['facet_fields'][$facetkey];
+			}
+		
+		}catch(Exception $e){
+			Mage::logException($e);
+		}
+		
+		return $fallbackData;
+		
 	}
+	
+	public function getFacesUrl($params=array())
+    {
+    	$_solrDataArray = $this->getSolrData();
+
+    	$paramss = $this->getRequest()->getParams();
+
+    	if( isset($_solrDataArray['responseHeader']['params']['q']) && !empty($_solrDataArray['responseHeader']['params']['q']) ) {
+        	if (isset($paramss['q']) && $paramss['q'] != $_solrDataArray['responseHeader']['params']['q']) {
+        		$paramss['q'] = $_solrDataArray['responseHeader']['params']['q'];
+        	}
+        }
+
+        foreach ($params as $key=>$item) {
+        	$key = trim($key);
+
+        	if( in_array($key, array('min', 'max')) ) {
+        		if (isset($paramss[$key])) {
+        			unset($paramss[$key]);
+        			$finalParams = array_merge_recursive($params, $paramss);
+        		}
+        	}
+
+        	if ($key == 'fq') {
+        		foreach ($item as $k=>$v) {
+        			if (isset($paramss[$key][$k]) && $v == $paramss[$key][$k]){
+
+        			}else{
+        				if( $k == 'price' && isset($paramss[$key][$k])/* || $k == 'category' || $k == 'category_id'*/){
+        					unset($paramss[$key][$k]);
+        				}
+						
+        				$finalParams = array_merge_recursive($params, $paramss);
+						
+        			}
+        		}
+        	}
+        }
+
+        if (isset($finalParams['p'])) {
+        	$finalParams['p'] = 1;
+        }
+        if (isset($finalParams['fq'])){
+			if(isset($finalParams['fq']['category_id']) && is_array($finalParams['fq']['category_id'])) {
+				$finalParams['fq']['category_id'] = array_unique($finalParams['fq']['category_id']);
+			}
+			if(isset($finalParams['fq']['category']) && is_array($finalParams['fq']['category'])) {
+				$finalParams['fq']['category'] = array_unique($finalParams['fq']['category']);
+			}
+        }
+
+    	$urlParams = array();
+        $urlParams['_current']  = true;
+        $urlParams['_escape']   = true;
+        $urlParams['_use_rewrite']   = true;
+        if (isset($finalParams)) {
+
+        	if (Mage::app()->getRequest()->getRouteName() == 'catalog') {
+        		if (isset($finalParams['q'])) {
+        			unset($finalParams['q']);
+        		}
+        		if (isset($finalParams['id'])) {
+        			unset($finalParams['id']);
+        		}
+        	}
+
+        	$urlParams['_query']    = $finalParams;
+        }
+        return $this->getUrl('*/*/*', $urlParams);
+    }
 }

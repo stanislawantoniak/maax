@@ -14,29 +14,30 @@ class Zolago_Dhl_Model_DhlTest extends ZolagoDb_TestCase {
     }	
 	
     public function testCreate() {
-		$posModel		= Zolago_Dhl_Helper_Test::getPos();
-		$operatorModel	= Zolago_Dhl_Helper_Test::getOperator();	
-		
-        $model = new Zolago_Dhl_Model_Dhl($posModel, $operatorModel);
-		
+        $this->_getModel();
+        $model = Mage::getModel('zolagodhl/carrier');
         $this->assertNotEmpty($model);
-		$this->assertEquals('Zolago_Dhl_Model_Dhl',get_class($model));
+        $model = Mage::getModel('zolagodhl/carrier/tracking');
+        $this->assertNotEmpty($model);
     }
 	
     protected function _getModel() {
         if (!$this->_model) {
-            $model = Mage::getModel('zolagodhl/dhl');
-            $this->assertNotEmpty($model->getId());
+            $model = Mage::getModel('zolagodhl/client');
+            $this->assertNotEmpty($model);
+            $model->setAuth('CONVERTICA','yezxCGQ2bFYCWr');
             $this->_model = $model;
         }
         return $this->_model;
     }
-	
+    public function testGetModelTrackAndTraceInfo() {
+        $model = $this->_getModel();
+        $ret = $model->getTrackAndTraceInfo('11898773100');
+        $this->assertNotEmpty($ret);
+        $this->assertInstanceOf('StdClass',$ret);
+    }	
+
     public function testGetTrackAndTraceInfo() {
-		if (!no_coverage()) {
-			$this->markTestSkipped('coverage');
-			return;
-		}
 		
 		$soapResult = new StdClass;
 		$soapResult->shipmentId = '11122223333';
@@ -56,12 +57,16 @@ class Zolago_Dhl_Model_DhlTest extends ZolagoDb_TestCase {
 			)
         );
 	}
-	
+    public function testGetModelMyShipments() { 
+        $model = $this->_getModel();
+        $ret = $model->getMyShipments(date('Y-m-d',time()-40*24*3600),date('Y-m-d'));
+        $this->assertNotEmpty($ret);
+        $this->assertInstanceOf('StdClass',$ret,print_R($ret,1));
+        $ret = $model->getMyShipments(date('Y-m-d',time()-140*24*3600),date('Y-m-d'));
+        $this->assertNotEmpty($ret);
+        $this->assertInternalType('array',$ret,print_R($ret,1));
+    }	
     public function testGetMyShipments() {
-		if (!no_coverage()) {
-			$this->markTestSkipped('coverage');
-			return;
-		}
 		
 		$soapResult = new StdClass;
 		$soapResult->getMyShipmentsResult = new StdClass();
@@ -79,4 +84,18 @@ class Zolago_Dhl_Model_DhlTest extends ZolagoDb_TestCase {
 			)
         );
 	}	
+	public function testCreateShipments() { 
+	    return;
+	    $shipment = new Zolago_Dhl_Mock_Shipment('cashondelivery');
+	    $model = $this->_getModel();
+	    $shipmentSettings = array (
+	        'width' => 10,
+	        'height' => 10,
+	        'length' => 10,
+	        'weight' => 10,
+	        'quantity' => 1,
+	        'type' => 'PACKAGE'
+        );
+	    $ret = $model->createShipments($shipment,$shipmentSettings);	    
+	}
 }

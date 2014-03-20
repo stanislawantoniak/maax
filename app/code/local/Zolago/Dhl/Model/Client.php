@@ -15,6 +15,8 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
 	
 	const PAYMENT_TYPE				= 'BANK_TRANSFER';
 	const PAYER_TYPE				= 'SHIPPER';
+	
+	const DHL_LABEL_TYPE			= 'LP';
 
     /**
      * @param Zolago_Pos_Model_Pos $pos
@@ -44,7 +46,7 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
      * @param Zolago_Operator_Model_Operator $operator
      */
     protected function _construct() {
-        $this->_init('zolagodhl/dhl'); 
+        $this->_init('zolagodhl/client'); 
     }
 
 
@@ -216,31 +218,32 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
      }
      
     /**
-     * labels to print NOT FINISHED YET!
+     * labels to print
      */
-     public function getLabels($shipment) {  
-          if (empty($shipment)) {
-              return false;
-          }
-          if (!is_array($shipment)) {   
-              $shipment = array($shipment);
-          }
-          if (count($shipment) > 3) {   
-               Mage::throwException('Too many shipments in one query');
-          }
-          $message = new StdClass();
-          $message->authData = $this->_auth;
-          $print = new StdClass();
-          foreach ($shipment as $item) {
-              $obj = new StdClass();
-              $obj->labelType = 'LP';
-              $obj->shipmentId = $item;
-              $print->item[] = $obj;
-          }
-          $message->itemsToPrint = $print;
-          $return = $this->_sendMessage('getLabels',$message);
-          print_R($return);
-     }
+	public function getLabels($tracking) {
+		if (empty($tracking)) {
+			return false;
+		}
+		if (!is_array($tracking)) {   
+			$tracking = array($tracking);
+		}		
+		if (count($tracking) > 3) {   
+			 Mage::throwException('Too many shipments in one query');
+		}
+		$message = new StdClass();
+		$message->authData = $this->_auth;
+		$print = new StdClass();
+		foreach ($tracking as $track) {
+			if ($track->getCarrierCode() == Zolago_Dhl_Helper_Data::DHL_CARRIER_CODE) {
+				$obj = new StdClass();
+				$obj->labelType = self::DHL_LABEL_TYPE;
+				$obj->shipmentId = $track->getNumber();
+				$print->item[] = $obj;
+			}
+		}
+		$message->itemsToPrint = $print;
+		return $this->_sendMessage('getLabels', $message);
+	}
     
 	/**
 	 * Prepare Post Code - DHL Format
@@ -286,6 +289,39 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
 		
 		return array_unique($result);
 	}
+	
+	/**
+	 * Process DHL Web API Labels Result
+	 * 
+	 * @param object $dhlResult
+	 * 
+	 * @return array $result Default: array('status' => false);
+	 */
+	public function processDhlLabelsResult($method, $dhlResult)
+	{
+		$result = array(
+			'status'	=> false
+		);
+		
+		if (is_array($dhlResult) && array_key_exists('error', $dhlResult)) {
+			//Dhl Error Scenario
+			Mage::helper('zolagodhl')->_log('DHL Service Error: ' .$dhlResult['error']);
+			$result['status']	= false;
+			$result['message']		= 'DHL Service Error: ' .$dhlResult['error'];
+		} elseif (property_exists($dhlResult, 'getLabelsResult') && property_exists($dhlResult->getLabelsResult, 'item')) {
+			$item = $dhlResult->getLabelsResult->item;
+			$result['status']		= $item->shipmentId;
+			$result['message']		= 'Shipment ID: ' . $item->shipmentId;
+			$result['labelName']	= $item->labelName;
+			$result['labelData']	= base64_decode($item->labelData);
+		} else {
+			Mage::helper('zolagodhl')->_log('DHL Service Error: ' .$method);
+			$result['status']		= false;
+			$result['message']		= 'DHL Service Error: ' .$method;
+		}
+		
+		return array_unique($result);
+	}	
 	
 	/**
 	 * Get COD Value for DHL Service per Shipment
