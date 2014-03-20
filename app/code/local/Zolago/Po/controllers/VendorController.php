@@ -1,6 +1,59 @@
 <?php
 
 class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstract {
+	
+	public function saveShippingAddressAction(){
+		$req = $this->getRequest();
+		$poId = $req->getParam("po_id");
+		$data = $req->getPost();
+		
+		$po = Mage::getModel("udpo/po")->load($poId);
+		/* @var $po Zolago_Po_Model_Po */
+		$session = $this->_getSession();
+		/* @var $session Zolago_Dropship_Model_Session */
+		
+		$this->getResponse()->setHeader("content-type", "application/json");
+		
+		if(!$po->getId()){
+			$this->getResponse()->setBody(Zend_Json::encode(array(
+				"status"=>0, 
+				"content"=>"Wrong PO Id"
+			)));
+			return;
+		}
+		
+		if($po->getVendor()->getId()!=$session->getVendor()->getId()){
+			$this->getResponse()->setBody(Zend_Json::encode(array(
+				"status"=>0, 
+				"content"=>"You have no access to this PO"
+			)));
+			return;
+		}
+		
+		$response = array(
+			"status"=>1,
+			"content"=>array()
+		);
+		
+		try{
+			if(isset($data['restore'])){
+				$po->clearOwnShippingAddress();
+			}elseif(isset($data['add_own'])){
+				$orignAddress = $po->getOrder()->getShippingAddress();
+				$newAddress = clone $orignAddress;
+				$newAddress->addData($data);
+				$po->setOwnShippingAddress($newAddress);
+			}
+			$po->save();
+			$response['content']['reload']=1;
+		}catch(Exception $e){
+			Mage::logException($e);
+			$response = array("status"=>0, "content"=>"Some errors occure. Check logs.");
+		}
+		
+		$this->getResponse()->setBody(Zend_Json::encode($response));
+	}
+
 	public function updatePosAction(){
 		
 		$poId = $this->getRequest()->getParam("id");
