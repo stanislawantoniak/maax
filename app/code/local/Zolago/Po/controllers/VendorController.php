@@ -106,7 +106,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 			/**
 			 * DHL: Make a WebApi Call to get T&T Data
 			 */
-			$autoTracking = $r->getParam('auto_trakcing');
+			$autoTracking = $r->getParam('auto-tracking');
 			$dhlSettings = $udpoHlp->getDhlSettings($vendor, $udpo->getDefaultPosId());
 
 			if (!$number && $carrier == Zolago_Dhl_Helper_Data::DHL_CARRIER_CODE && $autoTracking && $shipment && $dhlSettings) {

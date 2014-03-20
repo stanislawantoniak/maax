@@ -631,8 +631,8 @@ $dhlSettings = $_poHlp->getDhlSettings($_vendor, $_po->getDefaultPosId());
                         <input id="tracking_id-<?php echo $_id?>" name="tracking_id" value="" title="<?php echo $_hlp->__('Add Tracking ID') ?>" type="text" class="input-text tracking-id" style="width:250px;" />
 						</br>
 						<?php if ($dhlSettings): ?>
-							<label for="auto-tracking-<?php echo $_id?>" style="width:250px">
-							<input type="checkbox" class="auto-tracking" onchange="changeAutoTrack(this);" id="auto-tracking-<?php echo $_id?>" name="auto_trakcing"/>
+							<label for="auto-tracking-<?php echo $_id?>" style="width:250px; display:none" class="auto-tracking-box">
+								<input type="checkbox" class="auto-tracking" onchange="changeAutoTrack(this)" id="auto-tracking-<?php echo $_id?>" name="auto-tracking"/>
 								<?php echo $_hlp->__('I have no Track ID')?><br/>
 							</label>
 						<?php else: ?>
