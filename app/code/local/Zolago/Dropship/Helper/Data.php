@@ -123,7 +123,7 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
 			return false;
 		}
 		
-		$dhlClient = Mage::helper('zolagodhl')->startDhlClient();	
+		$dhlClient = Mage::helper('zolagodhl')->startDhlClient();
 		$processTracks = array();
 		foreach ($trackIds as $_trackId => $_tracks) {
 			foreach ($_tracks as $_track) {
@@ -160,11 +160,14 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
 		$status			= $this->__('Ready to Ship');
 
 		if (is_array($dhlResult) && array_key_exists('error', $dhlResult)) {
+			//Dhl Error Scenario
 			Mage::helper('zolagodhl')->_log('DHL Service Error: ' .$dhlResult['error']);
 			$dhlMessage[] = 'DHL Service Error: ' .$dhlResult['error'];
 		} elseif (property_exists($dhlResult, 'getTrackAndTraceInfoResult') && property_exists($dhlResult->getTrackAndTraceInfoResult, 'events') && property_exists($dhlResult->getTrackAndTraceInfoResult->events, 'item')) {
 			$shipmentIdMessage = $this->__('Tracking ID') . ': '. $dhlResult->getTrackAndTraceInfoResult->shipmentId . PHP_EOL;
 			$events = $dhlResult->getTrackAndTraceInfoResult->events;
+			
+			//DHL: Concatenate T&T Message History
 			foreach ($events->item as $singleEvent) {
 				$dhlMessage[$singleEvent->status] = 
 						(($singleEvent->receivedBy) ? $this->__('Received By: ') . $singleEvent->receivedBy . PHP_EOL : '')
@@ -193,6 +196,7 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
 				}
 			}
 		} else {
+			//DHL Scenario: No T&T Data Recieved
 			Mage::helper('zolagodhl')->_log('DHL Service Error: Missing Track and Trace Data');
 			$dhlMessage[] = $this->__('DHL Service Error: Missing Track and Trace Data');
 		}
