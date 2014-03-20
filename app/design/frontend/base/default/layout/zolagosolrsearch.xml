@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <solrbridge_solrsearch_category_view> 
+		<remove name="mana.catalog.leftnav" />
+    </solrbridge_solrsearch_category_view>
+</layout> 
