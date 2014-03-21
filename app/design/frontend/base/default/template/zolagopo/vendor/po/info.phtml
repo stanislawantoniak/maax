@@ -245,10 +245,6 @@ $dhlSettings = $_poHlp->getDhlSettings($_vendor, $_po->getDefaultPosId());
                     </div>
                     <div class="col-2 a-right" <?php if (!empty($_highlight['tracking'])): ?>class="highlight"<?php endif ?>>
 						<a href="#" id="address-label-edit-<?php echo $_id;?>"><?php echo $_hlp->__('Change')?></a>
-						<?php if(!$_addressesSame):?>
-							<br/>
-							<a href="#" id="address-label-restore-<?php echo $_id;?>"><?php echo $_hlp->__('Restore original')?></a>
-						<?php endif;?>
                     </div>
                 </div>
 				<div id="address-edit-<?php echo $_id;?>" style="display:none;">
@@ -257,6 +253,10 @@ $dhlSettings = $_poHlp->getDhlSettings($_vendor, $_po->getDefaultPosId());
 							<strong><?php echo $_hlp->__('Edit shipping address')?></strong>
 						</div>
 						<div class="col-2 a-right">
+							<?php if(!$_addressesSame):?>
+							<a href="#" id="address-edit-restore-<?php echo $_id;?>"><?php echo $_hlp->__('Restore original')?></a>
+							&nbsp;&middot;&nbsp;
+							<?php endif;?>
 							<a href="#" id="address-edit-cancel-<?php echo $_po->getId();?>"><?php echo $_hlp->__('Cancel')?></a>
 						</div>
 					</div>
@@ -319,8 +319,8 @@ $dhlSettings = $_poHlp->getDhlSettings($_vendor, $_po->getDefaultPosId());
 					(function(){
 						var addressLabel = $("address-label-<?php echo $_id;?>");
 						var addressLabelEdit = $("address-label-edit-<?php echo $_id;?>");
-						var addressLabelRestore = $("address-label-restore-<?php echo $_id;?>");
 						var addressEdit = $("address-edit-<?php echo $_id;?>");
+						var addressEditRestore = $("address-edit-restore-<?php echo $_id;?>");
 						var editCancel = $("address-edit-cancel-<?php echo $_id;?>");
 						var editCancel2 = $("address-edit-cancel2-<?php echo $_id;?>");
 						var editSubmit = $("address-edit-submit-<?php echo $_id;?>");
@@ -380,8 +380,8 @@ $dhlSettings = $_poHlp->getDhlSettings($_vendor, $_po->getDefaultPosId());
 						editCancel.observe("click", cancelFn);
 						editCancel2.observe("click", cancelFn);
 						
-						if(addressLabelRestore){
-							addressLabelRestore.observe("click", restoreOriginFn);
+						if(addressEditRestore){
+							addressEditRestore.observe("click", restoreOriginFn);
 						}
 						
 					})();
