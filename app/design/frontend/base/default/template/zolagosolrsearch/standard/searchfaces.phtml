@@ -24,7 +24,7 @@
 									}
 									?>
 									
-									<span class="label"><?php echo $this->getFacetLabel($key); ?>:</span> <span class="value"><?php echo $this->facetFormat($selectedFacetValue) ?></span>
+									<span class="label"><?php echo $this->__($this->getFacetLabel($key)); ?>:</span> <span class="value"><?php echo $this->facetFormat($selectedFacetValue) ?></span>
 									
 									
 									<a title="<?php echo $this->__('Remove This Item') ?>" href="<?php echo $this->getRemoveFacesUrl($face_key, $v)?>" class="btn-remove"><?php echo $this->__('Remove This Item') ?></a>

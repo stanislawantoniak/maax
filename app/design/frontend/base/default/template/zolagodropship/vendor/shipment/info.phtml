@@ -29,7 +29,15 @@ $_id = $_shipment->getId();
 
 $_order = $_shipment->getOrder();
 $_udpo = $this->getUdpo($_shipment);
-$_address = $_order->getShippingAddress() ? $_order->getShippingAddress() : $_order->getBillingAddress();
+
+//$_address = $_order->getShippingAddress() ? $_order->getShippingAddress() : $_order->getBillingAddress();
+
+$_addressId = $_shipment->getShippingAddressId();
+$_address = Mage::getModel("sales/order_address")->load($_addressId);
+
+if(!$_address->getId()){
+	$_address = $_udpo->getShippingAddress() ? $_udpo->getShippingAddress() : $_udpo->getBillingAddress();
+}
 
 $shipping = $_hlp->getShippingMethods();
 $vShipping = $_vendor->getShippingMethods();

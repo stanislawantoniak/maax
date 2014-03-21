@@ -32,7 +32,12 @@ $_posCollection = Mage::getResourceModel("zolagopos/pos_collection");
 $_posCollection->addVendorFilter($_vendor);
 
 $_order = $_po->getOrder();
-$_address = $_order->getShippingAddress() ? $_order->getShippingAddress() : $_order->getBillingAddress();
+
+// swap addresses
+//$_address = $_order->getShippingAddress() ? $_order->getShippingAddress() : $_order->getBillingAddress();
+$_address = $_po->getShippingAddress() ? $_po->getShippingAddress() : $_po->getBillingAddress();
+$_orderAddress = $_order->getShippingAddress() ? $_order->getShippingAddress() : $_order->getBillingAddress();
+$_addressesSame = $_po->isShippingSameAsOrder();
 
 $shipping = $_hlp->getShippingMethods();
 $vShipping = $_vendor->getShippingMethods();
@@ -200,7 +205,7 @@ $dhlSettings = $_poHlp->getDhlSettings($_vendor, $_po->getDefaultPosId());
 								<option <?php if($option['value']==$_po->getDefaultPosId()):?>selected="selected"<?php endif;?> value="<?php echo $this->htmlEscape($option['value']);?>"><?php echo $this->htmlEscape($option['label']);?></option>
 								<?php endforeach;?>
 							</select>
-							<button class="form-button" type="button" id="change-pos-<?php echo $_po->getId();?>"><span><?php echo $_hlp->__('Change')?></span></button>
+							<button class="form-button" type="button" id="change-pos-<?php echo $_po->getId();?>"><span><?php echo $_hlp->__('Submit')?></span></button>
 					</div>
                     <div class="col-1">
                         <strong><?php echo $_hlp->__('Current POS')?></strong><br/>
@@ -233,15 +238,140 @@ $dhlSettings = $_poHlp->getDhlSettings($_vendor, $_po->getDefaultPosId());
                 </div>
                 <div class="clear"></div>
 				<hr style="margin: 10px 0;"/>
-                <div class="col2-set">
+                <div class="col2-set address-label" id="address-label-<?php echo $_id;?>" >
                     <div class="col-1">
                         <strong><?php echo $_hlp->__('Shipping Address')?></strong><br/>
                         <?php echo Mage::helper('udropship')->formatCustomerAddress($_address, 'html', $_vendor) ?>
                     </div>
-                    <div class="col-2" <?php if (!empty($_highlight['tracking'])): ?>class="highlight"<?php endif ?>>
-
+                    <div class="col-2 a-right" <?php if (!empty($_highlight['tracking'])): ?>class="highlight"<?php endif ?>>
+						<a href="#" id="address-label-edit-<?php echo $_id;?>"><?php echo $_hlp->__('Change')?></a>
+						<?php if(!$_addressesSame):?>
+							<br/>
+							<a href="#"><?php echo $_hlp->__('Restore original')?></a>
+						<?php endif;?>
                     </div>
                 </div>
+				<div id="address-edit-<?php echo $_id;?>" style="display:none;">
+					<div class="col2-set" >
+						<div class="col-1">
+							<strong><?php echo $_hlp->__('Edit shipping address')?></strong>
+						</div>
+						<div class="col-2 a-right">
+							<a href="#" id="address-edit-cancel-<?php echo $_po->getId();?>"><?php echo $_hlp->__('Cancel')?></a>
+						</div>
+					</div>
+					<div class="clear"></div>
+					<div class="col2-set address-edit shipment-items" style="margin: 10px 0;" >
+						<ul class="form-list">
+							<li>
+								<label for="address-firstname-<?php echo $_id?>"><?php echo $_hlp->__('Firstname') ?></label>
+								<input id="address-firstname-<?php echo $_id?>" name="address_firstname" value="<?php echo $this->escapeHtml($_address->getFirstname()) ?>" title="<?php echo $_hlp->__('Firstname') ?>" type="text" class="input-text" style="width:250px;" />
+							</li>
+							<li>
+								<label for="address-lastname-<?php echo $_id?>"><?php echo $_hlp->__('Lastname') ?></label>
+								<input id="address-lastname-<?php echo $_id?>" name="address_lastname" value="<?php echo $this->escapeHtml($_address->getLastname()) ?>" title="<?php echo $_hlp->__('Lastname') ?>" type="text" class="input-text" style="width:250px;" />
+							</li>
+							<li>
+								<label for="address-company-<?php echo $_id?>"><?php echo $_hlp->__('Company') ?></label>
+								<input id="address-company-<?php echo $_id?>" name="address_company" value="<?php echo $this->escapeHtml($_address->getCompany()) ?>" title="<?php echo $_hlp->__('Company') ?>" type="text" class="input-text" style="width:250px;" />
+							</li>
+							<li>
+								<label for="address-telephone-<?php echo $_id?>"><?php echo $_hlp->__('Phone') ?></label>
+								<input id="address-telephone-<?php echo $_id?>" name="address_telephone" value="<?php echo $this->escapeHtml($_address->getTelephone()) ?>" title="<?php echo $_hlp->__('Phone') ?>" type="text" class="input-text" style="width:250px;" />
+							</li>
+							<li>
+								<label for="address-street-<?php echo $_id?>"><?php echo $_hlp->__('Street') ?></label>
+								<input id="address-street-<?php echo $_id?>" name="address_street" value="<?php echo $this->escapeHtml($_address->getStreet(1)) ?>" title="<?php echo $_hlp->__('Street') ?>" type="text" class="input-text" style="width:250px;" />
+							</li>
+							<li>
+								<label for="address-postcode-<?php echo $_id?>"><?php echo $_hlp->__('Postcode') ?></label>
+								<input id="address-postcode-<?php echo $_id?>" name="address_postcode" value="<?php echo $this->escapeHtml($_address->getPostcode()) ?>" title="<?php echo $_hlp->__('Postcode') ?>" type="text" class="input-text" style="width:100px;" />
+							</li>
+							<li>
+								<label for="address-city-<?php echo $_id?>"><?php echo $_hlp->__('City') ?></label>
+								<input id="address-city-<?php echo $_id?>" name="address_city" value="<?php echo $this->escapeHtml($_address->getCity()) ?>" title="<?php echo $_hlp->__('City') ?>" type="text" class="input-text" style="width:250px;" />
+							</li>
+							<li>
+								<label for="address-country-<?php echo $_id?>"><?php echo $_hlp->__('Country') ?></label>
+															<?php $_countries = Mage::getResourceModel('directory/country_collection')
+                                    ->loadData()
+                                    ->toOptionArray(false) ?>
+								<?php if (count($_countries) > 0): ?>
+									<select id="address-country-<?php echo $_id?>" name="address_country" class="input-select" style="width:260px;"  >
+										<option value="">-- Please Select --</option>
+										<?php foreach($_countries as $_country): ?>
+											<option value="<?php echo $_country['value'] ?>" <?php if($_address->getCountryId()==$_country['value']):?>selected="selected"<?php endif;?>>
+												<?php echo $_country['label'] ?>
+											</option>
+										<?php endforeach; ?>
+									</select>
+								<?php endif; ?>
+							</li>
+							<li>
+								<label>&nbsp;</label>
+								<button class="form-button" type="button" id="address-edit-submit-<?php echo $_po->getId();?>"><span><?php echo $_hlp->__('Submit')?></span></button>
+								<button class="form-button" style="background: #ccc;" type="button" id="address-edit-cancel2-<?php echo $_po->getId();?>"><span><?php echo $_hlp->__('Cancel')?></span></button>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<script type="text/javascript">
+					(function(){
+						var addressLabel = $("address-label-<?php echo $_id;?>");
+						var addressLabelEdit = $("address-label-edit-<?php echo $_id;?>");
+						var addressEdit = $("address-edit-<?php echo $_id;?>");
+						var editCancel = $("address-edit-cancel-<?php echo $_id;?>");
+						var editCancel2 = $("address-edit-cancel2-<?php echo $_id;?>");
+						var editSubmit = $("address-edit-submit-<?php echo $_id;?>");
+						
+						addressLabelEdit.observe("click", function(e){
+							addressLabel.hide();
+							addressEdit.show();
+							e.preventDefault();
+						});
+						var prepareAddressData = function(){
+							var data = {}, name;
+							addressEdit.select("input,select").each(function(el){
+								name = el.getAttribute("name");
+								if(name){
+									name = name.replace(/address_/, "");
+								}
+								data[name] = el.value;
+							});
+							data['add_own']=1;
+							return data;
+						}
+						var makeSaveRequest = function(url, data){
+							new Ajax.Request(url, {
+								parameters: data,
+								onSuccess: function(response){
+									var json =response.responseJSON;
+									if(!json.status){
+										alert(json.content);
+										return;
+									}
+									
+								}
+							});
+						}
+						var cancelFn = function(e){
+							addressLabel.show();
+							addressEdit.hide();
+							e.preventDefault();
+						}
+						var saveFn = function(){
+							makeSaveRequest("<?php echo $this->getUrl("*/*/saveShippingAddress", array("po_id"=>$_id));?>", prepareAddressData());
+						}
+						var restoreOriginFn = function(){
+							makeSaveRequest("<?php echo $this->getUrl("*/*/saveShippingAddress", array("po_id"=>$_id));?>", {restore: 1});
+						}
+							
+						editSubmit.observe("click", saveFn);
+						editCancel.observe("click", cancelFn);
+						editCancel2.observe("click", cancelFn);
+					})();
+                    
+                </script>
                 <div class="clear"></div>
                 <br />
                 <div style="float:right">

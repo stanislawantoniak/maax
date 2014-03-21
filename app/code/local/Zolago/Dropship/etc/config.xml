@@ -129,6 +129,14 @@
                         <fieldset>dhl</fieldset>
                         <position>30</position>
                     </dhl_password>
+					<!-- category -->
+					<root_category>
+                        <label>Root categories</label>
+						<frontend_model>zolagodropship/adminhtml_vendor_helper_form_category</frontend_model>
+						<backend_model>adminhtml/system_config_backend_serialized</backend_model>
+                        <fieldset>microsite</fieldset>
+                        <position>600</position>
+                    </root_category>
 				</fields>
 			</vendor>
 		</udropship>
@@ -183,6 +191,17 @@
 			</updates>
 		</layout>
 	</frontend>
+	<admin>
+		<routers>
+			<udropshipadmin>
+				<args>
+					<modules>
+						<zolagodropshipl before="Unirgy_Dropship_Adminhtml">Zolago_Dropship_Adminhtml</zolagodropshipl>
+					</modules>
+				</args>
+			</udropshipadmin>
+		</routers>
+	</admin>
 	<adminhtml>
 		<translate>
 			<modules>
