@@ -5,8 +5,8 @@ class Zolago_Solrsearch_Block_Faces_Flag extends Zolago_Solrsearch_Block_Faces_A
 	protected $_bestsellerFacet;
 	protected $_isNewFacet;
 
-	const FACET_BESTSELLER		= 'Bestseller';
-	const FACET_NEW				= 'New';
+	const FACET_BESTSELLER	= 'Bestseller';
+	const FACET_NEW			= 'New';
 			
 	public function __construct()
 	{
@@ -22,7 +22,7 @@ class Zolago_Solrsearch_Block_Faces_Flag extends Zolago_Solrsearch_Block_Faces_A
 	}
 	
 	public function getFacetLabel() {
-		return Mage::helper('zolagosolrsearch')->__("Product Flags");
+		return Mage::helper('zolagosolrsearch')->__('Product Flags');
 	}
 	
 	public function getItemUrl($item) {
