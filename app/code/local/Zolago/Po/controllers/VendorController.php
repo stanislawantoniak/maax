@@ -17,7 +17,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 		if(!$po->getId()){
 			$this->getResponse()->setBody(Zend_Json::encode(array(
 				"status"=>0, 
-				"content"=>"Wrong PO Id"
+				"content"=>Mage::helper("zolagopo")->__("Wrong PO Id")
 			)));
 			return;
 		}
@@ -25,7 +25,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 		if($po->getVendor()->getId()!=$session->getVendor()->getId()){
 			$this->getResponse()->setBody(Zend_Json::encode(array(
 				"status"=>0, 
-				"content"=>"You have no access to this PO"
+				"content"=>Mage::helper("zolagopo")->__("You have no access to this PO")
 			)));
 			return;
 		}
@@ -38,17 +38,24 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 		try{
 			if(isset($data['restore'])){
 				$po->clearOwnShippingAddress();
+				$po->save();
+				$session->addSuccess(Mage::helper("zolagopo")->__("Address restored"));
+				$response['content']['reload']=1;
 			}elseif(isset($data['add_own'])){
 				$orignAddress = $po->getOrder()->getShippingAddress();
 				$newAddress = clone $orignAddress;
 				$newAddress->addData($data);
 				$po->setOwnShippingAddress($newAddress);
+				$po->save();
+				$session->addSuccess(Mage::helper("zolagopo")->__("Address changed"));
+				$response['content']['reload']=1;
 			}
-			$po->save();
-			$response['content']['reload']=1;
 		}catch(Exception $e){
 			Mage::logException($e);
-			$response = array("status"=>0, "content"=>"Some errors occure. Check logs.");
+			$response = array(
+				"status"=>0, 
+				"content"=>Mage::helper("zolagopo")->__("Some errors occure. Check logs.")
+			);
 		}
 		
 		$this->getResponse()->setBody(Zend_Json::encode($response));

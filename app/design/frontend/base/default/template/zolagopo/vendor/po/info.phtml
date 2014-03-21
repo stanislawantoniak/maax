@@ -239,7 +239,7 @@ $fcBlock->setFieldValue(array(
 						<a href="#" id="address-label-edit-<?php echo $_id;?>"><?php echo $_hlp->__('Change')?></a>
 						<?php if(!$_addressesSame):?>
 							<br/>
-							<a href="#"><?php echo $_hlp->__('Restore original')?></a>
+							<a href="#" id="address-label-restore-<?php echo $_id;?>"><?php echo $_hlp->__('Restore original')?></a>
 						<?php endif;?>
                     </div>
                 </div>
@@ -311,16 +311,12 @@ $fcBlock->setFieldValue(array(
 					(function(){
 						var addressLabel = $("address-label-<?php echo $_id;?>");
 						var addressLabelEdit = $("address-label-edit-<?php echo $_id;?>");
+						var addressLabelRestore = $("address-label-restore-<?php echo $_id;?>");
 						var addressEdit = $("address-edit-<?php echo $_id;?>");
 						var editCancel = $("address-edit-cancel-<?php echo $_id;?>");
 						var editCancel2 = $("address-edit-cancel2-<?php echo $_id;?>");
 						var editSubmit = $("address-edit-submit-<?php echo $_id;?>");
 						
-						addressLabelEdit.observe("click", function(e){
-							addressLabel.hide();
-							addressEdit.show();
-							e.preventDefault();
-						});
 						var prepareAddressData = function(){
 							var data = {}, name;
 							addressEdit.select("input,select").each(function(el){
@@ -333,6 +329,7 @@ $fcBlock->setFieldValue(array(
 							data['add_own']=1;
 							return data;
 						}
+						
 						var makeSaveRequest = function(url, data){
 							new Ajax.Request(url, {
 								parameters: data,
@@ -342,25 +339,43 @@ $fcBlock->setFieldValue(array(
 										alert(json.content);
 										return;
 									}
-									
+									if(json.content && json.content.reload){
+										showUdpoInfo(<?php echo $_id;?>);
+									}
 								}
 							});
 						}
+						
+						
+						var startEditFn = function(e){
+							addressLabel.hide();
+							addressEdit.show();
+							e.preventDefault();
+						}
+						
 						var cancelFn = function(e){
 							addressLabel.show();
 							addressEdit.hide();
 							e.preventDefault();
 						}
-						var saveFn = function(){
+						var saveFn = function(e){
 							makeSaveRequest("<?php echo $this->getUrl("*/*/saveShippingAddress", array("po_id"=>$_id));?>", prepareAddressData());
+							e.preventDefault();
 						}
-						var restoreOriginFn = function(){
+						var restoreOriginFn = function(e){
 							makeSaveRequest("<?php echo $this->getUrl("*/*/saveShippingAddress", array("po_id"=>$_id));?>", {restore: 1});
+							e.preventDefault();
 						}
 							
+						addressLabelEdit.observe("click", startEditFn);
 						editSubmit.observe("click", saveFn);
 						editCancel.observe("click", cancelFn);
 						editCancel2.observe("click", cancelFn);
+						
+						if(addressLabelRestore){
+							addressLabelRestore.observe("click", restoreOriginFn);
+						}
+						
 					})();
                     
                 </script>

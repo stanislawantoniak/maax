@@ -23,6 +23,9 @@
 			</udpo>
 		</blocks>
 		<helpers>
+			<zolagopo>
+				<class>Zolago_Po_Helper</class>
+			</zolagopo>
 			<udpo>
 				<rewrite>
 					<data>Zolago_Po_Helper_Data</data>
