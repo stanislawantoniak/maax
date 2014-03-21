@@ -177,7 +177,8 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 					'length'		=> $r->getParam('specify_zolagodhl_length'),
 					'weight'		=> ($shipment->getTotalWeight() ? ((int) ceil($shipment->getTotalWeight())) : Mage::helper('zolagodhl')->getDhlDefaultWeight()),
 					'quantity'		=> Zolago_Dhl_Model_Client::SHIPMENT_QTY,
-					'nonStandard'	=> $r->getParam('specify_zolagodhl_custom_dim')
+					'nonStandard'	=> $r->getParam('specify_zolagodhl_custom_dim'),
+					'shipmentDate'  => $r->getParam('specify_zolagodhl_shipping_date'),
 				);
 				$number = $this->_createShipments($dhlSettings, $shipment, $shipmentSettings, $udpo);
 				if (!$number) {
