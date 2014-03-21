@@ -1,0 +1,28 @@
+<?php
+$sHlp = Mage::helper('core/string');
+$qaHlp = Mage::helper('udqa');
+?>
+<?php $_questions = $this->getQuestionsCollection(); ?>
+<?php if($_questions->getSize()): ?>
+<h2><?php echo $this->__('Vendor Questions/Answers') ?></h2>
+<?php echo $this->getChildHtml('toolbar') ?>
+<dl id="questions-list">
+    <?php foreach ($_questions as $_question): ?>
+    <dt><?php echo $qaHlp->__('<b>%s</b> asks vendor <b>%s</b>', $_question->getCustomerName(), $_question->getVendorName())?> </dt>
+    <dd>
+        <h5><?php echo $qaHlp->__('Question Text')?></h5>
+        <p><?php echo $this->escapeHtml($_question->getQuestionText()); ?></p>
+        <?php if ($_question->getAnswerText()): ?>
+        <h5><?php echo $qaHlp->__('Answer')?></h5>
+        <p><?php echo $this->escapeHtml($_question->getAnswerText()); ?></p>
+        <?php else: ?>
+        <p><?php echo $qaHlp->__('Not Answered yet')?></p>
+        <?php endif ?>
+    </dd>
+    <?php endforeach; ?>
+</dl>
+<script type="text/javascript">decorateDataList('questions-list');</script>
+<?php echo $this->getChildHtml('toolbar') ?>
+<?php else: ?>
+<p><?php echo $this->__('No questions asked yet.'); ?></p>
+<?php endif ?>

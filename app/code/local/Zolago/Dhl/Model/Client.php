@@ -46,7 +46,7 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
      * @param Zolago_Operator_Model_Operator $operator
      */
     protected function _construct() {
-        $this->_init('zolagodhl/dhl'); 
+        $this->_init('zolagodhl/client'); 
     }
 
 
