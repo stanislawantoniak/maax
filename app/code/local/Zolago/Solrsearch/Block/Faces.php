@@ -181,11 +181,11 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
     		$facetFileds = $solrData['facet_counts']['facet_fields'];
     	}
 		
-		if (isset($facetFileds['is_bestseller_facet'])) {
+		if (isset($facetFileds['is_bestseller_facet'][$this->__('Yes')])) {
 			$bestsellerFacet	= array(Mage::helper('zolagosolrsearch')->__('Bestseller') => $facetFileds['is_bestseller_facet'][$this->__('Yes')]);
 		}
 		
-		if (isset($facetFileds['is_new_facet'])) {
+		if (isset($facetFileds['is_new_facet'][$this->__('Yes')])) {
 			$isNewFacet			= array(Mage::helper('zolagosolrsearch')->__('New') => $facetFileds['is_new_facet'][$this->__('Yes')]);
 		}
 		
