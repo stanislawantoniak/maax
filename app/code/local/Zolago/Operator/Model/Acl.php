@@ -95,7 +95,7 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_RMA_OPERATOR, self::RES_URMA_VENDOR);
 		
 		// Build ACL Rules - Helpdesk
-		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_RMA_OPERATOR, self::RES_ASK_QUESTION);
+		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_HELPDESK, self::RES_ASK_QUESTION);
 		
 	}
 	
