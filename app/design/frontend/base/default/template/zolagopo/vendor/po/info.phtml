@@ -641,6 +641,11 @@ $dhlSettings = $_poHlp->getDhlSettings($_vendor, $_po->getDefaultPosId());
 							</label>
 						<?php endif; ?>
 					</li>
+                    <li id="specify-zolagodhl-4-<?php echo $_id?>" class="specify-params specify-zolagodhl" style="display: none;">
+                        <label for="specify-zolagodhl-pkg-date-<?php echo $_id?>"><?php echo $_hlp->__('Shipping date') ?></label>
+                        <input id="specify-zolagodhl-pkg-date-<?php echo $_id?>" name="specify_zolagodhl_shipping_date" value="<?php echo date('Y-m-d');?>" 
+                            title="<?php echo $_hlp->__('Shipping date') ?>" type="text" class="input-text specify-zolagodhl-date" style="width:250px;" />
+                    </li>
 					<li id="specify-zolagodhl-2-<?php echo $_id?>" class="specify-params specify-zolagodhl" style="display: none;">
                         <label for="specify-zolagodhl-pkg-type-<?php echo $_id?>">
 							<?php echo $_hlp->__('Pkg. type')?><br/>
