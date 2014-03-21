@@ -5,53 +5,49 @@
 class Zolago_Catalog_Model_Product_Source_Flag 
         extends Mage_Eav_Model_Entity_Attribute_Source_Abstract {
 
-	public function getOptionText($value)
-    {
-        $isMultiple = false;
-        if (strpos($value, ',')) {
-            $isMultiple = true;
-            $value = explode(',', $value);
-        }
-
-        $options = $this->getAllOptions(false);
-
-        if ($isMultiple) {
-            $values = array();
-            foreach ($options as $item) {
-                if (in_array($item['value'], $value)) {
-                    $values[] = $item['label'];
-                }
-            }
-            return $values;
-        }
-
-        foreach ($options as $item) {
-            if ($item['value'] == $value) {
-                return $item['label'];
-            }
-        }
-        return false;
-    }
+//	public function getOptionText($value)
+//    {
+//        $isMultiple = false;
+//        if (strpos($value, ',')) {
+//            $isMultiple = true;
+//            $value = explode(',', $value);
+//        }
+//
+//        $options = $this->getAllOptions(false);
+//
+//        if ($isMultiple) {
+//            $values = array();
+//            foreach ($options as $item) {
+//                if (in_array($item['value'], $value)) {
+//                    $values[] = $item['label'];
+//                }
+//            }
+//            return $values;
+//        }
+//
+//        foreach ($options as $item) {
+//            if ($item['value'] == $value) {
+//                return $item['label'];
+//            }
+//        }
+//        return false;
+//    }
 	
     public function getAllOptions() {
         if (!$this->_options) {
             $this->_options = array (
                 array (
+                    'value' => '0',
+                    'label' => '',
+                ),				
+                array (
                     'value' => '1',
-                    'label' => 'Promotion',
+                    'label' => Mage::helper('zolagocatalog')->__('Promotion'),
                 ),
                 array (
                     'value' => '2',
-                    'label' => 'Bestseller',
-                ),
-                array (
-                    'value' => '3',
-                    'label' => 'New',
-                ),
-                array (
-                    'value' => '4',
-                    'label' => 'Sale',
-                ),
+                    'label' => Mage::helper('zolagocatalog')->__('Sale'),
+                )
             );
         } 
         return $this->_options;
@@ -68,25 +64,40 @@ class Zolago_Catalog_Model_Product_Source_Flag
 
         if (Mage::helper('core')->useDbCompatibleMode()) {
             $columns[$attributeCode] = array(
-                'type'      => 'varchar(255)',
+                'type'      =>  'int',
                 'unsigned'  => false,
                 'is_null'   => true,
                 'default'   => null,
                 'extra'     => null
             );
+                $columns[$attributeCode . '_value'] = array(
+                    'type'      => 'varchar(255)',
+                    'unsigned'  => false,
+                    'is_null'   => true,
+                    'default'   => null,
+                    'extra'     => null
+                );
         } else {
-            $type = Varien_Db_Ddl_Table::TYPE_TEXT ;
+            $type =  Varien_Db_Ddl_Table::TYPE_INTEGER;
             $columns[$attributeCode] = array(
                 'type'      => $type,
-                'length'    => 255,
+                'length'    => null,
                 'unsigned'  => false,
-                'nullable'   => true,
+                'nullable'	=> true,
                 'default'   => null,
                 'extra'     => null,
                 'comment'   => $attributeCode . ' column'
             );
+                $columns[$attributeCode . '_value'] = array(
+                    'type'      => Varien_Db_Ddl_Table::TYPE_TEXT,
+                    'length'    => 255,
+                    'unsigned'  => false,
+                    'nullable'  => true,
+                    'default'   => null,
+                    'extra'     => null,
+                    'comment'   => $attributeCode . ' column'
+                );
         }
-
         return $columns;
     }
 
@@ -98,12 +109,22 @@ class Zolago_Catalog_Model_Product_Source_Flag
     public function getFlatIndexes()
     {
         $indexes = array();
-
-        $index = 'IDX_PRODUCT_FLAG';        
+        $index = 'IDX_PRODUCT_FLAG';
         $indexes[$index] = array(
             'type'      => 'index',
-            'fields'    => 'product_flag',
+            'fields'    => array('product_flag')
         );
+
+        $sortable   = $this->getAttribute()->getUsedForSortBy();
+        if ($sortable) {
+            $index = 'IDX_PRODUCT_FLAG_VALUE';
+
+            $indexes[$index] = array(
+                'type'      => 'index',
+                'fields'    => array('product_flag_value'),
+            );
+        }
+
         return $indexes;
     }
 
@@ -118,5 +139,4 @@ class Zolago_Catalog_Model_Product_Source_Flag
         return Mage::getResourceModel('eav/entity_attribute_option')
             ->getFlatUpdateSelect($this->getAttribute(), $store);
     }
-
 }
