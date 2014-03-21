@@ -1,0 +1,63 @@
+<?php
+$shipments = $this->getShipments();
+$vendors = $this->getVendors();
+?>
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+<div class="page-title">
+    <h1><?php echo $this->__('Ask A Question') ?></h1>
+</div>
+<form action="<?php echo $this->getFormAction(); ?>" id="question-form" method="post">
+    <div class="fieldset">
+        <h2 class="legend"><?php echo $this->__('Question Details') ?></h2>
+        <ul class="form-list">
+            <?php if ($shipments->getSize()): ?>
+            <li>
+                <label for="shipment"><?php echo $this->__('SHIPMENT') ?></label>
+                <div class="input-box">
+                    <select id="shipment" name="question[shipment_id]" style="width: 350px">
+                        <option value=""><?php echo $this->__('* Please select') ?></option>
+                        <?php foreach ($shipments as $shipment): ?>
+                        <option value="<?php echo $shipment->getShipmentId()?>"><?php echo $this->__('Shipment #%s for order #%s', $shipment->getShipmentIncrementId(), $shipment->getOrderIncrementId())?></option>
+                        <?php endforeach ?>
+                    </select>
+                </div>
+            </li>
+            <?php endif ?>
+            <li>
+                <label for="vendor"><?php echo $this->__('VENDOR') ?></label>
+                <div class="input-box">
+                    <select id="vendor" name="question[vendor_id]">
+                        <option value=""><?php echo $this->__('* Please select') ?></option>
+                        <?php foreach ($vendors as $vId=>$vName): ?>
+                        <option value="<?php echo $vId?>"><?php echo $vName?></option>
+                        <?php endforeach ?>
+                    </select>
+                </div>
+            </li>
+            <li class="wide">
+                <label for="question_text" class="required"><em>*</em><?php echo $this->__('Question Text') ?></label>
+                <div class="input-box">
+                    <textarea name="question[question_text]" id="question_text" title="<?php echo $this->__('Question Text') ?>" class="required-entry input-text" cols="5" rows="3"></textarea>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="buttons-set">
+        <p class="required"><?php echo $this->__('* Required Fields') ?></p>
+        <button type="submit" title="<?php echo $this->__('Submit') ?>" class="button"><span><span><?php echo $this->__('Submit') ?></span></span></button>
+    </div>
+</form>
+<script type="text/javascript">
+    //<![CDATA[
+    var questionForm = new VarienForm('question-form', true);
+    $('shipment').observe('change', function(){
+        if ($(shipment).value) {
+            $('vendor').disable();
+            $('vendor').up('li').hide();
+        } else {
+            $('vendor').enable();
+            $('vendor').up('li').show();
+        }
+    });
+    //]]>
+</script>

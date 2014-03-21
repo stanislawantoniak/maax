@@ -1,0 +1,15 @@
+<!--@subject Question replied by vendor@-->
+Dear {{var question.customer_name}},
+<br/>
+<br/>
+Your question to {{var question.vendor_name}} {{if show_vendor_info}}({{var question.vendor_email}}){{/if}} {{if question.shipment_id}}regarding shipment #{{var question.shipment_increment_id}}{{/if}} {{if question.product_id}}regarding product {{var question.product_name}}{{/if}} has been answered
+<br/><br/>
+Your question:
+<pre>{{var question.question_text}}</pre>
+<br/>
+<br/>
+Their answer is:
+<pre>{{var question.answer_text}}</pre>
+
+
+
