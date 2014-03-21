@@ -299,7 +299,7 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
             $result['message']		= 'DHL Service Error: ' .$method;
         }
 
-        return array_unique($result);
+        return $result;
     }
 
     /**
@@ -333,8 +333,7 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
             $result['status']		= false;
             $result['message']		= 'DHL Service Error: ' .$method;
         }
-
-        return array_unique($result);
+        return $result;
     }
 
     /**
