@@ -1,0 +1,17 @@
+<?php $key = $this->getFacetKey(); ?>
+<?php if ($this->getCanShow()): ?>
+	<dt id="solr_search_<?php echo $key ?>_expander" onclick="Effect.toggle('content_holder_<?php echo $key ?>', 'slide', {duration: 0.3});
+			$('solr_search_<?php echo $key ?>_expander').toggleClassName('collapsed');
+			return false;"><?php echo $this->getFacetLabel(); ?></dt>
+	<dd id="content_holder_<?php echo $key ?>">
+		<ol>
+			<?php foreach ($this->getItems() as $item => $count): ?>
+				<?php if ($this->getCanShowItem($item, $count)): ?>
+					<li>					
+						<a href="<?php echo $this->getItemUrl($item) ?>" class="facet-item <?php echo $this->getItemClass($item); ?>"><?php echo Mage::helper('zolagosolrsearch')->__($item); ?>&nbsp;<span>(<?php echo $count ?>)</span></a>
+					</li>
+				<?php endif; ?>
+			<?php endforeach; ?>
+		</ol>
+	</dd>
+<?php endif; ?>
