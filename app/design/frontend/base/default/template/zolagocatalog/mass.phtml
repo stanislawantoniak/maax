@@ -1,4 +1,7 @@
 <h1><?php echo Mage::helper("zolagocatalog")->__("Product mass actions");?></h1>
+<script>
+FORM_KEY = "<?php echo Mage::getSingleton('core/session')->getFormKey() ?>";
+</script>
 <div>
 	<?php echo $this->getGridHtml();?>
 </div>

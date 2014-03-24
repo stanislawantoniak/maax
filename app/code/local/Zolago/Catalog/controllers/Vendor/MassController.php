@@ -12,6 +12,7 @@ class Zolago_Catalog_Vendor_MassController
 		
 		$this->getLayout()->getUpdate()->
 				addHandle('default')->
+				addHandle('formkey')->
 				addHandle('adminhtml_head');
 
         // add default layout handles for this action

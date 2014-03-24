@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
-	
+	<formkey>
+        <block type="core/template" name="formkey" as="formkey" template="formkey.phtml"/>
+    </formkey>
 	<adminhtml_head>
 		<reference name="head">
 			<action method="addJs">
