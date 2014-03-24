@@ -21,7 +21,7 @@ class Zolago_Solrsearch_Block_Faces_Flag extends Zolago_Solrsearch_Block_Faces_A
 		$this->setTemplate('zolagosolrsearch/standard/searchfaces/flag.phtml');
 	}
 	
-	public function getFacetLabel() {
+	public function getFacetLabel($facetCode=null) {
 		return Mage::helper('zolagosolrsearch')->__('Product Flags');
 	}
 	
