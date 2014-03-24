@@ -106,8 +106,12 @@ $_isTierShip = $_session->getVendor()->getAllowTiershipModify();
         <li <?php if ($_active=='stockprice'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('udropship/vendor/product')?>"><?php echo $this->__('Stock')?></a></li>
 <?php endif ?>
 <?php if (Mage::helper('udropship')->isModuleActive('udprod')
-    && $_session->isLoggedIn() && $_session->isAllowed("udprod")): ?>
+    && $_session->isLoggedIn() && $_session->isAllowed("udprod/vendor")): ?>
         <li <?php if ($_active=='udprod'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('udprod/vendor/products')?>"><?php echo $this->__('Products Edit')?></a></li>
+<?php endif ?>
+<?php if (Mage::helper('core')->isModuleEnabled('Zolago_Catalog')
+    && $_session->isLoggedIn() && $_session->isAllowed("zolagocatalog/vendor_mass")): ?>
+        <li <?php if ($_active=='zolagocatalog'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('zolagocatalog/vendor_mass')?>"><?php echo $this->__('Mass Actions')?></a></li>
 <?php endif ?>
 <?php if (Mage::helper('udropship')->isModuleActive('zolagopos') && $_session->isAllowed("pos") && $_session->isLoggedIn()): ?>
         <li <?php if ($_active=='zolagopos'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('udropship/pos')?>"><?php echo $this->__('POS')?></a></li>
