@@ -28,4 +28,18 @@
 			</action>
 		</reference>
     </udpo_vendor_shipmentinfo>
+	<sales_order_shipment>
+		<reference name="shipment_items">
+			<action method="setTemplate">
+				<template>zolagodropship/sales/order/shipment/items.phtml</template>
+			</action>
+		</reference>
+	</sales_order_shipment>
+	<sales_order_printshipment>
+		<reference name="sales.order.print.shipment">
+			<action method="setTemplate">
+				<template>zolagodropship/sales/order/print/shipment.phtml</template>
+			</action>
+		</reference>
+	</sales_order_printshipment>
 </layout>

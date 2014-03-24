@@ -32,6 +32,7 @@
 			</zolagodropship>
 			<udropship>
 				<rewrite>
+					<vendor_preferences>Zolago_Dropship_Block_Vendor_Preferences</vendor_preferences>
 					<vendor_shipment_info>Zolago_Dropship_Block_Vendor_Shipment_Info</vendor_shipment_info>
 				</rewrite>
 			</udropship>
@@ -135,6 +136,7 @@
 						<frontend_model>zolagodropship/adminhtml_vendor_helper_form_category</frontend_model>
 						<backend_model>adminhtml/system_config_backend_serialized</backend_model>
                         <fieldset>microsite</fieldset>
+						<only_admin>1</only_admin>
                         <position>600</position>
                     </root_category>
 				</fields>

@@ -27,8 +27,7 @@ $_isUdreport = Mage::helper('udropship')->isModuleActive('Unirgy_DropshipVendorR
 $_dashboardUrl = $_isUdpo ? $this->getUrl('udpo/vendor') : $this->getUrl('udropship/vendor');
 $_dashboardText = $_isUdpo ? $this->__("Orders"): $this->__("Dashboard");
 $_active = $this->getActivePage();
-$_isUrmaActive = Mage::helper('udropship')->isModuleActive('Unirgy_Rma') && $_session->isAllowed("urma")
-    && $_session->isLoggedIn();
+$_isUrmaActive = Mage::helper('udropship')->isModuleActive('Unirgy_Rma');
 $_isUstockPoActive = Mage::helper('udropship')->isModuleActive('ustockpo')
      && $_session->isLoggedIn() && $_session->getVendor()->getDistributorId();
 $_isTierShip = $_session->getVendor()->getAllowTiershipModify();
@@ -76,7 +75,7 @@ $_isTierShip = $_session->getVendor()->getAllowTiershipModify();
 				<li class="first <?php if ($_active=='dashboard'): ?>active<?php endif ?>"><a href="<?php echo Mage::getUrl("udropship/vendor/login");?>"><?php echo $this->__("Login"); ?></a></li>
 		<?php endif;?>
 		
-<?php if ($_isUrmaActive && $_session->isAllowed("urma") && $_session->isLoggedIn()): ?>
+<?php if ($_isUrmaActive && $_session->isAllowed("urma/vendor") && $_session->isLoggedIn()): ?>
     <li <?php if ($_active=='urmas'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('urma/vendor/') ?>"><?php echo $this->__('Returns')?></a></li>
 <?php endif ?>
 <?php if ($_isUstockPoActive && $_session->isAllowed("ustockpos") && $_session->isLoggedIn()): ?>
@@ -131,10 +130,10 @@ $_isTierShip = $_session->getVendor()->getAllowTiershipModify();
     && $_session->isLoggedIn()): ?>
     <li <?php if ($_active=='umanlabels'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('umanlabel/vendor')?>"><?php echo $this->__('Manual Labels')?></a></li>
 <?php endif ?>
-<?php if (Mage::helper('udropship')->isModuleActive('udqa')
-		&& $_session->isAllowed("udqa")
-		&& $_session->isLoggedIn()): ?>
-		<li <?php if ($_active=='udqa'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('udqa/vendor/questions')?>"><?php echo $this->__('Customer Questions')?></a></li>
+<?php if (Mage::helper('udropship')->isModuleActive('udqa') && $_session->isAllowed("udqa/vendor") && $_session->isLoggedIn()): ?>
+		<li <?php if ($_active=='udqa'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('udqa/vendor')?>">
+			<?php echo $this->__('Customer Questions')?></a>
+		</li>
 <?php endif ?>
 <?php if (Mage::helper('udropship')->isModuleActive('Unirgy_DropshipMicrosite')
     && $_session->isLoggedIn()

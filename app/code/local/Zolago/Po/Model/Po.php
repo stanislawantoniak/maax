@@ -53,6 +53,7 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 	   $this->setShippingAddressId(
 			$this->getOrder()->getShippingAddress()->getId()
 	   );
+	   $this->cleanAddresses();
 	   return $this;
    }
    
