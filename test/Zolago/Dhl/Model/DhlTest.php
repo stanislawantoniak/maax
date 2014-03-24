@@ -30,9 +30,13 @@ class Zolago_Dhl_Model_DhlTest extends ZolagoDb_TestCase {
         }
         return $this->_model;
     }
-    public function testGetModelTrackAndTraceInfo() {
+    protected function _getModelTrackAndTraceInfo() {
         $model = $this->_getModel();
         $ret = $model->getTrackAndTraceInfo('11898773100');
+        return $ret;
+    }
+    public function testGetModelTrackAndTraceInfo() {
+        $ret = $this->_getModelTrackAndTraceInfo();
         $this->assertNotEmpty($ret);
         $this->assertInstanceOf('StdClass',$ret);
     }	
@@ -85,7 +89,6 @@ class Zolago_Dhl_Model_DhlTest extends ZolagoDb_TestCase {
         );
 	}	
 	public function testCreateShipments() { 
-	    return;
 	    $shipment = new Zolago_Dhl_Mock_Shipment('cashondelivery');
 	    $model = $this->_getModel();
 	    $shipmentSettings = array (
@@ -93,9 +96,97 @@ class Zolago_Dhl_Model_DhlTest extends ZolagoDb_TestCase {
 	        'height' => 10,
 	        'length' => 10,
 	        'weight' => 10,
-	        'quantity' => 1,
+	        'quantity' => 1,	        
 	        'type' => 'PACKAGE'
         );
+        $addressData = array (
+            'firstname' => 'Jan',
+            'lastname' => 'Kowalski',
+            'postcode' => '04-669',
+            'city' => 'Paździochowo',
+            'street' => 'Dziurawa 9',
+            'telephone' => '999888777',
+            'email' => 'janf0@interia.pl',
+        );
+        $pos = Zolago_Pos_Helper_Test::getPos();
+        $pos->setData(Zolago_Pos_Helper_Test::getPosData());
+        $model->setPos($pos);
+        $model->setAddressData($addressData);
+        $this->assertFalse($model->createShipments(array(),$shipmentSettings));
 	    $ret = $model->createShipments($shipment,$shipmentSettings);	    
+	    $this->assertNotEmpty($ret);
+	}
+    /**
+        * @expectedException Mage_Core_Exception
+        * @expectedExceptionMessage Too many shipments in one query
+    */
+        public function testLabels() {
+	    $model = $this->_getModel();
+	    $this->assertFalse($model->getLabels(null));
+	    $tracking = new Zolago_Dhl_Mock_Tracking('adfadfadsfaf');
+	    $ret = $model->getLabels($tracking);
+	    // errors expected
+	    $this->assertInternalType('array',$ret);
+	    $this->assertArrayHasKey('error',$ret);
+	    // too much trackings
+	    $track = array (
+	        $tracking,
+	        $tracking,
+	        $tracking,
+	        $tracking,
+        );
+        $model->getLabels($track);
+	}
+	public function testProcessShipmentResults() {
+	    $shipmentError = array (
+	        'error' => 'Error'
+        );
+        $model = $this->_getModel();
+        $ret = $model->processDhlShipmentsResult('test',$shipmentError);
+        $this->assertInternalType('array',$ret);
+        $this->assertFalse($ret['shipmentId']);
+        $shipment = new StdClass();
+        $shipment->createShipmentsResult = new StdClass();
+        $ret = $model->processDhlShipmentsResult('test',$shipment);
+        $this->assertInternalType('array',$ret);
+        $this->assertFalse($ret['shipmentId']);
+        $this->assertEquals($ret['message'],'DHL Service Error: test');
+        $shipment->createShipmentsResult->item = new StdClass();
+        $shipment->createShipmentsResult->item->shipmentId = 10;
+        $ret = $model->processDhlShipmentsResult('test',$shipment);
+        $this->assertInternalType('array',$ret);
+        $this->assertEquals(10,$ret['shipmentId']);
+	}
+	public function testProcessLabelResults() {
+	    $labelError = array (
+	        'error' => 'Error',
+        );
+        $model = $this->_getModel();
+        $ret = $model->processDhlLabelsResult('test',$labelError);
+        $this->assertInternalType('array',$ret);
+        $this->assertFalse($ret['status']);
+        
+        $label = new StdClass();
+        $label->getLabelsResult = new StdClass();
+        $ret = $model->processDhlLabelsResult('test',$label);
+        $this->assertInternalType('array',$ret);
+        $this->assertFalse($ret['status']);
+        $this->assertEquals('DHL Service Error: test',$ret['message']);
+        
+        $label->getLabelsResult->item = new StdClass();
+        $label->getLabelsResult->item->shipmentId = 10;        
+        $label->getLabelsResult->item->labelName = 'test';
+        $label->getLabelsResult->item->labelData = 'dGVzdA==';
+        
+        
+        $ret = $model->processDhlLabelsResult('test',$label);
+        $this->assertInternalType('array',$ret);
+        $expected = array(
+            'status' => 10,
+            'message' => 'Shipment ID: 10',
+            'labelName' => 'test',
+            'labelData' => 'test',
+        );
+        $this->assertEquals($expected,$ret);
 	}
 }

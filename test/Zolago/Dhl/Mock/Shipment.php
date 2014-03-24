@@ -25,5 +25,8 @@ class Zolago_Dhl_Mock_Shipment {
     public function getShippingAmountIncl() {
         return 10;
     }
+    public function getUdpoIncrementId() {
+        return 2;
+    }
 }
 ?>
