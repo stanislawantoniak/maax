@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+
+<layout version="0.1.0">
+
+    <customer_account>
+        <reference name="customer_account_navigation">
+            <action method="addLink" translate="label" module="udqa"><name>udqa</name><path>udqa/customer</path><label>Ask A Question</label></action>
+        </reference>
+    </customer_account>
+
+    <udqa_customer_index translate="label">
+        <label>Customer My Account Vendor Questions</label>
+        <update handle="customer_account"/>
+        <reference name="my.account.wrapper">
+            <block type="page/html_pager" name="udqa_list.toolbar" />
+            <block type="udqa/customer_list" name="udqa_list" template="udqa/customer/list.phtml" />
+        </reference>
+    </udqa_customer_index>
+
+    <udqa_customer_view translate="label">
+        <label>Customer My Account Vendor Question View</label>
+        <update handle="customer_account"/>
+        <reference name="my.account.wrapper">
+            <block type="udqa/customer_view" name="udqa_view" template="udqa/customer/view.phtml" />
+        </reference>
+    </udqa_customer_view>
+
+    <udqa_customer_form translate="label">
+        <label>Customer My Account Vendor Question Edit Form</label>
+        <update handle="customer_account"/>
+        <reference name="my.account.wrapper">
+            <block type="udqa/customer_form" name="udqa_form" template="udqa/customer/form.phtml" />
+        </reference>
+    </udqa_customer_form>
+
+    <udqa_catalog_product_view>
+        <reference name="product.info">
+            <block type="page/html_pager" name="udqa.product.list.toolbar" />
+            <block type="udqa/product_question_list" name="udqa.product.list" template="udqa/product/list.phtml">
+                <action method="addToParentGroup"><group>detailed_info</group></action>
+            </block>
+            <block type="udqa/product_question" name="udqa.product.question" template="udqa/product/question.phtml">
+                <action method="addToParentGroup"><group>detailed_info</group></action>
+            </block>
+        </reference>
+    </udqa_catalog_product_view>
+    <udqa_catalog_product_view_tabbed>
+        <reference name="product.info.tabs">
+            <action method="addTab" translate="title" module="udqa">
+                <alias>udqa_tabbed</alias>
+                <title>Ask A Question</title>
+                <block>udqa/product_tab</block>
+                <template>udqa/product/tab.phtml</template>
+            </action>
+        </reference>
+    </udqa_catalog_product_view_tabbed>
+
+    <udqa_vendor_questions>
+        <update handle="udropship_vendor" />
+        <reference name="head">
+            <action method="addItem"><type>js_css</type><name>calendar/calendar-win2k-1.css</name></action>
+            <action method="addItem"><type>js</type><name>calendar/calendar.js</name></action>
+            <action method="addItem"><type>js</type><name>calendar/calendar-setup.js</name></action>
+        </reference>
+        <reference name="content">
+            <block type="core/html_calendar" name="head.calendar" as="calendar" template="page/js/calendar.phtml"/>
+            <block type="core/template" template="udqa/vendor/questions/wrapper.phtml" name="wrapper">
+                <block type="udqa/vendor_questions" template="udqa/vendor/questions/grid.phtml" name="udqa.questions.grid" as="questions">
+                    <block type="page/html_pager" name="udqa.grid.toolbar" as="toolbar" />
+                </block>
+            </block>
+        </reference>
+    </udqa_vendor_questions>
+    <_udqa_vendor_questionedit>
+        <reference name="head">
+            <action method="addItem"><type>js_css</type><name>calendar/calendar-win2k-1.css</name></action>
+            <action method="addItem"><type>js</type><name>calendar/calendar.js</name></action>
+            <action method="addItem"><type>js</type><name>calendar/lang/calendar-en.js</name></action>
+            <action method="addItem"><type>js</type><name>calendar/calendar-setup.js</name></action>
+
+            <action method="addJs"><script>mage/adminhtml/form.js</script></action>
+            <action method="addJs"><script>mage/adminhtml/events.js</script></action>
+            <action method="addJs"><script>mage/adminhtml/loader.js</script></action>
+            <action method="addJs"><script>mage/adminhtml/tools.js</script></action>
+            <action method="addJs"><script>mage/adminhtml/hash.js</script></action>
+
+            <action method="addItem"><type>js</type><name>extjs/ext-tree.js</name></action>
+            <action method="addItem"><type>js</type><name>extjs/fix-defer.js</name></action>
+            <action method="addItem"><type>js</type><name>extjs/ext-tree-checkbox.js</name></action>
+            <action method="addItem"><type>js_css</type><name>extjs/resources/css/ext-all.css</name></action>
+            <action method="addItem"><type>js_css</type><name>extjs/resources/css/ytheme-magento.css</name></action>
+        </reference>
+        <reference name="content">
+            <block type="core/html_calendar" name="head.calendar" as="calendar" template="page/js/calendar.phtml"/>
+            <block type="udqa/vendor_question" template="udqa/vendor/question/edit.phtml" name="udqa.question.edit" />
+        </reference>
+    </_udqa_vendor_questionedit>
+    <udqa_vendor_questionedit>
+        <update handle="udropship_vendor" />
+        <update handle="_udqa_vendor_questionedit" />
+    </udqa_vendor_questionedit>
+
+</layout>

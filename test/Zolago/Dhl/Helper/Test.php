@@ -23,4 +23,13 @@ class Zolago_Dhl_Helper_Test {
     static public function getPos() {
         return static::getItem('zolagopos/pos');
 	}
+	
+    /**
+     * mock shipment
+     */
+    static public function getMockShipment() {
+        $obj = new Zolago_Dhl_Mock_Shipment();
+        return $obj;
+    }
+     
 }

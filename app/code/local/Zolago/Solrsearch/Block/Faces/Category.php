@@ -87,10 +87,11 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
 			if(count($all)==1){
 				list($item, $count) = each($all);
 				$array = $this->pathToArray($item);
-				$last = array_pop($array);
-				Mage::log($last);
-				if($last['id']==$category->getId()){
-					return false;
+				if($array){
+					$last = array_pop($array);
+					if(isset($last['id']) && $last['id']==$category->getId()){
+						return false;
+					}
 				}
 			}
 		}	

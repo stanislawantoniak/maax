@@ -173,15 +173,29 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 		if($this->getMode()==self::MODE_CATEGORY&& !$this->getCurrentCategory()->getUseFlagFilter()){
 			return null;
 		}
-		$facetFileds = array();
+		$facetFileds		= array();
+		$bestsellerFacet	= array();
+		$isNewFacet			= array();
+		
     	if (isset($solrData['facet_counts']['facet_fields']) && is_array($solrData['facet_counts']['facet_fields'])) {
     		$facetFileds = $solrData['facet_counts']['facet_fields'];
     	}
+		
+		if (isset($facetFileds['is_bestseller_facet'][$this->__('Yes')])) {
+			$bestsellerFacet	= array(Mage::helper('zolagosolrsearch')->__('Bestseller') => $facetFileds['is_bestseller_facet'][$this->__('Yes')]);
+		}
+		
+		if (isset($facetFileds['is_new_facet'][$this->__('Yes')])) {
+			$isNewFacet			= array(Mage::helper('zolagosolrsearch')->__('New') => $facetFileds['is_new_facet'][$this->__('Yes')]);
+		}
+		
 		if(isset($facetFileds['product_flag_facet'])){
 			$data = $facetFileds['product_flag_facet'];
 			if($this->getSpecialMultiple()){
 				$data = $this->_prepareMultiValues('product_flag_facet', $data);
 			}
+			$data = array_merge($facetFileds['product_flag_facet'], $bestsellerFacet, $isNewFacet);
+			
 			$block = $this->getLayout()->createBlock($this->_getFlagRenderer());
 			$block->setParentBlock($this);
 			$block->setAllItems($data);
@@ -228,7 +242,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 	 * @return string
 	 */
 	protected function _getFlagRenderer() {
-		return $this->getDefaultRenderer();
+		return "zolagosolrsearch/faces_flag";
 	}
 	/**
 	 * @return string

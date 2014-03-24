@@ -1,0 +1,52 @@
+<?php
+$sHlp = Mage::helper('core/string');
+$qaHlp = Mage::helper('udqa');
+$_question = $this->getQuestion();
+?>
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+<div class="page-title title-buttons">
+    <h1><?php echo $this->__('My Vendor Questions') ?></h1>
+    <button type="button" title="<?php echo $this->__('Ask New Question') ?>" class="button" onclick="window.location='<?php echo $this->getNewUrl() ?>';"><span><span><?php echo $this->__('Ask New Question') ?></span></span></button>
+</div>
+
+<div class="col1-set addresses-list">
+    <h2><?php echo $qaHlp->__('Question Details') ?></h2>
+    <ol>
+        <li class="item">
+            <h5><?php echo $this->__('VENDOR') ?></h5>
+            <span class="nobr"><?php echo $_question->getVendorName() ?></span>
+            <h5><?php echo $this->__('QUESTION DATE')?></h5>
+            <span class="nobr"><?php echo $this->formatDate($_question->getQuestionDate()) ?></span>
+            <?php if ($_question->canCustomerViewAnswer() && !$_question->isEmptyAnswerDate()): ?>
+            <h5><?php echo $this->__('ANSWER DATE')?></h5>
+            <?php echo $this->formatDate($_question->getAnswerDate(), Mage_Core_Model_Locale::FORMAT_TYPE_SHORT, true); ?>
+            <?php endif ?>
+            <?php if ($_question->getShipmentId()): ?>
+            <h5><?php echo $this->__('SHIPMENT')?></h5>
+            <a href="<?php echo $this->getShipmentUrl($_question)?>"><?php echo $this->__('#%s for order #%s', $_question->getShipmentIncrementId(), $_question->getOrderIncrementId())?></a>
+            <?php endif ?>
+            <?php if ($_question->getProductId()): ?>
+            <h5><?php echo $this->__('PRODUCT')?></h5>
+            <a href="<?php echo $this->getProductUrl($_question)?>"><?php echo $this->getProductName()?></a>
+            <?php endif ?>
+        </li>
+    </ol>
+    <h2><?php echo $qaHlp->__('Question Text') ?></h2>
+    <ol>
+        <li class="item">
+            <p><?php echo $this->escapeHtml($_question->getQuestionText()) ?></p>
+        </li>
+    </ol>
+    <?php if ($_question->canCustomerViewAnswer()): ?>
+    <h2><?php echo $qaHlp->__('Answer Text') ?></h2>
+    <ol>
+        <li class="item">
+            <p><?php echo $this->escapeHtml($_question->getAnswerText()) ?></p>
+        </li>
+    </ol>
+    <?php endif ?>
+</div>
+
+<div class="buttons-set">
+    <p class="back-link"><a href="<?php echo $this->getUrl('udqa/customer')?>"><small>« </small>Back</a></p>
+</div>
