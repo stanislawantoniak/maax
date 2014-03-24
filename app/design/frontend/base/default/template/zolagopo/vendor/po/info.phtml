@@ -384,10 +384,10 @@ $dhlSettings = $_poHlp->getDhlSettings($_vendor, $_po->getDefaultPosId());
 							<?php if ($dhlSettings): ?>
 								<?php foreach ($_tracking as $_track): ?>
 									<?php if ($_track->getCarrierCode() == Zolago_Dhl_Helper_Data::DHL_CARRIER_CODE && $_track->getNumber()): ?>
-									| <a id='dhlLp' style="white-space:nowrap" href="#"><strong><?php echo $_poHlp->__('DHL Waybill')?></strong></a>
+									| <a id="dhlLp-<?php echo $_track->getNumber(); ?>" style="white-space:nowrap" href="#"><strong><?php echo $_poHlp->__('DHL Waybill')?></strong></a>
 									<script type="text/javascript">
 										//<![CDATA[
-										var dhlId	= $('dhlLp');
+										var dhlId	= $('dhlLp-<?php echo $_track->getNumber(); ?>');
 										var dhlUrl	= '<?php echo $this->getUrl('zolagodhl/dhl/lp', array('trackId' => $_track->getId(), 'trackNumber' => $_track->getNumber(), 'vId' => $_vendor->getId(), 'posId' => $_po->getDefaultPosId(), 'udpoId' => $_shipment->getUdpoId())); ?>';
 
 										function dhlAjaxRequest() {
@@ -406,7 +406,11 @@ $dhlSettings = $_poHlp->getDhlSettings($_vendor, $_po->getDefaultPosId());
 														var fileDownload = "<?php echo $this->getUrl('zolagodhl/dhl/lpDownload') . "dhlFileName/" ?>" +response.file;
 														window.location.replace(fileDownload);
 													} else {
-														alert(response.message);
+														if (response.message) {
+															alert(response.message);
+														} else {
+															alert("<?php echo $this->__('DHL API Service Error'); ?>");
+														}
 													}
 													return;
 												},
@@ -421,7 +425,7 @@ $dhlSettings = $_poHlp->getDhlSettings($_vendor, $_po->getDefaultPosId());
 											dhlAjaxRequest();
 										});
 										//]]>
-									</script>									
+									</script>
 									<?php endif; ?>
 								<?php endforeach; ?>
 							<?php endif; ?>
