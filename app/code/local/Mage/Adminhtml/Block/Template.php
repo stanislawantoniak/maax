@@ -34,15 +34,15 @@
 class Mage_Adminhtml_Block_Template extends Mage_Core_Block_Template
 {
     /**
-     * Enter description here...
+     * Fixed
      *
      * @return string
      */
     public function _getUrlModelClass() {
-		if($this->getIsFrontend() || Mage::registry('as_frontend')){
+		if($this->getAsFrontend() || Mage::registry('as_frontend')){
 			return 'core/url';
 		}
-		return parent::_getUrlModelClass();
+		return 'adminhtml/url';
 	}
 
     /**
