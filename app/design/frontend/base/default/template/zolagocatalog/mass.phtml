@@ -1,0 +1,19 @@
+<h1><?php echo Mage::helper("zolagocatalog")->__("Product mass actions");?></h1>
+<div class="box-left">
+	<?php echo $this->getChildHtml("attribute_set_switcher");?>
+</div>
+<div class="box-right">
+	<?php echo $this->getSwitcherHtml();?>
+</div>
+
+<?php if($this->getCurrentAttributeSet()):?>
+<script>
+FORM_KEY = "<?php echo Mage::getSingleton('core/session')->getFormKey() ?>";
+</script>
+<div>
+	<?php echo $this->getGridHtml();?>
+</div>
+<div class="switcher">
+	<?php echo Mage::helper("zolagocatalog")->__("Mass edit form");?>
+</div>
+<?php endif;?>

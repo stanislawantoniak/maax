@@ -8,6 +8,8 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 	const ROLE_MARKETING_OFFICER					= "marketing_officer";
 	const ROLE_RMA_OPERATOR		   			    = "rma_operator";
 	const ROLE_HELPDESK							= "helpdesk";
+	const ROLE_MASS_OPERATOR						= "mass_operator";
+	const ROLE_PRODUCT_OPERATOR					= "product_operator";
 	
 	
 	// Reousrce definition
@@ -20,8 +22,8 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 	const RES_UDROPSHIP_VENDOR_LOGIN				= "udropship/vendor/login";
 	const RES_UDROPSHIP_VENDOR_LOGOUT				= "udropship/vendor/logout";
 	const RES_UDROPSHIP_VENDOR_PASSWORD			= "udropship/vendor/password";
-	const RES_UDROPSHIP_VENDOR_PASSWORD_POST		= "udropship/vendor/passwordPost"
-			;
+	const RES_UDROPSHIP_VENDOR_PASSWORD_POST		= "udropship/vendor/passwordPost";
+			
 	// Restricted 
 	const RES_UDROPSHIP_VENDOR_PREFERENCES			= "udropship/vendor/preferences";
 	const RES_UDROPSHIP_VENDOR_PREFERENCES_POST	= "udropship/vendor/preferencesPost";
@@ -32,6 +34,11 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 	const RES_URMA_VENDOR							= "urma/vendor";
 	// Po Vendor controller - whole
 	const RES_ASK_QUESTION							= "udqa/vendor";
+	// Product editor
+	const RES_UDPROD_VENDOR						= "udprod/vendor";
+	// Mass editor
+	const RES_CATALOG_VENDOR_MASS					= "zolagocatalog/vendor_mass";
+	
 
 	// Resources as array
 	protected static $_currentResources = array(
@@ -50,7 +57,11 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		// RMA
 		self::RES_URMA_VENDOR						=> "RMA",
 		//  Ask Question
-		self::RES_ASK_QUESTION						=> "Vendor ask question"
+		self::RES_ASK_QUESTION						=> "Vendor ask question",
+		//  Product editor
+		self::RES_UDPROD_VENDOR					=> "Product edit",
+		//  Mass edit
+		self::RES_CATALOG_VENDOR_MASS				=> "Mass edit",
 			
 			
 	);
@@ -61,6 +72,8 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		self::ROLE_MARKETING_OFFICER				=> "Marketing officer",	
 		self::ROLE_RMA_OPERATOR					=> "RMA Operator",	
 		self::ROLE_HELPDESK						=> "Helpdesk",	
+		self::ROLE_MASS_OPERATOR					=> "Mass Operator",	
+		self::ROLE_PRODUCT_OPERATOR				=> "Product Operator"
 	);
 	
 	
@@ -96,6 +109,12 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		
 		// Build ACL Rules - Helpdesk
 		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_HELPDESK, self::RES_ASK_QUESTION);
+		
+		// Build ACL Rules - Product edit
+		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_PRODUCT_OPERATOR, self::RES_UDPROD_VENDOR);
+		
+		// Build ACL Rules - Mass Actions
+		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MASS_OPERATOR, self::RES_CATALOG_VENDOR_MASS);
 		
 	}
 	

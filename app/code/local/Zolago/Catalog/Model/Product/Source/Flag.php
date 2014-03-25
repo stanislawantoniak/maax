@@ -37,7 +37,7 @@ class Zolago_Catalog_Model_Product_Source_Flag
         if (!$this->_options) {
             $this->_options = array (
                 array (
-                    'value' => '0',
+                    'value' => '',
                     'label' => '',
                 ),				
                 array (
