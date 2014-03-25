@@ -533,7 +533,7 @@ $dhlSettings = $_poHlp->getDhlSettings($_vendor, $_po->getDefaultPosId());
 									<script type="text/javascript">
 										//<![CDATA[
 										var dhlId	= $('dhlLp-<?php echo $_track->getNumber(); ?>');
-										var dhlUrl	= '<?php echo $this->getUrl('zolagodhl/dhl/lp', array('trackId' => $_track->getId(), 'trackNumber' => $_track->getNumber(), 'vId' => $_vendor->getId(), 'posId' => $_po->getDefaultPosId(), 'udpoId' => $_shipment->getUdpoId())); ?>';
+										var dhlUrl	= '<?php echo $this->getUrl('zolagodhl/dhl/lp', array('trackId' => $_track->getId(), 'trackNumber' => $_track->getNumber(), 'vId' => $_vendor->getId(), 'posId' => $_po->getDefaultPosId(), 'udpoId' => $_shipment->getUdpoId(), '_secure'=>true)); ?>';
 
 										function dhlAjaxRequest() {
 											new Ajax.Request(dhlUrl, {
