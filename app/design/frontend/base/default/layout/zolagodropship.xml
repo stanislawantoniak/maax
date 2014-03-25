@@ -1,6 +1,10 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
+
 	<udropship_vendor>
+		<reference name="head">
+			<action method="addCss"><stylesheet>css/zolagodropship.css</stylesheet></action>
+		</reference>
 		<reference name="header">
 			<action method="setTemplate">
 				<template>zolagodropship/vendor/header.phtml</template>
