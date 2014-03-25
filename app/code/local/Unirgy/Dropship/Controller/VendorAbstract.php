@@ -112,9 +112,13 @@ class Unirgy_Dropship_Controller_VendorAbstract extends Mage_Core_Controller_Fro
                 Mage::getConfig()->setNode('global/models/core/rewrite/url', 'Unirgy_Dropship_Model_Url');
             }
         }
-
+		Mage::log("Predispath: " . ($session->isOperatorMode() ? "1" : "0") . " " . Mage::app()->getRequest()->getRequestUri());
     }
 
+	public function postDispatch() {
+		Mage::log("Postdispathc: " . ($session->isOperatorMode() ? "1" : "0") . " " . Mage::app()->getRequest()->getRequestUri());
+	}
+	
     protected function _loginPostRedirect()
     {
         $this->_getSession()->loginPostRedirect($this);
