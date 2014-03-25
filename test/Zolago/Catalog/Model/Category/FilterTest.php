@@ -7,8 +7,11 @@ class Zolago_Catalog_Model_Category_FilterTest extends ZolagoDb_TestCase {
     protected function _getAttribute() {
         $resource =  Mage::getSingleton('core/resource');
         $table = $resource->getTableName('eav/attribute');
-        $query = 'SELECT attribute_id FROM '.$table.' WHERE attribute_code = \'description\''.
-                ' AND entity_type_id = 10'; // category
+        $tableEntity = $resource->getTableName('eav/entity_type');
+        $query = 'SELECT attribute_id FROM '.$table. ' a '.
+                 ' INNER JOIN '.$tableEntity. ' b on a.entity_type_id = b.entity_type_id '.
+                 ' WHERE a.attribute_code = \'description\''.
+                ' AND b.entity_type_code = \'catalog_product\''; // category
         $data = $resource->getConnection('core_read')->fetchAll($query);
         $this->assertNotEmpty(count($data));
         return array_pop($data);
