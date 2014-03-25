@@ -17,6 +17,9 @@ class Zolago_Catalog_Block_Vendor_Mass extends Mage_Core_Block_Template
 		$design->setArea("frontend");
 	}
     public function _prepareStoreSwitcher() {
+		if(Mage::app()->isSingleStoreMode()){
+			return;
+		}
 		$design = Mage::getDesign();
 		$design->setArea("adminhtml");
 		$block = $this->getLayout()->createBlock("adminhtml/store_switcher");
