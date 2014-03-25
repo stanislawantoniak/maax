@@ -13,7 +13,7 @@ class Zolago_Dhl_DhlController extends Mage_Core_Controller_Front_Action
 		$result	= array(
 			'status'	=> false,
 			'file'		=> false,
-			'message'	=> ''
+			'message'	=> Mage::helper('zolagodhl')->__('DHL Service Error')
 		);
 		$request = $this->getRequest();
 		if ($request->getParam('trackNumber')) {
@@ -49,7 +49,7 @@ class Zolago_Dhl_DhlController extends Mage_Core_Controller_Front_Action
 			$ioAdapter = new Varien_Io_File();
 			$dhlFile = Mage::helper('zolagodhl')->getIsDhlFileAvailable($dhlFileName);
 			if ($dhlFile) {
-				return $this->_prepareDownloadResponse(basename($dhlFile), $ioAdapter->read($dhlFile), 'application/pdf');
+				return $this->_prepareDownloadResponse(basename($dhlFile), @$ioAdapter->read($dhlFile), 'application/pdf');
 			}
 		}
 		$this->_redirectReferer();
@@ -83,7 +83,7 @@ class Zolago_Dhl_DhlController extends Mage_Core_Controller_Front_Action
 			$fileContent		= $result['labelData'];
 			$fileLocation		= Mage::helper('zolagodhl')->getDhlFileDir() . $fileName;
 			$dhlFile['status']	= true;
-			$dhlFile['file']	= $ioAdapter->filePutContent($fileLocation, $fileContent);
+			$dhlFile['file']	= @$ioAdapter->filePutContent($fileLocation, $fileContent);
 		} else {
 			//Error Scenario
 			Mage::helper('zolagodhl')->addUdpoComment($udpoModel, $result['message'], false, true, false);

@@ -1,0 +1,27 @@
+<!--@subject New Question {{if question.shipment_id}}for Shipment #{{var question.shipment_increment_id}}{{/if}} {{if question.product_id}}for Product {{var question.product_name}}{{/if}}@-->
+
+New Question for {{if question.shipment_id}}Shipment #{{var question.shipment_increment_id}}{{/if}} {{if question.product_id}}Product {{var question.product_name}}{{/if}} have been asked. 
+<br/>
+Please see details below:
+<br/>
+<br/>
+<b>Name:</b>  {{var question.customer_name}}
+<br/>
+{{if show_customer_info}}
+<b>E-mail:</b>  {{var question.customer_email}}
+<br/>
+{{/if}}
+{{if question.shipment_id}}
+<b>Shipment:</b>  {{var question.shipment_increment_id}}
+<br/>
+{{/if}}
+{{if question.product_id}}
+<b>Product:</b>  {{var question.product_name}}
+<br/>
+{{/if}}
+<b>Question:</b> <pre>{{var question.question_text}}</pre>
+
+<br/>
+<br/>
+
+You can reply from the <a href="{{var question.getVendorUrl()}}">vendor portal</a>

@@ -48,7 +48,7 @@
                         <Zolago_Solrsearch before="Solrbridge_Solsearch">Zolago_Solrsearch</Zolago_Solrsearch>  
                     </modules>  
                 </args>  
-            </customer> 
+            </customer>
         </routers>
         <layout>
             <updates>
@@ -57,5 +57,14 @@
                 </zolagosolrsearch>
             </updates>
         </layout>
+		<translate>
+			<modules>
+				<Zolago_Solrsearch>
+					<files>
+						<default>Zolago_Solrsearch.csv</default>
+					</files>
+				</Zolago_Solrsearch>
+			</modules>
+		</translate>		
     </frontend>
 </config>

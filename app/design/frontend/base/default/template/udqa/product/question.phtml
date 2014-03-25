@@ -1,0 +1,61 @@
+<?php
+$vendors = $this->getVendors();
+$visibility = Mage::getSingleton('udqa/source')->setPath('visibility')->toOptionHash();
+?>
+<form action="<?php echo $this->getFormAction(); ?>" id="question-form" method="post">
+    <input type="hidden" name="question[product_id]" value="<?php echo $this->getProduct()->getId()?>" />
+    <div class="fieldset">
+        <h2 class="legend"><?php echo $this->__('Ask Vendor A Question') ?></h2>
+        <ul class="form-list">
+            <li class="wide">
+                <label for="customer_name" class="required"><em>*</em><?php echo $this->__('Your Name') ?></label>
+                <div class="input-box">
+                    <input type="text" name="question[customer_name]" id="customer_name" class="required-entry input-text" />
+                </div>
+            </li>
+            <li class="wide">
+                <label for="customer_email" class="required"><em>*</em><?php echo $this->__('Email') ?></label>
+                <div class="input-box">
+                    <input type="text" name="question[customer_email]" id="customer_email" class="validate-email required-entry input-text" />
+                </div>
+            </li>
+            <li>
+                <label for="vendor"><?php echo $this->__('VENDOR') ?></label>
+                <div class="input-box">
+                    <select id="vendor" name="question[vendor_id]" class="required-entry">
+                        <option value=""><?php echo $this->__('* Please select') ?></option>
+                        <?php foreach ($vendors as $vId=>$vName): ?>
+                        <option value="<?php echo $vId?>"><?php echo $vName?></option>
+                        <?php endforeach ?>
+                    </select>
+                </div>
+            </li>
+            <li>
+                <label for="vendor"><?php echo $this->__('Visibility') ?></label>
+                <div class="input-box">
+                    <select id="visibility" name="question[visibility]" class="required-entry">
+                        <option value=""><?php echo $this->__('* Please select') ?></option>
+                        <?php foreach ($visibility as $vId=>$vName): ?>
+                        <option value="<?php echo $vId?>"><?php echo $vName?></option>
+                        <?php endforeach ?>
+                    </select>
+                </div>
+            </li>
+            <li class="wide">
+                <label for="question_text" class="required"><em>*</em><?php echo $this->__('Question Text') ?></label>
+                <div class="input-box">
+                    <textarea name="question[question_text]" id="question_text" title="<?php echo $this->__('Question Text') ?>" class="required-entry input-text" cols="5" rows="3"></textarea>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="buttons-set">
+        <p class="required"><?php echo $this->__('* Required Fields') ?></p>
+        <button type="submit" title="<?php echo $this->__('Submit') ?>" class="button"><span><span><?php echo $this->__('Submit') ?></span></span></button>
+    </div>
+</form>
+<script type="text/javascript">
+    //<![CDATA[
+    var questionForm = new VarienForm('question-form', true);
+    //]]>
+</script>

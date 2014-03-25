@@ -69,7 +69,7 @@ class Mage_Adminhtml_Block_Review_Grid extends Mage_Adminhtml_Block_Widget_Grid
         }
 
         $collection->addStoreData();
-
+		Mage::log($collection->getSelect()."");
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }

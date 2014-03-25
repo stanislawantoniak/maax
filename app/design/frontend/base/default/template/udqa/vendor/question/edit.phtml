@@ -1,0 +1,56 @@
+
+
+<?php
+$_hlp = Mage::helper('udropship');
+$_prHlp = Mage::helper('udqa');
+$_session = Mage::getSingleton('udropship/session');
+$_vendor = Mage::getSingleton('udropship/session')->getVendor();
+$_question = $this->getQuestion();
+?>
+
+<div class="page-title">
+<h1>
+<?php echo $_prHlp->__('Reply question #%s from %s', $_question->getId(), $_question->getData('customer_name')) ?>
+</h1>
+<span class="required"><?php echo $this->__('* Indicated Required Fields') ?></span>
+</div>
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+<form action="<?php echo $this->getUrl('udqa/vendor/questionPost', array('_current'=>true))?>" method="post" id="question-edit-form">
+<input type="hidden" name="id" value="<?php echo $_question->getId() ?>" />
+<input id="udqa-send_email" type="hidden" name="send_email" value="" />
+<?php foreach ($this->getForm()->getElements() as $element) {
+    echo $element->toHtml();
+} ?>
+
+<div class="buttons-set">
+    <span class="question-edit-form-loader" style="display:none" id="question-edit-form-loader"><?php echo $this->__('Please wait, submitting...')?></span>
+    <button class="form-button" type="button" onclick="udqaEditFormSubmit(this, false)" name="send"><span><?php echo $this->__('Save') ?></span></button>
+    <?php if ($_question->getIsCustomerNotified()): ?>
+    <button class="form-button" type="button" onclick="udqaEditFormSubmit(this, true)" name="send"><span><?php echo $this->__('Save And Email') ?></span></button>
+    <?php endif ?>
+    <div class="clearer"></div><br/>
+    <p><a href="<?php echo $this->getUrl('udqa/vendor/questions')?>">&laquo; <?php echo $this->__('Return to questions list')?></a></p></p>
+</div>
+</form>
+
+<script type="text/javascript">
+    var udqaEditForm = new VarienForm('question-edit-form', true);
+    function udqaEditFormSubmit(elem, sendEmail) {
+        if (sendEmail) {
+            $('udqa-send_email').value=1;
+        } else {
+            $('udqa-send_email').value=0;
+        }
+        $(elem).up().select('button').invoke('hide');
+        $('question-edit-form-loader').show();
+        var res = false;
+        if (udqaEditForm.validator && udqaEditForm.validator.validate()) {
+            res = true;
+            udqaEditForm.form.submit();
+        } else {
+            $(elem).up().select('button').invoke('show');
+            $('question-edit-form-loader').hide();
+        }
+        return res;
+    }
+</script>

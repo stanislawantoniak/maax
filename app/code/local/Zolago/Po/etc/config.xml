@@ -23,12 +23,35 @@
 			</udpo>
 		</blocks>
 		<helpers>
+			<zolagopo>
+				<class>Zolago_Po_Helper</class>
+			</zolagopo>
 			<udpo>
 				<rewrite>
 					<data>Zolago_Po_Helper_Data</data>
 				</rewrite>
 			</udpo>
 		</helpers>
+		<models>
+			<zolagopo>
+				<class>Zolago_Po_Model</class>
+			</zolagopo>
+			<udpo>
+				<rewrite>
+					<po>Zolago_Po_Model_Po</po>
+				</rewrite>
+			</udpo>
+		</models>
+		<events>
+			<udpo_po_shipment_save_before>
+				<observers>
+					<poShipmentSaveBefore>
+						<model>zolagopo/observer</model>
+						<method>poShipmentSaveBefore</method>
+					</poShipmentSaveBefore>
+				</observers>
+			</udpo_po_shipment_save_before>
+		</events>
     </global>
     <frontend>
         <layout>
