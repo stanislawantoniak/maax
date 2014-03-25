@@ -72,6 +72,7 @@ class Unirgy_Dropship_Model_Session extends Mage_Core_Model_Session_Abstract
         $vendor = Mage::getModel('udropship/vendor');
 
         if ($vendor->authenticate($username, $password)) {
+			Mage::log("Im vendor");
             $this->setVendorAsLoggedIn($vendor);
             return true;
         }
