@@ -116,7 +116,9 @@ class Unirgy_Dropship_Controller_VendorAbstract extends Mage_Core_Controller_Fro
     }
 
 	public function postDispatch() {
+		$session = Mage::getSingleton('udropship/session');
 		Mage::log("Postdispathc: " . ($session->isOperatorMode() ? "1" : "0") . " " . Mage::app()->getRequest()->getRequestUri());
+		parent::postDispatch();
 	}
 	
     protected function _loginPostRedirect()
