@@ -2,9 +2,11 @@
 <div class="box-left">
 	<?php echo $this->getChildHtml("attribute_set_switcher");?>
 </div>
+<?php if(!Mage::app()->isSingleStoreMode()):?>
 <div class="box-right">
 	<?php echo $this->getStoreSwitcherHtml();?>
 </div>
+<?php endif;?>
 <div class="clear"></div>
 <?php if($this->getCurrentAttributeSet()):?>
 <script>
