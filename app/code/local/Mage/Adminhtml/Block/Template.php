@@ -22,7 +22,7 @@ class Mage_Adminhtml_Block_Template extends Mage_Adminhtml_Block_Template_Tmp
      *
      * @return string
      */
-    public function _getUrlModelClass() {
+    protected function _getUrlModelClass() {
 		if($this->getAsFrontend() || Mage::registry('as_frontend')){
 			return 'core/url';
 		}
