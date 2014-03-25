@@ -40,7 +40,6 @@ class Zolago_Dropship_Model_Session extends Unirgy_Dropship_Model_Session
 	 * @return boolean
 	 */
     public function isOperatorMode(){
-		Mage::log("Is operator mode: " . ((bool)$this->getOperatorMode() ? "1" : "0"));
 		return (bool)$this->getOperatorMode();
 	}
 	
@@ -48,7 +47,6 @@ class Zolago_Dropship_Model_Session extends Unirgy_Dropship_Model_Session
 	 * @return boolean
 	 */
 	public function isVendorMode() {
-		Mage::log("Is vendor mode: " . (!(bool)$this->getOperatorMode() ? "1" : "0"));
 		return !$this->isOperatorMode();
 	}
 	
