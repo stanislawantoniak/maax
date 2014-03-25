@@ -41,7 +41,7 @@ class Zolago_Dropship_Model_Session extends Unirgy_Dropship_Model_Session
 	 */
     public function isOperatorMode(){
 		if($this->getOperatorMode()){
-			Mage::log("Opertator " . $this->getOperator()->getId());
+			Mage::log("Opertator " . $this->getOperator()->getId() . " / " . Mage::app()->getRequest()->getRequestUri());
 		}
 		return (bool)$this->getOperatorMode();
 	}
@@ -51,7 +51,7 @@ class Zolago_Dropship_Model_Session extends Unirgy_Dropship_Model_Session
 	 */
 	public function isVendorMode() {
 		if(!$this->getOperatorMode()){
-			Mage::log("Vendor");
+			Mage::log("Vendor / " .Mage::app()->getRequest()->getRequestUri());
 		}
 		return !$this->isOperatorMode();
 	}
