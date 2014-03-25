@@ -61,9 +61,6 @@ class Unirgy_Dropship_Controller_VendorAbstract extends Mage_Core_Controller_Fro
      */
     public function preDispatch()
     {
-		
-        $session = Mage::getSingleton('udropship/session');
-		Mage::log("Predispath-start: " . ($session->isOperatorMode() ? "1" : "0") . " " . Mage::app()->getRequest()->getRequestUri());
 		/***********************************************************************
 		 *  Changning locale
 		 ***********************************************************************/
@@ -115,15 +112,9 @@ class Unirgy_Dropship_Controller_VendorAbstract extends Mage_Core_Controller_Fro
                 Mage::getConfig()->setNode('global/models/core/rewrite/url', 'Unirgy_Dropship_Model_Url');
             }
         }
-		Mage::log("Predispath-stop: " . ($session->isOperatorMode() ? "1" : "0") . " " . Mage::app()->getRequest()->getRequestUri());
+
     }
 
-	public function postDispatch() {
-		$session = Mage::getSingleton('udropship/session');
-		Mage::log("Postdispatch: " . ($session->isOperatorMode() ? "1" : "0") . " " . Mage::app()->getRequest()->getRequestUri());
-		parent::postDispatch();
-	}
-	
     protected function _loginPostRedirect()
     {
         $this->_getSession()->loginPostRedirect($this);
