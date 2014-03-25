@@ -3,7 +3,7 @@
 	<?php echo $this->getChildHtml("attribute_set_switcher");?>
 </div>
 <div class="box-right">
-	<?php echo $this->getSwitcherHtml();?>
+	<?php echo $this->getStoreSwitcherHtml();?>
 </div>
 <div class="clear"></div>
 <?php if($this->getCurrentAttributeSet()):?>
@@ -11,9 +11,9 @@
 FORM_KEY = "<?php echo Mage::getSingleton('core/session')->getFormKey() ?>";
 </script>
 <div>
-	<?php echo $this->getGridHtml();?>
+	<?php echo $this->getGridHtml(); ?>
 </div>
-<div class="switcher">
-	<?php echo Mage::helper("zolagocatalog")->__("Mass edit form");?>
-</div>
+
+	<?php echo $this->getChildHtml("editor");?>
+
 <?php endif;?>

@@ -11,9 +11,20 @@ class Zolago_Catalog_Vendor_MassController
 		$this->_renderPage(array('default', 'formkey', 'adminhtml_head'), 'zolagocatalog');
 	}
 	
+	
+	public function gridAction(){
+		$this->loadLayout();
+		$design = Mage::getDesign();
+		$design->setArea("adminhtml");
+		$block = $this->getLayout()->createBlock("zolagocatalog/vendor_mass_grid");
+
+		$this->getResponse()->setBody($block->toHtml());
+	}
+	
 	public function massDeleteAction() {
 		var_export($this->getRequest()->getParams());
 	}
+	
 	
 }
 

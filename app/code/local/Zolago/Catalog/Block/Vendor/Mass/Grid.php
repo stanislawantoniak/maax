@@ -7,6 +7,7 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
         $this->setId('zolagocatalog_mass_grid');
         $this->setDefaultSort('entity_id');
         $this->setDefaultDir('desc');
+        $this->setUseAjax(true);
     }
 
 	protected function _prepareCollection(){
@@ -48,6 +49,11 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
         ));
         return parent::_prepareColumns();
     }
+
+	public function getGridUrl() {
+		return $this->getUrl("*/*/grid", array("_current"=>true));
+	}
+
 
 	protected function _prepareMassaction()
     {
