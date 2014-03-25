@@ -50,7 +50,7 @@ class Zolago_Dropship_Model_Session extends Unirgy_Dropship_Model_Session
 	 * @return boolean
 	 */
 	public function isVendorMode() {
-		if($this->getOperatorMode()){
+		if(!$this->getOperatorMode()){
 			Mage::log("Vendor");
 		}
 		return !$this->isOperatorMode();
