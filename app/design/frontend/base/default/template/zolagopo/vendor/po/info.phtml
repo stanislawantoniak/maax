@@ -180,6 +180,12 @@ $fcBlock->setFieldValue(array(
  * DHL Settings
  */
 $dhlSettings = $_poHlp->getDhlSettings($_vendor, $_po->getDefaultPosId());
+
+$filterItemTotals = array(
+	Mage::helper('udpo')->__('Price Incl. Tax')
+);
+
+$filterPoTotals = array('subtotal_excl', 'tax', 'shipping', 'total');
 ?>
 
 <?php if ($this->getRequest()->isPost()): ?>
@@ -290,12 +296,14 @@ $dhlSettings = $_poHlp->getDhlSettings($_vendor, $_po->getDefaultPosId());
                     <tr class="udropship-item-totals"><td>
                         <ul>
                         <?php foreach ($_item->getUdropshipTotals() as $udTotal): ?>
-                        <li>
-                        <nobr>
-                            <span class="label"><?php echo $this->escapeHtml($udTotal['label']) ?></span>
-                            <span class="value"><?php echo $udTotal['value'] ?></span>
-                        </nobr>
-                        </li>
+							<?php if (in_array($udTotal['label'], $filterItemTotals)): ?>
+								<li>
+								<nobr>
+									<span class="label"><?php echo $this->escapeHtml($udTotal['label']) ?></span>
+									<span class="value"><?php echo $udTotal['value'] ?></span>
+								</nobr>
+								</li>
+							<?php endif; ?>
                         <?php endforeach ?>
                         </ul>
                     </td></tr>
@@ -304,11 +312,13 @@ $dhlSettings = $_poHlp->getDhlSettings($_vendor, $_po->getDefaultPosId());
                     </tbody>
                     <?php if ($this->isShowTotals()): ?>
                     <tfoot class="udropship-totals">
-                        <?php foreach ($_po->getUdropshipTotals() as $udTotal): ?>
-                        <tr>
-                        <td align="left" colspan="3"><b><?php echo $this->escapeHtml($udTotal['label']) ?></b></td>
-                        <td align="right"><?php echo $udTotal['value'] ?></td>
-                        </tr>
+                        <?php foreach ($_po->getUdropshipTotals() as $udTotalKey => $udTotal): ?>
+							<?php if (in_array($udTotalKey, $filterPoTotals, true)): ?>
+								<tr>
+								<td align="left" colspan="3"><b><?php echo $this->escapeHtml(Mage::helper('zolagodropship')->__($udTotal['label'])); ?></b></td>
+								<td align="right"><?php echo $udTotal['value'] ?></td>
+								</tr>
+							<?php endif; ?>
                         <?php endforeach ?>
                     </tfoot>
                     <?php endif?>

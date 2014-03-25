@@ -2,11 +2,11 @@
 <config>
     <modules>
         <Zolago_Po>
-            <version>0.0.2</version>
+            <version>0.0.3</version>
         </Zolago_Po>
     </modules>
     <global>
-       <resources>
+		<resources>
             <zolagopo_setup>
                 <setup>
                     <module>Zolago_Po</module>

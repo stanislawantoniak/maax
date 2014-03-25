@@ -23,6 +23,7 @@
 			<udropship>
 				<rewrite>
 					<data>Zolago_Dropship_Helper_Data</data>
+					<item>Zolago_Dropship_Helper_Item</item>
 				</rewrite>
 			</udropship>
 		</helpers>
@@ -190,6 +191,15 @@
 				</zolagodropship>
 			</updates>
 		</layout>
+		<translate>
+			<modules>
+				<zolagodropship>
+					<files>
+						<default>Zolago_Dropship.csv</default>
+					</files>
+				</zolagodropship>
+			</modules>
+		</translate>		
 	</frontend>
 	<admin>
 		<routers>
