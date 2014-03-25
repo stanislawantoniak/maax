@@ -2,22 +2,28 @@
 
 class Zolago_Catalog_Block_Vendor_Mass extends Mage_Core_Block_Template
 {
-    public function getGridHtml() {
+	public function _prepareLayout() {
+		$this->_prepareGrid();
+		$this->_prepareStoreSwitcher();
+		parent::_prepareLayout();
+	}
+	
+    public function _prepareGrid() {
 		$design = Mage::getDesign();
 		$design->setArea("adminhtml");
 		$block = $this->getLayout()->createBlock("zolagocatalog/vendor_mass_grid");
-		$html = $block->toHtml();
+		$this->setGridHtml($block->toHtml());
+		$this->setGrid($block);
 		$design->setArea("frontend");
-		return $html;
 	}
-    public function getSwitcherHtml() {
+    public function _prepareStoreSwitcher() {
 		$design = Mage::getDesign();
 		$design->setArea("adminhtml");
 		$block = $this->getLayout()->createBlock("adminhtml/store_switcher");
 		$block->setUseConfirm(0);
-		$html = $block->toHtml();
+		$this->setStoreSwitcherHtml($block->toHtml());
+		$this->setStoreSwitcher($block);
 		$design->setArea("frontend");
-		return $html;
 	}
 	public function getCurrentAttributeSet() {
 		return Mage::app()->getRequest()->getParam("attribute_set");

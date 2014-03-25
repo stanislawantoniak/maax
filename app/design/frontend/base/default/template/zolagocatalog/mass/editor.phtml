@@ -1,0 +1,77 @@
+<style>
+	.grid.custom-grid tbody td{
+		background: #e7efef;
+	}
+	.grid.custom-grid thead tr{
+		visibility: hidden;
+	}
+	.grid.custom-grid thead tr.filter th{
+	    padding-top:0;
+		padding-bottom:0;
+	}
+	.grid.custom-grid thead tr.filter th > div{
+		height:0; 
+		overflow: hidden;
+	}
+</style>
+<div class="grid custom-grid">
+	<form>
+	<?php if($this->getGrid()): ?>
+	<table cellpadding="0" cellspacing="0" style="width:100%;" class="data">
+		<colgroup>
+			<?php foreach ($this->getGrid()->getColumns() as $_column): ?>
+				<col <?php echo $_column->getHtmlProperty() ?> />
+			<?php endforeach;?>
+		</colgroup>
+		<thead>
+			<tr class="filter" style="">
+				<?php $i=0;?>
+				<?php foreach ($this->getGrid()->getColumns() as $_column): ?>
+						<th>
+							<div>
+								<?php echo $_column->getFilterHtml();?>
+							</div>
+						</th>
+				<?php endforeach; ?>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<?php $i=0;?>
+				<?php foreach ($this->getGrid()->getColumns() as $_column): ?>
+					<?php if($i++==0):?>
+						<td class="a-center" rowspan="2" style="vertical-align: middle;">
+							<!-- <input type="checkbox" name="change"  value="1"/><br/> -->
+						</td>
+					<?php else:?>
+						<td>
+							<div class="field-100"><input type="text" class="input-text"/></div>
+						</td>
+					<?php endif;?>
+				</td>
+				<?php endforeach;?>
+			</tr>
+			<tr>
+				<?php $i=0;?>
+				<?php foreach ($this->getGrid()->getColumns() as $_column): ?>
+					<?php if($i++==0):?>
+					<?php else:?>
+						<td>
+							<input type="checkbox" name="change" value="1"/>
+							<label>Change</label>
+						</td>
+					<?php endif;?>
+				<?php endforeach;?>
+			</tr>
+		</tbody>
+		<tfoot>
+			<tr>
+				<td  class="totals a-right" colspan="5">
+					<?php echo $this->getSubmitButtonHtml(); ?>
+				</td>
+			<tr>
+		</tfoot>
+	</table>
+	</form>
+	<?php endif;?>
+</div>
