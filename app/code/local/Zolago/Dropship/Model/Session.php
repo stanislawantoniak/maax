@@ -78,7 +78,7 @@ class Zolago_Dropship_Model_Session extends Unirgy_Dropship_Model_Session
 		if(parent::login($username, $password)){
 			return true;
 		}
-		die("Try next");
+		die("Try next username, $password");
 		$operator = Mage::getModel('zolagooperator/operator');
 		/* @var $operator Zolago_Operator_Model_Operator */
 		if ($operator->authenticate($username, $password)) {
