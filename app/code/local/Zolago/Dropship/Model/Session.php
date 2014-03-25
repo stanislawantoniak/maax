@@ -62,10 +62,7 @@ class Zolago_Dropship_Model_Session extends Unirgy_Dropship_Model_Session
         $this->setOperator($operator);
         $this->setOperatorId($operator->getId());
 		$this->setOperatorMode(true);
-		Mage::log("Operator setted as logged in");
-		Mage::log(var_export($this->getOperatorMode(),1));
         Mage::dispatchEvent('zolagooperator_operator_login', array('operator'=>$operator));
-		Mage::log(var_export($this->getOperatorMode(),1));
         return $this;
     }
 	
@@ -95,6 +92,7 @@ class Zolago_Dropship_Model_Session extends Unirgy_Dropship_Model_Session
 	 */
 	public function logout()
     {
+		Mage::log("Logout");
 		$this->setOperatorId(null);
 		$this->setOperatorMode(null);
 		return parent::logout();
