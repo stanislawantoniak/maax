@@ -11,7 +11,7 @@
 		if($F(select)){
 			location += "attribute_set/" + $F(select) + "/"
 		}
-		if($F("store_switcher")){
+		if($("store_switcher") && $F("store_switcher")){
 			location += "store/" + $F("store_switcher") + "/";
 		}
 		setLocation(location);
