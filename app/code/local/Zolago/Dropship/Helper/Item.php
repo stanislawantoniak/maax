@@ -177,12 +177,14 @@ class Zolago_Dropship_Helper_Item extends Unirgy_Dropship_Helper_Item {
 				'value' => $this->formatBasePrice($order, $tax)
 			);		
 
+			$shippingInclTax = $po->getShippingAmountIncl();
+			
 			$poTotals['shipping'] = array(
 				'label' => $helper->__('Shipping Cost'),
-				'value' => $this->formatBasePrice($order, $order->getShippingInclTax())
+				'value' => $this->formatBasePrice($order, $shippingInclTax)
 			);
 			
-			$total = $subtotalIncl + $order->getShippingInclTax();
+			$total = $subtotalIncl + $shippingInclTax;
 			$poTotals['total'] = array(
 				'label' => $helper->__('Totals'),
 				'value' => $this->formatBasePrice($order, $total)
