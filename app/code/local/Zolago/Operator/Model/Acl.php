@@ -5,8 +5,11 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		
 	// Roles definiton
 	const ROLE_ORDER_OPERATOR						= "order_operator";
-	// Roles definiton
 	const ROLE_MARKETING_OFFICER					= "marketing_officer";
+	const ROLE_RMA_OPERATOR		   			    = "rma_operator";
+	const ROLE_HELPDESK							= "helpdesk";
+	const ROLE_MASS_OPERATOR						= "mass_operator";
+	const ROLE_PRODUCT_OPERATOR					= "product_operator";
 	
 	
 	// Reousrce definition
@@ -20,12 +23,22 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 	const RES_UDROPSHIP_VENDOR_LOGOUT				= "udropship/vendor/logout";
 	const RES_UDROPSHIP_VENDOR_PASSWORD			= "udropship/vendor/password";
 	const RES_UDROPSHIP_VENDOR_PASSWORD_POST		= "udropship/vendor/passwordPost";
+			
 	// Restricted 
 	const RES_UDROPSHIP_VENDOR_PREFERENCES			= "udropship/vendor/preferences";
 	const RES_UDROPSHIP_VENDOR_PREFERENCES_POST	= "udropship/vendor/preferencesPost";
 	
 	// Po Vendor controller - whole
 	const RES_UDPO_VENDOR							= "udpo/vendor";
+	// Po Vendor controller - whole
+	const RES_URMA_VENDOR							= "urma/vendor";
+	// Po Vendor controller - whole
+	const RES_ASK_QUESTION							= "udqa/vendor";
+	// Product editor
+	const RES_UDPROD_VENDOR						= "udprod/vendor";
+	// Mass editor
+	const RES_CATALOG_VENDOR_MASS					= "zolagocatalog/vendor_mass";
+	
 
 	// Resources as array
 	protected static $_currentResources = array(
@@ -40,7 +53,15 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		self::RES_UDROPSHIP_VENDOR_PREFERENCES		=> "Vendor preferneces",
 		self::RES_UDROPSHIP_VENDOR_PREFERENCES_POST=> "Vendor preferneces post",
         // PO
-		self::RES_UDPO_VENDOR						=> "Orders"
+		self::RES_UDPO_VENDOR						=> "Orders",
+		// RMA
+		self::RES_URMA_VENDOR						=> "RMA",
+		//  Ask Question
+		self::RES_ASK_QUESTION						=> "Vendor ask question",
+		//  Product editor
+		self::RES_UDPROD_VENDOR					=> "Product edit",
+		//  Mass edit
+		self::RES_CATALOG_VENDOR_MASS				=> "Mass edit",
 			
 			
 	);
@@ -49,6 +70,10 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 	protected static $_currentRoles = array(
 		self::ROLE_ORDER_OPERATOR					=> "Order operator",	
 		self::ROLE_MARKETING_OFFICER				=> "Marketing officer",	
+		self::ROLE_RMA_OPERATOR					=> "RMA Operator",	
+		self::ROLE_HELPDESK						=> "Helpdesk",	
+		self::ROLE_MASS_OPERATOR					=> "Mass Operator",	
+		self::ROLE_PRODUCT_OPERATOR				=> "Product Operator"
 	);
 	
 	
@@ -78,6 +103,19 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		// Build ACL Rules - Marketing officer
 		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MARKETING_OFFICER, self::RES_UDROPSHIP_VENDOR_PREFERENCES);
 		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MARKETING_OFFICER, self::RES_UDROPSHIP_VENDOR_PREFERENCES_POST);
+		
+		// Build ACL Rules - RMA Operator
+		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_RMA_OPERATOR, self::RES_URMA_VENDOR);
+		
+		// Build ACL Rules - Helpdesk
+		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_HELPDESK, self::RES_ASK_QUESTION);
+		
+		// Build ACL Rules - Product edit
+		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_PRODUCT_OPERATOR, self::RES_UDPROD_VENDOR);
+		
+		// Build ACL Rules - Mass Actions
+		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MASS_OPERATOR, self::RES_CATALOG_VENDOR_MASS);
+		
 	}
 	
 	/**

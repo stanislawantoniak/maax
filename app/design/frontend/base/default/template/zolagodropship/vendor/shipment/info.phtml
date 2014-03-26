@@ -29,7 +29,15 @@ $_id = $_shipment->getId();
 
 $_order = $_shipment->getOrder();
 $_udpo = $this->getUdpo($_shipment);
-$_address = $_order->getShippingAddress() ? $_order->getShippingAddress() : $_order->getBillingAddress();
+
+//$_address = $_order->getShippingAddress() ? $_order->getShippingAddress() : $_order->getBillingAddress();
+
+$_addressId = $_shipment->getShippingAddressId();
+$_address = Mage::getModel("sales/order_address")->load($_addressId);
+
+if(!$_address->getId()){
+	$_address = $_udpo->getShippingAddress() ? $_udpo->getShippingAddress() : $_udpo->getBillingAddress();
+}
 
 $shipping = $_hlp->getShippingMethods();
 $vShipping = $_vendor->getShippingMethods();
@@ -190,6 +198,12 @@ $fcBlock->setFieldValue(array(
     'remaining_value' => $this->getRemainingValue()
 ))->setPo($_shipment)->setMasterId($_masterId)->setFieldName('mps_config_'.$_masterId);
 ?>
+<?php
+/*
+ * DHL Settings
+ */
+$dhlSettings = $_poHlp->getDhlSettings($_vendor, $_udpo->getDefaultPosId());
+?>
 <?php if ($this->getRequest()->isPost()): ?>
     <span id="status-update-<?php echo $_masterId ?>" style="display:none"><?php echo $_hlp->getShipmentStatusName($_shipment) ?></span>
     <?php if($this->getIsInUdpo()): ?>
@@ -246,6 +260,53 @@ $fcBlock->setFieldValue(array(
                                 <?php endif ?>
                                 <a class="delete" href="#" onclick="<?php if($this->getIsInUdpo()): ?>shipmentDeleteTrack(<?php echo $_masterId ?>, <?php echo $_id ?>, <?php echo $_tId ?>);<?php else: ?>deleteTrack(<?php echo $_masterId ?>, <?php echo $_tId ?>);<?php endif; ?> return false" title="<?php echo !$_t->getLabelFormat() ? $_hlp->__('Delete tracking number') : $_hlp->__('Delete tracking number and void/refund label if possible') ?>"><span></span></a>
                                 <?php endif ?>
+								
+								<?php if ($dhlSettings && $_t->getCarrierCode() == Zolago_Dhl_Helper_Data::DHL_CARRIER_CODE && $_t->getNumber()): ?>
+								<br />
+								<a id="dhlLp-<?php echo $_t->getNumber(); ?>" style="white-space:nowrap" href="#"><strong><?php echo $_poHlp->__('DHL Waybill')?></strong></a>
+								<script type="text/javascript">
+									//<![CDATA[
+									var dhlId	= $('dhlLp-<?php echo $_t->getNumber(); ?>');
+									var dhlUrl	= '<?php echo $this->getUrl('zolagodhl/dhl/lp', array('trackId' => $_t->getId(), 'trackNumber' => $_t->getNumber(), 'vId' => $_vendor->getId(), 'posId' => $_udpo->getDefaultPosId(), 'udpoId' => $_shipment->getUdpoId(), '_secure'=>true)); ?>';
+
+									function dhlAjaxRequest() {
+										new Ajax.Request(dhlUrl, {
+											method: 'POST',
+											parameters: '',
+											onLoading: '',
+											onSuccess: function(transport) {
+												try {
+													response = eval('(' + transport.responseText + ')');
+												} catch (e) {
+													response = {};
+												}
+
+												if (response.status && response.file) {
+													var fileDownload = "<?php echo $this->getUrl('zolagodhl/dhl/lpDownload') . "dhlFileName/" ?>" +response.file;
+													window.location.replace(fileDownload);
+												} else {
+													if (response.message) {
+														alert(response.message);
+													} else {
+														alert("<?php echo $this->__('DHL API Service Error'); ?>");
+													}
+												}
+												return;
+											},
+											onFailure: function() {
+												alert("<?php echo $this->__('DHL Service Error'); ?>");
+											}                          
+										});
+									}
+
+									new Event.observe(dhlId, 'click', function(event) {
+										event.stop();
+										dhlAjaxRequest();
+									});
+									//]]>
+								</script>
+							<?php endif; ?>
+
                             </li>
                             <?php $_prevTmtId = $_tmtId ?>
                         <?php endforeach ?>

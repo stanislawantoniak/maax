@@ -67,6 +67,8 @@
                 <model>zolagodhl/carrier</model>
                 <title>Zolago DHL</title>
                 <specificerrmsg>This shipping method is currently unavailable.</specificerrmsg>
+				<repeat_tracking>1</repeat_tracking>
+				<default_weight>2</default_weight>
             </zolagodhl>
         </carriers>
 	</default>

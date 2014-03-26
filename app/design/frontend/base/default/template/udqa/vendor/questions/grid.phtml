@@ -1,0 +1,141 @@
+<?php
+$_cHlp = Mage::helper('core');
+$_hlp = Mage::helper('udropship');
+$_prHlp = Mage::helper('udprod');
+$_prSrc = Mage::getSingleton('udprod/source');
+$_dateFormat = Varien_Date::convertZendToStrFtime(Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT), true, false);
+?>
+<form method="get">
+<fieldset>
+    <div class="generic-box col2-set">
+        <div class="col-1">
+            <ul class="form-list">
+                <li>
+                    <label for="filter-order_id-from"><?php echo $_hlp->__('Order ID') ?></label><br/>
+                    <input id="filter-order_id-from" name="filter_order_id_from" title="<?php echo $_hlp->__('From Order ID') ?>" type="text" class="input-text" style="width:80px;" value="<?php echo $this->getRequest()->getParam('filter_order_id_from') ?>" /> -
+                    <input id="filter-order_id-to" name="filter_order_id_to" title="<?php echo $_hlp->__('To Order ID') ?>" type="text" class="input-text" style="width:80px;" value="<?php echo $this->getRequest()->getParam('filter_order_id_to') ?>" />
+                </li>
+                <li>
+                    <label for="filter-sku"><?php echo $_hlp->__('Product SKU') ?></label><br/>
+                    <input id="filter-sku" name="filter_sku" title="<?php echo $_hlp->__('SKU') ?>" type="text" class="input-text" style="width:160px;" value="<?php echo $this->getRequest()->getParam('filter_sku') ?>" />
+                </li>
+                <li>
+                    <label for="filter-name"><?php echo $_hlp->__('Product Name') ?></label><br/>
+                    <input id="filter-name" name="filter_name" title="<?php echo $_hlp->__('Product Name') ?>" type="text" class="input-text" style="width:160px;" value="<?php echo $this->getRequest()->getParam('filter_name') ?>" />
+                </li>
+                <li>
+                    <label for="filter-visibility"><?php echo $_hlp->__('Question Visibility') ?></label><br/>
+                    <select id="filter-visibility" name="filter_visibility" title="<?php echo $_hlp->__('Question Visibility') ?>"  style="width:160px;">
+                        <?php $_status = (string)$this->getRequest()->getParam('filter_visibility') ?>
+                        <option value="" <?php echo $_status===''?'selected="selected"':'' ?>><?php echo $_hlp->__('Any') ?></option>
+                        <option value="1" <?php echo $_status==='1'?'selected="selected"':'' ?>><?php echo $_hlp->__('Public') ?></option>
+                        <option value="2" <?php echo $_status==='2'?'selected="selected"':'' ?>><?php echo $_hlp->__('Private') ?></option>
+                    </select>
+                </li>
+
+            </ul>
+        </div>
+        <div class="col-2">
+            <ul class="form-list">
+                <li>
+                    <label for="filter-customer_name"><?php echo $_hlp->__('Customer Name') ?></label><br/>
+                    <input id="filter-customer_name" name="filter_customer_name" title="<?php echo $_hlp->__('Customer Name') ?>" type="text" class="input-text" style="width:160px;" value="<?php echo $this->getRequest()->getParam('filter_customer_name') ?>" />
+                </li>
+                <li>
+                    <label for="filter-question_date-from"><?php echo $_hlp->__('Question Date') ?></label><br/>
+                    <input id="filter-question_date-from" name="filter_question_date_from" title="<?php echo $_hlp->__('From Question Date') ?>" type="text" class="input-text" style="width:80px;" value="<?php echo $this->getRequest()->getParam('filter_question_date_from') ?>" /> -
+                    <input id="filter-question_date-to" name="filter_question_date_to" title="<?php echo $_hlp->__('To Question Date') ?>" type="text" class="input-text" style="width:80px;" value="<?php echo $this->getRequest()->getParam('filter_question_date_to') ?>" />
+                </li>
+                <li>
+                    <label for="filter-question"><?php echo $_hlp->__('Question') ?></label><br/>
+                    <input id="filter-question" name="filter_question" title="<?php echo $_hlp->__('Question') ?>" type="text" class="input-text" style="width:160px;" value="<?php echo $this->getRequest()->getParam('filter_question') ?>" />
+                </li>
+                <li>
+                    <label for="filter-replied"><?php echo $_hlp->__('Is Replied') ?></label><br/>
+                    <select id="filter-replied" name="filter_replied" title="<?php echo $_hlp->__('Is Replied') ?>"  style="width:160px;">
+                        <?php $_status = (string)$this->getRequest()->getParam('filter_replied') ?>
+                        <option value="" <?php echo $_status===''?'selected="selected"':'' ?>><?php echo $_hlp->__('Any') ?></option>
+                        <option value="1" <?php echo $_status==='1'?'selected="selected"':'' ?>><?php echo $_hlp->__('Yes') ?></option>
+                        <option value="0" <?php echo $_status==='2'?'selected="selected"':'' ?>><?php echo $_hlp->__('No') ?></option>
+                    </select>
+                </li>
+            </ul>
+        </div>
+        <div class="buttons-set">
+            <input type="submit" value="search" style="display:none" />
+
+            <input type="hidden" name="limit" value="<?php echo $this->getRequest()->getParam('limit')?>"/>
+            <input type="hidden" name="p" value="<?php echo $this->getRequest()->getParam('p')?>"/>
+
+            <button class="form-button" name="submit_action" type="submit" id="filter-search" value="search"><span><?php echo $_hlp->__('Search') ?></span></button>
+
+        </div>
+    </div>
+</fieldset>
+</form>
+
+<?php echo $this->getChildHtml('toolbar') ?>
+<table cellspacing="0" cellpadding="0" class="data-table" id="questions-table">
+    <col width="" />
+    <col width="" />
+    <col width="" />
+    <col width="" />
+    <col width="" />
+    <col width="" />
+    <thead>
+        <tr>
+            <th><?php echo $this->__('Details')?></th>
+            <th><?php echo $this->__('Is Replied')?></th>
+            <th><?php echo $this->__('Customer Name')?></th>
+            <th><?php echo $this->__('Question')?></th>
+            <th><?php echo $this->__('Answer')?></th>
+        </tr>
+    </thead>
+    <tbody>
+<?php foreach ($this->getQuestionsCollection() as $_p): $_id = $_p->getId(); ?>
+        <tr>
+            <td>
+                <h5><?php echo $this->__('QUESTION DATE')?></h5>
+                <span class="nobr"><?php echo $this->formatDate($_p->getQuestionDate()) ?></span>
+                <?php if (!$_p->isEmptyAnswerDate()): ?>
+                <h5><?php echo $this->__('ANSWER DATE')?></h5>
+                <?php echo $this->formatDate($_p->getAnswerDate()); ?>
+                <?php endif ?>
+                <?php if ($_p->getShipmentId()): ?>
+                <h5><?php echo $this->__('SHIPMENT')?></h5>
+                <a href="<?php echo $this->getShipmentUrl($_p)?>"><?php echo $this->__('#%s for order #%s', $_p->getShipmentIncrementId(), $_p->getOrderIncrementId())?></a>
+                <?php endif ?>
+                <?php if ($_p->getProductId()): ?>
+                <h5><?php echo $this->__('PRODUCT')?></h5>
+                <a href="<?php echo $this->getProductUrl($_p)?>">SKU: <?php echo $_p->getProductSku().' : '.$_p->getProductName()?></a>
+                <?php endif ?>
+                <h5><?php echo $this->__('VISIBILITY')?></h5>
+                <?php if ($_p->getVisibility()==1):?>
+                <?php echo $this->__('Public') ?>
+                <?php else: ?>
+                <?php echo $this->__('Private') ?>
+                <?php endif ?>
+            </td>
+            <td>
+                <?php if ($_p->getIsReplied()==1):?>
+                <?php echo $this->__('Yes') ?>
+                <?php else: ?>
+                <?php echo $this->__('No') ?>
+                <?php endif ?>
+            </td>
+            <td><a href="<?php echo $this->getUrl('udqa/vendor/questionEdit', array('id'=>$_id))?>"><?php echo $this->htmlEscape($_p->getData('customer_name')); ?></a></td>
+            <td><?php echo $this->htmlEscape($_p->getData('question_text')); ?></td>
+            <td><?php echo $this->htmlEscape($_p->getData('answer_text')); ?></td>
+        </tr>
+<?php endforeach ?>
+    </tbody>
+</table>
+<?php echo $this->getChildHtml('toolbar') ?>
+
+<script type="text/javascript">
+    decorateTable('questions-table');
+    var dateFields = ['filter-question_date-from', 'filter-question_date-to'];
+    for (var i=0, l=dateFields.length; i<l; i++) {
+        Calendar.setup({inputField : dateFields[i], ifFormat : "<?php echo $_dateFormat?>", showsTime : false});
+    }
+</script>
