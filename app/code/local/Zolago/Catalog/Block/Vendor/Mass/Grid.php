@@ -16,7 +16,13 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 		$collection->addAttributeToSelect("sku");
 		$collection->addAttributeToSelect("name");
 		$collection->addPriceData();
-		$collection->addAttributeToFilter("udropship_vendor", $this->_getSession()->getVendorId());
+		$collection->addAttributeToFilter("udropship_vendor", $this->getVendorId());
+		$collection->addAttributeToFilter("attribute_set_id", $this->getAttributeSet()->getId());
+		$store = $this->getStore();
+		if(!Mage::app()->isSingleStoreMode() && !$store->isAdmin()){
+			$collection->setStoreId($store->getId());
+			$collection->addWebsiteFilter($store->getWebsite());
+		}
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
@@ -65,24 +71,6 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
              'url'  => $this->getUrl('*/*/massDelete'),
              'confirm' => Mage::helper('catalog')->__('Are you sure?')
         ));
-
-        //$statuses = Mage::getSingleton('catalog/product_status')->getOptionArray();
-
-//        array_unshift($statuses, array('label'=>'', 'value'=>''));
-//        $this->getMassactionBlock()->addItem('status', array(
-//             'label'=> Mage::helper('catalog')->__('Change status'),
-//             'url'  => $this->getUrl('*/*/massStatus', array('_current'=>true)),
-//             'additional' => array(
-//                    'visibility' => array(
-//                         'name' => 'status',
-//                         'type' => 'select',
-//                         'class' => 'required-entry',
-//                         'label' => Mage::helper('catalog')->__('Status'),
-//                         'values' => $statuses
-//                     )
-//             )
-//        ));
-
         return $this;
     }
 
@@ -95,6 +83,27 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 	 */
 	protected function _getSession(){
 		return Mage::getSingleton('udropship/session');
+	}
+	
+	/**
+	 * @return Unirgy_Dropship_Model_Vendor
+	 */
+	public function getVendorId() {
+		return $this->_getSession()->getVendorId();
+	}
+	
+	/**
+	 * @return Mage_Eav_Model_Entity_Attribute_Set
+	 */
+	public function getAttributeSet() {
+		return $this->getParentBlock()->getCurrentAttributeSet();
+	}
+	
+	/**
+	 * @return Mage_Core_Model_Store
+	 */
+	public function getStore() {
+		return $this->getParentBlock()->getCurrentStore();
 	}
     
 
