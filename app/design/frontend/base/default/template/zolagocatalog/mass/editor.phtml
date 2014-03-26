@@ -60,7 +60,6 @@
 			grid.each(function(el,i){
 				editor[i].style.width = (el.clientWidth - 7) + "px";
 			});
-			console.log("TAK")
 		}
 		Event.observe(window, "resize", assignEditorLayout);
 		Ajax.Responders.register({
