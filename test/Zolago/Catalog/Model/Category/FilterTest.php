@@ -7,7 +7,11 @@ class Zolago_Catalog_Model_Category_FilterTest extends ZolagoDb_TestCase {
     protected function _getAttribute() {
         $resource =  Mage::getSingleton('core/resource');
         $table = $resource->getTableName('eav/attribute');
-        $query = 'SELECT attribute_id FROM '.$table.' WHERE attribute_code = \'description\'';  
+        $tableEntity = $resource->getTableName('eav/entity_type');
+        $query = 'SELECT attribute_id FROM '.$table. ' a '.
+                 ' INNER JOIN '.$tableEntity. ' b on a.entity_type_id = b.entity_type_id '.
+                 ' WHERE a.attribute_code = \'description\''.
+                ' AND b.entity_type_code = \'catalog_product\''; // category
         $data = $resource->getConnection('core_read')->fetchAll($query);
         $this->assertNotEmpty(count($data));
         return array_pop($data);
@@ -71,7 +75,9 @@ class Zolago_Catalog_Model_Category_FilterTest extends ZolagoDb_TestCase {
 
         $cid_1 = $this->_createCategory($cid);
         $cid_2 = $this->_createCategory($cid);
-        
+
+        $model = Mage::getResourceModel('zolagomapper/mapper');
+        $this->assertNotEmpty($model);
         // create attribute set
         $newSet = Zolago_Helper_Test::addAttributeSet('zestaw testowy');
         $this->assertNotEmpty($newSet->getId());
@@ -96,16 +102,12 @@ class Zolago_Catalog_Model_Category_FilterTest extends ZolagoDb_TestCase {
         $this->assertNotEmpty($mapper_2->getId());
         
         // test!
-        $model = Mage::getResourceModel('zolagomapper/mapper');
-        $this->assertNotEmpty($model);
         $ret = $model->getAttributesByCategory($cid_1->getId());
-        $expected = array (
-            $attr_1->getId() => 'label_1',
-            $attr_2->getId() => 'label_2',
-        );
-        $this->assertEquals($expected,$ret);
+        $this->assertContains('label_1',$ret);
+        $this->assertContains('label_2',$ret);
         $ret = $model->getAttributesByCategory($cid_2->getId());
-        $this->assertEquals($expected,$ret);        
+        $this->assertContains('label_1',$ret);
+        $this->assertContains('label_2',$ret);
     }
     public function testAttributeListAnotherSet() {
         if (!no_coverage()) {
@@ -152,15 +154,11 @@ class Zolago_Catalog_Model_Category_FilterTest extends ZolagoDb_TestCase {
         $model = Mage::getResourceModel('zolagomapper/mapper');
         $this->assertNotEmpty($model);
         $ret = $model->getAttributesByCategory($cid_1->getId());
-        $expected = array (
-            $attr_1->getId() => 'label_3',
-        );
-        $this->assertEquals($expected,$ret);
-        $expected = array (
-            $attr_2->getId() => 'label_4',
-        );
+        $this->assertContains('label_3',$ret);
+        $this->assertNotContains('label_4',$ret);
         $ret = $model->getAttributesByCategory($cid_2->getId());
-        $this->assertEquals($expected,$ret);        
+        $this->assertContains('label_4',$ret);
+        $this->assertNotContains('label_3',$ret);
     }
     
 }

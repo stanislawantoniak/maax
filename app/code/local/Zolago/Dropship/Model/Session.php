@@ -56,12 +56,14 @@ class Zolago_Dropship_Model_Session extends Unirgy_Dropship_Model_Session
 	 */
     public function setOperatorAsLoggedIn($operator)
     {
-		// Login in Vendor Context
-		$this->setVendorAsLoggedIn($operator->getVendor());
 		// Set Operator
         $this->setOperator($operator);
         $this->setOperatorId($operator->getId());
 		$this->setOperatorMode(true);
+		
+		// Login in Vendor Context
+		$this->setVendorAsLoggedIn($operator->getVendor());
+		
         Mage::dispatchEvent('zolagooperator_operator_login', array('operator'=>$operator));
         return $this;
     }

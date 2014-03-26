@@ -11,3 +11,5 @@
 /phpmyadmin
 /dev/*
 *.DS_Store
+/downloader/
+/app/etc/solrbridge.conf

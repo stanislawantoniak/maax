@@ -1,0 +1,113 @@
+<?php
+/** @var $this Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Price_Group */
+$_element = $this->getElement();
+$_htmlId = $_element->getHtmlId();
+$_htmlClass = $_element->getClass();
+$_htmlName = $_element->getName();
+$_readonly = $_element->getReadonly();
+$_value = $_element->getValue();
+?>
+<div class="grid tier">
+    <table cellspacing="0" class="data border" id="group_prices_table">
+        <col width="150" />
+        <col width="150" />
+        <col width="300"/>
+        <thead>
+            <tr class="headings">
+                <th><?php echo Mage::helper('zolagodropship')->__('Website'); ?></th>
+                <th><?php echo Mage::helper('zolagodropship')->__('Shop group'); ?></th>
+                <th><?php echo Mage::helper('zolagodropship')->__('Category ID'); ?></th>
+            </tr>
+        </thead>
+        <tbody id="<?php echo $_htmlId; ?>_container">
+			<?php foreach($_element->getStoreGroupCollection() as $_group):?>
+			<?php /* @var $group Mage_Core_Model_Store_Group */;?>
+			<?php $_gId = $_group->getId();?>
+			<tr>
+				<td>
+					<?php echo $this->escapeHtml($_group->getWebsite()->getName());?>
+				</td>
+				<td><?php echo $this->escapeHtml($_group->getName());?></td>
+				<td>
+					<div>
+						<input type="text" style="width: 220px;" value="<?php if(isset($_value[$_gId])):?><?php echo $_value[$_gId];?><?php endif;?>" class="input-text validate-digits" id="chooser_text_<?php echo $_gId;?>" name="<?php echo $_htmlName;?>[<?php echo $_gId;?>]"/>
+						<a href="#" data-related="chooser_<?php echo $_gId;?>" data-parent-id="<?php echo $_group->getRootCategoryId();?>" data-url="<?php echo $_element->getValueElementChooserUrl($_gId, isset($_value[$_gId]) ? $_value[$_gId] : null);?>" class="chooser-trigger"><img src="<?php echo $this->getSkinUrl("images/rule_chooser_trigger.gif");?>" alt=""/></a>
+						<!-- <a href="#" data-related="chooser_<?php echo $_gId;?>" class="close-trigger"><img src="<?php echo $this->getSkinUrl("images/rule_component_remove.gif");?>" alt=""/></a>-->
+					</div>
+					<div id="chooser_<?php echo $_gId;?>"></div>
+				</td>
+			</tr>
+			<?php endforeach;?>
+		</tbody>
+    </table>
+</div>
+<script type="text/javascript">
+ function clearChecked(node,active){
+		var _node;
+		if(parseInt(node.id)!=parseInt(active.id)){
+			if(node.getUI().check && node.getUI().checked()){
+				node.getUI().check(false);
+			}
+		}
+		if(node.childNodes){
+			for(var i=0; i<node.childNodes.length; i++){
+				clearChecked(node.childNodes[i], active);
+			}
+		}
+	};
+	
+(function(){
+	
+	var clickHandler = function(e){
+		var el = $(e.currentTarget);
+		var url = el.getAttribute("data-url"),
+		    related = el.getAttribute("data-related"),
+		    parent_id = el.getAttribute("data-parent-id");
+	
+		var input = el.up("div").select("input")[0].value;
+		var target = $(related);
+		
+		if(target.innerHTML){
+			target.update('');
+		}else{
+			new Ajax.Request(url, {
+				evalScripts: true,
+				parameters: {"selected[]": input.split(), "parent_id": parent_id},
+				onSuccess: function(response){
+					target.update(response.responseText);
+				}
+			});
+		}
+		
+		
+		e.preventDefault();
+		e.stopPropagation();
+		return false;
+	}
+	
+	
+//	var closeHandler = function(e){
+//		var el = $(e.currentTarget);
+//		var related = el.getAttribute("data-related");
+//		
+//		
+//		if(!$(related).innerHTML){
+//			el.up("div").select("input")[0].value = "";
+//		}
+//		$(related).innerHTML = "";
+//		
+//		e.preventDefault();
+//		e.stopPropagation();
+//		return false;
+//	}
+	
+	
+	
+	$$(".chooser-trigger").each(function(el){
+		$(el).observe("click", clickHandler)
+	});
+//	$$(".close-trigger").each(function(el){
+//		$(el).observe("click", closeHandler)
+//	});
+})();
+</script>

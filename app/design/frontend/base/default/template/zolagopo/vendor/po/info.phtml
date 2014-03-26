@@ -32,7 +32,12 @@ $_posCollection = Mage::getResourceModel("zolagopos/pos_collection");
 $_posCollection->addVendorFilter($_vendor);
 
 $_order = $_po->getOrder();
-$_address = $_order->getShippingAddress() ? $_order->getShippingAddress() : $_order->getBillingAddress();
+
+// swap addresses
+//$_address = $_order->getShippingAddress() ? $_order->getShippingAddress() : $_order->getBillingAddress();
+$_address = $_po->getShippingAddress() ? $_po->getShippingAddress() : $_po->getBillingAddress();
+$_orderAddress = $_order->getShippingAddress() ? $_order->getShippingAddress() : $_order->getBillingAddress();
+$_addressesSame = $_po->isShippingSameAsOrder();
 
 $shipping = $_hlp->getShippingMethods();
 $vShipping = $_vendor->getShippingMethods();
@@ -174,6 +179,20 @@ $fcBlock->setFieldValue(array(
     'remaining_value' => $this->getRemainingValue(),
 ))->setPo($_po)->setMasterId($_id)->setFieldName('mps_config_'.$_id)->setUseDisabled(true);
 ?>
+
+<?php
+/*
+ * DHL Settings
+ */
+$dhlSettings = $_poHlp->getDhlSettings($_vendor, $_po->getDefaultPosId());
+
+$filterItemTotals = array(
+	Mage::helper('udpo')->__('Price Incl. Tax')
+);
+
+$filterPoTotals = array('subtotal_excl', 'tax', 'shipping', 'total');
+?>
+
 <?php if ($this->getRequest()->isPost()): ?>
     <span id="status-update-<?php echo $_id ?>" style="display:none"><?php echo $_poHlp->getUdpoStatusName($_po) ?></span>
 <?php endif ?>
@@ -192,7 +211,7 @@ $fcBlock->setFieldValue(array(
 								<option <?php if($option['value']==$_po->getDefaultPosId()):?>selected="selected"<?php endif;?> value="<?php echo $this->htmlEscape($option['value']);?>"><?php echo $this->htmlEscape($option['label']);?></option>
 								<?php endforeach;?>
 							</select>
-							<button class="form-button" type="button" id="change-pos-<?php echo $_po->getId();?>"><span><?php echo $_hlp->__('Change')?></span></button>
+							<button class="form-button" type="button" id="change-pos-<?php echo $_po->getId();?>"><span><?php echo $_hlp->__('Submit')?></span></button>
 					</div>
                     <div class="col-1">
                         <strong><?php echo $_hlp->__('Current POS')?></strong><br/>
@@ -225,15 +244,155 @@ $fcBlock->setFieldValue(array(
                 </div>
                 <div class="clear"></div>
 				<hr style="margin: 10px 0;"/>
-                <div class="col2-set">
+                <div class="col2-set address-label" id="address-label-<?php echo $_id;?>" >
                     <div class="col-1">
                         <strong><?php echo $_hlp->__('Shipping Address')?></strong><br/>
                         <?php echo Mage::helper('udropship')->formatCustomerAddress($_address, 'html', $_vendor) ?>
                     </div>
-                    <div class="col-2" <?php if (!empty($_highlight['tracking'])): ?>class="highlight"<?php endif ?>>
-
+                    <div class="col-2 a-right" <?php if (!empty($_highlight['tracking'])): ?>class="highlight"<?php endif ?>>
+						<a href="#" id="address-label-edit-<?php echo $_id;?>"><?php echo $_hlp->__('Change')?></a>
                     </div>
                 </div>
+				<div id="address-edit-<?php echo $_id;?>" style="display:none;">
+					<div class="col2-set" >
+						<div class="col-1">
+							<strong><?php echo $_hlp->__('Edit shipping address')?></strong>
+						</div>
+						<div class="col-2 a-right">
+							<?php if(!$_addressesSame):?>
+							<a href="#" id="address-edit-restore-<?php echo $_id;?>"><?php echo $_hlp->__('Restore original')?></a>
+							&nbsp;&middot;&nbsp;
+							<?php endif;?>
+							<a href="#" id="address-edit-cancel-<?php echo $_po->getId();?>"><?php echo $_hlp->__('Cancel')?></a>
+						</div>
+					</div>
+					<div class="clear"></div>
+					<div class="col2-set address-edit shipment-items" style="margin: 10px 0;" >
+						<ul class="form-list">
+							<li>
+								<label for="address-firstname-<?php echo $_id?>"><?php echo $_hlp->__('Firstname') ?></label>
+								<input id="address-firstname-<?php echo $_id?>" name="address_firstname" value="<?php echo $this->escapeHtml($_address->getFirstname()) ?>" title="<?php echo $_hlp->__('Firstname') ?>" type="text" class="input-text" style="width:250px;" />
+							</li>
+							<li>
+								<label for="address-lastname-<?php echo $_id?>"><?php echo $_hlp->__('Lastname') ?></label>
+								<input id="address-lastname-<?php echo $_id?>" name="address_lastname" value="<?php echo $this->escapeHtml($_address->getLastname()) ?>" title="<?php echo $_hlp->__('Lastname') ?>" type="text" class="input-text" style="width:250px;" />
+							</li>
+							<li>
+								<label for="address-company-<?php echo $_id?>"><?php echo $_hlp->__('Company') ?></label>
+								<input id="address-company-<?php echo $_id?>" name="address_company" value="<?php echo $this->escapeHtml($_address->getCompany()) ?>" title="<?php echo $_hlp->__('Company') ?>" type="text" class="input-text" style="width:250px;" />
+							</li>
+							<li>
+								<label for="address-telephone-<?php echo $_id?>"><?php echo $_hlp->__('Phone') ?></label>
+								<input id="address-telephone-<?php echo $_id?>" name="address_telephone" value="<?php echo $this->escapeHtml($_address->getTelephone()) ?>" title="<?php echo $_hlp->__('Phone') ?>" type="text" class="input-text" style="width:250px;" />
+							</li>
+							<li>
+								<label for="address-street-<?php echo $_id?>"><?php echo $_hlp->__('Street') ?></label>
+								<input id="address-street-<?php echo $_id?>" name="address_street" value="<?php echo $this->escapeHtml($_address->getStreet(1)) ?>" title="<?php echo $_hlp->__('Street') ?>" type="text" class="input-text" style="width:250px;" />
+							</li>
+							<li>
+								<label for="address-postcode-<?php echo $_id?>"><?php echo $_hlp->__('Postcode') ?></label>
+								<input id="address-postcode-<?php echo $_id?>" name="address_postcode" value="<?php echo $this->escapeHtml($_address->getPostcode()) ?>" title="<?php echo $_hlp->__('Postcode') ?>" type="text" class="input-text" style="width:100px;" />
+							</li>
+							<li>
+								<label for="address-city-<?php echo $_id?>"><?php echo $_hlp->__('City') ?></label>
+								<input id="address-city-<?php echo $_id?>" name="address_city" value="<?php echo $this->escapeHtml($_address->getCity()) ?>" title="<?php echo $_hlp->__('City') ?>" type="text" class="input-text" style="width:250px;" />
+							</li>
+							<li>
+								<label for="address-country-<?php echo $_id?>"><?php echo $_hlp->__('Country') ?></label>
+															<?php $_countries = Mage::getResourceModel('directory/country_collection')
+                                    ->loadData()
+                                    ->toOptionArray(false) ?>
+								<?php if (count($_countries) > 0): ?>
+									<select id="address-country-<?php echo $_id?>" name="address_country" class="input-select" style="width:260px;"  >
+										<option value="">-- Please Select --</option>
+										<?php foreach($_countries as $_country): ?>
+											<option value="<?php echo $_country['value'] ?>" <?php if($_address->getCountryId()==$_country['value']):?>selected="selected"<?php endif;?>>
+												<?php echo $_country['label'] ?>
+											</option>
+										<?php endforeach; ?>
+									</select>
+								<?php endif; ?>
+							</li>
+							<li>
+								<label>&nbsp;</label>
+								<button class="form-button" type="button" id="address-edit-submit-<?php echo $_po->getId();?>"><span><?php echo $_hlp->__('Submit')?></span></button>
+								<button class="form-button" style="background: #ccc;" type="button" id="address-edit-cancel2-<?php echo $_po->getId();?>"><span><?php echo $_hlp->__('Cancel')?></span></button>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<script type="text/javascript">
+					(function(){
+						var addressLabel = $("address-label-<?php echo $_id;?>");
+						var addressLabelEdit = $("address-label-edit-<?php echo $_id;?>");
+						var addressEdit = $("address-edit-<?php echo $_id;?>");
+						var addressEditRestore = $("address-edit-restore-<?php echo $_id;?>");
+						var editCancel = $("address-edit-cancel-<?php echo $_id;?>");
+						var editCancel2 = $("address-edit-cancel2-<?php echo $_id;?>");
+						var editSubmit = $("address-edit-submit-<?php echo $_id;?>");
+						
+						var prepareAddressData = function(){
+							var data = {}, name;
+							addressEdit.select("input,select").each(function(el){
+								name = el.getAttribute("name");
+								if(name){
+									name = name.replace(/address_/, "");
+								}
+								data[name] = el.value;
+							});
+							data['add_own']=1;
+							return data;
+						}
+						
+						var makeSaveRequest = function(url, data){
+							new Ajax.Request(url, {
+								parameters: data,
+								onSuccess: function(response){
+									var json =response.responseJSON;
+									if(!json.status){
+										alert(json.content);
+										return;
+									}
+									if(json.content && json.content.reload){
+										showUdpoInfo(<?php echo $_id;?>);
+									}
+								}
+							});
+						}
+						
+						
+						var startEditFn = function(e){
+							addressLabel.hide();
+							addressEdit.show();
+							e.preventDefault();
+						}
+						
+						var cancelFn = function(e){
+							addressLabel.show();
+							addressEdit.hide();
+							e.preventDefault();
+						}
+						var saveFn = function(e){
+							makeSaveRequest("<?php echo $this->getUrl("*/*/saveShippingAddress", array("po_id"=>$_id));?>", prepareAddressData());
+							e.preventDefault();
+						}
+						var restoreOriginFn = function(e){
+							makeSaveRequest("<?php echo $this->getUrl("*/*/saveShippingAddress", array("po_id"=>$_id));?>", {restore: 1});
+							e.preventDefault();
+						}
+							
+						addressLabelEdit.observe("click", startEditFn);
+						editSubmit.observe("click", saveFn);
+						editCancel.observe("click", cancelFn);
+						editCancel2.observe("click", cancelFn);
+						
+						if(addressEditRestore){
+							addressEditRestore.observe("click", restoreOriginFn);
+						}
+						
+					})();
+                    
+                </script>
                 <div class="clear"></div>
                 <br />
                 <div style="float:right">
@@ -282,12 +441,14 @@ $fcBlock->setFieldValue(array(
                     <tr class="udropship-item-totals"><td>
                         <ul>
                         <?php foreach ($_item->getUdropshipTotals() as $udTotal): ?>
-                        <li>
-                        <nobr>
-                            <span class="label"><?php echo $this->escapeHtml($udTotal['label']) ?></span>
-                            <span class="value"><?php echo $udTotal['value'] ?></span>
-                        </nobr>
-                        </li>
+							<?php if (in_array($udTotal['label'], $filterItemTotals)): ?>
+								<li>
+								<nobr>
+									<span class="label"><?php echo $this->escapeHtml($udTotal['label']) ?></span>
+									<span class="value"><?php echo $udTotal['value'] ?></span>
+								</nobr>
+								</li>
+							<?php endif; ?>
                         <?php endforeach ?>
                         </ul>
                     </td></tr>
@@ -296,11 +457,13 @@ $fcBlock->setFieldValue(array(
                     </tbody>
                     <?php if ($this->isShowTotals()): ?>
                     <tfoot class="udropship-totals">
-                        <?php foreach ($_po->getUdropshipTotals() as $udTotal): ?>
-                        <tr>
-                        <td align="left" colspan="3"><b><?php echo $this->escapeHtml($udTotal['label']) ?></b></td>
-                        <td align="right"><?php echo $udTotal['value'] ?></td>
-                        </tr>
+                        <?php foreach ($_po->getUdropshipTotals() as $udTotalKey => $udTotal): ?>
+							<?php if (in_array($udTotalKey, $filterPoTotals, true)): ?>
+								<tr>
+								<td align="left" colspan="3"><b><?php echo $this->escapeHtml(Mage::helper('zolagodropship')->__($udTotal['label'])); ?></b></td>
+								<td align="right"><?php echo $udTotal['value'] ?></td>
+								</tr>
+							<?php endif; ?>
                         <?php endforeach ?>
                     </tfoot>
                     <?php endif?>
@@ -372,7 +535,56 @@ $fcBlock->setFieldValue(array(
                                 </ul>
                                 <?php endif ?>
                             </td>
-                            <td><a style="white-space:nowrap" href="<?php echo $this->getUrl('udpo/vendor/pdf', array('shipment_id'=>$_shipment->getId()))?>"><strong><?php echo $_hlp->__('Packing Slip')?></strong></a></td>
+                            <td><a style="white-space:nowrap" href="<?php echo $this->getUrl('udpo/vendor/pdf', array('shipment_id'=>$_shipment->getId()))?>"><strong><?php echo $_hlp->__('Packing Slip')?></strong></a>
+							<?php if ($dhlSettings): ?>
+								<?php foreach ($_tracking as $_track): ?>
+									<?php if ($_track->getCarrierCode() == Zolago_Dhl_Helper_Data::DHL_CARRIER_CODE && $_track->getNumber()): ?>
+									| <a id="dhlLp-<?php echo $_track->getNumber(); ?>" style="white-space:nowrap" href="#"><strong><?php echo $_poHlp->__('DHL Waybill')?></strong></a>
+									<script type="text/javascript">
+										//<![CDATA[
+										var dhlId	= $('dhlLp-<?php echo $_track->getNumber(); ?>');
+										var dhlUrl	= '<?php echo $this->getUrl('zolagodhl/dhl/lp', array('trackId' => $_track->getId(), 'trackNumber' => $_track->getNumber(), 'vId' => $_vendor->getId(), 'posId' => $_po->getDefaultPosId(), 'udpoId' => $_shipment->getUdpoId(), '_secure'=>true)); ?>';
+
+										function dhlAjaxRequest() {
+											new Ajax.Request(dhlUrl, {
+												method: 'POST',
+												parameters: '',
+												onLoading: '',
+												onSuccess: function(transport) {
+													try {
+														response = eval('(' + transport.responseText + ')');
+													} catch (e) {
+														response = {};
+													}
+
+													if (response.status && response.file) {
+														var fileDownload = "<?php echo $this->getUrl('zolagodhl/dhl/lpDownload') . "dhlFileName/" ?>" +response.file;
+														window.location.replace(fileDownload);
+													} else {
+														if (response.message) {
+															alert(response.message);
+														} else {
+															alert("<?php echo $this->__('DHL API Service Error'); ?>");
+														}
+													}
+													return;
+												},
+												onFailure: function() {
+													alert("<?php echo $this->__('DHL Service Error'); ?>");
+												}                          
+											});
+										}
+
+										new Event.observe(dhlId, 'click', function(event) {
+											event.stop();
+											dhlAjaxRequest();
+										});
+										//]]>
+									</script>
+									<?php endif; ?>
+								<?php endforeach; ?>
+							<?php endif; ?>
+							</td>
                         </tr>
                     <?php endforeach; ?>
                     </tbody>
@@ -577,11 +789,22 @@ $fcBlock->setFieldValue(array(
                         <label for="tracking_id-<?php echo $_id?>"><?php echo $_hlp->__('Add Tracking ID') ?></label>
                         <input id="tracking_id-<?php echo $_id?>" name="tracking_id" value="" title="<?php echo $_hlp->__('Add Tracking ID') ?>" type="text" class="input-text tracking-id" style="width:250px;" />
 						</br>
-                        <label for="auto-tracking-<?php echo $_id?>">
-							<input type="checkbox" class="auto-tracking" onchange="changeAutoTrack(this);" id="auto-tracking-<?php echo $_id?>" name="auto_trakcing"/>
-							<?php echo $_hlp->__('I have no Track ID')?><br/>
-						</label>
+						<?php if ($dhlSettings): ?>
+							<label for="auto-tracking-<?php echo $_id?>" style="width:250px; display:none" class="auto-tracking-box">
+								<input type="checkbox" class="auto-tracking" onchange="changeAutoTrack(this)" id="auto-tracking-<?php echo $_id?>" name="auto-tracking"/>
+								<?php echo $_hlp->__('I have no Track ID')?><br/>
+							</label>
+						<?php else: ?>
+							<label for="auto-tracking-<?php echo $_id?>" style="width:250px">
+								<?php echo $this->__('Lack of DHL Settings'); ?>
+							</label>
+						<?php endif; ?>
 					</li>
+                    <li id="specify-zolagodhl-4-<?php echo $_id?>" class="specify-params specify-zolagodhl" style="display: none;">
+                        <label for="specify-zolagodhl-pkg-date-<?php echo $_id?>"><?php echo $_hlp->__('Shipping date') ?></label>
+                        <input id="specify-zolagodhl-pkg-date-<?php echo $_id?>" name="specify_zolagodhl_shipping_date" value="<?php echo date('Y-m-d');?>" 
+                            title="<?php echo $_hlp->__('Shipping date') ?>" type="text" class="input-text specify-zolagodhl-date" style="width:250px;" />
+                    </li>
 					<li id="specify-zolagodhl-2-<?php echo $_id?>" class="specify-params specify-zolagodhl" style="display: none;">
                         <label for="specify-zolagodhl-pkg-type-<?php echo $_id?>">
 							<?php echo $_hlp->__('Pkg. type')?><br/>
@@ -596,18 +819,19 @@ $fcBlock->setFieldValue(array(
                         <label>
 							<?php echo $_hlp->__('Pkg. Dimensions')?><br/>
 						</label>
-						<?php echo Mage::helper("zolagodropship")->__("W:");?>
+						<?php echo Mage::helper("zolagodropship")->__("W (cm):");?>
                         <input name="specify_zolagodhl_width" value="<?php echo (float)$_vendor->getDefaultPkgWidth()?>" title="<?php echo $_hlp->__('Width') ?>" type="text" class="input-text" style="width:30px;" />			
-						&nbsp;<?php echo Mage::helper("zolagodropship")->__("H:");?>
+						&nbsp;<?php echo Mage::helper("zolagodropship")->__("H (cm):");?>
                         <input name="specify_zolagodhl_height" value="<?php echo (float)$_vendor->getDefaultPkgHeight()?>" title="<?php echo $_hlp->__('Height') ?>" type="text" class="input-text" style="width:30px;" />
-						&nbsp;<?php echo Mage::helper("zolagodropship")->__("L:");?>
+						&nbsp;<?php echo Mage::helper("zolagodropship")->__("L (cm):");?>
 						<input name="specify_zolagodhl_length" value="<?php echo (float)$_vendor->getDefaultPkgLength()?>" title="<?php echo $_hlp->__('Length') ?>" type="text" class="input-text" style="width:30px;" />
 					</li>
 					<li id="specify-zolagodhl-3-<?php echo $_id?>" class="specify-params specify-zolagodhl specify-zolagodhl-type" style="display: none;">
                         <label for="specify-zolagodhl-custom-dim-<?php echo $_id?>">
 							<?php echo $_hlp->__('Custom dim.')?><br/>
 						</label>
-						<input type="checkbox" id="specify-zolagodhl-custom-pkg-<?php echo $_id?>" name="specify_zolagodhl_custom_dim"/>
+						<input type="hidden" id="specify-zolagodhl-custom-pkg-<?php echo $_id?>" name="specify_zolagodhl_custom_dim" value="0"/>
+						<input type="checkbox" id="specify-zolagodhl-custom-pkg-<?php echo $_id?>" name="specify_zolagodhl_custom_dim" value="1"/>
 					</li>
 					<?php endif ?>
 					
