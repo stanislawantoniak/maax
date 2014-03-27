@@ -107,12 +107,7 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
     }
     protected function _getAddressData($shipment) {
         if (!$this->_address) {
-            $orderId = $shipment->getOrderId();
-            $model = Mage::getModel('udpo/po');
-            $collection = $model->getCollection();
-            $collection->addFieldToFilter('order_id',$orderId);
-            $po = $collection->getFirstItem();
-            $shippingId = $po->getShippingAddressId();
+			$shippingId = $shipment->getShippingAddressId();
             $model = Mage::getModel('sales/order_address');
             $address = $model->load($shippingId);
             $data = $address->getData();
@@ -131,6 +126,7 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
         $obj->contactPerson = $data['firstname'].' '.$data['lastname'];
         $obj->contactPhone = $data['telephone'];
         $obj->contactEmail = $data['email'];
+		$this->_address = null;
         return $obj;
     }
     protected function _createPieceList($shipmentSettings) {
