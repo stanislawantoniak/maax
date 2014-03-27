@@ -161,9 +161,9 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
         $obj->costsCenter = null;
         return $obj;
     }
-    protected function _createService($shipment) {
+    protected function _createService($shipment, $shippingAmount) {
         $order = $shipment->getOrder();
-        $collectOnDeliveryValue = $this->_getCollectOnDeliveryValue($shipment);
+        $collectOnDeliveryValue = $this->_getCollectOnDeliveryValue($shipment, $shippingAmount);
         $obj = new StdClass();
         $obj->product = self::SHIPMENT_DOMESTIC;
         if ($order->getPayment()->getMethod() == 'cashondelivery') {
@@ -193,9 +193,9 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
         $obj->receiver = $this->_createReceiver($shipment);
         $obj->pieceList = $this->_createPieceList($shipmentSettings);
         $obj->payment = $this->_createPayment();
-        $obj->service = $this->_createService($shipment);
+        $obj->service = $this->_createService($shipment, $shipmentSettings['shippingAmount']);
         $obj->shipmentDate = $shipmentSettings['shipmentDate'];
-        $obj->content = $shipment->getUdpoIncrementId();
+        $obj->content = Mage::helper('zolagopo')->__('Shipment') . ': ' . $shipment->getIncrementId();
         $shipmentObject->item[] = $obj;
 
         $message->shipments = $shipmentObject;
@@ -343,8 +343,8 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
      *
      * @return float COD Value
      */
-    protected function _getCollectOnDeliveryValue($shipment)
+    protected function _getCollectOnDeliveryValue($shipment, $shippingAmount)
     {
-        return $shipment->getTotalValue() + $shipment->getBaseTaxAmount() + $shipment->getShippingAmountIncl();
+        return $shipment->getTotalValue() + $shipment->getBaseTaxAmount() + $shippingAmount;
     }
 }
