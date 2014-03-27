@@ -97,4 +97,6 @@ class Zolago_Catalog_Block_Vendor_Mass extends Mage_Core_Block_Template
 	protected function _getSession() {
 		return Mage::getSingleton('udropship/session');
 	}
+	
+
 }

@@ -9,23 +9,49 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
         $this->setDefaultDir('desc');
         $this->setUseAjax(true);
     }
+	
+	protected function _setCollectionOrder($column) {
+		$attribute = $column->getAttribute();
+		if($attribute instanceof Mage_Catalog_Model_Resource_Eav_Attribute && $this->isAttributeEnumerable($attribute)){
+			$source = $column->getAttribute()->getSource();
+			if($source instanceof Mage_Eav_Model_Entity_Attribute_Source_Boolean){
+				// Need fix
+				Mage::getResourceSingleton('zolagocatalog/vendor_mass')->addBoolValueSortToCollection(
+						$attribute, 
+						$this->getCollection(), 
+						$column->getDir()
+				);
+			}
+			return $this;
+		}
+		return parent::_setCollectionOrder($column);
+	}
 
 	protected function _prepareCollection(){
         $collection = Mage::getResourceModel('catalog/product_collection');
         /* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
+		
+		// Set store id
+		$store = $this->getStore();
+		
+		if($store->getId()){
+			$collection->addStoreFilter($store);
+			$collection->setStoreId($store->getId());
+		}
+		
 		// Add non-grid filters
 		$collection->addAttributeToFilter("udropship_vendor", $this->getVendorId());
 		$collection->addAttributeToFilter("attribute_set_id", $this->getAttributeSet()->getId());
-		// Set store id
-		$store = $this->getStore();
-		if(!Mage::app()->isSingleStoreMode() && !$store->isAdmin()){
-			$collection->setStoreId($store->getId());
-			$collection->addWebsiteFilter($store->getWebsite());
-		}
+		
 		// Add static attrs
-		$collection->addAttributeToSelect("sku");
-		$collection->addAttributeToSelect("name");
 		$collection->addPriceData();
+		
+		// Add fixed column data
+	    foreach($this->_getFixedColumns() as $position){
+			 foreach($position as $key=>$column){
+				$collection->addAttributeToSelect($key);
+			 }
+		 }
 		
 		foreach($this->_getGridVisibleAttributes() as $attribute){
 			/* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
@@ -33,6 +59,7 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 		}
 		
         $this->setCollection($collection);
+		
         return parent::_prepareCollection();
     }
 	
@@ -64,6 +91,7 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 					"width" => "50px"
 				)
 			),
+			/*
 			"end" => array(
 				"price" => array(
 					"index"			=> "price",
@@ -71,7 +99,8 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 					'currency_code' => $this->getStore()->getBaseCurrency()->getCode(),
 					"header"		=> Mage::helper("zolagocatalog")->__("Price"),
 				)
-			)
+			) 
+			*/
 		);
 	}
 
@@ -90,6 +119,7 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 				"index"     => $code,
 				'type'		=> $this->_getColumnType($attribute),
 				"header"    => $this->_getColumnLabel($attribute),
+				"attribute"	=> $attribute
 			);
 			$this->addColumn($code,  $this->_processColumnConfig($attribute, $data));
 		}
@@ -106,7 +136,7 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 	protected function _processColumnConfig(Mage_Catalog_Model_Resource_Eav_Attribute $attribute, array $config){
 		$extend = array();
 		// Process select
-		if(in_array($attribute->getFrontendInput(), array("select", "multiselect", "boolean"))){
+		if($this->isAttributeEnumerable($attribute)){
 			$extend['type'] = "options";
 			if($attribute->getSource()){
 				$extend['options']  = array();
@@ -116,6 +146,17 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 			}
 		}
 		return array_merge($config, $extend);
+	}
+
+	public function isAttributeEnumerable(Mage_Catalog_Model_Resource_Eav_Attribute $attribute){
+		switch ($attribute->getFrontendInput()){
+			case "select":
+			case "multiselect":
+			case "boolean":
+				return true;
+			break;
+		}
+		return false;
 	}
 	
 	protected function _getColumnLabel(Mage_Catalog_Model_Resource_Eav_Attribute $attribute){
@@ -147,12 +188,18 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 	protected function _getGridVisibleAttributes() {
 		$collection = Mage::getResourceModel("catalog/product_attribute_collection");
 		/* @var $collection Mage_Catalog_Model_Resource_Product_Attribute_Collection */
-		$collection->setAttributeSetFilter($this->getAttributeSet()->getId());
+		
+		Mage::getResourceSingleton('zolagocatalog/vendor_mass')->addAttributeSetFilterAndSort(
+				$collection,
+				$this->getAttributeSet()
+		);
+		
 		$collection->addFieldToFilter("grid_permission", array("in"=>array(
 			Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::DISPLAY,
 			Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::EDITION,
 			Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::INLINE_EDITION,
 		)));
+		
 		return $collection;
 	}
 
