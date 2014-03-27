@@ -21,8 +21,8 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 						$this->getCollection(), 
 						$column->getDir()
 				);
+				return $this;
 			}
-			return $this;
 		}
 		return parent::_setCollectionOrder($column);
 	}
