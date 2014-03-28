@@ -14,8 +14,8 @@
 	</div>
 <?php endif;?>
 
-<?php if($this->getCurrentAttributeSet()):?>
-<script>
+<?php if($this->getCurrentAttributeSetId()):?>
+	<script type="text/javascript">
 FORM_KEY = "<?php echo Mage::getSingleton('core/session')->getFormKey() ?>";
 </script>
 <div>
