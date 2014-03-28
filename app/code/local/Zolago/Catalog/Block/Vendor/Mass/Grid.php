@@ -152,8 +152,9 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 	protected function _processColumnConfig(Mage_Catalog_Model_Resource_Eav_Attribute $attribute, array $config){
 		$extend = array();
 		// Process select
+		$frontendType = $attribute->getFrontendInput();
 		if($this->isAttributeEnumerable($attribute)){
-			if($attribute->getFrontendInput()=="multiselect"){
+			if($frontendType=="multiselect"){
 				$extend['type'] = "multiselect";
 			}else{
 				$extend['type'] = "options";
@@ -164,6 +165,9 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 					$extend['options'][$option['value']]=$option['label'];
 				}
 			}
+		}elseif($frontendType=="price"){
+			$extend['type'] = "price";
+			$extend['currency_code'] = $this->getStore()->getBaseCurrency()->getCode();
 		}
 		return array_merge($config, $extend);
 	}
