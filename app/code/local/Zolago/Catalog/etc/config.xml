@@ -43,8 +43,9 @@
             </zolagocatalog_setup>
         </resources>
     </global>
-<!--    <frontend>
+    <frontend>
         <routers>
+			<!--
             <catalog>  
                 <args>  
                     <modules>  
@@ -52,8 +53,23 @@
                     </modules>  
                 </args>  
             </catalog> 
+			-->
+			<zolagocatalog>
+				<use>standard</use>
+				<args>
+					<module>Zolago_Catalog</module>
+                    <frontName>zolagocatalog</frontName>
+				</args>
+			</zolagocatalog>
         </routers>
-    </frontend>-->
+		<layout>
+			<updates>
+				<zolagocatalog>
+					<file>zolagocatalog.xml</file>
+				</zolagocatalog>
+			</updates>
+		</layout>
+    </frontend>
     <adminhtml>
 		<translate>
 			<modules>

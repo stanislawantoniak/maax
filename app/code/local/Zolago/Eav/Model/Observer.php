@@ -28,6 +28,13 @@ class Zolago_Eav_Model_Observer
 			'title'     => Mage::helper('zolagoeav')->__('Use in Category Mapping'),
 			'values'    => $yesnoSource,
 		));
+		
+		$fieldset->addField('grid_permission', 'select', array(
+			'name'      => 'grid_permission',
+			'label'     => Mage::helper('zolagoeav')->__('Grid Permission'),
+			'title'     => Mage::helper('zolagoeav')->__('Grid Permission'),
+			'values'    => Mage::getModel('zolagoeav/entity_attribute_source_gridPermission')->getAllOptions(false)
+		));		
 	}
 	
 	public function addAttributeToSet($observer)
