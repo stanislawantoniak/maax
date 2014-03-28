@@ -1084,3 +1084,6 @@ button.skip {
 .page-title h1, 
 .col-main h1 { 
 	padding-left: 16px;}
+
+.registered-users button {
+	margin-top: 8px;}
