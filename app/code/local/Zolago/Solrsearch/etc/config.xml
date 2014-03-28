@@ -17,6 +17,7 @@
 			<solrsearch>
 				<rewrite>
 					<solr>Zolago_Solrsearch_Model_Solr</solr>
+					<data>Zolago_Solrsearch_Model_Data</data>
 				</rewrite>
 			</solrsearch>
         </models>
