@@ -7,6 +7,52 @@ class Zolago_Catalog_Model_Resource_Vendor_Mass
 		$this->_init("udropship/vendor_product_assoc", null);
 	}
 	
+	
+	
+	/**
+	 * @param Mage_Catalog_Model_Resource_Product_Attribute_Collection $collection
+	 * @param Mage_Catalog_Model_Resource_Eav_Attribute $attrbiute
+	 * @param stinrg $dir
+	 */
+	public function addMultipleValueSortToCollection(
+		Mage_Catalog_Model_Resource_Eav_Attribute $attrbiute,
+		Mage_Catalog_Model_Resource_Product_Collection $collection,
+		$dir = Varien_Db_Select::SQL_ASC) {
+	
+		$valueTable1    = $attrbiute->getAttributeCode() . '_t1';
+        $valueTable2    = $attrbiute->getAttributeCode() . '_t2';
+        $collection->getSelect()
+            ->joinLeft(
+                array($valueTable1 => $attrbiute->getBackend()->getTable()),
+                "e.entity_id={$valueTable1}.entity_id"
+                . " AND {$valueTable1}.attribute_id='{$attrbiute->getId()}'"
+                . " AND {$valueTable1}.store_id=0",
+                array())
+            ->joinLeft(
+                array($valueTable2 => $attrbiute->getBackend()->getTable()),
+                "e.entity_id={$valueTable2}.entity_id"
+                . " AND {$valueTable2}.attribute_id='{$attrbiute->getId()}'"
+                . " AND {$valueTable2}.store_id='{$collection->getStoreId()}'",
+                array()
+            );
+        $valueExpr = $collection->getSelect()->getAdapter()
+            ->getCheckSql("{$valueTable2}.value_id > 0", "{$valueTable2}.value", "{$valueTable1}.value");
+		
+		$comma = ",";
+		// Sort by comma count - separed values
+		
+		$sortAttribute = "{$attrbiute->getAttributeCode()}_count";
+		
+		$expressions = "ROUND ((LENGTH({$valueExpr}) - LENGTH( REPLACE ({$valueExpr}, '{$comma}', ''))) / LENGTH('{$comma}'))";
+		
+		$collection->getSelect()->columns(array(
+			$sortAttribute => $expressions
+		));
+		
+		$collection->getSelect()
+			->order("{$sortAttribute} {$dir}");
+			
+	}
 	/**
 	 * @param Mage_Catalog_Model_Resource_Product_Attribute_Collection $collection
 	 * @param Mage_Catalog_Model_Resource_Eav_Attribute $attrbiute

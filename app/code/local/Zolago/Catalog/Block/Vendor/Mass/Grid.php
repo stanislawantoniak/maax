@@ -8,8 +8,16 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
         $this->setDefaultSort('entity_id');
         $this->setDefaultDir('desc');
         $this->setUseAjax(true);
+		
+		// Add custom renderes
+		$this->setColumnRenderers(array(
+			'multiselect'=>'zolagoadminhtml/widget_grid_column_renderer_multiselect'
+		));
+		$this->setColumnFilters(array(
+			"multiselect"=>'zolagoadminhtml/widget_grid_column_filter_multiselect'
+		));
     }
-	
+
 	protected function _setCollectionOrder($column) {
 		$attribute = $column->getAttribute();
 		if($attribute instanceof Mage_Catalog_Model_Resource_Eav_Attribute && $this->isAttributeEnumerable($attribute)){
@@ -17,6 +25,14 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 			if($source instanceof Mage_Eav_Model_Entity_Attribute_Source_Boolean){
 				// Need fix
 				Mage::getResourceSingleton('zolagocatalog/vendor_mass')->addBoolValueSortToCollection(
+						$attribute, 
+						$this->getCollection(), 
+						$column->getDir()
+				);
+				return $this;
+			}elseif($attribute->getFrontendInput()=="multiselect"){
+				// Need fix - comma 
+				Mage::getResourceSingleton('zolagocatalog/vendor_mass')->addMultipleValueSortToCollection(
 						$attribute, 
 						$this->getCollection(), 
 						$column->getDir()
@@ -137,7 +153,11 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 		$extend = array();
 		// Process select
 		if($this->isAttributeEnumerable($attribute)){
-			$extend['type'] = "options";
+			if($attribute->getFrontendInput()=="multiselect"){
+				$extend['type'] = "multiselect";
+			}else{
+				$extend['type'] = "options";
+			}
 			if($attribute->getSource()){
 				$extend['options']  = array();
 				foreach($attribute->getSource()->getAllOptions(false) as $option){
