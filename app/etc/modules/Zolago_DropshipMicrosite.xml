@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Zolago_Solrsearch>
+            <active>true</active>
+            <codePool>local</codePool>            
+			<depends>
+				<Mana_Filters />
+			</depends>
+        </Zolago_Solrsearch>
+    </modules>
+</config>
