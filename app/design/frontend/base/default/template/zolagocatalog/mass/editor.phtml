@@ -2,19 +2,8 @@
 	.grid.custom-grid tbody td{
 		background: #e7efef;
 	}
-	.grid.custom-grid thead tr{
-		visibility: hidden;
-	}
-	.grid.custom-grid thead tr.filter th{
-	    padding-top:0;
-		padding-bottom:0;
-	}
-	.grid.custom-grid thead tr.filter th > div{
-		height:0; 
-		overflow: hidden;
-	}
 </style>
-<div class="grid custom-grid">
+<div class="grid custom-grid" id="<?php echo $this->getGrid()->getId();?>_editor">
 	<form>
 	<?php if($this->getGrid()): ?>
 	<table cellpadding="0" cellspacing="0" style="width:100%;" class="data">
@@ -23,18 +12,6 @@
 				<col <?php echo $_column->getHtmlProperty() ?> />
 			<?php endforeach;?>
 		</colgroup>
-		<thead>
-			<tr class="filter" style="">
-				<?php $i=0;?>
-				<?php foreach ($this->getGrid()->getColumns() as $_column): ?>
-						<th>
-							<div>
-								<?php echo $_column->getFilterHtml();?>
-							</div>
-						</th>
-				<?php endforeach; ?>
-			</tr>
-		</thead>
 		<tbody>
 			<tr>
 				<?php $i=0;?>
@@ -75,3 +52,20 @@
 	</form>
 	<?php endif;?>
 </div>
+<script type="text/javascript">
+	(function(){
+		var assignEditorLayout = function(){
+			var editor = $("<?php echo $this->getGrid()->getId();?>_editor").select("tbody tr:first-child td");
+			var grid = $("<?php echo $this->getGrid()->getId();?>").select(".grid thead tr:first-child th");
+			grid.each(function(el,i){
+				editor[i].style.width = (el.clientWidth - 7) + "px";
+			});
+			console.log("TAK")
+		}
+		Event.observe(window, "resize", assignEditorLayout);
+		Ajax.Responders.register({
+			onComplete: assignEditorLayout
+		});
+		assignEditorLayout();
+	})();
+</script>

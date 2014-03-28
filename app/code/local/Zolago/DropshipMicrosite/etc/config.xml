@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<config>
+	<modules>
+		<Zolago_DropshipMicrosite>
+			<version>0.0.1</version>
+		</Zolago_DropshipMicrosite>
+	</modules>
+	<global>
+		<blocks>
+            <zolagodropshipmicrosite>
+                <class>Zolago_DropshipMicrosite_Block</class>
+            </zolagodropshipmicrosite>			
+			<umicrosite>
+				<rewrite>
+					<frontend_vendorProducts>Zolago_DropshipMicrosite_Block_Frontend_VendorProducts</frontend_vendorProducts>
+				</rewrite>
+			</umicrosite>
+		</blocks>
+		<helpers>
+			<zolagodropshipmicrosite>
+				<class>Zolago_DropshipMicrosite_Helper</class>
+			</zolagodropshipmicrosite>
+		</helpers>
+		<models>
+			<zolagodropshipmicrosite>
+				<class>Zolago_DropshipMicrosite_Model</class>
+			</zolagodropshipmicrosite>
+		</models>		
+		
+		<events>
+			<catalog_controller_category_init_after>
+				<observers>
+					<microsite_category_init_after>
+						<model>zolagodropshipmicrosite/observer</model>
+						<method>validateVendorCategory</method>
+					</microsite_category_init_after>
+				</observers>
+			</catalog_controller_category_init_after>
+		</events>
+	</global>
+</config>
