@@ -101,4 +101,5 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 				'catIds'   => $categoryIds,
 		);
 	}
+
 }

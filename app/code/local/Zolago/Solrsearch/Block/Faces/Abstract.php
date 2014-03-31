@@ -144,8 +144,11 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 					$hiddenItems[$option['label']] = $allItems[$option['label']];
 				}
 			}else{
-				// No specified values - show all
+				// No specified values - show all - if none active
 				$out[$option['label']] = $allItems[$option['label']];
+				if($this->isFilterActive() && !$filter->getShowMultiple()){
+					break;
+				}
 			}
 		}
 		return array_merge($out, $extraAdded);
