@@ -44,6 +44,7 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 						$hiddenItems
 				);
 			}
+			
 			//ksort($items);
 			//ksort($hiddenItems);
 			$this->setData("items", $items);
@@ -62,8 +63,11 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 
 	public function isItemActive($item) {
 		$filterQuery = $this->getFilterQuery();
-		if (isset($filterQuery[$this->getFacetKey()]) && in_array($item, $filterQuery[$this->getFacetKey()])) {
-			return true;
+		if (isset($filterQuery[$this->getFacetKey()])) {
+			if(is_array($filterQuery[$this->getFacetKey()])){
+				return in_array($item, $filterQuery[$this->getFacetKey()]);
+			}
+			return trim($filterQuery[$this->getFacetKey()])==trim($item);
 		}
 		return false;
 	}
@@ -119,11 +123,15 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 		$allSourceOptions = $this->getAllOptions();
 		$extraAdded = array();
 		// Options are sorted via admin panel
+		
+		
+		
 		foreach($allSourceOptions as $option){
 			// Option not in available result colleciotn
 			if(!isset($allItems[$option['label']])){
 				continue;
 			}
+			
 			
 			if($filter && $filter->getUseSpecifiedOptions()){
 				// Force show all items is filter is active and multiple
@@ -145,13 +153,19 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 				}
 			}else{
 				// No specified values - show all - if none active
-				$out[$option['label']] = $allItems[$option['label']];
-				if($this->isFilterActive() && !$filter->getShowMultiple()){
-					break;
+				if($filter->getShowMultiple()){
+					$out[$option['label']] = $allItems[$option['label']];
+				}else{
+					if($this->isFilterActive() && $this->isItemActive ($option['label'])){
+						$out[$option['label']] = $allItems[$option['label']];
+						//break;
+					}else{
+						$out[$option['label']] = $allItems[$option['label']];
+					}
 				}
 			}
 		}
-		return array_merge($out, $extraAdded);
+		return $out+$extraAdded;
 		
 	}
 	
