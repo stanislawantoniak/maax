@@ -136,15 +136,25 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 			if($filter && $filter->getUseSpecifiedOptions()){
 				// Force show all items is filter is active and multiple
 				$specifiedIds = $filter->getSpecifiedOptions();
+				
+				// Active single mode filter
+				if(!$filter->getShowMultiple() && $this->isFilterActive()){
+					if($this->isItemActive ($option['label'])){
+						$out[$option['label']] = $allItems[$option['label']];
+						break;
+					}
+					continue;
+				}
+				
 				if(in_array($option['value'], $specifiedIds)){
 					// Option specified - move to items
 					$out[$option['label']] = $allItems[$option['label']];
-				}elseif($this->isFilterActive() && $filter->getShowMultiple()){
+				}elseif($this->isFilterActive() && $filter->getShowMultiple() 
+					&& $filter->getCanShowMore()){
 					// Multiselect active - show all fileds, after specified fields
 					$extraAdded[$option['label']] = $allItems[$option['label']];
-				}elseif($this->isFilterActive() && !$filter->getShowMultiple() 
-					&& $this->isItemActive ($option['label'])){
-					// Item is active and filter isn't multiple - add to selected
+				}elseif($this->isFilterActive() && $this->isItemActive ($option['label'])){
+					// Add olny one item
 					$out[$option['label']] = $allItems[$option['label']];
 				}
 				else{
@@ -153,15 +163,11 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 				}
 			}else{
 				// No specified values - show all - if none active
-				if($filter->getShowMultiple()){
+				if($filter->getShowMultiple() || !$this->isFilterActive()){
 					$out[$option['label']] = $allItems[$option['label']];
-				}else{
-					if($this->isFilterActive() && $this->isItemActive ($option['label'])){
-						$out[$option['label']] = $allItems[$option['label']];
-						//break;
-					}else{
-						$out[$option['label']] = $allItems[$option['label']];
-					}
+				}elseif($this->isFilterActive() && $this->isItemActive ($option['label'])){
+					$out[$option['label']] = $allItems[$option['label']];
+					break;
 				}
 			}
 		}
