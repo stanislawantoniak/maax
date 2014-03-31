@@ -125,10 +125,8 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 				continue;
 			}
 			
-					
-			// Force show all items is filter is active and multiple
-
 			if($filter && $filter->getUseSpecifiedOptions()){
+				// Force show all items is filter is active and multiple
 				$specifiedIds = $filter->getSpecifiedOptions();
 				if(in_array($option['value'], $specifiedIds)){
 					// Option specified - move to items
@@ -136,7 +134,6 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 				}elseif($this->isFilterActive() && $filter->getShowMultiple()){
 					// Multiselect active - show all fileds, after specified fields
 					$extraAdded[$option['label']] = $allItems[$option['label']];
-					continue;
 				}elseif($this->isFilterActive() && !$filter->getShowMultiple() 
 					&& $this->isItemActive ($option['label'])){
 					// Item is active and filter isn't multiple - add to selected
@@ -147,6 +144,7 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 					$hiddenItems[$option['label']] = $allItems[$option['label']];
 				}
 			}else{
+				// No specified values - show all
 				$out[$option['label']] = $allItems[$option['label']];
 			}
 		}
