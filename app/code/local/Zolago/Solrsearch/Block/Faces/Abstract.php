@@ -113,6 +113,12 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 	}
 
 
+	/**
+	 * @param array $allItems
+	 * @param type $filter
+	 * @param array $hiddenItems
+	 * @return array
+	 */
 	public function filterAndSortOptions(array $allItems, $filter, array &$hiddenItems) {
 		
 		if(!$this->getAllOptions()){
@@ -124,14 +130,11 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 		$extraAdded = array();
 		// Options are sorted via admin panel
 		
-		
-		
 		foreach($allSourceOptions as $option){
 			// Option not in available result colleciotn
 			if(!isset($allItems[$option['label']])){
 				continue;
 			}
-			
 			
 			if($filter && $filter->getUseSpecifiedOptions()){
 				// Force show all items is filter is active and multiple
