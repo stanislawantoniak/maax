@@ -43,7 +43,7 @@
 		</tbody>
 		<tfoot>
 			<tr>
-				<td  class="totals a-right" colspan="5">
+				<td  class="totals a-right" colspan="<?php echo $this->getGrid()->getColumnCount();?>">
 					<?php echo $this->getSubmitButtonHtml(); ?>
 				</td>
 			<tr>

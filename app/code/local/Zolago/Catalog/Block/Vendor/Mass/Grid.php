@@ -49,18 +49,15 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 		
 		// Set store id
 		$store = $this->getStore();
-		
+		$collection->setStoreId($store->getId());
+				
 		if($store->getId()){
 			$collection->addStoreFilter($store);
-			$collection->setStoreId($store->getId());
 		}
 		
 		// Add non-grid filters
 		$collection->addAttributeToFilter("udropship_vendor", $this->getVendorId());
 		$collection->addAttributeToFilter("attribute_set_id", $this->getAttributeSet()->getId());
-		
-		// Add static attrs
-		$collection->addPriceData();
 		
 		// Add fixed column data
 	    foreach($this->_getFixedColumns() as $position){
@@ -78,6 +75,11 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 		
         return parent::_prepareCollection();
     }
+	
+	
+	protected function _afterLoadCollection(){
+		Mage::log($this->getCollection()->getSelect()."");
+	}
 	
 	protected function _prepareStaticStartColumns(){
 		 $static = $this->_getFixedColumns();
@@ -125,7 +127,6 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 		$this->_prepareStaticStartColumns();
         
 		$attributeCollection = $this->_getGridVisibleAttributes();
-		$count = $attributeCollection->count();
 		
 		foreach($attributeCollection as $attribute){
 			/* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
