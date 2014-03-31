@@ -538,7 +538,7 @@ $filterPoTotals = array('subtotal_excl', 'tax', 'shipping', 'total');
                             <td><a style="white-space:nowrap" href="<?php echo $this->getUrl('udpo/vendor/pdf', array('shipment_id'=>$_shipment->getId()))?>"><strong><?php echo $_hlp->__('Packing Slip')?></strong></a>
 							<?php if ($dhlSettings): ?>
 								<?php foreach ($_tracking as $_track): ?>
-									<?php if ($_track->getCarrierCode() == Zolago_Dhl_Helper_Data::DHL_CARRIER_CODE && $_track->getNumber()): ?>
+									<?php if (Mage::helper('zolagodhl')->canShowWaybill($_track, $_shipment)): ?>
 									| <a id="dhlLp-<?php echo $_track->getNumber(); ?>" style="white-space:nowrap" href="#"><strong><?php echo $_poHlp->__('DHL Waybill')?></strong></a>
 									<script type="text/javascript">
 										//<![CDATA[
