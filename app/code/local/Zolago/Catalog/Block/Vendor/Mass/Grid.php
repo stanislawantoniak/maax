@@ -77,10 +77,6 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
     }
 	
 	
-	protected function _afterLoadCollection(){
-		Mage::log($this->getCollection()->getSelect()."");
-	}
-	
 	protected function _prepareStaticStartColumns(){
 		 $static = $this->_getFixedColumns();
 		 if(isset($static['start'])){
