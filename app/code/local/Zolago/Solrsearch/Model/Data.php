@@ -39,6 +39,64 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 		return 0;
 	}
 	
+	/**
+	 * Get allow categories by store
+	 * @param Mage_Core_Model_Store $store
+	 * @return array
+	 */
+	public function getAllowCategoriesByStore($store)
+	{
+		$cachedKey = 'solrbridge_solrsearch_indexing_allowcategories_' . $store->getId ();
+
+		$useCache = Mage::app()->useCache('solrbridge_solrsearch');
+		
+		if ((false !== ($returnData = Mage::app ()->getCache ()->load ( $cachedKey ))) && $useCache) {
+			return unserialize ( $returnData );
+		}
+
+		$rootCatId = $store->getRootCategoryId();
+
+		$rootCat = Mage::getModel('catalog/category')->load($rootCatId);
+
+		$allowCatIds = Mage::getModel('catalog/category')->getResource()->getChildren($rootCat, true);
+
+		$excludedCategoriesIds = Mage::helper('solrsearch')->getSetting('excluded_categories');
+		$excludedCategoriesIdsArray = array();
+
+		if (!empty($excludedCategoriesIds)) {
+
+			$excludedCategoriesIdsArray = explode(',', trim($excludedCategoriesIds, ','));
+			//Loaded categories recusive for excluding
+			$recusiveExcludedCategory = Mage::helper('solrsearch')->getSetting('excluded_categories_recusive');
+
+			if (isset($recusiveExcludedCategory) && intval($recusiveExcludedCategory) > 0) {
+
+				$excludedChildrenCategoriesIdsArray = array();
+
+				foreach ( $excludedCategoriesIdsArray as $catId ) {
+					$parentCat = Mage::getModel('catalog/category')->load($catId);
+					$excludedChildrenCategoriesIds = Mage::getModel('catalog/category')->getResource()->getChildren($parentCat, true);
+					if (count($excludedChildrenCategoriesIds)) {
+						$excludedChildrenCategoriesIdsArray = array_merge($excludedChildrenCategoriesIdsArray, $excludedChildrenCategoriesIds);
+					}
+				}
+				//Merge categories id from settings and its children,
+				$excludedCategoriesIdsArray = array_merge($excludedCategoriesIdsArray, $excludedChildrenCategoriesIdsArray);
+			}
+
+			if (count($excludedCategoriesIdsArray)) {
+				$allowCatIds = array_diff($allowCatIds, $excludedCategoriesIdsArray);
+			}
+		}
+
+		if (! empty ( $allowCatIds ) && $useCache) {
+			Mage::app ()->getCache ()->save ( serialize ( $allowCatIds ), $cachedKey, array ('SOLRBRIDGE_SOLRSEARCH') );
+		}
+
+		return $allowCatIds;
+	}
+
+	
 	public function prepareCategoriesData($_product, &$docData)
 	{
 		$store = $this->store;
