@@ -162,10 +162,11 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 					$hiddenItems[$option['label']] = $allItems[$option['label']];
 				}
 			}else{
-				// No specified values - show all - if none active
 				if($filter->getShowMultiple() || !$this->isFilterActive()){
+					// No specified values - show all - if none active or filter is multiple
 					$out[$option['label']] = $allItems[$option['label']];
 				}elseif($this->isFilterActive() && $this->isItemActive ($option['label'])){
+					// if filter is single and item active - add only this one
 					$out[$option['label']] = $allItems[$option['label']];
 					break;
 				}
