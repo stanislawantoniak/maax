@@ -12,10 +12,6 @@ class Zolago_DropshipMicrosite_Block_Frontend_VendorProducts extends Unirgy_Drop
 		$websiteId		= Mage::app()->getWebsite()->getId();
 		$rootCategoryId = Mage::helper('zolagodropshipmicrosite')->getVendorRootCategory($_vendor, $websiteId);
 		
-		if (!$rootCategoryId) {
-			return parent::_getProductCollection();
-		}
-		
 		$layer = $this->getLayer();
 		if (is_null($this->_productCollection)) {
             /* @var $layer Mage_Catalog_Model_Layer */
@@ -56,7 +52,7 @@ class Zolago_DropshipMicrosite_Block_Frontend_VendorProducts extends Unirgy_Drop
 
             if ($origCategory) {
                 $layer->setCurrentCategory($category);
-            }			
+            }
 			
             $this->_addProductAttributesAndPrices($collection);
             Mage::getSingleton('catalog/product_status')->addVisibleFilterToCollection($collection);
@@ -67,10 +63,15 @@ class Zolago_DropshipMicrosite_Block_Frontend_VendorProducts extends Unirgy_Drop
             $this->_productCollection = $collection;
         }
 		
-		$vendorCurrentUrl = Mage::helper('zolagodropshipmicrosite')->getVendorCurrentUrl();
-		$redirectUrl = $vendorCurrentUrl.$layer->getCurrentCategory()->getUrlPath();
-		Mage::app()->getFrontController()->getResponse()->setRedirect($redirectUrl);	
-		
+		if (!$rootCategoryId) {
+			$redirectUrl = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB);
+			Mage::app()->getFrontController()->getResponse()->setRedirect($redirectUrl);
+		} else {
+			$vendorUrl = Mage::helper('zolagodropshipmicrosite')->getVendorCurrentUrl();
+			$redirectUrl = $vendorUrl.$layer->getCurrentCategory()->getUrlPath();
+			Mage::app()->getFrontController()->getResponse()->setRedirect($redirectUrl, Zolago_DropshipMicrosite_Helper_Data::URL_REDIRECT_MODE);	
+		}
+
         return $this->_productCollection;
     }	
 }

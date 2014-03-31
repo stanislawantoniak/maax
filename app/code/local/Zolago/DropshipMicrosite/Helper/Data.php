@@ -1,20 +1,48 @@
 <?php
 class Zolago_DropshipMicrosite_Helper_Data extends Mage_Core_Helper_Abstract
 {
+	const URL_UNSECURE_PREFIX	= 'http://';
+	const URL_SECURE_PREFIX		= 'https://';
+	const URL_MODE_PATH			= 'udropship/microsite/subdomain_level';
+	
+	const URL_MODE_DEFAULT		= 1; //URL Pattern: http://www.baseurl.com/vendor_url
+	const URL_MODE_SUBDOMAIN	= 3; //URL Pattern: http://vendor_url.baseurl.com
+	const URL_REDIRECT_MODE		= 301;
+	
 	public function getVendorRootUrl()
 	{
-		$_vendor = Mage::helper('umicrosite')->getCurrentVendor();
-		$vendorRootUrl = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB) . $_vendor->getUrlKey() . DS;
-		if (Mage::app()->getStore()->isCurrentlySecure()) {
-			$vendorRootUrl = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB, true) . $_vendor->getUrlKey() . DS;
+		$_vendor		= Mage::helper('umicrosite')->getCurrentVendor();
+		$vendorUrlKey	= $_vendor->getUrlKey();
+		$urlMode		= Mage::getStoreConfig(self::URL_MODE_PATH);
+		$unsecureUrl	= Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB);
+		$secureUrl		= Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB, true);
+		
+		switch ($urlMode) {
+			case self::URL_MODE_SUBDOMAIN:
+				$vendorRootUrl = $this->getSubdomainVendorUrl($unsecureUrl, $vendorUrlKey);
+				if (Mage::app()->getStore()->isCurrentlySecure()) {
+					$vendorRootUrl = $this->getSubdomainVendorUrl($secureUrl, $vendorUrlKey);
+				}
+				break;
+			default:
+				$vendorRootUrl = $unsecureUrl . $vendorUrlKey . DS;
+				if (Mage::app()->getStore()->isCurrentlySecure()) {
+					$vendorRootUrl = $secureUrl . $vendorUrlKey . DS;
+				}
+				break;
 		}
+
+		if (!$vendorUrlKey) {
+			$vendorRootUrl = $unsecureUrl;
+		}
+
 		return $vendorRootUrl;		
 	}
 
 	public function getVendorCurrentUrl()
 	{
 		$currentUrl = $this->getVendorRootUrl();
-		if (!in_array(Mage::app()->getFrontController()->getAction()->getFullActionName(), array('cms_index_noRoute', 'cms_index_defaultNoRoute'))) {
+		if (!in_array(Mage::app()->getFrontController()->getAction()->getFullActionName(), array('cms_index_noRoute', 'cms_index_defaultNoRoute', 'umicrosite_index_landingPage'))) {
 			$currentUrl = rtrim(Mage::helper('core/url')->getCurrentUrl(), DS) . DS;
 		}
 		return $currentUrl;
@@ -41,5 +69,18 @@ class Zolago_DropshipMicrosite_Helper_Data extends Mage_Core_Helper_Abstract
 			}
 		}
 		return $rootCategoryId;
+	}
+	
+	public function getSubdomainVendorUrl($rootUrl, $vendorKey)
+	{
+		$urlParts	= explode('//', $rootUrl);
+		$vendorUrl	= array_shift($urlParts);
+		$vendorUrl .= '//' . $vendorKey . '.';
+		
+		foreach ($urlParts as $urlPart) {
+			$vendorUrl .= $urlPart;
+		}
+		
+		return $vendorUrl;
 	}
 }
