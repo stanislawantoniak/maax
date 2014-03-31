@@ -21,9 +21,13 @@ class Zolago_Adminhtml_Block_Widget_Grid_Column_Filter_Multiselect extends
 			$valueTable1 = "at_".$code."_default";
 			$valueTable2 = "at_".$code;
 
-			$valueExpr = $collection->getSelect()->getAdapter()
-				->getCheckSql("{$valueTable2}.value_id > 0", "{$valueTable2}.value", "{$valueTable1}.value");
+			if($collection->getStoreId()){
+				$valueExpr = $collection->getSelect()->getAdapter()
+					->getCheckSql("{$valueTable2}.value_id > 0", "{$valueTable2}.value", "{$valueTable1}.value");
 
+			}else{
+				$valueExpr = "$valueTable2.value";
+			}
 			// Try use regexp to match vales with boundary (like comma, ^, $)  - (123,456,678) 
 			$collection->getSelect()->where(
 					$valueExpr." REGEXP ?", "[[:<:]]".$this->getValue()."[[:>:]]"
