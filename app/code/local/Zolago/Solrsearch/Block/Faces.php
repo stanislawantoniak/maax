@@ -12,7 +12,9 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         // Override tmpalte
         $this->setTemplate('zolagosolrsearch/standard/searchfaces.phtml');
     }
-
+    public function setSolrData($data) {
+        $this->solrData = $data;
+    }
 
     protected function _checkFilterDepedncy($filter) {
 
