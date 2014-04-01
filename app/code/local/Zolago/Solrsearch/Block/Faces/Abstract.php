@@ -209,7 +209,7 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 			}
 		}
 		// No filter - show items if have
-		return $this->getCanShowItems() || $this->getCanShowHidden();
+		return $this->getCanShowItems();
 	}
 	// Can show visible items list
 	public function getCanShowItems() {
