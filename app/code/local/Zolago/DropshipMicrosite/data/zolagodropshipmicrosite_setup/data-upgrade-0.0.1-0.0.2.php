@@ -12,5 +12,7 @@ if($model->getId()){
 <p>{{var currentVendorReviewsSummaryHtml}}</p>
 <div class="generic-box vendor-description"><img class="vendor-img" src="{{media url=$currentVendor.getLogo()}}" alt="" /> {{var currentVendor.getDescription()|escape:html}}</div>
 <div id="our-products">{{layout handle="umicrosite_current_vendor_products_list_solr"}}</div>');
+	
+	$model->setData('layout_update_xml', '<update handle="umicrosite_landing"/>');
 	$model->save();
 }
