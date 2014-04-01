@@ -5,6 +5,13 @@
 			<version>0.0.1</version>
 		</Zolago_DropshipMicrositePro>
 	</modules>
+	<global>
+		<models>
+			<zolagoudmspro>
+                <class>Zolago_DropshipMicrositePro_Model</class>
+            </zolagoudmspro>
+		</models>
+	</global>
 	<frontend>
 		<routers>
             <umicrosite>
@@ -22,5 +29,16 @@
 				</args>
 			</udmspro>
 		</routers>
+		<events>
+			<controller_action_layout_load_before>
+            	<observers>
+                    <zolagoudmspro>
+                        <type>singleton</type>
+                        <class>zolagoudmspro/observer</class>
+                        <method>handleCatalogLayoutRender</method>
+                    </zolagoudmspro>
+                </observers>
+            </controller_action_layout_load_before>
+        </events>
 	</frontend>
 </config>

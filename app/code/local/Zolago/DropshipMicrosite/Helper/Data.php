@@ -83,4 +83,13 @@ class Zolago_DropshipMicrosite_Helper_Data extends Mage_Core_Helper_Abstract
 		
 		return $vendorUrl;
 	}
+	
+	public function getBaseUrl($store=null) {
+		$baseUnsecure = $base = Mage::app()->getStore($store)->getConfig("web/unsecure/base_url");
+		if(Mage::app()->getRequest()->isSecure()){
+			$baseSecure = Mage::app()->getStore($store)->getConfig("web/secure/base_url");
+			$base = str_replace("{{base_url}}", $baseUnsecure, $baseSecure);
+		}
+		return $base;
+	}
 }
