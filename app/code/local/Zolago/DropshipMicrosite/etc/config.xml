@@ -25,7 +25,14 @@
 			<zolagodropshipmicrosite>
 				<class>Zolago_DropshipMicrosite_Model</class>
 			</zolagodropshipmicrosite>
-		</models>		
+		</models>
+        <resources>
+            <zolagodropshipmicrosite_setup>
+                <setup>
+                    <module>Zolago_DropshipMicrosite</module>
+                </setup>
+            </zolagodropshipmicrosite_setup>
+        </resources>
 		
 		<events>
 			<catalog_controller_category_init_after>

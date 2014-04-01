@@ -13,9 +13,9 @@ class Zolago_Catalog_Vendor_MassController
 	
 	
 	public function gridAction(){
-		$this->loadLayout();
 		$design = Mage::getDesign();
 		$design->setArea("adminhtml");
+		$this->loadLayout();
 		$block = $this->getLayout()->createBlock("zolagocatalog/vendor_mass_grid");
 
 		$this->getResponse()->setBody($block->toHtml());

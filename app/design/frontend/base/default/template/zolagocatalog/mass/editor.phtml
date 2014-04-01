@@ -43,7 +43,7 @@
 		</tbody>
 		<tfoot>
 			<tr>
-				<td  class="totals a-right" colspan="5">
+				<td  class="totals a-right" colspan="<?php echo $this->getGrid()->getColumnCount();?>">
 					<?php echo $this->getSubmitButtonHtml(); ?>
 				</td>
 			<tr>
@@ -60,7 +60,6 @@
 			grid.each(function(el,i){
 				editor[i].style.width = (el.clientWidth - 7) + "px";
 			});
-			console.log("TAK")
 		}
 		Event.observe(window, "resize", assignEditorLayout);
 		Ajax.Responders.register({

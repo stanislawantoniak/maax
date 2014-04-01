@@ -44,6 +44,7 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 						$hiddenItems
 				);
 			}
+			
 			//ksort($items);
 			//ksort($hiddenItems);
 			$this->setData("items", $items);
@@ -62,8 +63,11 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 
 	public function isItemActive($item) {
 		$filterQuery = $this->getFilterQuery();
-		if (isset($filterQuery[$this->getFacetKey()]) && in_array($item, $filterQuery[$this->getFacetKey()])) {
-			return true;
+		if (isset($filterQuery[$this->getFacetKey()])) {
+			if(is_array($filterQuery[$this->getFacetKey()])){
+				return in_array($item, $filterQuery[$this->getFacetKey()]);
+			}
+			return trim($filterQuery[$this->getFacetKey()])==trim($item);
 		}
 		return false;
 	}
@@ -109,6 +113,12 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 	}
 
 
+	/**
+	 * @param array $allItems
+	 * @param type $filter
+	 * @param array $hiddenItems
+	 * @return array
+	 */
 	public function filterAndSortOptions(array $allItems, $filter, array &$hiddenItems) {
 		
 		if(!$this->getAllOptions()){
@@ -119,32 +129,53 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 		$allSourceOptions = $this->getAllOptions();
 		$extraAdded = array();
 		// Options are sorted via admin panel
+		
 		foreach($allSourceOptions as $option){
 			// Option not in available result colleciotn
 			if(!isset($allItems[$option['label']])){
 				continue;
 			}
 			
-			// Force show all items is filter is active and multiple
-
 			if($filter && $filter->getUseSpecifiedOptions()){
+				// Force show all items is filter is active and multiple
 				$specifiedIds = $filter->getSpecifiedOptions();
-				// Option specified - move to items
-				if(in_array($option['value'], $specifiedIds)){
-					$out[$option['label']] = $allItems[$option['label']];
-				// Multiselect active - show all fileds, after specified fields
-				}elseif($this->isFilterActive() && $filter->getShowMultiple()){
-					$extraAdded[$option['label']] = $allItems[$option['label']];
+				
+				// Active single mode filter
+				if(!$filter->getShowMultiple() && $this->isFilterActive()){
+					if($this->isItemActive ($option['label'])){
+						$out[$option['label']] = $allItems[$option['label']];
+						break;
+					}
 					continue;
-				// Option non specified move to hidden
-				}else{
+				}
+				
+				if(in_array($option['value'], $specifiedIds)){
+					// Option specified - move to items
+					$out[$option['label']] = $allItems[$option['label']];
+				}elseif($this->isFilterActive() && $filter->getShowMultiple() 
+					&& $filter->getCanShowMore()){
+					// Multiselect active - show all fileds, after specified fields
+					$extraAdded[$option['label']] = $allItems[$option['label']];
+				}elseif($this->isFilterActive() && $this->isItemActive ($option['label'])){
+					// Add olny one item
+					$out[$option['label']] = $allItems[$option['label']];
+				}
+				else{
+					// Option non specified move to hidden
 					$hiddenItems[$option['label']] = $allItems[$option['label']];
 				}
 			}else{
-				$out[$option['label']] = $allItems[$option['label']];
+				if($filter->getShowMultiple() || !$this->isFilterActive()){
+					// No specified values - show all - if none active or filter is multiple
+					$out[$option['label']] = $allItems[$option['label']];
+				}elseif($this->isFilterActive() && $this->isItemActive ($option['label'])){
+					// if filter is single and item active - add only this one
+					$out[$option['label']] = $allItems[$option['label']];
+					break;
+				}
 			}
 		}
-		return array_merge($out, $extraAdded);
+		return $out+$extraAdded;
 		
 	}
 	

@@ -9,15 +9,18 @@ class Zolago_Catalog_Block_Vendor_Mass extends Mage_Core_Block_Template
 	}
 	
     public function _prepareGrid() {
-		$design = Mage::getDesign();
-		$design->setArea("adminhtml");
-		$block = $this->getLayout()->
-				createBlock("zolagocatalog/vendor_mass_grid");
-		$block->setParentBlock($this);
-		$this->setGridHtml($block->toHtml());
-		$this->setGrid($block);
-		$design->setArea("frontend");
+		if($this->getCurrentAttributeSetId()){
+			$design = Mage::getDesign();
+			$design->setArea("adminhtml");
+			$block = $this->getLayout()->
+					createBlock("zolagocatalog/vendor_mass_grid");
+			$block->setParentBlock($this);
+			$this->setGridHtml($block->toHtml());
+			$this->setGrid($block);
+			$design->setArea("frontend");
+		}
 	}
+	
     public function _prepareStoreSwitcher() {
 		$design = Mage::getDesign();
 		$design->setArea("adminhtml");
@@ -97,4 +100,6 @@ class Zolago_Catalog_Block_Vendor_Mass extends Mage_Core_Block_Template
 	protected function _getSession() {
 		return Mage::getSingleton('udropship/session');
 	}
+	
+
 }

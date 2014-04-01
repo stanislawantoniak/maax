@@ -3,6 +3,100 @@
  * rewrited solrsearch data model
  */
 class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
+	
+	public function getProductOrderedQty($_product, $store)
+	{
+		$visibility = Mage::getSingleton('catalog/product_visibility')->getVisibleInSiteIds();
+		if ($_product->getId() && in_array($_product->getVisibility(), $visibility) && $_product->getStatus())
+		{
+			$oldStore = Mage::app ()->getStore ();
+			
+			// Fix dla plaskiego: zmiana store view w adminie powduje przelaczenie 
+			// ktore przestaje korzysatac z EAV tylko plaskiego katalog
+			// metoda addOrderedQty nastepnie przywraca tabelke eav (catalog_product_entity)
+			// a potem odaje atrybuty jak do plskiego katalogu
+			
+			//Mage::app ()->setCurrentStore ( $store );
+
+			$storeId    = $store->getId();
+			$products = Mage::getResourceModel('reports/product_collection')
+				->addOrderedQty()
+				->addAttributeToSelect(array('name')) //edit to suit tastes
+				->setStoreId($storeId)
+				->addStoreFilter($storeId)
+				->addIdFilter($_product->getId())->setOrder('ordered_qty', 'desc'); //best sellers on top
+			$data = $products->getFirstItem()->getData();
+
+			//Mage::app ()->setCurrentStore ( $oldStore );
+
+			if(isset($data['ordered_qty']) && (int) $data['ordered_qty'])
+			{
+				return (int)$data['ordered_qty'];
+			}
+		}else{
+			return 0;
+		}
+		return 0;
+	}
+	
+	/**
+	 * Get allow categories by store
+	 * @param Mage_Core_Model_Store $store
+	 * @return array
+	 */
+	public function getAllowCategoriesByStore($store)
+	{
+		$cachedKey = 'solrbridge_solrsearch_indexing_allowcategories_' . $store->getId ();
+
+		$useCache = Mage::app()->useCache('solrbridge_solrsearch');
+		
+		if ((false !== ($returnData = Mage::app ()->getCache ()->load ( $cachedKey ))) && $useCache) {
+			return unserialize ( $returnData );
+		}
+
+		$rootCatId = $store->getRootCategoryId();
+
+		$rootCat = Mage::getModel('catalog/category')->load($rootCatId);
+
+		$allowCatIds = Mage::getModel('catalog/category')->getResource()->getChildren($rootCat, true);
+
+		$excludedCategoriesIds = Mage::helper('solrsearch')->getSetting('excluded_categories');
+		$excludedCategoriesIdsArray = array();
+
+		if (!empty($excludedCategoriesIds)) {
+
+			$excludedCategoriesIdsArray = explode(',', trim($excludedCategoriesIds, ','));
+			//Loaded categories recusive for excluding
+			$recusiveExcludedCategory = Mage::helper('solrsearch')->getSetting('excluded_categories_recusive');
+
+			if (isset($recusiveExcludedCategory) && intval($recusiveExcludedCategory) > 0) {
+
+				$excludedChildrenCategoriesIdsArray = array();
+
+				foreach ( $excludedCategoriesIdsArray as $catId ) {
+					$parentCat = Mage::getModel('catalog/category')->load($catId);
+					$excludedChildrenCategoriesIds = Mage::getModel('catalog/category')->getResource()->getChildren($parentCat, true);
+					if (count($excludedChildrenCategoriesIds)) {
+						$excludedChildrenCategoriesIdsArray = array_merge($excludedChildrenCategoriesIdsArray, $excludedChildrenCategoriesIds);
+					}
+				}
+				//Merge categories id from settings and its children,
+				$excludedCategoriesIdsArray = array_merge($excludedCategoriesIdsArray, $excludedChildrenCategoriesIdsArray);
+			}
+
+			if (count($excludedCategoriesIdsArray)) {
+				$allowCatIds = array_diff($allowCatIds, $excludedCategoriesIdsArray);
+			}
+		}
+
+		if (! empty ( $allowCatIds ) && $useCache) {
+			Mage::app ()->getCache ()->save ( serialize ( $allowCatIds ), $cachedKey, array ('SOLRBRIDGE_SOLRSEARCH') );
+		}
+
+		return $allowCatIds;
+	}
+
+	
 	public function prepareCategoriesData($_product, &$docData)
 	{
 		$store = $this->store;
@@ -65,6 +159,5 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 				'catIds'   => $categoryIds,
 		);
 	}
-
 
 }
