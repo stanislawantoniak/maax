@@ -889,17 +889,37 @@ function selectCarrier(elem) {
 		title.each(function(element) {
 			element.setAttribute('value', elem.title);
 		});
+		
+		form.select(".specify-params").invoke("hide");
+		form.select(".specify-zolagodhl").invoke("hide");			
+		carrierBox.invoke("hide");
+		autoTrackingBox.invoke("hide");
+		dhlHide.invoke("hide");
+		trackingIdBox.invoke("show");
+		
 		if (elem.value === 'zolagodhl') {
-			autoTrackingCheckbox[0].checked = true;
+			dhlHide.invoke("show");
+			if (autoTrackingCheckbox[0]) {
+				autoTrackingCheckbox[0].checked = true;
+			}
 			form.select(".specify-"+elem.value).invoke("show");
 			carrierBox.invoke("hide");
 			autoTrackingBox.invoke("show");
-			dhlHide.invoke("show");
 			trackingIdBox.invoke("hide");
+		} else if (autoTrackingCheckbox[0]) {
+			autoTrackingCheckbox[0].checked = false;		
 		}
-		if(autoTrack){
+		
+		if (autoTrackingCheckbox[0] && autoTrackingCheckbox[0].checked) {
 			form.select(".specify-"+elem.value).invoke("show");
+		} else {
+			dhlHide.invoke("hide");
+			carrierBox.invoke("hide");
+			trackingIdBox.invoke("show");
+			form.select(".specify-params").invoke("hide");
+			form.select(".specify-zolagodhl").invoke("hide");
 		}
+		
 		if(form.select(".specify-zolagodhl-type-select").length){
 			dhlSelectTypeChange(form.select(".specify-zolagodhl-type-select")[0]);
 		}
@@ -910,7 +930,9 @@ function selectCarrier(elem) {
 			element.setAttribute('value', '');
 			element.disabled = false;
 		});
-		autoTrackingCheckbox[0].checked = false;
+		if (autoTrackingCheckbox[0]) {
+			autoTrackingCheckbox[0].checked = false;
+		}
 		form.select(".specify-zolagodhl").invoke("hide");
 		autoTrackingBox.invoke("hide");
 		dhlHide.invoke("hide");
@@ -937,8 +959,9 @@ function changeAutoTrack(elem){
 	autoTrack = autoTrack.length ? autoTrack[0].checked : null;
 	var depends = elem.up("form").select(".specify-params.specify-zolagodhl");
 	var trackingIdBox = form.select(".tracking-id-box");
+	var autoTrackingCheckbox = form.select(".auto-tracking");
 	
-	if (autoTrack) {
+	if (autoTrackingCheckbox[0] && autoTrackingCheckbox[0].checked) {
 		depends.each(function(element) {
 			$(element).toggle();
 		});
