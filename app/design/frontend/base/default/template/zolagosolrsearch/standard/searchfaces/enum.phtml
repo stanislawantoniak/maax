@@ -5,7 +5,6 @@
 			return false;"><?php echo $this->getFacetLabel(); ?></dt>
 	<dd id="content_holder_<?php echo $key ?>">
 		<ol class="visible_filters">
-			<?php echo "TAK";?>
 			<?php foreach ($this->getItems() as $item => $count): ?>
 				<?php if ($this->getCanShowItem($item, $count)): ?>
 					<li>					
