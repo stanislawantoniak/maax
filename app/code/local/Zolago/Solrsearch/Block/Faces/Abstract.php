@@ -133,7 +133,6 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 		foreach($allSourceOptions as $option){
 			// Option not in available result colleciotn
 			if(!isset($allItems[$option['label']])){
-				Mage::log($option['label']);
 				continue;
 			}
 			
@@ -210,7 +209,7 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 			}
 		}
 		// No filter - show items if have
-		return $this->_getCanShow($this->getAllItems());
+		return $this->getCanShowItems() || $this->getCanShowHidden();
 	}
 	// Can show visible items list
 	public function getCanShowItems() {
