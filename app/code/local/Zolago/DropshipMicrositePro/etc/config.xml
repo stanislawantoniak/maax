@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<config>
+	<modules>
+		<Zolago_DropshipMicrositePro>
+			<version>0.0.1</version>
+		</Zolago_DropshipMicrositePro>
+	</modules>
+	<frontend>
+		<routers>
+            <umicrosite>
+                <args>
+                    <modules>
+                        <udmspro before="Unirgy_DropshipMicrosite">Zolago_DropshipMicrositePro</udmspro>
+                    </modules>
+                </args>
+            </umicrosite>
+			<udmspro>
+				<args>
+					<modules>
+						<udmspro before="Unirgy_DropshipMicrositePro">Zolago_DropshipMicrositePro</udmspro>
+					</modules>
+				</args>
+			</udmspro>
+		</routers>
+	</frontend>
+</config>

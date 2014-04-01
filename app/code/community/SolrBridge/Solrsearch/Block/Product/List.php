@@ -32,6 +32,7 @@ class SolrBridge_Solrsearch_Block_Product_List extends Mage_Catalog_Block_Produc
     		$queryText = Mage::helper('solrsearch')->getParam('q');
     		$this->_solrData = $this->_solrModel->query($queryText);
     	}
+		Mage::log($this->_solrData);
     }
 
 	public function _prepareLayout()

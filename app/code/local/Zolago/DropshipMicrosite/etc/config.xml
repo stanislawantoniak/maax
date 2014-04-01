@@ -10,11 +10,6 @@
             <zolagodropshipmicrosite>
                 <class>Zolago_DropshipMicrosite_Block</class>
             </zolagodropshipmicrosite>			
-			<umicrosite>
-				<rewrite>
-					<frontend_vendorProducts>Zolago_DropshipMicrosite_Block_Frontend_VendorProducts</frontend_vendorProducts>
-				</rewrite>
-			</umicrosite>
 		</blocks>
 		<helpers>
 			<zolagodropshipmicrosite>
@@ -45,4 +40,5 @@
 			</catalog_controller_category_init_after>
 		</events>
 	</global>
+
 </config>
