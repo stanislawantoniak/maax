@@ -6,6 +6,7 @@
 	<dd id="content_holder_<?php echo $key ?>">
 		<ol>
 			<?php foreach ($this->getItems() as $item => $count): ?>
+				<?php echo "Item $item, ";?>
 				<?php if ($this->getCanShowItem($item, $count)): ?>
 					<li>					
 						<a href="<?php echo $this->getItemUrl($item) ?>" class="facet-item <?php echo $this->getItemClass($item); ?>"><?php echo $item ?>&nbsp;<span>(<?php echo $count ?>)</span></a>
