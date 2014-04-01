@@ -28,5 +28,8 @@ class Zolago_Dhl_Mock_Shipment {
     public function getUdpoIncrementId() {
         return 2;
     }
+    public function getIncrementId() {
+        return 10;
+    }
 }
 ?>
