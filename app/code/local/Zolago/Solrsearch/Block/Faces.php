@@ -410,7 +410,10 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
      * @return Mage_Catalog_Model_Category
      */
     public function getCurrentCategory() {
-        return Mage::registry('current_category');
+		if(Mage::registry('current_category')){
+			return Mage::registry('current_category');
+		}
+		return  Mage::registry('vendor_current_category');
     }
 
     /**
