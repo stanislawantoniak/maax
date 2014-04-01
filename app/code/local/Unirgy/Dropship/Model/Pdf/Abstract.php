@@ -114,16 +114,20 @@ abstract class Unirgy_Dropship_Model_Pdf_Abstract extends Varien_Object
     {
         switch (strtoupper($type)) {
         case 'NORMAL':
-            $font = Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_TIMES);
+            //$font = Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_TIMES);
+$font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir() . '/lib/LinLibertineFont/LinLibertine_Re-4.4.1.ttf');
             break;
         case 'BOLD':
-            $font = Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_TIMES_BOLD);
+            //$font = Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_TIMES_BOLD);
+$font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir() . '/lib/LinLibertineFont/LinLibertine_Bd-2.8.1.ttf');
             break;
         case 'ITALIC':
-            $font = Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_TIMES_ITALIC);
+            //$font = Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_TIMES_ITALIC);
+$font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir() . '/lib/LinLibertineFont/LinLibertine_It-2.8.2.ttf');
             break;
         case 'BOLD_ITALIC':
-            $font = Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_TIMES_BOLD_ITALIC);
+            //$font = Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_TIMES_BOLD_ITALIC);
+$font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir() . '/lib/LinLibertineFont/LinLibertine_It-2.8.2.ttf');
             break;
         default:
             Mage::throwException('Invalid font type');
@@ -183,6 +187,7 @@ abstract class Unirgy_Dropship_Model_Pdf_Abstract extends Varien_Object
             default:
                 $offset = 0;
             }
+    udDump($line, '__statement_pdf');
             $page->drawText($line, $this->x-$offset, $this->y-$this->getFontSize(), 'UTF-8');
             $this->moveRel(0, $lineHeight, 'point');
         }
@@ -221,7 +226,9 @@ abstract class Unirgy_Dropship_Model_Pdf_Abstract extends Varien_Object
     
     public function getTextWidth($string)
     {
-        $drawingString = iconv('UTF-8', 'UTF-16BE//IGNORE', $string);
+        $drawingString = '"libiconv"' == ICONV_IMPL ?
+            iconv('UTF-8', 'UTF-16BE//IGNORE', $string) :
+            @iconv('UTF-8', 'UTF-16BE', $string);
         $characters = array();
         for ($i = 0; $i < strlen($drawingString); $i++) {
             $characters[] = (ord($drawingString[$i++]) << 8) | ord($drawingString[$i]);
