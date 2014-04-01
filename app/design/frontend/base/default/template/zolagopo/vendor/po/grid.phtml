@@ -874,34 +874,46 @@ function showUdpoInfo(udpoId) {
 var poItemsJson = {};
 
 function selectCarrier(elem) {
-    option = elem.options[elem.selectedIndex];
 	var form = elem.up("form");
 	var autoTrack = form.select(".auto-tracking");
-	var title = form.select(".carrier-title")[0];
+	var title = form.select(".carrier-title");
 	autoTrack = autoTrack.length ? autoTrack[0].checked : null;
 	var autoTrackingBox = form.select(".auto-tracking-box");
 	var autoTrackingCheckbox = form.select(".auto-tracking");
+	var carrierBox = form.select(".carrier-box");
+	var trackingIdBox = form.select(".tracking-id-box");
+	var dhlHide = form.select('.dhl-hide');
 	
 	form.select(".specify-params").invoke("hide");
-    if (option.value && option.value != 'custom') {
-        title.value = option.text;
-		if (option.value === 'zolagodhl') {
+    if (elem.value && elem.value != 'custom') {
+		title.each(function(element) {
+			element.setAttribute('value', elem.title);
+		});
+		if (elem.value === 'zolagodhl') {
 			autoTrackingCheckbox[0].checked = true;
-			form.select(".specify-"+option.value).invoke("show");
+			form.select(".specify-"+elem.value).invoke("show");
+			carrierBox.invoke("hide");
 			autoTrackingBox.invoke("show");
+			dhlHide.invoke("show");
+			trackingIdBox.invoke("hide");
 		}
 		if(autoTrack){
-			form.select(".specify-"+option.value).invoke("show");
+			form.select(".specify-"+elem.value).invoke("show");
 		}
 		if(form.select(".specify-zolagodhl-type-select").length){
 			dhlSelectTypeChange(form.select(".specify-zolagodhl-type-select")[0]);
 		}
-    }
-    else {
-        title.value = '';
+    } else {
+		carrierBox.invoke("show");
+		trackingIdBox.invoke("show");
+		title.each(function(element) {
+			element.setAttribute('value', '');
+			element.disabled = false;
+		});
 		autoTrackingCheckbox[0].checked = false;
-		form.select(".specify-"+option.value).invoke("hide");
+		form.select(".specify-zolagodhl").invoke("hide");
 		autoTrackingBox.invoke("hide");
+		dhlHide.invoke("hide");
     }
 }
 
@@ -924,14 +936,18 @@ function changeAutoTrack(elem){
 	var autoTrack = form.select(".auto-tracking");
 	autoTrack = autoTrack.length ? autoTrack[0].checked : null;
 	var depends = elem.up("form").select(".specify-params.specify-zolagodhl");
+	var trackingIdBox = form.select(".tracking-id-box");
+	
 	if (autoTrack) {
 		depends.each(function(element) {
 			$(element).toggle();
 		});
+		trackingIdBox.invoke("hide");
 	} else {
 		depends.each(function(element) {
 			$(element).toggle();
-		});		
+		});
+		trackingIdBox.invoke("show");
 	}
 }
 
