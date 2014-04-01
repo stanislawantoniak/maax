@@ -4,7 +4,7 @@
 			$('solr_search_<?php echo $key ?>_expander').toggleClassName('collapsed');
 			return false;"><?php echo $this->getFacetLabel(); ?></dt>
 	<dd id="content_holder_<?php echo $key ?>">
-		<ol>
+		<ol class="visible_filters">
 			<?php foreach ($this->getItems() as $item => $count): ?>
 				<?php if ($this->getCanShowItem($item, $count)): ?>
 					<li>					
