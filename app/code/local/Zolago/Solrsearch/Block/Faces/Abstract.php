@@ -36,7 +36,7 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 		if(!$this->hasData("items")){
 			$hiddenItems = array();
 			$items = $this->getAllItems();
-			
+			Mage::log($items);
 			if($this->getFilterModel()){
 				$items =  $this->filterAndSortOptions(
 						$this->getAllItems(), 
@@ -44,7 +44,7 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 						$hiddenItems
 				);
 			}
-			
+			Mage::log($items);
 			//ksort($items);
 			//ksort($hiddenItems);
 			$this->setData("items", $items);
@@ -209,7 +209,6 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 			}
 		}
 		// No filter - show items if have
-		Mage::log($this->getAllItems());
 		return $this->_getCanShow($this->getAllItems());
 	}
 	// Can show visible items list
