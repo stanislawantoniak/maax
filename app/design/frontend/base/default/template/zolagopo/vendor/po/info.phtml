@@ -793,12 +793,14 @@ $filterPoTotals = array('subtotal_excl', 'tax', 'shipping', 'total');
 							<?php endif;?>
 						<?php endforeach; ?>
                     </li>
-                    <li id="tracking_id-4-<?php echo $_id?>" class="carrier-box" style="display:none">
+					<input id="carrier_title-<?php echo $_id?>" name="carrier_title" value="<?php echo $this->escapeHtml($_name); ?>" title="<?php echo $_hlp->__('Carrier Title') ?>" type="hidden" class="input-text carrier-title" style="width:250px;" />
+                    <li id="tracking_id-4-<?php echo $_id?>" class="carrier-box" style="display: none">
                         <label for="carrier_title-<?php echo $_id?>"><?php echo $_hlp->__('Carrier Title') ?></label>
-                        <input id="carrier_title-<?php echo $_id?>" name="carrier_title" value="" title="<?php echo $_hlp->__('Carrier Title') ?>" type="text" class="input-text carrier-title" style="width:250px;" />
+                        <input id="carrier_title-<?php echo $_id?>" name="carrier_title" value="<?php echo $this->escapeHtml($_name); ?>" title="<?php echo $_hlp->__('Carrier Title') ?>" type="text" class="input-text carrier-title" style="width:250px;" />
                     </li>
+					
 					<li>
-						<label for="tracking_id-<?php echo $_id?>" class="dhl-hide" style="<?php if (!$dhlSettings) {echo "display: none";} ?>" style="<?php if (!$dhlSettings) {echo "display: none";} ?>"><?php echo $_hlp->__('DHL Waybill') ?></label>
+						<label for="tracking_id-<?php echo $_id?>" class="dhl-hide" style="<?php if (!$dhlSettings) {echo "display: none";} ?>"><?php echo $_hlp->__('DHL Waybill') ?></label>
 						<?php if ($dhlSettings): ?>
 							<label for="auto-tracking-<?php echo $_id?>" style="width:250px;" class="auto-tracking-box">
 								<input type="checkbox" class="auto-tracking" onchange="changeAutoTrack(this)" id="auto-tracking-<?php echo $_id?>" name="auto-tracking" checked="checked"/>
@@ -814,7 +816,7 @@ $filterPoTotals = array('subtotal_excl', 'tax', 'shipping', 'total');
                         <label for="tracking_id-<?php echo $_id?>"><?php echo $_hlp->__('Add Tracking ID') ?></label>
                         <input id="tracking_id-<?php echo $_id?>" name="tracking_id" value="" title="<?php echo $_hlp->__('Add Tracking ID') ?>" type="text" class="input-text tracking-id" style="width:250px;" />
 					</li>
-					<li id="specify-zolagodhl-4-<?php echo $_id?>" class="specify-params specify-zolagodhl" style="<?php if (!$dhlSettings) {echo "display: none";} ?>" style="<?php if (!$dhlSettings) {echo "display: none";} ?>">
+					<li id="specify-zolagodhl-4-<?php echo $_id?>" class="specify-params specify-zolagodhl" style="<?php if (!$dhlSettings) {echo "display: none";} ?>">
                         <label for="specify-zolagodhl-pkg-date-<?php echo $_id?>"><?php echo $_hlp->__('Shipping date') ?></label>
                         <input id="specify-zolagodhl-pkg-date-<?php echo $_id?>" name="specify_zolagodhl_shipping_date" value="<?php echo date('Y-m-d');?>" 
                             title="<?php echo $_hlp->__('Shipping date') ?>" type="text" class="input-text specify-zolagodhl-date" style="width:250px;" />
@@ -823,13 +825,13 @@ $filterPoTotals = array('subtotal_excl', 'tax', 'shipping', 'total');
                         <label for="specify-zolagodhl-pkg-type-<?php echo $_id?>">
 							<?php echo $_hlp->__('Pkg. type')?><br/>
 						</label>
-						<select id="specify-dhl-pkg-type-<?php echo $_id?>" name="specify_zolagodhl_type" class="select specify-zolagodhl-type-select" style="width:250px" onchange="dhlSelectTypeChange(this)"  style="<?php if (!$dhlSettings) {echo "display: none";} ?>" style="<?php if (!$dhlSettings) {echo "display: none";} ?>">
+						<select id="specify-dhl-pkg-type-<?php echo $_id?>" name="specify_zolagodhl_type" class="select specify-zolagodhl-type-select" style="width:250px" onchange="dhlSelectTypeChange(this)" style="<?php if (!$dhlSettings) {echo "display: none";} ?>">
                             <?php foreach(Mage::getSingleton('zolagodhl/system_source_pkgtype')->toOptionHash() as $value=>$label):?>
 							<option value="<?php echo $this->escapeHtml($value);?>"><?php echo $this->escapeHtml($label);?></option>
 							<?php endforeach;?>
                         </select>
 					</li>
-					<li id="specify-zolagodhl-1-<?php echo $_id?>" class="specify-params specify-zolagodhl specify-zolagodhl-type"  style="<?php if (!$dhlSettings) {echo "display: none";} ?>" style="<?php if (!$dhlSettings) {echo "display: none";} ?>">
+					<li id="specify-zolagodhl-1-<?php echo $_id?>" class="specify-params specify-zolagodhl specify-zolagodhl-type" style="<?php if (!$dhlSettings) {echo "display: none";} ?>">
                         <label>
 							<?php echo $_hlp->__('Pkg. Dimensions')?><br/>
 						</label>
@@ -840,7 +842,7 @@ $filterPoTotals = array('subtotal_excl', 'tax', 'shipping', 'total');
 						&nbsp;<?php echo Mage::helper("zolagodropship")->__("L (cm):");?>
 						<input name="specify_zolagodhl_length" value="<?php echo (float)$_vendor->getDefaultPkgLength()?>" title="<?php echo $_hlp->__('Length') ?>" type="text" class="input-text" style="width:30px;" />
 					</li>
-					<li id="specify-zolagodhl-3-<?php echo $_id?>" class="specify-params specify-zolagodhl specify-zolagodhl-type"  style="<?php if (!$dhlSettings) {echo "display: none";} ?>" style="<?php if (!$dhlSettings) {echo "display: none";} ?>">
+					<li id="specify-zolagodhl-3-<?php echo $_id?>" class="specify-params specify-zolagodhl specify-zolagodhl-type" style="<?php if (!$dhlSettings) {echo "display: none";} ?>">
                         <label for="specify-zolagodhl-custom-dim-<?php echo $_id?>">
 							<?php echo $_hlp->__('Custom dim.')?><br/>
 						</label>
