@@ -201,18 +201,15 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 		if($this->getFilterModel()){
 			// Has visible items
 			if($this->getCanShowItems()){
-				Mage::log($this->getFacetKey() . " 1");
 				return true;
 			}
 			// Have some hiddne items
 			if($this->getFilterModel()->getCanShowMore()){
-				Mage::log($this->getFacetKey() . " 2");
 				return $this->getCanShowHidden();
 			}
 		}
 		// No filter - show items if have
-		
-		Mage::log($this->getFacetKey() . " 3");
+		Mage::log($this->getAllItems());
 		return $this->_getCanShow($this->getAllItems());
 	}
 	// Can show visible items list
