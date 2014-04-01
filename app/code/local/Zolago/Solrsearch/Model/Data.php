@@ -25,7 +25,9 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 		    $category = $categoryModel->load($catid);
 		    $parents = $category->getParentCategories();
 		    foreach ($parents as $parent) {
-    		    $tmp[] = $parent->getId();
+		        if ($parent->getIsAnchor()) {
+        		    $tmp[] = $parent->getId();
+                }
             }
 		}
 		$cats = array_unique(array_merge($cats,$tmp));
