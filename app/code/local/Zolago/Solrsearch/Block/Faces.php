@@ -320,6 +320,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 
             // In category mode
             if($this->getMode()==self::MODE_CATEGORY) {
+				
                 $filter = $this->getFilterByAttribute($attrCode);
 
                 // Skip attribs with no custom filter
