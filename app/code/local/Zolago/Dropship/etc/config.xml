@@ -149,6 +149,14 @@
 						<only_admin>1</only_admin>
                         <position>600</position>
                     </root_category>
+					<!-- design -->
+					<custom_design>
+                        <label>Custom design</label>
+						<frontend_model>zolagodropship/adminhtml_vendor_helper_form_design</frontend_model>
+                        <fieldset>microsite</fieldset>
+						<only_admin>1</only_admin>
+                        <position>700</position>
+                    </custom_design>
 				</fields>
 			</vendor>
 		</udropship>

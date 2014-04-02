@@ -40,5 +40,16 @@
 			</catalog_controller_category_init_after>
 		</events>
 	</global>
-
+	<frontend>
+		<events>
+			<controller_action_layout_load_before>
+				<observers>
+					<change_vendor_design>
+						<class>zolagodropshipmicrosite/observer</class>
+						<method>changeVendorDesign</method>
+					</change_vendor_design>
+				</observers>
+			</controller_action_layout_load_before>
+		</events>
+	</frontend>
 </config>
