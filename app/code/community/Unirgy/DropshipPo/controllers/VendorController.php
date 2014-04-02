@@ -264,6 +264,9 @@ class Unirgy_DropshipPo_VendorController extends Unirgy_Dropship_VendorControlle
                 }
                 if ($poStatus==$poStatusShipped || $poStatus==$poStatusDelivered) {
                     foreach ($udpo->getShipmentsCollection() as $_s) {
+                        if ($_s->getUdropshipStatus()==Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED) {
+                            continue;
+                        }
                         $hlp->completeShipment($_s, true, $poStatus==$poStatusDelivered);
                     }
                     if (isset($_s)) {
@@ -374,6 +377,9 @@ class Unirgy_DropshipPo_VendorController extends Unirgy_Dropship_VendorControlle
                 }
                 if ($poStatus==$poStatusShipped || $poStatus==$poStatusDelivered) {
                     foreach ($udpo->getShipmentsCollection() as $_s) {
+                        if ($_s->getUdropshipStatus()==Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED) {
+                            continue;
+                        }
                         $hlp->completeShipment($_s, true, $poStatus==$poStatusDelivered);
                     }
                     if (isset($_s)) {
@@ -579,6 +585,9 @@ class Unirgy_DropshipPo_VendorController extends Unirgy_Dropship_VendorControlle
                     }
                     if ($poStatus==$poStatusShipped || $poStatus==$poStatusDelivered) {
                         foreach ($udpo->getShipmentsCollection() as $_s) {
+                            if ($_s->getUdropshipStatus()==Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED) {
+                                continue;
+                            }
                             $hlp->completeShipment($_s, true, $poStatus==$poStatusDelivered);
                         }
                         if (isset($_s)) {
@@ -721,6 +730,14 @@ class Unirgy_DropshipPo_VendorController extends Unirgy_Dropship_VendorControlle
                         $_shipment->setDeleteOnFailedLabelRequestFlag(true);
                         $_shipment->setCreatedByVendorFlag(true);
                         $shipments[] = $_shipment;
+                    }
+                } else {
+                    foreach ($udpo->getShipmentsCollection() as $_s) {
+                        if ($_s->getUdropshipStatus()==Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED) {
+                            continue;
+                        }
+                        $shipments[] = $_s;
+                        break;
                     }
                 }
                 $udpoHlp->createReturnAllShipments=false;
