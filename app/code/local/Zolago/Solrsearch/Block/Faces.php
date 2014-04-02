@@ -312,6 +312,8 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 				case "category_path":
 				case "category_id":
 				case "product_flag":
+				case "is_new":
+				case "is_bestseller":
 				case "product_rating":
 					continue 2;
 				break;
