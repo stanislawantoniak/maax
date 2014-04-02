@@ -26,4 +26,21 @@ class Zolago_DropshipMicrosite_Model_Observer
 			}
 		}
 	}
+	
+	public function changeVendorDesign($observer) {
+		if ($this->_vendor && $this->_vendor->getId()) {
+			// Update to new design
+			Mage::helper('udropship')->loadCustomData($this->_vendor);
+			$customDesign = $this->_vendor->getCustomDesign();
+			$storeId = Mage::app()->getStore()->getId();
+			if($customDesign && is_array($customDesign) && isset($customDesign[$storeId])){
+				$customTheme = explode("/",$customDesign[$storeId]);
+				if(count($customTheme)==2 && isset($customTheme[0]) && isset($customTheme[1])){
+					Mage::getDesign()->setPackageName($customTheme[0]);
+					Mage::getDesign()->setTheme($customTheme[1]);
+				}
+				
+			}
+		}
+	}
 }
