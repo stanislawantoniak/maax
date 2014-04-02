@@ -18,7 +18,7 @@ class Zolago_DropshipMicrosite_Model_Observer
 	
 	public function validateVendorCategory($observer)
 	{
-		if ($this->_vendor && $this->_vendor->getId() && $this->_vendorRootCategory) {
+		if ($this->_vendor && $this->_vendor->getId() && $this->_vendorRootCategory && $this->_vendorRootCategory->getId()) {
 			$category = $observer->getEvent()->getCategory();
 			if (strpos($category->getPath(), $this->_vendorRootCategory->getPath()) !== 0) {
 				$redirectUrl = Mage::helper('zolagodropshipmicrosite')->getVendorRootUrl();
