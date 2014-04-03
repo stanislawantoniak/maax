@@ -35,7 +35,8 @@ class Zolago_Eav_Model_Observer
 			'label'     => Mage::helper('zolagoeav')->__('Grid Permission'),
 			'title'     => Mage::helper('zolagoeav')->__('Grid Permission'),
 			'values'    => Mage::getModel('zolagoeav/entity_attribute_source_gridPermission')->getAllOptions(false),
-			'value'		=> (!$attribute->getId() ? Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::EDITION : '')
+			'value'		=> (!$attribute->getId() ? Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::EDITION : ''),
+			'class'		=> 'validate-grid-permission'
 		));		
 	}
 	
