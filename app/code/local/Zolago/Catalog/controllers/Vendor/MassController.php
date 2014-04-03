@@ -11,7 +11,25 @@ class Zolago_Catalog_Vendor_MassController
 		$this->_renderPage(array('default', 'formkey', 'adminhtml_head'), 'zolagocatalog');
 	}
 	
-	
+	public function saveAjaxAction() {
+		$response = array();
+		if($this->getRequest()->isPost()){
+			// Do save
+			$response = array("status"=>1);
+		}else{
+			$response = array(
+				"status"=>0, 
+				"content"=>Mage::helper("zolagocatalog")->__("Wrogn HTTP method")
+			);
+		}
+		
+		
+		$this->getResponse()->
+				setBody(Zend_Json::encode($response))->
+				setHeader('content-type', 'application/json');
+	}
+
+
 	public function gridAction(){
 		$design = Mage::getDesign();
 		$design->setArea("adminhtml");
