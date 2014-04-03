@@ -93,8 +93,16 @@
 			if(!form.validator.validate()){
 				return false;
 			}
+			var data = $(form.form).serialize(true);
+			if(!Object.keys(data).length){
+				alert("<?php echo Mage::helper("zolagocatalog")->__("No attribute selected");?>");
+				return;
+			}
+			data.store = $F("store_switcher");
+			data.attribute_set = $F("attribute_set_switcher");
+	
 			new Ajax.Request("<?php echo $this->getSaveUrl();?>", {
-				parameters: $(form.form).serialize(true),
+				parameters: data,
 				method: "post",
 				onSuccess: function(transport){
 					if(transport.responseJSON){
@@ -102,11 +110,12 @@
 							alert(transport.responseJSON.content);
 							return;
 						}
+						//console.log(transport.responseJSON.content);
 						gridObj.reload();
 					}
 				},
 				onError: function(transport){
-					alert("Other error - contact administrator");
+					alert("<?php echo Mage::helper("zolagocatalog")->__("Other error - contact administrator");?>");
 				}
 			});
 		}
