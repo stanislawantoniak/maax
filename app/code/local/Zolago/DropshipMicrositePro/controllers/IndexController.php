@@ -15,9 +15,11 @@ class Zolago_DropshipMicrositePro_IndexController
 		
 			$category = Mage::getModel("catalog/category")->load($rootCategoryId);
 			
-			if($category->getId()){
-				Mage::register('vendor_current_category', $category);
+			if(!$category->getId()){
+				$category->load(Mage::app()->getStore()->getRootCategoryId());
 			}
+			// Set vendor-context current category
+			Mage::register('vendor_current_category', $category);
             $this->_forward('landingPage');
             return;
         }
