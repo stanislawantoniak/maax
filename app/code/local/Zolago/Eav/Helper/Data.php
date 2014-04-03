@@ -27,4 +27,22 @@ class Zolago_Eav_Helper_Data extends Mage_Core_Helper_Abstract
 		}
 		return $editable;
 	}	
+	
+	public function isAttributeEditableNormal(Mage_Eav_Model_Entity_Attribute $attribute)
+	{
+		$editable = false;
+		if ($attribute->getGridPermission() == Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::EDITION) {
+			$editable = true;
+		}
+		return $editable;
+	}	
+	
+	public function isAttributeEditableInline(Mage_Eav_Model_Entity_Attribute $attribute)
+	{
+		$editable = false;
+		if ($attribute->getGridPermission() == Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::INLINE_EDITION) {
+			$editable = true;
+		}
+		return $editable;
+	}	
 }

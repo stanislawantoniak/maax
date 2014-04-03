@@ -206,22 +206,32 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 	/**
 	 * @return Mage_Catalog_Model_Resource_Product_Attribute_Collection
 	 */
+	public function getGridVisibleAttributes(){
+		return $this->_getGridVisibleAttributes();
+	}
+
+
+	/**
+	 * @return Mage_Catalog_Model_Resource_Product_Attribute_Collection
+	 */
 	protected function _getGridVisibleAttributes() {
-		$collection = Mage::getResourceModel("catalog/product_attribute_collection");
-		/* @var $collection Mage_Catalog_Model_Resource_Product_Attribute_Collection */
-		
-		Mage::getResourceSingleton('zolagocatalog/vendor_mass')->addAttributeSetFilterAndSort(
-				$collection,
-				$this->getAttributeSet()
-		);
-		
-		$collection->addFieldToFilter("grid_permission", array("in"=>array(
-			Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::DISPLAY,
-			Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::EDITION,
-			Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::INLINE_EDITION,
-		)));
-		
-		return $collection;
+		if(!$this->getData("grid_visible_attributes")){
+			$collection = Mage::getResourceModel("catalog/product_attribute_collection");
+			/* @var $collection Mage_Catalog_Model_Resource_Product_Attribute_Collection */
+
+			Mage::getResourceSingleton('zolagocatalog/vendor_mass')->addAttributeSetFilterAndSort(
+					$collection,
+					$this->getAttributeSet()
+			);
+
+			$collection->addFieldToFilter("grid_permission", array("in"=>array(
+				Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::DISPLAY,
+				Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::EDITION,
+				Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::INLINE_EDITION,
+			)));
+			$this->setData("grid_visible_attributes", $collection);
+		}
+		return $this->getData("grid_visible_attributes");
 	}
 
 	protected function _prepareMassaction()
