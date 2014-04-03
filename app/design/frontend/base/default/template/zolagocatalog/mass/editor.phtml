@@ -153,6 +153,10 @@
 			$(fieldId).up(".element-wrapper").select(".additional_field").each(function(el){
 				$(el).disabled = mode ? "" : "disabled";
 			});
+			// Datepicker
+			$(fieldId).up(".element-wrapper").select("img.v-middle").each(function(el){
+				mode ? $(el).show() : $(el).hide();
+			});
 		}
 		
 		
