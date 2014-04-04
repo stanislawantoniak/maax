@@ -126,6 +126,9 @@ class Zolago_Adminhtml_Block_Catalog_Category_Filters extends Mage_Adminhtml_Blo
 	
 	public function getFilterJsonData($filter) {
 		$attribute = $filter->getAttribute();
+		if (!$attribute) {
+		    return Mage::helper('core')->jsonEncode(null);
+		}
 		$attributeData = array_merge(
 				$filter->getData(),
 				array(
