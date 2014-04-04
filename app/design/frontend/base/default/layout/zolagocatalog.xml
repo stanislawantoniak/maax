@@ -194,7 +194,7 @@
             
 			<block name="mass" type="zolagocatalog/vendor_mass" template="zolagocatalog/mass.phtml">
 				<block type="zolagocatalog/vendor_mass_attributesetswitcher" name="attribute_set_switcher" as="attribute_set_switcher" template="zolagocatalog/mass/attributesetswitcher.phtml"/>
-				<block type="zolagocatalog/vendor_mass_staticFilter" name="static_filter" as="static_filter" template="zolagocatalog/mass/staticfilter.phtml"/>
+				<block type="zolagocatalog/vendor_mass_staticfilter" name="static_filter" as="static_filter" template="zolagocatalog/mass/staticfilter.phtml"/>
 				<block type="zolagocatalog/vendor_mass_editor" name="editor" as="editor" template="zolagocatalog/mass/editor.phtml"/>
 			</block>
 		</reference>

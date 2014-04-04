@@ -24,8 +24,8 @@ $activeFilters = $this->getCurrentStaticFilterValues();
 						var selectedFilterOption = $$('#' + element.id + ' option').find(function(ele){
 							return !!ele.selected;
 						});
-					
-						location += "staticFilterId-"+activeFilter+"/" + $F(element) + "/" + "staticFilterValue-"+activeFilter+"/" + selectedFilterOption.text + "/";
+
+						location += "staticFilterId-"+activeFilter+"/" + $F(element) + "/" + "staticFilterValue-"+activeFilter+"/" + encodeURIComponent(selectedFilterOption.text) + "/";
 						activeFilter++;
 					} else {
 						filtersCount--;
