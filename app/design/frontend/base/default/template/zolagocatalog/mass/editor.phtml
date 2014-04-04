@@ -50,6 +50,7 @@
 						<td>
 							<?php if($_field = $this->getField($_column)):?>
 								<div class="filter-field-100 element-wrapper" style="display: none;" id="<?php echo $_field->getId() . "_wrapper";?>">
+									<?php echo $this->getEmptyValueField($_field);?>
 									<?php echo $_field->toHtml();?>
 									<div>
 									<?php foreach($this->getAdditionalFields($_column) as $_field):?>
@@ -90,17 +91,29 @@
 		}
 	
 		var submitHandler = function(){
+		
+			var productIds = gridObj.massaction.getCheckedValues();
+			
+			if(productIds==""){	
+				alert("<?php echo Mage::helper("zolagocatalog")->__("Select some products");?>");
+				return;
+			}
+			
 			if(!form.validator.validate()){
 				return false;
 			}
+			
 			var data = $(form.form).serialize(true);
+			
 			if(!Object.keys(data).length){
 				alert("<?php echo Mage::helper("zolagocatalog")->__("No attribute selected");?>");
 				return;
 			}
+			
 			data.store = $F("store_switcher");
 			data.attribute_set = $F("attribute_set_switcher");
-	
+			data.product_ids = productIds;
+			
 			new Ajax.Request("<?php echo $this->getSaveUrl();?>", {
 				parameters: data,
 				method: "post",
@@ -160,6 +173,9 @@
 		
 		var disableAdditionalFields = function(fieldId, mode){
 			$(fieldId).up(".element-wrapper").select(".additional_field").each(function(el){
+				$(el).disabled = mode ? "" : "disabled";
+			});
+			$(fieldId).up(".element-wrapper").select(".empty_field").each(function(el){
 				$(el).disabled = mode ? "" : "disabled";
 			});
 			// Datepicker
