@@ -2,7 +2,9 @@
 	.grid.custom-grid tbody td{
 		background: #e7efef;
 	}
-	
+	.grid.custom-grid table tfoot tr td{
+		border-top: inherit;
+	}
 	.grid.custom-grid table{
 		padding-bottom: 0;
 	}
@@ -17,17 +19,11 @@
 		font-size: .9em;
 	}
 </style>
-<div class="grid custom-grid" id="<?php echo $this->getGrid()->getId();?>_editor">
-	<form id="<?php echo $this->getGrid()->getId();?>_editor_form">
+<div class="grid custom-grid" id="<?php echo $this->buildFieldId("editor");?>">
 	<?php if($this->getGrid()): ?>
-	<table cellpadding="0" cellspacing="0" style="width:100%;" class="data grid">
-		<colgroup>
-			<?php foreach ($this->getGrid()->getColumns() as $_column): ?>
-				<col <?php echo $_column->getHtmlProperty() ?> />
-			<?php endforeach;?>
-		</colgroup>
-		<tbody>
-			<tr class="filter">
+	<table style="display: none;">
+		<tfoot id="<?php echo $this->buildFieldId("foot");?>">
+			<tr id="<?php echo $this->getGrid()->getId();?>_change">
 				<?php $i=0;?>
 				<?php foreach ($this->getGrid()->getColumns() as $_column): ?>
 					<?php if($i++==0):?>
@@ -46,7 +42,7 @@
 					<?php endif;?>
 				<?php endforeach;?>
 			</tr>
-			<tr class="filter" style="display: none;" id="<?php echo $this->getGrid()->getId();?>_fields">
+			<tr class="filter" style="display:none;" id="<?php echo $this->getGrid()->getId();?>_fields">
 				<?php $i=0;?>
 				<?php foreach ($this->getGrid()->getColumns() as $_column): ?>
 					<?php if($i++==0):?>
@@ -71,31 +67,49 @@
 				</td>
 				<?php endforeach;?>
 			</tr>
-		</tbody>
-		<tfoot>
-			<tr>
+			<tr style="display:none;"  id="<?php echo $this->getGrid()->getId();?>_confirm">
 				<td  class="totals a-right" colspan="<?php echo $this->getGrid()->getColumnCount();?>">
 					<?php echo $this->getSubmitButtonHtml(); ?>
 				</td>
 			<tr>
 		</tfoot>
 	</table>
-	</form>
 	<?php endif;?>
 </div>
 <script type="text/javascript">
 	(function(){
 	
 		var gridObj = <?php echo $this->getGrid()->getId();?>JsObject;
-		var form  = new VarienForm("<?php echo $this->buildFieldId("editor_form");?>");	
+		var gridDom = $(gridObj.containerId); 
+		var form ;
+		var foot = $("<?php echo $this->buildFieldId("foot");?>");
 		
-		var assignEditorLayout = function(){
-			var editor = $("<?php echo $this->getGrid()->getId();?>_editor").select("tbody tr:first-child td");
-			var grid = $("<?php echo $this->getGrid()->getId();?>").select(".grid thead tr:first-child th");
-			grid.each(function(el,i){
-				editor[i].style.width = (el.clientWidth - 7) + "px";
+		var oldInitGrid = gridObj.initGrid;
+		
+		var appendContent = function(grid, content){
+			var table = $(grid.containerId).select("table.data")[0];
+			if(!table.select("tfoot").length){
+				table.insert({bottom: content});
+			}
+			$("<?php echo $this->buildFieldId("submit"); ?>").observe("click", submitHandler);
+			$("<?php echo $this->buildFieldId("change");?>").select(".changer").each(function(el){
+				el.observe("change", changerHandler)
 			});
+			
+			// Prepare form
+			var formEl = new Element("form", {id:"<?php echo $this->buildFieldId("editor_form");?>"});
+			gridDom.select(".data")[0].wrap(formEl);
+			form = new VarienForm("<?php echo $this->buildFieldId("editor_form");?>");	
+			gridDom.select(".grid")[0].className = "grid custom-grid";
 		}
+		
+		
+		gridObj.initGrid = function(){
+			oldInitGrid.apply(gridObj, arguments);
+			appendContent(gridObj, foot);
+		}
+		
+		
 	
 		var submitHandler = function(){
 		
@@ -110,16 +124,24 @@
 				return false;
 			}
 			
-			var data = $(form.form).serialize(true);
+			var tmpData = $(form.form).serialize(true);
+			var key;
+			var data = {};
 			
+			for(key in tmpData){
+				if(/^attributes/.test(key) && tmpData.hasOwnProperty(key)){
+					data[key] = tmpData[key];
+				}
+			}
 			if(!Object.keys(data).length){
 				alert("<?php echo Mage::helper("zolagocatalog")->__("No attribute selected");?>");
 				return;
 			}
 			
 			data.store = $F("store_switcher");
-			data.attribute_set = $F("attribute_set_switcher");
-			data.product_ids = productIds;
+			data.attribute_set =  $F("attribute_set_switcher");
+			data.product_ids=  productIds;
+	
 			
 			new Ajax.Request("<?php echo $this->getSaveUrl();?>", {
 				parameters: data,
@@ -148,10 +170,10 @@
 			}
 			
 		}
-		Event.observe(window, "resize", assignEditorLayout);
+		//Event.observe(window, "resize", assignEditorLayout);
 		
 		Ajax.Responders.register({
-			onComplete: assignEditorLayout
+			//onComplete: assignEditorLayout
 		});
 		
 		
@@ -170,12 +192,14 @@
 				
 			if(currentEditCount>0){
 				$("<?php echo $this->buildFieldId("fields");?>").show();
+				$("<?php echo $this->buildFieldId("confirm");?>").show();
 			}else{
 				$("<?php echo $this->buildFieldId("fields");?>").hide();
+				$("<?php echo $this->buildFieldId("confirm");?>").hide();
 			}
 			
 			disableAdditionalFields(fieldId, mode);
-			assignEditorLayout();
+			//assignEditorLayout();
 		}
 		
 		var disableAdditionalFields = function(fieldId, mode){
@@ -191,11 +215,7 @@
 			});
 		}
 		
-		
-		assignEditorLayout();
-		$("<?php echo $this->buildFieldId("submit"); ?>").observe("click", submitHandler);
-		$("<?php echo $this->buildFieldId("editor_form");?>").select(".changer").each(function(el){
-			el.observe("change", changerHandler)
-		})
+		//assignEditorLayout();
+		appendContent(gridObj, foot);
 	})();
 </script>
