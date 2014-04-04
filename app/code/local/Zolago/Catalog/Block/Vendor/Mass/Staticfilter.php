@@ -1,5 +1,5 @@
 <?php
-class Zolago_Catalog_Block_Vendor_Mass_StaticFilter extends Mage_Core_Block_Template
+class Zolago_Catalog_Block_Vendor_Mass_Staticfilter extends Mage_Core_Block_Template
 {
 	public function getStaticFilters() {
 		$staticFiltersCollection = array();

@@ -8,10 +8,10 @@ $activeFilters = $this->getCurrentStaticFilterValues();
 		<?php if ($singleFilter): ?>
 			<?php $firstFilter = current($singleFilter); ?>
 			<label for="staticFilter"><?php echo $firstFilter['frontend_label']; ?>:</label>
-			<select name="staticFilter" id="staticFilter-<?php echo $firstFilter['attribute_id']; ?>" onChange="changeStaticFilter(this);" class="staticFilter" style="min-width: 125px;">
-				<option value="" ><?php echo Mage::helper("zolagocatalog")->__("--- Select ---"); ?></option>
+			<select name="staticFilter" id="staticFilter-<?php echo $firstFilter['attribute_id']; ?>" onChange="changeStaticFilter(this);" class="staticFilter" style="width: 155px;">
+				<option value="" style="width: 130px;"><?php echo Mage::helper("zolagocatalog")->__("--- Select ---"); ?></option>
 				<?php foreach($singleFilter as $value): ?>
-					<option value="<?php echo $value['attribute_id']; ?>" <?php if($activeFilters && array_key_exists($value['attribute_id'], $activeFilters) && $activeFilters[$value['attribute_id']]==$value['value']):?> selected="selected"<?php endif;?>><?php echo $this->escapeHtml($value['value']);?></option>
+				<option value="<?php echo $value['attribute_id']; ?>" style="width: 130px;" <?php if($activeFilters && array_key_exists($value['attribute_id'], $activeFilters) && $activeFilters[$value['attribute_id']]==$value['value']):?> selected="selected"<?php endif;?> filterValue="<?php echo $this->escapeHtml($value['value']); ?>"><?php echo substr($this->escapeHtml($value['value']), 0, 20);?></option>
 				<?php endforeach; ?>
 			</select>
 			<script type="text/javascript">
@@ -24,8 +24,9 @@ $activeFilters = $this->getCurrentStaticFilterValues();
 						var selectedFilterOption = $$('#' + element.id + ' option').find(function(ele){
 							return !!ele.selected;
 						});
-					
-						location += "staticFilterId-"+activeFilter+"/" + $F(element) + "/" + "staticFilterValue-"+activeFilter+"/" + selectedFilterOption.text + "/";
+						
+						var filterValue = selectedFilterOption.getAttribute('filtervalue');
+						location += "staticFilterId-"+activeFilter+"/" + $F(element) + "/" + "staticFilterValue-"+activeFilter+"/" + encodeURIComponent(filterValue) + "/";
 						activeFilter++;
 					} else {
 						filtersCount--;
