@@ -50,6 +50,7 @@
 						<td>
 							<?php if($_field = $this->getField($_column)):?>
 								<div class="filter-field-100 element-wrapper" style="display: none;" id="<?php echo $_field->getId() . "_wrapper";?>">
+									<?php echo $this->getEmptyValueField($_field);?>
 									<?php echo $_field->toHtml();?>
 									<div>
 									<?php foreach($this->getAdditionalFields($_column) as $_field):?>
@@ -90,11 +91,31 @@
 		}
 	
 		var submitHandler = function(){
+		
+			var productIds = gridObj.massaction.getCheckedValues();
+			
+			if(productIds==""){	
+				alert("<?php echo Mage::helper("zolagocatalog")->__("Select some products");?>");
+				return;
+			}
+			
 			if(!form.validator.validate()){
 				return false;
 			}
+			
+			var data = $(form.form).serialize(true);
+			
+			if(!Object.keys(data).length){
+				alert("<?php echo Mage::helper("zolagocatalog")->__("No attribute selected");?>");
+				return;
+			}
+			
+			data.store = $F("store_switcher");
+			data.attribute_set = $F("attribute_set_switcher");
+			data.product_ids = productIds;
+			
 			new Ajax.Request("<?php echo $this->getSaveUrl();?>", {
-				parameters: $(form.form).serialize(true),
+				parameters: data,
 				method: "post",
 				onSuccess: function(transport){
 					if(transport.responseJSON){
@@ -102,11 +123,12 @@
 							alert(transport.responseJSON.content);
 							return;
 						}
+						//console.log(transport.responseJSON.content);
 						gridObj.reload();
 					}
 				},
 				onError: function(transport){
-					alert("Other error - contact administrator");
+					alert("<?php echo Mage::helper("zolagocatalog")->__("Other error - contact administrator");?>");
 				}
 			});
 		}
@@ -152,6 +174,13 @@
 		var disableAdditionalFields = function(fieldId, mode){
 			$(fieldId).up(".element-wrapper").select(".additional_field").each(function(el){
 				$(el).disabled = mode ? "" : "disabled";
+			});
+			$(fieldId).up(".element-wrapper").select(".empty_field").each(function(el){
+				$(el).disabled = mode ? "" : "disabled";
+			});
+			// Datepicker
+			$(fieldId).up(".element-wrapper").select("img.v-middle").each(function(el){
+				mode ? $(el).show() : $(el).hide();
 			});
 		}
 		

@@ -102,6 +102,11 @@ class Zolago_Catalog_Block_Vendor_Mass_Editor extends Mage_Core_Block_Template {
 				$extend['class'] = "input-text validate-number";
 			break;
 		}
+		
+		// Required?
+		if($attribute->getIsRequired()){
+			$extend['required'] = true;
+		}
 		return array_merge($config, $extend);
 	}
 	
@@ -139,6 +144,12 @@ class Zolago_Catalog_Block_Vendor_Mass_Editor extends Mage_Core_Block_Template {
 		return in_array($type, $this->_availableTypes);
 	}
 	
+	/**
+	 * Unused - add smoe extra fields
+	 * @todo implement
+	 * @param type $column
+	 * @return array
+	 */
 	public function getAdditionalFields($column) {
 		$attribute = $this->_getAttributeFromColumn($column);
 		if(!$this->_validateAttribute($attribute)){
@@ -147,6 +158,7 @@ class Zolago_Catalog_Block_Vendor_Mass_Editor extends Mage_Core_Block_Template {
 		$code = $attribute->getAttributeCode();
 		switch ($attribute->getFrontendInput()) {
 			case "multiselect":
+				/*
 				$field = $this->getForm()->addField($code."_mode", "select", array(
 					"name"		=> "mode"."[".$code."]",
 					"values"	=> $this->_getMultiselectModeValues(),
@@ -154,10 +166,8 @@ class Zolago_Catalog_Block_Vendor_Mass_Editor extends Mage_Core_Block_Template {
 					"class"		=> "additional_field"
 				));
 				return array($field);
+				*/
 			break;
-
-			default:
-				break;
 		}
 		return array();
 	}
@@ -187,5 +197,27 @@ class Zolago_Catalog_Block_Vendor_Mass_Editor extends Mage_Core_Block_Template {
 	 */
 	protected function _getAttributeFromColumn($column){
 		return $column->getAttribute();
+	}
+	
+	/**
+	 * Fill some fileds with empty values (like multiple select)
+	 * @param Varien_Data_Form_Element_Abstract $field
+	 * @return string
+	 */
+	public function getEmptyValueField($field) {
+		if($field->getExtType()=="multiple"){
+			$empty = $this->getForm()->addField(
+				$this->buildFieldId($field->getId(), "empty"), 
+				"hidden", 
+				array(
+					"name"		=> preg_replace("/\[\]$/", "", $field->getName()),
+					"value"		=> "",
+					"disabled"  => "dsiabled",
+					"class"		=> "empty_field"
+				)
+			);
+			return $empty->toHTml();
+		}
+		return '';
 	}
 }

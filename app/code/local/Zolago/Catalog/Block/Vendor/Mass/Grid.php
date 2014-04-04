@@ -47,6 +47,8 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
         $collection = Mage::getResourceModel('catalog/product_collection');
         /* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
 		
+		$collection->setFlag("skip_price_data", true);
+		
 		// Set store id
 		$store = $this->getStore();
 		$collection->setStoreId($store->getId());
