@@ -150,4 +150,72 @@ class Zolago_Catalog_Model_Resource_Vendor_Mass
 		
 		return  $this->getReadConnection()->fetchPairs($select);
 	}
+
+	/**
+	 * Get Static Filters for Vendor
+	 * 
+	 * @param Unirgy_Dropship_Model_Vendor $vendor
+	 * 
+	 * @return array
+	 */	
+	public function getStaticFiltersForVendor(Unirgy_Dropship_Model_Vendor $vendor, $attributeSetId)
+	{
+		$select = $this->getReadConnection()->select();
+		$setup = new Mage_Core_Model_Resource_Setup('core_setup');
+		
+		$select->from(
+				array("index"=>$this->getMainTable()), array()
+		);
+		$select->join(
+				array("product"=>$this->getTable('catalog/product')),
+				"product.entity_id=index.product_id",
+				array()
+		);
+		$select->join(
+				array("product_attribute"=>$setup->getTable('catalog_product_entity_varchar')),
+				"product_attribute.entity_id=product.entity_id",
+				array("attribute_id","value")				
+		);
+		
+		$select->join(
+				array("attribute"=>$setup->getTable('catalog/eav_attribute')),
+				"attribute.attribute_id=product_attribute.attribute_id",
+				array()
+		);
+		
+		$select->join(
+				array("attribute_link"=>$setup->getTable('eav_entity_attribute')),
+				"attribute_link.attribute_id=attribute.attribute_id",
+				array()
+		);		
+		
+		$select->join(
+				array("attribute_eav"=>$setup->getTable('eav_attribute')),
+				"attribute_eav.attribute_id=attribute.attribute_id",
+				array("frontend_label")
+		);
+		
+		$select->join(
+				array("attribute_set"=>$this->getTable('eav/attribute_set')),
+				"attribute_set.attribute_set_id=product.attribute_set_id",
+				array()
+		);		
+		
+		$select->where("index.vendor_id=?", $vendor->getId());
+		$select->where("attribute.grid_permission=?", Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::USE_IN_FILTER);
+		if ($attributeSetId) {
+			$select->where("attribute_link.attribute_set_id=?", $attributeSetId);
+			$select->where("attribute_set.attribute_set_id=?", $attributeSetId);
+		}
+		
+		$select->distinct(true);
+		$select->order(array("attribute_link.sort_order ASC"));
+		$select->group(array(
+			"attribute_id",
+			"value"
+			)
+		);
+
+		return $this->getReadConnection()->fetchAll($select);
+	}
 }

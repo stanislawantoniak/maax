@@ -13,6 +13,9 @@
 		<?php echo $this->getChildHtml("attribute_set_switcher");?>
 	</div>
 <?php endif;?>
+	<div>
+		<?php echo $this->getChildHtml("static_filter");?>
+	</div>
 
 <?php if($this->getCurrentAttributeSetId()):?>
 	<script type="text/javascript">

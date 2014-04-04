@@ -74,6 +74,15 @@
 				</zolagocatalog>
 			</updates>
 		</layout>
+		<translate>
+			<modules>
+				<Zolago_Catalog>
+					<files>
+						<default>Zolago_Catalog.csv</default>
+					</files>
+				</Zolago_Catalog>
+			</modules>
+		</translate>		
     </frontend>
     <adminhtml>
 		<translate>
@@ -84,6 +93,6 @@
 					</files>
 				</Zolago_Catalog>
 			</modules>
-		</translate>		
+		</translate>
     </adminhtml>	
 </config>

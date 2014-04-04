@@ -73,6 +73,21 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 			$collection->addAttributeToSelect($attribute->getAttributeCode());
 		}
 		
+		//Add Active Static Filters to Collection - Start
+		$staticFilters		= $this->getStaticFilters();
+		$staticFilterValues	= $this->getStaticFilterValues();
+		if ($staticFilters && $staticFilterValues) {
+			foreach ($staticFilters as $staticFilter) {
+				/* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
+				$attribute = Mage::getModel('eav/entity_attribute')->load($staticFilter);
+				if ($attribute->getGridPermission() == Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::USE_IN_FILTER
+					&& array_key_exists($staticFilter, $staticFilterValues)) {
+					$collection->addAttributeToFilter($attribute->getAttributeCode(), $staticFilterValues[$staticFilter]);
+				}
+			}
+		}
+		//Add Active Static Filters to Collection - End
+		
         $this->setCollection($collection);
 		
         return parent::_prepareCollection();
@@ -278,6 +293,43 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 			Mage::app()->getRequest()->getParam("attribute_set")
 		);
 	}
+	
+	public function getStaticFilters() {
+		if($this->getParentBlock()){
+			return $this->getParentBlock()->getCurrentStaticFilters();
+		}
+		
+		$staticFilters		= Mage::app()->getRequest()->getParam("staticFilters", 0);
+		$staticFiltersIds	= false;
+
+		for ($i = 1; $i <= $staticFilters; $i++) {
+			if (Mage::app()->getRequest()->getParam("staticFilterId-".$i)) {
+				$staticFiltersIds[] = Mage::app()->getRequest()->getParam("staticFilterId-".$i);
+			}
+		}
+		
+		return $staticFiltersIds;
+	}
+	
+	/**
+	 * @return Mage_Eav_Model_Entity_Attribute
+	 */
+	public function getStaticFilterValues() {
+		if($this->getParentBlock()){
+			return $this->getParentBlock()->getCurrentStaticFilterValues();
+		}
+		
+		$staticFilters			= Mage::app()->getRequest()->getParam("staticFilters", 0);
+		$staticFiltersValues	= false;
+		
+		for ($i = 1; $i <= $staticFilters; $i++) {
+			if (Mage::app()->getRequest()->getParam("staticFilterId-".$i) && Mage::app()->getRequest()->getParam("staticFilterValue-".$i)) {
+				$staticFiltersValues[Mage::app()->getRequest()->getParam("staticFilterId-".$i)] = Mage::app()->getRequest()->getParam("staticFilterValue-".$i);
+			}
+		}
+		
+		return $staticFiltersValues;
+	}	
 	
 	/**
 	 * @return Mage_Core_Model_Store

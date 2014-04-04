@@ -87,6 +87,38 @@ class Zolago_Catalog_Block_Vendor_Mass extends Mage_Core_Block_Template
 		return $this->getCurrentStore()->getId();
 	}
 	
+	public function getCurrentStaticFilters() {
+		if(!$this->getData("current_static_filter")){
+			$staticFilters		= Mage::app()->getRequest()->getParam("staticFilters", 0);
+			$staticFiltersIds	= false;
+			
+			for ($i = 1; $i <= $staticFilters; $i++) {
+				if (Mage::app()->getRequest()->getParam("staticFilterId-".$i)) {
+					$staticFiltersIds[] = Mage::app()->getRequest()->getParam("staticFilterId-".$i);
+				}
+			}
+			
+			$this->setData("current_static_filter", $staticFiltersIds);
+		}
+		return $this->getData("current_static_filter");
+	}
+	
+	public function getCurrentStaticFilterValues() {
+		if(!$this->getData("current_static_filter_value")) {
+			$staticFilters			= Mage::app()->getRequest()->getParam("staticFilters", 0);
+			$staticFiltersValues	= false;
+
+			for ($i = 1; $i <= $staticFilters; $i++) {
+				if (Mage::app()->getRequest()->getParam("staticFilterId-".$i) && Mage::app()->getRequest()->getParam("staticFilterValue-".$i)) {
+					$staticFiltersValues[Mage::app()->getRequest()->getParam("staticFilterId-".$i)] = Mage::app()->getRequest()->getParam("staticFilterValue-".$i);
+				}
+			}
+
+			$this->setData("current_static_filter_value", $staticFiltersValues);
+		}
+		return $this->getData("current_static_filter_value");
+	}
+	
 	/**
 	 * @return Unirgy_Dropship_Model_Vendor
 	 */

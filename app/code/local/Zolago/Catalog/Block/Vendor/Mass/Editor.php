@@ -220,4 +220,21 @@ class Zolago_Catalog_Block_Vendor_Mass_Editor extends Mage_Core_Block_Template {
 		}
 		return '';
 	}
+	
+	public function getScope($attribute=null){
+		if($attribute instanceof Mage_Catalog_Model_Resource_Eav_Attribute){
+			switch ($attribute->getIsGlobal()){
+				case "0":
+					return Mage::helper("catalog")->__("Store");
+				break;
+				case "1":
+					return Mage::helper("catalog")->__("Global");
+				break;
+				case "2":
+					return Mage::helper("catalog")->__("Website");
+				break;
+			}
+		}
+		return '';
+	}
 }
