@@ -143,6 +143,7 @@ class Zolago_Catalog_Vendor_MassController
 		
 		$keys = array_keys($attributes);
 		$collection->addFieldToFilter("attribute_code", array("in"=>$keys));
+		//$collection->addIsNotUniqueFilter();
 		
 		$notMatched = array();
 		
