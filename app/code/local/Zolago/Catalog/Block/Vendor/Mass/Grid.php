@@ -241,6 +241,7 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 					$this->getAttributeSet()
 			);
 
+            //$collection->addIsNotUniqueFilter();
 			$collection->addFieldToFilter("grid_permission", array("in"=>array(
 				Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::DISPLAY,
 				Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::EDITION,

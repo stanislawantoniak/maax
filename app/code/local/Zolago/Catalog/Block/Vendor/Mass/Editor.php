@@ -60,7 +60,8 @@ class Zolago_Catalog_Block_Vendor_Mass_Editor extends Mage_Core_Block_Template {
 	}
 	
 	protected function _validateAttribute(Mage_Catalog_Model_Resource_Eav_Attribute $attribute = null) {
-		return $attribute && Mage::helper("zolagoeav")->isAttributeEditableNormal($attribute);
+		return $attribute && Mage::helper("zolagoeav")->isAttributeEditableNormal($attribute) 
+				&& !$attribute->getIsUnique();
 	}
 	
 	public function buildFieldId($id, $postfix=null) {
