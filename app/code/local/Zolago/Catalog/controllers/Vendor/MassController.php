@@ -21,6 +21,8 @@ class Zolago_Catalog_Vendor_MassController
 			);
 			// Attributes data array('code'=>'value',...)
 			$attributesData = $this->getRequest()->getPost("attributes");
+			// Attrbiute modes
+			$attributesMode = $this->getRequest()->getPost("attributes_mode");
 			// Attribure set
 			$attributeSet = $this->_getAttributeSet();
 			// Store scope
@@ -76,9 +78,25 @@ class Zolago_Catalog_Vendor_MassController
                         if (is_array($value)) {
                             $attributesData[$attributeCode] = implode(',', $value);
                         }
+						
+						// Unset value if add mode active
+						if(isset($attributesMode[$attributeCode])){
+							switch ($attributesMode[$attributeCode]) {
+								case "add":
+									Mage::getResourceSingleton('zolagocatalog/vendor_mass')->addValueToMultipleAttribute(
+										$productIds,
+										$attribute, 
+										is_array($value) ? $value : array(),
+										$store
+									);
+									unset($attributesData[$attributeCode]);
+								break;
+							}
+						}
                     }
                 }
 				
+				// Write attribs & make reindex
                 Mage::getSingleton('catalog/product_action')
                     ->updateAttributes($productIds, $attributesData, $store->getId());
 				
