@@ -16,6 +16,8 @@ class Zolago_Catalog_Model_Resource_Vendor_Mass
 	 * @param array $valuesToAdd
 	 * @param Mage_Core_Model_Store $store
 	 * @return Zolago_Catalog_Model_Resource_Vendor_Mass
+	 * 
+	 * @todo optymalize performence via collect same attribute vale and product ids
 	 */
 	public function addValueToMultipleAttribute(
 			array $productIds, 
