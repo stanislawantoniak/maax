@@ -1,0 +1,52 @@
+<?php
+$activeFilters = $this->getCurrentStaticFilterValues();
+?>
+<h1><?php echo $this->__("Static Filters");?></h1>
+<p class="switcher">
+<?php if ($this->getStaticFilters($this->getCurrentAttributeSetId()) && $this->getCurrentAttributeSetId()): ?>
+	<?php foreach($this->getStaticFilters($this->getCurrentAttributeSetId()) as $singleFilter): ?>
+		<?php if ($singleFilter): ?>
+			<?php $firstFilter = current($singleFilter); ?>
+			<label for="staticFilter"><?php echo $firstFilter['frontend_label']; ?>:</label>
+			<select name="staticFilter" id="staticFilter-<?php echo $firstFilter['attribute_id']; ?>" onChange="changeStaticFilter(this);" class="staticFilter" style="width: 155px;">
+				<option value="" style="width: 130px;"><?php echo Mage::helper("zolagocatalog")->__("--- Select ---"); ?></option>
+				<?php foreach($singleFilter as $value): ?>
+				<option value="<?php echo $value['attribute_id']; ?>" style="width: 130px;" <?php if($activeFilters && array_key_exists($value['attribute_id'], $activeFilters) && $activeFilters[$value['attribute_id']]==$value['value']):?> selected="selected"<?php endif;?> filterValue="<?php echo $this->escapeHtml($value['value']); ?>"><?php echo substr($this->escapeHtml($value['value']), 0, 20);?></option>
+				<?php endforeach; ?>
+			</select>
+			<script type="text/javascript">
+			function changeStaticFilter(select){
+				var location = '<?php echo $this->getChangeUrl();?>';
+				var filtersCount = $$('.staticFilter').length;
+				var activeFilter = 1;
+				$$('.staticFilter').each(function(element) {
+					if ($F(element)) {
+						var selectedFilterOption = $$('#' + element.id + ' option').find(function(ele){
+							return !!ele.selected;
+						});
+						
+						var filterValue = selectedFilterOption.getAttribute('filtervalue');
+						location += "staticFilterId-"+activeFilter+"/" + $F(element) + "/" + "staticFilterValue-"+activeFilter+"/" + encodeURIComponent(filterValue) + "/";
+						activeFilter++;
+					} else {
+						filtersCount--;
+					}
+				});
+
+				location += "staticFilters/" + filtersCount + "/";
+
+				if ($("attribute_set_switcher") && $F("attribute_set_switcher")) {
+					location += "attribute_set/" + $F("attribute_set_switcher") + "/";
+				}
+				if ($("store_switcher") && $F("store_switcher")) {
+					location += "store/" + $F("store_switcher") + "/";
+				}
+				setLocation(location);
+			}
+			</script>
+		<?php endif; ?>
+	<?php endforeach; ?>
+<?php else: ?>
+	<?php echo $this->__('There are no Static Filters for this Attribute Set'); ?>		
+<?php endif; ?>
+</p>

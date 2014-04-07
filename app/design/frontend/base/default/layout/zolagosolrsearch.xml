@@ -3,4 +3,33 @@
     <solrbridge_solrsearch_category_view> 
 		<remove name="mana.catalog.leftnav" />
     </solrbridge_solrsearch_category_view>
+	
+    <umicrosite_landing>
+		<remove name="catalog.leftnav" />
+        <remove name="enterprisecatalog.leftnav"/> 
+		<reference name="left">
+           <block type="solrsearch/faces" name="searchfaces" as="searchFaces" before="-" >
+            	<block type="solrsearch/faces_price" name="solr_price_facets" as="solr_price_facets" />
+            	<block type="solrsearch/faces_range" name="solr_range_facets" as="solr_range_facets" />
+            </block>
+        </reference>
+	</umicrosite_landing>
+	
+	<umicrosite_current_vendor_products_list_solr>
+		<block type="solrsearch/product_list" template="catalog/product/list.phtml" as="solrsearch_product_list">
+			<block type="solrsearch/product_list_toolbar" name="product_list_toolbar" template="catalog/product/list/toolbar.phtml">
+				<block type="solrsearch/html_pager" name="product_list_toolbar_pager"/>
+			</block>
+			<action method="addColumnCountLayoutDepend"><layout>empty</layout><count>6</count></action>
+			<action method="addColumnCountLayoutDepend"><layout>one_column</layout><count>5</count></action>
+			<action method="addColumnCountLayoutDepend"><layout>two_columns_left</layout><count>4</count></action>
+			<action method="addColumnCountLayoutDepend"><layout>two_columns_right</layout><count>4</count></action>
+			<action method="addColumnCountLayoutDepend"><layout>three_columns</layout><count>3</count></action>
+			<action method="setToolbarBlockName"><name>product_list_toolbar</name></action>
+		</block>
+    </umicrosite_current_vendor_products_list_solr>
+	
+    <umicrosite_index_default>
+		<update handle="umicrosite_landing"/>
+	</umicrosite_index_default>
 </layout> 

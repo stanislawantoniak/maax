@@ -38,17 +38,24 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
          * Ignore the following section if the request is for autocomplete
          * The purpose is the speed up autocomplete
          */
+		
         if (!$this->isAutocomplete) {
 
-            if (Mage::app()->getRequest()->getRouteName() == 'catalog') {
+            if (in_array(Mage::app()->getRequest()->getRouteName(), array('catalog', 'umicrosite'))) {
 
                 $layer = Mage::getSingleton('catalog/layer');
-                $_category = $layer->getCurrentCategory();
-                $currentCategoryId= $_category->getId();
-
+				if( Mage::registry("vendor_current_category") instanceof Mage_Catalog_Model_Category){
+					$_category = Mage::registry("vendor_current_category");
+				}else{
+					$_category = $layer->getCurrentCategory();
+				} 
+                $currentCategoryId = $_category->getId();
+				
+				
                 if (empty($filterQuery['category_id'])) {
                     $filterQuery['category_id'] = array($currentCategoryId);
                 }
+				
 
                 $filterQuery['filter_visibility_int'] = Mage::getSingleton('catalog/product_visibility')->getVisibleInCatalogIds();
 

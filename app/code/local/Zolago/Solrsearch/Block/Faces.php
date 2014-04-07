@@ -12,7 +12,9 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         // Override tmpalte
         $this->setTemplate('zolagosolrsearch/standard/searchfaces.phtml');
     }
-
+    public function setSolrData($data) {
+        $this->solrData = $data;
+    }
 
     protected function _checkFilterDepedncy($filter) {
 
@@ -299,25 +301,33 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
             unset($facetFileds[$priceFieldName]);
         }
 
-        // Category mode
         foreach($facetFileds as $key=>$data) {
 
             $attrCode = $this->_extractAttributeCode($key);
             $block = null;
             $sortOrder = 0;
 
-            switch ($key) {
+            switch ($attrCode) {
                 // Skip special facets
-            case "category_path":
-            case "category_id":
-            case "product_flag":
-            case "product_rating":
-                continue 2;
-                break;
+				case "category_path":
+				case "category_id":
+				case "product_flag":
+				case "is_new":
+				case "is_bestseller":
+				case "product_rating":
+					continue 2;
+				break;
+			
+				// Skip vendor facet in vendor scope
+				case "udropship_vendor":
+					if($this->getVendor()){
+						continue 2;
+					}
+				break;
             }
-
             // In category mode
             if($this->getMode()==self::MODE_CATEGORY) {
+				
                 $filter = $this->getFilterByAttribute($attrCode);
 
                 // Skip attribs with no custom filter
@@ -329,7 +339,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
                 if($filter->getParentAttributeId() && !$this->_checkFilterDepedncy($filter)) {
                     continue;
                 }
-
+				
                 // Is multiple values
                 if($filter->getShowMultiple()) {
                     $data = $this->_prepareMultiValues($key, $data);
@@ -410,7 +420,10 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
      * @return Mage_Catalog_Model_Category
      */
     public function getCurrentCategory() {
-        return Mage::registry('current_category');
+		if(Mage::registry('current_category')){
+			return Mage::registry('current_category');
+		}
+		return  Mage::registry('vendor_current_category');
     }
 
     /**
@@ -600,4 +613,14 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         }
         return $this->getUrl('*/*/*', $urlParams);
     }
+	
+	/**
+	 * @return Unirgy_Dropship_Model_Vendor|null
+	 */
+	public function getVendor() {
+		if(!$this->hasData("vendor")){
+			$this->setData("vendor", Mage::helper('umicrosite')->getCurrentVendor());
+		}
+		return $this->getData("vendor");
+	}
 }

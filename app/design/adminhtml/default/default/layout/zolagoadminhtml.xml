@@ -5,4 +5,9 @@
 			<block type="zolagoadminhtml/catalog_category_filters" template="zolagoadminhtml/catalog/category/filters.phtml"/>
 		</reference>
     </adminhtml_catalog_category_filter_edit>
+    <adminhtml_catalog_product_attribute_edit>
+        <reference name="js">
+            <block type="adminhtml/template" name="attribute_edit_js" template="zolagoadminhtml/catalog/product/attribute/js.phtml"></block>
+        </reference>
+    </adminhtml_catalog_product_attribute_edit>	
 </layout>
