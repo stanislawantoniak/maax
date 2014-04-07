@@ -167,6 +167,11 @@ class Zolago_Catalog_Vendor_MassController
 		$collection->addIdFilter($productIds);
 		$collection->addAttributeToFilter("attribute_set_id", $attributeSet->getId());
 		$collection->addAttributeToFilter("udropship_vendor", $this->_getSession()->getVendor()->getId());
+		$collection->addAttributeToFilter("visibility", array("in"=>array(
+			Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_CATALOG, 
+			Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_SEARCH, 
+			Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH 
+		)));
 		return count(array_diff($productIds, $collection->getAllIds()))==0;
 	}
 	

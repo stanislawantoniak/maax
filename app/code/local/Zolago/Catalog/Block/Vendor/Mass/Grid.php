@@ -60,6 +60,11 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 		// Add non-grid filters
 		$collection->addAttributeToFilter("udropship_vendor", $this->getVendorId());
 		$collection->addAttributeToFilter("attribute_set_id", $this->getAttributeSet()->getId());
+		$collection->addAttributeToFilter("visibility", array("in"=>array(
+			Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_CATALOG, 
+			Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_SEARCH, 
+			Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH 
+		)));
 		
 		// Add fixed column data
 	    foreach($this->_getFixedColumns() as $position){
