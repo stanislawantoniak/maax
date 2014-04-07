@@ -127,7 +127,6 @@ class Zolago_Catalog_Model_Resource_Vendor_Mass
 		foreach($unsorted as $unsort){
 			$result[] = $unsort;
 		}
-		Mage::log($result);
 		return $result;
 	}
 	
@@ -136,6 +135,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Mass
 			$select = $this->getReadConnection()->select();
 			$select->from($this->getTable("eav/attribute_option"), array("option_id", "sort_order"));
 			$select->where("attribute_id=?", $attribute->getId());
+			$select->order(array("sort_order DESC", "option_id DESC"));
 			$this->_options[$attribute->getId()] = $this->getReadConnection()->fetchPairs($select);
 		}
 		return $this->_options[$attribute->getId()];
