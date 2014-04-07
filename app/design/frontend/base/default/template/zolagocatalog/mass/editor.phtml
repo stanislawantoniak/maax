@@ -42,7 +42,7 @@
 					<?php endif;?>
 				<?php endforeach;?>
 			</tr>
-			<tr class="filter" style="display:none;" id="<?php echo $this->getGrid()->getId();?>_fields">
+			<tr class="filter" style="display:none;" id="<?php echo $this->buildFieldId("fields");?>">
 				<?php $i=0;?>
 				<?php foreach ($this->getGrid()->getColumns() as $_column): ?>
 					<?php if($i++==0):?>
@@ -67,8 +67,11 @@
 				</td>
 				<?php endforeach;?>
 			</tr>
-			<tr style="display:none;"  id="<?php echo $this->getGrid()->getId();?>_confirm">
+			<tr style="display:none;"  id="<?php echo $this->buildFieldId("confirm");?>">
 				<td  class="totals a-right" colspan="<?php echo $this->getGrid()->getColumnCount();?>">
+					<span style="display: none;" class="notice" id="<?php echo $this->buildFieldId("loading");?>">
+						<?php echo Mage::helper("zolagocatalog")->__("Saving...");?>
+					</span>
 					<?php echo $this->getSubmitButtonHtml(); ?>
 				</td>
 			<tr>
@@ -83,6 +86,7 @@
 		var gridDom = $(gridObj.containerId); 
 		var form ;
 		var foot = $("<?php echo $this->buildFieldId("foot");?>");
+		var loading = $("<?php echo $this->buildFieldId("loading");?>");
 		
 		var oldInitGrid = gridObj.initGrid;
 		
@@ -106,6 +110,7 @@
 		
 		gridObj.initGrid = function(){
 			oldInitGrid.apply(gridObj, arguments);
+			loading.hide();
 			appendContent(gridObj, foot);
 		}
 		
@@ -141,8 +146,7 @@
 			data.store = $F("store_switcher");
 			data.attribute_set =  $F("attribute_set_switcher");
 			data.product_ids=  productIds;
-	
-			
+						
 			new Ajax.Request("<?php echo $this->getSaveUrl();?>", {
 				parameters: data,
 				method: "post",
@@ -152,9 +156,11 @@
 							alert(transport.responseJSON.content);
 							return;
 						}
-						//console.log(transport.responseJSON.content);
 						gridObj.reload();
 					}
+				},
+				onLoading: function(){
+					loading.show();
 				},
 				onError: function(transport){
 					alert("<?php echo Mage::helper("zolagocatalog")->__("Other error - contact administrator");?>");
@@ -170,14 +176,9 @@
 			}
 			
 		}
-		//Event.observe(window, "resize", assignEditorLayout);
-		
-		Ajax.Responders.register({
-			//onComplete: assignEditorLayout
-		});
 		
 		
-		currentEditCount = 0;
+		var currentEditCount = 0;
 
 		var switchVisible = function(fieldId, mode){
 			if(mode){
@@ -199,7 +200,6 @@
 			}
 			
 			disableAdditionalFields(fieldId, mode);
-			//assignEditorLayout();
 		}
 		
 		var disableAdditionalFields = function(fieldId, mode){
@@ -215,7 +215,6 @@
 			});
 		}
 		
-		//assignEditorLayout();
 		appendContent(gridObj, foot);
 	})();
 </script>
