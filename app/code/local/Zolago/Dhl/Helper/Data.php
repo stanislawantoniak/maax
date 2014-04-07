@@ -189,4 +189,24 @@ class Zolago_Dhl_Helper_Data extends Mage_Core_Helper_Abstract {
 			->setUsername($userName);
 		$commentModel->save();
 	}
+	
+	/**
+	 * Check if DHL Waybill cna be shown
+	 * 
+	 * @param type $track
+	 * @param type $shipment
+	 * 
+	 * @return boolean $canShow Boolean Value
+	 */
+	public function canShowWaybill($track, $shipment)
+	{
+		$canShow = false;
+		if ($track->getCarrierCode() == Zolago_Dhl_Helper_Data::DHL_CARRIER_CODE
+			&& $track->getNumber()
+			&& $shipment->getUdropshipStatus() != Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED) {
+			$canShow = true;
+		}
+		
+		return $canShow;
+	}
 }

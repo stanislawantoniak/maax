@@ -66,7 +66,7 @@ class Unirgy_DropshipVendorAskQuestion_Block_Vendor_Questions extends Mage_Core_
             if ($param) {
                 $collection->addFieldToFilter('answer_text', array('gt'=>0,'field_expr'=>'LENGTH(#?)'));
             } else {
-                $collection->addFieldToFilter('answer_text', array('eq'=>0,'field_expr'=>'LENGTH(#?)'));
+                $collection->addFieldToFilter('answer_text', array(array('null'=>1),array('eq'=>0,'field_expr'=>'LENGTH(#?)')));
             }
         }
         $param = $r->getParam('filter_question');

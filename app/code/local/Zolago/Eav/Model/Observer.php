@@ -5,6 +5,7 @@ class Zolago_Eav_Model_Observer
 	{
 		$fieldset = $observer->getForm()->getElement('base_fieldset');
 		$yesnoSource = Mage::getModel('adminhtml/system_config_source_yesno')->toOptionArray();
+		$attribute = $observer->getAttribute();
 
 		$fieldset->addField('set_id', 'select', array(
 			'name'      => 'set_id',
@@ -28,6 +29,15 @@ class Zolago_Eav_Model_Observer
 			'title'     => Mage::helper('zolagoeav')->__('Use in Category Mapping'),
 			'values'    => $yesnoSource,
 		));
+		
+		$fieldset->addField('grid_permission', 'select', array(
+			'name'      => 'grid_permission',
+			'label'     => Mage::helper('zolagoeav')->__('Grid Permission'),
+			'title'     => Mage::helper('zolagoeav')->__('Grid Permission'),
+			'values'    => Mage::getModel('zolagoeav/entity_attribute_source_gridPermission')->getAllOptions(false),
+			'value'		=> (!$attribute->getId() ? Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::EDITION : ''),
+			'class'		=> 'validate-grid-permission'
+		));		
 	}
 	
 	public function addAttributeToSet($observer)
