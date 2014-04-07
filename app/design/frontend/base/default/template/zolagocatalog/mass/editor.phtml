@@ -23,7 +23,7 @@
 	<?php if($this->getGrid()): ?>
 	<table style="display: none;">
 		<tfoot id="<?php echo $this->buildFieldId("foot");?>">
-			<tr id="<?php echo $this->getGrid()->getId();?>_change">
+			<tr id="<?php echo $this->buildFieldId("change");?>">
 				<?php $i=0;?>
 				<?php foreach ($this->getGrid()->getColumns() as $_column): ?>
 					<?php if($i++==0):?>
