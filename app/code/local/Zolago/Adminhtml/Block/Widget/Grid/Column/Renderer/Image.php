@@ -9,7 +9,7 @@ class Zolago_Adminhtml_Block_Widget_Grid_Column_Renderer_Image
 		if($src){
 			$img = "<img src=\"$src\" alt=\"\"/>";
 			if($this->getColumn()->getClickable()){
-				return "<a href=\"{$this->_getImageUrl($row)}\" target=\"blank\">$img</a>";
+				return "<a href=\"{$this->_getImageUrl($row)}\" target=\"_blank\">$img</a>";
 			}
 			return $img;
 		}
