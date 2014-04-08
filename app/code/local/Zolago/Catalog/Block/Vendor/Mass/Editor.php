@@ -60,8 +60,10 @@ class Zolago_Catalog_Block_Vendor_Mass_Editor extends Mage_Core_Block_Template {
 	}
 	
 	protected function _validateAttribute(Mage_Catalog_Model_Resource_Eav_Attribute $attribute = null) {
-		return $attribute && Mage::helper("zolagoeav")->isAttributeEditableNormal($attribute) 
-				&& !$attribute->getIsUnique();
+		return $attribute && 
+			   Mage::helper("zolagoeav")->isAttributeEditableNormal($attribute) && 
+			   !$attribute->getIsUnique() && 
+			   !in_array($attribute->getFrontendInput(), array("media_image", "fixed_tax"));
 	}
 	
 	public function buildFieldId($id, $postfix=null) {
