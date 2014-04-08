@@ -326,7 +326,10 @@ class Zolago_Catalog_Model_Resource_Vendor_Mass
 		$select->join(
 				array("attribute_eav"=>$setup->getTable('eav_attribute')),
 				"attribute_eav.attribute_id=attribute.attribute_id",
-				array("label" => "frontend_label")
+				array(
+					"label"	=> "frontend_label",
+					"code"	=> "attribute_code"
+				)
 		);
 		
 		$select->join(

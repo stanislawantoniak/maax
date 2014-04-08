@@ -49,4 +49,27 @@ class Zolago_Catalog_Block_Vendor_Mass_Staticfilter extends Mage_Core_Block_Temp
 		}
 		return $this->getData("current_static_filter_value");
 	}
+	
+	/**
+	 * @return Mage_Core_Model_Store
+	 */
+	public function getStore() {
+		if($this->getParentBlock()){
+			return $this->getParentBlock()->getCurrentStore();
+		}
+		return Mage::app()->getStore(
+			Mage::app()->getRequest()->getParam("store", 0)
+		);
+	}
+	
+	public function getAttributeLabel($code, $store) {
+		$storeLabel = false;
+		$attribute = Mage::getModel('catalog/resource_eav_attribute')
+						->loadByCode(Mage_Catalog_Model_Product::ENTITY, $code);
+		if ($attribute && $attribute->getId()) {
+			$storeLabel = $attribute->getStoreLabel($store->getId());
+		}
+		
+		return $storeLabel;
+	}
 }

@@ -777,7 +777,7 @@ $filterPoTotals = array('subtotal_excl', 'tax', 'shipping', 'total');
                         <label for="carrier-<?php echo $_id?>"><?php echo $_hlp->__('Carrier') ?></label>
 						<?php foreach ($this->getCarriers() as $_code=>$_name): ?>
 							<dt style="padding-left: 120px;">
-								<input name="carrier" type="radio" value="<?php echo $_code ?>" title="<?php echo $this->escapeHtml($_name); ?>" class="radio" style="float: left" onchange="selectCarrier(this)" checked="checked"/>
+							<input name="carrier" type="radio" value="<?php echo $_code ?>" title="<?php echo $this->escapeHtml($_name); ?>" class="radio" style="float: left" onchange="selectCarrier(this)" <?php if ($dhlSettings && $_code == Zolago_Dhl_Helper_Data::DHL_CARRIER_CODE) {echo 'checked="checked"';} ?>/>
 								<label for="carrier" style="float: left; width: 65%"><?php echo $this->escapeHtml($_name); ?></label>
 							</dt>
 							<div class="clear"></div>

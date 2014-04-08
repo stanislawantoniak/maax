@@ -265,6 +265,29 @@ class SolrBridge_Solrsearch_Model_Observer {
 
 	}
 
+	public function generateIgnoreSearchTermsConfig()
+	{
+	    $allow_ignore_term = (int)Mage::helper('solrsearch')->getSetting('allow_ignore_term');
+	    if ($allow_ignore_term > 0)
+	    {
+	        $collection = Mage::getModel('catalogsearch/query')->getResourceCollection();
+
+	        $collection->addFieldToFilter('display_in_terms', array('eq' => 0));
+
+	        $ignoreSearchTerms = array();
+	        foreach ($collection as $term)
+	        {
+	            $ignoreSearchTerms[] = strtolower($term->getQueryText());
+	        }
+
+	        if (!empty($ignoreSearchTerms)) {
+	            $configModel = Mage::getModel('core/config');
+	            $configModel->saveConfig('solrbridge/settings/ignoresearchterms', @implode(',', $ignoreSearchTerms));
+	            $this->generateStaticConfig();
+	        }
+	    }
+	}
+
 	public function productModelSaveAfter($observer)
 	{
 		if ($this->autoIndex)

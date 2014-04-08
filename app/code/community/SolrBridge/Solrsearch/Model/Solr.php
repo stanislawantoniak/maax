@@ -54,6 +54,13 @@ class SolrBridge_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr_
     	$queryUrl = trim($queryUrl,'/').'/'.$solrcore;
     	$url = trim($queryUrl,'/').'/select/?q='.$query.'&rows=-1&facet=true&facet.field='.$facetfield.'&facet.mincount=1&facet.limit=5000';
 
+    	//filter query
+    	$this->prepareFilterQuery();
+    	$filterQueryString = $this->filterQuery;
+    	if (!empty($filterQueryString)) {
+    	    $url .= '&fq='.$filterQueryString;
+    	}
+
     	$resultSet = Mage::getResourceModel('solrsearch/solr')->doRequest($url, $arguments, 'array');
 
     	$returnData = array();
@@ -94,6 +101,13 @@ class SolrBridge_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr_
     	);
     	$queryUrl = trim($queryUrl,'/').'/'.$solrcore;
     	$url = trim($queryUrl,'/').'/select/?q='.$query.'&rows=-1&facet=true&facet.field='.$facetfield.'&facet.mincount=1&facet.limit=5000';
+
+    	//filter query
+    	$this->prepareFilterQuery();
+    	$filterQueryString = $this->filterQuery;
+    	if (!empty($filterQueryString)) {
+    	    $url .= '&fq='.$filterQueryString;
+    	}
 
     	$resultSet = Mage::getResourceModel('solrsearch/solr')->doRequest($url, $arguments, 'array');
 

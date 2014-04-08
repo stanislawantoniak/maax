@@ -22,6 +22,10 @@ class SolrBridge_Solrsearch_Model_Data
 
 	public $allowCategoryIds = array();
 
+	public $categories = array();
+
+	public $filterableAttributes = array();
+
 	public function setBrandAttributes($attributes)
 	{
 		$this->includedBrandAttributeCodes = $attributes;
@@ -74,21 +78,45 @@ class SolrBridge_Solrsearch_Model_Data
 			}
 		}
 	}
-
+    /**
+     * Check to see if the attribute value will be pushed to Solr or Not
+     * @param unknown $atributeObj
+     * @return boolean
+     */
 	public function isAttributeIgnore($atributeObj)
 	{
 		$attributeCode = $atributeObj->getAttributeCode();
+		$attributeData = $atributeObj->getData();
 
-		if (!$atributeObj->getIsSearchable() && !in_array($attributeCode, $this->includedSearchWeightAttributeCodes)) // ignore fields which are not searchable or not used as product search weight
+		if (!empty($this->includedSearchWeightAttributeCodes) && in_array($attributeCode, $this->includedSearchWeightAttributeCodes))
 		{
-			if (!empty($this->includedBrandAttributeCodes)  && in_array($attributeCode, $this->includedBrandAttributeCodes))
-			{
-				return false;
-			} else {
-				return true;//Mean that the attribute will be ignored
-			}
+		    return false;
 		}
-		return false;
+
+		if (!empty($this->includedBrandAttributeCodes)  && in_array($attributeCode, $this->includedBrandAttributeCodes))
+		{
+		    return false;
+		}
+
+		if ( $atributeObj->getIsSearchable() ) {
+		    return false;
+		}
+
+		if ( in_array($attributeCode, $this->getFilterableAtributes()) ) {
+		    return false;
+		}
+
+		if ( (isset($attributeData['solr_search_field_weight']) && !empty($attributeData['solr_search_field_weight'])) ||
+		     (isset($attributeData['solr_search_field_boost']) && !empty($attributeData['solr_search_field_boost'])) )
+		{
+		    return false;
+		}
+
+		if ($atributeObj->getUsedForSortBy()) {
+		    return false;
+		}
+
+		return true;//Meaning the attribute is ignored
 	}
 
 	public function getProductAttributesData($_product)
@@ -96,6 +124,7 @@ class SolrBridge_Solrsearch_Model_Data
 		$docData = array();
 
 		foreach ($_product->getAttributes() as $atributeObj){
+			$atributeObj->setStoreId($this->store->getId());
 			$backendType = $atributeObj->getBackendType();
 			$frontEndInput = $atributeObj->getFrontendInput();
 			$attributeCode = $atributeObj->getAttributeCode();
@@ -120,16 +149,13 @@ class SolrBridge_Solrsearch_Model_Data
 				$attributeVal = implode(' ', $attributeVal);
 			}
 
-			if ($_product->getData($attributeCode) == null)
-			{
-				$attributeVal = null;
-			}
-
 			//Generate sort attribute
 			if ($atributeObj->getUsedForSortBy() && !empty($attributeVal)) {
 				$sortValue = $_product->getData($attributeCode);
 				if (!empty($sortValue)) {
 					$docData['sort_'.$attributeCode.'_'.$backendType] = $sortValue;
+					//$docData[$attributeKey] = $sortValue;
+					$docData[$attributeKey] = $attributeVal;
 				}
 			}
 
@@ -137,10 +163,6 @@ class SolrBridge_Solrsearch_Model_Data
 			if (in_array($attributeCode, $this->includedSearchWeightAttributeCodes)) {
 				if (!empty($attributeVal) && is_numeric($attributeVal)) {
 					$docData['product_search_weight_int'] = $attributeVal;
-					if ( !$atributeObj->getIsSearchable() )
-					{
-						continue;
-					}
 				}
 			}
 
@@ -167,26 +189,33 @@ class SolrBridge_Solrsearch_Model_Data
 					$attributeVal = date("Y-m-d\TG:i:s\Z", $attributeVal);
 				}
 
-				if (!in_array($attributeVal, $this->textSearch) && $attributeVal != 'None' && $attributeCode != 'status' && $attributeCode != 'sku'){
-					if (strlen($attributeVal) > 255) {
-						$this->pushTextSearchText ( $attributeVal );
-					}else{
-						$this->pushTextSearch ( $attributeVal );
-						$this->pushTextSearch ( $atributeObj->getStoreLabel().' '.$attributeVal );
-					}
+				if( $atributeObj->getIsSearchable() )
+				{
+				    if (!in_array($attributeVal, $this->textSearch) && $attributeVal != 'None' && $attributeCode != 'status' && $attributeCode != 'sku' && $attributeCode != 'price'){
+				        if (strlen($attributeVal) > 255) {
+				            $this->pushTextSearchText ( $attributeVal );
+				        }else{
+				            $this->pushTextSearch ( $attributeVal );
+				        }
+				    }
 				}
 
-				if ($backendType != 'text' && !in_array($attributeCode, $this->ignoreFields)) {
-					$docData[$attributeCode.'_boost'] = $attributeVal;
+                if (in_array($attributeCode, $this->getFilterableAtributes())) {
+                    if ($backendType != 'text' && !in_array($attributeCode, $this->ignoreFields))
+                    {
+                        $docData[$attributeCode.'_boost'] = $attributeVal;
 
-					$docData[$attributeCode.'_boost_exact'] = $attributeVal;
+                        $docData[$attributeCode.'_boost_exact'] = $attributeVal;
 
-					$docData[$attributeCode.'_relative_boost'] = $attributeVal;
+                        $docData[$attributeCode.'_relative_boost'] = $attributeVal;
 
-					$docData[$attributeCode.'_text'] = $attributeVal;
+                        $docData[$attributeCode.'_text'] = $attributeVal;
 
-					$docData[$attributeKey] = $attributeVal;
-				}
+                        $docData[$attributeKey] = $attributeVal;
+
+                        $this->pushTextSearch ( $atributeObj->getStoreLabel().' '.$attributeVal );
+                    }
+                }
 
 				if (
 				(isset($attributeData['solr_search_field_weight']) && !empty($attributeData['solr_search_field_weight']))
@@ -194,8 +223,12 @@ class SolrBridge_Solrsearch_Model_Data
 				(isset($attributeData['solr_search_field_boost']) && !empty($attributeData['solr_search_field_boost']))
 				) {
 					$docData[$attributeCode.'_boost'] = $attributeVal;
+
 					$docData[$attributeCode.'_boost_exact'] = $attributeVal;
+
 					$docData[$attributeCode.'_relative_boost'] = $attributeVal;
+
+					$docData[$attributeKey] = $attributeVal;
 				}
 
 				if (
@@ -208,9 +241,46 @@ class SolrBridge_Solrsearch_Model_Data
 		return $docData;
 	}
 
+	public function getFilterableAtributes()
+	{
+	    if (!empty($this->filterableAttributes))
+	    {
+	        return $this->filterableAttributes;
+	    }
+	    $oldStore = Mage::app ()->getStore ();
+	    Mage::app ()->setCurrentStore ( $this->store );
+
+	    $cachedKey = 'solrbridge_solrsearch_indexing_filter_attributes_' . $this->store->getId ();
+
+	    if (false !== ($returnData = Mage::app ()->getCache ()->load ( $cachedKey ))) {
+	        Mage::app ()->setCurrentStore ( $oldStore );
+	        $this->filterableAttributes = unserialize ( $returnData );
+	        return $this->filterableAttributes;
+	    }
+
+	    $filterableAttributes = array();
+	    $atts = Mage::getModel('catalog/layer')->getFilterableAttributes();
+	    foreach ($atts as $att)
+	    {
+	        $filterableAttributes[] = $att->getAttributeCode();
+	    }
+
+	    if (! empty ( $filterableAttributes )) {
+	        Mage::app ()->getCache ()->save ( serialize ( $filterableAttributes ), $cachedKey, array ('solrbridge_solrsearch_indexing') );
+	    }
+	    Mage::app ()->setCurrentStore ( $oldStore );
+	    $this->filterableAttributes = $filterableAttributes;
+	    return $this->filterableAttributes;
+	}
+
 	public function prepareCategoriesData($_product, &$docData)
 	{
 		$store = $this->store;
+
+		//Prepare loading categories into caches
+		if ( !isset( $this->categories[ $store->getId() ] ) ) {
+		    $this->loadAllCategoriesByStore($store);
+		}
 
 		//is category name searchable
 		$solr_include_category_in_search = Mage::helper('solrsearch')->getSetting('solr_search_in_category');
@@ -225,20 +295,41 @@ class SolrBridge_Solrsearch_Model_Data
 
 		$cats = $_product->getCategoryIds();
 		$catNames = array();
+		$catNamesSearch = array();
 		$categoryPaths = array();
 		$categoryIds = array();
+
+		foreach ($cats as $category_id)
+		{
+		    $storeid = $this->store->getId();
+		    if (in_array($category_id, $this->allowCategoryIds[$storeid]))
+		    {
+		        $_cat = $this->getLoadedCategory($category_id, $storeid);
+
+		        if ( is_array($_cat) && intval($_cat['is_active']) > 0 && intval($_cat['include_in_menu']) > 0 )
+		        {
+		            $catNames[] = $_cat['name'].'/'.$_cat['entity_id'];
+		            $catNamesSearch[] = $_cat['name'];
+		            $categoryPaths[] = $this->getCategoryPath($_cat, $this->store);
+		            $categoryIds[] = $_cat['entity_id'];
+		        }
+		    }
+		}
+		/* The old way, slow but it was working well
 		foreach ($cats as $category_id) {
 			$storeid = $this->store->getId();
 			if (in_array($category_id, $this->allowCategoryIds[$storeid])) {
 				$_cat = Mage::getModel('catalog/category')->setStoreId($storeid)->load($category_id) ;
 				if ( $_cat && $_cat->getIsActive() && $_cat->getIncludeInMenu() ) {
 					$catNames[] = $_cat->getName().'/'.$_cat->getId();
+					$catNamesSearch[] = $_cat->getName();
 					$categoryPaths[] = $this->getCategoryPath($_cat, $this->store);
 					$categoryIds[] = $_cat->getId();
 				}
 			}
 
 		}
+		*/
 
 		if ($use_category_as_facet) {
 			$docData['category_facet'] = $catNames;
@@ -252,7 +343,7 @@ class SolrBridge_Solrsearch_Model_Data
 
 		//Extend text search
 		if ($solr_include_category_in_search > 0) {
-			$this->textSearch = array_merge($this->textSearch, $catNames);
+			$this->textSearch = array_merge($this->textSearch, $catNamesSearch);
 		}
 		return array(
 				'catNames' => $catNames,
@@ -299,10 +390,11 @@ class SolrBridge_Solrsearch_Model_Data
 	}
 
 	/**
+	 * This is slow, but it was working well
 	 * Get category path
 	 * @param unknown_type $category
 	 */
-	public function getCategoryPath($category, $store){
+	public function getCategoryPathOld($category, $store){
 		$categoryPath = str_replace('/', '_._._',$category->getName()).'/'.$category->getId();
 		while ($category->getParentId() > 0){
 			$parentCategory = $category->getParentCategory();
@@ -315,6 +407,35 @@ class SolrBridge_Solrsearch_Model_Data
 			}
 		}
 		return trim($categoryPath, '/');
+	}
+
+	/**
+	 * Get category path
+	 * @param unknown_type $category
+	 */
+	public function getCategoryPath($category, $store)
+	{
+	    $categoryPath = str_replace('/', '_._._',$category['name']).'/'.$category['entity_id'];
+
+	    $parentIds = $category['parent_ids'];
+
+	    foreach ($parentIds as $parentId)
+	    {
+	        if ($parentId > 0)
+	        {
+	            $category = $this->getLoadedCategory($parentId, $store->getId());
+
+	            if (in_array($category['entity_id'], $this->allowCategoryIds[$store->getId()]))
+	            {
+	                if ( is_array($category) && intval($category['is_active']) > 0 && intval($category['include_in_menu']) > 0 )
+	                {
+	                    $categoryPath = str_replace('/', '_._._',$category['name']).'/'.$category['entity_id'].'/'.$categoryPath;
+	                }
+	            }
+	        }
+	    }
+
+	    return trim($categoryPath, '/');
 	}
 
 	/**
@@ -396,6 +517,59 @@ class SolrBridge_Solrsearch_Model_Data
 
 		return $allowCatIds;
 	}
+	/**
+	 * Load all categories of the store to cache
+	 * @param unknown $store
+	 */
+	public function loadAllCategoriesByStore($store)
+	{
+	    $cachedKey = 'solrbridge_solrsearch_indexing_categories_in_store_' . $store->getId ();
+
+	    if (false !== ($cachedCategories = Mage::app ()->getCache ()->load ( $cachedKey ))) {
+	        $this->categories = unserialize ( $cachedCategories );
+	        return $this->categories;
+	    }
+
+	    $rootCatId = $store->getRootCategoryId();
+
+	    $categories = Mage::getModel('catalog/category')->getCategories($rootCatId);
+
+	    $this->loadCategories($categories);
+
+	    if (isset( $this->categories[ $store->getId() ] ) && !empty ( $this->categories[ $store->getId() ] )) {
+	        Mage::app ()->getCache ()->save ( serialize ( $this->categories ), $cachedKey, array ('solrbridge_solrsearch_indexing') );
+	    }
+	    return $this->categories;
+	}
+	public function loadCategories($categories)
+	{
+	    foreach($categories as $category) {
+	        $catId = $category->getId();
+	        $cat = Mage::getModel('catalog/category')->setStoreId($this->store->getId())->load($catId);
+	        $parentIds = $cat->getParentIds();
+	        $catData = $category->getData();
+	        $catData['parent_ids'] = $parentIds;
+	        $this->categories[$this->store->getId()][$catId] = $catData;
+	        if($category->hasChildren()) {
+	            $children = Mage::getModel('catalog/category')->getCategories($catId);
+	            $this->loadCategories($children);
+	        }
+	    }
+	}
+    /**
+     * get loaded category object from cache
+     * @param int $catid
+     * @param int $storeid
+     * @return array|boolean
+     */
+	public function getLoadedCategory($catid, $storeid)
+	{
+	    if ( isset( $this->categories[$storeid][$catid] ) )
+	    {
+	        return $this->categories[$storeid][$catid];
+	    }
+	    return false;
+	}
 
 	public function prepareFinalProductData($_product, &$docData)
 	{
@@ -422,9 +596,13 @@ class SolrBridge_Solrsearch_Model_Data
 
 		$docData['url_path_varchar'] = $productUrl;
 		$productName = $_product->getName();
+		$docData['name_varchar'] = $productName;
 		$docData['name_boost'] = $productName;
 		$docData['name_boost_exact'] = $productName;
 		$docData['name_relative_boost'] = $productName;
+
+		$docData['attribute_set_varchar'] = Mage::getModel('eav/entity_attribute_set')->load($_product->getAttributeSetId())->getAttributeSetName();
+		$this->pushTextSearch ( $docData['attribute_set_varchar'] );
 
 		$this->pushTextSearch ( $productName );
 
@@ -445,18 +623,35 @@ class SolrBridge_Solrsearch_Model_Data
 		if (!isset($docData['product_search_weight_int'])) {
 			$docData['product_search_weight_int'] = 0;
 		}
-		$docData['store_id'] = $store->getId();
-		$docData['website_id'] = $store->getWebsiteId();
+
+		$multipleStoreModeSetting = Mage::helper('solrsearch')->getSetting('multiplestore');
+		if (intval($multipleStoreModeSetting) > 0) {//multiple store by different category root and different website
+		    $docData['store_id'] = $store->getId();
+		    $docData['website_id'] = $store->getWebsiteId();
+		}else{
+		    if(isset($docData['category_id']) && !empty($docData['category_id'])){
+		        $docData['store_id'] = $store->getId();
+		        $docData['website_id'] = $store->getWebsiteId();
+		    }else{
+		        $docData['store_id'] = 0;
+		        $docData['website_id'] = 0;
+		    }
+		}
 
 		$docData['filter_visibility_int'] = $_product->getVisibility();
 
-		$stock = Mage::getModel ( 'cataloginventory/stock_item' )->loadByProduct ( $_product );
-		if ($stock->getIsInStock()) {
-			$docData['instock_int'] = 1;
-		} else {
-			$docData['instock_int'] = 0;
+		try{
+    		$stock = Mage::getModel ( 'cataloginventory/stock_item' )->loadByProduct ( $_product );
+    		if ($stock->getIsInStock() && $stock->getQty() > 0) {
+    			$docData['instock_int'] = 1;
+    		} else {
+    			$docData['instock_int'] = 0;
+    		}
 		}
-
+		catch (Exception $e)
+		{
+            $docData['instock_int'] = 0;
+    	}
 		$docData['product_status'] = $_product->getStatus();
 	}
 
@@ -465,24 +660,30 @@ class SolrBridge_Solrsearch_Model_Data
 		$visibility = Mage::getSingleton('catalog/product_visibility')->getVisibleInSiteIds();
 		if ($_product->getId() && in_array($_product->getVisibility(), $visibility) && $_product->getStatus())
 		{
-			$oldStore = Mage::app ()->getStore ();
-			Mage::app ()->setCurrentStore ( $store );
+		    try{
+    			$oldStore = Mage::app ()->getStore ();
+    			Mage::app ()->setCurrentStore ( $store );
 
-			$storeId    = $store->getId();
-			$products = Mage::getResourceModel('reports/product_collection')
-			->addOrderedQty()
-			->addAttributeToSelect(array('name')) //edit to suit tastes
-			->setStoreId($storeId)
-			->addStoreFilter($storeId)
-			->addIdFilter($_product->getId())->setOrder('ordered_qty', 'desc'); //best sellers on top
-			$data = $products->getFirstItem()->getData();
+    			$storeId    = $store->getId();
+    			$products = Mage::getResourceModel('reports/product_collection')
+    			->addOrderedQty()
+    			//->addAttributeToSelect(array('name')) //edit to suit tastes
+    			->setStoreId($storeId)
+    			->addStoreFilter($storeId)
+    			->addIdFilter($_product->getId())->setOrder('ordered_qty', 'desc'); //best sellers on top
+    			$data = $products->getFirstItem()->getData();
 
-			Mage::app ()->setCurrentStore ( $oldStore );
+    			Mage::app ()->setCurrentStore ( $oldStore );
 
-			if(isset($data['ordered_qty']) && (int) $data['ordered_qty'])
-			{
-				return (int)$data['ordered_qty'];
-			}
+    			if(isset($data['ordered_qty']) && (int) $data['ordered_qty'])
+    			{
+    				return (int)$data['ordered_qty'];
+    			}
+		    }
+		    catch (Exception $e)
+		    {
+		        return 0;
+		    }
 		}else{
 			return 0;
 		}

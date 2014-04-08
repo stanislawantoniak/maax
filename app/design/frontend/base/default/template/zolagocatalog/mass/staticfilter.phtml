@@ -43,11 +43,12 @@ $activeFilters = $this->getCurrentStaticFilterValues();
 				<?php if ($singleFilter): ?>
 					<?php
 						$firstFilter = current($singleFilter);
+						$filterLabel = $this->getAttributeLabel($firstFilter['code'], $this->getStore());
 						$selectedFilter = false;
 					?>
 					<?php if ($firstFilter['group'] !== Zolago_Catalog_Helper_Data::ADDITIONAL_ATTRIBUTES_GROUP): ?>
 						<span class="filter-box">
-							<label for="staticFilter"><?php echo $firstFilter['label']; ?>:</label>
+							<label for="staticFilter"><?php echo $filterLabel; ?>:</label>
 							<select name="staticFilter" id="staticFilter-<?php echo $firstFilter['attribute_id']; ?>" class="staticFilter">
 								<option value=""><?php echo Mage::helper("zolagocatalog")->__("--- Select ---"); ?></option>
 								<?php foreach($singleFilter as $value): ?>
@@ -72,11 +73,12 @@ $activeFilters = $this->getCurrentStaticFilterValues();
 				<?php if ($singleFilter): ?>
 					<?php
 						$firstFilter = current($singleFilter);
+						$filterLabel = $this->getAttributeLabel($firstFilter['code'], $this->getStore());
 						$selectedFilter = false;
 					?>
 					<?php if ($firstFilter['group'] == Zolago_Catalog_Helper_Data::ADDITIONAL_ATTRIBUTES_GROUP): ?>
 						<span class="filter-box">
-							<label for="staticFilter"><?php echo $firstFilter['label']; ?>:</label>
+							<label for="staticFilter"><?php echo $filterLabel; ?>:</label>
 							<select name="staticFilter" id="staticFilter-<?php echo $firstFilter['attribute_id']; ?>" class="staticFilter">
 								<option value=""><?php echo Mage::helper("zolagocatalog")->__("--- Select ---"); ?></option>
 							<?php foreach($singleFilter as $value): ?>
