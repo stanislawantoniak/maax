@@ -108,6 +108,8 @@ class SolrBridge_Solrsearch_Block_Faces extends Mage_Core_Block_Template
 
     	$this->manupulateFacetFields($facets_fields);
 
+    	//$this->arrayMoveElementToTop($facets_fields, 'manufacturer_facet');
+
     	return $facets_fields;
     }
 
@@ -133,6 +135,12 @@ class SolrBridge_Solrsearch_Block_Faces extends Mage_Core_Block_Template
     		$this->filterQuery = $this->solrModel->getStandardFilterQuery();
     	}
     	return $this->filterQuery;
+    }
+
+    public function arrayMoveElementToTop(&$array, $key) {
+        $temp = array($key => $array[$key]);
+        unset($array[$key]);
+        $array = $temp + $array;
     }
 
     protected function manupulateFacetFields(&$facetData)

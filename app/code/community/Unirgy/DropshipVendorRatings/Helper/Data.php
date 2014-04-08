@@ -32,7 +32,7 @@ class Unirgy_DropshipVendorRatings_Helper_Data extends Mage_Core_Helper_Abstract
         $vendor = Mage::helper('udropship')->getVendor($vendor);
         return Mage::getModel('review/review')->getCollection()
             ->addStoreFilter(Mage::app()->getStore()->getId())
-            ->addStatusFilter('Approved')
+            ->addStatusFilter(Mage::helper('review')->__('Approved'))
             ->addEntityFilter(Mage::helper('udratings')->myEt(), $vendor->getId())
             ->setFlag('AddRateVotes', true)
             ->setFlag('AddAddressData', true);
@@ -41,7 +41,7 @@ class Unirgy_DropshipVendorRatings_Helper_Data extends Mage_Core_Helper_Abstract
     {
         return Mage::getModel('review/review')->getCollection()
             ->addStoreFilter(Mage::app()->getStore()->getId())
-            ->addStatusFilter('Approved')
+            ->addStatusFilter(Mage::helper('review')->__('Approved'))
             ->addFieldToFilter('main_table.entity_id', Mage::helper('udratings')->myEt())
             ->addCustomerFilter(Mage::getSingleton('customer/session')->getCustomerId())
             ->setDateOrder()
