@@ -5,7 +5,7 @@ class Zolago_Adminhtml_Block_Widget_Grid_Column_Renderer_Link
 {
 	
 	public function render(Varien_Object $row){
-		return "<a href=\"{$this->_getLink($row)}\" target=\"blank\">{$this->getColumn()->getLinkLabel()}</a>";
+		return "<a href=\"{$this->_getLink($row)}\" target=\"_blank\">{$this->getColumn()->getLinkLabel()}</a>";
 	}
 	
 	protected function _getLink(Varien_Object $row) {
