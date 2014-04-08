@@ -122,14 +122,12 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 	protected function	_getFixedColumns(){
 		return array(
 			"start" => array(
-				/*
 				"entity_id"	=> array(
 					"index"		=>"entity_id", 
 					"type"		=>"number",
 					"header"	=> Mage::helper("zolagocatalog")->__("ID"),
 					"width"		=> "50px"
 				),
-				*/
 				"thumbnail" => array(
 					"index"		=>"thumbnail", 
 					"type"		=>"image",
