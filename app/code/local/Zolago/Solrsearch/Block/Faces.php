@@ -219,8 +219,6 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
             if($this->getSpecialMultiple()) {
                 $data = $this->_prepareMultiValues('product_flag_facet', $data);
             }
-            $data = array_merge($facetFileds['product_flag_facet'], $bestsellerFacet, $isNewFacet);
-			
 			$data = array_merge($facetFileds['product_flag_facet'], $bestsellerFacet, $isNewFacet, $cleanSolrData);
 			ksort($data);
 			
@@ -649,13 +647,25 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
             $productFlagFacet	= $facetCleanFileds['product_flag_facet'];
         }
 		
+		if (!isset($productFlagFacet[Mage::helper('zolagocatalog')->__('Promotion')])) {
+			$productFlagFacet[Mage::helper('zolagocatalog')->__('Promotion')] = 0;
+		}
+		
+		if (!isset($productFlagFacet[Mage::helper('zolagocatalog')->__('Sale')])) {
+			$productFlagFacet[Mage::helper('zolagocatalog')->__('Sale')] = 0;
+		}		
+		
         if (isset($facetCleanFileds['is_bestseller_facet'][Mage::helper('core')->__('Yes')])) {
             $bestsellerFacet	= array(Mage::helper('zolagosolrsearch')->__('Bestseller') => $facetCleanFileds['is_bestseller_facet'][Mage::helper('core')->__('Yes')]);
-        }
+        } else {
+			$bestsellerFacet	= array(Mage::helper('zolagosolrsearch')->__('Bestseller') => 0);
+		}
 
         if (isset($facetCleanFileds['is_new_facet'][Mage::helper('core')->__('Yes')])) {
             $isNewFacet			= array(Mage::helper('zolagosolrsearch')->__('New') => $facetCleanFileds['is_new_facet'][Mage::helper('core')->__('Yes')]);
-        }
+        } else {
+			$isNewFacet	= array(Mage::helper('zolagosolrsearch')->__('New') => 0);
+		}
 		
 		return array_merge($productFlagFacet, $bestsellerFacet, $isNewFacet);
 	}
