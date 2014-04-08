@@ -256,13 +256,15 @@ class SolrBridge_Solrsearch_Model_Ultility
 
 	    if ($query->getQueryText() != '')
 	    {
-	        if ($query->getId()) {
+	        if ($query->getId())
+	        {
 	            $query->setPopularity($query->getPopularity()+1);
 	        }
-	        else {
-	            $query->setPopularity(1);
+	        else
+	        {
+	            $query->setPopularity(1)->setDisplayInTerms(1);
+	            $query->setIsActive(1)->setIsProcessed(1);
 	        }
-	        $query->setIsActive(1)->setIsProcessed(1)->setDisplayInTerms(1);
 	        $query->setNumResults($numberResults);
 	        $query->save();
 	    }
@@ -473,8 +475,7 @@ class SolrBridge_Solrsearch_Model_Ultility
 			$textSearch = array();
 			$textSearchText = array();
 			$docData = array();
-			//$_product = Mage::getModel('catalog/product')->setStoreId($store->getId())->load($product->getId());
-
+			$_product->setStoreId($store->getId());
 
 			//Price index only
 			if( $onlyprice )

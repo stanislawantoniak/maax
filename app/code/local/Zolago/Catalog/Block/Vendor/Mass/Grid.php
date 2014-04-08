@@ -11,10 +11,12 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 		
 		// Add custom renderes
 		$this->setColumnRenderers(array(
-			'multiselect'=>'zolagoadminhtml/widget_grid_column_renderer_multiselect'
+			'multiselect'	=>	'zolagoadminhtml/widget_grid_column_renderer_multiselect',
+			'image'			=>	'zolagoadminhtml/widget_grid_column_renderer_image',
+			'link'			=>	'zolagoadminhtml/widget_grid_column_renderer_link'
 		));
 		$this->setColumnFilters(array(
-			"multiselect"=>'zolagoadminhtml/widget_grid_column_filter_multiselect'
+			"multiselect"	=>	'zolagoadminhtml/widget_grid_column_filter_multiselect'
 		));
     }
 
@@ -60,6 +62,11 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 		// Add non-grid filters
 		$collection->addAttributeToFilter("udropship_vendor", $this->getVendorId());
 		$collection->addAttributeToFilter("attribute_set_id", $this->getAttributeSet()->getId());
+		$collection->addAttributeToFilter("visibility", array("in"=>array(
+			Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_CATALOG, 
+			Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_SEARCH, 
+			Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH 
+		)));
 		
 		// Add fixed column data
 	    foreach($this->_getFixedColumns() as $position){
@@ -115,23 +122,36 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 	protected function	_getFixedColumns(){
 		return array(
 			"start" => array(
-				"entity_id"=> array(
-					"index"=>"entity_id", 
-					"type"=>"number",
-					"header"=> Mage::helper("zolagocatalog")->__("ID"),
-					"width" => "50px"
+				"entity_id"	=> array(
+					"index"		=>"entity_id", 
+					"type"		=>"number",
+					"header"	=> Mage::helper("zolagocatalog")->__("ID"),
+					"width"		=> "50px"
+				),
+				"thumbnail" => array(
+					"index"		=>"thumbnail", 
+					"type"		=>"image",
+					"attribute" => Mage::getModel("eav/config")->getAttribute(Mage_Catalog_Model_Product::ENTITY, "thumbnail"),
+					"clickable" => true,
+					"header"	=> Mage::helper("zolagocatalog")->__("Image"),
+					"width"		=> "100px",
+					"filter"	=> false,
+					"sortable"	=> false
 				)
 			),
-			/*
 			"end" => array(
-				"price" => array(
-					"index"			=> "price",
-					'type'			=> 'price',
-					'currency_code' => $this->getStore()->getBaseCurrency()->getCode(),
-					"header"		=> Mage::helper("zolagocatalog")->__("Price"),
+				"edit" => array(
+					"index"			=> "entity_id",
+					'type'			=> 'link',
+					'link_action'	=> 'udprod/vendor/productEdit',
+					'link_param'	=> 'id',
+					'link_label'	=> Mage::helper("zolagocatalog")->__("Edit form"),
+					"header"		=> Mage::helper("zolagocatalog")->__("Edit"),
+					"width"			=> "100px",
+					"filter"		=> false,
+					"sortable"		=> false
 				)
 			) 
-			*/
 		);
 	}
 
@@ -149,14 +169,14 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 				"index"     => $code,
 				'type'		=> $this->_getColumnType($attribute),
 				"header"    => $this->_getColumnLabel($attribute),
-				"attribute"	=> $attribute
+				"attribute"	=> $attribute,
 			);
 			$this->addColumn($code,  $this->_processColumnConfig($attribute, $data));
 		}
 		
         $this->_prepareStaticEndColumns();
 		
-        return parent::_prepareColumns();
+		parent::_prepareColumns();
     }
 
 	public function getGridUrl() {
@@ -182,6 +202,12 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 		}elseif($frontendType=="price"){
 			$extend['type'] = "price";
 			$extend['currency_code'] = $this->getStore()->getBaseCurrency()->getCode();
+		}elseif($frontendType=="media_image"){
+			$extend['type'] = "image";
+			$extend['clickable'] = true;
+			$extend['width'] = "100px";
+			$extend['filter'] = false;
+			$extend['sortable'] = false;
 		}
 		return array_merge($config, $extend);
 	}

@@ -21,6 +21,8 @@ class Zolago_Catalog_Vendor_MassController
 			);
 			// Attributes data array('code'=>'value',...)
 			$attributesData = $this->getRequest()->getPost("attributes");
+			// Attrbiute modes
+			$attributesMode = $this->getRequest()->getPost("attributes_mode");
 			// Attribure set
 			$attributeSet = $this->_getAttributeSet();
 			// Store scope
@@ -76,9 +78,25 @@ class Zolago_Catalog_Vendor_MassController
                         if (is_array($value)) {
                             $attributesData[$attributeCode] = implode(',', $value);
                         }
+						
+						// Unset value if add mode active
+						if(isset($attributesMode[$attributeCode])){
+							switch ($attributesMode[$attributeCode]) {
+								case "add":
+									Mage::getResourceSingleton('zolagocatalog/vendor_mass')->addValueToMultipleAttribute(
+										$productIds,
+										$attribute, 
+										is_array($value) ? $value : array(),
+										$store
+									);
+									unset($attributesData[$attributeCode]);
+								break;
+							}
+						}
                     }
                 }
 				
+				// Write attribs & make reindex
                 Mage::getSingleton('catalog/product_action')
                     ->updateAttributes($productIds, $attributesData, $store->getId());
 				
@@ -167,6 +185,11 @@ class Zolago_Catalog_Vendor_MassController
 		$collection->addIdFilter($productIds);
 		$collection->addAttributeToFilter("attribute_set_id", $attributeSet->getId());
 		$collection->addAttributeToFilter("udropship_vendor", $this->_getSession()->getVendor()->getId());
+		$collection->addAttributeToFilter("visibility", array("in"=>array(
+			Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_CATALOG, 
+			Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_SEARCH, 
+			Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH 
+		)));
 		return count(array_diff($productIds, $collection->getAllIds()))==0;
 	}
 	
