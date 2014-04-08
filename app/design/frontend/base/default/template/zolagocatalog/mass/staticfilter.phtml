@@ -8,11 +8,22 @@
 	.filter-box {
 		padding: 2px 0 2px 0;
 		display: inline-block;
+		width: 48.5%;
+		vertical-align: top;
 	}
-	.staticFilter-box .switcher {
-		min-height: 55px;
+	.filter-box .selectedFilter {
+		display: inline-block;
+		font-weight: bold;
 	}
-	.staticFilter-box .switcher .scalable {
+	.staticFilter-box .box {
+		background: none repeat scroll 0 0 #EEEFFD;
+		padding-bottom: 0;
+	}
+	.staticFilter-box .box .left, 
+	.staticFilter-box .box .right {
+		width: 48.5%;
+	}	
+	.staticFilter-box .box .scalable {
 		margin-top: 5px;
 		margin-bottom: 10px;
 	}
@@ -24,34 +35,78 @@
 $activeFilters = $this->getCurrentStaticFilterValues();
 ?>
 <div class="staticFilter-box">
-	<h1><?php echo $this->__("Static Filters");?></h1>
-	<p class="switcher">
 	<?php if ($this->getStaticFilters($this->getCurrentAttributeSetId()) && $this->getCurrentAttributeSetId()): ?>
-		<?php foreach($this->getStaticFilters($this->getCurrentAttributeSetId()) as $singleFilter): ?>
-			<?php if ($singleFilter): ?>
-				<?php $firstFilter = current($singleFilter); ?>
-				<span class="filter-box">
-					<label for="staticFilter"><?php echo $firstFilter['frontend_label']; ?>:</label>
-					<select name="staticFilter" id="staticFilter-<?php echo $firstFilter['attribute_id']; ?>" class="staticFilter">
-						<option value=""><?php echo Mage::helper("zolagocatalog")->__("--- Select ---"); ?></option>
-						<?php foreach($singleFilter as $value): ?>
-						<?php if ($value['value']): ?>
-							<option value="<?php echo $value['attribute_id']; ?>" <?php if($activeFilters && array_key_exists($value['attribute_id'], $activeFilters) && $activeFilters[$value['attribute_id']]==$value['value']):?> selected="selected"<?php endif;?> filterValue="<?php echo $this->escapeHtml($value['value']); ?>"><?php echo substr($this->escapeHtml($value['value']), 0, 20);?></option>
-						<?php endif; ?>
-						<?php endforeach; ?>
-					</select>
-				</span>
-			<?php endif; ?>
-		<?php endforeach; ?>
+	<div class="box">
+		<!-- Static Filters from All Attribute Groups: Start -->
+		<div class="left">
+			<?php foreach($this->getStaticFilters($this->getCurrentAttributeSetId()) as $singleFilter): ?>
+				<?php if ($singleFilter): ?>
+					<?php
+						$firstFilter = current($singleFilter);
+						$filterLabel = $this->getAttributeLabel($firstFilter['code'], $this->getStore());
+						$selectedFilter = false;
+					?>
+					<?php if ($firstFilter['group'] !== Zolago_Catalog_Helper_Data::ADDITIONAL_ATTRIBUTES_GROUP): ?>
+						<span class="filter-box">
+							<label for="staticFilter"><?php echo $filterLabel; ?>:</label>
+							<select name="staticFilter" id="staticFilter-<?php echo $firstFilter['attribute_id']; ?>" class="staticFilter">
+								<option value=""><?php echo Mage::helper("zolagocatalog")->__("--- Select ---"); ?></option>
+								<?php foreach($singleFilter as $value): ?>
+									<?php if ($value['value'] && $value['group'] !== Zolago_Catalog_Helper_Data::ADDITIONAL_ATTRIBUTES_GROUP): ?>
+										<option value="<?php echo $value['attribute_id']; ?>" <?php if($activeFilters && array_key_exists($value['attribute_id'], $activeFilters) && $activeFilters[$value['attribute_id']]==$value['value']): $selectedFilter = $value['value']; ?> selected="selected"<?php endif;?> filterValue="<?php echo $this->escapeHtml($value['value']); ?>"><?php echo substr($this->escapeHtml($value['value']), 0, 20);?></option>
+									<?php endif; ?>
+								<?php endforeach; ?>
+							</select>
+							<?php // if ($selectedFilter): ?>
+								<br /><span class="selectedFilter"><?php echo $selectedFilter; ?></span>
+							<?php // endif; ?>
+						</span>
+					<?php endif; ?>
+				<?php endif; ?>
+			<?php endforeach; ?>
+		</div>
+		<!-- Static Filters from All Attribute Groups: End -->
+
+		<!-- Static Filters from Special Attribute Group: Start -->
+		<div class="right">
+			<?php foreach($this->getStaticFilters($this->getCurrentAttributeSetId()) as $singleFilter): ?>
+				<?php if ($singleFilter): ?>
+					<?php
+						$firstFilter = current($singleFilter);
+						$filterLabel = $this->getAttributeLabel($firstFilter['code'], $this->getStore());
+						$selectedFilter = false;
+					?>
+					<?php if ($firstFilter['group'] == Zolago_Catalog_Helper_Data::ADDITIONAL_ATTRIBUTES_GROUP): ?>
+						<span class="filter-box">
+							<label for="staticFilter"><?php echo $filterLabel; ?>:</label>
+							<select name="staticFilter" id="staticFilter-<?php echo $firstFilter['attribute_id']; ?>" class="staticFilter">
+								<option value=""><?php echo Mage::helper("zolagocatalog")->__("--- Select ---"); ?></option>
+							<?php foreach($singleFilter as $value): ?>
+									<?php if ($value['value'] && $value['group'] == Zolago_Catalog_Helper_Data::ADDITIONAL_ATTRIBUTES_GROUP): ?>
+										<option value="<?php echo $value['attribute_id']; ?>" <?php if($activeFilters && array_key_exists($value['attribute_id'], $activeFilters) && $activeFilters[$value['attribute_id']]==$value['value']): $selectedFilter = $value['value']; ?> selected="selected"<?php endif;?> filterValue="<?php echo $this->escapeHtml($value['value']); ?>"><?php echo substr($this->escapeHtml($value['value']), 0, 20);?></option>
+									<?php endif; ?>
+								<?php endforeach; ?>
+							</select>
+							<?php // if ($selectedFilter): ?>
+								<br /><span class="selectedFilter"><?php echo $selectedFilter; ?></span>
+							<?php // endif; ?>
+						</span>
+					<?php endif; ?>
+				<?php endif; ?>
+			<?php endforeach; ?>
+		</div>
+		<!-- Static Filters from Special Attribute Group: End -->
 		<span class="filterSearch">
 			<button type="button" title="<?php echo $this->__('Reset Filter') ?>" class="scalable task" onclick="resetStaticFilter(this);"><span><span><?php echo $this->__('Reset Filter') ?></span></span></button>
 			<button type="button" title="<?php echo $this->__('Search') ?>" class="scalable task" onclick="changeStaticFilter(this);"><span><span><?php echo $this->__('Search') ?></span></span></button>
 		</span>
 		<div class="clear"></div>
+	</div>
 	<?php else: ?>
-		<?php echo $this->__('There are no Static Filters for this Attribute Set'); ?>		
+		<p class="switcher">
+			<?php echo $this->__('There are no Static Filters for this Attribute Set'); ?>
+		</p>
 	<?php endif; ?>
-	</p>
 </div>
 <script type="text/javascript">
 function resetStaticFilter(select){

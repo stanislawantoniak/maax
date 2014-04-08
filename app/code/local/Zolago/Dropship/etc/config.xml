@@ -141,6 +141,15 @@
                         <fieldset>dhl</fieldset>
                         <position>30</position>
                     </dhl_password>
+					<!-- label store -->
+					<label_store>
+                        <label>Label store</label>
+                        <type>select</type>
+						<source_model>zolagodropship/source_store</source_model>
+                        <fieldset>microsite</fieldset>
+						<only_admin>1</only_admin>
+                        <position>500</position>
+                    </label_store>
 					<!-- category -->
 					<root_category>
                         <label>Root categories</label>

@@ -163,7 +163,7 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 		
 		foreach($attributeCollection as $attribute){
 			/* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
-			$attribute->setStoreId($this->getStore()->getId());
+			$attribute->setStoreId($this->getLabelStore()->getId());
 			$code = $attribute->getAttributeCode();
 			$data = array(
 				"index"     => $code,
@@ -224,7 +224,7 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 	}
 	
 	protected function _getColumnLabel(Mage_Catalog_Model_Resource_Eav_Attribute $attribute){
-		 return $attribute->getStoreLabel($this->getStore()->getId());
+		 return $attribute->getStoreLabel($this->getLabelStore()->getId());
 	}
 
 
@@ -303,10 +303,17 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 	}
 	
 	/**
-	 * @return Unirgy_Dropship_Model_Vendor
+	 * @return int
 	 */
 	public function getVendorId() {
 		return $this->_getSession()->getVendorId();
+	}
+	
+	/**
+	 * @return Unirgy_Dropship_Model_Vendor
+	 */
+	public function getVendor() {
+		return $this->_getSession()->getVendor();
 	}
 	
 	/**
@@ -368,6 +375,25 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 		return Mage::app()->getStore(
 			Mage::app()->getRequest()->getParam("store", 0)
 		);
+	}
+	
+	/**
+	 * Returns store used form labels values
+	 * @return Mage_Core_Model_Store
+	 */
+	public function getLabelStore(){
+		if(!$this->getData("label_store")){
+			$store = null;
+			if($this->getVendor() && $this->getVendor()->getLabelStore()){
+				Mage::helper('udropship')->loadCustomData($this->getVendor());
+				$store = Mage::app()->getStore($this->getVendor()->getLabelStore());
+			}
+			if(!$store || !$store->getId()){
+				$store = $this->getStore();
+			}
+			$this->setData("label_store", $store);
+		}
+		return $this->getData("label_store");
 	}
     
 
