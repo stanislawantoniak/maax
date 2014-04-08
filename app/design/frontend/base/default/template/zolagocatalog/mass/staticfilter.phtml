@@ -24,8 +24,8 @@
 		width: 48.5%;
 	}	
 	.staticFilter-box .box .scalable {
-		margin-top: 5px;
-		margin-bottom: 10px;
+		margin-top: 0px;
+		margin-bottom: 5px;
 	}
 	.filterSearch {
 		float: right;
@@ -96,6 +96,7 @@ $activeFilters = $this->getCurrentStaticFilterValues();
 			<?php endforeach; ?>
 		</div>
 		<!-- Static Filters from Special Attribute Group: End -->
+		<div class="clear"></div>
 		<span class="filterSearch">
 			<button type="button" title="<?php echo $this->__('Reset Filter') ?>" class="scalable task" onclick="resetStaticFilter(this);"><span><span><?php echo $this->__('Reset Filter') ?></span></span></button>
 			<button type="button" title="<?php echo $this->__('Search') ?>" class="scalable task" onclick="changeStaticFilter(this);"><span><span><?php echo $this->__('Search') ?></span></span></button>
