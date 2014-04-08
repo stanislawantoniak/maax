@@ -159,15 +159,15 @@ class Zolago_Catalog_Block_Vendor_Mass_Editor extends Mage_Core_Block_Template {
 		$code = $attribute->getAttributeCode();
 		switch ($attribute->getFrontendInput()) {
 			case "multiselect":
-				/*
-				$field = $this->getForm()->addField($code."_mode", "select", array(
-					"name"		=> "mode"."[".$code."]",
+				$field = $this->getForm()->addField($code."_mode", "radios", array(
+					"name"		=> "attributes_mode"."[".$code."]",
 					"values"	=> $this->_getMultiselectModeValues(),
+					"value"     => "add",
 					"disabled"  => "dsiabled",
-					"class"		=> "additional_field"
+					"class"		=> "additional_field",
+					"separator" => "<br/>"
 				));
 				return array($field);
-				*/
 			break;
 		}
 		return array();
@@ -175,9 +175,8 @@ class Zolago_Catalog_Block_Vendor_Mass_Editor extends Mage_Core_Block_Template {
 	
 	protected function _getMultiselectModeValues(){
 		return array(
-			"set" => Mage::helper('zolagocatalog')->__("Set"),
-			"add" => Mage::helper('zolagocatalog')->__("Add"),
-			"sub" => Mage::helper('zolagocatalog')->__("Substract")
+			array("value"=>"add", "label"=>Mage::helper('zolagocatalog')->__("Add")),
+			array("value"=>"set", "label"=> Mage::helper('zolagocatalog')->__("Set"))
 		);
 	}
 	

@@ -52,14 +52,14 @@
 								<div class="filter-field-100 element-wrapper" style="display: none;" id="<?php echo $_field->getId() . "_wrapper";?>">
 									<?php echo $this->getEmptyValueField($_field);?>
 									<?php echo $_field->toHtml();?>
-										<?php if($_column->getAttribute()):?>
-										<div class="scope">[<?php echo $this->getScope($_column->getAttribute());?>]</div>
-										<?php endif;?>
 									<div>
 									<?php foreach($this->getAdditionalFields($_column) as $_field):?>
 										<?php echo $_field->toHtml();?>
 									<?php endforeach;?>
 									</div>
+									<?php if($_column->getAttribute()):?>
+									<div class="scope">[<?php echo $this->getScope($_column->getAttribute());?>]</div>
+									<?php endif;?>
 								</div>
 							<?php endif;?>
 						</td>
