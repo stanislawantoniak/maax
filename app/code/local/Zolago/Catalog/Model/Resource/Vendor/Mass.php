@@ -107,27 +107,16 @@ class Zolago_Catalog_Model_Resource_Vendor_Mass
 	 */
 	protected function _sortOptions(Mage_Catalog_Model_Resource_Eav_Attribute $attrbiute, array &$result) {
 		$optionSort = $this->_getOptionSort($attrbiute);
-		$unsorted = array();
-		$sorted = array();
-		foreach($result as $key=>$optionId){
-			 if(isset($optionSort[$optionId])){
-				 if(!isset($sorted[$optionSort[$optionId]])){
-					 $sorted[$optionSort[$optionId]] = array(); 
-				 }
-				 $sorted[$optionSort[$optionId]][] = $optionId;
-			 }else{
-				 $unsorted[] = $optionId;
+		$_result = $result;
+		$result = array();
+		foreach($this->_getOptionSort($attrbiute) as $key=>$sortOrder){
+			 if(($index=array_search($key, $_result))!==false){
+				$result[] = $_result[$index];
+				unset($_result[$index]);
 			 }
 		}
-		$result = array();
-		sort($sorted);
-		foreach($sorted as $sort){
-			foreach($sort as $optionId){
-				$result[] = $optionId;
-			}
-		}
-		foreach($unsorted as $unsort){
-			$result[] = $unsort;
+		foreach($_result as $optionId){
+			$result[] = $optionId;
 		}
 		return $result;
 	}
@@ -137,7 +126,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Mass
 			$select = $this->getReadConnection()->select();
 			$select->from($this->getTable("eav/attribute_option"), array("option_id", "sort_order"));
 			$select->where("attribute_id=?", $attribute->getId());
-			$select->order(array("sort_order DESC", "option_id DESC"));
+			$select->order(array("sort_order ASC"));
 			$this->_options[$attribute->getId()] = $this->getReadConnection()->fetchPairs($select);
 		}
 		return $this->_options[$attribute->getId()];
