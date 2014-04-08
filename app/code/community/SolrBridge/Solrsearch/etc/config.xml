@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<SolrBridge_Solrsearch>
-			<version>1.9.6.3</version>
+			<version>1.9.6.4</version>
 		</SolrBridge_Solrsearch>
 	</modules>
 	<admin>
@@ -251,6 +251,14 @@
 					</solr_search>
 				</observers>
 			</admin_system_config_changed_section_solrbridge>
+			<catalogsearch_query_save_commit_after>
+				<observers>
+					<solr_search>
+						<class>solrsearch/observer</class>
+						<method>generateIgnoreSearchTermsConfig</method>
+					</solr_search>
+				</observers>
+			</catalogsearch_query_save_commit_after>
 		</events>
 	</adminhtml>
 	<default>
@@ -258,6 +266,7 @@
 			<settings>
 				<allow_part_of_word>1</allow_part_of_word>
 				<included_subproduct>0</included_subproduct>
+				<allow_ignore_term>0</allow_ignore_term>
 			</settings>
 		</solrbridge>
 	</default>
