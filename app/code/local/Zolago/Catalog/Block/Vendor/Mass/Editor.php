@@ -58,12 +58,16 @@ class Zolago_Catalog_Block_Vendor_Mass_Editor extends Mage_Core_Block_Template {
 		);
 		return $this->_processField($field, $attribute);
 	}
-	
+	/**
+	 * Can prepare edit filed for attribute?
+	 * @param Mage_Catalog_Model_Resource_Eav_Attribute $attribute
+	 * @return bool
+	 */
 	protected function _validateAttribute(Mage_Catalog_Model_Resource_Eav_Attribute $attribute = null) {
 		return $attribute && 
 			   Mage::helper("zolagoeav")->isAttributeEditableNormal($attribute) && 
 			   !$attribute->getIsUnique() && 
-			   !in_array($attribute->getFrontendInput(), array("media_image", "fixed_tax"));
+			   !in_array($attribute->getFrontendInput(), array("media_image", "weee"));
 	}
 	
 	public function buildFieldId($id, $postfix=null) {
