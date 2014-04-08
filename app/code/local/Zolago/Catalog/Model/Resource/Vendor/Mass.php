@@ -3,11 +3,145 @@
 class Zolago_Catalog_Model_Resource_Vendor_Mass 
 	extends Mage_Core_Model_Resource_Db_Abstract{
 	
+	protected $_options = array();
+	
 	protected function _construct() {
 		$this->_init("udropship/vendor_product_assoc", null);
 	}
+
+	/**
+	 * Process value-add action to multiple attribute
+	 * @param array $productIds
+	 * @param Mage_Catalog_Model_Resource_Eav_Attribute $attribute
+	 * @param array $valuesToAdd
+	 * @param Mage_Core_Model_Store $store
+	 * @return Zolago_Catalog_Model_Resource_Vendor_Mass
+	 * 
+	 * @todo optymalize performence via collect same attribute vale and product ids
+	 */
+	public function addValueToMultipleAttribute(
+			array $productIds, 
+			Mage_Catalog_Model_Resource_Eav_Attribute $attribute, 
+			array $valuesToAdd, 
+			Mage_Core_Model_Store $store) {
+		
+		if(!count($valuesToAdd) ||
+		   !($attribute->getBackend() instanceof Mage_Eav_Model_Entity_Attribute_Backend_Array) || 
+		   !$attribute->getBackendTable()){
+			
+			return $this;
+		}
+		
+		$write = $this->_getWriteAdapter();
+		$backend = $attribute->getBackendTable();
+		$select = $this->getReadConnection()->select();
+		
+		$select->from($backend, array("entity_id", "value"));
+		$select->where("entity_id IN (?)", $productIds);
+		$select->where("entity_type_id=?", $attribute->getEntityTypeId());
+		$select->where("attribute_id=?", $attribute->getId());
+		$select->where("store_id=?", $store->getId());
+		
+		$insert = array();
+		
+		$dbValues  = $this->getReadConnection()->fetchPairs($select);
+		$indexSameValues = $indexMixedValues = array();
+		
+		foreach($productIds as $productId){
+			$item = array(
+				"entity_type_id"=>$attribute->getEntityTypeId(),
+				"attribute_id"	=> $attribute->getId(),
+				"store_id"		=> $store->getId(),
+				"entity_id"		=> $productId
+			);
+			if($dbValues && isset($dbValues[$productId])){
+				$item['value'] = $this->_joinValues($attribute, $dbValues[$productId], $valuesToAdd);
+				$indexMixedValues[$productId] = $item['value'];
+			}else{
+				$item['value'] = implode(",", $this->_sortOptions($attribute, $valuesToAdd));
+				$indexSameValues[] = $productId;
+			}
+			$insert[]=$item;
+		}
+		$write->insertOnDuplicate($backend, $insert, array("value"));
+		
+		// Reindex changed values - each value can be different
+		foreach($indexMixedValues as $productId=>$value){
+			$object = new Varien_Object(array(
+				'product_ids'       => array($productId),
+				'attributes_data'   => array($attribute->getAttributeCode()=>$value),
+				'store_id'          => $store->getId()
+			));
+			Mage::getSingleton('index/indexer')->processEntityAction(
+				$object, Mage_Catalog_Model_Product::ENTITY, Mage_Index_Model_Event::TYPE_MASS_ACTION
+			);
+		}
+		
+		// Reindex new (same) values as one event
+		$object = new Varien_Object(array(
+			'product_ids'       => array_unique($indexSameValues),
+			'attributes_data'   => array($attribute->getAttributeCode()=>$valuesToAdd),
+			'store_id'          => $store->getId()
+		));
+		Mage::getSingleton('index/indexer')->processEntityAction(
+			$object, Mage_Catalog_Model_Product::ENTITY, Mage_Index_Model_Event::TYPE_MASS_ACTION
+		);
+		
+		return $this;
+	}
 	
+	/**
+	 * @param array $str
+	 * @param array $newValues
+	 * @return string
+	 */
+	protected function _joinValues(Mage_Catalog_Model_Resource_Eav_Attribute $attribute, $str, array $newValues) {
+		$result = array_unique(array_merge(explode(",", $str),$newValues));
+		$this->_sortOptions($attribute, $result);
+		return implode(",", $result);
+	}
 	
+	/**
+	 * @param Mage_Catalog_Model_Resource_Eav_Attribute $attrbiute
+	 * @param array $result
+	 */
+	protected function _sortOptions(Mage_Catalog_Model_Resource_Eav_Attribute $attrbiute, array &$result) {
+		$optionSort = $this->_getOptionSort($attrbiute);
+		$unsorted = array();
+		$sorted = array();
+		foreach($result as $key=>$optionId){
+			 if(isset($optionSort[$optionId])){
+				 if(!isset($sorted[$optionSort[$optionId]])){
+					 $sorted[$optionSort[$optionId]] = array(); 
+				 }
+				 $sorted[$optionSort[$optionId]][] = $optionId;
+			 }else{
+				 $unsorted[] = $optionId;
+			 }
+		}
+		$result = array();
+		sort($sorted);
+		foreach($sorted as $sort){
+			foreach($sort as $optionId){
+				$result[] = $optionId;
+			}
+		}
+		foreach($unsorted as $unsort){
+			$result[] = $unsort;
+		}
+		return $result;
+	}
+	
+	protected function _getOptionSort(Mage_Catalog_Model_Resource_Eav_Attribute $attribute) {
+		if(!isset($this->_options[$attribute->getId()])){
+			$select = $this->getReadConnection()->select();
+			$select->from($this->getTable("eav/attribute_option"), array("option_id", "sort_order"));
+			$select->where("attribute_id=?", $attribute->getId());
+			$select->order(array("sort_order DESC", "option_id DESC"));
+			$this->_options[$attribute->getId()] = $this->getReadConnection()->fetchPairs($select);
+		}
+		return $this->_options[$attribute->getId()];
+	}
 	
 	/**
 	 * @param Mage_Catalog_Model_Resource_Product_Attribute_Collection $collection
