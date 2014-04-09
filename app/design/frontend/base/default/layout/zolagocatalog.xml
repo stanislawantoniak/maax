@@ -186,7 +186,7 @@
 		</reference>
 	</adminhtml_head>
 	
-	<zolagocatalog_vendor_mass_index>
+	<udprod_vendor_mass_index>
 		<update handle="udropship_vendor" />
 		
 		<reference name="content">
@@ -198,5 +198,5 @@
 				<block type="zolagocatalog/vendor_mass_editor" name="editor" as="editor" template="zolagocatalog/mass/editor.phtml"/>
 			</block>
 		</reference>
-	</zolagocatalog_vendor_mass_index>
+	</udprod_vendor_mass_index>
 </layout>

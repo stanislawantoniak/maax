@@ -1,3 +1,41 @@
-.header {background: none !important;}
-.zolagocatalog-vendor-mass-index .pager { text-align: left !important; }
-.zolagocatalog-vendor-mass-index .wrapper { width: auto; min-width: 960px; margin: 20px;}
+.header {
+	background: none !important;
+}
+.z-grid .pager { 
+	text-align: left !important; 
+}
+.wrapper { 
+	width: auto !important; 
+	min-width: 960px; 
+	margin: 20px;
+}
+.grid.z-grid tbody td{
+	background: #e7efef;
+}
+.grid.z-grid tbody td.required-cell{
+	background: #fecccc;
+}
+.grid.z-grid table tfoot tr td{
+	border-top: inherit;
+}
+.grid.z-grid table tbody a{
+	color: #267DB7;
+	font-weight: normal;
+	border-bottom: 1px #267DB7 dotted;
+}	
+.grid.z-grid table tbody a:hover{
+	border-bottom-style: solid;
+}
+.grid.z-grid table{
+	padding-bottom: 0;
+}
+.grid.z-grid .filter-field-100 input.input-text,
+.grid.z-grid .filter-field-100 textarea.textarea{
+	width: 100%;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+}
+.z-grid .scope{
+	color: #6f8992;
+	font-size: .9em;
+}
