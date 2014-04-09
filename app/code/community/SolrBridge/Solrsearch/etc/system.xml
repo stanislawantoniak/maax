@@ -419,6 +419,41 @@
                             <show_in_store>0</show_in_store>
 							<source_model>adminhtml/system_config_source_yesno</source_model>
 						</advanced_autocomplete>
+						<multiplestore translate="label comment" module="solrsearch">
+							<label>Multiple store mode</label>
+							<comment>
+							Select No if you setup your multiple store by different category root, and the same website. Select Yes if you setup your multiple store by different category root and different website.
+							</comment>
+							<frontend_type>select</frontend_type>
+							<sort_order>55</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+						</multiplestore>
+						<allow_ignore_term translate="label comment" module="solrsearch">
+							<label>Ignore search terms from autocomplete</label>
+							<comment>
+							If set this to Yes, The following search terms will be ignore from Autocomplete search
+							</comment>
+							<frontend_type>select</frontend_type>
+							<sort_order>56</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+							<source_model>adminhtml/system_config_source_yesno</source_model>
+						</allow_ignore_term>
+						<ignoresearchterms>
+							<label>Search terms to ignore.</label>
+							<comment>
+							Put search term separated by comma. Note, this field will be updated automatically according to Catalog > Search terms
+							</comment>
+							<frontend_type>textarea</frontend_type>
+							<sort_order>57</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+						</ignoresearchterms>
 					</fields>
 				</settings>			
 			</groups>
@@ -1058,6 +1093,45 @@
 							</stores>
 					</fields>
 				</russian>
+				<chinese translate="label" module="solrsearch">
+					<label>Chinese (This index is for Chinese store)</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>17</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>0</show_in_website>
+					<show_in_store>0</show_in_store>
+					<frontend_model>adminhtml/system_config_form_fieldset</frontend_model>
+					<fields>
+							<label>
+								<label>Label</label>
+								<comment>Please set a lable for this index.</comment>
+								<frontend_type>text</frontend_type>
+								<sort_order>1</sort_order>
+								<show_in_default>1</show_in_default>
+								<show_in_website>0</show_in_website>
+								<show_in_store>0</show_in_store>
+							</label>
+							<corename>
+								<label>Core name</label>
+								<comment>Please specify a custom core name if any. This core name will override the default core name russian</comment>
+								<frontend_type>text</frontend_type>
+								<sort_order>2</sort_order>
+								<show_in_default>1</show_in_default>
+								<show_in_website>0</show_in_website>
+								<show_in_store>0</show_in_store>
+							</corename>
+							<stores>
+								<label>Stores mapping</label>
+								<comment>Please select stores to be mapped with this index.</comment>
+								<frontend_type>solrsearchgroupcheckboxes</frontend_type>
+								<sort_order>3</sort_order>
+								<show_in_default>1</show_in_default>
+								<show_in_website>0</show_in_website>
+								<show_in_store>0</show_in_store>
+								<source_model>solrsearch/adminhtml_system_source_config_stores</source_model>
+							</stores>
+					</fields>
+				</chinese>
 			</groups>
 		</solrbridgeindices>
 	</sections>

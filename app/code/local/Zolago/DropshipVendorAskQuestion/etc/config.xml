@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Zolago_DropshipVendorAskQuestion>
+            <version>0.0.1</version>
+        </Zolago_DropshipVendorAskQuestion>
+    </modules>
+    <frontend>
+        <layout>
+            <updates>
+                <zolago_udqa>
+                    <file>zolagoudqa.xml</file>
+                </zolago_udqa>
+            </updates>
+        </layout>
+    </frontend>
+</config>
