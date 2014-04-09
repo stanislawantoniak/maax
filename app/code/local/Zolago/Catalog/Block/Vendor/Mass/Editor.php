@@ -19,7 +19,8 @@ class Zolago_Catalog_Block_Vendor_Mass_Editor extends Mage_Core_Block_Template {
 				createBlock("adminhtml/widget_button")->
 				setType("button")->
 				setId($this->buildFieldId("submit"))->
-				setLabel("Confirm changes");
+				setLabel($this->__("Confirm changes"))->
+				setClass("confirm-changes");
 		return $btn->toHtml();
 	}
 	
