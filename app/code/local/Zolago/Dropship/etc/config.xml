@@ -129,6 +129,12 @@
                         </depend_fields>
                         <position>10</position>
                     </use_dhl>
+                	<dhl_account>
+                        <label>Dhl account</label>
+                        <type>text</type>
+                        <fieldset>dhl</fieldset>
+                        <position>15</position>
+                    </dhl_account>
                 	<dhl_login>
                         <label>Dhl login</label>
                         <type>text</type>
