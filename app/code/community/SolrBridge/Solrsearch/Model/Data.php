@@ -121,6 +121,13 @@ class SolrBridge_Solrsearch_Model_Data
 
 	public function getProductAttributesData($_product)
 	{
+	    $oldStore = Mage::app ()->getStore ();
+	    $currentLocaleCode = Mage::app()->getLocale()->getLocaleCode();
+	    $storeLocaleCode = Mage::getStoreConfig('general/locale/code', $this->store->getId());
+	    if ($storeLocaleCode) {
+	        Mage::getSingleton('core/translate')->setLocale($storeLocaleCode)->init('frontend', true);
+	    }
+
 		$docData = array();
 
 		foreach ($_product->getAttributes() as $atributeObj){
@@ -238,6 +245,10 @@ class SolrBridge_Solrsearch_Model_Data
 				}
 			}
 		}
+
+		Mage::app ()->setCurrentStore ( $oldStore );
+		Mage::getSingleton('core/translate')->setLocale($currentLocaleCode)->init('frontend', true);
+
 		return $docData;
 	}
 
@@ -417,7 +428,7 @@ class SolrBridge_Solrsearch_Model_Data
 	{
 	    $categoryPath = str_replace('/', '_._._',$category['name']).'/'.$category['entity_id'];
 
-	    $parentIds = $category['parent_ids'];
+	    $parentIds = (array)$category['parent_ids'];
 
 	    foreach ($parentIds as $parentId)
 	    {
