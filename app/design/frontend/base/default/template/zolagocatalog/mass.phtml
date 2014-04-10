@@ -17,6 +17,8 @@
 		<?php echo $this->getChildHtml("static_filter");?>
 	</div>
 	<div class="clear"></div>
+	
+	<?php echo $this->getMessagesBlock()->getGroupedHtml(); ?>
 
 <?php if($this->getCurrentAttributeSetId()):?>
 	<script type="text/javascript">

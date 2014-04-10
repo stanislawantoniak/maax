@@ -22,7 +22,7 @@ $activeFilters = $this->getCurrentStaticFilterValues();
 								<option value=""><?php echo Mage::helper("zolagocatalog")->__("--- Select ---"); ?></option>
 								<?php foreach($singleFilter as $value): ?>
 									<?php if ($value['value'] && $value['group'] !== Zolago_Catalog_Helper_Data::ADDITIONAL_ATTRIBUTES_GROUP): ?>
-										<option value="<?php echo $value['attribute_id']; ?>" <?php if($activeFilters && array_key_exists($value['attribute_id'], $activeFilters) && $activeFilters[$value['attribute_id']]==$value['value']): ?> selected="selected"<?php endif;?> filterValue="<?php echo $this->escapeHtml($value['value']); ?>"><?php echo $this->getUpdatedFilterValues($value['value'], $filterLabel, $updateValues); ?></option>
+										<option value="<?php echo $value['attribute_id']; ?>" <?php if($activeFilters && array_key_exists($value['attribute_id'], $activeFilters) && $this->escapeHtml($activeFilters[$value['attribute_id']])==$value['value']): ?> selected="selected"<?php endif;?> filterValue="<?php echo $this->escapeHtml($value['value']); ?>"><?php echo $this->getUpdatedFilterValues($value['value'], $filterLabel, $updateValues); ?></option>
 									<?php endif; ?>
 								<?php endforeach; ?>
 							</select>
@@ -51,7 +51,7 @@ $activeFilters = $this->getCurrentStaticFilterValues();
 								<option value=""><?php echo Mage::helper("zolagocatalog")->__("--- Select ---"); ?></option>
 								<?php foreach($singleFilter as $value): ?>
 									<?php if ($value['value'] && $value['group'] == Zolago_Catalog_Helper_Data::ADDITIONAL_ATTRIBUTES_GROUP): ?>
-										<option value="<?php echo $value['attribute_id']; ?>" <?php if($activeFilters && array_key_exists($value['attribute_id'], $activeFilters) && $activeFilters[$value['attribute_id']]==$value['value']): ?> selected="selected"<?php endif;?> filterValue="<?php echo $this->escapeHtml($value['value']); ?>"><?php echo $this->getUpdatedFilterValues($value['value'], $filterLabel, $updateValues); ?></option>
+										<option value="<?php echo $value['attribute_id']; ?>" <?php if($activeFilters && array_key_exists($value['attribute_id'], $activeFilters) && $this->escapeHtml($activeFilters[$value['attribute_id']])==$value['value']): ?> selected="selected"<?php endif;?> filterValue="<?php echo $this->escapeHtml($value['value']); ?>"><?php echo $this->getUpdatedFilterValues($value['value'], $filterLabel, $updateValues); ?></option>
 									<?php endif; ?>
 								<?php endforeach; ?>
 							</select>
