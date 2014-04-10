@@ -122,12 +122,12 @@ class Zolago_Catalog_Model_Resource_Vendor_Mass
 	}
 	
 	protected function _getOptionSort(Mage_Catalog_Model_Resource_Eav_Attribute $attribute) {
-		if(!isset($this->_options[$attribute->getId()])){
-			$select = $this->getReadConnection()->select();
-			$select->from($this->getTable("eav/attribute_option"), array("option_id", "sort_order"));
-			$select->where("attribute_id=?", $attribute->getId());
-			$select->order(array("sort_order ASC"));
-			$this->_options[$attribute->getId()] = $this->getReadConnection()->fetchPairs($select);
+		$attributeId = $attribute->getId();
+		if(!isset($this->_options[$attributeId])){
+			$this->_options[$attributeId] = array();
+			foreach($attribute->getSource()->getAllOptions(false) as $opt){
+				$this->_options[$attribute->getId()][$opt['value']] = $opt['label'];
+			}
 		}
 		return $this->_options[$attribute->getId()];
 	}
