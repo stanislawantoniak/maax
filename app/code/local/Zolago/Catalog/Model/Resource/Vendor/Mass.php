@@ -23,7 +23,8 @@ class Zolago_Catalog_Model_Resource_Vendor_Mass
 			array $productIds, 
 			Mage_Catalog_Model_Resource_Eav_Attribute $attribute, 
 			array $valuesToAdd, 
-			Mage_Core_Model_Store $store) {
+			Mage_Core_Model_Store $store,
+			$mode="add") {
 		
 		if(!count($valuesToAdd) ||
 		   !($attribute->getBackend() instanceof Mage_Eav_Model_Entity_Attribute_Backend_Array) || 
@@ -55,11 +56,23 @@ class Zolago_Catalog_Model_Resource_Vendor_Mass
 				"entity_id"		=> $productId
 			);
 			if($dbValues && isset($dbValues[$productId])){
-				$item['value'] = $this->_joinValues($attribute, $dbValues[$productId], $valuesToAdd);
+				// Some values in dob
+				if($mode=="add"){ // Add values
+					$item['value'] = $this->_joinValues($attribute, $dbValues[$productId], $valuesToAdd);
+				}elseif($mode=="sub"){ // Substract Values
+					$item['value'] = $this->_substractValues($attribute, $dbValues[$productId], $valuesToAdd);
+				}
 				$indexMixedValues[$productId] = $item['value'];
 			}else{
-				$item['value'] = implode(",", $this->_sortOptions($attribute, $valuesToAdd));
-				$indexSameValues[] = $productId;
+				if($mode=="add"){
+					// New values
+					$item['value'] = implode(",", $this->_sortOptions($attribute, $valuesToAdd));
+					$indexSameValues[] = $productId;
+				}elseif($mode=="sub"){
+					// Clear values
+					$item['value'] = "";
+					$indexSameValues[] = $productId;
+				}
 			}
 			$insert[]=$item;
 		}
@@ -97,6 +110,17 @@ class Zolago_Catalog_Model_Resource_Vendor_Mass
 	 */
 	protected function _joinValues(Mage_Catalog_Model_Resource_Eav_Attribute $attribute, $str, array $newValues) {
 		$result = array_unique(array_merge(explode(",", $str),$newValues));
+		$this->_sortOptions($attribute, $result);
+		return implode(",", $result);
+	}
+	
+	/**
+	 * @param array $str
+	 * @param array $newValues
+	 * @return string
+	 */
+	protected function _substractValues(Mage_Catalog_Model_Resource_Eav_Attribute $attribute, $str, array $newValues) {
+		$result = array_unique(array_diff(explode(",", $str),$newValues));
 		$this->_sortOptions($attribute, $result);
 		return implode(",", $result);
 	}

@@ -83,11 +83,13 @@ class Zolago_Catalog_Vendor_MassController
 						if(isset($attributesMode[$attributeCode])){
 							switch ($attributesMode[$attributeCode]) {
 								case "add":
+								case "sub":
 									Mage::getResourceSingleton('zolagocatalog/vendor_mass')->addValueToMultipleAttribute(
 										$productIds,
 										$attribute, 
 										is_array($value) ? $value : array(),
-										$store
+										$store,
+										$attributesMode[$attributeCode]	
 									);
 									unset($attributesData[$attributeCode]);
 								break;
