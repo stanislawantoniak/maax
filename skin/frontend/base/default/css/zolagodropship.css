@@ -39,3 +39,46 @@
 	color: #6f8992;
 	font-size: .9em;
 }
+
+#zolagocatalog_mass_grid_confirm .totals {
+	height: 29px;
+}
+
+#zolagocatalog_mass_grid_confirm .confirm-changes {
+	position: absolute;
+	left: 50%;
+}
+
+//Static Filters Section - Start
+.staticFilter {
+	width: 155px; 
+}
+.staticFilter option {
+	/*width: 130px;*/
+}
+.filter-box {
+	padding: 2px 0 2px 0;
+	display: inline-block;
+	width: 48.5%;
+	vertical-align: top;
+}
+.filter-box .selectedFilter {
+	display: inline-block;
+	font-weight: bold;
+}
+.staticFilter-box .box {
+	background: none repeat scroll 0 0 #EEEFFD;
+	padding-bottom: 0;
+}
+.staticFilter-box .box .left, 
+.staticFilter-box .box .right {
+	width: 48.5%;
+}	
+.staticFilter-box .box .scalable {
+	margin-top: 0px;
+	margin-bottom: 5px;
+}
+.filterSearch {
+	float: right;
+}
+//Static Filters Section - End
