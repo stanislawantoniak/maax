@@ -34,6 +34,11 @@
             <zolagocatalog>
                 <class>Zolago_Catalog_Block</class>
             </zolagocatalog>
+			<catalog>
+				<rewrite>
+					<breadcrumbs>Zolago_Catalog_Block_Breadcrumbs</breadcrumbs>
+				</rewrite>
+			</catalog>
         </blocks>
         <resources>
             <zolagocatalog_setup>
@@ -69,6 +74,15 @@
 				</zolagocatalog>
 			</updates>
 		</layout>
+		<translate>
+			<modules>
+				<Zolago_Catalog>
+					<files>
+						<default>Zolago_Catalog.csv</default>
+					</files>
+				</Zolago_Catalog>
+			</modules>
+		</translate>		
     </frontend>
     <adminhtml>
 		<translate>
@@ -79,6 +93,6 @@
 					</files>
 				</Zolago_Catalog>
 			</modules>
-		</translate>		
+		</translate>
     </adminhtml>	
 </config>

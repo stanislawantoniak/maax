@@ -74,11 +74,37 @@ class SolrBridge_Solrsearch_AjaxController extends Mage_Core_Controller_Front_Ac
 				$resultAutocomplete = $solrAutocompleteQuery->init($autocompleteoptions)->prepareQueryData()->execute();
 
 				if (isset($resultAutocomplete['facet_counts']['facet_fields']['textSearchStandard']) && is_array($resultAutocomplete['facet_counts']['facet_fields']['textSearchStandard'])) {
-					foreach ($resultAutocomplete['facet_counts']['facet_fields']['textSearchStandard'] as $term => $val)
-					{
-						$returnData['keywordssuggestions'][] = Mage::helper('solrsearch')->hightlight($returnData['responseHeader']['params']['q'], trim($term, ','));
-						$returnData['keywordsraw'][] = trim($term, ',');
-					}
+
+				    $allow_ignore_term = (int) $helper->getSetting('allow_ignore_term');
+
+				    if ($allow_ignore_term > 0) {
+				        $ignoreSearchTerms = $helper->getSetting('ignoresearchterms');
+				        if (!empty($ignoreSearchTerms)) {
+				            $ignoreSearchTermsArray = explode(',', trim($ignoreSearchTerms));
+
+				            foreach ($resultAutocomplete['facet_counts']['facet_fields']['textSearchStandard'] as $term => $val)
+				            {
+				                if (!in_array(strtolower($term), $ignoreSearchTermsArray))
+				                {
+				                    $returnData['keywordssuggestions'][] = Mage::helper('solrsearch')->hightlight($returnData['responseHeader']['params']['q'], trim($term, ','));
+				                    $returnData['keywordsraw'][] = trim($term, ',');
+				                }
+				            }
+
+				        }else{
+				            foreach ($resultAutocomplete['facet_counts']['facet_fields']['textSearchStandard'] as $term => $val)
+				            {
+				                $returnData['keywordssuggestions'][] = Mage::helper('solrsearch')->hightlight($returnData['responseHeader']['params']['q'], trim($term, ','));
+				                $returnData['keywordsraw'][] = trim($term, ',');
+				            }
+				        }
+				    }else{
+				        foreach ($resultAutocomplete['facet_counts']['facet_fields']['textSearchStandard'] as $term => $val)
+				        {
+				            $returnData['keywordssuggestions'][] = Mage::helper('solrsearch')->hightlight($returnData['responseHeader']['params']['q'], trim($term, ','));
+				            $returnData['keywordsraw'][] = trim($term, ',');
+				        }
+				    }
 				}
 
 			}

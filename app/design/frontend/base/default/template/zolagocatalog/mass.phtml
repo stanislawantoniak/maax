@@ -13,15 +13,18 @@
 		<?php echo $this->getChildHtml("attribute_set_switcher");?>
 	</div>
 <?php endif;?>
+	<div class="static-filter">
+		<?php echo $this->getChildHtml("static_filter");?>
+	</div>
+	<div class="clear"></div>
 
-<?php if($this->getCurrentAttributeSet()):?>
-<script>
+<?php if($this->getCurrentAttributeSetId()):?>
+	<script type="text/javascript">
 FORM_KEY = "<?php echo Mage::getSingleton('core/session')->getFormKey() ?>";
 </script>
 <div>
 	<?php echo $this->getGridHtml(); ?>
 </div>
-
 	<?php echo $this->getChildHtml("editor");?>
 
 <?php endif;?>

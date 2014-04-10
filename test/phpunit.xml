@@ -73,6 +73,9 @@
     <testsuite name="Dhl">
       <directory suffix="Test.php">./Zolago/Dhl/</directory>
     </testsuite>	
+    <testsuite name="Solrsearch">
+      <directory suffix="Test.php">./Zolago/Solrsearch/</directory>
+    </testsuite>	
   </testsuites>
   <logging>
     <log type="json" target="../var/logs/logfile.json"/>

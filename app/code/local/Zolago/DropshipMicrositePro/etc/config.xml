@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<config>
+	<modules>
+		<Zolago_DropshipMicrositePro>
+			<version>0.0.1</version>
+		</Zolago_DropshipMicrositePro>
+	</modules>
+	<global>
+		<models>
+			<zolagoudmspro>
+                <class>Zolago_DropshipMicrositePro_Model</class>
+            </zolagoudmspro>
+		</models>
+	</global>
+	<frontend>
+		<routers>
+            <umicrosite>
+                <args>
+                    <modules>
+                        <udmspro before="Unirgy_DropshipMicrosite">Zolago_DropshipMicrositePro</udmspro>
+                    </modules>
+                </args>
+            </umicrosite>
+			<udmspro>
+				<args>
+					<modules>
+						<udmspro before="Unirgy_DropshipMicrositePro">Zolago_DropshipMicrositePro</udmspro>
+					</modules>
+				</args>
+			</udmspro>
+		</routers>
+		<events>
+			<controller_action_layout_load_before>
+            	<observers>
+                    <zolagoudmspro>
+                        <type>singleton</type>
+                        <class>zolagoudmspro/observer</class>
+                        <method>handleCatalogLayoutRender</method>
+                    </zolagoudmspro>
+                </observers>
+            </controller_action_layout_load_before>
+        </events>
+	</frontend>
+</config>

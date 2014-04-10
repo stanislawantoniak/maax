@@ -2,6 +2,11 @@
 
 class Zolago_Dropship_Model_Observer {
 	
+	/**
+	 * 
+	 * @param type $observer
+	 * @return \Zolago_Dropship_Model_Observer
+	 */
 	public function bindLocale($observer)
     {
 		if(!Mage::registry("dropship_switch_lang")){

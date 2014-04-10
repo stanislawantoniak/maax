@@ -2,41 +2,45 @@
 	.grid.custom-grid tbody td{
 		background: #e7efef;
 	}
-	.grid.custom-grid thead tr{
-		visibility: hidden;
+	.grid.custom-grid table tfoot tr td{
+		border-top: inherit;
 	}
-	.grid.custom-grid thead tr.filter th{
-	    padding-top:0;
-		padding-bottom:0;
+	.grid.custom-grid table tbody a{
+		color: #267DB7;
+		font-weight: normal;
+		border-bottom: 1px #267DB7 dotted;
+	}	
+	.grid.custom-grid table tbody a:hover{
+		border-bottom-style: solid;
 	}
-	.grid.custom-grid thead tr.filter th > div{
-		height:0; 
-		overflow: hidden;
+	.grid.custom-grid table{
+		padding-bottom: 0;
+	}
+	.grid.custom-grid .filter-field-100 input.input-text,
+	.grid.custom-grid .filter-field-100 textarea.textarea{
+		width: 100%;
+		box-sizing: border-box;
+		-moz-box-sizing: border-box;
+	}
+	.custom-grid .scope{
+		color: #6f8992;
+		font-size: .9em;
+	}
+	
+	#zolagocatalog_mass_grid_confirm .totals {
+		height: 29px;
+	}
+	
+	.grid.custom-grid .confirm-changes {
+		position: absolute;
+		left: 50%;
 	}
 </style>
-<div class="grid custom-grid">
-	<form>
+<div class="grid custom-grid" id="<?php echo $this->buildFieldId("editor");?>">
 	<?php if($this->getGrid()): ?>
-	<table cellpadding="0" cellspacing="0" style="width:100%;" class="data">
-		<colgroup>
-			<?php foreach ($this->getGrid()->getColumns() as $_column): ?>
-				<col <?php echo $_column->getHtmlProperty() ?> />
-			<?php endforeach;?>
-		</colgroup>
-		<thead>
-			<tr class="filter" style="">
-				<?php $i=0;?>
-				<?php foreach ($this->getGrid()->getColumns() as $_column): ?>
-						<th>
-							<div>
-								<?php echo $_column->getFilterHtml();?>
-							</div>
-						</th>
-				<?php endforeach; ?>
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
+	<table style="display: none;">
+		<tfoot id="<?php echo $this->buildFieldId("foot");?>">
+			<tr id="<?php echo $this->buildFieldId("change");?>">
 				<?php $i=0;?>
 				<?php foreach ($this->getGrid()->getColumns() as $_column): ?>
 					<?php if($i++==0):?>
@@ -45,33 +49,189 @@
 						</td>
 					<?php else:?>
 						<td>
-							<div class="field-100"><input type="text" class="input-text"/></div>
+							<?php if($_field = $this->getChangeField($_column)):?>
+								<div data-rel="<?php echo $_field->getRel();?>">
+									<?php echo $_field->getElementHtml();?>
+									<label for="<?php echo $_field->getId();?>"><?php echo $_field->getLabel();?></label>
+								</div>
+							<?php endif;?>
 						</td>
 					<?php endif;?>
-				</td>
 				<?php endforeach;?>
 			</tr>
-			<tr>
+			<tr class="filter" style="display:none;" id="<?php echo $this->buildFieldId("fields");?>">
 				<?php $i=0;?>
 				<?php foreach ($this->getGrid()->getColumns() as $_column): ?>
 					<?php if($i++==0):?>
 					<?php else:?>
 						<td>
-							<input type="checkbox" name="change" value="1"/>
-							<label>Change</label>
+							<?php if($_field = $this->getField($_column)):?>
+								<div class="filter-field-100 element-wrapper" style="display: none;" id="<?php echo $_field->getId() . "_wrapper";?>">
+									<?php echo $this->getEmptyValueField($_field);?>
+									<?php echo $_field->toHtml();?>
+									<div>
+									<?php foreach($this->getAdditionalFields($_column) as $_field):?>
+										<?php echo $_field->toHtml();?>
+									<?php endforeach;?>
+									</div>
+									<?php if($_column->getAttribute()):?>
+									<div class="scope">[<?php echo $this->getScope($_column->getAttribute());?>]</div>
+									<?php endif;?>
+								</div>
+							<?php endif;?>
 						</td>
 					<?php endif;?>
+				</td>
 				<?php endforeach;?>
 			</tr>
-		</tbody>
-		<tfoot>
-			<tr>
-				<td  class="totals a-right" colspan="5">
+			<tr style="display:none;"  id="<?php echo $this->buildFieldId("confirm");?>">
+				<td  class="totals a-right" colspan="<?php echo $this->getGrid()->getColumnCount();?>">
+					<span style="display: none;" class="notice" id="<?php echo $this->buildFieldId("loading");?>">
+						<?php echo Mage::helper("zolagocatalog")->__("Saving...");?>
+					</span>
 					<?php echo $this->getSubmitButtonHtml(); ?>
 				</td>
 			<tr>
 		</tfoot>
 	</table>
-	</form>
 	<?php endif;?>
 </div>
+<script type="text/javascript">
+	(function(){
+	
+		var gridObj = <?php echo $this->getGrid()->getId();?>JsObject;
+		var gridDom = $(gridObj.containerId); 
+		var form ;
+		var foot = $("<?php echo $this->buildFieldId("foot");?>");
+		var loading = $("<?php echo $this->buildFieldId("loading");?>");
+		
+		var oldInitGrid = gridObj.initGrid;
+		
+		var appendContent = function(grid, content){
+			var table = $(grid.containerId).select("table.data")[0];
+			if(!table.select("tfoot").length){
+				table.insert({bottom: content});
+			}
+			$("<?php echo $this->buildFieldId("submit"); ?>").observe("click", submitHandler);
+			$("<?php echo $this->buildFieldId("change");?>").select(".changer").each(function(el){
+				el.observe("change", changerHandler)
+			});
+			
+			// Prepare form
+			var formEl = new Element("form", {id:"<?php echo $this->buildFieldId("editor_form");?>"});
+			gridDom.select(".data")[0].wrap(formEl);
+			form = new VarienForm("<?php echo $this->buildFieldId("editor_form");?>");	
+			gridDom.select(".grid")[0].className = "grid custom-grid";
+		}
+		
+		
+		gridObj.initGrid = function(){
+			oldInitGrid.apply(gridObj, arguments);
+			loading.hide();
+			appendContent(gridObj, foot);
+		}
+		
+		
+	
+		var submitHandler = function(){
+		
+			var productIds = gridObj.massaction.getCheckedValues();
+			
+			if(productIds==""){	
+				alert("<?php echo Mage::helper("zolagocatalog")->__("Select some products");?>");
+				return;
+			}
+			
+			if(!form.validator.validate()){
+				return false;
+			}
+			
+			var tmpData = $(form.form).serialize(true);
+			var key;
+			var data = {};
+			
+			for(key in tmpData){
+				if(/^attributes/.test(key) && tmpData.hasOwnProperty(key)){
+					data[key] = tmpData[key];
+				}
+			}
+			if(!Object.keys(data).length){
+				alert("<?php echo Mage::helper("zolagocatalog")->__("No attribute selected");?>");
+				return;
+			}
+			
+			data.store = $F("store_switcher");
+			data.attribute_set =  $F("attribute_set_switcher");
+			data.product_ids=  productIds;
+						
+			new Ajax.Request("<?php echo $this->getSaveUrl();?>", {
+				parameters: data,
+				method: "post",
+				onSuccess: function(transport){
+					if(transport.responseJSON){
+						if(!transport.responseJSON.status){
+							alert(transport.responseJSON.content);
+							return;
+						}
+						gridObj.reload();
+					}
+				},
+				onLoading: function(){
+					loading.show();
+				},
+				onError: function(transport){
+					alert("<?php echo Mage::helper("zolagocatalog")->__("Other error - contact administrator");?>");
+				}
+			});
+		}
+	
+		var changerHandler = function(e){
+			var el = $(e.currentTarget);
+			var target = $(el.up().getAttribute("data-rel"));
+			if(target){
+				switchVisible(target.id, el.checked);
+			}
+			
+		}
+		
+		
+		var currentEditCount = 0;
+
+		var switchVisible = function(fieldId, mode){
+			if(mode){
+				$(fieldId).disabled = "";
+				$(fieldId+"_wrapper").show();
+				currentEditCount++;
+			}else{
+				$(fieldId).disabled = "disabled";
+				$(fieldId+"_wrapper").hide();
+				currentEditCount--;
+			}
+				
+			if(currentEditCount>0){
+				$("<?php echo $this->buildFieldId("fields");?>").show();
+				$("<?php echo $this->buildFieldId("confirm");?>").show();
+			}else{
+				$("<?php echo $this->buildFieldId("fields");?>").hide();
+				$("<?php echo $this->buildFieldId("confirm");?>").hide();
+			}
+			
+			disableAdditionalFields(fieldId, mode);
+		}
+		
+		var disableAdditionalFields = function(fieldId, mode){
+			$(fieldId).up(".element-wrapper").select(".additional_field").each(function(el){
+				$(el).disabled = mode ? "" : "disabled";
+			});
+			$(fieldId).up(".element-wrapper").select(".empty_field").each(function(el){
+				$(el).disabled = mode ? "" : "disabled";
+			});
+			// Datepicker
+			$(fieldId).up(".element-wrapper").select("img.v-middle").each(function(el){
+				mode ? $(el).show() : $(el).hide();
+			});
+		}
+		
+		appendContent(gridObj, foot);
+	})();
+</script>

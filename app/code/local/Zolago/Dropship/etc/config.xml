@@ -32,6 +32,7 @@
 				<rewrite>
 					<data>Zolago_Dropship_Helper_Data</data>
 					<item>Zolago_Dropship_Helper_Item</item>
+					<catalog>Zolago_Dropship_Helper_Catalog</catalog>					
 				</rewrite>
 			</udropship>
 		</helpers>
@@ -43,6 +44,7 @@
 				<rewrite>
 					<vendor_preferences>Zolago_Dropship_Block_Vendor_Preferences</vendor_preferences>
 					<vendor_shipment_info>Zolago_Dropship_Block_Vendor_Shipment_Info</vendor_shipment_info>
+					<adminhtml_systemConfigFormField_categoriesSelect>Zolago_Dropship_Block_Adminhtml_SystemConfigFormField_CategoriesSelect</adminhtml_systemConfigFormField_categoriesSelect>
 				</rewrite>
 			</udropship>
 		</blocks>
@@ -139,15 +141,31 @@
                         <fieldset>dhl</fieldset>
                         <position>30</position>
                     </dhl_password>
+					<!-- label store -->
+					<label_store>
+                        <label>Label store</label>
+                        <type>select</type>
+						<source_model>zolagodropship/source_store</source_model>
+                        <fieldset>microsite</fieldset>
+						<only_admin>1</only_admin>
+                        <position>500</position>
+                    </label_store>
 					<!-- category -->
 					<root_category>
                         <label>Root categories</label>
 						<frontend_model>zolagodropship/adminhtml_vendor_helper_form_category</frontend_model>
-						<backend_model>adminhtml/system_config_backend_serialized</backend_model>
                         <fieldset>microsite</fieldset>
 						<only_admin>1</only_admin>
                         <position>600</position>
                     </root_category>
+					<!-- design -->
+					<custom_design>
+                        <label>Custom design</label>
+						<frontend_model>zolagodropship/adminhtml_vendor_helper_form_design</frontend_model>
+                        <fieldset>microsite</fieldset>
+						<only_admin>1</only_admin>
+                        <position>700</position>
+                    </custom_design>
 				</fields>
 			</vendor>
 		</udropship>
