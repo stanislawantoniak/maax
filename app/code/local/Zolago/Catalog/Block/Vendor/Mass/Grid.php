@@ -9,6 +9,7 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
         $this->setDefaultDir('desc');
         $this->setGridClass('z-grid');
         $this->setUseAjax(true);
+        $this->setSaveParametersInSession(true);
 		$this->setTemplate("zolagocatalog/widget/grid.phtml");
 		// Add custom renderes
 		$this->setColumnRenderers(array(
