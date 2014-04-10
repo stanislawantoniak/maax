@@ -507,10 +507,27 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 
 	
 	public function getCellClass(Mage_Adminhtml_Block_Widget_Grid_Column $column, Varien_Object $row) {
+		$classes = array();
 		if($column->getAttribute() instanceof Mage_Catalog_Model_Resource_Eav_Attribute){
-			if($column->getAttribute()->getIsRequired() && $row->getData($column->getIndex())==""){
-				return "required-cell";
+			$data = $row->getData($column->getIndex());
+			if($column->getAttribute()->getAttributeCode()=="status"){
+				$classes[] = "status";
+				switch($data){
+					case Mage_Catalog_Model_Product_Status::STATUS_ENABLED:
+						$classes[] = "status-enabled";
+					break;
+					case Mage_Catalog_Model_Product_Status::STATUS_DISABLED:
+						$classes[] = "status-disabled"; 
+					break;
+				}
 			}
+			
+			if($column->getAttribute()->getIsRequired() && $data==""){
+				$classes[] = "required-cell";
+			}
+		}
+		if($classes){
+			return implode(" ", $classes);
 		}
 		return null;
 	}
