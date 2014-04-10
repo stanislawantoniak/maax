@@ -46,10 +46,9 @@
 
 #zolagocatalog_mass_grid_confirm .confirm-changes {
 	position: absolute;
-	left: calc(50% - 125px);
-	*left: 50%;
-	left: 50%\9;
-	width: 250px;
+	left: 50%;
+	margin-left: -100px;
+	width: 200px;
 }
 
 /*Static Filters Section - Start*/
