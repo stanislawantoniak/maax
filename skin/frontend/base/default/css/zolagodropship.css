@@ -49,7 +49,7 @@
 	left: 50%;
 }
 
-//Static Filters Section - Start
+/*Static Filters Section - Start*/
 .staticFilter {
 	width: 155px; 
 }
@@ -81,4 +81,4 @@
 .filterSearch {
 	float: right;
 }
-//Static Filters Section - End
+/*Static Filters Section - End*/
