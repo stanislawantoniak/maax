@@ -191,14 +191,12 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 					)),
 					$name->getAttributeCode() => $this->_processColumnConfig($name, array(
 						"index"		=> $name->getAttributeCode(), 
-						"type"		=>"text",
+						"type"		=> "text",
+						"width"		=> "200px",
 						"attribute" => $name,
 						"clickable" => true,
 						"header"	=> $this->_getColumnLabel($name),
 					)),
-					/**
-					 * @todo add custom renderer & filter
-					 */
 					$status->getAttributeCode() => $this->_processColumnConfig($status, array(
 						"index"		=> $status->getAttributeCode(), 
 						"type"		=>"options",
@@ -209,7 +207,7 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 					$sku->getAttributeCode() => $this->_processColumnConfig($sku, array(
 						"index"		=> $sku->getAttributeCode(), 
 						"type"		=>"text",
-						"attribute" => $sku,
+						"width"		=> "50px",
 						"clickable" => true,
 						"header"	=> $this->_getColumnLabel($sku),
 					)),

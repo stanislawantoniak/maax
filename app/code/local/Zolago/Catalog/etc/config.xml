@@ -61,7 +61,9 @@
 			-->
 			<udprod>
 				<args>
-					<module>Zolago_Catalog</module>
+					<modules>
+						<zolagocatalog>Zolago_Catalog</zolagocatalog> 
+					</modules>
 				</args>
 			</udprod>
         </routers>
