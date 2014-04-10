@@ -9,28 +9,50 @@
 	min-width: 960px; 
 	margin: 20px;
 }
-.grid.z-grid tbody td{
+/* Row colors */
+.z-grid .grid tbody td{
 	background: #e7efef;
 }
-.grid.z-grid tbody td.required-cell{
-	background: #fecccc;
+.z-grid .grid tbody tr.even td{
+	background: #F8FAFA;
 }
-.grid.z-grid table tfoot tr td{
+.z-grid .grid tbody td.required-cell{
+	background: #ECA8A8;
+}
+.z-grid .grid tbody tr.even td.required-cell{
+	background: #FFC7C7;
+}
+
+/* Rows selected */
+.z-grid .grid tbody tr.row-selected td{
+	background: #ABB8D3;
+}
+.z-grid .grid tbody tr.row-selected.even td{
+	background: #CBD6EB;
+}
+.z-grid .grid tbody tr.row-selected td.required-cell{
+	background: #C24A4A;
+}
+.z-grid .grid tbody tr.row-selected.even td.required-cell{
+	background: #E77878;
+}
+
+.z-grid .grid table tfoot tr td{
 	border-top: inherit;
 }
-.grid.z-grid table tbody a{
+.z-grid .grid table tbody a{
 	color: #267DB7;
 	font-weight: normal;
 	border-bottom: 1px #267DB7 dotted;
 }	
-.grid.z-grid table tbody a:hover{
+.z-grid .grid table tbody a:hover{
 	border-bottom-style: solid;
 }
-.grid.z-grid table{
+.z-grid .grid table{
 	padding-bottom: 0;
 }
-.grid.z-grid .filter-field-100 input.input-text,
-.grid.z-grid .filter-field-100 textarea.textarea{
+.z-grid .grid .filter-field-100 input.input-text,
+.z-grid .grid .filter-field-100 textarea.textarea{
 	width: 100%;
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;

@@ -82,10 +82,28 @@
 			// Prepare form
 			var formEl = new Element("form", {id:"<?php echo $this->buildFieldId("editor_form");?>"});
 			gridDom.select(".data")[0].wrap(formEl);
-			form = new VarienForm("<?php echo $this->buildFieldId("editor_form");?>");	
-			//gridDom.select(".grid")[0].className = "grid z-grid";
+			form = new VarienForm("<?php echo $this->buildFieldId("editor_form");?>");
+			
+			gridDom.select(".data tbody .massaction-checkbox").each(updateSelectCheckbox);
 		}
 		
+		var updateSelectCheckbox = function(checkbox){
+			var el = checkbox.up("tr");
+			if(checkbox.checked){
+				el.addClassName("row-selected");
+			}else{
+				el.removeClassName("row-selected");
+			}
+		}
+		
+		varienGlobalEvents.attachEventHandler("gridRowClick", function(event){
+			var el = $(event.currentTarget);
+			if(!el.up("#"+gridObj.containerId)){
+				return;
+			}
+			var checkbox = el.select(".massaction-checkbox")[0];
+			updateSelectCheckbox(checkbox);
+		});
 		
 		gridObj.initGrid = function(){
 			oldInitGrid.apply(gridObj, arguments);
@@ -94,11 +112,9 @@
 		}
 		
 		
-	
 		var submitHandler = function(){
 		
-			var productIds = gridObj.massaction.getCheckedValues();
-			
+			var productIds = gridObj.massaction.getCheckedValues();	
 			if(productIds==""){	
 				alert("<?php echo Mage::helper("zolagocatalog")->__("Select some products");?>");
 				return;
