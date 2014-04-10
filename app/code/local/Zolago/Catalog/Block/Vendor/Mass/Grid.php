@@ -85,7 +85,7 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 	    // Add regular dynamic attributes
 		foreach($this->_getGridVisibleAttributes() as $attribute){
 			/* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
-			if($this->_canShowColumn($attribute)){
+			if($this->_canShowColumnByAttrbiute($attribute)){
 				$collection->addAttributeToSelect($attribute->getAttributeCode());
 			}
 		}
