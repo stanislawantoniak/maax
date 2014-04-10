@@ -151,7 +151,7 @@ class Zolago_Catalog_Vendor_MassController
      */
     public function massStatusAction()
     {
-        $productIds			= explode(',', $this->getRequest()->getParam('product'));
+        $productIds			= array_unique(explode(',', $this->getRequest()->getParam('product', '')));
         $storeId			= (int)$this->getRequest()->getParam('store', 0);
 		$attributeSet		= (int)$this->getRequest()->getParam('attribute_set', null);
         $status				= (int)$this->getRequest()->getParam('status');
@@ -273,7 +273,7 @@ class Zolago_Catalog_Vendor_MassController
 	
 	protected function _getCurrentStaticFilterValues() {
 		$staticFilters			= Mage::app()->getRequest()->getParam("staticFilters", 0);
-		$staticFiltersValues	= false;
+		$staticFiltersValues	= array();
 
 		for ($i = 1; $i <= $staticFilters; $i++) {
 			if (Mage::app()->getRequest()->getParam("staticFilterId-".$i) && Mage::app()->getRequest()->getParam("staticFilterValue-".$i)) {
