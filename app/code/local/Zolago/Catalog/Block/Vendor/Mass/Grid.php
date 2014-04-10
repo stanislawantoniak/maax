@@ -74,7 +74,7 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 			 foreach($position as $key=>$column){
 				if(isset($column['attribute']) && 
 					$column['attribute'] instanceof Mage_Catalog_Model_Resource_Eav_Attribute && 
-					$this->_canShowColumn($column['attribute'])){
+					$this->_canShowColumnByAttrbiute($column['attribute'])){
 					
 					$collection->addAttributeToSelect($column['attribute']->getAttributeCode());
 				}
