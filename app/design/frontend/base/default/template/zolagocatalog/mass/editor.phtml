@@ -1,42 +1,4 @@
-<style>
-	.grid.custom-grid tbody td{
-		background: #e7efef;
-	}
-	.grid.custom-grid table tfoot tr td{
-		border-top: inherit;
-	}
-	.grid.custom-grid table tbody a{
-		color: #267DB7;
-		font-weight: normal;
-		border-bottom: 1px #267DB7 dotted;
-	}	
-	.grid.custom-grid table tbody a:hover{
-		border-bottom-style: solid;
-	}
-	.grid.custom-grid table{
-		padding-bottom: 0;
-	}
-	.grid.custom-grid .filter-field-100 input.input-text,
-	.grid.custom-grid .filter-field-100 textarea.textarea{
-		width: 100%;
-		box-sizing: border-box;
-		-moz-box-sizing: border-box;
-	}
-	.custom-grid .scope{
-		color: #6f8992;
-		font-size: .9em;
-	}
-	
-	#zolagocatalog_mass_grid_confirm .totals {
-		height: 29px;
-	}
-	
-	.grid.custom-grid .confirm-changes {
-		position: absolute;
-		left: 50%;
-	}
-</style>
-<div class="grid custom-grid" id="<?php echo $this->buildFieldId("editor");?>">
+<div class="grid z-grid" id="<?php echo $this->buildFieldId("editor");?>">
 	<?php if($this->getGrid()): ?>
 	<table style="display: none;">
 		<tfoot id="<?php echo $this->buildFieldId("foot");?>">
@@ -121,7 +83,7 @@
 			var formEl = new Element("form", {id:"<?php echo $this->buildFieldId("editor_form");?>"});
 			gridDom.select(".data")[0].wrap(formEl);
 			form = new VarienForm("<?php echo $this->buildFieldId("editor_form");?>");	
-			gridDom.select(".grid")[0].className = "grid custom-grid";
+			//gridDom.select(".grid")[0].className = "grid z-grid";
 		}
 		
 		

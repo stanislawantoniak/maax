@@ -59,13 +59,11 @@
                 </args>  
             </catalog> 
 			-->
-			<zolagocatalog>
-				<use>standard</use>
+			<udprod>
 				<args>
 					<module>Zolago_Catalog</module>
-                    <frontName>zolagocatalog</frontName>
 				</args>
-			</zolagocatalog>
+			</udprod>
         </routers>
 		<layout>
 			<updates>

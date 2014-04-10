@@ -216,15 +216,16 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 		
         if(isset($facetFileds['product_flag_facet'])) {
             $data = $facetFileds['product_flag_facet'];
-			//Remove Boolean "False" Values
-			if (isset($data[Mage::helper('core')->__('No')])) {
-				unset($data[Mage::helper('core')->__('No')]);
-			}
 			
             if($this->getSpecialMultiple()) {
                 $data = $this->_prepareMultiValues('product_flag_facet', $data);
             }
 			$data = array_merge($data, $bestsellerFacet, $isNewFacet, $cleanSolrData);
+			//Remove Boolean "False" Values
+			if (isset($data[Mage::helper('core')->__('No')])) {
+				unset($data[Mage::helper('core')->__('No')]);
+			}
+			
 			ksort($data);
 			
             $block = $this->getLayout()->createBlock($this->_getFlagRenderer());

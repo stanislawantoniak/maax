@@ -37,7 +37,7 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 	// Product editor
 	const RES_UDPROD_VENDOR						= "udprod/vendor";
 	// Mass editor
-	const RES_CATALOG_VENDOR_MASS					= "zolagocatalog/vendor_mass";
+	const RES_UDPROD_VENDOR_MASS					= "udprod/vendor_mass";
 	
 
 	// Resources as array
@@ -61,9 +61,7 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		//  Product editor
 		self::RES_UDPROD_VENDOR					=> "Product edit",
 		//  Mass edit
-		self::RES_CATALOG_VENDOR_MASS				=> "Mass edit",
-			
-			
+		self::RES_UDPROD_VENDOR_MASS				=> "Mass edit",
 	);
 	
 	// Roles as array
@@ -114,7 +112,7 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_PRODUCT_OPERATOR, self::RES_UDPROD_VENDOR);
 		
 		// Build ACL Rules - Mass Actions
-		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MASS_OPERATOR, self::RES_CATALOG_VENDOR_MASS);
+		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MASS_OPERATOR, self::RES_UDPROD_VENDOR_MASS);
 		
 	}
 	
