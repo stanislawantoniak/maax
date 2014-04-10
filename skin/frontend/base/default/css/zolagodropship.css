@@ -46,10 +46,13 @@
 
 #zolagocatalog_mass_grid_confirm .confirm-changes {
 	position: absolute;
-	left: 50%;
+	left: calc(50% - 125px);
+	*left: 50%;
+	left: 50%\9;
+	width: 250px;
 }
 
-//Static Filters Section - Start
+/*Static Filters Section - Start*/
 .staticFilter {
 	width: 155px; 
 }
@@ -81,4 +84,4 @@
 .filterSearch {
 	float: right;
 }
-//Static Filters Section - End
+/*Static Filters Section - End*/
