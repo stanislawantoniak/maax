@@ -4,6 +4,10 @@
 .z-grid .pager { 
 	text-align: left !important; 
 }
+.z-grid .grid tr.headings th span.sort-title{
+	padding-left: 0;
+	padding-right: 0;
+}
 .wrapper { 
 	width: auto !important; 
 	min-width: 960px; 
@@ -17,10 +21,24 @@
 	background: #F8FAFA;
 }
 .z-grid .grid tbody td.required-cell{
-	background: #ECA8A8;
+	background: #C24A4A !important;
 }
 .z-grid .grid tbody tr.even td.required-cell{
-	background: #FFC7C7;
+	background: #E77878 !important;
+}
+.z-grid .grid tbody tr td.status span{
+	padding: 0 10px;
+	border-radius: 5px;
+	color: #fff;
+}
+.z-grid .grid tbody tr td.status-other{
+	background: #F1C40F !important;
+}
+.z-grid .grid tbody tr td.status-enabled {
+	background: #2EC029 !important;
+}
+.z-grid .grid tbody tr td.status-disabled {
+	background: #C24A4A !important;
 }
 
 /* Rows selected */
@@ -29,12 +47,6 @@
 }
 .z-grid .grid tbody tr.row-selected.even td{
 	background: #CBD6EB;
-}
-.z-grid .grid tbody tr.row-selected td.required-cell{
-	background: #C24A4A;
-}
-.z-grid .grid tbody tr.row-selected.even td.required-cell{
-	background: #E77878;
 }
 
 .z-grid .grid table tfoot tr td{

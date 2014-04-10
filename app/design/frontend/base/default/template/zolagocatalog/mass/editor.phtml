@@ -68,6 +68,8 @@
 		var loading = $("<?php echo $this->buildFieldId("loading");?>");
 		
 		var oldInitGrid = gridObj.initGrid;
+		var oldSetCheckboxChecked = gridObj.setCheckboxChecked;
+		var	oldCheckCheckboxes = gridObj.massaction.checkCheckboxes;
 		
 		var appendContent = function(grid, content){
 			var table = $(grid.containerId).select("table.data")[0];
@@ -83,8 +85,6 @@
 			var formEl = new Element("form", {id:"<?php echo $this->buildFieldId("editor_form");?>"});
 			gridDom.select(".data")[0].wrap(formEl);
 			form = new VarienForm("<?php echo $this->buildFieldId("editor_form");?>");
-			
-			gridDom.select(".data tbody .massaction-checkbox").each(updateSelectCheckbox);
 		}
 		
 		var updateSelectCheckbox = function(checkbox){
@@ -104,6 +104,18 @@
 			var checkbox = el.select(".massaction-checkbox")[0];
 			updateSelectCheckbox(checkbox);
 		});
+		
+		
+		
+		gridObj.massaction.checkCheckboxes = function(){
+			oldCheckCheckboxes.apply(gridObj.massaction, arguments);
+			gridObj.massaction.getCheckboxes().each(updateSelectCheckbox);
+		}
+		
+		gridObj.setCheckboxChecked = function(element){
+			oldSetCheckboxChecked.apply(gridObj, arguments);
+			updateSelectCheckbox(element);
+		}
 		
 		gridObj.initGrid = function(){
 			oldInitGrid.apply(gridObj, arguments);

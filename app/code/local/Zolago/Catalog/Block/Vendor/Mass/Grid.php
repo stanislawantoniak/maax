@@ -14,10 +14,12 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 		$this->setColumnRenderers(array(
 			'multiselect'	=>	'zolagoadminhtml/widget_grid_column_renderer_multiselect',
 			'image'			=>	'zolagoadminhtml/widget_grid_column_renderer_image',
+			'status'		=>	'zolagoadminhtml/widget_grid_column_renderer_status',
 			'link'			=>	'zolagoadminhtml/widget_grid_column_renderer_link'
 		));
 		$this->setColumnFilters(array(
-			"multiselect"	=>	'zolagoadminhtml/widget_grid_column_filter_multiselect'
+			"multiselect"	=>	'zolagoadminhtml/widget_grid_column_filter_multiselect',
+			'status'		=>	'adminhtml/widget_grid_column_filter_select',
 		));
     }
 
@@ -269,11 +271,17 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 			}else{
 				$extend['type'] = "options";
 			}
+			$extend['align'] = "center";
 			if($attribute->getSource()){
 				$extend['options']  = array();
 				foreach($attribute->getSource()->getAllOptions(false) as $option){
 					$extend['options'][$option['value']]=$option['label'];
 				}
+			}
+			if($attribute->getAttributeCode()=="status"){
+				$extend['type']="status";
+				$extend['filter']=false;
+				$extend['header']=$this->__("St.")." <span class=\"required\">*</span>";
 			}
 		}elseif($frontendType=="price"){
 			$extend['type'] = "price";
@@ -518,6 +526,9 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 					break;
 					case Mage_Catalog_Model_Product_Status::STATUS_DISABLED:
 						$classes[] = "status-disabled"; 
+					break;
+					default:
+						$classes[] = "status-other"; 
 					break;
 				}
 			}
