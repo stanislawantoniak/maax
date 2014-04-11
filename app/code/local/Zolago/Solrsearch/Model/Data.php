@@ -4,6 +4,24 @@
  */
 class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 	
+	/**
+	 * Fix instock_int param
+	 * @param type $_product
+	 * @param int $docData
+	 */
+	public function prepareFinalProductData($_product, &$docData){
+		parent::prepareFinalProductData($_product, $docData);
+		if($docData['instock_int']==0){
+			try{
+				$stock = Mage::getModel ( 'cataloginventory/stock_item' )->loadByProduct ( $_product );
+				if ($stock->getIsInStock() /* && $stock->getQty() > 0*/) {
+					$docData['instock_int'] = 1;
+				} 
+			}
+			catch (Exception $e){}
+		}
+	}
+	
 	public function getProductOrderedQty($_product, $store)
 	{
 		$visibility = Mage::getSingleton('catalog/product_visibility')->getVisibleInSiteIds();
