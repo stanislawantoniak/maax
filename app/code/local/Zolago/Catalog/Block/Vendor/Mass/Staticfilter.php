@@ -62,6 +62,54 @@ class Zolago_Catalog_Block_Vendor_Mass_Staticfilter extends Mage_Core_Block_Temp
 		);
 	}
 	
+	public function getStaticFilterLabel($singleFilter)
+	{
+		$firstFilter = current($singleFilter);
+		$filterLabel = $this->getAttributeLabel($firstFilter['code'], $this->getStore());
+		$labelsCount = array();
+		
+		$specialLabels = array();
+		foreach ($singleFilter as $value):
+			$startLabel = strpos($value['value'], Zolago_Catalog_Helper_Data::SPECIAL_LABELS_OLD_DELIMITER);
+			if ($startLabel !== false) {
+				$properLabel = trim(substr($value['value'], 0, $startLabel));
+				$specialLabels[$properLabel] = $properLabel;
+				if (array_key_exists($properLabel, $labelsCount)) {
+					$labelsCount[$properLabel] = $labelsCount[$properLabel]+1;
+				} else {
+					$labelsCount[$properLabel] = 1;
+				}
+			}			
+		endforeach;
+
+		if ($specialLabels) {
+			$filterLabel = implode(Zolago_Catalog_Helper_Data::SPECIAL_LABELS_NEW_DELIMITER, array_keys($specialLabels));
+		}
+		return array($filterLabel, $labelsCount);
+	}
+	
+	public function updateStaticFilterValues(&$singleFilter, $labelsCount)
+	{
+		$update = false;
+		foreach ($singleFilter as $filtereKey => $filterValue) {
+			if (empty($filterValue['value'])) {
+				unset($singleFilter[$filtereKey]);
+			}
+		}
+
+		if (count($singleFilter) == array_shift($labelsCount)) {
+			$update = true;
+		}
+		return $update;
+	}
+	
+	public function getUpdatedFilterValues($value, $filterLabel, $update) {
+		if ($update) {
+			$value = trim(substr($value, strlen($filterLabel)+1));
+		}
+		return $this->escapeHtml($value);
+	}
+
 	public function getAttributeLabel($code, $store) {
 		$storeLabel = false;
 		$attribute = Mage::getModel('catalog/resource_eav_attribute')

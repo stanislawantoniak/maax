@@ -145,6 +145,62 @@ class Zolago_Catalog_Vendor_MassController
 		var_export($this->getRequest()->getParams());
 	}
 	
+    /**
+     * Update product(s) status action
+     *
+     */
+    public function massStatusAction()
+    {
+        $productIds			= array_unique(explode(',', $this->getRequest()->getParam('product', '')));
+        $storeId			= (int)$this->getRequest()->getParam('store', 0);
+		$attributeSet		= (int)$this->getRequest()->getParam('attribute_set', null);
+        $status				= (int)$this->getRequest()->getParam('status');
+		$staticFiltersCount	= (int)$this->getRequest()->getParam('staticFilters');
+		
+		$staticFilters		= $this->_getCurrentStaticFilterValues();
+		$postParams			= array('store'=> $storeId, 'attribute_set' => $attributeSet, 'staticFilters' => $staticFiltersCount);
+		$postParams			= array_merge($postParams, $staticFilters);
+
+        try {
+            $this->_validateMassStatus($productIds, $status);
+            Mage::getSingleton('catalog/product_action')
+                ->updateAttributes($productIds, array('status' => $status), $storeId);
+
+            $this->_getSession()->addSuccess(
+                $this->__('Total of %d record(s) have been updated.', count($productIds))
+            );
+        }
+        catch (Mage_Core_Model_Exception $e) {
+            $this->_getSession()->addError($e->getMessage());
+        } catch (Mage_Core_Exception $e) {
+            $this->_getSession()->addError($e->getMessage());
+        } catch (Exception $e) {
+            $this->_getSession()
+                ->addException($e, $this->__('An error occurred while updating the product(s) status.'));
+        }
+		
+        $this->_redirect('*/*/', $postParams);
+    }
+	
+    /**
+     * Validate batch of products before theirs status will be set
+     *
+     * @throws Mage_Core_Exception
+     * @param  array $productIds
+     * @param  int $status
+     * @return void
+     */
+    public function _validateMassStatus(array $productIds, $status)
+    {
+        if ($status == Mage_Catalog_Model_Product_Status::STATUS_ENABLED) {
+            if (!Mage::getModel('catalog/product')->isProductsHasSku($productIds)) {
+                throw new Mage_Core_Exception(
+                    $this->__('Some of the processed products have no SKU value defined. Please fill it prior to performing operations on these products.')
+                );
+            }
+        }
+    }	
+	
 	/**
 	 * @param type $attributes
 	 * @return Mage_Catalog_Model_Resource_Product_Attribute_Collection
@@ -215,6 +271,18 @@ class Zolago_Catalog_Vendor_MassController
 		);
 	}
 	
+	protected function _getCurrentStaticFilterValues() {
+		$staticFilters			= Mage::app()->getRequest()->getParam("staticFilters", 0);
+		$staticFiltersValues	= array();
+
+		for ($i = 1; $i <= $staticFilters; $i++) {
+			if (Mage::app()->getRequest()->getParam("staticFilterId-".$i) && Mage::app()->getRequest()->getParam("staticFilterValue-".$i)) {
+				$staticFiltersValues["staticFilterId-".$i] = Mage::app()->getRequest()->getParam("staticFilterId-".$i);
+				$staticFiltersValues["staticFilterValue-".$i] = Mage::helper('core')->escapeHtml(Mage::app()->getRequest()->getParam("staticFilterValue-".$i));
+			}
+		}
+		return $staticFiltersValues;
+	}	
 }
 
 

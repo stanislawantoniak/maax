@@ -1,3 +1,120 @@
-.header {background: none !important;}
-.zolagocatalog-vendor-mass-index .pager { text-align: left !important; }
-.zolagocatalog-vendor-mass-index .wrapper { width: auto; min-width: 960px; margin: 20px;}
+.header {
+	background: none !important;
+}
+.z-grid .pager { 
+	text-align: left !important; 
+}
+.z-grid .grid tr.headings th span.sort-title{
+	padding-left: 0;
+	padding-right: 0;
+}
+.wrapper { 
+	width: auto !important; 
+	min-width: 960px; 
+	margin: 20px;
+}
+/* Row colors */
+.z-grid .grid tbody td{
+	background: #e7efef;
+}
+.z-grid .grid tbody tr.even td{
+	background: #F8FAFA;
+}
+.z-grid .grid tbody td.required-cell{
+	background: #C24A4A !important;
+}
+.z-grid .grid tbody tr.even td.required-cell{
+	background: #E77878 !important;
+}
+.z-grid .grid tbody tr td.status span{
+	padding: 0 10px;
+	border-radius: 5px;
+	color: #fff;
+}
+.z-grid .grid tbody tr td.status-other{
+	background: #F1C40F !important;
+}
+.z-grid .grid tbody tr td.status-enabled {
+	background: #2EC029 !important;
+}
+.z-grid .grid tbody tr td.status-disabled {
+	background: #C24A4A !important;
+}
+
+/* Rows selected */
+.z-grid .grid tbody tr.row-selected td{
+	background: #ABB8D3;
+}
+.z-grid .grid tbody tr.row-selected.even td{
+	background: #CBD6EB;
+}
+
+.z-grid .grid table tfoot tr td{
+	border-top: inherit;
+}
+.z-grid .grid table tbody a{
+	color: #267DB7;
+	font-weight: normal;
+	border-bottom: 1px #267DB7 dotted;
+}	
+.z-grid .grid table tbody a:hover{
+	border-bottom-style: solid;
+}
+.z-grid .grid table{
+	padding-bottom: 0;
+}
+.z-grid .grid .filter-field-100 input.input-text,
+.z-grid .grid .filter-field-100 textarea.textarea{
+	width: 100%;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+}
+.z-grid .scope{
+	color: #6f8992;
+	font-size: .9em;
+}
+
+#zolagocatalog_mass_grid_confirm .totals {
+	height: 29px;
+}
+
+#zolagocatalog_mass_grid_confirm .confirm-changes {
+	position: absolute;
+	left: 50%;
+	margin-left: -100px;
+	width: 200px;
+}
+
+/*Static Filters Section - Start*/
+.staticFilter {
+	width: 155px; 
+}
+.staticFilter option {
+	/*width: 130px;*/
+}
+.filter-box {
+	padding: 2px 0 2px 0;
+	display: inline-block;
+	width: 48.5%;
+	vertical-align: top;
+}
+.filter-box .selectedFilter {
+	display: inline-block;
+	font-weight: bold;
+}
+.staticFilter-box .box {
+	background: none repeat scroll 0 0 #EEEFFD;
+	padding-bottom: 0;
+}
+.staticFilter-box .box .left, 
+.staticFilter-box .box .right {
+	width: 48.5%;
+}	
+.staticFilter-box .box .scalable {
+	margin-top: 0px;
+	margin-bottom: 5px;
+}
+.filterSearch {
+	float: right;
+}
+/*Static Filters Section - End*/
