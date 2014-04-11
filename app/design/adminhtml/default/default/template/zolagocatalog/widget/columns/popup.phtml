@@ -1,0 +1,36 @@
+<div style="position:absolute;left:50%;margin-left:-20%;border:1px solid black;width:40%;top:20%;background-color:white;display:block;padding:20px">
+<form name="hide_columns" method="post" id="hide_columns_form">
+<div style="margin-bottom:20px">
+<?php
+    $denyList = $this->getData('denyList');
+    $counter = 0;
+    foreach ($this->getData('parent')->getColumns() as $_column) {
+        $attribute = $_column->getAttribute();
+        if (!$attribute) {
+            continue;
+        }
+        if (!($counter % 10)) {
+            echo '<ul style="float:left;margin:2px 5px 2px 5px;list-style-type:none">';
+        }
+        echo '<li style="margin:2px 5px 2px 0px;"><input id="hide_'.$counter.'"';
+        if (!isset($denyList[$attribute->getId()])) {
+            echo ' checked';
+        }
+        echo ' type="checkbox" name="hideColumn['.$attribute->getId().']" value="1"><label for="hide_'.$counter.'">'.$_column->getHeader().'</label></li>';
+        echo '<input type="hidden" name="listColumn['.$attribute->getId().']" value="'.$attribute->getId().'">';
+        if (($counter %10) == 9) {
+            echo '</ul>';    
+        }
+        $counter++;
+    }
+    if ($counter % 10) {
+        echo '</ul>';
+    }
+?>
+</div>
+<div style="display:block;clear:both"><br/></div>
+<div style="margin-top:20px;text-align:right" >
+<?php echo $this->getButtonsHtml() ?>
+</div>
+</form>
+</div>

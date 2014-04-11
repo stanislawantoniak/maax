@@ -7,10 +7,27 @@ class Zolago_Catalog_Vendor_MassController
 	 */
 	public function indexAction() {
 		Mage::register('as_frontend', true);// Tell block class to use regular URL's
-		
+		$this->_saveHiddenColumns();		
 		$this->_renderPage(array('default', 'formkey', 'adminhtml_head'), 'zolagocatalog');
 	}
-	
+	protected function _saveHiddenColumns() {
+		if ($this->getRequest()->isPost()) {
+			$listColumns = $this->getRequest()->getParam('listColumn');
+  			$attributeSet = $this->getRequest()->getParam('attribute_set');
+  			$hiddenColumns = $this->getRequest()->getParam('hideColumn');
+  			foreach ($hiddenColumns as $key=>$dummy) {
+  				unset($listColumns[$key]);
+  			}
+  			$session = Mage::getSingleton('udropship/session');
+  			
+  			$list = $session->getData('denyColumnList');
+  			if (!$list) {
+  				$list = array();
+  			}
+  			$list[$attributeSet] = $listColumns;
+			$session->setData('denyColumnList',$list);
+		}
+	}	
 	public function saveAjaxAction() {
 		$response = array();
 		if($this->getRequest()->isPost()){

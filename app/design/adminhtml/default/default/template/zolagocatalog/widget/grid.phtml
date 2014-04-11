@@ -107,6 +107,7 @@ $numColumns = sizeof($this->getColumns());
         </td>
     <?php endif; ?>
         <td class="filter-actions a-right">
+            <?php echo $this->getHideColumnsButtonHtml() ?>
             <?php echo $this->getMainButtonsHtml() ?>
         </td>
         </tr>
@@ -157,7 +158,7 @@ $numColumns = sizeof($this->getColumns());
 
                 <?php if ($this->shouldRenderCell($_item, $_column)):?>
                     <?php $_rowspan = $this->getRowspan($_item, $_column);?>
-                    <td <?php echo ($_rowspan ? 'rowspan="' . $_rowspan . '" ' : '') ?>class="<?php echo $_column->getCssProperty() ?> <?php echo $this->getCellClass($_column, $_item);?> <?php echo ++$i==$numColumns?'last':'' ?>">
+                    <td <?php echo ($_rowspan ? 'rowspan="' . $_rowspan . '" ' : '') ?>class="<?php echo $_column->getCssProperty() ?> <?php echo $this->getCellClass($_column, $_item);?> <?php echo ++$i==$numColumns? 'last':'' ?>">
                         <?php echo (($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?>
                     </td>
                     <?php if ($this->shouldRenderEmptyCell($_item, $_column)):?>
@@ -171,7 +172,7 @@ $numColumns = sizeof($this->getColumns());
                 <?php foreach ($_multipleRows as $_i):?>
                 <tr>
                     <?php $i=0;foreach ($this->getMultipleRowColumns($_i) as $_column): ?>
-                        <td class="<?php echo $_column->getCssProperty() ?> <?php echo ++$i==$numColumns-1?'last':'' ?>">
+                        <td class="<?php echo $_column->getCssProperty() ?> <?php echo ++$i==$numColumns-1? 'last':'' ?>">
                             <?php echo (($_html = $_column->getRowField($_i)) != '' ? $_html : '&nbsp;') ?>
                         </td>
                     <?php endforeach; ?>
@@ -218,11 +219,26 @@ $numColumns = sizeof($this->getColumns());
         <?php echo $this->getJsObjectName() ?>.initRowCallback = <?php echo $this->getRowInitCallback() ?>;
         <?php echo $this->getJsObjectName() ?>.initGridRows();
     <?php endif; ?>
+    
     <?php if($this->getMassactionBlock()->isAvailable()): ?>
     <?php echo $this->getMassactionBlock()->getJavaScript() ?>
     <?php endif ?>
     <?php echo $this->getAdditionalJavaScript(); ?>
+
+    function openMyPopup() {
+        $('hide-column-layer').show();
+    }
+    function closeMyPopup() {
+        $('hide-column-layer').hide();
+    }
+    function saveHiddenColumns() {
+        $('hide_columns_form').submit();
+    }
 //]]>
+
 </script>
+<div id="hide-column-layer" style="display:none">
+<?php echo $this->getPopupContent() ?>
+</div>
 <?php endif; ?>
 <?php endif ?>

@@ -2,6 +2,8 @@
 
 class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_Grid {
 
+	protected $_denyColumnList = null;
+
     public function __construct() {
         parent::__construct();
         $this->setId('zolagocatalog_mass_grid');
@@ -45,7 +47,31 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 		}
 		return parent::_setCollectionOrder($column);
 	}
+	public function getPopupContent() {
+		return $this->getChildHtml('popup_content');
+	}
+	public function getHideColumnsButtonHtml() {
+		return $this->getChildHtml('hide_column_button');
+	}
+	protected function _prepareLayout() {
+		$this->setChild('popup_content',
+			$this->getLayout()->createBlock('zolagocatalog/vendor_mass_columnspopup')
+				->setData(array(
+					'parent' => $this,
+					'denyList' => $this->_getDenyColumnList(),
+				))
+		);
+        $this->setChild('hide_column_button',
+            $this->getLayout()->createBlock('adminhtml/widget_button')
+                ->setData(array(
+                    'label'     => Mage::helper('zolagocatalog')->__('Show/Hide columns'),
+                    'onclick'   => 'javascript:openMyPopup()',
+                    'class'   => 'task'
+                ))
+        );
 
+		return parent::_prepareLayout();
+	}
 	protected function _prepareCollection(){
         $collection = Mage::getResourceModel('catalog/product_collection');
         /* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
@@ -109,14 +135,30 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 		
         return parent::_prepareCollection();
     }
-	
+
+    /**
+     * list of not allowed columns (from session)
+     */	
+    protected function _getDenyColumnList() {
+    	if (is_null($this->_denyColumnList)) {
+    		$attributeSet = $this->getAttributeSet()->getId();
+    		$list = Mage::getSingleton('udropship/session')->getData('denyColumnList');
+ 			$out = array();
+    		if ($list && isset($list[$attributeSet])) {
+				$out = $list[$attributeSet];
+			} 
+			$this->_denyColumnList = $out;
+    	}
+    	return $this->_denyColumnList;
+    }
 	/**
 	 * @todo Przemek: implement using custom column setting
 	 * @param Mage_Catalog_Model_Resource_Eav_Attribute $attribute
 	 * @return boolean
 	 */
 	protected function _canShowColumnByAttrbiute(Mage_Catalog_Model_Resource_Eav_Attribute $attribute) {
-		return true; //$attribute->getAttributeCode()!="name";
+		$list = $this->_getDenyColumnList();
+		return empty($list[$attribute->getId()]);
 	}
 	
 	
@@ -514,4 +556,5 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 		}
 		return null;
 	}
+
 }
