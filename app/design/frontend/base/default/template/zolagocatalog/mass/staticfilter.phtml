@@ -1,5 +1,6 @@
 <?php
-$activeFilters = $this->getCurrentStaticFilterValues();
+$storeId		= $this->getStore()->getId();
+$activeFilters	= $this->getCurrentStaticFilterValues();
 ?>
 <div class="staticFilter-box">
 	<?php if ($this->getStaticFilters($this->getCurrentAttributeSetId()) && $this->getCurrentAttributeSetId()): ?>
@@ -21,8 +22,19 @@ $activeFilters = $this->getCurrentStaticFilterValues();
 							<select name="staticFilter" id="staticFilter-<?php echo $firstFilter['attribute_id']; ?>" class="staticFilter">
 								<option value=""><?php echo Mage::helper("zolagocatalog")->__("--- Select ---"); ?></option>
 								<?php foreach($singleFilter as $value): ?>
-									<?php if ($value['value'] && $value['group'] !== Zolago_Catalog_Helper_Data::ADDITIONAL_ATTRIBUTES_GROUP): ?>
-										<option value="<?php echo $value['attribute_id']; ?>" <?php if($activeFilters && array_key_exists($value['attribute_id'], $activeFilters) && $this->escapeHtml($activeFilters[$value['attribute_id']])==$value['value']): ?> selected="selected"<?php endif;?> filterValue="<?php echo $this->escapeHtml($value['value']); ?>"><?php echo $this->getUpdatedFilterValues($value['value'], $filterLabel, $updateValues); ?></option>
+									<?php if (isset($value['option'])):
+											$filterValue	= $value['option'];
+											$displayValue	= $this->getOptionLabelbyId($filterValue, $storeId);
+											if (!$displayValue):
+												$displayValue = $this->getOptionLabelbyId($filterValue, 0);
+											endif;
+										else:
+											$filterValue	= $this->escapeHtml($value['value']);
+											$displayValue	= $this->escapeHtml($value['value']);
+										endif;
+									?>
+									<?php if ($displayValue && $value['group'] !== Zolago_Catalog_Helper_Data::ADDITIONAL_ATTRIBUTES_GROUP): ?>
+										<option value="<?php echo $value['attribute_id']; ?>" <?php if($this->isFilterActive($activeFilters, $value['attribute_id'], $displayValue, $filterValue)): ?> selected="selected"<?php endif;?> filterValue="<?php echo $this->escapeHtml($filterValue); ?>"><?php echo $this->getUpdatedFilterValues($displayValue, $filterLabel, $updateValues); ?></option>
 									<?php endif; ?>
 								<?php endforeach; ?>
 							</select>
@@ -50,8 +62,19 @@ $activeFilters = $this->getCurrentStaticFilterValues();
 							<select name="staticFilter" id="staticFilter-<?php echo $firstFilter['attribute_id']; ?>" class="staticFilter">
 								<option value=""><?php echo Mage::helper("zolagocatalog")->__("--- Select ---"); ?></option>
 								<?php foreach($singleFilter as $value): ?>
-									<?php if ($value['value'] && $value['group'] == Zolago_Catalog_Helper_Data::ADDITIONAL_ATTRIBUTES_GROUP): ?>
-										<option value="<?php echo $value['attribute_id']; ?>" <?php if($activeFilters && array_key_exists($value['attribute_id'], $activeFilters) && $this->escapeHtml($activeFilters[$value['attribute_id']])==$value['value']): ?> selected="selected"<?php endif;?> filterValue="<?php echo $this->escapeHtml($value['value']); ?>"><?php echo $this->getUpdatedFilterValues($value['value'], $filterLabel, $updateValues); ?></option>
+									<?php if (isset($value['option'])):
+											$filterValue	= $value['option'];
+											$displayValue	= $this->getOptionLabelbyId($filterValue, $storeId);
+											if (!$displayValue):
+												$displayValue = $this->getOptionLabelbyId($filterValue, 0);
+											endif;
+										else:
+											$filterValue	= $this->escapeHtml($value['value']);
+											$displayValue	= $this->escapeHtml($value['value']);
+										endif;
+									?>						
+									<?php if ($displayValue && $value['group'] == Zolago_Catalog_Helper_Data::ADDITIONAL_ATTRIBUTES_GROUP): ?>
+										<option value="<?php echo $value['attribute_id']; ?>" <?php if($this->isFilterActive($activeFilters, $value['attribute_id'], $displayValue, $filterValue)): ?> selected="selected"<?php endif;?> filterValue="<?php echo $this->escapeHtml($filterValue); ?>"><?php echo $this->getUpdatedFilterValues($displayValue, $filterLabel, $updateValues); ?></option>
 									<?php endif; ?>
 								<?php endforeach; ?>
 							</select>
