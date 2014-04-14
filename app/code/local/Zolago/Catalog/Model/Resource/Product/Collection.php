@@ -19,10 +19,9 @@ class Zolago_Catalog_Model_Resource_Product_Collection
 	   $select->joinLeft(
 			   array("base_image_default"=>$imageTabele), 
 			   sprintf(
-					"base_image_default.entity_id=e.entity_id AND base_image_default.attribute_id=%s AND base_image_default.store_id=%s AND base_image_default.value!=%s", 
+					"base_image_default.entity_id=e.entity_id AND base_image_default.attribute_id=%s AND base_image_default.store_id=%s", 
 					$adapter->quote($imageAttribute->getId()),
-					$adapter->quote(Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID),
-					$adapter->quote("no_selection")
+					$adapter->quote(Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID)
 			   ),
 			   array()
 	   );
@@ -31,17 +30,17 @@ class Zolago_Catalog_Model_Resource_Product_Collection
 			$select->joinLeft(
 					array("base_image_store"=>$imageTabele), 
 					sprintf(
-						 "base_image_store.entity_id=e.entity_id AND base_image_store.attribute_id=%s AND base_image_store.store_id=%s AND base_image_store.value!=%s", 
+						 "base_image_store.entity_id=e.entity_id AND base_image_store.attribute_id=%s AND base_image_store.store_id=%s", 
 						 $adapter->quote($imageAttribute->getId()),
-						 $adapter->quote(Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID),
-						 $adapter->quote("no_selection")
+						 $adapter->quote($this->getStoreId())
 					),
 					array()
 			);
-			
-			$baseImageExpression = "IF(base_image_store.value_id>0, 1, IF(base_image_default.value_id>0,1,0))";
+			$baseImageExpression = "IF(base_image_store.value_id>0,".
+				"base_image_store.value!='no_selection',".
+				"IF(base_image_default.value_id>0, base_image_default.value!='no_selection', 0))";
 	   }else{
-			$baseImageExpression = "IF(base_image_default.value_id, 1, 0)";
+			$baseImageExpression = "IF(base_image_default.value_id, base_image_default.value!='no_selection, 0)";
 	   }
 	   
 	   if(!$withExcluded){
@@ -62,7 +61,8 @@ class Zolago_Catalog_Model_Resource_Product_Collection
 		   if($this->getStoreId()){
 				$subselect->joinLeft(
 				   array("gallery_value_store" => $this->getTable("catalog/product_attribute_media_gallery_value")),
-				   $adapter->quoteInto("gallery_value_store.value_id=gallery.value_id AND gallery_value_store.store_id=?", $this->getStoreId()),
+				   $adapter->quoteInto("gallery_value_store.value_id=gallery.value_id AND gallery_value_store.store_id=?", 
+						   $this->getStoreId()),
 				   array()
 				 );
 				$subselect->where("IF(gallery_value_store.value_id>0, gallery_value_store.disabled, gallery_value_default.disabled)=?", 0);
