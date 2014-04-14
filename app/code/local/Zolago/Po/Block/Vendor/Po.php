@@ -1,0 +1,83 @@
+<?php
+
+class Zolago_Po_Block_Vendor_Po extends Mage_Core_Block_Template
+{
+	
+	protected function _beforeToHtml() {
+		$this->getGrid();
+		return parent::_beforeToHtml();
+	}
+
+	public function getGridJsObjectName() {
+		return $this->getGrid()->getJsObjectName();
+	}
+
+	/**
+	 * @return Zolago_Po_Block_Vendor_Po_Grid
+	 */
+	public function getGrid() {
+		if(!$this->getData("grid")){
+			$design = Mage::getDesign();
+			$design->setArea("adminhtml");
+			$block = $this->getLayout()->
+					createBlock("zolagopo/vendor_po_grid");
+			$block->setParentBlock($this);
+			$this->setGridHtml($block->toHtml());
+			$this->setData("grid", $block);
+			$design->setArea("frontend");
+		}
+		return $this->getData("grid");
+	}
+	
+	public function getFilterValue($filter=null) {
+		$params = Mage::app()->getRequest()->getParam("filter");
+		if($filter && isset($params[$filter])){
+			return $params[$filter];
+		}
+		return $params;
+	}
+	
+	public function getStatusOptions() {
+		if($this->getFilterValue('po_status')){
+			$values = $this->getFilterValue('po_status');
+		}else{
+			$values = $this->getDefaultStatuses();
+		}
+		
+		$allFilters = Mage::helper('udpo')->getVendorUdpoStatuses();;
+		$out = array();
+		
+		foreach($allFilters as $key=>$label){
+			$item = array(
+				"value" => $key,
+				"label" => $label
+			);
+			if(in_array($key, $values)){
+				$item['checked'] = true;
+			}
+			$out[] = $item;
+		}
+		
+		return $out;
+	}
+	
+	
+	public function getDefaultStatuses() {
+		$statuses = $this->getVendor()->getData('vendor_po_grid_status_filter');
+		return is_array($statuses) ? $statuses : array();
+	}
+	
+	public function getPosCollection() {
+		$collection = Mage::getResourceModel('zolagopos/pos_collection');
+		/* @var $collection Zolago_Pos_Model_Resource_Pos_Collection */
+		$collection->addVendorFilter($this->getVendor());
+		return $collection;
+	}
+	
+	/**
+	 * @return Unirgy_Dropship_Model_Vendor
+	 */
+	public function getVendor() {
+		return Mage::getSingleton('udropship/session')->getVendor();
+	}
+}

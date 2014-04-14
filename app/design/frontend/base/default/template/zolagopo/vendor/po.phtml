@@ -1,0 +1,82 @@
+<?php /* @var $this Zolago_Po_Block_Po */ ?>
+<div class="page-title">
+	<h1><?php echo Mage::helper("zolagopo")->__("My orders");?></h1>
+</div>
+<div class="fiters generic-box">
+	<form>
+		<div class="left p50">
+			<dl>
+				<dt>
+					<label for="filter_default_pos"><?php echo Mage::helper("zolagopo")->__("POS");?></label></dt>
+				<dd>
+					<select id="filter_default_pos" class="block">
+						<option value=""><?php echo Mage::helper("zolagopo")->__("--- Select ---");?></option>
+						<?php foreach($this->getPosCollection() as $pos):?>
+							<option value="<?php echo $pos->getId();?>"><?php echo $this->escapeHtml($pos->getName());?></option>
+						<?php endforeach;?>
+					</select>
+				</dd>
+			</dl>
+			<dl>
+				<dt><?php echo Mage::helper("zolagopo")->__("Order date");?></dt>
+				<dd>
+					<input id="filter_order_date_from" type="text" class="input-text date "/>
+					&mdash;
+					<input id="filter_order_date_to" type="text" class="input-text date"/>
+				</dd>
+			</dl>
+			<dl>
+				<dt><?php echo Mage::helper("zolagopo")->__("Max. shipment date");?></dt>
+				<dd>
+					<input id="filter_max_shipment_date_from" type="text" class="input-text date "/>
+					&mdash;
+					<input id="filter_max_shipment_date_to" type="text" class="input-text date"/>
+				</dd>
+			</dl>
+			<dl>
+				<dt><?php echo Mage::helper("zolagopo")->__("Shipment date");?></dt>
+				<dd>
+					<input id="filter_shipment_date_from" type="text" class="input-text date "/>
+					&mdash;
+					<input id="filter_shipment_date_to" type="text" class="input-text date"/>
+				</dd>
+			</dl>
+		</div>
+		<div class="left p50">
+			<dl>
+				<dt class="nofloat"><?php echo Mage::helper("zolagopo")->__("Order status");?></dt>
+				<dd>
+					<?php foreach($this->getStatusOptions() as $option):?>
+					<input type="checkbox"<?php if(isset($option['checked'])):?> checked="checked"<?php endif;?> class="filter_po_status" id="filter_po_status_<?php echo $this->escapeHtml($option['value']);?>" value="<?php echo $this->escapeHtml($option['value']);?>">
+					<label for="filter_po_status_<?php echo $this->escapeHtml($option['value']);?>"><?php echo $this->escapeHtml($option['label']);?></label><br/>
+					<?php endforeach;?>
+				</dd>
+			</dl>
+			<div class="clear"></div>
+			<div>
+				<button type="submit" class="scalable"><span><span><?php echo Mage::helper("zolagopo")->__("Apply filter ");?></span></span></button>
+				<button type="reset" class="scalable"><span><span><?php echo Mage::helper("zolagopo")->__("Reset");?></span></span></button>
+			</div>
+		</div>
+	<div class="clear"></div>
+	</form>
+</div>
+<div class="z-grid">
+	<?php echo $this->getGridHtml(); ?>
+</div>
+<script type="text/javascript">
+(function(){
+	var dateFields = [ 
+		'filter_order_date_from', 
+		'filter_order_date_to', 
+		'filter_max_shipment_date_from', 
+		'filter_max_shipment_date_to',
+		'filter_shipment_date_from', 
+		'filter_shipment_date_to'
+	];
+	for (var i=0, l=dateFields.length; i<l; i++) {
+		Calendar.setup({inputField : dateFields[i], ifFormat : "%d-%m-%Y", showsTime : false});
+	}
+})();
+</script>
+	

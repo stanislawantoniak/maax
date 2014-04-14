@@ -208,7 +208,7 @@ input.input-text:focus,select:focus,textarea:focus { background-color:#edf7fd; }
 .buttons-set .back-link { float:left; margin:0; }
 .buttons-set button.button { float:right; margin-left:5px; }
 .form-button { 
-	/* tak by³o SA
+	/* tak byï¿½o SA
 		background:#2e353d; -moz-border-radius:4px; -webkit-border-radius:4px; color:#fff; overflow:visible; padding:5px 13px; border:0; text-transform:uppercase; font-weight:bold; font-size:12px; cursor:pointer; line-height:1; 
 	*/
   	background-color: #8c9cbf;
@@ -318,7 +318,7 @@ p.required { font-size:11px; text-align:right; color:#EB340A; }
 .data-table thead th.wrap { white-space:normal; }
 .data-table thead th a,
 .data-table thead th a:hover { color:#263056; }
-.data-table thead th { background:#d2d5f2 /*by³o #ddd*/; }
+.data-table thead th { background:#d2d5f2 /*byï¿½o #ddd*/; }
 .data-table thead th .tax-flag { font-size:11px; white-space:nowrap; }
 
 .data-table a,
@@ -391,7 +391,7 @@ p.required { font-size:11px; text-align:right; color:#EB340A; }
 #header-logo { float:left; font-size:26px; font-weight:bold; }
 .utility-nav { float:right; margin-top:15px; text-align:right; }
 .main-nav { 
-	/* tak by³o 
+	/* tak byï¿½o 
 		margin-top:5px; padding:0 12px; background:#2e353d; -moz-border-radius: 3px; -webkit-border-radius: 3px; line-height:1; font-weight:bold; }
 	*/
 	margin-top:5px; 
@@ -430,12 +430,12 @@ p.required { font-size:11px; text-align:right; color:#EB340A; }
 
 
 .pipe { font-size:10px; color:#777; padding:0 3px 0 6px; }
-.generic-box { margin-bottom:15px; background:#eefdf8; border:1px solid #ddd; padding:10px 18px; } /*by³o 18px*/
-.box-head { margin:-10px -18px 18px; padding:8px 15px; background:#eeeffd /*by³o #ccc*/; color:#2e353d; }
+.generic-box { margin-bottom:15px; background:#eefdf8; border:1px solid #ddd; padding:10px 18px; } /*byï¿½o 18px*/
+.box-head { margin:-10px -18px 18px; padding:8px 15px; background:#eeeffd /*byï¿½o #ccc*/; color:#2e353d; }
 .box-head .col3-set { background:none !important; }
 .box-head a, .box-head a:hover { color:#263056; }
 .filter .col3-set { background:url(../images/filter_bg.gif) repeat-y; margin:-18px 0 -4em 0; padding:19px 0; }
-.batch-actions { margin:-10px -18px 18px; background:#eeeffd /*by³o #ccc*/; padding:8px 15px; text-align:right; }
+.batch-actions { margin:-10px -18px 18px; background:#eeeffd /*byï¿½o #ccc*/; padding:8px 15px; text-align:right; }
 .shipment-info-breadcrumb {
     font-size: 1.3em;
     margin-bottom: 20px;
@@ -1087,3 +1087,30 @@ button.skip {
 
 .registered-users button {
 	margin-top: 8px;}
+
+.p50{
+	width: 50%;
+}
+.fiters dt{
+	width: 150px;
+	float: left;
+	clear:both;
+}
+.fiters dt.nofloat{
+	float: none;
+}
+.fiters dd{
+	width: 250px;
+	margin-bottom: 10px;
+	float: left;
+}
+.fiters dl:last-child dd{
+	margin-bottom: 0px;
+}
+.fiters .block{
+	display: block;
+	width: 100%;;
+}
+.fiters input.date{
+	width: 110px;
+}
