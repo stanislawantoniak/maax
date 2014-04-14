@@ -439,6 +439,10 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
             'label'=> Mage::helper('zolagocatalog')->__('Disabled'),
             'url'  => $this->getUrl('*/*/massStatus', array('_current'=>true, 'status' => Mage_Catalog_Model_Product_Status::STATUS_DISABLED)),
         ));
+        $this->getMassactionBlock()->addItem('review', array(
+            'label'=> Mage::helper('zolagocatalog')->__('Product Review'),
+            'url'  => $this->getUrl('*/*/massStatus', array('_current'=>true, 'review' => true)),
+        ));		
         return $this;
     }
 
