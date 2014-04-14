@@ -126,6 +126,7 @@
 						<depend_fields>
                             <dhl_login>1</dhl_login>
                             <dhl_password>1</dhl_password>
+							<dhl_account>1</dhl_account>
                         </depend_fields>
                         <position>10</position>
                     </use_dhl>
