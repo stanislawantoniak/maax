@@ -36,11 +36,15 @@ class Zolago_Catalog_Model_Resource_Product_Collection
 					),
 					array()
 			);
-			$baseImageExpression = "IF(base_image_store.value_id>0,".
-				"base_image_store.value!='no_selection',".
-				"IF(base_image_default.value_id>0, base_image_default.value!='no_selection', 0))";
+			$baseImageExpression = "IF(".
+					"base_image_store.value_id>0,".
+					"base_image_store.value!='no_selection',".
+					"IF(".
+						"base_image_default.value_id>0,".
+						"base_image_default.value!='no_selection',".
+						"0))";
 	   }else{
-			$baseImageExpression = "IF(base_image_default.value_id, base_image_default.value!='no_selection, 0)";
+			$baseImageExpression = "IF(base_image_default.value_id, base_image_default.value!='no_selection', 0)";
 	   }
 	   
 	   if(!$withExcluded){
