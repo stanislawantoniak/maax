@@ -168,6 +168,9 @@ class Zolago_Catalog_Block_Vendor_Mass_Staticfilter extends Mage_Core_Block_Temp
 		if ($update) {
 			$value = trim(substr($value, strlen($filterLabel)+1));
 		}
+		if (!$value) {
+			$value = Mage::helper("zolagocatalog")->__('--- no data ---');
+		}
 		return $this->escapeHtml($value);
 	}
 
