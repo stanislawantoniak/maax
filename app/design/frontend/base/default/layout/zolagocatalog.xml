@@ -199,4 +199,10 @@
 			</block>
 		</reference>
 	</udprod_vendor_mass_index>
+	<udprod_vendor_image_index>
+		<update handle="udropship_vendor" />
+		
+		<reference name="content">
+		</reference>
+	</udprod_vendor_image_index>
 </layout>

@@ -6,7 +6,7 @@ class Zolago_Catalog_Vendor_ImageController
 	 * Index
 	 */
 	public function indexAction() {
-		echo "Hello world";
+		$this->_renderPage(null, 'udprod_image');
 	}
 	
 }

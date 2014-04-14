@@ -21,7 +21,7 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 	const RES_UDROPSHIP_VENDOR_INDEX				= "udropship/vendor/index";
 	const RES_UDROPSHIP_VENDOR_LOGIN				= "udropship/vendor/login";
 	const RES_UDROPSHIP_VENDOR_LOGOUT				= "udropship/vendor/logout";
-	const RES_UDROPSHIP_VENDOR_PASSWORD			= "udropship/vendor/password";
+	const RES_UDROPSHIP_VENDOR_PASSWORD				= "udropship/vendor/password";
 	const RES_UDROPSHIP_VENDOR_PASSWORD_POST		= "udropship/vendor/passwordPost";
 			
 	// Restricted 
@@ -35,7 +35,9 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 	// Po Vendor controller - whole
 	const RES_ASK_QUESTION							= "udqa/vendor";
 	// Product editor
-	const RES_UDPROD_VENDOR						= "udprod/vendor";
+	const RES_UDPROD_VENDOR							= "udprod/vendor";
+	// Mass editor
+	const RES_UDPROD_VENDOR_IMAGE					= "udprod/vendor_image";
 	// Mass editor
 	const RES_UDPROD_VENDOR_MASS					= "udprod/vendor_mass";
 	
@@ -48,7 +50,7 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		self::RES_UDROPSHIP_VENDOR_INDEX			=> "Vendor index",	
 		self::RES_UDROPSHIP_VENDOR_LOGIN			=> "Vendor login",	
 		self::RES_UDROPSHIP_VENDOR_LOGOUT			=> "Vendor logout",
-		self::RES_UDROPSHIP_VENDOR_PASSWORD		=> "Vendor pasword",
+		self::RES_UDROPSHIP_VENDOR_PASSWORD			=> "Vendor pasword",
 		self::RES_UDROPSHIP_VENDOR_PASSWORD_POST	=> "Vendor password post",
 		self::RES_UDROPSHIP_VENDOR_PREFERENCES		=> "Vendor preferneces",
 		self::RES_UDROPSHIP_VENDOR_PREFERENCES_POST=> "Vendor preferneces post",
@@ -59,7 +61,9 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		//  Ask Question
 		self::RES_ASK_QUESTION						=> "Vendor ask question",
 		//  Product editor
-		self::RES_UDPROD_VENDOR					=> "Product edit",
+		self::RES_UDPROD_VENDOR						=> "Product edit",
+		//  Mass edit
+		self::RES_UDPROD_VENDOR_IMAGE				=> "Mass images",
 		//  Mass edit
 		self::RES_UDPROD_VENDOR_MASS				=> "Mass edit",
 	);
@@ -110,6 +114,7 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		
 		// Build ACL Rules - Product edit
 		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_PRODUCT_OPERATOR, self::RES_UDPROD_VENDOR);
+		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_PRODUCT_OPERATOR, self::RES_UDPROD_VENDOR_IMAGE);
 		
 		// Build ACL Rules - Mass Actions
 		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MASS_OPERATOR, self::RES_UDPROD_VENDOR_MASS);
