@@ -18,25 +18,58 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 		$collection->addProductNames();
 		$collection->addHasShipment();
 		
-		/**
-		 * Applay external filters
-		 */
-		$statuses = $this->getFilterValueByColumn("udropship_status");
-		
-		if(is_null($statuses)){
-			$statuses=$this->getParentBlock()->getDefaultStatuses();
-		}
-		if($statuses){
-			$collection->addAttributeToFilter("main_table.udropship_status", array("in"=>$statuses));
-		}
+		$this->_applayExternalFilters($collection);
 		
         $this->setCollection($collection);
 		
         return parent::_prepareCollection();
 	}
 	
-	public function getFilterValueByColumn($columnId) {
-		$index = $this->getColumn($columnId)->getIndex();
+	/**
+	 * @param Zolago_Po_Model_Resource_Po_Collection $collection
+	 * @return Zolago_Po_Block_Vendor_Po_Grid
+	 */
+	protected function _applayExternalFilters(Zolago_Po_Model_Resource_Po_Collection $collection) {
+		
+		// Order Date
+		if($date=$this->getFilterValueByIndex("created_at")){
+			$this->_applayDateFilter($collection, "main_table.created_at", $date);
+		}
+		
+		// Max shipment date
+		//if($date=$this->getFilterValueByIndex("max_shipment_date")){
+		//	$this->_applayDateFilter($collection, "main_table.max_shipment_date", $date);
+		//}
+		
+		// Max shipment date
+		if($date=$this->getFilterValueByIndex("shipment_date")){
+			$this->_applayDateFilter($collection, "shipment.created_at", $date);
+		}
+		
+		// Pos
+		if($pos=$this->getFilterValueByIndex("default_pos_id")){
+			$collection->addFieldToFilter("main_table.default_pos_id", $pos);
+		}
+			
+		// Status
+		$statuses = $this->getFilterValueByColumn("udropship_status");
+		if(is_null($statuses)){
+			$statuses=$this->getParentBlock()->getDefaultStatuses();
+		}
+		if($statuses){
+			$collection->addAttributeToFilter("main_table.udropship_status", array("in"=>$statuses));
+		}
+		return $this;
+	}
+	
+	protected function _applayDateFilter(Zolago_Po_Model_Resource_Po_Collection $collection, $index, $date) {
+		if(is_array($date)){
+			$date['date']=true;
+			$collection->addFieldToFilter($index, $date);
+		}
+	}
+	
+	public function getFilterValueByIndex($index) {
 		$param = Mage::app()->getRequest()->getParam($this->getVarNameFilter());
 		if($param){
 			$param = $this->helper('adminhtml')->prepareFilterString($param);
@@ -45,6 +78,10 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 			}
 		}
 		return null;
+	}
+	public function getFilterValueByColumn($columnId) {
+		$index = $this->getColumn($columnId)->getIndex();
+		return $this->getFilterValueByIndex($index);
 	}
 	
 	protected function _prepareColumns() {

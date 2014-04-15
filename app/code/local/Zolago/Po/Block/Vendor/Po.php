@@ -29,8 +29,31 @@ class Zolago_Po_Block_Vendor_Po extends Mage_Core_Block_Template
 		return $this->getData("grid");
 	}
 	
-	public function getFilterValue($columnId) {
-		return $this->getGrid()->getFilterValueByColumn($columnId);
+	public function getFilterValue($index) {
+		return $this->getGrid()->getFilterValueByIndex($index);
+	}
+	
+	public function getCreatedAt($idx) {
+		if(($v=$this->getFilterValue('created_at')) && is_array($v) && isset($v[$idx])){
+			return $v[$idx];
+		}
+		return null;
+	}
+	public function getMaxShipmentDate($idx) {
+		if(($v=$this->getFilterValue('max_shipment_date')) && is_array($v) && isset($v[$idx])){
+			return $v[$idx];
+		}
+		return null;
+	}
+	public function getShipmentDate($idx) {
+		if(($v=$this->getFilterValue('shipment_date')) && is_array($v) && isset($v[$idx])){
+			return $v[$idx];
+		}
+		return null;
+	}
+	
+	public function getDefaultPosId() {
+		return $this->getFilterValue('default_pos_id');
 	}
 	
 	public function getStatusOptions() {
