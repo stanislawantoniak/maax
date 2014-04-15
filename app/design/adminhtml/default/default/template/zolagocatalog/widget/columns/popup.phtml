@@ -1,33 +1,31 @@
 <div class="column_popup_layer">
 <form name="hide_columns" method="post" id="hide_columns_form">
 <div class="column_box">
+<ul>
 <?php
     $denyList = $this->getData('denyList');
     $counter = 0;
     foreach ($this->getData('parent')->getAllColumns() as $key => $_column) {
-        if (empty($_column['attribute'])) {
+        if ($key == 'edit') {
             continue;
-        } else {
-            $attribute = $_column['attribute'];
         }
-        if (!($counter % 10)) {
-            echo '<ul>';
+        if ($counter == 5) {
+            echo '</ul>';            
+            echo '<a name="check" href="javascript:checkGroupColumns()">'.$this->__('Check all');
+            echo '</a> / <a name="uncheck" href="javascript:unCheckGroupColumns()">'.$this->__('Uncheck all').'</a>';
+            echo '<ul id="checked_group">';
         }
         echo '<li><input id="hide_'.$counter.'"';
-        if (!isset($denyList[$attribute->getId()])) {
+        if (!isset($denyList[$key])) {
             echo ' checked';
         }
-        echo ' type="checkbox" name="hideColumn['.$attribute->getId().']" value="1"><label for="hide_'.$counter.'">'.$_column['header'].'</label></li>';
-        echo '<input type="hidden" name="listColumn['.$attribute->getId().']" value="'.$attribute->getId().'">';
-        if (($counter %10) == 9) {
-            echo '</ul>';    
-        }
+        echo ' type="checkbox" name="hideColumn['.$key.']" value="1"><label for="hide_'.$counter.'">'.$_column['header'].'</label></li>';
+        echo '<input type="hidden" name="listColumn['.$key.']" value="'.$key.'">';
         $counter++;
     }
-    if ($counter % 10) {
-        echo '</ul>';
-    }
 ?>
+</ul>
+<div><span class="required">*</span> <?php echo $this->__('- required columns'); ?></div>
 <div class="clear"><br/></div>
 </div>
 <div class="buttons">
