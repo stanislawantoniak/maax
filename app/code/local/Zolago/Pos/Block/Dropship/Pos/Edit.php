@@ -20,7 +20,6 @@ class Zolago_Pos_Block_Dropship_Pos_Edit extends Mage_Core_Block_Template {
             'minimal_stock',
             'priority',
             'external_id',
-            'client_number',
         ));         
         
 		$settings->addField("pos_id", "hidden", array("name"=>"pos_id"));
@@ -51,6 +50,7 @@ class Zolago_Pos_Block_Dropship_Pos_Edit extends Mage_Core_Block_Template {
         $builder->setFieldset($dhl);
         $builder->prepareForm(array(
             'use_dhl',
+            'dhl_account',
             'dhl_login',
             'dhl_password',
         ));

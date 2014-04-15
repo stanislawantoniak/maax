@@ -8,6 +8,7 @@ class Zolago_Dhl_Helper_Data extends Mage_Core_Helper_Abstract {
 	protected $_dhlClient;
 	protected $_dhlLogin;
 	protected $_dhlPassword;
+	protected $_dhlAccount;
 	protected $_dhlDir;
 	
 	const DHL_DIR		= 'dhl';
@@ -30,7 +31,7 @@ class Zolago_Dhl_Helper_Data extends Mage_Core_Helper_Abstract {
 	/**
 	 * Initialize DHL Web API Client
 	 * 
-	 * @param array $dhlSettings Array('login' => 'value', 'password' => 'value')
+	 * @param array $dhlSettings Array('login' => 'value', 'password' => 'value','account' => 'value')
 	 * 
 	 * @return Zolago_Dhl_Model_Client DHl Client
 	 */
@@ -40,13 +41,15 @@ class Zolago_Dhl_Helper_Data extends Mage_Core_Helper_Abstract {
 			if ($dhlSettings) {
 				$this->_dhlLogin	= $dhlSettings['login'];
 				$this->_dhlPassword	= $dhlSettings['password'];					
+				$this->_dhlAccount  = $dhlSettings['account'];
 			} else {
 				$this->_dhlLogin	= $this->getDhlLogin();
+				$this->_dhlAccount	= $this->getDhlAccount();
 				$this->_dhlPassword	= $this->getDhlPassword();				
 			}
 			
 			$dhlClient			= Mage::getModel('zolagodhl/client');
-			$dhlClient->setAuth($this->_dhlLogin, $this->_dhlPassword);
+			$dhlClient->setAuth($this->_dhlLogin, $this->_dhlPassword,$this->_dhlAccount);
 			$this->_dhlClient	= $dhlClient;
 		}
 		
