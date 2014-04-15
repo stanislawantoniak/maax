@@ -8,7 +8,7 @@ class Zolago_Catalog_Vendor_MassController
 	public function indexAction() {
 		Mage::register('as_frontend', true);// Tell block class to use regular URL's
 		
-		$this->_renderPage(array('default', 'formkey', 'adminhtml_head'), 'zolagocatalog');
+		$this->_renderPage(array('default', 'formkey', 'adminhtml_head'), 'udprod_mass');
 	}
 	
 	public function saveAjaxAction() {
@@ -83,11 +83,13 @@ class Zolago_Catalog_Vendor_MassController
 						if(isset($attributesMode[$attributeCode])){
 							switch ($attributesMode[$attributeCode]) {
 								case "add":
+								case "sub":
 									Mage::getResourceSingleton('zolagocatalog/vendor_mass')->addValueToMultipleAttribute(
 										$productIds,
 										$attribute, 
 										is_array($value) ? $value : array(),
-										$store
+										$store,
+										$attributesMode[$attributeCode]	
 									);
 									unset($attributesData[$attributeCode]);
 								break;
