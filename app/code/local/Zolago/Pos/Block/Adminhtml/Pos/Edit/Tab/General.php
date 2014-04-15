@@ -74,7 +74,13 @@ class Zolago_Pos_Block_Adminhtml_Pos_Edit_Tab_General extends Mage_Adminhtml_Blo
             'dhl_login',
             'dhl_password',
         ));
-        
+		
+		$review = $form->addFieldset('review', array('legend'=>$helper->__('Product Review Settings')));
+        $builder = Mage::getModel('zolagopos/form_fieldset_review'); 
+        $builder->setFieldset($review);
+        $builder->prepareForm(array(
+            'review_status'
+        ));
         
         $form->setValues($this->_getValues());
         
