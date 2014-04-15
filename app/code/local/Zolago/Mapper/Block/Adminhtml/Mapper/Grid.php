@@ -7,6 +7,7 @@ class Zolago_Mapper_Block_Adminhtml_Mapper_Grid extends Mage_Adminhtml_Block_Wid
         $this->setId('zolagomapper_mapper_grid');
         $this->setDefaultSort('mapper_id');
         $this->setDefaultDir('desc');
+        $this->setSaveParametersInSession(true);
     }
 
     protected function _prepareCollection(){

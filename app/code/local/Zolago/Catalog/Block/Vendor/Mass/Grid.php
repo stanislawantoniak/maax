@@ -11,15 +11,18 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
         $this->setDefaultDir('desc');
         $this->setGridClass('z-grid');
         $this->setUseAjax(true);
+        $this->setSaveParametersInSession(true);
 		$this->setTemplate("zolagocatalog/widget/grid.phtml");
 		// Add custom renderes
 		$this->setColumnRenderers(array(
 			'multiselect'	=>	'zolagoadminhtml/widget_grid_column_renderer_multiselect',
 			'image'			=>	'zolagoadminhtml/widget_grid_column_renderer_image',
+			'status'		=>	'zolagoadminhtml/widget_grid_column_renderer_status',
 			'link'			=>	'zolagoadminhtml/widget_grid_column_renderer_link'
 		));
 		$this->setColumnFilters(array(
-			"multiselect"	=>	'zolagoadminhtml/widget_grid_column_filter_multiselect'
+			"multiselect"	=>	'zolagoadminhtml/widget_grid_column_filter_multiselect',
+			'status'		=>	'adminhtml/widget_grid_column_filter_select',
 		));
     }
 
@@ -73,8 +76,8 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 		return parent::_prepareLayout();
 	}
 	protected function _prepareCollection(){
-        $collection = Mage::getResourceModel('catalog/product_collection');
-        /* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
+        $collection = Mage::getResourceModel('zolagocatalog/product_collection');
+        /* @var $collection Zolago_Catalog_Model_Resource_Product_Collection */
 		
 		$collection->setFlag("skip_price_data", true);
 		
@@ -95,26 +98,6 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 			Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH 
 		)));
 		
-		// Add fixed column attributes
-	    foreach($this->_getFixedColumns() as $position){
-			 foreach($position as $key=>$column){
-				if(isset($column['attribute']) && 
-					$column['attribute'] instanceof Mage_Catalog_Model_Resource_Eav_Attribute && 
-					$this->_canShowColumnByAttrbiute($column['attribute'])){
-					
-					$collection->addAttributeToSelect($column['attribute']->getAttributeCode());
-				}
-					
-			 }
-		 }
-		
-	    // Add regular dynamic attributes
-		foreach($this->_getGridVisibleAttributes() as $attribute){
-			/* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
-			if($this->_canShowColumnByAttrbiute($attribute)){
-				$collection->addAttributeToSelect($attribute->getAttributeCode());
-			}
-		}
 		
 		//Add Active Static Filters to Collection - Start
 		$staticFilters		= $this->getStaticFilters();
@@ -131,6 +114,22 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 		}
 		//Add Active Static Filters to Collection - End
 		
+		
+	    // Prepare collection data
+		foreach($this->getColumns() as $key=>$column){
+			$columnData = $column->getData();
+			// Add regular dynamic attributes data
+			if($this->_canShowColumn($key, $columnData)){
+				if(isset($columnData['attribute']) && 
+					$columnData['attribute'] instanceof Mage_Catalog_Model_Resource_Eav_Attribute){
+					// By regular attribute
+					$collection->addAttributeToSelect($columnData['attribute']->getAttributeCode());
+				}elseif($key=="images_count"){
+					$collection->addImagesCount(false);
+				}
+			}
+		}
+
         $this->setCollection($collection);
 		
         return parent::_prepareCollection();
@@ -152,136 +151,152 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
     	return $this->_denyColumnList;
     }
 	/**
-	 * @todo Przemek: implement using custom column setting
-	 * @param Mage_Catalog_Model_Resource_Eav_Attribute $attribute
-	 * @return boolean
+	 * @return array
 	 */
-	protected function _canShowColumnByAttrbiute(Mage_Catalog_Model_Resource_Eav_Attribute $attribute) {
-		$list = $this->_getDenyColumnList();
-		return empty($list[$attribute->getId()]);
+	protected function _getAllPossibleColumns(){
+		if(!$this->getData("all_possible_columns")){
+			$columns = array();
+			// Build final columns
+			foreach($this->_prepareFixedStartColumns() as $key=>$column){
+				$columns[$key] = $column;
+			}
+			foreach($this->_prepareDynamicColumns() as $key=>$column){
+				$columns[$key] = $column;
+			}
+			foreach($this->_prepareFixedEndColumns() as $key=>$column){
+				$columns[$key] = $column;
+			}
+			$this->setData("all_possible_columns", $columns);
+		}
+		return $this->getData("all_possible_columns");
 	}
 	
 	
 	/**
 	 * Prepare layout for static start columns
+	 * @return array
 	 */
-	protected function _prepareStaticStartColumns(){
+	protected function _prepareFixedStartColumns(){
 		 $static = $this->_getFixedColumns();
 		 if(isset($static['start'])){
-			 foreach($static['start'] as $key=>$column){
-				 if(!isset($column['attribute'])){
-					$this->addColumn($key, $column);
-				 }elseif($column['attribute'] instanceof Mage_Catalog_Model_Resource_Eav_Attribute && 
-						 $this->_canShowColumnByAttrbiute($column['attribute'])){
-					$this->addColumn($key, $column);
-				 }
-			 }
+			 return $static['start'];
 		 }
+		 return array();
 	}
 	
 	/**
 	 * Prepare layout for static end columns
+	 * @return array Description
 	 */
-	protected function _prepareStaticEndColumns(){
+	protected function _prepareFixedEndColumns(){
 		 $static = $this->_getFixedColumns();
+		 $columns = array();
 		 if(isset($static['end'])){
-			 foreach($static['end'] as $key=>$column){
-				 if(!isset($column['attribute'])){
-					$this->addColumn($key, $column);
-				 }elseif($column['attribute'] instanceof Mage_Catalog_Model_Resource_Eav_Attribute && 
-						 $this->_canShowColumnByAttrbiute($column['attribute'])){
-					$this->addColumn($key, $column);
-				 }
-			 }
+			 return $static['end'];
 		 }
+		 return array();
 	}
 
+	/**
+	 * @return array()
+	 */
 	protected function	_getFixedColumns(){
 		if(!$this->getData("fixed_columns")){
+			
+			$columnStart = array();
 			
 			// Thumb
 			$thumbnail =  Mage::getModel("eav/config")->getAttribute(Mage_Catalog_Model_Product::ENTITY, "thumbnail");
 			$thumbnail->setStoreId($this->getLabelStore()->getId());
+			$columnStart[$thumbnail->getAttributeCode()] = array(
+				"index"		=> $thumbnail->getAttributeCode(), 
+				"type"		=> "image",
+				"attribute" => $thumbnail,
+				"clickable" => true,
+				"header"	=> $this->_getColumnLabel($thumbnail),
+				"width"		=> "100px",
+				"filter"	=> false,
+				"sortable"	=> false
+			);
 			
 			// Name
 			$name = Mage::getModel("eav/config")->getAttribute(Mage_Catalog_Model_Product::ENTITY, "name");
 			$name->setStoreId($this->getLabelStore()->getId());
+			$columnStart[$name->getAttributeCode()] = array(
+				"index"		=> $name->getAttributeCode(), 
+				"type"		=> "text",
+				"width"		=> "200px",
+				"attribute" => $name,
+				"clickable" => true,
+				"header"	=> $this->_getColumnLabel($name),
+			);
+			
 			
 			// Status
 			$status = Mage::getModel("eav/config")->getAttribute(Mage_Catalog_Model_Product::ENTITY, "status");
 			$status->setStoreId($this->getLabelStore()->getId());
 			
+			$columnStart[$status->getAttributeCode()] = array(
+				"index"		=> $status->getAttributeCode(), 
+				"type"		=>"options",
+				"attribute" => $status,
+				"clickable" => true,
+				"width"		=> "30px",
+				"header"	=> $this->_getColumnLabel($status),
+			);
+			
+			// Image count
+			$columnStart["images_count"] = array(
+				"index"		=> "images_count", 
+				"type"		=> "text",
+				"header"	=> $this->__("Im."),
+				"width"		=> "30px",
+				"filter"	=> false
+			);
+			
 			// Sku
 			$sku = Mage::getModel("eav/config")->getAttribute(Mage_Catalog_Model_Product::ENTITY, "sku");
 			$sku->setStoreId($this->getLabelStore()->getId());
-
+			$columnStart[$sku->getAttributeCode()] = array(
+				"index"		=> $sku->getAttributeCode(), 
+				"type"		=>"text",
+				"width"		=> "50px",
+				"clickable" => true,
+				"header"	=> $this->_getColumnLabel($sku),
+			);
+			
+			// End columns
+			$columnEnd = array();
+			
+			$columnEnd["edit"] = array(
+				"index"			=> "entity_id",
+				'type'			=> 'link',
+				'link_action'	=> 'udprod/vendor/productEdit',
+				'link_param'	=> 'id',
+				'link_label'	=> Mage::helper("zolagocatalog")->__("Edit form"),
+				"header"		=> Mage::helper("zolagocatalog")->__("Edit"),
+				"width"			=> "100px",
+				"filter"		=> false,
+				"sortable"		=> false
+			);
 			
 			$this->setData("fixed_columns", array(
-				"start" => array(
-					$thumbnail->getAttributeCode() => $this->_processColumnConfig($thumbnail, array(
-						"index"		=> $thumbnail->getAttributeCode(), 
-						"type"		=> "image",
-						"attribute" => $thumbnail,
-						"clickable" => true,
-						"header"	=> $this->_getColumnLabel($thumbnail),
-						"width"		=> "100px",
-						"filter"	=> false,
-						"sortable"	=> false
-					)),
-					$name->getAttributeCode() => $this->_processColumnConfig($name, array(
-						"index"		=> $name->getAttributeCode(), 
-						"type"		=>"text",
-						"attribute" => $name,
-						"clickable" => true,
-						"header"	=> $this->_getColumnLabel($name),
-					)),
-					/**
-					 * @todo add custom renderer & filter
-					 */
-					$status->getAttributeCode() => $this->_processColumnConfig($status, array(
-						"index"		=> $status->getAttributeCode(), 
-						"type"		=>"options",
-						"attribute" => $status,
-						"clickable" => true,
-						"header"	=> $this->_getColumnLabel($status),
-					)),
-					$sku->getAttributeCode() => $this->_processColumnConfig($sku, array(
-						"index"		=> $sku->getAttributeCode(), 
-						"type"		=>"text",
-						"attribute" => $sku,
-						"clickable" => true,
-						"header"	=> $this->_getColumnLabel($sku),
-					)),
-				),
-				"end" => array(
-					"edit" => array(
-						"index"			=> "entity_id",
-						'type'			=> 'link',
-						'link_action'	=> 'udprod/vendor/productEdit',
-						'link_param'	=> 'id',
-						'link_label'	=> Mage::helper("zolagocatalog")->__("Edit form"),
-						"header"		=> Mage::helper("zolagocatalog")->__("Edit"),
-						"width"			=> "100px",
-						"filter"		=> false,
-						"sortable"		=> false)
-					)
+				"start" => $columnStart,
+				"end" => $columnEnd
 			));
 		}
 		return $this->getData("fixed_columns");
 	}
 
-    protected function _prepareColumns() {
-       
-		$this->_prepareStaticStartColumns();
-        
+	/**
+	 * @return type
+	 */
+	protected function _prepareDynamicColumns(){
 		$attributeCollection = $this->_getGridVisibleAttributes();
-		
+		$columns = array();
 		foreach($attributeCollection as $attribute){
 			/* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
 			$attribute->setStoreId($this->getLabelStore()->getId());
-			if(!$this->_canShowColumnByAttrbiute($attribute)){
-				continue;
-			}
 			$code = $attribute->getAttributeCode();
 			$data = array(
 				"index"     => $code,
@@ -289,45 +304,79 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 				"header"    => $this->_getColumnLabel($attribute),
 				"attribute"	=> $attribute,
 			);
-			$this->addColumn($code,  $this->_processColumnConfig($attribute, $data));
+			$columns[$code] = $data;
 		}
-		
-        $this->_prepareStaticEndColumns();
-		
+		return $columns;
+	}
+
+
+	protected function _prepareColumns() {
+		foreach($this->_getAllPossibleColumns() as $key=>$column){
+			if($this->_canShowColumn($key, $column)){
+				$this->addColumn($key, $this->_processColumnConfig($key, $column));
+			}
+		}
 		parent::_prepareColumns();
     }
+	
+	/**
+	 * use this to checkou out witch column display
+	 * @param type $key
+	 * @param array $column
+	 * @return boolean
+	 */
+	protected function _canShowColumn($key, array $column) {
+		return true;//$key!="name";
+	}
 
 	public function getGridUrl() {
 		return $this->getUrl("*/*/grid", array("_current"=>true));
 	}
 	
-	protected function _processColumnConfig(Mage_Catalog_Model_Resource_Eav_Attribute $attribute, array $config){
-		$extend = array();
-		// Process select
-		$frontendType = $attribute->getFrontendInput();
-		if($this->isAttributeEnumerable($attribute)){
-			if($frontendType=="multiselect"){
-				$extend['type'] = "multiselect";
-			}else{
-				$extend['type'] = "options";
-			}
-			if($attribute->getSource()){
-				$extend['options']  = array();
-				foreach($attribute->getSource()->getAllOptions(false) as $option){
-					$extend['options'][$option['value']]=$option['label'];
-				}
-			}
-		}elseif($frontendType=="price"){
-			$extend['type'] = "price";
-			$extend['currency_code'] = $this->getStore()->getBaseCurrency()->getCode();
-		}elseif($frontendType=="media_image"){
-			$extend['type'] = "image";
-			$extend['clickable'] = true;
-			$extend['width'] = "100px";
-			$extend['filter'] = false;
-			$extend['sortable'] = false;
+	protected function _processColumnConfig($key, array $config){
+		
+		$attribute = null;
+		if(isset($config['attribute']) && $config['attribute'] instanceof Mage_Catalog_Model_Resource_Eav_Attribute){
+			$attribute = $config['attribute'];
 		}
-		return array_merge($config, $extend);
+		/* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
+		
+		if($attribute){
+			$extend = array();
+			// Process select
+			$frontendType = $attribute->getFrontendInput();
+			if($this->isAttributeEnumerable($attribute)){
+				if($frontendType=="multiselect"){
+					$extend['type'] = "multiselect";
+				}else{
+					$extend['type'] = "options";
+				}
+				$extend['align'] = "center";
+				if($attribute->getSource()){
+					$extend['options']  = array();
+					foreach($attribute->getSource()->getAllOptions(false) as $option){
+						$extend['options'][$option['value']]=$option['label'];
+					}
+				}
+				if($attribute->getAttributeCode()=="status"){
+					$extend['type']="status";
+					$extend['filter']=false;
+					$extend['header']=$this->__("St.")." <span class=\"required\">*</span>";
+				}
+			}elseif($frontendType=="price"){
+				$extend['type'] = "price";
+				$extend['currency_code'] = $this->getStore()->getBaseCurrency()->getCode();
+			}elseif($frontendType=="media_image"){
+				$extend['type'] = "image";
+				$extend['clickable'] = true;
+				$extend['width'] = "100px";
+				$extend['filter'] = false;
+				$extend['sortable'] = false;
+			}
+			return array_merge($config, $extend);
+		}
+		
+		return $config;
 	}
 
 	public function isAttributeEnumerable(Mage_Catalog_Model_Resource_Eav_Attribute $attribute){
@@ -549,10 +598,30 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 
 	
 	public function getCellClass(Mage_Adminhtml_Block_Widget_Grid_Column $column, Varien_Object $row) {
+		$classes = array();
 		if($column->getAttribute() instanceof Mage_Catalog_Model_Resource_Eav_Attribute){
-			if($column->getAttribute()->getIsRequired() && $row->getData($column->getIndex())==""){
-				return "required-cell";
+			$data = $row->getData($column->getIndex());
+			if($column->getAttribute()->getAttributeCode()=="status"){
+				$classes[] = "status";
+				switch($data){
+					case Mage_Catalog_Model_Product_Status::STATUS_ENABLED:
+						$classes[] = "status-enabled";
+					break;
+					case Mage_Catalog_Model_Product_Status::STATUS_DISABLED:
+						$classes[] = "status-disabled"; 
+					break;
+					default:
+						$classes[] = "status-other"; 
+					break;
+				}
 			}
+			
+			if($column->getAttribute()->getIsRequired() && $data==""){
+				$classes[] = "required-cell";
+			}
+		}
+		if($classes){
+			return implode(" ", $classes);
 		}
 		return null;
 	}
