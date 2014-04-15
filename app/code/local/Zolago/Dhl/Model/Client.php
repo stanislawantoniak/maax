@@ -50,11 +50,21 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
         $this->_init('zolagodhl/client');
     }
 
-
-    public function setAuth($user,$password) {
+    public function getDhlAccount() {
+        if (!empty($this->_auth) && 
+            !empty($this->_auth->account)) {
+            $account = $this->_auth->account;
+        } else {
+            $account = Mage::helper('zolagodhl')->getDhlAccount();        
+        }
+        return $account;
+    }
+    
+    public function setAuth($user,$password,$account = null) {
         $auth = new StdClass();
         $auth->username = $user;
         $auth->password = $password;
+        $auth->account = $account;
         $this->_auth = $auth;
     }
 
@@ -153,7 +163,7 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
         $obj = new StdClass();
         $obj->paymentMethod = self::PAYMENT_TYPE;
         $obj->payerType		= self::PAYER_TYPE;
-        $obj->accountNumber = Mage::helper('zolagodhl')->getDhlAccount();
+        $obj->accountNumber = $this->getDhlAccount();
         $obj->costsCenter = null;
         return $obj;
     }
