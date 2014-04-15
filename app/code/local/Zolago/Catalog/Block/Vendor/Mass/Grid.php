@@ -150,6 +150,14 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
     	}
     	return $this->_denyColumnList;
     }
+    public function getAllColumns() {
+    	$columns = $this->_getAllPossibleColumns();
+    	$out = array();
+    	foreach ($columns as $key => $column) {
+	    	$out[$key] = $this->_processColumnConfig($key, $column);
+		}
+		return $out;
+    }
 	/**
 	 * @return array
 	 */
@@ -326,7 +334,13 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 	 * @return boolean
 	 */
 	protected function _canShowColumn($key, array $column) {
-		return true;//$key!="name";
+		$deny = $this->_getDenyColumnList();
+		if (isset($column['attribute'])) {
+			$id = $column['attribute']->getId();
+			return empty($deny[$id]);
+		} else {
+			return true;
+		}
 	}
 
 	public function getGridUrl() {
