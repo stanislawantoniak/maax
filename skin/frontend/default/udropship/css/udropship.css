@@ -1087,3 +1087,41 @@ button.skip {
 
 .registered-users button {
 	margin-top: 8px;}
+.column_popup_layer {
+    position:absolute;
+    left:50%;
+    margin-left:-20%;
+    border:1px solid black;
+    width:40%;
+    top:20%;
+    background-color:white;
+    display:block;
+    padding:20px;
+}
+.column_popup_layer form {
+    margin-bottom:20px;
+}
+.column_popup_layer .column_box {
+    background: none repeat scroll 0 0 #EEEFFD;
+    border: 1px solid #CDDDDD;
+    margin-bottom: 10px;
+    padding: 10px;
+    display:block;
+}
+.column_popup_layer ul {
+    float:left;
+    margin:2px 5px 2px 5px;
+    list-style-type:none;
+}
+.column_popup_layer ul li {
+    margin:2px 5px 2px 0px;
+}
+.column_popup_layer .clear {
+    display:block;
+    clear:both;
+}
+.column_popup_layer .buttons {
+    margin-top:20px;
+    text-align:right;
+    float:right;
+}

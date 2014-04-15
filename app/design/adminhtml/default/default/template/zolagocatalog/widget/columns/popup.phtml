@@ -1,6 +1,6 @@
-<div style="position:absolute;left:50%;margin-left:-20%;border:1px solid black;width:40%;top:20%;background-color:white;display:block;padding:20px">
+<div class="column_popup_layer">
 <form name="hide_columns" method="post" id="hide_columns_form">
-<div style="margin-bottom:20px">
+<div class="column_box">
 <?php
     $denyList = $this->getData('denyList');
     $counter = 0;
@@ -11,9 +11,9 @@
             $attribute = $_column['attribute'];
         }
         if (!($counter % 10)) {
-            echo '<ul style="float:left;margin:2px 5px 2px 5px;list-style-type:none">';
+            echo '<ul>';
         }
-        echo '<li style="margin:2px 5px 2px 0px;"><input id="hide_'.$counter.'"';
+        echo '<li><input id="hide_'.$counter.'"';
         if (!isset($denyList[$attribute->getId()])) {
             echo ' checked';
         }
@@ -28,10 +28,11 @@
         echo '</ul>';
     }
 ?>
+<div class="clear"><br/></div>
 </div>
-<div style="display:block;clear:both"><br/></div>
-<div style="margin-top:20px;text-align:right" >
+<div class="buttons">
 <?php echo $this->getButtonsHtml() ?>
 </div>
+<div class="clear"></div>
 </form>
 </div>
