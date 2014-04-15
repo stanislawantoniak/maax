@@ -335,12 +335,7 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 	 */
 	protected function _canShowColumn($key, array $column) {
 		$deny = $this->_getDenyColumnList();
-		if (isset($column['attribute'])) {
-			$id = $column['attribute']->getId();
-			return empty($deny[$id]);
-		} else {
-			return true;
-		}
+		return empty($deny[$key]);
 	}
 
 	public function getGridUrl() {

@@ -12,9 +12,9 @@ class Zolago_Catalog_Vendor_MassController
 	}
 	protected function _saveHiddenColumns() {
 		if ($this->getRequest()->isPost()) {
-			$listColumns = $this->getRequest()->getParam('listColumn');
-  			$attributeSet = $this->getRequest()->getParam('attribute_set');
-  			$hiddenColumns = $this->getRequest()->getParam('hideColumn');
+			$listColumns = $this->getRequest()->getParam('listColumn',array());
+  			$attributeSet = $this->getRequest()->getParam('attribute_set','');
+  			$hiddenColumns = $this->getRequest()->getParam('hideColumn',array());
   			foreach ($hiddenColumns as $key=>$dummy) {
   				unset($listColumns[$key]);
   			}
