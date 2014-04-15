@@ -2,7 +2,7 @@
 /**
  * popup with columns visibility settings
  */
-class Zolago_Catalog_Block_Vendor_Mass_Columnspopup extends Mage_Adminhtml_Block_Widget_Form {
+class Zolago_Catalog_Block_Vendor_Mass_Columnspopup extends Mage_Core_Block_Template {
 
     public function __construct() {
         parent::__construct();
