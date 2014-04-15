@@ -86,22 +86,60 @@
 }
 
 /*Static Filters Section - Start*/
+/*.staticFilter {
+	width: 155px;
+	float: left;
+}*/
+
 .staticFilter {
-	width: 155px; 
+    display: inline-block;
+    float: right;
+	top: -20px;
+	bottom: 0px;
+	position: relative;
+    width: 155px;
 }
+
 .staticFilter option {
 	/*width: 130px;*/
 }
-.filter-box {
+/*.filter-box {
 	padding: 2px 0 2px 0;
 	display: inline-block;
 	width: 48.5%;
 	vertical-align: top;
+}*/
+
+.filter-box {
+	padding: 2px 0 2px 0;
+	display: inline-block;
+	vertical-align: top;
+	width: 325px;
+	height: 25px;
 }
+
 .filter-box .selectedFilter {
 	display: inline-block;
 	font-weight: bold;
 }
+
+/*.filter-box label {
+	display: inline-block;
+	min-width: 110px;
+	float: left;
+}*/
+
+
+.filter-box label {
+    display: inline-block;
+    float: right;
+    margin-right: 160px;
+    margin-top: 0;
+    overflow: hidden;
+    text-align: right;
+	height: 20px;
+}
+
 .staticFilter-box .box {
 	background: none repeat scroll 0 0 #EEEFFD;
 	padding-bottom: 0;
