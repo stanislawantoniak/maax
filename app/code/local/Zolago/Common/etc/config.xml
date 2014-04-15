@@ -15,6 +15,13 @@
                 </args>
             </zolagocommon>
 		</routers>
+		<layout>
+			<updates>
+				<zolagocommon>
+					<file>zolagocommon.xml</file>
+				</zolagocommon>
+			</updates>
+		</layout>
 	</frontend>
     <global>
         <helpers>
