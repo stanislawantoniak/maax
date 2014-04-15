@@ -1,0 +1,38 @@
+<div class="column_popup_layer">
+<form name="hide_columns" method="post" id="hide_columns_form">
+<div class="column_box">
+<?php
+    $denyList = $this->getData('denyList');
+    $counter = 0;
+    foreach ($this->getData('parent')->getAllColumns() as $key => $_column) {
+        if (empty($_column['attribute'])) {
+            continue;
+        } else {
+            $attribute = $_column['attribute'];
+        }
+        if (!($counter % 10)) {
+            echo '<ul>';
+        }
+        echo '<li><input id="hide_'.$counter.'"';
+        if (!isset($denyList[$attribute->getId()])) {
+            echo ' checked';
+        }
+        echo ' type="checkbox" name="hideColumn['.$attribute->getId().']" value="1"><label for="hide_'.$counter.'">'.$_column['header'].'</label></li>';
+        echo '<input type="hidden" name="listColumn['.$attribute->getId().']" value="'.$attribute->getId().'">';
+        if (($counter %10) == 9) {
+            echo '</ul>';    
+        }
+        $counter++;
+    }
+    if ($counter % 10) {
+        echo '</ul>';
+    }
+?>
+<div class="clear"><br/></div>
+</div>
+<div class="buttons">
+<?php echo $this->getButtonsHtml() ?>
+</div>
+<div class="clear"></div>
+</form>
+</div>

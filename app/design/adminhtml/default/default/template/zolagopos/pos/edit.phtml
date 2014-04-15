@@ -61,18 +61,24 @@
         },			
 		enableDhl: function(state){
 				var login = $("dhl_login"),
-					password = $("dhl_password");
+					password = $("dhl_password"),
+					account = $("dhl_account");
+					
 			
 				if(!!state){
 					login.className += " required-entry";
 					login.up('tr').show();
 					password.className += " required-entry";
 					password.up('tr').show();
+					account.className += " required-entry";
+					account.up('tr').show();
 				}else{
 					login.className = login.className.replace(/\srequired-entry/g, "");
 					login.up('tr').hide();
 					password.className = password.className.replace(/\srequired-entry/g, "");
 					password.up('tr').hide();
+					account.className = account.className.replace(/\srequired-entry/g, "");
+					account.up('tr').hide();
 				}
 			}
     };
