@@ -52,7 +52,7 @@ class Zolago_Po_Block_Vendor_Po extends Mage_Core_Block_Template
 				"value" => $key,
 				"label" => $label
 			);
-			if(in_array($key, $values)){
+			if(is_array($values) && in_array($key, $values)){
 				$item['checked'] = true;
 			}
 			$out[] = $item;

@@ -17,6 +17,7 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
         $collection = Mage::getResourceModel('zolagopo/po_collection');
         /* @var $collection Zolago_Po_Model_Resource_Po_Collection */
 		$collection->addOrderData();
+		$collection->addProductNames();
         $this->setCollection($collection);
 		
         return parent::_prepareCollection();
@@ -39,15 +40,17 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 			"header"	=>	Mage::helper("zolagopo")->__("Max ship. date"),
 			"filter"	=>	false
 		));
-		$this->addColumn("customer_id", array(
+		$this->addColumn("customer_fullname", array(
 			"type"		=>	"text",
-			"index"		=>	"customer_id",
+			"index"		=>	"customer_fullname",
 			"header"	=>	Mage::helper("zolagopo")->__("Customer"),
 		));
-		$this->addColumn("produts", array(
+		$this->addColumn("product_names", array(
 			"type"		=>	"text",
-			"index"		=>	"order_id",
+			"index"		=>	"product_names",
 			"header"	=>	Mage::helper("zolagopo")->__("Products"),
+			"renderer"	=>	Mage::getConfig()->
+				getBlockClassName("zolagopo/vendor_po_grid_column_renderer_products")
 		));
 		$this->addColumn("total_value", array(
             'index'		=> 'total_value',
@@ -197,6 +200,28 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 		 return $ret;
 	}
 	
+	/**
+	 * Custom filter
+	 * @param Mage_Adminhtml_Block_Widget_Grid_Column $column
+	 * @return Zolago_Po_Block_Vendor_Po_Grid
+	 */
+	protected function _addColumnFilterToCollection($column) {
+		switch ($column->getId()) {
+			case "customer_fullname":
+				$this->getCollection()->addCustomerNameFilter(
+					$column->getFilter()->getValue());
+				return $this;
+			break;
+			case "product_names":
+				$this->getCollection()->addProductNameFilter(
+					$column->getFilter()->getValue());
+				return $this;
+			break;
+		}
+		return parent::_addColumnFilterToCollection($column);
+	}
+
+
 	public function getVendor() {
 		return $this->getParentBlock()->getVendor();
 	}
