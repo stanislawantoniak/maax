@@ -29,9 +29,10 @@ class Zolago_Po_Model_Resource_Po_Collection
 	public function addCustomerNameFilter($customerName) {
 		$adapter = $this->getSelect()->getAdapter();
 		$where = array(
-			$adapter->quoteInto("order_table.customer_firstname LIKE ?", '%'.$customerName.'%'),
-			$adapter->quoteInto("order_table.customer_lastname LIKE ?", '%'.$customerName.'%'),
 			$adapter->quoteInto("order_table.customer_email LIKE ?", '%'.$customerName.'%'),
+			// Fullname search
+			$adapter->quoteInto("CONCAT_WS(' ', order_table.customer_firstname, order_table.customer_lastname) LIKE ?", 
+					'%'.$customerName.'%'),
 		);
 		$this->getSelect()->where(join(" OR ", $where));
 		return $this;
