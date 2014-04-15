@@ -303,4 +303,8 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 	public function getVendor() {
 		return $this->getParentBlock()->getVendor();
 	}
+	
+	public function getRowUrl($item) {
+		return null;
+	}
 }
