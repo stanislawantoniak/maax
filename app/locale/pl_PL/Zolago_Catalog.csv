@@ -18,3 +18,7 @@
 "Off", "Wył."
 "Wait", "Ocz."
 "Subtract", "Usuń"
+"Product Review","Zatwierdź"
+"%d selected product has empty required attribute(s) and/or is missing a base image.", "%d wybrany produkt ma puste wartości atrybutów wymaganych i/lub nie ma zdjęcia głównego."
+"%d selected products have empty required attribute(s) and/or are missing a base image.", "%d z wybranych produktów ma puste wartości atrybutów wymaganych i/lub nie ma zdjęcia głównego."
+"--- no data ---", "--- brak danych ---"

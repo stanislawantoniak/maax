@@ -356,6 +356,7 @@ class Solrsearch_Shell_Indexer extends Mage_Shell_Abstract{
 	    		}
 	    		$request = $response;
     		}catch (Exception $e){
+    		    echo $e->getMessage();
     			$this->ultility->writeLog($e->getMessage(), 0, $solrcore, 100, true);
     			break;
     		}
@@ -409,6 +410,7 @@ class Solrsearch_Shell_Indexer extends Mage_Shell_Abstract{
 	        	$request = $response;
 	        	unset($this->indexer);
 			}catch (Exception $e){
+			    echo $e->getMessage();
 				$this->ultility->writeLog($e->getMessage(), 0, $solrcore, 100, true);
 				break;
 			}
@@ -542,6 +544,7 @@ class Solrsearch_Shell_Indexer extends Mage_Shell_Abstract{
     			//$request['page'] = ($request['page'] + 1);
     			unset($this->indexer);
     		}catch (Exception $e){
+    		    echo $e->getMessage();
     			$this->ultility->writeLog($e->getMessage(), 0, $solrcore, 100, true);
     			break;
     		}
