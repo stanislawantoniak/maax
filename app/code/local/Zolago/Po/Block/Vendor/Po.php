@@ -29,22 +29,19 @@ class Zolago_Po_Block_Vendor_Po extends Mage_Core_Block_Template
 		return $this->getData("grid");
 	}
 	
-	public function getFilterValue($filter=null) {
-		$params = Mage::app()->getRequest()->getParam("filter");
-		if($filter && isset($params[$filter])){
-			return $params[$filter];
-		}
-		return $params;
+	public function getFilterValue($columnId) {
+		return $this->getGrid()->getFilterValueByColumn($columnId);
 	}
 	
 	public function getStatusOptions() {
-		if($this->getFilterValue('po_status')){
-			$values = $this->getFilterValue('po_status');
+		
+		if(!is_null($this->getFilterValue('udropship_status'))){
+			$values = $this->getFilterValue('udropship_status');
 		}else{
 			$values = $this->getDefaultStatuses();
 		}
 		
-		$allFilters = Mage::helper('udpo')->getVendorUdpoStatuses();;
+		$allFilters = Mage::helper('udpo')->getVendorUdpoStatuses();
 		$out = array();
 		
 		foreach($allFilters as $key=>$label){

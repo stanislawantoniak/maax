@@ -6,6 +6,22 @@ class Zolago_Po_Model_Resource_Po_Collection
 		return $this->_joinOrderTable();
 	}
 	
+	public function addHasShipment() {
+		$this->getSelect()->joinLeft(
+				array("shipment"=>$this->getTable("sales/shipment")), 
+				"shipment.udpo_id=main_table.entity_id",
+				array("has_shipment"=>$this->_getShipmentExpr())
+		);
+		$this->getSelect()->group("main_table.entity_id");
+	}
+	
+	
+	protected function _getShipmentExpr(){
+		return new Zend_Db_Expr("COUNT(shipment.entity_id)>0");
+	}
+	
+	
+
 	/**
 	 * @param string $customerName
 	 * @return Zolago_Po_Model_Resource_Po_Collection
@@ -33,16 +49,42 @@ class Zolago_Po_Model_Resource_Po_Collection
 				"po_item.parent_id=main_table.entity_id",
 			    array()
 		);
+		$select->join(
+				array("order_item"=>$this->getTable('sales/order_item')), 
+				$select->getAdapter()->quoteInto("order_item.item_id=po_item.order_item_id AND order_item.product_type IN(?)", $this->_getVisibleTypes()),
+			    array()
+		);
 		$select->group("main_table.entity_id");
 		$this->getSelect()->where("po_item.name LIKE ?", "%".$productName."%");
 		return $this;
 	}
-	
+
+
 	public function addProductNames() {
 		$this->setFlag("add_po_items_data", true);
 		return $this;
 	}
+	public function getSelectCountSql() {
+        $this->_renderFilters();
+        $countSelect = clone $this->getSelect();
+		$countSelect->reset();
+		$countSelect->from($this->getSelect(), array("COUNT(*)"));
+		return $countSelect;
+	}
 	
+	public function addHasShipmentFilter($hasShipment) {
+		$oprator = $hasShipment ?  ">" : "=";
+		$this->getSelect()->having("COUNT(shipment.entity_id)".$oprator."0");
+	}
+	
+	/**
+	 * @return array
+	 */
+	protected function _getVisibleTypes() {
+		return array("simple", "virual");
+	}
+
+
 	/**
 	 * Load grid items data
 	 * @return type
@@ -50,12 +92,21 @@ class Zolago_Po_Model_Resource_Po_Collection
     protected function _afterLoad() {
 		$return = parent::_afterLoad();
 		if($this->getFlag("add_po_items_data")){
+			$ids = array_keys($this->getItems());
+			
 			$select = $this->_conn->select();
 			$select->from(
 					array("po_item"=>$this->getTable('udpo/po_item')), 
 					array("po_item.parent_id", "po_item.name")
 			);
-			$select->where("po_item.parent_id IN (?)", $this->getAllIds());
+			$select->join(
+					array("order_item"=>$this->getTable('sales/order_item')), 
+					$select->getAdapter()->quoteInto(
+							"order_item.item_id=po_item.order_item_id AND order_item.product_type IN(?)", 
+							$this->_getVisibleTypes()),
+					array()
+			);
+			$select->where("po_item.parent_id IN (?)", $ids);
 			$grouped = array();
 			foreach($this->_conn->fetchAll($select) as $row){
 				$parentId = $row['parent_id'];

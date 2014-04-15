@@ -8,8 +8,6 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
         $this->setDefaultSort('created_at');
         $this->setDefaultDir('desc');
         $this->setGridClass('z-grid');
-//        $this->setUseAjax(true);
-//        $this->setSaveParametersInSession(true);
 		
     }
 	
@@ -18,27 +16,59 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
         /* @var $collection Zolago_Po_Model_Resource_Po_Collection */
 		$collection->addOrderData();
 		$collection->addProductNames();
+		$collection->addHasShipment();
+		
+		/**
+		 * Applay external filters
+		 */
+		$statuses = $this->getFilterValueByColumn("udropship_status");
+		
+		if(is_null($statuses)){
+			$statuses=$this->getParentBlock()->getDefaultStatuses();
+		}
+		if($statuses){
+			$collection->addAttributeToFilter("main_table.udropship_status", array("in"=>$statuses));
+		}
+		
         $this->setCollection($collection);
 		
         return parent::_prepareCollection();
 	}
 	
+	public function getFilterValueByColumn($columnId) {
+		$index = $this->getColumn($columnId)->getIndex();
+		$param = Mage::app()->getRequest()->getParam($this->getVarNameFilter());
+		if($param){
+			$param = $this->helper('adminhtml')->prepareFilterString($param);
+			if(isset($param[$index])){
+				return $param[$index];
+			}
+		}
+		return null;
+	}
+	
 	protected function _prepareColumns() {
 		$this->addColumn("increment_id", array(
 			"type"		=>	"text",
+			"align"		=>  "right",
 			"index"		=>	"increment_id",
-			"header"	=>	Mage::helper("zolagopo")->__("Order No.")
+			"header"	=>	Mage::helper("zolagopo")->__("Order No."),
+			"width"		=>	"100px"
 		));
 		$this->addColumn("created_at", array(
 			"type"		=>	"date",
 			"index"		=>	"created_at",
+			"align"		=>  "center",
 			"header"	=>	Mage::helper("zolagopo")->__("Order date"),
-			"filter"	=>	false
+			"filter"	=>	false,
+			"width"		=>	"100px"
 		));
 		$this->addColumn("max_order_date", array(
 			"type"		=>	"date",
+			"align"		=>  "center",
 			"header"	=>	Mage::helper("zolagopo")->__("Max ship. date"),
-			"filter"	=>	false
+			"filter"	=>	false,
+			"width"		=>	"100px"
 		));
 		$this->addColumn("customer_fullname", array(
 			"type"		=>	"text",
@@ -47,14 +77,17 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 		));
 		$this->addColumn("product_names", array(
 			"type"		=>	"text",
+			"width"		=>	"400px",
 			"index"		=>	"product_names",
 			"header"	=>	Mage::helper("zolagopo")->__("Products"),
 			"renderer"	=>	Mage::getConfig()->
-				getBlockClassName("zolagopo/vendor_po_grid_column_renderer_products")
+				getBlockClassName("zolagopo/vendor_po_grid_column_renderer_products"),
+			"sortable"	=> false
 		));
 		$this->addColumn("total_value", array(
             'index'		=> 'total_value',
             'type'		=> 'price',
+			'align'		=> 'right',
             'currency'	=> 'base_currency_code',
 			"header"	=>	Mage::helper("zolagopo")->__("Total"),
 			"filter"	=>	false,
@@ -65,7 +98,8 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 			"index"		=>	"udropship_status",
 			"header"	=>	Mage::helper("zolagopo")->__("Status"),
 			"options"	=>	Mage::getSingleton('udpo/source')->setPath('po_statuses')->toOptionHash(),
-			"filter"	=>	false
+			"filter"	=>	false,
+			"width"		=>	"100px"
 		));
 		
 		$this->addColumn("payment_status", array(
@@ -84,9 +118,11 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 			"options"	=>	$this->_getShippingMethodOptions()
 		));
 		
-		$this->addColumn("shipping letter", array(
+		$this->addColumn("has_shipment", array(
 			"type"		=>	"options",
 			"header"	=>	Mage::helper("zolagopo")->__("Shipping letter"),
+			"index"		=> "has_shipment",
+			"align"		=> "center",
 			"options"	=>	Mage::getSingleton("adminhtml/system_config_source_yesno")->toArray(),
 			"width"		=> "50px"
 		));
@@ -152,11 +188,11 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
     {
         $this->setMassactionIdField('entity_id');
         $this->getMassactionBlock()->setFormFieldName('po');
-
-
-
-        $statuses = $this->getParentBlock()->getStatusOptions();
-
+		$statuses=array();
+		
+		foreach(Mage::helper('udpo')->getVendorUdpoStatuses() as $key=>$label){
+			$statuses[$key]=$label;
+		}
         array_unshift($statuses, array('label'=>'', 'value'=>''));
         $this->getMassactionBlock()->addItem('status', array(
              'label'=> Mage::helper('catalog')->__('Change status'),
@@ -214,6 +250,11 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 			break;
 			case "product_names":
 				$this->getCollection()->addProductNameFilter(
+					$column->getFilter()->getValue());
+				return $this;
+			break;
+			case "has_shipment":
+				$this->getCollection()->addHasShipmentFilter(
 					$column->getFilter()->getValue());
 				return $this;
 			break;

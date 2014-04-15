@@ -3,16 +3,16 @@
 	<h1><?php echo Mage::helper("zolagopo")->__("My orders");?></h1>
 </div>
 <div class="fiters generic-box">
-	<form>
+	<form id="filter_form">
 		<div class="left p50">
 			<dl>
 				<dt>
 					<label for="filter_default_pos"><?php echo Mage::helper("zolagopo")->__("POS");?></label></dt>
 				<dd>
-					<select id="filter_default_pos" class="block">
+					<select id="filter_default_pos" class="block" name="pos">
 						<option value=""><?php echo Mage::helper("zolagopo")->__("--- Select ---");?></option>
 						<?php foreach($this->getPosCollection() as $pos):?>
-							<option value="<?php echo $pos->getId();?>"><?php echo $this->escapeHtml($pos->getName());?></option>
+							<option <?php if($this->getPos()==$pos->getId()):?>selected="selected" <?php endif;?>value="<?php echo $pos->getId();?>"><?php echo $this->escapeHtml($pos->getName());?></option>
 						<?php endforeach;?>
 					</select>
 				</dd>
@@ -20,25 +20,25 @@
 			<dl>
 				<dt><?php echo Mage::helper("zolagopo")->__("Order date");?></dt>
 				<dd>
-					<input id="filter_order_date_from" type="text" class="input-text date "/>
+					<input id="filter_order_date_from" name="created_at[from]" value="<?php echo $this->getCreatedAtFrom();?>" type="text" class="input-text date "/>
 					&mdash;
-					<input id="filter_order_date_to" type="text" class="input-text date"/>
+					<input id="filter_order_date_to" name="created_at[to]" value="<?php echo $this->getCreatedAtTo();?>" type="text" class="input-text date"/>
 				</dd>
 			</dl>
 			<dl>
 				<dt><?php echo Mage::helper("zolagopo")->__("Max. shipment date");?></dt>
 				<dd>
-					<input id="filter_max_shipment_date_from" type="text" class="input-text date "/>
+					<input id="filter_max_shipment_date_from" name="max_shipment_date[from]" value="<?php echo $this->getMaxShipmentDateFrom();?>" type="text" class="input-text date "/>
 					&mdash;
-					<input id="filter_max_shipment_date_to" type="text" class="input-text date"/>
+					<input id="filter_max_shipment_date_to" name="max_shipment_date[to]" value="<?php echo $this->getMaxShipmentDateTo();?>" type="text" class="input-text date"/>
 				</dd>
 			</dl>
 			<dl>
 				<dt><?php echo Mage::helper("zolagopo")->__("Shipment date");?></dt>
 				<dd>
-					<input id="filter_shipment_date_from" type="text" class="input-text date "/>
+					<input id="filter_shipment_date_from" name="shipment_date[from]" value="<?php echo $this->getShipmentDateFrom();?>" type="text" class="input-text date "/>
 					&mdash;
-					<input id="filter_shipment_date_to" type="text" class="input-text date"/>
+					<input id="filter_shipment_date_to" name="shipment_date[to]" value="<?php echo $this->getShipmentDateTo();?>" type="text" class="input-text date"/>
 				</dd>
 			</dl>
 		</div>
@@ -46,16 +46,17 @@
 			<dl>
 				<dt class="nofloat"><?php echo Mage::helper("zolagopo")->__("Order status");?></dt>
 				<dd>
+					<input type="hidden" name="udropship_status" value="0"/>
 					<?php foreach($this->getStatusOptions() as $option):?>
-					<input type="checkbox"<?php if(isset($option['checked'])):?> checked="checked"<?php endif;?> class="filter_po_status" id="filter_po_status_<?php echo $this->escapeHtml($option['value']);?>" value="<?php echo $this->escapeHtml($option['value']);?>">
+					<input type="checkbox" name="udropship_status[]"<?php if(isset($option['checked'])):?> checked="checked"<?php endif;?> class="filter_po_status" id="filter_po_status_<?php echo $this->escapeHtml($option['value']);?>" value="<?php echo $this->escapeHtml($option['value']);?>">
 					<label for="filter_po_status_<?php echo $this->escapeHtml($option['value']);?>"><?php echo $this->escapeHtml($option['label']);?></label><br/>
 					<?php endforeach;?>
 				</dd>
 			</dl>
 			<div class="clear"></div>
 			<div>
-				<button type="submit" class="scalable"><span><span><?php echo Mage::helper("zolagopo")->__("Apply filter ");?></span></span></button>
-				<button type="reset" class="scalable"><span><span><?php echo Mage::helper("zolagopo")->__("Reset");?></span></span></button>
+				<button type="submit" id="filter_submit" class="scalable"><span><span><?php echo Mage::helper("zolagopo")->__("Apply filter ");?></span></span></button>
+				<button type="reset" id="filter_reset" class="scalable"><span><span><?php echo Mage::helper("zolagopo")->__("Reset");?></span></span></button>
 			</div>
 		</div>
 	<div class="clear"></div>
@@ -66,6 +67,38 @@
 </div>
 <script type="text/javascript">
 (function(){
+	var gridObj = <?php echo $this->getGridJsObjectName();?>;
+	var topForm = $("filter_form");
+	
+	gridObj.doFilter = (function(){
+        var filters = $$('#'+this.containerId+' .filter input', '#'+this.containerId+' .filter select');
+        var filters2 = $$('#'+topForm.id+' input', '#'+this.containerId+' select');
+        var elements = [],
+			elements2 = [];
+        for(var i in filters){
+            if(filters[i].value && filters[i].value.length) elements.push(filters[i]);
+        }
+        for(var i in filters2){
+            if(filters2[i].value && filters2[i].value.length) elements2.push(filters2[i]);
+        }
+		
+		var serialized = Form.serializeElements(elements);
+		var serialized2 = Form.serializeElements(elements2);
+		var params = []
+		
+		if(serialized){
+			params.push(serialized);
+		}
+		if(serialized2){
+			params.push(serialized2);
+		}
+		console.log(params);
+		
+        if (!this.doFilterCallback || (this.doFilterCallback && this.doFilterCallback())) {
+            this.reload(this.addVarToUrl(this.filterVar, encode_base64(params.join("&"))));
+        }
+    }).bind(gridObj);
+	
 	var dateFields = [ 
 		'filter_order_date_from', 
 		'filter_order_date_to', 
@@ -77,6 +110,14 @@
 	for (var i=0, l=dateFields.length; i<l; i++) {
 		Calendar.setup({inputField : dateFields[i], ifFormat : "%d-%m-%Y", showsTime : false});
 	}
+	topForm.observe("submit", function(e){
+		gridObj.doFilter();
+		e.preventDefault();
+	});
+	topForm.observe("reset", function(e){
+		gridObj.resetFilter();
+		e.preventDefault();
+	});
 })();
 </script>
 	
