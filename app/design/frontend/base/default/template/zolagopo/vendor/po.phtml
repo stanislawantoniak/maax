@@ -99,6 +99,39 @@
         }
     }).bind(gridObj);
 	
+	var oldSetCheckboxChecked = gridObj.setCheckboxChecked;
+	var	oldCheckCheckboxes = gridObj.massaction.checkCheckboxes;
+
+	var updateSelectCheckbox = function(checkbox){
+			var el = checkbox.up("tr");
+			if(checkbox.checked){
+				el.addClassName("row-selected");
+			}else{
+				el.removeClassName("row-selected");
+			}
+		}
+		
+	varienGlobalEvents.attachEventHandler("gridRowClick", function(event){
+		var el = $(event.currentTarget);
+		if(!el.up("#"+gridObj.containerId)){
+			return;
+		}
+		var checkbox = el.select(".massaction-checkbox")[0];
+		updateSelectCheckbox(checkbox);
+	});
+
+
+
+	gridObj.massaction.checkCheckboxes = function(){
+		oldCheckCheckboxes.apply(gridObj.massaction, arguments);
+		gridObj.massaction.getCheckboxes().each(updateSelectCheckbox);
+	}
+
+	gridObj.setCheckboxChecked = function(element){
+		oldSetCheckboxChecked.apply(gridObj, arguments);
+		updateSelectCheckbox(element);
+	}
+	
 	var dateFields = [ 
 		'filter_order_date_from', 
 		'filter_order_date_to', 
