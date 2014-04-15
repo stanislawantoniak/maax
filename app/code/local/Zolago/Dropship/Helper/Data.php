@@ -351,4 +351,14 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
 			return false;
 		}
 	}
+	
+	public function getProductStatusForVendor(Unirgy_Dropship_Model_Vendor $vendor) {
+		$status = Mage_Catalog_Model_Product_Status::STATUS_DISABLED;
+
+		if ($vendor->getReviewStatus()) {
+			$status = (int)$vendor->getReviewStatus();
+		}
+		
+		return $status;
+	}
 }

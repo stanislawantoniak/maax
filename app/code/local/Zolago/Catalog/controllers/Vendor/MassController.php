@@ -180,12 +180,12 @@ class Zolago_Catalog_Vendor_MassController
 		$staticFilters		= $this->_getCurrentStaticFilterValues();
 		$postParams			= array('store'=> $storeId, 'attribute_set' => $attributeSet, 'staticFilters' => $staticFiltersCount);
 		$postParams			= array_merge($postParams, $staticFilters);
-
+		
         try {
 			if ($productReview) {
 				$this->_validateProductAttributes($productIds, $attributeSet, $storeId);
 				$this->_redirect('*/*/', $postParams);
-				$status = Mage_Catalog_Model_Product_Status::STATUS_ENABLED;
+				$status = Mage::helper('zolagodropship')->getProductStatusForVendor($this->_getSession()->getVendor());
 			}
             $this->_validateMassStatus($productIds, $status);
             Mage::getSingleton('catalog/product_action')
@@ -333,11 +333,6 @@ class Zolago_Catalog_Vendor_MassController
 		
 		$errorProductCount = count($errorProducts);
 		if ($errorProductCount) {
-			$status = Unirgy_DropshipVendorProduct_Model_ProductStatus::STATUS_PENDING;
-			$this->_validateMassStatus(array_keys($errorProducts), $status);
-			Mage::getSingleton('catalog/product_action')
-				->updateAttributes(array_keys($errorProducts), array('status' => $status), $storeId);
-			
 			switch ($errorProductCount) {
 				case 1:
 					throw new Mage_Core_Exception(
