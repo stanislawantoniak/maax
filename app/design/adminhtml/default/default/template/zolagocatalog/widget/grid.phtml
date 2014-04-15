@@ -234,6 +234,18 @@ $numColumns = sizeof($this->getColumns());
     function saveHiddenColumns() {
         $('hide_columns_form').submit();
     }
+    function checkGroupColumns() {
+        var a = $('checked_group').select('input'); //childElements();
+        a.each(function(node) {
+            node.checked = true;
+        });
+    }
+    function unCheckGroupColumns() {
+        var a = $('checked_group').select('input'); //childElements();
+        a.each(function(node) {
+            node.checked = false;
+        });
+    }
 //]]>
 
 </script>
