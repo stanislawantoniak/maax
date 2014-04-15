@@ -50,13 +50,5 @@ class Zolago_Pos_Model_Form_Fieldset_Settings extends Zolago_Common_Model_Form_F
                                        "maxlength"     => 100
                                    ));
     }
-    protected function _addFieldClientNumber() {
-        $this->_fieldset->addField('client_number', 'text', array(
-                                       'name'          => 'client_number',
-                                       'label'         => $this->_helper->__('Client number'),
-                                       "maxlength"     => 100
-                                   ));
-
-    }
 
 }

@@ -29,11 +29,13 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 	public function getDhlSettings($vendor, $posId) {
 		$dhlSettings = false;
 		$posModel = Mage::getModel('zolagopos/pos')->load($posId);
-		if ($posModel && $posModel->getId() && $posModel->getUseDhl() && $posModel->getDhlLogin() && $posModel->getDhlPassword()) {
+		if ($posModel && $posModel->getId() && $posModel->getUseDhl() && $posModel->getDhlLogin() && $posModel->getDhlPassword() && $posModel->getDhlAccount()) {
 			$dhlSettings['login']		= $posModel->getDhlLogin();
+			$dhlSettings['account']		= $posModel->getDhlAccount();
 			$dhlSettings['password']	= $posModel->getDhlPassword();
-		} elseif ($vendor && $vendor->getId() && $vendor->getUseDhl() && $vendor->getDhlLogin() && $vendor->getDhlPassword()) {
+		} elseif ($vendor && $vendor->getId() && $vendor->getUseDhl() && $vendor->getDhlLogin() && $vendor->getDhlPassword() && $vendor->getDhlAccount()) {
 			$dhlSettings['login']		= $vendor->getDhlLogin();
+			$dhlSettings['account']		= $vendor->getDhlAccount();
 			$dhlSettings['password']	= $vendor->getDhlPassword();
 		}
 		

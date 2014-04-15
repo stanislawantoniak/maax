@@ -38,7 +38,6 @@ class Zolago_Pos_Block_Adminhtml_Pos_Edit_Tab_General extends Mage_Adminhtml_Blo
             'minimal_stock',
             'priority',
             'external_id',
-            'client_number',
         ));         
 
         
@@ -71,6 +70,7 @@ class Zolago_Pos_Block_Adminhtml_Pos_Edit_Tab_General extends Mage_Adminhtml_Blo
         $builder->setFieldset($dhl);
         $builder->prepareForm(array(
             'use_dhl',
+            'dhl_account',
             'dhl_login',
             'dhl_password',
         ));
