@@ -55,7 +55,11 @@ class Zolago_Po_Model_Resource_Po_Collection
 			    array()
 		);
 		$select->group("main_table.entity_id");
-		$this->getSelect()->where("po_item.name LIKE ?", "%".$productName."%");
+		$where = array(
+			$select->getAdapter()->quoteInto("po_item.name LIKE ?", "%".$productName."%"),
+			$select->getAdapter()->quoteInto("po_item.sku LIKE ?", "%".$productName."%"),
+		);
+		$this->getSelect()->where(join(" OR ", $where));
 		return $this;
 	}
 
