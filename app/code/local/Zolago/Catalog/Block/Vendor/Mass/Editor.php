@@ -68,7 +68,7 @@ class Zolago_Catalog_Block_Vendor_Mass_Editor extends Mage_Core_Block_Template {
 		return $attribute && 
 			   Mage::helper("zolagoeav")->isAttributeEditableNormal($attribute) && 
 			   !$attribute->getIsUnique() && 
-			   !in_array($attribute->getFrontendInput(), array("media_image", "weee"));
+			   !in_array($attribute->getFrontendInput(), array("media_image", "weee", "gallery"));
 	}
 	
 	public function buildFieldId($id, $postfix=null) {

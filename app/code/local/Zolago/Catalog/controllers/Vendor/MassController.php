@@ -353,6 +353,9 @@ class Zolago_Catalog_Vendor_MassController
 		$missingAttributes = 0;
 		$attributes = $product->getAttributes();
 		foreach ($attributes as $attribute) {
+			if(in_array($attribute->getFrontendInput(), array("gallery", "weee"))){
+				continue;
+			}
 			if ($attribute->getIsRequired()) {
 				$value = Mage::getResourceModel('catalog/product')->getAttributeRawValue($product->getId(), $attribute->getAttributeCode(), $storeId);
 				if ($attribute->isValueEmpty($value)) {
