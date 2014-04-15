@@ -148,6 +148,14 @@
                         <fieldset>dhl</fieldset>
                         <position>30</position>
                     </dhl_password>
+					<!-- Product Review -->
+                	<review_status>
+                        <label>Product Review Status</label>
+                        <type>select</type>
+                        <fieldset>microsite</fieldset>
+						<source_model>zolagodropship/source_review</source_model>
+                        <position>800</position>
+                    </review_status>					
 					<!-- label store -->
 					<label_store>
                         <label>Label store</label>
