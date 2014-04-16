@@ -295,6 +295,13 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 					$column->getFilter()->getValue());
 				return $this;
 			break;
+			case "increment_id":
+				$this->getCollection()->addFieldToFilter(
+						"main_table.increment_id", 
+						array("like"=>"%".$column->getFilter()->getValue()."%")
+				);
+				return $this;
+			break;
 		}
 		return parent::_addColumnFilterToCollection($column);
 	}
