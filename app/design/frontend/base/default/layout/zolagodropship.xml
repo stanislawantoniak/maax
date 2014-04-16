@@ -5,11 +5,6 @@
 		<reference name="head">
 			<action method="addCss"><stylesheet>css/zolagodropship.css</stylesheet></action>
 		</reference>
-		<reference name="header">
-			<action method="setTemplate">
-				<template>zolagodropship/vendor/header.phtml</template>
-			</action>
-		</reference>
 	</udropship_vendor>
 	
 	<udropship_vendor_dashboard>

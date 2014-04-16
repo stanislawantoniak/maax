@@ -2,7 +2,7 @@
  * Core script to handle all login specific things
  */
 
-var Login = function() {
+var Login = function($) {
 
 	"use strict";
 
@@ -233,4 +233,4 @@ var Login = function() {
 
 	};
 
-}();
+}(jQuery);

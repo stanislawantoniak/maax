@@ -1,7 +1,8 @@
 /**
 Core script to handle the entire layout and base functions
 **/
-var App = function() {
+
+var App = function($) {
 
 	"use strict";
 
@@ -728,4 +729,4 @@ var App = function() {
 
 	};
 
-}();
+}(jQuery);

@@ -6,7 +6,7 @@
 
 "use strict";
 
-$(document).ready(function(){
+jQuery(document).ready(function($){
 
 	//===== Sidebar Search (Demo Only) =====//
 	$('.sidebar-search').submit(function (e) {

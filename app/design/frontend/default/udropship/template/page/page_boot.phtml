@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script type="text/javascript">
+    var BLANK_URL = '<?php echo $this->getJsUrl() ?>blank.html';
+    var BLANK_IMG = '<?php echo $this->getJsUrl() ?>spacer.gif';
+    var BASE_URL = '<?php echo $this->getUrl('*') ?>';
+    var SKIN_URL = '<?php echo $this->getSkinUrl() ?>';
+    var FORM_KEY = '<?php echo $this->getFormKey() ?>';
+</script>
+	<?php echo $this->getChildHtml('head') ?>
+</head>
+<body<?php echo $this->getBodyClass()?' class="'.$this->getBodyClass().'"':'' ?>>
+<?php echo $this->getChildHtml('after_body_start') ?>
+
+<?php echo $this->getChildHtml('global_notices') ?>
+<?php echo $this->getChildHtml('header') ?>
+	
+<div id="container">
+	<div id="sidebar" class="sidebar-fixed">
+			<div id="sidebar-content">
+				<!--=== Navigation ===-->
+				<ul id="nav">
+					<li class="current">
+						<a href="index.html">
+							<i class="icon-dashboard"></i>
+							Entry #1
+						</a>
+					</li>
+					<li>
+						<a href="javascript:void(0);">
+							<i class="icon-desktop"></i>
+							Entry #2
+							<span class="label label-info pull-right">6</span>
+						</a>
+						<ul class="sub-menu">
+							<li>
+								<a href="ui_general.html">
+								<i class="icon-angle-right"></i>
+								Entry #2.1
+								</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<!-- /Navigation -->
+			</div>
+			<div id="divider" class="resizeable"></div>
+		</div>
+	<div id="content">
+		<?php echo $this->getChildHtml('breadcrumbs') ?>
+		<?php echo $this->getChildHtml('global_messages') ?>
+		<?php echo $this->getChildHtml('content') ?>
+	</div>
+</div>
+<?php echo $this->getChildHtml('footer') ?>
+<?php echo $this->getChildHtml('before_body_end') ?>
+
+<?php echo $this->getAbsoluteFooter() ?>
+</body>
+</html>

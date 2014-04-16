@@ -2,7 +2,7 @@
  * Core script to handle all form specific plugins
  */
 
-var FormComponents = function() {
+var FormComponents = function($) {
 
 	"use strict";
 
@@ -49,6 +49,7 @@ var FormComponents = function() {
 	 **************************/
 	var initUniform = function() {
 		if ($.fn.uniform) {
+			console.log($(':radio.uniform, :checkbox.uniform'));
 			$(':radio.uniform, :checkbox.uniform').uniform();
 		}
 	}
@@ -279,4 +280,4 @@ var FormComponents = function() {
 
 	};
 
-}();
+}(jQuery);
