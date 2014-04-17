@@ -9,8 +9,8 @@
 
 <script type="text/javascript">
 // Initialize the widget when the DOM is ready
-$(function() {
-	$("#uploader").plupload({
+jQuery(document).ready(function() {
+	jQuery("#uploader").plupload({
 		// General settings
 		runtimes : 'html5,flash,silverlight,html4',
 		url : '../upload.php',
@@ -63,16 +63,16 @@ $(function() {
 
 
 	// Handle the case when form was submitted before uploading has finished
-	$('#form').submit(function(e) {
+	jQuery('#form').submit(function(e) {
 		// Files in queue upload them first
-		if ($('#uploader').plupload('getFiles').length > 0) {
+		if (jQuery('#uploader').plupload('getFiles').length > 0) {
 
 			// When all files are uploaded submit form
-			$('#uploader').on('complete', function() {
-				$('#form')[0].submit();
+			jQuery('#uploader').on('complete', function() {
+				jQuery('#form')[0].submit();
 			});
 
-			$('#uploader').plupload('start');
+			jQuery('#uploader').plupload('start');
 		} else {
 			alert("You must have at least one file in the queue.");
 		}
