@@ -66,6 +66,141 @@
         </reference>
     </udropship_vendor>
 
+	<!-- bootsrap handling -->
+	<boostrap>
+		<reference name="root">
+			<action method="setTemplate">
+				<template>page/page_boot.phtml</template>
+			</action>
+		</reference>
+		<reference name="head">
+			<!-- frontend css -->
+			<action method="removeItem"><type>skin_css</type><name>css/udropship.css</name></action> 
+			<action method="removeItem"><type>skin_css</type><name>css/zolagodropship.css</name></action> 
+			<action method="removeItem"><type>skin_css</type><name>css/styles-ie.css</name></action> 
+            <action method="addCss"><stylesheet>css/boostrap/bootstrap.min.css</stylesheet></action>
+            <action method="addCss"><stylesheet>css/melon/main.css</stylesheet></action>
+            <action method="addCss"><stylesheet>css/melon/plugins.css</stylesheet></action>
+            <action method="addCss"><stylesheet>css/melon/responsive.css</stylesheet></action>
+            <action method="addCss"><stylesheet>css/melon/fontawesome/font-awesome.min.css</stylesheet></action>
+            <action method="addCss"><stylesheet>css/melon/plugins/uniform.css</stylesheet></action>
+			<action method="addItem">
+				<type>skin_css</type>
+				<name>css/melon/fontawesome/font-awesome-ie7.min.css</name>
+				<params/>
+				<if>IE 7</if>
+			</action>
+			<!-- adminhtml css -->
+			<action method="removeItem"><type>skin_css</type><name>../../../adminhtml/default/default/boxes.css</name></action> 
+			<action method="removeItem"><type>skin_css</type><name>../../../adminhtml/default/default/custom.css</name></action> 
+			<action method="removeItem"><type>skin_css</type><name>../../../adminhtml/default/defaultie/styles.css</name></action> 
+			<action method="removeItem"><type>skin_css</type><name>../../../adminhtml/default/default/below_ie7.css</name></action> 
+			<action method="removeItem"><type>skin_css</type><name>../../../adminhtml/default/default/ie7.css</name></action> 
+			<action method="removeItem"><type>skin_css</type><name>../../../adminhtml/default/default/print.css</name></action> 
+			<!-- front js -->
+				
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/melon/libs/jquery-1.10.2.min.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/integration.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/jquery-ui/jquery-ui-1.10.2.custom.min.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/boostrap/bootstrap.min.js</name>
+			</action>
+			
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/melon/libs/lodash.compat.min.js</name>
+			</action>
+			
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/melon/libs/html5shiv.js</name>
+				<params/>
+				<if>lt IE 9</if>
+			</action>
+			
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/touchpunch/jquery.ui.touch-punch.min.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/event.swipe/jquery.event.move.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/event.swipe/jquery.event.swipe.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/melon/libs/breakpoints.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/respond/respond.min.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/cookie/jquery.cookie.min.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/slimscroll/jquery.slimscroll.min.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/slimscroll/jquery.slimscroll.horizontal.min.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/melon/app.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/melon/plugins.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/melon/plugins.form-components.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/pickadate/picker.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/pickadate/picker.date.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/pickadate/picker.time.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/uniform/jquery.uniform.min.js</name>
+			</action>
+	
+			<!-- add init script -->
+			<block type="core/template" name="head.initscript" template="unirgy/dropship/vendor/initscript.phtml"/>
+        </reference>		
+		
+		<!-- Override header -->			
+		<reference name="header">
+			<action method="setTemplate">
+				<template>unirgy/dropship/vendor/header_boot.phtml</template>
+			</action>
+		</reference>
+	</boostrap>
+
     <udropship_vendor_index>
         <update handle="udropship_vendor" />
         <reference name="head">

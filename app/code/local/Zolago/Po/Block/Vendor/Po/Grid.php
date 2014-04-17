@@ -8,7 +8,7 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
         $this->setDefaultSort('created_at');
         $this->setDefaultDir('desc');
         $this->setGridClass('z-grid');
-		
+		$this->setTemplate("zolagoadminhtml/widget/grid.phtml");
     }
 	
 	protected function _prepareCollection(){
