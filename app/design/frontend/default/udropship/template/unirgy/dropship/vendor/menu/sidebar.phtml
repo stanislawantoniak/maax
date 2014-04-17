@@ -1,0 +1,12 @@
+<div id="sidebar" class="sidebar-fixed">
+	<div id="sidebar-content">
+		<!--=== Navigation ===-->
+		<?php if(count($this->getFullMenu())):?>
+		<ul id="nav">
+			<?php echo $this->renderMenu($this->getFullMenu());?>
+		</ul>
+		<?php endif;?>
+		<!-- /Navigation -->
+	</div>
+	<div id="divider" class="resizeable"></div>
+</div>

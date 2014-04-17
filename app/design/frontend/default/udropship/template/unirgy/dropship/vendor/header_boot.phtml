@@ -150,12 +150,6 @@ $_isTierShip = $_session->getVendor()->getAllowTiershipModify();
 								<?php echo $this->__('Customer Questions')?></a>
 							</li>
 					<?php endif ?>
-					<?php if (Mage::helper('udropship')->isModuleActive('Unirgy_DropshipMicrosite')
-						&& $_session->isLoggedIn()
-						&& $_session->isAllowed("umicrosite")
-						&& $_session->getVendor()->getShowProductsMenuItem()): ?>
-							<li><a href="<?php echo Mage::helper('umicrosite')->getManageProductsUrl() ?>" onclick="this.target='VendorAdmin'"><?php echo $this->__('System View')?></a></li>
-					<?php endif ?>
 				<?php else:?>
 					<li class="<?php if ($_active=='dashboard'): ?>active<?php endif ?>"><a href="<?php echo Mage::getUrl("udropship/vendor/login");?>"><?php echo $this->__("Login"); ?></a></li>
 			<?php endif;?>
@@ -180,14 +174,6 @@ $_isTierShip = $_session->getVendor()->getAllowTiershipModify();
 					<i class="icon-caret-down small"></i>
 				</a>
 				<ul class="dropdown-menu">
-					<?php if($_session->isAllowed("udropship/vendor/preferences") && $_session->isLoggedIn() ):?>
-						<li <?php if ($_active=='preferences'): ?>class="active"<?php endif ?>>
-							<a href="<?php echo $this->getUrl('udropship/vendor/preferences')?>">
-								<i class="icon-wrench"></i>
-								<?php echo $this->__('Settings')?>
-							</a>
-						</li>
-					<?php endif;?>
 					<li><a href="<?php echo $this->getUrl('udropship/vendor/logout')?>"><i class="icon-off"></i> <?php echo $this->__('Log out')?></a></li>
 				</ul>
 			</li>

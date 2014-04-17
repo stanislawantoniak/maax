@@ -72,6 +72,7 @@
 			<action method="setTemplate">
 				<template>page/page_boot.phtml</template>
 			</action>
+			<block type="zolagodropship/vendor_menu_sidebar" template="unirgy/dropship/vendor/menu/sidebar.phtml" name="sidebar" />
 		</reference>
 		<reference name="head">
 			<!-- frontend css -->
