@@ -7,6 +7,7 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
         $this->setId('zolagopo_grid');
         $this->setDefaultSort('created_at');
         $this->setDefaultDir('desc');
+		// Need
         $this->setGridClass('z-grid');
 		$this->setTemplate("zolagoadminhtml/widget/grid.phtml");
     }
@@ -224,7 +225,7 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 	
 	protected function _prepareMassaction()
     {
-        $this->setMassactionIdField('entity_id');
+        $this->setMassactionIdField('main_table.entity_id');
         $this->getMassactionBlock()->setFormFieldName('po');
 		$this->getMassactionBlock()->setTemplate("zolagoadminhtml/widget/grid/massaction.phtml");
 		$statuses=array();
@@ -298,8 +299,9 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 				return $this;
 			break;
 			case "increment_id":
+			case "entity_id":
 				$this->getCollection()->addFieldToFilter(
-						"main_table.increment_id", 
+						"main_table.{$column->getId()}", 
 						array("like"=>"%".$column->getFilter()->getValue()."%")
 				);
 				return $this;
