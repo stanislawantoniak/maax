@@ -1,38 +1,6 @@
-<style>
-	.staticFilter {
-		width: 155px; 
-	}
-	.staticFilter option {
-		/*width: 130px;*/
-	}
-	.filter-box {
-		padding: 2px 0 2px 0;
-		display: inline-block;
-		width: 48.5%;
-		vertical-align: top;
-	}
-	.filter-box .selectedFilter {
-		display: inline-block;
-		font-weight: bold;
-	}
-	.staticFilter-box .box {
-		background: none repeat scroll 0 0 #EEEFFD;
-		padding-bottom: 0;
-	}
-	.staticFilter-box .box .left, 
-	.staticFilter-box .box .right {
-		width: 48.5%;
-	}	
-	.staticFilter-box .box .scalable {
-		margin-top: 0px;
-		margin-bottom: 5px;
-	}
-	.filterSearch {
-		float: right;
-	}
-</style>
 <?php
-$activeFilters = $this->getCurrentStaticFilterValues();
+$storeId		= $this->getStore()->getId();
+$activeFilters	= $this->getCurrentStaticFilterValues();
 ?>
 <div class="staticFilter-box">
 	<?php if ($this->getStaticFilters($this->getCurrentAttributeSetId()) && $this->getCurrentAttributeSetId()): ?>
@@ -43,23 +11,33 @@ $activeFilters = $this->getCurrentStaticFilterValues();
 				<?php if ($singleFilter): ?>
 					<?php
 						$firstFilter = current($singleFilter);
-						$filterLabel = $this->getAttributeLabel($firstFilter['code'], $this->getStore());
-						$selectedFilter = false;
 					?>
 					<?php if ($firstFilter['group'] !== Zolago_Catalog_Helper_Data::ADDITIONAL_ATTRIBUTES_GROUP): ?>
 						<span class="filter-box">
+							<?php
+								list ($filterLabel, $labelsCount) = $this->getStaticFilterLabel($singleFilter);
+								$updateValues = $this->updateStaticFilterValues($singleFilter, $labelsCount);
+							?>
 							<label for="staticFilter"><?php echo $filterLabel; ?>:</label>
 							<select name="staticFilter" id="staticFilter-<?php echo $firstFilter['attribute_id']; ?>" class="staticFilter">
 								<option value=""><?php echo Mage::helper("zolagocatalog")->__("--- Select ---"); ?></option>
 								<?php foreach($singleFilter as $value): ?>
-									<?php if ($value['value'] && $value['group'] !== Zolago_Catalog_Helper_Data::ADDITIONAL_ATTRIBUTES_GROUP): ?>
-										<option value="<?php echo $value['attribute_id']; ?>" <?php if($activeFilters && array_key_exists($value['attribute_id'], $activeFilters) && $activeFilters[$value['attribute_id']]==$value['value']): $selectedFilter = $value['value']; ?> selected="selected"<?php endif;?> filterValue="<?php echo $this->escapeHtml($value['value']); ?>"><?php echo $this->escapeHtml($value['value']); ?></option>
+									<?php if (isset($value['option'])):
+											$filterValue	= $value['option'];
+											$displayValue	= $this->getOptionLabelbyId($filterValue, $storeId);
+											if (!$displayValue):
+												$displayValue = $this->getOptionLabelbyId($filterValue, 0);
+											endif;
+										else:
+											$filterValue	= $this->escapeHtml($value['value']);
+											$displayValue	= $this->escapeHtml($value['value']);
+										endif;
+									?>
+									<?php if ($displayValue && $value['group'] !== Zolago_Catalog_Helper_Data::ADDITIONAL_ATTRIBUTES_GROUP): ?>
+										<option value="<?php echo $value['attribute_id']; ?>" <?php if($this->isFilterActive($activeFilters, $value['attribute_id'], $displayValue, $filterValue)): ?> selected="selected"<?php endif;?> filterValue="<?php echo $this->escapeHtml($filterValue); ?>"><?php echo $this->getUpdatedFilterValues($displayValue, $filterLabel, $updateValues); ?></option>
 									<?php endif; ?>
 								<?php endforeach; ?>
 							</select>
-							<?php // if ($selectedFilter): ?>
-								<br /><span class="selectedFilter"><?php echo $selectedFilter; ?></span>
-							<?php // endif; ?>
 						</span>
 					<?php endif; ?>
 				<?php endif; ?>
@@ -73,23 +51,33 @@ $activeFilters = $this->getCurrentStaticFilterValues();
 				<?php if ($singleFilter): ?>
 					<?php
 						$firstFilter = current($singleFilter);
-						$filterLabel = $this->getAttributeLabel($firstFilter['code'], $this->getStore());
-						$selectedFilter = false;
 					?>
 					<?php if ($firstFilter['group'] == Zolago_Catalog_Helper_Data::ADDITIONAL_ATTRIBUTES_GROUP): ?>
 						<span class="filter-box">
+							<?php
+								list ($filterLabel, $labelsCount) = $this->getStaticFilterLabel($singleFilter);
+								$updateValues = $this->updateStaticFilterValues($singleFilter, $labelsCount);
+							?>
 							<label for="staticFilter"><?php echo $filterLabel; ?>:</label>
 							<select name="staticFilter" id="staticFilter-<?php echo $firstFilter['attribute_id']; ?>" class="staticFilter">
 								<option value=""><?php echo Mage::helper("zolagocatalog")->__("--- Select ---"); ?></option>
 								<?php foreach($singleFilter as $value): ?>
-									<?php if ($value['value'] && $value['group'] == Zolago_Catalog_Helper_Data::ADDITIONAL_ATTRIBUTES_GROUP): ?>
-										<option value="<?php echo $value['attribute_id']; ?>" <?php if($activeFilters && array_key_exists($value['attribute_id'], $activeFilters) && $activeFilters[$value['attribute_id']]==$value['value']): $selectedFilter = $value['value']; ?> selected="selected"<?php endif;?> filterValue="<?php echo $this->escapeHtml($value['value']); ?>"><?php echo $this->escapeHtml($value['value']); ?></option>
+									<?php if (isset($value['option'])):
+											$filterValue	= $value['option'];
+											$displayValue	= $this->getOptionLabelbyId($filterValue, $storeId);
+											if (!$displayValue):
+												$displayValue = $this->getOptionLabelbyId($filterValue, 0);
+											endif;
+										else:
+											$filterValue	= $this->escapeHtml($value['value']);
+											$displayValue	= $this->escapeHtml($value['value']);
+										endif;
+									?>						
+									<?php if ($displayValue && $value['group'] == Zolago_Catalog_Helper_Data::ADDITIONAL_ATTRIBUTES_GROUP): ?>
+										<option value="<?php echo $value['attribute_id']; ?>" <?php if($this->isFilterActive($activeFilters, $value['attribute_id'], $displayValue, $filterValue)): ?> selected="selected"<?php endif;?> filterValue="<?php echo $this->escapeHtml($filterValue); ?>"><?php echo $this->getUpdatedFilterValues($displayValue, $filterLabel, $updateValues); ?></option>
 									<?php endif; ?>
 								<?php endforeach; ?>
 							</select>
-							<?php // if ($selectedFilter): ?>
-								<br /><span class="selectedFilter"><?php echo $selectedFilter; ?></span>
-							<?php // endif; ?>
 						</span>
 					<?php endif; ?>
 				<?php endif; ?>
