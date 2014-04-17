@@ -92,6 +92,7 @@
 			</action>
 			<!-- Customs -->
             <action method="addCss"><stylesheet>css/local/customs.css</stylesheet></action>
+            <action method="addCss"><stylesheet>css/local/noless.css</stylesheet></action>
 			<!-- adminhtml css -->
 			<action method="removeItem"><type>skin_css</type><name>../../../adminhtml/default/default/boxes.css</name></action> 
 			<action method="removeItem"><type>skin_css</type><name>../../../adminhtml/default/default/custom.css</name></action> 
