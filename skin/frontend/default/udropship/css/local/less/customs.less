@@ -1,0 +1,54 @@
+@import (reference) "../../boostrap/less/bootstrap.less"; 
+@import "../../melon/less/general/variables.less";
+
+select.form-control{
+	min-width: 50px; 
+} 
+.z-grid .filter{
+	
+	position: static;   
+}
+.nobr{
+	white-space: nowrap !important;
+}
+.form-inline label{   
+	font-weight: normal;
+} 
+.z-grid {
+	
+	hr{
+		margin-top: 10px; 
+		margin-bottom: 10px;
+	}
+	entry-edit{
+		display: inline-block;
+	}
+	.outer-span label{
+		display: none; 
+	}
+	.inline-form-text{
+		padding-top: 5px;
+	}
+	.table-striped tbody > tr.row-selected td{
+		background-color: rgba(147,175,236,0.13) !important;
+	}
+	.sort-arrow-asc:after,
+	.sort-arrow-desc:after{
+		.glyphicon();
+		font-size: @fontSizeMini;
+		color: @green;
+	}
+	.sort-arrow-asc:after{
+		content: "\e093"; 
+	}
+	.sort-arrow-desc:after{
+		content: "\e094"; 
+	}
+	.hor-scroll{
+		width: 100%;
+		overflow: auto;  
+	}
+}
+.a-center {
+	text-align: center;
+}
