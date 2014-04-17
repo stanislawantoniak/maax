@@ -123,6 +123,8 @@
 (function(){
 	var gridObj = <?php echo $this->getGridJsObjectName();?>;
 	var topForm = $("filter_form");
+	// create integrator
+	new Zolago.gridIntegrator(gridObj);
 	
 	gridObj.doFilter = (function(){
         var filters = $$('#'+this.containerId+' .filter input', '#'+this.containerId+' .filter select');
@@ -146,47 +148,12 @@
 		if(serialized2){
 			params.push(serialized2);
 		}
-		console.log(params);
 		
         if (!this.doFilterCallback || (this.doFilterCallback && this.doFilterCallback())) {
             this.reload(this.addVarToUrl(this.filterVar, encode_base64(params.join("&"))));
         }
     }).bind(gridObj);
 	
-	var oldSetCheckboxChecked = gridObj.setCheckboxChecked;
-	var	oldCheckCheckboxes = gridObj.massaction.checkCheckboxes;
-
-	var updateSelectCheckbox = function(checkbox){
-			var el = checkbox.up("tr");
-			if(checkbox.checked){
-				el.addClassName("row-selected");
-			}else{
-				el.removeClassName("row-selected");
-			}
-		}
-		
-	varienGlobalEvents.attachEventHandler("gridRowClick", function(event){
-		var el = $(event.currentTarget);
-		if(!el.up("#"+gridObj.containerId)){
-			return;
-		}
-		var checkbox = el.select(".massaction-checkbox")[0];
-		updateSelectCheckbox(checkbox);
-	});
-
-
-
-	gridObj.massaction.checkCheckboxes = function(){
-		oldCheckCheckboxes.apply(gridObj.massaction, arguments);
-		gridObj.massaction.getCheckboxes().each(updateSelectCheckbox);
-	}
-
-	gridObj.setCheckboxChecked = function(element){
-		oldSetCheckboxChecked.apply(gridObj, arguments);
-		updateSelectCheckbox(element);
-	}
-	
-	gridObj.massaction.checkCheckboxes();
 	
 	topForm.observe("submit", function(e){
 		gridObj.doFilter();
@@ -196,14 +163,9 @@
 		gridObj.resetFilter();
 		e.preventDefault();
 	});
-	
-	var filters = $$('#'+gridObj.containerId+' .filter input', '#'+gridObj.containerId+' .filter select');
-	console.log(filters, gridObj.containerId);
-	filters.each(function(el){
-		el.addClassName("form-control");
-	});
-})();
 
+})();
+// Do pickers
 jQuery(function($){
 	$( ".datepicker" ).datepicker({
 		defaultDate: +7,

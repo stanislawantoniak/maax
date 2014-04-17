@@ -49,7 +49,7 @@ var FormComponents = function($) {
 	 **************************/
 	var initUniform = function() {
 		if ($.fn.uniform) {
-			$(':radio.uniform, :checkbox.uniform').uniform();
+			$(':radio.uniform, :checkbox.uniform, :checkbox.massaction-checkbox').uniform();
 		}
 	}
 
