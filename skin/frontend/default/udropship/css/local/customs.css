@@ -1,0 +1,31 @@
+select.form-control {
+  min-width: 50px;
+}
+.z-grid .filter {
+  position: static;
+}
+.nobr {
+  white-space: nowrap !important;
+}
+.form-inline label {
+  font-weight: normal;
+}
+.z-grid hr {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.z-grid .entry-edit {
+  display: inline-block;
+}
+.z-grid .outer-span label {
+  display: none;
+}
+.z-grid .inline-form-text {
+  padding-top: 5px;
+}
+.z-grid .table-striped tbody > tr.row-selected td {
+  background-color: rgba(147, 175, 236, 0.13) !important;
+}
+.a-center {
+  text-align: center;
+}

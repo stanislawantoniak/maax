@@ -78,7 +78,7 @@
 			<action method="removeItem"><type>skin_css</type><name>css/udropship.css</name></action> 
 			<action method="removeItem"><type>skin_css</type><name>css/zolagodropship.css</name></action> 
 			<action method="removeItem"><type>skin_css</type><name>css/styles-ie.css</name></action> 
-            <action method="addCss"><stylesheet>css/boostrap/bootstrap.min.css</stylesheet></action>
+            <action method="addCss"><stylesheet>css/boostrap/bootstrap.css</stylesheet></action>
             <action method="addCss"><stylesheet>css/melon/main.css</stylesheet></action>
             <action method="addCss"><stylesheet>css/melon/plugins.css</stylesheet></action>
             <action method="addCss"><stylesheet>css/melon/responsive.css</stylesheet></action>
@@ -90,6 +90,9 @@
 				<params/>
 				<if>IE 7</if>
 			</action>
+			<!-- Customs -->
+            <action method="addCss"><stylesheet>css/local/customs.css</stylesheet></action>
+            <action method="addCss"><stylesheet>css/local/noless.css</stylesheet></action>
 			<!-- adminhtml css -->
 			<action method="removeItem"><type>skin_css</type><name>../../../adminhtml/default/default/boxes.css</name></action> 
 			<action method="removeItem"><type>skin_css</type><name>../../../adminhtml/default/default/custom.css</name></action> 
