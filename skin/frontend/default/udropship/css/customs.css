@@ -1,0 +1,16 @@
+select.form-control{
+	min-width: 50px;
+}
+.z-grid .filter{
+	position: static;
+}
+.nobr{
+	white-space: nowrap !important;
+}
+.form-inline label{
+	font-weight: normal;
+}
+.z-grid hr{
+	margin-top: 10px;
+	margin-bottom: 10px;
+}

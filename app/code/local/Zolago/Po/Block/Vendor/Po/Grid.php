@@ -89,6 +89,7 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 			"type"		=>	"text",
 			"align"		=>  "right",
 			"index"		=>	"increment_id",
+			"class"		=>  "form-controll",
 			"header"	=>	Mage::helper("zolagopo")->__("Order No."),
 			"width"		=>	"100px"
 		));
@@ -225,6 +226,7 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
     {
         $this->setMassactionIdField('entity_id');
         $this->getMassactionBlock()->setFormFieldName('po');
+		$this->getMassactionBlock()->setTemplate("zolagoadminhtml/widget/grid/massaction.phtml");
 		$statuses=array();
 		
 		foreach(Mage::helper('udpo')->getVendorUdpoStatuses() as $key=>$label){
@@ -307,4 +309,5 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 	public function getRowUrl($item) {
 		return null;
 	}
+	
 }
