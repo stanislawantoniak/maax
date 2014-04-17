@@ -2,6 +2,12 @@
 
 class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstract {
 	
+	public function indexAction() {
+		// Override origin index
+		Mage::register('as_frontend', true);// Tell block class to use regular URL's
+		$this->_renderPage(array('default', 'formkey', 'adminhtml_head'), 'dashboard');
+	}
+	
 	public function saveShippingAddressAction(){
 		$req = $this->getRequest();
 		$poId = $req->getParam("po_id");

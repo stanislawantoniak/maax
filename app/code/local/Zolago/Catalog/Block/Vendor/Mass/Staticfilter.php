@@ -16,8 +16,69 @@ class Zolago_Catalog_Block_Vendor_Mass_Staticfilter extends Mage_Core_Block_Temp
 			->getStaticFiltersForVendor(
 				$this->getVendor(),
 				$this->getCurrentAttributeSetId()
-		);
-		return $array;
+			);
+
+		$arrayDropdown = Mage::getResourceSingleton('zolagocatalog/vendor_mass')
+			->getStaticDropdownFiltersForVendor(
+				$this->getVendor(),
+				$this->getCurrentAttributeSetId(),
+				$this->getStore()->getId()
+			);
+		
+		$staticFilters = array_merge($array, $arrayDropdown);
+		$staticFilters = $this->_sortStaticFiltersbyColumns($staticFilters, array('groupOrder' => SORT_ASC, 'sortOrder' => SORT_ASC));
+		return $staticFilters;
+	}
+	
+	/**
+	 * Sort MultiDimensional Array by Multiple Columns
+	 * 
+	 * @param array $array
+	 * @param array $columns
+	 * 
+	 * @return array $result Sorted Array 
+	 */
+	protected function _sortStaticFiltersbyColumns($array, $columns)
+	{
+		$columnArray = array();
+		foreach ($columns as $column => $order) {
+			$columnArray[$column] = array();
+			foreach ($array as $key => $row) {
+				$columnArray[$column]['_'.$key] = strtolower($row[$column]);
+			}
+		}
+
+		$eval = 'array_multisort(';
+		foreach ($columns as $column => $order) {
+			$eval .= '$columnArray[\''.$column.'\'],'.$order.',';
+		}
+
+		$eval = substr($eval,0,-1).');';
+		eval($eval);
+		$result = array();
+
+		foreach ($columnArray as $column => $arr) {
+			foreach ($arr as $key => $value) {
+				$key = substr($key,1);
+				if (!isset($result[$key])) {
+					$result[$key] = $array[$key];
+				}
+				$result[$key][$column] = $array[$key][$column];
+			}
+		}
+
+		return $result;
+	}
+	
+	public function getOptionLabelbyId($labelId, $storeId = 0)
+	{	
+		$optionValue = Mage::getResourceSingleton('zolagocatalog/vendor_mass')
+					->getOptionLabelbyId(
+						$labelId,
+						$storeId
+					);
+		
+		return $optionValue;
 	}
 	
 	public function getCurrentAttributeSetId() {
@@ -62,6 +123,57 @@ class Zolago_Catalog_Block_Vendor_Mass_Staticfilter extends Mage_Core_Block_Temp
 		);
 	}
 	
+	public function getStaticFilterLabel($singleFilter)
+	{
+		$firstFilter = current($singleFilter);
+		$filterLabel = $this->getAttributeLabel($firstFilter['code'], $this->getStore());
+		$labelsCount = array();
+		
+		$specialLabels = array();
+		foreach ($singleFilter as $value):
+			$startLabel = strpos($value['value'], Zolago_Catalog_Helper_Data::SPECIAL_LABELS_OLD_DELIMITER);
+			if ($startLabel !== false) {
+				$properLabel = trim(substr($value['value'], 0, $startLabel));
+				$specialLabels[$properLabel] = $properLabel;
+				if (array_key_exists($properLabel, $labelsCount)) {
+					$labelsCount[$properLabel] = $labelsCount[$properLabel]+1;
+				} else {
+					$labelsCount[$properLabel] = 1;
+				}
+			}			
+		endforeach;
+
+		if ($specialLabels) {
+			$filterLabel = implode(Zolago_Catalog_Helper_Data::SPECIAL_LABELS_NEW_DELIMITER, array_keys($specialLabels));
+		}
+		return array($filterLabel, $labelsCount);
+	}
+	
+	public function updateStaticFilterValues(&$singleFilter, $labelsCount)
+	{
+		$update = false;
+		foreach ($singleFilter as $filtereKey => $filterValue) {
+			if (empty($filterValue['value'])) {
+				unset($singleFilter[$filtereKey]);
+			}
+		}
+
+		if (count($singleFilter) == array_shift($labelsCount)) {
+			$update = true;
+		}
+		return $update;
+	}
+	
+	public function getUpdatedFilterValues($value, $filterLabel, $update) {
+		if ($update) {
+			$value = trim(substr($value, strlen($filterLabel)+1));
+		}
+		if (!$value) {
+			$value = Mage::helper("zolagocatalog")->__('--- no data ---');
+		}
+		return $this->escapeHtml($value);
+	}
+
 	public function getAttributeLabel($code, $store) {
 		$storeLabel = false;
 		$attribute = Mage::getModel('catalog/resource_eav_attribute')
@@ -71,5 +183,21 @@ class Zolago_Catalog_Block_Vendor_Mass_Staticfilter extends Mage_Core_Block_Temp
 		}
 		
 		return $storeLabel;
+	}
+	
+	public function isFilterActive($activeFilters, $attributeId, $displayValue, $filterValue)
+	{
+		$active = false;
+		
+		if (($activeFilters
+			&& array_key_exists($attributeId, $activeFilters)
+			&& $this->escapeHtml($activeFilters[$attributeId]) == $displayValue)
+			|| ($activeFilters
+			&& array_key_exists($attributeId, $activeFilters)
+			&& $activeFilters[$attributeId] == $filterValue)):
+			$active = true;
+		endif;	
+		
+		return $active;
 	}
 }

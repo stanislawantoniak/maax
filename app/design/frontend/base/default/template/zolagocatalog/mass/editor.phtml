@@ -1,42 +1,4 @@
-<style>
-	.grid.custom-grid tbody td{
-		background: #e7efef;
-	}
-	.grid.custom-grid table tfoot tr td{
-		border-top: inherit;
-	}
-	.grid.custom-grid table tbody a{
-		color: #267DB7;
-		font-weight: normal;
-		border-bottom: 1px #267DB7 dotted;
-	}	
-	.grid.custom-grid table tbody a:hover{
-		border-bottom-style: solid;
-	}
-	.grid.custom-grid table{
-		padding-bottom: 0;
-	}
-	.grid.custom-grid .filter-field-100 input.input-text,
-	.grid.custom-grid .filter-field-100 textarea.textarea{
-		width: 100%;
-		box-sizing: border-box;
-		-moz-box-sizing: border-box;
-	}
-	.custom-grid .scope{
-		color: #6f8992;
-		font-size: .9em;
-	}
-	
-	#zolagocatalog_mass_grid_confirm .totals {
-		height: 29px;
-	}
-	
-	.grid.custom-grid .confirm-changes {
-		position: absolute;
-		left: 50%;
-	}
-</style>
-<div class="grid custom-grid" id="<?php echo $this->buildFieldId("editor");?>">
+<div class="grid z-grid" id="<?php echo $this->buildFieldId("editor");?>">
 	<?php if($this->getGrid()): ?>
 	<table style="display: none;">
 		<tfoot id="<?php echo $this->buildFieldId("foot");?>">
@@ -106,6 +68,8 @@
 		var loading = $("<?php echo $this->buildFieldId("loading");?>");
 		
 		var oldInitGrid = gridObj.initGrid;
+		var oldSetCheckboxChecked = gridObj.setCheckboxChecked;
+		var	oldCheckCheckboxes = gridObj.massaction.checkCheckboxes;
 		
 		var appendContent = function(grid, content){
 			var table = $(grid.containerId).select("table.data")[0];
@@ -120,10 +84,38 @@
 			// Prepare form
 			var formEl = new Element("form", {id:"<?php echo $this->buildFieldId("editor_form");?>"});
 			gridDom.select(".data")[0].wrap(formEl);
-			form = new VarienForm("<?php echo $this->buildFieldId("editor_form");?>");	
-			gridDom.select(".grid")[0].className = "grid custom-grid";
+			form = new VarienForm("<?php echo $this->buildFieldId("editor_form");?>");
 		}
 		
+		var updateSelectCheckbox = function(checkbox){
+			var el = checkbox.up("tr");
+			if(checkbox.checked){
+				el.addClassName("row-selected");
+			}else{
+				el.removeClassName("row-selected");
+			}
+		}
+		
+		varienGlobalEvents.attachEventHandler("gridRowClick", function(event){
+			var el = $(event.currentTarget);
+			if(!el.up("#"+gridObj.containerId)){
+				return;
+			}
+			var checkbox = el.select(".massaction-checkbox")[0];
+			updateSelectCheckbox(checkbox);
+		});
+		
+		
+		
+		gridObj.massaction.checkCheckboxes = function(){
+			oldCheckCheckboxes.apply(gridObj.massaction, arguments);
+			gridObj.massaction.getCheckboxes().each(updateSelectCheckbox);
+		}
+		
+		gridObj.setCheckboxChecked = function(element){
+			oldSetCheckboxChecked.apply(gridObj, arguments);
+			updateSelectCheckbox(element);
+		}
 		
 		gridObj.initGrid = function(){
 			oldInitGrid.apply(gridObj, arguments);
@@ -132,11 +124,9 @@
 		}
 		
 		
-	
 		var submitHandler = function(){
 		
-			var productIds = gridObj.massaction.getCheckedValues();
-			
+			var productIds = gridObj.massaction.getCheckedValues();	
 			if(productIds==""){	
 				alert("<?php echo Mage::helper("zolagocatalog")->__("Select some products");?>");
 				return;

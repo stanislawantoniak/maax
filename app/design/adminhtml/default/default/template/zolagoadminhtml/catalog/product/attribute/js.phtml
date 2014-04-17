@@ -337,10 +337,10 @@ bindAttributeInputType();
 
 if (Validation) {
 	Validation.addAllThese([
-		['validate-grid-permission', '<?php echo Mage::helper('zolagoeav')->__('Only Text attributes can used in Grid Static Filter'); ?>', function(v) {
+		['validate-grid-permission', '<?php echo Mage::helper('zolagoeav')->__('Only Text and Dropdown attributes can used in Grid Static Filter'); ?>', function(v) {
 			var inputType = $F('frontend_input');
 			if (v === "<?php echo Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::USE_IN_FILTER; ?>"
-				&& inputType !== 'text') {
+				&& (inputType !== 'text') && (inputType !== 'select')) {
 				return false;
 			}
 			return true;

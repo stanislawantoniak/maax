@@ -7,10 +7,27 @@ class Zolago_Catalog_Vendor_MassController
 	 */
 	public function indexAction() {
 		Mage::register('as_frontend', true);// Tell block class to use regular URL's
-		
-		$this->_renderPage(array('default', 'formkey', 'adminhtml_head'), 'zolagocatalog');
+		$this->_saveHiddenColumns();
+		$this->_renderPage(null, 'udprod_mass');
 	}
-	
+	protected function _saveHiddenColumns() {
+		if ($this->getRequest()->isPost()) {
+			$listColumns = $this->getRequest()->getParam('listColumn',array());
+  			$attributeSet = $this->getRequest()->getParam('attribute_set','');
+  			$hiddenColumns = $this->getRequest()->getParam('hideColumn',array());
+  			foreach ($hiddenColumns as $key=>$dummy) {
+  				unset($listColumns[$key]);
+  			}
+  			$session = Mage::getSingleton('udropship/session');
+  			
+  			$list = $session->getData('denyColumnList');
+  			if (!$list) {
+  				$list = array();
+  			}
+  			$list[$attributeSet] = $listColumns;
+			$session->setData('denyColumnList',$list);
+		}
+	}	
 	public function saveAjaxAction() {
 		$response = array();
 		if($this->getRequest()->isPost()){
@@ -83,11 +100,13 @@ class Zolago_Catalog_Vendor_MassController
 						if(isset($attributesMode[$attributeCode])){
 							switch ($attributesMode[$attributeCode]) {
 								case "add":
+								case "sub":
 									Mage::getResourceSingleton('zolagocatalog/vendor_mass')->addValueToMultipleAttribute(
 										$productIds,
 										$attribute, 
 										is_array($value) ? $value : array(),
-										$store
+										$store,
+										$attributesMode[$attributeCode]	
 									);
 									unset($attributesData[$attributeCode]);
 								break;
@@ -144,6 +163,68 @@ class Zolago_Catalog_Vendor_MassController
 	public function massDeleteAction() {
 		var_export($this->getRequest()->getParams());
 	}
+	
+    /**
+     * Update product(s) status action
+     *
+     */
+    public function massStatusAction()
+    {
+        $productIds			= array_unique(explode(',', $this->getRequest()->getParam('product', '')));
+        $storeId			= (int)$this->getRequest()->getParam('store', 0);
+		$attributeSet		= (int)$this->getRequest()->getParam('attribute_set', null);
+        $status				= (int)$this->getRequest()->getParam('status');
+		$staticFiltersCount	= (int)$this->getRequest()->getParam('staticFilters');
+		$productReview		= (int)$this->getRequest()->getParam('review', null);
+		
+		$staticFilters		= $this->_getCurrentStaticFilterValues();
+		$postParams			= array('store'=> $storeId, 'attribute_set' => $attributeSet, 'staticFilters' => $staticFiltersCount);
+		$postParams			= array_merge($postParams, $staticFilters);
+		
+        try {
+			if ($productReview) {
+				$this->_validateProductAttributes($productIds, $attributeSet, $storeId);
+				$this->_redirect('*/*/', $postParams);
+				$status = Mage::helper('zolagodropship')->getProductStatusForVendor($this->_getSession()->getVendor());
+			}
+            $this->_validateMassStatus($productIds, $status);
+            Mage::getSingleton('catalog/product_action')
+                ->updateAttributes($productIds, array('status' => $status), $storeId);
+
+            $this->_getSession()->addSuccess(
+                $this->__('Total of %d record(s) have been updated.', count($productIds))
+            );
+        }
+        catch (Mage_Core_Model_Exception $e) {
+            $this->_getSession()->addError($e->getMessage());
+        } catch (Mage_Core_Exception $e) {
+            $this->_getSession()->addError($e->getMessage());
+        } catch (Exception $e) {
+            $this->_getSession()
+                ->addException($e, $this->__('An error occurred while updating the product(s) status.'));
+        }
+		
+        $this->_redirect('*/*/', $postParams);
+    }
+	
+    /**
+     * Validate batch of products before theirs status will be set
+     *
+     * @throws Mage_Core_Exception
+     * @param  array $productIds
+     * @param  int $status
+     * @return void
+     */
+    public function _validateMassStatus(array $productIds, $status)
+    {
+        if ($status == Mage_Catalog_Model_Product_Status::STATUS_ENABLED) {
+            if (!Mage::getModel('catalog/product')->isProductsHasSku($productIds)) {
+                throw new Mage_Core_Exception(
+                    $this->__('Some of the processed products have no SKU value defined. Please fill it prior to performing operations on these products.')
+                );
+            }
+        }
+    }	
 	
 	/**
 	 * @param type $attributes
@@ -215,6 +296,85 @@ class Zolago_Catalog_Vendor_MassController
 		);
 	}
 	
+	protected function _getCurrentStaticFilterValues() {
+		$staticFilters			= Mage::app()->getRequest()->getParam("staticFilters", 0);
+		$staticFiltersValues	= array();
+
+		for ($i = 1; $i <= $staticFilters; $i++) {
+			if (Mage::app()->getRequest()->getParam("staticFilterId-".$i) && Mage::app()->getRequest()->getParam("staticFilterValue-".$i)) {
+				$staticFiltersValues["staticFilterId-".$i] = Mage::app()->getRequest()->getParam("staticFilterId-".$i);
+				$staticFiltersValues["staticFilterValue-".$i] = Mage::helper('core')->escapeHtml(Mage::app()->getRequest()->getParam("staticFilterValue-".$i));
+			}
+		}
+		return $staticFiltersValues;
+	}
+	
+	protected function _validateProductAttributes($productIds, $attributeSetId, $storeId) {
+		$errorProducts	= array();
+		$collection		= Mage::getResourceModel('zolagocatalog/product_collection');
+		/* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
+		$collection->setFlag("skip_price_data", true);
+		$collection->setStoreId($storeId);
+		$collection->addIdFilter($productIds);
+		$collection->addAttributeToSelect('name');
+		$collection->addAttributeToFilter("attribute_set_id", $attributeSetId);
+		$collection->addAttributeToFilter("udropship_vendor", $this->_getSession()->getVendor()->getId());
+		$collection->addAttributeToSelect('image');
+		
+		foreach ($collection as $product) {
+			$imageValidation		= $this->_validateBaseImage($product);
+			$attributeValidation	= $this->_validateRequiredAttributes($product, $storeId);
+			if (!$imageValidation || $attributeValidation > 0) {
+				$errorProducts[$product->getId()]['name']		= $product->getName();
+				$errorProducts[$product->getId()]['image']		= $imageValidation;
+				$errorProducts[$product->getId()]['missing']	= $attributeValidation;
+			}
+		}
+		
+		$errorProductCount = count($errorProducts);
+		if ($errorProductCount) {
+			switch ($errorProductCount) {
+				case 1:
+					throw new Mage_Core_Exception(
+						$this->__('%d selected product has empty required attribute(s) and/or is missing a base image.', $errorProductCount)
+					);
+				case $errorProductCount > 1:
+					throw new Mage_Core_Exception(
+						$this->__('%d selected products have empty required attribute(s) and/or are missing a base image.', $errorProductCount)
+					);				
+				default:
+					break;			
+			}			
+		}
+	}
+	
+	protected function _validateRequiredAttributes($product, $storeId) 
+	{
+		$missingAttributes = 0;
+		$attributes = $product->getAttributes();
+		foreach ($attributes as $attribute) {
+			if(in_array($attribute->getFrontendInput(), array("gallery", "weee"))){
+				continue;
+			}
+			if ($attribute->getIsRequired()) {
+				$value = Mage::getResourceModel('catalog/product')->getAttributeRawValue($product->getId(), $attribute->getAttributeCode(), $storeId);
+				if ($attribute->isValueEmpty($value)) {
+					++$missingAttributes;
+				}
+			}
+		}
+		
+		return $missingAttributes;
+	}
+	
+	protected function _validateBaseImage($product) 
+	{
+		$validateImage = true;
+		$baseImage = $product->getImage();
+		if (empty($baseImage) || $baseImage == 'no_selection') {
+			$validateImage = false;
+		}
+		
+		return $validateImage;		
+	}	
 }
-
-

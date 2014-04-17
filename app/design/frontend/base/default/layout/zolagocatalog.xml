@@ -1,193 +1,9 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
-	<formkey>
-        <block type="core/template" name="formkey" as="formkey" template="formkey.phtml"/>
-    </formkey>
-	<adminhtml_head>
-		<reference name="head">
-			<action method="addJs">
-				<script>prototype/prototype.js</script>
-			</action>
-			<action method="addItem">
-				<type>js</type>
-				<name>extjs/fix-defer-before.js</name>
-				<params/>
-				<if/>
-				<condition>can_load_ext_js</condition>
-			</action>
-			<action method="addJs">
-				<script>prototype/window.js</script>
-			</action>
-			<action method="addJs">
-				<script>scriptaculous/builder.js</script>
-			</action>
-			<action method="addJs">
-				<script>scriptaculous/effects.js</script>
-			</action>
-			<action method="addJs">
-				<script>scriptaculous/dragdrop.js</script>
-			</action>
-			<action method="addJs">
-				<script>scriptaculous/controls.js</script>
-			</action>
-			<action method="addJs">
-				<script>scriptaculous/slider.js</script>
-			</action>
-			<action method="addJs">
-				<script>lib/ccard.js</script>
-			</action>
-			<action method="addJs">
-				<script>prototype/validation.js</script>
-			</action>
-			<action method="addJs">
-				<script>varien/js.js</script>
-			</action>
-			<action method="addJs">
-				<script>mage/translate.js</script>
-			</action>
-
-			<action method="addJs">
-				<script>mage/adminhtml/hash.js</script>
-			</action>
-			<action method="addJs">
-				<script>mage/adminhtml/events.js</script>
-			</action>
-			<action method="addJs">
-				<script>mage/adminhtml/loader.js</script>
-			</action>
-			<action method="addJs">
-				<script>mage/adminhtml/grid.js</script>
-			</action>
-			<action method="addJs">
-				<script>mage/adminhtml/tabs.js</script>
-			</action>
-			<action method="addJs">
-				<script>mage/adminhtml/form.js</script>
-			</action>
-			<action method="addJs">
-				<script>mage/adminhtml/accordion.js</script>
-			</action>
-			<action method="addJs">
-				<script>mage/adminhtml/tools.js</script>
-			</action>
-			<action method="addJs">
-				<script>mage/adminhtml/uploader.js</script>
-			</action>
-			<action method="addJs">
-				<script>mage/adminhtml/product.js</script>
-			</action>
-
-			<action method="addCss">
-				<name>../../../adminhtml/default/default/boxes.css</name>
-			</action>
-			<action method="addCss">
-				<name>../../../adminhtml/default/default/custom.css</name>
-			</action>
-
-			<action method="addItem">
-				<type>skin_css</type>
-				<name>../../../adminhtml/default/defaultie/styles.css</name>
-				<params/>
-				<if>lt IE 8</if>
-			</action>
-			<action method="addItem">
-				<type>skin_css</type>
-				<name>../../../adminhtml/default/default/below_ie7.css</name>
-				<params/>
-				<if>lt IE 7</if>
-			</action>
-			<action method="addItem">
-				<type>skin_css</type>
-				<name>../../../adminhtml/default/default/ie7.css</name>
-				<params/>
-				<if>IE 7</if>
-			</action>
-
-			<action method="addCss">
-				<name>../../../adminhtml/default/default/print.css</name>
-				<params>media="print"</params>
-			</action>
-
-			<action method="addItem">
-				<type>js</type>
-				<name>lib/ds-sleight.js</name>
-				<params>defer</params>
-				<if>lt IE 7</if>
-			</action>
-			<action method="addItem">
-				<type>js</type>
-				<name>varien/iehover-fix.js</name>
-				<params/>
-				<if>lt IE 7</if>
-			</action>
-			<action method="addItem">
-				<type>js_css</type>
-				<name>calendar/calendar-win2k-1.css</name>
-				<params/><!--<if/><condition>can_load_calendar_js</condition>-->
-			</action>
-			<action method="addItem">
-				<type>js</type>
-				<name>calendar/calendar.js</name><!--<params/><if/><condition>can_load_calendar_js</condition>-->
-			</action>
-			<action method="addItem">
-				<type>js</type>
-				<name>calendar/calendar-setup.js</name><!--<params/><if/><condition>can_load_calendar_js</condition>-->
-			</action>
-			<action method="addItem">
-				<type>js</type>
-				<name>extjs/ext-tree.js</name>
-				<params/>
-				<if/>
-				<condition>can_load_ext_js</condition>
-			</action>
-			<action method="addItem">
-				<type>js</type>
-				<name>extjs/fix-defer.js</name>
-				<params/>
-				<if/>
-				<condition>can_load_ext_js</condition>
-			</action>
-			<action method="addItem">
-				<type>js</type>
-				<name>extjs/ext-tree-checkbox.js</name>
-				<params/>
-				<if/>
-				<condition>can_load_ext_js</condition>
-			</action>
-			<action method="addItem">
-				<type>js_css</type>
-				<name>extjs/resources/css/ext-all.css</name>
-				<params/>
-				<if/>
-				<condition>can_load_ext_js</condition>
-			</action>
-			<action method="addItem">
-				<type>js_css</type>
-				<name>extjs/resources/css/ytheme-magento.css</name>
-				<params/>
-				<if/>
-				<condition>can_load_ext_js</condition>
-			</action>
-			<action method="addItem">
-				<type>js</type>
-				<name>mage/adminhtml/rules.js</name>
-				<params/>
-				<if/>
-				<condition>can_load_rules_js</condition>
-			</action>
-			<action method="addItem">
-				<type>js</type>
-				<name>mage/adminhtml/wysiwyg/tiny_mce/setup.js</name>
-				<params/>
-				<if/>
-				<condition>can_load_tiny_mce</condition>
-			</action>
-  
-		</reference>
-	</adminhtml_head>
-	
-	<zolagocatalog_vendor_mass_index>
+	<udprod_vendor_mass_index>
 		<update handle="udropship_vendor" />
+		<update handle="formkey" />
+		<update handle="adminhtml_head" />
 		
 		<reference name="content">
 			<block type="core/html_calendar" name="head.udropship.calendar" as="udropship.calendar" template="unirgy/dropship/calendar.phtml"></block>
@@ -198,5 +14,12 @@
 				<block type="zolagocatalog/vendor_mass_editor" name="editor" as="editor" template="zolagocatalog/mass/editor.phtml"/>
 			</block>
 		</reference>
-	</zolagocatalog_vendor_mass_index>
+	</udprod_vendor_mass_index>
+	<udprod_vendor_image_index>
+		<update handle="udropship_vendor" />
+		<update handle="formkey" />
+		<update handle="adminhtml_head" />
+		<reference name="content">
+		</reference>
+	</udprod_vendor_image_index>
 </layout>

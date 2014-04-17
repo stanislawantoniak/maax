@@ -6,6 +6,13 @@
  * @copyright    Copyright (c) 2011-2014 Solr Bridge (http://www.solrbridge.com)
  *
  */
+define('SBDS', DIRECTORY_SEPARATOR);
+define('SOLRBRIDGE_ROOT', getcwd());
+
+include_once SOLRBRIDGE_ROOT.SBDS.'lib'.SBDS.'Zend'.SBDS.'Controller'.SBDS.'Request'.SBDS.'Abstract.php';
+include_once SOLRBRIDGE_ROOT.SBDS.'lib'.SBDS.'Zend'.SBDS.'Controller'.SBDS.'Request'.SBDS.'Http.php';
+
+
 $baseDir = '/'.trim(getcwd(), '/');
 $configData = file_get_contents($baseDir.'/app/etc/solrbridge.conf');
 $config = json_decode($configData, true);
@@ -28,11 +35,40 @@ if (!empty($display_keyword_suggestion) && $display_keyword_suggestion > 0) {
 	$resultAutocomplete = $autocomplete->execute();
 
 	if (isset($resultAutocomplete['facet_counts']['facet_fields']['textSearchStandard']) && is_array($resultAutocomplete['facet_counts']['facet_fields']['textSearchStandard'])) {
-		foreach ($resultAutocomplete['facet_counts']['facet_fields']['textSearchStandard'] as $term => $val)
-		{
-			$result['keywordssuggestions'][] = $solr->hightlight($result['responseHeader']['params']['q'], trim($term, ','));
-			$result['keywordsraw'][] = trim($term, ',');
-		}
+
+	    $allow_ignore_term = (int)$solr->getConfigValue('allow_ignore_term');
+
+	    if ($allow_ignore_term > 0)
+	    {
+	        $ignoreSearchTerms = trim($solr->getConfigValue('ignoresearchterms'));
+	        if (!empty($ignoreSearchTerms)) {
+	            $ignoreSearchTermsArray = explode(',', trim($ignoreSearchTerms));
+
+	            foreach ($resultAutocomplete['facet_counts']['facet_fields']['textSearchStandard'] as $term => $val)
+	            {
+	                if (!in_array(strtolower($term), $ignoreSearchTermsArray))
+	                {
+	                    $result['keywordssuggestions'][] = $solr->hightlight($result['responseHeader']['params']['q'], trim($term, ','));
+	                    $result['keywordsraw'][] = trim($term, ',');
+	                }
+	            }
+
+	        }else{
+	            foreach ($resultAutocomplete['facet_counts']['facet_fields']['textSearchStandard'] as $term => $val)
+	            {
+	                $result['keywordssuggestions'][] = $solr->hightlight($result['responseHeader']['params']['q'], trim($term, ','));
+	                $result['keywordsraw'][] = trim($term, ',');
+	            }
+	        }
+	    }
+	    else
+	    {
+	        foreach ($resultAutocomplete['facet_counts']['facet_fields']['textSearchStandard'] as $term => $val)
+	        {
+	            $result['keywordssuggestions'][] = $solr->hightlight($result['responseHeader']['params']['q'], trim($term, ','));
+	            $result['keywordsraw'][] = trim($term, ',');
+	        }
+	    }
 	}
 }
 
@@ -87,14 +123,15 @@ if (isset($result['facet_counts']['facet_fields']['category_facet'])) {
 }
 
 
+if (isset($result['responseHeader']['params']['q'])) {
+    $categoryFacets = $solr->getCategoryFacets('category_path', $result['responseHeader']['params']['q']);
+    if (is_array($categoryFacets) && isset($result['facet_counts']['facet_fields']['category_path']) && is_array($result['facet_counts']['facet_fields']['category_path'])) {
+        $categoryFacets = array_merge($categoryFacets, $result['facet_counts']['facet_fields']['category_path']);
 
-$categoryFacets = $solr->getCategoryFacets('category_path', $result['responseHeader']['params']['q']);
-if (is_array($categoryFacets) && isset($result['facet_counts']['facet_fields']['category_path']) && is_array($result['facet_counts']['facet_fields']['category_path'])) {
-    $categoryFacets = array_merge($categoryFacets, $result['facet_counts']['facet_fields']['category_path']);
+        $categoryFacets = array_slice($categoryFacets,0,$solr->getFacetLimit());
 
-	$categoryFacets = array_slice($categoryFacets,0,$solr->getFacetLimit());
-
-	$result['facet_counts']['facet_fields']['category_path'] = $categoryFacets;
+        $result['facet_counts']['facet_fields']['category_path'] = $categoryFacets;
+    }
 }
 
 header('Content-Type: application/javascript');
@@ -107,7 +144,10 @@ if (isset($timestamp)) {
 	$result['responseHeader']['params']['timestamp'] = $timestamp;
 }
 
-$jsonp_callback = isset($js_callback) ? $js_callback : null;
-
-echo $jsonp_callback.'('.json_encode($result).')';
+if( isset($js_callback) && !empty($js_callback) )
+{
+    echo $js_callback.'('.json_encode($result).')';
+}else{
+    echo json_encode($result);
+}
 exit;
