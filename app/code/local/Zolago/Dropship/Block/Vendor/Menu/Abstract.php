@@ -79,19 +79,38 @@ class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Block_Templat
 		return self::$fullMenu;
 	}
 	
+	protected function _isUdpoAvailable() {
+		if (Mage::helper('udropship')->isUdpoActive()) {
+			$session = $this->getSession();
+			if($session->isOperatorMode()){
+				$operator = $session->getOperator();
+				if($operator->isAllowed("udpo/vendor")){
+					return true;
+				}else{
+					return false;
+				}
+			}
+			return true;
+		}
+		return false;
+	}
+
+
 	public function getDashboardSection() {
-		if($this->isAllowed("udpo/vendor")){
+		// Dispaly dasboard only order is unavailable
+		if(!$this->_isUdpoAvailable()){
 			return array(
-				"active" => $this->isActive(array("dashboard")),
+				"active" => $this->isActive("dashboard"),
 				"label"	 => $this->__("Dashboard"),
 				"icon"	 => "icon-dashboard",
-				"url"	 => $this->getUrl('udropship/vendor')
+				"url"	 => $this->getUrl('udropship/vendor/dashboard')
 			);
 		}
+		return null;
 	}
 	
 	public function getOrderSection() {
-		if(Mage::helper('udropship')->isUdpoActive() && $this->isAllowed("udpo/vendor")){
+		if($this->_isUdpoAvailable()){
 			return array(
 				"active" => $this->isActive("udpo"),
 				"icon"	 => "icon-shopping-cart",
@@ -131,14 +150,57 @@ class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Block_Templat
 	}
 	
 	public function getSettingSection() {
+		
+		$groupOne = array();
 		if($this->isAllowed("udropship/vendor/preferences")){
-			return array(
+			$groupOne[] = array(
 				"active" => $this->isActive("preferences"),
 				"icon"	 => "icon-wrench",
 				"label"	 => $this->__('Preferences'),
 				"url"	 => $this->getUrl('udropship/vendor/preferences')
 			);
 		}
+		
+				
+		if($this->isModuleActive('zolagooperator') && $this->isAllowed("zolagooperator")){
+			$groupOne[] = array(
+				"active" => $this->isActive("zolagooperator"),
+				"icon"	 => "icon-wrench",
+				"label"	 => $this->__('Operators'),
+				"url"	 => $this->getUrl('udropship/operator')
+			);
+		}
+		
+		if($this->isModuleActive('zolagopos') && $this->isAllowed("zolagopos")){
+			$groupOne[] = array(
+				"active" => $this->isActive("zolagopos"),
+				"icon"	 => "icon-wrench",
+				"label"	 => $this->__('POS'),
+				"url"	 => $this->getUrl('udropship/pos')
+			);
+		}
+		
+		if($this->getVendor()->getAllowTiershipModify() && $this->isAllowed("udtiership")){
+			$groupOne[] = array(
+				"active" => $this->isActive("tiership_rates"),
+				"icon"	 => "icon-wrench",
+				"label"	 => $this->__('Shipping Rates'),
+				"url"	 => $this->getUrl('udtiership/vendor/rates')
+			);
+		}
+		
+		$grouped = $this->_processGroups($groupOne);
+		
+		if(count($grouped)){
+			return array(
+				"label"		=> $this->__("Settings"),
+				"active"	=> $this->isActive(array("preferences", "zolagooperator", "zolagopos", "tiership_rates")),
+				"icon"		=> "icon-folder-open",
+				"url"		=> "#",
+				"children"	=> $grouped
+			);
+		}
+		
 		return null;
 	}
 	
@@ -165,7 +227,7 @@ class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Block_Templat
 		
 		// Mass edit
 		if ($this->isModuleActive('Zolago_Catalog') && $this->isAllowed("udprod/vendor_mass")){
-			$groupOne[] = array(
+			$groupTwo[] = array(
 				"active" => $this->isActive("udprod_mass"),
 				"label"	 => $this->__('Mass Actions'),
 				"url"	 => $this->getUrl('udprod/vendor_mass')
