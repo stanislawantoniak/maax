@@ -15,11 +15,49 @@
 			</block>
 		</reference>
 	</udprod_vendor_mass_index>
+	<udprod_vendor_image_queue>
+		<update handle="udropship_vendor" />
+		<update handle="boostrap" />
+		<reference name="head">
+		   <!--
+		    <action method="removeItem"><type>js</type><name>prototype/prototype.js</name></action>
+		    <action method="removeItem"><type>js</type><name>prototype/validation.js</name></action>
+		    <action method="removeItem"><type>js</type><name>scriptaculous/scriptaculos.js</name></action>
+		    <action method="removeItem"><type>js</type><name>scriptaculous/controls.js</name></action>
+		    <action method="removeItem"><type>js</type><name>scriptaculous/effects.js</name></action>
+		    <action method="removeItem"><type>js</type><name>scriptaculous/dragdrop.js</name></action>
+		    <action method="removeItem"><type>js</type><name>scriptaculous/slider.js</name></action>
+		    <action method="removeItem"><type>js</type><name>varien/js.js</name></action>
+		    <action method="removeItem"><type>js</type><name>varien/form.js</name></action>
+		    <action method="removeItem"><type>js</type><name>varien/menu.js</name></action>
+		    <action method="removeItem"><type>js</type><name>mage/translate.js</name></action>
+		    <action method="removeItem"><type>js</type><name>unirgy/modal.js</name></action>
+		    <action method="removeItem"><type>js</type><name>unirgy/banner_media.js</name></action>
+		    <action method="removeItem"><type>js</type><name>unirgy/slider.js</name></action>
+		    <action method="removeItem"><type>skin_js</type><name>plugins/jquery-ui/jquery-ui-1.10.2.custom.min.js</name></action>
+		  -->
+		    <action method="addItem"><type>skin_js</type><name>plugins/plupload/jquery-ui/js/jquery-ui-1.10.4.min.js</name></action>
+		    <action method="addItem"><type>skin_js</type><name>plugins/plupload/plupload.full.min.js</name></action> 
+		    <action method="addItem"><type>skin_js</type><name>plugins/plupload/jquery.ui.plupload/jquery.ui.plupload.min.js</name></action>
+		    <action method="addCss"><stylesheet>plugins/plupload/jquery-ui/css/ui-lightness/jquery-ui-1.10.4.css</stylesheet></action>
+		    <action method="addCss"><stylesheet>plugins/plupload/jquery.ui.plupload/css/jquery.ui.plupload.css</stylesheet></action>
+		</reference>
+		<reference name="content">
+			<block name="image" type="zolagocatalog/vendor_image" template="zolagocatalog/image.phtml">			    
+            </block>		    
+		</reference>
+	</udprod_vendor_image_queue>
 	<udprod_vendor_image_index>
 		<update handle="udropship_vendor" />
-		<update handle="formkey" />
-		<update handle="adminhtml_head" />
+		<update handle="boostrap" />
+		<reference name="head">
+		    <action method="addItem"><type>skin_js</type><name>plugins/plupload/plupload.full.min.js</name></action>
+		    <action method="addItem"><type>skin_js</type><name>plugins/plupload/jquery.plupload.queue/jquery.plupload.queue.js</name></action>
+		    <action method="addCss"><stylesheet>plugins/plupload/jquery.plupload.queue/css/jquery.plupload.queue.css</stylesheet></action>
+		</reference>
 		<reference name="content">
+			<block name="mass" type="zolagocatalog/vendor_image_queue" template="zolagocatalog/image/queue.phtml">			    
+            </block>		    
 		</reference>
 	</udprod_vendor_image_index>
 </layout>
