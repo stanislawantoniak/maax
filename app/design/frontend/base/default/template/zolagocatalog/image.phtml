@@ -1,5 +1,6 @@
 <div class="text-center">
-<form id="form" method="post">
+
+<form id="form" method="post" action="<?php echo  Mage::getUrl('udprod/vendor_image/send');?>">
 	<div id="uploader">
 		<p>Your browser doesn't have Flash, Silverlight or HTML5 support.</p>
 	</div>
@@ -9,15 +10,15 @@
 
 <script type="text/javascript">
 // Initialize the widget when the DOM is ready
-jQuery(document).ready(function() {
-	jQuery("#uploader").plupload({
+jQuery(function() {
+	var uploader = jQuery("#uploader").plupload({
 		// General settings
-		runtimes : 'html5,flash,silverlight,html4',
-		url : '../upload.php',
+		runtimes : 'html5,html4',
+		url : '<?php echo Mage::getUrl('udprod/vendor_image/upload'); ?>',
 
 		// User can upload no more then 20 files in one go (sets multiple_queues to false)
 		max_file_count: 20,
-		
+		max_file_size: '2mb',		
 		chunk_size: '1mb',
 
 		// Resize images on clientside if we can
@@ -28,19 +29,13 @@ jQuery(document).ready(function() {
 			crop: true // crop to exact dimensions
 		},
 		
-		filters : {
-			// Maximum file size
-			max_file_size : '1000mb',
-			// Specify what files to browse for
-			mime_types: [
+		filters : [
 				{title : "Image files", extensions : "jpg,gif,png"},
-				{title : "Zip files", extensions : "zip"}
-			]
-		},
+		],
 
 		// Rename files by clicking on their titles
 		rename: true,
-		
+		multiple_queues: true,
 		// Sort files
 		sortable: true,
 
@@ -55,12 +50,17 @@ jQuery(document).ready(function() {
 		},
 
 		// Flash settings
-		flash_swf_url : 'js/plupload/Moxie.swf',
+		flash_swf_url : '../../js/Moxie.swf',
 
 		// Silverlight settings
-		silverlight_xap_url : 'js/plupload/Moxie.xap'
+		silverlight_xap_url : '../../js/Moxie.xap',
+		init : {
+			 FilesAdded: function(up, files) {
+			 	up.disableBrowse(false);
+			 }
+		}
+		
 	});
-
 
 	// Handle the case when form was submitted before uploading has finished
 	jQuery('#form').submit(function(e) {
@@ -79,6 +79,13 @@ jQuery(document).ready(function() {
 		return false; // Keep the form from submitting
 	});
 });
+function turn_on_uploader() {
+			 	alert('begin');
+			 	for (a in jQuery('#uploader').plupload()) {
+			 		console.log(a);
+			 	}
+			 	alert('end');
+}
 </script>
 
 </div>
