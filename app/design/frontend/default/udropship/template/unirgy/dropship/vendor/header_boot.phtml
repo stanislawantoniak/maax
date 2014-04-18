@@ -1,39 +1,12 @@
 <?php
-/**
- * Unirgy LLC
- *
- * NOTICE OF LICENSE
- *
- * This source file is subject to the EULA
- * that is bundled with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://www.unirgy.com/LICENSE-M1.txt
- *
- * @category   Unirgy
- * @package    Unirgy_Dropship
- * @copyright  Copyright (c) 2008-2009 Unirgy LLC (http://www.unirgy.com)
- * @license    http:///www.unirgy.com/LICENSE-M1.txt
- */
-?>
-<?php
-
+$_session = Mage::getSingleton('udropship/session');
+$_vendor = $_session->getVendor();
+$_currentLocale = Mage::app()->getLocale()->getLocaleCode();
+$_logoHeader = Mage::app()->getStore($_vendor->getLabelStore())->getGroup()->getName();
 $_allowedLocale = array(
 	"pl_PL"=>array("symbol"=>$this->__("PL"), "name"=>$this->__("Polish")), 
 	"en_US"=>array("symbol"=>$this->__("EN"), "name"=>$this->__("English"))
 );
-$_session = Mage::getSingleton('udropship/session');
-$_vendor = $_session->getVendor();
-$_logoHeader = Mage::app()->getStore($_vendor->getLabelStore())->getGroup()->getName();
-$_currentLocale = Mage::app()->getLocale()->getLocaleCode();
-$_isUdpo = Mage::helper('udropship')->isUdpoActive();
-$_isUdreport = Mage::helper('udropship')->isModuleActive('Unirgy_DropshipVendorReport');
-$_dashboardUrl = $_isUdpo ? $this->getUrl('udpo/vendor') : $this->getUrl('udropship/vendor');
-$_dashboardText = $_isUdpo ? $this->__("Orders"): $this->__("Dashboard");
-$_active = $this->getActivePage();
-$_isUrmaActive = Mage::helper('udropship')->isModuleActive('Unirgy_Rma');
-$_isUstockPoActive = Mage::helper('udropship')->isModuleActive('ustockpo')
-     && $_session->isLoggedIn() && $_session->getVendor()->getDistributorId();
-$_isTierShip = $_session->getVendor()->getAllowTiershipModify();
 ?>
 
 <header class="header navbar navbar-fixed-top" role="banner">
@@ -58,103 +31,7 @@ $_isTierShip = $_session->getVendor()->getAllowTiershipModify();
 		</a>
 		<!-- /Sidebar Toggler -->
 
-
-		<!-- Top Left Menu -->
-		<ul class="nav navbar-nav navbar-left hidden-xs hidden-sm">
-			<?php if($_session->isLoggedIn()):?>
-				<?php if($_session->isAllowed("udpo/vendor")):?>
-					<li class="<?php if ($_active=='dashboard'): ?>active<?php endif ?>"><a href="<?php echo $_dashboardUrl?>"><?php echo $_dashboardText; ?></a></li>
-				<?php endif;?>
-
-					<li class="dropdown"> 
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown"> <?php echo $this->__("Catalog");?> <i class="icon-caret-down small"></i> </a>
-						<ul class="dropdown-menu"> 
-							<?php if (Mage::helper('udropship')->isModuleActive('udprod') &&$_session->isAllowed("udprod/vendor")): ?>
-								<li <?php if ($_active=='udprod'): ?>class="active"<?php endif ?>>
-									<a href="<?php echo $this->getUrl('udprod/vendor/products')?>">
-										<i class="icon-pencil"></i> <?php echo $this->__('Products Edit')?>
-									</a>
-								</li>
-							<?php endif ?>
-							<?php if (Mage::helper('core')->isModuleEnabled('Zolago_Catalog') && $_session->isAllowed("udprod/vendor_mass")): ?>
-								<li <?php if ($_active=='udprod_mass'): ?>class="active"<?php endif ?>> 
-									<a href="<?php echo $this->getUrl('udprod/vendor_mass')?>">
-										<i class="icon-list"></i> <?php echo $this->__('Mass Actions')?>
-									</a>
-								</li>
-							<?php endif ?>
-							<?php if (Mage::helper('core')->isModuleEnabled('Zolago_Catalog') && $_session->isAllowed("udprod/vendor_image")): ?>
-								<li class="divider"></li> 
-								<li <?php if ($_active=='udprod_image'): ?>class="active"<?php endif ?>>
-									<a href="<?php echo $this->getUrl('udprod/vendor_image')?>">
-										<i class="icon-camera"></i> <?php echo $this->__('Mass Images')?>
-									</a>
-								</li>
-							<?php endif ?>
-						</ul> 
-					</li>
-
-					<?php if ($_isUrmaActive && $_session->isAllowed("urma/vendor") && $_session->isLoggedIn()): ?>
-						<li <?php if ($_active=='urmas'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('urma/vendor/') ?>"><?php echo $this->__('Returns')?></a></li>
-					<?php endif ?>
-					<?php if ($_isUstockPoActive && $_session->isAllowed("ustockpos") && $_session->isLoggedIn()): ?>
-							<li <?php if ($_active=='ustockpos'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('ustockpo/vendor/') ?>"><?php echo $this->__('Stock POs')?></a></li>
-					<?php endif ?>
-					<?php if ($_isUstockPoActive && $_session->isAllowed("ustockpos") && $_session->isLoggedIn()): ?>
-							<li <?php if ($_active=='pending_ustockpo'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('ustockpo/vendor/pendingUstockpo') ?>"><?php echo $this->__('Pending Stock PO')?></a></li>
-					<?php endif ?>
-					<?php if ($_isTierShip && $_session->isAllowed("udtiership") && $_session->isLoggedIn()): ?>
-						<li <?php if ($_active=='tiership_rates'): ?>class="active"<?php endif ?>><a href="<?php echo Mage::helper('udtiership')->getVendorEditUrl()?>"><?php echo $this->__('Shipping Rates')?></a></li>
-					<?php endif ?>
-					<?php if (0&&Mage::helper('udropship')->isModuleActive('udtiercom')): ?>
-						<li <?php if ($_active=='tiercom_rates'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('udtiercom/vendor/rates')?>"><?php echo $this->__('Commission Percents')?></a></li>
-					<?php endif ?>
-					<?php if (false && $_session->getVendor()->getLabelType()): ?>
-							<li <?php if ($_active=='batches'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('udropship/vendor/batches')?>"><?php echo $this->__('Label Batches')?></a></li>
-					<?php endif ?>
-
-							<?php if (Mage::helper('udropship')->isModuleActive('Unirgy_DropshipBatch')): ?>
-								<li <?php if ($_active=='importstock'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('udbatch/vendor_batch/importStock') ?>" ><?php echo $this->__('Import Stock')?></a></li>
-								<li <?php if ($_active=='importorders'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('udbatch/vendor_batch/importOrders') ?>" ><?php echo $this->__('Import Tracking')?></a></li>
-							<?php endif ?>
-					<?php if (Mage::helper('udropship')->isModuleActive('modules/Unirgy_DropshipMulti') && $_session->isLoggedIn() ): ?>
-							<li <?php if ($_active=='stockprice'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('udmulti/vendor_product')?>"><?php echo $this->__('Stock And Price')?></a></li>
-					<?php elseif($_session->isAllowed("udropship/vendor/product") && $_session->isLoggedIn()): ?>
-							<li <?php if ($_active=='stockprice'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('udropship/vendor/product')?>"><?php echo $this->__('Stock')?></a></li>
-					<?php endif ?>
-
-
-					<?php if (Mage::helper('udropship')->isModuleActive('zolagopos') && $_session->isAllowed("pos") && $_session->isLoggedIn()): ?>
-							<li <?php if ($_active=='zolagopos'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('udropship/pos')?>"><?php echo $this->__('POS')?></a></li>
-					<?php endif ?>
-					<?php if (Mage::helper('udropship')->isModuleActive('zolagooperator') && $_session->isAllowed("zolagooperator") && $_session->isLoggedIn()): ?>
-							<li <?php if ($_active=='zolagooperator'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('udropship/operator')?>"><?php echo $this->__('Operators')?></a></li>
-					<?php endif ?>
-					<?php if (Mage::helper('udropship')->isModuleActive('udsell')): ?>
-						<li <?php if ($_active=='myudsell'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('udsell/index/mysellSearch')?>"><?php echo $this->__('My Sell List')?></a></li>
-						<li <?php if ($_active=='udsell'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('udsell/index/sellSearch')?>"><?php echo $this->__('Select &amp; Sell')?></a></li>
-					<?php endif ?>
-					<?php if ($_isUdreport): ?>
-						<li <?php if ($_active=='udrshipment'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('udreport/vendor/shipment')?>"><?php echo $this->__('Shipments Report')?></a></li>
-						<?php if ($_isUdpo): ?>
-						<li <?php if ($_active=='udrudpo'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('udreport/vendor/udpo')?>"><?php echo $this->__('Advanced PO Report')?></a></li>
-						<?php endif ?>
-					<?php endif ?>
-					<?php if (Mage::helper('udropship')->isModuleActive('Unirgy_DropshipManualLabel')
-						&& $_session->isAllowed("umanlabel")
-						&& $_session->isLoggedIn()): ?>
-						<li <?php if ($_active=='umanlabels'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('umanlabel/vendor')?>"><?php echo $this->__('Manual Labels')?></a></li>
-					<?php endif ?>
-					<?php if (Mage::helper('udropship')->isModuleActive('udqa') && $_session->isAllowed("udqa/vendor") && $_session->isLoggedIn()): ?>
-							<li <?php if ($_active=='udqa'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('udqa/vendor')?>">
-								<?php echo $this->__('Customer Questions')?></a>
-							</li>
-					<?php endif ?>
-				<?php else:?>
-					<li class="<?php if ($_active=='dashboard'): ?>active<?php endif ?>"><a href="<?php echo Mage::getUrl("udropship/vendor/login");?>"><?php echo $this->__("Login"); ?></a></li>
-			<?php endif;?>
-		</ul>
-		<!-- /Top Left Menu -->
+		<?php echo $this->getChildHtml("topmenu");?>
 
 		<?php if($_session->isLoggedIn()):?>
 		<!-- Top Right Menu -->

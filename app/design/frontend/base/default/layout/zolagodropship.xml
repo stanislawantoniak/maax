@@ -137,6 +137,7 @@
 			<action method="setTemplate">
 				<template>unirgy/dropship/vendor/header_boot.phtml</template>
 			</action>
+			<block name="header.topmenu" as="topmenu" type="zolagodropship/vendor_menu_topmenu" template="unirgy/dropship/vendor/menu/topmenu.phtml"/>
 		</reference>
 	</bootstrap>
 	<udropship_vendor>
