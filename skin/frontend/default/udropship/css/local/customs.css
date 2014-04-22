@@ -134,6 +134,9 @@ select.form-control {
 .dl-horizontal.orders {
   min-height: 180px;
 }
+table.foot-empty-cells tfoot td:empty {
+  visibility: hidden;
+}
 @media (min-width: 768px) and (max-width: 1200px) {
   .dl-horizontal.dl-z dt {
     width: 120px;
