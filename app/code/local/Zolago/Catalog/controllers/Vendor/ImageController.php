@@ -5,45 +5,102 @@ class Zolago_Catalog_Vendor_ImageController
     /**
      * Index
      */
-    public function indexAction() {        
-        $this->_renderPage(null, 'udprod_image_queue');        
+    public function indexAction() {
+        $this->_renderPage(null, 'udprod_image_queue');
     }
-    public function queueAction() {        
-        $this->_renderPage(null, 'udprod_image');        
+    public function queueAction() {
+        $this->_renderPage(null, 'udprod_image');
     }
-    
+    public function connectorAction() {
+        $path = 'lib/ElFinder';
+        include_once $path.DIRECTORY_SEPARATOR.'elFinderConnector.class.php';
+        include_once $path.DIRECTORY_SEPARATOR.'elFinder.class.php';
+        include_once $path.DIRECTORY_SEPARATOR.'elFinderVolumeDriver.class.php';
+        include_once $path.DIRECTORY_SEPARATOR.'elFinderVolumeLocalFileSystem.class.php';
+// Required for MySQL storage connector
+// include_once dirname(__FILE__).DIRECTORY_SEPARATOR.'elFinderVolumeMySQL.class.php';
+// Required for FTP connector support
+// include_once dirname(__FILE__).DIRECTORY_SEPARATOR.'elFinderVolumeFTP.class.php';
+
+
+        /**
+         * Simple function to demonstrate how to control file access using "accessControl" callback.
+         * This method will disable accessing files/folders starting from  '.' (dot)
+         *
+         * @param  string  $attr  attribute name (read|write|locked|hidden)
+         * @param  string  $path  file path relative to volume root directory started with directory separator
+         * @return bool|null
+         **/
+        function access($attr, $path, $data, $volume) {
+            return strpos(basename($path), '.') === 0       // if file/folder begins with '.' (dot)
+                                                    ? !($attr == 'read' || $attr == 'write')    // set read+write to false, other (locked+hidden) set to true
+                                                    :  null;                                    // else elFinder decide it itself
+        }
+        $vendor = $this->_getSession()->getVendor();
+        if ($vendor) {
+            $extendedPath = $vendor->getId();
+        } else {
+            $extendedPath = '0';
+        }
+        $path = 'var'.DIRECTORY_SEPARATOR.'plupload'.DIRECTORY_SEPARATOR.$extendedPath;
+        $opts = array(
+                    // 'debug' => true,
+                    'roots' => array(
+                        array(
+                            'driver'        => 'LocalFileSystem',   // driver for accessing file system (REQUIRED)
+                            'path'          => $path,         // path to files (REQUIRED)
+                            'URL'           => dirname($_SERVER['PHP_SELF']) . 'var/plupload/'.$extendedPath, // URL to files (REQUIRED)
+                            'accessControl' => 'access'             // disable and hide dot starting files (OPTIONAL)
+                        )
+                    )
+                );
+
+// run elFinder
+        // Create target dir
+        if (!file_exists($path)) {
+            @mkdir($path);
+        }
+        $connector = new elFinderConnector(new elFinder($opts));
+        $connector->run();
+
+
+    }
     /**
      * send
      */
-    public function sendAction() { ?>
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
-<head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
-<title>Plupload - Form dump</title>
-</head>
-<body style="font: 13px Verdana; background: #eee; color: #333">
-	
-<h1>Post dump</h1>
+    public function sendAction() {
+        ?>
+        <!DOCTYPE html>
+        <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
+                    <head>
+                    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+                                     <title>Plupload - Form dump</title>
+                                     </head>
+                                     <body style="font: 13px Verdana; background: #eee; color: #333">
 
-<p>Shows the form items posted.</p>
+                                             <h1>Post dump</h1>
 
-<table>
-	<tr>
-		<th>Name</th>
-		<th>Value</th>
-	</tr>
-	<?php $count = 0; foreach ($_POST as $name => $value) { ?>
-	<tr class="<?php echo $count % 2 == 0 ? 'alt' : ''; ?>">
-		<td><?php echo htmlentities(stripslashes($name)) ?></td>
-		<td><?php echo nl2br(htmlentities(stripslashes($value))) ?></td>
-	</tr>
-	<?php } ?>
-</table>
+                                             <p>Shows the form items posted.</p>
 
-</body>
-</html>
-<?php
+                                             <table>
+                                             <tr>
+                                             <th>Name</th>
+                                             <th>Value</th>
+                                             </tr>
+                                             <?php $count = 0;
+        foreach ($_POST as $name => $value) {
+            ?>
+            <tr class="<?php echo $count % 2 == 0 ? 'alt' : ''; ?>">
+                          <td><?php echo htmlentities(stripslashes($name)) ?></td>
+                          <td><?php echo nl2br(htmlentities(stripslashes($value))) ?></td>
+                          </tr>
+                          <?php
+                } ?>
+        </table>
+
+        </body>
+        </html>
+        <?php
     }
     /**
      * upload
@@ -86,9 +143,16 @@ class Zolago_Catalog_Vendor_ImageController
 
         // Uncomment this one to fake upload time
         // usleep(5000);
-
+        
         // Settings
         $targetDir = 'var' . DIRECTORY_SEPARATOR . "plupload";
+        
+        $vendor = $this->_getSession()->getVendor();
+        if ($vendor) {
+            $targetDir .= DIRECTORY_SEPARATOR. $vendor->getId();
+        } else {
+            $targetDir .= DIRECTORY_SEPARATOR. '0';
+        }
         //$targetDir = 'uploads';
         $cleanupTargetDir = true; // Remove old files
         $maxFileAge = 5 * 3600; // Temp file age in seconds
@@ -156,7 +220,7 @@ class Zolago_Catalog_Vendor_ImageController
                 die(' {"jsonrpc" : "2.0", "error" : {"code": 101, "message": "Failed to open input stream."}, "id" : "id"}');
             }
         }
-        
+
         while ($buff = fread($in, 4096)) {
             fwrite($out, $buff);
         }
