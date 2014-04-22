@@ -1,0 +1,234 @@
+<div class="black-nav">
+    <div class="container">
+        <div class="row ">
+            <div class="col-xs-1">
+                <a href="#" class="hidden-xs ico_menu"><img src="<?php echo $this->getSkinUrl('images/menu_ico.png') ?>" /></a>
+                <a href="#" class="visible-xs ico_menu2"><img src="<?php echo $this->getSkinUrl('images/mobile_ico_menu.png') ?>" /></a>
+            </div>
+            <div class="col-xs-3">
+                <?php
+                $catalogSearchHelper =  $this->helper('catalogsearch');
+                ?>
+                <form id="search_mini_form" action="<?php echo $catalogSearchHelper->getResultUrl() ?>" method="get" class="form-inline" role="form">
+                    <div class="form-search form-group">
+                        <input id="search" type="text" name="<?php echo $catalogSearchHelper->getQueryParamName() ?>" value="<?php echo $catalogSearchHelper->getEscapedQueryText() ?>" class="search-input hidden-xs" maxlength="<?php echo $catalogSearchHelper->getMaxQueryLength();?>" />
+                        <select class="search-select hidden-xs">
+                            <option>w całej galerii</option>
+                            <option></option>
+                        </select>
+                        <button type="submit" title="<?php echo $this->__('Search') ?>" class="modago-search-btn hidden-xs"></button>
+                        <div class="visible-xs mobile-search-bg">
+                            <a class="visible-xs mobile-search-ico" href=""><img src="<?php echo $this->getSkinUrl('images/ico_mobile_search.png'); ?>" alt=""/></a>
+                        </div>
+                        <div id="search_autocomplete" class="search-autocomplete"></div>
+                        <script type="text/javascript">
+                            //<![CDATA[
+                            var searchForm = new Varien.searchForm('search_mini_form', 'search', '<?php echo $this->__('Search entire store here...') ?>');
+                            searchForm.initAutocomplete('<?php echo $catalogSearchHelper->getSuggestUrl() ?>', 'search_autocomplete');
+                            //]]>
+                        </script>
+                    </div>
+                </form>
+            </div>
+            <div class="col-xs-4">
+                <a href="<?php echo $this->getUrl('') ?>" class="hidden-xs logo"><img src="<?php echo $this->getLogoSrc() ?>" alt="<?php echo $this->getLogoAlt(); ?>" /></a>
+                <a href="<?php echo $this->getUrl('') ?>" class="visible-xs"><img src="<?php echo $this->getSkinUrl('images/mobile_logo.png') ?>" alt="<?php echo $this->getLogoAlt(); ?>" /></a>
+            </div>
+            <div class="col-xs-4 user-space">
+                <ul>
+                    <li class="your-account hidden-sm hidden-xs">
+                        <a href="">
+                            <span class="count">3</span>
+                            <img src="<?php echo $this->getSkinUrl('images/ico_your_account.png'); ?>" alt="" />
+                            <span>Twoje konto</span>
+                        </a>
+                    </li>
+                    <li class="favorites">
+                        <a href="" class="hidden-xs">
+                            <span class="count">3</span>
+                            <img src="<?php echo $this->getSkinUrl('images/ico_favorites.png'); ?>" alt="" />
+                            <span>Ulubione</span>
+                        <a href="" class="visible-xs">
+                            <span class="count">3</span>
+                            <img src="<?php echo $this->getSkinUrl('images/ico_favorites.png'); ?>" alt="" />
+                            <span>Ulubione</span>
+                        </a>
+                    </li>
+                    <li class="basket">
+                        <a href="" class="hidden-xs">
+                            <span class="count">100</span>
+                            <img src="<?php echo $this->getSkinUrl('images/ico_basket.png'); ?>" alt=""/>
+                            <span>Koszyk</span>
+                        </a>
+                        <a href="" class="visible-xs">
+                            <span class="count">100</span>
+                            <img src="<?php echo $this->getSkinUrl('images/ico_basket.png'); ?>" alt=""/>
+                            <span>Koszyk</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="gold-strip-nav"></div>
+
+<div class="nav-bg"></div>
+<div class="top-menu-wrapper">
+    <hr class="top-hr"/>
+
+    <div class="container">
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only"><?php echo __("Toggle navigation"); ?></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li  class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">ona <b class="caret"></b></a>
+                            <ul class="dropdown-menu col-sm-12">
+                                <li>
+                                    <div class="col-sm-12">
+
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">on <b class="caret"></b></a>
+                            <ul class="dropdown-menu col-sm-12">
+                                <li>
+                                    <div class="col-sm-12">
+                                        ona
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">dziecko <b class="caret"></b></a>
+                            <ul class="dropdown-menu col-sm-12">
+                                <li>
+                                    <div class="col-sm-2">
+                                        <a href="#" class="dropdown-title">odzież</a>
+                                        <a href="#">bluzki</a>
+                                        <a href="#">bluzy</a>
+                                        <a href="#" class="dropdown-title">odzież</a>
+                                        <a href="#">kurtki i płaszcze</a>
+                                        <a href="#">rajstopy i skarpetki</a>
+                                        <a href="#" class="dropdown-seemore">zobacz więcej ></a>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <a href="#" class="dropdown-title">odzież</a>
+                                        <a href="#">bluzki</a>
+                                        <a href="#">bluzy</a>
+                                        <a href="#" class="dropdown-title">odzież</a>
+                                        <a href="#">kurtki i płaszcze</a>
+                                        <a href="#">rajstopy i skarpetki</a>
+                                        <a href="#" class="dropdown-seemore">zobacz więcej ></a>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <a href="#" class="dropdown-title">odzież</a>
+                                        <a href="#">bluzki</a>
+                                        <a href="#">bluzy</a>
+                                        <a href="#" class="dropdown-title">odzież</a>
+                                        <a href="#">kurtki i płaszcze</a>
+                                        <a href="#">rajstopy i skarpetki</a>
+                                        <a href="#" class="dropdown-seemore">zobacz więcej ></a>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <a href="#" class="dropdown-title">odzież</a>
+                                        <a href="#">bluzki</a>
+                                        <a href="#">bluzy</a>
+                                        <a href="#" class="dropdown-title">odzież</a>
+                                        <a href="#">kurtki i płaszcze</a>
+                                        <a href="#">rajstopy i skarpetki</a>
+                                        <a href="#" class="dropdown-seemore">zobacz więcej ></a>
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <a href="#" class="dropdown-title">odzież</a>
+                                        <a href="#">bluzki</a>
+                                        <a href="#">bluzy</a>
+                                        <a href="#" class="dropdown-title">odzież</a>
+                                        <a href="#">kurtki i płaszcze</a>
+                                        <a href="#">rajstopy i skarpetki</a>
+                                        <a href="#" class="dropdown-seemore">zobacz więcej ></a>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <a href="#" class="dropdown-title"><img src="<?php echo $this->getSkinUrl('images/hilfinger.jpg'); ?>" width="247" /> </a>
+                                        <a href="#" class="submenu-close"><img src="<?php echo $this->getSkinUrl('images/icon-cross-close.gif'); ?>" /></a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">wybierz sklep</b></a>
+                        </li>
+                        <li>
+                            <a href="#">outlet</a>
+                        </li>
+                        <li>
+                            <a href="#">w twoim stylu</a>
+                        </li>
+                    </ul>
+
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+        </nav>
+        <div class="col-sm-12" id="submenu"></div>
+    </div>
+
+</div>
+<!---->
+<!--<div class="container hidden-xs">-->
+<!--    <div class="row">-->
+<!--        <div class="col-sm-12 modago-breadcrumb">-->
+<!--            <a href="">Strona główna</a><span>></span>-->
+<!--            <a href="">Ona</a><span>></span>-->
+<!--            <a href="">Odzież wierzchnia</a><span>></span>-->
+<!--            <a href="">Zara krótki płaszcz z metalowymi guzikami</a>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<!---->
+<!--<div class="container filters-top">-->
+<!--    <div class="row">-->
+<!--        <div class="col-sm-12"><h1>Sukienki</h1></div>-->
+<!--        <div class="col-sm-2 filter-header-p">-->
+<!--            <p>aktualnie oglądasz:</p>-->
+<!--        </div>-->
+<!--        <div class="col-sm-8">-->
+<!--            <div class="chosen-filter-wr">-->
+<!--                <span class="chosen-filter-label">rozmiar:</span>-->
+<!--                <div class="filter-btn-wr">-->
+<!--                    <span class="filter-top-txt">M</span>-->
+<!--                    <a href="" class="filter-top-close"><img src="--><?php //echo $this->getSkinUrl('images/ico-filter-top-close.png'); ?><!--" /></a>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="chosen-filter-wr">-->
+<!--                <span class="chosen-filter-label">marka:</span>-->
+<!--                <div class="filter-btn-wr">-->
+<!--                    <span class="filter-top-txt">Zara</span>-->
+<!--                    <a href="" class="filter-top-close"><img src="--><?php //echo $this->getSkinUrl('images/ico-filter-top-close.png'); ?><!--" /></a>-->
+<!--                </div>-->
+<!--                <div class="filter-btn-wr">-->
+<!--                    <span class="filter-top-txt">Adidas</span>-->
+<!--                    <a href="" class="filter-top-close"><img src="--><?php //echo $this->getSkinUrl('images/ico-filter-top-close.png'); ?><!--" /></a>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="col-sm-2">-->
+<!--            <a href="" class="filter-top-clear">-->
+<!--                <span>wyczyść wszystko</span>-->
+<!--                <img class="filter-top-close" src="--><?php //echo $this->getSkinUrl('images/ico-filter-top-close.png'); ?><!--" />-->
+<!--            </a>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+

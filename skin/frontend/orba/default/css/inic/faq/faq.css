@@ -1,0 +1,136 @@
+/**
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.magesupport.com/license/
+ * 
+ * @package    Inic_Faq
+ * @copyright  Copyright (c) 2013 Inic
+ * @license    http://www.magesupport.com/license/
+ */
+.page-title{
+	margin-top: 30px;
+    overflow: visible;
+}
+h2{
+	border-bottom: 1px solid #DDDDDD;
+	margin-bottom: 15px;
+}
+ 
+table tbody tr:first-child td:first-child {
+    border-radius: 4px 0 0 0;
+}
+table td {
+    vertical-align: top;
+}
+table th, table td {
+    line-height: 18px;
+    padding: 10px 10px 9px;
+    text-align: left;
+}
+.label.important {
+    background-color: #C43C35;
+}
+.label {
+    background-color: #008800;
+    border-radius: 3px 3px 3px 3px;
+    color: #FFFFFF;
+    font-size: 9.75px;
+    font-weight: bold;
+    padding: 1px 3px 2px;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.faq-container{
+	 width: 100%;
+}
+.faq-frequent-container{
+	 width: 100%;
+}
+.faq-griddata-table{width: 47%;float:left;}
+.faq-listdata-table{
+    width: 100%;
+}
+.faq-listdata-table{
+    border: 1px solid #DDDDDD;
+    border-collapse: separate;
+    border-radius: 4px 4px 4px 4px;
+    font-size: 13px;
+    margin-bottom: 18px;
+    padding: 0;
+}
+.faq-griddata-table th + th, .faq-griddata-table td + td ,table.faq-listdata-table th + th, table.faq-listdata-table td + td{
+    border-left: 1px solid #DDDDDD;
+}
+.faq-griddata-table tr + tr td ,table.faq-listdata-table tr + tr td {
+    border-top: 1px solid #DDDDDD;
+}
+.faq-detail table tbody tr td:first-child{
+	margin-right: 10px;
+}
+.faq-list .faq-griddata-table{
+	margin-right: 10px;
+}
+.faq-griddata-table table{
+	border: 1px solid #DDDDDD;
+    border-collapse: separate;
+    border-radius: 4px 4px 4px 4px;
+    font-size: 13px;
+    margin-bottom: 18px;
+    padding: 0;
+}
+.faq-question{
+	cursor: pointer;
+}
+
+.catname{
+cursor: pointer;
+text-decoration: none;
+color: #2F2F2F;
+}
+
+.bk-link{
+	clear: both;
+}
+
+.expand, .collaps{
+	float:right;
+}
+.expand a{background: url("../../../images/inic/faq/plus.png") no-repeat left center; padding-left:20px; display:block;}
+
+.collaps a{background: url("../../../images/inic/faq/minus.png") no-repeat left center; padding-left:20px; display:block;}
+
+/*Search Area*/
+.faq #searchform {
+    background: url("../../../images/inic/faq/faq_search_bar.png") no-repeat scroll left top #F5F5F5;
+    height: 21px;
+    margin: 30px;
+    padding: 10px 10px 10px 30px;
+}
+
+.faq #searchform label {
+    float: left;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.faq #searchform #keyword {
+    float: left;
+    margin-left: 10px;
+}
+
+
+.faq #searchform .btnSearch {
+    background: url("../../../images/inic/faq/search.gif") no-repeat scroll left top transparent;
+    border: 0 none;
+    display: inline;
+    float: left;
+    height: 25px;
+    margin: 0 0 0 5px;
+    width: 25px;
+}
+
+/*Search Ends*/
