@@ -140,6 +140,24 @@
 			<block name="header.topmenu" as="topmenu" type="zolagodropship/vendor_menu_topmenu" template="unirgy/dropship/vendor/menu/topmenu.phtml"/>
 		</reference>
 	</bootstrap>
+	<!-- Noty handling -->
+	<noty>
+		<reference name="head">
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/noty/jquery.noty.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/noty/layouts/top.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/noty/themes/default.js</name>
+			</action>
+		</reference>
+	</noty>
+	
 	<udropship_vendor>
 		<reference name="head">
 			<action method="addCss"><stylesheet>css/zolagodropship.css</stylesheet></action>

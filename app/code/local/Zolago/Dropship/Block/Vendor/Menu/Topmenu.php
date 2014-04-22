@@ -12,10 +12,10 @@ class Zolago_Dropship_Block_Vendor_Menu_Topmenu
 		self::ITEM_RMA
 	);
 	/**
-	 * @return arrayx
+	 * @return array
 	 */
 	public function getMenu() {
-		return $this->getFullMenu();
+		return array_intersect_key($this->getFullMenu(), array_flip($this->getTopmenuSections()));
 	}
 	/**
 	 * @return array

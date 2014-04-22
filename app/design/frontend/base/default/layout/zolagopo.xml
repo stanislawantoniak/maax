@@ -14,10 +14,16 @@
 		<remove name="dashboard"/>
 		<update handle="bootstrap"/>
 		<reference name="content">			
-			<block type="core/html_calendar" name="head.udropship.calendar" as="udropship.calendar" template="unirgy/dropship/calendar.phtml"></block>
 			<block name="vendor_po" type="zolagopo/vendor_po" template="zolagopo/vendor/po.phtml"/>
 		</reference>
     </udpo_vendor_index>
+	<udpo_vendor_edit>		
+		<update handle="bootstrap"/>
+		<update handle="noty"/>
+		<reference name="content">			
+			<block name="vendor_po_edit" type="zolagopo/vendor_po_edit" template="zolagopo/vendor/po/edit.phtml"/>
+		</reference>
+    </udpo_vendor_edit>
 	<udpo_vendor_udpoinfo>
 		<reference name="info">
 			<action method="setTemplate">
