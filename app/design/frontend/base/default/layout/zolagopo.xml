@@ -12,7 +12,7 @@
 	-->
 	<udpo_vendor_index>		
 		<remove name="dashboard"/>
-		<update handle="boostrap"/>
+		<update handle="bootstrap"/>
 		<reference name="content">			
 			<block type="core/html_calendar" name="head.udropship.calendar" as="udropship.calendar" template="unirgy/dropship/calendar.phtml"></block>
 			<block name="vendor_po" type="zolagopo/vendor_po" template="zolagopo/vendor/po.phtml"/>
