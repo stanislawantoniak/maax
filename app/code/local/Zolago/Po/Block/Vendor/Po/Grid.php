@@ -300,6 +300,7 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 			break;
 			case "increment_id":
 			case "entity_id":
+			case "udropship_method":
 				$this->getCollection()->addFieldToFilter(
 						"main_table.{$column->getId()}", 
 						array("like"=>"%".$column->getFilter()->getValue()."%")

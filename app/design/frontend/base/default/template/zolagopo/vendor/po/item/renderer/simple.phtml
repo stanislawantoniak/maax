@@ -14,6 +14,12 @@
 	<td class="align-right"><?php echo Mage::helper("core")->currency($_priceInclTax);?></td>
 	<td></td>
 	<td>
-		<button class="btn btn-inverse btn-notification" data-layout="top" data-type="confirm" data-text="<?php echo Mage::helper("zolagopo")->__("Do you want to remove this item?");?>" data-modal="true">Confirm</button>
+		<button class="btn btn-xs btn-primary" >
+			<i class="icon-edit"></i>
+			<?php echo Mage::helper("zolagopo")->__("Edit item");?>
+		</button>
+		<button class="btn btn-danger btn-xs btn-notification" data-layout="top" data-type="confirm" data-text="<?php echo Mage::helper("zolagopo")->__("Do you want to remove this item?");?>" data-modal="true">
+			<i class="icon-remove"></i>
+		</button>
 	</td>
 </tr>
