@@ -19,6 +19,7 @@ class Zolago_Dropship_VendorController extends Unirgy_Dropship_VendorController 
 			}
 		}
 		return parent::indexAction();
+		
 	}
 	
 	/**

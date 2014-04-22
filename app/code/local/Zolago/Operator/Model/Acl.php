@@ -6,10 +6,10 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 	// Roles definiton
 	const ROLE_ORDER_OPERATOR						= "order_operator";
 	const ROLE_MARKETING_OFFICER					= "marketing_officer";
-	const ROLE_RMA_OPERATOR		   			    = "rma_operator";
-	const ROLE_HELPDESK							= "helpdesk";
+	const ROLE_RMA_OPERATOR							= "rma_operator";
+	const ROLE_HELPDESK								= "helpdesk";
 	const ROLE_MASS_OPERATOR						= "mass_operator";
-	const ROLE_PRODUCT_OPERATOR					= "product_operator";
+	const ROLE_PRODUCT_OPERATOR						= "product_operator";
 	
 	
 	// Reousrce definition
@@ -26,7 +26,7 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 			
 	// Restricted 
 	const RES_UDROPSHIP_VENDOR_PREFERENCES			= "udropship/vendor/preferences";
-	const RES_UDROPSHIP_VENDOR_PREFERENCES_POST	= "udropship/vendor/preferencesPost";
+	const RES_UDROPSHIP_VENDOR_PREFERENCES_POST		= "udropship/vendor/preferencesPost";
 	
 	// Po Vendor controller - whole
 	const RES_UDPO_VENDOR							= "udpo/vendor";
@@ -40,6 +40,13 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 	const RES_UDPROD_VENDOR_IMAGE					= "udprod/vendor_image";
 	// Mass editor
 	const RES_UDPROD_VENDOR_MASS					= "udprod/vendor_mass";
+	// POS Manage
+	const RES_UDROPSHIP_POS							= "udropship/pos";
+	// Operator manage
+	const RES_UDROPSHIP_OPERATOR					= "udropship/operator";
+	// Tiership manage
+	const RES_UTIERSHIP_OPERATOR					= "udtiership/vendor";
+	
 	
 
 	// Resources as array
@@ -58,24 +65,29 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		self::RES_UDPO_VENDOR						=> "Orders",
 		// RMA
 		self::RES_URMA_VENDOR						=> "RMA",
-		//  Ask Question
+		// Ask Question
 		self::RES_ASK_QUESTION						=> "Vendor ask question",
-		//  Product editor
+		// Product editor
 		self::RES_UDPROD_VENDOR						=> "Product edit",
-		//  Mass edit
+		// Mass edit
+		self::RES_UDPROD_VENDOR_MASS				=> "Mass products",
+		// Mass images
 		self::RES_UDPROD_VENDOR_IMAGE				=> "Mass images",
-		//  Mass edit
-		self::RES_UDPROD_VENDOR_MASS				=> "Mass edit",
+		// POS Manage
+		self::RES_UDROPSHIP_POS						=> "POS Manage",
+		// Operator manage
+		self::RES_UDROPSHIP_OPERATOR				=> "Operator manage",
+	
 	);
 	
 	// Roles as array
 	protected static $_currentRoles = array(
 		self::ROLE_ORDER_OPERATOR					=> "Order operator",	
 		self::ROLE_MARKETING_OFFICER				=> "Marketing officer",	
-		self::ROLE_RMA_OPERATOR					=> "RMA Operator",	
-		self::ROLE_HELPDESK						=> "Helpdesk",	
+		self::ROLE_RMA_OPERATOR						=> "RMA Operator",	
+		self::ROLE_HELPDESK							=> "Helpdesk",	
 		self::ROLE_MASS_OPERATOR					=> "Mass Operator",	
-		self::ROLE_PRODUCT_OPERATOR				=> "Product Operator"
+		self::ROLE_PRODUCT_OPERATOR					=> "Product Operator"
 	);
 	
 	
