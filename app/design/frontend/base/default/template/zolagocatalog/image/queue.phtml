@@ -33,6 +33,7 @@ function init_uploader() {
 	});
 	var uploader = jQuery('#uploader').pluploadQueue();
 	uploader.bind('UploadComplete',function() {
+		elf.sync();
 		alert('<?php echo Mage::helper('zolagocatalog')->__('Upload completed'); ?>');
 		jQuery('#uploader').remove();
 		init_uploader();
