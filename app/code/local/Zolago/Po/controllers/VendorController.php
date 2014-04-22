@@ -8,6 +8,10 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 		$this->_renderPage(array('default', 'formkey', 'adminhtml_head'), 'udpo');
 	}
 	
+	public function editAction() {
+		$this->_renderPage(null, 'udpo');
+	}
+	
 	public function saveShippingAddressAction(){
 		$req = $this->getRequest();
 		$poId = $req->getParam("po_id");

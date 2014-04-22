@@ -1,0 +1,19 @@
+<?php $_item = $this->getItem();?>
+<?php $_orderItem = $this->getItem()->getOrderItem();?>
+<?php $_key = $_item->getId();?>
+<?php $_taxPrecent = $_orderItem->getTaxPercent();?>
+<?php $_priceInclTax = $_item->getPrice()*((100+$_taxPrecent)/100);?>
+<tr>
+	<td class="align-center checkbox-column"><input type="checkbox" name="item[<?php echo $_key;?>]" value="1" class="uniform"/></td>
+	<td class="align-right"><?php echo $this->getLp();?></td>
+	<td><?php echo $this->escapeHtml($_item->getSku());?></td>
+	<td><?php echo $this->escapeHtml($_item->getName());?></td>
+	<td class="align-right"><?php echo round($_item->getQty());?></td>
+	<td class="align-right"><?php echo Mage::helper("core")->currency($_priceInclTax);?></td>
+	<td class="align-right"><!-- after complete dataflow--></td>
+	<td class="align-right"><?php echo Mage::helper("core")->currency($_priceInclTax);?></td>
+	<td></td>
+	<td>
+		<button class="btn btn-inverse btn-notification" data-layout="top" data-type="confirm" data-text="<?php echo Mage::helper("zolagopo")->__("Do you want to remove this item?");?>" data-modal="true">Confirm</button>
+	</td>
+</tr>

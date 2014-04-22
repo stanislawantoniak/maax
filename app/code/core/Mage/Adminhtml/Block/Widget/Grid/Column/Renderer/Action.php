@@ -143,6 +143,7 @@ class Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Action
                         if(isset($action['url']['params'])) {
                             $params = array_merge($action['url']['params'], $params);
                         }
+						Mage::log($this->_getUrlModelClass());
                         $action['href'] = $this->getUrl($action['url']['base'], $params);
                         unset($action['field']);
                     } else {

@@ -36,9 +36,9 @@ select.form-control{
 	.sort-arrow-desc:after{
 		.glyphicon();
 		font-size: @fontSizeMini;
-		color: @green;
+		color: @green; 
 	}
-	.sort-arrow-asc:after{
+	.sort-arrow-asc:after{ 
 		content: "\e093"; 
 	}
 	.sort-arrow-desc:after{
@@ -51,4 +51,27 @@ select.form-control{
 }
 .a-center {
 	text-align: center;
+}
+.dl-horizontal.dl-z{
+
+	dt,dd{
+		min-height: @inputHeight;
+	}
+	margin-bottom: 0;
+	margin-top: 10px;
+}
+.dl-horizontal.orders{
+	min-height: 180px;
+}
+
+@media (min-width: 768px) and (max-width: 1200px) {
+
+	.dl-horizontal.dl-z{
+		dt{
+			width: 120px;
+		}
+		dd{
+			margin-left: 130px;
+		}
+	}
 }
