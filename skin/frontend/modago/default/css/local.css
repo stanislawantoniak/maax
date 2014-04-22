@@ -48,6 +48,7 @@ h1            {font-family: Lato, sans-serif; font-size: 34px;font-weight: bold;
     padding: 0;
     list-style-type: none;
     text-align: center;
+    float: right;
 }
 
 .user-space > ul > li {
@@ -129,7 +130,7 @@ h1            {font-family: Lato, sans-serif; font-size: 34px;font-weight: bold;
     margin: 0;
     padding: 0 3px;
     width: 40%;
-    background: #ffffff url("../images/ico_search_separator.png") right 6px no-repeat;
+    background: #ffffff url("/skin/frontend/modago/default/images/ico_search_separator.png") right 6px no-repeat;
     border: none;
     font-family: 'Lato', sans-serif;
     font-size: 12px;
@@ -151,7 +152,7 @@ h1            {font-family: Lato, sans-serif; font-size: 34px;font-weight: bold;
 .modago-search-btn {
     padding:0;
     margin: 0;
-    background: url("../images/ico_search.gif") no-repeat;
+    background: url("/skin/frontend/modago/default/images/ico_search.gif") no-repeat;
     border: none;
     width: 29px;
     height: 26px;
@@ -219,11 +220,10 @@ h1            {font-family: Lato, sans-serif; font-size: 34px;font-weight: bold;
     font-style: italic;
 }
 
-.ico_menu {
-    line-height: 45px;
-}
+.ico_menu { line-height: 45px; text-align: left;}
+.ico_menu>img {margin-top: 10px;}
 
-.logo {margin-top: 4px;}
+.logo {margin-top: 4px;margin-left: 30%;}
 
 .ico_menu2 {margin-top: 8px;}
 
@@ -335,7 +335,7 @@ h1            {font-family: Lato, sans-serif; font-size: 34px;font-weight: bold;
     display: inline-block;
     box-shadow: 0 0 10px 1px #eaeaea;
     position: relative;
-    background: url("../images/bg-filter-top-btn.gif") repeat-x;
+    background: url("/skin/frontend/modago/default/images/bg-filter-top-btn.gif") repeat-x;
     margin-right: 5px;
 }
 .filter-btn-sh-inner {box-shadow: 0 -3px 5px 2px #eaeaea inset;}
@@ -363,9 +363,9 @@ h1            {font-family: Lato, sans-serif; font-size: 34px;font-weight: bold;
 #carousel-top-mobile-generic .item>img {margin: 0 auto;}
 #carousel-top-mobile-indicators {left: 50%;right: 50%;}
 
-.small-banners-lg>div {padding: 0px 0px 0px 4px;}
-.small-banners-lg>div:first-child {padding: 0px 15px 0px 15px !important;}
-.small-banners-lg>div:last-child {padding: 0px 15px 0px 4px !important;}
+/*.small-banners-lg>div {padding: 0px 0px 0px 4px;}*/
+/*.small-banners-lg>div:first-child {padding: 0px 15px 0px 15px !important;}*/
+/*.small-banners-lg>div:last-child {padding: 0px 15px 0px 4px !important;}*/
 
 
 /*inpirations*/
@@ -378,10 +378,10 @@ h1            {font-family: Lato, sans-serif; font-size: 34px;font-weight: bold;
 .jcarousel>ul>li>a:hover {text-decoration: underline;}
 .jcarousel {width: 90%;margin:0 auto;}
 .jcarousel-control-prev,.jcarousel-control-next {background: transparent;top:40%;width:24px;height: 40px;}
-.jcarousel-control-prev {left: 0;background: url("../images/ico-insp-lt.png") no-repeat;}
-.jcarousel-control-next {right: 0;background: url("../images/ico-insp-gt.png") no-repeat;}
-.jcarousel-control-prev:hover {left: 0;background: url("../images/ico-insp-lt-hover.png") no-repeat;}
-.jcarousel-control-next:hover {right: 0;background: url("../images/ico-insp-gt-hover.png") no-repeat;}
+.jcarousel-control-prev {left: 0;background: url("/skin/frontend/modago/default/images/ico-insp-lt.png") no-repeat;}
+.jcarousel-control-next {right: 0;background: url("/skin/frontend/modago/default/images/ico-insp-gt.png") no-repeat;}
+.jcarousel-control-prev:hover {left: 0;background: url("/skin/frontend/modago/default/images/ico-insp-lt-hover.png") no-repeat;}
+.jcarousel-control-next:hover {right: 0;background: url("/skin/frontend/modago/default/images/ico-insp-gt-hover.png") no-repeat;}
 .insp-carousel-title-bold {text-transform: uppercase;font-weight: bold;padding: 5px 0px;display: block;margin:0 auto;margin-top: 5px;}
 .insp-carousel-title-gray {color:#8b8b8b;padding: 5px 0px;display: block;margin:0 auto;}
 .insp-carousel-seemore {color:#484848;text-transform: uppercase;padding: 5px 0px;display: block;margin:0 auto;font-size: 11px;}
@@ -397,7 +397,7 @@ h1            {font-family: Lato, sans-serif; font-size: 34px;font-weight: bold;
 .pop-shop-lst>li>a>span.pop-shop-img-wr {line-height: 74px;height: 74px;background: #ffffff;text-align: center;width: 100%;margin-top: 0;}
 .pop-shop-lst>li>a>span.pop-shop-img-wr>img {vertical-align: middle;}
 .pop-shop-seemore {font-size: 12px; display: block;background-color: #000000;background-image:none; text-align: center;width: 245px; height: 38px;line-height: 38px;margin: 0 auto;margin-top:-38px;color: #ffffff !important;text-transform: uppercase;margin-bottom: 18px;}
-.pop-shop-seemore:hover {text-decoration: none;background: url("../images/popular-brands-hover-bg-btn.png") no-repeat;}
+.pop-shop-seemore:hover {text-decoration: none;background: url("/skin/frontend/modago/default/images/popular-brands-hover-bg-btn.png") no-repeat;}
 
 
 /*last seen*/
@@ -408,10 +408,10 @@ h1            {font-family: Lato, sans-serif; font-size: 34px;font-weight: bold;
 .jcarousel>ul.last-seen-list>li {padding: 0 7px;width: 140px;}
 .jcarousel>ul.last-seen-list>li>a>span {display: block;width: 112px;margin-top: 10px;font-weight: bold;font-size: 12px; text-align: left;}
 .jcarousel>ul.last-seen-list>li>a:hover {text-decoration: underline;}
-.carousel-small-ctr-lt {background: url("../images/ico-arrow-gray-slider-lt.png") no-repeat;box-shadow: none;border-radius: 0;}
-.carousel-small-ctr-gt {background: url("../images/ico-arrow-gray-slider-gt.png") no-repeat;box-shadow: none;border-radius: 0;}
-.carousel-small-ctr-lt:hover {background: url("../images/ico-arrow-gray-slider-lt-hover.png") no-repeat !important;}
-.carousel-small-ctr-gt:hover {background: url("../images/ico-arrow-gray-slider-gt-hover.png") no-repeat;}
+.carousel-small-ctr-lt {background: url("/skin/frontend/modago/default/images/ico-arrow-gray-slider-lt.png") no-repeat;box-shadow: none;border-radius: 0;}
+.carousel-small-ctr-gt {background: url("/skin/frontend/modago/default/images/ico-arrow-gray-slider-gt.png") no-repeat;box-shadow: none;border-radius: 0;}
+.carousel-small-ctr-lt:hover {background: url("/skin/frontend/modago/default/images/ico-arrow-gray-slider-lt-hover.png") no-repeat !important;}
+.carousel-small-ctr-gt:hover {background: url("/skin/frontend/modago/default/images/ico-arrow-gray-slider-gt-hover.png") no-repeat;}
 
 /*footer*/
 footer {background-color: #000000;}
@@ -428,7 +428,7 @@ footer {background-color: #000000;}
 .footer-connect {text-transform: uppercase;text-align: right;padding-top: 5px;}
 .footer-connect>span {display: inline-block;position: relative;top:-5px;}
 .connect-twitter,.connect-fb
-,.connect-rss,.connect-gplus,.connect-pin {height: 30px;background: url("../images/ico-social.png") no-repeat;display: inline-block;margin-left: 15px;}
+,.connect-rss,.connect-gplus,.connect-pin {height: 30px;background: url("/skin/frontend/modago/default/images/ico-social.png") no-repeat;display: inline-block;margin-left: 15px;}
 .connect-twitter {background-position: 0px 5px; width: 27px;}
 .connect-fb {background-position: -29px 5px; width: 14px;}
 .connect-rss {background-position: -44px 5px; width: 24px;}
@@ -437,7 +437,7 @@ footer {background-color: #000000;}
 .footer-gray-wr {background-color: #2e2e2e;border-top: 1px solid #242424;line-height: 64px;}
 .footer-gray-wr>div>div>div {color: #828282;font-size: 11px;text-align: center;}
 .footer-pay-visa,.footer-pay-master,
-.footer-pay-paypal {height:22px;width:33px;background:url("../images/ico-payment-options.png")no-repeat;display:inline-block;margin-left:27px;position:relative;top:5px;}
+.footer-pay-paypal {height:22px;width:33px;background:url("/skin/frontend/modago/default/images/ico-payment-options.png")no-repeat;display:inline-block;margin-left:27px;position:relative;top:5px;}
 .footer-pay-master {background-position: -34px 0px;width: 35px;}
 .footer-pay-paypal {background-position: -69px 0px;width: 37px;}
 .footer-pay-visa {margin-left:5px;}
