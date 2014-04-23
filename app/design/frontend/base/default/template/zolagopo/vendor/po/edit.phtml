@@ -1,5 +1,6 @@
 <?php /* @var $this Zolago_Po_Block_Vendor_Po_Edit */ ?>
 <?php $_po = $this->getPo(); ?>
+<?php $_shipping = $this->getShippingMethod();?>
 <div class="container">
 	<!--=== Page Header ===-->
 	<div class="page-header">
@@ -118,13 +119,25 @@
 						<tfoot>
 							<tr>
 								<td colspan="3"></td>
-								<td colspan="2">Dostawa</td>
-								<td >1</td>
-								<td >1</td>
-								<td >1</td>
+								<?php if($_shipping):?>
+								<td colspan="2"><?php echo Mage::helper("zolagopo")->__("Shipping");?>:<?php echo $this->escapeHtml($this->getMethodName($_shipping));?></td>
+								<td class="align-right"><?php echo Mage::helper("core")->currency($this->getBaseShippingAmount(), true, false);?></td>
+								<td class="align-right"><?php echo Mage::helper("core")->currency($this->getShippingDiscount(), true, false);?></td>
+								<td class="align-right"><?php echo Mage::helper("core")->currency($this->getFinalShippingAmount(), true, false);?></td>
+								<?php else:?>
+								<td colspan="5"></td>
+								<?php endif;?>
 								<td ></td>
 								<td >1</td>
 							</tr>
+							<tr>
+								<td colspan="3"></td>
+								<td colspan="4"><strong> <?php echo Mage::helper("zolagopo")->__("Total");?></strong> 
+								<?php var_export($_po->getUdropshipTotals());?></td>
+								<td class="align-right">1</td>
+								<td colspan="2"></td>
+							</tr>
+							
 						</tfoot>
 						<tbody>
 							<?php $i=0;?>
