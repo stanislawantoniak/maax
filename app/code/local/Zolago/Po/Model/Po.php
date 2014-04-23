@@ -4,6 +4,13 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 {
 	const TYPE_POSHIPPING = "poshipping";
 	
+	public function getPos() {
+		if($this->getDefaultPosId()){
+			return Mage::getModel("zolagopos/pos")->load($this->getDefaultPosId());
+		}
+		return null;
+	}
+	
    // Override address
    public function getShippingAddress() {
 	   if($this->getShippingAddressId()){

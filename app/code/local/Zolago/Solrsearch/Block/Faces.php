@@ -216,10 +216,16 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 		
         if(isset($facetFileds['product_flag_facet'])) {
             $data = $facetFileds['product_flag_facet'];
+			
             if($this->getSpecialMultiple()) {
                 $data = $this->_prepareMultiValues('product_flag_facet', $data);
             }
-			$data = array_merge($facetFileds['product_flag_facet'], $bestsellerFacet, $isNewFacet, $cleanSolrData);
+			$data = array_merge($data, $bestsellerFacet, $isNewFacet, $cleanSolrData);
+			//Remove Boolean "False" Values
+			if (isset($data[Mage::helper('core')->__('No')])) {
+				unset($data[Mage::helper('core')->__('No')]);
+			}
+			
 			ksort($data);
 			
             $block = $this->getLayout()->createBlock($this->_getFlagRenderer());
@@ -248,6 +254,12 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
             if(isset($data['No rating'])) {
                 unset($data['No rating']);
             }
+			
+			//Remove Boolean "False" Values
+			if (isset($data[Mage::helper('core')->__('No')])) {
+				unset($data[Mage::helper('core')->__('No')]);
+			}			
+			
             $block = $this->getLayout()->createBlock($this->_getRatingRenderer());
             $block->setParentBlock($this);
             $block->setAllItems($data);
@@ -646,6 +658,11 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         if (isset($facetCleanFileds['product_flag_facet'])) {
             $productFlagFacet	= $facetCleanFileds['product_flag_facet'];
         }
+		
+		//Remove Boolean "False" Values
+		if (isset($productFlagFacet[Mage::helper('core')->__('No')])) {
+			unset($productFlagFacet[Mage::helper('core')->__('No')]);
+		}		
 		
 		if (!isset($productFlagFacet[Mage::helper('zolagocatalog')->__('Promotion')])) {
 			$productFlagFacet[Mage::helper('zolagocatalog')->__('Promotion')] = 0;

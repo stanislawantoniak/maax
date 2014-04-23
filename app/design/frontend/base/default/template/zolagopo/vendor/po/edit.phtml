@@ -1,0 +1,155 @@
+<?php /* @var $this Zolago_Po_Block_Vendor_Po_Edit */ ?>
+<?php $_po = $this->getPo(); ?>
+<div class="container">
+	<!--=== Page Header ===-->
+	<div class="page-header">
+		<div class="page-title">
+			<h3><?php echo Mage::helper("zolagopo")->__("Order #%s", $_po->getIncrementId());?></h3>
+			<span><?php echo Mage::helper("zolagopo")->__("Order details");?></span>
+		</div>
+	</div>
+</div>
+<div class="container">
+	<div class="row">
+		<div class="col-md-4">
+			<div class="widget box">
+				<div class="widget-header"> <h4><i class="icon-info"></i> <?php echo Mage::helper("zolagopo")->__("General");?></h4> </div>
+				<div class="widget-content">
+					<dl class="dl-horizontal dl-z orders"> 
+						<dt><?php echo Mage::helper("zolagopo")->__("Number");?>:</dt> 
+						<dd><?php echo $_po->getIncrementId();?></dd> 
+						<dt><?php echo Mage::helper("zolagopo")->__("Status");?>:</dt> 
+						<dd>
+							<div class="btn-group"> 
+								<button class="btn btn-xs dropdown-toggle" data-toggle="dropdown"> 
+									<?php echo $this->getCurrentStatus($_po);?> <span class="caret"></span> 
+								</button> 
+								<ul class="dropdown-menu"> 
+									<?php foreach($this->getAllowedStatusesForPo($_po) as $key=>$status):?>
+									<li><a href="#<?php echo $key;?>"><?php echo $status;?></a></li> 
+									<?php endforeach;?>
+								</ul> 
+							</div>
+						</dd> 
+						<dt><?php echo Mage::helper("zolagopo")->__("Order date");?>:</dt> 
+						<dd><?php echo Mage::helper('core')->formatDate($_po->getCreatedAt(), 'medium')?></dd> 
+						<dt><?php echo Mage::helper("zolagopo")->__("Max. order date");?>:</dt> 
+						<dd><?php echo Mage::helper('core')->formatDate($_po->getCreatedAt(), 'medium')?></dd> 
+						<?php if($_po->getPos()):?>
+						<dt><?php echo Mage::helper("zolagopo")->__("POS");?>:</dt> 
+						<dd><?php echo $_po->getPos()->getName(); ?></dd> 
+						<?php endif;?>
+						<dt><?php echo Mage::helper("zolagopo")->__("Alert");?>:</dt> 
+						<dd class="text-danger"><?php echo Mage::helper("zolagopo")->__("Alert");?></dd> 
+					</dl>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="widget box">
+				<div class="widget-header"> <h4><i class="icon-usd"></i> <?php echo Mage::helper("zolagopo")->__("Payment");?></h4> </div>
+				<div class="widget-content">
+					<dl class="dl-horizontal dl-z orders"> 
+						<dt><?php echo Mage::helper("zolagopo")->__("Payment status");?>:</dt> 
+						<dd>Opłacono</dd> 
+						<dt><?php echo Mage::helper("zolagopo")->__("Paid");?>:</dt> 
+						<dd>1 034,00 PLN</dd> 
+						<dt><?php echo Mage::helper("zolagopo")->__("Debt");?>:</dt> 
+						<dd> 34,00 PLN</dd> 
+					</dl>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="widget box">
+				<div class="widget-header"> <h4><i class="icon-phone"></i> <?php echo Mage::helper("zolagopo")->__("Contact");?></h4> </div>
+				<div class="widget-content">
+					<dl class="dl-horizontal dl-z orders"> 
+						<dt><?php echo Mage::helper("zolagopo")->__("Fullname");?>:</dt> 
+						<dd><?php echo $this->escapeHtml($_po->getBillingAddress()->getName());?></dd> 
+						<dt><?php echo Mage::helper("zolagopo")->__("Phone");?>:</dt> 
+						<dd><?php echo $this->escapeHtml($_po->getBillingAddress()->getTelephone());?></dd> 
+						<dt><?php echo Mage::helper("zolagopo")->__("Messages");?>:</dt> 
+						<dd><span class="label label-danger">6 new</span> / 120</dd> 
+						<dt><?php echo Mage::helper("zolagopo")->__("New msg.");?>:</dt> 
+						<dd><button class="btn btn-xs btn-default"><i class="icon-envelope-alt"></i> Compose</button></dd> 
+					</dl>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="widget box">
+				<div class="widget-header"> 
+					<h4><i class="icon-list"></i> <?php echo Mage::helper("zolagopo")->__("Order items");?></h4> 
+				</div>
+				<div class="widget-content">
+					<table class="table  table-striped table-bordered table-checkable table-hover">
+						<colgroup>
+							<col width="50px"/>
+							<col width="50px"/>
+							<col width="100px"/>
+							<col/>
+							<col width="50px"/>
+							<col width="100px"/>
+							<col width="100px"/>
+							<col width="100px"/>
+							<col width="100px"/>
+						</colgroup>
+						<thead>
+							<tr>
+								<th class="align-center"><?php echo Mage::helper("zolagopo")->__("Check");?></th>
+								<th class="align-right"><?php echo Mage::helper("zolagopo")->__("LP");?></th>
+								<th><?php echo Mage::helper("zolagopo")->__("SKU");?></th>
+								<th><?php echo Mage::helper("zolagopo")->__("Product");?></th>
+								<th class="align-right"><?php echo Mage::helper("zolagopo")->__("Qty");?></th>
+								<th class="align-right"><?php echo Mage::helper("zolagopo")->__("Price inc. tax");?></th>
+								<th class="align-right"><?php echo Mage::helper("zolagopo")->__("Discount");?></th>
+								<th class="align-right"><?php echo Mage::helper("zolagopo")->__("Final price");?></th>
+								<th class="align-right"><?php echo Mage::helper("zolagopo")->__("POS Qty");?></th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							<?php $i=0;?>
+							<?php foreach($_po->getAllItems() as $_key=>$_item): ?>
+								<?php if(!$_item->getOrderItem()->getParentItemId()):?>
+									<?php echo $this->getItemRedener($_item)->setLp(++$i)->toHtml();?>
+								<?php endif;?>
+							<?php endforeach;?>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	jQuery(function($){
+		$('.btn-notification').click(function() {
+			var self = $(this);
+			noty({
+				text: self.data('text'),
+				type: self.data('type'),
+				modal: self.data('modal'),
+				layout: self.data('layout'),
+				buttons: (self.data('type') != 'confirm') ? false : [
+					{
+						addClass: 'btn btn-primary', text: 'Ok', onClick: function($noty) {
+							$noty.close();
+							noty({force: true, timeout: 2000, text: 'You clicked "Ok" button', type: 'success', layout: self.data('layout')});
+						}
+					}, {
+						addClass: 'btn btn-danger', text: 'Cancel', onClick: function($noty) {$noty.close();}
+					}
+				]
+			});
+
+			return false;
+		});
+	});
+</script>

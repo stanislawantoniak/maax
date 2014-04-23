@@ -1,0 +1,159 @@
+<?php /* @var $this Zolago_Po_Block_Po */ ?>
+<div class="container">
+	<!--=== Page Header ===-->
+	<div class="page-header">
+		<div class="page-title">
+			<h3><?php echo Mage::helper("zolagopo")->__("My orders");?></h3>
+			<span><?php echo Mage::helper("zolagopo")->__("Browse your orders");?></span>
+		</div>
+	</div>
+	<!-- /Page Header -->
+
+	<!--=== Page Content ===-->
+	<div class="row">
+		<!--=== Example Box ===-->
+		<div class="col-md-12">
+			<div class="widget box">
+				<div class="widget-header">
+					<h4><i class="icon-filter"></i> <?php echo Mage::helper("zolagopo")->__("Filters");?></h4>
+					<div class="toolbar no-padding"> <div class="btn-group"> <span class="btn btn-xs widget-collapse"><i class="icon-angle-up"></i></span> </div> </div>
+				</div>
+				<div class="widget-content fiters">
+					<form id="filter_form" class="form-horizontal row-border">
+						<div class="form-group">
+							<div class="col-md-6">
+								<div class="row">
+									<label for="filter_default_pos" class="col-md-4 control-label">
+										<?php echo Mage::helper("zolagopo")->__("POS");?></label>
+									<div class="col-md-8">
+										<select id="filter_default_pos_id" class="form-control" name="default_pos_id">
+											<option value=""><?php echo Mage::helper("zolagopo")->__("--- Select ---");?></option>
+											<?php foreach($this->getPosCollection() as $pos):?>
+												<option <?php if($this->getDefaultPosId()==$pos->getId()):?>selected="selected" <?php endif;?>value="<?php echo $pos->getId();?>"><?php echo $this->escapeHtml($pos->getName());?></option>
+											<?php endforeach;?>
+										</select>
+									</div>
+								</div>
+								<div class="row next-row">
+									<label for="filter_order_date_from" class="col-md-4 control-label">
+										<?php echo Mage::helper("zolagopo")->__("Order date");?></label>
+									<div class="col-md-4">
+										<input placeholder="<?php echo $this->__("From");?>" id="filter_order_date_from" name="created_at[from]" value="<?php echo $this->getCreatedAt('from');?>" type="text" class="form-control datepicker"/>
+									</div>
+									<div class="col-md-4">
+										<input placeholder="<?php echo $this->__("To");?>" id="filter_order_date_to" name="created_at[to]" value="<?php echo $this->getCreatedAt('to');?>" type="text" class="form-control datepicker"/>
+									</div>
+								</div>
+								<div class="row next-row">
+									<label for="filter_max_shipment_date_from" class="col-md-4 control-label">
+										<?php echo Mage::helper("zolagopo")->__("Max. shipment date");?></label>
+									<div class="col-md-4">
+										<input placeholder="<?php echo $this->__("From");?>" id="filter_max_shipment_date_from" name="max_shipment_date[from]" value="<?php echo $this->getMaxShipmentDate('from');?>" type="text" class="form-control datepicker"/>
+									</div>
+									<div class="col-md-4">
+										<input placeholder="<?php echo $this->__("To");?>" id="filter_max_shipment_date_to" name="max_shipment_date[to]" value="<?php echo $this->getMaxShipmentDate('to');?>" type="text" class="form-control datepicker"/>
+									</div>
+								</div>
+								<div class="row next-row">
+									<label for="filter_shipment_date_from" class="col-md-4 control-label">
+										<?php echo Mage::helper("zolagopo")->__("Shipment date");?></label>
+									<div class="col-md-4">
+										<input placeholder="<?php echo $this->__("From");?>" id="filter_shipment_date_from" name="shipment_date[from]" value="<?php echo $this->getShipmentDate('from');?>" type="text" class="form-control datepicker"/>
+									</div>
+									<div class="col-md-4">
+										<input placeholder="<?php echo $this->__("To");?>" id="filter_shipment_date_to" name="shipment_date[to]" value="<?php echo $this->getShipmentDate('to');?>" type="text" class="form-control datepicker"/>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="row">
+									<label class="col-md-4 control-label"><?php echo Mage::helper("zolagopo")->__("Order status");?></label>
+									<div class="col-md-8">
+										<input type="hidden" name="udropship_status" value="0"/>
+										<?php foreach($this->getStatusOptions() as $option):?>
+											<label class="checkbox">
+												<input type="checkbox" name="udropship_status[]"<?php if(isset($option['checked'])):?> checked="checked"<?php endif;?> class="filter_po_status uniform" id="filter_po_status_<?php echo $this->escapeHtml($option['value']);?>" value="<?php echo $this->escapeHtml($option['value']);?>"/>
+												<?php echo $this->escapeHtml($option['label']);?>
+											</label>
+										<?php endforeach;?>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="form-actions">
+							<button type="submit" id="filter_submit" class="btn btn-primary pull-right"><span><span><?php echo Mage::helper("zolagopo")->__("Apply filter ");?></span></span></button>
+							<button type="reset" id="filter_reset" class="btn pull-right"><span><span><?php echo Mage::helper("zolagopo")->__("Reset");?></span></span></button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div> <!-- /.col-md-12 -->
+		<!-- /Example Box -->
+	</div> <!-- /.row -->
+	<!-- /Page Content -->
+
+</div>
+
+<div class="container z-grid">
+	<div class="widget box">
+		<div class="widget-content">
+			<?php echo $this->getGridHtml(); ?>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+(function(){
+	var gridObj = <?php echo $this->getGridJsObjectName();?>;
+	var topForm = $("filter_form");
+	// create integrator
+	new Zolago.gridIntegrator(gridObj);
+	
+	gridObj.doFilter = (function(){
+        var filters = $$('#'+this.containerId+' .filter input', '#'+this.containerId+' .filter select');
+        var filters2 = $$('#'+topForm.id+' input', '#'+topForm.id+' select');
+        var elements = [],
+			elements2 = [];
+        for(var i in filters){
+            if(filters[i].value && filters[i].value.length) elements.push(filters[i]);
+        }
+        for(var i in filters2){
+            if(filters2[i].value && filters2[i].value.length) elements2.push(filters2[i]);
+        }
+		
+		var serialized = Form.serializeElements(elements);
+		var serialized2 = Form.serializeElements(elements2);
+		var params = []
+		
+		if(serialized){
+			params.push(serialized);
+		}
+		if(serialized2){
+			params.push(serialized2);
+		}
+		
+        if (!this.doFilterCallback || (this.doFilterCallback && this.doFilterCallback())) {
+            this.reload(this.addVarToUrl(this.filterVar, encode_base64(params.join("&"))));
+        }
+    }).bind(gridObj);
+	
+	
+	topForm.observe("submit", function(e){
+		gridObj.doFilter();
+		e.preventDefault();
+	});
+	topForm.observe("reset", function(e){
+		gridObj.resetFilter();
+		e.preventDefault();
+	});
+
+})();
+// Do pickers
+jQuery(function($){
+	$( ".datepicker" ).datepicker({
+		defaultDate: +7,
+		showOtherMonths:true,
+		autoSize: true,
+		dateFormat: 'dd-mm-yy'
+	});
+});
+</script>

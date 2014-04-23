@@ -16,6 +16,16 @@ class Zolago_Pos_Model_Form_Fieldset_Dhl extends Zolago_Common_Model_Form_Fields
                                    ));
 
     }
+    protected function _addFieldDhlAccount() {
+        $this->_fieldset->addField('dhl_account', 'text', array(
+                                       'name'          => 'dhl_account',
+                                       'label'         => $this->_helper->__('DHL Account'),
+                                       'required'      => true,
+                                       "maxlength"     => 32
+                                   ));
+
+    }
+
     protected function _addFieldDhlLogin() {
         $this->_fieldset->addField('dhl_login', 'text', array(
                                        'name'          => 'dhl_login',
