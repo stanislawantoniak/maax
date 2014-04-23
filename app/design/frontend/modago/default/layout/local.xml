@@ -8,10 +8,12 @@
             <action method="addCss"><stylesheet>css/bootstrap.min.css</stylesheet></action>
             <action method="addCss"><stylesheet>css/jcarousel.responsive.css</stylesheet></action>
             <action method="addCss"><stylesheet>css/local.css</stylesheet></action>
+            <action method="addCss"><stylesheet>css/header.css</stylesheet></action>
             <action method="addJs"><script>jquery/jquery-1.11.0.min.js</script></action>
             <action method="addJs"><script>jquery/jquery.jcarousel.min.js</script></action>
             <action method="addJs"><script>bootstrap/bootstrap.min.js</script></action>
             <action method="addItem"><type>skin_js</type><script>js/modago.js</script></action>
+            <action method="addItem"><type>skin_js</type><script>js/fns.js</script></action>
         </reference>
         
         <remove name="right.poll"/>

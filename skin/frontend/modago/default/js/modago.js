@@ -5,19 +5,23 @@ jQuery.noConflict();
 (function( $ ) {
     $(function() {
         var ww = $(window).width();
-        if (ww >= 767) {
-            $('li.dropdown').on('show.bs.dropdown', function () {
-                var h = $(this).children('ul');
-                h.hide();
-                h.clone().appendTo('#submenu').slideDown();
-            });
-            $('li.dropdown').on('hidden.bs.dropdown', function () {
-                $('#submenu').children('ul').slideUp(300,function(){
-                    $(this).remove()
-                })
-                $(this).show();
-            });
-        };
+//        if (ww >= 767) {
+//            $('li.dropdown').on('show.bs.dropdown', function () {
+//                var h = $(this).children('ul');
+//                h.hide();
+//                h.clone().appendTo('#submenu').slideDown();
+//            });
+//            $('li.dropdown').on('hidden.bs.dropdown', function () {
+//                $('#submenu').children('ul').slideUp(300,function(){
+//                    $(this).remove()
+//                })
+//                $(this).show();
+//            });
+//        };
+
+        $('.dropdown').on('hidden.bs.dropdown', function () {
+            $(this).show();
+        });
 
         // CAROUSEL  1
 
