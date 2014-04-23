@@ -83,5 +83,12 @@
             <block type="cms/page" name="cms_page"/>
         </reference>
     </cms_page>
+	
+	<zolagomodago_index_index>
+		<!-- w <default> zdefiniuj domyslny root - mysle ze layout 1 kolumnowy -->
+		<reference name="content">
+            <block template="cms/modagohome.phtml" name="abc" type="core/template"/>
+        </reference>
+	</zolagomodago_index_index>
 
 </layout>
