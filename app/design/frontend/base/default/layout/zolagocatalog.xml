@@ -44,8 +44,10 @@
 		    <action method="addCss"><stylesheet>plugins/elfinder/css/theme.css</stylesheet></action>
 		</reference>
 		<reference name="content">
-			<block name="queue" type="zolagocatalog/vendor_image_queue" template="zolagocatalog/image/queue.phtml"/>			    
-    		<block type="zolagocatalog/vendor_image_files" name="files" template="zolagocatalog/image/files.phtml"/>
+			<block name="image" type="zolagocatalog/vendor_image" template="zolagocatalog/image.phtml">			    
+			    <block name="image_queue" type="zolagocatalog/vendor_image_queue" template="zolagocatalog/image/queue.phtml"/>
+			    <block name="image_grid" type="zolagocatalog/vendor_image_grid" template="zolagocatalog/image/grid.phtml"/>
+			</block>
 		</reference>
 	</udprod_vendor_image_index>
 </layout>

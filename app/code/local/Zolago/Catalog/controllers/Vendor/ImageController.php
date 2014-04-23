@@ -6,7 +6,7 @@ class Zolago_Catalog_Vendor_ImageController
      * Index
      */
     public function indexAction() {
-        $this->_renderPage(null, 'udprod_image_queue');
+        $this->_renderPage(null, 'udprod_image');
     }
     public function queueAction() {
         $this->_renderPage(null, 'udprod_image');
@@ -222,6 +222,7 @@ class Zolago_Catalog_Vendor_ImageController
         }
 
         while ($buff = fread($in, 4096)) {
+            sleep(1);
             fwrite($out, $buff);
         }
 

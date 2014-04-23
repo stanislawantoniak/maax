@@ -1,8 +1,17 @@
-<div class="text-center">
-
-<form method="post">
-	<div id="uploader_wrapper">	</div>
-</form>
+<div class="widget">
+	<div class="align-center form-group" style="margin:5px 0px 5px 0px">
+		<div class="col-md-8">
+			<button class="btn">Dodaj</button>
+			<button class="btn">Usuń</button>
+			<button class="btn">Mapuj po nazwach</button>
+			<button class="btn">Mapuj z CSV</button>
+			<button class="btn btn-primary"><i class="icon-question-sign"></i></button>
+		</div>
+		<div class="input-group" style="width:200px"><input type="text" class="form-control input-width-medium" id="input_search"><span class="input-group-btn"><button class="btn btn-default" type="button"><i class="icon-search">
+			</i></button></span></div>
+	</div>
+<div style="clear:both"></div>
+	<div id="uploader_wrapper" class="widget-content"></div>
 
 <script type="text/javascript">
 function init_uploader() {	
@@ -39,8 +48,12 @@ function init_uploader() {
 		init_uploader();
 	});
 }
-jQuery(function() {
-	init_uploader();
-});
-</script>
+			var elf;
+			jQuery().ready(function() {
+				elf = jQuery('#uploader_wrapper').elfinder({
+					url : '<?php echo Mage::getUrl('udprod/vendor_image/connector');?>',  // connector URL (REQUIRED)
+					lang: '<?php echo $this->localeCode ?>',             // language (OPTIONAL)
+				}).elfinder('instance');
+			});
+		</script>
 </div>

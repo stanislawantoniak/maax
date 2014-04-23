@@ -1,91 +1,18 @@
-<div class="text-center">
-
-<form id="form" method="post" action="<?php echo  Mage::getUrl('udprod/vendor_image/send');?>">
-	<div id="uploader">
-		<p>Your browser doesn't have Flash, Silverlight or HTML5 support.</p>
-	</div>
-	<br />
-	<input type="submit" value="Submit" />
-</form>
-
-<script type="text/javascript">
-// Initialize the widget when the DOM is ready
-jQuery(function() {
-	var uploader = jQuery("#uploader").plupload({
-		// General settings
-		runtimes : 'html5,html4',
-		url : '<?php echo Mage::getUrl('udprod/vendor_image/upload'); ?>',
-
-		// User can upload no more then 20 files in one go (sets multiple_queues to false)
-		max_file_count: 20,
-		max_file_size: '2mb',		
-		chunk_size: '1mb',
-
-		// Resize images on clientside if we can
-		resize : {
-			width : 200, 
-			height : 200, 
-			quality : 90,
-			crop: true // crop to exact dimensions
-		},
-		
-		filters : [
-				{title : "Image files", extensions : "jpg,gif,png"},
-		],
-
-		// Rename files by clicking on their titles
-		rename: true,
-		multiple_queues: true,
-		// Sort files
-		sortable: true,
-
-		// Enable ability to drag'n'drop files onto the widget (currently only HTML5 supports that)
-		dragdrop: true,
-
-		// Views to activate
-		views: {
-			list: true,
-			thumbs: true, // Show thumbs
-			active: 'thumbs'
-		},
-
-		// Flash settings
-		flash_swf_url : '../../js/Moxie.swf',
-
-		// Silverlight settings
-		silverlight_xap_url : '../../js/Moxie.xap',
-		init : {
-			 FilesAdded: function(up, files) {
-			 	up.disableBrowse(false);
-			 }
-		}
-		
-	});
-
-	// Handle the case when form was submitted before uploading has finished
-	jQuery('#form').submit(function(e) {
-		// Files in queue upload them first
-		if (jQuery('#uploader').plupload('getFiles').length > 0) {
-
-			// When all files are uploaded submit form
-			jQuery('#uploader').on('complete', function() {
-				jQuery('#form')[0].submit();
-			});
-
-			jQuery('#uploader').plupload('start');
-		} else {
-			alert("You must have at least one file in the queue.");
-		}
-		return false; // Keep the form from submitting
-	});
-});
-function turn_on_uploader() {
-			 	alert('begin');
-			 	for (a in jQuery('#uploader').plupload()) {
-			 		console.log(a);
-			 	}
-			 	alert('end');
-}
-</script>
-
+<div class="tabbable tabbabble-custom">
+    <ul class="nav nav-tabs">
+        <li class="active">
+            <a data-toggle="tab" href="#tab_1_1">Zdjęcia</a>
+        </li>
+        <li class="">
+            <a data-toggle="tab" href="#tab_1_2">Dodaj</a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div id="tab_1_1" class="tab-pane active">
+    		<?php echo $this->getChildHtml("image_grid");?>
+        </div>
+        <div id="tab_1_2" class="tab-pane">
+    		<?php echo $this->getChildHtml("image_queue");?>
+        </div>
+    </div>
 </div>

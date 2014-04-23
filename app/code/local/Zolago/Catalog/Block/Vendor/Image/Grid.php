@@ -6,6 +6,7 @@ class Zolago_Catalog_Block_Vendor_Image_Grid extends Mage_Adminhtml_Block_Widget
 
     public function __construct() {
         parent::__construct();
+        return;
         $this->setId('zolagocatalog_image_grid');
         $this->setDefaultSort('entity_id');
         $this->setDefaultDir('desc');
@@ -57,6 +58,7 @@ class Zolago_Catalog_Block_Vendor_Image_Grid extends Mage_Adminhtml_Block_Widget
 		return $this->getChildHtml('hide_column_button');
 	}
 	protected function _prepareLayout() {
+		return parent::_prepareLayout(); //hehe
 		$this->setChild('popup_content',
 			$this->getLayout()->createBlock('zolagocatalog/vendor_mass_columnspopup')
 				->setData(array(
@@ -76,6 +78,8 @@ class Zolago_Catalog_Block_Vendor_Image_Grid extends Mage_Adminhtml_Block_Widget
 		return parent::_prepareLayout();
 	}
 	protected function _prepareCollection(){
+        return parent::_prepareCollection();
+		
         $collection = Mage::getResourceModel('zolagocatalog/product_collection');
         /* @var $collection Zolago_Catalog_Model_Resource_Product_Collection */
 		
@@ -184,7 +188,7 @@ class Zolago_Catalog_Block_Vendor_Image_Grid extends Mage_Adminhtml_Block_Widget
 	 * Prepare layout for static start columns
 	 * @return array
 	 */
-	protected function _prepareFixedStartColumns(){
+	protected function _prepareFixedStartColumns(){		
 		 $static = $this->_getFixedColumns();
 		 if(isset($static['start'])){
 			 return $static['start'];
@@ -319,6 +323,7 @@ class Zolago_Catalog_Block_Vendor_Image_Grid extends Mage_Adminhtml_Block_Widget
 
 
 	protected function _prepareColumns() {
+		return parent::_prepareColumns();
 		foreach($this->_getAllPossibleColumns() as $key=>$column){
 			if($this->_canShowColumn($key, $column)){
 				$this->addColumn($key, $this->_processColumnConfig($key, $column));
