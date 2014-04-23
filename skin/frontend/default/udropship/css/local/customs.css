@@ -71,6 +71,10 @@
 select.form-control {
   min-width: 50px;
 }
+.btn-xs,
+.btn-group-xs > .btn {
+  font-size: 11.049999999999999px !important;
+}
 .z-grid .filter {
   position: static;
 }
@@ -131,8 +135,13 @@ select.form-control {
 .dl-horizontal.dl-z dd {
   min-height: 30px;
 }
-.dl-horizontal.orders {
-  min-height: 180px;
+.widget-content.orders {
+  min-height: 220px;
+}
+.widget-content.orders .alert {
+  margin-bottom: 0;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 table.foot-empty-cells tfoot td:empty {
   visibility: hidden;

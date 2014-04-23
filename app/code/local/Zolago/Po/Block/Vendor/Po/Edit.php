@@ -49,22 +49,6 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Unirgy_DropshipPo_Block_Vendor_Po_I
 		return $this->getAllowedStatuses();
 	}
 	
-	/**
-	 * 
-	 * @return decimal
-	 */
-	public function getTotal() {
-		$totals = $this->getTotals();
-		var_export($totals);
-		if(isset($totals['total'])){
-			return $totals['total'];
-		}
-		return 0;
-	}
-	
-	public function getTotals() {
-		return $this->getPo()->getUdropshipTotals();
-	}
 	
 	
 	public function	getItemRedener(Unirgy_DropshipPo_Model_Po_Item $item) {
@@ -196,27 +180,7 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Unirgy_DropshipPo_Block_Vendor_Po_I
 		return '';
 	}
 	
-	/**
-	 * @todo move to PO
-	 * @return float
-	 */
-	public function getBaseShippingAmount() {
-		return $this->getPo()->getOrder()->getShippingInclTax();
-	}
-	/**
-	 * @todo move to PO, 
-	 * @return float
-	 */
-	public function getShippingDiscount() {
-		return 0;
-	}
-	
-	/**
-	 * @return float
-	 */
-	public function getFinalShippingAmount() {
-		return $this->getBaseShippingAmount()-$this->getShippingDiscount();
-	}
+
 	
 	/**
 	 * @param type $type

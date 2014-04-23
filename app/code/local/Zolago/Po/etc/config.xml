@@ -46,6 +46,7 @@
 			<udpo>
 				<rewrite>
 					<po>Zolago_Po_Model_Po</po>
+					<po_item>Zolago_Po_Model_Po_Item</po_item>
 				</rewrite>
 			</udpo>
 		</models>
