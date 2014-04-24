@@ -17,11 +17,10 @@
 	<td class="align-right"><?php echo Mage::helper("core")->currency($_finalPrice);?></td>
 	<td></td>
 	<td>
-		<button class="btn btn-xs" >
-			<i class="icon-edit"></i>
-			<?php echo Mage::helper("zolagopo")->__("Edit item");?>
+		<button class="btn btn-xs bs-tooltip" data-placement="top" title="<?php echo Mage::helper("zolagopo")->__("Edit item");?>">
+			<i class="icon-pencil"></i>
 		</button>
-		<button class="btn btn-xs btn-notification" data-layout="top" data-type="confirm" data-text="<?php echo Mage::helper("zolagopo")->__("Do you want to remove this item?");?>" data-modal="true">
+		<button class="btn btn-xs btn-notification bs-tooltip" data-placement="top" title="<?php echo Mage::helper("zolagopo")->__("Remove item");?>" data-layout="top" data-type="confirm" data-text="<?php echo Mage::helper("zolagopo")->__("Do you want to remove this item?");?>" data-modal="true">
 			<i class="icon-remove"></i>
 		</button>
 	</td>

@@ -133,18 +133,52 @@ select.form-control {
 }
 .dl-horizontal.dl-z dt,
 .dl-horizontal.dl-z dd {
-  min-height: 30px;
+  min-height: 24px;
+}
+.shipping-info .dl-horizontal.dl-z dt {
+  width: 100px;
+}
+.shipping-info .dl-horizontal.dl-z dd {
+  margin-left: 120px;
 }
 .widget-content.orders {
-  min-height: 220px;
+  min-height: 150px;
 }
 .widget-content.orders .alert {
   margin-bottom: 0;
   padding-top: 10px;
   padding-bottom: 10px;
 }
+.widget-content.orders .with-alert {
+  min-height: 190px;
+}
+.widget-content.bottom-info {
+  min-height: 110px;
+}
+.shipping-info .btn {
+  margin: 28px 0;
+}
+.comments dl {
+  margin-bottom: 10px;
+}
+.comments dl dt,
+.comments dl dd {
+  margin-bottom: 5px;
+}
+.comments small {
+  font-weight: normal;
+  color: #adadad;
+}
 table.foot-empty-cells tfoot td:empty {
   visibility: hidden;
+}
+.icon-checked-action {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  margin: 0px 14px -5px 10px;
+  opacity: 0.7;
+  background: url(../../images/icon-checked-actions.png);
 }
 @media (min-width: 768px) and (max-width: 1200px) {
   .dl-horizontal.dl-z dt {
@@ -152,5 +186,11 @@ table.foot-empty-cells tfoot td:empty {
   }
   .dl-horizontal.dl-z dd {
     margin-left: 130px;
+  }
+  .shipping-info .dl-horizontal.dl-z dt {
+    width: 100px;
+  }
+  .shipping-info .dl-horizontal.dl-z dd {
+    margin-left: 110px;
   }
 }
