@@ -1,11 +1,4 @@
 <?php
-class Zolago_Catalog_Block_Vendor_Image extends Zolago_Catalog_Block_Vendor_Image_Abstract {
+class Zolago_Catalog_Block_Vendor_Image extends Mage_Core_Block_Template {
 
-    protected $localeJsPath = 'plugins/plupload/i18n/%s.js';
-    
-    protected function _perpareLayout() {
-        $this->_addItem($this->localeJsPath);
-        parent::_prepareLayout();
-    }
-    
 }

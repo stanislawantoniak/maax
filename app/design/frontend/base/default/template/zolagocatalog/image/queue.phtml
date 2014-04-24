@@ -1,14 +1,24 @@
-<div class="text-center">
-
-<form method="post">
-	<div id="uploader_wrapper">	</div>
-</form>
+<div class="widget">
+	<div class="align-center form-group" style="margin:5px 0px 5px 0px">
+		<div class="col-md-8">
+			<button class="btn" id="add_button"><?php echo Mage::helper('zolagocatalog')->__('Add');?></button>
+			<button class="btn" id="delete_button"><?php echo Mage::helper('zolagocatalog')->__('Delete');?></button>
+			<button class="btn"><?php echo Mage::helper('zolagocatalog')->__('Map by name');?></button>
+			<button class="btn"><?php echo Mage::helper('zolagocatalog')->__('Map by CSV');?></button>
+			<button class="btn btn-primary"><i class="icon-question-sign"></i></button>
+		</div>
+		<div class="input-group" style="width:200px"><input type="text" class="form-control input-width-medium" id="input_search"><span class="input-group-btn"><button class="btn btn-default" id="search_button" type="button"><i class="icon-search">
+			</i></button></span></div>
+	</div>
+<div style="clear:both"></div>
+	<div id="uploader_wrapper" class="widget-content"><div id="elf"></div><div id="uploader"></div></div>
 
 <script type="text/javascript">
-function init_uploader() {	
-	// Setup html5 version
-	jQuery('#uploader_wrapper').append('<div id="uploader"></div>');
-	jQuery("#uploader").pluploadQueue({
+var elf = null;
+var plup = null;
+var func = 'show_filebrowser';
+function init_uploader() {
+	plup = jQuery("#uploader").pluploadQueue({
 		// General settings
 		runtimes : 'html5,flash,silverlight,html4',
 		url : '<?php echo Mage::getUrl('udprod/vendor_image/upload'); ?>',
@@ -30,17 +40,70 @@ function init_uploader() {
 
 		flash_swf_url : '../../js/Moxie.swf',
 		silverlight_xap_url : '../../js/Moxie.xap',
-	});
-	var uploader = jQuery('#uploader').pluploadQueue();
-	uploader.bind('UploadComplete',function() {
-		elf.sync();
-		alert('<?php echo Mage::helper('zolagocatalog')->__('Upload completed'); ?>');
-		jQuery('#uploader').remove();
-		init_uploader();
+		preinit: {
+			UploadFile: function() {
+				elf.sync();	
+			},
+			UploadComplete: function() {
+				elf.sync();
+				plup.remove();
+				jQuery('#elf').after('<div id="uploader"></div>');
+				init_uploader();
+				show_filebrowser();
+			}
+		}
 	});
 }
-jQuery(function() {
+function show_uploader() {
+		elf.hide();
+		jQuery('#delete_button').attr('disabled',true);
+	// Setup html5 version
+		jQuery('#add_button').html('<?php echo Mage::helper('zolagocatalog')->__('Browse');?>');
+		func = 'show_filebrowser';
+		plup.show();
+		jQuery('#uploader_browse').click();
+}
+function init_filebrowser() {
+		elf = jQuery('#elf').elfinder({
+			url : '<?php echo Mage::getUrl('udprod/vendor_image/connector');?>',  // connector URL (REQUIRED)
+			lang: '<?php echo $this->localeCode ?>',             // language (OPTIONAL)
+			contextmenu : {
+				navbar : ['open', 'rm', '|', 'info'],
+				cwd    : ['reload', 'info'],
+				files  : [
+				        'open', 'download', 'rm', 'rename', 'info'
+				                    ]
+			},
+			ui     : [],
+		}).elfinder('instance');	
+}
+function show_filebrowser() {
+		plup.hide();
+		jQuery('#delete_button').removeAttr('disabled');
+		jQuery('#add_button').html('<?php echo Mage::helper('zolagocatalog')->__('Add');?>');
+		func = 'show_uploader';
+		elf.show();
+}
+jQuery().ready(function() {
+	jQuery('#uploader').hide();
+	jQuery('#elf').hide();
 	init_uploader();
+	init_filebrowser();
+	jQuery('#add_button').click(function () {
+		eval(func+'()');
+	});
+	jQuery('#search_button').click(function() {
+		var query = jQuery.trim(jQuery('#input_search').val());
+		if (query!='') {
+			elf.exec('search',query);
+		} else {
+			elf.exec('search','.');			
+		}
+	});
+	jQuery('#delete_button').click(function() {
+		elf.exec('rm');
+	});
+	show_filebrowser();
 });
 </script>
 </div>
