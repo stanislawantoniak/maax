@@ -222,7 +222,6 @@ class Zolago_Catalog_Vendor_ImageController
         }
 
         while ($buff = fread($in, 4096)) {
-            sleep(1);
             fwrite($out, $buff);
         }
 
@@ -234,7 +233,7 @@ class Zolago_Catalog_Vendor_ImageController
             // Strip the temp .part suffix off
             rename("{$filePath}.part", $filePath);
         }
-
+        die($filePath);
         // Return Success JSON-RPC response
         die(' {"jsonrpc" : "2.0", "result" : null, "id" : "id"}');
 
