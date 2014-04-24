@@ -2,6 +2,7 @@
 <?php $_po = $this->getPo(); ?>
 <?php $_shipping = $this->getShippingMethod();?>
 <?php $_alert = $_po->getAlert();?>
+<?php $_comments = $_po->getVendorCommentsCollection(); ;?>
 <div class="container">
 	<!--=== Page Header ===-->
 	<div class="page-header">
@@ -306,14 +307,21 @@
 					</div>
 				</div>
 				<div class="widget-content">
+					<?php if (count($_comments)): ?>
 					<dl class="dl-horizontal">
-						<dt>12.03.2014 14:03<br/><small>Oczekuje</small></dt>
-						<dd> Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Lorem ipsum primis in nibh vel risus. Sed vel lectus. Ut sagittis, ipsum dolor quam.</dd>
-						<dt>12.03.2014 14:03<br/><small>Oczekuje</small></dt>
-						<dd> Lorem ipsum dolor sit amet enim. Etiam ullamcorper.</dd>
-						<dt>12.03.2014 14:03<br/><small>Oczekuje</small></dt>
-						<dd> Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. </dd>
+						<?php foreach ($_comments as $_c): ?>
+						<dt>
+							<?php echo Mage::helper('core')->formatDate($_c->getCreatedAt(), 'medium', true) ?>
+							<br/>
+							<small><?php echo$_c->getUdropshipStatus();?></small>
+						</dt>
+						<dd><?php echo $this->htmlEscape($_c->getComment());?></dd>
+						
+						<?php endforeach ?>
 					</dl>
+					<?php else:?>
+					<small><?php echo Mage::helper("zolagopo")->__("No comments currently added");?></small>
+					<?php endif ?>
 				</div>
 			</div>
 		</div>
