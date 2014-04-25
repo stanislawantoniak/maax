@@ -7,6 +7,24 @@ select.form-control{
 .btn-xs{
 	font-size: @fontSizeSmall !important;
 }
+.messages{
+	.list-unstyled();
+	& , & > li ul{	
+		.list-unstyled();
+	}
+	& > li{
+		.alert();
+		&.error-msg{
+			.alert-danger(); 
+		}
+		&.success-msg{
+			.alert-success();
+		}
+	}
+	padding-top: @baseLineHeight;
+	margin: 0 @baseLineHeight;
+}
+
 .z-grid .filter{
 	
 	position: static;   

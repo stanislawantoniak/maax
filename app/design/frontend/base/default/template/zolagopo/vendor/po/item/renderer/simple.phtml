@@ -6,7 +6,7 @@
 <?php $_basePriceInclTax = $_item->getPrice()*((100+$_taxPrecent)/100);?>
 <?php $_discount = 0; ?>
 <?php $_finalPrice = $_basePriceInclTax - $_discount; ?>
-<tr>
+<tr data-item-id="<?php echo $_item->getId();?>">
 	<td class="align-center checkbox-column"><input type="checkbox" name="item[<?php echo $_key;?>]" value="1" class="uniform"/></td>
 	<td class="align-right"><?php echo $this->getLp();?></td>
 	<td><?php echo $this->escapeHtml($_item->getSku());?></td>
@@ -17,7 +17,7 @@
 	<td class="align-right"><?php echo Mage::helper("core")->currency($_finalPrice);?></td>
 	<td></td>
 	<td>
-		<button class="btn btn-xs bs-tooltip" data-placement="top" title="<?php echo Mage::helper("zolagopo")->__("Edit item");?>">
+		<button data-toggle="modal" data-target="#editItemModal" class="btn btn-xs bs-tooltip" data-placement="top" title="<?php echo Mage::helper("zolagopo")->__("Edit item");?>">
 			<i class="icon-pencil"></i>
 		</button>
 		<button class="btn btn-xs btn-notification bs-tooltip" data-placement="top" title="<?php echo Mage::helper("zolagopo")->__("Remove item");?>" data-layout="top" data-type="confirm" data-text="<?php echo Mage::helper("zolagopo")->__("Do you want to remove this item?");?>" data-modal="true">

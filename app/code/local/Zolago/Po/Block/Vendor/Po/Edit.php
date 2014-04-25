@@ -168,7 +168,11 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Unirgy_DropshipPo_Block_Vendor_Po_I
 		$this->setAvailableMethods($availableMethods);
 		$this->setCurrentShipping($curShipping);
 		$this->setShippingMethod($poShippingMethod);
-		//$this->setCurrentShippingLabel($availableMethods[$curShipping->getUdropshipMethod()] );
+		$this->setShipmentsCollection($_po->getShipmentsCollection());
+	}
+	
+	public function canPosUseDhl() {
+		return Mage::helper('zolagodhl')->isDhlEnabledForPos($this->getPo()->getDefaultPos());
 	}
 	
 	public function getMethodName($poShippingMethod) {
@@ -180,7 +184,10 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Unirgy_DropshipPo_Block_Vendor_Po_I
 		return '';
 	}
 	
-
+	public function getPoUrl($action, $params=array()) {
+		$params += array("id"=> $this->getPo()->getId());
+		return $this->getUrl("*/*/$action", $params);
+	}
 	
 	/**
 	 * @param type $type
@@ -200,4 +207,6 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Unirgy_DropshipPo_Block_Vendor_Po_I
 		return $this->getLayout()->createBlock($renderPath);
 	}
   
+	
+	
 }
