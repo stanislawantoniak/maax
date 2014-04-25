@@ -14,7 +14,7 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 	public function getSubtotalInclTax() {
 		$total = 0;
 		foreach($this->getAllItems() as $item){
-			$total += $this->calcuateItemPrice($item) * $item->getQty();
+			$total += $this->calcuateItemPrice($item) * $item->getQty() - $item->getDiscountAmount();
 		}
 		return $total;
 	}

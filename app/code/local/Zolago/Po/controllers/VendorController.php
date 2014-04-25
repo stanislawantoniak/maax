@@ -61,7 +61,10 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 			);
 			Mage::logException($e);
 		}
-		return $this->_redirectReferer();
+		return $this->_redirectReferer(); //$this->_redirectUrl($this->_getAnchorEditUrl("comments"));
+	}
+	protected function _getAnchorEditUrl($anchor) {
+		return Mage::getUrl("*/*/edit", array("id"=>$this->_registerPo()->getId()))."#".$anchor;
 	}
 	
 	public function saveShippingAddressAction(){
