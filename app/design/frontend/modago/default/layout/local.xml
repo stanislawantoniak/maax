@@ -91,17 +91,16 @@
     </cms_page>
 	
 	<zolagomodago_index_index>
-		<!-- w <default> zdefiniuj domyslny root - mysle ze layout 1 kolumnowy -->
 		<reference name="content">
             <block template="cms/modagohome.phtml" name="modagohome" type="core/template">
-                <block type="zolagomodago/banner" name="zolago_modago_banners" template="banner/hometopwr.phtml">
-                    <block type="zolagomodago/banner" name="zolago_modago_banner_top_slider" template="banner/homebigslider.phtml" />
-                    <block type="zolagomodago/banner" name="zolago_modago_banner_smallfour" template="banner/smallfour.phtml" />
+                <block type="zolagomodago/home_banner" name="zolago_modago_home_banners" template="home/banner/hometopwr.phtml">
+                    <block type="zolagomodago/home_banner" name="zolago_modago_home_banner_top_slider" template="home/banner/homebigslider.phtml" />
+                    <block type="zolagomodago/home_banner" name="zolago_modago_home_banner_smallfour" template="home/banner/smallfour.phtml" />
                 </block>
 
-                <block type="zolagomodago/banner" name="zolago_modago_inspirations" template="banner/inspirations.phtml" />
-                <block type="zolagomodago/popularbrands" name="zolago_modago_popularbrands" template="cms/popularbrands.phtml" />
-                <block type="zolagomodago/slider" name="zolago_modago_homesliderlastseen" template="slider/lastseen.phtml" />
+                <block type="zolagomodago/home_banner" name="zolago_modago_home_inspirations" template="home/banner/inspirations.phtml" />
+                <block type="zolagomodago/home_vendor" name="zolago_modago_home_popularvendors" template="home/popularvendors.phtml" />
+                <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml" />
             </block>
         </reference>
 	</zolagomodago_index_index>
