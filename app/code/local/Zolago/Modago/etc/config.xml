@@ -16,4 +16,11 @@
             </zolagomodago>
 		</routers>
 	</frontend>
+    <global>
+        <blocks>
+            <zolagomodago>
+                <class>Zolago_Modago_Block</class>
+            </zolagomodago>
+        </blocks>
+    </global>
 </config>

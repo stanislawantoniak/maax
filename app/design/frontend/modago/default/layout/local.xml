@@ -15,6 +15,10 @@
             <action method="addItem"><type>skin_js</type><script>js/modago.js</script></action>
             <action method="addItem"><type>skin_js</type><script>js/fns.js</script></action>
         </reference>
+
+        <reference name="root">
+            <action method="setTemplate"><template>page/1column.phtml</template></action>
+        </reference>
         
         <remove name="right.poll"/>
         <remove name="right.permanent.callout"/>
@@ -89,7 +93,16 @@
 	<zolagomodago_index_index>
 		<!-- w <default> zdefiniuj domyslny root - mysle ze layout 1 kolumnowy -->
 		<reference name="content">
-            <block template="cms/modagohome.phtml" name="abc" type="core/template"/>
+            <block template="cms/modagohome.phtml" name="modagohome" type="core/template">
+                <block type="zolagomodago/banner" name="zolago_modago_banners" template="banner/hometopwr.phtml">
+                    <block type="zolagomodago/banner" name="zolago_modago_banner_top_slider" template="banner/homebigslider.phtml" />
+                    <block type="zolagomodago/banner" name="zolago_modago_banner_smallfour" template="banner/smallfour.phtml" />
+                </block>
+
+                <block type="zolagomodago/banner" name="zolago_modago_inspirations" template="banner/inspirations.phtml" />
+                <block type="zolagomodago/popularbrands" name="zolago_modago_popularbrands" template="cms/popularbrands.phtml" />
+                <block type="zolagomodago/slider" name="zolago_modago_homesliderlastseen" template="slider/lastseen.phtml" />
+            </block>
         </reference>
 	</zolagomodago_index_index>
 
