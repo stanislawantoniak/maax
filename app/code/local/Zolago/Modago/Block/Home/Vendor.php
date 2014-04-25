@@ -4,7 +4,7 @@
  * Date: 25.04.14
  */
 
-class Zolago_Modago_Block_Popularbrands extends Mage_Core_Block_Template
+class Zolago_Modago_Block_Home_Vendors extends Mage_Core_Block_Template
 {
 
 } 
