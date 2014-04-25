@@ -3,7 +3,7 @@
 		<div class="col-md-8">
 			<button class="btn" id="add_button"><?php echo Mage::helper('zolagocatalog')->__('Add');?></button>
 			<button class="btn" id="delete_button"><?php echo Mage::helper('zolagocatalog')->__('Delete');?></button>
-			<button class="btn"><?php echo Mage::helper('zolagocatalog')->__('Map by name');?></button>
+			<button class="btn" id="map_by_name"><?php echo Mage::helper('zolagocatalog')->__('Map by name');?></button>
 			<button class="btn"><?php echo Mage::helper('zolagocatalog')->__('Map by CSV');?></button>
 			<button class="btn btn-primary"><i class="icon-question-sign"></i></button>
 		</div>
@@ -12,7 +12,9 @@
 	</div>
 <div style="clear:both"></div>
 	<div id="uploader_wrapper" class="widget-content"><div id="elf"></div><div id="uploader"></div></div>
-
+<div id="dialog_by_name" title="Map by name" style="left:50%;top:50%">
+    Map by name
+</div>
 <script type="text/javascript">
 var elf = null;
 var plup = null;
@@ -102,6 +104,11 @@ jQuery().ready(function() {
 	});
 	jQuery('#delete_button').click(function() {
 		elf.exec('rm');
+	});
+	jQuery('#dialog_by_name').dialog({autoOpen:false});
+	jQuery('#map_by_name').click(function() {
+	    alert('dialog');
+	    jQuery('#dialog_by_name').dialog('open');
 	});
 	show_filebrowser();
 });
