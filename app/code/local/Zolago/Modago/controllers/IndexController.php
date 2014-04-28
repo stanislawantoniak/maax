@@ -12,8 +12,8 @@ class Zolago_Modago_IndexController extends Mage_Core_Controller_Front_Action{
 			echo $vendor->getShoppingCartWatchworldOne() . "<br/>";
 			echo $vendor->getShoppingCartWatchworldTwo() . "<br/>";
 		}
-		 */
 		die;
+		 */
 		
 		$this->renderLayout();
 	}
