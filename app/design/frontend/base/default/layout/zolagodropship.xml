@@ -1,19 +1,172 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
 
+	<!-- bootsrap handling -->
+	<bootstrap>
+		<reference name="root">
+			<action method="setTemplate">
+				<template>page/page_boot.phtml</template>
+			</action>
+			<block type="zolagodropship/vendor_menu_sidebar" template="unirgy/dropship/vendor/menu/sidebar.phtml" name="sidebar" />
+		</reference>
+		<reference name="head">
+			<!-- frontend css -->
+			<action method="removeItem"><type>skin_css</type><name>css/udropship.css</name></action> 
+			<action method="removeItem"><type>skin_css</type><name>css/zolagodropship.css</name></action> 
+			<action method="removeItem"><type>skin_css</type><name>css/styles-ie.css</name></action> 
+            <action method="addCss"><stylesheet>css/boostrap/bootstrap.css</stylesheet></action>
+            <action method="addCss"><stylesheet>css/melon/main.css</stylesheet></action>
+            <action method="addCss"><stylesheet>css/melon/plugins.css</stylesheet></action>
+            <action method="addCss"><stylesheet>css/melon/responsive.css</stylesheet></action>
+            <action method="addCss"><stylesheet>css/melon/fontawesome/font-awesome.min.css</stylesheet></action>
+            <action method="addCss"><stylesheet>css/melon/plugins/uniform.css</stylesheet></action>
+			<action method="addItem">
+				<type>skin_css</type>
+				<name>css/melon/fontawesome/font-awesome-ie7.min.css</name>
+				<params/>
+				<if>IE 7</if>
+			</action>
+			<!-- Customs -->
+            <action method="addCss"><stylesheet>css/local/customs.css</stylesheet></action>
+            <action method="addCss"><stylesheet>css/local/noless.css</stylesheet></action>
+			<!-- adminhtml css -->
+			<action method="removeItem"><type>skin_css</type><name>../../../adminhtml/default/default/boxes.css</name></action> 
+			<action method="removeItem"><type>skin_css</type><name>../../../adminhtml/default/default/custom.css</name></action> 
+			<action method="removeItem"><type>skin_css</type><name>../../../adminhtml/default/defaultie/styles.css</name></action> 
+			<action method="removeItem"><type>skin_css</type><name>../../../adminhtml/default/default/below_ie7.css</name></action> 
+			<action method="removeItem"><type>skin_css</type><name>../../../adminhtml/default/default/ie7.css</name></action> 
+			<action method="removeItem"><type>skin_css</type><name>../../../adminhtml/default/default/print.css</name></action> 
+			<!-- front js -->
+				
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/melon/libs/jquery-1.10.2.min.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/integration.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/jquery-ui/jquery-ui-1.10.2.custom.min.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/boostrap/bootstrap.min.js</name>
+			</action>
+			
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/melon/libs/lodash.compat.min.js</name>
+			</action>
+			
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/melon/libs/html5shiv.js</name>
+				<params/>
+				<if>lt IE 9</if>
+			</action>
+			
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/touchpunch/jquery.ui.touch-punch.min.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/event.swipe/jquery.event.move.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/event.swipe/jquery.event.swipe.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/melon/libs/breakpoints.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/respond/respond.min.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/cookie/jquery.cookie.min.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/slimscroll/jquery.slimscroll.min.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/slimscroll/jquery.slimscroll.horizontal.min.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/melon/app.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/melon/plugins.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/melon/plugins.form-components.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/pickadate/picker.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/pickadate/picker.date.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/pickadate/picker.time.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/uniform/jquery.uniform.min.js</name>
+			</action>
+	
+			<!-- add init script -->
+			<block type="core/template" name="head.initscript" template="unirgy/dropship/vendor/initscript.phtml"/>
+        </reference>		
+		
+		<!-- Override header -->			
+		<reference name="header">
+			<action method="setTemplate">
+				<template>unirgy/dropship/vendor/header_boot.phtml</template>
+			</action>
+			<block name="header.topmenu" as="topmenu" type="zolagodropship/vendor_menu_topmenu" template="unirgy/dropship/vendor/menu/topmenu.phtml"/>
+		</reference>
+	</bootstrap>
+	<!-- Noty handling -->
+	<noty>
+		<reference name="head">
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/noty/jquery.noty.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/noty/layouts/top.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/noty/themes/default.js</name>
+			</action>
+		</reference>
+	</noty>
+	
 	<udropship_vendor>
 		<reference name="head">
 			<action method="addCss"><stylesheet>css/zolagodropship.css</stylesheet></action>
-		</reference>
-		<reference name="header">
-			<action method="setTemplate">
-				<template>zolagodropship/vendor/header.phtml</template>
-			</action>
 		</reference>
 	</udropship_vendor>
 	
 	<udropship_vendor_dashboard>
 		<update handle="udropship_vendor" />
+		<update handle="bootstrap" />
         <reference name="content">
             <block type="core/template" template="zolagodropship/vendor/dashboard.phtml"/>
         </reference>

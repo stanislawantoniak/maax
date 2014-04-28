@@ -1,0 +1,143 @@
+@import (reference) "../../boostrap/less/bootstrap.less"; 
+@import "../../melon/less/general/variables.less";
+
+select.form-control{
+	min-width: 50px; 
+} 
+.btn-xs{
+	font-size: @fontSizeSmall !important;
+}
+.messages{
+	.list-unstyled();
+	& , & > li ul{	
+		.list-unstyled();
+	}
+	& > li{
+		.alert();
+		&.error-msg{
+			.alert-danger(); 
+		}
+		&.success-msg{
+			.alert-success();
+		}
+	}
+	padding-top: @baseLineHeight;
+	margin: 0 @baseLineHeight;
+}
+
+.z-grid .filter{
+	
+	position: static;   
+}
+.nobr{
+	white-space: nowrap !important;
+}
+.form-inline label{   
+	font-weight: normal;
+} 
+.z-grid {
+	
+	hr{
+		margin-top: 10px; 
+		margin-bottom: 10px;
+	}
+	entry-edit{
+		display: inline-block;
+	}
+	.outer-span label{
+		display: none; 
+	}
+	.inline-form-text{
+		padding-top: 5px;
+	}
+	.table-striped tbody > tr.row-selected td{
+		background-color: rgba(147,175,236,0.13) !important;
+	}
+	.sort-arrow-asc:after,
+	.sort-arrow-desc:after{
+		.glyphicon();
+		font-size: @fontSizeMini;
+		color: @green; 
+	}
+	.sort-arrow-asc:after{ 
+		content: "\e093"; 
+	}
+	.sort-arrow-desc:after{
+		content: "\e094"; 
+	}
+	.hor-scroll{
+		width: 100%;
+		overflow: auto;  
+	}
+}
+.a-center {
+	text-align: center;
+}
+.dl-horizontal.dl-z{
+	dt,dd{
+		min-height: @baseLineHeight*1.2;
+	}
+	margin-bottom: 0;
+	margin-top: 10px;
+}
+.shipping-info .dl-horizontal.dl-z{
+	dt{width: 100px;}
+	dd{margin-left: 120px;}
+}
+.widget-content.orders{
+	.alert{
+		margin-bottom:0;
+		padding-top: 10px;
+		padding-bottom: 10px;
+	}
+	min-height: 150px;
+	.with-alert{
+		min-height: 190px;
+	}
+}
+.widget-content.bottom-info{
+	min-height: 110px;
+}
+.shipping-info{
+	.btn{
+		margin: 28px 0;
+	}
+}
+.comments{
+	dl{
+		margin-bottom:10px;
+		dt,dd{
+			margin-bottom: 5px;
+		}
+	}
+	small{
+		font-weight: normal;
+		color: @gray;
+	}
+}
+table.foot-empty-cells tfoot td:empty{
+	visibility: hidden;
+}
+.icon-checked-action{
+	width: 20px;
+	height: 20px;
+	display: inline-block;
+	margin: 0px 14px -5px 10px;
+	opacity: 0.7;
+	background: url(../../images/icon-checked-actions.png);
+}
+@media (min-width: 768px) and (max-width: 1200px) {
+
+	.dl-horizontal.dl-z{
+		dt{
+			width: 120px;
+		}
+		dd{
+			margin-left: 130px;
+		}
+	}
+	.shipping-info .dl-horizontal.dl-z{
+		dt{width: 100px;}
+		dd{margin-left: 110px;}
+	}
+}
