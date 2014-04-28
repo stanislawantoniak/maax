@@ -62,6 +62,41 @@ var App = function($) {
 			// Toggle visibility
 			$('.navbar-left.navbar-left-responsive').slideToggle(200);
 		});
+		
+			
+		//===== Notty buttons =====//
+		$('.btn-notification').click(function() {
+			var self = $(this);
+			noty({
+				text: self.data('text'),
+				type: self.data('type'),
+				modal: self.data('modal'),
+				layout: self.data('layout'),
+				buttons: (self.data('type') != 'confirm') ? false : [
+					{
+						addClass: 'btn btn-primary', text: 'Ok', onClick: function($noty) {
+							$noty.close();
+							noty({force: true, timeout: 2000, text: 'You clicked "Ok" button', type: 'success', layout: self.data('layout')});
+						}
+					}, {
+						addClass: 'btn btn-danger', text: 'Cancel', onClick: function($noty) {$noty.close();}
+					}
+				]
+			});
+			return false;
+		});
+
+			
+		//===== loading btn =====//	
+		$('.form-btn-loading').each(function(){
+			var self = $(this);
+			if(self.parents("form").length){
+				self.parents("form").submit(function(){
+					self.button('loading');
+				});
+			}
+		})
+		
 
 		var handleElements = function() {
 			// First visible childs add .first

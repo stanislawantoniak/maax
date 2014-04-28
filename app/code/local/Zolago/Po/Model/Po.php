@@ -11,6 +11,29 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 		return null;
 	}
 	
+	public function getSubtotalInclTax() {
+		$total = 0;
+		foreach($this->getAllItems() as $item){
+			$total += $this->calcuateItemPrice($item) * $item->getQty() - $item->getDiscountAmount();
+		}
+		return $total;
+	}
+	
+	
+	public function getShippingDiscountIncl() {
+		return $this->getBaseShippingAmountIncl()-$this->getShippingAmountIncl();
+	}
+	
+	/**
+	 * 
+	 * @param Unirgy_DropshipPo_Model_Po_Item $item
+	 * @return type
+	 */
+	public function calcuateItemPrice(Unirgy_DropshipPo_Model_Po_Item $item, $inclTax=true) {
+		return $inclTax ? $item->getPriceInclTax() : $item->getPriceExclTax();
+	}
+	
+	
    // Override address
    public function getShippingAddress() {
 	   if($this->getShippingAddressId()){
@@ -86,4 +109,34 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 			$toDelete->delete();
 		}
    }
+   
+   public function needInvoice() {
+	   return $this->getBillingAddress()->getNeedInvoice();
+   }
+   
+   /**
+    * @return Zolago_Pos_Model_Pos
+    */
+   public function getDefaultPos() {
+	   $pos = Mage::getModel("zolagopos/pos");
+	   if($this->getDefaultPosId()){
+			$pos->load($this->getDefaultPosId());
+	   }
+	   return $pos;
+   }
+   
+   public function updateTotals($force=false) {
+	    if($force || !$this->getGrandTotalInclTax()){
+			$this->setGrandTotalInclTax($this->getSubtotalInclTax()+$this->getShippingAmountIncl());
+			$this->save();
+		}
+		return $this;
+   }
+   
+	protected function _afterSave(){
+		$ret = parent::_afterSave();
+		$this->updateTotals();
+		return $ret;
+	} 
+   
 }

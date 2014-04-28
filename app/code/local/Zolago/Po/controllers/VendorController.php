@@ -2,6 +2,25 @@
 
 class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstract {
 	
+	/**
+	 * @return Zolago_Po_Model_Po
+	 */
+	protected function _registerPo() {
+		if(!Mage::registry("current_po")){
+			$poId = $this->getRequest()->getParam("id");
+			$po = Mage::getModel("udpo/po")->load($poId);
+			Mage::register("current_po", $po);
+		}
+		return Mage::registry("current_po");
+	}
+	
+	/**
+	 * @return Unirgy_Dropship_Model_Vendor
+	 */
+	protected function _getVendor() {
+		return $this->_getSession()->getVendor();
+	}
+	
 	public function indexAction() {
 		// Override origin index
 		Mage::register('as_frontend', true);// Tell block class to use regular URL's
@@ -10,6 +29,42 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 	
 	public function editAction() {
 		$this->_renderPage(null, 'udpo');
+	}
+	
+	
+	public function addCommentAction() {
+		$_po = $this->_registerPo();
+		$comment = $this->getRequest()->getParam("comment");
+		
+		if(empty($comment)){
+			$this->_getSession()->addError(
+				Mage::helper("zolagopo")->__("Enter some comment")
+			);
+			return $this->_redirectReferer();
+		}
+		
+		if($this->_getVendor()){
+			$comment = $this->_getVendor()->getVendorName() . ": " . $comment;
+		}
+		
+		try{
+			$_po->addComment($comment, false, true);
+			$_po->saveComments();
+			$this->_getSession()->addSuccess(
+				Mage::helper("zolagopo")->__("Comment added")
+			);
+		}catch(Mage_Core_Exception $e){
+			$this->_getSession()->addError($e->getMessage());
+		}catch(Exception $e){
+			$this->_getSession()->addError(
+				Mage::helper("zolagopo")->__("Some error occure")
+			);
+			Mage::logException($e);
+		}
+		return $this->_redirectReferer(); //$this->_redirectUrl($this->_getAnchorEditUrl("comments"));
+	}
+	protected function _getAnchorEditUrl($anchor) {
+		return Mage::getUrl("*/*/edit", array("id"=>$this->_registerPo()->getId()))."#".$anchor;
 	}
 	
 	public function saveShippingAddressAction(){

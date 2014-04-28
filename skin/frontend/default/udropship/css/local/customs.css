@@ -71,6 +71,63 @@
 select.form-control {
   min-width: 50px;
 }
+.btn-xs,
+.btn-group-xs > .btn {
+  font-size: 11.049999999999999px !important;
+}
+.messages {
+  padding-left: 0;
+  list-style: none;
+  padding-top: 20px;
+  margin: 0 20px;
+}
+.messages,
+.messages > li ul {
+  padding-left: 0;
+  list-style: none;
+}
+.messages > li {
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+.messages > li h4 {
+  margin-top: 0;
+  color: inherit;
+}
+.messages > li .alert-link {
+  font-weight: bold;
+}
+.messages > li > p,
+.messages > li > ul {
+  margin-bottom: 0;
+}
+.messages > li > p + p {
+  margin-top: 5px;
+}
+.messages > li.error-msg {
+  background-color: #f2dede;
+  border-color: #ebccd1;
+  color: #a94442;
+}
+.messages > li.error-msg hr {
+  border-top-color: #e4b9c0;
+}
+.messages > li.error-msg .alert-link {
+  color: #843534;
+}
+.messages > li.success-msg {
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+  color: #3c763d;
+}
+.messages > li.success-msg hr {
+  border-top-color: #c9e2b3;
+}
+.messages > li.success-msg .alert-link {
+  color: #2b542c;
+}
 .z-grid .filter {
   position: static;
 }
@@ -129,10 +186,52 @@ select.form-control {
 }
 .dl-horizontal.dl-z dt,
 .dl-horizontal.dl-z dd {
-  min-height: 30px;
+  min-height: 24px;
 }
-.dl-horizontal.orders {
-  min-height: 180px;
+.shipping-info .dl-horizontal.dl-z dt {
+  width: 100px;
+}
+.shipping-info .dl-horizontal.dl-z dd {
+  margin-left: 120px;
+}
+.widget-content.orders {
+  min-height: 150px;
+}
+.widget-content.orders .alert {
+  margin-bottom: 0;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.widget-content.orders .with-alert {
+  min-height: 190px;
+}
+.widget-content.bottom-info {
+  min-height: 110px;
+}
+.shipping-info .btn {
+  margin: 28px 0;
+}
+.comments dl {
+  margin-bottom: 10px;
+}
+.comments dl dt,
+.comments dl dd {
+  margin-bottom: 5px;
+}
+.comments small {
+  font-weight: normal;
+  color: #adadad;
+}
+table.foot-empty-cells tfoot td:empty {
+  visibility: hidden;
+}
+.icon-checked-action {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  margin: 0px 14px -5px 10px;
+  opacity: 0.7;
+  background: url(../../images/icon-checked-actions.png);
 }
 @media (min-width: 768px) and (max-width: 1200px) {
   .dl-horizontal.dl-z dt {
@@ -140,5 +239,11 @@ select.form-control {
   }
   .dl-horizontal.dl-z dd {
     margin-left: 130px;
+  }
+  .shipping-info .dl-horizontal.dl-z dt {
+    width: 100px;
+  }
+  .shipping-info .dl-horizontal.dl-z dd {
+    margin-left: 110px;
   }
 }
