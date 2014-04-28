@@ -9,9 +9,12 @@ class Zolago_Modago_IndexController extends Mage_Core_Controller_Front_Action{
 			echo $block->getVendorMarkUrl($vendor) . "<br/>";
 			echo $block->getVendorBaseUrl($vendor) . "<br/>";
 			echo $block->getVendorResizedLogoUrl($vendor) . "<br/>";
+			echo $vendor->getShoppingCartWatchworldOne() . "<br/>";
+			echo $vendor->getShoppingCartWatchworldTwo() . "<br/>";
 		}
+		 */
 		die;
-		*/
+		
 		$this->renderLayout();
 	}
 }
