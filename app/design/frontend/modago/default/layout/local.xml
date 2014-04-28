@@ -98,7 +98,7 @@
                     <block type="zolagomodago/home_banner" name="zolago_modago_home_banner_smallfour" template="home/banner/smallfour.phtml" />
                 </block>
 
-                <block type="zolagomodago/home_banner" name="zolago_modago_home_inspirations" template="home/banner/inspirations.phtml" />
+                <block type="zolagomodago/home_inspirations" name="zolago_modago_home_inspirations" template="home/banner/inspirations.phtml" />
                 <block type="zolagomodago/home_vendor" name="zolago_modago_home_popularvendors" template="home/popularvendors.phtml" />
                 <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml" />
             </block>
