@@ -123,8 +123,8 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 				getBlockClassName("zolagopo/vendor_po_grid_column_renderer_products"),
 			"sortable"	=> false
 		));
-		$this->addColumn("total_value", array(
-            'index'		=> 'total_value',
+		$this->addColumn("grand_total_incl_tax", array(
+            'index'		=> 'grand_total_incl_tax',
             'type'		=> 'price',
 			'align'		=> 'right',
             'currency'	=> 'base_currency_code',
