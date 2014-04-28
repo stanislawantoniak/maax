@@ -2,6 +2,56 @@
 class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
 	const TRACK_SINGLE			= 1;
 
+	public function getVendorLogoResizedUrl(Unirgy_Dropship_Model_Vendor $vendor, 
+			$width=150, $height=70, $imageKey='logo') {
+		
+		return Mage::getBaseUrl("media") . 
+				$this->getVendorLogoResized($vendor, $width, $height, $imageKey);
+	}
+	
+	/**
+	 * @param Unirgy_Dropship_Model_Vendor $vendor
+	 * @param int $width
+	 * @param int $height
+	 * @param sting $imageKey
+	 * @return string|null
+	 */
+	public function getVendorLogoResized(Unirgy_Dropship_Model_Vendor $vendor, 
+			$width=150, $height=70, $imageKey='logo') {
+		$image = $vendor->getData($imageKey);
+		
+		if(empty($image)){
+			return null;
+		}
+		
+		$imagePath = Mage::getBaseDir('media').DS.$image;
+		$pathInfo = pathinfo($image);
+		
+ 		$imageResizedRealtive = $pathInfo['dirname'].DS.						// some/path/
+			$pathInfo['filename'].												// oldname
+			"-".$width."x".$height.												// -100x200
+			".".$pathInfo['extension'];											// .jpg
+		$imageResizedPath = Mage::getBaseDir("media").DS.$imageResizedRealtive;
+			
+		if ((!file_exists($imageResizedPath) && file_exists($imagePath)) ||
+			(file_exists($imageResizedPath) && !$this->_isImageUpToDate($imagePath, $imageResizedPath))){
+			$imageObj = new Varien_Image($imagePath);
+			$imageObj->constrainOnly(true);
+			$imageObj->keepAspectRatio(true);
+			$imageObj->keepFrame(false);
+			$imageObj->resize($width, $height);
+			$imageObj->save($imageResizedPath);
+			
+		}
+		
+		return $imageResizedRealtive;
+
+	}
+	
+	protected function _isImageUpToDate($orig, $thumb) {
+		return filectime($orig)<filectime($thumb);
+	}
+	
 	public function isUdpoMpsAvailable($carrierCode, $vendor = null) {
 		if(in_array($carrierCode, array("zolagodhl"))){
 			return true;
