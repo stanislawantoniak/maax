@@ -1,19 +1,27 @@
 <?php $_item = $this->getItem();?>
 <?php $_orderItem = $this->getItem()->getOrderItem();?>
 <?php $_key = $_item->getId();?>
+<?php /* @todo move taxes and prices to PO Item */ ?>
 <?php $_taxPrecent = $_orderItem->getTaxPercent();?>
-<?php $_priceInclTax = $_item->getPrice()*((100+$_taxPrecent)/100);?>
+<?php $_basePriceInclTax = $_item->getPrice()*((100+$_taxPrecent)/100);?>
+<?php $_discount = 0; ?>
+<?php $_finalPrice = $_basePriceInclTax - $_discount; ?>
 <tr>
 	<td class="align-center checkbox-column"><input type="checkbox" name="item[<?php echo $_key;?>]" value="1" class="uniform"/></td>
 	<td class="align-right"><?php echo $this->getLp();?></td>
 	<td><?php echo $this->escapeHtml($_item->getSku());?></td>
 	<td><?php echo $this->escapeHtml($_item->getName());?></td>
 	<td class="align-right"><?php echo round($_item->getQty());?></td>
-	<td class="align-right"><?php echo Mage::helper("core")->currency($_priceInclTax);?></td>
-	<td class="align-right"><!-- after complete dataflow--></td>
-	<td class="align-right"><?php echo Mage::helper("core")->currency($_priceInclTax);?></td>
+	<td class="align-right"><?php echo Mage::helper("core")->currency($_basePriceInclTax);?></td>
+	<td class="align-right"><?php echo Mage::helper("core")->currency($_discount);?></td>
+	<td class="align-right"><?php echo Mage::helper("core")->currency($_finalPrice);?></td>
 	<td></td>
 	<td>
-		<button class="btn btn-inverse btn-notification" data-layout="top" data-type="confirm" data-text="<?php echo Mage::helper("zolagopo")->__("Do you want to remove this item?");?>" data-modal="true">Confirm</button>
+		<button class="btn btn-xs bs-tooltip" data-placement="top" title="<?php echo Mage::helper("zolagopo")->__("Edit item");?>">
+			<i class="icon-pencil"></i>
+		</button>
+		<button class="btn btn-xs btn-notification bs-tooltip" data-placement="top" title="<?php echo Mage::helper("zolagopo")->__("Remove item");?>" data-layout="top" data-type="confirm" data-text="<?php echo Mage::helper("zolagopo")->__("Do you want to remove this item?");?>" data-modal="true">
+			<i class="icon-remove"></i>
+		</button>
 	</td>
 </tr>

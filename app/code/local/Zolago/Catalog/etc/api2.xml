@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<config>
+  <api2>
+    <resource_groups>
+      <restapi translate="title" module="api2">
+        <title>Zolago Catalog Api</title>
+        <sort_order>10</sort_order>
+      </restapi>
+    </resource_groups>
+    <resources>
+      <convertproduct translate="title" module="api2">
+        <group>convertproduct</group>
+        <model>zolagocatalog/api2_restapi</model>
+        <title>Testing My Rest API</title>
+        <sort_order>10</sort_order>
+        <privileges>
+          <admin>
+            <create>1</create>
+            <retrieve>1</retrieve>
+            <update>1</update>
+            <delete>1</delete>
+          </admin>
+        </privileges>
+        <attributes>
+            <cmd>Command</cmd>
+            <merchant>Merchant logo</merchant>
+            <sku>Merchant SKU</sku>
+            <data>Detailed data</data>
+        </attributes>
+        <routes>
+          <route_collection>
+            <route>/convertproduct</route>
+            <action_type>collection</action_type>
+          </route_collection>
+        </routes>
+        <versions>1</versions>
+      </convertproduct>
+    </resources>
+  </api2>
+</config>
