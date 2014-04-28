@@ -19,9 +19,6 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 		return $total;
 	}
 	
-	public function getGrandTotalInclTax() {
-		return $this->getSubtotalInclTax()+$this->getShippingAmountIncl();
-	}
 	
 	public function getShippingDiscountIncl() {
 		return $this->getBaseShippingAmountIncl()-$this->getShippingAmountIncl();
@@ -127,5 +124,19 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 	   }
 	   return $pos;
    }
+   
+   public function updateTotals($force=false) {
+	    if($force || !$this->getGrandTotalInclTax()){
+			$this->setGrandTotalInclTax($this->getSubtotalInclTax()+$this->getShippingAmountIncl());
+			$this->save();
+		}
+		return $this;
+   }
+   
+	protected function _afterSave(){
+		$ret = parent::_afterSave();
+		$this->updateTotals();
+		return $ret;
+	} 
    
 }

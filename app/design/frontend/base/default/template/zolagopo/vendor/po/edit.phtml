@@ -561,7 +561,7 @@
 			
 		checkboxes.change(function(el){
 			var checkLen = checkboxes.filter(":checked").length;
-			splitBtn.attr("disabled", checkLen==checkboxes.length || !checkLen);
+			splitBtn.attr("disabled", /* checkLen==checkboxes.length || */!checkLen);
 		});
 	});
 </script>
