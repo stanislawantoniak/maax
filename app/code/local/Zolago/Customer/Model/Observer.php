@@ -27,7 +27,7 @@ class Zolago_Customer_Model_Observer {
 			if($customer->getId()){
 				$data = array(
 					"method"			=> $payment->getMethod(),
-					"additional_data"	=> $payment->getAdditionalInformation()
+					"additional_information"	=> $payment->getAdditionalInformation()
 				);
 				$customer->setLastUsedPayment($data);
 				$customer->save();
