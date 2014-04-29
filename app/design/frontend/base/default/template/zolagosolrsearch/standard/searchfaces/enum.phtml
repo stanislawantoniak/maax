@@ -2,8 +2,8 @@
 <?php if ($this->getCanShow()): ?>
 	<dt id="solr_search_<?php echo $key ?>_expander" onclick="Effect.toggle('content_holder_<?php echo $key ?>', 'slide', {duration: 0.3});
 			$('solr_search_<?php echo $key ?>_expander').toggleClassName('collapsed');
-			return false;"><?php echo $this->getFacetLabel(); ?></dt>
-	<dd id="content_holder_<?php echo $key ?>">
+			return false;" <?php if($this->isFilterRolled()):?>class="collapsed"<?php endif;?>><?php echo $this->getFacetLabel(); ?></dt>
+	<dd id="content_holder_<?php echo $key ?>" <?php if($this->isFilterRolled()):?>style="display:none;"<?php endif;?>>
 		<ol class="visible_filters">
 			<?php foreach ($this->getItems() as $item => $count): ?>
 				<?php if ($this->getCanShowItem($item, $count)): ?>
