@@ -12,6 +12,16 @@ class Zolago_Po_Model_Observer {
 			}
 		}
 	}
+	
+	public function quoteAddressSaveBefore($observer) {
+		$address = $observer->getEvent()->getDataObject();
+		/* @var $address Mage_Sales_Model_Quote_Address */
+		if($address instanceof Mage_Sales_Model_Quote_Address){
+			if($address->getAddressType()==Mage_Sales_Model_Quote_Address::TYPE_SHIPPING){
+				$address->setNeedInvoice(0);
+			}
+		}
+	}	
 }
 
 ?>
