@@ -21,7 +21,10 @@
 		<update handle="bootstrap"/>
 		<update handle="noty"/>
 		<reference name="content">			
-			<block name="vendor_po_edit" type="zolagopo/vendor_po_edit" template="zolagopo/vendor/po/edit.phtml"/>
+			<block name="vendor_po_edit" type="zolagopo/vendor_po_edit" template="zolagopo/vendor/po/edit.phtml">
+				<block name="vendor_po_edit_shipping" type="zolagopo/vendor_po_edit_address" template="zolagopo/vendor/po/edit/address.phtml"/>
+				<block name="vendor_po_edit_billing" type="zolagopo/vendor_po_edit_address" template="zolagopo/vendor/po/edit/address.phtml"/>
+			</block>
 		</reference>
     </udpo_vendor_edit>
 	<udpo_vendor_udpoinfo>
