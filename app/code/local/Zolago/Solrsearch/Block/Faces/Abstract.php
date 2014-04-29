@@ -72,6 +72,7 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 		return false;
 	}
 	
+	
 	public function getItemClass($item) {
 		return $this->isItemActive($item) ? "active" : "inactive";
 	}
@@ -97,6 +98,13 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 	
 	public function isFilterActive() {
 		return $this->getFilterContainer()->isFilterActive($this->getAttributeCode());
+	}
+	
+	public function isFilterRolled() {
+		if($this->getFilterModel()){
+			return $this->getFilterModel()->getIsRolled() && !$this->isFilterActive();
+		}
+		return false;
 	}
 	
 	public function getAllOptions() {

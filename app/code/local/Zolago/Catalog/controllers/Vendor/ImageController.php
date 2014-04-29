@@ -6,7 +6,7 @@ class Zolago_Catalog_Vendor_ImageController
      * Index
      */
     public function indexAction() {
-        $this->_renderPage(null, 'udprod_image_queue');
+        $this->_renderPage(null, 'udprod_image');
     }
     public function queueAction() {
         $this->_renderPage(null, 'udprod_image');
@@ -233,7 +233,7 @@ class Zolago_Catalog_Vendor_ImageController
             // Strip the temp .part suffix off
             rename("{$filePath}.part", $filePath);
         }
-
+        die($filePath);
         // Return Success JSON-RPC response
         die(' {"jsonrpc" : "2.0", "result" : null, "id" : "id"}');
 
