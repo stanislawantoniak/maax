@@ -5,7 +5,7 @@
 <!-- Modal <?php echo $_type;?> address -->
 <div class="modal fade" id="edit<?php echo ucfirst($this->getType());?>AddressModal">
 	<div class="modal-dialog">
-		<form data-address-id="<?php echo $_address->getId();?>" id="<?php echo $_type;?>-form" action="<?php echo $this->getPoUrl("saveAddress", array("type"=>$this->getType()));?>" class="form-horizontal row-border" method="post">
+		<form data-address-id="<?php echo $_address->getId();?>" id="<?php echo $_type;?>-address-form" action="<?php echo $this->getPoUrl("saveAddress", array("type"=>$this->getType()));?>" class="form-horizontal row-border" method="post">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -115,7 +115,7 @@
 <?php if($this->isBilling()):?>
 <script type="text/javascript">
 jQuery(function($){
-	var form = $("#<?php echo $_type;?>-form");
+	var form = $("#<?php echo $_type;?>-address-form");
 	form.find(".sales-document").change(function(){
 		var dependsFileds = form.find(".invoice-data");
 		if($(this).val()==1 && $(this).is(":checked")){

@@ -2,6 +2,10 @@
 class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
 	const TRACK_SINGLE			= 1;
 
+	public function getAllowedCarriers() {
+		return array(/*"", "custom", */"zolagodhl","ups");
+	}
+	
 	public function isUdpoMpsAvailable($carrierCode, $vendor = null) {
 		if(in_array($carrierCode, array("zolagodhl"))){
 			return true;

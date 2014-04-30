@@ -1,6 +1,6 @@
 <?php
 
-class Zolago_Po_Block_Vendor_Po_Edit extends Unirgy_DropshipPo_Block_Vendor_Po_Info
+class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 {
 	public function __construct(array $args = array()){
 		parent::__construct($args);
@@ -169,6 +169,10 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Unirgy_DropshipPo_Block_Vendor_Po_I
 		$this->setCurrentShipping($curShipping);
 		$this->setShippingMethod($poShippingMethod);
 		$this->setShipmentsCollection($_po->getShipmentsCollection());
+	}
+	
+	public function canUseCarrier() {
+		return $this->canPosUseDhl();
 	}
 	
 	public function canPosUseDhl() {

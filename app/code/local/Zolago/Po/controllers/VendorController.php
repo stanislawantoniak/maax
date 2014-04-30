@@ -184,6 +184,12 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 		
 		$this->getResponse()->setBody(Zend_Json::encode(array("status"=>0, "message"=>"Some error occure")));
 	}
+	
+	public function saveShippingAction() {
+		$po = $this->_registerPo();
+		var_export($this->getRequest()->getPost());
+		die;
+	}
 
     public function udpoPostAction()
     {

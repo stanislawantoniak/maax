@@ -309,10 +309,10 @@
 					<div class="clearfix"></div>
 					<?php else:?>
 					<div class="align-center">
-						<?php if($this->canPosUseDhl()):?>
-						<button class="btn btn-primary" data-toggle="modal" href="#generateShippingLetterModal"><?php echo $_hlp->__("Generate shipping letter");?></button>
+						<?php if($this->canUseCarrier()):?>
+						<button class="btn btn-primary" data-toggle="modal" href="#shippingModal"><?php echo $_hlp->__("Generate shipping letter");?></button>
 						<?php else:?>
-						<button class="btn btn-primary" data-toggle="modal" href="#addShippingLetterModal"><?php echo $_hlp->__("Add shipping letter");?></button>
+						<button class="btn btn-primary" data-toggle="modal" href="#shippingModal"><?php echo $_hlp->__("Add shipping letter");?></button>
 						<?php endif;?>
 					</div>
 					<?php endif;?>
@@ -460,7 +460,7 @@
 /*******************************************************************************
  *	Shippign address modal
  *******************************************************************************/
-	echo $this->getChild("vendor_po_edit_shipping")->
+	echo $this->getChild("vendor_po_edit_shipping_address")->
 		setAddress($_po->getShippingAddress())->
 		toHtml();
 ?>
@@ -469,51 +469,21 @@
 /*******************************************************************************
  *	Billign address modal
  *******************************************************************************/
-	echo $this->getChild("vendor_po_edit_billing")->
+	echo $this->getChild("vendor_po_edit_billing_address")->
 		setAddress($_po->getBillingAddress())->
 		toHtml();
 ?>
 
-<!-- Modal add letter-->
-<div class="modal fade" id="addShippingLetterModal">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title"><?php echo $_hlp->__("Generate shipping letter");?></h4>
-			</div>
-			<div class="modal-body">
-				<form action="<?php Mage::getUrl("*/*/addShippingLetter");?>">
-					Add opts
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary" data-dismiss="modal"><?php echo $_hlp->__("Add comment");?></button>
-			</div>
-		</div>
-	</div>
-</div>
-<!-- Modal generate letter-->
-<div class="modal fade" id="generateShippingLetterModal">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title"><?php echo $_hlp->__("Generate shipping letter");?></h4>
-			</div>
-			<div class="modal-body">
-				<form action="<?php Mage::getUrl("*/*/generateShippingLetter");?>">
-					Generate opts
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary" data-dismiss="modal"><?php echo $_hlp->__("Add comment");?></button>
-			</div>
-		</div>
-	</div>
-</div>
+
+<?php 
+/*******************************************************************************
+ *	Shipping modal
+ *******************************************************************************/
+	echo $this->getChild("vendor_po_edit_shipping")->
+		setAddress($_po->getShippingAddress())->
+		toHtml();
+?>
+
 <!-- Modals comment -->
 <div class="modal fade" id="addCommentModal">
 	<div class="modal-dialog">

@@ -1,15 +1,8 @@
 <?php
 class Zolago_Po_Block_Vendor_Po_Edit_Address 
-	extends Mage_Core_Block_Template
+	extends Zolago_Po_Block_Vendor_Po_Edit_Abstract
 {
-	public function getPo() {
-		return $this->getParentBlock()->getPo();
-	}
-	
-	public function getPoUrl($action, $params=array()) {
-		return $this->getParentBlock()->getPoUrl($action, $params);
-	}
-	
+
 	public function isSameAsOrigin($type) {
 		if($type==Mage_Sales_Model_Order_Address::TYPE_SHIPPING){
 			return $this->getPo()->isShippingSameAsOrder();
