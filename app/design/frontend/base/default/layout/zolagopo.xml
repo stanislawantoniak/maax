@@ -1,20 +1,20 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
 	<!-- Old version -->
-    <udpo_vendor_index>
+    <!--<udpo_vendor_index>
 		<reference name="udpo.grid">
 			<action method="setTemplate">
 				<template>zolagopo/vendor/po/grid.phtml</template>
 			</action>
 		</reference>
-    </udpo_vendor_index>
-<!--	<udpo_vendor_index>		
+    </udpo_vendor_index>-->
+	<udpo_vendor_index>		
 		<remove name="dashboard"/>
 		<update handle="bootstrap"/>
 		<reference name="content">			
 			<block name="vendor_po" type="zolagopo/vendor_po" template="zolagopo/vendor/po.phtml"/>
 		</reference>
-    </udpo_vendor_index>-->
+    </udpo_vendor_index>
 	<udpo_vendor_edit>		
 		<update handle="bootstrap"/>
 		<update handle="noty"/>

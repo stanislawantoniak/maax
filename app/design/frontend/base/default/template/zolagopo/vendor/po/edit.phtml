@@ -48,7 +48,9 @@
 								</button> 
 								<ul class="dropdown-menu"> 
 									<?php foreach($this->getAllowedStatusesForPo($_po) as $key=>$status):?>
-									<li><a class="btn-notification" data-placement="top"  data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("Are you sure");?>" data-modal="true" data-status="<?php echo $key;?>" href="#"><?php echo $status;?></a></li> 
+										<?php if($key!=$_po->getUdropshipStatus()):?>
+										<li><a class="btn-notification" data-placement="top"  data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("You are about to change status from %s to %s. Are You sure?", $this->getCurrentStatus($_po), $this->escapeHtml($status));?>" data-modal="true" data-status="<?php echo $key;?>" href="#"><?php echo $this->escapeHtml($status);?></a></li> 
+										<?php endif;?>
 									<?php endforeach;?>
 								</ul> 
 							</div>
@@ -352,11 +354,11 @@
 				<div class="widget-header">
 					<h4>
 						<i class="icon-comments-alt"></i> 
-						<?php echo $_hlp->__("Operiation history");?>
+						<?php echo $_hlp->__("Operation history");?>
 					</h4>			
 					<div class="toolbar no-padding"> 
 						<div class="btn-group"> 
-							<a class="btn btn-xs btn-default" data-toggle="modal" href="#addCommentModal"><i class="icon-comment"></i> <?php echo $_hlp->__("Add comment");?></a> 
+							<a class="btn btn-xs btn-default" data-toggle="modal" href="#addCommentModal" id="addCommentModalTrigger"><i class="icon-comment"></i> <?php echo $_hlp->__("Add comment");?></a> 
 						</div> 
 					</div>
 				</div>
@@ -541,5 +543,8 @@
 			var checkLen = checkboxes.filter(":checked").length;
 			splitBtn.attr("disabled", /* checkLen==checkboxes.length || */!checkLen);
 		});
+		$("#addCommentModal").on('shown.bs.modal', function(){
+			$(this).find("textarea").focus();
+		})
 	});
 </script>

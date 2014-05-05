@@ -185,18 +185,13 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 		
 		$this->addColumn("actions", array(
                 'header'    => Mage::helper('zolagopo')->__('Action'),
+				'renderer'	=> Mage::getConfig()->getBlockClassName("zolagoadminhtml/widget_grid_column_renderer_link"),
                 'width'     => '50px',
                 'type'      => 'action',
-                'getter'     => 'getId',
-                'actions'   => array(
-                    array(
-                        'caption' => Mage::helper('zolagopo')->__('Edit'),
-                        'url'     => array(
-                            'base'=>'*/*/edit'
-                        ),
-                        'field'   => 'id'
-                    )
-                ),
+				'index'		=> 'entity_id',
+				'link_action'=> "*/*/edit",
+				'link_param'=> 'id',
+				'link_label'=> 'Edit',
                 'filter'    => false,
                 'sortable'  => false
         ));

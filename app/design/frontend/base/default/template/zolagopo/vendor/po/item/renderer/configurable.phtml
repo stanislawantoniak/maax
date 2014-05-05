@@ -14,12 +14,12 @@
 	<td class="align-center checkbox-column"><input type="checkbox" name="item[<?php echo $_key;?>]" value="1" class="uniform"/></td>
 	<td class="align-right"><?php echo $this->getLp();?></td>
 	<td><?php echo $this->escapeHtml($_item->getData('vendor_simple_sku') ? $_item->getData('vendor_simple_sku') : $_item->getData('sku'));?></td>
-	<td><?php echo $this->escapeHtml($_item->getName());?></td>
+	<td><?php echo $this->escapeHtml($_item->getName());?><?php echo $this->getConfigurableHtml($_orderItem);?></td>
 	<td class="align-right"><?php echo round($_item->getQty());?></td>
 	<td class="align-right"><?php echo Mage::helper("core")->currency($_priceInclTax);?></td>
 	<td class="align-right">
 		<?php if($_itemDiscount>0):?>
-			<span class="text-success"><?php echo  Mage::helper("core")->currency(-1*$_itemDiscount);?></span>
+			<span class="text-success"><?php echo Mage::helper("core")->currency(-1*$_itemDiscount);?></span>
 		<?php else:?>
 			<?php echo Mage::helper("core")->currency($_itemDiscount);?>
 		<?php endif;?>
