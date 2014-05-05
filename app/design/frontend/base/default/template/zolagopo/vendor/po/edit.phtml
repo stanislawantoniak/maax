@@ -276,7 +276,7 @@
 					<?php if($_currentShipping && $_currentShipping->getId()):?>
 					<div class="toolbar no-padding"> 
 						<div class="btn-group"> 
-							<span data-toggle="modal" data-target="#composeModal"  class="btn btn-xs">
+							<span class="btn-notification btn btn-xs" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("cancelShipping", array("shipping_id"=>$_currentShipping->getId()));?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("Are You sure?");?>" data-modal="true" href="#">
 								<i class="icon-remove "></i> 
 								<?php echo $_hlp->__("Cancel");?>
 							</span> 

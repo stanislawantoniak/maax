@@ -465,6 +465,10 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 
         return $this->_redirectReferer();
     }
+	public function cancelShippingAction() {
+		$this->_getSession()->addSuccess("Shipping canceld");
+		return $this->_redirectReferer();
+	}
 	
 	protected function _porcessDhlDate($date) {
 		$_date = explode("-", $date);
