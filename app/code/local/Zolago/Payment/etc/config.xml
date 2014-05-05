@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Zolago_Payment>
+            <version>0.0.1</version>
+        </Zolago_Payment>
+    </modules>
+    <global>
+        <models>
+            <zolagopayment>
+                <class>Zolago_Payment_Model</class>
+                <resourceModel>zolagopayment_resource</resourceModel>
+            </zolagopayment>
+            <zolagopayment_resource>
+                <class>Zolago_Payment_Model_Resource</class>
+                <entities>
+                    <provider>
+                        <table>zolago_payment_provider</table>
+                    </provider>
+                </entities>
+            </zolagopayment_resource>
+        </models>
+        <blocks>
+            <zolagopayment>
+                <class>Zolago_Payment_Block</class>
+            </zolagopayment>
+        </blocks>
+       
+        <resources>
+            <zolagopayment_setup>
+                <setup>
+                    <module>Zolago_Payment</module>
+                </setup>
+            </zolagopayment_setup>
+        </resources>
+    </global>
+	<default>
+		<payment>
+            <zolagopayment>
+                <active>1</active>
+                <model>zolagopayment/method</model>
+                <order_status>pending</order_status>
+                <title>Online Payment</title>
+                <allowspecific>0</allowspecific>
+                <group>online</group>
+            </zolagopayment>
+        </payment>
+	</default>
+</config>

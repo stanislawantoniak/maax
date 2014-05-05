@@ -147,6 +147,10 @@ class Unirgy_DropshipTierCommission_Model_VendorStatement extends Unirgy_Dropshi
         }
         unset($_ar);
         $order['amounts'] = array_merge($this->_getEmptyTotals(), $amountRow);
+        udDump($po, '__state');
+        udDump($poItem, '__state');
+        udDump($orderItem, '__state');
+        udDump($order, '__state');
         return $order;
     }
 

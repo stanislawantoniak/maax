@@ -1,0 +1,13 @@
+<div style="clear:both"></div>
+<div>
+		<script type="text/javascript" charset="utf-8">
+			var elf;
+			jQuery().ready(function() {
+				elf = jQuery('#elfinder').elfinder({
+					url : '<?php echo Mage::getUrl('udprod/vendor_image/connector');?>',  // connector URL (REQUIRED)
+					lang: '<?php echo $this->localeCode ?>',             // language (OPTIONAL)
+				}).elfinder('instance');
+			});
+		</script>
+		<div id="elfinder"></div>
+</div>

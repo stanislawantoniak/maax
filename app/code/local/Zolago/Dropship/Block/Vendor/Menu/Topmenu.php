@@ -25,7 +25,7 @@ class Zolago_Dropship_Block_Vendor_Menu_Topmenu
 	}
 	
 	public function renderMenu(array $menu, $useContainer=false, $isSubmenu=false) {
-		$str = $useContainer ? "<ul".($isSubmenu ? " class=\"dropdown-menu\"" : "") . "\">" : "";
+		$str = $useContainer ? "<ul".($isSubmenu ? " class=\"dropdown-menu\"" : "") . ">" : "";
 		foreach($menu as $item){
 			if(is_array($item)){
 				$className = array();
