@@ -185,19 +185,23 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 		$this->getResponse()->setBody(Zend_Json::encode(array("status"=>0, "message"=>"Some error occure")));
 	}
 	
-	public function saveShippingAction() {
-		$po = $this->_registerPo();
-		var_export($this->getRequest()->getPost());
-		die;
-	}
+//	public function saveShippingAction() {
+//		$po = $this->_registerPo();
+//		var_export($this->getRequest()->getPost());
+//		die;
+//	}
 
-    public function udpoPostAction()
+    public function saveShippingAction()
     {
+		
+		
+		
         $hlp = Mage::helper('udropship');
         $udpoHlp = Mage::helper('udpo');
         $r = $this->getRequest();
-        $id = $r->getParam('id');
-        $udpo = Mage::getModel('udpo/po')->load($id);
+        $udpo = $this->_registerPo();
+        $id = $udpo->getId();
+		
         $vendor = $hlp->getVendor($udpo->getUdropshipVendor());
         $session = $this->_getSession();
 
@@ -461,7 +465,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             $session->addError($e->getMessage());
         }
 
-        $this->_forward('udpoInfo');
+        $this->_redirectReferer();
     }
 	
 	protected function _createShipments($dhlSettings, $shipment, $shipmentSettings, $udpo) {

@@ -6,6 +6,11 @@ class Zolago_Po_Block_Vendor_Po_Edit_Shipping
 	const MODE_GENERATE		= "generate";
 	const MODE_ADD			= "add";
 	
+	public function isMethodChecked($code){
+		return $this->canPosUseDhl();
+	}
+	
+	
 	public function getMode() {
 		return $this->canPosUseDhl() ? self::MODE_GENERATE : self::MODE_ADD;
 	}
@@ -14,9 +19,14 @@ class Zolago_Po_Block_Vendor_Po_Edit_Shipping
 		return $this->getParentBlock()->getAvailableMethods();
 	}
 	
-	public function isMethodChecked($code){
-		return $code=="zolagodhl";
+	public function getRemainingShippingAmount() {
+		return $this->getParentBlock()->getRemainingShippingAmount();
 	}
+	
+	public function getShippingMethod() {
+		return $this->getParentBlock()->getShippingMethod();
+	}
+	
 	public function getCarriers(){
 		return $this->getParentBlock()->getCarriers();
 	}
@@ -29,4 +39,5 @@ class Zolago_Po_Block_Vendor_Po_Edit_Shipping
 	public function canPosUseDhl() {
 		return $this->getParentBlock()->canPosUseDhl();
 	}
+	
 }

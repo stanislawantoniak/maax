@@ -3,9 +3,10 @@
 <?php $_hlp = Mage::helper("zolagopo");?>
 <?php $_shippingMethod = $this->getShippingMethod();?>
 <?php $_shipmentsCollection = $this->getShipmentsCollection();?>
-<?php $_shipmentsCount = $_shipmentsCollection->count();?>
+<?php $_currentShipping = $this->getCustomCurrentShipping();?>
 <?php $_alert = $_po->getAlert();?>
 <?php $_comments = $_po->getVendorCommentsCollection(); ;?>
+<?php $_shippingStatuses = Mage::helper('udropship')->getVendorShipmentStatuses(); ?>
 <div class="container">
 	<!--=== Page Header ===-->
 	<div class="page-header">
@@ -270,7 +271,7 @@
 						<i class="icon-plane"></i> 
 						<?php echo $_hlp->__("Shipment");?>
 					</h4>	
-					<?php if($_shipmentsCollection->count()):?>
+					<?php if($_currentShipping && $_currentShipping->getId()):?>
 					<div class="toolbar no-padding"> 
 						<div class="btn-group"> 
 							<span data-toggle="modal" data-target="#composeModal"  class="btn btn-xs">
@@ -283,12 +284,16 @@
 					<?php endif; ?>
 				</div>
 				<div class="widget-content bottom-info shipping-info">
-					<?php if($_shipmentsCollection->count()):?>
+					<?php if($_currentShipping && $_currentShipping->getId()):?>
 					<div class="row">
 						<div class="col-md-6">
 							<dl class="dl-horizontal dl-z">
 								<dt><?php echo $_hlp->__("Status");?>:</dt>
-								<dd><?php echo $_hlp->__("Not send");?></dd>
+								<dd>
+									<?php if(isset($_shippingStatuses[$_currentShipping->getUdropshipStatus()])): ?>
+										<?php echo $this->escapeHtml($_shippingStatuses[$_currentShipping->getUdropshipStatus()]);?>
+									<?php endif;?>
+								</dd>
 								<dt><?php echo $_hlp->__("Method");?>:</dt>
 								<dd><?php echo $_hlp->__("Carrier");?></dd>
 								<dt><?php echo $_hlp->__("Letter no.");?>:</dt>

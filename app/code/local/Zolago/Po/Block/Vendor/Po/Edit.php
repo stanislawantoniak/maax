@@ -168,7 +168,14 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 		$this->setAvailableMethods($availableMethods);
 		$this->setCurrentShipping($curShipping);
 		$this->setShippingMethod($poShippingMethod);
-		$this->setShipmentsCollection($_po->getShipmentsCollection());
+		
+		$collection = $_po->getShipmentsCollection();
+		$collection->addFieldToFilter("udropship_status", 
+				array("nin"=>array(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED))
+		);
+		$collection->setOrder("created_at", "DESC");
+		$this->setShipmentsCollection($collection);
+		$this->setCustomCurrentShipping($collection->getFirstItem());
 	}
 	
 	public function canUseCarrier() {
