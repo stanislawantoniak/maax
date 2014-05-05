@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
 	<!-- Old version -->
-	<!-- 
     <udpo_vendor_index>
 		<reference name="udpo.grid">
 			<action method="setTemplate">
@@ -9,19 +8,22 @@
 			</action>
 		</reference>
     </udpo_vendor_index>
-	-->
-	<udpo_vendor_index>		
+<!--	<udpo_vendor_index>		
 		<remove name="dashboard"/>
 		<update handle="bootstrap"/>
 		<reference name="content">			
 			<block name="vendor_po" type="zolagopo/vendor_po" template="zolagopo/vendor/po.phtml"/>
 		</reference>
-    </udpo_vendor_index>
+    </udpo_vendor_index>-->
 	<udpo_vendor_edit>		
 		<update handle="bootstrap"/>
 		<update handle="noty"/>
 		<reference name="content">			
-			<block name="vendor_po_edit" type="zolagopo/vendor_po_edit" template="zolagopo/vendor/po/edit.phtml"/>
+			<block name="vendor_po_edit" type="zolagopo/vendor_po_edit" template="zolagopo/vendor/po/edit.phtml">
+				<block name="vendor_po_edit_shipping_address" type="zolagopo/vendor_po_edit_address" template="zolagopo/vendor/po/edit/address.phtml"/>
+				<block name="vendor_po_edit_billing_address" type="zolagopo/vendor_po_edit_address" template="zolagopo/vendor/po/edit/address.phtml"/>
+				<block name="vendor_po_edit_shipping" type="zolagopo/vendor_po_edit_shipping" template="zolagopo/vendor/po/edit/shipping.phtml"/>
+			</block>
 		</reference>
     </udpo_vendor_edit>
 	<udpo_vendor_udpoinfo>

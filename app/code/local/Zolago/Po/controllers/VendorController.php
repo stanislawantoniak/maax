@@ -67,17 +67,18 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 		return Mage::getUrl("*/*/edit", array("id"=>$this->_registerPo()->getId()))."#".$anchor;
 	}
 	
-	public function saveShippingAddressAction(){
-		$req = $this->getRequest();
-		$poId = $req->getParam("po_id");
-		$data = $req->getPost();
+	
+	public function saveAddressAction(){
+		$req	=	$this->getRequest();
+		$data	=	$req->getPost();
+		$type	=	$req->getParam("type");
+		$isAjax =	$req->isAjax();
 		
-		$po = Mage::getModel("udpo/po")->load($poId);
+		$po = $this->_registerPo();
 		/* @var $po Zolago_Po_Model_Po */
 		$session = $this->_getSession();
 		/* @var $session Zolago_Dropship_Model_Session */
 		
-		$this->getResponse()->setHeader("content-type", "application/json");
 		
 		if(!$po->getId()){
 			$this->getResponse()->setBody(Zend_Json::encode(array(
@@ -101,16 +102,28 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 		);
 		
 		try{
-			if(isset($data['restore'])){
-				$po->clearOwnShippingAddress();
+			if(isset($data['restore']) && $data['restore']==1){
+				if($type==Mage_Sales_Model_Order_Address::TYPE_SHIPPING){
+					$po->clearOwnShippingAddress();
+				}else{
+					$po->clearOwnBillingAddress();
+				}
 				$po->save();
 				$session->addSuccess(Mage::helper("zolagopo")->__("Address restored"));
 				$response['content']['reload']=1;
-			}elseif(isset($data['add_own'])){
-				$orignAddress = $po->getOrder()->getShippingAddress();
+			}elseif(isset($data['add_own']) && $data['add_own']==1){
+				if($type==Mage_Sales_Model_Order_Address::TYPE_SHIPPING){
+					$orignAddress = $po->getOrder()->getShippingAddress();
+				}else{
+					$orignAddress = $po->getOrder()->getBillingAddress();
+				}
 				$newAddress = clone $orignAddress;
 				$newAddress->addData($data);
-				$po->setOwnShippingAddress($newAddress);
+				if($type==Mage_Sales_Model_Order_Address::TYPE_SHIPPING){
+					$po->setOwnShippingAddress($newAddress);
+				}else{
+					$po->setOwnBillingAddress($newAddress);
+				}
 				$po->save();
 				$session->addSuccess(Mage::helper("zolagopo")->__("Address changed"));
 				$response['content']['reload']=1;
@@ -121,9 +134,16 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 				"status"=>0, 
 				"content"=>Mage::helper("zolagopo")->__("Some errors occure. Check logs.")
 			);
+			if(!$isAjax){
+				$session->addError(Mage::helper("zolagopo")->__("Some errors occure. Check logs."));
+			}
 		}
-		
-		$this->getResponse()->setBody(Zend_Json::encode($response));
+		if($isAjax){
+			$this->getResponse()->setHeader("content-type", "application/json");
+			$this->getResponse()->setBody(Zend_Json::encode($response));
+		}else{
+			$this->_redirectReferer();
+		}
 	}
 
 	public function updatePosAction(){
@@ -164,14 +184,24 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 		
 		$this->getResponse()->setBody(Zend_Json::encode(array("status"=>0, "message"=>"Some error occure")));
 	}
+	
+//	public function saveShippingAction() {
+//		$po = $this->_registerPo();
+//		var_export($this->getRequest()->getPost());
+//		die;
+//	}
 
-    public function udpoPostAction()
+    public function saveShippingAction()
     {
+		
+		
+		
         $hlp = Mage::helper('udropship');
         $udpoHlp = Mage::helper('udpo');
         $r = $this->getRequest();
-        $id = $r->getParam('id');
-        $udpo = Mage::getModel('udpo/po')->load($id);
+        $udpo = $this->_registerPo();
+        $id = $udpo->getId();
+		
         $vendor = $hlp->getVendor($udpo->getUdropshipVendor());
         $session = $this->_getSession();
 
@@ -435,7 +465,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             $session->addError($e->getMessage());
         }
 
-        $this->_forward('udpoInfo');
+        $this->_redirectReferer();
     }
 	
 	protected function _createShipments($dhlSettings, $shipment, $shipmentSettings, $udpo) {

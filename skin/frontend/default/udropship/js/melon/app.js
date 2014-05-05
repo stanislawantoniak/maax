@@ -97,7 +97,15 @@ var App = function($) {
 			}
 		})
 		
-
+		
+		//===== datepicker btn =====//	
+		if($.datepicker){
+			$.datepicker.setDefaults({
+				showOtherMonths:true,
+				autoSize: true,
+				dateFormat: 'dd-mm-yy'
+			});
+		}
 		var handleElements = function() {
 			// First visible childs add .first
 			$('.crumbs .crumb-buttons > li').removeClass('first');

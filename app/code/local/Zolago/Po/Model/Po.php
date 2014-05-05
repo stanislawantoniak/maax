@@ -3,6 +3,7 @@
 class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 {
 	const TYPE_POSHIPPING = "poshipping";
+	const TYPE_POBILLING = "pobilling";
 	
 	public function getPos() {
 		if($this->getDefaultPosId()){
@@ -56,25 +57,40 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 	   return parent::getBillingAddress();
    }
    
-   // Address wasn't overrriden?
+   
    public function isShippingSameAsOrder() {
 	   return $this->getShippingAddress()->getId() == $this->getOrder()->getShippingAddress()->getId();
    }
    
+   public function isBillingSameAsOrder() {
+	   return $this->getBillingAddress()->getId() == $this->getOrder()->getBillingAddress()->getId();
+   }
+   
    public function setOwnShippingAddress(Mage_Sales_Model_Order_Address $address, $append=false){
+	    return $this->_setOwnAddress(self::TYPE_POSHIPPING, $address, $append);
+   }
+   
+   public function setOwnBillingAddress(Mage_Sales_Model_Order_Address $address, $append=false){
+	   return $this->_setOwnAddress(self::TYPE_POBILLING, $address, $append);
+   }
+   
+   protected function _setOwnAddress($type, Mage_Sales_Model_Order_Address $address, $append=false){
 	   $address->setId(null);
 	   $address->setParentId($this->getOrder()->getId());
-	   $address->setAddressType(self::TYPE_POSHIPPING);
+	   $address->setAddressType($type);
 	   $address->save();
-	   $this->setShippingAddressId($address->getId());
-	   
+	   if($type==self::TYPE_POSHIPPING){
+			$this->setShippingAddressId($address->getId());
+	   }else{
+		    $this->setBillingAddressId($address->getId());
+	   }
 	   // Remove not used addresses
 	   if(!$append){
-		  $this->cleanAddresses(array($address->getId()));
+		  $this->_cleanAddresses($type, array($address->getId()));
 	   }
-	   
 	   return $this;
    }
+   
    
    public function clearOwnShippingAddress(){
 	   if($this->isShippingSameAsOrder()){
@@ -83,35 +99,51 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 	   $this->setShippingAddressId(
 			$this->getOrder()->getShippingAddress()->getId()
 	   );
-	   $this->cleanAddresses();
+	   $this->_cleanAddresses(self::TYPE_POSHIPPING);
 	   return $this;
    }
    
-   public function cleanAddresses($exclude=array()) {
+   public function clearOwnBillingAddress(){
+	   if($this->isBillingSameAsOrder()){
+		   return $this;
+	   }
+	   $this->setBillingAddressId(
+			$this->getOrder()->getBillingAddress()->getId()
+	   );
+	   $this->_cleanAddresses(self::TYPE_POBILLING);
+	   return $this;
+   }
+   
+   
+   protected function _cleanAddresses($type, $exclude=array()) {
 	    // Add this shippign id
 		$exclude[] = $this->getShippingAddressId();
 	    $addressCollection = Mage::getResourceModel("sales/order_address_collection");
 		/* @var $addressCollection Mage_Sales_Model_Resource_Order_Address_Collection */
 		$addressCollection->addFieldToFilter("parent_id", $this->getOrder()->getId());
 		$addressCollection->addFieldToFilter("entity_id", array("nin"=>$exclude));
-		$addressCollection->addFieldToFilter("address_type", self::TYPE_POSHIPPING);
-		$select = $addressCollection->getSelect();
-		$subSelect = $select->getAdapter()->select();
-		$subSelect->from( 
-				array("shipment"=>$this->getResource()->getTable("sales/shipment")),
-				array(new Zend_Db_Expr("COUNT(shipment.entity_id)"))
-		);
-		$subSelect->where("shipment.shipping_address_id=main_table.entity_id");
+		$addressCollection->addFieldToFilter("address_type", $type);
+		
+		if($type==self::TYPE_POSHIPPING){
+			$select = $addressCollection->getSelect();
 
-		$select->where("? < 1", $subSelect);
+			$subSelect = $select->getAdapter()->select();
+			$subSelect->from( 
+					array("shipment"=>$this->getResource()->getTable("sales/shipment")),
+					array(new Zend_Db_Expr("COUNT(shipment.entity_id)"))
+			);
+			$subSelect->where("shipment.shipping_address_id=main_table.entity_id");
 
+			$select->where("? < 1", $subSelect);
+		}
+		
 		foreach($addressCollection as $toDelete){
 			$toDelete->delete();
 		}
    }
    
    public function needInvoice() {
-	   return $this->getBillingAddress()->getNeedInvoice();
+	   return (int)$this->getBillingAddress()->getNeedInvoice();
    }
    
    /**
