@@ -284,6 +284,7 @@
 					<?php endif; ?>
 				</div>
 				<div class="widget-content bottom-info shipping-info">
+					<?php $_tracking = $this->getCurrentTracking($_currentShipping);?>
 					<?php if($_currentShipping && $_currentShipping->getId()):?>
 					<div class="row">
 						<div class="col-md-6">
@@ -293,21 +294,41 @@
 									<?php if(isset($_shippingStatuses[$_currentShipping->getUdropshipStatus()])): ?>
 										<?php echo $this->escapeHtml($_shippingStatuses[$_currentShipping->getUdropshipStatus()]);?>
 									<?php endif;?>
+									<?php echo $_currentShipping->getUdropshipStatus() . " / " . $_currentShipping->getId();?>
 								</dd>
 								<dt><?php echo $_hlp->__("Method");?>:</dt>
-								<dd><?php echo $_hlp->__("Carrier");?></dd>
-								<dt><?php echo $_hlp->__("Letter no.");?>:</dt>
-								<dd><?php echo $_hlp->__("123123233");?></dd>
+								<dd>
+									<?php echo $this->escapeHtml($_currentShipping->getUdropshipMethodDescription());?>
+								</dd>
+								<dt><?php echo $_hlp->__("Date send");?>:</dt>
+								<dd>
+									<?php echo $_hlp->__("N/A");?>
+								</dd>
 							</dl>
 						</div>
 						<div class="col-md-6">
 							<dl class="dl-horizontal dl-z">
-								<dt><?php echo $_hlp->__("Status");?>:</dt>
-								<dd><?php echo $_hlp->__("Not send");?></dd>
-								<dt><?php echo $_hlp->__("Method");?>:</dt>
-								<dd><?php echo $_hlp->__("Carrier");?></dd>
+								
+								<dt><?php echo $_hlp->__("Carrier");?>:</dt>
+								<dd>
+									<?php if($_tracking && $_tracking->getId()):?>
+										<?php echo $this->escapeHtml($_tracking->getTitle());?>
+									<?php else:?>
+										<?php echo $_hlp->__("N/A");?>
+									<?php endif;?>
+								</dd>
 								<dt><?php echo $_hlp->__("Letter no.");?>:</dt>
-								<dd><?php echo $_hlp->__("123123233");?></dd>
+								<dd>
+									<?php if($_tracking && $_tracking->getId()):?>
+										<?php echo $this->escapeHtml($_tracking->getTrackNumber());?>
+									<?php else:?>
+										<?php echo $_hlp->__("N/A");?>
+									<?php endif;?>
+								</dd>
+								<dt><?php echo $_hlp->__("Aggregated");?>:</dt>
+								<dd>
+									<?php echo $_hlp->__("N/A");?>
+								</dd>
 							</dl>
 						</div>
 					</div>

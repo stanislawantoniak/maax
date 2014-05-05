@@ -18,12 +18,11 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 	 * @return string
 	 */
 	public function getCurrentStatus(Unirgy_DropshipPo_Model_Po $po) {
-		$statuses = $this->getAllowedStatuses();
-		$statusId = $this->getPo()->getUdropshipStatus();
-		if(isset($statuses[$statusId])){
-			return $this->__($statuses[$statusId]);;
-		}
-		return '';
+		return Mage::helper("udpo")->getPoStatusName($this->getPo()->getUdropshipStatus());
+	}
+	
+	public function getAllStatuses() {
+		
 	}
 	
 	/**
@@ -169,13 +168,24 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 		$this->setCurrentShipping($curShipping);
 		$this->setShippingMethod($poShippingMethod);
 		
-		$collection = $_po->getShipmentsCollection();
-		$collection->addFieldToFilter("udropship_status", 
-				array("nin"=>array(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED))
+		$collection =  Mage::getResourceModel('sales/order_shipment_collection')->
+				addAttributeToFilter('udpo_id', $_po->getId())->
+				addAttributeToFilter("udropship_status", 
+					array("nin"=>array(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED))
 		);
+		
 		$collection->setOrder("created_at", "DESC");
 		$this->setShipmentsCollection($collection);
 		$this->setCustomCurrentShipping($collection->getFirstItem());
+
+	}
+	
+	public function getCurrentTracking(Mage_Sales_Model_Order_Shipment $shipment = null) {
+		if($shipment instanceof  Mage_Sales_Model_Order_Shipment && $shipment->getId()){
+			$collection = $shipment->getTracksCollection()->setOrder("created_at", "DESC");
+			return $collection->getFirstItem();
+		}
+		return null;
 	}
 	
 	public function canUseCarrier() {
