@@ -1,0 +1,28 @@
+<?php
+/**
+ * Author: Paweł Chyl <pawel.chyl@orba.pl>
+ * Date: 02.05.14
+ * @see Zolago_Modago_Block_Page_Header_Rightmenu
+ */
+?>
+<!-- NAV RIGHT -->
+<div id="user_menu" class="pull-right">
+    <ul class="nav navbar-nav  pull-right">
+        <li id="link_your_account" class="hidden-xs">
+            <a href="#"><i class="ico_your_account"></i><br><span class="hidden-xs">Twoje Konto</span></a>
+        </li>
+        <li id="link_favorites">
+            <a href="#"><i class="ico_favorites"><span class="badge">42</span></i><br><span class="hidden-xs">Ulubione</span></a>
+
+        </li>
+        <li id="link_basket" class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                <i class="ico_basket"><span class="badge">42</span></i>
+                <br>
+                <span class="hidden-xs">Koszyk</span>
+
+            </a>
+            <?php echo $this->getChildHtml(''); ?>
+        </li>
+    </ul>
+</div>

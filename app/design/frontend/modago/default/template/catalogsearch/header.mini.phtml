@@ -1,0 +1,50 @@
+<?php
+/**
+ * Author: Paweł Chyl <pawel.chyl@orba.pl>
+ * Date: 02.05.14
+ */
+?>
+
+
+<div class="block_search search hidden-sm hidden-xs">
+    <form class="navbar-form navbar-left" role="search">
+        <div class="form-group">
+            <input type="text" class="form-control" placeholder="Search">
+        </div>
+        <div class="select-box">
+            <select name="" class="form-control select-styled">
+                <option value="">w całej galerii</option>
+                <option value="">Ona</option>
+                <option value="">On</option>
+            </select>
+        </div>
+        <input type="image" src="<?php echo $this->getSkinUrl('images/ico_search.gif') ?>" name="Szukaj" alt="Szukaj">
+    </form>
+
+</div>
+<!-- MOBILE -->
+<div id="toggleSearch" class="block_search_m visible-sm visible-xs">
+    <div class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="ico_search_mobile"></i></a>
+        <ul class="dropdown-menu searchDropdown">
+            <li>
+                <form class="navbar-form navbar-left clearfix" role="search">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search">
+                    </div>
+                    <div class="form-group styledSelected">
+                        <select name="" class="form-control  select-styled">
+                            <option value="">Wszystkie kategorie</option>
+                            <option value="">Ona</option>
+                            <option value="">On</option>
+                        </select>
+                    </div>
+                    <div class="form-group action">
+                        <button class="btn sending pull-right">Szukaj</button>
+                    </div>
+                </form>
+            </li>
+        </ul>
+    </div>
+</div>
+<!-- END :// MOBILE -->
