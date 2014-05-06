@@ -184,17 +184,9 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 		
 		$this->getResponse()->setBody(Zend_Json::encode(array("status"=>0, "message"=>"Some error occure")));
 	}
-	
-//	public function saveShippingAction() {
-//		$po = $this->_registerPo();
-//		var_export($this->getRequest()->getPost());
-//		die;
-//	}
 
     public function saveShippingAction()
     {
-		
-		
 		
         $hlp = Mage::helper('udropship');
         $udpoHlp = Mage::helper('udpo');
@@ -241,6 +233,9 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                 $poStatus = $r->getParam('status');
                 $isShipped = $poStatus == $poStatusShipped || $poStatus==$poStatusDelivered || $autoComplete && ($poStatus==='' || is_null($poStatus));
             }
+			
+			
+		
 
             //if ($printLabel || $number || ($partial=='ship' && $partialQty)) {
             $partialQty = $partialQty ? $partialQty : array();
@@ -256,6 +251,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                 $shipment->setDeleteOnFailedLabelRequestFlag(true);
                 $shipment->setCreatedByVendorFlag(true);
             }
+			
             //}
 			
 			/**
@@ -265,6 +261,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 			$dhlSettings = $udpoHlp->getDhlSettings($vendor, $udpo->getDefaultPosId());
 
 			if (!$number && $carrier == Zolago_Dhl_Helper_Data::DHL_CARRIER_CODE && $autoTracking && $shipment && $dhlSettings) {
+				
 				$shipmentSettings = array(
 					'type'			=> $r->getParam('specify_zolagodhl_type'),
 					'width'			=> $r->getParam('specify_zolagodhl_width'),
@@ -273,13 +270,14 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 					'weight'		=> ($shipment->getTotalWeight() ? ((int) ceil($shipment->getTotalWeight())) : Mage::helper('zolagodhl')->getDhlDefaultWeight()),
 					'quantity'		=> Zolago_Dhl_Model_Client::SHIPMENT_QTY,
 					'nonStandard'	=> $r->getParam('specify_zolagodhl_custom_dim'),
-					'shipmentDate'  => $r->getParam('specify_zolagodhl_shipping_date'),
+					'shipmentDate'  => $this->_porcessDhlDate($r->getParam('specify_zolagodhl_shipping_date')),
 					'shippingAmount'=> $r->getParam('shipping_amount')
 				);
+				
 				$number = $this->_createShipments($dhlSettings, $shipment, $shipmentSettings, $udpo);
 				if (!$number) {
 					$udpoHlp->cancelShipment($shipment, true);
-					$this->_forward('udpoInfo');
+					return $this->_redirectReferer();
 				}
 			}
 
@@ -465,8 +463,22 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             $session->addError($e->getMessage());
         }
 
-        $this->_redirectReferer();
+        return $this->_redirectReferer();
     }
+	public function cancelShippingAction() {
+		$this->_getSession()->addSuccess("Shipping canceld");
+		return $this->_redirectReferer();
+	}
+	
+	protected function _porcessDhlDate($date) {
+		$_date = explode("-", $date);
+		if(count($_date)==3){
+			if(count($_date[0])==4){
+				return $date;
+			}
+			return $_date[2] . "-" . $_date[1] . "-" . $_date[0];
+		}
+	}
 	
 	protected function _createShipments($dhlSettings, $shipment, $shipmentSettings, $udpo) {
 		$number		= false;
@@ -489,6 +501,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                 );
                 $shipment->save();
 				Mage::helper('zolagodhl')->addUdpoComment($udpo, $result['message'], false, true, false);
+                			
                 $session->addError($this->__('DHL Service Error. Shipment Canceled. Please try again later.'));				
 			}
 		}

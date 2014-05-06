@@ -269,7 +269,6 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
 			->setShipmentFilter($shipment->getId())
 			->addFieldToFilter('comment', array('like' => '%'. Zolago_Dhl_Helper_Data::DHL_HEADER . '%'))
 			->getFirstItem();
-
 		$commentModel->setParentId($shipment->getId())
 			->setComment($comment)
 			->setIsCustomerNotified($isCustomerNotified)

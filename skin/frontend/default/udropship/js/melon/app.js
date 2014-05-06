@@ -74,9 +74,11 @@ var App = function($) {
 				layout: self.data('layout'),
 				buttons: (self.data('type') != 'confirm') ? false : [
 					{
-						addClass: 'btn btn-primary', text: 'Ok', onClick: function($noty) {
-							$noty.close();
-							noty({force: true, timeout: 2000, text: 'You clicked "Ok" button', type: 'success', layout: self.data('layout')});
+						addClass: 'btn btn-primary', text: 'OK', onClick: function($noty) {
+							//$noty.close();
+							if(self.data("ok-url")){
+								document.location.replace(self.data("ok-url"));
+							}
 						}
 					}, {
 						addClass: 'btn btn-danger', text: 'Cancel', onClick: function($noty) {$noty.close();}

@@ -13,7 +13,7 @@
 		<div class="page-title">
 			<h3><?php echo $_hlp->__("Order #%s", $_po->getIncrementId());?></h3>
 			<?php if(1||$_alert):?>
-				<span class="label label-warning" style="display: inline; color: #fff;"><?php echo $_hlp->__("Sample alert text");?></span>
+				<span class="label label-danger" style="display: inline; color: #fff; "><?php echo $_hlp->__("Sample alert text");?></span>
 			<?php endif;?>
 		</div>
 	</div>
@@ -250,7 +250,7 @@
 						<?php if($_po->needInvoice()):?>
 							<?php echo $_hlp->__("Invoice");?>
 						<?php else:?>
-							<?php echo $_hlp->__("Paragon");?>
+							<?php echo $_hlp->__("Bill of sale");?>
 						<?php endif;?>
 					</h4>
 					<div class="toolbar no-padding"> 
@@ -261,7 +261,9 @@
 				</div>
 				<div class="widget-content bottom-info">
 					<?php if($_po->needInvoice()):?>
-					<?php echo Mage::helper('udropship')->formatCustomerAddress($_po->getBillingAddress(), 'html', $this->getVendor()) ?>
+						<?php echo Mage::helper('udropship')->formatCustomerAddress($_po->getBillingAddress(), 'html', $this->getVendor()) ?>
+					<?php else:?>
+						<small><?php echo $_hlp->__("Click pencil icon if You need invoice.");?></small>
 					<?php endif;?>
 				</div>
 			</div>
@@ -276,7 +278,7 @@
 					<?php if($_currentShipping && $_currentShipping->getId()):?>
 					<div class="toolbar no-padding"> 
 						<div class="btn-group"> 
-							<span data-toggle="modal" data-target="#composeModal"  class="btn btn-xs">
+							<span class="btn-notification btn btn-xs" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("cancelShipping", array("shipping_id"=>$_currentShipping->getId()));?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("Are You sure?");?>" data-modal="true" href="#">
 								<i class="icon-remove "></i> 
 								<?php echo $_hlp->__("Cancel");?>
 							</span> 

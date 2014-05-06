@@ -206,7 +206,10 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 	}
 	
 	public function getPoUrl($action, $params=array()) {
-		$params += array("id"=> $this->getPo()->getId());
+		$params += array(
+			"id"=> $this->getPo()->getId(),
+			"form_key" => Mage::getSingleton('core/session')->getFormKey()
+		);
 		return $this->getUrl("*/*/$action", $params);
 	}
 	
