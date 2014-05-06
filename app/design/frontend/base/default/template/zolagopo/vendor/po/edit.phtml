@@ -102,7 +102,7 @@
 						</div> 
 					</div>
 				</div>
-				<div class="widget-content orders<?php /* if($_alert):?> with-alert<?php endif; */ ?>">
+				<div class="widget-content orders">
 					<dl class="dl-horizontal dl-z"> 
 						<dt><?php echo $_hlp->__("Fullname");?>:</dt> 
 						<dd><?php echo $this->escapeHtml($_po->getBillingAddress()->getName());?></dd> 
@@ -110,8 +110,8 @@
 						<dd><?php echo $this->escapeHtml($_po->getBillingAddress()->getTelephone());?></dd> 
 						<dt><?php echo $_hlp->__("Messages / new");?></dt> 
 						<dd>
-							120 / <span class="label label-danger">2</span><br/>
-							<a href="#"><?php echo $_hlp->__("View all messages");?></a>
+							<?php echo $this->getAllMessagesCount($_po);?> / <span class="label label-danger"><?php echo $this->getUnreadMessagesCount($_po);?></span><br/>
+							<a href="<?php echo $this->getHelpdeskUrl($_po);?>"><?php echo $_hlp->__("View all messages");?></a>
 						</dd> 
 					</dl>
 				</div>
@@ -131,10 +131,14 @@
 					</h4> 
 					<div class="toolbar no-padding"> 
 						<div class="btn-group"> 
-							<span class="btn btn-xs">
+							<a class="btn btn-xs<?php if($_po->getStockConfirm()):?> btn-success<?php endif;?>" href="<?php echo $this->getPoUrl("toggleConfirmStock");?>">
 								<i class="icon-ok"></i>
-								<?php echo $_hlp->__("Confirm stock");?>
-							</span> 
+								<?php if($_po->getStockConfirm()):?>
+									<?php echo $_hlp->__("Stock confimed");?>
+								<?php else:?>
+									<?php echo $_hlp->__("Confirm stock");?>
+								<?php endif;?>
+							</a> 
 							
 							<button data-toggle="modal" data-target="#addItemModal" class="btn btn-xs" >
 								<i class="icon-plus-sign"></i>
@@ -298,7 +302,6 @@
 									<?php if(isset($_shippingStatuses[$_currentShipping->getUdropshipStatus()])): ?>
 										<?php echo $this->escapeHtml($_shippingStatuses[$_currentShipping->getUdropshipStatus()]);?>
 									<?php endif;?>
-									<?php echo $_currentShipping->getUdropshipStatus() . " / " . $_currentShipping->getId();?>
 								</dd>
 								<dt><?php echo $_hlp->__("Method");?>:</dt>
 								<dd>
@@ -385,26 +388,7 @@
 		</div>
 	</div>
 </div>
-<!-- Modals comment -->
-<div class="modal fade" id="composeModal">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title"><?php echo $_hlp->__("Compose message");?></h4>
-			</div>
-			<div class="modal-body">
-				<form action="<?php Mage::getUrl("*/*/sendCustomerMessage");?>">
-					<textarea class="form-control" rows="6"></textarea>
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_hlp->__("Cancel");?></button>
-				<button type="button" class="btn btn-primary" data-dismiss="modal"><?php echo $_hlp->__("Send");?></button>
-			</div>
-		</div>
-	</div>
-</div>
+
 <!-- Modal change pos-->
 <div class="modal fade" id="changePosModal">
 	<div class="modal-dialog">
@@ -425,6 +409,14 @@
 		</div>
 	</div>
 </div>
+
+<?php
+/*******************************************************************************
+ *	Compose modal
+ *******************************************************************************/
+	echo $this->getChildHtml("vendor_po_edit_compose");
+?>
+
 <!-- Modal add item-->
 <div class="modal fade" id="addItemModal">
 	<div class="modal-dialog">
@@ -493,48 +485,27 @@
 	echo $this->getChild("vendor_po_edit_shipping_address")->
 		setAddress($_po->getShippingAddress())->
 		toHtml();
-?>
 
-<?php 
 /*******************************************************************************
  *	Billign address modal
  *******************************************************************************/
 	echo $this->getChild("vendor_po_edit_billing_address")->
 		setAddress($_po->getBillingAddress())->
 		toHtml();
-?>
-
-
-<?php 
+	
 /*******************************************************************************
  *	Shipping modal
  *******************************************************************************/
 	echo $this->getChild("vendor_po_edit_shipping")->
 		setAddress($_po->getShippingAddress())->
 		toHtml();
+	
+/*******************************************************************************
+ *	Comment modal
+ *******************************************************************************/
+	echo $this->getChildHtml("vendor_po_edit_comment");
 ?>
 
-<!-- Modals comment -->
-<div class="modal fade" id="addCommentModal">
-	<div class="modal-dialog">
-		<form action="<?php echo $this->getPoUrl("addComment");?>" method="post">
-			<?php echo $this->getFormKey(); ?>
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title"><?php echo $_hlp->__("Add comment");?></h4>
-				</div>
-				<div class="modal-body">
-					<textarea class="form-control" name="comment" rows="6" required="required"></textarea>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					<button type="submit" class="btn form-btn-loading btn-primary" data-loading-text="<?php echo $_hlp->__("Loading...");?>"><?php echo $_hlp->__("Add comment");?></button>
-				</div>
-			</div>
-		</form>
-	</div>
-</div>
 <script type="text/javascript">
 	jQuery(function($){
 		var items = $("#items"),
@@ -545,8 +516,5 @@
 			var checkLen = checkboxes.filter(":checked").length;
 			splitBtn.attr("disabled", /* checkLen==checkboxes.length || */!checkLen);
 		});
-		$("#addCommentModal").on('shown.bs.modal', function(){
-			$(this).find("textarea").focus();
-		})
 	});
 </script>
