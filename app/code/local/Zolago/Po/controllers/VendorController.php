@@ -18,6 +18,18 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 	}
 	
 	/**
+	 * @return Zolago_Pos_Model_Pos
+	 */
+	protected function _registerPos() {
+		if(!Mage::registry("current_pos")){
+			$posId = $this->getRequest()->getParam("pos");
+			$pos = Mage::getModel("zolagopos/pos")->load($posId);
+			Mage::register("current_pos", $pos);
+		}
+		return Mage::registry("current_pos");
+	}
+	
+	/**
 	 * @return Unirgy_Dropship_Model_Vendor
 	 */
 	protected function _getVendor() {
@@ -548,6 +560,32 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 		}
 		
 		return $this->_redirectReferer();
+	}
+	
+	public function changePosAction() {
+		$po=$this->_registerPo();
+		$pos=$this->_registerPos();
+		
+		try{
+			$po->setDefaultPosId($pos->getId());
+			$po->setDefaultPosName($pos->getName());
+			$po->save();
+			$this->_getSession()->addSuccess((Mage::helper("zolagopo")->__("POS has been changed.")));
+		} catch (Mage_Core_Exception $e) {
+			$this->_getSession()->addError($e->getMessage());
+		} catch (Exception $e) {
+			Mage::logException($e);
+			$this->_getSession()->addError(Mage::helper("zolagopo")->__("Some error occured."));
+		}
+		
+		return $this->_redirectReferer();
+	}
+	
+	public function getPosStockAction() {
+		$this->_registerPo();
+		$this->_registerPos();
+		$this->loadLayout();
+		$this->renderLayout();
 	}
 	
 	protected function _porcessDhlDate($date) {

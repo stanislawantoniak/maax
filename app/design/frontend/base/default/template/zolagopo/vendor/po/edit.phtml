@@ -389,28 +389,14 @@
 	</div>
 </div>
 
-<!-- Modal change pos-->
-<div class="modal fade" id="changePosModal">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title"><?php echo $_hlp->__("Change POS");?></h4>
-			</div>
-			<div class="modal-body">
-				<form action="<?php Mage::getUrl("*/*/changePos");?>">
-					Change pos content
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_hlp->__("Cancel");?></button>
-				<button type="button" class="btn btn-primary" data-dismiss="modal"><?php echo $_hlp->__("Change pos");?></button>
-			</div>
-		</div>
-	</div>
-</div>
+
 
 <?php
+/*******************************************************************************
+ *	Compose modal
+ *******************************************************************************/
+	echo $this->getChildHtml("vendor_po_edit_pos");
+
 /*******************************************************************************
  *	Compose modal
  *******************************************************************************/
