@@ -213,6 +213,38 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 		return $this->getUrl("*/*/$action", $params);
 	}
 	
+	public function getHelpdeskUrl(Zolago_Po_Model_Po $po) {
+		//filter_customer_name
+		return $this->getUrl("udqa/vendor/index", array(
+			"_query"=>array("filter_customer_name"=>$po->getOrder()->getCustomerName())
+		));
+	}
+	
+	public function getAllMessagesCount(Zolago_Po_Model_Po $po) {
+		if(!$this->hasData('all_messages_count')){
+			$collection = Mage::getResourceModel('udqa/question_collection');
+			/* @var $collection Unirgy_DropshipVendorAskQuestion_Model_Mysql4_Question_Collection */
+			$collection->addApprovedAnswersFilter();
+			$collection->addVendorFilter($this->getVendor());
+			$collection->addFieldToFilter("main_table.customer_name", array("like"=>$this->getPo()->getOrder()->getCustomerName()));
+			$this->setData("all_messages_count", $collection->count());
+		}
+		return $this->getData("all_messages_count");
+	}
+	
+	public function getUnreadMessagesCount(Zolago_Po_Model_Po $po) {
+		if(!$this->hasData('unread_messages_count')){
+			$collection = Mage::getResourceModel('udqa/question_collection');
+			/* @var $collection Unirgy_DropshipVendorAskQuestion_Model_Mysql4_Question_Collection */
+			$collection->addApprovedAnswersFilter();
+			$collection->addVendorFilter($this->getVendor());
+			$collection->addFieldToFilter("main_table.customer_name", array("like"=>$this->getPo()->getOrder()->getCustomerName()));
+			$collection->addFieldToFilter("main_table.answer_text", array("null"=>true));
+			$this->setData("unread_messages_count", $collection->count());
+		}
+		return $this->getData("unread_messages_count");
+	}
+	
 	/**
 	 * @param type $type
 	 * @return Zolago_Po_Block_Vendor_Po_Item_Renderer_Abstract
