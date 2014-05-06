@@ -482,11 +482,13 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
     }
 	
 	
-	public function toggleConfirmStockAction() {
+	public function setConfirmStockAction() {
         $udpo = $this->_registerPo();
         $r = $this->getRequest();
 		try{
-			$udpo->setStockConfirm(!$udpo->getStockConfirm())->save();
+			if(!$udpo->getStockConfirm()){
+				$udpo->setStockConfirm(1)->save();
+			}
 			$this->_getSession()->addSuccess("Stock confirm changed");
 		} catch (Mage_Core_Exception $e) {
 			$this->_getSession()->addError($e->getMessage());

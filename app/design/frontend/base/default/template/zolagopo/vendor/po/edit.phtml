@@ -131,14 +131,17 @@
 					</h4> 
 					<div class="toolbar no-padding"> 
 						<div class="btn-group"> 
-							<a class="btn btn-xs<?php if($_po->getStockConfirm()):?> btn-success<?php endif;?>" href="<?php echo $this->getPoUrl("toggleConfirmStock");?>">
+							<?php if(!$_po->getStockConfirm()):?>
+							<a class="btn btn-xs" href="<?php echo $this->getPoUrl("setConfirmStock");?>">
 								<i class="icon-ok"></i>
-								<?php if($_po->getStockConfirm()):?>
-									<?php echo $_hlp->__("Stock confimed");?>
-								<?php else:?>
-									<?php echo $_hlp->__("Confirm stock");?>
-								<?php endif;?>
+								<?php echo $_hlp->__("Confirm stock");?>
 							</a> 
+							<?php else: ?>
+							<span class="btn btn-xs btn-success">
+								<i class="icon-ok"></i>
+								<?php echo $_hlp->__("Stock confirmed");?>
+							</span>
+							<?php endif;?>
 							
 							<button data-toggle="modal" data-target="#addItemModal" class="btn btn-xs" >
 								<i class="icon-plus-sign"></i>

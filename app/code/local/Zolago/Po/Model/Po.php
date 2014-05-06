@@ -114,6 +114,11 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 	   return $this;
    }
    
+   /**
+    * @todo move to reseource
+    * @param string $type
+    * @param array $exclude
+    */
    
    protected function _cleanAddresses($type, $exclude=array()) {
 	    // Add this shippign id
@@ -163,6 +168,14 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 			$this->save();
 		}
 		return $this;
+   }
+   
+   /**
+    * @todo implement
+    * @return bool
+    */
+   public function isPaymentComplete() {
+	   return $this->getOrder()->getPayment()->getMethod() != Zolago_Payment_Model_Method::PAYMENT_METHOD_CODE;
    }
    
 	protected function _afterSave(){
