@@ -211,6 +211,9 @@ select.form-control {
 .shipping-info .btn {
   margin-top: 46px;
 }
+.shipping-info p {
+  margin-top: 52px;
+}
 .comments dl {
   margin-bottom: 10px;
 }
