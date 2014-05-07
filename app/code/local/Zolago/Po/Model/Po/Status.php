@@ -5,34 +5,258 @@ class Zolago_Po_Model_Po_Status
 	 * Dropship statuses
 	 */
 	
-	// czeka na spakowanie
+	/**
+	 * czeka na spakowanie
+	 */
     const STATUS_PENDING    = Zolago_Po_Model_Source::UDPO_STATUS_PENDING; 
-	// w trakcie pakowania
+	/**
+	 * w trakcie pakowania
+	 */
     const STATUS_EXPORTED   = Zolago_Po_Model_Source::UDPO_STATUS_EXPORTED;
-	// czeka na potwierdzenie
+	/**
+	 * czeka na potwierdzenie
+	 */
     const STATUS_ACK        = Zolago_Po_Model_Source::UDPO_STATUS_ACK;
-	// czeka na rezerwację
+	/**
+	 * czeka na rezerwację
+	 */
     const STATUS_BACKORDER  = Zolago_Po_Model_Source::UDPO_STATUS_BACKORDER;
-	// problem
+	/**
+	 * problem
+	 */
     const STATUS_ONHOLD     = Zolago_Po_Model_Source::UDPO_STATUS_ONHOLD;
-	// spakowane
+	/**
+	 * spakowane
+	 */
     const STATUS_READY      = Zolago_Po_Model_Source::UDPO_STATUS_READY;
-	// N/O
+	/**
+	 * N/O
+	 */
     const STATUS_PARTIAL    = Zolago_Po_Model_Source::UDPO_STATUS_PARTIAL;
-	// wysłane
+	/**
+	 * wysłane
+	 */
     const STATUS_SHIPPED    = Zolago_Po_Model_Source::UDPO_STATUS_SHIPPED;
-	// anulowane
+	/**
+	 * anulowane
+	 */
     const STATUS_CANCELED   = Zolago_Po_Model_Source::UDPO_STATUS_CANCELED;
-	// dostarczone
+	/**
+	 * dostarczone
+	 */
 	const STATUS_DELIVERED  = Zolago_Po_Model_Source::UDPO_STATUS_DELIVERED;
-	// zwrócone
+	/**
+	 * zwrócone
+	 */
     const STATUS_RETURNED   = Zolago_Po_Model_Source::UDPO_STATUS_RETURNED;
-	// czeka na płatność
+	/**
+	 * czeka na płatność
+	 */
     const STATUS_PAYMENT    = Zolago_Po_Model_Source::UDPO_STATUS_PAYMENT; 
 
+	/**
+	 * if PO is NEW
+	 * set if ALERT is not null:
+	 *   ACK
+	 *	 else if PAYMENT IS GATEWAY
+	 *	 BACKORDER
+	 *	 else 
+	 *	 PENDING
+	 * @param Zolago_Po_Model_Po $po
+	 */
+	public function processNewStatus(Zolago_Po_Model_Po $po) {
+		if($po->getId()){
+			return;
+		}
+		if($po->getAlert()){
+			$po->setUdropshipStatus(self::STATUS_ACK);
+		}elseif($po->isGatewayPayment()){
+			$po->setUdropshipStatus(self::STATUS_BACKORDER);
+		}else{
+			$po->setUdropshipStatus(self::STATUS_PENDING);
+		}
+	}
+	
+	/**
+	 * set if PAYMENT IS GATEWAY and IS NOT PAID:
+	 *	 BACKORDER
+	 *	 else 
+	 *	 PENDING
+	 * @param Zolago_Po_Model_Po $po
+	 */
+	public function processConfirmRelease(Zolago_Po_Model_Po $po) {
+		if($this->isConfirmReleaseAvailable($po)){
+			if($po->isGatewayPayment() && !$po->isPaid()){
+				$status = self::STATUS_BACKORDER;
+			}else{
+				$status = self::STATUS_PENDING;
+			}
+			$this->_processStatus($po, $status);
+		}
+	}
+	
+	/**
+	 * set if PAYMENT IS GATEWAY and IS NOT PAID:
+	 *	 PAYMENT
+	 *	 else 
+	 *	 PENDING
+	 * @param Zolago_Po_Model_Po $po
+	 */
+	public function processConfirmStock(Zolago_Po_Model_Po $po) {
+		if($this->isConfirmStockAvailable($po)){
+			$po->setStockConfirm(1);
+			$po->getResource()->saveAttribute($po, "stock_confirm");
+			if($po->isGatewayPayment() && !$po->isPaid()){
+				$status = self::STATUS_PAYMENT;
+			}else{
+				$status = self::STATUS_PENDING;
+			}
+			$this->_processStatus($po, $status);
+		}
+	}
+	
+	
+	/**
+	 * @param Zolago_Po_Model_Po $po
+	 */
+	public function processStartPacking(Zolago_Po_Model_Po $po) {
+		if($this->isStartPackingAvailable($po)){
+			$this->_processStatus($po, self::STATUS_EXPORTED);
+		}
+	}
+	
+	/**
+	 * @param Zolago_Po_Model_Po $po
+	 */
+	public function processCancelShipment(Zolago_Po_Model_Po $po) {
+		$this->_processStatus($po, self::STATUS_EXPORTED);
+	}
+	
+	
+	
+	
+	/**
+	 * @param Zolago_Po_Model_Po|int $po
+	 * @return boolean
+	 */
+	public function isConfirmReleaseAvailable($po) {
+		switch ($this->_getStatus($po)) {
+			case self::STATUS_ACK:
+				return true;
+			break;
+		}
+		return false;
+	}
+	
+	
+	/**
+	 * @param Zolago_Po_Model_Po|int $po
+	 * @return boolean
+	 */
+	public function isConfirmStockAvailable($po) {
+		switch ($this->_getStatus($po)) {
+			case self::STATUS_BACKORDER:
+				return true;
+			break;
+		}
+		return false;
+	}
+	
+	/**
+	 * @param Zolago_Po_Model_Po|int $po
+	 * @return boolean
+	 */
+	public function isStartPackingAvailable($po) {
+		switch ($this->_getStatus($po)) {
+			case self::STATUS_PENDING:
+				return true;
+			break;
+		}
+		return false;
+	}
+	
+	/**
+	 * @param Zolago_Po_Model_Po|int $po
+	 * @return boolean
+	 */
+	public function isShippingAvailable($po) {
+		switch ($this->_getStatus($po)) {
+			case self::STATUS_EXPORTED:
+				return true;
+			break;
+		}
+		return false;
+	}
+	
+	/**
+	 * @param Zolago_Po_Model_Po|int $po
+	 * @return boolean
+	 */
+	public function isEditingAvailable($po) {
+		switch ($this->_getStatus($po)) {
+			case self::STATUS_ACK:
+			case self::STATUS_BACKORDER:
+			case self::STATUS_PAYMENT:
+			case self::STATUS_PENDING:
+			case self::STATUS_EXPORTED:
+				return true;
+			break;
+		}
+		return false;
+	}
+	
+	/**
+	 * @param Zolago_Po_Model_Po|int $po
+	 * @return boolean
+	 */
+	public function isManulaStatusAvailable($po) {
+		return count($this->getAvailableStatuses($po));
+	}
+	
+	/**
+	 * @param Zolago_Po_Model_Po|int $status
+	 * @return array
+	 */
+	public function getAvailableStatuses($status) {
+		$statuses = array();
+		$hlp = Mage::helper("udpo");
+		switch ($this->_getStatus($status)) {
+			case self::STATUS_EXPORTED:
+				$statuses[self::STATUS_PENDING] = $hlp->getPoStatusName(self::STATUS_PENDING);
+			case self::STATUS_BACKORDER:
+			case self::STATUS_PAYMENT:
+			case self::STATUS_PENDING:
+				$statuses[self::STATUS_ONHOLD] = $hlp->getPoStatusName(self::STATUS_ONHOLD);
+				$statuses[self::STATUS_CANCELED] = $hlp->getPoStatusName(self::STATUS_CANCELED);
+			break;
+			case self::STATUS_ONHOLD:
+				$statuses[self::STATUS_CANCELED] = $hlp->getPoStatusName(self::STATUS_CANCELED);
+			break;
+		}
+		
+		return $statuses;
+	}
 
-	public function canChange($old, $new) {
-	   return true;
-   }
+	/**
+	 * @param Zolago_Po_Model_Po $po
+	 * @param string $newStatus
+	 */
+	protected function _processStatus(Zolago_Po_Model_Po $po, $newStatus) {
+		$hlp = Mage::helper("udpo");
+		/* @var $hlp Unirgy_DropshipPo_Helper_Data */
+		$po->setForceStatusChangeFlag(true);
+		$hlp->processPoStatusSave($po, $newStatus, true);
+	}
+	
+	/**
+	 * @param Zolago_Po_Model_Po|int $status
+	 * @return int
+	 */
+	protected function _getStatus($status) {
+		if($status instanceof Zolago_Po_Model_Po){
+			return $status->getUdropshipStatus();
+		}
+		return $status;
+	}
    
 }

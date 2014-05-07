@@ -41,19 +41,28 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 	}
 	
 	/**
-	 * @param Unirgy_DropshipPo_Model_Po $po
+	 * @param Zolago_Po_Model_Po $po
 	 * @return array
 	 */
-	public function getAllowedStatusesForPo(Unirgy_DropshipPo_Model_Po $po) {
-		return $this->getAllowedStatuses();
+	public function getAllowedStatusesForPo(Zolago_Po_Model_Po $po) {
+		return $po->getStatusModel()->getAvailableStatus($po);
 	}
 	
 	
+	public function isManulaStatusAvailable(Zolago_Po_Model_Po $po){
+		return $po->getStatusModel()->isManulaStatusAvailable($po);
+	}
 	
+	/**
+	 * @param Unirgy_DropshipPo_Model_Po_Item $item
+	 * @return Zolago_Po_Block_Vendor_Po_Item_Renderer_Abstract
+	 */
 	public function	getItemRedener(Unirgy_DropshipPo_Model_Po_Item $item) {
 		$orderItem = $item->getOrderItem();
 		$type=$orderItem->getProductType();
-		return $this->_getRendererByType($type)->setItem($item);
+		return $this->_getRendererByType($type)->
+				setItem($item)->
+				setIsEditable($this->isEditable());
 		
 	}
 	
@@ -243,6 +252,13 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 			$this->setData("unread_messages_count", $collection->count());
 		}
 		return $this->getData("unread_messages_count");
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function isEditable() {
+		return $this->getPo()->getStatusModel()->isEditingAvailable($this->getPo());
 	}
 	
 	/**

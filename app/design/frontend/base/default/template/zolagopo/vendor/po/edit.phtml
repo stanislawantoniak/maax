@@ -1,12 +1,15 @@
 <?php /* @var $this Zolago_Po_Block_Vendor_Po_Edit */ ?>
-<?php $_po = $this->getPo(); ?>
-<?php $_hlp = Mage::helper("zolagopo");?>
-<?php $_shippingMethod = $this->getShippingMethod();?>
+<?php $_hlp					= Mage::helper("zolagopo");?>
+<?php $_po					= $this->getPo(); ?>
+<?php $_shippingMethod		= $this->getShippingMethod();?>
 <?php $_shipmentsCollection = $this->getShipmentsCollection();?>
-<?php $_currentShipping = $this->getCustomCurrentShipping();?>
-<?php $_alert = $_po->getAlert();?>
-<?php $_comments = $_po->getVendorCommentsCollection(); ;?>
-<?php $_shippingStatuses = Mage::helper('udropship')->getVendorShipmentStatuses(); ?>
+<?php $_currentShipping		= $this->getCustomCurrentShipping();?>
+<?php $_alert				= $_po->getAlert();?>
+<?php $_comments			= $_po->getVendorCommentsCollection(); ;?>
+<?php $_shippingStatuses	= Mage::helper('udropship')->getVendorShipmentStatuses(); ?>
+<?php $_statusModel			= $_po->getStatusModel(); ?>
+<?php $_isEditable			= $this->isEditable();?>
+
 <div class="container">
 	<!--=== Page Header ===-->
 	<div class="page-header">
@@ -28,12 +31,14 @@
 						<?php echo $_hlp->__("General");?>
 					</h4>
 					<div class="toolbar no-padding"> 
+						<?php if($_isEditable):?>
 						<div class="btn-group"> 
 							<span data-toggle="modal" data-target="#changePosModal" class="btn btn-xs">
 								<i class="icon-retweet"></i> 
 								<?php echo $_hlp->__("Change POS");?>
 							</span> 
 						</div> 
+						<?php endif;?>
 					</div>
 				</div>
 				<div class="widget-content orders<?php /* if($_alert):?> with-alert<?php endif;*/ ?>">
@@ -42,18 +47,23 @@
 						<dd><?php echo $_po->getIncrementId();?></dd> 
 						<dt><?php echo $_hlp->__("Status");?>:</dt> 
 						<dd>
+							<?php if($_statusModel->isManulaStatusAvailable($_po)):?>
 							<div class="btn-group"> 
 								<button class="btn btn-xs dropdown-toggle" data-toggle="dropdown"> 
 									<?php echo $this->getCurrentStatus($_po);?> <span class="caret"></span> 
 								</button> 
 								<ul class="dropdown-menu"> 
-									<?php foreach($this->getAllowedStatusesForPo($_po) as $key=>$status):?>
+									<?php foreach($_statusModel->getAvailableStatuses($_po) as $key=>$status):?>
 										<?php if($key!=$_po->getUdropshipStatus()):?>
 										<li><a class="btn-notification" data-placement="top"  data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("You are about to change status from %s to %s. Are You sure?", $this->getCurrentStatus($_po), $this->escapeHtml($status));?>" data-modal="true" data-status="<?php echo $key;?>" href="#"><?php echo $this->escapeHtml($status);?></a></li> 
 										<?php endif;?>
 									<?php endforeach;?>
 								</ul> 
 							</div>
+							<?php else:?>
+								<?php echo $this->getCurrentStatus($_po);?>
+							<?php endif;?>
+							
 						</dd> 
 						<dt><?php echo $_hlp->__("Order date");?>:</dt> 
 						<dd><?php echo Mage::helper('core')->formatDate($_po->getCreatedAt(), 'medium')?></dd> 
@@ -131,22 +141,47 @@
 					</h4> 
 					<div class="toolbar no-padding"> 
 						<div class="btn-group"> 
-							<?php if(!$_po->getStockConfirm()):?>
-							<a class="btn btn-xs" href="<?php echo $this->getPoUrl("setConfirmStock");?>">
-								<i class="icon-ok"></i>
-								<?php echo $_hlp->__("Confirm stock");?>
-							</a> 
-							<?php else: ?>
-							<span class="btn btn-xs btn-success">
-								<i class="icon-ok"></i>
-								<?php echo $_hlp->__("Stock confirmed");?>
-							</span>
+							<?php /* Confirm realase button */ ?>
+							<?php if($_statusModel->isConfirmReleaseAvailable($_po)):?>
+								<a class="btn-notification btn btn-xs" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("setConfirmRelease");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("You are about to confirm stock. Are You sure?");?>" data-modal="true" href="#">
+									<i class="icon-ok"></i>
+									<?php echo $_hlp->__("Confirm release");?>
+								</a> 
+							<?php endif;?>
+								
+							<?php /* Confirm stock button */ ?>
+							<?php if($_statusModel->isConfirmStockAvailable($_po)):?>
+								<?php if(!$_po->getStockConfirm()):?>
+								<?php  /* Display as active widget */ ?>
+								<a class="btn-notification btn btn-xs" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("setConfirmStock");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("You are about to confirm order release. Are You sure?");?>" data-modal="true" href="#">
+									<i class="icon-ok"></i>
+									<?php echo $_hlp->__("Confirm stock");?>
+								</a> 
+								<?php else: ?>
+								<?php  /* Display as label */ ?>
+								<button class="btn btn-xs btn-success" disabled="disabled">
+									<?php echo $_hlp->__("Stock confirmed");?>
+								</button>
+								<?php endif;?>
+							<?php else:?>
+								<?php  /* Display as label */ ?>
+								<button class="btn btn-xs<?php if($_po->getStockConfirm()):?> btn-success<?php endif;?>" disabled="disabled">
+									<?php if($_po->getStockConfirm()):?>
+										<i class="icon-ok"></i>
+										<?php echo $_hlp->__("Stock confirmed");?>
+									<?php else:?>
+										<?php echo $_hlp->__("Stock not confirmed");?>
+									<?php endif;?>
+								</button>
 							<?php endif;?>
 							
+							<?php /* Add new item button */ ?>
+							<?php if($_isEditable):?>
 							<button data-toggle="modal" data-target="#addItemModal" class="btn btn-xs" >
 								<i class="icon-plus-sign"></i>
 								<?php echo $_hlp->__("Add new item");?>
 							</button>
+							<?php endif;?>
 						</div> 
 					</div>
 				</div>
@@ -183,11 +218,13 @@
 							<!-- shipping row -->
 							<tr data-item-id="">
 								<td colspan="3" rowspan="2" style="vertical-align: middle; border-bottom: 0;">
+									<?php if($_isEditable):?>
 									<i class="icon-checked-action"></i>
 									<button data-toggle="modal" data-target="#splitOrderModal" class="btn" id="split" disabled="disabled">
 										<i class=" icon-unlink"></i>
 										<?php echo $_hlp->__("Split order");?>
 									</button>
+									<?php endif;?>
 								</td>
 								
 								<?php if($_shippingMethod):?>
@@ -200,7 +237,7 @@
 								<?php endif;?>
 								<td></td>
 								<td>
-									<?php if($_shippingMethod):?>
+									<?php if($_shippingMethod && $_isEditable):?>
 									<button data-toggle="modal" data-target="#editItemModal" class="btn btn-xs bs-tooltip btn-edit" data-placement="top" title="<?php echo $_hlp->__("Edit item");?>" >
 										<i class="icon-pencil"></i>
 									</button>
@@ -238,11 +275,13 @@
 						<i class=" icon-envelope"></i> 
 						<?php echo $_hlp->__("Shipping");?>
 					</h4>			
+					<?php if($_isEditable):?>
 					<div class="toolbar no-padding"> 
 						<div class="btn-group"> 
 							<button class="btn btn-xs" data-address-id="<?php echo $_po->getShippingAddress()->getId();?>" data-toggle="modal" href="#editShippingAddressModal"><i class="icon-pencil"></i></button> 
 						</div> 
 					</div>
+					<?php endif;?>
 				</div>
 				<div class="widget-content bottom-info">
 					<?php echo Mage::helper('udropship')->formatCustomerAddress($_po->getShippingAddress(), 'html', $this->getVendor()) ?>
@@ -260,11 +299,13 @@
 							<?php echo $_hlp->__("Bill of sale");?>
 						<?php endif;?>
 					</h4>
+					<?php if($_isEditable):?>
 					<div class="toolbar no-padding"> 
 						<div class="btn-group"> 
 							<button class="btn btn-xs" data-toggle="modal" data-address-id="<?php echo $_po->getBillingAddress()->getId();?>" data-target="#editBillingAddressModal"><i class="icon-pencil"></i></button> 
 						</div> 
 					</div>
+					<?php endif;?>
 				</div>
 				<div class="widget-content bottom-info">
 					<?php if($_po->needInvoice()):?>
@@ -345,10 +386,16 @@
 					<div class="clearfix"></div>
 					<?php else:?>
 					<div class="align-center">
-						<?php if($this->canUseCarrier()):?>
-						<button class="btn btn-primary" data-toggle="modal" href="#shippingModal"><?php echo $_hlp->__("Generate shipping letter");?></button>
+						<?php if($_statusModel->isShippingAvailable($_po)):?>
+							<?php if($this->canUseCarrier()):?>
+							<button class="btn btn-primary" data-toggle="modal" href="#shippingModal"><?php echo $_hlp->__("Generate shipping letter");?></button>
+							<?php else:?>
+							<button class="btn btn-primary" data-toggle="modal" href="#shippingModal"><?php echo $_hlp->__("Add shipping letter");?></button>
+							<?php endif;?>
+						<?php elseif($_statusModel->isStartPackingAvailable($_po)):?>
+							<a class="btn btn-primary" data-toggle="modal" href="<?php echo $this->getPoUrl("startPacking");?>"><?php echo $_hlp->__("Start packing");?></a>
 						<?php else:?>
-						<button class="btn btn-primary" data-toggle="modal" href="#shippingModal"><?php echo $_hlp->__("Add shipping letter");?></button>
+							<p class="align-center"><small class="text-muted"><?php echo $_hlp->__("Process order to right status");?></small></p>
 						<?php endif;?>
 					</div>
 					<?php endif;?>
@@ -502,8 +549,10 @@
 			splitBtn = $("#split");
 			
 		checkboxes.change(function(el){
-			var checkLen = checkboxes.filter(":checked").length;
-			splitBtn.attr("disabled", /* checkLen==checkboxes.length || */!checkLen);
+			if(splitBtn.length){
+				var checkLen = checkboxes.filter(":checked").length;
+				splitBtn.attr("disabled", /* checkLen==checkboxes.length || */!checkLen);
+			}
 		});
 	});
 </script>

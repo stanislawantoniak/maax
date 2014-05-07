@@ -42,7 +42,6 @@
                 <order_status>pending</order_status>
                 <title>Online Payment</title>
                 <allowspecific>0</allowspecific>
-                <group>online</group>
             </zolagopayment>
         </payment>
 	</default>

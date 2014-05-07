@@ -174,8 +174,28 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
     * @todo implement
     * @return bool
     */
-   public function isPaymentComplete() {
-	   return $this->getOrder()->getPayment()->getMethod() != Zolago_Payment_Model_Method::PAYMENT_METHOD_CODE;
+   public function isGatewayPayment() {
+	   return $this->getOrder()->getPayment()->getMethod() == Zolago_Payment_Model_Method::PAYMENT_METHOD_CODE;
+   }
+   
+   /**
+    * @return boolean
+    */
+   public function isPaid() {
+	   if($this->isGatewayPayment()){
+		   /**
+		    * @todo implement logic based on transaction
+		    */
+		   return false;
+	   }
+	   return true;
+   }
+   
+   /**
+    * @return Zolago_Po_Model_Po_Status
+    */
+   public function getStatusModel() {
+	   return Mage::getSingleton('zolagopo/po_status');
    }
    
 	protected function _afterSave(){
@@ -183,5 +203,25 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 		$this->updateTotals();
 		return $ret;
 	} 
+	
+	protected function _beforeSave() {
+		$this->_processAlert();
+		$this->_processStatus();
+		return parent::_beforeSave();
+	}
+	
+	protected function _processAlert() {
+		if(!$this->getId()){
+			/**
+			 * @todo implement
+			 */
+		}
+	}
+	
+	protected function _processStatus() {
+		if(!$this->getId()){
+			Mage::getSingleton('zolagopo/po_status')->processNewStatus($this);
+		}
+	}
    
 }

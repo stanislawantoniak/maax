@@ -29,8 +29,8 @@ class Zolago_Po_Model_Source extends Unirgy_DropshipPo_Model_Source
                 self::UDPO_STATUS_PENDING    => $hlp->__('Wait for packing'),
 				self::UDPO_STATUS_PAYMENT    => $hlp->__('Wait for payment'),
                 self::UDPO_STATUS_EXPORTED   => $hlp->__('Packing'),
-                self::UDPO_STATUS_ACK        => $hlp->__('Acknowledged'),
-                self::UDPO_STATUS_BACKORDER  => $hlp->__('Wait for backorder'),
+                self::UDPO_STATUS_ACK        => $hlp->__('Wait for confirmation'),
+                self::UDPO_STATUS_BACKORDER  => $hlp->__('Wait for stock confirm'),
                 self::UDPO_STATUS_ONHOLD     => $hlp->__('Problem'),
                 self::UDPO_STATUS_READY      => $hlp->__('Packed'),
                 self::UDPO_STATUS_PARTIAL    => $hlp->__('Partially Shipped'), // unuse
