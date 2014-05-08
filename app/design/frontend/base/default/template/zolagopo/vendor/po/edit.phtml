@@ -55,7 +55,7 @@
 								<ul class="dropdown-menu"> 
 									<?php foreach($_statusModel->getAvailableStatuses($_po) as $key=>$status):?>
 										<?php if($key!=$_po->getUdropshipStatus()):?>
-										<li><a class="btn-notification" data-placement="top"  data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("You are about to change status from %s to %s. Are You sure?", $this->getCurrentStatus($_po), $this->escapeHtml($status));?>" data-modal="true" data-status="<?php echo $key;?>" href="#"><?php echo $this->escapeHtml($status);?></a></li> 
+										<li><a class="btn-notification" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("changeStatus", array("status"=>$key));?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("You are about to change status from %s to %s. Are You sure?", $this->getCurrentStatus($_po), $this->escapeHtml($status));?>" data-modal="true" data-status="<?php echo $key;?>" href="#"><?php echo $this->escapeHtml($status);?></a></li> 
 										<?php endif;?>
 									<?php endforeach;?>
 								</ul> 
@@ -141,9 +141,17 @@
 					</h4> 
 					<div class="toolbar no-padding"> 
 						<div class="btn-group"> 
+							<?php /* Confirm direct realistaion */ ?>
+							<?php if($_statusModel->isDirectRealisationAvailable($_po)):?>
+								<a class="btn-notification btn btn-xs btn-primary" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("directRealisation");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("You are about to direct realisation Are You sure?");?>" data-modal="true" href="#">
+									<i class="icon-ok"></i>
+									<?php echo $_hlp->__("Direct realisation");?>
+								</a> 
+							<?php endif;?>
+							
 							<?php /* Confirm realase button */ ?>
 							<?php if($_statusModel->isConfirmReleaseAvailable($_po)):?>
-								<a class="btn-notification btn btn-xs" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("setConfirmRelease");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("You are about to confirm stock. Are You sure?");?>" data-modal="true" href="#">
+								<a class="btn-notification btn btn-xs" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("setConfirmRelease");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("You are about to confirm order realisation. Are You sure?");?>" data-modal="true" href="#">
 									<i class="icon-ok"></i>
 									<?php echo $_hlp->__("Confirm release");?>
 								</a> 
@@ -153,7 +161,7 @@
 							<?php if($_statusModel->isConfirmStockAvailable($_po)):?>
 								<?php if(!$_po->getStockConfirm()):?>
 								<?php  /* Display as active widget */ ?>
-								<a class="btn-notification btn btn-xs" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("setConfirmStock");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("You are about to confirm order release. Are You sure?");?>" data-modal="true" href="#">
+								<a class="btn-notification btn btn-xs btn-primary" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("setConfirmStock");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("You are about to confirm stock. Are You sure?");?>" data-modal="true" href="#">
 									<i class="icon-ok"></i>
 									<?php echo $_hlp->__("Confirm stock");?>
 								</a> 

@@ -548,7 +548,20 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 			Mage::logException($e);
 			$this->_getSession()->addError(Mage::helper("zolagopo")->__("Some error occured."));
 		}
-		
+		return $this->_redirectReferer();
+	}
+	
+	public function directRealisationAction() {
+        $udpo = $this->_registerPo();
+		try{
+			$udpo->getStatusModel()->processDirectRealisation($udpo);
+			$this->_getSession()->addSuccess(Mage::helper("zolagopo")->__("Directed to realisation"));
+		} catch (Mage_Core_Exception $e) {
+			$this->_getSession()->addError($e->getMessage());
+		} catch (Exception $e) {
+			Mage::logException($e);
+			$this->_getSession()->addError(Mage::helper("zolagopo")->__("Some error occured."));
+		}
 		return $this->_redirectReferer();
 	}
 	
@@ -563,23 +576,22 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 				);
 			}
 			
-			$newStatus = $this->getRequest()->getStatus();
-			
-			if(!in_array($newStatus, $statusModel->getAvailableStatuses($udpo))){
+			$newStatus = $this->getRequest()->getParam('status');
+
+			if(!in_array($newStatus, array_keys($statusModel->getAvailableStatuses($udpo)))){
 				throw new Mage_Core_Exception(
 					Mage::helper("zolagopo")->__("Requested status is wrong")
 				);
 			}
-			
-			
-			$udpo->getStatusModel()->processStartPacking($udpo);
-			$this->_getSession()->addSuccess(Mage::helper("zolagopo")->__("Packing started"));
+			$statusModel->changeStatus($udpo, $newStatus);
+			$this->_getSession()->addSuccess(Mage::helper("zolagopo")->__("Status has been changed"));
 		} catch (Mage_Core_Exception $e) {
 			$this->_getSession()->addError($e->getMessage());
 		} catch (Exception $e) {
 			Mage::logException($e);
 			$this->_getSession()->addError(Mage::helper("zolagopo")->__("Some error occured."));
 		}
+		return $this->_redirectReferer();
 			
 	}
 	
