@@ -23,6 +23,7 @@
 				<!-- modals -->
 				<block name="vendor_po_edit_compose" type="zolagopo/vendor_po_edit_compose" template="zolagopo/vendor/po/edit/compose.phtml"/>
 				<block name="vendor_po_edit_pos" type="zolagopo/vendor_po_edit_pos" template="zolagopo/vendor/po/edit/pos.phtml"/>
+				<block name="vendor_po_edit_additem" type="zolagopo/vendor_po_edit_additem" template="zolagopo/vendor/po/edit/additem.phtml"/>
 				<block name="vendor_po_edit_shipping_address" type="zolagopo/vendor_po_edit_address" template="zolagopo/vendor/po/edit/address.phtml"/>
 				<block name="vendor_po_edit_billing_address" type="zolagopo/vendor_po_edit_address" template="zolagopo/vendor/po/edit/address.phtml"/>
 				<block name="vendor_po_edit_shipping" type="zolagopo/vendor_po_edit_shipping" template="zolagopo/vendor/po/edit/shipping.phtml"/>

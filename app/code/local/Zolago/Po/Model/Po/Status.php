@@ -122,8 +122,8 @@ class Zolago_Po_Model_Po_Status
 	 *	 PENDING
 	 * @param Zolago_Po_Model_Po $po
 	 */
-	public function processDirectRealisation(Zolago_Po_Model_Po $po) {
-		if($this->isDirectRealisationAvailable($po)){
+	public function processDirectRealisation(Zolago_Po_Model_Po $po, $force=false) {
+		if($this->isDirectRealisationAvailable($po) || $force){
 			$po->setStockConfirm(0);
 			$po->getResource()->saveAttribute($po, "stock_confirm");
 			if($po->isGatewayPayment() && !$po->isPaid()){

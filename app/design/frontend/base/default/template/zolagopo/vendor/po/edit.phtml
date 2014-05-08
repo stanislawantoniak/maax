@@ -451,36 +451,21 @@
 
 <?php
 /*******************************************************************************
- *	Compose modal
+ *	Add item modal
  *******************************************************************************/
-	echo $this->getChildHtml("vendor_po_edit_pos");
+	echo $this->getChildHtml("vendor_po_edit_additem");
 
 /*******************************************************************************
  *	Compose modal
  *******************************************************************************/
 	echo $this->getChildHtml("vendor_po_edit_compose");
+
+	/*******************************************************************************
+ *	Compose modal
+ *******************************************************************************/
+	echo $this->getChildHtml("vendor_po_edit_compose");
 ?>
 
-<!-- Modal add item-->
-<div class="modal fade" id="addItemModal">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title"><?php echo $_hlp->__("Add item");?></h4>
-			</div>
-			<div class="modal-body">
-				<form action="<?php Mage::getUrl("*/*/addItem");?>">
-					Add item content
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_hlp->__("Cancel");?></button>
-				<button type="button" class="btn btn-primary" data-dismiss="modal"><?php echo $_hlp->__("Add item");?></button>
-			</div>
-		</div>
-	</div>
-</div>
 <!-- Modal split order-->
 <div class="modal fade" id="splitOrderModal">
 	<div class="modal-dialog">
