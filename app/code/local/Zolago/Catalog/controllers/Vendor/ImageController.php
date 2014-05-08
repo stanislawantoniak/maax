@@ -5,12 +5,76 @@ class Zolago_Catalog_Vendor_ImageController
     /**
      * Index
      */
+
     public function indexAction() {
         $this->_renderPage(null, 'udprod_image');
+    }
+    protected function _getVendorId() {
+        $vendor = $this->_getSession()->getVendor();
+        if ($vendor) {
+            $vendorId = $vendor->getId();
+        } else {
+            $vendorId = '0';
+        }
+        return $vendorId;
+    }
+    protected function _prepareMapper() {
+        $path = $this->_getPath();
+        $mapper = Mage::getModel('zolagocatalog/mapper');
+        $mapper->setPath($this->_getPath());
+        $collection = Mage::getResourceModel('zolagocatalog/product_collection');
+        $collection->addAttributeToFilter("udropship_vendor", $this->_getVendorId());
+        $collection->addAttributeToSelect('skuv');
+
+
+        $mapper->setCollection($collection);
+        return $mapper;
+    }
+    public function namemapAction() {
+        $mapper = $this->_prepareMapper();
+        $result = $mapper->mapByName();
+        echo json_encode($result);
+    }
+    public function csvmapAction() {
+        if (!empty($_FILES['csv_file'])) {
+            $file = file($_FILES['csv_file']['tmp_name']);
+            if (!$file) {
+                $this->_getSession()->addError(Mage::helper('zolagocatalog')->__('Cant read file'));
+            } else {
+                // check file
+                $check = true;
+                foreach ($file as $number=>$line) {                    
+                    if (trim($line) && 
+                        (!preg_match('/^([a-zA-Z\.\-\_\ \(\)\{\}ąćłóżźęśńĘÓĄŚŻŹĆŃŁ0-9]+;){2}([a-zA-Z\.\-\_\ \(\)\{\}ąćłóżźęśńĘÓĄŚŻŹĆŃŁ0-9]+)?$/',trim($line)))) {
+                        $check = false;
+                        break;
+                    }
+                }
+                if (!$check) {
+                    $this->_getSession()->addError(Mage::helper('zolagocatalog')->__('Wrong file format. Error at line ').' '.($number+1).':'.$line);
+                } else {
+                    $mapper = $this->_prepareMapper();
+                    $mapper->setFile($file);
+                    $count = $mapper->mapByFile();
+                    $this->_getSession()->addSuccess(Mage::helper('zolagocatalog')->__('Operation successful. Processed images: ').$count);
+                }
+            }
+        } else {
+            $this->_getSession()->addError(Mage::helper('zolagocatalog')->__('Cant upload file'));
+        }
+        header('Location: '.Mage::getUrl("udprod/vendor_image/"));
+        exit();
     }
     public function queueAction() {
         $this->_renderPage(null, 'udprod_image');
     }
+
+    protected function _getPath() {
+        $extendedPath = $this->_getVendorId();
+        $path = 'var'.DIRECTORY_SEPARATOR.'plupload'.DIRECTORY_SEPARATOR.$extendedPath;
+        return $path;
+    }
+
     public function connectorAction() {
         $path = 'lib/ElFinder';
         include_once $path.DIRECTORY_SEPARATOR.'elFinderConnector.class.php';
@@ -36,13 +100,7 @@ class Zolago_Catalog_Vendor_ImageController
                                                     ? !($attr == 'read' || $attr == 'write')    // set read+write to false, other (locked+hidden) set to true
                                                     :  null;                                    // else elFinder decide it itself
         }
-        $vendor = $this->_getSession()->getVendor();
-        if ($vendor) {
-            $extendedPath = $vendor->getId();
-        } else {
-            $extendedPath = '0';
-        }
-        $path = 'var'.DIRECTORY_SEPARATOR.'plupload'.DIRECTORY_SEPARATOR.$extendedPath;
+        $path = $this->_getPath();
         $opts = array(
                     // 'debug' => true,
                     'roots' => array(
@@ -143,10 +201,10 @@ class Zolago_Catalog_Vendor_ImageController
 
         // Uncomment this one to fake upload time
         // usleep(5000);
-        
+
         // Settings
         $targetDir = 'var' . DIRECTORY_SEPARATOR . "plupload";
-        
+
         $vendor = $this->_getSession()->getVendor();
         if ($vendor) {
             $targetDir .= DIRECTORY_SEPARATOR. $vendor->getId();
