@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Po>
-            <version>0.0.6</version>
+            <version>0.0.8</version>
         </Zolago_Po>
     </modules>
     <global>
@@ -45,6 +45,7 @@
 			</zolagopo_resource>
 			<udpo>
 				<rewrite>
+					<source>Zolago_Po_Model_Source</source>
 					<po>Zolago_Po_Model_Po</po>
 					<po_item>Zolago_Po_Model_Po_Item</po_item>
 				</rewrite>
@@ -68,6 +69,15 @@
 				</observers>
 			</sales_quote_address_save_before>
 		</events>
+		<template>
+            <email>
+               <zolagopo_compose>
+                   <label>PO Customer Message</label>
+                   <file>zolagopo_compose.html</file>
+                   <type>html</type>
+               </zolagopo_compose>
+            </email>
+        </template>
 		<fieldsets>
 			<!-- Transfer need invoice field -->
 			<sales_copy_order_billing_address>

@@ -2,6 +2,16 @@
 
 class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstract {
 	
+	
+    const EMAIL_TEMPLATE = "zolagopo_compose"; 
+	
+	public function preDispatch() {
+		/**
+		 * @todo add secure to own PO
+		 */
+		return parent::preDispatch();
+	}
+	
 	/**
 	 * @return Zolago_Po_Model_Po
 	 */
@@ -12,6 +22,18 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 			Mage::register("current_po", $po);
 		}
 		return Mage::registry("current_po");
+	}
+	
+	/**
+	 * @return Zolago_Pos_Model_Pos
+	 */
+	protected function _registerPos() {
+		if(!Mage::registry("current_pos")){
+			$posId = $this->getRequest()->getParam("pos");
+			$pos = Mage::getModel("zolagopos/pos")->load($posId);
+			Mage::register("current_pos", $pos);
+		}
+		return Mage::registry("current_pos");
 	}
 	
 	/**
@@ -44,7 +66,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 		}
 		
 		if($this->_getVendor()){
-			$comment = $this->_getVendor()->getVendorName() . ": " . $comment;
+			$comment = "[" .$this->_getVendor()->getVendorName() . "] " . $comment;
 		}
 		
 		try{
@@ -102,6 +124,9 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 		);
 		
 		try{
+			if(!$po->getStatusModel()->isEditingAvailable($po)){
+				throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("Order cannot be edited."));
+			}
 			if(isset($data['restore']) && $data['restore']==1){
 				if($type==Mage_Sales_Model_Order_Address::TYPE_SHIPPING){
 					$po->clearOwnShippingAddress();
@@ -127,6 +152,14 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 				$po->save();
 				$session->addSuccess(Mage::helper("zolagopo")->__("Address changed"));
 				$response['content']['reload']=1;
+			}
+		}catch(Mage_Core_Exception $e){
+			$response = array(
+				"status"	=>0, 
+				"content"	=>$e->getMessage()
+			);
+			if(!$isAjax){
+				$session->addError($e->getMessage());
 			}
 		}catch(Exception $e){
 			Mage::logException($e);
@@ -202,6 +235,13 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         }
 
         try {
+			
+			if(!$udpo->getStatusModel()->isShippingAvailable($udpo)){
+				throw new Mage_Core_Exception(
+					Mage::helper("zolagopo")->__("Shipment cannot be created with this stauts.")
+				);
+			}
+			
             $store = $udpo->getOrder()->getStore();
 
             $track = null;
@@ -465,9 +505,177 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 
         return $this->_redirectReferer();
     }
-	public function cancelShippingAction() {
-		$this->_getSession()->addSuccess("Shipping canceld");
+	
+	
+	public function setConfirmStockAction() {
+        $udpo = $this->_registerPo();
+		try{
+			$udpo->getStatusModel()->processConfirmStock($udpo);
+			$this->_getSession()->addSuccess(Mage::helper("zolagopo")->__("Stock confirmed"));
+		} catch (Mage_Core_Exception $e) {
+			$this->_getSession()->addError($e->getMessage());
+		} catch (Exception $e) {
+			Mage::logException($e);
+			$this->_getSession()->addError(Mage::helper("zolagopo")->__("Some error occured."));
+		}
+		
 		return $this->_redirectReferer();
+	}
+	
+	public function setConfirmReleaseAction() {
+        $udpo = $this->_registerPo();
+		try{
+			$udpo->getStatusModel()->processConfirmRelease($udpo);
+			$this->_getSession()->addSuccess(Mage::helper("zolagopo")->__("Order release confirmed"));
+		} catch (Mage_Core_Exception $e) {
+			$this->_getSession()->addError($e->getMessage());
+		} catch (Exception $e) {
+			Mage::logException($e);
+			$this->_getSession()->addError(Mage::helper("zolagopo")->__("Some error occured."));
+		}
+		
+		return $this->_redirectReferer();
+	}
+	
+	public function startPackingAction() {
+        $udpo = $this->_registerPo();
+		try{
+			$udpo->getStatusModel()->processStartPacking($udpo);
+			$this->_getSession()->addSuccess(Mage::helper("zolagopo")->__("Packing started"));
+		} catch (Mage_Core_Exception $e) {
+			$this->_getSession()->addError($e->getMessage());
+		} catch (Exception $e) {
+			Mage::logException($e);
+			$this->_getSession()->addError(Mage::helper("zolagopo")->__("Some error occured."));
+		}
+		
+		return $this->_redirectReferer();
+	}
+	
+	public function changeStatusAction() {
+		$udpo = $this->_registerPo();
+		try{
+			$statusModel = $udpo->getStatusModel();
+			
+			if(!$statusModel->isManulaStatusAvailable($udpo)){
+				throw new Mage_Core_Exception(
+					Mage::helper("zolagopo")->__("Status cannot be changed.")
+				);
+			}
+			
+			$newStatus = $this->getRequest()->getStatus();
+			
+			if(!in_array($newStatus, $statusModel->getAvailableStatuses($udpo))){
+				throw new Mage_Core_Exception(
+					Mage::helper("zolagopo")->__("Requested status is wrong")
+				);
+			}
+			
+			
+			$udpo->getStatusModel()->processStartPacking($udpo);
+			$this->_getSession()->addSuccess(Mage::helper("zolagopo")->__("Packing started"));
+		} catch (Mage_Core_Exception $e) {
+			$this->_getSession()->addError($e->getMessage());
+		} catch (Exception $e) {
+			Mage::logException($e);
+			$this->_getSession()->addError(Mage::helper("zolagopo")->__("Some error occured."));
+		}
+			
+	}
+	
+	
+	public function cancelShippingAction() {
+        $udpo = $this->_registerPo();
+        $r = $this->getRequest();
+		
+		try{
+			$shipment = Mage::getModel("sales/order_shipment")->load($r->getParam("shipping_id"));
+			/* @var $shipment Mage_Sales_Model_Order_Shipment */
+			if($shipment->getId() && $shipment->getUdpoId()==$udpo->getId()){
+				$udpoHlp = Mage::helper('udpo');
+				/* @var $udpoHlp Unirgy_DropshipPo_Helper_Data */
+				$udpoHlp->cancelShipment($shipment, true);
+				$udpo->getStatusModel()->processCancelShipment($udpo);
+				$this->_getSession()->addSuccess("Shipping canceled.");
+			}else{
+				throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("Wrong shipment."));
+			}
+		} catch (Mage_Core_Exception $e) {
+			$this->_getSession()->addError($e->getMessage());
+		} catch (Exception $e) {
+			Mage::logException($e);
+			$this->_getSession()->addError(Mage::helper("zolagopo")->__("Some error occured."));
+		}
+		
+		return $this->_redirectReferer();
+	}
+	
+	public function composeAction() {
+		
+		$udpo = $this->_registerPo();
+        $r = $this->getRequest();
+		
+		try{
+			$order = $udpo->getOrder();
+			$store = $order->getStore();
+			$vendor = $this->_getVendor();
+			$message = $r->getParam("message");
+			
+			$templateParams = array(
+				"po" => $udpo,
+				"order" => $order,
+				"store" => $store,
+				"vendor" => $vendor,
+				"message" => $message
+			);
+			$title = Mage::helper("zolagopo")->__("[%s] message of order #%s", $vendor->getVendorName(), $order->getIncrementId());
+			
+			if(!$this->_sendEmailTemplate($order->getCustomerName(), $order->getCustomerEmail(), $title,
+					self::EMAIL_TEMPLATE, $templateParams, $store->getId())){
+				throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("Cannot send mail"));
+			}
+			
+			$udpo->addComment("[".$vendor->getVendorName()." &rarr; ".$order->getCustomerName()."] " . $message, false, true);
+			$udpo->saveComments();
+			
+			$this->_getSession()->addSuccess((Mage::helper("zolagopo")->__("Message sent via email")));
+		} catch (Mage_Core_Exception $e) {
+			$this->_getSession()->addError($e->getMessage());
+		} catch (Exception $e) {
+			Mage::logException($e);
+			$this->_getSession()->addError(Mage::helper("zolagopo")->__("Some error occured."));
+		}
+		
+		return $this->_redirectReferer();
+	}
+	
+	public function changePosAction() {
+		$po=$this->_registerPo();
+		$pos=$this->_registerPos();
+		
+		try{
+			if(!$po->getStatusModel()->isEditingAvailable($po)){
+				throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("Order cannot be edited."));
+			}
+			$po->setDefaultPosId($pos->getId());
+			$po->setDefaultPosName($pos->getName());
+			$po->save();
+			$this->_getSession()->addSuccess((Mage::helper("zolagopo")->__("POS has been changed.")));
+		} catch (Mage_Core_Exception $e) {
+			$this->_getSession()->addError($e->getMessage());
+		} catch (Exception $e) {
+			Mage::logException($e);
+			$this->_getSession()->addError(Mage::helper("zolagopo")->__("Some error occured."));
+		}
+		
+		return $this->_redirectReferer();
+	}
+	
+	public function getPosStockAction() {
+		$this->_registerPo();
+		$this->_registerPos();
+		$this->loadLayout();
+		$this->renderLayout();
 	}
 	
 	protected function _porcessDhlDate($date) {
@@ -508,6 +716,45 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 		
 		return $number;
 	}
+	
+	protected function _sendEmailTemplate($customerName, $customerEmail, $title,
+        $template, $templateParams = array(), $storeId = null)
+    {
+        $emailTemplate = Mage::getModel("core/email_template");
+        /* @var $emailTempalte Mage_Core_Model_Email_Template */
+       
+        
+        // Set required design parameters 
+        // and delegate email sending to Mage_Core_Model_Email_Template
+        $emailTemplate->
+            setDesignConfig(array('area' => 'frontend', 'store' => $storeId));
+        
+        if (is_numeric($template)) {
+            $emailTemplate->load($template);
+        } else {
+            $localeCode = Mage::getStoreConfig('general/locale/code', $storeId);
+            $emailTemplate->loadDefault($template, $localeCode);
+        }
+
+        $senderName = Mage::getStoreConfig('trans_email/ident_support/name', 
+                                                                    $storeId);
+        $senderEmail = Mage::getStoreConfig('trans_email/ident_support/email', 
+                                                                    $storeId);
+        
+        $emailTemplate->setSenderEmail($senderEmail);
+        $emailTemplate->setSenderName($senderName);
+        
+        if(!$emailTemplate->getTemplateSubject()){
+            $emailTemplate->setTemplateSubject($title);
+        }
+        
+        return $emailTemplate->send(
+            $customerEmail, 
+            $customerName,
+            $templateParams
+        );
+            
+    }
 }
 
 
