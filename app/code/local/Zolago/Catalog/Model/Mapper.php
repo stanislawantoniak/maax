@@ -74,9 +74,9 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
                     if($imagefile!==false)
                     {
                         //add to gallery
-                        if ($this->_addImageToGallery($pid,$storeid,$imagefile,$filename[2])) {
+                        if ($this->_addImageToGallery($pid,$storeid,$imagefile,trim($filename[2]),$filename[3])) {
                             // remove image from upload area
-                            unlink($this->_path.'/'.$filename[1]);
+                            @unlink($this->_path.'/'.$filename[1]);
                             $count ++;
                         }
                     }
@@ -92,6 +92,7 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
         foreach ($this->_collection as $item) {
             $skuv = $item->getData('skuv');
             $pid = $item->getData('entity_id');
+            $label = $item->getData('name');
             if (!$skuv) {
                 continue;
             }
@@ -101,9 +102,9 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
                     if($imagefile!==false)
                     {
                         //add to gallery
-                        if ($this->_addImageToGallery($pid,$storeid,$imagefile,$label)) {
+                        if ($this->_addImageToGallery($pid,$storeid,$imagefile,'',$label)) {
                             // remove image from upload area
-                            unlink($this->_path.'/'.$file);
+                            @unlink($this->_path.'/'.$file);
                             $count ++;
                         }
                     }
@@ -166,7 +167,7 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
 	 * @param array $attrdesc : product attribute description
 	 * @param string $imgname : image file name (relative to /products/media in magento dir)
 	 */
-	protected function _addImageToGallery($pid,$storeid,$imgname,$imglabel='')
+	protected function _addImageToGallery($pid,$storeid,$imgname,$pos='',$imglabel='')
 	{
 
 	    $resource = Mage::getSingleton('core/resource');
@@ -184,16 +185,18 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
 		if($vid!=null)
 		{
             		
-			#get maximum current position in the product gallery
-			$sql="SELECT MAX( position ) as maxpos
-					 FROM $tgv AS emgv
-					 JOIN $tg AS emg ON emg.value_id = emgv.value_id AND emg.entity_id = '%s'
-					 WHERE emgv.store_id='%s'
-			 		 GROUP BY emg.entity_id";
-            $sql = sprintf($sql,$pid,$storeid);
-            $readConnection = $resource->getConnection('core_read');
-            $result = $readConnection->fetchAll($sql);
-            $pos = (empty($result[0]))? 0:($result[0]['maxpos']+1);
+            if ($pos === '') {
+    			#get maximum current position in the product gallery
+	    		$sql="SELECT MAX( position ) as maxpos
+		    			 FROM $tgv AS emgv
+					     JOIN $tg AS emg ON emg.value_id = emgv.value_id AND emg.entity_id = '%s'
+			    		 WHERE emgv.store_id='%s'
+			 	    	 GROUP BY emg.entity_id";
+                $sql = sprintf($sql,$pid,$storeid);
+                $readConnection = $resource->getConnection('core_read');
+                $result = $readConnection->fetchAll($sql);
+                $pos = (empty($result[0]))? 0:($result[0]['maxpos']+1);
+            }
 			#insert new value (ingnore duplicates)
 				
 			$vinserts=array();
@@ -202,7 +205,7 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
             $sql="INSERT INTO $tgv
 					(value_id,store_id,position,disabled,label)
 					VALUES ('%d','%d','%d','%d','%s')
-					ON DUPLICATE KEY UPDATE label=VALUES(`label`)";
+					ON DUPLICATE KEY UPDATE label=VALUES(`label`),position=VALUES(`position`)";
 			$insert = sprintf($sql,$vid,$storeid,$pos,1,$imglabel);
 			
 			$writeConnection = $resource->getConnection('core_write');
@@ -220,8 +223,12 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
     }
 
     protected function _saveImage($imgfile,$target)
-    {
-        $result = copy($this->_path.'/'.$imgfile,$target);
+    {   
+        $parse = parse_url($imgfile);
+        if (!isset($imgfile['scheme'])) {
+            $imgfile = $this->_path.'/'.$imgfile; 
+        }
+        $result = copy($imgfile,$target);
         return $result;
     }
 
@@ -241,8 +248,8 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
         $l2d = getcwd()."/media/catalog/product/$i1/$i2";
         $te="$l2d/$bimgfile";
         $result="/$i1/$i2/$bimgfile";
-        /* test for same image */
-        if(!file_exists($te))
+        /* test for same image (disabled) */
+        if(1 || !file_exists($te)) 
         {
             /* try to recursively create target dir */
             if(!file_exists("$l2d"))

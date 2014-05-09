@@ -25,6 +25,7 @@ class Zolago_Catalog_Vendor_ImageController
         $collection = Mage::getResourceModel('zolagocatalog/product_collection');
         $collection->addAttributeToFilter("udropship_vendor", $this->_getVendorId());
         $collection->addAttributeToSelect('skuv');
+        $collection->addAttributeToSelect('name');
 
 
         $mapper->setCollection($collection);
@@ -43,13 +44,18 @@ class Zolago_Catalog_Vendor_ImageController
             } else {
                 // check file
                 $check = true;
-                foreach ($file as $number=>$line) {                    
-                    if (trim($line) && 
-                        (!preg_match('/^([a-zA-Z\.\-\_\ \(\)\{\}ąćłóżźęśńĘÓĄŚŻŹĆŃŁ0-9]+;){2}([a-zA-Z\.\-\_\ \(\)\{\}ąćłóżźęśńĘÓĄŚŻŹĆŃŁ0-9]+)?$/',trim($line)))) {
-                        $check = false;
-                        break;
+                $header = $file[0];
+                unset($file[0]);
+                if (!preg_match('/^sku;file;order;label$/',trim($header))) {
+                    $this->_getSession()->addError(Mage::helper('zolagocatalog')->__('Wrong file header'));
+                } else {
+                    foreach ($file as $number=>$line) {
+                        if (trim($line) &&
+                                (!preg_match('/^([a-zA-Z\.\-\_\ \(\)\{\}ąćłóżźęśńĘÓĄŚŻŹĆŃŁ0-9\:\/@#]+;){2}[0-9]*;([a-zA-Z\.\-\_\ \(\)\{\}ąćłóżźęśńĘÓĄŚŻŹĆŃŁ0-9]+)?$/',trim($line)))) {
+                            $check = false;
+                            break;
+                        }
                     }
-                }
                 if (!$check) {
                     $this->_getSession()->addError(Mage::helper('zolagocatalog')->__('Wrong file format. Error at line ').' '.($number+1).':'.$line);
                 } else {
@@ -57,6 +63,7 @@ class Zolago_Catalog_Vendor_ImageController
                     $mapper->setFile($file);
                     $count = $mapper->mapByFile();
                     $this->_getSession()->addSuccess(Mage::helper('zolagocatalog')->__('Operation successful. Processed images: ').$count);
+                }
                 }
             }
         } else {
