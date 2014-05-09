@@ -1,10 +1,11 @@
 <?php /* @var $this Zolago_Po_Block_Vendor_Po_Edit_Additem  */?>
 <?php $_hlp = Mage::helper("zolagopo");?>
 <?php $_po =  $this->getPo();?>
+<?php $_currency = $_po->getOrder()->getOrderCurrencyCode();?>
 <!-- Modal add letter-->
 <div class="modal fade" id="addItemModal">
 	<div class="modal-dialog">
-		<form id="shipping-form" action="<?php echo $this->getPoUrl("addItem");?>" 
+		<form id="add-item-form" action="<?php echo $this->getPoUrl("addItem");?>" 
 			  class="form-horizontal row-border" method="post">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -16,23 +17,44 @@
 				<div class="modal-body">
 					<ul class="list-unstyled">
 						<li class="form-group">
-							<div class="col-md-12">
-								<input name="product" data-placeholder="<?php echo $_hlp->__('Choose a product') ?>" id="additem-product" class="select2-select-00 col-md-12 full-width-fix" type="hidden"/>
+							<label for="additem-product_id" class="col-md-3 control-label"><?php echo $_hlp->__('Product') ?></label>
+							<div class="col-md-9">
+								<input name="product_id" required="required" data-placeholder="<?php echo $_hlp->__('Choose a product') ?>" id="additem-product_id" class="select2-select-00 col-md-12 full-width-fix" type="hidden"/>
 							</div>
 						</li>
-<!--						<li class="form-group">
-							<label for="additem-product" class="col-md-3 control-label"><?php echo $_hlp->__('Product') ?></label>
-							<div class="col-md-9">
-								<select name="product" id="additem-product" class="form-control">
-									<option value="">Select</option>
-								</select>
+						<li class="form-group product-specified">
+							<label for="additem-product_qty" class="col-md-3 control-label"><?php echo $_hlp->__('Qty') ?></label>
+							<div class="col-md-4">
+								<input name="product_qty" required="required" id="additem-product_qty" type="text" value="1" min="1" class="form-control digits required"/> 
 							</div>
-						</li>-->
+						</li>
+						<li class="form-group product-specified">
+							<label for="additem-product_price" class="col-md-3 control-label"><?php echo $_hlp->__('Price') ?></label>
+							<div class="col-md-4">
+								<input name="product_price" required="required" id="additem-product_price" type="text" value="" class="form-control number required"/> 
+							</div>
+							<div class="col-md-2">
+								<div class="after-filed-label text-muted">
+									<?php echo $_currency;?>
+								</div>
+							</div>
+						</li>
+						<li class="form-group product-specified">
+							<label for="additem-product_discount" class="col-md-3 control-label"><?php echo $_hlp->__('Discount') ?></label>
+							<div class="col-md-4">
+								<input name="product_discount"  id="additem-product_discount" type="text" value="" class="form-control digits"/> 
+							</div>
+							<div class="col-md-2">
+								<div class="after-filed-label text-muted">
+									<?php echo $_currency;?>
+								</div>
+							</div>
+						</li>
 					</ul>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_hlp->__("Cancel");?></button>
-					<button type="submit" name="add_own" value="1" class="btn form-btn-loading btn-primary" data-loading-text="<?php echo $_hlp->__("Loading...");?>"><?php echo $_hlp->__("Add item");?></button>
+					<button type="submit" name="add_own" value="1" class="btn form-btn-loading btn-primary product-specified" data-loading-text="<?php echo $_hlp->__("Loading...");?>"><?php echo $_hlp->__("Add item");?></button>
 				</div>
 			</div>
 		</form>
@@ -40,12 +62,37 @@
 </div>
 
 <script src="<?php echo $this->getSkinUrl("js/plugins/select2/select2.min.js");?>" type="text/javascript"></script>
+<script src="<?php echo $this->getSkinUrl("js/plugins/validation/jquery.validate.min.js");?>" type="text/javascript"></script>
+<script src="<?php echo $this->getSkinUrl("js/plugins/validation/additional-methods.min.js");?>" type="text/javascript"></script>
 
 <script type="text/javascript">
 jQuery(function($){
-	var formatSelection = function(item) { return item.name; }
-	var formatResult = function(item) { return item.name + " (" + item.sku +  ")"; }
-	$("#additem-product").select2({
+	var currency = '<?php echo $_currency;?>';
+	var formatSelection = function(item) { return item.name; };
+	var formatResult = function(item) { return item.name + "<br/><small class=\"text-muted\">SKU: " + item.sku +  " &middot;  Price: " + parseFloat(item.price) + " " + currency + "</small>"};
+	var form = $("#add-item-form");
+	var product = $("#additem-product_id");
+	var price = $("#additem-product_price");
+	var qty = $("#additem-product_qty");
+	var discount = $("#additem-product_discount");
+	
+	var validator = form.validate({
+		invalidHandler: function(form, validator) {
+			var errors = validator.numberOfInvalids();
+			if (errors) {
+				var message = errors == 1
+				? 'You missed 1 field. It has been highlighted.'
+				: 'You missed ' + errors + ' fields. They have been highlighted.';
+				noty({
+					text: message,
+					type: 'error',
+					timeout: 2000
+				});
+			}
+		}
+	});
+	
+	product.select2({
 		data:				<?php echo $this->getProductCollectionJson();?>,
 		id:					"entity_id",
 		text:				"name",
@@ -56,5 +103,23 @@ jQuery(function($){
 				   (''+opts.sku).toUpperCase().indexOf((''+term).toUpperCase()) >= 0
 		}
 	});
+	
+	product.change(function(){
+		var el = $(this), val = el.val(), item = el.select2('data');
+		$("#addItemModal .product-specified").addClass("hidden");
+		form[0].reset();
+		validator.resetForm();
+		if(val){
+			$("#addItemModal .product-specified").removeClass("hidden");
+			price.val(parseFloat(item.price));
+		}
+	})
+
+	
+	$("#addItemModal").on("show.bs.modal", function(){
+		product.val("").change();
+	});
+	
+	
 });
 </script>

@@ -53,6 +53,132 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 		$this->_renderPage(null, 'udpo');
 	}
 	
+	public function addItemAction() {
+		$hlp = Mage::helper("zolagopo");
+		$po = $this->_registerPo();
+		$store = $po->getOrder()->getStore();
+		$request = $this->getRequest();
+		
+		$product = Mage::getModel("catalog/product")->
+			//setStoreId($store->getId())->
+			load($request->getParam("product_id"));
+		/* @var $prodcut Mage_Catalog_Model_Product */
+		
+		$price = $request->getParam("product_price");
+		$qty = $request->getParam("product_qty", 1);
+		$discount = $request->getParam("product_discount", 0);
+
+		if(empty($discount) || $discount<0){
+			$discount = 0;
+		}
+		
+		$errors = array();
+		
+		if(empty($price) || !is_numeric($price) || $price<0){
+			$errors[] = $hlp->__("Price is incorrect");
+		}
+		
+		if(empty($qty) || !is_numeric($qty) || $qty<1){
+			$errors[] = $hlp->__("Qty is inncorrect");
+		}
+		
+		if(!is_numeric($discount) | (!empty($discount) && $discount>$price)){
+			$errors[] = $hlp->__("Discount is inncorrect");
+		}
+		
+		if(!$product->getId() || $product->getUdropshipVendor()!=$this->_getVendor()->getId()){
+			$errors[] = $hlp->__("It's not Your product");
+		}
+		
+		if($product->getTypeId()!=Mage_Catalog_Model_Product_Type::TYPE_SIMPLE){
+			$errors[] = $hlp->__("It's not simple product");
+		}
+		
+		if($errors){
+			foreach($errors as $error){
+				$this->_getSession()->addError($error);
+			}
+			return $this->_redirectReferer();
+		}
+		
+		try{
+
+			$taxHelper = Mage::helper('tax');
+			/* @var $taxHelper Mage_Tax_Helper_Data */
+			$product->setPrice($price);
+
+			$finalPrice = $price-$discount;
+			$baseRowPrice = $price * $qty;
+			$finalRowPrice = $finalPrice * $qty;
+			$discountPrecent = round(($discount/$price)*100, 2);
+
+			$discountAmount = $baseRowPrice - $finalRowPrice;
+
+			if($this->_getIsBruttoPrice()){
+				$priceInclTax = $price;
+				$priceExclTax = $taxHelper->getPrice($product, $price, false, null, null, null, null, true);
+				$finalPriceInclTax = $finalPrice;
+				$finalPriceExclTax = $taxHelper->getPrice($product, $finalPrice, false, null, null, null, null, true);
+
+			}else{
+				$priceExclTax = $price;
+				$priceInclTax = $taxHelper->getPrice($product, $price, true, null, null, null, null, false);
+				$finalPriceExclTax = $finalPrice;
+				$finalPriceInclTax = $taxHelper->getPrice($product, $finalPrice, true, null, null, null, null, false);
+			}
+
+			$item = Mage::getModel("zolagopo/po_item");
+			/* @var $item Zolago_Po_Model_Po_Item */
+
+			$itemData = array(
+
+				'row_total'				=> $finalPriceExclTax * $qty,
+				'price'					=> $price,
+				'weight'				=> $product->getWeight(),
+				'qty'					=> $qty,
+				'qty_shipped'			=> null,
+				'product_id'			=> $product->getId(),
+				'order_item_id'			=> null,
+				'additional_data'		=> null,
+				'description'			=> null,
+				'name'					=> $product->getName(),
+				'sku'					=> $product->getSku(),
+				'base_cost'				=> $product->getCost(),
+				'qty_invoiced'			=> null,
+				'qty_canceled'			=> null,
+				'vendor_sku'			=> null, // add by helper
+				'vendor_simple_sku'		=> null, // add by helper
+				'is_virtual'			=> $product->isVirtual(),
+				'commission_percent'	=> null, // ad by helper
+				'transaction_fee'		=> null, // add by helper
+				'price_incl_tax'		=> $priceInclTax,
+				'base_price_incl_tax'	=> $priceInclTax, // @todo use currency
+				'discount_amount'		=> $discountAmount,
+				'discount_percent'		=> $discountPrecent,
+				'row_total_incl_tax'	=> $finalPriceInclTax*$qty,
+				'base_row_total_incl_tax'=> $finalPriceInclTax*$qty, // @todo use currency
+				'parent_item_id'		=> null
+			);
+
+			$item->addData($itemData);
+			$po->addItem($item);
+
+			Mage::helper("udropship")->addVendorSkus($po);
+			if(Mage::helper("core")->isModuleEnabled('Unirgy_DropshipTierCommission')){
+				Mage::helper("udtiercom")->processPo($po);
+			}
+
+			$po->updateTotals(true);
+			$this->_getSession()->addSuccess(Mage::helper("zolagopo")->__("Item added"));
+		} catch (Mage_Core_Exception $e) {
+			$this->_getSession()->addError($e->getMessage());
+		} catch (Exception $e) {
+			Mage::logException($e);
+			$this->_getSession()->addError(Mage::helper("zolagopo")->__("Some error occured."));
+		}
+		
+		return $this->_redirectReferer();
+	}
 	
 	public function addCommentAction() {
 		$_po = $this->_registerPo();
@@ -767,6 +893,14 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             $templateParams
         );
             
+    }
+	
+	/**
+	 * @param Mage_Core_Model_Store|null $store
+	 * @return bool
+	 */
+	protected function _getIsBruttoPrice($store=null) {
+        return Mage::getStoreConfig('tax/calculation/price_includes_tax', $store);
     }
 }
 

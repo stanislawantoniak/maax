@@ -7,8 +7,9 @@ class Zolago_Po_Block_Vendor_Po_Edit_Additem
 		$collection = Mage::getResourceModel('catalog/product_collection');
 		/* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
 		$collection->addAttributeToSelect("name");
-		$collection->addAttributeToSelect("sku");
-		$collection->addAttributeToSelect("entity_id");
+		$collection->addAttributeToSelect("price");
+		$collection->addAttributeToFilter("udropship_vendor", $this->getVendor()->getId());
+		$collection->addFieldToFilter("type_id", Mage_Catalog_Model_Product_Type::TYPE_SIMPLE);
 //		$collArray = array();
 //		foreach($collection as $product){
 //			$collArray[] = array(
