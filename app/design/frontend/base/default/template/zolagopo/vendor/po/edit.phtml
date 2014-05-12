@@ -246,11 +246,8 @@
 								<td></td>
 								<td>
 									<?php if($_shippingMethod && $_isEditable):?>
-									<button data-toggle="modal" data-target="#editItemModal" class="btn btn-xs bs-tooltip btn-edit" data-placement="top" title="<?php echo $_hlp->__("Edit item");?>" >
+									<button data-toggle="modal" data-price="<?php echo $_po->getShippingAmountIncl();?>" data-target="#shippignCostModal" class="btn btn-xs bs-tooltip btn-edit" data-placement="top" title="<?php echo $_hlp->__("Edit item");?>" >
 										<i class="icon-pencil"></i>
-									</button>
-									<button class="btn btn-xs btn-notification bs-tooltip btn-remove" data-placement="top" title="<?php echo $_hlp->__("Remove item");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("Do you want to remove this item?");?>" data-modal="true">
-										<i class="icon-remove"></i>
 									</button>
 									<?php endif;?>
 								</td>
@@ -453,7 +450,7 @@
 /*******************************************************************************
  *	Add item modal
  *******************************************************************************/
-	echo $this->getChildHtml("vendor_po_edit_additem");
+	echo $this->getChildHtml("vendor_po_edit_add_item");
 
 /*******************************************************************************
  *	Pos modal
@@ -486,28 +483,17 @@
 		</div>
 	</div>
 </div>
-<!-- Modal edit item-->
-<div class="modal fade" id="editItemModal">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title"><?php echo $_hlp->__("Edit item");?></h4>
-			</div>
-			<div class="modal-body">
-				<form action="<?php Mage::getUrl("*/*/saveItem");?>">
-					Item fields
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_hlp->__("Cancel");?></button>
-				<button type="button" class="btn btn-primary" data-dismiss="modal"><?php echo $_hlp->__("Save");?></button>
-			</div>
-		</div>
-	</div>
-</div>
-
 <?php 
+/*******************************************************************************
+ *	Shippign address modal
+ *******************************************************************************/
+	echo $this->getChild("vendor_po_edit_edit_item")->
+		toHtml();
+/*******************************************************************************
+ *	Shippign cost modal
+ *******************************************************************************/
+	echo $this->getChild("vendor_po_edit_shipping_cost")->
+		toHtml();
 /*******************************************************************************
  *	Shippign address modal
  *******************************************************************************/
@@ -544,7 +530,7 @@
 		checkboxes.change(function(el){
 			if(splitBtn.length){
 				var checkLen = checkboxes.filter(":checked").length;
-				splitBtn.attr("disabled", /* checkLen==checkboxes.length || */!checkLen);
+				splitBtn.attr("disabled", checkLen==checkboxes.length || !checkLen);
 			}
 		});
 	});

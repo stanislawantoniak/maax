@@ -1,6 +1,12 @@
 <?php
 class Zolago_Po_Model_Po_Item extends Unirgy_DropshipPo_Model_Po_Item
 {
+	/**
+	 * @return float
+	 */
+	public function getDiscount() {
+		return round($this->getDiscountAmount()/$this->getQty(), 4);
+	}
 
    public function _beforeSave() {
 	   // Transfer fields

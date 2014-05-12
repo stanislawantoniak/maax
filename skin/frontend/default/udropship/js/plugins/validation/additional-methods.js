@@ -615,3 +615,14 @@ jQuery.validator.addMethod("extension", function(value, element, param) {
 	param = typeof param === "string" ? param.replace(/,/g, '|') : "png|jpe?g|gif";
 	return this.optional(element) || value.match(new RegExp(".(" + param + ")$", "i"));
 }, jQuery.format("Please enter a value with a valid extension."));
+
+
+// Less that
+jQuery.validator.addMethod("lessthat", function(value, element, param) {
+	var cmpField = jQuery(param);
+	
+	if(cmpField.length){
+		return this.optional(element) || parseFloat(cmpField.val())>parseFloat(value);
+	}
+	return this.optional(element);
+}, jQuery.format("Value is greather that expected"));

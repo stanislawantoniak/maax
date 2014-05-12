@@ -91,4 +91,29 @@ Zolago.gridIntegrator = function(gridObj){
 	
 	gridObj.massaction.checkCheckboxes();
 }
-console.log(Zolago);
+
+Zolago.price = function(v){
+	
+        /* @todo locale... */
+        var p = (Math.round(v * Math.pow(10, 2)) / Math.pow(10, 2) + "").split(".");
+
+        if (p.length == 1) {
+            p[1] = "00";
+        } else if (p.length == 2 && p[1].length == 1) {
+            p[1] += "0";
+        }
+        return p.join(",");
+}
+
+Zolago.round = function(v, pow){
+	
+		if(pow==undefined){
+			pow=2;
+		}
+		
+        return Math.round(v * Math.pow(10, pow)) / Math.pow(10, pow) + "";
+}
+
+Zolago.currency = function(v){
+	return this.price(price) + " " + global.i18n.currency;
+}
