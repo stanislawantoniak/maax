@@ -53,11 +53,75 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 		$this->_renderPage(null, 'udpo');
 	}
 	
-	public function editShippingAmountAction() {
+	public function shippingCostAction() {
 		$hlp = Mage::helper("zolagopo");
 		$po = $this->_registerPo();
-		var_export($this->getRequest()->getParams());
+		$price = $this->getRequest()->getParam("price");
+		$store = $po->getOrder()->getStore();
 		
+		try{
+			if(empty($price) || (float)$price<0){
+				throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("Illegal price"));
+			}
+			if(!$po->getStatusModel()->isEditingAvailable($po)){
+				throw new Mage_Core_Exception($hlp->__("Cannot remove item of order in this status."));
+			}
+			
+			/** Tax **/
+			$taxCalculationModel = Mage::getSingleton('tax/calculation');
+			/* @var $taxCalculationModel Mage_Tax_Model_Calculation */
+			
+			$customerGroup = Mage::getModel("customer/group")->load($po->getOrder()->getCustomerGroupId());
+			/* @var $customerGroup Mage_Customer_Model_Group */
+			
+			$request = $taxCalculationModel->getRateRequest(
+					$po->getShippingAddress(), 
+					$po->getBillingAddress(), 
+					$customerGroup->getTaxClassId(),
+					$store
+			);
+			
+			$shippingTaxClass = Mage::getStoreConfig(Mage_Tax_Model_Config::CONFIG_XML_PATH_SHIPPING_TAX_CLASS, $store);
+
+			$shippingTax		= 0;
+			$shippignInclTax	= 0;
+			if ($shippingTaxClass) {
+				if ($rate = $taxCalculationModel->getRate($request->setProductClassId($shippingTaxClass))) {
+					 if (!Mage::helper('tax')->shippingPriceIncludesTax()) {
+						$shippingTax   = $price * $rate/100;
+						$shippignInclTax = $price + $shippingTax;
+					 }else{
+						$shippingTax  = $price * (1 - 1 / (($rate/100)+1));
+						$shippignInclTax = $price;
+					 }	
+					 $shippingTax = $store->roundPrice($shippingTax);
+				}
+			}else{
+				$shippignInclTax = $price;	
+			}
+			
+			$data = array(
+				"shipping_tax"				=> $shippingTax,
+				"base_shipping_tax"			=> $shippingTax,
+				"shipping_amount_incl"		=> $shippignInclTax,
+				"base_shipping_amount_incl"	=> $shippignInclTax
+			);
+			
+			$po->addData($data);
+			$po->updateTotals(true);
+			
+			$this->_getSession()->addSuccess(
+				Mage::helper("zolagopo")->__("Shipping amount has been changed")
+			);
+		}catch(Mage_Core_Exception $e){
+			$this->_getSession()->addError($e->getMessage());
+		}catch(Exception $e){
+			$this->_getSession()->addError(
+				Mage::helper("zolagopo")->__("Some error occure")
+			);
+			Mage::logException($e);
+		}
+		return $this->_redirectReferer(); 
 	}
 	
 	/**
@@ -216,7 +280,6 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 				'base_row_total_incl_tax'=> $finalPriceInclTax*$qty, // @todo use currency
 			);
 
-			Mage::log($itemData);
 			$item->addData($itemData);
 			
 			Mage::helper("udropship")->addVendorSkus($po);
@@ -321,7 +384,6 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 			/* @var $item Zolago_Po_Model_Po_Item */
 
 			$itemData = array(
-
 				'row_total'				=> $finalPriceExclTax * $qty,
 				'price'					=> $price,
 				'weight'				=> $product->getWeight(),
@@ -357,8 +419,8 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 			if(Mage::helper("core")->isModuleEnabled('Unirgy_DropshipTierCommission')){
 				Mage::helper("udtiercom")->processPo($po);
 			}
-
 			$po->updateTotals(true);
+			$po->getStatusModel()->processDirectRealisation($po, true);
 			$this->_getSession()->addSuccess(Mage::helper("zolagopo")->__("Item added"));
 		} catch (Mage_Core_Exception $e) {
 			$this->_getSession()->addError($e->getMessage());
@@ -534,6 +596,11 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 		$this->getResponse()->setBody(Zend_Json::encode(array("status"=>0, "message"=>"Some error occure")));
 	}
 
+	/**
+	 * @return void
+	 * @throws Mage_Core_Exception
+	 * @throws Exception
+	 */
     public function saveShippingAction()
     {
 		
@@ -822,7 +889,10 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         return $this->_redirectReferer();
     }
 	
-	
+	/**
+	 * 
+	 * @return type
+	 */
 	public function setConfirmStockAction() {
         $udpo = $this->_registerPo();
 		try{
@@ -838,6 +908,10 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 		return $this->_redirectReferer();
 	}
 	
+	/**
+	 * 
+	 * @return type
+	 */
 	public function setConfirmReleaseAction() {
         $udpo = $this->_registerPo();
 		try{
@@ -853,6 +927,10 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 		return $this->_redirectReferer();
 	}
 	
+	/**
+	 * 
+	 * @return type
+	 */
 	public function startPackingAction() {
         $udpo = $this->_registerPo();
 		try{
@@ -881,6 +959,11 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 		return $this->_redirectReferer();
 	}
 	
+	/**
+	 * 
+	 * @return type
+	 * @throws Mage_Core_Exception
+	 */
 	public function changeStatusAction() {
 		$udpo = $this->_registerPo();
 		try{
@@ -911,7 +994,11 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 			
 	}
 	
-	
+	/**
+	 * 
+	 * @return type
+	 * @throws Mage_Core_Exception
+	 */
 	public function cancelShippingAction() {
         $udpo = $this->_registerPo();
         $r = $this->getRequest();

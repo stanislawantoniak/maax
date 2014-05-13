@@ -164,10 +164,30 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
    
    public function updateTotals($force=false) {
 	    if($force || !$this->getGrandTotalInclTax()){
+			$this->_processTotalWeight();
+			$this->_processTotalQty();
 			$this->setGrandTotalInclTax($this->getSubtotalInclTax()+$this->getShippingAmountIncl());
 			$this->save();
 		}
 		return $this;
+   }
+   
+   protected function _processTotalWeight() {
+	   $weight = 0;
+	   foreach($this->getItemsCollection() as $item){
+		   $weight += $item->getWeight() * $item->getQty();
+	   }
+	   $this->setTotalWeight($weight);
+	   return $this;
+   }
+   
+   protected function _processTotalQty() {
+	   $qty = 0;
+	   foreach($this->getItemsCollection() as $item){
+		   $qty += $item->getQty();
+	   }
+	   $this->setTotalQty($qty);
+	   return $this;
    }
    
    /**
