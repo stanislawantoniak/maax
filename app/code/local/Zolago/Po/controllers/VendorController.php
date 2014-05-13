@@ -53,6 +53,90 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 		$this->_renderPage(null, 'udpo');
 	}
 	
+	
+	public function massConfirmStockAction() {
+		
+		$hlp = Mage::helper("zolagopo");
+		$ids = $this->_getMassIds();
+		$collection = Mage::getResourceModel('zolagopo/po_collection');
+		/* @var $collection Zolago_Po_Model_Resource_Po_Collection */
+		if(count($ids)){
+			$collection->addFieldToFilter("entity_id", array("in"=>$ids));
+		}else{
+			$collection->addFieldToFilter("entity_id", -1);
+		}
+		
+		$notVaildPos = array(
+			'vendor' => array(),
+			'status' => array()
+		);
+		$count = $collection->count();
+		foreach($collection as $po){
+			/* @var $po Zolago_Po_Model_Po */
+			if(!$this->_vaildPo($po)){
+				$notVaildPos['vendor'][] = $po;
+			}elseif( !$po->getStatusModel()->isConfirmStockAvailable($po)){
+				$notVaildPos['status'][] = $po;
+			}
+		}
+		
+		if(count($notVaildPos['vendor']) || count($notVaildPos['status'])){
+			foreach($notVaildPos['vendor'] as $po){
+				$this->_getSession()->addError($hlp->__("Order #%s is not vaild", $po->getIncrementId()));
+			}
+			foreach($notVaildPos['status'] as $po){
+				$this->_getSession()->addError($hlp->__("Order #%s has invaild status", $po->getIncrementId()));
+			}
+		}elseif($count){
+			$transaction = Mage::getSingleton('core/resource')->getConnection('core_write');
+			/* @var $transaction Varien_Db_Adapter_Interface */
+			try{
+				$transaction->beginTransaction();
+				foreach($collection as $po){
+					$po->getStatusModel()->processConfirmStock($po);
+				}
+				$transaction->commit();
+				$this->_getSession()->addSuccess($hlp->__("%d order stock confirmed", $count));
+			}catch(Mage_Core_Exception $e){
+				$transaction->rollBack();
+				$this->_getSession()->addError($e->getMessage());
+			}catch(Exception $e){
+				$transaction->rollBack();
+				$this->_getSession()->addError(
+					Mage::helper("zolagopo")->__("Some error occure")
+				);
+				Mage::logException($e);
+			}
+		}else{
+			$this->_getSession()->addError(
+				Mage::helper("zolagopo")->__("No selected orders")
+			);
+		}
+		
+		return $this->_redirectReferer();
+		
+	}
+	
+	/**
+	 * @param Zolago_Po_Model_Po $po
+	 * @return bool
+	 */
+	public function _vaildPo(Zolago_Po_Model_Po $po) {
+		return $po->getUdropshipVendor()==$this->_getVendor()->getId();
+	}
+	
+	public function massConfirmSendAction() {
+		$ids = $this->_getMassIds();
+	}
+	
+	/**
+	 * @return array
+	 */
+	protected function _getMassIds(){
+		return explode(",", $this->getRequest()->getParam('po', ''));
+	}
+
+
 	public function splitAction(){
 		$hlp = Mage::helper("zolagopo");
 		$po = $this->_registerPo();
