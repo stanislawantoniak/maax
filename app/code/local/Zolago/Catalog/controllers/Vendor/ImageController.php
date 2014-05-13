@@ -7,7 +7,8 @@ class Zolago_Catalog_Vendor_ImageController
      */
 
     public function indexAction() {
-        $this->_renderPage(null, 'udprod_image');
+        Mage::register('as_frontend', true);// Tell block class to use regular URL's                        
+        $this->_renderPage(array('default','formkey','adminhtml_head'), 'udprod_image');
     }
     protected function _getVendorId() {
         $vendor = $this->_getSession()->getVendor();
@@ -26,8 +27,6 @@ class Zolago_Catalog_Vendor_ImageController
         $collection->addAttributeToFilter("udropship_vendor", $this->_getVendorId());
         $collection->addAttributeToSelect('skuv');
         $collection->addAttributeToSelect('name');
-
-
         $mapper->setCollection($collection);
         return $mapper;
     }
@@ -83,6 +82,7 @@ class Zolago_Catalog_Vendor_ImageController
     }
 
     public function connectorAction() {
+        $extendedPath = '';
         $path = 'lib/ElFinder';
         include_once $path.DIRECTORY_SEPARATOR.'elFinderConnector.class.php';
         include_once $path.DIRECTORY_SEPARATOR.'elFinder.class.php';
@@ -205,7 +205,6 @@ class Zolago_Catalog_Vendor_ImageController
 
         // 5 minutes execution time
         @set_time_limit(5 * 60);
-
         // Uncomment this one to fake upload time
         // usleep(5000);
 

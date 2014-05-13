@@ -31,7 +31,10 @@
 		</reference>
 	</udprod_vendor_image_queue>
 	<udprod_vendor_image_index>
-		<update handle="udropship_vendor" />
+<!--		<update handle="udropship_vendor" />
+		<update handle="formkey" />
+		<update handle="adminhtml_head" />
+-->     <remove name="dashboard">		
 		<update handle="bootstrap" />
 		<reference name="head">
 		    <action method="addItem"><type>skin_js</type><name>plugins/plupload/plupload.full.min.js</name></action>
@@ -46,7 +49,7 @@
 		<reference name="content">
 			<block name="image" type="zolagocatalog/vendor_image" template="zolagocatalog/image.phtml">			    
 			    <block name="image_queue" type="zolagocatalog/vendor_image_queue" template="zolagocatalog/image/queue.phtml"/>
-			    <block name="image_grid" type="zolagocatalog/vendor_image_grid" template="zolagocatalog/image/grid.phtml"/>
+			    <block name="image_list" type="zolagocatalog/vendor_image_list" template="zolagocatalog/image/list.phtml"/>
 			</block>
 		</reference>
 	</udprod_vendor_image_index>

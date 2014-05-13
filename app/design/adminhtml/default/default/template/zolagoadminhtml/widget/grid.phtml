@@ -10,7 +10,6 @@
  */
 $numColumns = sizeof($this->getColumns());
 ?>
-
 <div id="<?php echo $this->getId() ?>">
 <?php if($this->getCollection()): ?>
     <?php if($this->canDisplayContainer()): ?>
@@ -163,7 +162,7 @@ $numColumns = sizeof($this->getColumns());
 
 					<?php if ($this->shouldRenderCell($_item, $_column)):?>
 						<?php $_rowspan = $this->getRowspan($_item, $_column);?>
-						<td <?php echo ($_rowspan ? 'rowspan="' . $_rowspan . '" ' : '') ?>class="<?php echo $_column->getCssProperty() ?> <?php echo ++$i==$numColumns?'last':'' ?>">
+						<td <?php echo ($_rowspan ? 'rowspan="' . $_rowspan . '" ' : '') ?>class="<?php echo $_column->getCssProperty() ?> <?php echo ++$i==$numColumns? 'last': '' ?>">
 							<?php echo (($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?>
 						</td>
 						<?php if ($this->shouldRenderEmptyCell($_item, $_column)):?>
@@ -177,7 +176,7 @@ $numColumns = sizeof($this->getColumns());
 					<?php foreach ($_multipleRows as $_i):?>
 					<tr>
 						<?php $i=0;foreach ($this->getMultipleRowColumns($_i) as $_column): ?>
-							<td class="<?php echo $_column->getCssProperty() ?> <?php echo ++$i==$numColumns-1?'last':'' ?>">
+							<td class="<?php echo $_column->getCssProperty() ?> <?php echo ++$i==$numColumns-1? 'last':'' ?>">
 								<?php echo (($_html = $_column->getRowField($_i)) != '' ? $_html : '&nbsp;') ?>
 							</td>
 						<?php endforeach; ?>
