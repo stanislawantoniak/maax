@@ -54,6 +54,23 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 	}
 	
 	/**
+	 * @return bool
+	 */
+	public function isRemovable() {
+		if(!$this->hasData('is_removable')){
+			$removable = false;
+			$i = 0;
+			foreach($this->getPo()->getAllItems() as $item){
+				if(is_null($item->getOrderItem()->getParentItemId())){
+					$i++;
+				}
+			}
+			$this->setData('is_removable', $i>1);
+		}
+		return $this->getData('is_removable');
+	}
+	
+	/**
 	 * @param Unirgy_DropshipPo_Model_Po_Item $item
 	 * @return Zolago_Po_Block_Vendor_Po_Item_Renderer_Abstract
 	 */
@@ -62,10 +79,15 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 		$type=$orderItem->getProductType();
 		return $this->_getRendererByType($type)->
 				setItem($item)->
+				setParentBlock($this)->
+				setIsRemovable($this->isRemovable())->
 				setIsEditable($this->isEditable());
 		
 	}
 	
+	/**
+	 * @return void
+	 */
 	protected function _prepareShipments() {
 		$_po = $this->getPo();
 		$_order = $_po->getOrder();

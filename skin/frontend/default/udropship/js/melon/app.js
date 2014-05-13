@@ -93,8 +93,13 @@ var App = function($) {
 		$('.form-btn-loading').each(function(){
 			var self = $(this);
 			if(self.parents("form").length){
-				self.parents("form").submit(function(){
-					self.button('loading');
+				self.parents("form").submit(function(e){
+					setTimeout(function(){
+						if(!e.isDefaultPrevented()){
+							self.button('loading');
+						}
+					}, 50);
+					
 				});
 			}
 		})

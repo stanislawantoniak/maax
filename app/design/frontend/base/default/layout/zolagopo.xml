@@ -18,11 +18,29 @@
 	<udpo_vendor_edit>		
 		<update handle="bootstrap"/>
 		<update handle="noty"/>
+		<reference name="head">
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/select2/select2.min.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/validation/jquery.validate.min.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/validation/additional-methods.js</name>
+			</action>
+		</reference>
 		<reference name="content">			
 			<block name="vendor_po_edit" type="zolagopo/vendor_po_edit" template="zolagopo/vendor/po/edit.phtml">
 				<!-- modals -->
 				<block name="vendor_po_edit_compose" type="zolagopo/vendor_po_edit_compose" template="zolagopo/vendor/po/edit/compose.phtml"/>
 				<block name="vendor_po_edit_pos" type="zolagopo/vendor_po_edit_pos" template="zolagopo/vendor/po/edit/pos.phtml"/>
+				<block name="vendor_po_edit_add_item" type="zolagopo/vendor_po_edit_additem" template="zolagopo/vendor/po/edit/add_item.phtml"/>
+				<block name="vendor_po_edit_edit_item" type="zolagopo/vendor_po_edit_edititem" template="zolagopo/vendor/po/edit/edit_item.phtml"/>
+				<block name="vendor_po_edit_shipping_cost" type="zolagopo/vendor_po_edit_shippingcost" template="zolagopo/vendor/po/edit/shipping_cost.phtml"/>
+				<block name="vendor_po_edit_split" type="zolagopo/vendor_po_edit_split" template="zolagopo/vendor/po/edit/split.phtml"/>
 				<block name="vendor_po_edit_shipping_address" type="zolagopo/vendor_po_edit_address" template="zolagopo/vendor/po/edit/address.phtml"/>
 				<block name="vendor_po_edit_billing_address" type="zolagopo/vendor_po_edit_address" template="zolagopo/vendor/po/edit/address.phtml"/>
 				<block name="vendor_po_edit_shipping" type="zolagopo/vendor_po_edit_shipping" template="zolagopo/vendor/po/edit/shipping.phtml"/>

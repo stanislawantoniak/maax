@@ -7,6 +7,9 @@ class Zolago_Po_Block_Vendor_Po_Item_Renderer_Abstract extends Mage_Core_Block_T
 		$this->setTemplate("zolagopo/vendor/po/item/renderer/simple.phtml");
 	}
 	
+	public function getPoUrl($action, $params=array()) {
+		return $this->getParentBlock()->getPoUrl($action, $params);
+	}
 	
 
 }

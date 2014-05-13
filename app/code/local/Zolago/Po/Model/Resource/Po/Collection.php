@@ -105,13 +105,13 @@ class Zolago_Po_Model_Resource_Po_Collection
 					array("po_item.parent_id", "po_item.name")
 			);
 			$select->join(
-					array("order_item"=>$this->getTable('sales/order_item')), 
+					array("product"=>$this->getTable('catalog/product')), 
 					$select->getAdapter()->quoteInto(
-							"order_item.item_id=po_item.order_item_id AND order_item.product_type IN(?)", 
+							"product.entity_id=po_item.product_id AND product.type_id IN(?)", 
 							$this->_getVisibleTypes()),
 					array()
 			);
-			$select->where("po_item.parent_id IN (?)", $ids);
+			$select->where("po_item.parent_id IN (?) ", $ids);
 			$grouped = array();
 			foreach($this->_conn->fetchAll($select) as $row){
 				$parentId = $row['parent_id'];

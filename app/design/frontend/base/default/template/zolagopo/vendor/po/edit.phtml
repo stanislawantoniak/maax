@@ -55,7 +55,7 @@
 								<ul class="dropdown-menu"> 
 									<?php foreach($_statusModel->getAvailableStatuses($_po) as $key=>$status):?>
 										<?php if($key!=$_po->getUdropshipStatus()):?>
-										<li><a class="btn-notification" data-placement="top"  data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("You are about to change status from %s to %s. Are You sure?", $this->getCurrentStatus($_po), $this->escapeHtml($status));?>" data-modal="true" data-status="<?php echo $key;?>" href="#"><?php echo $this->escapeHtml($status);?></a></li> 
+										<li><a class="btn-notification" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("changeStatus", array("status"=>$key));?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("You are about to change status from %s to %s. Are You sure?", $this->getCurrentStatus($_po), $this->escapeHtml($status));?>" data-modal="true" data-status="<?php echo $key;?>" href="#"><?php echo $this->escapeHtml($status);?></a></li> 
 										<?php endif;?>
 									<?php endforeach;?>
 								</ul> 
@@ -141,9 +141,17 @@
 					</h4> 
 					<div class="toolbar no-padding"> 
 						<div class="btn-group"> 
+							<?php /* Confirm direct realistaion */ ?>
+							<?php if($_statusModel->isDirectRealisationAvailable($_po)):?>
+								<a class="btn-notification btn btn-xs btn-primary" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("directRealisation");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("You are about to direct realisation Are You sure?");?>" data-modal="true" href="#">
+									<i class="icon-ok"></i>
+									<?php echo $_hlp->__("Direct realisation");?>
+								</a> 
+							<?php endif;?>
+							
 							<?php /* Confirm realase button */ ?>
 							<?php if($_statusModel->isConfirmReleaseAvailable($_po)):?>
-								<a class="btn-notification btn btn-xs" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("setConfirmRelease");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("You are about to confirm stock. Are You sure?");?>" data-modal="true" href="#">
+								<a class="btn-notification btn btn-xs" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("setConfirmRelease");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("You are about to confirm order realisation. Are You sure?");?>" data-modal="true" href="#">
 									<i class="icon-ok"></i>
 									<?php echo $_hlp->__("Confirm release");?>
 								</a> 
@@ -153,7 +161,7 @@
 							<?php if($_statusModel->isConfirmStockAvailable($_po)):?>
 								<?php if(!$_po->getStockConfirm()):?>
 								<?php  /* Display as active widget */ ?>
-								<a class="btn-notification btn btn-xs" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("setConfirmStock");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("You are about to confirm order release. Are You sure?");?>" data-modal="true" href="#">
+								<a class="btn-notification btn btn-xs btn-primary" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("setConfirmStock");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("You are about to confirm stock. Are You sure?");?>" data-modal="true" href="#">
 									<i class="icon-ok"></i>
 									<?php echo $_hlp->__("Confirm stock");?>
 								</a> 
@@ -220,7 +228,7 @@
 								<td colspan="3" rowspan="2" style="vertical-align: middle; border-bottom: 0;">
 									<?php if($_isEditable):?>
 									<i class="icon-checked-action"></i>
-									<button data-toggle="modal" data-target="#splitOrderModal" class="btn" id="split" disabled="disabled">
+									<button data-toggle="modal" data-target="#splitModal" class="btn" id="split" disabled="disabled">
 										<i class=" icon-unlink"></i>
 										<?php echo $_hlp->__("Split order");?>
 									</button>
@@ -238,11 +246,8 @@
 								<td></td>
 								<td>
 									<?php if($_shippingMethod && $_isEditable):?>
-									<button data-toggle="modal" data-target="#editItemModal" class="btn btn-xs bs-tooltip btn-edit" data-placement="top" title="<?php echo $_hlp->__("Edit item");?>" >
+									<button data-toggle="modal" data-price="<?php echo $_po->getShippingAmountIncl();?>" data-target="#shippignCostModal" class="btn btn-xs bs-tooltip btn-edit" data-placement="top" title="<?php echo $_hlp->__("Edit item");?>" >
 										<i class="icon-pencil"></i>
-									</button>
-									<button class="btn btn-xs btn-notification bs-tooltip btn-remove" data-placement="top" title="<?php echo $_hlp->__("Remove item");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("Do you want to remove this item?");?>" data-modal="true">
-										<i class="icon-remove"></i>
 									</button>
 									<?php endif;?>
 								</td>
@@ -443,7 +448,12 @@
 
 <?php
 /*******************************************************************************
- *	Compose modal
+ *	Add item modal
+ *******************************************************************************/
+	echo $this->getChildHtml("vendor_po_edit_add_item");
+
+/*******************************************************************************
+ *	Pos modal
  *******************************************************************************/
 	echo $this->getChildHtml("vendor_po_edit_pos");
 
@@ -451,70 +461,22 @@
  *	Compose modal
  *******************************************************************************/
 	echo $this->getChildHtml("vendor_po_edit_compose");
-?>
+	
+/*******************************************************************************
+ *	Split modal
+ *******************************************************************************/
+	echo $this->getChildHtml("vendor_po_edit_split");
 
-<!-- Modal add item-->
-<div class="modal fade" id="addItemModal">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title"><?php echo $_hlp->__("Add item");?></h4>
-			</div>
-			<div class="modal-body">
-				<form action="<?php Mage::getUrl("*/*/addItem");?>">
-					Add item content
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_hlp->__("Cancel");?></button>
-				<button type="button" class="btn btn-primary" data-dismiss="modal"><?php echo $_hlp->__("Add item");?></button>
-			</div>
-		</div>
-	</div>
-</div>
-<!-- Modal split order-->
-<div class="modal fade" id="splitOrderModal">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title"><?php echo $_hlp->__("Split order");?></h4>
-			</div>
-			<div class="modal-body">
-				<form action="<?php Mage::getUrl("*/*/splitOrder");?>">
-					Dialog content
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_hlp->__("Cancel");?></button>
-				<button type="button" class="btn btn-primary" data-dismiss="modal"><?php echo $_hlp->__("Split order");?></button>
-			</div>
-		</div>
-	</div>
-</div>
-<!-- Modal edit item-->
-<div class="modal fade" id="editItemModal">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title"><?php echo $_hlp->__("Edit item");?></h4>
-			</div>
-			<div class="modal-body">
-				<form action="<?php Mage::getUrl("*/*/saveItem");?>">
-					Item fields
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_hlp->__("Cancel");?></button>
-				<button type="button" class="btn btn-primary" data-dismiss="modal"><?php echo $_hlp->__("Save");?></button>
-			</div>
-		</div>
-	</div>
-</div>
-
-<?php 
+/*******************************************************************************
+ *	Shippign address modal
+ *******************************************************************************/
+	echo $this->getChildHtml("vendor_po_edit_edit_item");
+	
+/*******************************************************************************
+ *	Shippign cost modal
+ *******************************************************************************/
+	echo $this->getChildHtml("vendor_po_edit_shipping_cost");
+	
 /*******************************************************************************
  *	Shippign address modal
  *******************************************************************************/
@@ -551,7 +513,7 @@
 		checkboxes.change(function(el){
 			if(splitBtn.length){
 				var checkLen = checkboxes.filter(":checked").length;
-				splitBtn.attr("disabled", /* checkLen==checkboxes.length || */!checkLen);
+				splitBtn.attr("disabled", checkLen==checkboxes.length || !checkLen);
 			}
 		});
 	});

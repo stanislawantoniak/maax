@@ -115,6 +115,25 @@ class Zolago_Po_Model_Po_Status
 		}
 	}
 	
+	/**
+	 * set if PAYMENT IS GATEWAY and IS NOT PAID:
+	 *	 BACKORDER
+	 *	 else 
+	 *	 PENDING
+	 * @param Zolago_Po_Model_Po $po
+	 */
+	public function processDirectRealisation(Zolago_Po_Model_Po $po, $force=false) {
+		if($this->isDirectRealisationAvailable($po) || $force){
+			$po->setStockConfirm(0);
+			$po->getResource()->saveAttribute($po, "stock_confirm");
+			if($po->isGatewayPayment() && !$po->isPaid()){
+				$status = self::STATUS_BACKORDER;
+			}else{
+				$status = self::STATUS_PENDING;
+			}
+			$this->_processStatus($po, $status);
+		}
+	}
 	
 	/**
 	 * @param Zolago_Po_Model_Po $po
@@ -214,6 +233,20 @@ class Zolago_Po_Model_Po_Status
 	}
 	
 	/**
+	 * @param Zolago_Po_Model_Po|int $po
+	 * @return boolean
+	 */
+	public function isDirectRealisationAvailable($po) {
+		switch ($this->_getStatus($po)) {
+			case self::STATUS_CANCELED:
+			case self::STATUS_ONHOLD:
+				return true;
+			break;
+		}
+		return false;
+	}
+	
+	/**
 	 * @param Zolago_Po_Model_Po|int $status
 	 * @return array
 	 */
@@ -235,6 +268,14 @@ class Zolago_Po_Model_Po_Status
 		}
 		
 		return $statuses;
+	}
+	
+	/**
+	 * @param Zolago_Po_Model_Po $po
+	 * @param string $newStatus
+	 */
+	public function changeStatus(Zolago_Po_Model_Po $po, $newStatus) {
+		$this->_processStatus($po, $newStatus);
 	}
 
 	/**

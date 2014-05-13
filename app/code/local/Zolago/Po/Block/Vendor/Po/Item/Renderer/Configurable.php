@@ -12,7 +12,7 @@ class Zolago_Po_Block_Vendor_Po_Item_Renderer_Configurable
 		$this->setTemplate("zolagopo/vendor/po/item/renderer/configurable.phtml");
 	}
 	
-	public function getConfigurableHtml(Mage_Sales_Model_Order_Item $item) {
+	public function getConfigurableText(Mage_Sales_Model_Order_Item $item) {
 		$request = $item->getProductOptionByCode("attributes_info");
 		$out = array();
 		if(is_array($request)){
@@ -21,7 +21,15 @@ class Zolago_Po_Block_Vendor_Po_Item_Renderer_Configurable
 			}
 		}
 		if($out){
-			return " <em class=\"text-muted\">(".implode(", ", $out).")</em>";
+			return " (".implode(", ", $out).")";
+		}
+		return "";
+	}
+	
+	public function getConfigurableHtml(Mage_Sales_Model_Order_Item $item) {
+		$text = $this->getConfigurableText($item);
+		if($text){
+			return " <em class=\"text-muted\">".$text."</em>";
 		}
 		return "";
 	}
