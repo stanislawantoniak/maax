@@ -53,6 +53,27 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 		$this->_renderPage(null, 'udpo');
 	}
 	
+	public function splitAction(){
+		$hlp = Mage::helper("zolagopo");
+		$po = $this->_registerPo();
+		$items = $this->getRequest()->getParam("items");
+		
+		try{
+			$newPo = $po->split($items);
+			$this->_getSession()->addSuccess(
+				Mage::helper("zolagopo")->__("Order has been splited. New order: #%s", $newPo->getIncrementId())
+			);
+		}catch(Mage_Core_Exception $e){
+			$this->_getSession()->addError($e->getMessage());
+		}catch(Exception $e){
+			$this->_getSession()->addError(
+				Mage::helper("zolagopo")->__("Some error occure")
+			);
+			Mage::logException($e);
+		}
+		return $this->_redirectReferer(); 
+	}
+	
 	public function shippingCostAction() {
 		$hlp = Mage::helper("zolagopo");
 		$po = $this->_registerPo();

@@ -228,7 +228,7 @@
 								<td colspan="3" rowspan="2" style="vertical-align: middle; border-bottom: 0;">
 									<?php if($_isEditable):?>
 									<i class="icon-checked-action"></i>
-									<button data-toggle="modal" data-target="#splitOrderModal" class="btn" id="split" disabled="disabled">
+									<button data-toggle="modal" data-target="#splitModal" class="btn" id="split" disabled="disabled">
 										<i class=" icon-unlink"></i>
 										<?php echo $_hlp->__("Split order");?>
 									</button>
@@ -457,43 +457,26 @@
  *******************************************************************************/
 	echo $this->getChildHtml("vendor_po_edit_pos");
 
-	/*******************************************************************************
+/*******************************************************************************
  *	Compose modal
  *******************************************************************************/
 	echo $this->getChildHtml("vendor_po_edit_compose");
-?>
+	
+/*******************************************************************************
+ *	Split modal
+ *******************************************************************************/
+	echo $this->getChildHtml("vendor_po_edit_split");
 
-<!-- Modal split order-->
-<div class="modal fade" id="splitOrderModal">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title"><?php echo $_hlp->__("Split order");?></h4>
-			</div>
-			<div class="modal-body">
-				<form action="<?php Mage::getUrl("*/*/splitOrder");?>">
-					Dialog content
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_hlp->__("Cancel");?></button>
-				<button type="button" class="btn btn-primary" data-dismiss="modal"><?php echo $_hlp->__("Split order");?></button>
-			</div>
-		</div>
-	</div>
-</div>
-<?php 
 /*******************************************************************************
  *	Shippign address modal
  *******************************************************************************/
-	echo $this->getChild("vendor_po_edit_edit_item")->
-		toHtml();
+	echo $this->getChildHtml("vendor_po_edit_edit_item");
+	
 /*******************************************************************************
  *	Shippign cost modal
  *******************************************************************************/
-	echo $this->getChild("vendor_po_edit_shipping_cost")->
-		toHtml();
+	echo $this->getChildHtml("vendor_po_edit_shipping_cost");
+	
 /*******************************************************************************
  *	Shippign address modal
  *******************************************************************************/
