@@ -31,7 +31,7 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 					$collection->removeItemByKey($itemId);
 					$item->setId(null); // force add item to colelciton in po model
 					$newModel->addItem($item);
-					$item->setId($itemId); // do not 
+					$item->setId($itemId); 
 					
 					// Proces child items
 					$childCollection = Mage::getResourceModel('zolagopo/po_item_collection');
@@ -60,7 +60,6 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 			}else{
 				$newBilling = $this->getBillingAddress();
 			}
-			
 			
 			if(!$this->isShippingSameAsOrder()){
 				$newShipping = clone $this->getShippingAddress();
@@ -95,8 +94,11 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 				$tmpComment = clone $comment;
 				$tmpComment->setId(null);
 				$tmpComment->setParentId(null);
+				$tmpComment->setPo($newModel);
 				$comments->addItem($tmpComment);
 			}
+			
+			$newModel->setCommentsChanged(true);
 			
 			////////////////////////////////////////////////////////////////////
 			// Save objects
@@ -110,6 +112,11 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 			throw $ex;
 		}
 		return $newModel;
+	}
+	
+	public function setCommentsChanged($value) {
+		$this->_commentsChanged = $value;
+		return $this;
 	}
 	
 	protected function _getNextIncementId() {
