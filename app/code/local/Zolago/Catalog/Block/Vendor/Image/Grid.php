@@ -60,7 +60,7 @@ class Zolago_Catalog_Block_Vendor_Image_Grid extends Mage_Adminhtml_Block_Widget
 			"index"		=>	"gallery_to_check",
 //			"class"		=>  "form-controll",
 			"header"	=>	Mage::helper("zolagocatalog")->__("Gallery to check"),
-			"width"		=>	"50px"
+			"width"		=>	"20px"
 		));
 		$this->addColumn("gallery", array(
                 'header'    => Mage::helper('zolagocatalog')->__('Gallery'),
