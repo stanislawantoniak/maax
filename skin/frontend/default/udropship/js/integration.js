@@ -14,6 +14,7 @@ jQuery.noConflict();
                 isBootstrapEvent = true;
             });
         });
+		
     }
     var originalHide = Element.hide;
     Element.addMethods({

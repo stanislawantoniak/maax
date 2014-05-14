@@ -11,6 +11,7 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 	 * @throws Exception
 	 */
 	public function split(array $itemIds) {
+		
 		$transaction = Mage::getSingleton('core/resource')->getConnection('core_write');
 		/* @var $transaction Varien_Db_Adapter_Interface */
 		try{
@@ -82,6 +83,10 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 			$newModel->setCreatedAt(null);
 			$newModel->setUpdatedAt(null);
 			$newModel->setIncrementId($this->_getNextIncementId());
+			$newModel->setBaseShippingTax(0);
+			$newModel->setShippingTax(0);
+			$newModel->setBaseShippingAmountIncl(0);
+			$newModel->setShippingAmountIncl(0);
 				
 			////////////////////////////////////////////////////////////////////
 			// Process comments
@@ -120,8 +125,22 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 	}
 	
 	protected function _getNextIncementId() {
-		$arr = explode("-", $this->getIncrementId());
-		return $arr[0] . "-" . ($arr[1]+1);
+		$collection = Mage::getResourceModel('zolagopo/po_collection');
+		/* @var $collection Zolago_Po_Model_Resource_Po_Collection */
+		$collection->setOrderFilter($this->getOrder());
+		
+		$currentIncrement = explode("-", $this->getIncrementId());
+		$base = $currentIncrement[0];
+		$maxIncrement = $currentIncrement[1];
+		foreach($collection as $po){
+			$arr = explode("-", $po->getIncrementId());
+			// Same base
+			if($arr[0]==$base){
+				$maxIncrement = max($maxIncrement, (int)$arr[1]);
+			}
+		}
+		
+		return $base . "-" . ($maxIncrement+1);
 	}
 	
 	public function getPos() {

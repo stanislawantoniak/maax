@@ -5,6 +5,10 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 	
     const EMAIL_TEMPLATE = "zolagopo_compose"; 
 	
+	const ACTION_CONFIRM_STOCK = "confirm_stock";
+	const ACTION_CONFIRM_SEND = "confirm_send";
+	const ACTION_DIRECT_REALISATION = "direct_realisation";
+	
 	public function preDispatch() {
 		/**
 		 * @todo add secure to own PO
@@ -53,6 +57,132 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 		$this->_renderPage(null, 'udpo');
 	}
 	
+	protected function _processMass($action) {
+		$hlp = Mage::helper("zolagopo");
+		$ids = $this->_getMassIds();
+		$collection = Mage::getResourceModel('zolagopo/po_collection');
+		/* @var $collection Zolago_Po_Model_Resource_Po_Collection */
+		if(count($ids)){
+			$collection->addFieldToFilter("entity_id", array("in"=>$ids));
+		}else{
+			$collection->addFieldToFilter("entity_id", -1);
+		}
+		
+		$notVaildPos = array(
+			'vendor' => array(),
+			'status' => array()
+		);
+		$count = $collection->count();
+		
+		foreach($collection as $po){
+			/* @var $po Zolago_Po_Model_Po */
+			if(!$this->_vaildPo($po)){
+				$notVaildPos['vendor'][] = $po;
+			};
+			
+			switch ($action) {
+				case self::ACTION_CONFIRM_STOCK:
+					if(!$po->getStatusModel()->isConfirmStockAvailable($po)){
+						$notVaildPos['status'][] = $po;
+					}
+				break;
+				case self::ACTION_CONFIRM_SEND:
+					if(!$po->getStatusModel()->isConfirmSendAvailable($po)){
+						$notVaildPos['status'][] = $po;
+					}
+				break;
+				case self::ACTION_DIRECT_REALISATION:
+					if(!$po->getStatusModel()->isDirectRealisationAvailable($po)){
+						$notVaildPos['status'][] = $po;
+					}
+				break;
+			}
+		}
+		
+		if(count($notVaildPos['vendor']) || count($notVaildPos['status'])){
+			foreach($notVaildPos['vendor'] as $po){
+				$this->_getSession()->addError($hlp->__("Order #%s is not vaild", $po->getIncrementId()));
+			}
+			foreach($notVaildPos['status'] as $po){
+				$this->_getSession()->addError($hlp->__("Order #%s has invaild status", $po->getIncrementId()));
+			}
+		}elseif($count){
+			$transaction = Mage::getSingleton('core/resource')->getConnection('core_write');
+			/* @var $transaction Varien_Db_Adapter_Interface */
+			try{
+				$transaction->beginTransaction();
+				foreach($collection as $po){
+					switch ($action) {
+						case self::ACTION_CONFIRM_STOCK:
+							$po->getStatusModel()->processConfirmStock($po);
+						break;
+						case self::ACTION_CONFIRM_SEND:
+							$po->getStatusModel()->processConfirmSend($po);
+						break;
+						case self::ACTION_DIRECT_REALISATION:
+							$po->getStatusModel()->processDirectRealisation($po);
+						break;
+					}
+				}
+				$transaction->commit();
+				$this->_getSession()->addSuccess($hlp->__("%d order stock processed", $count));
+			}catch(Mage_Core_Exception $e){
+				$transaction->rollBack();
+				$this->_getSession()->addError($e->getMessage());
+			}catch(Exception $e){
+				$transaction->rollBack();
+				$this->_getSession()->addError(
+					Mage::helper("zolagopo")->__("Some error occure")
+				);
+				Mage::logException($e);
+			}
+		}else{
+			$this->_getSession()->addError(
+				Mage::helper("zolagopo")->__("No selected orders")
+			);
+		}
+	}
+	
+	
+	/**
+	 * @return void
+	 */
+	public function massConfirmStockAction() {
+		return $this->_redirectReferer();
+	}
+	
+	/**
+	 * @return void
+	 */
+	public function massConfirmSendAction() {
+		$this->_processMass(self::ACTION_CONFIRM_SEND);
+		return $this->_redirectReferer();
+	}
+	
+	/**
+	 * @return void
+	 */
+	public function massDirectRealisationAction() {
+		$this->_processMass(self::ACTION_DIRECT_REALISATION);
+		return $this->_redirectReferer();
+	}
+	
+	/**
+	 * @param Zolago_Po_Model_Po $po
+	 * @return bool
+	 */
+	public function _vaildPo(Zolago_Po_Model_Po $po) {
+		return $po->getUdropshipVendor()==$this->_getVendor()->getId();
+	}
+	
+	/**
+	 * @return array
+	 */
+	protected function _getMassIds(){
+		return explode(",", $this->getRequest()->getParam('po', ''));
+	}
+
+
 	public function splitAction(){
 		$hlp = Mage::helper("zolagopo");
 		$po = $this->_registerPo();
@@ -178,12 +308,14 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 				$childItem->delete();
 			}
 			
+			$itemName = $item->getOneLineDesc();
+			
 			$item->delete();
 			
 			$po->updateTotals(true);
 			
 			$this->_getSession()->addSuccess(
-				Mage::helper("zolagopo")->__("Item has been removed")
+				Mage::helper("zolagopo")->__("Item %s has been removed", $itemName)
 			);
 			
 			$transaction->commit();
@@ -248,7 +380,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 		}
 		
 		if(!$product->getId() || $product->getUdropshipVendor()!=$this->_getVendor()->getId()){
-			$errors[] = $hlp->__("It's not Your product");
+			$errors[] = $hlp->__("It's not your product");
 		}
 		
 		
@@ -357,7 +489,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 		}
 		
 		if(!$product->getId() || $product->getUdropshipVendor()!=$this->_getVendor()->getId()){
-			$errors[] = $hlp->__("It's not Your product");
+			$errors[] = $hlp->__("It's not your product");
 		}
 		
 		if($product->getTypeId()!=Mage_Catalog_Model_Product_Type::TYPE_SIMPLE){
@@ -721,6 +853,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 				$number = $this->_createShipments($dhlSettings, $shipment, $shipmentSettings, $udpo);
 				if (!$number) {
 					$udpoHlp->cancelShipment($shipment, true);
+					$udpo->getStatusModel()->processStartPacking($udpo, true);
 					return $this->_redirectReferer();
 				}
 			}
@@ -970,7 +1103,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         $udpo = $this->_registerPo();
 		try{
 			$udpo->getStatusModel()->processDirectRealisation($udpo);
-			$this->_getSession()->addSuccess(Mage::helper("zolagopo")->__("Directed to realisation"));
+			$this->_getSession()->addSuccess(Mage::helper("zolagopo")->__("Order moved to fulfilment. Note that stock check is cleared."));
 		} catch (Mage_Core_Exception $e) {
 			$this->_getSession()->addError($e->getMessage());
 		} catch (Exception $e) {

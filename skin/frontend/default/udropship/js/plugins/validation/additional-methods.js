@@ -626,3 +626,33 @@ jQuery.validator.addMethod("lessthat", function(value, element, param) {
 	}
 	return this.optional(element);
 }, jQuery.format("Value is greather that expected"));
+
+// Zip code
+jQuery.validator.addMethod('zipcodePL', function(value, element) {
+  return this.optional(element) || !!value.trim().match(/^\d{2}-\d{3}$/);
+}, jQuery.format("Invaild zip code"));
+
+// integer
+jQuery.validator.addMethod('integer', function(value, element) {
+	return this.optional(element) || /^-?(?:\d+)$/.test(value);
+}, jQuery.format("Enter vaild integer"));
+
+// positiveInteger
+jQuery.validator.addMethod('positiveInteger', function(value, element) {
+	return this.optional(element) || /^\d+$/.test(value);
+}, jQuery.format("Enter vaild positive integer"));
+
+// number
+jQuery.validator.addMethod('number', function(value, element) {
+	return this.optional(element) || /^-?(?:\d+((?:,|\.)\d+)?)$/.test(value);
+}, jQuery.format("Enter vaild number"));
+
+// price
+jQuery.validator.addMethod('price', function(value, element) {
+	return this.optional(element) || /^-?(?:\d+((?:,|\.)\d+)?)$/.test(value);
+}, jQuery.format("Enter vaild price"));
+
+// price positive
+jQuery.validator.addMethod('pricePositive', function(value, element) {
+	return this.optional(element) || /^(?:\d+((?:,|\.)\d+)?)$/.test(value);
+}, jQuery.format("Enter vaild price"));

@@ -116,6 +116,15 @@ class Zolago_Po_Model_Po_Status
 	}
 	
 	/**
+	 * @param Zolago_Po_Model_Po $po
+	 */
+	public function processConfirmSend(Zolago_Po_Model_Po $po) {
+		if($this->isConfirmSendAvailable($po)){
+			$this->_processStatus($po, self::STATUS_SHIPPED);
+		}
+	}
+	
+	/**
 	 * set if PAYMENT IS GATEWAY and IS NOT PAID:
 	 *	 BACKORDER
 	 *	 else 
@@ -138,8 +147,8 @@ class Zolago_Po_Model_Po_Status
 	/**
 	 * @param Zolago_Po_Model_Po $po
 	 */
-	public function processStartPacking(Zolago_Po_Model_Po $po) {
-		if($this->isStartPackingAvailable($po)){
+	public function processStartPacking(Zolago_Po_Model_Po $po, $force = false) {
+		if($this->isStartPackingAvailable($po) || $force){
 			$this->_processStatus($po, self::STATUS_EXPORTED);
 		}
 	}
@@ -175,6 +184,19 @@ class Zolago_Po_Model_Po_Status
 	public function isConfirmStockAvailable($po) {
 		switch ($this->_getStatus($po)) {
 			case self::STATUS_BACKORDER:
+				return true;
+			break;
+		}
+		return false;
+	}
+	
+	/**
+	 * @param Zolago_Po_Model_Po|int $po
+	 * @return boolean
+	 */
+	public function isConfirmSendAvailable($po) {
+		switch ($this->_getStatus($po)) {
+			case self::STATUS_READY:
 				return true;
 			break;
 		}
