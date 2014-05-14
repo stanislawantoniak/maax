@@ -17,6 +17,7 @@ class Zolago_Catalog_Block_Vendor_Image_Grid extends Mage_Adminhtml_Block_Widget
         $collection->addAttributeToFilter("udropship_vendor", $vendorId);
         $collection->addAttributeToSelect('skuv');
         $collection->addAttributeToSelect('name');
+        $collection->addAttributeToSelect('gallery_to_check');
 
         
         $this->setCollection($collection);
@@ -55,12 +56,13 @@ class Zolago_Catalog_Block_Vendor_Image_Grid extends Mage_Adminhtml_Block_Widget
 			"header"	=>	Mage::helper("zolagocatalog")->__("Product name"),
 		));
 		$this->addColumn("gallery_to_check", array(
-			"type"		=>	"checkbox",
+			"type"		=>	"options",
 			"align"		=>  "center",
 			"index"		=>	"gallery_to_check",
-//			"class"		=>  "form-controll",
+			"class"		=>  "form-controll",
 			"header"	=>	Mage::helper("zolagocatalog")->__("Gallery to check"),
-			"width"		=>	"20px"
+			"width"		=>	"20px",
+			"options"   => array('0'=>'Nie', '1'=>'Tak'),
 		));
 		$this->addColumn("gallery", array(
                 'header'    => Mage::helper('zolagocatalog')->__('Gallery'),

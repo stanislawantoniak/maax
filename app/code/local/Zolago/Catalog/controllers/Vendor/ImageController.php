@@ -5,10 +5,20 @@ class Zolago_Catalog_Vendor_ImageController
     /**
      * Index
      */
-
+    
     public function indexAction() {
         Mage::register('as_frontend', true);// Tell block class to use regular URL's                        
         $this->_renderPage(array('default','formkey','adminhtml_head'), 'udprod_image');
+    }
+    public function check_galleryAction() {
+        $list = $this->getRequest()->getParam('image',array());
+        $products = explode(',',$list);
+        foreach ($products as $id) {
+             $_product = Mage::getModel('catalog/product')->load($id);
+             $_product->setGalleryToCheck(0);
+             $_product->getResource()->saveAttribute($_product, 'gallery_to_check');
+        }
+        $this->_redirect('*/*/', $postParams);
     }
     protected function _getVendorId() {
         $vendor = $this->_getSession()->getVendor();
@@ -129,43 +139,6 @@ class Zolago_Catalog_Vendor_ImageController
         $connector->run();
 
 
-    }
-    /**
-     * send
-     */
-    public function sendAction() {
-        ?>
-        <!DOCTYPE html>
-        <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
-                    <head>
-                    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
-                                     <title>Plupload - Form dump</title>
-                                     </head>
-                                     <body style="font: 13px Verdana; background: #eee; color: #333">
-
-                                             <h1>Post dump</h1>
-
-                                             <p>Shows the form items posted.</p>
-
-                                             <table>
-                                             <tr>
-                                             <th>Name</th>
-                                             <th>Value</th>
-                                             </tr>
-                                             <?php $count = 0;
-        foreach ($_POST as $name => $value) {
-            ?>
-            <tr class="<?php echo $count % 2 == 0 ? 'alt' : ''; ?>">
-                          <td><?php echo htmlentities(stripslashes($name)) ?></td>
-                          <td><?php echo nl2br(htmlentities(stripslashes($value))) ?></td>
-                          </tr>
-                          <?php
-                } ?>
-        </table>
-
-        </body>
-        </html>
-        <?php
     }
     /**
      * upload
@@ -291,17 +264,28 @@ class Zolago_Catalog_Vendor_ImageController
 
         @fclose($out);
         @fclose($in);
-
+        
         // Check if file has been uploaded
         if (!$chunks || $chunk == $chunks - 1) {
             // Strip the temp .part suffix off
             rename("{$filePath}.part", $filePath);
         }
-        die($filePath);
+            if (!$this->_checkImage($filePath)) {
+                unlink($filePath);
+                die(' {"jsonrpc" : "2.0", "error" : {"code": 101, "message": "File is not image."}, "id" : "id"}');
+            }
         // Return Success JSON-RPC response
         die(' {"jsonrpc" : "2.0", "result" : null, "id" : "id"}');
 
     }
+    protected function _checkImage($path) {
+        if (getimagesize($path)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
+
 
 

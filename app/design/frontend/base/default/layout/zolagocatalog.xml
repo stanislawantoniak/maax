@@ -31,10 +31,7 @@
 		</reference>
 	</udprod_vendor_image_queue>
 	<udprod_vendor_image_index>
-<!--		<update handle="udropship_vendor" />
-		<update handle="formkey" />
-		<update handle="adminhtml_head" />
--->     <remove name="dashboard">		
+        <remove name="dashboard"/>		
 		<update handle="bootstrap" />
 		<reference name="head">
 		    <action method="addItem"><type>skin_js</type><name>plugins/plupload/plupload.full.min.js</name></action>
