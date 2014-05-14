@@ -26,13 +26,13 @@ class Zolago_Po_Model_Source extends Unirgy_DropshipPo_Model_Source
         case 'initial_virtual_po_status':
         case 'vendor_po_grid_status_filter':
             $options = array(
-                self::UDPO_STATUS_PENDING    => $hlp->__('Wait for packing'),
-				self::UDPO_STATUS_PAYMENT    => $hlp->__('Wait for payment'),
-                self::UDPO_STATUS_EXPORTED   => $hlp->__('Packing'),
-                self::UDPO_STATUS_ACK        => $hlp->__('Wait for confirmation'),
-                self::UDPO_STATUS_BACKORDER  => $hlp->__('Wait for stock confirm'),
+                self::UDPO_STATUS_PENDING    => $hlp->__('Pending collection'),
+				self::UDPO_STATUS_PAYMENT    => $hlp->__('Pending payment'),
+                self::UDPO_STATUS_EXPORTED   => $hlp->__('Collecting and packing'),
+                self::UDPO_STATUS_ACK        => $hlp->__('Pending acceptance'),
+                self::UDPO_STATUS_BACKORDER  => $hlp->__('Pending stock check'),
                 self::UDPO_STATUS_ONHOLD     => $hlp->__('Problem'),
-                self::UDPO_STATUS_READY      => $hlp->__('Packed'),
+                self::UDPO_STATUS_READY      => $hlp->__('Packed and label printed'),
                 self::UDPO_STATUS_PARTIAL    => $hlp->__('Partially Shipped'), // unuse
                 self::UDPO_STATUS_SHIPPED    => $hlp->__('Shipped'),
                 self::UDPO_STATUS_DELIVERED  => $hlp->__('Delivered'),
