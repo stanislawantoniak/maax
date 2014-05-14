@@ -2,6 +2,9 @@
 abstract class Zolago_Po_Block_Vendor_Po_Edit_Abstract
 	extends Mage_Core_Block_Template
 {
+	/**
+	 * @return Zolago_Po_Model_Po
+	 */
 	public function getPo() {
 		return $this->getParentBlock()->getPo();
 	}
@@ -13,5 +16,6 @@ abstract class Zolago_Po_Block_Vendor_Po_Edit_Abstract
 	public function getVendor() {
 		return $this->getParentBlock()->getVendor();
 	}
+	
 	
 }

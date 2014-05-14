@@ -12,19 +12,26 @@ class Zolago_Po_Block_Vendor_Po_Item_Renderer_Configurable
 		$this->setTemplate("zolagopo/vendor/po/item/renderer/configurable.phtml");
 	}
 	
-	public function getConfigurableHtml(Mage_Sales_Model_Order_Item $item) {
-		$request = $item->getProductOptionByCode("attributes_info");
-		$out = array();
-		if(is_array($request)){
-			foreach($request as $item){
-				$out[] = $this->__($item['label']).": ".$this->__($item['value']);
-			}
-		}
+	public function getConfigurableText(Zolago_Po_Model_Po_Item $item) {
+		return $item->getConfigurableText();
+	}
+	
+	public function getConfigurableFormattedText(Zolago_Po_Model_Po_Item $item) {
+		$out = $this->getConfigurableText($item);
 		if($out){
-			return " <em class=\"text-muted\">(".implode(", ", $out).")</em>";
+			return " ($out)";
 		}
 		return "";
 	}
+	
+	public function getConfigurableHtml(Zolago_Po_Model_Po_Item $item) {
+		$text = $this->getConfigurableFormattedText($item);
+		if($text){
+			return " <em class=\"text-muted\">".$text."</em>";
+		}
+		return "";
+	}
+	
 	
 //	/**
 //	 * @param Mage_Sales_Model_Order_Item $item

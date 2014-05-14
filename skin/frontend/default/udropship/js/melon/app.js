@@ -87,14 +87,46 @@ var App = function($) {
 			});
 			return false;
 		});
-
+		
+		//===== Validation & notty =====//
+		if(noty){
+			$.validator.setDefaults({
+				invalidHandler: function(form, validator) {
+					var errors = validator.numberOfInvalids();
+					if (errors) {
+						var message = errors == 1
+						? 'You missed 1 field. It has been highlighted'
+						: 'You missed ' + errors + ' fields. They have been highlighted.';
+						noty({
+							text: message,
+							type: 'error',
+							timeout: 2000
+						});
+					}
+				}
+			});
+		}
+		
+		//===== price plugin =====//
+		if($.fn.alphanum){
+			$(".positiveInteger").numeric("positiveInteger");
+			$(".integer").numeric("integer");
+			$(".numeric").numeric();
+			$(".alphanum").alphanum();
+			$(".alpha").alpha();
+		}
 			
 		//===== loading btn =====//	
 		$('.form-btn-loading').each(function(){
 			var self = $(this);
 			if(self.parents("form").length){
-				self.parents("form").submit(function(){
-					self.button('loading');
+				self.parents("form").submit(function(e){
+					setTimeout(function(){
+						if(!e.isDefaultPrevented()){
+							self.button('loading');
+						}
+					}, 50);
+					
 				});
 			}
 		})

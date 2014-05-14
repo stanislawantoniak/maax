@@ -192,6 +192,7 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 				'link_action'=> "*/*/edit",
 				'link_param'=> 'id',
 				'link_label'=> 'Edit',
+				'link_target'=>'_self',
                 'filter'    => false,
                 'sortable'  => false
         ));
@@ -223,43 +224,30 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
         $this->setMassactionIdField('main_table.entity_id');
         $this->getMassactionBlock()->setFormFieldName('po');
 		$this->getMassactionBlock()->setTemplate("zolagoadminhtml/widget/grid/massaction.phtml");
-		$statuses=array();
 		
-		foreach(Mage::helper('udpo')->getVendorUdpoStatuses() as $key=>$label){
-			$statuses[$key]=$label;
-		}
-        array_unshift($statuses, array('label'=>'', 'value'=>''));
-        $this->getMassactionBlock()->addItem('status', array(
-             'label'=> Mage::helper('catalog')->__('Change status'),
-             'url'  => $this->getUrl('*/*/massStatus', array('_current'=>true)),
-             'additional' => array(
-                    'visibility' => array(
-                         'name' => 'status',
-                         'type' => 'select',
-                         'class' => 'required-entry',
-                         'label' => Mage::helper('catalog')->__('Status'),
-                         'values' => $statuses
-                     )
-             )
-        ));
-
+//		$this->getMassactionBlock()->addItem('shipping_letters', array(
+//             'label'=> Mage::helper('zolagopo')->__('Generate shipping letters'),
+//             'url'  => $this->getUrl('*/*/shipping_letters')
+//        ));
+//        $this->getMassactionBlock()->addItem('print_aggregated', array(
+//             'label'=> Mage::helper('zolagopo')->__('Print aggregated'),
+//             'url'  => $this->getUrl('*/*/print_aggregated')
+//        ));
 		
-		$this->getMassactionBlock()->addItem('shipping_letters', array(
-             'label'=> Mage::helper('zolagopo')->__('Generate shipping letters'),
-             'url'  => $this->getUrl('*/*/shipping_letters')
+        $this->getMassactionBlock()->addItem('confirm_stock', array(
+             'label'=> Mage::helper('zolagopo')->__('Confirm stock'),
+             'url'  => $this->getUrl('*/*/massConfirmStock')
         ));
-        $this->getMassactionBlock()->addItem('print_aggregated', array(
-             'label'=> Mage::helper('zolagopo')->__('Print aggregated'),
-             'url'  => $this->getUrl('*/*/print_aggregated')
+		
+        $this->getMassactionBlock()->addItem('direct_relasiation', array(
+             'label'=> Mage::helper('zolagopo')->__('Direct realisation'),
+             'url'  => $this->getUrl('*/*/massDirectRealisation')
         ));
-        $this->getMassactionBlock()->addItem('confirm_shipment', array(
-             'label'=> Mage::helper('zolagopo')->__('Confirm shipment'),
-             'url'  => $this->getUrl('*/*/confirm_shipment')
-        ));
-        $this->getMassactionBlock()->addItem('confirm_backorder', array(
-             'label'=> Mage::helper('zolagopo')->__('Confirm bacorder'),
-             'url'  => $this->getUrl('*/*/confirm_backorder')
-        ));
+		
+//        $this->getMassactionBlock()->addItem('confirm_send', array(
+//             'label'=> Mage::helper('zolagopo')->__('Confirm send'),
+//             'url'  => $this->getUrl('*/*/massConfirmSend')
+//        ));
 
         return $this;
     }
