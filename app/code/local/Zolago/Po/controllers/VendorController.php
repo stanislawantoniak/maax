@@ -308,12 +308,14 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 				$childItem->delete();
 			}
 			
+			$itemName = $item->getOneLineDesc();
+			
 			$item->delete();
 			
 			$po->updateTotals(true);
 			
 			$this->_getSession()->addSuccess(
-				Mage::helper("zolagopo")->__("Item has been removed")
+				Mage::helper("zolagopo")->__("Item %s has been removed", $itemName)
 			);
 			
 			$transaction->commit();
@@ -378,7 +380,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 		}
 		
 		if(!$product->getId() || $product->getUdropshipVendor()!=$this->_getVendor()->getId()){
-			$errors[] = $hlp->__("It's not Your product");
+			$errors[] = $hlp->__("It's not your product");
 		}
 		
 		
@@ -487,7 +489,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 		}
 		
 		if(!$product->getId() || $product->getUdropshipVendor()!=$this->_getVendor()->getId()){
-			$errors[] = $hlp->__("It's not Your product");
+			$errors[] = $hlp->__("It's not your product");
 		}
 		
 		if($product->getTypeId()!=Mage_Catalog_Model_Product_Type::TYPE_SIMPLE){
@@ -851,6 +853,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 				$number = $this->_createShipments($dhlSettings, $shipment, $shipmentSettings, $udpo);
 				if (!$number) {
 					$udpoHlp->cancelShipment($shipment, true);
+					$udpo->getStatusModel()->processStartPacking($udpo, true);
 					return $this->_redirectReferer();
 				}
 			}
@@ -1100,7 +1103,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         $udpo = $this->_registerPo();
 		try{
 			$udpo->getStatusModel()->processDirectRealisation($udpo);
-			$this->_getSession()->addSuccess(Mage::helper("zolagopo")->__("Directed to realisation"));
+			$this->_getSession()->addSuccess(Mage::helper("zolagopo")->__("Order moved to fulfilment. Note that stock check is cleared."));
 		} catch (Mage_Core_Exception $e) {
 			$this->_getSession()->addError($e->getMessage());
 		} catch (Exception $e) {

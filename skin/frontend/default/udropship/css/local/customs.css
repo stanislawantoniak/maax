@@ -128,6 +128,9 @@ select.form-control {
 .messages > li.success-msg .alert-link {
   color: #2b542c;
 }
+.inline-block {
+  display: inline-block;
+}
 .input-group-addon.no-border {
   border: 0;
   background: transparent;

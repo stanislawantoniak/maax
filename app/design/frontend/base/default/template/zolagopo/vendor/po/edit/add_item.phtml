@@ -25,13 +25,13 @@
 						<li class="form-group product-specified">
 							<label for="additem-product_qty" class="col-md-3 control-label"><?php echo $_hlp->__('Qty') ?> <span class="required">*</span></label>
 							<div class="col-md-4">
-								<input name="product_qty" required="required" id="additem-product_qty" type="text" value="1" min="1" class="form-control digits required"/> 
+								<input name="product_qty" required="required" id="additem-product_qty" type="text" value="1" min="1" class="form-control required positiveInteger"/> 
 							</div>
 						</li>
 						<li class="form-group product-specified">
 							<label for="additem-product_price" class="col-md-3 control-label"><?php echo $_hlp->__('Price') ?> <span class="required">*</span></label>
 							<div class="col-md-4">
-								<input name="product_price" required="required" id="additem-product_price" type="text" value="" class="form-control number required"/> 
+								<input name="product_price" required="required" id="additem-product_price" type="text" value="" class="form-control pricePositive required numeric"/> 
 							</div>
 							<div class="col-md-2">
 								<div class="after-filed-label text-muted">
@@ -42,7 +42,7 @@
 						<li class="form-group product-specified">
 							<label for="additem-product_discount" class="col-md-3 control-label"><?php echo $_hlp->__('Discount') ?></label>
 							<div class="col-md-4">
-								<input name="product_discount" id="additem-product_discount" type="text" value="" class="form-control number"/> 
+								<input name="product_discount" id="additem-product_discount" type="text" value="" class="form-control pricePositive numeric"/> 
 							</div>
 							<div class="col-md-4">
 								<div class="after-filed-label text-muted">
@@ -74,19 +74,6 @@ jQuery(function($){
 	var timer = null;
 	
 	var validator = form.validate({
-		invalidHandler: function(form, validator) {
-			var errors = validator.numberOfInvalids();
-			if (errors) {
-				var message = errors == 1
-				? 'You missed 1 field. It has been highlighted.'
-				: 'You missed ' + errors + ' fields. They have been highlighted.';
-				noty({
-					text: message,
-					type: 'error',
-					timeout: 2000
-				});
-			}
-		},
 		rules: {
 			"product_discount":{
 				lessthat: price

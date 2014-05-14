@@ -17,7 +17,7 @@ class Zolago_Po_Block_Vendor_Po_Edit_Address
 	}
 	
 	public function isShipping() {
-		return $this->getType()==Mage_Sales_Model_Order_Address::TYPE_BILLING;
+		return $this->getType()==Mage_Sales_Model_Order_Address::TYPE_SHIPPING;
 	}
 	
 	public function getType() {

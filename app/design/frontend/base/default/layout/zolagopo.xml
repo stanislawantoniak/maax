@@ -31,6 +31,10 @@
 				<type>skin_js</type>
 				<name>js/plugins/validation/additional-methods.js</name>
 			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/alphanum/jquery.alphanum.js</name>
+			</action>
 		</reference>
 		<reference name="content">			
 			<block name="vendor_po_edit" type="zolagopo/vendor_po_edit" template="zolagopo/vendor/po/edit.phtml">

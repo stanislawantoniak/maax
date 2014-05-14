@@ -83,6 +83,10 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 			$newModel->setCreatedAt(null);
 			$newModel->setUpdatedAt(null);
 			$newModel->setIncrementId($this->_getNextIncementId());
+			$newModel->setBaseShippingTax(0);
+			$newModel->setShippingTax(0);
+			$newModel->setBaseShippingAmountIncl(0);
+			$newModel->setShippingAmountIncl(0);
 				
 			////////////////////////////////////////////////////////////////////
 			// Process comments
