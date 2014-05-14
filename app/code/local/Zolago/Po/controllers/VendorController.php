@@ -5,6 +5,10 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 	
     const EMAIL_TEMPLATE = "zolagopo_compose"; 
 	
+	const ACTION_CONFIRM_STOCK = "confirm_stock";
+	const ACTION_CONFIRM_SEND = "confirm_send";
+	const ACTION_DIRECT_REALISATION = "direct_realisation";
+	
 	public function preDispatch() {
 		/**
 		 * @todo add secure to own PO
@@ -53,9 +57,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 		$this->_renderPage(null, 'udpo');
 	}
 	
-	
-	public function massConfirmStockAction() {
-		
+	protected function _processMass($action) {
 		$hlp = Mage::helper("zolagopo");
 		$ids = $this->_getMassIds();
 		$collection = Mage::getResourceModel('zolagopo/po_collection');
@@ -71,12 +73,29 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 			'status' => array()
 		);
 		$count = $collection->count();
+		
 		foreach($collection as $po){
 			/* @var $po Zolago_Po_Model_Po */
 			if(!$this->_vaildPo($po)){
 				$notVaildPos['vendor'][] = $po;
-			}elseif( !$po->getStatusModel()->isConfirmStockAvailable($po)){
-				$notVaildPos['status'][] = $po;
+			};
+			
+			switch ($action) {
+				case self::ACTION_CONFIRM_STOCK:
+					if(!$po->getStatusModel()->isConfirmStockAvailable($po)){
+						$notVaildPos['status'][] = $po;
+					}
+				break;
+				case self::ACTION_CONFIRM_SEND:
+					if(!$po->getStatusModel()->isConfirmSendAvailable($po)){
+						$notVaildPos['status'][] = $po;
+					}
+				break;
+				case self::ACTION_DIRECT_REALISATION:
+					if(!$po->getStatusModel()->isDirectRealisationAvailable($po)){
+						$notVaildPos['status'][] = $po;
+					}
+				break;
 			}
 		}
 		
@@ -93,10 +112,20 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 			try{
 				$transaction->beginTransaction();
 				foreach($collection as $po){
-					$po->getStatusModel()->processConfirmStock($po);
+					switch ($action) {
+						case self::ACTION_CONFIRM_STOCK:
+							$po->getStatusModel()->processConfirmStock($po);
+						break;
+						case self::ACTION_CONFIRM_SEND:
+							$po->getStatusModel()->processConfirmSend($po);
+						break;
+						case self::ACTION_DIRECT_REALISATION:
+							$po->getStatusModel()->processDirectRealisation($po);
+						break;
+					}
 				}
 				$transaction->commit();
-				$this->_getSession()->addSuccess($hlp->__("%d order stock confirmed", $count));
+				$this->_getSession()->addSuccess($hlp->__("%d order stock processed", $count));
 			}catch(Mage_Core_Exception $e){
 				$transaction->rollBack();
 				$this->_getSession()->addError($e->getMessage());
@@ -112,9 +141,30 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 				Mage::helper("zolagopo")->__("No selected orders")
 			);
 		}
-		
+	}
+	
+	
+	/**
+	 * @return void
+	 */
+	public function massConfirmStockAction() {
 		return $this->_redirectReferer();
-		
+	}
+	
+	/**
+	 * @return void
+	 */
+	public function massConfirmSendAction() {
+		$this->_processMass(self::ACTION_CONFIRM_SEND);
+		return $this->_redirectReferer();
+	}
+	
+	/**
+	 * @return void
+	 */
+	public function massDirectRealisationAction() {
+		$this->_processMass(self::ACTION_DIRECT_REALISATION);
+		return $this->_redirectReferer();
 	}
 	
 	/**
@@ -123,10 +173,6 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 	 */
 	public function _vaildPo(Zolago_Po_Model_Po $po) {
 		return $po->getUdropshipVendor()==$this->_getVendor()->getId();
-	}
-	
-	public function massConfirmSendAction() {
-		$ids = $this->_getMassIds();
 	}
 	
 	/**
