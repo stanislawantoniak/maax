@@ -1,7 +1,7 @@
 <div class="widget">
- 	<div class="align-center form-group" style="margin:5px 0px 5px 0px">
+ 	<div class="align-left form-group" style="margin:5px 0px 5px 0px">
 		<div class="col-md-8">
-			<button class="btn" id="add_button"><?php echo Mage::helper('zolagocatalog')->__('Add');?></button>
+			<button class="btn" id="add_button"><?php echo Mage::helper('zolagocatalog')->__('Upload queue');?></button>
 			<button class="btn" id="delete_button"><?php echo Mage::helper('zolagocatalog')->__('Delete');?></button>
 			<a class="btn btn-default" href="#dialog_by_name" data-toggle="modal"><?php echo Mage::helper('zolagocatalog')->__('Map by name');?></a>
 			<a class="btn btn-default" href="#dialog_by_csv" data-toggle="modal"><?php echo Mage::helper('zolagocatalog')->__('Map by CSV');?></a>
@@ -11,7 +11,7 @@
 			</i></button></span></div>
 	</div>
 <div style="clear:both"></div>
-	<div id="uploader_wrapper" class="widget-content"><div id="elf"></div><div id="uploader"></div></div>
+	<div id="uploader_wrapper" class="widget-content"><div id="uploader"></div><div id="elf"></div></div>
 <div id="dialog_by_csv" class="modal fade" style="display:none" aria-hidden="true" title="Map by CSV">
 <div class="modal-dialog">
     <div class="modal-content">
@@ -124,7 +124,7 @@ function init_uploader() {
 			UploadComplete: function() {
 				elf.sync();
 				plup.remove();
-				jQuery('#elf').after('<div id="uploader"></div>');
+				jQuery('#elf').before('<div id="uploader"></div>');
 				init_uploader();
 				show_filebrowser();
 			}
@@ -132,10 +132,12 @@ function init_uploader() {
 	});
 }
 function show_uploader() {
-		elf.hide();
+//		elf.hide();
 		jQuery('#delete_button').attr('disabled',true);
 	// Setup html5 version
-		jQuery('#add_button').html('<?php echo Mage::helper('zolagocatalog')->__('Browse');?>');
+//		jQuery('#add_button').html('<?php echo Mage::helper('zolagocatalog')->__('Browse');?>');
+        jQuery('#add_button').addClass('btn-primary');
+
 		func = 'show_filebrowser';
 		plup.show();
 		jQuery('#uploader_browse').click();
@@ -157,7 +159,8 @@ function init_filebrowser() {
 function show_filebrowser() {
 		plup.hide();
 		jQuery('#delete_button').removeAttr('disabled');
-		jQuery('#add_button').html('<?php echo Mage::helper('zolagocatalog')->__('Add');?>');
+//		jQuery('#add_button').html('<?php echo Mage::helper('zolagocatalog')->__('Add');?>');
+        jQuery('#add_button').removeClass('btn-primary');
 		func = 'show_uploader';
 		elf.show();
 }

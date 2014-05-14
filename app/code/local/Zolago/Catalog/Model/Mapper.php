@@ -67,6 +67,7 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
             if (!$skuv) {
                 continue;
             }
+            $updateFlag = false;
             if (!empty($importlist[$skuv])) {
                 // found file
                 foreach ($importlist[$skuv] as $filename) {
@@ -77,19 +78,30 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
                         if ($this->_addImageToGallery($pid,$storeid,$imagefile,trim($filename[2]),$filename[3])) {
                             // remove image from upload area
                             @unlink($this->_path.'/'.$filename[1]);
+                            $updateFlag = true;
                             $count ++;
                         }
                     }
                 }
             }
+            if ($updateFlag) {
+                $this->_changeCheckFlag($pid);
+            }
         }
         return $count;
+    }
+    protected function _changeCheckFlag($pid) {
+             $_product = Mage::getModel('catalog/product')->load($pid);
+             $_product->setGalleryToCheck(1);
+             $_product->getResource()->saveAttribute($_product, 'gallery_to_check');
+
     }
     public function mapByName() {
         $count = 0;
         $list = $this->_getFileList();
-        $storeid = 0;
+        $storeid = 0;        
         foreach ($this->_collection as $item) {
+            $updateFlag = false;
             $skuv = $item->getData('skuv');
             $pid = $item->getData('entity_id');
             $label = $item->getData('name');
@@ -106,11 +118,15 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
                             // remove image from upload area
                             @unlink($this->_path.'/'.$file);
                             $count ++;
+                            $updateFlag = true;
                         }
                     }
 
                 }
-            }            
+            }    
+            if ($updateFlag) {
+                $this->_changeCheckFlag($pid);        
+            }
         }
         return $count;
 
