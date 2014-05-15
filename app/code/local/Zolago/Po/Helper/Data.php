@@ -86,7 +86,13 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 		if ($taxRate = $taxCalculation->getRate($request)) {
 			$taxAmount  = $store->roundPrice($priceInclTax * (1 - 1 / (($taxRate/100)+1)));
 	    }
+		$hiddenTaxAmount = 0;
 		
+		if($poItem->getDiscountPercent()){
+			$originTax = $taxAmount;
+			$taxAmount = ($poItem->getDiscountPercent()/100)*$taxAmount;
+			$hiddenTaxAmount = $originTax - $taxAmount;
+		}
 		// Stock item 
 		$stockItem = $product->getStockItem();
 		
@@ -122,13 +128,13 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 			"original_price"				=> $product->getPrice(),
 			"base_original_price"			=> $store->convertPrice($product->getPrice()),
 			"tax_percent"					=> $taxRate,
-			"tax_amount"					=> $taxAmount,
-			"base_tax_amount"				=> $store->convertPrice($taxAmount),
+			"tax_amount"					=> $taxAmount * $poItem->getQty(),
+			"base_tax_amount"				=> $store->convertPrice($taxAmount * $poItem->getQty()),
 			"tax_invoiced"					=> 0,
 			"base_tax_invoiced"				=> 0,
-			"discount_percent"				=> 0,
-			"discount_amount"				=> 0,
-			"base_discount_amount"			=> 0,
+			"discount_percent"				=> $poItem->getDiscountPercent(), 
+			"discount_amount"				=> $poItem->getDiscountAmount(), 
+			"base_discount_amount"			=> $store->convertPrice($poItem->getDiscountAmount()),
 			"discount_invoiced"				=> 0,
 			"base_discount_invoiced"		=> 0,
 			"amount_refunded"				=> 0,
@@ -155,11 +161,11 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 			"locked_do_invoice"				=> null,
 			"locked_do_ship"				=> null,
 			"price_incl_tax"				=> $priceInclTax,
-			"base_price_incl_tax"			=> $store->convertPrice($poItem->getBasePriceInclTax()),
+			"base_price_incl_tax"			=> $store->convertPrice($priceInclTax),
 			"row_total_incl_tax"			=> $poItem->getRowTotalInclTax(),
 			"base_row_total_incl_tax"		=> $store->convertPrice($poItem->getRowTotalInclTax()),
-			"hidden_tax_amount"				=> 0,
-			"base_hidden_tax_amount"		=> 0,
+			"hidden_tax_amount"				=> $hiddenTaxAmount * $poItem->getQty(),
+			"base_hidden_tax_amount"		=> $store->convertPrice($hiddenTaxAmount * $poItem->getQty()),
 			"hidden_tax_invoiced"			=> null,
 			"base_hidden_tax_invoiced"		=> null,
 			"hidden_tax_refunded"			=> null,

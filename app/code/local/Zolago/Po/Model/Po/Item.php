@@ -35,8 +35,7 @@ class Zolago_Po_Model_Po_Item extends Unirgy_DropshipPo_Model_Po_Item
 				Mage::helper("zolagopo")->prepareOrderItemByPoItem($this->_orderItem, $this);
 				$order = $this->_orderItem->getOrder();
 				/* @var $order Mage_Sales_Model_Order */
-				
-				$order->save();
+				$this->_orderItem->save();
 				$this->setOrderItemId($this->_orderItem->getId());
 				if($this->getId()){
 					$this->getResource()->saveAttribute($this, "order_item_id");

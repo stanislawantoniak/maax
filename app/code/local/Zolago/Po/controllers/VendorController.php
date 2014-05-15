@@ -537,7 +537,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 			/* @var $item Zolago_Po_Model_Po_Item */
 
 			$itemData = array(
-				'row_total'				=> $finalPriceExclTax * $qty,
+				'row_total'				=> $priceExclTax * $qty,
 				'price'					=> $priceExclTax,
 				'weight'				=> $product->getWeight(),
 				'qty'					=> $qty,
@@ -560,19 +560,22 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 				'base_price_incl_tax'	=> $priceInclTax, // @todo use currency
 				'discount_amount'		=> $discountAmount,
 				'discount_percent'		=> $discountPrecent,
-				'row_total_incl_tax'	=> $finalPriceInclTax*$qty,
-				'base_row_total_incl_tax'=> $finalPriceInclTax*$qty, // @todo use currency
+				'row_total_incl_tax'	=> $priceInclTax*$qty,
+				'base_row_total_incl_tax'=> $priceInclTax*$qty, // @todo use currency
 				'parent_item_id'		=> null
 			);
-
+			
+		
 			$item->addData($itemData);
 			$po->addItem($item);
-
+			
 			Mage::helper("udropship")->addVendorSkus($po);
 			if(Mage::helper("core")->isModuleEnabled('Unirgy_DropshipTierCommission')){
 				Mage::helper("udtiercom")->processPo($po);
 			}
+			
 			$po->updateTotals(true);
+			
 			$po->getStatusModel()->processDirectRealisation($po, true);
 			$this->_getSession()->addSuccess(Mage::helper("zolagopo")->__("Item added"));
 		} catch (Mage_Core_Exception $e) {
