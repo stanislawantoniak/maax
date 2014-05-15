@@ -45,21 +45,7 @@ jQuery(function($){
 	var form = $("#shippigncost-form");
 	var price = $("#shippingcost-price");
 	
-	var validator = form.validate({
-		invalidHandler: function(form, validator) {
-			var errors = validator.numberOfInvalids();
-			if (errors) {
-				var message = errors == 1
-				? 'You missed 1 field. It has been highlighted.'
-				: 'You missed ' + errors + ' fields. They have been highlighted.';
-				noty({
-					text: message,
-					type: 'error',
-					timeout: 2000
-				});
-			}
-		}
-	});
+	var validator = form.validate();
 	
 	
 	$("#shippignCostModal").on("show.bs.modal", function(e){
