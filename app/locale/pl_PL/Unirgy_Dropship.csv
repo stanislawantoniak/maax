@@ -746,7 +746,3 @@
 "The last item cannot be deleted. You can delete it when you add another item or cancel the order.","Ostatni produkt nie może być usunięty. Możesz go usunąć po dodaniu następnego produktu. Możesz też anulować całe zamówienie."
 "Change POS","Zmień POS"
 "If you want change POS only for selective products split order before.","Jeśli chcesz zmienić POS dla wybranych produktów - wydziel je najpierw do osobnego zamówienia (przycisk Podziel zamówienie)."
-
-"You can split selected items out to another order. First select items.", "Możesz podzielić za zamówienie. Wpierw wybierz elementy"
-"You missed 1 field. It has been highlighted.", "Pominąłeś 1 wymagane pole. Zostało ono podkreślone."
-"You missed {{errors}} fields. They have been highlighted.", "Pominąłeś {{errors}} pól. Zostały one podkreślone"
