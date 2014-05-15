@@ -512,7 +512,7 @@
 			checkboxes = items.find(".checker :checkbox"),
 			splitBtn = $("#split"),
 			splitWrapper = $("#split-wrapper"),
-			inactiveMsg = '<?php echo $_hlp->__("You can split selected items out to another order. First select items."); ?>';
+			inactiveMsg = Translator.translate("You can split selected items out to another order. First select items.");
 			
 		splitWrapper.tooltip({title: inactiveMsg});
 		

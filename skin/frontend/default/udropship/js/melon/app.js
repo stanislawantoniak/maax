@@ -74,19 +74,20 @@ var App = function($) {
 				layout: self.data('layout'),
 				buttons: (self.data('type') != 'confirm') ? false : [
 					{
-						addClass: 'btn btn-primary', text: 'OK', onClick: function($noty) {
+						addClass: 'btn btn-primary', text: Translator.translate('Ok'), onClick: function($noty) {
 							//$noty.close();
 							if(self.data("ok-url")){
 								document.location.replace(self.data("ok-url"));
 							}
 						}
 					}, {
-						addClass: 'btn btn-danger', text: 'Cancel', onClick: function($noty) {$noty.close();}
+						addClass: 'btn btn-danger', text: Translator.translate('Cancel'), onClick: function($noty) {$noty.close();}
 					}
 				]
 			});
 			return false;
 		});
+		
 		
 		//===== Validation & notty =====//
 		if(window.noty){
@@ -95,8 +96,8 @@ var App = function($) {
 					var errors = validator.numberOfInvalids();
 					if (errors) {
 						var message = errors == 1
-						? 'You missed 1 field. It has been highlighted'
-						: 'You missed ' + errors + ' fields. They have been highlighted.';
+						? Translator.translate('You missed 1 field. It has been highlighted.')
+						: Zolago.replace(Translator.translate('You missed {{errors}} fields. They have been highlighted.'), {errors: errors});
 						noty({
 							text: message,
 							type: 'error',

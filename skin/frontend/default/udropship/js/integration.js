@@ -118,3 +118,10 @@ Zolago.round = function(v, pow){
 Zolago.currency = function(v){
 	return this.price(price) + " " + global.i18n.currency;
 }
+
+Zolago.replace = function(markup, data) {
+	jQuery.each(data, function(key) {
+		markup = markup.replace(new RegExp("\{\{" + key + "\}\}", "g"), typeof data[key] != "undefined" ? data[key] : "");
+	});
+	return markup;
+};
