@@ -429,8 +429,8 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 				'base_price_incl_tax'	=> $priceInclTax, // @todo use currency
 				'discount_amount'		=> $discountAmount,
 				'discount_percent'		=> $discountPrecent,
-				'row_total_incl_tax'	=> $finalPriceInclTax*$qty,
-				'base_row_total_incl_tax'=> $finalPriceInclTax*$qty, // @todo use currency
+				'row_total_incl_tax'	=> $priceInclTax*$qty,
+				'base_row_total_incl_tax'=> $priceInclTax*$qty, // @todo use currency
 			);
 
 			$item->addData($itemData);
