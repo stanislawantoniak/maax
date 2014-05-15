@@ -423,7 +423,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 
 			$itemData = array(
 				'row_total'				=> $finalPriceExclTax * $qty,
-				'price'					=> $price,
+				'price'					=> $priceExclTax,
 				'qty'					=> $qty,
 				'price_incl_tax'		=> $priceInclTax,
 				'base_price_incl_tax'	=> $priceInclTax, // @todo use currency
@@ -538,7 +538,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 
 			$itemData = array(
 				'row_total'				=> $finalPriceExclTax * $qty,
-				'price'					=> $price,
+				'price'					=> $priceExclTax,
 				'weight'				=> $product->getWeight(),
 				'qty'					=> $qty,
 				'qty_shipped'			=> null,
@@ -821,6 +821,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                 $udpo->setShipmentShippingAmount($r->getParam('shipping_amount'));
             }
             $udpo->setUdpoNoSplitPoFlag(true);
+			
             $shipment = $udpoHlp->createShipmentFromPo($udpo, $partialQty, true, true, true);
             if ($shipment) {
                 $shipment->setNewShipmentFlag(true);
@@ -852,6 +853,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 				
 				$number = $this->_createShipments($dhlSettings, $shipment, $shipmentSettings, $udpo);
 				if (!$number) {
+					$session->addError($this->__('Shipping creation fail'));
 					$udpoHlp->cancelShipment($shipment, true);
 					$udpo->getStatusModel()->processStartPacking($udpo, true);
 					return $this->_redirectReferer();

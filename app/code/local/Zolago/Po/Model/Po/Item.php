@@ -7,8 +7,57 @@ class Zolago_Po_Model_Po_Item extends Unirgy_DropshipPo_Model_Po_Item
 	public function getDiscount() {
 		return round($this->getDiscountAmount()/$this->getQty(), 4);
 	}
+	
+	/**
+	 * Overrride if we have no order item 
+	 * @return int
+	 */
+	public function getQtyToShip() {
+		if(!$this->hasOrderItem()){
+			return max(0, $this->getQty()-$this->getQtyShipped()-$this->getQtyCanceled());
+		}
+		return parent::getQtyToShip();
+	}
+	
+	public function getOrderItem() {
+		 if (is_null($this->_orderItem)) {
+            if ($this->getPo()
+            	&& ($orderItem = Mage::helper('udropship')->getOrderItemById($this->getPo()->getOrder(), $this->getOrderItemId()))
+            ) {
+                $this->_orderItem = $orderItem;
+            }
+            else {
+                $this->_orderItem = Mage::getModel('sales/order_item')
+                    ->load($this->getOrderItemId());
+            }
+			// Process abstract order item
+			if(!$this->_orderItem->getId()){
+				Mage::helper("zolagopo")->prepareOrderItemByPoItem($this->_orderItem, $this);
+				$order = $this->_orderItem->getOrder();
+				/* @var $order Mage_Sales_Model_Order */
+				
+				$order->save();
+				$this->setOrderItemId($this->_orderItem->getId());
+				if($this->getId()){
+					$this->getResource()->saveAttribute($this, "order_item_id");
+				}
+			}
+        }
+        return $this->_orderItem;
+	}
+	
+	public function hasOrderItem() {
+		return (bool)(int)$this->getOrderItem()->getId();
+	}
 
+	
    public function _beforeSave() {
+	   
+	   // Process order item if needed
+		if(!$this->getOrderItemId()){
+			$this->getOrderItem();
+		}
+		
 	   // Transfer fields
 	   if((!$this->getId() || $this->isObjectNew()) && !$this->getSkipTransferOrderItemsData()){
 		   $transferFields = array(

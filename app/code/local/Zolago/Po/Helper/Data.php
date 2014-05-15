@@ -41,4 +41,145 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 		
 		return $dhlSettings;
 	}
+	
+	public function prepareOrderItemByPoItem(Mage_Sales_Model_Order_Item $item, 
+		Zolago_Po_Model_Po_Item $poItem) {
+		
+		$po = $poItem->getPo();
+		/* @var $po Zolago_Po_Model_Po */
+		$order = $po->getOrder();
+		/* @var $order Mage_Sales_Model_Order */
+		$tmplItem = $order->getItemsCollection()->getFirstItem();
+		/* @var $tmplItem Mage_Sales_Model_Order_Item */
+		$store = $order->getStore();
+		
+		$product = Mage::getModel("catalog/product")->setStoreId($store->getId())
+				->load($poItem->getProductId());
+		/* @var $product Mage_Catalog_Model_Product */
+		
+		// Rates
+		$globalCurrencyCode  = Mage::app()->getBaseCurrencyCode();
+        $baseCurrency = $store->getBaseCurrency();
+		
+		
+		// Taxes 
+		$priceInclTax = $poItem->getPriceInclTax();
+		
+		$taxHelper = Mage::helper('tax');
+		/* @var $taxHelper Mage_Tax_Helper_Data */
+		$taxConfig = $taxHelper->getConfig();
+		/* @var $taxConfig Mage_Tax_Model_Config */
+		$taxCalculation = Mage::getSingleton('tax/calculation');
+		/* @var $taxCalculation Mage_Tax_Model_Calculation */
+		$customerGroup = Mage::getModel("customer/group")->load($po->getOrder()->getCustomerGroupId());
+		/* @var $customerGroup Mage_Customer_Model_Group */
+		
+		$request = $taxCalculation->getRateRequest(
+				$po->getShippingAddress(), 
+				$po->getBillingAddress(), 
+				$customerGroup->getTaxClassId(), 
+				$store
+		);
+		
+		$request->setProductClassId($product->getData('tax_class_id'));
+		$taxAmount = 0;
+		if ($taxRate = $taxCalculation->getRate($request)) {
+			$taxAmount  = $store->roundPrice($priceInclTax * (1 - 1 / (($taxRate/100)+1)));
+	    }
+		
+		// Stock item 
+		$stockItem = $product->getStockItem();
+		
+		$data = array(			
+			"order_id"						=> $order->getId(),
+			"parent_item_id"				=> null,
+			"quote_item_id"					=> null, 
+			"store_id"						=> $store->getId(),
+			"created_at"					=> null, 
+			"updated_at"					=> null,
+			"product_id"					=> $product->getId(),
+			"product_type"					=> $product->getTypeId(),
+			"product_options"				=> null,
+			"weight"						=> $poItem->getWeight(),
+			"is_virtual"					=> $poItem->getIsVirtual(),
+			"sku"							=> $poItem->getSku(),
+			"name"							=> $poItem->getName(),
+			"description"					=> null,
+			"applied_rule_ids"				=> null,
+			"additional_data"				=> null,
+			"free_shipping"					=> 0,
+			"is_qty_decimal"				=> $stockItem ? $stockItem->getIsQtyDecimal() : 0,
+			"no_discount"					=> 0,
+			"qty_backordered"				=> null,
+			"qty_canceled"					=> 0,
+			"qty_invoiced"					=> 0,
+			"qty_ordered"					=> $poItem->getQty(),
+			"qty_refunded"					=> 0,
+			"qty_shipped"					=> 0,
+			"base_cost"						=> $poItem->getBaseCost(),
+			"price"							=> $poItem->getPrice(),
+			"base_price"					=> $store->convertPrice($poItem->getPrice()),
+			"original_price"				=> $product->getPrice(),
+			"base_original_price"			=> $store->convertPrice($product->getPrice()),
+			"tax_percent"					=> $taxRate,
+			"tax_amount"					=> $taxAmount,
+			"base_tax_amount"				=> $store->convertPrice($taxAmount),
+			"tax_invoiced"					=> 0,
+			"base_tax_invoiced"				=> 0,
+			"discount_percent"				=> 0,
+			"discount_amount"				=> 0,
+			"base_discount_amount"			=> 0,
+			"discount_invoiced"				=> 0,
+			"base_discount_invoiced"		=> 0,
+			"amount_refunded"				=> 0,
+			"base_amount_refunded"			=> 0,
+			"row_total"						=> $poItem->getRowTotal(),
+			"base_row_total"				=> $store->convertPrice($poItem->getRowTotal()),
+			"row_invoiced"					=> 0,
+			"base_row_invoiced"				=> 0,
+			"row_weight"					=> $poItem->getWeight() * $poItem->getQty(),
+			"gift_message_id"				=> null,
+			"gift_message_available"		=> null,
+			"base_tax_before_discount"		=> null,
+			"tax_before_discount"			=> null,
+			"weee_tax_applied"				=> null,
+			"weee_tax_applied_amount"		=> 0,
+			"weee_tax_applied_row_amount"	=> 0,
+			"base_weee_tax_applied_amount"	=> 0,
+			"base_weee_tax_applied_row_amnt"=> 0,
+			"weee_tax_disposition"			=> 0,
+			"weee_tax_row_disposition"		=> 0,
+			"base_weee_tax_disposition"		=> 0,
+			"base_weee_tax_row_disposition"	=> 0,
+			"ext_order_item_id"				=> null,
+			"locked_do_invoice"				=> null,
+			"locked_do_ship"				=> null,
+			"price_incl_tax"				=> $priceInclTax,
+			"base_price_incl_tax"			=> $store->convertPrice($poItem->getBasePriceInclTax()),
+			"row_total_incl_tax"			=> $poItem->getRowTotalInclTax(),
+			"base_row_total_incl_tax"		=> $store->convertPrice($poItem->getRowTotalInclTax()),
+			"hidden_tax_amount"				=> 0,
+			"base_hidden_tax_amount"		=> 0,
+			"hidden_tax_invoiced"			=> null,
+			"base_hidden_tax_invoiced"		=> null,
+			"hidden_tax_refunded"			=> null,
+			"base_hidden_tax_refunded"		=> null,
+			"is_nominal"					=> $poItem->getIsNominal(),
+			"tax_canceled"					=> null,
+			"hidden_tax_canceled"			=> null,
+			"tax_refunded"					=> null,
+			"base_tax_refunded"				=> null,
+			"discount_refunded"				=> null,
+			"base_discount_refunded"		=> null,
+			"udropship_vendor"				=> $po->getUdropshipVendor(),
+			"locked_do_udpo"				=> null,
+			"qty_udpo"						=> $poItem->getQty(),
+			"udpo_seq_number"				=> null,
+			"udpo_qty_reverted"				=> null,
+			"udpo_qty_used"					=> $poItem->getQty()
+		);
+		$item->addData($data);
+		$item->setOrder($order);
+		$order->addItem($item);
+	}
 }

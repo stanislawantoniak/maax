@@ -21,6 +21,10 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 		return Mage::helper("udpo")->getPoStatusName($this->getPo()->getUdropshipStatus());
 	}
 	
+	public function isShippignLetterFile($trackingNo) {
+		return Mage::helper("zolagodhl")->getIsDhlFileAvailable($trackingNo);
+	}
+	
 	public function getAllStatuses() {
 		
 	}
