@@ -1,0 +1,32 @@
+
+
+
+
+#items-product {
+	margin-top:-4px;
+	.item {
+		width:47.55555555%;
+		padding: 5px;
+		margin:4px;
+		
+		@media (min-width: 480px) { 
+			width:47%;
+		 }
+		@media (min-width: $screen-sm-min) { 
+			width:48%;
+		 }
+		@media (min-width: $screen-md-min) { 
+			width:32%;
+		 }
+		@media (min-width: $screen-lg-min) { 
+			width:24.10%;
+		 }
+		 figure {
+		 	img {
+		 		width:100%;
+		 		height: auto;
+		 	}
+		 }
+		 
+	}
+}

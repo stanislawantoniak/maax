@@ -362,4 +362,506 @@ jQuery.extend( jQuery.easing,
  *
  */
 
- 
+ ;(function($) {
+
+  $.slidebars = function(options) {
+
+    // ----------------------
+    // 001 - Default Settings
+
+    var settings = $.extend({
+      siteClose: true, // true or false - Enable closing of Slidebars by clicking on #sb-site.
+      siteLock: false, // true or false - Prevent scrolling of site when a Slidebar is open.
+      disableOver: false, // integer or false - Hide Slidebars over a specific width.
+      hideControlClasses: false, // true or false - Hide controls at same width as disableOver.
+      slidebarLinks: 'standard' // 'close' or 'standard' - Links clicked in Slidebars close Slidebars.
+    }, options);
+
+    // -----------------------
+    // 002 - Feature Detection
+
+    var test = document.createElement('div').style, // Create element to test on.
+    supportTransition = false, // Variable for testing transitions.
+    supportTransform = false; // variable for testing transforms.
+
+    // Test for CSS Transitions
+    if (test.MozTransition === '' || test.WebkitTransition === '' || test.OTransition === '' || test.transition === '') supportTransition = true;
+
+    // Test for CSS Transforms
+    if (test.MozTransform === '' || test.WebkitTransform === '' || test.OTransform === '' || test.transform === '') supportTransform = true;
+
+    // -----------------
+    // 003 - User Agents
+
+    var ua = navigator.userAgent, // Get user agent string.
+    android = false, // Variable for storing android version.
+    iOS = false; // Variable for storing iOS version.
+    
+    if (/Android/.test(ua)) { // Detect Android in user agent string.
+      android = ua.substr(ua.indexOf('Android')+8, 3); // Set version of Android.
+    } else if (/(iPhone|iPod|iPad)/.test(ua)) { // Detect iOS in user agent string.
+      iOS = ua.substr(ua.indexOf('OS ')+3, 3).replace('_', '.'); // Set version of iOS.
+    }
+    
+    if (android && android < 3 || iOS && iOS < 5) $('html').addClass('sb-static'); // Add helper class for older versions of Android & iOS.
+
+    // -----------
+    // 004 - Setup
+
+    // Site Container
+    var $site = $('#sb-site, .sb-site'); // Cache the selector.
+
+    // Left Slidebar  
+    if ($('.sb-left').length) { // Check if the left Slidebar exists.
+      var $left = $('.sb-left'), // Cache the selector.
+      leftActive = false; // Used to check whether the left Slidebar is open or closed.
+    }
+
+    // Right Slidebar
+    if ($('.sb-right').length) { // Check if the right Slidebar exists.
+      var $right = $('.sb-right'), // Cache the selector.
+      rightActive = false; // Used to check whether the right Slidebar is open or closed.
+    }
+        
+    var init = false, // Initialisation variable.
+    windowWidth = $(window).width(), // Get width of window.
+    $controls = $('.sb-toggle-left, .sb-toggle-right, .sb-open-left, .sb-open-right, .sb-close'), // Cache the control classes.
+    $slide = $('.sb-slide'); // Cache users elements to animate.
+    
+    // Initailise Slidebars
+    function initialise() {
+      if (!settings.disableOver || (typeof settings.disableOver === 'number' && settings.disableOver >= windowWidth)) { // False or larger than window size. 
+        init = true; // true enabled Slidebars to open.
+        $('html').addClass('sb-init'); // Add helper class.
+        if (settings.hideControlClasses) $controls.removeClass('sb-hide'); // Remove class just incase Slidebars was originally disabled.
+        css(); // Set required inline styles.
+      } else if (typeof settings.disableOver === 'number' && settings.disableOver < windowWidth) { // Less than window size.
+        init = false; // false stop Slidebars from opening.
+        $('html').removeClass('sb-init'); // Remove helper class.
+        if (settings.hideControlClasses) $controls.addClass('sb-hide'); // Hide controls
+        $site.css('minHeight', ''); // Remove minimum height.
+        if (leftActive || rightActive) close(); // Close Slidebars if open.
+      }
+    }
+    initialise();
+    
+    // Inline CSS
+    function css() {
+      // Set minimum height.
+      $site.css('minHeight', ''); // Reset minimum height.
+      $site.css('minHeight', $('html').height() + 'px'); // Set minimum height of the site to the minimum height of the html.
+      
+      // Custom Slidebar widths.
+      if ($left && $left.hasClass('sb-width-custom')) $left.css('width', $left.attr('data-sb-width')); // Set user custom width.
+      if ($right && $right.hasClass('sb-width-custom')) $right.css('width', $right.attr('data-sb-width')); // Set user custom width.
+      
+      // Set off-canvas margins for Slidebars with push and overlay animations.
+      if ($left && ($left.hasClass('sb-style-push') || $left.hasClass('sb-style-overlay'))) $left.css('marginLeft', '-' + $left.css('width'));
+      if ($right && ($right.hasClass('sb-style-push') || $right.hasClass('sb-style-overlay'))) $right.css('marginRight', '-' + $right.css('width'));
+      
+      // Site lock.
+      if (settings.siteLock) $('html').addClass('sb-site-lock');
+    }
+    
+    // Resize Functions
+    $(window).resize(function() {
+      var resizedWindowWidth = $(window).width(); // Get resized window width.
+      if (windowWidth !== resizedWindowWidth) { // Slidebars is running and window was actually resized.
+        windowWidth = resizedWindowWidth; // Set the new window width.
+        initialise(); // Call initalise to see if Slidebars should still be running.
+        if (leftActive) open('left'); // If left Slidebar is open, calling open will ensure it is the correct size.
+        if (rightActive) open('right'); // If right Slidebar is open, calling open will ensure it is the correct size.
+      }
+    });
+    // I may include a height check along side a width check here in future.
+
+    // ---------------
+    // 005 - Animation
+
+    var animation; // Animation type.
+
+    // Set Animation Type
+    if (supportTransition && supportTransform) { // Browser supports css transitions and transforms.
+      animation = 'translate'; // Translate for browsers that support it.
+      if (android && android < 4.4) animation = 'side'; // Android supports both, but can't translate any fixed positions, so use left instead.
+    } else {
+      animation = 'jQuery'; // Browsers that don't support css transitions and transitions.
+    }
+
+    // Animate Mixin
+    function animate(object, amount, side) {
+      // Choose selectors depending on animation style.
+      var selector;
+      
+      if (object.hasClass('sb-style-push')) {
+        selector = $site.add(object).add($slide); // Push - Animate site, Slidebar and user elements.
+      } else if (object.hasClass('sb-style-overlay')) {
+        selector = object; // Overlay - Animate Slidebar only.
+      } else {
+        selector = $site.add($slide); // Reveal - Animate site and user elements.
+      }
+      
+      // Apply Animation
+      if (animation === 'translate') {
+        selector.css('transform', 'translate(' + amount + ')');
+      } else if (animation === 'side') {    
+        if (amount[0] === '-') amount = amount.substr(1); // Remove the '-' from the passed amount for side animations.
+        selector.css(side, amount);
+      } else if (animation === 'jQuery') {
+        if (amount[0] === '-') amount = amount.substr(1); // Remove the '-' from the passed amount for jQuery animations.
+        var properties = {};
+        properties[side] = amount;
+        selector.stop().animate(properties, 400); // Stop any current jQuery animation before starting another.
+      }
+      
+      // If closed, remove the inline styling on completion of the animation.
+      setTimeout(function() {
+        if (amount === '0px') {
+          selector.removeAttr('style');
+          css();
+        }
+      }, 400);
+    }
+
+    // ----------------
+    // 006 - Operations
+
+    // Open a Slidebar
+    function open(side) {
+      // Check to see if opposite Slidebar is open.
+      if (side === 'left' && $left && rightActive || side === 'right' && $right && leftActive) { // It's open, close it, then continue.
+        close();
+        setTimeout(proceed, 400);
+      } else { // Its not open, continue.
+        proceed();
+      }
+
+      // Open
+      function proceed() {
+        if (init && side === 'left' && $left) { // Slidebars is initiated, left is in use and called to open.
+          $('html').addClass('sb-active sb-active-left'); // Add active classes.
+          $left.addClass('sb-active');
+          animate($left, $left.css('width'), 'left'); // Animation
+          setTimeout(function() { leftActive = true; }, 400); // Set active variables.
+        } else if (init && side === 'right' && $right) { // Slidebars is initiated, right is in use and called to open.
+          $('html').addClass('sb-active sb-active-right'); // Add active classes.
+          $right.addClass('sb-active');
+          animate($right, '-' + $right.css('width'), 'right'); // Animation
+          setTimeout(function() { rightActive = true; }, 400); // Set active variables.
+        }
+      }
+    }
+      
+    // Close either Slidebar
+    function close(link) {
+      if (leftActive || rightActive) { // If a Slidebar is open.
+        if (leftActive) {
+          animate($left, '0px', 'left'); // Animation
+          leftActive = false;
+        }
+        if (rightActive) {
+          animate($right, '0px', 'right'); // Animation
+          rightActive = false;
+        }
+      
+        setTimeout(function() { // Wait for closing animation to finish.
+          $('html').removeClass('sb-active sb-active-left sb-active-right'); // Remove active classes.
+          if ($left) $left.removeClass('sb-active');
+          if ($right) $right.removeClass('sb-active');
+          if (link) window.location = link; // If a link has been passed to the function, go to it.
+        }, 400);
+      }
+    }
+    
+    // Toggle either Slidebar
+    function toggle(side) {
+      if (side === 'left' && $left) { // If left Slidebar is called and in use.
+        if (!leftActive) {
+          open('left'); // Slidebar is closed, open it.
+        } else {
+          close(); // Slidebar is open, close it.
+        }
+      }
+      if (side === 'right' && $right) { // If right Slidebar is called and in use.
+        if (!rightActive) {
+          open('right'); // Slidebar is closed, open it.
+        } else {
+          close(); // Slidebar is open, close it.
+        }
+      }
+    }
+
+    // ---------
+    // 007 - API
+    
+    this.slidebars = {
+      open: open, // Maps user variable name to the open method.
+      close: close, // Maps user variable name to the close method.
+      toggle: toggle, // Maps user variable name to the toggle method.
+      init: function() { // Returns true or false whether Slidebars are running or not.
+        return init; // Returns true or false whether Slidebars are running.
+      },
+      active: function(side) { // Returns true or false whether Slidebar is open or closed.
+        if (side === 'left' && $left) return leftActive;
+        if (side === 'right' && $right) return rightActive;
+      },
+      destroy: function(side) { // Removes the Slidebar from the DOM.
+        if (side === 'left' && $left) {
+          if (leftActive) close(); // Close if its open.
+          setTimeout(function() {
+            $left.remove(); // Remove it.
+            $left = false; // Set variable to false so it cannot be opened again.
+          }, 400);
+        }
+        if (side === 'right' && $right) {
+          if (rightActive) close(); // Close if its open.
+          setTimeout(function() {
+            $right.remove(); // Remove it.
+            $right = false; // Set variable to false so it cannot be opened again.
+          }, 400);
+        }
+      }
+    };
+
+    // ----------------
+    // 008 - User Input
+    
+    function eventHandler(event, selector) {
+      event.stopPropagation(); // Stop event bubbling.
+      event.preventDefault(); // Prevent default behaviour
+      if (event.type === 'touchend') selector.off('click'); // If event type was touch turn off clicks to prevent phantom clicks.
+    }
+    
+    // Toggle Left Slidebar
+    $('.sb-toggle-left').on('touchend click', function(event) {
+      eventHandler(event, $(this)); // Handle the event.
+      toggle('left'); // Toggle the left Slidbar.
+    });
+    
+    // Toggle Right Slidebar
+    $('.sb-toggle-right').on('touchend click', function(event) {
+      eventHandler(event, $(this)); // Handle the event.
+      toggle('right'); // Toggle the right Slidbar.
+    });
+    
+    // Open Left Slidebar
+    $('.sb-open-left').on('touchend click', function(event) {
+      eventHandler(event, $(this)); // Handle the event.
+      open('left'); // Open the left Slidebar.
+    });
+    
+    // Open Right Slidebar
+    $('.sb-open-right').on('touchend click', function(event) {
+      eventHandler(event, $(this)); // Handle the event.
+      open('right'); // Open the right Slidebar.
+    });
+    
+    // Close a Slidebar
+    $('.sb-close').on('touchend click', function(event) {
+      eventHandler(event, $(this)); // Handle the event.
+      close(); // Close either Slidebar.
+    });
+    $('.sb-slidebar a.closeSlidebar').on('touchend click', function(event) {
+      eventHandler(event, $(this)); // Handle the event.
+      close(); // Close either Slidebar.
+    });
+    
+    // Close Slidebar via Link
+    $('.sb-slidebar a').not('.sb-disable-close').on('click', function(event) {
+      if (settings.slidebarLinks == 'close' || settings.slidebarLinks == 'standard' && $(this).hasClass('sb-enable-close')) {
+        eventHandler(event, $(this)); // Handle the event.
+        close( $(this).attr('href') ); // Close the Slidebar and pass link.
+      }
+    });
+    
+    // Close Slidebar via Site
+    $site.on('touchend click', function(event) {
+      if (settings.siteClose && (leftActive || rightActive)) { // If settings permit closing by site and left or right Slidebar is open.
+        eventHandler(event, $(this)); // Handle the event.
+        close(); // Close it.
+      }
+    });
+    
+  }; // End slidebars function.
+
+}) (jQuery);
+
+
+
+;(function ( $, window, document, undefined ) {
+    
+    var defaults = {
+        orientation: 'left',
+        mode: 'push',
+        static: false
+    };
+
+    // The actual plugin constructor
+    function Slidepanel( $element, options ) {
+        this.$element = $element;
+        this.options = $.extend( {}, defaults, options) ;
+        this._defaults = defaults;
+        this.init();
+    }
+
+    Slidepanel.prototype.init = function () {
+        
+        var base = this;
+
+        if($('#slidepanel').length == 0){
+            var panel_html = '<div id="slidepanel" class="cb_slide_panel"><div class="wrapper"><a href="#" class="close">Close</a><div class="inner"><div class="wrapper"></div></div></div></div>';
+            $(panel_html).hide().appendTo($('body'));    
+        }
+
+        this.$panel = $('#slidepanel');
+        this.$body = $('body');
+        this.$body_position = this.$body.css('position');
+
+        //hide the panel and set orientation class for display
+        this.$panel.hide().addClass('panel_' + this.options.orientation);
+        
+        //set current trigger link to false for the current panel
+        this.$panel.data('slidepanel-current', false);
+        this.$panel.data('slidepanel-loaded', false);
+        
+
+        //reset any defined a positions
+        this.$panel.css('left', '').css('right', '').css('top', '').css('bottom', '');
+
+        //set a default top value for left and right orientations
+        //and set the starting position based on element width
+        if(this.options.orientation == 'left' || this.options.orientation == 'right') {
+            var options = {};
+            options['top'] = 0;
+            options[this.options.orientation] = -this.$panel.width();
+            this.$panel.css(options);
+        }
+
+        //set a default left value for top and bottom orientations
+        //and set the starting position based on element height
+        if(this.options.orientation == 'top' || this.options.orientation == 'bottom') {
+            var options = {};
+            options['left'] = 0;
+            options[this.options.orientation] = -this.$panel.height();
+            this.$panel.css(options);
+        }
+
+        //bind click event to trigger ajax load of html content
+        //and panel display to any elements that have the attribute rel="panel"
+        $(this.$element).on('click', function(e) {
+            e.preventDefault();
+             
+            //if the request mode is static
+            if(base.options.static) { 
+                //show the panel
+                base.expand();
+            }
+            // if the reques mode is ajax 
+            else {
+                //load the external html
+                base.load();
+            };
+        });
+
+        //listen for a click on the close buttons for this panel
+        $('.close', this.$panel).click(function(e) {
+            e.preventDefault();
+            base.collapse();
+        });
+        
+    };
+
+    Slidepanel.prototype.load = function() {
+            var base = this;
+            //if the current trigger element is the element that just triggered a load
+            if(this.$panel.data('slidepanel-current') == this.$element) {
+                //collapse the current panel
+                this.collapse();
+                return;
+            } else {
+                //show the slide panel
+                this.expand();
+                //get the target url
+                var href = $(this.$element).attr('href');
+
+                //prevent an ajax request if the current URL is the the target URL
+                if(this.$panel.data('slidepanel-loaded') !== href){
+                    //load the content from the target url, and update the panel html
+                    $('.inner .wrapper', this.$panel).html('').load(href, function() {
+                        //remove the loading indicator
+                        base.$panel.removeClass('loading');
+                        //set the current loaded URL to the target URL
+                        base.$panel.data('slidepanel-loaded', href);
+                    });
+                //  the current URL is already loaded
+                } else {
+                    //remove the loading indicator
+                    this.$panel.removeClass('loading');
+                }
+            }
+            //set the current source element to this element that triggered the load
+            this.$panel.data('slidepanel-current', this.$element);
+    };
+
+
+    Slidepanel.prototype.expand = function() {
+        var base = this;
+                //set the css properties to animatate
+
+        var panel_options = {};
+        var body_options = {};
+        panel_options.visible = 'show';
+        panel_options[this.options.orientation] = 0;
+        body_options[this.options.orientation] = (this.options.orientation == 'top' || this.options.orientation == 'bottom') ? this.$panel.height() : this.$panel.width();
+        
+        //if the animation mode is set to push, we move the body in relation to the panel
+        //else the panel is overlayed on top of the body
+        if(this.options.mode == 'push'){
+            //animate the body position in relation to the panel dimensions
+            this.$body.css('position', 'absolute').animate(body_options, 250);
+        }
+
+        //animate the panel into view
+        this.$panel.addClass('loading').animate(panel_options, 250, function() {
+            //show the panel's close button
+            $('.close', base.$panel).fadeIn(250);
+        });
+    };
+
+    Slidepanel.prototype.collapse = function() {
+        //hide the close button for this panel
+        $('.close', this.$panel).hide();
+
+        //set the css properties to animatate
+        var panel_options = {};
+        var body_options = {};
+        panel_options.visible = 'hide';
+        panel_options[this.options.orientation] = -(this.$panel.width() + 40);
+        body_options[this.options.orientation] = 0;
+        
+        //if the animation mode is push, move the document body back to it's original position
+        if(this.options.mode == 'push'){
+            this.$body.css('position', this.$body_position).animate(body_options, 250);
+        }
+        //animate the panel out of view
+        this.$panel.animate(panel_options, 250).data('slidepanel-current', false);
+    };
+
+    $.fn['slidepanel'] = function ( options ) {
+        return this.each(function () {
+            if (!$.data(this, 'plugin_slidepanel')) {
+                $.data(this, 'plugin_slidepanel', new Slidepanel( this, options ));
+            }
+        });
+    }
+
+})(jQuery, window);
+
+/*
+ * jQuery dropdown: A simple dropdown plugin
+ *
+ *
+jQuery&&function(e){function t(t,i){var s=t?e(this):i,o=e(s.attr("data-dropdown")),u=s.hasClass("dropdown-open");if(t){if(e(t.target).hasClass("dropdown-ignore"))return;t.preventDefault();t.stopPropagation()}else if(s!==i.target&&e(i.target).hasClass("dropdown-ignore"))return;n();if(u||s.hasClass("dropdown-disabled"))return;s.addClass("dropdown-open");o.data("dropdown-trigger",s).show();r();o.trigger("show",{dropdown:o,trigger:s})}function n(t){var n=t?e(t.target).parents().addBack():null;if(n&&n.is(".dropdown")){if(!n.is(".dropdown-menu"))return;if(!n.is("A"))return}e(document).find(".dropdown:visible").each(function(){var t=e(this);t.hide().removeData("dropdown-trigger").trigger("hide",{dropdown:t})});e(document).find(".dropdown-open").removeClass("dropdown-open")}function r(){var t=e(".dropdown:visible").eq(0),n=t.data("dropdown-trigger"),r=n?parseInt(n.attr("data-horizontal-offset")||0,10):null,i=n?parseInt(n.attr("data-vertical-offset")||0,10):null;if(t.length===0||!n)return;t.hasClass("dropdown-relative")?t.css({left:t.hasClass("dropdown-anchor-right")?n.position().left-(t.outerWidth(!0)-n.outerWidth(!0))-parseInt(n.css("margin-right"),10)+r:n.position().left+parseInt(n.css("margin-left"),10)+r,top:n.position().top+n.outerHeight(!0)-parseInt(n.css("margin-top"),10)+i}):t.css({left:t.hasClass("dropdown-anchor-right")?n.offset().left-(t.outerWidth()-n.outerWidth())+r:n.offset().left+r,top:n.offset().top+n.outerHeight()+i})}e.extend(e.fn,{dropdown:function(r,i){switch(r){case"show":t(null,e(this));return e(this);case"hide":n();return e(this);case"attach":return e(this).attr("data-dropdown",i);case"detach":n();return e(this).removeAttr("data-dropdown");case"disable":return e(this).addClass("dropdown-disabled");case"enable":n();return e(this).removeClass("dropdown-disabled")}}});e(document).on("click.dropdown","[data-dropdown]",t);e(document).on("click.dropdown",n);e(window).on("resize",r)}(jQuery);
+*/
+
+

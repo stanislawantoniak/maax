@@ -1,0 +1,112 @@
+#items-product {
+	.item {
+		border:1px solid #ebebeb;
+		background: #fff;
+		//height:550px;
+	}
+}
+.box_listing_product {
+    
+    
+    background:#fff;
+    
+    figure {
+        &.img_product {
+            margin-bottom:18px;
+        }
+        img {
+            width:100%;
+            height:auto;
+        }
+    }
+    .logo_manufacturer {
+        margin-bottom:18px;
+        padding:0 8px;
+    }
+    .name_product {
+        font-size: 12px;
+        margin-bottom:18px;
+        padding:0 8px;
+    }
+    .price {
+        color:#fd002a;
+        font-size: 20px;
+        margin-bottom:18px;
+        font-family:$fontRegular;
+        padding:0 8px;
+        position:relative;
+        .old {
+            color:#000;
+            text-decoration:line-through;
+            font-size:15px;
+            margin-right:10px;
+        }
+        .like {
+            position:absolute;
+            right:8px;
+            top:6px;
+            font-size:11px;
+            font-family:$fontBlack;
+            color:#000;
+            padding-right:30px;
+            &:before {
+                content: ' ';
+                display:block;
+                width:21px;
+                height:16px;
+                position:absolute;
+                right:0px;
+                top:0px;
+                background:url('../images/heart.png')
+            }
+            &.liked {
+                &:before {
+                    background:url('../images/heart-like.png')
+                }
+            }
+        }
+
+    }
+    .promotion {
+            background:#aefbe1;
+            border:2px solid #ffd9fc;
+            font-size:14px;
+            text-align:center;
+            padding:5px 10px;
+            color:#4f4f4f;
+            p {
+                margin:0px;
+                padding:0px;
+                color:#4f4f4f;
+                font-style: italic;
+                font-family:$fontBlack;
+            }
+        }
+}
+.shapes_listing {
+    height:155px;
+    background:url('../images/shapes-listing.png') 0 0 repeat-x;
+    position:absolute;
+    bottom:0px;
+    left:0px;
+    width:100%;
+    text-align:center;
+}
+.addNewPositionListProduct {
+    &:link,
+    &:visited {
+      height:38px;
+      width:245px;
+      display:inline-block;
+      background:#000;
+      text-align:center;
+      line-height: 38px;
+      font-size: 12px;
+      color:#fff;
+      margin-top:85px;
+      &:hover {
+          color:#fff;
+      }  
+    }
+    
+}

@@ -1,10 +1,16 @@
 <!DOCTYPE html>
-<html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
 <head>
 <?php echo $this->getChildHtml('head') ?>
 </head>
-<body<?php echo $this->getBodyClass()?' class="'.$this->getBodyClass().'"':'' ?>>
-<div id="wrapper">
+<body class="not-front not-logged-in  sidebar-first <?php echo $this->getBodyClass()?' '.$this->getBodyClass().'"':'' ?>">
+<!--[if lt IE 9]>
+<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
+<div id="sb-site" class="sb-site fb-site">
     <?php echo $this->getChildHtml('after_body_start') ?>
 
     <?php echo $this->getChildHtml('global_notices') ?>
@@ -17,464 +23,420 @@
     <?php echo $this->getChildHtml('global_messages') ?>
 <!--        --><?php //echo $this->getChildHtml('content') ?>
 
+    <section id="main">
+        <div id="content" class="container-fluid">
+            <div class="col-sm-12">
+                <div class="row">
+                    <section class="blockCarouselTop">
 
-    <div class="content-wrapper">
-        <div class="container hidden-xxs">
-            <div id="carousel-top-generic" class="carousel slide border1px-rd2-img-gray" data-ride="carousel">
-                <!-- Indicators -->
-                <ol class="carousel-indicators" id="carousel-top-indicators">
-                    <li data-target="#carousel-top-generic" data-slide-to="0" class=""></li>
-                    <li data-target="#carousel-top-generic" data-slide-to="1" class="active"></li>
-                </ol>
+                        <div id="carousel-top-generic" class="carousel slide border-gray-1x" data-ride="carousel">
 
-                <!-- Wrapper for slides -->
-                <div class="carousel-inner">
-                    <div class="item">
-                        <img src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/banner1.jpg" alt="">
+                            <!-- Indicators -->
+                            <ol class="carousel-indicators " id="carousel-top-indicators">
+                                <li data-target="#carousel-top-generic" data-slide-to="0" class="active"></li>
+                                <li data-target="#carousel-top-generic" data-slide-to="1" class=""></li>
+                            </ol>
 
-                        <div class="carousel-caption  hidden-xs">
-                            <a href="">przeglądaj stylizacje<img
-                                    src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/ico-green-arrow-small.png"
-                                    alt=""></a>
-                            <a class="margin-top-20px" href="">wejdź do sklepu<img
-                                    src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/ico-green-arrow-small.png"
-                                    alt=""></a>
-                        </div>
-                    </div>
-                    <div class="item active">
-                        <img src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/banner1.jpg" alt="">
+                            <!-- Wrapper for slides -->
+                            <div class="carousel-inner">
+                                <div class="item active">
+                                    <img src="skin/frontend/modago/default/images/banner1.jpg" alt="" class="hidden-xs">
+                                    <img src="skin/frontend/modago/default/images/bannermobile1.jpg" alt=""
+                                         class="visible-xs">
 
-                        <div class="carousel-caption hidden-xs">
-                            <a href="">przeglądaj stylizacje<img
-                                    src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/ico-green-arrow-small.png"
-                                    alt=""></a>
-                            <a class="margin-top-20px" href="">wejdź do sklepu<img
-                                    src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/ico-green-arrow-small.png"
-                                    alt=""></a>
-                        </div>
-                    </div>
-                </div>
+                                    <div class="carousel-caption hidden-xs">
+                                        <a href="">przeglądaj stylizacje&nbsp;&nbsp;&nbsp;<i class="fa fa-caret-right"></i></a>
+                                        <a class="margin-top-20px" href="">wejdź do sklepu&nbsp;&nbsp;&nbsp;<i
+                                                class="fa fa-caret-right"></i></a>
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <img src="skin/frontend/modago/default/images/banner1.jpg" alt="" class="hidden-xs">
+                                    <img src="skin/frontend/modago/default/images/bannermobile1.jpg" alt=""
+                                         class="visible-xs">
 
-            </div>
-        </div>
-
-        <div class="container visible-xxs">
-            <div class="row">
-                <div class="col-xs-12">
-
-                    <div id="carousel-top-mobile-generic" class="carousel slide" data-ride="carousel">
-                        <!-- Indicators -->
-                        <ol class="carousel-indicators" id="carousel-top-mobile-indicators">
-                            <li data-target="#carousel-top-mobile-generic" data-slide-to="0" class="active"></li>
-                            <li data-target="#carousel-top-mobile-generic" data-slide-to="1" class=""></li>
-                        </ol>
-
-                        <!-- Wrapper for slides -->
-                        <div class="carousel-inner">
-                            <div class="item active">
-                                <img class="border1px-rd2-img-gray"
-                                     src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/bannermobile1.jpg"
-                                     alt="">
-
-                                <div class="carousel-caption">
+                                    <div class="carousel-caption hidden-xs">
+                                        <a href="">przeglądaj stylizacje&nbsp;&nbsp;&nbsp;<i class="fa fa-caret-right"></i></a>
+                                        <a class="margin-top-20px" href="">wejdź do sklepu&nbsp;&nbsp;&nbsp;<i
+                                                class="fa fa-caret-right"></i></a>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="item">
-                                <img class="border1px-rd2-img-gray"
-                                     src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/bannermobile1.jpg"
-                                     alt="">
 
-                                <div class="carousel-caption">
+
+                        </div>
+                    </section>
+                </div>
+
+                <div class="row">
+
+
+                    <!--small banners-->
+                    <div class="container-fluid small-banners">
+                        <div class="row">
+
+                            <div class="col-xs-6 col-sm-3 tight-padding clear-left-nth">
+                                <a href=""><img class="border1px-rd2-img-gray margin-10-top img-responsive"
+                                                src="http://modago.dev/skin/frontend/modago/default/images/banner-small-1.jpg"
+                                                alt=""></a>
+                            </div>
+                            <div class="col-xs-6 col-sm-3 tight-padding clear-left-nth">
+                                <a href=""><img class="border1px-rd2-img-gray margin-10-top img-responsive"
+                                                src="http://modago.dev/skin/frontend/modago/default/images/banner-small-2.jpg"
+                                                alt=""></a>
+                            </div>
+                            <div class="col-xs-6 col-sm-3 tight-padding clear-left-nth">
+                                <a href=""><img class="border1px-rd2-img-gray margin-10-top img-responsive"
+                                                src="http://modago.dev/skin/frontend/modago/default/images/banner-small-3.jpg"
+                                                alt=""></a>
+                            </div>
+                            <div class="col-xs-6 col-sm-3 tight-padding clear-left-nth">
+                                <a href=""><img class="border1px-rd2-img-gray margin-10-top img-responsive"
+                                                src="http://modago.dev/skin/frontend/modago/default/images/banner-small-4.jpg"
+                                                alt=""></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <section id="bottom" class="bg-w">
+            <div class="container-fluid">
+                <div class="col-sm-12">
+                    <!-- START BLOCK INSPIRACJE -->
+                    <div class="row">
+
+                        <section class="block-inspiration">
+                            <header class="title-section">
+                                <div class="inspiration-strips "></div>
+                                <h2 >inspiracje</h2>
+                            </header>
+                            <div id="rwd-inspiration" class="rwdCarousel">
+                                <div class="rwd-carousel rwd-theme">
+                                    <div class="item">
+                                        <a href="">
+                                            <img src="skin/frontend/modago/default/images/insp-1.jpg" alt="">
+                                            <div class="carousel-caption">
+                                                <span class="title-caption">lady in the bushes</span>
+                                                <span class="body-caption">Drugi wiersz opisu</span>
+                                                <span class="seemore-caption">zobacz &gt;</span>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="item">
+                                        <a href="">
+                                            <img src="skin/frontend/modago/default/images/insp-2.jpg" alt="">
+                                            <div class="carousel-caption">
+                                                <span class="title-caption">lady in the bushes</span>
+                                                <span class="body-caption">Drugi wiersz opisu</span>
+                                                <span class="seemore-caption">zobacz &gt;</span>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="item">
+                                        <a href="">
+                                            <img src="skin/frontend/modago/default/images/insp-3.jpg" alt="">
+                                            <div class="carousel-caption">
+                                                <span class="title-caption">lady in the bushes</span>
+                                                <span class="body-caption">Drugi wiersz opisu</span>
+                                                <span class="seemore-caption">zobacz &gt;</span>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="item">
+                                        <a href="">
+                                            <img src="skin/frontend/modago/default/images/insp-4.jpg" alt="">
+                                            <div class="carousel-caption">
+                                                <span class="title-caption">lady in the bushes</span>
+                                                <span class="body-caption">Drugi wiersz opisu</span>
+                                                <span class="seemore-caption">zobacz &gt;</span>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="item">
+                                        <a href="">
+                                            <img src="skin/frontend/modago/default/images/insp-1.jpg" alt="">
+                                            <div class="carousel-caption">
+                                                <span class="title-caption">lady in the bushes</span>
+                                                <span class="body-caption">Drugi wiersz opisu</span>
+                                                <span class="seemore-caption">zobacz &gt;</span>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="item">
+                                        <a href="">
+                                            <img src="skin/frontend/modago/default/images/insp-2.jpg" alt="">
+                                            <div class="carousel-caption">
+                                                <span class="title-caption">lady in the bushes</span>
+                                                <span class="body-caption">Drugi wiersz opisu</span>
+                                                <span class="seemore-caption">zobacz &gt;</span>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="item">
+                                        <a href="">
+                                            <img src="skin/frontend/modago/default/images/insp-3.jpg" alt="">
+                                            <div class="carousel-caption">
+                                                <span class="title-caption">lady in the bushes</span>
+                                                <span class="body-caption">Drugi wiersz opisu</span>
+                                                <span class="seemore-caption">zobacz &gt;</span>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="item">
+                                        <a href="">
+                                            <img src="skin/frontend/modago/default/images/insp-4.jpg" alt="">
+                                            <div class="carousel-caption">
+                                                <span class="title-caption">lady in the bushes</span>
+                                                <span class="body-caption">Drugi wiersz opisu</span>
+                                                <span class="seemore-caption">zobacz &gt;</span>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div class="customNavigation">
+                                    <a class="prev"><i class="fa fa-chevron-left"></i></a>
+                                    <a class="next"><i class="fa fa-chevron-right"></i></a>
                                 </div>
                             </div>
+                        </section>                        <!-- END:/ BLOCK INSPIRACJE -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="popular-brands">
+            <div class="container-fluid">
+                <div class="col-sm-12">
+
+                    <!--    popular-->
+                    <div class="row">
+
+                            <div class="popular-shops">
+                                <h3>najpopularniejsze marki</h3>
+                                <ul class="pop-shop-lst">
+                                    <li><a href="#"><span class="pop-shop-img-wr"><img
+                                                    src="http://modago.dev/skin/frontend/modago/default/images/ck-logo-small.jpg"
+                                                    alt=""></span><span>Calvin Klein &gt;</span></a></li>
+                                    <li><a href="#"><span class="pop-shop-img-wr"><img
+                                                    src="http://modago.dev/skin/frontend/modago/default/images/ck-logo-small.jpg"
+                                                    alt=""></span><span>Calvin Klein &gt;</span></a></li>
+                                    <li><a href="#"><span class="pop-shop-img-wr"><img
+                                                    src="http://modago.dev/skin/frontend/modago/default/images/ck-logo-small.jpg"
+                                                    alt=""></span><span>Calvin Klein &gt;</span></a></li>
+                                </ul>
+                                <ul class="pop-shop-lst">
+                                    <li><a href="#"><span class="pop-shop-img-wr"><img
+                                                    src="http://modago.dev/skin/frontend/modago/default/images/ck-logo-small.jpg"
+                                                    alt=""></span><span>Calvin Klein &gt;</span></a></li>
+                                    <li><a href="#"><span class="pop-shop-img-wr"><img
+                                                    src="http://modago.dev/skin/frontend/modago/default/images/ck-logo-small.jpg"
+                                                    alt="http://modago.dev/skin/frontend/modago/default/images/ck-logo-small.jpg"></span><span>Calvin Klein &gt;</span></a>
+                                    </li>
+                                    <li><a href="#"><span class="pop-shop-img-wr"><img
+                                                    src="http://modago.dev/skin/frontend/modago/default/images/ck-logo-small.jpg"
+                                                    alt="http://modago.dev/skin/frontend/modago/default/images/ck-logo-small.jpg"></span><span>Calvin Klein &gt;</span></a>
+                                    </li>
+                                </ul>
+                                <ul class="pop-shop-lst">
+                                    <li><a href="#"><span class="pop-shop-img-wr"><img
+                                                    src="http://modago.dev/skin/frontend/modago/default/images/ck-logo-small.jpg"
+                                                    alt="http://modago.dev/skin/frontend/modago/default/images/ck-logo-small.jpg"></span><span>Calvin Klein &gt;</span></a>
+                                    </li>
+                                    <li><a href="#"><span class="pop-shop-img-wr"><img
+                                                    src="http://modago.dev/skin/frontend/modago/default/images/ck-logo-small.jpg"
+                                                    alt="http://modago.dev/skin/frontend/modago/default/images/ck-logo-small.jpg"></span><span>Calvin Klein &gt;</span></a>
+                                    </li>
+                                    <li><a href="#"><span class="pop-shop-img-wr"><img
+                                                    src="http://modago.dev/skin/frontend/modago/default/images/ck-logo-small.jpg"
+                                                    alt="http://modago.dev/skin/frontend/modago/default/images/ck-logo-small.jpg"></span><span>Calvin Klein &gt;</span></a>
+                                    </li>
+                                </ul>
+                                <ul class="pop-shop-lst ">
+                                    <li><a href="#"><span class="pop-shop-img-wr"><img
+                                                    src="http://modago.dev/skin/frontend/modago/default/images/ck-logo-small.jpg"
+                                                    alt="http://modago.dev/skin/frontend/modago/default/images/ck-logo-small.jpg"></span><span>Calvin Klein &gt;</span></a>
+                                    </li>
+                                    <li><a href="#"><span class="pop-shop-img-wr"><img
+                                                    src="http://modago.dev/skin/frontend/modago/default/images/ck-logo-small.jpg"
+                                                    alt="http://modago.dev/skin/frontend/modago/default/images/ck-logo-small.jpg"></span><span>Calvin Klein &gt;</span></a>
+                                    </li>
+                                    <li><a href="#"><span class="pop-shop-img-wr"><img
+                                                    src="http://modago.dev/skin/frontend/modago/default/images/ck-logo-small.jpg"
+                                                    alt="http://modago.dev/skin/frontend/modago/default/images/ck-logo-small.jpg"></span><span>Calvin Klein &gt;</span></a>
+                                    </li>
+                                </ul>
+                                <ul class="pop-shop-lst">
+                                    <li><a href="#"><span class="pop-shop-img-wr"><img
+                                                    src="http://modago.dev/skin/frontend/modago/default/images/ck-logo-small.jpg"
+                                                    alt="http://modago.dev/skin/frontend/modago/default/images/ck-logo-small.jpg"></span><span>Calvin Klein &gt;</span></a>
+                                    </li>
+                                    <li><a href="#"><span class="pop-shop-img-wr"><img
+                                                    src="http://modago.dev/skin/frontend/modago/default/images/ck-logo-small.jpg"
+                                                    alt="http://modago.dev/skin/frontend/modago/default/images/ck-logo-small.jpg"></span><span>Calvin Klein &gt;</span></a>
+                                    </li>
+                                    <li><a href="#"><span class="pop-shop-img-wr"><img
+                                                    src="http://modago.dev/skin/frontend/modago/default/images/ck-logo-small.jpg"
+                                                    alt="http://modago.dev/skin/frontend/modago/default/images/ck-logo-small.jpg"></span><span>Calvin Klein &gt;</span></a>
+                                    </li>
+                                </ul>
+                                <ul class="pop-shop-lst">
+                                    <li><a href="#"><span class="pop-shop-img-wr"><img
+                                                    src="http://modago.dev/skin/frontend/modago/default/images/ck-logo-small.jpg"
+                                                    alt="http://modago.dev/skin/frontend/modago/default/images/ck-logo-small.jpg"></span><span>Calvin Klein &gt;</span></a>
+                                    </li>
+                                    <li><a href="#"><span class="pop-shop-img-wr"><img
+                                                    src="http://modago.dev/skin/frontend/modago/default/images/ck-logo-small.jpg"
+                                                    alt="http://modago.dev/skin/frontend/modago/default/images/ck-logo-small.jpg"></span><span>Calvin Klein &gt;</span></a>
+                                    </li>
+                                    <li><a href="#"><span class="pop-shop-img-wr"><img
+                                                    src="http://modago.dev/skin/frontend/modago/default/images/ck-logo-small.jpg"
+                                                    alt="http://modago.dev/skin/frontend/modago/default/images/ck-logo-small.jpg"></span><span>Calvin Klein &gt;</span></a>
+                                    </li>
+                                </ul>
+                                <ul class="pop-shop-lst ">
+                                    <li><a href="#"><span class="pop-shop-img-wr"><img
+                                                    src="http://modago.dev/skin/frontend/modago/default/images/ck-logo-small.jpg"
+                                                    alt="http://modago.dev/skin/frontend/modago/default/images/ck-logo-small.jpg"></span><span>Calvin Klein &gt;</span></a>
+                                    </li>
+                                    <li><a href="#"><span class="pop-shop-img-wr"><img
+                                                    src="http://modago.dev/skin/frontend/modago/default/images/ck-logo-small.jpg"
+                                                    alt="http://modago.dev/skin/frontend/modago/default/images/ck-logo-small.jpg"></span><span>Calvin Klein &gt;</span></a>
+                                    </li>
+                                    <li><a href="#"><span class="pop-shop-img-wr"><img
+                                                    src="http://modago.dev/skin/frontend/modago/default/images/ck-logo-small.jpg"
+                                                    alt="http://modago.dev/skin/frontend/modago/default/images/ck-logo-small.jpg"></span><span>Calvin Klein &gt;</span></a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <a class="pop-shop-seemore" href="">zobacz więcej marek</a>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="recently-viewed" class="bg-w">
+            <div class="container-fluid">
+                <div class="col-sm-12">
+                    <div class="recently-viewed">
+                        <h3 class="title-section">ostatnio oglądane:</h3>
+
+                        <div class="rv-wrapper">
+                            <div class="canvas-left "></div>
+                            <div class="rv" data-jcarousel="true">
+                                <ul style="left: -685px; top: 0px;">
+
+
+
+                                    <li>
+                                        <a href="# " class="productItem-wrapper ">
+                                            <img src="skin/frontend/modago/default/images/last-seen-1.jpg " alt="... " class="border1px-rd2-img-gray ">
+                                            <span>ZARA krótki płaszcz z guzikami</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="# " class="productItem-wrapper ">
+                                            <img src="skin/frontend/modago/default/images/last-seen-2.jpg " alt="... " class="border1px-rd2-img-gray ">
+                                            <span>Zara krótki płaszcz z guzikami</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="# " class="productItem-wrapper ">
+                                            <img src="skin/frontend/modago/default/images/last-seen-1.jpg " alt="... " class="border1px-rd2-img-gray ">
+                                            <span>Zara krótki płaszcz z guzikami</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="# " class="productItem-wrapper ">
+                                            <img src="skin/frontend/modago/default/images/last-seen-2.jpg " alt="... " class="border1px-rd2-img-gray ">
+                                            <span>Zara krótki płaszcz z guzikami</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="# " class="productItem-wrapper ">
+                                            <img src="skin/frontend/modago/default/images/last-seen-1.jpg " alt="... " class="border1px-rd2-img-gray ">
+                                            <span>Zara krótki płaszcz z guzikami</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="# " class="productItem-wrapper ">
+                                            <img src="skin/frontend/modago/default/images/last-seen-2.jpg " alt="... " class="border1px-rd2-img-gray ">
+                                            <span>Zara krótki płaszcz z guzikami</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="# " class="productItem-wrapper ">
+                                            <img src="skin/frontend/modago/default/images/last-seen-1.jpg " alt="... " class="border1px-rd2-img-gray ">
+                                            <span>Zara krótki płaszcz z guzikami</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="# " class="productItem-wrapper ">
+                                            <img src="skin/frontend/modago/default/images/last-seen-2.jpg " alt="... " class="border1px-rd2-img-gray ">
+                                            <span>Zara krótki płaszcz z guzikami</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="# " class="productItem-wrapper ">
+                                            <img src="skin/frontend/modago/default/images/last-seen-1.jpg " alt="... " class="border1px-rd2-img-gray ">
+                                            <span>Zara krótki płaszcz z guzikami</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="# " class="productItem-wrapper ">
+                                            <img src="skin/frontend/modago/default/images/last-seen-2.jpg " alt="... " class="border1px-rd2-img-gray ">
+                                            <span>Zara krótki płaszcz z guzikami</span>
+                                        </a>
+                                    </li><li>
+                                        <a href="# " class="productItem-wrapper ">
+                                            <img src="skin/frontend/modago/default/images/last-seen-1.jpg " alt="... " class="border1px-rd2-img-gray ">
+                                            <span>Zara krótki płaszcz z guzikami</span>
+                                        </a>
+                                    </li><li>
+                                        <a href="# " class="productItem-wrapper ">
+                                            <img src="skin/frontend/modago/default/images/last-seen-2.jpg " alt="... " class="border1px-rd2-img-gray ">
+                                            <span>Zara krótki płaszcz z guzikami</span>
+                                        </a>
+                                    </li></ul>
+
+                            </div>
+                            <a href="# " class="rv-control-prev rv-small-ctr-lt" data-jcarouselcontrol="true"><i class="fa fa-chevron-left"></i></a>
+                            <a href="# " class="rv-control-next rv-small-ctr-gt" data-jcarouselcontrol="true"><i class="fa fa-chevron-right"></i></a>
+
+
+                            <div class="canvas-right "></div>
                         </div>
 
                     </div>
                 </div>
             </div>
-        </div>
-        <!--small banners-->
-        <div class="container ">
-            <div class="row hidden-xs visible-lg visible-md visible-sm small-banners-lg">
-                <div class="col-lg-3 col-md-3 col-sm-3">
-                    <a href=""><img class="border1px-rd2-img-gray margin-10-top img-responsive" width="100%"
-                                    src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/banner-small-1.jpg"
-                                    alt=""></a>
-                </div>
-                <div class="col-lg-3 col-md-3 col-sm-3">
-                    <a href=""><img class="border1px-rd2-img-gray margin-10-top img-responsive" width="100%"
-                                    src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/banner-small-2.jpg"
-                                    alt=""></a>
-                </div>
-                <div class="col-lg-3 col-md-3 col-sm-3">
-                    <a href=""><img class="border1px-rd2-img-gray margin-10-top img-responsive" width="100%"
-                                    src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/banner-small-3.jpg"
-                                    alt=""></a>
-                </div>
-                <div class="col-lg-3 col-md-3 col-sm-3">
-                    <a href=""><img class="border1px-rd2-img-gray margin-10-top img-responsive" width="100%"
-                                    src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/banner-small-4.jpg"
-                                    alt=""></a>
-                </div>
-            </div>
-            <div class="row visible-xs">
-                <div class="col-xs-6 col-sm-6 col-md-6">
-                    <a href=""><img class="border1px-rd2-img-gray margin-10-top img-responsive" width="100%"
-                                    src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/banner-small-1.jpg"
-                                    alt=""></a>
-                </div>
-                <div class="col-xs-6 col-sm-6 col-md-6">
-                    <a href=""><img class="border1px-rd2-img-gray margin-10-top img-responsive" width="100%"
-                                    src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/banner-small-2.jpg"
-                                    alt=""></a>
-                </div>
-            </div>
-            <div class="row visible-xs hidden-md hidden-sm">
-                <div class="col-xs-6 col-sm-6 col-md-6">
-                    <a href=""><img class="border1px-rd2-img-gray margin-10-top img-responsive" width="100%"
-                                    src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/banner-small-3.jpg"
-                                    alt=""></a>
-                </div>
-                <div class="col-xs-6 col-sm-6 col-md-6">
-                    <a href=""><img class="border1px-rd2-img-gray margin-10-top img-responsive" width="100%"
-                                    src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/banner-small-4.jpg"
-                                    alt=""></a>
-                </div>
-            </div>
-        </div>
-    </div>
+        </section>
 
-<!--inspiracje-->
-    <div class="white-wrapper border1px-rd2-img-gray noborder-lft-rgt">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 talcen">
-                    <div class="inspiration-strips"></div>
-                    <h2 class="insp-h">inspiracje</h2>
-                </div>
-            </div>
-
-            <div class="jcarousel-wrapper listComics">
-                <div class="canvas-left"></div>
-                <div class="jcarousel" data-jcarousel="true">
-                    <ul style="left: 0px; top: 0px;">
-                        <li class="col-sm-3">
-                            <a href="#" class="productItem-wrapper">
-                                <img src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/insp-1.jpg"
-                                     alt="...">
-                                <span class="insp-carousel-title-bold">lady in the bushes</span>
-                                <span class="insp-carousel-title-gray">Drugi wiersz opisu</span>
-                                <span class="insp-carousel-seemore">zobacz &gt;</span>
-                            </a>
-                        </li>
-                        <li class="col-sm-3">
-                            <a href="#" class="productItem-wrapper">
-                                <img src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/insp-2.jpg"
-                                     alt="...">
-
-                                <span class="insp-carousel-title-bold">lady in the bushes</span>
-                                <span class="insp-carousel-title-gray">Drugi wiersz opisu</span>
-                                <span class="insp-carousel-seemore">zobacz &gt;</span>
-                            </a>
-                        </li>
-                        <li class="col-sm-3">
-                            <a href="#" class="productItem-wrapper" data-json="c_01">
-
-                                <img src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/insp-3.jpg"
-                                     alt="...">
-                                <span class="insp-carousel-title-bold">lady in the bushes</span>
-                                <span class="insp-carousel-title-gray">Drugi wiersz opisu</span>
-                                <span class="insp-carousel-seemore">zobacz &gt;</span>
-                            </a>
-                        </li>
-                        <li class="col-sm-3">
-                            <a href="#" class="productItem-wrapper" data-json="c_02">
-
-                                <img src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/insp-1.jpg"
-                                     alt="...">
-                                <span class="insp-carousel-title-bold">lady in the bushes</span>
-                                <span class="insp-carousel-title-gray">Drugi wiersz opisu</span>
-                                <span class="insp-carousel-seemore">zobacz &gt;</span>
-                            </a>
-                        </li>
-                        <li class="col-sm-3">
-                            <a href="#" class="productItem-wrapper">
-
-                                <img src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/insp-1.jpg"
-                                     alt="...">
-                                <span class="insp-carousel-title-bold">lady in the bushes</span>
-                                <span class="insp-carousel-title-gray">Drugi wiersz opisu</span>
-                                <span class="insp-carousel-seemore">zobacz &gt;</span>
-                            </a>
-                        </li>
-                        <li class="col-sm-3">
-                            <a href="#" class="productItem-wrapper">
-
-                                <img src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/insp-1.jpg"
-                                     alt="...">
-                                <span class="insp-carousel-title-bold">lady in the bushes</span>
-                                <span class="insp-carousel-title-gray">Drugi wiersz opisu</span>
-                                <span class="insp-carousel-seemore">zobacz &gt;</span>
-                            </a>
-                        </li>
-                        <li class="col-sm-3">
-                            <a href="#" class="productItem-wrapper">
-
-                                <img src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/insp-1.jpg"
-                                     alt="...">
-                                <span class="insp-carousel-title-bold">lady in the bushes</span>
-                                <span class="insp-carousel-title-gray">Drugi wiersz opisu</span>
-                                <span class="insp-carousel-seemore">zobacz &gt;</span>
-                            </a>
-                        </li>
-                        <li class="col-sm-3">
-                            <a href="#" class="productItem-wrapper">
-
-                                <img src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/insp-1.jpg"
-                                     alt="...">
-                                <span class="insp-carousel-title-bold">lady in the bushes</span>
-                                <span class="insp-carousel-title-gray">Drugi wiersz opisu</span>
-                                <span class="insp-carousel-seemore">zobacz &gt;</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-
-                <a href="#" class="jcarousel-control-prev" data-jcarouselcontrol="true"></a>
-                <a href="#" class="jcarousel-control-next" data-jcarouselcontrol="true"></a>
-
-                <div class="canvas-right"></div>
-            </div>
-
-        </div>
-    </div>
-
-<!--    popular-->
-    <div class="content-wrapper">
-        <div class="container popular-shops">
-            <h3>najpopularniejsze marki</h3>
-            <ul class="pop-shop-lst">
-                <li><a href="#"><span class="pop-shop-img-wr"><img
-                                src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/ck-logo-small.jpg"
-                                alt=""></span><span>Calvin Klein &gt;</span></a></li>
-                <li><a href="#"><span class="pop-shop-img-wr"><img
-                                src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/ck-logo-small.jpg"
-                                alt=""></span><span>Calvin Klein &gt;</span></a></li>
-                <li><a href="#"><span class="pop-shop-img-wr"><img
-                                src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/ck-logo-small.jpg"
-                                alt=""></span><span>Calvin Klein &gt;</span></a></li>
-            </ul>
-            <ul class="pop-shop-lst">
-                <li><a href="#"><span class="pop-shop-img-wr"><img
-                                src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/ck-logo-small.jpg"
-                                alt=""></span><span>Calvin Klein &gt;</span></a></li>
-                <li><a href="#"><span class="pop-shop-img-wr"><img
-                                src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/ck-logo-small.jpg"
-                                alt="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/ck-logo-small.jpg"></span><span>Calvin Klein &gt;</span></a>
-                </li>
-                <li><a href="#"><span class="pop-shop-img-wr"><img
-                                src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/ck-logo-small.jpg"
-                                alt="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/ck-logo-small.jpg"></span><span>Calvin Klein &gt;</span></a>
-                </li>
-            </ul>
-            <ul class="pop-shop-lst">
-                <li><a href="#"><span class="pop-shop-img-wr"><img
-                                src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/ck-logo-small.jpg"
-                                alt="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/ck-logo-small.jpg"></span><span>Calvin Klein &gt;</span></a>
-                </li>
-                <li><a href="#"><span class="pop-shop-img-wr"><img
-                                src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/ck-logo-small.jpg"
-                                alt="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/ck-logo-small.jpg"></span><span>Calvin Klein &gt;</span></a>
-                </li>
-                <li><a href="#"><span class="pop-shop-img-wr"><img
-                                src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/ck-logo-small.jpg"
-                                alt="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/ck-logo-small.jpg"></span><span>Calvin Klein &gt;</span></a>
-                </li>
-            </ul>
-            <ul class="pop-shop-lst ">
-                <li><a href="#"><span class="pop-shop-img-wr"><img
-                                src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/ck-logo-small.jpg"
-                                alt="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/ck-logo-small.jpg"></span><span>Calvin Klein &gt;</span></a>
-                </li>
-                <li><a href="#"><span class="pop-shop-img-wr"><img
-                                src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/ck-logo-small.jpg"
-                                alt="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/ck-logo-small.jpg"></span><span>Calvin Klein &gt;</span></a>
-                </li>
-                <li><a href="#"><span class="pop-shop-img-wr"><img
-                                src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/ck-logo-small.jpg"
-                                alt="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/ck-logo-small.jpg"></span><span>Calvin Klein &gt;</span></a>
-                </li>
-            </ul>
-            <ul class="pop-shop-lst">
-                <li><a href="#"><span class="pop-shop-img-wr"><img
-                                src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/ck-logo-small.jpg"
-                                alt="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/ck-logo-small.jpg"></span><span>Calvin Klein &gt;</span></a>
-                </li>
-                <li><a href="#"><span class="pop-shop-img-wr"><img
-                                src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/ck-logo-small.jpg"
-                                alt="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/ck-logo-small.jpg"></span><span>Calvin Klein &gt;</span></a>
-                </li>
-                <li><a href="#"><span class="pop-shop-img-wr"><img
-                                src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/ck-logo-small.jpg"
-                                alt="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/ck-logo-small.jpg"></span><span>Calvin Klein &gt;</span></a>
-                </li>
-            </ul>
-            <ul class="pop-shop-lst">
-                <li><a href="#"><span class="pop-shop-img-wr"><img
-                                src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/ck-logo-small.jpg"
-                                alt="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/ck-logo-small.jpg"></span><span>Calvin Klein &gt;</span></a>
-                </li>
-                <li><a href="#"><span class="pop-shop-img-wr"><img
-                                src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/ck-logo-small.jpg"
-                                alt="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/ck-logo-small.jpg"></span><span>Calvin Klein &gt;</span></a>
-                </li>
-                <li><a href="#"><span class="pop-shop-img-wr"><img
-                                src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/ck-logo-small.jpg"
-                                alt="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/ck-logo-small.jpg"></span><span>Calvin Klein &gt;</span></a>
-                </li>
-            </ul>
-            <ul class="pop-shop-lst ">
-                <li><a href="#"><span class="pop-shop-img-wr"><img
-                                src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/ck-logo-small.jpg"
-                                alt="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/ck-logo-small.jpg"></span><span>Calvin Klein &gt;</span></a>
-                </li>
-                <li><a href="#"><span class="pop-shop-img-wr"><img
-                                src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/ck-logo-small.jpg"
-                                alt="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/ck-logo-small.jpg"></span><span>Calvin Klein &gt;</span></a>
-                </li>
-                <li><a href="#"><span class="pop-shop-img-wr"><img
-                                src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/ck-logo-small.jpg"
-                                alt="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/ck-logo-small.jpg"></span><span>Calvin Klein &gt;</span></a>
-                </li>
-            </ul>
-        </div>
-        <a class="pop-shop-seemore" href="">zobacz więcej marek</a>
-    </div>
+    </section>
 
 
-<!--    ostatnio ogladane-->
-    <div class="white-wrapper ">
-        <div class="container last-seen">
-            <h3>ostatnio oglądane:</h3>
 
-            <div class="jcarousel-wrapper listComics">
-                <div class="canvas-left"></div>
-                <div class="jcarousel last-seen" data-jcarousel="true">
-                    <ul class="last-seen-list" style="left: 0px; top: 0px;">
-                        <li class="col-sm-2">
-                            <a href="#" class="productItem-wrapper">
-                                <img
-                                    src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/last-seen-1.jpg"
-                                    alt="..." class="border1px-rd2-img-gray">
-                                <span>ZARA krótki płaszcz z guzikami</span>
-                            </a>
-                        </li>
-                        <li class="col-sm-2">
-                            <a href="#" class="productItem-wrapper">
-                                <img
-                                    src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/last-seen-2.jpg"
-                                    alt="..." class="border1px-rd2-img-gray">
-                                <span>Zara krótki płaszcz z guzikami</span>
-                            </a>
-                        </li>
-                        <li class="col-sm-2">
-                            <a href="#" class="productItem-wrapper">
-                                <img
-                                    src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/last-seen-1.jpg"
-                                    alt="..." class="border1px-rd2-img-gray">
-                                <span>Zara krótki płaszcz z guzikami</span>
-                            </a>
-                        </li>
-                        <li class="col-sm-2">
-                            <a href="#" class="productItem-wrapper">
-                                <img
-                                    src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/last-seen-2.jpg"
-                                    alt="..." class="border1px-rd2-img-gray">
-                                <span>Zara krótki płaszcz z guzikami</span>
-                            </a>
-                        </li>
-                        <li class="col-sm-2">
-                            <a href="#" class="productItem-wrapper">
-                                <img
-                                    src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/last-seen-1.jpg"
-                                    alt="..." class="border1px-rd2-img-gray">
-                                <span>Zara krótki płaszcz z guzikami</span>
-                            </a>
-                        </li>
-                        <li class="col-sm-2">
-                            <a href="#" class="productItem-wrapper">
-                                <img
-                                    src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/last-seen-2.jpg"
-                                    alt="..." class="border1px-rd2-img-gray">
-                                <span>Zara krótki płaszcz z guzikami</span>
-                            </a>
-                        </li>
-                        <li class="col-sm-2">
-                            <a href="#" class="productItem-wrapper">
-                                <img
-                                    src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/last-seen-1.jpg"
-                                    alt="..." class="border1px-rd2-img-gray">
-                                <span>Zara krótki płaszcz z guzikami</span>
-                            </a>
-                        </li>
-                        <li class="col-sm-2">
-                            <a href="#" class="productItem-wrapper">
-                                <img
-                                    src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/last-seen-2.jpg"
-                                    alt="..." class="border1px-rd2-img-gray">
-                                <span>Zara krótki płaszcz z guzikami</span>
-                            </a>
-                        </li>
-                        <li class="col-sm-2">
-                            <a href="#" class="productItem-wrapper">
-                                <img
-                                    src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/last-seen-1.jpg"
-                                    alt="..." class="border1px-rd2-img-gray">
-                                <span>Zara krótki płaszcz z guzikami</span>
-                            </a>
-                        </li>
-                        <li class="col-sm-2">
-                            <a href="#" class="productItem-wrapper">
-                                <img
-                                    src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/last-seen-2.jpg"
-                                    alt="..." class="border1px-rd2-img-gray">
-                                <span>Zara krótki płaszcz z guzikami</span>
-                            </a>
-                        </li>
-                        <li class="col-sm-2">
-                            <a href="#" class="productItem-wrapper">
-                                <img
-                                    src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/last-seen-1.jpg"
-                                    alt="..." class="border1px-rd2-img-gray">
-                                <span>Zara krótki płaszcz z guzikami</span>
-                            </a>
-                        </li>
-                        <li class="col-sm-2">
-                            <a href="#" class="productItem-wrapper">
-                                <img
-                                    src="http://modago.cindy.orba.pl/skin/frontend/modago/default/images/last-seen-2.jpg"
-                                    alt="..." class="border1px-rd2-img-gray">
-                                <span>Zara krótki płaszcz z guzikami</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-
-                <a href="#" class="jcarousel-control-prev carousel-small-ctr-lt" data-jcarouselcontrol="true"></a>
-                <a href="#" class="jcarousel-control-next carousel-small-ctr-gt" data-jcarouselcontrol="true"></a>
-
-                <div class="canvas-right"></div>
-            </div>
-
-        </div>
-    </div>
-    <!--    --><?php //echo $this->getChildHtml('footer') ?>
-    <!--    --><?php //echo $this->getChildHtml('global_cookie_notice') ?>
-    <!--    --><?php //echo $this->getChildHtml('before_body_end') ?>
+        <?php echo $this->getChildHtml('footer') ?>
+        <?php echo $this->getChildHtml('global_cookie_notice') ?>
+        <?php echo $this->getChildHtml('before_body_end') ?>
 
 
     <?php echo $this->getAbsoluteFooter() ?>
 
 </div>
+
+<script type="text/javascript">
+    jQuery(document).ready(function($){
+
+
+
+    });
+</script>
+<?php echo $this->getChildHtml('aside.header.sliding'); ?>
 </body>
 </html>

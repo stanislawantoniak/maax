@@ -1,0 +1,116 @@
+#filter_size {
+     
+      label {
+        width:38px;
+        height:38px;
+        display:inline-block;
+        position:relative;
+        cursor:pointer;
+        margin-left:12px;
+        margin-bottom:12px;
+        &:nth-child(3n+1) {
+          margin-left: 0;
+        }
+        span {
+          width:38px;
+          height:38px;
+          border:1px solid #afafaf;
+          text-align:center;
+          line-height: 38px;
+          font-size:14px;
+          color:#313131;
+          display:inline-block;
+          position:absolute;
+          top:0px;
+          left:0px;
+          background:#fff;
+        }
+         input[type="checkbox"]:checked + span  {
+            background:#000;
+            border-color:#000;
+            color:#fff;
+        }
+      }
+    }
+#filter_manufacturer {
+      input[type="text"] {
+        padding:0px;
+        float:left;
+        height:23px;
+        width:83%;
+        border:1px solid #d6d6d6;
+        &:focus {
+          outline:none;
+        }
+      }
+      input[type="image"] {
+        height:23px;
+        margin-left: 2px;
+        outline:none;
+      }
+    }
+#filter_price {
+      .form-horizontal {
+        &+.form-horizontal {
+           margin-left: 5px;
+        }
+        input {
+          width:30%;
+          margin:0 5px;
+          &[type="text"] {
+            padding:0px;
+            margin:0px 5px;
+            text-align: center;
+          }
+        }
+        label {
+          font-weight: normal
+        }
+        [type="image"] {
+          width:34px;
+          height:19px;
+        }
+      }
+      #od_do {
+        padding-left:15px;
+        .form-horizontal {
+          width:62px;
+          float:left;
+        }
+        .form-action {
+          margin-bottom: 5px;
+        }
+      }
+    }
+#filter_color {
+      label {
+        display:inline-block;
+        width:34px;
+        height:34px;
+        margin:5px 7px;
+        position:relative;
+        &:nth-child(3n+1) {
+          margin-left: 0;
+        }
+        > span {
+          display:inline-block;
+          width:33px;
+          height:33px;
+          padding:3px;
+          position:absolute;
+          background:#fff;
+          top:0px;
+          left:0px;
+          @include border-radius(5px);
+          span {
+            display:inline-block;
+            width:27px;
+            height:27px;
+            border:1px solid #afafaf;
+          }
+        }
+        [type="checkbox"]:checked + span {
+          background:#404040;
+        }
+      }
+    }

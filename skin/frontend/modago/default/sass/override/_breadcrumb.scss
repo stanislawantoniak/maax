@@ -1,0 +1,27 @@
+ol.breadcrumb {
+	background:none;
+	padding:0px 0px 0px;
+	margin:0px;
+	li {
+		font-size: 11px;
+		&:not(:first-child):before {
+			content: "\f105";
+			font-family: FontAwesome;
+			width: 32px;
+			font-size: 11px;
+			display: inline-block;
+			text-align: right;
+			margin-right: 10px;
+			color:#000;
+		}
+		a:link,
+		a:visited {
+			color:#000;
+			
+		}
+		&.active {
+			color:#000;
+
+		}
+	}
+}

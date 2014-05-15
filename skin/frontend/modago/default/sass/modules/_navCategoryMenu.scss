@@ -1,0 +1,33 @@
+#navCategory {
+	background:#fff;
+	padding:15px 0;
+	margin-top:4px;
+	h3 {
+		margin:0px;
+		padding:10px 0 10px 5px;
+		float:left;
+		text-transform: uppercase;
+		font-size: 18px;
+	}
+	.backToCategory {
+		float:right;
+		padding:10px 5px 10px 0px;
+		text-transform: uppercase;
+		font-size: 12px;
+		line-height: 34px;
+	}
+	#nav_category_mobile {
+		clear:both;
+		> li {
+			display:block;
+		    > a:link,
+		    > a:visited {
+		    border-top:1px solid #dedce1;
+		    position:relative;
+		    line-height: 29px;
+			display:block;
+			padding-left: 25px !important;
+		    }
+		}
+	}
+}
