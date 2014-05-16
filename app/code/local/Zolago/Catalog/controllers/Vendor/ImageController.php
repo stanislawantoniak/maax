@@ -73,7 +73,7 @@ class Zolago_Catalog_Vendor_ImageController
                     $mapper = $this->_prepareMapper();
                     $mapper->setFile($file);
                     $count = $mapper->mapByFile();
-                    $this->_getSession()->addSuccess(Mage::helper('zolagocatalog')->__('Operation successful. Processed images: ').$count);
+                    $this->_getSession()->addSuccess(sprintf(Mage::helper('zolagocatalog')->__('Operation successful. Processed images: %s '),$count));
                 }
                 }
             }

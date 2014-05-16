@@ -17,6 +17,12 @@ class Zolago_Catalog_Block_Vendor_Image_Grid extends Mage_Adminhtml_Block_Widget
         $vendor = Mage::getSingleton('udropship/session')->getVendor();
         $vendorId = ($vendor)? ($vendor->getId()):0;
         $collection->addAttributeToFilter("udropship_vendor", $vendorId);
+        $session =  Mage::getSingleton('core/session');
+        $pidList = $session->getMappedEntities();
+        if (!empty($pidList)) {
+            $collection->addAttributeToFilter("entity_id", array('in'=>implode(',',$pidList)));
+            $session->unsMappedEntities();
+        }
         $collection->addAttributeToSelect('skuv');
         $collection->addAttributeToSelect('name');
         $collection->addAttributeToSelect('gallery_to_check');
