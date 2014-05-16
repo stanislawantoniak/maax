@@ -65,8 +65,8 @@
                 <block type="zolagomodago/page_header_leftmenu" name="page.header.leftmenu" template="page/html/header/left.menu.phtml" />
                 <block type="core/template" name="page.header.search" template="catalogsearch/header.mini.phtml" />
                 <block type="zolagomodago/page_header_rightmenu" name="page.header.right.menu" template="page/html/header/right.menu.phtml">
-                    <block type="zolagomodago/checkout_cart" name="page.header.right.cartdropdown" template="checkout/cart/dropdown.phtml" />
                 </block>
+                <block type="zolagomodago/checkout_cart" name="page.header.right.cartdropdown" template="checkout/cart/dropdown.phtml" />
                 <block type="zolagomodago/page_header_bottommenu" name="page.header.bottom.menu" template="page/html/header/bottom.menu.phtml" />
             </block>
         </reference>
