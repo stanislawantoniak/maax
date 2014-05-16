@@ -90,7 +90,7 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 		
 		if($poItem->getDiscountPercent()){
 			$originTax = $taxAmount;
-			$taxAmount = ($poItem->getDiscountPercent()/100)*$taxAmount;
+			$taxAmount *= (1-$poItem->getDiscountPercent()/100);
 			$hiddenTaxAmount = $originTax - $taxAmount;
 		}
 		// Stock item 
@@ -184,6 +184,7 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 			"udpo_qty_reverted"				=> null,
 			"udpo_qty_used"					=> $poItem->getQty()
 		);
+		
 		$item->addData($data);
 		$item->setOrder($order);
 		$order->addItem($item);
