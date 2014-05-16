@@ -73,6 +73,14 @@
 					</zolagopo>
 				</observers>
 			</sales_quote_address_save_before>
+			<zolagopo_shipment_cancel_after>
+				<observers>
+					<zolagopo>
+						<model>zolagopo/observer</model>
+						<method>shipmentCancelAfter</method>
+					</zolagopo>
+				</observers>
+			</zolagopo_shipment_cancel_after>
 		</events>
 		<template>
             <email>

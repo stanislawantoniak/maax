@@ -132,6 +132,13 @@ var App = function($) {
 			}
 		})
 		
+		//===== handle esc  =====//	
+		$(window).on("keyup", function(e){
+			if(e.keyCode==27){
+				$(".modal").modal("hide");
+				$.noty.closeAll();
+			}
+		})
 		
 		//===== datepicker btn =====//	
 		if($.datepicker){
@@ -160,6 +167,9 @@ var App = function($) {
 			// Handle project switcher width
 			handleProjectSwitcherWidth();
 		}
+
+
+
 
 		// handles responsive breakpoints.
 		$(window).setBreakpoints({

@@ -4,6 +4,17 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 	protected $_condJoined = false;
 	
 	/**
+	 * @param type $shipment
+	 * @param type $save
+	 * @return type
+	 */
+    public function cancelShipment($shipment, $save){
+		Mage::dispatchEvent("zolagopo_shipment_cancel_before", array("shipment"=>$shipment));
+		$return = parent::cancelShipment($shipment, $save);
+		Mage::dispatchEvent("zolagopo_shipment_cancel_after", array("shipment"=>$shipment));
+		return $return;
+	}
+	/**
 	 * @param Unirgy_DropshipPo_Model_Mysql4_Po_Collection|array $collection
 	 * @param Unirgy_Dropship_Model_Vendor | int $vendor
 	 * @return boolean

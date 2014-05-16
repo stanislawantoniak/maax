@@ -420,7 +420,8 @@
 								</dd>
 								<dt><?php echo $_hlp->__("Dispatch ref.");?>:</dt>
 								<dd>
-									<?php if($_aggregated = $_po->getAggregated()):?>
+									<?php $_aggregated= $_po->getAggregated();?>
+									<?php if($_aggregated->getId()):?>
 										<?php echo $this->escapeHtml($_aggregated->getAggregatedName());?>
 									<?php else:?>
 										<?php echo $_hlp->__("N/A");?>

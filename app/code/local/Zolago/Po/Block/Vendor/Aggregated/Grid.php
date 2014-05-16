@@ -53,7 +53,7 @@ class Zolago_Po_Block_Vendor_Aggregated_Grid extends Mage_Adminhtml_Block_Widget
 				'index'		=> 'aggregated_id',
 				'link_action'=> "*/*/download",
 				'link_param'=> 'id',
-				'link_label'=> 'Edit',
+				'link_label'=> 'Download',
 				'link_target'=>'_self',
                 'filter'    => false,
                 'sortable'  => false
