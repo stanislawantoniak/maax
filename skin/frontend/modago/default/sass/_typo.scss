@@ -652,6 +652,7 @@ a.view_basket {
 			@include sprite-dimensions($icoMapMobile, search_ico_mobile);
 			top: -2px;
 			position: relative;
+			cursor:pointer;
 		}
     }
 }

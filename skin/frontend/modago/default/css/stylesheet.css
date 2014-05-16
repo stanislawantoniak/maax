@@ -674,7 +674,8 @@ a.view_basket {
     height: 20px;
     width: 22px;
     top: -2px;
-    position: relative; } }
+    position: relative;
+    cursor: pointer; } }
 
 /* line 1, ../sass/override/_global.scss */
 .container-fluid {
@@ -804,7 +805,7 @@ ol.breadcrumb li.active {
 @media screen and (max-width: 991px) {
   /* line 22, ../sass/modules/_dropdown-search-basket.scss */
   #dropdown-search {
-    top: 40px !important; } }
+    top: 45px !important; } }
 /* line 30, ../sass/modules/_dropdown-search-basket.scss */
 #dropdown-search .searchDropdown {
   width: 320px;
@@ -1116,115 +1117,133 @@ ol.breadcrumb li.active {
 /* CLONE MENU */
 /* line 4, ../sass/modules/_clone-menu.scss */
 #clone_submenu {
-  background: #f8f7f5; }
-/* line 6, ../sass/modules/_clone-menu.scss */
+  background: #f8f7f5;
+  box-shadow: 0 2px 0 #ebebeb; }
+/* line 7, ../sass/modules/_clone-menu.scss */
 #clone_submenu .view-all-category {
-  font-weight: 12px;
+  font-size: 14px;
   text-transform: lowercase;
   color: #7b6c35;
   text-decoration: underline;
   font-style: italic;
   float: right;
   margin-right: 50px !important; }
-/* line 14, ../sass/modules/_clone-menu.scss */
+/* line 15, ../sass/modules/_clone-menu.scss */
 #clone_submenu .view-all-category i {
   margin-left: 5px; }
-/* line 18, ../sass/modules/_clone-menu.scss */
+/* line 19, ../sass/modules/_clone-menu.scss */
 #clone_submenu ul {
   box-shadow: none;
   border: none;
   background: transparent;
   list-style: none; }
-/* line 23, ../sass/modules/_clone-menu.scss */
+/* line 24, ../sass/modules/_clone-menu.scss */
 #clone_submenu ul a {
   color: #656565;
   text-transform: uppercase; }
-/* line 30, ../sass/modules/_clone-menu.scss */
+/* line 31, ../sass/modules/_clone-menu.scss */
 #clone_submenu ul dl dt {
   color: #000; }
-/* line 33, ../sass/modules/_clone-menu.scss */
+/* line 34, ../sass/modules/_clone-menu.scss */
 #clone_submenu ul dl dt a:link, #clone_submenu ul dl dt a:visited {
   font-size: 14px;
   font-weight: 900;
   color: #000; }
-/* line 38, ../sass/modules/_clone-menu.scss */
+/* line 39, ../sass/modules/_clone-menu.scss */
 #clone_submenu ul dl dt a:hover {
   text-decoration: underline; }
-/* line 42, ../sass/modules/_clone-menu.scss */
+/* line 43, ../sass/modules/_clone-menu.scss */
 #clone_submenu ul dl dd {
   color: #000; }
-/* line 45, ../sass/modules/_clone-menu.scss */
+/* line 46, ../sass/modules/_clone-menu.scss */
 #clone_submenu ul dl dd a:link, #clone_submenu ul dl dd a:visited {
   font-size: 12px;
   font-weight: 400;
   color: #000; }
-/* line 50, ../sass/modules/_clone-menu.scss */
+/* line 51, ../sass/modules/_clone-menu.scss */
 #clone_submenu ul dl dd a:hover {
   text-decoration: underline; }
-/* line 54, ../sass/modules/_clone-menu.scss */
+/* line 55, ../sass/modules/_clone-menu.scss */
 #clone_submenu ul dl dd a[data-description="ReadMore"] {
   font-style: italic;
   text-transform: lowercase;
   font-size: 12px;
   text-decoration: underline; }
-/* line 59, ../sass/modules/_clone-menu.scss */
+/* line 60, ../sass/modules/_clone-menu.scss */
 #clone_submenu ul dl dd a[data-description="ReadMore"] i {
   margin-left: 5px; }
 
 /* CLONE MENU */
-/* line 76, ../sass/modules/_clone-menu.scss */
+/* line 77, ../sass/modules/_clone-menu.scss */
 #clone_submenu .col-left {
   width: 78.2312925170068%;
   float: left; }
 @media screen and (max-width: 1199px) {
-  /* line 76, ../sass/modules/_clone-menu.scss */
+  /* line 77, ../sass/modules/_clone-menu.scss */
   #clone_submenu .col-left {
     width: 72.231293%; } }
 @media screen and (max-width: 991px) {
-  /* line 76, ../sass/modules/_clone-menu.scss */
+  /* line 77, ../sass/modules/_clone-menu.scss */
   #clone_submenu .col-left {
     width: 65.231293%; } }
-/* line 86, ../sass/modules/_clone-menu.scss */
+/* line 87, ../sass/modules/_clone-menu.scss */
 #clone_submenu .col-righ {
   width: 22.02380952380952%;
   float: left; }
-/* line 89, ../sass/modules/_clone-menu.scss */
+/* line 90, ../sass/modules/_clone-menu.scss */
 #clone_submenu .col-righ img {
   width: 100%;
   height: auto; }
-/* line 93, ../sass/modules/_clone-menu.scss */
+/* line 94, ../sass/modules/_clone-menu.scss */
 #clone_submenu ul {
   position: relative !important;
   margin: 0px;
   padding: 47px 0; }
-/* line 98, ../sass/modules/_clone-menu.scss */
+/* line 99, ../sass/modules/_clone-menu.scss */
 #clone_submenu ul > li > a {
   padding: 6px 15px; }
-/* line 102, ../sass/modules/_clone-menu.scss */
+/* line 103, ../sass/modules/_clone-menu.scss */
 #clone_submenu ul dl {
   width: 175px; }
 @media screen and (max-width: 991px) {
-  /* line 102, ../sass/modules/_clone-menu.scss */
+  /* line 103, ../sass/modules/_clone-menu.scss */
   #clone_submenu ul dl {
     width: 155px; } }
-/* line 107, ../sass/modules/_clone-menu.scss */
+/* line 108, ../sass/modules/_clone-menu.scss */
 #clone_submenu ul dl dt {
   margin-bottom: 10px; }
-/* line 110, ../sass/modules/_clone-menu.scss */
+/* line 111, ../sass/modules/_clone-menu.scss */
 #clone_submenu ul dl dd {
   margin-bottom: 10px; }
-/* line 116, ../sass/modules/_clone-menu.scss */
+/* line 117, ../sass/modules/_clone-menu.scss */
 #clone_submenu ul .closeSubMenu {
-  background: #fff;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  -ms-border-radius: 3px;
-  -o-border-radius: 3px;
-  border-radius: 3px;
-  padding: 3px 10px;
-  color: #000;
   float: right;
-  margin-right: 15px; }
+  margin-right: 15px;
+  border-radius: 0;
+  cursor: pointer;
+  font-style: normal;
+  overflow: hidden;
+  outline: none;
+  text-align: center;
+  border: none;
+  background: url("../images/sprites/sprite_clear.png") no-repeat 0 -1px !important;
+  display: inline-block;
+  width: 93px;
+  height: 26px;
+  line-height: 25px;
+  color: #4f4f4f !important;
+  text-transform: uppercase;
+  font-size: 12px; }
+/* line 139, ../sass/modules/_clone-menu.scss */
+#clone_submenu ul .closeSubMenu:hover {
+  background-position: 0 -30px !important;
+  color: #fff !important;
+  outline: none !important; }
+/* line 145, ../sass/modules/_clone-menu.scss */
+#clone_submenu ul .closeSubMenu:active, #clone_submenu ul .closeSubMenu:focus {
+  background-position: 0 -58px;
+  outline: none;
+  color: #c6a662; }
 
 /* line 1, ../sass/modules/_sliding-menu.scss */
 html, body, #sb-site, .sb-site, .sb-slidebar, #fb-site, .fb-site, .fb-slidebar {
@@ -2870,7 +2889,7 @@ html.fb-static .fb-slidebar, .fb-slidebar.fb-static {
 /* line 1, ../sass/modules/_navCategoryMenu.scss */
 #navCategory {
   background: #fff;
-  padding: 15px 0;
+  padding: 0px 0;
   margin-top: 4px; }
 /* line 5, ../sass/modules/_navCategoryMenu.scss */
 #navCategory h3 {
@@ -2878,27 +2897,28 @@ html.fb-static .fb-slidebar, .fb-slidebar.fb-static {
   padding: 10px 0 10px 5px;
   float: left;
   text-transform: uppercase;
-  font-size: 18px; }
-/* line 12, ../sass/modules/_navCategoryMenu.scss */
+  font-size: 18px;
+  font-weight: 900; }
+/* line 13, ../sass/modules/_navCategoryMenu.scss */
 #navCategory .backToCategory {
   float: right;
   padding: 10px 5px 10px 0px;
   text-transform: uppercase;
   font-size: 12px;
   line-height: 34px; }
-/* line 19, ../sass/modules/_navCategoryMenu.scss */
+/* line 20, ../sass/modules/_navCategoryMenu.scss */
 #navCategory #nav_category_mobile {
   clear: both; }
-/* line 21, ../sass/modules/_navCategoryMenu.scss */
+/* line 22, ../sass/modules/_navCategoryMenu.scss */
 #navCategory #nav_category_mobile > li {
   display: block; }
-/* line 24, ../sass/modules/_navCategoryMenu.scss */
+/* line 25, ../sass/modules/_navCategoryMenu.scss */
 #navCategory #nav_category_mobile > li > a:link, #navCategory #nav_category_mobile > li > a:visited {
   border-top: 1px solid #dedce1;
   position: relative;
   line-height: 29px;
   display: block;
-  padding-left: 25px !important; }
+  padding-left: 30px !important; }
 
 /* line 7, ../sass/dimensions/_global.scss */
 #header {
@@ -2928,7 +2948,7 @@ html.fb-static .fb-slidebar, .fb-slidebar.fb-static {
 /* line 35, ../sass/dimensions/_global.scss */
 #content {
   padding-top: 15px;
-  padding-bottom: 55px; }
+  padding-bottom: 25px; }
 
 /* line 39, ../sass/dimensions/_global.scss */
 #bottom {
