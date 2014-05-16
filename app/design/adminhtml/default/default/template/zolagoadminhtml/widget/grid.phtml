@@ -52,6 +52,12 @@ $numColumns = sizeof($this->getColumns());
 				</div>
 			</div>
 			<div class="col-md-6 form-inline">
+				
+				<?php if($this->getMainButtonsHtml()):?>
+				<div class="pull-right">
+						<?php echo $this->getMainButtonsHtml() ?>
+				</div>
+				<?php endif;?>
 				<div class="pull-right">
 					<?php $_curPage  = $this->getCollection()->getCurPage() ?>
 					<?php $_lastPage = $this->getCollection()->getLastPageNumber() ?>
@@ -107,15 +113,6 @@ $numColumns = sizeof($this->getColumns());
 			</div>
 		</div>
     <?php endif; ?>
-	<?php if($this->getMainButtonsHtml()):?>
-		<div class="next-row">
-			<div class="col-md-4">
-				<div class="pull-right">
-					<?php echo $this->getMainButtonsHtml() ?>
-				</div>
-			</div>
-		</div>
-	<?php endif;?>
 <?php endif; ?>
 <?php if($this->getMassactionBlock()->isAvailable()): ?>
 	<?php echo $this->getMassactionBlockHtml() ?>

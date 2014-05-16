@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Po>
-            <version>0.0.8</version>
+            <version>0.0.11</version>
         </Zolago_Po>
     </modules>
     <global>
@@ -42,6 +42,11 @@
 			</zolagopo>
 			<zolagopo_resource>
 				<class>Zolago_Po_Model_Resource</class>
+				<entities>
+					<aggregated>
+						<table>zolago_po_aggregated</table>
+					</aggregated>
+				</entities>
 			</zolagopo_resource>
 			<udpo>
 				<rewrite>

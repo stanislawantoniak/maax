@@ -20,7 +20,17 @@ class Zolago_Po_Model_Resource_Po_Collection
 		return new Zend_Db_Expr("COUNT(shipment.entity_id)>0");
 	}
 	
-	
+	public function joinAggregatedNames() {
+		$select = $this->getSelect();
+		
+		$select->joinLeft(
+				array("aggregated"=>$this->getTable('zolagopo/aggregated')), 
+				"aggregated.aggregated_id=main_table.aggregated_id",
+			    array("aggregated_name")
+		);
+		
+		return $this;
+	}
 
 	/**
 	 * @param string $customerName

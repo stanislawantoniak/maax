@@ -64,4 +64,12 @@
 			</action>
 		</reference>    
 	</udpo_vendor_udpoinfo>
+	
+	<udpo_vendor_aggregated_index>		
+		<update handle="bootstrap"/>
+		<reference name="content">			
+			<block name="vendor_aggregated" type="zolagopo/vendor_aggregated" template="zolagopo/vendor/aggregated.phtml"/>
+		</reference>
+    </udpo_vendor_aggregated_index>
+	
 </layout>

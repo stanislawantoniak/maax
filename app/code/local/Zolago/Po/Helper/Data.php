@@ -3,6 +3,63 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 {
 	protected $_condJoined = false;
 	
+	/**
+	 * @param Unirgy_DropshipPo_Model_Mysql4_Po_Collection|array $collection
+	 * @param Unirgy_Dropship_Model_Vendor | int $vendor
+	 * @return boolean
+	 * @throws Mage_Core_Exception
+	 */
+	public function createAggregated($collection, $vendor) {
+		
+		if($vendor instanceof Unirgy_Dropship_Model_Vendor){
+			$vendor = $vendor->getId();
+		}
+		
+		if(is_array($collection)){
+			$collection = Mage::getResourceModel('udpo/po_collection');
+			/* @var $collection Unirgy_DropshipPo_Model_Mysql4_Po_Collection */
+			$collection->addFieldToFilter("entity_id", array("in"=>$collection));
+		}
+		
+		if(!$collection->count()){
+			throw new Mage_Core_Exception(Mage::helper('zolagopo')->__("Specify 1 or more PO"));
+		}
+		
+		$poses = array();
+		$currentlyHas = array();
+		foreach($collection as $po){
+			if($po->getAggregatedId()){
+				$currentlyHas[] = $po->getIncrementId();
+			}
+			$poses[$po->getDefaultPosId()] = true;
+		}
+		$count = count($currentlyHas);
+		if($count){
+			throw new Mage_Core_Exception(Mage::helper('zolagopo')->__(
+					"Purchase Order%s: %s %s currently dispatch ref.", 
+					$count>1 ? "s" : "",
+					implode(",", $currentlyHas), 
+					$count>1 ? "have" : "has"
+			));
+		}
+		if(count($poses)!=1){
+			throw new Mage_Core_Exception(Mage::helper('zolagopo')->__("Purchase Order have different POSes"));
+		}
+		
+		$aggregated = Mage::getModel("zolagopo/aggregated");
+		$aggregated->setPosId(current($poses));
+		$aggregated->setVendorId($vendor);
+		$aggregated->generateName();
+		$aggregated->save();
+		
+		foreach($collection as $po){
+			$po->setAggregatedId($aggregated->getId());
+			$po->getResource()->saveAttribute($po, "aggregated_id");
+		}
+		
+		return true;
+	}
+	
 	public function setCondJoined($flag) {
 		$this->_condJoined = $flag;
 	}
