@@ -2,6 +2,8 @@
 
 class Zolago_Catalog_Block_Vendor_Image_Grid extends Mage_Adminhtml_Block_Widget_Grid
 {
+     // pager visible in footer
+     protected $pagerFooter = true;
      public function __construct() {
         parent::__construct();
         $this->setId('catalog_image_grid');
@@ -53,21 +55,23 @@ class Zolago_Catalog_Block_Vendor_Image_Grid extends Mage_Adminhtml_Block_Widget
 		$this->addColumn("name", array(
 			"type"		=>	"text",
 			"index"		=>	"name",
+			"width"     =>  "100px",
 			"header"	=>	Mage::helper("zolagocatalog")->__("Product name"),
 		));
 		$this->addColumn("gallery_to_check", array(
 			"type"		=>	"options",
+			'renderer'	=> Mage::getConfig()->getBlockClassName("zolagoadminhtml/widget_grid_column_renderer_options"),
 			"align"		=>  "center",
 			"index"		=>	"gallery_to_check",
 			"class"		=>  "form-controll",
 			"header"	=>	Mage::helper("zolagocatalog")->__("Gallery to check"),
 			"width"		=>	"20px",
+			"style"     => array('0'=>'','1'=>'background-color:#55cc55;color:white'),
 			"options"   => array('0'=>'Nie', '1'=>'Tak'),
 		));
 		$this->addColumn("gallery", array(
                 'header'    => Mage::helper('zolagocatalog')->__('Gallery'),
 				'renderer'	=> Mage::getConfig()->getBlockClassName("zolagoadminhtml/widget_grid_column_renderer_gallery"),
-                'width'     => '500px',
                 'type'      => 'gallery',
                 'filter'    => false,
                 'sortable'  => false

@@ -43,7 +43,9 @@ class Zolago_Catalog_Vendor_ImageController
     public function namemapAction() {
         $mapper = $this->_prepareMapper();
         $result = $mapper->mapByName();
-        echo json_encode($result);
+        $this->_getSession()->addSuccess(sprintf(Mage::helper('zolagocatalog')->__('Operation successful. Processed images: %s '),$result));
+        header('Location: '.Mage::getUrl("udprod/vendor_image/"));
+        exit();
     }
     public function csvmapAction() {
         if (!empty($_FILES['csv_file'])) {
