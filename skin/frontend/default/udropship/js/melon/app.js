@@ -70,7 +70,7 @@ var App = function($) {
 			noty({
 				text: self.data('text'),
 				type: self.data('type'),
-				modal: self.data('modal'),
+				modal: self.data('modal') || self.data('type') == 'confirm',
 				layout: self.data('layout'),
 				buttons: (self.data('type') != 'confirm') ? false : [
 					{

@@ -219,7 +219,7 @@ select.form-control {
 .widget-content.bottom-info {
   min-height: 146px;
 }
-.shipping-info .btn {
+.shipping-info .btn-primary {
   margin-top: 46px;
 }
 .shipping-info p {

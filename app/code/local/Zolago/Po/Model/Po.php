@@ -119,6 +119,18 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 		return $newModel;
 	}
 	
+	/**
+	 * @return Zolago_Po_Model_Aggregated
+	 */
+	public function getAggregated() {
+		if(!$this->hasData("aggregated")){
+			$aggregated = Mage::getModel("zolagopo/aggregated");
+			$aggregated->load($this->getAggregatedId());
+			$this->setData("aggregated", $aggregated);
+		}
+		return $this->getData("aggregated");
+	}
+	
 	public function setCommentsChanged($value) {
 		$this->_commentsChanged = $value;
 		return $this;
