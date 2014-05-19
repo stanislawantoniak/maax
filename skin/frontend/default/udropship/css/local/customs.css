@@ -148,6 +148,18 @@ select.form-control {
 .form-inline label {
   font-weight: normal;
 }
+.z-grid .form-inline .form-group {
+  display: inline-block;
+}
+.z-grid .text-holder {
+  display: inline-block;
+}
+.z-grid .main-buttons {
+  margin-left: 20px;
+}
+.z-grid .btn-search {
+  margin-left: 10px;
+}
 .z-grid hr {
   margin-top: 10px;
   margin-bottom: 10px;

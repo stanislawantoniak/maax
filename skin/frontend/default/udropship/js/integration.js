@@ -126,6 +126,9 @@ Zolago.gridIntegrator = function(gridObj){
 	});
 	buttons.each(function(el){
 		el.addClassName("btn");
+		if(el.hasClassName("task")){
+			el.addClassName("btn-primary btn-search");
+		}
 	});
 	if(mass){
 		mass.checkCheckboxes();
