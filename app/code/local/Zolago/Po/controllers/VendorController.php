@@ -138,7 +138,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 					}
 				}
 				$transaction->commit();
-				$this->_getSession()->addSuccess($hlp->__("%d order stock processed", $count));
+				$this->_getSession()->addSuccess($hlp->__("%d order processed", $count));
 			}catch(Mage_Core_Exception $e){
 				$transaction->rollBack();
 				$this->_getSession()->addError($e->getMessage());
