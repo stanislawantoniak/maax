@@ -67,6 +67,7 @@
 	
 	<udpo_vendor_aggregated_index>		
 		<update handle="bootstrap"/>
+		<update handle="noty"/>
 		<reference name="content">			
 			<block name="vendor_aggregated" type="zolagopo/vendor_aggregated" template="zolagopo/vendor/aggregated.phtml"/>
 		</reference>

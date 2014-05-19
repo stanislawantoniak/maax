@@ -61,7 +61,7 @@ class Zolago_Po_Block_Vendor_Aggregated_Grid extends Mage_Adminhtml_Block_Widget
 		
 		$this->addColumn("remove", array(
                 'header'    => Mage::helper('zolagopo')->__('Remove'),
-				'renderer'	=> Mage::getConfig()->getBlockClassName("zolagoadminhtml/widget_grid_column_renderer_link"),
+				'renderer'	=> Mage::getConfig()->getBlockClassName("zolagoadminhtml/widget_grid_column_renderer_confirmlink"),
                 'width'     => '50px',
                 'type'      => 'action',
 				'index'		=> 'aggregated_id',

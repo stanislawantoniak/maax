@@ -90,7 +90,7 @@ var App = function($) {
 		
 		
 		//===== Validation & notty =====//
-		if(window.noty){
+		if($.validator && window.noty){
 			$.validator.setDefaults({
 				invalidHandler: function(form, validator) {
 					var errors = validator.numberOfInvalids();
