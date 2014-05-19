@@ -32,6 +32,27 @@ class Zolago_Po_Vendor_AggregatedController
 	}
 	
 	/**
+ 	 * Confirm dispatch reference
+	 * @return void
+	 */
+	public function confirmAction() {
+		try{
+			$aggregated  = $this->_registerAggregated();
+			$aggregated->confirm(true);
+			$this->_getSession()->addSuccess(
+				Mage::helper("zolagopo")->__("Dispatch ref. confirmed")
+			);
+		}catch(Mage_Core_Exception $e){
+			$this->_getSession()->addError($e->getMessage());
+		}catch(Exception $e){
+			$this->_getSession()->addError(
+				Mage::helper("zolagopo")->__("Some error occure")
+			);
+			Mage::logException($e);
+		}
+		return $this->_redirectReferer();
+	}
+	/**
  	 * Remove dispatch reference
 	 * @return void
 	 */

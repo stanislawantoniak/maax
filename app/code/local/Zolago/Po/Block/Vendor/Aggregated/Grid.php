@@ -27,14 +27,25 @@ class Zolago_Po_Block_Vendor_Aggregated_Grid extends Mage_Adminhtml_Block_Widget
 			"index"		=>	"aggregated_name",
 			"class"		=>  "form-controll",
 			"header"	=>	Mage::helper("zolagopo")->__("Name"),
-			"width"		=>	"100px"
 		));
+		
 		$this->addColumn("name", array(
 			"type"		=>	"text",
 			"index"		=>	"name",
 			"class"		=>  "form-controll",
 			"header"	=>	Mage::helper("zolagopo")->__("POS"),
-			"width"		=>	"100px"
+		));
+		
+		$this->addColumn("status", array(
+			"type"		=>	"options",
+			"options"	=> array(
+				Zolago_Po_Model_Aggregated_Status::STATUS_CONFIRMED => $this->__("Confirmed"),
+				Zolago_Po_Model_Aggregated_Status::STATUS_NOT_CONFIRMED => $this->__("Not confirmed")
+			),
+			"index"		=>	"status",
+			"class"		=>  "form-controll",
+			"header"	=>	Mage::helper("zolagopo")->__("Status"),
+			"width"		=>	"150px"
 		));
 		
 		$this->addColumn("created_at", array(
@@ -42,7 +53,7 @@ class Zolago_Po_Block_Vendor_Aggregated_Grid extends Mage_Adminhtml_Block_Widget
 			"index"		=>	"created_at",
 			"align"		=>  "center",
 			"header"	=>	Mage::helper("zolagopo")->__("Created date"),
-			"width"		=>	"100px"
+			"width"		=>	"150px"
 		));
 		
 		$this->addColumn("download", array(
@@ -53,22 +64,39 @@ class Zolago_Po_Block_Vendor_Aggregated_Grid extends Mage_Adminhtml_Block_Widget
 				'index'		=> 'aggregated_id',
 				'link_action'=> "*/*/download",
 				'link_param'=> 'id',
-				'link_label'=> 'Download',
+				'link_label'=> $this->__('Download'),
 				'link_target'=>'_self',
+                'filter'    => false,
+                'sortable'  => false
+        ));
+		
+		$this->addColumn("confirm", array(
+                'header'    => Mage::helper('zolagopo')->__('Confirm send'),
+				'renderer'	=> Mage::getConfig()->getBlockClassName("zolagopo/vendor_aggregated_grid_column_renderer_confirmbutton"),
+                'width'     => '50px',
+                'type'      => 'action',
+				'index'		=> 'aggregated_id',
+				'icon'		=> 'icon-ok',
+				'width'		=> '50px',
+				'link_action'=> "*/*/confirm",
+				'link_param'=> 'id',
+				'link_label'=> $this->__('Confirm send'),
                 'filter'    => false,
                 'sortable'  => false
         ));
 		
 		$this->addColumn("remove", array(
                 'header'    => Mage::helper('zolagopo')->__('Remove'),
-				'renderer'	=> Mage::getConfig()->getBlockClassName("zolagoadminhtml/widget_grid_column_renderer_confirmlink"),
+				'renderer'	=> Mage::getConfig()->getBlockClassName("zolagoadminhtml/widget_grid_column_renderer_confirmbutton"),
                 'width'     => '50px',
                 'type'      => 'action',
+				'icon'		=> 'icon-ok',
+				'width'		=> '50px',
 				'index'		=> 'aggregated_id',
 				'link_action'=> "*/*/remove",
+				'icon'		=> 'icon-remove',
 				'link_param'=> 'id',
-				'link_label'=> 'Remove',
-				'link_target'=>'_self',
+				'link_label'=> $this->__('Remove'),
                 'filter'    => false,
                 'sortable'  => false
         ));
@@ -77,7 +105,13 @@ class Zolago_Po_Block_Vendor_Aggregated_Grid extends Mage_Adminhtml_Block_Widget
 	}
 	
 	
-
+	public function _addColumnFilterToCollection($column) {
+		if($column->getIndex()=="created_at"){
+			$this->getCollection()->addFieldToFilter("main_table.created_at", $column->getFilter()->getCondition());
+			return $this;
+		}
+		return parent::_addColumnFilterToCollection($column) ;
+	}
 	
 	public function getRowUrl($item) {
 		return null;

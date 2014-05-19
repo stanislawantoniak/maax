@@ -23,4 +23,38 @@ class Zolago_Po_Model_Aggregated extends Mage_Core_Model_Abstract
 		return $this->getData("pos");
 	}
 	
+	/**
+	 * @return Zolago_Po_Model_Resource_Po_Collection
+	 */
+	public function getPoCollection() {
+		$collection = Mage::getResourceModel("zolagopo/po_collection");
+		/* @var $collection Zolago_Po_Model_Resource_Po_Collection */
+		$collection->addFieldToFilter("aggregated_id", $this->getId());
+		return $collection;
+	}
+	
+	/**
+	 * @return \Zolago_Po_Model_Aggregated
+	 */
+	public function confirm() {
+		$this->getResource()->beginTransaction();
+		foreach($this->getPoCollection() as $po){
+			/* @var $po Zolago_Po_Model_Po */
+			$po->getStatusModel()->processConfirmSend($po);
+		}
+		$this->setStatus(Zolago_Po_Model_Aggregated_Status::STATUS_CONFIRMED);
+		$this->save();
+		$this->getResource()->commit();
+		return $this;
+	}
+	
+	
+	public function _beforeDelete() {
+		$this->getResource()->beginTransaction();
+		foreach($this->getPoCollection() as $po){
+			/* @var $po Zolago_Po_Model_Po */
+			$po->getStatusModel()->processCancelAggregated($po, true);
+		}
+		$this->getResource()->commit();
+	}
 }

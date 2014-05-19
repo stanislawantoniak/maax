@@ -241,11 +241,6 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
              'label'=> Mage::helper('zolagopo')->__('Direct realisation'),
              'url'  => $this->getUrl('*/*/massDirectRealisation')
         ));
-		
-//        $this->getMassactionBlock()->addItem('confirm_send', array(
-//             'label'=> Mage::helper('zolagopo')->__('Confirm send'),
-//             'url'  => $this->getUrl('*/*/massConfirmSend')
-//        ));
 
         return $this;
     }

@@ -13,7 +13,7 @@ class Zolago_Po_Block_Vendor_Po_Grid_Column_Renderer_Products
 					$this->escapeHtml($item['name']) . "<br/>" . 
 					"<small class=\"text-muted\">" . 
 						$this->__("SKU") . ": " . ($item['vendor_sku'] ? $item['vendor_sku'] : $item['sku']) . ", " . 
-						$this->__("Price") . ": " . Mage::helper('core')->currency($item['price_incl_tax'], true, false) .
+						$this->__("Price") . ": " . Mage::helper('core')->currency($item['price_incl_tax']*(1-$item['discount_percent']/100), true, false) .
 					"</small>" . "<br/>";
 			}
 			$return .= "</ul>";

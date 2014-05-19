@@ -26,6 +26,14 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 	 */
 	protected static $fullMenu;
 	
+	
+	/**
+	 * @return array
+	 */
+	public function getMenu() {
+		return array_intersect_key($this->getFullMenu(), array_flip($this->_sections));
+	}
+	
 	abstract function renderMenu(array $menu);
 
 	/**

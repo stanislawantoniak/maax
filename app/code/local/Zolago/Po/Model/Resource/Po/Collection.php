@@ -112,7 +112,9 @@ class Zolago_Po_Model_Resource_Po_Collection
 			$select = $this->_conn->select();
 			$select->from(
 					array("po_item"=>$this->getTable('udpo/po_item')), 
-					array("po_item.parent_id", "po_item.name", "po_item.vendor_sku", "po_item.sku", "po_item.qty", "po_item.price_incl_tax")
+					array("po_item.parent_id", "po_item.name", "po_item.vendor_sku", 
+						"po_item.sku", "po_item.discount_percent", "po_item.qty", 
+						"po_item.price_incl_tax")
 			);
 			$select->join(
 					array("product"=>$this->getTable('catalog/product')), 

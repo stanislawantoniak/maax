@@ -1,6 +1,6 @@
 <?php
 
-class Zolago_Adminhtml_Block_Widget_Grid_Column_Renderer_Confirmlink
+class Zolago_Adminhtml_Block_Widget_Grid_Column_Renderer_Confirmbutton
     extends Zolago_Adminhtml_Block_Widget_Grid_Column_Renderer_Link
 {
 	public function render(Varien_Object $row){
@@ -8,13 +8,16 @@ class Zolago_Adminhtml_Block_Widget_Grid_Column_Renderer_Confirmlink
 			$this->getColumn()->getConfirmText() : $this->__("Are you sure?");
 		$label = $this->getColumn()->getLinkLabel();
 		
-		return '<a class="btn-notification" '.
+		return '<button class="btn-notification btn-xs '.$this->getColumn()->getClass().'" '.
 			'data-placement="top" '.
 			'data-ok-url="'.$this->_getLink($row).'" '.
 			'data-layout="top" '.
 			'data-type="confirm" '.
 			'data-text="'.$this->escapeHtml($text).'" . '.
-			'data-modal="true" data-status="<?php echo $key;?>" ' . 
-			'href="#">' . $this->escapeHtml($label) . "</a>";
+			'data-modal="true">'. 
+				($this->getColumn()->getIcon() ? 
+				'<i class="'.$this->getColumn()->getIcon().'"></i> ' : '' ) . 
+				$this->escapeHtml($label) . 
+			'</button>';
 	}
 }

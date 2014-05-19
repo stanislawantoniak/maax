@@ -87,11 +87,6 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 						$notVaildPos['status'][] = $po;
 					}
 				break;
-				case self::ACTION_CONFIRM_SEND:
-					if(!$po->getStatusModel()->isConfirmSendAvailable($po)){
-						$notVaildPos['status'][] = $po;
-					}
-				break;
 				case self::ACTION_PRINT_AGGREGATED:
 					if(!$po->getStatusModel()->isPrintAggregatedAvailable($po)){
 						$notVaildPos['status'][] = $po;
@@ -127,9 +122,6 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 						switch ($action) {
 							case self::ACTION_CONFIRM_STOCK:
 								$po->getStatusModel()->processConfirmStock($po);
-							break;
-							case self::ACTION_CONFIRM_SEND:
-								$po->getStatusModel()->processConfirmSend($po);
 							break;
 							case self::ACTION_DIRECT_REALISATION:
 								$po->getStatusModel()->processDirectRealisation($po);
