@@ -1,4 +1,7 @@
 #view-current-filter {
+	@media (max-width: $screen-sm-min) { 
+	padding-bottom: 25px;
+	}
 	h1 {
 		text-transform: uppercase;
 		margin-bottom: 10px;
@@ -64,7 +67,7 @@
     	        @media (max-width: $screen-sm-min) { 
 	    			position: absolute;
 		        	right: 0px;
-		        	bottom: -17px;
+		        	bottom: 8px;
 	    		 }
 	        	
 	            a {
@@ -78,7 +81,7 @@
 	.actionViewFilter {
 		position:absolute;
 		left: -3px;
-		bottom: -15px;
+		bottom: 10px;
 	}
 	.backToCategory {
 	    position:absolute;

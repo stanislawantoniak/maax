@@ -1,6 +1,13 @@
 @import "../../vendor/bootstrap/variables";
 @import "media-queries";
 
+
+// NEW BREAKPOINT 
+
+//@screen-sxs:                 480px;
+//@screen-sxs-max:             @screen-sxs;
+//@screen-phone:               @screen-sxs-max;
+
 $global-image-path: "../images";
 // #{$global-image-path}
 
@@ -64,3 +71,4 @@ $bulletMap: sprite-map("sprites/bullet/*.png");
 $selectMap: sprite-map("sprites/select/*.png"); 
 $buttonMap: sprite-map("sprites/buttons/*.png");
 $arrowMap: sprite-map("sprites/arrow/*.png"); 
+$socialMap: sprite-map("sprites/social/*.png"); 

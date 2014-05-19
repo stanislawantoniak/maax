@@ -13,6 +13,11 @@
 			border-color:#4f4f4f;
 		}
 	}
+	#sidebar {
+		.sbHolder{
+			width:149px;
+		}
+	}
 	.sbHolder:focus .sbSelector{
 		
 	}
@@ -129,5 +134,11 @@
 		}
 		.sbSub{
 		padding-left: 17px;
+		}
+	}
+
+	#sidebar {
+		.sbOptions{
+			width:149px;
 		}
 	}

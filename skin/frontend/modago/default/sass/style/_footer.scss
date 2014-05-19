@@ -14,7 +14,7 @@
     overflow: hidden;
    a:link,
    a:visited {
-   	 color:#ffffff;
+     color:#ffffff;
      text-transform: uppercase;
    }
    .footer-logo {
@@ -34,7 +34,7 @@
         @media (min-width: $screen-lg-min) { margin-left: 17.683673%;  }
         li {
             display: inline-block;
-            margin: 0 15px;
+            margin: 0 10px;
              a:link,
              a:visited {
                 font-size: 12px;
@@ -64,41 +64,61 @@
     float:left;
 }
 
-.connect-twitter, .connect-fb, .connect-rss, .connect-gplus, .connect-pin {
-    height: 30px;
-    background: url("../images/ico-social.png") no-repeat;
-    display: inline-block;
-    margin-left: 15px;
-}
-.connect-twitter {
-    background-position: 0px 5px;
-    width: 27px;
-    margin-left:0px;
-}
-.connect-fb {
-    background-position: -29px 5px;
-    width: 14px;
-}
-.connect-rss {
-    background-position: -44px 5px;
-    width: 24px;
-}
-.connect-gplus {
-    background-position: -70px 5px;
-    width: 23px;
 
+#footer {
+    [class^=ico_] {
+        background:$socialMap;
+        @include inline-block;
+         margin-left: 15px;
+    }
+    .ico_social_twitter {
+        @include sprite($socialMap, ico_social_twitter);    
+        @include sprite-dimensions($socialMap, ico_social_twitter);
+        &:hover {
+            @include sprite($socialMap, ico_social_twitter);
+        }
+    }
+    .ico_social_fb {
+        @include sprite($socialMap, ico_social_fb);    
+        @include sprite-dimensions($socialMap, ico_social_fb);
+        &:hover {
+            @include sprite($socialMap, ico_social_fb_hover);
+        }
+    }
+    
+    .ico_social_instagram {
+        @include sprite($socialMap, ico_social_instagram);    
+        @include sprite-dimensions($socialMap, ico_social_instagram);
+        &:hover {
+            @include sprite($socialMap, ico_social_instagram);
+        }
+    }
+    .ico_social_gplus {
+        @include sprite($socialMap, ico_social_gplus);    
+        @include sprite-dimensions($socialMap, ico_social_gplus);
+        &:hover {
+            @include sprite($socialMap, ico_social_gplus);
+        }
+    }
+    .ico_social_pinterest {
+        @include sprite($socialMap, ico_social_pinterest);    
+        @include sprite-dimensions($socialMap, ico_social_pinterest);
+        &:hover {
+            @include sprite($socialMap, ico_social_pinterest);
+        }
+    }
 }
-.connect-pin {
-    background-position: -96px 5px;
-    width: 25px;
-}
+
+
+
+
 .footer-gray-wr {
     background-color: #2e2e2e;
     border-top: 1px solid #242424;
     line-height: 32px;
     padding:10px 0 ;
     a {
-    	color:#828282;
+        color:#828282;
     }
 }
 .footer-gray-wr>div>div>div {
@@ -132,7 +152,7 @@
     width: 37px;
 }
 .footer-pay-visa {
-	margin-left:0px;
+    margin-left:0px;
 }
 
 
@@ -172,11 +192,11 @@
            
             >ul {
                 list-style-type: none;
-				margin: 0px 0 0 0;
-				padding: 0px;
-				text-align: left;
-				position: relative;
-				top:-30px;
+                margin: 0px 0 0 0;
+                padding: 0px;
+                text-align: left;
+                position: relative;
+                top:-30px;
                 >li {
                     text-transform: uppercase;
                     margin:0px;
@@ -211,18 +231,18 @@
         }
         .footer-gray-wr {
 
-        	.footer-utils {
-        		overflow:hidden;
-        		padding:0 10px;
+            .footer-utils {
+                overflow:hidden;
+                padding:0 10px;
                 //float:right;
-        		a {
-        			float:left;
-        			&+a {
-        				float:right;
+                a {
+                    float:left;
+                    &+a {
+                        float:right;
                         margin-left:20px;
-        			}
-        		}
-        	}
+                    }
+                }
+            }
         }
         .copy {
             text-align: center;

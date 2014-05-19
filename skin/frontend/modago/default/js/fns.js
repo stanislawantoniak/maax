@@ -1,6 +1,13 @@
 jQuery.noConflict();
 (function( $ ) {
   $(function() {
+
+
+
+
+
+
+
     var rwd_banners = $("#rwd-banners .rwd-carousel");
  
       rwd_banners.rwdCarousel({
@@ -101,6 +108,8 @@ jQuery.noConflict();
           deleteCurrentFilter();
           clearFilter();
           closeBlockFilter();
+          ratySidebar();
+          $(".select-styled,.select-styled select").selectbox();
        });
         
      } else {
@@ -110,6 +119,8 @@ jQuery.noConflict();
           filterColor();
           deleteCurrentFilter();
           clearFilter();
+          ratySidebar();
+          $(".select-styled,.select-styled select").selectbox();
         });
         
      }
@@ -122,6 +133,8 @@ jQuery.noConflict();
               deleteCurrentFilter();
               clearFilter();
               closeBlockFilter();
+              ratySidebar();
+              $(".select-styled,.select-styled select").selectbox();
             });
             if ($('body').hasClass('noscroll')) {
               var screenWidth = $(window).width();
@@ -141,6 +154,8 @@ jQuery.noConflict();
               filterColor();
               deleteCurrentFilter();
               clearFilter();
+              ratySidebar();
+              $(".select-styled,.select-styled select").selectbox();
             });
             $('#sb-site').removeClass('open');
             $('.fb-slidebar').removeClass('open');
@@ -245,17 +260,24 @@ $(document).mouseup(function (e){
     //}).data('masonry');
 if ($('body').hasClass('node-type-list')) {
     imagesLoaded( document.querySelector('#items-product'), function( instance ) {
-      console.log('all images are loaded');
+      //console.log('all images are loaded');
+      var $containerContent = $('.jsMasonryContent');
+          $containerContent.masonry({
+            //columnWidth: 100,
+            //gutter: 5,
+            itemSelector: '.item',
+            isResizable: true
+          });
     });
 
 
-    var $container = $('.jsMasonryContent').masonry();
-    // layout Masonry again after all images have loaded
+   /* var $container = $('.jsMasonryContent').masonry();
     $container.imagesLoaded( function() {
       $container.masonry({
         itemSelector: '.box'
+
       });
-    });
+    });*/
 
 };
 
@@ -276,6 +298,8 @@ deleteCurrentFilter();
 clearFilter();
 
 linkCloseMenu();
+
+ratySidebar()
 
 //actionViewFilter();
 //toogleFilterBlock();
@@ -319,11 +343,7 @@ $('.sb-toggle-submenu').off('click').on('click', function() {
 
 
 
-var $containerContent = $('.jsMasonryContent');
-    $containerContent.masonry({
-      //columnWidth: 100,
-      itemSelector: '.item'
-    });
+
 
 function closeBlockFilter(){
   $('.noscroll').on('click',  function(event) {
@@ -847,6 +867,23 @@ $('.scrollTo').on('click', function(event) {
 
           
 });
+
+
+function ratySidebar() {
+  $('#note_client .note').raty({
+    path: 'skin/frontend/modago/default/images/raty',
+    starOff : 'star-off-custom.png',
+    starOn  : 'star-on-custom.png',
+    size   : 17,
+    readOnly: true,
+    number: function() {
+      return $(this).attr('data-number');
+    },
+    score: function() {
+      return $(this).attr('data-score');
+    }
+  });
+}
 
 
 

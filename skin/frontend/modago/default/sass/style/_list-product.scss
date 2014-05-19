@@ -1,8 +1,10 @@
 #items-product {
 	.item {
+        .box_listing_product {
 		border:1px solid #ebebeb;
 		background: #fff;
 		//height:550px;
+        }
 	}
 }
 .box_listing_product {
@@ -42,26 +44,18 @@
             margin-right:10px;
         }
         .like {
-            position:absolute;
-            right:8px;
-            top:6px;
+            
             font-size:11px;
             font-family:$fontBlack;
             color:#000;
-            padding-right:30px;
+           
             &:before {
                 content: ' ';
-                display:block;
-                width:21px;
-                height:16px;
-                position:absolute;
-                right:0px;
-                top:0px;
-                background:url('../images/heart.png')
+                background:url('../images/heart.png');
             }
             &.liked {
                 &:before {
-                    background:url('../images/heart-like.png')
+                    background:url('../images/heart-like.png');
                 }
             }
         }

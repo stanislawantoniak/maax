@@ -114,7 +114,8 @@
            
 
         }
-        .closeSubMenu { 
+        a.closeSubMenu:link,
+        a.closeSubMenu:visited { 
 //            background:#fff;
 //            @include border-radius(3px);
 //            padding:3px 10px;
@@ -136,17 +137,18 @@
             color:#4f4f4f !important;
             text-transform: uppercase;
             font-size:12px;
+            
             &:hover {
                 background-position:0 -30px !important;
                 color:#fff !important;
                 outline:none !important;
             }
-            &:active,
-            &:focus {
-                background-position:0 -58px;
+            &:active {
+                background-position:0 -58px !important;
                 outline:none;
-                color:#c6a662;
+                color:#c6a662 !important;
             }
+            
         }
     //END UL
     }
