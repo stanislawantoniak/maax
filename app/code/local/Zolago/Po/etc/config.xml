@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Po>
-            <version>0.0.8</version>
+            <version>0.0.12</version>
         </Zolago_Po>
     </modules>
     <global>
@@ -42,6 +42,11 @@
 			</zolagopo>
 			<zolagopo_resource>
 				<class>Zolago_Po_Model_Resource</class>
+				<entities>
+					<aggregated>
+						<table>zolago_po_aggregated</table>
+					</aggregated>
+				</entities>
 			</zolagopo_resource>
 			<udpo>
 				<rewrite>
@@ -68,6 +73,14 @@
 					</zolagopo>
 				</observers>
 			</sales_quote_address_save_before>
+			<zolagopo_shipment_cancel_after>
+				<observers>
+					<zolagopo>
+						<model>zolagopo/observer</model>
+						<method>shipmentCancelAfter</method>
+					</zolagopo>
+				</observers>
+			</zolagopo_shipment_cancel_after>
 		</events>
 		<template>
             <email>

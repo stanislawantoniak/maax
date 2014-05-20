@@ -26,7 +26,6 @@ class Zolago_Dhl_DhlController extends Mage_Core_Controller_Front_Action
 					$dhlFile = Mage::helper('zolagodhl')->getIsDhlFileAvailable($trackNumber);
 				} else {
 					$result['message'] = $dhlWebCall['message'];
-
 				}
 			}
 		}
@@ -34,9 +33,12 @@ class Zolago_Dhl_DhlController extends Mage_Core_Controller_Front_Action
 		if ($dhlFile) {
 			$result['status']	= true;
 			$result['file']		= $trackNumber;
+			$result['url']		= Mage::getUrl('zolagodhl/dhl/lpDownload', array("dhlFileName"=>$trackNumber));
+			unset($result['message']);
 		}
 		
 		$resultJSON = Mage::helper('core')->jsonEncode($result);
+		$this->getResponse()->setHeader('Content-type', 'application/json');
 		$this->getResponse()->setBody($resultJSON);
 	}
 	

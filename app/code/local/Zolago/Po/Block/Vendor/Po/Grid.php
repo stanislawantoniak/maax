@@ -18,6 +18,7 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 		$collection->addOrderData();
 		$collection->addProductNames();
 		$collection->addHasShipment();
+		$collection->joinAggregatedNames();
 		
 		$this->_applayExternalFilters($collection);
 		
@@ -114,10 +115,10 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 			"index"		=>	"customer_fullname",
 			"header"	=>	Mage::helper("zolagopo")->__("Customer"),
 		));
-		$this->addColumn("product_names", array(
+		$this->addColumn("order_items", array(
 			"type"		=>	"text",
 			"width"		=>	"400px",
-			"index"		=>	"product_names",
+			"index"		=>	"order_items",
 			"header"	=>	Mage::helper("zolagopo")->__("Products"),
 			"renderer"	=>	Mage::getConfig()->
 				getBlockClassName("zolagopo/vendor_po_grid_column_renderer_products"),
@@ -168,6 +169,7 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 		
 		$this->addColumn("aggregated", array(
 			"type"		=>	"text",
+			"index"		=> "aggregated_name",
 			"header"	=>	Mage::helper("zolagopo")->__("Dispatch ref."),
 			"width"		=> "50px"
 		));
@@ -225,14 +227,14 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
         $this->getMassactionBlock()->setFormFieldName('po');
 		$this->getMassactionBlock()->setTemplate("zolagoadminhtml/widget/grid/massaction.phtml");
 		
-//		$this->getMassactionBlock()->addItem('shipping_letters', array(
-//             'label'=> Mage::helper('zolagopo')->__('Shipping label'),
-//             'url'  => $this->getUrl('*/*/shipping_letters')
-//        ));
-//        $this->getMassactionBlock()->addItem('print_aggregated', array(
-//             'label'=> Mage::helper('zolagopo')->__('Dispatch ref.'),
-//             'url'  => $this->getUrl('*/*/print_aggregated')
-//        ));
+        $this->getMassactionBlock()->addItem('start_packing', array(
+             'label'=> Mage::helper('zolagopo')->__('Start packing'),
+             'url'  => $this->getUrl('*/*/massStartPacking')
+        ));
+        $this->getMassactionBlock()->addItem('print_aggregated', array(
+             'label'=> Mage::helper('zolagopo')->__('Dispatch ref.'),
+             'url'  => $this->getUrl('*/*/massPrintAggregated')
+        ));
 		
         $this->getMassactionBlock()->addItem('confirm_stock', array(
              'label'=> Mage::helper('zolagopo')->__('Confirm stock'),
@@ -243,11 +245,6 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
              'label'=> Mage::helper('zolagopo')->__('Direct realisation'),
              'url'  => $this->getUrl('*/*/massDirectRealisation')
         ));
-		
-//        $this->getMassactionBlock()->addItem('confirm_send', array(
-//             'label'=> Mage::helper('zolagopo')->__('Confirm send'),
-//             'url'  => $this->getUrl('*/*/massConfirmSend')
-//        ));
 
         return $this;
     }

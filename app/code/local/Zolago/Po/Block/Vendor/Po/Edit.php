@@ -6,6 +6,24 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 		parent::__construct($args);
 		$this->_prepareShipments();
 	}
+	
+	/**
+	 * 
+	 * @param type $trackign
+	 * @param type $shipment
+	 * @return string
+	 */
+	public function getLetterUrl(Mage_Sales_Model_Order_Shipment_Track $tracking, Zolago_Po_Model_Po $po) {
+		return $this->getUrl('zolagodhl/dhl/lp', array(
+			'trackId'		=> $tracking->getId(), 
+			'trackNumber'	=> $tracking->getNumber(), 
+			'vId'			=> $po->getVendor()->getId(), 
+			'posId'			=> $po->getDefaultPosId(),
+			'udpoId'		=> $po->getId(), 
+			'_secure'		=>true
+		));
+	}
+	
 	/**
 	 * @return Zolago_Po_Model_Po
 	 */

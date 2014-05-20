@@ -378,8 +378,39 @@
 								<dt><?php echo $_hlp->__("Tracking no.");?>:</dt>
 								<dd>
 									<?php if($_tracking && $_tracking->getId()):?>
-										<?php if($this->isShippignLetterFile($_tracking->getTrackNumber())):?>
-											<?php echo $this->escapeHtml($_tracking->getTrackNumber());?> link
+										<?php if($_letterUrl=$this->getLetterUrl($_tracking, $_po)):?>
+											<a id="download-letter" data-loading-text="<?php echo $this->__("Loading...");?>" class="btn btn-link btn-xs" href="<?php echo $_letterUrl;?>">
+												<i class="icon-arrow-down"></i>
+												<?php echo $this->escapeHtml($_tracking->getTrackNumber());?>
+											</a>
+											<script type="text/javascript">
+											jQuery(function($){
+												$("#download-letter").click(function(){
+													var el = $(this);
+													el.button("loading");
+													$.post(el.attr("href"), function(response){
+														if(response.status){
+															//console.log(response.url);
+															document.location.replace(response.url);
+														}else{
+															noty({
+																text: response.message,
+																type: 'error',
+																timeout: 2000
+															});
+														}
+													}).fail(function(){
+														noty({
+															text: Translator.translate("Other error contact admin"),
+															type: 'error'
+														});
+													}).always(function(){
+														el.button('reset')
+													});
+													return false;
+												});
+											});
+										</script>
 										<?php else:?>
 											<?php echo $this->escapeHtml($_tracking->getTrackNumber());?>
 										<?php endif;?>
@@ -389,7 +420,12 @@
 								</dd>
 								<dt><?php echo $_hlp->__("Dispatch ref.");?>:</dt>
 								<dd>
-									<?php echo $_hlp->__("N/A");?> [dev]
+									<?php $_aggregated= $_po->getAggregated();?>
+									<?php if($_aggregated->getId()):?>
+										<?php echo $this->escapeHtml($_aggregated->getAggregatedName());?>
+									<?php else:?>
+										<?php echo $_hlp->__("N/A");?>
+									<?php endif;?>
 								</dd>
 							</dl>
 						</div>
