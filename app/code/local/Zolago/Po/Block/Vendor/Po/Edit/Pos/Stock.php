@@ -2,8 +2,9 @@
 class Zolago_Po_Block_Vendor_Po_Edit_Pos_Stock
 	extends Mage_Core_Block_Template
 {
-	const CALSS_DANGER = "danger";
-	const CALSS_SUCCESS = "success";
+	const CALSS_OUT_OF_STOCK = "danger";
+	const CALSS_IN_STOCK = "success";
+	const CALSS_NOT_AVAILABLE = "default";
 	
 	const DEFUALT_MINIMAL_QTY = 1;
 	
@@ -34,10 +35,23 @@ class Zolago_Po_Block_Vendor_Po_Edit_Pos_Stock
 	 * @return string
 	 */
 	public function getLabelClass($qty) {
-		if($qty>$this->getMinimalStock()){
-			return self::CALSS_SUCCESS;
+		if(is_null($qty)){
+			return self::CALSS_NOT_AVAILABLE;
+		}elseif($qty>$this->getMinimalStock()){
+			return self::CALSS_IN_STOCK;
 		}
-		return self::CALSS_DANGER;
+		return self::CALSS_OUT_OF_STOCK;
+	}
+	
+	/**
+	 * @param int|null $qty
+	 * @return string
+	 */
+	public function getQtyText($qty) {
+		if(is_null($qty)){
+			return $this->__("N/A");
+		}
+		return $qty;
 	}
 	
 	/**
@@ -50,30 +64,24 @@ class Zolago_Po_Block_Vendor_Po_Edit_Pos_Stock
 	
 	/**
 	 * @param Unirgy_DropshipPo_Model_Po_Item $item
-	 * @return int
+	 * @return int | null
 	 */
-	public function getPosQty(Unirgy_DropshipPo_Model_Po_Item $item) {
-		return $this->_getPosQty($item, $this->getPos());
+	public function getPosQty(Zolago_Po_Model_Po_Item $item){
+		$pos = $this->getPo()->getPos();
+		if($pos && $pos->getId() && $item->getVendorSku()){
+			return $this->_getPosQty($pos, $item->getVendorSku());
+		}
+		
+		return null;
 	}
 	
 	/**
-	 * @param Unirgy_DropshipPo_Model_Po_Item $item
 	 * @param Zolago_Pos_Model_Pos $pos
+	 * @param string $vsku
 	 * @return int
 	 */
-	protected function _getPosQty(Unirgy_DropshipPo_Model_Po_Item $item, 
-		Zolago_Pos_Model_Pos $pos) {
-		/**
-		 * @todo implement
-		 */
-		return $this->_getRandomStock();
+	protected function _getPosQty(Zolago_Pos_Model_Pos $pos, $vsku) {
+		return Mage::helper("zolagoconverter")->getQtyForPos($pos,$vsku);
 	}
 	
-	/**
-	 * @return int
-	 */
-	protected function _getRandomStock() {
-		return rand(0,10);
-	}
-
 }
