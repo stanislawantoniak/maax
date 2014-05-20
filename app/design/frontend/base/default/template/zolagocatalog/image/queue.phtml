@@ -1,15 +1,31 @@
 <div class="widget">
- 	<div class="input-group align-left form-group" style="margin:5px 0px 5px 0px">
+    <br/>
+    <table>
+    <tr>
+    <td>
 			<div class="input-group-btn">&nbsp;
 			<button class="btn btn-primary" id="add_button"><?php echo Mage::helper('zolagocatalog')->__('Upload queue');?></button>&nbsp;
+    </td>
+    <td>
 			<button class="btn btn-primary" id="delete_button"><?php echo Mage::helper('zolagocatalog')->__('Delete');?></button>&nbsp;
+    </td>
+    <td>
 			<a class="btn-notification btn btn-primary" href="#dialog_by_name" data-text="<?php echo Mage::helper('zolagocatalog')->__('Are you sure?');?>" data-placement="top" 
 			    data-layout="top" data-type="confirm" data-modal="true" data-ok-url="<?php echo Mage::getUrl('udprod/vendor_image/namemap'); ?>"><?php echo Mage::helper('zolagocatalog')->__('Map by name');?></a>&nbsp;
+    </td>
+    <td>
 			<a class="btn btn-primary" href="#dialog_by_csv" data-toggle="modal"><?php echo Mage::helper('zolagocatalog')->__('Map by CSV');?></a>&nbsp;
 			<button class="btn btn-default"><?php echo Mage::helper('zolagocatalog')->__('Help');?> <i class="icon-question-sign"></i></button>&nbsp;
+    </td>
+    <td>
+        <div class="input-group">
 			<input type="text" class="form-control input-width-medium" id="input_search"/>
-			<button class="btn btn-primary" id="search_button" type="button"><i class="icon-search"></i></button></div>
-	</div>
+			<button class="btn btn-primary input-group-btn" id="search_button" type="button"><i class="icon-search"></i></button></div>
+        </div>
+    </td>
+    </tr>
+    </table>
+    <br/>
 <div style="clear:both"></div>
 	<div id="uploader_wrapper" class="widget-content"><div id="uploader"></div><div id="elf"></div></div>
 <div id="dialog_by_csv" class="modal fade" style="display:none" aria-hidden="true" title="Map by CSV">
