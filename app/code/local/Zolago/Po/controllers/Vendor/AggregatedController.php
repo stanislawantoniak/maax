@@ -30,7 +30,13 @@ class Zolago_Po_Vendor_AggregatedController
 		Mage::register('as_frontend', true);// Tell block class to use regular URL's
 		$this->_renderPage(array('default', 'formkey', 'adminhtml_head'), 'zolagopo_aggregated');
 	}
-	
+	public function pdfAction() {
+		header('Content-type: application/pdf');
+		$pdf = Mage::getModel('zolagopo/aggregated_pdf');
+		$doc = $pdf->getPdf();
+		echo $doc->render();
+		exit();
+	}	
 	/**
  	 * Confirm dispatch reference
 	 * @return void
