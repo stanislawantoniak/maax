@@ -18,6 +18,7 @@
 	<udprod_vendor_image_queue>
 		<update handle="udropship_vendor" />
 		<update handle="bootstrap" />
+		<update handle="noty" />
 		<reference name="head">
 		    <action method="addItem"><type>skin_js</type><name>plugins/plupload/jquery-ui/js/jquery-ui-1.10.4.min.js</name></action>
 		    <action method="addItem"><type>skin_js</type><name>plugins/plupload/plupload.full.min.js</name></action> 
@@ -31,9 +32,13 @@
 		</reference>
 	</udprod_vendor_image_queue>
 	<udprod_vendor_image_index>
-        <remove name="dashboard"/>		
 		<update handle="bootstrap" />
+		<update handle="noty" />
 		<reference name="head">
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/validation/jquery.validate.min.js</name>
+			</action>
 		    <action method="addItem"><type>skin_js</type><name>plugins/plupload/plupload.full.min.js</name></action>
 		    <action method="addItem"><type>skin_js</type><name>plugins/elfinder/js/elfinder.full.js</name></action>
 		    <action method="addItem"><type>skin_js</type><name>plugins/elfinder/js/jquery-ui.min.js</name></action>
