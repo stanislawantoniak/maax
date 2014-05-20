@@ -159,7 +159,7 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 		
 		$this->addColumn("has_shipment", array(
 			"type"		=>	"options",
-			"header"	=>	Mage::helper("zolagopo")->__("Shipping letter"),
+			"header"	=>	Mage::helper("zolagopo")->__("Shipping label"),
 			"index"		=> "has_shipment",
 			"align"		=> "center",
 			"options"	=>	Mage::getSingleton("adminhtml/system_config_source_yesno")->toArray(),
@@ -168,7 +168,7 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 		
 		$this->addColumn("aggregated", array(
 			"type"		=>	"text",
-			"header"	=>	Mage::helper("zolagopo")->__("Aggregated"),
+			"header"	=>	Mage::helper("zolagopo")->__("Dispatch ref."),
 			"width"		=> "50px"
 		));
 		
@@ -226,11 +226,11 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 		$this->getMassactionBlock()->setTemplate("zolagoadminhtml/widget/grid/massaction.phtml");
 		
 //		$this->getMassactionBlock()->addItem('shipping_letters', array(
-//             'label'=> Mage::helper('zolagopo')->__('Generate shipping letters'),
+//             'label'=> Mage::helper('zolagopo')->__('Shipping label'),
 //             'url'  => $this->getUrl('*/*/shipping_letters')
 //        ));
 //        $this->getMassactionBlock()->addItem('print_aggregated', array(
-//             'label'=> Mage::helper('zolagopo')->__('Print aggregated'),
+//             'label'=> Mage::helper('zolagopo')->__('Dispatch ref.'),
 //             'url'  => $this->getUrl('*/*/print_aggregated')
 //        ));
 		
