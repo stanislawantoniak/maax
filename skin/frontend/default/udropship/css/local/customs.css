@@ -268,3 +268,6 @@ table.foot-empty-cells tfoot td:empty {
 .clearb {
     clear: both;
 }
+#control-battons td {
+    display: inline-block;
+}

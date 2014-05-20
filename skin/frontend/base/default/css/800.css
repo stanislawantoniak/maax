@@ -22,6 +22,6 @@
     padding-bottom: 5px;
 }
 
-.widget .input-group {
-    margin-left: 15px;
+#control-battons .input-group {
+    margin: 5px 8px;
 }
