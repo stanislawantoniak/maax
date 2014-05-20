@@ -155,11 +155,14 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 		return $base . "-" . ($maxIncrement+1);
 	}
 	
+	/**
+	 * @return Zolago_Pos_Model_Pos
+	 */
 	public function getPos() {
-		if($this->getDefaultPosId()){
-			return Mage::getModel("zolagopos/pos")->load($this->getDefaultPosId());
+		if(!$this->hasData("pos")){
+			$this->setData("pos", Mage::getModel("zolagopos/pos")->load($this->getDefaultPosId()));
 		}
-		return null;
+		return $this->getData("pos");
 	}
 	
 	public function getSubtotalInclTax() {

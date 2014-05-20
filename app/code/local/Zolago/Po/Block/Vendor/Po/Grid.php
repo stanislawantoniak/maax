@@ -227,6 +227,10 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
         $this->getMassactionBlock()->setFormFieldName('po');
 		$this->getMassactionBlock()->setTemplate("zolagoadminhtml/widget/grid/massaction.phtml");
 		
+        $this->getMassactionBlock()->addItem('start_packing', array(
+             'label'=> Mage::helper('zolagopo')->__('Start packing'),
+             'url'  => $this->getUrl('*/*/massStartPacking')
+        ));
         $this->getMassactionBlock()->addItem('print_aggregated', array(
              'label'=> Mage::helper('zolagopo')->__('Dispatch ref.'),
              'url'  => $this->getUrl('*/*/massPrintAggregated')

@@ -6,7 +6,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
     const EMAIL_TEMPLATE = "zolagopo_compose"; 
 	
 	const ACTION_CONFIRM_STOCK = "confirm_stock";
-	const ACTION_CONFIRM_SEND = "confirm_send";
+	const ACTION_START_PACKING = "start_packing";
 	const ACTION_DIRECT_REALISATION = "direct_realisation";
 	const ACTION_PRINT_AGGREGATED = "print_aggregated";
 	
@@ -97,6 +97,11 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 						$notVaildPos['status'][] = $po;
 					}
 				break;
+				case self::ACTION_START_PACKING:
+					if(!$po->getStatusModel()->isStartPackingAvailable($po)){
+						$notVaildPos['status'][] = $po;
+					}
+				break;
 			}
 		}
 		
@@ -125,6 +130,9 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 							break;
 							case self::ACTION_DIRECT_REALISATION:
 								$po->getStatusModel()->processDirectRealisation($po);
+							break;
+							case self::ACTION_START_PACKING:
+								$po->getStatusModel()->processStartPacking($po);
 							break;
 						}
 					}
@@ -159,8 +167,8 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 	/**
 	 * @return void
 	 */
-	public function massConfirmSendAction() {
-		$this->_processMass(self::ACTION_CONFIRM_SEND);
+	public function massStartPackingAction() {
+		$this->_processMass(self::ACTION_START_PACKING);
 		return $this->_redirectReferer();
 	}
 	
