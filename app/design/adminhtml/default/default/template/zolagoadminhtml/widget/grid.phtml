@@ -201,6 +201,77 @@ $numColumns = sizeof($this->getColumns());
 		</table>
 		</div>
 	</div>
+	<?php if($this->getPagerVisibility() || $this->getExportTypes() || $this->getFilterVisibility()): ?>
+        <?php if($this->getPagerVisibility() && !empty($this->pagerFooter)): ?>
+		<div class="actions row">
+			<div class="col-md-6 form-inline">
+				<div class="checkbox">
+					<label>
+					<?php echo $this->__('Total %d records found.', $this->getCollection()->getSize()) ?>
+					<span id="<?php echo $this->getHtmlId() ?>-total-count" class="hidden"><?php echo $this->getCollection()->getSize() ?></span>
+					</label>
+				</div>
+				<div class="checkbox">
+					<label><?php echo $this->__('View') ?></label>
+				</div>
+				<div class="form-group">
+					<select class="form-control" name="<?php echo $this->getVarNameLimit() ?>" onchange="<?php echo $this->getJsObjectName() ?>.loadByElement(this)" class="form-control">
+						<option value="20"<?php if($this->getCollection()->getPageSize()==20): ?> selected="selected"<?php endif; ?>>20</option>
+						<option value="30"<?php if($this->getCollection()->getPageSize()==30): ?> selected="selected"<?php endif; ?>>30</option>
+						<option value="50"<?php if($this->getCollection()->getPageSize()==50): ?> selected="selected"<?php endif; ?>>50</option>
+						<option value="100"<?php if($this->getCollection()->getPageSize()==100): ?> selected="selected"<?php endif; ?>>100</option>
+						<option value="200"<?php if($this->getCollection()->getPageSize()==200): ?> selected="selected"<?php endif; ?>>200</option>
+					</select>
+				</div>
+				<div class="checkbox">
+					<label><?php echo $this->__('per page.') ?></label>
+				</div>
+			</div>
+			<div class="col-md-6 form-inline">
+				<div class="pull-right">
+					<?php $_curPage  = $this->getCollection()->getCurPage() ?>
+					<?php $_lastPage = $this->getCollection()->getLastPageNumber() ?>
+					<div class="form-group"> 
+						<input type="text" size="1" name="<?php echo $this->getVarNamePage() ?>" value="<?php echo $_curPage ?>" class="page align-right form-control" onkeypress="<?php echo $this->getJsObjectName() ?>.inputPage(event, '<?php echo $_lastPage ?>')"/>
+					</div>
+					<div class="checkbox">
+						<label>
+							<?php echo $this->__('of %s', $this->getCollection()->getLastPageNumber()) ?>
+						</label>
+					</div>
+					<div class="form-group">
+						<div class="btn-group">
+							<?php if($_curPage>1): ?>
+								<button class="btn btn-default"  title="<?php echo $this->__('Previous page') ?>" onclick="<?php echo $this->getJsObjectName() ?>.setPage('<?php echo ($_curPage-1) ?>');return false;"><img src="<?php echo $this->getSkinUrl('images/pager_arrow_left.gif') ?>" alt="Go to Previous page" class="arrow"/></button>
+							<?php else: ?>
+								<button class="btn btn-default" disabled="disabled"><i class="glyphicon glyphicon-chevron-left arrow"></i></button>
+							<?php endif; ?>
+
+							<?php if($_curPage < $_lastPage): ?>
+								<button  class="btn btn-default"  title="<?php echo $this->__('Next page') ?>" onclick="<?php echo $this->getJsObjectName() ?>.setPage('<?php echo ($_curPage+1) ?>');return false;"><i class="glyphicon glyphicon-chevron-right arrow"></i></a>
+							<?php else: ?>
+								<button class="btn btn-default" disabled="disabled"><i class="glyphicon glyphicon-chevron-right arrow"></i></button>
+							<?php endif; ?>
+						</div>
+					</div>
+
+					<div class="checkbox">
+						<label>
+						<?php if($this->getRssLists()): ?>
+							<?php foreach ($this->getRssLists() as $_rss): ?>
+							<span class="separator">|</span><a href="<?php echo $_rss->getUrl() ?>" class="link-feed"><?php echo $_rss->getLabel() ?></a>
+							<?php endforeach ?>
+						<?php endif; ?>
+						</label>
+					</div>
+				</div>
+			</div>
+		</div>
+		<hr/>
+
+		<?php endif ?>
+    <?php endif; ?>
+	
 <?php if($this->canDisplayContainer()): ?>
 <script type="text/javascript">
 //<![CDATA[

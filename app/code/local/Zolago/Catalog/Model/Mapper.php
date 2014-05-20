@@ -61,6 +61,7 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
                 $importlist[$tmp[0]][] = $tmp;
             }
         }    
+        $pidList = array();
         foreach ($this->_collection as $item) {
             $skuv = $item->getData('skuv');
             $pid = $item->getData('entity_id');
@@ -86,9 +87,16 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
             }
             if ($updateFlag) {
                 $this->_changeCheckFlag($pid);
+                $pidList[] = $pid;
             }
         }
+        if ($pidList) {
+            $this->_savePid($pidList);
+        }
         return $count;
+    }
+    protected function _savePid($pidList) {
+        Mage::getSingleton('core/session')->setMappedEntities($pidList);
     }
     protected function _changeCheckFlag($pid) {
              $_product = Mage::getModel('catalog/product')->load($pid);
@@ -100,6 +108,7 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
         $count = 0;
         $list = $this->_getFileList();
         $storeid = 0;        
+        $pidList = array();
         foreach ($this->_collection as $item) {
             $updateFlag = false;
             $skuv = $item->getData('skuv');
@@ -126,7 +135,11 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
             }    
             if ($updateFlag) {
                 $this->_changeCheckFlag($pid);        
+                $pidList[] = $pid;
             }
+        }
+        if ($pidList) {
+            $this->_savePid($pidList);
         }
         return $count;
 

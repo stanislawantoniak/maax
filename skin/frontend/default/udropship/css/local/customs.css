@@ -276,3 +276,7 @@ table.foot-empty-cells tfoot td:empty {
     margin-left: 110px;
   }
 }
+
+.clearb {
+    clear: both;
+}
