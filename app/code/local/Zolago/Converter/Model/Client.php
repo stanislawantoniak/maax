@@ -43,10 +43,10 @@ class Zolago_Converter_Model_Client{
 	 * @todo implement
 	 * @param string $vsku
 	 * @param string $posExternalId
-	 * @return int
+	 * @return int | null
 	 */
 	public function getQtyForPos($vsku, $posExternalId) {
-		return 0;
+		return rand(0,1) ? rand(1,10) : null;
 	}
 	
 }
