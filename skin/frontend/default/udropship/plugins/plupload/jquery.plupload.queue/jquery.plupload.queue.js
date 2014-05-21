@@ -251,11 +251,11 @@ used as it is.
 					}
 					uploader.files.length == (uploader.total.uploaded + uploader.total.failed);
 					if (uploader.files.length) {
-						jQuery('a.plupload_start', target).toggleClass('plupload_disabled',true);
+						jQuery('a.plupload_start', target).toggleClass('plupload_disabled',false);
 						jQuery('a.plupload_start').css('background-color','#3968C6');
 						jQuery('a.plupload_start').css('color','#ffffff');
 					} else {
-							jQuery('a.plupload_start', target).toggleClass('plupload_disabled',false);
+							jQuery('a.plupload_start', target).toggleClass('plupload_disabled',true);
 							jQuery('a.plupload_start').css('background-color','#F3F3F3');
 							jQuery('a.plupload_start').css('color','#888888');
 					
