@@ -1,6 +1,7 @@
-<form id="filter_form">
-</form>
 <br/>
+<script type="text/javascript">
+    var gridObj;
+</script>
 <div class="container z-grid">
     <div class="widget box">   
         <div class="widget-content">
@@ -10,7 +11,7 @@
 </div>
 <script type="text/javascript">
 (function(){
-	var gridObj = <?php echo $this->getGridJsObjectName();?>;
+	gridObj = <?php echo $this->getGridJsObjectName();?>;
 	var topForm = $("filter_form");
 	// create integrator
 	new Zolago.gridIntegrator(gridObj);

@@ -2,6 +2,8 @@
 
 class Zolago_Catalog_Block_Vendor_Image_Grid extends Mage_Adminhtml_Block_Widget_Grid
 {
+     // pager visible in footer
+     protected $pagerFooter = true;
      public function __construct() {
         parent::__construct();
         $this->setId('catalog_image_grid');
@@ -15,6 +17,12 @@ class Zolago_Catalog_Block_Vendor_Image_Grid extends Mage_Adminhtml_Block_Widget
         $vendor = Mage::getSingleton('udropship/session')->getVendor();
         $vendorId = ($vendor)? ($vendor->getId()):0;
         $collection->addAttributeToFilter("udropship_vendor", $vendorId);
+        $session =  Mage::getSingleton('core/session');
+        $pidList = $session->getMappedEntities();
+        if (!empty($pidList)) {
+            $collection->addAttributeToFilter("entity_id", array('in'=>implode(',',$pidList)));
+            $session->unsMappedEntities();
+        }
         $collection->addAttributeToSelect('skuv');
         $collection->addAttributeToSelect('name');
         $collection->addAttributeToSelect('gallery_to_check');
@@ -53,21 +61,23 @@ class Zolago_Catalog_Block_Vendor_Image_Grid extends Mage_Adminhtml_Block_Widget
 		$this->addColumn("name", array(
 			"type"		=>	"text",
 			"index"		=>	"name",
+			"width"     =>  "100px",
 			"header"	=>	Mage::helper("zolagocatalog")->__("Product name"),
 		));
 		$this->addColumn("gallery_to_check", array(
 			"type"		=>	"options",
+			'renderer'	=> Mage::getConfig()->getBlockClassName("zolagoadminhtml/widget_grid_column_renderer_options"),
 			"align"		=>  "center",
 			"index"		=>	"gallery_to_check",
 			"class"		=>  "form-controll",
 			"header"	=>	Mage::helper("zolagocatalog")->__("Gallery to check"),
 			"width"		=>	"20px",
-			"options"   => array('0'=>'Nie', '1'=>'Tak'),
+			"style"     => array('0'=>'','1'=>'background-color:#55cc55;color:white'),
+			"options"   => array('0'=>Mage::helper('zolagocatalog')->__('No'), '1'=>Mage::helper('zolagocatalog')->__('Yes')),
 		));
 		$this->addColumn("gallery", array(
                 'header'    => Mage::helper('zolagocatalog')->__('Gallery'),
 				'renderer'	=> Mage::getConfig()->getBlockClassName("zolagoadminhtml/widget_grid_column_renderer_gallery"),
-                'width'     => '500px',
                 'type'      => 'gallery',
                 'filter'    => false,
                 'sortable'  => false
@@ -80,7 +90,7 @@ class Zolago_Catalog_Block_Vendor_Image_Grid extends Mage_Adminhtml_Block_Widget
     {
         $this->setMassactionIdField('main_table.entity_id');
         $this->getMassactionBlock()->setFormFieldName('image');
-		$this->getMassactionBlock()->setTemplate("zolagoadminhtml/widget/grid/massaction.phtml");
+		$this->getMassactionBlock()->setTemplate("zolagocatalog/widget/grid/massaction.phtml");
 
 		
 		$this->getMassactionBlock()->addItem('check_gallery', array(

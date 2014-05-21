@@ -1,22 +1,37 @@
 <div class="widget">
- 	<div class="align-left form-group" style="margin:5px 0px 5px 0px">
-		<div class="col-md-8">
-			<button class="btn" id="add_button"><?php echo Mage::helper('zolagocatalog')->__('Upload queue');?></button>
-			<button class="btn" id="delete_button"><?php echo Mage::helper('zolagocatalog')->__('Delete');?></button>
-			<a class="btn btn-default" href="#dialog_by_name" data-toggle="modal"><?php echo Mage::helper('zolagocatalog')->__('Map by name');?></a>
-			<a class="btn btn-default" href="#dialog_by_csv" data-toggle="modal"><?php echo Mage::helper('zolagocatalog')->__('Map by CSV');?></a>
-			<button class="btn btn-primary"><i class="icon-question-sign"></i></button>
-		</div>
-		<div class="input-group" style="width:200px"><input type="text" class="form-control input-width-medium" id="input_search"><span class="input-group-btn"><button class="btn btn-default" id="search_button" type="button"><i class="icon-search">
-			</i></button></span></div>
-	</div>
-<div style="clear:both"></div>
+    <br/>
+    <table id="control-battons">
+    <tr>
+    <td>
+			&nbsp;<button class="btn btn-primary" id="add_button"><?php echo Mage::helper('zolagocatalog')->__('Upload queue');?></button>&nbsp;
+    </td>
+    <td>
+			<button class="btn btn-primary" id="delete_button"><?php echo Mage::helper('zolagocatalog')->__('Delete');?></button>&nbsp;
+    </td>
+    <td>
+			<a class="btn-notification btn btn-primary" href="#dialog_by_name" data-text="<?php echo Mage::helper('zolagocatalog')->__('Are you sure?');?>" data-placement="top" 
+			    data-layout="top" data-type="confirm" data-modal="true" data-ok-url="<?php echo Mage::getUrl('udprod/vendor_image/namemap'); ?>"><?php echo Mage::helper('zolagocatalog')->__('Map by name');?></a>&nbsp;
+    </td>
+    <td>
+			<a class="btn btn-primary" href="#dialog_by_csv" data-toggle="modal"><?php echo Mage::helper('zolagocatalog')->__('Map by CSV');?></a>&nbsp;
+			<button class="btn btn-default"><?php echo Mage::helper('zolagocatalog')->__('Help');?> <i class="icon-question-sign"></i></button>&nbsp;
+    </td>
+    <td>
+        <div class="input-group">
+			<input type="text" class="form-control input-width-medium" id="input_search"/>
+			<button class="btn btn-primary input-group-btn" id="search_button" type="button"><i class="icon-search"></i></button>
+        </div>
+    </td>
+    </tr>
+    </table>
+    <br/>
+<div class="clearb"></div>
 	<div id="uploader_wrapper" class="widget-content"><div id="uploader"></div><div id="elf"></div></div>
 <div id="dialog_by_csv" class="modal fade" style="display:none" aria-hidden="true" title="Map by CSV">
 <div class="modal-dialog">
     <div class="modal-content">
         <div class="modal-header">
-            <h4><?php echo Mage::helper('zolagocatalog')->__('Map by CSV');?></h4>
+            <strong><?php echo Mage::helper('zolagocatalog')->__('Map by CSV');?></strong>
         </div>
         <div class="modal-body">
             <div id="map_upload">
@@ -24,9 +39,8 @@
             <?php echo Mage::helper('zolagocatalog')->__('Upload CSV file');?>
             <form id="map_form" action="<?php  echo Mage::getUrl("udprod/vendor_image/csvmap");?>" method="post" enctype="multipart/form-data" name="csv_form">
             <input type="file" name="csv_file" id="map_csv_file">
-            </div>
             <br/>
-            <div class="col-md-12">
+            <div class="col-md-12 align-right">
                 <button class="btn btn-default" data-dismiss="modal" type="button"><?php echo Mage::helper('zolagocatalog')->__('Cancel');?></button>
                 <button id="map_csv_button" class="btn btn-primary" type="submit"><?php echo Mage::helper('zolagocatalog')->__('Process');?></button>
             </div>
@@ -52,7 +66,7 @@
     </div>
 </div>
 </div>
-
+<?php /*
 <div id="dialog_by_name" class="modal fade" style="display:none" aria-hidden="true" title="Map by name">
 <div class="modal-dialog">
     <div class="modal-content">
@@ -62,7 +76,7 @@
         <div class="modal-body">
             <div id="map_confirm">
             <div class="col-md-12">
-            <?php echo Mage::helper('zolagocatalog')->__('Are you sure?');?>
+         <?php echo Mage::helper('zolagocatalog')->__('Are you sure?');?>
             </div>
             <br/>
             <div class="col-md-12">
@@ -90,6 +104,7 @@
     </div>
 </div>
 </div>
+*/ ?>
 <script type="text/javascript">
 var elf = null;
 var plup = null;
@@ -136,7 +151,7 @@ function show_uploader() {
 		jQuery('#delete_button').attr('disabled',true);
 	// Setup html5 version
 //		jQuery('#add_button').html('<?php echo Mage::helper('zolagocatalog')->__('Browse');?>');
-        jQuery('#add_button').addClass('btn-primary');
+        jQuery('#add_button').addClass('btn-warning');
 
 		func = 'show_filebrowser';
 		plup.show();
@@ -160,7 +175,7 @@ function show_filebrowser() {
 		plup.hide();
 		jQuery('#delete_button').removeAttr('disabled');
 //		jQuery('#add_button').html('<?php echo Mage::helper('zolagocatalog')->__('Add');?>');
-        jQuery('#add_button').removeClass('btn-primary');
+        jQuery('#add_button').removeClass('btn-warning');
 		func = 'show_uploader';
 		elf.show();
 }
@@ -222,4 +237,5 @@ jQuery().ready(function() {
 
 
 
+</div>
 </div>
