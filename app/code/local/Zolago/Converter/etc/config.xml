@@ -22,6 +22,26 @@
 				<class>Zolago_Converter_Helper</class>
 			</zolagoconverter>
 		</helpers>
+		<resources>
+			<zolagoconverter_setup>
+				<setup>
+					<module>Zolago_Converter</module>
+				</setup>
+			</zolagoconverter_setup>
+		</resources>
+		
+		<udropship>
+            <vendor>
+                <fields>
+                	<external_id>
+                        <label>External id (Converters)</label>
+                        <type>text</type>
+                        <fieldset>integration</fieldset>
+                        <position>0</position>
+                    </external_id>
+				</fields>
+			</vendor>
+		</udropship>
 	</global>
 	<adminhtml>
 		<translate>
@@ -37,10 +57,8 @@
 	<default>
 		<zolagoconverter>
 			<config>
-				<location></location>
-				<uri></uri>
-				<apikey></apikey>
-				<login></login>
+				<url_stock>http://37.187.244.141:8092/zolago/_design/read/_view/stock?key={{key}}</url_stock>
+				<login>zolago</login>
 				<password></password>
 			</config>
 		</zolagoconverter>

@@ -67,21 +67,15 @@ class Zolago_Po_Block_Vendor_Po_Edit_Pos_Stock
 	 * @return int | null
 	 */
 	public function getPosQty(Zolago_Po_Model_Po_Item $item){
-		$pos = $this->getPo()->getPos();
-		if($pos && $pos->getId() && $item->getVendorSku()){
-			return $this->_getPosQty($pos, $item->getVendorSku());
+		$pos = $this->getPos();
+		$vendor = $this->getPo()->getVendor();
+		if($pos && $pos->getId() && $item->getVendorSku() && $vendor->getExternalId()){
+			return Mage::helper("zolagoconverter")->getQty($vendor, $pos, $item->getVendorSku());
 		}
 		
 		return null;
 	}
 	
-	/**
-	 * @param Zolago_Pos_Model_Pos $pos
-	 * @param string $vsku
-	 * @return int
-	 */
-	protected function _getPosQty(Zolago_Pos_Model_Pos $pos, $vsku) {
-		return Mage::helper("zolagoconverter")->getQtyForPos($pos,$vsku);
-	}
+
 	
 }
