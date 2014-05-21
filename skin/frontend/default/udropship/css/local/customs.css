@@ -264,3 +264,19 @@ table.foot-empty-cells tfoot td:empty {
     margin-left: 110px;
   }
 }
+
+.clearb {
+    clear: both;
+}
+#control-battons td {
+    display: inline-block;
+}
+#control-battons .input-group .form-control {
+    margin-right: 5px;
+}
+.chrome #control-battons .input-group .form-control {
+    float: left;
+}
+.chrome #control-battons .input-group .icon-search {
+    margin: 0 -5px;
+}
