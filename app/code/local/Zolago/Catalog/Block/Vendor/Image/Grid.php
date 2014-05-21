@@ -90,7 +90,7 @@ class Zolago_Catalog_Block_Vendor_Image_Grid extends Mage_Adminhtml_Block_Widget
 	
 	protected function _prepareMassaction()
     {
-        $this->setMassactionIdField('main_table.entity_id');
+        $this->setMassactionIdField('entity_id');
         $this->getMassactionBlock()->setFormFieldName('image');
 		$this->getMassactionBlock()->setTemplate("zolagocatalog/widget/grid/massaction.phtml");
 
