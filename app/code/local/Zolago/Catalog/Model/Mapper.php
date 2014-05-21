@@ -256,6 +256,9 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
         $parse = parse_url($imgfile);
         if (!isset($imgfile['scheme'])) {
             $imgfile = $this->_path.'/'.$imgfile; 
+            if (!file_exists($imgfile)) {
+                return false;
+            }
         }
         $result = copy($imgfile,$target);
         return $result;
@@ -270,9 +273,6 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
      */
     protected function _copyImageFile($imgfile)
     {
-        if (!file_exists($imgfile)) {
-            return null;
-        }
         $bimgfile=$this->_getTargetName($imgfile);
         //source file exists
         $i1=$bimgfile[0];
