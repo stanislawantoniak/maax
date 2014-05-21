@@ -2,7 +2,7 @@
     height: 40px;
 }
 
-.actions.row {
+#catalog_image_grid .actions {
     height: 33px;
 }
 
@@ -18,10 +18,13 @@
     float: left;
 }
 
+#control-battons .input-group .form-control {
+    float: left;
+}
 .widget .col-md-8 {
     padding-bottom: 5px;
 }
 
-.widget .input-group {
-    margin-left: 15px;
+#control-battons .input-group {
+    margin: 5px 8px;
 }
