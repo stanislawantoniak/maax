@@ -53,8 +53,9 @@ class Zolago_Po_Block_Vendor_Po_Item_Renderer_Abstract extends Mage_Core_Block_T
 	 */
 	public function getPosQty(Zolago_Po_Model_Po_Item $item){
 		$pos = $this->getPo()->getPos();
-		if($pos && $pos->getId() && $item->getVendorSku()){
-			$qty = $this->_getPosQty($pos, $item->getVendorSku());
+		$vendor = $this->getPo()->getVendor();
+		if($pos && $pos->getId() && $item->getVendorSku() && $vendor->getExternalId()){
+			$qty = Mage::helper("zolagoconverter")->getQty($vendor, $pos, $item->getVendorSku());
 			if(!is_null($qty)){
 				return $qty;
 			}
@@ -63,14 +64,5 @@ class Zolago_Po_Block_Vendor_Po_Item_Renderer_Abstract extends Mage_Core_Block_T
 		return $this->__("N/A");
 	}
 	
-	/**
-	 * 
-	 * @param Zolago_Pos_Model_Pos $pos
-	 * @param type $vsku
-	 * @return int | null
-	 */
-	protected function _getPosQty(Zolago_Pos_Model_Pos $pos, $vsku) {
-		return Mage::helper("zolagoconverter")->getQtyForPos($pos,$vsku);
-	}
 
 }

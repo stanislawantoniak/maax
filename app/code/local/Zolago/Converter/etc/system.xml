@@ -18,32 +18,18 @@
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
                     <fields>
-                        <location translate="label">
-                            <label>Service Location</label>
+                        <url_stock translate="label">
+                            <label>URL Stock</label>
+							<comment>Use {{key}} for product key</comment>
                             <frontend_type>text</frontend_type>
                             <sort_order>0</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
-                        </location>
-                        <uri translate="label">
-                            <label>Service URI</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>10</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>0</show_in_website>
-                            <show_in_store>0</show_in_store>
-                        </uri>
-                        <apikey translate="label">
-                            <label>API Key</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>20</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>0</show_in_website>
-                            <show_in_store>0</show_in_store>
-                        </apikey>
+                        </url_stock>
                         <login translate="label">
                             <label>Login</label>
+							<comment>For basic auth</comment>
                             <frontend_type>text</frontend_type>
                             <sort_order>30</sort_order>
                             <show_in_default>1</show_in_default>
@@ -52,6 +38,7 @@
                         </login>
                         <password translate="label">
                             <label>Password</label>
+							<comment>For basic auth</comment>
                             <frontend_type>password</frontend_type>
                             <sort_order>40</sort_order>
                             <show_in_default>1</show_in_default>

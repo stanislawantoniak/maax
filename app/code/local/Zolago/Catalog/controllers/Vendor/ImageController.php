@@ -35,7 +35,7 @@ class Zolago_Catalog_Vendor_ImageController
         $mapper->setPath($this->_getPath());
         $collection = Mage::getResourceModel('zolagocatalog/product_collection');
         $collection->addAttributeToFilter("udropship_vendor", $this->_getVendorId());
-        $collection->addAttributeToSelect('skuv');
+        $collection->addAttributeToSelect(Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute'));
         $collection->addAttributeToSelect('name');
         $mapper->setCollection($collection);
         return $mapper;

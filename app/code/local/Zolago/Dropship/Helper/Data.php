@@ -2,6 +2,24 @@
 class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
 	const TRACK_SINGLE			= 1;
 
+	/**
+	 * @param Mage_Core_Model_Store|int|null $store
+	 * @return Mage_Catalog_Model_Entity_Attribute
+	 */
+	public function getVendorSkuAttribute($store=null) {
+		if($store instanceof Mage_Core_Model_Store){
+			$store=$store->getId();
+		}
+		$attrCode = Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute', $store);
+		if(!empty($attrCode)){
+			$attr = Mage::getSingleton('eav/config')->getAttribute(Mage_Catalog_Model_Product::ENTITY, $attrCode);
+			if($attr->getId()){
+				return $attr;
+			}
+		}
+		return Mage::getSingleton('eav/config')->getAttribute(Mage_Catalog_Model_Product::ENTITY, "sku");
+	}
+	
 	public function getAllowedCarriers() {
 		return array(/*"", "custom", */"zolagodhl","ups");
 	}
