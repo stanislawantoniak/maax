@@ -31,7 +31,7 @@ class Zolago_Po_Block_Vendor_Po extends Mage_Core_Block_Template
 	
 	public function getFilterValue($index) {
 		return $this->getGrid()->getFilterValueByIndex($index);
-	}
+}
 	
 	public function getCreatedAt($idx) {
 		if(($v=$this->getFilterValue('created_at')) && is_array($v) && isset($v[$idx])){

@@ -42,7 +42,8 @@ Zolago.gridIntegrator = function(gridObj){
 	this.gridObj = gridObj;
 	
 	var oldSetCheckboxChecked = gridObj.setCheckboxChecked;
-	var	oldCheckCheckboxes = gridObj.massaction.checkCheckboxes;
+	var mass = gridObj.massaction;
+	var	oldCheckCheckboxes = mass ? mass.checkCheckboxes : null;
 
 	var updateSelectCheckbox = function(checkbox){
 		if(jQuery.uniform){
@@ -61,36 +62,77 @@ Zolago.gridIntegrator = function(gridObj){
 		if(!el.up("#"+gridObj.containerId)){
 			return;
 		}
-		var checkbox = el.select(".massaction-checkbox")[0];
-		updateSelectCheckbox(checkbox);
+		if(mass){
+			var checkbox = el.select(".massaction-checkbox")[0];
+			updateSelectCheckbox(checkbox);
+		}
 	});
-	gridObj.massaction.checkCheckboxes = function(){
-		oldCheckCheckboxes.apply(gridObj.massaction, arguments);
-		gridObj.massaction.getCheckboxes().each(updateSelectCheckbox);
+	if(mass){
+		mass.checkCheckboxes = function(){
+			oldCheckCheckboxes.apply(mass, arguments);
+			mass.getCheckboxes().each(updateSelectCheckbox);
+		}
 	}
 
-	gridObj.setCheckboxChecked = function(element){
-		oldSetCheckboxChecked.apply(gridObj, arguments);
-		updateSelectCheckbox(element);
+	if(mass){
+		gridObj.setCheckboxChecked = function(element){
+			oldSetCheckboxChecked.apply(gridObj, arguments);
+			updateSelectCheckbox(element);
+		}
+	}
+	var widgets = [], buttons = [];
+	
+	if(mass){
+		 widgets = $$(
+				'#'+gridObj.containerId+' .filter input', 
+				'#'+gridObj.containerId+' .filter select',
+				'#'+mass.containerId+' select',
+				'#'+mass.containerId+' input'
+		);
+
+		buttons = $$(
+				'#'+gridObj.containerId+' button',
+				'#'+mass.containerId+' button'
+		);
+	}else{
+		 widgets = $$(
+				'#'+gridObj.containerId+' .filter input', 
+				'#'+gridObj.containerId+' .filter select'
+		);
+		buttons = $$(
+				'#'+gridObj.containerId+' button'
+		);
 	}
 	
-	var widgets = $$(
-			'#'+gridObj.containerId+' .filter input', 
-			'#'+gridObj.containerId+' .filter select',
-			'#'+gridObj.massaction.containerId+' select',
-			'#'+gridObj.massaction.containerId+' input'
-	);
-	var buttons = $$(
-			'#'+gridObj.massaction.containerId+' button'
-	);
+	/// proess date fileds
+	$$('#'+gridObj.containerId+' .filter .date img', 
+	   '#'+gridObj.containerId+' .filter .date span').each(function(el){
+		el.remove();
+	});
+	$$('#'+gridObj.containerId+' .filter .date input').each(function(el, i){
+		var _el = jQuery(el);
+			_el.attr("placeholder", Translator.translate(!i ? "From" : "To"));
+			_el.css({
+				width: "49%",
+				float: "left"
+			});
+			if(!i){
+				_el.css("margin-right", "2%");
+			}
+			_el.datepicker();
+	});
 	widgets.each(function(el){
 		el.addClassName("form-control");
 	});
 	buttons.each(function(el){
 		el.addClassName("btn");
+		if(el.hasClassName("task")){
+			el.addClassName("btn-primary btn-search");
+		}
 	});
-	
-	gridObj.massaction.checkCheckboxes();
+	if(mass){
+		mass.checkCheckboxes();
+	}
 }
 
 Zolago.price = function(v){

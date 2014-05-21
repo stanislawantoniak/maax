@@ -118,6 +118,15 @@ class Zolago_Po_Model_Po_Status
 	/**
 	 * @param Zolago_Po_Model_Po $po
 	 */
+	public function processPrintAggregated(Zolago_Po_Model_Po $po) {
+		if($this->isPrintAggregatedAvailable($po)){
+			
+		}
+	}
+	
+	/**
+	 * @param Zolago_Po_Model_Po $po
+	 */
 	public function processConfirmSend(Zolago_Po_Model_Po $po) {
 		if($this->isConfirmSendAvailable($po)){
 			$this->_processStatus($po, self::STATUS_SHIPPED);
@@ -160,7 +169,16 @@ class Zolago_Po_Model_Po_Status
 		$this->_processStatus($po, self::STATUS_EXPORTED);
 	}
 	
-	
+	/**
+	 * @param Zolago_Po_Model_Po $po
+	 */
+	public function processCancelAggregated(Zolago_Po_Model_Po $po, $force = false) {
+		if($this->isCancelAggregatedAvailable($po) || $force){
+			$po->setAggregatedId(null);
+			$po->getResource()->saveAttribute($po, "aggregated_id");
+			$this->_processStatus($po, self::STATUS_READY);
+		}
+	}
 	
 	
 	/**
@@ -184,6 +202,32 @@ class Zolago_Po_Model_Po_Status
 	public function isConfirmStockAvailable($po) {
 		switch ($this->_getStatus($po)) {
 			case self::STATUS_BACKORDER:
+				return true;
+			break;
+		}
+		return false;
+	}
+	
+	/**
+	 * @param Zolago_Po_Model_Po|int $po
+	 * @return boolean
+	 */
+	public function isPrintAggregatedAvailable($po) {
+		switch ($this->_getStatus($po)) {
+			case self::STATUS_READY:
+				return true;
+			break;
+		}
+		return false;
+	}
+	
+	/**
+	 * @param Zolago_Po_Model_Po|int $po
+	 * @return boolean
+	 */
+	public function isCancelAggregatedAvailable($po) {
+		switch ($this->_getStatus($po)) {
+			case self::STATUS_SHIPPED:
 				return true;
 			break;
 		}

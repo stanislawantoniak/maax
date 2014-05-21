@@ -70,7 +70,7 @@ var App = function($) {
 			noty({
 				text: self.data('text'),
 				type: self.data('type'),
-				modal: self.data('modal'),
+				modal: self.data('modal') || self.data('type') == 'confirm',
 				layout: self.data('layout'),
 				buttons: (self.data('type') != 'confirm') ? false : [
 					{
@@ -90,7 +90,7 @@ var App = function($) {
 		
 		
 		//===== Validation & notty =====//
-		if(window.noty){
+		if($.validator && window.noty){
 			$.validator.setDefaults({
 				invalidHandler: function(form, validator) {
 					var errors = validator.numberOfInvalids();
@@ -132,6 +132,13 @@ var App = function($) {
 			}
 		})
 		
+		//===== handle esc  =====//	
+		$(window).on("keyup", function(e){
+			if(e.keyCode==27){
+				$(".modal").modal("hide");
+				$.noty.closeAll();
+			}
+		})
 		
 		//===== datepicker btn =====//	
 		if($.datepicker){
@@ -160,6 +167,9 @@ var App = function($) {
 			// Handle project switcher width
 			handleProjectSwitcherWidth();
 		}
+
+
+
 
 		// handles responsive breakpoints.
 		$(window).setBreakpoints({

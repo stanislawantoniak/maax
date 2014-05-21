@@ -7,7 +7,7 @@ class Zolago_Dropship_Block_Vendor_Menu_Topmenu
 	 * @var array
 	 */
 	protected $_sections = array(
-		self::ITEM_ORDER,
+		self::ITEM_DIRECT_ORDER,
 		self::ITEM_HELPDESK,
 		self::ITEM_RMA
 	);

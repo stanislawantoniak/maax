@@ -16,7 +16,7 @@
 		<div class="page-title">
 			<h3><?php echo $_hlp->__("Order #%s", $_po->getIncrementId());?></h3>
 			<?php if(1||$_alert):?>
-				<span class="label label-danger" style="display: inline; color: #fff; "><?php echo $_hlp->__("Sample alert text");?></span>
+				<span class="label label-danger" style="display: inline; color: #fff; "><?php echo $_hlp->__("Sample alert text [dev]");?></span>
 			<?php endif;?>
 		</div>
 	</div>
@@ -143,7 +143,7 @@
 						<div class="btn-group"> 
 							<?php /* Confirm direct realistaion */ ?>
 							<?php if($_statusModel->isDirectRealisationAvailable($_po)):?>
-								<a class="btn-notification btn btn-xs btn-primary" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("directRealisation");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("You are about to vove to fulfilment. Are you sure?");?>" data-modal="true" href="#">
+								<a class="btn-notification btn btn-xs btn-primary" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("directRealisation");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("You are about to move to fulfilment. Are you sure?");?>" data-modal="true" href="#">
 									<i class="icon-ok"></i>
 									<?php echo $_hlp->__("Move to fulfilment");?>
 								</a> 
@@ -318,7 +318,7 @@
 					<?php if($_po->needInvoice()):?>
 						<?php echo Mage::helper('udropship')->formatCustomerAddress($_po->getBillingAddress(), 'html', $this->getVendor()) ?>
 					<?php else:?>
-						<small><?php echo $_hlp->__("Click pencil icon if You need an invoice.");?></small>
+						<small><?php echo $_hlp->__("Click pencil icon if you need an invoice.");?></small>
 					<?php endif;?>
 				</div>
 			</div>
@@ -358,7 +358,7 @@
 								<dd>
 									<?php echo $this->escapeHtml($_currentShipping->getUdropshipMethodDescription());?>
 								</dd>
-								<dt><?php echo $_hlp->__("Date sent");?>:</dt>
+								<dt><?php echo $_hlp->__("Dispatch date");?>:</dt>
 								<dd>
 									<?php echo $_hlp->__("N/A");?>
 								</dd>
@@ -378,14 +378,54 @@
 								<dt><?php echo $_hlp->__("Tracking no.");?>:</dt>
 								<dd>
 									<?php if($_tracking && $_tracking->getId()):?>
-										<?php echo $this->escapeHtml($_tracking->getTrackNumber());?>
+										<?php if($_letterUrl=$this->getLetterUrl($_tracking, $_po)):?>
+											<a id="download-letter" data-loading-text="<?php echo $this->__("Loading...");?>" class="btn btn-link btn-xs" href="<?php echo $_letterUrl;?>">
+												<i class="icon-arrow-down"></i>
+												<?php echo $this->escapeHtml($_tracking->getTrackNumber());?>
+											</a>
+											<script type="text/javascript">
+											jQuery(function($){
+												$("#download-letter").click(function(){
+													var el = $(this);
+													el.button("loading");
+													$.post(el.attr("href"), function(response){
+														if(response.status){
+															//console.log(response.url);
+															document.location.replace(response.url);
+														}else{
+															noty({
+																text: response.message,
+																type: 'error',
+																timeout: 2000
+															});
+														}
+													}).fail(function(){
+														noty({
+															text: Translator.translate("Other error contact admin"),
+															type: 'error'
+														});
+													}).always(function(){
+														el.button('reset')
+													});
+													return false;
+												});
+											});
+										</script>
+										<?php else:?>
+											<?php echo $this->escapeHtml($_tracking->getTrackNumber());?>
+										<?php endif;?>
 									<?php else:?>
 										<?php echo $_hlp->__("N/A");?>
 									<?php endif;?>
 								</dd>
 								<dt><?php echo $_hlp->__("Dispatch ref.");?>:</dt>
 								<dd>
-									<?php echo $_hlp->__("N/A");?> [dev]
+									<?php $_aggregated= $_po->getAggregated();?>
+									<?php if($_aggregated->getId()):?>
+										<?php echo $this->escapeHtml($_aggregated->getAggregatedName());?>
+									<?php else:?>
+										<?php echo $_hlp->__("N/A");?>
+									<?php endif;?>
 								</dd>
 							</dl>
 						</div>
@@ -395,7 +435,7 @@
 					<div class="align-center">
 						<?php if($_statusModel->isShippingAvailable($_po)):?>
 							<?php if($this->canUseCarrier()):?>
-							<button class="btn btn-primary" data-toggle="modal" href="#shippingModal"><?php echo $_hlp->__("Print shipping label");?></button>
+							<button class="btn btn-primary" data-toggle="modal" href="#shippingModal"><?php echo $_hlp->__("Print shipping letter");?></button>
 							<?php else:?>
 							<button class="btn btn-primary" data-toggle="modal" href="#shippingModal"><?php echo $_hlp->__("Add shipping letter");?></button>
 							<?php endif;?>

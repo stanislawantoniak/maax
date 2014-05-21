@@ -6,8 +6,9 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
     const EMAIL_TEMPLATE = "zolagopo_compose"; 
 	
 	const ACTION_CONFIRM_STOCK = "confirm_stock";
-	const ACTION_CONFIRM_SEND = "confirm_send";
+	const ACTION_START_PACKING = "start_packing";
 	const ACTION_DIRECT_REALISATION = "direct_realisation";
+	const ACTION_PRINT_AGGREGATED = "print_aggregated";
 	
 	public function preDispatch() {
 		/**
@@ -86,13 +87,18 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 						$notVaildPos['status'][] = $po;
 					}
 				break;
-				case self::ACTION_CONFIRM_SEND:
-					if(!$po->getStatusModel()->isConfirmSendAvailable($po)){
+				case self::ACTION_PRINT_AGGREGATED:
+					if(!$po->getStatusModel()->isPrintAggregatedAvailable($po)){
 						$notVaildPos['status'][] = $po;
 					}
 				break;
 				case self::ACTION_DIRECT_REALISATION:
 					if(!$po->getStatusModel()->isDirectRealisationAvailable($po)){
+						$notVaildPos['status'][] = $po;
+					}
+				break;
+				case self::ACTION_START_PACKING:
+					if(!$po->getStatusModel()->isStartPackingAvailable($po)){
 						$notVaildPos['status'][] = $po;
 					}
 				break;
@@ -111,21 +117,28 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 			/* @var $transaction Varien_Db_Adapter_Interface */
 			try{
 				$transaction->beginTransaction();
-				foreach($collection as $po){
-					switch ($action) {
-						case self::ACTION_CONFIRM_STOCK:
-							$po->getStatusModel()->processConfirmStock($po);
-						break;
-						case self::ACTION_CONFIRM_SEND:
-							$po->getStatusModel()->processConfirmSend($po);
-						break;
-						case self::ACTION_DIRECT_REALISATION:
-							$po->getStatusModel()->processDirectRealisation($po);
-						break;
+				
+				if($action == self::ACTION_PRINT_AGGREGATED){
+					// Action not based on status
+					Mage::helper('zolagopo')->createAggregated($collection, $this->_getVendor());
+				}else{
+					// All actions based on satatus
+					foreach($collection as $po){
+						switch ($action) {
+							case self::ACTION_CONFIRM_STOCK:
+								$po->getStatusModel()->processConfirmStock($po);
+							break;
+							case self::ACTION_DIRECT_REALISATION:
+								$po->getStatusModel()->processDirectRealisation($po);
+							break;
+							case self::ACTION_START_PACKING:
+								$po->getStatusModel()->processStartPacking($po);
+							break;
+						}
 					}
 				}
 				$transaction->commit();
-				$this->_getSession()->addSuccess($hlp->__("%d order stock processed", $count));
+				$this->_getSession()->addSuccess($hlp->__("%d order processed", $count));
 			}catch(Mage_Core_Exception $e){
 				$transaction->rollBack();
 				$this->_getSession()->addError($e->getMessage());
@@ -154,8 +167,16 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 	/**
 	 * @return void
 	 */
-	public function massConfirmSendAction() {
-		$this->_processMass(self::ACTION_CONFIRM_SEND);
+	public function massStartPackingAction() {
+		$this->_processMass(self::ACTION_START_PACKING);
+		return $this->_redirectReferer();
+	}
+	
+	/**
+	 * @return void
+	 */
+	public function massPrintAggregatedAction() {
+		$this->_processMass(self::ACTION_PRINT_AGGREGATED);
 		return $this->_redirectReferer();
 	}
 	
@@ -423,14 +444,14 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 
 			$itemData = array(
 				'row_total'				=> $finalPriceExclTax * $qty,
-				'price'					=> $price,
+				'price'					=> $priceExclTax,
 				'qty'					=> $qty,
 				'price_incl_tax'		=> $priceInclTax,
 				'base_price_incl_tax'	=> $priceInclTax, // @todo use currency
 				'discount_amount'		=> $discountAmount,
 				'discount_percent'		=> $discountPrecent,
-				'row_total_incl_tax'	=> $finalPriceInclTax*$qty,
-				'base_row_total_incl_tax'=> $finalPriceInclTax*$qty, // @todo use currency
+				'row_total_incl_tax'	=> $priceInclTax*$qty,
+				'base_row_total_incl_tax'=> $priceInclTax*$qty, // @todo use currency
 			);
 
 			$item->addData($itemData);
@@ -537,8 +558,8 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 			/* @var $item Zolago_Po_Model_Po_Item */
 
 			$itemData = array(
-				'row_total'				=> $finalPriceExclTax * $qty,
-				'price'					=> $price,
+				'row_total'				=> $priceExclTax * $qty,
+				'price'					=> $priceExclTax,
 				'weight'				=> $product->getWeight(),
 				'qty'					=> $qty,
 				'qty_shipped'			=> null,
@@ -560,19 +581,22 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 				'base_price_incl_tax'	=> $priceInclTax, // @todo use currency
 				'discount_amount'		=> $discountAmount,
 				'discount_percent'		=> $discountPrecent,
-				'row_total_incl_tax'	=> $finalPriceInclTax*$qty,
-				'base_row_total_incl_tax'=> $finalPriceInclTax*$qty, // @todo use currency
+				'row_total_incl_tax'	=> $priceInclTax*$qty,
+				'base_row_total_incl_tax'=> $priceInclTax*$qty, // @todo use currency
 				'parent_item_id'		=> null
 			);
-
+			
+		
 			$item->addData($itemData);
 			$po->addItem($item);
-
+			
 			Mage::helper("udropship")->addVendorSkus($po);
 			if(Mage::helper("core")->isModuleEnabled('Unirgy_DropshipTierCommission')){
 				Mage::helper("udtiercom")->processPo($po);
 			}
+			
 			$po->updateTotals(true);
+			
 			$po->getStatusModel()->processDirectRealisation($po, true);
 			$this->_getSession()->addSuccess(Mage::helper("zolagopo")->__("Item added"));
 		} catch (Mage_Core_Exception $e) {
@@ -821,6 +845,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                 $udpo->setShipmentShippingAmount($r->getParam('shipping_amount'));
             }
             $udpo->setUdpoNoSplitPoFlag(true);
+			
             $shipment = $udpoHlp->createShipmentFromPo($udpo, $partialQty, true, true, true);
             if ($shipment) {
                 $shipment->setNewShipmentFlag(true);
@@ -852,6 +877,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 				
 				$number = $this->_createShipments($dhlSettings, $shipment, $shipmentSettings, $udpo);
 				if (!$number) {
+					$session->addError($this->__('Shipping creation fail'));
 					$udpoHlp->cancelShipment($shipment, true);
 					$udpo->getStatusModel()->processStartPacking($udpo, true);
 					return $this->_redirectReferer();
