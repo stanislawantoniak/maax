@@ -3,8 +3,7 @@
     <table>
     <tr>
     <td>
-			<div class="input-group-btn">&nbsp;
-			<button class="btn btn-primary" id="add_button"><?php echo Mage::helper('zolagocatalog')->__('Upload queue');?></button>&nbsp;
+			&nbsp;<button class="btn btn-primary" id="add_button"><?php echo Mage::helper('zolagocatalog')->__('Upload queue');?></button>&nbsp;
     </td>
     <td>
 			<button class="btn btn-primary" id="delete_button"><?php echo Mage::helper('zolagocatalog')->__('Delete');?></button>&nbsp;
@@ -20,7 +19,7 @@
     <td>
         <div class="input-group">
 			<input type="text" class="form-control input-width-medium" id="input_search"/>
-			<button class="btn btn-primary input-group-btn" id="search_button" type="button"><i class="icon-search"></i></button></div>
+			<button class="btn btn-primary input-group-btn" id="search_button" type="button"><i class="icon-search"></i></button>
         </div>
     </td>
     </tr>
@@ -40,7 +39,6 @@
             <?php echo Mage::helper('zolagocatalog')->__('Upload CSV file');?>
             <form id="map_form" action="<?php  echo Mage::getUrl("udprod/vendor_image/csvmap");?>" method="post" enctype="multipart/form-data" name="csv_form">
             <input type="file" name="csv_file" id="map_csv_file">
-            </div>
             <br/>
             <div class="col-md-12 align-right">
                 <button class="btn btn-default" data-dismiss="modal" type="button"><?php echo Mage::helper('zolagocatalog')->__('Cancel');?></button>
@@ -239,4 +237,5 @@ jQuery().ready(function() {
 
 
 
+</div>
 </div>
