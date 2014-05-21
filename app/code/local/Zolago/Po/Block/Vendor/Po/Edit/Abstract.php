@@ -17,5 +17,13 @@ abstract class Zolago_Po_Block_Vendor_Po_Edit_Abstract
 		return $this->getParentBlock()->getVendor();
 	}
 	
+	/**
+	 * @param type $storeId
+	 * @return Mage_Catalog_Model_Entity_Attribute
+	 */
+	public function getSkuAttribute($storeId=null) {
+		return Mage::helper('udropship')->getVendorSkuAttribute($storeId);
+	}
+	
 	
 }

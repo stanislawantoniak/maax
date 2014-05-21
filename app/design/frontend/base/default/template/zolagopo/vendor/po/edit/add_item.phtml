@@ -65,7 +65,13 @@
 jQuery(function($){
 	var currency = '<?php echo $_currency;?>';
 	var formatSelection = function(item) { return item.name; };
-	var formatResult = function(item) { return item.name + "<br/><small class=\"text-muted\">SKU: " + item.sku +  " &middot;  Price: " + parseFloat(item.price) + " " + currency + "</small>"};
+	var skuCode = '<?php echo $this->getSkuAttribute()->getAttributeCode();?>';
+	var skuLabel = '<?php echo $this->getSkuAttribute()->getStoreLabel();?>';
+	var formatResult = function(item) { 
+		return item.name + "<br/><small class=\"text-muted\">"+
+				skuLabel + ": " + (item[skuCode]!=undefined ? item[skuCode] : "<?php echo $this->__("N/A");?>")  +  " &middot; "+
+				"Price: " + parseFloat(item.price) + " " + currency + "</small>"
+	};
 	var form = $("#add-item-form");
 	var product = $("#additem-product_id");
 	var price = $("#additem-product_price");
@@ -89,7 +95,7 @@ jQuery(function($){
 		formatResult:		formatResult,
 		matcher: function(term, text, opts) { 
 			return (''+opts.name).toUpperCase().indexOf((''+term).toUpperCase()) >= 0 || 
-				   (''+opts.sku).toUpperCase().indexOf((''+term).toUpperCase()) >= 0
+				   (''+opts[skuCode]).toUpperCase().indexOf((''+term).toUpperCase()) >= 0
 		}
 	});
 	
