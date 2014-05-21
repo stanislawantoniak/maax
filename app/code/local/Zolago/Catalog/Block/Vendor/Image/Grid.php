@@ -73,7 +73,7 @@ class Zolago_Catalog_Block_Vendor_Image_Grid extends Mage_Adminhtml_Block_Widget
 			"header"	=>	Mage::helper("zolagocatalog")->__("Gallery to check"),
 			"width"		=>	"20px",
 			"style"     => array('0'=>'','1'=>'background-color:#55cc55;color:white'),
-			"options"   => array('0'=>'Nie', '1'=>'Tak'),
+			"options"   => array('0'=>Mage::helper('zolagocatalog')->__('No'), '1'=>Mage::helper('zolagocatalog')->__('Yes')),
 		));
 		$this->addColumn("gallery", array(
                 'header'    => Mage::helper('zolagocatalog')->__('Gallery'),
@@ -90,7 +90,7 @@ class Zolago_Catalog_Block_Vendor_Image_Grid extends Mage_Adminhtml_Block_Widget
     {
         $this->setMassactionIdField('main_table.entity_id');
         $this->getMassactionBlock()->setFormFieldName('image');
-		$this->getMassactionBlock()->setTemplate("zolagoadminhtml/widget/grid/massaction.phtml");
+		$this->getMassactionBlock()->setTemplate("zolagocatalog/widget/grid/massaction.phtml");
 
 		
 		$this->getMassactionBlock()->addItem('check_gallery', array(

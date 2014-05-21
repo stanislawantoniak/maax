@@ -18,7 +18,7 @@ class Zolago_Catalog_Vendor_ImageController
              $_product->setGalleryToCheck(0);
              $_product->getResource()->saveAttribute($_product, 'gallery_to_check');
         }
-        $this->_redirect('*/*/', $postParams);
+        $this->_redirect('*/*/');
     }
     protected function _getVendorId() {
         $vendor = $this->_getSession()->getVendor();
