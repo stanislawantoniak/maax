@@ -270,6 +270,9 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
      */
     protected function _copyImageFile($imgfile)
     {
+        if (!file_exists($imgfile)) {
+            return null;
+        }
         $bimgfile=$this->_getTargetName($imgfile);
         //source file exists
         $i1=$bimgfile[0];
