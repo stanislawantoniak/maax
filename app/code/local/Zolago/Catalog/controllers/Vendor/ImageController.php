@@ -94,7 +94,7 @@ class Zolago_Catalog_Vendor_ImageController
     }
 
     public function connectorAction() {
-        $extendedPath = '';
+        $extendedPath = $this->_getVendorId();
         $path = 'lib/ElFinder';
         include_once $path.DIRECTORY_SEPARATOR.'elFinderConnector.class.php';
         include_once $path.DIRECTORY_SEPARATOR.'elFinder.class.php';
