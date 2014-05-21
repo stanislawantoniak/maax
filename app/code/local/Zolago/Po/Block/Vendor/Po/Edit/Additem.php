@@ -12,6 +12,7 @@ class Zolago_Po_Block_Vendor_Po_Edit_Additem
 		$collection->setStoreId($this->getPo()->getOrder()->getStoreId());
 		$collection->addAttributeToSelect("name");
 		$collection->addAttributeToSelect("price");
+		$collection->addAttributeToSelect($this->getSkuAttribute()->getAttributeCode());
 		$collection->addAttributeToFilter("udropship_vendor", $this->getVendor()->getId());
 		$collection->addFieldToFilter("type_id", Mage_Catalog_Model_Product_Type::TYPE_SIMPLE);
 		$collection->load();

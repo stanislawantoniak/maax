@@ -10,6 +10,7 @@ class Zolago_Catalog_Block_Vendor_Image_Grid extends Mage_Adminhtml_Block_Widget
 		// Need
         $this->setGridClass('z-grid');
 		$this->setTemplate("zolagoadminhtml/widget/grid.phtml");
+		$this->setVendorSku(Mage::helper('udropship')->getVendorSkuAttribute());
     }
 	
 	protected function _prepareCollection(){
@@ -23,7 +24,8 @@ class Zolago_Catalog_Block_Vendor_Image_Grid extends Mage_Adminhtml_Block_Widget
             $collection->addAttributeToFilter("entity_id", array('in'=>implode(',',$pidList)));
             $session->unsMappedEntities();
         }
-        $collection->addAttributeToSelect(Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute'));
+		
+        $collection->addAttributeToSelect($this->getVendorSku()->getAttributeCode());
         $collection->addAttributeToSelect('name');
         $collection->addAttributeToSelect('gallery_to_check');
 
@@ -50,11 +52,10 @@ class Zolago_Catalog_Block_Vendor_Image_Grid extends Mage_Adminhtml_Block_Widget
 	}
 	
 	protected function _prepareColumns() {
-	    $skuv = Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute');
-		$this->addColumn($skuv, array(
+		$this->addColumn($this->getVendorSku()->getAttributeCode(), array(
 			"type"		=>	"text",
 			"align"		=>  "right",
-			"index"		=>  $skuv,	
+			"index"		=>	$this->getVendorSku()->getAttributeCode(),
 			"class"		=>  "form-controll",
 			"header"	=>	Mage::helper("zolagocatalog")->__("Vendor sku"),
 			"width"		=>	"40px"
