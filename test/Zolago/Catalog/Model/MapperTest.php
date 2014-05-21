@@ -46,9 +46,43 @@ class Zolago_Catalog_Model_MapperTest extends ZolagoDb_TestCase
         $r = new ReflectionClass('Zolago_Catalog_Model_Mapper');
         $m = $r->getMethod('_saveImage');
         $m->setAccessible(true);
-        $result = $m->invoke($this->mapperClass);
+        $imgfile = 'test.jpg';
+        $target = 'test';
 
-        $this->assertFalse($result);
+        $result = $m->invoke($this->mapperClass, $imgfile, $target);
+
+        $this->assertNotNull($result);
+    }
+
+    public function testCollection()
+    {
+        $model = $this->_getModel();
+        $collection = $model->getCollection();
+
+        //Collection shouldn't be empty
+        $this->assertGreaterThan(0,count($collection));
+    }
+
+
+    public function testGetImageId()
+    {
+        $r = new ReflectionClass('Zolago_Catalog_Model_Mapper');
+        $m = $r->getMethod('_getImageId');
+        $m->setAccessible(true);
+
+        $result = $m->invoke($this->mapperClass, 1,2,3);
+        $this->assertNotNull($result);
+    }
+
+    public function testAddImageToGallery()
+    {
+        $r = new ReflectionClass('Zolago_Catalog_Model_Mapper');
+        $m = $r->getMethod('_addImageToGallery');
+        $m->setAccessible(true);
+
+
+        $result = $m->invoke($this->mapperClass, 1, 0, '', '');
+        $this->assertNotNull($result);
     }
 
 }
