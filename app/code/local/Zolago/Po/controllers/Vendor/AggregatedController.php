@@ -33,6 +33,8 @@ class Zolago_Po_Vendor_AggregatedController
 	public function pdfAction() {
 		header('Content-type: application/pdf');
 		$pdf = Mage::getModel('zolagopo/aggregated_pdf');
+		$aggr = Mage::getModel('zolagopo/aggregated')->load(1);
+		$pdf->setAggregated($aggr);
 		$doc = $pdf->getPdf();
 		echo $doc->render();
 		exit();
