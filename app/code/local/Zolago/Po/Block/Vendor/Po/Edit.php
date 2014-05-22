@@ -14,14 +14,30 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 	 * @return string
 	 */
 	public function getLetterUrl(Mage_Sales_Model_Order_Shipment_Track $tracking, Zolago_Po_Model_Po $po) {
-		return $this->getUrl('zolagodhl/dhl/lp', array(
-			'trackId'		=> $tracking->getId(), 
-			'trackNumber'	=> $tracking->getNumber(), 
-			'vId'			=> $po->getVendor()->getId(), 
-			'posId'			=> $po->getDefaultPosId(),
-			'udpoId'		=> $po->getId(), 
-			'_secure'		=>true
-		));
+		if($this->isLetterable($tracking)){
+			return $this->getUrl('zolagodhl/dhl/lp', array(
+					'trackId'		=> $tracking->getId(), 
+					'trackNumber'	=> $tracking->getNumber(), 
+					'vId'			=> $po->getVendor()->getId(), 
+					'posId'			=> $po->getDefaultPosId(),
+					'udpoId'		=> $po->getId(), 
+					'_secure'		=>true
+				));
+		}
+		return null;
+	}
+	
+	/**
+	 * @param Mage_Sales_Model_Order_Shipment_Track $tracking
+	 * @return boolean
+	 */
+	public function isLetterable(Mage_Sales_Model_Order_Shipment_Track $tracking) {
+		switch ($tracking->getCarrierCode()) {
+			case Zolago_Dhl_Model_Carrier::CODE:
+				return true;
+			break;
+		}
+		return false;
 	}
 	
 	/**
