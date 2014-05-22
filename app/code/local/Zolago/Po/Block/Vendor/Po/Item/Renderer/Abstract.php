@@ -54,8 +54,8 @@ class Zolago_Po_Block_Vendor_Po_Item_Renderer_Abstract extends Mage_Core_Block_T
 	public function getPosQty(Zolago_Po_Model_Po_Item $item){
 		$pos = $this->getPo()->getPos();
 		$vendor = $this->getPo()->getVendor();
-		if($pos && $pos->getId() && $item->getVendorSku() && $vendor->getExternalId()){
-			$qty = Mage::helper("zolagoconverter")->getQty($vendor, $pos, $item->getVendorSku());
+		if($pos && $pos->getId() && $item->getFinalSku() && $vendor->getExternalId()){
+			$qty = Mage::helper("zolagoconverter")->getQty($vendor, $pos, $item->getFinalSku());
 			if(!is_null($qty)){
 				return $qty;
 			}
