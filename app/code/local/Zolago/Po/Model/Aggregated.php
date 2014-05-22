@@ -3,14 +3,32 @@
 class Zolago_Po_Model_Aggregated extends Mage_Core_Model_Abstract
 {
 	protected $_resourceName = "zolagopo/aggregated";
+	protected $_resourceCollectionName = "zolagopo/aggregated_collection";
    
 	public function generateName() {
-		$date = Mage::helper('core')->formatDate(Varien_Date::now(), 'medium');
-		$posName = $this->getPos()->getName();
+		$date = new Zend_Date(null,null,Mage::app()->getLocale()->getLocaleCode());
 		$externalId = $this->getPos()->getExternalId();
-		$this->setAggregatedName($date." / ".$posName." / ".$externalId);
+		$candidate = $date->toString("dd-MM-yyyy")."-".$externalId."-";
+		$incrementNo = 1;
+		
+		$coll = $this->getCollection();
+		/* @var $coll Zolago_Po_Model_Resource_Aggregated_Collection */
+		$coll->addFieldToFilter("pos_id", $this->getPosId());
+		$coll->setOrder("sequence", "DESC");
+		if($item=$coll->getFirstItem()){
+			$incrementNo = $item->getSequence()+1;
+		}
+		$this->setAggregatedName($candidate.$incrementNo);
 	}
 	
+	/**
+	 * @return bool
+	 */
+	public function isConfirmed() {
+		return $this->getStatus() == Zolago_Po_Model_Aggregated_Status::STATUS_CONFIRMED;
+	}
+
+
 	/**
 	 * @return Zolago_Pos_Model_Pos
 	 */

@@ -226,8 +226,16 @@ class Zolago_Po_Model_Po_Status
 	 * @return boolean
 	 */
 	public function isCancelAggregatedAvailable($po) {
+		return false;
+	}
+	
+	/**
+	 * @param Zolago_Po_Model_Po|int $po
+	 * @return boolean
+	 */
+	public function isCancelShippingAvailable($po) {
 		switch ($this->_getStatus($po)) {
-			case self::STATUS_SHIPPED:
+			case self::STATUS_READY:
 				return true;
 			break;
 		}

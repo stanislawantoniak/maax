@@ -945,7 +945,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                 if ($batch->getShipmentCnt()) {
                     $url = Mage::getUrl('udropship/vendor/reprintLabelBatch', array('batch_id'=>$batch->getId()));
                     Mage::register('udropship_download_url', $url);
-
+					$udpo->setCurrentCarrier(null);
                     if (($track = $batch->getLastTrack())) {
                         $session->addSuccess('Label was succesfully created');
                         Mage::helper('udropship')->addShipmentComment(
@@ -992,7 +992,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                     ->setNumber($number)
                     ->setCarrierCode($_carrier)
                     ->setTitle($title);
-
+						
                 $shipment->addTrack($track);
 
                 Mage::helper('udropship')->processTrackStatus($track, true, $isShipped);
@@ -1074,6 +1074,10 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                 $highlight['comment'] = true;
             }
 
+			// Carrier saved
+			$udpo->setCurrentCarrier($carrier);
+			$udpo->getResource()->saveAttribute($udpo, "current_carrier");
+			
             $session->setHighlight($highlight);
         } catch (Exception $e) {
             $session->addError($e->getMessage());

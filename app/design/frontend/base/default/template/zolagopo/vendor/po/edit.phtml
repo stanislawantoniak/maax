@@ -8,6 +8,7 @@
 <?php $_comments			= $_po->getVendorCommentsCollection(); ;?>
 <?php $_shippingStatuses	= Mage::helper('udropship')->getVendorShipmentStatuses(); ?>
 <?php $_statusModel			= $_po->getStatusModel(); ?>
+<?php $_aggregated			= $_po->getAggregated();?>
 <?php $_isEditable			= $this->isEditable();?>
 
 <div class="container">
@@ -344,16 +345,21 @@
 						<i class="icon-plane"></i> 
 						<?php echo $_hlp->__("Shipment");?>
 					</h4>	
-					<?php if($_currentShipping && $_currentShipping->getId()):?>
-					<div class="toolbar no-padding"> 
-						<div class="btn-group"> 
-							<span class="btn-notification btn btn-xs" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("cancelShipping", array("shipping_id"=>$_currentShipping->getId()));?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("Proceeding will cancel the shipment. Are you sure?");?>" data-modal="true" href="#">
-								<i class="icon-remove "></i> 
-								<?php echo $_hlp->__("Cancel");?>
-							</span> 
-							
-						</div> 
-					</div>
+					<?php if($_currentShipping && $_currentShipping->getId() && $_statusModel->isCancelShippingAvailable($_po)):?>
+						<?php if($_aggregated->getId()):?>
+							<?php $_msg = "Proceeding will cancel the shipment. It will remove dispatch ref. Are you sure?";?>
+						<?php else:?>
+							<?php $_msg = "Proceeding will cancel the shipment. Are you sure?";?>
+						<?php endif;?>
+						<div class="toolbar no-padding"> 
+							<div class="btn-group"> 
+								<span class="btn-notification btn btn-xs" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("cancelShipping", array("shipping_id"=>$_currentShipping->getId()));?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__($_msg);?>" data-modal="true" href="#">
+									<i class="icon-remove "></i> 
+									<?php echo $_hlp->__("Cancel");?>
+								</span> 
+
+							</div> 
+						</div>
 					<?php endif; ?>
 				</div>
 				<div class="widget-content bottom-info shipping-info">
