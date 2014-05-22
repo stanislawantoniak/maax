@@ -1,0 +1,179 @@
+#product-shop {
+	h1 {
+		font-family:$fontLight;
+		text-transform:uppercase;
+		font-size:34px;
+		padding-bottom:15px;
+		margin-bottom:15px;
+		margin-top: 0;
+		border-bottom: 1px solid #eeedf0;
+		@media (min-width: $screen-lg-min) { 
+			//margin-left: -4%;
+			//padding-left: 4%;
+		}
+	}
+	.short-description {
+		font-size: 11px;
+		color: #383838;
+		a {
+			color :#959595;
+			span {
+				color :#1dd8a0;
+				margin-left:30px;
+			}
+		}
+	}
+	.price-box-bundle {
+		position:relative;
+		margin-bottom: 40px;
+		.price-label,
+		.old-price {
+			font-size: 24px;
+			color:#000;
+			font-family: $fontLight;
+		}
+		.old-price {
+			text-decoration: line-through;
+		}
+		.price {
+			font-size: 36px;
+			color:#000;
+			font-family: $fontBlack;
+		}
+		ul {
+			@include no-bullet;
+			@include reset-m;
+			position:absolute;
+			right:0px;
+			top:10px;
+			li {
+				font-size: 10px;	
+				color:#4f4f4f;
+				line-height: 1.5;
+			}
+		}
+	}
+	.color-box-bundle,
+	.size-box-bundle {
+		.color-label,
+		.size-label {
+			line-height: 47px;
+			width: 115px;
+			display: inline-block;
+			float: left;
+		}
+		.form-group {
+			display: inline-block;
+			label {
+				position: relative;
+				width:37px;
+				height: 47px;
+				display:inline-block;
+				margin-right:8px;
+				cursor:pointer;
+				img {
+					position:absolute;
+					top:0px;
+					left:0px;
+					border:1px solid #f2f2f2;
+				}
+				[type="radio"]:checked {
+					&+img {
+						border-color:#1dd8a0;
+					}
+				}
+			}
+		}
+	}
+	.size-box-bundle {
+		margin-bottom:20px;
+		.size-label { 
+			line-height: 29px;
+		}
+		.form-group {
+			margin-bottom: 5px;
+			label {
+				width:29px;
+				height:29px;
+				position: relative;
+				span {
+					width:29px;
+					height:29px;
+					display:block;
+					background:#fff;
+					border:1px solid #afafaf;
+					text-align:center;
+					line-height: 29px;
+					color:#858585;
+					font-size:12px;
+					font-family:$fontRegular;
+					font-weight: normal;
+					position:absolute;
+					top:0px;
+					left:0px;
+				}
+			[type="radio"]:checked {
+				&+span {
+					border-color:#000;
+					background:#000;
+					color:#fff;
+				}
+			}	
+			}
+		}
+		.view-sizing {
+			display:block;
+			margin-left:115px;
+			font-size: 11px;
+			color:#000;
+			span {
+				font-size:8px;
+				color:#1dd8a0;
+				margin-left:15px;
+			}
+		}
+	}
+	.action-box-bundle {
+		margin-bottom:20px;
+		font-size: 11px;
+		color:#000;
+		.addLike {
+			width:149px;
+			height:43px;
+			display:block;
+			border:2px solid #a6a6a6;
+			@include border-radius(5px);
+			line-height: 1.2;
+			padding: 7px 0 0 43px;
+			font-size: 11px;
+			color:#4f4f4f;
+			text-transform: uppercase;
+			font-family: $fontRegular;
+			background:#fff url('../images/heart.png') 8px 11px no-repeat;
+			&:hover {
+				text-decoration: none;
+				background:#fff url('../images/heart-like.png') 8px 11px no-repeat;
+			}
+		}
+		.likeAdded {
+			display:block;
+			height:43px;
+			padding: 7px 0 0 43px;
+			color:#4f4f4f;
+			background:#fff url('../images/heart-like.png') 8px 11px no-repeat;
+			span {
+				color:#dcdcdc;
+			}
+			&:hover {
+				text-decoration: none;
+				background:#fff url('../images/heart.png') 8px 11px no-repeat;
+				span {
+					color:#4f4f4f;
+				}
+			}
+		}
+		.addBasket {
+			margin-top: 15px;
+		}
+	}
+}

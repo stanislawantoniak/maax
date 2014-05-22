@@ -194,9 +194,13 @@
         vertical-align: middle;
         width:31px;
         height:31px;
+        img {
+          border:3px solid #fff;
+        }
         :checked {
           &+ img {
-            box-shadow:0 0 2px 0px red;
+            border:3px solid #404040;
+            @include border-radius(5px);
           }
         }
       }

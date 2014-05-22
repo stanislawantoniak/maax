@@ -5,9 +5,6 @@
  */
 ?>
 
-
-
-
 <header id="header">
 <!--  class="navbar-fixed-top" -->
     <?php echo $this->getChildHtml('page.header.bottom.menu'); ?>
@@ -26,7 +23,7 @@
             <!-- LOGO -->
             <div id="header_top_block_center">
                 <div id="logo">
-                    <a href="#" class="logo">
+                    <a href="<?php echo $this->getUrl(''); ?>" class="logo">
                         <img src="<?php echo $this->getLogoSrc(); ?>" alt="">
                     </a>
                 </div>
@@ -35,6 +32,7 @@
         </div>
         <!-- TOGGLE BLOCK || SEARCH & BASKET -->
         <?php echo $this->getChildHtml('page.header.right.cartdropdown'); ?>
+        <?php echo $this->getChildHtml('page.header.search.dropdown'); ?>
     </div>
 </div>
 </header>

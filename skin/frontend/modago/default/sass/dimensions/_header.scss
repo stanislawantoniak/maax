@@ -8,6 +8,7 @@
     left:0px;
     width: 100%;
     z-index: 1000;
+    -webkit-transform: translateZ(0);
     
     > .container-fluid {
         position:relative;
@@ -50,13 +51,13 @@
     }
     #header_top_block_right {
         position:absolute;
-        right: -15px;
+        right: -10px;
         top:0px;
         @include max-screen($screen-sm-max) {
             top: -5px;
         }
         @include max-screen($screen-sm) {
-           right: 0px; 
+           right: -10px; 
         }
     }
     .block_toggle_menu {
@@ -132,7 +133,7 @@
                 display:inline-block;
                
                 @include max-screen($screen-sm-max) {
-                    width: 55px;
+                    width: 45px;
                 }
                  @media (max-width: 360px) { 
                     width: 45px;
@@ -232,30 +233,35 @@
             position:relative;
             display:block;
             padding-left:15px;
-            //line-height: 29px;
-                .ico-submenu-mobile-right {
+                i.fa {
                     position:absolute;
                     right:27px;
                     top:50%;
                     margin-top:-8px;
                 }
             }
+            > a:hover {
+                text-decoration: underline;
+            }
            
             ul {
                 &.open {
+                    -webkit-padding-start: 0px !important;
                     display:block;
                 }
             }
             li {
-
+                margin-left: 0;
                 a {
                     width:249px;
                     display:block;
-                    padding-left:15px;
-                    //line-height: 29px;
+                    padding-left:25px!important;
+                    font-size: 15px;
+                }
+                a:hover {
+                    text-decoration: underline;
                 }
             }
         }
     }
 }
-

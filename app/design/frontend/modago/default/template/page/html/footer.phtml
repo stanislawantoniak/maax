@@ -8,25 +8,12 @@
             <div class="row">
                 <div class="footer-logo ">
 
-                    <a href="index.php/ "><img src="<?php echo $headerBlock->getLogoSrc() ?>" alt="<?php $headerBlock->getLogoAlt(); ?>" /></a>
+                    <a href="<?php echo $this->getUrl(''); ?>"><img src="<?php echo $headerBlock->getLogoSrc() ?>" alt="<?php $headerBlock->getLogoAlt(); ?>" /></a>
 
                 </div>
-                <div class="footer-about ">
-                    <ul class="hidden-sm hidden-xs">
-                        <li><a href="#"><i class="fa fa-angle-right"></i> Pomoc</a></li>
-                        <li><a href="#"><i class="fa fa-angle-right"></i> Twoje konto</a></li>
-                        <li><a href="#"><i class="fa fa-angle-right"></i> Regulamin</a></li>
-                        <li><a href="#"><i class="fa fa-angle-right"></i> O nas</a></li>
-                    </ul>
 
-                    <ul class="visible-sm visible-xs">
-                        <li><a href="#"><i class="fa fa-angle-right"></i> Pomoc</a></li>
-                        <li><a href="#"><i class="fa fa-angle-right"></i> O nas</a></li>
-                        <li><a href="#"><i class="fa fa-angle-right"></i> Twoje konto</a></li>
-                        <li><a href="#"><i class="fa fa-angle-right"></i> Kontakt</a></li>
-                        <li><a href="#"><i class="fa fa-angle-right"></i> Pełna wersja wpisu</a></li>
-                    </ul>
-                </div>
+                <?php echo $this->getChildHtml('footer.links'); ?>
+
                 <div class="footer-connect ">
                     <span>dołącz <br class="visible-xs">do nas</span>
                     <a href="#" class="ico_social_twitter"></a>
@@ -49,12 +36,12 @@
                     </div>
                     <div class="footer-utils visible-xs">
                         <div>
-                            <a href=" ">polityka cookies <i class="fa fa-angle-right"></i></a>
-                            <a href=" ">pełna wersja strony <i class="fa fa-angle-right"></i></a>
+                            <a href=" "><?php echo $this->__("cookies policy"); ?> <i class="fa fa-angle-right"></i></a>
+                            <a href=" "><?php echo $this->__("full page version"); ?> <i class="fa fa-angle-right"></i></a>
                         </div>
                     </div>
                     <div class="copy">
-                        Copyright &copy; 2014 MODAGO. All Rights Reserved
+                        <?php echo Mage::getStoreConfig('design/footer/copyright'); ?>
                     </div>
 
                 </div>

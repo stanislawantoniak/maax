@@ -1,0 +1,86 @@
+#note_product {
+	dl.raty_note {
+		dt,dd {
+			margin-bottom: 10px;
+			overflow:hidden;
+		}
+		dt {
+			line-height: 22px;
+			margin-bottom: 20px;
+			strong {
+				margin-right:10px;
+				@include inline-block;
+				float:left;
+			}
+			#average_rating {
+				@include inline-block;
+				float:left;
+				width:130px;
+			}
+			.suffix {
+				@include inline-block;
+				float:left;
+				line-height: 26px;
+				font-size: 11px;
+				color:#959595;
+				font-family: $fontLight;
+				font-weight: normal;
+			}
+		}
+		dd {
+			clear:both;
+			
+			strong {
+				display:inline-block;
+				width:100px;
+				float:left;
+			}
+			div {
+				@include inline-block;
+				float:left;
+				
+			}
+			.suffix {
+				@include inline-block;
+				float:left;
+				line-height: 26px;
+			}
+		}
+	}
+	.rating_note {
+		 @media (min-width: 931px){
+			position:relative;
+			top:90px;
+		}
+		.prefix {
+			margin-right: 10px;
+			line-height: 13px;
+		}
+		.suffix {
+			margin-left: 10px;
+			line-height: 13px
+		}
+	}
+	.rating {
+		@include inline-block;
+		height:13px;
+		width:134px;
+		position:relative;
+		background:#e2e2e2;
+		
+		> span {
+			display:block;
+			position:absolute;
+			height:13px;
+			background:#6fffcf;
+		}
+	}
+
+	.add_opinion {
+		@media (min-width: 931px) { 
+			top:-50px;
+			text-align: right;
+		} 
+	}
+
+}

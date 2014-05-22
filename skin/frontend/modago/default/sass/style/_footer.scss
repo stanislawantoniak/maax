@@ -32,6 +32,10 @@
         //@media (min-width: $screen-sm-min) { margin-left:0; float:right;margin-right: -15px; margin-top:-15px }
         @media (min-width: $screen-md-min) { margin-left: 8.683673%;float:left ;margin-right: inherit; margin-top:inherit  }
         @media (min-width: $screen-lg-min) { margin-left: 17.683673%;  }
+        ul {
+            margin-left: 0px;
+            padding-left: 0px;
+        }
         li {
             display: inline-block;
             margin: 0 10px;
@@ -50,12 +54,13 @@
         font-size: 12px;
         position: relative;
         clear: right;
-        top: 5px; 
+        top: 8px; 
         > span {
             float: left;
-            line-height: 30px;
+            line-height: 25px;
             margin-right: 10px; 
             text-transform: uppercase;
+            word-spacing:4px;
         }
     }
 }
@@ -74,6 +79,7 @@
     .ico_social_twitter {
         @include sprite($socialMap, ico_social_twitter);    
         @include sprite-dimensions($socialMap, ico_social_twitter);
+
         &:hover {
             @include sprite($socialMap, ico_social_twitter);
         }
@@ -81,6 +87,7 @@
     .ico_social_fb {
         @include sprite($socialMap, ico_social_fb);    
         @include sprite-dimensions($socialMap, ico_social_fb);
+        margin-left: 8px;
         &:hover {
             @include sprite($socialMap, ico_social_fb_hover);
         }
@@ -89,6 +96,7 @@
     .ico_social_instagram {
         @include sprite($socialMap, ico_social_instagram);    
         @include sprite-dimensions($socialMap, ico_social_instagram);
+        margin-left: 9px;
         &:hover {
             @include sprite($socialMap, ico_social_instagram);
         }
@@ -96,6 +104,7 @@
     .ico_social_gplus {
         @include sprite($socialMap, ico_social_gplus);    
         @include sprite-dimensions($socialMap, ico_social_gplus);
+        margin-left: 16px;
         &:hover {
             @include sprite($socialMap, ico_social_gplus);
         }
@@ -103,6 +112,7 @@
     .ico_social_pinterest {
         @include sprite($socialMap, ico_social_pinterest);    
         @include sprite-dimensions($socialMap, ico_social_pinterest);
+        margin-left: 12px;
         &:hover {
             @include sprite($socialMap, ico_social_pinterest);
         }

@@ -2,7 +2,25 @@ jQuery.noConflict();
 (function( $ ) {
   $(function() {
 
+      $('#accordion').on('click', '.panel-title a', function () {
+         $(this).find('i').toggleClass('fa-angle-down fa-angle-up');
+      })
 
+      var toggleXS = $('body').find('.toggle-xs');
+      if($(window).width() < 768) {
+          $('.toggle-xs').on('click', '.title_section', function(event) {
+            event.preventDefault();
+            $(this).closest('.section').find('.main').slideToggle();
+            console.log('test')
+          });
+      };
+
+       $(window).resize(function() {
+
+          if($(window).width() > 768) {
+            $('.toggle-xs').find('.main').attr('style', '').stop();
+          };
+       });
 
 
 
@@ -60,6 +78,32 @@ jQuery.noConflict();
         rwd_inspiration.trigger('rwd.stop');
       });
 
+    var rwd_complementary_product = $("#rwd-complementary-product .rwd-carousel");
+
+      rwd_complementary_product.rwdCarousel({
+          items : 5, //10 items above 1000px browser width
+          itemsDesktop : [1000,4], //5 items between 1000px and 901px
+          itemsDesktopSmall : [900,3], // betweem 900px and 601px
+          itemsTablet: [600,3], //2 items between 600 and 0
+          itemsMobile : [480,1], // itemsMobile disabled - inherit from itemsTablet option
+          pagination : false,
+           itemsScaleUp:true
+      });
+
+      // Custom Navigation Events
+      $("#rwd-complementary-product .next").click(function(){
+        rwd_complementary_product.trigger('rwd.next');
+      })
+      $("#rwd-complementary-product .prev").click(function(){
+        rwd_complementary_product.trigger('rwd.prev');
+      })
+      $("#rwd-complementary-product .play").click(function(){
+        rwd_complementary_product.trigger('rwd.play',1000); //rwd.play event accept autoPlay speed as second parameter
+      })
+      $("#rwd-complementary-product .stop").click(function(){
+        rwd_complementary_product.trigger('rwd.stop');
+      });
+
 
 
      
@@ -109,6 +153,7 @@ jQuery.noConflict();
           clearFilter();
           closeBlockFilter();
           ratySidebar();
+          filterList();
           $(".select-styled,.select-styled select").selectbox();
        });
         
@@ -120,6 +165,7 @@ jQuery.noConflict();
           deleteCurrentFilter();
           clearFilter();
           ratySidebar();
+          filterList();
           $(".select-styled,.select-styled select").selectbox();
         });
         
@@ -134,6 +180,7 @@ jQuery.noConflict();
               clearFilter();
               closeBlockFilter();
               ratySidebar();
+              filterList();
               $(".select-styled,.select-styled select").selectbox();
             });
             if ($('body').hasClass('noscroll')) {
@@ -155,6 +202,7 @@ jQuery.noConflict();
               deleteCurrentFilter();
               clearFilter();
               ratySidebar();
+              filterList();
               $(".select-styled,.select-styled select").selectbox();
             });
             $('#sb-site').removeClass('open');
@@ -299,7 +347,9 @@ clearFilter();
 
 linkCloseMenu();
 
-ratySidebar()
+ratySidebar();
+
+filterList();
 
 //actionViewFilter();
 //toogleFilterBlock();
@@ -392,6 +442,7 @@ function clearFilter(){
     event.preventDefault();
     /* Act on the event */
     $(this).closest('.content').find('input[type="checkbox"]:checked').removeAttr('checked');
+    //$(this).closest('.content').find('input[type="text"]').val('');
   });
 }
 
@@ -518,6 +569,13 @@ function showSubMenuMobile(){
   mobileMenu.on('click', 'a', function(event) {
     event.preventDefault();
     //$(this).closest(mobileMenu).find('.open').removeClass('open');
+    var ico = $(this).find('i');
+    if (ico.hasClass('fa-chevron-down') || ico.hasClass('fa-chevron-up')) {
+
+      $(this).find('i').toggleClass( 'fa-chevron-down fa-chevron-up' );
+    };
+    
+    
     $(this).next('ul').toggleClass('open');
 
     
@@ -555,7 +613,7 @@ function masonryMenu() {
 // RATY{ path: 'assets/images' }
 
 $('#average_rating').raty({
-  path: 'skin/frontend/orba/modago/images/raty',
+  path: 'skin/frontend/modago/default/images/raty',
   starOff : 'star-off-big-custom.png',
   starOn  : 'star-on-big-custom.png',
   starHalf  : 'star-half-big-custom.png',
@@ -571,9 +629,10 @@ $('#average_rating').raty({
 });
 
 $('.raty_note dd div').raty({
-  path: 'skin/frontend/orba/modago/images/raty',
+  path: 'skin/frontend/modago/default/images/raty',
   starOff : 'star-off-custom.png',
   starOn  : 'star-on-custom.png',
+  //readOnly: true,
   size   : 17,
 
   number: function() {
@@ -585,7 +644,7 @@ $('.raty_note dd div').raty({
 });
 
 $('.comment_rating').raty({
-  path: 'skin/frontend/orba/modago/images/raty',
+  path: 'skin/frontend/modago/default/images/raty',
   starOff : 'star-off-custom.png',
   starOn  : 'star-on-custom.png',
   size   : 17,
@@ -769,13 +828,12 @@ $('#product_gallery').on('show.bs.modal', function (e) {
           });
   });
   // ZOOM
-    $(".my-foto").imagezoomsl({
-                      
-      zoomrange: [1, 12],
-       zoomstart: 4,
-       innerzoom: true,
-       magnifierborder: "none"    
-    });
+    $(".my-foto").imagezoomsl({                  
+          zoomrange: [1, 12],
+           zoomstart: 4,
+           innerzoom: true,
+           magnifierborder: "none"    
+        });
 });
 /* =============================== END::// CAROUSEL GALLERY Product MODAL ================================= */
 
@@ -885,7 +943,46 @@ function ratySidebar() {
   });
 }
 
+// FILTER MARKA
+function filterList(){
 
+    $('#filter_manufacturer_search').keyup(function(){
+        var valThis = $(this).val().toLowerCase();
+        var noresult = 0;
+        if(valThis == ""){
+            $('.manufacturerList > li').show();
+            noresult = 1;
+          $('.no-results-found').remove();
+        } else {
+            $('.manufacturerList > li').each(function(){
+                var text = $(this).text().toLowerCase();
+                var match = text.indexOf(valThis);
+                if (match >= 0) {
+                    $(this).show();
+                    noresult = 1;
+                $('.no-results-found').remove();
+                } else {
+                    $(this).hide();
+                }
+            });
+       };
+        if (noresult == 0) {
+            $(".manufacturerList").append('<li class="no-results-found">Brak wyników.</li>');
+        }
+    });
+    $('.block-filter').on('click', '.clear', function(event) {
+      event.preventDefault();
+      /* Act on the event */
+      $(this).closest('.content').find('input[type="text"]').val('');
+      $('.manufacturerList > li').each(function(){
+        $(this).show();
+      });
+    });
+
+}
+
+
+    // END FILTER MARKA
 
 
 

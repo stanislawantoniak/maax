@@ -90,3 +90,108 @@
 .popular-shops:after {
     content: "";width: 100%;display: inline-block;
 }
+
+
+#product-gallery {
+    
+    &.col-lg-5 {
+        @media (min-width: $screen-lg-min) {
+            width:38.66667%;
+            padding-right: 9px;
+        }
+         @media (min-width: 932px) and (max-width: 1199px) { 
+            //width:38.66667%;
+            width:449.683px;
+            padding-right: 9px;
+            float:left;
+        }
+        @media (max-width: 931px){
+            width:350px;
+            float:left;
+        }
+       
+
+    }
+}
+
+#block-bundle {
+
+    &.col-lg-7 {
+         @media (min-width: $screen-lg-min) { 
+            width:61.33333%;
+            padding-left:0px;
+            //padding-right: 0px;
+        } 
+        @media (min-width: 1166px) and (max-width: 1199px) { 
+            width:60.333%;
+            padding-left:0px;
+            float:left;
+        }
+        @media (min-width: 932px) and (max-width: 1165px) { 
+            width:60.333%;
+            padding-left:0px;
+            float:left;
+        }
+        @media (min-width: 1111px) and (max-width: 1165px) { 
+            width:58.333%;
+            padding-left:0px;
+            float:left;
+        }
+        @media (min-width: 1062px) and (max-width: 1110px) { 
+            width:56.333%;
+            padding-left:0px;
+            float:left;
+        }
+        @media (min-width: 974px) and (max-width: 1161px) { 
+            width:52.333%;
+            padding-left:0px;
+            float:left;
+        }
+         @media (min-width: 932px) and (max-width: 973px) { 
+            width:49.333%;
+            padding-left:0px;
+            float:left;
+        }
+        @media (min-width: 891px) and (max-width: 931px) { 
+            width:59.333%;
+            padding-left:0px;
+            float:left;
+        }
+         @media (min-width: 815px) and (max-width: 890px) { 
+            width:55.333%;
+            padding-left:0px;
+            float:left;
+        }
+         @media (min-width: 768px) and (max-width: 814px) { 
+            width:52.333%;
+            padding-left:0px;
+            float:left;
+        }
+
+        .col-lg-4 {
+             @media (min-width: $screen-lg-min) { 
+                padding-left: 0px;
+                //padding-right: 0px;
+                width:30.33333%;
+             }
+        }
+
+    }
+    
+    #product-shop {
+        &.col-lg-8 {
+            padding-left:0px;
+        }
+    }
+
+  //  outline: 1px solid red;
+  //  width:41.26712328767123%;
+  //  padding-left:35px;
+   // float:left;
+  //  margin-right:10px;
+}
+#seller-box-bundle {
+  //  outline: 1px solid red;
+   // width:20.63356164383562%;
+    //float:right;
+}

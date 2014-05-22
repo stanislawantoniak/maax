@@ -33,11 +33,12 @@
       }
     }
 #filter_manufacturer {
+
       input[type="text"] {
-        padding:0px;
+        padding:0 23px 0 5px;
         float:left;
         height:23px;
-        width:83%;
+        width:100%;
         border:1px solid #d6d6d6;
         &:focus {
           outline:none;
@@ -48,6 +49,26 @@
         margin-left: 2px;
         outline:none;
       }
+      .form-group {
+        position:relative;
+      }
+      #filter_manufacturer_search {
+        &+label {
+          position:absolute;
+          right:0px;
+          top:0px;
+          display:inline-block;
+          padding:0px;
+          margin:0px;
+          height:23px;
+          width:23px;
+          i {
+            position:static;
+            margin: 4px 0 0 4px;
+            color:#000;
+          }
+        }
+      }    
     }
 #filter_price {
       .form-horizontal {
@@ -114,3 +135,18 @@
         }
       }
     }
+
+.manufacturerList {
+  margin:0px;
+  padding:0px;
+  list-style: none;
+  max-height:126px;
+  overflow-y:auto;
+  margin-bottom: 10px;
+  li {
+    padding-left: 5px;
+    .form-group {
+      margin-bottom: 5px;
+    }
+  }
+} 

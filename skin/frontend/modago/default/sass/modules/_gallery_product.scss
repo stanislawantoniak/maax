@@ -20,21 +20,27 @@
 		    				position:absolute;
 		    				top:88%;
 		    				right:10px;
-		    				z-index: 900	
+		    				z-index: 900;
+		    				@media (max-width: 931px) {
+								display:none;
+		    				}
 		    			}
 		    		}
 		    	}
 		    }
 		}
 		.navigation {
-		    width:77px;
-		    margin: 15px 23px 10px 20px;
+		    width:78px;
+		    margin: 15px 24px 10px 0;
 		    position: relative;
 		    padding:0 0;
 		    float:left;
+		     @media (max-width: 931px) {
+		     	display:none;
+		     }
 		    ul {
 		    	li {
-					width:250px;
+					width:67px;
 		    	}
 		    }
 		}
@@ -57,7 +63,7 @@
 		    height: 379px;
 		    width: 77px;
 		    background: #fff;
-		    margin-left: -2px;
+		    margin-left: 0;
 		    ul {
 		    	width: 70px;
 		    	height:2000em;
@@ -85,5 +91,63 @@
 			    }
 			}
 		}
+	}
+	/** Stage carousel controls **/
+
+	.connected-carousels {
+		    .prev-stage,
+			.next-stage {
+			    display: block;
+			    background:$arrowMap;
+			    position: absolute;
+			    top:41%;
+			    z-index: 900;
+			     @media (min-width: 931px){
+					display:none;
+			     }
+			}
+			.prev-stage {
+		    	left: 10px;
+		    	@include sprite($arrowMap, arrow-complementary-left);
+			    @include sprite-dimensions($arrowMap, arrow-complementary-left);
+			    &:hover {
+			    	@include sprite($arrowMap, arrow-complementary-left-h);
+			    }
+			   
+			}
+			.next-stage {
+			    right: 10px;
+			    @include sprite($arrowMap, arrow-complementary-right);
+			    @include sprite-dimensions($arrowMap, arrow-complementary-right);
+			    &:hover {
+			    	@include sprite($arrowMap, arrow-complementary-right-h);
+			    }
+			}
+	}
+}
+/** Navigation carousel controls **/
+
+.connected-carousels {
+	.prev-navigation,
+	.next-navigation {
+	    	display:inline-block;
+			width:15px;
+			height:75px;
+			background:#fff;
+			position:absolute;
+			left:50%;
+			margin-left: -(image-width(sprite-file($arrowMap, arrow_top_j)) / 2) ;
+			background:$arrowMap;
+			z-index: 999;
+	}
+	.prev-navigation {
+	    top:-15px; 
+	    @include sprite($arrowMap, arrow_top_j);
+	    @include sprite-dimensions($arrowMap, arrow_top_j);
+	}
+	.next-navigation {
+	    bottom:-15px; 
+	    @include sprite($arrowMap,arrow_bottom_j);
+	    @include sprite-dimensions($arrowMap, arrow_bottom_j);
 	}
 }

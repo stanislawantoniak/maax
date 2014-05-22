@@ -82,6 +82,37 @@ h2,.h2 {
 		font-weight: 300;
 	}
 }
+.section {
+	header.title-section {
+		text-align: left;
+		h2 {
+			position: relative;
+			display: block;
+			height: 18px;
+			overflow: hidden;
+			padding-left: 35px;
+			font-size: 18px;
+			font-family: $fontLight;
+			line-height: 18px;
+			text-transform: uppercase;
+			margin-left: 0;
+			margin-right: 0;
+			margin-bottom: 8px;
+			margin-top: 0px;
+			text-align: left;
+			&:before {
+			content: ' ';
+			display: block;
+			width: 18px;
+			height: 18px;
+			background: #6fffcf;
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			}
+		}
+	}
+}
 h3,.h3 {
 	font-family: $fontRegular;
 	font-size: 25px;
@@ -654,5 +685,40 @@ a.view_basket {
 			position: relative;
 			cursor:pointer;
 		}
+    }
+}
+.followUs {
+	text-align: center;
+	padding-top: 10px;
+	clear: both;
+	ul {
+		margin:0;
+		padding:0;
+		list-style: none;
+		li {
+			display:inline-block;
+			font-size: 10px;
+			color:#4f4f4f;
+			margin-right: 15px;
+			text-transform: uppercase;
+			line-height: image-height(sprite-file($followUsMap, follow_us));
+			&:first-child {
+				position:relative;
+				top:1px;
+				margin-right: 5px;
+			}
+		}
+	}
+}
+.follow_us {
+	background:$followUsMap;
+    @include inline-block;
+    &.fb {
+	    @include sprite($followUsMap, follow_us);	
+		@include sprite-dimensions($followUsMap, follow_us);
+    }
+    &.twitter {
+	    @include sprite($followUsMap, follow_us-02);	
+		@include sprite-dimensions($followUsMap, follow_us-02);
     }
 }

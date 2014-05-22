@@ -474,7 +474,9 @@ html.fb-site-lock.fb-active:not(.fb-static) {
 	}
 	.fb-slidebar-inner {
 		overflow-y: auto;
+		overflow-x: hidden;
 		height: 100%;
+		width: 210px;
 	}
 }
 
