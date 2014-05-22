@@ -30,6 +30,7 @@ class Zolago_Catalog_Vendor_ImageController
         return $vendorId;
     }
     protected function _makeRedirect($pidList) {
+        $extends = '';
         if ($pidList) {
             $extends = '/filter/'.
                 base64_encode('massaction=1').
