@@ -29,7 +29,7 @@ class Zolago_Catalog_Vendor_ImageController
         }
         return $vendorId;
     }
-    protected function _redirect($pidList) {
+    protected function _makeRedirect($pidList) {
         if ($pidList) {
             $extends = '/filter/'.
                 base64_encode('massaction=1').
@@ -37,6 +37,7 @@ class Zolago_Catalog_Vendor_ImageController
                 
         }
         header('Location: '.Mage::getUrl("udprod/vendor_image/".$extends));
+        exit();
         
     }
     protected function _prepareMapper() {
@@ -55,7 +56,7 @@ class Zolago_Catalog_Vendor_ImageController
         $result = $mapper->mapByName();
         $this->_getSession()->addSuccess(sprintf(Mage::helper('zolagocatalog')->__('Operation successful. Processed images: %s '),$result));
         $pidList = $mapper->getPidList();
-        $this->_redirect($pidList);        
+        $this->_makeRedirect($pidList);        
     }
     public function csvmapAction() {
         $pidList = array();
@@ -92,7 +93,7 @@ class Zolago_Catalog_Vendor_ImageController
         } else {
             $this->_getSession()->addError(Mage::helper('zolagocatalog')->__('Cant upload file'));
         }
-        $this->_redirect($pidList);
+        $this->_makeRedirect($pidList);
     }
     public function queueAction() {
         $this->_renderPage(null, 'udprod_image');
