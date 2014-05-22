@@ -5,18 +5,18 @@ class Zolago_Catalog_Vendor_ImageController
     /**
      * Index
      */
-    
+
     public function indexAction() {
-        Mage::register('as_frontend', true);// Tell block class to use regular URL's                        
+        Mage::register('as_frontend', true);// Tell block class to use regular URL's
         $this->_renderPage(array('default','formkey','adminhtml_head'), 'udprod_image');
     }
     public function check_galleryAction() {
         $list = $this->getRequest()->getParam('image',array());
         $products = explode(',',$list);
         foreach ($products as $id) {
-             $_product = Mage::getModel('catalog/product')->load($id);
-             $_product->setGalleryToCheck(0);
-             $_product->getResource()->saveAttribute($_product, 'gallery_to_check');
+            $_product = Mage::getModel('catalog/product')->load($id);
+            $_product->setGalleryToCheck(0);
+            $_product->getResource()->saveAttribute($_product, 'gallery_to_check');
         }
         $this->_redirect('*/*/');
     }
@@ -28,6 +28,16 @@ class Zolago_Catalog_Vendor_ImageController
             $vendorId = '0';
         }
         return $vendorId;
+    }
+    protected function _redirect($pidList) {
+        if ($pidList) {
+            $extends = '/filter/'.
+                base64_encode('massaction=1').
+                '/internal_image/'.implode(',',$pidList).'/';
+                
+        }
+        header('Location: '.Mage::getUrl("udprod/vendor_image/".$extends));
+        
     }
     protected function _prepareMapper() {
         $path = $this->_getPath();
@@ -44,10 +54,11 @@ class Zolago_Catalog_Vendor_ImageController
         $mapper = $this->_prepareMapper();
         $result = $mapper->mapByName();
         $this->_getSession()->addSuccess(sprintf(Mage::helper('zolagocatalog')->__('Operation successful. Processed images: %s '),$result));
-        header('Location: '.Mage::getUrl("udprod/vendor_image/"));
-        exit();
+        $pidList = $mapper->getPidList();
+        $this->_redirect($pidList);        
     }
     public function csvmapAction() {
+        $pidList = array();
         if (!empty($_FILES['csv_file'])) {
             $file = file($_FILES['csv_file']['tmp_name']);
             if (!$file) {
@@ -67,21 +78,21 @@ class Zolago_Catalog_Vendor_ImageController
                             break;
                         }
                     }
-                if (!$check) {
-                    $this->_getSession()->addError(Mage::helper('zolagocatalog')->__('Wrong file format. Error at line ').' '.($number+1).':'.$line);
-                } else {
-                    $mapper = $this->_prepareMapper();
-                    $mapper->setFile($file);
-                    $count = $mapper->mapByFile();
-                    $this->_getSession()->addSuccess(sprintf(Mage::helper('zolagocatalog')->__('Operation successful. Processed images: %s '),$count));
-                }
+                    if (!$check) {
+                        $this->_getSession()->addError(Mage::helper('zolagocatalog')->__('Wrong file format. Error at line ').' '.($number+1).':'.$line);
+                    } else {
+                        $mapper = $this->_prepareMapper();
+                        $mapper->setFile($file);
+                        $count = $mapper->mapByFile();
+                        $this->_getSession()->addSuccess(sprintf(Mage::helper('zolagocatalog')->__('Operation successful. Processed images: %s '),$count));
+                        $pidList = $mapper->getPidList();
+                    }
                 }
             }
         } else {
             $this->_getSession()->addError(Mage::helper('zolagocatalog')->__('Cant upload file'));
         }
-        header('Location: '.Mage::getUrl("udprod/vendor_image/"));
-        exit();
+        $this->_redirect($pidList);
     }
     public function queueAction() {
         $this->_renderPage(null, 'udprod_image');
@@ -94,7 +105,7 @@ class Zolago_Catalog_Vendor_ImageController
     }
 
     public function connectorAction() {
-        $extendedPath = '';
+        $extendedPath = $this->_getVendorId();
         $path = 'lib/ElFinder';
         include_once $path.DIRECTORY_SEPARATOR.'elFinderConnector.class.php';
         include_once $path.DIRECTORY_SEPARATOR.'elFinder.class.php';
@@ -266,16 +277,16 @@ class Zolago_Catalog_Vendor_ImageController
 
         @fclose($out);
         @fclose($in);
-        
+
         // Check if file has been uploaded
         if (!$chunks || $chunk == $chunks - 1) {
             // Strip the temp .part suffix off
             rename("{$filePath}.part", $filePath);
         }
-            if (!$this->_checkImage($filePath)) {
-                unlink($filePath);
-                die(' {"jsonrpc" : "2.0", "error" : {"code": 101, "message": "File is not image."}, "id" : "id"}');
-            }
+        if (!$this->_checkImage($filePath)) {
+            unlink($filePath);
+            die(' {"jsonrpc" : "2.0", "error" : {"code": 101, "message": "File is not image."}, "id" : "id"}');
+        }
         // Return Success JSON-RPC response
         die(' {"jsonrpc" : "2.0", "result" : null, "id" : "id"}');
 

@@ -11,7 +11,8 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
      * vendor products collection
      */
     protected $_collection;
-    
+
+    protected $_pidList;    
     /**
      * csv file
      */
@@ -95,8 +96,12 @@ class Zolago_Catalog_Model_Mapper extends Mage_Core_Model_Abstract {
         }
         return $count;
     }
+    public function getPidList() {
+        return $this->_pidList;
+    }
     protected function _savePid($pidList) {
-        Mage::getSingleton('core/session')->setMappedEntities($pidList);
+        $this->_pidList = $pidList;
+//        Mage::getSingleton('core/session')->setMappedEntities($pidList);
     }
     protected function _changeCheckFlag($pid) {
              $_product = Mage::getModel('catalog/product')->load($pid);
