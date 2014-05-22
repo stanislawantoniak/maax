@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<jstranslator>
+    <po-split translate="message" module="zolagopo">
+        <message>You can split selected items out to another order. First select items.</message>
+    </po-split>
+    <jquery-validation-error translate="message" module="zolagopo">
+        <message>You missed 1 field. It has been highlighted.</message>
+    </jquery-validation-error>
+    <jquery-validation-errors translate="message" module="zolagopo">
+        <message>You missed {{errors}} fields. They have been highlighted.</message>
+    </jquery-validation-errors>
+</jstranslator>

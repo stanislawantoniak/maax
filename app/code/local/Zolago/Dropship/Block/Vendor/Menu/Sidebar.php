@@ -3,12 +3,22 @@
 class Zolago_Dropship_Block_Vendor_Menu_Sidebar 
 	extends Zolago_Dropship_Block_Vendor_Menu_Abstract
 {
-	public function getMenu() {
-		return $this->getFullMenu();
-	}
+	/**
+	 * @var array
+	 */
+	protected $_sections = array(
+		self::ITEM_DASHBOARD,
+		self::ITEM_PRODUCTS,
+		self::ITEM_ORDER,
+		self::ITEM_HELPDESK,
+		self::ITEM_RMA,
+		self::ITEM_ADVERTISE,
+		self::ITEM_SETTING,
+		self::ITEM_STATEMENTS
+	);
 	
 	public function renderMenu(array $menu, $useContainer=false, $isSubmenu=false) {
-		$str = $useContainer ? "<ul".($isSubmenu ? " class=\"sub-menu\"" : "") . "\">" : "";
+		$str = $useContainer ? "<ul".($isSubmenu ? " class=\"sub-menu\"" : "") . ">" : "";
 		foreach($menu as $item){
 			if(is_array($item)){
 				$className = array();

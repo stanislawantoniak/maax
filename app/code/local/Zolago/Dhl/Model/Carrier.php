@@ -6,7 +6,9 @@ class Zolago_Dhl_Model_Carrier extends
         Mage_Shipping_Model_Carrier_Abstract implements 
         Mage_Shipping_Model_Carrier_Interface{ 
 			
-    protected $_code = "zolagodhl";
+	const CODE = "zolagodhl";
+	
+    protected $_code = self::CODE;
 	
 	/**
 	 * Empyt collect

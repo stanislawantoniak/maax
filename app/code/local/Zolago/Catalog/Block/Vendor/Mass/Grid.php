@@ -263,6 +263,7 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 			);
 			
 			// Sku
+			// @todo get attribute by unirgy dropship config
 			$sku = Mage::getModel("eav/config")->getAttribute(Mage_Catalog_Model_Product::ENTITY, "sku");
 			$sku->setStoreId($this->getLabelStore()->getId());
 			$columnStart[$sku->getAttributeCode()] = array(

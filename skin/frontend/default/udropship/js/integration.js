@@ -14,6 +14,7 @@ jQuery.noConflict();
                 isBootstrapEvent = true;
             });
         });
+		
     }
     var originalHide = Element.hide;
     Element.addMethods({
@@ -41,7 +42,8 @@ Zolago.gridIntegrator = function(gridObj){
 	this.gridObj = gridObj;
 	
 	var oldSetCheckboxChecked = gridObj.setCheckboxChecked;
-	var	oldCheckCheckboxes = gridObj.massaction.checkCheckboxes;
+	var mass = gridObj.massaction;
+	var	oldCheckCheckboxes = mass ? mass.checkCheckboxes : null;
 
 	var updateSelectCheckbox = function(checkbox){
 		if(jQuery.uniform){
@@ -60,35 +62,108 @@ Zolago.gridIntegrator = function(gridObj){
 		if(!el.up("#"+gridObj.containerId)){
 			return;
 		}
-		var checkbox = el.select(".massaction-checkbox")[0];
-		updateSelectCheckbox(checkbox);
+		if(mass){
+			var checkbox = el.select(".massaction-checkbox")[0];
+			updateSelectCheckbox(checkbox);
+		}
 	});
-	gridObj.massaction.checkCheckboxes = function(){
-		oldCheckCheckboxes.apply(gridObj.massaction, arguments);
-		gridObj.massaction.getCheckboxes().each(updateSelectCheckbox);
+	if(mass){
+		mass.checkCheckboxes = function(){
+			oldCheckCheckboxes.apply(mass, arguments);
+			mass.getCheckboxes().each(updateSelectCheckbox);
+		}
 	}
 
-	gridObj.setCheckboxChecked = function(element){
-		oldSetCheckboxChecked.apply(gridObj, arguments);
-		updateSelectCheckbox(element);
+	if(mass){
+		gridObj.setCheckboxChecked = function(element){
+			oldSetCheckboxChecked.apply(gridObj, arguments);
+			updateSelectCheckbox(element);
+		}
+	}
+	var widgets = [], buttons = [];
+	
+	if(mass){
+		 widgets = $$(
+				'#'+gridObj.containerId+' .filter input', 
+				'#'+gridObj.containerId+' .filter select',
+				'#'+mass.containerId+' select',
+				'#'+mass.containerId+' input'
+		);
+
+		buttons = $$(
+				'#'+gridObj.containerId+' button',
+				'#'+mass.containerId+' button'
+		);
+	}else{
+		 widgets = $$(
+				'#'+gridObj.containerId+' .filter input', 
+				'#'+gridObj.containerId+' .filter select'
+		);
+		buttons = $$(
+				'#'+gridObj.containerId+' button'
+		);
 	}
 	
-	var widgets = $$(
-			'#'+gridObj.containerId+' .filter input', 
-			'#'+gridObj.containerId+' .filter select',
-			'#'+gridObj.massaction.containerId+' select',
-			'#'+gridObj.massaction.containerId+' input'
-	);
-	var buttons = $$(
-			'#'+gridObj.massaction.containerId+' button'
-	);
+	/// proess date fileds
+	$$('#'+gridObj.containerId+' .filter .date img', 
+	   '#'+gridObj.containerId+' .filter .date span').each(function(el){
+		el.remove();
+	});
+	$$('#'+gridObj.containerId+' .filter .date input').each(function(el, i){
+		var _el = jQuery(el);
+			_el.attr("placeholder", Translator.translate(!i ? "From" : "To"));
+			_el.css({
+				width: "49%",
+				float: "left"
+			});
+			if(!i){
+				_el.css("margin-right", "2%");
+			}
+			_el.datepicker();
+	});
 	widgets.each(function(el){
 		el.addClassName("form-control");
 	});
 	buttons.each(function(el){
 		el.addClassName("btn");
+		if(el.hasClassName("task")){
+			el.addClassName("btn-primary btn-search");
+		}
 	});
-	
-	gridObj.massaction.checkCheckboxes();
+	if(mass){
+		mass.checkCheckboxes();
+	}
 }
-console.log(Zolago);
+
+Zolago.price = function(v){
+	
+        /* @todo locale... */
+        var p = (Math.round(v * Math.pow(10, 2)) / Math.pow(10, 2) + "").split(".");
+
+        if (p.length == 1) {
+            p[1] = "00";
+        } else if (p.length == 2 && p[1].length == 1) {
+            p[1] += "0";
+        }
+        return p.join(",");
+}
+
+Zolago.round = function(v, pow){
+	
+		if(pow==undefined){
+			pow=2;
+		}
+		
+        return Math.round(v * Math.pow(10, pow)) / Math.pow(10, pow) + "";
+}
+
+Zolago.currency = function(v){
+	return this.price(price) + " " + global.i18n.currency;
+}
+
+Zolago.replace = function(markup, data) {
+	jQuery.each(data, function(key) {
+		markup = markup.replace(new RegExp("\{\{" + key + "\}\}", "g"), typeof data[key] != "undefined" ? data[key] : "");
+	});
+	return markup;
+};

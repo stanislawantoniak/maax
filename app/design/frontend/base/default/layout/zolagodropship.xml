@@ -127,6 +127,10 @@
 				<type>skin_js</type>
 				<name>js/plugins/uniform/jquery.uniform.min.js</name>
 			</action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>js/cssbs.js</name>
+            </action>
 	
 			<!-- add init script -->
 			<block type="core/template" name="head.initscript" template="unirgy/dropship/vendor/initscript.phtml"/>
