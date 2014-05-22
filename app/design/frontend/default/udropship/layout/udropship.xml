@@ -66,6 +66,7 @@
         </reference>
     </udropship_vendor>
 
+
     <udropship_vendor_index>
         <update handle="udropship_vendor" />
         <reference name="head">

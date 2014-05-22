@@ -100,4 +100,5 @@ class Zolago_Po_Block_Vendor_Po extends Mage_Core_Block_Template
 	public function getVendor() {
 		return Mage::getSingleton('udropship/session')->getVendor();
 	}
+	
 }

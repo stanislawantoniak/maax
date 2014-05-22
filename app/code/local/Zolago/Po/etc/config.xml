@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Po>
-            <version>0.0.3</version>
+            <version>0.0.6</version>
         </Zolago_Po>
     </modules>
     <global>
@@ -46,6 +46,7 @@
 			<udpo>
 				<rewrite>
 					<po>Zolago_Po_Model_Po</po>
+					<po_item>Zolago_Po_Model_Po_Item</po_item>
 				</rewrite>
 			</udpo>
 		</models>
@@ -58,8 +59,59 @@
 					</poShipmentSaveBefore>
 				</observers>
 			</udpo_po_shipment_save_before>
+			<sales_quote_address_save_before>
+				<observers>
+					<zolagopo>
+						<model>zolagopo/observer</model>
+						<method>quoteAddressSaveBefore</method>
+					</zolagopo>
+				</observers>
+			</sales_quote_address_save_before>
 		</events>
+		<fieldsets>
+			<!-- Transfer need invoice field -->
+			<sales_copy_order_billing_address>
+                <need_invoice>
+                    <to_order>*</to_order>
+				</need_invoice>
+			</sales_copy_order_billing_address>
+			<sales_copy_order_shipping_address>
+                <need_invoice>
+                    <to_order>*</to_order>
+				</need_invoice>
+			</sales_copy_order_shipping_address>
+			<sales_convert_quote_address>
+                <need_invoice>
+                    <to_order_address>*</to_order_address>
+                </need_invoice>
+			</sales_convert_quote_address>
+			<sales_convert_order_address>
+                <need_invoice>
+                    <to_quote_address>*</to_quote_address>
+                </need_invoice>
+			</sales_convert_order_address>
+			<customer_address>
+                 <need_invoice>
+					 <to_quote_address>*</to_quote_address>
+				 </need_invoice>
+            </customer_address>
+			<checkout_onepage_billing>
+				<need_invoice>
+					<to_customer>*</to_customer>
+				</need_invoice>
+			</checkout_onepage_billing>
+		</fieldsets>
     </global>
+	<admin>
+		<fieldsets>
+			<customer_dataflow>
+			   <need_invoice>
+				   <billing>1</billing>
+				   <shipping>1</shipping>
+			   </need_invoice>
+			</customer_dataflow>
+		</fieldsets>
+	</admin>
     <frontend>
         <layout>
             <updates>

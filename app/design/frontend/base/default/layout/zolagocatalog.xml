@@ -19,7 +19,17 @@
 		<update handle="udropship_vendor" />
 		<update handle="formkey" />
 		<update handle="adminhtml_head" />
+		<reference name="head">
+		    <action method="addJs"><script>jquery/jquery.min.js</script></action>
+		    <action method="addJs"><script>jquery/jquery-ui.min.js</script></action>
+		    <action method="addJs"><script>plupload/plupload.full.min.js</script></action>
+		    <action method="addJs"><script>plupload/jquery.ui.plupload/jquery.ui.plupload.js</script></action>
+		    <action method="addCss"><stylesheet>css/melon/plugins/jquery-ui.css</stylesheet></action>
+		    <action method="addItem"><type>js_css</type><name>plupload/jquery.ui.plupload/css/jquery.ui.plupload.css</name></action>
+		</reference>
 		<reference name="content">
+			<block name="mass" type="zolagocatalog/vendor_image" template="zolagocatalog/image.phtml">			    
+            </block>		    
 		</reference>
 	</udprod_vendor_image_index>
 </layout>
