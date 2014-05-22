@@ -1201,6 +1201,12 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         $r = $this->getRequest();
 		
 		try{
+			$statusModel = $udpo->getStatusModel();
+			if(!$statusModel->isCancelShippingAvailable($udpo)){
+				throw new Mage_Core_Exception(
+					Mage::helper("zolagopo")->__("Status cannot be changed.")
+				);
+			}
 			$shipment = Mage::getModel("sales/order_shipment")->load($r->getParam("shipping_id"));
 			/* @var $shipment Mage_Sales_Model_Order_Shipment */
 			if($shipment->getId() && $shipment->getUdpoId()==$udpo->getId()){

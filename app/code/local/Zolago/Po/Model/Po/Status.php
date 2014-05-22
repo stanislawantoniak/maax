@@ -236,6 +236,9 @@ class Zolago_Po_Model_Po_Status
 	public function isCancelShippingAvailable($po) {
 		switch ($this->_getStatus($po)) {
 			case self::STATUS_READY:
+				if($po instanceof Zolago_Po_Model_Po){
+					return !$po->getAggregated()->isConfirmed();
+				}
 				return true;
 			break;
 		}
