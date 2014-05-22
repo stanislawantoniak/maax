@@ -102,3 +102,4 @@
 "You are about to change status from %s to %s. Are you sure?","Zamierzasz zmienić status zamówienia z <b>%s</b> na %s. Jesteś pewien?",
 "Dispatch ref.", "Wystaw zbiorówkę"
 "Direct realisation", "Skieruj do realizacji"
+"Status has been changed", "Status zmieniono"

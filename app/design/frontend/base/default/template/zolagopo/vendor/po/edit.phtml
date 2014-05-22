@@ -18,6 +18,60 @@
 			<?php if(1||$_alert):?>
 				<span class="label label-danger" style="display: inline; color: #fff; "><?php echo $_hlp->__("Sample alert text [dev]");?></span>
 			<?php endif;?>
+				
+		</div>
+		<div class="pull-right main-actions">
+			<?php /* Confirm direct realistaion */ ?>
+			<?php if($_statusModel->isDirectRealisationAvailable($_po)):?>
+				<a class="btn-notification btn  btn-primary" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("directRealisation");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("You are about to move to fulfilment. Are you sure?");?>" data-modal="true" href="#">
+					<i class="icon-ok"></i>
+					<?php echo $_hlp->__("Move to fulfilment");?>
+				</a> 
+			<?php endif;?>
+
+			<?php /* Confirm realase button */ ?>
+			<?php if($_statusModel->isConfirmReleaseAvailable($_po)):?>
+				<a class="btn-notification btn" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("setConfirmRelease");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("You are about to confirm order realisation. Are you sure?");?>" data-modal="true" href="#">
+					<i class="icon-ok"></i>
+					<?php echo $_hlp->__("Confirm release");?>
+				</a> 
+			<?php endif;?>
+			
+			<?php if($_statusModel->isShippingAvailable($_po)):?>
+				<?php if($this->canUseCarrier()):?>
+				<button class="btn btn-primary" data-toggle="modal" href="#shippingModal"><?php echo $_hlp->__("Print shipping letter");?></button>
+				<?php else:?>
+				<button class="btn btn-primary" data-toggle="modal" href="#shippingModal"><?php echo $_hlp->__("Add shipping letter");?></button>
+				<?php endif;?>
+			<?php elseif($_statusModel->isStartPackingAvailable($_po)):?>
+				<a class="btn btn-primary" data-toggle="modal" href="<?php echo $this->getPoUrl("startPacking");?>"><?php echo $_hlp->__("Start packing");?></a>
+			<?php endif;?>
+
+			<?php /* Check stock button */ ?>
+			<?php if($_statusModel->isConfirmStockAvailable($_po)):?>
+				<?php if(!$_po->getStockConfirm()):?>
+				<?php  /* Display as active widget */ ?>
+				<a class="btn-notification  btn-danger" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("setConfirmStock");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("You are about to check stock. Are you sure?");?>" data-modal="true" href="#">
+					<i class="icon-warning-sign"></i>
+					<?php echo $_hlp->__("Check stock");?>
+				</a> 
+				<?php else: ?>
+				<?php  /* Display as label */ ?>
+				<button class="btn  btn-success" disabled="disabled">
+					<?php echo $_hlp->__("Stock checked");?>
+				</button>
+				<?php endif;?>
+			<?php else:?>
+				<?php  /* Display as label */ ?>
+				<button class="btn <?php if($_po->getStockConfirm()):?> btn-success<?php endif;?>" disabled="disabled">
+					<?php if($_po->getStockConfirm()):?>
+						<i class="icon-ok"></i>
+						<?php echo $_hlp->__("Stock checked");?>
+					<?php else:?>
+						<?php echo $_hlp->__("Stock not checked");?>
+					<?php endif;?>
+				</button>
+			<?php endif;?>
 		</div>
 	</div>
 </div>
@@ -141,47 +195,7 @@
 					</h4> 
 					<div class="toolbar no-padding"> 
 						<div class="btn-group"> 
-							<?php /* Confirm direct realistaion */ ?>
-							<?php if($_statusModel->isDirectRealisationAvailable($_po)):?>
-								<a class="btn-notification btn btn-xs btn-primary" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("directRealisation");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("You are about to move to fulfilment. Are you sure?");?>" data-modal="true" href="#">
-									<i class="icon-ok"></i>
-									<?php echo $_hlp->__("Move to fulfilment");?>
-								</a> 
-							<?php endif;?>
 							
-							<?php /* Confirm realase button */ ?>
-							<?php if($_statusModel->isConfirmReleaseAvailable($_po)):?>
-								<a class="btn-notification btn btn-xs" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("setConfirmRelease");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("You are about to confirm order realisation. Are you sure?");?>" data-modal="true" href="#">
-									<i class="icon-ok"></i>
-									<?php echo $_hlp->__("Confirm release");?>
-								</a> 
-							<?php endif;?>
-								
-							<?php /* Check stock button */ ?>
-							<?php if($_statusModel->isConfirmStockAvailable($_po)):?>
-								<?php if(!$_po->getStockConfirm()):?>
-								<?php  /* Display as active widget */ ?>
-								<a class="btn-notification btn btn-xs btn-danger" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("setConfirmStock");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("You are about to check stock. Are you sure?");?>" data-modal="true" href="#">
-									<i class="icon-warning-sign"></i>
-									<?php echo $_hlp->__("Check stock");?>
-								</a> 
-								<?php else: ?>
-								<?php  /* Display as label */ ?>
-								<button class="btn btn-xs btn-success" disabled="disabled">
-									<?php echo $_hlp->__("Stock checked");?>
-								</button>
-								<?php endif;?>
-							<?php else:?>
-								<?php  /* Display as label */ ?>
-								<button class="btn btn-xs<?php if($_po->getStockConfirm()):?> btn-success<?php endif;?>" disabled="disabled">
-									<?php if($_po->getStockConfirm()):?>
-										<i class="icon-ok"></i>
-										<?php echo $_hlp->__("Stock checked");?>
-									<?php else:?>
-										<?php echo $_hlp->__("Stock not checked");?>
-									<?php endif;?>
-								</button>
-							<?php endif;?>
 							
 							<?php /* Add new item button */ ?>
 							<?php if($_isEditable):?>
@@ -433,17 +447,7 @@
 					<div class="clearfix"></div>
 					<?php else:?>
 					<div class="align-center">
-						<?php if($_statusModel->isShippingAvailable($_po)):?>
-							<?php if($this->canUseCarrier()):?>
-							<button class="btn btn-primary" data-toggle="modal" href="#shippingModal"><?php echo $_hlp->__("Print shipping letter");?></button>
-							<?php else:?>
-							<button class="btn btn-primary" data-toggle="modal" href="#shippingModal"><?php echo $_hlp->__("Add shipping letter");?></button>
-							<?php endif;?>
-						<?php elseif($_statusModel->isStartPackingAvailable($_po)):?>
-							<a class="btn btn-primary" data-toggle="modal" href="<?php echo $this->getPoUrl("startPacking");?>"><?php echo $_hlp->__("Start packing");?></a>
-						<?php else:?>
-							<p class="align-center"><small class="text-muted"><?php echo $_hlp->__("Shipment is not possible in this order status. Process order to right status or wait for payment.");?></small></p>
-						<?php endif;?>
+						<p class="align-center"><small class="text-muted"><?php echo $_hlp->__("Shipment is not possible in this order status. Process order to right status or wait for payment.");?></small></p>
 					</div>
 					<?php endif;?>
 				</div>

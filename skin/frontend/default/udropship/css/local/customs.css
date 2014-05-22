@@ -231,6 +231,9 @@ select.form-control {
 .widget-content.bottom-info {
   min-height: 146px;
 }
+.main-actions {
+  padding: 25px 0;
+}
 .shipping-info .btn-primary {
   margin-top: 46px;
 }
