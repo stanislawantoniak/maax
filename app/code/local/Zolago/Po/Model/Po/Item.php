@@ -99,7 +99,31 @@ class Zolago_Po_Model_Po_Item extends Unirgy_DropshipPo_Model_Po_Item
    }
    
    public function getFinalSku() {
-	   return $this->getData('vendor_simple_sku') ? $this->getData('vendor_simple_sku') : $this->getData('sku');
+	   
+	   $child = $this->getChildItem();
+	   if($child && $child->getId() && $child->getData('vendor_sku')){
+		   return $child->getData('vendor_sku');
+	   }
+	   
+	   if($this->getData('vendor_sku')){
+		   return $this->getData('vendor_sku');
+	   }
+	   
+	   
+	   return null;
+   }
+   
+   /**
+    * @return Zolago_Po_Model_Po_Item
+    */
+   public function getChildItem() {
+	   if(!$this->hasData("child_item")){
+			$parent = Mage::getResourceModel('zolagopo/po_item_collection')->
+				 addFieldToFilter("parent_item_id", $this->getOrderItem()->getId())->
+					getFirstItem();
+			$this->setData("child_item", $parent);
+	   }
+	   return $this->getData("child_item");
    }
    
    public function getOneLineDesc() {

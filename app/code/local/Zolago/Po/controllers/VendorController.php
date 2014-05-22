@@ -156,12 +156,25 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 		}
 	}
 	
+	/**
+	 * @return type
+	 */
+	protected function _massRedirectReferer($defaultUrl=null) {
+		$ids = $this->_getMassIds();
+		$filter = "massaction=1&udropship_status=0";
+        $this->getResponse()->setRedirect(Mage::getUrl("*/*/index", array(
+			"filter" => Mage::helper("core")->urlEncode($filter),
+			"internal_po" => implode(",",$ids)
+		)));
+        return $this;
+	}
 	
 	/**
 	 * @return void
 	 */
 	public function massConfirmStockAction() {
-		return $this->_redirectReferer();
+		$this->_processMass(self::ACTION_CONFIRM_STOCK);
+		return $this->_massRedirectReferer();
 	}
 	
 	/**
@@ -169,7 +182,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 	 */
 	public function massStartPackingAction() {
 		$this->_processMass(self::ACTION_START_PACKING);
-		return $this->_redirectReferer();
+		return $this->_massRedirectReferer();
 	}
 	
 	/**
@@ -177,7 +190,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 	 */
 	public function massPrintAggregatedAction() {
 		$this->_processMass(self::ACTION_PRINT_AGGREGATED);
-		return $this->_redirectReferer();
+		return $this->_massRedirectReferer();
 	}
 	
 	/**
@@ -185,7 +198,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 	 */
 	public function massDirectRealisationAction() {
 		$this->_processMass(self::ACTION_DIRECT_REALISATION);
-		return $this->_redirectReferer();
+		return $this->_massRedirectReferer();
 	}
 	
 	/**

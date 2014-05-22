@@ -69,8 +69,8 @@ class Zolago_Po_Block_Vendor_Po_Edit_Pos_Stock
 	public function getPosQty(Zolago_Po_Model_Po_Item $item){
 		$pos = $this->getPos();
 		$vendor = $this->getPo()->getVendor();
-		if($pos && $pos->getId() && $item->getVendorSku() && $vendor->getExternalId()){
-			return Mage::helper("zolagoconverter")->getQty($vendor, $pos, $item->getVendorSku());
+		if($pos && $pos->getId() && $item->getFinalSku() && $vendor->getExternalId()){
+			return Mage::helper("zolagoconverter")->getQty($vendor, $pos, $item->getFinalSku());
 		}
 		
 		return null;
