@@ -163,7 +163,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 		$ids = $this->_getMassIds();
 		$filter = "massaction=1&udropship_status=0";
         $this->getResponse()->setRedirect(Mage::getUrl("*/*/index", array(
-			"filter" => Mage::helper("url")->encode($filter),
+			"filter" => Mage::helper("core")->urlEncode($filter),
 			"internal_po" => implode(",",$ids)
 		)));
         return $this;
