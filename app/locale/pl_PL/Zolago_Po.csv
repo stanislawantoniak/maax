@@ -100,4 +100,5 @@
 "POS has been changed.","POS został zmieniony"
 "Total %s records found.","Znaleziono %s rekord(ów)."
 "You are about to change status from %s to %s. Are you sure?","Zamierzasz zmienić status zamówienia z <b>%s</b> na %s. Jesteś pewien?",
-
+"Dispatch ref.", "Wystaw zbiorówkę"
+"Direct realisation", "Skieruj do realizacji"

@@ -48,7 +48,7 @@
 						<dt><?php echo $_hlp->__("Status");?>:</dt> 
 						<dd>
 							<?php if($_statusModel->isManulaStatusAvailable($_po)):?>
-							<div class="btn-group"> 
+							<div class="btn-group" id="status-holder"> 
 								<button class="btn btn-xs dropdown-toggle" data-toggle="dropdown"> 
 									<?php echo $this->getCurrentStatus($_po);?> <span class="caret"></span> 
 								</button> 

@@ -262,7 +262,10 @@ table.foot-empty-cells tfoot td:empty {
 .select2-highlighted .text-muted {
   color: #fff;
 }
-@media (min-width: 768px) and (max-width: 1200px) {
+#status-holder .btn {
+  white-space: normal;
+}
+@media (min-width: 768px) and (max-width: 1400px) {
   .dl-horizontal.dl-z dt {
     width: 120px;
   }
@@ -275,20 +278,4 @@ table.foot-empty-cells tfoot td:empty {
   .shipping-info .dl-horizontal.dl-z dd {
     margin-left: 110px;
   }
-}
-
-.clearb {
-    clear: both;
-}
-#control-battons td {
-    display: inline-block;
-}
-#control-battons .input-group .form-control {
-    margin-right: 5px;
-}
-.chrome #control-battons .input-group .form-control {
-    float: left;
-}
-.chrome #control-battons .input-group .icon-search {
-    margin: 0 -5px;
 }
