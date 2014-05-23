@@ -17,6 +17,7 @@ class Zolago_Catalog_Vendor_ImageController
             $_product = Mage::getModel('catalog/product')->load($id);
             $_product->setGalleryToCheck(0);
             $_product->getResource()->saveAttribute($_product, 'gallery_to_check');
+            
         }
         $this->_redirect('*/*/');
     }
