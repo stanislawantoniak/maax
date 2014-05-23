@@ -42,7 +42,7 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 
 					foreach($childCollection as $childItemId=>$childItem){
 						$collection->removeItemByKey($childItemId);
-						$childItem->setId(null);
+						$childItem->setId(null); // force add item to colelciton in po model
 						$newModel->addItem($childItem);
 						$childItem->setId($childItemId); 
 					}
@@ -116,6 +116,13 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 			$transaction->rollBack();
 			throw $ex;
 		}
+		
+		Mage::dispatchEvent("zolagopo_po_split", array(
+			"po"		=> $this, 
+			"new_po"	=> $newModel, 
+			"item_ids"	=> $itemIds
+		));
+					
 		return $newModel;
 	}
 	
