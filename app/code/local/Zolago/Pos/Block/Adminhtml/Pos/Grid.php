@@ -31,6 +31,7 @@ class Zolago_Pos_Block_Adminhtml_Pos_Grid extends Mage_Adminhtml_Block_Widget_Gr
         
         $this->addColumn("client_number", $data);
         $data['index'] = 'external_id';
+        $data['type'] = 'text';
         $data['header'] = Mage::helper("zolagopos")->__("External ID");
         
         $this->addColumn("external_id", $data);

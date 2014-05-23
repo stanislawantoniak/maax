@@ -62,7 +62,92 @@ var App = function($) {
 			// Toggle visibility
 			$('.navbar-left.navbar-left-responsive').slideToggle(200);
 		});
-
+		
+			
+		//===== Notty buttons =====//
+		$('.btn-notification').click(function() {
+			var self = $(this);
+			noty({
+				text: self.data('text'),
+				type: self.data('type'),
+				modal: self.data('modal') || self.data('type') == 'confirm',
+				layout: self.data('layout'),
+				buttons: (self.data('type') != 'confirm') ? false : [
+					{
+						addClass: 'btn btn-primary', text: Translator.translate('Ok'), onClick: function($noty) {
+							//$noty.close();
+							if(self.data("ok-url")){
+								document.location.replace(self.data("ok-url"));
+							}
+						}
+					}, {
+						addClass: 'btn btn-danger', text: Translator.translate('Cancel'), onClick: function($noty) {$noty.close();}
+					}
+				]
+			});
+			return false;
+		});
+		
+		
+		//===== Validation & notty =====//
+		if($.validator && window.noty){
+			$.validator.setDefaults({
+				invalidHandler: function(form, validator) {
+					var errors = validator.numberOfInvalids();
+					if (errors) {
+						var message = errors == 1
+						? Translator.translate('You missed 1 field. It has been highlighted.')
+						: Zolago.replace(Translator.translate('You missed {{errors}} fields. They have been highlighted.'), {errors: errors});
+						noty({
+							text: message,
+							type: 'error',
+							timeout: 2000
+						});
+					}
+				}
+			});
+		}
+		
+		//===== price plugin =====//
+		if($.fn.alphanum){
+			$(".positiveInteger").numeric("positiveInteger");
+			$(".integer").numeric("integer");
+			$(".numeric").numeric();
+			$(".alphanum").alphanum();
+			$(".alpha").alpha();
+		}
+			
+		//===== loading btn =====//	
+		$('.form-btn-loading').each(function(){
+			var self = $(this);
+			if(self.parents("form").length){
+				self.parents("form").submit(function(e){
+					setTimeout(function(){
+						if(!e.isDefaultPrevented()){
+							self.button('loading');
+						}
+					}, 50);
+					
+				});
+			}
+		})
+		
+		//===== handle esc  =====//	
+		$(window).on("keyup", function(e){
+			if(e.keyCode==27){
+				$(".modal").modal("hide");
+				$.noty.closeAll();
+			}
+		})
+		
+		//===== datepicker btn =====//	
+		if($.datepicker){
+			$.datepicker.setDefaults({
+				showOtherMonths:true,
+				autoSize: true,
+				dateFormat: 'dd-mm-yy'
+			});
+		}
 		var handleElements = function() {
 			// First visible childs add .first
 			$('.crumbs .crumb-buttons > li').removeClass('first');
@@ -82,6 +167,9 @@ var App = function($) {
 			// Handle project switcher width
 			handleProjectSwitcherWidth();
 		}
+
+
+
 
 		// handles responsive breakpoints.
 		$(window).setBreakpoints({

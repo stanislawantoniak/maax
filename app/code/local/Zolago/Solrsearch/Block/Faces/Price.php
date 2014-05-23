@@ -15,7 +15,9 @@ class Zolago_Solrsearch_Block_Faces_Price extends Zolago_Solrsearch_Block_Faces_
         if ($usePriceSilder > 0) {
             $this->setTemplate('solrsearch/standard/searchfaces/price-slider.phtml');
             $head = $this->getLayout()->getBlock('head');
-            $head->addJs('solrsearch/slider.js');
+            if ($head) {
+                $head->addJs('solrsearch/slider.js');
+            }
         }
 
         return parent::_prepareLayout();

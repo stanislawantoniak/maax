@@ -1,0 +1,136 @@
+<?php /* @var $this Zolago_Po_Block_Vendor_Po_Edit_Edititem  */?>
+<?php $_hlp = Mage::helper("zolagopo");?>
+<?php $_po =  $this->getPo();?>
+<?php $_currency = $_po->getOrder()->getOrderCurrencyCode();?>
+
+<!-- Modal add letter-->
+<div class="modal fade" id="editItemModal">
+	<div class="modal-dialog">
+		<form id="edititem-item-form" action="<?php echo $this->getPoUrl("editItem");?>" 
+			  class="form-horizontal row-border" method="post">
+			<input type="hidden" name="item_id" value="" id="edititem-item_id"/> 
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title">
+						<?php echo $_hlp->__("Edit item");?>
+					</h4>
+				</div>
+				<div class="modal-body">
+					<ul class="list-unstyled">
+						<li class="form-group">
+							<label class="col-md-3 control-label"><?php echo $_hlp->__('Product') ?></label>
+							<label class="col-md-9 control-label" style="text-align: left; font-weight: normal;" id="edititem-item_name">Product name</label>
+						</li>
+						<li class="form-group">
+							<label for="edititem-item_qty" class="col-md-3 control-label"><?php echo $_hlp->__('Qty') ?> <span class="required">*</span></label>
+							<div class="col-md-4">
+								<input name="product_qty" required="required" id="edititem-item_qty" type="text" value="1" min="1" class="form-control positiveInteger required"/> 
+							</div>
+						</li>
+						<li class="form-group">
+							<label for="edititem-item_price" class="col-md-3 control-label"><?php echo $_hlp->__('Price') ?> <span class="required">*</span></label>
+							<div class="col-md-4">
+								<input name="product_price" required="required" id="edititem-item_price" type="text" value="" class="form-control pricePositive required numeric"/> 
+							</div>
+							<div class="col-md-2">
+								<div class="after-filed-label text-muted">
+									<?php echo $_currency;?>
+								</div>
+							</div>
+						</li>
+						<li class="form-group ">
+							<label for="edititem-item_discount" class="col-md-3 control-label"><?php echo $_hlp->__('Discount') ?></label>
+							<div class="col-md-4">
+								<input name="product_discount"  id="edititem-item_discount" type="text" value="" class="form-control pricePositive numeric"/> 
+							</div>
+							<div class="col-md-4">
+								<div class="after-filed-label text-muted">
+									<?php echo $_currency;?>
+									<span id="edititem-dicount-percent" class="text-success"></span>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_hlp->__("Cancel");?></button>
+					<button type="submit" name="add_own" value="1" class="btn form-btn-loading btn-primary product-specified" data-loading-text="<?php echo $_hlp->__("Loading...");?>"><?php echo $_hlp->__("Save");?></button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+jQuery(function($){
+	var currency = '<?php echo $_currency;?>';
+	var form = $("#edititem-item-form");
+	var name = $("#edititem-item_name");
+	var item = $("#edititem-item_id");
+	var price = $("#edititem-item_price");
+	var qty = $("#edititem-item_qty");
+	var discount = $("#edititem-item_discount");
+	var timer = null;
+	
+	
+	var validator = form.validate({
+		rules: {
+			"product_discount":{
+				lessthat: price
+			}
+		}
+	});
+	
+	
+	var precentChange= function(){
+		var value = parseFloat(discount.val());
+		var priceValue = parseFloat(price.val());
+		
+		if(isNaN(value) || value<0){
+			value=0;
+		}
+		
+		if(isNaN(priceValue) || priceValue<0){
+			priceValue=0;
+		}
+		$("#edititem-dicount-percent").html('');
+		
+		if(value && price && priceValue>value){
+			$("#edititem-dicount-percent").html('(-' + Math.round(value/priceValue*10000)/100 + '%)');
+		}	
+	}
+	
+	
+	
+	var startTimer = function(){
+		
+		timer = setInterval(precentChange, 50);
+	}
+	
+	var stopInterval = function(){
+		if(timer){
+			clearInterval(timer);
+		}
+	}
+	
+	discount.focus(startTimer).blur(stopInterval);
+	price.focus(startTimer).blur(stopInterval);
+
+	
+	$("#editItemModal").on("show.bs.modal", function(e){
+		
+		var data = $(e.relatedTarget).data();
+		
+		price.val(Zolago.round(data.itemPrice));
+		discount.val(Zolago.round(data.itemDiscount));
+		qty.val(Math.round(data.itemQty))
+		item.val(data.itemId);
+		name.text(data.itemName);
+		
+		validator.resetForm();
+		precentChange();
+	});
+	
+	
+});
+</script>

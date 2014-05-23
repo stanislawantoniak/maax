@@ -20,7 +20,17 @@ class Zolago_Po_Model_Resource_Po_Collection
 		return new Zend_Db_Expr("COUNT(shipment.entity_id)>0");
 	}
 	
-	
+	public function joinAggregatedNames() {
+		$select = $this->getSelect();
+		
+		$select->joinLeft(
+				array("aggregated"=>$this->getTable('zolagopo/aggregated')), 
+				"aggregated.aggregated_id=main_table.aggregated_id",
+			    array("aggregated_name")
+		);
+		
+		return $this;
+	}
 
 	/**
 	 * @param string $customerName
@@ -102,26 +112,28 @@ class Zolago_Po_Model_Resource_Po_Collection
 			$select = $this->_conn->select();
 			$select->from(
 					array("po_item"=>$this->getTable('udpo/po_item')), 
-					array("po_item.parent_id", "po_item.name")
+					array("po_item.parent_id", "po_item.name", "po_item.vendor_sku", 
+						"po_item.sku", "po_item.discount_percent", "po_item.qty", 
+						"po_item.price_incl_tax")
 			);
 			$select->join(
-					array("order_item"=>$this->getTable('sales/order_item')), 
+					array("product"=>$this->getTable('catalog/product')), 
 					$select->getAdapter()->quoteInto(
-							"order_item.item_id=po_item.order_item_id AND order_item.product_type IN(?)", 
+							"product.entity_id=po_item.product_id AND product.type_id IN(?)", 
 							$this->_getVisibleTypes()),
 					array()
 			);
-			$select->where("po_item.parent_id IN (?)", $ids);
+			$select->where("po_item.parent_id IN (?) ", $ids);
 			$grouped = array();
 			foreach($this->_conn->fetchAll($select) as $row){
 				$parentId = $row['parent_id'];
 				if(!isset($grouped[$parentId])){
 					$grouped[$parentId] = array();
 				}
-				$grouped[$parentId][] = $row['name'];
+				$grouped[$parentId][] = $row;
 			}
-			foreach($grouped as $itemId=>$names){
-				$this->getItemById($itemId)->setProductNames($names);
+			foreach($grouped as $itemId=>$items){
+				$this->getItemById($itemId)->setOrderItems($items);
 			}
 		}
         return $return;

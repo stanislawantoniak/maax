@@ -69,4 +69,5 @@ jQuery(document).ready(function($){
 	setTimeout(function() {
 		$('#sidebar .notifications.demo-slide-in > li:eq(0)').slideDown(500);
 	}, 7000);
+
 });

@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<config>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <zolagoconverter translate="title" module="zolagoconverter">
+											<title>Converters</title>
+                                    </zolagoconverter>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+    <menu>
+        <vendors>
+            <children>
+                <zolagoconverter translate="title" module="api">
+                    <title>Converters</title>
+                    <sort_order>25</sort_order>
+                    <action>adminhtml/system_config/edit/section/zolagoconverter</action>
+                </zolagoconverter>
+            </children>
+        </vendors>
+    </menu>
+</config>
+
