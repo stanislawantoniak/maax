@@ -1,8 +1,62 @@
 <?php
 class Zolago_Po_Model_Po_Item extends Unirgy_DropshipPo_Model_Po_Item
 {
+	/**
+	 * @return float
+	 */
+	public function getDiscount() {
+		return round($this->getDiscountAmount()/$this->getQty(), 4);
+	}
+	
+	/**
+	 * Overrride if we have no order item 
+	 * @return int
+	 */
+	public function getQtyToShip() {
+		if(!$this->hasOrderItem()){
+			return max(0, $this->getQty()-$this->getQtyShipped()-$this->getQtyCanceled());
+		}
+		return parent::getQtyToShip();
+	}
+	
+	public function getOrderItem() {
+		 if (is_null($this->_orderItem)) {
+            if ($this->getPo()
+            	&& ($orderItem = Mage::helper('udropship')->getOrderItemById($this->getPo()->getOrder(), $this->getOrderItemId()))
+            ) {
+                $this->_orderItem = $orderItem;
+            }
+            else {
+                $this->_orderItem = Mage::getModel('sales/order_item')
+                    ->load($this->getOrderItemId());
+            }
+			// Process abstract order item
+			if(!$this->_orderItem->getId()){
+				Mage::helper("zolagopo")->prepareOrderItemByPoItem($this->_orderItem, $this);
+				$order = $this->_orderItem->getOrder();
+				/* @var $order Mage_Sales_Model_Order */
+				$this->_orderItem->save();
+				$this->setOrderItemId($this->_orderItem->getId());
+				if($this->getId()){
+					$this->getResource()->saveAttribute($this, "order_item_id");
+				}
+			}
+        }
+        return $this->_orderItem;
+	}
+	
+	public function hasOrderItem() {
+		return (bool)(int)$this->getOrderItem()->getId();
+	}
 
+	
    public function _beforeSave() {
+	   
+	   // Process order item if needed
+		if(!$this->getOrderItemId()){
+			$this->getOrderItem();
+		}
+		
 	   // Transfer fields
 	   if((!$this->getId() || $this->isObjectNew()) && !$this->getSkipTransferOrderItemsData()){
 		   $transferFields = array(
@@ -23,6 +77,67 @@ class Zolago_Po_Model_Po_Item extends Unirgy_DropshipPo_Model_Po_Item
 			}
 	   }
 	   return parent::_beforeSave();
+   }
+   
+   
+	public function getFinalItemPrice() {
+		return $this->getPriceInclTax() - $this->getDiscount();
+	}
+   
+   public function getConfigurableText() {
+	   	$request = $this->getOrderItem()->getProductOptionByCode("attributes_info");
+		$out = array();
+		if(is_array($request)){
+			foreach($request as $item){
+				$out[] = Mage::helper("zolagopo")->__($item['label']) . ": " . Mage::helper("zolagopo")->__($item['value']);
+			}
+		}
+		if($out){
+			return implode(", ", $out);
+		}
+		return "";
+   }
+   
+   public function getFinalSku() {
+	   
+	   /**
+	    * @todo 
+	    */
+	   $child = $this->getChildItem();
+	   if($child && $child->getId() && $child->getData('vendor_sku')){
+		   return $child->getData('vendor_sku');
+	   }
+	   
+	   if($this->getData('vendor_sku')){
+		   return $this->getData('vendor_sku');
+	   }
+	   
+	   
+	   return null;
+   }
+   
+   /**
+    * @return Zolago_Po_Model_Po_Item
+    */
+   public function getChildItem() {
+	   if(!$this->hasData("child_item")){
+			$parent = Mage::getResourceModel('zolagopo/po_item_collection')->
+				 addFieldToFilter("parent_item_id", $this->getOrderItem()->getId())->
+					getFirstItem();
+			$this->setData("child_item", $parent);
+	   }
+	   return $this->getData("child_item");
+   }
+   
+   public function getOneLineDesc() {
+		$configurable = $this->getConfigurableText();
+		return $this->getName() . " " .
+			"(".
+				 ($configurable ? $configurable . ", " : "") .
+				 Mage::helper("zolagopo")->__("SKU") .   ": " . $this->getFinalSku() . ", " .
+				 Mage::helper("zolagopo")->__("Qty") .   ": " . round($this->getQty(),2) . ", " .
+				 Mage::helper("zolagopo")->__("Price") . ": " . Mage::helper("core")->currency($this->getFinalItemPrice(), true, false) .
+			")";
    }
    
 }

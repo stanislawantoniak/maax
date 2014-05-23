@@ -1,0 +1,25 @@
+<?php /* @var $this Zolago_Po_Block_Vendor_Po_Edit_Pos_Stock  */?>
+<?php $_hlp = Mage::helper("zolagopo");?>
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th class="align-right"><?php echo $_hlp->__("Lp");?></th>
+			<th><?php echo $_hlp->__("SKU");?></th>
+			<th><?php echo $_hlp->__("Product");?></th>
+			<th class="align-right"><?php echo $_hlp->__("POS Qty");?></th>
+		</tr>
+	</thead>
+	<tbody>
+		<?php $i=0; foreach($this->getItemsCollection() as $_item):?>
+			<?php if(!$_item->getOrderItem()->getParentItemId()):?>
+			<tr>
+				<td class="align-right"><?php echo ++$i;?></td>
+				<td><?php echo $this->escapeHtml($_item->getFinalSku());?></td>
+				<td><?php echo $this->escapeHtml($_item->getName());?></td>
+				<?php $_posQty = $this->getPosQty($_item);?>
+				<td class="align-right"><span class="label label-<?php echo $this->getLabelClass($_posQty);?>"><?php echo $this->getQtyText($_posQty);?></span></td>
+			</tr>
+			<?php endif;?>
+		<?php endforeach;?>
+	</tbody>
+</table>

@@ -128,6 +128,17 @@ select.form-control {
 .messages > li.success-msg .alert-link {
   color: #2b542c;
 }
+.inline-block {
+  display: inline-block;
+}
+.input-group-addon.no-border {
+  border: 0;
+  background: transparent;
+}
+.after-filed-label {
+  margin-top: 7px;
+  margin-left: -20px;
+}
 .z-grid .filter {
   position: static;
 }
@@ -136,6 +147,18 @@ select.form-control {
 }
 .form-inline label {
   font-weight: normal;
+}
+.z-grid .form-inline .form-group {
+  display: inline-block;
+}
+.z-grid .text-holder {
+  display: inline-block;
+}
+.z-grid .main-buttons {
+  margin-left: 20px;
+}
+.z-grid .btn-search {
+  margin-left: 10px;
 }
 .z-grid hr {
   margin-top: 10px;
@@ -206,10 +229,16 @@ select.form-control {
   min-height: 190px;
 }
 .widget-content.bottom-info {
-  min-height: 110px;
+  min-height: 146px;
 }
-.shipping-info .btn {
-  margin: 28px 0;
+.main-actions {
+  padding: 25px 0;
+}
+.shipping-info .btn-primary {
+  margin-top: 46px;
+}
+.shipping-info p {
+  margin-top: 52px;
 }
 .comments dl {
   margin-bottom: 10px;
@@ -233,7 +262,13 @@ table.foot-empty-cells tfoot td:empty {
   opacity: 0.7;
   background: url(../../images/icon-checked-actions.png);
 }
-@media (min-width: 768px) and (max-width: 1200px) {
+.select2-highlighted .text-muted {
+  color: #fff;
+}
+#status-holder .btn {
+  white-space: normal;
+}
+@media (min-width: 768px) and (max-width: 1400px) {
   .dl-horizontal.dl-z dt {
     width: 120px;
   }

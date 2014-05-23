@@ -1,0 +1,21 @@
+<?php $_providers = $this->getProviderCollection();?>
+<?php $_i = 0;?>
+<?php if ($_providers->count()):?>
+    <ul id="payment_form_<?php echo $this->getMethodCode() ?>" style="display:none;">
+		<?php foreach($_providers as $_provider):?>
+		<?php $_code = $_provider->getCode();?>
+		<?php $_id = $this->getMethodCode()."_".$_code;?>
+        <li class="left" style="width:20%; margin-left: 5%;">
+			<p>
+				<label for="<?php echo $_id;?>"><img src="<?php echo $this->getProviderLogoUrl($_provider);?>" alt="<?php echo $this->escapeHtml($_provider->getName());?>"/></label>
+			</p>
+			<p>
+				<input type="radio" <?php if($this->isChecked($_provider)):?>checked="checked" <?php endif;?>id="<?php echo $_id;?>" name="payment[additional_information][provider]" value="<?php echo $this->escapeHtml($_code);?>"/>
+				<label for="<?php echo $_id;?>"><?php echo $this->escapeHtml($_provider->getName());?></label>
+			</p>
+        </li>
+		<?php if(++$_i%4==0):?><li style="clear: both;"></li><?php endif;?>
+		<?php endforeach;?>
+		<li class="clearer"></li>
+    </ul>
+<?php endif; ?>

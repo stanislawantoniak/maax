@@ -188,7 +188,7 @@ class Zolago_Dhl_Helper_Data extends Mage_Core_Helper_Abstract {
 			->setCreatedAt(now())
 			->setIsVendorNotified($isVendorNotified)
 			->setIsVisibleToVendor($visibleToVendor)
-			->setUdropshipStatus($udpo->getUdropshipStatus())
+			->setUdropshipStatus(Mage::helper("udpo")->getUdpoStatusName($udpo))
 			->setUsername($userName);
 		$commentModel->save();
 	}
