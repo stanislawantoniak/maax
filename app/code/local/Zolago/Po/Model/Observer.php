@@ -24,17 +24,23 @@ class Zolago_Po_Model_Observer {
 	}	
 	/**
 	 * Delete aggregated based shipment-related po
+	 * Clear current carrier from PO
 	 * @param type $observer
 	 */
 	public function shipmentCancelAfter($observer) {
 		$shipment = $observer->getEvent()->getData('shipment');
 		if($shipment instanceof Mage_Sales_Model_Order_Shipment){
 			$po = Mage::getModel("zolagopo/po")->load($shipment->getUdpoId());
+			
 			/* @var $po Zolago_Po_Model_Po */
 			$aggregated = $po->getAggregated();
 			if($aggregated->getId()){
 				$aggregated->delete();
 			}
+			
+			// Clear current carrier
+			$po->setCurrentCarrier(null);
+			$po->getResource()->saveAttribute($po, "current_carrier");
 		}
 	}
 }

@@ -41,7 +41,7 @@ class Zolago_Operator_Model_Observer {
          || $this->_checkAllow($session,$module . "/" . $controllerName)
          || $this->_checkAllow($session,$module . "/" . $controllerName . "/" . $action)) {
 
-            if ($request->getModuleName()=="udpo") {
+            if ($request->getModuleName()=="udpo" && $request->getControllerName()=="index") {
                 $isAllowed = $this->_checkForUdpo($request, $operator);                
             } else {
                 $isAllowed = true;
