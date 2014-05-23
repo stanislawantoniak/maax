@@ -98,22 +98,22 @@ class Zolago_Po_Model_Po_Item extends Unirgy_DropshipPo_Model_Po_Item
 		return "";
    }
    
+   /**
+    * @return string
+    */
    public function getFinalSku() {
-	   
-	   /**
-	    * @todo 
-	    */
-	   $child = $this->getChildItem();
-	   if($child && $child->getId() && $child->getData('vendor_sku')){
-		   return $child->getData('vendor_sku');
-	   }
-	   
-	   if($this->getData('vendor_sku')){
-		   return $this->getData('vendor_sku');
+
+//	   $child = $this->getChildItem();
+//	   if($child && $child->getId() && $child->getData('vendor_sku')){
+//		   return $child->getData('vendor_sku');
+//	   }
+//	   
+	   if($this->getData('vendor_simple_sku')){
+		   return $this->getData('vendor_simple_sku');
 	   }
 	   
 	   
-	   return null;
+	   return $this->getData('vendor_sku');
    }
    
    /**

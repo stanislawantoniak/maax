@@ -30,6 +30,8 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 	
 	// Po Vendor controller - whole
 	const RES_UDPO_VENDOR							= "udpo/vendor";
+	// Po Vendor aggregated
+	const RES_UDPO_VENDOR_AGGREGATED				= "udpo/vendor_aggregated";
 	// Po Vendor controller - whole
 	const RES_URMA_VENDOR							= "urma/vendor";
 	// Po Vendor controller - whole
@@ -63,6 +65,7 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		self::RES_UDROPSHIP_VENDOR_PREFERENCES_POST=> "Vendor preferneces post",
         // PO
 		self::RES_UDPO_VENDOR						=> "Orders",
+		self::RES_UDPO_VENDOR_AGGREGATED			=> "Dispatch refs",
 		// RMA
 		self::RES_URMA_VENDOR						=> "RMA",
 		// Ask Question
@@ -113,6 +116,7 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		
 		// Build ACL Rules - Order operator
 		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_ORDER_OPERATOR, self::RES_UDPO_VENDOR);
+		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_ORDER_OPERATOR, self::RES_UDPO_VENDOR_AGGREGATED);
 		
 		// Build ACL Rules - Marketing officer
 		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MARKETING_OFFICER, self::RES_UDROPSHIP_VENDOR_PREFERENCES);
