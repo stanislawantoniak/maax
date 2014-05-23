@@ -13,12 +13,12 @@
 		    top:11px;
 		    right:10px;
 		   @include max-screen($screen-sm-max) {
-		        @include border-radius(3px);
+		        @include border-radius(2px);
 		        font-size: 10px;
 		        font-style: normal;
-		        padding: 3px 3px 3px 2px;
+		        padding: 3px 3px 2px 2px;
 		        top:11px;
-		    	right:0px;
+		    	right:-2px;
 		   }
 		}
 		&.dropdown-toggle {

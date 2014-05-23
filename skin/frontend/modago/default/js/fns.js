@@ -568,18 +568,23 @@ function showSubMenuMobile(){
 
   mobileMenu.on('click', 'a', function(event) {
     event.preventDefault();
-    //$(this).closest(mobileMenu).find('.open').removeClass('open');
     var ico = $(this).find('i');
-    if (ico.hasClass('fa-chevron-down') || ico.hasClass('fa-chevron-up')) {
-
+      if (ico.hasClass('fa-chevron-down') || ico.hasClass('fa-chevron-up')) {
       $(this).find('i').toggleClass( 'fa-chevron-down fa-chevron-up' );
-    };
-    
-    
-    $(this).next('ul').toggleClass('open');
+
+      };
+
+
+      $(this).next('ul').toggleClass('open');
+      if($(this).closest(mobileMenu).find('.open').length > 1) {
+          $(this).closest(mobileMenu).find('.open').removeClass('open');
+          $(this).next('ul').toggleClass('open');
+      }
 
     
   });
+
+
 }
 
 

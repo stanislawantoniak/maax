@@ -402,6 +402,13 @@ form {
 	  padding-left:32px;
 	  text-align: left;
 	  outline:none;
+	  @media (max-width: $screen-xs-max) {
+	  	width:149px;
+	  	 background:url('../images/sprites/add_basket_mobile.png') no-repeat 0 1px !important;
+	  	 padding-left:0;
+	  	text-align: center;
+	  }
+	  
 	}
 	&.clearAll {
 		background:#fff;	

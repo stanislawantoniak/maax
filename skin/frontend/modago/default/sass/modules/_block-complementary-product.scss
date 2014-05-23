@@ -9,6 +9,9 @@
 			border:1px solid #f5f6f6;
 			background: #fff;
 			color: #515151;
+			@media (max-width: $screen-xs-max) {
+				margin:0 5px;
+			}
 			img {
 			  	width:100%;
 			  	height:auto;

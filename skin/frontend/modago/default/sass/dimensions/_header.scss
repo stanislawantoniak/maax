@@ -230,12 +230,13 @@
             height:auto;
             > a:link,
             > a:visited {
+            text-decoration: none;
             position:relative;
             display:block;
             padding-left:15px;
                 i.fa {
                     position:absolute;
-                    right:27px;
+                    right:7px;
                     top:50%;
                     margin-top:-8px;
                 }
@@ -262,6 +263,14 @@
                     text-decoration: underline;
                 }
             }
+        }
+    }
+}
+
+[class^=ico_] {
+    &.ico_basket {
+        @include max-screen($screen-sm-max) {
+            margin-right: 4px;
         }
     }
 }

@@ -7,9 +7,11 @@
 		margin-bottom:15px;
 		margin-top: 0;
 		border-bottom: 1px solid #eeedf0;
-		@media (min-width: $screen-lg-min) { 
+		@media (max-width: $screen-xs-max) { 
 			//margin-left: -4%;
 			//padding-left: 4%;
+			font-size:22px;
+			margin-top:15px;
 		}
 	}
 	.short-description {
@@ -39,6 +41,12 @@
 			font-size: 36px;
 			color:#000;
 			font-family: $fontBlack;
+			@media (max-width: $screen-xs-max) {
+				display:block;
+				margin:0px;
+				padding:0px;
+				line-height: 1.0;
+			}
 		}
 		ul {
 			@include no-bullet;
@@ -89,6 +97,10 @@
 		margin-bottom:20px;
 		.size-label { 
 			line-height: 29px;
+			@media (max-width: $screen-xs-max) { 
+				display:block;
+				width:100%;
+			}
 		}
 		.form-group {
 			margin-bottom: 5px;
@@ -126,6 +138,9 @@
 			margin-left:115px;
 			font-size: 11px;
 			color:#000;
+			@media (max-width: $screen-xs-max) {
+				margin-left:0px;
+			}
 			span {
 				font-size:8px;
 				color:#1dd8a0;
