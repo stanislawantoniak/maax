@@ -52,7 +52,7 @@
 			<?php if($_statusModel->isConfirmStockAvailable($_po)):?>
 				<?php if(!$_po->getStockConfirm()):?>
 				<?php  /* Display as active widget */ ?>
-				<a class="btn-notification  btn-danger" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("setConfirmStock");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("You are about to check stock. Are you sure?");?>" data-modal="true" href="#">
+				<a class="btn btn-notification btn-danger" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("setConfirmStock");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("You are about to check stock. Are you sure?");?>" data-modal="true" href="#">
 					<i class="icon-warning-sign"></i>
 					<?php echo $_hlp->__("Check stock");?>
 				</a> 

@@ -18,6 +18,7 @@ class Zolago_Po_Model_Aggregated extends Mage_Core_Model_Abstract
 		if($item=$coll->getFirstItem()){
 			$incrementNo = $item->getSequence()+1;
 		}
+		$this->setSequence($incrementNo);
 		$this->setAggregatedName($candidate.$incrementNo);
 	}
 	

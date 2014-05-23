@@ -108,32 +108,19 @@ class Zolago_Po_Model_Resource_Po_Collection
 		$return = parent::_afterLoad();
 		if($this->getFlag("add_po_items_data")){
 			$ids = array_keys($this->getItems());
-			
-			$select = $this->_conn->select();
-			$select->from(
-					array("po_item"=>$this->getTable('udpo/po_item')), 
-					array("po_item.parent_id", "po_item.name", "po_item.vendor_sku", 
-						"po_item.sku", "po_item.discount_percent", "po_item.qty", 
-						"po_item.price_incl_tax")
-			);
-			$select->join(
-					array("product"=>$this->getTable('catalog/product')), 
-					$select->getAdapter()->quoteInto(
-							"product.entity_id=po_item.product_id AND product.type_id IN(?)", 
-							$this->_getVisibleTypes()),
-					array()
-			);
-			$select->where("po_item.parent_id IN (?) ", $ids);
+			$collection = Mage::getResourceModel("zolagopo/po_item_collection");
+			$collection->addFieldToFilter("main_table.parent_id", array("in"=>$ids));
+			$collection->addFieldToFilter("main_table.parent_item_id", array("null"=>true));
 			$grouped = array();
-			foreach($this->_conn->fetchAll($select) as $row){
-				$parentId = $row['parent_id'];
+			foreach($collection as $item){
+				$parentId = $item->getParentId();
 				if(!isset($grouped[$parentId])){
 					$grouped[$parentId] = array();
 				}
-				$grouped[$parentId][] = $row;
+				$grouped[$parentId][] = $item;
 			}
-			foreach($grouped as $itemId=>$items){
-				$this->getItemById($itemId)->setOrderItems($items);
+			foreach($grouped as $poId=>$items){
+				$this->getItemById($poId)->setOrderItems($items);
 			}
 		}
         return $return;
