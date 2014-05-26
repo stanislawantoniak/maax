@@ -56,12 +56,35 @@ class Zolago_Po_Model_Observer {
 		$itemIds = $observer->getEvent()->getData('itme_ids');
 		/* @var $newPos array */
 		
-		$text = Mage::helper('zolagopo')->__("PO Split");
+		$header = Mage::helper('zolagopo')->__("PO Split (#%s&rarr;#%s)", $po->getIncrementId(), $newPo->getIncrementId());
+		$poInfo = Mage::helper('zolagopo')->__("Items of #%s:", $po->getIncrementId()) . 
+				"\n" . $this->_getPoItemsText($po);
+		$newPoInfo = Mage::helper('zolagopo')->__("Items of #%s:", $newPo->getIncrementId()) . 
+				"\n" . $this->_getPoItemsText($newPo);
+		
+		$text = trim($header . "\n" . $poInfo . "\n" . $newPoInfo);
 		
 		$this->_logPoEvent($po, $text);
 		$this->_logPoEvent($newPo, $text);
 	}
 	
+	/**
+	 * 
+	 * @param Zolago_Po_Model_Po $po
+	 * @return string
+	 */
+	protected function _getPoItemsText(Zolago_Po_Model_Po $po) {
+		$items = array();
+		foreach($po->getAllItems() as $item){
+			/* @var $item Zolago_Po_Model_Po_Item */
+			if(!$item->getParentItemId()){
+				$items[] = $item->getOneLineDesc();
+			}
+		}
+		return implode("\n", $items);
+	}
+
+
 	/**
 	 * Change pos
 	 * @param type $observer
