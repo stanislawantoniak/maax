@@ -7,6 +7,14 @@ class Zolago_Po_Model_Aggregated_Pdf extends Varien_Object {
     protected $_doc;
     // Aggregation
     protected $_aggregated;
+    protected $_rows = array (
+        1 => 60,
+        2 => 180,
+        3 => 380,
+        4 => 435,
+        5 => 700,
+        6 => 760,
+    );
     
     public function setAggregated($aggr) {
         $this->_aggregated = $aggr;
@@ -43,7 +51,7 @@ class Zolago_Po_Model_Aggregated_Pdf extends Varien_Object {
             foreach ($collection as $po) {
                 if (!$counter) {
                     $num ++;
-                    $page = $this->_doc->newPage(Zend_Pdf_Page::SIZE_A4);
+                    $page = $this->_doc->newPage(Zend_Pdf_Page::SIZE_A4_LANDSCAPE);
                     $this->_prepareHeader($page,$num,$pages);
                     $this->_doc->pages[] = $page;
                 }
@@ -63,13 +71,21 @@ class Zolago_Po_Model_Aggregated_Pdf extends Varien_Object {
     protected function _setFont($page,$size = 7,$type = '') {
         switch ($type) {
             case 'b':
-                $font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir() . '/lib/LinLibertineFont/LinLibertine_Re-4.4.1.ttf');
+                $font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir() . '/lib/font/Arial_Bold.ttf');                                
+//                $font = Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA_BOLD); 
+                
+//                $font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir() . '/lib/LinLibertineFont/LinLibertine_Re-4.4.1.ttf');
                 break;
             case 'i':
-                $font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir() . '/lib/LinLibertineFont/LinLibertine_It-2.8.2.ttf');
+                $font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir() . '/lib/font/Arial_Italic.ttf');                                
+//                $font = Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA_ITALIC); 
+//                $font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir() . '/lib/LinLibertineFont/LinLibertine_It-2.8.2.ttf');
                 break;
             default:
-                $font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir() . '/lib/LinLibertineFont/LinLibertine_Re-4.4.1.ttf');                                
+                $font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir() . '/lib/font/Arial.ttf');                                
+//                $font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir() . '/lib/LinLibertineFont/LinLibertine_Re-4.4.1.ttf');                                
+//                $font = Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA); 
+
         }
         $page->setFont($font,$size);
     }
@@ -94,7 +110,7 @@ class Zolago_Po_Model_Aggregated_Pdf extends Varien_Object {
         return $out;
     }
     protected function _prepareStatus($status_id) {
-        switch ($status) {
+        switch ($status_id) {
             case Zolago_Po_Model_Aggregated_Status::STATUS_CONFIRMED:
                 return Mage::helper('zolagopo')->__('Confirmed');
             case Zolago_Po_Model_Aggregated_Status::STATUS_NOT_CONFIRMED:
@@ -103,23 +119,56 @@ class Zolago_Po_Model_Aggregated_Pdf extends Varien_Object {
                 return Mage::helper('zolagopo')->__('Unknown');                
         }
     }
+    protected function _drawCells($page,$top,$bottom) {
+        for ($a=1;$a<7;$a++) {
+            $page->drawLine($this->_rows[$a],495,$this->_rows[$a],475);
+        }
+        $page->drawLine(35,$bottom,810,$bottom);
+    }
     protected function _prepareHeader($page,$num,$pages) {
         $aggr = $this->_aggregated;
-        $page->setFillColor(new Zend_Pdf_Color_GrayScale(0.8));
-        $page->drawRectangle(25,790,570,707);
-        $this->_setFont($page,12);        
         $data = $aggr->getData();
         $vendor = $this->_prepareVendorData($data['vendor_id']);
         $pos = $this->_preparePosData($data['pos_id']);
         $status = $this->_prepareStatus($data['status']);
+        $date_start = date('Y-m-d');
+        $date_end = date('Y-m-d');
+        $operator = '';
+        $id_ecas = '';
+        $sap = '';
+        $courier = '';
+        $phone = '';
+        $terminal = '';
+        $address = '';
         $page->setFillColor(new Zend_Pdf_Color_GrayScale(0));
-        $page->drawText(Mage::helper('zolagopo')->__('Name').': '.$data['aggregated_name'],35,777,'UTF-8');
-        $page->drawText(Mage::helper('zolagopo')->__('Create date').': '.$data['created_at'],335,757,'UTF-8');
-        $page->drawText(Mage::helper('zolagopo')->__('Update date').': '.$data['updated_at'],335,737,'UTF-8');
-        $page->drawText(Mage::helper('zolagopo')->__('Vendor name').': '.$vendor,35,757,'UTF-8');
-        $page->drawText(Mage::helper('zolagopo')->__('POS name').': '.$pos,35,737,'UTF-8');
-        $page->drawText(Mage::helper('zolagopo')->__('Status').': '.$status,35,717,'UTF-8');
-        $page->drawText(Mage::helper('zolagopo')->__('Page').': '.$num.'/'.$pages,335,777,'UTF-8');
+        $this->_setFont($page,12,'b');
+        $page->drawText(Mage::helper('zolagopo')->__('Proof of postage from %s to %s',$date_start,$date_end),100,550,'UTF-8');
+
+        $this->_setFont($page,10,'b');
+        $page->drawText(Mage::helper('zolagopo')->__('Sender'),35,530,'UTF-8');
+        $this->_setFont($page,9);
+        $page->drawText(Mage::helper('zolagopo')->__('Page %s from %s',$num,$pages),700,540,'UTF-8');
+        $page->drawText(Mage::helper('zolagopo')->__('Date and time of create'),35,515,'UTF-8');
+        $page->drawText(Mage::helper('zolagopo')->__('Address :%s',$address),35,500,'UTF-8');
+        $page->drawText(Mage::helper('zolagopo')->__('Operator eCas: %s',$operator),305,515,'UTF-8');
+        $page->drawText(Mage::helper('zolagopo')->__('Id eCas: %s',$id_ecas),550,515,'UTF-8');
+        $page->drawText(Mage::helper('zolagopo')->__('SAP: %s',$sap),700,515,'UTF-8');
+        $page->drawText(Mage::helper('zolagopo')->__('Courier: %s',$courier),455,515,'UTF-8');
+        $page->drawText(Mage::helper('zolagopo')->__('Phone: %s',$phone),550,500,'UTF-8');
+        $page->drawText(Mage::helper('zolagopo')->__('Terminal: %s',$terminal),700,500,'UTF-8');
+        
+        // table header
+        $page->drawLine(35,495,810,495);
+        $page->drawText(Mage::helper('zolagopo')->__('No.'),35,480,'UTF-8');
+        $page->drawLine(35,478,810,478);
+        $this->_drawCells($page,495,475);
+        
+        $page->drawText(Mage::helper('zolagopo')->__('Tracking number'),75,480,'UTF-8');
+        $page->drawText(Mage::helper('zolagopo')->__('Elements of shipping'),235,480,'UTF-8');
+        $page->drawText(Mage::helper('zolagopo')->__('Europalets'),385,480,'UTF-8');
+        $page->drawText(Mage::helper('zolagopo')->__('Receiver | Additional services | Value'),485,480,'UTF-8');
+        $page->drawText(Mage::helper('zolagopo')->__('COD'),755,480,'UTF-8');
+        $page->drawText(Mage::helper('zolagopo')->__('Sended'),585,480,'UTF-8');
         
     }
 }
