@@ -101,6 +101,9 @@ class Zolago_Po_Model_Observer {
 				"Changed POS (%s&rarr;%s)", $oldPos->getExternalId(), $newPos->getExternalId());
 		
 		$this->_logPoEvent($po, $text);
+		
+		// Send email
+		Mage::helper('udpo')->sendNewPoNotificationEmail($po);
 	}
 	
 	/**

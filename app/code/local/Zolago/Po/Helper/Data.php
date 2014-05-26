@@ -3,6 +3,33 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 {
 	protected $_condJoined = false;
 	
+	public function sendNewPoNotificationEmail($po, $comment=''){
+		$vendor = $po->getVendor();
+		/* @var $po Zolago_Po_Model_Po */
+		$order = $po->getOrder();
+        $store = $order->getStore();
+		$pos = $po->getPos();
+		
+		$emailField = $store->getConfig('udropship/vendor/vendor_notification_field');
+		
+		if(!$emailField){
+			$emailField = "email";
+		}
+		
+		$oldEmail = $newEmail = $vendor->getData($emailField);
+		
+		if($pos && $pos->getId()){
+			$newEmail = $pos->getEmail();
+		}
+		
+		// Replace vendor email to pos email & send mail & restore origin
+		$vendor->setData($emailField, $newEmail);	
+		$return = parent::sendNewPoNotificationEmail($po, $comment);
+		$vendor->setData($emailField, $oldEmail);
+		
+		return $return; 
+	}
+	
 	/**
 	 * @param type $shipment
 	 * @param type $save

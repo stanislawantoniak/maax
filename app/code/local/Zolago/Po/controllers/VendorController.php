@@ -1333,7 +1333,12 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 			$po->setDefaultPosName($pos->getName());
 			$po->save();
 			$po->getStatusModel()->processDirectRealisation($po, true);
-			Mage::dispatchEvent("zolagopo_po_change_pos", array("po"=>$po, "old_pos"=>$oldPos, "new_pos"=>$pos));
+			
+			Mage::dispatchEvent("zolagopo_po_change_pos", array(
+				"po"=>$po, 
+				"old_pos"=>$oldPos, 
+				"new_pos"=>$pos
+			));
 			
 			$this->_getSession()->addSuccess((Mage::helper("zolagopo")->__("POS has been changed.")));
 		} catch (Mage_Core_Exception $e) {
