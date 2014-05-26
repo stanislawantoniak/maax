@@ -11,20 +11,22 @@ class Zolago_Catalog_Helper_Log extends Mage_Core_Helper_Abstract {
     public static function log($log, $testMode = FALSE)
     {
 
+        $codeRoot = getcwd();
+
         $file = FALSE;
         if (!empty($log)) {
             set_time_limit(60 * 40);
             ini_set('memory_limit', '512M');
-
+            Zend_Debug::dump($log);
             self::prepareLogDirs($testMode);
             if (!$testMode) {
-                $logFileParts = array(MAGENTO_ROOT, self::ZOLAGO_API_LOG_FOLDER, date('Y'), date('m'), self::getFileName());
+                $logFileParts = array($codeRoot, self::ZOLAGO_API_LOG_FOLDER, date('Y'), date('m'), self::getFileName());
                 $logFile = implode(DS, $logFileParts);
             } else {
-                $logFileParts = array(MAGENTO_ROOT, self::ZOLAGO_API_LOG_FOLDER_TEST, self::getFileName(TRUE));
+                $logFileParts = array($codeRoot, self::ZOLAGO_API_LOG_FOLDER_TEST, self::getFileName(TRUE));
                 $logFile = implode(DS, $logFileParts);
             }
-
+            Zend_Debug::dump($logFile);
             if (!empty($log)) {
                 //echo $log;
                 //$file will return int The function returns the number of bytes that were written to the file, or
@@ -40,6 +42,7 @@ class Zolago_Catalog_Helper_Log extends Mage_Core_Helper_Abstract {
      */
     private function getFileName($testMode = FALSE)
     {
+
         if (!$testMode) {
             $fileNameParts = array(self::ZOLAGO_API_LOG_FILE_NAME, date('m_d_Y_H_i_s'));
         } else {
@@ -56,12 +59,13 @@ class Zolago_Catalog_Helper_Log extends Mage_Core_Helper_Abstract {
      */
     public static function readZolagoAPILog()
     {
+        $codeRoot = getcwd();
         $page = 0;
         $limit = 100;
         $offset = $page * $limit;
 
 
-        $logFileParts = array(MAGENTO_ROOT, self::ZOLAGO_API_LOG_FOLDER, date('Y'), date('m'), 'zolago_log_05_23_2014_12_44_03.json');
+        $logFileParts = array($codeRoot, self::ZOLAGO_API_LOG_FOLDER, date('Y'), date('m'), 'zolago_log_05_23_2014_12_44_03.json');
         $logFile = implode(DS, $logFileParts);
 
         set_time_limit(60 * 40);
@@ -81,7 +85,8 @@ class Zolago_Catalog_Helper_Log extends Mage_Core_Helper_Abstract {
      */
     private function  prepareLogDirs($testMode)
     {
-        $dirCommon = MAGENTO_ROOT . DS . self::ZOLAGO_API_LOG_FOLDER;
+        $codeRoot = getcwd();
+        $dirCommon = $codeRoot . DS . self::ZOLAGO_API_LOG_FOLDER;
 
         if (!is_dir($dirCommon)) {
             mkdir($dirCommon);
@@ -89,20 +94,20 @@ class Zolago_Catalog_Helper_Log extends Mage_Core_Helper_Abstract {
         }
 
         if (!$testMode) {
-            $dirYear = MAGENTO_ROOT . DS . self::ZOLAGO_API_LOG_FOLDER . DS . date('Y');
+            $dirYear = $codeRoot . DS . self::ZOLAGO_API_LOG_FOLDER . DS . date('Y');
             if (!is_dir($dirYear)) {
                 mkdir($dirYear);
                 @chmod($dirYear, 0777);
             }
 
 
-            $dirMonth = MAGENTO_ROOT . DS . self::ZOLAGO_API_LOG_FOLDER . DS . date('Y') . DS . date('m');
+            $dirMonth = $codeRoot . DS . self::ZOLAGO_API_LOG_FOLDER . DS . date('Y') . DS . date('m');
             if (!is_dir($dirMonth)) {
                 mkdir($dirMonth);
                 @chmod($dirMonth, 0777);
             }
         } else {
-            $dirTest = MAGENTO_ROOT . DS . self::ZOLAGO_API_LOG_FOLDER . DS . 'test';
+            $dirTest = $codeRoot . DS . self::ZOLAGO_API_LOG_FOLDER . DS . 'test';
             if (!is_dir($dirTest)) {
                 mkdir($dirTest);
                 @chmod($dirTest, 0777);
