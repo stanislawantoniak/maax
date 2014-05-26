@@ -242,6 +242,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 		$hlp = Mage::helper("zolagopo");
 		$po = $this->_registerPo();
 		$price = $this->getRequest()->getParam("price");
+		$oldPrice = $po->getShippingAmountIncl();
 		$store = $po->getOrder()->getStore();
 		
 		try{
@@ -293,6 +294,13 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 			);
 			
 			$po->addData($data);
+			
+			Mage::dispatchEvent("zolagopo_po_shipping_cost", array(
+				"po"			=> $po, 
+				"new_price"		=> $shippignInclTax,
+				"old_price"		=> $oldPrice,
+			));
+			
 			$po->updateTotals(true);
 			
 			$this->_getSession()->addSuccess(
@@ -343,6 +351,12 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 			}
 			
 			$itemName = $item->getOneLineDesc();
+			
+			
+			Mage::dispatchEvent("zolagopo_po_item_remove", array(
+				"po"		=> $po, 
+				"item"		=> $item,
+			));
 			
 			$item->delete();
 			
@@ -466,13 +480,21 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 				'row_total_incl_tax'	=> $priceInclTax*$qty,
 				'base_row_total_incl_tax'=> $priceInclTax*$qty, // @todo use currency
 			);
-
+			
+			$oldItem = clone $item;
+			
 			$item->addData($itemData);
 			
 			Mage::helper("udropship")->addVendorSkus($po);
 			if(Mage::helper("core")->isModuleEnabled('Unirgy_DropshipTierCommission')){
 				Mage::helper("udtiercom")->processPo($po);
 			}
+			
+			Mage::dispatchEvent("zolagopo_po_item_edit", array(
+				"po"		=> $po, 
+				"old_item"	=> $oldItem,
+				"new_item"	=> $item
+			));
 
 			$po->updateTotals(true);
 			$this->_getSession()->addSuccess(Mage::helper("zolagopo")->__("Item saved"));
@@ -608,6 +630,11 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 				Mage::helper("udtiercom")->processPo($po);
 			}
 			
+			Mage::dispatchEvent("zolagopo_po_item_add", array(
+				"po"		=> $po, 
+				"item"		=> $item
+			));
+			
 			$po->updateTotals(true);
 			
 			$po->getStatusModel()->processDirectRealisation($po, true);
@@ -701,14 +728,22 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 				}else{
 					$po->clearOwnBillingAddress();
 				}
+				
+				Mage::dispatchEvent("zolagopo_po_address_restore", array(
+					"po"		=> $po, 
+					"type"		=> $type
+				));
+				
 				$po->save();
 				$session->addSuccess(Mage::helper("zolagopo")->__("Address restored"));
 				$response['content']['reload']=1;
 			}elseif(isset($data['add_own']) && $data['add_own']==1){
 				if($type==Mage_Sales_Model_Order_Address::TYPE_SHIPPING){
 					$orignAddress = $po->getOrder()->getShippingAddress();
+					$oldAddress = $po->getShippingAddress();
 				}else{
 					$orignAddress = $po->getOrder()->getBillingAddress();
+					$oldAddress = $po->getBillingAddress();
 				}
 				$newAddress = clone $orignAddress;
 				$newAddress->addData($data);
@@ -717,7 +752,17 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 				}else{
 					$po->setOwnBillingAddress($newAddress);
 				}
+				
+				
+				Mage::dispatchEvent("zolagopo_po_address_change", array(
+					"po"			=> $po, 
+					"new_address"	=> $newAddress, 
+					"old_address"	=> $oldAddress, 
+					"type"			=> $type
+				));
+				
 				$po->save();
+				
 				$session->addSuccess(Mage::helper("zolagopo")->__("Address changed"));
 				$response['content']['reload']=1;
 			}
@@ -1253,8 +1298,11 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 				throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("Cannot send mail"));
 			}
 			
-			$udpo->addComment("[".$vendor->getVendorName()." &rarr; ".$order->getCustomerName()."] " . $message, false, true);
-			$udpo->saveComments();
+			Mage::dispatchEvent("zolagopo_po_compose", array(
+				"po"		=> $udpo, 
+				"message"	=> $message, 
+				"recipient"	=> $order->getCustomerName())
+			);
 			
 			$this->_getSession()->addSuccess((Mage::helper("zolagopo")->__("Message sent via email")));
 		} catch (Mage_Core_Exception $e) {
@@ -1270,15 +1318,23 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 	public function changePosAction() {
 		$po=$this->_registerPo();
 		$pos=$this->_registerPos();
-		
+		$oldPos = $po->getPos();
 		try{
 			if(!$po->getStatusModel()->isEditingAvailable($po)){
 				throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("Order cannot be edited."));
 			}
+			
+			if($pos->getId()==$oldPos->getId()){
+				throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("New POS and old POS are the same"));
+			}
+			
+			$po->setPos($pos);
 			$po->setDefaultPosId($pos->getId());
 			$po->setDefaultPosName($pos->getName());
 			$po->save();
 			$po->getStatusModel()->processDirectRealisation($po, true);
+			Mage::dispatchEvent("zolagopo_po_change_pos", array("po"=>$po, "old_pos"=>$oldPos, "new_pos"=>$pos));
+			
 			$this->_getSession()->addSuccess((Mage::helper("zolagopo")->__("POS has been changed.")));
 		} catch (Mage_Core_Exception $e) {
 			$this->_getSession()->addError($e->getMessage());
