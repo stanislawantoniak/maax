@@ -13,11 +13,8 @@ class Zolago_Catalog_Vendor_ImageController
     public function check_galleryAction() {
         $list = $this->getRequest()->getParam('image',array());
         $products = explode(',',$list);
-        foreach ($products as $id) {
-            $_product = Mage::getModel('catalog/product')->load($id);
-            $_product->setGalleryToCheck(0);
-            $_product->getResource()->saveAttribute($_product, 'gallery_to_check');
-        }
+        $mapper = Mage::getModel('zolagocatalog/mapper');
+        $mapper->checkGallery($list);
         $this->_redirect('*/*/');
     }
     protected function _getVendorId() {
