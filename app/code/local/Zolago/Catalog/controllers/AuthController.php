@@ -8,7 +8,7 @@ class Zolago_Catalog_AuthController
     public function indexAction()
     {
 
-        $host = 'http://modago.local';
+        $host = 'http://admin.dev01.lorante.com';
 
         // $callbackUrl is a path to your file with OAuth authentication example for the Admin user
         $callbackUrl = $host . "/udprod/auth";
@@ -57,7 +57,7 @@ class Zolago_Catalog_AuthController
                 //print_r($oauthClient->getLastResponse());
                 $oauthClient->fetch($resourceUrl, $productData, OAUTH_HTTP_METHOD_PUT, array('Content-Type' => 'application/json'));
 
-                //print_r($oauthClient->getLastResponse());
+                print_r($oauthClient->getLastResponse());
 
             }
         } catch (OAuthException $e) {
@@ -113,6 +113,8 @@ class Zolago_Catalog_AuthController
         }
         return $data;
     }
+
+
 
 }
 
