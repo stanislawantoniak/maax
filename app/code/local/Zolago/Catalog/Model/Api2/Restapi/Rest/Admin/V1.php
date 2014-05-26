@@ -100,7 +100,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 extends Zolago_Catalog_Mod
             $merchant = $data['merchant'];
 
             $productsButch = $data['pos'];
-            $productsButch = array_slice($productsButch, 0, 3); //for test
+            //$productsButch = array_slice($productsButch, 0, 3); //for test
 
             foreach ($productsButch as $productsButchItem) {
                 $skuXML = $productsButchItem['sku'];
@@ -115,7 +115,9 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 extends Zolago_Catalog_Mod
                     $productIds = array($productId);
                     $attrData = array('price' => $price);
 
-                    $productAction->updateAttributes($productIds, $attrData, $storeId);
+                    $productAction->updateAttributes($productIds, $attrData, 0);
+                    $productAction->updateAttributes($productIds, $attrData, 1);
+                    $productAction->updateAttributes($productIds, $attrData, 2);
                 }
             }
             unset($productsButchItem);
