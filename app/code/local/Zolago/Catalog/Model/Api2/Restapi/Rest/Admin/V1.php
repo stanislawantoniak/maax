@@ -88,7 +88,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 extends Zolago_Catalog_Mod
 
     protected function _multiUpdate()
     {
-        $storeId = 0;
+        $storeId = 1;
 
         $skuAssoc = self::getSkuAssoc();
 
@@ -100,7 +100,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 extends Zolago_Catalog_Mod
             $merchant = $data['merchant'];
 
             $productsButch = $data['pos'];
-            //$productsButch = array_slice($productsButch, 0, 3); //for test
+            $productsButch = array_slice($productsButch, 0, 3); //for test
 
             foreach ($productsButch as $productsButchItem) {
                 $skuXML = $productsButchItem['sku'];
@@ -132,9 +132,13 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 extends Zolago_Catalog_Mod
         $json = json_encode($data);
         Zolago_Catalog_Helper_Log::log($json);
 
-        return $json;
+        return json_encode($this->getRequest());
     }
 
+    /**
+     * get sku-id associated array
+     * @return array
+     */
     protected function getSkuAssoc()
     {
         $resource = Mage::getSingleton('core/resource');
@@ -150,4 +154,5 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 extends Zolago_Catalog_Mod
         }
         return $skuAssoc;
     }
+
 }
