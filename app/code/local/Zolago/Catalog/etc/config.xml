@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Catalog>
-            <version>0.0.10</version>
+            <version>0.0.11</version>
         </Zolago_Catalog>
     </modules>
     <global>
@@ -94,5 +94,18 @@
 				</Zolago_Catalog>
 			</modules>
 		</translate>
-    </adminhtml>	
+    </adminhtml>
+    <crontab>
+        <jobs>
+            <zolagocatalog_configured_recalc>
+                <schedule>
+                    <!-- Run every 2 hours -->
+                    <cron_expr>0 */2 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>zolagocatalog/observer::recalcConfigurable</model>
+                </run>
+            </zolagocatalog_configured_recalc>
+        </jobs>
+    </crontab>
 </config>
