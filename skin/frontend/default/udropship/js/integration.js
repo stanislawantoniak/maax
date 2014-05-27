@@ -35,6 +35,13 @@ jQuery.noConflict();
 Zolago = Object.create(Object.prototype);
 
 /**
+ * Form integrator
+ */
+Zolago.formIntegrator = function(form){
+	form.find(".required-entry").attr("required", "required");
+	form.find(".validate-email ").addClass("email");
+}
+/**
  * Grid integrator
  */
 Zolago.gridIntegrator = function(gridObj){
