@@ -22,6 +22,9 @@ class Zolago_Po_Block_Vendor_Po_Edit_Shipping
 	public function getRemainingShippingAmount() {
 		return $this->getParentBlock()->getRemainingShippingAmount();
 	}
+	public function getRemainingWeight() {
+		return $this->getParentBlock()->getRemainingWeight();
+	}
 	
 	public function getShippingMethod() {
 		return $this->getParentBlock()->getShippingMethod();

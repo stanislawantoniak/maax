@@ -2,6 +2,8 @@
 <layout version="0.1.0">
 	<udropship_pos_index>
         <update handle="udropship_vendor" />
+        <update handle="adminhtml_head" />
+        <update handle="bootstrap" />
         <reference name="content">
             <block type="zolagopos/dropship_pos" template="zolagopos/dropship/pos.phtml"/>
         </reference>
