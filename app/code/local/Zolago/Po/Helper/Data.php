@@ -3,6 +3,33 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 {
 	protected $_condJoined = false;
 	
+	public function sendNewPoNotificationEmail($po, $comment=''){
+		$vendor = $po->getVendor();
+		/* @var $po Zolago_Po_Model_Po */
+		$order = $po->getOrder();
+        $store = $order->getStore();
+		$pos = $po->getPos();
+		
+		$emailField = $store->getConfig('udropship/vendor/vendor_notification_field');
+		
+		if(!$emailField){
+			$emailField = "email";
+		}
+		
+		$oldEmail = $newEmail = $vendor->getData($emailField);
+		
+		if($pos && $pos->getId()){
+			$newEmail = $pos->getEmail();
+		}
+		
+		// Replace vendor email to pos email & send mail & restore origin
+		$vendor->setData($emailField, $newEmail);	
+		$return = parent::sendNewPoNotificationEmail($po, $comment);
+		$vendor->setData($emailField, $oldEmail);
+		
+		return $return; 
+	}
+	
 	/**
 	 * @param type $shipment
 	 * @param type $save
@@ -37,13 +64,17 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 		}
 		
 		$poses = array();
+		$carriers = array();
 		$currentlyHas = array();
 		foreach($collection as $po){
 			if($po->getAggregatedId()){
 				$currentlyHas[] = $po->getIncrementId();
 			}
 			$poses[$po->getDefaultPosId()] = true;
+			$carriers[$po->getCurrentCarrier()] = true;
 		}
+		
+		
 		$count = count($currentlyHas);
 		if($count){
 			throw new Mage_Core_Exception(Mage::helper('zolagopo')->__(
@@ -53,8 +84,12 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 					$count>1 ? "have" : "has"
 			));
 		}
+		
 		if(count($poses)!=1){
-			throw new Mage_Core_Exception(Mage::helper('zolagopo')->__("Purchase Order have different POSes"));
+			throw new Mage_Core_Exception(Mage::helper('zolagopo')->__("Purchase Order(s) have different POSes"));
+		}
+		if(count($carriers)!=1){
+			throw new Mage_Core_Exception(Mage::helper('zolagopo')->__("Purchase Order(s) have different carriers"));
 		}
 		
 		$aggregated = Mage::getModel("zolagopo/aggregated");

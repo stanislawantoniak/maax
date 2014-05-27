@@ -8,12 +8,13 @@ class Zolago_Po_Block_Vendor_Po_Grid_Column_Renderer_Products
 		$return = "";
 		if(is_array($items)){
 			foreach($items as $item){
+				/* @var $item Zolago_Po_Model_Po_Item */
 				$return .= 
-					round($item['qty']) . " &times; " . 
-					$this->escapeHtml($item['name']) . "<br/>" . 
+					round($item->getQty()) . " &times; " . 
+					$this->escapeHtml($item->getName()) . "<br/>" . 
 					"<small class=\"text-muted\">" . 
-						$this->__("SKU") . ": " . ($item['vendor_sku'] ? $item['vendor_sku'] : $item['sku']) . ", " . 
-						$this->__("Price") . ": " . Mage::helper('core')->currency($item['price_incl_tax']*(1-$item['discount_percent']/100), true, false) .
+						$this->__("SKU") . ": " . ($item->getFinalSku() ? $item->getFinalSku() : $this->__('N/A')) . ", " . 
+						$this->__("Price") . ": " . Mage::helper('core')->currency($item->getPriceInclTax()*(1-$item->getDiscountPercent()/100), true, false) .
 					"</small>" . "<br/>";
 			}
 			$return .= "</ul>";
