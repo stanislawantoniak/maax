@@ -8,6 +8,45 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 	}
 	
 	/**
+	 * @param Zolago_Po_Model_Po $po
+	 * @return string
+	 */
+	public function getAlert(Zolago_Po_Model_Po $po) {
+		if($po->getStatusModel()->isConfirmStockAvailable($po)){
+			if(!$po->getStockConfirm()){
+				return $this->__("Product reservation not yet confirmed!");
+			}else{
+				return $this->__("Items reserved");
+			}
+		}else{
+			if($po->getStockConfirm()){
+				return $this->__("Items reserved");
+			}
+		}
+		return "";
+	}
+	
+	
+	/**
+	 * @param Zolago_Po_Model_Po $po
+	 * @return string
+	 */
+	public function getAlertClass(Zolago_Po_Model_Po $po) {
+		if($po->getStatusModel()->isConfirmStockAvailable($po)){
+			if($po->getStockConfirm()){
+				return "success";
+			}
+		}else{
+			if($po->getStockConfirm()){
+				return $this->__("success");
+			}
+		}
+		return "danger";
+	}
+	
+	
+	
+	/**
 	 * 
 	 * @param type $trackign
 	 * @param type $shipment
