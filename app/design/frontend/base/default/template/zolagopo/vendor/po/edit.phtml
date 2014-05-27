@@ -42,7 +42,7 @@
 				<?php if($this->canUseCarrier()):?>
 				<button class="btn btn-primary" data-toggle="modal" href="#shippingModal"><?php echo $_hlp->__("Print shipping letter");?></button>
 				<?php else:?>
-				<button class="btn btn-primary" data-toggle="modal" href="#shippingModal"><?php echo $_hlp->__("Add shipping letter");?></button>
+				<button class="btn btn-primary" data-toggle="modal" href="#shippingModal"><?php echo $_hlp->__("Add shipping label");?></button>
 				<?php endif;?>
 			<?php elseif($_statusModel->isStartPackingAvailable($_po)):?>
 				<a class="btn btn-primary" data-toggle="modal" href="<?php echo $this->getPoUrl("startPacking");?>"><?php echo $_hlp->__("Start packing");?></a>

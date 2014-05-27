@@ -9,4 +9,7 @@
     <jquery-validation-errors translate="message" module="zolagopo">
         <message>You missed {{errors}} fields. They have been highlighted.</message>
     </jquery-validation-errors>
+    <cancel translate="message" module="zolagopo">
+        <message>Cancel</message>
+    </cancel>
 </jstranslator>

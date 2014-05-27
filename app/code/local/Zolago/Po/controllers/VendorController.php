@@ -225,7 +225,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 		try{
 			$newPo = $po->split($items);
 			$this->_getSession()->addSuccess(
-				Mage::helper("zolagopo")->__("Order has been splited. New order: #%s", $newPo->getIncrementId())
+				Mage::helper("zolagopo")->__("Order has been split. New order: #%s.", $newPo->getIncrementId())
 			);
 		}catch(Mage_Core_Exception $e){
 			$this->_getSession()->addError($e->getMessage());

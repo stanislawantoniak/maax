@@ -57,21 +57,21 @@ class Zolago_Po_Block_Vendor_Aggregated_Grid extends Mage_Adminhtml_Block_Widget
 		));
 		
 		$this->addColumn("download", array(
-                'header'    => Mage::helper('zolagopo')->__('Download'),
+                'header'    => Mage::helper('zolagopo')->__('Download report'),
 				'renderer'	=> Mage::getConfig()->getBlockClassName("zolagoadminhtml/widget_grid_column_renderer_link"),
                 'width'     => '50px',
                 'type'      => 'action',
 				'index'		=> 'aggregated_id',
 				'link_action'=> "*/*/download",
 				'link_param'=> 'id',
-				'link_label'=> $this->__('Download'),
+				'link_label'=> $this->__('Download report'),
 				'link_target'=>'_self',
                 'filter'    => false,
                 'sortable'  => false
         ));
 		
 		$this->addColumn("confirm", array(
-                'header'    => Mage::helper('zolagopo')->__('Confirm send'),
+                'header'    => Mage::helper('zolagopo')->__('Confirm shipment'),
 				'renderer'	=> Mage::getConfig()->getBlockClassName("zolagopo/vendor_aggregated_grid_column_renderer_confirmbutton"),
                 'width'     => '50px',
                 'type'      => 'action',
@@ -80,23 +80,24 @@ class Zolago_Po_Block_Vendor_Aggregated_Grid extends Mage_Adminhtml_Block_Widget
 				'width'		=> '50px',
 				'link_action'=> "*/*/confirm",
 				'link_param'=> 'id',
-				'link_label'=> $this->__('Confirm send'),
+				'link_label'=> $this->__('Confirm shipment'),
                 'filter'    => false,
                 'sortable'  => false
         ));
 		
 		$this->addColumn("remove", array(
-                'header'    => Mage::helper('zolagopo')->__('Remove'),
+                'header'    => Mage::helper('zolagopo')->__('Delete'),
 				'renderer'	=> Mage::getConfig()->getBlockClassName("zolagopo/vendor_aggregated_grid_column_renderer_deletebutton"),
                 'width'     => '50px',
                 'type'      => 'action',
 				'icon'		=> 'icon-ok',
 				'width'		=> '50px',
 				'index'		=> 'aggregated_id',
+				'tooltip'	=> Mage::helper('zolagopo')->__("If you want to change the contents (shipments) in dispatch list you can delete the dispatch list and make a new one in order list grid."),
 				'link_action'=> "*/*/remove",
 				'icon'		=> 'icon-remove',
 				'link_param'=> 'id',
-				'link_label'=> $this->__('Remove'),
+				'link_label'=> $this->__('Delete'),
                 'filter'    => false,
                 'sortable'  => false
         ));
