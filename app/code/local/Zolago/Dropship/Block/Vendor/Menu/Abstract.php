@@ -176,7 +176,7 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 			$groupOne[] = array(
 				"active" => $this->isActive("zolagooperator"),
 				"icon"	 => "icon-user",
-				"label"	 => $this->__('Operators'),
+				"label"	 => $this->__('Agents'),
 				"url"	 => $this->getUrl('udropship/operator')
 			);
 		}
