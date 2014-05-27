@@ -6,7 +6,7 @@ class Zolago_Catalog_Model_Observer {
 
         $base_path = Mage::getBaseDir('base');
 
-        $hash = md5($base_path);
+        $hash = md5(microtime());
 
         //read dir
         $dir = $base_path . '/var/log/configurableUpdate';
