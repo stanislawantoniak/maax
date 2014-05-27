@@ -111,7 +111,7 @@ Zolago.gridIntegrator = function(gridObj){
 	});
 	$$('#'+gridObj.containerId+' .filter .date input').each(function(el, i){
 		var _el = jQuery(el);
-			_el.attr("placeholder", Translator.translate(!i ? "From" : "To"));
+			_el.attr("placeholder", Translator.translate(!(i%2)? "From" : "To"));
 			_el.css({
 				width: "49%",
 				float: "left"
@@ -121,6 +121,13 @@ Zolago.gridIntegrator = function(gridObj){
 			}
 			_el.datepicker();
 	});
+	
+	// Range
+	$$('#'+gridObj.containerId+' .filter .range-line input').each(function(el, i){
+		var _el = jQuery(el);
+			_el.attr("placeholder", Translator.translate(!(i%2) ? "From" : "To"));
+	});
+	
 	widgets.each(function(el){
 		el.addClassName("form-control");
 	});

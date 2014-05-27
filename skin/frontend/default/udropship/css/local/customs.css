@@ -200,6 +200,15 @@ select.form-control {
   width: 100%;
   overflow: auto;
 }
+.z-grid .range-line:first-child {
+  margin-bottom: 5px;
+}
+.z-grid .range-line .label {
+  display: none;
+}
+.z-grid .table thead > tr > th {
+  vertical-align: top;
+}
 .a-center {
   text-align: center;
 }
@@ -232,13 +241,20 @@ select.form-control {
   min-height: 146px;
 }
 .page-heading {
-  margin-bottom: 20px;
+  margin-top: 10px;
+  margin-bottom: 30px;
 }
 .page-heading h3 {
   margin-bottom: 10px;
   color: #555555;
   font-weight: 400;
   font-size: 20px;
+}
+.page-heading .tageline {
+  display: block;
+  font-size: 11px;
+  color: #888888;
+  font-weight: normal;
 }
 .main-actions {
   margin-top: 25px;
