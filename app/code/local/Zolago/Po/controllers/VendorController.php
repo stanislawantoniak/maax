@@ -919,6 +919,18 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 			$autoTracking = $r->getParam('auto-tracking');
 			$dhlSettings = $udpoHlp->getDhlSettings($vendor, $udpo->getDefaultPosId());
 
+			$weight =  $r->getParam("weight");
+			
+			if(empty($weight)){
+				if($shipment->getTotalWeight()){
+					$weight = ceil($shipment->getTotalWeight());
+				}else{
+					$weight = Mage::helper('zolagodhl')->getDhlDefaultWeight();
+				}
+			}
+			
+			$shipment->setTotalWeight($weight);
+			
 			if (!$number && $carrier == Zolago_Dhl_Helper_Data::DHL_CARRIER_CODE && $autoTracking && $shipment && $dhlSettings) {
 				
 				$shipmentSettings = array(
@@ -926,13 +938,12 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 					'width'			=> $r->getParam('specify_zolagodhl_width'),
 					'height'		=> $r->getParam('specify_zolagodhl_height'),
 					'length'		=> $r->getParam('specify_zolagodhl_length'),
-					'weight'		=> ($shipment->getTotalWeight() ? ((int) ceil($shipment->getTotalWeight())) : Mage::helper('zolagodhl')->getDhlDefaultWeight()),
+					'weight'		=> $weight,
 					'quantity'		=> Zolago_Dhl_Model_Client::SHIPMENT_QTY,
 					'nonStandard'	=> $r->getParam('specify_zolagodhl_custom_dim'),
 					'shipmentDate'  => $this->_porcessDhlDate($r->getParam('specify_zolagodhl_shipping_date')),
 					'shippingAmount'=> $r->getParam('shipping_amount')
 				);
-				
 				$number = $this->_createShipments($dhlSettings, $shipment, $shipmentSettings, $udpo);
 				if (!$number) {
 					$session->addError($this->__('Shipping creation fail'));
