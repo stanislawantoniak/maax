@@ -1139,7 +1139,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         $udpo = $this->_registerPo();
 		try{
 			$udpo->getStatusModel()->processConfirmStock($udpo);
-			$this->_getSession()->addSuccess(Mage::helper("zolagopo")->__("Stock confirmed"));
+			$this->_getSession()->addSuccess(Mage::helper("zolagopo")->__("You have confirmed reservation"));
 		} catch (Mage_Core_Exception $e) {
 			$this->_getSession()->addError($e->getMessage());
 		} catch (Exception $e) {
