@@ -7,6 +7,7 @@ class Zolago_Po_Model_Aggregated_Pdf extends Varien_Object {
     protected $_doc;
     // Aggregation
     protected $_aggregated;
+    protected $_line_count = 1;
     protected $_rows = array (
         1 => 60,
         2 => 180,
@@ -19,33 +20,84 @@ class Zolago_Po_Model_Aggregated_Pdf extends Varien_Object {
     public function setAggregated($aggr) {
         $this->_aggregated = $aggr;
     }
-    
-    public function getPdf() {
+    protected function _getFileName($id) {
+        $sfx = $id % 100;
+        $a = floor($sfx / 10);
+        $b = $sfx % 10;
+        $path = Mage::getBaseDir('media').DS.'shipping'.DS.$b.DS.$a.DS;
+        if(!file_exists($path)) {
+            mkdir($path,0755,true);
+        }
+        $filename = $path.'aggregate_'.$id.'.pdf';
+        return $filename;
+    }
+    public function getPdf($id) {          
         if (empty($this->_doc)) {
-            $this->_preparePdf();
+            if (!file_exists($this->_getFileName($id))) {
+                $this->_preparePdf($id);
+            } else {
+                return file_get_contents($this->_getFileName($id));
+            }
         }    
-        return $this->_doc;
+        return $this->_doc->render();
     }    
-    protected function _addPo($po,$page,$counter) {
-        $page->setFillColor(new Zend_Pdf_Color_GrayScale(1));
-        $rel = 55*$counter;
-        $page->drawRectangle(25,700+$rel,570,650+55*$rel);
-        $page->setFillColor(new Zend_Pdf_Color_GrayScale(0));
-        $this->_setFont($page,8);        
-        $data = $po->getData();
-        $page->drawText(Mage::helper('zolagopo')->__('Number').': '.$data['increment_id'],35,690+$rel,'UTF-8');
-        $page->drawText(Mage::helper('zolagopo')->__('Date').': '.$data['increment_id'],35,680+$rel,'UTF-8');
-        $page->drawText(Mage::helper('zolagopo')->__('Value').': '.$data['increment_id'],35,670+$rel,'UTF-8');
-        
+    
+    /**
+     * connecting text array into one text line using keys
+     */    
+    protected function _prepareText($data, $keys,$separator = ' ') {
+        $tmp = array();        
+        foreach ($keys as $key) {
+            if (!empty($data[$key])) {
+                $tmp[] = $data[$key];
+            }            
+        }
+        return implode($separator,$tmp); 
+    }
+    protected function _addShip($ship,$page,$counter) {
+        $rel = 480-55*$counter;
+        $this->_drawCells($page,$rel,$rel-30);
+        $page->drawText($this->_line_count++,40,$rel-20);
+        $tracks = $ship->getTracksCollection();
+        // tracking numbers
+        $num = count($tracks)-1;
+        $pos_tmp = $rel-20+$num*6;
+        foreach ($tracks as $track) {
+            $number = $track->getNumber();
+            $center = ($this->_rows[2] - $this->_rows[1])/2 - (strlen($number)*6)/2+$this->_rows[1];
+            $page->drawText($track->getNumber(),$center,$pos_tmp);
+            $pos_tmp -= 10;               
+        }
+        // europalets
+        $page->drawText('0',400,$rel-20);        
+        // shipment address
+        $address = $ship->getShippingAddress();
+        $data = $address->getData();
+        // name
+        $keys = array (
+            'firstname',
+            'middlename',
+            'lastname',
+        );
+        $text = $this->_prepareText($data,$keys);
+        $data['fullname'] = $text;
+        $text = $this->_prepareText($data,array('fullname','company'),', '); 
+        $this->_setFont($page,7);
+        $page->drawText($text,440,$rel-13);
+        // address
+        $text = $this->_prepareText($data,array('postcode','city'));
+        $data['full_city'] = $text;
+        $text = $this->_prepareText($data,array('full_city','street','telephone'),', ');
+        $page->drawText($text,440,$rel-20);
     }
     protected function _preparePages() {
-        $agg = $this->_aggregated;
-        $id = $agg->getId();
+        $aggr = $this->_aggregated;
+        $id = $aggr->getId();
         if ($id) {
             $collection = Mage::getModel('udpo/po')->getCollection();
             $collection->addFieldToFilter('aggregated_id',$id);
             $count =  count($collection);
-            $pages = ceil($count/10);
+            $pages = ceil($count/16);
             $counter = 0;
             $num = 0;
             foreach ($collection as $po) {
@@ -55,18 +107,26 @@ class Zolago_Po_Model_Aggregated_Pdf extends Varien_Object {
                     $this->_prepareHeader($page,$num,$pages);
                     $this->_doc->pages[] = $page;
                 }
-                $this->_addPo($po,$page,$counter);
-                if ($counter++>9) {
-                    $counter = 0;
-                }                
+                $shipmentCollection = $po->getShipmentsCollection();
+                foreach ($shipmentCollection as $ship) {
+                    $this->_addShip($ship,$page,$counter);
+                    if ($counter++>15) {
+                        $counter = 0;
+                    }                
+                }
             }
         }        
         
     }
-    protected function _preparePdf() {
+    protected function _preparePdf($id) {
+        if (!$this->_aggregated) {
+    		$aggr = Mage::getModel('zolagopo/aggregated')->load($id);
+	    	$this->setAggregated($aggr);
+        }
         $pdf = new Zend_Pdf();
         $this->_doc = $pdf;
         $this->_preparePages();
+        $pdf->save($this->_getFileName($id));
     }
     protected function _setFont($page,$size = 7,$type = '') {
         switch ($type) {
@@ -100,11 +160,11 @@ class Zolago_Po_Model_Aggregated_Pdf extends Varien_Object {
         return $out;
     }
     protected function _preparePosData($pos_id) {
-        $out = '';
+        $out = array();
         if ($pos_id) {
             $pos = Mage::getModel('zolagopos/pos')->load($pos_id);
             if ($pos) {
-                $out = $pos->getName();
+                $out = $pos->getData();
             }
         }
         return $out;
@@ -121,7 +181,7 @@ class Zolago_Po_Model_Aggregated_Pdf extends Varien_Object {
     }
     protected function _drawCells($page,$top,$bottom) {
         for ($a=1;$a<7;$a++) {
-            $page->drawLine($this->_rows[$a],495,$this->_rows[$a],475);
+            $page->drawLine($this->_rows[$a],$top,$this->_rows[$a],$bottom);
         }
         $page->drawLine(35,$bottom,810,$bottom);
     }
@@ -137,15 +197,22 @@ class Zolago_Po_Model_Aggregated_Pdf extends Varien_Object {
         $id_ecas = '';
         $sap = '';
         $courier = '';
-        $phone = '';
+        $phone = empty($pos['phone'])? '':$pos['phone'];
         $terminal = '';
-        $address = '';
+        $pos['full_code'] = $this->_prepareText($pos,array('postcode','city'));
+        $address = $this->_prepareText($pos,array('full_code','street'),', ');
         $page->setFillColor(new Zend_Pdf_Color_GrayScale(0));
         $this->_setFont($page,12,'b');
         $page->drawText(Mage::helper('zolagopo')->__('Proof of postage from %s to %s',$date_start,$date_end),100,550,'UTF-8');
 
         $this->_setFont($page,10,'b');
-        $page->drawText(Mage::helper('zolagopo')->__('Sender'),35,530,'UTF-8');
+        $page->drawText(Mage::helper('zolagopo')->__(
+            'Sender: %s',
+            $this->_prepareText($pos,array('name','company'),', ')),
+            35,
+            530,
+            'UTF-8'
+        );
         $this->_setFont($page,9);
         $page->drawText(Mage::helper('zolagopo')->__('Page %s from %s',$num,$pages),700,540,'UTF-8');
         $page->drawText(Mage::helper('zolagopo')->__('Date and time of create'),35,515,'UTF-8');
@@ -167,8 +234,8 @@ class Zolago_Po_Model_Aggregated_Pdf extends Varien_Object {
         $page->drawText(Mage::helper('zolagopo')->__('Elements of shipping'),235,480,'UTF-8');
         $page->drawText(Mage::helper('zolagopo')->__('Europalets'),385,480,'UTF-8');
         $page->drawText(Mage::helper('zolagopo')->__('Receiver | Additional services | Value'),485,480,'UTF-8');
-        $page->drawText(Mage::helper('zolagopo')->__('COD'),755,480,'UTF-8');
-        $page->drawText(Mage::helper('zolagopo')->__('Sended'),585,480,'UTF-8');
+        $page->drawText(Mage::helper('zolagopo')->__('COD'),715,480,'UTF-8');
+        $page->drawText(Mage::helper('zolagopo')->__('Sended'),770,480,'UTF-8');
         
     }
 }
