@@ -224,4 +224,7 @@
 			</action>
 		</reference>
 	</sales_order_printshipment>
+	
+	<!-- todo move it to new module-based xml layout -->
+	
 </layout>
