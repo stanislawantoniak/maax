@@ -5,7 +5,7 @@ class Zolago_Catalog_Model_Product_Configurable_Data extends Mage_Core_Model_Res
 {
     protected function _construct()
     {
-
+        $this->_init('zolagocatalog/pricessizes');
     }
 
 
