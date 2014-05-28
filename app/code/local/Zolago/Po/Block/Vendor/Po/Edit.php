@@ -38,14 +38,14 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 			}else{
 				$alert[] = array( 
 					"text" => $this->__("Items reserved"),
-					"class"=> "cuccess"
+					"class"=> "success"
 				);
 			}
 		}else{
 			if($po->getStockConfirm()){
 				$alert[] = array( 
 					"text" => $this->__("Items reserved"),
-					"class"=> "cuccess"
+					"class"=> "success"
 				);
 			}
 		}

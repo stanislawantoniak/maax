@@ -10,6 +10,8 @@
 	</udropship_pos_index>
 	<udropship_pos_edit>
         <update handle="udropship_vendor" />
+        <update handle="bootstrap" />
+        <update handle="forms" />
         <reference name="content">
             <block type="zolagopos/dropship_pos_edit" template="zolagopos/dropship/pos/edit.phtml"/>
         </reference>

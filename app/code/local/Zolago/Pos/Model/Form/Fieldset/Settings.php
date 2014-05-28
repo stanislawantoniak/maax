@@ -13,7 +13,8 @@ class Zolago_Pos_Model_Form_Fieldset_Settings extends Zolago_Common_Model_Form_F
                                        'name'          => 'name',
                                        'label'         => $this->_helper->__('Name'),
                                        'required'      => true,
-                                       "maxlength"     => 100
+                                       "maxlength"     => 100,
+									   'class'		   => "form-control",
                                    ));
 
     }
@@ -22,6 +23,7 @@ class Zolago_Pos_Model_Form_Fieldset_Settings extends Zolago_Common_Model_Form_F
                                        'name'          => 'vendor_owner_id',
                                        'label'         => $this->_helper->__('Vendor owner'),
                                        'values'        => Mage::getSingleton("udropship/vendor_source")->getAllOptions(),
+									   'class'		   => "form-control",
                                    ));
 
     }
@@ -30,7 +32,7 @@ class Zolago_Pos_Model_Form_Fieldset_Settings extends Zolago_Common_Model_Form_F
                                        'name'          => 'minimal_stock',
                                        'label'         => $this->_helper->__('Minimal stock'),
                                        'required'      => true,
-                                       "class"         => "validate-digits",
+                                       "class"         => "validate-digits form-control",
                                        "maxlength"     => 3
                                    ));
     }
@@ -39,7 +41,7 @@ class Zolago_Pos_Model_Form_Fieldset_Settings extends Zolago_Common_Model_Form_F
                                        'name'          => 'priority',
                                        'label'         => $this->_helper->__('Priority'),
                                        'required'      => true,
-                                       "class"         => "validate-digits",
+                                       "class"         => "validate-digits form-control",
                                        "maxlength"     => 3
                                    ));
     }
@@ -47,7 +49,8 @@ class Zolago_Pos_Model_Form_Fieldset_Settings extends Zolago_Common_Model_Form_F
         $this->_fieldset->addField('external_id', 'text', array(
                                        'name'          => 'external_id',
                                        'label'         => $this->_helper->__('External ID'),
-                                       "maxlength"     => 100
+                                       "maxlength"     => 100,
+                                       "class"         => "form-control",
                                    ));
     }
 

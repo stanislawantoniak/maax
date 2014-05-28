@@ -86,7 +86,7 @@ class Zolago_Pos_Block_Dropship_Pos_Grid extends Mage_Adminhtml_Block_Widget_Gri
                 'type'      => 'action',
 				'index'		=> 'pos_id',
 				'link_action'=> "*/*/edit",
-				'link_param'=> 'id',
+				'link_param'=> 'pos_id',
 				'link_label'=> 'Edit',
 				'link_target'=>'_self',
                 'filter'    => false,

@@ -13,6 +13,7 @@ class Zolago_Pos_Model_Form_Fieldset_Dhl extends Zolago_Common_Model_Form_Fields
                                        'label'         => $this->_helper->__('Use DHL'),
                                        'values'		   => Mage::getSingleton("adminhtml/system_config_source_yesno")->toOptionArray(),
                                        'required'      => false,
+									   'class'		   => "form-control"
                                    ));
 
     }
@@ -21,7 +22,8 @@ class Zolago_Pos_Model_Form_Fieldset_Dhl extends Zolago_Common_Model_Form_Fields
                                        'name'          => 'dhl_account',
                                        'label'         => $this->_helper->__('DHL Account'),
                                        'required'      => true,
-                                       "maxlength"     => 32
+                                       "maxlength"     => 32,
+									   'class'		   => "form-control"
                                    ));
 
     }
@@ -31,7 +33,8 @@ class Zolago_Pos_Model_Form_Fieldset_Dhl extends Zolago_Common_Model_Form_Fields
                                        'name'          => 'dhl_login',
                                        'label'         => $this->_helper->__('DHL Login'),
                                        'required'      => true,
-                                       "maxlength"     => 32
+                                       "maxlength"     => 32,
+									   'class'		   => "form-control"
                                    ));
 
     }
@@ -40,7 +43,8 @@ class Zolago_Pos_Model_Form_Fieldset_Dhl extends Zolago_Common_Model_Form_Fields
                                        'name'          => 'dhl_password',
                                        'label'         => $this->_helper->__('DHL Password'),
                                        'required'      => true,
-                                       "maxlength"     => 32
+                                       "maxlength"     => 32,
+									   'class'		   => "form-control"
                                    ));
 
     }
