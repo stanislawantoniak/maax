@@ -16,7 +16,17 @@ class Zolago_Po_Model_Aggregated_Pdf extends Varien_Object {
         5 => 700,
         6 => 760,
     );
-    
+    // footer data
+    protected $_totals = array (
+        'cod' => 0,
+        'palets' => 0,
+        'k' => 0,
+        'dr' => 0,
+        'dhl09' => 0,
+        'dhl12' => 0,
+    );
+             
+            
     public function setAggregated($aggr) {
         $this->_aggregated = $aggr;
     }
@@ -90,7 +100,120 @@ class Zolago_Po_Model_Aggregated_Pdf extends Varien_Object {
         $text = $this->_prepareText($data,array('postcode','city'));
         $data['full_city'] = $text;
         $text = $this->_prepareText($data,array('full_city','street','telephone'),', ');
-        $page->drawText($text,440,$rel-16);
+        $page->drawText($text,440,$rel-18);
+        // cod and insurance
+        $data = array ();
+        $value = $ship->getTotalValue() + $ship->getBaseTaxAmount() + $ship->getShippingAmount();
+        if ($ship->getOrder()->getPayment()->getMethod() == 'cashondelivery') {
+            $data['cod'] = 'COD';
+            $cod_value = $value;
+        } else {
+            $cod_value = 0;
+        }
+        $data['insurance'] = Mage::helper('zolagopo')->__('INS decl. val. %.2f',$value);
+        $text = $this->_prepareText($data,array('cod','insurance'),', ');
+        $page->drawText($text,440,$rel-27);
+        // elements
+        $weight = $ship->getTotalWeight();
+        $pack = $ship->getPackages();
+        $count = count($pack)? count($pack):1;
+        $text = $this->_calculateElements($weight,$count);
+        $page->drawText($text,190,$rel-15);
+        // COD
+        $this->_setFont($page,9,'b');
+        $page->drawText(sprintf('%.2f',$cod_value),710,$rel-20);
+        $this->_totals['cod'] += $cod_value;
+        // send
+        $this->_setFont($page,9);
+        $page->drawText('Y',780,$rel-20);
+    }
+    protected function _calculateElements($weight,$count) {
+        $pattern = 'AH: %s - %.0f';
+        $total_key = 'k';
+        if ($weight < 5) {
+            $class = 'k1';
+        } elseif ($weight < 10) {
+            $class = 'k2';            
+        } elseif ($weight < 20) {
+            $class = 'k3';
+        } elseif ($weight < 31.5) {
+            $class = 'k4';
+        } else {
+            $class = $count;
+            $count = $weight;
+            $total_key = 'dr';
+            $pattern = sprintf('AH: DR - \%s %s \%s kg',Mage::helper('zolagopo')->__('Total weight:'));  
+        }        
+        $this->_totals[$total_key] += $count;
+        return sprintf($pattern,$class,$count);
+    }
+    protected function _prepareFooter($page,$counter) {
+        $rel = 475-30*$counter;
+        // totals
+        $this->_setFont($page,9,'b');
+        $sum = $this->_totals['k'] +    
+               $this->_totals['dr'] + 
+               $this->_totals['dhl09'] +
+               $this->_totals['dhl12'];
+        $page->drawText(Mage::helper('zolagopo')->__('Number of shipments: %d',$sum),35,$rel-18);               
+        $this->_setFont($page,9);
+        $page->drawText(Mage::helper('zolagopo')->__('Elements under 31,5 kg: %d',$this->_totals['k']),35,$rel-30);
+        $page->drawText(Mage::helper('zolagopo')->__('Elements DR: %d',$this->_totals['dr']),35,$rel-42);
+        $page->drawText(Mage::helper('zolagopo')->__('COD value: %.2f',$this->_totals['cod']),35,$rel-54);
+        $page->drawText(Mage::helper('zolagopo')->__('Europalets: %d',$this->_totals['palets']),35,$rel-66);
+        // ah
+        $this->_setFont($page,9,'b');
+        $page->drawText(Mage::helper('zolagopo')->__('AH'),235,$rel-18);               
+        $this->_setFont($page,9);
+        $page->drawText(Mage::helper('zolagopo')->__('Number of shipments: %d',$this->_totals['k']+$this->_totals['dr']),235,$rel-30);
+        $page->drawText(Mage::helper('zolagopo')->__('Elements under 31,5 kg: %d',$this->_totals['k']),235,$rel-42);
+        $page->drawText(Mage::helper('zolagopo')->__('Elements DR: %d',$this->_totals['dr']),235,$rel-54);
+        // dhl9
+        $this->_setFont($page,9,'b');
+        $page->drawText(Mage::helper('zolagopo')->__('DHL 09'),450,$rel-18);               
+        $this->_setFont($page,9);
+        $page->drawText(Mage::helper('zolagopo')->__('Number of shipments: %d',$this->_totals['dhl09']),450,$rel-30);
+        $page->drawText(Mage::helper('zolagopo')->__('Elements DHL09: %d',$this->_totals['dhl09']),450,$rel-42);
+        // dhl 12
+        $this->_setFont($page,9,'b');
+        $page->drawText(Mage::helper('zolagopo')->__('DHL 12'),635,$rel-18);               
+        $this->_setFont($page,9);
+        $page->drawText(Mage::helper('zolagopo')->__('Number of shipments: %d',$this->_totals['dhl12']),635,$rel-30);
+        $page->drawText(Mage::helper('zolagopo')->__('Elements DHL12: %d',$this->_totals['dhl12']),635,$rel-42);
+        // signs
+        $page->setLineWidth(1);
+        $page->setLineDashingPattern(array(2, 1, 2, 1), 1.6); 
+        $page->drawLine(45,$rel-98,210,$rel-98);
+        $page->drawText(Mage::helper('zolagopo')->__('DHL signature'),45,$rel-110);
+        $page->drawLine(305,$rel-98,500,$rel-98);
+        $page->drawText(Mage::helper('zolagopo')->__('Customer signature'),305,$rel-110);
+    }
+    // preparing date from - to
+    // additionally gets courier name
+    protected function _prepareDate($collection) {
+        foreach ($collection as $po) {
+            $shipmentCollection = $po->getShipmentsCollection();
+            foreach ($shipmentCollection as $ship) {
+                if ($ship->getUdropshipStatus() != Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED) {
+                    $date = $ship->getCreatedAt();
+                    if (!isset($this->_totals['date_start']) ||
+                        ($date < $this->_totals['date_start'])) {
+                            $this->_totals['date_start'] = $date;
+                        
+                    } 
+                    if (!isset($this->_totals['date_end']) ||
+                        ($date > $this->_totals['date_end'])) {
+                            $this->_totals['date_end'] = $date;
+                        
+                    } 
+                }
+                
+            }
+        }
+        if (isset($ship)) {
+            $track = $ship->getTracksCollection()->getFirstItem();
+            $this->_totals['courier'] = $track->getTitle();
+        }
     }
     protected function _preparePages() {
         $aggr = $this->_aggregated;
@@ -99,9 +222,10 @@ class Zolago_Po_Model_Aggregated_Pdf extends Varien_Object {
             $collection = Mage::getModel('udpo/po')->getCollection();
             $collection->addFieldToFilter('aggregated_id',$id);
             $count =  count($collection);
-            $pages = ceil($count/16);
+            $pages = ceil(($count+6)/16);
             $counter = 0;
             $num = 0;
+            $this->_prepareDate($collection);
             foreach ($collection as $po) {
                 if (!$counter) {
                     $num ++;
@@ -119,7 +243,14 @@ class Zolago_Po_Model_Aggregated_Pdf extends Varien_Object {
                     }
                 }
             }
+            if ($counter>10) {
+                $page = $this->_doc->newPage(Zend_Pdf_Page::SIZE_A4_LANDSCAPE);
+                $this->_prepareHeader($page,$num,$pages);
+                $counter = 0; // next page
+                $this->_doc->pages[] = $page;
+            }
             // footer
+            $this->_prepareFooter($page,$counter);
         }        
         
     }
@@ -193,15 +324,21 @@ class Zolago_Po_Model_Aggregated_Pdf extends Varien_Object {
     protected function _prepareHeader($page,$num,$pages) {
         $aggr = $this->_aggregated;
         $data = $aggr->getData();
+        $created_at = $data['created_at'];
         $vendor = $this->_prepareVendorData($data['vendor_id']);
         $pos = $this->_preparePosData($data['pos_id']);
         $status = $this->_prepareStatus($data['status']);
-        $date_start = date('Y-m-d');
-        $date_end = date('Y-m-d');
-        $operator = '';
-        $id_ecas = '';
-        $sap = '';
-        $courier = '';
+        $date_start = date('Y-m-d',strtotime($this->_totals['date_start']));
+        $date_end = date('Y-m-d',strtotime($this->_totals['date_end']));
+        if (Mage::getSingleton('udropship/session')->isOperatorMode()) {
+            $operator = Mage::getSingleton('udropship/session')->getOperator()->getEmail();
+        } else {
+            $operator = Mage::getSingleton('udropship/session')->getVendor()->getEmail();
+        }
+        $id_ecas = ''; $pos['dhl_account'];
+        $sap = $pos['dhl_account'];
+        // only one courier
+        $courier = $this->_totals['courier'];
         $phone = empty($pos['phone'])? '':$pos['phone'];
         $terminal = '';
         $pos['full_code'] = $this->_prepareText($pos,array('postcode','city'));
@@ -220,7 +357,7 @@ class Zolago_Po_Model_Aggregated_Pdf extends Varien_Object {
         );
         $this->_setFont($page,9);
         $page->drawText(Mage::helper('zolagopo')->__('Page %s from %s',$num,$pages),700,540,'UTF-8');
-        $page->drawText(Mage::helper('zolagopo')->__('Date and time of create'),35,515,'UTF-8');
+        $page->drawText(Mage::helper('zolagopo')->__('Date and time of create: %s',$created_at),35,515,'UTF-8');
         $page->drawText(Mage::helper('zolagopo')->__('Address :%s',$address),35,500,'UTF-8');
         $page->drawText(Mage::helper('zolagopo')->__('Operator eCas: %s',$operator),305,515,'UTF-8');
         $page->drawText(Mage::helper('zolagopo')->__('Id eCas: %s',$id_ecas),550,515,'UTF-8');
