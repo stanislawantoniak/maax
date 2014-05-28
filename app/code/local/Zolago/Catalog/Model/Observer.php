@@ -69,6 +69,7 @@ class Zolago_Catalog_Model_Observer {
             Mage::log("{$hash} {$date} Found 0 configurable products ", 0, 'configurable_update.log');
             return;
         }
+        $relations = count($configurableSimpleRelation);
         Mage::log(" define parent products (configurable) by child (simple) ", 0, 'configurable_update.log');
         $configurableProductsIds = implode(',', array_keys($configurableSimpleRelation));
 
@@ -93,6 +94,7 @@ class Zolago_Catalog_Model_Observer {
 
         $productAction = Mage::getSingleton('catalog/product_action');
         $productConfigurableIds = array();
+        Mage::log("{$hash} {$date} {$relations} relations found ", 0, 'configurable_update.log');
         foreach ($configurableSimpleRelation as $productConfigurableId => $configurableSimpleRelationItem) {
             $productMinPrice = isset($minPrices[$productConfigurableId]) ? $minPrices[$productConfigurableId]['min_price'] : FALSE;
 
