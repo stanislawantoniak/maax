@@ -104,6 +104,7 @@ class Zolago_Po_Model_Observer {
 		
 		// Send email
 		Mage::helper('udpo')->sendNewPoNotificationEmail($po);
+		Mage::helper('udropship')->processQueue();
 	}
 	
 	/**
