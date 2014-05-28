@@ -69,14 +69,14 @@ class Zolago_Catalog_Model_Observer {
             Mage::log("{$hash} {$date} Found 0 configurable products ", 0, 'configurable_update.log');
             return;
         }
-
+        Mage::log(" define parent products (configurable) by child (simple) ", 0, 'configurable_update.log');
         $configurableProductsIds = implode(',', array_keys($configurableSimpleRelation));
 
 
         //min prices
         $minPrices = $zolagoCatalogModelProductConfigurableData->getConfigurableMinPrice($storeId, $configurableProductsIds);
         //--min prices
-
+        Mage::log($hash . " min prices ", 0, 'configurable_update.log');
 
         //super attribute ids
         $select = $readConnection->select()
@@ -88,6 +88,7 @@ class Zolago_Catalog_Model_Observer {
         $superAttributes = $readConnection->fetchAssoc($select);
         unset($select);
         //--super attribute ids
+        Mage::log("{$hash} {$date} super attribute ids ", 0, 'configurable_update.log');
 
 
         $productAction = Mage::getSingleton('catalog/product_action');
@@ -98,6 +99,8 @@ class Zolago_Catalog_Model_Observer {
             //update configurable product price
             if ($productMinPrice)
                 $productAction->updateAttributes(array($productConfigurableId), array('price' => $productMinPrice), $storeId);
+
+            Mage::log("{$hash} {$date} update configurable product price ", 0, 'configurable_update.log');
 
             $superAttributeId = isset($superAttributes[$productConfigurableId]) ? (int)$superAttributes[$productConfigurableId]['super_attribute'] : FALSE;
 
@@ -132,6 +135,7 @@ ON DUPLICATE KEY UPDATE catalog_product_super_attribute_pricing.pricing_value=VA
 ", $catalogProductSuperAttributePricingTable, $lineQuery);
 
                         $writeConnection->query($insertQuery);
+                        Mage::log("{$hash} {$date} insert ", 0, 'configurable_update.log');
                     }
                 }
                 $productConfigurableIds[] = $productConfigurableId;
