@@ -54,8 +54,9 @@ class Zolago_Po_Model_Aggregated_Pdf extends Varien_Object {
         }
         return implode($separator,$tmp); 
     }
-    protected function _addShip($ship,$page,$counter) {
-        $rel = 480-55*$counter;
+    protected function _addShip($ship,$po,$page,$counter) {
+        $this->_setFont($page,9);
+        $rel = 475-30*$counter;
         $this->_drawCells($page,$rel,$rel-30);
         $page->drawText($this->_line_count++,40,$rel-20);
         $tracks = $ship->getTracksCollection();
@@ -71,7 +72,8 @@ class Zolago_Po_Model_Aggregated_Pdf extends Varien_Object {
         // europalets
         $page->drawText('0',400,$rel-20);        
         // shipment address
-        $address = $ship->getShippingAddress();
+        $id = $po->getShippingAddressId();
+        $address = Mage::getModel('sales/order_address')->load($id);
         $data = $address->getData();
         // name
         $keys = array (
@@ -83,12 +85,12 @@ class Zolago_Po_Model_Aggregated_Pdf extends Varien_Object {
         $data['fullname'] = $text;
         $text = $this->_prepareText($data,array('fullname','company'),', '); 
         $this->_setFont($page,7);
-        $page->drawText($text,440,$rel-13);
+        $page->drawText($text,440,$rel-9);
         // address
         $text = $this->_prepareText($data,array('postcode','city'));
         $data['full_city'] = $text;
         $text = $this->_prepareText($data,array('full_city','street','telephone'),', ');
-        $page->drawText($text,440,$rel-20);
+        $page->drawText($text,440,$rel-16);
     }
     protected function _preparePages() {
         $aggr = $this->_aggregated;
@@ -109,12 +111,15 @@ class Zolago_Po_Model_Aggregated_Pdf extends Varien_Object {
                 }
                 $shipmentCollection = $po->getShipmentsCollection();
                 foreach ($shipmentCollection as $ship) {
-                    $this->_addShip($ship,$page,$counter);
-                    if ($counter++>15) {
-                        $counter = 0;
-                    }                
+                    if ($ship->getUdropshipStatus() != Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED) {
+                        $this->_addShip($ship,$po,$page,$counter);
+                        if ($counter++>15) {
+                            $counter = 0;
+                        }                
+                    }
                 }
             }
+            // footer
         }        
         
     }
