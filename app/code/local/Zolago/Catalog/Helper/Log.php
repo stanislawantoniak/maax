@@ -80,10 +80,9 @@ class Zolago_Catalog_Helper_Log extends Mage_Core_Helper_Abstract {
     }
 
 
-
-    public static function emulateConfigurable()
+    public static function emulateConfigurable($testMode = FALSE, $storeId = 0)
     {
-        $storeId = 1;
+        $file = FALSE;
         $data = array();
 
         /*Load xml data*/
@@ -91,7 +90,13 @@ class Zolago_Catalog_Helper_Log extends Mage_Core_Helper_Abstract {
         // $file = $base_path . '/var/log/price2-0.xml';
         $file = $base_path . '/var/log/price2-1.xml';
 
-        $configurableUpdate = $base_path . '/var/log/configurableUpdate';
+        if (!$testMode) {
+            $configFolder = 'configurableUpdate';
+        } else {
+            $configFolder = 'testConfigurableUpdate';
+        }
+
+        $configurableUpdate = $base_path . '/var/log/' . $configFolder;
 
         if (!is_dir($configurableUpdate)) {
             mkdir($configurableUpdate);
@@ -99,14 +104,13 @@ class Zolago_Catalog_Helper_Log extends Mage_Core_Helper_Abstract {
         }
 
         $date = array(
-            date('m'),date('d'),date('Y'),date('H'),date('i'),date('s')
+            date('m'), date('d'), date('Y'), date('H'), date('i'), date('s')
         );
-        $configurableFile = $base_path . '/var/log/configurableUpdate/configurable_'.implode('_',$date).'.txt';
+        $configurableFile = $base_path . '/var/log/' . $configFolder . '/configurable_' . implode('_', $date) . '.txt';
         @chmod($configurableFile, 0777);
 
         $xml = simplexml_load_file($file, 'SimpleXMLElement', LIBXML_NOCDATA);
         $document = (array)$xml;
-
 
 
         $merchant = isset($document['merchant']) ? $document['merchant'] : FALSE;
@@ -127,7 +131,7 @@ class Zolago_Catalog_Helper_Log extends Mage_Core_Helper_Abstract {
                         $attributes = $productsXMLItem->attributes();
                         $skuXML = (string)$productsXMLItem;
 //                        $price = (string)$attributes->price;
-                        $data[] = "'".$merchant . '-' . $skuXML . "'";
+                        $data[] = "'" . $merchant . '-' . $skuXML . "'";
                     }
                     unset($productsXMLItem);
                     unset($price);
@@ -139,10 +143,16 @@ class Zolago_Catalog_Helper_Log extends Mage_Core_Helper_Abstract {
         }
 
         if (!empty($data)) {
-            $data = array_merge(array($storeId),$data);
-            file_put_contents($configurableFile, implode(',' ,$data));
+            $data = array_merge(array($storeId), $data);
+            $file = file_put_contents($configurableFile, implode(',', $data));
 
         }
+        if ($testMode) {
+            if (file_exists($configurableFile)) {
+                unlink($configurableFile);
+            }
+        }
+        return $file;
     }
 
 

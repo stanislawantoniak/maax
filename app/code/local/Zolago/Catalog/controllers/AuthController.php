@@ -73,6 +73,14 @@ class Zolago_Catalog_AuthController
 
     }
 
+
+
+
+    public function configurableAction()
+    {
+        Mage::getModel('zolagocatalog/observer')->recalcConfigurable();
+    }
+
     private function emulateConverterTestData()
     {
         $data = array();
@@ -83,8 +91,6 @@ class Zolago_Catalog_AuthController
         //$file = $base_path . '/var/log/price2-1.xml';
         $xml = simplexml_load_file($file, 'SimpleXMLElement', LIBXML_NOCDATA);
         $document = (array)$xml;
-
-        //echo "XML loaded ".date('h:i:s')." ".microtime() . "<br />";
 
         $merchant = isset($document['merchant']) ? $document['merchant'] : FALSE;
         /*Load xml data*/
@@ -119,17 +125,16 @@ class Zolago_Catalog_AuthController
         return $data;
     }
 
-
-    public function configurableAction()
-    {
-        Mage::getModel('zolagocatalog/observer')->recalcConfigurable();
-    }
-
-
+    /*
+     * emulate configurable file
+     */
     public function emulateConfigurableAction()
     {
-        Zolago_Catalog_Helper_Log::emulateConfigurable();
+        $store = (int)Mage::app()->getRequest()->getParam('store');
+        Zolago_Catalog_Helper_Log::emulateConfigurable(FALSE, $store);
     }
+
+
 }
 
 

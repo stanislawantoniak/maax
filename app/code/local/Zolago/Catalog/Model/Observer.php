@@ -132,7 +132,8 @@ ON DUPLICATE KEY UPDATE catalog_product_super_attribute_pricing.pricing_value=VA
             }
 
         }
-        Mage::log("{$hash} {$date} Configurable " . implode(',', $productConfigurableIds), 0, 'configurable_update.log');
+        $countUpdated = count($productConfigurableIds);
+        Mage::log("{$hash} {$date} Configurable({$countUpdated}) " . implode(',', $productConfigurableIds), 0, 'configurable_update.log');
 
 
         Mage::log("{$hash} {$date} Reindex ", 0, 'configurable_update.log');
