@@ -56,7 +56,7 @@ class Zolago_Catalog_Model_Observer {
             return;
         }
         $storeId = $configurableData[0];
-        $websiteId = $configurableData[0];
+        $websiteId =  Mage::getModel('core/store')->load($storeId)->getWebsiteId();
 
         unset($configurableData[0]);
 
@@ -69,6 +69,7 @@ class Zolago_Catalog_Model_Observer {
             Mage::log("{$hash} {$date} Found 0 configurable products ", 0, 'configurable_update.log');
             return;
         }
+        $relations = count($configurableSimpleRelation);
 
         $configurableProductsIds = implode(',', array_keys($configurableSimpleRelation));
 
@@ -90,14 +91,17 @@ class Zolago_Catalog_Model_Observer {
         //--super attribute ids
 
 
+
         $productAction = Mage::getSingleton('catalog/product_action');
         $productConfigurableIds = array();
+        Mage::log("{$hash} {$date} {$relations} relations found ", 0, 'configurable_update.log');
         foreach ($configurableSimpleRelation as $productConfigurableId => $configurableSimpleRelationItem) {
             $productMinPrice = isset($minPrices[$productConfigurableId]) ? $minPrices[$productConfigurableId]['min_price'] : FALSE;
 
             //update configurable product price
             if ($productMinPrice)
                 $productAction->updateAttributes(array($productConfigurableId), array('price' => $productMinPrice), $storeId);
+
 
             $superAttributeId = isset($superAttributes[$productConfigurableId]) ? (int)$superAttributes[$productConfigurableId]['super_attribute'] : FALSE;
 
@@ -107,6 +111,7 @@ class Zolago_Catalog_Model_Observer {
                     ->where('parent=?', $productConfigurableId)
                     ->where('store=?', (int)$storeId);
                 $productRelations = $readConnection->fetchAll($select);
+
                 unset($select);
 
                 if (!empty($productRelations)) {
@@ -132,14 +137,13 @@ ON DUPLICATE KEY UPDATE catalog_product_super_attribute_pricing.pricing_value=VA
 ", $catalogProductSuperAttributePricingTable, $lineQuery);
 
                         $writeConnection->query($insertQuery);
+
                     }
                 }
                 $productConfigurableIds[] = $productConfigurableId;
             }
 
         }
-        $countUpdated = count($productConfigurableIds);
-        Mage::log("{$hash} {$date} Configurable({$countUpdated}) " . implode(',', $productConfigurableIds), 0, 'configurable_update.log');
 
 
         Mage::log("{$hash} {$date} Reindex ", 0, 'configurable_update.log');
