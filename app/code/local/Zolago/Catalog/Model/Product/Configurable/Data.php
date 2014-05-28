@@ -28,31 +28,27 @@ class Zolago_Catalog_Model_Product_Configurable_Data extends Mage_Core_Model_Res
                     'configurable_product' => 'product_relation.parent_id',
                     'min_price' => 'MIN(prices.value)')
             )
-            ->join(
-                array('sizes' => 'catalog_product_entity_int'),
-                'prices.entity_id = sizes.entity_id',
-                array()
-            )
+
             ->join(
                 array('products' => 'catalog_product_entity'),
-                'products.entity_id = sizes.entity_id',
+                'products.entity_id = prices.entity_id',
                 array()
             )
             ->join(
                 array('product_relation' => 'catalog_product_relation'),
-                'product_relation.child_id = sizes.entity_id',
+                'product_relation.child_id = prices.entity_id',
                 array()
             )
             ->where('products.type_id=?', 'simple') //chose from simple products
+            ->where('prices.attribute_id=?', 75)
             ->where('prices.store_id=?', (int)$storeId);
         if (!empty($configurableProductsIds)) {
             $select->where("product_relation.parent_id IN({$configurableProductsIds})");
         }
         $select->order('products.entity_id');
 
-
-
         $select->group('product_relation.parent_id');
+
         $result = $adapter->fetchAssoc($select);
 
 
