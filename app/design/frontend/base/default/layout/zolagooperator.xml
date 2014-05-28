@@ -11,6 +11,7 @@
 	<udropship_operator_edit>
         <update handle="udropship_vendor" />
 		<update handle="bootstrap"/>
+		<update handle="forms"/>
         <reference name="content">
             <block name="zolagooperator_dropship_operator_edit" type="zolagooperator/dropship_operator_edit" template="zolagooperator/dropship/operator/edit.phtml"/>
         </reference>

@@ -33,7 +33,7 @@
 			<i class="icon-pencil"></i>
 		</button>
 		<span title="<?php if($this->getIsRemovable()): ?><?php echo $this->__("Remove Item");?><?php else:?><?php echo $this->__("The last item cannot be deleted. You can delete it when you add another item or cancel the order.");?><?php endif;?>" class="bs-tooltip inline-block">
-			<button <?php if(!$this->getIsRemovable()):?>disabled="disabled"<?php endif;?> class="btn btn-xs btn-notification" data-ok-url="<?php echo $this->getPoUrl('removeItem', array("item_id"=>$_item->getId()));?>" data-placement="top"  data-layout="top" data-type="confirm" data-text="<?php echo Mage::helper("zolagopo")->__("Do you want remove %s?", $_item->getOneLineDesc());?>" data-modal="true">
+			<button <?php if(!$this->getIsRemovable()):?>disabled="disabled"<?php endif;?> class="btn btn-xs btn-notification" data-ok-url="<?php echo $this->getPoUrl('removeItem', array("item_id"=>$_item->getId()));?>" data-placement="top"  data-layout="top" data-type="confirm" data-text="<?php echo Mage::helper("zolagopo")->__("Do you want to remove %s?", $_item->getOneLineDesc());?>" data-modal="true">
 				<i class="icon-remove"></i>
 			</button>
 		</span>
