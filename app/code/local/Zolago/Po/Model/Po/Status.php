@@ -54,6 +54,15 @@ class Zolago_Po_Model_Po_Status
 	 */
     const STATUS_PAYMENT    = Zolago_Po_Model_Source::UDPO_STATUS_PAYMENT; 
 
+	static function getFinishStatuses() {
+		return array(
+			self::STATUS_CANCELED,
+			self::STATUS_DELIVERED,
+			self::STATUS_SHIPPED,
+			self::STATUS_RETURNED
+		);;
+	}
+	
 	/**
 	 * if PO is NEW
 	 * set if ALERT is not null:

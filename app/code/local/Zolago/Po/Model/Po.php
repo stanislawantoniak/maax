@@ -5,6 +5,11 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 	const TYPE_POSHIPPING = "poshipping";
 	const TYPE_POBILLING = "pobilling";
 	
+	public function isFinished() {
+		$status = $this->getStatusModel();
+		return in_array($this->getUdropshipStatus(), $status::getFinishStatuses());
+	}
+	
 	/**
 	 * @param array $itemIds
 	 * @return Zolago_Po_Model_Po
@@ -398,6 +403,31 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 	   return Mage::getSingleton('zolagopo/po_status');
    }
    
+   /**
+    * @return Zolago_Po_Model_Resource_Po_Collection
+    */
+   public function getSameEmailPoCollection() {
+	   $collection = $this->getCollection();
+	   
+	   $statModel = Mage::getSingleton("zolagopo/po_status");
+	   $finishedStatuses = $statModel::getFinishStatuses();
+	   
+	   if(in_array($this->getUdropshipStatus(), $finishedStatuses)){
+		   $collection->addFieldToFilter("entity_id", -1); // Emtpy
+		   return $collection;
+	   }
+	   
+	   /* @var $collection Zolago_Po_Model_Resource_Po_Collection */
+	   if($this->getId()){
+			$collection->addFieldToFilter("entity_id", array("neq"=>$this->getId()));
+	   }
+	   $collection->addFieldToFilter("udropship_vendor", $this->getUdropshipVendor());
+	   $collection->addFieldToFilter("udropship_status", array("nin"=>$finishedStatuses));
+	   $collection->addFieldToFilter("customer_email", $this->getCustomerEmail());
+
+	   return $collection;
+   }
+   
 	protected function _afterSave(){
 		$ret = parent::_afterSave();
 		$this->updateTotals();
@@ -405,16 +435,27 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 	} 
 	
 	protected function _beforeSave() {
+		// Transfer fields
+		if((!$this->getId() || $this->isObjectNew()) && !$this->getSkipTransferOrderItemsData()){
+			$this->setCustomerEmail($this->getOrder()->getCustomerEmail());
+		}
+		
 		$this->_processAlert();
 		$this->_processStatus();
+		
 		return parent::_beforeSave();
 	}
 	
 	protected function _processAlert() {
 		if(!$this->getId()){
-			/**
-			 * @todo implement
-			 */
+			$alertBit = 0;
+			
+			$sameEmail = $this->getSameEmailPoCollection();
+			if($sameEmail->count()){
+				$alertBit += Zolago_Po_Model_Po_Alert::ALERT_SAME_EMAIL_PO;
+			}
+			
+			$this->setAlert($alertBit);
 		}
 	}
 	

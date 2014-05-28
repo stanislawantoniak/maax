@@ -4,8 +4,7 @@
 <?php $_shippingMethod		= $this->getShippingMethod();?>
 <?php $_shipmentsCollection = $this->getShipmentsCollection();?>
 <?php $_currentShipping		= $this->getCustomCurrentShipping();?>
-<?php $_alert				= $this->getAlert($_po);?>
-<?php $_alertClass			= $this->getAlertClass($_po);?>
+<?php $_alerts				= $this->getAlerts($_po);?>
 <?php $_comments			= $_po->getVendorCommentsCollection(); ;?>
 <?php $_shippingStatuses	= Mage::helper('udropship')->getVendorShipmentStatuses(); ?>
 <?php $_statusModel			= $_po->getStatusModel(); ?>
@@ -17,9 +16,9 @@
 	<div class="row page-heading">
 		<div class="col-md-6">
 			<h3><?php echo $_hlp->__("Order #%s", $_po->getIncrementId());?></h3>
-			<?php if($_alert):?>
-				<span class="label label-<?php echo $_alertClass;?>" style="display: inline; color: #fff; "><?php echo $_alert;?></span>
-			<?php endif;?>
+			<?php foreach($_alerts as $alert):?>
+				<span class="label label-<?php echo $alert['class'];?>" style="display: inline; color: #fff; "><?php echo $alert['text'];?></span><br/>
+			<?php endforeach;?>
 		</div>
 		<div class="main-actions align-right col-md-6">
 			<?php /* Confirm direct realistaion */ ?>
