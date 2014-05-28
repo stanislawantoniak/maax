@@ -5,7 +5,7 @@ class Zolago_Catalog_Model_Product_Configurable_Data extends Mage_Core_Model_Res
 {
     protected function _construct()
     {
-
+        $this->_init('zolagocatalog/pricessizes');
     }
 
 
@@ -15,35 +15,46 @@ class Zolago_Catalog_Model_Product_Configurable_Data extends Mage_Core_Model_Res
      * @param array $configurableProductsIds
      * @return array
      */
-    public function getConfigurableMinPrice(int $storeId, array $configurableProductsIds)
+    public function getConfigurableMinPrice(int $storeId, $configurableProductsIds = array())
     {
         $result = array();
 
-        if (!empty($configurableProductsIds)) {
-            $adapter = $this->getReadConnection();
-            $select = $adapter->select();
+        $adapter = $this->getReadConnection();
+        $select = $adapter->select();
 
-            $select
-                ->from('catalog_product_entity_decimal AS prices',
-                    array(
-                        'configurable_product' => 'product_relation.parent_id',
-                        'min_price' => 'MIN(prices.value)')
-                )
-                ->join(
-                    array('sizes' => 'catalog_product_entity_int'),
-                    'prices.entity_id = sizes.entity_id',
-                    array()
-                )
-                ->join(
-                    array('product_relation' => 'catalog_product_relation'),
-                    'product_relation.child_id = sizes.entity_id',
-                    array()
-                )
-                ->where('prices.store_id=?', (int)$storeId)
-                ->where("product_relation.parent_id IN({$configurableProductsIds})")
-                ->group('product_relation.parent_id');
-            $result = $adapter->fetchAssoc($select);
+        $select
+            ->from('catalog_product_entity_decimal AS prices',
+                array(
+                    'configurable_product' => 'product_relation.parent_id',
+                    'min_price' => 'MIN(prices.value)')
+            )
+            ->join(
+                array('sizes' => 'catalog_product_entity_int'),
+                'prices.entity_id = sizes.entity_id',
+                array()
+            )
+            ->join(
+                array('products' => 'catalog_product_entity'),
+                'products.entity_id = sizes.entity_id',
+                array()
+            )
+            ->join(
+                array('product_relation' => 'catalog_product_relation'),
+                'product_relation.child_id = sizes.entity_id',
+                array()
+            )
+            ->where('products.type_id=?', 'simple') //chose from simple products
+            ->where('prices.store_id=?', (int)$storeId);
+        if (!empty($configurableProductsIds)) {
+            $select->where("product_relation.parent_id IN({$configurableProductsIds})");
         }
+        $select->order('products.entity_id');
+
+
+
+        $select->group('product_relation.parent_id');
+        $result = $adapter->fetchAssoc($select);
+
 
         return $result;
     }
@@ -53,7 +64,7 @@ class Zolago_Catalog_Model_Product_Configurable_Data extends Mage_Core_Model_Res
      * @param $listUpdatedProducts
      * @return array
      */
-    public function getConfigurableSimpleRelation($listUpdatedProducts)
+    public function getConfigurableSimpleRelation($listUpdatedProducts, $limit = 0)
     {
         $result = array();
         if (!empty($listUpdatedProducts)) {
@@ -77,6 +88,88 @@ class Zolago_Catalog_Model_Product_Configurable_Data extends Mage_Core_Model_Res
             $result = $adapter->fetchAssoc($select);
         }
 
+        return $result;
+    }
+
+
+    /**
+     * Get configurable prices
+     * @param int $storeId
+     * @return array
+     */
+    public function getConfigurablePrices($storeId = 0, $limit = 0)
+    {
+
+        $adapter = $this->getReadConnection();
+        $select = $adapter->select();
+        $select
+            ->from('catalog_product_entity AS products',
+                array(
+                    'product' => 'products.entity_id',
+                    'sku' => 'products.sku'
+                )
+            )
+            ->join(
+                array('prices' => 'catalog_product_entity_decimal'),
+                'prices.entity_id=products.entity_id',
+                array(
+                    'price' => 'prices.value'
+                )
+            )
+            ->where("prices.attribute_id=?", 75)
+            ->where("products.type_id=?", 'configurable')
+            ->where("prices.store_id=?", (int)$storeId)
+            ->order('products.entity_id');
+        if ($limit > 0) {
+            $select->limit($limit);
+        }
+
+        $result = $adapter->fetchAssoc($select);
+        return $result;
+    }
+
+
+
+    public function getConfigurablePricesMinPriceRelation($storeId = 0, $limit = 0)
+    {
+
+        $adapter = $this->getReadConnection();
+        $select = $adapter->select();
+        $select
+            ->from('catalog_product_relation AS product_relation',
+                array(
+                    'product' => 'parent_id'
+                )
+            )
+            ->join(
+                array('product_super_attribute' => 'catalog_product_super_attribute'),
+                'product_relation.parent_id=product_super_attribute.product_id',
+                array()
+            )
+            ->join(
+                array('product_super_attribute_pricing' => 'catalog_product_super_attribute_pricing'),
+                'product_super_attribute_pricing.product_super_attribute_id=product_super_attribute.product_super_attribute_id',
+                array(
+                    'diff' => 'product_super_attribute_pricing.pricing_value'
+                )
+            )
+            ->join(
+                array('product_entity_decimal' => 'catalog_product_entity_decimal'),
+                'product_relation.child_id=product_entity_decimal.entity_id',
+                array(
+                    'price' => 'product_entity_decimal.value',
+                    'min_price' => 'MIN(product_entity_decimal.value)'
+                )
+            )
+            ->where("product_entity_decimal.attribute_id=?", 75)
+            ->where("product_entity_decimal.store_id", (int)$storeId)
+
+            ->group('product_relation.parent_id');
+        if ($limit > 0) {
+            $select->limit($limit);
+        }
+
+        $result = $adapter->fetchAssoc($select);
         return $result;
     }
 }
