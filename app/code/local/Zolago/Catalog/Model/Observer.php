@@ -112,6 +112,8 @@ class Zolago_Catalog_Model_Observer {
                     ->where('parent=?', $productConfigurableId)
                     ->where('store=?', (int)$storeId);
                 $productRelations = $readConnection->fetchAll($select);
+                $countVwRel = count($productRelations);
+                Mage::log("{$hash} {$date} {$countVwRel} relations in view  vw_product_relation_prices_sizes", 0, 'configurable_update.log');
                 unset($select);
 
                 if (!empty($productRelations)) {
