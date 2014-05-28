@@ -93,7 +93,6 @@ class Zolago_Po_Vendor_AggregatedController
 		try{
 			$aggregated  = $this->_registerAggregated();
 			$dhlFileName = $aggregated->getPdfFile();
-
 			$ioAdapter = new Varien_Io_File();
 			if ($dhlFileName) {
 				return $this->_prepareDownloadResponse(basename($dhlFileName), @$ioAdapter->read($dhlFileName), 'application/pdf');

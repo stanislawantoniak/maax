@@ -103,7 +103,7 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 			$po->getResource()->saveAttribute($po, "aggregated_id");
 		}
 		
-		return true;
+		return $aggregated->getId();
 	}
 	
 	public function setCondJoined($flag) {
