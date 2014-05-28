@@ -8,5 +8,13 @@
 			</action>
         </reference>
     </udqa_catalog_product_view>
-
+	
+	<udqa_vendor_questions>	
+		<remove name="head.calendar"/>
+		<remove name="wrapper"/>
+		<update handle="bootstrap" />
+		<reference name="content">
+			<block type="core/template" template="zolagoudqa/vendor/question.phtml" name="question"/>
+		</reference>
+	</udqa_vendor_questions>
 </layout>
