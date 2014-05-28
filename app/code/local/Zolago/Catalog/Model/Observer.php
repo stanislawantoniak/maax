@@ -70,14 +70,14 @@ class Zolago_Catalog_Model_Observer {
             return;
         }
         $relations = count($configurableSimpleRelation);
-        Mage::log(" define parent products (configurable) by child (simple) ", 0, 'configurable_update.log');
+
         $configurableProductsIds = implode(',', array_keys($configurableSimpleRelation));
 
 
         //min prices
         $minPrices = $zolagoCatalogModelProductConfigurableData->getConfigurableMinPrice($storeId, $configurableProductsIds);
         //--min prices
-        Mage::log($hash . " min prices ", 0, 'configurable_update.log');
+
 
         //super attribute ids
         $select = $readConnection->select()
@@ -89,7 +89,7 @@ class Zolago_Catalog_Model_Observer {
         $superAttributes = $readConnection->fetchAssoc($select);
         unset($select);
         //--super attribute ids
-        Mage::log("{$hash} {$date} super attribute ids ", 0, 'configurable_update.log');
+
 
 
         $productAction = Mage::getSingleton('catalog/product_action');
@@ -102,7 +102,6 @@ class Zolago_Catalog_Model_Observer {
             if ($productMinPrice)
                 $productAction->updateAttributes(array($productConfigurableId), array('price' => $productMinPrice), $storeId);
 
-            Mage::log("{$hash} {$date} update configurable product price ", 0, 'configurable_update.log');
 
             $superAttributeId = isset($superAttributes[$productConfigurableId]) ? (int)$superAttributes[$productConfigurableId]['super_attribute'] : FALSE;
 
@@ -112,8 +111,7 @@ class Zolago_Catalog_Model_Observer {
                     ->where('parent=?', $productConfigurableId)
                     ->where('store=?', (int)$storeId);
                 $productRelations = $readConnection->fetchAll($select);
-                $countVwRel = count($productRelations);
-                Mage::log("{$hash} {$date} {$countVwRel} relations in view  vw_product_relation_prices_sizes", 0, 'configurable_update.log');
+
                 unset($select);
 
                 if (!empty($productRelations)) {
@@ -139,15 +137,13 @@ ON DUPLICATE KEY UPDATE catalog_product_super_attribute_pricing.pricing_value=VA
 ", $catalogProductSuperAttributePricingTable, $lineQuery);
 
                         $writeConnection->query($insertQuery);
-                        Mage::log("{$hash} {$date} insert ", 0, 'configurable_update.log');
+
                     }
                 }
                 $productConfigurableIds[] = $productConfigurableId;
             }
 
         }
-        $countUpdated = count($productConfigurableIds);
-        Mage::log("{$hash} {$date} Configurable({$countUpdated}) " . implode(',', $productConfigurableIds), 0, 'configurable_update.log');
 
 
         Mage::log("{$hash} {$date} Reindex ", 0, 'configurable_update.log');
