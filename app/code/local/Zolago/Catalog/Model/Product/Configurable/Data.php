@@ -26,7 +26,7 @@ class Zolago_Catalog_Model_Product_Configurable_Data extends Mage_Core_Model_Res
             ->from('catalog_product_entity_decimal AS prices',
                 array(
                     'configurable_product' => 'product_relation.parent_id',
-                    'min_price' => 'MIN(prices.value)')
+                    'min_price' => 'MIN(NULLIF(prices.value, 0))')
             )
 
             ->join(
