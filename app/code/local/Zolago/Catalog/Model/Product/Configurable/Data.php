@@ -39,7 +39,7 @@ class Zolago_Catalog_Model_Product_Configurable_Data extends Mage_Core_Model_Res
                 'product_relation.child_id = prices.entity_id',
                 array()
             )
-            ->where('products.type_id=?', 'simple') //chose from simple products
+            ->where('products.type_id=?', 'simple') //choose from simple products
             ->where('prices.attribute_id=?', 75)
             ->where('prices.store_id=?', (int)$storeId);
         if (!empty($configurableProductsIds)) {
@@ -50,8 +50,7 @@ class Zolago_Catalog_Model_Product_Configurable_Data extends Mage_Core_Model_Res
         $select->group('product_relation.parent_id');
 
         $result = $adapter->fetchAssoc($select);
-var_dump($result);
-        die('test');
+
 
         return $result;
     }
