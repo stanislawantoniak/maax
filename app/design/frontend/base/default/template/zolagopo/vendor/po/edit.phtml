@@ -58,9 +58,17 @@
 				<?php else: ?>
 				<?php  /* Display as label */ ?>
 				<button class="btn  btn-success" disabled="disabled">
+					<i class="icon-barcode"></i>
 					<?php echo $_hlp->__("Stock checked");?>
 				</button>
 				<?php endif;?>
+			<?php else:?>
+				<?php /* if($_po->getStockConfirm()):?>
+				<button class="btn  btn-success" disabled="disabled">
+					<i class="icon-barcode"></i>
+					<?php echo $_hlp->__("Stock checked");?>
+				</button>
+				<?php endif; */?>
 			<?php endif;?>
 				
 			<?php if($_statusModel->isConfirmStockAvailable($_po) && !$_po->getStockConfirm()):?>	

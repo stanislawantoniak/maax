@@ -32,19 +32,19 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 		if($po->getStatusModel()->isConfirmStockAvailable($po)){
 			if(!$po->getStockConfirm()){
 				$alert[] = array( 
-					"text" => $this->__("Product reservation not yet confirmed!"),
+					"text" => '<i class="icon-warning"></i> '  . $this->__("Product reservation not yet confirmed!"),
 					"class"=> "danger"
 				);
 			}else{
 				$alert[] = array( 
-					"text" => $this->__("Items reserved"),
+					"text" => '<i class="icon-barcode"></i> ' . $this->__("Items reserved"),
 					"class"=> "success"
 				);
 			}
 		}else{
 			if($po->getStockConfirm()){
 				$alert[] = array( 
-					"text" => $this->__("Items reserved"),
+					"text" => '<i class="icon-barcode"></i> ' . $this->__("Items reserved"),
 					"class"=> "success"
 				);
 			}
