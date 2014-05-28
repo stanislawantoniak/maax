@@ -35,10 +35,16 @@ class Zolago_Catalog_Model_Product_Configurable_Data extends Mage_Core_Model_Res
                     array()
                 )
                 ->join(
+                    array('products' => 'catalog_product_entity'),
+                    'products.entity_id = sizes.entity_id',
+                    array()
+                )
+                ->join(
                     array('product_relation' => 'catalog_product_relation'),
                     'product_relation.child_id = sizes.entity_id',
                     array()
                 )
+                ->where('products.type_id=?', 'simple') //chose from simple products
                 ->where('prices.store_id=?', (int)$storeId)
                 ->where("product_relation.parent_id IN({$configurableProductsIds})")
                 ->group('product_relation.parent_id');
