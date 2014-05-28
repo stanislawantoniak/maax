@@ -118,13 +118,16 @@ Zolago.gridIntegrator = function(gridObj){
 	});
 	$$('#'+gridObj.containerId+' .filter .date input').each(function(el, i){
 		var _el = jQuery(el);
-			_el.attr("placeholder", Translator.translate(!(i%2)? "From" : "To"));
-			_el.css({
+			
+			
+			_el.parent().css({
+				display: "inline-block",
 				width: "49%",
-				float: "left"
 			});
-			if(!i){
-				_el.css("margin-right", "2%");
+			_el.attr("placeholder", Translator.translate(!(i%2)? "From" : "To"));
+
+			if(!(i%2)){
+				_el.parent().css("margin-right", "2%");
 			}
 			_el.datepicker();
 	});

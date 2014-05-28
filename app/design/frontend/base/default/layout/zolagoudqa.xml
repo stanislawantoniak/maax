@@ -10,11 +10,12 @@
     </udqa_catalog_product_view>
 	
 	<udqa_vendor_questions>	
+		<update handle="adminhtml_head" />
+		<update handle="bootstrap" />
 		<remove name="head.calendar"/>
 		<remove name="wrapper"/>
-		<update handle="bootstrap" />
 		<reference name="content">
-			<block type="core/template" template="zolagoudqa/vendor/question.phtml" name="question"/>
+			<block type="zolagoudqa/vendor_question" template="zolagoudqa/vendor/question.phtml" name="question"/>
 		</reference>
 	</udqa_vendor_questions>
 </layout>
