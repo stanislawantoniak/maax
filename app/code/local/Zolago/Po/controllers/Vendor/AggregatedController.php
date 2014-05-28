@@ -31,12 +31,14 @@ class Zolago_Po_Vendor_AggregatedController
 		$this->_renderPage(array('default', 'formkey', 'adminhtml_head'), 'zolagopo_aggregated');
 	}
 	public function pdfAction() {
+		$id = $this->getRequest()->getParam('id');
+		if (!$id) {
+			 throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("No pdf id"));
+		}
 		header('Content-type: application/pdf');
 		$pdf = Mage::getModel('zolagopo/aggregated_pdf');
-		$aggr = Mage::getModel('zolagopo/aggregated')->load(1);
-		$pdf->setAggregated($aggr);
-		$doc = $pdf->getPdf();
-		echo $doc->render();
+		$doc = $pdf->getPdf($id);
+		echo $doc;
 		exit();
 	}	
 	/**
