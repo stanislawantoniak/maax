@@ -133,3 +133,7 @@
 "Cancel", "Anuluj"
 "Order has been split. New order: #%s.", "Zamówienie zostało podzielone. Nowe zamówienie: #%s."
 "If you want to change the contents (shipments) in dispatch list you can delete the dispatch list and make a new one in order list grid.", "Jeśli chcesz usunąć bądź dodać listy przewozowe do zbiorówki usuń całą zbiorówkę i zrób nową z poziomu listy zamówień."
+"There are another orders from the same customer. Click the %s to see all the customer orders.", "Istnieją inne zamówienia od tego samego klienta. Kliknij %s by je zobaczyć."
+"There is another order from the same customer. Click the %s to see the customer order.", "Istnieje inne zamówienie od tego samego klienta. Kilknij %s by je zobaczyć."
+"link", "link"
+"Another order from same customer", "Inne zamówienie od tego klienta"

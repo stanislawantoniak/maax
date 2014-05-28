@@ -15,6 +15,7 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 	protected function _prepareCollection(){
         $collection = Mage::getResourceModel('zolagopo/po_collection');
         /* @var $collection Zolago_Po_Model_Resource_Po_Collection */
+		$collection->addVendorFilter(Mage::getSingleton('udropship/session')->getVendor());
 		$collection->addOrderData();
 		$collection->addProductNames();
 		$collection->addHasShipment();
@@ -175,14 +176,13 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 		));
 		
 		$this->addColumn("alert", array(
-			"type"		=>	"options",
+			"type"		=> "options",
+			"options"   => Zolago_Po_Model_Po_Alert::getAllOptions(),
 			"header"	=>	Mage::helper("zolagopo")->__("Alert"),
 			"width"		=> "150px",
-			"options"	=> array(
-				0=>Mage::helper("zolagopo")->__("Alert 1"), 
-				1=>Mage::helper("zolagopo")->__("Alert 2"),
-				1=>Mage::helper("zolagopo")->__("Alert 3")
-			)
+			"index"		=> "alert",
+			"renderer"	=>	Mage::getConfig()->
+				getBlockClassName("zolagopo/vendor_po_grid_column_renderer_alert"),
 		));
 		
 		$this->addColumn("actions", array(
@@ -275,6 +275,11 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 			break;
 			case "has_shipment":
 				$this->getCollection()->addHasShipmentFilter(
+					$column->getFilter()->getValue());
+				return $this;
+			break;
+			case "alert":
+				$this->getCollection()->addAlertFilter(
 					$column->getFilter()->getValue());
 				return $this;
 			break;
