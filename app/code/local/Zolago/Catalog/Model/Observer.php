@@ -12,6 +12,11 @@ class Zolago_Catalog_Model_Observer {
         $dir = $base_path . '/var/log/configurableUpdate';
         $dh = opendir($dir);
 
+        if(!$dh){
+            Mage::log("No updates ", 0, 'configurable_update.log');
+            return;
+        }
+
         while (false !== ($filename = readdir($dh))) {
             if (substr($filename, 0, 13) === 'configurable_') {
                 $files[$filename] = filemtime($dir . "/" . $filename);
