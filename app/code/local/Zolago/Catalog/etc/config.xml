@@ -17,6 +17,9 @@
                     <category_filter>
                         <table>zolago_catalog_category_filter</table>
                     </category_filter>
+                    <pricessizes>
+                        <table>vw_product_relation_prices_sizes</table>
+                    </pricessizes>
                 </entities>
             </zolagocatalog_resource>
 			<catalog>

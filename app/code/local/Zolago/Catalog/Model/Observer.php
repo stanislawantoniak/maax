@@ -24,11 +24,13 @@ class Zolago_Catalog_Model_Observer {
             return;
         }
         //get first file in queue
-        $configurableFile = $base_path . '/var/log/configurableUpdate/' . array_keys($files)[0];
+        $fileName = array_keys($files)[0];
+        $configurableFile = $base_path . '/var/log/configurableUpdate/' . $fileName;
         $configurableFileData = file_get_contents($configurableFile);
 
-        $storeId = 1;
-        $websiteId = 1;
+        $date = str_replace(array('configurable_','.txt'),'',$fileName);
+
+
 
         if (!$configurableFileData) {
             Mage::log($hash . " No updates ", 0, 'configurable_update.log');
@@ -41,15 +43,24 @@ class Zolago_Catalog_Model_Observer {
         $readConnection = $resource->getConnection('core_read');
         $writeConnection = $resource->getConnection('core_write');
 
-        Mage::log($hash . " Start ", 0, 'configurable_update.log');
+        Mage::log("{$hash} {$date} Start ", 0, 'configurable_update.log');
         $configurableData = explode(',', $configurableFileData);
+        if (empty($configurableData)) {
+            Mage::log($hash . " Empty info ", 0, 'configurable_update.log');
+            return;
+        }
+        $storeId = $configurableData[0];
+        $websiteId = $configurableData[0];
+
+        unset($configurableData[0]);
+
         $listUpdatedProducts = implode(',', $configurableData);
 
 
         //define parent products (configurable) by child (simple)
         $configurableSimpleRelation = $zolagoCatalogModelProductConfigurableData->getConfigurableSimpleRelation($listUpdatedProducts);
         if (empty($configurableSimpleRelation)) {
-            Mage::log($hash . " Found 0 configurable products ", 0, 'configurable_update.log');
+            Mage::log("{$hash} {$date} Found 0 configurable products ", 0, 'configurable_update.log');
             return;
         }
 
@@ -121,10 +132,10 @@ ON DUPLICATE KEY UPDATE catalog_product_super_attribute_pricing.pricing_value=VA
             }
 
         }
-        Mage::log($hash . " Configurable " . implode(',', $productConfigurableIds), 0, 'configurable_update.log');
+        Mage::log("{$hash} {$date} Configurable " . implode(',', $productConfigurableIds), 0, 'configurable_update.log');
 
 
-        Mage::log($hash . " Reindex ", 0, 'configurable_update.log');
+        Mage::log("{$hash} {$date} Reindex ", 0, 'configurable_update.log');
         $indexProcessModel = Mage::getModel('index/process');
 
         $index = array(1, 2, 4, 5, 8);
@@ -132,7 +143,7 @@ ON DUPLICATE KEY UPDATE catalog_product_super_attribute_pricing.pricing_value=VA
             $process = $indexProcessModel->load($i);
             $process->reindexAll();
         }
-        Mage::log($hash . " End ", 0, 'configurable_update.log');
+        Mage::log("{$hash} {$date} End ", 0, 'configurable_update.log');
         if (file_exists($configurableFile)) {
             unlink($configurableFile);
         }

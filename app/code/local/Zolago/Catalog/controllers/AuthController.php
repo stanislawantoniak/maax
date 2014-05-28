@@ -79,8 +79,8 @@ class Zolago_Catalog_AuthController
 
         /*Load xml data*/
         $base_path = Mage::getBaseDir('base');
-       // $file = $base_path . '/var/log/price2-0.xml';
-        $file = $base_path . '/var/log/price2-1.xml';
+        $file = $base_path . '/var/log/price2-0.xml';
+        //$file = $base_path . '/var/log/price2-1.xml';
         $xml = simplexml_load_file($file, 'SimpleXMLElement', LIBXML_NOCDATA);
         $document = (array)$xml;
 
@@ -129,6 +129,7 @@ class Zolago_Catalog_AuthController
 
     public  function emulateConfigurableAction()
     {
+        $storeId = 1;
         $data = array();
 
         /*Load xml data*/
@@ -184,6 +185,7 @@ class Zolago_Catalog_AuthController
         }
 
         if (!empty($data)) {
+            $data = array_merge(array($storeId),$data);
             file_put_contents($configurableFile, implode(',' ,$data));
 
         }
