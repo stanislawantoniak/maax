@@ -27,6 +27,10 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 		$return = parent::sendNewPoNotificationEmail($po, $comment);
 		$vendor->setData($emailField, $oldEmail);
 		
+		
+		// Porocess queue
+		Mage::helper('udropship')->processQueue();
+		
 		return $return; 
 	}
 	

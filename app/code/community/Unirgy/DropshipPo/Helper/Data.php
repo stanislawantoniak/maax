@@ -1099,7 +1099,6 @@ class Unirgy_DropshipPo_Helper_Data extends Mage_Core_Helper_Abstract
             $email = $vendor->getEmail();
         }
         Mage::getModel('udropship/email')->sendTransactional($template, $identity, $email, $vendor->getVendorName(), $data);
-		Mage::log("Mail should be send: ". $email);
         $hlp->unassignVendorSkus($po);
 
         $hlp->setDesignStore();
