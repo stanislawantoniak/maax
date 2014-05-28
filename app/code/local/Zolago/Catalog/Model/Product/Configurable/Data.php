@@ -15,7 +15,7 @@ class Zolago_Catalog_Model_Product_Configurable_Data extends Mage_Core_Model_Res
      * @param array $configurableProductsIds
      * @return array
      */
-    public function getConfigurableMinPrice(int $storeId, $configurableProductsIds = array())
+    public function getConfigurableMinPrice($storeId, $configurableProductsIds = array())
     {
         $result = array();
 
