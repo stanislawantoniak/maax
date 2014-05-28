@@ -5,6 +5,13 @@
             <version>0.0.1</version>
         </Zolago_DropshipVendorAskQuestion>
     </modules>
+	<global>
+		<blocks>
+			<zolagoudqa>
+				<class>Zolago_DropshipVendorAskQuestion_Block</class>
+			</zolagoudqa>
+		</blocks>
+	</global>
     <frontend>
         <layout>
             <updates>
