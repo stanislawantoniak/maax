@@ -116,6 +116,14 @@
 			a {
 				font-size: 48px;
 				margin-top:-45px;
+				@media (max-width: $screen-xs-max) {
+					margin-top:-45px;	
+				}
+				i {
+					@media (max-width: $screen-xs-max) {
+						font-size: 18px;	
+					}
+				}
 				&.prev {
 					left:35px;
 				}

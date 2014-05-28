@@ -13,7 +13,12 @@
     > a { 
       @include inline-block;
       text-align: center;
-
+      &::selection {
+        background: transparent; /* Safari */
+        }
+      &::-moz-selection {
+        background: transparent; /* Firefox */
+      }
 
     }
     &.open {

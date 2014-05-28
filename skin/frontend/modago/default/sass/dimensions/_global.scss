@@ -99,6 +99,38 @@ section {
 		margin-bottom: 15px;
 		@media (max-width: $screen-xs-max) {
 			padding: 10px 0 0!important;
+			margin-bottom: 0px;
+		}
+		&#product_shop {
+			margin-bottom: 30px;
+		}
+		&#delivery {
+			ul {
+				margin:0px 0 10px;
+				padding:0px;
+				list-style-type: none;
+			}
+		}
+		&#note_product {
+			header {
+				h2.title_section {
+					@media (max-width: $screen-xs-max) {
+						height: 38px;
+					}
+					&:before {
+						@media (max-width: $screen-xs-max) {
+							top:10px;
+						}
+					}
+				}
+				#average_note_client {
+					position:static;
+					display:block;
+					span {
+						position:static;
+					}
+				}
+			}
 		}
 		.main {
 			padding: 20px 45px 30px;
@@ -113,6 +145,9 @@ section {
 			&.title_section {
 				@media (max-width: $screen-xs-max) {
 					cursor:pointer;
+				}
+				i {
+					right:20px;
 				}
 			}
 		}

@@ -14,19 +14,16 @@
 						font-size: 11px;
 						color:#000;
 						position:relative;
-						font-weight: bold;
+						font-weight: normal;
+						 font-family: 'OpenSansRegular';
 						a {
 							display:block;
 							text-align: left;
 							text-transform: uppercase;
-							padding-left:35px;
+							padding-left:25px;
 							position:relative;
-							i {
-								position:absolute;
-								right:15px;
-								top:-8px;
-								font-size: 24px;	
-							}
+							
+							
 						}
 						&:before {
 					    content: " ";

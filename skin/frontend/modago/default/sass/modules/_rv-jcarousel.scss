@@ -33,8 +33,28 @@
 .rv>ul>li>a:hover {text-decoration: underline;}
 .rv {margin:0 auto;}
 .rv-control-prev,.rv-control-next {position:absolute;background: transparent;top:27%; font-size: 36px;	color:#b7b7b7 !important;}
-.rv-control-prev {left: 40px;}
-.rv-control-next {right: 40px;}
+.rv-control-prev {
+    left: 40px;
+    @media (max-width: $screen-xs-max) {
+        left: 0px;
+    }
+    i {
+       @media (max-width: $screen-xs-max) {
+        font-size: 18px;
+       } 
+    }
+}
+.rv-control-next {
+    right: 0px;
+    @media (max-width: $screen-xs-max) {
+        right: 0px;
+    }
+    i {
+       @media (max-width: $screen-xs-max) {
+        font-size: 18px;
+       } 
+    }
+}
 .rv-control-prev:hover {}
 .rv-control-next:hover {}
 .rv-wrapper .canvas-left, .rv-wrapper .canvas-right {width: auto;}

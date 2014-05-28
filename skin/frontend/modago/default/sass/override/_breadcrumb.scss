@@ -1,23 +1,31 @@
+.node-type-view-product {
+	#breadcrumbs {
+	margin-top: -15px;
+	}
+}
 ol.breadcrumb {
 	background:none;
-	padding:0px 0px 15px;
-	margin:0px;
+	padding:0px 0px 5px;
+	margin:20px 0;
+	font-family: 'OpenSansRegular';
+	font-size: 11px;
 	li {
 		font-size: 11px;
 		&:not(:first-child):before {
 			content: "\f105";
 			font-family: FontAwesome;
-			width: 32px;
+			//width: 32px;
 			font-size: 11px;
 			display: inline-block;
 			text-align: right;
-			margin-right: 10px;
+			margin-right: 5px;
 			color:#000;
 		}
 		a:link,
 		a:visited {
 			color:#000;
-			
+			font-family: 'OpenSansRegular';
+			font-size: 11px;			
 		}
 		&.active {
 			color:#000;

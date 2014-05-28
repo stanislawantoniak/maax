@@ -1,5 +1,6 @@
 @charset "UTF-8";
 @import url(../fonts/lato/stylesheet.css);
+@import url(../fonts/open-sans/stylesheet.css);
 /* line 1, ../sass/override/_global.scss */
 .container-fluid {
   max-width: 1206px; }
@@ -61,28 +62,35 @@
          
         }*/ }
 
-/* line 1, ../sass/override/_breadcrumb.scss */
+/* line 2, ../sass/override/_breadcrumb.scss */
+.node-type-view-product #breadcrumbs {
+  margin-top: -15px; }
+
+/* line 6, ../sass/override/_breadcrumb.scss */
 ol.breadcrumb {
   background: none;
-  padding: 0px 0px 15px;
-  margin: 0px; }
-/* line 5, ../sass/override/_breadcrumb.scss */
+  padding: 0px 0px 5px;
+  margin: 20px 0;
+  font-family: 'OpenSansRegular';
+  font-size: 11px; }
+/* line 12, ../sass/override/_breadcrumb.scss */
 ol.breadcrumb li {
   font-size: 11px; }
-/* line 7, ../sass/override/_breadcrumb.scss */
+/* line 14, ../sass/override/_breadcrumb.scss */
 ol.breadcrumb li:not(:first-child):before {
   content: "\f105";
   font-family: FontAwesome;
-  width: 32px;
   font-size: 11px;
   display: inline-block;
   text-align: right;
-  margin-right: 10px;
+  margin-right: 5px;
   color: #000; }
-/* line 18, ../sass/override/_breadcrumb.scss */
+/* line 25, ../sass/override/_breadcrumb.scss */
 ol.breadcrumb li a:link, ol.breadcrumb li a:visited {
-  color: #000; }
-/* line 22, ../sass/override/_breadcrumb.scss */
+  color: #000;
+  font-family: 'OpenSansRegular';
+  font-size: 11px; }
+/* line 30, ../sass/override/_breadcrumb.scss */
 ol.breadcrumb li.active {
   color: #000; }
 
@@ -133,8 +141,8 @@ ol.breadcrumb li.active {
     font-size: 10px;
     font-style: normal;
     padding: 3px 3px 2px 2px;
-    top: 11px;
-    right: -2px; } }
+    top: 9px;
+    right: -3px; } }
 /* line 25, ../sass/override/_badge.scss */
 .user-navigation a.dropdown-toggle .badge {
   right: 15px; }
@@ -148,6 +156,10 @@ ol.breadcrumb li.active {
     /* line 39, ../sass/override/_badge.scss */
     .user-navigation a.dropdown-toggle .badge {
       top: 13px; } } }
+
+/* line 48, ../sass/override/_badge.scss */
+#link_basket {
+  top: -1px; }
 
 /* line 3, ../sass/override/_accordion-seller-box-bundle.scss */
 #seller-box-bundle #accordion .panel-default {
@@ -165,21 +177,16 @@ ol.breadcrumb li.active {
   font-size: 11px;
   color: #000;
   position: relative;
-  font-weight: bold; }
-/* line 18, ../sass/override/_accordion-seller-box-bundle.scss */
+  font-weight: normal;
+  font-family: 'OpenSansRegular'; }
+/* line 19, ../sass/override/_accordion-seller-box-bundle.scss */
 #seller-box-bundle #accordion .panel-default > .panel-heading h4.panel-title a {
   display: block;
   text-align: left;
   text-transform: uppercase;
-  padding-left: 35px;
+  padding-left: 25px;
   position: relative; }
-/* line 24, ../sass/override/_accordion-seller-box-bundle.scss */
-#seller-box-bundle #accordion .panel-default > .panel-heading h4.panel-title a i {
-  position: absolute;
-  right: 15px;
-  top: -8px;
-  font-size: 24px; }
-/* line 31, ../sass/override/_accordion-seller-box-bundle.scss */
+/* line 28, ../sass/override/_accordion-seller-box-bundle.scss */
 #seller-box-bundle #accordion .panel-default > .panel-heading h4.panel-title:before {
   content: " ";
   display: block;
@@ -189,18 +196,18 @@ ol.breadcrumb li.active {
   position: absolute;
   left: -9px;
   top: -4px; }
-/* line 46, ../sass/override/_accordion-seller-box-bundle.scss */
+/* line 43, ../sass/override/_accordion-seller-box-bundle.scss */
 #seller-box-bundle #accordion .panel-default > .panel-heading + .panel-collapse .panel-body {
   border: none;
   font-size: 11px;
   color: #000;
   text-align: left; }
-/* line 51, ../sass/override/_accordion-seller-box-bundle.scss */
+/* line 48, ../sass/override/_accordion-seller-box-bundle.scss */
 #seller-box-bundle #accordion .panel-default > .panel-heading + .panel-collapse .panel-body ul {
   margin: 0px;
   padding: 0px;
   list-style: none; }
-/* line 56, ../sass/override/_accordion-seller-box-bundle.scss */
+/* line 53, ../sass/override/_accordion-seller-box-bundle.scss */
 #seller-box-bundle #accordion .panel-default > .panel-heading + .panel-collapse .panel-body .view-store {
   background: none repeat scroll 0% 0% #313131;
   border: 1px solid #C5C5C5;
@@ -300,24 +307,51 @@ section.section {
 @media (max-width: 767px) {
   /* line 97, ../sass/dimensions/_global.scss */
   section.section {
-    padding: 10px 0 0 !important; } }
-/* line 103, ../sass/dimensions/_global.scss */
+    padding: 10px 0 0 !important;
+    margin-bottom: 0px; } }
+/* line 104, ../sass/dimensions/_global.scss */
+section.section#product_shop {
+  margin-bottom: 30px; }
+/* line 108, ../sass/dimensions/_global.scss */
+section.section#delivery ul {
+  margin: 0px 0 10px;
+  padding: 0px;
+  list-style-type: none; }
+@media (max-width: 767px) {
+  /* line 116, ../sass/dimensions/_global.scss */
+  section.section#note_product header h2.title_section {
+    height: 38px; } }
+@media (max-width: 767px) {
+  /* line 120, ../sass/dimensions/_global.scss */
+  section.section#note_product header h2.title_section:before {
+    top: 10px; } }
+/* line 126, ../sass/dimensions/_global.scss */
+section.section#note_product header #average_note_client {
+  position: static;
+  display: block; }
+/* line 129, ../sass/dimensions/_global.scss */
+section.section#note_product header #average_note_client span {
+  position: static; }
+/* line 135, ../sass/dimensions/_global.scss */
 section.section .main {
   padding: 20px 45px 30px;
   font-size: 12px;
   color: #000;
   line-height: 1.5; }
 @media (max-width: 767px) {
-  /* line 103, ../sass/dimensions/_global.scss */
+  /* line 135, ../sass/dimensions/_global.scss */
   section.section .main {
     display: none; } }
 @media (max-width: 767px) {
-  /* line 113, ../sass/dimensions/_global.scss */
+  /* line 145, ../sass/dimensions/_global.scss */
   section.section h2.title_section {
     cursor: pointer; } }
+/* line 149, ../sass/dimensions/_global.scss */
+section.section h2.title_section i {
+  right: 20px; }
 
 @media (max-width: 767px) {
-  /* line 125, ../sass/dimensions/_global.scss */
+  /* line 160, ../sass/dimensions/_global.scss */
   #main > .container-fluid > .row > .col-sm-12 {
     padding: 0px; } }
 
@@ -582,6 +616,17 @@ section.section .main {
   /* line 271, ../sass/dimensions/_header.scss */
   [class^=ico_].ico_basket {
     margin-right: 4px; } }
+@media screen and (max-width: 991px) {
+  /* line 275, ../sass/dimensions/_header.scss */
+  [class^=ico_].ico_basket > span {
+    top: 11px !important; } }
+/* line 282, ../sass/dimensions/_header.scss */
+[class^=ico_].ico_favorites > span {
+  top: 10px !important; }
+@media screen and (max-width: 991px) {
+  /* line 282, ../sass/dimensions/_header.scss */
+  [class^=ico_].ico_favorites > span {
+    top: 9px !important; } }
 
 /* line 4, ../sass/dimensions/_sidebar.scss */
 #sidebar {
@@ -618,7 +663,7 @@ section.section .main {
   display: block;
   height: 18px;
   overflow: hidden;
-  padding-left: 35px;
+  padding-left: 25px;
   margin-left: -18px;
   margin-right: -18px;
   margin-bottom: 8px;

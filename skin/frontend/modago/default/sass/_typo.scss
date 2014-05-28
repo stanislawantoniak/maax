@@ -100,6 +100,7 @@ h2,.h2 {
 			margin-bottom: 8px;
 			margin-top: 0px;
 			text-align: left;
+			z-index: 1;
 			&:before {
 			content: ' ';
 			display: block;
@@ -163,6 +164,11 @@ h2 {
 	  margin-bottom: 8px;
 	  margin-top: 0px;
 	  text-align:left;
+	  @media (max-width: $screen-xs-max) {
+		font-size: 11px;
+		font-weight: normal;
+		 font-family: 'OpenSansRegular';
+	  }
 	  span {
 	    position:absolute;
 	    right:12px;
@@ -542,7 +548,37 @@ a.view_basket {
     text-transform: uppercase;
 }
 
+.bullet-plusik {
+	@include inline-block;
+	background:$bulletMap;
+	@include sprite($bulletMap, plusik);	
+	@include sprite-dimensions($bulletMap, plusik);
+	position:absolute;
+	margin-top:-(image-height(sprite-file($bulletMap, plusik)) / 2) ;
+	top:50%;
+	right:10px;
+}
 
+.bullet-strzalka-down {
+	@include inline-block;
+	background:$bulletMap;
+	@include sprite($bulletMap, strzalka_down);	
+	@include sprite-dimensions($bulletMap, strzalka_down);
+	position:absolute;
+	margin-top:-(image-height(sprite-file($bulletMap, strzalka_down)) / 2) ;
+	top:50%;
+	right:10px;
+}
+.bullet-strzalka-up {
+	@include inline-block;
+	background:$bulletMap;
+	@include sprite($bulletMap, strzalka_up);	
+	@include sprite-dimensions($bulletMap, strzalka_up);
+	position:absolute;
+	margin-top:-(image-height(sprite-file($bulletMap, strzalka_up)) / 2) ;
+	top:50%;
+	right:10px;
+}
 
 
 /* LISTING */

@@ -15,6 +15,9 @@
     figure {
         &.img_product {
             margin-bottom:18px;
+               @media (max-width: $screen-xs-max) {
+                margin-bottom: 0px;
+               }
         }
         img {
             width:100%;

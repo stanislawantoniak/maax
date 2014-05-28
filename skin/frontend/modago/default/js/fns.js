@@ -2,8 +2,54 @@ jQuery.noConflict();
 (function( $ ) {
   $(function() {
 
+    
+        
+
+
+filterManufacturerCheked();
+//filterManufacturerUnCheked();
+function filterManufacturerCheked() {
+   /*var fm = $('#filter_manufacturer');
+   var fml = $('.manufacturerList');
+   var fmlc = $('.manufacturerListChecked');
+
+   fml.on('click', 'label', function(event) {
+    
+      $(this).closest('.form-checkbox').clone().appendTo(fmlc);
+      $(this).removeAttr( "checked" ).hide();
+     
+     console.log('test');
+   });*/
+
+
+    var list = $(".manufacturerList"),
+        origOrder = list.children();
+    
+    list.on("click", ":checkbox", function() {
+        var i, checked = document.createDocumentFragment(),
+            unchecked = document.createDocumentFragment();
+        for (i = 0; i < origOrder.length; i++) {
+            if (origOrder[i].getElementsByTagName("input")[0].checked) {
+                checked.appendChild(origOrder[i]);
+            } else {
+                unchecked.appendChild(origOrder[i]);
+            }
+            console.log(origOrder[i])
+        }
+        list.append(checked).append(unchecked).children('li');
+      
+        
+        //console.log(listChek);
+    });
+}
+
+
+
+
+
+
       $('#accordion').on('click', '.panel-title a', function () {
-         $(this).find('i').toggleClass('fa-angle-down fa-angle-up');
+         $(this).find('i').toggleClass('bullet-strzalka-down bullet-strzalka-up');
       })
 
       var toggleXS = $('body').find('.toggle-xs');
@@ -11,6 +57,7 @@ jQuery.noConflict();
           $('.toggle-xs').on('click', '.title_section', function(event) {
             event.preventDefault();
             $(this).closest('.section').find('.main').slideToggle();
+            $(this).find('i').toggleClass('bullet-strzalka-down bullet-strzalka-up');
             console.log('test')
           });
       };
@@ -35,7 +82,8 @@ jQuery.noConflict();
           itemsTablet: [600,2], //2 items between 600 and 0
           itemsMobile : [480,1], // itemsMobile disabled - inherit from itemsTablet option
           pagination : false,
-           itemsScaleUp:true
+          itemsScaleUp:true,
+          rewindNav : false
       });
      
       // Custom Navigation Events
@@ -61,6 +109,7 @@ jQuery.noConflict();
           itemsTablet: [600,3], //2 items between 600 and 0
           itemsMobile : [480,1], // itemsMobile disabled - inherit from itemsTablet option
           pagination : false,
+           rewindNav : false,
            itemsScaleUp:true
       });
 
@@ -85,8 +134,9 @@ jQuery.noConflict();
           itemsDesktop : [1000,4], //5 items between 1000px and 901px
           itemsDesktopSmall : [900,3], // betweem 900px and 601px
           itemsTablet: [600,3], //2 items between 600 and 0
-          itemsMobile : [480,1], // itemsMobile disabled - inherit from itemsTablet option
+          itemsMobile : [480,3], // itemsMobile disabled - inherit from itemsTablet option
           pagination : false,
+           rewindNav : false,
            itemsScaleUp:true
       });
 
@@ -147,6 +197,8 @@ jQuery.noConflict();
     if($(window).width() < 768) {
        $("#sidebar").find('.sidebar').remove();
        $(".fb-slidebar-inner").load("_include/sidebar.inc", function(){
+          //filterManufacturerUnCheked()
+          filterManufacturerCheked();
           toggleSidebar();
           filterColor();
           deleteCurrentFilter();
@@ -160,6 +212,8 @@ jQuery.noConflict();
      } else {
         $(".fb-slidebar-inner").find('.sidebar').remove();
         $("#sidebar").load("_include/sidebar.inc", function(){
+          //filterManufacturerUnCheked()
+          filterManufacturerCheked();
           toggleSidebar();
           filterColor();
           deleteCurrentFilter();
@@ -746,6 +800,14 @@ var connector = function(itemNavigation, carouselStage) {
         .jcarouselControl({
             target: '+=1'
         });
+    $('.jcarousel-pagination')
+            .on('jcarouselpagination:active', 'a', function() {
+                $(this).addClass('active');
+            })
+            .on('jcarouselpagination:inactive', 'a', function() {
+                $(this).removeClass('active');
+            })
+            .jcarouselPagination();
 });
 /* =============================== END::// CAROUSEL GALLERY Product ================================= */
 
@@ -933,11 +995,11 @@ $('.scrollTo').on('click', function(event) {
 
 
 function ratySidebar() {
-  $('#note_client .note').raty({
+  $('#average_note_client .note').raty({
     path: 'skin/frontend/modago/default/images/raty',
-    starOff : 'star-off-custom.png',
-    starOn  : 'star-on-custom.png',
-    size   : 17,
+    starOff : 'star-small-off.png',
+    starOn  : 'star-small.png',
+    size   : 13,
     readOnly: true,
     number: function() {
       return $(this).attr('data-number');

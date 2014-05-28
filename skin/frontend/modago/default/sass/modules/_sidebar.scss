@@ -24,10 +24,18 @@
           top:0px;
           left:0px;
           background:#fff;
+          &:hover {
+            color:#999;
+          }
+        }
+        input[type="checkbox"]:hover + span  {
+            background:#999;
+            border-color:#999;
+            color:#fff;
         }
          input[type="checkbox"]:checked + span  {
-            background:#000;
-            border-color:#000;
+            background:#999;
+            border-color:#999;
             color:#fff;
         }
       }
@@ -51,6 +59,9 @@
       }
       .form-group {
         position:relative;
+      }
+      > .form-group {
+        margin-bottom: 15px;
       }
       #filter_manufacturer_search {
         &+label {
@@ -130,23 +141,31 @@
             border:1px solid #afafaf;
           }
         }
+        [type="checkbox"]:hover + span {
+          background:#999;
+          cursor:pointer;
+        }
         [type="checkbox"]:checked + span {
-          background:#404040;
+          background:#999;
         }
       }
     }
 
 .manufacturerList {
-  margin:0px;
-  padding:0px;
+  margin:0px !important;
+  padding:5px 0 5px 0;
   list-style: none;
-  max-height:126px;
-  overflow-y:auto;
+  //max-height:126px;
+  //overflow-y:auto;
   margin-bottom: 10px;
   li {
     padding-left: 5px;
     .form-group {
       margin-bottom: 5px;
+    }
+    &.first:not(:first-child) {
+      border-top: 1px solid #999;
+      padding-top:5px;
     }
   }
 } 

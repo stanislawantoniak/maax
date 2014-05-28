@@ -75,6 +75,7 @@
 				border:1px solid #f0f0f0;
 
 			    &.active {
+
 			    	.shadow {
 			    		width:99px;
 			    		height:75px;
@@ -86,8 +87,13 @@
 			    		box-shadow:         inset 0 0 0 3px #e5621b;
 			    	}
 			    	img {
-					   
+					   border:1px solid #999;
 					}
+			    }
+			    &:hover {
+			    	img {
+			    		border:1px solid #999;
+			    	}
 			    }
 			}
 		}
@@ -108,19 +114,19 @@
 			}
 			.prev-stage {
 		    	left: 10px;
-		    	@include sprite($arrowMap, arrow-complementary-left);
-			    @include sprite-dimensions($arrowMap, arrow-complementary-left);
+		    	@include sprite($arrowMap, arrow-stage-prev);
+			    @include sprite-dimensions($arrowMap, arrow-stage-prev);
 			    &:hover {
-			    	@include sprite($arrowMap, arrow-complementary-left-h);
+			    	@include sprite($arrowMap, arrow-stage-prev);
 			    }
 			   
 			}
 			.next-stage {
 			    right: 10px;
-			    @include sprite($arrowMap, arrow-complementary-right);
-			    @include sprite-dimensions($arrowMap, arrow-complementary-right);
+			    @include sprite($arrowMap, arrow-stage-next);
+			    @include sprite-dimensions($arrowMap, arrow-stage-next);
 			    &:hover {
-			    	@include sprite($arrowMap, arrow-complementary-right-h);
+			    	@include sprite($arrowMap, arrow-stage-next);
 			    }
 			}
 	}
@@ -149,5 +155,36 @@
 	    bottom:-15px; 
 	    @include sprite($arrowMap,arrow_bottom_j);
 	    @include sprite-dimensions($arrowMap, arrow_bottom_j);
+	}
+}
+
+// PAGINATION
+.pagination {
+	position: absolute;
+	bottom: 15px;
+	margin-bottom: 0px;
+	text-align: center;
+	width:100%;
+}
+.jcarousel-pagination {
+	
+	background:rgba(255,255,255,0.3);
+	box-shadow: 0 0 0 1px rgba(0,0,0,0.3);
+	display:inline-block;
+	padding: 3px 15px;
+
+	a {
+		background:#626262;
+		@include border-radius(50px);
+		@include inline-block;
+		width:13px;
+		height:13px;
+		text-indent: -999em;
+		margin: 0 3px;
+		outline: none!important;
+		&.active {
+			background:#fff;
+			border:1px solid #d0cfcf;
+		}
 	}
 }

@@ -3,6 +3,8 @@
   border-right:1px solid #ebebeb;
   background:#fff;
   border-top: 3px solid #6fffcf;
+  font-family: 'OpenSansRegular';
+  font-size: 12px;
   a:link,
   a:visited {
     color:#1e1e1e;
@@ -10,6 +12,10 @@
     span {
       color:#999999;
     }
+  }
+  a:hover {
+    color:#999999;
+    text-decoration: underline;
   }
   .section {
     border-bottom: 1px solid #d2d2d2;
@@ -45,6 +51,9 @@
       font-size:12px;
       color:#5a5a5a;
       text-decoration:underline;
+      &:hover {
+        color:#999;
+      }
       i {
         //font-size:8px;
         margin-left:5px;
@@ -124,6 +133,8 @@
   .go_read_filter {
     color:#5a5a5a;
     font-size: 12px;
+    margin-bottom: 5px;
+display: inline-block;
     &:hover {
       text-decoration: underline;
     }
@@ -131,41 +142,46 @@
   #filter_recommended_products {
     label {
       position:relative;
-    }
-    span {
+      span {
       display:inline-block;
       height:17px;
       width:85px;
       padding-left: 5px;
       color:#fff;
       text-transform: uppercase;
-    }
-    b {
+      &+.suffix {
         font-weight: normal;
         position:absolute;
         left:115px;
         top:0px;
+        background-color:transparent !important;
+        width:auto;
+        color:#4f4f4f;
       }
+    }
+    }
+
+    
     label[for="filter_recommended_products_news"] {
-      span {
+      >span {
         background:#7fce25;
       }
     }
 
     label[for="filter_recommended_products_sale"] {
-      span {
+      >span {
         background:#de0e59;
       }
     }
 
     label[for="filter_recommended_products_bestseler"] {
-      span {
+      >span {
         background:#3ca89b;
       }
     }
 
     label[for="filter_recommended_products_propotion"] {
-      span {
+      >span {
         background:#ec4920;
       }
     }
@@ -194,13 +210,25 @@
         vertical-align: middle;
         width:31px;
         height:31px;
-        img {
-          border:3px solid #fff;
+        label {
+          img {
+            border:3px solid #fff;
+          }
+        }
+        :hover {
+          &+label { 
+            img {
+              border:3px solid #999;
+              @include border-radius(5px);
+            }
+          }
         }
         :checked {
-          &+ img {
-            border:3px solid #404040;
-            @include border-radius(5px);
+          &+label{
+            img {
+              border:3px solid #999;
+              @include border-radius(5px);
+            }
           }
         }
       }
@@ -213,13 +241,136 @@
       label {
         font-weight: normal;
         cursor:pointer;
+        position: static;
+        float: none;
+        display: inline;
+        font-size: 12px;
       }
       img {
         position:absolute;
         left:0px;
-        top:-2px;
+        top:-4px;
       }
     }
   }
 }      
   
+
+
+  .block-filter {
+    form {
+      #filter_price {
+        #slider-range {
+          margin-bottom: 10px;
+          margin-left: -15px;
+        }
+        #od_do {
+          //padding-left: 15px;
+          margin-top: 10px;
+          }
+        }
+        .form-group {
+          margin-bottom: 0px;
+            input[type=checkbox].css-checkbox + label.css-label,
+            input[type=radio].css-radio + label.css-label {
+                padding-left:20px;
+                height:17px; 
+                display:inline-block;
+                line-height:17px;
+                background-repeat:no-repeat;
+                background-position: 0 0;
+                font-size:12px;
+                vertical-align:middle;
+                cursor:pointer;
+                font-weight:normal;
+                color:#1e1e1e;
+                img {
+                  float: left;
+                  position: relative;
+                  top: 2px;
+                  margin-right: 5px;
+                }
+                .suffix {
+                  color:#b0b0b0;
+                  font-size:12px;
+                }
+            }
+        }
+            input[type=checkbox].css-checkbox + label.css-label {
+                background-image:url('../images/checkbox_filter.png');
+
+            }
+            input[type=radio].css-radio + label.css-label {
+                background-image:url('../images/radio.png');
+            }
+            input[type=checkbox].css-checkbox + label.css-label:hover,
+            input[type=radio].css-radio + label.css-label:hover {
+                background-position: 0 -28px;
+                color:#999999;
+            }
+            input[type=checkbox].css-checkbox:checked + label.css-label,
+            input[type=radio].css-radio:checked + label.css-label {
+                background-position: 0 -55px;
+                color:#1e1e1e;
+            }
+            
+    }
+    label:hover {
+      color:#999999;
+    }
+  }
+.wrapper-filter_manufacturerScrollbar {
+  min-height:151px;
+  border:1px solid #d0cfcf;
+  @include border-radius(5px);
+  margin-bottom: 10px;
+
+  /*.manufacturerListChecked {
+    min-height:25px;
+    width:100%;
+    border-bottom:1px solid #d0cfcf;
+    padding: 10px 5px 0px 10px;
+  }*/
+}
+.filter_manufacturerScrollbar {
+  max-height:145px;
+  padding:5px 5px 5px 5px;
+
+}
+#filter_manufacturer {
+  .mCSB_scrollTools {
+    width:12px;
+    .mCSB_dragger {
+      height:39px!important;
+      max-height: 39px!important;
+      min-height: 39px!important;
+      .mCSB_dragger_bar {
+        background:url('../images/scrollbar/scrollbar_filter.png') 0 0 no-repeat;
+         width:12px;
+         border-radius: 0;
+      }
+      
+    }
+    .mCSB_buttonUp {
+      background:url('../images/scrollbar/arrow_up_filter.png') 0 0 no-repeat;
+    }
+    .mCSB_buttonDown {
+      background:url('../images/scrollbar/arrow_down_filter.png') 0 0 no-repeat;
+      bottom: -5px;
+    }
+    a {
+      &+.mCSB_draggerContainer {
+        margin: 18px 0 20px;
+        }
+    }
+    .mCSB_draggerRail {
+       width:12px;
+       background:none!important;
+    }
+  }
+  .mCSB_inside {
+    > .mCSB_container {
+      margin-right: 20px;
+      }
+  }
+}

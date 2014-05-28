@@ -272,5 +272,18 @@
         @include max-screen($screen-sm-max) {
             margin-right: 4px;
         }
+        >span {
+            @include max-screen($screen-sm-max) {
+                top: 11px !important;
+            }
+        }
+    }
+    &.ico_favorites {
+        >span {
+            top: 10px !important;
+            @include max-screen($screen-sm-max) {
+                top: 9px !important;
+            }
+        }
     }
 }

@@ -92,7 +92,7 @@
 		position: absolute;
 		top: 30px;
 		width: 200px;
-		z-index: 1;
+		z-index: 2;
 		overflow-y: auto;
 		li{
 			padding: 0 0 0 0;
@@ -101,7 +101,7 @@
 			margin-left:0px !important;
 		}
 		a {
-			border-bottom: dotted 1px #515151;
+			//border-bottom: dotted 1px #515151;
 			display: block;
 			outline: none;
 			padding: 7px 10px 7px 10px;
