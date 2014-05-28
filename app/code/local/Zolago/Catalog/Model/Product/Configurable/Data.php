@@ -50,7 +50,8 @@ class Zolago_Catalog_Model_Product_Configurable_Data extends Mage_Core_Model_Res
         $select->group('product_relation.parent_id');
 
         $result = $adapter->fetchAssoc($select);
-
+var_dump($result);
+        die('test');
 
         return $result;
     }
