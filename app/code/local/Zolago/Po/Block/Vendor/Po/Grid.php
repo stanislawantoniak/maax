@@ -146,8 +146,8 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 			"header"	=>	Mage::helper("zolagopo")->__("Payment status"),
 			"type"		=>	"options",
 			"options"	=> array(
-				0=>Mage::helper("zolagopo")->__("Not Payed"), 
-				1=>Mage::helper("zolagopo")->__("Payed")
+				0=>Mage::helper("zolagopo")->__("Not Paid"), 
+				1=>Mage::helper("zolagopo")->__("Paid")
 			)
 		));
 		
@@ -232,7 +232,7 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
              'url'  => $this->getUrl('*/*/massStartPacking')
         ));
         $this->getMassactionBlock()->addItem('print_aggregated', array(
-             'label'=> Mage::helper('zolagopo')->__('Dispatch ref.'),
+             'label'=> Mage::helper('zolagopo')->__('Make dispatch list'),
              'url'  => $this->getUrl('*/*/massPrintAggregated')
         ));
 		
@@ -242,7 +242,7 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
         ));
 		
         $this->getMassactionBlock()->addItem('direct_relasiation', array(
-             'label'=> Mage::helper('zolagopo')->__('Direct realisation'),
+             'label'=> Mage::helper('zolagopo')->__('Move to fulfilment'),
              'url'  => $this->getUrl('*/*/massDirectRealisation')
         ));
 

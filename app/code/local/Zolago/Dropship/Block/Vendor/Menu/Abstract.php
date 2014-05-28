@@ -96,7 +96,7 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 			return array(
 				"active" => $this->isActive("udpo"),
 				"icon"	 => "icon-shopping-cart",
-				"label"	 => $this->__("Order lsit"),
+				"label"	 => $this->__("Order list"),
 				"url"	 => $this->getUrl('udpo/vendor')
 			);
 		}
@@ -115,7 +115,7 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 				array(
 					"active" => $this->isActive("zolagopo_aggregated"),
 					"icon"	 => "icon-share-alt",
-					"label"	 => $this->__("Dispatch refs."),
+					"label"	 => $this->__("Dispatch lists"),
 					"url"	 => $this->getUrl('udpo/vendor_aggregated')
 				),
 			);
@@ -176,7 +176,7 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 			$groupOne[] = array(
 				"active" => $this->isActive("zolagooperator"),
 				"icon"	 => "icon-user",
-				"label"	 => $this->__('Operators'),
+				"label"	 => $this->__('Agents'),
 				"url"	 => $this->getUrl('udropship/operator')
 			);
 		}

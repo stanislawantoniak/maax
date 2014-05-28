@@ -18,24 +18,8 @@
 	<udpo_vendor_edit>		
 		<update handle="bootstrap"/>
 		<update handle="noty"/>
-		<reference name="head">
-			<action method="addItem">
-				<type>skin_js</type>
-				<name>js/plugins/select2/select2.min.js</name>
-			</action>
-			<action method="addItem">
-				<type>skin_js</type>
-				<name>js/plugins/validation/jquery.validate.min.js</name>
-			</action>
-			<action method="addItem">
-				<type>skin_js</type>
-				<name>js/plugins/validation/additional-methods.js</name>
-			</action>
-			<action method="addItem">
-				<type>skin_js</type>
-				<name>js/plugins/alphanum/jquery.alphanum.js</name>
-			</action>
-		</reference>
+		<update handle="forms"/>
+		
 		<reference name="content">			
 			<block name="vendor_po_edit" type="zolagopo/vendor_po_edit" template="zolagopo/vendor/po/edit.phtml">
 				<!-- modals -->

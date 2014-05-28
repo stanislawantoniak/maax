@@ -4,7 +4,8 @@
 <?php $_shippingMethod		= $this->getShippingMethod();?>
 <?php $_shipmentsCollection = $this->getShipmentsCollection();?>
 <?php $_currentShipping		= $this->getCustomCurrentShipping();?>
-<?php $_alert				= $_po->getAlert();?>
+<?php $_alert				= $this->getAlert($_po);?>
+<?php $_alertClass			= $this->getAlertClass($_po);?>
 <?php $_comments			= $_po->getVendorCommentsCollection(); ;?>
 <?php $_shippingStatuses	= Mage::helper('udropship')->getVendorShipmentStatuses(); ?>
 <?php $_statusModel			= $_po->getStatusModel(); ?>
@@ -13,15 +14,14 @@
 
 <div class="container">
 	<!--=== Page Header ===-->
-	<div class="page-header">
-		<div class="page-title">
+	<div class="row page-heading">
+		<div class="col-md-6">
 			<h3><?php echo $_hlp->__("Order #%s", $_po->getIncrementId());?></h3>
-			<?php if(1||$_alert):?>
-				<span class="label label-danger" style="display: inline; color: #fff; "><?php echo $_hlp->__("Sample alert text [dev]");?></span>
+			<?php if($_alert):?>
+				<span class="label label-<?php echo $_alertClass;?>" style="display: inline; color: #fff; "><?php echo $_alert;?></span>
 			<?php endif;?>
-				
 		</div>
-		<div class="pull-right main-actions">
+		<div class="main-actions align-right col-md-6">
 			<?php /* Confirm direct realistaion */ ?>
 			<?php if($_statusModel->isDirectRealisationAvailable($_po)):?>
 				<a class="btn-notification btn  btn-primary" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("directRealisation");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("You are about to move to fulfilment. Are you sure?");?>" data-modal="true" href="#">
@@ -42,7 +42,7 @@
 				<?php if($this->canUseCarrier()):?>
 				<button class="btn btn-primary" data-toggle="modal" href="#shippingModal"><?php echo $_hlp->__("Print shipping letter");?></button>
 				<?php else:?>
-				<button class="btn btn-primary" data-toggle="modal" href="#shippingModal"><?php echo $_hlp->__("Add shipping letter");?></button>
+				<button class="btn btn-primary" data-toggle="modal" href="#shippingModal"><?php echo $_hlp->__("Add shipping label");?></button>
 				<?php endif;?>
 			<?php elseif($_statusModel->isStartPackingAvailable($_po)):?>
 				<a class="btn btn-primary" data-toggle="modal" href="<?php echo $this->getPoUrl("startPacking");?>"><?php echo $_hlp->__("Start packing");?></a>
@@ -52,8 +52,8 @@
 			<?php if($_statusModel->isConfirmStockAvailable($_po)):?>
 				<?php if(!$_po->getStockConfirm()):?>
 				<?php  /* Display as active widget */ ?>
-				<a class="btn btn-notification btn-danger" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("setConfirmStock");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("You are about to check stock. Are you sure?");?>" data-modal="true" href="#">
-					<i class="icon-warning-sign"></i>
+				<a class="btn btn-notification btn-primary" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("setConfirmStock");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("Are you sure to confirm the items have been reserved?");?>" data-modal="true" href="#">
+					<i class="icon-barcode"></i>
 					<?php echo $_hlp->__("Check stock");?>
 				</a> 
 				<?php else: ?>
@@ -62,18 +62,13 @@
 					<?php echo $_hlp->__("Stock checked");?>
 				</button>
 				<?php endif;?>
-			<?php else:?>
-				<?php  /* Display as label */ ?>
-				<button class="btn <?php if($_po->getStockConfirm()):?> btn-success<?php endif;?>" disabled="disabled">
-					<?php if($_po->getStockConfirm()):?>
-						<i class="icon-ok"></i>
-						<?php echo $_hlp->__("Stock checked");?>
-					<?php else:?>
-						<?php echo $_hlp->__("Stock not checked");?>
-					<?php endif;?>
-				</button>
+			<?php endif;?>
+				
+			<?php if($_statusModel->isConfirmStockAvailable($_po) && !$_po->getStockConfirm()):?>	
+				<p class="text-muted align-right"><small></small><?php echo $_hlp->__("Set aside the ordered items together with other reservations, to make sure they are available and ready to be shipped. The order will not be processed until you confirm the product reservation");?></p>
 			<?php endif;?>
 		</div>
+		
 	</div>
 </div>
 <div class="container">
