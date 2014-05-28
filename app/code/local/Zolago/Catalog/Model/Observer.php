@@ -56,7 +56,7 @@ class Zolago_Catalog_Model_Observer {
             return;
         }
         $storeId = $configurableData[0];
-        $websiteId = $configurableData[0];
+        $websiteId =  Mage::getModel('core/store')->load($storeId)->getWebsiteId();
 
         unset($configurableData[0]);
 
