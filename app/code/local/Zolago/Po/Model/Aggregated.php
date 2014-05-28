@@ -76,4 +76,9 @@ class Zolago_Po_Model_Aggregated extends Mage_Core_Model_Abstract
 		}
 		$this->getResource()->commit();
 	}
+	public function getPdfFile() {
+		$pdf = Mage::getModel('zolagopo/aggregated_pdf');
+		$doc = $pdf->getPdf($this->getId());
+		return $doc;
+	}
 }
