@@ -73,18 +73,24 @@ class Zolago_Catalog_AuthController
 
     }
 
+
+
+
+    public function configurableAction()
+    {
+        Mage::getModel('zolagocatalog/observer')->recalcConfigurable();
+    }
+
     private function emulateConverterTestData()
     {
         $data = array();
 
         /*Load xml data*/
         $base_path = Mage::getBaseDir('base');
-       // $file = $base_path . '/var/log/price2-0.xml';
-        $file = $base_path . '/var/log/price2-1.xml';
+        $file = $base_path . '/var/log/price2-0.xml';
+        //$file = $base_path . '/var/log/price2-1.xml';
         $xml = simplexml_load_file($file, 'SimpleXMLElement', LIBXML_NOCDATA);
         $document = (array)$xml;
-
-        //echo "XML loaded ".date('h:i:s')." ".microtime() . "<br />";
 
         $merchant = isset($document['merchant']) ? $document['merchant'] : FALSE;
         /*Load xml data*/
@@ -119,75 +125,16 @@ class Zolago_Catalog_AuthController
         return $data;
     }
 
-
-    public function configurableAction()
+    /*
+     * emulate configurable file
+     */
+    public function emulateConfigurableAction()
     {
-        Mage::getModel('zolagocatalog/observer')->recalcConfigurable();
-//
+        $store = (int)Mage::app()->getRequest()->getParam('store');
+        Zolago_Catalog_Helper_Log::emulateConfigurable(FALSE, $store);
     }
 
 
-    public  function emulateConfigurableAction()
-    {
-        $data = array();
-
-        /*Load xml data*/
-        $base_path = Mage::getBaseDir('base');
-        // $file = $base_path . '/var/log/price2-0.xml';
-        $file = $base_path . '/var/log/price2-1.xml';
-
-        $configurableUpdate = $base_path . '/var/log/configurableUpdate';
-
-        if (!is_dir($configurableUpdate)) {
-            mkdir($configurableUpdate);
-            @chmod($configurableUpdate, 0777);
-        }
-
-        $date = array(
-            date('m'),date('d'),date('Y'),date('H'),date('i'),date('s')
-        );
-        $configurableFile = $base_path . '/var/log/configurableUpdate/configurable_'.implode('_',$date).'.txt';
-        @chmod($configurableFile, 0777);
-
-        $xml = simplexml_load_file($file, 'SimpleXMLElement', LIBXML_NOCDATA);
-        $document = (array)$xml;
-
-
-
-        $merchant = isset($document['merchant']) ? $document['merchant'] : FALSE;
-        /*Load xml data*/
-        if ($merchant) {
-
-
-            $priceList = isset($document['priceList']) ? $document['priceList'] : array();
-
-            if (!empty($priceList)) {
-                //$priceList not empty, so we can start updating
-//                $storeId = 0;
-                $productsXML = isset($priceList->product) ? $priceList->product : array();
-
-                if (!empty($productsXML)) {
-                    $productsButch = array();
-                    foreach ($productsXML as $productsXMLItem) {
-                        $attributes = $productsXMLItem->attributes();
-                        $skuXML = (string)$productsXMLItem;
-//                        $price = (string)$attributes->price;
-                        $data[] = "'".$merchant . '-' . $skuXML . "'";
-                    }
-                    unset($productsXMLItem);
-                    unset($price);
-
-                }
-
-            }
-
-        }
-
-        if (!empty($data)) {
-            file_put_contents($configurableFile, implode(',' ,$data));
-
-        }
-    }
 }
 
 
