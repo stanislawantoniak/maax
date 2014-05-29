@@ -393,7 +393,7 @@ class Zolago_Po_Model_Aggregated_Pdf extends Varien_Object {
         $page->drawText(Mage::helper('zolagopo')->__('Europalets'),385,480,'UTF-8');
         $page->drawText(Mage::helper('zolagopo')->__('Receiver | Additional services | Value'),485,480,'UTF-8');
         $page->drawText(Mage::helper('zolagopo')->__('COD'),715,480,'UTF-8');
-        $page->drawText(Mage::helper('zolagopo')->__('Sended'),770,480,'UTF-8');
+        $page->drawText(Mage::helper('zolagopo')->__('Sent'),770,480,'UTF-8');
 
     }
 }
