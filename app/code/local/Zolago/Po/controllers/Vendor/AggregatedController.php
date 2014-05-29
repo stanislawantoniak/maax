@@ -69,9 +69,14 @@ class Zolago_Po_Vendor_AggregatedController
 	public function removeAction() {
 		try{
 			$aggregated  = $this->_registerAggregated();
+			
+			if($aggregated->isConfirmed()){
+				throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("Cannot remove confirmed dispatch list"));
+			}
+			
 			$aggregated->delete();
 			$this->_getSession()->addSuccess(
-				Mage::helper("zolagopo")->__("Dispatch reference removed.")
+				Mage::helper("zolagopo")->__("Dispatch list removed.")
 			);
 		}catch(Mage_Core_Exception $e){
 			$this->_getSession()->addError($e->getMessage());
