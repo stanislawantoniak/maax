@@ -124,6 +124,7 @@ Zolago.gridIntegrator = function(gridObj){
 			_el.parent().css({
 				display: "inline-block",
 				width: "49%",
+				marginBottom: "0px",
 			});
 			_el.attr("placeholder", Translator.translate(!(i%2)? "From" : "To"));
 

@@ -33,7 +33,7 @@
 			<?php if($_statusModel->isConfirmReleaseAvailable($_po)):?>
 				<a class="btn-notification btn" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("setConfirmRelease");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("You are about to confirm order realisation. Are you sure?");?>" data-modal="true" href="#">
 					<i class="icon-ok"></i>
-					<?php echo $_hlp->__("Confirm release");?>
+					<?php echo $_hlp->__("Accept the order");?>
 				</a> 
 			<?php endif;?>
 			
@@ -72,7 +72,9 @@
 			<?php endif;?>
 				
 			<?php if($_statusModel->isConfirmStockAvailable($_po) && !$_po->getStockConfirm()):?>	
-				<p class="text-muted align-right"><small></small><?php echo $_hlp->__("Set aside the ordered items together with other reservations, to make sure they are available and ready to be shipped. The order will not be processed until you confirm the product reservation");?></p>
+				<p class="text-muted align-right"><?php echo $_hlp->__("Set aside the ordered items together with other reservations, to make sure they are available and ready to be shipped. The order will not be processed until you confirm the product reservation");?></p>
+			<?php elseif(count($_alerts) && $_statusModel->isConfirmReleaseAvailable($_po)):?>
+				<p class="text-muted align-right"><?php echo $_hlp->__("There is an alert on the order. In spite of the alert you can move the order to fulfilment by accepting the order.");?></p>				
 			<?php endif;?>
 		</div>
 		
