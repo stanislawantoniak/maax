@@ -122,9 +122,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 					// Action not based on status
 					$id = Mage::helper('zolagopo')->createAggregated($collection, $this->_getVendor());
     				$transaction->commit();
-    				$url = mage::getUrl('udpo/vendor_aggregated/download',array('id'=>$id));
-    				header('Location: '.$url);
-    				exit();
+					return $this->_redirect('udpo/vendor_aggregated/download', array('id'=>$id));
 				}else{
 					// All actions based on satatus
 					foreach($collection as $po){
