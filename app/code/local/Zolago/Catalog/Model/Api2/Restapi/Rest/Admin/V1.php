@@ -115,7 +115,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 extends Zolago_Catalog_Mod
                     $productIds = array($productId);
                     $attrData = array('price' => $price);
 
-                    $productAction->updateAttributes($productIds, $attrData, 0);
+                    $productAction->updateAttributesNoIndex($productIds, $attrData, 0);
                     //$productAction->updateAttributes($productIds, $attrData, 1);
                     //$productAction->updateAttributes($productIds, $attrData, 2);
                 }
