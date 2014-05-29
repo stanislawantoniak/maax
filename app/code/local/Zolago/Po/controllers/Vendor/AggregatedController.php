@@ -35,11 +35,11 @@ class Zolago_Po_Vendor_AggregatedController
 		if (!$id) {
 			 throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("No pdf id"));
 		}
-		header('Content-type: application/pdf');
+		$this->getResponse()->setHeader('Content-type: application/pdf');
 		$pdf = Mage::getModel('zolagopo/aggregated_pdf');
 		$doc = $pdf->getPdf($id);
-		echo $doc;
-		exit();
+		$this->getResponse()->setBody($doc);
+		$this->getResponse()->sendResponse();
 	}	
 	/**
  	 * Confirm dispatch reference
