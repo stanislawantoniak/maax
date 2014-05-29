@@ -3,6 +3,8 @@
 
 class Zolago_Catalog_Model_Product_Configurable_Data extends Mage_Core_Model_Resource_Db_Abstract
 {
+    const PRICE_ATTRIBUTE_ID = 75;
+
     protected function _construct()
     {
         $this->_init('zolagocatalog/pricessizes');
@@ -40,7 +42,7 @@ class Zolago_Catalog_Model_Product_Configurable_Data extends Mage_Core_Model_Res
                 array()
             )
             ->where('products.type_id=?', 'simple') //choose from simple products
-            ->where('prices.attribute_id=?', 75)
+            ->where('prices.attribute_id=?', self::PRICE_ATTRIBUTE_ID)
             ->where('prices.store_id=?', (int)$storeId);
         if (!empty($configurableProductsIds)) {
             $select->where("product_relation.parent_id IN({$configurableProductsIds})");
@@ -112,7 +114,7 @@ class Zolago_Catalog_Model_Product_Configurable_Data extends Mage_Core_Model_Res
                     'price' => 'prices.value'
                 )
             )
-            ->where("prices.attribute_id=?", 75)
+            ->where("prices.attribute_id=?", self::PRICE_ATTRIBUTE_ID)
             ->where("products.type_id=?", 'configurable')
             ->where("prices.store_id=?", (int)$storeId)
             ->order('products.entity_id');
@@ -157,7 +159,7 @@ class Zolago_Catalog_Model_Product_Configurable_Data extends Mage_Core_Model_Res
                     'min_price' => 'MIN(product_entity_decimal.value)'
                 )
             )
-            ->where("product_entity_decimal.attribute_id=?", 75)
+            ->where("product_entity_decimal.attribute_id=?", self::PRICE_ATTRIBUTE_ID)
             ->where("product_entity_decimal.store_id", (int)$storeId)
 
             ->group('product_relation.parent_id');
