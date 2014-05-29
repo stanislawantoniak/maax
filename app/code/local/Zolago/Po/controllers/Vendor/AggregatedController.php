@@ -30,17 +30,8 @@ class Zolago_Po_Vendor_AggregatedController
 		Mage::register('as_frontend', true);// Tell block class to use regular URL's
 		$this->_renderPage(array('default', 'formkey', 'adminhtml_head'), 'zolagopo_aggregated');
 	}
-	public function pdfAction() {
-		$id = $this->getRequest()->getParam('id');
-		if (!$id) {
-			 throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("No pdf id"));
-		}
-		header('Content-type: application/pdf');
-		$pdf = Mage::getModel('zolagopo/aggregated_pdf');
-		$doc = $pdf->getPdf($id);
-		echo $doc;
-		exit();
-	}	
+	
+	
 	/**
  	 * Confirm dispatch reference
 	 * @return void
@@ -69,9 +60,14 @@ class Zolago_Po_Vendor_AggregatedController
 	public function removeAction() {
 		try{
 			$aggregated  = $this->_registerAggregated();
+			
+			if($aggregated->isConfirmed()){
+				throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("Cannot remove confirmed dispatch list"));
+			}
+			
 			$aggregated->delete();
 			$this->_getSession()->addSuccess(
-				Mage::helper("zolagopo")->__("Dispatch reference removed.")
+				Mage::helper("zolagopo")->__("Dispatch list removed.")
 			);
 		}catch(Mage_Core_Exception $e){
 			$this->_getSession()->addError($e->getMessage());
