@@ -60,7 +60,6 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 			$statuses=$this->getParentBlock()->getDefaultStatuses();
 		}
 		if($statuses){
-			var_export($statuses);
 			$collection->addAttributeToFilter("main_table.udropship_status", array("in"=>$statuses));
 		}
 		return $this;
