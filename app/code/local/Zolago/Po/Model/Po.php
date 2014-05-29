@@ -113,6 +113,10 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 			////////////////////////////////////////////////////////////////////
 			// Save objects
 			////////////////////////////////////////////////////////////////////
+			
+			$newModel->setSkipCheckSameEmail(true);
+			$this->setSkipCheckSameEmail(true);
+			
 			$newModel->updateTotals(true);
 			$this->updateTotals(true);
 			
@@ -450,12 +454,21 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 		if(!$this->getId()){
 			$alertBit = 0;
 			
-			$sameEmail = $this->getSameEmailPoCollection();
-			if($sameEmail->count()){
-				$alertBit += Zolago_Po_Model_Po_Alert::ALERT_SAME_EMAIL_PO;
+			if(!$this->getSkipCheckSameEmail()){
+				$sameEmail = $this->getSameEmailPoCollection();
+				if($sameEmail->count()){
+					$alertBit += Zolago_Po_Model_Po_Alert::ALERT_SAME_EMAIL_PO;
+					foreach($sameEmail as $po){
+						$oldAlert = (int)$po->getAlert();
+						if(!($oldAlert&Zolago_Po_Model_Po_Alert::ALERT_SAME_EMAIL_PO)){
+							$oldAlert+=Zolago_Po_Model_Po_Alert::ALERT_SAME_EMAIL_PO;
+						}
+						$po->setAlert($oldAlert);
+						$po->getResource()->saveAttribute($po, "alert");
+					}
+				}
+				$this->setAlert($alertBit);
 			}
-			
-			$this->setAlert($alertBit);
 		}
 	}
 	
