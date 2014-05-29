@@ -42,8 +42,11 @@
 		</reference>
         <reference name="content">
 			<remove name="head.calendar"/>
-			<remove name="udqa.question.edit"/>
-            <!-- <block type="zolagoudqa/vendor_question" template="zolagoudqa/vendor/question/edit.phtml" name="udqa.question.edit" /> -->
+			<reference name="udqa.question.edit">
+				<action method="setTemplate">
+					<template>zolagoudqa/vendor/question/edit.phtml</template>
+				</action>
+			</reference>
         </reference>
 	</_udqa_vendor_questionedit>
 </layout>
