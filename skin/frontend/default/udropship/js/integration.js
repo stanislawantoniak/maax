@@ -35,6 +35,14 @@ jQuery.noConflict();
 Zolago = Object.create(Object.prototype);
 
 /**
+ * Form integrator
+ */
+Zolago.formIntegrator = function(form){
+	form.find(".required-entry").attr("required", "required");
+	form.find(".validate-email ").addClass("email");
+	form.find(".validate-digits ").addClass("number");
+}
+/**
  * Grid integrator
  */
 Zolago.gridIntegrator = function(gridObj){
@@ -111,16 +119,26 @@ Zolago.gridIntegrator = function(gridObj){
 	});
 	$$('#'+gridObj.containerId+' .filter .date input').each(function(el, i){
 		var _el = jQuery(el);
-			_el.attr("placeholder", Translator.translate(!i ? "From" : "To"));
-			_el.css({
+			
+			
+			_el.parent().css({
+				display: "inline-block",
 				width: "49%",
-				float: "left"
 			});
-			if(!i){
-				_el.css("margin-right", "2%");
+			_el.attr("placeholder", Translator.translate(!(i%2)? "From" : "To"));
+
+			if(!(i%2)){
+				_el.parent().css("margin-right", "2%");
 			}
 			_el.datepicker();
 	});
+	
+	// Range
+	$$('#'+gridObj.containerId+' .filter .range-line input').each(function(el, i){
+		var _el = jQuery(el);
+			_el.attr("placeholder", Translator.translate(!(i%2) ? "From" : "To"));
+	});
+	
 	widgets.each(function(el){
 		el.addClassName("form-control");
 	});

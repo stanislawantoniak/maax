@@ -54,6 +54,15 @@ class Zolago_Po_Model_Po_Status
 	 */
     const STATUS_PAYMENT    = Zolago_Po_Model_Source::UDPO_STATUS_PAYMENT; 
 
+	static function getFinishStatuses() {
+		return array(
+			self::STATUS_CANCELED,
+			self::STATUS_DELIVERED,
+			self::STATUS_SHIPPED,
+			self::STATUS_RETURNED
+		);;
+	}
+	
 	/**
 	 * if PO is NEW
 	 * set if ALERT is not null:
@@ -226,8 +235,19 @@ class Zolago_Po_Model_Po_Status
 	 * @return boolean
 	 */
 	public function isCancelAggregatedAvailable($po) {
+		return false;
+	}
+	
+	/**
+	 * @param Zolago_Po_Model_Po|int $po
+	 * @return boolean
+	 */
+	public function isCancelShippingAvailable($po) {
 		switch ($this->_getStatus($po)) {
-			case self::STATUS_SHIPPED:
+			case self::STATUS_READY:
+				if($po instanceof Zolago_Po_Model_Po){
+					return !$po->getAggregated()->isConfirmed();
+				}
 				return true;
 			break;
 		}
@@ -324,6 +344,7 @@ class Zolago_Po_Model_Po_Status
 				$statuses[self::STATUS_PENDING] = $hlp->getPoStatusName(self::STATUS_PENDING);
 			case self::STATUS_BACKORDER:
 			case self::STATUS_PAYMENT:
+			case self::STATUS_ACK:
 			case self::STATUS_PENDING:
 				$statuses[self::STATUS_ONHOLD] = $hlp->getPoStatusName(self::STATUS_ONHOLD);
 				$statuses[self::STATUS_CANCELED] = $hlp->getPoStatusName(self::STATUS_CANCELED);

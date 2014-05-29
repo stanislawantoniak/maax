@@ -7,6 +7,54 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 		$this->_prepareShipments();
 	}
 	
+	
+	/**
+	 * @param Zolago_Po_Model_Po $po
+	 * @return array
+	 */
+	public function getAlerts(Zolago_Po_Model_Po $po) {
+		
+		$alert = array();
+	
+		if(($po->getAlert() & Zolago_Po_Model_Po_Alert::ALERT_SAME_EMAIL_PO) /*&& !$po->isFinished()*/){
+			$filter = "customer_fullname=".  $po->getData("customer_email") . "&udropship_status=";
+			$link = $this->getUrl("udpo/vendor/index", array("filter"=>Mage::helper('core')->urlEncode($filter)));
+			
+			$alert[] = array(
+				"text"=>$this->__(
+					Zolago_Po_Model_Po_Alert::getAlertText(Zolago_Po_Model_Po_Alert::ALERT_SAME_EMAIL_PO), 
+					'<a href="'.$link.'">' . $this->__("link") . '</a>'
+				),
+				"class" => "danger"
+			);
+		}
+		
+		if($po->getStatusModel()->isConfirmStockAvailable($po)){
+			if(!$po->getStockConfirm()){
+				$alert[] = array( 
+					"text" => '<i class="icon-warning"></i> '  . $this->__("Product reservation not yet confirmed!"),
+					"class"=> "danger"
+				);
+			}else{
+				$alert[] = array( 
+					"text" => '<i class="icon-barcode"></i> ' . $this->__("Items reserved"),
+					"class"=> "success"
+				);
+			}
+		}else{
+			if($po->getStockConfirm()){
+				$alert[] = array( 
+					"text" => '<i class="icon-barcode"></i> ' . $this->__("Items reserved"),
+					"class"=> "success"
+				);
+			}
+		}
+		return $alert;
+	}
+	
+	
+	
+	
 	/**
 	 * 
 	 * @param type $trackign

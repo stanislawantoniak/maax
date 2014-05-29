@@ -5,6 +5,11 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 	const TYPE_POSHIPPING = "poshipping";
 	const TYPE_POBILLING = "pobilling";
 	
+	public function isFinished() {
+		$status = $this->getStatusModel();
+		return in_array($this->getUdropshipStatus(), $status::getFinishStatuses());
+	}
+	
 	/**
 	 * @param array $itemIds
 	 * @return Zolago_Po_Model_Po
@@ -42,7 +47,7 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 
 					foreach($childCollection as $childItemId=>$childItem){
 						$collection->removeItemByKey($childItemId);
-						$childItem->setId(null);
+						$childItem->setId(null); // force add item to colelciton in po model
 						$newModel->addItem($childItem);
 						$childItem->setId($childItemId); 
 					}
@@ -108,6 +113,10 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 			////////////////////////////////////////////////////////////////////
 			// Save objects
 			////////////////////////////////////////////////////////////////////
+			
+			$newModel->setSkipCheckSameEmail(true);
+			$this->setSkipCheckSameEmail(true);
+			
 			$newModel->updateTotals(true);
 			$this->updateTotals(true);
 			
@@ -116,6 +125,13 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 			$transaction->rollBack();
 			throw $ex;
 		}
+		
+		Mage::dispatchEvent("zolagopo_po_split", array(
+			"po"		=> $this, 
+			"new_po"	=> $newModel, 
+			"item_ids"	=> $itemIds
+		));
+					
 		return $newModel;
 	}
 	
@@ -391,6 +407,31 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 	   return Mage::getSingleton('zolagopo/po_status');
    }
    
+   /**
+    * @return Zolago_Po_Model_Resource_Po_Collection
+    */
+   public function getSameEmailPoCollection() {
+	   $collection = $this->getCollection();
+	   
+	   $statModel = Mage::getSingleton("zolagopo/po_status");
+	   $finishedStatuses = $statModel::getFinishStatuses();
+	   
+	   if(in_array($this->getUdropshipStatus(), $finishedStatuses)){
+		   $collection->addFieldToFilter("entity_id", -1); // Emtpy
+		   return $collection;
+	   }
+	   
+	   /* @var $collection Zolago_Po_Model_Resource_Po_Collection */
+	   if($this->getId()){
+			$collection->addFieldToFilter("entity_id", array("neq"=>$this->getId()));
+	   }
+	   $collection->addFieldToFilter("udropship_vendor", $this->getUdropshipVendor());
+	   $collection->addFieldToFilter("udropship_status", array("nin"=>$finishedStatuses));
+	   $collection->addFieldToFilter("customer_email", $this->getCustomerEmail());
+
+	   return $collection;
+   }
+   
 	protected function _afterSave(){
 		$ret = parent::_afterSave();
 		$this->updateTotals();
@@ -398,16 +439,36 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 	} 
 	
 	protected function _beforeSave() {
+		// Transfer fields
+		if((!$this->getId() || $this->isObjectNew()) && !$this->getSkipTransferOrderItemsData()){
+			$this->setCustomerEmail($this->getOrder()->getCustomerEmail());
+		}
+		
 		$this->_processAlert();
 		$this->_processStatus();
+		
 		return parent::_beforeSave();
 	}
 	
 	protected function _processAlert() {
 		if(!$this->getId()){
-			/**
-			 * @todo implement
-			 */
+			$alertBit = 0;
+			
+			if(!$this->getSkipCheckSameEmail()){
+				$sameEmail = $this->getSameEmailPoCollection();
+				if($sameEmail->count()){
+					$alertBit += Zolago_Po_Model_Po_Alert::ALERT_SAME_EMAIL_PO;
+					foreach($sameEmail as $po){
+						$oldAlert = (int)$po->getAlert();
+						if(!($oldAlert&Zolago_Po_Model_Po_Alert::ALERT_SAME_EMAIL_PO)){
+							$oldAlert+=Zolago_Po_Model_Po_Alert::ALERT_SAME_EMAIL_PO;
+						}
+						$po->setAlert($oldAlert);
+						$po->getResource()->saveAttribute($po, "alert");
+					}
+				}
+				$this->setAlert($alertBit);
+			}
 		}
 	}
 	

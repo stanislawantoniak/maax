@@ -1,5 +1,6 @@
 <?php $element = $this->getElement(); ?>
-<tr<?php echo ($element->getType()=="hidden" ? " style=\"display:none;\"" : "") ?>>
-<th><label for="<?php echo $element->getLabelName();?>"><?php echo $element->getLabelHtml();?></label></th>
-<td><?php echo $element->getElementHtml(); ?></td>
-</tr>
+
+<div class="form-group"<?php echo ($element->getType()=="hidden" ? " style=\"display:none;\"" : "") ?> >
+	<label class="col-md-2 control-label"><?php echo $element->getLabelHtml();?></label> 
+	<div class="col-md-10"><?php echo $element->getElementHtml(); ?></div> 
+</div>

@@ -8,7 +8,7 @@ class Zolago_Adminhtml_Block_Widget_Grid_Column_Renderer_Confirmbutton
 			$this->getColumn()->getConfirmText() : $this->__("Are you sure?");
 		$label = $this->getColumn()->getLinkLabel();
 		
-		return '<button class="btn-notification btn-xs '.$this->getColumn()->getClass().'" '.
+		$return = '<button class="btn-notification btn-xs '.$this->getColumn()->getClass().'" '.
 			'data-placement="top" '.
 			'data-ok-url="'.$this->_getLink($row).'" '.
 			'data-layout="top" '.
@@ -19,5 +19,11 @@ class Zolago_Adminhtml_Block_Widget_Grid_Column_Renderer_Confirmbutton
 				'<i class="'.$this->getColumn()->getIcon().'"></i> ' : '' ) . 
 				$this->escapeHtml($label) . 
 			'</button>';
+		
+		if($tooltip=$this->getColumn()->getTooltip()){
+			$return = '<span class="bs-tooltip" title="'.$this->escapeHtml($tooltip).'">' . $return . '</span>'; 
+		}
+		
+		return $return;
 	}
 }

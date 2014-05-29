@@ -1,24 +1,46 @@
 <?php $_helper = Mage::helper("zolagooperator");?>
 <?php $_pos = $this->getModel();?>
-<?php echo $this->getMessagesBlock()->getGroupedHtml(); ?>
-<div class="page-title">
-	<h1>
-		<?php if(!$this->getIsNew()):?>
-			<?php echo $_helper->__("Edit operator");?> <?php echo $this->escapeHtml($_pos->getEmail());?>
-		<?php else:?>
-			<?php echo $_helper->__("Create operator");?>
-		<?php endif;?>
-	</h1>
+<div class="container">
+	<!--=== Page Header ===-->
+	<div class="page-heading row">
+		<div class="col-lg-6">
+			<h3>
+			<?php if(!$this->getIsNew()):?>
+				<?php echo $_helper->__("Edit agent");?> <?php echo $this->escapeHtml($_pos->getEmail());?>
+			<?php else:?>
+				<?php echo $_helper->__("Create agent");?>
+			<?php endif;?>
+			</h3>
+		</div>
+		<div class="main-actions align-right col-md-6">
+		
+		</div>
+	</div>
 </div>
-<div>
-	<form id="edit-operator" action="<?php echo $this->getForm()->getAction();?>" method="POST">
+
+<div class="container">
+	<form id="edit-operator" class="form-horizontal row-border" action="<?php echo $this->getForm()->getAction();?>" method="POST">
+		<input type="hidden" name="operator_id" value="<?php echo $_pos->getId();?>"/>
 		<?php echo $this->getLayout()->getBlock('formkey')->toHtml();?>
 		<?php echo $this->getFormHtml();?>
-		<div>
-			<button class="form-button" type="submit"><span><?php echo $_helper->__("Save operator");?></span></button>
-		</div>
+		<div class="form-actions"> <input type="submit" value="<?php echo $_helper->__("Save");?>" class="btn btn-primary pull-right"> </div>
 	</form>
-	<script type="text/javascript">
-		var posForm = new VarienForm('edit-operator');
-	</script>
 </div>
+
+<script type="text/javascript">
+jQuery(function($){
+	var form = $("#edit-operator");
+	new Zolago.formIntegrator(form);
+	form.validate({
+		rules: {
+			"password": {
+				minlength: 5
+			},
+			"confirmation": {
+				minlength: 5,
+				equalTo: "#password"
+			}
+		}
+	});
+});
+</script>

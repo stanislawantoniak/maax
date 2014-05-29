@@ -80,6 +80,14 @@ class Zolago_Po_Model_Po_Item extends Unirgy_DropshipPo_Model_Po_Item
    }
    
    
+	public function getFinalProductPrice() {
+		return $this->getPriceInclTax()*(1-$this->getDiscountPercent()/100);
+	}
+	
+	public function getProductDiscountPrice() {
+		return $this->getPriceInclTax()*($this->getDiscountPercent()/100);
+	}
+	
 	public function getFinalItemPrice() {
 		return $this->getPriceInclTax() - $this->getDiscount();
 	}
@@ -98,22 +106,22 @@ class Zolago_Po_Model_Po_Item extends Unirgy_DropshipPo_Model_Po_Item
 		return "";
    }
    
+   /**
+    * @return string
+    */
    public function getFinalSku() {
-	   
-	   /**
-	    * @todo 
-	    */
-	   $child = $this->getChildItem();
-	   if($child && $child->getId() && $child->getData('vendor_sku')){
-		   return $child->getData('vendor_sku');
-	   }
-	   
-	   if($this->getData('vendor_sku')){
-		   return $this->getData('vendor_sku');
+
+//	   $child = $this->getChildItem();
+//	   if($child && $child->getId() && $child->getData('vendor_sku')){
+//		   return $child->getData('vendor_sku');
+//	   }
+//	   
+	   if($this->getData('vendor_simple_sku')){
+		   return $this->getData('vendor_simple_sku');
 	   }
 	   
 	   
-	   return null;
+	   return $this->getData('vendor_sku');
    }
    
    /**
@@ -129,14 +137,18 @@ class Zolago_Po_Model_Po_Item extends Unirgy_DropshipPo_Model_Po_Item
 	   return $this->getData("child_item");
    }
    
+   /**
+    * @return string
+    */
    public function getOneLineDesc() {
 		$configurable = $this->getConfigurableText();
 		return $this->getName() . " " .
 			"(".
-				 ($configurable ? $configurable . ", " : "") .
-				 Mage::helper("zolagopo")->__("SKU") .   ": " . $this->getFinalSku() . ", " .
-				 Mage::helper("zolagopo")->__("Qty") .   ": " . round($this->getQty(),2) . ", " .
-				 Mage::helper("zolagopo")->__("Price") . ": " . Mage::helper("core")->currency($this->getFinalItemPrice(), true, false) .
+		    	 ($configurable ? $configurable . ", " : "") .
+				Mage::helper("zolagopo")->__("Qty") .   ": " . (int)$this->getQty() . ", " . 
+				Mage::helper("zolagopo")->__("Price") . ": " . Mage::helper("core")->currency($this->getPriceInclTax(), true, false) . ", " . 
+			    Mage::helper("zolagopo")->__("Discount").": " . Mage::helper("core")->currency($this->getProductDiscountPrice(), true, false) . ", " . 
+				Mage::helper("zolagopo")->__("SKU") .   ": " . $this->getFinalSku() .
 			")";
    }
    

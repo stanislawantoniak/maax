@@ -1,6 +1,27 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
 
+	<!-- bootsrap forms -->
+	<forms>
+		<reference name="head">
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/select2/select2.min.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/validation/jquery.validate.min.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/validation/additional-methods.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/alphanum/jquery.alphanum.js</name>
+			</action>
+		</reference>
+	</forms>
 	<!-- bootsrap handling -->
 	<bootstrap>
 		<reference name="root">
@@ -203,4 +224,7 @@
 			</action>
 		</reference>
 	</sales_order_printshipment>
+	
+	<!-- todo move it to new module-based xml layout -->
+	
 </layout>
