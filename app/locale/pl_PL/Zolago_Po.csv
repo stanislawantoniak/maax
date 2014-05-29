@@ -137,3 +137,5 @@
 "There is another order from the same customer. Click the %s to see the customer order.", "Istnieje inne zamówienie od tego samego klienta. Kilknij %s by je zobaczyć."
 "link", "link"
 "Another order from same customer", "Inne zamówienie od tego klienta"
+"There is an alert on the order. In spite of the alert you can move the order to fulfilment by accepting the order.", "Z zamówieniem związany jest alert. Możesz mimo to zaakceptować zamówienie i skierować je do realizacji."
+"Accept the order", "Akceptuj zamówienie"
