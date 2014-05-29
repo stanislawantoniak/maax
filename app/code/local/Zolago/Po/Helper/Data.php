@@ -82,10 +82,8 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 		$count = count($currentlyHas);
 		if($count){
 			throw new Mage_Core_Exception(Mage::helper('zolagopo')->__(
-					"Purchase Order%s: %s %s currently dispatch ref.", 
-					$count>1 ? "s" : "",
-					implode(",", $currentlyHas), 
-					$count>1 ? "have" : "has"
+					"Purchase Order(s): %s has currently dispatch ref.", 
+					implode(",", $currentlyHas)
 			));
 		}
 		
