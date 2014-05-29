@@ -23,12 +23,13 @@ $_question = $this->getQuestion();
 	</div>
 </div>
 <div class="container">
-	<form id="edit-pos" class="form-horizontal row-border" action="<?php echo $this->getUrl('udqa/vendor/questionPost', array('_current'=>true))?>" method="POST">
+	<form id="edit-question" class="form-horizontal row-border" action="<?php echo $this->getUrl('udqa/vendor/questionPost', array('_current'=>true))?>" method="POST">
 		<input type="hidden" name="id" value="<?php echo $_question->getId();?>"/>
+		<input id="udqa-send_email" type="hidden" name="send_email" value="" />
 		<?php echo $this->getLayout()->getBlock('formkey')->toHtml();?>
-			<?php foreach ($this->getForm()->getElements() as $element) {
-		echo $element->toHtml();
-	} ?>
+		<?php foreach ($this->getForm()->getElements() as $element): ?>
+			<?php echo $element->toHtml(); ?>
+		<?php endforeach; ?>
 		<div class="form-actions"> <input type="submit" value="<?php echo $_helper->__("Save");?>" class="btn btn-primary pull-right"> </div>
 	</form>
 </div>
