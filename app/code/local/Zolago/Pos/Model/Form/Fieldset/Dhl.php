@@ -48,5 +48,25 @@ class Zolago_Pos_Model_Form_Fieldset_Dhl extends Zolago_Common_Model_Form_Fields
                                    ));
 
     }
+    protected function _addFieldDhlEcas() {
+        $this->_fieldset->addField('dhl_ecas', 'text', array(
+                                       'name'          => 'dhl_ecas',
+                                       'label'         => $this->_helper->__('eCas Id'),
+                                       'required'      => false,
+                                       "maxlength"     => 32,
+									   'class'		   => "form-control"
+                                   ));
 
+    }
+
+    protected function _addFieldDhlTerminal() {
+        $this->_fieldset->addField('dhl_terminal', 'text', array(
+                                       'name'          => 'dhl_terminal',
+                                       'label'         => $this->_helper->__('Terminal'),
+                                       'required'      => false,
+                                       "maxlength"     => 2,
+									   'class'		   => "form-control"
+                                   ));
+
+    }
 }
