@@ -71,6 +71,10 @@
                         <legend>DHL</legend>
                         <position>140</position>
                     </dhl>
+                    <rma>
+                        <legend>RMA Settings</legend>
+                        <position>140</position>
+                    </rma>
                 </fieldsets>
 
                 <fields>
@@ -129,6 +133,7 @@
 							<dhl_account>1</dhl_account>
 							<dhl_ecas>1</dhl_ecas>
 							<dhl_terminal>1</dhl_terminal>
+							<dhl_rma>1</dhl_rma>
                         </depend_fields>
                         <position>10</position>
                     </use_dhl>
@@ -162,6 +167,38 @@
                         <fieldset>dhl</fieldset>
                         <position>50</position>
                     </dhl_terminal>
+                    <!-- Rma -->
+                    <dhl_rma>
+                        <label>Use another DHL account for RMA</label>
+                        <type>select</type>
+                        <fieldset>rma</fieldset>
+                        <source>yesno</source>
+						<frontend_model>udropship/adminhtml_vendor_helper_form_dependSelect</frontend_model>
+						<depend_fields>
+                            <dhl_rma_login>1</dhl_rma_login>
+                            <dhl_rma_password>1</dhl_rma_password>
+							<dhl_rma_account>1</dhl_rma_account>
+                        </depend_fields>
+                        <position>10</position>
+                    </dhl_rma>
+                	<dhl_rma_account>
+                        <label>Account number</label>
+                        <type>text</type>
+                        <fieldset>rma</fieldset>
+                        <position>15</position>
+                    </dhl_rma_account>
+                	<dhl_rma_login>
+                        <label>Dhl login</label>
+                        <type>text</type>
+                        <fieldset>rma</fieldset>
+                        <position>20</position>
+                    </dhl_rma_login>
+                	<dhl_rma_password>
+                        <label>Dhl password</label>
+                        <type>password</type>
+                        <fieldset>rma</fieldset>
+                        <position>30</position>
+                    </dhl_rma_password>
 					<!-- Product Review -->
                 	<review_status>
                         <label>Product Review Status</label>
