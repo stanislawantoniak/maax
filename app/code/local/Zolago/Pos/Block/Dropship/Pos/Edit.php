@@ -53,6 +53,8 @@ class Zolago_Pos_Block_Dropship_Pos_Edit extends Mage_Core_Block_Template {
             'dhl_account',
             'dhl_login',
             'dhl_password',
+            'dhl_ecas',
+            'dhl_terminal',
         ));
         
 		
