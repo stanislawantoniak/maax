@@ -1,5 +1,41 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
+	<!-- forntend -->
+	<customer_account>
+		<reference name="customer_account_navigation">
+			 <action method="addLink" translate="label" module="zolagopo">
+				 <name>orders</name>
+				 <path>sales/po/history</path>
+				 <label>Purchase Order History</label>
+			 </action>
+		</reference>
+	</customer_account>
+	<sales_po_view>
+		<label>Customer My Account Order RMA View</label>
+        <update handle="customer_account"/>
+        <reference name="my.account.wrapper">
+			<block type="zolagopo/info" as="info" name="sales.po.info">
+				<action method="addLink" translate="label" module="sales"><name>view</name><path>*/*/view</path><label>Order Information</label></action>
+				<action method="addLink" translate="label" module="sales"><name>invoice</name><path>*/*/invoice</path><label>Invoices</label></action>
+				<action method="addLink" translate="label" module="sales"><name>shipment</name><path>*/*/shipment</path><label>Shipments</label></action>
+				<action method="addLink" translate="label" module="sales"><name>creditmemo</name><path>*/*/creditmemo</path><label>Refunds</label></action>
+				<action method="addLink" translate="label" module="urma"><name>rma</name><path>*/*/rma</path><label>RMA</label></action>
+			</block> 
+            <block type="zolagopo/view" name="po.view">
+<!--                <block type="urma/order_rma_items" name="rma_items" template="urma/sales/order/rma/items.phtml">
+                    <action method="addItemRender">
+						<type>default</type>
+						<block>sales/order_item_renderer_default</block>
+						<template>urma/sales/order/rma/items/renderer/default.phtml</template>
+					</action>
+                    <block type="sales/order_comments" name="rma_comments" template="sales/order/comments.phtml" />
+                </block>-->
+            </block>
+        </reference>
+	</sales_po_view>
+	
+	<!-- Vendor portal -->
+	
 	<!-- Old version -->
     <!--<udpo_vendor_index>
 		<reference name="udpo.grid">

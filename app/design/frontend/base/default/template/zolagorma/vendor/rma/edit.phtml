@@ -1,15 +1,113 @@
+<?php /* @var $this Zolago_Rma_Block_Vendor_Rma_Edit */ ?>
 <?php $_helper = Mage::helper("zolagorma");?>
 <?php $_object = $this->getModel();?>
+<?php $_po = $_object->getPo();?>
+<?php $_order= $_object->getOrder();?>
 <div class="container">
 	<!--=== Page Header ===-->
 	<div class="page-heading row">
 		<div class="col-lg-6">
 			<h3>
-				<?php echo $_helper->__("Edit RAM");?> <?php echo $this->escapeHtml($_object->getId());?>
+				<?php echo $_helper->__("Details of RAM notification no. #%s", $_object->getIncrementId());?>
 			</h3>
 		</div>
 		<div class="main-actions align-right col-md-6">
 		
+		</div>
+	</div>
+</div>
+<div class="container">
+	<div class="row">
+		<div class="col-md-4">
+			<div class="widget box">
+				<div class="widget-header"> 
+					<h4>
+						<i class="icon-info"></i> 
+						<?php echo $_helper->__("RMA Data");?>
+					</h4>
+					<div class="toolbar no-padding"> 
+						<div class="btn-group"> 
+							<span data-toggle="modal" data-target="#modal" class="btn btn-xs">
+								<i class="icon-retweet"></i> 
+								<?php echo $_helper->__("Action");?>
+							</span> 
+						</div> 
+					</div>
+				</div>
+				<div class="widget-content rma">
+					<dl class="dl-horizontal dl-z"> 
+						<dt><?php echo $_helper->__("Notification no.");?>:</dt> 
+						<dd><?php echo "1212312312313";?></dd> 
+						<dt><?php echo $_helper->__("Notification date");?>:</dt> 
+						<dd><?php echo $this->formatDate($_object->getCreatedAt());?></dd> 
+						<dt><?php echo $_helper->__("Reaction deadline");?>:</dt> 
+						<dd><?php echo $this->formatDate();?></dd> 
+						<dt><?php echo $_helper->__("Store");?>:</dt> 
+						<dd><?php echo $this->escapeHtml($_object->getStore()->getName())?></dd> 
+						<dt><?php echo $_helper->__("Return payment");?>:</dt> 
+						<dd>
+							<div class="btn-group" id="status-holder"> 
+								<button class="btn btn-xs dropdown-toggle" data-toggle="dropdown"> 
+									<?php echo $this->escapeHtml('Not paid');?> <span class="caret"></span> 
+								</button> 
+								<ul class="dropdown-menu"> 
+									<li><a class="btn-notification" data-placement="top" data-ok-url="<?php echo $this->getRmaUrl("directPayment");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_helper->__("You are about to direct payment. Are you sure?");?>" data-modal="true" href="#"><?php echo $_helper->__("Direct payment");?></a></li> 								
+								</ul> 
+							</div>
+						</dd> 
+						<dt><?php echo $_helper->__("Shipping letter no.");?>:<br/><small class="text-muted" style="font-weight: normal;">(<?php echo $_helper->__("Customer return");?>)</small></dt> 
+						<dd><?php echo "1212312312313";?></dd> 
+					</dl>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="widget box">
+				<div class="widget-header"> 
+					<h4>
+						<i class="icon-shopping-cart"></i> 
+						<?php echo $_helper->__("Order data");?>
+					</h4>
+					<div class="toolbar no-padding"> 
+						<div class="btn-group"> 
+							<span data-toggle="modal" data-target="#modal" class="btn btn-xs">
+								<i class="icon-retweet"></i> 
+								<?php echo $_helper->__("Action");?>
+							</span> 
+						</div> 
+					</div>
+				</div>
+				<div class="widget-content rma">
+					<dl class="dl-horizontal dl-z"> 
+						<dt><?php echo $_helper->__("Order No.");?>:</dt> 
+						<dd><?php echo "123";?></dd> 
+					</dl>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="widget box">
+				<div class="widget-header"> 
+					<h4>
+						<i class="icon-info"></i> 
+						<?php echo $_helper->__("Ttile");?>
+					</h4>
+					<div class="toolbar no-padding"> 
+						<div class="btn-group"> 
+							<span data-toggle="modal" data-target="#modal" class="btn btn-xs">
+								<i class="icon-retweet"></i> 
+								<?php echo $_helper->__("Action");?>
+							</span> 
+						</div> 
+					</div>
+				</div>
+				<div class="widget-content rma">
+					<dl class="dl-horizontal dl-z"> 
+						<dt><?php echo $_helper->__("Number");?>:</dt> 
+						<dd><?php echo "123";?></dd> 
+					</dl>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>

@@ -46,6 +46,13 @@
 	</global>
 	<frontend>
 		<routers>
+			<sales>
+                <args>
+                    <modules>
+                        <zolagorma before="Mage_Sales">Zolago_Rma</zolagorma>
+                    </modules>
+                </args>
+            </sales>
 			<urma>
 				<args>
 					<modules>

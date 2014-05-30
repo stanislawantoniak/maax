@@ -909,11 +909,14 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             $udpo->setUdpoNoSplitPoFlag(true);
 			
             $shipment = $udpoHlp->createShipmentFromPo($udpo, $partialQty, true, true, true);
+			
             if ($shipment) {
                 $shipment->setNewShipmentFlag(true);
                 $shipment->setDeleteOnFailedLabelRequestFlag(true);
                 $shipment->setCreatedByVendorFlag(true);
-            }
+            }else{
+				Mage::throwException("Cannot create shipment");
+			}
 			
             //}
 			
@@ -926,12 +929,13 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 			$weight =  $r->getParam("weight");
 			
 			if(empty($weight)){
-				if($shipment->getTotalWeight()){
+				if($shipment && $shipment->getTotalWeight()){
 					$weight = ceil($shipment->getTotalWeight());
 				}else{
 					$weight = Mage::helper('zolagodhl')->getDhlDefaultWeight();
 				}
 			}
+			
 			
 			$shipment->setTotalWeight($weight);
 			
