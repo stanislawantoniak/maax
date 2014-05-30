@@ -127,6 +127,8 @@
                             <dhl_login>1</dhl_login>
                             <dhl_password>1</dhl_password>
 							<dhl_account>1</dhl_account>
+							<dhl_ecas>1</dhl_ecas>
+							<dhl_terminal>1</dhl_terminal>
                         </depend_fields>
                         <position>10</position>
                     </use_dhl>
@@ -148,6 +150,18 @@
                         <fieldset>dhl</fieldset>
                         <position>30</position>
                     </dhl_password>
+                	<dhl_ecas>
+                        <label>Dhl eCas id</label>
+                        <type>text</type>
+                        <fieldset>dhl</fieldset>
+                        <position>40</position>
+                    </dhl_ecas>
+                	<dhl_terminal>
+                        <label>Terminal code</label>
+                        <type>text</type>
+                        <fieldset>dhl</fieldset>
+                        <position>50</position>
+                    </dhl_terminal>
 					<!-- Product Review -->
                 	<review_status>
                         <label>Product Review Status</label>
