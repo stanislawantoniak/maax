@@ -16,6 +16,11 @@
 				<entities>
 				</entities>
 			</zolagorma_resource>
+			<urma>
+				<rewrite>
+					<rma>Zolago_Rma_Model_Rma</rma>
+				</rewrite>
+			</urma>
 		</models>
 		<blocks>
 			<zolagorma>
@@ -41,13 +46,13 @@
 	</global>
 	<frontend>
 		<routers>
-			<udrma>
+			<urma>
 				<args>
 					<modules>
 						<Zolago_Rma before="Unirgy_Rma">Zolago_Rma</Zolago_Rma>
 					</modules>
 				</args>
-			</udrma>
+			</urma>
 		</routers>
 		<layout>
 			<updates>
