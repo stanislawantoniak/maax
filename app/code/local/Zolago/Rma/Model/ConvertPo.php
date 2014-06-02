@@ -1,6 +1,6 @@
 <?php
 
-class Unirgy_Rma_Model_ConvertPo extends Mage_Sales_Model_Convert_Order
+class Zolago_Rma_Model_ConvertPo extends Mage_Sales_Model_Convert_Order
 {
     public function toRma(Zolago_Po_Model_Po $po)
     {

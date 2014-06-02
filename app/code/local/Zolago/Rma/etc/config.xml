@@ -42,6 +42,22 @@
 					<to_urma>udpo_increment_id</to_urma>
 				</increment_id>
 			</zolagopo_convert_po>
+			
+			<!-- PO Item -> Rma Item (Override some editable fields) -->
+			<zolagopo_convert_po_item>
+				<price>
+					<to_urma_item>*</to_urma_item>
+				</price>
+				<vendor_sku>
+					<to_urma_item>*</to_urma_item>
+				</vendor_sku>
+				<vendor_simple_sku>
+					<to_urma_item>*</to_urma_item>
+				</vendor_simple_sku>
+				<entity_id>
+					<to_urma_item>udpo_item_id</to_urma_item>
+				</entity_id>
+			</zolagopo_convert_po_item>
 		</fieldsets>
 		<!-- 
 		<resources>
