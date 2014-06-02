@@ -1,23 +1,24 @@
 <?php
-
-class Zolago_Rma_Model_ServiceOrder extends Unirgy_Rma_Model_ServiceOrder
+// http://zolago01.dev/index.php/sales/po/saveRma/po_id/106
+class Zolago_Rma_Model_ServicePo extends Unirgy_Rma_Model_ServiceOrder
 {
     public function __construct($po)
     {
         $this->_po			= $po;
-        $this->_order       = $order;
+        $this->_order       = $po->getOrder();
         $this->_convertor   = Mage::getModel('zolagorma/convertPo');
     }
     public function prepareRma($qtys = array())
     {
         $totalQty = 0;
-        $rma = $this->_convertor->toRma($this->_order);
+        $rma = $this->_convertor->toRma($this->_po);
         foreach ($this->_order->getAllItems() as $orderItem) {
             if (!$this->_canRmaItem($orderItem, $qtys)) {
                 continue;
             }
 
             $item = $this->_convertor->itemToRmaItem($orderItem);
+			
             if ($orderItem->isDummy(true)) {
                 $qty = 1;
             } else {
@@ -34,6 +35,7 @@ class Zolago_Rma_Model_ServiceOrder extends Unirgy_Rma_Model_ServiceOrder
             $item->setQty($qty);
             $rma->addItem($item);
         }
+		
         $rma->setTotalQty($totalQty);
         return $rma;
     }
@@ -41,25 +43,33 @@ class Zolago_Rma_Model_ServiceOrder extends Unirgy_Rma_Model_ServiceOrder
     {
         $totalQtys = array();
         $rmaItems = array();
-        foreach ($this->_order->getAllItems() as $orderItem) {
-            if (!$this->_canRmaItem($orderItem, $qtys)) {
+		
+		
+        foreach ($this->_po->getItemsCollection() as $poItem) {
+			/* @var $poItem Zolago_Po_Model_Po_Item */
+			$orderItem = $poItem->getOrderItem();
+            if (!$this->_canRmaItem($poItem, $qtys)) {
+				
+			die("TAK");
                 continue;
             }
-
-            $item = $this->_convertor->itemToRmaItem($orderItem);
+			
+            $item = $this->_convertor->itemToRmaItem($poItem);
+			
             if ($orderItem->isDummy(true)) {
                 $qty = 1;
             } else {
-                if (isset($qtys[$orderItem->getId()])) {
-                    $qty = min($qtys[$orderItem->getId()], $orderItem->getQtyShipped());
+                if (isset($qtys[$poItem->getId()])) {
+                    $qty = min($qtys[$poItem->getId()], $poItem->getQtyShipped());
                 } elseif (!count($qtys)) {
-                    $qty = $orderItem->getQtyShipped();
+                    $qty = $poItem->getQtyShipped();
                 } else {
                     continue;
                 }
             }
             if ($qty<=0) continue;
-            $vId = $orderItem->getUdropshipVendor();
+			
+            $vId = $poItem->getUdropshipVendor();
 
             $rmaItems[$vId][] = $item;
 
@@ -70,7 +80,7 @@ class Zolago_Rma_Model_ServiceOrder extends Unirgy_Rma_Model_ServiceOrder
 
             $item->setQty($qty);
 
-            $item->setItemCondition(@$conditions[$orderItem->getId()]);
+            $item->setItemCondition(@$conditions[$poItem->getId()]);
 
         }
         if (empty($rmaItems)) {
@@ -88,7 +98,7 @@ class Zolago_Rma_Model_ServiceOrder extends Unirgy_Rma_Model_ServiceOrder
                 }
             }
             if (null == $shipment) continue;
-            $rma = $this->_convertor->toRma($this->_order);
+            $rma = $this->_convertor->toRma($this->_po);
             $rma->setUdropshipVendor($vId);
             $rma->setUdropshipMethod($shipment->getUdropshipMethod());
             $rma->setUdropshipMethodDescription($shipment->getUdropshipMethodDescription());
@@ -102,8 +112,12 @@ class Zolago_Rma_Model_ServiceOrder extends Unirgy_Rma_Model_ServiceOrder
         return $rmas;
     }
 
-    protected function _canRmaItem($item, $qtys=array())
+    protected function _canRmaItem($poItem, $qtys=array())
     {
+		/* @var $poItem Zolago_Po_Model_Po_Item */
+		$item = $poItem->getOrderItem();
+		/* @var $item Mage_Sales_Model_Order_Item */
+		
         if ($item->isDummy(true)) {
             if ($item->getHasChildren()) {
                 if ($item->isShipSeparately()) {
@@ -133,7 +147,7 @@ class Zolago_Rma_Model_ServiceOrder extends Unirgy_Rma_Model_ServiceOrder
                 }
             }
         } else {
-            return $item->getQtyShipped()>0;
+            return $poItem->getQtyShipped()>0;
         }
     }
 }

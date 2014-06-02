@@ -33,7 +33,7 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
             $this->_redirect('*/*/view', array('po_id'=>$this->getRequest()->getParam('po_id')));
         } catch (Exception $e) {
             Mage::getSingleton('core/session')->addError($e->getMessage());
-            $this->_redirect('*/*/view', array('order_id'=>$this->getRequest()->getParam('order_id')));
+            $this->_redirect('*/*/view', array('po_id'=>$this->getRequest()->getParam('po_id')));
         }
     }
 
@@ -76,17 +76,22 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
 	}
 
 	protected function _initTmpData(){
-//		order_id:78
-//		rma[items_condition][202]:unopened
-//		rma[items][202]:1
-//		rma[items_condition][203]:unopened
-//		rma[items][203]:1
-//		rma[rma_reason]:exchange
-//		rma[comment_text]:asfasdf
+		
 		$data = array(
-			
+			"rma" => array(
+				"items_condition" => array(
+					221 => "unopened"
+				),
+				"items" => array(
+					221 => 1,
+				),
+				"comment_text" => "My test comment"
+			),
+			"po_id"		   => 107,
+			"order_id"	   => 77
 		);
-		$this->getRequest()->setPost("rma", $data);
+		
+		$this->getRequest()->setPost($data);
 	}
 
 
@@ -104,7 +109,9 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
         }
 
         foreach ($rmas as $rma) {
+			/* @var $rma Zolago_Rma_Model_Rma */
             $po = $rma->getPo();
+			/* @var $po Zolago_Po_Model_Po */
             $rma->register();
         }
 
@@ -128,9 +135,11 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
         foreach ($rmas as $rma) {
             $rma->setIsCutomer(true);
             $trans->addObject($rma);
+			
+			var_export($rma->getData('udpo_id'));
         }
         $trans->addObject($rma->getPo())->save();
-
+		
         foreach ($rmas as $rma) {
             $rma->sendEmail(!empty($data['send_email']), $comment);
             Mage::helper('urma')->sendNewRmaNotificationEmail($rma, $comment);
