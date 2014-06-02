@@ -170,38 +170,38 @@ class Zolago_Po_Model_Aggregated_Pdf extends Varien_Object {
                $this->_totals['dr'] +
                $this->_totals['dhl09'] +
                $this->_totals['dhl12'];
-        $page->drawText(Mage::helper('zolagopo')->__('Number of shipments: %d',$sum),35,$rel-18);
+        $page->drawText(Mage::helper('zolagopo')->__('Number of shipments: %d',$sum),35,$rel-18,'UTF-8');
         $this->_setFont($page,9);
-        $page->drawText(Mage::helper('zolagopo')->__('Elements under 31,5 kg: %d',$this->_totals['k']),35,$rel-30);
-        $page->drawText(Mage::helper('zolagopo')->__('Elements DR: %d',$this->_totals['dr']),35,$rel-42);
-        $page->drawText(Mage::helper('zolagopo')->__('COD value: %.2f',$this->_totals['cod']),35,$rel-54);
-        $page->drawText(Mage::helper('zolagopo')->__('Europalets: %d',$this->_totals['palets']),35,$rel-66);
+        $page->drawText(Mage::helper('zolagopo')->__('Elements under 31,5 kg: %d',$this->_totals['k']),35,$rel-30,'UTF-8');
+        $page->drawText(Mage::helper('zolagopo')->__('Elements DR: %d',$this->_totals['dr']),35,$rel-42,'UTF-8');
+        $page->drawText(Mage::helper('zolagopo')->__('COD value: %.2f',$this->_totals['cod']),35,$rel-54,'UTF-8');
+        $page->drawText(Mage::helper('zolagopo')->__('Europalets: %d',$this->_totals['palets']),35,$rel-66,'UTF-8');
         // ah
         $this->_setFont($page,9,'b');
-        $page->drawText(Mage::helper('zolagopo')->__('AH'),235,$rel-18);
+        $page->drawText(Mage::helper('zolagopo')->__('AH'),235,$rel-18,'UTF-8');
         $this->_setFont($page,9);
-        $page->drawText(Mage::helper('zolagopo')->__('Number of shipments: %d',$this->_totals['k']+$this->_totals['dr']),235,$rel-30);
-        $page->drawText(Mage::helper('zolagopo')->__('Elements under 31,5 kg: %d',$this->_totals['k']),235,$rel-42);
-        $page->drawText(Mage::helper('zolagopo')->__('Elements DR: %d',$this->_totals['dr']),235,$rel-54);
+        $page->drawText(Mage::helper('zolagopo')->__('Number of shipments: %d',$this->_totals['k']+$this->_totals['dr']),235,$rel-30,'UTF-8');
+        $page->drawText(Mage::helper('zolagopo')->__('Elements under 31,5 kg: %d',$this->_totals['k']),235,$rel-42,'UTF-8');
+        $page->drawText(Mage::helper('zolagopo')->__('Elements DR: %d',$this->_totals['dr']),235,$rel-54,'UTF-8');
         // dhl9
         $this->_setFont($page,9,'b');
-        $page->drawText(Mage::helper('zolagopo')->__('DHL 09'),450,$rel-18);
+        $page->drawText(Mage::helper('zolagopo')->__('DHL 09'),450,$rel-18,'UTF-8');
         $this->_setFont($page,9);
-        $page->drawText(Mage::helper('zolagopo')->__('Number of shipments: %d',$this->_totals['dhl09']),450,$rel-30);
-        $page->drawText(Mage::helper('zolagopo')->__('Elements DHL09: %d',$this->_totals['dhl09']),450,$rel-42);
+        $page->drawText(Mage::helper('zolagopo')->__('Number of shipments: %d',$this->_totals['dhl09']),450,$rel-30,'UTF-8');
+        $page->drawText(Mage::helper('zolagopo')->__('Elements DHL09: %d',$this->_totals['dhl09']),450,$rel-42,'UTF-8');
         // dhl 12
         $this->_setFont($page,9,'b');
-        $page->drawText(Mage::helper('zolagopo')->__('DHL 12'),635,$rel-18);
+        $page->drawText(Mage::helper('zolagopo')->__('DHL 12'),635,$rel-18,'UTF-8');
         $this->_setFont($page,9);
-        $page->drawText(Mage::helper('zolagopo')->__('Number of shipments: %d',$this->_totals['dhl12']),635,$rel-30);
-        $page->drawText(Mage::helper('zolagopo')->__('Elements DHL12: %d',$this->_totals['dhl12']),635,$rel-42);
+        $page->drawText(Mage::helper('zolagopo')->__('Number of shipments: %d',$this->_totals['dhl12']),635,$rel-30,'UTF-8');
+        $page->drawText(Mage::helper('zolagopo')->__('Elements DHL12: %d',$this->_totals['dhl12']),635,$rel-42,'UTF-8');
         // signs
         $page->setLineWidth(1);
         $page->setLineDashingPattern(array(2, 1, 2, 1), 1.6);
         $page->drawLine(45,$rel-98,210,$rel-98);
-        $page->drawText(Mage::helper('zolagopo')->__('DHL signature'),45,$rel-110);
+        $page->drawText(Mage::helper('zolagopo')->__('DHL signature'),45,$rel-110,'UTF-8');
         $page->drawLine(305,$rel-98,500,$rel-98);
-        $page->drawText(Mage::helper('zolagopo')->__('Customer signature'),305,$rel-110);
+        $page->drawText(Mage::helper('zolagopo')->__('Customer signature'),305,$rel-110,'UTF-8');
     }
     // preparing date from - to
     // additionally gets courier name
@@ -305,7 +305,7 @@ class Zolago_Po_Model_Aggregated_Pdf extends Varien_Object {
         if ($vendor_id) {
             $vendor = Mage::getModel('udropship/vendor')->load($vendor_id);
             if ($vendor) {
-                $out = $vendor->getVendorName();
+                $out = $vendor->getData();
             }
         }
         return $out;
@@ -350,13 +350,13 @@ class Zolago_Po_Model_Aggregated_Pdf extends Varien_Object {
         } else {
             $operator = Mage::getSingleton('udropship/session')->getVendor()->getEmail();
         }
-        $id_ecas = '';
-        $pos['dhl_account'];
+        $id_ecas = empty($pos['dhl_ecas'])? $vendor['dhl_ecas']:$pos['dhl_ecas'];
+        $terminal = empty($pos['dhl_terminal'])? $vendor['dhl_terminal']:$pos['dhl_terminal'];
+
         $sap = $pos['dhl_account'];
         // only one courier
         $courier = $this->_totals['courier'];
         $phone = empty($pos['phone'])? '':$pos['phone'];
-        $terminal = '';
         $pos['full_code'] = $this->_prepareText($pos,array('postcode','city'));
         $address = $this->_prepareText($pos,array('full_code','street'),', ');
         $page->setFillColor(new Zend_Pdf_Color_GrayScale(0));
