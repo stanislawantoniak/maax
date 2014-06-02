@@ -11,7 +11,6 @@ class Zolago_Po_PoController extends Mage_Core_Controller_Front_Action
         }
     }
 	
-	
 	public function viewAction() {
 		$this->_viewAction();
 	}
