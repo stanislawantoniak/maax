@@ -32,6 +32,17 @@
 				<class>Zolago_Rma_Helper</class>
 			</zolagorma>
 		</helpers>
+		<fieldsets>
+			<!-- PO -> RMA -->
+			<zolagopo_convert_po>
+				<entity_id>
+					<to_urma>udpo_id</to_urma>
+				</entity_id>
+				<increment_id>
+					<to_urma>udpo_increment_id</to_urma>
+				</increment_id>
+			</zolagopo_convert_po>
+		</fieldsets>
 		<!-- 
 		<resources>
 			<zolagorma_setup>

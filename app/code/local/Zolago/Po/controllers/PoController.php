@@ -24,7 +24,7 @@ class Zolago_Po_PoController extends Mage_Core_Controller_Front_Action
      */
     protected function _viewAction()
     {
-        if (!$this->_loadValidOrder()) {
+        if (!$this->_loadValidPo()) {
             return;
         }
 
@@ -58,7 +58,7 @@ class Zolago_Po_PoController extends Mage_Core_Controller_Front_Action
      * @param int $poId
      * @return bool
      */
-    protected function _loadValidOrder($poId = null)
+    protected function _loadValidPo($poId = null)
     {
         if (null === $poId) {
             $poId = (int) $this->getRequest()->getParam('po_id');

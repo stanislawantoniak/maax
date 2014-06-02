@@ -35,15 +35,6 @@
 	</sales_po_view>
 	
 	<!-- Vendor portal -->
-	
-	<!-- Old version -->
-    <!--<udpo_vendor_index>
-		<reference name="udpo.grid">
-			<action method="setTemplate">
-				<template>zolagopo/vendor/po/grid.phtml</template>
-			</action>
-		</reference>
-    </udpo_vendor_index>-->
 	<udpo_vendor_index>		
 		<remove name="dashboard"/>
 		<update handle="bootstrap"/>
