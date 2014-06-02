@@ -5,6 +5,32 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 	const TYPE_POSHIPPING = "poshipping";
 	const TYPE_POBILLING = "pobilling";
 	
+	/**
+	 * @return Mage_Sales_Model_Order_Shipment | null
+	 */
+	public function getLastNotCanceledShipment() {
+		
+		$collection = $this->getShipmentsCollection();
+		/* @var $collection Mage_Sales_Model_Resource_Order_Shipment_Collection */
+		$collection->clear();
+		
+		$collection->addAttributeToFilter("udropship_status", 
+			array("nin"=>array(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED))
+		);
+		$collection->setOrder("created_at", "DESC");
+		
+		$item = $collection->getFirstItem();
+		
+		if($item && $item->getId()){
+			return $item;
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * @return bool
+	 */
 	public function isFinished() {
 		$status = $this->getStatusModel();
 		return in_array($this->getUdropshipStatus(), $status::getFinishStatuses());
@@ -302,8 +328,10 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 		$addressCollection->addFieldToFilter("entity_id", array("nin"=>$exclude));
 		$addressCollection->addFieldToFilter("address_type", $type);
 		
+		
+		$select = $addressCollection->getSelect();
+		
 		if($type==self::TYPE_POSHIPPING){
-			$select = $addressCollection->getSelect();
 
 			$subSelect = $select->getAdapter()->select();
 			$subSelect->from( 
@@ -316,7 +344,6 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 		}
 		
 		// Skip used addresses
-		$select = $addressCollection->getSelect();
 
 		$subSelect = $select->getAdapter()->select();
 		$subSelect->from( 
@@ -324,6 +351,16 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 				array(new Zend_Db_Expr("COUNT(self.entity_id)"))
 		);
 		$subSelect->where("self.shipping_address_id=main_table.entity_id OR self.billing_address_id=main_table.entity_id");
+
+		$select->where("? < 1", $subSelect);
+		
+		// Skip RMA used addresse
+		$subSelect = $select->getAdapter()->select();
+		$subSelect->from( 
+				array("rma"=>$this->getResource()->getTable("urma/rma")),
+				array(new Zend_Db_Expr("COUNT(rma.entity_id)"))
+		);
+		$subSelect->where("rma.shipping_address_id=main_table.entity_id OR rma.billing_address_id=main_table.entity_id");
 
 		$select->where("? < 1", $subSelect);
 		

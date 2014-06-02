@@ -201,16 +201,19 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
 					case Zolago_Dhl_Helper_Data::DHL_STATUS_DELIVERED:
 						$status = $this->__('Delivered');
 						$track->setUdropshipStatus(Unirgy_Dropship_Model_Source::TRACK_STATUS_DELIVERED);
+						$track->setShippedDate(Varien_Date::now());
 						$track->getShipment()->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED);
 						break;
 					case Zolago_Dhl_Helper_Data::DHL_STATUS_RETURNED:
 						$status = $this->__('Returned');
 						$track->setUdropshipStatus(Unirgy_Dropship_Model_Source::TRACK_STATUS_CANCELED);
+						$track->setShippedDate(null);
 						$track->getShipment()->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_RETURNED);
 						break;
 					case Zolago_Dhl_Helper_Data::DHL_STATUS_WRONG:
 						$status = $this->__('Canceled');
 						$track->setUdropshipStatus(Unirgy_Dropship_Model_Source::TRACK_STATUS_CANCELED);
+						$track->setShippedDate(null);
 						$track->getShipment()->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_RETURNED);
 						break;
 					default:

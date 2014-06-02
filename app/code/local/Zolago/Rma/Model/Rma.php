@@ -13,4 +13,15 @@ class Zolago_Rma_Model_Rma extends Unirgy_Rma_Model_Rma
 		}
 		return $this->getData("po");
 	}
+	/**
+	 * @return Mage_Sales_Model_Order_Shipment
+	 */
+	public function getShipment() {
+		if(!$this->hasData("shipment")){
+			$shipment = Mage::getModel("sales/order_shipment");
+			$shipment->load($this->getShipmentId());
+			$this->setData("shipment", $shipment);
+		}
+		return $this->getData("shipment");
+	}
 }

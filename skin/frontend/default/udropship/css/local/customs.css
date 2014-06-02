@@ -240,6 +240,9 @@ select.form-control {
 .widget-content.rma .with-alert {
   min-height: 190px;
 }
+.widget-content.rma {
+  min-height: 200px;
+}
 .widget-content.bottom-info {
   min-height: 146px;
 }
