@@ -44,13 +44,11 @@ class Zolago_Rma_Model_ServicePo extends Unirgy_Rma_Model_ServiceOrder
         $totalQtys = array();
         $rmaItems = array();
 		
-		
+
         foreach ($this->_po->getItemsCollection() as $poItem) {
 			/* @var $poItem Zolago_Po_Model_Po_Item */
 			$orderItem = $poItem->getOrderItem();
             if (!$this->_canRmaItem($poItem, $qtys)) {
-				
-			die("TAK");
                 continue;
             }
 			
@@ -67,6 +65,7 @@ class Zolago_Rma_Model_ServicePo extends Unirgy_Rma_Model_ServiceOrder
                     continue;
                 }
             }
+			
             if ($qty<=0) continue;
 			
             $vId = $poItem->getUdropshipVendor();

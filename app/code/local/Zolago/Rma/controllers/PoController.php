@@ -80,15 +80,20 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
 		$data = array(
 			"rma" => array(
 				"items_condition" => array(
-					221 => "unopened"
+					226 => "unopened",
+					228 => "unopened",
+					
 				),
 				"items" => array(
-					221 => 1,
+					226 => 3,
+					228 => 1,
 				),
-				"comment_text" => "My test comment"
+				"comment_text" => "My test comment",				
+				"rma_reason"   => "exchange",
+				
 			),
-			"po_id"		   => 107,
-			"order_id"	   => 77
+			"po_id"		   => 110,
+			"order_id"	   => 80
 		);
 		
 		$this->getRequest()->setPost($data);
@@ -103,7 +108,7 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
         $data = $this->getRequest()->getPost('rma');
         $data['send_email'] = true;
         $comment = '';
-
+		
         if (empty($rmas)) {
             Mage::throwException('Return could not be created');
         }
