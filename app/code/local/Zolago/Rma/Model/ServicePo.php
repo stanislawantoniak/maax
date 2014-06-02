@@ -1,11 +1,12 @@
 <?php
 
-class Unirgy_Rma_Model_ServiceOrder extends Mage_Sales_Model_Service_Order
+class Zolago_Rma_Model_ServiceOrder extends Unirgy_Rma_Model_ServiceOrder
 {
-    public function __construct(Mage_Sales_Model_Order $order)
+    public function __construct($po)
     {
+        $this->_po			= $po;
         $this->_order       = $order;
-        $this->_convertor   = Mage::getModel('urma/convertOrder');
+        $this->_convertor   = Mage::getModel('zolagorma/convertPo');
     }
     public function prepareRma($qtys = array())
     {
