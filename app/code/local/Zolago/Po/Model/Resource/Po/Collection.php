@@ -4,6 +4,7 @@ class Zolago_Po_Model_Resource_Po_Collection
 {
 	
 	protected $_vendorId;
+	protected $_vendorJoined = false;
 	
 	public function addAlertFilter($int) {
 		$this->getSelect()->where("main_table.alert & ".(int)$int);
@@ -13,7 +14,9 @@ class Zolago_Po_Model_Resource_Po_Collection
     public function addOrderData() {
 		return $this->_joinOrderTable();
 	}
-	
+	public function addVendorData() {
+	    return $this->_joinVendorTable();
+	}
 	public function addVendorFilter($vendor) {
 		if($vendor instanceof Unirgy_Dropship_Model_Vendor){
 			$vendor = $vendor->getId();
@@ -195,6 +198,19 @@ class Zolago_Po_Model_Resource_Po_Collection
 			}
 		}
         return $return;
+    }
+    protected function _joinVendorTable() {
+        if (!$this->_vendorJoined) {
+            $this->getSelect()->join('vendor_table'=>$this->getTable('udropship/vendor')),
+                'vendor_table.vendor_id=main_table.udropship_vendor',
+                array ('vendor_table.vendor_name'))
+            );
+            $this->_vendorJoined = true;
+        }
+        return $this;
+        
+    }
+    protected function _joinProductTable() {
     }
 	protected function _joinOrderTable()
     {

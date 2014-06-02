@@ -1,0 +1,50 @@
+<?php
+    $list = $this->getPoList();
+    if ($list) { 
+?>
+<table>
+    <tr>
+        <th>
+            Numer zamówienia
+        </th>
+        <th>
+            Data 
+        </th>
+        <th>
+            Sklep
+        </th>
+        <th>
+            Produkty
+        </th>
+        <th>
+        </th>        
+    </tr>
+
+<?php
+        foreach ($list as $item) {
+?>
+    <tr>
+        <td>
+            <?php echo $item->getIncrementId(); ?>
+        </td>
+        <td>
+            <?php echo $item->getCreatedAt(); ?>
+        </td>
+        <td>
+            <?php echo $item->getVendorName(); ?>
+        </td>
+        <td>
+        </td>
+            
+        <td>
+            <a href="">wybierz</a>
+        </td>
+    </tr>
+<?php            
+        }
+        
+?>
+</table>
+<?php
+    }
+?>
