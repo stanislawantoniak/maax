@@ -136,7 +136,7 @@ class Zolago_Catalog_AuthController
 
 
     //////////////////////////////////////////////
-    public function testAction(){
+    public function queueAction(){
 
         $ids = Mage::getModel('catalog/product')
             ->getCollection()
