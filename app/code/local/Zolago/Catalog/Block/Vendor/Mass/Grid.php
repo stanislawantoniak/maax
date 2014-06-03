@@ -10,7 +10,7 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
         $this->setDefaultSort('entity_id');
         $this->setDefaultDir('desc');
         $this->setGridClass('z-grid');
-        $this->setUseAjax(true);
+
         $this->setSaveParametersInSession(true);
 		$this->setTemplate("zolagocatalog/widget/grid.phtml");
 		// Add custom renderes
@@ -50,10 +50,7 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 		}
 		return parent::_setCollectionOrder($column);
 	}
-    public function getGridUrl()
-    {
-        return $this->getUrl('*/*/grid', array('_current'=>true));
-    }
+
 	public function getPopupContent() {
 		return $this->getChildHtml('popup_content');
 	}
