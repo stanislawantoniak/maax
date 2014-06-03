@@ -12,6 +12,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 extends Zolago_Catalog_Mod
 
     protected function _create($data)
     {
+        Mage::log(microtime()." _create ", 0, 'converter_test.log');
 
         $json = json_encode($data);
         print_r($data);
@@ -88,7 +89,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 extends Zolago_Catalog_Mod
 
     protected function _multiUpdate()
     {
-
+        Mage::log(microtime()." _multiUpdate ", 0, 'converter_test.log');
         $skuAssoc = Zolago_Catalog_Helper_Data::getSkuAssoc();
 
         $data = $this->getRequest()->getBodyParams();
