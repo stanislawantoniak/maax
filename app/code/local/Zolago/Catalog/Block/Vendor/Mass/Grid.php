@@ -50,6 +50,10 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 		}
 		return parent::_setCollectionOrder($column);
 	}
+    public function getGridUrl()
+    {
+        return $this->getUrl('*/*/grid', array('_current'=>true));
+    }
 	public function getPopupContent() {
 		return $this->getChildHtml('popup_content');
 	}

@@ -322,3 +322,6 @@ table.foot-empty-cells tfoot td:empty {
 .z-grid .grid tbody tr td.status-disabled {
     background: none repeat scroll 0 0 #C24A4A !important;
 }
+.gecko select.form-control, textarea.form-control {
+    padding: 4px 0;
+}

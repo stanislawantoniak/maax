@@ -7,9 +7,7 @@ class Zolago_Catalog_AuthController
      */
     public function indexAction()
     {
-
         $host = 'http://modago.local';
-
         // $callbackUrl is a path to your file with OAuth authentication example for the Admin user
         $callbackUrl = $host . "/udprod/auth";
         $temporaryCredentialsRequestUrl = $host . "/index.php/oauth/initiate?oauth_callback=" . urlencode($callbackUrl);
@@ -74,11 +72,10 @@ class Zolago_Catalog_AuthController
     }
 
 
-
-
     public function configurableAction()
     {
-        Mage::getModel('zolagocatalog/observer')->recalcConfigurable();
+
+        Zolago_Catalog_Model_Observer::processConfigurableQueue();
     }
 
     private function emulateConverterTestData()
@@ -133,6 +130,21 @@ class Zolago_Catalog_AuthController
         $store = (int)Mage::app()->getRequest()->getParam('store');
         Zolago_Catalog_Helper_Log::emulateConfigurable(FALSE, $store);
     }
+
+
+
+
+    //////////////////////////////////////////////
+    public function testAction(){
+
+        $ids = Mage::getModel('catalog/product')
+            ->getCollection()
+            ->addAttributeToFilter('type_id', array('eq' => 'simple'))
+            ->getAllIds();
+
+        Zolago_Catalog_Helper_Configurable::queue($ids);
+    }
+
 
 
 }
