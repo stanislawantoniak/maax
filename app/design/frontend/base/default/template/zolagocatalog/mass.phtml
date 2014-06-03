@@ -16,7 +16,7 @@
                    </div>
                </div>
                <div class="widget-content fiters">
-                   <div class="form-horizontal">
+                   <form class="form-horizontal">
                        <div class="form-group">
                            <?php if ($this->getStoreSwitcherHtml()): ?>
                                <div class="col-md-6">
@@ -32,7 +32,7 @@
                            <?php endif; ?>
                        </div>
                        <?php echo $this->getChildHtml("static_filter"); ?>
-                   </div>
+                   </form>
                </div>
            </div>
        </div>
