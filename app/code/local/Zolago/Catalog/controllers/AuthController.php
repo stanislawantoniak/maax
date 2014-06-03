@@ -76,6 +76,7 @@ class Zolago_Catalog_AuthController
     {
 
         Zolago_Catalog_Model_Observer::processConfigurableQueue();
+        echo 'Done';
     }
 
     private function emulateConverterTestData()
@@ -135,7 +136,7 @@ class Zolago_Catalog_AuthController
 
 
     //////////////////////////////////////////////
-    public function testAction(){
+    public function queueAction(){
 
         $ids = Mage::getModel('catalog/product')
             ->getCollection()

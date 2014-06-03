@@ -11,17 +11,16 @@ class Zolago_Catalog_Model_Resource_Queue_Configurable extends Zolago_Common_Mod
         $this->_init('zolagocatalog/queue_configurable','queue_id');
     }
 
-    public function addToQueue($ids, $websiteId = null) {
-
-        if(!empty($ids)){
-            foreach($ids as $productId){
-                $this->_prepareData($websiteId, $productId);
+    public function addToQueue($ids)
+    {
+        if (!empty($ids)) {
+            foreach ($ids as $productId) {
+                $this->_prepareData($productId);
             }
 
             $this->_saveData();
         }
         return $ids;
-
     }
 
     protected function _resetData()
@@ -29,19 +28,18 @@ class Zolago_Catalog_Model_Resource_Queue_Configurable extends Zolago_Common_Mod
         $this->_dataToSave = array();
     }
 
-    protected function _prepareData($websiteId, $productId)
+    protected function _prepareData($productId)
     {
-        $key = $this->_buildIndexKey($websiteId, $productId);
+        $key = $this->_buildIndexKey($productId);
         $this->_dataToSave[$key] = array(
             "insert_date" => date('Y-m-d H:i:s'),
-            "website_id" => $websiteId,
             "product_id" => $productId
         );
     }
 
-    protected function _buildIndexKey($websiteId, $productId)
+    protected function _buildIndexKey($productId)
     {
-        return "$websiteId|$productId";
+        return "$productId";
     }
 
     /**
