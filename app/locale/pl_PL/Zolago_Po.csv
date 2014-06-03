@@ -9,11 +9,8 @@
 "Price Incl. Tax", "Cena brutto"
 "Shipping date", "Data nadania"
 "Shipment", "Przesyłka"
-
 "You missed 1 field. It has been highlighted.", "Pominięto 1 wymagane pole. Zostało ono podkreślone."
 "You missed {{errors}} fields. They have been highlighted.", "Pominięto {{errors}} pól. Zostały one podkreślone"
-
-
 "Pending collection","Oczekuje na spakowanie"
 "Pending payment","Oczekuje na zapłatę"
 "Collecting and packing","W trakcie pakowania"
@@ -100,9 +97,8 @@
 "You are about to change status from %s to %s. Are you sure?","Zamierzasz zmienić status zamówienia z <b>%s</b> na %s. Jesteś pewien?",
 "Status has been changed", "Status zmieniono"
 "Proceeding will cancel the shipment. It will remove dispatch ref. Are you sure?", "Czy na pewno chcesz anulować przesyłkę i list przewozowy? Czynność usunie także zbiorówkę!"
-<<<<<<< HEAD
 "Proof of postage from %s to %s", "Potwierdzenie nadania przesyłek za okres od %s do %s"
-"Date and time of create", "Data i czas utworzenia"
+"Date and time of create: %s", "Data i czas utworzenia: %s"
 "Address :%s", "Adres :%s"
 "Courier: %s", "Kurier: %s"
 "Phone: %s", "Tel.: %s"
@@ -113,7 +109,7 @@
 "Elements of shipping", "Elementy przesyłki"
 "Europalets", "Europalet"
 "Receiver | Additional services | Value", "Odbiorca | Usługi dodatkowe | Dekl. wart (zł)"
-"Sended", "Wysłano"
+"Sent", "Wysłano"
 "COD", "Pobranie"
 "Sender:", "Nazwa nadawcy:"
 "Number of shipments:","Liczba przesyłek:"
@@ -150,4 +146,16 @@
 "Shipping label","List przewozowy"
 "Dispatch ref. confirmed","Wysyłka zbiorówki została powierdzona"
 "Shipping canceled.","Przesyłka skasowana."
-
+"Sender: %s", "Nazwa nadawcy: %s"
+"Operator eCas: %s", "Operator eCas: %s"
+"Id eCas: %s", "Id eCas: %s"
+"SAP: %s", "SAP: %s"
+"Number of shipments: %d", "Ilość przesyłek: %d",
+"Elements under 31,5 kg: %d", "Elementów do 31,5 kg: %d"
+"Elements DR: %d", "Elementów DR: %d"
+"Customer signature" ,"Podpis klienta"
+"COD value: %.2f", "Kwota COD: %.2f zł"
+"Europalets: %d", "Ilość Europalet %d"
+"Elements DHL09: %d", "Elementów DHL09"
+"Elements DHL12: %d", "Elementów DHL12"
+"DHL signature", "Podpis pracownika DHL"
