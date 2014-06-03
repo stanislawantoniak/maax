@@ -2,10 +2,11 @@
 <config>
     <modules>
         <Zolago_Catalog>
-            <version>0.0.11</version>
+            <version>0.0.12</version>
         </Zolago_Catalog>
     </modules>
     <global>
+
         <models>
             <zolagocatalog>
                 <class>Zolago_Catalog_Model</class>
@@ -17,6 +18,9 @@
                     <category_filter>
                         <table>zolago_catalog_category_filter</table>
                     </category_filter>
+                    <queue_configurable>
+                        <table>zolago_catalog_queue_configurable</table>
+                    </queue_configurable>
                     <pricessizes>
                         <table>vw_product_relation_prices_sizes</table>
                     </pricessizes>
@@ -48,7 +52,20 @@
                 <setup>
                     <module>Zolago_Catalog</module>
                 </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
             </zolagocatalog_setup>
+            <zolagocatalog_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </zolagocatalog_write>
+            <zolagocatalog_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </zolagocatalog_read>
         </resources>
     </global>
     <frontend>
@@ -100,15 +117,24 @@
     </adminhtml>
     <crontab>
         <jobs>
-            <zolagocatalog_configured_recalc>
+            <!--<zolagocatalog_configured_recalc>-->
+                <!--<schedule>-->
+                    <!--&lt;!&ndash; Run every 2 hours &ndash;&gt;-->
+                    <!--<cron_expr>0 */2 * * *</cron_expr>-->
+                <!--</schedule>-->
+                <!--<run>-->
+                    <!--<model>zolagocatalog/observer::recalculateConfigurable</model>-->
+                <!--</run>-->
+            <!--</zolagocatalog_configured_recalc>-->
+            <zolagocatalog_process_configurable_queue>
                 <schedule>
-                    <!-- Run every 2 hours -->
-                    <cron_expr>0 */2 * * *</cron_expr>
+                    <!-- Run every 15 minutes -->
+                    <cron_expr>7,23,37,53 * * * *</cron_expr>
                 </schedule>
                 <run>
-                    <model>zolagocatalog/observer::recalcConfigurable</model>
+                    <model>zolagocatalog/observer::processConfigurableQueue</model>
                 </run>
-            </zolagocatalog_configured_recalc>
+            </zolagocatalog_process_configurable_queue>
         </jobs>
     </crontab>
 </config>
