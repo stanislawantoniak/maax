@@ -51,8 +51,7 @@
             <action method="addCss"><stylesheet>css/local/customs.css</stylesheet></action>
             <action method="addCss"><stylesheet>css/local/noless.css</stylesheet></action>
 			<!-- adminhtml css -->
-			<action method="removeItem"><type>skin_css</type><name>../../../adminhtml/default/default/boxes.css</name></action> 
-			<action method="removeItem"><type>skin_css</type><name>../../../adminhtml/default/default/custom.css</name></action> 
+			<action method="removeItem"><type>skin_css</type><name>../../../adminhtml/default/default/boxes.css</name></action> 			<action method="removeItem"><type>skin_css</type><name>../../../adminhtml/default/default/custom.css</name></action>
 			<action method="removeItem"><type>skin_css</type><name>../../../adminhtml/default/defaultie/styles.css</name></action> 
 			<action method="removeItem"><type>skin_css</type><name>../../../adminhtml/default/default/below_ie7.css</name></action> 
 			<action method="removeItem"><type>skin_css</type><name>../../../adminhtml/default/default/ie7.css</name></action> 
