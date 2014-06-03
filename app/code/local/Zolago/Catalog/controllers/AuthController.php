@@ -7,15 +7,15 @@ class Zolago_Catalog_AuthController
      */
     public function indexAction()
     {
-        $host = 'http://modago.local';
+        $host = 'http://admin.dev01.lorante.com';
         // $callbackUrl is a path to your file with OAuth authentication example for the Admin user
         $callbackUrl = $host . "/udprod/auth";
         $temporaryCredentialsRequestUrl = $host . "/index.php/oauth/initiate?oauth_callback=" . urlencode($callbackUrl);
         $adminAuthorizationUrl = $host . '/admin/oauth_authorize';
         $accessTokenRequestUrl = $host . '/oauth/token';
         $apiUrl = $host . '/api/rest';
-        $consumerKey = '76cc2b14a5bfd31f13245303baaa321a';
-        $consumerSecret = '71bed0926360cd79cbecbb14fbbc01b2';
+        $consumerKey = 'a692397bbdce9093ce1952eb464087d6';
+        $consumerSecret = '8fcfb8acecd55908193f9b523ebad833';
 
         session_start();
         if (!isset($_GET['oauth_token']) && isset($_SESSION['state']) && $_SESSION['state'] == 1) {
