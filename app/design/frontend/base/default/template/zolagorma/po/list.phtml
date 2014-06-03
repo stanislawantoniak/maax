@@ -2,7 +2,8 @@
     $list = $this->getPoList();
     if ($list) { 
 ?>
-<table>
+<table class="data-table">
+    <thead>
     <tr>
         <th>
             Numer zamówienia
@@ -19,31 +20,41 @@
         <th>
         </th>        
     </tr>
-
+    </thead>
+    <tbody>
 <?php
-        foreach ($list as $item) {
+        foreach ($list as $po) {
 ?>
     <tr>
         <td>
-            <?php echo $item->getIncrementId(); ?>
+            <?php echo $po->getIncrementId(); ?>
         </td>
         <td>
-            <?php echo $item->getCreatedAt(); ?>
+            <?php echo $po->getCreatedAt(); ?>
         </td>
         <td>
-            <?php echo $item->getVendorName(); ?>
+            <?php echo $po->getVendorName(); ?>
         </td>
         <td>
+            <?php
+                if ($items = $po->getItemsCollection()) {
+                    foreach ($items as $item) {
+                        if (!$item->getParentItemId()) {
+                            echo $item->getName().'<br/>';
+                        }
+                    }
+                }
+            ?>
         </td>
-            
         <td>
-            <a href="">wybierz</a>
+            <a href="<?php echo $this->getUrl('sales/po/newrma/',array('po_id'=>$po->getId()));?>">wybierz</a>
         </td>
     </tr>
 <?php            
         }
         
 ?>
+</tbody>
 </table>
 <?php
     }

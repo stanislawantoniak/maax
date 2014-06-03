@@ -18,7 +18,7 @@ class Zolago_Po_Block_List extends Mage_Core_Block_Template
             if (!$customerId) {
                 return array();
             }
-            $collection = Mage::getModel('zolagopo/po')->getCollection();
+            $collection = Mage::getResourceModel('zolagopo/po_collection');
             $collection->addFieldToFilter('main_table.customer_id',$customerId);
             $this->_poList = $collection;
         }
