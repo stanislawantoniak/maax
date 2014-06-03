@@ -44,7 +44,7 @@ class Zolago_Catalog_Model_Product_Configurable_DataTest extends ZolagoDb_TestCa
      */
     public function testRecalculateConfigurablePrice()
     {
-        $storeId = array($this->_store);
+        $storeId = $this->_store;
 
         //1. configurable prices
         $catalogModelProductConfigurableData = Mage::getModel('zolagocatalog/product_configurable_data');
@@ -53,7 +53,7 @@ class Zolago_Catalog_Model_Product_Configurable_DataTest extends ZolagoDb_TestCa
         $configurableProductsIds = array_keys($configurablePrices);
         //2. min simple prices
         $catalogModelProductConfigurableData = Mage::getModel('zolagocatalog/product_configurable_data');
-        $minPrices = $catalogModelProductConfigurableData->getConfigurableMinPrice($storeId, $configurableProductsIds);
+        $minPrices = $catalogModelProductConfigurableData->getConfigurableMinPrice($configurableProductsIds,$storeId);
 
 
         $diff = array();
@@ -73,29 +73,6 @@ class Zolago_Catalog_Model_Product_Configurable_DataTest extends ZolagoDb_TestCa
     }
 
 
-    public function testRecalculateConfigurableOptions()
-    {
-        $storeId = $this->_store;
-        $countItemsToCheck = 1000;
-
-        $blackList = array();
-        $catalogModelProductConfigurableData = Mage::getModel('zolagocatalog/product_configurable_data');
-        $diffs = $catalogModelProductConfigurableData
-            ->getConfigurablePricesMinPriceRelation($storeId, $countItemsToCheck);
-
-
-        //check items
-        if (!empty($diffs)) {
-            foreach ($diffs as $diff) {
-
-                if ((float)$diff['price'] - (float)$diff['min_price'] !== (float)$diff['diff']) {
-                    $blackList[] = $diff['product'];
-                }
-            }
-        }
-        $this->assertEquals($blackList, array(), "There are differences in attribute prices");
-
-    }
 
 
 }

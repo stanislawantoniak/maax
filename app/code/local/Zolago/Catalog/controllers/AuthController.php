@@ -76,6 +76,7 @@ class Zolago_Catalog_AuthController
     {
 
         Zolago_Catalog_Model_Observer::processConfigurableQueue();
+        echo 'Done';
     }
 
     private function emulateConverterTestData()
