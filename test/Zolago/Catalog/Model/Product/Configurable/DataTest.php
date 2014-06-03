@@ -44,13 +44,13 @@ class Zolago_Catalog_Model_Product_Configurable_DataTest extends ZolagoDb_TestCa
      */
     public function testRecalculateConfigurablePrice()
     {
-        $storeId = $this->_store;
+        $storeId = array($this->_store);
 
         //1. configurable prices
         $catalogModelProductConfigurableData = Mage::getModel('zolagocatalog/product_configurable_data');
         $configurablePrices = $catalogModelProductConfigurableData->getConfigurablePrices($storeId, 10);
 
-        $configurableProductsIds = implode(',', array_keys($configurablePrices));
+        $configurableProductsIds = array_keys($configurablePrices);
         //2. min simple prices
         $catalogModelProductConfigurableData = Mage::getModel('zolagocatalog/product_configurable_data');
         $minPrices = $catalogModelProductConfigurableData->getConfigurableMinPrice($storeId, $configurableProductsIds);

@@ -79,7 +79,7 @@ class Zolago_Po_Model_Aggregated_Pdf extends Varien_Object {
         $this->_setFont($page,9);
         $rel = 475-30*$counter;
         $this->_drawCells($page,$rel,$rel-30);
-        $page->drawText($this->_line_count++,40,$rel-20);
+        $page->drawText($this->_line_count++,40,$rel-20,'UTF-8');
         $tracks = $ship->getTracksCollection();
         // tracking numbers
         $num = count($tracks)-1;
@@ -87,11 +87,11 @@ class Zolago_Po_Model_Aggregated_Pdf extends Varien_Object {
         foreach ($tracks as $track) {
             $number = $track->getNumber();
             $center = ($this->_rows[2] - $this->_rows[1])/2 - (strlen($number)*6)/2+$this->_rows[1];
-            $page->drawText($track->getNumber(),$center,$pos_tmp);
+            $page->drawText($track->getNumber(),$center,$pos_tmp,'UTF-8');
             $pos_tmp -= 10;
         }
         // europalets
-        $page->drawText('0',400,$rel-20);
+        $page->drawText('0',400,$rel-20,'UTF-8');
         // shipment address
         $id = $po->getShippingAddressId();
         $address = Mage::getModel('sales/order_address')->load($id);
@@ -106,12 +106,12 @@ class Zolago_Po_Model_Aggregated_Pdf extends Varien_Object {
         $data['fullname'] = $text;
         $text = $this->_prepareText($data,array('fullname','company'),', ');
         $this->_setFont($page,7);
-        $page->drawText($text,440,$rel-9);
+        $page->drawText($text,440,$rel-9,'UTF-8');
         // address
         $text = $this->_prepareText($data,array('postcode','city'));
         $data['full_city'] = $text;
         $text = $this->_prepareText($data,array('full_city','street','telephone'),', ');
-        $page->drawText($text,440,$rel-18);
+        $page->drawText($text,440,$rel-18,'UTF-8');
         // cod and insurance
         $data = array ();
         $value = $ship->getTotalValue() + $ship->getBaseTaxAmount() + $ship->getShippingAmount();
@@ -123,20 +123,20 @@ class Zolago_Po_Model_Aggregated_Pdf extends Varien_Object {
         }
         $data['insurance'] = Mage::helper('zolagopo')->__('INS decl. val. %.2f',$value);
         $text = $this->_prepareText($data,array('cod','insurance'),', ');
-        $page->drawText($text,440,$rel-27);
+        $page->drawText($text,440,$rel-27,'UTF-8');
         // elements
         $weight = $ship->getTotalWeight();
         $pack = $ship->getPackages();
         $count = count($pack)? count($pack):1;
         $text = $this->_calculateElements($weight,$count);
-        $page->drawText($text,190,$rel-15);
+        $page->drawText($text,190,$rel-15,'UTF-8');
         // COD
         $this->_setFont($page,9,'b');
-        $page->drawText(sprintf('%.2f',$cod_value),710,$rel-20);
+        $page->drawText(sprintf('%.2f',$cod_value),710,$rel-20,'UTF-8');
         $this->_totals['cod'] += $cod_value;
         // send
         $this->_setFont($page,9);
-        $page->drawText('Y',780,$rel-20);
+        $page->drawText('Y',780,$rel-20,'UTF-8');
     }
     protected function _calculateElements($weight,$count) {
         $pattern = 'AH: %s - %.0f';

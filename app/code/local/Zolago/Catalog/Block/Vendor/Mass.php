@@ -7,7 +7,10 @@ class Zolago_Catalog_Block_Vendor_Mass extends Mage_Core_Block_Template
 		$this->_prepareStoreSwitcher();
 		parent::_prepareLayout();
 	}
-	
+    public function getGridJsObjectName() {
+        return $this->getGrid()->getJsObjectName();
+    }
+
     public function _prepareGrid() {
 		if($this->getCurrentAttributeSetId()){
 			$design = Mage::getDesign();
