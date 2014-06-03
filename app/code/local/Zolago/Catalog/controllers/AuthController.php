@@ -16,8 +16,10 @@ class Zolago_Catalog_AuthController
         $apiUrl = $host . '/api/rest';
         $consumerKey = 'a692397bbdce9093ce1952eb464087d6';
         $consumerSecret = '8fcfb8acecd55908193f9b523ebad833';
-
-        session_start();
+        if(!isset($_SESSION))
+        {
+            session_start();
+        }
         if (!isset($_GET['oauth_token']) && isset($_SESSION['state']) && $_SESSION['state'] == 1) {
             $_SESSION['state'] = 0;
         }
