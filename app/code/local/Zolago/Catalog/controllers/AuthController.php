@@ -55,7 +55,7 @@ class Zolago_Catalog_AuthController
 
                 $productData = json_encode($data);
                 print_r($oauthClient->getLastResponse());
-                $oauthClient->fetch($resourceUrl, $productData, OAUTH_HTTP_METHOD_POST, array('Content-Type' => 'application/json'));
+                $oauthClient->fetch($resourceUrl, $productData, OAUTH_HTTP_METHOD_PUT, array('Content-Type' => 'application/json'));
 
                 print_r($oauthClient->getLastResponse());
 
