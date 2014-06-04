@@ -1,6 +1,12 @@
 <?php
 class Zolago_Rma_Block_Vendor_Rma_Edit extends Mage_Core_Block_Template {
 	
+	
+	
+	public function getAvailableStatuses(){
+		
+	}
+	
 	/**
 	 * @param Mage_Sales_Model_Order_Shipment $shipment
 	 * @return Mage_Sales_Model_Order_Shipment_Track|null

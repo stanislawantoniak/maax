@@ -151,6 +151,13 @@ class Zolago_Operator_Model_Operator extends Mage_Core_Model_Abstract {
 	}
 	
 	/**
+	 * @return string
+	 */
+	public function getFullname() {
+		return $this->getFirstname() . " " . $this->getLastname();
+	}
+	
+	/**
 	 * @param string $role
 	 * @return bool
 	 */

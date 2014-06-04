@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Zolago_Rma>
-			<version>0.0.4</version>
+			<version>0.0.5</version>
 		</Zolago_Rma>
 	</modules>
 	<global>
@@ -20,6 +20,7 @@
 				<rewrite>
 					<rma>Zolago_Rma_Model_Rma</rma>
 					<rma_item>Zolago_Rma_Model_Rma_Item</rma_item>
+					<rma_comment>Zolago_Rma_Model_Rma_Comment</rma_comment>
 				</rewrite>
 			</urma>
 		</models>

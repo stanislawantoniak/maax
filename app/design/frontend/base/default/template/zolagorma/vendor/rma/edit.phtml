@@ -9,6 +9,9 @@
 <?php $_tracking = $this->getTracking($_rmaShipment);?>
 <?php $_billingAddress = $_po->getBillingAddress();?>
 <?php $_shippingAddress = $_po->getShippingAddress();?>
+<?php $_comments = $_rma->getVendorCommentsCollection(); ?>
+<?php $_statuses = $_helper->getVendorRmaStatuses(); ?>
+<?php $_currentStatusId = $_rma->getRmaStatus(); ;?>
 
 <div class="container">
 	<!--=== Page Header ===-->
@@ -32,14 +35,6 @@
 						<i class="icon-info"></i> 
 						<?php echo $_helper->__("RMA Data");?>
 					</h4>
-					<div class="toolbar no-padding"> 
-						<div class="btn-group"> 
-							<span data-toggle="modal" data-target="#modal" class="btn btn-xs">
-								<i class="icon-retweet"></i> 
-								<?php echo $_helper->__("Action");?>
-							</span> 
-						</div> 
-					</div>
 				</div>
 				<div class="widget-content rma">
 					<dl class="dl-horizontal dl-z"> 
@@ -139,6 +134,146 @@
 	
 	<?php echo $this->getChildHtml('vendor_rma_edit_items');?>
 	
+	<div class="row">
+		<div class="col-md-12">
+			<div class="widget box">
+				<div class="widget-header"> 
+					<h4>
+						<i class="icon-comment"></i> 
+						<?php echo $_helper->__("Customer notification comment");?>
+					</h4>
+				</div>
+				<div class="widget-content">
+					<?php if($_rma->getCommentText()):?>
+						<?php echo nl2br($this->escapeHtml($_rma->getCommentText()));?>
+					<?php else:?>
+						<span class="text-muted"><?php echo $_helper->__("No comment");?></span>
+					<?php endif;?>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-md-8">
+			<div class="widget box">
+				<div class="widget-header"> 
+					<h4>
+						<i class="icon-comments-alt"></i> 
+						<?php echo $_helper->__("History");?>
+					</h4>
+				</div>
+				<div class="widget-content">
+					<?php if($_comments->count()):?>
+					<dl class="dl-horizontal">
+						<?php foreach ($_comments as $_c): ?>
+						<dt>
+							<?php echo Mage::helper('core')->formatDate($_c->getCreatedAt(), 'medium', true) ?>
+							<br/>
+							<small class="text-muted" style="font-weight: normal;">
+								<?php echo $this->htmlEscape($_c->getRmaStatusName());?>
+							</small>
+						</dt>
+						<dd>
+							[<?php echo $this->htmlEscape($_c->getAuthorTypeText());?>]
+							<?php echo nl2br($this->htmlEscape($_c->getComment()));?>
+						</dd>
+						
+						<?php endforeach ?>
+					</dl>
+					<?php else:?>
+						<span class="text-muted"><?php echo $_helper->__("No comment");?></span>
+					<?php endif;?>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="widget box">
+				<div class="widget-header"> 
+					<h4>
+						<i class="icon-pencil"></i> 
+						<?php echo $_helper->__("Change status / add comment");?>
+					</h4>
+				</div>
+				<div class="widget-content">
+					<form class="form-horizontal row-border " action="<?php echo $this->getRmaUrl("comment");?>">
+						<div class="form-group">
+							<label class="control-label col-md-3">
+								<?php echo $_helper->__("Status");?>
+							</label>
+							<div class="col-md-9">
+								<select class="form-control">
+									<?php foreach($_statuses as $_statusId=>$_label):?>
+									<option value="<?php echo $this->escapeHtml($_statusId)?>" <?php if($_currentStatusId==$_statusId):?>selected="selected"<?php endif;?>><?php echo $this->escapeHtml($_label) ?></option>
+									<?php endforeach;?>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-md-12">
+								<textarea class="form-control" rows="8"></textarea>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-md-3">
+								<?php echo $_helper->__("Notify cust.");?>
+							</label>
+							<div class="col-md-9">
+								<label class="checkbox"> 
+									<input type="checkbox" value=""> 
+								</label>
+							</div>
+						</div>
+						<div class="form-actions"> <input type="submit" value="<?php echo $_helper->__("Save");?>" class="btn btn-primary pull-right"> </div>
+					</form>
+				</div>
+			</div>
+			
+			<div class="widget box">
+				<div class="widget-header"> 
+					<h4>
+						<i class="icon-pencil"></i> 
+						<?php echo $_helper->__("Shipping confirmation");?>
+					</h4>
+				</div>
+				<div class="widget-content">
+					<form class="form-horizontal row-border " action="<?php echo $this->getRmaUrl("comment");?>">
+						<div class="form-group">
+							<div class="col-md-12">
+								<dl class="dl-horizontal dl-z">
+									<dt><?php echo $_helper->__("Shpping letter");?>:</dt>
+									<dd>1212313123 [dev]</dd>
+									<dt><?php echo $_helper->__("Sent date");?>:</dt>
+									<dd><?php echo $this->formatDate();?></dd>
+									<dt><?php echo $_helper->__("Carrier");?>:</dt>
+									<dd>DHL [dev]</dd>
+									<dt><?php echo $_helper->__("Status");?>:</dt>
+									<dd>Odebrane [dev]</dd>
+								</dl>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<div class="col-md-12">
+								<dl class="dl-horizontal dl-z">
+									<dt><?php echo $_helper->__("Shpping letter");?>:</dt>
+									<dd>1212313123 [dev]</dd>
+									<dt><?php echo $_helper->__("Sent date");?>:</dt>
+									<dd><?php echo $this->formatDate();?></dd>
+									<dt><?php echo $_helper->__("Carrier");?>:</dt>
+									<dd>DHL [dev]</dd>
+									<dt><?php echo $_helper->__("Status");?>:</dt>
+									<dd>Odebrane [dev]</dd>
+								</dl>
+							</div>
+						</div>
+						
+						<div class="form-actions"> <input type="submit" value="<?php echo $_helper->__("Confirm shipping");?>" class="btn btn-primary pull-right"> </div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
 <?php  /*
