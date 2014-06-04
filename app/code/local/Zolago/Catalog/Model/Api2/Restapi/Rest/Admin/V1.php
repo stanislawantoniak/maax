@@ -23,7 +23,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 extends Zolago_Catalog_Mod
             $sku = $merchant . '-' . $skuV;
             $productId = Zolago_Catalog_Helper_Data::getSkuAssocId($sku);
             if ($productId) {
-                $price = $data['data']['price'];
+                $price = $data['data'][0]['price'];
 
                 $productIds = array($productId);
                 $attrData = array('price' => $price);
