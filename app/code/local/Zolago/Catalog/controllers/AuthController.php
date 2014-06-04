@@ -48,12 +48,21 @@ class Zolago_Catalog_AuthController
 
                 $resourceUrl = "$apiUrl/convertproduct";
 
-                $data = self::emulateConverterTestData();
+//                $data = self::emulateConverterTestData();
 
-
+                $data = array(
+                    'cmd' => 'ProductPricesUpdate',
+                    'merchant' => 4,
+                    'data' => array(
+                        'price' => 1285.6
+                    ),
+                    'sku' => "32319-01X-M"
+                );
                 $productData = json_encode($data);
                 //print_r($oauthClient->getLastResponse());
-                $oauthClient->fetch($resourceUrl, $productData, OAUTH_HTTP_METHOD_PUT, array('Content-Type' => 'application/json'));
+                $oauthClient->fetch($resourceUrl, $productData, OAUTH_HTTP_METHOD_POST,
+                    array('Content-Type' => 'application/json')
+                );
 
                 print_r($oauthClient->getLastResponse());
 
@@ -76,6 +85,7 @@ class Zolago_Catalog_AuthController
     {
 
         Zolago_Catalog_Model_Observer::processConfigurableQueue();
+        echo 'Done';
     }
 
     private function emulateConverterTestData()
@@ -135,7 +145,7 @@ class Zolago_Catalog_AuthController
 
 
     //////////////////////////////////////////////
-    public function testAction(){
+    public function queueAction(){
 
         $ids = Mage::getModel('catalog/product')
             ->getCollection()
@@ -146,6 +156,40 @@ class Zolago_Catalog_AuthController
     }
 
 
+    public function testViewAction(){
+
+//        $data = array(
+//            'cmd' => 'ProductPricesUpdate',
+//            'merchant' => 4,
+//            'data' => array(
+//                'price' => 285.6
+//            ),
+//            'sku' => "32319-01X-M"
+//        );
+//        if (!empty($data)) {
+//            $productAction = Mage::getSingleton('catalog/product_action');
+//            $merchant = $data['merchant'];
+//            $skuV = $data['sku'];
+//
+//            $sku = $merchant . '-' . $skuV;
+//            $productId = Zolago_Catalog_Helper_Data::getSkuAssocId($sku);
+//            if($productId){
+//                $price = $data['data']['price'];
+//
+//                $productIds = array($productId);
+//                $attrData = array('price' => $price);
+//
+//                $productAction->updateAttributesNoIndex($productIds, $attrData, 0);
+//                $productAction->updateAttributesNoIndex($productIds, $attrData, 1);
+//                $productAction->updateAttributesNoIndex($productIds, $attrData, 2);
+//
+//                Zolago_Catalog_Helper_Configurable::queueProduct($productId);
+//            }
+//
+//        }
+
+        Zolago_Catalog_Model_Observer::clearConfigurableQueue();
+    }
 
 }
 

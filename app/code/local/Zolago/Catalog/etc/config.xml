@@ -117,24 +117,24 @@
     </adminhtml>
     <crontab>
         <jobs>
-            <!--<zolagocatalog_configured_recalc>-->
-                <!--<schedule>-->
-                    <!--&lt;!&ndash; Run every 2 hours &ndash;&gt;-->
-                    <!--<cron_expr>0 */2 * * *</cron_expr>-->
-                <!--</schedule>-->
-                <!--<run>-->
-                    <!--<model>zolagocatalog/observer::recalculateConfigurable</model>-->
-                <!--</run>-->
-            <!--</zolagocatalog_configured_recalc>-->
             <zolagocatalog_process_configurable_queue>
                 <schedule>
-                    <!-- Run every 15 minutes -->
-                    <cron_expr>7,23,37,53 * * * *</cron_expr>
+                    <!-- Run every 5 minutes -->
+                    <cron_expr>0,5,10,15,20,25,30,35,40,45,50,55 * * * *</cron_expr>
                 </schedule>
                 <run>
                     <model>zolagocatalog/observer::processConfigurableQueue</model>
                 </run>
             </zolagocatalog_process_configurable_queue>
+            <!--<zolagocatalog_clear_configurable_queue>-->
+                <!--<schedule>-->
+                    <!--&lt;!&ndash; Run every 5 minutes &ndash;&gt;-->
+                    <!--<cron_expr>0,5,10,15,20,25,30,35,40,45,50,55 * * * *</cron_expr>-->
+                <!--</schedule>-->
+                <!--<run>-->
+                    <!--<model>zolagocatalog/observer::clearConfigurableQueue</model>-->
+                <!--</run>-->
+            <!--</zolagocatalog_clear_configurable_queue>-->
         </jobs>
     </crontab>
 </config>
