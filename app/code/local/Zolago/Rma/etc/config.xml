@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Zolago_Rma>
-			<version>0.0.1</version>
+			<version>0.0.4</version>
 		</Zolago_Rma>
 	</modules>
 	<global>
@@ -16,6 +16,11 @@
 				<entities>
 				</entities>
 			</zolagorma_resource>
+			<urma>
+				<rewrite>
+					<rma>Zolago_Rma_Model_Rma</rma>
+				</rewrite>
+			</urma>
 		</models>
 		<blocks>
 			<zolagorma>
@@ -27,7 +32,33 @@
 				<class>Zolago_Rma_Helper</class>
 			</zolagorma>
 		</helpers>
-		<!-- 
+		<fieldsets>
+			<!-- PO -> RMA -->
+			<zolagopo_convert_po>
+				<entity_id>
+					<to_urma>udpo_id</to_urma>
+				</entity_id>
+				<increment_id>
+					<to_urma>udpo_increment_id</to_urma>
+				</increment_id>
+			</zolagopo_convert_po>
+			
+			<!-- PO Item -> Rma Item (Override some editable fields) -->
+			<zolagopo_convert_po_item>
+				<price>
+					<to_urma_item>*</to_urma_item>
+				</price>
+				<vendor_sku>
+					<to_urma_item>*</to_urma_item>
+				</vendor_sku>
+				<vendor_simple_sku>
+					<to_urma_item>*</to_urma_item>
+				</vendor_simple_sku>
+				<entity_id>
+					<to_urma_item>udpo_item_id</to_urma_item>
+				</entity_id>
+			</zolagopo_convert_po_item>
+		</fieldsets>
 		<resources>
 			<zolagorma_setup>
 				<setup>
@@ -35,19 +66,23 @@
 				</setup>
 			</zolagorma_setup>
 		</resources>
-		<events>
-		</events>
-		-->
 	</global>
 	<frontend>
 		<routers>
-			<udrma>
+			<sales>
+                <args>
+                    <modules>
+                        <zolagorma before="Mage_Sales">Zolago_Rma</zolagorma>
+                    </modules>
+                </args>
+            </sales>
+			<urma>
 				<args>
 					<modules>
 						<Zolago_Rma before="Unirgy_Rma">Zolago_Rma</Zolago_Rma>
 					</modules>
 				</args>
-			</udrma>
+			</urma>
 		</routers>
 		<layout>
 			<updates>

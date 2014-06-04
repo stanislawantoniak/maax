@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Po>
-            <version>0.0.15</version>
+            <version>0.0.16</version>
         </Zolago_Po>
     </modules>
     <global>
@@ -219,10 +219,17 @@
 			<udpo>
 				<args>
 					<modules>
-						<Zolago_Pos before="Unirgy_DropshipPo">Zolago_Po</Zolago_Pos>
+						<Zolago_Po before="Unirgy_DropshipPo">Zolago_Po</Zolago_Po>
 					</modules>
 				</args>
 			</udpo>
+			<sales>
+				<args>
+					<modules>
+						<Zolago_Po>Zolago_Po</Zolago_Po>
+					</modules>
+				</args>
+			</sales>
 		</routers>
 		<translate>
 			<modules>

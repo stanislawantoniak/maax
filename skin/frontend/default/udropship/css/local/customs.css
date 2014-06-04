@@ -226,16 +226,22 @@ select.form-control {
 .shipping-info .dl-horizontal.dl-z dd {
   margin-left: 120px;
 }
-.widget-content.orders {
+.widget-content.orders,
+.widget-content.rma {
   min-height: 150px;
 }
-.widget-content.orders .alert {
+.widget-content.orders .alert,
+.widget-content.rma .alert {
   margin-bottom: 0;
   padding-top: 10px;
   padding-bottom: 10px;
 }
-.widget-content.orders .with-alert {
+.widget-content.orders .with-alert,
+.widget-content.rma .with-alert {
   min-height: 190px;
+}
+.widget-content.rma {
+  min-height: 200px;
 }
 .widget-content.bottom-info {
   min-height: 146px;
