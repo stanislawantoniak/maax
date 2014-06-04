@@ -48,12 +48,21 @@ class Zolago_Catalog_AuthController
 
                 $resourceUrl = "$apiUrl/convertproduct";
 
-                $data = self::emulateConverterTestData();
+//                $data = self::emulateConverterTestData();
 
-
+                $data = array(
+                    'cmd' => 'ProductPricesUpdate',
+                    'merchant' => 4,
+                    'data' => array(
+                        'price' => 1285.6
+                    ),
+                    'sku' => "32319-01X-M"
+                );
                 $productData = json_encode($data);
                 //print_r($oauthClient->getLastResponse());
-                $oauthClient->fetch($resourceUrl, $productData, OAUTH_HTTP_METHOD_PUT, array('Content-Type' => 'application/json'));
+                $oauthClient->fetch($resourceUrl, $productData, OAUTH_HTTP_METHOD_POST,
+                    array('Content-Type' => 'application/json')
+                );
 
                 print_r($oauthClient->getLastResponse());
 
