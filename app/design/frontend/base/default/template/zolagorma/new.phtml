@@ -2,7 +2,8 @@
 <?php 
 if ($items = $this->getItemList()) {
 ?>
-<form method="post" name="rma" action="<?php echo $this->getUrl('*/*/saveRma',array('po_id',$this->getPo()->getId()))?>">
+<form method="post" name="rma" action="<?php echo $this->getUrl('*/*/saveRma')?>">
+<input type="hidden" name="po_id" value="<?php echo $this->getPo()->getId();?>">
 <table class="data-table">
 <tbody>
 <?php
@@ -20,7 +21,7 @@ if ($items = $this->getItemList()) {
         </td>
         <td>
             Powód zwrotu:
-                <select name="rma[items_condition_single][<?php echo $item['entityId'].'['.$key.']'?>]">
+                <select name="rma[items_condition_single][<?php echo $item['entityId'].']['.$key.']'?>">
                     <option value=""><?php echo $_helper->__('Select a reason..')?></option>
                     <?php
                         echo $this->getReturnRenderer();

@@ -8,33 +8,42 @@ class Zolago_Rma_Block_New extends Mage_Core_Block_Template
     public function getItemList() {
         $po = $this->getPo();
         if (!$po) {
-            return array();            
+            return array();
         }
         $items = $po->getItemsCollection();
         $out = array();
-        $parents = array();
+        $child = array();
         foreach ($items as $item) {
             if ($parentId = $item->getParentItemId()) {
-                $parents[$parentId]  = $parentId;            
+                $child[$parentId][]  = $item;
             }
         }
         foreach ($items as $item) {
-                for ($a = 0; $a<$item->getQty();$a++) {            
+            $max = intval($item->getQty());
+            if (!$item->getParentItemId()) {
+                for ($a = 0; $a<$max; $a++) {
                     $entity_id = $item->getEntityId();
-                    if (!isset($parents[$item->getOrderItemId()])) {
-                        $out[$entity_id][$a] = array (
-                            'entityId' => $entity_id,
-                            'name' => $item->getName(),
-                        );
+                    if (!empty($child[$item->getOrderItemId()])) {
+                        $name = '';
+                        foreach ($child[$item->getOrderItemId()] as $ch) {
+                            $name .= $ch->getName();
+                        }
+                    } else {
+                        $name = $item->getName();
                     }
+                    $out[$entity_id][$a] = array (
+                                               'entityId' => $entity_id,
+                                               'name' => $item->getName(),
+                                           );
                 }
+            }
         }
         return $out;
     }
     public function getReturnRenderer() {
         if (is_null($this->_returnRenderer)) {
-            $helper = Mage::helper('urma');        
-            $list = $helper->getItemConditionTitles();        
+            $helper = Mage::helper('urma');
+            $list = $helper->getItemConditionTitles();
             $out = '';
             foreach ($list as $key=>$item) {
                 $out .= '<option value="'.$key.'">'.Mage::helper('zolagorma')->__($item).'</option>';
