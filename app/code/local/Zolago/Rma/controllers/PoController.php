@@ -61,7 +61,7 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
             }
             $data = $this->getRequest()->getParam('rma');
             if (!isset($data['items_single'])) {
-                return;
+                Mage::throwException($this->__('No items.'));
             } 
             $rma = Mage::getModel('zolagorma/servicePo', $po)->prepareRmaForSave($data);
         }

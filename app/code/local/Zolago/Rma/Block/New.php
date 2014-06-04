@@ -23,7 +23,7 @@ class Zolago_Rma_Block_New extends Mage_Core_Block_Template
             if (!$item->getParentItemId()) {
                 for ($a = 0; $a<$max; $a++) {
                     $entity_id = $item->getEntityId();
-                    if (!empty($child[$item->getOrderItemId()])) {
+                    if (!empty($child[$item->getOrderItemId()])) {                        
                         $name = '';
                         foreach ($child[$item->getOrderItemId()] as $ch) {
                             $name .= $ch->getName();
@@ -33,7 +33,7 @@ class Zolago_Rma_Block_New extends Mage_Core_Block_Template
                     }
                     $out[$entity_id][$a] = array (
                                                'entityId' => $entity_id,
-                                               'name' => $item->getName(),
+                                               'name' => $name,
                                            );
                 }
             }
