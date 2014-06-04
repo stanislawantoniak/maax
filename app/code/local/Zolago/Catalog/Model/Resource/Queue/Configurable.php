@@ -23,6 +23,17 @@ class Zolago_Catalog_Model_Resource_Queue_Configurable extends Zolago_Common_Mod
         return $ids;
     }
 
+    public function addToQueueProduct($id)
+    {
+        if (!empty($id)) {
+            $this->getReadConnection()->insert(
+                $this->getTable('zolagocatalog/queue_configurable'),
+                array("insert_date" => date('Y-m-d H:i:s'), "status" => 0, "product_id" => $id)
+            );
+        }
+        return $id;
+    }
+
     protected function _resetData()
     {
         $this->_dataToSave = array();
@@ -76,7 +87,11 @@ class Zolago_Catalog_Model_Resource_Queue_Configurable extends Zolago_Common_Mod
         return $all;
     }
 
-
+    public function clearQueue()
+    {
+        $condition = $this->_getWriteAdapter()->quoteInto('status = ?', 1);
+        $this->_getWriteAdapter()->delete($this->getTable('zolagocatalog/queue_configurable'), $condition);
+    }
 
 }
 

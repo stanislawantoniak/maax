@@ -147,6 +147,40 @@ class Zolago_Catalog_AuthController
     }
 
 
+    public function testViewAction(){
+
+        $data = array(
+            'cmd' => 'ProductPricesUpdate',
+            'merchant' => 4,
+            'data' => array(
+                'price' => 285.6
+            ),
+            'sku' => "32319-01X-M"
+        );
+        if (!empty($data)) {
+            $productAction = Mage::getSingleton('catalog/product_action');
+            $merchant = $data['merchant'];
+            $skuV = $data['sku'];
+
+            $sku = $merchant . '-' . $skuV;
+            $productId = Zolago_Catalog_Helper_Data::getSkuAssocId($sku);
+            if($productId){
+                $price = $data['data']['price'];
+
+                $productIds = array($productId);
+                $attrData = array('price' => $price);
+
+                $productAction->updateAttributesNoIndex($productIds, $attrData, 0);
+                $productAction->updateAttributesNoIndex($productIds, $attrData, 1);
+                $productAction->updateAttributesNoIndex($productIds, $attrData, 2);
+
+                Zolago_Catalog_Helper_Configurable::queueProduct($productId);
+            }
+
+        }
+
+        //Zolago_Catalog_Model_Observer::clearConfigurableQueue();
+    }
 
 }
 
