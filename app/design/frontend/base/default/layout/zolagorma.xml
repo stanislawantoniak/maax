@@ -30,7 +30,9 @@
 		<update handle="forms"/>
 		
 		<reference name="content">			
-			<block name="vendor_rma_edit" type="zolagorma/vendor_rma_edit" template="zolagorma/vendor/rma/edit.phtml"/>
+			<block name="vendor_rma_edit" type="zolagorma/vendor_rma_edit" template="zolagorma/vendor/rma/edit.phtml">
+				<block name="vendor_rma_edit_items" type="zolagorma/vendor_rma_edit_items" template="zolagorma/vendor/rma/edit/items.phtml"/>
+			</block>
 				<!--
 				<block name="vendor_po_edit_compose" type="zolagopo/vendor_po_edit_compose" template="zolagopo/vendor/po/edit/compose.phtml"/>
 				<block name="vendor_po_edit_pos" type="zolagopo/vendor_po_edit_pos" template="zolagopo/vendor/po/edit/pos.phtml"/>

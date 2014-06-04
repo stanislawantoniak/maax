@@ -19,6 +19,7 @@
 			<urma>
 				<rewrite>
 					<rma>Zolago_Rma_Model_Rma</rma>
+					<rma_item>Zolago_Rma_Model_Rma_Item</rma_item>
 				</rewrite>
 			</urma>
 		</models>
