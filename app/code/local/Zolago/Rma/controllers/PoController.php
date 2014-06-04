@@ -54,32 +54,17 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
         if ($rmaId) {
             $rma = Mage::getModel('urma/rma')->load($rmaId);
         } elseif ($poId) {
-            $po      = Mage::getModel('zolagopo/po')->load($poId);
+            $po = Mage::getModel('zolagopo/po')->load($poId);
 
             if (!$po->getId()) {
                 Mage::throwException($this->__('The order no longer exists.'));
             }
-
             $data = $this->getRequest()->getParam('rma');
-            if (isset($data['items'])) {
-                $qtys = $data['items'];
-            } else {
-                $qtys = array();
-            }
-            if (isset($data['items_condition'])) {
-                $conditions = $data['items_condition'];
-            } else {
-                $conditions = array();
-            }
-			
-            if ($forSave) {
-                $rma = Mage::getModel('zolagorma/servicePo', $po)->prepareRmaForSave($qtys, $conditions);
-            } else {
-                $rma = Mage::getModel('zolagorma/servicePo', $po)->prepareRma($qtys);
-            }
-
+            if (!isset($data['items_single'])) {
+                return;
+            } 
+            $rma = Mage::getModel('zolagorma/servicePo', $po)->prepareRmaForSave($data);
         }
-
         Mage::register('current_rma', $rma);
         return $rma;
 	}
@@ -111,13 +96,12 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
 
 	protected function _saveRma()
     {
-		$this->_initTmpData();
+//		$this->_initTmpData();
 		
         $rmas = $this->_initRma(true);
         $data = $this->getRequest()->getPost('rma');
         $data['send_email'] = true;
         $comment = '';
-		
         if (empty($rmas)) {
             Mage::throwException('Return could not be created');
         }
@@ -132,17 +116,16 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
         if (!empty($data['comment_text'])) {
             foreach ($rmas as $rma) {
                 $rma->addComment($data['comment_text'], true, true);
+                $rma->setCommentText($data['comment_text']);
             }
             $comment = $data['comment_text'];
         }
-
         if (!empty($data['send_email'])) {
             foreach ($rmas as $rma) {
                 $rma->setEmailSent(true);
             }
         }
         $rma->setRmaReason(@$data['rma_reason']);
-
         $po->setCustomerNoteNotify(!empty($data['send_email']));
         $po->setIsInProcess(true);
         $trans = Mage::getModel('core/resource_transaction');
@@ -150,7 +133,6 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
             $rma->setIsCutomer(true);
             $trans->addObject($rma);
 			
-			var_export($rma->getData('udpo_id'));
         }
         $trans->addObject($rma->getPo())->save();
 		

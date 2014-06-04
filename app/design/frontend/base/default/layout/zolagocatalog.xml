@@ -2,12 +2,26 @@
 <layout version="0.1.0">
 	<udprod_vendor_mass_index>
 		<update handle="udropship_vendor" />
+        <update handle="adminhtml_head" />
+        <update handle="bootstrap" />
+        <update handle="forms" />
 		<update handle="formkey" />
 		<update handle="adminhtml_head" />
-		
+        <reference name="head">
+            <action method="addItem"><type>skin_js</type><name>../../../frontend/default/udropship/js/melon/vendor_mass.js</name></action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>js/plugins/validation/jquery.validate.min.js</name>
+            </action>
+            <action method="removeItem">
+                <type>skin_css</type>
+                <name>../../../adminhtml/default/default/boxes.css</name>
+            </action>
+
+        </reference>
 		<reference name="content">
 			<block type="core/html_calendar" name="head.udropship.calendar" as="udropship.calendar" template="unirgy/dropship/calendar.phtml"></block>
-            
+
 			<block name="mass" type="zolagocatalog/vendor_mass" template="zolagocatalog/mass.phtml">
 				<block type="zolagocatalog/vendor_mass_attributesetswitcher" name="attribute_set_switcher" as="attribute_set_switcher" template="zolagocatalog/mass/attributesetswitcher.phtml"/>
 				<block type="zolagocatalog/vendor_mass_staticfilter" name="static_filter" as="static_filter" template="zolagocatalog/mass/staticfilter.phtml"/>
@@ -15,6 +29,8 @@
 			</block>
 		</reference>
 	</udprod_vendor_mass_index>
+
+
 	<udprod_vendor_image_queue>
 		<update handle="udropship_vendor" />
 		<update handle="bootstrap" />

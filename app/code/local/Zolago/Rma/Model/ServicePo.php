@@ -39,49 +39,36 @@ class Zolago_Rma_Model_ServicePo extends Unirgy_Rma_Model_ServiceOrder
         $rma->setTotalQty($totalQty);
         return $rma;
     }
-    public function prepareRmaForSave($qtys = array(), $conditions=array())
+    public function prepareRmaForSave($data)
     {
-        $totalQtys = array();
+        $rmas = array();
+        $items = $data['items_single'];
+        $conditions = $data['items_condition_single'];
+        $poItems = array();
         $rmaItems = array();
-		
-
         foreach ($this->_po->getItemsCollection() as $poItem) {
-			/* @var $poItem Zolago_Po_Model_Po_Item */
-			$orderItem = $poItem->getOrderItem();
-            if (!$this->_canRmaItem($poItem, $qtys)) {
-                continue;
-            }
-			
-            $item = $this->_convertor->itemToRmaItem($poItem);
-			
-            if ($orderItem->isDummy(true)) {
-                $qty = 1;
-            } else {
-                if (isset($qtys[$poItem->getId()])) {
-                    $qty = min($qtys[$poItem->getId()], $poItem->getQtyShipped());
-                } elseif (!count($qtys)) {
-                    $qty = $poItem->getQtyShipped();
-                } else {
+            $poItems[$poItem->getId()] = $poItem;
+        }
+        foreach ($items as $itemId=>$itemPack) {
+            $poItem = $poItems[$itemId];
+            foreach ($itemPack as $packId => $dummy) {
+                if (empty($conditions[$itemId][$packId])) {
                     continue;
                 }
+    			$orderItem = $poItem->getOrderItem();
+                $item = $this->_convertor->itemToRmaItem($poItem);
+                $item->setQty(1); // only 1 by line
+                $item->setItemCondition($conditions[$itemId][$packId]);
+                $vId = $poItem->getUdropshipVendor();                
+                $rmaItems[$vId][] = $item;
+                if (empty($totalQtys[$vId])) {
+                    $totalQtys[$vId] = 0;
+                }
+                $totalQtys[$vId] ++;
             }
-			
-            if ($qty<=0) continue;
-			
-            $vId = $poItem->getUdropshipVendor();
-
-            $rmaItems[$vId][] = $item;
-
-            if (empty($totalQtys[$vId])) {
-                $totalQtys[$vId] = 0;
-            }
-            $totalQtys[$vId] += $qty;
-
-            $item->setQty($qty);
-
-            $item->setItemCondition(@$conditions[$poItem->getId()]);
-
         }
+
+
         if (empty($rmaItems)) {
             Mage::throwException(
                 Mage::getStoreConfig('urma/message/customer_no_items')

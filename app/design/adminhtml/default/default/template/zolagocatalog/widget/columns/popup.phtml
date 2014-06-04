@@ -10,9 +10,9 @@
             continue;
         }
         if ($counter == 5) {
-            echo '</ul>';            
-            echo '<a name="check" href="javascript:checkGroupColumns()">'.$this->__('Check all');
-            echo '</a> / <a name="uncheck" href="javascript:unCheckGroupColumns()">'.$this->__('Uncheck all').'</a>';
+            echo '</ul>';
+            echo '<a name="check" class="check" href="">'.$this->__('Check all');
+            echo '</a> / <a name="uncheck" href="">'.$this->__('Uncheck all').'</a>';
             echo '<ul id="checked_group">';
         }
         echo '<li><input id="hide_'.$counter.'"';
@@ -26,11 +26,11 @@
 ?>
 </ul>
 <div><span class="required">*</span> <?php echo $this->__('- required columns'); ?></div>
-<div class="clear"><br/></div>
+<!--<div class="clear"><br/></div>-->
 </div>
-<div class="buttons">
-<?php echo $this->getButtonsHtml() ?>
-</div>
-<div class="clear"></div>
+<!--<div class="buttons">-->
+<?php //echo $this->getButtonsHtml() ?>
+<!--</div>-->
+<!--<div class="clear"></div>-->
 </form>
 </div>

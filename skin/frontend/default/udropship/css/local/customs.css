@@ -265,6 +265,9 @@ select.form-control {
   color: #888888;
   font-weight: normal;
 }
+.column_popup_layer ul {
+    list-style-type: none;
+}
 .main-actions {
   margin-top: 25px;
 }
@@ -318,4 +321,16 @@ table.foot-empty-cells tfoot td:empty {
   .shipping-info .dl-horizontal.dl-z dd {
     margin-left: 110px;
   }
+}
+
+
+
+.z-grid .grid tbody tr td.status-enabled {
+    background: none repeat scroll 0 0 #2EC029 !important;
+}
+.z-grid .grid tbody tr td.status-disabled {
+    background: none repeat scroll 0 0 #C24A4A !important;
+}
+.gecko select.form-control, textarea.form-control {
+    padding: 4px 0;
 }

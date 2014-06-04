@@ -88,9 +88,8 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 extends Zolago_Catalog_Mod
 
     protected function _multiUpdate()
     {
-        $storeId = 1;
 
-        $skuAssoc = self::getSkuAssoc();
+        $skuAssoc = Zolago_Catalog_Helper_Data::getSkuAssoc();
 
         $data = $this->getRequest()->getBodyParams();
 
@@ -102,6 +101,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 extends Zolago_Catalog_Mod
             $productsButch = $data['pos'];
             //$productsButch = array_slice($productsButch, 0, 3); //for test
 
+            $idsForQueue = array();
             foreach ($productsButch as $productsButchItem) {
                 $skuXML = $productsButchItem['sku'];
                 $price = $productsButchItem['price'];
@@ -109,6 +109,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 extends Zolago_Catalog_Mod
 
 
                 $productId = isset($skuAssoc[$sku]) ? $skuAssoc[$sku] : 0;
+                $idsForQueue[$productId] = $productId;
 
 
                 if (!empty($productId)) {
@@ -116,8 +117,8 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 extends Zolago_Catalog_Mod
                     $attrData = array('price' => $price);
 
                     $productAction->updateAttributesNoIndex($productIds, $attrData, 0);
-                    //$productAction->updateAttributes($productIds, $attrData, 1);
-                    //$productAction->updateAttributes($productIds, $attrData, 2);
+                    //$productAction->updateAttributesNoIndex($productIds, $attrData, 1);
+                    //$productAction->updateAttributesNoIndex($productIds, $attrData, 2);
                 }
             }
             unset($productsButchItem);
@@ -128,33 +129,12 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 extends Zolago_Catalog_Mod
 //        Mage::getSingleton('index/indexer')->processEntityAction(
 //            $this, Mage_Catalog_Model_Product::ENTITY, Mage_Index_Model_Event::TYPE_MASS_ACTION
 //        );
-        //echo 'Done';
 
-
-        $json = json_encode($data);
-        Zolago_Catalog_Helper_Log::log($json);
+        Zolago_Catalog_Helper_Configurable::queue($idsForQueue);
 
         return json_encode($this->getRequest());
     }
 
-    /**
-     * get sku-id associated array
-     * @return array
-     */
-    protected function getSkuAssoc()
-    {
-        $resource = Mage::getSingleton('core/resource');
-        $readConnection = $resource->getConnection('core_read');
-        $query = "SELECT entity_id AS product_id, sku FROM `catalog_product_entity`;"; //Total time 0.00285 (on 1000 row(s))
-        $result = $readConnection->fetchAll($query);
-        $skuAssoc = array();
-        if (!empty($result)) {
-            foreach ($result as $res) {
-                $skuAssoc[$res['sku']] = $res['product_id'];
-            }
-            unset($res);
-        }
-        return $skuAssoc;
-    }
+
 
 }

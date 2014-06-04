@@ -1,2 +1,47 @@
 <?php $_helper = Mage::helper("zolagorma");?>
-Hello
+<?php 
+if ($items = $this->getItemList()) {
+?>
+<form method="post" name="rma" action="<?php echo $this->getUrl('*/*/saveRma')?>">
+<input type="hidden" name="po_id" value="<?php echo $this->getPo()->getId();?>">
+<table class="data-table">
+<tbody>
+<?php
+    foreach ($items as $item_pack) {        
+        foreach ($item_pack as $key => $item) {
+            ?>
+    <tr>
+        <td>
+            <input type="checkbox" name="rma[items_single][<?php echo $item['entityId']?>][<?php echo $key ?>]" value="true"/>
+        </td>
+        <td>
+            <?php
+                echo $item['name'];
+            ?>
+        </td>
+        <td>
+            Powód zwrotu:
+                <select name="rma[items_condition_single][<?php echo $item['entityId'].']['.$key.']'?>">
+                    <option value=""><?php echo $_helper->__('Select a reason..')?></option>
+                    <?php
+                        echo $this->getReturnRenderer();
+                    ?>
+                </select>
+                
+        </td>
+    </tr>
+            
+            <?php
+        }
+    }
+?>
+</tbody>
+</table>
+Dodatkowe informacje dotyczące zgłoszenia<br/>
+<textarea name="rma[comment_text]">
+</textarea>
+<button type="submit">Dalej</button>
+</form>
+<?php
+}
+?>

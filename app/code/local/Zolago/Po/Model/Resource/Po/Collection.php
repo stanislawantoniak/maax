@@ -5,6 +5,7 @@ class Zolago_Po_Model_Resource_Po_Collection
 	
 	protected $_vendorId;
 	protected $_vendorJoined = false;
+	protected $_productJoined = false;
 	
 	public function addAlertFilter($int) {
 		$this->getSelect()->where("main_table.alert & ".(int)$int);
@@ -13,6 +14,9 @@ class Zolago_Po_Model_Resource_Po_Collection
 	
     public function addOrderData() {
 		return $this->_joinOrderTable();
+	}
+	public function addProductData() {
+	    return $this->_joinPoItem();
 	}
 	public function addVendorData() {
 	    return $this->_joinVendorTable();
@@ -211,7 +215,20 @@ class Zolago_Po_Model_Resource_Po_Collection
         return $this;
         
     }
-    protected function _joinProductTable() {
+    protected function _joinPoItem() {
+        if (!$this->_productJoined) {
+            $this->getSelect()->join(
+                array('item_table'=>$this->getTable('udpo/po_item')),
+                'item_table.parent_id=main_table.entity_id'
+                ,
+                array(
+                    'item_table.qty'                    
+                )
+            );
+            $this->_orderJoined = true;
+        }
+        return $this;
+        
     }
 	protected function _joinOrderTable()
     {
