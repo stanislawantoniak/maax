@@ -121,7 +121,7 @@
             <zolagocatalog_process_configurable_queue>
                 <schedule>
                     <!-- Run every 5 minutes -->
-                    <cron_expr>*/5 * * * *</cron_expr>
+                    <cron_expr>0,5,10,15,20,25,30,35,40,45,50,55 * * * *</cron_expr>
                 </schedule>
                 <run>
                     <model>zolagocatalog/observer::processConfigurableQueue</model>
@@ -130,7 +130,7 @@
             <zolagocatalog_clear_configurable_queue>
                 <schedule>
                     <!-- Run every 5 minutes -->
-                    <cron_expr>*/5 * * * *</cron_expr>
+                    <cron_expr>0,5,10,15,20,25,30,35,40,45,50,55 * * * *</cron_expr>
                 </schedule>
                 <run>
                     <model>zolagocatalog/observer::clearConfigurableQueue</model>
