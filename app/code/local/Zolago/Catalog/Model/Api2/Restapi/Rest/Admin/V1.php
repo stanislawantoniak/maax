@@ -12,9 +12,10 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 extends Zolago_Catalog_Mod
 
     protected function _create($data)
     {
-        Mage::log(microtime()." _create ", 0, 'converter_test.log');
-
         $json = json_encode($data);
+        Mage::log($json, 0, 'converter_test.log');
+
+
         print_r($data);
         Zolago_Catalog_Helper_Log::log($json);
 
