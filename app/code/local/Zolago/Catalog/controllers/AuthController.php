@@ -7,24 +7,22 @@ class Zolago_Catalog_AuthController
      */
     public function indexAction()
     {
-        $host = 'http://admin.dev01.lorante.com';
+        $host = 'http://modago.local';
         // $callbackUrl is a path to your file with OAuth authentication example for the Admin user
         $callbackUrl = $host . "/udprod/auth";
         $temporaryCredentialsRequestUrl = $host . "/index.php/oauth/initiate?oauth_callback=" . urlencode($callbackUrl);
         $adminAuthorizationUrl = $host . '/admin/oauth_authorize';
         $accessTokenRequestUrl = $host . '/oauth/token';
         $apiUrl = $host . '/api/rest';
-        $consumerKey = 'a692397bbdce9093ce1952eb464087d6';
-        $consumerSecret = '8fcfb8acecd55908193f9b523ebad833';
-        if(!isset($_SESSION))
-        {
-            session_start();
-        }
+        $consumerKey = '76cc2b14a5bfd31f13245303baaa321a';
+        $consumerSecret = '71bed0926360cd79cbecbb14fbbc01b2';
+
+        session_start();
         if (!isset($_GET['oauth_token']) && isset($_SESSION['state']) && $_SESSION['state'] == 1) {
             $_SESSION['state'] = 0;
         }
         try {
-            $authType = (isset($_SESSION['state']) && $_SESSION['state'] == 2) ? OAUTH_AUTH_TYPE_AUTHORIZATION : OAUTH_AUTH_TYPE_URI;
+            $authType = ($_SESSION['state'] == 2) ? OAUTH_AUTH_TYPE_AUTHORIZATION : OAUTH_AUTH_TYPE_URI;
             $oauthClient = new OAuth($consumerKey, $consumerSecret, OAUTH_SIG_METHOD_HMACSHA1, $authType);
             $oauthClient->enableDebug();
 
@@ -50,15 +48,20 @@ class Zolago_Catalog_AuthController
 
                 $resourceUrl = "$apiUrl/convertproduct";
 
-                $data = self::emulateConverterTestData();
+//                $data = self::emulateConverterTestData();
 
-
+                $data = array(
+                    'cmd' => 'ProductPricesUpdate',
+                    'merchant' => 4,
+                    'data' => array(
+                        'price' => 1285.6
+                    ),
+                    'sku' => "32319-01X-M"
+                );
                 $productData = json_encode($data);
-                print_r($oauthClient->getLastResponse());
-                $oauthClient->fetch($resourceUrl, $productData, OAUTH_HTTP_METHOD_PUT,
-                    array('Content-Type' => 'application/json',
-                        'Accept' => 'application/json,text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-                    )
+                //print_r($oauthClient->getLastResponse());
+                $oauthClient->fetch($resourceUrl, $productData, OAUTH_HTTP_METHOD_POST,
+                    array('Content-Type' => 'application/json')
                 );
 
                 print_r($oauthClient->getLastResponse());

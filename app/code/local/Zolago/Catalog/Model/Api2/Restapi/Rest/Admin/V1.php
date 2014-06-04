@@ -13,6 +13,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 extends Zolago_Catalog_Mod
     protected function _create($data)
     {
         $json = json_encode($data);
+        Mage::log($json, 0, 'converter_test.log');
 
         if (!empty($data)) {
             $productAction = Mage::getSingleton('catalog/product_action');
@@ -99,7 +100,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 extends Zolago_Catalog_Mod
 //            $this, Mage_Catalog_Model_Product::ENTITY, Mage_Index_Model_Event::TYPE_MASS_ACTION
 //        );
 
-        Zolago_Catalog_Helper_Configurable::queue($idsForQueue);
+        //Zolago_Catalog_Helper_Configurable::queue($idsForQueue);
 
         return json_encode($this->getRequest());
     }
