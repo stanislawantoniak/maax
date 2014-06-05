@@ -49,7 +49,6 @@ class Zolago_Catalog_Model_Product_Configurable_Data extends Mage_Core_Model_Res
             $select->where("prices.store_id=?",$storeId);
 
 
-        ;
         if (!empty($configurableProductsIds)) {
             $configurableProductsIds = implode(',',$configurableProductsIds);
             $select->where("product_relation.parent_id IN({$configurableProductsIds})");
@@ -58,7 +57,7 @@ class Zolago_Catalog_Model_Product_Configurable_Data extends Mage_Core_Model_Res
 
         $select->group('product_relation.parent_id');
 
-
+        echo $select;
         $result = $adapter->fetchAssoc($select);
 
 
