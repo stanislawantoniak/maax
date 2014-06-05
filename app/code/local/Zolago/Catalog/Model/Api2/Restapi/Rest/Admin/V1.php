@@ -12,8 +12,9 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 extends Zolago_Catalog_Mod
 
     protected function _create($data)
     {
-        Mage::log($data . "------" , 0, 'converter_log.log');
+
         $json = json_encode($data);
+        Mage::log($json . "------" , 0, 'converter_log.log');
 
         if (!empty($data)) {
             $productAction = Mage::getSingleton('catalog/product_action');
