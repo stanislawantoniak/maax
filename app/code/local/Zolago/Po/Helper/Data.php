@@ -151,8 +151,8 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 		Zolago_Po_Model_Po_Item $poItem) {
 		
 		$po = $poItem->getPo();
-		Mage::log($poItem->getId());
-		Mage::log($poItem->getParentId());
+		Mage::log("PO Item Id: " . $poItem->getId());
+		Mage::log("ParentId: " . $poItem->getParentId());
 		Mage::log($po->getId());
 		/* @var $po Zolago_Po_Model_Po */
 		$order = $po->getOrder();
