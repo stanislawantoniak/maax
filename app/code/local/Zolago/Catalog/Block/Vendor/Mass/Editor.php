@@ -103,7 +103,7 @@ class Zolago_Catalog_Block_Vendor_Mass_Editor extends Mage_Core_Block_Template {
 			break;
 			case "date":
 				$extend['format'] = $this->getLocale()->getDateStrFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT);
-                $extend['class'] = "datepicker";
+                $extend['class'] = "datepicker form-control";
 			break;
 			default:
 				break;
