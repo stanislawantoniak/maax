@@ -5,6 +5,7 @@ $activeFilters	= $this->getCurrentStaticFilterValues();
 
 	<?php if ($this->getStaticFilters($this->getCurrentAttributeSetId()) && $this->getCurrentAttributeSetId()): ?>
 
+    <div class="col-md-6">
 
         <!-- Static Filters from All Attribute Groups: Start -->
         <?php $rowCounter = 0; ?>
@@ -105,11 +106,20 @@ $activeFilters	= $this->getCurrentStaticFilterValues();
             <?php endif; ?>
         <?php endforeach; ?>
         <!-- Static Filters from Special Attribute Group: End -->
-
+    </div>
+        </div>
+        <div class="form-actions">
+            <button type="button" title="<?php echo $this->__('Reset Filter') ?>" class="btn btn-primary pull-right" onclick="resetStaticFilter(this);"><span><span><?php echo $this->__('Reset Filter') ?></span></span></button>
+            <button type="button" title="<?php echo $this->__('Search') ?>" class="btn btn-primary pull-right" onclick="changeStaticFilter(this);"><span><span><?php echo $this->__('Search') ?></span></span></button>
+        </div>
 	<?php else: ?>
-		<p class="switcher">
-			<?php echo $this->__('There are no Static Filters for this Attribute Set'); ?>
-		</p>
+        <div class="col-md-6" style="clear: both;">
+            <br /><br />
+            <p class="switcher">
+                <?php echo $this->__('There are no Static Filters for this Attribute Set'); ?>
+            </p>
+        </div>
+        </div>
 	<?php endif; ?>
 
 <script type="text/javascript">
