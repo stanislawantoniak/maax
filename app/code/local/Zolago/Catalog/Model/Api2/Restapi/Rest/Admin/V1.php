@@ -51,7 +51,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 extends Zolago_Catalog_Mod
 
             }
         }
-        Zolago_Catalog_Helper_Log::log($json);
+        //Zolago_Catalog_Helper_Log::log($json);
         return $json;
     }
 
