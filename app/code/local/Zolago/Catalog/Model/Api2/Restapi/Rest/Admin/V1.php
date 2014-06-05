@@ -12,6 +12,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 extends Zolago_Catalog_Mod
 
     protected function _create($data)
     {
+        Mage::log($data . "------" , 0, 'converter_log.log');
         $json = json_encode($data);
 
         if (!empty($data)) {
@@ -20,7 +21,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 extends Zolago_Catalog_Mod
             $skuV = $data['sku'];
 
             $sku = $merchant . '-' . $skuV;
-            Mage::log($sku . "------" , 0, 'converter_log.log');
+
             $productId = Zolago_Catalog_Helper_Data::getSkuAssocId($sku);
             if ($productId) {
 
