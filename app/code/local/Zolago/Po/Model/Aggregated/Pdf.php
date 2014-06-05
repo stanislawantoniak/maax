@@ -170,31 +170,31 @@ class Zolago_Po_Model_Aggregated_Pdf extends Varien_Object {
                $this->_totals['dr'] +
                $this->_totals['dhl09'] +
                $this->_totals['dhl12'];
-        $page->drawText(Mage::helper('zolagopo')->__('Number of shipments: %d',$sum),35,$rel-18,'UTF-8');
+        $page->drawText(Mage::helper('zolagopo')->__('Shipment count: %d',$sum),35,$rel-18,'UTF-8');
         $this->_setFont($page,9);
-        $page->drawText(Mage::helper('zolagopo')->__('Elements under 31,5 kg: %d',$this->_totals['k']),35,$rel-30,'UTF-8');
-        $page->drawText(Mage::helper('zolagopo')->__('Elements DR: %d',$this->_totals['dr']),35,$rel-42,'UTF-8');
+        $page->drawText(Mage::helper('zolagopo')->__('Items under 31,5 kg: %d',$this->_totals['k']),35,$rel-30,'UTF-8');
+        $page->drawText(Mage::helper('zolagopo')->__('DR items: %d',$this->_totals['dr']),35,$rel-42,'UTF-8');
         $page->drawText(Mage::helper('zolagopo')->__('COD value: %.2f',$this->_totals['cod']),35,$rel-54,'UTF-8');
         $page->drawText(Mage::helper('zolagopo')->__('Europalets: %d',$this->_totals['palets']),35,$rel-66,'UTF-8');
         // ah
         $this->_setFont($page,9,'b');
         $page->drawText(Mage::helper('zolagopo')->__('AH'),235,$rel-18,'UTF-8');
         $this->_setFont($page,9);
-        $page->drawText(Mage::helper('zolagopo')->__('Number of shipments: %d',$this->_totals['k']+$this->_totals['dr']),235,$rel-30,'UTF-8');
-        $page->drawText(Mage::helper('zolagopo')->__('Elements under 31,5 kg: %d',$this->_totals['k']),235,$rel-42,'UTF-8');
-        $page->drawText(Mage::helper('zolagopo')->__('Elements DR: %d',$this->_totals['dr']),235,$rel-54,'UTF-8');
+        $page->drawText(Mage::helper('zolagopo')->__('Shipment count: %d',$this->_totals['k']+$this->_totals['dr']),235,$rel-30,'UTF-8');
+        $page->drawText(Mage::helper('zolagopo')->__('Items under 31,5 kg: %d',$this->_totals['k']),235,$rel-42,'UTF-8');
+        $page->drawText(Mage::helper('zolagopo')->__('DR items: %d',$this->_totals['dr']),235,$rel-54,'UTF-8');
         // dhl9
         $this->_setFont($page,9,'b');
         $page->drawText(Mage::helper('zolagopo')->__('DHL 09'),450,$rel-18,'UTF-8');
         $this->_setFont($page,9);
-        $page->drawText(Mage::helper('zolagopo')->__('Number of shipments: %d',$this->_totals['dhl09']),450,$rel-30,'UTF-8');
-        $page->drawText(Mage::helper('zolagopo')->__('Elements DHL09: %d',$this->_totals['dhl09']),450,$rel-42,'UTF-8');
+        $page->drawText(Mage::helper('zolagopo')->__('Shipment count: %d',$this->_totals['dhl09']),450,$rel-30,'UTF-8');
+        $page->drawText(Mage::helper('zolagopo')->__('DHL09 items: %d',$this->_totals['dhl09']),450,$rel-42,'UTF-8');
         // dhl 12
         $this->_setFont($page,9,'b');
         $page->drawText(Mage::helper('zolagopo')->__('DHL 12'),635,$rel-18,'UTF-8');
         $this->_setFont($page,9);
-        $page->drawText(Mage::helper('zolagopo')->__('Number of shipments: %d',$this->_totals['dhl12']),635,$rel-30,'UTF-8');
-        $page->drawText(Mage::helper('zolagopo')->__('Elements DHL12: %d',$this->_totals['dhl12']),635,$rel-42,'UTF-8');
+        $page->drawText(Mage::helper('zolagopo')->__('Shipment count: %d',$this->_totals['dhl12']),635,$rel-30,'UTF-8');
+        $page->drawText(Mage::helper('zolagopo')->__('DHL12 items: %d',$this->_totals['dhl12']),635,$rel-42,'UTF-8');
         // signs
         $page->setLineWidth(1);
         $page->setLineDashingPattern(array(2, 1, 2, 1), 1.6);
@@ -361,7 +361,7 @@ class Zolago_Po_Model_Aggregated_Pdf extends Varien_Object {
         $address = $this->_prepareText($pos,array('full_code','street'),', ');
         $page->setFillColor(new Zend_Pdf_Color_GrayScale(0));
         $this->_setFont($page,12,'b');
-        $page->drawText(Mage::helper('zolagopo')->__('Proof of postage from %s to %s',$date_start,$date_end),100,550,'UTF-8');
+        $page->drawText(Mage::helper('zolagopo')->__('Dispatch list of shipments created from %s to %s',$date_start,$date_end),100,550,'UTF-8');
 
         $this->_setFont($page,10,'b');
         $page->drawText(Mage::helper('zolagopo')->__(
@@ -389,7 +389,7 @@ class Zolago_Po_Model_Aggregated_Pdf extends Varien_Object {
         $this->_drawCells($page,495,475);
 
         $page->drawText(Mage::helper('zolagopo')->__('Tracking number'),75,480,'UTF-8');
-        $page->drawText(Mage::helper('zolagopo')->__('Elements of shipping'),235,480,'UTF-8');
+        $page->drawText(Mage::helper('zolagopo')->__('Shipment items'),235,480,'UTF-8');
         $page->drawText(Mage::helper('zolagopo')->__('Europalets'),385,480,'UTF-8');
         $page->drawText(Mage::helper('zolagopo')->__('Receiver | Additional services | Value'),485,480,'UTF-8');
         $page->drawText(Mage::helper('zolagopo')->__('COD'),715,480,'UTF-8');

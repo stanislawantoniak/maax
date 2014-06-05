@@ -37,13 +37,11 @@
         </td>
         <td>
             <?php
-                if ($items = $po->getItemsCollection()) {
-                    foreach ($items as $item) {
-                        if (!$item->getParentItemId()) {
-                            echo $item->getName().'<br/>';
-                        }
+                    $itemList = $this->getItemList($po);                    
+                    foreach ($itemList as $item) {
+                        $first = array_pop($item);
+                        echo $first['name'].'<br/>';
                     }
-                }
             ?>
         </td>
         <td>

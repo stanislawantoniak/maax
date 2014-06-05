@@ -25,4 +25,12 @@ class Zolago_Po_Block_List extends Mage_Core_Block_Template
         return $this->_poList;
         
     }
+    public function getItemList($po) {
+        if (!$po) {
+            return array();
+        }
+        $items = $po->getItemsCollection();
+        $out = Mage::helper('zolagorma')->getItemList($items);
+        return $out;
+    }
 }
