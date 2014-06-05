@@ -28,7 +28,8 @@ class Zolago_Catalog_Block_Vendor_Mass extends Mage_Core_Block_Template
 		$design = Mage::getDesign();
 		$design->setArea("adminhtml");
 		$block = $this->getLayout()->
-				createBlock("adminhtml/store_switcher");
+				createBlock("adminhtml/store_switcher")
+            ->setTemplate('zolagocatalog/widget/grid/store/switcher.phtml');
 		$block->setWebsiteIds($this->getPossibleWebsiteIds());
 		$block->setUseConfirm(0);
 		$block->setParentBlock($this);

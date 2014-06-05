@@ -25,3 +25,7 @@
     content:"*";
     color:red;
 }
+
+.z-grid .range-line.date {
+    margin-bottom: 5px;
+}
