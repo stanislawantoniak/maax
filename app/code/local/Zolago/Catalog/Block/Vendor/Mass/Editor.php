@@ -91,16 +91,19 @@ class Zolago_Catalog_Block_Vendor_Mass_Editor extends Mage_Core_Block_Template {
 		switch ($type) {
 			case "textarea":
 				$extend['style'] = "height: 60px;";
+                $extend['class'] = "form-control";
 			break;
 			case "select":
 				$extend['values'] = $attribute->getSource()->getAllOptions();
+                $extend['class'] = "form-control";
 			break;
 			case "multiselect":
 				$extend['values'] = $attribute->getSource()->getAllOptions(false);
+                $extend['class'] = "form-control";
 			break;
 			case "date":
 				$extend['format'] = $this->getLocale()->getDateStrFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT);
-				$extend['image'] = $this->getSkinUrl("images/grid-cal.gif");
+                $extend['class'] = "datepicker";
 			break;
 			default:
 				break;
@@ -108,7 +111,7 @@ class Zolago_Catalog_Block_Vendor_Mass_Editor extends Mage_Core_Block_Template {
 		// By EAV Atrribute Inout
 		switch ($attribute->getFrontendInput()){
 			case "price":
-				$extend['class'] = "input-text validate-number";
+				$extend['class'] = "input-text validate-number form-control";
 			break;
 		}
 		
