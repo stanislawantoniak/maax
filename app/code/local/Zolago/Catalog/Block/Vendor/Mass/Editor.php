@@ -20,7 +20,7 @@ class Zolago_Catalog_Block_Vendor_Mass_Editor extends Mage_Core_Block_Template {
 				setType("button")->
 				setId($this->buildFieldId("submit"))->
 				setLabel($this->__("Confirm changes"))->
-				setClass("confirm-changes");
+				setClass("confirm-changes btn btn-primary");
 		return $btn->toHtml();
 	}
 	
@@ -34,7 +34,7 @@ class Zolago_Catalog_Block_Vendor_Mass_Editor extends Mage_Core_Block_Template {
 				"checkbox", 
 				array(
 					"label"	=> Mage::helper("catalog")->__("Change"),
-					"class"	=> "changer",
+					"class"	=> "changer massaction-checkbox",
 					"rel"	=> $this->buildFieldId($attribute->getAttributeCode())
 				)
 		);
@@ -50,7 +50,8 @@ class Zolago_Catalog_Block_Vendor_Mass_Editor extends Mage_Core_Block_Template {
 		$type = $this->parseInputType($attribute);
 		$config = array(
 			"name"=>"attributes[".$attribute->getAttributeCode()."]",
-			"disabled" => "disabled"
+			"disabled" => "disabled",
+            'class' => 'form-control'
 		);
 		$field = $this->getForm()->addField(
 				$this->buildFieldId($attribute->getAttributeCode()), 

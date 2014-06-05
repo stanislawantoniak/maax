@@ -13,7 +13,6 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 extends Zolago_Catalog_Mod
     protected function _create($data)
     {
         $json = json_encode($data);
-        Mage::log($json, 0, 'converter_test.log');
 
         if (!empty($data)) {
             $productAction = Mage::getSingleton('catalog/product_action');
@@ -34,8 +33,8 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 extends Zolago_Catalog_Mod
 
                 Zolago_Catalog_Helper_Configurable::queueProduct($productId);
             }
-
         }
+        Zolago_Catalog_Helper_Log::log($json);
         return $json;
     }
 

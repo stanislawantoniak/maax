@@ -3,3 +3,25 @@
  * No LESS-based rules here
  *
  ******************************************************************************/
+.z-grid .grid tbody tr td.status-enabled {
+    background: none repeat scroll 0 0 #2EC029 !important;
+}
+.z-grid .grid tbody tr td.status-disabled {
+    background: none repeat scroll 0 0 #C24A4A !important;
+}
+.gecko select.form-control, textarea.form-control {
+    padding: 4px 0;
+}
+.filter-field-100.element-wrapper .form-control {
+    min-width: 90px;
+}
+
+#zolagocatalog_mass_grid_loading {
+    background: url(../../img/bootsrap/ajax-loading-input.gif);
+    color: transparent;
+    background-repeat: no-repeat;
+}
+.required {
+    content:"*";
+    color:red;
+}
