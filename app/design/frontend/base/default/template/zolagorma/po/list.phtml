@@ -1,0 +1,59 @@
+<?php
+    $list = $this->getPoList();
+    if ($list) { 
+?>
+<table class="data-table">
+    <thead>
+    <tr>
+        <th>
+            Numer zamówienia
+        </th>
+        <th>
+            Data 
+        </th>
+        <th>
+            Sklep
+        </th>
+        <th>
+            Produkty
+        </th>
+        <th>
+        </th>        
+    </tr>
+    </thead>
+    <tbody>
+<?php
+        foreach ($list as $po) {
+?>
+    <tr>
+        <td>
+            <?php echo $po->getIncrementId(); ?>
+        </td>
+        <td>
+            <?php echo $po->getCreatedAt(); ?>
+        </td>
+        <td>
+            <?php echo $po->getVendorName(); ?>
+        </td>
+        <td>
+            <?php
+                    $itemList = $this->getItemList($po);                    
+                    foreach ($itemList as $item) {
+                        $first = array_pop($item);
+                        echo $first['name'].'<br/>';
+                    }
+            ?>
+        </td>
+        <td>
+            <a href="<?php echo $this->getUrl('sales/po/newrma/',array('po_id'=>$po->getId()));?>">wybierz</a>
+        </td>
+    </tr>
+<?php            
+        }
+        
+?>
+</tbody>
+</table>
+<?php
+    }
+?>

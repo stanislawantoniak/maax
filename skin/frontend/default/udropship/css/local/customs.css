@@ -256,6 +256,9 @@ select.form-control {
   color: #888888;
   font-weight: normal;
 }
+.column_popup_layer ul {
+    list-style-type: none;
+}
 .main-actions {
   margin-top: 25px;
 }

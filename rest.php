@@ -8,7 +8,7 @@
  * 4. Configure resource permissions for Admin REST user for retrieving all product data for Admin
  * 5. Create a Consumer
  */
-include_once('developer/class.krumo.php');
+
 define('MAGENTO_ROOT', getcwd());
 
 $compilerConfig = MAGENTO_ROOT . '/includes/config.php';

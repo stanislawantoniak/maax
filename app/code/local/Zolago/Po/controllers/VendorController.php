@@ -122,9 +122,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 					// Action not based on status
 					$id = Mage::helper('zolagopo')->createAggregated($collection, $this->_getVendor());
     				$transaction->commit();
-    				$url = Mage::getUrl('udpo/vendor_aggregated/download',array('id'=>$id));
-    				header('Location: '.$url);
-    				exit();
+    				Mage::getSingleton('core/session')->setAggregatedPrintId($id);
 				}else{
 					// All actions based on satatus
 					foreach($collection as $po){
@@ -909,11 +907,14 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             $udpo->setUdpoNoSplitPoFlag(true);
 			
             $shipment = $udpoHlp->createShipmentFromPo($udpo, $partialQty, true, true, true);
+			
             if ($shipment) {
                 $shipment->setNewShipmentFlag(true);
                 $shipment->setDeleteOnFailedLabelRequestFlag(true);
                 $shipment->setCreatedByVendorFlag(true);
-            }
+            }else{
+				Mage::throwException("Cannot create shipment");
+			}
 			
             //}
 			
@@ -926,12 +927,13 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 			$weight =  $r->getParam("weight");
 			
 			if(empty($weight)){
-				if($shipment->getTotalWeight()){
+				if($shipment && $shipment->getTotalWeight()){
 					$weight = ceil($shipment->getTotalWeight());
 				}else{
 					$weight = Mage::helper('zolagodhl')->getDhlDefaultWeight();
 				}
 			}
+			
 			
 			$shipment->setTotalWeight($weight);
 			

@@ -16,6 +16,7 @@ class Zolago_DropshipVendorAskQuestion_Block_Vendor_Question_Grid extends Mage_A
 		$v = Mage::getSingleton('udropship/session')->getVendor();
 		$collection = Mage::getModel('udqa/question')->getCollection();
 		$collection->joinShipments()->joinProducts()->joinVendors();
+		$collection->addVendorFilter($v);
 		$collection->getSelect()->columns(array('is_replied' => new Zend_Db_Expr('if(LENGTH(answer_text)>0,1,0)')));
 
         $this->setCollection($collection);
