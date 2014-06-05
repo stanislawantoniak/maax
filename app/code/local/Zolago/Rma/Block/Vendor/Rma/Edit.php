@@ -48,8 +48,36 @@ class Zolago_Rma_Block_Vendor_Rma_Edit extends Mage_Core_Block_Template {
 		return Mage::registry("current_rma");
 	}
 	
-	public function getPoUrl(Zolago_Po_Model_Po $po) {
-		return $this->getUrl("udpo/vendor/edit", array("id"=>$po->getId()));
+	/**
+	 * alias
+	 * @return Zolago_Rma_Model_Rma
+	 */
+	public function getRma() {
+		return $this->getModel();
+	}
+	
+	/**
+	 * @return Zolago_Po_Model_Po
+	 */
+	public function getPo() {
+		return $this->getRma()->getPo();
+	}
+
+
+	public function getPoUrl($action, $params=array()) {
+		$params += array(
+			"id"=> $this->getPo()->getId(),
+			"form_key" => Mage::getSingleton('core/session')->getFormKey()
+		);
+		return $this->getUrl("udpo/vendor/$action", $params);
+	}
+	
+	public function getRmaUrl($action, $params=array()) {
+		$params += array(
+			"id"=> $this->getRma()->getId(),
+			"form_key" => Mage::getSingleton('core/session')->getFormKey()
+		);
+		return $this->getUrl("*/*/$action", $params);
 	}
 	
 }
