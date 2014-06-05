@@ -41,6 +41,8 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 extends Zolago_Catalog_Mod
                     $productAction->updateAttributesNoIndex($productIds, $attrData, 1);
                     $productAction->updateAttributesNoIndex($productIds, $attrData, 2);
 
+                    Mage::log($sku . ":".$priceA , 0, 'converter_log.log');
+
                     Zolago_Catalog_Helper_Configurable::queueProduct($productId);
                 }
 
