@@ -25,6 +25,9 @@
     content:"*";
     color:red;
 }
+.validation-advice {
+    color:red;
+}
 
 .z-grid .range-line.date {
     margin-bottom: 5px;
