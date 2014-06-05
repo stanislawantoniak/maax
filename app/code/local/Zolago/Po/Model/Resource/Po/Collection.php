@@ -205,7 +205,8 @@ class Zolago_Po_Model_Resource_Po_Collection
     }
     protected function _joinVendorTable() {
         if (!$this->_vendorJoined) {
-            $this->getSelect()->join(array('vendor_table'=>$this->getTable('udropship/vendor')),
+            $this->getSelect()->join(
+				array('vendor_table'=>$this->getTable('udropship/vendor')),
                 'vendor_table.vendor_id=main_table.udropship_vendor',
                 array ('vendor_table.vendor_name')
             );

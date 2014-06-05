@@ -4,8 +4,9 @@ class Zolago_Catalog_Model_Observer
 
     static public function processConfigurableQueue()
     {
-        Zolago_Catalog_Model_Observer::clearConfigurableQueue();
-        Mage::getModel('zolagocatalog/queue_configurable')->process();
+        Mage::log(microtime() . " Starting processConfigurableQueue ", 0, 'configurable_update.log');
+        Mage::getResourceModel('zolagocatalog/queue_configurable')->clearQueue();
+        Mage::getModel('zolagocatalog/queue_configurable')->process(2000);
     }
 
     static public function clearConfigurableQueue()
