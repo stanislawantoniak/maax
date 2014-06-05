@@ -32,3 +32,7 @@
 .z-grid .range-line.date {
     margin-bottom: 5px;
 }
+.datepicker, .hasDatepicker {
+    position: relative;
+    z-index: 10;
+}
