@@ -12,61 +12,31 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 extends Zolago_Catalog_Mod
 
     protected function _create($data)
     {
-
         $json = json_encode($data);
-        print_r($data);
-        Zolago_Catalog_Helper_Log::log($json);
+        Mage::log($json, 0, 'converter_test.log');
 
-        /* @var $validator Mage_Catalog_Model_Api2_Product_Validator_Product */
-        $validator = Mage::getModel('catalog/api2_product_validator_product', array(
-            'operation' => self::OPERATION_CREATE
-        ));
+        if (!empty($data)) {
+            $productAction = Mage::getSingleton('catalog/product_action');
+            $merchant = $data['merchant'];
+            $skuV = $data['sku'];
 
-        if (!$validator->isValidData($data)) {
-            foreach ($validator->getErrors() as $error) {
-                $this->_error($error, Mage_Api2_Model_Server::HTTP_BAD_REQUEST);
+            $sku = $merchant . '-' . $skuV;
+            $productId = Zolago_Catalog_Helper_Data::getSkuAssocId($sku);
+            if ($productId) {
+                $price = $data['data'][0]['price'];
+
+                $productIds = array($productId);
+                $attrData = array('price' => $price);
+
+                $productAction->updateAttributesNoIndex($productIds, $attrData, 0);
+                $productAction->updateAttributesNoIndex($productIds, $attrData, 1);
+                $productAction->updateAttributesNoIndex($productIds, $attrData, 2);
+
+                Zolago_Catalog_Helper_Configurable::queueProduct($productId);
             }
-            $this->_critical(self::RESOURCE_DATA_PRE_VALIDATION_ERROR);
+
         }
-
-        $type = $data['type_id'];
-
-        if ($type !== 'simple') {
-            $this->_critical("Creation of products with type '$type' is not implemented",
-                Mage_Api2_Model_Server::HTTP_METHOD_NOT_ALLOWED);
-        }
-        $set = $data['attribute_set_id'];
-        $sku = $data['sku'];
-
-        /** @var $product Mage_Catalog_Model_Product */
-        $product = Mage::getModel('catalog/product')
-            ->setStoreId(Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID)
-            ->setAttributeSetId($set)
-            ->setTypeId($type)
-            ->setSku($sku);
-
-        foreach ($product->getMediaAttributes() as $mediaAttribute) {
-            $mediaAttrCode = $mediaAttribute->getAttributeCode();
-            $product->setData($mediaAttrCode, 'no_selection');
-        }
-
-        $this->_prepareDataForSave($product, $data);
-        try {
-            $product->validate();
-            $product->save();
-            $this->_multicall($product->getId());
-        } catch (Mage_Eav_Model_Entity_Attribute_Exception $e) {
-            $this->_critical(sprintf('Invalid attribute "%s": %s', $e->getAttributeCode(), $e->getMessage()),
-                Mage_Api2_Model_Server::HTTP_BAD_REQUEST);
-        } catch (Mage_Core_Exception $e) {
-            $this->_critical($e->getMessage(), Mage_Api2_Model_Server::HTTP_INTERNAL_ERROR);
-        } catch (Exception $e) {
-            $this->_critical(self::RESOURCE_UNKNOWN_ERROR);
-        }
-
-        return $this->_getLocation($product);
-
-        //return $json;
+        return $json;
     }
 
     /*--test*/
@@ -130,7 +100,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 extends Zolago_Catalog_Mod
 //            $this, Mage_Catalog_Model_Product::ENTITY, Mage_Index_Model_Event::TYPE_MASS_ACTION
 //        );
 
-        Zolago_Catalog_Helper_Configurable::queue($idsForQueue);
+        //Zolago_Catalog_Helper_Configurable::queue($idsForQueue);
 
         return json_encode($this->getRequest());
     }
