@@ -76,15 +76,7 @@ class Zolago_Rma_Model_ServicePo extends Unirgy_Rma_Model_ServiceOrder
         }
         foreach ($rmaItems as $vId=>$items) {
             if (empty($items)) continue;
-			/*
-            $shipment = null;
-            foreach ($this->_order->getShipmentsCollection() as $_shipment) {
-                if ($_shipment->getUdropshipVendor()==$vId) {
-                    $shipment = $_shipment;
-                    break;
-                }
-            }
-			*/
+            
             $shipment = $this->_po->getLastNotCanceledShipment();
 			
             if (null == $shipment) continue;
@@ -102,6 +94,7 @@ class Zolago_Rma_Model_ServicePo extends Unirgy_Rma_Model_ServiceOrder
             }
 
         }
+        
         return $rmas;
     }
 

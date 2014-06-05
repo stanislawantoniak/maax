@@ -69,34 +69,8 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
         return $rma;
 	}
 
-	protected function _initTmpData(){
-		
-		$data = array(
-			"rma" => array(
-				"items_condition" => array(
-					226 => "unopened",
-					228 => "unopened",
-					
-				),
-				"items" => array(
-					226 => 3,
-					228 => 1,
-				),
-				"comment_text" => "My test comment",				
-				"rma_reason"   => "exchange",
-				
-			),
-			"po_id"		   => 110,
-			"order_id"	   => 80
-		);
-		
-		$this->getRequest()->setPost($data);
-	}
-
-
 	protected function _saveRma()
     {
-//		$this->_initTmpData();
 		
         $rmas = $this->_initRma(true);
         $data = $this->getRequest()->getPost('rma');
