@@ -137,25 +137,25 @@
                         <position>10</position>
                     </use_dhl>
                 	<dhl_account>
-                        <label>Dhl account</label>
+                        <label>DHL account</label>
                         <type>text</type>
                         <fieldset>dhl</fieldset>
                         <position>15</position>
                     </dhl_account>
                 	<dhl_login>
-                        <label>Dhl login</label>
+                        <label>DHL login</label>
                         <type>text</type>
                         <fieldset>dhl</fieldset>
                         <position>20</position>
                     </dhl_login>
                 	<dhl_password>
-                        <label>Dhl password</label>
+                        <label>DHL password</label>
                         <type>password</type>
                         <fieldset>dhl</fieldset>
                         <position>30</position>
                     </dhl_password>
                 	<dhl_ecas>
-                        <label>Dhl eCas id</label>
+                        <label>DHL eCas id</label>
                         <type>text</type>
                         <fieldset>dhl</fieldset>
                         <position>40</position>
@@ -187,13 +187,13 @@
                         <position>15</position>
                     </dhl_rma_account>
                 	<dhl_rma_login>
-                        <label>Dhl login</label>
+                        <label>DHL login</label>
                         <type>text</type>
                         <fieldset>rma</fieldset>
                         <position>20</position>
                     </dhl_rma_login>
                 	<dhl_rma_password>
-                        <label>Dhl password</label>
+                        <label>DHL password</label>
                         <type>password</type>
                         <fieldset>rma</fieldset>
                         <position>30</position>
