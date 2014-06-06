@@ -24,6 +24,21 @@
         </reference>
 	</sales_po_newrma>
 	
+	
+	<urma_vendor_index>		
+		
+		<update handle="adminhtml_head"/>
+		<update handle="bootstrap"/>
+		<update handle="noty"/>
+		<update handle="forms"/>
+		<remove name="head.udropship.calendar"/>
+		<remove name="dashboard"/>
+		<reference name="content">
+			<block name="zolagorma_vendor_rma" type="zolagorma/vendor_rma" template="zolagorma/vendor/rma.phtml">
+			</block>
+		</reference>
+	</urma_vendor_index>
+	
 	<urma_vendor_edit>		
 		<update handle="bootstrap"/>
 		<update handle="noty"/>
