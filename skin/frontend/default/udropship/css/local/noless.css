@@ -36,3 +36,10 @@
     position: relative;
     z-index: 10;
 }
+
+#login-vendor .messages {
+    margin: 0 4px;
+}
+#login-vendor .messages > li {
+    margin-bottom: 0;
+}
