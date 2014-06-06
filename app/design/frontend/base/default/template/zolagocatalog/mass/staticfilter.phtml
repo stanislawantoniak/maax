@@ -116,14 +116,16 @@ $activeFilters	= $this->getCurrentStaticFilterValues();
         </div>
 	<?php else: ?>
         <div class="form-group">
-        <div class="col-md-6">
-            <br />
-            <p class="switcher">
-                <?php echo $this->__('There are no Static Filters for this Attribute Set'); ?>
-            </p>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-8">
+                        <p class="switcher">
+                            <?php echo $this->__('There are no Static Filters for this Attribute Set'); ?>
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
-        </div>
-
 	<?php endif; ?>
 
 <script type="text/javascript">
