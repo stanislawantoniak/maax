@@ -1,5 +1,19 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
+    <udropship_vendor_login>
+        <update handle="bootstrap" />
+        <update handle="forms"/>
+
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/page_clear.phtml</template>
+            </action>
+        </reference>
+        <reference name="header">
+            <action method="setTemplate"><template>unirgy/dropship/vendor/header_clear.phtml</template></action>
+        </reference>
+    </udropship_vendor_login>
+
 	<udprod_vendor_mass_index>
 		<update handle="udropship_vendor" />
         <update handle="adminhtml_head" />

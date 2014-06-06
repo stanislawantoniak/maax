@@ -86,19 +86,10 @@
     </udropship_vendor_index>
 
     <udropship_vendor_login>
-        <update handle="bootstrap" />
-        <update handle="forms"/>
-
-        <reference name="root">
-            <action method="setTemplate">
-                <template>page/page_clear.phtml</template>
-            </action>
-        </reference>
+        <update handle="udropship_vendor" />
         <reference name="content">
             <block type="core/template" template="unirgy/dropship/vendor/loginwrapper.phtml" name="login-wrapper">
                 <block type="core/template" template="unirgy/dropship/vendor/login.phtml" name="login">
-
-                    <block type="core/messages" name="global_messages" as="global_messages"/>
                     <block type="page/template_links" name="login_links" as="login_links">
                         <action method="addLink" translate="label title" module="udropship">
                             <label>Forgot Password</label>

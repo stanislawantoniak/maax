@@ -16,12 +16,20 @@
  */
 ?>
 <?php
-$_allowedLocale = array(
-	"pl_PL"=>$this->__("PL"),
-	"en_US"=>$this->__("EN")
-);
+//$_allowedLocale = array(
+//	"pl_PL"=>$this->__("PL"),
+//	"en_US"=>$this->__("EN")
+//);
+
 $_session = Mage::getSingleton('udropship/session');
+$_vendor = $_session->getVendor();
 $_currentLocale = Mage::app()->getLocale()->getLocaleCode();
+$_logoHeader = Mage::app()->getStore($_vendor->getLabelStore())->getGroup()->getName();
+$_allowedLocale = array(
+    "pl_PL"=>array("symbol"=>$this->__("PL"), "name"=>$this->__("Polish")),
+    "en_US"=>array("symbol"=>$this->__("EN"), "name"=>$this->__("English"))
+);
+
 $_isUdpo = Mage::helper('udropship')->isUdpoActive();
 $_isUdreport = Mage::helper('udropship')->isModuleActive('Unirgy_DropshipVendorReport');
 $_dashboardUrl = $_isUdpo ? $this->getUrl('udpo/vendor') : $this->getUrl('udropship/vendor');
@@ -32,8 +40,38 @@ $_isUstockPoActive = Mage::helper('udropship')->isModuleActive('ustockpo')
      && $_session->isLoggedIn() && $_session->getVendor()->getDistributorId();
 $_isTierShip = $_session->getVendor()->getAllowTiershipModify();
 ?>
-    <div class="header">
-        <h1 id="header-logo"><a href="<?php echo $this->getUrl('') ?>"><?php echo $this->getLogoAlt() ?></a></h1>
+<header class="header navbar navbar-fixed-top" role="banner">
+    <div class="container">
+
+        <!-- Logo -->
+        <a class="navbar-brand" href="<?php echo $this->getUrl("udropship/vendor/*");?>"><img src="<?php echo $this->getSkinUrl('img/bootsrap/logo.png');?>" alt="logo" /><strong><?php echo $this->escapeHtml($_logoHeader);?></strong></a>
+        <!-- /logo -->
+
+
+        <!-- Top Right Menu -->
+        <ul class="nav navbar-nav navbar-right">
+            <!-- Locale -->
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <?php foreach($_allowedLocale as $locale=>$info):?>
+                        <?php if($locale==$_currentLocale):?>
+                            <?php echo $this->escapeHtml($info['symbol']);?>
+                        <?php endif;?>
+                    <?php endforeach;?>
+                    <i class="icon-caret-down small"></i>
+                </a>
+                <ul class="dropdown-menu">
+                    <?php foreach($_allowedLocale as $locale=>$info):?>
+                        <li>
+                            <a href="<?php echo Mage::getUrl('udropship/vendor/setlocale', array("locale"=>$locale));?>">
+                                <?php echo $this->escapeHtml($info['name']);?>
+                            </a>
+                        </li>
+                    <?php endforeach;?>
+                </ul>
+            </li>
+            <!-- /Locale -->
+        </ul>
 
     <div class="utility-nav">
         <?php if ($_session->isLoggedIn()): ?>
@@ -52,21 +90,12 @@ $_isTierShip = $_session->getVendor()->getAllowTiershipModify();
 			<span class="pipe">|</span>
 			<a href="<?php echo $this->getUrl('udropship/vendor/logout')?>"><?php echo $this->__('Log out')?></a>
 			<?php else: ?>
-			<?php echo $this->__('Welcome to Dropship Vendor Interface') ?>
+			<?php //echo $this->__('Welcome to Dropship Vendor Interface') ?>
 			<?php endif ?>
-			| <select id="locale-change">
-				<?php foreach($_allowedLocale as $locale=>$label):?>
-				<option value="<?php echo $locale;?>"<?php if($locale==$_currentLocale):?> selected="selected"<?php endif;?>><?php echo $this->escapeHtml($label);?></option>
-				<?php endforeach;?>
-			</select>
-			<script type="text/javascript">
-			  $('locale-change').observe('change', function(){
-				  document.location.href = '<?php echo Mage::getUrl('udropship/vendor/setlocale');?>locale/' + $F('locale-change');
-			  });
-			</script>
+
     </div>
     <div class="clear"></div>
-    <ul class="main-nav">
+        <ul class="nav navbar-nav navbar-left hidden-xs hidden-sm">
 		<?php if($_session->isLoggedIn()):?>
 			<?php if($_session->isAllowed("udpo/vendor")):?>
 				<li class="first <?php if ($_active=='dashboard'): ?>active<?php endif ?>"><a href="<?php echo $_dashboardUrl?>"><?php echo $_dashboardText; ?></a></li>
@@ -152,4 +181,5 @@ $_isTierShip = $_session->getVendor()->getAllowTiershipModify();
         <li><a href="<?php echo Mage::helper('umicrosite')->getManageProductsUrl() ?>" onclick="this.target='VendorAdmin'"><?php echo $this->__('System View')?></a></li>
 <?php endif ?>
     </ul>
-</div>
+    </div>
+</header>
