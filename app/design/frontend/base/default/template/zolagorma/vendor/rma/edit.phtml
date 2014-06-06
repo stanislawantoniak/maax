@@ -7,8 +7,8 @@
 <?php $_order= $_po->getOrder(); ?>
 <?php $_vendor = $_rma->getVendor(); ?>
 <?php $_tracking = $this->getTracking($_rmaShipment);?>
-<?php $_billingAddress = $_po->getBillingAddress();?>
-<?php $_shippingAddress = $_po->getShippingAddress();?>
+<?php $_billingAddress = $_rma->getBillingAddress();?>
+<?php $_shippingAddress = $_rma->getShippingAddress();?>
 <?php $_comments = $_rma->getVendorCommentsCollection(); ?>
 <?php $_statuses = $_helper->getVendorRmaStatuses(); ?>
 <?php $_currentStatusId = $_rma->getRmaStatus(); ;?>
@@ -74,7 +74,7 @@
 				<div class="widget-content rma">
 					<dl class="dl-horizontal dl-z"> 
 						<dt><?php echo $_helper->__("Order No.");?>:</dt> 
-						<dd><a href="<?php echo $this->getPoUrl($_po);?>">#<?php echo $_po->getIncrementId();?></a></dd> 
+						<dd><a href="<?php echo $this->getPoUrl('edit');?>">#<?php echo $_po->getIncrementId();?></a></dd> 
 						<dt><?php echo $_helper->__("Order date");?>:</dt> 
 						<dd><?php echo $this->formatDate($_po->getCreatedAt());?></dd> 
 						<dt><?php echo $_helper->__("Shipment date");?>:</dt> 
@@ -109,7 +109,7 @@
 					</h4>
 					<div class="toolbar no-padding"> 
 						<div class="btn-group"> 
-							<span data-toggle="modal" data-target="#modal" class="btn btn-xs">
+							<span data-toggle="modal" data-target="#editShippingAddressModal" class="btn btn-xs">
 								<i class="icon-pencil"></i> 
 								<?php echo $_helper->__("Zmień dane");?>
 							</span> 
@@ -120,7 +120,7 @@
 					<dl class="dl-horizontal dl-z"> 
 						<dt><?php echo $_helper->__("Fullname");?>:</dt> 
 						<dd><?php echo $this->escapeHtml($_billingAddress->getName());?></dd> 
-						<dt><?php echo $_helper->__("Address");?>:</dt> 
+						<dt><?php echo $_helper->__("Address");?>: <?php echo $_shippingAddress->getId();?></dt> 
 						<dd><?php echo Mage::helper('udropship')->formatCustomerAddress($_shippingAddress, 'html', $_po->getVendor());?> </dd> 
 						<dt><?php echo $_helper->__("Phone");?>:</dt> 
 						<dd><?php echo $this->escapeHtml($_shippingAddress->getTelephone()); ?> </dd> 
@@ -275,7 +275,14 @@
 		</div>
 	</div>
 </div>
-
+<?php  
+/*******************************************************************************
+ *	Shippign address modal
+ *******************************************************************************/
+	echo $this->getChild("vendor_rma_edit_shipping_address")->
+		setAddress($_shippingAddress)->
+		toHtml();
+?>
 <?php  /*
 <div class="container">
 	<form id="edit-pos" class="form-horizontal row-border" action="<?php echo $this->getForm()->getAction();?>" method="POST">
