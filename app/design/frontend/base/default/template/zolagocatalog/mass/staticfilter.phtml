@@ -115,13 +115,15 @@ $activeFilters	= $this->getCurrentStaticFilterValues();
             <button type="button" title="<?php echo $this->__('Search') ?>" class="btn btn-primary pull-right" onclick="changeStaticFilter(this);"><span><span><?php echo $this->__('Search') ?></span></span></button>
         </div>
 	<?php else: ?>
-        <div class="col-md-6" style="clear: both;">
-            <br /><br />
+        <div class="form-group">
+        <div class="col-md-6">
+            <br />
             <p class="switcher">
                 <?php echo $this->__('There are no Static Filters for this Attribute Set'); ?>
             </p>
         </div>
         </div>
+
 	<?php endif; ?>
 
 <script type="text/javascript">
