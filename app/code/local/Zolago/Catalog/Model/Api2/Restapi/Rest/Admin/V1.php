@@ -14,7 +14,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 extends Zolago_Catalog_Mod
     {
 
         $json = json_encode($data);
-        Mage::log($json , 0, 'converter_log.log');
+        Mage::log(microtime() . " " . $json, 0, 'converter_log.log');
 
         if (!empty($data)) {
             $productAction = Mage::getSingleton('catalog/product_action');
@@ -44,7 +44,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 extends Zolago_Catalog_Mod
                     $productAction->updateAttributesNoIndex($productIds, $attrData, 1);
                     $productAction->updateAttributesNoIndex($productIds, $attrData, 2);
 
-                    Mage::log($sku . ":".$priceA ."\n ---------------" , 0, 'converter_log.log');
+                    Mage::log(microtime() . " " . $sku . ":".$priceA ."\n ---------------" , 0, 'converter_log.log');
 
                     Zolago_Catalog_Helper_Configurable::queueProduct($productId);
                 }
