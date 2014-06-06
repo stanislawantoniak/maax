@@ -10,7 +10,7 @@
             </action>
         </reference>
         <reference name="header">
-            <action method="setTemplate"><template>unirgy/dropship/vendor/header_clear.phtml</template></action>
+            <action method="setTemplate"><template>unirgy/dropship/vendor/header_boot.phtml</template></action>
         </reference>
     </udropship_vendor_login>
 
