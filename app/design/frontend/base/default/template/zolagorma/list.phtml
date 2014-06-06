@@ -1,0 +1,64 @@
+<h1>Zwroty i reklamacje</h1>
+<div><button onclick="location.href='<?php echo $this->getUrl('sales/po/history');?>'">Zgłoś zwrot lub reklamację</button></div>
+<?php
+    $list = $this->getRmaList();
+    if ($list) { 
+?>
+<table class="data-table">
+    <thead>
+    <tr>
+        <th>
+            Numer RMA
+        </th>
+        <th>
+            Data 
+        </th>
+        <th>
+            Sklep
+        </th>
+        <th>
+            Produkty
+        </th>
+        <th>
+            Status 
+        </th>        
+    </tr>
+    </thead>
+    <tbody>
+<?php
+        foreach ($list as $rma) {
+?>
+    <tr>
+        <td>
+            <?php echo $rma->getIncrementId(); ?>
+        </td>
+        <td>
+            <?php echo $po->getCreatedAt(); ?>
+        </td>
+        <td>
+            <?php echo $po->getVendorName(); ?>
+        </td>
+        <td>
+            <?php
+                    $itemList = $this->getItemList($rma);                    
+                    foreach ($itemList as $item) {
+                        $first = array_pop($item);
+                        echo $first['name'].'<br/>';
+                    }
+            ?>
+        </td>
+        <td>
+            <a href="<?php echo $this->getUrl('sales/rma/details/',array('rma_id'=>$rma->getId()));?>">zobacz szczegóły</a>
+        </td>
+    </tr>
+<?php            
+        }
+        
+?>
+</tbody>
+</table>
+<?php
+    } else {
+        echo "Nie masz żadnych aktywnych zgłoszeń";
+    }
+?>
