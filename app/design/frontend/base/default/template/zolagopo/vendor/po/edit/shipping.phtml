@@ -6,7 +6,7 @@
 <!-- Modal add letter-->
 <div class="modal fade" id="shippingModal">
 	<div class="modal-dialog">
-		<form id="shipping-form" action="<?php echo $this->getPoUrl("saveShipping", array("mode"=>$this->getMode()));?>" 
+		<form id="shipping-form" action="<?php echo $this->getFormUrl();?>" 
 			  class="form-horizontal row-border" method="post">
 			<input type="hidden" name="pos" value="<?php echo $_po->getDefaultPosId();?>"/>
 			<input type="hidden" name="partial_availability" value=""/>

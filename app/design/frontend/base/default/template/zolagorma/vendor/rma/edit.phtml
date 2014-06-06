@@ -10,8 +10,9 @@
 <?php $_billingAddress = $_rma->getBillingAddress();?>
 <?php $_shippingAddress = $_rma->getShippingAddress();?>
 <?php $_comments = $_rma->getVendorCommentsCollection(); ?>
-<?php $_statuses = $_helper->getVendorRmaStatuses(); ?>
+<?php $_statuses = $this->getAvailableStatuses(); ?>
 <?php $_currentStatusId = $_rma->getRmaStatus(); ;?>
+<?php $_trackCollection = $this->getTrackingCollection();?>
 
 <div class="container">
 	<!--=== Page Header ===-->
@@ -33,18 +34,18 @@
 				<div class="widget-header"> 
 					<h4>
 						<i class="icon-info"></i> 
-						<?php echo $_helper->__("RMA Data");?>
+						<?php echo $_helper->__("RMA Details");?>
 					</h4>
 				</div>
 				<div class="widget-content rma">
 					<dl class="dl-horizontal dl-z"> 
-						<dt><?php echo $_helper->__("Notification status.");?>:</dt> 
+						<dt><?php echo $_helper->__("RMA status");?>:</dt> 
 						<dd><?php echo $this->escapeHtml($_rma->getRmaStatusName());?></dd> 
-						<dt><?php echo $_helper->__("Notification date");?>:</dt> 
+						<dt><?php echo $_helper->__("RMA date");?>:</dt> 
 						<dd><?php echo $this->formatDate($_rma->getCreatedAt());?></dd> 
-						<dt><?php echo $_helper->__("Reaction deadline");?>:</dt> 
+						<dt><?php echo $_helper->__("Response deadline");?>:</dt> 
 						<dd><?php echo $this->formatDate();?> [dev]</dd> 
-						<dt><?php echo $_helper->__("Store");?>:</dt> 
+						<dt><?php echo $_helper->__("Vendor");?>:</dt> 
 						<dd><?php echo $this->escapeHtml($_vendor->getVendorName())?></dd> 
 						<dt><?php echo $_helper->__("Return payment");?>:</dt> 
 						<dd>
@@ -53,11 +54,11 @@
 									<?php echo $this->escapeHtml('Not paid');?> <span class="caret"></span> 
 								</button> 
 								<ul class="dropdown-menu"> 
-									<li><a class="btn-notification" data-placement="top" data-ok-url="<?php echo $this->getRmaUrl("directPayment");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_helper->__("You are about to direct payment. Are you sure?");?>" data-modal="true" href="#"><?php echo $_helper->__("Direct payment");?></a></li> 								
+									<li><a class="btn-notification" data-placement="top" data-ok-url="<?php echo $this->getRmaUrl("directPayment");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_helper->__("You are about to direct payment. Are you sure?");?>" data-modal="true" href="#"><?php echo $_helper->__("Make payment");?> [dev]</a></li> 								
 								</ul> 
 							</div>
 						</dd> 
-						<dt><?php echo $_helper->__("Shipping letter no.");?>:<br/><small class="text-muted" style="font-weight: normal;">(<?php echo $_helper->__("Customer return");?>)</small></dt> 
+						<dt><?php echo $_helper->__("Tracking no.");?>:<br/><small class="text-muted" style="font-weight: normal;">(<?php echo $_helper->__("Customer return");?>)</small></dt> 
 						<dd><?php echo "1212312312313";?> [dev]</dd> 
 					</dl>
 				</div>
@@ -68,7 +69,7 @@
 				<div class="widget-header"> 
 					<h4>
 						<i class="icon-shopping-cart"></i> 
-						<?php echo $_helper->__("Order data");?>
+						<?php echo $_helper->__("Order details");?>
 					</h4>
 				</div>
 				<div class="widget-content rma">
@@ -79,7 +80,7 @@
 						<dd><?php echo $this->formatDate($_po->getCreatedAt());?></dd> 
 						<dt><?php echo $_helper->__("Shipment date");?>:</dt> 
 						<dd><?php echo $_rmaShipment ? $this->formatDate($_rmaShipment->getCreatedAt()) : $_helper->__("N/A");?></dd> 
-						<dt><?php echo $_helper->__("Shipment letter");?>:</dt> 
+						<dt><?php echo $_helper->__("Tracking no.");?>:</dt> 
 						<dd>
 							<?php if($_tracking):?>
 								<!-- <a href="<?php echo $this->getTrackingUrl($_tracking);?>"> -->
@@ -89,11 +90,11 @@
 								<?php echo $_helper->__("N/A");?>
 							<?php endif ?>
 						</dd> 
-						<dt><?php echo $_helper->__("Recived date");?>:</dt> 
+						<dt><?php echo $_helper->__("Date delivered");?>:</dt> 
 						<dd><?php echo ($_tracking && $_tracking->getShippedDate()) ? $this->formatDate($_tracking->getShippedDate()) : $this->__("N/A");?></dd>
 						<dt><?php echo $_helper->__("POS");?>:</dt> 
 						<dd><?php echo $this->escapeHtml($_pos->getName())?></dd>
-						<dt><?php echo $_helper->__("Payment");?>:</dt> 
+						<dt><?php echo $_helper->__("Payment method");?>:</dt> 
 						<dd><?php echo $this->getPaymentText($_order); ?></dd>
 					
 					</dl>
@@ -105,7 +106,7 @@
 				<div class="widget-header"> 
 					<h4>
 						<i class="icon-user"></i> 
-						<?php echo $_helper->__("Customer data");?>
+						<?php echo $_helper->__("Customer");?>
 					</h4>
 					<div class="toolbar no-padding"> 
 						<div class="btn-group"> 
@@ -120,10 +121,10 @@
 					<dl class="dl-horizontal dl-z"> 
 						<dt><?php echo $_helper->__("Fullname");?>:</dt> 
 						<dd><?php echo $this->escapeHtml($_billingAddress->getName());?></dd> 
-						<dt><?php echo $_helper->__("Address");?>: <?php echo $_shippingAddress->getId();?></dt> 
+						<dt><?php echo $_helper->__("Shipping address");?>:</dt> 
 						<dd><?php echo Mage::helper('udropship')->formatCustomerAddress($_shippingAddress, 'html', $_po->getVendor());?> </dd> 
-						<dt><?php echo $_helper->__("Phone");?>:</dt> 
-						<dd><?php echo $this->escapeHtml($_shippingAddress->getTelephone()); ?> </dd> 
+						<?php  /* <dt><?php echo $_helper->__("Phone");?>:</dt> 
+						<dd><?php echo $this->escapeHtml($_shippingAddress->getTelephone()); ?> </dd> */ ?>
 						<dt><?php echo $_helper->__("Bank account");?>:</dt> 
 						<dd><?php echo $this->__("N/A");?> [dev] </dd> 
 					</dl>
@@ -140,7 +141,7 @@
 				<div class="widget-header"> 
 					<h4>
 						<i class="icon-comment"></i> 
-						<?php echo $_helper->__("Customer notification comment");?>
+						<?php echo $_helper->__("Customer comment");?>
 					</h4>
 				</div>
 				<div class="widget-content">
@@ -160,10 +161,10 @@
 				<div class="widget-header"> 
 					<h4>
 						<i class="icon-comments-alt"></i> 
-						<?php echo $_helper->__("History");?>
+						<?php echo $_helper->__("RMA change log");?>
 					</h4>
 				</div>
-				<div class="widget-content">
+				<div class="widget-content comments">
 					<?php if($_comments->count()):?>
 					<dl class="dl-horizontal">
 						<?php foreach ($_comments as $_c): ?>
@@ -175,7 +176,9 @@
 							</small>
 						</dt>
 						<dd>
-							[<?php echo $this->htmlEscape($_c->getAuthorTypeText());?>]
+							<?php $_name = $_c->getAuthorName();?>
+							<?php $type = $_c->getAuthorTypeText(); ?>
+							[<?php echo $this->htmlEscape($_c->getAuthorTypeText());?><?php echo $_name ? " " . $_name : "";?>]
 							<?php echo nl2br($this->htmlEscape($_c->getComment()));?>
 						</dd>
 						
@@ -202,7 +205,7 @@
 								<?php echo $_helper->__("Status");?>
 							</label>
 							<div class="col-md-9">
-								<select class="form-control">
+								<select class="form-control" name="status">
 									<?php foreach($_statuses as $_statusId=>$_label):?>
 									<option value="<?php echo $this->escapeHtml($_statusId)?>" <?php if($_currentStatusId==$_statusId):?>selected="selected"<?php endif;?>><?php echo $this->escapeHtml($_label) ?></option>
 									<?php endforeach;?>
@@ -211,7 +214,7 @@
 						</div>
 						<div class="form-group">
 							<div class="col-md-12">
-								<textarea class="form-control" rows="8"></textarea>
+								<textarea class="form-control" name="comment" rows="8"></textarea>
 							</div>
 						</div>
 						<div class="form-group">
@@ -220,7 +223,8 @@
 							</label>
 							<div class="col-md-9">
 								<label class="checkbox"> 
-									<input type="checkbox" value=""> 
+									<input type="hidden" name="notify_customer" value=""> 
+									<input type="checkbox" name="notify_customer" value="1"> 
 								</label>
 							</div>
 						</div>
@@ -232,43 +236,40 @@
 			<div class="widget box">
 				<div class="widget-header"> 
 					<h4>
-						<i class="icon-pencil"></i> 
-						<?php echo $_helper->__("Shipping confirmation");?>
+						<i class="icon-envelope"></i> 
+						<?php echo $_helper->__("Shipments");?>
 					</h4>
 				</div>
 				<div class="widget-content">
 					<form class="form-horizontal row-border " action="<?php echo $this->getRmaUrl("comment");?>">
-						<div class="form-group">
-							<div class="col-md-12">
-								<dl class="dl-horizontal dl-z">
-									<dt><?php echo $_helper->__("Shpping letter");?>:</dt>
-									<dd>1212313123 [dev]</dd>
-									<dt><?php echo $_helper->__("Sent date");?>:</dt>
-									<dd><?php echo $this->formatDate();?></dd>
-									<dt><?php echo $_helper->__("Carrier");?>:</dt>
-									<dd>DHL [dev]</dd>
-									<dt><?php echo $_helper->__("Status");?>:</dt>
-									<dd>Odebrane [dev]</dd>
-								</dl>
+						<?php if(count($_trackCollection)):?>
+							<?php foreach ($_trackCollection as $_tracking):?>
+							<div class="form-group">
+								<div class="col-md-12">
+									<dl class="dl-horizontal dl-z">
+										<dt><?php echo $_helper->__("Tracking no.");?>:</dt>
+										<dd>
+											<?php if($_tracking->getTrackNumber()):?>
+												<?php echo $this->escapeHtml($_tracking->getTrackNumber());?>
+											<?php else:?>
+												<?php echo $_helper->__("N/A");?>
+											<?php endif;?>
+										</dd>
+										<dt><?php echo $_helper->__("Sent date");?>:</dt>
+										<dd><?php echo $this->escapeHtml($_tracking->getCreatedAt());?></dd>
+										<dt><?php echo $_helper->__("Carrier");?>:</dt>
+										<dd><?php echo $this->escapeHtml($_tracking->getTitle());?></dd>
+										<dt><?php echo $_helper->__("Status");?>:</dt>
+										<dd><?php echo $this->getTrackingStatusName($_tracking); ?></dd>
+									</dl>
+								</div>
 							</div>
-						</div>
+							<?php	endforeach; ;?>
+						<?php else:?>
+							<span class="text-muted"><?php echo $_helper->__("There is no tracking label");?></span>
+						<?php endif;?>
 						
-						<div class="form-group">
-							<div class="col-md-12">
-								<dl class="dl-horizontal dl-z">
-									<dt><?php echo $_helper->__("Shpping letter");?>:</dt>
-									<dd>1212313123 [dev]</dd>
-									<dt><?php echo $_helper->__("Sent date");?>:</dt>
-									<dd><?php echo $this->formatDate();?></dd>
-									<dt><?php echo $_helper->__("Carrier");?>:</dt>
-									<dd>DHL [dev]</dd>
-									<dt><?php echo $_helper->__("Status");?>:</dt>
-									<dd>Odebrane [dev]</dd>
-								</dl>
-							</div>
-						</div>
-						
-						<div class="form-actions"> <input type="submit" value="<?php echo $_helper->__("Confirm shipping");?>" class="btn btn-primary pull-right"> </div>
+						<div class="form-actions"> <input type="button" data-toggle="modal" href="#shippingModal" value="<?php echo $_helper->__("Print shipping label");?>" class="btn btn-primary pull-right"> </div>
 					</form>
 				</div>
 			</div>
@@ -282,6 +283,12 @@
 	echo $this->getChild("vendor_rma_edit_shipping_address")->
 		setAddress($_shippingAddress)->
 		toHtml();
+?>
+<?php  
+/*******************************************************************************
+ *	Shippign address modal
+ *******************************************************************************/
+	echo $this->getChild("vendor_rma_edit_shipping")->toHtml();
 ?>
 <?php  /*
 <div class="container">
