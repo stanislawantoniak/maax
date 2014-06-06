@@ -201,7 +201,7 @@ class Zolago_Po_Model_Aggregated_Pdf extends Varien_Object {
         $page->drawLine(45,$rel-98,210,$rel-98);
         $page->drawText(Mage::helper('zolagopo')->__('DHL signature'),45,$rel-110,'UTF-8');
         $page->drawLine(305,$rel-98,500,$rel-98);
-        $page->drawText(Mage::helper('zolagopo')->__('Customer signature'),305,$rel-110,'UTF-8');
+        $page->drawText(Mage::helper('zolagopo')->__('Sender signature'),305,$rel-110,'UTF-8');
     }
     // preparing date from - to
     // additionally gets courier name

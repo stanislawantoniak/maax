@@ -142,9 +142,11 @@
 "Number of shipments: %d", "Ilość przesyłek: %d",
 "Elements under 31,5 kg: %d", "Elementów do 31,5 kg: %d"
 "Elements DR: %d", "Elementów DR: %d"
-"Customer signature" ,"Podpis klienta"
 "COD value: %.2f", "Kwota COD: %.2f zł"
 "Europalets: %d", "Ilość Europalet %d"
 "Elements DHL09: %d", "Elementów DHL09"
 "Elements DHL12: %d", "Elementów DHL12"
 "DHL signature", "Podpis pracownika DHL"
+"Sender signature", "Podpis klienta"
+
+
