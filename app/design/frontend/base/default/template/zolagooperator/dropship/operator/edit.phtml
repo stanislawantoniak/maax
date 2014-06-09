@@ -31,16 +31,6 @@
 jQuery(function($){
 	var form = $("#edit-operator");
 	new Zolago.formIntegrator(form);
-	form.validate({
-		rules: {
-			"password": {
-				minlength: 5
-			},
-			"confirmation": {
-				minlength: 5,
-				equalTo: "#password"
-			}
-		}
-	});
+    form.validate();
 });
 </script>
