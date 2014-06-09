@@ -3,7 +3,7 @@ $_session = Mage::getSingleton('udropship/session');
 
 $_vendor = $_session->getVendor();
 $_currentLocale = Mage::app()->getLocale()->getLocaleCode();
-echo $_currentLocale;
+var_dump($_currentLocale);
 
 $_logoHeader = Mage::app()->getStore($_vendor->getLabelStore())->getGroup()->getName();
 $_allowedLocale = array(
