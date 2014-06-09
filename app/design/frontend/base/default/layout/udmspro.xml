@@ -15,6 +15,9 @@
             <!--<action method="addItem"><type>js</type><name>calendar/lang/calendar-en.js</name></action>-->
             <action method="addItem"><type>js</type><name>calendar/calendar-setup.js</name></action>
         </reference>
+        <reference name="header">
+            <action method="setTemplate"><template>unirgy/dropship/vendor/header_reg.phtml</template></action>
+        </reference>
         <reference name="content">
             <block type="core/html_calendar" name="head.calendar" as="calendar" template="page/js/calendar.phtml"/>
             <remove name="register" />
