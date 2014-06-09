@@ -33,17 +33,16 @@
             <?php echo $rma->getIncrementId(); ?>
         </td>
         <td>
-            <?php echo $po->getCreatedAt(); ?>
+            <?php echo $rma->getCreatedAt(); ?>
         </td>
         <td>
-            <?php echo $po->getVendorName(); ?>
+            <?php echo $rma->getVendorName(); ?>
         </td>
         <td>
             <?php
-                    $itemList = $this->getItemList($rma);                    
+                    $itemList = $rma->getItemsCollection();                    
                     foreach ($itemList as $item) {
-                        $first = array_pop($item);
-                        echo $first['name'].'<br/>';
+                        echo $item->getName().'<br/>';
                     }
             ?>
         </td>

@@ -42,7 +42,7 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
             $this->_redirect('*/*/view', array('po_id'=>$this->getRequest()->getParam('po_id')));
         } catch (Exception $e) {
             Mage::getSingleton('core/session')->addError($e->getMessage());
-            $this->_redirect('*/*/view', array('po_id'=>$this->getRequest()->getParam('po_id')));
+            $this->_redirect('*/*/newrma', array('po_id'=>$this->getRequest()->getParam('po_id')));
         }
     }
 
