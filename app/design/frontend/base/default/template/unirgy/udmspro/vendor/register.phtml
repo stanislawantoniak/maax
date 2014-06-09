@@ -23,13 +23,13 @@ $_session = Mage::getSingleton('udropship/session');
                         <div class="container">
                             <div class="col-md-12">
                                 <div style="margin-top:10px" class="form-group">
-                                    <span class="required"><?php echo $this->__('* Indicated Required Fields') ?></span>
+                                    <label><span class="required"><?php echo $this->__('* Indicated Required Fields') ?></span></label>
                                     <br><br>
 
                                     <div class="controls">
                                         <button class="form-button btn btn-lg btn-primary btn-block" type="submit"
                                                 name="send">
-                                            <span><?php echo $this->__('Register') ?></span></button>
+                                            <span><?php echo $this->__('Register as a vendor') ?></span></button>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -40,6 +40,8 @@ $_session = Mage::getSingleton('udropship/session');
                                     </div>
                                 </div>
                             </div>
+
+
                         </div>
                     </form>
 
@@ -49,23 +51,6 @@ $_session = Mage::getSingleton('udropship/session');
     </div>
 </div>
 
-<!--<script type="text/javascript">-->
-<!--    jQuery(function ($) {-->
-<!--        var form = $("#registration-form");-->
-<!--        new Zolago.formIntegrator(form);-->
-<!--        form.validate({-->
-<!--            rules: {-->
-<!--                "email": {-->
-<!--                    email: true-->
-<!--                },-->
-<!--                "telephone": {-->
-<!--                    digits: true-->
-<!--                }-->
-<!---->
-<!--            }-->
-<!--        });-->
-<!--    });-->
-<!--</script>-->
 
 <script type="text/javascript">
     var udNumberValidate = function (cmp, v, elm) {
@@ -182,10 +167,18 @@ $_session = Mage::getSingleton('udropship/session');
         });
         return result;
     }
+
+    Translator.add('Please enter valid email address', '<?php echo $this->__('Please enter valid email address'); ?>');
+
     Validation.addAllThese([
         ['validate-urlkey', 'Please use only letters (a-z) or numbers (0-9) in this field, first character should be a letter.', function (v) {
             if (!v) return true;
             return Validation.get('IsEmpty').test(v) ||  /^[a-z]+[a-z0-9]+$/.test(v)
+        }],
+        ['validate-email', Translator.translate('Please enter valid email address'), function (v) {
+            //return Validation.get('IsEmpty').test(v) || /\w{1,}[@][\w\-]{1,}([.]([\w\-]{1,})){1,3}$/.test(v)
+            //return Validation.get('IsEmpty').test(v) || /^[\!\#$%\*/?|\^\{\}`~&\'\+\-=_a-z0-9][\!\#$%\*/?|\^\{\}`~&\'\+\-=_a-z0-9\.]{1,30}[\!\#$%\*/?|\^\{\}`~&\'\+\-=_a-z0-9]@([a-z0-9_-]{1,30}\.){1,5}[a-z]{2,4}$/i.test(v)
+            return Validation.get('IsEmpty').test(v) || /^([a-z0-9,!\#\$%&'\*\+\/=\?\^_`\{\|\}~-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z0-9,!\#\$%&'\*\+\/=\?\^_`\{\|\}~-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*@([a-z0-9-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z0-9-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*\.(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]){2,})$/i.test(v)
         }],
         ['udvendor_name-unique', 'This vendor name is already used.', udCheckVendorNameExist],
         ['udemail-unique', 'This email is already used.', udCheckEmailExist],
