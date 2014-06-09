@@ -1,30 +1,66 @@
-<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
-
 <?php
 $_hlp = Mage::helper('udropship');
 $_sHlp = Mage::helper('udmspro');
 $_session = Mage::getSingleton('udropship/session');
+
 ?>
+<div class="col-md-12">
+    <div class="col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-3">
+        <div style="margin-top:100px;">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="a-center"><?php echo $_sHlp->__('Become a Vendor') ?></h3>
+                </div>
+                <div class="panel-body">
+                    <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+                    <form action="<?php echo $this->getUrl('umicrosite/vendor/registerPost') ?>" enctype="multipart/form-data"
+                          method="post"
+                          id="registration-form" autocomplete="off">
+                        <?php foreach ($this->getForm()->getElements() as $element) {
+                            echo $element->toHtml();
+                        } ?>
 
 
-	<div class="page-title">
-		<h1><?php echo $_sHlp->__('Become a Vendor') ?></h1>
-		<span class="required"><?php echo $this->__('* Indicated Required Fields') ?></span>
-	</div>
+                        <div style="margin-top:10px" class="form-group">
+                            <span class="required"><?php echo $this->__('* Indicated Required Fields') ?></span>
+                            <br><br>
+                            <div class="controls">
+                                <button class="form-button btn btn-lg btn-primary btn-block" type="submit" name="send">
+                                    <span><?php echo $this->__('Register') ?></span></button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="control">
+                                <div style="border-top: 1px solid#888; padding-top:15px; font-size:85%">
+                                    <a href="<?php echo $this->getUrl('udropship/vendor') ?>">&laquo; <?php echo $this->__('Return to log in') ?></a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
 
-<form action="<?php echo $this->getUrl('umicrosite/vendor/registerPost')?>" enctype="multipart/form-data" method="post" id="registration-form">
-<?php foreach ($this->getForm()->getElements() as $element) {
-    echo $element->toHtml();
-} ?>
-
-<div class="buttons-set">
-    <button class="form-button" type="button" onclick="udRegForm.submit()" name="send"><span><?php echo $this->__('Register') ?></span></button>
-    <div class="clearer"></div>
-    <ul class="links">
-    	<li><a href="<?php echo $this->getUrl('udropship/vendor')?>">&laquo; <?php echo $this->__('Return to log in')?></a></li>
-    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-</form>
+
+<!--<script type="text/javascript">-->
+<!--    jQuery(function ($) {-->
+<!--        var form = $("#registration-form");-->
+<!--        new Zolago.formIntegrator(form);-->
+<!--        form.validate({-->
+<!--            rules: {-->
+<!--                "email": {-->
+<!--                    email: true-->
+<!--                },-->
+<!--                "telephone": {-->
+<!--                    digits: true-->
+<!--                }-->
+<!---->
+<!--            }-->
+<!--        });-->
+<!--    });-->
+<!--</script>-->
 
 <script type="text/javascript">
     var udNumberValidate = function (cmp, v, elm) {
@@ -165,7 +201,10 @@ $_session = Mage::getSingleton('udropship/session');
         }]
     ]);
     var udRegForm = new VarienForm('registration-form', true);
-    new RegionUpdater('country_id', 'region', 'region_id', <?php echo $this->helper('directory')->getRegionJson() ?>);
+    if($('country_id')){
+        new RegionUpdater('country_id', 'region', 'region_id', <?php echo $this->helper('directory')->getRegionJson() ?>);
+
+    }
 
     Event.observe(window, 'load', function(e){
         var payout_selector = $('payout_method');

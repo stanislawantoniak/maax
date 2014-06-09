@@ -43,3 +43,9 @@
 #login-vendor .messages > li {
     margin-bottom: 0;
 }
+
+
+.validation-advice {
+    display: block !important;
+    color: #b94a48;
+}
