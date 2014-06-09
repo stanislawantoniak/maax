@@ -21,25 +21,26 @@ $_session = Mage::getSingleton('udropship/session');
                         } ?>
 
                         <div class="container">
-                            <div style="margin-top:10px" class="form-group">
-                                <span class="required"><?php echo $this->__('* Indicated Required Fields') ?></span>
-                                <br><br>
+                            <div class="col-md-12">
+                                <div style="margin-top:10px" class="form-group">
+                                    <span class="required"><?php echo $this->__('* Indicated Required Fields') ?></span>
+                                    <br><br>
 
-                                <div class="controls">
-                                    <button class="form-button btn btn-lg btn-primary btn-block" type="submit"
-                                            name="send">
-                                        <span><?php echo $this->__('Register') ?></span></button>
+                                    <div class="controls">
+                                        <button class="form-button btn btn-lg btn-primary btn-block" type="submit"
+                                                name="send">
+                                            <span><?php echo $this->__('Register') ?></span></button>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="control">
-                                    <div style="border-top: 1px solid#888; padding-top:15px; font-size:85%">
-                                        <a href="<?php echo $this->getUrl('udropship/vendor') ?>">&laquo; <?php echo $this->__('Return to log in') ?></a>
+                                <div class="form-group">
+                                    <div class="control">
+                                        <div style="border-top: 1px solid#888; padding-top:15px; font-size:85%">
+                                            <a href="<?php echo $this->getUrl('udropship/vendor') ?>">&laquo; <?php echo $this->__('Return to log in') ?></a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                     </form>
 
                 </div>

@@ -1,10 +1,17 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
-    <sales_po_history>
-        <label>Customer Purchase Order History</label>
+    <sales_rma_index>
+        <label>Customer Rma History</label>
         <update handle="customer_account"/>
         <reference name="my.account.wrapper">
-             <block type="zolagopo/list" as="list" name="sales.po.list"/>  
+             <block type="zolagorma/list" as="list" name="sales.rma.list"/>
+        </reference>
+    </sales_rma_index>	
+    <sales_po_history>
+        <label>Customer Po History</label>
+        <update handle="customer_account"/>
+        <reference name="my.account.wrapper">
+             <block type="zolagopo/list" as="list" name="sales.po.list"/>
         </reference>
     </sales_po_history>	
 	<sales_po_newrma>
