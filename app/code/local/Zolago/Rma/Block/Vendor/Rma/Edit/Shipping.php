@@ -1,15 +1,15 @@
 <?php
-class Zolago_Po_Block_Vendor_Po_Edit_Shipping 
-	extends Zolago_Po_Block_Vendor_Po_Edit_Abstract
+class Zolago_Rma_Block_Vendor_Rma_Edit_Shipping 
+	extends Zolago_Rma_Block_Vendor_Rma_Edit_Abstract
 	implements Zolago_Po_Block_Vendor_Po_Edit_Shipping_Interface
 {
-
+	
 	public function isMethodChecked($code){
 		return $code == Zolago_Dhl_Model_Carrier::CODE;
 	}
 	
 	public function getFormUrl() {
-		return  $this->getPoUrl("saveShipping", array("mode"=>$this->getMode()));
+		return $this->getRmaUrl("saveShipping", array("mode"=>$this->getMode()));
 	}
 	
 	public function getMode() {
@@ -23,6 +23,7 @@ class Zolago_Po_Block_Vendor_Po_Edit_Shipping
 	public function getRemainingShippingAmount() {
 		return $this->getParentBlock()->getRemainingShippingAmount();
 	}
+	
 	public function getRemainingWeight() {
 		return $this->getParentBlock()->getRemainingWeight();
 	}
@@ -34,7 +35,6 @@ class Zolago_Po_Block_Vendor_Po_Edit_Shipping
 	public function getCarriers(){
 		return $this->getParentBlock()->getCarriers();
 	}
-
 
 	public function canUseCarrier() {
 		return $this->getParentBlock()->canUseCarrier();

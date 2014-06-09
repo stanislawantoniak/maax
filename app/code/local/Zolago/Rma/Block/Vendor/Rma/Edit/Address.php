@@ -1,6 +1,7 @@
 <?php
 class Zolago_Rma_Block_Vendor_Rma_Edit_Address 
 	extends Zolago_Rma_Block_Vendor_Rma_Edit_Abstract
+	implements Zolago_Po_Block_Vendor_Po_Edit_Address_Interface
 {
 	
 	public function getFormUrl() {
