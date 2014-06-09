@@ -12,7 +12,9 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 extends Zolago_Catalog_Mod
 
     protected function _create($data)
     {
+
         $json = json_encode($data);
+        Mage::log(microtime() . " " . $json, 0, 'converter_log.log');
 
         if (!empty($data)) {
             $productAction = Mage::getSingleton('catalog/product_action');
@@ -20,21 +22,37 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 extends Zolago_Catalog_Mod
             $skuV = $data['sku'];
 
             $sku = $merchant . '-' . $skuV;
+
             $productId = Zolago_Catalog_Helper_Data::getSkuAssocId($sku);
             if ($productId) {
-                $price = $data['data'][0]['price'];
 
-                $productIds = array($productId);
-                $attrData = array('price' => $price);
+                $prices = isset($data['data']) ? $data['data'] : array();
+                if(!empty($prices)){
 
-                $productAction->updateAttributesNoIndex($productIds, $attrData, 0);
-                $productAction->updateAttributesNoIndex($productIds, $attrData, 1);
-                $productAction->updateAttributesNoIndex($productIds, $attrData, 2);
+                    $priceA = FALSE;
+                    foreach ($prices as $pricesItem) {
+                        if ($pricesItem['price_id'] == "A") {
+                            $priceA = $pricesItem['price'];
+                        }
+                    }
 
-                Zolago_Catalog_Helper_Configurable::queueProduct($productId);
+
+                    $productIds = array($productId);
+                    $attrData = array('price' => $priceA);
+
+                    $productAction->updateAttributesNoIndex($productIds, $attrData, 0);
+                    $productAction->updateAttributesNoIndex($productIds, $attrData, 1);
+                    $productAction->updateAttributesNoIndex($productIds, $attrData, 2);
+
+                    Mage::log(microtime() . " " . $sku . ":".$priceA ."\n ---------------" , 0, 'converter_log.log');
+
+                    Zolago_Catalog_Helper_Configurable::queueProduct($productId);
+                }
+
+
             }
         }
-        Zolago_Catalog_Helper_Log::log($json);
+        //Zolago_Catalog_Helper_Log::log($json);
         return $json;
     }
 

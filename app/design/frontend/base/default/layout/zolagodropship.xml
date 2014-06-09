@@ -209,6 +209,19 @@
 			</action>
 		</reference>
     </udpo_vendor_shipmentinfo>
+    <udropship_vendor_login>
+        <update handle="bootstrap" />
+        <update handle="forms"/>
+
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/page_clear.phtml</template>
+            </action>
+        </reference>
+        <reference name="header">
+            <action method="setTemplate"><template>unirgy/dropship/vendor/header_boot.phtml</template></action>
+        </reference>
+    </udropship_vendor_login>
 	<sales_order_shipment>
 		<reference name="shipment_items">
 			<action method="setTemplate">

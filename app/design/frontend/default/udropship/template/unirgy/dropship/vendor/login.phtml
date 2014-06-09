@@ -16,32 +16,73 @@
  */
 ?>
 
-<?php $_session = Mage::getSingleton('udropship/session') ?>
+<?php $_session = Mage::getSingleton('udropship/session'); ?>
+    <div style="margin-top:100px;" id="login-vendor">
+        <div class="panel panel-default" >
+            <div class="panel-heading">
+                <h3 class="a-center">
+                    <strong>
+                        <?php echo $this->__('Vendor Log in') ?>
+                    </strong>
+                </h3>
+            </div>
+            <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+            <div class="panel-body" >
+                <form class="form-horizontal" action="#" method="post" id="login-form" role="form" autocomplete="off">
+                    <div style="margin-bottom: 25px" class="form-group">
+                        <label for="email"><?php echo $this->__('Username / Email ') ?> <span class="required">*</span></label>
+                        <input name="login[username]"
+                               value="<?php echo $this->htmlEscape($_session->getUsername()) ?>" type="text"
+                               class="form-control input-lg input-text required-entry validate-email"
+                               placeholder="<?php echo $this->__('Username / Email') ?>" id="email">
+                    </div>
 
-<form action="#" method="post" id="login-form">
-<div class="login-box generic-box">
-    <div class="box-head"><h3><?php echo $this->__('Vendor Log in') ?></h3></div>
-    <div class="registered-users">
-        <div class="content">
-            <ul class="form-list">
-                <li>
-                    <label for="email"><?php echo $this->__('Username / Email Address') ?> <span class="required">*</span></label><br />
-                    <input name="login[username]" value="<?php echo $this->htmlEscape($_session->getUsername()) ?>" title="<?php echo $this->__('Email Address') ?>" id="email" type="text" class="input-text required-entry" style="width:250px;" />
-                </li>
-                <li>
-                    <label for="pass"><?php echo $this->__('Password') ?> <span class="required">*</span></label><br />
-                    <input name="login[password]" type="password" class="input-text required-entry vaidate-password" id="pass" style="width:250px;" />
-                </li>
-            </ul>
-            <p class="required"><?php echo $this->__('* Required Fields') ?></p>
-        </div>
-        <div class="buttons-set" style="margin-top:10px;">
-            <?php echo $this->getChildHtml('login_links') ?>
-            <button class="form-button" type="submit" name="send"><span><?php echo $this->__('Login') ?></span></button>
+                    <div style="margin-bottom: 25px" class="form-group">
+                        <label for="pass"><?php echo $this->__('Password') ?> <span class="required">*</span></label>
+                        <input name="login[password]" type="password"
+                               class="form-control input-lg required-entry vaidate-password"
+                               placeholder="<?php echo $this->__('Password') ?>" id="pass">
+                    </div>
+                    <div style="margin-top:10px" class="form-group">
+                        <div class="controls">
+                                <button class="form-button btn btn-lg btn-primary btn-block" type="submit" name="send">
+                                    <?php echo $this->__('Login') ?>
+                                </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="control">
+                            <?php //echo $this->getChildHtml('login_links') ?>
+                            <div style="border-top: 1px solid#888; padding-top:15px; font-size:85%">
+
+                                <a title="<?php echo $this->__('Forgot Password'); ?>" href="<?php echo Mage::helper('udropship')->getVendorForgotPasswordUrl(); ?>"><?php echo $this->__('Forgot Password') ?></a><br />
+
+                                    <a title="<?php echo $this->__('Register New Account'); ?>" href="<?php echo Mage::helper('umicrosite')->getVendorRegisterUrl(); ?>"><?php echo $this->__('Register New Account') ?></a>
+                            </div>
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+
         </div>
     </div>
-</div>
-</form>
+
+<!--    <script type="text/javascript">-->
+<!--        jQuery(function ($) {-->
+<!--            var form = $("#login-form");-->
+<!--            new Zolago.formIntegrator(form);-->
+<!--            form.validate({-->
+<!--                rules: {-->
+<!--                    "password": {-->
+<!--                        minlength: 5-->
+<!--                    }-->
+<!---->
+<!--                }-->
+<!--            });-->
+<!--        });-->
+<!--    </script>-->
 
 <?php if (!$this->getRequest()->getParam('ajax')): ?>
 <script type="text/javascript">
