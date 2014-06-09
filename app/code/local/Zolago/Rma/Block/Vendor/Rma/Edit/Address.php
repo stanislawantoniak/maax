@@ -1,23 +1,24 @@
 <?php
-class Zolago_Po_Block_Vendor_Po_Edit_Address 
-	extends Zolago_Po_Block_Vendor_Po_Edit_Abstract
+class Zolago_Rma_Block_Vendor_Rma_Edit_Address 
+	extends Zolago_Rma_Block_Vendor_Rma_Edit_Abstract
 	implements Zolago_Po_Block_Vendor_Po_Edit_Address_Interface
 {
-
-	protected $_shippingTypes = array(
-		Mage_Sales_Model_Order_Address::TYPE_SHIPPING, 
-		Zolago_Po_Model_Po::TYPE_POSHIPPING
-	);
 	
 	public function getFormUrl() {
-		return $this->getPoUrl("saveAddress", array("type"=>$this->getType()));
+		return $this->getRmaUrl("saveAddress", array("type"=>$this->getType()));
 	}
+	
+	protected $_shippingTypes = array(
+		Mage_Sales_Model_Order_Address::TYPE_SHIPPING, 
+		Zolago_Po_Model_Po::TYPE_POSHIPPING, 
+		Zolago_Rma_Model_Rma::TYPE_RMASHIPPING
+	);
 	
 	public function isSameAsOrigin($type) {
 		if($type==Mage_Sales_Model_Order_Address::TYPE_SHIPPING){
-			return $this->getPo()->isShippingSameAsOrder();
+			return $this->getRma()->isShippingSameAsPo();
 		}elseif($type==Mage_Sales_Model_Order_Address::TYPE_BILLING){
-			return $this->getPo()->isBillingSameAsOrder();
+			return $this->getRma()->isShippingSameAsPo();
 		}
 		return true;
 	}

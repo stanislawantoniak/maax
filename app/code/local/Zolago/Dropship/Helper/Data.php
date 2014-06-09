@@ -3,6 +3,33 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
 	const TRACK_SINGLE			= 1;
 
 	/**
+	 * @param Unirgy_Rma_Model_Rma_Track | string $tracking 
+	 */
+	public function getTrackingStatusName($tracking) {
+		if($tracking instanceof Unirgy_Rma_Model_Rma_Track){
+			$tracking = $tracking->getUdropshipStatus();
+		}
+		switch ($tracking) {
+			case Unirgy_Dropship_Model_Source::TRACK_STATUS_CANCELED:
+				return $this->__("Canceled");
+			break;
+			case Unirgy_Dropship_Model_Source::TRACK_STATUS_DELIVERED:
+				return $this->__("Delivered");
+			break;
+			case Unirgy_Dropship_Model_Source::TRACK_STATUS_PENDING:
+				return $this->__("Pending");
+			break;
+			case Unirgy_Dropship_Model_Source::TRACK_STATUS_READY:
+				return $this->__("Ready");
+			break;
+			case Unirgy_Dropship_Model_Source::TRACK_STATUS_SHIPPED:
+				return $this->__("Shipped");
+			break;
+		}
+		return $tracking;
+	}
+	
+	/**
 	 * @param Mage_Core_Model_Store|int|null $store
 	 * @return Mage_Catalog_Model_Entity_Attribute
 	 */
