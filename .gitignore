@@ -13,3 +13,5 @@
 *.DS_Store
 /downloader/
 /app/etc/solrbridge.conf
+bin/
+vendor/
