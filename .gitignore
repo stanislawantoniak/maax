@@ -15,3 +15,4 @@
 /app/etc/solrbridge.conf
 bin/
 vendor/
+.project
