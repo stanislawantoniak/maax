@@ -29,9 +29,9 @@
 .z-grid .range-line.date {
     margin-bottom: 5px;
 }
-.datepicker, .hasDatepicker {
+.grid .filter .hasDatepicker {
     position: relative;
-    z-index: 10;
+    z-index: 1;
 }
 
 #login-vendor .messages {
