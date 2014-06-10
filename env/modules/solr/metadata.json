@@ -1,0 +1,29 @@
+{
+  "name": "example42-solr",
+  "version": "2.0.6",
+  "summary": "Puppet module for solr",
+  "author": "Alessandro Franceschi",
+  "description": "This module installs and manages solr. Check README for details.",
+  "dependencies": [
+    {
+      "name": "example42/puppi",
+      "version_requirement": ">=2.0.0"
+    }
+  ],
+  "types": [
+
+  ],
+  "checksums": {
+    "LICENSE": "a300b604c66de62cf6e923cca89c9d83",
+    "Modulefile": "952c34f50b4c888f860e7a6f2c5e6e36",
+    "README.markdown": "62dfb03dc10eedd3484db863471897a4",
+    "README.md": "14b7ecc1b652351af7004f2560a3124c",
+    "Rakefile": "e90d68823ff237c89224eb139f8926ad",
+    "manifests/init.pp": "c4b668674d54f3d94dd480f272af976d",
+    "manifests/install.pp": "231250dcdec0814d3258df1810debd63",
+    "manifests/params.pp": "ec1d37a2f353c3c05d0aa242cf9dbea9"
+  },
+  "source": "https://github.com/example42/puppet-solr",
+  "project_page": "http://www.example42.com",
+  "license": "Apache2"
+}
