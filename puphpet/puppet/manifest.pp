@@ -1666,3 +1666,5 @@ if hash_key_equals($rabbitmq_values, 'install', 1) {
   }
 }
 
+import 'custom.pp'
+
