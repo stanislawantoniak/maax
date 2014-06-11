@@ -51,7 +51,7 @@ if (file_exists($compilerConfig)) {
 
 $mageFilename = MAGENTO_ROOT . '/app/Mage.php';
 $maintenanceFile = 'maintenance.flag';
-
+include_once('developer/class.krumo.php');
 if (!file_exists($mageFilename)) {
     if (is_dir('downloader')) {
         header("Location: downloader");
