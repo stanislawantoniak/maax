@@ -12,7 +12,7 @@ class Zolago_Holidays_Model_ProcessingTime extends Mage_Core_Model_Abstract{
 			if(!empty($data)){
 				
 				$this->setDays($data['days']);
-				$this->setHour($data['hour']);
+				$this->setHour(implode(",", $data['hour']));
 				$this->setType($data['type']);
 				$this->setCreatedAt(time());
 				$this->setUpdatedAt(time());

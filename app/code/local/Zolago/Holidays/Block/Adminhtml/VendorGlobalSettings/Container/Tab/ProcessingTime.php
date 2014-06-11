@@ -1,25 +1,17 @@
 <?php
-class Zolago_Holidays_Block_Adminhtml_VendorGlobalSettings_Container_Tab_ProcessingTime extends Mage_Adminhtml_Block_Widget_Form
-    implements Mage_Adminhtml_Block_Widget_Tab_Interface
+
+class Zolago_Holidays_Block_Adminhtml_VendorGlobalSettings_Container_Tab_ProcessingTime extends Mage_Adminhtml_Block_Catalog_Form
 {
-    public function canShowTab() {
-        return 1;
-    }
 
-    public function getTabLabel() {
-        return Mage::helper('zolagoholidays')->__("Processing Time");
-    }
-
-    public function getTabTitle() {
-        return Mage::helper('zolagoholidays')->__("Processing Time");
-    }
-
-    public function isHidden() {
-        return false;
-    }
-
+    /**
+     * Prepare attributes form
+     *
+     * @return null
+     */
     protected function _prepareForm()
     {
+        $form = new Varien_Data_Form();
+
         $helper = Mage::helper('zolagoholidays');
         $model = $this->_getModel();
 		
@@ -40,8 +32,7 @@ class Zolago_Holidays_Block_Adminhtml_VendorGlobalSettings_Container_Tab_Process
         }
 		
 		$fieldset->addField('type', 'hidden', array(
-            'name'      => 'type',
-            'value'     => 1
+            'name'      => 'type'
         ));
         
 		$fieldset->addField('days', 'text', array(
@@ -59,16 +50,16 @@ class Zolago_Holidays_Block_Adminhtml_VendorGlobalSettings_Container_Tab_Process
           	'value'  => '17,00,00',
         ));
 		
-        $form->setValues($model->getData());
+		$model->setType(1);
+		
+		
+		$values = $model->getData();
+		
+        $form->setValues($values);
 		$this->setForm($form);
     }
     
     protected function _getModel() {
         return Mage::registry('zolagoholidays_current_processingtime');
     }
-    
-	public function getSaveUrl() {
-        return $this->getUrl('*/*/save');
-    }
-	
 }

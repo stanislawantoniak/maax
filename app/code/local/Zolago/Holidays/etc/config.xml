@@ -27,6 +27,11 @@
 			<zolagoholidays>
 				<class>Zolago_Holidays_Block</class>
 			</zolagoholidays>
+            <zolagovendorglobalsettings>
+                <rewrite>
+                    <adminhtml_vendorglobalsettings_container_tabs>Zolago_Holidays_Block_Adminhtml_VendorGlobalSettings_Container_Tabs</adminhtml_vendorglobalsettings_container_tabs>
+                </rewrite>
+            </zolagovendorglobalsettings>
 		</blocks>
 		<helpers>
 			<zolagoholidays>
