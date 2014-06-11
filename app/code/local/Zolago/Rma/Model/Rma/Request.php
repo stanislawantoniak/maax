@@ -47,6 +47,19 @@ class Zolago_Rma_Model_Rma_Request extends Mage_Core_Model_Abstract {
         $dhlSettings = $this->_prepareDhlSettings();
         $client = Mage::helper('zolagodhl')->startDhlClient($dhlSettings);
         $client->setRma($this->_rma);
-        print_R($client->createShipmentAtOnce($dhlSettings));
+        $out = $client->createShipmentAtOnce($dhlSettings);
+		if ($out) {
+			$ioAdapter			= new Varien_Io_File();
+			$fileName			= $out->createShipmentResult->shipmentTrackingNumber.'.pdf';
+			$fileContent		= base64_decode($out->createShipmentResult->label->labelContent);
+			$fileLocation		= Mage::helper('zolagodhl')->getDhlFileDir() . $fileName;
+			$result = @$ioAdapter->filePutContent($fileLocation, $fileContent);
+			if (!$result) {
+    		    Mage::throwException(Mage::helper('zolagodhl')->_('Print label error'));
+			}
+			return $fileLocation;
+		} else {
+                Mage::throwException(Mage::helper('zolagodhl')->_('Create shipment error'));
+		}		
     }
 }

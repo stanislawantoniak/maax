@@ -17,6 +17,7 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
 
     const PAYMENT_TYPE				= 'BANK_TRANSFER';
     const PAYER_TYPE				= 'SHIPPER';
+    const SHIPMENT_RMA_CONTENT      = 'Reklamacyjny zwrot do nadawcy';
 
     const DHL_LABEL_TYPE			= 'LP';
     protected $_default_params = array (
@@ -95,9 +96,10 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
     protected function _sendMessage($method,$message = null) {
         try {
             $wsdl = Mage::getStoreConfig('carriers/zolagodhl/gateway');
-            $soap = new SoapClient($wsdl,array());
+            $soap = new SoapClient($wsdl,array('trace'=>true));
             $result = $soap->$method($message);
         } catch (Exception $xt) {
+            print_R($soap->__getLastRequest());
             $result = array (
                           'error' => $xt->getMessage()
                       );
@@ -415,9 +417,10 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
         $data = $address->getData();
         $message = new StdClass();
         $message->name = $data['firstname'].' '.$data['lastname'];
-        $message->postalCode = $data['postcode'];
-        $message->city = $data['city'];
+        $message->postalCode = $this->formatDhlPostCode($data['postcode']);
+        $message->city = substr($data['city'],0,17);
         $message->street = $data['street'];
+        $message->houseNumber = self::ADDRESS_HOUSE_NUMBER;
         $contact = new StdClass;
         $contact->personName = $message->name;
         $contact->phoneNumber = $data['telephone'];
@@ -434,9 +437,10 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
         $data = $vendor->getData();
         $message = new StdClass;
         $address->name = $data['vendor_name'];
-        $address->city = $data['city'];
-        $address->postalCode = $data['zip'];
+        $address->city = substr($data['city'],0,17);
+        $address->postalCode = $this->formatDhlPostCode($data['zip']);
         $address->street = $data['street'];
+        $address->houseNumber = self::ADDRESS_HOUSE_NUMBER;
         $contact = new StdClass;
         $contact->personName = $address->name;
         $contact->phoneNumber = $data['telephone'];
@@ -464,11 +468,12 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
     public function createShipmentAtOnce($dhlSettings) {
         $message = new StdClass;
         $message->authData = $this->_auth;
-        $message->shipment = new stdClass;
-        $message->shipment->shipmentInfo = $this->_prepareShipmentAtOnce(); 
-        $message->ship = $this->_prepareShip();
-        $message->pieceList = $this->_createPieceList($dhlSettings);
-        print_R($message);
+        $shipment = new stdClass;
+        $shipment->shipmentInfo = $this->_prepareShipmentAtOnce(); 
+        $shipment->ship = $this->_prepareShip();
+        $shipment->content = self::SHIPMENT_RMA_CONTENT;
+        $shipment->pieceList = $this->_createPieceList($dhlSettings);
+        $message->shipment = $shipment;
         return $this->_sendMessage('createShipment',$message);
     }
     public function setParam($param,$value) {

@@ -157,6 +157,15 @@ class Zolago_Rma_Model_Rma extends Unirgy_Rma_Model_Rma
    }
    public function sendDhlRequest() {
        $request = Mage::getModel('zolagorma/rma_request');
-       $request->prepareRequest($this);
+       $filename = $request->prepareRequest($this);
+       return $filename;
+   }
+   public function getTotalValue() {
+       $collection = $this->getItemsCollection();
+       $price = 0;
+       foreach ($collection as $item) {
+         $price += $item->getPrice();
+       }
+       return $price;
    }
 }
