@@ -121,7 +121,7 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 			);
 			
 		   return array(
-				"active" => $this->isActive("udpo") || $this->isActive("zolagopo_aggregated"),
+				"active" => $this->isActive(array("udpo", "zolagopo_aggregated")),
 				"icon"	 => "icon-shopping-cart",
 				"label"	 => $this->__("Orders"),
 				"url"		=> "#",
@@ -249,9 +249,10 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 		$grouped = $this->_processGroups($groupOne, $groupTwo);
 		
 		if(count($grouped)){
+			
 			return array(
 				"label"		=> $this->__("Products"),
-				"active"	=> $this->isActive("udprod", "udprod_mass", "udprod_image"),
+				"active"	=> $this->isActive(array("udprod", "udprod_mass", "udprod_image")),
 				"icon"		=> "icon-folder-open",
 				"url"		=> "#",
 				"children"	=> $grouped

@@ -8,7 +8,19 @@ class Zolago_Rma_Block_New extends Mage_Core_Block_Template
     public function getPo() {
         return Mage::registry('current_po');
     }
-    public function getItemList() {
+	/**
+	 * @return Zolago_Rma_Model_Rma
+	 */
+	public function getRma() {
+		return Mage::registry('current_rma');
+	}
+	/**
+	 * @return Unirgy_Rma_Model_Rma_Track
+	 */
+	public function getTrack() {
+		return Mage::registry('current_track');
+	}
+	public function getItemList() {
         $po = $this->getPo();
         if (!$po) {
             return array();
@@ -16,18 +28,6 @@ class Zolago_Rma_Block_New extends Mage_Core_Block_Template
         $items = $po->getItemsCollection();
         $out = Mage::helper('zolagorma')->getItemList($items);
         return $out;
-    }
-    public function getReturnRenderer() {
-        if (is_null($this->_returnRenderer)) {
-            $helper = Mage::helper('urma');
-            $list = $helper->getItemConditionTitles();
-            $out = '';
-            foreach ($list as $key=>$item) {
-                $out .= '<option value="'.$key.'">'.Mage::helper('zolagorma')->__($item).'</option>';
-            }
-            $this->_returnRenderer = $out;
-        }
-        return $this->_returnRenderer;
     }
 	public function getHours() {
 		$opts = array();

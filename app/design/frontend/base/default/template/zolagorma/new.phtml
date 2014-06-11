@@ -1,6 +1,9 @@
 <?php $_helper = Mage::helper("zolagorma"); ?>
 <?php $_po = $this->getPo(); ?>
+<?php $_rma = $this->getRma();?>
 <?php $_shippingAddress = $_po->getShippingAddress(); ?>
+<?php $_itemsSingle = $_rma->getItemsSingle(); ?>
+<?php $_itemsConditionSingle = $_rma->getItemsConditionSingle(); ?>
 <?php if ($items = $this->getItemList()): ?>
 
 	<h4><?php echo $_helper->__("Create new RMA"); ?></h4>
@@ -32,7 +35,7 @@
 											?>
 											<tr data-name="<?php echo $this->escapeHtml($item['name']); ?>">
 												<td style="vertical-align: middle;">
-													<input type="checkbox" class="rma-checkbox" name="rma[items_single][<?php echo $item['entityId'] ?>][<?php echo $key ?>]" value="true"/>
+													<input <?php if(isset($_itemsSingle[$item['entityId']][$key])):?>checked="checked"<?php endif;?> type="checkbox" class="rma-checkbox" name="rma[items_single][<?php echo $item['entityId'] ?>][<?php echo $key ?>]" value="true"/>
 												</td>
 												<td>
 													<?php echo $this->escapeHtml($item['name']); ?>
@@ -40,10 +43,10 @@
 												<td style="vertical-align: middle;">
 													<div class="condition-wrapper" style="display: none;">
 														<select style="width: auto;" class="required-entry" id="condition-<?php echo $item['entityId']; ?>" name="rma[items_condition_single][<?php echo $item['entityId'] . '][' . $key . ']' ?>">
-															<option value=""><?php echo $_helper->__('Select a reason..') ?></option>
-															<?php
-															echo $this->getReturnRenderer();
-															?>
+															<option value=""><?php echo $_helper->__('Select a reason...') ?></option>
+															<?php foreach($_helper->getItemConditionTitles() as $_key=>$_label):?>
+															<option <?php if(isset($_itemsConditionSingle[$item['entityId']][$key]) && $_itemsConditionSingle[$item['entityId']][$key]==$_key):?>selected="selected"<?php endif;?> value="<?php echo $this->escapeHtml($_key);?>"><?php echo $this->escapeHtml($_label); ?></option>
+															<?php endforeach;?>
 														</select>
 													</div>
 												</td>
@@ -54,7 +57,7 @@
 									?>
 								</tbody>
 							</table>
-							<input type="hidden" name="has_items" value="" class="required-entry" id="rma-has-items"/>
+							<input type="hidden" name="rma[has_items]" value="" class="required-entry" id="rma-has-items"/>
 						</div>
 					</li>
 				</ul>
@@ -66,7 +69,7 @@
 					<li class="wide">
 						<label class="required" for="carrier-date"><?php echo $_helper->__("Comment"); ?> <em>*</em></label>
 						<div class="input-box">
-							<textarea name="rma[comment_text]" id="comment-text" class="required-entry"></textarea>
+							<textarea name="rma[comment_text]" id="comment-text" class="required-entry"><?php echo $this->escapeHtml($_rma->getCommentText());?></textarea>
 						</div>
 					</li>
 				</ul>
@@ -80,8 +83,8 @@
 			</div>
 		</div>
 		<div class="steps step-2" id="step-2" style="display: none;">
-			<input type="hidden" name="shipping_address_id" value="<?php $_shippingAddress->getId(); ?>"/>
-			<input type="hidden" name="override_address" value="0"/>
+			<input type="hidden" name="rma[shipping_address_id]" value="<?php $_shippingAddress->getId(); ?>"/>
+			<input type="hidden" name="rma[override_address]" value="0"/>
 			
 			<div class="fieldset">
 				<h2 class="legend"><?php echo $_helper->__("Confirm or change pickup address for the courier"); ?></h2>
@@ -102,17 +105,17 @@
 					<li class="wide">
 						<label class="required" for="carrier-date"><?php echo $_helper->__("Choose the day"); ?> <em>*</em></label>
 						<div class="input-box">
-							<input type="text" name="carrier_date" value="<?php echo $this->formatDate();?>" id="carrier-date" title="<?php echo $_helper->__("Choose the day"); ?>" value="" class="input-text required-entry ">
+							<input type="text" value="<?php echo $_rma->getCarrierDate();?>" name="rma[carrier_date]" value="<?php echo $this->formatDate();?>" id="carrier-date" title="<?php echo $_helper->__("Choose the day"); ?>" value="" class="input-text required-entry ">
 						</div>
 					</li>
 					<li class="fields">
 						<div class="field">
 							<label class="required" for="carrier-time-from"><?php echo $_helper->__("Choose time-from of the day"); ?> <em>*</em></label>
 							<div class="input-box">
-								<select class="required-entry" name="carrier_time_from" id="carrier-time-from" title="<?php echo $_helper->__("Choose time-from of the day"); ?>">
+								<select class="required-entry" name="rma[carrier_time_from]" id="carrier-time-from" title="<?php echo $_helper->__("Choose time-from of the day"); ?>">
 									<option value=""></option>
 									<?php foreach($this->getHours() as $value=>$label):?>
-									<option value="<?php echo $label;?>"><?php echo $label;?></option>
+									<option <?php if($_rma->getCarrierTimeFrom()==$label):?>selected="selected"<?php endif;?> value="<?php echo $label;?>"><?php echo $label;?></option>
 									<?php endforeach;?>
 								</select>
 							</div>
@@ -120,10 +123,10 @@
 						<div class="field">
 							<label class="required" for="carrier-time-to"><?php echo $_helper->__("Choose time-to of the day"); ?> <em>*</em></label>
 							<div class="input-box">
-								<select class="required-entry" name="carrier_time_to" id="carrier-time-to" title="<?php echo $_helper->__("Choose time-to of the day"); ?>">
+								<select class="required-entry" name="rma[carrier_time_to]" id="carrier-time-to" title="<?php echo $_helper->__("Choose time-to of the day"); ?>">
 									<option value=""></option>
 									<?php foreach($this->getHours() as $value=>$label):?>
-									<option value="<?php echo $label;?>"><?php echo $label;?></option>
+									<option <?php if($_rma->getCarrierTimeTo()==$label):?>selected="selected"<?php endif;?> value="<?php echo $label;?>"><?php echo $label;?></option>
 									<?php endforeach;?>
 								</select>
 							</div>
@@ -137,7 +140,7 @@
 					<li class="wide">
 						<label class="required" for="customer-account"><?php echo $_helper->__("Bank account"); ?></label>
 						<div class="input-box">
-							<input type="text" name="customer_account" value="" id="customer-account" title="<?php echo $_helper->__("Bank account"); ?>" value="" class="input-text">
+							<input type="text" value="<?php echo $this->escapeHtml($_rma->getCustomerAccount());?>" name="rma[customer_account]" value="" id="customer-account" title="<?php echo $_helper->__("Bank account"); ?>" value="" class="input-text">
 						</div>
 					</li>
 				</ul>
@@ -179,22 +182,20 @@
 			<div class="fieldset">
 				<h2 class="legend"><?php echo $_helper->__("Pickup date"); ?></h2>
 	            <ul class="form-list">
-					<li class="wide">
-						<p id="pickup-date-review"></p>
+					<li class="wide" id="pickup-date-review">
 					</li>
 				</ul>
 			</div>
 			<div class="fieldset">
-				<h2 class="legend"><?php echo $_helper->__("Banck account form return"); ?></h2>
+				<h2 class="legend"><?php echo $_helper->__("Bank account for return"); ?></h2>
 	            <ul class="form-list">
-					<li class="wide">
-						<p id="bank-account-review"></p>
+					<li class="wide" id="customer-account-review">
 					</li>
 				</ul>
 			</div>
 			<div>
 				<button type="button"  class="button" id="step-2-back"><span><span><?php echo $_helper->__("Prev"); ?></span></span></button>
-				<button type="button" class="button back-button"  id="step-3-submit"><span><span><?php echo $_helper->__("Next"); ?></span></span></button>
+				<button type="submit" class="button"  id="step-3-submit"><span><span><?php echo $_helper->__("Place RMA"); ?></span></span></button>
 			</div>
 		</div>
 	</form>
@@ -226,7 +227,7 @@
 						var tr = $(item).up('tr');
 						items.push({
 							name: tr.getAttribute('data-name'),
-							reasonText: $F(tr.select('select')[0])
+							reasonText: tr.select('option[selected]')[0].innerHTML
 						});
 					}
 				});
@@ -239,9 +240,6 @@
 					reviewItems.insert("<tr><td>"+(lp++)+"</td><td>"+item.name+"</td><td>"+item.reasonText+"</td></tr>");
 				})
 				
-				// Address
-				$("review-shipping-address").innerHTML = $("shipping-address").innerHTML;
-				
 				// Comment 
 				var comment = $("comment-text");
 				var commentReview = $("review-comment-text");
@@ -251,6 +249,25 @@
 					commentReview.innerHTML = "<strong><?php echo $_helper->__("Additional information");?>:</strong> " +
 						comment.value;
 				}
+				
+				// Address
+				$("review-shipping-address").innerHTML = $("shipping-address").innerHTML;
+				
+				// Pickup date
+				var dateText = "<?php echo $_helper->__("Carrier");?>",
+					carrierDate = $("carrier-date");
+			
+					dateText += " " + escape(carrierDate.value) + "<br/>";
+					dateText += "<?php echo $_helper->__("Between");?>";
+					dateText += " " + $F('carrier-time-from');
+					dateText += " <?php echo $_helper->__("and");?>"
+					dateText += " " + $F('carrier-time-to');
+					
+				$("pickup-date-review").innerHTML = dateText;
+				
+				// Account
+				$("customer-account-review").innerHTML = $F("customer-account") ? 
+					$F("customer-account") : "<?php echo $_helper->__('N/A');?>";
 			}
 
 			var checkHandler = function() {
@@ -310,7 +327,11 @@
 				singleClick : true
 			});
 
-
+			// trigger chaneg
+			newRma.select(".rma-checkbox").each(function(item) {
+				checkHandler.bind(item)();
+			});
+			
 			// check submit possible
 			newRma.observe('submit', function(e){
 				if(currentStep!=steps.length){
