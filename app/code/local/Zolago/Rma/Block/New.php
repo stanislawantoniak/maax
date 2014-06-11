@@ -2,6 +2,9 @@
 class Zolago_Rma_Block_New extends Mage_Core_Block_Template
 {
     protected $_returnRenderer;
+	/**
+	 * @return Zolago_Po_Model_Po
+	 */
     public function getPo() {
         return Mage::registry('current_po');
     }
@@ -26,4 +29,11 @@ class Zolago_Rma_Block_New extends Mage_Core_Block_Template
         }
         return $this->_returnRenderer;
     }
+	public function getHours() {
+		$opts = array();
+		for($i=6*2;$i<16*2-1;$i++){
+			$opts[$i] = sprintf("%02d:%02d", floor($i/2), ($i%2)*15);
+		}
+		return $opts;
+	}
 }

@@ -24,6 +24,12 @@
 	<sales_po_newrma>
 		<label>Customer My Account Order RMA View</label>
         <update handle="customer_account"/>
+		<reference name="head">
+			<action method="addItem"><type>js_css</type><name>calendar/calendar-win2k-1.css</name><params/><!--<if/><condition>can_load_calendar_js</condition>--></action>
+			<action method="addItem"><type>js</type><name>calendar/calendar.js</name><!--<params/><if/><condition>can_load_calendar_js</condition>--></action>
+			<action method="addItem"><type>js</type><name>calendar/calendar-setup.js</name><!--<params/><if/><condition>can_load_calendar_js</condition>--></action>
+		    <block type="core/html_calendar" name="head.calendar" as="calendar" template="page/js/calendar.phtml"/>
+		</reference>
         <reference name="my.account.wrapper">
 			<block type="zolagopo/info" as="info" name="sales.po.info">
 				<action method="addLink" translate="label" module="sales"><name>view</name><path>*/*/view</path><label>Order Information</label></action>
