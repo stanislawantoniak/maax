@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Unirgy LLC
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the EULA
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://www.unirgy.com/LICENSE-M1.txt
+ *
+ * @category   Unirgy
+ * @package    Unirgy_Dropship
+ * @copyright  Copyright (c) 2008-2009 Unirgy LLC (http://www.unirgy.com)
+ * @license    http:///www.unirgy.com/LICENSE-M1.txt
+ */
+ -->
+<config>
+    <sections>
+        <udropship>
+            <groups>
+                <vendor>
+                    <fields>
+                        <max_shipping_date translate="label,comment">
+                            <label>Max shipping date</label>
+							<comment>Number of days</comment>
+							<validate>validate-number validate-zero-or-greater</validate>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </max_shipping_date>
+					</fields>
+				</vendor>
+            </groups>
+		</udropship>
+    </sections>
+</config>

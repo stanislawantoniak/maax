@@ -51,6 +51,20 @@
 				</connection>
 			</zolagoholidays_read>
 		</resources>
+		<udropship>
+            <vendor>
+                <fields>
+                	<max_shipping_date>
+                        <label>Max shipping date</label>
+						<note>Number of days</note>
+						<validate>validate-number validate-zero-or-greater</validate>
+                        <type>text</type>
+                        <fieldset>integration</fieldset>
+                        <position>0</position>
+					</max_shipping_date>
+				</fields>
+			</vendor>
+		</udropship>
     </global>
     <adminhtml>
     	<translate>
