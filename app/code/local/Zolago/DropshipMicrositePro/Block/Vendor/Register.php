@@ -76,6 +76,7 @@ class Zolago_DropshipMicrositePro_Block_Vendor_Register extends Unirgy_DropshipM
                     ));
                     $this->_addElementTypes($fieldset);
                     foreach ($fields as $field) {
+
                         if (!empty($field['input_renderer'])) {
                             $fieldset->addType($field['type'], $field['input_renderer']);
                         }
@@ -87,7 +88,13 @@ class Zolago_DropshipMicrositePro_Block_Vendor_Register extends Unirgy_DropshipM
                         if (!empty($field['required'])) {
                             $formField->addClass('required-entry');
                         }
+                        if (!empty($field['id'])) {
+                            $formField->addClass('required-entry');
+                        }
+
+
                         $formField->addClass('form-control');
+                        //krumo($formField->getData());
                     }
                     $this->_prepareFieldsetColumns($fieldset);
                     $emptyForm = false;
@@ -158,5 +165,33 @@ class Zolago_DropshipMicrositePro_Block_Vendor_Register extends Unirgy_DropshipM
         foreach ($types as $code => $className) {
             $baseElement->addType($code, $className);
         }
+    }
+
+    public function getCountryHtmlSelect($defValue = null, $name = 'country_id', $id = 'country', $title = 'Country')
+    {
+        Varien_Profiler::start('TEST: ' . __METHOD__);
+        if (is_null($defValue)) {
+            $defValue = $this->getCountryId();
+        }
+        $cacheKey = 'DIRECTORY_COUNTRY_SELECT_STORE_' . Mage::app()->getStore()->getCode();
+        if (Mage::app()->useCache('config') && $cache = Mage::app()->loadCache($cacheKey)) {
+            $options = unserialize($cache);
+        } else {
+            $options = $this->getCountryCollection()->toOptionArray();
+            if (Mage::app()->useCache('config')) {
+                Mage::app()->saveCache(serialize($options), $cacheKey, array('config'));
+            }
+        }
+        $html = $this->getLayout()->createBlock('core/html_select')
+            ->setName($name)
+            ->setId($id)
+            ->setTitle(Mage::helper('directory')->__($title))
+            ->setClass('validate-select form-control')
+            ->setValue($defValue)
+            ->setOptions($options)
+            ->getHtml();
+
+        Varien_Profiler::stop('TEST: ' . __METHOD__);
+        return $html;
     }
 }
