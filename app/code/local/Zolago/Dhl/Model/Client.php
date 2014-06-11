@@ -18,6 +18,11 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
     const PAYER_TYPE				= 'SHIPPER';
 
     const DHL_LABEL_TYPE			= 'LP';
+    protected $_default_params = array (
+        'dropOffType' => 'REQUEST_COURIER',
+        'serviceType' => 'AH',
+        'labelType' => self::DHL_LABEL_TYPE,
+    );        
 
     /**
      * @param Zolago_Pos_Model_Pos $pos
@@ -352,5 +357,33 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
     protected function _getCollectOnDeliveryValue($shipment, $shippingAmount)
     {
         return $shipment->getTotalValue() + $shipment->getBaseTaxAmount() + $shippingAmount;
+    }
+    protected function _prepareBiling() {
+        $message = new StdClass;
+        $message->shippingPaymentType = $this->_default_params['shippingPaymentType'];
+        
+    }
+    protected function _prepareShipmentAtOnce() {
+        $message = new StdClass;
+        $message->dropOffType = $this->_default_params['dropOffType'];
+        $message->serviceType = $this->_default_params['serviceType'];        
+        $message->labelType   = $this->_default_params['labelType'];
+        $message->biling = $this->_prepareBiling();
+        
+    }
+    /**
+     * creating shipment and book courier in one request
+     */
+    public function createShipmentAtOnce() {
+        $message = new StdClass;
+        $message->authData = $this->_auth;
+        $message->shipment = new stdClass;
+        $message->shipment->shipmentInfo = $this->_prepareShipmentInfo(); 
+    }
+    public function setParam($param,$value) {
+        if (!isset($this->_default_params[$param])) {
+            Mage::throwException(sprintf('Wrong param name: %s',$param));
+        }
+        $this->_default_params[$param] = $value;
     }
 }

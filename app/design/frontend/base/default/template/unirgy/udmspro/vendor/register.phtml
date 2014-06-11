@@ -1,30 +1,56 @@
-<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
-
 <?php
 $_hlp = Mage::helper('udropship');
 $_sHlp = Mage::helper('udmspro');
 $_session = Mage::getSingleton('udropship/session');
+
 ?>
+<div class="col-md-12">
+    <div class="col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-3">
+        <div style="margin-top:100px;">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="a-center"><?php echo $_sHlp->__('Become a Vendor') ?></h3>
+                </div>
+                <div class="panel-body">
+                    <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+                    <form action="<?php echo $this->getUrl('umicrosite/vendor/registerPost') ?>" enctype="multipart/form-data"
+                          method="post"
+                          id="registration-form" autocomplete="off">
+                        <?php foreach ($this->getForm()->getElements() as $element) {
+                            echo $element->toHtml();
+                        } ?>
+
+                        <div class="container">
+                            <div class="col-md-12">
+                                <div style="margin-top:10px" class="form-group">
+                                    <label><span class="required"><?php echo $this->__('* Indicated Required Fields') ?></span></label>
+                                    <br><br>
+
+                                    <div class="controls">
+                                        <button class="form-button btn btn-lg btn-primary btn-block" type="submit"
+                                                name="send">
+                                            <span><?php echo $this->__('Register as a vendor') ?></span></button>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="control">
+                                        <div style="border-top: 1px solid#888; padding-top:15px; font-size:85%">
+                                            <a href="<?php echo $this->getUrl('udropship/vendor') ?>">&laquo; <?php echo $this->__('Return to log in') ?></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
 
-	<div class="page-title">
-		<h1><?php echo $_sHlp->__('Become a Vendor') ?></h1>
-		<span class="required"><?php echo $this->__('* Indicated Required Fields') ?></span>
-	</div>
+                        </div>
+                    </form>
 
-<form action="<?php echo $this->getUrl('umicrosite/vendor/registerPost')?>" enctype="multipart/form-data" method="post" id="registration-form">
-<?php foreach ($this->getForm()->getElements() as $element) {
-    echo $element->toHtml();
-} ?>
-
-<div class="buttons-set">
-    <button class="form-button" type="button" onclick="udRegForm.submit()" name="send"><span><?php echo $this->__('Register') ?></span></button>
-    <div class="clearer"></div>
-    <ul class="links">
-    	<li><a href="<?php echo $this->getUrl('udropship/vendor')?>">&laquo; <?php echo $this->__('Return to log in')?></a></li>
-    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-</form>
+
 
 <script type="text/javascript">
     var udNumberValidate = function (cmp, v, elm) {
@@ -141,10 +167,18 @@ $_session = Mage::getSingleton('udropship/session');
         });
         return result;
     }
+
+    Translator.add('Please enter valid email address', '<?php echo $this->__('Please enter valid email address'); ?>');
+
     Validation.addAllThese([
         ['validate-urlkey', 'Please use only letters (a-z) or numbers (0-9) in this field, first character should be a letter.', function (v) {
             if (!v) return true;
             return Validation.get('IsEmpty').test(v) ||  /^[a-z]+[a-z0-9]+$/.test(v)
+        }],
+        ['validate-email', Translator.translate('Please enter valid email address'), function (v) {
+            //return Validation.get('IsEmpty').test(v) || /\w{1,}[@][\w\-]{1,}([.]([\w\-]{1,})){1,3}$/.test(v)
+            //return Validation.get('IsEmpty').test(v) || /^[\!\#$%\*/?|\^\{\}`~&\'\+\-=_a-z0-9][\!\#$%\*/?|\^\{\}`~&\'\+\-=_a-z0-9\.]{1,30}[\!\#$%\*/?|\^\{\}`~&\'\+\-=_a-z0-9]@([a-z0-9_-]{1,30}\.){1,5}[a-z]{2,4}$/i.test(v)
+            return Validation.get('IsEmpty').test(v) || /^([a-z0-9,!\#\$%&'\*\+\/=\?\^_`\{\|\}~-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z0-9,!\#\$%&'\*\+\/=\?\^_`\{\|\}~-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*@([a-z0-9-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z0-9-]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*\.(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]){2,})$/i.test(v)
         }],
         ['udvendor_name-unique', 'This vendor name is already used.', udCheckVendorNameExist],
         ['udemail-unique', 'This email is already used.', udCheckEmailExist],
@@ -165,7 +199,10 @@ $_session = Mage::getSingleton('udropship/session');
         }]
     ]);
     var udRegForm = new VarienForm('registration-form', true);
-    new RegionUpdater('country_id', 'region', 'region_id', <?php echo $this->helper('directory')->getRegionJson() ?>);
+    if($('country_id')){
+        new RegionUpdater('country_id', 'region', 'region_id', <?php echo $this->helper('directory')->getRegionJson() ?>);
+
+    }
 
     Event.observe(window, 'load', function(e){
         var payout_selector = $('payout_method');

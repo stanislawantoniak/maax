@@ -18,19 +18,28 @@
                <div class="widget-content fiters">
                    <form class="form-horizontal">
                        <div class="form-group">
+
                            <?php if ($this->getStoreSwitcherHtml()): ?>
                                <div class="col-md-6">
-                                   <?php echo $this->getChildHtml("attribute_set_switcher"); ?>
+                                   <div class="row">
+                                       <?php echo $this->getChildHtml("attribute_set_switcher"); ?>
+                                   </div>
                                </div>
                                <div class="col-md-6">
-                                   <?php echo $this->getStoreSwitcherHtml(); ?>
+                                   <div class="row">
+                                       <?php echo $this->getStoreSwitcherHtml(); ?>
+                                   </div>
                                </div>
                            <?php else: ?>
                                <div class="col-md-6">
-                                   <?php echo $this->getChildHtml("attribute_set_switcher"); ?>
+                                   <div class="row">
+                                       <?php echo $this->getChildHtml("attribute_set_switcher"); ?>
+                                   </div>
                                </div>
                            <?php endif; ?>
                        </div>
+
+
                        <?php echo $this->getChildHtml("static_filter"); ?>
                    </form>
                </div>
@@ -110,12 +119,9 @@
                 $( ".datepicker" ).datepicker();
 
                 $('#myModal').modal();
-
-
             });
 
         </script>
-
         <?php echo $this->getChildHtml("editor");?>
 
     <?php endif;?>

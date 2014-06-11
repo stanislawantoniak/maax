@@ -93,9 +93,9 @@ class Zolago_Rma_Model_Rma_Comment extends Unirgy_Rma_Model_Rma_Comment
 	public function getAuthorType() {
 		if($this->getCustomerId()){
 			return self::CUSTOMER;
-		}elseif($this->getOperatoId()){
+		}elseif($this->getOperatorId()){
 			return self::OPERATOR;
-		}elseif($this->getVednorId()){
+		}elseif($this->getVendorId()){
 			return self::VENDOR;
 		}
 		return self::SYSTEM;

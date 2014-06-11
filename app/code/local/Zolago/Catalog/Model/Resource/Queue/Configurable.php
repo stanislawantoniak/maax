@@ -91,7 +91,7 @@ class Zolago_Catalog_Model_Resource_Queue_Configurable extends Zolago_Common_Mod
     {
         $condition = $this->_getWriteAdapter()->quoteInto('status = ?', 1);
         $this->_getWriteAdapter()->delete($this->getTable('zolagocatalog/queue_configurable'), $condition);
-        Mage::log('clearQueue', 0, 'converter_test.log');
+
     }
 
 }

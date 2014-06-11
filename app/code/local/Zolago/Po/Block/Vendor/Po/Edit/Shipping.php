@@ -1,15 +1,16 @@
 <?php
 class Zolago_Po_Block_Vendor_Po_Edit_Shipping 
 	extends Zolago_Po_Block_Vendor_Po_Edit_Abstract
+	implements Zolago_Po_Block_Vendor_Po_Edit_Shipping_Interface
 {
 
-	const MODE_GENERATE		= "generate";
-	const MODE_ADD			= "add";
-	
 	public function isMethodChecked($code){
-		return $this->canPosUseDhl();
+		return $code == Zolago_Dhl_Model_Carrier::CODE;
 	}
 	
+	public function getFormUrl() {
+		return  $this->getPoUrl("saveShipping", array("mode"=>$this->getMode()));
+	}
 	
 	public function getMode() {
 		return $this->canPosUseDhl() ? self::MODE_GENERATE : self::MODE_ADD;

@@ -13,36 +13,70 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
 		$this->_viewAction();
 	}
 
-
-    public function historyAction() {
+	public function rmaListAction() {
         $this->loadLayout();
         $this->_initLayoutMessages('catalog/session');
         $navigationBlock = $this->getLayout()->getBlock('customer_account_navigation');
         if ($navigationBlock) {
-            $navigationBlock->setActive('sales/po/history');
+            $navigationBlock->setActive('sales/rma/history');
         }
                                              
         $this->renderLayout();
-    }    
-    public function newRmaAction()
-    {
+	}
+    public function historyAction()
+	{
 		/**
 		 * @todo Implement
 		 */
 		$this->_viewAction();
+    }    
+	
+    public function newRmaAction()
+    {
+        if (!$this->_loadValidPo()) {
+            return;
+        }
+		$session =   Mage::getSingleton('core/session');
+		/* @var $session Mage_Core_Model_Session */
+		
+		// Rma data
+		$rma = Mage::getModel("zolagorma/rma");
+		/* @var $rma Zolago_Rma_Model_Rma */
+		if($data=$session->getRma(true)){
+			$rma->setData($data);
+		}
+		Mage::register("current_rma", $rma);
+		
+		
+        $this->loadLayout();
+        $this->_initLayoutMessages('catalog/session');
+
+        $navigationBlock = $this->getLayout()->getBlock('customer_account_navigation');
+        if ($navigationBlock) {
+            $navigationBlock->setActive('sales/rma/history');
+        }
+        $this->renderLayout();
     }
 
     public function saveRmaAction()
     {
+		$request = $this->getRequest();
+		
         try {
-            $this->_saveRma();
+			/**
+			 * @todo Add processing carrier and insert tracking
+			 */
+			$this->_saveRma();
             Mage::getSingleton('core/session')->addSuccess(
                 Mage::getStoreConfig('urma/message/customer_success')
             );
             $this->_redirect('*/*/view', array('po_id'=>$this->getRequest()->getParam('po_id')));
         } catch (Exception $e) {
-            Mage::getSingleton('core/session')->addError($e->getMessage());
-            $this->_redirect('*/*/view', array('po_id'=>$this->getRequest()->getParam('po_id')));
+            Mage::getSingleton('core/session')->
+					addError($e->getMessage())->
+					setData("rma", $request->getParam('rma'));
+			
+            $this->_redirect('*/*/newrma', array('po_id'=>$this->getRequest()->getParam('po_id')));
         }
     }
 
@@ -69,34 +103,8 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
         return $rma;
 	}
 
-	protected function _initTmpData(){
-		
-		$data = array(
-			"rma" => array(
-				"items_condition" => array(
-					226 => "unopened",
-					228 => "unopened",
-					
-				),
-				"items" => array(
-					226 => 3,
-					228 => 1,
-				),
-				"comment_text" => "My test comment",				
-				"rma_reason"   => "exchange",
-				
-			),
-			"po_id"		   => 110,
-			"order_id"	   => 80
-		);
-		
-		$this->getRequest()->setPost($data);
-	}
-
-
 	protected function _saveRma()
     {
-//		$this->_initTmpData();
 		
         $rmas = $this->_initRma(true);
         $data = $this->getRequest()->getPost('rma');
@@ -142,6 +150,4 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
         }
         Mage::helper('udropship')->processQueue();
     }
-	
-
 }

@@ -12,9 +12,10 @@
 					<?php else:?>
 						<td>
 							<?php if($_field = $this->getChangeField($_column)):?>
-								<div data-rel="<?php echo $_field->getRel();?>">
+								<div data-rel="<?php echo $_field->getRel();?>" class="relChanger">
+                                    <label for="<?php echo $_field->getId();?>"><?php echo $_field->getLabel();?></label>
+                                    <br />
 									<?php echo $_field->getElementHtml();?>
-									<label for="<?php echo $_field->getId();?>"><?php echo $_field->getLabel();?></label>
 								</div>
 							<?php endif;?>
 						</td>
@@ -47,11 +48,12 @@
 				<?php endforeach;?>
 			</tr>
 			<tr style="display:none;"  id="<?php echo $this->buildFieldId("confirm");?>">
-				<td  class="totals a-right" colspan="<?php echo $this->getGrid()->getColumnCount();?>">
-					<span style="display: none;" class="notice" id="<?php echo $this->buildFieldId("loading");?>">
+				<td  class="totals a-center" colspan="<?php echo $this->getGrid()->getColumnCount();?>">
+                    <?php echo $this->getSubmitButtonHtml(); ?>
+                    <span style="display: none;" class="notice" id="<?php echo $this->buildFieldId("loading");?>">
 						<?php echo Mage::helper("zolagocatalog")->__("Saving...");?>
 					</span>
-					<?php echo $this->getSubmitButtonHtml(); ?>
+
 				</td>
 			<tr>
 		</tfoot>
@@ -177,7 +179,7 @@
 	
 		var changerHandler = function(e){
 			var el = $(e.currentTarget);
-			var target = $(el.up().getAttribute("data-rel"));
+			var target = $(el.up('.relChanger').getAttribute("data-rel"));
 			if(target){
 				switchVisible(target.id, el.checked);
 			}
