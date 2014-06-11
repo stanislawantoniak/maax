@@ -157,7 +157,8 @@ jQuery(function($){
 
 	
 	$("#addItemModal").on("show.bs.modal", function(){
-		product.val("").change();
+		product.select2("val", "");
+		product.change();
 	});
 	
 	
