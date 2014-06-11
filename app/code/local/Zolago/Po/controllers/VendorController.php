@@ -10,6 +10,44 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 	const ACTION_DIRECT_REALISATION = "direct_realisation";
 	const ACTION_PRINT_AGGREGATED = "print_aggregated";
 	
+	
+	public function loadCollectionAction() {
+		$collArray = array();
+		$q = $this->getRequest()->getParam("q");
+		
+		if(is_string($q) && strlen(trim($q))>0){
+			
+			$po = $this->_registerPo();
+			$storeId = $po->getOrder()->getStoreId();
+			$vendorSku = Mage::helper('udropship')->getVendorSkuAttribute($storeId)->getAttributeCode();
+			
+			$collection = Mage::getResourceModel('catalog/product_collection');
+			/* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
+			
+			$collection->setStoreId($storeId);
+			$collection->addAttributeToSelect("name", "left");
+			$collection->addAttributeToSelect("price");
+			$collection->addAttributeToSelect($vendorSku, "left");
+			
+			$collection->addAttributeToFilter("udropship_vendor", $po->getUdropshipVendor());
+			$collection->addFieldToFilter("type_id", Mage_Catalog_Model_Product_Type::TYPE_SIMPLE);
+			
+			$collection->addAttributeToFilter(array(
+				array("attribute"=>$vendorSku,	"like"=>'%'.$q.'%'),
+				array("attribute"=>"sku",		"like"=>'%'.$q.'%'),
+				array("attribute"=>"name",		"like"=> '%'.$q.'%')
+			), "left");
+			
+			$collection->load();
+			
+			$collArray = array_values($collection->toArray());
+		}
+		
+		
+		$this->getResponse()->setHeader('content-type', 'application/json');
+		$this->getResponse()->setBody(Zend_Json::encode($collArray));
+	}
+	
 	public function preDispatch() {
 		/**
 		 * @todo add secure to own PO

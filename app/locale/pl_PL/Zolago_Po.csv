@@ -161,3 +161,6 @@
 "DHL09 items: %d", "Elementów DHL09"
 "DHL12 items: %d", "Elementów DHL12"
 "DHL signature", "Podpis pracownika DHL"
+"Sender signature", "Podpis klienta"
+
+
