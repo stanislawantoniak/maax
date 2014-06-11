@@ -12,7 +12,7 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
     }
 	
 	protected function _beforeSave() {
-		if($this->getData("max_shipping_date")=="" || $maxShippingDate==0){
+		if($this->getData("max_shipping_date")=="" || $this->getData("max_shipping_date")==0){
 			$this->setData("max_shipping_date", null);
 		}
 		return parent::_beforeSave();
