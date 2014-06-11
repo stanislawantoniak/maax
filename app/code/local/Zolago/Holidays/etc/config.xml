@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Holidays>
-            <version>0.0.2</version>
+            <version>0.0.3</version>
         </Zolago_Holidays>
     </modules>
     <global>
@@ -59,8 +59,7 @@
                 <fields>
                 	<max_shipping_date>
                         <label>Max shipping date</label>
-						<note>Number of days</note>
-						<validate>validate-number validate-zero-or-greater</validate>
+						<note>Number of days. Leave empty or enter 0 to use default.</note>
                         <type>text</type>
                         <fieldset>integration</fieldset>
                         <position>0</position>
