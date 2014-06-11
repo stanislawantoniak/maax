@@ -13,25 +13,38 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
 		$this->_viewAction();
 	}
 
-
-    public function historyAction()
-	{
+	public function rmaListAction() {
         $this->loadLayout();
         $this->_initLayoutMessages('catalog/session');
         $navigationBlock = $this->getLayout()->getBlock('customer_account_navigation');
         if ($navigationBlock) {
-            $navigationBlock->setActive('sales/po/history');
+            $navigationBlock->setActive('sales/rma/history');
         }
                                              
         $this->renderLayout();
-    }    
-	
-    public function newRmaAction()
-    {
+	}
+    public function historyAction()
+	{
 		/**
 		 * @todo Implement
 		 */
 		$this->_viewAction();
+    }    
+	
+    public function newRmaAction()
+    {
+        if (!$this->_loadValidPo()) {
+            return;
+        }
+
+        $this->loadLayout();
+        $this->_initLayoutMessages('catalog/session');
+
+        $navigationBlock = $this->getLayout()->getBlock('customer_account_navigation');
+        if ($navigationBlock) {
+            $navigationBlock->setActive('sales/rma/history');
+        }
+        $this->renderLayout();
     }
 
     public function saveRmaAction()

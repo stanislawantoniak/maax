@@ -39,7 +39,7 @@ class Zolago_Rma_Model_ServicePo extends Unirgy_Rma_Model_ServiceOrder
         $rma->setTotalQty($totalQty);
         return $rma;
     }
-    public function prepareRmaForSave($data)
+    public function prepareRmaForSave($data = array(), $conditions=array())
     {
         $rmas = array();
         $items = $data['items_single'];
@@ -51,7 +51,7 @@ class Zolago_Rma_Model_ServicePo extends Unirgy_Rma_Model_ServiceOrder
         }        
         // repair names
         foreach ($poItems as $poItem) {
-            if ($parent = $poItem->getParentItemId()) {
+            if ($parent = $poItem->getParentItemId() && isset($poItems[$parent])) {
                 $poItems[$parent]->setName($poItem->getName());
             }
         } 
