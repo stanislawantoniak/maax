@@ -162,5 +162,5 @@
 "DHL12 items: %d", "Elementów DHL12"
 "DHL signature", "Podpis pracownika DHL"
 "Sender signature", "Podpis klienta"
-
-
+"Tracking no.","Nr listu przewozowego"
+"Comment added","Komentarz dodany"
