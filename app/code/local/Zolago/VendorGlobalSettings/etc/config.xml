@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <modules>
+        <Zolago_VendorGlobalSettings>
+            <version>0.0.1</version>
+        </Zolago_VendorGlobalSettings>
+    </modules>
+    <global>
+		<blocks>
+			<zolagovendorglobalsettings>
+				<class>Zolago_VendorGlobalSettings_Block</class>
+			</zolagovendorglobalsettings>
+		</blocks>
+		<helpers>
+			<zolagovendorglobalsettings>
+				<class>Zolago_VendorGlobalSettings_Helper</class>
+			</zolagovendorglobalsettings>
+		</helpers>
+    </global>
+    <adminhtml>
+    	<translate>
+            <modules>
+                <zolagovendorglobalsettings>
+                    <files>
+                        <default>Zolago_VendorGlobalSettings.csv</default>
+                    </files>
+                </zolagovendorglobalsettings>
+            </modules>
+        </translate>
+    	<layout>
+            <updates>
+                <zolagovendorglobalsettings>
+                    <file>zolagovendorglobalsettings.xml</file>
+                </zolagovendorglobalsettings>
+            </updates>
+        </layout>
+    </adminhtml>
+	<admin>
+		<routers>
+			<adminhtml>
+				<args>
+					<modules>
+						<zolagovendorglobalsettings before="Mage_Adminhtml">Zolago_VendorGlobalSettings_Adminhtml</zolagovendorglobalsettings>
+					</modules>
+				</args>
+			</adminhtml>
+		</routers>
+	</admin>
+</config>

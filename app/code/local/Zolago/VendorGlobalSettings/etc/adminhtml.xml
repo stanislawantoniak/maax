@@ -1,0 +1,29 @@
+<config>
+    <menu>
+        <vendors>
+            <children>
+                <global_settings translate="title" module="zolagoholidays">
+                    <title>Global Settings</title>
+                    <sort_order>200</sort_order>
+                    <action>adminhtml/vendorglobalsettings/index</action>
+                </global_settings>
+            </children>
+        </vendors>
+    </menu>
+    <acl>
+        <resources>
+        	<admin>
+	        	<children>
+	                <vendors>
+	                    <children>
+	                        <global_settings translate="title" module="zolagoholidays">
+	                            <title>Global Settings</title>
+	                            <sort_order>51</sort_order>
+	                        </global_settings>
+	                    </children>
+	                </vendors>
+	            </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

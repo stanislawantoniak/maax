@@ -80,5 +80,14 @@
 				</args>
 			</adminhtml>
 		</routers>
+		<!-- <routers>
+			<adminhtml>
+				<args>
+					<modules>
+						<zolagoholidaysvendorsettings before="Zolago_VendorGlobalSettings_Adminhtml">Zolago_Holidays_Adminhtml</zolagoholidaysvendorsettings>
+					</modules>
+				</args>
+			</adminhtml>
+		</routers> -->
 	</admin>
 </config>
