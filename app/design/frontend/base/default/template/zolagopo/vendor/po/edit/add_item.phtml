@@ -91,6 +91,7 @@ jQuery(function($){
 		ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
 			url: "<?php echo $this->getLoadCollectionUrl();?>",
 			dataType: 'json',
+			quietMillis: 300,
 			data: function (term, page) {
 				return {
 					q: term, // search term
