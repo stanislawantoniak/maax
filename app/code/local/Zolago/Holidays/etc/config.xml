@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Holidays>
-            <version>0.0.1</version>
+            <version>0.0.2</version>
         </Zolago_Holidays>
     </modules>
     <global>
@@ -17,6 +17,9 @@
 					<holiday>
 						<table>zolago_holidays</table>
 					</holiday>
+					<processingtime>
+						<table>zolago_processing_times</table>
+					</processingtime>
 				</entities>
 			</zolagoholidays_resource>
 		</models>
@@ -80,7 +83,7 @@
 				</args>
 			</adminhtml>
 		</routers>
-		<!-- <routers>
+		<routers>
 			<adminhtml>
 				<args>
 					<modules>
@@ -88,6 +91,6 @@
 					</modules>
 				</args>
 			</adminhtml>
-		</routers> -->
+		</routers>
 	</admin>
 </config>

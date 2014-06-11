@@ -9,7 +9,7 @@
     <adminhtml_vendorglobalsettings_index>
         <update handle="zolagovendorglobalsettings_update_menu"/>
         <reference name="content">
-            <block type="zolagovendorglobalsettings/adminhtml_vendorglobalsettings_container" name="zolagovendorglobalsettings_vendorglobalsettings_container" template="zolagovendorglobalsettings/container.phtml" />
+            <block type="zolagovendorglobalsettings/adminhtml_vendorglobalsettings_container" name="zolagovendorglobalsettings_vendorglobalsettings_container" />
         </reference>
         <reference name="left">
             <block type="zolagovendorglobalsettings/adminhtml_vendorglobalsettings_container_tabs" name="zolagovendorglobalsettings_vendorglobalsettings_container_tabs">
