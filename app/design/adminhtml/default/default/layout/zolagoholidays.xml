@@ -29,4 +29,14 @@
 			</block>
 		</reference>
 	</adminhtml_holidays_edit>
+	<adminhtml_vendorglobalsettings_index>
+        <reference name="left">
+            <block type="zolagoholidays/adminhtml_vendorglobalsettings_container_tabs" name="zolagoholidays_holidays_container_tabs" after="zolagovendorglobalsettings_vendorglobalsettings_container_tabs">
+                <action method="addTab">
+                    <name>group_processing_time</name>
+                    <block>zolagoholidays/adminhtml_vendorglobalsettings_container_tab_processingtime</block>
+                </action>
+            </block>
+        </reference>
+    </adminhtml_vendorglobalsettings_index>
 </layout>
