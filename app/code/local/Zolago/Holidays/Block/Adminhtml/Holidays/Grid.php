@@ -7,8 +7,8 @@ class Zolago_Holidays_Block_Adminhtml_Holidays_Grid extends Mage_Adminhtml_Block
        	$this->setId('holidaysList');
        	$this->setUseAjax(true);
        	$this->setDefaultSort('name');
-       	$this->setFilterVisibility(false);
-       	$this->setPagerVisibility(false);
+       	$this->setFilterVisibility(true);
+       	$this->setPagerVisibility(true);
 	}
 	
 	protected function _prepareCollection(){
@@ -35,11 +35,13 @@ class Zolago_Holidays_Block_Adminhtml_Holidays_Grid extends Mage_Adminhtml_Block
        	$this->addColumn('country_id', array(
            	'header'   => Mage::helper('zolagoholidays')->__('Country'),
            	'index'    => 'country_id',
+           	'renderer' => Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Country,
            	'sortable' => false,
        	));
 		$this->addColumn('type', array(
            	'header'   => Mage::helper('zolagoholidays')->__('Type'),
            	'index'    => 'type',
+           	'renderer' => Zolago_Holidays_Block_Adminhtml_Holidays_Grid_Renderer_Type,
            	'sortable' => false,
        	));
        	$this->addColumn('date', array(
@@ -50,11 +52,13 @@ class Zolago_Holidays_Block_Adminhtml_Holidays_Grid extends Mage_Adminhtml_Block
 		$this->addColumn('exclude_from_delivery', array(
        		'header'   => Mage::helper('zolagoholidays')->__('Exclude from delivery'),
            	'index'    => 'exclude_from_delivery',
+           	'renderer' => Zolago_Holidays_Block_Adminhtml_Holidays_Grid_Renderer_Boolean,
            	'sortable' => false,
        	));
 		$this->addColumn('exclude_from_pickup', array(
        		'header'   => Mage::helper('zolagoholidays')->__('Exclude from pickup'),
            	'index'    => 'exclude_from_pickup',
+           	'renderer' => Zolago_Holidays_Block_Adminhtml_Holidays_Grid_Renderer_Boolean,
            	'sortable' => false,
        	));
 		

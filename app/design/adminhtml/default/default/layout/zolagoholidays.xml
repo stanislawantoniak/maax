@@ -2,7 +2,7 @@
 <layout>
 	<zolagoholidays_update_menu>      
         <reference name="menu">
-            <action method="setActive"><menupath>zolagoholidays/holiday</menupath></action>
+            <action method="setActive"><menupath>vendors/holiday</menupath></action>
         </reference>
     </zolagoholidays_update_menu>
 	<adminhtml_holidays_index>
