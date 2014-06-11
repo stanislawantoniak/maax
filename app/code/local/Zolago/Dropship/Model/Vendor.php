@@ -8,7 +8,7 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
         if (is_null($maxShippingDate) || $maxShippingDate=="" || $maxShippingDate==0) {
             $maxShippingDate = Mage::getStoreConfig('udropship/vendor/max_shipping_date', $storeId);
         }
-        return $maxShippingDate;
+        return (int)$maxShippingDate;
     }
 	
 	protected function _beforeSave() {
