@@ -1,6 +1,23 @@
 <?php
 class Zolago_Rma_Block_Vendor_Rma_Edit extends Mage_Core_Block_Template {
 	
+	/**
+	 * @param Mage_Sales_Model_Order_Shipment $shipment
+	 * @return Mage_Sales_Model_Order_Shipment_Track|null
+	 */
+	public function getPoTracking(Mage_Sales_Model_Order_Shipment $shipment = null) {
+		if($shipment instanceof Mage_Sales_Model_Order_Shipment){
+			return $shipment->getTracksCollection()->getFirstItem();
+		}
+		return null;
+	}
+	
+	/**
+	 * @return Mage_Sales_Model_Order_Shipment | null
+	 */
+	public function getPoShipment(Zolago_Po_Model_Po $po) {
+		return $po->getLastNotCanceledShipment();
+	}
 	
 	/**
 	 * @return array
@@ -20,8 +37,15 @@ class Zolago_Rma_Block_Vendor_Rma_Edit extends Mage_Core_Block_Template {
 	/**
 	 * @return Unirgy_Rma_Model_Mysql4_Rma_Track_Collection
 	 */
-	public function getTrackingCollection() {
-		return $this->getRma()->getTracksCollection();
+	public function getVendorTrackingCollection() {
+		return $this->getRma()->getVendorTracksCollection();
+	}
+	
+	/**
+	 * @return Unirgy_Rma_Model_Mysql4_Rma_Track_Collection
+	 */
+	public function getCustomerTrackingCollection() {
+		return $this->getRma()->getCustomerTracksCollection();
 	}
 	
 	/**

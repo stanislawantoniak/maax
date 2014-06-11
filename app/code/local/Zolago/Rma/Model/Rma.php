@@ -9,6 +9,23 @@ class Zolago_Rma_Model_Rma extends Unirgy_Rma_Model_Rma
 	const TYPE_RMABILLING = "rmabilling";
 	
 	/**
+	 * @return Zolago_Rma_Model_Resource_Rma_Track_Collection
+	 */
+	public function getVendorTracksCollection() {
+		return Mage::getResourceModel('urma/rma_track_collection')
+                ->setRmaFilter($this->getId())
+                ->addVendorFilter();
+	}
+	
+	/**
+	 * @return Zolago_Rma_Model_Resource_Rma_Track_Collection
+	 */
+	public function getCustomerTracksCollection() {
+		return Mage::getResourceModel('urma/rma_track_collection')
+                ->setRmaFilter($this->getId())
+                ->addCustomerFilter();
+	}
+	/**
 	 * @return Zolago_Po_Model_Po
 	 */
 	public function getPo() {

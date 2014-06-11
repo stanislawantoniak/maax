@@ -94,6 +94,7 @@ class Zolago_Rma_Model_ServicePo extends Unirgy_Rma_Model_ServiceOrder
             $rma->setUdropshipMethod($shipment->getUdropshipMethod());
             $rma->setUdropshipMethodDescription($shipment->getUdropshipMethodDescription());
             $rma->setTotalQty($totalQtys[$vId]);
+			$rma->addData($data);
             $rmas[$vId] = $rma;
             foreach ($items as $item) {
                 $rma->addItem($item);
