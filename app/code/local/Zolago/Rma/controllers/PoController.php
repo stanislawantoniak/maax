@@ -46,7 +46,6 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
         }
         $this->renderLayout();
     }
-
     public function saveRmaAction()
     {
         try {

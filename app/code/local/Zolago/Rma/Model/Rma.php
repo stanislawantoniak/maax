@@ -155,4 +155,8 @@ class Zolago_Rma_Model_Rma extends Unirgy_Rma_Model_Rma
    protected function _cleanAddresses($type, $exclude=array()) {
 	   Mage::helper('zolagopo')->clearAddresses($this->getPo(), $type, $exclude);
    }
+   public function sendDhlRequest() {
+       $request = Mage::getModel('zolagorma/rma_request');
+       $request->prepareRequest($this);
+   }
 }
