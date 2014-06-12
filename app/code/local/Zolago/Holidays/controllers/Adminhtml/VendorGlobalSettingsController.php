@@ -6,11 +6,17 @@ class Zolago_Holidays_Adminhtml_VendorGlobalSettingsController
 	
 	public function indexAction(){
 		
+		// TODO: Refactor to model
 		$collection = Mage::getModel('zolagoholidays/processingtime')->getCollection();
 		$collection->addFieldToFilter('type', 1);
 		$model = $collection->getFirstItem();
 		
 		Mage::register('zolagoholidays_current_processingtime', $model);
+		
+		//TESTING
+		// $po = Mage::getModel('zolagopo/po')->load(1);
+		// $max_shipping_date = Mage::helper('zolagoholidays/vendorglobalsettings')->calculateMaxPoShippingDate($po);
+		// var_dump($max_shipping_date);
 		
 		$this->loadLayout();
 		$this->renderLayout();

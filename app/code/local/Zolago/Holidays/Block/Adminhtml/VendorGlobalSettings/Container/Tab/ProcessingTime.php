@@ -50,7 +50,7 @@ class Zolago_Holidays_Block_Adminhtml_VendorGlobalSettings_Container_Tab_Process
           	'value'  => '17,00,00',
         ));
 		
-		$model->setType(1);
+		$model->setTypePo();
 		
 		
 		$values = $model->getData();

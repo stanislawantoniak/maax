@@ -1,6 +1,8 @@
 <?php
 class Zolago_Holidays_Model_ProcessingTime extends Mage_Core_Model_Abstract{
 	
+	const TYPE_PO = 1;
+	
 	protected function _construct() {   
         $this->_init('zolagoholidays/processingtime');
     }
@@ -25,4 +27,9 @@ class Zolago_Holidays_Model_ProcessingTime extends Mage_Core_Model_Abstract{
 		
 		return $this;
 	}
+	
+	public function setTypePo(){
+		$this->setType(self::TYPE_PO);
+	}
+	
 }
