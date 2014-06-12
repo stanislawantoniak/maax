@@ -93,8 +93,9 @@ jQuery(function($){
 			dataType: 'json',
 			quietMillis: 300,
 			data: function (term, page) {
+				var value = jQuery("#select2-drop .select2-input").val();
 				return {
-					q: term, // search term
+					q: (value && value.length>0) ? value : "" // search term
 				};
 			},
 			results: function (data, page) {
