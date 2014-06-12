@@ -75,7 +75,7 @@ class Zolago_Catalog_AuthController extends Mage_Core_Controller_Front_Action
     }
 
 
-    public static function testAction()
+    public static function stockAction()
     {
         $stockId = Zolago_Catalog_Model_Resource_Stock_Data::ZOLAGO_STOCK_ID;
         $websiteAdmin = 0;
