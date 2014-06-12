@@ -51,5 +51,14 @@
 				</observers>
 			</controller_action_layout_load_before>
 		</events>
+        <translate>
+            <modules>
+                <zolagodropshipmicrosite>
+                    <files>
+                        <default>Zolago_DropshipMicrosite.csv</default>
+                    </files>
+                </zolagodropshipmicrosite>
+            </modules>
+        </translate>
 	</frontend>
 </config>
