@@ -107,7 +107,10 @@ class Zolago_Catalog_AuthController extends Mage_Core_Controller_Front_Action
 //
 //        /*Prepare data to insert*/
 
-
+//        if(empty($data)){
+//            Mage::log(microtime() . ' Empty source ', 0, 'product_stock_update.log');
+//            return;
+//        }
 
 //
 //        if(!empty($data)){
@@ -128,10 +131,14 @@ class Zolago_Catalog_AuthController extends Mage_Core_Controller_Front_Action
 
         $skuAssoc = Zolago_Catalog_Helper_Data::getIdSkuAssoc();
 
-//
+
         $qty = 1;
-//
+
         $i = 0;
+        if(empty($skuAssoc)){
+            Mage::log(microtime() . ' Empty source ', 0, 'product_stock_update.log');
+            return;
+        }
         foreach($skuAssoc as $id => $skuAssocItem){
             $cataloginventory_stock_status0 []= "({$id},{$qty},1,{$stockId},{$websiteAdmin})";
             $cataloginventory_stock_status1 []= "({$id},{$qty},1,{$stockId},{$websiteFront})";
