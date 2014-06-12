@@ -4,10 +4,11 @@ $activeFilters	= $this->getCurrentStaticFilterValues();
 ?>
 
 	<?php if ($this->getStaticFilters($this->getCurrentAttributeSetId()) && $this->getCurrentAttributeSetId()): ?>
+        <div class="form-group next-row">
 
 
         <!-- Static Filters from All Attribute Groups: Start -->
-        <?php $rowCounter = 0; ?>
+
         <?php foreach ($this->getStaticFilters($this->getCurrentAttributeSetId()) as $singleFilter): ?>
             <?php if ($singleFilter): ?>
                 <?php
@@ -15,12 +16,12 @@ $activeFilters	= $this->getCurrentStaticFilterValues();
                 ?>
                 <?php if ($firstFilter['group'] !== Zolago_Catalog_Helper_Data::ADDITIONAL_ATTRIBUTES_GROUP): ?>
 
-
+            <div class="col-md-6">
                     <?php
                     list ($filterLabel, $labelsCount) = $this->getStaticFilterLabel($singleFilter);
                     $updateValues = $this->updateStaticFilterValues($singleFilter, $labelsCount);
                     ?>
-                    <div class="row<?php if ($rowCounter > 0): ?> next-row<?php endif; ?>">
+                    <div class="row  next-row">
                         <label for="staticFilter" class="col-md-4 control-label">
                             <?php echo $filterLabel; ?>:
                         </label>
@@ -50,8 +51,9 @@ $activeFilters	= $this->getCurrentStaticFilterValues();
                                 <?php endforeach; ?>
                             </select>
                         </div>
-                        <?php $rowCounter++; ?>
+
                     </div>
+            </div>
                 <?php endif; ?>
             <?php endif; ?>
         <?php endforeach; ?>
@@ -64,12 +66,12 @@ $activeFilters	= $this->getCurrentStaticFilterValues();
                 $firstFilter = current($singleFilter);
                 ?>
                 <?php if ($firstFilter['group'] == Zolago_Catalog_Helper_Data::ADDITIONAL_ATTRIBUTES_GROUP): ?>
-
+                    <div class="col-md-6">
                     <?php
                     list ($filterLabel, $labelsCount) = $this->getStaticFilterLabel($singleFilter);
                     $updateValues = $this->updateStaticFilterValues($singleFilter, $labelsCount);
                     ?>
-                    <div class="row<?php if ($rowCounter > 0): ?> next-row<?php endif; ?>">
+                    <div class="row  next-row">
                         <label for="staticFilter" class="col-md-4 control-label"><?php echo $filterLabel; ?>
                             :</label>
 
@@ -99,17 +101,31 @@ $activeFilters	= $this->getCurrentStaticFilterValues();
                                 <?php endforeach; ?>
                             </select>
                         </div>
-                        <?php $rowCounter++; ?>
+
+                    </div>
                     </div>
                 <?php endif; ?>
             <?php endif; ?>
         <?php endforeach; ?>
         <!-- Static Filters from Special Attribute Group: End -->
 
+        </div>
+        <div class="form-actions">
+            <button type="button" title="<?php echo $this->__('Reset Filter') ?>" class="btn btn-primary pull-right" onclick="resetStaticFilter(this);"><span><span><?php echo $this->__('Reset Filter') ?></span></span></button>
+            <button type="button" title="<?php echo $this->__('Search') ?>" class="btn btn-primary pull-right" onclick="changeStaticFilter(this);"><span><span><?php echo $this->__('Search') ?></span></span></button>
+        </div>
 	<?php else: ?>
-		<p class="switcher">
-			<?php echo $this->__('There are no Static Filters for this Attribute Set'); ?>
-		</p>
+        <div class="form-group">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-8">
+                        <p class="switcher">
+                            <?php echo $this->__('There are no Static Filters for this Attribute Set'); ?>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
 	<?php endif; ?>
 
 <script type="text/javascript">

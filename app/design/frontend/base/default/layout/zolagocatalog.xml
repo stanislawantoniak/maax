@@ -9,6 +9,7 @@
 		<update handle="adminhtml_head" />
         <reference name="head">
             <action method="addItem"><type>skin_js</type><name>../../../frontend/default/udropship/js/melon/vendor_mass.js</name></action>
+            <action method="addItem"><type>skin_js</type><name>../../../frontend/default/udropship/plugins/bootbox/bootbox.js</name></action>
             <action method="addItem">
                 <type>skin_js</type>
                 <name>js/plugins/validation/jquery.validate.min.js</name>

@@ -3,6 +3,11 @@
 	<!-- forntend -->
 	<customer_account>
 		<reference name="customer_account_navigation">
+			 <action method="addLink" translate="label" module="zolagorma">
+				 <name>rma</name>
+				 <path>sales/rma/history</path>
+				 <label>Rma History</label>
+			 </action>
 			 <action method="addLink" translate="label" module="zolagopo">
 				 <name>orders</name>
 				 <path>sales/po/history</path>
