@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Holidays>
-            <version>0.0.3</version>
+            <version>0.0.4</version>
         </Zolago_Holidays>
     </modules>
     <global>
@@ -17,9 +17,6 @@
 					<holiday>
 						<table>zolago_holidays</table>
 					</holiday>
-					<processingtime>
-						<table>zolago_processing_times</table>
-					</processingtime>
 				</entities>
 			</zolagoholidays_resource>
 		</models>
@@ -27,11 +24,6 @@
 			<zolagoholidays>
 				<class>Zolago_Holidays_Block</class>
 			</zolagoholidays>
-            <zolagovendorglobalsettings>
-                <rewrite>
-                    <adminhtml_vendorglobalsettings_container_tabs>Zolago_Holidays_Block_Adminhtml_VendorGlobalSettings_Container_Tabs</adminhtml_vendorglobalsettings_container_tabs>
-                </rewrite>
-            </zolagovendorglobalsettings>
 		</blocks>
 		<helpers>
 			<zolagoholidays>
@@ -62,13 +54,20 @@
 		<udropship>
             <vendor>
                 <fields>
-                	<max_shipping_date>
-                        <label>Max shipping date</label>
+                	<max_shipping_days>
+                        <label>Max shipping days</label>
 						<note>Number of days. Leave empty or enter 0 to use default.</note>
                         <type>text</type>
                         <fieldset>integration</fieldset>
                         <position>0</position>
-					</max_shipping_date>
+					</max_shipping_days>
+					<max_shipping_time>
+                        <label>Max shipping time</label>
+						<note>Time after which one day will be added to Max shipping days.</note>
+                        <type>time</type>
+                        <fieldset>integration</fieldset>
+                        <position>1</position>
+					</max_shipping_time>
 				</fields>
 			</vendor>
 		</udropship>
@@ -97,15 +96,6 @@
 				<args>
 					<modules>
 						<zolagoholidays before="Mage_Adminhtml">Zolago_Holidays_Adminhtml</zolagoholidays>
-					</modules>
-				</args>
-			</adminhtml>
-		</routers>
-		<routers>
-			<adminhtml>
-				<args>
-					<modules>
-						<zolagoholidaysvendorsettings before="Zolago_VendorGlobalSettings_Adminhtml">Zolago_Holidays_Adminhtml</zolagoholidaysvendorsettings>
 					</modules>
 				</args>
 			</adminhtml>

@@ -1,7 +1,6 @@
 <?php
-class Zolago_Holidays_Helper_VendorGlobalSettings extends Mage_Core_Helper_Abstract{
+class Zolago_Holidays_Helper_DateCalculator extends Mage_Core_Helper_Abstract{
 	
-	protected $timezone;
 	protected $weekend;
 	
 	public function calculateMaxPoShippingDate(Zolago_Po_Model_Po $po, $return_object = FALSE){
@@ -9,18 +8,18 @@ class Zolago_Holidays_Helper_VendorGlobalSettings extends Mage_Core_Helper_Abstr
 		$store = $po->getStore();
 		$storeId = $store->getStoreId();
 		$locale = $store->getLocaleCode();
-		
-		$this->timezone = Mage::getStoreConfig('general/locale/timezone', $storeId);
-		$this->weekend = explode(',', Mage::getStoreConfig('general/locale/weekend', $storeId));
-		
 		$vendor = $po->getVendor();
 		
-		// $maxShippingDate = $vendor->getMaxShippingDate($storeId);
+		$this->weekend = explode(',', Mage::getStoreConfig('general/locale/weekend', $storeId));
 		
-		$max_date_timestamp = $this->calculateMaxDate(strtotime($po->getCreatedAt()));
+		$timezone = Mage::getStoreConfig('general/locale/timezone', $storeId);
+		$max_shipping_days = $vendor->getMaxShippingDays($storeId);
+		$max_shipping_time = $vendor->getMaxShippingTime($storeId);
+		
+		$max_date_timestamp = $this->calculateMaxDate($max_shipping_days, $max_shipping_time, strtotime($po->getCreatedAt()));
 		
 		$date = new Zend_Date($max_date_timestamp, null, $locale);
-	    $date->setTimezone($this->timezone);
+	    $date->setTimezone($timezone);
         $date->setHour(0)
             ->setMinute(0)
             ->setSecond(0);
@@ -33,21 +32,14 @@ class Zolago_Holidays_Helper_VendorGlobalSettings extends Mage_Core_Helper_Abstr
 		}
 	} 
 	
-	protected function calculateMaxDate($current_timestamp = NULL){
-		
-		// Get PO
-		$collection = Mage::getModel('zolagoholidays/processingtime')->getCollection();
-		$collection->addFieldToFilter('type', 1);
-		$model = $collection->getFirstItem();
-		
-		$max_days = (int) $model->getDays();
+	protected function calculateMaxDate($max_days, $max_time, $current_timestamp = NULL){
 		
 		// Calculate number of days based on hour
 		if(!$current_timestamp){
 			$current_timestamp = Mage::getModel('core/date')->timestamp(time());
 		}
 		$current_hour = date("H", $current_timestamp);
-		$max_hour_array = explode(",", $model->getHour());
+		$max_hour_array = explode(",", $max_time);
 		$max_hour = $max_hour_array[0];
 		
 		if($current_hour > $max_hour){
@@ -89,3 +81,4 @@ class Zolago_Holidays_Helper_VendorGlobalSettings extends Mage_Core_Helper_Abstr
 		return ($holiday->count() > 0) ? true : false;
 	}
 }
+

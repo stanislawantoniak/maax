@@ -22,8 +22,17 @@
             <groups>
                 <vendor>
                     <fields>
-                        <max_shipping_date translate="label,comment">
-                            <label>Max shipping date</label>
+                        <max_shipping_time translate="label,comment">
+                            <label>Max shipping time</label>
+							<comment>Time after which 1 day will be added to maximum shipping days</comment>
+                            <frontend_type>time</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </max_shipping_time>
+                        <max_shipping_days translate="label,comment">
+                            <label>Max shipping days</label>
 							<comment>Number of days</comment>
 							<validate>validate-number validate-zero-or-greater</validate>
                             <frontend_type>text</frontend_type>
@@ -31,7 +40,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>
-                        </max_shipping_date>
+                        </max_shipping_days>
 					</fields>
 				</vendor>
             </groups>
