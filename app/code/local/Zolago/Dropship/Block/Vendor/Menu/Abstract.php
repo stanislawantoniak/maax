@@ -146,7 +146,7 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 	public function getRmaSection() {
 		if($this->isModuleActive('Unirgy_Rma') && $this->isAllowed("urma/vendor")){
 			return array(
-				"active" => $this->isActive("urmas"),
+				"active" => $this->isActive("urma") || $this->isActive("urmas"),
 				"icon"	 => "icon-exclamation-sign",
 				"label"	 => $this->__('Returns'),
 				"url"	 => $this->getUrl('urma/vendor')

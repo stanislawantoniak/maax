@@ -6,6 +6,13 @@
 		</Zolago_DropshipMicrositePro>
 	</modules>
 	<global>
+        <blocks>
+            <udmspro>
+                <rewrite>
+                    <vendor_register>Zolago_DropshipMicrositePro_Block_Vendor_Register</vendor_register>
+                </rewrite>
+            </udmspro>
+        </blocks>
 		<models>
 			<zolagoudmspro>
                 <class>Zolago_DropshipMicrositePro_Model</class>

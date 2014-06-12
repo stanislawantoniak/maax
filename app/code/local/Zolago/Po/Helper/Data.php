@@ -3,6 +3,66 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 {
 	protected $_condJoined = false;
 	
+	/**
+	 * Clear not used addresses (trashes)
+	 * @param Zolago_Po_Model_Po $po
+	 * @param type $type
+	 * @param type $exclude
+	 */
+	public function clearAddresses(Zolago_Po_Model_Po $po, $type, $exclude=array()) {
+		
+	    // Add this shippign id
+		// $exclude[] = $po->getShippingAddressId();
+	    $addressCollection = Mage::getResourceModel("sales/order_address_collection");
+		/* @var $addressCollection Mage_Sales_Model_Resource_Order_Address_Collection */
+		$addressCollection->addFieldToFilter("parent_id", $po->getOrder()->getId());
+		$addressCollection->addFieldToFilter("address_type", $type);
+		
+		if($exclude){
+			$addressCollection->addFieldToFilter("entity_id", array("nin"=>$exclude));
+		}
+		
+		$select = $addressCollection->getSelect();
+		
+		if($type==$po::TYPE_POSHIPPING || $type==Zolago_Rma_Model_Rma::TYPE_RMASHIPPING){
+
+			$subSelect = $select->getAdapter()->select();
+			$subSelect->from( 
+					array("shipment"=>$po->getResource()->getTable("sales/shipment")),
+					array(new Zend_Db_Expr("COUNT(shipment.entity_id)"))
+			);
+			$subSelect->where("shipment.shipping_address_id=main_table.entity_id");
+
+			$select->where("? < 1", $subSelect);
+		}
+		
+		// Skip used addresses
+
+		$subSelect = $select->getAdapter()->select();
+		$subSelect->from( 
+				array("self"=>$po->getResource()->getMainTable()),
+				array(new Zend_Db_Expr("COUNT(self.entity_id)"))
+		);
+		$subSelect->where("self.shipping_address_id=main_table.entity_id OR self.billing_address_id=main_table.entity_id");
+
+		$select->where("? < 1", $subSelect);
+		
+		// Skip RMA used addresse
+		$subSelect = $select->getAdapter()->select();
+		$subSelect->from( 
+				array("rma"=>$po->getResource()->getTable("urma/rma")),
+				array(new Zend_Db_Expr("COUNT(rma.entity_id)"))
+		);
+		$subSelect->where("rma.shipping_address_id=main_table.entity_id OR rma.billing_address_id=main_table.entity_id");
+
+		$select->where("? < 1", $subSelect);
+		
+		foreach($addressCollection as $toDelete){
+			$toDelete->delete();
+		}
+   
+	}
+	
 	public function sendNewPoNotificationEmail($po, $comment=''){
 		$vendor = $po->getVendor();
 		/* @var $po Zolago_Po_Model_Po */

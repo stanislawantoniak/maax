@@ -14,7 +14,8 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
 	}
 
 
-    public function historyAction() {
+    public function historyAction()
+	{
         $this->loadLayout();
         $this->_initLayoutMessages('catalog/session');
         $navigationBlock = $this->getLayout()->getBlock('customer_account_navigation');
@@ -24,6 +25,7 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
                                              
         $this->renderLayout();
     }    
+	
     public function newRmaAction()
     {
 		/**
@@ -42,7 +44,7 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
             $this->_redirect('*/*/view', array('po_id'=>$this->getRequest()->getParam('po_id')));
         } catch (Exception $e) {
             Mage::getSingleton('core/session')->addError($e->getMessage());
-            $this->_redirect('*/*/view', array('po_id'=>$this->getRequest()->getParam('po_id')));
+            $this->_redirect('*/*/newrma', array('po_id'=>$this->getRequest()->getParam('po_id')));
         }
     }
 
@@ -116,6 +118,4 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
         }
         Mage::helper('udropship')->processQueue();
     }
-	
-
 }
