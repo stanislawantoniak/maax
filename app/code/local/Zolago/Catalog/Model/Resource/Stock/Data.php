@@ -3,6 +3,7 @@
 
 class Zolago_Catalog_Model_Resource_Stock_Data extends Mage_Core_Model_Resource_Db_Abstract
 {
+    const ZOLAGO_STOCK_ID = 1;
 
 
     public  function _construct()
@@ -17,16 +18,14 @@ class Zolago_Catalog_Model_Resource_Stock_Data extends Mage_Core_Model_Resource_
     {
         $this->_getWriteAdapter()->beginTransaction();
 
-        $this->_getWriteAdapter()->query("INSERT INTO  `cataloginventory_stock_item`
-(product_id,qty,is_in_stock,stock_id)
-VALUES {$insertData}
-ON DUPLICATE KEY UPDATE
-qty=VALUES(qty),is_in_stock=VALUES(is_in_stock),stock_id=1;");
+        $stockId = self::ZOLAGO_STOCK_ID;
 
+        $insert = sprintf("INSERT INTO %s (product_id,qty,is_in_stock,stock_id) VALUES %s "
+            . " ON DUPLICATE KEY UPDATE qty=VALUES(qty),is_in_stock=VALUES(is_in_stock),stock_id=%s",
+            $this->getTable('cataloginventory/stock_item'), $insertData, $stockId);
 
-
+        $this->_getWriteAdapter()->query($insert);
         $this->_getWriteAdapter()->commit();
-
     }
 
 
@@ -36,13 +35,14 @@ qty=VALUES(qty),is_in_stock=VALUES(is_in_stock),stock_id=1;");
      */
     public function  saveCatalogInventoryStockStatus($insertData)
     {
-
+        $stockId = self::ZOLAGO_STOCK_ID;
         $this->_getWriteAdapter()->beginTransaction();
-        $this->_getWriteAdapter()->query("INSERT INTO  `cataloginventory_stock_status`
-(product_id,qty,stock_status,stock_id,website_id)
-VALUES {$insertData}
-ON DUPLICATE KEY UPDATE
-qty=VALUES(qty),stock_status=VALUES(stock_status),stock_id=1;");
+
+        $insert = sprintf("INSERT INTO %s (product_id,qty,stock_status,stock_id,website_id) VALUES %s "
+            . " ON DUPLICATE KEY UPDATE qty=VALUES(qty),stock_status=VALUES(stock_status),stock_id=%s",
+            $this->getTable('cataloginventory/stock_status'), $insertData, $stockId);
+
+        $this->_getWriteAdapter()->query($insert);
         $this->_getWriteAdapter()->commit();
     }
 
@@ -75,14 +75,23 @@ qty=VALUES(qty),stock_status=VALUES(stock_status),stock_id=1;");
             )
             ->where("products.type_id=?", Mage_Catalog_Model_Product_Type::TYPE_SIMPLE)
             ->where("po.udropship_vendor=?", (int)$merchant)
-            ->where('po.udropship_status NOT IN (?)', array(11, 2, 1, 6, 7, 10, 13, 12))
+            ->where('po.udropship_status NOT IN (?)',
+                array(
+                    Unirgy_DropshipPo_Model_Source::UDPO_STATUS_EXPORTED,
+                    Unirgy_DropshipPo_Model_Source::UDPO_STATUS_PARTIAL,
+                    Unirgy_DropshipPo_Model_Source::UDPO_STATUS_SHIPPED,
+                    Unirgy_DropshipPo_Model_Source::UDPO_STATUS_CANCELED,
+                    Unirgy_DropshipPo_Model_Source::UDPO_STATUS_DELIVERED,
+                    Unirgy_DropshipPo_Model_Source::UDPO_STATUS_EXPORTED,
+                    Unirgy_DropshipPo_Model_Source::UDPO_STATUS_STOCKPO_RECEIVED,
+                    Unirgy_DropshipPo_Model_Source::UDPO_STATUS_STOCKPO_EXPORTED
+                )
+            )
             ->group('po_item.sku');
 
         $result = $adapter->fetchAssoc($select);
 
         return $result;
     }
-
-
 
 }
