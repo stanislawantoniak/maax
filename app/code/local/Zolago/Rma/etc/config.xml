@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Zolago_Rma>
-			<version>0.0.5</version>
+			<version>0.0.7</version>
 		</Zolago_Rma>
 	</modules>
 	<global>
@@ -20,9 +20,15 @@
 				<rewrite>
 					<rma>Zolago_Rma_Model_Rma</rma>
 					<rma_item>Zolago_Rma_Model_Rma_Item</rma_item>
+					<rma_track>Zolago_Rma_Model_Rma_Track</rma_track>
 					<rma_comment>Zolago_Rma_Model_Rma_Comment</rma_comment>
 				</rewrite>
 			</urma>
+			<urma_mysql4>
+				<rewrite>
+					<rma_track_collection>Zolago_Rma_Model_Resource_Rma_Track_Collection</rma_track_collection>
+				</rewrite>
+			</urma_mysql4>
 		</models>
 		<blocks>
 			<zolagorma>

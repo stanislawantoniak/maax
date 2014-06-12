@@ -1,6 +1,6 @@
 <?php
 
-class Zolago_Po_Block_List extends Mage_Core_Block_Template
+class Zolago_Po_Block_Rma extends Mage_Core_Block_Template
 {
     protected $_poList;
     protected function _construct()

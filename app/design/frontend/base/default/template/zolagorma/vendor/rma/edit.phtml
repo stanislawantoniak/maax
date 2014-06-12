@@ -6,13 +6,15 @@
 <?php $_rmaShipment = $_rma->getShipment(); ?>
 <?php $_order= $_po->getOrder(); ?>
 <?php $_vendor = $_rma->getVendor(); ?>
-<?php $_tracking = $this->getTracking($_rmaShipment);?>
+<?php $_poShipment = $this->getPoShipment($_po);?>
+<?php $_poTracking = $this->getPoTracking($_poShipment);?>
 <?php $_billingAddress = $_rma->getBillingAddress();?>
 <?php $_shippingAddress = $_rma->getShippingAddress();?>
 <?php $_comments = $_rma->getVendorCommentsCollection(); ?>
 <?php $_statuses = $this->getAvailableStatuses(); ?>
 <?php $_currentStatusId = $_rma->getRmaStatus(); ;?>
-<?php $_trackCollection = $this->getTrackingCollection();?>
+<?php $_trackCollection = $this->getVendorTrackingCollection();?>
+<?php $_customerTrackCollection = $this->getCustomerTrackingCollection();?>
 
 <div class="container">
 	<!--=== Page Header ===-->
@@ -59,7 +61,13 @@
 							</div>
 						</dd> 
 						<dt><?php echo $_helper->__("Tracking no.");?>:<br/><small class="text-muted" style="font-weight: normal;">(<?php echo $_helper->__("Customer return");?>)</small></dt> 
-						<dd><?php echo "1212312312313";?> [dev]</dd> 
+						<dd>
+							<?php if(($_customerTrack=$_customerTrackCollection->getFirstItem()) && $_customerTrack->getId()):?>
+								<?php echo $_customerTrack->getTrackNumber();?>
+							<?php else:?>
+								<?php echo $_helper->__("N/A");?>
+							<?php endif;?>
+						</dd> 
 					</dl>
 				</div>
 			</div>
@@ -79,19 +87,19 @@
 						<dt><?php echo $_helper->__("Order date");?>:</dt> 
 						<dd><?php echo $this->formatDate($_po->getCreatedAt());?></dd> 
 						<dt><?php echo $_helper->__("Shipment date");?>:</dt> 
-						<dd><?php echo $_rmaShipment ? $this->formatDate($_rmaShipment->getCreatedAt()) : $_helper->__("N/A");?></dd> 
+						<dd><?php echo $_poShipment ? $this->formatDate($_poShipment->getCreatedAt()) : $_helper->__("N/A");?></dd> 
 						<dt><?php echo $_helper->__("Tracking no.");?>:</dt> 
 						<dd>
-							<?php if($_tracking):?>
-								<!-- <a href="<?php echo $this->getTrackingUrl($_tracking);?>"> -->
-									<?php echo $this->escapeHtml($_tracking->getTrackNumber()) ;?>
+							<?php if($_poTracking):?>
+								<!-- <a href="<?php echo $this->getTrackingUrl($_poTracking);?>"> -->
+									<?php echo $this->escapeHtml($_poTracking->getTrackNumber()) ;?>
 								<!-- </a> -->
 							<?php else: ?>
 								<?php echo $_helper->__("N/A");?>
 							<?php endif ?>
 						</dd> 
 						<dt><?php echo $_helper->__("Date delivered");?>:</dt> 
-						<dd><?php echo ($_tracking && $_tracking->getShippedDate()) ? $this->formatDate($_tracking->getShippedDate()) : $this->__("N/A");?></dd>
+						<dd><?php echo ($_poTracking && $_poTracking->getShippedDate()) ? $this->formatDate($_poTracking->getShippedDate()) : $this->__("N/A");?></dd>
 						<dt><?php echo $_helper->__("POS");?>:</dt> 
 						<dd><?php echo $this->escapeHtml($_pos->getName())?></dd>
 						<dt><?php echo $_helper->__("Payment method");?>:</dt> 
@@ -126,7 +134,13 @@
 						<?php  /* <dt><?php echo $_helper->__("Phone");?>:</dt> 
 						<dd><?php echo $this->escapeHtml($_shippingAddress->getTelephone()); ?> </dd> */ ?>
 						<dt><?php echo $_helper->__("Bank account");?>:</dt> 
-						<dd><?php echo $this->__("N/A");?> [dev] </dd> 
+						<dd>
+							<?php if($_rma->getCustomerAccount()):?>
+								<?php echo $this->escapeHtml($_rma->getCustomerAccount());?>
+							<?php else:?>
+								<?php echo $this->__("N/A");?>
+							<?php endif;?>
+						</dd> 
 					</dl>
 				</div>
 			</div>

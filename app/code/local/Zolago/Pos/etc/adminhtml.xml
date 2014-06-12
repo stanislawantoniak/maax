@@ -1,12 +1,5 @@
 <?xml version="1.0"?>
 <config>
-    <layout>
-        <updates>
-            <zolagopos>
-                <file>zolagopos.xml</file>
-            </zolagopos>
-        </updates>
-    </layout>
     <translate>
         <modules>
             <zolagopos>
