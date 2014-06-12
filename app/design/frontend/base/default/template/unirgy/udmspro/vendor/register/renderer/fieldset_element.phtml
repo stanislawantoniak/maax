@@ -14,7 +14,10 @@ foreach (array('length_gte', 'length_gt', 'symlength_gte', 'symlength_gt') as $l
     }
 }
 ?>
-<?php echo $this->getElement()->getLabelHtml(); ?> <br />
+<?php
+
+//echo $this->__($this->getElement()->getData('label'));
+echo $this->getElement()->getLabelHtml(); ?> <br />
 <?php echo $this->getElementHtml() ?>
 <?php echo $this->getAfterElementHtml() ?>
 <?php if ($this->getElement()->getId()=='description'): ?>
