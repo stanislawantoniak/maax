@@ -4,7 +4,11 @@
  */
 class Zolago_Rma_Model_Rma_Request extends Mage_Core_Model_Abstract {
     protected $_rma;
-
+    protected $_params = array();
+    
+    public function setParam($key,$val) {
+        $this->_params[$key] = $val;
+    }
     public function setRma($rma) {
         $this->_rma = $rma;
     }
@@ -46,20 +50,30 @@ class Zolago_Rma_Model_Rma_Request extends Mage_Core_Model_Abstract {
         }
         $dhlSettings = $this->_prepareDhlSettings();
         $client = Mage::helper('zolagodhl')->startDhlClient($dhlSettings);
+        foreach ($this->_params as $key=>$param) {
+            $dhlSettings[$key] = $param;
+        }
         $client->setRma($this->_rma);
         $out = $client->createShipmentAtOnce($dhlSettings);
 		if ($out) {
+		    if (is_array($out) && !empty($out['error'])) {
+    		    Mage::throwException($out['error']);		        
+		    }
 			$ioAdapter			= new Varien_Io_File();
 			$fileName			= $out->createShipmentResult->shipmentTrackingNumber.'.pdf';
 			$fileContent		= base64_decode($out->createShipmentResult->label->labelContent);
 			$fileLocation		= Mage::helper('zolagodhl')->getDhlFileDir() . $fileName;
 			$result = @$ioAdapter->filePutContent($fileLocation, $fileContent);
 			if (!$result) {
-    		    Mage::throwException(Mage::helper('zolagodhl')->_('Print label error'));
+    		    Mage::throwException(Mage::helper('zolagodhl')->__('Print label error'));
 			}
-			return $fileLocation;
+			return array (
+			    'trackingNumber' => $out->createShipmentResult->shipmentTrackingNumber,
+			    'file' => $fileLocation,
+			    'size' => $result,
+            );
 		} else {
-                Mage::throwException(Mage::helper('zolagodhl')->_('Create shipment error'));
+                Mage::throwException(Mage::helper('zolagodhl')->__('Create shipment error'));
 		}		
     }
 }

@@ -8,6 +8,7 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
     protected $_rma;
     protected $_operator;
     protected $_address;
+    protected $_settings;
 
     const ADDRESS_HOUSE_NUMBER		= '.';
     const SHIPMENT_TYPE_PACKAGE		= 'PACKAGE';
@@ -96,10 +97,9 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
     protected function _sendMessage($method,$message = null) {
         try {
             $wsdl = Mage::getStoreConfig('carriers/zolagodhl/gateway');
-            $soap = new SoapClient($wsdl,array('trace'=>true));
+            $soap = new SoapClient($wsdl,array());
             $result = $soap->$method($message);
         } catch (Exception $xt) {
-            print_R($soap->__getLastRequest());
             $result = array (
                           'error' => $xt->getMessage()
                       );
@@ -457,15 +457,16 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
     }
     protected function _prepareShipmentTime() {
         $message = new StdClass;
-        $message->shipmentDate = date('Y-m-d',time()+24*3600);
-        $message->shipmentStartHour = '12:00';
-        $message->shipmentEndHour = '15:00';
+        $message->shipmentDate = empty($this->_settings['shipmentDate'])? date('Y-m-d',time()+3600*24):date('Y-m-d',strtotime($this->_settings['shipmentDate']));
+        $message->shipmentStartHour = empty($this->_settings['shipmentStartHour'])? '9:00':$this->_settings['shipmentStartHour'];
+        $message->shipmentEndHour = empty($this->_settings['shipmentEndHour'])? '15:00':$this->_settings['shipmentEndHour'];
         return $message;
     }
     /**
      * creating shipment and book courier in one request
      */
     public function createShipmentAtOnce($dhlSettings) {
+        $this->_settings = $dhlSettings;
         $message = new StdClass;
         $message->authData = $this->_auth;
         $shipment = new stdClass;
