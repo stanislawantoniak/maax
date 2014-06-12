@@ -60,6 +60,7 @@
 
 #zolagocatalog_mass_grid_submit {
     position: absolute;
+    left: 50%;
 }
 
 #zolagocatalog_mass_grid_foot .totals.a-center:not(:empty) {
