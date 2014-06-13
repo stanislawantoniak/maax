@@ -106,7 +106,7 @@ nginx:
     install: '1'
     vhosts:
         Ra1TiYwSqHP3:
-            server_name: local.zolago.com
+            server_name: local.lorante.com
             www_root: /var/www 
             listen_port: '80'
             index_files:
