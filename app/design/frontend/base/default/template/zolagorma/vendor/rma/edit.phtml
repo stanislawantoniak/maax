@@ -4,6 +4,7 @@
 <?php $_po = $_rma->getPo();?>
 <?php $_pos = $_po->getPos();?>
 <?php $_rmaShipment = $_rma->getShipment(); ?>
+<?php $_statusModel = $this->getStatusModel();?>
 <?php $_order= $_po->getOrder(); ?>
 <?php $_vendor = $_rma->getVendor(); ?>
 <?php $_poShipment = $this->getPoShipment($_po);?>
@@ -11,7 +12,8 @@
 <?php $_billingAddress = $_rma->getBillingAddress();?>
 <?php $_shippingAddress = $_rma->getShippingAddress();?>
 <?php $_comments = $_rma->getVendorCommentsCollection(); ?>
-<?php $_statuses = $this->getAvailableStatuses(); ?>
+<?php $_statuses = $this->getAvailableStatuses(true); ?>
+<?php $_statusesOptions = $this->getAvailableStatuses(false); ?>
 <?php $_currentStatusId = $_rma->getRmaStatus(); ;?>
 <?php $_trackCollection = $this->getVendorTrackingCollection();?>
 <?php $_customerTrackCollection = $this->getCustomerTrackingCollection();?>
@@ -116,6 +118,7 @@
 						<i class="icon-user"></i> 
 						<?php echo $_helper->__("Customer");?>
 					</h4>
+					<?php if($_statusModel->isEditingAddressAvailable($_rma)):?>
 					<div class="toolbar no-padding"> 
 						<div class="btn-group"> 
 							<span data-toggle="modal" data-target="#editShippingAddressModal" class="btn btn-xs">
@@ -124,6 +127,7 @@
 							</span> 
 						</div> 
 					</div>
+					<?php endif;?>
 				</div>
 				<div class="widget-content rma">
 					<dl class="dl-horizontal dl-z"> 
@@ -215,30 +219,30 @@
 				<div class="widget-content">
 					<form class="form-horizontal row-border " action="<?php echo $this->getRmaUrl("comment");?>">
 						<div class="form-group">
-							<label class="control-label col-md-3">
+							<label class="control-label col-md-3" for="rma-status">
 								<?php echo $_helper->__("Status");?>
 							</label>
 							<div class="col-md-9">
-								<select class="form-control" name="status">
-									<?php foreach($_statuses as $_statusId=>$_label):?>
-									<option value="<?php echo $this->escapeHtml($_statusId)?>" <?php if($_currentStatusId==$_statusId):?>selected="selected"<?php endif;?>><?php echo $this->escapeHtml($_label) ?></option>
+								<select class="form-control" id="rma-status" name="status">
+									<?php foreach($_statusesOptions as $_option):?>
+									<option data-notify-customer="<?php echo (int)$_option['notify_customer'];?>" value="<?php echo $this->escapeHtml($_option['value'])?>" <?php if($_currentStatusId==$_option['value']):?>selected="selected"<?php endif;?>><?php echo $this->escapeHtml($_option['label']) ?></option>
 									<?php endforeach;?>
 								</select>
 							</div>
 						</div>
 						<div class="form-group">
 							<div class="col-md-12">
-								<textarea class="form-control" name="comment" rows="8"></textarea>
+								<textarea <?php if(!$_statusModel->isVendorCommentAvailable($_rma)):?>disabled="disabled"<?php endif;?> class="form-control" name="comment" rows="8"></textarea>
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="control-label col-md-3">
+							<label class="control-label col-md-3" for="rma-notify-customer">
 								<?php echo $_helper->__("Notify cust.");?>
 							</label>
 							<div class="col-md-9">
 								<label class="checkbox"> 
 									<input type="hidden" name="notify_customer" value=""> 
-									<input type="checkbox" name="notify_customer" value="1"> 
+									<input type="checkbox" id="rma-notify-customer" name="notify_customer" value="1"> 
 								</label>
 							</div>
 						</div>
@@ -313,3 +317,22 @@
 		<div class="form-actions"> <input type="submit" value="<?php echo $_helper->__("Save");?>" class="btn btn-primary pull-right"> </div>
 	</form>
 </div> */ ?>
+
+<script type="text/javascript">
+jQuery(function($){
+	var status = $("#rma-status");
+	var notify = $("#rma-notify-customer");
+	
+	status.change(function(){
+		var el = $(this),
+			// Isnt't currentylu selected & force notify
+			doNotify = !!parseInt(el.children(":selected").attr('data-notify-customer')) 
+					&& el.children("[selected]").attr('value') != el.val();
+		notify.prop("checked", doNotify);
+		notify.prop("disabled", doNotify);
+	});
+	
+	
+});
+
+</script>

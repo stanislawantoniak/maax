@@ -20,10 +20,17 @@ class Zolago_Rma_Block_Vendor_Rma_Edit extends Mage_Core_Block_Template {
 	}
 	
 	/**
+	 * @return Zolago_Rma_Model_Rma_Status
+	 */
+	public function getStatusModel() {
+		return $this->getRma()->getStatusModel();
+	}
+	
+	/**
 	 * @return array
 	 */
-	public function getAvailableStatuses(){
-		return Mage::helper('zolagorma')->getVendorRmaStatuses();
+	public function getAvailableStatuses($asHash=true){
+		return $this->getStatusModel()->getAvailableStatuses($this->getRma(), true, $asHash);
 	}
 	
 	/**

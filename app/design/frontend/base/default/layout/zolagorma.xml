@@ -46,7 +46,6 @@
 	
 	
 	<urma_vendor_index>		
-		
 		<update handle="adminhtml_head"/>
 		<update handle="bootstrap"/>
 		<update handle="noty"/>

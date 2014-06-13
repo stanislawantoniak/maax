@@ -1,6 +1,11 @@
 <?php
 class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data{
-
+	
+	/**
+	 * 
+	 * @param type $items
+	 * @return type
+	 */
     public function getItemList($items) {
         $out = array();
         $child = array();
