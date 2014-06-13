@@ -4,7 +4,7 @@ $_session = Mage::getSingleton('udropship/session');
 $_vendor = $_session->getVendor();
 
 $locale = $_session->getLocale();
-
+Zend_Debug::dump($locale);
 if(!empty($locale)){
     $_currentLocale = $locale;
 } else {
