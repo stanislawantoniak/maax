@@ -77,7 +77,7 @@ class Zolago_Catalog_AuthController extends Mage_Core_Controller_Front_Action
 
     public static function stockAction()
     {
-        $stockId = Zolago_Catalog_Model_Resource_Stock_Data::ZOLAGO_STOCK_ID;
+        $stockId = 1;
         $websiteAdmin = 0;
         $websiteFront = 1;
 
@@ -132,13 +132,14 @@ class Zolago_Catalog_AuthController extends Mage_Core_Controller_Front_Action
         $skuAssoc = Zolago_Catalog_Helper_Data::getIdSkuAssoc();
 
 
-        $qty = 1;
+        $qty = 10;
 
         $i = 0;
         if(empty($skuAssoc)){
             Mage::log(microtime() . ' Empty source ', 0, 'product_stock_update.log');
             return;
         }
+
         foreach($skuAssoc as $id => $skuAssocItem){
             $cataloginventory_stock_status0 []= "({$id},{$qty},1,{$stockId},{$websiteAdmin})";
             $cataloginventory_stock_status1 []= "({$id},{$qty},1,{$stockId},{$websiteFront})";
@@ -158,18 +159,19 @@ class Zolago_Catalog_AuthController extends Mage_Core_Controller_Front_Action
         $insertB = implode(',',$updateB);
 
         Mage::log(microtime() . ' End prepare data ', 0, 'product_stock_update.log');
-        $zcSDModel = Mage::getResourceModel('zolagocatalog/stock_data');
+        $zcSDItemModel = Mage::getResourceModel('zolagocatalog/stock_item');
 
         Mage::log(microtime() . ' Start cataloginventory_stock_item ', 0, 'product_stock_update.log');
-        $zcSDModel->saveCatalogInventoryStockItem($insert1);
+        $zcSDItemModel->saveCatalogInventoryStockItem($insert1);
 
+        $zcSDStatusModel = Mage::getResourceModel('zolagocatalog/stock_status');
         Mage::log(microtime() . ' Start cataloginventory_stock_status website_id=0 ', 0, 'product_stock_update.log');
         //website_id=0
-        $zcSDModel->saveCatalogInventoryStockStatus($insertA);
+        $zcSDStatusModel->saveCatalogInventoryStockStatus($insertA);
 
         Mage::log(microtime() . ' Start cataloginventory_stock_status website_id=1 ', 0, 'product_stock_update.log');
         //website_id=1
-        $zcSDModel->saveCatalogInventoryStockStatus($insertB);
+        $zcSDStatusModel->saveCatalogInventoryStockStatus($insertB);
 
 
 

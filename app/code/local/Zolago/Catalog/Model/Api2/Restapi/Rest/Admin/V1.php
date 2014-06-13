@@ -1,12 +1,26 @@
 <?php
-class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 extends Zolago_Catalog_Model_Api2_Restapi {
+/**
+ * API2 Model
+ *
+ * @category   Zolago
+ * @package    Zolago_Catalog
+ * method string _create() _create(array $data) creation of an entity
+ * method void _multiCreate() _multiCreate(array $filteredData) processing and creation of a collection
+ * method array _retrieve() retrieving an entity
+ * method array _retrieveCollection() retrieving a collection
+ * method void _update() _update(array $filteredData) update of an entity
+ * method void _multiUpdate() _multiUpdate(array $filteredData) update of a collection
+ * method void _delete() deletion of an entity
+ * method void _multidelete() _multidelete(array $requestData) deletion of a collection
+ */
+class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
+    extends Zolago_Catalog_Model_Api2_Restapi
+{
 
-
-    /*test*/
     public function createTest($data)
     {
         $json = json_encode($data);
-        $log = Zolago_Catalog_Helper_Log::log($json, TRUE);
+        $log = Zolago_Catalog_Helper_Log::log($json, true);
         return $log;
     }
 
@@ -27,9 +41,9 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 extends Zolago_Catalog_Mod
             if ($productId) {
 
                 $prices = isset($data['data']) ? $data['data'] : array();
-                if(!empty($prices)){
+                if (!empty($prices)) {
 
-                    $priceA = FALSE;
+                    $priceA = false;
                     foreach ($prices as $pricesItem) {
                         if ($pricesItem['price_id'] == "A") {
                             $priceA = $pricesItem['price'];
@@ -44,7 +58,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 extends Zolago_Catalog_Mod
                     $productAction->updateAttributesNoIndex($productIds, $attrData, 1);
                     $productAction->updateAttributesNoIndex($productIds, $attrData, 2);
 
-                    Mage::log(microtime() . " " . $sku . ":".$priceA ."\n ---------------" , 0, 'converter_log.log');
+                    Mage::log(microtime() . " " . $sku . ":" . $priceA . "\n ---------------", 0, 'converter_log.log');
 
                     Zolago_Catalog_Helper_Configurable::queueProduct($productId);
                 }
@@ -74,7 +88,5 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1 extends Zolago_Catalog_Mod
         Mage::log(microtime() . " " . $json, 0, 'converter_stock_test.log');
         return $json;
     }
-
-
 
 }
