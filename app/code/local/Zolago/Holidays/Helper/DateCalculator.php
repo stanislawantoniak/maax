@@ -16,6 +16,11 @@ class Zolago_Holidays_Helper_DateCalculator extends Mage_Core_Helper_Abstract{
 		$max_shipping_days = $vendor->getMaxShippingDays($storeId);
 		$max_shipping_time = $vendor->getMaxShippingTime($storeId);
 		
+		if(!$max_shipping_days || !$max_shipping_time){
+			Mage::log("No global values set to Max Shipping Days and Max Shippint Time");
+			return NULL;	
+		}
+		
 		$max_date_timestamp = $this->calculateMaxDate($max_shipping_days, $max_shipping_time, strtotime($po->getCreatedAt()));
 		
 		$date = new Zend_Date($max_date_timestamp, null, $locale);

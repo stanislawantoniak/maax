@@ -4,7 +4,7 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
 {
 	public function getMaxShippingDays($storeId=null)
     {
-        $maxShippingDays = $this->getData('max_shipping_date');
+        $maxShippingDays = $this->getData('max_shipping_days');
         if (is_null($maxShippingDays) || $maxShippingDays=="" || $maxShippingDays==0) {
             $maxShippingDays = Mage::getStoreConfig('udropship/vendor/max_shipping_days', $storeId);
         }
@@ -28,6 +28,12 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
 		if($this->getData("max_shipping_time")=="" || $this->getData("max_shipping_time")==0){
 			$this->setData("max_shipping_time", null);
 		}
+		else{
+			if($this->getData('max_shipping_time') && is_array($this->getData('max_shipping_time'))){
+				$this->setData('max_shipping_time', implode(',', $this->getData('max_shipping_time')));
+			}
+		}
+		
 		return parent::_beforeSave();
 	}
 

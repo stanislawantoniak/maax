@@ -3,10 +3,6 @@ class Zolago_Holidays_Adminhtml_HolidaysController extends Mage_Adminhtml_Contro
 	
 	public function indexAction(){
 		
-		$po = Mage::getModel('zolagopo/po')->load(1);
-		$max_shipping_date = Mage::helper('zolagoholidays/datecalculator')->calculateMaxPoShippingDate($po);
-		var_dump($max_shipping_date);
-		
 		$this->loadLayout();
 		$this->renderLayout();
 		return $this;
