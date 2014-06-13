@@ -3,7 +3,15 @@ $_session = Mage::getSingleton('udropship/session');
 
 $_vendor = $_session->getVendor();
 
-$_currentLocale = $_session->getLocale();
+$locale = $_session->getLocale();
+
+if(!empty($locale)){
+    $_currentLocale = $locale;
+} else {
+    $_currentLocale = "pl_PL";
+    $_session->setLocale($_currentLocale);
+}
+
 $currentUrl = Mage::helper('core/url')->getCurrentUrl();
 
 $_logoHeader = Mage::app()->getStore($_vendor->getLabelStore())->getGroup()->getName();
