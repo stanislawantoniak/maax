@@ -52,7 +52,7 @@ class Zolago_DropshipMicrosite_Model_Observer
     public function bindLocale($observer)
     {
         if(!Mage::registry("dropship_switch_lang")){
-            //return;
+            return;
         }
 
 
