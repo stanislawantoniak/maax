@@ -1,12 +1,31 @@
 <?php
 
-require_once Mage::getModuleDir('controllers', "Unirgy_DropshipMicrosite") . DS . "VendorController.php";
+require_once Mage::getModuleDir('controllers', "Unirgy_Dropship_VendorController") . DS . "VendorController.php";
 
 class Zolago_DropshipMicrosite_VendorController extends Unirgy_DropshipMicrosite_VendorController
 {
 
+    protected function _getSession()
+    {
+        return Mage::getSingleton('udropship/session');
+    }
+
+    /**
+     * Action predispatch
+     *
+     * Check customer authentication for some actions
+     */
     public function preDispatch()
     {
+        /***********************************************************************
+         *  Changning locale
+         ***********************************************************************/
+        if(!$this->_getSession()->getLocale()){
+            $this->_getSession()->setLocale(Mage::app()->getLocale()->getLocaleCode());
+        }
+        if(!Mage::registry("dropship_switch_lang")){
+            Mage::register("dropship_switch_lang", 1);
+        }
         // a brute-force protection here would be nice
         parent::preDispatch();
 
@@ -39,7 +58,7 @@ class Zolago_DropshipMicrosite_VendorController extends Unirgy_DropshipMicrosite
                     $this->_loginPostRedirect();
                 }
             }
-            if (!preg_match('#^(login|logout|password)#i', $action)) {
+            if (!preg_match('#^(login|logout|password|setlocale)#i', $action)) {
                 $this->_forward('login', 'vendor', 'udropship');
             }
         } else {

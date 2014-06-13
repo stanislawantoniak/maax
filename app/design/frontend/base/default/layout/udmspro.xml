@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <layout>
     <umicrosite_vendor_register>
+        <update handle="udropship_vendor" />
         <update handle="bootstrap" />
         <update handle="forms"/>
         <remove name="sidebar"/>
