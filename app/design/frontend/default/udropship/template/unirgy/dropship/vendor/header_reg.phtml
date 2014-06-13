@@ -4,8 +4,7 @@ $_session = Mage::getSingleton('udropship/session');
 $_vendor = $_session->getVendor();
 
 $locale = $_session->getLocale();
-Zend_Debug::dump($locale);
-Zend_Debug::dump(Mage::app()->getLocale()->getLocaleCode());
+
 
 if(!empty($locale)){
     $_currentLocale = $locale;
@@ -31,7 +30,7 @@ $_allowedLocale = array(
 
 Mage::app()->getLocale()->setLocale($_currentLocale);
 Mage::app()->getTranslator()->setLocale($_currentLocale);
-Mage::app()->getTranslator()->init('frontend', true);
+Mage::app()->getTranslator()->init('adminhtml', true);
 
 ?>
 
