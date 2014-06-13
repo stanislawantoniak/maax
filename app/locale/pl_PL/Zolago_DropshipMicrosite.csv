@@ -132,6 +132,8 @@ Requester ID","Wnioskodawca ID"
 "ITN (Internal Transaction Number)","ITN (wewnętrzny numer transakcji)"
 "Always use assigned vendor","Zawsze używaj przypisany sprzedawca"
 "When in stock use local, otherwise use vendor","Gdy w stanie używać lokalnych, w inny sposób korzystać z dostawcą"
+"Use Custom HTML Customer Address Template For Vendors","Zastosowanie szablonu HTML Adres zwykły klient sprzedawców"
+"Payout Method","Sposób wypłaty"
 
 
 
