@@ -5,7 +5,6 @@ $_vendor = $_session->getVendor();
 
 $locale = $_session->getLocale();
 
-
 if(!empty($locale)){
     $_currentLocale = $locale;
 } else {
@@ -30,7 +29,7 @@ $_allowedLocale = array(
 
 Mage::app()->getLocale()->setLocale($_currentLocale);
 Mage::app()->getTranslator()->setLocale($_currentLocale);
-Mage::app()->getTranslator()->init('adminhtml', true);
+Mage::app()->getTranslator()->init('frontend', true);
 
 ?>
 
