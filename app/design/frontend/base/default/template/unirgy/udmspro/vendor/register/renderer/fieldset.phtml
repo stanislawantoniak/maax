@@ -7,9 +7,12 @@ $rcElements = $this->getElement()->getRightColumn();
 $lcElements = $this->getElement()->getLeftColumn();
 $rcElements = $this->getElement()->getRightColumn();
 ?>
-<div class="generic-box udmspro-register-fieldset container" alt="<?php echo $this->getElement()->getLegend() ?>">
 
-    <h3 class="a-center"><?php echo $this->getElement()->getLegend() ?></h3>
+<div class="generic-box udmspro-register-fieldset container" alt="<?php echo $this->__($this->getElement()->getLegend()); ?>">
+
+    <h3 class="a-center">
+        <?php echo $this->__($this->getElement()->getLegend()) ?>
+    </h3>
 
     <?php if (!empty($topElements)): ?>
         <div class="col-md-7">
@@ -60,3 +63,9 @@ $rcElements = $this->getElement()->getRightColumn();
         </div>
     <?php endif ?>
 </div>
+
+<script type="text/javascript">
+    jQuery(document).ready(function ($) {
+        $('input[type=file]').attr("data-label",'<?php echo $this->__('Choose File'); ?>').niceFileField();
+    })
+</script>
