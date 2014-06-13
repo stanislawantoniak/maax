@@ -3,13 +3,13 @@ $_session = Mage::getSingleton('udropship/session');
 
 $_vendor = $_session->getVendor();
 
-$locale = $_session->getLocale();
+$locale = $locale = $this->getRequest()->getParam("locale");
 
-if(!empty($locale)){
+
+if (!empty($locale)) {
     $_currentLocale = $locale;
 } else {
     $_currentLocale = "pl_PL";
-    $_session->setLocale($_currentLocale);
 }
 
 $currentUrl = Mage::helper('core/url')->getCurrentUrl();
@@ -57,7 +57,7 @@ Mage::app()->getTranslator()->init('frontend', true);
                 <ul class="dropdown-menu">
                     <?php foreach ($_allowedLocale as $locale => $info): ?>
                         <li>
-                            <a href="<?php echo Mage::getUrl('udropship/vendor/setlocale', array("locale" => $locale)); ?>">
+                            <a href="<?php echo Mage::getUrl('umicrosite/vendor/register', array("locale" => $locale)); ?>">
                                 <?php echo $this->escapeHtml($info['name']); ?>
                             </a>
                         </li>
