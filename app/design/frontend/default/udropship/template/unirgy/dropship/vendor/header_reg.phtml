@@ -5,6 +5,8 @@ $_vendor = $_session->getVendor();
 
 $locale = $_session->getLocale();
 Zend_Debug::dump($locale);
+Zend_Debug::dump(Mage::app()->getLocale()->getLocaleCode());
+
 if(!empty($locale)){
     $_currentLocale = $locale;
 } else {
