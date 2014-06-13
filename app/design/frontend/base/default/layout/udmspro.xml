@@ -1,12 +1,23 @@
 <?xml version="1.0"?>
 <layout>
-
     <umicrosite_vendor_register>
+        <update handle="bootstrap" />
+        <update handle="forms"/>
+        <remove name="sidebar"/>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/page_clear.phtml</template>
+            </action>
+        </reference>
         <reference name="head">
             <action method="addItem"><type>js_css</type><name>calendar/calendar-win2k-1.css</name></action>
             <action method="addItem"><type>js</type><name>calendar/calendar.js</name></action>
-            <action method="addItem"><type>js</type><name>calendar/lang/calendar-en.js</name></action>
+            <!--<action method="addItem"><type>js</type><name>calendar/lang/calendar-en.js</name></action>-->
             <action method="addItem"><type>js</type><name>calendar/calendar-setup.js</name></action>
+            <action method="addItem"><type>skin_js</type><name>../../../frontend/default/udropship/js/melon/niceFile.js</name></action>
+        </reference>
+        <reference name="header">
+            <action method="setTemplate"><template>unirgy/dropship/vendor/header_reg.phtml</template></action>
         </reference>
         <reference name="content">
             <block type="core/html_calendar" name="head.calendar" as="calendar" template="page/js/calendar.phtml"/>
@@ -14,5 +25,4 @@
             <block type="udmspro/vendor_register" template="unirgy/udmspro/vendor/register.phtml" name="udmspro_register" />
         </reference>
     </umicrosite_vendor_register>
-
 </layout>

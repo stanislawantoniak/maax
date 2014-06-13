@@ -1,15 +1,35 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
-    <sales_po_history>
-        <label>Customer Purchase Order History</label>
+    <sales_rma_history>
+        <label>Customer Rma History</label>
         <update handle="customer_account"/>
         <reference name="my.account.wrapper">
-             <block type="zolagopo/list" as="list" name="sales.po.list"/>  
+             <block type="zolagorma/list" as="list" name="sales.rma.list"/>
+        </reference>
+    </sales_rma_history>	
+    <sales_po_rmalist>
+        <label>Customer Po History for RMA</label>
+        <update handle="customer_account"/>
+        <reference name="my.account.wrapper">
+             <block type="zolagopo/rma" as="list" name="sales.po.rma"/>
+        </reference>
+    </sales_po_rmalist>
+    <sales_po_history>
+        <label>Customer Po History</label>
+        <update handle="customer_account"/>
+        <reference name="my.account.wrapper">
+             <block type="zolagopo/list" as="list" name="sales.po.list"/>
         </reference>
     </sales_po_history>	
 	<sales_po_newrma>
 		<label>Customer My Account Order RMA View</label>
         <update handle="customer_account"/>
+		<reference name="head">
+			<action method="addItem"><type>js_css</type><name>calendar/calendar-win2k-1.css</name><params/><!--<if/><condition>can_load_calendar_js</condition>--></action>
+			<action method="addItem"><type>js</type><name>calendar/calendar.js</name><!--<params/><if/><condition>can_load_calendar_js</condition>--></action>
+			<action method="addItem"><type>js</type><name>calendar/calendar-setup.js</name><!--<params/><if/><condition>can_load_calendar_js</condition>--></action>
+		    <block type="core/html_calendar" name="head.calendar" as="calendar" template="page/js/calendar.phtml"/>
+		</reference>
         <reference name="my.account.wrapper">
 			<block type="zolagopo/info" as="info" name="sales.po.info">
 				<action method="addLink" translate="label" module="sales"><name>view</name><path>*/*/view</path><label>Order Information</label></action>
@@ -24,6 +44,21 @@
         </reference>
 	</sales_po_newrma>
 	
+	
+	<urma_vendor_index>		
+		
+		<update handle="adminhtml_head"/>
+		<update handle="bootstrap"/>
+		<update handle="noty"/>
+		<update handle="forms"/>
+		<remove name="head.udropship.calendar"/>
+		<remove name="dashboard"/>
+		<reference name="content">
+			<block name="zolagorma_vendor_rma" type="zolagorma/vendor_rma" template="zolagorma/vendor/rma.phtml">
+			</block>
+		</reference>
+	</urma_vendor_index>
+	
 	<urma_vendor_edit>		
 		<update handle="bootstrap"/>
 		<update handle="noty"/>
@@ -32,6 +67,8 @@
 		<reference name="content">			
 			<block name="vendor_rma_edit" type="zolagorma/vendor_rma_edit" template="zolagorma/vendor/rma/edit.phtml">
 				<block name="vendor_rma_edit_items" type="zolagorma/vendor_rma_edit_items" template="zolagorma/vendor/rma/edit/items.phtml"/>
+				<block name="vendor_rma_edit_shipping_address" type="zolagorma/vendor_rma_edit_address" template="zolagopo/vendor/po/edit/address.phtml"/>
+				<block name="vendor_rma_edit_shipping" type="zolagorma/vendor_rma_edit_shipping" template="zolagopo/vendor/po/edit/shipping.phtml"/>
 			</block>
 				<!--
 				<block name="vendor_po_edit_compose" type="zolagopo/vendor_po_edit_compose" template="zolagopo/vendor/po/edit/compose.phtml"/>
