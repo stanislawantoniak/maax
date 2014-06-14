@@ -27,7 +27,6 @@ class Zolago_Catalog_Model_Resource_Stock_Status
         return 1;
     }
 
-
     /**
      * Save Product Status per website
      *
@@ -58,6 +57,4 @@ class Zolago_Catalog_Model_Resource_Stock_Status
 
         return $this;
     }
-
-
 }

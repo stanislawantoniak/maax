@@ -9,7 +9,7 @@ class Zolago_Catalog_Helper_Stock extends Mage_Core_Helper_Abstract
      *
      * @return string
      */
-    public static function emulateStock($testMode = FALSE)
+    public static function emulateStock($testMode = false)
     {
 
         /*Load xml data*/
@@ -34,14 +34,12 @@ class Zolago_Catalog_Helper_Stock extends Mage_Core_Helper_Abstract
                 $dataXML[$sku][$posId] = $stock;
             }
         }
-        $res = array('merchant' => $merchant , 'data' => $dataXML);
-
+        $res = array('merchant' => $merchant, 'data' => $dataXML);
 
 
         return json_encode($res);
 
     }
-
 
     /**
      * @param $dataStock
@@ -49,9 +47,10 @@ class Zolago_Catalog_Helper_Stock extends Mage_Core_Helper_Abstract
      *
      * @return array
      */
-    public static function getAvailableStock($dataStock,$merchant){
+    public static function getAvailableStock($dataStock, $merchant)
+    {
 
-        if(empty($dataStock)){
+        if (empty($dataStock)) {
             return array();
         }
         $data = array();
@@ -59,9 +58,9 @@ class Zolago_Catalog_Helper_Stock extends Mage_Core_Helper_Abstract
         /**
          * Prepare data
          *
-         1 calculate available stock
-         2 calculate stock on open orders
-         3 stock = available stock - stock on open orders
+         * 1 calculate available stock
+         * 2 calculate stock on open orders
+         * 3 stock = available stock - stock on open orders
 
          */
         //1. get min POS stock (calculate available stock)
@@ -76,12 +75,13 @@ class Zolago_Catalog_Helper_Stock extends Mage_Core_Helper_Abstract
         if (!empty($minPOSValues)) {
             foreach ($dataStock as $sku => $dataStockItem) {
                 $dataStockItems = (array)$dataStockItem;
-                if(!empty($dataStockItems)){
-                    foreach($dataStockItems as $stockId => $posStockConverter){
+                if (!empty($dataStockItems)) {
+                    foreach ($dataStockItems as $stockId => $posStockConverter) {
                         $minimalStockPOS = $minPOSValues[$stockId];
                         $openOrderQty = isset($openOrdersQty[$sku]) ? $openOrdersQty[$sku]['qty'] : 0;
                         //available stock = if [POS stock from converter]>[minimal stock from POS] then [POS stock from converter] - [minimal stock from POS] else 0
-                        $data[$sku][$stockId] = ($posStockConverter > $minimalStockPOS) ? ($posStockConverter - $minimalStockPOS - $openOrderQty) : 0;
+                        $data[$sku][$stockId] = ($posStockConverter > $minimalStockPOS) ? ($posStockConverter
+                            - $minimalStockPOS - $openOrderQty) : 0;
                     }
                     unset($posStockConverter);
                 }
@@ -92,10 +92,10 @@ class Zolago_Catalog_Helper_Stock extends Mage_Core_Helper_Abstract
         $skuIdAssoc = Zolago_Catalog_Helper_Data::getSkuAssoc($skus);
 
         $dataSum = array();
-        foreach($data as $sku => $_){
-           if(isset($skuIdAssoc[$sku])){
-               $dataSum[$skuIdAssoc[$sku]] = array_sum((array)$_);
-           }
+        foreach ($data as $sku => $_) {
+            if (isset($skuIdAssoc[$sku])) {
+                $dataSum[$skuIdAssoc[$sku]] = array_sum((array)$_);
+            }
         }
         unset($_);
 
