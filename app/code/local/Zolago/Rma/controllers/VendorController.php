@@ -7,6 +7,11 @@ require_once Mage::getModuleDir('controllers', 'Unirgy_Rma') . "/VendorControlle
  */
 class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 {
+	
+	public function indexAction() {
+		Mage::register('as_frontend', true);
+		return parent::indexAction();
+	}
 	/**
 	 * Display edit form
 	 * @return null
@@ -44,6 +49,7 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 		
 		try{
 			$rma = $this->_registerRma();
+			$statusModel = $rma->getStatusModel();
 			$request = $this->getRequest();
 			
 			$comment = trim($request->getParam("comment", ''));
@@ -54,8 +60,9 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 			
 			// Process status
 			if($status!=$rma->getRmaStatus()){
-				if(!$this->_isValidTrackingStatus($status)){
-					throw new Mage_Core_Exception(Mage::helper("zolagorma")->__("Status code %s is not valid.", $status));
+				if(!$this->_isValidRmaStatus($rma, $status)){
+					throw new Mage_Core_Exception(Mage::helper("zolagorma")->
+						__("Status code %s is not valid.", $status));
 				}
 				$rma->setRmaStatus($status);
 				$rma->getResource()->saveAttribute($rma, 'rma_status');
@@ -64,6 +71,10 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 			
 			// Process comment
 			if($comment){
+				if(!$statusModel->isVendorCommentAvailable($rma)){
+					throw new Mage_Core_Exception(Mage::helper("zolagorma")->
+						__("Cannot add comment in this status"));
+				}
 				$vendorId = $session->getVendorId();
 				$operatorId = $session->getOperatorId();
 				
@@ -110,7 +121,7 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 				$rma->sendUpdateEmail($notify, $emailComment);
 				
 			}else{
-				$this->_getSession()->addSuccess(Mage::helper("zolagorma")->__("No changes (empty comment and same status)"));
+				$this->_getSession()->addNotice(Mage::helper("zolagorma")->__("No changes (empty comment and same status)"));
 			}
 		}catch(Mage_Core_Exception $e){
 			$connection->rollBack();
@@ -206,6 +217,7 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 				"master_tracking_id"	=> null, // what is this ?
 				"package_count"			=> null, // what is this ?
 				"package_idx"			=> null, // what is this ?
+				"track_creator"			=> Zolago_Rma_Model_Rma_Track::CREATOR_TYPE_VENDOR
 			);
 			
 			$model = Mage::getModel('urma/rma_track')->
@@ -238,6 +250,11 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 		
 		try{
 			$rma = $this->_registerRma();
+			
+			if(!$rma->getStatusModel()->isEditingAddressAvailable($rma)){
+				throw new Mage_Core_Exception(Mage::helper("zolagorma")->
+					__("Cannot edit shipping address in this status"));
+			}
 			
 			if(isset($data['restore']) && $data['restore']==1){
 				if($type==Mage_Sales_Model_Order_Address::TYPE_SHIPPING){
@@ -324,10 +341,14 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 	}
 	
 	/**
+	 * @param Zolago_Rma_Model_Rma $rma
 	 * @param string $status
 	 * @return bool
 	 */
-	public function _isValidTrackingStatus($status) {
-		return array_key_exists($status, Mage::helper('zolagorma')->getVendorRmaStatuses());
+	public function _isValidRmaStatus(Zolago_Rma_Model_Rma $rma, $status) {
+		return array_key_exists(
+			$status,
+			$rma->getStatusModel()->getAvailableStatuses($rma)
+		);
 	}
 }

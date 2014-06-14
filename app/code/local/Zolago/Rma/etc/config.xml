@@ -39,6 +39,11 @@
 			<zolagorma>
 				<class>Zolago_Rma_Helper</class>
 			</zolagorma>
+			<urma>
+				<rewrite>
+					<data>Zolago_Rma_Helper_Data</data>
+				</rewrite>
+			</urma>
 		</helpers>
 		<fieldsets>
 			<!-- PO -> RMA -->
