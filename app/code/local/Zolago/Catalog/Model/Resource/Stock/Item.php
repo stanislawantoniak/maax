@@ -37,7 +37,7 @@ class Zolago_Catalog_Model_Resource_Stock_Item
      */
     public function saveCatalogInventoryStockItem($insertData)
     {
-        $this->_getWriteAdapter()->beginTransaction();
+        $this->beginTransaction();
         try {
             $stockId = $this->getStockId();
 
@@ -50,7 +50,7 @@ class Zolago_Catalog_Model_Resource_Stock_Item
             $this->_getWriteAdapter()->query($insert);
             $this->_getWriteAdapter()->commit();
         } catch (Exception $e) {
-            $this->_getWriteAdapter()->rollBack();
+            $this->rollBack();
             throw $e;
         }
 
