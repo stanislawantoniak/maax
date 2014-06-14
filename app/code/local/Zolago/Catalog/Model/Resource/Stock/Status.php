@@ -32,7 +32,9 @@ class Zolago_Catalog_Model_Resource_Stock_Status
      * Save Product Status per website
      *
      * @param array $insertData
-     * @param int|null $websiteId
+     *
+     * @throws Exception
+     * @internal param int|null $websiteId
      * @return Mage_CatalogInventory_Model_Resource_Stock_Status
      */
     public function saveCatalogInventoryStockStatus($insertData)

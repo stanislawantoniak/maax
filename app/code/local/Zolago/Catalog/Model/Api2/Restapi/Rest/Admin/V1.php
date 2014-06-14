@@ -17,6 +17,11 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
     extends Zolago_Catalog_Model_Api2_Restapi
 {
 
+    /**
+     * @param $data
+     *
+     * @return bool|int
+     */
     public function createTest($data)
     {
         $json = json_encode($data);
@@ -24,6 +29,11 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         return $log;
     }
 
+    /**
+     * @param array $data
+     *
+     * @return string
+     */
     protected function _create($data)
     {
 
@@ -71,17 +81,28 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
     }
 
 
+    /**
+     * @return string
+     */
     protected function _retrieveCollection()
     {
         return json_encode(array("testing", "hello2"));
     }
 
+    /**
+     * @return string
+     */
     protected function _retrieve()
     {
         return json_encode($this->getRequest());
         //return json_encode(array("testing", "hello3"));
     }
 
+    /**
+     * @param array $data
+     *
+     * @return string
+     */
     protected function _multiUpdate($data)
     {
         $json = json_encode($data);

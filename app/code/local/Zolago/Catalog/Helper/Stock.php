@@ -1,10 +1,16 @@
 <?php
+/**
+ * Class Zolago_Catalog_Helper_Stock
+ */
 class Zolago_Catalog_Helper_Stock extends Mage_Core_Helper_Abstract
 {
+    /**
+     * @param bool $testMode
+     *
+     * @return string
+     */
     public static function emulateStock($testMode = FALSE)
     {
-        $file = FALSE;
-        $data = array();
 
         /*Load xml data*/
         $base_path = Mage::getBaseDir('base');
@@ -37,6 +43,12 @@ class Zolago_Catalog_Helper_Stock extends Mage_Core_Helper_Abstract
     }
 
 
+    /**
+     * @param $dataStock
+     * @param $merchant
+     *
+     * @return array
+     */
     public static function getAvailableStock($dataStock,$merchant){
 
         if(empty($dataStock)){

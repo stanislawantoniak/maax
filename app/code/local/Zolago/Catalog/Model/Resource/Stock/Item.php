@@ -31,6 +31,9 @@ class Zolago_Catalog_Model_Resource_Stock_Item
      * Update inventory stock
      *
      * @param $insertData
+     *
+     * @throws Exception
+     * @return Zolago_Catalog_Model_Resource_Stock_Item
      */
     public function saveCatalogInventoryStockItem($insertData)
     {
