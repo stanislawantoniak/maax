@@ -109,12 +109,12 @@ class Zolago_Catalog_AuthController extends Mage_Core_Controller_Front_Action
 //
 //
 //        /*Prepare data to insert*/
-
+//
 //        if(empty($data)){
 //            Mage::log(microtime() . ' Empty source ', 0, 'product_stock_update.log');
 //            return;
 //        }
-
+//
 //
 //        if(!empty($data)){
 //            foreach($data as $id => $qty){
@@ -130,7 +130,7 @@ class Zolago_Catalog_AuthController extends Mage_Core_Controller_Front_Action
          * 2. Test with all products
          */
 
-        $load = 2;
+        $load = 1;
 
         $skuAssoc = Zolago_Catalog_Helper_Data::getIdSkuAssoc();
 
@@ -185,6 +185,44 @@ class Zolago_Catalog_AuthController extends Mage_Core_Controller_Front_Action
         Mage::log(microtime() . ' End ', 0, 'product_stock_update.log');
         echo 'Done';
     }
+
+
+    public static function testAction()
+    {
+        for ($i = 1; $i <= 10000; $i++) {
+            $product = new Mage_Catalog_Model_Product();
+// Build the product
+            $sku = 'SKUFAKE-' . rand();
+            $product->setSku($sku);
+            $product->setAttributeSetId(4);
+            $product->setTypeId('simple');
+            $product->setName('Some cool product name');
+            $product->setCategoryIds(array(7)); # some cat id's, my is 7
+            $product->setWebsiteIDs(array(0, 1)); # Website id, my is 1 (default frontend)
+            $product->setDescription('Full description here');
+            $product->setShortDescription('Short description here');
+            $product->setPrice(39.99); # Set some price
+
+//Default Magento attribute
+            $product->setWeight(4.0000);
+            $product->setVisibility(Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH);
+            $product->setStatus(1);
+            $product->setTaxClassId(0); # My default tax class
+            $product->setStockData(
+                array(
+                     'is_in_stock' => 1,
+                     'qty'         => 1
+                )
+            );
+            $product->setCreatedAt(strtotime('now'));
+            try {
+                $product->save();
+            } catch (Exception $ex) {
+                //Handle the error
+            }
+        }
+    }
+
 
 }
 

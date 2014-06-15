@@ -70,6 +70,7 @@ class Zolago_Catalog_Helper_Stock extends Mage_Core_Helper_Abstract
         //2. calculate stock on open orders
         $zcSDModel = Mage::getResourceModel('zolagocatalog/stock_data');
         $openOrdersQty = $zcSDModel->calculateStockOpenOrders($merchant);
+
         //-------Prepare data
 
         if (!empty($minPOSValues)) {
