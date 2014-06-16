@@ -101,12 +101,10 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 		/* @var $rma Zolago_Rma_Model_Rma */
 		$type = $observer->getEvent()->getData('type');
 		if($type==Mage_Sales_Model_Order_Address::TYPE_SHIPPING){
-			$type = Mage::helper('zolagorma')->__("shipping");
+			$text = Mage::helper('zolagorma')->__("Origin shipping address restored");
 		}else{
-			$type = Mage::helper('zolagorma')->__("billing");
+			$text = Mage::helper('zolagorma')->__("Origin billing address restored");
 		}
-
-		$text = Mage::helper('zolagorma')->__("Origin %s address restored", $type);
 		$this->_logEvent($rma, $text, false);
 	}
 	
@@ -145,11 +143,11 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 		
 		if($changeLog){
 			if($type==Mage_Sales_Model_Order_Address::TYPE_SHIPPING){
-				$type = $hlp->__("Shipping");
+				$text = $hlp->__("Shipping address changed (%s)");
 			}else{
-				$type = $hlp->__("Billing");
+				$text = $hlp->__("Billing address changed (%s)");
 			}
-			$text = Mage::helper('zolagorma')->__("%s address changed (%s)", $type, implode(", " , $changeLog));
+			$text = Mage::helper('zolagorma')->__($text, implode(", " , $changeLog));
 			$this->_logEvent($rma, $text, false);
 		}
 	}
