@@ -3,6 +3,14 @@ class Zolago_Holidays_Helper_DateCalculator extends Mage_Core_Helper_Abstract{
 	
 	protected $weekend;
 	
+	/**
+	 * Calculate maximum shipping date for PO
+	 * 
+	 * @param Zolago_Po_Model_Po $po
+	 * @param boolean $return_object Set to TRUE if you want to return Z
+	 * 
+	 * @return Zend_Date|string
+	 */
 	public function calculateMaxPoShippingDate(Zolago_Po_Model_Po $po, $return_object = FALSE){
 		
 		$store = $po->getStore();
@@ -37,6 +45,13 @@ class Zolago_Holidays_Helper_DateCalculator extends Mage_Core_Helper_Abstract{
 		}
 	} 
 	
+	/**
+	 * @param int $max_days
+	 * @param mixed $max_time
+	 * @param timestamp $current_timestamp
+	 * 
+	 * @return timestamp
+	 */
 	protected function calculateMaxDate($max_days, $max_time, $current_timestamp = NULL){
 		
 		// Calculate number of days based on hour
@@ -70,11 +85,21 @@ class Zolago_Holidays_Helper_DateCalculator extends Mage_Core_Helper_Abstract{
 		return strtotime("+ " . ($max_days - 1) . "days", $current_timestamp);
 	}
 	
+	/**
+	 * @param timestamp $timestamp
+	 * 
+	 * @return boolean
+	 */
 	private function _isWeekend($timestamp){
 		$weekd_day = date('w', $timestamp);
 		return in_array($weekd_day, $this->weekend);
 	}
 	
+	/**
+	 * @param timestamp $timestamp
+	 * 
+	 * @return boolean
+	 */
 	private function _isHoliday($timestamp){
 		
 		$fixed_string = date("d/m/Y", $timestamp);

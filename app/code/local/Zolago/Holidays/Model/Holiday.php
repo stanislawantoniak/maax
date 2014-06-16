@@ -5,6 +5,13 @@ class Zolago_Holidays_Model_Holiday extends Mage_Core_Model_Abstract{
         $this->_init('zolagoholidays/holiday');
     }
 	
+	/**
+	 * @param mixed[] @data
+	 * 
+	 * @throws Exception When array is empty and when cannot set values
+	 * 
+	 * @return Zolago_Holidays_Model_Holiday
+	 */
 	public function updateModelData($data){
 		
 		try{
