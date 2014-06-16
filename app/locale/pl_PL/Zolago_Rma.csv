@@ -10,3 +10,6 @@
 "Closed - accepted","Zamknięte - zrealizowane"
 "Closed - rejected","Zamknięte - niezrealizowane"
 "Shipment received/delivered","Otrzymana przesyłka"
+"Status changed (%s&rarr;%s)", "Zmiana statusu (%s&rarr;%s)"
+"Tracking status changed (%s&rarr;%s)", "Zmiana statusu wysyłki (%s&rarr;%s)"
+"Tracking added (Creator: %s, Carrier: %s, Number: %s)", "Numer śledzenia dodany (Twórca: %s, Przwoźnik: %s, Numer: %s)"

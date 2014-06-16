@@ -9,6 +9,12 @@ class Zolago_Rma_Model_Rma extends Unirgy_Rma_Model_Rma
 	const TYPE_RMABILLING = "rmabilling";
 	
 	/**
+	 * @return string
+	 */
+	public function getRmaStatusName() {
+		return $this->getStatusObject()->getTitle();
+	}
+	/**
 	 * @return Varien_Object
 	 */
 	public function getStatusObject() {

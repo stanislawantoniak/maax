@@ -1,8 +1,6 @@
 <?php
 class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 {
-	
-	
 	/**
 	 * RMA Created
 	 * @param type $observer
@@ -14,6 +12,28 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 				$rma,
 				Mage::helper('zolagorma')->__("New RMA created"), 
 				true
+		);
+	}
+	
+	/**
+	 * RMA track status chnge
+	 * @param type $observer
+	 */
+	public function rmaTrackStatusChange($observer) {
+		$rma = $observer->getEvent()->getData('rma');
+		/* @var $rma Zolago_Rma_Model_Rma */
+		$track = $observer->getEvent()->getData('track');
+		/* @var $rma Zolago_Rma_Model_Rma_Track */
+		
+		$newStatus = $observer->getEvent()->getData("new_status");
+		$oldStatus = $observer->getEvent()->getData("old_status");
+		
+		$this->_logEvent($rma, Mage::helper('zolagorma')->
+			__("Tracking %s status changed (%s&rarr;%s)", 
+					$track->getTrackNumber(),
+					$oldStatus,
+					$newStatus
+			)
 		);
 	}
 	
@@ -41,8 +61,15 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 		/* @var $rma Zolago_Rma_Model_Rma */
 		$track = $observer->getEvent()->getData('track');
 		/* @var $track Zolago_Rma_Model_Rma_Track */
-		$this->_logEvent($rma, Mage::helper('zolagorma')->
-			__("Track added (Carrier: %s, Number: %s)", $track->getTitle(), $track->getTrackNumber()));
+		
+		$type = Mage::helper('zolagorma')->__(
+				$track->getTrackCreator()==Zolago_Rma_Model_Rma_Track::CREATOR_TYPE_CUSTOMER ? "Customer" : "Vendor");
+		
+		$this->_logEvent($rma, 
+				Mage::helper('zolagorma')->__("Tracking added (Creator: %s, Carrier: %s, Number: %s)", 
+						$type, $track->getTitle(), $track->getTrackNumber()),
+				false
+		);
 	}
 	
 	/**
@@ -53,9 +80,15 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 		$rma = $observer->getEvent()->getData('rma');
 		$newStatus = $observer->getEvent()->getData("new_status");
 		$oldStatus = $observer->getEvent()->getData("old_status");
+		$helper = Mage::helper("zolagorma");
 		/* @var $rma Zolago_Rma_Model_Rma */
+		$statusModel = $rma->getStatusModel();
 		$this->_logEvent($rma, Mage::helper('zolagorma')->
-			__("Status changed (%s&rarr;%s)", $oldStatus, $newStatus));
+			__("Status changed (%s&rarr;%s)", 
+					$helper->__($statusModel->getStatusObject($oldStatus)->getTitle()), 
+					$helper->__($statusModel->getStatusObject($newStatus)->getTitle())
+			)
+		);
 	}
 	
 	

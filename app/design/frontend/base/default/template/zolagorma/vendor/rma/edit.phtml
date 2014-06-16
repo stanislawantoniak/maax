@@ -44,7 +44,7 @@
 				<div class="widget-content rma">
 					<dl class="dl-horizontal dl-z"> 
 						<dt><?php echo $_helper->__("RMA status");?>:</dt> 
-						<dd><?php echo $this->escapeHtml($_rma->getRmaStatusName());?></dd> 
+						<dd><?php echo $this->escapeHtml($_helper->__($_rma->getRmaStatusName()));?></dd> 
 						<dt><?php echo $_helper->__("RMA date");?>:</dt> 
 						<dd><?php echo $this->formatDate($_rma->getCreatedAt());?></dd> 
 						<dt><?php echo $_helper->__("Response deadline");?>:</dt> 
@@ -190,7 +190,7 @@
 							<?php echo Mage::helper('core')->formatDate($_c->getCreatedAt(), 'medium', true) ?>
 							<br/>
 							<small class="text-muted" style="font-weight: normal;">
-								<?php echo $this->htmlEscape($_c->getRmaStatusName());?>
+								<?php echo $this->htmlEscape($_helper->__($_c->getRmaStatusName()));?>
 							</small>
 						</dt>
 						<dd>
