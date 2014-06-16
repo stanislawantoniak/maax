@@ -9,6 +9,13 @@ class Zolago_Rma_Model_Rma extends Unirgy_Rma_Model_Rma
 	const TYPE_RMABILLING = "rmabilling";
 	
 	/**
+	 * @return Varien_Object
+	 */
+	public function getStatusObject() {
+		return $this->getStatusModel()->getStatusObject($this);
+	}
+	
+	/**
 	 * @return bool
 	 */
 	public function hasCustomerTracking() {
@@ -222,6 +229,7 @@ class Zolago_Rma_Model_Rma extends Unirgy_Rma_Model_Rma
    protected function _beforeSave() {
 	   if(!$this->getId()){
 			$this->getStatusModel()->processNewRmaStatus($this);
+			$this->setIsNewFlag(true);
 	   }
 	   return parent::_beforeSave();
    }

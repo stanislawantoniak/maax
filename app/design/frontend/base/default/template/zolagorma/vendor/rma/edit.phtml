@@ -11,7 +11,7 @@
 <?php $_poTracking = $this->getPoTracking($_poShipment);?>
 <?php $_billingAddress = $_rma->getBillingAddress();?>
 <?php $_shippingAddress = $_rma->getShippingAddress();?>
-<?php $_comments = $_rma->getVendorCommentsCollection(); ?>
+<?php $_comments = $_rma->getVendorCommentsCollection(true)->setOrder("entity_id DESC"); ?>
 <?php $_statuses = $this->getAvailableStatuses(true); ?>
 <?php $_statusesOptions = $this->getAvailableStatuses(false); ?>
 <?php $_currentStatusId = $_rma->getRmaStatus(); ;?>
