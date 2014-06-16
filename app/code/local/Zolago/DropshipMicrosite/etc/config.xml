@@ -50,7 +50,24 @@
 					</change_vendor_design>
 				</observers>
 			</controller_action_layout_load_before>
+            <core_locale_set_locale>
+                <observers>
+                    <bind_locale>
+                        <class>zolagodropshipmicrosite/observer</class>
+                        <method>bindLocale</method>
+                    </bind_locale>
+                </observers>
+            </core_locale_set_locale>
 		</events>
+        <routers>
+            <umicrosite>
+                <args>
+                    <modules>
+                        <Zolago_DropshipMicrosite before="Unirgy_DropshipMicrosite">Zolago_DropshipMicrosite</Zolago_DropshipMicrosite>
+                    </modules>
+                </args>
+            </umicrosite>
+        </routers>
         <translate>
             <modules>
                 <zolagodropshipmicrosite>
