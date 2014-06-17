@@ -20,6 +20,9 @@ class Zolago_Rma_Adminhtml_ReturnController extends Mage_Adminhtml_Controller_Ac
 
                     $model->delete();
                     $this->_getSession()->addSuccess($helper->__("Return Reason has been successfully deleted."));
+					
+					$data = array( 'model' => $model);
+					Mage::dispatchEvent('zolagorma_global_return_reson_delete_after', $data);
 
                 }else{
 
@@ -107,6 +110,9 @@ class Zolago_Rma_Adminhtml_ReturnController extends Mage_Adminhtml_Controller_Ac
                 }
                 $model->updateModelData($data);
                 $model->save();
+				
+				$data = array( 'model' => $model);
+				Mage::dispatchEvent('zolagorma_global_return_reson_save_after', $data);
                 // $validErrors = $model->validate();
                 // if($validErrors===true){
                     // $model->save();

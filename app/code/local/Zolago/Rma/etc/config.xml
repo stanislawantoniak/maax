@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Zolago_Rma>
-			<version>0.0.9</version>
+			<version>0.0.10</version>
 		</Zolago_Rma>
 	</modules>
 	<global>
@@ -17,6 +17,9 @@
 					<returnreason>
                         <table>zolago_return_reasons</table>
                     </returnreason>
+                    <vendorreturnreason>
+                        <table>zolago_vendor_return_reasons</table>
+                    </vendorreturnreason>
 				</entities>
 			</zolagorma_resource>
 			<urma>
@@ -155,5 +158,31 @@
                 </zolagorma>
             </updates>
         </layout>
+        <events>
+            <udropship_adminhtml_vendor_tabs_after>
+                <observers>
+                    <zolagorma>
+                        <class>zolagorma/observer</class>
+                        <method>udropship_adminhtml_vendor_tabs_after</method>
+                    </zolagorma>
+                </observers>
+            </udropship_adminhtml_vendor_tabs_after>
+            <udropship_vendor_save_after>
+                <observers>
+                    <zolagorma>
+                        <class>zolagorma/observer</class>
+                        <method>udropship_vendor_save_after</method>
+                    </zolagorma>
+                </observers>
+            </udropship_vendor_save_after>
+            <zolagorma_global_return_reson_save_after>
+                <observers>
+                    <zolagorma>
+                        <class>zolagorma/observer</class>
+                        <method>zolagorma_global_return_reson_save_after</method>
+                    </zolagorma>
+                </observers>
+            </zolagorma_global_return_reson_save_after>
+        </events>
     </adminhtml>
 </config>

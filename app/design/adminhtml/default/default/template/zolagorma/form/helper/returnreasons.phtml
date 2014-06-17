@@ -1,0 +1,40 @@
+<?php $_element = $this->getElement()?>
+<?php $collection = $this->getReturnReasons(); ?>
+<?php if($collection->count() > 0): ?>
+<tr>
+    <td class="grid" colspan=10>
+        <table cellspacing="0" class="data" cellpadding="0" id="tiercom_category_rates-grid" width="100%">
+            <thead>
+                <tr class="headings">
+                    <th class="a-center"><?php echo Mage::helper('zolagorma')->__('Name') ?></th>
+                    <th class="a-center"><?php echo Mage::helper('zolagorma')->__('Auto days') ?></th>
+                    <th class="a-center"><?php echo Mage::helper('zolagorma')->__('Allowed days') ?></th>
+                    <th class="a-center"><?php echo Mage::helper('zolagorma')->__('Message') ?></th>
+                </tr>
+            </thead>
+            <tbody id="vendor_return_reasons-table">
+                <?php foreach($this->getReturnReasons() as $reason): ?>
+                <?php $_id = $reason->getReturnReasonId(); ?>
+                <tr class="option-row">
+                    <td class="a-center"><?php echo $reason->getName()?></td>
+                    <td class="a-left"><input name="[return_reasons][<?php echo $_id; ?>][auto_days]" class="input-text" type="text" value="<?php echo $reason->getAutoDays(); ?>" /></td>
+                    <td class="a-left"><input name="[return_reasons][<?php echo $_id; ?>][allowed_days]" class="input-text" type="text" value="<?php echo $reason->getAllowedDays(); ?>" /></td>
+                    <td class="a-left" width="500"><input name="[return_reasons][<?php echo $_id; ?>][message]" class="input-text" type="text" value="<?php echo $reason->getMessage(); ?>" /></td>
+                </tr>
+                <?php endforeach ?>
+            </tbody>
+        </table>
+
+    </td>
+</tr>
+<?php else: ?>
+	There are no return reasons found.	
+<?php endif; ?>
+<style>
+#tiercom_category_rates-grid{
+	width:100%;
+}
+	#tiercom_category_rates-grid .option-row input{
+		width:95%;
+	}
+</style>
