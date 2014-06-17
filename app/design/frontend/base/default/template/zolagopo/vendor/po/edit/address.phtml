@@ -140,9 +140,34 @@ jQuery(function($){
 	form.validate({
 		rules: {
 			"postcode":{
-				zipcodePL: true
+				zipcodePL: true,
+                remote: function () { //the function allows the creation of the data string // outside of the remote call itself, which would not return a current value from the form.
+                    var zip = jQuery('#shipping-address-postcode').val();
+                    var r = {
+                        url: "/zolagodhl/dhl/checkDhlZip",
+                        type: "get",
+                        cache: false,
+                        dataFilter: function(response) {
+                            var isSuccess;
+                            console.log(response);
+                            var msg = jQuery.parseJSON(response);
+                            console.log(msg.status);
+                            if(msg.status == "error"){
+                                isSuccess = false;
+                            } else {
+                                isSuccess = true;
+                            }
+                            return isSuccess;
+                        }
+                    };
+                    return r;
+                }
+
 			}
-		}
+		},
+        messages: {"postcode": {
+            remote: "<?php echo $this->__("Please enter valid DHL zip code"); ?>"}
+        }
 	});
 });
 </script>

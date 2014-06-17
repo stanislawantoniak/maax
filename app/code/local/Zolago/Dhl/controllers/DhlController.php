@@ -97,11 +97,12 @@ class Zolago_Dhl_DhlController extends Mage_Core_Controller_Front_Action
 
     public function checkDhlZipAction()
     {
-
-
-        $zip = Mage::app()->getRequest()->getParam('zip');
-
+        $zip = Mage::app()->getRequest()->getParam('postcode');
+        $response = array();
         if (empty($zip)) {
+            $response['status'] = 'error';
+            $response['message'] = 'Please enter zip code';
+            echo json_encode($response);
             return;
         }
         $zip = str_replace('-', '', $zip);
@@ -116,14 +117,19 @@ class Zolago_Dhl_DhlController extends Mage_Core_Controller_Front_Action
         $dhlValidZip = ($domesticExpress9 || $domesticExpress12) ? true : false;
 
         if (!$dhlValidZip) {
-            echo 'Invalid Dhl Postal Code';
+            $response['status'] = 'error';
+            $response['message'] = 'Invalid Dhl Postal Code';
+            echo json_encode($response);
             return;
         }
 
         $zipModel = Mage::getResourceModel('zolagodhl/zip');
         $zipModel->updateDhlZip($zip);
 
-
+        $response['status'] = 'success';
+        $response['message'] = 'Zip code is valid';
+        echo json_encode($response);
+        return;
 
     }
 }
