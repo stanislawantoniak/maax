@@ -25,16 +25,16 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
         $rmaId = $this->getRequest()->getParam('rma_id');
         $rma = Mage::getModel('urma/rma')->load($rmaId);
         if ($this->_canViewRma($rma)) {
-			$ioAdapter = new Varien_Io_File();
-			$tracks = $rma->getAllTracks();
-			foreach ($tracks as $track) {   
-			    if (!$dhlFile = $track->getLabelPic()) {
+            $ioAdapter = new Varien_Io_File();
+            $tracks = $rma->getAllTracks();
+            foreach ($tracks as $track) {
+                if (!$dhlFile = $track->getLabelPic()) {
                     continue;
-			    }
-				return $this->_prepareDownloadResponse(basename($dhlFile), @$ioAdapter->read($dhlFile), 'application/pdf');
-			}			
+                }
+                return $this->_prepareDownloadResponse(basename($dhlFile), @$ioAdapter->read($dhlFile), 'application/pdf');
+            }
         }
-		$this->_redirectReferer();
+        $this->_redirectReferer();
     }
     public function rmaListAction() {
         $this->loadLayout();
@@ -142,26 +142,27 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
                           'shipmentStartHour' => $data['carrier_time_from'],
                           'shipmentEndHour' => $data['carrier_time_to'],
                       );
-		
-		
-		$config = Mage::getSingleton("shipping/config");
-		/* @var $config Mage_Shipping_Model_Config */
-			
+
+
+        $config = Mage::getSingleton("shipping/config");
+        /* @var $config Mage_Shipping_Model_Config */
+
         foreach ($rmas as $rma) {
             /* @var $rma Zolago_Rma_Model_Rma */
             $po = $rma->getPo();
             /* @var $po Zolago_Po_Model_Po */
             $rma->register();
             // set tracking
-            $trackingParams = $rma->sendDhlRequest($dhlRequest);
-            $track = Mage::getModel('urma/rma_track');
-            $track->setTrackCreator(Zolago_Rma_Model_Rma_Track::CREATOR_TYPE_CUSTOMER);
-            $track->setTrackNumber($trackingParams['trackingNumber']);
-            $track->setTitle($config->getCarrierInstance('zolagodhl')->getConfigData('title'));
-            $track->setCarrierCode('zolagodhl');
-            $track->setLabelPic($trackingParams['file']);
-            $rma->addTrack($track);
-			$rma->setCurrentTrack($track);
+            if ($trackingParams = $rma->sendDhlRequest($dhlRequest)) {
+                $track = Mage::getModel('urma/rma_track');
+                $track->setTrackCreator(Zolago_Rma_Model_Rma_Track::CREATOR_TYPE_CUSTOMER);
+                $track->setTrackNumber($trackingParams['trackingNumber']);
+                $track->setTitle($config->getCarrierInstance('zolagodhl')->getConfigData('title'));
+                $track->setCarrierCode('zolagodhl');
+                $track->setLabelPic($trackingParams['file']);
+                $rma->addTrack($track);
+                $rma->setCurrentTrack($track);
+            }
         }
         if (!empty($data['comment_text'])) {
             foreach ($rmas as $rma) {
@@ -187,14 +188,14 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
 
         foreach ($rmas as $rma) {
             Mage::dispatchEvent("zolagorma_rma_created", array(
-				"rma" => $rma
-			));
-			if($rma->getCurrentTrack()){
-				Mage::dispatchEvent("zolagorma_rma_track_added", array(
-					"rma"		=> $rma, 
-					"track"		=> $rma->getCurrentTrack()
-				));
-			}
+                                    "rma" => $rma
+                                ));
+            if($rma->getCurrentTrack()) {
+                Mage::dispatchEvent("zolagorma_rma_track_added", array(
+                                        "rma"		=> $rma,
+                                        "track"		=> $rma->getCurrentTrack()
+                                    ));
+            }
         }
         Mage::helper('udropship')->processQueue();
         Mage::getSingleton('core/session')->setRmaPrintId($rma->getId());
