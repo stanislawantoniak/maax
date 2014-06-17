@@ -94,4 +94,36 @@ class Zolago_Dhl_DhlController extends Mage_Core_Controller_Front_Action
 		
 		return $dhlFile;
 	}
+
+    public function checkDhlZipAction()
+    {
+
+
+        $zip = Mage::app()->getRequest()->getParam('zip');
+
+        if (empty($zip)) {
+            return;
+        }
+        $zip = str_replace('-', '', $zip);
+
+        $model = Mage::getModel('zolagodhl/client');
+        $model->setAuth('CONVERTICA', 'yezxCGQ2bFYCWr');
+        $ret = $model->getPostalCodeServices($zip, date('Y-m-d'));
+
+        $domesticExpress9 = (bool)$ret->getPostalCodeServicesResult->domesticExpress9;
+        $domesticExpress12 = (bool)$ret->getPostalCodeServicesResult->domesticExpress12;
+
+        $dhlValidZip = ($domesticExpress9 || $domesticExpress12) ? true : false;
+
+        if (!$dhlValidZip) {
+            echo 'Invalid Dhl Postal Code';
+            return;
+        }
+
+        $zipModel = Mage::getResourceModel('zolagodhl/zip');
+        $zipModel->updateDhlZip($zip);
+
+
+
+    }
 }
