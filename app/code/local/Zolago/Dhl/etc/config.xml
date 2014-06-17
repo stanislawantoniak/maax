@@ -19,11 +19,6 @@
                     </zip>
                 </entities>
             </zolagodhl_resource>
-            <checkout>
-                <rewrite>
-                    <type_onepage>Zolago_Dhl_Model_Checkout_Type_Onepage</type_onepage>
-                </rewrite>
-            </checkout>
         </models>
         <helpers>
             <zolagodhl>
