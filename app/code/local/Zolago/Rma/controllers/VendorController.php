@@ -162,6 +162,7 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
             'shipmentDate' => $date,
             'weight' => ($weight>1)? $weight:1,
             'type' => $dhlType,
+            'vendor' => true,
         );
         if (!$request->getParam('specify_zolagodhl_custom_dim')) {
             $dhlParams['nonStandard'] = true;
