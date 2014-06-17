@@ -39,7 +39,7 @@ class Zolago_Customer_Model_Customer_Form extends Mage_Customer_Model_Form {
         if (!empty($data['postcode'])) {
             $attribute = $this->getAttribute('postcode');
             $dhlHelper = Mage::helper('zolagodhl');
-            $dhlValidZip = $dhlHelper->isDHLValidZip($data['postcode']);
+            $dhlValidZip = $dhlHelper->isDHLValidZip($data['country'],$data['postcode']);
 
             if (!$dhlValidZip) {
                 $label = Mage::helper('eav')->__($attribute->getStoreLabel());

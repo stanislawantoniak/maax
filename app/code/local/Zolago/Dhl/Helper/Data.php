@@ -213,14 +213,14 @@ class Zolago_Dhl_Helper_Data extends Mage_Core_Helper_Abstract {
 		return $canShow;
 	}
 
-    public function isDHLValidZip($zip)
+    public function isDHLValidZip($country,$zip)
     {
         $dhlValidZip = false;
         if (!empty($zip)) {
             $zip = str_replace('-', '', $zip);
-            $model = Mage::getModel('zolagodhl/client');
-            $model->setAuth('CONVERTICA', 'yezxCGQ2bFYCWr');
-            $ret = $model->getPostalCodeServices($zip, date('Y-m-d'));
+            $dhlClient = Mage::getModel('zolagodhl/client');
+            $dhlClient->setAuth($this->_dhlLogin, $this->_dhlPassword,$this->_dhlAccount);
+            $ret = $dhlClient->getPostalCodeServices($zip, date('Y-m-d'));
 
             $domesticExpress9 = (bool)$ret->getPostalCodeServicesResult->domesticExpress9;
             $domesticExpress12 = (bool)$ret->getPostalCodeServicesResult->domesticExpress12;
@@ -229,7 +229,7 @@ class Zolago_Dhl_Helper_Data extends Mage_Core_Helper_Abstract {
 
             if ($dhlValidZip) {
                 $zipModel = Mage::getResourceModel('zolagodhl/zip');
-                $zipModel->updateDhlZip($zip);
+                $zipModel->updateDhlZip($country,$zip);
             }
         }
         return $dhlValidZip;

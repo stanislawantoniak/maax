@@ -143,15 +143,15 @@ jQuery(function($){
 				zipcodePL: true,
                 remote: function () { //the function allows the creation of the data string // outside of the remote call itself, which would not return a current value from the form.
                     var zip = jQuery('#shipping-address-postcode').val();
+                    var country = jQuery('#shipping-address-country').val();
                     var r = {
                         url: "/zolagodhl/dhl/checkDhlZip",
                         type: "get",
+                        data: {country: country},
                         cache: false,
                         dataFilter: function(response) {
                             var isSuccess;
-                            console.log(response);
                             var msg = jQuery.parseJSON(response);
-                            console.log(msg.status);
                             if(msg.status == "error"){
                                 isSuccess = false;
                             } else {

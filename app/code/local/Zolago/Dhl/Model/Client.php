@@ -236,7 +236,7 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
      *
      * @return array
      */
-    public function getPostalCodeServices($postCode, $pickupDate)
+    public function getPostalCodeServices($postCode, $pickupDate, $country = 'PL')
     {
         $message = new StdClass();
         $message->authData = $this->_auth;

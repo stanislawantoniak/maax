@@ -24,14 +24,16 @@ class Zolago_Dhl_Model_Resource_Zip extends Mage_Core_Model_Resource_Db_Abstract
      * @return Zolago_Dhl_Model_Resource_Zip
      * @throws Exception
      */
-    public function updateDhlZip($zip)
+    public function updateDhlZip($country,$zip)
     {
+
         $writeConnection = $this->_getWriteAdapter();
         $insert = sprintf(
-            "INSERT INTO %s (zip) VALUES ('%s') "
-            . " ON DUPLICATE KEY UPDATE zip=VALUES(zip)",
-            $this->getMainTable(), $zip
+            "INSERT INTO %s (zip,country) VALUES ('%s','%s') "
+            . " ON DUPLICATE KEY UPDATE zip=VALUES(zip),country=VALUES(country)",
+            $this->getMainTable(), $zip, $country
         );
+
         try {
             $writeConnection->query($insert);
         } catch (Exception $e) {

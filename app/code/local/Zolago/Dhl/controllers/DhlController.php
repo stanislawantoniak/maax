@@ -98,6 +98,7 @@ class Zolago_Dhl_DhlController extends Mage_Core_Controller_Front_Action
     public function checkDhlZipAction()
     {
         $zip = Mage::app()->getRequest()->getParam('postcode');
+        $country = Mage::app()->getRequest()->getParam('country');
         $response = array();
         if (empty($zip)) {
             $response['status'] = 'error';
@@ -107,7 +108,7 @@ class Zolago_Dhl_DhlController extends Mage_Core_Controller_Front_Action
         }
 
         $dhlHelper = Mage::helper('zolagodhl');
-        $dhlValidZip = $dhlHelper->isDHLValidZip($zip);
+        $dhlValidZip = $dhlHelper->isDHLValidZip($country,$zip);
 
         if (!$dhlValidZip) {
             $response['status'] = 'error';

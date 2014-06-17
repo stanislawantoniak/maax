@@ -24,6 +24,15 @@ $table = $installer->getConnection()
         Varien_Db_Ddl_Table::TYPE_VARCHAR,
         5, array('nullable' => false), 'ZIP'
     )
+    ->addColumn(
+        "country",
+        Varien_Db_Ddl_Table::TYPE_VARCHAR, 2,
+        array(
+             'nullable' => false,
+             'default'  => '',
+             "comment"  => "Country Id"
+        )
+    )
 
     ->setComment('ZIP');
 $installer->getConnection()->createTable($table);
