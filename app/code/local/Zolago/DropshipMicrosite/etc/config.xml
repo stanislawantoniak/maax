@@ -51,6 +51,15 @@
 				</observers>
 			</controller_action_layout_load_before>
 		</events>
+		<routers>
+			<umicrosite>
+				<args>
+					<modules>
+						<Zolago_DropshipMicrosite before="Unirgy_DropshipMicrosite">Zolago_DropshipMicrosite</Zolago_DropshipMicrosite>
+					</modules>
+				</args>
+			</umicrosite>
+		</routers>
         <translate>
             <modules>
                 <zolagodropshipmicrosite>
