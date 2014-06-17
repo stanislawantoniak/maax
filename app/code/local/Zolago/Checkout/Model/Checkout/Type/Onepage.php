@@ -38,7 +38,6 @@ class Zolago_Checkout_Model_Checkout_Type_Onepage extends Mage_Checkout_Model_Ty
                 }
             }
         } else {
-//            echo '2';
             $addressForm->setEntity($address);
             // emulate request object
             $addressData    = $addressForm->extractData($addressForm->prepareRequest($data));

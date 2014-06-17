@@ -14,8 +14,8 @@ class Zolago_Customer_Model_Customer_Form extends Mage_Customer_Model_Form {
         $result = parent::validateData($data);
 
         //checking sipping address; perform additional validation
-        //echo $this->getEntity()->getAddressType();
-        if ($this->getEntity()->getAddressType() == Mage_Sales_Model_Quote_Address::TYPE_SHIPPING) {
+
+        //if ($this->getEntity()->getAddressType() == Mage_Sales_Model_Quote_Address::TYPE_SHIPPING) {
             //echo $data['postcode'];
             $valid = $this->_validateDHLZip($data);
             if ($result !== true && $valid !== true) {
@@ -23,7 +23,7 @@ class Zolago_Customer_Model_Customer_Form extends Mage_Customer_Model_Form {
             } elseif ($result === true && $valid !== true) {
                 $result = $valid;
             }
-        }
+        //}
 
         return $result;
     }
@@ -43,7 +43,7 @@ class Zolago_Customer_Model_Customer_Form extends Mage_Customer_Model_Form {
 
             if (!$dhlValidZip) {
                 $label = Mage::helper('eav')->__($attribute->getStoreLabel());
-                $errors[] = Mage::helper('eav')->__('Invalid zip', $label);
+                $errors[] = Mage::helper('eav')->__('Please enter valid DHL zip code', $label);
             }
 
         }
