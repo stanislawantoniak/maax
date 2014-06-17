@@ -219,7 +219,7 @@ class Zolago_Dhl_Helper_Data extends Mage_Core_Helper_Abstract {
         if (!empty($zip)) {
             $zip = str_replace('-', '', $zip);
             $dhlClient = Mage::getModel('zolagodhl/client');
-            $dhlClient->setAuth($this->_dhlLogin, $this->_dhlPassword,$this->_dhlAccount);
+            $dhlClient->setAuth('CONVERTICA', 'yezxCGQ2bFYCWr');
             $ret = $dhlClient->getPostalCodeServices($zip, date('Y-m-d'));
 
             $domesticExpress9 = (bool)$ret->getPostalCodeServicesResult->domesticExpress9;
