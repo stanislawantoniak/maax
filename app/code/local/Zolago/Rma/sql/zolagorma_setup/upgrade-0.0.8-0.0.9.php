@@ -5,7 +5,7 @@ $installer = $this;
 
 $installer->startSetup();
 
-$tableName = $installer->getTable("zolagorma/returnreason");
+$tableName = $installer->getTable("zolagorma/rma_reason");
 if($installer->getConnection()->isTableExists($tableName) != true) {
 
     $table = $installer->getConnection()
@@ -27,11 +27,11 @@ if($installer->getConnection()->isTableExists($tableName) != true) {
     ->addColumn('updated_at', Varien_Db_Ddl_Table::TYPE_TIMESTAMP, null, array(), 'Update Time')
 
     // Indexes
-    ->addIndex($installer->getIdxName('zolagorma/returnreason', array('return_reason_id')),
+    ->addIndex($installer->getIdxName('zolagorma/rma_reason', array('return_reason_id')),
         array('return_reason_id'))
-    ->addIndex($installer->getIdxName('zolagorma/returnreason', array('auto_days')),
+    ->addIndex($installer->getIdxName('zolagorma/rma_reason', array('auto_days')),
         array('auto_days'))
-    ->addIndex($installer->getIdxName('zolagorma/returnreason', array('allowed_days')),
+    ->addIndex($installer->getIdxName('zolagorma/rma_reason', array('allowed_days')),
         array('allowed_days'));
 
 	$installer->getConnection()->createTable($table);

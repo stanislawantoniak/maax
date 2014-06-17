@@ -1,8 +1,8 @@
 <?php
-class Zolago_Rma_Model_VendorReturnReason extends Mage_Core_Model_Abstract{
+class Zolago_Rma_Model_Rma_Reason_Vendor extends Mage_Core_Model_Abstract{
 
     protected function _construct() {
-        $this->_init('zolagorma/vendorreturnreason');
+        $this->_init('zolagorma/rma_reason_vendor');
     }
 
     /**
@@ -41,7 +41,7 @@ class Zolago_Rma_Model_VendorReturnReason extends Mage_Core_Model_Abstract{
      */
 	public function getReturnReason(){
 		
-		return Mage::getModel('zolagorma/returnreason')->load($this->getReturnReasonId());
+		return Mage::getModel('zolagorma/rma_reason')->load($this->getReturnReasonId());
 		
 	}
 }

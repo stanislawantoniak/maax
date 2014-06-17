@@ -5,8 +5,8 @@ $installer = $this;
 
 $installer->startSetup();
 
-$tableName = $installer->getTable("zolagorma/vendorreturnreason");
-$returnReasonTableName = $installer->getTable("zolagorma/returnreason");
+$tableName = $installer->getTable("zolagorma/rma_reason_vendor");
+$returnReasonTableName = $installer->getTable("zolagorma/rma_reason");
 $vendorTableName = $installer->getTable("udropship/vendor");
 
 if($installer->getConnection()->isTableExists($tableName) != true) {
@@ -31,15 +31,15 @@ if($installer->getConnection()->isTableExists($tableName) != true) {
     ->addColumn('updated_at', Varien_Db_Ddl_Table::TYPE_TIMESTAMP, null, array(), 'Update Time')
 
     // Indexes
-    ->addIndex($installer->getIdxName('zolagorma/vendorreturnreason', array('vendor_return_reason_id')),
+    ->addIndex($installer->getIdxName('zolagorma/rma_reason_vendor', array('vendor_return_reason_id')),
         array('vendor_return_reason_id'))
-	->addIndex($installer->getIdxName('zolagorma/vendorreturnreason', array('return_reason_id')),
+	->addIndex($installer->getIdxName('zolagorma/rma_reason_vendor', array('return_reason_id')),
         array('return_reason_id'))
-    ->addIndex($installer->getIdxName('zolagorma/vendorreturnreason', array('vendor_id')),
+    ->addIndex($installer->getIdxName('zolagorma/rma_reason_vendor', array('vendor_id')),
         array('vendor_id'))
-    ->addIndex($installer->getIdxName('zolagorma/vendorreturnreason', array('auto_days')),
+    ->addIndex($installer->getIdxName('zolagorma/rma_reason_vendor', array('auto_days')),
         array('auto_days'))
-    ->addIndex($installer->getIdxName('zolagorma/vendorreturnreason', array('allowed_days')),
+    ->addIndex($installer->getIdxName('zolagorma/rma_reason_vendor', array('allowed_days')),
         array('allowed_days'))
 	
 	// Add FK keys
