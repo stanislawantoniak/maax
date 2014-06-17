@@ -3,7 +3,6 @@ class Zolago_Catalog_Model_Api2_Restapi extends Mage_Api2_Model_Resource {
 
     public function dispatch()
     {
-        //echo "rewrite------action:".$this->getActionType() . "    operation:".$this->getOperation() ."-------------------\n";
         switch ($this->getActionType() . $this->getOperation()) {
             /* Create */
             case self::ACTION_TYPE_ENTITY . self::OPERATION_CREATE:

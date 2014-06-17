@@ -1,8 +1,10 @@
 <?php
 
+/**
+ * Class Zolago_Catalog_Model_Queue_Configurable
+ */
 class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_Abstract
 {
-
 
     public function _construct()
     {
@@ -10,15 +12,20 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
         $this->_init('zolagocatalog/queue_configurable');
     }
 
-    protected function _getItem() {
+    /**
+     * @return false|Mage_Core_Model_Abstract
+     */
+    protected function _getItem()
+    {
         return Mage::getModel('zolagocatalog/queue_item_configurable');
     }
 
-    protected function _execute() {
+    protected function _execute()
+    {
 
         $hash = md5(microtime());
 
-        Mage::log(microtime()."{$hash} Start ", 0, 'configurable_update.log');
+        Mage::log(microtime() . "{$hash} Start ", 0, 'configurable_update.log');
         $collection = $this->_collection;
 
         $websites = array();
@@ -35,18 +42,18 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
         unset($productId);
 
 
-
-
-        $storeId = array(0,1,2);
+        $storeId = array(0, 1, 2);
 
 
         $zolagoCatalogModelProductConfigurableData = Mage::getModel('zolagocatalog/product_configurable_data');
 
 
         //define parent products (configurable) by child (simple)
-        $configurableSimpleRelation = $zolagoCatalogModelProductConfigurableData->getConfigurableSimpleRelation($listUpdatedProducts);
+        $configurableSimpleRelation = $zolagoCatalogModelProductConfigurableData->getConfigurableSimpleRelation(
+            $listUpdatedProducts
+        );
         if (empty($configurableSimpleRelation)) {
-            Mage::log(microtime()."{$hash} Found 0 configurable products ", 0, 'configurable_update.log');
+            Mage::log(microtime() . "{$hash} Found 0 configurable products ", 0, 'configurable_update.log');
             return;
         }
 
@@ -56,7 +63,7 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
 
         //min prices
         $minPrices = array();
-        foreach($storeId as $store){
+        foreach ($storeId as $store) {
             $minPrices[$store] = $zolagoCatalogModelProductConfigurableData
                 ->getConfigurableMinPrice($configurableProductsIds, $store);
         }
@@ -69,24 +76,29 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
         //--super attribute ids
 
 
-
         $productAction = Mage::getSingleton('catalog/product_action');
         $productConfigurableIds = array();
-        Mage::log(microtime()."{$hash} {$relations} relations found ", 0, 'configurable_update.log');
+        Mage::log(microtime() . "{$hash} {$relations} relations found ", 0, 'configurable_update.log');
         foreach ($configurableSimpleRelation as $productConfigurableId => $configurableSimpleRelationItem) {
 
 
             //update configurable product price
             foreach ($storeId as $store) {
-                $productMinPrice = isset($minPrices[$store][$productConfigurableId]) ? $minPrices[$store][$productConfigurableId]['min_price'] : FALSE;
+                $productMinPrice = isset($minPrices[$store][$productConfigurableId])
+                    ? $minPrices[$store][$productConfigurableId]['min_price'] : false;
 
-                if ($productMinPrice){
-                    $productAction->updateAttributesNoIndex(array($productConfigurableId), array('price' => $productMinPrice), $store);
+                if ($productMinPrice) {
+                    $productAction->updateAttributesNoIndex(
+                        array($productConfigurableId), array('price' => $productMinPrice), $store
+                    );
 
-                    $superAttributeId = isset($superAttributes[$productConfigurableId]) ? (int)$superAttributes[$productConfigurableId]['super_attribute'] : FALSE;
+                    $superAttributeId = isset($superAttributes[$productConfigurableId])
+                        ? (int)$superAttributes[$productConfigurableId]['super_attribute'] : false;
 
                     if ($superAttributeId) {
-                        $zolagoCatalogModelProductConfigurableData->insertProductSuperAttributePricing($productConfigurableId, $superAttributeId, $productMinPrice, $store);
+                        $zolagoCatalogModelProductConfigurableData->insertProductSuperAttributePricing(
+                            $productConfigurableId, $superAttributeId, $productMinPrice, $store
+                        );
 
                         $productConfigurableIds[] = $productConfigurableId;
                     }
@@ -95,23 +107,17 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
             }
 
 
-
-
         }
 
 
-        Mage::log(microtime()."{$hash} Reindex ", 0, 'configurable_update.log');
+        Mage::log(microtime() . "{$hash} Reindex ", 0, 'configurable_update.log');
 
 
         Mage::getResourceSingleton('catalog/product_indexer_price')
             ->reindexProductIds($productConfigurableIds);
 
-        Mage::log(microtime()."{$hash} End ", 0, 'configurable_update.log');
+        Mage::log(microtime() . "{$hash} End ", 0, 'configurable_update.log');
 
 
     }
-
-
-
-
 }
