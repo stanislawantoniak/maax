@@ -176,7 +176,7 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
             $obj->quantity	= $shipmentSettings['quantity'];
             break;
         }
-        $obj->nonStandard = $shipmentSettings['nonStandard'];
+        $obj->nonStandard = (empty($shipmentSettings['nonStandard']))? null:$shipmentSettings['nonStandard'];
         $ret = new StdClass();
         $ret->item[] = $obj;
         return $ret;
@@ -436,6 +436,7 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
         $vendor = Mage::getModel('udropship/vendor')->load($vendorId);
         $data = $vendor->getData();
         $message = new StdClass;
+        $address = new StdClass;
         $address->name = $data['vendor_name'];
         $address->city = substr($data['city'],0,17);
         $address->postalCode = $this->formatDhlPostCode($data['zip']);

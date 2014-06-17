@@ -131,6 +131,17 @@ select.form-control {
 .messages > li.success-msg .alert-link {
   color: #2b542c;
 }
+.messages > li.notice-msg {
+  background-color: #fcf8e3;
+  border-color: #faebcc;
+  color: #8a6d3b;
+}
+.messages > li.notice-msg hr {
+  border-top-color: #f7e1b5;
+}
+.messages > li.notice-msg .alert-link {
+  color: #66512c;
+}
 .inline-block {
   display: inline-block;
 }

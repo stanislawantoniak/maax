@@ -89,7 +89,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 	public function indexAction() {
 		// Override origin index
 		Mage::register('as_frontend', true);// Tell block class to use regular URL's
-		$this->_renderPage(array('default', 'formkey', 'adminhtml_head'), 'udpo');
+		$this->_renderPage(array('default', 'adminhtml_head'), 'udpo');
 	}
 	
 	public function editAction() {

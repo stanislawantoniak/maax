@@ -1,6 +1,31 @@
 <?php
 class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data{
-
+	
+	/**
+	 * @param Zolago_Rma_Model_Rma $rma
+	 * @param string $status
+	 * @return Zolago_Rma_Model_Rma
+	 */
+	public function processSaveStatus(Zolago_Rma_Model_Rma $rma, $status) {
+		$oldStatus = $rma->getRmaStatus();
+		if($status!=$oldStatus){
+			$rma->setRmaStatus($status);
+			$rma->getResource()->saveAttribute($rma, 'rma_status');
+			// Trigger event
+			Mage::dispatchEvent("zolagorma_rma_status_changed", array(
+				"rma"			=> $rma, 
+				"new_status"	=> $status,
+				"old_status"	=> $oldStatus
+			));
+		}
+		return $rma;
+	}
+	
+	/**
+	 * 
+	 * @param type $items
+	 * @return type
+	 */
     public function getItemList($items) {
         $out = array();
         $child = array();
