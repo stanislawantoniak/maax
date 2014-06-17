@@ -31,6 +31,7 @@ class Zolago_Rma_Model_Rma_Request extends Mage_Core_Model_Abstract {
                 $password = Mage::helper('zolagodhl')->getDhlPassword();
             }
         }
+        // default params
         $dhlSettings = array (
             'login' => $login,
             'password' => $password,
@@ -50,6 +51,7 @@ class Zolago_Rma_Model_Rma_Request extends Mage_Core_Model_Abstract {
         }
         $dhlSettings = $this->_prepareDhlSettings();
         $client = Mage::helper('zolagodhl')->startDhlClient($dhlSettings);
+        // overwriting default params
         foreach ($this->_params as $key=>$param) {
             $dhlSettings[$key] = $param;
         }
