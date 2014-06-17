@@ -286,8 +286,9 @@
 						<?php else:?>
 							<span class="text-muted"><?php echo $_helper->__("There is no tracking label");?></span>
 						<?php endif;?>
-						
-						<div class="form-actions"> <input type="button" data-toggle="modal" href="#shippingModal" value="<?php echo $_helper->__("Print shipping label");?>" class="btn btn-primary pull-right"> </div>
+						<?php if($_statusModel->isPrintShippingLabelAvailable($_rma)):?>
+							<div class="form-actions"> <input type="button" data-toggle="modal" href="#shippingModal" value="<?php echo $_helper->__("Print shipping label");?>" class="btn btn-primary pull-right"> </div>
+						<?php endif;?>
 					</form>
 				</div>
 			</div>
