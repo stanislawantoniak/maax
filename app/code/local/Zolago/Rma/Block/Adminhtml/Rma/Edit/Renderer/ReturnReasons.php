@@ -53,8 +53,7 @@ class Zolago_Rma_Block_Adminhtml_Rma_Edit_Renderer_ReturnReasons
 		// Is Edit mode
 		if($vendor){
 			$this->_mode = 'edit';				
-			$collection = Mage::getModel("zolagorma/rma_reason_vendor")->getCollection()
-																 	   ->addFieldToFilter('vendor_id', $vendor->getVendorId());
+			$collection = $vendor->getRmaReasonVendorCollection();
 		}
 		
 		if(!$collection || $collection->count() == 0){
