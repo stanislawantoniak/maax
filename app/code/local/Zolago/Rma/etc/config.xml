@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Zolago_Rma>
-			<version>0.0.7</version>
+			<version>0.0.8</version>
 		</Zolago_Rma>
 	</modules>
 	<global>
@@ -27,6 +27,7 @@
 			<urma_mysql4>
 				<rewrite>
 					<rma_track_collection>Zolago_Rma_Model_Resource_Rma_Track_Collection</rma_track_collection>
+					<rma_comment_collection>Zolago_Rma_Model_Resource_Rma_Comment_Collection</rma_comment_collection>
 				</rewrite>
 			</urma_mysql4>
 		</models>
@@ -39,6 +40,11 @@
 			<zolagorma>
 				<class>Zolago_Rma_Helper</class>
 			</zolagorma>
+			<urma>
+				<rewrite>
+					<data>Zolago_Rma_Helper_Data</data>
+				</rewrite>
+			</urma>
 		</helpers>
 		<fieldsets>
 			<!-- PO -> RMA -->
@@ -67,6 +73,56 @@
 				</entity_id>
 			</zolagopo_convert_po_item>
 		</fieldsets>
+		<events>
+			<zolagorma_rma_created>
+				<observers>
+					<zolagorma>
+						<model>zolagorma/observer</model>
+						<method>rmaCreated</method>
+					</zolagorma>
+				</observers>
+			</zolagorma_rma_created>
+			<zolagorma_rma_comment_added>
+				<observers>
+					<zolagorma>
+						<model>zolagorma/observer</model>
+						<method>rmaCommentAdded</method>
+					</zolagorma>
+				</observers>
+			</zolagorma_rma_comment_added>
+			<zolagorma_rma_address_restore>
+				<observers>
+					<zolagorma>
+						<model>zolagorma/observer</model>
+						<method>rmaAddressRestore</method>
+					</zolagorma>
+				</observers>
+			</zolagorma_rma_address_restore>
+			<zolagorma_rma_address_change>
+				<observers>
+					<zolagorma>
+						<model>zolagorma/observer</model>
+						<method>rmaAddressChange</method>
+					</zolagorma>
+				</observers>
+			</zolagorma_rma_address_change>
+			<zolagorma_rma_status_changed>
+				<observers>
+					<zolagorma>
+						<model>zolagorma/observer</model>
+						<method>rmaStatusChanged</method>
+					</zolagorma>
+				</observers>
+			</zolagorma_rma_status_changed>
+			<zolagorma_rma_track_added>
+				<observers>
+					<zolagorma>
+						<model>zolagorma/observer</model>
+						<method>rmaTrackAdded</method>
+					</zolagorma>
+				</observers>
+			</zolagorma_rma_track_added>
+		</events>
 		<resources>
 			<zolagorma_setup>
 				<setup>
