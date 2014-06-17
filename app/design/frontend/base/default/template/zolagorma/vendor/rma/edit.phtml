@@ -65,7 +65,11 @@
 						<dt><?php echo $_helper->__("Tracking no.");?>:<br/><small class="text-muted" style="font-weight: normal;">(<?php echo $_helper->__("Customer return");?>)</small></dt> 
 						<dd>
 							<?php if(($_customerTrack=$_customerTrackCollection->getFirstItem()) && $_customerTrack->getId()):?>
-								<?php echo $_customerTrack->getTrackNumber();?>
+								<?php $_letterUrl = $this->getPoLetterUrl($_customerTrack, $_po);?>
+								<a data-loading-text="<?php echo $this->__("Loading...");?>" class="btn btn-link btn-xs download-letter" href="<?php echo $_letterUrl;?>">
+									<i class="icon-arrow-down"></i>
+									<?php echo $this->escapeHtml($_customerTrack->getTrackNumber());?>
+								</a>
 							<?php else:?>
 								<?php echo $_helper->__("N/A");?>
 							<?php endif;?>
@@ -93,9 +97,11 @@
 						<dt><?php echo $_helper->__("Tracking no.");?>:</dt> 
 						<dd>
 							<?php if($_poTracking):?>
-								<!-- <a href="<?php echo $this->getTrackingUrl($_poTracking);?>"> -->
-									<?php echo $this->escapeHtml($_poTracking->getTrackNumber()) ;?>
-								<!-- </a> -->
+								<?php $_letterUrl = $this->getPoLetterUrl($_poTracking, $_po);?>
+								<a data-loading-text="<?php echo $this->__("Loading...");?>" class="btn btn-link btn-xs download-letter" href="<?php echo $_letterUrl;?>">
+									<i class="icon-arrow-down"></i>
+									<?php echo $this->escapeHtml($_poTracking->getTrackNumber());?>
+								</a>
 							<?php else: ?>
 								<?php echo $_helper->__("N/A");?>
 							<?php endif ?>
@@ -268,7 +274,11 @@
 										<dt><?php echo $_helper->__("Tracking no.");?>:</dt>
 										<dd>
 											<?php if($_tracking->getTrackNumber()):?>
-												<?php echo $this->escapeHtml($_tracking->getTrackNumber());?>
+												<?php $_letterUrl = $this->getPoLetterUrl($_tracking, $_po);?>
+												<a data-loading-text="<?php echo $this->__("Loading...");?>" class="btn btn-link btn-xs download-letter" href="<?php echo $_letterUrl;?>">
+													<i class="icon-arrow-down"></i>
+													<?php echo $this->escapeHtml($_tracking->getTrackNumber());?>
+												</a>
 											<?php else:?>
 												<?php echo $_helper->__("N/A");?>
 											<?php endif;?>
@@ -333,7 +343,29 @@ jQuery(function($){
 		notify.prop("disabled", doNotify);
 	});
 	
-	
+	$(".download-letter").click(function(){
+		var el = $(this);
+		el.button("loading");
+		$.post(el.attr("href"), function(response){
+			if(response.status){
+				//console.log(response.url);
+				document.location.replace(response.url);
+			}else{
+				noty({
+					text: response.message,
+					type: 'error',
+					timeout: 2000
+				});
+			}
+		}).fail(function(){
+			noty({
+				text: Translator.translate("Other error contact admin"),
+				type: 'error'
+			});
+		}).always(function(){
+			el.button('reset')
+		});
+		return false;
+	});
 });
-
 </script>
