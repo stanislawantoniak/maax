@@ -15,22 +15,10 @@ if(!empty($locale)){
 $currentUrl = Mage::helper('core/url')->getCurrentUrl();
 
 $_logoHeader = Mage::app()->getStore($_vendor->getLabelStore())->getGroup()->getName();
-
 $_allowedLocale = array(
-    "pl_PL" => array(
-        "symbol" => $this->__("PL"),
-        "name" => $this->__("Polish")
-    ),
-    "en_US" => array(
-        "symbol" => $this->__("EN"),
-        "name" => $this->__("English")
-    )
+    "pl_PL" => array("symbol" => $this->__("PL"), "name" => $this->__("Polish")),
+    "en_US" => array("symbol" => $this->__("EN"), "name" => $this->__("English"))
 );
-
-Mage::app()->getLocale()->setLocale($_currentLocale);
-Mage::app()->getTranslator()->setLocale($_currentLocale);
-Mage::app()->getTranslator()->init('frontend', true);
-
 ?>
 
 <header class="header navbar navbar-fixed-top" role="banner">
@@ -55,13 +43,13 @@ Mage::app()->getTranslator()->init('frontend', true);
                     <i class="icon-caret-down small"></i>
                 </a>
                 <ul class="dropdown-menu">
-                    <?php foreach ($_allowedLocale as $locale => $info): ?>
+                    <?php foreach($_allowedLocale as $locale=>$info):?>
                         <li>
                             <a href="<?php echo Mage::getUrl('udropship/vendor/setlocale', array("locale" => $locale)); ?>">
                                 <?php echo $this->escapeHtml($info['name']); ?>
                             </a>
                         </li>
-                    <?php endforeach; ?>
+                    <?php endforeach;?>
                 </ul>
             </li>
             <!-- /Locale -->

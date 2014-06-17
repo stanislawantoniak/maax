@@ -17,10 +17,10 @@ foreach (array('length_gte', 'length_gt', 'symlength_gte', 'symlength_gt') as $l
 
     <label for="<?php echo $this->getElement()->getId(); ?>">
         <?php echo $this->__($this->getElement()->getLabel()); ?>
-        <?php if ($this->getElement()->getRequired()): ?>
+        <?php
+        if ($this->getElement()->getRequired()): ?>
             <span class="required">*</span>
         <?php endif; ?>
-
     </label>
     <br />
 <?php echo $this->getElementHtml() ?>

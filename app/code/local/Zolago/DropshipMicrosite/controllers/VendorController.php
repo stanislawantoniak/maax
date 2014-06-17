@@ -9,6 +9,11 @@ class Zolago_DropshipMicrosite_VendorController extends Unirgy_DropshipMicrosite
         return Mage::getSingleton('udropship/session');
     }
 
+    /**
+     * Action predispatch
+     *
+     * Check customer authentication for some actions
+     */
     public function preDispatch()
     {
         /***********************************************************************
