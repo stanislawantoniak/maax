@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Zolago_Rma>
-			<version>0.0.8</version>
+			<version>0.0.10</version>
 		</Zolago_Rma>
 	</modules>
 	<global>
@@ -14,6 +14,12 @@
 			<zolagorma_resource>
 				<class>Zolago_Rma_Model_Resource</class>
 				<entities>
+					<returnreason>
+                        <table>zolago_return_reasons</table>
+                    </returnreason>
+                    <vendorreturnreason>
+                        <table>zolago_vendor_return_reasons</table>
+                    </vendorreturnreason>
 				</entities>
 			</zolagorma_resource>
 			<urma>
@@ -129,6 +135,16 @@
 					<module>Zolago_Rma</module>
 				</setup>
 			</zolagorma_setup>
+			<zolagorma_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </zolagorma_write>
+            <zolagorma_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </zolagorma_read>
 		</resources>
 	</global>
 	<frontend>
@@ -165,4 +181,59 @@
 			</modules>
 		</translate>
 	</frontend>
+	<admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <zolagorma before="Mage_Adminhtml">Zolago_Rma_Adminhtml</zolagorma>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <adminhtml>
+    	<translate>
+            <modules>
+                <zolagorma>
+                    <files>
+                        <default>Zolago_Rma.csv</default>
+                    </files>
+                </zolagorma>
+            </modules>
+        </translate>
+        <layout>
+            <updates>
+                <zolagorma>
+                    <file>zolagorma.xml</file>
+                </zolagorma>
+            </updates>
+        </layout>
+        <events>
+            <udropship_adminhtml_vendor_tabs_after>
+                <observers>
+                    <zolagorma>
+                        <class>zolagorma/observer</class>
+                        <method>udropship_adminhtml_vendor_tabs_after</method>
+                    </zolagorma>
+                </observers>
+            </udropship_adminhtml_vendor_tabs_after>
+            <udropship_vendor_save_after>
+                <observers>
+                    <zolagorma>
+                        <class>zolagorma/observer</class>
+                        <method>udropship_vendor_save_after</method>
+                    </zolagorma>
+                </observers>
+            </udropship_vendor_save_after>
+            <zolagorma_global_return_reson_save_after>
+                <observers>
+                    <zolagorma>
+                        <class>zolagorma/observer</class>
+                        <method>zolagorma_global_return_reson_save_after</method>
+                    </zolagorma>
+                </observers>
+            </zolagorma_global_return_reson_save_after>
+        </events>
+    </adminhtml>
 </config>
