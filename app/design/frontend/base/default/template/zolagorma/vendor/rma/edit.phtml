@@ -11,7 +11,7 @@
 <?php $_poTracking = $this->getPoTracking($_poShipment);?>
 <?php $_billingAddress = $_rma->getBillingAddress();?>
 <?php $_shippingAddress = $_rma->getShippingAddress();?>
-<?php $_comments = $_rma->getVendorCommentsCollection(); ?>
+<?php $_comments = $_rma->getVendorCommentsCollection(true)->setOrder("entity_id DESC"); ?>
 <?php $_statuses = $this->getAvailableStatuses(true); ?>
 <?php $_statusesOptions = $this->getAvailableStatuses(false); ?>
 <?php $_currentStatusId = $_rma->getRmaStatus(); ;?>
@@ -44,7 +44,7 @@
 				<div class="widget-content rma">
 					<dl class="dl-horizontal dl-z"> 
 						<dt><?php echo $_helper->__("RMA status");?>:</dt> 
-						<dd><?php echo $this->escapeHtml($_rma->getRmaStatusName());?></dd> 
+						<dd><?php echo $this->escapeHtml($_helper->__($_rma->getRmaStatusName()));?></dd> 
 						<dt><?php echo $_helper->__("RMA date");?>:</dt> 
 						<dd><?php echo $this->formatDate($_rma->getCreatedAt());?></dd> 
 						<dt><?php echo $_helper->__("Response deadline");?>:</dt> 
@@ -190,7 +190,7 @@
 							<?php echo Mage::helper('core')->formatDate($_c->getCreatedAt(), 'medium', true) ?>
 							<br/>
 							<small class="text-muted" style="font-weight: normal;">
-								<?php echo $this->htmlEscape($_c->getRmaStatusName());?>
+								<?php echo $this->htmlEscape($_helper->__($_c->getRmaStatusName()));?>
 							</small>
 						</dt>
 						<dd>
@@ -286,8 +286,9 @@
 						<?php else:?>
 							<span class="text-muted"><?php echo $_helper->__("There is no tracking label");?></span>
 						<?php endif;?>
-						
-						<div class="form-actions"> <input type="button" data-toggle="modal" href="#shippingModal" value="<?php echo $_helper->__("Print shipping label");?>" class="btn btn-primary pull-right"> </div>
+						<?php if($_statusModel->isPrintShippingLabelAvailable($_rma)):?>
+							<div class="form-actions"> <input type="button" data-toggle="modal" href="#shippingModal" value="<?php echo $_helper->__("Print shipping label");?>" class="btn btn-primary pull-right"> </div>
+						<?php endif;?>
 					</form>
 				</div>
 			</div>

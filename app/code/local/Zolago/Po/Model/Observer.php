@@ -1,5 +1,5 @@
 <?php
-class Zolago_Po_Model_Observer {
+class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 	// Force UDPO shippping addres, no mage order shipping address
 	public function poShipmentSaveBefore($observer) {
 		$shipments = $observer->getEvent()->getShipments();
@@ -69,8 +69,8 @@ class Zolago_Po_Model_Observer {
 		
 		$text = trim($header . "\n" . $poInfo . "\n" . $newPoInfo);
 		
-		$this->_logPoEvent($po, $text);
-		$this->_logPoEvent($newPo, $text);
+		$this->_logEvent($po, $text);
+		$this->_logEvent($newPo, $text);
 	}
 	
 	/**
@@ -105,7 +105,7 @@ class Zolago_Po_Model_Observer {
 		$text = Mage::helper('zolagopo')->__(
 				"Changed POS (%s&rarr;%s)", $oldPos->getExternalId(), $newPos->getExternalId());
 		
-		$this->_logPoEvent($po, $text);
+		$this->_logEvent($po, $text);
 		
 		// Send email
 		Mage::helper('udpo')->sendNewPoNotificationEmail($po);
@@ -124,7 +124,7 @@ class Zolago_Po_Model_Observer {
 		
 		$text = Mage::helper('zolagopo')->__("Message send to %s: %s", $recipient, $message);
 		
-		$this->_logPoEvent($po, $text);
+		$this->_logEvent($po, $text);
 	}
 	
 	/**
@@ -162,7 +162,7 @@ class Zolago_Po_Model_Observer {
 		
 		if($changeLog){
 			$text = Mage::helper('zolagopo')->__("Item changed %s (%s)", $newItem->getName(), implode(", ", $changeLog));
-			$this->_logPoEvent($po, $text);
+			$this->_logEvent($po, $text);
 		}
 	}
 	
@@ -178,7 +178,7 @@ class Zolago_Po_Model_Observer {
 		
 		$text = Mage::helper('zolagopo')->__("Item added %s", $this->_getItemText($item));
 				
-		$this->_logPoEvent($po, $text);
+		$this->_logEvent($po, $text);
 	}
 	
 	/**
@@ -193,7 +193,7 @@ class Zolago_Po_Model_Observer {
 
 		$text = Mage::helper('zolagopo')->__("Item removed %s", $this->_getItemText($item, $po));
 				
-		$this->_logPoEvent($po, $text);
+		$this->_logEvent($po, $text);
 	}
 	
 	/**
@@ -212,7 +212,7 @@ class Zolago_Po_Model_Observer {
 					$po->getStore()->formatPrice($oldPrice,false),
 					$po->getStore()->formatPrice($newPrice,false)
 			);
-			$this->_logPoEvent($po, $text);
+			$this->_logEvent($po, $text);
 		}
 	}
 	/**
@@ -230,7 +230,7 @@ class Zolago_Po_Model_Observer {
 		}
 
 		$text = Mage::helper('zolagopo')->__("Origin %s address restored", $type);
-		$this->_logPoEvent($po, $text);
+		$this->_logEvent($po, $text);
 	}
 	
 	/**
@@ -273,7 +273,7 @@ class Zolago_Po_Model_Observer {
 				$type = $hlp->__("Billing");
 			}
 			$text = Mage::helper('zolagopo')->__("%s address changed (%s)", $type, implode(", " , $changeLog));
-			$this->_logPoEvent($po, $text);
+			$this->_logEvent($po, $text);
 		}
 	}
 	
@@ -286,28 +286,10 @@ class Zolago_Po_Model_Observer {
 	}
 	
 	/**
-	 * @param array $fileds
-	 * @param Varien_Object $object1
-	 * @param Varien_Object $object2
-	 * @return array
-	 */
-	protected function _prepareChangeLog(array $fileds, Varien_Object $object1, Varien_Object $object2) {
-		$out = array();
-		foreach(array_keys($fileds) as $key){
-			$old = (string)$object1->getData($key);
-			$new = (string)$object2->getData($key);
-			if(trim($new)!=trim($old)){
-				$out[] = $fileds[$key] . ": " . $old . "&rarr;" . $new; 
-			}
-		}
-		return $out;
-	}
-	
-	/**
 	 * @param Unirgy_DropshipPo_Model_Po $po
 	 * @param string $comment
 	 */
-	protected function _logPoEvent(Unirgy_DropshipPo_Model_Po $po, $comment) {
+	protected function _logEvent($po, $comment) {
 		$session = Mage::getSingleton('udropship/session');
 		/* @var $session Zolago_Dropship_Model_Session */
 		$vendor = $session->getVendor();

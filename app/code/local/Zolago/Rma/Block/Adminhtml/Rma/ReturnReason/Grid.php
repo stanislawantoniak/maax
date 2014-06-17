@@ -33,13 +33,13 @@ class Zolago_Rma_Block_Adminhtml_Rma_ReturnReason_Grid extends Mage_Adminhtml_Bl
                	'sortable' => true,
         ));
        $this->addColumn('auto_days', array(
-               'header'   => Mage::helper('zolagorma')->__('Auto days'),
+               'header'   => Mage::helper('zolagorma')->__('Instant return days #'),
                'width'    => 100,
                'index'    => 'auto_days',
                'sortable' => true,
            ));
         $this->addColumn('allowed_days', array(
-               'header'   => Mage::helper('zolagorma')->__('Allowed days'),
+               'header'   => Mage::helper('zolagorma')->__('Acknowledged return days #'),
                'width'    => 100,
                'index'    => 'allowed_days',
                'sortable' => true,
