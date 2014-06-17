@@ -11,13 +11,39 @@ class Zolago_Rma_Model_Observer{
         ));
     }
 	
+	/**
+     * Save return reason for specific vendor
+     *
+     * @param $observer Varien_Event_Observer
+	 * 
+     * @return Zolago_Rma_Model_Observer
+     */
 	public function udropship_vendor_save_after($observer){
 		
 		$params = Mage::app()->getFrontController()->getRequest()->getParams();
-		print_r($params);
-		var_dump($observer->getVendor());
-		exit();
+		$vendor_return_reasons = $params['return_reasons'];
+		$vendor = $observer->getVendor();
 		
+		if(sizeof($vendor_return_reasons) > 0){
+			
+			foreach($vendor_return_reasons as $vendor_return_reason_id => $data){
+				
+				$vendor_return_reason = Mage::getModel('zolagorma/vendorreturnreason')->load($vendor_return_reason_id);
+				
+				if($vendor_return_reason){
+					try{
+						$vendor_return_reason->updateModelData($data);
+						$vendor_return_reason->save();
+					}catch(Mage_Core_Exception $e){
+			            Mage::logException($e);
+			        }catch(Exception $e){
+			            Mage::logException($e);
+			        }
+				}
+			}
+		}
+		
+		return $this;
 	}
 	
 	/**

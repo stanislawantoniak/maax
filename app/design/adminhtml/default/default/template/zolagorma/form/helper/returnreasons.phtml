@@ -1,5 +1,5 @@
 <?php $_element = $this->getElement()?>
-<?php $collection = $this->getReturnReasons(); ?>
+<?php $collection = $this->getVendorReturnReasons(); ?>
 <?php if($collection->count() > 0): ?>
 <tr>
     <td class="grid" colspan=10>
@@ -13,13 +13,13 @@
                 </tr>
             </thead>
             <tbody id="vendor_return_reasons-table">
-                <?php foreach($this->getReturnReasons() as $reason): ?>
-                <?php $_id = $reason->getReturnReasonId(); ?>
+                <?php foreach($collection as $vendor_reason): ?>
+                <?php $_id = $vendor_reason->getVendorReturnReasonId(); ?>
                 <tr class="option-row">
-                    <td class="a-center"><?php echo $reason->getName()?></td>
-                    <td class="a-left"><input name="[return_reasons][<?php echo $_id; ?>][auto_days]" class="input-text" type="text" value="<?php echo $reason->getAutoDays(); ?>" /></td>
-                    <td class="a-left"><input name="[return_reasons][<?php echo $_id; ?>][allowed_days]" class="input-text" type="text" value="<?php echo $reason->getAllowedDays(); ?>" /></td>
-                    <td class="a-left" width="500"><input name="[return_reasons][<?php echo $_id; ?>][message]" class="input-text" type="text" value="<?php echo $reason->getMessage(); ?>" /></td>
+                    <td class="a-center"><?php echo $vendor_reason->getReturnReason()->getName()?></td>
+                    <td class="a-left"><input name="<?php echo $_element->getName()?>[<?php echo $_id; ?>][auto_days]" class="input-text required-entry" type="text" value="<?php echo $vendor_reason->getAutoDays(); ?>" /></td>
+                    <td class="a-left"><input name="<?php echo $_element->getName()?>[<?php echo $_id; ?>][allowed_days]" class="input-text required-entry" type="text" value="<?php echo $vendor_reason->getAllowedDays(); ?>" /></td>
+                    <td class="a-left" width="500"><input name="<?php echo $_element->getName()?>[<?php echo $_id; ?>][message]" class="input-text required-entry" type="text" value="<?php echo $vendor_reason->getMessage(); ?>" /></td>
                 </tr>
                 <?php endforeach ?>
             </tbody>

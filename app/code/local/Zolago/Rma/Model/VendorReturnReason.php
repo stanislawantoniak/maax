@@ -18,8 +18,8 @@ class Zolago_Rma_Model_VendorReturnReason extends Mage_Core_Model_Abstract{
 
             if(!empty($data)){
 
-                $this->setReturnReasonId($data['return_reason_id']);
-                $this->setVendorId($data['vendor_id']);
+                if(key_exists('return_reason_id', $data)) $this->setReturnReasonId($data['return_reason_id']);
+                if(key_exists('vendor_id', $data)) $this->setVendorId($data['vendor_id']);
                 $this->setAutoDays($data['auto_days']);
                 $this->setAllowedDays($data['allowed_days']);
                 $this->setMessage($data['message']);
@@ -34,4 +34,14 @@ class Zolago_Rma_Model_VendorReturnReason extends Mage_Core_Model_Abstract{
 
         return $this;
     }
+	
+	/**
+     * 
+     * @return Zolago_Rma_Model_ReturnReason
+     */
+	public function getReturnReason(){
+		
+		return Mage::getModel('zolagorma/returnreason')->load($this->getReturnReasonId());
+		
+	}
 }

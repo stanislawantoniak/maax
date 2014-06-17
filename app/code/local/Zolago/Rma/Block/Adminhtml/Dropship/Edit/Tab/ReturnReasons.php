@@ -21,7 +21,7 @@ class Zolago_Rma_Block_Adminhtml_Dropship_Edit_Tab_ReturnReasons
             'legend'=>$helper->__('Return Reasons')
         ));
 
-        $fieldset->addType('return_reasons', 'Zolago_Rma_Block_Adminhtml_Rma_Edit_Renderer_ReturnReasons');
+        $fieldset->addType('return_reasons', 'Zolago_Rma_Block_Adminhtml_Rma_Edit_Form_Element_ReturnReasons');
         
         $fieldset->addField('return_reasons', 'return_reasons', array(
             'name'      => 'return_reasons',
