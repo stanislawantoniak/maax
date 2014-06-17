@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Zolago_Catalog_AuthController
+ */
 class Zolago_Catalog_AuthController extends Mage_Core_Controller_Front_Action
 {
 
@@ -77,7 +80,7 @@ class Zolago_Catalog_AuthController extends Mage_Core_Controller_Front_Action
 
     public static function stockAction()
     {
-        $stockId = Zolago_Catalog_Model_Resource_Stock_Data::ZOLAGO_STOCK_ID;
+        $stockId = 1;
         $websiteAdmin = 0;
         $websiteFront = 1;
 
@@ -89,64 +92,65 @@ class Zolago_Catalog_AuthController extends Mage_Core_Controller_Front_Action
          * 1. Test with file
          */
         //Emulate stock data
-//        $dataXMLJSON= Zolago_Catalog_Helper_Stock::emulateStock();
-//        //Zend_Debug::dump($dataXMLJSON);
-//
-//        $dataXML = json_decode($dataXMLJSON);
-//
-//
-//
-//
-//        $merchant = $dataXML->merchant;
-//        //calculate available stock
-//        $stock =(array)$dataXML->data;
-//
-//        Mage::log(microtime() . ' Start prepare data ', 0, 'product_stock_update.log');
-//        $data = Zolago_Catalog_Helper_Stock::getAvailableStock($stock,$merchant);
-//
-//
-//        /*Prepare data to insert*/
+        $dataXMLJSON= Zolago_Catalog_Helper_Stock::emulateStock();
+        //Zend_Debug::dump($dataXMLJSON);
 
-//        if(empty($data)){
-//            Mage::log(microtime() . ' Empty source ', 0, 'product_stock_update.log');
-//            return;
-//        }
+        $dataXML = json_decode($dataXMLJSON);
 
-//
-//        if(!empty($data)){
-//            foreach($data as $id => $qty){
-//                $is_in_stock = ($qty > 0) ? 1 : 0;
-//                $cataloginventory_stock_status0 []= "({$id},{$qty},{$is_in_stock},{$stockId},{$websiteAdmin})";
-//                $cataloginventory_stock_status1 []= "({$id},{$qty},{$is_in_stock},{$stockId},{$websiteFront})";
-//
-//                $cataloginventory_stock_item []= "({$id},{$qty},{$is_in_stock},{$stockId})";
-//            }
-//        }
+
+
+
+        $merchant = $dataXML->merchant;
+        //calculate available stock
+        $stock =(array)$dataXML->data;
+
+        Mage::log(microtime() . ' Start prepare data ', 0, 'product_stock_update.log');
+        $data = Zolago_Catalog_Helper_Stock::getAvailableStock($stock,$merchant);
+
+
+        /*Prepare data to insert*/
+
+        if(empty($data)){
+            Mage::log(microtime() . ' Empty source ', 0, 'product_stock_update.log');
+            return;
+        }
+
+
+        if(!empty($data)){
+            foreach($data as $id => $qty){
+                $is_in_stock = ($qty > 0) ? 1 : 0;
+                $cataloginventory_stock_status0 []= "({$id},{$qty},{$is_in_stock},{$stockId},{$websiteAdmin})";
+                $cataloginventory_stock_status1 []= "({$id},{$qty},{$is_in_stock},{$stockId},{$websiteFront})";
+
+                $cataloginventory_stock_item []= "({$id},{$qty},{$is_in_stock},{$stockId})";
+            }
+        }
 
         /**
          * 2. Test with all products
          */
 
-        $load = 2;
+        $load = 1;
 
-        $skuAssoc = Zolago_Catalog_Helper_Data::getIdSkuAssoc();
-
-
-        $qty = 1;
-
-        $i = 0;
-        if(empty($skuAssoc)){
-            Mage::log(microtime() . ' Empty source ', 0, 'product_stock_update.log');
-            return;
-        }
-        foreach($skuAssoc as $id => $skuAssocItem){
-            $cataloginventory_stock_status0 []= "({$id},{$qty},1,{$stockId},{$websiteAdmin})";
-            $cataloginventory_stock_status1 []= "({$id},{$qty},1,{$stockId},{$websiteFront})";
-
-            $cataloginventory_stock_item []= "({$id},{$qty},1,{$stockId})";
-
-            $i++;
-        }
+//        $skuAssoc = Zolago_Catalog_Helper_Data::getIdSkuAssoc();
+//
+//
+//        $qty = 10;
+//
+//        $i = 0;
+//        if(empty($skuAssoc)){
+//            Mage::log(microtime() . ' Empty source ', 0, 'product_stock_update.log');
+//            return;
+//        }
+//
+//        foreach($skuAssoc as $id => $skuAssocItem){
+//            $cataloginventory_stock_status0 []= "({$id},{$qty},1,{$stockId},{$websiteAdmin})";
+//            $cataloginventory_stock_status1 []= "({$id},{$qty},1,{$stockId},{$websiteFront})";
+//
+//            $cataloginventory_stock_item []= "({$id},{$qty},1,{$stockId})";
+//
+//            $i++;
+//        }
 
         $update1 = array_fill(0,$load, implode(',',$cataloginventory_stock_item));
         $updateA = array_fill(0,$load, implode(',',$cataloginventory_stock_status0));
@@ -158,18 +162,19 @@ class Zolago_Catalog_AuthController extends Mage_Core_Controller_Front_Action
         $insertB = implode(',',$updateB);
 
         Mage::log(microtime() . ' End prepare data ', 0, 'product_stock_update.log');
-        $zcSDModel = Mage::getResourceModel('zolagocatalog/stock_data');
+        $zcSDItemModel = Mage::getResourceModel('zolagocatalog/stock_item');
 
         Mage::log(microtime() . ' Start cataloginventory_stock_item ', 0, 'product_stock_update.log');
-        $zcSDModel->saveCatalogInventoryStockItem($insert1);
+        $zcSDItemModel->saveCatalogInventoryStockItem($insert1);
 
+        $zcSDStatusModel = Mage::getResourceModel('zolagocatalog/stock_status');
         Mage::log(microtime() . ' Start cataloginventory_stock_status website_id=0 ', 0, 'product_stock_update.log');
         //website_id=0
-        $zcSDModel->saveCatalogInventoryStockStatus($insertA);
+        $zcSDStatusModel->saveCatalogInventoryStockStatus($insertA);
 
         Mage::log(microtime() . ' Start cataloginventory_stock_status website_id=1 ', 0, 'product_stock_update.log');
         //website_id=1
-        $zcSDModel->saveCatalogInventoryStockStatus($insertB);
+        $zcSDStatusModel->saveCatalogInventoryStockStatus($insertB);
 
 
 
@@ -180,6 +185,7 @@ class Zolago_Catalog_AuthController extends Mage_Core_Controller_Front_Action
         Mage::log(microtime() . ' End ', 0, 'product_stock_update.log');
         echo 'Done';
     }
+
 
 }
 

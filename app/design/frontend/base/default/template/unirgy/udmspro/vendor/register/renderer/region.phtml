@@ -1,3 +1,8 @@
-<?php echo $this->getElement()->getLabelHtml(); ?> <br />
+<label for="<?php echo $this->getElement()->getId(); ?>">
+    <?php echo $this->__($this->getElement()->getLabel()); ?>
+    <?php if ($this->getElement()->getRequired()): ?>
+        <span class="required">*</span>
+    <?php endif; ?>
+</label> <br />
 <?php echo $this->getElementHtml() ?>
  <input type="text" id="region" name="region" value="<?php echo $this->getElement()->getForm()->getRegion()?>"  title="<?php echo $this->__('State/Province') ?>" class="input-text" style="display:none" />

@@ -5,8 +5,15 @@
             <version>0.0.12</version>
         </Zolago_Catalog>
     </modules>
+    <default>
+        <zolagocatalog>
+            <config>
+                <group>config</group>
+                <po_open_order>0,11,9,5,4,3,11</po_open_order>
+            </config>
+        </zolagocatalog>
+    </default>
     <global>
-
         <models>
             <zolagocatalog>
                 <class>Zolago_Catalog_Model</class>
