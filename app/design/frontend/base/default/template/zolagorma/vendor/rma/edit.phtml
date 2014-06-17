@@ -18,6 +18,22 @@
 <?php $_trackCollection = $this->getVendorTrackingCollection();?>
 <?php $_customerTrackCollection = $this->getCustomerTrackingCollection();?>
 
+<?php
+    if ($id = Mage::getSingleton('core/session')->getPdfNumberPrintId()) {
+          Mage::getSingleton('core/session')->setPdfNumberPrintId(null);
+          $url =  Mage::getUrl('*/*/pdf',array('number'=>$id));
+        
+?>
+<script type="text/javascript">
+jQuery(document).ready(function() {
+    document.location.href="<?php echo $url ?>";
+});
+</script>
+<?php
+    }
+?>
+
+
 <div class="container">
 	<!--=== Page Header ===-->
 	<div class="page-heading row">
