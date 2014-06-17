@@ -105,16 +105,9 @@ class Zolago_Dhl_DhlController extends Mage_Core_Controller_Front_Action
             echo json_encode($response);
             return;
         }
-        $zip = str_replace('-', '', $zip);
 
-        $model = Mage::getModel('zolagodhl/client');
-        $model->setAuth('CONVERTICA', 'yezxCGQ2bFYCWr');
-        $ret = $model->getPostalCodeServices($zip, date('Y-m-d'));
-
-        $domesticExpress9 = (bool)$ret->getPostalCodeServicesResult->domesticExpress9;
-        $domesticExpress12 = (bool)$ret->getPostalCodeServicesResult->domesticExpress12;
-
-        $dhlValidZip = ($domesticExpress9 || $domesticExpress12) ? true : false;
+        $dhlHelper = Mage::helper('zolagodhl');
+        $dhlValidZip = $dhlHelper->isDHLValidZip($zip);
 
         if (!$dhlValidZip) {
             $response['status'] = 'error';
@@ -122,9 +115,6 @@ class Zolago_Dhl_DhlController extends Mage_Core_Controller_Front_Action
             echo json_encode($response);
             return;
         }
-
-        $zipModel = Mage::getResourceModel('zolagodhl/zip');
-        $zipModel->updateDhlZip($zip);
 
         $response['status'] = 'success';
         $response['message'] = 'Zip code is valid';

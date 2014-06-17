@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Zolago_Checkout>
+            <version>0.1.0</version>
+        </Zolago_Checkout>
+    </modules>
+    <global>
+        <models>
+            <zolago_checkout>
+                <class>Zolago_Checkout_Model</class>
+                <resourceModel>zolago_checkout_resource</resourceModel>
+            </zolago_checkout>
+            <zolago_checkout_resource>
+                <class>Zolago_Checkout_Model_Resource</class>
+            </zolago_checkout_resource>
+            <checkout>
+                <rewrite>
+                    <type_onepage>Zolago_Checkout_Model_Checkout_Type_Onepage</type_onepage>
+                </rewrite>
+            </checkout>
+        </models>
+        <helpers>
+            <zolago_checkout>
+                <class>Zolago_Checkout_Helper</class>
+            </zolago_checkout>
+        </helpers>
+    </global>
+</config>

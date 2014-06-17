@@ -19,6 +19,11 @@
                     </emailtoken>
                 </entities>
             </zolagocustomer_resource>
+            <customer>
+                <rewrite>
+                    <form>Zolago_Customer_Model_Customer_Form</form>
+                </rewrite>
+            </customer>
         </models>
         <helpers>
             <zolagocustomer>
