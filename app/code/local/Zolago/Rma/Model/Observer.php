@@ -327,7 +327,7 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 	                	'message' => $return_reason->getMessage()
 					);
 					
-					$vendor_return_reason->updateModelData($data);
+					$vendor_return_reason->setData($data);
 					$vendor_return_reason->save();
 					
 					$ok_saved++;
