@@ -76,7 +76,7 @@ class Zolago_Rma_Block_Adminhtml_Rma_Edit_Renderer_ReturnReasons
 	 */
 	public function getVendor(){
 		$params = Mage::app()->getFrontController()->getRequest()->getParams();
-		$vendor_id = $params['id'];
+		$vendor_id = (key_exists('id', $params)) ? $params['id'] : NULL;
 		
 		if($vendor_id){
 			$vendor = Mage::getModel('udropship/vendor')->load($params['id']);
