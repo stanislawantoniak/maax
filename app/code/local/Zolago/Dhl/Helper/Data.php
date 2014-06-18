@@ -212,4 +212,33 @@ class Zolago_Dhl_Helper_Data extends Mage_Core_Helper_Abstract {
 		
 		return $canShow;
 	}
+
+    public function isDHLValidZip($country, $zip)
+    {
+        $dhlValidZip = false;
+        if (!empty($zip)) {
+            $zip = str_replace('-', '', $zip);
+            $zipModel = Mage::getModel('zolagodhl/zip');
+            $source = $zipModel->load($zip, 'zip')->getId();
+            if (!empty($source)) {
+
+                $dhlValidZip = true;
+            } else {
+                $dhlClient = Mage::getModel('zolagodhl/client');
+                $dhlClient->setAuth('CONVERTICA', 'yezxCGQ2bFYCWr');
+                $ret = $dhlClient->getPostalCodeServices($zip, date('Y-m-d'));
+
+                $domesticExpress9 = (bool)$ret->getPostalCodeServicesResult->domesticExpress9;
+                $domesticExpress12 = (bool)$ret->getPostalCodeServicesResult->domesticExpress12;
+
+                $dhlValidZip = ($domesticExpress9 || $domesticExpress12) ? true : false;
+
+                if ($dhlValidZip) {
+                    $zipModel = Mage::getResourceModel('zolagodhl/zip');
+                    $zipModel->updateDhlZip($country, $zip);
+                }
+            }
+        }
+        return $dhlValidZip;
+    }
 }
