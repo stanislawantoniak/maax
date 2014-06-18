@@ -213,6 +213,13 @@ class Zolago_Dhl_Helper_Data extends Mage_Core_Helper_Abstract {
 		return $canShow;
 	}
 
+    /**
+     * Check if entered zip available on DHL
+     * @param $country
+     * @param $zip
+     *
+     * @return bool
+     */
     public function isDHLValidZip($country, $zip)
     {
         $dhlValidZip = false;
@@ -221,11 +228,12 @@ class Zolago_Dhl_Helper_Data extends Mage_Core_Helper_Abstract {
             $zipModel = Mage::getModel('zolagodhl/zip');
             $source = $zipModel->load($zip, 'zip')->getId();
             if (!empty($source)) {
-
                 $dhlValidZip = true;
             } else {
                 $dhlClient = Mage::getModel('zolagodhl/client');
-                $dhlClient->setAuth('CONVERTICA', 'yezxCGQ2bFYCWr');
+                $login = Mage::helper('core')->decrypt($this->getDhlLogin());
+                $password = Mage::helper('core')->decrypt($this->getDhlPassword());
+                $dhlClient->setAuth($login, $password);
                 $ret = $dhlClient->getPostalCodeServices($zip, date('Y-m-d'));
 
                 $domesticExpress9 = (bool)$ret->getPostalCodeServicesResult->domesticExpress9;
