@@ -34,7 +34,20 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 
         return $this->_redirect("*/*");
     }
-
+    
+    /**
+     * Print DHL waybill
+     */
+     public function pdfAction() {
+         $request = $this->getRequest();
+         $number = $request->getParam('number');
+         if (empty($number)) {
+             Mage::throwException(Mage::helper('zolagorma')->__('No tracking number'));
+         }
+         $ioAdapter = new Varien_Io_File();
+         $dhlFile = Mage::helper('zolagodhl')->getDhlFileDir() . $number . '.pdf';
+         return $this->_prepareDownloadResponse(basename($dhlFile), @$ioAdapter->read($dhlFile), 'application/pdf');
+     }
     /**
      * Add comment
      * @return null
@@ -162,12 +175,15 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
             'shipmentDate' => $date,
             'weight' => ($weight>1)? $weight:1,
             'type' => $dhlType,
+            'vendor' => true,
         );
         if (!$request->getParam('specify_zolagodhl_custom_dim')) {
             $dhlParams['nonStandard'] = true;
         }
         $rma = $this->_registerRma();
         $trackingParams = $rma->sendDhlRequest($dhlParams);        
+        $session = Mage::getSingleton('core/session');
+        $session->setPdfNumberPrintId($trackingParams['trackingNumber']);
         return $trackingParams['trackingNumber'];
     }
     /**

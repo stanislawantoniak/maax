@@ -427,7 +427,7 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
         $message->labelType = $this->_default_params['labelType'];
         return $message;       
     }
-    protected function _prepareShippingAddress() {
+    protected function _prepareClientAddress() {
         $address = $this->_rma->getShippingAddress();
         $data = $address->getData();
         $message = new StdClass();
@@ -446,7 +446,7 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
         $out->address = $message;
         return $out;
     }
-    protected function _prepareReceiverAddress() {
+    protected function _prepareVendorAddress() {
         $vendorId = $this->_rma->getUdropshipVendor();
         $vendor = Mage::getModel('udropship/vendor')->load($vendorId);
         $data = $vendor->getData();
@@ -465,10 +465,16 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
         $message->contact = $contact;
         return $message;
     }
-    protected function _prepareShip() {
+    protected function _prepareShipClient() {
         $message = new StdClass;
-        $message->shipper = $this->_prepareShippingAddress();
-        $message->receiver = $this->_prepareReceiverAddress();
+        $message->shipper = $this->_prepareClientAddress();
+        $message->receiver = $this->_prepareVendorAddress();
+        return $message;
+    }
+    protected function _prepareShipVendor() {
+        $message = new StdClass;
+        $message->shipper = $this->_prepareVendorAddress();
+        $message->receiver = $this->_prepareClientAddress();
         return $message;
     }
     protected function _prepareShipmentTime() {
@@ -487,7 +493,11 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
         $message->authData = $this->_auth;
         $shipment = new stdClass;
         $shipment->shipmentInfo = $this->_prepareShipmentAtOnce(); 
-        $shipment->ship = $this->_prepareShip();
+        if (empty($dhlSettings['vendor'])) {
+            $shipment->ship = $this->_prepareShipClient();        
+        } else {
+            $shipment->ship = $this->_prepareShipVendor();
+        }
         $shipment->content = self::SHIPMENT_RMA_CONTENT;
         $shipment->pieceList = $this->_createPieceList($dhlSettings);
         $message->shipment = $shipment;
