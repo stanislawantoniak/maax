@@ -3,6 +3,10 @@ class Zolago_Holidays_Helper_DateCalculator extends Mage_Core_Helper_Abstract{
 	
 	protected $weekend;
 	
+	protected $country_id;
+	protected $exclude_from_pickup;
+	protected $exclude_from_delivery;
+	
 	/**
 	 * Calculate maximum shipping date for PO
 	 * 
@@ -15,10 +19,15 @@ class Zolago_Holidays_Helper_DateCalculator extends Mage_Core_Helper_Abstract{
 		
 		$store = $po->getStore();
 		$storeId = $store->getStoreId();
-		$locale = $store->getLocaleCode();
+		$locale = Mage::getStoreConfig('general/locale/code', $store->getId());
+		$locale_array = explode("_", $locale);
+		
 		$vendor = $po->getVendor();
 		
 		$this->weekend = explode(',', Mage::getStoreConfig('general/locale/weekend', $storeId));
+		$this->country_id = (key_exists(1, $locale_array)) ? $locale_array[1] : NULL;
+		$this->exclude_from_delivery = 1;
+		$this->exclude_from_pickup = array(1, 0);
 		
 		$timezone = Mage::getStoreConfig('general/locale/timezone', $storeId);
 		$max_shipping_days = $vendor->getMaxShippingDays($storeId);
@@ -59,10 +68,12 @@ class Zolago_Holidays_Helper_DateCalculator extends Mage_Core_Helper_Abstract{
 			$current_timestamp = Mage::getModel('core/date')->timestamp(time());
 		}
 		$current_hour = date("H", $current_timestamp);
+		$current_minute = date("i", $current_timestamp);
 		$max_hour_array = explode(",", $max_time);
 		$max_hour = $max_hour_array[0];
+		$max_minute = $max_hour_array[1];
 		
-		if($current_hour > $max_hour){
+		if((($current_hour * 60) + $current_minute) > (($max_hour * 60) + $max_minute)){
 			$max_days++;
 		}
 		
@@ -105,10 +116,18 @@ class Zolago_Holidays_Helper_DateCalculator extends Mage_Core_Helper_Abstract{
 		$fixed_string = date("d/m/Y", $timestamp);
 		$movable_string = date("d/m", $timestamp);
 		
-		$holiday = Mage::getModel('zolagoholidays/holiday')->getCollection()
-												           ->addFieldToFilter('date', array($fixed_string, $movable_string));
-														   
-		return ($holiday->count() > 0) ? true : false;
+		$collection = Mage::getModel('zolagoholidays/holiday')->getCollection();
+		$collection->addFieldToFilter('date', array($fixed_string, $movable_string));
+		
+		if($this->country_id){
+			$collection->addFieldToFilter('country_id', $this->country_id);
+		}
+		
+		$collection->addFieldToFilter('exclude_from_delivery', $this->exclude_from_delivery);
+		
+		$collection->addFieldToFilter('exclude_from_pickup', $this->exclude_from_pickup);
+		
+		return ($collection->count() > 0) ? true : false;
 	}
 }
 

@@ -16,4 +16,7 @@
 bin/
 /vendor/
 /.project
-/.vagrant/*
+/.vagrant/
+/puphpet/
+Vagrantfile
+composer.*
