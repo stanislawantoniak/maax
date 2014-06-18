@@ -13,17 +13,16 @@ class Zolago_Customer_Model_Customer_Form extends Mage_Customer_Model_Form {
         $result = parent::validateData($data);
 
         //checking sipping address; perform additional validation
-
-        //if ($this->getEntity()->getAddressType() == Mage_Sales_Model_Quote_Address::TYPE_SHIPPING) {
-
-        $valid = $this->_validateDHLZip($data);
-        if ($result !== true && $valid !== true) {
-            $result[] = $valid;
-        } elseif ($result === true && $valid !== true) {
-            $result = $valid;
+        if (Mage::helper('core')->isModuleEnabled('Zolago_Dhl')) {
+            //if ($this->getEntity()->getAddressType() == Mage_Sales_Model_Quote_Address::TYPE_SHIPPING) {
+            $valid = $this->_validateDHLZip($data);
+            if ($result !== true && $valid !== true) {
+                $result[] = $valid;
+            } elseif ($result === true && $valid !== true) {
+                $result = $valid;
+            }
+            //}
         }
-        //}
-
         return $result;
     }
 
