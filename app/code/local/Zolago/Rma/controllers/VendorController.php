@@ -384,10 +384,14 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
         if(!$rma->getId()) {
             return false;
         }
-        if($rma->getVendor()->getId() != $this->_getSession()->getVendorId()) {
-            return false;
+		$vendor = $this->_getSession()->getVendor();
+		$rmaVendorId = $rma->getVendor()->getId();
+	
+        if($rmaVendorId == $vendor->getId()) {
+            return true;
         }
-        return true;
+		
+        return in_array($rmaVendorId, $vendor->getChildVendorIds());
     }
 
     /**

@@ -36,11 +36,6 @@
 					<rma_comment_collection>Zolago_Rma_Model_Resource_Rma_Comment_Collection</rma_comment_collection>
 				</rewrite>
 			</urma_mysql4>
-			<udropship>
-				<rewrite>
-					<vendor>Zolago_Rma_Model_Rma_Vendor</vendor>
-				</rewrite>
-			</udropship>
 		</models>
 		<blocks>
 			<zolagorma>
