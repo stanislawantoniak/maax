@@ -134,11 +134,15 @@ jQuery(function($){
 });
 </script>
 <?php else:?>
+    <?php
+    $dhlEnabled = Mage::helper('core')->isModuleEnabled('Zolago_Dhl');
+    $dhlActive = Mage::helper('zolagodhl')->isDhlActive();
+    ?>
 <script type="text/javascript">
 jQuery(function($){
 	var form = $("#<?php echo $_type;?>-address-form");
 
-    <?php if (Mage::helper('core')->isModuleEnabled('Zolago_Dhl')): ?>
+    <?php if ($dhlEnabled && $dhlActive): ?>
     form.validate({
         rules: {
             "postcode": {
