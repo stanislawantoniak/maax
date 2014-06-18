@@ -13,6 +13,15 @@
 		</blocks>
 	</global>
     <frontend>
+		<routers>
+			<udqa>
+				<args>
+					<modules>
+						<Zolago_DropshipVendorAskQuestion before="Unirgy_DropshipVendorAskQuestion">Zolago_DropshipVendorAskQuestion</Zolago_DropshipVendorAskQuestion>
+					</modules>
+				</args>
+			</udqa>
+		</routers>
         <layout>
             <updates>
                 <zolago_udqa>

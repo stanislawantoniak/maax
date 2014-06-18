@@ -12,7 +12,7 @@ class Zolago_Rma_Block_Adminhtml_Rma_ReturnReason_Grid extends Mage_Adminhtml_Bl
     }
 
     protected function _prepareCollection(){
-           $collection = Mage::getModel('zolagorma/returnreason')
+           $collection = Mage::getModel('zolagorma/rma_reason')
                            ->getCollection();
            $this->setCollection($collection);
 

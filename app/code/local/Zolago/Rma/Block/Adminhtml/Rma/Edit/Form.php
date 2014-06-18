@@ -49,16 +49,16 @@ class Zolago_Rma_Block_Adminhtml_Rma_Edit_Form extends Mage_Adminhtml_Block_Widg
 		
 		$fieldset->addField('auto_days', 'text', array(
             'name'      => 'auto_days',
-            'label'     => $helper->__('Auto Days Count'),
-            'title'     => $helper->__('Auto Days Count'),
+            'label'     => $helper->__('Instant return days #'),
+            'title'     => $helper->__('Instant return days #'),
             'required'  => true,
             'class'      => 'validate-number'
         ));
         
 		$fieldset->addField('allowed_days', 'text', array(
             'name'      => 'allowed_days',
-            'label'     => $helper->__('Allowed Days Count'),
-            'title'     => $helper->__('Allowed Days Count'),
+            'label'     => $helper->__('Acknowledged return days #'),
+            'title'     => $helper->__('Acknowledged return days #'),
             'required'  => true,
             'class'      => 'validate-number'
         ));

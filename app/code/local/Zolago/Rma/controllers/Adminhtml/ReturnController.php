@@ -16,7 +16,7 @@ class Zolago_Rma_Adminhtml_ReturnController extends Mage_Adminhtml_Controller_Ac
             $model_id = $this->getRequest()->getParam('return_reason_id');
             if($model_id){
 
-                if($model = Mage::getModel('zolagorma/returnreason')->load($model_id)){
+                if($model = Mage::getModel('zolagorma/rma_reason')->load($model_id)){
 
                     $model->delete();
                     $this->_getSession()->addSuccess($helper->__("Return Reason has been successfully deleted."));
@@ -55,7 +55,7 @@ class Zolago_Rma_Adminhtml_ReturnController extends Mage_Adminhtml_Controller_Ac
 
         // Get id if available
         $model_id  = $this->getRequest()->getParam('return_reason_id');
-        $model = Mage::getModel('zolagorma/returnreason');
+        $model = Mage::getModel('zolagorma/rma_reason');
 
         if ($model_id) {
             // Load record
@@ -85,7 +85,7 @@ class Zolago_Rma_Adminhtml_ReturnController extends Mage_Adminhtml_Controller_Ac
 
     public function saveAction(){
 
-        $model = Mage::getModel("zolagorma/returnreason");
+        $model = Mage::getModel("zolagorma/rma_reason");
         $helper = Mage::helper('zolagorma');
         $data = $this->getRequest()->getParams();
         $modelId = $this->getRequest()->getParam("return_reason_id");
@@ -113,16 +113,7 @@ class Zolago_Rma_Adminhtml_ReturnController extends Mage_Adminhtml_Controller_Ac
 				
 				$data = array( 'model' => $model);
 				Mage::dispatchEvent('zolagorma_global_return_reson_save_after', $data);
-                // $validErrors = $model->validate();
-                // if($validErrors===true){
-                    // $model->save();
-                // }else{
-                    // $this->_getSession()->setFormData($data);
-                    // foreach($validErrors as $error){
-                        // $this->_getSession()->addError($error);
-                    // }
-                    // return $this->_redirectReferer();
-                // }
+				
                 $this->_getSession()->addSuccess($helper->__("Return Reason Saved"));
             }
         }catch(Mage_Core_Exception $e){

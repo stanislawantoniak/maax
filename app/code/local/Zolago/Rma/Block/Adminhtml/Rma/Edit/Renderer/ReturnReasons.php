@@ -6,7 +6,8 @@ class Zolago_Rma_Block_Adminhtml_Rma_Edit_Renderer_ReturnReasons
 {
 
     protected $_element = null;
-
+	protected $_mode;
+	
     public function __construct()
     {
         $this->setTemplate('zolagorma/form/helper/returnreasons.phtml');
@@ -45,18 +46,45 @@ class Zolago_Rma_Block_Adminhtml_Rma_Edit_Renderer_ReturnReasons
 	/**
 	 * @return Zolago_Rma_Model_Resource_VendorReturnReason_Collection | NULL
 	 */
-	public function getVendorReturnReasons(){
+	public function getCollection(){
 		
-		$params = Mage::app()->getFrontController()->getRequest()->getParams();
-		$vendor = Mage::getModel('udropship/vendor')->load($params['id']);
-		
-		if(!$vendor){
-			return NULL;
+		$collection = NULL;
+		$vendor = $this->getVendor();
+		// Is Edit mode
+		if($vendor){
+			$this->_mode = 'edit';				
+			$collection = $vendor->getRmaReasonVendorCollection();
 		}
 		
-		return Mage::getModel("zolagorma/vendorreturnreason")->getCollection()
-															 ->addFieldToFilter('vendor_id', $vendor->getVendorId());
+		if(!$collection || $collection->count() == 0){
+			$this->_mode = 'new';
+			$collection = Mage::getModel("zolagorma/rma_reason")->getCollection();
+		}
 		
+		return $collection;
+	}
+	
+	/**
+	 * @return string
+	 */
+	public function getMode(){
+		return $this->_mode;
+	}
+	
+	/**
+	 * @return Udropship_Model_Vendor
+	 */
+	public function getVendor(){
+		$params = Mage::app()->getFrontController()->getRequest()->getParams();
+		$vendor_id = (key_exists('id', $params)) ? $params['id'] : NULL;
+		
+		if($vendor_id){
+			$vendor = Mage::getModel('udropship/vendor')->load($params['id']);
+			return ($vendor) ? $vendor : NULL;
+		}
+		else{
+			return NULL;
+		}
 	}
     
 }

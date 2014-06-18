@@ -5,6 +5,22 @@ class Zolago_Po_Model_Aggregated extends Mage_Core_Model_Abstract
 	protected $_resourceName = "zolagopo/aggregated";
 	protected $_resourceCollectionName = "zolagopo/aggregated_collection";
    
+	/**
+	 * @param Unirgy_Dropship_Model_Vendor $venndor
+	 * @param Zolago_Operator_Model_Operator $operator
+	 * @return boolean
+	 */
+	public function isAllowed(Unirgy_Dropship_Model_Vendor $vendor = null, Zolago_Operator_Model_Operator $operator = null) {
+		if($operator instanceof Zolago_Operator_Model_Operator){
+			return in_array($this->getPosId(), $operator->getAllowedPos());
+		}elseif($vendor instanceof Zolago_Dropship_Model_Vendor){
+			return in_array($this->getPosId(), $vendor->getAllowedPos());
+		}
+		return false;
+	}
+	/**
+	 * @return Zolago_Po_Model_Aggregated
+	 */
 	public function generateName() {
 		$date = new Zend_Date(null,null,Mage::app()->getLocale()->getLocaleCode());
 		$externalId = $this->getPos()->getExternalId();
@@ -20,6 +36,7 @@ class Zolago_Po_Model_Aggregated extends Mage_Core_Model_Abstract
 		}
 		$this->setSequence($incrementNo);
 		$this->setAggregatedName($candidate.$incrementNo);
+		return $this;
 	}
 	
 	/**

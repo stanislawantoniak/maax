@@ -14,12 +14,12 @@
 			<zolagorma_resource>
 				<class>Zolago_Rma_Model_Resource</class>
 				<entities>
-					<returnreason>
-                        <table>zolago_return_reasons</table>
-                    </returnreason>
-                    <vendorreturnreason>
-                        <table>zolago_vendor_return_reasons</table>
-                    </vendorreturnreason>
+					<rma_reason>
+                        <table>zolago_rma_return_reason</table>
+                    </rma_reason>
+                    <rma_reason_vendor>
+                        <table>zolago_rma_vendor_return_reason</table>
+                    </rma_reason_vendor>
 				</entities>
 			</zolagorma_resource>
 			<urma>

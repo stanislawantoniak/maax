@@ -6,6 +6,22 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 	const TYPE_POBILLING = "pobilling";
 	
 	/**
+	 * @param Unirgy_Dropship_Model_Vendor $venndor
+	 * @param Zolago_Operator_Model_Operator $operator
+	 * @return boolean
+	 */
+	public function isAllowed(Unirgy_Dropship_Model_Vendor $vendor = null, 
+		Zolago_Operator_Model_Operator $operator = null) {
+		
+		if($operator instanceof Zolago_Operator_Model_Operator){
+			return in_array($this->getDefaultPosId(), $operator->getAllowedPos());
+		}elseif($vendor instanceof Zolago_Dropship_Model_Vendor){
+			return in_array($this->getDefaultPosId(), $vendor->getAllowedPos());
+		}
+		return false;
+	}
+	
+	/**
 	 * @return Mage_Sales_Model_Order_Shipment | null
 	 */
 	public function getLastNotCanceledShipment() {

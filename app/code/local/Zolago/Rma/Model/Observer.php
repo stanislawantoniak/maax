@@ -258,26 +258,43 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
      */
 	public function udropship_vendor_save_after($observer)
 	{
+		$front_controller = Mage::app()->getFrontController();
 		
-		$params = Mage::app()->getFrontController()->getRequest()->getParams();
-		$vendor_return_reasons = $params['return_reasons'];
-		$vendor = $observer->getVendor();
-		
-		if(sizeof($vendor_return_reasons) > 0){
+		if($front_controller->getRequest()->isPost()){
 			
-			foreach($vendor_return_reasons as $vendor_return_reason_id => $data){
+			$params = $front_controller->getRequest()->getParams();
+			
+			if(key_exists('return_reasons', $params)){
 				
-				$vendor_return_reason = Mage::getModel('zolagorma/vendorreturnreason')->load($vendor_return_reason_id);
+				$vendor_return_reasons = $params['return_reasons'];
+				$mode = $params['submit_mode'];
+				$vendor = $observer->getVendor();
 				
-				if($vendor_return_reason){
-					try{
-						$vendor_return_reason->updateModelData($data);
-						$vendor_return_reason->save();
-					}catch(Mage_Core_Exception $e){
-			            Mage::logException($e);
-			        }catch(Exception $e){
-			            Mage::logException($e);
-			        }
+				if(sizeof($vendor_return_reasons) > 0){
+					
+					foreach($vendor_return_reasons as $model_id => $data){
+						
+						$vendor_return_reason = Mage::getModel('zolagorma/rma_reason_vendor');
+						
+						// Edit mode
+						if($mode == 'edit'){
+							$vendor_return_reason = $vendor_return_reason->load($model_id);
+							$vendor_return_reason->addData($data);
+						}
+						else{
+							$data['vendor_id'] = (int) $vendor->getVendorId();
+							$data['return_reason_id'] = (int) $model_id;
+							$vendor_return_reason->setData($data);
+						}
+						
+						try{
+							$vendor_return_reason->save();
+						}catch(Mage_Core_Exception $e){
+				            Mage::logException($e);
+				        }catch(Exception $e){
+				            Mage::logException($e);
+				        }
+					}
 				}
 			}
 		}
@@ -309,7 +326,7 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 			foreach($all_vendors as $vendor){
 				
 				try{
-					$vendor_return_reason = Mage::getModel('zolagorma/vendorreturnreason');
+					$vendor_return_reason = Mage::getModel('zolagorma/rma_reason_vendor');
 					
 					$data = array(
 						'return_reason_id' => $return_reason->getReturnReasonId(),
@@ -319,7 +336,7 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 	                	'message' => $return_reason->getMessage()
 					);
 					
-					$vendor_return_reason->updateModelData($data);
+					$vendor_return_reason->setData($data);
 					$vendor_return_reason->save();
 					
 					$ok_saved++;

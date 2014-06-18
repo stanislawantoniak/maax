@@ -13,3 +13,9 @@
 *.DS_Store
 /downloader/
 /app/etc/solrbridge.conf
+/vendor/
+/.vagrant/
+/Vagrantfile
+/puphpet/
+/.project
+/errors/local.xml
