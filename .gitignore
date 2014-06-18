@@ -13,3 +13,10 @@
 *.DS_Store
 /downloader/
 /app/etc/solrbridge.conf
+bin/
+/vendor/
+/.project
+/.vagrant/
+/puphpet/
+Vagrantfile
+composer.*
