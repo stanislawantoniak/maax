@@ -9,20 +9,19 @@ class Zolago_Customer_Model_Customer_Form extends Mage_Customer_Model_Form {
      */
     public function validateData(array $data)
     {
-        //echo 'Zolago_Customer_Model_Customer_Form';
         //perform parent validation
         $result = parent::validateData($data);
 
         //checking sipping address; perform additional validation
 
         //if ($this->getEntity()->getAddressType() == Mage_Sales_Model_Quote_Address::TYPE_SHIPPING) {
-            //echo $data['postcode'];
-            $valid = $this->_validateDHLZip($data);
-            if ($result !== true && $valid !== true) {
-                $result[] = $valid;
-            } elseif ($result === true && $valid !== true) {
-                $result = $valid;
-            }
+
+        $valid = $this->_validateDHLZip($data);
+        if ($result !== true && $valid !== true) {
+            $result[] = $valid;
+        } elseif ($result === true && $valid !== true) {
+            $result = $valid;
+        }
         //}
 
         return $result;
