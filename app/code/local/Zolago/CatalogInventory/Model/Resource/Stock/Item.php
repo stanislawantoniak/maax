@@ -3,9 +3,9 @@
  * Stock item resource model
  *
  * @category    Zolago
- * @package     Zolago_Catalog
+ * @package     Zolago_CatalogInventory
  */
-class Zolago_Catalog_Model_Resource_Stock_Item
+class Zolago_CatalogInventory_Model_Resource_Stock_Item
     extends Mage_CatalogInventory_Model_Resource_Stock_Item
 {
     /**

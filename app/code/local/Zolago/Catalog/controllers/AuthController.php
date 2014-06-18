@@ -29,7 +29,8 @@ class Zolago_Catalog_AuthController extends Mage_Core_Controller_Front_Action
 
             $sku = $merchant . '-' . $skuV;
             Mage::log(microtime() . ' Got system sku', 0, 'converter_profiler.log');
-            $productId = Zolago_Catalog_Helper_Data::getSkuAssocId($sku);
+            $productId = Mage::getResourceModel('catalog/product')
+                ->getIdBysku($sku);
             Mage::log(microtime() . ' Got product id from sku', 0, 'converter_profiler.log');
             if ($productId) {
 
@@ -84,9 +85,9 @@ class Zolago_Catalog_AuthController extends Mage_Core_Controller_Front_Action
         $websiteAdmin = 0;
         $websiteFront = 1;
 
-        $cataloginventory_stock_item = array();
-        $cataloginventory_stock_status0 = array();
-        $cataloginventory_stock_status1 = array();
+        $cataloginventoryStockItem = array();
+        $cataloginventoryStockStatus0 = array();
+        $cataloginventoryStockStatus1 = array();
 
         /*
          * 1. Test with file
@@ -96,9 +97,6 @@ class Zolago_Catalog_AuthController extends Mage_Core_Controller_Front_Action
         //Zend_Debug::dump($dataXMLJSON);
 
         $dataXML = json_decode($dataXMLJSON);
-
-
-
 
         $merchant = $dataXML->merchant;
         //calculate available stock
@@ -119,10 +117,10 @@ class Zolago_Catalog_AuthController extends Mage_Core_Controller_Front_Action
         if(!empty($data)){
             foreach($data as $id => $qty){
                 $is_in_stock = ($qty > 0) ? 1 : 0;
-                $cataloginventory_stock_status0 []= "({$id},{$qty},{$is_in_stock},{$stockId},{$websiteAdmin})";
-                $cataloginventory_stock_status1 []= "({$id},{$qty},{$is_in_stock},{$stockId},{$websiteFront})";
+                $cataloginventoryStockStatus0 []= "({$id},{$qty},{$is_in_stock},{$stockId},{$websiteAdmin})";
+                $cataloginventoryStockStatus1 []= "({$id},{$qty},{$is_in_stock},{$stockId},{$websiteFront})";
 
-                $cataloginventory_stock_item []= "({$id},{$qty},{$is_in_stock},{$stockId})";
+                $cataloginventoryStockItem []= "({$id},{$qty},{$is_in_stock},{$stockId})";
             }
         }
 
@@ -144,17 +142,17 @@ class Zolago_Catalog_AuthController extends Mage_Core_Controller_Front_Action
 //        }
 //
 //        foreach($skuAssoc as $id => $skuAssocItem){
-//            $cataloginventory_stock_status0 []= "({$id},{$qty},1,{$stockId},{$websiteAdmin})";
-//            $cataloginventory_stock_status1 []= "({$id},{$qty},1,{$stockId},{$websiteFront})";
+//            $cataloginventoryStockStatus0 []= "({$id},{$qty},1,{$stockId},{$websiteAdmin})";
+//            $cataloginventoryStockStatus1 []= "({$id},{$qty},1,{$stockId},{$websiteFront})";
 //
-//            $cataloginventory_stock_item []= "({$id},{$qty},1,{$stockId})";
+//            $cataloginventoryStockItem []= "({$id},{$qty},1,{$stockId})";
 //
 //            $i++;
 //        }
 
-        $update1 = array_fill(0,$load, implode(',',$cataloginventory_stock_item));
-        $updateA = array_fill(0,$load, implode(',',$cataloginventory_stock_status0));
-        $updateB = array_fill(0,$load, implode(',',$cataloginventory_stock_status1));
+        $update1 = array_fill(0,$load, implode(',',$cataloginventoryStockItem));
+        $updateA = array_fill(0,$load, implode(',',$cataloginventoryStockStatus0));
+        $updateB = array_fill(0,$load, implode(',',$cataloginventoryStockStatus1));
 
 
         $insert1 = implode(',',$update1);
@@ -162,12 +160,12 @@ class Zolago_Catalog_AuthController extends Mage_Core_Controller_Front_Action
         $insertB = implode(',',$updateB);
 
         Mage::log(microtime() . ' End prepare data ', 0, 'product_stock_update.log');
-        $zcSDItemModel = Mage::getResourceModel('zolagocatalog/stock_item');
+        $zcSDItemModel = Mage::getResourceModel('zolago_cataloginventory/stock_item');
 
         Mage::log(microtime() . ' Start cataloginventory_stock_item ', 0, 'product_stock_update.log');
         $zcSDItemModel->saveCatalogInventoryStockItem($insert1);
 
-        $zcSDStatusModel = Mage::getResourceModel('zolagocatalog/stock_status');
+        $zcSDStatusModel = Mage::getResourceModel('zolago_cataloginventory/stock_status');
         Mage::log(microtime() . ' Start cataloginventory_stock_status website_id=0 ', 0, 'product_stock_update.log');
         //website_id=0
         $zcSDStatusModel->saveCatalogInventoryStockStatus($insertA);
@@ -185,7 +183,6 @@ class Zolago_Catalog_AuthController extends Mage_Core_Controller_Front_Action
         Mage::log(microtime() . ' End ', 0, 'product_stock_update.log');
         echo 'Done';
     }
-
 
 }
 
