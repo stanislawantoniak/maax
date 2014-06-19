@@ -21,4 +21,16 @@
             </zolago_cataloginventory>
         </helpers>
     </global>
+    <adminhtml>
+        <events>
+            <catalog_product_save_after>
+                <observers>
+                    <zolago_cataloginventory_converter_update>
+                        <class>Zolago_CatalogInventory_Model_Observer</class>
+                        <method>productAddUpdate</method>
+                    </zolago_cataloginventory_converter_update>
+                </observers>
+            </catalog_product_save_after>
+        </events>
+    </adminhtml>
 </config>
