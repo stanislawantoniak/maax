@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Catalog>
-            <version>0.0.12</version>
+            <version>0.0.13</version>
         </Zolago_Catalog>
     </modules>
     <default>
@@ -36,7 +36,8 @@
 			<catalog>
 				<rewrite>
 					<product_action>Zolago_Catalog_Model_Product_Action</product_action>
-				</rewrite>
+                    <product>Zolago_Catalog_Model_Product</product>
+                </rewrite>
 			</catalog>
         </models>
         <helpers>
