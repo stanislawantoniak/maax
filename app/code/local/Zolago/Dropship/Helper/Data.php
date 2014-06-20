@@ -73,7 +73,7 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
             }
             $vId = $track->getShipment()->getUdropshipVendor();
             $v = Mage::helper('udropship')->getVendor($vId);
-			if ($cCode !== 'zolagodhl') {
+			if ($cCode !== Zolago_Dhl_Model_Carrier::CODE) {
 				if (!$v->getTrackApi($cCode) || !$v->getId()) {
 					continue;
 				}
@@ -93,7 +93,7 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
                 }
                 try {
                     if ($_track) Mage::helper('udropship/label')->beforeShipmentLabel($v, $_track);
-					if ($cCode !== 'zolagodhl') {
+					if ($cCode !== Zolago_Dhl_Model_Carrier::CODE) {
 						$result = $v->getTrackApi($cCode)->collectTracking($v, array_keys($trackIds));
 					} else {
 						$result = $this->collectDhlTracking($trackIds);

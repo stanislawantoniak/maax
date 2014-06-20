@@ -189,4 +189,8 @@ class Zolago_Dhl_Model_DhlTest extends ZolagoDb_TestCase {
         );
         $this->assertEquals($expected,$ret);
 	}
+	public function testRma() {
+	    $helper = Mage::helper('zolagorma');
+	    $helper->rmaTracking();
+	}
 }

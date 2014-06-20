@@ -59,26 +59,65 @@ class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
     }
 
     /**
+     * @param Zolago_Rma_Model_Resource_Rma_Track_Collection
+     */
+    public function collectTracking($tracks) {
+        $requests = array();
+        echo count($tracks);
+        foreach ($tracks as $track) {
+            echo 'track';
+            $code = $track->getCarrierCode();
+            echo $code;
+            if (!$code) {
+                continue;
+            }
+            $vId = $track->getShipment()->getUdropshipVendor();
+            echo $vId;
+            $v = Mage::helper('udropship')->getVendor($vId);
+            if ($cCode !== Zolago_Dhl_Model_Carrier::CODE) {
+                if (!$v->getTrackApi($cCode) || !$v->getId()) {
+                    continue;
+                }
+            }
+
+            if (!$vId) {
+                continue;
+            }
+
+            $requests[$cCode][$vId][$track->getNumber()][] = $track;
+        }
+        die();
+
+    }
+    /**
      * tracking rma
      */
     public function rmaTracking() {
         $statusFilter = array(Unirgy_Dropship_Model_Source::TRACK_STATUS_PENDING,Unirgy_Dropship_Model_Source::TRACK_STATUS_READY,Unirgy_Dropship_Model_Source::TRACK_STATUS_SHIPPED);
         $res  = Mage::getSingleton('core/resource');
         $conn = $res->getConnection('sales_read');
+
         $sIdsSel = $conn->select()->distinct()
                    ->from($res->getTableName('urma/rma_track'), array('parent_id'))
                    ->where('udropship_status in (?)', $statusFilter)
                    ->where('next_check<=?', now())
                    ->limit(50);
-        echo $sIdsSel;
+
         $sIds = $conn->fetchCol($sIdsSel);
-        print_R($sIds);
-        die();
+        if (!empty($sIds)) {
+            $tracks = Mage::getModel('urma/rma_track')->getCollection()
+                ->addAttributeToSelect('*')
+                ->addAttributeToFilter('udropship_status', array('in'=>$statusFilter))
+                ->addAttributeToFilter('parent_id', array('in'=>$sIds))
+                ->addAttributeToSort('parent_id')
+            ;
+            $this->collectTracking($tracks);
+        }
 
     }
-	
-	public function getItemConditionTitles(){
-		$collection = Mage::getModel('zolagorma/rma_reason')->getCollection();
-		return $collection->toOptionHash();
-	} 
-} 
+
+    public function getItemConditionTitles() {
+        $collection = Mage::getModel('zolagorma/rma_reason')->getCollection();
+        return $collection->toOptionHash();
+    }
+}
