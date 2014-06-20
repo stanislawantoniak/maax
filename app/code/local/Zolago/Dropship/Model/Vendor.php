@@ -1,5 +1,5 @@
 <?php
-<<<<<<< HEAD
+
 class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
 {
 		
@@ -41,12 +41,8 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
 		}
 		return $collection;
     }
-}
- 
-=======
-
-class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
-{
+	
+	
 	public function getMaxShippingDays($storeId=null)
     {
         $maxShippingDays = $this->getData('max_shipping_days');
@@ -81,6 +77,7 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
 		
 		return parent::_beforeSave();
 	}
-
 }
->>>>>>> c7f39f9c8c23b0f6d9dcaf38fd9e8a9fae45d348
+ 
+
+
