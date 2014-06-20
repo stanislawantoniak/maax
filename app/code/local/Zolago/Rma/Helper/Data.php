@@ -56,5 +56,10 @@ class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data{
         }
         return $out;
 
-    }    
+    }   
+	
+	public function getItemConditionTitles(){
+		$collection = Mage::getModel('zolagorma/rma_reason')->getCollection();
+		return $collection->toOptionHash();
+	} 
 } 
