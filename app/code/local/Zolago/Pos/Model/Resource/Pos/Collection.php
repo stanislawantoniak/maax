@@ -57,19 +57,4 @@ class Zolago_Pos_Model_Resource_Pos_Collection
 		return $this;
 	}
 
-    /**
-     * @return mixed
-     */
-    public function getMinPOSStock()
-    {
-        $readConnection = Mage::getSingleton('core/resource')
-            ->getConnection('core_read');
-        $value = $this
-            ->addFieldToFilter('external_id', array('neq' => NULL))
-            ->getSelect()
-            ->reset(Zend_Db_Select::COLUMNS)
-            ->columns(array('external_id', 'minimal_stock'));
-        $minPOSValues = $readConnection->fetchPairs($value);
-        return $minPOSValues;
-    }
 }

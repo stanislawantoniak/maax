@@ -14,8 +14,12 @@
 /downloader/
 /app/etc/solrbridge.conf
 /vendor/
-/.vagrant/
 /Vagrantfile
 /puphpet/
-/.project
 /errors/local.xml
+bin/
+/vendor/
+/.project
+/.vagrant/
+Vagrantfile
+composer.*

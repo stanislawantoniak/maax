@@ -41,7 +41,7 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 		
 		// Max shipment date
 		if($date=$this->getFilterValueByIndex("max_shipment_date")){
-			$this->_applayDateFilter($collection, "main_table.max_shipment_date", $date);
+			$this->_applayDateFilter($collection, "main_table.max_shipping_date", $date);
 		}
 		
 		// Max shipment date
@@ -78,7 +78,7 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 		if(!$this->hasData("allowed_pos_ids")){
 			$this->setData("allowed_pos_ids", $this->getParentBlock()->getPosCollection()->getAllIds());
 		}
-		return $this->getData("allowed_pos_ids") ? $this->hasData("allowed_pos_ids") : array();
+		return $this->getData("allowed_pos_ids") ? $this->getData("allowed_pos_ids") : array();
 	}
 	
 	protected function _applayDateFilter(Zolago_Po_Model_Resource_Po_Collection $collection, $index, $date) {
@@ -120,8 +120,9 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 			"filter"	=>	false,
 			"width"		=>	"100px"
 		));
-		$this->addColumn("max_order_date", array(
+		$this->addColumn("max_shipping_date", array(
 			"type"		=>	"date",
+			'index'     =>  "max_shipping_date",
 			"align"		=>  "center",
 			"header"	=>	Mage::helper("zolagopo")->__("Max ship. date"),
 			"filter"	=>	false,

@@ -231,6 +231,21 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
         return $this->_sendMessage('createShipments', $message);
     }
     /**
+     * @param $postCode
+     * @param $pickupDate
+     *
+     * @return array
+     */
+    public function getPostalCodeServices($postCode, $pickupDate, $country = 'PL')
+    {
+        $message = new StdClass();
+        $message->authData = $this->_auth;
+        $message->postCode = $postCode;
+        $message->pickupDate = $pickupDate;
+        $return = $this->_sendMessage('getPostalCodeServices', $message);
+        return $return;
+    }
+    /**
      * booking courier
      */
     public function bookCourier($date,$timeFrom,$timeTo,$additionalInfo = null) {

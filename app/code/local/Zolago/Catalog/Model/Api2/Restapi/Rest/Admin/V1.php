@@ -47,9 +47,9 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
             $sku = $merchant . '-' . $skuV;
 
-            $productId = Zolago_Catalog_Helper_Data::getSkuAssocId($sku);
+            $productId = Mage::getResourceModel('catalog/product')
+                ->getIdBysku($sku);
             if ($productId) {
-
                 $prices = isset($data['data']) ? $data['data'] : array();
                 if (!empty($prices)) {
 
