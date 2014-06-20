@@ -5,4 +5,10 @@ class Zolago_Rma_Model_Resource_Rma_Reason_Collection extends Mage_Core_Model_Re
         parent::_construct();
         $this->_init('zolagorma/rma_reason');
     }
+	
+	public function toOptionHash(){
+		
+		return $this->_toOptionHash('return_reason_id', 'name');
+		
+	}
 }
