@@ -288,7 +288,6 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 	   return $this;
    }
    
-   
    public function clearOwnShippingAddress(){
 	   if($this->isShippingSameAsOrder()){
 		   return $this;
@@ -314,59 +313,12 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
    }
    
    /**
-    * @todo move to reseource
     * @param string $type
     * @param array $exclude
     */
    
    protected function _cleanAddresses($type, $exclude=array()) {
-	    // Add this shippign id
-		$exclude[] = $this->getShippingAddressId();
-	    $addressCollection = Mage::getResourceModel("sales/order_address_collection");
-		/* @var $addressCollection Mage_Sales_Model_Resource_Order_Address_Collection */
-		$addressCollection->addFieldToFilter("parent_id", $this->getOrder()->getId());
-		$addressCollection->addFieldToFilter("entity_id", array("nin"=>$exclude));
-		$addressCollection->addFieldToFilter("address_type", $type);
-		
-		
-		$select = $addressCollection->getSelect();
-		
-		if($type==self::TYPE_POSHIPPING){
-
-			$subSelect = $select->getAdapter()->select();
-			$subSelect->from( 
-					array("shipment"=>$this->getResource()->getTable("sales/shipment")),
-					array(new Zend_Db_Expr("COUNT(shipment.entity_id)"))
-			);
-			$subSelect->where("shipment.shipping_address_id=main_table.entity_id");
-
-			$select->where("? < 1", $subSelect);
-		}
-		
-		// Skip used addresses
-
-		$subSelect = $select->getAdapter()->select();
-		$subSelect->from( 
-				array("self"=>$this->getResource()->getMainTable()),
-				array(new Zend_Db_Expr("COUNT(self.entity_id)"))
-		);
-		$subSelect->where("self.shipping_address_id=main_table.entity_id OR self.billing_address_id=main_table.entity_id");
-
-		$select->where("? < 1", $subSelect);
-		
-		// Skip RMA used addresse
-		$subSelect = $select->getAdapter()->select();
-		$subSelect->from( 
-				array("rma"=>$this->getResource()->getTable("urma/rma")),
-				array(new Zend_Db_Expr("COUNT(rma.entity_id)"))
-		);
-		$subSelect->where("rma.shipping_address_id=main_table.entity_id OR rma.billing_address_id=main_table.entity_id");
-
-		$select->where("? < 1", $subSelect);
-		
-		foreach($addressCollection as $toDelete){
-			$toDelete->delete();
-		}
+	   Mage::helper('zolagopo')->clearAddresses($this, $type, $exclude);
    }
    
    public function needInvoice() {

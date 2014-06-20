@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<config>
+    <sections>
+        <zolagocatalog translate="label" module="zolagocatalog">
+            <label>Converter update settings</label>
+            <tab>service</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>301</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>0</show_in_website>
+            <show_in_store>0</show_in_store>
+            <groups>
+                <config translate="label">
+                    <label>General Settings</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>1</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <po_open_order translate="label">
+                            <label>PO open orders</label>
+                            <comment><![CDATA[PO open orders]]></comment>
+                            <frontend_type>multiselect</frontend_type>
+                            <sort_order>0</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <can_be_empty>0</can_be_empty>
+                            <source_model>zolagocatalog/system_config_source_view</source_model>
+                        </po_open_order>
+                    </fields>
+                </config>
+            </groups>
+        </zolagocatalog>
+    </sections>
+</config>

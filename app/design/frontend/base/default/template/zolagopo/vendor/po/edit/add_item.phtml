@@ -88,15 +88,25 @@ jQuery(function($){
 	});
 	
 	product.select2({
-		data:				<?php echo $this->getProductCollectionJson();?>,
+		ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
+			url: "<?php echo $this->getLoadCollectionUrl();?>",
+			dataType: 'json',
+			quietMillis: 300,
+			data: function (term, page) {
+				var value = jQuery("#select2-drop .select2-input").val();
+				return {
+					q: (value && value.length>0) ? value : "" // search term
+				};
+			},
+			results: function (data, page) {
+				return {results: data};
+			}
+		},
+		minimumInputLength: 1,
 		id:					"entity_id",
 		text:				"name",
 		formatSelection:	formatSelection,
-		formatResult:		formatResult,
-		matcher: function(term, text, opts) { 
-			return (''+opts.name).toUpperCase().indexOf((''+term).toUpperCase()) >= 0 || 
-				   (''+opts[skuCode]).toUpperCase().indexOf((''+term).toUpperCase()) >= 0
-		}
+		formatResult:		formatResult
 	});
 	
 	product.change(function(){
@@ -148,7 +158,8 @@ jQuery(function($){
 
 	
 	$("#addItemModal").on("show.bs.modal", function(){
-		product.val("").change();
+		product.select2("val", "");
+		product.change();
 	});
 	
 	

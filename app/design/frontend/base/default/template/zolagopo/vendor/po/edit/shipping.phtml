@@ -6,7 +6,7 @@
 <!-- Modal add letter-->
 <div class="modal fade" id="shippingModal">
 	<div class="modal-dialog">
-		<form id="shipping-form" action="<?php echo $this->getPoUrl("saveShipping", array("mode"=>$this->getMode()));?>" 
+		<form id="shipping-form" action="<?php echo $this->getFormUrl();?>" 
 			  class="form-horizontal row-border" method="post">
 			<input type="hidden" name="pos" value="<?php echo $_po->getDefaultPosId();?>"/>
 			<input type="hidden" name="partial_availability" value=""/>
@@ -23,9 +23,9 @@
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					<h4 class="modal-title">
 						<?php if($this->canUseCarrier()):?>
-						<?php echo $_hlp->__("Print shipping letter");?>
+						<?php echo $_hlp->__("Print shipping label");?>
 						<?php else:?>
-						<?php echo $_hlp->__("Add shipping letter");?>
+						<?php echo $_hlp->__("Add shipping label");?>
 						<?php endif;?>
 					</h4>
 					<small class="text-small"><?php echo $_hlp->__("Insert carrier name and tracking number or enter data for label printing");?></small>

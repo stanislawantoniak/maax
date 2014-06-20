@@ -39,7 +39,7 @@
 			
 			<?php if($_statusModel->isShippingAvailable($_po)):?>
 				<?php if($this->canUseCarrier()):?>
-				<button class="btn btn-primary" data-toggle="modal" href="#shippingModal"><?php echo $_hlp->__("Print shipping letter");?></button>
+				<button class="btn btn-primary" data-toggle="modal" href="#shippingModal"><?php echo $_hlp->__("Print shipping label");?></button>
 				<?php else:?>
 				<button class="btn btn-primary" data-toggle="modal" href="#shippingModal"><?php echo $_hlp->__("Add shipping label");?></button>
 				<?php endif;?>
@@ -53,7 +53,7 @@
 				<?php  /* Display as active widget */ ?>
 				<a class="btn btn-notification btn-primary" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("setConfirmStock");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("Are you sure to confirm the items have been reserved?");?>" data-modal="true" href="#">
 					<i class="icon-barcode"></i>
-					<?php echo $_hlp->__("Check stock");?>
+					<?php echo $_hlp->__("I confirm the items have been reserved");?>
 				</a> 
 				<?php else: ?>
 				<?php  /* Display as label */ ?>

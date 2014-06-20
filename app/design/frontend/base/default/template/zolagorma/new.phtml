@@ -1,47 +1,347 @@
-<?php $_helper = Mage::helper("zolagorma");?>
-<?php 
-if ($items = $this->getItemList()) {
-?>
-<form method="post" name="rma" action="<?php echo $this->getUrl('*/*/saveRma')?>">
-<input type="hidden" name="po_id" value="<?php echo $this->getPo()->getId();?>">
-<table class="data-table">
-<tbody>
-<?php
-    foreach ($items as $item_pack) {        
-        foreach ($item_pack as $key => $item) {
-            ?>
-    <tr>
-        <td>
-            <input type="checkbox" name="rma[items_single][<?php echo $item['entityId']?>][<?php echo $key ?>]" value="true"/>
-        </td>
-        <td>
-            <?php
-                echo $item['name'];
-            ?>
-        </td>
-        <td>
-            Powód zwrotu:
-                <select name="rma[items_condition_single][<?php echo $item['entityId'].']['.$key.']'?>">
-                    <option value=""><?php echo $_helper->__('Select a reason..')?></option>
-                    <?php
-                        echo $this->getReturnRenderer();
-                    ?>
-                </select>
-                
-        </td>
-    </tr>
-            
-            <?php
-        }
-    }
-?>
-</tbody>
-</table>
-Dodatkowe informacje dotyczące zgłoszenia<br/>
-<textarea name="rma[comment_text]">
-</textarea>
-<button type="submit">Dalej</button>
-</form>
-<?php
-}
-?>
+<?php $_helper = Mage::helper("zolagorma"); ?>
+<?php $_po = $this->getPo(); ?>
+<?php $_rma = $this->getRma();?>
+<?php $_shippingAddress = $_po->getShippingAddress(); ?>
+<?php $_itemsSingle = $_rma->getItemsSingle(); ?>
+<?php $_itemsConditionSingle = $_rma->getItemsConditionSingle(); ?>
+<?php if ($items = $this->getItemList()): ?>
+
+	<h4><?php echo $_helper->__("Create new RMA"); ?></h4>
+	<form method="post" id="new-rma" action="<?php echo $this->getUrl('*/*/saveRma') ?>">
+		<input type="hidden" name="po_id" value="<?php echo $this->getPo()->getId(); ?>">
+		<div class="steps step-1" id="step-1" style="display: none;">
+			<div class="fieldset">
+				<h2 class="legend"><?php echo $_helper->__("Choose RMA items"); ?></h2>
+	            <ul class="form-list">
+					<li class="wide">
+						<div class="input-box">
+							<table class="data-table" style="width: 100%;">
+								<colgroup>
+									<col width="30px"/>
+									<col/>
+									<col width="150px"/>
+								</colgroup>
+								<thead>
+									<tr>
+										<th>&nbsp;<label class="required"><em>*</em></label></th>
+										<th><?php echo $_helper->__("Product"); ?></th>
+										<th><label class="required"><?php echo $_helper->__("Reason"); ?><em>*</em></label></th>
+									</tr>
+								</thead>
+								<tbody>
+									<?php
+									foreach ($items as $item_pack):
+										foreach ($item_pack as $key => $item):
+											?>
+											<tr data-name="<?php echo $this->escapeHtml($item['name']); ?>">
+												<td style="vertical-align: middle;">
+													<input <?php if(isset($_itemsSingle[$item['entityId']][$key])):?>checked="checked"<?php endif;?> type="checkbox" class="rma-checkbox" name="rma[items_single][<?php echo $item['entityId'] ?>][<?php echo $key ?>]" value="true"/>
+												</td>
+												<td>
+													<?php echo $this->escapeHtml($item['name']); ?>
+												</td>
+												<td style="vertical-align: middle;">
+													<div class="condition-wrapper" style="display: none;">
+														<select style="width: auto;" class="required-entry" id="condition-<?php echo $item['entityId']; ?>" name="rma[items_condition_single][<?php echo $item['entityId'] . '][' . $key . ']' ?>">
+															<option value=""><?php echo $_helper->__('Select a reason...') ?></option>
+															<?php foreach($_helper->getItemConditionTitles() as $_key=>$_label):?>
+															<option <?php if(isset($_itemsConditionSingle[$item['entityId']][$key]) && $_itemsConditionSingle[$item['entityId']][$key]==$_key):?>selected="selected"<?php endif;?> value="<?php echo $this->escapeHtml($_key);?>"><?php echo $this->escapeHtml($_label); ?></option>
+															<?php endforeach;?>
+														</select>
+													</div>
+												</td>
+											</tr>
+											<?php
+										endforeach;
+									endforeach;
+									?>
+								</tbody>
+							</table>
+							<input type="hidden" name="rma[has_items]" value="" class="required-entry" id="rma-has-items"/>
+						</div>
+					</li>
+				</ul>
+			</div>
+
+			<div class="fieldset">
+				<h2 class="legend"><?php echo $_helper->__("Additional return information"); ?></h2>
+	            <ul class="form-list">
+					<li class="wide">
+						<label class="required" for="carrier-date"><?php echo $_helper->__("Comment"); ?> <em>*</em></label>
+						<div class="input-box">
+							<textarea name="rma[comment_text]" id="comment-text" class="required-entry"><?php echo $this->escapeHtml($_rma->getCommentText());?></textarea>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div>
+				<button class="button" type="button" id="step-1-submit">
+					<span>
+						<span><?php echo $_helper->__("Next"); ?></span>
+					</span> 
+				</button>
+			</div>
+		</div>
+		<div class="steps step-2" id="step-2" style="display: none;">
+			<input type="hidden" name="rma[shipping_address_id]" value="<?php $_shippingAddress->getId(); ?>"/>
+			<input type="hidden" name="rma[override_address]" value="0"/>
+			
+			<div class="fieldset">
+				<h2 class="legend"><?php echo $_helper->__("Confirm or change pickup address for the courier"); ?></h2>
+	            <ul class="form-list">
+					<li class="wide">
+						<address  id="shipping-address" class="left">
+							<?php echo Mage::helper('udropship')->formatCustomerAddress($_shippingAddress, 'html', $_po->getVendor()); ?>
+						</address>
+						<a href="#" class="right"><?php echo $_helper->__("Change address"); ?> [dev]</a>
+						<div class="clearer"></div>
+					</li>
+					
+				</ul>
+			</div>
+			<div class="fieldset">
+				<h2 class="legend"><?php echo $_helper->__("Schedule pickup date that is convenient for you"); ?></h2>
+	            <ul class="form-list">
+					<li class="wide">
+						<label class="required" for="carrier-date"><?php echo $_helper->__("Choose the day"); ?> <em>*</em></label>
+						<div class="input-box">
+							<input type="text" value="<?php echo $_rma->getCarrierDate();?>" name="rma[carrier_date]" value="<?php echo $this->formatDate();?>" id="carrier-date" title="<?php echo $_helper->__("Choose the day"); ?>" value="" class="input-text required-entry ">
+						</div>
+					</li>
+					<li class="fields">
+						<div class="field">
+							<label class="required" for="carrier-time-from"><?php echo $_helper->__("Choose time-from of the day"); ?> <em>*</em></label>
+							<div class="input-box">
+								<select class="required-entry" name="rma[carrier_time_from]" id="carrier-time-from" title="<?php echo $_helper->__("Choose time-from of the day"); ?>">
+									<option value=""></option>
+									<?php foreach($this->getHours() as $value=>$label):?>
+									<option <?php if($_rma->getCarrierTimeFrom()==$label):?>selected="selected"<?php endif;?> value="<?php echo $label;?>"><?php echo $label;?></option>
+									<?php endforeach;?>
+								</select>
+							</div>
+						</div>
+						<div class="field">
+							<label class="required" for="carrier-time-to"><?php echo $_helper->__("Choose time-to of the day"); ?> <em>*</em></label>
+							<div class="input-box">
+								<select class="required-entry" name="rma[carrier_time_to]" id="carrier-time-to" title="<?php echo $_helper->__("Choose time-to of the day"); ?>">
+									<option value=""></option>
+									<?php foreach($this->getHours() as $value=>$label):?>
+									<option <?php if($_rma->getCarrierTimeTo()==$label):?>selected="selected"<?php endif;?> value="<?php echo $label;?>"><?php echo $label;?></option>
+									<?php endforeach;?>
+								</select>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div class="fieldset">
+				<h2 class="legend"><?php echo $_helper->__("Enter your account number for your order refund"); ?></h2>
+	            <ul class="form-list">
+					<li class="wide">
+						<label class="required" for="customer-account"><?php echo $_helper->__("Bank account"); ?></label>
+						<div class="input-box">
+							<input type="text" value="<?php echo $this->escapeHtml($_rma->getCustomerAccount());?>" name="rma[customer_account]" value="" id="customer-account" title="<?php echo $_helper->__("Bank account"); ?>" value="" class="input-text">
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div>
+				<button type="button"  class="button" id="step-1-back"><span><span><?php echo $_helper->__("Prev"); ?></span></span></button>
+				<button type="button" class="button back-button"  id="step-2-submit"><span><span><?php echo $_helper->__("Next"); ?></span></span></button>
+			</div>
+		</div>
+		
+		<div class="steps step-3" id="step-3" style="display: none;">
+			<h5><?php echo $_helper->__("Check again inserted data. Note carrier pickup date."); ?></h5>
+			<div class="fieldset">
+				<h2 class="legend"><?php echo $_helper->__("RMA Items"); ?></h2>
+	            <ul class="form-list">
+					<li class="wide">
+						<table class="data-table">
+							<thead>
+								<tr>
+									<th><?php echo $_helper->__("Lp."); ?></th>
+									<th><?php echo $_helper->__("Product"); ?></th>
+									<th><?php echo $_helper->__("Reason"); ?></th>
+								</tr>
+							</thead>
+							<tbody id="review-items"></tbody>
+						</table>
+						<p id="review-comment-text"></p>
+					</li>
+				</ul>
+			</div>
+			<div class="fieldset">
+				<h2 class="legend"><?php echo $_helper->__("Your address"); ?></h2>
+	            <ul class="form-list">
+					<li class="wide">
+						<address id="review-shipping-address"></address>
+					</li>
+				</ul>
+			</div>
+			<div class="fieldset">
+				<h2 class="legend"><?php echo $_helper->__("Pickup date"); ?></h2>
+	            <ul class="form-list">
+					<li class="wide" id="pickup-date-review">
+					</li>
+				</ul>
+			</div>
+			<div class="fieldset">
+				<h2 class="legend"><?php echo $_helper->__("Bank account for return"); ?></h2>
+	            <ul class="form-list">
+					<li class="wide" id="customer-account-review">
+					</li>
+				</ul>
+			</div>
+			<div>
+				<button type="button"  class="button" id="step-2-back"><span><span><?php echo $_helper->__("Prev"); ?></span></span></button>
+				<button type="submit" class="button"  id="step-3-submit"><span><span><?php echo $_helper->__("Place RMA"); ?></span></span></button>
+			</div>
+		</div>
+	</form>
+	<script type="text/javascript">
+		(function() {
+			var newRma = $("new-rma");
+			var form = new VarienForm("new-rma");
+			var oldOldSubmit = form.submit;
+			var step1 = $("step-1");
+			var step2 = $("step-2");
+			var step3 = $("step-3");
+			var steps = [step1, step2, step3];
+			var currentStep = 1;
+
+			var showStep = function(step) {
+				steps.each(function(el) {
+					el.style.display = 'none';
+				});
+				currentStep = step;
+				collectData();
+				steps[currentStep - 1].style.display = 'block';
+			}
+			
+			var collectData = function(){
+				// Rma items
+				var items = [];
+				newRma.select(".rma-checkbox").each(function(item) {
+					if ($(item).checked) {
+						var tr = $(item).up('tr');
+						items.push({
+							name: tr.getAttribute('data-name'),
+							reasonText: tr.select('option[selected]')[0].innerHTML
+						});
+					}
+				});
+				
+				var reviewItems = $("review-items");
+				
+				reviewItems.innerHTML = "";
+				var lp = 1;
+				items.each(function(item){
+					reviewItems.insert("<tr><td>"+(lp++)+"</td><td>"+item.name+"</td><td>"+item.reasonText+"</td></tr>");
+				})
+				
+				// Comment 
+				var comment = $("comment-text");
+				var commentReview = $("review-comment-text");
+				
+				commentReview.innerHTML = "";
+				if(comment.value){
+					commentReview.innerHTML = "<strong><?php echo $_helper->__("Additional information");?>:</strong> " +
+						comment.value;
+				}
+				
+				// Address
+				$("review-shipping-address").innerHTML = $("shipping-address").innerHTML;
+				
+				// Pickup date
+				var dateText = "<?php echo $_helper->__("Carrier");?>",
+					carrierDate = $("carrier-date");
+			
+					dateText += " " + escape(carrierDate.value) + "<br/>";
+					dateText += "<?php echo $_helper->__("Between");?>";
+					dateText += " " + $F('carrier-time-from');
+					dateText += " <?php echo $_helper->__("and");?>"
+					dateText += " " + $F('carrier-time-to');
+					
+				$("pickup-date-review").innerHTML = dateText;
+				
+				// Account
+				$("customer-account-review").innerHTML = $F("customer-account") ? 
+					$F("customer-account") : "<?php echo $_helper->__('N/A');?>";
+			}
+
+			var checkHandler = function() {
+				var el = $(this);
+				el.up("tr").down(".condition-wrapper").style.display = el.checked ? "block" : "none";
+				validateItems();
+			}
+
+			// Validate conditions
+			var validateItems = function(e) {
+				var checked = false;
+				var hasItems = $("rma-has-items");
+				newRma.select(".rma-checkbox").each(function(item) {
+					if ($(item).checked) {
+						checked = true;
+					}
+				});
+
+				hasItems.value = "";
+				if (checked) {
+					hasItems.value = 1;
+				}
+			};
+
+			// Register click
+			newRma.select(".rma-checkbox").each(function(item) {
+				$(item).observe('click', checkHandler);
+			});
+
+			$("step-1-submit").observe("click", function() {
+				if (form.validator.validate()) {
+					showStep(2);
+				}
+			});
+
+
+			$("step-2-submit").observe("click", function() {
+				if (form.validator.validate()) {
+					showStep(3);
+				}
+			});
+			
+			$("step-1-back").observe("click", function() {
+				showStep(1)
+			})
+			
+			$("step-2-back").observe("click", function() {
+				showStep(2)
+			})
+
+			// Calendar setup
+			Calendar.setup({
+				inputField : 'carrier-date',
+				ifFormat : '%d-%m-%Y',
+				button : false,
+				align : 'Bl',
+				singleClick : true
+			});
+
+			// trigger chaneg
+			newRma.select(".rma-checkbox").each(function(item) {
+				checkHandler.bind(item)();
+			});
+			
+			// check submit possible
+			newRma.observe('submit', function(e){
+				if(currentStep!=steps.length){
+					Event.stop(e);
+				}
+			})
+			
+			// Check on beginig
+			validateItems();
+			showStep(1);
+		})();
+	</script>
+<?php endif; ?>

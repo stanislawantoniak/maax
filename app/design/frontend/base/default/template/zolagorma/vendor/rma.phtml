@@ -1,18 +1,97 @@
-<?php $_helper = Mage::helper("zolagopos");?>
+<?php $_helper = Mage::helper("zolagorma");?>
 <div class="container">
 	<!--=== Page Header ===-->
 	<div class="page-heading row">
 		<div class="col-lg-6">
-			<h3><?php echo $_helper->__("POS List");?></h3>
-			<span class="tageline"><?php echo Mage::helper("zolagopo")->__("Browse your POS");?></span>
+			<h3><?php echo $_helper->__("RMA List");?></h3>
+			<span class="tageline"><?php echo $_helper->__("Browse your RMA");?></span>
 		</div>
 		<div class="main-actions align-right col-md-6">
-			<a class="btn btn-success" href="<?php echo Mage::getUrl('udropship/pos/new');?>">
-					<i class="icon-plus"></i>
-					<?php echo $_helper->__("Create POS");?>
-				</a> 
+			
 		</div>
 	</div>
+	
+	<!--=== Page Content ===-->
+	<div class="row">
+		<!--=== Example Box ===-->
+		<div class="col-md-12">
+			<div class="widget box">
+				<div class="widget-header">
+					<h4><i class="icon-filter"></i> <?php echo $_helper->__("Filters");?></h4>
+					<div class="toolbar no-padding"> <div class="btn-group"> <span class="btn btn-xs widget-collapse"><i class="icon-angle-up"></i></span> </div> </div>
+				</div>
+				<div class="widget-content fiters">
+					<form id="filter_form" class="form-horizontal row-border">
+						<div class="form-group">
+							<div class="col-md-4">
+								<div class="row">
+									<label for="filter_rma_date_from" class="col-md-4 control-label">
+										<?php echo $_helper->__("RMA date");?></label>
+									<div class="col-md-4">
+										<input placeholder="<?php echo $this->__("From");?>" id="filter_rma_date_from" name="created_at[from]" value="<?php echo $this->getCreatedAt('from');?>" type="text" class="form-control datepicker"/>
+									</div>
+									<div class="col-md-4">
+										<input placeholder="<?php echo $this->__("To");?>" id="filter_rma_date_to" name="created_at[to]" value="<?php echo $this->getCreatedAt('to');?>" type="text" class="form-control datepicker"/>
+									</div>
+								</div>
+								<div class="row">
+									<label for="filter_rma_max_data_over" class="col-md-4 control-label">
+										<?php echo $_helper->__("RMA max date");?> [dev]</label>
+									<div class="col-md-8">
+										<input type="hidden" name="max_data_exceed" value="0"/>
+										<label for="filter_rma_max_data_exceed" class="checkbox">
+											<input id="filter_rma_max_data_exceed" name="max_date_exceed[]" <?php if(null!==$this->getMaxDateExceed(0)):?>checked="checked"<?php endif;?> value="0" type="checkbox" class="form-control uniform"/>
+											<?php echo $_helper->__("Not Exceed");?>
+										</label>
+										<label for="filter_rma_max_data_exceed_not" class="checkbox">
+											<input id="filter_rma_max_data_exceed_not" name="max_date_exceed[]" <?php if(null!==$this->getMaxDateExceed(1)):?>checked="checked"<?php endif;?> value="1" type="checkbox" class="form-control uniform"/>
+											<?php echo $_helper->__("Exceed");?>
+										</label>
+									</div>
+									
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="row">
+									<label class="col-md-4 control-label"><?php echo $_helper->__("RMA Reason");?></label>
+									<div class="col-md-8">
+										<input type="hidden" name="rma_item_condition" value="0"/>
+										<?php foreach($this->getConditionOptions() as $option):?>
+											<label class="checkbox">
+												<input type="checkbox" name="rma_item_condition[]"<?php if(isset($option['checked'])):?> checked="checked"<?php endif;?> class="filter_po_status uniform" id="filter_po_status_<?php echo $this->escapeHtml($option['value']);?>" value="<?php echo $this->escapeHtml($option['value']);?>"/>
+												<?php echo $this->escapeHtml($option['label']);?>
+											</label>
+										<?php endforeach;?>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="row">
+									<label class="col-md-4 control-label"><?php echo $_helper->__("RMA status");?></label>
+									<div class="col-md-8">
+										<input type="hidden" name="rma_status" value="0"/>
+										<?php foreach($this->getStatusOptions() as $option):?>
+											<label class="checkbox">
+												<input type="checkbox" name="rma_status[]"<?php if(isset($option['checked'])):?> checked="checked"<?php endif;?> class="filter_po_status uniform" id="filter_po_status_<?php echo $this->escapeHtml($option['value']);?>" value="<?php echo $this->escapeHtml($option['value']);?>"/>
+												<?php echo $this->escapeHtml($option['label']);?>
+											</label>
+										<?php endforeach;?>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="form-actions">
+							<button type="submit" id="filter_submit" class="btn btn-primary pull-right"><span><span><?php echo $_helper->__("Apply filter ");?></span></span></button>
+							<button type="reset" id="filter_reset" class="btn pull-right"><span><span><?php echo $_helper->__("Reset");?></span></span></button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div> <!-- /.col-md-12 -->
+		<!-- /Example Box -->
+	</div> <!-- /.row -->
+	<!-- /Page Content -->
+	
 </div>
 
 <div class="container z-grid">
@@ -25,7 +104,51 @@
 <script type="text/javascript">
 (function(){
 	var gridObj = <?php echo $this->getGridJsObjectName();?>;
+	var topForm = $("filter_form");
 	// create integrator
 	new Zolago.gridIntegrator(gridObj);
-})();;
+	
+	gridObj.doFilter = (function(){
+        var filters = $$('#'+this.containerId+' .filter input', '#'+this.containerId+' .filter select');
+        var filters2 = $$('#'+topForm.id+' input', '#'+topForm.id+' select');
+        var elements = [],
+			elements2 = [];
+        for(var i in filters){
+            if(filters[i].value && filters[i].value.length) elements.push(filters[i]);
+        }
+        for(var i in filters2){
+            if(filters2[i].value && filters2[i].value.length) elements2.push(filters2[i]);
+        }
+		
+		var serialized = Form.serializeElements(elements);
+		var serialized2 = Form.serializeElements(elements2);
+		var params = []
+		
+		if(serialized){
+			params.push(serialized);
+		}
+		if(serialized2){
+			params.push(serialized2);
+		}
+		
+        if (!this.doFilterCallback || (this.doFilterCallback && this.doFilterCallback())) {
+            this.reload(this.addVarToUrl(this.filterVar, encode_base64(params.join("&"))));
+        }
+    }).bind(gridObj);
+	
+	
+	topForm.observe("submit", function(e){
+		gridObj.doFilter();
+		e.preventDefault();
+	});
+	topForm.observe("reset", function(e){
+		gridObj.resetFilter();
+		e.preventDefault();
+	});
+
+})();
+// Do pickers
+jQuery(function($){
+	$( ".datepicker" ).datepicker();
+});
 </script>

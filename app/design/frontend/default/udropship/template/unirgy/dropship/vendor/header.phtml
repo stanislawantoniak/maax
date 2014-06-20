@@ -17,7 +17,7 @@
 ?>
 <?php
 $_allowedLocale = array(
-	"pl_PL"=>$this->__("PL"), 
+	"pl_PL"=>$this->__("PL"),
 	"en_US"=>$this->__("EN")
 );
 $_session = Mage::getSingleton('udropship/session');
@@ -48,7 +48,7 @@ $_isTierShip = $_session->getVendor()->getAllowTiershipModify();
 					<?php echo $this->htmlEscape($this->__('Logged in as %s', $_session->getVendor()->getVendorName())) ?>
 				</strong>
 			<?php endif;?>
-		
+
 			<span class="pipe">|</span>
 			<a href="<?php echo $this->getUrl('udropship/vendor/logout')?>"><?php echo $this->__('Log out')?></a>
 			<?php else: ?>
@@ -74,7 +74,7 @@ $_isTierShip = $_session->getVendor()->getAllowTiershipModify();
 		<?php else:?>
 				<li class="first <?php if ($_active=='dashboard'): ?>active<?php endif ?>"><a href="<?php echo Mage::getUrl("udropship/vendor/login");?>"><?php echo $this->__("Login"); ?></a></li>
 		<?php endif;?>
-		
+
 <?php if ($_isUrmaActive && $_session->isAllowed("urma/vendor") && $_session->isLoggedIn()): ?>
     <li <?php if ($_active=='urmas'): ?>class="active"<?php endif ?>><a href="<?php echo $this->getUrl('urma/vendor/') ?>"><?php echo $this->__('Returns')?></a></li>
 <?php endif ?>

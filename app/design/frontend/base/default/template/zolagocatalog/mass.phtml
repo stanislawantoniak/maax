@@ -18,28 +18,29 @@
                <div class="widget-content fiters">
                    <form class="form-horizontal">
                        <div class="form-group">
-                           <div class="col-md-6">
-                               <?php if ($this->getStoreSwitcherHtml()): ?>
+
+                           <?php if ($this->getStoreSwitcherHtml()): ?>
+                               <div class="col-md-6">
                                    <div class="row">
                                        <?php echo $this->getChildHtml("attribute_set_switcher"); ?>
                                    </div>
-                                   <div class="row next-row">
+                               </div>
+                               <div class="col-md-6">
+                                   <div class="row">
                                        <?php echo $this->getStoreSwitcherHtml(); ?>
                                    </div>
-                               <?php else: ?>
+                               </div>
+                           <?php else: ?>
+                               <div class="col-md-6">
                                    <div class="row">
                                        <?php echo $this->getChildHtml("attribute_set_switcher"); ?>
                                    </div>
-                               <?php endif; ?>
-                           </div>
-                           <div class="col-md-6">
-                               <?php echo $this->getChildHtml("static_filter"); ?>
-                           </div>
+                               </div>
+                           <?php endif; ?>
                        </div>
-                       <div class="form-actions">
-                           <button type="button" title="<?php echo $this->__('Reset Filter') ?>" class="btn btn-primary pull-right" onclick="resetStaticFilter(this);"><span><span><?php echo $this->__('Reset Filter') ?></span></span></button>
-                           <button type="button" title="<?php echo $this->__('Search') ?>" class="btn btn-primary pull-right" onclick="changeStaticFilter(this);"><span><span><?php echo $this->__('Search') ?></span></span></button>
-                       </div>
+
+
+                       <?php echo $this->getChildHtml("static_filter"); ?>
                    </form>
                </div>
            </div>

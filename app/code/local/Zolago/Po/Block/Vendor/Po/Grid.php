@@ -238,7 +238,7 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
         ));
 		
         $this->getMassactionBlock()->addItem('confirm_stock', array(
-             'label'=> Mage::helper('zolagopo')->__('Check stock'),
+             'label'=> Mage::helper('zolagopo')->__('Confirm reservation'),
              'url'  => $this->getUrl('*/*/massConfirmStock')
         ));
 		

@@ -3,14 +3,30 @@
  * resource model for product queue
  */
 class Zolago_Catalog_Model_Resource_Queue_Configurable extends Zolago_Common_Model_Resource_Queue_Abstract {
+    /**
+     * @var int
+     */
     protected $_buffer = 500;
+    /**
+     * @var array
+     */
     protected $_dataToSave = array();
 
+
+    /**
+     * Init main table
+     */
     public  function _construct() {
 
         $this->_init('zolagocatalog/queue_configurable','queue_id');
     }
 
+    /**
+     * Add item to queue
+     * @param $ids
+     *
+     * @return mixed
+     */
     public function addToQueue($ids)
     {
         if (!empty($ids)) {
@@ -23,6 +39,11 @@ class Zolago_Catalog_Model_Resource_Queue_Configurable extends Zolago_Common_Mod
         return $ids;
     }
 
+    /**
+     * @param $id
+     *
+     * @return mixed
+     */
     public function addToQueueProduct($id)
     {
         if (!empty($id)) {
@@ -34,11 +55,18 @@ class Zolago_Catalog_Model_Resource_Queue_Configurable extends Zolago_Common_Mod
         return $id;
     }
 
+    /**
+     * Reset data after save
+     */
     protected function _resetData()
     {
         $this->_dataToSave = array();
     }
 
+    /**
+     * Prepare data to save
+     * @param $productId
+     */
     protected function _prepareData($productId)
     {
         $key = $this->_buildIndexKey($productId);
@@ -48,6 +76,11 @@ class Zolago_Catalog_Model_Resource_Queue_Configurable extends Zolago_Common_Mod
         );
     }
 
+    /**
+     * @param $productId
+     *
+     * @return string
+     */
     protected function _buildIndexKey($productId)
     {
         return "$productId";
@@ -87,11 +120,14 @@ class Zolago_Catalog_Model_Resource_Queue_Configurable extends Zolago_Common_Mod
         return $all;
     }
 
+    /**
+     * Clear precessed queue
+     */
     public function clearQueue()
     {
         $condition = $this->_getWriteAdapter()->quoteInto('status = ?', 1);
         $this->_getWriteAdapter()->delete($this->getTable('zolagocatalog/queue_configurable'), $condition);
-        Mage::log('clearQueue', 0, 'converter_test.log');
+
     }
 
 }
