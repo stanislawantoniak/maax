@@ -1,5 +1,5 @@
 <?php
-class Zolago_Rma_Block_Adminhtml_Rma_ReturnReason_Grid extends Mage_Adminhtml_Block_Widget_Grid
+class Zolago_Rma_Block_Adminhtml_Rma_Returnreason_Grid extends Mage_Adminhtml_Block_Widget_Grid
 {
 
     public function __construct(){
