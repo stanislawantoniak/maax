@@ -222,13 +222,13 @@ class Zolago_Dhl_Helper_Data extends Mage_Core_Helper_Abstract {
      */
     public function isDHLValidZip($country, $zip)
     {
-        $dhlValidZip = false;
+        $dhlValidZip = true;
         if (!empty($zip)) {
             $zip = str_replace('-', '', $zip);
             $zipModel = Mage::getModel('zolagodhl/zip');
             $source = $zipModel->load($zip, 'zip')->getId();
             if (!empty($source)) {
-                $dhlValidZip = true;
+                return true;
             } else {
                 $dhlClient = Mage::getModel('zolagodhl/client');
                 $login = Mage::helper('core')->decrypt($this->getDhlLogin());
@@ -236,13 +236,7 @@ class Zolago_Dhl_Helper_Data extends Mage_Core_Helper_Abstract {
                 $dhlClient->setAuth($login, $password);
                 $ret = $dhlClient->getPostalCodeServices($zip, date('Y-m-d'));
 
-                if (!property_exists($ret, 'getPostalCodeServicesResult')) {
-                    if (isset($ret['error'])) {
-                        $this->_log("Check PL zip availability:" . $ret['error'], 'dhl_zip.log');
-                    } else {
-                        $this->_log("Check PL zip availability:error", 'dhl_zip.log');
-                    }
-                } else {
+                if (is_object($ret) && property_exists($ret, 'getPostalCodeServicesResult')) {
                     $domesticExpress9 = (bool)$ret->getPostalCodeServicesResult->domesticExpress9;
                     $domesticExpress12 = (bool)$ret->getPostalCodeServicesResult->domesticExpress12;
 
@@ -252,6 +246,15 @@ class Zolago_Dhl_Helper_Data extends Mage_Core_Helper_Abstract {
                         $zipModel = Mage::getResourceModel('zolagodhl/zip');
                         $zipModel->updateDhlZip($country, $zip);
                     }
+
+                } else {
+                    if (isset($ret['error'])) {
+                        $this->_log("Check PL zip availability:" . $ret['error'], 'dhl_zip.log');
+                    } else {
+                        $this->_log("Check PL zip availability:error", 'dhl_zip.log');
+                    }
+                    //if there was an communication error forms should PASS validation
+                    return true;
                 }
             }
         }
