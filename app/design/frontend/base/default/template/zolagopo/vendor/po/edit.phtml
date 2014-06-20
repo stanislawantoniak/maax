@@ -127,7 +127,7 @@
 						<dt><?php echo $_hlp->__("Order date");?>:</dt> 
 						<dd><?php echo Mage::helper('core')->formatDate($_po->getCreatedAt(), 'medium')?></dd> 
 						<dt><?php echo $_hlp->__("Max. ship. date");?>:</dt> 
-						<dd><?php echo Mage::helper('core')->formatDate($_po->getCreatedAt(), 'medium')?> [dev]</dd> 
+						<dd><?php echo Mage::helper('core')->formatDate($_po->getMaxShippingDate(), 'medium')?></dd> 
 						<?php if($_po->getPos()):?>
 						<dt><?php echo $_hlp->__("POS");?>:</dt> 
 						<dd><?php echo $_po->getPos()->getName(); ?></dd> 

@@ -39,7 +39,7 @@ class Zolago_Po_Block_Vendor_Po extends Mage_Core_Block_Template
 		}
 		return null;
 	}
-	public function getMaxShipmentDate($idx) {
+	public function getMaxShippingDate($idx) {
 		if(($v=$this->getFilterValue('max_shipment_date')) && is_array($v) && isset($v[$idx])){
 			return $v[$idx];
 		}
