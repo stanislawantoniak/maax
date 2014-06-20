@@ -85,8 +85,7 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
 			
 			$requests[$cCode][$vId][$track->getNumber()][] = $track;
         }
-
-        foreach ($requests as $cCode => $vendors) {
+        foreach ($requests as $cCode => $vendors) {        	
             foreach ($vendors as $vId => $trackIds) {
                 $_track = null;
                 foreach ($trackIds as $_trackId=>$_tracks) {
@@ -105,7 +104,6 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
                     $this->_processPollTrackingFailed($trackIds, $e);
                     continue;
                 }
-
                 $processTracks = array();
                 foreach ($result as $trackId=>$status) {
                     foreach ($trackIds[$trackId] as $track) {
@@ -119,7 +117,6 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
                             $track->setNextCheck(date('Y-m-d H:i:s', time()+$repeatIn))->save();
                             if ($status==Unirgy_Dropship_Model_Source::TRACK_STATUS_PENDING) continue;
                         }
-
                         $track->setUdropshipStatus($status);
                         if ($track->dataHasChangedFor('udropship_status')) {
                             switch ($status) {
@@ -136,6 +133,8 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
                                     $track->getShipment(),
                                     $this->__('Tracking ID %s was delivered to customer', $trackId)
                                 );
+                                $track->setShippedDate();
+                                $track->save();
                                 $track->getShipment()->save();
                                 break;
                             }
@@ -186,9 +185,8 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
 				$processTracks[$_track->getOrderId()][] = $_track;
 			}
 		}
-		
 		//Process all Collected Shipments and update Shipment Status
-		$this->_processShipmentTracks($processTracks);
+		$result = $this->_processShipmentTracks($processTracks);
 		return true;
 	}
 	
@@ -207,7 +205,7 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
 		$shipment		= $track->getShipment();
 		$poId			= $shipment->getUdpoId();
 		$status			= $this->__('Ready to Ship');
-
+		$shipmentIdMessage = '';
 		if (is_array($dhlResult) && array_key_exists('error', $dhlResult)) {
 			//Dhl Error Scenario
 			Mage::helper('zolagodhl')->_log('DHL Service Error: ' .$dhlResult['error']);
@@ -215,15 +213,13 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
 		} elseif (property_exists($dhlResult, 'getTrackAndTraceInfoResult') && property_exists($dhlResult->getTrackAndTraceInfoResult, 'events') && property_exists($dhlResult->getTrackAndTraceInfoResult->events, 'item')) {
 			$shipmentIdMessage = $this->__('Tracking ID') . ': '. $dhlResult->getTrackAndTraceInfoResult->shipmentId . PHP_EOL;
 			$events = $dhlResult->getTrackAndTraceInfoResult->events;
-			
 			//DHL: Concatenate T&T Message History
 			foreach ($events->item as $singleEvent) {
 				$dhlMessage[$singleEvent->status] = 
-						(($singleEvent->receivedBy) ? $this->__('Received By: ') . $singleEvent->receivedBy . PHP_EOL : '')
+						(!empty($singleEvent->receivedBy) ? $this->__('Received By: ') . $singleEvent->receivedBy . PHP_EOL : '')
 						. $this->__('Description: ') . $singleEvent->description . PHP_EOL
 						. $this->__('Terminal: ') . $singleEvent->terminal . PHP_EOL
 						. $this->__('Time: ') . $singleEvent->timestamp . PHP_EOL.PHP_EOL;
-
 				switch ($singleEvent->status) {
 					case Zolago_Dhl_Helper_Data::DHL_STATUS_DELIVERED:
 						$status = $this->__('Delivered');
