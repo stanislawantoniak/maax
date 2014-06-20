@@ -222,6 +222,11 @@ class Zolago_Dhl_Helper_Data extends Mage_Core_Helper_Abstract {
      */
     public function isDHLValidZip($country, $zip)
     {
+		/**
+		 * @todo remove it. added for test.
+		 */
+		return true;
+		
         $dhlValidZip = false;
         if (!empty($zip)) {
             $zip = str_replace('-', '', $zip);
