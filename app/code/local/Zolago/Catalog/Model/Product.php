@@ -8,6 +8,8 @@
  */
 class Zolago_Catalog_Model_Product extends Mage_Catalog_Model_Product
 {
+    const ZOLAGO_CATALOG_CONVERTER_PRICE_TYPE_CODE = 'converter_price_type';
+    const ZOLAGO_CATALOG_PRICE_MARGIN_CODE = 'price_margin';
     /**
      * Get converter price type
      * @param $sku
@@ -44,23 +46,28 @@ class Zolago_Catalog_Model_Product extends Mage_Catalog_Model_Product
                 'eav.attribute_id = integ.attribute_id',
                 array(
                      'converter_price_type_value' => 'integ.value',
-                     'store'                      => 'integ.store_id'
+                     //'store'                      => 'integ.store_id'
                 )
             )
             ->join(
                 array('option_value' => 'eav_attribute_option_value'),
                 'integ.value=option_value.option_id',
                 array(
-                     'converter_price_type_label' => 'option_value.value',
+                     'price_type' => 'option_value.value',
                 )
             )
             ->where("e.type_id=?", Mage_Catalog_Model_Product_Type::TYPE_SIMPLE)
+            ->where("e.sku=?", $sku)
             ->where("integ.entity_id = e.entity_id")
-            ->where("eav.attribute_code=?", 'converter_price_type');
+            ->where("eav.attribute_code=?", self::ZOLAGO_CATALOG_CONVERTER_PRICE_TYPE_CODE)
+            ->where("integ.store_id=?", (int)Mage::getSingleton('adminhtml/config_data')->getStore())
+        ;
+
+echo $select;
         try {
-            $priceType = $readConnection->fetchAssoc($select);
+            $priceType = $readConnection->fetchRow($select);
         } catch (Exception $e) {
-            Mage::throwException(Mage::helper('catalog')->__('Fetch converter price ype'));
+            Mage::throwException(Mage::helper('catalog')->__('Fetch converter price type: ' .$e->getMessage()));
         }
         return $priceType;
     }

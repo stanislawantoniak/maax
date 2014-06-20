@@ -17,9 +17,22 @@ class Zolago_CatalogInventory_Model_Observer
      *
      * @param Varien_Event_Observer $observer
      */
-    public function productAddUpdate($observer)
+    public function productBeforeUpdate($observer)
     {
         $product = $observer->getProduct();
-        Zolago_Catalog_Helper_Configurable::queueProduct($product->getId());
+        $productBefore = Mage::getModel('catalog/product')->load($product->getId());
+
+        $attributesAffected = false;
+
+        //Price should be switched/saved/calculated only if are different
+        if ((int)$productBefore->getConverterPriceType() !== (int)$product->getConverterPriceType())
+            $attributesAffected = true;
+
+        if ((int)$productBefore->getPriceMargin() !== (int)$product->getPriceMargin())
+            $attributesAffected = true;
+
+        if ($attributesAffected)
+            Zolago_Catalog_Helper_Configurable::queueProduct($product->getId());
+
     }
 }

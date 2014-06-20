@@ -7,6 +7,7 @@ class Zolago_Catalog_AuthController extends Mage_Core_Controller_Front_Action
 {
 
     public function indexAction(){
+
         $data = array(
             'cmd' => 'ProductPricesUpdate',
             'merchant' => 4,
@@ -28,7 +29,16 @@ class Zolago_Catalog_AuthController extends Mage_Core_Controller_Front_Action
             $skuV = $data['sku'];
 
             $sku = $merchant . '-' . $skuV;
-//
+
+            $zcModel = Mage::getModel('zolagocatalog/product');
+            $priceType = $zcModel->getConverterPriceTypeBySku($sku);
+
+            $priceTypeSelected = "A";
+            if(!empty($priceType) && isset($priceType['price_type'])){
+                $priceTypeSelected = $priceType['price_type'];
+            }
+
+
             Mage::log(microtime() . ' Got system sku', 0, 'converter_profiler.log');
             $productId = Mage::getResourceModel('catalog/product')
                 ->getIdBysku($sku);
@@ -40,7 +50,7 @@ class Zolago_Catalog_AuthController extends Mage_Core_Controller_Front_Action
 
                     $priceA = FALSE;
                     foreach ($prices as $pricesItem) {
-                        if ($pricesItem['price_id'] == "A") {
+                        if ($pricesItem['price_id'] == $priceTypeSelected) {
                             $priceA = $pricesItem['price'];
                         }
                     }

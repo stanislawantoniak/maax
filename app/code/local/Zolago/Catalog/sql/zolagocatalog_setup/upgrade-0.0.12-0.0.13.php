@@ -8,7 +8,7 @@ $installer->startSetup();
 $setup = new Mage_Eav_Model_Entity_Setup('core_setup');
 
 //Adding Attribute converter_price_type
-$attributePriceTypeCode = "converter_price_type";
+$attributePriceTypeCode = Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER_PRICE_TYPE_CODE;
 $attributePriceType = $setup->addAttribute(
     Mage_Catalog_Model_Product::ENTITY, $attributePriceTypeCode,
     array(
@@ -16,7 +16,7 @@ $attributePriceType = $setup->addAttribute(
          'type'       => 'int',
          'input'      => 'select',
          'label'      => 'Converter Price Type',
-         'sort_order' => 2,
+         'sort_order' => 1,
          'set_id'     => 4,
          'required'   => false,
          'global'     => Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_WEBSITE,
@@ -33,7 +33,7 @@ $attributePriceType = $setup->addAttribute(
     )
 );
 //Adding Attribute price_margin
-$attributePriceMarginCode = "price_margin";
+$attributePriceMarginCode = Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_PRICE_MARGIN_CODE;
 $attributePriceMargin = $setup->addAttribute(
     Mage_Catalog_Model_Product::ENTITY, $attributePriceMarginCode,
     array(
@@ -41,7 +41,7 @@ $attributePriceMargin = $setup->addAttribute(
          'type'       => 'text',
          'input'      => 'text',
          'label'      => 'Price margin, %',
-         'sort_order' => 3,
+         'sort_order' => 2,
          'set_id'     => 4,
          'required'   => false,
          'global'     => Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_WEBSITE,
