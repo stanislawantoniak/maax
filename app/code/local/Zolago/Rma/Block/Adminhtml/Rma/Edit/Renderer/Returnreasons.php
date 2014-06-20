@@ -1,6 +1,6 @@
 <?php
 
-class Zolago_Rma_Block_Adminhtml_Rma_Edit_Renderer_ReturnReasons 
+class Zolago_Rma_Block_Adminhtml_Rma_Edit_Renderer_Returnreasons 
 	extends Mage_Adminhtml_Block_Widget 
 	implements Varien_Data_Form_Element_Renderer_Interface
 {

@@ -1,5 +1,5 @@
 <?php
-class Zolago_Rma_Block_Adminhtml_Rma_Edit_Form_Element_ReturnReasons extends Varien_Data_Form_Element_Abstract
+class Zolago_Rma_Block_Adminhtml_Rma_Edit_Form_Element_Returnreasons extends Varien_Data_Form_Element_Abstract
 {
 	public function getHtml()
     {
