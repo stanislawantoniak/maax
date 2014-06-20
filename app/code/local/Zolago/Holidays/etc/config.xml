@@ -17,6 +17,10 @@
 					<holiday>
 						<table>zolago_holidays</table>
 					</holiday>
+					<!-- Needed for backwards compatibility -->
+					<processingtime>
+						<table>zolago_processingtime</table>
+					</processingtime>
 				</entities>
 			</zolagoholidays_resource>
 		</models>
