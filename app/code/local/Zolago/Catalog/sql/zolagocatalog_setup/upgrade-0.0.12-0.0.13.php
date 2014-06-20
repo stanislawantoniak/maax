@@ -25,7 +25,7 @@ $attributePriceType = $setup->addAttribute(
              'values' => array(
                  0 => 'A',
                  1 => 'B',
-                 2 => 'D',
+                 2 => 'C',
                  3 => 'Z',
              )
          ),
