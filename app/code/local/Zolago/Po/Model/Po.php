@@ -451,6 +451,7 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 		
 		$this->_processAlert();
 		$this->_processStatus();
+		$this->_processMaxShippingDate();
 		
 		return parent::_beforeSave();
 	}
@@ -481,6 +482,16 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 		if(!$this->getId()){
 			Mage::getSingleton('zolagopo/po_status')->processNewStatus($this);
 		}
+	}
+	
+	protected function _processMaxShippingDate() {
+		if(!$this->getId()){
+			$max_shipping_date = Mage::helper('zolagoholidays/datecalculator')->calculateMaxPoShippingDate($this, true);
+			
+			$this->setMaxShippingDate($max_shipping_date->toString('YYYY-MM-dd'));
+		}
+		
+		
 	}
    
 }

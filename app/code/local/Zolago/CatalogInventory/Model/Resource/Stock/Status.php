@@ -1,11 +1,11 @@
 <?php
 /**
- * Zolago_Catalog_Model_Resource_Stock_Status Stock Status per website Resource Model
+ * Zolago_CatalogInventory_Model_Resource_Stock_Status Stock Status per website Resource Model
  *
  * @category    Zolago
- * @package     Zolago_Catalog
+ * @package     Zolago_CatalogInventory
  */
-class Zolago_Catalog_Model_Resource_Stock_Status
+class Zolago_CatalogInventory_Model_Resource_Stock_Status
     extends Mage_CatalogInventory_Model_Resource_Stock_Status
 {
     /**
