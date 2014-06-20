@@ -1,7 +1,15 @@
 <?php
 class Zolago_Holidays_Model_Holiday extends Mage_Core_Model_Abstract{
 	
-	protected function _construct() {   
+	protected $_types;
+	
+	protected function _construct() {
+		
+		$this->_types = array(
+			'1' => Mage::helper("zolagorma")->__("Fixed"),
+			'2' => Mage::helper("zolagorma")->__("Movable")
+		);
+	   
         $this->_init('zolagoholidays/holiday');
     }
 	
@@ -42,4 +50,11 @@ class Zolago_Holidays_Model_Holiday extends Mage_Core_Model_Abstract{
 		
 		return $this;
 	}
+	
+	public function getTypes(){
+		
+		return $this->_types;
+		
+	}
+	
 }
