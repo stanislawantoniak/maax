@@ -209,7 +209,8 @@
 			var step3 = $("step-3");
 			var steps = [step1, step2, step3];
 			var currentStep = 1;
-
+			var returnReasons = <?php echo Mage::helper('zolagorma')->getReturnReasons($_po, true); ?>;
+			
 			var showStep = function(step) {
 				steps.each(function(el) {
 					el.style.display = 'none';

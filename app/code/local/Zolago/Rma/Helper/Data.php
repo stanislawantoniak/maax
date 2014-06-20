@@ -58,8 +58,70 @@ class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data{
 
     }   
 	
+	/**
+	 * @return array
+	 */
 	public function getItemConditionTitles(){
 		$collection = Mage::getModel('zolagorma/rma_reason')->getCollection();
 		return $collection->toOptionHash();
 	} 
+	
+	public function getReturnReasons($po, $to_json){
+		
+		$reasons_array = array();
+		
+		$vendor = $po->getVendor();
+		
+		$vendor_reasons = Mage::getModel('zolagorma/rma_reason_vendor')->getCollection()
+															->addFieldToFilter('vendor_id', $vendor->getId());
+		
+		if($vendor_reasons->count() > 0){
+			
+			foreach($vendor_reasons as $vendor_reason){
+				
+				$return_reason_id = $vendor_reason->getReturnReasonId();
+				
+				$reasons_array[$return_reason_id] = array(
+					'isAvailable' => $this->isReasonAvailable($return_reason_id, $po),
+					'message' => $vendor_reason->getMessage()
+				);
+				
+			}
+		}				
+		
+		return ($to_json) ? json_encode($reasons_array) : $reasons_array;	
+	}
+	
+	public function isReasonAvailable($return_reason_id, $po){
+		
+		$vendor = $po->getVendor();
+		
+		$reason_vendor = Mage::getModel('zolagorma/rma_reason_vendor')->getCollection()
+															          ->addFieldToFilter('return_reason_id', $return_reason_id)
+															          ->addFieldToFilter('vendor_id', $vendor->getId())
+															          ->getFirstItem();
+																  
+		if($reason_vendor){
+			
+			//now
+ 			$time_now = new Zend_Date();
+			
+			$shipped_date = Mage::getModel('sales/order_shipment_track')->getShippedDate();
+			
+		    $time_then = new Zend_Date("2014-05-21T10:30:00");
+		    $difference = $time_now->sub($time_then);
+		
+		    $measure = new Zend_Measure_Time($difference->toValue(), Zend_Measure_Time::SECOND);
+		    $measure->convertTo(Zend_Measure_Time::DAY);
+		
+		    $days_elapsed = $measure->getValue();
+			
+			//Acknowledged return days #
+			$acknowledged_return_days = $reason_vendor->getAllowedDays();
+			
+			return ($days_elapsed > $acknowledged_return_days) ? false : true;
+		}
+		
+		return false;
+	}
 } 
