@@ -28,80 +28,79 @@ class Zolago_Catalog_Model_Queue_Pricetype extends Zolago_Common_Model_Queue_Abs
         Mage::helper('zolagocatalog/pricetype')->_logQueue( "Start process queue");
         $collection = $this->_collection;
 
-        //$websites = array();
-        $listUpdatedProducts = array();
-
-
         foreach ($collection as $colItem) {
             $productId = $colItem->getProductId();
-            $listUpdatedProducts[$productId] = $productId;
+            $ids[$productId] = $productId;
         }
         unset($productId);
 
-        Mage::helper('zolagocatalog/pricetype')->_logQueue($listUpdatedProducts);
+        $queueModel = Mage::getResourceModel('zolagocatalog/queue_pricetype');
+        $skuvs = $queueModel->getVendorSkuAssoc($ids);
 
-        $types = array(
-            851 => 'A',
-            852 => 'B',
-            853 => 'C',
-            854 => 'Z'
-        );
+        $priceTypeValues = $queueModel->getPriceTypeValues($ids);
 
+        //reformat
+        $priceTypeValueByStore =array();
+        if(!empty($priceTypeValues)){
+            foreach($priceTypeValues as $priceTypeValue){
+                $priceTypeValueByStore[$priceTypeValue['store']][$priceTypeValue['product_id']] = $priceTypeValue['converter_price_type_label'];
+            }
+            unset($priceTypeValue);
+        }
+
+        $priceMarginValues = $queueModel->getPriceMarginValues($ids);
+
+        //reformat
+        $priceMarginValuesByStore = array();
+        if(!empty($priceMarginValues)){
+            foreach($priceMarginValues as $priceMarginValue){
+                $priceMarginValuesByStore[$priceMarginValue['store']][$priceMarginValue['product_id']] = $priceMarginValue['price_margin'];
+            }
+            unset($priceMarginValue);
+        }
+
+        $vendorExternalId = 4;
         try {
             $converter = Mage::getModel('zolagoconverter/client');
         } catch (Exception $e) {
             Mage::throwException("DHL client is unavailable");
             return;
         }
-        $vendorExternalId = 4;
         $productAction = Mage::getSingleton('catalog/product_action');
-        foreach($listUpdatedProducts as $productId){
+        if (!empty($skuvs)) {
+            foreach ($skuvs as $productId => $vendorSku) {
 
-            Mage::helper('zolagocatalog/pricetype')->_logQueue("Product {$productId}");
-            $product = Mage::getModel('catalog/product')->load($productId);
+                $stores = array(0,1,2);
+                foreach($stores as $store){
+                    $priceType = (isset($priceTypeValueByStore[$store]) && isset($priceTypeValueByStore[$store][$productId])) ? $priceTypeValueByStore[$store][$productId] : 0;
 
-            if($product){
-                $vendorSku = $product->getSkuv();
-                $priceType = $types[$product->getConverterPriceType()];
+                    $newPrice = $converter->getPrice($vendorExternalId, $vendorSku, $priceType);
 
-                Mage::helper('zolagocatalog/pricetype')->_logQueue("priceType {$priceType}");
 
-                //$newPrice = $converter->getPrice($vendorExternalId, $vendorSku, $priceType);
-                $newPrice = 5000;
+                    if (!empty($newPrice)) {
+                        Mage::helper('zolagocatalog/pricetype')->_logQueue("New price {$priceType}: {$newPrice}");
 
-                if (!empty($newPrice)) {
-                    Mage::helper('zolagocatalog/pricetype')->_logQueue("New price {$priceType}: {$newPrice}");
+                        $margin = (isset($priceMarginValuesByStore[$store]) && isset($priceMarginValuesByStore[$store][$productId])) ? $priceMarginValuesByStore[$store][$productId] : 0;
 
-                    $margin = (int)$product->getPriceMargin();
+                        Mage::helper('zolagocatalog/pricetype')->_logQueue("Margin {$priceType}: {$margin}%");
 
-                    Mage::helper('zolagocatalog/pricetype')->_logQueue("Margin {$priceType}: {$margin}%");
+                        $newPriceWithMargin = $newPrice + $newPrice * ((int)$margin / 100);
 
-                    $newPriceWithMargin = $newPrice + $newPrice * ((int)$margin / 100);
-
-                    Mage::helper('zolagocatalog/pricetype')->_logQueue(
-                        "New price with margin $priceType: {$newPriceWithMargin}"
-                    );
-                    $productAction->updateAttributesNoIndex(
-                        array($productId), array('price' => $newPriceWithMargin), 0
-                    );
-                    $productAction->updateAttributesNoIndex(
-                        array($productId), array('price' => $newPriceWithMargin), 1
-                    );
-                    $productAction->updateAttributesNoIndex(
-                        array($productId), array('price' => $newPriceWithMargin), 2
-                    );
-                } else {
-                    Mage::helper('zolagocatalog/pricetype')->_logQueue("Converter result is empty, price not changed");
+                        Mage::helper('zolagocatalog/pricetype')->_logQueue(
+                            "New price with margin $priceType: {$newPriceWithMargin}"
+                        );
+                        $productAction->updateAttributesNoIndex(array($productId), array('price' => $newPriceWithMargin), $store);
+                    } else {
+                        Mage::helper('zolagocatalog/pricetype')->_logQueue("Converter result is empty, price not changed");
+                    }
                 }
             }
-
         }
-        unset($productId);
 
         Mage::helper('zolagocatalog/pricetype')->_logQueue( "Reindex");
 
         Mage::getResourceSingleton('catalog/product_indexer_price')
-            ->reindexProductIds(array_keys($listUpdatedProducts));
+            ->reindexProductIds(array_keys($ids));
 
         Mage::helper('zolagocatalog/pricetype')->_logQueue( "End");
 

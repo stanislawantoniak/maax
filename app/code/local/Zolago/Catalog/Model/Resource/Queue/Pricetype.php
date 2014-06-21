@@ -141,5 +141,156 @@ class Zolago_Catalog_Model_Resource_Queue_Pricetype extends Zolago_Common_Model_
 
     }
 
+    /**
+     * @return array
+     * @throws Mage_Core_Exception
+     */
+    public function getConverterPriceTypeOptions()
+    {
+        $converterPriceTypeOptions = array();
+        $readConnection = $this->_getReadAdapter();
+
+        $select = $readConnection->select();
+        $select->from(
+            array("attribute" => $this->getTable('eav/attribute')), array()
+        );
+        $select->join(
+            array("attribute_option" => $this->getTable("eav/attribute_option")),
+            "attribute.attribute_id=attribute_option.attribute_id",
+            array("id" => "attribute_option.option_id")
+        );
+        $select->join(
+            array("attribute_option_value" => $this->getTable("eav/attribute_option_value")),
+            "attribute_option.option_id=attribute_option_value.option_id",
+            array("label" => "attribute_option_value.value")
+        );
+        $select->where(
+            "attribute.attribute_code=?", Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER_PRICE_TYPE_CODE
+        );
+
+        try {
+            $converterPriceTypeOptions = $readConnection->fetchPairs($select);
+        } catch (Exception $e) {
+            Mage::throwException("Empty converter_price_type attribute options");
+        }
+        return $converterPriceTypeOptions;
+    }
+
+
+    /**
+     * @param $ids
+     *
+     * @return array $assoc
+     */
+    public function getVendorSkuAssoc($ids)
+    {
+        $assoc = array();
+
+        if (!empty($ids)) {
+            $readConnection = $this->_getReadAdapter();
+            $select = $readConnection->select();
+            $select->from(
+                array("product_varchar" => 'catalog_product_entity_varchar'),
+                array(
+                     "product_id" => "product_varchar.entity_id",
+                     "skuv"       => "product_varchar.value",
+                     "store"      => "product_varchar.store_id"
+                )
+            );
+            $select->join(
+                array("attribute" => $this->getTable("eav/attribute")),
+                "attribute.attribute_id = product_varchar.attribute_id",
+                array()
+            );
+            $select->where("attribute.attribute_code=?", Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute'));
+            $select->where("product_varchar.entity_id IN(?)", $ids);
+
+            try {
+                $assoc = $readConnection->fetchPairs($select);
+            } catch (Exception $e) {
+                Mage::throwException("Error skuv");
+            }
+
+        }
+        return $assoc;
+    }
+
+
+    public function getPriceTypeValues($ids)
+    {
+        $assoc = array();
+
+        if (!empty($ids)) {
+            $readConnection = $this->_getReadAdapter();
+            $select = $readConnection->select();
+            $select->from(
+                array("product_int" => 'catalog_product_entity_int'),
+                array(
+                     "product_id"           => "product_int.entity_id",
+                     "converter_price_type" => "product_int.value",
+                     "store"                => "product_int.store_id"
+                )
+            );
+            $select->join(
+                array("attribute" => $this->getTable("eav/attribute")),
+                "attribute.attribute_id = product_int.attribute_id",
+                array()
+            );
+            $select->join(
+                array("attribute_option_value" => $this->getTable("eav/attribute_option_value")),
+                "attribute_option_value.option_id=product_int.value",
+                array("converter_price_type_label" => "attribute_option_value.value")
+            );
+            $select->where(
+                "attribute.attribute_code=?", Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER_PRICE_TYPE_CODE
+            );
+            $select->where("product_int.entity_id IN(?)", $ids);
+
+
+            try {
+                $assoc = $readConnection->fetchAll($select);
+            } catch (Exception $e) {
+                Mage::throwException("Error fetching converter_price_type values");
+            }
+
+        }
+        return $assoc;
+    }
+
+
+    public function getPriceMarginValues($ids)
+    {
+        $assoc = array();
+
+        if (!empty($ids)) {
+            $readConnection = $this->_getReadAdapter();
+            $select = $readConnection->select();
+            $select->from(
+                array("product_text" => 'catalog_product_entity_text'),
+                array(
+                     "product_id"   => "product_text.entity_id",
+                     "price_margin" => "product_text.value",
+                     "store"        => "product_text.store_id"
+                )
+            );
+            $select->join(
+                array("attribute" => $this->getTable("eav/attribute")),
+                "attribute.attribute_id = product_text.attribute_id",
+                array()
+            );
+            $select->where(
+                "attribute.attribute_code=?", Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_PRICE_MARGIN_CODE
+            );
+            $select->where("product_text.entity_id IN(?)", $ids);
+
+            try {
+                $assoc = $readConnection->fetchAll($select);
+            } catch (Exception $e) {
+                Mage::throwException("Error fetching price_margin values");
+            }
+        }
+        return $assoc;
+    }
+
 }
 
