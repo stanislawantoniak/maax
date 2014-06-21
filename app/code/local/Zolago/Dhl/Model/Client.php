@@ -94,15 +94,16 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
     /**
      * message via soap
      */
-    protected function _sendMessage($method,$message = null) {
+    protected function _sendMessage($method, $message = null)
+    {
         try {
             $wsdl = Mage::getStoreConfig('carriers/zolagodhl/gateway');
-            $soap = new SoapClient($wsdl,array());
+            $soap = new SoapClient($wsdl, array());
             $result = $soap->$method($message);
         } catch (Exception $xt) {
-            $result = array (
-                          'error' => $xt->getMessage()
-                      );
+            $result = array(
+                'error' => $xt->getMessage()
+            );
         }
         return $result;
     }
@@ -238,11 +239,16 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
      */
     public function getPostalCodeServices($postCode, $pickupDate, $country = 'PL')
     {
+        $return = array();
         $message = new StdClass();
         $message->authData = $this->_auth;
         $message->postCode = $postCode;
         $message->pickupDate = $pickupDate;
-        $return = $this->_sendMessage('getPostalCodeServices', $message);
+        try {
+            $return = $this->_sendMessage('getPostalCodeServices', $message);
+        } catch (Exception $e) {
+            Mage::throwException("getPostalCodeServices");
+        }
         return $return;
     }
     /**

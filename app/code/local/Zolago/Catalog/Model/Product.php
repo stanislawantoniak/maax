@@ -63,7 +63,7 @@ class Zolago_Catalog_Model_Product extends Mage_Catalog_Model_Product
             ->where("integ.store_id=?", (int)Mage::getSingleton('adminhtml/config_data')->getStore())
         ;
 
-echo $select;
+
         try {
             $priceType = $readConnection->fetchRow($select);
         } catch (Exception $e) {
