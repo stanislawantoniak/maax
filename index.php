@@ -49,8 +49,7 @@ if (file_exists($compilerConfig)) {
     include $compilerConfig;
 }
 
-//TODO
-include_once('developer/class.krumo.php');
+
 $mageFilename = MAGENTO_ROOT . '/app/Mage.php';
 $maintenanceFile = 'maintenance.flag';
 
