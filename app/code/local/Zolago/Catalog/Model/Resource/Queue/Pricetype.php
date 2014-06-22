@@ -202,8 +202,15 @@ class Zolago_Catalog_Model_Resource_Queue_Pricetype extends Zolago_Common_Model_
                 "attribute.attribute_id = product_varchar.attribute_id",
                 array()
             );
+            $select->join(
+                array("product" => $this->getTable("catalog/product")),
+                "product.entity_id = product_varchar.entity_id",
+                array("type" => "product.type_id")
+            );
             $select->where("attribute.attribute_code=?", Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute'));
             $select->where("product_varchar.entity_id IN(?)", $ids);
+            //TODO need to know what to do for configurable
+            $select->where("product.type_id=?", Mage_Catalog_Model_Product_Type::TYPE_SIMPLE);
 
             try {
                 $assoc = $readConnection->fetchPairs($select);
