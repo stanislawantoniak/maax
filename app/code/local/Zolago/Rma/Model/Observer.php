@@ -63,7 +63,7 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 		/* @var $track Zolago_Rma_Model_Rma_Track */
 		
 		$carrierCode = $track->getCarrierCode () ;
-		if ($carrierCode == Zolag_Dhl_Model_Carrier::CODE 
+		if ($carrierCode == Zolago_Dhl_Model_Carrier::CODE 
     	    // zolagodhl
 			&& Mage::getSingleton('shipping/config')->getCarrierInstance($carrierCode)->isTrackingAvailable()
 			&& !$track->getWebApi()) {
