@@ -28,7 +28,27 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 				"class" => "danger"
 			);
 		}
-		
+
+        //Dhl zip validation
+        $shippingId = $po->getShippingAddressId();
+        $address = Mage::getModel('sales/order_address')->load($shippingId);
+
+        $dhlEnabled = Mage::helper('core')->isModuleEnabled('Zolago_Dhl');
+        $dhlActive = Mage::helper('zolagodhl')->isDhlActive();
+        if ($dhlEnabled && $dhlActive) {
+            $dhlHelper = Mage::helper('zolagodhl');
+            $dhlValidZip = $dhlHelper->isDHLValidZip($address->getCountry(), $address->getPostcode());
+            if (!$dhlValidZip) {
+                $alert[] = array(
+                    "text"  => $this->__(
+                            $dhlHelper::getAlertText($dhlHelper::ALERT_DHL_ZIP_ERROR)
+                        ),
+                    "class" => "danger"
+                );
+            }
+        }
+
+
 		if($po->getStatusModel()->isConfirmStockAvailable($po)){
 			if(!$po->getStockConfirm()){
 				$alert[] = array( 

@@ -134,48 +134,10 @@ jQuery(function($){
 });
 </script>
 <?php else:?>
-    <?php
-    $dhlEnabled = Mage::helper('core')->isModuleEnabled('Zolago_Dhl');
-    $dhlActive = Mage::helper('zolagodhl')->isDhlActive();
-    ?>
+
 <script type="text/javascript">
 jQuery(function($){
 	var form = $("#<?php echo $_type;?>-address-form");
-
-    <?php if ($dhlEnabled && $dhlActive): ?>
-    form.validate({
-        rules: {
-            "postcode": {
-                zipcodePL: true,
-                remote: function () { //the function allows the creation of the data string // outside of the remote call itself, which would not return a current value from the form.
-                    var zip = jQuery('#shipping-address-postcode').val();
-                    var country = jQuery('#shipping-address-country').val();
-                    var r = {
-                        url: "/zolagodhl/dhl/checkDhlZip",
-                        type: "get",
-                        data: {country: country},
-                        cache: false,
-                        dataFilter: function (response) {
-                            var isSuccess;
-                            var msg = jQuery.parseJSON(response);
-                            if (msg.status == "error") {
-                                isSuccess = false;
-                            } else {
-                                isSuccess = true;
-                            }
-                            return isSuccess;
-                        }
-                    };
-                    return r;
-                }
-
-            }
-        },
-        messages: {"postcode": {
-            remote: "<?php echo $this->__("Please enter valid DHL zip code"); ?>"}
-        }
-    });
-    <?php else: ?>
     form.validate({
         rules: {
             "postcode": {
@@ -183,8 +145,6 @@ jQuery(function($){
             }
         }
     });
-    <?php endif; ?>
-
 });
 </script>
 <?php endif;?>
