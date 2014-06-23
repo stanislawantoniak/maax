@@ -261,7 +261,7 @@ class Zolago_Dhl_Helper_Data extends Mage_Core_Helper_Abstract {
                         $this->_log("Check PL zip availability:error", 'dhl_zip.log');
                     }
                     //if there was an communication error forms should PASS validation
-                    return true;
+                    $dhlValidZip = false;
                 }
             }
         }

@@ -17,11 +17,11 @@ class Zolago_Customer_Model_Customer_Form extends Mage_Customer_Model_Form {
         if ($dhlEnabled && $dhlActive) {
             //if ($this->getEntity()->getAddressType() == Mage_Sales_Model_Quote_Address::TYPE_SHIPPING) {
             $valid = $this->_validateDHLZip($data);
-            if ($result !== true && $valid !== true) {
-                $result[] = $valid;
-            } elseif ($result === true && $valid !== true) {
-                $result = $valid;
-            }
+//            if ($result !== true && $valid !== true) {
+//                $result[] = $valid;
+//            } elseif ($result === true && $valid !== true) {
+//                $result = $valid;
+//            }
             //}
         }
         return $result;
