@@ -196,10 +196,6 @@ class Zolago_Catalog_AuthController extends Mage_Core_Controller_Front_Action
         echo 'Done';
     }
 
-    public function priceAction(){
-        Zolago_Catalog_Model_Observer::processPriceTypeQueue();
-    }
-
 }
 
 

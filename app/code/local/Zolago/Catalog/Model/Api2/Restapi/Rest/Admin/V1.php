@@ -47,15 +47,23 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
             $sku = $merchant . '-' . $skuV;
 
+            $zcModel = Mage::getModel('zolagocatalog/product');
+            $priceType = $zcModel->getConverterPriceTypeBySku($sku);
+
+            $priceTypeSelected = "A";
+            if(!empty($priceType) && isset($priceType['price_type'])){
+                $priceTypeSelected = $priceType['price_type'];
+            }
+
             $productId = Mage::getResourceModel('catalog/product')
                 ->getIdBysku($sku);
             if ($productId) {
                 $prices = isset($data['data']) ? $data['data'] : array();
                 if (!empty($prices)) {
 
-                    $priceA = false;
+                    $priceA = FALSE;
                     foreach ($prices as $pricesItem) {
-                        if ($pricesItem['price_id'] == "A") {
+                        if ($pricesItem['price_id'] == $priceTypeSelected) {
                             $priceA = $pricesItem['price'];
                         }
                     }
