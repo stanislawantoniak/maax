@@ -54,7 +54,7 @@ class Zolago_Catalog_Model_Resource_Queue_Pricetype extends Zolago_Common_Model_
 
             $table = $this->getTable('zolagocatalog/queue_pricetype');
             $data = array(
-                "insert_date"          => date('Y-m-d H:i:s'),
+                "insert_date"          => Varien_Date::now(),
                 "status"               => 0,
                 "product_id"           => $id
             );
@@ -82,7 +82,7 @@ class Zolago_Catalog_Model_Resource_Queue_Pricetype extends Zolago_Common_Model_
     {
         $key = $this->_buildIndexKey($productId);
         $this->_dataToSave[$key] = array(
-            "insert_date" => date('Y-m-d H:i:s'),
+            "insert_date" => Varien_Date::now(),
             "product_id" => $productId
         );
     }
@@ -148,30 +148,16 @@ class Zolago_Catalog_Model_Resource_Queue_Pricetype extends Zolago_Common_Model_
     public function getConverterPriceTypeOptions()
     {
         $converterPriceTypeOptions = array();
-        $readConnection = $this->_getReadAdapter();
-
-        $select = $readConnection->select();
-        $select->from(
-            array("attribute" => $this->getTable('eav/attribute')), array()
+        $attribute = Mage::getSingleton('eav/config')->getAttribute(
+            'catalog_product', Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER_PRICE_TYPE_CODE
         );
-        $select->join(
-            array("attribute_option" => $this->getTable("eav/attribute_option")),
-            "attribute.attribute_id=attribute_option.attribute_id",
-            array("id" => "attribute_option.option_id")
-        );
-        $select->join(
-            array("attribute_option_value" => $this->getTable("eav/attribute_option_value")),
-            "attribute_option.option_id=attribute_option_value.option_id",
-            array("label" => "attribute_option_value.value")
-        );
-        $select->where(
-            "attribute.attribute_code=?", Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER_PRICE_TYPE_CODE
-        );
-
-        try {
-            $converterPriceTypeOptions = $readConnection->fetchPairs($select);
-        } catch (Exception $e) {
-            Mage::throwException("Empty converter_price_type attribute options");
+        if ($attribute->usesSource()) {
+            $options = $attribute->getSource()->getAllOptions(false);
+            if (!empty($options)) {
+                foreach ($options as $option) {
+                    $converterPriceTypeOptions[$option['value']] = $option['label'];
+                }
+            }
         }
         return $converterPriceTypeOptions;
     }
@@ -188,9 +174,10 @@ class Zolago_Catalog_Model_Resource_Queue_Pricetype extends Zolago_Common_Model_
 
         if (!empty($ids)) {
             $readConnection = $this->_getReadAdapter();
+            $tVarchar = $readConnection->getTableName('catalog_product_entity_varchar');
             $select = $readConnection->select();
             $select->from(
-                array("product_varchar" => 'catalog_product_entity_varchar'),
+                array("product_varchar" => $tVarchar),
                 array(
                      "product_id" => "product_varchar.entity_id",
                      "skuv"       => "product_varchar.value",
@@ -222,7 +209,11 @@ class Zolago_Catalog_Model_Resource_Queue_Pricetype extends Zolago_Common_Model_
         return $assoc;
     }
 
-
+    /**
+     * @param $ids
+     *
+     * @return array $assoc
+     */
     public function getPriceTypeValues($ids)
     {
         $assoc = array();
@@ -265,6 +256,11 @@ class Zolago_Catalog_Model_Resource_Queue_Pricetype extends Zolago_Common_Model_
     }
 
 
+    /**
+     * @param $ids
+     *
+     * @return array $assoc
+     */
     public function getPriceMarginValues($ids)
     {
         $assoc = array();

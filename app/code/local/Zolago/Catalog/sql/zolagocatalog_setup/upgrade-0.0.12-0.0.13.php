@@ -12,11 +12,11 @@ $attributePriceTypeCode = Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER
 $attributePriceType = $setup->addAttribute(
     Mage_Catalog_Model_Product::ENTITY, $attributePriceTypeCode,
     array(
-         'group'      => 'Price',
+         'group'      => 'Prices',
          'type'       => 'int',
          'input'      => 'select',
          'label'      => 'Converter Price Type',
-         'sort_order' => 1,
+         'sort_order' => 20,
          'set_id'     => 4,
          'required'   => false,
          'global'     => Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_WEBSITE,
@@ -37,55 +37,16 @@ $attributePriceMarginCode = Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_PRICE_M
 $attributePriceMargin = $setup->addAttribute(
     Mage_Catalog_Model_Product::ENTITY, $attributePriceMarginCode,
     array(
-         'group'      => 'Price',
+         'group'      => 'Prices',
          'type'       => 'text',
          'input'      => 'text',
          'label'      => 'Price margin, %',
-         'sort_order' => 2,
+         'sort_order' => 21,
          'set_id'     => 4,
          'required'   => false,
          'global'     => Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_WEBSITE,
          'backend'    => ''
     )
 );
-
-$entityTypeId = Mage::getModel('eav/entity')
-    ->setType('catalog_product')
-    ->getTypeId();
-
-$attributePriceTypeId = $attributePriceType->getAttributeId($entityTypeId, $attributePriceTypeCode);
-$attributePriceMarginId = $attributePriceMargin->getAttributeId($entityTypeId, $attributePriceMarginCode);
-
-$collection = Mage::getResourceModel('eav/entity_attribute_set_collection');
-$collection
-    ->getSelect()
-    ->reset('columns')
-    ->join(
-        array('attribute_group' => 'eav_attribute_group'),
-        'attribute_group.attribute_set_id=main_table.attribute_set_id',
-        array(
-             'main_table.attribute_set_id AS set',
-             'attribute_group_id AS group'
-        )
-    )
-    ->where("attribute_group_name='Prices'");
-$attributeSetsGroups = $collection->getData();
-
-if (!empty($attributeSetsGroups)) {
-    foreach ($attributeSetsGroups as $attributeSetsGroupsItem) {
-        $setup->addAttributeToSet(
-            Mage_Catalog_Model_Product::ENTITY,
-            (int)$attributeSetsGroupsItem['set'],
-            (int)$attributeSetsGroupsItem['group'],
-            $attributePriceTypeId
-        );
-        $setup->addAttributeToSet(
-            Mage_Catalog_Model_Product::ENTITY,
-            (int)$attributeSetsGroupsItem['set'],
-            (int)$attributeSetsGroupsItem['group'],
-            $attributePriceMarginId
-        );
-    }
-}
 
 $installer->endSetup();
