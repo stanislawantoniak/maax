@@ -5,6 +5,22 @@
 class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 	
 	/**
+	 * @param Varien_Object $product
+	 * @return Zolago_Solrsearch_Model_Data
+	 */
+	public function prepareImproveFinalProductData(Varien_Object $product, &$docData) {
+		return $this;
+	}
+	
+	/**
+	 * @param Varien_Object $product
+	 * @return Zolago_Solrsearch_Model_Data
+	 */
+	public function getImprovedProductAttributesData(Varien_Object $product, &$docData) {
+		return $this;
+	}
+	
+	/**
 	 * Fix instock_int param
 	 * @param type $_product
 	 * @param int $docData

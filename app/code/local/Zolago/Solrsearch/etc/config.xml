@@ -16,8 +16,10 @@
             </zolagosolrsearch_resource>
 			<solrsearch>
 				<rewrite>
-					<solr>Zolago_Solrsearch_Model_Solr</solr>
 					<data>Zolago_Solrsearch_Model_Data</data>
+					<indexer>Zolago_Solrsearch_Model_Indexer</indexer>
+					<solr>Zolago_Solrsearch_Model_Solr</solr>
+					<ultility>Zolago_Solrsearch_Model_Ultility</ultility>
 				</rewrite>
 			</solrsearch>
         </models>
