@@ -33,7 +33,7 @@ class Zolago_Holidays_Helper_DateCalculator extends Mage_Core_Helper_Abstract{
 		$max_shipping_days = $vendor->getMaxShippingDays($storeId);
 		$max_shipping_time = $vendor->getMaxShippingTime($storeId);
 		
-		if(!$max_shipping_days || !$max_shipping_time){
+		if($max_shipping_days === "" || $max_shipping_time === ""){
 			Mage::log("No global values set to Max Shipping Days and Max Shippint Time");
 			return NULL;	
 		}
@@ -77,7 +77,7 @@ class Zolago_Holidays_Helper_DateCalculator extends Mage_Core_Helper_Abstract{
 			$max_days++;
 		}
 		
-		for($i = 0; $i < $max_days; $i++){
+		for($i = 0; $i <= $max_days; $i++){
 			
 			$next_day = strtotime("+ " . $i . "days", $current_timestamp);
 			
@@ -93,7 +93,7 @@ class Zolago_Holidays_Helper_DateCalculator extends Mage_Core_Helper_Abstract{
 			}
 		}
 		
-		return strtotime("+ " . ($max_days - 1) . "days", $current_timestamp);
+		return strtotime("+ " . $max_days . "days", $current_timestamp);
 	}
 	
 	/**
@@ -122,11 +122,9 @@ class Zolago_Holidays_Helper_DateCalculator extends Mage_Core_Helper_Abstract{
 		if($this->country_id){
 			$collection->addFieldToFilter('country_id', $this->country_id);
 		}
-		
 		$collection->addFieldToFilter('exclude_from_delivery', $this->exclude_from_delivery);
 		
 		$collection->addFieldToFilter('exclude_from_pickup', $this->exclude_from_pickup);
-		
 		return ($collection->count() > 0) ? true : false;
 	}
 }

@@ -472,7 +472,9 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 		if(!$this->getId()){
 			$max_shipping_date = Mage::helper('zolagoholidays/datecalculator')->calculateMaxPoShippingDate($this, true);
 			
-			$this->setMaxShippingDate($max_shipping_date->toString('YYYY-MM-dd'));
+			if($max_shipping_date){
+				$this->setMaxShippingDate($max_shipping_date->toString('YYYY-MM-dd'));
+			}
 		}
 		
 		

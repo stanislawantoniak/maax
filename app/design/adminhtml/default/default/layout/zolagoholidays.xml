@@ -8,7 +8,9 @@
 	<adminhtml_holidays_index>
 		<update handle="zolagoholidays_update_menu"/>
 		<reference name="content">
-            <block type="zolagoholidays/adminhtml_holidays_grid" name="zolagoholidays_holidays_grid"/>
+            <block type="zolagoholidays/adminhtml_holidays" name="zolagoholidays_holidays">
+	            <block type="zolagoholidays/adminhtml_holidays_grid" name="zolagoholidays_holidays_grid"/>
+            </block>
         </reference>
 	</adminhtml_holidays_index>
 	
