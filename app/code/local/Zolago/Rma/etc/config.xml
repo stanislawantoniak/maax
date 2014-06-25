@@ -128,6 +128,14 @@
 					</zolagorma>
 				</observers>
 			</zolagorma_rma_track_added>
+			<zolagorma_rma_track_status_change>
+				<observers>
+					<zolagorma>
+						<model>zolagorma/observer</model>
+						<method>rmaTrackStatusChange</method>
+					</zolagorma>
+				</observers>
+			</zolagorma_rma_track_status_change>
 		</events>
 		<resources>
 			<zolagorma_setup>

@@ -102,7 +102,6 @@ class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
                    ->where('udropship_status in (?)', $statusFilter)
                    ->where('next_check<=?', now())
                    ->limit(50);
-
         $sIds = $conn->fetchCol($sIdsSel);
         if (!empty($sIds)) {
             $tracks = Mage::getModel('urma/rma_track')->getCollection()
@@ -111,13 +110,28 @@ class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
                 ->addAttributeToFilter('parent_id', array('in'=>$sIds))
                 ->addAttributeToSort('parent_id')
             ;
-            $this->collectTracking($tracks);
+            $helper = Mage::helper('udropship');
+            $helper->setTrackingHelperPath('zolagorma/tracking');
+            $helper->collectTracking($tracks);
+/*
+            try {
+                Mage::helper('zolagorma')->collectTracking($tracks);
+            } catch (Exception $e) {
+                $tracksByStore = array();
+                foreach ($tracks as $track) {
+                    $tracksByStore[$track->getShipment()->getOrder()->getStoreId()][] = $track;
+                }
+                foreach ($tracksByStore as $sId => $_tracks) {
+                    Mage::helper('udropship/error')->sendPollTrackingFailedNotification($_tracks, "$e", $sId);
+                }
+            }
+*/        
         }
-
     }
-
-    public function getItemConditionTitles() {
-        $collection = Mage::getModel('zolagorma/rma_reason')->getCollection();
-        return $collection->toOptionHash();
-    }
-}
+    
+	
+	public function getItemConditionTitles(){
+		$collection = Mage::getModel('zolagorma/rma_reason')->getCollection();
+		return $collection->toOptionHash();
+	} 
+} 

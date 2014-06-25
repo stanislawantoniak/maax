@@ -190,12 +190,13 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
             Mage::dispatchEvent("zolagorma_rma_created", array(
                                     "rma" => $rma
                                 ));
-            if($rma->getCurrentTrack()) {
+            if($rma->getCurrentTrack()) {                
                 Mage::dispatchEvent("zolagorma_rma_track_added", array(
                                         "rma"		=> $rma,
                                         "track"		=> $rma->getCurrentTrack()
                                     ));
             }
+            $rma->save();
         }
         Mage::helper('udropship')->processQueue();
         Mage::getSingleton('core/session')->setRmaPrintId($rma->getId());
