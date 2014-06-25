@@ -56,6 +56,11 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 																	  ->addFieldToFilter('vendor_id', $vendor->getId())
 																	  ->setOrder('allowed_days', 'desc')
 																	  ->getFirstItem();
+		
+		if(!$reason_vendor){
+			return false;
+		}
+		
 		$max_allowed_days = (int) $reason_vendor->getAllowedDays();
 		
 		$days_elapsed = Mage::helper('zolagorma')->getDaysElapsed($reason_vendor->getReturnReasonId(), $this);
