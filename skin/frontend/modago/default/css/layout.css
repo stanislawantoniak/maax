@@ -1,4 +1,3 @@
-@charset "CP852";
 @import url(../fonts/lato/stylesheet.css);
 @import url(../fonts/open-sans/stylesheet.css);
 /* line 1, ../sass/override/_global.scss */
@@ -622,7 +621,6 @@ section.section h2.title_section i {
 
 /* line 100, ../sass/dimensions/_header.scss */
 #toggleSearch {
-  /* BLOK Z PRZYCISKIEM WYWOŁUJĄCYM PANEL WYSZUKIWANIA */
   float: left; }
 @media screen and (max-width: 768px) {
   /* line 100, ../sass/dimensions/_header.scss */
@@ -992,7 +990,7 @@ section.section h2.title_section i {
   height: 38px;
   line-height: 38px;
   margin: 0 auto;
-  margin-top: -38px;
+  margin-top: 30px;
   margin-bottom: 28px; }
 
 /* line 90, ../sass/dimensions/_mainpage.scss */
@@ -1128,6 +1126,10 @@ section.section h2.title_section i {
   /* line 220, ../sass/dimensions/_mainpage.scss */
   #block-bundle #product-shop.col-lg-8 {
     padding-right: 0; } }
+
+/* line 246, ../sass/dimensions/_mainpage.scss */
+#recently-viewed .recently-viewed {
+  padding-top: 30px; }
 
 /* line 5, ../sass/dimensions/_list-product.scss */
 #items-product {

@@ -97,7 +97,7 @@
         }    
 }
 
-#toggleSearch { /* BLOK Z PRZYCISKIEM WYWOŁUJĄCYM PANEL WYSZUKIWANIA */
+#toggleSearch {
     float:left;
     @include max-screen($screen-sm) {
         margin-right: 29px;
