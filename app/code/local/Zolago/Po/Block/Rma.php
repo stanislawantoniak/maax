@@ -21,10 +21,14 @@ class Zolago_Po_Block_Rma extends Mage_Core_Block_Template
             $collection = Mage::getResourceModel('zolagopo/po_collection');
             $collection->addFieldToFilter('main_table.customer_id',$customerId);
             $collection->addFieldToFilter('udropship_status',Unirgy_DropshipPo_Model_Source::UDPO_STATUS_DELIVERED);
+			
+			
+			
             // remove po without shipment
             $out = array();
             foreach ($collection as $po) {
-                if ($po->getLastNotCanceledShipment()) {
+            	
+                if ($po->getLastNotCanceledShipment() && $po->canBeReturned()) {
                     $this->_poList[] = $po;
                 }
             }

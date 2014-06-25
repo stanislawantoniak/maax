@@ -42,7 +42,7 @@
 												</td>
 												<td style="vertical-align: middle;">
 													<div class="condition-wrapper" style="display: none;">
-														<select style="width: auto;" class="required-entry" id="condition-<?php echo $item['entityId']; ?>" name="rma[items_condition_single][<?php echo $item['entityId'] . '][' . $key . ']' ?>">
+														<select style="width: auto;" class="required-entry" id="condition-<?php echo $key; ?>-<?php echo $item['entityId']; ?>" name="rma[items_condition_single][<?php echo $item['entityId'] . '][' . $key . ']' ?>">
 															<option value=""><?php echo $_helper->__('Select a reason...') ?></option>
 															<?php foreach($_helper->getItemConditionTitles() as $_key=>$_label):?>
 															<option <?php if(isset($_itemsConditionSingle[$item['entityId']][$key]) && $_itemsConditionSingle[$item['entityId']][$key]==$_key):?>selected="selected"<?php endif;?> value="<?php echo $this->escapeHtml($_key);?>"><?php echo $this->escapeHtml($_label); ?></option>
@@ -86,7 +86,7 @@
 			<input type="hidden" name="rma[shipping_address_id]" value="<?php $_shippingAddress->getId(); ?>"/>
 			<input type="hidden" name="rma[override_address]" value="0"/>
 			
-			<div class="fieldset">
+			<div id="pickup-address-form" class="fieldset flow-return">
 				<h2 class="legend"><?php echo $_helper->__("Confirm or change pickup address for the courier"); ?></h2>
 	            <ul class="form-list">
 					<li class="wide">
@@ -99,7 +99,7 @@
 					
 				</ul>
 			</div>
-			<div class="fieldset">
+			<div id="pickup-date-form" class="fieldset flow-return">
 				<h2 class="legend"><?php echo $_helper->__("Schedule pickup date that is convenient for you"); ?></h2>
 	            <ul class="form-list">
 					<li class="wide">
@@ -152,7 +152,7 @@
 		</div>
 		
 		<div class="steps step-3" id="step-3" style="display: none;">
-			<h5><?php echo $_helper->__("Check again inserted data. Note carrier pickup date."); ?></h5>
+			<h5 id="overview-message" class="flow-return"><?php echo $_helper->__("Check again inserted data. Note carrier pickup date."); ?></h5>
 			<div class="fieldset">
 				<h2 class="legend"><?php echo $_helper->__("RMA Items"); ?></h2>
 	            <ul class="form-list">
@@ -171,7 +171,7 @@
 					</li>
 				</ul>
 			</div>
-			<div class="fieldset">
+			<div id="pickup-address-overview" class="fieldset flow-return">
 				<h2 class="legend"><?php echo $_helper->__("Your address"); ?></h2>
 	            <ul class="form-list">
 					<li class="wide">
@@ -179,7 +179,7 @@
 					</li>
 				</ul>
 			</div>
-			<div class="fieldset">
+			<div id="pickup-date-overview" class="fieldset flow-return">
 				<h2 class="legend"><?php echo $_helper->__("Pickup date"); ?></h2>
 	            <ul class="form-list">
 					<li class="wide" id="pickup-date-review">
@@ -276,7 +276,57 @@
 				el.up("tr").down(".condition-wrapper").style.display = el.checked ? "block" : "none";
 				validateItems();
 			}
+			
+			var selectHandler = function() {
+				var el = $(this),
+					value = el.value,
+					initialClass = el.className,
+					initialId = el.id,
+					advice,
+					initialAdviceId,
+					newClass,
+					newAdviceId;
+				
+				
+				if(value){
+					newClass = 'must-be-available-' + value;
+				}
+				else{
+					newClass = 'required-entry';
+				}		
+				
+				el.removeClassName(initialClass).addClassName(newClass);
+				
+				//find advice
+				initialClass = initialClass.replace('validation-passed', '');
+				initialClass = initialClass.replace('validation-failed', '');
+				initialClass = initialClass.replace(' ', '');
+				initialAdviceId = 'advice-' + initialClass + '-' + initialId;
+				
+				advice = $(initialAdviceId);
+				
+				if(advice){
+					advice.remove();				
+				}
+			}
 
+			//custom validator
+		    
+		    <?php foreach($_helper->getItemConditionTitles() as $_key=>$_label):?>
+		    
+		    Validation.add('must-be-available-<?php echo $_key; ?>',returnReasons[<?php echo $_key; ?>].message,function(value){
+		    	
+		    	var currentReason = returnReasons[value];
+		    	
+		    	if(!currentReason){
+		    		return false;
+		    	}
+		    	
+		        return currentReason.isAvailable;
+		    });
+			
+			<?php endforeach;?>
+		        
 			// Validate conditions
 			var validateItems = function(e) {
 				var checked = false;
@@ -297,14 +347,74 @@
 			newRma.select(".rma-checkbox").each(function(item) {
 				$(item).observe('click', checkHandler);
 			});
-
+			
+			newRma.select(".condition-wrapper > select option").each(function(item) {
+				
+				var value = item.value,
+					currentReason;
+				
+				if(value && value != ""){
+					
+					currentReason = returnReasons[value];
+					if(currentReason && !currentReason.isAvailable){
+						
+						item.text += ' (Not available)';
+					}
+				}
+			});
+			
+			newRma.select(".condition-wrapper > select").each(function(item) {
+				
+				$(item).observe('change', selectHandler);
+			});
+			
 			$("step-1-submit").observe("click", function() {
 				if (form.validator.validate()) {
 					showStep(2);
+					
+					//check which flow is selected
+					applyFlow();
+					
 				}
 			});
 
-
+			var applyFlow = function(){
+				
+				var isAcknowledged = false,
+					selects;
+				
+				selects = $$('.step-1 .form-list select');
+				
+				// Loop through all selects and find selected ones
+				selects.each(function(item){
+					
+					if(item.value){
+						
+						if(returnReasons[item.value].flow == <?php echo Zolago_Rma_Model_Rma::FLOW_ACKNOWLEDGED; ?>){
+							isAcknowledged = true;
+						}
+					}
+						
+				});
+				
+				if(isAcknowledged){
+			  		$('pickup-address-form').hide();
+			  		$('pickup-date-form').hide();
+			  		$('pickup-address-overview').hide();
+			  		$('pickup-date-overview').hide();
+			  		$('overview-message').hide();
+				}
+				else{
+					$('pickup-address-form').show();
+			  		$('pickup-date-form').show();
+			  		$('pickup-address-overview').show();
+			  		$('pickup-date-overview').show();
+			  		$('overview-message').show();
+				}
+		  		
+		  		return true;
+			};
+			
 			$("step-2-submit").observe("click", function() {
 				if (form.validator.validate()) {
 					showStep(3);

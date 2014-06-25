@@ -85,6 +85,12 @@ class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
 		return $collection->toOptionHash();
 	} 
 	
+	/**
+	 * @param Zolago_Po_Model_Po $po
+	 * @param boolean $to_json
+	 * 
+	 * @return json|array
+	 */
 	public function getReturnReasons($po, $to_json){
 		
 		$reasons_array = array();
@@ -92,7 +98,7 @@ class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
 		$vendor = $po->getVendor();
 		
 		$vendor_reasons = Mage::getModel('zolagorma/rma_reason_vendor')->getCollection()
-															->addFieldToFilter('vendor_id', $vendor->getId());
+															           ->addFieldToFilter('vendor_id', $vendor->getId());
 		
 		if($vendor_reasons->count() > 0){
 			
@@ -100,8 +106,19 @@ class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
 				
 				$return_reason_id = $vendor_reason->getReturnReasonId();
 				
+				$days_elapsed = $this->getDaysElapsed($return_reason_id, $po);
+				
+				//Acknowledged return days #
+				$acknowledged_return_days = $vendor_reason->getAllowedDays();
+			
+				$is_reason_available = ($days_elapsed > $acknowledged_return_days) ? false : true;
+			
 				$reasons_array[$return_reason_id] = array(
-					'isAvailable' => $this->isReasonAvailable($return_reason_id, $po),
+					'isAvailable' => $is_reason_available,
+					'days_elapsed' => $days_elapsed,
+					'flow' => $this->getFlow($vendor_reason, $days_elapsed),
+					'auto_days' => $vendor_reason->getAutoDays(),
+					'allowed_days' => $vendor_reason->getAllowedDays(),
 					'message' => $vendor_reason->getMessage()
 				);
 				
@@ -111,9 +128,16 @@ class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
 		return ($to_json) ? json_encode($reasons_array) : $reasons_array;	
 	}
 	
-	public function isReasonAvailable($return_reason_id, $po){
+	/**
+	 * @param int $return_reason_id
+	 * @param Zolago_Po_Model_Po $po
+	 * 
+	 * @return float | boolean
+	 */
+	public function getDaysElapsed($return_reason_id, $po){
 		
 		$vendor = $po->getVendor();
+		$order  = $po->getOrder();
 		
 		$reason_vendor = Mage::getModel('zolagorma/rma_reason_vendor')->getCollection()
 															          ->addFieldToFilter('return_reason_id', $return_reason_id)
@@ -124,23 +148,52 @@ class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
 			
 			//now
  			$time_now = new Zend_Date();
+			$track = Mage::getModel('sales/order_shipment_track')->getCollection()
+															     ->addFieldToFilter('order_id', $order->getId())
+															     ->getFirstItem();
+			if(!$track->getId()){
+				return false;
+			}				
+												 
+			$shipped_date = $track->getShippedDate();
 			
-			$shipped_date = Mage::getModel('sales/order_shipment_track')->getShippedDate();
+			// Get default value as a date of creation of tracking
+			if(!$shipped_date) $shipped_date = $track->getCreatedAt();
 			
-		    $time_then = new Zend_Date("2014-05-21T10:30:00");
+		    $time_then = new Zend_Date($shipped_date);
 		    $difference = $time_now->sub($time_then);
 		
 		    $measure = new Zend_Measure_Time($difference->toValue(), Zend_Measure_Time::SECOND);
 		    $measure->convertTo(Zend_Measure_Time::DAY);
 		
-		    $days_elapsed = $measure->getValue();
-			
-			//Acknowledged return days #
-			$acknowledged_return_days = $reason_vendor->getAllowedDays();
-			
-			return ($days_elapsed > $acknowledged_return_days) ? false : true;
+		    return (float) $measure->getValue();
 		}
 		
-		return false;
+		return NULL;
+	}
+	
+	/**
+	 * Get flow number based on days elapsed
+	 * 
+	 * @param Zolago_Rma_Model_Resource_Rma_Reason_Vendor $vendor_reason
+	 * @param int $days_elasped
+	 * 
+	 * @return int | false
+	 */
+	public function getFlow($vendor_reason, $days_elapsed){
+		
+		$auto_days = $vendor_reason->getAutoDays();
+		$allowed_days = $vendor_reason->getAllowedDays();
+		
+		if($days_elapsed < $auto_days){
+			return Zolago_Rma_Model_Rma::FLOW_INSTANT;
+		}
+		else if($days_elapsed <= $allowed_days){
+			return Zolago_Rma_Model_Rma::FLOW_ACKNOWLEDGED;
+		}
+		else{
+			return false;
+		}
+		
 	}
 } 
