@@ -253,10 +253,20 @@ class Zolago_Dhl_Helper_Data extends Mage_Core_Helper_Abstract {
                 $dhlClient->setAuth($login, $password);                
                 $ret = $dhlClient->getPostalCodeServices($zip, date('Y-m-d'));
                 if (is_object($ret) && property_exists($ret, 'getPostalCodeServicesResult')) {
-                    $domesticExpress9 = (bool)$ret->getPostalCodeServicesResult->domesticExpress9;
-                    $domesticExpress12 = (bool)$ret->getPostalCodeServicesResult->domesticExpress12;
-
-                    $dhlValidZip = ($domesticExpress9 || $domesticExpress12) ? true : false;
+                    $empty = new StdClass;
+                    $empty->domesticExpress9 = false;
+                    $empty->domesticExpress12 = false;
+                    $empty->deliveryEvening = false;
+                    $empty->deliverySaturday = false;
+                    $empty->exPickupTo       = 'brak';
+                    $empty->exPickupFrom     = 'brak';
+                    $empty->drPickupFrom     = 'brak';
+                    $empty->drPickupTo       = 'brak';
+                    if (!$ret->getPostalCodeServicesResult == $empty) {
+                        $dhlValidZip = false;
+                    } else {
+                        $dhlValidZip = true;
+                    }
 
                     if ($dhlValidZip) {
                         $zipModel = Mage::getResourceModel('zolagodhl/zip');
