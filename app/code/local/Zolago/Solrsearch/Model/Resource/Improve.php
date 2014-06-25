@@ -6,6 +6,8 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 	
 	protected $_entity;
 	
+	protected $_categories = array();
+	
 	/**
 	 * Use link as main table
 	 */
@@ -35,6 +37,171 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 	}
 	
 	/**
+	 * @param Varien_Data_Collection $collection
+	 * @return \Zolago_Solrsearch_Model_Resource_Improve
+	 */
+	public function loadCategoryData(Varien_Data_Collection $collection, $storeId) {
+		
+		$asFacet = Mage::helper('solrsearch')->getSetting('use_category_as_facet');
+		$isSearchable = Mage::helper('solrsearch')->getSetting('solr_search_in_category');
+		
+		// Get collection ids to be indexed
+		$allIds = $collection->getFlag('index_category_product_ids') ?
+				$collection->getFlag('index_category_product_ids')  : $collection->getAllIds();
+		
+		if(!$allIds){
+			return $this;
+		}
+		
+		// Collect category data
+		$this->_collectCategories($allIds, $storeId, true);
+		
+		// Group category by product
+		$facets = array();
+		$ids = array();
+		foreach($this->_categories as $row){
+			// Facetes
+			if(!isset($facets[$row['product_id']])){
+				$facets[$row['product_id']] = array();
+			}
+			$facets[$row['product_id']][] = $row['name'] . "/" . $row['category_id'];
+			// Ids
+			if(!isset($ids[$row['product_id']])){
+				$ids[$row['product_id']] = array();
+			}
+			$ids[$row['product_id']][] = $row['category_id'];
+		}
+		
+		// Assign categories to product
+		foreach($ids as $productId => $prodcutCategoryIds){
+			if($item = $collection->getItemById($productId)){
+				if(isset($facets[$productId])){
+					// Set faces
+					if($asFacet){
+						$item->setCategoryFacet($facets[$productId]);
+						$item->setCategoryText($facets[$productId]);
+						$item->setCategoryBoost($facets[$productId]);
+						$item->setCategoryBoostExact($facets[$productId]);
+						$item->setCategoryRelativeBoost($facets[$productId]);
+					}
+					// Process search
+					if($isSearchable){
+						$textSearch = $item->getSearchText();
+						if(is_array($textSearch)){
+							$textSearch = array_merge($textSearch, $facets[$productId]);
+						}
+						$item->getSearchText($textSearch);
+					}
+					// @todo all parent categories?
+					$item->setCategoryPath($facets[$productId]);
+				}
+				// Finally set categoru ids
+				$item->setCategoryId($prodcutCategoryIds);
+			}
+		}
+		
+		return $this;
+	}
+	
+	/**
+	 * @param array $allIds
+	 * @param type $storeId
+	 * @return Zolago_Solrsearch_Model_Resource_Improve
+	 */
+	protected function _collectCategories(array $allIds, $storeId, $isParent=null) {
+		
+		$adapter = $this->getReadConnection();
+		$config = Mage::getModel("eav/config");
+		
+		/* @var $config Mage_Eav_Model_Config */
+		$nameAttribute = $config->getAttribute(
+			Mage_Catalog_Model_Category::ENTITY,
+			"name"
+		);
+		$includeAttribute = $config->getAttribute(
+			Mage_Catalog_Model_Category::ENTITY,
+			"include_in_menu"
+		);
+		/* @var $nameAttribute Mage_Eav_Model_Entity_Attribute */
+		
+		$select = $adapter->select();
+		
+		// Start from index
+		$select->from(
+			array("category_product"=>$this->getTable("catalog/category_product_index")),
+			array(
+				"product_id", 
+				"category_id", 
+				"name"=>new Zend_Db_Expr("IF(store_value_name.value_id>0, store_value_name.value, default_value_name.value)")
+			)
+		);
+		
+		// Join attributes data
+		$this->_joinAttribute($select, $nameAttribute, "category_product.category_id", $storeId);
+		$this->_joinAttribute($select, $includeAttribute, "category_product.category_id", $storeId);
+		
+		// Filters
+		$select->where("category_product.product_id IN (?)", $allIds);
+		$select->where("category_product.store_id = ?", $storeId);
+		$select->where(
+			"IF(".
+				"store_value_include_in_menu.value_id>0,".
+				"store_value_include_in_menu.value, ".
+				"default_value_include_in_menu.value".
+			 ")=?", 1
+		);
+		// Parent filter
+		if($isParent!==null){
+			$select->where("category_product.is_parent=?", $isParent ? 1 : 0);
+		}
+		
+		$this->_categories = $adapter->fetchAll($select);
+		return $this;
+	}
+	
+	/**
+	 * 
+	 * @param Varien_Db_Select $select
+	 * @param Mage_Eav_Model_Entity_Attribute $attribute
+	 * @param type $entity
+	 * @param type $storeId
+	 */
+	protected function _joinAttribute(Varien_Db_Select $select, 
+			Mage_Eav_Model_Entity_Attribute $attribute, 
+			$joinEntityField,
+			$storeId) {
+		
+		$code = $attribute->getAttributeCode();
+		$adapter = $this->getReadConnection();
+		
+		// Join default attr value of name
+		$joinCond = array(
+			$adapter->quoteInto('default_value_'.$code.'.attribute_id = ?', $attribute->getId()),
+			'default_value_'.$code.'.entity_id='.$joinEntityField,
+			$adapter->quoteInto('default_value_'.$code.'.store_id = ?',
+					Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID)
+		);
+		$select->join(
+			array('default_value_'.$code => $attribute->getBackendTable()),
+			implode(' AND  ', $joinCond) , 
+			array()
+		);
+		$joinCond = array(
+			'store_value_'.$code.'.attribute_id = default_value_'.$code.'.attribute_id',
+			'store_value_'.$code.'.entity_id = default_value_'.$code.'.entity_id',
+			$adapter->quoteInto('store_value_'.$code.'.store_id = ?', $storeId)
+		);
+		$select->joinLeft(
+			array('store_value_'.$code => $attribute->getBackendTable()),
+			implode(' AND ', $joinCond),
+			array()
+		);
+		
+		return $this;
+		
+	}
+	
+	/**
 	 * Load attributes data by n*query - n = num data table
 	 * @param Varien_Data_Collection $collection
 	 * @param Mage_Catalog_Model_Resource_Product_Attribute_Collection $attributesColleciton
@@ -60,6 +227,7 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 		
 		// Collect backend tables
         foreach ($attrbiuteCollection as $attributeId=>$attribute) {
+			$attribute->setStoreId($storeId);
 			$attributeCode = $attribute->getAttributeCode();
             if (!$attributeId) {
                 continue;
@@ -102,14 +270,27 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
                 }
             }
         }
+		
+		foreach($collection as $item){
+			Mage::getSingleton("zolagosolrsearch/data")->processFinalItemData($item);
+		}
+		
 	}
 	
+	/**
+	 * @param Varien_Data_Collection $collection
+	 * @param Mage_Catalog_Model_Resource_Product_Attribute_Collection $attrbiuteCollection
+	 * @param array $valueInfo
+	 * @return \Zolago_Solrsearch_Model_Resource_Improve
+	 * @throws Exception
+	 */
 	protected function _setItemAttributeValue(Varien_Data_Collection $collection, 
-			Mage_Catalog_Model_Resource_Product_Attribute_Collection $attrbiuteCollection,  $valueInfo)
+			Mage_Catalog_Model_Resource_Product_Attribute_Collection $attrbiuteCollection,  
+			$valueInfo)
     {
         $entityIdField  = $this->getEntity()->getEntityIdField();
         $entityId       = $valueInfo[$entityIdField];
-		$item			= $collection->getItemByColumnValue($entityIdField, $entityId);
+		$item			= $collection->getItemById($entityId);
 		$attributeCode  = null;
 		
         if (!$item) {
@@ -135,9 +316,9 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
         }
 		
 		if($attributeCode){
-			$item->setData($attributeCode, $valueInfo['value']);
-			//$value = $attribute->getFrontend()->getValue($item);
-			//$item->setData($attributeCode."_front", $value);
+			$item->setOrigData($attributeCode, $valueInfo['value']);
+			Mage::getSingleton("zolagosolrsearch/data")->
+					afterLoadAttribute($item, $attribute);
 		}
 
         return $this;

@@ -111,43 +111,97 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 	}
 	
 	/**
-	 * @todo Add customer group prices
 	 * 
 	 * @param int $storeId
 	 * @param array $allIds
-	 * @return Varien_Data_Collection - faster
+	 * @param Mage_Catalog_Model_Resource_Product_Attribute_Collection $attibutes
+	 * @param Varien_Data_Collection $initedColelction
+	 * @return \Varien_Data_Collection
 	 */
 	protected function _prepareFinalCollection($storeId, array $allIds = array(), 
-			Mage_Catalog_Model_Resource_Product_Attribute_Collection $attibutes) {
+			Mage_Catalog_Model_Resource_Product_Attribute_Collection $attibutes,
+			Varien_Data_Collection $initedColelction = null) {
+		
+		/**
+		 * Switch store ang lang settings to simulate
+		 */
+		$oldStore = Mage::app ()->getStore ();
+	    $currentLocaleCode = Mage::app()->getLocale()->getLocaleCode();
+	    $storeLocaleCode = Mage::getStoreConfig('general/locale/code', $storeId);
+		
+	    if ($storeLocaleCode) {
+	        Mage::getSingleton('core/translate')->
+				setLocale($storeLocaleCode)->
+				init('frontend', true);
+	    }
 		
 		
-		Mage::log("Start");
-		$finalCollection = new Varien_Data_Collection;
+		$finalCollection = $initedColelction ? $initedColelction : 
+				new Varien_Data_Collection;
 		
-		// Basic select
+		////////////////////////////////////////////////////////////////////////
+		// Load base entity and joins
+		////////////////////////////////////////////////////////////////////////
+		$time = $this->getMicrotime();
 		$rows = Mage::getResourceSingleton('zolagosolrsearch/improve')->
 			getFlatProducts($storeId, $allIds, array("stock"=>true, "price"=>true));
 
+		
 		foreach($rows as $row){
-			$product = new Varien_Object($row);
-			$product->setId($product->getEntityId());
-			$finalCollection->addItem($product);
+			$row['store_id'] = $storeId;
+			$item = new Varien_Object;
+			$item->setData($row);
+			$item->setOrigData();
+			$item->unsetData();
+			$item->setId($row['entity_id']);
+			$finalCollection->addItem($item);
 		}
-		// Load attributes data
+		Mage::log("Base collection " . $this->_formatTime($this->getMicrotime()-$time));
+		
+
+		////////////////////////////////////////////////////////////////////////
+		// Load attributes data & process values
+		////////////////////////////////////////////////////////////////////////
+		$time = $this->getMicrotime();
+		
 		Mage::getResourceSingleton('zolagosolrsearch/improve')->
 				loadAttributesData($finalCollection, $attibutes, $allIds, $storeId);
 		
-		Mage::log($finalCollection->getFirstItem()->getData());
-		Mage::log("Stop " . $finalCollection->count() . " " . count($allIds));
+		Mage::log("Attributes load " . $this->_formatTime($this->getMicrotime()-$time));
+		
+		
+		////////////////////////////////////////////////////////////////////////
+		// Add category data
+		////////////////////////////////////////////////////////////////////////
+		$time = $this->getMicrotime();
+		Mage::getResourceSingleton('zolagosolrsearch/improve')->
+				loadCategoryData($finalCollection, $storeId);
+		
+		Mage::log("Categories load " . $this->_formatTime($this->getMicrotime()-$time));
+		
+		/**
+		 * Restore old store & lang settings
+		 */
+		Mage::app ()->setCurrentStore ($oldStore);
+		Mage::getSingleton('core/translate')->
+			setLocale($currentLocaleCode)->
+			init('frontend', true);
 
 		return $finalCollection;
 	}
 	
+	public function getWeightAttributeCode() {
+		return trim(Mage::helper('solrsearch')->getSetting('search_weight_attribute_code'));
+	}
 	
+	public function getBrandAttributeCode() {
+		return trim(Mage::helper('solrsearch')->getSetting('display_brand_suggestion'));
+	}
 	
-
+	public function useInSugestions() {
+		return Mage::helper('solrsearch')->getSetting('display_brand_suggestion');
+	}
 	
-		
 	/**
 	 * Returns used by Solr regular attributes
 	 * @return Mage_Catalog_Model_Resource_Product_Attribute_Collection
@@ -155,24 +209,18 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 	public function getSolrUsedAttributes() {
 		if(!$this->_solrAttributesCollection){
 			
-			$codes = array("name");
+			$codes = array("name", "status", "visibility", "sku");
 			
-			//display brand suggestion
-			$displayBrandSuggestion = Mage::helper('solrsearch')->getSetting('display_brand_suggestion');
 			//display brand suggestion attribute code
-			$brandAttributeCode = trim(Mage::helper('solrsearch')->getSetting('brand_attribute_code'));
-			$includedBrandAttributeCodes = array();
-			if ($displayBrandSuggestion > 0 && !empty($brandAttributeCode)) {
-				$includedBrandAttributeCodes[] = $brandAttributeCode;
+			$brandAttributeCode = $this->getBrandAttributeCode();
+			
+			if ($this->useInSugestions() > 0 && !empty($brandAttributeCode)) {
 				$codes[] = $brandAttributeCode;
 			}
 
 			//Product search weight attribute code
-			$includedSearchWeightAttributeCodes = array();
-			$searchWeightAttributeCode =	trim(Mage::helper('solrsearch')->getSetting('search_weight_attribute_code'));
-			if (!empty($searchWeightAttributeCode)) {
-				$includedSearchWeightAttributeCodes[] = $searchWeightAttributeCode;
-				$codes[] = $searchWeightAttributeCode;
+			if ($this->getWeightAttributeCode()) {
+				$codes[] = $this->getWeightAttributeCode();
 			}
 			
 			$collection = Mage::getResourceModel("catalog/product_attribute_collection");
@@ -194,7 +242,10 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 					array("eq"=>1),
 				)
 			);
-			
+			/*foreach($collection as $attr){
+				Mage::log($attr->getAttributeCode());
+			}*/
+			//Mage::log($collection->getSelect()."");
 			$this->_solrAttributesCollection=$collection;
 		}
 		return $this->_solrAttributesCollection;
@@ -221,16 +272,26 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 	 */
 	public function parseJsonData($collection, $store, $onlyprice = false)
 	{
+		/* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
 		
-		$time = $this->getMicrotime();
+		$mainTime = $this->getMicrotime();
 		$ignoreFields = array('sku', 'price', 'status');
 		$storeId = $collection->getStoreId();
+		Mage::log("Start");
 		
 	    $fetchedProducts = 0;
 		$index = 1;
-
+		$collecitonIds = array_keys($collection->getItems());
+		
 		//included sub products for search
 		$included_subproduct = (int)Mage::helper('solrsearch')->getSetting('included_subproduct');
+		
+		
+		
+		////////////////////////////////////////////////////////////////////////
+		// Start collectiong relative products
+		////////////////////////////////////////////////////////////////////////
+		$time = $this->getMicrotime();
 		
 		// Collect grouped child ids
 		if($included_subproduct){
@@ -241,18 +302,45 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 		$this->_collectConfigurableChildIds($collection);
 		
 		$allIds = array_unique(array_merge(
-				$collection->getAllIds(), 
+				$collecitonIds,
 				$this->_configurableChildIdsFlat, 
 				$this->_groupedChildIdsFlat
 		));
+		Mage::log("Collecting childs " . $this->_formatTime($this->getMicrotime()-$time));
 		
 		// Final collection is a set with all types of products
-		$finalCollection = $this->_prepareFinalCollection(
-				$storeId, $allIds, $this->getSolrUsedAttributes());
+		$finalCollection = new Varien_Data_Collection;
 		
-		Mage::log("Count regular prods: " . count($collection->getAllIds()));
+		// Do not index category for configurable childs
+		$indexCategoryProductIds =  array_unique(array_merge(
+				$collecitonIds,
+				$this->_groupedChildIdsFlat
+		));
+		
+		$finalCollection->setFlag('index_category_product_ids', 
+				$indexCategoryProductIds);
+		
+		$this->_prepareFinalCollection($storeId, $allIds, 
+				$this->getSolrUsedAttributes(), $finalCollection);
+				
+		
+		Mage::log("Stop " . $finalCollection->count() . " = " . count($allIds));
+		
+		// DEV: log one item
+		foreach($finalCollection as $item){
+			/* @var $item Varien_Object */
+			if($item->getOrigData('type_id')=="configurable"){
+				Mage::log($item->getOrigData());
+				Mage::log($item->getData());
+				break;
+			}
+		}
+		
+		Mage::log("Time processed:" . $this->_formatTime($this->getMicrotime()-$mainTime));
+		Mage::log("Inout collection prods: " . count($collecitonIds));
 		Mage::log("Count configurable childs: " . count($this->_configurableChildIdsFlat));
 		Mage::log("Count grouped childs: " . count($this->_groupedChildIdsFlat));
+		
 		die;
 		// Process each product type each way
 

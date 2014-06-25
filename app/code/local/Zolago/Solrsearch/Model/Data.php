@@ -4,6 +4,8 @@
  */
 class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 	
+	protected $_tmpProduct;
+	
 	/**
 	 * @param Varien_Object $product
 	 * @return Zolago_Solrsearch_Model_Data
@@ -12,12 +14,270 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 		return $this;
 	}
 	
+	
 	/**
-	 * @param Varien_Object $product
-	 * @return Zolago_Solrsearch_Model_Data
+	 * @return Mage_Catalog_Model_Product
 	 */
-	public function getImprovedProductAttributesData(Varien_Object $product, &$docData) {
+	public function getTmpProduct() {
+		if(!$this->_tmpProduct){
+			$this->_tmpProduct =  Mage::getModel("catalog/product");
+		}
+		return $this->_tmpProduct;
+	}
+	
+	public function getWeightAttributeCode() {
+		return trim(Mage::helper('solrsearch')->getSetting('search_weight_attribute_code'));
+	}
+	
+	public function getBrandAttributeCode() {
+		return trim(Mage::helper('solrsearch')->getSetting('display_brand_suggestion'));
+	}
+	
+	public function useInSugestions() {
+		return Mage::helper('solrsearch')->getSetting('display_brand_suggestion');
+	}
+	
+	public function processFinalItemData(Varien_Object $item) {
+		$storeId = $item->getOrigData('store_id');
+		$store = Mage::app()->getStore($storeId);
+		$docData = array();
+		//Remove store from Product Url
+		$remove_store_from_url = Mage::helper('solrsearch')->getSetting('remove_store_from_url');
+
+		if (intval($remove_store_from_url) > 0) {
+//			$params['_store_to_url'] = false;
+//			$productUrl = $_product->getUrlInStore($product, $params);
+//			$baseurl = $store->getBaseUrl();
+//			$productUrl = str_replace($baseurl, '/', $productUrl);
+		}else{
+//			$productUrl = $_product->getProductUrl();
+		}
+		
+		$productUrl = Mage::getUrl("catalog/product/view", array("id"=>$item->getId()));
+		
+		// Url process @todo fix, appen in base colleciton
+		if (strpos($productUrl, 'solrbridge.php')) {
+			$productUrl = str_replace('solrbridge.php', 'index.php', $productUrl);
+		}
+		$docData['url_path_varchar'] = $productUrl;
+
+		// Sku process
+		$sku = $item->getOrigData("sku");
+		$docData['sku_varchar'] = $sku;
+		$docData['sku_boost'] = $sku;
+		$docData['sku_boost_exact'] = $sku;
+		$docData['sku_relative_boost'] = $sku;
+		$this->pushTextSearchToObject ($item, $sku);
+		$this->pushTextSearchToObject ($item, str_replace(array('-', '_'), '', $sku) );
+
+		
+		$productName = $item->getOrigData('name');
+		
+		$docData['name_varchar'] = $productName;
+		$docData['name_boost'] = $productName;
+		$docData['name_boost_exact'] = $productName;
+		$docData['name_relative_boost'] = $productName;
+
+		$docData['attribute_set_varchar'] = Mage::getModel('eav/entity_attribute_set')->
+				load($item->getOrigData("attribute_set_id"))->getAttributeSetName();
+		
+		$this->pushTextSearchToObject($item, $docData['attribute_set_varchar']);
+		$this->pushTextSearchToObject($item, $productName);
+
+		// Load by primary colleciton
+		$catIndexPosition = $item->getOrigData('cat_index_position');
+
+		if (!empty($catIndexPosition) && is_numeric($catIndexPosition)) {
+			$docData['sort_position_decimal'] = floatval($catIndexPosition);
+		}else{
+			$docData['sort_position_decimal'] = 0;
+		}
+
+		// @todo add later
+		//$docData['sort_bestselling_decimal'] = $this->getProductOrderedQty($_product, $this->store);
+
+
+		$docData['products_id'] = $item->getId();
+		$docData['product_type_static'] = (string)$item->getOriginData("type_id");
+		$docData['unique_id'] = $store->getId().'P'.$item->getId();
+		if (!isset($docData['product_search_weight_int'])) {
+			$docData['product_search_weight_int'] = 0;
+		}
+
+		$multipleStoreModeSetting = Mage::helper('solrsearch')->getSetting('multiplestore');
+		if (intval($multipleStoreModeSetting) > 0) {//multiple store by different category root and different website
+		    $docData['store_id'] = $store->getId();
+		    $docData['website_id'] = $store->getWebsiteId();
+		}else{
+		    if(isset($docData['category_id']) && !empty($docData['category_id'])){
+		        $docData['store_id'] = $store->getId();
+		        $docData['website_id'] = $store->getWebsiteId();
+		    }else{
+		        $docData['store_id'] = 0;
+		        $docData['website_id'] = 0;
+		    }
+		}
+
+		$docData['filter_visibility_int'] = $item->getOrigData('visibility');
+
+		$docData['instock_int'] = $item->getOrigData('stock_status');
+		
+		$docData['product_status'] = $item->getOrigData('status');
+		
+		$item->addData($docData);
+	}
+	
+	/**
+	 * 
+	 * @param Varien_Object $item
+	 * @param Mage_Catalog_Model_Resource_Eav_Attribute $attribute
+	 * @return \Zolago_Solrsearch_Model_Data
+	 */
+	public function afterLoadAttribute(
+			Varien_Object $item, 
+			Mage_Catalog_Model_Resource_Eav_Attribute $attributeObj) {
+		
+		$storeId = $item->getOrigData('store_id');
+		$tmpProduct = $this->getTmpProduct();
+		
+		$attributeObj->setStoreId($storeId);
+		$backendType = $attributeObj->getBackendType();
+		$frontEndInput = $attributeObj->getFrontendInput();
+		$attributeCode = $attributeObj->getAttributeCode();
+		$attributeData = $attributeObj->getData();
+		$addData = array();
+		
+		// Set org data to template product
+		$origValue = $item->getOrigData($attributeCode);
+
+		$tmpProduct->setId($item->getId());
+		$tmpProduct->setData($attributeCode, $origValue);
+
+		if ($backendType == 'int') {
+			$backendType = 'varchar';
+		}
+
+		$attributeKey = $attributeCode.'_'.$backendType;
+		$attributeKeyFacets = $attributeCode.'_facet';
+
+		$attributeVal = $attributeObj->getFrontEnd()->getValue($tmpProduct);
+
+		if(is_array($attributeVal)){
+			$attributeVal = implode(' ', $attributeVal);
+		}
+
+
+		//Generate sort attribute
+		if ($attributeObj->getUsedForSortBy() && !empty($attributeVal)) {
+			if (!empty($origValue)) {
+				$addData['sort_'.$attributeCode.'_'.$backendType] = $origValue;
+				//$docData[$attributeKey] = $sortValue;
+				$addData[$attributeKey] = $attributeVal;
+			}
+		}
+		
+		//Generate product search weight value
+		if ($attributeCode==$this->getWeightAttributeCode()) {
+			if (!empty($attributeVal) && is_numeric($attributeVal)) {
+				$docData['product_search_weight_int'] = $attributeVal;
+			}
+		}
+		
+		if (empty($attributeVal) || $attributeVal == 'No' || $attributeVal == 'None') {
+			unset($addData[$attributeKey]);
+			unset($addData[$attributeKeyFacets]);
+			unset($addData[$attributeCode.'_boost']);
+			unset($addData[$attributeCode.'_boost_exact']);
+			unset($addData[$attributeCode.'_relative_boost']);
+		}else{
+			$attributeValFacets = array();
+			if($frontEndInput == 'multiselect') {
+				$attributeValFacetsArray = @explode(',', $attributeVal);
+				$attributeValFacets = array();
+				foreach ($attributeValFacetsArray as $val) {
+					$attributeValFacets[] = trim($val);
+				}
+			} else {
+				$attributeValFacets[] = trim($attributeVal);
+			}
+
+			if ($backendType == 'datetime') {
+				$attributeVal = date("Y-m-d\TG:i:s\Z", $attributeVal);
+			}
+			
+				
+			if($attributeObj->getIsSearchable()){
+				
+				
+				if (!$this->isInObject($item, $attributeVal) && $attributeVal != 'None' 
+						&& $attributeCode != 'status' && $attributeCode != 'sku' && $attributeCode != 'price'){
+					if (strlen($attributeVal) > 255) {
+						$this->pushTextSearchToObject ($item, $attributeVal, 'textSearchText');
+					}else{
+						$this->pushTextSearchToObject ($item, $attributeVal);
+					}
+				}
+			}
+
+			if ($attributeObj->getIsFilterable() || $attributeObj->getIsFilterableInSearch()) {
+				if ($backendType != 'text' && !in_array($attributeCode, $this->ignoreFields))
+				{
+					$addData[$attributeCode.'_boost'] = $attributeVal;
+					$addData[$attributeCode.'_boost_exact'] = $attributeVal;
+					$addData[$attributeCode.'_relative_boost'] = $attributeVal;
+					$addData[$attributeCode.'_text'] = $attributeVal;
+					$addData[$attributeKey] = $attributeVal;
+					$this->pushTextSearchToObject ($item, $attributeObj->getStoreLabel() . ' ' . $attributeVal );
+				}
+			}
+			
+			if ($attributeObj->getData("solr_search_field_weight") || 
+					$attributeObj->getData("solr_search_field_boost")){
+				
+				$addData[$attributeCode.'_boost'] = $attributeVal;
+				$addData[$attributeCode.'_boost_exact'] = $attributeVal;
+				$addData[$attributeCode.'_relative_boost'] = $attributeVal;
+				$addData[$attributeKey] = $attributeVal;
+			}
+			
+			if ($attributeObj->getIsFilterableInSearch()) {
+				$addData[$attributeKeyFacets] = $attributeValFacets;
+			}
+		}
+		
+			
+		if($addData){
+			$item->addData($addData);
+		}
+		
 		return $this;
+	}
+	
+	/**
+	 * @param Varien_Object $item
+	 * @param string $string
+	 * @param string $field
+	 * @return bool
+	 */
+	public function isInObject(Varien_Object $item, $string, $field = "textSearch") {
+		if($item->getOrignData($field)){
+			return in_array($string, $item->getOrignData($field));
+		}
+		return false;
+	}
+	
+	/**
+	 * @param Varien_Object $item
+	 * @param string $string
+	 * @param string $field
+	 */
+	public function pushTextSearchToObject(Varien_Object $item, $string, $field = "textSearch") {
+		$texts = $item->getData($field);
+		if(!is_array($texts)){
+			$texts = array();
+		}
+		$texts[] = $string;
+		$item->setData($field, $texts);
 	}
 	
 	/**
