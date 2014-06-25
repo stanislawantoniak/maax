@@ -73,11 +73,19 @@ class Zolago_Holidays_Helper_DateCalculator extends Mage_Core_Helper_Abstract{
 		$max_hour = $max_hour_array[0];
 		$max_minute = $max_hour_array[1];
 		
-		if((($current_hour * 60) + $current_minute) > (($max_hour * 60) + $max_minute)){
-			$max_days++;
+		// If it is a working day check number of days
+		if($this->_isHoliday($current_timestamp) || $this->_isWeekend($current_timestamp)){
+			$start_day = 1;
 		}
-		
-		for($i = 0; $i <= $max_days; $i++){
+		else{
+			$start_day = 0;
+			
+			if((($current_hour * 60) + $current_minute) > (($max_hour * 60) + $max_minute)){
+				$max_days++;
+			}
+		}
+		   
+		for($i = $start_day; $i <= $max_days; $i++){
 			
 			$next_day = strtotime("+ " . $i . "days", $current_timestamp);
 			
