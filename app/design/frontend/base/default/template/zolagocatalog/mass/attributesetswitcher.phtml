@@ -1,21 +1,24 @@
-<p class="switcher">
-	<label for="attribute_switcher"><?php echo Mage::helper("zolagocatalog")->__("Choose attribute set"); ?>:</label>
-	<select name="attribute_switcher" id="attribute_set_switcher" onChange="changeAttributeSet(this);">
-		<option value="" ><?php echo Mage::helper("zolagocatalog")->__("--- Select ---"); ?></option>
-		<?php foreach($this->getAttributeSets() as $value=>$label):?>
-		<option value="<?php echo $value;?>" <?php if($this->getCurrentAttributeSetId()==$value):?> selected="selected"<?php endif;?>><?php echo $this->escapeHtml($label);?></option>
-		<?php endforeach;?>
-	</select>
-	<script type="text/javascript">
-	function changeAttributeSet(select){
-		var location = '<?php echo $this->getChangeUrl();?>';
-		if($F(select)){
-			location += "attribute_set/" + $F(select) + "/";
-		}
-		if($("store_switcher") && $F("store_switcher")){
-			location += "store/" + $F("store_switcher") + "/";
-		}
-		setLocation(location);
-	}
-	</script>
-</p>
+<label class="col-md-4 control-label" for="attribute_switcher">
+    <?php echo Mage::helper("zolagocatalog")->__("Choose attribute set"); ?>:
+</label>
+<div class="col-md-8">
+    <select name="attribute_switcher" id="attribute_set_switcher" class="form-control" onChange="changeAttributeSet(this);">
+        <option value="" ><?php echo Mage::helper("zolagocatalog")->__("--- Select ---"); ?></option>
+        <?php foreach($this->getAttributeSets() as $value=>$label):?>
+            <option value="<?php echo $value;?>" <?php if($this->getCurrentAttributeSetId()==$value):?> selected="selected"<?php endif;?>><?php echo $this->escapeHtml($label);?></option>
+        <?php endforeach;?>
+    </select>
+    <script type="text/javascript">
+        function changeAttributeSet(select){
+            var location = '<?php echo $this->getChangeUrl();?>';
+            if($F(select)){
+                location += "attribute_set/" + $F(select) + "/";
+            }
+            if($("store_switcher") && $F("store_switcher")){
+                location += "store/" + $F("store_switcher") + "/";
+            }
+            setLocation(location);
+        }
+    </script>
+</div>
+

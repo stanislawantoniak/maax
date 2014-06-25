@@ -10,7 +10,7 @@ class Zolago_Operator_Block_Dropship_Operator_Edit extends Mage_Core_Block_Templ
 		
                             
         $contact = $form->addFieldset('contact', array('legend'=>$helper->__('Details')));
-        $contact->addField("operator_id", "hidden", array("name"=>"operator_id"));		
+        	
         $builder = Mage::getModel('zolagooperator/form_fieldset_details');
         $builder->setFieldset($contact);
         $builder->prepareForm(array(
@@ -27,6 +27,7 @@ class Zolago_Operator_Block_Dropship_Operator_Edit extends Mage_Core_Block_Templ
 		$roles = $form->addFieldset("privileges", array("legend"=>$helper->__('Privileges')));
 		$roles->addField("roles", "multiselect", array(
 			"name"	 => "roles",
+			"class"  => "multiple",
 			"label"  => $helper->__('Roles'),
 			"values" => $acl::getAllRolesOptions()
 		));
@@ -40,6 +41,7 @@ class Zolago_Operator_Block_Dropship_Operator_Edit extends Mage_Core_Block_Templ
 		
 		$roles->addField("allowed_pos", "multiselect", array(
 			"name"	 => "allowed_pos",
+			"class"  => "multiple",
 			"label"  => $helper->__('Allowed POS'),
 			"values" => $posColection->toOptionArray()
 		));

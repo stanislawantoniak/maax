@@ -2,8 +2,32 @@
 class Zolago_Po_Model_Resource_Po_Collection 
 	extends Unirgy_DropshipPo_Model_Mysql4_Po_Collection
 {
+	
+	protected $_vendorId;
+	protected $_vendorJoined = false;
+	protected $_productJoined = false;
+	
+	public function addAlertFilter($int) {
+		$this->getSelect()->where("main_table.alert & ".(int)$int);
+		return $this;
+	}
+	
     public function addOrderData() {
 		return $this->_joinOrderTable();
+	}
+	public function addProductData() {
+	    return $this->_joinPoItem();
+	}
+	public function addVendorData() {
+	    return $this->_joinVendorTable();
+	}
+	public function addVendorFilter($vendor) {
+		if($vendor instanceof Unirgy_Dropship_Model_Vendor){
+			$vendor = $vendor->getId();
+		}
+		$this->_vendorId = $vendor;
+		$this->addFieldToFilter("main_table.udropship_vendor", $vendor);
+		return $this;
 	}
 	
 	public function addHasShipment() {
@@ -20,7 +44,17 @@ class Zolago_Po_Model_Resource_Po_Collection
 		return new Zend_Db_Expr("COUNT(shipment.entity_id)>0");
 	}
 	
-	
+	public function joinAggregatedNames() {
+		$select = $this->getSelect();
+		
+		$select->joinLeft(
+				array("aggregated"=>$this->getTable('zolagopo/aggregated')), 
+				"aggregated.aggregated_id=main_table.aggregated_id",
+			    array("aggregated_name")
+		);
+		
+		return $this;
+	}
 
 	/**
 	 * @param string $customerName
@@ -69,6 +103,12 @@ class Zolago_Po_Model_Resource_Po_Collection
 		$this->setFlag("add_po_items_data", true);
 		return $this;
 	}
+	
+	public function addSameEmailPo() {
+		$this->setFlag("add_same_email_po", true);
+		return $this;
+	}
+	
 	public function getSelectCountSql() {
         $this->_renderFilters();
         $countSelect = clone $this->getSelect();
@@ -98,33 +138,97 @@ class Zolago_Po_Model_Resource_Po_Collection
 		$return = parent::_afterLoad();
 		if($this->getFlag("add_po_items_data")){
 			$ids = array_keys($this->getItems());
-			
-			$select = $this->_conn->select();
-			$select->from(
-					array("po_item"=>$this->getTable('udpo/po_item')), 
-					array("po_item.parent_id", "po_item.name")
-			);
-			$select->join(
-					array("order_item"=>$this->getTable('sales/order_item')), 
-					$select->getAdapter()->quoteInto(
-							"order_item.item_id=po_item.order_item_id AND order_item.product_type IN(?)", 
-							$this->_getVisibleTypes()),
-					array()
-			);
-			$select->where("po_item.parent_id IN (?)", $ids);
+			$collection = Mage::getResourceModel("zolagopo/po_item_collection");
+			$collection->addFieldToFilter("main_table.parent_id", array("in"=>$ids));
+			$collection->addFieldToFilter("main_table.parent_item_id", array("null"=>true));
 			$grouped = array();
-			foreach($this->_conn->fetchAll($select) as $row){
-				$parentId = $row['parent_id'];
+			foreach($collection as $item){
+				$parentId = $item->getParentId();
 				if(!isset($grouped[$parentId])){
 					$grouped[$parentId] = array();
 				}
-				$grouped[$parentId][] = $row['name'];
+				$grouped[$parentId][] = $item;
 			}
-			foreach($grouped as $itemId=>$names){
-				$this->getItemById($itemId)->setProductNames($names);
+			foreach($grouped as $poId=>$items){
+				$this->getItemById($poId)->setOrderItems($items);
+			}
+		}
+		if($this->getFlag("add_same_email_po") && $this->_vendorId){
+			$ids = array_keys($this->getItems());
+			
+			$adapter = $this->getSelect()->getAdapter();
+			$select = $adapter->select();
+			
+			$select->from(
+				array("main_po"=>$this->getTable('udpo/po')),
+				array(
+					"main_po_id"		=> "main_po.entity_id",
+					"entity_id"			=> "same_po.entity_id",
+					"increment_id"		=> "same_po.increment_id",
+				)
+			);
+
+			$statModel = Mage::getSingleton("zolagopo/po_status");
+			$finishedStatuses = $statModel::getFinishStatuses();
+			
+			$conds = array(
+				"same_po.udropship_vendor = main_po.udropship_vendor",
+				"same_po.customer_email = main_po.customer_email",
+				"same_po.entity_id != main_po.entity_id",
+				"same_po.udropship_status NOT IN (".implode(",", $finishedStatuses).")"	
+			);
+			
+			$select->join(
+					array("same_po"=>$collection->getTable('udpo/po')),
+					implode(" AND ", $conds),
+					array("increment_id")
+			);
+			
+			
+			$select->where("main_po.udropship_vendor=?", $this->_vendorId);
+			$select->where("main_po.entity_id IN (?)", $ids);
+			$select->where("main_po.udropship_status NOT IN (?)", $finishedStatuses);
+			
+			$grouped = array();
+			foreach($adapter->fetchAll($select) as $row){
+				$poId = $row['main_po_id'];
+				if(!isset($grouped[$poId])){
+					$grouped[$poId] = array();
+				}
+				$grouped[$poId][] = new Varien_Object($row);
+			}
+			foreach($grouped as $poId=>$poArray){
+				$this->getItemById($poId)->setSameEmailPo($poArray);
 			}
 		}
         return $return;
+    }
+    protected function _joinVendorTable() {
+        if (!$this->_vendorJoined) {
+            $this->getSelect()->join(
+				array('vendor_table'=>$this->getTable('udropship/vendor')),
+                'vendor_table.vendor_id=main_table.udropship_vendor',
+                array ('vendor_table.vendor_name')
+            );
+            $this->_vendorJoined = true;
+        }
+        return $this;
+        
+    }
+    protected function _joinPoItem() {
+        if (!$this->_productJoined) {
+            $this->getSelect()->join(
+                array('item_table'=>$this->getTable('udpo/po_item')),
+                'item_table.parent_id=main_table.entity_id'
+                ,
+                array(
+                    'item_table.qty'                    
+                )
+            );
+            $this->_orderJoined = true;
+        }
+        return $this;
+        
     }
 	protected function _joinOrderTable()
     {
@@ -134,7 +238,7 @@ class Zolago_Po_Model_Resource_Po_Collection
                 'order_table.entity_id=main_table.order_id',
                 array(
 					'order_table.base_currency_code', 
-					'order_table.customer_email', 
+					'order_customer_email' => "order_table.customer_email", 
 					'order_table.customer_firstname', 
 					'order_table.customer_lastname', 
 					'customer_fullname'=>new Zend_Db_Expr("CONCAT_WS(' ', order_table.customer_firstname, order_table.customer_lastname)"))

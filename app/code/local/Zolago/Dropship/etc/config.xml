@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Zolago_Dropship>
-			<version>0.0.1</version>
+			<version>0.0.2</version>
 		</Zolago_Dropship>
 	</modules>
 	<global>
@@ -13,12 +13,18 @@
 			<udropship>
 				<rewrite>
 					<session>Zolago_Dropship_Model_Session</session>
+					<vendor>Zolago_Dropship_Model_Vendor</vendor>
 					<!-- overide order shippign address id to shipment shipping address id -->
 					<pdf_shipment>Zolago_Dropship_Model_Pdf_Shipment</pdf_shipment>
 					<!-- Vendor model -->
 					<vendor>Zolago_Dropship_Model_Vendor</vendor>
 				</rewrite>
 			</udropship>
+			<udropship_mysql4>
+				<rewrite>
+					<vendor>Zolago_Dropship_Model_Resource_Vendor</vendor>
+				</rewrite>
+			</udropship_mysql4>
 			<sales>
 				<rewrite>
 					<!-- overide order shippign address id to shipment shipping address id -->
@@ -73,9 +79,21 @@
                         <legend>DHL</legend>
                         <position>140</position>
                     </dhl>
+                    <rma>
+                        <legend>RMA Settings</legend>
+                        <position>140</position>
+                    </rma>
                 </fieldsets>
 
                 <fields>
+                	<super_vendor_id>
+                        <label>Super vendor</label>
+                        <type>select</type>
+						<source_model>zolagodropship/source</source_model>
+                        <source>allvendorswithempty</source>
+                        <fieldset>integration</fieldset>
+                        <position>0</position>
+                    </super_vendor_id>
                 	<marketing_store_information>
                         <label>Main store menu - marketing store information</label>
                         <type>wysiwyg</type>
@@ -129,27 +147,73 @@
                             <dhl_login>1</dhl_login>
                             <dhl_password>1</dhl_password>
 							<dhl_account>1</dhl_account>
+							<dhl_ecas>1</dhl_ecas>
+							<dhl_terminal>1</dhl_terminal>
                         </depend_fields>
                         <position>10</position>
                     </use_dhl>
                 	<dhl_account>
-                        <label>Dhl account</label>
+                        <label>DHL account</label>
                         <type>text</type>
                         <fieldset>dhl</fieldset>
                         <position>15</position>
                     </dhl_account>
                 	<dhl_login>
-                        <label>Dhl login</label>
+                        <label>DHL login</label>
                         <type>text</type>
                         <fieldset>dhl</fieldset>
                         <position>20</position>
                     </dhl_login>
                 	<dhl_password>
-                        <label>Dhl password</label>
+                        <label>DHL password</label>
                         <type>password</type>
                         <fieldset>dhl</fieldset>
                         <position>30</position>
                     </dhl_password>
+                	<dhl_ecas>
+                        <label>DHL eCas id</label>
+                        <type>text</type>
+                        <fieldset>dhl</fieldset>
+                        <position>40</position>
+                    </dhl_ecas>
+                	<dhl_terminal>
+                        <label>Terminal code</label>
+                        <type>text</type>
+                        <fieldset>dhl</fieldset>
+                        <position>50</position>
+                    </dhl_terminal>
+                    <!-- Rma -->
+                    <dhl_rma>
+                        <label>Use another DHL account for RMA</label>
+                        <type>select</type>
+                        <fieldset>rma</fieldset>
+                        <source>yesno</source>
+						<frontend_model>udropship/adminhtml_vendor_helper_form_dependSelect</frontend_model>
+						<depend_fields>
+                            <dhl_rma_login>1</dhl_rma_login>
+                            <dhl_rma_password>1</dhl_rma_password>
+							<dhl_rma_account>1</dhl_rma_account>
+                        </depend_fields>
+                        <position>10</position>
+                    </dhl_rma>
+                	<dhl_rma_account>
+                        <label>Account number</label>
+                        <type>text</type>
+                        <fieldset>rma</fieldset>
+                        <position>15</position>
+                    </dhl_rma_account>
+                	<dhl_rma_login>
+                        <label>DHL login</label>
+                        <type>text</type>
+                        <fieldset>rma</fieldset>
+                        <position>20</position>
+                    </dhl_rma_login>
+                	<dhl_rma_password>
+                        <label>DHL password</label>
+                        <type>password</type>
+                        <fieldset>rma</fieldset>
+                        <position>30</position>
+                    </dhl_rma_password>
 					<!-- Product Review -->
                 	<review_status>
                         <label>Product Review Status</label>

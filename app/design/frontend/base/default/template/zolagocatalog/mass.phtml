@@ -1,32 +1,128 @@
-<h1><?php echo Mage::helper("zolagocatalog")->__("Product mass actions");?></h1>
+<div class="container">
+    <div class="page-header">
+        <div class="page-title">
+            <h3><?php echo Mage::helper("zolagocatalog")->__("Product mass actions");?></h3>
+        </div>
+    </div>
 
-<?php if($this->getStoreSwitcherHtml()):?>
-	<div class="box-left">
-		<?php echo $this->getChildHtml("attribute_set_switcher");?>
-	</div>
-	<div class="box-right">
-		<?php echo $this->getStoreSwitcherHtml();?>
-	</div>
-	<div class="clear"></div>
-<?php else:?>
-	<div>
-		<?php echo $this->getChildHtml("attribute_set_switcher");?>
-	</div>
-<?php endif;?>
-	<div class="static-filter">
-		<?php echo $this->getChildHtml("static_filter");?>
-	</div>
-	<div class="clear"></div>
-	
-	<?php echo $this->getMessagesBlock()->getGroupedHtml(); ?>
+    <div class="row">
+       <div class="col-md-12">
+           <div class="widget box">
+               <div class="widget-header">
+<!--                   Filters-->
+                   <h4><i class="icon-filter"></i><?php echo Mage::helper("zolagocatalog")->__("Filters");?></h4>
+                   <div class="toolbar no-padding">
+                       <div class="btn-group"><span class="btn btn-xs widget-collapse"><i class="icon-angle-down"></i></span></div>
+                   </div>
+               </div>
+               <div class="widget-content fiters">
+                   <form class="form-horizontal">
+                       <div class="form-group">
 
-<?php if($this->getCurrentAttributeSetId()):?>
-	<script type="text/javascript">
-FORM_KEY = "<?php echo Mage::getSingleton('core/session')->getFormKey() ?>";
-</script>
-<div>
-	<?php echo $this->getGridHtml(); ?>
+                           <?php if ($this->getStoreSwitcherHtml()): ?>
+                               <div class="col-md-6">
+                                   <div class="row">
+                                       <?php echo $this->getChildHtml("attribute_set_switcher"); ?>
+                                   </div>
+                               </div>
+                               <div class="col-md-6">
+                                   <div class="row">
+                                       <?php echo $this->getStoreSwitcherHtml(); ?>
+                                   </div>
+                               </div>
+                           <?php else: ?>
+                               <div class="col-md-6">
+                                   <div class="row">
+                                       <?php echo $this->getChildHtml("attribute_set_switcher"); ?>
+                                   </div>
+                               </div>
+                           <?php endif; ?>
+                       </div>
+
+
+                       <?php echo $this->getChildHtml("static_filter"); ?>
+                   </form>
+               </div>
+           </div>
+       </div>
+    </div>
 </div>
-	<?php echo $this->getChildHtml("editor");?>
 
-<?php endif;?>
+
+
+    <?php echo $this->getMessagesBlock()->getGroupedHtml(); ?>
+
+    <?php if($this->getCurrentAttributeSetId()):?>
+        <script type="text/javascript">
+            FORM_KEY = "<?php echo Mage::getSingleton('core/session')->getFormKey() ?>";
+        </script>
+        <script type="text/javascript">
+            var gridObj;
+        </script>
+        <div class="container z-grid">
+            <div class="widget box">
+                <div class="widget-content">
+                    <?php
+
+                    echo $this->getGridHtml(); ?>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+            (function(){
+                gridObj = <?php echo $this->getGridJsObjectName();?>;
+                var topForm = $("filter_form");
+                // create integrator
+                new Zolago.gridIntegrator(gridObj);
+
+                gridObj.doFilter = (function(){
+                    var filters = $$('#'+this.containerId+' .filter input', '#'+this.containerId+' .filter select');
+                    var filters2 = $$('#'+topForm.id+' input', '#'+topForm.id+' select');
+                    var elements = [],
+                        elements2 = [];
+                    for(var i in filters){
+                        if(filters[i].value && filters[i].value.length) elements.push(filters[i]);
+                    }
+                    for(var i in filters2){
+                        if(filters2[i].value && filters2[i].value.length) elements2.push(filters2[i]);
+                    }
+
+                    var serialized = Form.serializeElements(elements);
+                    var serialized2 = Form.serializeElements(elements2);
+                    var params = []
+
+                    if(serialized){
+                        params.push(serialized);
+                    }
+                    if(serialized2){
+                        params.push(serialized2);
+                    }
+
+                    if (!this.doFilterCallback || (this.doFilterCallback && this.doFilterCallback())) {
+                        this.reload(this.addVarToUrl(this.filterVar, encode_base64(params.join("&"))));
+                    }
+                }).bind(gridObj);
+
+
+                topForm.observe("submit", function(e){
+                    gridObj.doFilter();
+                    e.preventDefault();
+                });
+                topForm.observe("reset", function(e){
+                    gridObj.resetFilter();
+                    e.preventDefault();
+                });
+
+            })();
+            // Do pickers
+            jQuery(function($){
+                $( ".datepicker" ).datepicker();
+
+                $('#myModal').modal();
+            });
+
+        </script>
+        <?php echo $this->getChildHtml("editor");?>
+
+    <?php endif;?>
+

@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Po>
-            <version>0.0.6</version>
+            <version>0.0.17</version>
         </Zolago_Po>
     </modules>
     <global>
@@ -42,15 +42,93 @@
 			</zolagopo>
 			<zolagopo_resource>
 				<class>Zolago_Po_Model_Resource</class>
+				<entities>
+					<aggregated>
+						<table>zolago_po_aggregated</table>
+					</aggregated>
+				</entities>
 			</zolagopo_resource>
 			<udpo>
 				<rewrite>
+					<source>Zolago_Po_Model_Source</source>
 					<po>Zolago_Po_Model_Po</po>
 					<po_item>Zolago_Po_Model_Po_Item</po_item>
 				</rewrite>
 			</udpo>
 		</models>
 		<events>
+			<zolagopo_po_split>
+				<observers>
+					<zolagopo>
+						<model>zolagopo/observer</model>
+						<method>poSplit</method>
+					</zolagopo>
+				</observers>
+			</zolagopo_po_split>
+			<zolagopo_po_shipping_cost>
+				<observers>
+					<zolagopo>
+						<model>zolagopo/observer</model>
+						<method>poShippingCost</method>
+					</zolagopo>
+				</observers>
+			</zolagopo_po_shipping_cost>
+			<zolagopo_po_item_remove>
+				<observers>
+					<zolagopo>
+						<model>zolagopo/observer</model>
+						<method>poItemRemove</method>
+					</zolagopo>
+				</observers>
+			</zolagopo_po_item_remove>
+			<zolagopo_po_item_edit>
+				<observers>
+					<zolagopo>
+						<model>zolagopo/observer</model>
+						<method>poItemEdit</method>
+					</zolagopo>
+				</observers>
+			</zolagopo_po_item_edit>
+			<zolagopo_po_item_add>
+				<observers>
+					<zolagopo>
+						<model>zolagopo/observer</model>
+						<method>poItemAdd</method>
+					</zolagopo>
+				</observers>
+			</zolagopo_po_item_add>
+			<zolagopo_po_address_restore>
+				<observers>
+					<zolagopo>
+						<model>zolagopo/observer</model>
+						<method>poAddressRestore</method>
+					</zolagopo>
+				</observers>
+			</zolagopo_po_address_restore>
+			<zolagopo_po_address_change>
+				<observers>
+					<zolagopo>
+						<model>zolagopo/observer</model>
+						<method>poAddressChange</method>
+					</zolagopo>
+				</observers>
+			</zolagopo_po_address_change>
+			<zolagopo_po_compose>
+				<observers>
+					<zolagopo>
+						<model>zolagopo/observer</model>
+						<method>poCompose</method>
+					</zolagopo>
+				</observers>
+			</zolagopo_po_compose>
+			<zolagopo_po_change_pos>
+				<observers>
+					<zolagopo>
+						<model>zolagopo/observer</model>
+						<method>poChangePos</method>
+					</zolagopo>
+				</observers>
+			</zolagopo_po_change_pos>
 			<udpo_po_shipment_save_before>
 				<observers>
 					<poShipmentSaveBefore>
@@ -67,7 +145,24 @@
 					</zolagopo>
 				</observers>
 			</sales_quote_address_save_before>
+			<zolagopo_shipment_cancel_after>
+				<observers>
+					<zolagopo>
+						<model>zolagopo/observer</model>
+						<method>shipmentCancelAfter</method>
+					</zolagopo>
+				</observers>
+			</zolagopo_shipment_cancel_after>
 		</events>
+		<template>
+            <email>
+               <zolagopo_compose>
+                   <label>PO Customer Message</label>
+                   <file>zolagopo_compose.html</file>
+                   <type>html</type>
+               </zolagopo_compose>
+            </email>
+        </template>
 		<fieldsets>
 			<!-- Transfer need invoice field -->
 			<sales_copy_order_billing_address>
@@ -124,10 +219,17 @@
 			<udpo>
 				<args>
 					<modules>
-						<Zolago_Pos before="Unirgy_DropshipPo">Zolago_Po</Zolago_Pos>
+						<Zolago_Po before="Unirgy_DropshipPo">Zolago_Po</Zolago_Po>
 					</modules>
 				</args>
 			</udpo>
+			<sales>
+				<args>
+					<modules>
+						<Zolago_Po>Zolago_Po</Zolago_Po>
+					</modules>
+				</args>
+			</sales>
 		</routers>
 		<translate>
 			<modules>

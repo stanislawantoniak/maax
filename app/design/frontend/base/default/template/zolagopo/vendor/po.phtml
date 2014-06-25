@@ -1,4 +1,18 @@
 <?php /* @var $this Zolago_Po_Block_Po */ ?>
+<?php
+    if ($id = Mage::getSingleton('core/session')->getAggregatedPrintId()) {
+          Mage::getSingleton('core/session')->setAggregatedPrintId(null);
+          $url =  Mage::getUrl('udpo/vendor_aggregated/download',array('id'=>$id));
+        
+?>
+<script type="text/javascript">
+jQuery(document).ready(function() {
+    document.location.href="<?php echo $url ?>";
+});
+</script>
+<?php
+    }
+?>
 <div class="container">
 	<!--=== Page Header ===-->
 	<div class="page-header">
@@ -149,11 +163,6 @@
 })();
 // Do pickers
 jQuery(function($){
-	$( ".datepicker" ).datepicker({
-		defaultDate: +7,
-		showOtherMonths:true,
-		autoSize: true,
-		dateFormat: 'dd-mm-yy'
-	});
+	$( ".datepicker" ).datepicker();
 });
 </script>

@@ -17,3 +17,13 @@
 .sass-cache
 listingrev2
 skin/frontend/modago/default_orig
+/vendor/
+/Vagrantfile
+/puphpet/
+/errors/local.xml
+bin/
+/vendor/
+/.project
+/.vagrant/
+Vagrantfile
+composer.*

@@ -8,5 +8,45 @@
 			</action>
         </reference>
     </udqa_catalog_product_view>
-
+	
+	<udqa_vendor_questions>	
+		<update handle="adminhtml_head" />
+		<update handle="bootstrap" />
+		<remove name="head.calendar"/>
+		<remove name="wrapper"/>
+		<reference name="content">
+			<block type="zolagoudqa/vendor_question" template="zolagoudqa/vendor/question.phtml" name="question"/>
+		</reference>
+	</udqa_vendor_questions>
+	
+	<_udqa_vendor_questionedit>
+		<update handle="bootstrap" />
+		<update handle="forms" />
+		<reference name="head">
+			<action method="removeItem">
+				<type>js_css</type>
+				<name>calendar/calendar-win2k-1.css</name>
+			</action>
+			<action method="removeItem">
+				<type>js</type>
+				<name>calendar/calendar.js</name>
+			</action>
+			<action method="removeItem">
+				<type>js</type>
+				<name>calendar/lang/calendar-en.js</name>
+			</action>
+			<action method="removeItem">
+				<type>js</type>
+				<name>calendar/calendar-setup.js</name>
+			</action>
+		</reference>
+        <reference name="content">
+			<remove name="head.calendar"/>
+			<reference name="udqa.question.edit">
+				<action method="setTemplate">
+					<template>zolagoudqa/vendor/question/edit.phtml</template>
+				</action>
+			</reference>
+        </reference>
+	</_udqa_vendor_questionedit>
 </layout>

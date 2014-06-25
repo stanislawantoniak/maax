@@ -2,9 +2,17 @@
 <config>
     <modules>
         <Zolago_Catalog>
-            <version>0.0.9</version>
+            <version>0.0.12</version>
         </Zolago_Catalog>
     </modules>
+    <default>
+        <zolagocatalog>
+            <config>
+                <group>config</group>
+                <po_open_order>0,11,9,5,4,3,11</po_open_order>
+            </config>
+        </zolagocatalog>
+    </default>
     <global>
         <models>
             <zolagocatalog>
@@ -17,6 +25,12 @@
                     <category_filter>
                         <table>zolago_catalog_category_filter</table>
                     </category_filter>
+                    <queue_configurable>
+                        <table>zolago_catalog_queue_configurable</table>
+                    </queue_configurable>
+                    <pricessizes>
+                        <table>vw_product_relation_prices_sizes</table>
+                    </pricessizes>
                 </entities>
             </zolagocatalog_resource>
 			<catalog>
@@ -45,7 +59,20 @@
                 <setup>
                     <module>Zolago_Catalog</module>
                 </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
             </zolagocatalog_setup>
+            <zolagocatalog_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </zolagocatalog_write>
+            <zolagocatalog_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </zolagocatalog_read>
         </resources>
     </global>
     <frontend>
@@ -94,5 +121,27 @@
 				</Zolago_Catalog>
 			</modules>
 		</translate>
-    </adminhtml>	
+    </adminhtml>
+    <crontab>
+        <jobs>
+            <zolagocatalog_process_configurable_queue>
+                <schedule>
+                    <!-- Run every 5 minutes -->
+                    <cron_expr>0,5,10,15,20,25,30,35,40,45,50,55 * * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>zolagocatalog/observer::processConfigurableQueue</model>
+                </run>
+            </zolagocatalog_process_configurable_queue>
+            <zolagocatalog_clear_configurable_queue>
+                <schedule>
+                    <!-- Run every 5 minutes -->
+                    <cron_expr>0,5,10,15,20,25,30,35,40,45,50,55 * * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>zolagocatalog/observer::clearConfigurableQueue</model>
+                </run>
+            </zolagocatalog_clear_configurable_queue>
+        </jobs>
+    </crontab>
 </config>

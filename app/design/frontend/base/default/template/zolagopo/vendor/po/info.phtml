@@ -427,7 +427,7 @@ $filterPoTotals = array('subtotal_excl', 'tax', 'shipping', 'total');
                         <?php if ($_item->getOrderItem()->getParentItem()) continue; ?>
                         <?php echo $this->getItemHtml($_item) ?>
                         <?php echo $_item->getGiftMessageId() ?>
-<?php if (($_gId = $_item->getOrderItem()->getGiftMessageId()) && !empty($_giftMsg[$_gId])): ?>
+					<?php if (($_gId = $_item->getOrderItem()->getGiftMessageId()) && !empty($_giftMsg[$_gId])): ?>
                         <tr><td colspan="3">
                             <h4><a href="#" class="item-gift-message-trigger"><?php echo $_hlp->__('Show/Hide Gift Message for the item above') ?></a></h4>
                             <div class="item-gift-message-content" style="display:none">
@@ -436,7 +436,7 @@ $filterPoTotals = array('subtotal_excl', 'tax', 'shipping', 'total');
                                 <p><?php echo nl2br($this->htmlEscape($_giftMsg[$_gId]['message'])) ?></p>
                             </div>
                         </td></tr>
-<?php endif ?>
+					<?php endif ?>
                     <?php if ($this->isShowTotals()): ?>
                     <tr class="udropship-item-totals"><td>
                         <ul>

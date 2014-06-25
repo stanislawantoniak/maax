@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<layout>
+	<zolagoholidays_update_menu>      
+        <reference name="menu">
+            <action method="setActive"><menupath>vendors/holiday</menupath></action>
+        </reference>
+    </zolagoholidays_update_menu>
+	<adminhtml_holidays_index>
+		<update handle="zolagoholidays_update_menu"/>
+		<reference name="content">
+            <block type="zolagoholidays/adminhtml_holidays" name="zolagoholidays_holidays"/>
+        </reference>
+	</adminhtml_holidays_index>
+	
+	<adminhtml_holidays_new>
+		<update handle="zolagoholidays_update_menu"/>
+		<reference name="content">
+			<block name="zolagoholidays.new" type="zolagoholidays/adminhtml_holidays_edit" as="zolagoholidays_new">
+				<block type="zolagoholidays/adminhtml_holiday_edit_form" name="zolagoholidays_holidays_edit_form"/>
+			</block>
+		</reference>
+	</adminhtml_holidays_new>
+	<adminhtml_holidays_edit>
+		<update handle="zolagoholidays_update_menu"/>
+		<reference name="content">
+			<block name="zolagoholidays.new" type="zolagoholidays/adminhtml_holidays_edit" as="zolagoholidays_new">
+				<block type="zolagoholidays/adminhtml_holiday_edit_form" name="zolagoholidays_holidays_edit_form"/>
+			</block>
+		</reference>
+	</adminhtml_holidays_edit>
+</layout>

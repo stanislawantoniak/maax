@@ -2,54 +2,54 @@
 class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
 	const TRACK_SINGLE			= 1;
 
-	public function getVendorLogoResizedUrl(Unirgy_Dropship_Model_Vendor $vendor, 
-			$width=150, $height=70, $imageKey='logo') {
-		
-		return Mage::getBaseUrl("media") . 
-				$this->getVendorLogoResized($vendor, $width, $height, $imageKey);
+	/**
+	 * @param Unirgy_Rma_Model_Rma_Track | string $tracking 
+	 */
+	public function getTrackingStatusName($tracking) {
+		if($tracking instanceof Unirgy_Rma_Model_Rma_Track){
+			$tracking = $tracking->getUdropshipStatus();
+		}
+		switch ($tracking) {
+			case Unirgy_Dropship_Model_Source::TRACK_STATUS_CANCELED:
+				return $this->__("Canceled");
+			break;
+			case Unirgy_Dropship_Model_Source::TRACK_STATUS_DELIVERED:
+				return $this->__("Delivered");
+			break;
+			case Unirgy_Dropship_Model_Source::TRACK_STATUS_PENDING:
+				return $this->__("Pending");
+			break;
+			case Unirgy_Dropship_Model_Source::TRACK_STATUS_READY:
+				return $this->__("Ready");
+			break;
+			case Unirgy_Dropship_Model_Source::TRACK_STATUS_SHIPPED:
+				return $this->__("Shipped");
+			break;
+		}
+		return $tracking;
 	}
 	
 	/**
-	 * @param Unirgy_Dropship_Model_Vendor $vendor
-	 * @param int $width
-	 * @param int $height
-	 * @param sting $imageKey
-	 * @return string|null
+	 * @param Mage_Core_Model_Store|int|null $store
+	 * @return Mage_Catalog_Model_Entity_Attribute
 	 */
-	public function getVendorLogoResized(Unirgy_Dropship_Model_Vendor $vendor, 
-			$width=150, $height=70, $imageKey='logo') {
-		$image = $vendor->getData($imageKey);
-		
-		if(empty($image)){
-			return null;
+	public function getVendorSkuAttribute($store=null) {
+		if($store instanceof Mage_Core_Model_Store){
+			$store=$store->getId();
 		}
-		
-		$imagePath = Mage::getBaseDir('media').DS.$image;
-		$pathInfo = pathinfo($image);
-		
- 		$imageResizedRealtive = $pathInfo['dirname'].DS.						// some/path/
-			$pathInfo['filename'].												// oldname
-			"-".$width."x".$height.												// -100x200
-			".".$pathInfo['extension'];											// .jpg
-		$imageResizedPath = Mage::getBaseDir("media").DS.$imageResizedRealtive;
-			
-		if ((!file_exists($imageResizedPath) && file_exists($imagePath)) ||
-			(file_exists($imageResizedPath) && !$this->_isImageUpToDate($imagePath, $imageResizedPath))){
-			$imageObj = new Varien_Image($imagePath);
-			$imageObj->constrainOnly(true);
-			$imageObj->keepAspectRatio(true);
-			$imageObj->keepFrame(false);
-			$imageObj->resize($width, $height);
-			$imageObj->save($imageResizedPath);
-			
+		$attrCode = Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute', $store);
+		if(!empty($attrCode)){
+			$attr = Mage::getSingleton('eav/config')->getAttribute(Mage_Catalog_Model_Product::ENTITY, $attrCode);
+			if($attr->getId()){
+				return $attr;
+			}
 		}
-		
-		return $imageResizedRealtive;
-
+		return Mage::getSingleton('eav/config')->getAttribute(Mage_Catalog_Model_Product::ENTITY, "sku");
 	}
 	
-	protected function _isImageUpToDate($orig, $thumb) {
-		return filectime($orig)<filectime($thumb);
+	public function getAllowedCarriers() {
+		return array(/*"", "custom", */"zolagodhl","ups");
+>>>>>>> origin/dev
 	}
 	
 	public function isUdpoMpsAvailable($carrierCode, $vendor = null) {
@@ -86,8 +86,7 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
 			
 			$requests[$cCode][$vId][$track->getNumber()][] = $track;
         }
-
-        foreach ($requests as $cCode => $vendors) {
+        foreach ($requests as $cCode => $vendors) {        	
             foreach ($vendors as $vId => $trackIds) {
                 $_track = null;
                 foreach ($trackIds as $_trackId=>$_tracks) {
@@ -106,7 +105,6 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
                     $this->_processPollTrackingFailed($trackIds, $e);
                     continue;
                 }
-
                 $processTracks = array();
                 foreach ($result as $trackId=>$status) {
                     foreach ($trackIds[$trackId] as $track) {
@@ -120,7 +118,6 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
                             $track->setNextCheck(date('Y-m-d H:i:s', time()+$repeatIn))->save();
                             if ($status==Unirgy_Dropship_Model_Source::TRACK_STATUS_PENDING) continue;
                         }
-
                         $track->setUdropshipStatus($status);
                         if ($track->dataHasChangedFor('udropship_status')) {
                             switch ($status) {
@@ -137,6 +134,8 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
                                     $track->getShipment(),
                                     $this->__('Tracking ID %s was delivered to customer', $trackId)
                                 );
+                                $track->setShippedDate();
+                                $track->save();
                                 $track->getShipment()->save();
                                 break;
                             }
@@ -187,9 +186,8 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
 				$processTracks[$_track->getOrderId()][] = $_track;
 			}
 		}
-		
 		//Process all Collected Shipments and update Shipment Status
-		$this->_processShipmentTracks($processTracks);
+		$result = $this->_processShipmentTracks($processTracks);
 		return true;
 	}
 	
@@ -208,7 +206,7 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
 		$shipment		= $track->getShipment();
 		$poId			= $shipment->getUdpoId();
 		$status			= $this->__('Ready to Ship');
-
+		$shipmentIdMessage = '';
 		if (is_array($dhlResult) && array_key_exists('error', $dhlResult)) {
 			//Dhl Error Scenario
 			Mage::helper('zolagodhl')->_log('DHL Service Error: ' .$dhlResult['error']);
@@ -216,29 +214,30 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
 		} elseif (property_exists($dhlResult, 'getTrackAndTraceInfoResult') && property_exists($dhlResult->getTrackAndTraceInfoResult, 'events') && property_exists($dhlResult->getTrackAndTraceInfoResult->events, 'item')) {
 			$shipmentIdMessage = $this->__('Tracking ID') . ': '. $dhlResult->getTrackAndTraceInfoResult->shipmentId . PHP_EOL;
 			$events = $dhlResult->getTrackAndTraceInfoResult->events;
-			
 			//DHL: Concatenate T&T Message History
 			foreach ($events->item as $singleEvent) {
 				$dhlMessage[$singleEvent->status] = 
-						(($singleEvent->receivedBy) ? $this->__('Received By: ') . $singleEvent->receivedBy . PHP_EOL : '')
+						(!empty($singleEvent->receivedBy) ? $this->__('Received By: ') . $singleEvent->receivedBy . PHP_EOL : '')
 						. $this->__('Description: ') . $singleEvent->description . PHP_EOL
 						. $this->__('Terminal: ') . $singleEvent->terminal . PHP_EOL
 						. $this->__('Time: ') . $singleEvent->timestamp . PHP_EOL.PHP_EOL;
-
 				switch ($singleEvent->status) {
 					case Zolago_Dhl_Helper_Data::DHL_STATUS_DELIVERED:
 						$status = $this->__('Delivered');
 						$track->setUdropshipStatus(Unirgy_Dropship_Model_Source::TRACK_STATUS_DELIVERED);
+						$track->setShippedDate(Varien_Date::now());
 						$track->getShipment()->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED);
 						break;
 					case Zolago_Dhl_Helper_Data::DHL_STATUS_RETURNED:
 						$status = $this->__('Returned');
 						$track->setUdropshipStatus(Unirgy_Dropship_Model_Source::TRACK_STATUS_CANCELED);
+						$track->setShippedDate(null);
 						$track->getShipment()->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_RETURNED);
 						break;
 					case Zolago_Dhl_Helper_Data::DHL_STATUS_WRONG:
 						$status = $this->__('Canceled');
 						$track->setUdropshipStatus(Unirgy_Dropship_Model_Source::TRACK_STATUS_CANCELED);
+						$track->setShippedDate(null);
 						$track->getShipment()->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_RETURNED);
 						break;
 					default:
@@ -315,7 +314,6 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
 			->setShipmentFilter($shipment->getId())
 			->addFieldToFilter('comment', array('like' => '%'. Zolago_Dhl_Helper_Data::DHL_HEADER . '%'))
 			->getFirstItem();
-
 		$commentModel->setParentId($shipment->getId())
 			->setComment($comment)
 			->setIsCustomerNotified($isCustomerNotified)

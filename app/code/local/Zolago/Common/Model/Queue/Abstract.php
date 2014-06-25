@@ -19,6 +19,7 @@ abstract class Zolago_Common_Model_Queue_Abstract extends Mage_Core_Model_Abstra
           $model->save();
      }
     protected function _getCollection() {
+        $limit = $this->_limit;
           $model = $this->_getItem();
           $collection = $model->getCollection();
           $collection->setPageSize($limit);
