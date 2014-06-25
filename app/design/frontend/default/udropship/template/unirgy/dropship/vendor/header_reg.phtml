@@ -2,7 +2,17 @@
 $_session = Mage::getSingleton('udropship/session');
 
 $_vendor = $_session->getVendor();
-$_currentLocale = Mage::app()->getLocale()->getLocaleCode();
+
+$locale = $_session->getLocale();
+
+if(!empty($locale)){
+    $_currentLocale = $locale;
+} else {
+    $_currentLocale = "pl_PL";
+    $_session->setLocale($_currentLocale);
+}
+
+$currentUrl = Mage::helper('core/url')->getCurrentUrl();
 
 $_logoHeader = Mage::app()->getStore($_vendor->getLabelStore())->getGroup()->getName();
 $_allowedLocale = array(
@@ -35,8 +45,8 @@ $_allowedLocale = array(
                 <ul class="dropdown-menu">
                     <?php foreach($_allowedLocale as $locale=>$info):?>
                         <li>
-                            <a href="<?php echo Mage::getUrl('udropship/vendor/setlocale', array("locale"=>$locale));?>">
-                                <?php echo $this->escapeHtml($info['name']);?>
+                            <a href="<?php echo Mage::getUrl('udropship/vendor/setlocale', array("locale" => $locale)); ?>">
+                                <?php echo $this->escapeHtml($info['name']); ?>
                             </a>
                         </li>
                     <?php endforeach;?>

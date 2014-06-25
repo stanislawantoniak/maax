@@ -15,7 +15,7 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 	protected function _prepareCollection(){
         $collection = Mage::getResourceModel('zolagopo/po_collection');
         /* @var $collection Zolago_Po_Model_Resource_Po_Collection */
-		$collection->addVendorFilter(Mage::getSingleton('udropship/session')->getVendor());
+		
 		$collection->addOrderData();
 		$collection->addProductNames();
 		$collection->addHasShipment();
@@ -49,9 +49,15 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 			$this->_applayDateFilter($collection, "shipment.created_at", $date);
 		}
 		
-		// Pos
-		if($pos=$this->getFilterValueByIndex("default_pos_id")){
+		// Pos 
+		if(($pos=$this->getFilterValueByIndex("default_pos_id")) && 
+			in_array($pos, $this->_getAllowedPosIds())){
+			// specified and validated
 			$collection->addFieldToFilter("main_table.default_pos_id", $pos);
+		}else{
+			// All allowed
+			$collection->addFieldToFilter("main_table.default_pos_id", 
+				array("in"=>$this->_getAllowedPosIds()));
 		}
 			
 		// Status
@@ -65,6 +71,22 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 		return $this;
 	}
 	
+	/**
+	 * @return array
+	 */
+	protected function _getAllowedPosIds() {
+		if(!$this->hasData("allowed_pos_ids")){
+			$this->setData("allowed_pos_ids", $this->getParentBlock()->getPosCollection()->getAllIds());
+		}
+		return $this->getData("allowed_pos_ids") ? $this->getData("allowed_pos_ids") : array();
+	}
+	
+	/**
+	 * 
+	 * @param Zolago_Po_Model_Resource_Po_Collection $collection
+	 * @param string $index
+	 * @param boolean $date
+	 */
 	protected function _applayDateFilter(Zolago_Po_Model_Resource_Po_Collection $collection, $index, $date) {
 		if(is_array($date)){
 			$date['date']=true;

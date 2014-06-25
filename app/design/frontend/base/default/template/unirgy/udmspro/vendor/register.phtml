@@ -227,11 +227,17 @@ $_session = Mage::getSingleton('udropship/session');
 
         function toggleElementRequired(el, req) {
             var el = $(el);
-            var lbl = el.previous('label[for="' + el.identify() + '"]')
+            var lbl = el.previous('label[for="' + el.identify() + '"]');
+
+            var spanRequired = jQuery(lbl).find('span.required').length;
+
             if (req) {
                 el.addClassName('required-entry');
                 if (lbl) {
-                    lbl.insert('<span class="required">*</span>')
+                    if(spanRequired == 0){
+                        lbl.insert('<span class="required">*</span>');
+                    }
+
                 }
             }else {
                 el.removeClassName('required-entry');

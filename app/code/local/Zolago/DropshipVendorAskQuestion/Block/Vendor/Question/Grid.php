@@ -13,10 +13,20 @@ class Zolago_DropshipVendorAskQuestion_Block_Vendor_Question_Grid extends Mage_A
     }
 	
 	protected function _prepareCollection(){
-		$v = Mage::getSingleton('udropship/session')->getVendor();
 		$collection = Mage::getModel('udqa/question')->getCollection();
-		$collection->joinShipments()->joinProducts()->joinVendors();
-		$collection->addVendorFilter($v);
+		$collection->
+				joinShipments()->
+				joinProducts()->
+				joinVendors();
+		
+		$vendor = Mage::getSingleton('udropship/session')->getVendor();
+		/* @var $vendor Zolago_Dropship_Model_Vendor */
+		$vendorsIds = $vendor->getChildVendorIds();
+		$vendorsIds[] = $vendor->getId();
+		
+		$collection->addFieldToFilter("main_table.vendor_id", 
+			array("in"=>  array_unique($vendorsIds)));
+		
 		$collection->getSelect()->columns(array('is_replied' => new Zend_Db_Expr('if(LENGTH(answer_text)>0,1,0)')));
 
         $this->setCollection($collection);

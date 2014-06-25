@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+    <sections>
+        <urma>
+            <groups>
+                <general>
+                    <fields>
+                        <statuses>
+                            <frontend_model>zolagorma/adminhtml_systemConfigFormField_optionsDefinition</frontend_model>
+                            <backend_model>udropship/systemConfig_backend_rowsSortable</backend_model>
+                        </statuses>
+                    </fields>
+                </general>
+		   </groups>
+        </urma>
+    </sections>
+</config>

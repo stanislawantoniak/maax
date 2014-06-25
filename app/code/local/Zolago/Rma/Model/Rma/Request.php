@@ -12,25 +12,33 @@ class Zolago_Rma_Model_Rma_Request extends Mage_Core_Model_Abstract {
     public function setRma($rma) {
         $this->_rma = $rma;
     }
+    
+    /**
+     * prepare default dhl settings
+     * @return array
+     */
     protected function _prepareDhlSettings() {
         $vendorId = $this->_rma->getUdropshipVendor();
         $vendor = Mage::getModel('udropship/vendor')->load($vendorId);
-        if (!$account = $vendor->getDhlRmaAccount()) {
-            if (!$account = $vendor->getDhlAccount()) {
-                $account = Mage::helper('zolagodhl')->getDhlAccount();
+        $useRma = $vendor->getDhlRma();
+        $useDhl = $vendor->getUseDhl();
+        if ((!$account = $vendor->getDhlRmaAccount()) || (!$useRma)) {            
+            if ((!$account = $vendor->getDhlAccount()) || (!$useDhl)) {
+                return false;
             }
         }
-        if (!$login = $vendor->getDhlRmaLogin()) {
+        if ((!$login = $vendor->getDhlRmaLogin()) || (!$useRma)) {
             if (!$login = $vendor->getDhlLogin()) {
-                $login = Mage::helper('zolagodhl')->getDhlLogin();
+                return false;
             }
         }
 
-        if (!$password = $vendor->getDhlRmaPassword()) {
+        if ((!$password = $vendor->getDhlRmaPassword()) || (!$useRma)) {
             if (!$password = $vendor->getDhlPassword()) {
-                $password = Mage::helper('zolagodhl')->getDhlPassword();
+                return false;
             }
         }
+        // default params
         $dhlSettings = array (
             'login' => $login,
             'password' => $password,
@@ -48,8 +56,11 @@ class Zolago_Rma_Model_Rma_Request extends Mage_Core_Model_Abstract {
         if ($rma) {
             $this->setRma($rma);
         }
-        $dhlSettings = $this->_prepareDhlSettings();
-        $client = Mage::helper('zolagodhl')->startDhlClient($dhlSettings);
+        if (!$dhlSettings = $this->_prepareDhlSettings()) {
+            return false;
+        }
+        $client = Mage::helper('zolagodhl')->startDhlClient($dhlSettings);        
+        // overwriting default params
         foreach ($this->_params as $key=>$param) {
             $dhlSettings[$key] = $param;
         }

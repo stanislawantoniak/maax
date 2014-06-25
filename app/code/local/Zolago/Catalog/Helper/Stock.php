@@ -20,7 +20,6 @@ class Zolago_Catalog_Helper_Stock extends Mage_Core_Helper_Abstract
         $xml = simplexml_load_file($file, 'SimpleXMLElement', LIBXML_NOCDATA);
 
         $merchant = (int)$xml->merchant;
-        echo $merchant;
 
         $dataXML = array();
         foreach ($xml->stocksPerPOS->pos as $pos) {
@@ -34,8 +33,8 @@ class Zolago_Catalog_Helper_Stock extends Mage_Core_Helper_Abstract
                 $dataXML[$sku][$posId] = $stock;
             }
         }
-        $res = array('merchant' => $merchant, 'data' => $dataXML);
 
+        $res = array('merchant' => $merchant, 'data' => $dataXML);
 
         return json_encode($res);
 
@@ -64,11 +63,11 @@ class Zolago_Catalog_Helper_Stock extends Mage_Core_Helper_Abstract
 
          */
         //1. get min POS stock (calculate available stock)
-        $posResourceModel = Mage::getResourceModel('zolagopos/pos_collection');
+        $posResourceModel = Mage::getResourceModel('zolagopos/pos');
         $minPOSValues = $posResourceModel->getMinPOSStock();
 
         //2. calculate stock on open orders
-        $zcSDModel = Mage::getResourceModel('zolagocatalog/stock_data');
+        $zcSDModel = Mage::getResourceModel('zolagopos/pos');
         $openOrdersQty = $zcSDModel->calculateStockOpenOrders($merchant);
 
         //-------Prepare data

@@ -1,11 +1,8 @@
-<?php //echo $this->getElement()->getLabelHtml(); ?>
 <label for="<?php echo $this->getElement()->getId(); ?>">
     <?php echo $this->__($this->getElement()->getLabel()); ?>
     <?php if ($this->getElement()->getRequired()): ?>
         <span class="required">*</span>
     <?php endif; ?>
-
-</label>
-<br />
+</label> <br />
 <?php echo $this->getElementHtml() ?>
  <strong>.<?php echo Mage::helper('umicrosite')->getDomainName() ?></strong>

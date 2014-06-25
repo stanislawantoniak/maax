@@ -7,6 +7,18 @@ class Zolago_Po_Model_Resource_Aggregated_Collection
         $this->_init('zolagopo/aggregated');
     }
 	/**
+	 * @param array $posIds
+	 * @return Zolago_Po_Model_Resource_Aggregated_Collection
+	 */
+	public function addPosFilter(array $posIds = array()){
+		if($posIds){
+			$this->addFieldToFilter("main_table.pos_id", array("in"=>$posIds));
+		}else{
+			$this->addFieldToFilter("aggregated_id", -1); // Epty collection
+		}
+		return $this;
+	}
+	/**
 	 * @param Unirgy_Dropship_Model_Vendor | int $vendor
 	 * @return \Zolago_Po_Model_Resource_Aggregated_Collection
 	 */

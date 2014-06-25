@@ -176,7 +176,7 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
             $obj->quantity	= $shipmentSettings['quantity'];
             break;
         }
-        $obj->nonStandard = $shipmentSettings['nonStandard'];
+        $obj->nonStandard = (empty($shipmentSettings['nonStandard']))? null:$shipmentSettings['nonStandard'];
         $ret = new StdClass();
         $ret->item[] = $obj;
         return $ret;
@@ -229,6 +229,21 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
         $message->shipments = $shipmentObject;
 
         return $this->_sendMessage('createShipments', $message);
+    }
+    /**
+     * @param $postCode
+     * @param $pickupDate
+     *
+     * @return array
+     */
+    public function getPostalCodeServices($postCode, $pickupDate, $country = 'PL')
+    {
+        $message = new StdClass();
+        $message->authData = $this->_auth;
+        $message->postCode = $this->formatDhlPostCode($postCode);
+        $message->pickupDate = $pickupDate;
+        $return = $this->_sendMessage('getPostalCodeServices', $message);
+        return $return;
     }
     /**
      * booking courier
@@ -412,7 +427,7 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
         $message->labelType = $this->_default_params['labelType'];
         return $message;       
     }
-    protected function _prepareShippingAddress() {
+    protected function _prepareClientAddress() {
         $address = $this->_rma->getShippingAddress();
         $data = $address->getData();
         $message = new StdClass();
@@ -431,11 +446,12 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
         $out->address = $message;
         return $out;
     }
-    protected function _prepareReceiverAddress() {
+    protected function _prepareVendorAddress() {
         $vendorId = $this->_rma->getUdropshipVendor();
         $vendor = Mage::getModel('udropship/vendor')->load($vendorId);
         $data = $vendor->getData();
         $message = new StdClass;
+        $address = new StdClass;
         $address->name = $data['vendor_name'];
         $address->city = substr($data['city'],0,17);
         $address->postalCode = $this->formatDhlPostCode($data['zip']);
@@ -449,10 +465,16 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
         $message->contact = $contact;
         return $message;
     }
-    protected function _prepareShip() {
+    protected function _prepareShipClient() {
         $message = new StdClass;
-        $message->shipper = $this->_prepareShippingAddress();
-        $message->receiver = $this->_prepareReceiverAddress();
+        $message->shipper = $this->_prepareClientAddress();
+        $message->receiver = $this->_prepareVendorAddress();
+        return $message;
+    }
+    protected function _prepareShipVendor() {
+        $message = new StdClass;
+        $message->shipper = $this->_prepareVendorAddress();
+        $message->receiver = $this->_prepareClientAddress();
         return $message;
     }
     protected function _prepareShipmentTime() {
@@ -471,7 +493,11 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
         $message->authData = $this->_auth;
         $shipment = new stdClass;
         $shipment->shipmentInfo = $this->_prepareShipmentAtOnce(); 
-        $shipment->ship = $this->_prepareShip();
+        if (empty($dhlSettings['vendor'])) {
+            $shipment->ship = $this->_prepareShipClient();        
+        } else {
+            $shipment->ship = $this->_prepareShipVendor();
+        }
         $shipment->content = self::SHIPMENT_RMA_CONTENT;
         $shipment->pieceList = $this->_createPieceList($dhlSettings);
         $message->shipment = $shipment;

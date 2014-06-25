@@ -85,16 +85,16 @@ class Zolago_DropshipMicrositePro_Block_Vendor_Register extends Unirgy_DropshipM
                             $formField->setRenderer($field['renderer']);
                         }
                         $formField->addClass('input-text');
+
                         if (!empty($field['required'])) {
                             $formField->addClass('required-entry');
                         }
-                        if (!empty($field['id'])) {
-                            $formField->addClass('required-entry');
-                        }
+//                        if (!empty($field['id'])) {
+//                            $formField->addClass('required-entry');
+//                        }
 
 
                         $formField->addClass('form-control');
-                        //krumo($formField->getData());
                     }
                     $this->_prepareFieldsetColumns($fieldset);
                     $emptyForm = false;
