@@ -254,7 +254,7 @@
                 <run>
                     <model>zolagorma/observer::cronRmaTracking</model>
                 </run>
-            </zolagomapper_process_collect_tracking>
+            </zolagorma_process_collect_tracking>
         </jobs>
     </crontab>
 </config>
