@@ -67,6 +67,7 @@ class Zolago_Rma_Model_Rma_Status
 		switch ($obj->getCode()){
 			case self::STATUS_PENDING_COURIER:
 			case self::STATUS_PENDING_PICKUP:
+				$ret[self::STATUS_PROCESSING] = true;
 				$ret[self::STATUS_CLOSED_REJECTED] = true;
 			break;
 			case self::STATUS_PENDING_DELIVERY:

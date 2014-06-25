@@ -45,6 +45,30 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 	}
 	
 	/**
+	 * It can be returned when order has been delivered not later than the bigges number for allowed_days
+	 * 
+	 * @return bloolean
+	 */
+	public function canBeReturned(){
+		
+		$vendor = $this->getVendor();
+		$reason_vendor = Mage::getModel('zolagorma/rma_reason_vendor')->getCollection()
+																	  ->addFieldToFilter('vendor_id', $vendor->getId())
+																	  ->setOrder('allowed_days', 'desc')
+																	  ->getFirstItem();
+		
+		if(!$reason_vendor){
+			return false;
+		}
+		
+		$max_allowed_days = (int) $reason_vendor->getAllowedDays();
+		
+		$days_elapsed = Mage::helper('zolagorma')->getDaysElapsed($reason_vendor->getReturnReasonId(), $this);
+		
+		return ($days_elapsed < $max_allowed_days) ? true : false;
+	}
+	
+	/**
 	 * @return bool
 	 */
 	public function isFinished() {

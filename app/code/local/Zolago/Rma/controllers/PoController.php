@@ -137,12 +137,21 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
         if (empty($rmas)) {
             Mage::throwException('Return could not be created');
         }
-        $dhlRequest = array (
-                          'shipmentDate' => $data['carrier_date'],
-                          'shipmentStartHour' => $data['carrier_time_from'],
-                          'shipmentEndHour' => $data['carrier_time_to'],
-                      );
-
+		
+		// If pickup date and time is not set
+		// It is a RETURN flow
+		if(isset($data['carrier_date']) && $data['carrier_date'] != "" 
+			&& isset($data['carrier_time_from'])  && $data['carrier_time_from'] != "" 
+			&& isset($data['carrier_time_to']) && $data['carrier_time_to'] != ""){
+	        $dhlRequest = array (
+	                          'shipmentDate' => $data['carrier_date'],
+	                          'shipmentStartHour' => $data['carrier_time_from'],
+	                          'shipmentEndHour' => $data['carrier_time_to'],
+	                      );
+		}
+		else{
+			$dhlRequest = NULL;
+		}
 
         $config = Mage::getSingleton("shipping/config");
         /* @var $config Mage_Shipping_Model_Config */
@@ -153,7 +162,7 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
             /* @var $po Zolago_Po_Model_Po */
             $rma->register();
             // set tracking
-            if ($trackingParams = $rma->sendDhlRequest($dhlRequest)) {
+            if ($dhlRequest && $trackingParams = $rma->sendDhlRequest($dhlRequest)) {
                 $track = Mage::getModel('urma/rma_track');
                 $track->setTrackCreator(Zolago_Rma_Model_Rma_Track::CREATOR_TYPE_CUSTOMER);
                 $track->setTrackNumber($trackingParams['trackingNumber']);
@@ -190,12 +199,13 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
             Mage::dispatchEvent("zolagorma_rma_created", array(
                                     "rma" => $rma
                                 ));
-            if($rma->getCurrentTrack()) {
+            if($rma->getCurrentTrack()) {                
                 Mage::dispatchEvent("zolagorma_rma_track_added", array(
                                         "rma"		=> $rma,
                                         "track"		=> $rma->getCurrentTrack()
                                     ));
             }
+            $rma->save();
         }
         Mage::helper('udropship')->processQueue();
         Mage::getSingleton('core/session')->setRmaPrintId($rma->getId());

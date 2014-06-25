@@ -272,7 +272,7 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
                                     "rma"		=> $rma,
                                     "track"		=> $model
                                 ));
-
+            $rma->save();
             $this->_getSession()->addSuccess(Mage::helper("zolagorma")->__("Shipping label added."));
         } catch(Mage_Core_Exception $e) {
             $this->_getSession()->addError($e->getMessage());

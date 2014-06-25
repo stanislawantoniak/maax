@@ -20,14 +20,12 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 	 * @param type $observer
 	 */
 	public function rmaTrackStatusChange($observer) {
-		$rma = $observer->getEvent()->getData('rma');
+		$rma   = $observer->getEvent()->getData('rma');
 		/* @var $rma Zolago_Rma_Model_Rma */
 		$track = $observer->getEvent()->getData('track');
 		/* @var $rma Zolago_Rma_Model_Rma_Track */
-		
 		$newStatus = $observer->getEvent()->getData("new_status");
-		$oldStatus = $observer->getEvent()->getData("old_status");
-		
+		$oldStatus = $observer->getEvent()->getData("old_status");		
 		$this->_logEvent($rma, Mage::helper('zolagorma')->
 			__("Tracking %s status changed (%s&rarr;%s)", 
 					$track->getTrackNumber(),
@@ -69,6 +67,7 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 			&& !$track->getWebApi()) {
 				$track->setNextCheck(date('Y-m-d H:i:s', time()));
 				$track->setUdropshipStatus(Unirgy_Dropship_Model_Source::TRACK_STATUS_PENDING);
+				$track->save();
 		    
 		}
 		$type = Mage::helper('zolagorma')->__(
@@ -360,4 +359,12 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 		
 		return $this;
 	}
+	
+    /**
+     * auto tracking rma
+     */
+    public function cronRmaTracking() {
+        $helper = Mage::helper('zolagorma');
+        $helper->rmaTracking();
+    }
 }
