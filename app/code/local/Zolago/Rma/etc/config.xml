@@ -244,4 +244,17 @@
             </zolagorma_global_return_reson_save_after>
         </events>
     </adminhtml>
+    <crontab>
+        <jobs>
+            <zolagorma_process_collect_tracking>
+                <schedule>
+                    <!-- Run every 5 minutes -->
+                    <cron_expr>*/5 * * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>zolagorma/observer::cronRmaTracking</model>
+                </run>
+            </zolagomapper_process_collect_tracking>
+        </jobs>
+    </crontab>
 </config>

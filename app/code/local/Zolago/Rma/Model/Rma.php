@@ -8,6 +8,9 @@ class Zolago_Rma_Model_Rma extends Unirgy_Rma_Model_Rma
 	const TYPE_RMASHIPPING = "rmashipping";
 	const TYPE_RMABILLING = "rmabilling";
 	
+	const FLOW_INSTANT = 1;
+	const FLOW_ACKNOWLEDGED = 2;
+	
 	/**
 	 * @return string
 	 */

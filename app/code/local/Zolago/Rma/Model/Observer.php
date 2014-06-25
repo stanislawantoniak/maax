@@ -359,4 +359,12 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 		
 		return $this;
 	}
+	
+    /**
+     * auto tracking rma
+     */
+    public function cronRmaTracking() {
+        $helper = Mage::helper('zolagorma');
+        $helper->rmaTracking();
+    }
 }

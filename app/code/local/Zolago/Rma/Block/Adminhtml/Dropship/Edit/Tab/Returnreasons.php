@@ -1,5 +1,5 @@
 <?php
-class Zolago_Rma_Block_Adminhtml_Dropship_Edit_Tab_ReturnReasons 
+class Zolago_Rma_Block_Adminhtml_Dropship_Edit_Tab_Returnreasons 
 	extends Mage_Adminhtml_Block_Widget_Form{
 	
 	public function __construct(){
@@ -21,7 +21,7 @@ class Zolago_Rma_Block_Adminhtml_Dropship_Edit_Tab_ReturnReasons
             'legend'=>$helper->__('Return Reasons')
         ));
 
-        $fieldset->addType('return_reasons', 'Zolago_Rma_Block_Adminhtml_Rma_Edit_Form_Element_ReturnReasons');
+        $fieldset->addType('return_reasons', 'Zolago_Rma_Block_Adminhtml_Rma_Edit_Form_Element_Returnreasons');
         
         $fieldset->addField('return_reasons', 'return_reasons', array(
             'name'      => 'return_reasons',
