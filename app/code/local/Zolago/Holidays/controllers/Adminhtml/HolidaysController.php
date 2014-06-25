@@ -139,4 +139,12 @@ class Zolago_Holidays_Adminhtml_HolidaysController extends Mage_Adminhtml_Contro
         return $this->_redirect("*/*");
 	}
 	
+	public function gridAction(){
+		
+		$this->loadLayout();
+	    $this->getResponse()->setBody(
+	           $this->getLayout()->createBlock('zolagoholidays/adminhtml_holidays_grid')->toHtml()
+	    ); 
+			 
+	}
 }
