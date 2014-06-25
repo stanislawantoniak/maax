@@ -4,6 +4,14 @@
 		border:1px solid #ebebeb;
 		background: #fff;
 		//height:550px;
+        @include transition-property(box-shadow);
+        @include transition-duration(0.1s);
+        @include transition-timing-function(ease-in);
+        //@include transition-delay(0.2s);
+        &:hover,
+        &.hover {
+            box-shadow: 0 0 3px 2px #bcbaba;
+            }
         }
 	}
 }
@@ -44,25 +52,133 @@
             color:#000;
             text-decoration:line-through;
             font-size:15px;
-            margin-right:10px;
+            margin-right:5px;
         }
         .like {
             
             font-size:11px;
             font-family:$fontBlack;
             color:#000;
-           
-            &:before {
-                content: ' ';
-                background:url('../images/heart.png');
+            position:relative;
+            z-index: 900;
+            .icoLike {
+                position:absolute;
+                top:0px;
+                right:0px;
+                .img-01 {
+                   display:block; 
+                }
+                .img-02 {
+                    display:none;
+                }
+            }
+            
+            .toolLike {
+                position:absolute;
+                background: #fff;
+                right:-20px;
+                top:-35px;
+                border:1px solid #bcbaba;
+                width:150px;
+                padding:5px 0;
+                text-align: center;
+                display:none;
+                background-clip: padding-box;
+                box-shadow: 0 0px 2px rgba(0, 0, 0, 0.5);
+                border: 1px solid #bcbaba;
+                border: 1px solid rgba(0, 0, 0, 0.5);
+                -webkit-transition: opacity 0.5s linear;
+                -moz-transition: opacity 0.5s linear;
+                -ms-transition: opacity 0.5s linear;
+                -o-transition: opacity 0.5s linear;
+                transition: opacity 0.5s linear;
+                
+
+                &:before, 
+                &:after {
+                    content: "";
+                    position: absolute;
+                    border-left: 10px solid transparent;
+                    border-right: 10px solid transparent;
+                    top: 100%;
+                    right: 19px;
+                    //margin-left: -10px;
+                }
+
+                &:before {
+                    border-top: 10px solid #111;
+                    border-top: 10px solid rgba(0, 0, 0, 0.5);
+                    margin-top: 0px;
+                }
+
+                &:after{
+                    border-top: 10px solid #fff;
+                    margin-top: -2px;
+                    z-index: 1;
+                }
+            }   
+            &.hover {
+                .toolLike {
+                    display:block; 
+
+                }
+            } 
+            &.liked {
+                .icoLike {
+
+                    .img-01 {
+                       display:none; 
+                    }
+                    .img-02 {
+                        display:block;
+                    }
+                }
+            
+            }
+            &:hover {
+                .icoLike {
+
+                    .img-01 {
+                       display:none; 
+                    }
+                    .img-02 {
+                        display:block;
+                    }
+                }
             }
             &.liked {
-                &:before {
-                    background:url('../images/heart-like.png');
+                &:hover {
+                    .icoLike {
+
+                        .img-01 {
+                           display:block; 
+                        }
+                        .img-02 {
+                            display:none;
+                        }
+                }
                 }
             }
         }
-
+        &.price-two-line {
+            .col-price {
+                span {
+                    display:block;
+                }
+            }
+            .like {
+                top: 21px;
+            }
+        }
+        &.like-two-line {
+            .like {
+                top: -4px;
+                padding-right: 0px!important;
+                .icoLike {
+                    top: 22px;
+                }
+            }
+        }
     }
     .promotion {
             background:#aefbe1;
@@ -81,13 +197,27 @@
         }
 }
 .shapes_listing {
-    height:155px;
-    background:url('../images/shapes-listing.png') 0 0 repeat-x;
+    height:60px;
+    /* IE9 SVG, needs conditional override of 'filter' to 'none' */
+    background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2YyZjFmMCIgc3RvcC1vcGFjaXR5PSIwLjAxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjQyJSIgc3RvcC1jb2xvcj0iI2YyZjFmMCIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmMmYxZjAiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+    background: -moz-linear-gradient(top,  rgba(242,241,240,0.01) 0%, rgba(242,241,240,1) 42%, rgba(242,241,240,1) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(242,241,240,0.01)), color-stop(42%,rgba(242,241,240,1)), color-stop(100%,rgba(242,241,240,1))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  rgba(242,241,240,0.01) 0%,rgba(242,241,240,1) 42%,rgba(242,241,240,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  rgba(242,241,240,0.01) 0%,rgba(242,241,240,1) 42%,rgba(242,241,240,1) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  rgba(242,241,240,0.01) 0%,rgba(242,241,240,1) 42%,rgba(242,241,240,1) 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  rgba(242,241,240,0.01) 0%,rgba(242,241,240,1) 42%,rgba(242,241,240,1) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#03f2f1f0', endColorstr='#f2f1f0',GradientType=0 ); /* IE6-8 */
+
     position:absolute;
-    bottom:-45px;
+    bottom:0px;
     left:0px;
     width:100%;
     text-align:center;
+    z-index: 900;
+}
+.addNewPositionListProductWrapper {
+    text-align: center;
+    margin-top:-15px;
 }
 .addNewPositionListProduct {
     &:link,
@@ -100,10 +230,23 @@
       line-height: 38px;
       font-size: 12px;
       color:#fff;
-      margin-top:85px;
+      position: relative;
+      z-index: 901; 
       &:hover {
           color:#fff;
       }  
     }
     
+}
+#items-product {
+    .item {
+        .box_listing_product {
+            &:hover,
+            &.hover {
+                .name_product {
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
 }

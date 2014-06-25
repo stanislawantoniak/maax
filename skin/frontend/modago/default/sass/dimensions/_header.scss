@@ -144,22 +144,56 @@
                     //    padding-top: 18px !important;
                     //}
                     @include max-screen($screen-sm-max) {
-                        padding-top: 18px !important; 
+                        padding-top: 14px !important; 
                     }
                     @include min-screen($screen-md) {
                         padding-top: 10px !important; 
                     }
                 }
+                &.no-badge {
+                    @include max-screen($screen-sm-max) {
+                        width:26px;
+                        //margin-right:-1px;
+                        margin-left:11px;
+                    }
+                    [class^=ico_] {
+
+                        &.ico_basket {
+                            @include max-screen($screen-sm-max) {
+                                margin-right: 0px!important;
+                            }
+                            >span {
+                                @include max-screen($screen-sm-max) {
+                                    top: 11px !important;
+                                }
+                            }
+                        }
+                    }
+                }
+                &.no-badge {
+                   a:link,
+                   a:visited {
+                       //@include max-screen($screen-xs-max) {
+                       //    padding-top: 18px !important;
+                       //}
+                       @include max-screen($screen-sm-max) {
+                           padding-top: 14px !important; 
+                       }
+                       @include min-screen($screen-md) {
+                           padding-top: 10px !important; 
+                       }
+                   } 
+                }
             }
             a {
                 @include reset-m;
                 position: relative;
-                height:60px;
+                height:61px;
                 padding-bottom: 2px;
                 display:block;
                 padding-top: 11px;
                  @include max-screen($screen-sm-max) {
-                    height: 45px;
+                    height: 46px;
                     padding-top: 17px;
                 }              
             }
@@ -287,3 +321,5 @@
         }
     }
 }
+
+

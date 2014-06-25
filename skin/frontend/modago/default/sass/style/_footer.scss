@@ -75,11 +75,17 @@
         background:$socialMap;
         @include inline-block;
          margin-left: 15px;
+         &:first-child {
+
+         }
+         
     }
     .ico_social_twitter {
         @include sprite($socialMap, ico_social_twitter);    
         @include sprite-dimensions($socialMap, ico_social_twitter);
-
+        @media (max-width: 320px) {
+            margin-left: 0!important;
+        }
         &:hover {
             @include sprite($socialMap, ico_social_twitter);
         }
@@ -236,7 +242,12 @@
                 top:-5px;
                 font-size: 11px;  
                 line-height: 1.2; 
-                padding-top:8px             
+                padding-top:8px ; 
+                @media (max-width: 320px) {
+                    display: block;
+                    width: 100%;
+                    margin-bottom: 5px;
+                }          
             }
         }
         .footer-gray-wr {

@@ -9,7 +9,9 @@
 				border-radius: 0;
 				border-top:1px solid #d9d9d9;
 				border-bottom:1px solid #d9d9d9;
+				padding: 14px 15px 12px 15px;
 				h4 {
+					padding:0px;
 					&.panel-title {
 						font-size: 11px;
 						color:#000;
@@ -51,14 +53,21 @@
 							list-style: none;
 						}
 						.view-store {
-							background: none repeat scroll 0% 0% #313131;
-							border: 1px solid #C5C5C5;
+							//background: none repeat scroll 0% 0% #313131;
+							//border: 1px solid #C5C5C5;
 							font-size: 11px;
 							padding: 3px 10px;
 							color: #FFF;
 							display: inline-block;
+							float: right;
+							margin-right: 2px;
 						}
 					}
+				}
+			}
+			&.last {
+				> .panel-heading {
+					border-bottom:none;
 				}
 			}
 		}

@@ -1,5 +1,11 @@
 #note_product {
+	
+	#statystyki_opinii {
+		border-bottom: 1px solid #f2f1f0;
+		padding-bottom: 15px;
+	}
 	dl.raty_note {
+		margin-bottom: 23px;
 		dt,dd {
 			margin-bottom: 10px;
 			overflow:hidden;
@@ -50,7 +56,19 @@
 	.rating_note {
 		 @media (min-width: 931px){
 			position:relative;
-			top:90px;
+			top:5px;
+		}
+		dt {
+			text-align: right;
+			padding-right: 30px;
+			margin-bottom: 12px;
+			padding-bottom: 0px;
+			@media (max-width: $screen-xs-max) {
+				text-align: left;
+			}
+			span {
+				margin-left:5px;
+			}
 		}
 		.prefix {
 			margin-right: 10px;
@@ -77,8 +95,11 @@
 	}
 
 	.add_opinion {
+		a {
+			position: relative;
+			top: 4px;
+		}
 		@media (min-width: 931px) { 
-			top:-50px;
 			text-align: right;
 		} 
 	}

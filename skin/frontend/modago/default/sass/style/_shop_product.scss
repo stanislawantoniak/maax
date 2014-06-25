@@ -4,6 +4,7 @@
 		text-transform:uppercase;
 		font-size:34px;
 		padding-bottom:15px;
+		padding-top: 0px;
 		margin-bottom:15px;
 		margin-top: 0;
 		border-bottom: 1px solid #eeedf0;
@@ -17,6 +18,7 @@
 	.short-description {
 		font-size: 11px;
 		color: #383838;
+		margin-bottom: 6px;
 		a {
 			color :#959595;
 			span {
@@ -24,10 +26,16 @@
 				margin-left:30px;
 			}
 		}
+		@media (max-width: 1199px) {
+			display:none;
+		}
 	}
 	.price-box-bundle {
 		position:relative;
-		margin-bottom: 40px;
+		margin-bottom: 16px;
+		@media (min-width: 768px) and (max-width: 819px) {
+			margin-bottom: 0px;
+		}
 		.price-label,
 		.old-price {
 			font-size: 24px;
@@ -41,11 +49,21 @@
 			font-size: 36px;
 			color:#000;
 			font-family: $fontBlack;
-			@media (max-width: $screen-xs-max) {
+			@media (min-width: 768px) and (max-width: 819px) {
+				margin-bottom: 0px;
+			}
+			@media (min-width: 481px) and (max-width: $screen-xs-max) {
+				display:inline-block;
+				margin:0px;
+				padding:0px;
+				line-height: 1.0;
+			}
+			@media (max-width: 480px) {
 				display:block;
 				margin:0px;
 				padding:0px;
 				line-height: 1.0;
+				display:block;
 			}
 		}
 		ul {
@@ -66,55 +84,102 @@
 		.color-label,
 		.size-label {
 			line-height: 47px;
-			width: 115px;
+			width: 135px;
 			display: inline-block;
 			float: left;
 			text-transform: uppercase;
 			font-size: 11px;
 			color:#020202;
-            font-weight: bold;
+            font-weight: normal;
+            @media (max-width: $screen-xs-max) {
+            	float:none;
+            	display:block;
+            	line-height: 29px;
+            }
 		}
 		.form-group {
 			display: inline-block;
 			label {
 				position: relative;
-				width:37px;
-				height: 47px;
+				width:43px;
+				height: 43px;
 				display:inline-block;
 				margin-right:8px;
 				cursor:pointer;
+				&:first-child {
+					margin-left:-2px;
+				}
 				img {
 					position:absolute;
 					top:0px;
 					left:0px;
-					border:1px solid #f2f2f2;
+					width:100%;
+					height:auto;
+					@include border-radius(3px);
+					border:1px solid #fff;
+				}
+				&:hover {
+					&+img {
+						border-color:#999;
+					}
+				}
+				img:hover {
+					border-color:#999;
 				}
 				[type="radio"]:checked {
 					&+img {
-						border-color:#999;
+						border-color:#000;
 					}
 				}
 			}
 		}
 	}
+	.color {
+		.form-group {
+			input[type="radio"] {
+				margin-left: 50%;
+				margin-top: 50%;
+				float: left;
+			}
+		}
+	}
+	.size {
+		position:relative;
+	}
+	.size {
+		.form-group {
+			input[type="radio"] {
+				margin-left: 30%;
+				margin-top: 30%;
+				float: left;
+			}
+		}
+	}
 	.size-box-bundle {
 		margin-bottom:20px;
+		@media (min-width: 992px) and (max-width: 1197px){
+			margin-bottom:0px;
+		}
+		@media (min-width: 768px) and (max-width: 991px) {
+			margin-bottom:0px;
+		}
 		.size-label { 
 			line-height: 29px;
 			@media (max-width: $screen-xs-max) { 
 				display:block;
-				width:100%;
+				float:none;
 			}
 		}
 		.form-group {
 			margin-bottom: 5px;
+			margin-left: 2px;
 			label {
-				width:29px;
-				height:29px;
+				width:31px;
+				height:31px;
 				position: relative;
 				span {
-					width:29px;
-					height:29px;
+					width:31px;
+					height:31px;
 					display:block;
 					background:#fff;
 					border:1px solid #afafaf;
@@ -128,44 +193,102 @@
 					top:0px;
 					left:0px;
 				}
-			[type="radio"]:checked {
+			[type="radio"]:hover {
 				&+span {
 					border-color:#999;
 					background:#999;
 					color:#fff;
 				}
 			}	
+			span:hover {
+					border-color:#999;
+					background:#999;
+					color:#fff;
+				}
+			[type="radio"]:checked,
+			[type="radio"]:hover:checked {
+				&+span {
+					border-color:#000;
+					background:#000;
+					color:#fff;
+				}
+			}
+			
 			}
 		}
 		.view-sizing {
 			display:block;
-			margin-left:115px;
 			font-size: 11px;
-			color:#000;
-			text-decoration: underline;
+			float: right;
+			position: absolute;
+			bottom: -10px;
+			left: 0px;
+			@media (min-width: 769px) and (max-width: 814px) {
+				
+			}
 			@media (max-width: $screen-xs-max) {
 				margin-left:0px;
+
 			}
-			span {
-				font-size:8px;
-				color:#1dd8a0;
-				margin-left:15px;
+			&.hidden-xs {
+				@media (min-width: 769px) and (max-width: 814px) {
+					display:none!important;
+				}
 			}
-			&:hover {
-				color:#999;
+			&.visible-xs {
+				@media (min-width: 769px) and (max-width: 814px) {
+					display:inline-block!important;
+				}
+				@media (max-width: $screen-xs-max) {
+					display:inline-block!important;
+					float:right;
+					position: absolute;
+					top: 5px;
+					left: 155px;
+				}
 			}
+			
+			
 		}
 		.size-box {
-			margin-bottom: 20px;
+			margin-bottom: 25px;
+			.sbHolder {
+				width:167px;
+			}
 		}
 	}
 	.action-box-bundle {
 		margin-bottom:20px;
 		font-size: 11px;
 		color:#000;
+		@media screen and (-webkit-min-device-pixel-ratio:0) {
+			   margin-top:4.5px;
+			}
+		
+		@media (max-width: 360px) {
+			font-size: 9px;
+		}
+		.col-xs-6.text-right {
+			margin-top: 16px;
+			@media screen and (-webkit-min-device-pixel-ratio:0) {
+			    margin-top: 15px;
+			}
+			@media (max-width: 320px) {
+				margin-top: 15px;
+			}
+		}
+		.addLike-box {
+			@media (max-width: 360px) {
+			margin-top: 1px;
+			@media screen and (-webkit-min-device-pixel-ratio:0) {
+					margin-top: 2px;
+				}
+			}
+
+		}
 		.addLike {
 			width:149px;
-			height:43px;
+			height:42px;
 			display:block;
 			border:2px solid #a6a6a6;
 			@include border-radius(5px);
@@ -176,6 +299,9 @@
 			text-transform: uppercase;
 			font-family: $fontRegular;
 			background:#fff url('../images/heart.png') 8px 11px no-repeat;
+			@media screen and (-webkit-min-device-pixel-ratio:0) {
+				   height:42px;
+				}
 			&:hover {
 				text-decoration: none;
 				background:#fff url('../images/heart-like.png') 8px 11px no-repeat;
@@ -199,7 +325,21 @@
 			}
 		}
 		.addBasket {
-			margin-top: 15px;
+			
+			width: 100%; 
+			max-width:165px;
+			overflow:hidden;
+			@media (min-width: $screen-lg-min) {
+				max-width:190px;
+			}
+			@media (max-width: 320px) {
+				font-size: 11px;
+				font-weight: normal;
+			}
 		}
 	}
+}
+
+#share {
+	margin-top: -10px;
 }

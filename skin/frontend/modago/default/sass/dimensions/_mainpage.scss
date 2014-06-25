@@ -105,21 +105,56 @@
             padding-right: 9px;
             float:left;
         }
-        @media (max-width: 931px){
+        @media (min-width: 768px) and (max-width: 931px){
             width:350px;
             float:left;
         }
+        @media (min-width: 481px) and (max-width: 767px){
+            width:360px;
+            float:none;
+            margin: 0 auto;
+        }
+        @media (max-width: 480px){
+            width:360px;
+            float:none;
+            margin: 0 auto;
+        }
        
 
+    }
+    &.col-xs-12 {
+        @media  (max-width: 767px) {
+            float:none;
+            margin: 0 auto;
+        }
     }
 }
 
 #block-bundle {
 
     &.col-lg-7 {
-         @media (min-width: $screen-lg-min) { 
+        float: none;
+        margin-left: 435px;
+        width: auto;
+        padding-right: 20px;
+        @media (min-width: 767px) and (max-width: 931px) {
+            margin-left: 335px;
+        }
+        @media  (max-width: 767px) {
+            margin-left: inherit;
+            float:inherit;
+            margin-left: inherit;
+            width: inherit;
+        }
+        @media  (max-width: 360px) {
+            padding-right: 10px;
+            padding-left: 10px;
+        }
+
+         /*@media (min-width: $screen-lg-min) { 
             width:61.33333%;
             padding-left:0px;
+
             //padding-right: 0px;
         } 
         @media (min-width: 1166px) and (max-width: 1199px) { 
@@ -135,16 +170,19 @@
         @media (min-width: 1111px) and (max-width: 1165px) { 
             width:58.333%;
             padding-left:0px;
+            //padding-right: 0px;
             float:left;
         }
         @media (min-width: 1062px) and (max-width: 1110px) { 
             width:56.333%;
             padding-left:0px;
+            padding-right: 0px;
             float:left;
         }
         @media (min-width: 974px) and (max-width: 1161px) { 
             width:51.333%;
             padding-left:0px;
+            padding-right: 0px;
             float:left;
         }
          @media (min-width: 932px) and (max-width: 973px) { 
@@ -166,7 +204,7 @@
             width:51.333%;
             padding-left:0px;
             float:left;
-        }
+        }*/
 
         .col-lg-4 {
              @media (min-width: $screen-lg-min) { 
@@ -181,6 +219,14 @@
     #product-shop {
         &.col-lg-8 {
             padding-left:0px;
+            //padding-right: 0px;
+            overflow: hidden;
+            @media (max-width: $screen-lg-min) { 
+                padding-right: 0px;
+            }
+             @media (max-width: 320px) { 
+                padding-right: 0;
+            }
         }
     }
 

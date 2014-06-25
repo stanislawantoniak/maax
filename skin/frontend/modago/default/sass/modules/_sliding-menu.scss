@@ -120,6 +120,9 @@ html.sb-site-lock.sb-active:not(.sb-static) {
 	.sb-slidebar-inner {
 		overflow-y: auto;
 		height: 100%;
+		nav {
+			padding-bottom: 30px;
+		}
 	}
 }
 

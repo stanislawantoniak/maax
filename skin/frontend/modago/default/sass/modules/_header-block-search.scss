@@ -57,18 +57,20 @@
             }
         }
 
-        .sbOptions{
-            background-color: #212121;
-            border: solid 1px #515151;
+        .sbOptionsWrapper{
+            background-color: #fff;
+            border: none;
             list-style: none;
             left: -1px;
             margin: 0;
-            padding: 0;
+            padding: 0 0 5px 0;
             position: absolute;
             top: 30px;
-            width: 200px;
+            width: 135px;
             z-index: 1;
             overflow-y: auto;
+            box-shadow: 0 0 0 5px rgba(0,0,0,0.2);
+
             li {
                 padding: 0 7px;
             }
@@ -159,13 +161,13 @@
         	background-position: 0 -69px;
         }
 
-        .sbOptions {
+        .sbOptionsWrapper {
         	width:100%;
         	background:#fff;
         	border:none;
         	left:0px;
         	padding-top:6px;
-        	@include box-shadow(rgba(1,1,1,.22) 0 5px 3px);
+        	@include box-shadow(rgba(1,1,1,.12) 0 3px 5px);
         	li {
         		padding:0;
         		height:auto;

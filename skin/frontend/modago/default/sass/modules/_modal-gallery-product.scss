@@ -137,6 +137,9 @@
 			margin-left: -(image-width(sprite-file($arrowMap, arrow_top_j)) / 2) ;
 			background:$arrowMap;
 			z-index: 999;
+			&.inactive {
+				visibility:hidden;
+			}
 	}
 	.prev-navigation-modd {
 	    top:-15px; 

@@ -49,7 +49,6 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
 	
 	public function getAllowedCarriers() {
 		return array(/*"", "custom", */"zolagodhl","ups");
->>>>>>> origin/dev
 	}
 	
 	public function isUdpoMpsAvailable($carrierCode, $vendor = null) {

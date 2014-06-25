@@ -1,11 +1,19 @@
 .node-type-view-product {
 	#breadcrumbs {
 	margin-top: -15px;
+		@media (min-width: 768px) and (max-width: 768px) {
+			margin-top: 0px;
+		}
+	}
+}
+.node-type-main_categories {
+	ol.breadcrumb {
+		margin:20px 0px;
 	}
 }
 ol.breadcrumb {
 	background:none;
-	padding:0px 0px 5px;
+	padding:0px 0px 0px;
 	margin:20px 0;
 	font-family: 'OpenSansRegular';
 	font-size: 11px;
@@ -27,9 +35,12 @@ ol.breadcrumb {
 			font-family: 'OpenSansRegular';
 			font-size: 11px;			
 		}
+		a:hover {
+			text-decoration: underline;
+		}
 		&.active {
 			color:#000;
-
+			
 		}
 	}
 }

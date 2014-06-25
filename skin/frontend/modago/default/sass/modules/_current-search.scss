@@ -1,6 +1,9 @@
 #block-current-search {
 	padding-bottom: 5px;
 	position:relative;
+	p {
+		margin-bottom: 10px;
+	}
 	form {
 		position:relative;
 		margin-top:10px;
@@ -26,24 +29,58 @@
 	}
 	.actionViewFilter{
 		width:50%;
-		margin:0 auto;
+		min-width: 180px;
+		position: relative;
+		left: -25px;
 		text-align: center;
+		line-height: 18px;
+		margin-bottom: 10px;
+		white-space:nowrap;
 		i {
 			float:left;
 			position:relative;
-			top:5px;
+			top:3px;
+			margin-left: 10px;
+			margin-right: 10px;
+
 		}
+	}
+	.breadcrumb {
+		margin-bottom: 0;
+	}
+	a.underline.external {
+		margin-right: 10px;
+		&:after {
+			top: 2px;
+		}
+	}
+	.no-result {
+		font-size: 16px;
+		display:block;
+	}
+	.found-product {
+		margin-bottom: 0px;
 	}
 }
 .current-search {
 	h1 {
 		font-size: 24px;
-		margin-bottom: 5px;
+		margin-bottom: 10px;
+		padding-top: 12px;
+		padding-bottom: 0;
+		@media (max-width: $screen-xs-max) {
+			font-size: 20px;
+		}
 		&+h1 {
 			margin-top: 0px;
 			margin-bottom: 15px;
 			span {
 				font-size: 14px;
+			}
+		}
+		strong {
+			@media (max-width: $screen-xs-max) {
+				display:block;
 			}
 		}
 	}
@@ -64,5 +101,12 @@
 				float:none;
 			}
 		}
+	}
+}
+
+#number_products {
+	@media (min-width: $screen-sm-min) {
+		//top: 10px;
+		position: relative;
 	}
 }

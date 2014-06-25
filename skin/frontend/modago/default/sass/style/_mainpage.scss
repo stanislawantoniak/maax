@@ -55,9 +55,12 @@
 }
 
 .path_back_to_category {
-    padding:0 0 10px 0;
+    padding: 5px 0px 5px;
+    margin-bottom: 5px;
     text-transform: uppercase;
     overflow:hidden;
+    border-top:1px solid #dedce1;
+    border-bottom:1px solid #dedce1;
     a {
         font-size: 18px;
     }

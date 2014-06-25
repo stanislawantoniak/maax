@@ -1,5 +1,5 @@
 <?php
-class Zolago_Holidays_Helper_DateCalculator extends Mage_Core_Helper_Abstract{
+class Zolago_Holidays_Helper_Datecalculator extends Mage_Core_Helper_Abstract{
 	
 	protected $weekend;
 	

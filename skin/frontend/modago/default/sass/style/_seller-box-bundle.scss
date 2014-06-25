@@ -2,8 +2,8 @@
 
 #seller-box-bundle,
 .descripionProduct-box-bundle {
-	border:1px solid #bfbfbf;
-	padding:9px;
+	border:1px solid #d9d9d9;
+	padding:9px 9px 0px;
 	text-align:center;
 	margin-bottom: 10px;
 	@media (max-width: $screen-xs-max) {
@@ -17,9 +17,23 @@
 		margin-top: 9px;
 		margin-bottom: 13px;
 		display:block;
+		@media (max-width: $screen-xs-max) {
+			
+			float:left;
+			text-align: left;
+			clear: left;
+			margin-left:25px;
+			display: inline-block;
+			margin-bottom: 7px;
+		}
 	}
 	figure {
 		margin-bottom:14px;
+		@media (max-width: $screen-xs-max) {
+			position:absolute;
+			right:35px;
+			top:16px;
+		}
 	}
 	.seller {
 		font-size: 12px;
@@ -27,6 +41,14 @@
 		margin-bottom: 17px;
 		a {
 			@extend .seller;
+		}
+		@media (max-width: $screen-xs-max) {
+			float:left;
+			text-align: left;
+			clear: left;
+			margin-left:13px;
+			display: inline-block;
+			margin-bottom: 10px;
 		}
 	}
 	.block {
@@ -39,6 +61,7 @@
 			@media (min-width: $screen-md-min) and (max-width: $screen-md-max) { 
 				border-top: none;
 			}
+
 		}
 	}
 	h3 {
@@ -48,7 +71,7 @@
 		margin:0px;
 		display:block;
 		text-align: left;
-		padding-left: 20px;
+		padding:0 0 0 10px;
 		position:relative;
 		a {
 			font-size: 11px;
@@ -94,7 +117,70 @@
 	@media (min-width: $screen-md-min) and (max-width: $screen-md-max) { 
 		margin-top: 10px;		
 	 }
+	 span {
+		position:relative;
+	}
+	 .bullet-plusik {
+
+ 		@media (min-width: $screen-md-min) and (max-width: $screen-md-max) { 
+			left: 195px;
+		}
+
+		@media  (min-width: 1045px) and (max-width:1161px) { 
+			left:168px;
+		}
+		@media  (max-width:1044px) { 
+			left:180px;
+		}
+		@media  (max-width:991px) { 
+			left: 195px;
+		}
+		
+		
+	}
 }
+.seller-box-question {
+	span {
+		position:relative;
+	}
+	 .bullet-plusik {
+ 		@media (min-width: $screen-md-min) and (max-width: $screen-md-max) { 
+			left: 195px;
+		}
+
+		@media  (min-width: 1045px) and (max-width:1161px) { 
+			left:168px;
+		}
+		@media  (max-width:1044px) { 
+			left:180px;
+		}
+		@media  (max-width:991px) { 
+			left: 195px;
+		}
+		
+	}
+}
+.descripionProduct-box-comments {
+	span {
+		position:relative;
+	}
+	 .bullet-plusik {
+ 		@media (min-width: $screen-md-min) and (max-width: $screen-md-max) { 
+			left: 198px;
+		}
+
+		@media  (min-width: 1045px) and (max-width:1161px) { 
+			left:172px;
+		}
+		@media  (max-width:1044px) { 
+			left:180px;
+		}
+		@media  (max-width:991px) { 
+			left: 198px;
+		}
+	}
+}
+
 
 #seller-box-bundle {
 	@media (max-width: $screen-xs-max) {
@@ -115,4 +201,21 @@
 	.panel-group {
 		margin-bottom: 0px;
 	}  
+}
+
+.seller-box-description,
+.seller-box-question,
+.descripionProduct-box-comments {
+	h3 {
+		@media (min-width: $screen-md-min) and (max-width: $screen-md-max) { 
+			text-align: center!important;
+		}
+		@media  (max-width:1044px) { 
+			text-align: left!important;
+		}
+		@media  (max-width:991px) { 
+			text-align: center!important;
+		}
+
+	}
 }

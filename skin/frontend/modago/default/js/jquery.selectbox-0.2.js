@@ -23,6 +23,8 @@
 			classHolderDisabled: "sbHolderDisabled",
 			classSelector: "sbSelector",
 			classOptions: "sbOptions",
+			classOptionsWrapper: "sbOptionsWrapper",
+			classOptionsWrapperInner: "sbOptionsWrapperInner mCustomScrollbar",
 			classGroup: "sbGroup",
 			classSub: "sbSub",
 			classDisabled: "sbDisabled",
@@ -77,7 +79,7 @@
 			var $target = $(target),
 				self = this,
 				inst = self._newInst($target),
-				sbHolder, sbSelector, sbToggle, sbOptions,
+				sbHolder, sbSelector, sbToggle, sbOptions, sbOptionsWrapper,
 				s = FALSE, optGroup = $target.find("optgroup"), opts = $target.find("option"), olen = opts.length;
 				
 			$target.attr("sb", inst.uid);
@@ -143,6 +145,22 @@
 			sbOptions = $("<ul>", {
 				"id": "sbOptions_" + inst.uid,
 				"class": inst.settings.classOptions,
+				"css": {
+					//"display": "none"
+				}
+			});
+			//classOptionsWrapperInner
+			sbOptionsWrapperInner = $("<div>", {
+				"id": "sbOptionsWrapperInner_" + inst.uid,
+				"class": inst.settings.classOptionsWrapperInner,
+				"css": {
+					//"display": "none"
+				}
+			});
+
+			sbOptionsWrapper = $("<div>", {
+				"id": "sbOptionsWrapper_" + inst.uid,
+				"class": inst.settings.classOptionsWrapper,
 				"css": {
 					"display": "none"
 				}
@@ -297,8 +315,12 @@
 			});
 			
 			sbSelector.appendTo(sbHolder);
-			sbOptions.appendTo(sbHolder);			
+			sbOptions.appendTo(sbOptionsWrapper);
+			//sbOptionsWrapperInner.appendTo(sbOptionsWrapper);
+			sbOptionsWrapper.appendTo(sbHolder);			
 			sbHolder.insertAfter($target);
+
+
 			
 			$("html").on('mousedown', function(e) {
 				e.stopPropagation();          
@@ -399,7 +421,7 @@
 			if (!inst || inst.isOpen || inst.isDisabled) {
 				return;
 			}
-			var	el = $("#sbOptions_" + inst.uid),
+			var	el = $("#sbOptionsWrapper_" + inst.uid),
 				viewportHeight = parseInt($(window).height(), 10),
 				offset = $("#sbHolder_" + inst.uid).offset(),
 				scrollTop = $(window).scrollTop(),
@@ -431,7 +453,7 @@
 				return;
 			}
 			var onClose = this._get(inst, 'onClose');
-			inst.settings.effect === "fade" ? $("#sbOptions_" + inst.uid).fadeOut(inst.settings.speed) : $("#sbOptions_" + inst.uid).slideUp(inst.settings.speed);
+			inst.settings.effect === "fade" ? $("#sbOptionsWrapper_" + inst.uid).fadeOut(inst.settings.speed) : $("#sbOptionsWrapper_" + inst.uid).slideUp(inst.settings.speed);
 			$("#sbToggle_" + inst.uid).removeClass(inst.settings.classToggleOpen);
 			this._state[inst.uid] = FALSE;
 			inst.isOpen = FALSE;

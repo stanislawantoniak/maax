@@ -14647,8 +14647,8 @@ function removeDescribedBy( elem ) {
 		elem.removeAttr( "aria-describedby" );
 	}
 }
-
-$.widget( "ui.tooltip", {
+/////////////////////////////////////////////////////////////////////////////////////////////////
+/*$.widget( "ui.tooltip", {
 	version: "1.10.4",
 	options: {
 		content: function() {
@@ -15003,6 +15003,6 @@ $.widget( "ui.tooltip", {
 			}
 		});
 	}
-});
-
+});*/
+//////////////////////////////////
 }( jQuery ) );

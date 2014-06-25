@@ -19,24 +19,34 @@
           line-height: 38px;
           font-size:14px;
           color:#313131;
-          display:inline-block;
+          display:block;
           position:absolute;
           top:0px;
           left:0px;
           background:#fff;
-          &:hover {
-            color:#999;
+          
+        }
+        &:hover {
+          span {
+             background-color:#999;
+            border-color:#999;
+            color:#fff;
           }
-        }
-        input[type="checkbox"]:hover + span  {
-            background:#999;
+           
+          }
+        input[type=checkbox]:hover + span  {
+            background-color:#999;
             border-color:#999;
             color:#fff;
         }
-         input[type="checkbox"]:checked + span  {
-            background:#999;
-            border-color:#999;
+        input[type=checkbox]:checked {
+          outline:none!important;
+        }
+         input[type=checkbox]:checked + span  {
+            background:#000;
+            border-color:#000;
             color:#fff;
+
         }
       }
     }
@@ -46,8 +56,9 @@
         padding:0 23px 0 5px;
         float:left;
         height:23px;
-        width:100%;
+        width:122px;
         border:1px solid #d6d6d6;
+        float:left;
         &:focus {
           outline:none;
         }
@@ -55,6 +66,7 @@
       input[type="image"] {
         height:23px;
         margin-left: 2px;
+        float:left;
         outline:none;
       }
       .form-group {
@@ -82,17 +94,21 @@
       }    
     }
 #filter_price {
+      &> .form-checkbox {
+        margin-left: 0px;
+      }
       .form-horizontal {
-        &+.form-horizontal {
+        &+.form-horizontal {  
            margin-left: 5px;
         }
         input {
-          width:30%;
           margin:0 5px;
           &[type="text"] {
             padding:0px;
             margin:0px 5px;
             text-align: center;
+            height:22px;
+            width:38px;
           }
         }
         label {
@@ -104,17 +120,45 @@
         }
       }
       #od_do {
-        padding-left:15px;
+        padding-left:16px;
+        #slider-range {
+          margin-top:10px;
+        }
+
         .form-horizontal {
-          width:62px;
+          width:40px;
           float:left;
+          margin-left:-6px;
+         & + .form-horizontal {
+          margin-left:11px;
+          }
         }
         .form-action {
           margin-bottom: 5px;
+          margin-right: 0;
+          float: right;
+          width: 45px;
+          .btn {
+            position:relative;
+            top:0px;
+            &.black {
+              width:45px!important;
+              height:22px!important;
+              line-height: 21px!important;
+              font-size: 15px!important;
+              min-width: 45px;
+              padding:0px;
+            }
+            
+          }
         }
       }
     }
 #filter_color {
+      [type="checkbox"] {
+        outline:none!important;
+        margin:3px 0 0 3px;
+      }
       label {
         display:inline-block;
         width:34px;
@@ -125,7 +169,7 @@
           margin-left: 0;
         }
         > span {
-          display:inline-block;
+          display:block;
           width:33px;
           height:33px;
           padding:3px;
@@ -140,13 +184,18 @@
             height:27px;
             border:1px solid #afafaf;
           }
+          
         }
         [type="checkbox"]:hover + span {
           background:#999;
           cursor:pointer;
         }
         [type="checkbox"]:checked + span {
+          background:#000;
+        }
+        &:hover span {
           background:#999;
+          cursor:pointer;
         }
       }
     }
@@ -160,12 +209,26 @@
   margin-bottom: 10px;
   li {
     padding-left: 5px;
+    padding-right: 19px;
     .form-group {
       margin-bottom: 5px;
     }
-    &.first:not(:first-child) {
-      border-top: 1px solid #999;
-      padding-top:5px;
+    &.lastChecked {
+      border-bottom: 1px solid #d0cfcf;
+      margin-bottom:5px;
     }
   }
 } 
+
+#filter_style {
+  .select-group {
+    &.medium {
+      width:140px;
+      max-width: 140px;
+      .button-select {
+        width:140px;
+        min-width:140px;
+      }
+    }
+  }
+}
