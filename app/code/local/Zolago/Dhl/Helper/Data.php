@@ -27,7 +27,7 @@ class Zolago_Dhl_Helper_Data extends Mage_Core_Helper_Abstract {
 	const DHL_HEADER				= 'DHL Tracking Info';
 	const DHL_CARRIER_CODE		= 'zolagodhl';
 	const USER_NAME_COMMENT		= 'API';
-	
+    const ALERT_DHL_ZIP_ERROR = 1;
     public function isDhlEnabledForVendor(Unirgy_Dropship_Model_Vendor $vendor) {
 		return (bool)(int)$vendor->getUseDhl();
 	}
@@ -222,7 +222,14 @@ class Zolago_Dhl_Helper_Data extends Mage_Core_Helper_Abstract {
 		
 		return $canShow;
 	}
-
+    public static function getAlertText($int) {
+        switch ($int) {
+            case self::ALERT_DHL_ZIP_ERROR:
+                return "Zip code in shipment address is not valid. There will be a problem when shipping to that address.";
+                break;
+        }
+        return "";
+    }
     /**
      * Check if entered zip available on DHL
      * @param $country
@@ -246,10 +253,20 @@ class Zolago_Dhl_Helper_Data extends Mage_Core_Helper_Abstract {
                 $dhlClient->setAuth($login, $password);                
                 $ret = $dhlClient->getPostalCodeServices($zip, date('Y-m-d'));
                 if (is_object($ret) && property_exists($ret, 'getPostalCodeServicesResult')) {
-                    $domesticExpress9 = (bool)$ret->getPostalCodeServicesResult->domesticExpress9;
-                    $domesticExpress12 = (bool)$ret->getPostalCodeServicesResult->domesticExpress12;
-
-                    $dhlValidZip = ($domesticExpress9 || $domesticExpress12) ? true : false;
+                    $empty = new StdClass;
+                    $empty->domesticExpress9 = false;
+                    $empty->domesticExpress12 = false;
+                    $empty->deliveryEvening = false;
+                    $empty->deliverySaturday = false;
+                    $empty->exPickupTo       = 'brak';
+                    $empty->exPickupFrom     = 'brak';
+                    $empty->drPickupFrom     = 'brak';
+                    $empty->drPickupTo       = 'brak';
+                    if (!$ret->getPostalCodeServicesResult == $empty) {
+                        $dhlValidZip = false;
+                    } else {
+                        $dhlValidZip = true;
+                    }
 
                     if ($dhlValidZip) {
                         $zipModel = Mage::getResourceModel('zolagodhl/zip');
@@ -263,7 +280,7 @@ class Zolago_Dhl_Helper_Data extends Mage_Core_Helper_Abstract {
                         $this->_log("Check PL zip availability:error", 'dhl_zip.log');
                     }
                     //if there was an communication error forms should PASS validation
-                    return true;
+                    $dhlValidZip = false;
                 }
             }
         }
