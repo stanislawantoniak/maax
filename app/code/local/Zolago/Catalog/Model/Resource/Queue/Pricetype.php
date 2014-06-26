@@ -181,7 +181,8 @@ class Zolago_Catalog_Model_Resource_Queue_Pricetype extends Zolago_Common_Model_
                 array(
                      "product_id" => "product_varchar.entity_id",
                      "skuv"       => "product_varchar.value",
-                     "store"      => "product_varchar.store_id"
+                     "store"      => "product_varchar.store_id",
+                     "sku" => "product.sku"
                 )
             );
             $select->join(
@@ -200,7 +201,7 @@ class Zolago_Catalog_Model_Resource_Queue_Pricetype extends Zolago_Common_Model_
             $select->where("product.type_id=?", Mage_Catalog_Model_Product_Type::TYPE_SIMPLE);
 
             try {
-                $assoc = $readConnection->fetchPairs($select);
+                $assoc = $readConnection->fetchAssoc($select);
             } catch (Exception $e) {
                 Mage::throwException("Error skuv");
             }

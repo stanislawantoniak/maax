@@ -59,7 +59,7 @@ class Zolago_Catalog_Model_Queue_Pricetype extends Zolago_Common_Model_Queue_Abs
             unset($priceMarginValue);
         }
 
-        $vendorExternalId = 4;
+
         try {
             $converter = Mage::getModel('zolagoconverter/client');
         } catch (Exception $e) {
@@ -69,7 +69,17 @@ class Zolago_Catalog_Model_Queue_Pricetype extends Zolago_Common_Model_Queue_Abs
         $productAction = Mage::getSingleton('catalog/product_action');
         if (!empty($skuvs)) {
             $recalculateConfigurableIds = array();
-            foreach ($skuvs as $productId => $vendorSku) {
+            foreach ($skuvs as $productId => $productData) {
+                $vendorSku = $productData['skuv'];
+                $sku = $productData['sku'];
+
+                $res = explode('-', $sku);
+                $vendorExternalId = (!empty($res) && isset($res[0])) ? (int)$res[0] : false;
+                if (!$vendorExternalId) {
+                    return;
+                }
+
+
                 Mage::helper('zolagocatalog/pricetype')->_logQueue("Product {$productId}");
                 $stores = array(Mage_Core_Model_App::ADMIN_STORE_ID);
                 $allStores = Mage::app()->getStores();
