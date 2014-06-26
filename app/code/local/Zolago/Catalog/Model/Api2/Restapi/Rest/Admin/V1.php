@@ -38,7 +38,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
     {
 
         $json = json_encode($data);
-        Mage::log(microtime() . " " . $json, 0, 'converter_log.log');
+        Mage::log(microtime() . " \n -------Start connection--------\n" . $json, 0, 'converter_log.log');
 
         if (!empty($data)) {
             $productAction = Mage::getSingleton('catalog/product_action');
@@ -47,10 +47,10 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
             switch ($cmd) {
                 case "ProductStockUpdate":
-                    Mage::log(microtime() . "\n " . $cmd, 0, 'converter_log.log');
-                    Mage::log(microtime() . "Done ---------------\n", 0, 'converter_log.log');
+                    Mage::log(microtime() . " " . $cmd, 0, 'converter_log.log');
                     break;
-                case "ProductPriceUpdate":
+                case "ProductPricesUpdate":
+                    Mage::log(microtime() . " " . $cmd, 0, 'converter_log.log');
                     $merchant = $data['merchant'];
                     $skuV = $data['sku'];
 
@@ -94,6 +94,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                     }
                     break;
             }
+            Mage::log(microtime() . "-------End connection--------\n", 0, 'converter_log.log');
 
 
         }
