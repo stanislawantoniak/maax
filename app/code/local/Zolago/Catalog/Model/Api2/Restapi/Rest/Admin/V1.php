@@ -48,7 +48,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
             switch ($cmd) {
                 case "ProductStockUpdate":
                     Mage::log(microtime() . "\n " . $cmd, 0, 'converter_log.log');
-                    Mage::log(microtime() . "Done ---------------", 0, 'converter_log.log');
+                    Mage::log(microtime() . "Done ---------------\n", 0, 'converter_log.log');
                     break;
                 case "ProductPriceUpdate":
                     $merchant = $data['merchant'];
