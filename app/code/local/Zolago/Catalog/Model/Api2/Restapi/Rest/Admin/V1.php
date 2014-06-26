@@ -42,6 +42,8 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
         if (!empty($data)) {
             $productAction = Mage::getSingleton('catalog/product_action');
+            $cmd = $data['cmd'];
+            Mage::log(microtime() . "\n " . $cmd, 0, 'converter_log.log');
             $merchant = $data['merchant'];
             $skuV = $data['sku'];
 
