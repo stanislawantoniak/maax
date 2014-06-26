@@ -33,7 +33,7 @@ class Zolago_Holidays_Helper_DateCalculator extends Mage_Core_Helper_Abstract{
 		$max_shipping_days = $vendor->getMaxShippingDays($storeId);
 		$max_shipping_time = $vendor->getMaxShippingTime($storeId);
 		
-		if(!$max_shipping_days || !$max_shipping_time){
+		if($max_shipping_days === "" || $max_shipping_time === ""){
 			Mage::log("No global values set to Max Shipping Days and Max Shippint Time");
 			return NULL;	
 		}
@@ -73,11 +73,19 @@ class Zolago_Holidays_Helper_DateCalculator extends Mage_Core_Helper_Abstract{
 		$max_hour = $max_hour_array[0];
 		$max_minute = $max_hour_array[1];
 		
-		if((($current_hour * 60) + $current_minute) > (($max_hour * 60) + $max_minute)){
-			$max_days++;
+		// If it is a working day check number of days
+		if($this->_isHoliday($current_timestamp) || $this->_isWeekend($current_timestamp)){
+			$start_day = 1;
 		}
-		
-		for($i = 0; $i < $max_days; $i++){
+		else{
+			$start_day = 0;
+			
+			if((($current_hour * 60) + $current_minute) > (($max_hour * 60) + $max_minute)){
+				$max_days++;
+			}
+		}
+		   
+		for($i = $start_day; $i <= $max_days; $i++){
 			
 			$next_day = strtotime("+ " . $i . "days", $current_timestamp);
 			
@@ -93,7 +101,7 @@ class Zolago_Holidays_Helper_DateCalculator extends Mage_Core_Helper_Abstract{
 			}
 		}
 		
-		return strtotime("+ " . ($max_days - 1) . "days", $current_timestamp);
+		return strtotime("+ " . $max_days . "days", $current_timestamp);
 	}
 	
 	/**
@@ -122,11 +130,9 @@ class Zolago_Holidays_Helper_DateCalculator extends Mage_Core_Helper_Abstract{
 		if($this->country_id){
 			$collection->addFieldToFilter('country_id', $this->country_id);
 		}
-		
 		$collection->addFieldToFilter('exclude_from_delivery', $this->exclude_from_delivery);
 		
 		$collection->addFieldToFilter('exclude_from_pickup', $this->exclude_from_pickup);
-		
 		return ($collection->count() > 0) ? true : false;
 	}
 }

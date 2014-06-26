@@ -76,17 +76,32 @@ class Zolago_Holidays_Block_Adminhtml_Holidays_Edit_Form extends Mage_Adminhtml_
 		$fieldset->addField('exclude_from_pickup', 'checkbox', array(
 				'name' => 'exclude_from_pickup',
           		'label'     => Mage::helper('zolagoholidays')->__('Exclude from pickup'),
-          		'checked' => true,
-          		'value'  => 1
+          		'checked' => true
         ));
 		
 		$fieldset->addField('exclude_from_delivery', 'checkbox', array(
 				'name' => 'exclude_from_delivery',
           		'label'     => Mage::helper('zolagoholidays')->__('Exclude from delivery'),
-          		'checked' => true,
-          		'value'  => '1'
+          		'checked' => true
         ));
 		
+		// Model is NEW
+		// Preselect country based on current locale
+		// Preselect type
+		if(!$model->getId() || $model->isObjectNew()){
+		
+			$country_id = Mage::helper('zolagoholidays')->getCurrentCountryId();
+			if($country_id){
+				$model->setCountryId($country_id);					
+			}
+			
+			$model->setType(1);
+		}
+		else{
+			$form->getElement('exclude_from_pickup')->setIsChecked($model->getExcludeFromPickup());
+			$form->getElement('exclude_from_delivery')->setIsChecked($model->getExcludeFromDelivery());
+		}	
+			
         $form->setValues($model->getData());
         $form->setUseContainer(true);
         $this->setForm($form);

@@ -9,6 +9,11 @@ class Zolago_Holidays_Block_Adminhtml_Holidays_Grid extends Mage_Adminhtml_Block
        	$this->setDefaultSort('name');
        	$this->setFilterVisibility(true);
        	$this->setPagerVisibility(true);
+		
+		// $country_id = Mage::helper('zolagoholidays')->getCurrentCountryId();
+		// if($country_id){
+			// $this->_defaultFilter = array('country_id'=>$country_id);
+		// }
 	}
 	
 	protected function _prepareCollection(){
