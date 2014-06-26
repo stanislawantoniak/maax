@@ -38,43 +38,65 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
     {
 
         $json = json_encode($data);
-        Mage::log(microtime() . " " . $json, 0, 'converter_log.log');
+        Mage::log(microtime() . " \n -------Start connection--------\n" . $json, 0, 'converter_log.log');
 
         if (!empty($data)) {
             $productAction = Mage::getSingleton('catalog/product_action');
-            $merchant = $data['merchant'];
-            $skuV = $data['sku'];
+            $cmd = $data['cmd'];
 
-            $sku = $merchant . '-' . $skuV;
 
-            $productId = Mage::getResourceModel('catalog/product')
-                ->getIdBysku($sku);
-            if ($productId) {
-                $prices = isset($data['data']) ? $data['data'] : array();
-                if (!empty($prices)) {
+            switch ($cmd) {
+                case "ProductStockUpdate":
+                    Mage::log(microtime() . " " . $cmd, 0, 'converter_log.log');
+                    break;
+                case "ProductPricesUpdate":
+                    Mage::log(microtime() . " " . $cmd, 0, 'converter_log.log');
+                    $merchant = $data['merchant'];
+                    $skuV = $data['sku'];
 
-                    $priceA = false;
-                    foreach ($prices as $pricesItem) {
-                        if ($pricesItem['price_id'] == "A") {
-                            $priceA = $pricesItem['price'];
-                        }
+                    $sku = $merchant . '-' . $skuV;
+
+                    $zcModel = Mage::getModel('zolagocatalog/product');
+                    $priceType = $zcModel->getConverterPriceTypeBySku($sku);
+
+                    $priceTypeSelected = "A";
+                    if(!empty($priceType) && isset($priceType['price_type'])){
+                        $priceTypeSelected = $priceType['price_type'];
                     }
 
+                    $productId = Mage::getResourceModel('catalog/product')
+                        ->getIdBysku($sku);
+                    if ($productId) {
+                        $prices = isset($data['data']) ? $data['data'] : array();
+                        if (!empty($prices)) {
 
-                    $productIds = array($productId);
-                    $attrData = array('price' => $priceA);
-
-                    $productAction->updateAttributesNoIndex($productIds, $attrData, 0);
-                    $productAction->updateAttributesNoIndex($productIds, $attrData, 1);
-                    $productAction->updateAttributesNoIndex($productIds, $attrData, 2);
-
-                    Mage::log(microtime() . " " . $sku . ":" . $priceA . "\n ---------------", 0, 'converter_log.log');
-
-                    Zolago_Catalog_Helper_Configurable::queueProduct($productId);
-                }
+                            $priceA = FALSE;
+                            foreach ($prices as $pricesItem) {
+                                if ($pricesItem['price_id'] == $priceTypeSelected) {
+                                    $priceA = $pricesItem['price'];
+                                }
+                            }
 
 
+                            $productIds = array($productId);
+                            $attrData = array('price' => $priceA);
+
+                            $productAction->updateAttributesNoIndex($productIds, $attrData, 0);
+                            $productAction->updateAttributesNoIndex($productIds, $attrData, 1);
+                            $productAction->updateAttributesNoIndex($productIds, $attrData, 2);
+
+                            Mage::log(microtime() . " " . $sku . ":" . $priceA . "\n ---------------", 0, 'converter_log.log');
+
+                            Zolago_Catalog_Helper_Configurable::queueProduct($productId);
+                        }
+
+
+                    }
+                    break;
             }
+            Mage::log(microtime() . "-------End connection--------\n", 0, 'converter_log.log');
+
+
         }
         //Zolago_Catalog_Helper_Log::log($json);
         return $json;

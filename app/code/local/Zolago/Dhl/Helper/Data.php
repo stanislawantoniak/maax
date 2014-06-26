@@ -258,11 +258,11 @@ class Zolago_Dhl_Helper_Data extends Mage_Core_Helper_Abstract {
                     $empty->domesticExpress12 = false;
                     $empty->deliveryEvening = false;
                     $empty->deliverySaturday = false;
-                    $empty->exPickupTo       = 'brak';
                     $empty->exPickupFrom     = 'brak';
+                    $empty->exPickupTo       = 'brak';
                     $empty->drPickupFrom     = 'brak';
                     $empty->drPickupTo       = 'brak';
-                    if (!$ret->getPostalCodeServicesResult == $empty) {
+                    if ($ret->getPostalCodeServicesResult == $empty) {
                         $dhlValidZip = false;
                     } else {
                         $dhlValidZip = true;

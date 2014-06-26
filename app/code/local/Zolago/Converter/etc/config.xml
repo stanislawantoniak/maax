@@ -58,6 +58,7 @@
 		<zolagoconverter>
 			<config>
 				<url_stock>http://37.187.244.141:8092/zolago/_design/read/_view/stock?key={{key}}</url_stock>
+                <url_price>http://37.187.244.141:8092/zolago/_design/read/_view/price?key={{key}}</url_price>
 				<login>zolago</login>
 				<password></password>
 			</config>
