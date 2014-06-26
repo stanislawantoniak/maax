@@ -30,8 +30,7 @@ class Zolago_Dhl_Helper_Tracking extends Mage_Core_Helper_Abstract {
 			}
 		}
 		//Process all Collected Shipments and update Shipment Status
-		$result = $this->_processShipmentTracks($processTracks);
-		return true;
+		return $this->_processShipmentTracks($processTracks);
 	}
 	
     /**
