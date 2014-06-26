@@ -40,7 +40,7 @@
     overflow-y:hidden;
     max-height: 503px;
     >h3 {
-        margin-top: 20px;
+        margin-top: 0px;
         margin-bottom:28px;
     }
     .pop-shop-lst {
@@ -245,5 +245,12 @@
 #recently-viewed {
     .recently-viewed {
         padding-top: 30px;
+    }
+}
+
+
+.customNavigation {
+    a {
+        top:37%;
     }
 }

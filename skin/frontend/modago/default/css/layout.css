@@ -950,7 +950,7 @@ section.section h2.title_section i {
   max-height: 503px; }
 /* line 42, ../sass/dimensions/_mainpage.scss */
 .popular-shops > h3 {
-  margin-top: 20px;
+  margin-top: 0px;
   margin-bottom: 28px; }
 /* line 46, ../sass/dimensions/_mainpage.scss */
 .popular-shops .pop-shop-lst {
@@ -1130,6 +1130,10 @@ section.section h2.title_section i {
 /* line 246, ../sass/dimensions/_mainpage.scss */
 #recently-viewed .recently-viewed {
   padding-top: 30px; }
+
+/* line 253, ../sass/dimensions/_mainpage.scss */
+.customNavigation a {
+  top: 37%; }
 
 /* line 5, ../sass/dimensions/_list-product.scss */
 #items-product {
