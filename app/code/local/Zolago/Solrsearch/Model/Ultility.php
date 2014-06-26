@@ -115,12 +115,12 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 	 * @param int $storeId
 	 * @param array $allIds
 	 * @param Mage_Catalog_Model_Resource_Product_Attribute_Collection $attibutes
-	 * @param Varien_Data_Collection $initedColelction
+	 * @param Zolago_Solrsearch_Model_Improve_Collection $initedColelction
 	 * @return \Varien_Data_Collection
 	 */
 	protected function _prepareFinalCollection($storeId, array $allIds = array(), 
 			Mage_Catalog_Model_Resource_Product_Attribute_Collection $attibutes,
-			Varien_Data_Collection $initedColelction = null) {
+			Zolago_Solrsearch_Model_Improve_Collection $initedColelction = null) {
 		
 		/**
 		 * Switch store ang lang settings to simulate
@@ -137,7 +137,9 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 		
 		
 		$finalCollection = $initedColelction ? $initedColelction : 
-				new Varien_Data_Collection;
+				Mage::getModel("zolagosolrsearch/improve_collection");
+		
+		/* @var $finalCollection Zolago_Solrsearch_Model_Improve_Collection */
 		
 		////////////////////////////////////////////////////////////////////////
 		// Load base entity and joins
@@ -178,6 +180,41 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 				loadCategoryData($finalCollection, $storeId);
 		
 		Mage::log("Categories load " . $this->_formatTime($this->getMicrotime()-$time));
+		
+		
+		////////////////////////////////////////////////////////////////////////
+		// Extend configurable product with child data
+		////////////////////////////////////////////////////////////////////////
+		$time = $this->getMicrotime();
+		
+		foreach($finalCollection->getParentIds() as $id=>$childs){
+			if(($item = $finalCollection->getItemById($id)) && $finalCollection->isParentItem($item)){
+				foreach($childs as $childId){
+					if($childItem = $finalCollection->getItemById($childId)){
+						Mage::getSingleton("zolagosolrsearch/data")->
+							extendConfigurable($item, $childItem, $attibutes);
+					}
+				}
+			}
+		}
+		
+		Mage::log("Extending configurable with child data " . $this->_formatTime($this->getMicrotime()-$time));
+		
+		
+		////////////////////////////////////////////////////////////////////////
+		// Post process loaded data
+		////////////////////////////////////////////////////////////////////////
+		$time = $this->getMicrotime();
+		$regularIds =  $finalCollection->getFlag("regular_ids") ?
+				$finalCollection->getFlag("regular_ids") : $allIds;
+		
+		foreach($finalCollection->getRegularIds() as $id){
+			if($item = $finalCollection->getItemById($id)){
+				Mage::getSingleton("zolagosolrsearch/data")->processFinalItemData($item);
+			}
+		}
+		Mage::log("Processing final values for regular " . $this->_formatTime($this->getMicrotime()-$time));
+		
 		
 		/**
 		 * Restore old store & lang settings
@@ -309,16 +346,16 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 		Mage::log("Collecting childs " . $this->_formatTime($this->getMicrotime()-$time));
 		
 		// Final collection is a set with all types of products
-		$finalCollection = new Varien_Data_Collection;
+		$finalCollection = Mage::getModel("zolagosolrsearch/improve_collection");
+		/* @var $finalCollection Zolago_Solrsearch_Model_Improve_Collection */
 		
 		// Do not index category for configurable childs
-		$indexCategoryProductIds =  array_unique(array_merge(
+		$finalCollection->setCategoryIds(array_unique(array_merge(
 				$collecitonIds,
 				$this->_groupedChildIdsFlat
-		));
-		
-		$finalCollection->setFlag('index_category_product_ids', 
-				$indexCategoryProductIds);
+		)));
+		$finalCollection->setParentIds($this->_configurableChildIds);
+		$finalCollection->setRegularIds($collecitonIds);
 		
 		$this->_prepareFinalCollection($storeId, $allIds, 
 				$this->getSolrUsedAttributes(), $finalCollection);
@@ -326,13 +363,15 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 		
 		Mage::log("Stop " . $finalCollection->count() . " = " . count($allIds));
 		
-		// DEV: log one item
-		foreach($finalCollection as $item){
+		// DEV: log 10 item
+		$i = 0;
+		foreach($collecitonIds as $id){
 			/* @var $item Varien_Object */
-			if($item->getOrigData('type_id')=="configurable"){
+			$item = $finalCollection->getItemById($id);
+			if($item && $item->getOrigData('type_id')=="configurable"){
 				Mage::log($item->getOrigData());
 				Mage::log($item->getData());
-				break;
+				if($i++>9) break;
 			}
 		}
 		
@@ -469,96 +508,6 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 		list($usec, $sec) = explode(" ",microtime()); 
 		return ((float)$usec + (float)$sec); 
     } 
-
-
-	/**
-	 * Load all products with its needed attributes by paretn products ids
-	 * and process its 
-	 * 
-	 * @param type $docData
-	 * @param type $parentProduct
-	 * @param type $store
-	 */
-	public function updateDocDataForConfigurableProducts(&$docData, $parentProduct, $store){
-
-		if($parentProduct->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE){
-			
-			$collection = $parentProduct->getTypeInstance()->getUsedProductCollection($parentProduct);
-
-			foreach ($collection as $product) {
-				$textSearch = array();
-
-				$_product = Mage::getModel('catalog/product')->setStoreId($store->getId())->load($product->getId());
-				$atributes = $_product->getAttributes();
-				foreach ($atributes as $key=>$atributeObj) {
-					$backendType = $atributeObj->getBackendType();
-					$frontEndInput = $atributeObj->getFrontendInput();
-					$attributeCode = $atributeObj->getAttributeCode();
-					$attributeData = $atributeObj->getData();
-
-					if (!$atributeObj->getIsSearchable()) continue; // ignore fields which are not searchable
-
-					if ($backendType == 'int') {
-						$backendType = 'varchar';
-					}
-
-					$attributeKey = $key.'_'.$backendType;
-
-					$attributeKeyFacets = $key.'_facet';
-
-					if (!is_array($atributeObj->getFrontEnd()->getValue($_product))){
-						$attributeVal = strip_tags($atributeObj->getFrontEnd()->getValue($_product));
-					}else {
-						$attributeVal = $atributeObj->getFrontEnd()->getValue($_product);
-						$attributeVal = implode(' ', $attributeVal);
-					}
-
-					if ($_product->getData($key) == null)
-					{
-						$attributeVal = null;
-					}
-					$attributeValFacets = array();
-					if (!empty($attributeVal) && $attributeVal != 'No') {
-						if($frontEndInput == 'multiselect') {
-							$attributeValFacetsArray = @explode(',', $attributeVal);
-							$attributeValFacets = array();
-							foreach ($attributeValFacetsArray as $val) {
-								$attributeValFacets[] = trim($val);
-							}
-						}else {
-							$attributeValFacets[] = trim($attributeVal);
-						}
-
-						if ($backendType == 'datetime') {
-							$attributeVal = date("Y-m-d\TG:i:s\Z", $attributeVal);
-						}
-
-						if (!in_array($attributeVal, $textSearch) && $attributeVal != 'None' && $attributeCode != 'status' && $attributeCode != 'sku'){
-							$textSearch[] = $attributeVal;
-						}
-
-						if (
-						(isset($attributeData['is_filterable_in_search']) && !empty($attributeData['is_filterable_in_search']) && $attributeValFacets != 'No' && $attributeKey != 'price_decimal' && $attributeKey != 'special_price_decimal')
-						) {
-							if (isset($docData[$attributeKeyFacets])) {
-								$docData[$attributeKeyFacets] = array_merge($docData[$attributeKeyFacets], $attributeValFacets);
-							}else{
-								$docData[$attributeKeyFacets] = $attributeValFacets;
-							}
-							if (is_array($docData[$attributeKeyFacets]) && count($docData[$attributeKeyFacets]) > 0) {
-								$docData[$attributeKeyFacets] = array_unique($docData[$attributeKeyFacets]);
-							}
-
-						}
-					}
-
-				}
-				$docData['textSearch'] = array_merge($docData['textSearch'], $textSearch);
-			}
-		}
-	}
-	
-	
 
 }
 ?>

@@ -38,16 +38,16 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 	
 	/**
 	 * @param Varien_Data_Collection $collection
-	 * @return \Zolago_Solrsearch_Model_Resource_Improve
+	 * @return \olago_Solrsearch_Model_Improve_Collection
 	 */
-	public function loadCategoryData(Varien_Data_Collection $collection, $storeId) {
+	public function loadCategoryData(Zolago_Solrsearch_Model_Improve_Collection $collection, $storeId) {
 		
 		$asFacet = Mage::helper('solrsearch')->getSetting('use_category_as_facet');
 		$isSearchable = Mage::helper('solrsearch')->getSetting('solr_search_in_category');
 		
 		// Get collection ids to be indexed
-		$allIds = $collection->getFlag('index_category_product_ids') ?
-				$collection->getFlag('index_category_product_ids')  : $collection->getAllIds();
+		$allIds = $collection->getCategoryIds() ?
+				$collection->getCategoryIds() : $collection->getAllIds();
 		
 		if(!$allIds){
 			return $this;
@@ -271,10 +271,6 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
             }
         }
 		
-		foreach($collection as $item){
-			Mage::getSingleton("zolagosolrsearch/data")->processFinalItemData($item);
-		}
-		
 	}
 	
 	/**
@@ -288,6 +284,7 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 			Mage_Catalog_Model_Resource_Product_Attribute_Collection $attrbiuteCollection,  
 			$valueInfo)
     {
+		
         $entityIdField  = $this->getEntity()->getEntityIdField();
         $entityId       = $valueInfo[$entityIdField];
 		$item			= $collection->getItemById($entityId);
@@ -317,8 +314,11 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 		
 		if($attributeCode){
 			$item->setOrigData($attributeCode, $valueInfo['value']);
-			Mage::getSingleton("zolagosolrsearch/data")->
+			if($collection->isReagularItem($item)){
+				Mage::getSingleton("zolagosolrsearch/data")->
 					afterLoadAttribute($item, $attribute);
+		
+			}
 		}
 
         return $this;

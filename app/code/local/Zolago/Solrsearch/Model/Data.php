@@ -37,6 +37,8 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 		return Mage::helper('solrsearch')->getSetting('display_brand_suggestion');
 	}
 	
+	
+	
 	public function processFinalItemData(Varien_Object $item) {
 		$storeId = $item->getOrigData('store_id');
 		$store = Mage::app()->getStore($storeId);
@@ -127,31 +129,25 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 		$item->addData($docData);
 	}
 	
+
 	/**
-	 * 
 	 * @param Varien_Object $item
-	 * @param Mage_Catalog_Model_Resource_Eav_Attribute $attribute
+	 * @param Mage_Catalog_Model_Resource_Eav_Attribute $attributeObj
 	 * @return \Zolago_Solrsearch_Model_Data
 	 */
-	public function afterLoadAttribute(
-			Varien_Object $item, 
+	protected function _processAttributeData(Varien_Object $item, 
 			Mage_Catalog_Model_Resource_Eav_Attribute $attributeObj) {
 		
 		$storeId = $item->getOrigData('store_id');
-		$tmpProduct = $this->getTmpProduct();
 		
 		$attributeObj->setStoreId($storeId);
 		$backendType = $attributeObj->getBackendType();
 		$frontEndInput = $attributeObj->getFrontendInput();
 		$attributeCode = $attributeObj->getAttributeCode();
-		$attributeData = $attributeObj->getData();
 		$addData = array();
 		
 		// Set org data to template product
 		$origValue = $item->getOrigData($attributeCode);
-
-		$tmpProduct->setId($item->getId());
-		$tmpProduct->setData($attributeCode, $origValue);
 
 		if ($backendType == 'int') {
 			$backendType = 'varchar';
@@ -160,12 +156,7 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 		$attributeKey = $attributeCode.'_'.$backendType;
 		$attributeKeyFacets = $attributeCode.'_facet';
 
-		$attributeVal = $attributeObj->getFrontEnd()->getValue($tmpProduct);
-
-		if(is_array($attributeVal)){
-			$attributeVal = implode(' ', $attributeVal);
-		}
-
+		$attributeVal = $this->_getAttributeValue($attributeObj, $item);
 
 		//Generate sort attribute
 		if ($attributeObj->getUsedForSortBy() && !empty($attributeVal)) {
@@ -179,7 +170,7 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 		//Generate product search weight value
 		if ($attributeCode==$this->getWeightAttributeCode()) {
 			if (!empty($attributeVal) && is_numeric($attributeVal)) {
-				$docData['product_search_weight_int'] = $attributeVal;
+				$addData['product_search_weight_int'] = $attributeVal;
 			}
 		}
 		
@@ -245,12 +236,134 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 			}
 		}
 		
-			
 		if($addData){
 			$item->addData($addData);
 		}
 		
 		return $this;
+	}
+	
+	/**
+	 * 
+	 * @param Mage_Catalog_Model_Resource_Eav_Attribute $attributeObj
+	 * @param Varien_Object $item
+	 */
+	protected function _getAttributeValue(Mage_Catalog_Model_Resource_Eav_Attribute $attributeObj, 
+			Varien_Object $item) {
+		
+		// Frontend getter by vitrual product
+		$tmpProduct = $this->getTmpProduct();
+		$tmpProduct->setId($item->getId());
+		$tmpProduct->setData(
+				$attributeObj->getAttributeCode(), 
+				$item->getOrigData($attributeObj->getAttributeCode())
+		);
+		
+		$attributeVal = $attributeObj->getFrontEnd()->getValue($tmpProduct);
+
+		if(is_array($attributeVal)){
+			$attributeVal = implode(' ', $attributeVal);
+		}
+		
+		return $attributeVal;
+		
+	}
+	
+	/**
+	 * 
+	 * @param Varien_Object $item
+	 * @param Mage_Catalog_Model_Resource_Eav_Attribute $attributeObj
+	 * @return array()
+	 */
+	public function _processAttributeDataConfigurable(Varien_Object $parent,
+			Varien_Object $child,
+			Mage_Catalog_Model_Resource_Eav_Attribute $attributeObj) 
+				{
+	
+		$attributeCode = $attributeObj->getAttributeCode();
+		
+		// nullable data - return 
+		if($child->getOrigData($attributeCode)==null){
+			return $this;
+		}
+		
+		$attributeVal = $this->_getAttributeValue($attributeObj, $child);
+	
+		$backendType = $attributeObj->getBackendType();
+		$frontEndInput = $attributeObj->getFrontendInput();
+		$attributeKey = $attributeCode.'_'.$backendType;
+		$attributeKeyFacets = $attributeCode.'_facet';
+		
+		if ($attributeVal == 'No') {
+			return $this;
+		}
+		
+		if($frontEndInput == 'multiselect') {
+			$attributeValFacetsArray = @explode(',', $attributeVal);
+			$attributeValFacets = array();
+			foreach ($attributeValFacetsArray as $val) {
+				$attributeValFacets[] = trim($val);
+			}
+		}else {
+			$attributeValFacets[] = trim($attributeVal);
+		}
+
+		if ($backendType == 'datetime') {
+			$attributeVal = date("Y-m-d\TG:i:s\Z", $attributeVal);
+		}
+
+		if (!in_array($attributeVal, $parent->getData('textSearch')) && $attributeVal != 'None' 
+				&& $attributeCode != 'status' && $attributeCode != 'sku'){
+			$this->pushTextSearchToObject($parent, $attributeVal);
+		}
+
+
+		if ($attributeObj->getIsFilterableInSearch() && $attributeValFacets != 'No' && 
+				$attributeKey != 'price_decimal' && $attributeKey != 'special_price_decimal' &&
+				!@in_array($attributeVal, $parent->getData($attributeKeyFacets))){
+			$this->pushToObject($parent, $attributeKeyFacets, array_unique($attributeValFacets));
+		}
+		return $this;
+	}
+	
+	/**
+	 * 
+	 * @param Varien_Object $parent
+	 * @param Varien_Object $child
+	 * @param Mage_Catalog_Model_Resource_Product_Attribute_Collection $attributes
+	 * @return \Zolago_Solrsearch_Model_Data
+	 */
+	public function extendConfigurable(Varien_Object $parent, Varien_Object $child, 
+			Mage_Catalog_Model_Resource_Product_Attribute_Collection $attributes) {
+		
+		
+		foreach($attributes as $attribute){
+			/* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
+			if(!$attribute->getIsSearchable()){
+				continue;;
+			}
+			$this->_processAttributeDataConfigurable($parent, $child, $attribute);
+			
+		}
+		
+		return $this;
+	}
+	
+	/**
+	 * 
+	 * @param Varien_Object $item
+	 * @param Mage_Catalog_Model_Resource_Eav_Attribute $attribute
+	 * @return Zolago_Solrsearch_Model_Data
+	 */
+	public function afterLoadAttribute(
+			Varien_Object $item, 
+			Mage_Catalog_Model_Resource_Eav_Attribute $attributeObj) {
+		
+		
+		
+
+		
+		return $this->_processAttributeData($item, $attributeObj);
 	}
 	
 	/**
@@ -271,13 +384,26 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 	 * @param string $string
 	 * @param string $field
 	 */
-	public function pushTextSearchToObject(Varien_Object $item, $string, $field = "textSearch") {
+	public function pushToObject(Varien_Object $item, $field, $value) {
 		$texts = $item->getData($field);
 		if(!is_array($texts)){
 			$texts = array();
 		}
-		$texts[] = $string;
+		if(is_array($value)){
+			$texts = array_merge($texts, $value);
+		}else{
+			$texts[] = $value;
+		}
 		$item->setData($field, $texts);
+	}
+	
+	/**
+	 * @param Varien_Object $item
+	 * @param mixed $string
+	 * @param string $field
+	 */
+	public function pushTextSearchToObject(Varien_Object $item, $string, $field = "textSearch") {
+		$this->pushToObject($item, $field, $string);
 	}
 	
 	/**
