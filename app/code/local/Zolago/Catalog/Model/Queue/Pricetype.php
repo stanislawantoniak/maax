@@ -70,7 +70,7 @@ class Zolago_Catalog_Model_Queue_Pricetype extends Zolago_Common_Model_Queue_Abs
         if (!empty($skuvs)) {
             $recalculateConfigurableIds = array();
             foreach ($skuvs as $productId => $vendorSku) {
-
+                Mage::helper('zolagocatalog/pricetype')->_logQueue("Product {$productId}");
                 $stores = array(Mage_Core_Model_App::ADMIN_STORE_ID);
                 $allStores = Mage::app()->getStores();
                 foreach ($allStores as $_eachStoreId => $val) {
