@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Zolago_CatalogInventory>
+            <version>0.1.0</version>
+        </Zolago_CatalogInventory>
+    </modules>
+    <global>
+        <models>
+            <zolago_cataloginventory>
+                <class>Zolago_CatalogInventory_Model</class>
+                <resourceModel>zolago_cataloginventory_resource</resourceModel>
+            </zolago_cataloginventory>
+            <zolago_cataloginventory_resource>
+                <class>Zolago_CatalogInventory_Model_Resource</class>
+            </zolago_cataloginventory_resource>
+        </models>
+        <helpers>
+            <zolago_cataloginventory>
+                <class>Zolago_CatalogInventory_Helper</class>
+            </zolago_cataloginventory>
+        </helpers>
+    </global>
+    <adminhtml>
+        <events>
+            <catalog_product_save_before>
+                <observers>
+                    <zolago_cataloginventory_converter>
+                        <class>Zolago_CatalogInventory_Model_Observer</class>
+                        <method>productBeforeUpdate</method>
+                    </zolago_cataloginventory_converter>
+                </observers>
+            </catalog_product_save_before>
+        </events>
+    </adminhtml>
+</config>

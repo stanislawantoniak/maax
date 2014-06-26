@@ -2,6 +2,38 @@
 class Zolago_Rma_Block_Vendor_Rma_Edit extends Mage_Core_Block_Template {
 	
 	/**
+	 * @param Varien_Object $tracking
+	 * @param Zolago_Po_Model_Po $po
+	 * @return null
+	 */
+	public function getPoLetterUrl(Varien_Object $tracking, Zolago_Po_Model_Po $po) {
+		if($this->isLetterable($tracking)){
+			return $this->getUrl('zolagodhl/dhl/lp', array(
+					'trackId'		=> $tracking->getId(), 
+					'trackNumber'	=> $tracking->getNumber(), 
+					'vId'			=> $po->getVendor()->getId(), 
+					'posId'			=> $po->getDefaultPosId(),
+					'udpoId'		=> $po->getId(), 
+					'_secure'		=>true
+				));
+		}
+		return null;
+	}
+	
+	/**
+	 * @param Varien_Object $tracking
+	 * @return boolean
+	 */
+	public function isLetterable(Varien_Object $tracking) {
+		switch ($tracking->getCarrierCode()) {
+			case Zolago_Dhl_Model_Carrier::CODE:
+				return true;
+			break;
+		}
+		return false;
+	}
+	
+	/**
 	 * @param Mage_Sales_Model_Order_Shipment $shipment
 	 * @return Mage_Sales_Model_Order_Shipment_Track|null
 	 */
@@ -20,10 +52,17 @@ class Zolago_Rma_Block_Vendor_Rma_Edit extends Mage_Core_Block_Template {
 	}
 	
 	/**
+	 * @return Zolago_Rma_Model_Rma_Status
+	 */
+	public function getStatusModel() {
+		return $this->getRma()->getStatusModel();
+	}
+	
+	/**
 	 * @return array
 	 */
-	public function getAvailableStatuses(){
-		return Mage::helper('zolagorma')->getVendorRmaStatuses();
+	public function getAvailableStatuses($asHash=true){
+		return $this->getStatusModel()->getAvailableStatuses($this->getRma(), true, $asHash);
 	}
 	
 	/**
@@ -124,9 +163,17 @@ class Zolago_Rma_Block_Vendor_Rma_Edit extends Mage_Core_Block_Template {
 	 * @return bool
 	 */
 	public function canUseCarrier() {
-		return $this->canPosUseDhl();
+		return $this->canVendorUseDhl();
 	}
 	
+	
+    /**
+     * @return bool
+     */
+	public function canVendorUseDhl() {
+	    return Mage::helper('zolagodhl')->isDhlEnabledForVendor($this->getVendor()) ||
+	            Mage::helper('zolagodhl')->isDhlEnabledForRma($this->getVendor());
+	}
 	/**
 	 * @return bool
 	 */

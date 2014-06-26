@@ -76,7 +76,10 @@ class Zolago_Rma_Model_Rma_Comment extends Unirgy_Rma_Model_Rma_Comment
 	/**
 	 * @return string
 	 */
-	public function getAuthorName() {
+	public function getAuthorName($fromObjData=true) {
+		if($fromObjData){
+			return parent::getAuthorName();
+		}
 		if($this->getCustomer()->getId()){
 			return $this->getCustomer()->getName();
 		}elseif($this->getOperator()->getId()){
@@ -84,7 +87,7 @@ class Zolago_Rma_Model_Rma_Comment extends Unirgy_Rma_Model_Rma_Comment
 		}elseif($this->getVednor()->getId()){
 			return $this->getVednor()->getVendorName();
 		}
-		return parent::getAuthorName();
+		return Mage::helper('zolagorma')->__("System");
 	}
 	
 	/**
@@ -132,7 +135,10 @@ class Zolago_Rma_Model_Rma_Comment extends Unirgy_Rma_Model_Rma_Comment
 	public function _beforeSave() {
 		if($this->isObjectNew()){
 			$this->setRmaStatus($this->getRma()->getRmaStatus());
-			$this->setAuthorName($this->getAuthorName());
+			// Save author name by as text
+			if($this->getAuthorName(false) && !parent::getAuthorName()){
+				$this->setAuthorName($this->getAuthorName(false));
+			}
 			$this->setComment(trim($this->getComment()));
 		}
 		return parent::_beforeSave();

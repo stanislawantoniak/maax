@@ -15,7 +15,13 @@ class Zolago_Po_Block_Vendor_Aggregated_Grid extends Mage_Adminhtml_Block_Widget
 	protected function _prepareCollection(){
         $collection = Mage::getResourceModel('zolagopo/aggregated_collection');
         /* @var $collection Zolago_Po_Model_Resource_Aggregated_Collection */
-		$collection->addVendorFilter(Mage::getSingleton('udropship/session')->getVendor());
+		$session = Mage::getSingleton('udropship/session');
+		/* @var $session Zolago_Dropship_Model_Session */
+		if($session->isOperatorMode()){
+			$collection->addPosFilter($session->getOperator()->getAllowedPos());
+		}else{
+			$collection->addPosFilter($session->getVendor()->getAllowedPos());
+		}
 		$collection->joinPosNames();
         $this->setCollection($collection);
         return parent::_prepareCollection();

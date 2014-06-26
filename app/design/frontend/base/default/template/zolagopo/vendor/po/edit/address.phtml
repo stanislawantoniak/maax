@@ -134,16 +134,17 @@ jQuery(function($){
 });
 </script>
 <?php else:?>
+
 <script type="text/javascript">
 jQuery(function($){
 	var form = $("#<?php echo $_type;?>-address-form");
-	form.validate({
-		rules: {
-			"postcode":{
-				zipcodePL: true
-			}
-		}
-	});
+    form.validate({
+        rules: {
+            "postcode": {
+                zipcodePL: true
+            }
+        }
+    });
 });
 </script>
 <?php endif;?>

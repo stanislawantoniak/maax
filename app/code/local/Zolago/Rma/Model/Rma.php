@@ -8,6 +8,34 @@ class Zolago_Rma_Model_Rma extends Unirgy_Rma_Model_Rma
 	const TYPE_RMASHIPPING = "rmashipping";
 	const TYPE_RMABILLING = "rmabilling";
 	
+	const FLOW_INSTANT = 1;
+	const FLOW_ACKNOWLEDGED = 2;
+	
+	/**
+	 * @return string
+	 */
+	public function getRmaStatusName() {
+		return $this->getStatusObject()->getTitle();
+	}
+	/**
+	 * @return Varien_Object
+	 */
+	public function getStatusObject() {
+		return $this->getStatusModel()->getStatusObject($this);
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function hasCustomerTracking() {
+		foreach($this->getTracksCollection() as $track){
+			if($track->getTrackCreator()==Zolago_Rma_Model_Rma_Track::CREATOR_TYPE_CUSTOMER){
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	/**
 	 * @return Zolago_Rma_Model_Resource_Rma_Track_Collection
 	 */
@@ -49,6 +77,13 @@ class Zolago_Rma_Model_Rma extends Unirgy_Rma_Model_Rma
 	}
 	
 
+	/**
+	 * @return Zolago_Rma_Model_Rma_Status
+	 */
+	public function getStatusModel() {
+		return Mage::getSingleton('zolagorma/rma_status');
+	}
+	
 	/**
 	 * @return bool
 	 */
@@ -168,10 +203,14 @@ class Zolago_Rma_Model_Rma extends Unirgy_Rma_Model_Rma
     * @param string $type
     * @param array $exclude
     */
-   
    protected function _cleanAddresses($type, $exclude=array()) {
 	   Mage::helper('zolagopo')->clearAddresses($this->getPo(), $type, $exclude);
    }
+   
+   /**
+    * @param array $dhlParams
+    * @return type
+    */
    public function sendDhlRequest($dhlParams = array()) {
        $request = Mage::getModel('zolagorma/rma_request');
        foreach ($dhlParams as $key=>$val) {
@@ -180,6 +219,10 @@ class Zolago_Rma_Model_Rma extends Unirgy_Rma_Model_Rma
        $return = $request->prepareRequest($this);
        return $return;
    }
+   
+   /**
+    * @return flaot
+    */
    public function getTotalValue() {
        $collection = $this->getItemsCollection();
        $price = 0;
@@ -187,5 +230,16 @@ class Zolago_Rma_Model_Rma extends Unirgy_Rma_Model_Rma
          $price += $item->getPrice();
        }
        return $price;
+   }
+  
+   /**
+    * @return Zolago_Rma_Model_Rma
+    */
+   protected function _beforeSave() {
+	   if(!$this->getId()){
+			$this->getStatusModel()->processNewRmaStatus($this);
+			$this->setIsNewFlag(true);
+	   }
+	   return parent::_beforeSave();
    }
 }

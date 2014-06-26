@@ -40,7 +40,7 @@ class Zolago_Pos_Model_Resource_Pos_Collection
 	 * @param Unirgy_Dropship_Model_Vendor|int $vendor
 	 * @return Zolago_Pos_Model_Resource_Pos_Collection
 	 */
-public function addVendorFilter($vendor){
+	public function addVendorFilter($vendor){
 		if($vendor instanceof Unirgy_Dropship_Model_Vendor){
 			$vendor = $vendor->getId();
 		}
@@ -57,19 +57,4 @@ public function addVendorFilter($vendor){
 		return $this;
 	}
 
-    /**
-     * @return mixed
-     */
-    public function getMinPOSStock()
-    {
-        $readConnection = Mage::getSingleton('core/resource')
-            ->getConnection('core_read');
-        $value = $this
-            ->addFieldToFilter('external_id', array('neq' => NULL))
-            ->getSelect()
-            ->reset(Zend_Db_Select::COLUMNS)
-            ->columns(array('external_id', 'minimal_stock'));
-        $minPOSValues = $readConnection->fetchPairs($value);
-        return $minPOSValues;
-    }
 }

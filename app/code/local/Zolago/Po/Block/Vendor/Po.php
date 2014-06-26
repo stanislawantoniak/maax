@@ -81,17 +81,33 @@ class Zolago_Po_Block_Vendor_Po extends Mage_Core_Block_Template
 		return $out;
 	}
 	
-	
+	/**
+	 * @return array
+	 */
 	public function getDefaultStatuses() {
 		$statuses = $this->getVendor()->getData('vendor_po_grid_status_filter');
 		return is_array($statuses) ? $statuses : array();
 	}
 	
+	/**
+	 * @return Zolago_Pos_Model_Resource_Pos_Collection
+	 */
 	public function getPosCollection() {
-		$collection = Mage::getResourceModel('zolagopos/pos_collection');
-		/* @var $collection Zolago_Pos_Model_Resource_Pos_Collection */
-		$collection->addVendorFilter($this->getVendor());
-		return $collection;
+		if(!$this->getData("pos_collection")){
+			$session = Mage::getModel("udropship/session");
+			/* @var $session Zolago_Dropship_Model_Session */
+			if($session->isOperatorMode()){
+				// Operator mode
+				$collection = $session->getOperator()->getAllowedPosCollection();
+			}else{
+				// Vendor mode
+				$collection = Mage::getResourceModel('zolagopos/pos_collection');
+				/* @var $collection Zolago_Pos_Model_Resource_Pos_Collection */
+				$collection->addVendorFilter($this->getVendor());
+			}
+			$this->setData("pos_collection", $collection);
+		}
+		return $this->getData("pos_collection");
 	}
 	
 	/**
