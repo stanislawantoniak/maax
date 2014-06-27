@@ -1,8 +1,9 @@
 <?php
 class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_Db_Abstract{
 	
-	const JOIN_STOCK = "stock";
-	const JOIN_PRICE = "price";
+	const JOIN_STOCK	= "stock";
+	const JOIN_PRICE	= "price";
+	const JOIN_URL		= "url";
 	
 	protected $_entity;
 	
@@ -112,6 +113,8 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 		
 		$adapter = $this->getReadConnection();
 		$config = Mage::getModel("eav/config");
+		$rootCat = Mage::app()->getStore($storeId)->getRootCategoryId();
+		$treeRoot = Mage_Catalog_Model_Category::TREE_ROOT_ID;
 		
 		/* @var $config Mage_Eav_Model_Config */
 		$nameAttribute = $config->getAttribute(
@@ -132,8 +135,20 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 			array(
 				"product_id", 
 				"category_id", 
+				"cat_index_position" => "category_product.position",
 				"name"=>new Zend_Db_Expr("IF(store_value_name.value_id>0, store_value_name.value, default_value_name.value)")
 			)
+		);
+		
+		// Add store-root category descendant (without root store category, only descendants)
+		$joinCond = array(
+			"category.entity_id=category_product.category_id",
+			$adapter->quoteInto("category.path LIKE ?", $treeRoot.'/'.$rootCat."/%")
+		);
+		$select->join(
+			array("category"=>$this->getTable("catalog/category")),
+			implode(" AND ", $joinCond),
+			array()
 		);
 		
 		// Join attributes data
@@ -150,6 +165,7 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 				"default_value_include_in_menu.value".
 			 ")=?", 1
 		);
+		
 		// Parent filter
 		if($isParent!==null){
 			$select->where("category_product.is_parent=?", $isParent ? 1 : 0);
@@ -482,7 +498,25 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
             $select->joinLeft($tableName, implode(' AND ', $joinCond), $colls);
 		}
 		
+		if(isset($extraJoins[self::JOIN_URL])){
+			$joinCond = array(
+				'url.product_id = product.entity_id',
+				'url.id_path = CONCAT(\'product/\', product.entity_id)',
+				$adapter->quoteInto('url.store_id = ?', $storeId),
+				'url.category_id IS NULL'
+			);
+			$select->joinLeft(
+					array("url"=>$this->getTable("core/url_rewrite")), 
+					implode(" AND ", $joinCond),
+					array("request_path")
+			);
+		}
+		
 		return $adapter->fetchAll($select);
+	}
+	
+	protected function _addTaxPercent() {
+		
 	}
 	
 }

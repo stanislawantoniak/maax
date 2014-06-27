@@ -4,7 +4,15 @@
  */
 class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 	
+	/**
+	 * @var Mage_Catalog_Model_Product
+	 */
 	protected $_tmpProduct;
+	
+	/**
+	 * @var Mage_Customer_Model_Resource_Group_Collection 
+	 */
+	protected $_groupCollection;
 	
 	/**
 	 * @param Varien_Object $product
@@ -37,27 +45,162 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 		return Mage::helper('solrsearch')->getSetting('display_brand_suggestion');
 	}
 	
+	/**
+	 * @return Mage_Customer_Model_Resource_Group_Collection
+	 */
+	protected function _getGroupCollection() {
+		if(!$this->_groupCollection){
+			$this->_groupCollection = Mage::getResourceModel('customer/group_collection')
+				->addTaxClass();
+		}
+		return $this->_groupCollection;
+	}
 	
+	/**
+	 * 
+	 * @param Varien_Object $item
+	 * @return \Zolago_Solrsearch_Model_Data
+	 */
+	public function processPriceData(Varien_Object $item) {
+		
+		$product = $this->getTmpProduct();
+		$product->setData($item->getOrigData());
+		$product->setId($item->getId());
+		
+		$customerGroupCollection = $this->_getGroupCollection();
+
+		$storeObject = Mage::app()->getStore($item->getOrigData('store_id'));
+		
+		$currenciesCode = $storeObject->getAvailableCurrencyCodes(true);
+		$data = array();
+			
+		foreach ($currenciesCode as $currencycode)
+		{
+			$currency  = Mage::getModel('directory/currency')->load($currencycode);
+			$storeObject->setData('current_currency', $currency);
+			
+			foreach ($customerGroupCollection as $group){
+
+				$price = 0;//including tax
+				$specialPrice = 0;//including tax
+				$sortSpecialPrice = 0;
+
+				$returnData = Mage::getModel('solrsearch/price')->
+						getProductPrice($product, $storeObject, $group->getId());
+
+				if (isset($returnData['price']) && $returnData['price'] > 0) {
+				    $price = $returnData['price'];
+				}
+				if (isset($returnData['special_price']) && $returnData['special_price'] > 0) {
+					$specialPrice = $returnData['special_price'];
+				}
+
+				$code = SolrBridge_Base::getPriceFieldPrefix($currencycode, $group->getId());
+
+				$data[$code.'_price_decimal'] = $price;
+				$data[$code.'_special_price_decimal'] = $specialPrice;
+
+				$data['sort_'.$code.'_special_price_decimal'] = ($specialPrice > 0)?$specialPrice:$price;
+
+				$specialPriceFromDate = 0;
+
+				$specialPriceToDate = 0;
+
+				if ($specialPrice > 0 && isset($returnData['product']) && is_object($returnData['product'])) {
+					$specialPriceFromDate = $returnData['product']->getSpecialFromDate();
+					$specialPriceToDate = $returnData['product']->getSpecialToDate();
+				}
+				if ($specialPriceFromDate > 0 && $specialPriceToDate > 0) {
+					$data[$code.'_special_price_fromdate_int'] = strtotime($specialPriceFromDate);
+					$data[$code.'_special_price_todate_int'] = strtotime($specialPriceToDate);
+				}else{
+					if (isset($returnData['special_price_from_time']) && $returnData['special_price_from_time'] > 0) {
+						$data[$code.'_special_price_fromdate_int'] = $returnData['special_price_from_time'];
+					}
+					if (isset($returnData['special_price_to_time']) && $returnData['special_price_to_time'] > 0) {
+						$data[$code.'_special_price_todate_int'] = $returnData['special_price_to_time'];
+					}
+				}
+
+				if(isset($data[$code.'_special_price_fromdate_int']) && !is_numeric($data[$code.'_special_price_fromdate_int'])){
+					//$data[$code.'_special_price_fromdate_int'] = strtotime($data[$code.'_special_price_fromdate_int']);
+					$data[$code.'_special_price_fromdate_int'] = 0;
+				}
+				if(isset($data[$code.'_special_price_todate_int']) && !is_numeric($data[$code.'_special_price_todate_int'])){
+					//$data[$code.'_special_price_todate_int'] = strtotime($data[$code.'_special_price_todate_int']);
+					$data[$code.'_special_price_fromdate_int'] = 0;
+				}
+
+				if (!isset($data[$code.'_special_price_fromdate_int'])) {
+					$data[$code.'_special_price_fromdate_int'] = 0;
+				}
+				if (!isset($data[$code.'_special_price_todate_int'])) {
+					$data[$code.'_special_price_todate_int'] = 0;
+				}
+			}
+		}
+		
+		$item->addData($data);
+		
+		return $this;
+	}
 	
+	/**
+	 * @param Varien_Data_Collection $collection
+	 * @return Zolago_Solrsearch_Model_Data
+	 */
+	public function addTaxPercents(Varien_Data_Collection $collection, $storeId=null) {
+		
+		$helper = Mage::helper('tax');
+        if (!$helper->needPriceConversion($storeId)) {
+            return $this;
+        }
+		
+		$request = Mage::getSingleton('tax/calculation')->getRateRequest();
+		$classToRate = array();
+		foreach ($collection as $item) {
+			/* @var $item Varien_Object */
+			$taxClassId = $item->getOrigData('tax_class_id');
+			if (null === $taxClassId) {
+				$item->setOrigData('tax_percent', 0);
+			}
+			if (!isset($classToRate[$taxClassId])) {
+				$request->setProductClassId($taxClassId);
+				$classToRate[$taxClassId] = Mage::getSingleton('tax/calculation')->getRate($request);
+			}
+			$item->setOrigData('tax_percent', $classToRate[$taxClassId]);
+		}
+		return $this;
+	}
+	
+	/**
+	 * @param Varien_Object $item
+	 * @return Zolago_Solrsearch_Model_Data
+	 */
 	public function processFinalItemData(Varien_Object $item) {
 		$storeId = $item->getOrigData('store_id');
 		$store = Mage::app()->getStore($storeId);
 		$docData = array();
 		//Remove store from Product Url
 		$remove_store_from_url = Mage::helper('solrsearch')->getSetting('remove_store_from_url');
-
-		if (intval($remove_store_from_url) > 0) {
-//			$params['_store_to_url'] = false;
-//			$productUrl = $_product->getUrlInStore($product, $params);
-//			$baseurl = $store->getBaseUrl();
-//			$productUrl = str_replace($baseurl, '/', $productUrl);
+		
+		
+		// Url process 
+		if($path =$item->getOrigData('request_path')){
+			$productUrl = $path;
+			if(!$remove_store_from_url){
+				$productUrl = $store->getBaseUrl() . $productUrl;
+			}else{
+				$productUrl = "/" . $productUrl;
+			}
 		}else{
-//			$productUrl = $_product->getProductUrl();
+			if($remove_store_from_url){
+				$productUrl = "catalog/product/view/id/" . $item->getId();
+			}else{
+				$productUrl = $store->getUrl("catalog/product/view", array("id"=>$item->getId()));
+			}
 		}
 		
-		$productUrl = Mage::getUrl("catalog/product/view", array("id"=>$item->getId()));
-		
-		// Url process @todo fix, appen in base colleciton
 		if (strpos($productUrl, 'solrbridge.php')) {
 			$productUrl = str_replace('solrbridge.php', 'index.php', $productUrl);
 		}
@@ -65,7 +208,7 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 
 		// Sku process
 		$sku = $item->getOrigData("sku");
-		$docData['sku_varchar'] = $sku;
+		$docData['sku_static'] = $sku;
 		$docData['sku_boost'] = $sku;
 		$docData['sku_boost_exact'] = $sku;
 		$docData['sku_relative_boost'] = $sku;
@@ -92,7 +235,7 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 		if (!empty($catIndexPosition) && is_numeric($catIndexPosition)) {
 			$docData['sort_position_decimal'] = floatval($catIndexPosition);
 		}else{
-			$docData['sort_position_decimal'] = 0;
+			$docData['sort_position_decimal'] = 1;
 		}
 
 		// @todo add later
@@ -100,7 +243,7 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 
 
 		$docData['products_id'] = $item->getId();
-		$docData['product_type_static'] = (string)$item->getOriginData("type_id");
+		$docData['product_type_static'] = (string)$item->getOrigData("type_id");
 		$docData['unique_id'] = $store->getId().'P'.$item->getId();
 		if (!isset($docData['product_search_weight_int'])) {
 			$docData['product_search_weight_int'] = 0;
@@ -111,7 +254,7 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 		    $docData['store_id'] = $store->getId();
 		    $docData['website_id'] = $store->getWebsiteId();
 		}else{
-		    if(isset($docData['category_id']) && !empty($docData['category_id'])){
+		    if($item->getData('category_id')){
 		        $docData['store_id'] = $store->getId();
 		        $docData['website_id'] = $store->getWebsiteId();
 		    }else{
@@ -119,14 +262,31 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 		        $docData['website_id'] = 0;
 		    }
 		}
+		
+		if(!$item->hasData('textSearchText')){
+			$item->setData('textSearchText', array());
+		}
+
+		
+		// Unique data
+		foreach($item->getData() as $key=>$value){
+			if(is_array($value) && preg_match("/_facet$/", $key)){
+				$item->setData($key, array_unique($value));
+			}
+		}
 
 		$docData['filter_visibility_int'] = $item->getOrigData('visibility');
-
 		$docData['instock_int'] = $item->getOrigData('stock_status');
-		
 		$docData['product_status'] = $item->getOrigData('status');
 		
+		$docData['textSearchStandard'] = $item->getData('textSearch');
+		
+		
 		$item->addData($docData);
+		
+		// Finally clear id
+		$item->unsetData('id');
+		return $this;
 	}
 	
 
@@ -144,6 +304,7 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 		$backendType = $attributeObj->getBackendType();
 		$frontEndInput = $attributeObj->getFrontendInput();
 		$attributeCode = $attributeObj->getAttributeCode();
+		$helper = Mage::helper('core');
 		$addData = array();
 		
 		// Set org data to template product
@@ -174,7 +335,7 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 			}
 		}
 		
-		if (empty($attributeVal) || $attributeVal == 'No' || $attributeVal == 'None') {
+		if (empty($attributeVal) || $attributeVal == $helper->__('No') || $attributeVal == $helper->__('None')) {
 			unset($addData[$attributeKey]);
 			unset($addData[$attributeKeyFacets]);
 			unset($addData[$attributeCode.'_boost']);
@@ -200,8 +361,7 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 			if($attributeObj->getIsSearchable()){
 				
 				
-				if (!$this->isInObject($item, $attributeVal) && $attributeVal != 'None' 
-						&& $attributeCode != 'status' && $attributeCode != 'sku' && $attributeCode != 'price'){
+				if ($attributeVal != $helper->__('No') && $attributeCode != 'status' && $attributeCode != 'sku' && $attributeCode != 'price'){
 					if (strlen($attributeVal) > 255) {
 						$this->pushTextSearchToObject ($item, $attributeVal, 'textSearchText');
 					}else{
@@ -211,7 +371,7 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 			}
 
 			if ($attributeObj->getIsFilterable() || $attributeObj->getIsFilterableInSearch()) {
-				if ($backendType != 'text' && !in_array($attributeCode, $this->ignoreFields))
+				if ($backendType != 'text' && !in_array($attributeCode, array("price", "sku")))
 				{
 					$addData[$attributeCode.'_boost'] = $attributeVal;
 					$addData[$attributeCode.'_boost_exact'] = $attributeVal;
@@ -312,15 +472,13 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 			$attributeVal = date("Y-m-d\TG:i:s\Z", $attributeVal);
 		}
 
-		if (!in_array($attributeVal, $parent->getData('textSearch')) && $attributeVal != 'None' 
-				&& $attributeCode != 'status' && $attributeCode != 'sku'){
+		if ($attributeVal != 'None' && $attributeCode != 'status' && $attributeCode != 'sku'){
 			$this->pushTextSearchToObject($parent, $attributeVal);
 		}
 
 
 		if ($attributeObj->getIsFilterableInSearch() && $attributeValFacets != 'No' && 
-				$attributeKey != 'price_decimal' && $attributeKey != 'special_price_decimal' &&
-				!@in_array($attributeVal, $parent->getData($attributeKeyFacets))){
+				$attributeKey != 'price_decimal' && $attributeKey != 'special_price_decimal'){
 			$this->pushToObject($parent, $attributeKeyFacets, array_unique($attributeValFacets));
 		}
 		return $this;
@@ -392,7 +550,9 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 		if(is_array($value)){
 			$texts = array_merge($texts, $value);
 		}else{
-			$texts[] = $value;
+			if(!in_array($value, $texts)){
+				$texts[] = $value;
+			}
 		}
 		$item->setData($field, $texts);
 	}

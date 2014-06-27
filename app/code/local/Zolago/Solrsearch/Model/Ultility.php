@@ -128,6 +128,10 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 		$oldStore = Mage::app ()->getStore ();
 	    $currentLocaleCode = Mage::app()->getLocale()->getLocaleCode();
 	    $storeLocaleCode = Mage::getStoreConfig('general/locale/code', $storeId);
+		$resourceModel = Mage::getResourceModel("zolagosolrsearch/improve");
+		/* @var $resourceModel Zolago_Solrsearch_Model_Resource_Improve */
+		$dataModel = Mage::getSingleton("zolagosolrsearch/data");
+		/* @var $dataModel Zolago_Solrsearch_Model_Data */
 		
 	    if ($storeLocaleCode) {
 	        Mage::getSingleton('core/translate')->
@@ -145,9 +149,12 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 		// Load base entity and joins
 		////////////////////////////////////////////////////////////////////////
 		$time = $this->getMicrotime();
-		$rows = Mage::getResourceSingleton('zolagosolrsearch/improve')->
-			getFlatProducts($storeId, $allIds, array("stock"=>true, "price"=>true));
-
+		
+		$rows = $resourceModel->getFlatProducts($storeId, $allIds, array(
+			Zolago_Solrsearch_Model_Resource_Improve::JOIN_PRICE => true,
+			Zolago_Solrsearch_Model_Resource_Improve::JOIN_STOCK => true,
+			Zolago_Solrsearch_Model_Resource_Improve::JOIN_URL => true,
+		));
 		
 		foreach($rows as $row){
 			$row['store_id'] = $storeId;
@@ -166,18 +173,25 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 		////////////////////////////////////////////////////////////////////////
 		$time = $this->getMicrotime();
 		
-		Mage::getResourceSingleton('zolagosolrsearch/improve')->
-				loadAttributesData($finalCollection, $attibutes, $allIds, $storeId);
+		$resourceModel->loadAttributesData($finalCollection, $attibutes, $allIds, $storeId);
 		
 		Mage::log("Attributes load " . $this->_formatTime($this->getMicrotime()-$time));
+		
+		////////////////////////////////////////////////////////////////////////
+		// Add tax percents
+		////////////////////////////////////////////////////////////////////////
+		$time = $this->getMicrotime();
+		
+		$dataModel->addTaxPercents($finalCollection, $storeId);
+		
+		Mage::log("Add tax percents " . $this->_formatTime($this->getMicrotime()-$time));
 		
 		
 		////////////////////////////////////////////////////////////////////////
 		// Add category data
 		////////////////////////////////////////////////////////////////////////
 		$time = $this->getMicrotime();
-		Mage::getResourceSingleton('zolagosolrsearch/improve')->
-				loadCategoryData($finalCollection, $storeId);
+		$resourceModel->loadCategoryData($finalCollection, $storeId);
 		
 		Mage::log("Categories load " . $this->_formatTime($this->getMicrotime()-$time));
 		
@@ -191,8 +205,7 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 			if(($item = $finalCollection->getItemById($id)) && $finalCollection->isParentItem($item)){
 				foreach($childs as $childId){
 					if($childItem = $finalCollection->getItemById($childId)){
-						Mage::getSingleton("zolagosolrsearch/data")->
-							extendConfigurable($item, $childItem, $attibutes);
+						$dataModel->extendConfigurable($item, $childItem, $attibutes);
 					}
 				}
 			}
@@ -210,7 +223,8 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 		
 		foreach($finalCollection->getRegularIds() as $id){
 			if($item = $finalCollection->getItemById($id)){
-				Mage::getSingleton("zolagosolrsearch/data")->processFinalItemData($item);
+				$dataModel->processPriceData($item);
+				$dataModel->processFinalItemData($item);
 			}
 		}
 		Mage::log("Processing final values for regular " . $this->_formatTime($this->getMicrotime()-$time));
@@ -246,7 +260,8 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 	public function getSolrUsedAttributes() {
 		if(!$this->_solrAttributesCollection){
 			
-			$codes = array("name", "status", "visibility", "sku");
+			$codes = array("name", "tax_class_id", "status", "visibility", "sku", 
+				'is_new_facet', 'is_bestseller_facet', 'product_flag_facet');
 			
 			//display brand suggestion attribute code
 			$brandAttributeCode = $this->getBrandAttributeCode();
@@ -310,14 +325,17 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 	public function parseJsonData($collection, $store, $onlyprice = false)
 	{
 		/* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
+		//  Price - use original method
+		if($onlyprice){
+			return parent::parseJsonData($collection, $store, $onlyprice);
+		}
 		
 		$mainTime = $this->getMicrotime();
 		$ignoreFields = array('sku', 'price', 'status');
 		$storeId = $collection->getStoreId();
 		Mage::log("Start");
 		
-	    $fetchedProducts = 0;
-		$index = 1;
+	   
 		$collecitonIds = array_keys($collection->getItems());
 		
 		//included sub products for search
@@ -364,139 +382,36 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 		Mage::log("Stop " . $finalCollection->count() . " = " . count($allIds));
 		
 		// DEV: log 10 item
-		$i = 0;
+		$fetchedProducts = 0;
+		$index = 1;
+		$documents = "{";
+		
+		Mage::log("Collection " . count($collecitonIds));
+		
 		foreach($collecitonIds as $id){
 			/* @var $item Varien_Object */
-			$item = $finalCollection->getItemById($id);
-			if($item && $item->getOrigData('type_id')=="configurable"){
-				Mage::log($item->getOrigData());
-				Mage::log($item->getData());
-				if($i++>9) break;
+			
+			if($item = $finalCollection->getItemById($id)){
+				$documents .= '"add": '.json_encode(array('doc'=>$item->getData())).",";
+				// Log first item
+				//Mage::log(var_export($item->getData(),1));
+				
 			}
+			
+			$index++;
+			$fetchedProducts++;
 		}
+		
+		$jsonData = trim($documents,",").'}';
+		
 		
 		Mage::log("Time processed:" . $this->_formatTime($this->getMicrotime()-$mainTime));
 		Mage::log("Inout collection prods: " . count($collecitonIds));
 		Mage::log("Count configurable childs: " . count($this->_configurableChildIdsFlat));
 		Mage::log("Count grouped childs: " . count($this->_groupedChildIdsFlat));
 		
-		die;
-		// Process each product type each way
-
 		
-
-		$documents = "{";
 		
-		/*
-		//loop products
-		//$collection->load();
-		foreach ($collection as $_product) {
-			$_time = $this->getMicrotime();
-			$textSearch = array();
-			$textSearchText = array();
-			$docData = array();
-			$_product->setStoreId($store->getId());
-
-			//Price index only
-			if( $onlyprice )
-			{
-				$docData ['products_id'] = $_product->getId ();
-				$docData ['unique_id'] = $store->getId () . 'P' . $_product->getId ();
-				$docData ['store_id'] = $store->getId ();
-				$docData ['website_id'] = $store->getWebsiteId ();
-
-				$stock = Mage::getModel ( 'cataloginventory/stock_item' )->loadByProduct ( $_product );
-				if ($stock->getIsInStock ()) {
-					$docData ['instock_int'] = 1;
-				} else {
-					$docData ['instock_int'] = 0;
-				}
-				$docData ['product_status'] = $_product->getStatus ();
-
-				$this->updatePriceData ( $docData, $_product, $store );
-				$documents .= '"set": ' . json_encode ( array ('doc' => $docData) ) . ",";
-			}
-			else
-			{
-				$solrBridgeData = Mage::getModel('solrsearch/data');
-				$solrBridgeData->setStore($store);
-				$solrBridgeData->setBrandAttributes($includedBrandAttributeCodes);
-				$solrBridgeData->setSearchWeightAttributes($includedSearchWeightAttributeCodes);
-				$solrBridgeData->setIgnoreFields($ignoreFields);
-				$docData = $solrBridgeData->getProductAttributesData($_product);
-
-				//Categories
-				$solrBridgeData->prepareCategoriesData($_product, $docData);
-				//product tags
-				$solrBridgeData->prepareTagsData($_product, $docData);
-
-				$solrBridgeData->prepareFinalProductData($_product, $docData);
-
-				$textSearch = $solrBridgeData->getTextSearch();
-				$textSearchText = $solrBridgeData->getTextSearchText();
-
-				
-				if (!empty($included_subproduct) && $included_subproduct > 0) {
-					if ($_product->getTypeId() == 'grouped') {
-						Mage::log("Subproducts");
-						$associatedProducts = $_product->getTypeInstance(true)->getAssociatedProducts($_product);
-						foreach ($associatedProducts as $subproduct) {
-							$_subproduct = Mage::getModel('catalog/product')->setStoreId($store->getId())->load($subproduct->getId());
-
-							$solrBridgeSubData = Mage::getModel('solrsearch/data');
-							$solrBridgeSubData->setStore($store);
-							$solrBridgeSubData->setBrandAttributes($includedBrandAttributeCodes);
-							$solrBridgeSubData->setSearchWeightAttributes($includedSearchWeightAttributeCodes);
-							$solrBridgeSubData->setIgnoreFields($ignoreFields);
-							$docSubData = $solrBridgeData->getProductAttributesData($_subproduct);
-
-							//Categories
-							$solrBridgeSubData->prepareCategoriesData($_subproduct, $docSubData);
-							//product tags
-							$solrBridgeSubData->prepareTagsData($_subproduct, $docSubData);
-
-							$solrBridgeSubData->prepareFinalProductData($_subproduct, $docSubData);
-
-							$subTextSearch = $solrBridgeSubData->getTextSearch();
-							$textSearch = array_merge($textSearch, $subTextSearch);
-
-							$subTextSearchText = $solrBridgeSubData->getTextSearchText();
-							$textSearchText = array_merge($textSearchText, $subTextSearchText);
-						}
-					}
-				}
-				 
-
-				//Prepare text search data
-				$docData['textSearch'] = (array) $textSearch;
-				$docData['textSearchText'] = (array) $textSearchText;
-				$docData['textSearchStandard'] = (array) $textSearch;
-
-				$this->updateDocDataForConfigurableProducts($docData, $_product, $store);
-
-				$this->updatePriceData($docData, $_product, $store);
-
-				try{
-					$this->generateThumb($_product);
-				}catch (Exception $e){
-					$message = Mage::helper('solrsearch')->__('#%s %s at product %s[%s] in store [%s]', $index, $e->getMessage() , $_product->getId(), $_product->getName(), $store->getName());
-					$this->writeLog($message, $store->getId(), 'english', 0, true);
-				}
-				Mage::log($docData);
-				$documents .= '"add": '.json_encode(array('doc'=>$docData)).",";
-			}
-			//Mage::log("Processing " . $_product->getId() . ": " . $this->_formatTime($this->getMicrotime()-$_time));
-			$index++;
-			$fetchedProducts++;
-		}
-		*/
-		
-		$jsonData = trim($documents,",").'}';
-		
-		$time = $this->getMicrotime()-$time;
-		if($fetchedProducts){
-			Mage::log($fetchedProducts. " products " . round($time) . " /  " .  $this->_formatTime($time/$fetchedProducts) . "per product");
-		}
 		return array('jsondata'=> $jsonData, 'fetchedProducts' => (int) $fetchedProducts);
 	}
 	
