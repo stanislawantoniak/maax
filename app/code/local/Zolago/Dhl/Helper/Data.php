@@ -248,8 +248,8 @@ class Zolago_Dhl_Helper_Data extends Mage_Core_Helper_Abstract {
                 return true;
             } else {
                 $dhlClient = Mage::getModel('zolagodhl/client');
-                $login = $this->getDhlLogin();
-                $password = $this->getDhlPassword();
+                $login = Mage::helper('core')->decrypt($this->getDhlLogin());
+                $password = Mage::helper('core')->decrypt($this->getDhlPassword());
                 $dhlClient->setAuth($login, $password);                
                 $ret = $dhlClient->getPostalCodeServices($zip, date('Y-m-d'));
                 if (is_object($ret) && property_exists($ret, 'getPostalCodeServicesResult')) {
