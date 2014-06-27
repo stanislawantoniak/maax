@@ -8,7 +8,6 @@
 <header id="header">
 <!--  class="navbar-fixed-top" -->
     <?php echo $this->getChildHtml('page.header.bottom.menu'); ?>
-
 <div class="header_top">
     <div class="container-fluid clearfix">
         <div class="col-xs-12">
@@ -18,21 +17,29 @@
                 <?php echo $this->getChildHtml('page.header.leftmenu'); ?>
 
                 <?php echo $this->getChildHtml('page.header.search'); ?>
+
+
+
+                <!-- END :// MOBILE -->
             </div>
             <!-- END:/ HEADER BOTTOM BLOCK LEFT -->
             <!-- LOGO -->
             <div id="header_top_block_center">
                 <div id="logo">
                     <a href="<?php echo $this->getUrl(''); ?>" class="logo">
-                        <img src="<?php echo $this->getLogoSrc(); ?>" alt="">
+                        <img src="<?php echo $this->getLogoSrc(); ?>" alt="" alt="">
                     </a>
                 </div>
             </div>
+
             <?php echo $this->getChildHtml('page.header.right.menu'); ?>
+
         </div>
         <!-- TOGGLE BLOCK || SEARCH & BASKET -->
         <?php echo $this->getChildHtml('page.header.right.cartdropdown'); ?>
         <?php echo $this->getChildHtml('page.header.search.dropdown'); ?>
+
+        <!-- END:/ TOGGLE BLOCK -->
     </div>
 </div>
 </header>
