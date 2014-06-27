@@ -130,18 +130,25 @@ class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
 				
 				$days_elapsed = $this->getDaysElapsed($return_reason_id, $po);
 				
-				//Acknowledged return days #
-				$acknowledged_return_days = $vendor_reason->getAllowedDays();
+				//Get message based on use_default flag
+				$message = ($vendor_reason->getUseDefault()) ? $vendor_reason->getReturnReason()->getMessage() : $vendor_reason->getMessage() ;
+				
+				//Get auto_days based on use_default flag
+				$auto_days = ($vendor_reason->getUseDefault()) ? $vendor_reason->getReturnReason()->getAutoDays() : $vendor_reason->getAutoDays() ;
+				
+				//Get allowed_days based on use_default flag
+				$allowed_days = ($vendor_reason->getUseDefault()) ? $vendor_reason->getReturnReason()->getAllowedDays() : $vendor_reason->getAllowedDays() ;
 			
-				$is_reason_available = ($days_elapsed > $acknowledged_return_days) ? false : true;
-			
+				$is_reason_available = ($days_elapsed >= $allowed_days) ? false : true;
+				
+				
 				$reasons_array[$return_reason_id] = array(
 					'isAvailable' => $is_reason_available,
 					'days_elapsed' => $days_elapsed,
 					'flow' => $this->getFlow($vendor_reason, $days_elapsed),
-					'auto_days' => $vendor_reason->getAutoDays(),
-					'allowed_days' => $vendor_reason->getAllowedDays(),
-					'message' => $vendor_reason->getMessage()
+					'auto_days' => $auto_days,
+					'allowed_days' => $allowed_days,
+					'message' => $message
 				);
 				
 			}
