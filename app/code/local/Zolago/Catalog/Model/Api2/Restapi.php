@@ -8,7 +8,7 @@ class Zolago_Catalog_Model_Api2_Restapi extends Mage_Api2_Model_Resource {
             case self::ACTION_TYPE_ENTITY . self::OPERATION_CREATE:
 
                 // Creation of objects is possible only when working with collection
-                $this->_critical(self::RESOURCE_METHOD_NOT_IMPLEMENTED);
+                //$this->_critical(self::RESOURCE_METHOD_NOT_IMPLEMENTED);
                 break;
             case self::ACTION_TYPE_COLLECTION . self::OPERATION_CREATE:
 
