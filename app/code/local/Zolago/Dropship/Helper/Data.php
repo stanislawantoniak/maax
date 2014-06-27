@@ -94,6 +94,7 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
 			
 			$requests[$cCode][$vId][$track->getNumber()][] = $track;
         }
+		
         foreach ($requests as $cCode => $vendors) {        	
             foreach ($vendors as $vId => $trackIds) {
                 $_track = null;
@@ -113,6 +114,9 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
                     $this->_processPollTrackingFailed($trackIds, $e);
                     continue;
                 }
+				
+				if(!result) continue;
+				
                 $processTracks = array();
                 foreach ($result as $trackId=>$status) {
                     foreach ($trackIds[$trackId] as $track) {
@@ -127,6 +131,7 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
                             if ($status==Unirgy_Dropship_Model_Source::TRACK_STATUS_PENDING) continue;
                         }
                         $track->setUdropshipStatus($status);
+						
                         if ($track->dataHasChangedFor('udropship_status')) {
                             switch ($status) {
                             case Unirgy_Dropship_Model_Source::TRACK_STATUS_READY:
@@ -154,6 +159,7 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
                         }
                     }
                 }
+                
                 foreach ($processTracks as $_pTracks) {
                     try {
                         $this->processTrackStatus($_pTracks, true); } catch
