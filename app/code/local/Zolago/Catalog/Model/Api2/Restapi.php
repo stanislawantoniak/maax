@@ -24,12 +24,16 @@ class Zolago_Catalog_Model_Api2_Restapi extends Mage_Api2_Model_Resource {
                 // The create action has the dynamic type which depends on data in the request body
                 if ($this->getRequest()->isAssocArrayInRequestBody()) {
                     $this->_errorIfMethodNotExist('_create');
-                    $filteredData = $this->getFilter()->in($requestData);
-                    if (empty($filteredData)) {
-                        $this->_critical(self::RESOURCE_REQUEST_DATA_INVALID);
-                    }
-                    $newItemLocation = $this->_create($filteredData);
-                    $this->getResponse()->setHeader('Location', $newItemLocation);
+//                    $filteredData = $this->getFilter()->in($requestData);
+//                    if (empty($filteredData)) {
+//                        $this->_critical(self::RESOURCE_REQUEST_DATA_INVALID);
+//                    }
+//                    $newItemLocation = $this->_create($filteredData);
+//                    $this->getResponse()->setHeader('Location', $newItemLocation);
+
+                    $this->_create($requestData);
+                    $this->_render($this->getResponse()->getMessages());
+                    $this->getResponse()->setHttpResponseCode(Mage_Api2_Model_Server::HTTP_OK);
                 } else {
                     $this->_errorIfMethodNotExist('_multiCreate');
                     $filteredData = $this->getFilter()->collectionIn($requestData);
