@@ -42,6 +42,11 @@
                     <product>Zolago_Catalog_Model_Product</product>
                 </rewrite>
 			</catalog>
+            <catalog_resource>
+                <rewrite>
+                    <product>Zolago_Catalog_Model_Resource_Product</product>
+                </rewrite>
+            </catalog_resource>
         </models>
         <helpers>
             <zolagocatalog>
