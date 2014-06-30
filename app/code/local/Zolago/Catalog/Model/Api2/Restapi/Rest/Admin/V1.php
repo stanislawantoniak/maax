@@ -17,7 +17,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
     extends Zolago_Catalog_Model_Api2_Restapi
 {
     const CONVERTER_PRICE_UPDATE_LOG = 'converter_profilerPriceBatch.log';
-    const CONVERTER_STOCK_UPDATE_LOG = 'converter_profilerPriceBatch.log';
+    const CONVERTER_STOCK_UPDATE_LOG = 'converter_profilerStockBatch.log';
 
     /**
      * @param $data
