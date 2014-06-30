@@ -58,7 +58,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                         if(!empty($batch)){
                             $batch = (array)$batch;
                             foreach($batch as $dataPrice){
-                                Mage::log(microtime() . "Test {$dataPrice}", 0, $batchFile);
+Zend_Debug::dump($dataPrice);
                                 $merchant = $dataPrice->merchant;
                                 $prices = $dataPrice->data;
 
