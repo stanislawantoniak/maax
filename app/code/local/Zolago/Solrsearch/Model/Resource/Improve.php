@@ -91,7 +91,7 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 						if(is_array($textSearch)){
 							$textSearch = array_merge($textSearch, $facets[$productId]);
 						}
-						$item->getSearchText($textSearch);
+						$item->setSearchText($textSearch);
 					}
 					// @todo all parent categories?
 					$item->setCategoryPath($facets[$productId]);
