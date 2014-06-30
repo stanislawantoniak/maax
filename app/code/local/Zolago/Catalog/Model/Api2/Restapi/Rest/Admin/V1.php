@@ -87,6 +87,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
                         if(!empty($batch)){
                             foreach($batch as $dataStock){
+                                Mage::log($dataStock, 0, $batchFile);
                                 $merchant = $dataStock->merchant;
                                 $stock = $dataStock->data;
 
