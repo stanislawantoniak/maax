@@ -7,76 +7,14 @@ class Zolago_Catalog_AuthController extends Mage_Core_Controller_Front_Action
 {
 
     public function indexAction(){
+        $apiModel = new Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1();
 
 
-        $data = array(
-            'cmd' => 'ProductPricesUpdate',
-            'merchant' => 4,
-            'data' => array(
-                array('price' => 584.63,
-                    'price_id' => "marketPrice"
-                ),
-                array('price' => 575.52,
-                    'price_id' => "A"
-                )
-            ),
-            'sku' => "32345-01X-65C"
-        );
-        Mage::log(microtime() . ' Start', 0, 'converter_profiler.log');
+        //$res = '{"ProductPricesUpdate":[{"merchant":"4","data":{"20375-80X-75F":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20375-80X-75E":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20375-80X-85E":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20375-80X-85D":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20375-99X-65D":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20375-99X-65B":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20375-99X-65C":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20375-80X-65F":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20375-00X-70E":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20183-99X-65F":{"marketPrice":194.79,"A":191.76,"B":24.5,"C":23.1,"salePriceBefore":194.79,"Z":23.1},"20375-00X-70D":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20183-99X-65E":{"marketPrice":194.79,"A":191.76,"B":24.5,"C":23.1,"salePriceBefore":194.79,"Z":23.1},"20375-00X-80B":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20375-80X-65G":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20183-99X-65C":{"marketPrice":194.79,"A":191.76,"B":24.5,"C":23.1,"salePriceBefore":194.79,"Z":23.1},"20375-00X-70F":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20375-00X-70A":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20375-00X-80E":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20375-00X-70C":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20375-00X-80C":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20183-99X-65G":{"marketPrice":194.79,"A":191.76,"B":24.5,"C":23.1,"salePriceBefore":194.79,"Z":23.1},"20375-00X-70B":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20375-00X-80D":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20183-99X-85E":{"marketPrice":194.79,"A":191.76,"B":24.5,"C":23.1,"salePriceBefore":194.79,"Z":23.1},"20183-99X-85B":{"marketPrice":194.79,"A":191.76,"B":24.5,"C":23.1,"salePriceBefore":194.79,"Z":23.1},"20183-80X-75A":{"marketPrice":194.79,"A":191.76,"B":24.5,"C":23.1,"salePriceBefore":194.79,"Z":23.1},"20183-80X-75C":{"marketPrice":194.79,"A":191.76,"B":24.5,"C":23.1,"salePriceBefore":194.79,"Z":23.1},"20183-80X-75B":{"marketPrice":194.79,"A":191.76,"B":24.5,"C":23.1,"salePriceBefore":194.79,"Z":23.1},"20183-80X-75E":{"marketPrice":194.79,"A":191.76,"B":24.5,"C":23.1,"salePriceBefore":194.79,"Z":23.1},"20183-80X-75D":{"marketPrice":194.79,"A":191.76,"B":24.5,"C":23.1,"salePriceBefore":194.79,"Z":23.1},"20183-80X-75F":{"marketPrice":194.79,"A":191.76,"B":24.5,"C":23.1,"salePriceBefore":194.79,"Z":23.1},"20183-80X-80D":{"marketPrice":194.79,"A":191.76,"B":24.5,"C":23.1,"salePriceBefore":194.79,"Z":23.1},"20183-80X-80E":{"marketPrice":194.79,"A":191.76,"B":24.5,"C":23.1,"salePriceBefore":194.79,"Z":23.1},"20375-80X-75C":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20375-80X-75D":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20375-80X-80B":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20375-80X-75A":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20375-80X-75B":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20375-80X-80D":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20375-80X-80C":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20375-80X-80E":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20375-00X-75C":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20375-00X-75D":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20375-00X-75A":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20375-00X-65F":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20375-00X-75B":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20375-00X-65G":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20375-00X-65D":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20375-00X-65E":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20375-00X-65B":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20375-00X-75E":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20375-00X-65C":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20375-00X-75F":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20375-00X-85C":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20375-00X-85B":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20183-80X-80B":{"marketPrice":194.79,"A":191.76,"B":24.5,"C":23.1,"salePriceBefore":194.79,"Z":23.1},"20183-80X-80C":{"marketPrice":194.79,"A":191.76,"B":24.5,"C":23.1,"salePriceBefore":194.79,"Z":23.1},"20375-00X-85E":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20375-00X-85D":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20183-80X-70A":{"marketPrice":194.79,"A":191.76,"B":24.5,"C":23.1,"salePriceBefore":194.79,"Z":23.1},"20183-99X-75A":{"marketPrice":194.79,"A":191.76,"B":24.5,"C":23.1,"salePriceBefore":194.79,"Z":23.1},"20183-80X-70B":{"marketPrice":194.79,"A":191.76,"B":24.5,"C":23.1,"salePriceBefore":194.79,"Z":23.1},"20183-80X-70C":{"marketPrice":194.79,"A":191.76,"B":24.5,"C":23.1,"salePriceBefore":194.79,"Z":23.1},"20183-80X-70D":{"marketPrice":194.79,"A":191.76,"B":24.5,"C":23.1,"salePriceBefore":194.79,"Z":23.1},"20183-99X-75F":{"marketPrice":194.79,"A":191.76,"B":24.5,"C":23.1,"salePriceBefore":194.79,"Z":23.1},"20183-99X-75D":{"marketPrice":194.79,"A":191.76,"B":24.5,"C":23.1,"salePriceBefore":194.79,"Z":23.1},"20183-99X-75C":{"marketPrice":194.79,"A":191.76,"B":24.5,"C":23.1,"salePriceBefore":194.79,"Z":23.1},"20183-99X-75B":{"marketPrice":194.79,"A":191.76,"B":24.5,"C":23.1,"salePriceBefore":194.79,"Z":23.1},"20183-80X-70H":{"marketPrice":194.79,"A":191.76,"B":24.5,"C":23.1,"salePriceBefore":194.79,"Z":23.1},"20183-80X-65G":{"marketPrice":194.79,"A":191.76,"B":24.5,"C":23.1,"salePriceBefore":194.79,"Z":23.1},"20183-80X-70G":{"marketPrice":194.79,"A":191.76,"B":24.5,"C":23.1,"salePriceBefore":194.79,"Z":23.1},"20183-80X-70F":{"marketPrice":194.79,"A":191.76,"B":24.5,"C":23.1,"salePriceBefore":194.79,"Z":23.1},"20183-80X-70E":{"marketPrice":194.79,"A":191.76,"B":24.5,"C":23.1,"salePriceBefore":194.79,"Z":23.1},"20375-80X-65B":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20183-80X-85B":{"marketPrice":194.79,"A":191.76,"B":24.5,"C":23.1,"salePriceBefore":194.79,"Z":23.1},"20375-80X-65C":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20183-99X-80E":{"marketPrice":194.79,"A":191.76,"B":24.5,"C":23.1,"salePriceBefore":194.79,"Z":23.1},"20183-80X-85C":{"marketPrice":194.79,"A":191.76,"B":24.5,"C":23.1,"salePriceBefore":194.79,"Z":23.1},"20375-80X-65D":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20183-99X-80D":{"marketPrice":194.79,"A":191.76,"B":24.5,"C":23.1,"salePriceBefore":194.79,"Z":23.1},"20183-80X-85D":{"marketPrice":194.79,"A":191.76,"B":24.5,"C":23.1,"salePriceBefore":194.79,"Z":23.1},"20375-80X-65E":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20183-99X-80C":{"marketPrice":194.79,"A":191.76,"B":24.5,"C":23.1,"salePriceBefore":194.79,"Z":23.1},"20375-80X-70F":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20183-99X-80B":{"marketPrice":194.79,"A":191.76,"B":24.5,"C":23.1,"salePriceBefore":194.79,"Z":23.1},"20375-80X-70D":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20375-80X-70E":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20375-80X-70B":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20375-80X-70C":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20375-80X-70A":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20183-99X-70G":{"marketPrice":194.79,"A":191.76,"B":24.5,"C":23.1,"salePriceBefore":194.79,"Z":23.1},"20183-99X-70H":{"marketPrice":194.79,"A":191.76,"B":24.5,"C":23.1,"salePriceBefore":194.79,"Z":23.1},"20183-99X-70E":{"marketPrice":194.79,"A":191.76,"B":24.5,"C":23.1,"salePriceBefore":194.79,"Z":23.1},"20183-99X-70F":{"marketPrice":194.79,"A":191.76,"B":24.5,"C":23.1,"salePriceBefore":194.79,"Z":23.1},"20183-99X-70C":{"marketPrice":194.79,"A":191.76,"B":24.5,"C":23.1,"salePriceBefore":194.79,"Z":23.1},"20375-80X-85C":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20375-80X-85B":{"marketPrice":185.04,"A":182.16,"B":24.5,"C":23.1,"salePriceBefore":185.04,"Z":23.1},"20183-99X-70D":{"marketPrice":194.79,"A":191.76,"B":24.5,"C":23.1,"salePriceBefore":194.79,"Z":23.1},"20183-99X-70A":{"marketPrice":194.79,"A":191.76,"B":24.5,"C":23.1,"salePriceBefore":194.79,"Z":23.1},"20183-99X-70B":{"marketPrice":194.79,"A":191.76,"B":24.5,"C":23.1,"salePriceBefore":194.79,"Z":23.1}}}]}';
 
-        if (!empty($data)) {
-            $productAction = Mage::getSingleton('catalog/product_action');
-            $merchant = $data['merchant'];
-            $skuV = $data['sku'];
-
-            $sku = $merchant . '-' . $skuV;
-
-            $zcModel = Mage::getModel('zolagocatalog/product');
-            $priceType = $zcModel->getConverterPriceTypeBySku($sku);
-
-            $priceTypeSelected = "A";
-            if(!empty($priceType) && isset($priceType['price_type'])){
-                $priceTypeSelected = $priceType['price_type'];
-            }
-
-
-            Mage::log(microtime() . ' Got system sku', 0, 'converter_profiler.log');
-            $productId = Mage::getResourceModel('catalog/product')
-                ->getIdBysku($sku);
-            Mage::log(microtime() . ' Got product id from sku', 0, 'converter_profiler.log');
-            if ($productId) {
-
-                $prices = isset($data['data']) ? $data['data'] : array();
-                if(!empty($prices)){
-
-                    $priceA = FALSE;
-                    foreach ($prices as $pricesItem) {
-                        if ($pricesItem['price_id'] == $priceTypeSelected) {
-                            $priceA = $pricesItem['price'];
-                        }
-                    }
-
-                    Mage::log(microtime() . ' Got priceA from all prices', 0, 'converter_profiler.log');
-
-                    $productIds = array($productId);
-                    $attrData = array('price' => $priceA);
-
-                    Mage::log(microtime() . ' Update prices - start', 0, 'converter_profiler.log');
-                    $productAction->updateAttributesNoIndex($productIds, $attrData, 0);
-                    $productAction->updateAttributesNoIndex($productIds, $attrData, 1);
-                    $productAction->updateAttributesNoIndex($productIds, $attrData, 2);
-                    Mage::log(microtime() . ' Update prices - end', 0, 'converter_profiler.log');
-
-                    Mage::log(microtime() . ' Add to queue - start', 0, 'converter_profiler.log');
-                    Zolago_Catalog_Helper_Configurable::queueProduct($productId);
-                    Mage::log(microtime() . ' Add to queue - end', 0, 'converter_profiler.log');
-                }
-
-
-            }
-        }
-
-        Mage::log(microtime() . ' Finish', 0, 'converter_profiler.log');
+        $res = '{"ProductStockUpdate":[{"merchant":"4","data":{"32345-01X-65F":{"K88":48,"K99":4,"K01":8},"32345-01X-75A":{"K88":48,"K99":4,"K01":8},"32345-01X-65E":{"K88":48,"K99":4,"K01":8},"32345-01X-75C":{"K88":48,"K99":4,"K01":8},"32345-01X-75B":{"K88":48,"K99":4,"K01":8},"32345-01X-75D":{"K88":48,"K99":4,"K01":8},"32345-01X-65D":{"K88":48,"K99":4,"K01":8},"32345-01X-65C":{"K88":48,"K99":4,"K01":8},"32345-01X-70B":{"K88":48,"K99":4,"K01":8},"32345-01X-70C":{"K88":48,"K99":4,"K01":8},"32345-01X-70D":{"K88":48,"K99":4,"K01":8},"32345-01X-70E":{"K88":48,"K99":4,"K01":8},"32345-01X-80C":{"K88":48,"K99":4,"K01":8},"32345-01X-80B":{"K88":48,"K99":4,"K01":8}}}]}';
+        $data = json_decode($res);
+        $apiModel->api2($data);
     }
 
     public function configurableAction()
