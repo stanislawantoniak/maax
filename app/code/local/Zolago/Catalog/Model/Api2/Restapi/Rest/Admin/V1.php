@@ -237,8 +237,6 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
             $eav = Mage::getSingleton('eav/config');
             $productEt = $eav->getEntityType('catalog_product')->getId();
 
-            //$productAction = Mage::getSingleton('catalog/product_action');
-
             $priceTypeByStore = array();
             $zcModel = Mage::getModel('zolagocatalog/product');
             $priceType = $zcModel->getConverterPriceType($skuS);
@@ -307,10 +305,6 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                                 'entity_id' => $productId,
                                 'value' => Mage::app()->getLocale()->getNumber($priceToInsert + (($priceToInsert * $marginSelected)/100))
                             );
-                            //$productIds = array($productId);
-                            //$attrData = array('price' => $priceToInsert);
-
-                            //$productAction->updateAttributesNoIndex($productIds, $attrData, $storeId);
                         }
                     }
 
