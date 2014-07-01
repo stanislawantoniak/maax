@@ -52,22 +52,61 @@
 				</rewrite>
 			</solrsearch>
         </blocks>
-		
-    </global>
-	<adminhtml>
 		<events>
-			<!-- Works -->
+			
+			<!-- Process product save anywhere -->
 			<catalog_product_save_after>
 				<observers>
-					<solr_search>
-						<type>disabled</type>
-					</solr_search>
 					<zolagosolrsearch>
 						<class>zolagosolrsearch/observer</class>
 						<method>catalogProductSaveAfter</method>
 					</zolagosolrsearch>
 				</observers>
 			</catalog_product_save_after>
+		
+			
+			<!-- Process category save anywhere -->
+			<catalog_category_save_after>
+				<observers>
+					<zolagosolrsearch>
+						<class>zolagosolrsearch/observer</class>
+						<method>catalogCategorySaveAfter</method>
+					</zolagosolrsearch>
+				</observers>
+			</catalog_category_save_after>
+			
+			<!-- Process mass -->
+			<catalog_product_attribute_update_before>
+				<observers>
+					<zolagosolrsearch>
+						<class>zolagosolrsearch/observer</class>
+						<method>catalogProductAttributeUpdateBefore</method>
+					</zolagosolrsearch>
+				</observers>
+			</catalog_product_attribute_update_before>
+			
+			<!-- Procesing after response send -->
+			<controller_front_send_response_after>
+				<observers>
+					<zolagosolrsearch>
+						<class>zolagosolrsearch/observer</class>
+						<method>controllerFrontSendResponseAfter</method>
+					</zolagosolrsearch>
+				</observers>
+			</controller_front_send_response_after>
+		</events>
+    </global>
+	<adminhtml>
+		<events>
+			<!-- Just disable -->
+			<catalog_product_save_after>
+				<observers>
+					<solr_search>
+						<type>disabled</type>
+					</solr_search>
+				</observers>
+			</catalog_product_save_after>
+			
 			<!-- Will process collected products -->
 			<after_reindex_process_catalog_product_price>
 				<observers>
@@ -80,6 +119,7 @@
 					</zolagosolrsearch>
 				</observers>
 			</after_reindex_process_catalog_product_price>
+			
 			<!-- Implementing ... -->
 			<catalogrule_after_apply>
 				<observers>

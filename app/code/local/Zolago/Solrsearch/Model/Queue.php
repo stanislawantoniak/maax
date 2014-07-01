@@ -2,6 +2,8 @@
 
 class Zolago_Solrsearch_Model_Queue extends Varien_Data_Collection{
 
+	protected $_justAdded = array();
+	
 	protected $_limit = 150;
 	protected $_toProcessing = 0;
 	protected $_resourceCollection;
@@ -23,11 +25,19 @@ class Zolago_Solrsearch_Model_Queue extends Varien_Data_Collection{
 	 * @return Zolago_Solrsearch_Model_Queue
 	 */
 	public function push(Zolago_Solrsearch_Model_Queue_Item $item) {
+		
+		if(isset($this->_justAdded[$item->getStoreId()][$item->getProductId()])){
+			return $this;
+		}
+		
 		$resource = Mage::getResourceModel("zolagosolrsearch/queue_item");
 		$item->setStatus(Zolago_Solrsearch_Model_Queue_Item::STATUS_WAIT);
 		// Skup double items
 		if(!$item->getId() && !$resource->fetchProductId($item)){
 			//$this->_log("Single product {$item->getProductId()} added to queue with store {$item->getStoreId()}");
+			if(!isset($this->_justAdded[$item->getStoreId()])){
+				$this->_justAdded[$item->getStoreId()][$item->getProductId()] = true;
+			}
 			$item->save();
 		}
 		return $this;
@@ -90,6 +100,8 @@ class Zolago_Solrsearch_Model_Queue extends Varien_Data_Collection{
 		$afterStatus = Zolago_Solrsearch_Model_Queue_Item::STATUS_DONE;
 		
 		try{
+			// 1. Delete item
+			// 2. Make reindex if nessery
 			// Sth
 		} catch (Exception $ex) {
 			$afterStatus = Zolago_Solrsearch_Model_Queue_Item::STATUS_FAIL;

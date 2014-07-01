@@ -17,6 +17,57 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 	}
 	
 	/**
+	 * @param int|array $childId
+	 * @return array
+	 */
+	public function getStoreIdsByProducts($childId)
+    {
+        $parentIds = array();
+
+        $select = $this->_getReadAdapter()->select()
+            ->from(array("s"=>$this->getTable("core/store")), array('store_id'))
+            ->join(
+				array("g"=>$this->getTable("core/store_group")),
+				"g.store_id=s.store_id",
+				array())
+			->join(
+				array("c"=>$this->getTable("catalog/product_website")),
+				"c.website_id=g.website_id",
+				array("product_id"))
+			->where("c.product_id IN (?)", $childId);
+		
+        foreach ($this->_getReadAdapter()->fetchAll($select) as $row) {
+			if(!isset($parentIds[$row['product_id']])){
+				$parentIds[$row['product_id']] = array();
+			}
+            $parentIds[$row['product_id']][] = $row['store_id'];
+        }
+
+        return $parentIds;
+    }
+	
+	/**
+	 * @param int|array $childId
+	 * @return array
+	 */
+	public function getParentIdsByChild($childId)
+    {
+        $parentIds = array();
+
+        $select = $this->_getReadAdapter()->select()
+            ->from($this->getMainTable(), array('product_id', 'parent_id'))
+            ->where('product_id IN(?)', $childId);
+        foreach ($this->_getReadAdapter()->fetchAll($select) as $row) {
+			if(!isset($parentIds[$row['product_id']])){
+				$parentIds[$row['product_id']] = array();
+			}
+            $parentIds[$row['product_id']][] = $row['parent_id'];
+        }
+
+        return $parentIds;
+    }
+	
+	/**
 	 * @param array|int $parentIds
 	 * @return array (parenId=>array(child1, child2,...),...)
 	 */
