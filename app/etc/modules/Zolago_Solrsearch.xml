@@ -6,6 +6,7 @@
             <codePool>local</codePool>            
 			<depends>
 				<Mana_Filters />
+				<SolrBridge_Solrsearch/>
 			</depends>
         </Zolago_Solrsearch>
     </modules>
