@@ -253,6 +253,9 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 					else if(in_array($key, $this->_specialKeys, true)) {
 						continue;
 					}
+                    else if($key == 'category_id') {
+                        $cats[] = "category_id:%22{$value}%22";
+                    }
 					else{
                         $face_key = substr($key, 0, strrpos($key, '_'));
                         if ($key == 'price_facet') {
@@ -266,11 +269,14 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
                         }
                     }
                 }
-
-				if ($query) {
-					$query = trim($query, '+OR+');
-					$filterQueryArray[] = $query;
-				}
+                if (!empty($cats)) {
+                    $catIds = implode('+OR+', $cats);
+                    $query .= "({$catIds})";
+                }
+                if ($query) {
+                    $query = trim($query, '+OR+');
+                    $filterQueryArray[] = $query;
+                }
             }
         }
 

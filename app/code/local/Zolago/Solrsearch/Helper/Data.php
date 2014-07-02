@@ -88,7 +88,10 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
         return $uri;
     }
 
-
+    /**
+     * Construct context search selector
+     * @return string
+     */
     public function getContextSelectorHtml()
     {
         $filterQuery = (array)Mage::getSingleton('core/session')->getSolrFilterQuery();
@@ -114,5 +117,18 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
         $catListHtmlSelect .= "</select>";
 
         return $catListHtmlSelect;
+    }
+
+
+    /**
+     * Set Vendor Search Context
+     */
+    public function setVendorSearchContext(){
+        $h = Mage::helper('umicrosite');
+        if($h->getCurrentVendor()){
+            $vendorUrlKey = $h->getCurrentVendor()->getUrlKey();
+            $filterQuery = array('udropship_vendor_text' => $vendorUrlKey);
+            Mage::getSingleton('core/session')->setSolrFilterQuery(array_unique($filterQuery));
+        }
     }
 }

@@ -43,9 +43,8 @@ class Zolago_Solrsearch_IndexController extends SolrBridge_Solrsearch_IndexContr
 			$this->setFlag('', self::FLAG_NO_DISPATCH, true);
 			return $this;
 		}
-        ///////////////Changed
-        $filterQuery = Mage::getSingleton('core/session')->getSolrFilterQuery();
 
+        $filterQuery = Mage::getSingleton('core/session')->getSolrFilterQuery();
     	Mage::getSingleton('core/session')->setSolrFilterQuery($filterQuery);
 
     	$this->loadLayout();

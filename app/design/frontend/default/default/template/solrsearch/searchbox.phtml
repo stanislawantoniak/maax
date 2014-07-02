@@ -1,3 +1,7 @@
+<?php
+$zsHelper = Mage::helper('zolagosolrsearch');
+$zsHelper->setVendorSearchContext();
+?>
 <form id="search_mini_form" action="<?php echo $this->helper('solrsearch')->getResultUrl() ?>" method="get">
     <div class="form-search">
         <label for="search"><?php echo $this->__('Search') ?>:</label>
@@ -22,7 +26,7 @@
                 'on',
                 'change',
                 function () {
-                    new Ajax.Request('<?php echo Mage::helper('zolagosolrsearch')->getContextUrl() ?>', {
+                    new Ajax.Request('<?php echo $zsHelper->getContextUrl() ?>', {
                         method: 'get',
                         parameters: {'cat': this.getValue() }
                     });
