@@ -101,14 +101,14 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
         $rootCatId = Mage::app()->getStore()->getRootCategoryId();
 
         $catListHtmlSelect = '<select name="scat">'
-            . '<option value="0">' . Mage::helper('catalog')->__('everywhere') . '</option>';
+            . '<option value="0">' . Mage::helper('catalog')->__('Everywhere') . '</option>';
 
         $catListHtmlSelect .= self::getTreeCategoriesSelect($rootCatId, 0, $selectedContext);
 
         if (Mage::registry('current_category')) {
             $catListHtmlSelect
                 .= '<option value="' . Mage::registry('current_category')->getId() . '">'
-                . Mage::helper('catalog')->__('this category')
+                . Mage::helper('catalog')->__('This category')
                 . '</option>';
         }
         $catListHtmlSelect .= "</select>";
