@@ -305,16 +305,23 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 	
 	
 	/**
-	 * -2. Enlarge buffer limit
-	 * -1. Improve loadded collection attrivures data. alod only needed attributes data.
-	 *  0. Collect ids if childs via one query
-	 *  1. Process all super products
-	 *  2. Procesa all childs if needed
-	 *  3. Load product attributes data via collected information
-	 *  3. COllect categories data and process all categoriees data 
-	 *  4. Process final data
-	 *  
-	 *  After processing produc clear it's instance
+	 * The scenario:
+	 * 
+	 * 1. Collect grouped products if needed
+	 * 2. Collect child products if needed
+	 * 3. Init abstract objects collection - setup entries depend product ids (for category, parents, childs etc)
+	 * 4. Fill collection with data:
+	 *		4.1 Primary entity and some joins (prices, stock, url etc)
+	 *		4.2 Loadd attributes data via one query
+	 *		4.3 Process attributes data (labels, values)
+	 *		4.4 Load category data
+	 *		4.5 Process final data (textSearch, skus, prices etc...)
+	 * 5. Build json string via Varien_Object flatten
+	 * 6. Process request
+	 * 
+	 * Time ~0.05s per congigurable with 10 childs (150 in 7s)
+	 * 
+	 * After processing produc clear it's instance
 	 * 
 	 * 
 	 * Parse product collection into json

@@ -4,6 +4,23 @@ class Zolago_Solrsearch_Model_Resource_Queue_Item extends Mage_Core_Model_Resour
         $this->_init('zolagosolrsearch/queue_item','queue_id');
     }
 	
+	
+	public function updateStatus(Varien_Data_Collection_Db $itemCollection, $status) {
+		$itemIds = array();
+		foreach($itemCollection as $id=>$item){
+			$itemIds[] = $id;
+			$item->setStatus($status);
+		}
+		if(!$itemIds){
+			return;
+		}
+		$data = array("status"=>$status);
+		if($status==Zolago_Solrsearch_Model_Queue_Item::STATUS_DONE){
+			$data['processed_at'] = Varien_Date::now();
+		}
+		$where = $this->_getWriteAdapter()->quoteInto("queue_id IN (?)", $itemCollection->getAllIds());
+		$this->_getWriteAdapter()->update($this->getMainTable(), $data , $where);
+	}
 	/**
 	 * @param Varien_Object $item
 	 * @return boolean

@@ -51,20 +51,12 @@ class Zolago_Solrsearch_Model_Observer {
 		if(!($product instanceof Mage_Catalog_Model_Product)){
 			return;
 		}
+
+		/**
+		 * @todo add check solr-used attribute changed?
+		 */
 		
-		$deleteOnly = false;
-		
-		// Prodcut beign indexed and sould be only deleted?
-		if($product->dataHasChangedFor("status") && 
-			$product->getStatus()!=Mage_Catalog_Model_Product_Status::STATUS_ENABLED){
-			$deleteOnly = true;
-		}
-		if($product->dataHasChangedFor("visibility") && 
-			$product->getVisibility()==Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLED){
-			$deleteOnly = true;
-		}
-		
-		$this->_pushProduct($product, $product->getStoreId());
+		$this->_pushProduct($product, $product->getStoreId(), true);
 		
 	}
 	
@@ -166,6 +158,10 @@ class Zolago_Solrsearch_Model_Observer {
 		$event = $observer->getEvent();
 		$productIds = $event->getProductIds();
 		$storeId = $event->getStoreId();
+		
+		/**
+		 * @todo add check solr-used attribute changed?
+		 */
 		
 		if($storeId==Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID){
 			$storeIds = array_keys(Mage::app()->getStores());

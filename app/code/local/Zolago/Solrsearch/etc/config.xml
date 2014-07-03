@@ -5,6 +5,17 @@
             <version>0.0.3</version>
         </Zolago_Solrsearch>
     </modules>
+	<admin>
+		<routers>
+			<solrbridge_admin>
+				<args>
+					<modules>
+                        <Zolago_Solrsearch before="SolrBridge_Solsearch">Zolago_Solrsearch</Zolago_Solrsearch>
+                    </modules>
+				</args>
+			</solrbridge_admin>
+		</routers>
+	</admin>
     <global>
 		<resources>
             <zolagosolrsearch_setup>
