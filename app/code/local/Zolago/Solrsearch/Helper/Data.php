@@ -10,26 +10,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 {
     const ZOLAGO_USE_IN_SEARCH_CONTEXT = 'use_in_search_context';
 
-    public static function extract_domain($domain)
-    {
-        if (preg_match("/(?P<domain>[a-z0-9][a-z0-9\-]{1,63}\.[a-z\.]{2,6})$/i", $domain, $matches)) {
-            return $matches['domain'];
-        } else {
-            return $domain;
-        }
-    }
-
-    public static function extract_subdomains($domain)
-    {
-        $subdomains = $domain;
-        $domain = self::extract_domain($subdomains);
-
-        $subdomains = rtrim(strstr($subdomains, $domain, true), '.');
-
-        return $subdomains;
-    }
-
-    public static function getTreeCategoriesSelect($parentId, $level, $cat)
+    public function getTreeCategoriesSelect($parentId, $level, $cat)
     {
         if ($level > 5) {
             return '';
@@ -37,7 +18,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
         $allCats = Mage::getModel('catalog/category')->getCollection()
             ->addAttributeToSelect('*')
             ->addAttributeToFilter('is_active', '1')
-            // ->addAttributeToFilter( self::ZOLAGO_USE_IN_SEARCH_CONTEXT , array('eq' => 1))
+             //->addAttributeToFilter( self::ZOLAGO_USE_IN_SEARCH_CONTEXT , array('eq' => 1))
             ->addAttributeToFilter('include_in_menu', '1')
             ->addAttributeToFilter('parent_id', array('eq' => $parentId));
 
@@ -57,7 +38,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
         return $html;
     }
 
-    public static function getTreeCategories($parentId, $isChild)
+    public function getTreeCategories($parentId, $isChild)
     {
 
         $cats = array();
