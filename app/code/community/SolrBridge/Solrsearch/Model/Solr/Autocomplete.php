@@ -20,6 +20,7 @@ class SolrBridge_Solrsearch_Model_Solr_Autocomplete extends SolrBridge_Solrsearc
 	{
 		$queryUrl = Mage::helper('solrsearch')->getSetting('solr_server_url');
 
+		
 		$q = $this->getQueryText();
 
 		if (!empty($this->synonym))
