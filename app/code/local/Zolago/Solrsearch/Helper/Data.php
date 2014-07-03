@@ -37,7 +37,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
         $allCats = Mage::getModel('catalog/category')->getCollection()
             ->addAttributeToSelect('*')
             ->addAttributeToFilter('is_active', '1')
-            // ->addAttributeToFilter( self::ZOLAGO_USE_IN_SEARCH_CONTEXT , array('eq' => 1))
+             ->addAttributeToFilter( self::ZOLAGO_USE_IN_SEARCH_CONTEXT , array('eq' => 1))
             ->addAttributeToFilter('include_in_menu', '1')
             ->addAttributeToFilter('parent_id', array('eq' => $parentId));
 
@@ -47,9 +47,8 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
             if($category->getId() == $cat){
                 $selected = ' selected="selected" ';
             }
-            $html .= '<option value="' . $category->getId() . '" '. $selected.'>' . str_repeat("&nbsp;", 4 * $level) . Mage::helper(
-                    'catalog'
-                )->__($category->getName()) . "</option>";
+            $html .= '<option value="' . $category->getId() . '" '. $selected.'>' . str_repeat("&nbsp;", 4 * $level)
+                . $category->getName() . "</option>";
             $subcats = $category->getChildren();
             if ($subcats != '') {
                 $html .= self::getTreeCategoriesSelect($category->getId(), $level + 1,$cat);
