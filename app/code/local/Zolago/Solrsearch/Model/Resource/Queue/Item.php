@@ -15,6 +15,7 @@ class Zolago_Solrsearch_Model_Resource_Queue_Item extends Mage_Core_Model_Resour
 			$select->where("product_id=?", $item->getProductId());
 			$select->where("store_id=?", $item->getStoreId());
 			$select->where("status=?", $item->getStatus());
+			$select->where("delete_only=?", $item->getDeleteOnly());
 		    if($result=$this->getReadConnection()->fetchOne($select)){
 				$item->setId($result);
 				return true;
