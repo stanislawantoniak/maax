@@ -275,6 +275,8 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 						
 						$vendor_return_reason = Mage::getModel('zolagorma/rma_reason_vendor');
 						
+						if(!isset($data['use_default'])) $data['use_default'] = 0;
+						
 						// Edit mode
 						if($mode == 'edit'){
 							$vendor_return_reason = $vendor_return_reason->load($model_id);

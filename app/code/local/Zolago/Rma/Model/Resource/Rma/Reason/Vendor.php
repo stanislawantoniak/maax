@@ -15,11 +15,15 @@ class Zolago_Rma_Model_Resource_Rma_Reason_Vendor extends Mage_Core_Model_Resour
 		
 		// Times
 		$currentTime = Varien_Date::now();
-		if ((!$object->getId() || $object->isObjectNew()) && !$object->getCreatedAt()) {
-
-			$object->setCreatedAt($currentTime);
+		if ((!$object->getId() || $object->isObjectNew())) {
+			
+			if(!$object->getCreatedAt()) $object->setCreatedAt($currentTime);
+			if($object->getUseDefault() !== 1) $object->setUseDefault(0);
 		}
 		$object->setUpdatedAt($currentTime);
+		
+		($object->getUseDefault() == "1") ? $object->setUseDefault(1) : $object->setUseDefault(0); 
+		
 		return parent::_prepareDataForSave($object);
 		
 	}
