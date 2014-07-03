@@ -26,7 +26,6 @@ class Zolago_Dhl_DhlController extends Mage_Core_Controller_Front_Action
 					$dhlFile = Mage::helper('zolagodhl')->getIsDhlFileAvailable($trackNumber);
 				} else {
 					$result['message'] = $dhlWebCall['message'];
-
 				}
 			}
 		}
@@ -34,9 +33,12 @@ class Zolago_Dhl_DhlController extends Mage_Core_Controller_Front_Action
 		if ($dhlFile) {
 			$result['status']	= true;
 			$result['file']		= $trackNumber;
+			$result['url']		= Mage::getUrl('zolagodhl/dhl/lpDownload', array("dhlFileName"=>$trackNumber));
+			unset($result['message']);
 		}
 		
 		$resultJSON = Mage::helper('core')->jsonEncode($result);
+		$this->getResponse()->setHeader('Content-type', 'application/json');
 		$this->getResponse()->setBody($resultJSON);
 	}
 	
@@ -92,4 +94,33 @@ class Zolago_Dhl_DhlController extends Mage_Core_Controller_Front_Action
 		
 		return $dhlFile;
 	}
+
+    public function checkDhlZipAction()
+    {
+        $zip = Mage::app()->getRequest()->getParam('postcode');
+        $country = Mage::app()->getRequest()->getParam('country');
+        $response = array();
+        if (empty($zip)) {
+            $response['status'] = 'error';
+            $response['message'] = 'Please enter zip code';
+            echo json_encode($response);
+            return;
+        }
+
+        $dhlHelper = Mage::helper('zolagodhl');
+        $dhlValidZip = $dhlHelper->isDHLValidZip($country,$zip);
+
+        if (!$dhlValidZip) {
+            $response['status'] = 'error';
+            $response['message'] = 'Invalid Dhl Postal Code';
+            echo json_encode($response);
+            return;
+        }
+
+        $response['status'] = 'success';
+        $response['message'] = 'Zip code is valid';
+        echo json_encode($response);
+        return;
+
+    }
 }

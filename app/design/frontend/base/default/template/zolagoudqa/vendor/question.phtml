@@ -1,0 +1,25 @@
+<?php /* @var $this Mage_Core_Model_Template */ ?>
+<div class="container">
+	<!--=== Page Header ===-->
+	<div class="page-header">
+		<div class="page-title">
+			<h3><?php echo Mage::helper("zolagopo")->__("Questions");?></h3>
+			<span><?php echo Mage::helper("zolagopo")->__("Browse customer questions");?></span>
+		</div>
+	</div>
+	<!-- /Page Header -->
+</div>
+<div class="container z-grid">
+	<div class="widget box">
+		<div class="widget-content">
+			<?php echo $this->getGridHtml(); ?>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+(function(){
+	var gridObj = <?php echo $this->getGridJsObjectName();?>;
+	// create integrator
+	new Zolago.gridIntegrator(gridObj);
+})();;
+</script>

@@ -1,6 +1,9 @@
 <?php
 class Zolago_Pos_Model_Pos extends Mage_Core_Model_Abstract{
     
+	const STATUS_INACTIVE = 0;
+	const STATUS_ACTIVE = 1;
+	
     protected function _construct() {
         $this->_init('zolagopos/pos');
     }

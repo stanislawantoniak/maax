@@ -220,6 +220,13 @@
                     </modules>  
                 </args>  
             </customer>
+            <solrsearch>
+                <args>
+                    <modules>
+                        <Zolago_Solrsearch before="SolrBridge_Solrsearch">Zolago_Solrsearch</Zolago_Solrsearch>
+                    </modules>
+                </args>
+            </solrsearch>
         </routers>
         <layout>
             <updates>

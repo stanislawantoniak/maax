@@ -9,7 +9,7 @@ class Zolago_Po_Block_Vendor_Po_Info extends Unirgy_DropshipPo_Block_Vendor_Po_I
 	}
 	
 	protected function getAllowedKeys(){
-		return Mage::helper('zolagocommon')->getCarriersForVendor();
+		return Mage::helper('zolagodropship')->getAllowedCarriers();
 	}
 	
     public function getPo()

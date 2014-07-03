@@ -1,0 +1,47 @@
+<?php $_helper = Mage::helper("zolagorma");?>
+<?php $_rma = $this->getParentBlock()->getModel();?>
+<?php $_items = $_rma->getAllItems(); ?>
+<div class="row">
+	<div class="col-md-12">
+		<div class="widget box">
+			<div class="widget-header"> 
+				<h4>
+					<i class="icon-list"></i> 
+					<?php echo $_helper->__("RMA Items");?>
+				</h4>
+			</div>
+			<div class="widget-content no-padding">
+				<table id="items" class="table table-striped table-bordered table-checkable  foot-empty-cells">
+					<colgroup>
+						<col width="1"/>
+						<col width="150px"/>
+						<col />
+						<col width="100px"/>
+						<col width="100px"/>
+						<col width="100px"/>
+						<col />
+					</colgroup>
+                    <thead>
+                        <tr>
+                            <th class="align-right"><?php echo $_helper->__('Lp') ?></th>
+                            <th><?php echo $_helper->__('SKU') ?></th>
+                            <th><?php echo $_helper->__('Product Name') ?></th>
+                            <th class="align-right"><span class="nobr"><?php echo $_helper->__('Qty') ?></span></th>
+                            <th class="align-right"><?php echo $_helper->__('Price') ?></th>
+                            <th class="align-right"><?php echo $_helper->__('Discount') ?></th>
+                            <th><?php echo $_helper->__('Reason') ?></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+					<?php $i = 1;?>
+                    <?php foreach ($_items as $_item): ?>
+                        <?php if ($_item->getOrderItem()->getParentItem()) continue; ?>
+						<?php $_item->setLp($i++);?>
+                        <?php echo $this->getItemHtml($_item) ?>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+			</div>
+		</div>
+	</div>
+</div>

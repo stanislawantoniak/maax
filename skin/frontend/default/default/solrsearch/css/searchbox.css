@@ -1,0 +1,6 @@
+.header .form-search {
+    width: 445px;
+}
+.header .form-search select[name=scat] {
+    float: left;margin-right: 6px;
+}

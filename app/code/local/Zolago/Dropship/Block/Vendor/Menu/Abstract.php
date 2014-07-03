@@ -12,6 +12,8 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 	const ITEM_ADVERTISE = 'advertise';
 	const ITEM_SETTING	  = 'setting';
 	const ITEM_STATEMENTS= 'statements';
+	
+	const ITEM_DIRECT_ORDER = "direct_order";
 	/**
 	 *array(
 	 *	array(
@@ -24,6 +26,14 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 	 */
 	protected static $fullMenu;
 	
+	
+	/**
+	 * @return array
+	 */
+	public function getMenu() {
+		return array_intersect_key($this->getFullMenu(), array_flip($this->_sections));
+	}
+	
 	abstract function renderMenu(array $menu);
 
 	/**
@@ -35,11 +45,12 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 				self::ITEM_DASHBOARD	=>	$this->getDashboardSection(),
 				self::ITEM_PRODUCTS		=>	$this->getProductSection(),
 				self::ITEM_ORDER		=>	$this->getOrderSection(),
+				self::ITEM_DIRECT_ORDER =>  $this->getDirectOrderSection(),
 				self::ITEM_HELPDESK		=>	$this->getHelpdeskSection(),
 				self::ITEM_RMA			=>	$this->getRmaSection(),
 				self::ITEM_ADVERTISE	=>	$this->getAdvertiseSection(),
 				self::ITEM_SETTING		=>	$this->getSettingSection(),
-				self::ITEM_STATEMENTS	=>	$this->getStatementsSection()
+				self::ITEM_STATEMENTS	=>	$this->getStatementsSection(),
 			);
 			foreach($sections as $key=>$section){
 				if(is_array($section)){
@@ -80,13 +91,41 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 		return null;
 	}
 	
-	public function getOrderSection() {
+	public function getDirectOrderSection() {
 		if($this->_isUdpoAvailable()){
 			return array(
 				"active" => $this->isActive("udpo"),
 				"icon"	 => "icon-shopping-cart",
-				"label"	 => $this->__("Orders"),
+				"label"	 => $this->__("Order list"),
 				"url"	 => $this->getUrl('udpo/vendor')
+			);
+		}
+		return null;
+	}
+	
+	public function getOrderSection() {
+		if($this->_isUdpoAvailable()){
+			$group = array(
+				array(
+					"active" => $this->isActive("udpo"),
+					"icon"	 => "icon-tasks",
+					"label"	 => $this->__("Order list"),
+					"url"	 => $this->getUrl('udpo/vendor')
+				),
+				array(
+					"active" => $this->isActive("zolagopo_aggregated"),
+					"icon"	 => "icon-share-alt",
+					"label"	 => $this->__("Dispatch lists"),
+					"url"	 => $this->getUrl('udpo/vendor_aggregated')
+				),
+			);
+			
+		   return array(
+				"active" => $this->isActive(array("udpo", "zolagopo_aggregated")),
+				"icon"	 => "icon-shopping-cart",
+				"label"	 => $this->__("Orders"),
+				"url"		=> "#",
+				"children" => $this->_processGroups($group)
 			);
 		}
 		return null;
@@ -107,7 +146,7 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 	public function getRmaSection() {
 		if($this->isModuleActive('Unirgy_Rma') && $this->isAllowed("urma/vendor")){
 			return array(
-				"active" => $this->isActive("urmas"),
+				"active" => $this->isActive("urma") || $this->isActive("urmas"),
 				"icon"	 => "icon-exclamation-sign",
 				"label"	 => $this->__('Returns'),
 				"url"	 => $this->getUrl('urma/vendor')
@@ -137,7 +176,7 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 			$groupOne[] = array(
 				"active" => $this->isActive("zolagooperator"),
 				"icon"	 => "icon-user",
-				"label"	 => $this->__('Operators'),
+				"label"	 => $this->__('Agents'),
 				"url"	 => $this->getUrl('udropship/operator')
 			);
 		}
@@ -210,9 +249,10 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 		$grouped = $this->_processGroups($groupOne, $groupTwo);
 		
 		if(count($grouped)){
+			
 			return array(
 				"label"		=> $this->__("Products"),
-				"active"	=> $this->isActive("udprod", "udprod_mass", "udprod_image"),
+				"active"	=> $this->isActive(array("udprod", "udprod_mass", "udprod_image")),
 				"icon"		=> "icon-folder-open",
 				"url"		=> "#",
 				"children"	=> $grouped

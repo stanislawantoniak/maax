@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<config>
+	<sections>
+		<zolagoconverter translate="label" module="zolagoconverter">
+            <label>Converters</label>
+            <tab>service</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>300</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>0</show_in_website>
+            <show_in_store>0</show_in_store>
+            <groups>
+                 <config translate="label">
+                    <label>General Settings</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>1</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <url_stock translate="label">
+                            <label>URL Stock</label>
+							<comment>Use {{key}} for product key</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>0</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </url_stock>
+                        <url_price translate="label">
+                            <label>URL Price</label>
+                            <comment>Use {{key}} for product key</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>0</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </url_price>
+                        <login translate="label">
+                            <label>Login</label>
+							<comment>For basic auth</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </login>
+                        <password translate="label">
+                            <label>Password</label>
+							<comment>For basic auth</comment>
+                            <frontend_type>password</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </password>
+					</fields>
+				 </config>
+			</groups>
+		</zolagoconverter>
+	</sections>
+</config>

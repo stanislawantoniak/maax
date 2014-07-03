@@ -1,20 +1,110 @@
 <div class="widget">
-	<div class="align-center form-group" style="margin:5px 0px 5px 0px">
-		<div class="col-md-8">
-			<button class="btn" id="add_button"><?php echo Mage::helper('zolagocatalog')->__('Add');?></button>
-			<button class="btn" id="delete_button"><?php echo Mage::helper('zolagocatalog')->__('Delete');?></button>
-			<button class="btn" id="map_by_name"><?php echo Mage::helper('zolagocatalog')->__('Map by name');?></button>
-			<button class="btn"><?php echo Mage::helper('zolagocatalog')->__('Map by CSV');?></button>
-			<button class="btn btn-primary"><i class="icon-question-sign"></i></button>
-		</div>
-		<div class="input-group" style="width:200px"><input type="text" class="form-control input-width-medium" id="input_search"><span class="input-group-btn"><button class="btn btn-default" id="search_button" type="button"><i class="icon-search">
-			</i></button></span></div>
-	</div>
-<div style="clear:both"></div>
-	<div id="uploader_wrapper" class="widget-content"><div id="elf"></div><div id="uploader"></div></div>
-<div id="dialog_by_name" title="Map by name" style="left:50%;top:50%">
-    Map by name
+    <br/>
+    <table id="control-battons">
+    <tr>
+    <td>
+			&nbsp;<button class="btn btn-primary" id="add_button"><?php echo Mage::helper('zolagocatalog')->__('Upload queue');?></button>&nbsp;
+    </td>
+    <td>
+			<button class="btn btn-primary" id="delete_button"><?php echo Mage::helper('zolagocatalog')->__('Delete');?></button>&nbsp;
+    </td>
+    <td>
+			<a class="btn-notification btn btn-primary" href="#dialog_by_name" data-text="<?php echo Mage::helper('zolagocatalog')->__('Are you sure?');?>" data-placement="top" 
+			    data-layout="top" data-type="confirm" data-modal="true" data-ok-url="<?php echo Mage::getUrl('udprod/vendor_image/namemap'); ?>"><?php echo Mage::helper('zolagocatalog')->__('Map by name');?></a>&nbsp;
+    </td>
+    <td>
+			<a class="btn btn-primary" href="#dialog_by_csv" data-toggle="modal"><?php echo Mage::helper('zolagocatalog')->__('Map by CSV');?></a>&nbsp;
+			<button class="btn btn-default"><?php echo Mage::helper('zolagocatalog')->__('Help');?> <i class="icon-question-sign"></i></button>&nbsp;
+    </td>
+    <td>
+        <div class="input-group">
+			<input type="text" class="form-control input-width-medium" id="input_search"/>
+			<button class="btn btn-primary input-group-btn" id="search_button" type="button"><i class="icon-search"></i></button>
+        </div>
+    </td>
+    </tr>
+    </table>
+    <br/>
+<div class="clearb"></div>
+	<div id="uploader_wrapper" class="widget-content"><div id="uploader"></div><div id="elf"></div></div>
+<div id="dialog_by_csv" class="modal fade" style="display:none" aria-hidden="true" title="Map by CSV">
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <strong><?php echo Mage::helper('zolagocatalog')->__('Map by CSV');?></strong>
+        </div>
+        <div class="modal-body">
+            <div id="map_upload">
+            <div class="col-md-12">
+            <?php echo Mage::helper('zolagocatalog')->__('Upload CSV file');?>
+            <form id="map_form" action="<?php  echo Mage::getUrl("udprod/vendor_image/csvmap");?>" method="post" enctype="multipart/form-data" name="csv_form">
+            <input type="file" name="csv_file" id="map_csv_file">
+            <br/>
+            <div class="col-md-12 align-right">
+                <button class="btn btn-default" data-dismiss="modal" type="button"><?php echo Mage::helper('zolagocatalog')->__('Cancel');?></button>
+                <button id="map_csv_button" class="btn btn-primary" type="submit"><?php echo Mage::helper('zolagocatalog')->__('Process');?></button>
+            </div>
+            </form>
+            </div>
+            <div id="map_process_upload" style="display:none">
+            <div class="col-md-12">
+            <?php echo Mage::helper('zolagocatalog')->__('Please wait ...');?>
+            </div>
+            <br/>
+            <div class="progress progress-striped active">
+                <div class="progress-bar progress-bar-success" id="map_progress_bar" style="width:100%"></div>
+            </div>
+            <br/>
+            <div class="col-md-12">
+                <button id="map_break_button" class="btn btn-default" data-dismiss="modal" type="button"><?php echo Mage::helper('zolagocatalog')->__('Cancel');?></button>
+            </div>
+            </div>
+            <div id="map_success" style="display:none">
+            <?php echo Mage::helper('zolagocatalog')->__('Finished!');?>                
+            </div>
+        </div>
+    </div>
 </div>
+</div>
+<?php /*
+<div id="dialog_by_name" class="modal fade" style="display:none" aria-hidden="true" title="Map by name">
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4><?php echo Mage::helper('zolagocatalog')->__('Map by name');?></h4>
+        </div>
+        <div class="modal-body">
+            <div id="map_confirm">
+            <div class="col-md-12">
+         <?php echo Mage::helper('zolagocatalog')->__('Are you sure?');?>
+            </div>
+            <br/>
+            <div class="col-md-12">
+                <button class="btn btn-default" data-dismiss="modal" type="button"><?php echo Mage::helper('zolagocatalog')->__('Cancel');?></button>
+                <button id="map_process_button" class="btn btn-primary" type="button"><?php echo Mage::helper('zolagocatalog')->__('Process');?></button>
+            </div>
+            </div>
+            <div id="map_process" style="display:none">
+            <div class="col-md-12">
+            <?php echo Mage::helper('zolagocatalog')->__('Please wait ...');?>
+            </div>
+            <br/>
+            <div class="progress progress-striped active">
+                <div class="progress-bar progress-bar-success" id="map_progress_bar" style="width:100%"></div>
+            </div>
+            <br/>
+            <div class="col-md-12">
+                <button id="map_break_button" class="btn btn-default" data-dismiss="modal" type="button"><?php echo Mage::helper('zolagocatalog')->__('Cancel');?></button>
+            </div>
+            </div>
+            <div id="map_success" style="display:none">
+            <?php echo Mage::helper('zolagocatalog')->__('Finished!');?>                
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+*/ ?>
 <script type="text/javascript">
 var elf = null;
 var plup = null;
@@ -49,7 +139,7 @@ function init_uploader() {
 			UploadComplete: function() {
 				elf.sync();
 				plup.remove();
-				jQuery('#elf').after('<div id="uploader"></div>');
+				jQuery('#elf').before('<div id="uploader"></div>');
 				init_uploader();
 				show_filebrowser();
 			}
@@ -57,10 +147,12 @@ function init_uploader() {
 	});
 }
 function show_uploader() {
-		elf.hide();
+//		elf.hide();
 		jQuery('#delete_button').attr('disabled',true);
 	// Setup html5 version
-		jQuery('#add_button').html('<?php echo Mage::helper('zolagocatalog')->__('Browse');?>');
+//		jQuery('#add_button').html('<?php echo Mage::helper('zolagocatalog')->__('Browse');?>');
+        jQuery('#add_button').addClass('btn-warning');
+
 		func = 'show_filebrowser';
 		plup.show();
 		jQuery('#uploader_browse').click();
@@ -82,9 +174,31 @@ function init_filebrowser() {
 function show_filebrowser() {
 		plup.hide();
 		jQuery('#delete_button').removeAttr('disabled');
-		jQuery('#add_button').html('<?php echo Mage::helper('zolagocatalog')->__('Add');?>');
+//		jQuery('#add_button').html('<?php echo Mage::helper('zolagocatalog')->__('Add');?>');
+        jQuery('#add_button').removeClass('btn-warning');
 		func = 'show_uploader';
 		elf.show();
+}
+function map_by_name() {
+jQuery.get('<?php echo Mage::getUrl('udprod/vendor_image/namemap'); ?>',function(data) {
+    jQuery('#dialog_by_name').hide();
+    alert('<?php echo Mage::helper('zolagocatalog')->__('Operation finished. Mapped images:')?>'+data);
+    window.location.href = '<?php  echo Mage::getUrl("udprod/vendor_image");?>';
+});
+}
+function beforeSubmit() {
+    var filename = jQuery('#map_csv_file').val();
+    if (!filename) {
+        alert('No file');
+        return false;
+    } 
+    return true;
+};
+function uploadCsv(responseText, statusText, xhr, form) {
+    jQuery('#map_upload').hide();
+    jQuery('#map_process_upload').show();
+    alert(responseTest);
+    return false;
 }
 jQuery().ready(function() {
 	jQuery('#uploader').hide();
@@ -105,12 +219,23 @@ jQuery().ready(function() {
 	jQuery('#delete_button').click(function() {
 		elf.exec('rm');
 	});
-	jQuery('#dialog_by_name').dialog({autoOpen:false});
-	jQuery('#map_by_name').click(function() {
-	    alert('dialog');
-	    jQuery('#dialog_by_name').dialog('open');
+	jQuery('#map_process_button').click(function() {
+	    jQuery('#map_confirm').hide();
+	    jQuery('#map_process').show();
+	    map_by_name();
+	});
+	jQuery('#map_break_button').click(function() {	 
+	    jQuery('#map_confirm').show();
+	    jQuery('#map_process').hide();
 	});
 	show_filebrowser();
+	jQuery('#map_csv_button').click(function() {
+        return beforeSubmit();
+    });
 });
 </script>
+
+
+
+</div>
 </div>

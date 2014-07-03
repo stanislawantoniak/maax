@@ -3,12 +3,248 @@
 class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 {
 	const TYPE_POSHIPPING = "poshipping";
+	const TYPE_POBILLING = "pobilling";
 	
-	public function getPos() {
-		if($this->getDefaultPosId()){
-			return Mage::getModel("zolagopos/pos")->load($this->getDefaultPosId());
+	/**
+	 * @param Unirgy_Dropship_Model_Vendor $venndor
+	 * @param Zolago_Operator_Model_Operator $operator
+	 * @return boolean
+	 */
+	public function isAllowed(Unirgy_Dropship_Model_Vendor $vendor = null, 
+		Zolago_Operator_Model_Operator $operator = null) {
+		
+		if($operator instanceof Zolago_Operator_Model_Operator){
+			return in_array($this->getDefaultPosId(), $operator->getAllowedPos());
+		}elseif($vendor instanceof Zolago_Dropship_Model_Vendor){
+			return in_array($this->getDefaultPosId(), $vendor->getAllowedPos());
 		}
+		return false;
+	}
+	
+	/**
+	 * @return Mage_Sales_Model_Order_Shipment | null
+	 */
+	public function getLastNotCanceledShipment() {
+		
+		$collection = $this->getShipmentsCollection();
+		/* @var $collection Mage_Sales_Model_Resource_Order_Shipment_Collection */
+		$collection->clear();
+		
+		$collection->addAttributeToFilter("udropship_status", 
+			array("nin"=>array(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED))
+		);
+		$collection->setOrder("created_at", "DESC");
+		
+		$item = $collection->getFirstItem();
+		
+		if($item && $item->getId()){
+			return $item;
+		}
+		
 		return null;
+	}
+	
+	/**
+	 * It can be returned when order has been delivered not later than the bigges number for allowed_days
+	 * 
+	 * @return bloolean
+	 */
+	public function canBeReturned(){
+		
+		$vendor = $this->getVendor();
+		$reason_vendor = Mage::getModel('zolagorma/rma_reason_vendor')->getCollection()
+																	  ->addFieldToFilter('vendor_id', $vendor->getId())
+																	  ->setOrder('allowed_days', 'desc')
+																	  ->getFirstItem();
+		
+		if(!$reason_vendor){
+			return false;
+		}
+		
+		$max_allowed_days = (int) $reason_vendor->getAllowedDays();
+		
+		$days_elapsed = Mage::helper('zolagorma')->getDaysElapsed($reason_vendor->getReturnReasonId(), $this);
+		
+		return ($days_elapsed < $max_allowed_days) ? true : false;
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function isFinished() {
+		$status = $this->getStatusModel();
+		return in_array($this->getUdropshipStatus(), $status::getFinishStatuses());
+	}
+	
+	/**
+	 * @param array $itemIds
+	 * @return Zolago_Po_Model_Po
+	 * @throws Exception
+	 */
+	public function split(array $itemIds) {
+		
+		$transaction = Mage::getSingleton('core/resource')->getConnection('core_write');
+		/* @var $transaction Varien_Db_Adapter_Interface */
+		try{
+			$transaction->beginTransaction();
+			$collection = $this->getItemsCollection() ;
+			/* @var $collection Unirgy_DropshipPo_Model_Mysql4_Po_Item_Collection */
+
+			$newModel = Mage::getModel("zolagopo/po");
+			/* @var $newModel Zolago_Po_Model_Po */
+
+
+			////////////////////////////////////////////////////////////////////
+			// Process items
+			////////////////////////////////////////////////////////////////////
+			foreach($collection as $itemId=>$item){
+				
+				if(in_array($itemId, $itemIds)){
+					$collection->removeItemByKey($itemId);
+					$item->setId(null); // force add item to colelciton in po model
+					$newModel->addItem($item);
+					$item->setId($itemId); 
+					
+					// Proces child items
+					$childCollection = Mage::getResourceModel('zolagopo/po_item_collection');
+					/* @var $childCollection Zolago_Po_Model_Resource_Po_Item_Collection */
+
+					$childCollection->addParentFilter($item);
+
+					foreach($childCollection as $childItemId=>$childItem){
+						$collection->removeItemByKey($childItemId);
+						$childItem->setId(null); // force add item to colelciton in po model
+						$newModel->addItem($childItem);
+						$childItem->setId($childItemId); 
+					}
+				}
+			}
+			
+			////////////////////////////////////////////////////////////////////
+			// Process addresses - clone custom addresses or referene origin
+			////////////////////////////////////////////////////////////////////
+			if(!$this->isBillingSameAsOrder()){
+				$newBilling = clone $this->getBillingAddress();
+				$newBilling->setCreatedAt(null);
+				$newBilling->setUpdatedAt(null);
+				$newBilling->setId(null);
+				$newBilling->save();
+			}else{
+				$newBilling = $this->getBillingAddress();
+			}
+			
+			if(!$this->isShippingSameAsOrder()){
+				$newShipping = clone $this->getShippingAddress();
+				$newShipping->setCreatedAt(null);
+				$newShipping->setUpdatedAt(null);
+				$newShipping->setId(null);
+				$newShipping->save();
+			}else{
+				$newShipping = $this->getShippingAddress();
+			}
+			
+			
+			////////////////////////////////////////////////////////////////////
+			// Process misc data
+			////////////////////////////////////////////////////////////////////
+			$newModel->addData($this->getData());
+			$newModel->setId(null);
+			$newModel->setShippingAddressId($newShipping->getId());
+			$newModel->setBillingAddressId($newBilling->getId());
+			$newModel->setCreatedAt(null);
+			$newModel->setUpdatedAt(null);
+			$newModel->setIncrementId($this->_getNextIncementId());
+			$newModel->setBaseShippingTax(0);
+			$newModel->setShippingTax(0);
+			$newModel->setBaseShippingAmountIncl(0);
+			$newModel->setShippingAmountIncl(0);
+				
+			////////////////////////////////////////////////////////////////////
+			// Process comments
+			////////////////////////////////////////////////////////////////////
+			$comments = $newModel->getCommentsCollection();
+			/* @var $comments Unirgy_DropshipPo_Model_Mysql4_Po_Comment_Collection */
+			
+			foreach($this->getCommentsCollection() as $comment){
+				/* @var $comment Unirgy_DropshipPo_Model_Po_Comment */
+				$tmpComment = clone $comment;
+				$tmpComment->setId(null);
+				$tmpComment->setParentId(null);
+				$tmpComment->setPo($newModel);
+				$comments->addItem($tmpComment);
+			}
+			
+			$newModel->setCommentsChanged(true);
+			
+			////////////////////////////////////////////////////////////////////
+			// Save objects
+			////////////////////////////////////////////////////////////////////
+			
+			$newModel->setSkipCheckSameEmail(true);
+			$this->setSkipCheckSameEmail(true);
+			
+			$newModel->updateTotals(true);
+			$this->updateTotals(true);
+			
+			$transaction->commit();
+		} catch (Exception $ex) {
+			$transaction->rollBack();
+			throw $ex;
+		}
+		
+		Mage::dispatchEvent("zolagopo_po_split", array(
+			"po"		=> $this, 
+			"new_po"	=> $newModel, 
+			"item_ids"	=> $itemIds
+		));
+					
+		return $newModel;
+	}
+	
+	/**
+	 * @return Zolago_Po_Model_Aggregated
+	 */
+	public function getAggregated() {
+		if(!$this->hasData("aggregated")){
+			$aggregated = Mage::getModel("zolagopo/aggregated");
+			$aggregated->load($this->getAggregatedId());
+			$this->setData("aggregated", $aggregated);
+		}
+		return $this->getData("aggregated");
+	}
+	
+	public function setCommentsChanged($value) {
+		$this->_commentsChanged = $value;
+		return $this;
+	}
+	
+	protected function _getNextIncementId() {
+		$collection = Mage::getResourceModel('zolagopo/po_collection');
+		/* @var $collection Zolago_Po_Model_Resource_Po_Collection */
+		$collection->setOrderFilter($this->getOrder());
+		
+		$currentIncrement = explode("-", $this->getIncrementId());
+		$base = $currentIncrement[0];
+		$maxIncrement = $currentIncrement[1];
+		foreach($collection as $po){
+			$arr = explode("-", $po->getIncrementId());
+			// Same base
+			if($arr[0]==$base){
+				$maxIncrement = max($maxIncrement, (int)$arr[1]);
+			}
+		}
+		
+		return $base . "-" . ($maxIncrement+1);
+	}
+	
+	/**
+	 * @return Zolago_Pos_Model_Pos
+	 */
+	public function getPos() {
+		if(!$this->hasData("pos")){
+			$this->setData("pos", Mage::getModel("zolagopos/pos")->load($this->getDefaultPosId()));
+		}
+		return $this->getData("pos");
 	}
 	
 	public function getSubtotalInclTax() {
@@ -56,23 +292,39 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 	   return parent::getBillingAddress();
    }
    
-   // Address wasn't overrriden?
+   
    public function isShippingSameAsOrder() {
 	   return $this->getShippingAddress()->getId() == $this->getOrder()->getShippingAddress()->getId();
    }
    
+   public function isBillingSameAsOrder() {
+	   return $this->getBillingAddress()->getId() == $this->getOrder()->getBillingAddress()->getId();
+   }
+   
    public function setOwnShippingAddress(Mage_Sales_Model_Order_Address $address, $append=false){
+	    return $this->_setOwnAddress(self::TYPE_POSHIPPING, $address, $append);
+   }
+   
+   public function setOwnBillingAddress(Mage_Sales_Model_Order_Address $address, $append=false){
+	   return $this->_setOwnAddress(self::TYPE_POBILLING, $address, $append);
+   }
+   
+   protected function _setOwnAddress($type, Mage_Sales_Model_Order_Address $address, $append=false){
 	   $address->setId(null);
 	   $address->setParentId($this->getOrder()->getId());
-	   $address->setAddressType(self::TYPE_POSHIPPING);
+	   $address->setAddressType($type);
 	   $address->save();
-	   $this->setShippingAddressId($address->getId());
-	   
+	   if($type==self::TYPE_POSHIPPING){
+			$this->setShippingAddressId($address->getId());
+			$this->getResource()->saveAttribute($this, "shipping_address_id");
+	   }else{
+		    $this->setBillingAddressId($address->getId());
+			$this->getResource()->saveAttribute($this, "billing_address_id");
+	   }
 	   // Remove not used addresses
 	   if(!$append){
-		  $this->cleanAddresses(array($address->getId()));
+		  $this->_cleanAddresses($type, array($address->getId()));
 	   }
-	   
 	   return $this;
    }
    
@@ -83,35 +335,34 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 	   $this->setShippingAddressId(
 			$this->getOrder()->getShippingAddress()->getId()
 	   );
-	   $this->cleanAddresses();
+	   $this->getResource()->saveAttribute($this, "shipping_address_id");
+	   $this->_cleanAddresses(self::TYPE_POSHIPPING);
 	   return $this;
    }
    
-   public function cleanAddresses($exclude=array()) {
-	    // Add this shippign id
-		$exclude[] = $this->getShippingAddressId();
-	    $addressCollection = Mage::getResourceModel("sales/order_address_collection");
-		/* @var $addressCollection Mage_Sales_Model_Resource_Order_Address_Collection */
-		$addressCollection->addFieldToFilter("parent_id", $this->getOrder()->getId());
-		$addressCollection->addFieldToFilter("entity_id", array("nin"=>$exclude));
-		$addressCollection->addFieldToFilter("address_type", self::TYPE_POSHIPPING);
-		$select = $addressCollection->getSelect();
-		$subSelect = $select->getAdapter()->select();
-		$subSelect->from( 
-				array("shipment"=>$this->getResource()->getTable("sales/shipment")),
-				array(new Zend_Db_Expr("COUNT(shipment.entity_id)"))
-		);
-		$subSelect->where("shipment.shipping_address_id=main_table.entity_id");
-
-		$select->where("? < 1", $subSelect);
-
-		foreach($addressCollection as $toDelete){
-			$toDelete->delete();
-		}
+   public function clearOwnBillingAddress(){
+	   if($this->isBillingSameAsOrder()){
+		   return $this;
+	   }
+	   $this->setBillingAddressId(
+			$this->getOrder()->getBillingAddress()->getId()
+	   );
+	   $this->getResource()->saveAttribute($this, "billing_address_id");
+	   $this->_cleanAddresses(self::TYPE_POBILLING);
+	   return $this;
+   }
+   
+   /**
+    * @param string $type
+    * @param array $exclude
+    */
+   
+   protected function _cleanAddresses($type, $exclude=array()) {
+	   Mage::helper('zolagopo')->clearAddresses($this, $type, $exclude);
    }
    
    public function needInvoice() {
-	   return $this->getBillingAddress()->getNeedInvoice();
+	   return (int)$this->getBillingAddress()->getNeedInvoice();
    }
    
    /**
@@ -127,10 +378,87 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
    
    public function updateTotals($force=false) {
 	    if($force || !$this->getGrandTotalInclTax()){
+			$this->_processTotalWeight();
+			$this->_processTotalQty();
 			$this->setGrandTotalInclTax($this->getSubtotalInclTax()+$this->getShippingAmountIncl());
 			$this->save();
 		}
 		return $this;
+   }
+   
+   protected function _processTotalWeight() {
+	   $weight = 0;
+	   foreach($this->getItemsCollection() as $item){
+		   if(!$item->getParentItemId()){
+			$weight += $item->getWeight() * $item->getQty();
+		   }
+	   }
+	   $this->setTotalWeight($weight);
+	   return $this;
+   }
+   
+   protected function _processTotalQty() {
+	   $qty = 0;
+	   foreach($this->getItemsCollection() as $item){
+		   if(!$item->getParentItemId()){
+				$qty += $item->getQty();
+		   }
+	   }
+	   $this->setTotalQty($qty);
+	   return $this;
+   }
+   
+   /**
+    * @todo implement
+    * @return bool
+    */
+   public function isGatewayPayment() {
+	   return $this->getOrder()->getPayment()->getMethod() == Zolago_Payment_Model_Method::PAYMENT_METHOD_CODE;
+   }
+   
+   /**
+    * @return boolean
+    */
+   public function isPaid() {
+	   if($this->isGatewayPayment()){
+		   /**
+		    * @todo implement logic based on transaction
+		    */
+		   return false;
+	   }
+	   return true;
+   }
+   
+   /**
+    * @return Zolago_Po_Model_Po_Status
+    */
+   public function getStatusModel() {
+	   return Mage::getSingleton('zolagopo/po_status');
+   }
+   
+   /**
+    * @return Zolago_Po_Model_Resource_Po_Collection
+    */
+   public function getSameEmailPoCollection() {
+	   $collection = $this->getCollection();
+	   
+	   $statModel = Mage::getSingleton("zolagopo/po_status");
+	   $finishedStatuses = $statModel::getFinishStatuses();
+	   
+	   if(in_array($this->getUdropshipStatus(), $finishedStatuses)){
+		   $collection->addFieldToFilter("entity_id", -1); // Emtpy
+		   return $collection;
+	   }
+	   
+	   /* @var $collection Zolago_Po_Model_Resource_Po_Collection */
+	   if($this->getId()){
+			$collection->addFieldToFilter("entity_id", array("neq"=>$this->getId()));
+	   }
+	   $collection->addFieldToFilter("udropship_vendor", $this->getUdropshipVendor());
+	   $collection->addFieldToFilter("udropship_status", array("nin"=>$finishedStatuses));
+	   $collection->addFieldToFilter("customer_email", $this->getCustomerEmail());
+
+	   return $collection;
    }
    
 	protected function _afterSave(){
@@ -138,5 +466,56 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 		$this->updateTotals();
 		return $ret;
 	} 
+	
+	protected function _beforeSave() {
+		// Transfer fields
+		if((!$this->getId() || $this->isObjectNew()) && !$this->getSkipTransferOrderItemsData()){
+			$this->setCustomerEmail($this->getOrder()->getCustomerEmail());
+		}
+		
+		$this->_processAlert();
+		$this->_processStatus();
+		$this->_processMaxShippingDate();
+		
+		return parent::_beforeSave();
+	}
+	
+	protected function _processAlert() {
+		if(!$this->getId()){
+			$alertBit = 0;
+			
+			if(!$this->getSkipCheckSameEmail()){
+				$sameEmail = $this->getSameEmailPoCollection();
+				if($sameEmail->count()){
+					$alertBit += Zolago_Po_Model_Po_Alert::ALERT_SAME_EMAIL_PO;
+					foreach($sameEmail as $po){
+						$oldAlert = (int)$po->getAlert();
+						if(!($oldAlert&Zolago_Po_Model_Po_Alert::ALERT_SAME_EMAIL_PO)){
+							$oldAlert+=Zolago_Po_Model_Po_Alert::ALERT_SAME_EMAIL_PO;
+						}
+						$po->setAlert($oldAlert);
+						$po->getResource()->saveAttribute($po, "alert");
+					}
+				}
+				$this->setAlert($alertBit);
+			}
+		}
+	}
+	
+	protected function _processStatus() {
+		if(!$this->getId()){
+			Mage::getSingleton('zolagopo/po_status')->processNewStatus($this);
+		}
+	}
+	
+	protected function _processMaxShippingDate() {
+		if(!$this->getId()){
+			if ($max_shipping_date = Mage::helper('zolagoholidays/datecalculator')->calculateMaxPoShippingDate($this, true)) {
+				$this->setMaxShippingDate($max_shipping_date->toString('YYYY-MM-dd'));
+			}
+		}
+		
+		
+	}
    
 }

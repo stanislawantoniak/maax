@@ -49,6 +49,7 @@ if (file_exists($compilerConfig)) {
     include $compilerConfig;
 }
 
+
 $mageFilename = MAGENTO_ROOT . '/app/Mage.php';
 $maintenanceFile = 'maintenance.flag';
 

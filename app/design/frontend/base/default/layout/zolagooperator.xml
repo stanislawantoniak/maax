@@ -2,6 +2,7 @@
 <layout version="0.1.0">
 	<udropship_operator_index>
         <update handle="udropship_vendor" />
+        <update handle="adminhtml_head" />
 		<update handle="bootstrap"/>
         <reference name="content">
             <block name="zolagooperator_dropship_operator" type="zolagooperator/dropship_operator" template="zolagooperator/dropship/operator.phtml"/>
@@ -10,6 +11,7 @@
 	<udropship_operator_edit>
         <update handle="udropship_vendor" />
 		<update handle="bootstrap"/>
+		<update handle="forms"/>
         <reference name="content">
             <block name="zolagooperator_dropship_operator_edit" type="zolagooperator/dropship_operator_edit" template="zolagooperator/dropship/operator/edit.phtml"/>
         </reference>

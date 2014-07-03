@@ -1,6 +1,27 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
 
+	<!-- bootsrap forms -->
+	<forms>
+		<reference name="head">
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/select2/select2.min.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/validation/jquery.validate.min.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/validation/additional-methods.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/plugins/alphanum/jquery.alphanum.js</name>
+			</action>
+		</reference>
+	</forms>
 	<!-- bootsrap handling -->
 	<bootstrap>
 		<reference name="root">
@@ -30,8 +51,7 @@
             <action method="addCss"><stylesheet>css/local/customs.css</stylesheet></action>
             <action method="addCss"><stylesheet>css/local/noless.css</stylesheet></action>
 			<!-- adminhtml css -->
-			<action method="removeItem"><type>skin_css</type><name>../../../adminhtml/default/default/boxes.css</name></action> 
-			<action method="removeItem"><type>skin_css</type><name>../../../adminhtml/default/default/custom.css</name></action> 
+			<action method="removeItem"><type>skin_css</type><name>../../../adminhtml/default/default/boxes.css</name></action> 			<action method="removeItem"><type>skin_css</type><name>../../../adminhtml/default/default/custom.css</name></action>
 			<action method="removeItem"><type>skin_css</type><name>../../../adminhtml/default/defaultie/styles.css</name></action> 
 			<action method="removeItem"><type>skin_css</type><name>../../../adminhtml/default/default/below_ie7.css</name></action> 
 			<action method="removeItem"><type>skin_css</type><name>../../../adminhtml/default/default/ie7.css</name></action> 
@@ -127,6 +147,10 @@
 				<type>skin_js</type>
 				<name>js/plugins/uniform/jquery.uniform.min.js</name>
 			</action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>js/cssbs.js</name>
+            </action>
 	
 			<!-- add init script -->
 			<block type="core/template" name="head.initscript" template="unirgy/dropship/vendor/initscript.phtml"/>
@@ -185,6 +209,32 @@
 			</action>
 		</reference>
     </udpo_vendor_shipmentinfo>
+    <udropship_vendor_login>
+        <update handle="bootstrap" />
+        <update handle="forms"/>
+
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/page_clear.phtml</template>
+            </action>
+        </reference>
+        <reference name="header">
+            <action method="setTemplate"><template>unirgy/dropship/vendor/header_boot.phtml</template></action>
+        </reference>
+    </udropship_vendor_login>
+
+    <udropship_vendor_password>
+        <update handle="udropship_vendor" />
+        <update handle="bootstrap" />
+        <update handle="forms"/>
+
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/page_clear.phtml</template>
+            </action>
+        </reference>
+    </udropship_vendor_password>
+
 	<sales_order_shipment>
 		<reference name="shipment_items">
 			<action method="setTemplate">
@@ -199,4 +249,7 @@
 			</action>
 		</reference>
 	</sales_order_printshipment>
+	
+	<!-- todo move it to new module-based xml layout -->
+	
 </layout>

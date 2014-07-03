@@ -61,7 +61,7 @@ abstract class Zolago_Common_Model_Form_Fieldset_Abstract  {
                                        'name'          => 'phone',
                                        'label'         => $this->_helper->__('Phone'),
                                        'required'      => true,
-                                       'class'         => 'validate-phone-number',
+                                       'class'         => 'validate-phone-number form-control',
                                        "maxlength"     => 50
                                    ));
 
@@ -74,7 +74,7 @@ abstract class Zolago_Common_Model_Form_Fieldset_Abstract  {
         $this->_fieldset->addField('email', 'text', array(
                                        'name'          => 'email',
                                        'label'         => $this->_helper->__('Email'),
-                                       'class'         => 'validate-email',
+                                       'class'         => 'validate-email form-control',
                                        "maxlength"     => 100
                                    ));
 
@@ -87,7 +87,8 @@ abstract class Zolago_Common_Model_Form_Fieldset_Abstract  {
         $this->_fieldset->addField('firstname', 'text', array(
                                        'name'          => 'firstname',
                                        'label'         => $this->_helper->__('First name'),
-                                       "maxlength"     => 100
+                                       "maxlength"     => 100,
+									   "class"		   => "form-control"
                                    ));
 
 
@@ -99,7 +100,8 @@ abstract class Zolago_Common_Model_Form_Fieldset_Abstract  {
         $this->_fieldset->addField('lastname', 'text', array(
                                        'name'          => 'lastname',
                                        'label'         => $this->_helper->__('Last name'),
-                                       "maxlength"     => 100
+                                       "maxlength"     => 100,
+									   "class"		   => "form-control"
                                    ));
 
 
@@ -113,6 +115,7 @@ abstract class Zolago_Common_Model_Form_Fieldset_Abstract  {
                                        'name'          => 'is_active',
                                        'label'         => $this->_helper->__('Is active'),
                                        'required'      => true,
+									   "class"		   => "form-control",
                                        'options'       => Mage::getSingleton("adminhtml/system_config_source_yesno")->toArray()
                                    ));
 

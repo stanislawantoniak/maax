@@ -9,8 +9,9 @@ class Zolago_Payment_Model_Method extends Mage_Payment_Model_Method_Abstract {
      *
      * @var string
      */
-    protected $_code = self::PAYMENT_METHOD_CODE;
+    protected $_code		  = self::PAYMENT_METHOD_CODE;
     protected $_formBlockType = "zolagopayment/form";
+    protected $_isGateway     = true;
 	
 	/**
 	 * Zolago_Payment_Model_Provider

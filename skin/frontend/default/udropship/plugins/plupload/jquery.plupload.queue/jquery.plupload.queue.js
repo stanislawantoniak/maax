@@ -249,9 +249,17 @@ used as it is.
 					} else {
 						jQuery('span.plupload_add_text', target).html(o.sprintf(_('%d files queued'), uploader.total.queued));
 					}
-
-					jQuery('a.plupload_start', target).toggleClass('plupload_disabled', uploader.files.length == (uploader.total.uploaded + uploader.total.failed));
-
+					uploader.files.length == (uploader.total.uploaded + uploader.total.failed);
+					if (uploader.files.length) {
+						jQuery('a.plupload_start', target).toggleClass('plupload_disabled',false);
+						jQuery('a.plupload_start').css('background-color','#3968C6');
+						jQuery('a.plupload_start').css('color','#ffffff');
+					} else {
+							jQuery('a.plupload_start', target).toggleClass('plupload_disabled',true);
+							jQuery('a.plupload_start').css('background-color','#F3F3F3');
+							jQuery('a.plupload_start').css('color','#888888');
+					
+					}
 					// Scroll to end of file list
 					fileList[0].scrollTop = fileList[0].scrollHeight;
 
@@ -324,6 +332,7 @@ used as it is.
 					});
 
 					jQuery('a.plupload_start', target).addClass('plupload_disabled');
+
 				});
 
 				uploader.bind("Error", function(up, err) {
@@ -381,6 +390,7 @@ used as it is.
 						if (settings.multiple_queues && uploader.total.uploaded + uploader.total.failed == uploader.files.length) {
 							jQuery(".plupload_buttons,.plupload_upload_status", target).css("display", "inline");
 							jQuery(".plupload_start", target).addClass("plupload_disabled");
+							
 							jQuery('span.plupload_total_status,span.plupload_total_file_size', target).hide();
 						}
 					}

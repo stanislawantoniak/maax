@@ -2,14 +2,23 @@
 <config>
     <modules>
         <Zolago_Dhl>
-            <version>0.0.1</version>
+            <version>0.0.2</version>
         </Zolago_Dhl>
     </modules>
     <global>
         <models>
             <zolagodhl>
                 <class>Zolago_Dhl_Model</class>
+                <resourceModel>zolagodhl_resource</resourceModel>
             </zolagodhl>
+            <zolagodhl_resource>
+                <class>Zolago_Dhl_Model_Resource</class>
+                <entities>
+                    <zip>
+                        <table>zolago_dhl_zip</table>
+                    </zip>
+                </entities>
+            </zolagodhl_resource>
         </models>
         <helpers>
             <zolagodhl>
@@ -21,7 +30,20 @@
                 <setup>
                     <module>Zolago_Dhl</module>
                 </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
             </zolagodhl_setup>
+            <zolagodhl_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </zolagodhl_write>
+            <zolagodhl_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </zolagodhl_read>
         </resources>
 		
         <udropship>

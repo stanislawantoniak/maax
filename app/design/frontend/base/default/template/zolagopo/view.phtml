@@ -1,0 +1,20 @@
+<?php
+    if ($id = Mage::getSingleton('core/session')->getRmaPrintId()) {
+          Mage::getSingleton('core/session')->setRmaPrintId(null);
+          $url =  Mage::getUrl('sales/po/printrma',array('rma_id'=>$id));
+        
+?>
+<script type="text/javascript">
+document.observe('dom:loaded',function() {
+    document.location.href="<?php echo $url ?>";
+});
+</script>
+<?php
+    }
+?>
+
+Po details
+
+<div class="buttons-set">
+	<p class="back-link"><a href="<?php echo $this->getBackUrl() ?>"><small>&laquo; </small><?php echo $this->getBackTitle() ?></a></p>
+</div>

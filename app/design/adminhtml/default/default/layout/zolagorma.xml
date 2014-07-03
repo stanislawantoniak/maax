@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<layout>
+    <zolagorma_update_menu>      
+        <reference name="menu">
+            <action method="setActive"><menupath>sales/udropship/urma</menupath></action>
+        </reference>
+    </zolagorma_update_menu>
+    <adminhtml_return_index>
+        <update handle="zolagorma_update_menu"/>
+        <reference name="content">
+            <block type="zolagorma/adminhtml_rma_returnreason" name="zolagopos.reaturn.reasons">
+            	<block type="zolagorma/adminhtml_rma_returnreason_grid" name="zolagopos.reaturn.reasons.grid" />
+            </block>
+        </reference>
+    </adminhtml_return_index>
+    <adminhtml_return_new>
+        <update handle="zolagorma_update_menu"/>
+        <reference name="content">
+            <block name="zolagopos.reaturn.reasons" type="zolagorma/adminhtml_rma_edit">
+            	<!-- <block name="zolagopos.reaturn.reasons.form" type="zolagorma/adminhtml_rma_edit_form" /> -->
+            </block>
+        </reference>
+    </adminhtml_return_new>
+    <adminhtml_return_edit>
+        <update handle="zolagorma_update_menu"/>
+        <reference name="content">
+            <block name="zolagopos.reaturn.reasons" type="zolagorma/adminhtml_rma_edit">
+            	<!-- <block name="zolagopos.reaturn.reasons.form" type="zolagorma/adminhtml_rma_edit_form" /> -->
+            </block>
+        </reference>
+    </adminhtml_return_edit>
+    
+</layout>

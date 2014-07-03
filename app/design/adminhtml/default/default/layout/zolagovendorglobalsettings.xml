@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<layout>
+    <zolagovendorglobalsettings_update_menu>      
+        <reference name="menu">
+            <action method="setActive"><menupath>vendors/global_settings</menupath></action>
+        </reference>
+    </zolagovendorglobalsettings_update_menu>
+    <adminhtml_vendorglobalsettings_index>
+        <update handle="zolagovendorglobalsettings_update_menu"/>
+        <reference name="content">
+            <block type="zolagovendorglobalsettings/adminhtml_vendorglobalsettings_container" name="zolagovendorglobalsettings_vendorglobalsettings_container" template="zolagovendorglobalsettings/container.phtml" />
+        </reference>
+        <reference name="left">
+            <block type="zolagovendorglobalsettings/adminhtml_vendorglobalsettings_container_tabs" name="zolagovendorglobalsettings_vendorglobalsettings_container_tabs">
+            </block>
+        </reference>
+    </adminhtml_vendorglobalsettings_index>
+</layout>

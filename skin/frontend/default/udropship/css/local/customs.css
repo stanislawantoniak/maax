@@ -75,6 +75,9 @@ select.form-control {
 .btn-group-xs > .btn {
   font-size: 11.049999999999999px !important;
 }
+.table dl {
+  margin: 0;
+}
 .messages {
   padding-left: 0;
   list-style: none;
@@ -128,6 +131,28 @@ select.form-control {
 .messages > li.success-msg .alert-link {
   color: #2b542c;
 }
+.messages > li.notice-msg {
+  background-color: #fcf8e3;
+  border-color: #faebcc;
+  color: #8a6d3b;
+}
+.messages > li.notice-msg hr {
+  border-top-color: #f7e1b5;
+}
+.messages > li.notice-msg .alert-link {
+  color: #66512c;
+}
+.inline-block {
+  display: inline-block;
+}
+.input-group-addon.no-border {
+  border: 0;
+  background: transparent;
+}
+.after-filed-label {
+  margin-top: 7px;
+  margin-left: -20px;
+}
 .z-grid .filter {
   position: static;
 }
@@ -136,6 +161,18 @@ select.form-control {
 }
 .form-inline label {
   font-weight: normal;
+}
+.z-grid .form-inline .form-group {
+  display: inline-block;
+}
+.z-grid .text-holder {
+  display: inline-block;
+}
+.z-grid .main-buttons {
+  margin-left: 20px;
+}
+.z-grid .btn-search {
+  margin-left: 10px;
 }
 .z-grid hr {
   margin-top: 10px;
@@ -177,6 +214,15 @@ select.form-control {
   width: 100%;
   overflow: auto;
 }
+.z-grid .range-line:first-child {
+  margin-bottom: 5px;
+}
+.z-grid .range-line .label {
+  display: none;
+}
+.z-grid .table thead > tr > th {
+  vertical-align: top;
+}
 .a-center {
   text-align: center;
 }
@@ -194,22 +240,53 @@ select.form-control {
 .shipping-info .dl-horizontal.dl-z dd {
   margin-left: 120px;
 }
-.widget-content.orders {
+.widget-content.orders,
+.widget-content.rma {
   min-height: 150px;
 }
-.widget-content.orders .alert {
+.widget-content.orders .alert,
+.widget-content.rma .alert {
   margin-bottom: 0;
   padding-top: 10px;
   padding-bottom: 10px;
 }
-.widget-content.orders .with-alert {
+.widget-content.orders .with-alert,
+.widget-content.rma .with-alert {
   min-height: 190px;
 }
-.widget-content.bottom-info {
-  min-height: 110px;
+.widget-content.rma {
+  min-height: 200px;
 }
-.shipping-info .btn {
-  margin: 28px 0;
+.widget-content.bottom-info {
+  min-height: 146px;
+}
+.page-heading {
+  margin-top: 10px;
+  margin-bottom: 30px;
+}
+.page-heading h3 {
+  margin-bottom: 10px;
+  color: #555555;
+  font-weight: 400;
+  font-size: 20px;
+}
+.page-heading .tageline {
+  display: block;
+  font-size: 11px;
+  color: #888888;
+  font-weight: normal;
+}
+.main-actions {
+  margin-top: 25px;
+}
+.main-actions p {
+  margin-top: 10px;
+}
+.shipping-info .btn-primary {
+  margin-top: 46px;
+}
+.shipping-info p {
+  margin-top: 52px;
 }
 .comments dl {
   margin-bottom: 10px;
@@ -233,7 +310,13 @@ table.foot-empty-cells tfoot td:empty {
   opacity: 0.7;
   background: url(../../images/icon-checked-actions.png);
 }
-@media (min-width: 768px) and (max-width: 1200px) {
+.select2-highlighted .text-muted {
+  color: #fff;
+}
+#status-holder .btn {
+  white-space: normal;
+}
+@media (min-width: 768px) and (max-width: 1400px) {
   .dl-horizontal.dl-z dt {
     width: 120px;
   }
