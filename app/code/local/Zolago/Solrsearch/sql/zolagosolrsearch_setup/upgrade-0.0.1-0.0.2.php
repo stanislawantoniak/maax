@@ -28,4 +28,54 @@ $setup->addAttribute(
     )
 );
 
+
+
+/**
+ * Product queue
+ */
+$table = $installer->getConnection()
+    ->newTable($installer->getTable('zolagosolrsearch/queue_item'))
+    ->addColumn('queue_id', Varien_Db_Ddl_Table::TYPE_BIGINT, null, array( 
+            'identity'  => true,
+            'nullable'  => false,
+            'primary'   => true,
+    ))    
+    ->addColumn('product_id',Varien_Db_Ddl_Table::TYPE_INTEGER, null, array (
+        'nullable' => false,
+    ))
+    ->addColumn('store_id',Varien_Db_Ddl_Table::TYPE_INTEGER, null, array (
+        'nullable' => false,
+    ))
+    ->addColumn('status',Varien_Db_Ddl_Table::TYPE_TEXT, 20, array (
+        'nullable' => false,
+    ))
+    ->addColumn('core_name',Varien_Db_Ddl_Table::TYPE_TEXT, 50, array (
+        'nullable' => false,
+    ))
+    ->addColumn('processed_at',Varien_Db_Ddl_Table::TYPE_DATETIME,null, array (
+        'nullable' => true,
+    ))
+    ->addColumn('created_at',Varien_Db_Ddl_Table::TYPE_DATETIME,null, array (
+        'nullable' => false,
+    ))
+    ->addIndex($installer->getIdxName('zolagosolrsearch/queue_item', array ('status')), array('status'))
+    ->addIndex($installer->getIdxName('zolagosolrsearch/queue_item', array ('product_id')), array('product_id'))
+    ->addIndex($installer->getIdxName('zolagosolrsearch/queue_item', array ('store_id')), array('store_id'))
+    ->addIndex($installer->getIdxName('zolagosolrsearch/queue_item', array ('created_at')), array('created_at'))
+	// Uniue key - do not double scopes and products
+    /*->addIndex(
+			$installer->getIdxName('zolagosolrsearch/queue_item', array ('product_id', 'store_id', 'status')), 
+			array ('product_id', 'store_id', 'status'), 
+			array("type"=>  Varien_Db_Adapter_Interface::INDEX_TYPE_UNIQUE))*/
+    ->addForeignKey(
+        $installer->getFkName('zolagosolrsearch/queue_item', 'product_id', 'catalog/product', 'entity_id'),
+        'product_id', $installer->getTable('catalog/product'), 'entity_id',
+        Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE)
+    ->addForeignKey(
+        $installer->getFkName('zolagosolrsearch/queue_item', 'store_id', 'core/store', 'store_id'),
+        'store_id', $installer->getTable('core/store'), 'store_id',
+        Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE);
+
+$installer->getConnection()->createTable($table);    
+
 $installer->endSetup();
