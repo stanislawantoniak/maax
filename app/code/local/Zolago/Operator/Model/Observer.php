@@ -41,7 +41,7 @@ class Zolago_Operator_Model_Observer {
          || $this->_checkAllow($session,$module . "/" . $controllerName)
          || $this->_checkAllow($session,$module . "/" . $controllerName . "/" . $action)) {
 
-            if ($request->getModuleName()=="udpo") {
+            if ($request->getModuleName()=="udpo" && $request->getControllerName()=="index") {
                 $isAllowed = $this->_checkForUdpo($request, $operator);                
             } else {
                 $isAllowed = true;
@@ -66,17 +66,12 @@ class Zolago_Operator_Model_Observer {
         switch ($request->getActionName()) {
             // Mass actions are prepared via Zolago_Po_Helper_Data::getVendorPoColleciton()
             // with operator filter applayed
-        case "udpoDeleteTrack":
-        case "updatePos":
-        case "addUdpoComment":
-        case "shipmentInfo":
-        case "udpoInfo":
-        case "udpoPost":
-            $poId = $request->getParam("id");
-            break;
-        case "udpoPdf":
-            $poId = $request->getParam("udpo_id");
-            break;
+			case "udpoPdf":
+				$poId = $request->getParam("udpo_id");
+				break;
+			default:
+				$poId = $request->getParam("id");
+			break;
         }
         if($poId!==null) {
             return $operator->isAllowedToPo($poId);

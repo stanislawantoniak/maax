@@ -20,9 +20,9 @@ class Zolago_Customer_Model_Observer {
 		if($payment->getId() && $payment->getOrder()){
 			$order = $payment->getOrder();
 			/* @var $order Mage_Sales_Model_Order */
+			$customer = Mage::getModel("customer/customer");
 			if($order->getCustomerId()){
-				$customer = Mage::getModel("customer/customer")->
-					load($order->getCustomerId());
+				$customer->load($order->getCustomerId());
 			}
 			if($customer->getId()){
 				$data = array(

@@ -2,20 +2,27 @@
 class Zolago_Catalog_Block_Vendor_Image_List extends Mage_Core_Block_Template {
 	protected $_availableTypes = array("text", "select", "multiselect", "textarea", "date");
 	
-	public function _prepareLayout() {
-		$this->_prepareGrid();
-		parent::_prepareLayout();
+	protected function _beforeToHtml() {
+		$this->getGrid();
+		return parent::_beforeToHtml();
 	}
-    public function _prepareGrid() {
+	public function getGridJsObjectName() {
+		return $this->getGrid()->getJsObjectName();
+	}
+	public function getGrid() {
+		if(!$this->getData("grid")){
 			$design = Mage::getDesign();
 			$design->setArea("adminhtml");
 			$block = $this->getLayout()->
-					createBlock("zolagocatalog/vendor_mass_grid");
+					createBlock("zolagocatalog/vendor_image_grid");
 			$block->setParentBlock($this);
 			$this->setGridHtml($block->toHtml());
-			$this->setGrid($block);
+			$this->setData("grid", $block);
 			$design->setArea("frontend");
+		}
+		return $this->getData("grid");
 	}
+	
 
 	public function getSaveUrl() { 
 //		return $this->getUrl("*/*/saveAjax");

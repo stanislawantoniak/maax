@@ -1,17 +1,83 @@
 <?php /* @var $this Zolago_Po_Block_Vendor_Po_Edit */ ?>
-<?php $_po = $this->getPo(); ?>
-<?php $_shippingMethod = $this->getShippingMethod();?>
+<?php $_hlp					= Mage::helper("zolagopo");?>
+<?php $_po					= $this->getPo(); ?>
+<?php $_shippingMethod		= $this->getShippingMethod();?>
 <?php $_shipmentsCollection = $this->getShipmentsCollection();?>
-<?php $_shipmentsCount = $_shipmentsCollection->count();?>
-<?php $_alert = $_po->getAlert();?>
-<?php $_comments = $_po->getVendorCommentsCollection(); ;?>
+<?php $_currentShipping		= $this->getCustomCurrentShipping();?>
+<?php $_alerts				= $this->getAlerts($_po);?>
+<?php $_comments			= $_po->getVendorCommentsCollection(); ;?>
+<?php $_shippingStatuses	= Mage::helper('udropship')->getVendorShipmentStatuses(); ?>
+<?php $_statusModel			= $_po->getStatusModel(); ?>
+<?php $_aggregated			= $_po->getAggregated();?>
+<?php $_isEditable			= $this->isEditable();?>
+
 <div class="container">
 	<!--=== Page Header ===-->
-	<div class="page-header">
-		<div class="page-title">
-			<h3><?php echo Mage::helper("zolagopo")->__("Order #%s", $_po->getIncrementId());?></h3>
-			<span><?php echo Mage::helper("zolagopo")->__("Order details");?></span>
+	<div class="row page-heading">
+		<div class="col-md-6">
+			<h3><?php echo $_hlp->__("Order #%s", $_po->getIncrementId());?></h3>
+			<?php foreach($_alerts as $alert):?>
+				<span class="label label-<?php echo $alert['class'];?>" style="display: inline; color: #fff; "><?php echo $alert['text'];?></span><br/>
+			<?php endforeach;?>
 		</div>
+		<div class="main-actions align-right col-md-6">
+			<?php /* Confirm direct realistaion */ ?>
+			<?php if($_statusModel->isDirectRealisationAvailable($_po)):?>
+				<a class="btn-notification btn  btn-primary" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("directRealisation");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("You are about to move to fulfilment. Are you sure?");?>" data-modal="true" href="#">
+					<i class="icon-ok"></i>
+					<?php echo $_hlp->__("Move to fulfilment");?>
+				</a> 
+			<?php endif;?>
+
+			<?php /* Confirm realase button */ ?>
+			<?php if($_statusModel->isConfirmReleaseAvailable($_po)):?>
+				<a class="btn-notification btn" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("setConfirmRelease");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("You are about to confirm order realisation. Are you sure?");?>" data-modal="true" href="#">
+					<i class="icon-ok"></i>
+					<?php echo $_hlp->__("Accept the order");?>
+				</a> 
+			<?php endif;?>
+			
+			<?php if($_statusModel->isShippingAvailable($_po)):?>
+				<?php if($this->canUseCarrier()):?>
+				<button class="btn btn-primary" data-toggle="modal" href="#shippingModal"><?php echo $_hlp->__("Print shipping label");?></button>
+				<?php else:?>
+				<button class="btn btn-primary" data-toggle="modal" href="#shippingModal"><?php echo $_hlp->__("Add shipping label");?></button>
+				<?php endif;?>
+			<?php elseif($_statusModel->isStartPackingAvailable($_po)):?>
+				<a class="btn btn-primary" data-toggle="modal" href="<?php echo $this->getPoUrl("startPacking");?>"><?php echo $_hlp->__("Start packing");?></a>
+			<?php endif;?>
+
+			<?php /* Check stock button */ ?>
+			<?php if($_statusModel->isConfirmStockAvailable($_po)):?>
+				<?php if(!$_po->getStockConfirm()):?>
+				<?php  /* Display as active widget */ ?>
+				<a class="btn btn-notification btn-primary" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("setConfirmStock");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("Are you sure to confirm the items have been reserved?");?>" data-modal="true" href="#">
+					<i class="icon-barcode"></i>
+					<?php echo $_hlp->__("I confirm the items have been reserved");?>
+				</a> 
+				<?php else: ?>
+				<?php  /* Display as label */ ?>
+				<button class="btn  btn-success" disabled="disabled">
+					<i class="icon-barcode"></i>
+					<?php echo $_hlp->__("Stock checked");?>
+				</button>
+				<?php endif;?>
+			<?php else:?>
+				<?php /* if($_po->getStockConfirm()):?>
+				<button class="btn  btn-success" disabled="disabled">
+					<i class="icon-barcode"></i>
+					<?php echo $_hlp->__("Stock checked");?>
+				</button>
+				<?php endif; */?>
+			<?php endif;?>
+				
+			<?php if($_statusModel->isConfirmStockAvailable($_po) && !$_po->getStockConfirm()):?>	
+				<p class="text-muted align-right"><?php echo $_hlp->__("Set aside the ordered items together with other reservations, to make sure they are available and ready to be shipped. The order will not be processed until you confirm the product reservation");?></p>
+			<?php elseif(count($_alerts) && $_statusModel->isConfirmReleaseAvailable($_po)):?>
+				<p class="text-muted align-right"><?php echo $_hlp->__("There is an alert on the order. In spite of the alert you can move the order to fulfilment by accepting the order.");?></p>				
+			<?php endif;?>
+		</div>
+		
 	</div>
 </div>
 <div class="container">
@@ -21,60 +87,69 @@
 				<div class="widget-header"> 
 					<h4>
 						<i class="icon-info"></i> 
-						<?php echo Mage::helper("zolagopo")->__("General");?>
+						<?php echo $_hlp->__("General");?>
 					</h4>
 					<div class="toolbar no-padding"> 
+						<?php if($_isEditable):?>
 						<div class="btn-group"> 
 							<span data-toggle="modal" data-target="#changePosModal" class="btn btn-xs">
 								<i class="icon-retweet"></i> 
-								<?php echo Mage::helper("zolagopo")->__("Change POS");?>
+								<?php echo $_hlp->__("Change POS");?>
 							</span> 
 						</div> 
+						<?php endif;?>
 					</div>
 				</div>
-				<div class="widget-content orders<?php if($_alert):?> with-alert<?php endif;?>">
+				<div class="widget-content orders<?php /* if($_alert):?> with-alert<?php endif;*/ ?>">
 					<dl class="dl-horizontal dl-z"> 
-						<dt><?php echo Mage::helper("zolagopo")->__("Number");?>:</dt> 
+						<dt><?php echo $_hlp->__("Number");?>:</dt> 
 						<dd><?php echo $_po->getIncrementId();?></dd> 
-						<dt><?php echo Mage::helper("zolagopo")->__("Status");?>:</dt> 
+						<dt><?php echo $_hlp->__("Status");?>:</dt> 
 						<dd>
-							<div class="btn-group"> 
+							<?php if($_statusModel->isManulaStatusAvailable($_po)):?>
+							<div class="btn-group" id="status-holder"> 
 								<button class="btn btn-xs dropdown-toggle" data-toggle="dropdown"> 
 									<?php echo $this->getCurrentStatus($_po);?> <span class="caret"></span> 
 								</button> 
 								<ul class="dropdown-menu"> 
-									<?php foreach($this->getAllowedStatusesForPo($_po) as $key=>$status):?>
-									<li><a class="btn-notification" data-placement="top"  data-layout="top" data-type="confirm" data-text="<?php echo Mage::helper("zolagopo")->__("Are you sure");?>" data-modal="true" data-status="<?php echo $key;?>" href="#"><?php echo $status;?></a></li> 
+									<?php foreach($_statusModel->getAvailableStatuses($_po) as $key=>$status):?>
+										<?php if($key!=$_po->getUdropshipStatus()):?>
+										<li><a class="btn-notification" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("changeStatus", array("status"=>$key));?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("You are about to change status from %s to %s. Are you sure?", $this->getCurrentStatus($_po), $this->escapeHtml($status));?>" data-modal="true" data-status="<?php echo $key;?>" href="#"><?php echo $this->escapeHtml($status);?></a></li> 
+										<?php endif;?>
 									<?php endforeach;?>
 								</ul> 
 							</div>
+							<?php else:?>
+								<?php echo $this->getCurrentStatus($_po);?>
+							<?php endif;?>
+							
 						</dd> 
-						<dt><?php echo Mage::helper("zolagopo")->__("Order date");?>:</dt> 
+						<dt><?php echo $_hlp->__("Order date");?>:</dt> 
 						<dd><?php echo Mage::helper('core')->formatDate($_po->getCreatedAt(), 'medium')?></dd> 
-						<dt><?php echo Mage::helper("zolagopo")->__("Max. order date");?>:</dt> 
-						<dd><?php echo Mage::helper('core')->formatDate($_po->getCreatedAt(), 'medium')?></dd> 
+						<dt><?php echo $_hlp->__("Max. ship. date");?>:</dt> 
+						<dd><?php echo Mage::helper('core')->formatDate($_po->getMaxShippingDate(), 'medium')?></dd> 
 						<?php if($_po->getPos()):?>
-						<dt><?php echo Mage::helper("zolagopo")->__("POS");?>:</dt> 
+						<dt><?php echo $_hlp->__("POS");?>:</dt> 
 						<dd><?php echo $_po->getPos()->getName(); ?></dd> 
 						<?php endif;?>
 					</dl>
-					<?php if($_alert):?>
+					<?php /* if($_alert):?>
 					<p class="alert alert-danger fade in"><?php echo $this->getAlertText($_alert);?></p>
-					<?php endif;?>
+					<?php endif; */?>
 				</div>
 			</div>
 		</div>
 		<div class="col-md-4">
 			<div class="widget box">
-				<div class="widget-header"> <h4><i class="icon-usd"></i> <?php echo Mage::helper("zolagopo")->__("Payment");?></h4> </div>
-				<div class="widget-content orders<?php if($_alert):?> with-alert<?php endif;?>">
+				<div class="widget-header"> <h4><i class="icon-usd"></i> <?php echo $_hlp->__("Payment");?></h4> </div>
+				<div class="widget-content orders<?php /* if($_alert):?> with-alert<?php endif; */?>">
 					<dl class="dl-horizontal dl-z"> 
-						<dt><?php echo Mage::helper("zolagopo")->__("Payment status");?>:</dt> 
-						<dd>Opłacono</dd> 
-						<dt><?php echo Mage::helper("zolagopo")->__("Paid");?>:</dt> 
-						<dd>1 034,00 PLN</dd> 
-						<dt><?php echo Mage::helper("zolagopo")->__("Debt");?>:</dt> 
-						<dd> 34,00 PLN</dd> 
+						<dt><?php echo $_hlp->__("Payment status");?>:</dt> 
+						<dd>Opłacono [dev]</dd> 
+						<dt><?php echo $_hlp->__("Paid");?>:</dt> 
+						<dd>1 034,00 PLN [dev]</dd> 
+						<dt><?php echo $_hlp->__("Debt");?>:</dt> 
+						<dd> 34,00 PLN [dev]</dd> 
 					</dl>
 				</div>
 			</div>
@@ -84,28 +159,28 @@
 				<div class="widget-header"> 
 					<h4>
 						<i class="icon-phone"></i> 
-							<?php echo Mage::helper("zolagopo")->__("Contact");?>
+							<?php echo $_hlp->__("Contact");?>
 					</h4> 
 					<div class="toolbar no-padding"> 
 						<div class="btn-group"> 
 							<span data-toggle="modal" data-target="#composeModal"  class="btn btn-xs">
 								<i class="icon-comment "></i> 
-								<?php echo Mage::helper("zolagopo")->__("Compose");?>
+								<?php echo $_hlp->__("Compose message");?>
 							</span> 
 							
 						</div> 
 					</div>
 				</div>
-				<div class="widget-content orders<?php if($_alert):?> with-alert<?php endif;?>">
+				<div class="widget-content orders">
 					<dl class="dl-horizontal dl-z"> 
-						<dt><?php echo Mage::helper("zolagopo")->__("Fullname");?>:</dt> 
+						<dt><?php echo $_hlp->__("Fullname");?>:</dt> 
 						<dd><?php echo $this->escapeHtml($_po->getBillingAddress()->getName());?></dd> 
-						<dt><?php echo Mage::helper("zolagopo")->__("Phone");?>:</dt> 
+						<dt><?php echo $_hlp->__("Phone");?>:</dt> 
 						<dd><?php echo $this->escapeHtml($_po->getBillingAddress()->getTelephone());?></dd> 
-						<dt><?php echo Mage::helper("zolagopo")->__("Messages / new");?></dt> 
+						<dt><?php echo $_hlp->__("Messages / new");?></dt> 
 						<dd>
-							120 / <span class="label label-danger">2</span><br/>
-							<a href="#"><?php echo Mage::helper("zolagopo")->__("View all messages");?></a>
+							<?php echo $this->getAllMessagesCount($_po);?> / <span class="label label-danger"><?php echo $this->getUnreadMessagesCount($_po);?></span><br/>
+							<a href="<?php echo $this->getHelpdeskUrl($_po);?>"><?php echo $_hlp->__("View all messages");?></a>
 						</dd> 
 					</dl>
 				</div>
@@ -121,19 +196,19 @@
 				<div class="widget-header"> 
 					<h4>
 						<i class="icon-list"></i> 
-						<?php echo Mage::helper("zolagopo")->__("Order items");?>
+						<?php echo $_hlp->__("Order items");?>
 					</h4> 
 					<div class="toolbar no-padding"> 
 						<div class="btn-group"> 
-							<span class="btn btn-xs">
-								<i class="icon-ok"></i>
-								<?php echo Mage::helper("zolagopo")->__("Confirm stock");?>
-							</span> 
 							
+							
+							<?php /* Add new item button */ ?>
+							<?php if($_isEditable):?>
 							<button data-toggle="modal" data-target="#addItemModal" class="btn btn-xs" >
 								<i class="icon-plus-sign"></i>
-								<?php echo Mage::helper("zolagopo")->__("Add new item");?>
+								<?php echo $_hlp->__("Add new item");?>
 							</button>
+							<?php endif;?>
 						</div> 
 					</div>
 				</div>
@@ -154,15 +229,15 @@
 						</colgroup>
 						<thead>
 							<tr>
-								<th class="align-center"><?php echo Mage::helper("zolagopo")->__("Check");?></th>
-								<th class="align-right"><?php echo Mage::helper("zolagopo")->__("LP");?></th>
-								<th><?php echo Mage::helper("zolagopo")->__("SKU");?></th>
-								<th><?php echo Mage::helper("zolagopo")->__("Product");?></th>
-								<th class="align-right"><?php echo Mage::helper("zolagopo")->__("Qty");?></th>
-								<th class="align-right"><?php echo Mage::helper("zolagopo")->__("Price incl. tax");?></th>
-								<th class="align-right"><?php echo Mage::helper("zolagopo")->__("Discount");?></th>
-								<th class="align-right"><?php echo Mage::helper("zolagopo")->__("Final price");?></th>
-								<th class="align-right"><?php echo Mage::helper("zolagopo")->__("POS Qty");?></th>
+								<th class="align-center"><?php echo $_hlp->__("Check");?></th>
+								<th class="align-right"><?php echo $_hlp->__("LP");?></th>
+								<th><?php echo $_hlp->__("SKU");?></th>
+								<th><?php echo $_hlp->__("Product");?></th>
+								<th class="align-right"><?php echo $_hlp->__("Qty");?></th>
+								<th class="align-right"><?php echo $_hlp->__("Price incl. tax");?></th>
+								<th class="align-right"><?php echo $_hlp->__("Discount");?></th>
+								<th class="align-right"><?php echo $_hlp->__("Final price");?></th>
+								<th class="align-right"><?php echo $_hlp->__("POS Qty");?></th>
 								<th></th>
 							</tr>
 						</thead>
@@ -170,15 +245,19 @@
 							<!-- shipping row -->
 							<tr data-item-id="">
 								<td colspan="3" rowspan="2" style="vertical-align: middle; border-bottom: 0;">
+									<?php if($_isEditable):?>
 									<i class="icon-checked-action"></i>
-									<button data-toggle="modal" data-target="#splitOrderModal" class="btn" id="split" disabled="disabled">
-										<i class=" icon-unlink"></i>
-										<?php echo Mage::helper("zolagopo")->__("Split order");?>
-									</button>
+									<span id="split-wrapper" class="inline-block">
+										<button data-toggle="modal" data-target="#splitModal" class="btn" id="split" disabled="disabled">
+											<i class=" icon-unlink"></i>
+											<?php echo $_hlp->__("Split order");?>
+										</button>
+									</span>
+									<?php endif;?>
 								</td>
 								
 								<?php if($_shippingMethod):?>
-								<td colspan="2"><?php echo Mage::helper("zolagopo")->__("Shipping");?>: <?php echo $this->escapeHtml($this->getMethodName($_shippingMethod));?></td>
+								<td colspan="2"><?php echo $_hlp->__("Shipping");?>: <?php echo $this->escapeHtml($this->getMethodName($_shippingMethod));?></td>
 								<td class="align-right"><?php echo Mage::helper("core")->currency($_po->getBaseShippingAmountIncl(), true, false);?></td>
 								<td class="align-right"><?php echo Mage::helper("core")->currency($_po->getShippingDiscountIncl(), true, false);?></td>
 								<td class="align-right"><?php echo Mage::helper("core")->currency($_po->getShippingAmountIncl(), true, false);?></td>
@@ -187,18 +266,15 @@
 								<?php endif;?>
 								<td></td>
 								<td>
-									<?php if($_shippingMethod):?>
-									<button data-toggle="modal" data-target="#editItemModal" class="btn btn-xs bs-tooltip btn-edit" data-placement="top" title="<?php echo Mage::helper("zolagopo")->__("Edit item");?>" >
+									<?php if($_shippingMethod && $_isEditable):?>
+									<button data-toggle="modal" data-price="<?php echo $_po->getShippingAmountIncl();?>" data-target="#shippignCostModal" class="btn btn-xs bs-tooltip btn-edit" data-placement="top" title="<?php echo $_hlp->__("Edit item");?>" >
 										<i class="icon-pencil"></i>
-									</button>
-									<button class="btn btn-xs btn-notification bs-tooltip btn-remove" data-placement="top" title="<?php echo Mage::helper("zolagopo")->__("Remove item");?>" data-layout="top" data-type="confirm" data-text="<?php echo Mage::helper("zolagopo")->__("Do you want to remove this item?");?>" data-modal="true">
-										<i class="icon-remove"></i>
 									</button>
 									<?php endif;?>
 								</td>
 							</tr>
 							<tr>
-								<td colspan="4"><strong> <?php echo Mage::helper("zolagopo")->__("Total");?></strong></td>
+								<td colspan="4"><strong> <?php echo $_hlp->__("Total");?></strong></td>
 								<td class="align-right"><strong><?php echo Mage::helper("core")->currency($_po->getGrandTotalInclTax());?></strong></td>
 								<td colspan="2">
 								</td>
@@ -223,13 +299,15 @@
 				<div class="widget-header">
 					<h4>
 						<i class=" icon-envelope"></i> 
-						<?php echo Mage::helper("zolagopo")->__("Shipping");?>
+						<?php echo $_hlp->__("Shipping");?>
 					</h4>			
+					<?php if($_isEditable):?>
 					<div class="toolbar no-padding"> 
 						<div class="btn-group"> 
-							<button class="btn btn-xs" data-address-id="<?php echo $_po->getShippingAddress()->getId();?>" data-toggle="modal" href="#editShippignAddressModal"><i class="icon-pencil"></i></button> 
+							<button class="btn btn-xs" data-address-id="<?php echo $_po->getShippingAddress()->getId();?>" data-toggle="modal" href="#editShippingAddressModal"><i class="icon-pencil"></i></button> 
 						</div> 
 					</div>
+					<?php endif;?>
 				</div>
 				<div class="widget-content bottom-info">
 					<?php echo Mage::helper('udropship')->formatCustomerAddress($_po->getShippingAddress(), 'html', $this->getVendor()) ?>
@@ -242,20 +320,24 @@
 					<h4>
 						<i class="icon-file"></i> 
 						<?php if($_po->needInvoice()):?>
-							<?php echo Mage::helper("zolagopo")->__("Invoice");?>
+							<?php echo $_hlp->__("Invoice");?>
 						<?php else:?>
-							<?php echo Mage::helper("zolagopo")->__("Paragon");?>
+							<?php echo $_hlp->__("Bill of sale");?>
 						<?php endif;?>
 					</h4>
+					<?php if($_isEditable):?>
 					<div class="toolbar no-padding"> 
 						<div class="btn-group"> 
 							<button class="btn btn-xs" data-toggle="modal" data-address-id="<?php echo $_po->getBillingAddress()->getId();?>" data-target="#editBillingAddressModal"><i class="icon-pencil"></i></button> 
 						</div> 
 					</div>
+					<?php endif;?>
 				</div>
 				<div class="widget-content bottom-info">
 					<?php if($_po->needInvoice()):?>
-					<?php echo Mage::helper('udropship')->formatCustomerAddress($_po->getBillingAddress(), 'html', $this->getVendor()) ?>
+						<?php echo Mage::helper('udropship')->formatCustomerAddress($_po->getBillingAddress(), 'html', $this->getVendor()) ?>
+					<?php else:?>
+						<small><?php echo $_hlp->__("Click pencil icon if you need an invoice.");?></small>
 					<?php endif;?>
 				</div>
 			</div>
@@ -265,52 +347,117 @@
 				<div class="widget-header">
 					<h4>
 						<i class="icon-plane"></i> 
-						<?php echo Mage::helper("zolagopo")->__("Shipment");?>
+						<?php echo $_hlp->__("Shipment");?>
 					</h4>	
-					<?php if($_shipmentsCollection->count()):?>
-					<div class="toolbar no-padding"> 
-						<div class="btn-group"> 
-							<span data-toggle="modal" data-target="#composeModal"  class="btn btn-xs">
-								<i class="icon-remove "></i> 
-								<?php echo Mage::helper("zolagopo")->__("Cancel");?>
-							</span> 
-							
-						</div> 
-					</div>
+					<?php if($_currentShipping && $_currentShipping->getId() && $_statusModel->isCancelShippingAvailable($_po)):?>
+						<?php if($_aggregated->getId()):?>
+							<?php $_msg = "Proceeding will cancel the shipment. It will remove dispatch ref. Are you sure?";?>
+						<?php else:?>
+							<?php $_msg = "Proceeding will cancel the shipment. Are you sure?";?>
+						<?php endif;?>
+						<div class="toolbar no-padding"> 
+							<div class="btn-group"> 
+								<span class="btn-notification btn btn-xs" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("cancelShipping", array("shipping_id"=>$_currentShipping->getId()));?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__($_msg);?>" data-modal="true" href="#">
+									<i class="icon-remove "></i> 
+									<?php echo $_hlp->__("Cancel");?>
+								</span> 
+
+							</div> 
+						</div>
 					<?php endif; ?>
 				</div>
 				<div class="widget-content bottom-info shipping-info">
-					<?php if($_shipmentsCollection->count()):?>
+					<?php $_tracking = $this->getCurrentTracking($_currentShipping);?>
+					<?php if($_currentShipping && $_currentShipping->getId()):?>
 					<div class="row">
 						<div class="col-md-6">
 							<dl class="dl-horizontal dl-z">
-								<dt><?php echo Mage::helper("zolagopo")->__("Status");?>:</dt>
-								<dd><?php echo Mage::helper("zolagopo")->__("Not send");?></dd>
-								<dt><?php echo Mage::helper("zolagopo")->__("Method");?>:</dt>
-								<dd><?php echo Mage::helper("zolagopo")->__("Carrier");?></dd>
-								<dt><?php echo Mage::helper("zolagopo")->__("Letter no.");?>:</dt>
-								<dd><?php echo Mage::helper("zolagopo")->__("123123233");?></dd>
+								<dt><?php echo $_hlp->__("Status");?>:</dt>
+								<dd>
+									<?php if(isset($_shippingStatuses[$_currentShipping->getUdropshipStatus()])): ?>
+										<?php echo $this->escapeHtml($_shippingStatuses[$_currentShipping->getUdropshipStatus()]);?>
+									<?php endif;?>
+								</dd>
+								<dt><?php echo $_hlp->__("Method");?>:</dt>
+								<dd>
+									<?php echo $this->escapeHtml($_currentShipping->getUdropshipMethodDescription());?>
+								</dd>
+								<dt><?php echo $_hlp->__("Dispatch date");?>:</dt>
+								<dd>
+									<?php echo $_hlp->__("N/A");?>
+								</dd>
 							</dl>
 						</div>
 						<div class="col-md-6">
 							<dl class="dl-horizontal dl-z">
-								<dt><?php echo Mage::helper("zolagopo")->__("Status");?>:</dt>
-								<dd><?php echo Mage::helper("zolagopo")->__("Not send");?></dd>
-								<dt><?php echo Mage::helper("zolagopo")->__("Method");?>:</dt>
-								<dd><?php echo Mage::helper("zolagopo")->__("Carrier");?></dd>
-								<dt><?php echo Mage::helper("zolagopo")->__("Letter no.");?>:</dt>
-								<dd><?php echo Mage::helper("zolagopo")->__("123123233");?></dd>
+								
+								<dt><?php echo $_hlp->__("Carrier");?>:</dt>
+								<dd>
+									<?php if($_tracking && $_tracking->getId()):?>
+										<?php echo $this->escapeHtml($_tracking->getTitle());?>
+									<?php else:?>
+										<?php echo $_hlp->__("N/A");?>
+									<?php endif;?>
+								</dd>
+								<dt><?php echo $_hlp->__("Tracking no.");?>:</dt>
+								<dd>
+									<?php if($_tracking && $_tracking->getId()):?>
+										<?php if($_letterUrl=$this->getLetterUrl($_tracking, $_po)):?>
+											<a id="download-letter" data-loading-text="<?php echo $this->__("Loading...");?>" class="btn btn-link btn-xs" href="<?php echo $_letterUrl;?>">
+												<i class="icon-arrow-down"></i>
+												<?php echo $this->escapeHtml($_tracking->getTrackNumber());?>
+											</a>
+											<script type="text/javascript">
+											jQuery(function($){
+												$("#download-letter").click(function(){
+													var el = $(this);
+													el.button("loading");
+													$.post(el.attr("href"), function(response){
+														if(response.status){
+															//console.log(response.url);
+															document.location.replace(response.url);
+														}else{
+															noty({
+																text: response.message,
+																type: 'error',
+																timeout: 2000
+															});
+														}
+													}).fail(function(){
+														noty({
+															text: Translator.translate("Other error contact admin"),
+															type: 'error'
+														});
+													}).always(function(){
+														el.button('reset')
+													});
+													return false;
+												});
+											});
+										</script>
+										<?php else:?>
+											<?php echo $this->escapeHtml($_tracking->getTrackNumber());?>
+										<?php endif;?>
+									<?php else:?>
+										<?php echo $_hlp->__("N/A");?>
+									<?php endif;?>
+								</dd>
+								<dt><?php echo $_hlp->__("Dispatch ref.");?>:</dt>
+								<dd>
+									<?php $_aggregated= $_po->getAggregated();?>
+									<?php if($_aggregated->getId()):?>
+										<?php echo $this->escapeHtml($_aggregated->getAggregatedName());?>
+									<?php else:?>
+										<?php echo $_hlp->__("N/A");?>
+									<?php endif;?>
+								</dd>
 							</dl>
 						</div>
 					</div>
 					<div class="clearfix"></div>
 					<?php else:?>
 					<div class="align-center">
-						<?php if($this->canPosUseDhl()):?>
-						<button class="btn btn-primary" data-toggle="modal" href="#generateShippingLetterModal"><?php echo Mage::helper("zolagopo")->__("Generate shipping letter");?></button>
-						<?php else:?>
-						<button class="btn btn-primary" data-toggle="modal" href="#addShippingLetterModal"><?php echo Mage::helper("zolagopo")->__("Add shipping letter");?></button>
-						<?php endif;?>
+						<p class="align-center"><small class="text-muted"><?php echo $_hlp->__("Shipment is not possible in this order status. Process order to right status or wait for payment.");?></small></p>
 					</div>
 					<?php endif;?>
 				</div>
@@ -323,11 +470,11 @@
 				<div class="widget-header">
 					<h4>
 						<i class="icon-comments-alt"></i> 
-						<?php echo Mage::helper("zolagopo")->__("Operiation history");?>
+						<?php echo $_hlp->__("Order change log");?>
 					</h4>			
 					<div class="toolbar no-padding"> 
 						<div class="btn-group"> 
-							<a class="btn btn-xs btn-default" data-toggle="modal" href="#addCommentModal"><i class="icon-comment"></i> <?php echo Mage::helper("zolagopo")->__("Add comment");?></a> 
+							<a class="btn btn-xs btn-default" data-toggle="modal" href="#addCommentModal" id="addCommentModalTrigger"><i class="icon-comment"></i> <?php echo $_hlp->__("Add comment");?></a> 
 						</div> 
 					</div>
 				</div>
@@ -340,228 +487,100 @@
 							<br/>
 							<small><?php echo$_c->getUdropshipStatus();?></small>
 						</dt>
-						<dd><?php echo $this->htmlEscape($_c->getComment());?></dd>
+						<dd><?php echo nl2br($this->htmlEscape($_c->getComment()));?></dd>
 						
 						<?php endforeach ?>
 					</dl>
 					<?php else:?>
-					<small><?php echo Mage::helper("zolagopo")->__("No comments currently added");?></small>
+					<small><?php echo $_hlp->__("No comments currently added");?></small>
 					<?php endif ?>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
-<!-- Modals comment -->
-<div class="modal fade" id="composeModal">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title"><?php echo Mage::helper("zolagopo")->__("Compose message");?></h4>
-			</div>
-			<div class="modal-body">
-				<form action="<?php Mage::getUrl("*/*/sendCustomerMessage");?>">
-					<textarea class="form-control" rows="6"></textarea>
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo Mage::helper("zolagopo")->__("Cancel");?></button>
-				<button type="button" class="btn btn-primary" data-dismiss="modal"><?php echo Mage::helper("zolagopo")->__("Send");?></button>
-			</div>
-		</div>
-	</div>
-</div>
-<!-- Modal change pos-->
-<div class="modal fade" id="changePosModal">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title"><?php echo Mage::helper("zolagopo")->__("Change POS");?></h4>
-			</div>
-			<div class="modal-body">
-				<form action="<?php Mage::getUrl("*/*/changePos");?>">
-					Change pos content
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo Mage::helper("zolagopo")->__("Cancel");?></button>
-				<button type="button" class="btn btn-primary" data-dismiss="modal"><?php echo Mage::helper("zolagopo")->__("Change pos");?></button>
-			</div>
-		</div>
-	</div>
-</div>
-<!-- Modal add item-->
-<div class="modal fade" id="addItemModal">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title"><?php echo Mage::helper("zolagopo")->__("Add item");?></h4>
-			</div>
-			<div class="modal-body">
-				<form action="<?php Mage::getUrl("*/*/addItem");?>">
-					Add item content
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo Mage::helper("zolagopo")->__("Cancel");?></button>
-				<button type="button" class="btn btn-primary" data-dismiss="modal"><?php echo Mage::helper("zolagopo")->__("Add item");?></button>
-			</div>
-		</div>
-	</div>
-</div>
-<!-- Modal split order-->
-<div class="modal fade" id="splitOrderModal">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title"><?php echo Mage::helper("zolagopo")->__("Split order");?></h4>
-			</div>
-			<div class="modal-body">
-				<form action="<?php Mage::getUrl("*/*/splitOrder");?>">
-					Dialog content
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo Mage::helper("zolagopo")->__("Cancel");?></button>
-				<button type="button" class="btn btn-primary" data-dismiss="modal"><?php echo Mage::helper("zolagopo")->__("Split order");?></button>
-			</div>
-		</div>
-	</div>
-</div>
-<!-- Modal edit item-->
-<div class="modal fade" id="editItemModal">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title"><?php echo Mage::helper("zolagopo")->__("Edit item");?></h4>
-			</div>
-			<div class="modal-body">
-				<form action="<?php Mage::getUrl("*/*/saveItem");?>">
-					Item fields
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo Mage::helper("zolagopo")->__("Cancel");?></button>
-				<button type="button" class="btn btn-primary" data-dismiss="modal"><?php echo Mage::helper("zolagopo")->__("Save");?></button>
-			</div>
-		</div>
-	</div>
-</div>
-<!-- Modal bilign  address-->
-<div class="modal fade" id="editBillingAddressModal">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title"><?php echo Mage::helper("zolagopo")->__("Edit billign address");?></h4>
-			</div>
-			<div class="modal-body">
-				<form action="<?php Mage::getUrl("*/*/saveAddress", array("type"=>"billign"));?>">
-					Address fields
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo Mage::helper("zolagopo")->__("Cancel");?></button>
-				<button type="button" class="btn btn-primary" data-dismiss="modal"><?php echo Mage::helper("zolagopo")->__("Save");?></button>
-			</div>
-		</div>
-	</div>
-</div>
-<!-- Modal shipping Address r-->
-<div class="modal fade" id="editShippignAddressModal">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title"><?php echo Mage::helper("zolagopo")->__("Edit shipping address");?></h4>
-			</div>
-			<div class="modal-body">
-				<form action="<?php Mage::getUrl("*/*/saveAddress", array("type"=>"shipping"));?>">
-					Address fields
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo Mage::helper("zolagopo")->__("Cancel");?></button>
-				<button type="button" class="btn btn-primary" data-dismiss="modal"><?php echo Mage::helper("zolagopo")->__("Save");?></button>
-			</div>
-		</div>
-	</div>
-</div>
-<!-- Modal add letter-->
-<div class="modal fade" id="addShippingLetterModal">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title"><?php echo Mage::helper("zolagopo")->__("Generate shipping letter");?></h4>
-			</div>
-			<div class="modal-body">
-				<form action="<?php Mage::getUrl("*/*/addShippingLetter");?>">
-					Add opts
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary" data-dismiss="modal"><?php echo Mage::helper("zolagopo")->__("Add comment");?></button>
-			</div>
-		</div>
-	</div>
-</div>
-<!-- Modal generate letter-->
-<div class="modal fade" id="generateShippingLetterModal">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title"><?php echo Mage::helper("zolagopo")->__("Generate shipping letter");?></h4>
-			</div>
-			<div class="modal-body">
-				<form action="<?php Mage::getUrl("*/*/generateShippingLetter");?>">
-					Generate opts
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<button type="button" class="btn btn-primary" data-dismiss="modal"><?php echo Mage::helper("zolagopo")->__("Add comment");?></button>
-			</div>
-		</div>
-	</div>
-</div>
-<!-- Modals comment -->
-<div class="modal fade" id="addCommentModal">
-	<div class="modal-dialog">
-		<form action="<?php echo $this->getPoUrl("addComment");?>" method="post">
-			<?php echo $this->getFormKey(); ?>
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title"><?php echo Mage::helper("zolagopo")->__("Add comment");?></h4>
-				</div>
-				<div class="modal-body">
-					<textarea class="form-control" name="comment" rows="6" required="required"></textarea>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					<button type="submit" class="btn form-btn-loading btn-primary" data-loading-text="<?php echo Mage::helper("zolagopo")->__("Loading...");?>"><?php echo Mage::helper("zolagopo")->__("Add comment");?></button>
-				</div>
-			</div>
-		</form>
-	</div>
-</div>
+
+
+
+<?php
+/*******************************************************************************
+ *	Add item modal
+ *******************************************************************************/
+	echo $this->getChildHtml("vendor_po_edit_add_item");
+
+/*******************************************************************************
+ *	Pos modal
+ *******************************************************************************/
+	echo $this->getChildHtml("vendor_po_edit_pos");
+
+/*******************************************************************************
+ *	Compose modal
+ *******************************************************************************/
+	echo $this->getChildHtml("vendor_po_edit_compose");
+	
+/*******************************************************************************
+ *	Split modal
+ *******************************************************************************/
+	echo $this->getChildHtml("vendor_po_edit_split");
+
+/*******************************************************************************
+ *	Shippign address modal
+ *******************************************************************************/
+	echo $this->getChildHtml("vendor_po_edit_edit_item");
+	
+/*******************************************************************************
+ *	Shippign cost modal
+ *******************************************************************************/
+	echo $this->getChildHtml("vendor_po_edit_shipping_cost");
+	
+/*******************************************************************************
+ *	Shippign address modal
+ *******************************************************************************/
+	echo $this->getChild("vendor_po_edit_shipping_address")->
+		setAddress($_po->getShippingAddress())->
+		toHtml();
+
+/*******************************************************************************
+ *	Billign address modal
+ *******************************************************************************/
+	echo $this->getChild("vendor_po_edit_billing_address")->
+		setAddress($_po->getBillingAddress())->
+		toHtml();
+	
+/*******************************************************************************
+ *	Shipping modal
+ *******************************************************************************/
+	echo $this->getChild("vendor_po_edit_shipping")->
+		setAddress($_po->getShippingAddress())->
+		toHtml();
+	
+/*******************************************************************************
+ *	Comment modal
+ *******************************************************************************/
+	echo $this->getChildHtml("vendor_po_edit_comment");
+?>
+
 <script type="text/javascript">
 	jQuery(function($){
 		var items = $("#items"),
 			checkboxes = items.find(".checker :checkbox"),
-			splitBtn = $("#split");
+			splitBtn = $("#split"),
+			splitWrapper = $("#split-wrapper"),
+			inactiveMsg = Translator.translate("You can split selected items out to another order. First select items.");
 			
+		splitWrapper.tooltip({title: inactiveMsg});
+		
 		checkboxes.change(function(el){
-			var checkLen = checkboxes.filter(":checked").length;
-			splitBtn.attr("disabled", /* checkLen==checkboxes.length || */!checkLen);
+			splitWrapper.tooltip('destroy');
+			if(splitBtn.length){
+				var checkLen = checkboxes.filter(":checked").length;
+				if(checkLen==checkboxes.length || !checkLen){
+					splitWrapper.tooltip({title: inactiveMsg});
+					splitBtn.attr("disabled", true);
+				}else{
+					splitBtn.attr("disabled", false);
+				}
+			}
 		});
 	});
 </script>

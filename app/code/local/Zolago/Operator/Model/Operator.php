@@ -4,6 +4,9 @@
  */
 class Zolago_Operator_Model_Operator extends Mage_Core_Model_Abstract {
 	
+	const STATUS_INACTIVE = 0;
+	const STATUS_ACTIVE = 1;
+	
     protected function _construct() {   
         $this->_init('zolagooperator/operator');
     }
@@ -145,6 +148,13 @@ class Zolago_Operator_Model_Operator extends Mage_Core_Model_Abstract {
 			$po = $po->getId();
 		}
 		return $this->getResource()->isAllowedToPo($this, $po);
+	}
+	
+	/**
+	 * @return string
+	 */
+	public function getFullname() {
+		return $this->getFirstname() . " " . $this->getLastname();
 	}
 	
 	/**

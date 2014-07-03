@@ -1,0 +1,33 @@
+<?php /* @var $this Zolago_Po_Block_Po */ ?>
+<div class="container">
+	<!--=== Page Header ===-->
+	<div class="page-header">
+		<div class="page-title">
+			<h3><?php echo Mage::helper("zolagopo")->__("Dispatch lists");?></h3>
+			<span><?php echo Mage::helper("zolagopo")->__("You can browse and print your dispatch lists to be signed by the courier");?></span>
+		</div>
+	</div>
+	<!-- /Page Header -->
+</div>
+
+<div class="container z-grid">
+	<div class="widget box">
+		<div class="widget-content">
+			<?php echo $this->getGridHtml(); ?>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+(function(){
+	var gridObj = <?php echo $this->getGridJsObjectName();?>;
+	// create integrator
+	new Zolago.gridIntegrator(gridObj);
+	
+	
+	
+})();
+// Do pickers
+jQuery(function($){
+	$( ".datepicker" ).datepicker();
+});
+</script>

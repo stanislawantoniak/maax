@@ -658,9 +658,12 @@ window.elFinder = function(node, opts) {
 	 */
 	this.root = function(hash) {
 		var dir = files[hash || cwd], i;
-		
 		while (dir && dir.phash) {
-			dir = files[dir.phash]
+			dir = files[dir.phash];
+			if (dir.phash == (hash || cwd)) {
+			    // infinity loop
+			    dir.phash = '';
+			}
 		}
 		if (dir) {
 			return dir.hash;

@@ -20,7 +20,7 @@ class Zolago_Catalog_Block_Vendor_Mass_Editor extends Mage_Core_Block_Template {
 				setType("button")->
 				setId($this->buildFieldId("submit"))->
 				setLabel($this->__("Confirm changes"))->
-				setClass("confirm-changes");
+				setClass("confirm-changes btn btn-primary");
 		return $btn->toHtml();
 	}
 	
@@ -34,7 +34,7 @@ class Zolago_Catalog_Block_Vendor_Mass_Editor extends Mage_Core_Block_Template {
 				"checkbox", 
 				array(
 					"label"	=> Mage::helper("catalog")->__("Change"),
-					"class"	=> "changer",
+					"class"	=> "changer massaction-checkbox",
 					"rel"	=> $this->buildFieldId($attribute->getAttributeCode())
 				)
 		);
@@ -50,7 +50,8 @@ class Zolago_Catalog_Block_Vendor_Mass_Editor extends Mage_Core_Block_Template {
 		$type = $this->parseInputType($attribute);
 		$config = array(
 			"name"=>"attributes[".$attribute->getAttributeCode()."]",
-			"disabled" => "disabled"
+			"disabled" => "disabled",
+            'class' => 'form-control'
 		);
 		$field = $this->getForm()->addField(
 				$this->buildFieldId($attribute->getAttributeCode()), 
@@ -90,16 +91,19 @@ class Zolago_Catalog_Block_Vendor_Mass_Editor extends Mage_Core_Block_Template {
 		switch ($type) {
 			case "textarea":
 				$extend['style'] = "height: 60px;";
+                $extend['class'] = "form-control";
 			break;
 			case "select":
 				$extend['values'] = $attribute->getSource()->getAllOptions();
+                $extend['class'] = "form-control";
 			break;
 			case "multiselect":
 				$extend['values'] = $attribute->getSource()->getAllOptions(false);
+                $extend['class'] = "form-control";
 			break;
 			case "date":
 				$extend['format'] = $this->getLocale()->getDateStrFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT);
-				$extend['image'] = $this->getSkinUrl("images/grid-cal.gif");
+                $extend['class'] = "datepicker form-control";
 			break;
 			default:
 				break;
@@ -107,7 +111,7 @@ class Zolago_Catalog_Block_Vendor_Mass_Editor extends Mage_Core_Block_Template {
 		// By EAV Atrribute Inout
 		switch ($attribute->getFrontendInput()){
 			case "price":
-				$extend['class'] = "input-text validate-number";
+				$extend['class'] = "input-text validate-number form-control";
 			break;
 		}
 		

@@ -1,11 +1,113 @@
 <?php
 
-class Zolago_Po_Block_Vendor_Po_Edit extends Unirgy_DropshipPo_Block_Vendor_Po_Info
+class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 {
 	public function __construct(array $args = array()){
 		parent::__construct($args);
 		$this->_prepareShipments();
 	}
+	
+	
+	/**
+	 * @param Zolago_Po_Model_Po $po
+	 * @return array
+	 */
+	public function getAlerts(Zolago_Po_Model_Po $po) {
+		
+		$alert = array();
+	
+		if(($po->getAlert() & Zolago_Po_Model_Po_Alert::ALERT_SAME_EMAIL_PO) /*&& !$po->isFinished()*/){
+			$filter = "customer_fullname=".  $po->getData("customer_email") . "&udropship_status=";
+			$link = $this->getUrl("udpo/vendor/index", array("filter"=>Mage::helper('core')->urlEncode($filter)));
+			
+			$alert[] = array(
+				"text"=>$this->__(
+					Zolago_Po_Model_Po_Alert::getAlertText(Zolago_Po_Model_Po_Alert::ALERT_SAME_EMAIL_PO), 
+					'<a href="'.$link.'">' . $this->__("link") . '</a>'
+				),
+				"class" => "danger"
+			);
+		}
+
+        //Dhl zip validation
+        $shippingId = $po->getShippingAddressId();
+        $address = Mage::getModel('sales/order_address')->load($shippingId);
+
+        $dhlEnabled = Mage::helper('core')->isModuleEnabled('Zolago_Dhl');
+        $dhlActive = Mage::helper('zolagodhl')->isDhlActive();
+        if ($dhlEnabled && $dhlActive) {
+            $dhlHelper = Mage::helper('zolagodhl');
+            $dhlValidZip = $dhlHelper->isDHLValidZip($address->getCountry(), $address->getPostcode());
+            if (!$dhlValidZip) {
+                $alert[] = array(
+                    "text"  => $this->__(
+                            $dhlHelper::getAlertText($dhlHelper::ALERT_DHL_ZIP_ERROR)
+                        ),
+                    "class" => "danger"
+                );
+            }
+        }
+
+
+		if($po->getStatusModel()->isConfirmStockAvailable($po)){
+			if(!$po->getStockConfirm()){
+				$alert[] = array( 
+					"text" => '<i class="icon-warning"></i> '  . $this->__("Product reservation not yet confirmed!"),
+					"class"=> "danger"
+				);
+			}else{
+				$alert[] = array( 
+					"text" => '<i class="icon-barcode"></i> ' . $this->__("Items reserved"),
+					"class"=> "success"
+				);
+			}
+		}else{
+			if($po->getStockConfirm()){
+				$alert[] = array( 
+					"text" => '<i class="icon-barcode"></i> ' . $this->__("Items reserved"),
+					"class"=> "success"
+				);
+			}
+		}
+		return $alert;
+	}
+	
+	
+	
+	
+	/**
+	 * 
+	 * @param type $trackign
+	 * @param type $shipment
+	 * @return string
+	 */
+	public function getLetterUrl(Mage_Sales_Model_Order_Shipment_Track $tracking, Zolago_Po_Model_Po $po) {
+		if($this->isLetterable($tracking)){
+			return $this->getUrl('zolagodhl/dhl/lp', array(
+					'trackId'		=> $tracking->getId(), 
+					'trackNumber'	=> $tracking->getNumber(), 
+					'vId'			=> $po->getVendor()->getId(), 
+					'posId'			=> $po->getDefaultPosId(),
+					'udpoId'		=> $po->getId(), 
+					'_secure'		=>true
+				));
+		}
+		return null;
+	}
+	
+	/**
+	 * @param Mage_Sales_Model_Order_Shipment_Track $tracking
+	 * @return boolean
+	 */
+	public function isLetterable(Mage_Sales_Model_Order_Shipment_Track $tracking) {
+		switch ($tracking->getCarrierCode()) {
+			case Zolago_Dhl_Model_Carrier::CODE:
+				return true;
+			break;
+		}
+		return false;
+	}
+	
 	/**
 	 * @return Zolago_Po_Model_Po
 	 */
@@ -18,12 +120,15 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Unirgy_DropshipPo_Block_Vendor_Po_I
 	 * @return string
 	 */
 	public function getCurrentStatus(Unirgy_DropshipPo_Model_Po $po) {
-		$statuses = $this->getAllowedStatuses();
-		$statusId = $this->getPo()->getUdropshipStatus();
-		if(isset($statuses[$statusId])){
-			return $this->__($statuses[$statusId]);;
-		}
-		return '';
+		return Mage::helper("udpo")->getPoStatusName($this->getPo()->getUdropshipStatus());
+	}
+	
+	public function isShippignLetterFile($trackingNo) {
+		return Mage::helper("zolagodhl")->getIsDhlFileAvailable($trackingNo);
+	}
+	
+	public function getAllStatuses() {
+		
 	}
 	
 	/**
@@ -42,22 +147,53 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Unirgy_DropshipPo_Block_Vendor_Po_I
 	}
 	
 	/**
-	 * @param Unirgy_DropshipPo_Model_Po $po
+	 * @param Zolago_Po_Model_Po $po
 	 * @return array
 	 */
-	public function getAllowedStatusesForPo(Unirgy_DropshipPo_Model_Po $po) {
-		return $this->getAllowedStatuses();
+	public function getAllowedStatusesForPo(Zolago_Po_Model_Po $po) {
+		return $po->getStatusModel()->getAvailableStatus($po);
 	}
 	
 	
+	public function isManulaStatusAvailable(Zolago_Po_Model_Po $po){
+		return $po->getStatusModel()->isManulaStatusAvailable($po);
+	}
 	
+	/**
+	 * @return bool
+	 */
+	public function isRemovable() {
+		if(!$this->hasData('is_removable')){
+			$removable = false;
+			$i = 0;
+			foreach($this->getPo()->getAllItems() as $item){
+				if(is_null($item->getOrderItem()->getParentItemId())){
+					$i++;
+				}
+			}
+			$this->setData('is_removable', $i>1);
+		}
+		return $this->getData('is_removable');
+	}
+	
+	/**
+	 * @param Unirgy_DropshipPo_Model_Po_Item $item
+	 * @return Zolago_Po_Block_Vendor_Po_Item_Renderer_Abstract
+	 */
 	public function	getItemRedener(Unirgy_DropshipPo_Model_Po_Item $item) {
 		$orderItem = $item->getOrderItem();
 		$type=$orderItem->getProductType();
-		return $this->_getRendererByType($type)->setItem($item);
+		return $this->_getRendererByType($type)->
+				setItem($item)->
+				setParentBlock($this)->
+				setIsRemovable($this->isRemovable())->
+				setIsEditable($this->isEditable());
 		
 	}
 	
+	/**
+	 * @return void
+	 */
 	protected function _prepareShipments() {
 		$_po = $this->getPo();
 		$_order = $_po->getOrder();
@@ -91,13 +227,14 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Unirgy_DropshipPo_Block_Vendor_Po_I
 		$labelCarrierAllowAll = Mage::getStoreConfig('udropship/vendor/label_carrier_allow_all', $_order->getStoreId());
 		$labelMethodAllowAll = Mage::getStoreConfig('udropship/vendor/label_method_allow_all', $_order->getStoreId());
 
+		$availableMethods = array();
+			
 		if ($curShipping && $labelMethodAllowAll) {
 			$curShipping->useProfile($_vendor);
 			$_carriers = array($carrierCode=>0);
 			if ($labelCarrierAllowAll) {
 				$_carriers = array_merge($_carriers, $curShipping->getAllSystemMethods());
 			}
-			$availableMethods = array();
 			foreach ($_carriers as $_carrierCode=>$_dummy) {
 				$_availableMethods = $_hlp->getCarrierMethods($_carrierCode, true);
 				$carrierTitle = Mage::getStoreConfig("carriers/$_carrierCode/title", $_order->getStoreId());
@@ -168,7 +305,29 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Unirgy_DropshipPo_Block_Vendor_Po_I
 		$this->setAvailableMethods($availableMethods);
 		$this->setCurrentShipping($curShipping);
 		$this->setShippingMethod($poShippingMethod);
-		$this->setShipmentsCollection($_po->getShipmentsCollection());
+		
+		$collection =  Mage::getResourceModel('sales/order_shipment_collection')->
+				addAttributeToFilter('udpo_id', $_po->getId())->
+				addAttributeToFilter("udropship_status", 
+					array("nin"=>array(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_CANCELED))
+		);
+		
+		$collection->setOrder("created_at", "DESC");
+		$this->setShipmentsCollection($collection);
+		$this->setCustomCurrentShipping($collection->getFirstItem());
+
+	}
+	
+	public function getCurrentTracking(Mage_Sales_Model_Order_Shipment $shipment = null) {
+		if($shipment instanceof  Mage_Sales_Model_Order_Shipment && $shipment->getId()){
+			$collection = $shipment->getTracksCollection()->setOrder("created_at", "DESC");
+			return $collection->getFirstItem();
+		}
+		return null;
+	}
+	
+	public function canUseCarrier() {
+		return $this->canPosUseDhl();
 	}
 	
 	public function canPosUseDhl() {
@@ -185,8 +344,50 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Unirgy_DropshipPo_Block_Vendor_Po_I
 	}
 	
 	public function getPoUrl($action, $params=array()) {
-		$params += array("id"=> $this->getPo()->getId());
+		$params += array(
+			"id"=> $this->getPo()->getId(),
+			"form_key" => Mage::getSingleton('core/session')->getFormKey()
+		);
 		return $this->getUrl("*/*/$action", $params);
+	}
+	
+	public function getHelpdeskUrl(Zolago_Po_Model_Po $po) {
+		//filter_customer_name
+		return $this->getUrl("udqa/vendor/index", array(
+			"_query"=>array("filter_customer_name"=>$po->getOrder()->getCustomerName())
+		));
+	}
+	
+	public function getAllMessagesCount(Zolago_Po_Model_Po $po) {
+		if(!$this->hasData('all_messages_count')){
+			$collection = Mage::getResourceModel('udqa/question_collection');
+			/* @var $collection Unirgy_DropshipVendorAskQuestion_Model_Mysql4_Question_Collection */
+			$collection->addApprovedAnswersFilter();
+			$collection->addVendorFilter($this->getVendor());
+			$collection->addFieldToFilter("main_table.customer_name", array("like"=>$this->getPo()->getOrder()->getCustomerName()));
+			$this->setData("all_messages_count", $collection->count());
+		}
+		return $this->getData("all_messages_count");
+	}
+	
+	public function getUnreadMessagesCount(Zolago_Po_Model_Po $po) {
+		if(!$this->hasData('unread_messages_count')){
+			$collection = Mage::getResourceModel('udqa/question_collection');
+			/* @var $collection Unirgy_DropshipVendorAskQuestion_Model_Mysql4_Question_Collection */
+			$collection->addApprovedAnswersFilter();
+			$collection->addVendorFilter($this->getVendor());
+			$collection->addFieldToFilter("main_table.customer_name", array("like"=>$this->getPo()->getOrder()->getCustomerName()));
+			$collection->addFieldToFilter("main_table.answer_text", array("null"=>true));
+			$this->setData("unread_messages_count", $collection->count());
+		}
+		return $this->getData("unread_messages_count");
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function isEditable() {
+		return $this->getPo()->getStatusModel()->isEditingAvailable($this->getPo());
 	}
 	
 	/**

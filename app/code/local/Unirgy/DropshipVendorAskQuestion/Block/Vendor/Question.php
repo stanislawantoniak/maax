@@ -22,7 +22,7 @@ class Unirgy_DropshipVendorAskQuestion_Block_Vendor_Question extends Mage_Core_B
     {
         if (null === $this->_form) {
             $question = $this->getQuestion();
-            $this->_form = new Varien_Data_Form();
+            $this->_form = Mage::getModel('zolagodropship/form');
             $this->_form->setDataObject($question);
             $values = $question->getData();
 
@@ -68,6 +68,7 @@ class Unirgy_DropshipVendorAskQuestion_Block_Vendor_Question extends Mage_Core_B
             'input_format' => Varien_Date::DATE_INTERNAL_FORMAT,
             'text' => $this->formatDate($data->getQuestionDate()),
             'is_wide'=>true,
+			'class'	=> 'note',
             'is_top'=>true,
             'disabled'=>'disabled'
         ));
@@ -84,6 +85,7 @@ class Unirgy_DropshipVendorAskQuestion_Block_Vendor_Question extends Mage_Core_B
             $fieldset->addField('shipment_id', 'note', array(
                 'name' => 'shipment_id',
                 'label' => $this->__('SHIPMENT'),
+				'class'	=> 'note',
                 'text' => '<a href="'.$this->getShipmentUrl($data).'">'.$this->__('#%s for order #%s', $data->getShipmentIncrementId(), $data->getOrderIncrementId()).'</a>',
                 'is_wide'=>true,
                 'is_top'=>true,
@@ -94,7 +96,9 @@ class Unirgy_DropshipVendorAskQuestion_Block_Vendor_Question extends Mage_Core_B
             $fieldset->addField('product_id', 'note', array(
                 'name' => 'product_id',
                 'label' => $this->__('PRODUCT'),
-                'text' => '<a href="'.$this->getProductUrl($data).'">SKU: '.$data->getProductSku().' '.$data->getProductName().'</a>',
+				'class'	=> 'note',
+                //'text' => '<a href="'.$this->getProductUrl($data).'">SKU: '.$data->getProductSku().' '.$data->getProductName().'</a>',
+                'text' => 'SKU: '.$data->getProductSku().' '.$data->getProductName(),
                 'is_wide'=>true,
                 'is_top'=>true,
             ));
@@ -119,6 +123,7 @@ class Unirgy_DropshipVendorAskQuestion_Block_Vendor_Question extends Mage_Core_B
             'name' => 'question_text',
             'label' => $this->__('Question Text'),
             'required' => true,
+			'class'	=> 'note',
             'is_wide'=>true,
             'is_bottom'=>true,
             'text' => $data->getQuestionText()
@@ -128,6 +133,7 @@ class Unirgy_DropshipVendorAskQuestion_Block_Vendor_Question extends Mage_Core_B
             'name' => 'answer_text',
             'label' => $this->__('Answer Text'),
             'title' => $this->__('Answer Text'),
+			'class' => 'form-control',
             'wysiwyg' => false,
             'required' => true,
             'is_wide'=>true,

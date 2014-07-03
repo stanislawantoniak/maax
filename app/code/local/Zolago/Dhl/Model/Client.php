@@ -5,8 +5,10 @@
 class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
     protected $_auth;
     protected $_pos;
+    protected $_rma;
     protected $_operator;
     protected $_address;
+    protected $_settings;
 
     const ADDRESS_HOUSE_NUMBER		= '.';
     const SHIPMENT_TYPE_PACKAGE		= 'PACKAGE';
@@ -16,9 +18,29 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
 
     const PAYMENT_TYPE				= 'BANK_TRANSFER';
     const PAYER_TYPE				= 'SHIPPER';
+    const SHIPMENT_RMA_CONTENT      = 'Reklamacyjny zwrot do nadawcy';
 
     const DHL_LABEL_TYPE			= 'LP';
-
+    protected $_default_params = array (
+        'dropOffType' => 'REQUEST_COURIER',
+        'serviceType' => 'AH',
+        'labelType' => self::DHL_LABEL_TYPE,
+        'shippingPaymentType' => self::PAYER_TYPE,
+        'paymentType'   => self::PAYMENT_TYPE,
+        'labelType' => self::DHL_LABEL_TYPE,
+        
+        
+    );        
+    
+    /**
+     *  @param Zolago_Rma_Model_Rma
+     */
+    public function setRma($rma) {
+        if (!empty($rma)) {
+            $this->_rma = $rma;
+        }
+        
+    }
     /**
      * @param Zolago_Pos_Model_Pos $pos
      */
@@ -72,15 +94,16 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
     /**
      * message via soap
      */
-    protected function _sendMessage($method,$message = null) {
+    protected function _sendMessage($method, $message = null)
+    {
         try {
             $wsdl = Mage::getStoreConfig('carriers/zolagodhl/gateway');
-            $soap = new SoapClient($wsdl,array());
+            $soap = new SoapClient($wsdl, array());
             $result = $soap->$method($message);
         } catch (Exception $xt) {
-            $result = array (
-                          'error' => $xt->getMessage()
-                      );
+            $result = array(
+                'error' => $xt->getMessage()
+            );
         }
         return $result;
     }
@@ -154,7 +177,7 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
             $obj->quantity	= $shipmentSettings['quantity'];
             break;
         }
-        $obj->nonStandard = $shipmentSettings['nonStandard'];
+        $obj->nonStandard = (empty($shipmentSettings['nonStandard']))? null:$shipmentSettings['nonStandard'];
         $ret = new StdClass();
         $ret->item[] = $obj;
         return $ret;
@@ -207,6 +230,26 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
         $message->shipments = $shipmentObject;
 
         return $this->_sendMessage('createShipments', $message);
+    }
+    /**
+     * @param $postCode
+     * @param $pickupDate
+     *
+     * @return array
+     */
+    public function getPostalCodeServices($postCode, $pickupDate, $country = 'PL')
+    {
+        $return = array();
+        $message = new StdClass();
+        $message->authData = $this->_auth;
+        $message->postCode = $this->formatDhlPostCode($postCode);
+        $message->pickupDate = $pickupDate;
+        try {
+            $return = $this->_sendMessage('getPostalCodeServices', $message);
+        } catch (Exception $e) {
+            Mage::throwException("getPostalCodeServices");
+        }
+        return $return;
     }
     /**
      * booking courier
@@ -352,5 +395,124 @@ class Zolago_Dhl_Model_Client extends Mage_Core_Model_Abstract {
     protected function _getCollectOnDeliveryValue($shipment, $shippingAmount)
     {
         return $shipment->getTotalValue() + $shipment->getBaseTaxAmount() + $shippingAmount;
+    }
+    protected function _getRmaAccountNumber() {        
+        if (!$account = $this->_vendor->getDhlRmaAccount()) {
+            if (!$account = $this->_vendor->getDhlAccount()) {
+                $account = Mage::helper('zolagodhl')->getDhlAccount();
+            }
+        }
+        return $account;
+    }
+    protected function _prepareBiling() {
+        $message = new StdClass;
+        $message->shippingPaymentType = $this->_default_params['shippingPaymentType'];
+        $message->billingAccountNumber = $this->_auth->account;
+        $message->paymentType = $this->_default_params['paymentType'];        
+        return $message;
+    }
+    protected function _addSpecialItem($type,$value = null) {
+        $message = new StdClass();
+        $message->serviceType = $type;
+        $message->serviceValue = $value;
+        return $message;
+    }
+    protected function _prepareSpecialServices() {
+        $message = new StdClass();
+        $message->item[] = $this->_addSpecialItem('UBEZP',$this->_rma->getTotalValue());
+        return $message;
+    }
+    protected function _prepareShipmentAtOnce() {
+        $message = new StdClass;
+        $message->dropOffType = $this->_default_params['dropOffType'];
+        $message->serviceType = $this->_default_params['serviceType'];        
+        $message->labelType   = $this->_default_params['labelType'];
+        $message->billing = $this->_prepareBiling();
+        $message->specialServices = $this->_prepareSpecialServices();
+        $message->shipmentTime = $this->_prepareShipmentTime();
+        $message->labelType = $this->_default_params['labelType'];
+        return $message;       
+    }
+    protected function _prepareClientAddress() {
+        $address = $this->_rma->getShippingAddress();
+        $data = $address->getData();
+        $message = new StdClass();
+        $message->name = $data['firstname'].' '.$data['lastname'];
+        $message->postalCode = $this->formatDhlPostCode($data['postcode']);
+        $message->city = substr($data['city'],0,17);
+        $message->street = $data['street'];
+        $message->houseNumber = self::ADDRESS_HOUSE_NUMBER;
+        $contact = new StdClass;
+        $contact->personName = $message->name;
+        $contact->phoneNumber = $data['telephone'];
+        $order = $this->_rma->getOrder();
+        $contact->emailAddress = $order->getCustomerEmail();
+        $out = new StdClass;
+        $out->contact = $contact;
+        $out->address = $message;
+        return $out;
+    }
+    protected function _prepareVendorAddress() {
+        $vendorId = $this->_rma->getUdropshipVendor();
+        $vendor = Mage::getModel('udropship/vendor')->load($vendorId);
+        $data = $vendor->getData();
+        $message = new StdClass;
+        $address = new StdClass;
+        $address->name = $data['vendor_name'];
+        $address->city = substr($data['city'],0,17);
+        $address->postalCode = $this->formatDhlPostCode($data['zip']);
+        $address->street = $data['street'];
+        $address->houseNumber = self::ADDRESS_HOUSE_NUMBER;
+        $contact = new StdClass;
+        $contact->personName = $address->name;
+        $contact->phoneNumber = $data['telephone'];
+        $contact->emailAddress = $data['email'];
+        $message->address = $address;
+        $message->contact = $contact;
+        return $message;
+    }
+    protected function _prepareShipClient() {
+        $message = new StdClass;
+        $message->shipper = $this->_prepareClientAddress();
+        $message->receiver = $this->_prepareVendorAddress();
+        return $message;
+    }
+    protected function _prepareShipVendor() {
+        $message = new StdClass;
+        $message->shipper = $this->_prepareVendorAddress();
+        $message->receiver = $this->_prepareClientAddress();
+        return $message;
+    }
+    protected function _prepareShipmentTime() {
+        $message = new StdClass;
+        $message->shipmentDate = empty($this->_settings['shipmentDate'])? date('Y-m-d',time()+3600*24):date('Y-m-d',strtotime($this->_settings['shipmentDate']));
+        $message->shipmentStartHour = empty($this->_settings['shipmentStartHour'])? '9:00':$this->_settings['shipmentStartHour'];
+        $message->shipmentEndHour = empty($this->_settings['shipmentEndHour'])? '15:00':$this->_settings['shipmentEndHour'];
+        return $message;
+    }
+    /**
+     * creating shipment and book courier in one request
+     */
+    public function createShipmentAtOnce($dhlSettings) {
+        $this->_settings = $dhlSettings;
+        $message = new StdClass;
+        $message->authData = $this->_auth;
+        $shipment = new stdClass;
+        $shipment->shipmentInfo = $this->_prepareShipmentAtOnce(); 
+        if (empty($dhlSettings['vendor'])) {
+            $shipment->ship = $this->_prepareShipClient();        
+        } else {
+            $shipment->ship = $this->_prepareShipVendor();
+        }
+        $shipment->content = self::SHIPMENT_RMA_CONTENT;
+        $shipment->pieceList = $this->_createPieceList($dhlSettings);
+        $message->shipment = $shipment;
+        return $this->_sendMessage('createShipment',$message);
+    }
+    public function setParam($param,$value) {
+        if (!isset($this->_default_params[$param])) {
+            Mage::throwException(sprintf('Wrong param name: %s',$param));
+        }
+        $this->_default_params[$param] = $value;
     }
 }

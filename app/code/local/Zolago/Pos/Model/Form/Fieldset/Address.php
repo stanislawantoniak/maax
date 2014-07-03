@@ -12,7 +12,8 @@ class Zolago_Pos_Model_Form_Fieldset_Address extends Zolago_Common_Model_Form_Fi
                                        'name'          => 'city',
                                        'label'         => $this->_helper->__('City'),
                                        'required'      => true,
-                                       "maxlength"     => 100
+                                       "maxlength"     => 100,
+									   'class'		   => "form-control"
                                    ));
 
     }
@@ -22,6 +23,7 @@ class Zolago_Pos_Model_Form_Fieldset_Address extends Zolago_Common_Model_Form_Fi
                                        'label'         => $this->_helper->__('Country'),
                                        'values'        => Mage::getSingleton("adminhtml/system_config_source_country")->toOptionArray(),
                                        'required'      => true,
+									   'class'		   => "form-control"
                                    ));
 
     }
@@ -43,7 +45,7 @@ class Zolago_Pos_Model_Form_Fieldset_Address extends Zolago_Common_Model_Form_Fi
         $this->_fieldset->addField('region_id', 'select', array(
                                        'name'          => 'region_id',
                                        'label'         => $this->_helper->__('Region'),
-                                       'class'         => 'countries',
+									   'class'		   => "countries form-control",
                                        'values'        => $regionOpts
                                    ));
 
@@ -53,6 +55,7 @@ class Zolago_Pos_Model_Form_Fieldset_Address extends Zolago_Common_Model_Form_Fi
                                        'name'          => 'street',
                                        'label'         => $this->_helper->__('Street and number'),
                                        'required'      => true,
+									   'class'		   => "form-control",
                                        "maxlength"     => 150
                                    ));
 
@@ -62,6 +65,7 @@ class Zolago_Pos_Model_Form_Fieldset_Address extends Zolago_Common_Model_Form_Fi
                                        'name'          => 'postcode',
                                        'label'         => $this->_helper->__('Postcode'),
                                        'required'      => true,
+									   'class'		   => "form-control",
                                        "maxlength"     => 6
                                    ));
 
@@ -70,6 +74,7 @@ class Zolago_Pos_Model_Form_Fieldset_Address extends Zolago_Common_Model_Form_Fi
     protected function _addFieldCompany() {
         $this->_fieldset->addField('company', 'text', array(
                                        'name'          => 'company',
+									   'class'		   => "form-control",
                                        'label'         => $this->_helper->__('Company'),
                                        "maxlength"     => 100
                                    ));

@@ -13,7 +13,7 @@ class Zolago_Operator_Model_Form_Fieldset_Details extends Zolago_Common_Model_Fo
         $this->_fieldset->addField('phone', 'text', array(
                                        'name'          => 'phone',
                                        'label'         => $this->_helper->__('Phone'),
-                                       'class'         => 'validate-phone-number',
+                                       'class'         => 'validate-phone-number form-control',
                                        "maxlength"     => 50
                                    ));
 
@@ -25,7 +25,7 @@ class Zolago_Operator_Model_Form_Fieldset_Details extends Zolago_Common_Model_Fo
         $this->_fieldset->addField('email', 'text', array(
                                        'name'          => 'email',
                                        'label'         => $this->_helper->__('Email'),
-                                       'class'         => 'validate-email',
+                                       'class'         => 'validate-email form-control',
                                        'required'      => true,
                                        "maxlength"     => 100
                                    ));
@@ -38,7 +38,7 @@ class Zolago_Operator_Model_Form_Fieldset_Details extends Zolago_Common_Model_Fo
         $this->_fieldset->addField('password', 'password', array(
                                        'name'          => 'password',
                                        'label'         => $this->_helper->__('Password'),
-									   'class'		   => 'validate-password',
+									   'class'		   => 'validate-password form-control',
                                        "maxlength"     => 50
                                    ));
     }
@@ -49,7 +49,7 @@ class Zolago_Operator_Model_Form_Fieldset_Details extends Zolago_Common_Model_Fo
         $this->_fieldset->addField('password_confirm', 'password', array(
                                        'name'          => 'confirmation',
                                        'label'         => $this->_helper->__('Confirm password'),
-									   'class'		   => 'validate-cpassword',
+									   'class'		   => 'validate-cpassword form-control',
                                        "maxlength"     => 50
                                    ));
 

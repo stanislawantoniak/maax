@@ -1,0 +1,66 @@
+<?php /* @var $this Zolago_Po_Block_Vendor_Po_Edit_Split  */?>
+<?php $_hlp = Mage::helper("zolagopo");?>
+<?php $_po =  $this->getPo();?>
+<!-- Modals comment -->
+<div class="modal fade" id="splitModal">
+	<div class="modal-dialog">
+		<form action="<?php echo $this->getPoUrl("split");?>" method="post">
+			<?php echo $this->getFormKey(); ?>
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title"><?php echo $_hlp->__("Split order");?></h4>
+					<small><?php echo $_hlp->__("The following items will be split out to another order");?></small>
+				</div>
+				<div class="modal-body">
+					<table id="split-table" class="table table-striped">
+						<colgroup>
+							<col width="50px"/>
+							<col/>
+						</colgroup>
+						<thead>
+							<tr>
+								<th class="align-right"><?php echo $_hlp->__("Lp");?></th>
+								<th><?php echo $_hlp->__("Product");?></th>
+							</tr>
+						</thead>
+						<tbody>
+							
+						</tbody>
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_hlp->__("Cancel");?></button>
+					<button type="submit" class="btn form-btn-loading btn-primary" data-loading-text="<?php echo $_hlp->__("Loading...");?>"><?php echo $_hlp->__("Split");?></button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+<script type="text/javascript">
+jQuery(function($){
+	$("#splitModal").on('show.bs.modal', function(){
+		var table = $("#items"),
+			tbody = $("#split-table tbody");
+		var i = 1;
+		
+		tbody.html("");
+		
+		table.find(":checkbox:checked").each(function(){
+			var data = $(this).parents("tr").data();
+			tbody.append(
+				$("<tr>").append(
+					$("<td>").addClass("align-right").append(
+						$("<input>").attr({type: "hidden", name: "items[]", value: data.itemId})
+					).append(
+						$("<span>").text(i)
+					)
+				).append(
+					$("<td>").text(data.itemName)
+				)
+			);
+			i++;
+		});
+	});
+})
+</script>

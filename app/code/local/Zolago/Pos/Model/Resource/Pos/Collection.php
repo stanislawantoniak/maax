@@ -40,7 +40,7 @@ class Zolago_Pos_Model_Resource_Pos_Collection
 	 * @param Unirgy_Dropship_Model_Vendor|int $vendor
 	 * @return Zolago_Pos_Model_Resource_Pos_Collection
 	 */
-public function addVendorFilter($vendor){
+	public function addVendorFilter($vendor){
 		if($vendor instanceof Unirgy_Dropship_Model_Vendor){
 			$vendor = $vendor->getId();
 		}
@@ -56,5 +56,5 @@ public function addVendorFilter($vendor){
 		$this->getSelect()->group('main_table.pos_id');
 		return $this;
 	}
-    
+
 }
