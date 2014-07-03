@@ -103,11 +103,16 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
                 }
                 try {
                     if ($_track) Mage::helper('udropship/label')->beforeShipmentLabel($v, $_track);
-					if ($cCode !== Zolago_Dhl_Model_Carrier::CODE) {
-						$result = $v->getTrackApi($cCode)->collectTracking($v, array_keys($trackIds));
-					} else {
-						$result = Mage::helper($this->trackingHelperPath)->collectDhlTracking($trackIds);
-					}
+                    switch ($cCode) {
+                        case Zolago_Dhl_Model_Carrier::CODE:
+    						$result = Mage::helper($this->trackingHelperPath)->collectDhlTracking($trackIds);
+                            break;
+                        case Zolago_Ups_Model_Carrier::CODE:
+    						$result = Mage::helper($this->trackingHelperPath)->collectUpsTracking($trackIds);
+                            break;
+                        default:
+    						$result = $v->getTrackApi($cCode)->collectTracking($v, array_keys($trackIds));
+                    }
                     if ($_track) Mage::helper('udropship/label')->afterShipmentLabel($v, $_track);
                 } catch (Exception $e) {
                     if ($_track) Mage::helper('udropship/label')->afterShipmentLabel($v, $_track);

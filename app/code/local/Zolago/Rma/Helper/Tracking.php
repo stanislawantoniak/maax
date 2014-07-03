@@ -1,20 +1,20 @@
 <?php
-class Zolago_Rma_Helper_Tracking extends Zolago_Dhl_Helper_Tracking {
+class Zolago_Rma_Helper_Tracking extends Zolago_Carrier_Helper_Tracking {
 
 
     /**
      * @param Zolago_Rma_Model_Rma_Track $track
      * @param string $shipmentIdMessage
-     * @param array $dhlMessage
+     * @param array $carrierMessage
      * @param string $status
      */
-    protected function _addComment($track,$shipmentIdMessage,$dhlMessage,$status) {
-        $comment = $this->__(Zolago_Dhl_Helper_Data::DHL_HEADER) . PHP_EOL;
+    protected function _addComment($track,$shipmentIdMessage,$carrierMessage,$status) {
+        $comment = $this->__($this->_helper->getHeader()) . PHP_EOL;
         /* @var $shipment Mage_Sales_Model_Order_Shipment */
         $rma = $track->getRma();
         $comment .= $shipmentIdMessage;
-        $dhlMessage = array_reverse(array_unique($dhlMessage));
-        foreach ($dhlMessage as $singleMessage) {
+        $carrierMessage = array_reverse(array_unique($carrierMessage));
+        foreach ($carrierMessage as $singleMessage) {
             $comment .= $singleMessage;
         }
         $rmaComment = Mage::getModel("urma/rma_comment");

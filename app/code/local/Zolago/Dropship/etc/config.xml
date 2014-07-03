@@ -78,9 +78,13 @@
                         <legend>DHL</legend>
                         <position>140</position>
                     </dhl>
+                    <orbaups>
+                        <legend>UPS</legend>
+                        <position>160</position>
+                    </orbaups>
                     <rma>
                         <legend>RMA Settings</legend>
-                        <position>140</position>
+                        <position>180</position>
                     </rma>
                 </fieldsets>
 
@@ -181,6 +185,37 @@
                         <fieldset>dhl</fieldset>
                         <position>50</position>
                     </dhl_terminal>
+                    <use_orbaups>
+                        <label>Use UPS</label>
+                        <type>select</type>
+                        <fieldset>orbaups</fieldset>
+                        <source>yesno</source>
+						<frontend_model>udropship/adminhtml_vendor_helper_form_dependSelect</frontend_model>
+						<depend_fields>
+                            <orbaups_login>1</orbaups_login>
+                            <orbaups_password>1</orbaups_password>
+							<orbaups_account>1</orbaups_account>
+                        </depend_fields>
+                        <position>55</position>
+                    </use_orbaups>
+                	<orbaups_account>
+                        <label>UPS license key</label>
+                        <type>text</type>
+                        <fieldset>orbaups</fieldset>
+                        <position>60</position>
+                    </orbaups_account>
+                	<orbaups_login>
+                        <label>UPS login</label>
+                        <type>text</type>
+                        <fieldset>orbaups</fieldset>
+                        <position>70</position>
+                    </orbaups_login>
+                	<orbaups_password>
+                        <label>UPS password</label>
+                        <type>password</type>
+                        <fieldset>orbaups</fieldset>
+                        <position>80</position>
+                    </orbaups_password>
                     <!-- Rma -->
                     <dhl_rma>
                         <label>Use another DHL account for RMA</label>
@@ -195,6 +230,19 @@
                         </depend_fields>
                         <position>10</position>
                     </dhl_rma>
+                    <orbaups_rma>
+                        <label>Use another UPS account for RMA</label>
+                        <type>select</type>
+                        <fieldset>rma</fieldset>
+                        <source>yesno</source>
+						<frontend_model>udropship/adminhtml_vendor_helper_form_dependSelect</frontend_model>
+						<depend_fields>
+                            <orbaups_rma_login>1</orbaups_rma_login>
+                            <orbaups_rma_password>1</orbaups_rma_password>
+							<orbaups_rma_account>1</orbaups_rma_account>
+                        </depend_fields>
+                        <position>33</position>
+                    </orbaups_rma>
                 	<dhl_rma_account>
                         <label>Account number</label>
                         <type>text</type>
@@ -213,6 +261,24 @@
                         <fieldset>rma</fieldset>
                         <position>30</position>
                     </dhl_rma_password>
+                	<orbaups_rma_account>
+                        <label>License key</label>
+                        <type>text</type>
+                        <fieldset>rma</fieldset>
+                        <position>35</position>
+                    </orbaups_rma_account>
+                	<orbaups_rma_login>
+                        <label>UPS login</label>
+                        <type>text</type>
+                        <fieldset>rma</fieldset>
+                        <position>40</position>
+                    </orbaups_rma_login>
+                	<orbaups_rma_password>
+                        <label>UPS password</label>
+                        <type>password</type>
+                        <fieldset>rma</fieldset>
+                        <position>45</position>
+                    </orbaups_rma_password>
 					<!-- Product Review -->
                 	<review_status>
                         <label>Product Review Status</label>
