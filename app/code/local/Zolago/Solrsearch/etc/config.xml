@@ -114,7 +114,7 @@
 					</zolagosolrsearch>
 				</observers>
 			</zolago_mapper_after_assign_products>
-			
+
 			<!-- Procesing after response send -->
 			<controller_front_send_response_after>
 				<observers>
