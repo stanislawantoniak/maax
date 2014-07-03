@@ -10,7 +10,6 @@ class Zolago_Solrsearch_ContextController extends Mage_Core_Controller_Front_Act
     {
 
         $categoryP = Mage::app()->getRequest()->getParam('cat', 0);
-
         if (empty($categoryP)) {
             Mage::getSingleton('core/session')->setSolrFilterQuery(array());
         } else {
@@ -26,6 +25,7 @@ class Zolago_Solrsearch_ContextController extends Mage_Core_Controller_Front_Act
             $filterQuery = array('category_id' => $categoryP);
             Mage::getSingleton('core/session')->setSolrFilterQuery(array_unique($filterQuery));
         }
+        Mage::getSingleton('core/session')->setData('solr_change_context', 1);
 
     }
 }
