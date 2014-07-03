@@ -84,15 +84,8 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function getContextUrl()
     {
-        $uri = $this->_getUrl(
-            'zolagosolrsearch/context',
-            array(
-                 '_secure' => Mage::app()->getFrontController()->getRequest()->isSecure(),
-                 '_nosid'  => true,
-            )
-        );
-
-        return trim($uri, '/');
+        $uri = '/zolagosolrsearch/context';
+        return $uri;
     }
 
     /**
