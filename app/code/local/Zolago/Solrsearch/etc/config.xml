@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Solrsearch>
-            <version>0.0.4</version>
+            <version>0.0.5</version>
         </Zolago_Solrsearch>
     </modules>
 	<admin>
@@ -214,6 +214,13 @@
 				</observers>
 			</model_save_after>
 		</events>
+		<layout>
+			<updates>
+				<zolagosolrsearch>
+					<file>zolagosolrsearch.xml</file>
+				</zolagosolrsearch>
+			</updates>
+		</layout>
 	</adminhtml>
     <frontend>
         <routers>

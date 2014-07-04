@@ -2,21 +2,21 @@
 <config>
 	<translate>
 		<modules>
-			<SolrBridge_Solrsearch>
+			<Zolago_Solrsearch>
 				<files>
-					<default>SolrBridge_Solrsearch.csv</default>
+					<default>Zolago_Solrsearch.csv</default>
 				</files>
-			</SolrBridge_Solrsearch>
+			</Zolago_Solrsearch>
 		</modules>
 	</translate>
 	<menu>
 		<solrbridge module="solrsearch">
 			<children>
-				<process_queue translate="title" module="solrsearch">
+				<queue translate="title" module="solrsearch">
 					<title>Process queue</title>
 					<sort_order>0</sort_order>
-					<action>solrbridge_admin/adminhtml_solrsearch/processQueue</action>
-				</process_queue>
+					<action>solrbridge_admin/adminhtml_solrsearch/queue</action>
+				</queue>
 			</children>
 		</solrbridge>
 	</menu>
@@ -26,9 +26,9 @@
 				<children>
 					<solrbridge translate="title" module="zolagosolrsearch">
                         <children>
-                        	<process_queue translate="title">
+                        	<queue translate="title">
                         		<title>Process queue</title>
-                        	</process_queue>
+                        	</queue>
                         </children>
                     </solrbridge>
 				</children>

@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<layout version="0.1.0" >
+	<solrbridge_admin_adminhtml_solrsearch_queue>
+		<reference name="content">
+			<block type="adminhtml/template" name="queue" template="zolagosolrsearch/queue.phtml" />
+		</reference>
+	</solrbridge_admin_adminhtml_solrsearch_queue>
+</layout>

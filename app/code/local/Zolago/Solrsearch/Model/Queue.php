@@ -5,10 +5,18 @@ class Zolago_Solrsearch_Model_Queue extends Varien_Data_Collection{
 	protected $_limit = 150;
 	protected $_toProcessing = 0;
 	protected $_resourceCollection;
+	protected $_processedCores = 0;
+	protected $_processedItems = 0;
+	
+	
+	public function process() {
+		
+	}
 	
 	/**
 	 * @param array $items
 	 * @return Zolago_Solrsearch_Model_Queue
+	 * @todo Impelemnt
 	 */
 	public function pushMultiple(array $items) {
 		$resource = Mage::getResourceModel("zolagosolrsearch/queue_item");
@@ -48,29 +56,26 @@ class Zolago_Solrsearch_Model_Queue extends Varien_Data_Collection{
 	 * @param int $storeId
 	 * @return boolean|int
 	 */
-	public function processByStore($storeId) {
+	public function processByCore($storeId) {
 		$this->_toProcessing = 0;
-		try{
-			while(!$this->_processByStore($storeId));
-		}catch(Exception $e){
-			Mage::logException($e);
-			return false;
-		}
+		while(!$this->_processByStore($storeId));
 		return $this->_toProcessing;
 	}
 	
 	/**
 	 * 
-	 * @param type $storeId
+	 * @param string $core
 	 * @return boolean
 	 */
-	protected function _processByStore($storeId) {
+	protected function _processByCore($core) {
 		$collection = $this->getResourceCollection();
 		
 		$collection->clear();
-		$collection->addFieldToFilter("store_id", $storeId);
+		$collection->addFieldToFilter("core_name", $core);
 		$collection->addFieldToFilter("status", Zolago_Solrsearch_Model_Queue_Item::STATUS_WAIT);
+		$collection->setOrder("delete_only", "desc");
 		$collection->setOrder("created_at", "asc");
+		$collection->setOrder("product_id", "asc");
 		$collection->getSelect()->limit($this->_limit);
 		$itemsToProcess = 0;
 		foreach($collection as $item){

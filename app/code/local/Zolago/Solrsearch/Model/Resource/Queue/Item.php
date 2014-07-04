@@ -4,7 +4,11 @@ class Zolago_Solrsearch_Model_Resource_Queue_Item extends Mage_Core_Model_Resour
         $this->_init('zolagosolrsearch/queue_item','queue_id');
     }
 	
-	
+	/**
+	 * @param Varien_Data_Collection_Db $itemCollection
+	 * @param type $status
+	 * @return type
+	 */
 	public function updateStatus(Varien_Data_Collection_Db $itemCollection, $status) {
 		$itemIds = array();
 		foreach($itemCollection as $id=>$item){
@@ -21,6 +25,8 @@ class Zolago_Solrsearch_Model_Resource_Queue_Item extends Mage_Core_Model_Resour
 		$where = $this->_getWriteAdapter()->quoteInto("queue_id IN (?)", $itemCollection->getAllIds());
 		$this->_getWriteAdapter()->update($this->getMainTable(), $data , $where);
 	}
+	
+	
 	/**
 	 * @param Varien_Object $item
 	 * @return boolean
@@ -30,7 +36,7 @@ class Zolago_Solrsearch_Model_Resource_Queue_Item extends Mage_Core_Model_Resour
 			$select = $this->getReadConnection()->select();
 			$select->from($this->getMainTable(), array("queue_id"));
 			$select->where("product_id=?", $item->getProductId());
-			$select->where("store_id=?", $item->getStoreId());
+			$select->where("core_name=?", $item->getCoreName());
 			$select->where("status=?", $item->getStatus());
 			$select->where("delete_only=?", $item->getDeleteOnly());
 		    if($result=$this->getReadConnection()->fetchOne($select)){
