@@ -9,6 +9,10 @@
             <thead>
                 <tr class="headings">
                     <th class="a-center"><?php echo Mage::helper('zolagorma')->__('Name') ?></th>
+                    
+                    <?php if($this->getMode() == 'edit'): ?>
+	                    <th class="a-center"><?php echo Mage::helper('zolagorma')->__('Use default value') ?></th>
+	                <?php endif; ?>
                     <th class="a-center"><?php echo Mage::helper('zolagorma')->__('Instant return days #') ?></th>
                     <th class="a-center"><?php echo Mage::helper('zolagorma')->__('Acknowledged return days #') ?></th>
                     <th class="a-center"><?php echo Mage::helper('zolagorma')->__('Message') ?></th>
@@ -28,9 +32,21 @@
 	                    	<?php echo $vendor_reason->getReturnReason()->getName()?>
 	                    	<input type="hidden" name="submit_mode" value="edit">
 	                    </td>
-	                    <td class="a-left"><input name="<?php echo $_element->getName()?>[<?php echo $_id; ?>][auto_days]" class="input-text required-entry" type="text" value="<?php echo $vendor_reason->getAutoDays(); ?>" /></td>
-	                    <td class="a-left"><input name="<?php echo $_element->getName()?>[<?php echo $_id; ?>][allowed_days]" class="input-text required-entry" type="text" value="<?php echo $vendor_reason->getAllowedDays(); ?>" /></td>
-	                    <td class="a-left" width="500"><input name="<?php echo $_element->getName()?>[<?php echo $_id; ?>][message]" class="input-text required-entry" type="text" value="<?php echo $vendor_reason->getMessage(); ?>" /></td>
+	                    <td class="a-left">
+	                    	<input name="<?php echo $_element->getName()?>[<?php echo $_id; ?>][use_default]" class="" type="checkbox" value="1" <?php echo ($vendor_reason->getUseDefault()) ? 'checked="checked"' : ''; ?> />
+	                    </td>
+	                    <td class="a-left">
+	                    	<input name="<?php echo $_element->getName()?>[<?php echo $_id; ?>][auto_days]" class="input-text required-entry" type="text" value="<?php echo $vendor_reason->getAutoDays(); ?>" />
+	                    	<?php if((int)$vendor_reason->getAutoDays() != (int)$vendor_reason->getReturnReason()->getAutoDays()) echo '<small>Default value: ' .  $vendor_reason->getReturnReason()->getAutoDays() . '</small>'; ?>
+	                    </td>
+	                    <td class="a-left">
+	                    	<input name="<?php echo $_element->getName()?>[<?php echo $_id; ?>][allowed_days]" class="input-text required-entry" type="text" value="<?php echo $vendor_reason->getAllowedDays(); ?>" />
+	                    	<?php if((int)$vendor_reason->getAllowedDays() != (int)$vendor_reason->getReturnReason()->getAllowedDays()) echo '<small>Default value: ' .  $vendor_reason->getReturnReason()->getAllowedDays() . '</small>'; ?>
+	                    </td>
+	                    <td class="a-left" width="500">
+	                    	<input name="<?php echo $_element->getName()?>[<?php echo $_id; ?>][message]" class="input-text required-entry" type="text" value="<?php echo $vendor_reason->getMessage(); ?>" />
+	                    	<?php if(strcmp($vendor_reason->getMessage(), $vendor_reason->getReturnReason()->getMessage()) != 0) echo '<small>Default value: ' . $vendor_reason->getReturnReason()->getMessage() . '</small>'; ?>
+	                    </td>
 	                </tr>
 	                <?php endforeach ?>
 	            </tbody>

@@ -20,10 +20,19 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
 		
 		$array = $this->pathToArray($item);
 		$last = array_pop($array);
-		$facetUrl = $this->getFacesUrl(array('fq'=>array('category'=>array($last['name']), 'category_id' => array($last['id']))));
-		if($this->isItemActive($item)){
-			 $facetUrl = $this->getRemoveFacesUrl("category", array($last['name']));
+		
+		if($this->getParentBlock()->getMode()==Zolago_Solrsearch_Block_Faces::MODE_CATEGORY){
+			$categoty_id = $last['id'];
+			$category = Mage::getModel('catalog/category')->load($categoty_id);
+			$facetUrl = $category->getUrl($category);			
 		}
+		else{
+			$facetUrl = $this->getFacesUrl(array('fq'=>array('category'=>array($last['name']), 'category_id' => array($last['id']))));
+			if($this->isItemActive($item)){
+				 $facetUrl = $this->getRemoveFacesUrl("category", array($last['name']));
+			}
+		}
+		
 		return $facetUrl;
 	}
 	
@@ -72,9 +81,9 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
 			$category = $this->getParentBlock()->getCurrentCategory();
 			$array = $this->pathToArray($item);
 			$last = array_pop($array);
-			if($last['id']==$category->getId()){
-				return false;
-			}
+			// if($last['id']==$category->getId()){
+				// return false;
+			// }
 		}
 		return parent::getCanShowItem($item, $count);
 	}
