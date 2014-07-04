@@ -33,6 +33,34 @@ class Zolago_Solrsearch_Model_Queue extends Varien_Data_Collection{
 	protected $_solr;
 	
 	/**
+	 * @var int
+	 */
+	protected $_processingTime;
+	
+	
+	/**
+	 * @return int
+	 */
+	public function getToDeleteCount() {
+		$collection = $this->getResourceCollection();
+		$collection->addFieldToFilter("status", Zolago_Solrsearch_Model_Queue_Item::STATUS_WAIT);
+		$collection->addFieldToFilter("delete_only", 1);
+		return $collection->getSize();
+	}
+	
+	
+	/**
+	 * @return int
+	 */
+	public function getToReindexCount() {
+		$collection = $this->getResourceCollection();
+		$collection->addFieldToFilter("status", Zolago_Solrsearch_Model_Queue_Item::STATUS_WAIT);
+		$collection->addFieldToFilter("delete_only", 0);
+		return $collection->getSize();
+	}
+	
+	
+	/**
 	 * @return bool
 	 */
 	public function isEmpty() {
@@ -107,16 +135,19 @@ class Zolago_Solrsearch_Model_Queue extends Varien_Data_Collection{
 		return $this->_processedCores;
 	}
 	
+	public function getProcessingTime() {
+		return $this->_processingTime;
+	}
+	
 	
 	/**
 	 * @return boolean
 	 */
 	public function process() {
 		$helepr = Mage::helper("zolagosolrsearch");
+		$time = time();
 		/* @var $helepr Zolago_Solrsearch_Helper_Data */
-		$this->_processedCores = 0;
-		$this->_processedItems = 0;
-		$this->_hardException = null;
+		$this->prepareToProcessing();
 		foreach($helepr->getAvailableCores() as $core){
 			$coreCount = $this->processByCore($core);
 			if($coreCount){
@@ -127,7 +158,15 @@ class Zolago_Solrsearch_Model_Queue extends Varien_Data_Collection{
 				return false;
 			}
 		}
+		$this->_processingTime = time()-$time; 
 		return true;
+	}
+	
+	public function prepareToProcessing() {
+		$this->_processedCores = 0;
+		$this->_processedItems = 0;
+		$this->_processingTime = 0;
+		$this->_hardException = null;
 	}
 
 	/**
@@ -192,18 +231,27 @@ class Zolago_Solrsearch_Model_Queue extends Varien_Data_Collection{
 		try{
 			// 1. Collect data
 			foreach($collection as $item){
-				$toDelete[$item->getProductId()] = true;
+				
+				// Collect delete products
+				if(!isset($toDelete[$item->getStoreId()])){
+					$toDelete[$item->getStoreId()] = array();
+				}
+				$toDelete[$item->getStoreId()][$item->getProductId()] = true;
+				
 				if(!$item->getDeleteOnly()){
-					$toReindex[$item->getProductId()] = true;
+					if(!isset($toReindex[$item->getStoreId()])){
+						$toReindex[$item->getStoreId()] = array();
+					}
+					$toReindex[$item->getStoreId()][$item->getProductId()] = true;
 				}
 			}
 			
 			// 1. Delete item form solr
-			$this->_delteSolrDocs(array_keys($toDelete), $core);
+			$this->_delteSolrDocs($toDelete, $core);
 			
 			// 2. Make reindex if nessery
 			if($toReindex){
-				$this->_reindexSolrDocs(array_keys($toReindex), $core);
+				$this->_reindexSolrDocs($toReindex, $core);
 			}
 			
 		} catch (Exception $ex) {
@@ -228,17 +276,18 @@ class Zolago_Solrsearch_Model_Queue extends Varien_Data_Collection{
 	}
 	
 	/**
-	 * @param Zolago_Solrsearch_Model_Queue_Item $productIds
+	 * @param array $storeProductsArray
 	 */
-	protected function _delteSolrDocs(array $productIds, $core) {
-		$this->_getSolr()->deleteSolrDocumentByProductIds($productIds, $core);
+	protected function _delteSolrDocs(array $storeProductsArray, $core) {
+		return $this->_getSolr()->deleteSolrDocumentByProductIds($storeProductsArray, $core);
 	}
 	
 	
 	/**
-	 * @param Zolago_Solrsearch_Model_Queue_Item $items
+	 * @param array $storeProductsArray
 	 */
-	protected function _reindexSolrDocs(array $items, $core) {
+	protected function _reindexSolrDocs(array $storeProductsArray, $core) {
+		return $this->_getSolr()->reindexByProductIds($storeProductsArray, $core);
 	}
 	
 	

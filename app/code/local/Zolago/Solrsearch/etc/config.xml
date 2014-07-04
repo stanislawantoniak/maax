@@ -263,4 +263,17 @@
 			</modules>
 		</translate>		
     </frontend>
+	<crontab>
+        <jobs>
+            <zolagosolrearch_process_queue>
+                <schedule>
+                    <!-- Run every 5 minutes -->
+                    <cron_expr>*/5 * * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>zolagosolrsearch/cronProcessQueue</model>
+                </run>
+            </zolagosolrearch_process_queue>
+        </jobs>
+    </crontab>
 </config>

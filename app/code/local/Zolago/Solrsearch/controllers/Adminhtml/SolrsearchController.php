@@ -31,16 +31,16 @@ class Zolago_Solrsearch_Adminhtml_SolrsearchController
 				);
 			}else{
 				$queue->process();
-				$cores = $queue->getProcessedCores();
-				$items = $queue->getProcessedItems();
-				
 				if($queue->getHardException()){
 					$session->addError(
 						Mage::helper("zolagosolrsearch")->__("Critical error, queue stopped. Check logs.")
 					);
 				}else{
 					$session->addSuccess(
-						Mage::helper("zolagosolrsearch")->__("Queue has been processed (%s cores, %d items)", $cores, $items)
+						Mage::helper("zolagosolrsearch")->__("Queue has been processed (%s cores, %d items, time: %ds)", 
+							$queue->getProcessedCores(), 
+							$queue->getProcessedItems(), 
+							$queue->getProcessingTime())
 					);
 					if($queue->getExceptions()){
 						$session->addError(

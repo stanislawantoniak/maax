@@ -24,6 +24,14 @@ class Zolago_Solrsearch_Model_Observer {
 	 * @var bool
 	 */
 	protected $_handled = false;
+	
+	
+	/**
+	 * Process queue
+	 */
+	public function cronProcessQueue() {
+		Mage::getSingleton('zolagosolrsearch/queue')->process();
+	}
 
 	
 	/**
@@ -351,14 +359,16 @@ class Zolago_Solrsearch_Model_Observer {
 				continue;
 			}
 			
-			$item = Mage::getModel("zolagosolrsearch/queue_item");
-			/* @var $item Zolago_Solrsearch_Model_Queue_Item */
+			foreach($cores as $core){
+				$item = Mage::getModel("zolagosolrsearch/queue_item");
+				/* @var $item Zolago_Solrsearch_Model_Queue_Item */
 
-			$item->setProductId($product->getId());
-			$item->setCoreName($cores[0]);
-			$item->setStoreId($storeId);
-			$item->setDeleteOnly((int)$deleteOnly);
-			$queueModel->push($item);
+				$item->setProductId($product->getId());
+				$item->setCoreName($core);
+				$item->setStoreId($storeId);
+				$item->setDeleteOnly((int)$deleteOnly);
+				$queueModel->push($item);
+			}
 		}
 
 	}

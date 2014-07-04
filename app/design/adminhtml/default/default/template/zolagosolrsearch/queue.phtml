@@ -1,3 +1,5 @@
+<?php /* @var $this Zolago_Solrsearch_Block_Adminhtml_Queue */?>
+<?php $_queue = $this->getQueue();?>
 <div class="content-header">
 	<table cellspacing="0">
 		<tbody>
@@ -14,4 +16,6 @@
 </div>
 <div>
 	<p><?php echo $this->__("To start processing queue click the button");?></p>
+	<p><?php echo $this->__("Items to be reindexed: %s", $_queue->getToReindexCount());?></p>
+	<p><?php echo $this->__("Items to be only deleted: %s", $_queue->getToDeleteCount());?></p>
 </div>
