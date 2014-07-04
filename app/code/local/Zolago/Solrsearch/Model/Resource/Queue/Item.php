@@ -10,19 +10,27 @@ class Zolago_Solrsearch_Model_Resource_Queue_Item extends Mage_Core_Model_Resour
 	 * @return type
 	 */
 	public function updateStatus(Varien_Data_Collection_Db $itemCollection, $status) {
+		
 		$itemIds = array();
 		foreach($itemCollection as $id=>$item){
 			$itemIds[] = $id;
 			$item->setStatus($status);
 		}
+		
 		if(!$itemIds){
 			return;
 		}
+		
 		$data = array("status"=>$status);
-		if($status==Zolago_Solrsearch_Model_Queue_Item::STATUS_DONE){
+		
+		// Force inser process date on comleted statuses
+		if(in_array($status, array(
+			Zolago_Solrsearch_Model_Queue_Item::STATUS_DONE, 
+			Zolago_Solrsearch_Model_Queue_Item::STATUS_FAIL))){
+			
 			$data['processed_at'] = Varien_Date::now();
 		}
-		$where = $this->_getWriteAdapter()->quoteInto("queue_id IN (?)", $itemCollection->getAllIds());
+		$where = $this->_getWriteAdapter()->quoteInto("queue_id IN (?)", $itemIds);
 		$this->_getWriteAdapter()->update($this->getMainTable(), $data , $where);
 	}
 	

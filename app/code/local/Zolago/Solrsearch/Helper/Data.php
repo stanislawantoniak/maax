@@ -48,6 +48,22 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 	}
 	
 	/**
+	 * @return array
+	 */
+	public function getAvailableCores() {
+		$cores = array();
+		foreach($this->getCores() as $core => $data){
+			if(isset($data['stores'])){
+				$ids = array_filter(explode(",", trim($data['stores'], ",")));
+				if(count($ids)){
+					$cores[$core] = true;
+				}
+			}
+		}
+		return array_keys($cores);
+	}
+	
+	/**
 	 * Returns vaialble stores (cores with has assigned store)
 	 * @return array
 	 */

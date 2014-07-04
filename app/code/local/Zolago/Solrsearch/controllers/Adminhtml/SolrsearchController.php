@@ -33,18 +33,30 @@ class Zolago_Solrsearch_Adminhtml_SolrsearchController
 				$queue->process();
 				$cores = $queue->getProcessedCores();
 				$items = $queue->getProcessedItems();
-
-				$session->addSuccess(
-					Mage::helper("zolagosolrsearch")->__("Queue has been processed (%s cores, %d items)", $cores, $items)
-				);
+				
+				if($queue->getHardException()){
+					$session->addError(
+						Mage::helper("zolagosolrsearch")->__("Critical error, queue stopped. Check logs.")
+					);
+				}else{
+					$session->addSuccess(
+						Mage::helper("zolagosolrsearch")->__("Queue has been processed (%s cores, %d items)", $cores, $items)
+					);
+					if($queue->getExceptions()){
+						$session->addError(
+							Mage::helper("zolagosolrsearch")->__("During processing some errors occured. Check logs.")
+						);
+					}
+				}
 			}
 			
 		} catch (Exception $ex) {
-			Mage::log($ex);
-			
+			$session->addError(
+				Mage::helper("zolagosolrsearch")->__("During processing some errors occured. Check logs.")
+			);
+			Mage::logException($ex);
 		}
 		
-
 		return $this->_redirect("*/*/queue");
 	}
 }
