@@ -66,3 +66,9 @@
 #zolagocatalog_mass_grid_foot .totals.a-center:not(:empty) {
     height: 60px;
 }
+
+#catalog_image_grid_table .mass-thumb-image {
+    float: left;
+    text-align:center;
+    margin:2px;
+}
