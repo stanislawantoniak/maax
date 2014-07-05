@@ -11,13 +11,13 @@ class Zolago_Adminhtml_Block_Widget_Grid_Column_Renderer_Gallery
         $catalogHelper = $this->helper('catalog/image');
 
         $gallery = $product->getMediaGalleryImages();
-
-        foreach ($gallery as $_image) {
-            $thUrl = $catalogHelper->init($product, 'thumbnail', $_image->getFile())->resize(100);
-            $img = "<div class='mass-thumb-image'><img src='" . $thUrl . "' /></div>";
-            $out .= $img;
+        if ($gallery->count() > 0) {
+            foreach ($gallery as $_image) {
+                $thUrl = $catalogHelper->init($product, 'thumbnail', $_image->getFile())->resize(100);
+                $img = "<div class='mass-thumb-image'><img src='" . $thUrl . "' /></div>";
+                $out .= $img;
+            }
         }
-
         return $out;
     }
 	
