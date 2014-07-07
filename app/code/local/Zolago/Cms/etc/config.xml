@@ -6,7 +6,15 @@
         </Zolago_Cms>
     </modules>
     <global>
+		<helpers>
+			<zolagocms>
+				<class>Zolago_Cms_Helper</class>
+			</zolagocms>
+		</helpers>
         <blocks>
+			<zolagocms>
+				<class>Zolago_Cms_Block</class>
+			</zolagocms>
 			<cms>
 				<rewrite>
 					<page>Zolago_Cms_Block_Page</page>
