@@ -11,6 +11,18 @@
 				<class>Zolago_DropshipVendorAskQuestion_Block</class>
 			</zolagoudqa>
 		</blocks>
+        <models>
+            <udqa>
+                <rewrite>
+                    <question>Zolago_DropshipVendorAskQuestion_Model_Question</question>
+                </rewrite>
+            </udqa>
+        </models>
+        <helpers>
+            <zolagoudqa>
+                <class>Zolago_DropshipVendorAskQuestion_Helper</class>
+            </zolagoudqa>
+        </helpers>
 	</global>
     <frontend>
         <layout>
