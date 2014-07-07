@@ -403,7 +403,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
      * @return string
      */
     protected function _getRatingRenderer() {
-        return $this->getDefaultRenderer();
+        return "zolagosolrsearch/faces_rating";
     }
     /**
      * @return string
