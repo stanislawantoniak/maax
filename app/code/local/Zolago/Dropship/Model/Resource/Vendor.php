@@ -58,7 +58,7 @@ class Zolago_Dropship_Model_Resource_Vendor extends Unirgy_Dropship_Model_Mysql4
         $select->where("vendor.vendor_id=?", $vendorId);
         $select->where("operator.is_active=?", 1);
         $select->where("operator.roles LIKE '%" . Zolago_Operator_Model_Acl::ROLE_RMA_OPERATOR . "%'");
-        echo $select;
+
         try {
             $agents = $readConnection->fetchAssoc($select);
         } catch (Exception $e) {
@@ -97,7 +97,7 @@ class Zolago_Dropship_Model_Resource_Vendor extends Unirgy_Dropship_Model_Mysql4
         $select->where("vendor.vendor_id=?", $vendorId);
         $select->where("operator.is_active=?", 1);
         $select->where("operator.roles LIKE '%" . Zolago_Operator_Model_Acl::ROLE_RMA_OPERATOR . "%'");
-        echo $select;
+
         try {
             $agents = $readConnection->fetchAssoc($select);
         } catch (Exception $e) {
