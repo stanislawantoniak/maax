@@ -25,6 +25,13 @@ class Zolago_Solrsearch_Model_Observer {
 	 */
 	protected $_handled = false;
 	
+	/**
+	 * Shoul queue by handled
+	 * @var bool
+	 */
+	
+	protected $_canBeHandled = true;
+	
 	
 	/**
 	 * Process queue
@@ -32,7 +39,15 @@ class Zolago_Solrsearch_Model_Observer {
 	public function cronProcessQueue() {
 		Mage::getSingleton('zolagosolrsearch/queue')->process();
 	}
-
+	
+	
+	/**
+	 * Cleanup queue
+	 */
+	public function cronCleanupQueue() {
+		Mage::getSingleton('zolagosolrsearch/queue')->cleanup();
+	}
+	
 	
 	/**
 	 * Add product to queue.
@@ -44,8 +59,19 @@ class Zolago_Solrsearch_Model_Observer {
 		if(!($product instanceof Mage_Catalog_Model_Product)){
 			return;
 		}
+		$this->_canBeHandled = false;
 		$this->_pushProduct($product, $product->getStoreId(), true, true);
 		
+	}
+	
+	
+	/**
+	 * After commit product delte.
+	 * @param Mage_Core_Model_Observer $observer
+	 * @return type
+	 */
+	public function catalogProductDeleteAfter(Varien_Event_Observer $observer) {
+		$this->_canBeHandled = true;
 	}
 	
 	
@@ -88,6 +114,48 @@ class Zolago_Solrsearch_Model_Observer {
 				}
 			}
 		}
+	}
+	
+
+	/**
+	 * Before category Delete
+	 * @param Varien_Event_Observer $observer
+	 */
+	public function catalogCategoryDeleteBefore(Varien_Event_Observer $observer) {
+		$category = $observer->getEvent()->getCategory();
+		/* @var $category Mage_Catalog_Model_Category */
+		$category->getStoreId(Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID);
+		
+		////////////////////////////////////////////////////////////////////////
+		// Process scopes
+		////////////////////////////////////////////////////////////////////////		
+		$storeIds = $category->getStoreIds();
+		
+		foreach($this->_filterStoreIds($storeIds) as $storeId){
+			$regualrIds = $category->
+				setStoreId($storeId)->
+				getProductCollection()->
+					// Filter only product visible and enabled in current category in scope
+					addAttributeToFilter("status", Mage_Catalog_Model_Product_Status::STATUS_ENABLED)->
+					addAttributeToFilter("visibility",
+						array("neq"=>Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE))->
+					getAllIds();
+			
+			foreach($regualrIds as $productId){
+				$this->collectProduct($productId, $category->getStoreId());
+			}
+		}
+		
+		$this->_canBeHandled = false;
+	}
+	
+	
+	/**
+	 * Category delete after commit
+	 * @param Varien_Event_Observer $observer
+	 */
+	public function catalogCategoryDeleteAfter(Varien_Event_Observer $observer) {
+		$this->_canBeHandled = true;
 	}
 	
 	
@@ -261,6 +329,10 @@ class Zolago_Solrsearch_Model_Observer {
 	 * Process collected products
 	 */
 	public function processCollectedProducts() {
+		
+		if(!$this->_canBeHandled){
+			return;
+		}
 		
 		$resource = Mage::getResourceModel("zolagosolrsearch/improve");;
 		/* @var $resource Zolago_Solrsearch_Model_Resource_Improve */

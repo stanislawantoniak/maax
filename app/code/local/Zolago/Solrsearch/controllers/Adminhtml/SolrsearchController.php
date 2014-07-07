@@ -15,6 +15,38 @@ class Zolago_Solrsearch_Adminhtml_SolrsearchController
 		$this->renderLayout();
 	}
 	
+	
+	/**
+	 * Cleanup
+	 */
+	public function cleanupQueueAction() {
+		$queue = Mage::getSingleton('zolagosolrsearch/queue');
+		/* @var $queue Zolago_Solrsearch_Model_Queue */
+		$session = $this->_getSession();
+		
+		try{
+			
+			if($queue->isEmpty()){
+				$session->addSuccess(
+					Mage::helper("zolagosolrsearch")->__("Queue is empty")
+				);
+			}else{
+				$queue->cleanup();
+				$session->addSuccess(
+					Mage::helper("zolagosolrsearch")->__("Queue cleaned up")
+				);
+			}
+		}catch (Exception $ex) {
+			$session->addError(
+				Mage::helper("zolagosolrsearch")->__("During processing some errors occured. Check logs.")
+			);
+			Mage::logException($ex);
+		}
+			
+		Mage::getSingleton('zolagosolrsearch/queue')->cleanup();
+		return $this->_redirect("*/*/queue");
+	}
+	
 	/**
 	 * Process queue
 	 */

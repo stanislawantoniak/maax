@@ -41,6 +41,15 @@ class Zolago_Solrsearch_Model_Queue extends Varien_Data_Collection{
 	/**
 	 * @return int
 	 */
+	public function getProcessedCount() {
+		$collection = $this->getResourceCollection();
+		$collection->addFieldToFilter("status", Zolago_Solrsearch_Model_Queue_Item::STATUS_DONE);
+		return $collection->getSize();
+	}
+	
+	/**
+	 * @return int
+	 */
 	public function getToDeleteCount() {
 		$collection = $this->getResourceCollection();
 		$collection->addFieldToFilter("status", Zolago_Solrsearch_Model_Queue_Item::STATUS_WAIT);
@@ -67,6 +76,15 @@ class Zolago_Solrsearch_Model_Queue extends Varien_Data_Collection{
 		$collection = $this->getResourceCollection();
 		$collection->addFieldToFilter("status", Zolago_Solrsearch_Model_Queue_Item::STATUS_WAIT);
 		return !(bool)$collection->getSize();
+	}
+	
+	/**
+	 * Cleanup processed entries
+	 * @return Zolago_Solrsearch_Model_Queue
+	 */
+	public function cleanup() {
+		$this->getResource()->cleanup();
+		return $this;
 	}
 	
 	/**

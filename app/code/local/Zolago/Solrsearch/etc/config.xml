@@ -74,6 +74,16 @@
 				</observers>
 			</catalog_product_delete_before>
 			
+			<!-- Delte after commit -->
+			<catalog_product_delete_after>
+				<observers>
+					<zolagosolrsearch>
+						<class>zolagosolrsearch/observer</class>
+						<method>catalogProductDeleteAfter</method>
+					</zolagosolrsearch>
+				</observers>
+			</catalog_product_delete_after>
+			
 			<!-- Process product save anywhere -->
 			<catalog_product_save_after>
 				<observers>
@@ -94,6 +104,26 @@
 					</zolagosolrsearch>
 				</observers>
 			</catalog_category_save_after>
+			
+			<!-- Process category delete before anywhere -->
+			<catalog_category_delete_before>
+				<observers>
+					<zolagosolrsearch>
+						<class>zolagosolrsearch/observer</class>
+						<method>catalogCategoryDeleteBefore</method>
+					</zolagosolrsearch>
+				</observers>
+			</catalog_category_delete_before>
+			
+			<!-- Process category delete after commit -->
+			<catalog_category_delete_after>
+				<observers>
+					<zolagosolrsearch>
+						<class>zolagosolrsearch/observer</class>
+						<method>catalogCategoryDeleteAfter</method>
+					</zolagosolrsearch>
+				</observers>
+			</catalog_category_delete_after>
 			
 			<!-- Process mass -->
 			<catalog_product_attribute_update_after>
@@ -274,6 +304,15 @@
                     <model>zolagosolrsearch/cronProcessQueue</model>
                 </run>
             </zolagosolrearch_process_queue>
+            <zolagosolrearch_cleanup_queue>
+                <schedule>
+                    <!-- Run 0:00 everyday  -->
+                    <cron_expr>0 0 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>zolagosolrsearch/cronCleanupQueue</model>
+                </run>
+            </zolagosolrearch_cleanup_queue>
         </jobs>
     </crontab>
 </config>

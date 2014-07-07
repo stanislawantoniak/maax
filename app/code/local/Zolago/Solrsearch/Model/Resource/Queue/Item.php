@@ -5,6 +5,16 @@ class Zolago_Solrsearch_Model_Resource_Queue_Item extends Mage_Core_Model_Resour
     }
 	
 	/**
+	 * Cleanup queue
+	 * @return int
+	 */
+	public function cleanup() {
+		$adapter = $this->_getWriteAdapter();
+		$where = $adapter->quoteInto("status=?", Zolago_Solrsearch_Model_Queue_Item::STATUS_DONE);
+		return $adapter->delete($this->getMainTable(), $where);
+	}
+	
+	/**
 	 * @param Varien_Data_Collection_Db $itemCollection
 	 * @param type $status
 	 * @return type
