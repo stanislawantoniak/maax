@@ -2,9 +2,20 @@
 <config>
     <modules>
         <Zolago_Solrsearch>
-            <version>0.0.2</version>
+            <version>0.0.5</version>
         </Zolago_Solrsearch>
     </modules>
+	<admin>
+		<routers>
+			<solrbridge_admin>
+				<args>
+					<modules>
+                        <Zolago_Solrsearch before="SolrBridge_Solsearch">Zolago_Solrsearch</Zolago_Solrsearch>
+                    </modules>
+				</args>
+			</solrbridge_admin>
+		</routers>
+	</admin>
     <global>
 		<resources>
             <zolagosolrsearch_setup>
@@ -53,51 +64,109 @@
 			</solrsearch>
         </blocks>
 		<events>
+			<!-- Delete anywhere -->
+			<catalog_product_delete_before>
+				<observers>
+					<zolagosolrsearch>
+						<class>zolagosolrsearch/observer</class>
+						<method>catalogProductDeleteBefore</method>
+					</zolagosolrsearch>
+				</observers>
+			</catalog_product_delete_before>
+			
+			<!-- Delte after commit -->
+			<catalog_product_delete_after>
+				<observers>
+					<zolagosolrsearch>
+						<class>zolagosolrsearch/observer</class>
+						<method>catalogProductDeleteAfter</method>
+					</zolagosolrsearch>
+				</observers>
+			</catalog_product_delete_after>
 			
 			<!-- Process product save anywhere -->
-			<!-- <catalog_product_save_after>
+			<catalog_product_save_after>
 				<observers>
 					<zolagosolrsearch>
 						<class>zolagosolrsearch/observer</class>
 						<method>catalogProductSaveAfter</method>
 					</zolagosolrsearch>
 				</observers>
-			</catalog_product_save_after> -->
+			</catalog_product_save_after>
 		
 			
 			<!-- Process category save anywhere -->
-			<!-- <catalog_category_save_after>
+			<catalog_category_save_after>
 				<observers>
 					<zolagosolrsearch>
 						<class>zolagosolrsearch/observer</class>
 						<method>catalogCategorySaveAfter</method>
 					</zolagosolrsearch>
 				</observers>
-			</catalog_category_save_after> -->
+			</catalog_category_save_after>
 			
-			<!-- Process mass -->
-			<!-- <catalog_product_attribute_update_before>
+			<!-- Process category delete before anywhere -->
+			<catalog_category_delete_before>
 				<observers>
 					<zolagosolrsearch>
 						<class>zolagosolrsearch/observer</class>
-						<method>catalogProductAttributeUpdateBefore</method>
+						<method>catalogCategoryDeleteBefore</method>
 					</zolagosolrsearch>
 				</observers>
-			</catalog_product_attribute_update_before> -->
+			</catalog_category_delete_before>
 			
+			<!-- Process category delete after commit -->
+			<catalog_category_delete_after>
+				<observers>
+					<zolagosolrsearch>
+						<class>zolagosolrsearch/observer</class>
+						<method>catalogCategoryDeleteAfter</method>
+					</zolagosolrsearch>
+				</observers>
+			</catalog_category_delete_after>
+			
+			<!-- Process mass -->
+			<catalog_product_attribute_update_after>
+				<observers>
+					<zolagosolrsearch>
+						<class>zolagosolrsearch/observer</class>
+						<method>catalogProductAttributeUpdateAfter</method>
+					</zolagosolrsearch>
+				</observers>
+			</catalog_product_attribute_update_after>
+			
+			<!-- Process mapper asign -->
+			<zolago_mapper_after_assign_products>
+				<observers>
+					<zolagosolrsearch>
+						<class>zolagosolrsearch/observer</class>
+						<method>zolagoMapperAfterAssignProducts</method>
+					</zolagosolrsearch>
+				</observers>
+			</zolago_mapper_after_assign_products>
+
 			<!-- Procesing after response send -->
-			<!-- <controller_front_send_response_after>
+			<controller_front_send_response_after>
 				<observers>
 					<zolagosolrsearch>
 						<class>zolagosolrsearch/observer</class>
 						<method>controllerFrontSendResponseAfter</method>
 					</zolagosolrsearch>
 				</observers>
-			</controller_front_send_response_after> -->
+			</controller_front_send_response_after>
 		</events>
     </global>
 	<adminhtml>
 		<events>
+			<!-- Just disable -->
+			<catalog_product_delete_after>
+				<observers>
+					<solr_search>
+						<type>disabled</type>
+					</solr_search>
+				</observers>
+			</catalog_product_delete_after>
+			
 			<!-- Just disable -->
 			<catalog_product_save_after>
 				<observers>
@@ -175,6 +244,13 @@
 				</observers>
 			</model_save_after>
 		</events>
+		<layout>
+			<updates>
+				<zolagosolrsearch>
+					<file>zolagosolrsearch.xml</file>
+				</zolagosolrsearch>
+			</updates>
+		</layout>
 	</adminhtml>
     <frontend>
         <routers>
@@ -217,4 +293,26 @@
 			</modules>
 		</translate>		
     </frontend>
+	<crontab>
+        <jobs>
+            <zolagosolrearch_process_queue>
+                <schedule>
+                    <!-- Run every 5 minutes -->
+                    <cron_expr>*/5 * * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>zolagosolrsearch/cronProcessQueue</model>
+                </run>
+            </zolagosolrearch_process_queue>
+            <zolagosolrearch_cleanup_queue>
+                <schedule>
+                    <!-- Run 0:00 everyday  -->
+                    <cron_expr>0 0 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>zolagosolrsearch/cronCleanupQueue</model>
+                </run>
+            </zolagosolrearch_cleanup_queue>
+        </jobs>
+    </crontab>
 </config>

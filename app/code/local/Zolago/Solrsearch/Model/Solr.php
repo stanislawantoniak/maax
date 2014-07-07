@@ -95,7 +95,7 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
             }
 
             $cats = array();
-            if(count($filterItem) > 0){
+            if(is_array($filterItem) && sizeof($filterItem) > 0){
                 $query = '';
 				$extendedQuery = '';
                 foreach($filterItem as $value){
@@ -241,7 +241,7 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
                 continue;
             }
 
-            if(count($filterItem) > 0){
+            if(is_array($filterItem) && sizeof($filterItem) > 0){
                 $query = '';
 				$extendedQuery = '';
                 foreach($filterItem as $value){

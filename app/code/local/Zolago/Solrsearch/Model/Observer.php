@@ -18,9 +18,65 @@ class Zolago_Solrsearch_Model_Observer {
 	 */
 	protected $_collectedCheckParents = array();
 	
-
+	
 	/**
-	 * Add product to queue. If scope is default - reindex all cores
+	 * Are colleced product handled?
+	 * @var bool
+	 */
+	protected $_handled = false;
+	
+	/**
+	 * Shoul queue by handled
+	 * @var bool
+	 */
+	
+	protected $_canBeHandled = true;
+	
+	
+	/**
+	 * Process queue
+	 */
+	public function cronProcessQueue() {
+		Mage::getSingleton('zolagosolrsearch/queue')->process();
+	}
+	
+	
+	/**
+	 * Cleanup queue
+	 */
+	public function cronCleanupQueue() {
+		Mage::getSingleton('zolagosolrsearch/queue')->cleanup();
+	}
+	
+	
+	/**
+	 * Add product to queue.
+	 * @param Mage_Core_Model_Observer $observer
+	 * @return type
+	 */
+	public function catalogProductDeleteBefore(Varien_Event_Observer $observer) {
+		$product = $observer->getEvent()->getProduct();
+		if(!($product instanceof Mage_Catalog_Model_Product)){
+			return;
+		}
+		$this->_canBeHandled = false;
+		$this->_pushProduct($product, $product->getStoreId(), true, true);
+		
+	}
+	
+	
+	/**
+	 * After commit product delte.
+	 * @param Mage_Core_Model_Observer $observer
+	 * @return type
+	 */
+	public function catalogProductDeleteAfter(Varien_Event_Observer $observer) {
+		$this->_canBeHandled = true;
+	}
+	
+	
+	/**
+	 * Add product to queue.
 	 * @param Mage_Core_Model_Observer $observer
 	 * @return type
 	 */
@@ -29,6 +85,11 @@ class Zolago_Solrsearch_Model_Observer {
 		if(!($product instanceof Mage_Catalog_Model_Product)){
 			return;
 		}
+
+		/**
+		 * @todo add check solr-used attribute changed?
+		 */
+		
 		$this->_pushProduct($product, $product->getStoreId(), true);
 		
 	}
@@ -55,6 +116,48 @@ class Zolago_Solrsearch_Model_Observer {
 		}
 	}
 	
+
+	/**
+	 * Before category Delete
+	 * @param Varien_Event_Observer $observer
+	 */
+	public function catalogCategoryDeleteBefore(Varien_Event_Observer $observer) {
+		$category = $observer->getEvent()->getCategory();
+		/* @var $category Mage_Catalog_Model_Category */
+		$category->getStoreId(Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID);
+		
+		////////////////////////////////////////////////////////////////////////
+		// Process scopes
+		////////////////////////////////////////////////////////////////////////		
+		$storeIds = $category->getStoreIds();
+		
+		foreach($this->_filterStoreIds($storeIds) as $storeId){
+			$regualrIds = $category->
+				setStoreId($storeId)->
+				getProductCollection()->
+					// Filter only product visible and enabled in current category in scope
+					addAttributeToFilter("status", Mage_Catalog_Model_Product_Status::STATUS_ENABLED)->
+					addAttributeToFilter("visibility",
+						array("neq"=>Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE))->
+					getAllIds();
+			
+			foreach($regualrIds as $productId){
+				$this->collectProduct($productId, $category->getStoreId());
+			}
+		}
+		
+		$this->_canBeHandled = false;
+	}
+	
+	
+	/**
+	 * Category delete after commit
+	 * @param Varien_Event_Observer $observer
+	 */
+	public function catalogCategoryDeleteAfter(Varien_Event_Observer $observer) {
+		$this->_canBeHandled = true;
+	}
+	
 	
 	/**
 	 * Collect produc of category save
@@ -65,7 +168,7 @@ class Zolago_Solrsearch_Model_Observer {
 		/* @var $category Mage_Catalog_Model_Category */
 		
 		////////////////////////////////////////////////////////////////////////
-		// Did product changed on name changed or active change?
+		// Did product changed on depends attributes chnaged?
 		////////////////////////////////////////////////////////////////////////
 		$shouldProcess = false;
 		
@@ -75,7 +178,6 @@ class Zolago_Solrsearch_Model_Observer {
 		}else{
 			$shouldProcess = true;
 		}
-		
 		
 		foreach($this->_getChangableCategoryAttributes() as $attrCode){
 			if($category->getData($attrCode)!=$category->getOrigData($attrCode)){
@@ -102,8 +204,12 @@ class Zolago_Solrsearch_Model_Observer {
 		
 		foreach($this->_filterStoreIds($storeIds) as $storeId){
 			$regualrIds = $category->
-					setStoreId($storeId)->
-					getProductCollection()->
+				setStoreId($storeId)->
+				getProductCollection()->
+					// Filter only product visible and enabled in current category in scope
+					addAttributeToFilter("status", Mage_Catalog_Model_Product_Status::STATUS_ENABLED)->
+					addAttributeToFilter("visibility",
+						array("neq"=>Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE))->
 					getAllIds();
 			
 			if(!$regualrIds){
@@ -119,16 +225,19 @@ class Zolago_Solrsearch_Model_Observer {
 	}
 	
 	
-	
 	/**
 	 * @param Varien_Event_Observer $observer
 	 */
-	public function catalogProductAttributeUpdateBefore(
+	public function catalogProductAttributeUpdateAfter(
 			Varien_Event_Observer $observer) {
 		
 		$event = $observer->getEvent();
 		$productIds = $event->getProductIds();
 		$storeId = $event->getStoreId();
+		
+		/**
+		 * @todo add check solr-used attribute changed?
+		 */
 		
 		if($storeId==Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID){
 			$storeIds = array_keys(Mage::app()->getStores());
@@ -143,6 +252,27 @@ class Zolago_Solrsearch_Model_Observer {
 		}
 	}
 	
+	
+	/**
+	 * After mapper assign products
+	 * @param Varien_Event_Observer $observer
+	 */
+	public function zolagoMapperAfterAssignProducts(
+			Varien_Event_Observer $observer) {
+		
+		
+		$event = $observer->getEvent();
+		$productIds = $event->getProductIds();
+	
+		$storeIds = array_keys(Mage::app()->getStores());
+		
+		foreach($this->_filterStoreIds($storeIds) as $storeId){
+			foreach($productIds as $productId){
+				$this->collectProduct($productId, $storeId);
+			}
+		}
+		
+	}
 	
 	
 	/**
@@ -162,6 +292,7 @@ class Zolago_Solrsearch_Model_Observer {
 		if($this->_collectedProdutcs){
 			$this->processCollectedProducts();
 		}
+		$this->_handled = true;
 	}
 	
 	
@@ -199,6 +330,10 @@ class Zolago_Solrsearch_Model_Observer {
 	 */
 	public function processCollectedProducts() {
 		
+		if(!$this->_canBeHandled){
+			return;
+		}
+		
 		$resource = Mage::getResourceModel("zolagosolrsearch/improve");;
 		/* @var $resource Zolago_Solrsearch_Model_Resource_Improve */
 	
@@ -222,11 +357,11 @@ class Zolago_Solrsearch_Model_Observer {
 				}
 			}
 			
-			
 			$collection = Mage::getResourceModel('catalog/product_collection');
-			
-			
 			/* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
+			
+			$collection->addAttributeToSelect(array("status", "visibility"));
+			
 			if($storeId!=Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID){
 				$collection->addStoreFilter($storeId);
 				$collection->setStoreId($storeId);
@@ -234,16 +369,7 @@ class Zolago_Solrsearch_Model_Observer {
 				$stores = $resource->getStoreIdsByProducts($products);
 			}
 			
-			// Visible catalog
-			$collection->addAttributeToFilter("visibility", 
-				array("in"=>array(
-					Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH,
-					Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_CATALOG,
-					Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_SEARCH
-				))
-			);
-			
-			$collection->addIdFilter(array_unique($products + $parentIdsFlat));
+			$collection->addIdFilter($products + $parentIdsFlat);
 			
 			
 			foreach($collection as $product){
@@ -254,17 +380,19 @@ class Zolago_Solrsearch_Model_Observer {
 			}
 			
 		}
+		
 	}
 	
 	/**
 	 * Push single product to queue. Process parent if needed
 	 * @param Mage_Catalog_Model_Product|int $product
 	 * @param type $storeId
+	 * @param bool $deleteOnly
 	 * @return type
 	 */
 	protected function _pushProduct($product, 
 			$storeId=Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID, 
-			$checkParents = false) {
+			$checkParents = false, $deleteOnly=false) {
 
 		if(!$product instanceof Mage_Catalog_Model_Product){
 			$product = Mage::getModel("catalog/product")->setStoreId($storeId)->load($product);
@@ -272,20 +400,20 @@ class Zolago_Solrsearch_Model_Observer {
 		
 		// Product is simple and not visiable indyvidually - preindex its parent
 		// Do recursion
-		if($product->getTypeId()==Mage_Catalog_Model_Product_Type::TYPE_SIMPLE ){
-			if($checkParents){
-				$parentProducts = Mage::getResourceSingleton('catalog/product_type_configurable')
-					->getParentIdsByChild($product->getId());
-				
-				foreach($parentProducts as $parentProductId){
-					$this->_pushProduct($parentProductId, $storeId);
-				}
+		if($checkParents && $product->getTypeId()==Mage_Catalog_Model_Product_Type::TYPE_SIMPLE){
+			$parentProducts = Mage::getResourceSingleton('catalog/product_type_configurable')
+				->getParentIdsByChild($product->getId());
+			foreach($parentProducts as $parentProductId){
+				$this->_pushProduct($parentProductId, $storeId);
 			}
 		}
 		
 		// Check should be removed
 		if($product->getVisibility()==Mage_Catalog_Model_Product_Visibility::VISIBILITY_NOT_VISIBLE){
-			return;
+			$deleteOnly = true;
+		}
+		if($product->getStatus()!=Mage_Catalog_Model_Product_Status::STATUS_ENABLED){
+			$deleteOnly = true;
 		}
 		
 		$queueModel = Mage::getSingleton('zolagosolrsearch/queue');
@@ -303,13 +431,16 @@ class Zolago_Solrsearch_Model_Observer {
 				continue;
 			}
 			
-			$item = Mage::getModel("zolagosolrsearch/queue_item");
-			/* @var $item Zolago_Solrsearch_Model_Queue_Item */
+			foreach($cores as $core){
+				$item = Mage::getModel("zolagosolrsearch/queue_item");
+				/* @var $item Zolago_Solrsearch_Model_Queue_Item */
 
-			$item->setProductId($product->getId());
-			$item->setCoreName($cores[0]);
-			$item->setStoreId($storeId);
-			$queueModel->push($item);
+				$item->setProductId($product->getId());
+				$item->setCoreName($core);
+				$item->setStoreId($storeId);
+				$item->setDeleteOnly((int)$deleteOnly);
+				$queueModel->push($item);
+			}
 		}
 
 	}
@@ -343,8 +474,18 @@ class Zolago_Solrsearch_Model_Observer {
 		return $this->_tmpProduct;
 	}
 	
+	
 	public function doNothing(Varien_Event_Observer $observer) {
 		Mage::log("Nothing");
+	}
+	
+	/**
+	 * If no after dispatch - handle collected in destruct
+	 */
+	public function __destruct() {
+		if(!$this->_handled){
+			$this->processCollectedProducts();
+		}
 	}
 	
 }

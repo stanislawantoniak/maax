@@ -10,26 +10,79 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 {
     const ZOLAGO_USE_IN_SEARCH_CONTEXT = 'use_in_search_context';
 
-    public static function extract_domain($domain)
-    {
-        if (preg_match("/(?P<domain>[a-z0-9][a-z0-9\-]{1,63}\.[a-z\.]{2,6})$/i", $domain, $matches)) {
-            return $matches['domain'];
-        } else {
-            return $domain;
-        }
-    }
-
-    public static function extract_subdomains($domain)
-    {
-        $subdomains = $domain;
-        $domain = self::extract_domain($subdomains);
-
-        $subdomains = rtrim(strstr($subdomains, $domain, true), '.');
-
-        return $subdomains;
-    }
-
-    public static function getTreeCategoriesSelect($parentId, $level, $cat)
+	/**
+	 * @var array
+	 */
+	protected $_cores;
+	/**
+	 * @var array
+	 */
+	protected $_availableStoreIds;
+	
+	/**
+	 * 
+	 * @param type $storeId
+	 * @return type
+	 */
+	public function getCoresByStoreId($storeId) {
+		$cores = array();
+		foreach($this->getCores() as $core=>$data){
+			if(isset($data['stores'])){
+				$ids = explode(",", trim($data['stores'], ","));
+				if(in_array($storeId,$ids)){
+					$cores[] = $core;
+				}
+			}
+		}
+		return $cores;
+	}
+	
+	/**
+	 * @return array
+	 */
+	public function getCores() {
+		if(!$this->_cores){
+			$this->_cores  = (array) Mage::getStoreConfig('solrbridgeindices', 0);
+		}
+		return $this->_cores;
+	}
+	
+	/**
+	 * @return array
+	 */
+	public function getAvailableCores() {
+		$cores = array();
+		foreach($this->getCores() as $core => $data){
+			if(isset($data['stores'])){
+				$ids = array_filter(explode(",", trim($data['stores'], ",")));
+				if(count($ids)){
+					$cores[$core] = true;
+				}
+			}
+		}
+		return array_keys($cores);
+	}
+	
+	/**
+	 * Returns vaialble stores (cores with has assigned store)
+	 * @return array
+	 */
+	public function getAvailableStores() {
+		if(!is_array($this->_availableStoreIds)){
+			$this->_availableStoreIds = array();
+			foreach($this->getCores() as $core=>$data){
+				if(isset($data['stores'])){
+					$ids = explode(",", trim($data['stores'], ","));
+					$this->_availableStoreIds = array_merge($this->_availableStoreIds, $ids);
+				}
+			}
+			$this->_availableStoreIds = array_values(
+					array_filter(array_unique($this->_availableStoreIds)));
+		}
+		return $this->_availableStoreIds;
+	}
+	
+    public function getTreeCategoriesSelect($parentId, $level, $cat)
     {
         if ($level > 5) {
             return '';
@@ -37,7 +90,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
         $allCats = Mage::getModel('catalog/category')->getCollection()
             ->addAttributeToSelect('*')
             ->addAttributeToFilter('is_active', '1')
-            // ->addAttributeToFilter( self::ZOLAGO_USE_IN_SEARCH_CONTEXT , array('eq' => 1))
+             //->addAttributeToFilter( self::ZOLAGO_USE_IN_SEARCH_CONTEXT , array('eq' => 1))
             ->addAttributeToFilter('include_in_menu', '1')
             ->addAttributeToFilter('parent_id', array('eq' => $parentId));
 
@@ -47,9 +100,8 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
             if($category->getId() == $cat){
                 $selected = ' selected="selected" ';
             }
-            $html .= '<option value="' . $category->getId() . '" '. $selected.'>' . str_repeat("&nbsp;", 4 * $level) . Mage::helper(
-                    'catalog'
-                )->__($category->getName()) . "</option>";
+            $html .= '<option value="' . $category->getId() . '" '. $selected.'>' . str_repeat("&nbsp;", 4 * $level)
+                . $category->getName() . "</option>";
             $subcats = $category->getChildren();
             if ($subcats != '') {
                 $html .= self::getTreeCategoriesSelect($category->getId(), $level + 1,$cat);
@@ -58,7 +110,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
         return $html;
     }
 
-    public static function getTreeCategories($parentId, $isChild)
+    public function getTreeCategories($parentId, $isChild)
     {
 
         $cats = array();
