@@ -95,7 +95,7 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
             }
 
             $cats = array();
-            if(is_Array($filterItem) &&  count($filterItem) > 0){
+            if(count($filterItem) > 0){
                 $query = '';
 				$extendedQuery = '';
                 foreach($filterItem as $value){
