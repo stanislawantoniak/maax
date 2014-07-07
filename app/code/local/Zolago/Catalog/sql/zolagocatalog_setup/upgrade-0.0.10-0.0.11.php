@@ -5,6 +5,8 @@ $installer = new Mage_Catalog_Model_Resource_Setup('core_setup');
 
 $installer->startSetup();
 $installer->run("
+CREATE OR REPLACE
+VIEW `vw_product_relation_prices_sizes` AS
 SELECT  `product_relation`.`parent_id` AS `parent`,  `product_relation`.`child_id` AS `child`,
 `prices`.`store_id` AS `store`,  `websites`.`website_id` AS `website`,  `prices`.`value` AS `child_price`,
 `products`.`sku` AS `sku`,  `prices`.`attribute_id` AS `attribute_id`,  `sizes`.`value` AS `child_size`
