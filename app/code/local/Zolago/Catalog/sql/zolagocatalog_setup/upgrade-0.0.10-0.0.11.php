@@ -2,7 +2,7 @@
 
 $installer = new Mage_Catalog_Model_Resource_Setup('core_setup');
 /* @var $installer Mage_Catalog_Model_Resource_Setup */
-
+$entityTypeID = Mage::getModel('catalog/product')->getResource()->getTypeId();
 $installer->startSetup();
 $installer->run("
 CREATE OR REPLACE
@@ -16,8 +16,8 @@ JOIN `core_store` `websites`  ON ((`websites`.`store_id` = `prices`.`store_id`))
 JOIN `catalog_product_entity_int` `sizes`  ON ((`product_relation`.`child_id` = `sizes`.`entity_id`)))
 JOIN `catalog_product_entity` `products`  ON ((`products`.`entity_id` = `product_relation`.`child_id`)))
 JOIN `eav_attribute`
-WHERE ((`prices`.`attribute_id` IN(SELECT attribute_id FROM `eav_attribute` WHERE attribute_code='price'))
-AND (`sizes`.`attribute_id` IN(SELECT attribute_id FROM `eav_attribute` WHERE attribute_code='size')))
+WHERE ((`prices`.`attribute_id` IN(SELECT attribute_id FROM `eav_attribute` WHERE attribute_code='price' AND `entity_type_id`={$entityTypeID}))
+AND (`sizes`.`attribute_id` IN(SELECT attribute_id FROM `eav_attribute` WHERE attribute_code='size' AND `entity_type_id`={$entityTypeID})))
 ");
 
 $installer->endSetup();
