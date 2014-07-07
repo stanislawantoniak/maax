@@ -27,4 +27,82 @@ class Zolago_Dropship_Model_Resource_Vendor extends Unirgy_Dropship_Model_Mysql4
 		$select->where("pos_vendor.vendor_id=?", $object->getId());
 		return $this->getReadConnection()->fetchCol($select);
 	}
+
+    /**
+     * @param $vendorId
+     *
+     * @return array
+     */
+    public function getSuperVendorAgentEmails($vendorId)
+    {
+        $agents = array();
+
+        if (empty($vendorId)) {
+            return $agents;
+        }
+        $readConnection = $this->_getReadAdapter();
+        $select = $readConnection->select();
+        $select->from(
+            array("vendor" => 'udropship_vendor'),
+            array()
+        );
+        $select->join(
+            array("operator" => $this->getTable("zolagooperator/operator")),
+            "operator.vendor_id=vendor.super_vendor_id",
+            array(
+                 "operator_email" => "operator.email",
+                 "firstname"      => "operator.firstname",
+                 "lastname"       => "operator.lastname"
+            )
+        );
+        $select->where("vendor.vendor_id=?", $vendorId);
+        $select->where("operator.is_active=?", 1);
+        $select->where("operator.roles LIKE '%" . Zolago_Operator_Model_Acl::ROLE_RMA_OPERATOR . "%'");
+        echo $select;
+        try {
+            $agents = $readConnection->fetchAssoc($select);
+        } catch (Exception $e) {
+            Mage::throwException("Error fetching agents");
+        }
+        return $agents;
+    }
+
+    /**
+     * @param $vendorId
+     *
+     * @return array
+     */
+    public function getVendorAgentEmails($vendorId)
+    {
+        $agents = array();
+
+        if (empty($vendorId)) {
+            return $agents;
+        }
+        $readConnection = $this->_getReadAdapter();
+        $select = $readConnection->select();
+        $select->from(
+            array("vendor" => 'udropship_vendor'),
+            array()
+        );
+        $select->join(
+            array("operator" => $this->getTable("zolagooperator/operator")),
+            "operator.vendor_id=vendor.vendor_id",
+            array(
+                 "operator_email" => "operator.email",
+                 "firstname"      => "operator.firstname",
+                 "lastname"       => "operator.lastname"
+            )
+        );
+        $select->where("vendor.vendor_id=?", $vendorId);
+        $select->where("operator.is_active=?", 1);
+        $select->where("operator.roles LIKE '%" . Zolago_Operator_Model_Acl::ROLE_RMA_OPERATOR . "%'");
+        echo $select;
+        try {
+            $agents = $readConnection->fetchAssoc($select);
+        } catch (Exception $e) {
+            Mage::throwException("Error fetching agents");
+        }
+        return $agents;
+    }
 }
