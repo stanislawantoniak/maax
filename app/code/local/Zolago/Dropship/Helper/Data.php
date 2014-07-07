@@ -57,11 +57,11 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
 	}
 	
 	public function getAllowedCarriers() {
-		return array(/*"", "custom", */"zolagodhl","ups");
+		return array(/*"", "custom", */"orbadhl","orbaups");
 	}
 	
 	public function isUdpoMpsAvailable($carrierCode, $vendor = null) {
-		if(in_array($carrierCode, array("zolagodhl"))){
+		if(in_array($carrierCode, array("orbadhl","orbaups"))){
 			return true;
 		}
 		return parent::isUdpoMpsAvailable($carrierCode, $vendor);

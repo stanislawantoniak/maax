@@ -101,7 +101,7 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 	 */
 	public function isLetterable(Mage_Sales_Model_Order_Shipment_Track $tracking) {
 		switch ($tracking->getCarrierCode()) {
-			case Zolago_Dhl_Model_Carrier::CODE:
+			case Orba_Shipping_Model_Carrier_Dhl::CODE:
 				return true;
 			break;
 		}
@@ -327,7 +327,7 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 	}
 	
 	public function canUseCarrier() {
-		return $this->canPosUseDhl();
+		return Mage::helper('orbashipping')->canPosUseCarrier($this->getPo()->getDefaultPos());
 	}
 	
 	public function canPosUseDhl() {
