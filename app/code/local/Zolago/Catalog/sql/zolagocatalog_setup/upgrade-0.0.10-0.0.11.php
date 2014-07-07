@@ -17,7 +17,7 @@ JOIN `catalog_product_entity_int` `sizes`  ON ((`product_relation`.`child_id` = 
 JOIN `catalog_product_entity` `products`  ON ((`products`.`entity_id` = `product_relation`.`child_id`)))
 JOIN `eav_attribute`
 WHERE ((`prices`.`attribute_id` IN(SELECT attribute_id FROM `eav_attribute` WHERE attribute_code='price'))
-AND (`sizes`.`attribute_id` IN(SELECT attribute_id FROM `eav_attribute` WHERE attribute_code='color')))
+AND (`sizes`.`attribute_id` IN(SELECT attribute_id FROM `eav_attribute` WHERE attribute_code='size')))
 ");
 
 $installer->endSetup();
