@@ -1,30 +1,110 @@
+<section id="popular-brands">
+    <div class="container-fluid">
+        <div class="col-sm-12">
 
-<!--popular brands-->
-<?php
-    if(count($this->getVendorColleciton()) != 0) :
-?>
-<div class="content-wrapper">
-    <div class="container popular-shops">
-        <h3><?php echo $this->__("popular brands"); ?></h3>
-        <?php
-            $i = 0;
-        ?>
-        <?php
-            foreach($this->getVendorCollection() as $vendor) :
-            if($i % 3 == 0) :
-        ?>
-        <ul class="pop-shop-lst">
-        <? endif; ?>
-            <li><a href="<?php $this->getVendorBaseUrl($vendor); ?>"><span class="pop-shop-img-wr"><img src="<?php echo $this->getVendorResizedLogoUrl($vendor); ?>"
-                                  alt="<?php echo $this->getVendorName($vendor); ?>" /></span><span><?php echo $this->getVendorName($vendor); ?> &gt;</span></a></li>
-        <?php if(++$i % 3 == 0) : ?>
-        </ul>
-        <?php endif; ?>
-        <?php endforeach; ?>
-        <?php if($i % 3 != 0) : ?>
-        </ul>
-        <?php endif; ?>
+            <!--    popular-->
+            <div class="row">
+
+                <div class="popular-shops">
+                    <h3>najpopularniejsze marki</h3>
+                    <ul class="pop-shop-lst">
+                        <li><a href="#"><span class="pop-shop-img-wr"><img
+                                        src="<?php echo $this->getSkinUrl('images/ck-logo-small.jpg'); ?>"
+                                        alt=""></span><span>Calvin Klein &gt;</span></a></li>
+                        <li><a href="#"><span class="pop-shop-img-wr"><img
+                                        src="<?php echo $this->getSkinUrl('images/ck-logo-small.jpg'); ?>"
+                                        alt=""></span><span>Calvin Klein &gt;</span></a></li>
+                        <li><a href="#"><span class="pop-shop-img-wr"><img
+                                        src="<?php echo $this->getSkinUrl('images/ck-logo-small.jpg'); ?>"
+                                        alt=""></span><span>Calvin Klein &gt;</span></a></li>
+                    </ul>
+                    <ul class="pop-shop-lst">
+                        <li><a href="#"><span class="pop-shop-img-wr"><img
+                                        src="<?php echo $this->getSkinUrl('images/ck-logo-small.jpg'); ?>"
+                                        alt=""></span><span>Calvin Klein &gt;</span></a></li>
+                        <li><a href="#"><span class="pop-shop-img-wr"><img
+                                        src="<?php echo $this->getSkinUrl('images/ck-logo-small.jpg'); ?>"
+                                        alt="<?php echo $this->getSkinUrl('images/ck-logo-small.jpg'); ?>"></span><span>Calvin Klein &gt;</span></a>
+                        </li>
+                        <li><a href="#"><span class="pop-shop-img-wr"><img
+                                        src="<?php echo $this->getSkinUrl('images/ck-logo-small.jpg'); ?>"
+                                        alt="<?php echo $this->getSkinUrl('images/ck-logo-small.jpg'); ?>"></span><span>Calvin Klein &gt;</span></a>
+                        </li>
+                    </ul>
+                    <ul class="pop-shop-lst">
+                        <li><a href="#"><span class="pop-shop-img-wr"><img
+                                        src="<?php echo $this->getSkinUrl('images/ck-logo-small.jpg'); ?>"
+                                        alt="<?php echo $this->getSkinUrl('images/ck-logo-small.jpg'); ?>"></span><span>Calvin Klein &gt;</span></a>
+                        </li>
+                        <li><a href="#"><span class="pop-shop-img-wr"><img
+                                        src="<?php echo $this->getSkinUrl('images/ck-logo-small.jpg'); ?>"
+                                        alt="<?php echo $this->getSkinUrl('images/ck-logo-small.jpg'); ?>"></span><span>Calvin Klein &gt;</span></a>
+                        </li>
+                        <li><a href="#"><span class="pop-shop-img-wr"><img
+                                        src="<?php echo $this->getSkinUrl('images/ck-logo-small.jpg'); ?>"
+                                        alt="<?php echo $this->getSkinUrl('images/ck-logo-small.jpg'); ?>"></span><span>Calvin Klein &gt;</span></a>
+                        </li>
+                    </ul>
+                    <ul class="pop-shop-lst ">
+                        <li><a href="#"><span class="pop-shop-img-wr"><img
+                                        src="<?php echo $this->getSkinUrl('images/ck-logo-small.jpg'); ?>"
+                                        alt="<?php echo $this->getSkinUrl('images/ck-logo-small.jpg'); ?>"></span><span>Calvin Klein &gt;</span></a>
+                        </li>
+                        <li><a href="#"><span class="pop-shop-img-wr"><img
+                                        src="<?php echo $this->getSkinUrl('images/ck-logo-small.jpg'); ?>"
+                                        alt="<?php echo $this->getSkinUrl('images/ck-logo-small.jpg'); ?>"></span><span>Calvin Klein &gt;</span></a>
+                        </li>
+                        <li><a href="#"><span class="pop-shop-img-wr"><img
+                                        src="<?php echo $this->getSkinUrl('images/ck-logo-small.jpg'); ?>"
+                                        alt="<?php echo $this->getSkinUrl('images/ck-logo-small.jpg'); ?>"></span><span>Calvin Klein &gt;</span></a>
+                        </li>
+                    </ul>
+                    <ul class="pop-shop-lst">
+                        <li><a href="#"><span class="pop-shop-img-wr"><img
+                                        src="<?php echo $this->getSkinUrl('images/ck-logo-small.jpg'); ?>"
+                                        alt="<?php echo $this->getSkinUrl('images/ck-logo-small.jpg'); ?>"></span><span>Calvin Klein &gt;</span></a>
+                        </li>
+                        <li><a href="#"><span class="pop-shop-img-wr"><img
+                                        src="<?php echo $this->getSkinUrl('images/ck-logo-small.jpg'); ?>"
+                                        alt="<?php echo $this->getSkinUrl('images/ck-logo-small.jpg'); ?>"></span><span>Calvin Klein &gt;</span></a>
+                        </li>
+                        <li><a href="#"><span class="pop-shop-img-wr"><img
+                                        src="<?php echo $this->getSkinUrl('images/ck-logo-small.jpg'); ?>"
+                                        alt="<?php echo $this->getSkinUrl('images/ck-logo-small.jpg'); ?>"></span><span>Calvin Klein &gt;</span></a>
+                        </li>
+                    </ul>
+                    <ul class="pop-shop-lst">
+                        <li><a href="#"><span class="pop-shop-img-wr"><img
+                                        src="<?php echo $this->getSkinUrl('images/ck-logo-small.jpg'); ?>"
+                                        alt="<?php echo $this->getSkinUrl('images/ck-logo-small.jpg'); ?>"></span><span>Calvin Klein &gt;</span></a>
+                        </li>
+                        <li><a href="#"><span class="pop-shop-img-wr"><img
+                                        src="<?php echo $this->getSkinUrl('images/ck-logo-small.jpg'); ?>"
+                                        alt="<?php echo $this->getSkinUrl('images/ck-logo-small.jpg'); ?>"></span><span>Calvin Klein &gt;</span></a>
+                        </li>
+                        <li><a href="#"><span class="pop-shop-img-wr"><img
+                                        src="<?php echo $this->getSkinUrl('images/ck-logo-small.jpg'); ?>"
+                                        alt="<?php echo $this->getSkinUrl('images/ck-logo-small.jpg'); ?>"></span><span>Calvin Klein &gt;</span></a>
+                        </li>
+                    </ul>
+                    <ul class="pop-shop-lst ">
+                        <li><a href="#"><span class="pop-shop-img-wr"><img
+                                        src="<?php echo $this->getSkinUrl('images/ck-logo-small.jpg'); ?>"
+                                        alt="<?php echo $this->getSkinUrl('images/ck-logo-small.jpg'); ?>"></span><span>Calvin Klein &gt;</span></a>
+                        </li>
+                        <li><a href="#"><span class="pop-shop-img-wr"><img
+                                        src="<?php echo $this->getSkinUrl('images/ck-logo-small.jpg'); ?>"
+                                        alt="<?php echo $this->getSkinUrl('images/ck-logo-small.jpg'); ?>"></span><span>Calvin Klein &gt;</span></a>
+                        </li>
+                        <li><a href="#"><span class="pop-shop-img-wr"><img
+                                        src="<?php echo $this->getSkinUrl('images/ck-logo-small.jpg'); ?>"
+                                        alt="<?php echo $this->getSkinUrl('images/ck-logo-small.jpg'); ?>"></span><span>Calvin Klein &gt;</span></a>
+                        </li>
+                    </ul>
+                </div>
+                <a class="pop-shop-seemore" href="">zobacz więcej marek</a>
+
+            </div>
+        </div>
     </div>
-    <a class="pop-shop-seemore" href="<?php echo $this->getViewMoreUrl(); ?>"><?php echo $this->__("see more brands"); ?></a>
-</div>
-<?php endif; ?>
+</section>
