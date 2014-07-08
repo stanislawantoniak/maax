@@ -24,6 +24,13 @@ class Zolago_Solrsearch_Model_Catalog_Product_Collection extends Varien_Data_Col
 	}
 	
 	/**
+	 * @return Mage_Catalog_Model_Category
+	 */
+	public function getCurrentCategory() {
+		return $this->_currentCategory;
+	}
+	
+	/**
 	 * @param array $doc
 	 */
 	public function setSolrData(array $doc) {

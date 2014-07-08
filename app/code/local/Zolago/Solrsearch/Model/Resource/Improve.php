@@ -572,25 +572,27 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 	
 
 	/**
-	 * 
-	 * @param Varien_Data_Collection $collection
+	 * @param Zolago_Solrsearch_Model_Catalog_Product_Collection $collection
 	 * @param type $storeId
 	 * @param type $customerGroupId
 	 * @return \Zolago_Solrsearch_Model_Resource_Improve
 	 */
-	public function loadAttributesDataForFrontend(Varien_Data_Collection $collection, $storeId, $customerGroupId) {
-		// Load price data
+	public function loadAttributesDataForFrontend(
+			Zolago_Solrsearch_Model_Catalog_Product_Collection $collection, 
+			$storeId, $customerGroupId) {
 		
+		
+		$websiteId = Mage::app()->getStore($storeId)->getWebsiteId();
+		$category = $collection->getCurrentCategory();
+		
+		// Load price data
 		$taxClasses = array();
 		foreach($collection as $product){
 			$taxClasses[$product->getTaxClassId()] = true;
 		}
 		$taxClasses = array_keys($taxClasses);
 		
-		
-		
 		$select = $this->getReadConnection()->select();
-		
 		$least = $this->getReadConnection()->getLeastSql(
 			array('price_index.min_price', 'price_index.tier_price')
 		);
@@ -614,7 +616,6 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 				$colls
 		);
 		
-		$websiteId = Mage::app()->getStore($storeId)->getWebsiteId();
 		
 		$select->where("entity_id IN (?)", $collection->getAllIds());
 		$select->where("tax_class_id IN (?)", $taxClasses);
@@ -665,6 +666,25 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 		foreach($this->getReadConnection()->fetchCol($select) as $productId){
 			if($product=$collection->getItemById($productId)){
 				$product->setInMyWishlist(1);
+			}
+		}
+		
+		
+		// Add urls
+		
+		/*
+		$select = $this->getReadConnection()->select();
+		$select->from($this->getTable("core/url_rewrite"), array("product_id"));
+		$select->where("product_id IN (?)", $collection->getAllIds());
+		$select->where("store_id=?", $storeId);
+		
+		if($category && $category->getId()){
+			$select->where("category_id=?", $category->getId());
+		}
+		*/
+		foreach ($collection as $product){
+			if(!$product->getCurrentUrl()){
+				$product->setCurrentUrl(Mage::getUrl("catalog/product/view", array("id"=>$product->getId())));
 			}
 		}
 		
