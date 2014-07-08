@@ -7,7 +7,7 @@
     <div class="block-content">
     	<form name="searchFacets" method="get" action="<?php echo $this->helper('solrsearch')->getResultUrl() ?>">
 			<input type="hidden" name="q" value="<?php echo $this->getData('querytext') ?>" />
-    		<?php if($this->isSelectedFacetActive()) : ?>
+    		<?php if(sizeof($filterQuery) > 0 && $this->isSelectedFacetActive()) : ?>
 			<div class="currently">
 				<p class="block-subtitle"><?php echo $this->__('Currently Shopping by') ?></p>
 				<ol>
