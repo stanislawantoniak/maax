@@ -1,11 +1,25 @@
 <?php
 class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 {
+	
+	const REGISTER_KEY = "current_solr_data";
+	
 	protected $_specialKeys = array(
 		'is_new_facet',
 		'is_bestseller_facet',
 		'product_flag_facet'
 	);
+	
+	/**
+	 * Solr query with register results
+	 * @param array $queryText
+	 * @param array $params
+	 * @return array
+	 */
+	public function queryRegister($queryText, $params = array()) {
+		Mage::register(self::REGISTER_KEY, $this->query($queryText, $params));
+		return Mage::registry(self::REGISTER_KEY);
+	}
 	
     public function prepareCleanFlagQueryData()
     {
@@ -18,6 +32,14 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
         $this->prepareSynonym();
         return $this;
     }	
+	
+	/**
+	 * Prepare sorting ang pagin
+	 * @return type
+	 */
+	public function preparePagingAndSorting() {
+		return parent::preparePagingAndSorting();
+	}
 	
     /**
      * Prepare solr filter query paprams
@@ -300,5 +322,22 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
         }
 
         $this->filterQuery = $filterQueryString;
-    }		
+    }
+	
+	/**
+	 * Fileds to listing show
+	 */
+	protected function prepareFieldList()
+    {
+        if (empty($this->fieldList))
+        {
+            $this->fieldList = array_merge(
+				Mage::helper("zolagosolrsearch")->getSolrDocFileds(),		
+				array(
+					$this->priceFieldName
+				)
+			);
+        }
+    }
+	
 }
