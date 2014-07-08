@@ -5,6 +5,47 @@ class Zolago_Solrsearch_Model_Resource_Queue_Item extends Mage_Core_Model_Resour
     }
 	
 	/**
+	 * Cleanup queue
+	 * @return int
+	 */
+	public function cleanup() {
+		$adapter = $this->_getWriteAdapter();
+		$where = $adapter->quoteInto("status=?", Zolago_Solrsearch_Model_Queue_Item::STATUS_DONE);
+		return $adapter->delete($this->getMainTable(), $where);
+	}
+	
+	/**
+	 * @param Varien_Data_Collection_Db $itemCollection
+	 * @param type $status
+	 * @return type
+	 */
+	public function updateStatus(Varien_Data_Collection_Db $itemCollection, $status) {
+		
+		$itemIds = array();
+		foreach($itemCollection as $id=>$item){
+			$itemIds[] = $id;
+			$item->setStatus($status);
+		}
+		
+		if(!$itemIds){
+			return;
+		}
+		
+		$data = array("status"=>$status);
+		
+		// Force inser process date on comleted statuses
+		if(in_array($status, array(
+			Zolago_Solrsearch_Model_Queue_Item::STATUS_DONE, 
+			Zolago_Solrsearch_Model_Queue_Item::STATUS_FAIL))){
+			
+			$data['processed_at'] = Varien_Date::now();
+		}
+		$where = $this->_getWriteAdapter()->quoteInto("queue_id IN (?)", $itemIds);
+		$this->_getWriteAdapter()->update($this->getMainTable(), $data , $where);
+	}
+	
+	
+	/**
 	 * @param Varien_Object $item
 	 * @return boolean
 	 */
@@ -13,8 +54,9 @@ class Zolago_Solrsearch_Model_Resource_Queue_Item extends Mage_Core_Model_Resour
 			$select = $this->getReadConnection()->select();
 			$select->from($this->getMainTable(), array("queue_id"));
 			$select->where("product_id=?", $item->getProductId());
-			$select->where("store_id=?", $item->getStoreId());
+			$select->where("core_name=?", $item->getCoreName());
 			$select->where("status=?", $item->getStatus());
+			$select->where("delete_only=?", $item->getDeleteOnly());
 		    if($result=$this->getReadConnection()->fetchOne($select)){
 				$item->setId($result);
 				return true;
