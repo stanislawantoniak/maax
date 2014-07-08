@@ -60,6 +60,45 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
 		return array(/*"", "custom", */"orbadhl","orbaups");
 	}
 	
+    //{{{ 
+    /**
+     * 
+     * @param Zolago_Pos_Model_Pos $pos
+     * @return 
+     */
+    public function getAllowedCarriersForPos($pos) {
+        $out = array();
+        if ($pos->getUseDhl()) {
+            $out[] = 'orbadhl';
+        }
+        if ($pos->getUseOrbaups()) {
+            $out[] = 'orbaups';
+        }
+        return $out;
+    }
+    //}}}
+    //{{{ 
+    /**
+     * 
+     * @param Unirgy_Dropship_Model_Vendor $vendor
+     * @param bool $rmaMode 
+     * @return array
+     */
+     public function getAllowedCarriersForVendor($vendor,$rmaMode = false) {
+         $out = array();
+         if ($vendor->getUseDhl()) {
+             $out[] = 'orbadhl';
+         }
+         if ($vendor->getDhlRma() && $rmaMode) {
+             $out[] = 'orbadhl';
+         }
+         if ($vendor->getUseOrbaups()) {
+             $out[] = 'orbaups';
+         }
+         return array_unique($out);
+     }
+
+    //}}}
 	public function isUdpoMpsAvailable($carrierCode, $vendor = null) {
 		if(in_array($carrierCode, array("orbadhl","orbaups"))){
 			return true;

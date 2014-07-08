@@ -1053,24 +1053,24 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 				if($shipment && $shipment->getTotalWeight()){
 					$weight = ceil($shipment->getTotalWeight());
 				}else{
-					$weight = Mage::helper('zolagodhl')->getDhlDefaultWeight();
+					$weight = Mage::helper('orbashipping/carrier_dhl')->getDhlDefaultWeight();
 				}
 			}
 			
 			
 			$shipment->setTotalWeight($weight);
 			
-			if (!$number && $carrier == Zolago_Dhl_Helper_Data::DHL_CARRIER_CODE && $autoTracking && $shipment && $dhlSettings) {
+			if (!$number && $carrier == Orba_Shipping_Model_Carrier_Dhl::CODE && $autoTracking && $shipment && $dhlSettings) {
 				
 				$shipmentSettings = array(
-					'type'			=> $r->getParam('specify_zolagodhl_type'),
-					'width'			=> $r->getParam('specify_zolagodhl_width'),
-					'height'		=> $r->getParam('specify_zolagodhl_height'),
-					'length'		=> $r->getParam('specify_zolagodhl_length'),
+					'type'			=> $r->getParam('specify_orbadhl_type'),
+					'width'			=> $r->getParam('specify_orbadhl_width'),
+					'height'		=> $r->getParam('specify_orbadhl_height'),
+					'length'		=> $r->getParam('specify_orbadhl_length'),
 					'weight'		=> $weight,
-					'quantity'		=> Zolago_Dhl_Model_Client::SHIPMENT_QTY,
-					'nonStandard'	=> $r->getParam('specify_zolagodhl_custom_dim'),
-					'shipmentDate'  => $this->_porcessDhlDate($r->getParam('specify_zolagodhl_shipping_date')),
+					'quantity'		=> Orba_Shipping_Model_Carrier_Client_Dhl::SHIPMENT_QTY,
+					'nonStandard'	=> $r->getParam('specify_orbadhl_custom_dim'),
+					'shipmentDate'  => $this->_porcessDhlDate($r->getParam('specify_orbadhl_shipping_date')),
 					'shippingAmount'=> $r->getParam('shipping_amount')
 				);
 				$number = $this->_createShipments($dhlSettings, $shipment, $shipmentSettings, $udpo);
@@ -1517,7 +1517,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 	
 	protected function _createShipments($dhlSettings, $shipment, $shipmentSettings, $udpo) {
 		$number		= false;
-		$dhlClient	= Mage::helper('zolagodhl')->startDhlClient($dhlSettings);
+		$dhlClient	= Mage::helper('orbashipping/carrier_dhl')->startClient($dhlSettings);
 		$posModel	= Mage::getModel('zolagopos/pos')->load($udpo->getDefaultPosId());
 		$session = $this->_getSession();
 		/* @var $session Zolago_Dropship_Model_Session */

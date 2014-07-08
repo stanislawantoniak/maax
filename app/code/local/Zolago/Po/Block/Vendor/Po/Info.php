@@ -3,40 +3,13 @@
 class Zolago_Po_Block_Vendor_Po_Info extends Unirgy_DropshipPo_Block_Vendor_Po_Info
 {
         
-    protected $_allowedKeys;
-    //{{{ 
-    /**
-     * 
-     * @param string $key
-     * @return 
-     */
-
-    //}}}
-    protected function _reduceArray($key) {
-            $idx = array_search($key,$this->_allowedKeys);
-            if ($idx !== false) {
-                unset($this->_allowedKeys[$idx]);
-            }
-        
-    }
     public function getCarriers()
     {
         $po = $this->getPo();
         $posId = $po->getDefaultPosId();
         $pos = Mage::getModel('zolagopos/pos')->load($posId);
-        $this->_allowedKeys = $this->getAllowedKeys();
-        if (!$pos->getUseDhl()) {
-            $this->_reduceArray('orbadhl');
-        }
-        if (!$pos->getUseOrbaups()) {
-            $this->_reduceArray('orbaups');
-        }
-        $out = array_intersect_key(parent::getCarriers(), array_flip($this->_allowedKeys));
+        $out = array_intersect_key(parent::getCarriers(), array_flip(Mage::helper('zolagodropship')->getAllowedCarriersForPos($pos)));
         return $out;
-    }
-
-    protected function getAllowedKeys() {
-        return Mage::helper('zolagodropship')->getAllowedCarriers();
     }
 
     public function getPo()

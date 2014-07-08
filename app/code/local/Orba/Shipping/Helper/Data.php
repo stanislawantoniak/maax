@@ -8,6 +8,10 @@ class Orba_Shipping_Helper_Data extends Mage_Core_Helper_Abstract {
     public function canPosUseCarrier(Zolago_Pos_Model_Pos $pos) {
         return (bool)(int)($pos->getUseDhl()) | (bool)(int)($pos->getUseOrbaups());
     }
+    public function canVendorUseCarrier(Unirgy_Dropship_Model_Vendor $vendor) {
+		return (bool)(int)($vendor->getUseDhl()) | (bool)(int)($vendor->getUseOrbaups())
+		    | (bool)(int)($vendor->getDhlRma());
+	}
 
     public function isDhlEnabledForVendor(Unirgy_Dropship_Model_Vendor $vendor) {
 		return (bool)(int)$vendor->getUseDhl();
@@ -39,7 +43,7 @@ class Orba_Shipping_Helper_Data extends Mage_Core_Helper_Abstract {
 				$this->_dhlPassword	= $this->getDhlPassword();				
 			}
 			
-			$dhlClient			= Mage::getModel('orbashipping/carrier_client');
+			$dhlClient			= Mage::getModel('orbashipping/carrier_client_dhl');
 			$dhlClient->setAuth($this->_dhlLogin, $this->_dhlPassword,$this->_dhlAccount);
 			$this->_dhlClient	= $dhlClient;
 		}
