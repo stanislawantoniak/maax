@@ -1362,3 +1362,15 @@ section.section h2.title_section i {
 /* line 150, ../sass/dimensions/_rv.scss */
 .recently-viewed .rwd-controls .rwd-buttons .rwd-prev.disabled, .recently-viewed .rwd-controls .rwd-buttons .rwd-next.disabled {
   visibility: hidden; }
+
+/* line 1, ../sass/override/_override-layout.scss */
+.customNavigation a {
+  top: 38%; }
+
+/* line 3, ../sass/override/_override-layout.scss */
+.pop-shop-seemore {
+  margin-top: 30px; }
+
+/* line 6, ../sass/override/_override-layout.scss */
+.popular-shops .pop-shop-lst {
+  padding-left: 0; }

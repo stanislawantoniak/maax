@@ -12336,3 +12336,15 @@ div.noscroll {
 /* line 280, ../sass/style/_footer.scss */
 .noscroll #footer {
   position: absolute !important; }
+
+/* line 1, ../sass/override/_override-layout.scss */
+.customNavigation a {
+  top: 38%; }
+
+/* line 3, ../sass/override/_override-layout.scss */
+.pop-shop-seemore {
+  margin-top: 30px; }
+
+/* line 6, ../sass/override/_override-layout.scss */
+.popular-shops .pop-shop-lst {
+  padding-left: 0; }
