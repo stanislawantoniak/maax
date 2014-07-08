@@ -8,6 +8,7 @@
 			font-size: 11px;
 			font-family: 'OpenSansRegular'!important;
 			padding-left:20px;
+			margin-bottom: 29px;
 		}
 		&:before {
 			@media (max-width: $screen-xs-max) {
@@ -95,4 +96,62 @@
 			}
 		}
 
+}
+
+.recently-viewed {
+	.rwd-controls {
+		.rwd-buttons {
+			.rwd-prev,
+			.rwd-next {
+				font-size: 48px;
+				background:$arrowMap;
+				top:112.5px;
+				position:absolute;
+				text-indent: -999em;	
+			}
+			.rwd-prev {
+				left:-15px;
+				
+				@include sprite($arrowMap, arrow-slider-latest-left-l);
+				@include sprite-dimensions($arrowMap, arrow-slider-latest-left-l);
+				@media (max-width: $screen-xs-max) {
+					@include sprite($arrowMap, arrow-rwd-slider-prev-mobile);
+					@include sprite-dimensions($arrowMap, arrow-rwd-slider-prev-mobile);
+				}
+				&:hover {
+					@include sprite($arrowMap, arrow-slider-latest-left-h);
+					@include sprite-dimensions($arrowMap, arrow-slider-latest-left-h);
+					@media (max-width: $screen-xs-max) {
+						@include sprite($arrowMap, arrow-rwd-slider-prev-mobile-h);
+						@include sprite-dimensions($arrowMap, arrow-rwd-slider-prev-mobile-h);
+					}
+				}
+
+			}
+			.rwd-next {
+				right:-15px;
+				@include sprite($arrowMap, arrow-slider-latest-right-l);
+				@include sprite-dimensions($arrowMap, arrow-slider-latest-right-l);
+				@media (max-width: $screen-xs-max) {
+					@include sprite($arrowMap, arrow-rwd-slider-next-mobile);
+					@include sprite-dimensions($arrowMap, arrow-rwd-slider-next-mobile);
+				}
+				&:hover {
+					@include sprite($arrowMap, arrow-slider-latest-right-h);
+					@include sprite-dimensions($arrowMap, arrow-slider-latest-right-h);
+					@media (max-width: $screen-xs-max) {
+						@include sprite($arrowMap, arrow-rwd-slider-next-mobile-h);
+						@include sprite-dimensions($arrowMap, arrow-rwd-slider-next-mobile-h);
+					}
+				}
+			}
+			.rwd-prev,
+			.rwd-next {
+				&.disabled {
+					visibility:hidden;
+				}
+			}
+			
+		}
+	}
 }

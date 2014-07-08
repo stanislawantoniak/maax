@@ -91,6 +91,12 @@
 			font-size: 11px;
 			color:#020202;
             font-weight: normal;
+            @media (min-width: 768px) and (max-width: 814px) {
+				float:none;
+            	display:block;
+				width:100%;
+				line-height: 29px;
+			}
             @media (max-width: $screen-xs-max) {
             	float:none;
             	display:block;
@@ -133,6 +139,7 @@
 				}
 			}
 		}
+		
 	}
 	.color {
 		.form-group {
@@ -142,7 +149,9 @@
 				float: left;
 			}
 		}
+		
 	}
+
 	.size {
 		position:relative;
 	}
@@ -160,12 +169,18 @@
 		@media (min-width: 992px) and (max-width: 1197px){
 			margin-bottom:0px;
 		}
+
 		@media (min-width: 768px) and (max-width: 991px) {
 			margin-bottom:0px;
 		}
 		.size-label { 
 			line-height: 29px;
-			@media (max-width: $screen-xs-max) { 
+			@media (min-width: 768px) and (max-width: 814px) {
+							display:block;
+							width:100%;
+						}
+			@media (max-width: $screen-xs-max) {
+				float:none; 
 				display:block;
 				float:none;
 			}
@@ -223,28 +238,35 @@
 			position: absolute;
 			bottom: -10px;
 			left: 0px;
-			@media (min-width: 769px) and (max-width: 814px) {
+			@media (max-width: 814px) {
 				
 			}
 			@media (max-width: $screen-xs-max) {
 				margin-left:0px;
 
 			}
+			.linkToModal {
+				text-align: right;
+				top:-24px;
+				position:relative;
+				padding-left:100px;
+			}
 			&.hidden-xs {
-				@media (min-width: 769px) and (max-width: 814px) {
+				@media (max-width: 814px) {
 					display:none!important;
+				}
+				@media (min-width: 815px) {
+					display:inline-block!important;
 				}
 			}
 			&.visible-xs {
-				@media (min-width: 769px) and (max-width: 814px) {
+				@media  (max-width: 814px) {
 					display:inline-block!important;
-				}
-				@media (max-width: $screen-xs-max) {
-					display:inline-block!important;
-					float:right;
-					position: absolute;
-					top: 5px;
-					left: 155px;
+					//float:right;
+					position: static;
+					//top: -23px;
+					//right: 11px;
+					//left: auto;
 				}
 			}
 			
@@ -342,4 +364,76 @@
 
 #share {
 	margin-top: -10px;
+}
+
+#product-shop  {
+	.color-box-bundle {
+		.form-group {
+			label {
+				&:first-child {
+					margin-left:0px;
+				}
+			}
+		}
+	}
+}
+#product-shop  {
+	.size-box-bundle {
+		.listSelect {
+			.view-sizing {
+				&.visible-xs {
+					top: 5px;
+				}
+				&.hidden-xs {
+					top: 19px;
+				}
+			}
+		}
+	}
+}
+
+.zoom_plus,
+.zoom_minus {
+	display:block;
+	@include sprite-dimensions($icoMapDesktop, zoom_plus);
+	position:absolute;
+	top:0px;
+	right:15px;
+	margin-left:-45px;
+	span {
+		background:$icoMapDesktop;
+		display:block;
+		@include sprite-dimensions($icoMapDesktop, zoom_plus);
+	}
+	&.full {
+		right:20px!important;
+		left:auto!important;
+		margin-left: -15px;
+		
+	}
+	&.disabled {
+		cursor:default;
+		opacity:0.3
+	}
+	&:hover {
+		text-decoration: none;
+	}
+}
+.zoom_plus {
+ top:15px;
+	span {
+		top: 5px;
+		left: 1px;
+		
+		@include sprite($icoMapDesktop, zoom_plus);	
+		
+	} 
+}
+.zoom_minus {
+	top:55px;
+ 	span {
+ 		top: 6px;
+ 		left: -1px;
+ 		@include sprite($icoMapDesktop, zoom_minus);	
+ 	}
 }

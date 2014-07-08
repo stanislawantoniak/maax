@@ -261,33 +261,33 @@
 // THEME BANNERS
 
 .rwd-theme .rwd-controls{
-	margin-top: 10px;
-	text-align: center;
+	//margin-top: 10px;
+	//text-align: center;
 }
 
 /* Styling Next and Prev buttons */
 
 .rwd-theme .rwd-controls .rwd-buttons div{
-	color: #FFF;
-	display: inline-block;
-	zoom: 1;
-	*display: inline;/*IE7 life-saver */
-	margin: 5px;
-	padding: 3px 10px;
-	font-size: 12px;
-	-webkit-border-radius: 30px;
-	-moz-border-radius: 30px;
-	border-radius: 30px;
-	background: #869791;
-	filter: Alpha(Opacity=50);/*IE7 fix*/
-	opacity: 0.5;
+	//color: #FFF;
+	//display: inline-block;
+	//zoom: 1;
+	//*display: inline;/*IE7 life-saver */
+	//margin: 5px;
+	//padding: 3px 10px;
+	//font-size: 12px;
+	//-webkit-border-radius: 30px;
+	//-moz-border-radius: 30px;
+	//border-radius: 30px;
+	//background: #869791;
+	//filter: Alpha(Opacity=50);/*IE7 fix*/
+	//opacity: 0.5;
 }
 /* Clickable class fix problem with hover on touch devices */
 /* Use it for non-touch hover action */
 .rwd-theme .rwd-controls.clickable .rwd-buttons div:hover{
-	filter: Alpha(Opacity=100);/*IE7 fix*/
-	opacity: 1;
-	text-decoration: none;
+	//filter: Alpha(Opacity=100);/*IE7 fix*/
+	//opacity: 1;
+	//text-decoration: none;
 }
 
 /* Styling Pagination*/

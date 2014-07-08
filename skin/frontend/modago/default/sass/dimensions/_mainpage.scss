@@ -40,7 +40,7 @@
     overflow-y:hidden;
     max-height: 503px;
     >h3 {
-        margin-top: 0px;
+        margin-top: 20px;
         margin-bottom:28px;
     }
     .pop-shop-lst {
@@ -83,7 +83,7 @@
     height: 38px;
     line-height: 38px;
     margin: 0 auto;
-    margin-top:30px;
+    margin-top:-38px;
     margin-bottom: 28px;
 }
 
@@ -217,11 +217,12 @@
     }
     
     #product-shop {
+        overflow-x: hidden;
         &.col-lg-8 {
             padding-left:0px;
             //padding-right: 0px;
-            overflow: hidden;
-            @media (max-width: $screen-lg-min) { 
+            //overflow: hidden;
+            @media (max-width: 1199px) { //$screen-lg-min
                 padding-right: 0px;
             }
              @media (max-width: 320px) { 
@@ -240,17 +241,4 @@
   //  outline: 1px solid red;
    // width:20.63356164383562%;
     //float:right;
-}
-
-#recently-viewed {
-    .recently-viewed {
-        padding-top: 30px;
-    }
-}
-
-
-.customNavigation {
-    a {
-        top:37%;
-    }
 }

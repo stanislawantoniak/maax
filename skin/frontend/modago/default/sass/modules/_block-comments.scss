@@ -51,20 +51,18 @@
 		height:27px;
 		float:right;
 		@media (max-width: 360px) {
-			position:relative;
-			left:-17px;
+			float:none;
+			padding: 0px;
+			margin-bottom: 20px;
+			display: inline-block;
 			@media screen and (-webkit-min-device-pixel-ratio:0) {
-				position: relative;
-			    left: 2px;
-			    width: 280px;
+				
 			}
 		}
 		@media (max-width: 320px) {
-			left: 13px;
-			width: 120%;
+			
 			@media screen and (-webkit-min-device-pixel-ratio:0) {
-				left: 21px;
-				width: 136%;
+				
 			}
 		}
 		>li{
@@ -144,6 +142,18 @@
 	}
 	#block-review-form {
 			margin-top:30px;
+	}
+	.footer_comments {
+		@media (max-width: 360px) {
+			text-align: center;
+			margin: 0px -25px 0 -10px
+		}
+		.viewFormComments {
+			@media (max-width: 360px) {
+				float:none;
+				line-height: 26px;
+			}
+		}
 	}
 }
 

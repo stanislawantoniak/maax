@@ -141,6 +141,7 @@ html.sb-static .sb-slidebar,
 
 .sb-slidebar.sb-active {
 	display: block; /* Makes Slidebars visibile when open. Changed from visibility to display to allow -webkit-overflow-scrolling. */
+	z-index: 1;
 }
 
 .sb-slidebar.sb-style-overlay {

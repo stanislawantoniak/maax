@@ -22,7 +22,7 @@
 							display:block;
 							text-align: left;
 							text-transform: uppercase;
-							padding-left:25px;
+							padding-left:26px;
 							position:relative;
 							
 							
@@ -36,6 +36,9 @@
 					    position: absolute;
 					    left: -9px;
 						top: -4px;
+							@media (max-width: 360px) {
+								left: -4px;
+							}
 						}
 					}
 					
@@ -47,6 +50,8 @@
 						font-size: 11px;
 						color:#000;
 						text-align: left;
+						padding-left: 40px;
+						padding-right: 40px;
 						ul {
 							margin:0px;
 							padding:0px;
