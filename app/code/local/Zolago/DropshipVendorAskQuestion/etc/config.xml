@@ -17,6 +17,13 @@
                     <question>Zolago_DropshipVendorAskQuestion_Model_Question</question>
                 </rewrite>
             </udqa>
+            <zolagoudqa>
+                <class>Zolago_DropshipVendorAskQuestion_Model</class>
+                <resourceModel>zolagoudqa_resource</resourceModel>
+            </zolagoudqa>
+            <zolagoudqa_resource>
+                <class>Zolago_DropshipVendorAskQuestion_Model_Resource</class>
+            </zolagoudqa_resource>
         </models>
         <helpers>
             <zolagoudqa>

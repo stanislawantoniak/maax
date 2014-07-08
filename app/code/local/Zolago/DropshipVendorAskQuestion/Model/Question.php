@@ -12,12 +12,11 @@ class Zolago_DropshipVendorAskQuestion_Model_Question extends Mage_Core_Model_Ab
 
     public function afterCommitCallback()
     {
-        Mage::log("hello world12121212");
         $this->load($this->getId());
         Mage::helper('udqa')->notifyAdminCustomer($this);
         Mage::helper('udqa')->notifyAdminVendor($this);
         Mage::helper('udqa')->notifyCustomer($this);
-        Mage::helper('udqa')->notifyVendor($this);
+        //Mage::helper('udqa')->notifyVendor($this);
         Mage::helper('zolagoudqa')->notifyVendorAgent($this);
         return parent::afterCommitCallback();
     }
