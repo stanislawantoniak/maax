@@ -41,6 +41,14 @@
     opacity: 0.5;
 }
 
+#solr_search_facets ul li ul{
+	padding-left:15px;
+}
+
+#solr_search_facets #category-layered-nav a:hover{
+	background:none;
+}
+
 #solr_search_price_slider {
     /*
     background: url("../images/slider-images-track-right.png") no-repeat scroll right top transparent;

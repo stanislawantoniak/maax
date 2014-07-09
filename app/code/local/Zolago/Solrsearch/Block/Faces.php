@@ -142,40 +142,169 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
     }
 
     protected function _processCategoryData($data) {
+    	
         $out = array();
-        // change solr response
+		$children = array();
+		
+		// Get all category data from Solr		
+		$all_data = $this->getAllCatgoryData();
+		
+		// Get current category
         $category = $this->getCurrentCategory();
-        $only = array();        
-        if ($category) {
-            $list = $category->getCategories($category->getId(),1);
-            foreach ($list as $cat) {
-                $only[] = $cat->getId();
-            }
-        }        
-        foreach ($data as $key=>$val) {
-            $items = explode('/',$key);
-            if (in_array($items[count($items)-1],$only)) {
-                $out[$key] = $val;
-            }
+		
+		// If no category specified
+		// select root category
+		$is_root_category = FALSE;
+		if($category){
+			$parent_category = $category->getParentCategory();
+		}
+		else{
+			$root_category_id = Mage::app()->getStore()->getRootCategoryId();
+			$category = Mage::getModel('catalog/category')->load($root_category_id);
+			$is_root_category = TRUE;
+		}
+		
+		// Get first level categories of current category
+        $first_level_categories = $category->getCategories($category->getId(),1);
+        foreach ($first_level_categories as $first_level_cat_tree) {
+        	
+			$first_level_cat = Mage::getModel('catalog/category')->load($first_level_cat_tree->getId());
+			$first_level_cat_key = $first_level_cat->getName() . "/" . $first_level_cat->getId();
+			
+			$children_category_ids = $first_level_cat->getResource()->getChildren($first_level_cat, true);
+			if($children_category_ids){
+				
+				$children_total = 0;				
+				
+				foreach($children_category_ids as $child_cat_id){
+					
+					$children_total += $this->getCategoryCount($data, $child_cat_id);
+					
+				}
+				
+				$children[$first_level_cat_key] = $children_total;
+			}
+			else{
+				
+				$children[$first_level_cat_key] = $this->getCategoryCount($data, $first_level_cat->getId(), TRUE);
+				
+			}
+			
         }
+
+		// Chosen category		
+		$chosen_cat_total = 0;
+        foreach ($data as $key=>$val) {
+			$chosen_cat_total += (int)$val;
+        }
+		
+		$chosen_key = $category->getName() . "/" . $category->getId();	
+		
+		$out[$chosen_key] = array(
+			'is_root_category' => $is_root_category,
+			'total' => $chosen_cat_total,
+			'children' => $children
+		);
+		
+		// Sibling categories		
+		if(!$is_root_category){
+			
+			$siblings = $parent_category->getChildrenCategories();
+		
+			foreach($siblings as $sibling_cat){
+				
+				$sibling_total = 0;
+				
+				if($sibling_cat->getId() != $category->getId()){
+					$current_key = $sibling_cat->getName() . "/" . $sibling_cat->getId();
+					
+					$sibling_children_category_ids = $sibling_cat->getResource()->getChildren($sibling_cat, true);
+					
+					if($sibling_children_category_ids){
+						
+						foreach($sibling_children_category_ids as $sibling_children_category_id){
+							
+							$sibling_total += $this->getCategoryCount($all_data, $sibling_children_category_id);
+							
+						}
+					}
+					else{
+						
+						$sibling_total = $this->getCategoryCount($all_data, $sibling_cat->getId());
+						
+					}
+					
+					$out[$current_key] = $sibling_total;
+				}
+			}
+		}
+		
         return $out;
     }
+	
+	public function getCategoryCount($data, $category_id, $break = FALSE){
+		
+		$count = 0;
+		foreach($data as $key => $value){
+								
+			$items = explode('/',$key);
+			$current_category_id = (int)$items[count($items)-1];
+			
+			if($category_id == $current_category_id){
+				
+				$count += $value;
+				
+				if($break){
+					break;
+				}
+			}
+		}
+		
+		return $count;
+	}
+	
+	public function getAllCatgoryData(){
+		
+		$facetfield = 'category_facet';
+    	$query = '*:*';
 
+    	$solrcore = Mage::helper('solrsearch')->getSetting('solr_index');
+
+    	$queryUrl = Mage::helper('solrsearch')->getSetting('solr_server_url');
+
+    	$arguments = array(
+    			'json.nl' => 'map',
+    			'wt'=> 'json',
+    	);
+    	$queryUrl = trim($queryUrl,'/').'/'.$solrcore;
+    	$url = trim($queryUrl,'/').'/select/?q='.$query.'&rows=-1&facet=true&facet.field='.$facetfield.'&facet.mincount=1&facet.limit=5000';
+
+    	$resultSet = Mage::getResourceModel('solrsearch/solr')->doRequest($url, $arguments, 'array');
+		
+		$all_data = array();
+    	if(isset($resultSet['facet_counts']['facet_fields'][$facetfield]) && is_array($resultSet['facet_counts']['facet_fields'][$facetfield]))
+    	{
+    		$all_data = $resultSet['facet_counts']['facet_fields'][$facetfield];
+    	}
+		
+		return $all_data;
+	}
+	
     public function getCategoryBlock($solrData) {
         $facetFileds = array();
         if (isset($solrData['facet_counts']['facet_fields']) && is_array($solrData['facet_counts']['facet_fields'])) {
             $facetFileds = $solrData['facet_counts']['facet_fields'];
         }
-        if(isset($facetFileds['category_path'])) {
-            $data = $facetFileds['category_path'];
+        if(isset($facetFileds['category_facet'])) {
+            $data = $facetFileds['category_facet'];
             if($this->getSpecialMultiple()) {
-                $data = $this->_prepareMultiValues('category_path', $data);
+                $data = $this->_prepareMultiValues('category_facet', $data);
             }
             $data = $this->_processCategoryData($data);
             $block = $this->getLayout()->createBlock($this->_getCategoryRenderer());
             $block->setParentBlock($this);
             $block->setAllItems($data);
-            $block->setFacetKey("category_path");
+            $block->setFacetKey("category_facet");
             return $block;
         }
         return null;
@@ -274,7 +403,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
      * @return string
      */
     protected function _getRatingRenderer() {
-        return $this->getDefaultRenderer();
+        return "zolagosolrsearch/faces_rating";
     }
     /**
      * @return string

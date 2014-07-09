@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<config>
+	<translate>
+		<modules>
+			<Zolago_Solrsearch>
+				<files>
+					<default>Zolago_Solrsearch.csv</default>
+				</files>
+			</Zolago_Solrsearch>
+		</modules>
+	</translate>
+	<menu>
+		<solrbridge module="solrsearch">
+			<children>
+				<queue translate="title" module="solrsearch">
+					<title>Process queue</title>
+					<sort_order>0</sort_order>
+					<action>solrbridge_admin/adminhtml_solrsearch/queue</action>
+				</queue>
+			</children>
+		</solrbridge>
+	</menu>
+	<acl>
+		<resources>
+			<admin>
+				<children>
+					<solrbridge translate="title" module="zolagosolrsearch">
+                        <children>
+                        	<queue translate="title">
+                        		<title>Process queue</title>
+                        	</queue>
+                        </children>
+                    </solrbridge>
+				</children>
+			</admin>
+		</resources>
+	</acl>
+</config>

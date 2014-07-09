@@ -1,0 +1,23 @@
+<?php /* @var $this Zolago_Solrsearch_Block_Adminhtml_Queue */?>
+<?php $_queue = $this->getQueue();?>
+<div class="content-header">
+	<table cellspacing="0">
+		<tbody>
+			<tr>
+				<td style="width:50%;">
+					<h3 class="icon-head head-backups-control"><?php echo $this->__("Process SOLR queue");?></h3>
+				</td>
+				<td class="a-right">
+					<button title="<?php echo $this->__("Start processing");?>" type="button" class="scalable" onclick="setLocation('<?php echo $this->getUrl("*/*/processQueue");?>')"><span><span><span><?php echo $this->__("Start processing");?></span></span></span></button>       
+					<button title="<?php echo $this->__("Cleanup");?>" type="button" class="scalable delete" onclick="setLocation('<?php echo $this->getUrl("*/*/cleanupQueue");?>')"><span><span><span><?php echo $this->__("Clean up");?></span></span></span></button>       
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<div>
+	<p><?php echo $this->__("To start processing queue click the button");?></p>
+	<p><?php echo $this->__("Items to be reindexed: %s", $_queue->getToReindexCount());?></p>
+	<p><?php echo $this->__("Items to be only deleted: %s", $_queue->getToDeleteCount());?></p>
+	<p><?php echo $this->__("Items processed to be cleaned up: %s", $_queue->getProcessedCount());?></p>
+</div>

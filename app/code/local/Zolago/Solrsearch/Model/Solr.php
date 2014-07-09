@@ -94,7 +94,8 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
                 continue;
             }
 
-            if(count($filterItem) > 0){
+            $cats = array();
+            if(is_array($filterItem) && sizeof($filterItem) > 0){
                 $query = '';
 				$extendedQuery = '';
                 foreach($filterItem as $value){
@@ -106,6 +107,9 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 					else if(in_array($key, $this->_specialKeys, true)) {
 						$extendedQuery .= $key.':%22'.urlencode(trim(addslashes($value))).'%22+OR+';
 					}
+                    else if($key == 'category_id') {
+                        $cats[] = "category_id:%22{$value}%22";
+                    }
 					else{
                         $face_key = substr($key, 0, strrpos($key, '_'));
                         if ($key == 'price_facet') {
@@ -119,11 +123,15 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
                         }
                     }
                 }
-
+                if (!empty($cats)) {
+                    $catIds = implode('+OR+', $cats);
+                    $query .= "({$catIds})";
+                }
 				if ($query) {
 					$query = trim($query, '+OR+');
 					$filterQueryArray[] = $query;
 				}
+
 				
 				if ($extendedQuery) {
 					$extendedQuery				= trim($extendedQuery, '+OR+');
@@ -140,7 +148,6 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 			$filterQueryArray[] = $vendorQuery;
 		}
 		//Add Vendor Facet to Filter Microsite Products - End
-
         $filterQueryString = '';
 
         if(count($filterQueryArray) > 0) {
@@ -234,7 +241,7 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
                 continue;
             }
 
-            if(count($filterItem) > 0){
+            if(is_array($filterItem) && sizeof($filterItem) > 0){
                 $query = '';
 				$extendedQuery = '';
                 foreach($filterItem as $value){
@@ -246,6 +253,9 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 					else if(in_array($key, $this->_specialKeys, true)) {
 						continue;
 					}
+                    else if($key == 'category_id') {
+                        $cats[] = "category_id:%22{$value}%22";
+                    }
 					else{
                         $face_key = substr($key, 0, strrpos($key, '_'));
                         if ($key == 'price_facet') {
@@ -259,11 +269,14 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
                         }
                     }
                 }
-
-				if ($query) {
-					$query = trim($query, '+OR+');
-					$filterQueryArray[] = $query;
-				}
+                if (!empty($cats)) {
+                    $catIds = implode('+OR+', $cats);
+                    $query .= "({$catIds})";
+                }
+                if ($query) {
+                    $query = trim($query, '+OR+');
+                    $filterQueryArray[] = $query;
+                }
             }
         }
 
