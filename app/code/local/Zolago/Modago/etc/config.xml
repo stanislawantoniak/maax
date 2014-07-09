@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Modago>
-            <version>0.0.1</version>
+            <version>0.1.0</version>
         </Zolago_Modago>
     </modules>
 	<frontend>
@@ -22,5 +22,12 @@
                 <class>Zolago_Modago_Block</class>
             </zolagomodago>
         </blocks>
+        <resources>
+            <zolagomodago_setup>
+                <setup>
+                    <module>Zolago_Modago</module>
+                </setup>
+            </zolagomodago_setup>
+        </resources>
     </global>
 </config>
