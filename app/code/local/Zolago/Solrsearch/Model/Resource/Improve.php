@@ -670,22 +670,60 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 		}
 		
 		
-		// Add urls
+		// Add store urls
 		
-		/*
 		$select = $this->getReadConnection()->select();
-		$select->from($this->getTable("core/url_rewrite"), array("product_id"));
-		$select->where("product_id IN (?)", $collection->getAllIds());
-		$select->where("store_id=?", $storeId);
+		$select->from(
+			array("url_main"			=>	$this->getTable("core/url_rewrite")), 
+			array(
+				"product_id"			=> "url_main.product_id", 
+				"main_request_path"		=> "url_main.request_path"
+			));
+		$select->where("url_main.product_id IN (?)", $collection->getAllIds());
+		$select->where("url_main.store_id=?", $storeId);
+		$select->where("url_main.category_id IS NULL");
+		
+		// Add category url
 		
 		if($category && $category->getId()){
-			$select->where("category_id=?", $category->getId());
+			$joinConds = array(
+				"url_cat.product_id=url_main.product_id",
+				"url_cat.store_id=url_main.store_id",
+				$this->getReadConnection()->quoteInto("url_cat.category_id=?", $category->getId()),
+			);
+			$select->joinLeft(
+				array("url_cat"			=>	$this->getTable("core/url_rewrite")), 
+				implode(" AND ", $joinConds),
+				array(
+					"cat_request_path"	=> "url_cat.request_path"
+				)
+			);
+		}else{
+			$select->columns(array(
+				"cat_request_path"		=> new Zend_Db_Expr("NULL")
+			));
 		}
-		*/
+		
+		$groupedUrls=array();
+		foreach($this->getReadConnection()->fetchAll($select) as $row){
+			$groupedUrls[$row['product_id']] = $row;
+		}
+		
+		
 		foreach ($collection as $product){
-			if(!$product->getCurrentUrl()){
-				$product->setCurrentUrl(Mage::getUrl("catalog/product/view", array("id"=>$product->getId())));
+			$productUrl = null;
+			if(isset($groupedUrls[$product->getId()])){
+				$row = $groupedUrls[$product->getId()];
+				if(isset($row['cat_request_path'])){
+					$productUrl = Mage::getBaseUrl().$row['cat_request_path'];
+				}elseif(isset($row['main_request_path'])){
+					$productUrl = Mage::getBaseUrl().$row['main_request_path'];
+				}
 			}
+			if(!$productUrl){
+				$productUrl = Mage::getUrl("catalog/product/view", array("id"=>$productId));
+			}
+			$product->setCurrentUrl($productUrl);
 		}
 		
 		return $this;
