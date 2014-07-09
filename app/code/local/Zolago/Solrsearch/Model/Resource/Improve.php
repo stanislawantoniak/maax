@@ -729,4 +729,22 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 		return $this;
 	}
 	
+	/**
+	 * @return array
+	 */
+	public function getRuleAppliedAffectedProducts() {
+		try{
+			$table = $this->getTable('catalogrule/rule_product_price_tmp');
+			$connection = $this->getReadConnection();
+			/* @var $connection Varien_Db_Adapter_Interface */
+			$select = $connection->select();
+			$select->from($table, array("product_id"));
+			return $connection->fetchCol($select);
+			
+		}catch (Exception $ex) {
+			Mage::logException($ex);
+			return array();
+		}
+	}
+	
 }

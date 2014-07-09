@@ -13,6 +13,14 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 	protected $_globalSearch = FALSE;
 	
 	/**
+	 * !!!! Force fix - shame style !!!!
+	 */
+	public function __construct() {
+		Mage::getSingleton('core/session')->setSolrFilterQuery(null);
+		parent::__construct();
+	}
+	
+	/**
 	 * Do not include category in filter query to perform global search
 	 * 
 	 * @return boolean

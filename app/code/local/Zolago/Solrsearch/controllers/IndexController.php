@@ -7,6 +7,7 @@
 require_once Mage::getModuleDir('controllers', "SolrBridge_Solrsearch") . DS . "IndexController.php";
 class Zolago_Solrsearch_IndexController extends SolrBridge_Solrsearch_IndexController
 {
+	
 	public function indexAction()
 	{
 		//Redirect to Url set for the search term

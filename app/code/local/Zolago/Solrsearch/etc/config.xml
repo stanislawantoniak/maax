@@ -188,8 +188,6 @@
 					</zolagosolrsearch>
 				</observers>
 			</after_reindex_process_catalog_product_price>
-			
-			<!-- Implementing ... -->
 			<catalogrule_after_apply>
 				<observers>
 					<solr_search>
