@@ -7,6 +7,7 @@
 require_once Mage::getModuleDir('controllers', "SolrBridge_Solrsearch") . DS . "IndexController.php";
 class Zolago_Solrsearch_IndexController extends SolrBridge_Solrsearch_IndexController
 {
+	
 	public function indexAction()
 	{
 		//Redirect to Url set for the search term
@@ -33,7 +34,13 @@ class Zolago_Solrsearch_IndexController extends SolrBridge_Solrsearch_IndexContr
 				}
 			}
 		}
-
+		
+		// Set root category if in the vendor context
+		$vendor = Mage::helper('umicrosite')->getCurrentVendor();
+        if ($vendor) {
+			$vendor->rootCategory();
+        }
+		
 		//Redirect to Magento default search if ping solr server failed
 	    $queryText = Mage::helper('solrsearch')->getParam('q');
 
@@ -51,8 +58,8 @@ class Zolago_Solrsearch_IndexController extends SolrBridge_Solrsearch_IndexContr
 
     	$solrModel = Mage::getModel('solrsearch/solr');
 
-    	$solrData = $solrModel->query($queryText);
-
+    	$solrData = $solrModel->queryRegister($queryText);
+		
     	Mage::register('solrbridge_loaded_solr', $solrModel);
 
 
@@ -83,11 +90,11 @@ class Zolago_Solrsearch_IndexController extends SolrBridge_Solrsearch_IndexContr
     	$filterQuery = (array)Mage::getSingleton('core/session')->getSolrFilterQuery();
     	if (isset($params['fq']))
     	{
-    		$filterQuery[] = $params['fq'];
+    		$filterQuery = array($params['fq']);
     	}
     	if (isset($params['clear']) && $params['clear'] == 'yes') $filterQuery = array();
-
-    	Mage::getSingleton('core/session')->setSolrFilterQuery(array_unique($filterQuery));
+		
+    	Mage::getSingleton('core/session')->setSolrFilterQuery($filterQuery);
 
     	$this->renderLayout();
     }

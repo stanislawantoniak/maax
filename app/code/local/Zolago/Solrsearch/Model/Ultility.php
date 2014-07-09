@@ -261,7 +261,8 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 		if(!$this->_solrAttributesCollection){
 			
 			$codes = array("name", "tax_class_id", "status", "visibility", "sku", 
-				'is_new_facet', 'is_bestseller_facet', 'product_flag_facet');
+				'is_new', 'is_bestseller', 'product_flag', "image", 
+				"special_price", "special_from_date", "special_to_date");
 			
 			//display brand suggestion attribute code
 			$brandAttributeCode = $this->getBrandAttributeCode();

@@ -151,7 +151,7 @@ $numColumns = sizeof($this->getColumns());
         <div class="hor-scroll">
             <table cellspacing="0" class="data table table-bordered table-hover table-striped" id="<?php echo $this->getId() ?>_table">
                 <?php foreach ($this->getColumns() as $_column): ?>
-                    <col <?php echo $_column->getHtmlProperty() ?> />
+                    <!-- <col <?php //echo $_column->getHtmlProperty() ?> /> -->
                 <?php endforeach; ?>
                 <?php if ($this->getHeadersVisibility() || $this->getFilterVisibility()): ?>
                     <thead>
