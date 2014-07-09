@@ -57,7 +57,26 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 	 * @return type
 	 */
 	public function preparePagingAndSorting() {
-		return parent::preparePagingAndSorting();
+		
+		$itemsPerPage = 40;
+		
+		// Sorting
+		$sortOrder = $this->getListModel()->getCurrentOrder();
+		$sortDir = $this->getListModel()->getCurrentDir();
+		$this->sort = $this->getSortFieldByCode($sortOrder, $sortDir);
+		
+		// Paginaton
+		$currentPage = $this->getListModel()->getCurrentPage();
+		$start = $itemsPerPage * ($currentPage - 1);
+		$this->start = $start;
+        $this->rows = $itemsPerPage;
+	}
+	
+	/**
+	 * @return Zolago_Solrsearch_Model_Catalog_Product_List
+	 */
+	public function getListModel() {
+		return Mage::getSingleton('zolagosolrsearch/catalog_product_list');
 	}
 	
     /**

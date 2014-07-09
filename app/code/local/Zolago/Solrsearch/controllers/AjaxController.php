@@ -8,6 +8,10 @@ require_once Mage::getModuleDir('controllers', "SolrBridge_Solrsearch") . DS . "
 class Zolago_Solrsearch_AjaxController extends Mage_Core_Controller_Front_Action
 {
 	protected $ultility = null;
+	
+	public function getListingBlocks() {
+		
+	}
 
 	public function queryAction()
 	{

@@ -42,4 +42,61 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object{
 		return Mage::registry(Zolago_Solrsearch_Model_Solr::REGISTER_KEY);
   
 	}
+	/**
+	 * @return array
+	 */
+	public function getSortOptions() {
+		$options = array();
+		
+		$options[] = array(
+			'value' => 'wishlist_count',
+			'dir'   => 'desc',
+			'label' =>  Mage::helper("zolagosolrsearch")->__("Most popular first")
+		);
+		
+		$options[] = array(
+			'value' => 'is_new',
+			'dir'   => 'desc',
+			'label' =>  Mage::helper("zolagosolrsearch")->__("New products first")
+		);
+		
+		$options[] = array(
+			'value' => 'price',
+			'dir'   => 'desc',
+			'label' =>  Mage::helper("zolagosolrsearch")->__("Most expensive first")
+		);
+		
+		$options[] = array(
+			'value' => 'price',
+			'dir'   => 'asc',
+			'label' =>  Mage::helper("zolagosolrsearch")->__("Least expensive first")
+		);
+		
+		$options[] = array(
+			'value' => 'product_rating',
+			'dir'   => 'desc',
+			'label' =>  Mage::helper("zolagosolrsearch")->__("Best rated")
+		);
+		return $options;
+	}
+	
+	public function getCurrentOrder() {
+		return Mage::app()->getRequest()->getParam("order", $this->getDefaultOrder());
+	}
+	
+	public function getCurrentPage() {
+		return (int)Mage::app()->getRequest()->getParam("page", 1);
+	}
+	
+	public function getCurrentDir() {
+		return Mage::app()->getRequest()->getParam("dir", $this->getDefaultDir());
+	}
+	
+	public function getDefaultDir() {
+		return "asc";
+	}
+	
+	public function getDefaultOrder() {
+		return "wishlist_count";
+	}
 }
