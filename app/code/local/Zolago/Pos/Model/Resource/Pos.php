@@ -113,6 +113,7 @@ class Zolago_Pos_Model_Resource_Pos extends Mage_Core_Model_Resource_Db_Abstract
             array('external_id', 'minimal_stock')
         );
         $select->where("external_id!=?", "");
+        $select->where("is_active=?", 1);
 
         $minPOSValues = $readConnection->fetchPairs($select);
         return $minPOSValues;

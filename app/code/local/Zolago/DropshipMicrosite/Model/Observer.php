@@ -3,21 +3,26 @@ class Zolago_DropshipMicrosite_Model_Observer
 {
 	protected $_websiteId			= false;
 	protected $_vendor				= false;
-	protected $_vendorRootCategory	= false;
-	
+	static protected $_vendorRootCategoryId = false;
+	protected $_vendorRootCategory = false;
     public function __construct() {
-        if (!$this->_vendorRootCategory && !$this->_websiteId) {
-			$this->_vendor = Mage::helper('umicrosite')->getCurrentVendor();
+        $this->_vendor = Mage::helper('umicrosite')->getCurrentVendor();
+		$this->_websiteId			= Mage::app()->getWebsite()->getId();
+		if (self::$_vendorRootCategoryId === false) { // only first time
+		    $this->_initVendorRootCategory();
+		}
+    }	
+    protected function _initVendorRootCategory() {
 			if ($this->_vendor && $this->_vendor->getId()) {
-				$this->_websiteId			= Mage::app()->getWebsite()->getId();
-				$rootCategoryId				= (Mage::helper('zolagodropshipmicrosite')->getVendorRootCategory($this->_vendor, $this->_websiteId));			
-				$this->_vendorRootCategory	= Mage::getModel('catalog/category')->load($rootCategoryId);
+				self::$_vendorRootCategoryId = (Mage::helper('zolagodropshipmicrosite')->getVendorRootCategoryConfigId($this->_vendor, $this->_websiteId));			
 			}
-        }
-    }
-	
+    }	
 	public function validateVendorCategory($observer)
 	{
+	    if (self::$_vendorRootCategoryId) {
+	        $vendorCategorId = Mage::helper('zolagodropshipmicrosite')->checkVendorCategoryId(self::$_vendorRootCategoryId);
+    		$this->_vendorRootCategory	= Mage::getModel('catalog/category')->load($vendorCategoryId);
+        }
 		if ($this->_vendor && $this->_vendor->getId() && $this->_vendorRootCategory && $this->_vendorRootCategory->getId()) {
 			$category = $observer->getEvent()->getCategory();
 			if (strpos($category->getPath(), $this->_vendorRootCategory->getPath()) !== 0) {

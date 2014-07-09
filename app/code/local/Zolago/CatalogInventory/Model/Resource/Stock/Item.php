@@ -15,7 +15,7 @@ class Zolago_CatalogInventory_Model_Resource_Stock_Item
      */
     public function getStockId()
     {
-        return 1;
+        return Mage_CatalogInventory_Model_Stock::DEFAULT_STOCK_ID;
     }
 
     /**
