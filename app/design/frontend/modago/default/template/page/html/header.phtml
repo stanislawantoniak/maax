@@ -3,11 +3,13 @@
  * Author: Paweł Chyl <pawel.chyl@orba.pl>
  * Date: 29.04.14
  */
+
+/** @var $this Zolago_Modago_Block_Page_Header_Bottommenu */
 ?>
 
 <header id="header">
 <!--  class="navbar-fixed-top" -->
-    <?php echo $this->getChildHtml('page.header.bottom.menu'); ?>
+    <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('navigation-main-wrapper')->toHtml(); ?>
 <div class="header_top">
     <div class="container-fluid clearfix">
         <div class="col-xs-12">
@@ -27,7 +29,7 @@
             <div id="header_top_block_center">
                 <div id="logo">
                     <a href="<?php echo $this->getUrl(''); ?>" class="logo">
-                        <img src="<?php echo $this->getLogoSrc(); ?>" alt="" alt="">
+                        <img src="<?php echo $this->getLogoSrc(); ?>" alt="<?php echo $this->getLogoAlt(); ?>">
                     </a>
                 </div>
             </div>
