@@ -8,18 +8,10 @@ class Zolago_DropshipMicrositePro_IndexController
     {
         $vendor = Mage::helper('umicrosite')->getCurrentVendor();
         if ($vendor) {
+        	
 			// Set root category
-			$websiteId		= Mage::app()->getWebsite()->getId();
-			$rootCategoryId = Mage::helper('zolagodropshipmicrosite')
-					->getVendorRootCategory($vendor, $websiteId);
-		
-			$category = Mage::getModel("catalog/category")->load($rootCategoryId);
+			$vendor->rootCategory();
 			
-			if(!$category->getId()){
-				$category->load(Mage::app()->getStore()->getRootCategoryId());
-			}
-			// Set vendor-context current category
-			Mage::register('vendor_current_category', $category);
             $this->_forward('landingPage');
             return;
         }

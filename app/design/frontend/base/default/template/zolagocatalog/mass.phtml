@@ -1,3 +1,16 @@
+<style>
+.DTFC_LeftWrapper table colgroup{
+	display:none;
+}
+.DTFC_LeftHeadWrapper, .DTFC_LeftBodyWrapper{
+	border-right:2px #CCC solid;
+}
+</style>
+<script type="text/javascript">
+jQuery.noConflict();
+</script>
+<script src="http://local.lorante.com/js/tablefreezer/jquery.tableFreezer.js" type="text/javascript"></script>
+
 <div class="container">
     <div class="page-header">
         <div class="page-title">
@@ -119,10 +132,19 @@
                 $( ".datepicker" ).datepicker();
 
                 $('#myModal').modal();
+                
+                var $table = $("#zolagocatalog_mass_grid_table");
+                
+				$table.tableFreezer({
+					scroll: {
+			            leftCol: {
+			              fixedSpan: 2
+			            }
+		          	}
+				});
             });
 
         </script>
         <?php echo $this->getChildHtml("editor");?>
 
     <?php endif;?>
-
