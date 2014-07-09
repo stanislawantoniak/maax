@@ -33,7 +33,13 @@ class Zolago_Solrsearch_IndexController extends SolrBridge_Solrsearch_IndexContr
 				}
 			}
 		}
-
+		
+		// Set root category if in the vendor context
+		$vendor = Mage::helper('umicrosite')->getCurrentVendor();
+        if ($vendor) {
+			$vendor->rootCategory();
+        }
+		
 		//Redirect to Magento default search if ping solr server failed
 	    $queryText = Mage::helper('solrsearch')->getParam('q');
 

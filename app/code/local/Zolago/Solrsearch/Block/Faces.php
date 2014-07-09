@@ -319,7 +319,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 		$all_categories = Mage::helper('zolagocatalog/category')->getPathArray();
 		
 		// Get all category data from Solr		
-		$all_data = $this->getAllCatgoryData();
+		$all_data = Mage::helper('zolagosolrsearch')->getAllCatgoryData();
 		
 		// Get current category
 		if($this->getMode()==self::MODE_CATEGORY){
@@ -331,14 +331,27 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 			if(isset($params['parent_cat_id'])) $category = Mage::getModel('catalog/category')->load($params['parent_cat_id']);
 		}
 		
-		// If no category specified
-		// select root category
+		// Specify root and parent categories
+		$root_category_id = Mage::app()->getStore()->getRootCategoryId();
 		$is_root_category = FALSE;
 		if($category){
-			$parent_category = $category->getParentCategory();
+			
+			// Display only children categories when in the vendor context
+			$_vendor = Mage::helper('umicrosite')->getCurrentVendor();
+			if ($_vendor && $_vendor->getId()) {
+				
+				$vendor_root_category = $_vendor->rootCategory();
+				
+				if($vendor_root_category->getId() == $category->getId()){
+					$is_root_category = TRUE;
+				}
+				$parent_category = $category;
+			}
+			else{
+				$parent_category = $category->getParentCategory();
+			}
 		}
 		else{
-			$root_category_id = Mage::app()->getStore()->getRootCategoryId();
 			$category = Mage::getModel('catalog/category')->load($root_category_id);
 			$is_root_category = TRUE;
 		}
@@ -407,7 +420,6 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 			'total' => $chosen_cat_total,
 			'children' => $children
 		);
-		
 		// Sibling categories		
 		if(!$is_root_category){
 			
@@ -472,61 +484,8 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 		return $count;
 	}
 	
-	/**
-	 * Retrive info from solar for sibling categories
-	 * 
-	 * @return array
-	 */
-	public function getAllCatgoryData(){
-		
-		$facetfield = 'category_facet';
-		$all_data = array();
-		
-		// Get query		
-		$queryText = Mage::helper('solrsearch')->getParam('q');
-		if(empty($queryText)){
-	    	$queryText = '*:*';
-		}
-		
-		if($this->getMode()==self::MODE_CATEGORY){
-	        
-			$solrcore = Mage::helper('solrsearch')->getSetting('solr_index');
-
-	    	$queryUrl = Mage::helper('solrsearch')->getSetting('solr_server_url');
-	
-	    	$arguments = array(
-	    			'json.nl' => 'map',
-	    			'wt'=> 'json',
-	    	);
-	    	$queryUrl = trim($queryUrl,'/').'/'.$solrcore;
-	    	$url = trim($queryUrl,'/').'/select/?q='.$queryText.'&rows=-1&facet=true&facet.field='.$facetfield.'&facet.mincount=1&facet.limit=5000';
-	
-	    	$resultSet = Mage::getResourceModel('solrsearch/solr')->doRequest($url, $arguments, 'array');
-		}
-		else{
-			
-			// Remove category from filter query
-			$params = $this->getRequest()->getParams();
-			
-			if(isset($params['fq']['category_id'])){
-				unset($params['fq']['category_id']);
-				$this->getRequest()->setParams($params);
-			} 
-			
-			$solrModel = Mage::getModel('solrsearch/solr');
-
-    		$resultSet = $solrModel->query($queryText);
-		}
-		
-    	if(isset($resultSet['facet_counts']['facet_fields'][$facetfield]) && is_array($resultSet['facet_counts']['facet_fields'][$facetfield]))
-    	{
-    		$all_data = $resultSet['facet_counts']['facet_fields'][$facetfield];
-    	}
-		
-		return $all_data;
-	}
-	
     public function getCategoryBlock($solrData) {
+    	
         $facetFileds = array();
         if (isset($solrData['facet_counts']['facet_fields']) && is_array($solrData['facet_counts']['facet_fields'])) {
             $facetFileds = $solrData['facet_counts']['facet_fields'];
@@ -798,7 +757,9 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
      * @return int
      */
     public function getMode() {
-        if($this->getCurrentCategory() && !Mage::registry('current_product')) {
+    	
+		$queryText = Mage::helper('solrsearch')->getParam('q');
+        if($this->getCurrentCategory() && !Mage::registry('current_product') && !$queryText) {
             return self::MODE_CATEGORY;
         }
         return self::MODE_SEARCH;
