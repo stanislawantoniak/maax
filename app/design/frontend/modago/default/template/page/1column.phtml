@@ -34,6 +34,6 @@
 
 </div>
 
-<?php echo $this->getChildHtml('aside.header.sliding'); ?>
+<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('navigation-sliding-left')->toHtml(); ?>
 </body>
 </html>
