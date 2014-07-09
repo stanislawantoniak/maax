@@ -154,6 +154,15 @@
 					</zolagosolrsearch>
 				</observers>
 			</controller_front_send_response_after>
+			
+			<!-- disable default adding item -->
+			<!-- <page_block_html_topmenu_gethtml_before>
+                <observers>
+                    <catalog_add_topmenu_items>
+						<type>disabled</type>
+                    </catalog_add_topmenu_items>
+                </observers>
+            </page_block_html_topmenu_gethtml_before> -->
 		</events>
     </global>
 	<adminhtml>
