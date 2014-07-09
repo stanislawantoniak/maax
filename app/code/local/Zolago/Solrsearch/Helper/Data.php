@@ -90,22 +90,23 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
         $allCats = Mage::getModel('catalog/category')->getCollection()
             ->addAttributeToSelect('*')
             ->addAttributeToFilter('is_active', '1')
-             //->addAttributeToFilter( self::ZOLAGO_USE_IN_SEARCH_CONTEXT , array('eq' => 1))
+             ->addAttributeToFilter( self::ZOLAGO_USE_IN_SEARCH_CONTEXT , array('eq' => 1))
             ->addAttributeToFilter('include_in_menu', '1')
             ->addAttributeToFilter('parent_id', array('eq' => $parentId));
-
+			
         $html = '';
         foreach ($allCats as $category) {
+        	
             $selected = '';
             if($category->getId() == $cat){
                 $selected = ' selected="selected" ';
             }
             $html .= '<option value="' . $category->getId() . '" '. $selected.'>' . str_repeat("&nbsp;", 4 * $level)
                 . $category->getName() . "</option>";
-            $subcats = $category->getChildren();
-            if ($subcats != '') {
-                $html .= self::getTreeCategoriesSelect($category->getId(), $level + 1,$cat);
-            }
+            // $subcats = $category->getChildren();
+            // if ($subcats != '') {
+                // $html .= self::getTreeCategoriesSelect($category->getId(), $level + 1,$cat);
+            // }
         }
         return $html;
     }
@@ -148,16 +149,29 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
     {
         $filterQuery = (array)Mage::getSingleton('core/session')->getSolrFilterQuery();
 
+		$_vendor = Mage::helper('umicrosite')->getCurrentVendor();
+		
         $selectedContext = 0;
         if (isset($filterQuery['category_id']) && isset($filterQuery['category_id'][0])) {
             $selectedContext = $filterQuery['category_id'][0];
         }
-
+		
         $rootCatId = Mage::app()->getStore()->getRootCategoryId();
-
+		// When in the vendor context grab root category
+		if($_vendor && $_vendor->getId()){
+			$vendor_root_category = Mage::registry('vendor_current_category');
+			if($vendor_root_category){
+				$rootCatId = $vendor_root_category->getId();
+			}
+		}
+		
         $catListHtmlSelect = '<select name="scat">'
             . '<option value="0">' . Mage::helper('catalog')->__('Everywhere') . '</option>';
-
+		
+		if ($_vendor && $_vendor->getId()) {
+	        $catListHtmlSelect .= '<option selected="selected" value="' . $_vendor->getId() . '">' . $this->__('All ') . $_vendor->getVendorName() . '</option>';
+		}
+		
         $catListHtmlSelect .= self::getTreeCategoriesSelect($rootCatId, 0, $selectedContext);
 
         if (Mage::registry('current_category')) {
@@ -166,8 +180,55 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
                 . Mage::helper('catalog')->__('This category')
                 . '</option>';
         }
+	
         $catListHtmlSelect .= "</select>";
 
         return $catListHtmlSelect;
     }
+
+	/**
+	 * Retrive info from solar for sibling categories
+	 * 
+	 * @return array
+	 */
+	public function getAllCatgoryData(){
+		
+		if($all_data = Mage::registry('all_category_data')){
+			return $all_data;	
+		}
+		
+		$facetfield = 'category_facet';
+		$all_data = array();
+		
+		// Get query		
+		$queryText = Mage::helper('solrsearch')->getParam('q');
+		if(empty($queryText)){
+	    	$queryText = '*';
+		}
+		
+		// Remove category from filter query
+		$params = Mage::app()->getRequest()->getParams();
+		
+		if(isset($params['fq']['category_id'])){
+			unset($params['fq']['category_id']);
+			Mage::app()->getRequest()->setParams($params);
+		} 
+		
+		$solrModel = Mage::getModel('solrsearch/solr');
+		
+		$solrModel->isGlobalSearch();
+		
+		$resultSet = $solrModel->query($queryText);
+		
+    	if(isset($resultSet['facet_counts']['facet_fields'][$facetfield]) && is_array($resultSet['facet_counts']['facet_fields'][$facetfield]))
+    	{
+    		$all_data = $resultSet['facet_counts']['facet_fields'][$facetfield];
+    	}
+		
+		if($all_data){
+			Mage::register('all_category_data', $all_data);
+		}
+		
+		return $all_data;
+	}
 }

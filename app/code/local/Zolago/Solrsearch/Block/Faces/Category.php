@@ -23,7 +23,6 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
 		
 		$categoty_id = $last['id'];
 		$category = Mage::getModel('catalog/category')->load($categoty_id);
-		
 		if($this->getParentBlock()->getMode()==Zolago_Solrsearch_Block_Faces::MODE_CATEGORY){
 			$facetUrl = $category->getUrl($category);			
 		}
@@ -44,7 +43,6 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
 						
 				}
 			}
-			
 			// All category links need to have links to fresh categories
 			// No appending to current params
 			$params = $this->getRequest()->getParams();
@@ -105,24 +103,24 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
 		return ($count > 0) ? true : false;
 	}
 	
-	public function getCanShow() {
-		if($this->getParentBlock()->getMode()==Zolago_Solrsearch_Block_Faces::MODE_CATEGORY){
-			$category = $this->getParentBlock()->getCurrentCategory();
-			$all = $this->getAllItems();
-			// One item with couurent cat
-			if(count($all)==1){
-				list($item, $count) = each($all);
-				$array = $this->pathToArray($item);
-				if($array){
-					$last = array_pop($array);
-					if(isset($last['id']) && $last['id']==$category->getId()){
-						return false;
-					}
-				}
-			}
-		}	
-		
-		return parent::getCanShow();
-	}
+	// public function getCanShow() {
+		// if($this->getParentBlock()->getMode()==Zolago_Solrsearch_Block_Faces::MODE_CATEGORY){
+			// $category = $this->getParentBlock()->getCurrentCategory();
+			// $all = $this->getAllItems();
+			// // One item with couurent cat
+			// if(count($all)==1){
+				// list($item, $count) = each($all);
+				// $array = $this->pathToArray($item);
+				// if($array){
+					// $last = array_pop($array);
+					// if(isset($last['id']) && $last['id']==$category->getId()){
+						// return false;
+					// }
+				// }
+			// }
+		// }	
+// 		
+		// return parent::getCanShow();
+	// }
 	
 }

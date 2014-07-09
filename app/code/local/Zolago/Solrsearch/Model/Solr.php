@@ -7,6 +7,17 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 		'product_flag_facet'
 	);
 	
+	protected $_globalSearch = FALSE;
+	
+	/**
+	 * Do not include category in filter query to perform global search
+	 * 
+	 * @return boolean
+	 */
+	public function isGlobalSearch(){
+		$this->_globalSearch = TRUE;	
+	}
+	
     public function prepareCleanFlagQueryData()
     {
         $this->prepareFieldList();
@@ -51,7 +62,7 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
          * The purpose is the speed up autocomplete
          */
 		
-        if (!$this->isAutocomplete) {
+        if (!$this->isAutocomplete && !$this->_globalSearch) {
 
             if (in_array(Mage::app()->getRequest()->getRouteName(), array('catalog', 'umicrosite'))) {
 

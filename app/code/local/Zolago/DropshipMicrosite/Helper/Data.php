@@ -62,7 +62,7 @@ class Zolago_DropshipMicrosite_Helper_Data extends Mage_Core_Helper_Abstract
 		if (array_key_exists($websiteId, $rootCategories)) {
 			$rootCategoryConfigId = $rootCategories[$websiteId];
 		}
-		return $rootCategoryId;    	
+		return $rootCategoryConfigId;    	
     }
     
     /**
