@@ -55,6 +55,7 @@
             <action method="addItem"><type>skin_js</type><script>js/zoomsl-3.0.min.js</script></action>
             <action method="addItem"><type>skin_js</type><script>js/plugins.js</script></action>
             <action method="addItem"><type>skin_js</type><script>js/fns.js</script></action>
+            <block type="orbacommon/page_html_head" name="orba.jslib" template="orbacommon/js/script.phtml" />
         </reference>
 
         <reference name="root">
