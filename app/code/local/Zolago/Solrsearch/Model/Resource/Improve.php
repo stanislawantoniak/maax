@@ -284,7 +284,6 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 		if (!$collection->count()) {
             return $this;
         }
-		
 		$attrIds = $attrbiuteCollection->getAllIds();
 
         $entity = $this->getEntity();
@@ -439,7 +438,7 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 	}
 	
     protected function _getLoadAttributesSelect($allIds, $table, array $attributeIds, $storeId = null)
-    {	
+    {
         if ($storeId) {
             $adapter        = $this->getReadConnection();
             $entityIdField  = $this->getEntity()->getEntityIdField();
