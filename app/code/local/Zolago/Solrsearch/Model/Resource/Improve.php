@@ -570,4 +570,125 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 		
 	}
 	
+
+	/**
+	 * @param Zolago_Solrsearch_Model_Catalog_Product_Collection $collection
+	 * @param type $storeId
+	 * @param type $customerGroupId
+	 * @return \Zolago_Solrsearch_Model_Resource_Improve
+	 */
+	public function loadAttributesDataForFrontend(
+			Zolago_Solrsearch_Model_Catalog_Product_Collection $collection, 
+			$storeId, $customerGroupId) {
+		
+		
+		$websiteId = Mage::app()->getStore($storeId)->getWebsiteId();
+		$category = $collection->getCurrentCategory();
+		
+		// Load price data
+		$taxClasses = array();
+		foreach($collection as $product){
+			$taxClasses[$product->getTaxClassId()] = true;
+		}
+		$taxClasses = array_keys($taxClasses);
+		
+		$select = $this->getReadConnection()->select();
+		$least = $this->getReadConnection()->getLeastSql(
+			array('price_index.min_price', 'price_index.tier_price')
+		);
+		$minimalExpr = $this->getReadConnection()->getCheckSql(
+				'price_index.tier_price IS NOT NULL', $least, 'price_index.min_price'
+		);
+
+		$colls = array(
+			'entity_id',
+			'price', 
+			'tax_class_id', 
+			'final_price',
+			'minimal_price' => $minimalExpr , 
+			'min_price', 
+			'max_price', 
+			'tier_price'
+		);
+		
+		$select->from(
+				array("price_index"=>$this->getTable('catalog/product_index_price')),
+				$colls
+		);
+		
+		
+		$select->where("entity_id IN (?)", $collection->getAllIds());
+		$select->where("tax_class_id IN (?)", $taxClasses);
+		$select->where("website_id=?", $websiteId);
+		$select->where("customer_group_id=?", $customerGroupId);
+
+		// Calculate final price
+		foreach($this->getReadConnection()->fetchAll($select) as $row){
+			if($product = $collection->getItemById($row['entity_id'])){
+				/* @var $product Mage_Catalog_Model_Product */
+				if($row['tax_class_id']==$product->getTaxClassId()){
+					unset($row['entity_id']);
+					
+					$product->addData($row);
+					
+					$basePrice = $product->getPrice();
+					$specialPrice = $product->getSpecialPrice();
+				    $specialPriceFrom = $product->getSpecialFromDate();
+					$specialPriceTo = $product->getSpecialToDate();
+					$rulePrice = $product->getData('_rule_price');
+					
+					$finalPrice = $product->getPriceModel()->calculatePrice(
+						$basePrice,
+						$specialPrice,
+						$specialPriceFrom,
+						$specialPriceTo,
+						$rulePrice,
+						$websiteId,
+						$customerGroupId,
+						$product->getId()
+					);
+
+					$product->setCalculatedFinalPrice($finalPrice);
+				}
+			}
+		}
+		
+		// Add is in my wishlist
+		$wishlist = Mage::helper("zolagowishlist")->getWishlist();
+		/* @var $wishlist Mage_Wishlist_Model_Wishlist */
+		
+		$select = $this->getReadConnection()->select();
+		$select->from($this->getTable("wishlist/item"), array("product_id"));
+		$select->where("wishlist_id=?", $wishlist->getId());
+		$select->where("store_id=?", $storeId);
+		$select->where("product_id IN (?)", $collection->getAllIds());
+		
+		foreach($this->getReadConnection()->fetchCol($select) as $productId){
+			if($product=$collection->getItemById($productId)){
+				$product->setInMyWishlist(1);
+			}
+		}
+		
+		
+		// Add urls
+		
+		/*
+		$select = $this->getReadConnection()->select();
+		$select->from($this->getTable("core/url_rewrite"), array("product_id"));
+		$select->where("product_id IN (?)", $collection->getAllIds());
+		$select->where("store_id=?", $storeId);
+		
+		if($category && $category->getId()){
+			$select->where("category_id=?", $category->getId());
+		}
+		*/
+		foreach ($collection as $product){
+			if(!$product->getCurrentUrl()){
+				$product->setCurrentUrl(Mage::getUrl("catalog/product/view", array("id"=>$product->getId())));
+			}
+		}
+		
+		return $this;
+	}
+	
 }

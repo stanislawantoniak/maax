@@ -9,6 +9,35 @@
 class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 {
     const ZOLAGO_USE_IN_SEARCH_CONTEXT = 'use_in_search_context';
+	
+	/**
+	 * @var array
+	 */
+	protected $_solrToMageMap = array(
+		"products_id"			=> "id",
+		"product_type_static"	=> "type_id",
+		"name_varchar"			=> "name",
+		"store_id"				=> "store_id",
+		"website_id"			=> "website_id",
+		"category_id"			=> "category_ids",
+		"sku_static"			=> "sku",
+		"vsku_text"				=> "vsku",
+		"in_stock_int"			=> "in_stock",
+		"product_status"		=> "status",
+		"image_varchar"			=> "image",
+		"wishlist_count_int"	=> "wishlist_count",
+		"tax_class_id_int"		=> "tax_class_id",
+		"is_new_int"			=> "is_new",
+		"product_rating_int"	=> "product_rating",
+		"is_bestseller_int"		=> "bestseller_int",
+		"special_price_decimal"	=> "special_price",
+		"special_from_date_varchar"			=> "special_from_date",
+		"special_to_date_varchar"			=> "special_to_date",
+		"udropship_vendor_id_int"			=> "udropship_vendor",
+		"udropship_vendor_logo_varchar"		=> "udropship_vendor_logo",
+		"udropship_vendor_url_key_varchar"	=> "udropship_vendor_url_key",
+		"udropship_vendor_varchar"			=> "udropship_vendor_name"
+	);
 
 	/**
 	 * @var array
@@ -230,5 +259,29 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 		}
 		
 		return $all_data;
+	}
+		
+	/**
+	 * Map solr docuemnt data to local ORM product
+	 * @param array $item
+	 * @param Mage_Catalog_Model_Product $product
+	 * @return Mage_Catalog_Model_Product
+	 */
+	public function mapSolrDocToProduct(array $item, Mage_Catalog_Model_Product $product) {
+		
+		foreach($this->_solrToMageMap as $solr=>$mage){
+			if(isset($item[$solr])){
+				$product->setDataUsingMethod($mage, $item[$solr]);
+			}
+		}
+		
+		return $product;
+	}
+	
+	/**
+	 * @return array
+	 */
+	public function getSolrDocFileds() {
+		return array_keys($this->_solrToMageMap);
 	}
 }

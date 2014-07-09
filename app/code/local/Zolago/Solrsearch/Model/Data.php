@@ -34,7 +34,11 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 	}
 	
 	public function getWeightAttributeCode() {
-		return trim(Mage::helper('solrsearch')->getSetting('search_weight_attribute_code'));
+		$v = Mage::helper('solrsearch')->getSetting('search_weight_attribute_code');
+		if(is_string($v)){
+			return trim($v);
+		}
+		return null;
 	}
 	
 	public function getBrandAttributeCode() {
@@ -245,6 +249,46 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 		$docData['products_id'] = $item->getId();
 		$docData['product_type_static'] = (string)$item->getOrigData("type_id");
 		$docData['unique_id'] = $store->getId().'P'.$item->getId();
+		
+		// Vendor data
+		$vendor = Mage::helper('udropship')->getVendor($item->getOrigData('udropship_vendor'));
+		if($vendor && $vendor->getId()){
+			$docData['udropship_vendor_id_int'] = $vendor->getId();
+			$docData['udropship_vendor_url_key_varchar'] = $vendor->getUrlKey();
+			$docData['udropship_vendor_logo_varchar'] = $vendor->getLogo();
+		}
+		
+		// Wishlist count
+		$docData['wishlist_count_int'] = (int)$item->getOrigData('wishlist_count');
+		
+		// bestellers, new, rating, flags
+		$docData['is_new_int'] = (int)$item->getOrigData('is_new');
+		$docData['product_rating_int'] = (int)$item->getOrigData('product_rating');
+		$docData['is_bestseller_int'] = (int)$item->getOrigData('is_bestseller');
+		$docData['product_flag_int'] = (int)$item->getOrigData('product_flag');
+		
+		// Tax calss
+		if($item->getOrigData('tax_class_id')){
+			$docData['tax_class_id_int'] = (int)$item->getOrigData('tax_class_id');
+		}
+		
+		// Special price
+		if($item->getOrigData('special_price')){
+			$docData['special_price_decimal'] = (float)$item->getOrigData('special_price');
+		}
+		if($item->getOrigData('special_from_date')){
+			$docData['special_from_date_varchar'] = $item->getOrigData('special_from_date');
+		}
+		if($item->getOrigData('special_to_date')){
+			$docData['special_to_date_varchar'] = $item->getOrigData('special_to_date');
+		}
+		
+		
+		// Imgae url
+		if($item->getOrigData('image')!==null && $item->getOrigData('image')!="no_selection"){
+			$docData['image_varchar'] = $item->getOrigData('image');
+		}
+		
 		if (!isset($docData['product_search_weight_int'])) {
 			$docData['product_search_weight_int'] = 0;
 		}
@@ -354,7 +398,7 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 			}
 
 			if ($backendType == 'datetime') {
-				$attributeVal = date("Y-m-d\TG:i:s\Z", $attributeVal);
+				$attributeVal = date("Y-m-d\TG:i:s\Z", strtotime($attributeVal));
 			}
 			
 				
