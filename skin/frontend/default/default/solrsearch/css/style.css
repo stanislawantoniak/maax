@@ -29,6 +29,10 @@
 	
 }
 
+#solr_search_facets li a.active {
+    background: url("../images/master-sprite-8.png") no-repeat scroll -297px -369px transparent;
+}
+
 /*#solr_search_facets li a.active, #solr_search_facets dl li a:hover {
     background: url("../images/master-sprite-8.png") no-repeat scroll -10px -369px transparent;
     color: #000000;
