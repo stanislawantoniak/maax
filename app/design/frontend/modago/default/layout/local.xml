@@ -157,8 +157,10 @@
 		<reference name="content">
             <block template="cms/modagohome.phtml" name="modagohome" type="core/template">
                 <block type="zolagomodago/home_banner" name="zolago_modago_home_banners" template="home/banner/hometopwr.phtml">
-                    <block type="zolagomodago/home_banner" name="zolago_modago_home_banner_top_slider" template="home/banner/homebigslider.phtml" />
                     <block type="zolagomodago/home_banner" name="zolago_modago_home_banner_smallfour" template="home/banner/smallfour.phtml" />
+                    <block type="zolagocms/component_slider" name="slider" before="-"/>
+                    <block type="zolagocms/component_boxes" name="boxes" before="-"/>
+                    <block type="zolagocms/component_inspirations" name="inspirations" before="-"/>
                 </block>
 
                 <block type="zolagomodago/home_inspirations" name="zolago_modago_home_inspirations" template="home/banner/inspirations.phtml" />
