@@ -1,12 +1,14 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
 	<!-- Sample slider use -->
-	<!--
-	<catalog_category_view>
-		<reference name="content">
+	<!-- 
+	<default>
+		<reference name="footer">
 			<block type="zolagocms/component_slider" name="slider" before="-"/>
+			<block type="zolagocms/component_boxes" name="boxes" before="-"/>
+			<block type="zolagocms/component_inspirations" name="inspirations" before="-"/>
 		</reference>
-	</catalog_category_view>
+	</default>
 	-->
 	
 	<udprod_vendor_mass_index>
