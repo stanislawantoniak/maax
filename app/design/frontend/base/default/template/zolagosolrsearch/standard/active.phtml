@@ -19,7 +19,7 @@
 						<span class="label"><?php echo $this->__($this->getFacetLabel($key)); ?>:</span> <span class="value"><?php echo $this->facetFormat($selectedFacetValue) ?></span>
 
 
-						<a title="<?php echo $this->__('Remove This Item') ?>" href="<?php echo $this->getRemoveFacesUrl($face_key, $v)?>" class="btn-remove"><?php echo $this->__('Remove This Item') ?></a>
+						<a title="<?php echo $this->__('Remove This Item') ?>" href="<?php echo $this->getRemoveFacesUrl($face_key, $v)?>" data-params='<?php echo $this->getRemoveFacesJson($face_key, $v);?>' class="btn-remove"><?php echo $this->__('Remove This Item') ?></a>
 
 						<?php if ($face_key != 'price'):?>
 						<input type="hidden" name="fq[<?php echo $face_key ?>]" value="<?php echo $v?>" />
@@ -31,6 +31,6 @@
 	</ol>
 </div>
 <div class="actions">
-<a title="<?php echo $this->__('Clear all') ?>" href="<?php echo $this->getRemoveAllUrl()?>"><?php echo $this->__('Clear All') ?></a>
+<a title="<?php echo $this->__('Clear all') ?>" data-params='<?php echo $this->getRemoveAllJson();?>' href="<?php echo $this->getRemoveAllUrl()?>"><?php echo $this->__('Clear All') ?></a>
 </div>
 <?php endif; ?>

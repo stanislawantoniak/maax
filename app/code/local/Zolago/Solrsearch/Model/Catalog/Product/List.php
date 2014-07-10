@@ -58,6 +58,8 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object{
 		return Mage::registry(Zolago_Solrsearch_Model_Solr::REGISTER_KEY);
   
 	}
+	
+	
 	/**
 	 * @return array
 	 */

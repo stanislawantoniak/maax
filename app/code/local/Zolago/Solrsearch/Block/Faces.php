@@ -161,12 +161,21 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         return $depends;
     }
 	
+	protected function _mapUrlToJson($urlArray) {
+		if(isset($urlArray['_query']) && is_array($urlArray['_query'])){
+			$urlArray = $urlArray['_query'];
+		}else{
+			$urlArray = array();
+		}
+		return Mage::helper("core")->jsonEncode($urlArray);
+	}
+	
 	public function getRemoveAllUrl(){
 		return Mage::getUrl('*/*', $this->_parseRemoveAllUrl());
 	}
 	
 	public function getRemoveAllJson(){
-		return Mage::helper("core")->jsonEncode($this->_parseRemoveAllUrl());
+		return $this->_mapUrlToJson($this->_parseRemoveAllUrl());
 	}
 	
 	protected function _parseRemoveAllUrl(){
@@ -222,7 +231,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 	}
 	
 	public function getRemoveFacesJson($key,$value) {
-		return Mage::helper('core')->jsonEncode($this->_parseRemoveFacesUrl($key, $value));
+		return $this->_mapUrlToJson($this->_parseRemoveFacesUrl($key, $value));
 	}
 	
 	
@@ -960,7 +969,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 	 * @param array $paramss current params (if not set will take current params from current request)
 	 */
 	public function getFacesJson($params=array(), $paramss = NULL){
-		return Mage::helper("core")->jsonEncode($this->_parseQueryData($params, $paramss));
+		return $this->_mapUrlToJson($this->_parseQueryData($params, $paramss));
 	}
 		
 	/**
