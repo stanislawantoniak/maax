@@ -43,7 +43,7 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
 
     public function getProductListHtml()
     {
-        return $this->getChildHtml('solrsearch_product_list');
+        return $this->getChildHtml('zolagocatalog_breadcrumbs'). $this->getChildHtml('solrsearch_product_list');
     }
-
+ 
 }
