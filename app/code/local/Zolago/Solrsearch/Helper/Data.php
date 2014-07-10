@@ -9,6 +9,7 @@
 class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 {
     const ZOLAGO_USE_IN_SEARCH_CONTEXT = 'use_in_search_context';
+    const ZOLAGO_SEARCH_CONTEXT_CURRENT_VENDOR = 'current_vendor';
 
     /**
      * @var array
@@ -214,6 +215,103 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 
         return $catListHtmlSelect;
     }
+
+
+
+    /**
+     * Construct context search selector Array
+     * @return array
+     */
+    public function getContextSelectorArray()
+    {
+        $array = array();
+
+        $filterQuery = (array)Mage::getSingleton('core/session')->getSolrFilterQuery();
+
+        $_vendor = Mage::helper('umicrosite')->getCurrentVendor();
+
+        $helper = Mage::helper('catalog');
+
+        $selectedContext = 0;
+        if (isset($filterQuery['category_id']) && isset($filterQuery['category_id'][0])) {
+            $selectedContext = $filterQuery['category_id'][0];
+        }
+
+        $rootCatId = Mage::app()->getStore()->getRootCategoryId();
+
+        $queryText = Mage::helper('solrsearch')->getParam('q');
+
+        $array['url'] = Mage::getUrl("search/index/index");
+        $array['method'] = "get";
+        $array['input_name'] = 'q';
+        $array['select_name'] = 'scat';
+
+        $array['input_current_value'] = $queryText;
+
+        $array['select_options'] = array();
+
+        $array['select_options'][0] = array(
+            'value' => 0,
+            'text' => $helper->__('Everywhere'),
+            'selected' => true
+        );
+
+        $array['input_empty_text'] = $helper->__('Search entire store here...');
+
+        // This vendor
+        if ($_vendor && $_vendor->getId()) {
+            $array['select_options'][] = array(
+                'value' => self::ZOLAGO_SEARCH_CONTEXT_CURRENT_VENDOR,
+                'text' => $this->__('This vendor'),
+                'selected' => true,
+            );
+
+            $array['input_empty_text'] = $helper->__('Search in ') . $_vendor->getVendorName() . '...';
+
+            // Make "Everywhere" unselected
+            $array['select_options'][0]['selected'] = false;
+        }
+
+        // Categories
+        $allCats = Mage::getModel('catalog/category')->getCollection()
+            ->addAttributeToSelect('*')
+            ->addAttributeToFilter('is_active', '1')
+            ->addAttributeToFilter( self::ZOLAGO_USE_IN_SEARCH_CONTEXT , array('eq' => 1))
+            ->addAttributeToFilter('include_in_menu', '1');
+
+        foreach ($allCats as $category) {
+
+            $selected = false;
+
+            $array['select_options'][] = array(
+                'text' => $category->getName(),
+                'value' => $category->getId(),
+                'selected' => $selected
+            );
+        }
+
+        if ($searchCategory = Mage::registry('search_category')) {
+
+            $chosenCatId = $this->getChosenCategoryId();
+
+            $selected = ($chosenCatId == $searchCategory->getId()) ? true : false;
+
+            $array['select_options'][] = array(
+                'text' => Mage::helper('catalog')->__('This category'),
+                'value' => $searchCategory->getId(),
+                'selected' => $selected
+            );
+
+            $array['input_empty_text'] = $helper->__('Search in ') . $searchCategory->getName() . "...";
+
+            // Make "Everywhere" unselected
+            $array['select_options'][0]['selected'] = false;
+        }
+
+        return $array;
+    }
+
+
 
     /**
      * Retrive info from solar for sibling categories

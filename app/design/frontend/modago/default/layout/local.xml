@@ -82,7 +82,7 @@
                 <block type="zolagomodago/page_footer_links" name="footer.mobile.links" template="page/html/footer/links.mobile.phtml" />
             </block>
         </reference>
-        
+
         <remove name="right.poll"/>
         <remove name="right.permanent.callout"/>
         <remove name="left.permanent.callout"/>
@@ -168,6 +168,7 @@
                 <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml" />
             </block>
         </reference>
+
 	</zolagomodago_index_index>
 
 </layout>
