@@ -197,22 +197,26 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 		if ($_vendor && $_vendor->getId()) {
 	        $catListHtmlSelect .= '<option selected="selected" value="'. self::ZOLAGO_SEARCH_CONTEXT_CURRENT_VENDOR .'">' . $this->__('All ') . $_vendor->getVendorName() . '</option>';
 		}
+		else{
+	        $catListHtmlSelect .= self::getTreeCategoriesSelect($rootCatId, 0, $selectedContext);
+		}
 		
-        $catListHtmlSelect .= self::getTreeCategoriesSelect($rootCatId, 0, $selectedContext);
-		
-		$searchCategory = Mage::registry('search_category');
-		if(!$searchCategory) $searchCategory = Mage::registry('current_category');
-		
-        if ($searchCategory) {
+        if ($currentCategory = Mage::registry('current_category')) {
+			
+			$vendor_root_category = NULL;
+			if ($_vendor && $_vendor->getId()) {
+				$vendor_root_category = $_vendor->rootCategory();
+			}
+			
+			if($currentCategory->getId() != $vendor_root_category){
 				
-			$chosenCatId = $this->getChosenCategoryId();
-			
-			$selected = ($chosenCatId == $searchCategory->getId()) ? 'selected="selected"' : '';
-			
-            $catListHtmlSelect
-                .= '<option value="' . $searchCategory->getId() . ":" . self::ZOLAGO_SEARCH_CONTEXT_CURRENT_CATEGORY. '" ' . $selected . '>'
-                . Mage::helper('catalog')->__('This category')
-                . '</option>';
+				$selected = 'selected="selected"';
+				
+	            $catListHtmlSelect
+	                .= '<option value="' . $currentCategory->getId() . '" ' . $selected . '>'
+	                . Mage::helper('catalog')->__('This category')
+	                . '</option>';
+			}
         }
 	
         $catListHtmlSelect .= "</select>";
@@ -274,92 +278,53 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 			// Make "Everywhere" unselected
 			$array['select_options'][0]['selected'] = false;
 		}
+		else{
+			
+			// Categories are only shown for global context and not for vendor context
+			$allCats = Mage::getModel('catalog/category')->getCollection()
+	            ->addAttributeToSelect('*')
+	            ->addAttributeToFilter('is_active', '1')
+	             ->addAttributeToFilter( self::ZOLAGO_USE_IN_SEARCH_CONTEXT , array('eq' => 1))
+	            ->addAttributeToFilter('include_in_menu', '1');
+				
+	        foreach ($allCats as $category) {
+	        	
+	            $selected = false;
+				
+				$array['select_options'][] = array(
+					'text' => $category->getName(),
+					'value' => $category->getId(),
+					'selected' => $selected
+				);
+	        }
+		}
 		
-		// Categories
-		$allCats = Mage::getModel('catalog/category')->getCollection()
-            ->addAttributeToSelect('*')
-            ->addAttributeToFilter('is_active', '1')
-             ->addAttributeToFilter( self::ZOLAGO_USE_IN_SEARCH_CONTEXT , array('eq' => 1))
-            ->addAttributeToFilter('include_in_menu', '1');
+        if ($currentCategory = Mage::registry('current_category')) {
 			
-        foreach ($allCats as $category) {
-        	
-            $selected = false;
+			$vendor_root_category = NULL;
+			if ($_vendor && $_vendor->getId()) {
+				$vendor_root_category = $_vendor->rootCategory();
+			}
 			
-			$array['select_options'][] = array(
-				'text' => $category->getName(),
-				'value' => $category->getId(),
-				'selected' => $selected
-			);
-        }
-
-		$searchCategory = Mage::registry('search_category');
-		if(!$searchCategory) $searchCategory = Mage::registry('current_category');
-		
-        if ($searchCategory) {
-			
-			$chosenCatId = $this->getChosenCategoryId();
-			
-			$selected = ($chosenCatId == $searchCategory->getId()) ? true : false;
-			
-			$array['select_options'][] = array(
-				'text' => Mage::helper('catalog')->__('This category'),
-				'value' => $searchCategory->getId() . ":" . self::ZOLAGO_SEARCH_CONTEXT_CURRENT_CATEGORY,
-				'selected' => $selected
-			);
-			
-			$array['input_empty_text'] = $helper->__('Search in ') . $searchCategory->getName() . "...";
-			
-			// Make "Everywhere" unselected
-			$array['select_options'][0]['selected'] = false;
+			if($currentCategory->getId() != $vendor_root_category){
+				
+				$selected = true;
+				
+				$array['select_options'][] = array(
+					'text' => Mage::helper('catalog')->__('This category'),
+					'value' => $currentCategory->getId(),
+					'selected' => $selected
+				);
+				
+				$array['input_empty_text'] = $helper->__('Search in ') . $currentCategory->getName() . "...";
+				
+				// Make "Everywhere" unselected
+				$array['select_options'][0]['selected'] = false;
+			}
         }
 	
         return $array;
     }
-	
-	/**
-	 * Return chosen category id when you select it from the layered navigation
-	 * or from contextual search
-	 * 
-	 * parent_cat_id has priority over scat
-	 * when priority_cat_id is present scat is ignored
-	 */
-	public function getChosenCategoryId(){
-		
-		$params = Mage::app()->getRequest()->getParams();
-		$chosen_cat_id = NULL;
-		
-		if(isset($params['parent_cat_id'])){
-			
-			$chosen_cat_id = $params['parent_cat_id'];				
-			
-		}
-		else{
-			
-			if(isset($params['scat'])){
-				
-				if(strpos($params['scat'], Zolago_Solrsearch_Helper_Data::ZOLAGO_SEARCH_CONTEXT_CURRENT_CATEGORY) !== false){
-					$params_a = explode(':', $params['scat']);
-					$chosen_cat_id = $params_a[0];
-				}
-				elseif((int)$params['scat'] > 0){
-					$chosen_cat_id = $params['scat'];		
-				}
-				
-			}
-			
-		}
-		
-		if(!$chosen_cat_id){
-			
-			$chosenCategory = Mage::registry('current_category');
-			
-			if($chosenCategory){
-				$chosen_cat_id = $chosenCategory->getId();
-			}
-		}
-		return $chosen_cat_id;
-	}
 	
 	/**
 	 * Retrive info from solar for sibling categories
@@ -382,16 +347,16 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 		}
 		
 		// Remove category from filter query
-		$params = Mage::app()->getRequest()->getParams();
-		
-		if(isset($params['fq']['category_id'])){
-			
-			//First add it to registry in case anybody else would like to use it
-			Mage::register('fq_original', $params['fq']);
-			
-			unset($params['fq']['category_id']);
-			Mage::app()->getRequest()->setParams($params);
-		} 
+		// $params = Mage::app()->getRequest()->getParams();
+// 		
+		// if(isset($params['fq']['category_id'])){
+// 			
+			// //First add it to registry in case anybody else would like to use it
+			// Mage::register('fq_original', $params['fq']);
+// 			
+			// unset($params['fq']['category_id']);
+			// Mage::app()->getRequest()->setParams($params);
+		// } 
 		
 		$solrModel = Mage::getModel('solrsearch/solr');
 		

@@ -496,6 +496,13 @@ class Zolago_Solrsearch_Model_Observer {
 		}
 	}
 	
+	// public function handleCatalogLayoutRender($observer)
+	// {
+	    // if(Mage::getModel('zolagosolrsearch/catalog_product_list')->getMode() == Zolago_Solrsearch_Model_Catalog_Product_List::MODE_CATEGORY){
+	    	// parent::handleCatalogLayoutRender($observer);
+	    // }
+	// }
+	
 }
 
 ?>
