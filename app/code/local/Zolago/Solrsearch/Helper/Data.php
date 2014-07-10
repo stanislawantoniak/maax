@@ -9,114 +9,111 @@
 class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 {
     const ZOLAGO_USE_IN_SEARCH_CONTEXT = 'use_in_search_context';
+	const ZOLAGO_SEARCH_CONTEXT_CURRENT_VENDOR = 'current_vendor';
+	const ZOLAGO_SEARCH_CONTEXT_CURRENT_CATEGORY = "current_category";
+	
+	/**
+	 * @var array
+	 */
+	protected $_solrToMageMap = array(
+		"products_id"			=> "id",
+		"product_type_static"	=> "type_id",
+		"name_varchar"			=> "name",
+		"store_id"				=> "store_id",
+		"website_id"			=> "website_id",
+		"category_id"			=> "category_ids",
+		"sku_static"			=> "sku",
+		"vsku_text"				=> "vsku",
+		"in_stock_int"			=> "in_stock",
+		"product_status"		=> "status",
+		"image_varchar"			=> "image",
+		"wishlist_count_int"	=> "wishlist_count",
+		"tax_class_id_int"		=> "tax_class_id",
+		"is_new_int"			=> "is_new",
+		"product_rating_int"	=> "product_rating",
+		"is_bestseller_int"		=> "is_bestseller",
+		"product_flag_int"	=> "product_flag",
+		"special_price_decimal"	=> "special_price",
+		"special_from_date_varchar"			=> "special_from_date",
+		"special_to_date_varchar"			=> "special_to_date",
+		"udropship_vendor_id_int"			=> "udropship_vendor",
+		"udropship_vendor_logo_varchar"		=> "udropship_vendor_logo",
+		"udropship_vendor_url_key_varchar"	=> "udropship_vendor_url_key",
+		"udropship_vendor_varchar"			=> "udropship_vendor_name"
+	);
 
-    const ZOLAGO_SEARCH_CONTEXT_CURRENT_VENDOR = 'current_vendor';
-
-	// This flag is used to append it to url params when from the context select "This category" is selected
-	// This way we know not to redirect from vendor context
-	const ZOLAGO_SEARCH_CONTEXT_CURRENT_CATEGORY = 'current_category';
-
-    /**
-     * @var array
-     */
-    protected $_solrToMageMap = array(
-        "products_id"			=> "id",
-        "product_type_static"	=> "type_id",
-        "name_varchar"			=> "name",
-        "store_id"				=> "store_id",
-        "website_id"			=> "website_id",
-        "category_id"			=> "category_ids",
-        "sku_static"			=> "sku",
-        "vsku_text"				=> "vsku",
-        "in_stock_int"			=> "in_stock",
-        "product_status"		=> "status",
-        "image_varchar"			=> "image",
-        "wishlist_count_int"	=> "wishlist_count",
-        "tax_class_id_int"		=> "tax_class_id",
-        "is_new_int"			=> "is_new",
-        "product_rating_int"	=> "product_rating",
-        "is_bestseller_int"		=> "bestseller_int",
-        "special_price_decimal"	=> "special_price",
-        "special_from_date_varchar"			=> "special_from_date",
-        "special_to_date_varchar"			=> "special_to_date",
-        "udropship_vendor_id_int"			=> "udropship_vendor",
-        "udropship_vendor_logo_varchar"		=> "udropship_vendor_logo",
-        "udropship_vendor_url_key_varchar"	=> "udropship_vendor_url_key",
-        "udropship_vendor_varchar"			=> "udropship_vendor_name"
-    );
-
-    /**
-     * @var array
-     */
-    protected $_cores;
-    /**
-     * @var array
-     */
-    protected $_availableStoreIds;
-
-    /**
-     *
-     * @param type $storeId
-     * @return type
-     */
-    public function getCoresByStoreId($storeId) {
-        $cores = array();
-        foreach($this->getCores() as $core=>$data){
-            if(isset($data['stores'])){
-                $ids = explode(",", trim($data['stores'], ","));
-                if(in_array($storeId,$ids)){
-                    $cores[] = $core;
-                }
-            }
-        }
-        return $cores;
-    }
-
-    /**
-     * @return array
-     */
-    public function getCores() {
-        if(!$this->_cores){
-            $this->_cores  = (array) Mage::getStoreConfig('solrbridgeindices', 0);
-        }
-        return $this->_cores;
-    }
-
-    /**
-     * @return array
-     */
-    public function getAvailableCores() {
-        $cores = array();
-        foreach($this->getCores() as $core => $data){
-            if(isset($data['stores'])){
-                $ids = array_filter(explode(",", trim($data['stores'], ",")));
-                if(count($ids)){
-                    $cores[$core] = true;
-                }
-            }
-        }
-        return array_keys($cores);
-    }
-
-    /**
-     * Returns vaialble stores (cores with has assigned store)
-     * @return array
-     */
-    public function getAvailableStores() {
-        if(!is_array($this->_availableStoreIds)){
-            $this->_availableStoreIds = array();
-            foreach($this->getCores() as $core=>$data){
-                if(isset($data['stores'])){
-                    $ids = explode(",", trim($data['stores'], ","));
-                    $this->_availableStoreIds = array_merge($this->_availableStoreIds, $ids);
-                }
-            }
-            $this->_availableStoreIds = array_values(
-                array_filter(array_unique($this->_availableStoreIds)));
-        }
-        return $this->_availableStoreIds;
-    }
-
+	/**
+	 * @var array
+	 */
+	protected $_cores;
+	/**
+	 * @var array
+	 */
+	protected $_availableStoreIds;
+	
+	/**
+	 * 
+	 * @param type $storeId
+	 * @return type
+	 */
+	public function getCoresByStoreId($storeId) {
+		$cores = array();
+		foreach($this->getCores() as $core=>$data){
+			if(isset($data['stores'])){
+				$ids = explode(",", trim($data['stores'], ","));
+				if(in_array($storeId,$ids)){
+					$cores[] = $core;
+				}
+			}
+		}
+		return $cores;
+	}
+	
+	/**
+	 * @return array
+	 */
+	public function getCores() {
+		if(!$this->_cores){
+			$this->_cores  = (array) Mage::getStoreConfig('solrbridgeindices', 0);
+		}
+		return $this->_cores;
+	}
+	
+	/**
+	 * @return array
+	 */
+	public function getAvailableCores() {
+		$cores = array();
+		foreach($this->getCores() as $core => $data){
+			if(isset($data['stores'])){
+				$ids = array_filter(explode(",", trim($data['stores'], ",")));
+				if(count($ids)){
+					$cores[$core] = true;
+				}
+			}
+		}
+		return array_keys($cores);
+	}
+	
+	/**
+	 * Returns vaialble stores (cores with has assigned store)
+	 * @return array
+	 */
+	public function getAvailableStores() {
+		if(!is_array($this->_availableStoreIds)){
+			$this->_availableStoreIds = array();
+			foreach($this->getCores() as $core=>$data){
+				if(isset($data['stores'])){
+					$ids = explode(",", trim($data['stores'], ","));
+					$this->_availableStoreIds = array_merge($this->_availableStoreIds, $ids);
+				}
+			}
+			$this->_availableStoreIds = array_values(
+					array_filter(array_unique($this->_availableStoreIds)));
+		}
+		return $this->_availableStoreIds;
+	}
+	
     public function getTreeCategoriesSelect($parentId, $level, $cat)
     {
         if ($level > 5) {
@@ -131,7 +128,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 
         $html = '';
         foreach ($allCats as $category) {
-
+        	
             $selected = '';
             if($category->getId() == $cat){
                 $selected = ' selected="selected" ';
@@ -140,7 +137,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
                 . $category->getName() . "</option>";
             // $subcats = $category->getChildren();
             // if ($subcats != '') {
-            // $html .= self::getTreeCategoriesSelect($category->getId(), $level + 1,$cat);
+                // $html .= self::getTreeCategoriesSelect($category->getId(), $level + 1,$cat);
             // }
         }
         return $html;
@@ -184,13 +181,13 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
     {
         $filterQuery = (array)Mage::getSingleton('core/session')->getSolrFilterQuery();
 
-        $_vendor = Mage::helper('umicrosite')->getCurrentVendor();
-
+		$_vendor = Mage::helper('umicrosite')->getCurrentVendor();
+		
         $selectedContext = 0;
         if (isset($filterQuery['category_id']) && isset($filterQuery['category_id'][0])) {
             $selectedContext = $filterQuery['category_id'][0];
         }
-
+		
         $rootCatId = Mage::app()->getStore()->getRootCategoryId();
         // When in the vendor context grab root category
         if($_vendor && $_vendor->getId()){
@@ -209,21 +206,19 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 
         $catListHtmlSelect .= self::getTreeCategoriesSelect($rootCatId, 0, $selectedContext);
 		
-		$searchCategory = Mage::registry('search_category');
-		if(!$searchCategory) $searchCategory = Mage::registry('current_category');
 		
-        if ($searchCategory) {
-				
+        if ($searchCategory = Mage::registry('search_category')) {
+			
 			$chosenCatId = $this->getChosenCategoryId();
 			
 			$selected = ($chosenCatId == $searchCategory->getId()) ? 'selected="selected"' : '';
 			
             $catListHtmlSelect
-                .= '<option value="' . $searchCategory->getId() . ":" . self::ZOLAGO_SEARCH_CONTEXT_CURRENT_CATEGORY. '" ' . $selected . '>'
+                .= '<option value="' . $searchCategory->getId() . '" ' . $selected . '>'
                 . Mage::helper('catalog')->__('This category')
                 . '</option>';
         }
-
+	
         $catListHtmlSelect .= "</select>";
 
         return $catListHtmlSelect;
@@ -301,11 +296,8 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 				'selected' => $selected
 			);
         }
-
-		$searchCategory = Mage::registry('search_category');
-		if(!$searchCategory) $searchCategory = Mage::registry('current_category');
 		
-        if ($searchCategory) {
+        if ($searchCategory = Mage::registry('search_category')) {
 			
 			$chosenCatId = $this->getChosenCategoryId();
 			
@@ -313,7 +305,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 			
 			$array['select_options'][] = array(
 				'text' => Mage::helper('catalog')->__('This category'),
-				'value' => $searchCategory->getId() . ":" . self::ZOLAGO_SEARCH_CONTEXT_CURRENT_CATEGORY,
+				'value' => $searchCategory->getId(),
 				'selected' => $selected
 			);
 			
@@ -345,28 +337,14 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 		}
 		else{
 			
-			if(isset($params['scat'])){
+			if(isset($params['scat']) && (int)$params['scat'] > 0){
 				
-				if(strpos($params['scat'], Zolago_Solrsearch_Helper_Data::ZOLAGO_SEARCH_CONTEXT_CURRENT_CATEGORY) !== false){
-					$params_a = explode(':', $params['scat']);
-					$chosen_cat_id = $params_a[0];
-				}
-				elseif((int)$params['scat'] > 0){
-					$chosen_cat_id = $params['scat'];		
-				}
+				$chosen_cat_id = $params['scat'];		
 				
 			}
 			
 		}
 		
-		if(!$chosen_cat_id){
-			
-			$chosenCategory = Mage::registry('current_category');
-			
-			if($chosenCategory){
-				$chosen_cat_id = $chosenCategory->getId();
-			}
-		}
 		return $chosen_cat_id;
 	}
 	
@@ -394,10 +372,6 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 		$params = Mage::app()->getRequest()->getParams();
 		
 		if(isset($params['fq']['category_id'])){
-			
-			//First add it to registry in case anybody else would like to use it
-			Mage::register('fq_original', $params['fq']);
-			
 			unset($params['fq']['category_id']);
 			Mage::app()->getRequest()->setParams($params);
 		} 

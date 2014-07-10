@@ -20,6 +20,10 @@
 				Vendor name /  logo alt: <?php echo $product->getUdropshipVendorName();?><br/>
 				Wishlist count: <?php echo $product->getWishlistCount();?><br/>
 				In my wishlist: <?php echo (int)$product->getInMyWishlist();?><br/>
+				Is New: <?php echo (int)$product->getIsNew();?><br/>
+				Is Bestseller: <?php echo (int)$product->getIsBestseller();?><br/>
+				Rating: <?php echo (int)$product->getProductRating();?><br/>
+				Product Flag: <?php echo (int)$product->getProductFlag();?><br/>
 		</li>
 	<?php endforeach;?>
 	</ul>

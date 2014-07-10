@@ -1,47 +1,47 @@
 <?php
-class Zolago_Holidays_Helper_Datecalculator extends Mage_Core_Helper_Abstract{
-
-    protected $weekend;
-
-    protected $country_id;
-    protected $exclude_from_pickup;
-    protected $exclude_from_delivery;
-
-    /**
-     * Calculate maximum shipping date for PO
-     *
-     * @param Zolago_Po_Model_Po $po
-     * @param boolean $return_object Set to TRUE if you want to return Z
-     *
-     * @return Zend_Date|string
-     */
-    public function calculateMaxPoShippingDate(Zolago_Po_Model_Po $po, $return_object = FALSE){
-
-        $store = $po->getStore();
-        $storeId = $store->getStoreId();
-        $locale = Mage::getStoreConfig('general/locale/code', $store->getId());
-        $locale_array = explode("_", $locale);
-
-        $vendor = $po->getVendor();
-
-        $this->weekend = explode(',', Mage::getStoreConfig('general/locale/weekend', $storeId));
-        $this->country_id = (key_exists(1, $locale_array)) ? $locale_array[1] : NULL;
-        $this->exclude_from_delivery = 1;
-        $this->exclude_from_pickup = array(1, 0);
-
-        $timezone = Mage::getStoreConfig('general/locale/timezone', $storeId);
-        $max_shipping_days = $vendor->getMaxShippingDays($storeId);
-        $max_shipping_time = $vendor->getMaxShippingTime($storeId);
-
-        if($max_shipping_days === "" || $max_shipping_time === ""){
-            Mage::log("No global values set to Max Shipping Days and Max Shippint Time");
-            return NULL;
-        }
-
-        $max_date_timestamp = $this->calculateMaxDate($max_shipping_days, $max_shipping_time, strtotime($po->getCreatedAt()));
-
-        $date = new Zend_Date($max_date_timestamp, null, $locale);
-        $date->setTimezone($timezone);
+class Zolago_Holidays_Helper_DateCalculator extends Mage_Core_Helper_Abstract{
+	
+	protected $weekend;
+	
+	protected $country_id;
+	protected $exclude_from_pickup;
+	protected $exclude_from_delivery;
+	
+	/**
+	 * Calculate maximum shipping date for PO
+	 * 
+	 * @param Zolago_Po_Model_Po $po
+	 * @param boolean $return_object Set to TRUE if you want to return Z
+	 * 
+	 * @return Zend_Date|string
+	 */
+	public function calculateMaxPoShippingDate(Zolago_Po_Model_Po $po, $return_object = FALSE){
+		
+		$store = $po->getStore();
+		$storeId = $store->getStoreId();
+		$locale = Mage::getStoreConfig('general/locale/code', $store->getId());
+		$locale_array = explode("_", $locale);
+		
+		$vendor = $po->getVendor();
+		
+		$this->weekend = explode(',', Mage::getStoreConfig('general/locale/weekend', $storeId));
+		$this->country_id = (key_exists(1, $locale_array)) ? $locale_array[1] : NULL;
+		$this->exclude_from_delivery = 1;
+		$this->exclude_from_pickup = array(1, 0);
+		
+		$timezone = Mage::getStoreConfig('general/locale/timezone', $storeId);
+		$max_shipping_days = $vendor->getMaxShippingDays($storeId);
+		$max_shipping_time = $vendor->getMaxShippingTime($storeId);
+		
+		if(!$max_shipping_days || !$max_shipping_time){
+			Mage::log("No global values set to Max Shipping Days and Max Shippint Time");
+			return NULL;	
+		}
+		
+		$max_date_timestamp = $this->calculateMaxDate($max_shipping_days, $max_shipping_time, strtotime($po->getCreatedAt()));
+		
+		$date = new Zend_Date($max_date_timestamp, null, $locale);
+	    $date->setTimezone($timezone);
         $date->setHour(0)
             ->setMinute(0)
             ->setSecond(0);
