@@ -3,7 +3,7 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
 {
 	
 	/**
-	 * Sets root category to registry and then returns it
+	 * Sets root category to registry and then return
 	 */
 	public function rootCategory($websiteId = NULL){
 		

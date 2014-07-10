@@ -9,6 +9,11 @@
 class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 {
     const ZOLAGO_USE_IN_SEARCH_CONTEXT = 'use_in_search_context';
+	const ZOLAGO_SEARCH_CONTEXT_CURRENT_VENDOR = 'current_vendor';
+	
+	// This flag is used to append it to url params when from the context select "This category" is selected
+	// This way we know not to redirect from vendor context
+	const ZOLAGO_SEARCH_CONTEXT_CURRENT_CATEGORY = 'current_category';
 	
 	/**
 	 * @var array
@@ -120,8 +125,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
             ->addAttributeToSelect('*')
             ->addAttributeToFilter('is_active', '1')
              ->addAttributeToFilter( self::ZOLAGO_USE_IN_SEARCH_CONTEXT , array('eq' => 1))
-            ->addAttributeToFilter('include_in_menu', '1')
-            ->addAttributeToFilter('parent_id', array('eq' => $parentId));
+            ->addAttributeToFilter('include_in_menu', '1');
 			
         $html = '';
         foreach ($allCats as $category) {
@@ -171,7 +175,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
     }
 
     /**
-     * Construct context search selector
+     * Construct context search selector HTML
      * @return string
      */
     public function getContextSelectorHtml()
@@ -186,26 +190,25 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
         }
 		
         $rootCatId = Mage::app()->getStore()->getRootCategoryId();
-		// When in the vendor context grab root category
-		if($_vendor && $_vendor->getId()){
-			$vendor_root_category = Mage::registry('vendor_current_category');
-			if($vendor_root_category){
-				$rootCatId = $vendor_root_category->getId();
-			}
-		}
 		
         $catListHtmlSelect = '<select name="scat">'
             . '<option value="0">' . Mage::helper('catalog')->__('Everywhere') . '</option>';
 		
 		if ($_vendor && $_vendor->getId()) {
-	        $catListHtmlSelect .= '<option selected="selected" value="' . $_vendor->getId() . '">' . $this->__('All ') . $_vendor->getVendorName() . '</option>';
+	        $catListHtmlSelect .= '<option selected="selected" value="'. self::ZOLAGO_SEARCH_CONTEXT_CURRENT_VENDOR .'">' . $this->__('All ') . $_vendor->getVendorName() . '</option>';
 		}
 		
         $catListHtmlSelect .= self::getTreeCategoriesSelect($rootCatId, 0, $selectedContext);
-
-        if (Mage::registry('current_category')) {
+		
+		
+        if ($searchCategory = Mage::registry('search_category')) {
+			
+			$chosenCatId = $this->getChosenCategoryId();
+			
+			$selected = ($chosenCatId == $searchCategory->getId()) ? 'selected="selected"' : '';
+			
             $catListHtmlSelect
-                .= '<option value="' . Mage::registry('current_category')->getId() . '">'
+                .= '<option value="' . $searchCategory->getId() . ":" . self::ZOLAGO_SEARCH_CONTEXT_CURRENT_CATEGORY. '" ' . $selected . '>'
                 . Mage::helper('catalog')->__('This category')
                 . '</option>';
         }
@@ -215,6 +218,136 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
         return $catListHtmlSelect;
     }
 
+
+	/**
+     * Construct context search selector Array
+     * @return array
+     */
+    public function getContextSelectorArray()
+    {
+        $array = array();
+		
+        $filterQuery = (array)Mage::getSingleton('core/session')->getSolrFilterQuery();
+
+		$_vendor = Mage::helper('umicrosite')->getCurrentVendor();
+		
+		$helper = Mage::helper('catalog');
+		
+        $selectedContext = 0;
+        if (isset($filterQuery['category_id']) && isset($filterQuery['category_id'][0])) {
+            $selectedContext = $filterQuery['category_id'][0];
+        }
+		
+        $rootCatId = Mage::app()->getStore()->getRootCategoryId();
+		
+		$queryText = Mage::helper('solrsearch')->getParam('q');
+		
+		$array['url'] = Mage::getUrl("search/index/index");
+		$array['method'] = "get";
+		$array['input_name'] = 'q';
+		$array['select_name'] = 'scat';
+		
+		$array['input_value'] = $queryText;
+		
+		$array['select_options'] = array();
+		
+		$array['select_options'][0] = array(
+			'value' => 0,
+			'text' => $helper->__('Everywhere'),
+			'selected' => true
+		);
+		
+		$array['input_empty_text'] = $helper->__('Search entire store here...');
+		
+		// This vendor
+		if ($_vendor && $_vendor->getId()) {
+			$array['select_options'][] = array(
+				'value' => self::ZOLAGO_SEARCH_CONTEXT_CURRENT_VENDOR,
+				'text' => $this->__('This vendor'),
+				'selected' => true,
+			);
+			
+			$array['input_empty_text'] = $helper->__('Search in ') . $_vendor->getVendorName() . '...';
+			
+			// Make "Everywhere" unselected
+			$array['select_options'][0]['selected'] = false;
+		}
+		
+		// Categories
+		$allCats = Mage::getModel('catalog/category')->getCollection()
+            ->addAttributeToSelect('*')
+            ->addAttributeToFilter('is_active', '1')
+             ->addAttributeToFilter( self::ZOLAGO_USE_IN_SEARCH_CONTEXT , array('eq' => 1))
+            ->addAttributeToFilter('include_in_menu', '1');
+			
+        foreach ($allCats as $category) {
+        	
+            $selected = false;
+			
+			$array['select_options'][] = array(
+				'text' => $category->getName(),
+				'value' => $category->getId(),
+				'selected' => $selected
+			);
+        }
+		
+        if ($searchCategory = Mage::registry('search_category')) {
+			
+			$chosenCatId = $this->getChosenCategoryId();
+			
+			$selected = ($chosenCatId == $searchCategory->getId()) ? true : false;
+			
+			$array['select_options'][] = array(
+				'text' => Mage::helper('catalog')->__('This category'),
+				'value' => $searchCategory->getId() . ":" . self::ZOLAGO_SEARCH_CONTEXT_CURRENT_CATEGORY,
+				'selected' => $selected
+			);
+			
+			$array['input_empty_text'] = $helper->__('Search in ') . $searchCategory->getName() . "...";
+			
+			// Make "Everywhere" unselected
+			$array['select_options'][0]['selected'] = false;
+        }
+	
+        return $array;
+    }
+	
+	/**
+	 * Return chosen category id when you select it from the layered navigation
+	 * or from contextual search
+	 * 
+	 * parent_cat_id has priority over scat
+	 * when priority_cat_id is present scat is ignored
+	 */
+	public function getChosenCategoryId(){
+		
+		$params = Mage::app()->getRequest()->getParams();
+		$chosen_cat_id = NULL;
+		
+		if(isset($params['parent_cat_id'])){
+			
+			$chosen_cat_id = $params['parent_cat_id'];				
+			
+		}
+		else{
+			
+			if(isset($params['scat'])){
+				
+				if(strpos($params['scat'], Zolago_Solrsearch_Helper_Data::ZOLAGO_SEARCH_CONTEXT_CURRENT_CATEGORY) !== false){
+					$params_a = explode(':', $params['scat']);
+					$chosen_cat_id = $params_a[0];
+				}
+				elseif((int)$params['scat'] > 0){
+					$chosen_cat_id = $params['scat'];		
+				}
+				
+			}
+			
+		}
+		
+		return $chosen_cat_id;
+	}
+	
 	/**
 	 * Retrive info from solar for sibling categories
 	 * 
@@ -239,6 +372,10 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 		$params = Mage::app()->getRequest()->getParams();
 		
 		if(isset($params['fq']['category_id'])){
+			
+			//First add it to registry in case anybody else would like to use it
+			Mage::register('fq_original', $params['fq']);
+			
 			unset($params['fq']['category_id']);
 			Mage::app()->getRequest()->setParams($params);
 		} 
