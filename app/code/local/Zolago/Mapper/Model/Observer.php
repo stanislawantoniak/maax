@@ -66,7 +66,7 @@ class Zolago_Mapper_Model_Observer {
 		}
 	}
 	
-	static public function processMaperQueue() {
+	static public function processMapperQueue() {
 		$model = Mage::getModel('zolagomapper/queue_mapper')->process();		
 	}
 	

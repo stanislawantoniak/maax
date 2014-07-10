@@ -93,6 +93,7 @@ class Zolago_Solrsearch_Model_Observer {
 		$this->_pushProduct($product, $product->getStoreId(), true);
 		
 	}
+
 	
 	/**
 	 * Collect affected products ids
@@ -100,20 +101,27 @@ class Zolago_Solrsearch_Model_Observer {
 	 */
 	public function catalogruleApplyAfter(Varien_Event_Observer $observer)
 	{
-		$productCondition = $observer->getEvent()->getData('product_condition');
-		$adapter = Mage::getSingleton('core/resource')->getConnection('core_read');
-		$productCondition = $productCondition->getIdsSelect($adapter)->__toString();
-		$effectedProducts = $adapter->fetchAll($productCondition);
-		$availableStores = $this->_filterStoreIds(array_keys(Mage::app()->getStores()));
+		/**
+		 * Important
+		 * @todo add apply rule with disabled status before rule delte or delete form caralog_rule_product_price
+		 * Then should work - now prices are from Magento not solr in listing
+		 * Catalog rule price applied - queue matched products
+		 */
 		
-		foreach ($effectedProducts as $item)
+		/*
+		$affectedProductsIds = Mage::getResourceModel("zolagosolrsearch/improve")
+				->getRuleAppliedAffectedProducts();
+		$availableStores = $this->_filterStoreIds(array_keys(Mage::app()->getStores()));
+
+		foreach ($affectedProductsIds as $productId)
 		{
-			if (isset($item['product_id']) && $item['product_id'] > 0) {
+			if ($productId > 0) {
 				foreach($availableStores as $storeId){
-					$this->collectProduct($item['product_id'], $storeId);
+					$this->collectProduct($productId, $storeId);
 				}
 			}
 		}
+		*/
 	}
 	
 
