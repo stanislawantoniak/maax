@@ -195,6 +195,15 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         if(isset($paramss['q'])) {
         	$finalParams['q'] = $paramss['q'];
         }
+        if(isset($paramss['page'])) {
+        	$finalParams['page'] = $paramss['page'];
+        }
+        if(isset($paramss['order'])) {
+        	$finalParams['order'] = $paramss['order'];
+        }
+        if(isset($paramss['dir'])) {
+        	$finalParams['dir'] = $paramss['dir'];
+        }
 		
 		if(isset($paramss['fq']['category_id'])){
 			$finalParams['fq']['category_id'] = $paramss['fq']['category_id'];
