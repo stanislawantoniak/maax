@@ -200,9 +200,11 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 		
         $catListHtmlSelect .= self::getTreeCategoriesSelect($rootCatId, 0, $selectedContext);
 		
+		$searchCategory = Mage::registry('search_category');
+		if(!$searchCategory) $searchCategory = Mage::registry('current_category');
 		
-        if ($searchCategory = Mage::registry('search_category')) {
-			
+        if ($searchCategory) {
+				
 			$chosenCatId = $this->getChosenCategoryId();
 			
 			$selected = ($chosenCatId == $searchCategory->getId()) ? 'selected="selected"' : '';
@@ -290,8 +292,11 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 				'selected' => $selected
 			);
         }
+
+		$searchCategory = Mage::registry('search_category');
+		if(!$searchCategory) $searchCategory = Mage::registry('current_category');
 		
-        if ($searchCategory = Mage::registry('search_category')) {
+        if ($searchCategory) {
 			
 			$chosenCatId = $this->getChosenCategoryId();
 			
@@ -345,6 +350,14 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 			
 		}
 		
+		if(!$chosen_cat_id){
+			
+			$chosenCategory = Mage::registry('current_category');
+			
+			if($chosenCategory){
+				$chosen_cat_id = $chosenCategory->getId();
+			}
+		}
 		return $chosen_cat_id;
 	}
 	
