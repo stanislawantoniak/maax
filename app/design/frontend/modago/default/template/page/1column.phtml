@@ -6,7 +6,7 @@
 <head>
 <?php echo $this->getChildHtml('head'); ?>
 </head>
-<body class="not-front not-logged-in  sidebar-first <?php echo $this->getBodyClass()?' '.$this->getBodyClass().'':'' ?>">
+<body class="not-front not-logged-in <?php echo $this->getBodyClass()?' '.$this->getBodyClass().'':'' ?>">
 <!--[if lt IE 9]>
 <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
 <![endif]-->
@@ -18,11 +18,19 @@
     <?php echo $this->getChildHtml('header') ?>
 
 
-    <?php echo $this->getChildHtml('breadcrumbs') ?>
 
     <?php echo $this->getChildHtml('global_messages') ?>
 
-    <section id="main">
+    <section id="main" class="<?php echo $this->getElementClass(); ?>">
+        <header id="header-main">
+            <div class="container-fluid">
+                <div class="row hidden-xs">
+                    <div id="breadcrumbs" class="col-sm-12">
+                        <?php echo $this->getChildHtml('breadcrumbs') ?>
+                    </div>
+                </div>
+            </div>
+        </header>
         <?php echo $this->getChildHtml('content') ?>
     </section>
 
