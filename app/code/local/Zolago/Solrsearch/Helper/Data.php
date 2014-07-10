@@ -10,6 +10,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 {
     const ZOLAGO_USE_IN_SEARCH_CONTEXT = 'use_in_search_context';
 	const ZOLAGO_SEARCH_CONTEXT_CURRENT_VENDOR = 'current_vendor';
+	const ZOLAGO_SEARCH_CONTEXT_CURRENT_CATEGORY = "current_category";
 	
 	/**
 	 * @var array
@@ -30,7 +31,8 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 		"tax_class_id_int"		=> "tax_class_id",
 		"is_new_int"			=> "is_new",
 		"product_rating_int"	=> "product_rating",
-		"is_bestseller_int"		=> "bestseller_int",
+		"is_bestseller_int"		=> "is_bestseller",
+		"product_flag_int"	=> "product_flag",
 		"special_price_decimal"	=> "special_price",
 		"special_from_date_varchar"			=> "special_from_date",
 		"special_to_date_varchar"			=> "special_to_date",

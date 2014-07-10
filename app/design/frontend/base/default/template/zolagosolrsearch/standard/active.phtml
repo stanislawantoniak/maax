@@ -1,0 +1,36 @@
+<?php $filterQuery = $this->getFilterQuery(); ?>
+<?php if(sizeof($filterQuery) > 0 && $this->isSelectedFacetActive()) : ?>
+<div class="currently">
+	<p class="block-subtitle"><?php echo $this->__('Currently Shopping by') ?></p>
+	<ol>
+
+		<?php foreach($filterQuery as $key=>$values): ?>
+			<?php foreach($values as $v): ?>
+				<?php if ($key != 'category_id'):?>
+					<li>
+						<?php $face_key = substr($key, 0, strrpos($key, '_'))?>
+						<?php 
+						$selectedFacetValue = $v;
+						if ($face_key == 'price'){
+							$selectedFacetValue = $this->formatFacetPrice($v);
+						}
+						?>
+
+						<span class="label"><?php echo $this->__($this->getFacetLabel($key)); ?>:</span> <span class="value"><?php echo $this->facetFormat($selectedFacetValue) ?></span>
+
+
+						<a title="<?php echo $this->__('Remove This Item') ?>" href="<?php echo $this->getRemoveFacesUrl($face_key, $v)?>" class="btn-remove"><?php echo $this->__('Remove This Item') ?></a>
+
+						<?php if ($face_key != 'price'):?>
+						<input type="hidden" name="fq[<?php echo $face_key ?>]" value="<?php echo $v?>" />
+						<?php endif;?>
+					</li>
+				<?php endif;?>
+			<?php endforeach; ?>
+		<?php endforeach; ?>
+	</ol>
+</div>
+<div class="actions">
+<a title="<?php echo $this->__('Clear all') ?>" href="<?php echo $this->getRemoveAllUrl()?>"><?php echo $this->__('Clear All') ?></a>
+</div>
+<?php endif; ?>

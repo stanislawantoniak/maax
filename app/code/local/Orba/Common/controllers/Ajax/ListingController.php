@@ -21,14 +21,30 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 		$listModel = Mage::getSingleton("zolagosolrsearch/catalog_product_list");
 		/* @var $listModel Zolago_Solrsearch_Model_Catalog_Product_List */
 		
-		//$filters = $this->getLayout()->createBlock("zolagosearch/");
+		// Create product list 
 		$products = array();
 		foreach ($listModel->getCollection() as $product){
+			/* @var $_product Zolago_Solrsearch_Model_Catalog_Product */
 			$_product = $product->getData();
+			$_product['listing_resized_image_url'] = $product->getListingResizedImageUrl();
 			$products[] = $_product;
 		}
+		
+		// Header
+		$type = $listModel->getMode()==$listModel::MODE_SEARCH ? "search" : "category";
+		$header = $this->getLayout()->createBlock("zolagosolrsearch/catalog_product_list_header_$type")->toHtml();
+		
+		// Toolbar
+		$toolbar = $this->getLayout()->createBlock("zolagosolrsearch/catalog_product_list_toolbar")->toHtml();
+		
+		// Filter
+		$filters = $this->getLayout()->createBlock("zolagosolrsearch/catalog_product_list_faces")->toHtml();
+		
 		$content=array(
-			"products" => $products
+			"products" => $products,
+			"header" => $header,
+			"toolbar" => $toolbar,
+			"filters" => $filters
 		);
 		
 		$result = $this->_formatSuccessContentForResponse($content);
