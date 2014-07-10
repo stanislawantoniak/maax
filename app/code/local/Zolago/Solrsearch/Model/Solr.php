@@ -100,26 +100,36 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
          * Ignore the following section if the request is for autocomplete
          * The purpose is the speed up autocomplete
          */
-        if (!$this->isAutocomplete) {
+         if (!$this->isAutocomplete) {
+
             if (in_array(Mage::app()->getRequest()->getRouteName(), array('catalog', 'umicrosite', 'orbacommon', 'solrsearch'))) {
-				$_category = $this->getCurrentCategory();
+
+                $_category = $this->getCurrentCategory();
                 $currentCategoryId = $_category->getId();
 				
-                if (empty($filterQuery['category_id'])) {
-                    $filterQuery['category_id'] = array($currentCategoryId);
-                }
-				
-                $filterQuery['filter_visibility_int'] = Mage::getSingleton('catalog/product_visibility')->getVisibleInCatalogIds();
+				// In root sore category do not filter categories
+				// Do not filter in vendor root to (only vendor filter is applayed @todo)
+				if(!$this->isStoreRoot($_category) && !$this->isVendorRoot($_category)){
+						
+					$_category = $this->getCurrentCategory();
+					$currentCategoryId = $_category->getId();
 
-                //Check category is anchor
-                if ($_category->getIsAnchor()) {
-                    $childrenIds = $_category->getAllChildren(true);
-                    if (is_array($childrenIds) && isset($filterQuery['category_id']) && is_array($filterQuery['category_id'])) {
-                        if (!isset($standardFilterQuery['category_id'])){
-                            $filterQuery['category_id'] = array_merge($filterQuery['category_id'], $childrenIds);
-                        }
-                    }
-                }
+					if (empty($filterQuery['category_id'])) {
+						$filterQuery['category_id'] = array($currentCategoryId);
+					}
+
+					$filterQuery['filter_visibility_int'] = Mage::getSingleton('catalog/product_visibility')->getVisibleInCatalogIds();
+
+					//Check category is anchor
+					if ($_category->getIsAnchor()) {
+						$childrenIds = $_category->getAllChildren(true);
+						if (is_array($childrenIds) && isset($filterQuery['category_id']) && is_array($filterQuery['category_id'])) {
+							if (!isset($standardFilterQuery['category_id'])){
+								$filterQuery['category_id'] = array_merge($filterQuery['category_id'], $childrenIds);
+							}
+						}
+					}
+				}
             };
         }
         $filterQueryArray = array();
@@ -244,8 +254,9 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
                 $_category = $this->getCurrentCategory();
                 $currentCategoryId = $_category->getId();
 				
-				if($currentCategoryId!=Mage::app()->getStore()->getRootCategoryId()){
-				
+				// In root sore category do not filter categories
+				// Do not filter in vendor root to (only vendor filter is applayed @todo)
+				if(!$this->isStoreRoot($_category) && !$this->isVendorRoot($_category)){
 					if (empty($filterQuery['category_id'])) {
 						$filterQuery['category_id'] = array($currentCategoryId);
 					}
@@ -353,6 +364,23 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 	public function setCurrentCategory(Mage_Catalog_Model_Category $category) {
 		$this->_currentCategory = $category;
 		return $this;
+	}
+	
+	/**
+	 * @param Mage_Catalog_Model_Category $category
+	 * @return bool
+	 */
+	public function isVendorRoot(Mage_Catalog_Model_Category $category) {
+		return Mage::helper("zolagodropshipmicrosite")->getVendorRootCategoryObject()->getId()== $category->getId();
+	}
+	
+	
+	/**
+	 * @param Mage_Catalog_Model_Category $category
+	 * @return bool
+	 */
+	public function isStoreRoot(Mage_Catalog_Model_Category $category) {
+		return $category->getId()==Mage::app()->getStore()->getRootCategoryId();
 	}
 	
 	/**
