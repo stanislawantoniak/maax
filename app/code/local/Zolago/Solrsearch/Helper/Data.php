@@ -337,7 +337,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 	 * 
 	 * @return array
 	 */
-	public function getAllCatgoryData(){
+	public function getAllCatgoryData($parent_category, $rollback_category = NULL){
 		
 		if($all_data = Mage::registry('all_category_data')){
 			return $all_data;	
@@ -354,9 +354,15 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 		
 		$solrModel = Mage::getModel('solrsearch/solr');
 		
-		$solrModel->isGlobalSearch();
+		// Set parent category
+		$solrModel->setCurrentCategory($parent_category);
 		
 		$resultSet = $solrModel->query($queryText);
+		
+		// Rollback
+		if($rollback_category){
+			$solrModel->setCurrentCategory($rollback_category);
+		}
 		
     	if(isset($resultSet['facet_counts']['facet_fields'][$facetfield]) && is_array($resultSet['facet_counts']['facet_fields'][$facetfield]))
     	{

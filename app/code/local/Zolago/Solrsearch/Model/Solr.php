@@ -10,8 +10,6 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 		'product_flag_facet'
 	);
 	
-	protected $_globalSearch = FALSE;
-	
 	protected $_currentCategory;
 	
 	/**
@@ -20,15 +18,6 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 	public function __construct() {
 		Mage::getSingleton('core/session')->setSolrFilterQuery(null);
 		parent::__construct();
-	}
-	
-	/**
-	 * Do not include category in filter query to perform global search
-	 * 
-	 * @return boolean
-	 */
-	public function isGlobalSearch(){
-		$this->_globalSearch = TRUE;	
 	}
 	
 	/**
@@ -111,7 +100,7 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
          * Ignore the following section if the request is for autocomplete
          * The purpose is the speed up autocomplete
          */
-        if (!$this->isAutocomplete && !$this->_globalSearch) {
+        if (!$this->isAutocomplete) {
             if (in_array(Mage::app()->getRequest()->getRouteName(), array('catalog', 'umicrosite', 'orbacommon', 'solrsearch'))) {
 				$_category = $this->getCurrentCategory();
                 $currentCategoryId = $_category->getId();
