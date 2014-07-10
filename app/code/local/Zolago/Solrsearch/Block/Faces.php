@@ -355,8 +355,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 		// id => path
 		$all_categories = Mage::helper('zolagocatalog/category')->getPathArray();
 		
-		// Get all category data from Solr		
-		$all_data = Mage::helper('zolagosolrsearch')->getAllCatgoryData();
+		
 		
 		$_vendor = Mage::helper('umicrosite')->getCurrentVendor();
 		
@@ -376,39 +375,6 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         $category = $this->getCurrentCategory();
 		
 		$show_siblings = !$this->isCurrentCategory();
-				// if($this->getMode()==self::MODE_CATEGORY){
-		// }
-		// else{
-// 			
-			// if(isset($params['parent_cat_id'])){
-				// $category = Mage::getModel('catalog/category')->load($params['parent_cat_id']);
-			// }
-			// else{
-// 				
-				// if(isset($params['scat'])){
-// 					
-					// if(strpos($params['scat'], Zolago_Solrsearch_Helper_Data::ZOLAGO_SEARCH_CONTEXT_CURRENT_CATEGORY) !== false){
-						// $params_a = explode(':', $params['scat']);
-						// $category = Mage::getModel('catalog/category')->load($params_a[0]);
-					// }
-					// elseif((int)$params['scat'] > 0){
-						// $category = Mage::getModel('catalog/category')->load($params['scat']);
-					// }
-					// elseif($params['scat'] == Zolago_Solrsearch_Helper_Data::ZOLAGO_SEARCH_CONTEXT_CURRENT_VENDOR){
-						// $category = $this->getCurrentCategory();
-					// }
-// 					
-					// $show_siblings = FALSE;
-// 					
-				// }
-				// else{
-			        // $category = $this->getCurrentCategory();
-				// }
-// 				
-			// }
-// 			
-		// }
-// 		
 		// Specify root and parent categories
 		$root_category_id = Mage::app()->getStore()->getRootCategoryId();
 		$is_root_category = FALSE;
@@ -504,6 +470,9 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 		// Sibling categories		
 		if(!$is_root_category && $show_siblings){
 			
+			// Get all category data from Solr		
+			$all_data = Mage::helper('zolagosolrsearch')->getAllCatgoryData($parent_category, $category);
+		
 			$siblings = $parent_category->getChildrenCategories();
 			foreach($siblings as $sibling_cat){
 				

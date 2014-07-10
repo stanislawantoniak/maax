@@ -10,8 +10,6 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 		'product_flag_facet'
 	);
 	
-	protected $_globalSearch = FALSE;
-	
 	protected $_currentCategory;
 	
 	/**
@@ -20,15 +18,6 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 	public function __construct() {
 		Mage::getSingleton('core/session')->setSolrFilterQuery(null);
 		parent::__construct();
-	}
-	
-	/**
-	 * Do not include category in filter query to perform global search
-	 * 
-	 * @return boolean
-	 */
-	public function isGlobalSearch(){
-		$this->_globalSearch = TRUE;	
 	}
 	
 	/**
