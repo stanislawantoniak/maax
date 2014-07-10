@@ -6,9 +6,10 @@
 	</div>
 	<div class="left" style="margin-left: 20px;">
 		<label for="sort">Sort by</label>
-		<select name="sort" id="sort">
+		<select onChange="document.location.href=this.options[this.selectedIndex].value" name="sort" id="sort">
 			<?php foreach($this->getSortOptions() as $option):?>
-			<option value="<?php echo $this->escapeHtml($option['value']);?>"><?php echo $this->escapeHtml($option['label']);?></option>
+			<option <?php if($this->getCurrentOrder()==$option['value'] && $this->getCurrentDir()==$option['dir']):?>selected="selected"<?php endif;?> 
+				value="<?php echo $this->getSortUrl($option);?>"><?php echo $this->escapeHtml($option['label']);?></option>
 			<?php endforeach;?>
 		</select>
 	</div>
