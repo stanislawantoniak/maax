@@ -122,9 +122,10 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
         $allCats = Mage::getModel('catalog/category')->getCollection()
             ->addAttributeToSelect('*')
             ->addAttributeToFilter('is_active', '1')
-             ->addAttributeToFilter( self::ZOLAGO_USE_IN_SEARCH_CONTEXT , array('eq' => 1))
-            ->addAttributeToFilter('include_in_menu', '1');
-			
+            ->addAttributeToFilter( self::ZOLAGO_USE_IN_SEARCH_CONTEXT , array('eq' => 1))
+            ->addAttributeToFilter('include_in_menu', '1')
+            ->addAttributeToFilter('parent_id', array('eq' => $parentId));
+
         $html = '';
         foreach ($allCats as $category) {
         	
@@ -188,14 +189,21 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
         }
 		
         $rootCatId = Mage::app()->getStore()->getRootCategoryId();
-		
+        // When in the vendor context grab root category
+        if($_vendor && $_vendor->getId()){
+            $vendor_root_category = Mage::registry('vendor_current_category');
+            if($vendor_root_category){
+                $rootCatId = $vendor_root_category->getId();
+            }
+        }
+
         $catListHtmlSelect = '<select name="scat">'
             . '<option value="0">' . Mage::helper('catalog')->__('Everywhere') . '</option>';
-		
-		if ($_vendor && $_vendor->getId()) {
-	        $catListHtmlSelect .= '<option selected="selected" value="'. self::ZOLAGO_SEARCH_CONTEXT_CURRENT_VENDOR .'">' . $this->__('All ') . $_vendor->getVendorName() . '</option>';
-		}
-		
+
+        if ($_vendor && $_vendor->getId()) {
+            $catListHtmlSelect .= '<option selected="selected" value="' . $_vendor->getId() . '">' . $this->__('All ') . $_vendor->getVendorName() . '</option>';
+        }
+
         $catListHtmlSelect .= self::getTreeCategoriesSelect($rootCatId, 0, $selectedContext);
 		
 		
