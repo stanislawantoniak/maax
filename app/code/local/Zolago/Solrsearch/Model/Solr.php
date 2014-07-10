@@ -120,7 +120,7 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 				
 				// In root sore category do not filter categories
 				// Do not filter in vendor root to (only vendor filter is applayed @todo)
-				if(!$this->isStoreRoot($_category) && !$this->isVendorRoot($_category)){
+				if(!$this->isStoreRoot($_category) /* && !$this->isVendorRoot($_category) */){
 						
 					$_category = $this->getCurrentCategory();
 					$currentCategoryId = $_category->getId();
@@ -267,7 +267,7 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 				
 				// In root sore category do not filter categories
 				// Do not filter in vendor root to (only vendor filter is applayed @todo)
-				if(!$this->isStoreRoot($_category) && !$this->isVendorRoot($_category)){
+				if(!$this->isStoreRoot($_category) /* && !$this->isVendorRoot($_category)*/){
 					if (empty($filterQuery['category_id'])) {
 						$filterQuery['category_id'] = array($currentCategoryId);
 					}
