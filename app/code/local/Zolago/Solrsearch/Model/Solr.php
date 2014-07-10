@@ -105,25 +105,20 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
         }
 
         $filterQuery = array_merge($filterQuery, $defaultFilterQuery);
-
         /**
          * Ignore the following section if the request is for autocomplete
          * The purpose is the speed up autocomplete
          */
-		
         if (!$this->isAutocomplete && !$this->_globalSearch) {
 
             if (in_array(Mage::app()->getRequest()->getRouteName(), array('catalog', 'umicrosite', 'orbacommon', 'solrsearch'))) {
 				$_category = $this->getCurrentCategory();
-				
                 $currentCategoryId = $_category->getId();
-				
 				
                 if (empty($filterQuery['category_id'])) {
                     $filterQuery['category_id'] = array($currentCategoryId);
                 }
 				
-
                 $filterQuery['filter_visibility_int'] = Mage::getSingleton('catalog/product_visibility')->getVisibleInCatalogIds();
 
                 //Check category is anchor
@@ -137,7 +132,6 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
                 }
             };
         }
-
         $filterQueryArray = array();
 		$extendedFilterQueryArray = array();
         $rangeFields = $this->rangeFields;
