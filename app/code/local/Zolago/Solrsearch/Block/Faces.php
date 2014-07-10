@@ -162,6 +162,14 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
     }
 	
 	public function getRemoveAllUrl(){
+		return Mage::getUrl('*/*', $this->_parseRemoveAllUrl());
+	}
+	
+	public function getRemoveAllJson(){
+		return Mage::helper("core")->jsonEncode($this->_parseRemoveAllUrl());
+	}
+	
+	protected function _parseRemoveAllUrl(){
     	$_solrDataArray = $this->getSolrData();
 
     	$paramss = $this->getRequest()->getParams();
@@ -205,10 +213,20 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         	$urlParams['_query']    = $finalParams;
         }
 
-        return Mage::getUrl('*/*', $urlParams);
+        return $urlParams;
     }
 
     public function getRemoveFacesUrl($key,$value)
+    {
+		return Mage::getUrl('*/*/*', $this->_parseRemoveFacesUrl($key, $value));
+	}
+	
+	public function getRemoveFacesJson($key,$value) {
+		return Mage::helper('core')->jsonEncode($this->_parseRemoveFacesUrl($key, $value));
+	}
+	
+	
+    public function _parseRemoveFacesUrl($key,$value)
     {
         $paramss = $this->getRequest()->getParams();
 
@@ -271,8 +289,9 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
             $urlParams['_query']    = $finalParams;
         }
 
-        return Mage::getUrl('*/*/*', $urlParams);
+        return $urlParams;
     }
+
 
     /**
      * merge special blocks like category, price, typ flag, rating
@@ -899,6 +918,23 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 	 */
     public function getFacesUrl($params=array(), $paramss = NULL)
     {
+        return Mage::getUrl('*/*/*', $this->_parseQueryData($params, $paramss));
+	}
+	
+	/**
+	 * @param array $params params to be set
+	 * @param array $paramss current params (if not set will take current params from current request)
+	 */
+	public function getFacesJson($params=array(), $paramss = NULL){
+		return Mage::helper("core")->jsonEncode($this->_parseQueryData($params, $paramss));
+	}
+		
+	/**
+	 * @param array $params params to be set
+	 * @param array $paramss current params (if not set will take current params from current request)
+	 */
+    protected function _parseQueryData($params=array(), $paramss = NULL)
+    {
         $_solrDataArray = $this->getSolrData();
 		
 		if(!$paramss) $paramss = $this->getRequest()->getParams();
@@ -963,7 +999,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
             $urlParams['_query']    = $finalParams;
         }
 
-        return Mage::getUrl('*/*/*', $urlParams);
+        return $urlParams;
     }
 	
 	/**

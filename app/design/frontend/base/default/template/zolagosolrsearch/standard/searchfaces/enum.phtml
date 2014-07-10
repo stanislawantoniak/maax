@@ -8,7 +8,7 @@
 			<?php foreach ($this->getItems() as $item => $count): ?>
 				<?php if ($this->getCanShowItem($item, $count)): ?>
 					<li>					
-						<a href="<?php echo $this->getItemUrl($item) ?>" class="facet-item <?php echo $this->getItemClass($item); ?>"><?php echo $item ?>&nbsp;<span>(<?php echo $count ?>)</span></a>
+						<a href="<?php echo $this->getItemUrl($item) ?>" data-params='<?php echo $this->getItemJson($item);?>' class="facet-item <?php echo $this->getItemClass($item); ?>"><?php echo $item ?>&nbsp;<span>(<?php echo $count ?>)</span></a>
 					</li>
 				<?php endif; ?>
 			<?php endforeach; ?>
@@ -17,7 +17,7 @@
 			<ol style="display: none;" id="content_hidden_holder_<?php echo $key ?>">
 				<?php foreach ($this->getHiddenItems() as $item => $count): ?>
 					<li>
-						<a href="<?php echo $this->getItemUrl($item) ?>" class="facet-item <?php echo $this->getItemClass($item); ?>"><?php echo $item ?>&nbsp;<span>(<?php echo $count ?>)</span></a>
+						<a href="<?php echo $this->getItemUrl($item) ?>" data-params='<?php echo $this->getItemJson($item);?>' class="facet-item <?php echo $this->getItemClass($item); ?>"><?php echo $item ?>&nbsp;<span>(<?php echo $count ?>)</span></a>
 					</li>
 				<?php endforeach; ?>
 			</ol>

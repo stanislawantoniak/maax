@@ -81,10 +81,20 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
     {
 		return $this->getFilterContainer()->getRemoveFacesUrl($key, $value);
     }
+	
+	public function getRemoveFacesJson($key,$value)
+    {
+		return $this->getFilterContainer()->getRemoveFacesJson($key, $value);
+    }
 
 	public function getFacesUrl($params=array(), $paramss=NULL)
     {
 		return $this->getFilterContainer()->getFacesUrl($params, $paramss);
+    }
+	
+	public function getFacesJson($params=array(), $paramss=NULL)
+    {
+		return $this->getFilterContainer()->getFacesJson($params, $paramss);
     }
 	
 	public function getItemUrl($item) {
@@ -94,6 +104,16 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 			 $facetUrl = $this->getRemoveFacesUrl($face_key, $item);
 		}
 		return $facetUrl;
+	}
+	
+	public function getItemJson($item) {
+		$face_key = $this->getAttributeCode();
+		if($this->isItemActive($item)){
+			$json = $this->getRemoveFacesJson($face_key, $item);
+		}else{
+			$json = $this->getFacesJson(array('fq' => array($face_key => $item)));
+		}
+		return $json;
 	}
 	
 	public function isFilterActive() {
