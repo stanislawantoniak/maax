@@ -173,7 +173,7 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 		////////////////////////////////////////////////////////////////////////
 		$time = $this->getMicrotime();
 		
-		$resourceModel->loadAttributesData($finalCollection, $attibutes, $allIds, $storeId);
+		$resourceModel->loadAttributesData($finalCollection, $attibutes, $finalCollection->getAllIds(), $storeId);
 		
 		Mage::log("Attributes load " . $this->_formatTime($this->getMicrotime()-$time));
 		
