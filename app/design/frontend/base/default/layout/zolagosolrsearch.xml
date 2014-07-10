@@ -2,7 +2,22 @@
 <layout version="0.1.0">
     <solrbridge_solrsearch_category_view> 
 		<remove name="mana.catalog.leftnav" />
+		<remove name="solrsearch_category_view"/>
+		<reference name="content">
+			<block type="zolagosolrsearch/catalog_product_list_header_category" name="solrsearch_product_list_header" template="zolagosolrsearch/catalog/product/list/header/category.phtml" as="solrsearch_result_title" />
+			<block type="zolagosolrsearch/catalog_product_list_toolbar" name="solrsearch_product_list_toolbar" template="zolagosolrsearch/catalog/product/list/toolbar.phtml" as="solrsearch_product_list_toolbar"/>
+			<block type="zolagosolrsearch/catalog_product_list" name="solrsearch_product_list" template="zolagosolrsearch/catalog/product/list.phtml" as="solrsearch_product_list"/>
+		</reference>
     </solrbridge_solrsearch_category_view>
+	
+	<solrsearch_index_index>
+		<remove name="searchresult"/>
+		<reference name="content">
+			<block type="zolagosolrsearch/catalog_product_list_header_search" name="solrsearch_result_title" template="zolagosolrsearch/catalog/product/list/header/search.phtml" as="solrsearch_result_title" />
+			<block type="zolagosolrsearch/catalog_product_list_toolbar" name="solrsearch_product_list_toolbar" template="zolagosolrsearch/catalog/product/list/toolbar.phtml" as="solrsearch_product_list_toolbar"/>
+			<block type="zolagosolrsearch/catalog_product_list" name="solrsearch_product_list" template="zolagosolrsearch/catalog/product/list.phtml" as="solrsearch_product_list"/>
+		</reference>
+	</solrsearch_index_index>
 	
     <umicrosite_landing>
 		<remove name="catalog.leftnav" />

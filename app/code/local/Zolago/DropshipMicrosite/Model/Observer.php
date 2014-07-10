@@ -20,8 +20,8 @@ class Zolago_DropshipMicrosite_Model_Observer
 	public function validateVendorCategory($observer)
 	{
 	    if (self::$_vendorRootCategoryId) {
-	        $vendorCategorId = Mage::helper('zolagodropshipmicrosite')->checkVendorCategoryId(self::$_vendorRootCategoryId);
-    		$this->_vendorRootCategory	= Mage::getModel('catalog/category')->load($vendorCategoryId);
+	        // $vendorCategorId = Mage::helper('zolagodropshipmicrosite')->checkVendorCategoryId(self::$_vendorRootCategoryId);
+    		$this->_vendorRootCategory	= Mage::getModel('catalog/category')->load(self::$_vendorRootCategoryId);
         }
 		if ($this->_vendor && $this->_vendor->getId() && $this->_vendorRootCategory && $this->_vendorRootCategory->getId()) {
 			$category = $observer->getEvent()->getCategory();
