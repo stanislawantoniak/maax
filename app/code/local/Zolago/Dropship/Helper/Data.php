@@ -183,4 +183,9 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
 		
 		return $status;
 	}
+
+    public function getVendorLogoResizedUrl($vendor, $width, $height)
+    {
+        return '/skin/frontend/modago/default/images/ck-logo-small.jpg';
+    }
 }
