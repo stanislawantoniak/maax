@@ -111,8 +111,7 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
          */
         if (!$this->isAutocomplete && !$this->_globalSearch) {
 
-            if (in_array(Mage::app()->getRequest()->getRouteName(), array('catalog', 'umicrosite', 'solrsearch'))) {
-
+            if (in_array(Mage::app()->getRequest()->getRouteName(), array('catalog', 'umicrosite', 'orbacommon', 'solrsearch'))) {
 				$_category = $this->getCurrentCategory();
                 $currentCategoryId = $_category->getId();
 				
@@ -125,7 +124,6 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
                 //Check category is anchor
                 if ($_category->getIsAnchor()) {
                     $childrenIds = $_category->getAllChildren(true);
-
                     if (is_array($childrenIds) && isset($filterQuery['category_id']) && is_array($filterQuery['category_id'])) {
                         if (!isset($standardFilterQuery['category_id'])){
                             $filterQuery['category_id'] = array_merge($filterQuery['category_id'], $childrenIds);

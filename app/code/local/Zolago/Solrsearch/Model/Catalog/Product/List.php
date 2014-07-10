@@ -1,5 +1,21 @@
 <?php
 class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object{
+	
+	const MODE_CATEGORY = 1;
+    const MODE_SEARCH = 2;
+	
+	/**
+	 * 
+	 * @return int
+	 */
+    public function getMode() {
+		$queryText = Mage::helper('solrsearch')->getParam('q');
+        if($this->getCurrentCategory() && !Mage::registry('current_product') && !$queryText) {
+            return self::MODE_CATEGORY;
+        }
+        return self::MODE_SEARCH;
+    }
+	
 	/**
 	 * @return Zolago_Solrsearch_Model_Catalog_Product_Collection
 	 */
@@ -42,6 +58,8 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object{
 		return Mage::registry(Zolago_Solrsearch_Model_Solr::REGISTER_KEY);
   
 	}
+	
+	
 	/**
 	 * @return array
 	 */
@@ -93,7 +111,7 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object{
 	}
 	
 	public function getDefaultDir() {
-		return "asc";
+		return "desc";
 	}
 	
 	public function getDefaultOrder() {

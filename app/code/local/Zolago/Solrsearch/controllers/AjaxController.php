@@ -9,7 +9,23 @@ class Zolago_Solrsearch_AjaxController extends Mage_Core_Controller_Front_Action
 {
 	protected $ultility = null;
 	
-	public function getListingBlocks() {
+	/**
+	 * After filter reload
+	 */
+	public function getListingBlocksAction() {
+		$response = array(
+			"status"=>1,
+			"content"=>array(
+				"filter"	=>"Filter",
+				"toolbar"	=>"Toolbar",
+				"header"	=>"header",
+				"products"	=>array()
+			)
+		);
+		
+		$this->getResponse()->
+				setHeader("content-type", "application/json")->
+				setBody(Mage::helper("core")->jsonEncode($response));
 		
 	}
 

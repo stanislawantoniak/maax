@@ -10,10 +10,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 {
     const ZOLAGO_USE_IN_SEARCH_CONTEXT = 'use_in_search_context';
 	const ZOLAGO_SEARCH_CONTEXT_CURRENT_VENDOR = 'current_vendor';
-	
-	// This flag is used to append it to url params when from the context select "This category" is selected
-	// This way we know not to redirect from vendor context
-	const ZOLAGO_SEARCH_CONTEXT_CURRENT_CATEGORY = 'current_category';
+	const ZOLAGO_SEARCH_CONTEXT_CURRENT_CATEGORY = "current_category";
 	
 	/**
 	 * @var array
@@ -34,7 +31,8 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 		"tax_class_id_int"		=> "tax_class_id",
 		"is_new_int"			=> "is_new",
 		"product_rating_int"	=> "product_rating",
-		"is_bestseller_int"		=> "bestseller_int",
+		"is_bestseller_int"		=> "is_bestseller",
+		"product_flag_int"	=> "product_flag",
 		"special_price_decimal"	=> "special_price",
 		"special_from_date_varchar"			=> "special_from_date",
 		"special_to_date_varchar"			=> "special_to_date",
@@ -124,9 +122,10 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
         $allCats = Mage::getModel('catalog/category')->getCollection()
             ->addAttributeToSelect('*')
             ->addAttributeToFilter('is_active', '1')
-             ->addAttributeToFilter( self::ZOLAGO_USE_IN_SEARCH_CONTEXT , array('eq' => 1))
-            ->addAttributeToFilter('include_in_menu', '1');
-			
+            ->addAttributeToFilter( self::ZOLAGO_USE_IN_SEARCH_CONTEXT , array('eq' => 1))
+            ->addAttributeToFilter('include_in_menu', '1')
+            ->addAttributeToFilter('parent_id', array('eq' => $parentId));
+
         $html = '';
         foreach ($allCats as $category) {
         	
@@ -190,7 +189,14 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
         }
 		
         $rootCatId = Mage::app()->getStore()->getRootCategoryId();
-		
+        // When in the vendor context grab root category
+        if($_vendor && $_vendor->getId()){
+            $vendor_root_category = Mage::registry('vendor_current_category');
+            if($vendor_root_category){
+                $rootCatId = $vendor_root_category->getId();
+            }
+        }
+
         $catListHtmlSelect = '<select name="scat">'
             . '<option value="0">' . Mage::helper('catalog')->__('Everywhere') . '</option>';
 		
@@ -253,7 +259,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 		$array['input_name'] = 'q';
 		$array['select_name'] = 'scat';
 		
-		$array['input_value'] = $queryText;
+		$array['input_current_value'] = $queryText;
 		
 		$array['select_options'] = array();
 		
@@ -290,14 +296,14 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 	        foreach ($allCats as $category) {
 	        	
 	            $selected = false;
-				
+			
 				$array['select_options'][] = array(
 					'text' => $category->getName(),
 					'value' => $category->getId(),
 					'selected' => $selected
 				);
-	        }
-		}
+			}
+        }
 		
         if ($currentCategory = Mage::registry('current_category')) {
 			
@@ -345,18 +351,6 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 		if(empty($queryText)){
 	    	$queryText = '*';
 		}
-		
-		// Remove category from filter query
-		// $params = Mage::app()->getRequest()->getParams();
-// 		
-		// if(isset($params['fq']['category_id'])){
-// 			
-			// //First add it to registry in case anybody else would like to use it
-			// Mage::register('fq_original', $params['fq']);
-// 			
-			// unset($params['fq']['category_id']);
-			// Mage::app()->getRequest()->setParams($params);
-		// } 
 		
 		$solrModel = Mage::getModel('solrsearch/solr');
 		

@@ -496,12 +496,21 @@ class Zolago_Solrsearch_Model_Observer {
 		}
 	}
 	
-	// public function handleCatalogLayoutRender($observer)
-	// {
-	    // if(Mage::getModel('zolagosolrsearch/catalog_product_list')->getMode() == Zolago_Solrsearch_Model_Catalog_Product_List::MODE_CATEGORY){
-	    	// parent::handleCatalogLayoutRender($observer);
-	    // }
-	// }
+	public function handleCatalogLayoutRender($observer)
+	{
+	    if(Mage::getModel('zolagosolrsearch/catalog_product_list')->getMode() === Zolago_Solrsearch_Model_Catalog_Product_List::MODE_CATEGORY){
+			
+			$replaceCatalogLayerNavigation = (int) Mage::Helper('solrsearch')->getSetting('replace_catalog_layer_nav');
+		    if ($replaceCatalogLayerNavigation > 0)
+		    {
+		        $layoutUpdate = Mage::getSingleton('core/layout')->getUpdate();
+		        if ($category = Mage::registry('current_category') && !Mage::registry('current_product'))
+		        {
+		            $layoutUpdate->addHandle('solrbridge_solrsearch_category_view');
+		        }
+		    }
+	    }
+	}
 	
 }
 

@@ -80,6 +80,16 @@ class Zolago_Solrsearch_Model_Catalog_Product_Collection extends Varien_Data_Col
 	}
 	
 	/**
+	 * @return int
+	 */
+	public function getSize() {
+		if(null!==$this->getSolrData("response", "numFound")){
+			return $this->getSolrData("response", "numFound");
+		}
+		return parent::getSize();
+	}
+	
+	/**
 	 * @param index, .... otional
 	 * @return array | mixed
 	 */
