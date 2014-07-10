@@ -346,6 +346,7 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 		
 		$attributeObj->setStoreId($storeId);
 		$backendType = $attributeObj->getBackendType();
+		$origBackendType = $backendType;
 		$frontEndInput = $attributeObj->getFrontendInput();
 		$attributeCode = $attributeObj->getAttributeCode();
 		$helper = Mage::helper('core');
@@ -365,8 +366,8 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 
 		//Generate sort attribute
 		if ($attributeObj->getUsedForSortBy() && !empty($attributeVal)) {
-			if (!empty($origValue)) {
-				$addData['sort_'.$attributeCode.'_'.$backendType] = $origValue;
+			if ($origValue!==null) {
+				$addData['sort_'.$attributeCode.'_'.$origBackendType] = $origValue;
 				//$docData[$attributeKey] = $sortValue;
 				$addData[$attributeKey] = $attributeVal;
 			}

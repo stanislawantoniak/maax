@@ -23,8 +23,19 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
 		
 		$categoty_id = $last['id'];
 		$category = Mage::getModel('catalog/category')->load($categoty_id);
+		
+		$params = $this->getRequest()->getParams();
+		
 		if($this->getParentBlock()->getMode()==Zolago_Solrsearch_Block_Faces::MODE_CATEGORY){
-			$facetUrl = $category->getUrl($category);			
+			
+			if(isset($params['id'])) unset($params['id']);
+			$facetUrl = Mage::getUrl('',
+			    array(
+			        '_direct' => Mage::getModel('core/url_rewrite')->loadByIdPath('category/' . $category->getId())->getRequestPath(),
+			        '_query' => $params
+			    )
+			);
+								
 		}
 		else{
 			
@@ -45,9 +56,11 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
 			}
 			// All category links need to have links to fresh categories
 			// No appending to current params
-			$params = $this->getRequest()->getParams();
 			if(isset($params['fq']['category_id'])) unset($params['fq']['category_id']);
 			if(isset($params['parent_cat_id'])) unset($params['parent_cat_id']);
+			
+			//Remove scat parameter in order to display siblings in layered navigation
+			if(isset($params['scat'])) unset($params['scat']);
 			
 			$facetUrl = $this->getFacesUrl(array('fq'=>array('category_id' => $ids), 'parent_cat_id' => $parent_category_id), $params);
 			

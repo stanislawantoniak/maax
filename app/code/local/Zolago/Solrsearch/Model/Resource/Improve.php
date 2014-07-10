@@ -720,7 +720,7 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 				}
 			}
 			if(!$productUrl){
-				$productUrl = Mage::getUrl("catalog/product/view", array("id"=>$productId));
+				$productUrl = Mage::getUrl("catalog/product/view", array("id"=>$product->getId()));
 			}
 			$product->setCurrentUrl($productUrl);
 		}
