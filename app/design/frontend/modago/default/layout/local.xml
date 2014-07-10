@@ -20,6 +20,7 @@
             <action method="removeItem"><type>js</type><script>mage/translate.js</script></action>
             <action method="removeItem"><type>js</type><script>solrsearch/core.js</script></action>
             <action method="removeItem"><type>js</type><script>solrsearch/autocomplete.js</script></action>
+            <action method="removeItem"><type>js</type><script>solrsearch/slider.js</script></action>
             <action method="removeItem"><type>js</type><script>solrsearch/autocompleteWidget.js</script></action>
             <action method="removeItem"><type>js</type><script>solrsearch/autocomplete.css</script></action>
             <action method="removeItem"><type>js</type><script>unirgy/domloaded.js</script></action>
@@ -55,7 +56,7 @@
             <action method="addItem"><type>skin_js</type><script>js/zoomsl-3.0.min.js</script></action>
             <action method="addItem"><type>skin_js</type><script>js/plugins.js</script></action>
             <action method="addItem"><type>skin_js</type><script>js/fns.js</script></action>
-            <block type="orbacommon/page_html_head" name="orba.jslib" template="orbacommon/js/script.phtml" />
+            <!--<block type="orbacommon/page_html_head" name="orba.jslib" template="orbacommon/js/script.phtml" />-->
         </reference>
 
         <reference name="root">
@@ -114,7 +115,7 @@
     <page_two_columns_left translate="label">
         <label>All Two-Column Layout Pages (Left Column)</label>
         <reference name="root">
-            <action method="setTemplate"><template>page/modagopage.phtml</template></action>
+            <action method="setTemplate"><template>page/2columns-left.phtml</template></action>
             <!-- Mark root page block that template is applied -->
             <action method="setIsHandle"><applied>1</applied></action>
         </reference>
@@ -170,5 +171,37 @@
         </reference>
 
 	</zolagomodago_index_index>
+
+    <catalog_category_default translate="label">
+        <label>Catalog Category (Non-Anchor)</label>
+        <reference name="left">
+            <block type="catalog/navigation" name="catalog.leftnav" after="currency" template="catalog/navigation/left.phtml"/>
+        </reference>
+        <reference name="content">
+            <block type="catalog/category_view" name="category.products" template="catalog/category/view.phtml">
+                <block type="catalog/product_list" name="product_list" template="catalog/product/list.phtml">
+                    <block type="catalog/product_list_toolbar" name="product_list_toolbar" template="catalog/product/list/toolbar.phtml">
+                        <block type="page/html_pager" name="product_list_toolbar_pager"/>
+                        <!-- The following code shows how to set your own pager increments -->
+                        <!--
+                            <action method="setDefaultListPerPage"><limit>4</limit></action>
+                            <action method="setDefaultGridPerPage"><limit>9</limit></action>
+                            <action method="addPagerLimit"><mode>list</mode><limit>2</limit></action>
+                            <action method="addPagerLimit"><mode>list</mode><limit>4</limit></action>
+                            <action method="addPagerLimit"><mode>list</mode><limit>6</limit></action>
+                            <action method="addPagerLimit"><mode>list</mode><limit>8</limit></action>
+                            <action method="addPagerLimit" translate="label"><mode>list</mode><limit>all</limit><label>All</label></action>
+                        -->
+                    </block>
+                    <action method="addColumnCountLayoutDepend"><layout>empty</layout><count>6</count></action>
+                    <action method="addColumnCountLayoutDepend"><layout>one_column</layout><count>5</count></action>
+                    <action method="addColumnCountLayoutDepend"><layout>two_columns_left</layout><count>4</count></action>
+                    <action method="addColumnCountLayoutDepend"><layout>two_columns_right</layout><count>4</count></action>
+                    <action method="addColumnCountLayoutDepend"><layout>three_columns</layout><count>3</count></action>
+                    <action method="setToolbarBlockName"><name>product_list_toolbar</name></action>
+                </block>
+            </block>
+        </reference>
+    </catalog_category_default>
 
 </layout>
