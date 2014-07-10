@@ -23,30 +23,22 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 		$this->_initCategory();
 		$listModel = Mage::getSingleton("zolagosolrsearch/catalog_product_list");
 		/* @var $listModel Zolago_Solrsearch_Model_Catalog_Product_List */
+		$layout = $this->getLayout();
 		
-		// Product $
-		$products = $this->_getProducts($listModel);
-		
-		// Header
 		$type = $listModel->getMode()==$listModel::MODE_SEARCH ? "search" : "category";
-		$header = $this->getLayout()->createBlock("zolagosolrsearch/catalog_product_list_header_$type")->toHtml();
 		
-		// Toolbar
-		$toolbar = $this->getLayout()->createBlock("zolagosolrsearch/catalog_product_list_toolbar")->toHtml();
-		
-		// Filter
-		$filters = $this->getLayout()->createBlock("zolagosolrsearch/catalog_product_list_faces")->toHtml();
-		
-		$content=array(
-			"products" => $products,
-			"total" => $listModel->getCollection()->getSize(),
-			"header" => $header,
-			"toolbar" => $toolbar,
-			"filters" => $filters
-		);
+		// Product 
+		$products = $this->_getProducts($listModel);
+
+		$content=  array_merge($products, array(
+			"header"		=> $layout->createBlock("zolagosolrsearch/catalog_product_list_header_$type")->toHtml(),
+			"toolbar"		=> $layout->createBlock("zolagosolrsearch/catalog_product_list_toolbar")->toHtml(),
+			"filters"		=> $layout->createBlock("zolagosolrsearch/catalog_product_list_faces")->toHtml(),
+			"active"		=> $layout->createBlock("zolagosolrsearch/active")->toHtml()
+		));
 		
 		$result = $this->_formatSuccessContentForResponse($content);
-		$this->_setResponse($result);
+		$this->_setSuccessResponse($result);
 	}
 	
 	/**
@@ -56,10 +48,21 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 		$this->_initCategory();
 		$listModel = Mage::getSingleton("zolagosolrsearch/catalog_product_list");
 		/* @var $listModel Zolago_Solrsearch_Model_Catalog_Product_List */
-		$content=$this->_getProducts($listModel);
-		$result = $this->_formatSuccessContentForResponse($content);
+		$products=$this->_getProducts($listModel);
 		
-		$this->_setResponse($result);
+		$result = $this->_formatSuccessContentForResponse($products);
+		
+		$this->_setSuccessResponse($result);
+	}
+	
+	/**
+	 * 
+	 * @param Zolago_Solrsearch_Model_Catalog_Product_List $listModel
+	 * @param type $param
+	 * @return type
+	 */
+	protected function _getSolrParam(Zolago_Solrsearch_Model_Catalog_Product_List $listModel, $param) {
+		return $listModel->getCollection()->getSolrData('request', 'responseHeader', 'params', $param);
 	}
 	
 	/**
@@ -72,20 +75,19 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 		foreach ($listModel->getCollection() as $product){
 			/* @var $_product Zolago_Solrsearch_Model_Catalog_Product */
 			$_product = $product->getData();
-			$_product['listing_resized_image_url'] = $product->getListingResizedImageUrl();
+			$_product['listing_resized_image_url'] = (string)$product->getListingResizedImageUrl();
 			$products[] = $_product;
 		}
-		return $products;
+		
+		return array(
+			"total"			=> $listModel->getCollection()->getSize(),
+			"start"			=> $this->_getSolrParam($listModel, 'start'),
+			"rows"			=> $this->_getSolrParam($listModel, 'rows'),
+			"query"			=> $this->_getSolrParam($listModel, 'q'),
+			"sort"			=> $this->_getSolrParam($listModel, 'sort'),
+			"products"		=> $products,
+		);
 	}
 	
-	/**
-	 * @param mixed $response
-	 */
-	protected function _setResponse($response) {
-		$this->getResponse()
-			->clearHeaders()
-			->setHeader('Content-type', 'application/json')
-			->setBody(Mage::helper('core')->jsonEncode($response));
-	}
-    
+	
 }
