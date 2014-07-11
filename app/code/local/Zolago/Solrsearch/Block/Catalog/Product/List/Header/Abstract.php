@@ -26,4 +26,5 @@ class Zolago_Solrsearch_Block_Catalog_Product_List_Header_Abstract
 		return Mage::getSingleton('zolagosolrsearch/catalog_product_list');
 	}
 	
+	
 }

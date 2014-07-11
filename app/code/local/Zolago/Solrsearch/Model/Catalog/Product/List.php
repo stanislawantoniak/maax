@@ -55,7 +55,7 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object{
 		$solrData = Mage::registry(Zolago_Solrsearch_Model_Solr::REGISTER_KEY);
 
     	if (!$solrData) {
-    		$queryText = Mage::helper('solrsearch')->getParam('q');
+    		$queryText = $this->getQueryText();
     		Mage::getModel('solrsearch/solr')->queryRegister($queryText);
     	}
 		
@@ -63,6 +63,12 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object{
   
 	}
 	
+	/**
+	 * @return string
+	 */
+	public function getQueryText() {
+		return Mage::helper('solrsearch')->getParam('q');
+	}
 	
 	/**
 	 * @return array
