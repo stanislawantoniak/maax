@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <layout>
     <default>
-        <reference name="head">
-            <action method="addJsExtended">
-                <script>orbacommon/jquery/jquery-1.10.2.min.js</script>
-                <params />
-                <before>-</before>
-            </action>
-        </reference>
+        <!--<reference name="head">-->
+            <!--<action method="addJsExtended">-->
+                <!--<script>orbacommon/jquery/jquery-1.10.2.min.js</script>-->
+                <!--<params />-->
+                <!--<before>-</before>-->
+            <!--</action>-->
+        <!--</reference>-->
     </default>
     <orbacommon_js_lib>
         <reference name="root">
