@@ -588,6 +588,7 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 		$taxClasses = array();
 		foreach($collection as $product){
 			$taxClasses[$product->getTaxClassId()] = true;
+			$product->setInMyWishlist(0);
 		}
 		$taxClasses = array_keys($taxClasses);
 		
