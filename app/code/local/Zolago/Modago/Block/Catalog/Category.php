@@ -135,16 +135,32 @@ class Zolago_Modago_Block_Catalog_Category extends Mage_Core_Block_Template
         );
     }
 
+    /**
+     * Returns category label for mobile menu in main category page
+     *
+     * @todo implement full logic
+     * @return string
+     */
     public function getCategoryLabel()
     {
         return 'Dla kobiet';
     }
 
+    /**
+     * Returns go up url for mobile version of main category page's menu.
+     * @return string
+     */
     public function getMoveUpUrl()
     {
         return '/';
     }
 
+    /**
+     * Return array of mobile menu in main category page.
+     *
+     * @todo implement full logic
+     * @return array
+     */
     public function getCategoryCollection()
     {
         return array(
