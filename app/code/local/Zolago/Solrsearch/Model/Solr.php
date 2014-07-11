@@ -10,7 +10,7 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 		'product_flag_facet'
 	);
 	
-	protected $_globalSearch = FALSE;
+	protected $_currentCategory;
 	
 	/**
 	 * !!!! Force fix - shame style !!!!
@@ -18,15 +18,6 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 	public function __construct() {
 		Mage::getSingleton('core/session')->setSolrFilterQuery(null);
 		parent::__construct();
-	}
-	
-	/**
-	 * Do not include category in filter query to perform global search
-	 * 
-	 * @return boolean
-	 */
-	public function isGlobalSearch(){
-		$this->_globalSearch = TRUE;	
 	}
 	
 	/**
@@ -109,27 +100,36 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
          * Ignore the following section if the request is for autocomplete
          * The purpose is the speed up autocomplete
          */
-        if (!$this->isAutocomplete && !$this->_globalSearch) {
+         if (!$this->isAutocomplete) {
 
             if (in_array(Mage::app()->getRequest()->getRouteName(), array('catalog', 'umicrosite', 'orbacommon', 'solrsearch'))) {
-				$_category = $this->getCurrentCategory();
+
+                $_category = $this->getCurrentCategory();
                 $currentCategoryId = $_category->getId();
 				
-                if (empty($filterQuery['category_id'])) {
-                    $filterQuery['category_id'] = array($currentCategoryId);
-                }
-				
-                $filterQuery['filter_visibility_int'] = Mage::getSingleton('catalog/product_visibility')->getVisibleInCatalogIds();
+				// In root sore category do not filter categories
+				// Do not filter in vendor root to (only vendor filter is applayed @todo)
+				if(!$this->isStoreRoot($_category) /* && !$this->isVendorRoot($_category) */){
+						
+					$_category = $this->getCurrentCategory();
+					$currentCategoryId = $_category->getId();
 
-                //Check category is anchor
-                if ($_category->getIsAnchor()) {
-                    $childrenIds = $_category->getAllChildren(true);
-                    if (is_array($childrenIds) && isset($filterQuery['category_id']) && is_array($filterQuery['category_id'])) {
-                        if (!isset($standardFilterQuery['category_id'])){
-                            $filterQuery['category_id'] = array_merge($filterQuery['category_id'], $childrenIds);
-                        }
-                    }
-                }
+					if (empty($filterQuery['category_id'])) {
+						$filterQuery['category_id'] = array($currentCategoryId);
+					}
+
+					$filterQuery['filter_visibility_int'] = Mage::getSingleton('catalog/product_visibility')->getVisibleInCatalogIds();
+
+					//Check category is anchor
+					if ($_category->getIsAnchor()) {
+						$childrenIds = $_category->getAllChildren(true);
+						if (is_array($childrenIds) && isset($filterQuery['category_id']) && is_array($filterQuery['category_id'])) {
+							if (!isset($standardFilterQuery['category_id'])){
+								$filterQuery['category_id'] = array_merge($filterQuery['category_id'], $childrenIds);
+							}
+						}
+					}
+				}
             };
         }
         $filterQueryArray = array();
@@ -249,29 +249,32 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 		
         if (!$this->isAutocomplete) {
 
-            if (in_array(Mage::app()->getRequest()->getRouteName(), array('catalog', 'umicrosite'))) {
+            if (in_array(Mage::app()->getRequest()->getRouteName(), array('catalog', 'umicrosite', 'orbacommon', 'solrsearch'))) {
 
                 $_category = $this->getCurrentCategory();
                 $currentCategoryId = $_category->getId();
 				
-				
-                if (empty($filterQuery['category_id'])) {
-                    $filterQuery['category_id'] = array($currentCategoryId);
-                }
-				
+				// In root sore category do not filter categories
+				// Do not filter in vendor root to (only vendor filter is applayed @todo)
+				if(!$this->isStoreRoot($_category) /* && !$this->isVendorRoot($_category)*/){
+					if (empty($filterQuery['category_id'])) {
+						$filterQuery['category_id'] = array($currentCategoryId);
+					}
 
-                $filterQuery['filter_visibility_int'] = Mage::getSingleton('catalog/product_visibility')->getVisibleInCatalogIds();
 
-                //Check category is anchor
-                if ($_category->getIsAnchor()) {
-                    $childrenIds = $_category->getAllChildren(true);
+					$filterQuery['filter_visibility_int'] = Mage::getSingleton('catalog/product_visibility')->getVisibleInCatalogIds();
 
-                    if (is_array($childrenIds) && isset($filterQuery['category_id']) && is_array($filterQuery['category_id'])) {
-                        if (!isset($standardFilterQuery['category_id'])){
-                            $filterQuery['category_id'] = array_merge($filterQuery['category_id'], $childrenIds);
-                        }
-                    }
-                }
+					//Check category is anchor
+					if ($_category->getIsAnchor()) {
+						$childrenIds = $_category->getAllChildren(true);
+
+						if (is_array($childrenIds) && isset($filterQuery['category_id']) && is_array($filterQuery['category_id'])) {
+							if (!isset($standardFilterQuery['category_id'])){
+								$filterQuery['category_id'] = array_merge($filterQuery['category_id'], $childrenIds);
+							}
+						}
+					}
+				}
             };
         }
 
@@ -349,6 +352,41 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 	 * @return Mage_Catalog_Model_Category
 	 */
 	public function getCurrentCategory() {
+		if(!$this->_currentCategory){
+			$this->_currentCategory = $this->_getDefaultCategory();
+		}
+		return $this->_currentCategory;
+	}
+	
+	/**
+	 * @return Mage_Catalog_Model_Category
+	 */
+	public function setCurrentCategory(Mage_Catalog_Model_Category $category) {
+		$this->_currentCategory = $category;
+		return $this;
+	}
+	
+	/**
+	 * @param Mage_Catalog_Model_Category $category
+	 * @return bool
+	 */
+	public function isVendorRoot(Mage_Catalog_Model_Category $category) {
+		return Mage::helper("zolagodropshipmicrosite")->getVendorRootCategoryObject()->getId()== $category->getId();
+	}
+	
+	
+	/**
+	 * @param Mage_Catalog_Model_Category $category
+	 * @return bool
+	 */
+	public function isStoreRoot(Mage_Catalog_Model_Category $category) {
+		return $category->getId()==Mage::app()->getStore()->getRootCategoryId();
+	}
+	
+	/**
+	 * @return Mage_Catalog_Model_Category
+	 */
+	public function _getDefaultCategory() {
 		$_category = Mage::registry("current_category");
 		if(!$_category){
 			$_category = Mage::helper("zolagodropshipmicrosite")->getVendorRootCategoryObject();	
