@@ -4,8 +4,12 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object{
 	const MODE_CATEGORY = 1;
     const MODE_SEARCH = 2;
 	
+	const DEFAULT_DIR = "desc";
+	const DEFAULT_ORDER = "wishlist_count";
+	const DEFAULT_LIMIT = 40;
+	
+	
 	/**
-	 * 
 	 * @return int
 	 */
     public function getMode() {
@@ -98,23 +102,65 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object{
 		return $options;
 	}
 	
+	/**
+	 * @return int
+	 */
 	public function getCurrentOrder() {
 		return Mage::app()->getRequest()->getParam("order", $this->getDefaultOrder());
 	}
 	
+	/**
+	 * @return int
+	 */
 	public function getCurrentPage() {
-		return (int)Mage::app()->getRequest()->getParam("page", 1);
+		$request = Mage::app()->getRequest();
+		// Ajax request or Google bot - serve paged content
+		if($request->isAjax() || $this->isGoogleBot()){
+			return (int)$request->getParam("page", 1);
+		}
+		// Normal request by human - only first page served
+		return 1;
 	}
 	
+	/**
+	 * @return int
+	 */
+	public function getCurrentLimit() {
+		return $this->getDefaultLimit();
+	}
+	
+	/**
+	 * @return string
+	 */
 	public function getCurrentDir() {
 		return Mage::app()->getRequest()->getParam("dir", $this->getDefaultDir());
 	}
 	
-	public function getDefaultDir() {
-		return "desc";
+	/**
+	 * @return int
+	 */
+	public function getDefaultLimit() {
+		return self::DEFAULT_LIMIT;
 	}
 	
+	/**
+	 * @return string
+	 */
+	public function getDefaultDir() {
+		return self::DEFAULT_DIR;
+	}
+	
+	/**
+	 * @return string
+	 */
 	public function getDefaultOrder() {
-		return "wishlist_count";
+		return self::DEFAULT_ORDER;
+	}
+	
+	/**
+	 * @return bool
+	 */
+	public function isGoogleBot() {
+		return Mage::helper("zolagocommon")->isGoogleBot();
 	}
 }
