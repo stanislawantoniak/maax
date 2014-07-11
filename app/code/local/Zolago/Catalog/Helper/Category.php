@@ -37,7 +37,7 @@ class Zolago_Catalog_Helper_Category extends Mage_Core_Helper_Abstract
 		$children_ids = array();
 		
 		if(!$all_categories){
-			$all_categories = $this->all_categories;
+			$all_categories = ($this->all_categories) ? $this->all_categories : $this->getPathArray();
 		}
 		
 		if($all_categories){

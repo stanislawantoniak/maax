@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Solrsearch>
-            <version>0.0.5</version>
+            <version>0.0.6</version>
         </Zolago_Solrsearch>
     </modules>
 	<admin>
@@ -154,6 +154,15 @@
 					</zolagosolrsearch>
 				</observers>
 			</controller_front_send_response_after>
+			
+			<!-- disable default adding item -->
+			<!-- <page_block_html_topmenu_gethtml_before>
+                <observers>
+                    <catalog_add_topmenu_items>
+						<type>disabled</type>
+                    </catalog_add_topmenu_items>
+                </observers>
+            </page_block_html_topmenu_gethtml_before> -->
 		</events>
     </global>
 	<adminhtml>
@@ -289,7 +298,25 @@
 					</files>
 				</Zolago_Solrsearch>
 			</modules>
-		</translate>		
+		</translate>	
+		<events>
+			<controller_action_layout_load_before>
+				<observers>
+					<solr_search_observer>
+						<type>disabled</type>
+					</solr_search_observer>
+				</observers>
+			</controller_action_layout_load_before>
+            <controller_action_layout_load_before>
+            	<observers>
+                    <zolago_solr_search_observer>
+                        <type>singleton</type>
+                        <class>zolagosolrsearch/observer</class>
+                        <method>handleCatalogLayoutRender</method>
+                    </zolago_solr_search_observer>
+                </observers>
+            </controller_action_layout_load_before>
+		</events>	
     </frontend>
 	<crontab>
         <jobs>

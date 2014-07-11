@@ -1,4 +1,12 @@
 var OrbaLib = {
+	Listing: {
+		getBlocks: function(data, callback) {
+            OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_listing/get_blocks'); ?>', data, callback, 'GET');
+        },
+		getProducts: function(data, callback) {
+            OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_listing/get_products'); ?>', data, callback, 'GET');
+        },
+	},
     Product: {
         getOne: function(data, callback) {
             OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_product/get_one'); ?>', data, callback, 'GET');

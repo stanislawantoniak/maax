@@ -23,8 +23,19 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
 		
 		$categoty_id = $last['id'];
 		$category = Mage::getModel('catalog/category')->load($categoty_id);
+		
+		$params = $this->getRequest()->getParams();
+		
 		if($this->getParentBlock()->getMode()==Zolago_Solrsearch_Block_Faces::MODE_CATEGORY){
-			$facetUrl = $category->getUrl($category);			
+			
+			if(isset($params['id'])) unset($params['id']);
+			$facetUrl = Mage::getUrl('',
+			    array(
+			        '_direct' => Mage::getModel('core/url_rewrite')->loadByIdPath('category/' . $category->getId())->getRequestPath(),
+			        '_query' => $params
+			    )
+			);
+								
 		}
 		else{
 			
@@ -33,24 +44,26 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
 			
 			$names[] = $last['name'];
 			$parent_category_id = $last['id'];
-			$ids[] = $last['id'];
-			$children_category_ids = $category->getResource()->getChildren($category, true);
-			if($children_category_ids){
-				
-				foreach($children_category_ids as $child_cat_id){
-					
-					$ids[] = $child_cat_id;
-						
-				}
-			}
-			// All category links need to have links to fresh categories
-			// No appending to current params
-			$params = $this->getRequest()->getParams();
-			if(isset($params['fq']['category_id'])) unset($params['fq']['category_id']);
-			if(isset($params['parent_cat_id'])) unset($params['parent_cat_id']);
+			// $ids[] = $last['id'];
+			// $children_category_ids = $category->getResource()->getChildren($category, true);
+			// if($children_category_ids){
+// 				
+				// foreach($children_category_ids as $child_cat_id){
+// 					
+					// $ids[] = $child_cat_id;
+// 						
+				// }
+			// }
+			// // All category links need to have links to fresh categories
+			// // No appending to current params
+			// if(isset($params['fq']['category_id'])) unset($params['fq']['category_id']);
+			// if(isset($params['parent_cat_id'])) unset($params['parent_cat_id']);
+// 			
+			// //Remove scat parameter in order to display siblings in layered navigation
+			// if(isset($params['scat'])) unset($params['scat']);
 			
-			$facetUrl = $this->getFacesUrl(array('fq'=>array('category_id' => $ids), 'parent_cat_id' => $parent_category_id), $params);
-			
+			$facetUrl = $this->getFacesUrl(array('scat' => $parent_category_id));
+			 
 			// if($this->isItemActive($item)){
 				 // $facetUrl = $this->getRemoveFacesUrl("category", array($last['name']));
 			// }
