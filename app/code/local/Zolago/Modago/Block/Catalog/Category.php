@@ -134,4 +134,44 @@ class Zolago_Modago_Block_Catalog_Category extends Mage_Core_Block_Template
             ),
         );
     }
+
+    public function getCategoryLabel()
+    {
+        return 'Dla kobiet';
+    }
+
+    public function getMoveUpUrl()
+    {
+        return '/';
+    }
+
+    public function getCategoryCollection()
+    {
+        return array(
+            array(
+                'url' => '/dla-niej.html',
+                'label' => 'Dla niej'
+            ),
+            array(
+                'url' => '/dla-niej.html',
+                'label' => 'Podwiazki'
+            ),
+            array(
+                'url' => '/dla-niej.html',
+                'label' => 'Staniki'
+            ),
+            array(
+                'url' => '/dla-niej.html',
+                'label' => 'Plaszcze'
+            ),
+            array(
+                'url' => '/dla-niej.html',
+                'label' => 'Kapelusze'
+            ),
+            array(
+                'url' => '/dla-niej.html',
+                'label' => 'Marynarki'
+            ),
+        );
+    }
 } 
