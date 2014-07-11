@@ -24,7 +24,7 @@ class Zolago_Solrsearch_Model_Catalog_Product extends Mage_Catalog_Model_Product
 	 */
 	public function getUdropshipVendorLogoUrl() {
 		if($this->getData("udropship_vendor_logo")){
-			return Mage::getBaseUrl('media') . "/" . $this->getData("udropship_vendor_logo");
+			return Mage::getBaseUrl('media') . $this->getData("udropship_vendor_logo");
 		}
 		return null;
 	}
