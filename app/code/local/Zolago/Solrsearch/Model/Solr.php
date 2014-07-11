@@ -48,9 +48,6 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 	 * @return type
 	 */
 	public function preparePagingAndSorting() {
-		
-		
-		
 		// Sorting
 		$sortOrder = $this->getListModel()->getCurrentOrder();
 		$sortDir = $this->getListModel()->getCurrentDir();
