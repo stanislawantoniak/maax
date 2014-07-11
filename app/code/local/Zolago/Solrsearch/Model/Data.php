@@ -5,6 +5,12 @@
 class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 	
 	/**
+	 *
+	 * @var array(storeId=>array(attributeId=>array(valueId=>label))))
+	 */
+	protected $_attrCache = array();
+	
+	/**
 	 * @var Mage_Catalog_Model_Product
 	 */
 	protected $_tmpProduct;
@@ -456,15 +462,12 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 	protected function _getAttributeValue(Mage_Catalog_Model_Resource_Eav_Attribute $attributeObj, 
 			Varien_Object $item) {
 		
-		// Frontend getter by vitrual product
-		$tmpProduct = $this->getTmpProduct();
-		$tmpProduct->setId($item->getId());
-		$tmpProduct->setData(
-				$attributeObj->getAttributeCode(), 
-				$item->getOrigData($attributeObj->getAttributeCode())
-		);
 		
-		$attributeVal = $attributeObj->getFrontEnd()->getValue($tmpProduct);
+		$attributeVal = $this->_getCachedValue(
+			$attributeObj, 
+			$item->getOrigData($attributeObj->getAttributeCode()), 
+			$item->getId()
+		);
 
 		if(is_array($attributeVal)){
 			$attributeVal = implode(' ', $attributeVal);
@@ -472,6 +475,50 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 		
 		return $attributeVal;
 		
+	}
+	
+	/**
+	 * @param Mage_Catalog_Model_Resource_Eav_Attribute $attribute
+	 * @param mixed $data
+	 * @param int $productId
+	 * @return mixed
+	 */
+	protected function _getCachedValue(
+			Mage_Catalog_Model_Resource_Eav_Attribute $attribute, 
+			$data, $productId) {
+		
+		// Frontend getter by vitrual product
+		$product = $this->getTmpProduct();
+		$product->setId($productId);
+		$product->setData($attribute->getAttributeCode(), $data);
+		
+		// No source attr - get regular value
+		if(!$attribute->getSource() || is_null($data)){
+			return $attribute->getFrontEnd()->getValue($product);
+		}
+		
+		// @todo add cache for arrays
+		if(is_array($data)){
+			foreach($data as $optionId){
+				$return = array();
+				if(isset($this->_attrCache[$attribute->getStoreId()][$attribute->getId()][$optionId])){
+					return $this->_attrCache[$attribute->getStoreId()][$attribute->getId()][$optionId];
+				}else{
+					$this->_attrCache[$attribute->getStoreId()][$attribute->getId()][$optionId] = 
+						$attribute->getFrontEnd()->getValue($product);
+				}
+				$return[] = $this->_attrCache[$attribute->getStoreId()][$attribute->getId()][$optionId];
+			}
+		}else{
+			if(isset($this->_attrCache[$attribute->getStoreId()][$attribute->getId()][$data])){
+				return $this->_attrCache[$attribute->getStoreId()][$attribute->getId()][$data];
+			}else{
+				$this->_attrCache[$attribute->getStoreId()][$attribute->getId()][$data] = 
+					$attribute->getFrontEnd()->getValue($product);
+			}
+			$return = $this->_attrCache[$attribute->getStoreId()][$attribute->getId()][$data];
+		}
+		return $return;
 	}
 	
 	/**
