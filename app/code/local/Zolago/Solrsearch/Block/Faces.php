@@ -154,7 +154,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         $depends = array();
         $attributeId = $this->getAttributeIdByCode($attributeCode);
         foreach($this->getFilterCollection() as $fiter) {
-            if($fiter->getParentAttributeId()==$attributeId) {
+            if($attributeId && $fiter->getParentAttributeId()==$attributeId) {
                 $depends[] = $this->getAttributeCodeById($fiter->getAttributeId());
             }
         }
