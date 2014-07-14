@@ -1,17 +1,28 @@
 <?php
 
+/**
+ * @category   Zolago
+ * @package    Zolago_DropshipVendorAskQuestion
+ */
+
 class Zolago_DropshipVendorAskQuestion_Helper_Data extends Mage_Core_Helper_Abstract
 {
-
-
-
+    /**
+     * Notify vendor agents
+     *
+     * @param $question
+     *
+     * @return $this
+     */
     public function notifyVendorAgent($question)
     {
+        $store = Mage::helper('udqa')->getStore($question);
 
+        if (self::isNotifyVendorAgents($question)) {
+            Mage::helper('udropship')->setDesignStore($store);
             $emails = array();
             $tpl = Mage::getModel('core/email_template');
 
-            $store = Mage::helper('udqa')->getStore($question);
             $vendorId = $question->getVendorId();
 
             Mage::helper('udropship')->setDesignStore($store);
@@ -24,7 +35,8 @@ class Zolago_DropshipVendorAskQuestion_Helper_Data extends Mage_Core_Helper_Abst
 
             $emails += $superVendorAgents;
             $emails += $vendorAgents;
-            unset($superVendorAgents);unset($vendorAgents);
+            unset($superVendorAgents);
+            unset($vendorAgents);
 
             if (!empty($emails)) {
                 $data = array(
@@ -47,9 +59,33 @@ class Zolago_DropshipVendorAskQuestion_Helper_Data extends Mage_Core_Helper_Abst
                 }
                 unset($email);
                 unset($_);
-            }
 
+                $question->setIsVendorAgentsNotified(1);
+                Mage::getResourceSingleton('udropship/helper')->updateModelFields(
+                    $question, array('is_vendor_agents_notified')
+                );
+
+            }
+        }
         return $this;
+    }
+
+
+    /**
+     * Check if vendor agents notified
+     *
+     * @param $question
+     *
+     * @return bool
+     */
+    public function isNotifyVendorAgents($question)
+    {
+        $store = Mage::helper('udqa')->getStore($question);
+        return !$question->getIsVendorAgentsNotified()
+        && $question->getQuestionStatus() == Unirgy_DropshipVendorAskQuestion_Model_Source::UDQA_STATUS_APPROVED
+        && Mage::getStoreConfigFlag(
+            'udqa/general/send_vendor_agent_notifications', $store
+        );
     }
 
 }
