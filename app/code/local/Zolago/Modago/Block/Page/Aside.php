@@ -4,7 +4,7 @@
  * Date: 14.05.14
  */
 
-class Zolago_Modago_Block_Page_Aside extends Mage_Core_Block_Template
+class Zolago_Modago_Block_Page_Aside extends Zolago_Modago_Block_Catalog_Category
 {
 
 } 

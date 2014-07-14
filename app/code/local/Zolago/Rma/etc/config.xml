@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Zolago_Rma>
-			<version>0.0.10</version>
+			<version>0.0.11</version>
 		</Zolago_Rma>
 	</modules>
 	<global>
@@ -128,6 +128,14 @@
 					</zolagorma>
 				</observers>
 			</zolagorma_rma_track_added>
+			<zolagorma_rma_track_status_change>
+				<observers>
+					<zolagorma>
+						<model>zolagorma/observer</model>
+						<method>rmaTrackStatusChange</method>
+					</zolagorma>
+				</observers>
+			</zolagorma_rma_track_status_change>
 		</events>
 		<resources>
 			<zolagorma_setup>
@@ -236,4 +244,17 @@
             </zolagorma_global_return_reson_save_after>
         </events>
     </adminhtml>
+    <crontab>
+        <jobs>
+            <zolagorma_process_collect_tracking>
+                <schedule>
+                    <!-- Run every 5 minutes -->
+                    <cron_expr>*/5 * * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>zolagorma/observer::cronRmaTracking</model>
+                </run>
+            </zolagorma_process_collect_tracking>
+        </jobs>
+    </crontab>
 </config>

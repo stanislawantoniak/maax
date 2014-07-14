@@ -8,7 +8,7 @@
 		float:right;
 		@media (max-width: $screen-xs-max) {
 			float:right;
-			margin-right: -25px;
+			margin-right: -41px;
 		}
 		li {
 			display:inline-block;
@@ -50,6 +50,15 @@
 		}
 		&.small {
 			width: 180px;
+			@media (min-width: $screen-sm-min) {
+				width: 128px;
+			}
+			@media (min-width: $screen-md-min) {
+				width: 128px;
+			}
+			@media (min-width: $screen-lg-min) {
+				width: 128px;
+			}
 			.mCSB_inside {
 				> .mCSB_container {
 				margin-right: 19px;

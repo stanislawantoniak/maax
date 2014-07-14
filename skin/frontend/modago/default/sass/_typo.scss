@@ -34,6 +34,18 @@ body {
 .no-border {
 	border:none!important;
 }
+.reset-padding-right {
+	@media(max-width:767px) {
+		padding-right:5px!important;
+	}
+	
+}
+.reset-padding-left {
+	@media(max-width:767px) {
+		padding-left:5px!important;
+	}
+	
+}
 
 a:link,
 a:visited {
@@ -598,6 +610,7 @@ form {
 	        height:17px; 
 	        display:inline-block;
 	        line-height:17px;
+	        background:$btnCheck;
 	        background-repeat:no-repeat;
 	        background-position: 0 0;
 	        font-size:12px;
@@ -618,20 +631,25 @@ form {
 	    }
 	
 	    input[type=checkbox].css-checkbox + label.css-label {
-	        background-image:url('../images/checkbox_filter.png');
+	        //background-image:url('../images/checkbox_filter.png');
+	         @include sprite($btnCheck, check);	
+			//@include sprite-dimensions($bulletMap, remove-coupon);
 
 	    }
 	    input[type=radio].css-radio + label.css-label {
 	        background-image:url('../images/radio.png');
+
 	    }
 	    input[type=checkbox].css-checkbox + label.css-label:hover,
 	    input[type=radio].css-radio + label.css-label:hover {
-	        background-position: 0 -50px;
+	        //background-position: 0 -50px;
+	        @include sprite($btnCheck, hover);
 	        color:#999999;
 	    }
 	    input[type=checkbox].css-checkbox:checked + label.css-label,
 	    input[type=radio].css-radio:checked + label.css-label {
-	        background-position: 0 -100px;
+	        //background-position: 0 -100px;
+	        @include sprite($btnCheck, checked);
 	        color:#1e1e1e;
 	    }
 
@@ -1025,7 +1043,7 @@ a.view_basket {
 .icons-checked {
 	position:relative;
 	line-height: 1.7;
-	padding-left:25px;
+	padding-left:15px;
 	text-transform: uppercase;
 	&:before {
 		content:' ';
@@ -1044,7 +1062,7 @@ a.view_basket {
 .icons-interjection {
 	position:relative;
 	line-height: 1.7;
-	padding-left:25px;
+	padding-left:15px;
 	text-transform: uppercase;
 	&:before {
 		content:' ';
@@ -1543,7 +1561,7 @@ figure {
 		}
 		.button-select {
 			height:20px;
-			line-height: 20px;
+			line-height: 18px;
 			padding-right: 25px;
 			min-width: 110px;
 			max-width: 135px;
@@ -1662,3 +1680,16 @@ figure {
 				}
 			}
 		}
+
+.line-separator {
+	height:1px;
+	width:auto;
+	background:$bc-primary;
+	margin-left: -15px;
+	margin-right: -15px;
+
+	margin-bottom: 10px;
+	@media (min-width: $screen-lg-min) {
+		margin-bottom: 15px;
+	}
+}

@@ -803,9 +803,9 @@ class SolrBridge_Solrsearch_Model_Ultility
 						$backendType = 'varchar';
 					}
 
-					$attributeKey = $key.'_'.$backendType;
+					$attributeKey = $attributeCode.'_'.$backendType;
 
-					$attributeKeyFacets = $key.'_facet';
+					$attributeKeyFacets = $attributeCode.'_facet';
 
 					if (!is_array($atributeObj->getFrontEnd()->getValue($_product))){
 						$attributeVal = strip_tags($atributeObj->getFrontEnd()->getValue($_product));
@@ -814,7 +814,7 @@ class SolrBridge_Solrsearch_Model_Ultility
 						$attributeVal = implode(' ', $attributeVal);
 					}
 
-					if ($_product->getData($key) == null)
+					if ($_product->getData($attributeCode) == null)
 					{
 						$attributeVal = null;
 					}

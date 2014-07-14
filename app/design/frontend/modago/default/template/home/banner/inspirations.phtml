@@ -1,102 +1,114 @@
-<?php
-/**
- * Author: Paweł Chyl <pawel.chyl@orba.pl>
- * Date: 25.04.14
- */
-?>
-<!--inspiracje-->
-<div class="white-wrapper border1px-rd2-img-gray noborder-lft-rgt">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="inspiration-strips"></div>
-                <h2 class="insp-h"><?php echo $this->__("inspirations"); ?></h2>
+<section id="bottom" class="bg-w">
+    <div class="container-fluid">
+        <div class="col-sm-12">
+            <!-- START BLOCK INSPIRACJE -->
+            <div class="row">
+
+                <section class="block-inspiration">
+                    <header class="title-section">
+                        <div class="inspiration-strips "></div>
+                        <h2>inspiracje</h2>
+                    </header>
+                    <div id="rwd-inspiration" class="rwdCarousel">
+                        <div class="rwd-carousel rwd-theme">
+                            <div class="item">
+                                <a href="">
+                                    <img src="<?php echo $this->getSkinUrl('images/insp-1.jpg'); ?>" alt="">
+
+                                    <div class="carousel-caption">
+                                        <span class="title-caption">lady in the bushes</span>
+                                        <span class="body-caption">Drugi wiersz opisu</span>
+                                        <span class="seemore-caption">zobacz &gt;</span>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="item">
+                                <a href="">
+                                    <img src="<?php echo $this->getSkinUrl('images/insp-2.jpg'); ?>" alt="">
+
+                                    <div class="carousel-caption">
+                                        <span class="title-caption">lady in the bushes</span>
+                                        <span class="body-caption">Drugi wiersz opisu</span>
+                                        <span class="seemore-caption">zobacz &gt;</span>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="item">
+                                <a href="">
+                                    <img src="<?php echo $this->getSkinUrl('images/insp-3.jpg'); ?>" alt="">
+
+                                    <div class="carousel-caption">
+                                        <span class="title-caption">lady in the bushes</span>
+                                        <span class="body-caption">Drugi wiersz opisu</span>
+                                        <span class="seemore-caption">zobacz &gt;</span>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="item">
+                                <a href="">
+                                    <img src="<?php echo $this->getSkinUrl('images/insp-4.jpg'); ?>" alt="">
+
+                                    <div class="carousel-caption">
+                                        <span class="title-caption">lady in the bushes</span>
+                                        <span class="body-caption">Drugi wiersz opisu</span>
+                                        <span class="seemore-caption">zobacz &gt;</span>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="item">
+                                <a href="">
+                                    <img src="<?php echo $this->getSkinUrl('images/insp-1.jpg'); ?>" alt="">
+
+                                    <div class="carousel-caption">
+                                        <span class="title-caption">lady in the bushes</span>
+                                        <span class="body-caption">Drugi wiersz opisu</span>
+                                        <span class="seemore-caption">zobacz &gt;</span>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="item">
+                                <a href="">
+                                    <img src="<?php echo $this->getSkinUrl('images/insp-2.jpg'); ?>" alt="">
+
+                                    <div class="carousel-caption">
+                                        <span class="title-caption">lady in the bushes</span>
+                                        <span class="body-caption">Drugi wiersz opisu</span>
+                                        <span class="seemore-caption">zobacz &gt;</span>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="item">
+                                <a href="">
+                                    <img src="<?php echo $this->getSkinUrl('images/insp-3.jpg'); ?>" alt="">
+
+                                    <div class="carousel-caption">
+                                        <span class="title-caption">lady in the bushes</span>
+                                        <span class="body-caption">Drugi wiersz opisu</span>
+                                        <span class="seemore-caption">zobacz &gt;</span>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="item">
+                                <a href="">
+                                    <img src="<?php echo $this->getSkinUrl('images/insp-4.jpg'); ?>" alt="">
+
+                                    <div class="carousel-caption">
+                                        <span class="title-caption">lady in the bushes</span>
+                                        <span class="body-caption">Drugi wiersz opisu</span>
+                                        <span class="seemore-caption">zobacz &gt;</span>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="customNavigation">
+                            <a class="prev"><i class="fa fa-chevron-left"></i></a>
+                            <a class="next"><i class="fa fa-chevron-right"></i></a>
+                        </div>
+                    </div>
+                </section>
+                <!-- END:/ BLOCK INSPIRACJE -->
             </div>
         </div>
-
-        <div class="jcarousel-wrapper listComics">
-            <div class="canvas-left"></div>
-            <div class="jcarousel">
-                <ul>
-                    <li class="col-sm-3">
-                        <a href="#" class="productItem-wrapper">
-                            <img src="<?php echo $this->getSkinUrl('images/insp-1.jpg'); ?>" alt="...">
-                            <span class="insp-carousel-title-bold">lady in the bushes</span>
-                            <span class="insp-carousel-title-gray">Drugi wiersz opisu</span>
-                            <span class="insp-carousel-seemore"><?php echo $this->__("see"); ?> &gt;</span>
-                        </a>
-                    </li>
-                    <li class="col-sm-3">
-                        <a href="#" class="productItem-wrapper">
-                            <img src="<?php echo $this->getSkinUrl('images/insp-2.jpg'); ?>" alt="...">
-
-                            <span class="insp-carousel-title-bold">lady in the bushes</span>
-                            <span class="insp-carousel-title-gray">Drugi wiersz opisu</span>
-                            <span class="insp-carousel-seemore"><?php echo $this->__("see"); ?> &gt;</span>
-                        </a>
-                    </li>
-                    <li class="col-sm-3">
-                        <a href="#" class="productItem-wrapper" data-json="c_01">
-
-                            <img src="<?php echo $this->getSkinUrl('images/insp-3.jpg'); ?>" alt="...">
-                            <span class="insp-carousel-title-bold">lady in the bushes</span>
-                            <span class="insp-carousel-title-gray">Drugi wiersz opisu</span>
-                            <span class="insp-carousel-seemore"><?php echo $this->__("see"); ?> &gt;</span>
-                        </a>
-                    </li>
-                    <li class="col-sm-3">
-                        <a href="#" class="productItem-wrapper" data-json="c_02">
-
-                            <img src="<?php echo $this->getSkinUrl('images/insp-1.jpg'); ?>" alt="...">
-                            <span class="insp-carousel-title-bold">lady in the bushes</span>
-                            <span class="insp-carousel-title-gray">Drugi wiersz opisu</span>
-                            <span class="insp-carousel-seemore"><?php echo $this->__("see"); ?> &gt;</span>
-                        </a>
-                    </li>
-                    <li class="col-sm-3">
-                        <a href="#" class="productItem-wrapper">
-
-                            <img src="<?php echo $this->getSkinUrl('images/insp-1.jpg'); ?>" alt="...">
-                            <span class="insp-carousel-title-bold">lady in the bushes</span>
-                            <span class="insp-carousel-title-gray">Drugi wiersz opisu</span>
-                            <span class="insp-carousel-seemore"><?php echo $this->__("see"); ?> &gt;</span>
-                        </a>
-                    </li>
-                    <li class="col-sm-3">
-                        <a href="#" class="productItem-wrapper">
-
-                            <img src="<?php echo $this->getSkinUrl('images/insp-1.jpg'); ?>" alt="...">
-                            <span class="insp-carousel-title-bold">lady in the bushes</span>
-                            <span class="insp-carousel-title-gray">Drugi wiersz opisu</span>
-                            <span class="insp-carousel-seemore"><?php echo $this->__("see"); ?> &gt;</span>
-                        </a>
-                    </li>
-                    <li class="col-sm-3">
-                        <a href="#" class="productItem-wrapper">
-
-                            <img src="<?php echo $this->getSkinUrl('images/insp-1.jpg'); ?>" alt="...">
-                            <span class="insp-carousel-title-bold">lady in the bushes</span>
-                            <span class="insp-carousel-title-gray">Drugi wiersz opisu</span>
-                            <span class="insp-carousel-seemore"><?php echo $this->__("see"); ?> &gt;</span>
-                        </a>
-                    </li>
-                    <li class="col-sm-3">
-                        <a href="#" class="productItem-wrapper">
-
-                            <img src="<?php echo $this->getSkinUrl('images/insp-1.jpg'); ?>" alt="...">
-                            <span class="insp-carousel-title-bold">lady in the bushes</span>
-                            <span class="insp-carousel-title-gray">Drugi wiersz opisu</span>
-                            <span class="insp-carousel-seemore"><?php echo $this->__("see"); ?> &gt;</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-
-            <a href="#" class="jcarousel-control-prev"></a>
-            <a href="#" class="jcarousel-control-next"></a>
-
-            <div class="canvas-right"></div>
-        </div>
-
     </div>
-</div>
+</section>

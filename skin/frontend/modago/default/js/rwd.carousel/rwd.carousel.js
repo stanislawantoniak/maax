@@ -791,8 +791,8 @@ if (typeof Object.create !== "function") {
                                   "; transform:"         + translate3D;
             regex = /translate3d\(0px, 0px, 0px\)/g;
             asSupport = tempElem.style.cssText.match(regex);
-            support3d = (asSupport !== null && asSupport.length === 1);
-
+            //support3d = (asSupport !== null && asSupport.length === 1);
+            support3d = (Modernizr.csstransforms3d);
             isTouch = "ontouchstart" in window || window.navigator.msMaxTouchPoints;
 
             primal.browser = {
@@ -1087,6 +1087,14 @@ if (typeof Object.create !== "function") {
             primal.$elem.on("rwd.prev", function () {
                 primal.prev();
             });
+////////////////////////////////////////////////////////////////////////////////////
+            primal.$elem.on("rwd.up", function () {
+                primal.next();
+            });
+            primal.$elem.on("rwd.down", function () {
+                primal.prev();
+            });
+///////////////////////////////////////////////////////////////////////////////////
             primal.$elem.on("rwd.play", function (event, speed) {
                 primal.options.autoPlay = speed;
                 primal.play();

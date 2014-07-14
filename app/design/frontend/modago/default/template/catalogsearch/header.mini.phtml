@@ -3,18 +3,19 @@
  * Author: Paweł Chyl <pawel.chyl@orba.pl>
  * Date: 02.05.14
  */
+$options = Mage::helper('zolagosolrsearch')->getContextSelectorArray();
 ?>
 
 <div class="block_search search hidden-sm hidden-xs">
-    <form role="search">
+    <form action="<?php echo $options['url']; ?>" method="<?php echo $options['method']; ?>" role="search">
         <div class="form-group">
-            <input type="text" class="form-control" placeholder="<?php echo $this->__("Search"); ?>">
+            <input type="text" class="form-control" name="<?php echo $options['input_name']; ?>" placeholder="<?php echo $options['input_empty_text']; ?>" value="<?php echo $options['input_current_value']; ?>">
         </div>
         <div class="select-box">
-            <select name="" class="form-control select-styled">
-                <option value=""><?php echo $this->__("in whole gallery"); ?></option>
-                <option value=""><?php echo $this->__("She"); ?></option>
-                <option value=""><?php echo $this->__("Him"); ?></option>
+            <select name="<?php echo $options['select_name']; ?>" class="form-control select-styled">
+                <?php foreach($options['select_options'] as $opt) : ?>
+                <option value="<?php echo $opt['value']; ?>" <?php if($opt['selected']) : ?>selected="selected"<?php endif; ?>><?php echo $opt['text']; ?></option>
+                <?php endforeach; ?>
             </select>
         </div>
         <input type="image" src="<?php echo $this->getSkinUrl('images/ico_search.gif'); ?>" name="<?php echo $this->__("Search"); ?>" alt="<?php echo $this->__("Search"); ?>">

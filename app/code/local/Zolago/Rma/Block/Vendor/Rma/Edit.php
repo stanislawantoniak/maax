@@ -163,9 +163,17 @@ class Zolago_Rma_Block_Vendor_Rma_Edit extends Mage_Core_Block_Template {
 	 * @return bool
 	 */
 	public function canUseCarrier() {
-		return $this->canPosUseDhl();
+		return $this->canVendorUseDhl();
 	}
 	
+	
+    /**
+     * @return bool
+     */
+	public function canVendorUseDhl() {
+	    return Mage::helper('zolagodhl')->isDhlEnabledForVendor($this->getVendor()) ||
+	            Mage::helper('zolagodhl')->isDhlEnabledForRma($this->getVendor());
+	}
 	/**
 	 * @return bool
 	 */

@@ -1,0 +1,63 @@
+var OrbaLib = {
+	Customer: {
+		getAccountInformation: function(data, callback) {
+            OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_customer/get_account_information'); ?>', data, callback, 'GET');
+        }
+	},
+	Listing: {
+		getBlocks: function(data, callback) {
+            OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_listing/get_blocks'); ?>', data, callback, 'GET');
+        },
+		getProducts: function(data, callback) {
+            OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_listing/get_products'); ?>', data, callback, 'GET');
+        },
+	},
+    Product: {
+    	getRecentlyViewed: function(data, callback) {
+            OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_product/get_recently_viewed'); ?>', data, callback, 'GET');
+        },
+        getOne: function(data, callback) {
+            OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_product/get_one'); ?>', data, callback, 'GET');
+        },
+        getMany: function(data, callback) {
+            OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_product/get_many'); ?>', data, callback, 'GET');
+        }
+    },
+    Cart: {
+        get: function(data, callback) {
+            OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_cart/get'); ?>', data, callback, 'GET');
+        },
+        add: function(data, callback) {
+            OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_cart/add'); ?>', data, callback, 'POST');
+        },
+        update: function(data, callback) {
+            OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_cart/update'); ?>', data, callback, 'POST');
+        },
+        remove: function(data, callback) {
+            OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_cart/remove'); ?>', data, callback, 'POST');
+        },
+        Coupon: {
+            add: function(data, callback) {
+                OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_cart_coupon/add'); ?>', data, callback, 'POST');
+            },
+            remove: function(data, callback) {
+                OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_cart_coupon/remove'); ?>', data, callback, 'POST');
+            }
+        }
+    },
+    _ajax: function(url, data, callback, type) {
+        jQuery.ajax({
+            'url': url,
+            'data': data,
+            'type': type,
+            'timeout': 30000,
+            'dataType': 'json',
+            'success': function(response) {
+                callback(response, true);
+            },
+            'error': function(response) {
+                callback(response, true);
+            }
+        });
+    }
+};

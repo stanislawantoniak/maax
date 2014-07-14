@@ -1,7 +1,31 @@
 <?php
 class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
 {
+	
+	/**
+	 * Sets root category to registry and then return
+	 */
+	public function rootCategory($websiteId = NULL){
 		
+		if($category = Mage::registry('vendor_current_category')){
+			return $category;
+		}
+		
+		$websiteId		= ($websiteId) ? $websiteId : Mage::app()->getWebsite()->getId();
+		$rootCategoryId = Mage::helper('zolagodropshipmicrosite')
+				->getVendorRootCategory($this, $websiteId);
+	
+		$category = Mage::getModel("catalog/category")->load($rootCategoryId);
+		
+		if(!$category->getId()){
+			$category->load(Mage::app()->getStore()->getRootCategoryId());
+		}
+		
+		Mage::register('vendor_current_category', $category);
+		
+		return $category;		
+	}	
+	
 	/**
 	 * @return array
 	 */
@@ -40,10 +64,11 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
 		}
 		return $collection;
     }
+
 	public function getMaxShippingDays($storeId=null)
     {
         $maxShippingDays = $this->getData('max_shipping_days');
-        if (is_null($maxShippingDays) || $maxShippingDays=="" || $maxShippingDays==0) {
+        if (is_null($maxShippingDays) || $maxShippingDays=="" || $maxShippingDays < 0) {
             $maxShippingDays = Mage::getStoreConfig('udropship/vendor/max_shipping_days', $storeId);
         }
         return (int)$maxShippingDays;
@@ -59,7 +84,7 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
     }
 	
 	protected function _beforeSave() {
-		if($this->getData("max_shipping_days")=="" || $this->getData("max_shipping_days")==0){
+		if($this->getData("max_shipping_days")=="" || $this->getData("max_shipping_days") < 0){
 			$this->setData("max_shipping_days", null);
 		}
 		
@@ -74,5 +99,4 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
 		
 		return parent::_beforeSave();
 	}
-
 }

@@ -2,10 +2,28 @@
 <config>
     <modules>
         <Zolago_Solrsearch>
-            <version>0.0.1</version>
+            <version>0.0.6</version>
         </Zolago_Solrsearch>
     </modules>
+	<admin>
+		<routers>
+			<solrbridge_admin>
+				<args>
+					<modules>
+                        <Zolago_Solrsearch before="SolrBridge_Solsearch">Zolago_Solrsearch</Zolago_Solrsearch>
+                    </modules>
+				</args>
+			</solrbridge_admin>
+		</routers>
+	</admin>
     <global>
+		<resources>
+            <zolagosolrsearch_setup>
+                <setup>
+                    <module>Zolago_Solrsearch</module>
+                </setup>
+            </zolagosolrsearch_setup>
+        </resources>
         <models>
             <zolagosolrsearch>
                 <class>Zolago_Solrsearch_Model</class>
@@ -13,11 +31,18 @@
             </zolagosolrsearch>
             <zolagosolrsearch_resource>
                 <class>Zolago_Solrsearch_Model_Resource</class>
+				<entities>
+					<queue_item>
+						<table>zolago_solrsearch_queue_item</table>
+					</queue_item>
+				</entities>
             </zolagosolrsearch_resource>
 			<solrsearch>
 				<rewrite>
-					<solr>Zolago_Solrsearch_Model_Solr</solr>
 					<data>Zolago_Solrsearch_Model_Data</data>
+					<indexer>Zolago_Solrsearch_Model_Indexer</indexer>
+					<solr>Zolago_Solrsearch_Model_Solr</solr>
+					<ultility>Zolago_Solrsearch_Model_Ultility</ultility>
 				</rewrite>
 			</solrsearch>
         </models>
@@ -38,7 +63,202 @@
 				</rewrite>
 			</solrsearch>
         </blocks>
+		<events>
+			<!-- Delete anywhere -->
+			<catalog_product_delete_before>
+				<observers>
+					<zolagosolrsearch>
+						<class>zolagosolrsearch/observer</class>
+						<method>catalogProductDeleteBefore</method>
+					</zolagosolrsearch>
+				</observers>
+			</catalog_product_delete_before>
+			
+			<!-- Delte after commit -->
+			<catalog_product_delete_after>
+				<observers>
+					<zolagosolrsearch>
+						<class>zolagosolrsearch/observer</class>
+						<method>catalogProductDeleteAfter</method>
+					</zolagosolrsearch>
+				</observers>
+			</catalog_product_delete_after>
+			
+			<!-- Process product save anywhere -->
+			<catalog_product_save_after>
+				<observers>
+					<zolagosolrsearch>
+						<class>zolagosolrsearch/observer</class>
+						<method>catalogProductSaveAfter</method>
+					</zolagosolrsearch>
+				</observers>
+			</catalog_product_save_after>
+		
+			
+			<!-- Process category save anywhere -->
+			<catalog_category_save_after>
+				<observers>
+					<zolagosolrsearch>
+						<class>zolagosolrsearch/observer</class>
+						<method>catalogCategorySaveAfter</method>
+					</zolagosolrsearch>
+				</observers>
+			</catalog_category_save_after>
+			
+			<!-- Process category delete before anywhere -->
+			<catalog_category_delete_before>
+				<observers>
+					<zolagosolrsearch>
+						<class>zolagosolrsearch/observer</class>
+						<method>catalogCategoryDeleteBefore</method>
+					</zolagosolrsearch>
+				</observers>
+			</catalog_category_delete_before>
+			
+			<!-- Process category delete after commit -->
+			<catalog_category_delete_after>
+				<observers>
+					<zolagosolrsearch>
+						<class>zolagosolrsearch/observer</class>
+						<method>catalogCategoryDeleteAfter</method>
+					</zolagosolrsearch>
+				</observers>
+			</catalog_category_delete_after>
+			
+			<!-- Process mass -->
+			<catalog_product_attribute_update_after>
+				<observers>
+					<zolagosolrsearch>
+						<class>zolagosolrsearch/observer</class>
+						<method>catalogProductAttributeUpdateAfter</method>
+					</zolagosolrsearch>
+				</observers>
+			</catalog_product_attribute_update_after>
+			
+			<!-- Process mapper asign -->
+			<zolago_mapper_after_assign_products>
+				<observers>
+					<zolagosolrsearch>
+						<class>zolagosolrsearch/observer</class>
+						<method>zolagoMapperAfterAssignProducts</method>
+					</zolagosolrsearch>
+				</observers>
+			</zolago_mapper_after_assign_products>
+
+			<!-- Procesing after response send -->
+			<controller_front_send_response_after>
+				<observers>
+					<zolagosolrsearch>
+						<class>zolagosolrsearch/observer</class>
+						<method>controllerFrontSendResponseAfter</method>
+					</zolagosolrsearch>
+				</observers>
+			</controller_front_send_response_after>
+			
+			<!-- disable default adding item -->
+			<!-- <page_block_html_topmenu_gethtml_before>
+                <observers>
+                    <catalog_add_topmenu_items>
+						<type>disabled</type>
+                    </catalog_add_topmenu_items>
+                </observers>
+            </page_block_html_topmenu_gethtml_before> -->
+		</events>
     </global>
+	<adminhtml>
+		<events>
+			<!-- Just disable -->
+			<catalog_product_delete_after>
+				<observers>
+					<solr_search>
+						<type>disabled</type>
+					</solr_search>
+				</observers>
+			</catalog_product_delete_after>
+			
+			<!-- Just disable -->
+			<catalog_product_save_after>
+				<observers>
+					<solr_search>
+						<type>disabled</type>
+					</solr_search>
+				</observers>
+			</catalog_product_save_after>
+			
+			<!-- Will process collected products -->
+			<after_reindex_process_catalog_product_price>
+				<observers>
+					<solr_search>
+						<type>disabled</type>
+					</solr_search>
+					<zolagosolrsearch>
+						<class>zolagosolrsearch/observer</class>
+						<method>afterReindexProcessCatalogProductPrice</method>
+					</zolagosolrsearch>
+				</observers>
+			</after_reindex_process_catalog_product_price>
+			<catalogrule_after_apply>
+				<observers>
+					<solr_search>
+						<type>disabled</type>
+					</solr_search>
+					<zolagosolrsearch>
+						<class>zolagosolrsearch/observer</class>
+						<method>catalogruleApplyAfter</method>
+					</zolagosolrsearch>
+				</observers>
+			</catalogrule_after_apply>
+			<end_process_event_catalog_product_catalog_reindex_price>
+				<observers>
+					<solr_search>
+						<type>disabled</type>
+					</solr_search>
+				</observers>
+			</end_process_event_catalog_product_catalog_reindex_price>
+			<catalog_category_prepare_save>
+				<observers>
+					<solr_search>
+						<type>disabled</type>
+					</solr_search>
+				</observers>
+			</catalog_category_prepare_save>
+			<end_process_event_catalog_category_save>
+				<observers>
+					<solr_search>
+						<type>disabled</type>
+					</solr_search>
+				</observers>
+			</end_process_event_catalog_category_save>
+			<catalog_entity_attribute_save_after>
+				<observers>
+					<solr_search>
+						<type>disabled</type>
+					</solr_search>
+				</observers>
+			</catalog_entity_attribute_save_after>
+			<tag_save_after>
+				<observers>
+					<solr_search>
+						<type>disabled</type>
+					</solr_search>
+				</observers>
+			</tag_save_after>
+			<model_save_after>
+				<observers>
+					<solr_search>
+						<type>disabled</type>
+					</solr_search>
+				</observers>
+			</model_save_after>
+		</events>
+		<layout>
+			<updates>
+				<zolagosolrsearch>
+					<file>zolagosolrsearch.xml</file>
+				</zolagosolrsearch>
+			</updates>
+		</layout>
+	</adminhtml>
     <frontend>
         <routers>
             <zolagosolrsearch>
@@ -55,6 +275,13 @@
                     </modules>  
                 </args>  
             </customer>
+            <solrsearch>
+                <args>
+                    <modules>
+                        <Zolago_Solrsearch before="SolrBridge_Solrsearch">Zolago_Solrsearch</Zolago_Solrsearch>
+                    </modules>
+                </args>
+            </solrsearch>
         </routers>
         <layout>
             <updates>
@@ -71,6 +298,46 @@
 					</files>
 				</Zolago_Solrsearch>
 			</modules>
-		</translate>		
+		</translate>	
+		<events>
+			<controller_action_layout_load_before>
+				<observers>
+					<solr_search_observer>
+						<type>disabled</type>
+					</solr_search_observer>
+				</observers>
+			</controller_action_layout_load_before>
+            <controller_action_layout_load_before>
+            	<observers>
+                    <zolago_solr_search_observer>
+                        <type>singleton</type>
+                        <class>zolagosolrsearch/observer</class>
+                        <method>handleCatalogLayoutRender</method>
+                    </zolago_solr_search_observer>
+                </observers>
+            </controller_action_layout_load_before>
+		</events>	
     </frontend>
+	<crontab>
+        <jobs>
+            <zolagosolrearch_process_queue>
+                <schedule>
+                    <!-- Run every 5 minutes -->
+                    <cron_expr>*/5 * * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>zolagosolrsearch/cronProcessQueue</model>
+                </run>
+            </zolagosolrearch_process_queue>
+            <zolagosolrearch_cleanup_queue>
+                <schedule>
+                    <!-- Run 0:00 everyday  -->
+                    <cron_expr>0 0 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>zolagosolrsearch/cronCleanupQueue</model>
+                </run>
+            </zolagosolrearch_cleanup_queue>
+        </jobs>
+    </crontab>
 </config>

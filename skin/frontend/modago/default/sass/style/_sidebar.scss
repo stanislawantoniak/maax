@@ -435,3 +435,14 @@
     }  
   }
 }
+
+
+.fb-slidebar-inner {
+  .current-filter {
+    @media (max-width: 767px) { 
+       padding-top: 3px;
+       //
+       line-height: 24px;
+      }
+  }
+}
