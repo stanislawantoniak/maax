@@ -119,6 +119,10 @@
                 $( ".datepicker" ).datepicker();
 
                 $('#myModal').modal();
+
+                $table = $("#zolagocatalog_mass_grid_table");
+
+                $table.tableFreezer();
             });
 
         </script>
@@ -126,3 +130,130 @@
 
     <?php endif;?>
 
+<script>
+
+
+    (function($) {
+        $.fn.extend({
+            tableFreezer: function(options) {
+                var cfg = $.extend(true, {
+                    freezeHeader: true,
+                    freezeFooter: false,
+                    freezeColumnsLeft: false,  // provide integer as a number of columns you want to freeze on the left hand side
+                    freezeColumnsRight: false  // provide integer as a number of columns you want to freeze on the right hand side
+                }, options);
+
+//      var scrollWidth = cfg.scroll.width;
+//      var scrollHeight = cfg.scroll.height;
+//      var fixedLeftWidth = null;
+//      var fixedHeadHeight = null;
+                this.each(function() {
+                    console.log(this);
+                    init($(this));
+                });
+
+                function getHeader($table) {
+
+                    $tempTable = $table.clone();
+                    $header = $tempTable.find("thead");
+                    $headerElems = $header.find('th');
+                    $tempTable.html('').append($header);
+
+                    $table.find('thead th').each(function(i){
+
+                        w = $(this).width();
+                        $($headerElems[i]).css('width', w + 'px');
+
+                    });
+                    return $tempTable;
+                };
+
+                function getFooter($table) {
+
+                    $tempTable = $table.clone();
+                    $footer = $tempTable.find("tfoot");
+                    $footerElems = $footer.find('td');
+                    $tempTable.html('').append($footer);
+
+                    $table.find('thead th').each(function(i){
+
+                        w = $(this).width();
+                        $($footerElems[i]).css('width', (w) + 'px');
+
+                    });
+                    return $tempTable;
+                };
+
+                function getColGroup($table) {
+
+                    var html = '<colgroup>',
+                        w;
+
+                    $table.find('thead th').each(function(){
+
+                        w = $(this).width();
+                        html += '<col width="' + w + '">';
+
+                    });
+                    html += '</colgroup>';
+
+                    return $(html);
+                };
+
+                function init($table) {
+
+                    var $tableContainer = $table.parent(),
+                        tableContainerW = $tableContainer.width();
+                        tableW = $table.width(),
+                        $overlayTable = $table.clone(true),
+                        $colGroup = getColGroup($table),
+                        $overlayTableHeader = getHeader($table),
+                        $overlayTableFooter = getFooter($table),
+                        $viewport = $('<div id="tf-viewport">');
+
+                    console.log(tableW);
+                    console.log($table.outerWidth());
+                    console.log($overlayTableHeader);
+                    console.log($overlayTableFooter);
+
+                    $table.find('colgroup').remove();
+                    $table.append($colGroup);
+
+                    $tableContainer.css('position', 'relative');
+                    $overlayTableHeader.css('width', tableW)
+                        .css('background', 'white')
+                                 .css('position', 'absolute')
+                                 .css('top', 0)
+                                 .css('left', 0);
+
+                    $overlayTableFooter.css('width', tableW)
+                        .css('background', 'white')
+                        .css('position', 'absolute')
+                        .css('bottom', 0)
+                        .css('left', 0);
+
+                    $overlayTableHeader.append($colGroup);
+                    $overlayTableFooter.append($colGroup);
+
+                    $tableContainer.append($overlayTableHeader);
+                    $tableContainer.append($overlayTableFooter);
+
+                    $viewport.css('width', tableContainerW + 'px')
+                             .css('height', '300px')
+                             .css('overflow', 'auto');
+
+                    if(cfg.freezeColumnsLeft || cfg.freezeColumnsRight){
+                        $tableContainer.find('table').wrapAll($viewport);
+                    }
+                    else{
+                        $table.wrapAll($viewport);
+                    }
+
+                }
+
+                return this;
+            }
+        });
+    })(jQuery);
+
+</script>
