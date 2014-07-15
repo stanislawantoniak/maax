@@ -1,0 +1,90 @@
+<?php $_element = $this->getElement()?>
+<?php $collection = $this->getCollection(); ?>
+<?php $vendor = $this->getVendor(); ?>
+
+<?php if($collection && $collection->count() > 0): ?>
+<tr>
+    <td class="grid" colspan=10>
+        <table cellspacing="0" class="data" cellpadding="0" id="tiercom_category_rates-grid" width="100%">
+            <thead>
+                <tr class="headings">
+                    <th class="a-center"><?php echo Mage::helper('zolagorma')->__('Name') ?></th>
+                    
+                    <?php if($this->getMode() == 'edit'): ?>
+	                    <th class="a-center"><?php echo Mage::helper('zolagorma')->__('Use default value') ?></th>
+	                <?php endif; ?>
+                    <th class="a-center"><?php echo Mage::helper('zolagorma')->__('Instant return days #') ?></th>
+                    <th class="a-center"><?php echo Mage::helper('zolagorma')->__('Acknowledged return days #') ?></th>
+                    <th class="a-center"><?php echo Mage::helper('zolagorma')->__('Message') ?></th>
+                </tr>
+            </thead>
+            
+            <!-- EDIT mode -->
+            <?php if($this->getMode() == 'edit'): ?>
+            	
+            	<tbody id="vendor_return_reasons-table">
+	                <?php foreach($collection as $vendor_reason): ?>
+	                	
+	                <?php $_id = $vendor_reason->getVendorReturnReasonId(); ?>
+	                
+	                <tr class="option-row">
+	                    <td class="a-center">
+	                    	<?php echo $vendor_reason->getReturnReason()->getName()?>
+	                    	<input type="hidden" name="submit_mode" value="edit">
+	                    </td>
+	                    <td class="a-left">
+	                    	<input name="<?php echo $_element->getName()?>[<?php echo $_id; ?>][use_default]" class="" type="checkbox" value="1" <?php echo ($vendor_reason->getUseDefault()) ? 'checked="checked"' : ''; ?> />
+	                    </td>
+	                    <td class="a-left">
+	                    	<input name="<?php echo $_element->getName()?>[<?php echo $_id; ?>][auto_days]" class="input-text required-entry" type="text" value="<?php echo $vendor_reason->getAutoDays(); ?>" />
+	                    	<?php if((int)$vendor_reason->getAutoDays() != (int)$vendor_reason->getReturnReason()->getAutoDays()) echo '<small>Default value: ' .  $vendor_reason->getReturnReason()->getAutoDays() . '</small>'; ?>
+	                    </td>
+	                    <td class="a-left">
+	                    	<input name="<?php echo $_element->getName()?>[<?php echo $_id; ?>][allowed_days]" class="input-text required-entry" type="text" value="<?php echo $vendor_reason->getAllowedDays(); ?>" />
+	                    	<?php if((int)$vendor_reason->getAllowedDays() != (int)$vendor_reason->getReturnReason()->getAllowedDays()) echo '<small>Default value: ' .  $vendor_reason->getReturnReason()->getAllowedDays() . '</small>'; ?>
+	                    </td>
+	                    <td class="a-left" width="500">
+	                    	<input name="<?php echo $_element->getName()?>[<?php echo $_id; ?>][message]" class="input-text required-entry" type="text" value="<?php echo $vendor_reason->getMessage(); ?>" />
+	                    	<?php if(strcmp($vendor_reason->getMessage(), $vendor_reason->getReturnReason()->getMessage()) != 0) echo '<small>Default value: ' . $vendor_reason->getReturnReason()->getMessage() . '</small>'; ?>
+	                    </td>
+	                </tr>
+	                <?php endforeach ?>
+	            </tbody>
+            
+            <!-- NEW mode -->
+            <?php else: ?>
+            	
+            	<tbody id="vendor_return_reasons-table">
+	                <?php foreach($collection as $reason): ?>
+	                	
+	                <?php $_id = $reason->getReturnReasonId(); ?>
+	                
+	                <tr class="option-row">
+	                    <td class="a-center">
+	                    	<?php echo $reason->getName()?>
+	                    	<input type="hidden" name="submit_mode" value="new">
+	                    </td>
+	                    <td class="a-left"><input name="<?php echo $_element->getName()?>[<?php echo $_id; ?>][auto_days]" class="input-text required-entry" type="text" value="<?php echo $reason->getAutoDays(); ?>" /></td>
+	                    <td class="a-left"><input name="<?php echo $_element->getName()?>[<?php echo $_id; ?>][allowed_days]" class="input-text required-entry" type="text" value="<?php echo $reason->getAllowedDays(); ?>" /></td>
+	                    <td class="a-left" width="500"><input name="<?php echo $_element->getName()?>[<?php echo $_id; ?>][message]" class="input-text required-entry" type="text" value="<?php echo $reason->getMessage(); ?>" /></td>
+	                </tr>
+	                <?php endforeach ?>
+	            </tbody>
+            	
+            <?php endif; ?>
+            
+        </table>
+
+    </td>
+</tr>
+<?php else: ?>
+	There are no return reasons found.	
+<?php endif; ?>
+<style>
+#tiercom_category_rates-grid{
+	width:100%;
+}
+	#tiercom_category_rates-grid .option-row input{
+		width:95%;
+	}
+</style>

@@ -1,5 +1,16 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
+	<!-- Sample slider use -->
+
+	<!--<default>-->
+		<!--<reference name="content">-->
+			<!--<block type="zolagocms/component_slider" name="slider" before="-"/>-->
+			<!--<block type="zolagocms/component_boxes" name="boxes" before="-"/>-->
+			<!--<block type="zolagocms/component_inspirations" name="inspirations" before="-"/>-->
+		<!--</reference>-->
+	<!--</default>-->
+
+	
 	<udprod_vendor_mass_index>
 		<update handle="udropship_vendor" />
         <update handle="adminhtml_head" />
@@ -9,6 +20,7 @@
 		<update handle="adminhtml_head" />
         <reference name="head">
             <action method="addItem"><type>skin_js</type><name>../../../frontend/default/udropship/js/melon/vendor_mass.js</name></action>
+            <action method="addItem"><type>skin_js</type><name>../../../frontend/default/udropship/plugins/bootbox/bootbox.js</name></action>
             <action method="addItem">
                 <type>skin_js</type>
                 <name>js/plugins/validation/jquery.validate.min.js</name>

@@ -25,6 +25,9 @@ select.form-control{
 		&.success-msg{
 			.alert-success();
 		}
+		&.notice-msg{
+			.alert-warning();
+		}
 	}
 	padding-top: @baseLineHeight;
 	margin: 0 @baseLineHeight;
@@ -125,6 +128,7 @@ select.form-control{
 	dd{margin-left: 120px;}
 }
 .widget-content.orders, .widget-content.rma{
+	
 	.alert{
 		margin-bottom:0;
 		padding-top: 10px;

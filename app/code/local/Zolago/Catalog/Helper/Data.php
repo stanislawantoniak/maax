@@ -1,31 +1,35 @@
 <?php
+/**
+ * Class Zolago_Catalog_Helper_Data
+ */
 class Zolago_Catalog_Helper_Data extends Mage_Core_Helper_Abstract {
 	const ADDITIONAL_ATTRIBUTES_GROUP	= 'Additional columns';
 	const SPECIAL_LABELS_OLD_DELIMITER	= ':';
 	const SPECIAL_LABELS_NEW_DELIMITER	= ' | ';
 
-
     /**
-     * get sku-id associated array
+     * get id-sku associated array
      * @return array
      */
-    public static  function getSkuAssoc()
+    public static function getIdSkuAssoc()
     {
-        $readConnection = Mage::getSingleton('core/resource')
-            ->getConnection('core_read');
-        $query = "SELECT sku,entity_id AS product_id FROM `catalog_product_entity` WHERE type_id='simple';"; //Total time 0.00285 (on 1000 row(s))
-
-
-        $skuAssoc = $readConnection->fetchPairs($query);
+        $posResourceModel = Mage::getResourceModel('zolagopos/pos');
+        $skuAssoc = $posResourceModel->getIdSkuAssoc();
         return $skuAssoc;
     }
 
-    public static  function getSkuAssocId($sku)
+    /**
+     * get sku-id associated array
+     *
+     * @param array $skus
+     *
+     * @return array
+     */
+    public static function getSkuAssoc($skus = array())
     {
-        $readConnection = Mage::getSingleton('core/resource')
-            ->getConnection('core_read');
-        $query = "SELECT entity_id AS product_id FROM `catalog_product_entity` WHERE type_id='simple' AND sku='{$sku}';";
-        $productId = $readConnection->fetchOne($query);
-        return $productId;
+        $posResourceModel = Mage::getResourceModel('zolagopos/pos');
+        $skuAssoc = $posResourceModel->getSkuAssoc($skus);
+        return $skuAssoc;
     }
+
 }

@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<layout>
+    <default>
+        <!--<reference name="head">-->
+            <!--<action method="addJsExtended">-->
+                <!--<script>orbacommon/jquery/jquery-1.10.2.min.js</script>-->
+                <!--<params />-->
+                <!--<before>-</before>-->
+            <!--</action>-->
+        <!--</reference>-->
+    </default>
+    <orbacommon_js_lib>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>orbacommon/js/lib.phtml</template>
+            </action>
+        </reference>
+    </orbacommon_js_lib>
+</layout>

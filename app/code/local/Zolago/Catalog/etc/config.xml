@@ -2,11 +2,18 @@
 <config>
     <modules>
         <Zolago_Catalog>
-            <version>0.0.12</version>
+            <version>0.0.15</version>
         </Zolago_Catalog>
     </modules>
+    <default>
+        <zolagocatalog>
+            <config>
+                <group>config</group>
+                <po_open_order>0,11,9,5,4,3,11</po_open_order>
+            </config>
+        </zolagocatalog>
+    </default>
     <global>
-
         <models>
             <zolagocatalog>
                 <class>Zolago_Catalog_Model</class>
@@ -21,6 +28,9 @@
                     <queue_configurable>
                         <table>zolago_catalog_queue_configurable</table>
                     </queue_configurable>
+                    <queue_pricetype>
+                        <table>zolago_catalog_queue_pricetype</table>
+                    </queue_pricetype>
                     <pricessizes>
                         <table>vw_product_relation_prices_sizes</table>
                     </pricessizes>
@@ -29,8 +39,14 @@
 			<catalog>
 				<rewrite>
 					<product_action>Zolago_Catalog_Model_Product_Action</product_action>
-				</rewrite>
+                    <product>Zolago_Catalog_Model_Product</product>
+                </rewrite>
 			</catalog>
+            <catalog_resource>
+                <rewrite>
+                    <product>Zolago_Catalog_Model_Resource_Product</product>
+                </rewrite>
+            </catalog_resource>
         </models>
         <helpers>
             <zolagocatalog>
@@ -126,6 +142,15 @@
                     <model>zolagocatalog/observer::processConfigurableQueue</model>
                 </run>
             </zolagocatalog_process_configurable_queue>
+            <zolagocatalog_process_pricetype_queue>
+                <schedule>
+                    <!-- Run every 5 minutes -->
+                    <cron_expr>0,5,10,15,20,25,30,35,40,45,50,55 * * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>zolagocatalog/observer::processPriceTypeQueue</model>
+                </run>
+            </zolagocatalog_process_pricetype_queue>
             <zolagocatalog_clear_configurable_queue>
                 <schedule>
                     <!-- Run every 5 minutes -->

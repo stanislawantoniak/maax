@@ -34,6 +34,24 @@
 <dd class="<?php echo $completeClass ?>">
     <?php if ($this->getCheckout()->getStepData('shipping', 'complete')): ?>
     <address><?php echo $this->getShipping()->format('html') ?></address>
+        <?php
+        $dhlHelper = Mage::helper('zolagodhl');
+        echo $this->getShipping()->getPostcode();
+        $dhlValidZip = $dhlHelper
+            ->isDHLValidZip($this->getShipping()->getCountry(),$this->getShipping()->getPostcode());
+        ?>
+        <b>
+            <?php
+            if (!$dhlValidZip):?>
+                <br/>
+                <?php
+                echo $this->__(
+                    'Zip code in shipment address is not valid. There will be a problem when shipping to that address.'
+                );
+                ?>
+
+            <?php endif; ?>
+        </b>
     <?php endif; ?>
 </dd>
 <?php else: ?>

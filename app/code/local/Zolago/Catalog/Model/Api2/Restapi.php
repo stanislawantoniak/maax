@@ -3,13 +3,12 @@ class Zolago_Catalog_Model_Api2_Restapi extends Mage_Api2_Model_Resource {
 
     public function dispatch()
     {
-        //echo "rewrite------action:".$this->getActionType() . "    operation:".$this->getOperation() ."-------------------\n";
         switch ($this->getActionType() . $this->getOperation()) {
             /* Create */
             case self::ACTION_TYPE_ENTITY . self::OPERATION_CREATE:
 
                 // Creation of objects is possible only when working with collection
-                $this->_critical(self::RESOURCE_METHOD_NOT_IMPLEMENTED);
+                //$this->_critical(self::RESOURCE_METHOD_NOT_IMPLEMENTED);
                 break;
             case self::ACTION_TYPE_COLLECTION . self::OPERATION_CREATE:
 
@@ -25,12 +24,16 @@ class Zolago_Catalog_Model_Api2_Restapi extends Mage_Api2_Model_Resource {
                 // The create action has the dynamic type which depends on data in the request body
                 if ($this->getRequest()->isAssocArrayInRequestBody()) {
                     $this->_errorIfMethodNotExist('_create');
-                    $filteredData = $this->getFilter()->in($requestData);
-                    if (empty($filteredData)) {
-                        $this->_critical(self::RESOURCE_REQUEST_DATA_INVALID);
-                    }
-                    $newItemLocation = $this->_create($filteredData);
-                    $this->getResponse()->setHeader('Location', $newItemLocation);
+//                    $filteredData = $this->getFilter()->in($requestData);
+//                    if (empty($filteredData)) {
+//                        $this->_critical(self::RESOURCE_REQUEST_DATA_INVALID);
+//                    }
+//                    $newItemLocation = $this->_create($filteredData);
+//                    $this->getResponse()->setHeader('Location', $newItemLocation);
+
+                    $this->_create($requestData);
+                    $this->_render($this->getResponse()->getMessages());
+                    $this->getResponse()->setHttpResponseCode(Mage_Api2_Model_Server::HTTP_OK);
                 } else {
                     $this->_errorIfMethodNotExist('_multiCreate');
                     $filteredData = $this->getFilter()->collectionIn($requestData);

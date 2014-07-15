@@ -64,6 +64,8 @@ class Zolago_Mapper_Model_Resource_Index extends Mage_Core_Model_Resource_Db_Abs
 		$indexer = Mage::getSingleton("index/indexer");
 		/* @var $indexer Mage_Index_Model_Indexer */
 		
+		$affectedProductIds = array();
+		
 		if(!$productsIds){
 			$productsIds = Mage::getResourceModel("catalog/product_collection")->getAllIds();
 		}
@@ -114,8 +116,24 @@ class Zolago_Mapper_Model_Resource_Index extends Mage_Core_Model_Resource_Db_Abs
 						Mage_Catalog_Model_Product::ENTITY, 
 						Mage_Index_Model_Event::TYPE_SAVE
 				);
+				
+				$affectedProductIds[] = $productId;
 			}
 		}
+		
+//		$event = Mage::getModel("index/event");
+//		/* @var $newData Mage_Index_Model_Event */
+//		$newData = array("product_ids"=>$affectedProductIds);
+//		$event->setNewData($newData);
+//		
+//		// Process normal indexer
+//		Mage::getResourceSingleton("catalog/category_indexer_product")
+//			->catalogProductMassAction($event);
+		
+		Mage::dispatchEvent("zolago_mapper_after_assign_products", array(
+			"product_ids" => $affectedProductIds
+		));
+
 		return true;
 		
 	}

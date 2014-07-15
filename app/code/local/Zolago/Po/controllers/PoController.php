@@ -2,6 +2,12 @@
 
 class Zolago_Po_PoController extends Mage_Core_Controller_Front_Action
 {
+    public function newRmaRequestAction() {
+        $rmaId = $this->getRequest()->getParam('rma_id');
+        $rma = Mage::getModel('urma/rma')->load($rmaId);
+        $rma->sendDhlRequest();
+
+    }
 	public function preDispatch()
     {
         parent::preDispatch();

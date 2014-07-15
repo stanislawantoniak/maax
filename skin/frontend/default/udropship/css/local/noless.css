@@ -29,3 +29,46 @@
 .z-grid .range-line.date {
     margin-bottom: 5px;
 }
+.grid .filter .hasDatepicker {
+    position: relative;
+    z-index: 1;
+}
+
+#login-vendor .messages {
+    margin: 0 4px;
+}
+#login-vendor .messages > li {
+    margin-bottom: 0;
+}
+
+
+.validation-advice {
+    color: #b94a48;
+}
+
+.validation-failed.form-control {
+    border-color: #a94442;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075)
+}
+
+.validation-failed.form-control:focus {
+    border-color: #843534;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #ce8483;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 6px #ce8483
+}
+
+#zolagocatalog_mass_grid_submit {
+    position: absolute;
+    left: 50%;
+}
+
+#zolagocatalog_mass_grid_foot .totals.a-center:not(:empty) {
+    height: 60px;
+}
+
+#catalog_image_grid_table .mass-thumb-image {
+    float: left;
+    text-align:center;
+    margin:2px;
+}

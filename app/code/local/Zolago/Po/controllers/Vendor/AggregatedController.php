@@ -12,13 +12,23 @@ class Zolago_Po_Vendor_AggregatedController
 	}
 	
 	/**
+	 * @return Zolago_Operator_Model_Operator
+	 */
+	protected function _getOperator() {
+		return $this->_getSession()->getOperator();
+	}
+	
+	/**
 	 * @return Zolago_Po_Model_Aggregated
 	 */
 	protected function _registerAggregated() {
 		if(!Mage::registry('current_aggregated')){
 			$aggregated = Mage::getModel("zolagopo/aggregated");
 			$aggregated->load($this->getRequest()->getParam('id'));
-			if($aggregated->getVendorId()!=$this->_getVendor()->getId()){
+			/* @var $aggregated Zolago_Po_Model_Aggregated */
+			$session = $this->_getSession();
+			/* @var $session Zolago_Dropship_Model_Session */
+			if(!$aggregated->isAllowed($this->_getVendor(), $session->isOperatorMode() ? $this->_getOperator() : null)){
 				throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("It's not your object"));
 			}
 			Mage::register('current_aggregated', $aggregated);

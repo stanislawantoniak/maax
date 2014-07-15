@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Zolago_Dropship>
-			<version>0.0.1</version>
+			<version>0.0.2</version>
 		</Zolago_Dropship>
 	</modules>
 	<global>
@@ -13,10 +13,18 @@
 			<udropship>
 				<rewrite>
 					<session>Zolago_Dropship_Model_Session</session>
+					<vendor>Zolago_Dropship_Model_Vendor</vendor>
 					<!-- overide order shippign address id to shipment shipping address id -->
 					<pdf_shipment>Zolago_Dropship_Model_Pdf_Shipment</pdf_shipment>
+					<!-- Vendor model -->
+					<vendor>Zolago_Dropship_Model_Vendor</vendor>
 				</rewrite>
 			</udropship>
+			<udropship_mysql4>
+				<rewrite>
+					<vendor>Zolago_Dropship_Model_Resource_Vendor</vendor>
+				</rewrite>
+			</udropship_mysql4>
 			<sales>
 				<rewrite>
 					<!-- overide order shippign address id to shipment shipping address id -->
@@ -45,6 +53,7 @@
 					<vendor_preferences>Zolago_Dropship_Block_Vendor_Preferences</vendor_preferences>
 					<vendor_shipment_info>Zolago_Dropship_Block_Vendor_Shipment_Info</vendor_shipment_info>
 					<adminhtml_systemConfigFormField_categoriesSelect>Zolago_Dropship_Block_Adminhtml_SystemConfigFormField_CategoriesSelect</adminhtml_systemConfigFormField_categoriesSelect>
+					<adminhtml_vendor_edit_tab_preferences>Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Preferences</adminhtml_vendor_edit_tab_preferences>
 				</rewrite>
 			</udropship>
 		</blocks>
@@ -78,6 +87,14 @@
                 </fieldsets>
 
                 <fields>
+                	<super_vendor_id>
+                        <label>Super vendor</label>
+                        <type>select</type>
+						<source_model>zolagodropship/source</source_model>
+                        <source>allvendorswithempty</source>
+                        <fieldset>integration</fieldset>
+                        <position>0</position>
+                    </super_vendor_id>
                 	<marketing_store_information>
                         <label>Main store menu - marketing store information</label>
                         <type>wysiwyg</type>
@@ -137,25 +154,25 @@
                         <position>10</position>
                     </use_dhl>
                 	<dhl_account>
-                        <label>Dhl account</label>
+                        <label>DHL account</label>
                         <type>text</type>
                         <fieldset>dhl</fieldset>
                         <position>15</position>
                     </dhl_account>
                 	<dhl_login>
-                        <label>Dhl login</label>
+                        <label>DHL login</label>
                         <type>text</type>
                         <fieldset>dhl</fieldset>
                         <position>20</position>
                     </dhl_login>
                 	<dhl_password>
-                        <label>Dhl password</label>
+                        <label>DHL password</label>
                         <type>password</type>
                         <fieldset>dhl</fieldset>
                         <position>30</position>
                     </dhl_password>
                 	<dhl_ecas>
-                        <label>Dhl eCas id</label>
+                        <label>DHL eCas id</label>
                         <type>text</type>
                         <fieldset>dhl</fieldset>
                         <position>40</position>
@@ -187,13 +204,13 @@
                         <position>15</position>
                     </dhl_rma_account>
                 	<dhl_rma_login>
-                        <label>Dhl login</label>
+                        <label>DHL login</label>
                         <type>text</type>
                         <fieldset>rma</fieldset>
                         <position>20</position>
                     </dhl_rma_login>
                 	<dhl_rma_password>
-                        <label>Dhl password</label>
+                        <label>DHL password</label>
                         <type>password</type>
                         <fieldset>rma</fieldset>
                         <position>30</position>

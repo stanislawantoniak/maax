@@ -1,0 +1,35 @@
+#header {
+    @include reset-full;
+}
+/* USER MENU */
+.user-navigation  {
+    a {
+       /* .badge {
+            position: absolute;
+            top: 8px;
+            right: 1px;
+            padding: 7px;
+            width:22px;
+            height:22px;
+            padding:0px;
+            
+            @media (max-width: 360px) { 
+                right:1px;
+             }
+             @include max-screen($screen-sm-max) {
+                top: 11px;
+                right: 7px;
+                background:$icoMapMobile;
+                @include sprite-dimensions($icoMapMobile, badge);
+             }
+             @media (min-width: $screen-md) {
+                  top: 8px;
+                  right: 15px;
+             }
+
+         
+        }*/
+    }
+}
+
+            

@@ -10,6 +10,46 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 	const ACTION_DIRECT_REALISATION = "direct_realisation";
 	const ACTION_PRINT_AGGREGATED = "print_aggregated";
 	
+	/**
+	 * Lazy loading handle
+	 */
+	public function loadCollectionAction() {
+		$collArray = array();
+		$q = $this->getRequest()->getParam("q");
+		
+		if(is_string($q) && strlen(trim($q))>0){
+			
+			$po = $this->_registerPo();
+			$storeId = $po->getOrder()->getStoreId();
+			$vendorSku = Mage::helper('udropship')->getVendorSkuAttribute($storeId)->getAttributeCode();
+			
+			$collection = Mage::getResourceModel('catalog/product_collection');
+			/* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
+			
+			$collection->setStoreId($storeId);
+			$collection->addAttributeToSelect("name", "left");
+			$collection->addAttributeToSelect("price");
+			$collection->addAttributeToSelect($vendorSku, "left");
+			
+			$collection->addAttributeToFilter("udropship_vendor", $po->getUdropshipVendor());
+			$collection->addFieldToFilter("type_id", Mage_Catalog_Model_Product_Type::TYPE_SIMPLE);
+			
+			$collection->addAttributeToFilter(array(
+				array("attribute"=>$vendorSku,	"like"=>'%'.$q.'%'),
+				array("attribute"=>"sku",		"like"=>'%'.$q.'%'),
+				array("attribute"=>"name",		"like"=> '%'.$q.'%')
+			), "left");
+			
+			$collection->load();
+			
+			$collArray = array_values($collection->toArray());
+		}
+		
+		
+		$this->getResponse()->setHeader('content-type', 'application/json');
+		$this->getResponse()->setBody(Zend_Json::encode($collArray));
+	}
+	
 	public function preDispatch() {
 		/**
 		 * @todo add secure to own PO
@@ -24,6 +64,9 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 		if(!Mage::registry("current_po")){
 			$poId = $this->getRequest()->getParam("id");
 			$po = Mage::getModel("udpo/po")->load($poId);
+			if(!$this->_vaildPo($po)){
+				throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("It's not your object"));
+			}
 			Mage::register("current_po", $po);
 		}
 		return Mage::registry("current_po");
@@ -51,13 +94,26 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 	public function indexAction() {
 		// Override origin index
 		Mage::register('as_frontend', true);// Tell block class to use regular URL's
-		$this->_renderPage(array('default', 'formkey', 'adminhtml_head'), 'udpo');
+		$this->_renderPage(array('default', 'adminhtml_head'), 'udpo');
 	}
 	
 	public function editAction() {
+		try{
+			$this->_registerPo();
+		} catch (Mage_Core_Exception $e) {
+			$this->_getSession()->addError($e->getMessage());
+			return $this->_redirectReferer();
+		}catch(Exception $e){
+			$this->_getSession()->addError(Mage::helper("zolagopo")->__("Some error occured"));
+			Mage::logException($e);
+			return $this->_redirectReferer();
+		}
 		$this->_renderPage(null, 'udpo');
 	}
 	
+	/**
+	 * @param string $action
+	 */
 	protected function _processMass($action) {
 		$hlp = Mage::helper("zolagopo");
 		$ids = $this->_getMassIds();
@@ -208,7 +264,10 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 	 * @return bool
 	 */
 	public function _vaildPo(Zolago_Po_Model_Po $po) {
-		return $po->getUdropshipVendor()==$this->_getVendor()->getId();
+		$session = $this->_getSession();
+		/* @var $session Zolago_Dropship_Model_Session */
+		return $po->isAllowed($session->getVendor(), 
+			$session->isOperatorMode() ? $session->getOperator() : null);
 	}
 	
 	/**
@@ -221,10 +280,10 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 
 	public function splitAction(){
 		$hlp = Mage::helper("zolagopo");
-		$po = $this->_registerPo();
-		$items = $this->getRequest()->getParam("items");
 		
 		try{
+			$po = $this->_registerPo();
+			$items = $this->getRequest()->getParam("items");
 			$newPo = $po->split($items);
 			$this->_getSession()->addSuccess(
 				Mage::helper("zolagopo")->__("Order has been split. New order: #%s.", $newPo->getIncrementId())
@@ -242,12 +301,13 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 	
 	public function shippingCostAction() {
 		$hlp = Mage::helper("zolagopo");
-		$po = $this->_registerPo();
-		$price = $this->getRequest()->getParam("price");
-		$oldPrice = $po->getShippingAmountIncl();
-		$store = $po->getOrder()->getStore();
 		
 		try{
+			$po = $this->_registerPo();
+			$price = $this->getRequest()->getParam("price");
+			$oldPrice = $po->getShippingAmountIncl();
+			$store = $po->getOrder()->getStore();
+			
 			if(empty($price) || (float)$price<0){
 				throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("Illegal price"));
 			}
@@ -325,15 +385,16 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 	 */
 	public function removeItemAction() {
 		$hlp = Mage::helper("zolagopo");
-		$po = $this->_registerPo();
-		$itemId = $this->getRequest()->getParam("item_id");
 		
-		$item = Mage::getModel("zolagopo/po_item")->load($itemId);
 		
 		$transaction = Mage::getSingleton('core/resource')->getConnection('core_write');
 		/* @var $transaction Varien_Db_Adapter_Interface */
 
 		try{
+			$po = $this->_registerPo();
+			$itemId = $this->getRequest()->getParam("item_id");
+			$item = Mage::getModel("zolagopo/po_item")->load($itemId);
+			
 			if(!$item->getId()){
 				throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("Item doesn't exists"));
 			}
@@ -389,9 +450,19 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 	 */
 	public function editItemAction() {
 		$hlp = Mage::helper("zolagopo");
-		$po = $this->_registerPo();
-		$request = $this->getRequest();
 		
+		try{
+			$po = $this->_registerPo();
+		} catch (Mage_Core_Exception $e) {
+			$this->_getSession()->addError($e->getMessage());
+			return $this->_redirectReferer();
+		} catch (Exception $e) {
+			Mage::logException($e);
+			$this->_getSession()->addError(Mage::helper("zolagopo")->__("Some error occured."));
+			return $this->_redirectReferer();
+		}
+		
+		$request = $this->getRequest();
 		$itemId = $request->getParam("item_id");
 		
 		$item = $po->getItemById($itemId);
@@ -515,7 +586,18 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 	 */
 	public function addItemAction() {
 		$hlp = Mage::helper("zolagopo");
-		$po = $this->_registerPo();
+		
+		try{
+			$po = $this->_registerPo();
+		} catch (Mage_Core_Exception $e) {
+			$this->_getSession()->addError($e->getMessage());
+			return $this->_redirectReferer();
+		} catch (Exception $e) {
+			Mage::logException($e);
+			$this->_getSession()->addError(Mage::helper("zolagopo")->__("Some error occured."));
+			return $this->_redirectReferer();
+		}
+		
 		$store = $po->getOrder()->getStore();
 		$request = $this->getRequest();
 		
@@ -652,7 +734,17 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 	}
 	
 	public function addCommentAction() {
-		$_po = $this->_registerPo();
+		try{
+			$_po = $this->_registerPo();
+		} catch (Mage_Core_Exception $e) {
+			$this->_getSession()->addError($e->getMessage());
+			return $this->_redirectReferer();
+		} catch (Exception $e) {
+			Mage::logException($e);
+			$this->_getSession()->addError(Mage::helper("zolagopo")->__("Some error occured."));
+			return $this->_redirectReferer();
+		}
+		
 		$comment = $this->getRequest()->getParam("comment");
 		
 		if(empty($comment)){
@@ -693,7 +785,17 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 		$type	=	$req->getParam("type");
 		$isAjax =	$req->isAjax();
 		
-		$po = $this->_registerPo();
+		try{
+			$po = $this->_registerPo();
+		} catch (Mage_Core_Exception $e) {
+			$this->_getSession()->addError($e->getMessage());
+			return $this->_redirectReferer();
+		} catch (Exception $e) {
+			Mage::logException($e);
+			$this->_getSession()->addError(Mage::helper("zolagopo")->__("Some error occured."));
+			return $this->_redirectReferer();
+		}
+		
 		/* @var $po Zolago_Po_Model_Po */
 		$session = $this->_getSession();
 		/* @var $session Zolago_Dropship_Model_Session */
@@ -799,8 +901,18 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 		$poId = $this->getRequest()->getParam("id");
 		$posId = $this->getRequest()->getParam("pos_id");
 		
-		$po = Mage::getModel("udpo/po")->load($poId);
+		try{
+			$po = $this->_registerPo();
+		} catch (Mage_Core_Exception $e) {
+			$this->_getSession()->addError($e->getMessage());
+			return $this->_redirectReferer();
+		} catch (Exception $e) {
+			Mage::logException($e);
+			$this->_getSession()->addError(Mage::helper("zolagopo")->__("Some error occured."));
+			return $this->_redirectReferer();
+		}
 		/* @var $po Unirgy_DropshipPo_Model_Po */
+		
 		$pos = Mage::getModel("zolagopos/pos")->load($posId);
 		/* @var $pos Zolago_Pos_Model_Pos */
 		$session = $this->_getSession();
@@ -844,7 +956,18 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         $hlp = Mage::helper('udropship');
         $udpoHlp = Mage::helper('udpo');
         $r = $this->getRequest();
-        $udpo = $this->_registerPo();
+		
+		try{
+			$udpo = $this->_registerPo();
+		} catch (Mage_Core_Exception $e) {
+			$this->_getSession()->addError($e->getMessage());
+			return $this->_redirectReferer();
+		} catch (Exception $e) {
+			Mage::logException($e);
+			$this->_getSession()->addError(Mage::helper("zolagopo")->__("Some error occured."));
+			return $this->_redirectReferer();
+		}
+		
         $id = $udpo->getId();
 		
         $vendor = $hlp->getVendor($udpo->getUdropshipVendor());
@@ -1153,8 +1276,8 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 	 * @return type
 	 */
 	public function setConfirmStockAction() {
-        $udpo = $this->_registerPo();
 		try{
+			$udpo = $this->_registerPo();
 			$udpo->getStatusModel()->processConfirmStock($udpo);
 			$this->_getSession()->addSuccess(Mage::helper("zolagopo")->__("You have confirmed reservation"));
 		} catch (Mage_Core_Exception $e) {
@@ -1172,8 +1295,8 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 	 * @return type
 	 */
 	public function setConfirmReleaseAction() {
-        $udpo = $this->_registerPo();
 		try{
+			$udpo = $this->_registerPo();
 			$udpo->getStatusModel()->processConfirmRelease($udpo);
 			$this->_getSession()->addSuccess(Mage::helper("zolagopo")->__("Order release confirmed"));
 		} catch (Mage_Core_Exception $e) {
@@ -1191,8 +1314,8 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 	 * @return type
 	 */
 	public function startPackingAction() {
-        $udpo = $this->_registerPo();
 		try{
+			$udpo = $this->_registerPo();
 			$udpo->getStatusModel()->processStartPacking($udpo);
 			$this->_getSession()->addSuccess(Mage::helper("zolagopo")->__("Packing started"));
 		} catch (Mage_Core_Exception $e) {
@@ -1205,8 +1328,8 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 	}
 	
 	public function directRealisationAction() {
-        $udpo = $this->_registerPo();
 		try{
+			$udpo = $this->_registerPo();
 			$udpo->getStatusModel()->processDirectRealisation($udpo);
 			$this->_getSession()->addSuccess(Mage::helper("zolagopo")->__("Order moved to fulfilment. Note that stock check is cleared."));
 		} catch (Mage_Core_Exception $e) {
@@ -1224,8 +1347,8 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 	 * @throws Mage_Core_Exception
 	 */
 	public function changeStatusAction() {
-		$udpo = $this->_registerPo();
 		try{
+			$udpo = $this->_registerPo();
 			$statusModel = $udpo->getStatusModel();
 			
 			if(!$statusModel->isManulaStatusAvailable($udpo)){
@@ -1259,10 +1382,10 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 	 * @throws Mage_Core_Exception
 	 */
 	public function cancelShippingAction() {
-        $udpo = $this->_registerPo();
         $r = $this->getRequest();
 		
 		try{
+			$udpo = $this->_registerPo();
 			$statusModel = $udpo->getStatusModel();
 			if(!$statusModel->isCancelShippingAvailable($udpo)){
 				throw new Mage_Core_Exception(
@@ -1292,10 +1415,10 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 	
 	public function composeAction() {
 		
-		$udpo = $this->_registerPo();
         $r = $this->getRequest();
 		
 		try{
+			$udpo = $this->_registerPo();
 			$order = $udpo->getOrder();
 			$store = $order->getStore();
 			$vendor = $this->_getVendor();
@@ -1333,10 +1456,10 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 	}
 	
 	public function changePosAction() {
-		$po=$this->_registerPo();
-		$pos=$this->_registerPos();
-		$oldPos = $po->getPos();
 		try{
+			$po=$this->_registerPo();
+			$pos=$this->_registerPos();
+			$oldPos = $po->getPos();
 			if(!$po->getStatusModel()->isEditingAvailable($po)){
 				throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("Order cannot be edited."));
 			}
@@ -1369,10 +1492,17 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 	}
 	
 	public function getPosStockAction() {
-		$this->_registerPo();
-		$this->_registerPos();
-		$this->loadLayout();
-		$this->renderLayout();
+		try{
+			$this->_registerPo();
+			$this->_registerPos();
+			$this->loadLayout();
+			$this->renderLayout();
+		} catch (Mage_Core_Exception $e) {
+			$this->_getSession()->addError($e->getMessage());
+		} catch (Exception $e) {
+			Mage::logException($e);
+			$this->_getSession()->addError(Mage::helper("zolagopo")->__("Some error occured."));
+		}
 	}
 	
 	protected function _porcessDhlDate($date) {

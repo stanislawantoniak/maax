@@ -6,6 +6,22 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 	const TYPE_POBILLING = "pobilling";
 	
 	/**
+	 * @param Unirgy_Dropship_Model_Vendor $venndor
+	 * @param Zolago_Operator_Model_Operator $operator
+	 * @return boolean
+	 */
+	public function isAllowed(Unirgy_Dropship_Model_Vendor $vendor = null, 
+		Zolago_Operator_Model_Operator $operator = null) {
+		
+		if($operator instanceof Zolago_Operator_Model_Operator){
+			return in_array($this->getDefaultPosId(), $operator->getAllowedPos());
+		}elseif($vendor instanceof Zolago_Dropship_Model_Vendor){
+			return in_array($this->getDefaultPosId(), $vendor->getAllowedPos());
+		}
+		return false;
+	}
+	
+	/**
 	 * @return Mage_Sales_Model_Order_Shipment | null
 	 */
 	public function getLastNotCanceledShipment() {
@@ -26,6 +42,30 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 		}
 		
 		return null;
+	}
+	
+	/**
+	 * It can be returned when order has been delivered not later than the bigges number for allowed_days
+	 * 
+	 * @return bloolean
+	 */
+	public function canBeReturned(){
+		
+		$vendor = $this->getVendor();
+		$reason_vendor = Mage::getModel('zolagorma/rma_reason_vendor')->getCollection()
+																	  ->addFieldToFilter('vendor_id', $vendor->getId())
+																	  ->setOrder('allowed_days', 'desc')
+																	  ->getFirstItem();
+		
+		if(!$reason_vendor){
+			return false;
+		}
+		
+		$max_allowed_days = (int) $reason_vendor->getAllowedDays();
+		
+		$days_elapsed = Mage::helper('zolagorma')->getDaysElapsed($reason_vendor->getReturnReasonId(), $this);
+		
+		return ($days_elapsed < $max_allowed_days) ? true : false;
 	}
 	
 	/**
@@ -288,7 +328,6 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 	   return $this;
    }
    
-   
    public function clearOwnShippingAddress(){
 	   if($this->isShippingSameAsOrder()){
 		   return $this;
@@ -314,59 +353,12 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
    }
    
    /**
-    * @todo move to reseource
     * @param string $type
     * @param array $exclude
     */
    
    protected function _cleanAddresses($type, $exclude=array()) {
-	    // Add this shippign id
-		$exclude[] = $this->getShippingAddressId();
-	    $addressCollection = Mage::getResourceModel("sales/order_address_collection");
-		/* @var $addressCollection Mage_Sales_Model_Resource_Order_Address_Collection */
-		$addressCollection->addFieldToFilter("parent_id", $this->getOrder()->getId());
-		$addressCollection->addFieldToFilter("entity_id", array("nin"=>$exclude));
-		$addressCollection->addFieldToFilter("address_type", $type);
-		
-		
-		$select = $addressCollection->getSelect();
-		
-		if($type==self::TYPE_POSHIPPING){
-
-			$subSelect = $select->getAdapter()->select();
-			$subSelect->from( 
-					array("shipment"=>$this->getResource()->getTable("sales/shipment")),
-					array(new Zend_Db_Expr("COUNT(shipment.entity_id)"))
-			);
-			$subSelect->where("shipment.shipping_address_id=main_table.entity_id");
-
-			$select->where("? < 1", $subSelect);
-		}
-		
-		// Skip used addresses
-
-		$subSelect = $select->getAdapter()->select();
-		$subSelect->from( 
-				array("self"=>$this->getResource()->getMainTable()),
-				array(new Zend_Db_Expr("COUNT(self.entity_id)"))
-		);
-		$subSelect->where("self.shipping_address_id=main_table.entity_id OR self.billing_address_id=main_table.entity_id");
-
-		$select->where("? < 1", $subSelect);
-		
-		// Skip RMA used addresse
-		$subSelect = $select->getAdapter()->select();
-		$subSelect->from( 
-				array("rma"=>$this->getResource()->getTable("urma/rma")),
-				array(new Zend_Db_Expr("COUNT(rma.entity_id)"))
-		);
-		$subSelect->where("rma.shipping_address_id=main_table.entity_id OR rma.billing_address_id=main_table.entity_id");
-
-		$select->where("? < 1", $subSelect);
-		
-		foreach($addressCollection as $toDelete){
-			$toDelete->delete();
-		}
+	   Mage::helper('zolagopo')->clearAddresses($this, $type, $exclude);
    }
    
    public function needInvoice() {
@@ -483,6 +475,7 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 		
 		$this->_processAlert();
 		$this->_processStatus();
+		$this->_processMaxShippingDate();
 		
 		return parent::_beforeSave();
 	}
@@ -513,6 +506,16 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 		if(!$this->getId()){
 			Mage::getSingleton('zolagopo/po_status')->processNewStatus($this);
 		}
+	}
+	
+	protected function _processMaxShippingDate() {
+		if(!$this->getId()){
+			if ($max_shipping_date = Mage::helper('zolagoholidays/datecalculator')->calculateMaxPoShippingDate($this, true)) {
+				$this->setMaxShippingDate($max_shipping_date->toString('YYYY-MM-dd'));
+			}
+		}
+		
+		
 	}
    
 }

@@ -1,0 +1,20 @@
+.container-fluid {
+	max-width: 1206px;
+}
+.browsehappy {
+	position:absolute;
+	left:0px;
+	right:0px;
+	top:0px;
+	z-index: 9000;
+	background:#fff;
+	padding:50px;
+	text-align: center;
+	color:red;
+}
+
+.popular-shops {
+    ul {
+        -webkit-padding-start:0;
+    }
+}

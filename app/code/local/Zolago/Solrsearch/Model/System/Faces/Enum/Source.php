@@ -1,14 +1,18 @@
 <?php
 class Zolago_Solrsearch_Model_System_Faces_Enum_Source {
 	
-	const TEST_ONE = "zolagosolrsearch/faces_enum_blue";
-	const TEST_TWO = "zolagosolrsearch/faces_enum_yellow";
-	const ENUM_COLOR = "zolagosolrsearch/faces_enum_color";
+	const SIZE		= "zolagosolrsearch/faces_enum_size";
+	const COLOR		= "zolagosolrsearch/faces_enum_color";
+	const LONGLIST	= "zolagosolrsearch/faces_enum_longlist";
+	const DROPLIST	= "zolagosolrsearch/faces_enum_droplist";
+	const ICON		= "zolagosolrsearch/faces_enum_icon";
 	
 	protected $_options = array(
-		self::TEST_ONE => "Blue",
-		self::TEST_TWO => "Yellow",
-		self::ENUM_COLOR => "Color",
+		self::SIZE		=> "Size",
+		self::COLOR		=> "Color",
+		self::LONGLIST	=> "Long list",
+		self::DROPLIST	=> "Dropdown",
+		self::ICON		=> "Icons",
 	);
 
 	public function toOptionHash($withEmpty=true) {

@@ -1,0 +1,56 @@
+<?php
+/**
+ * Author: Paweł Chyl <pawel.chyl@orba.pl>
+ * Date: 02.05.14
+ * @see Zolago_Modago_Block_Checkout_Cart
+ */
+?>
+
+<div id="dropdown-basket" class="dropdown dropdown-anchor-right basket">
+    <div class="dropdown-panel">
+        <div class="dropdown-panel-inner">
+            <table>
+                <tbody>
+                <tr>
+                    <td class="thumb">
+                        <img src="<?php echo $this->getSkinUrl('images/product/thumb/img-thumb-product.png'); ?>" alt="">
+                    </td>
+                    <td class="desc">
+                        <p class="name_product">ZARA Krótki płaszcz z guzikami</p>
+                        <p class="size"><?php echo $this->__("size"); ?>:
+                            <span>38</span>
+                        </p>
+                        <p class="quantity"><?php echo $this->__("quantity"); ?>:
+                            <span>1</span>
+                        </p>
+                    </td>
+                    <td class="price">3 000,00 zł</td>
+                </tr>
+                <tr>
+                    <td class="thumb">
+                        <img src="<?php echo $this->getSkinUrl('images/product/thumb/img-thumb-product.png'); ?>" alt="">
+                    </td>
+                    <td class="desc">
+                        <p class="name_product">ZARA Krótki płaszcz z guzikami</p>
+                        <p class="size"><?php echo $this->__("size"); ?>:
+                            <span>38</span>
+                        </p>
+                        <p class="quantity"><?php echo $this->__("quantity"); ?>:
+                            <span>1</span>
+                        </p>
+                    </td>
+                    <td class="price">3 000,00 zł</td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="summary_basket">
+                <ul>
+                    <li><?php echo $this->__("Products count"); ?>: 2</li>
+                    <li><?php echo $this->__("Products worth"); ?>: 7600,00 zł</li>
+                    <li><?php echo $this->__("Shipping cost"); ?>: gratis</li>
+                </ul>
+                <a href="#" class="view_basket button button-primary medium link"><?php echo $this->__("See your cart"); ?></a>
+            </div>
+        </div>
+    </div>
+</div>

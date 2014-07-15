@@ -39,7 +39,7 @@ class Zolago_Rma_Model_ServicePo extends Unirgy_Rma_Model_ServiceOrder
         $rma->setTotalQty($totalQty);
         return $rma;
     }
-    public function prepareRmaForSave($data)
+    public function prepareRmaForSave($data = array(), $conditions=array())
     {
         $rmas = array();
         $items = $data['items_single'];
@@ -48,14 +48,20 @@ class Zolago_Rma_Model_ServicePo extends Unirgy_Rma_Model_ServiceOrder
         $rmaItems = array();
         foreach ($this->_po->getItemsCollection() as $poItem) {
             $poItems[$poItem->getId()] = $poItem;
-        }
+        }        
+        // repair names
+        foreach ($poItems as $poItem) {
+            if ($parent = $poItem->getParentItemId() && isset($poItems[$parent])) {
+                $poItems[$parent]->setName($poItem->getName());
+            }
+        } 
         foreach ($items as $itemId=>$itemPack) {
             $poItem = $poItems[$itemId];
             foreach ($itemPack as $packId => $dummy) {
                 if (empty($conditions[$itemId][$packId])) {
                     continue;
                 }
-    			$orderItem = $poItem->getOrderItem();
+    			$orderItem = $poItem->getOrderItem();    			
                 $item = $this->_convertor->itemToRmaItem($poItem);
                 $item->setQty(1); // only 1 by line
                 $item->setItemCondition($conditions[$itemId][$packId]);
@@ -88,6 +94,7 @@ class Zolago_Rma_Model_ServicePo extends Unirgy_Rma_Model_ServiceOrder
             $rma->setUdropshipMethod($shipment->getUdropshipMethod());
             $rma->setUdropshipMethodDescription($shipment->getUdropshipMethodDescription());
             $rma->setTotalQty($totalQtys[$vId]);
+			$rma->addData($data);
             $rmas[$vId] = $rma;
             foreach ($items as $item) {
                 $rma->addItem($item);
