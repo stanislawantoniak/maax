@@ -36,8 +36,9 @@ try {
     $authType = ($_SESSION['state'] == 2) ? OAUTH_AUTH_TYPE_AUTHORIZATION : OAUTH_AUTH_TYPE_URI;
     $oauthClient = new OAuth($consumerKey, $consumerSecret, OAUTH_SIG_METHOD_HMACSHA1, $authType);
     $oauthClient->enableDebug();
-
+    echo 'Step 1';
     if (!isset($_GET['oauth_token']) && empty($_SESSION['state'])) {
+        echo 'Step 2';
         echo 'request';
         $requestToken = $oauthClient->getRequestToken($temporaryCredentialsRequestUrl);
         echo 'after';
@@ -46,7 +47,9 @@ try {
         header('Location: ' . $adminAuthorizationUrl . '?oauth_token=' . $requestToken['oauth_token']);
         exit;
     } else if ($_SESSION['state'] == 1) {
+        echo 'Step 4';
         $oauthClient->setToken($_GET['oauth_token'], $_SESSION['secret']);
+        echo 'Step 5';
         $accessToken = $oauthClient->getAccessToken($accessTokenRequestUrl);
         $_SESSION['state'] = 2;
         $_SESSION['token'] = $accessToken['oauth_token'];
@@ -55,6 +58,8 @@ try {
         header('Location: ' . $callbackUrl);
         exit;
     } else {
+
+
         $oauthClient->setToken($_SESSION['token'], $_SESSION['secret']);
 
         $resourceUrl = "$apiUrl/convertproduct";
@@ -122,7 +127,7 @@ try {
 
         $productData = json_encode($data);
         //print_r($oauthClient->getLastResponse());
-        $oauthClient->fetch($resourceUrl, $productData,  OAUTH_HTTP_METHOD_PUT , array('Content-Type' => 'application/json'));
+        $oauthClient->fetch($resourceUrl, $productData,  OAUTH_HTTP_METHOD_POST , array('Content-Type' => 'application/json'));
 
         //print_r($oauthClient->getLastResponse());
 
@@ -131,7 +136,7 @@ try {
 
     }
 } catch (OAuthException $e) {
-    echo '--error<br />';
+    echo '--error2<br />';
     print_r($e->getMessage());
     echo "<br/>";
     print_r($e->lastResponse);
