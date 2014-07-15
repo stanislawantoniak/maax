@@ -80,6 +80,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                         $stockBatch = array();
 
                         if(!empty($batch)){
+                            $batch = (array)$batch;
                             foreach($batch as $dataStock){
 
                                 $merchant = $dataStock['merchant'];
@@ -91,6 +92,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                                         $stockBatch[$merchant][$sku] = $stockByPOS;
                                     }
                                 }
+                                Mage::log($stockBatch, 0, $batchFile);
                                 unset($sku);
                                 unset($skuV);
                                 unset($stockByPOS);
