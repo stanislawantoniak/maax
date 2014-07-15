@@ -20,13 +20,13 @@ $host = $_SERVER['HTTP_HOST'];
 
 
 // $callbackUrl is a path to your file with OAuth authentication example for the Admin user
-$callbackUrl = "http://modago.local/rest.php";
-$temporaryCredentialsRequestUrl = "http://modago.local/index.php/oauth/initiate?oauth_callback=" . urlencode($callbackUrl);
-$adminAuthorizationUrl = 'http://modago.local/admin/oauth_authorize';
-$accessTokenRequestUrl = 'http://modago.local/oauth/token';
-$apiUrl = 'http://modago.local/api/rest';
-$consumerKey = '76cc2b14a5bfd31f13245303baaa321a';
-$consumerSecret = '71bed0926360cd79cbecbb14fbbc01b2';
+$callbackUrl = "http://admin.dev01.lorante.com/rest.php";
+$temporaryCredentialsRequestUrl = "http://admin.dev01.lorante.com/index.php/oauth/initiate?oauth_callback=" . urlencode($callbackUrl);
+$adminAuthorizationUrl = 'http://admin.dev01.lorante.com/admin/oauth_authorize';
+$accessTokenRequestUrl = 'http://admin.dev01.lorante.com/oauth/token';
+$apiUrl = 'http://admin.dev01.lorante.com/api/rest';
+$consumerKey = '1dc998cafdd1048381fbb58833912868';
+$consumerSecret = '7e6ab7a1a98aa59d94943d4058810447';
 //die('test');
 session_start();
 if (!isset($_GET['oauth_token']) && isset($_SESSION['state']) && $_SESSION['state'] == 1) {
