@@ -1,4 +1,9 @@
 var OrbaLib = {
+	Customer: {
+		getAccountInformation: function(data, callback) {
+            OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_customer/get_account_information'); ?>', data, callback, 'GET');
+        }
+	},
 	Listing: {
 		getBlocks: function(data, callback) {
             OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_listing/get_blocks'); ?>', data, callback, 'GET');
@@ -8,6 +13,9 @@ var OrbaLib = {
         },
 	},
     Product: {
+    	getRecentlyViewed: function(data, callback) {
+            OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_product/get_recently_viewed'); ?>', data, callback, 'GET');
+        },
         getOne: function(data, callback) {
             OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_product/get_one'); ?>', data, callback, 'GET');
         },
