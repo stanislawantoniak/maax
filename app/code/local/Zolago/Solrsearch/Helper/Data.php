@@ -123,20 +123,17 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
             ->addAttributeToSelect('*')
             ->addAttributeToFilter('is_active', '1')
             ->addAttributeToFilter( self::ZOLAGO_USE_IN_SEARCH_CONTEXT , array('eq' => 1))
-            ->addAttributeToFilter('include_in_menu', '1')
-            ->addAttributeToFilter('parent_id', array('eq' => $parentId));
+            ->addAttributeToFilter('include_in_menu', '1');
 
         $html = '';
-        foreach ($allCats as $category) {
-        	
-            if($category->getId() != $cat->getId()){
-	            $html .= '<option value="' . $category->getId() . '" >' . str_repeat("&nbsp;", 4 * $level)
-	                . $category->getName() . "</option>";
+
+        if($allCats->count() > 0){
+
+            foreach ($allCats as $category) {
+
+                $html .= '<option value="' . $category->getId() . '" >' . str_repeat("&nbsp;", 4 * $level)
+                    . $category->getName() . "</option>";
             }
-            // $subcats = $category->getChildren();
-            // if ($subcats != '') {
-                // $html .= self::getTreeCategoriesSelect($category->getId(), $level + 1,$cat);
-            // }
         }
         return $html;
     }
