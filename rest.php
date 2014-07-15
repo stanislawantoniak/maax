@@ -127,7 +127,7 @@ try {
 
         $productData = json_encode($data);
         //print_r($oauthClient->getLastResponse());
-        $oauthClient->fetch($resourceUrl, $productData,  OAUTH_HTTP_METHOD_POST , array('Content-Type' => 'application/json'));
+        $oauthClient->fetch($resourceUrl, $productData,  OAUTH_HTTP_METHOD_POST , array('Content-Type' => 'application/json', 'Accept' => '*/*'));
 
         //print_r($oauthClient->getLastResponse());
 
