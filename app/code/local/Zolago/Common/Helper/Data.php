@@ -1,5 +1,27 @@
 <?php
 class Zolago_Common_Helper_Data extends Mage_Core_Helper_Abstract {
+	
+	/**
+	 * @return boolean
+	 */
+	public function isGoogleBot(){
+        $remoteAddr = $_SERVER['REMOTE_ADDR']; // Always available?
+        $remoteName = gethostbyaddr($remoteAddr);
+		// Test tmp address for localhost
+        //$remoteName = "crawl-127-0-0-1.googlebot.com";
+        if(preg_match("/^crawl-(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)-(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)-(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)-(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.googlebot\.com$/", $remoteName, $reg)){
+			$segemnts = explode(".", $remoteAddr);
+            if($segemnts[0]==$reg[1] && $segemnts[1]==$reg[2] && $segemnts[2]==$reg[3] && $segemnts[3]==$reg[4]){
+				
+                return true;
+            }
+        }
+        return false;
+    }
+	
+	/**
+	 * @return array
+	 */
 	public function getCarriersForVendor() {
 		return Mage::helper("zolagodropship")->getAllowedCarriers();
 	}
