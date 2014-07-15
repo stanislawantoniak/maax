@@ -51,6 +51,7 @@ try {
         $oauthClient->setToken($_GET['oauth_token'], $_SESSION['secret']);
         echo 'Step 5';
         $accessToken = $oauthClient->getAccessToken($accessTokenRequestUrl);
+        echo 'Step 6';
         $_SESSION['state'] = 2;
         $_SESSION['token'] = $accessToken['oauth_token'];
         $_SESSION['secret'] = $accessToken['oauth_token_secret'];
