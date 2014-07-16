@@ -25,16 +25,14 @@ class Zolago_Rma_Model_Rma_Item extends Unirgy_Rma_Model_Rma_Item
         $id = $this->getItemCondition();
 
         $itemConditionsA = Mage::helper('urma')->getItemConditionTitles();
-
         $code = $id;
-
         if (!empty($itemConditionsA)) {
             foreach ($itemConditionsA as $idD => $dataD) {
-                if ($id == $idD)
+                if ($id == $idD) {
                     $code = $dataD;
+                }
             }
         }
-
         return Mage::helper('urma')->getItemConditionTitle($code);
     }
 }
