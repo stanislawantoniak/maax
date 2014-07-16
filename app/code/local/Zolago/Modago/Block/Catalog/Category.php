@@ -15,26 +15,30 @@ class Zolago_Modago_Block_Catalog_Category extends Mage_Core_Block_Template
      */
     public function getMainCategories()
     {
-        return array(
-            array(
-                'name' => 'Ona',
-                'url' => '/',
-                'category_id' => 1,
-                'has_dropdown' => (bool) $this->getLayout()->createBlock('cms/block')->setBlockId('navigation-dropdown-c-1')->toHtml()
-            ),
-            array(
-                'name' => 'On',
-                'url' => '/',
-                'category_id' => 2,
-                'has_dropdown' => (bool) $this->getLayout()->createBlock('cms/block')->setBlockId('navigation-dropdown-c-2')->toHtml()
-            ),
-            array(
-                'name' => 'Dziecko',
-                'url' => '/dziecko',
-                'category_id' => 3,
-                'has_dropdown' => (bool) $this->getLayout()->createBlock('cms/block')->setBlockId('navigation-dropdown-c-3')->toHtml()
-            ),
-        );
+        $rootCatId = Mage::app()->getStore()->getRootCategoryId();
+        $categories = Mage::getModel('catalog/category')->getCategories($rootCatId);
+
+//        return array(
+//            array(
+//                'name' => 'Ona',
+//                'url' => '/',
+//                'category_id' => 1,
+//                'has_dropdown' => (bool) $this->getLayout()->createBlock('cms/block')->setBlockId('navigation-dropdown-c-1')->toHtml()
+//            ),
+//            array(
+//                'name' => 'On',
+//                'url' => '/',
+//                'category_id' => 2,
+//                'has_dropdown' => (bool) $this->getLayout()->createBlock('cms/block')->setBlockId('navigation-dropdown-c-2')->toHtml()
+//            ),
+//            array(
+//                'name' => 'Dziecko',
+//                'url' => '/dziecko',
+//                'category_id' => 3,
+//                'has_dropdown' => (bool) $this->getLayout()->createBlock('cms/block')->setBlockId('navigation-dropdown-c-3')->toHtml()
+//            ),
+//        );
+        return self::getCategoriesTree($categories,1,3);
     }
 
     /**
@@ -85,7 +89,35 @@ class Zolago_Modago_Block_Catalog_Category extends Mage_Core_Block_Template
             ),
         );
     }
+    static function  getCategoriesTree($categories, $level = 1, $span = false)
+    {
+        $tree = array();
 
+        foreach ($categories as $category) {
+            $cat = Mage::getModel('catalog/category')->load($category->getId());
+
+            $tree[$category->getId()] = array(
+                'name'           => $category->getName(),
+                'url'            => Mage::getUrl($cat->getUrlPath()),
+                'category_id'    => $category->getId(),
+                'level'          => $level,
+                'products_count' => $cat->getProductCount()
+            );
+            if($level == 1){
+                $tree[$category->getId()]['image'] = $cat->getImage();
+            }
+            if ($span && $level >= $span) {
+                continue;
+            }
+            if ($category->hasChildren()) {
+                $children = Mage::getModel('catalog/category')->getCategories($category->getId());
+                $tree[$category->getId()]['has_dropdown'] = self::getCategoriesTree($children, $level + 1, $span);
+            }
+
+        }
+
+        return $tree;
+    }
     /**
      * Returns categories for sliding menu(hamburger menu)
      *
