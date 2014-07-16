@@ -55,7 +55,7 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
 			
         }
 		
-		return $array;
+		return (sizeof($array) > 0) ? $array : 0;
 	}
 	
 	public function _getFavorites(){
