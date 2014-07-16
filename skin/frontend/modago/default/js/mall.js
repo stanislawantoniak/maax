@@ -110,6 +110,7 @@ var Mall = {
                 if(data.status == false) {
                     return;
                 }
+                Mall.setUserBlockData(data.content);
                 if(data.content.cart.all_products_count == null) {
                     data.content.cart.all_products_count = 0;
                 }
@@ -123,56 +124,6 @@ var Mall = {
                 // build product list
                 var products = data.content.cart.products;
                 // build object for filling products template
-                var products2 = [
-                    {
-                        name: "Henderson Bokserki Burito",
-                        qty: 60,
-                        unit_price: 105.37,
-                        image_url: "http://modago.cindy.orba.pl/listingrev2/skin/frontend/modago/default/images/product/thumb/img-thumb-product.png",
-                        options: [
-                            {
-                                label: "Rozmiar",
-                                value: "XXL"
-                            },
-                            {
-                                label: "Rozmiar2",
-                                value: "XXLLLL"
-                            }
-                        ]
-                    },
-                    {
-                        name: "Henderson Bokserki Burito 2",
-                        qty: 60,
-                        unit_price: 105.37,
-                        image_url: "http://modago.cindy.orba.pl/listingrev2/skin/frontend/modago/default/images/product/thumb/img-thumb-product.png",
-                        options: [
-                            {
-                                label: "Rozmiar",
-                                value: "XXL"
-                            },
-                            {
-                                label: "Rozmiar2",
-                                value: "XXLLLL"
-                            }
-                        ]
-                    },
-                    {
-                        name: "Henderson Bokserki Burito 2",
-                        qty: 60,
-                        unit_price: 105.37,
-                        image_url: "http://modago.cindy.orba.pl/listingrev2/skin/frontend/modago/default/images/product/thumb/img-thumb-product.png",
-                        options: [
-                            {
-                                label: "Rozmiar",
-                                value: "XXL"
-                            },
-                            {
-                                label: "Rozmiar2",
-                                value: "XXLLLL"
-                            }
-                        ]
-                    }
-                ]
                 Mall._data = data.content;
                 jQuery.each(products, function(key) {
                     if(typeof products[key].options[0] != "undefined") {
@@ -221,25 +172,13 @@ var Mall = {
         }
     },
 
-    getEmptyProductForCart : function() {
-        return [
-            {
-                name: "",
-                qty: 0,
-                unit_price: 105.37,
-                image_url: "http://modago.cindy.orba.pl/listingrev2/skin/frontend/modago/default/images/product/thumb/img-thumb-product.png",
-                options: [
-                    {
-                        label: "Rozmiar",
-                        value: "XXL"
-                    },
-                    {
-                        label: "Rozmiar2",
-                        value: "XXLLLL"
-                    }
-                ]
-            }
-        ];
+    setUserBlockData : function(content) {
+        var userBlock = jQuery("#header_top_block_right");
+        // set customer account url
+        jQuery("#link_your_account>a").attr("href", content.user_account_url);
+        // set basket url
+        jQuery("#link_basket>a").attr("href", content.cart.show_cart_url);
+        userBlock.show();
     }
 
 }
