@@ -22,6 +22,11 @@
 					<?php endif;?>
 				<?php endforeach;?>
 			</tr>
+
+<!--            HIDE IT FOR TESTING-->
+<!--            NEEDS UPDATE-->
+            <?php if(false): ?>
+
 			<tr class="filter" style="display:none;" id="<?php echo $this->buildFieldId("fields");?>">
 				<?php $i=0;?>
 				<?php foreach ($this->getGrid()->getColumns() as $_column): ?>
@@ -56,6 +61,8 @@
 
 				</td>
 			<tr>
+
+            <?php endif; ?>
 		</tfoot>
 	</table>
 	<?php endif;?>
