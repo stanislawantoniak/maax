@@ -9,7 +9,7 @@ $categories = $this->getMainCategoriesForSlidingMenu();
 <?php if(count($categories) > 0) : ?>
     <li>
         <a href="#" class="sb-toggle-submenu">
-            Kategorie: <span class="sb-caret"></span>
+            <?php echo $this->__('Kategorie'); ?>: <span class="sb-caret"></span>
         </a>
         <ul class="sb-submenu">
             <?php foreach ($categories as $cat) : ?>
