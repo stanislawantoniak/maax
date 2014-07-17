@@ -2274,15 +2274,11 @@ var rwd_banners = $("#rwd-banners .rwd-carousel");
           $("#rwd-recently-viewed .prev").click(function(){
               rwd_recently_viewed.trigger('rwd.prev');
           });
-
-
-
-      };
+      }
 
 
 function customDataSuccess(data){
     var content = "";
-//    data.content = [];
     if(data.content.length == 0) {
         $("#bottom-rv.recently-viewed-cls").hide();
     }
