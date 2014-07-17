@@ -2,8 +2,11 @@ var prevW = -1, prevH = -1;
 jQuery.noConflict();
 (function( $ ) {
   $(function() {
+
+  
       $(document).ajaxComplete(function(event, xhr, settings) {
         dropDownSelectListAjax();
+
          var scroll = $('body').find('.mCustomScrollbar');
           if (scroll.length >= 1) {
           scroll.mCustomScrollbar({
@@ -43,6 +46,163 @@ jQuery.noConflict();
                
           };
       });
+
+
+/* ===================== MASK INPUT ================== */
+
+$(".zipcode").mask("99-999",{placeholder:" "});
+$(".nip").mask("999-999-99-99",{placeholder:" "});
+
+/* ===================== invoice data ================== */
+
+$('#invoice_vat').on('click', function(){
+
+    var firm_name = $('#firm_name').val(),
+        street = $('#street').val(),
+        zip_code = $('#zip_code').val(),
+        city = $('#city').val();
+
+        //console.log (firm_name +' |'+ street +' |'+ zip_code +' |'+ city)
+
+    var invoice_data_firm_name = '',
+        invoice_data_street = '',
+        invoice_data_zip_code = '',
+        invoice_data_city = '';
+
+        if(this.checked) {
+          $('#invoice_data').css({display:'block'});
+          $('#invoice_data_firm_name').val(firm_name)
+          $('#invoice_data_street').val(street)
+          $('#invoice_data_zip_code').val(zip_code)
+          $('#invoice_data_city').val(city)
+        } else {
+          $('#invoice_data').css({display:'none'});
+        }
+});
+
+/* ===================== checkout ===================== */
+var invoice = $('#invoice input[type=checkbox]');
+var block_invoice = $('#block_invoice');
+if ($('#invoice_this').is(':checked')) {
+  block_invoice.show(50);
+};
+
+var change_address = $('.change_address');
+change_address.on('click', function(e){
+  e.preventDefault();
+  $(this).closest('.panel').find('.panel-body').find('.panel').each(function(key, value){
+      $(this).toggle(50);
+  });
+  var txt = $(this).is('.open') ? 'zmień adres' : ' zwiń listę adresów';
+  $(this).text(txt).toggleClass('open');
+});
+
+
+
+var devault_pay_bank = $('.default_pay input[name=pay_method]');
+/*devault_pay_bank.each(function(index){
+  console.log(index);
+  if (devault_pay_bank.prop('checked', true)) {
+    $(this).closest('.panel').addClass('selected');
+  };
+});*/
+
+$('body').find('.default_pay input[name=pay_method]:checked').closest('.panel').addClass('selected');
+
+
+$(devault_pay_bank).on('change', function(){
+  $(devault_pay_bank).closest('.panel').removeClass('selected');
+  $(this).closest('.panel').addClass('selected');
+  $('.selected_bank').hide();
+  $(this).closest('.form-group').next('.selected_bank').show();
+});
+$('#invoice').on('change', 'input', function(){
+  block_invoice.toggle();
+});
+
+var view_default_pay = $('#view_default_pay');
+var view_block_default_pay = $('.default_pay > .panel > .panel-body > .panel');
+var form_group_default_pay = $('.form-group.default_pay');
+view_default_pay.on('click', function(e){
+  e.preventDefault();
+  view_block_default_pay.toggle();
+  form_group_default_pay.closest('.row').css({marginBottom:'15px'})
+  $(this).closest('.panel-footer').hide();
+});
+
+var stara_cena = jQuery('.table-summary-product .cena .stara_cena');
+var stara_cena_szer = stara_cena.innerWidth();
+
+stara_cena.css({
+  marginLeft:-stara_cena_szer+20
+});
+
+
+// panels
+
+
+var hide_panel = $('.node-type-summary-delivery-payment header h2');
+hide_panel.on('click',function(){
+  $(this).closest('header').toggleClass('hide_panel_group');
+  $(this).closest('header').next('.panel-group').toggle(50);
+  $(this).find('i').toggleClass('bullet-strzalka-up bullet-strzalka-down')
+});
+$('#zwin_produkty').on('click',function(){
+  $(this).closest('.panel-group').hide(50);
+  hide_panel.find('i').removeClass('bullet-strzalka-up').addClass('bullet-strzalka-down');
+});
+
+$('#podsumowanie_popup').modal('show');
+
+
+var _modal = $('[data-toggle="modal"]');
+    _modal.each(function(){
+     
+     var  _modalTarget = $(this).data('target');
+ 
+
+    $(_modalTarget).on('show.bs.modal', function (e) {
+      $('#sb-site').append('<div class="modal-backdrop fade in"></div>');
+
+    });
+    $(_modalTarget).on('shown.bs.modal', function (e) {
+       $('html').find('body > .modal-backdrop').remove();       
+    });
+    $(_modalTarget).on('hidden.bs.modal', function (e) {
+       $('html').find('.modal-backdrop').remove();
+       
+    });
+
+});
+
+
+
+$('.popover-dismiss').popover({
+  trigger:'hover'
+});
+
+$('.open-details-order-info').on('click',function(e){
+  e.preventDefault();
+  $(this).toggleClass('current');
+   var txt = $(this).closest('.col-md-6').next('.block-addres').is(':visible') ? 'rozwiń szczegóły' : 'zwiń szczegóły';
+   $(this).text(txt);
+  
+  $(this).closest('.col-md-6').next('.block-addres').toggle(50);
+  $(this).closest('.block_info_order').next('.table-summary-product').toggle(50);
+});
+
+$(window).resize(function(){
+  var widthWindow = $(window).innerWidth();
+  if(widthWindow >=768) {
+   hide_panel.find('i').removeClass('bullet-strzalka-down').addClass('bullet-strzalka-up');
+   hide_panel.closest('.panel-group').next('.panel-group').show(50);
+   $('.open-details-order-info').closest('.block_info_order').next('.table-summary-product').show(50);
+   $('.title-section').next('.panel-group').show(50);
+   $('.hide_panel_group').next('.panel-group').show(50);
+  }
+});
+
+/* ================= end:// checkout ================= */
 
 ////// Wyrównanie kolumn
   var widthWindow = $(window).innerWidth();
@@ -213,7 +373,7 @@ function galeriaProduktu(){
     itemsScaleUp:true,
     transitionStyle : "fade",
     afterInit:function() {
-      imagesLoaded( document.querySelector('#galeria-lightbox #sync1 .rwd-item'), function( instance ) {
+      imagesLoaded( document.querySelector('#galeria-lightbox #sync1 .rwd-item .item'), function( instance ) {
         $('#galeria-lightbox #sync1 .rwd-item').each(function(index, el) {
           
           var img = $(this).find('img');
@@ -235,7 +395,7 @@ function galeriaProduktu(){
               width: 'auto'
             });
             // ustawienie szerokości contenera dla przeskalowanego zdjęcia
-            var innerItem = a.width();
+            var innerItem = a.innerWidth();
             var innerItemHeight = a.height();
             a.closest('.inner-item').css('width', innerItem );
             // Ukrycie button zoom
@@ -743,22 +903,22 @@ $('#product-gallery .stage a').on('click', '.selector', function(event) {
         
 
     }
-//    $('input[type=text],input[type=email],input[type=password],textarea ').tooltip({
-//        placement: function(a, element) {
-//               var position = $(element).parent().position();
-//               var viewport = $(window).innerWidth();
-//
-//                if (viewport > 768) {
-//                    return "right";
-//                }
-//                if (viewport <= 767) {
-//                    return "top";
-//                }
-//                return "right";
-//            },
-//        trigger: "focus"
-//        //container: 'body'
-//    });
+    $('input[type=text],input[type=email],input[type=password],textarea ').tooltip({
+        placement: function(a, element) {
+               var position = $(element).parent().position();
+               var viewport = $(window).innerWidth();
+
+                if (viewport > 768) {
+                    return "right";
+                }
+                if (viewport <= 767) {
+                    return "top";
+                }
+                return "right";
+            },
+        trigger: "focus"
+        //container: 'body'
+    });
     $('input[type=text],input[type=email],input[type=password],textarea ').focus(function(){
       $('.tooltip.top').css({
         right:0+'px',
@@ -963,6 +1123,7 @@ if($(window).width() != prevW) {
           init();
           initScrollBarFilterMarka();
           visibleBtnClearFilterSize();
+          
        });
         
      } else {
@@ -972,6 +1133,7 @@ if($(window).width() != prevW) {
           init();
           initScrollBarFilterMarka();
           visibleBtnClearFilterSize();
+          
         });
         
      }
@@ -998,6 +1160,7 @@ if($(window).width() != prevW) {
                 initScrollBarFilterMarka();
                 clearFilterManufacturerCheked();
                 visibleBtnClearFilterSize();
+                
               });
             };
             if ($('body').hasClass('noscroll')) {
@@ -1019,6 +1182,7 @@ if($(window).width() != prevW) {
                 initScrollBarFilterMarka();
                 clearFilterManufacturerCheked();
                 visibleBtnClearFilterSize();
+                
                 $( "#slider-range" ).slider({
                    range: true,
                    min: 0,
@@ -1147,7 +1311,10 @@ $(document).on('mouseup touchstart', function (e){
 
 $('.actionViewFilter').on('click', function(event){
         event.preventDefault();
+        var colorFilter = $(this).data('color');
+         var srcImg = $(this).data('img');
         $(".fb-slidebar-inner").load("_include/sidebar.inc", function(){
+          
                   init();
                   initScrollBarFilterMarka();
                   clearFilterManufacturerCheked();
@@ -1177,9 +1344,9 @@ $('.actionViewFilter').on('click', function(event){
                       var screenWidth = $(window).width();
                       var screenHeight = $(window).height();
                       $('body').addClass('noscroll').append('<div class="noscroll" style="width:100%; height:'+screenHeight+'px"></div>');
+                
                 });
-
-        
+       
             //$("#sidebar").slideToggle();    
    });
 
@@ -1354,6 +1521,7 @@ function init(){
   actionViewFilter();             // OTWARCIE BLOKU Z FILTRAMIE - MOBILE
   filterList();                   // FILTROWANIE LISTY PO WPISANIU WYRAZU/LITERY
   filterColor();                  // OBSŁUGA FILTRA KOLOR
+  filterColorChecked();
   clearFilter();                  // CZYSZCZENIE FILTRÓW
   recentlyViewed();               // POKAZ SLAJDÓW 
   responsJcarousel();             // POKAZ SLAJDÓW   
@@ -1845,15 +2013,50 @@ function clearFilterManufacturerCheked() {
 // OBSŁUGA FILTRA KOLOR
 
 function filterColor() {
-  $('#filter_color').find('label').each(function(index, el) {
+  console.log('test')
+  $('#filter_color label').each(function(index, el) {
     var colorFilter = $(this).data('color');
+    var srcImg = $(this).data('img');
+    //if ($(this).attr("data-color")) {
     $(this).find('span').children('span').css({
       'background-color': colorFilter
     });
+  //};
+    if ($(this).attr("data-img")) {
+      $(this).find('span').children('span').css({
+        'background-image': 'url('+srcImg+')'
+      });
+    };
+
+
+
+
+
+
+  var filterColor = $('#filter_color');
+  filterColor.on('click', ':checkbox', function(event) {
+    $('#filter_color .clear').removeClass('hidden');
+
+      var filterColorLenght = $('#filter_color input:checked').length;
+        if (filterColorLenght >= 1) {
+          $('#filter_color .action').removeClass('hidden');
+        } else {
+          $('#filter_color .action').addClass('hidden');
+          };
+  });
+   filterColor.on('click', '.clear', function(event) {
+    $(this).closest('.action').addClass('hidden');
+  });
 
   });
 
-  var filterColor = $('#filter_color');
+  
+
+
+}
+
+function filterColorChecked() {
+  /*var filterColor = $('#filter_color');
   filterColor.on('click', ':checkbox', function(event) {
     filterColor.find('.clear').removeClass('hidden');
 
@@ -1866,9 +2069,7 @@ function filterColor() {
   });
    filterColor.on('click', '.clear', function(event) {
     $(this).closest('.action').addClass('hidden');
-  });
-
-
+  });*/
 }
 // CZYSZCZENIE FILTRÓW
 function clearFilter(){
@@ -1998,7 +2199,7 @@ var rwd_banners = $("#rwd-banners .rwd-carousel");
           pagination : false,
           navigation: true,
            rewindNav : false,
-           itemsScaleUp:true,
+           itemsScaleUp:false,
            afterUpdate: function(){
               var imgHeight = rwd_recently_viewed.find('img').height()/2;
               var imgHeightplus = rwd_recently_viewed.find('img').height()/2-10;
@@ -2437,3 +2638,9 @@ $(function() {
   jQuery.fn[sr] = function(fn){  return fn ? this.bind('resize', debounce(fn)) : this.trigger(sr); };
 
 })(jQuery,'smartresize');
+
+
+jQuery(window).load(function() {
+
+
+});

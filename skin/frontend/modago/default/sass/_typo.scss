@@ -22,6 +22,10 @@ body {
    color: #000 !important;  
 }
 
+dl, ul, ol, {
+	margin-bottom: 15px;
+}
+
 .ff_os {
 	 font-family: 'OpenSansRegular'!important;
 }
@@ -40,6 +44,7 @@ body {
 	}
 	
 }
+
 .reset-padding-left {
 	@media(max-width:767px) {
 		padding-left:5px!important;
@@ -47,6 +52,31 @@ body {
 	
 }
 
+.col-xs-6.form-group.reset-padding-right {
+	@media(min-width: $screen-lg-min) {
+	padding-right:0px!important;
+	}
+}
+.col-xs-6.form-group.reset-padding-left {
+	@media(min-width: $screen-lg-min) {
+	padding-left:0px!important;
+	}
+	input[type='text'] {
+		@media(min-width: $screen-lg-min) {
+		float:right;
+		}
+	}
+}
+
+.uppercase {
+	text-transform: uppercase!important;
+}
+.border-all-primary {
+	@include bc-primary;
+}
+.border-all-secondary {
+	@include bc-secondary;
+}
 a:link,
 a:visited {
 	color:black;
@@ -278,6 +308,9 @@ article {
 			left: 0px;
 			top: 0px;
 			}
+			@media (max-width: 360px) {
+				height:auto;
+			}
 		}
 	}
 }
@@ -413,12 +446,25 @@ form {
 			box-shadow: inset 2px 2px 7px rgba(1,1,1,.1);
 			color:#1e1e1e;
 			font-size:12px;
-			padding: 13px 0 13px 15px;
+			padding: 13px 15px 13px 15px;
 			width:100%;
 			font-family: $fontRegular;
 			height:42px;
 			outline:none!important;
 		}
+		
+		.firstName 	{max-width: 296px;}
+		.lastName 	{max-width: 296px;}
+		.firm 		{max-width: 415px;}
+		.city 		{max-width: 314px;}
+		.street 	{max-width: 415px;}
+		.zipcode 	{max-width: 72px;}
+		.phone 		{max-width: 115px;}
+		.email 		{max-width: 296px;}
+		.password 	{max-width: 235px;}
+		.nip 		{max-width: 115px}
+		
+		
 
 		input:disabled {
 			border-color:#d9d9d9;
@@ -444,7 +490,9 @@ form {
 			}
 
 			input[type=checkbox].css-checkbox + label.css-label,
-			input[type=radio].css-radio + label.css-label {
+			input[type=checkbox].css-checkbox:active + label.css-label,
+			input[type=radio].css-radio + label.css-label,
+			 {
 				padding-left:23px;
 				height:17px; 
 				display:inline-block;
@@ -455,6 +503,7 @@ form {
 				vertical-align:middle;
 				cursor:pointer;
 				font-weight:normal;
+				touch-action: none;
 
 			}
 			label.css-label {
@@ -473,6 +522,7 @@ form {
 				background-image:url('../images/radio.png');
 			}
 			input[type=checkbox].css-checkbox + label.css-label:hover,
+
 			input[type=radio].css-radio + label.css-label:hover {
 				background-position: 0 -28px;
 				color:#1e1e1e;
@@ -1654,6 +1704,7 @@ figure {
 				padding: 6px 8px;
 				color:#000;
 				border-radius: 0px;
+				max-width: 400px;
 			}
 			.tooltip-arrow {
 				//border-top-color: #f0f0f0;
