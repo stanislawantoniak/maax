@@ -1,0 +1,21 @@
+#checkout {
+	.panel {
+		&.panel-custom {
+			background: #fff;
+			border-radius: 0px;
+			border-color: $bc-primary;
+			.panel-heading {
+				padding-top: 15px;
+				padding-bottom: 15px;
+				border-bottom: 1px solid $bc-primary;
+				text-transform: none;
+				strong {
+					text-transform: uppercase;
+				}
+			}
+			.panel-footer {
+				border-top: 1px solid $bc-primary;
+			}
+		}
+	}
+}
