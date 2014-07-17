@@ -1569,7 +1569,7 @@ function showSubMenuMobile(){
   var mobileMenu = $('#nav_mobile');
 
   mobileMenu.on('click', 'a', function(event) {
-    event.preventDefault();
+    //event.preventDefault();
     //$(this).closest(mobileMenu).find('.open').removeClass('open');
     var ico = $(this).find('i');
     if (ico.hasClass('fa-chevron-down') || ico.hasClass('fa-chevron-up')) {

@@ -10,11 +10,13 @@ $categoryCollection = $this->getCategoryCollection();
 
 <nav id="navCategory" class="visible-xs">
     <h3><?php echo $this->getCategoryLabel(); ?></h3>
-    <a href="<?php echo $this->getMoveUpUrl(); ?>" class="backToCategory">przejdź wyżej <i class="fa fa-angle-up"></i></a>
+    <a href="<?php echo $this->getMoveUpUrl(); ?>" class="backToCategory">
+        przejdź wyżej <i class="fa fa-angle-up"></i>
+    </a>
     <?php if(count($categoryCollection)) : ?>
     <ul id="nav_category_mobile" class="navigation" role="navigation">
         <?php foreach ($categoryCollection as $cat) : ?>
-        <li><a href="<?php echo $cat['url']; ?>>"><?php echo $cat['label']; ?></a></li>
+        <li><a href="/<?php echo $cat['url']; ?>"><?php echo $cat['label']; ?></a></li>
         <?php endforeach; ?>
     </ul>
     <?php endif; ?>
