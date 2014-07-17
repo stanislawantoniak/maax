@@ -5,6 +5,7 @@
 var Mall = {
     _data: {},
     _product_template: '<tr><td class="thumb"><img src="{{image_url}}" alt=""></td><td class="desc"><p class="name_product">{{name}}</p><p class="size">{{attr_label}}:<span>{{attr_value}}</span></p><p class="quantity">ilość:<span>{{qty}}</span></p></td><td class="price">{{unit_price}} {{currency_symbol}}</td></tr>',
+    _recently_viewed_item_template: '<div class="item"><a href="{{redirect_url}}" class="simple"><div class="box_listing_product"><figure class="img_product"><img src="{{image_url}}" alt="" /></figure><div class="name_product hidden-xs">{{title}}</div></div></a></div>',
     extend: function(subclass, superclass) {
         function Dummy(){}
         Dummy.prototype = superclass.prototype;
@@ -105,7 +106,6 @@ var Mall = {
                 // do nothing at the moment
             },
             success: function(data, status) {
-//                return;
                 // determine status
                 if(data.status == false) {
                     return;
@@ -136,6 +136,8 @@ var Mall = {
             },
             url: "/orbacommon/ajax_customer/get_account_information"
         });
+        // fetch recently viewed
+        this.fetchRecentlyViewed();
     },
 
     setProductsCountBadge : function(count) {
@@ -179,6 +181,33 @@ var Mall = {
         // set basket url
         jQuery("#link_basket>a").attr("href", content.cart.show_cart_url);
         userBlock.show();
+    },
+
+    fetchRecentlyViewed: function() {
+        jQuery.ajax({
+            cache: false,
+            dataType: "json",
+            data: {},
+            error: function(jqXhr, status, error) {
+                // do nothing at the moment
+            },
+            success: function(data, status) {
+                // determine status
+                if(data.status == false) {
+                    return;
+                }
+                if(data.content.length == 0) {
+                    return;
+                }
+                var products = data.content;
+                jQuery.each(products, function(key) {
+                    jQuery("#rwd-recently-viewed>div").append(Mall.replace(Mall._recently_viewed_item_template, products[key]));
+                });
+                jQuery("#bottom.recently-viewed-cls").show();
+
+            },
+            url: "/orbacommon/ajax_product/get_recently_viewed"
+        });
     }
 
 }
