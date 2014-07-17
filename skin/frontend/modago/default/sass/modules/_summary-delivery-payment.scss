@@ -239,4 +239,16 @@
 		}
 	}
 }
-//#f8f8f7
+
+
+#order-show-products {
+	.panel_action {
+		margin-bottom: 0px;
+	}
+}
+
+.text-potwierdzenie {
+	@media (min-width: $screen-md-min) and (max-width: $screen-md-max) {
+		
+	}
+}
