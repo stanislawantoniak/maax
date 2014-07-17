@@ -14,6 +14,12 @@
                     <h3><?php echo $this->__("popular brands"); ?></h3>
                     <?php
                         $k = 0;
+
+                        //TODO: Loop added only to test layout
+                        for($i=0; $i < 20; $i++){
+                            $vendors->addItem($vendors->getFirstItem()->setId(NULL));
+                        }
+
                         foreach ($vendors as $v) :
                     ?>
                     <?php if($k %3 == 0) : ?>
