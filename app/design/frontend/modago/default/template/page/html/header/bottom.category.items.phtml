@@ -11,7 +11,7 @@ $mainCategories = $this->getMainCategories();
 <?php if (count($mainCategories) > 0) : ?>
     <?php foreach ($mainCategories as $catFirstLevel) : ?>
         <li class="">
-            <a href="<?php echo $cat['has_dropdown'] ? '' : $catFirstLevel['url']; ?>"
+            <a href="<?php echo $catFirstLevel['has_dropdown'] ? '' : $catFirstLevel['url']; ?>"
                class="<?php echo $catFirstLevel['has_dropdown'] ? 'children' : '' ?>">
                 <?php echo $this->escapeHtml($catFirstLevel['name']); ?> <?php echo $catFirstLevel['has_dropdown']
                     ? '<i class="fa fa-caret-down"></i>' : ''; ?></a>
@@ -29,7 +29,7 @@ $mainCategories = $this->getMainCategories();
                                                         <?php echo $catSecondLevel['name']; ?>
                                                     </a>
                                                 </dt>
-                                                <?php if ($catSecondLevel['has_dropdown']): ?>
+                                                <?php if (isset($catSecondLevel['has_dropdown'])): ?>
                                                     <?php foreach ($catSecondLevel['has_dropdown'] as $catThirdLevel): ?>
                                                         <dd><a rel="category" data-description="<?php echo $catThirdLevel['name']; ?>" href="<?php echo $catThirdLevel['url']; ?>"><?php echo $catThirdLevel['name']; ?></a></dd>
                                                     <?php endforeach; ?>
