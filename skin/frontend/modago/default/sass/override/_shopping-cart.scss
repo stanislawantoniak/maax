@@ -12,8 +12,9 @@
 				position:relative;
 				font-size: 18px;
 				color:#000;
+				margin-bottom: 13px;
 				@media (max-width: $screen-xs-max) {
-					padding:14.86px 0 20px 29.41px;
+					padding:14.86px 0 0px 29.41px;
 				}
 				&:before {
 					content: ' ';

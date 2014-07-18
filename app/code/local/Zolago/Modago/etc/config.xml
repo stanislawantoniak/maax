@@ -27,6 +27,11 @@
                 </rewrite>
             </page>
         </blocks>
+        <helpers>
+            <zolagomodago>
+                <class>Zolago_Modago_Helper</class>
+            </zolagomodago>
+        </helpers>
         <resources>
             <zolagomodago_setup>
                 <setup>

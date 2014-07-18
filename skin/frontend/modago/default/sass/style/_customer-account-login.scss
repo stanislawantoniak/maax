@@ -113,13 +113,15 @@
 			label {
 				line-height: 17px;
 				&.remember_this {
-					.badge {
-						border-radius: 0;
-						background: #5e5e5e;
-						font-weight: normal;
-						margin-left:4px;
-					}
+					
 				}
+			}
+			.badge {
+				border-radius: 0;
+				background: #5e5e5e;
+				font-weight: normal;
+				margin-left:4px;
+				cursor:pointer;
 			}
 		}	
 		.col-sm-offset-3 {
@@ -198,13 +200,13 @@
 			}
 			.button-primary {
 				position:relative;
-				top:-114px;
-				margin-bottom: -114px!important;
+				top:-78px;
+				margin-bottom: -78px!important;
 				margin-right: 0px!important;
 				min-width: 150px;
 				@media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
-					top:-83px;
-					margin-bottom: -83px!important;
+					top:-78px;
+					margin-bottom: -78px!important;
 				}
 				@media (max-width: $screen-xs-max) {
 					top:-78px;
@@ -240,7 +242,7 @@
 					//position:static;
 				}
 				.button-primary {
-					top:-112px;
+					top:-80px;
 					@media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
 						top:-80px;
 					}
