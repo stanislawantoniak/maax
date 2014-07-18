@@ -29,7 +29,7 @@ $mainCategories = $this->getMainCategories();
                                                         <?php echo $catSecondLevel['name']; ?>
                                                     </a>
                                                 </dt>
-                                                <?php if ($catSecondLevel['has_dropdown']): ?>
+                                                <?php if (isset($catSecondLevel['has_dropdown'])): ?>
                                                     <?php foreach ($catSecondLevel['has_dropdown'] as $catThirdLevel): ?>
                                                         <dd><a rel="category" data-description="<?php echo $catThirdLevel['name']; ?>" href="<?php echo $catThirdLevel['url']; ?>"><?php echo $catThirdLevel['name']; ?></a></dd>
                                                     <?php endforeach; ?>
