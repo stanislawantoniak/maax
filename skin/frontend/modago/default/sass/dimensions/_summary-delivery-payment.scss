@@ -8,7 +8,7 @@
     	 padding-bottom: 0px;
 	}
 	#content-main {
-		@media (max-width: $screen-xs-max) {
+		@media (max-width: $screen-sm-max) {
 		margin-bottom: 15px;
 		}
 	}
@@ -51,12 +51,15 @@
 		text-align: right;
 	}
 	img {
-		margin-top: 39px;
 		width:100%;
 		max-width: 150px;
 		height:auto;
-		@media(max-width:767px) {
-			margin-top:18px;
+		position:absolute;
+		top:15px;
+		right:0px;
+		border:1px solid #1a1a1a;
+		@media(min-width:$screen-lg-min) {
+			top:37px;
 		}
 	}
 }
