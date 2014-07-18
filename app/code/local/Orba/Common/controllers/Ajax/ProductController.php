@@ -20,7 +20,7 @@ class Orba_Common_Ajax_ProductController extends Orba_Common_Controller_Ajax {
 				$image = Mage::helper('catalog/image')->init($product, 'image')->resize(110, 143);
 				$content[] = array(
 					'title' => Mage::helper('catalog/output')->productAttribute($product, $product->getName() , 'name'),
-					'image_url' => 'http://modago.dev/media/catalog/product/cache/1/image/110x143/9df78eab33525d08d6e5fb8d27136e95/images/catalog/product/placeholder/image.jpg', // Mage::getModel('catalog/product_media_config')->getMediaUrl($image),
+					'image_url' => Mage::getModel('catalog/product_media_config')->getMediaUrl($image),
 					'redirect_url' => $product->getProductUrl()				
 				);
 				

@@ -136,8 +136,6 @@ var Mall = {
             },
             url: "/orbacommon/ajax_customer/get_account_information"
         });
-        // fetch recently viewed
-        this.fetchRecentlyViewed();
     },
 
     setProductsCountBadge : function(count) {
@@ -181,34 +179,9 @@ var Mall = {
         // set basket url
         jQuery("#link_basket>a").attr("href", content.cart.show_cart_url);
         userBlock.show();
-    },
-
-    fetchRecentlyViewed: function() {
-        jQuery.ajax({
-            cache: false,
-            dataType: "json",
-            data: {},
-            error: function(jqXhr, status, error) {
-                // do nothing at the moment
-            },
-            success: function(data, status) {
-                // determine status
-                if(data.status == false) {
-                    return;
-                }
-                if(data.content.length == 0) {
-                    return;
-                }
-                var products = data.content;
-                jQuery.each(products, function(key) {
-                    jQuery("#rwd-recently-viewed>div").append(Mall.replace(Mall._recently_viewed_item_template, products[key]));
-                });
-                jQuery("#bottom.recently-viewed-cls").show();
-
-            },
-            url: "/orbacommon/ajax_product/get_recently_viewed"
-        });
     }
+
+
 
 }
 
