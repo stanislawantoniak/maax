@@ -50,7 +50,7 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
 				'name' => $product->getName(),
 				'qty' => $item->getQty(),
 				'unit_price' => round($item->getPrice(), 2),
-				'image_url' => Mage::getModel('catalog/product_media_config')->getMediaUrl($image),
+				'image_url' => (string) $image,
 				'options' => $options
 			);
 			
