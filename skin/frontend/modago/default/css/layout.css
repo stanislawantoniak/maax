@@ -1443,7 +1443,7 @@ section.section h2.title_section i {
 .node-type-summary-delivery-payment #header-main {
   padding-top: 0px;
   padding-bottom: 0px; }
-@media (max-width: 767px) {
+@media (max-width: 991px) {
   /* line 10, ../sass/dimensions/_summary-delivery-payment.scss */
   .node-type-summary-delivery-payment #content-main {
     margin-bottom: 15px; } }
@@ -1484,20 +1484,23 @@ section.section h2.title_section i {
   text-align: right; }
 /* line 53, ../sass/dimensions/_summary-delivery-payment.scss */
 #summary-delivery-payment img {
-  margin-top: 39px;
   width: 100%;
   max-width: 150px;
-  height: auto; }
-@media (max-width: 767px) {
+  height: auto;
+  position: absolute;
+  top: 15px;
+  right: 0px;
+  border: 1px solid #1a1a1a; }
+@media (min-width: 1200px) {
   /* line 53, ../sass/dimensions/_summary-delivery-payment.scss */
   #summary-delivery-payment img {
-    margin-top: 18px; } }
+    top: 37px; } }
 
-/* line 65, ../sass/dimensions/_summary-delivery-payment.scss */
+/* line 68, ../sass/dimensions/_summary-delivery-payment.scss */
 .node-type-summary-delivery-payment .panel_action {
   margin-bottom: 15px; }
 
-/* line 70, ../sass/dimensions/_summary-delivery-payment.scss */
+/* line 73, ../sass/dimensions/_summary-delivery-payment.scss */
 .table-summary-product .table-heading {
   width: 50%;
   float: right;
@@ -1508,156 +1511,156 @@ section.section h2.title_section i {
   font-weight: bold;
   text-transform: uppercase; }
 @media (min-width: 992px) {
-  /* line 70, ../sass/dimensions/_summary-delivery-payment.scss */
+  /* line 73, ../sass/dimensions/_summary-delivery-payment.scss */
   .table-summary-product .table-heading {
     width: 40%; } }
-/* line 82, ../sass/dimensions/_summary-delivery-payment.scss */
+/* line 85, ../sass/dimensions/_summary-delivery-payment.scss */
 .table-summary-product .table-heading div {
   width: 33.333%;
   position: relative;
   display: inline-block;
   float: left;
   text-align: center; }
-/* line 89, ../sass/dimensions/_summary-delivery-payment.scss */
+/* line 92, ../sass/dimensions/_summary-delivery-payment.scss */
 .table-summary-product .table-heading div.hcena, .table-summary-product .table-heading div.hwartosc {
   text-align: right; }
-/* line 94, ../sass/dimensions/_summary-delivery-payment.scss */
+/* line 97, ../sass/dimensions/_summary-delivery-payment.scss */
 .table-summary-product .table-group {
   height: auto;
   overflow: hidden;
   clear: both;
   position: relative;
   margin-bottom: 15px; }
-/* line 100, ../sass/dimensions/_summary-delivery-payment.scss */
+/* line 103, ../sass/dimensions/_summary-delivery-payment.scss */
 .table-summary-product .table-group .zdjecie {
   margin-right: 15px;
   width: 41px; }
-/* line 103, ../sass/dimensions/_summary-delivery-payment.scss */
+/* line 106, ../sass/dimensions/_summary-delivery-payment.scss */
 .table-summary-product .table-group .zdjecie img {
   height: auto;
   width: 100%; }
-/* line 108, ../sass/dimensions/_summary-delivery-payment.scss */
+/* line 111, ../sass/dimensions/_summary-delivery-payment.scss */
 .table-summary-product .table-group .nazwa_rozmiar {
   min-height: 54px;
   position: relative; }
-/* line 112, ../sass/dimensions/_summary-delivery-payment.scss */
+/* line 115, ../sass/dimensions/_summary-delivery-payment.scss */
 .table-summary-product .table-group .tabcol-1 {
   float: none;
   width: auto;
   overflow: hidden;
   margin-right: 51%; }
 @media (min-width: 992px) {
-  /* line 112, ../sass/dimensions/_summary-delivery-payment.scss */
+  /* line 115, ../sass/dimensions/_summary-delivery-payment.scss */
   .table-summary-product .table-group .tabcol-1 {
     margin-right: 41%; } }
 @media (max-width: 360px) {
-  /* line 112, ../sass/dimensions/_summary-delivery-payment.scss */
+  /* line 115, ../sass/dimensions/_summary-delivery-payment.scss */
   .table-summary-product .table-group .tabcol-1 {
     margin-right: 38%; } }
-/* line 123, ../sass/dimensions/_summary-delivery-payment.scss */
+/* line 126, ../sass/dimensions/_summary-delivery-payment.scss */
 .table-summary-product .table-group .tabcol-1 .zdjecie {
   float: left; }
-/* line 126, ../sass/dimensions/_summary-delivery-payment.scss */
+/* line 129, ../sass/dimensions/_summary-delivery-payment.scss */
 .table-summary-product .table-group .tabcol-1 .nazwa_rozmiar {
   margin-left: 56px; }
-/* line 130, ../sass/dimensions/_summary-delivery-payment.scss */
+/* line 133, ../sass/dimensions/_summary-delivery-payment.scss */
 .table-summary-product .table-group .tabcol-2 {
   width: 50%;
   float: right; }
 @media (min-width: 992px) {
-  /* line 130, ../sass/dimensions/_summary-delivery-payment.scss */
+  /* line 133, ../sass/dimensions/_summary-delivery-payment.scss */
   .table-summary-product .table-group .tabcol-2 {
     width: 40%; } }
 @media (max-width: 360px) {
-  /* line 130, ../sass/dimensions/_summary-delivery-payment.scss */
+  /* line 133, ../sass/dimensions/_summary-delivery-payment.scss */
   .table-summary-product .table-group .tabcol-2 {
     width: 38%; } }
-/* line 141, ../sass/dimensions/_summary-delivery-payment.scss */
+/* line 144, ../sass/dimensions/_summary-delivery-payment.scss */
 .table-summary-product .table-group .tabcol-2 .cena, .table-summary-product .table-group .tabcol-2 .ilosc, .table-summary-product .table-group .tabcol-2 .wartosc {
   position: relative;
   display: inline-block; }
 @media (min-width: 768px) {
-  /* line 141, ../sass/dimensions/_summary-delivery-payment.scss */
+  /* line 144, ../sass/dimensions/_summary-delivery-payment.scss */
   .table-summary-product .table-group .tabcol-2 .cena, .table-summary-product .table-group .tabcol-2 .ilosc, .table-summary-product .table-group .tabcol-2 .wartosc {
     width: 33.333%;
     float: left; } }
 @media (min-width: 768px) {
-  /* line 151, ../sass/dimensions/_summary-delivery-payment.scss */
+  /* line 154, ../sass/dimensions/_summary-delivery-payment.scss */
   .table-summary-product .table-group .tabcol-2 .cena {
     left: -33.333%; } }
 @media (max-width: 767px) {
-  /* line 151, ../sass/dimensions/_summary-delivery-payment.scss */
+  /* line 154, ../sass/dimensions/_summary-delivery-payment.scss */
   .table-summary-product .table-group .tabcol-2 .cena {
     display: block;
     text-align: right;
     position: absolute;
     bottom: 0px;
     right: 0px; } }
-/* line 162, ../sass/dimensions/_summary-delivery-payment.scss */
+/* line 165, ../sass/dimensions/_summary-delivery-payment.scss */
 .table-summary-product .table-group .tabcol-2 .cena .stara_cena {
   text-decoration: line-through;
   margin-right: 5px; }
-/* line 169, ../sass/dimensions/_summary-delivery-payment.scss */
+/* line 172, ../sass/dimensions/_summary-delivery-payment.scss */
 .table-summary-product .table-group .tabcol-2 .cena span {
   display: inline-block; }
 @media (min-width: 768px) {
-  /* line 173, ../sass/dimensions/_summary-delivery-payment.scss */
+  /* line 176, ../sass/dimensions/_summary-delivery-payment.scss */
   .table-summary-product .table-group .tabcol-2 .ilosc {
     right: -33.333%; } }
 @media (max-width: 767px) {
-  /* line 173, ../sass/dimensions/_summary-delivery-payment.scss */
+  /* line 176, ../sass/dimensions/_summary-delivery-payment.scss */
   .table-summary-product .table-group .tabcol-2 .ilosc {
     display: block;
     text-align: right; } }
 @media (max-width: 767px) {
-  /* line 182, ../sass/dimensions/_summary-delivery-payment.scss */
+  /* line 185, ../sass/dimensions/_summary-delivery-payment.scss */
   .table-summary-product .table-group .tabcol-2 .ilosc .lb {
     display: inline-block !important; } }
-/* line 194, ../sass/dimensions/_summary-delivery-payment.scss */
+/* line 197, ../sass/dimensions/_summary-delivery-payment.scss */
 .table-summary-product #sumary_total_amount .lb + span {
   display: inline-block;
   width: 90px; }
 
-/* line 203, ../sass/dimensions/_summary-delivery-payment.scss */
+/* line 206, ../sass/dimensions/_summary-delivery-payment.scss */
 #podsumowanie_popup .modal-content {
   padding: 0px; }
-/* line 205, ../sass/dimensions/_summary-delivery-payment.scss */
+/* line 208, ../sass/dimensions/_summary-delivery-payment.scss */
 #podsumowanie_popup .modal-content .modal-header {
   padding: 0px;
   margin: 0px;
   height: 0px; }
-/* line 212, ../sass/dimensions/_summary-delivery-payment.scss */
+/* line 215, ../sass/dimensions/_summary-delivery-payment.scss */
 #podsumowanie_popup .modal-body {
   padding: 50px 35px;
   margin-top: -15px; }
-/* line 216, ../sass/dimensions/_summary-delivery-payment.scss */
+/* line 219, ../sass/dimensions/_summary-delivery-payment.scss */
 #podsumowanie_popup h2 {
   font-size: 14px;
   margin: 30px 0;
   padding: 0px;
   font-weight: bold; }
-/* line 221, ../sass/dimensions/_summary-delivery-payment.scss */
+/* line 224, ../sass/dimensions/_summary-delivery-payment.scss */
 #podsumowanie_popup h2:first-child {
   margin-top: 0px; }
-/* line 225, ../sass/dimensions/_summary-delivery-payment.scss */
+/* line 228, ../sass/dimensions/_summary-delivery-payment.scss */
 #podsumowanie_popup p {
   margin-bottom: 0px; }
 
-/* line 231, ../sass/dimensions/_summary-delivery-payment.scss */
+/* line 234, ../sass/dimensions/_summary-delivery-payment.scss */
 .panel-group .panel {
   margin-bottom: 15px; }
-/* line 233, ../sass/dimensions/_summary-delivery-payment.scss */
+/* line 236, ../sass/dimensions/_summary-delivery-payment.scss */
 .panel-group .panel:last-child {
   margin-bottom: 0px; }
-/* line 237, ../sass/dimensions/_summary-delivery-payment.scss */
+/* line 240, ../sass/dimensions/_summary-delivery-payment.scss */
 .panel-group .panel .panel-heading a.external {
   margin-right: 15px; }
 @media (max-width: 480px) {
-  /* line 237, ../sass/dimensions/_summary-delivery-payment.scss */
+  /* line 240, ../sass/dimensions/_summary-delivery-payment.scss */
   .panel-group .panel .panel-heading a.external {
     float: left !important; } }
 @media (max-width: 360px) {
-  /* line 244, ../sass/dimensions/_summary-delivery-payment.scss */
+  /* line 247, ../sass/dimensions/_summary-delivery-payment.scss */
   .panel-group .panel .panel-heading strong + span {
     display: block; } }
 

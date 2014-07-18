@@ -4,11 +4,11 @@ class Zolago_Modago_Helper_Data extends Mage_Core_Helper_Abstract
     /**
      * @param      $categories
      * @param int  $level
-     * @param bool $span
+     * @param int|bool $span
      *
      * @return array
      */
-    public function  getCategoriesTree($categories, $level = 1, $span = false)
+    public function  getCategoriesTree(Varien_Data_Tree_Node_Collection $categories, $level = 1, $span = false)
     {
         $tree = array();
         foreach ($categories as $category) {
