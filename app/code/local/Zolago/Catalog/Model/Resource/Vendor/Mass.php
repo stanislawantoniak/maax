@@ -466,7 +466,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Mass
 //			"option"
 //			)
 //		);
-		return $this->getReadConnection()->fetchAll($select);
+//		return $this->getReadConnection()->fetchAll($select);
 	}
 	
 	public function getOptionLabelbyId($labelId, $storeId = 0)
