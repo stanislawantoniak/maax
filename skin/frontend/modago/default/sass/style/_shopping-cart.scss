@@ -2,6 +2,7 @@
 
 .tableWrapper {
         display: block;
+        border-top: 1px solid $bc-secondary;
         &.group_01 {
 			width:397px;
 			float:left;
@@ -35,7 +36,7 @@
         .table-row {
             display: block;
             @media (max-width: $screen-xs-max) {
-            	margin-bottom: 15px;
+            	margin-bottom: 0px;
             }
              .table-cell {
                 display: inline-block;
@@ -400,18 +401,31 @@
 		}
 }
 
+.node-type-shopping-cart {
+	#sidebar-secondary {
+		@media (min-width: $screen-md-min) {
+			padding-left: 0px;
+		}
+	}
+}
 
 #sidebar-secondary {
 	aside {
 		margin-bottom: 12px;
 	}
+	.col-sidebar-cart-summary {
+		@media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
+			width:40%;
+			float:left;
+		}
+	}
 	#cart-summary {
-		padding:24px 20px;
+		padding:24px 15px;
 		@media (max-width: 360px) {
 			padding:24px 4px;
 		}
 		> header {
-			margin-bottom: 27px;
+			margin-bottom: 30px;
 			h2 {
 				font-size: 18px;
 				font-family: $fontRegular;
@@ -449,7 +463,12 @@
 					font-size: 16px;
 					font-family: $fontBlack;
 					text-align: right;
-					width:90px;
+					float: right;
+					margin-right: 0px;
+					@media (max-width: $screen-sm-max) {
+										float: right;
+										margin-right: 0px;
+									}
 				}
 			}
 		}
@@ -534,7 +553,7 @@
 			.val_value_sum_price {
 				@include inline-block;
 				font-size: 18px;
-				width: 167px;
+				//width: 167px;
 			}
 			.value_sum_price {
 				@include inline-block;
@@ -542,26 +561,22 @@
 				font-family: $fontBlack;
 				text-transform: none;
 				float:right;
-				margin-right: 17px;
+				float: right;
+				margin-right: 0px;
+				@media (max-width: $screen-sm-max) {
+					float: right;
+					margin-right: 0px;
+				}
+				
 			}
 		}
 		.form-action {
 			text-align: center;
 		}
-		.btn-buy {
-			@include inline-block;
-			background:$formMap repeat-x;
-		    @include sprite($formMap, btn-buy);	
-			height: image-height(sprite-file($formMap, btn-buy));
-			line-height: image-height(sprite-file($formMap, btn-buy));
-			width: image-width(sprite-file($formMap, btn-buy));
-			text-align: center;
-			border:none;
-			margin: 0 auto 0 21px;
-			font-size: 14.93px;
-			color:#fff;
-			font-family: $fontBlack;
-			text-transform: uppercase;
+		.button.button-primary {
+				width:100%;
+				max-width: 225px;
+				margin:0 auto;
 			&:focus {
 				outline:none;
 			}
@@ -620,3 +635,214 @@
 				}
 }
 
+
+
+
+
+.table-cart {
+	.colgroup-01 {
+		width:100%;
+		float:left;
+		padding: 15px;
+		@media (min-width: $screen-sm-min) {
+			width:50%;
+		}
+		@media (max-width: $screen-xs-max) {
+		padding: 15px 15px 0;
+		}
+		figure {
+			float:left;
+			width:55px;
+			border:1px solid #f1f1f1;
+			margin-right: 3.168567807351077%;
+			@media (max-width: $screen-xs-max) {
+				margin-right:12px;
+			}
+		}
+		.description_checked_product {
+			float:left;
+			position:relative;
+			padding-top:3px;
+			min-height: 69px;
+			.product_name {
+				font-size: 16px;
+				color:#000;
+				margin-bottom: 5px;
+			}
+			.product_size {
+				font-size: 12px;
+
+			}
+			.product_availability {
+				position:absolute;
+				bottom:-8px;
+				left:0px;
+				.icons-checked,
+				.icons-interjection {
+					display:inline-block;
+					width:250px;
+					font-size: 12px;
+					text-transform: none;
+					padding-left: 15px;
+				}
+				
+			}
+		}
+	}
+	.colgroup-02 {
+		width:100%;
+		float:left;
+		position:relative;
+		padding-right: 15px;
+		@media (min-width: $screen-sm-min) {
+			width:50%;
+		}
+		.colgroup {
+			width:100%;
+			padding:15px 0;
+			@media (min-width: $screen-sm-min) {
+				padding:20px 0;
+			}
+			> div {
+				
+				text-align: center;
+			}
+			.col {
+				margin-right:15px;
+			}
+			.cena {
+				width:33.333%;
+				float:left;
+				.stara_cena {
+					display: inline-block;
+					vertical-align: middle;
+					zoom: 1;
+					margin-left: 0px !important;
+					width: 80px !important;
+					font-size: 11px;
+					color: #565655;
+					text-decoration: line-through;
+					margin-right: 10px;
+				}
+				@media (min-width: $screen-md-min) {
+					position:relative;
+					padding-top: 7px;
+				}
+			}
+			.ilosc {
+				
+				width:33.333%;
+				float:left;
+				.select-group.medium {
+					display:none;
+				}
+				@media (max-width: $screen-xs-max) {
+					.select-group.medium {
+						width: 60px;
+						margin-top: 13px;
+						display:block;
+						}
+					.select-group.medium {
+							width:60px;
+							margin: 0px auto;
+							.button-select {
+								min-width: 60px;
+								font-size: 11px;
+								text-align: center;
+							}
+						}
+					}
+				
+				.amount_product {
+					width: 22px;
+					height: 22px;
+					text-align: center;
+					font-size: 11px;
+					border: 1px solid #afafaf;
+					line-height: 22px;
+					margin:0 auto;
+					@media (max-width: $screen-xs-max) {
+						display:none!important;
+					}
+				}
+			}
+			.wartosc {
+				width:33.333%;
+				float:left;
+				font-weight: bold;
+				padding-top: 11px;
+				@media (min-width: $screen-md-min) {
+				padding-top: 3px;
+				
+				}
+			}
+			.usun {
+				width:15px;
+				float:right;
+				text-align: center;
+				padding-top: 5px;
+			}
+			&.naglowek {
+				
+				padding-right: 15px;
+				@media (min-width: $screen-sm-min) {
+					position:absolute;
+					top:-38px;
+					left:0px;
+					padding-right: 30px;
+					display:none;
+				}
+				.cena,
+				.ilosc,
+				.wartosc,
+				.usun {font-weight: normal; padding-top:0px!important;}
+				.cena {
+					//text-align: right;
+					padding-top: 0px!important;
+
+				}
+				.wartosc {
+					@media (min-width: $screen-md-min) {
+					padding-top: 0px;
+					}
+				}
+			}
+			
+		}
+		.stara_cena,
+		.cena_zakupu {
+			white-space: nowrap;
+			display:block;
+			position: relative;
+			top: -5px;
+			@media (min-width: $screen-sm-min) {
+				display:inline-block;
+				white-space: nowrap;
+			}
+
+		} 
+
+		.stara_cena {
+			@media (min-width: $screen-md-min) {
+				position: absolute;
+				top: 5px;
+				left: -50px;
+			}
+		}
+	}
+}
+
+.table-cart {
+	.table-row{
+		&:first-child {
+			.colgroup-02 {
+				.colgroup.naglowek {
+					@media (min-width: $screen-sm-min) {
+					top:-50px;
+					display:block;
+					}
+				}
+			}
+		}
+	}
+}

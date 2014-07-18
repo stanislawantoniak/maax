@@ -100,7 +100,7 @@
 #toggleSearch {
     float:left;
     @include max-screen($screen-sm) {
-        margin-right: 29px;
+        //margin-right: 29px;
     }
     @include screen(550px, $screen-xs-max) { 
         margin-right :26%;
