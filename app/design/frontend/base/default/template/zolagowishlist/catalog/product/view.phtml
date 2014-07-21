@@ -108,6 +108,11 @@
 				</ul>
 			<?php endif;?>
 				
+			<?php if($_deliveryreturnInfo = $this->getChild("product.vendor.deliveryreturn")):?>
+				<h4><?php echo $this->__("Delivery & return info");?></h4>
+				<p><?php echo $_deliveryreturnInfo->getDeliveryreturnHtml();?></p>
+			<?php endif;?>
+				
             <?php echo $this->getChildHtml('other');?>
 
             <?php if ($_product->isSaleable() && $this->hasOptions()):?>

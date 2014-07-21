@@ -13,6 +13,7 @@
 	<catalog_product_view>
 		<reference name="product.info">
 			<block name="product.vendor.info" type="zolagocatalog/product_vendor_info"/>
+			<block name="product.vendor.deliveryreturn" type="zolagocatalog/product_vendor_deliveryreturn"/>
 		</reference>
 	</catalog_product_view>
 	
