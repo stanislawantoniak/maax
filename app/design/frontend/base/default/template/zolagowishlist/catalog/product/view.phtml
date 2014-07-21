@@ -99,8 +99,7 @@
                 </div>
             <?php endif;?>
 				
-			<?php $_vendorInfo = $_vendorInfo = $this->getChild("product.vendor.info");?>
-			<?php if($_vendorInfo):?>
+			<?php if($_vendorInfo = $this->getChild("product.vendor.info")):?>
 				<h4><?php echo $this->__("Vendor info");?></h4>
 				<ul>
 					<li><?php echo $this->__("Logo");?>: <?php echo $this->escapeHtml($_vendorInfo->getLogoUrl());?></li>

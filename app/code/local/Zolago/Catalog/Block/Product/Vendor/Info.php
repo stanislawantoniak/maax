@@ -6,7 +6,7 @@ class Zolago_Catalog_Block_Product_Vendor_Info
 	 * @return string|null
 	 */
 	public function getLogoUrl() {
-		return Mage::getBaseUrl('media') . '/' . 'vendor' . '/' . $this->getVendor()->getLogo();
+		return Mage::getBaseUrl('media') . $this->getVendor()->getLogo();
 	}
 	
 	/**
@@ -40,11 +40,19 @@ class Zolago_Catalog_Block_Product_Vendor_Info
 	}
 	
 	/**
-	 * @todo implement
 	 * @return int
 	 */
 	public function getAvarangeRating() {
-		return 80;
+		$c = 0;
+		$i = 0;
+		foreach($this->getRatingsSummary() as $rating){
+			$c += $rating['vote_percent'];
+			$i++;
+		}
+		if($i>0){
+			$c = round($c/$i);
+		}
+		return $c;
 	}
 	
 	/**
