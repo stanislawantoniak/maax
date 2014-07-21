@@ -57,7 +57,7 @@
             <action method="addItem"><type>skin_js</type><script>js/plugins.js</script></action>
             <action method="addItem"><type>skin_js</type><script>js/fns.js</script></action>
             <action method="addItem"><type>skin_js</type><script>js/mall.js</script></action>
-            <!--<block type="orbacommon/page_html_head" name="orba.jslib" template="orbacommon/js/script.phtml" />-->
+            <block type="orbacommon/page_html_head" name="orba.jslib" template="orbacommon/js/script.phtml" />
         </reference>
 
         <reference name="root">
@@ -204,7 +204,8 @@
             <action method="setTemplate">
                 <template>catalog/product/view.phtml</template>
             </action>
-            <block name="product.info.media.modal" type="catalog/product_view_media" template="catalog/product/view/modal.gallery.phtml" />
+            <block name="product.info.media.modal" type="catalog/product_view_media" template="catalog/product/view/modal.gallery.phtml"/>
+            <block name="product.vendor.info" type="zolagocatalog/product_vendor_info" template="catalog/product/vendor/info.phtml" />
         </reference>
 
         <reference name="product.info.addto">
