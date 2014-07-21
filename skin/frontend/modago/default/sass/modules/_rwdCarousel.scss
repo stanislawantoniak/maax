@@ -26,6 +26,7 @@
 		display: none;
 		position: relative;
 		-webkit-transform: translate3d(0px, 0px, 0px);
+//        margin: 0 -5px;
 	}
 	.rwd-wrapper-outer{
 		overflow: hidden;
@@ -43,6 +44,7 @@
 	}
 	.rwd-item{
 		float: left;
+//        margin:0 5px 0 5px;
 	}
 	.rwd-page,
 	.rwd-buttons div{

@@ -204,6 +204,7 @@
             <action method="setTemplate">
                 <template>catalog/product/view.phtml</template>
             </action>
+            <block name="product.info.media.modal" type="catalog/product_view_media" template="catalog/product/view/modal.gallery.phtml" />
         </reference>
 
         <reference name="product.info.addto">

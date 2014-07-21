@@ -291,7 +291,7 @@ $(window).resize(function(){
     responsiveRefreshRate : 200,
     mouseDrag:false,
     rewindNav : false,
-    itemsScaleUp:true,
+    itemsScaleUp:true
     
   });
  
@@ -402,9 +402,20 @@ $(window).resize(function(){
 ////////////////////////////////////////////////////////////////////
 function galeriaProduktu(){
 // start
-  var sync3 = $("#lightbox #sync1");
-  var sync4 = $("#lightbox #sync2");
- 
+  var sync3 = $("#lightbox #sync3");
+  var sync4 = $("#lightbox #sync4");
+
+    sync4.rwdCarousel({
+        items : 1,
+        pagination:false,
+        navigation: false,
+        mouseDrag:false,
+        touchDrag: false,
+        transitionStyle: "fade",
+        afterInit : function(el){
+            el.find(".rwd-item").eq(0).addClass("synced");
+        }
+    });
   sync3.rwdCarousel({
     singleItem : true,
     slideSpeed : 1000,
@@ -417,8 +428,8 @@ function galeriaProduktu(){
     itemsScaleUp:true,
     transitionStyle : "fade",
     afterInit:function() {
-      imagesLoaded( document.querySelector('#galeria-lightbox #sync1 .rwd-item .item'), function( instance ) {
-        $('#galeria-lightbox #sync1 .rwd-item').each(function(index, el) {
+      imagesLoaded( document.querySelector('#galeria-lightbox #sync3 .rwd-item .item'), function( instance ) {
+        $('#galeria-lightbox #sync3 .rwd-item').each(function(index, el) {
           
           var img = $(this).find('img');
           var a = $(this).find('img');
@@ -443,7 +454,6 @@ function galeriaProduktu(){
             var innerItemHeight = a.height();
             a.closest('.inner-item').css('width', innerItem );
             // Ukrycie button zoom
-            console.log('innerItem:'+innerItem +'|| imgWidthLoad:' + imgWidthLoad)
             if (innerItem > imgWidthLoad) {
               $(this).find('.zoom_plus').hide();
               $(this).find('.zoom_minus').hide();
@@ -512,47 +522,37 @@ function galeriaProduktu(){
       });
     }
   });
- 
-  sync4.rwdCarousel({
-    items : 1,
-    pagination:false,
-    navigation: false,
-    mouseDrag:false,
-    touchDrag: false,
-    afterInit : function(el){
-      el.find(".rwd-item").eq(0).addClass("synced");
-    }
-  });
+
 
  
   function syncPosition(el){
     var current = this.currentItem;
-    $("#lightbox #sync2")
+    $("#lightbox #sync4")
       .find(".rwd-item")
       .removeClass("synced")
       .eq(current)
       .addClass("synced")
-    if($("#lightbox #sync2").data("rwdCarousel") !== undefined){
+    if($("#lightbox #sync4").data("rwdCarousel") !== undefined){
       center(current)
     }
   }
  
-  $("#lightbox #sync2").on("click", ".rwd-item", function(e){
+  $("#lightbox #sync4").on("click", ".rwd-item", function(e){
     e.preventDefault();
     var number = $(this).data("rwdItem");
     sync3.trigger("rwd.goTo",number);
   });
 
-  $('#lightbox #wrapper-sync2 .up').addClass('disabled');
+  $('#lightbox #wrapper-sync4 .up').addClass('disabled');
 
-  $('#lightbox #wrapper-sync2').on('click', '.up', function(event) {
+  $('#lightbox #wrapper-sync4').on('click', '.up', function(event) {
     event.preventDefault();
         
-        var item = $('#lightbox #wrapper-sync2').find('.rwd-item');
+        var item = $('#lightbox #wrapper-sync4').find('.rwd-item');
         var itemH = parseInt(item.height());
         var itemHeight = item.height()+10;
-        var position = parseInt($('#lightbox #wrapper-sync2 .rwd-wrapper').css('margin-top'));
-        var wrapp = $(this).closest('#lightbox #wrapper-sync2').find('.rwd-wrapper');
+        var position = parseInt($('#lightbox #wrapper-sync4 .rwd-wrapper').css('margin-top'));
+        var wrapp = $(this).closest('#lightbox #wrapper-sync4').find('.rwd-wrapper');
         var wrappHeight = wrapp.height(); 
         var sumItem = itemHeight * (item.length-5);      
         wrapp.filter(':not(:animated)').animate({
@@ -560,21 +560,21 @@ function galeriaProduktu(){
         });
        
         if (position == '-'+itemHeight) {
-          $('#lightbox #wrapper-sync2 .up').addClass('disabled');
+          $('#lightbox #wrapper-sync4 .up').addClass('disabled');
         };
         if (position != '-'+sumItem) {
-          $('#lightbox #wrapper-sync2 .down').removeClass('disabled');
+          $('#lightbox #wrapper-sync4 .down').removeClass('disabled');
         };
 
   });
 
-  $('#lightbox #wrapper-sync2').on('click', '.down', function(event) {
+  $('#lightbox #wrapper-sync4').on('click', '.down', function(event) {
     event.preventDefault();
         
-        var item = $('#lightbox #wrapper-sync2').find('.rwd-item');
+        var item = $('#lightbox #wrapper-sync4').find('.rwd-item');
         var itemHeight = item.height()+10;
-        var position =  parseInt($('#lightbox #wrapper-sync2 .rwd-wrapper').css('margin-top'));
-        var wrapp = $(this).closest('#lightbox #wrapper-sync2').find('.rwd-wrapper');
+        var position =  parseInt($('#lightbox #wrapper-sync4 .rwd-wrapper').css('margin-top'));
+        var wrapp = $(this).closest('#lightbox #wrapper-sync4').find('.rwd-wrapper');
 
         var wrappHeight = wrapp.height();
         var sumItem = itemHeight * (item.length-5);
@@ -582,10 +582,10 @@ function galeriaProduktu(){
           'margin-top': '-='+itemHeight
         });
         if (position != '-'+itemHeight) {
-          $('#lightbox #wrapper-sync2 .up').removeClass('disabled');
+          $('#lightbox #wrapper-sync4 .up').removeClass('disabled');
         };
         if (position == '-'+sumItem) {
-          $('#lightbox #wrapper-sync2 .down').addClass('disabled');
+          $('#lightbox #wrapper-sync4 .down').addClass('disabled');
         };
 
 
@@ -637,16 +637,21 @@ var widthWindow = $(window).width();
 if (widthWindow >= 768) {
 $('#product-gallery #sync1').on('click', 'a', function(event) {
   event.preventDefault();
-  $.ajax({
-    url: "_include/galeria_produktu.php",
-    cache: true
-  })
-    .done(function( html ) {
-      $( "#lightbox .bl" ).append( html );
-      $('#lightbox').show();
-      $('body').addClass('lightbox');
-      galeriaProduktu();
-    });
+    $( "#lightbox .bl" ).html($("#galeria-lightbox-wr").html());
+    $('#lightbox').show();
+    $('body').addClass('lightbox');
+    galeriaProduktu();
+
+//  $.ajax({
+//    url: "_include/galeria_produktu.php",
+//    cache: true
+//  })
+//    .done(function( html ) {
+//      $( "#lightbox .bl" ).append( html );
+//      $('#lightbox').show();
+//      $('body').addClass('lightbox');
+//      galeriaProduktu();
+//    });
 
 });
 };

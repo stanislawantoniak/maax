@@ -1703,7 +1703,7 @@ figure .figure-border {
   background-position: 0 -27px;
   height: 27px;
   width: 29px; }
-/* line 43, ../../../../../../../../../Ruby/lib/ruby/gems/1.9.1/gems/compass-0.12.5/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 43, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-0.12.6/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
 .select-group.medium .button-select .down:hover, .select-group.medium .button-select .down.select_styled_hover, .select-group.medium .button-select .down.select_styled-hover {
   background-position: 0 -54px; }
 /* line 1601, ../sass/_typo.scss */
@@ -3666,19 +3666,19 @@ html.fb-static .fb-slidebar, .fb-slidebar.fb-static {
   position: absolute;
   right: 0;
   top: 0; }
-/* line 43, ../../../../../../../../../Ruby/lib/ruby/gems/1.9.1/gems/compass-0.12.5/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 43, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-0.12.6/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
 .sbToggle:hover, .sbToggle.select_styled_hover, .sbToggle.select_styled-hover {
   background-position: 0 -54px; }
 /* line 62, ../sass/modules/_selected-styled.scss */
 .sbToggle:link {
   background-position: 0 -27px; }
-/* line 43, ../../../../../../../../../Ruby/lib/ruby/gems/1.9.1/gems/compass-0.12.5/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 43, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-0.12.6/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
 .sbToggle:link:hover, .sbToggle:link.select_styled_hover, .sbToggle:link.select_styled-hover {
   background-position: 0 -54px; }
 /* line 65, ../sass/modules/_selected-styled.scss */
 .sbToggle:visited {
   background-position: 0 -27px; }
-/* line 43, ../../../../../../../../../Ruby/lib/ruby/gems/1.9.1/gems/compass-0.12.5/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 43, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-0.12.6/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
 .sbToggle:visited:hover, .sbToggle:visited.select_styled_hover, .sbToggle:visited.select_styled-hover {
   background-position: 0 -54px; }
 /* line 68, ../sass/modules/_selected-styled.scss */
@@ -4011,26 +4011,26 @@ html.fb-static .fb-slidebar, .fb-slidebar.fb-static {
   display: none;
   position: relative;
   -webkit-transform: translate3d(0px, 0px, 0px); }
-/* line 30, ../sass/modules/_rwdCarousel.scss */
+/* line 31, ../sass/modules/_rwdCarousel.scss */
 .rwd-carousel .rwd-wrapper-outer {
   overflow: hidden;
   position: relative;
   width: 100%; }
-/* line 36, ../sass/modules/_rwdCarousel.scss */
+/* line 37, ../sass/modules/_rwdCarousel.scss */
 .rwd-carousel .rwd-wrapper-outer.autoHeight {
   -webkit-transition: height 500ms ease-in-out;
   -moz-transition: height 500ms ease-in-out;
   -ms-transition: height 500ms ease-in-out;
   -o-transition: height 500ms ease-in-out;
   transition: height 500ms ease-in-out; }
-/* line 44, ../sass/modules/_rwdCarousel.scss */
+/* line 45, ../sass/modules/_rwdCarousel.scss */
 .rwd-carousel .rwd-item {
   float: left; }
-/* line 48, ../sass/modules/_rwdCarousel.scss */
+/* line 50, ../sass/modules/_rwdCarousel.scss */
 .rwd-carousel .rwd-page, .rwd-carousel .rwd-buttons div {
   cursor: pointer; }
 
-/* line 53, ../sass/modules/_rwdCarousel.scss */
+/* line 55, ../sass/modules/_rwdCarousel.scss */
 .rwd-controls {
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -4039,7 +4039,7 @@ html.fb-static .fb-slidebar, .fb-slidebar.fb-static {
   user-select: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0); }
 
-/* line 63, ../sass/modules/_rwdCarousel.scss */
+/* line 65, ../sass/modules/_rwdCarousel.scss */
 .customNavigation a {
   font-size: 30px;
   color: #ccc;
@@ -4047,23 +4047,23 @@ html.fb-static .fb-slidebar, .fb-slidebar.fb-static {
   top: 50%;
   margin-top: -10px;
   cursor: pointer; }
-/* line 70, ../sass/modules/_rwdCarousel.scss */
+/* line 72, ../sass/modules/_rwdCarousel.scss */
 .customNavigation a:hover {
   color: gray; }
-/* line 73, ../sass/modules/_rwdCarousel.scss */
+/* line 75, ../sass/modules/_rwdCarousel.scss */
 .customNavigation a.prev {
   left: 0px; }
-/* line 76, ../sass/modules/_rwdCarousel.scss */
+/* line 78, ../sass/modules/_rwdCarousel.scss */
 .customNavigation a.next {
   right: 0px; }
 
 /* mouse grab icon */
-/* line 83, ../sass/modules/_rwdCarousel.scss */
+/* line 85, ../sass/modules/_rwdCarousel.scss */
 .grabbing {
   cursor: url(grabbing.png) 8 8, move; }
 
 /* fix */
-/* line 90, ../sass/modules/_rwdCarousel.scss */
+/* line 92, ../sass/modules/_rwdCarousel.scss */
 .rwd-carousel .rwd-wrapper, .rwd-carousel .rwd-item {
   -webkit-backface-visibility: hidden;
   -moz-backface-visibility: hidden;
@@ -4072,7 +4072,7 @@ html.fb-static .fb-slidebar, .fb-slidebar.fb-static {
   -moz-transform: translate3d(0, 0, 0);
   -ms-transform: translate3d(0, 0, 0); }
 
-/* line 100, ../sass/modules/_rwdCarousel.scss */
+/* line 102, ../sass/modules/_rwdCarousel.scss */
 .rwd-origin {
   -webkit-perspective: 1200px;
   -webkit-perspective-origin-x: 50%;
@@ -4083,53 +4083,53 @@ html.fb-static .fb-slidebar, .fb-slidebar.fb-static {
   perspective: 1200px; }
 
 /* fade */
-/* line 110, ../sass/modules/_rwdCarousel.scss */
+/* line 112, ../sass/modules/_rwdCarousel.scss */
 .rwd-fade-out {
   z-index: 10;
   -webkit-animation: fadeOut .7s both ease;
   -moz-animation: fadeOut .7s both ease;
   animation: fadeOut .7s both ease; }
 
-/* line 116, ../sass/modules/_rwdCarousel.scss */
+/* line 118, ../sass/modules/_rwdCarousel.scss */
 .rwd-fade-in {
   -webkit-animation: fadeIn .7s both ease;
   -moz-animation: fadeIn .7s both ease;
   animation: fadeIn .7s both ease; }
 
 /* backSlide */
-/* line 122, ../sass/modules/_rwdCarousel.scss */
+/* line 124, ../sass/modules/_rwdCarousel.scss */
 .rwd-backSlide-out {
   -webkit-animation: backSlideOut 1s both ease;
   -moz-animation: backSlideOut 1s both ease;
   animation: backSlideOut 1s both ease; }
 
-/* line 127, ../sass/modules/_rwdCarousel.scss */
+/* line 129, ../sass/modules/_rwdCarousel.scss */
 .rwd-backSlide-in {
   -webkit-animation: backSlideIn 1s both ease;
   -moz-animation: backSlideIn 1s both ease;
   animation: backSlideIn 1s both ease; }
 
 /* goDown */
-/* line 133, ../sass/modules/_rwdCarousel.scss */
+/* line 135, ../sass/modules/_rwdCarousel.scss */
 .rwd-goDown-out {
   -webkit-animation: scaleToFade .7s ease both;
   -moz-animation: scaleToFade .7s ease both;
   animation: scaleToFade .7s ease both; }
 
-/* line 138, ../sass/modules/_rwdCarousel.scss */
+/* line 140, ../sass/modules/_rwdCarousel.scss */
 .rwd-goDown-in {
   -webkit-animation: goDown .6s ease both;
   -moz-animation: goDown .6s ease both;
   animation: goDown .6s ease both; }
 
 /* scaleUp */
-/* line 144, ../sass/modules/_rwdCarousel.scss */
+/* line 146, ../sass/modules/_rwdCarousel.scss */
 .rwd-fadeUp-in {
   -webkit-animation: scaleUpFrom .5s ease both;
   -moz-animation: scaleUpFrom .5s ease both;
   animation: scaleUpFrom .5s ease both; }
 
-/* line 150, ../sass/modules/_rwdCarousel.scss */
+/* line 152, ../sass/modules/_rwdCarousel.scss */
 .rwd-fadeUp-out {
   -webkit-animation: scaleUpTo .5s ease both;
   -moz-animation: scaleUpTo .5s ease both;
@@ -4138,235 +4138,235 @@ html.fb-static .fb-slidebar, .fb-slidebar.fb-static {
 /* Keyframes */
 /*empty*/
 @-webkit-keyframes empty {
-  /* line 158, ../sass/modules/_rwdCarousel.scss */
+  /* line 160, ../sass/modules/_rwdCarousel.scss */
   0% {
     opacity: 1; } }
 
 @-moz-keyframes empty {
-  /* line 161, ../sass/modules/_rwdCarousel.scss */
+  /* line 163, ../sass/modules/_rwdCarousel.scss */
   0% {
     opacity: 1; } }
 
 @keyframes empty {
-  /* line 164, ../sass/modules/_rwdCarousel.scss */
+  /* line 166, ../sass/modules/_rwdCarousel.scss */
   0% {
     opacity: 1; } }
 
 @-webkit-keyframes fadeIn {
-  /* line 167, ../sass/modules/_rwdCarousel.scss */
+  /* line 169, ../sass/modules/_rwdCarousel.scss */
   0% {
     opacity: 0; }
 
-  /* line 168, ../sass/modules/_rwdCarousel.scss */
+  /* line 170, ../sass/modules/_rwdCarousel.scss */
   100% {
     opacity: 1; } }
 
 @-moz-keyframes fadeIn {
-  /* line 171, ../sass/modules/_rwdCarousel.scss */
+  /* line 173, ../sass/modules/_rwdCarousel.scss */
   0% {
     opacity: 0; }
 
-  /* line 172, ../sass/modules/_rwdCarousel.scss */
+  /* line 174, ../sass/modules/_rwdCarousel.scss */
   100% {
     opacity: 1; } }
 
 @keyframes fadeIn {
-  /* line 175, ../sass/modules/_rwdCarousel.scss */
+  /* line 177, ../sass/modules/_rwdCarousel.scss */
   0% {
     opacity: 0; }
 
-  /* line 176, ../sass/modules/_rwdCarousel.scss */
+  /* line 178, ../sass/modules/_rwdCarousel.scss */
   100% {
     opacity: 1; } }
 
 @-webkit-keyframes fadeOut {
-  /* line 179, ../sass/modules/_rwdCarousel.scss */
+  /* line 181, ../sass/modules/_rwdCarousel.scss */
   0% {
     opacity: 1; }
 
-  /* line 180, ../sass/modules/_rwdCarousel.scss */
+  /* line 182, ../sass/modules/_rwdCarousel.scss */
   100% {
     opacity: 0; } }
 
 @-moz-keyframes fadeOut {
-  /* line 183, ../sass/modules/_rwdCarousel.scss */
+  /* line 185, ../sass/modules/_rwdCarousel.scss */
   0% {
     opacity: 1; }
 
-  /* line 184, ../sass/modules/_rwdCarousel.scss */
+  /* line 186, ../sass/modules/_rwdCarousel.scss */
   100% {
     opacity: 0; } }
 
 @keyframes fadeOut {
-  /* line 187, ../sass/modules/_rwdCarousel.scss */
+  /* line 189, ../sass/modules/_rwdCarousel.scss */
   0% {
     opacity: 1; }
 
-  /* line 188, ../sass/modules/_rwdCarousel.scss */
+  /* line 190, ../sass/modules/_rwdCarousel.scss */
   100% {
     opacity: 0; } }
 
 @-webkit-keyframes backSlideOut {
-  /* line 191, ../sass/modules/_rwdCarousel.scss */
+  /* line 193, ../sass/modules/_rwdCarousel.scss */
   25% {
     opacity: .5;
     -webkit-transform: translateZ(-500px); }
 
-  /* line 192, ../sass/modules/_rwdCarousel.scss */
+  /* line 194, ../sass/modules/_rwdCarousel.scss */
   75% {
     opacity: .5;
     -webkit-transform: translateZ(-500px) translateX(-200%); }
 
-  /* line 193, ../sass/modules/_rwdCarousel.scss */
+  /* line 195, ../sass/modules/_rwdCarousel.scss */
   100% {
     opacity: .5;
     -webkit-transform: translateZ(-500px) translateX(-200%); } }
 
 @-moz-keyframes backSlideOut {
-  /* line 196, ../sass/modules/_rwdCarousel.scss */
+  /* line 198, ../sass/modules/_rwdCarousel.scss */
   25% {
     opacity: .5;
     -moz-transform: translateZ(-500px); }
 
-  /* line 197, ../sass/modules/_rwdCarousel.scss */
+  /* line 199, ../sass/modules/_rwdCarousel.scss */
   75% {
     opacity: .5;
     -moz-transform: translateZ(-500px) translateX(-200%); }
 
-  /* line 198, ../sass/modules/_rwdCarousel.scss */
+  /* line 200, ../sass/modules/_rwdCarousel.scss */
   100% {
     opacity: .5;
     -moz-transform: translateZ(-500px) translateX(-200%); } }
 
 @keyframes backSlideOut {
-  /* line 201, ../sass/modules/_rwdCarousel.scss */
+  /* line 203, ../sass/modules/_rwdCarousel.scss */
   25% {
     opacity: .5;
     transform: translateZ(-500px); }
 
-  /* line 202, ../sass/modules/_rwdCarousel.scss */
+  /* line 204, ../sass/modules/_rwdCarousel.scss */
   75% {
     opacity: .5;
     transform: translateZ(-500px) translateX(-200%); }
 
-  /* line 203, ../sass/modules/_rwdCarousel.scss */
+  /* line 205, ../sass/modules/_rwdCarousel.scss */
   100% {
     opacity: .5;
     transform: translateZ(-500px) translateX(-200%); } }
 
 @-webkit-keyframes backSlideIn {
-  /* line 206, ../sass/modules/_rwdCarousel.scss */
+  /* line 208, ../sass/modules/_rwdCarousel.scss */
   0%, 25% {
     opacity: .5;
     -webkit-transform: translateZ(-500px) translateX(200%); }
 
-  /* line 207, ../sass/modules/_rwdCarousel.scss */
+  /* line 209, ../sass/modules/_rwdCarousel.scss */
   75% {
     opacity: .5;
     -webkit-transform: translateZ(-500px); }
 
-  /* line 208, ../sass/modules/_rwdCarousel.scss */
+  /* line 210, ../sass/modules/_rwdCarousel.scss */
   100% {
     opacity: 1;
     -webkit-transform: translateZ(0) translateX(0); } }
 
 @-moz-keyframes backSlideIn {
-  /* line 211, ../sass/modules/_rwdCarousel.scss */
+  /* line 213, ../sass/modules/_rwdCarousel.scss */
   0%, 25% {
     opacity: .5;
     -moz-transform: translateZ(-500px) translateX(200%); }
 
-  /* line 212, ../sass/modules/_rwdCarousel.scss */
+  /* line 214, ../sass/modules/_rwdCarousel.scss */
   75% {
     opacity: .5;
     -moz-transform: translateZ(-500px); }
 
-  /* line 213, ../sass/modules/_rwdCarousel.scss */
+  /* line 215, ../sass/modules/_rwdCarousel.scss */
   100% {
     opacity: 1;
     -moz-transform: translateZ(0) translateX(0); } }
 
 @keyframes backSlideIn {
-  /* line 216, ../sass/modules/_rwdCarousel.scss */
+  /* line 218, ../sass/modules/_rwdCarousel.scss */
   0%, 25% {
     opacity: .5;
     transform: translateZ(-500px) translateX(200%); }
 
-  /* line 217, ../sass/modules/_rwdCarousel.scss */
+  /* line 219, ../sass/modules/_rwdCarousel.scss */
   75% {
     opacity: .5;
     transform: translateZ(-500px); }
 
-  /* line 218, ../sass/modules/_rwdCarousel.scss */
+  /* line 220, ../sass/modules/_rwdCarousel.scss */
   100% {
     opacity: 1;
     transform: translateZ(0) translateX(0); } }
 
 @-webkit-keyframes scaleToFade {
-  /* line 221, ../sass/modules/_rwdCarousel.scss */
+  /* line 223, ../sass/modules/_rwdCarousel.scss */
   to {
     opacity: 0;
     -webkit-transform: scale(0.8); } }
 
 @-moz-keyframes scaleToFade {
-  /* line 224, ../sass/modules/_rwdCarousel.scss */
+  /* line 226, ../sass/modules/_rwdCarousel.scss */
   to {
     opacity: 0;
     -moz-transform: scale(0.8); } }
 
 @keyframes scaleToFade {
-  /* line 227, ../sass/modules/_rwdCarousel.scss */
+  /* line 229, ../sass/modules/_rwdCarousel.scss */
   to {
     opacity: 0;
     transform: scale(0.8); } }
 
 @-webkit-keyframes goDown {
-  /* line 230, ../sass/modules/_rwdCarousel.scss */
+  /* line 232, ../sass/modules/_rwdCarousel.scss */
   from {
     -webkit-transform: translateY(-100%); } }
 
 @-moz-keyframes goDown {
-  /* line 233, ../sass/modules/_rwdCarousel.scss */
+  /* line 235, ../sass/modules/_rwdCarousel.scss */
   from {
     -moz-transform: translateY(-100%); } }
 
 @keyframes goDown {
-  /* line 236, ../sass/modules/_rwdCarousel.scss */
+  /* line 238, ../sass/modules/_rwdCarousel.scss */
   from {
     transform: translateY(-100%); } }
 
 @-webkit-keyframes scaleUpFrom {
-  /* line 240, ../sass/modules/_rwdCarousel.scss */
+  /* line 242, ../sass/modules/_rwdCarousel.scss */
   from {
     opacity: 0;
     -webkit-transform: scale(1.5); } }
 
 @-moz-keyframes scaleUpFrom {
-  /* line 243, ../sass/modules/_rwdCarousel.scss */
+  /* line 245, ../sass/modules/_rwdCarousel.scss */
   from {
     opacity: 0;
     -moz-transform: scale(1.5); } }
 
 @keyframes scaleUpFrom {
-  /* line 246, ../sass/modules/_rwdCarousel.scss */
+  /* line 248, ../sass/modules/_rwdCarousel.scss */
   from {
     opacity: 0;
     transform: scale(1.5); } }
 
 @-webkit-keyframes scaleUpTo {
-  /* line 250, ../sass/modules/_rwdCarousel.scss */
+  /* line 252, ../sass/modules/_rwdCarousel.scss */
   to {
     opacity: 0;
     -webkit-transform: scale(1.5); } }
 
 @-moz-keyframes scaleUpTo {
-  /* line 253, ../sass/modules/_rwdCarousel.scss */
+  /* line 255, ../sass/modules/_rwdCarousel.scss */
   to {
     opacity: 0;
     -moz-transform: scale(1.5); } }
 
 @keyframes scaleUpTo {
-  /* line 256, ../sass/modules/_rwdCarousel.scss */
+  /* line 258, ../sass/modules/_rwdCarousel.scss */
   to {
     opacity: 0;
     transform: scale(1.5); } }
@@ -4375,14 +4375,14 @@ html.fb-static .fb-slidebar, .fb-slidebar.fb-static {
 /* Clickable class fix problem with hover on touch devices */
 /* Use it for non-touch hover action */
 /* Styling Pagination*/
-/* line 295, ../sass/modules/_rwdCarousel.scss */
+/* line 297, ../sass/modules/_rwdCarousel.scss */
 .rwd-theme .rwd-controls .rwd-page {
   display: inline-block;
   zoom: 1;
   *display: inline;
   /*IE7 life-saver */ }
 
-/* line 300, ../sass/modules/_rwdCarousel.scss */
+/* line 302, ../sass/modules/_rwdCarousel.scss */
 .rwd-theme .rwd-controls .rwd-page span {
   display: block;
   width: 12px;
@@ -4396,14 +4396,14 @@ html.fb-static .fb-slidebar, .fb-slidebar.fb-static {
   border-radius: 20px;
   background: #869791; }
 
-/* line 314, ../sass/modules/_rwdCarousel.scss */
+/* line 316, ../sass/modules/_rwdCarousel.scss */
 .rwd-theme .rwd-controls .rwd-page.active span, .rwd-theme .rwd-controls.clickable .rwd-page:hover span {
   filter: Alpha(Opacity=100);
   /*IE7 fix*/
   opacity: 1; }
 
 /* If PaginationNumbers is true */
-/* line 321, ../sass/modules/_rwdCarousel.scss */
+/* line 323, ../sass/modules/_rwdCarousel.scss */
 .rwd-theme .rwd-controls .rwd-page span.rwd-numbers {
   height: auto;
   width: auto;
@@ -4415,12 +4415,12 @@ html.fb-static .fb-slidebar, .fb-slidebar.fb-static {
   border-radius: 30px; }
 
 /* preloading images */
-/* line 333, ../sass/modules/_rwdCarousel.scss */
+/* line 335, ../sass/modules/_rwdCarousel.scss */
 .rwd-item.loading {
   min-height: 150px;
   background: url(AjaxLoader.gif) no-repeat center center; }
 
-/* line 338, ../sass/modules/_rwdCarousel.scss */
+/* line 340, ../sass/modules/_rwdCarousel.scss */
 #rwd-banners .item {
   background: #fff;
   margin: 5px;
@@ -4429,16 +4429,16 @@ html.fb-static .fb-slidebar, .fb-slidebar.fb-static {
   -moz-border-radius: 3px;
   border-radius: 3px;
   text-align: center; }
-/* line 346, ../sass/modules/_rwdCarousel.scss */
+/* line 348, ../sass/modules/_rwdCarousel.scss */
 #rwd-banners .item img {
   width: 100%;
   height: auto; }
 
-/* line 352, ../sass/modules/_rwdCarousel.scss */
+/* line 354, ../sass/modules/_rwdCarousel.scss */
 .customNavigation {
   text-align: center; }
 
-/* line 356, ../sass/modules/_rwdCarousel.scss */
+/* line 358, ../sass/modules/_rwdCarousel.scss */
 .customNavigation a {
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -4774,23 +4774,23 @@ html.fb-static .fb-slidebar, .fb-slidebar.fb-static {
   border: 1px solid #d0cfcf; }
 
 /* line 237, ../sass/modules/_gallery_product.scss */
-#product-gallery #sync1 {
+#product-gallery #sync1, #product-gallery #sync3 {
   float: left;
   width: 319px; }
 @media (max-width: 360px) {
   /* line 237, ../sass/modules/_gallery_product.scss */
-  #product-gallery #sync1 {
+  #product-gallery #sync1, #product-gallery #sync3 {
     width: 360px;
     margin-left: -15px;
     margin-right: -15px; } }
 @media (max-width: 320px) {
   /* line 237, ../sass/modules/_gallery_product.scss */
-  #product-gallery #sync1 {
+  #product-gallery #sync1, #product-gallery #sync3 {
     width: 320px;
     margin-left: -15px;
     margin-right: -15px; } }
 /* line 250, ../sass/modules/_gallery_product.scss */
-#product-gallery #sync1 .item {
+#product-gallery #sync1 .item, #product-gallery #sync3 .item {
   padding: 0px;
   color: #FFF;
   -webkit-border-radius: 3px;
@@ -4799,7 +4799,7 @@ html.fb-static .fb-slidebar, .fb-slidebar.fb-static {
   text-align: center;
   height: 406px; }
 /* line 262, ../sass/modules/_gallery_product.scss */
-#product-gallery #wrapper-sync2 {
+#product-gallery #wrapper-sync2, #product-gallery #wrapper-sync4 {
   float: left;
   width: 80px;
   margin-left: 7px;
@@ -4807,20 +4807,20 @@ html.fb-static .fb-slidebar, .fb-slidebar.fb-static {
   position: relative; }
 @media (max-width: 931px) {
   /* line 262, ../sass/modules/_gallery_product.scss */
-  #product-gallery #wrapper-sync2 {
+  #product-gallery #wrapper-sync2, #product-gallery #wrapper-sync4 {
     display: none; } }
 /* line 273, ../sass/modules/_gallery_product.scss */
-#product-gallery #sync2 {
+#product-gallery #sync2, #product-gallery #sync4 {
   width: 80px;
   margin-top: 10.5px; }
 /* line 276, ../sass/modules/_gallery_product.scss */
-#product-gallery #sync2 .rwd-wrapper-outer {
+#product-gallery #sync2 .rwd-wrapper-outer, #product-gallery #sync4 .rwd-wrapper-outer {
   height: 379px; }
 /* line 279, ../sass/modules/_gallery_product.scss */
-#product-gallery #sync2 .rwd-wrapper {
+#product-gallery #sync2 .rwd-wrapper, #product-gallery #sync4 .rwd-wrapper {
   width: 72px !important; }
 /* line 282, ../sass/modules/_gallery_product.scss */
-#product-gallery #sync2 .rwd-item {
+#product-gallery #sync2 .rwd-item, #product-gallery #sync4 .rwd-item {
   padding: 5px 0px;
   color: #FFF;
   width: 67px !important;
@@ -4831,7 +4831,7 @@ html.fb-static .fb-slidebar, .fb-slidebar.fb-static {
   cursor: pointer;
   float: none; }
 /* line 294, ../sass/modules/_gallery_product.scss */
-#product-gallery #sync2 .rwd-item.synced img, #product-gallery #sync2 .rwd-item:hover img {
+#product-gallery #sync2 .rwd-item.synced img, #product-gallery #sync2 .rwd-item:hover img, #product-gallery #sync4 .rwd-item.synced img, #product-gallery #sync4 .rwd-item:hover img {
   border: 1px solid #999; }
 /* line 307, ../sass/modules/_gallery_product.scss */
 #product-gallery .item > div {
@@ -5049,31 +5049,31 @@ body.lightbox {
   width: 600px; }
 
 /* line 515, ../sass/modules/_gallery_product.scss */
-#lightbox #sync1 {
+#lightbox #sync3 {
   float: none;
   width: auto;
   margin-left: 110px; }
 @media (max-width: 1023px) {
   /* line 515, ../sass/modules/_gallery_product.scss */
-  #lightbox #sync1 {
+  #lightbox #sync3 {
     margin-left: 0; } }
 @media (max-width: 360px) {
   /* line 515, ../sass/modules/_gallery_product.scss */
-  #lightbox #sync1 {
+  #lightbox #sync3 {
     width: 360px;
     margin-left: -35px;
     margin-right: -15px; } }
 @media (max-width: 320px) {
   /* line 515, ../sass/modules/_gallery_product.scss */
-  #lightbox #sync1 {
+  #lightbox #sync3 {
     width: 320px;
     margin-left: -35px;
     margin-right: -15px; } }
 /* line 534, ../sass/modules/_gallery_product.scss */
-#lightbox #sync1 .rwd-wrapper-outer {
+#lightbox #sync3 .rwd-wrapper-outer {
   margin-right: 34px !important; }
 /* line 537, ../sass/modules/_gallery_product.scss */
-#lightbox #sync1 .item {
+#lightbox #sync3 .item {
   padding: 0px;
   color: #FFF;
   -webkit-border-radius: 3px;
@@ -5081,10 +5081,10 @@ body.lightbox {
   border-radius: 3px;
   text-align: center; }
 /* line 546, ../sass/modules/_gallery_product.scss */
-#lightbox #sync1 .item div {
+#lightbox #sync3 .item div {
   margin: 0 auto; }
 /* line 552, ../sass/modules/_gallery_product.scss */
-#lightbox #wrapper-sync2 {
+#lightbox #wrapper-sync2, #lightbox #wrapper-sync4 {
   float: left;
   width: 80px;
   margin-left: 7px;
@@ -5092,20 +5092,20 @@ body.lightbox {
   position: relative; }
 @media (max-width: 1023px) {
   /* line 552, ../sass/modules/_gallery_product.scss */
-  #lightbox #wrapper-sync2 {
+  #lightbox #wrapper-sync2, #lightbox #wrapper-sync4 {
     display: none; } }
 /* line 563, ../sass/modules/_gallery_product.scss */
-#lightbox #sync2 {
+#lightbox #sync2, #lightbox #sync4 {
   width: 80px;
   margin-top: 10.5px; }
 /* line 567, ../sass/modules/_gallery_product.scss */
-#lightbox #sync2 .rwd-wrapper-outer {
+#lightbox #sync2 .rwd-wrapper-outer, #lightbox #sync4 .rwd-wrapper-outer {
   height: 379px; }
 /* line 570, ../sass/modules/_gallery_product.scss */
-#lightbox #sync2 .rwd-wrapper {
+#lightbox #sync2 .rwd-wrapper, #lightbox #sync4 .rwd-wrapper {
   width: 72px !important; }
 /* line 573, ../sass/modules/_gallery_product.scss */
-#lightbox #sync2 .rwd-item {
+#lightbox #sync2 .rwd-item, #lightbox #sync4 .rwd-item {
   padding: 5px 0px;
   color: #FFF;
   width: 67px !important;
@@ -5116,7 +5116,7 @@ body.lightbox {
   cursor: pointer;
   float: none; }
 /* line 585, ../sass/modules/_gallery_product.scss */
-#lightbox #sync2 .rwd-item.synced img, #lightbox #sync2 .rwd-item:hover img {
+#lightbox #sync2 .rwd-item.synced img, #lightbox #sync2 .rwd-item:hover img, #lightbox #sync4 .rwd-item.synced img, #lightbox #sync4 .rwd-item:hover img {
   border: 1px solid #999; }
 /* line 598, ../sass/modules/_gallery_product.scss */
 #lightbox .item > div {
@@ -5874,7 +5874,7 @@ body.lightbox {
   margin: 0;
   padding: 0;
   margin-bottom: 25px; }
-/* line 11, ../../../../../../../../../Ruby/lib/ruby/gems/1.9.1/gems/compass-0.12.5/frameworks/compass/stylesheets/compass/typography/lists/_bullets.scss */
+/* line 11, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-0.12.6/frameworks/compass/stylesheets/compass/typography/lists/_bullets.scss */
 .modal-content ul li {
   list-style-image: none;
   list-style-type: none;
@@ -9094,75 +9094,68 @@ section.section h2.title_section i {
   top: -2px;
   position: relative; }
 
-/* line 4, ../sass/dimensions/_mainpage.scss */
-.small-banners .row div:first-child {
-  padding-left: 0; }
-/* line 7, ../sass/dimensions/_mainpage.scss */
-.small-banners .row div:last-child {
-  padding-right: 0; }
+/* line 3, ../sass/dimensions/_mainpage.scss */
+.small-banners .row {
+  margin: 0 -20px; }
 @media (max-width: 768px) {
-  /* line 11, ../sass/dimensions/_mainpage.scss */
+  /* line 6, ../sass/dimensions/_mainpage.scss */
   .small-banners .row div:nth-child(3) {
-    padding-left: 0; }
-  /* line 14, ../sass/dimensions/_mainpage.scss */
-  .small-banners .row div:nth-child(2) {
-    padding-right: 0; } }
+    clear: both; } }
 
-/* line 22, ../sass/dimensions/_mainpage.scss */
+/* line 14, ../sass/dimensions/_mainpage.scss */
 .tight-padding {
-  padding-left: 8px;
-  padding-right: 8px; }
+  margin-left: 0px;
+  margin-right: 0px;
+  padding: 0 5px; }
+/* line 18, ../sass/dimensions/_mainpage.scss */
+.tight-padding img {
+  width: 100%; }
 
-/* line 27, ../sass/dimensions/_mainpage.scss */
+/* line 23, ../sass/dimensions/_mainpage.scss */
 .inner-padding-10 {
   padding-left: 10px;
   padding-right: 10px; }
 
-@media (max-width: 480px) {
-  /* line 33, ../sass/dimensions/_mainpage.scss */
-  .tight-padding {
-    padding-right: 5px;
-    padding-left: 5px; } }
-/* line 39, ../sass/dimensions/_mainpage.scss */
+/* line 28, ../sass/dimensions/_mainpage.scss */
 .popular-shops {
   overflow-y: hidden;
   max-height: 503px; }
-/* line 42, ../sass/dimensions/_mainpage.scss */
+/* line 31, ../sass/dimensions/_mainpage.scss */
 .popular-shops > h3 {
   margin-top: 20px;
   margin-bottom: 28px; }
-/* line 46, ../sass/dimensions/_mainpage.scss */
+/* line 35, ../sass/dimensions/_mainpage.scss */
 .popular-shops .pop-shop-lst {
   display: inline-block;
   vertical-align: top;
   width: 130px;
   zoom: 1;
   *display: inline; }
-/* line 52, ../sass/dimensions/_mainpage.scss */
+/* line 41, ../sass/dimensions/_mainpage.scss */
 .popular-shops .pop-shop-lst > li:last-child {
   margin-bottom: 100px;
   padding-left: 0 !important;
   -webkit-padding-start: 0px !important; }
-/* line 58, ../sass/dimensions/_mainpage.scss */
+/* line 47, ../sass/dimensions/_mainpage.scss */
 .popular-shops .pop-shop-lst > li > a {
   width: 130px;
   display: block;
   margin-bottom: 35px; }
-/* line 62, ../sass/dimensions/_mainpage.scss */
+/* line 51, ../sass/dimensions/_mainpage.scss */
 .popular-shops .pop-shop-lst > li > a > span {
   margin-top: 15px;
   display: block; }
-/* line 66, ../sass/dimensions/_mainpage.scss */
+/* line 55, ../sass/dimensions/_mainpage.scss */
 .popular-shops .pop-shop-lst > li > a > span.pop-shop-img-wr {
   line-height: 74px;
   height: 74px;
   width: 100%;
   margin-top: 0; }
-/* line 73, ../sass/dimensions/_mainpage.scss */
+/* line 62, ../sass/dimensions/_mainpage.scss */
 .popular-shops .pop-shop-lst > li > a:hover {
   text-decoration: underline; }
 
-/* line 80, ../sass/dimensions/_mainpage.scss */
+/* line 69, ../sass/dimensions/_mainpage.scss */
 .pop-shop-seemore {
   display: block;
   width: 245px;
@@ -9172,47 +9165,47 @@ section.section h2.title_section i {
   margin-top: -38px;
   margin-bottom: 28px; }
 
-/* line 90, ../sass/dimensions/_mainpage.scss */
+/* line 79, ../sass/dimensions/_mainpage.scss */
 .popular-shops:after {
   content: "";
   width: 100%;
   display: inline-block; }
 
 @media (min-width: 1200px) {
-  /* line 97, ../sass/dimensions/_mainpage.scss */
+  /* line 86, ../sass/dimensions/_mainpage.scss */
   #product-gallery.col-lg-5 {
     width: 38.66667%;
     padding-right: 9px; } }
 @media (min-width: 932px) and (max-width: 1199px) {
-  /* line 97, ../sass/dimensions/_mainpage.scss */
+  /* line 86, ../sass/dimensions/_mainpage.scss */
   #product-gallery.col-lg-5 {
     width: 449.683px;
     padding-right: 9px;
     float: left; } }
 @media (min-width: 768px) and (max-width: 931px) {
-  /* line 97, ../sass/dimensions/_mainpage.scss */
+  /* line 86, ../sass/dimensions/_mainpage.scss */
   #product-gallery.col-lg-5 {
     width: 350px;
     float: left; } }
 @media (min-width: 481px) and (max-width: 767px) {
-  /* line 97, ../sass/dimensions/_mainpage.scss */
+  /* line 86, ../sass/dimensions/_mainpage.scss */
   #product-gallery.col-lg-5 {
     width: 360px;
     float: none;
     margin: 0 auto; } }
 @media (max-width: 480px) {
-  /* line 97, ../sass/dimensions/_mainpage.scss */
+  /* line 86, ../sass/dimensions/_mainpage.scss */
   #product-gallery.col-lg-5 {
     width: 360px;
     float: none;
     margin: 0 auto; } }
 @media (max-width: 767px) {
-  /* line 125, ../sass/dimensions/_mainpage.scss */
+  /* line 114, ../sass/dimensions/_mainpage.scss */
   #product-gallery.col-xs-12 {
     float: none;
     margin: 0 auto; } }
 
-/* line 135, ../sass/dimensions/_mainpage.scss */
+/* line 124, ../sass/dimensions/_mainpage.scss */
 #block-bundle.col-lg-7 {
   float: none;
   margin-left: 435px;
@@ -9273,38 +9266,38 @@ section.section h2.title_section i {
             float:left;
         }*/ }
 @media (min-width: 767px) and (max-width: 931px) {
-  /* line 135, ../sass/dimensions/_mainpage.scss */
+  /* line 124, ../sass/dimensions/_mainpage.scss */
   #block-bundle.col-lg-7 {
     margin-left: 335px; } }
 @media (max-width: 767px) {
-  /* line 135, ../sass/dimensions/_mainpage.scss */
+  /* line 124, ../sass/dimensions/_mainpage.scss */
   #block-bundle.col-lg-7 {
     margin-left: inherit;
     float: inherit;
     margin-left: inherit;
     width: inherit; } }
 @media (max-width: 360px) {
-  /* line 135, ../sass/dimensions/_mainpage.scss */
+  /* line 124, ../sass/dimensions/_mainpage.scss */
   #block-bundle.col-lg-7 {
     padding-right: 10px;
     padding-left: 10px; } }
 @media (min-width: 1200px) {
-  /* line 209, ../sass/dimensions/_mainpage.scss */
+  /* line 198, ../sass/dimensions/_mainpage.scss */
   #block-bundle.col-lg-7 .col-lg-4 {
     padding-left: 0px;
     width: 30.33333%; } }
-/* line 219, ../sass/dimensions/_mainpage.scss */
+/* line 208, ../sass/dimensions/_mainpage.scss */
 #block-bundle #product-shop {
   overflow-x: hidden; }
-/* line 221, ../sass/dimensions/_mainpage.scss */
+/* line 210, ../sass/dimensions/_mainpage.scss */
 #block-bundle #product-shop.col-lg-8 {
   padding-left: 0px; }
 @media (max-width: 1199px) {
-  /* line 221, ../sass/dimensions/_mainpage.scss */
+  /* line 210, ../sass/dimensions/_mainpage.scss */
   #block-bundle #product-shop.col-lg-8 {
     padding-right: 0px; } }
 @media (max-width: 320px) {
-  /* line 221, ../sass/dimensions/_mainpage.scss */
+  /* line 210, ../sass/dimensions/_mainpage.scss */
   #block-bundle #product-shop.col-lg-8 {
     padding-right: 0; } }
 
@@ -9370,19 +9363,25 @@ section.section h2.title_section i {
   text-align: left; }
 
 /* line 2, ../sass/dimensions/_rv.scss */
+.recently-viewed .rwd-wrapper {
+  margin: 0 -5px; }
+/* line 6, ../sass/dimensions/_rv.scss */
+.recently-viewed .rwd-item {
+  margin: 0 5px 0 5px; }
+/* line 9, ../sass/dimensions/_rv.scss */
 .recently-viewed h3.title-section {
   padding-top: 0px;
   padding-bottom: 0px;
   margin-left: -15px; }
 @media (max-width: 767px) {
-  /* line 2, ../sass/dimensions/_rv.scss */
+  /* line 9, ../sass/dimensions/_rv.scss */
   .recently-viewed h3.title-section {
     font-size: 11px;
     font-family: "OpenSansRegular" !important;
     padding-left: 20px;
     margin-bottom: 29px; } }
 @media (max-width: 767px) {
-  /* line 13, ../sass/dimensions/_rv.scss */
+  /* line 20, ../sass/dimensions/_rv.scss */
   .recently-viewed h3.title-section:before {
     content: ' ';
     display: block;
@@ -9392,134 +9391,135 @@ section.section h2.title_section i {
     position: absolute;
     left: -15px;
     top: -4px; } }
-/* line 28, ../sass/dimensions/_rv.scss */
+/* line 35, ../sass/dimensions/_rv.scss */
 .recently-viewed .box_listing_product figure.img_product {
   margin-bottom: 10px; }
-/* line 32, ../sass/dimensions/_rv.scss */
+/* line 39, ../sass/dimensions/_rv.scss */
 .recently-viewed .box_listing_product .name_product {
-  padding: 0px; }
-/* line 36, ../sass/dimensions/_rv.scss */
+  padding: 0px;
+  text-align: center; }
+/* line 44, ../sass/dimensions/_rv.scss */
 .recently-viewed .item {
   margin: 0 20px;
   background: #fff;
   color: #515151; }
 @media (max-width: 767px) {
-  /* line 36, ../sass/dimensions/_rv.scss */
+  /* line 44, ../sass/dimensions/_rv.scss */
   .recently-viewed .item {
     margin: 0 5px; } }
-/* line 43, ../sass/dimensions/_rv.scss */
+/* line 51, ../sass/dimensions/_rv.scss */
 .recently-viewed .item img {
   border: 1px solid #f5f6f6; }
-/* line 53, ../sass/dimensions/_rv.scss */
+/* line 61, ../sass/dimensions/_rv.scss */
 .recently-viewed .customNavigation a {
   font-size: 48px;
   margin-top: 0px;
   background: url('../images/sprites/arrow-s9ee80ff52b.png'); }
 @media (max-width: 767px) {
-  /* line 53, ../sass/dimensions/_rv.scss */
+  /* line 61, ../sass/dimensions/_rv.scss */
   .recently-viewed .customNavigation a {
     margin-top: 6px; } }
-/* line 61, ../sass/dimensions/_rv.scss */
+/* line 69, ../sass/dimensions/_rv.scss */
 .recently-viewed .customNavigation a.prev {
   left: 10px;
   background-position: 0 -339px;
   height: 27px;
   width: 16px; }
 @media (max-width: 767px) {
-  /* line 61, ../sass/dimensions/_rv.scss */
+  /* line 69, ../sass/dimensions/_rv.scss */
   .recently-viewed .customNavigation a.prev {
     background-position: 0 -366px;
     height: 18px;
     width: 11px; } }
-/* line 70, ../sass/dimensions/_rv.scss */
+/* line 78, ../sass/dimensions/_rv.scss */
 .recently-viewed .customNavigation a.prev:hover {
   background-position: 0 -271px;
   height: 27px;
   width: 16px; }
 @media (max-width: 767px) {
-  /* line 70, ../sass/dimensions/_rv.scss */
+  /* line 78, ../sass/dimensions/_rv.scss */
   .recently-viewed .customNavigation a.prev:hover {
     background-position: 0 -384px;
     height: 18px;
     width: 11px; } }
-/* line 79, ../sass/dimensions/_rv.scss */
+/* line 87, ../sass/dimensions/_rv.scss */
 .recently-viewed .customNavigation a.next {
   right: 10px;
   background-position: 0 -312px;
   height: 27px;
   width: 16px; }
 @media (max-width: 767px) {
-  /* line 79, ../sass/dimensions/_rv.scss */
+  /* line 87, ../sass/dimensions/_rv.scss */
   .recently-viewed .customNavigation a.next {
     background-position: 0 -402px;
     height: 18px;
     width: 11px; } }
-/* line 87, ../sass/dimensions/_rv.scss */
+/* line 95, ../sass/dimensions/_rv.scss */
 .recently-viewed .customNavigation a.next:hover {
   background-position: 0 -244px;
   height: 27px;
   width: 16px; }
 @media (max-width: 767px) {
-  /* line 87, ../sass/dimensions/_rv.scss */
+  /* line 95, ../sass/dimensions/_rv.scss */
   .recently-viewed .customNavigation a.next:hover {
     background-position: 0 -420px;
     height: 18px;
     width: 11px; } }
 
-/* line 105, ../sass/dimensions/_rv.scss */
+/* line 113, ../sass/dimensions/_rv.scss */
 .recently-viewed .rwd-controls .rwd-buttons .rwd-prev, .recently-viewed .rwd-controls .rwd-buttons .rwd-next {
   font-size: 48px;
   background: url('../images/sprites/arrow-s9ee80ff52b.png');
   top: 112.5px;
   position: absolute;
   text-indent: -999em; }
-/* line 112, ../sass/dimensions/_rv.scss */
+/* line 120, ../sass/dimensions/_rv.scss */
 .recently-viewed .rwd-controls .rwd-buttons .rwd-prev {
   left: -15px;
   background-position: 0 -339px;
   height: 27px;
   width: 16px; }
 @media (max-width: 767px) {
-  /* line 112, ../sass/dimensions/_rv.scss */
+  /* line 120, ../sass/dimensions/_rv.scss */
   .recently-viewed .rwd-controls .rwd-buttons .rwd-prev {
     background-position: 0 -366px;
     height: 18px;
     width: 11px; } }
-/* line 121, ../sass/dimensions/_rv.scss */
+/* line 129, ../sass/dimensions/_rv.scss */
 .recently-viewed .rwd-controls .rwd-buttons .rwd-prev:hover {
   background-position: 0 -271px;
   height: 27px;
   width: 16px; }
 @media (max-width: 767px) {
-  /* line 121, ../sass/dimensions/_rv.scss */
+  /* line 129, ../sass/dimensions/_rv.scss */
   .recently-viewed .rwd-controls .rwd-buttons .rwd-prev:hover {
     background-position: 0 -384px;
     height: 18px;
     width: 11px; } }
-/* line 131, ../sass/dimensions/_rv.scss */
+/* line 139, ../sass/dimensions/_rv.scss */
 .recently-viewed .rwd-controls .rwd-buttons .rwd-next {
   right: -15px;
   background-position: 0 -312px;
   height: 27px;
   width: 16px; }
 @media (max-width: 767px) {
-  /* line 131, ../sass/dimensions/_rv.scss */
+  /* line 139, ../sass/dimensions/_rv.scss */
   .recently-viewed .rwd-controls .rwd-buttons .rwd-next {
     background-position: 0 -402px;
     height: 18px;
     width: 11px; } }
-/* line 139, ../sass/dimensions/_rv.scss */
+/* line 147, ../sass/dimensions/_rv.scss */
 .recently-viewed .rwd-controls .rwd-buttons .rwd-next:hover {
   background-position: 0 -244px;
   height: 27px;
   width: 16px; }
 @media (max-width: 767px) {
-  /* line 139, ../sass/dimensions/_rv.scss */
+  /* line 147, ../sass/dimensions/_rv.scss */
   .recently-viewed .rwd-controls .rwd-buttons .rwd-next:hover {
     background-position: 0 -420px;
     height: 18px;
     width: 11px; } }
-/* line 150, ../sass/dimensions/_rv.scss */
+/* line 158, ../sass/dimensions/_rv.scss */
 .recently-viewed .rwd-controls .rwd-buttons .rwd-prev.disabled, .recently-viewed .rwd-controls .rwd-buttons .rwd-next.disabled {
   visibility: hidden; }
 
@@ -13379,7 +13379,7 @@ div.noscroll {
   background-position: 0 -168px;
   height: 24px;
   width: 27px; }
-/* line 43, ../../../../../../../../../Ruby/lib/ruby/gems/1.9.1/gems/compass-0.12.5/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 43, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-0.12.6/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
 #footer .ico_social_twitter:hover, #footer .ico_social_twitter.ico_social_twitter_hover, #footer .ico_social_twitter.ico_social_twitter-hover {
   background-position: 0 -144px; }
 @media (max-width: 320px) {
@@ -13389,7 +13389,7 @@ div.noscroll {
 /* line 89, ../sass/style/_footer.scss */
 #footer .ico_social_twitter:hover {
   background-position: 0 -168px; }
-/* line 43, ../../../../../../../../../Ruby/lib/ruby/gems/1.9.1/gems/compass-0.12.5/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 43, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-0.12.6/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
 #footer .ico_social_twitter:hover:hover, #footer .ico_social_twitter:hover.ico_social_twitter_hover, #footer .ico_social_twitter:hover.ico_social_twitter-hover {
   background-position: 0 -144px; }
 /* line 93, ../sass/style/_footer.scss */
@@ -13398,7 +13398,7 @@ div.noscroll {
   height: 24px;
   width: 27px;
   margin-left: 8px; }
-/* line 43, ../../../../../../../../../Ruby/lib/ruby/gems/1.9.1/gems/compass-0.12.5/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 43, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-0.12.6/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
 #footer .ico_social_fb:hover, #footer .ico_social_fb.ico_social_fb_hover, #footer .ico_social_fb.ico_social_fb-hover {
   background-position: 0 -192px; }
 /* line 97, ../sass/style/_footer.scss */
@@ -13410,13 +13410,13 @@ div.noscroll {
   height: 24px;
   width: 26px;
   margin-left: 9px; }
-/* line 43, ../../../../../../../../../Ruby/lib/ruby/gems/1.9.1/gems/compass-0.12.5/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 43, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-0.12.6/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
 #footer .ico_social_instagram:hover, #footer .ico_social_instagram.ico_social_instagram_hover, #footer .ico_social_instagram.ico_social_instagram-hover {
   background-position: 0 -48px; }
 /* line 106, ../sass/style/_footer.scss */
 #footer .ico_social_instagram:hover {
   background-position: 0 -120px; }
-/* line 43, ../../../../../../../../../Ruby/lib/ruby/gems/1.9.1/gems/compass-0.12.5/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 43, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-0.12.6/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
 #footer .ico_social_instagram:hover:hover, #footer .ico_social_instagram:hover.ico_social_instagram_hover, #footer .ico_social_instagram:hover.ico_social_instagram-hover {
   background-position: 0 -48px; }
 /* line 110, ../sass/style/_footer.scss */
@@ -13425,13 +13425,13 @@ div.noscroll {
   height: 24px;
   width: 26px;
   margin-left: 16px; }
-/* line 43, ../../../../../../../../../Ruby/lib/ruby/gems/1.9.1/gems/compass-0.12.5/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 43, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-0.12.6/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
 #footer .ico_social_gplus:hover, #footer .ico_social_gplus.ico_social_gplus_hover, #footer .ico_social_gplus.ico_social_gplus-hover {
   background-position: 0 0; }
 /* line 114, ../sass/style/_footer.scss */
 #footer .ico_social_gplus:hover {
   background-position: 0 -72px; }
-/* line 43, ../../../../../../../../../Ruby/lib/ruby/gems/1.9.1/gems/compass-0.12.5/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 43, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-0.12.6/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
 #footer .ico_social_gplus:hover:hover, #footer .ico_social_gplus:hover.ico_social_gplus_hover, #footer .ico_social_gplus:hover.ico_social_gplus-hover {
   background-position: 0 0; }
 /* line 118, ../sass/style/_footer.scss */
@@ -13440,13 +13440,13 @@ div.noscroll {
   height: 24px;
   width: 27px;
   margin-left: 12px; }
-/* line 43, ../../../../../../../../../Ruby/lib/ruby/gems/1.9.1/gems/compass-0.12.5/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 43, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-0.12.6/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
 #footer .ico_social_pinterest:hover, #footer .ico_social_pinterest.ico_social_pinterest_hover, #footer .ico_social_pinterest.ico_social_pinterest-hover {
   background-position: 0 -24px; }
 /* line 122, ../sass/style/_footer.scss */
 #footer .ico_social_pinterest:hover {
   background-position: 0 -96px; }
-/* line 43, ../../../../../../../../../Ruby/lib/ruby/gems/1.9.1/gems/compass-0.12.5/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 43, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-0.12.6/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
 #footer .ico_social_pinterest:hover:hover, #footer .ico_social_pinterest:hover.ico_social_pinterest_hover, #footer .ico_social_pinterest:hover.ico_social_pinterest-hover {
   background-position: 0 -24px; }
 
