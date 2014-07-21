@@ -113,6 +113,8 @@
 				<p><?php echo $_deliveryreturnInfo->getDeliveryreturnHtml();?></p>
 			<?php endif;?>
 				
+			<?php echo $this->getChildHtml("product.vendor.sizecomments");?>
+				
             <?php echo $this->getChildHtml('other');?>
 
             <?php if ($_product->isSaleable() && $this->hasOptions()):?>
