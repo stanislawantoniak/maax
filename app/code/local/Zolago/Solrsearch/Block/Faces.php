@@ -154,7 +154,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         $depends = array();
         $attributeId = $this->getAttributeIdByCode($attributeCode);
         foreach($this->getFilterCollection() as $fiter) {
-            if($fiter->getParentAttributeId()==$attributeId) {
+            if($attributeId && $fiter->getParentAttributeId()==$attributeId) {
                 $depends[] = $this->getAttributeCodeById($fiter->getAttributeId());
             }
         }
@@ -356,7 +356,6 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 		$all_categories = Mage::helper('zolagocatalog/category')->getPathArray();
 		
 		
-		
 		$_vendor = Mage::helper('umicrosite')->getCurrentVendor();
 		
 		$params = $this->getRequest()->getParams();
@@ -436,7 +435,13 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 		if($this->getMode()==self::MODE_CATEGORY){
 			
 	        foreach ($data as $key=>$val) {
-				$chosen_cat_total += (int)$val;
+	        	
+				$items = explode('/',$key);
+				$cat_id = (int)$items[count($items)-1];
+				
+				if(key_exists($cat_id, $all_categories)){
+					$chosen_cat_total += (int)$val;
+				}
 	        }
 			
 		}

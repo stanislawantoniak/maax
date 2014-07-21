@@ -7,6 +7,18 @@ class Zolago_Solrsearch_Model_Catalog_Product extends Mage_Catalog_Model_Product
 	/**
 	 * @return string
 	 */
+	public function getCurrency() {
+		if($this->getStoreId()){
+			$storeId = $this->getStoreId();
+		}else{
+			$storeId = Mage::app()->getStore()->getId();
+		}
+		return Mage::app()->getStore($storeId)->getCurrentCurrency()->getCode();
+	}
+	
+	/**
+	 * @return string
+	 */
 	public function getListingResizedImageUrl() {
 		/** 
 		 * @todo move configurable values of helpert do admin conif per website
@@ -24,7 +36,7 @@ class Zolago_Solrsearch_Model_Catalog_Product extends Mage_Catalog_Model_Product
 	 */
 	public function getUdropshipVendorLogoUrl() {
 		if($this->getData("udropship_vendor_logo")){
-			return Mage::getBaseUrl('media') . "/" . $this->getData("udropship_vendor_logo");
+			return Mage::getBaseUrl('media') . $this->getData("udropship_vendor_logo");
 		}
 		return null;
 	}

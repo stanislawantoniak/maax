@@ -56,7 +56,7 @@ class Zolago_Rma_Block_Vendor_Rma_Grid extends Mage_Adminhtml_Block_Widget_Grid
 		$this->addColumn("date_max", array(
 			"type"		=>	"date",
 			"index"		=>	"date_max",
-			"header"	=>	Mage::helper("zolagorma")->__("Date max. [dev]"),
+			"header"	=>	Mage::helper("zolagorma")->__("Response deadline [dev]"),
 			"filter"	=>	false,
 			"width"		=>	"100px"
 		));

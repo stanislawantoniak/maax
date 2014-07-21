@@ -123,22 +123,17 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
             ->addAttributeToSelect('*')
             ->addAttributeToFilter('is_active', '1')
             ->addAttributeToFilter( self::ZOLAGO_USE_IN_SEARCH_CONTEXT , array('eq' => 1))
-            ->addAttributeToFilter('include_in_menu', '1')
-            ->addAttributeToFilter('parent_id', array('eq' => $parentId));
+            ->addAttributeToFilter('include_in_menu', '1');
 
         $html = '';
-        foreach ($allCats as $category) {
-        	
-            $selected = '';
-            if($category->getId() == $cat){
-                $selected = ' selected="selected" ';
+
+        if($allCats->count() > 0){
+
+            foreach ($allCats as $category) {
+
+                $html .= '<option value="' . $category->getId() . '" >' . str_repeat("&nbsp;", 4 * $level)
+                    . $category->getName() . "</option>";
             }
-            $html .= '<option value="' . $category->getId() . '" '. $selected.'>' . str_repeat("&nbsp;", 4 * $level)
-                . $category->getName() . "</option>";
-            // $subcats = $category->getChildren();
-            // if ($subcats != '') {
-                // $html .= self::getTreeCategoriesSelect($category->getId(), $level + 1,$cat);
-            // }
         }
         return $html;
     }
@@ -183,12 +178,9 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 
 		$_vendor = Mage::helper('umicrosite')->getCurrentVendor();
 		
-        $selectedContext = 0;
-        if (isset($filterQuery['category_id']) && isset($filterQuery['category_id'][0])) {
-            $selectedContext = $filterQuery['category_id'][0];
-        }
-		
         $rootCatId = Mage::app()->getStore()->getRootCategoryId();
+		$currentCategory = Mage::registry('current_category');
+		
         // When in the vendor context grab root category
         if($_vendor && $_vendor->getId()){
             $vendor_root_category = Mage::registry('vendor_current_category');
@@ -204,7 +196,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 	        $catListHtmlSelect .= '<option selected="selected" value="'. self::ZOLAGO_SEARCH_CONTEXT_CURRENT_VENDOR .'">' . $this->__('All ') . $_vendor->getVendorName() . '</option>';
 		}
 		else{
-	        $catListHtmlSelect .= self::getTreeCategoriesSelect($rootCatId, 0, $selectedContext);
+	        $catListHtmlSelect .= self::getTreeCategoriesSelect($rootCatId, 0, $currentCategory);
 		}
 		
         if ($currentCategory = Mage::registry('current_category')) {
@@ -220,7 +212,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 				
 	            $catListHtmlSelect
 	                .= '<option value="' . $currentCategory->getId() . '" ' . $selected . '>'
-	                . Mage::helper('catalog')->__('This category')
+	                . $currentCategory->getName()
 	                . '</option>';
 			}
         }
@@ -251,6 +243,8 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
         }
 		
         $rootCatId = Mage::app()->getStore()->getRootCategoryId();
+		
+		$currentCategory = Mage::registry('current_category');
 		
 		$queryText = Mage::helper('solrsearch')->getParam('q');
 		
@@ -295,17 +289,23 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 				
 	        foreach ($allCats as $category) {
 	        	
-	            $selected = false;
-			
-				$array['select_options'][] = array(
-					'text' => $category->getName(),
-					'value' => $category->getId(),
-					'selected' => $selected
-				);
+				if($currentCategory && $currentCategory->getId() == $category->getId()){
+					
+				}
+				else{
+					
+		            $selected = false;
+				
+					$array['select_options'][] = array(
+						'text' => $category->getName(),
+						'value' => $category->getId(),
+						'selected' => $selected
+					);
+				}
 			}
         }
 		
-        if ($currentCategory = Mage::registry('current_category')) {
+        if ($currentCategory) {
 			
 			$vendor_root_category = NULL;
 			if ($_vendor && $_vendor->getId()) {

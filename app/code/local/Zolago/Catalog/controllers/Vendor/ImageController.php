@@ -15,8 +15,13 @@ class Zolago_Catalog_Vendor_ImageController
         $products = explode(',',$list);
         $mapper = Mage::getModel('zolagocatalog/mapper');
         $mapper->checkGallery($list);
-        $this->_redirect('*/*/');
+
+        // Dirty hack in order to preserve filters
+        // If we want to redirect to other page we need to do modifications to url
+        $referer_url = $this->_getRefererUrl();
+        $this->_redirectUrl($referer_url);
     }
+
     protected function _getVendorId() {
         $vendor = $this->_getSession()->getVendor();
         if ($vendor) {
