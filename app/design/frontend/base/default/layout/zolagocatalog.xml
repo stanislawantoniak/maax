@@ -10,6 +10,11 @@
 		<!--</reference>-->
 	<!--</default>-->
 
+	<catalog_product_view>
+		<reference name="product.info">
+			<block name="product.vendor.info" type="zolagocatalog/product_vendor_info"/>
+		</reference>
+	</catalog_product_view>
 	
 	<udprod_vendor_mass_index>
 		<update handle="udropship_vendor" />
