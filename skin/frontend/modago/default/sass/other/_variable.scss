@@ -20,6 +20,9 @@ $body-bg:               #fff;
 $bc-primary : #eeedf0;
 $bc-secondary : #d9d9d9;
 
+$panel-top: #FCFCFC;
+$panel-bottom: #FEFEFE;
+
 
 @mixin border-all($size:1px) {
     
@@ -93,5 +96,7 @@ $formIcoMap: sprite-map("sprites/form_feedback/*.png");
 $bgMap: sprite-map("sprites/bg/*.png");
 $formMap: sprite-map("sprites/form/*.png");
 $btnSocialMap: sprite-map("sprites/btn-social/*.png");
+
+$flagMap: sprite-map("sprites/flags/*.png");
 
 $btnCheck: sprite-map("check_filter/*.png", $spacing:200px);

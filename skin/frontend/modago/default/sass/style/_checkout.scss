@@ -38,6 +38,12 @@
 		border-color:$bc-primary;
 		.panel-body {
 			position:relative;
+			.current-addres {
+				margin:-15px -15px 0 -15px;
+				padding:15px;
+				border-bottom: 1px solid $bc-primary;
+				background:$panel-top;
+			}
 			dl.pull-left {
 				
 			}
@@ -62,6 +68,8 @@
 			}
 		.panel-footer {
 			background:transparent;
+			border:none;
+			padding: 0 15px 15px;
 		}
 		
 		&.current {
@@ -75,6 +83,16 @@
 			.form-group {
 				.form-group {
 					margin-bottom: 0px;
+					padding-right: 5px;
+					&.col-xs-6 {
+						@media(min-width: 730px) and (max-width:767px) {
+							max-width:264px!important
+						}
+					}
+					&+.form-group {
+						padding-right: 15px;
+						padding-left: 5px;
+					}
 				}
 			}
 			
@@ -126,7 +144,8 @@
 	}
 	.sidebar-secound {
 		.main {
-			padding:15px 30px;
+			//padding:15px 30px;
+			padding:30px 30px;
 			margin-bottom: 15px;
 			@media (max-width:480px) {
 				padding:15px 15px;
@@ -533,6 +552,14 @@
 		}
 		.default_delivery {
 			margin-bottom: 0px;
+			&.small-no-float {
+				@media(max-width:530px) {
+					float:none!important;
+					margin-bottom: 10px;
+					clear:both;
+				}
+			}
+			
 		}
 		.phone {
 			@media (max-width:525px){
@@ -588,7 +615,7 @@
 	}
 	.panel {
 		box-shadow:none;
-		background:#f8f8f7;
+		background:$panel-bottom;
 	}
 	.current-addres {
 		+ .panel {
