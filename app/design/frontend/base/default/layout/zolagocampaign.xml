@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+	<zolagocampaign_vendor_index>
+		<update handle="udropship_vendor" />
+        <update handle="adminhtml_head" />
+		<update handle="bootstrap"/>
+		<reference name="content">
+			<block name="campaign" type="core/template" template="zolagocampaign/dropship/campaign.phtml"></block>		    
+		</reference>
+	</zolagocampaign_vendor_index>
+	
+</layout>
