@@ -41,6 +41,7 @@ $attributePriceMargin = $setup->addAttribute(
          'type'       => 'text',
          'input'      => 'text',
          'label'      => 'Price margin, %',
+         'frontend_class'      => 'validate-number',
          'sort_order' => 21,
          'set_id'     => 4,
          'required'   => false,
