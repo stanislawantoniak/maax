@@ -70,11 +70,11 @@
 
                             <dl>
                                 <dt><?php echo $this->__("Shop details"); ?>:</dt>
-                                <dd><?php echo $this->__("Avarage stars count"); ?> <?php echo $this->getAvarangeRating(); ?> (<?php echo $this->getRatingCount(); ?> <?php echo $this->__("opinions"); ?>)</dd>
+                                <dd><?php echo $this->__("Avarage stars count"); ?> <?php echo $this->percentToNumber($this->getAvarangeRating()); ?> (<?php echo $this->getRatingCount(); ?> <?php echo $this->__("opinions"); ?>)</dd>
                                 <dd><?php echo $this->getAvarangeRating(); ?>% <?php echo $this->__("avarage rating"); ?></dd>
                                 <dd class="separator"></dd>
                                 <?php foreach($this->getRatingsSummary() as $rating) : ?>
-                                <dd class="visual"><?php echo $rating['rating_title']; ?> <span class="visual_block"><span></span></span> <?php echo $rating['vote_percent']; ?></dd>
+                                <dd class="visual"><?php echo $rating['rating_title']; ?> <span class="visual_block"><span></span></span> <?php echo $this->percentToNumber($rating['vote_percent']); ?></dd>
                                 <?php endforeach; ?>
                             </dl>
                             <a href="<?php echo $this->getVendorUrl(); ?>" class="view-store hidden-xs"><?php echo $this->__("Go to vendor's store"); ?></a>
@@ -162,11 +162,11 @@
 
                 <dl>
                     <dt><?php echo $this->__("Shop details"); ?>:</dt>
-                    <dd><?php echo $this->__("Avarage stars count"); ?> 3 (<?php echo $this->getRatingCount(); ?> <?php echo $this->__("opinions"); ?>)</dd>
+                    <dd><?php echo $this->__("Avarage stars count"); ?> <?php echo $this->percentToNumber($this->getAvarangeRating()); ?> (<?php echo $this->getRatingCount(); ?> <?php echo $this->__("opinions"); ?>)</dd>
                     <dd><?php echo $this->getAvarangeRating(); ?>% <?php echo $this->__("avarage rating"); ?></dd>
                     <dd class="separator"></dd>
                     <?php foreach($this->getRatingsSummary() as $rating) : ?>
-                    <dd class="visual"><?php echo $rating['rating_title']; ?> <span class="visual_block"><span></span></span> <?php echo $rating['vote_percent']; ?></dd>
+                    <dd class="visual"><?php echo $rating['rating_title']; ?> <span class="visual_block"><span></span></span> <?php echo $this->percentToNumber($rating['vote_percent']); ?></dd>
                     <?php endforeach; ?>
                 </dl>
                 <a href="<?php echo $this->getVendorUrl(); ?>" class="view-store button button-secondary link"><?php echo $this->__("Go to vendor's store"); ?></a>
