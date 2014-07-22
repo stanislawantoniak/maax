@@ -2,6 +2,9 @@
 class Zolago_Catalog_Block_Product_Vendor_Info
 	extends Zolago_Catalog_Block_Product_Vendor_Abstract
 {
+	const MIN_RATING = 1;
+	const MAX_RATING = 5;
+	
 	/**
 	 * @return string|null
 	 */
@@ -72,5 +75,13 @@ class Zolago_Catalog_Block_Product_Vendor_Info
 			array("rating_id"=>"2", "rating_title"=>"Realizacja zamówień", "vote_percent"=>60),
 			array("rating_id"=>"3", "rating_title"=>"Kontakt", "vote_percent"=>40)
 		);
+	}
+	
+	/**
+	 * @param int $percent
+	 * @return float
+	 */
+	public function percentToNumber($percent) {
+		return round(($percent/100)*(self::MAX_RATING-self::MIN_RATING) + self::MAX_RATING, 1);
 	}
 }
