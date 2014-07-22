@@ -82,6 +82,6 @@ class Zolago_Catalog_Block_Product_Vendor_Info
 	 * @return float
 	 */
 	public function percentToNumber($percent) {
-		return round(($percent/100)*(self::MAX_RATING-self::MIN_RATING) + self::MIX_RATING, 1);
+		return round(($percent/100)*(self::MAX_RATING-self::MIN_RATING) + self::MIN_RATING, 1);
 	}
 }
