@@ -205,7 +205,10 @@
                 <template>catalog/product/view.phtml</template>
             </action>
             <block name="product.info.media.modal" type="catalog/product_view_media" template="catalog/product/view/modal.gallery.phtml"/>
-            <block name="product.vendor.info" type="zolagocatalog/product_vendor_info" template="catalog/product/vendor/info.phtml" />
+            <block name="product.vendor.info" type="zolagocatalog/product_vendor_info" template="catalog/product/vendor/info.phtml">
+                <block name="product.vendor.deliveryreturn" type="zolagocatalog/product_vendor_deliveryreturn" />
+            </block>
+
         </reference>
 
         <reference name="product.info.addto">
