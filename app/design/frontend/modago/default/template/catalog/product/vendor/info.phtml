@@ -5,6 +5,9 @@
  */
 
 ?>
+<?php
+    $_deliveryreturnInfo = $this->getChild("product.vendor.deliveryreturn");
+?>
 
 <div id="seller-box-bundle">
     <div class="row">
@@ -27,12 +30,14 @@
                     <a href="#"><span><?php echo $this->__("Submit a question to seller"); ?> <i class="bullet-plusik"></i></span> </a>
                 </h3>
             </div>
+            <?php if($_deliveryreturnInfo) : ?>
             <div class="descripionProduct-box-comments block">
                 <h3>
                     <a href="#" data-toggle="modal" data-target="#terms_delivery"><span><?php echo $this->__("RMA rules"); ?> <i class="bullet-plusik"></i></span>
                     </a>
                 </h3>
             </div>
+            <?php endif; ?>
         </div>
         <div class="col-lg-12 col-md-6 visible-xs">
             <div class="panel-group" id="accordion">
@@ -65,11 +70,11 @@
 
                             <dl>
                                 <dt><?php echo $this->__("Shop details"); ?>:</dt>
-                                <dd><?php echo $this->__("Avarage stars count"); ?> <?php echo $this->getAvarangeRating(); ?> (<?php echo $this->getRatingCount(); ?> <?php echo $this->__("opinions"); ?>)</dd>
+                                <dd><?php echo $this->__("Avarage stars count"); ?> <?php echo $this->percentToNumber($this->getAvarangeRating()); ?> (<?php echo $this->getRatingCount(); ?> <?php echo $this->__("opinions"); ?>)</dd>
                                 <dd><?php echo $this->getAvarangeRating(); ?>% <?php echo $this->__("avarage rating"); ?></dd>
                                 <dd class="separator"></dd>
                                 <?php foreach($this->getRatingsSummary() as $rating) : ?>
-                                <dd class="visual"><?php echo $rating['rating_title']; ?> <span class="visual_block"><span></span></span> <?php echo $rating['vote_percent']; ?></dd>
+                                <dd class="visual"><?php echo $rating['rating_title']; ?> <span class="visual_block"><span></span></span> <?php echo $this->percentToNumber($rating['vote_percent']); ?></dd>
                                 <?php endforeach; ?>
                             </dl>
                             <a href="<?php echo $this->getVendorUrl(); ?>" class="view-store hidden-xs"><?php echo $this->__("Go to vendor's store"); ?></a>
@@ -90,35 +95,22 @@
                         </div>
                     </div>
                 </div>
+                <?php if($_deliveryreturnInfo): ?>
                 <div class="panel panel-default last">
                     <div class="panel-heading">
                         <h4 class="panel-title">
                             <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
-                                Warunki dostawy i zwrotu <i class="bullet-strzalka-down"></i>
+                                <?php echo $this->__("RMA rules"); ?> <i class="bullet-strzalka-down"></i>
                             </a>
                         </h4>
                     </div>
                     <div id="collapseThree" class="panel-collapse collapse">
                         <div class="panel-body">
-                            <ul>
-                                <li>
-                                    <strong>Koszt dostawy:</strong> Darmowa dostawa
-                                </li>
-                                <li>
-                                    <strong>Czas dostawy:</strong> 24h, doręczenie 1-2 dni robocze
-                                </li>
-                                <li>
-                                    <strong>pcje płatności:</strong> przelew elektroniczny, płatność gotówką przy odbiorze
-                                </li>
-
-                            </ul>
-                            <dl>
-                                <dt>Możliwość zwrotu w ciągu 30 dni</dt>
-                                <dd>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent pellentesque eget turpis ut sodales. Nunc aliquam id dui a imperdiet. Fusce pharetra luctus tristique. Vivamus varius quis mi at dictum. Maecenas rhoncus nulla quis luctus mattis. Integer urna eros, accumsan sit amet sollicitudin quis, lobortis sed turpis. Curabitur sodales tristique tellus vel viverra. Morbi pulvinar non mi a semper. Donec hendrerit sollicitudin nisl, quis fermentum tellus mattis eget. Fusce egestas eleifend pharetra. Pellentesque nec sodales urna, a adipiscing tortor. Duis elementum hendrerit enim et vulputate. </dd>
-                            </dl>
+                            <?php echo $_deliveryreturnInfo->getDeliveryreturnHtml(); ?>
                         </div>
                     </div>
                 </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>
@@ -127,35 +119,21 @@
 
 </div>
 
+<?php if($_deliveryreturnInfo) : ?>
 <div class="modal fade bs-example-modal-lg" id="terms_delivery" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="z-index: 1050">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"></button>
-                <h2 class="title_section">DOSTAWA I ZWROTY</h2>
+                <h2 class="title_section"><?php echo $this->__("DELIVERY & RETURNS"); ?></h2>
             </div>
             <div class="modal-body">
-                <ul>
-                    <li>
-                        <strong>Koszt dostawy:</strong> Darmowa dostawa
-                    </li>
-                    <li>
-                        <strong>Czas dostawy:</strong> 24h, doręczenie 1-2 dni robocze
-                    </li>
-                    <li>
-                        <strong>pcje płatności:</strong> przelew elektroniczny, płatność gotówką przy odbiorze
-                    </li>
-
-                </ul>
-                <dl>
-                    <dt>Możliwość zwrotu w ciągu 30 dni</dt>
-                    <dd>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent pellentesque eget turpis ut sodales. Nunc aliquam id dui a imperdiet. Fusce pharetra luctus tristique. Vivamus varius quis mi at dictum. Maecenas rhoncus nulla quis luctus mattis. Integer urna eros, accumsan sit amet sollicitudin quis, lobortis sed turpis. Curabitur sodales tristique tellus vel viverra. Morbi pulvinar non mi a semper. Donec hendrerit sollicitudin nisl, quis fermentum tellus mattis eget. Fusce egestas eleifend pharetra. Pellentesque nec sodales urna, a adipiscing tortor. Duis elementum hendrerit enim et vulputate. </dd>
-                </dl>
+                <?php echo $_deliveryreturnInfo->getDeliveryreturnHtml(); ?>
             </div>
         </div>
     </div>
 </div>
-
+<?php endif; ?>
 
 <div class="modal fade bs-example-modal-lg" id="seller_description" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="z-index: 1050">
     <div class="modal-dialog modal-lg">
@@ -184,11 +162,11 @@
 
                 <dl>
                     <dt><?php echo $this->__("Shop details"); ?>:</dt>
-                    <dd><?php echo $this->__("Avarage stars count"); ?> 3 (<?php echo $this->getRatingCount(); ?> <?php echo $this->__("opinions"); ?>)</dd>
+                    <dd><?php echo $this->__("Avarage stars count"); ?> <?php echo $this->percentToNumber($this->getAvarangeRating()); ?> (<?php echo $this->getRatingCount(); ?> <?php echo $this->__("opinions"); ?>)</dd>
                     <dd><?php echo $this->getAvarangeRating(); ?>% <?php echo $this->__("avarage rating"); ?></dd>
                     <dd class="separator"></dd>
                     <?php foreach($this->getRatingsSummary() as $rating) : ?>
-                    <dd class="visual"><?php echo $rating['rating_title']; ?> <span class="visual_block"><span></span></span> <?php echo $rating['vote_percent']; ?></dd>
+                    <dd class="visual"><?php echo $rating['rating_title']; ?> <span class="visual_block"><span></span></span> <?php echo $this->percentToNumber($rating['vote_percent']); ?></dd>
                     <?php endforeach; ?>
                 </dl>
                 <a href="<?php echo $this->getVendorUrl(); ?>" class="view-store button button-secondary link"><?php echo $this->__("Go to vendor's store"); ?></a>
