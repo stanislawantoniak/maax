@@ -22,6 +22,9 @@
 				@media (min-width: $screen-md-min) { padding-bottom: 12px; }
 				/* Large devices (large desktops, 1200px and up) */
 				@media (min-width: $screen-lg-min) { padding-bottom: 12px; }
+				@media (max-width: $screen-xs-max) {
+					display:none;
+				}
 				a:link,
 				a:visited {
 					text-transform: uppercase;
@@ -89,6 +92,9 @@
 		background:none;
 		i {
 			left:-60px;
+			@media (max-width: 460px) {
+				left:10px;
+			}
 
 		}
 	}
@@ -96,7 +102,22 @@
 		background:none;
 		i {
 			right:-60px;
+			@media (max-width: 460px) {
+				right:10px;
+			}
 		}
 	}
 	
+}
+
+.node-type-page-shop {
+	.carousel-inner {
+		.item {
+			.carousel-caption {
+				@media (max-width: $screen-xs-max) {
+					display:none;
+				}
+			}
+		}
+	}
 }

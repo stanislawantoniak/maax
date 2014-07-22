@@ -234,6 +234,14 @@
 				.date-order {
 					text-transform: none;
 					font-size: 13px;
+					&.pull-right {
+						@media (max-width: 639px) {
+							float:none!important;
+							display:block;
+							padding: 3px 0;
+						}
+					}
+					
 				}
 			}
 		}

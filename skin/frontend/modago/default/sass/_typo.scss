@@ -177,7 +177,7 @@ a.underline {
 			@include sprite-dimensions($bulletMap, arrow-external-link);
 			position:absolute;
 			right:-(image-width(sprite-file($bulletMap, arrow-external-link)))*1.5;
-			top:0;
+			top:2.5px;
 			margin-top: 5px;
 		}
 	}
@@ -264,6 +264,41 @@ article {
 
 	}
 }
+.node-type-page-shop {	
+	.title-section {
+		h2 {
+			font-size: 35px;
+			
+			
+			@media (min-width: $screen-md-min) and (max-width: $screen-md-max) {
+				font-size: 30px;
+				padding: 5px 15px 0;
+			}
+			@media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
+				font-size: 25px;
+				padding: 5px 15px 0;
+			}
+			@media (max-width: $screen-xs-max) {
+				font-size: 25px;
+				padding: 5px 15px 0;
+			}
+			@media (max-width: 480px) {
+				font-size: 17px;
+				padding: 10px 15px 0;
+			}
+			@media (max-width: 360px) {
+				font-size: 15px;
+				padding: 10px 15px 0;
+			}
+		}
+		.inspiration-strips {
+			@media (max-width: $screen-xs-max) {
+				left:15px;
+				right:15px;
+			}
+		}
+	}	
+}
 #name-shop {
 	text-transform: uppercase;
 	font-size: 18px;
@@ -285,7 +320,7 @@ article {
 		h2 {
 			position: relative;
 			display: block;
-			height: 18px;
+			//height: 18px;
 			overflow: hidden;
 			padding-left: 35px;
 			font-size: 18px;
@@ -314,6 +349,7 @@ article {
 		}
 	}
 }
+
 .no-padding-bottom {
 	padding-bottom: 0px!important;
 }
@@ -1504,7 +1540,6 @@ figure {
 			box-shadow:none;
 		}
 		&:active,
-		&:focus,
 		&.active {
 			background: #fff;
 			border-color:#c9ac6d;
@@ -1700,7 +1735,7 @@ figure {
 			border-radius: 0px;
 			.tooltip-inner{
 				background:#f0f0f0;
-				white-space:nowrap;
+				white-space: normal;
 				padding: 6px 8px;
 				color:#000;
 				border-radius: 0px;
@@ -1742,5 +1777,14 @@ figure {
 	margin-bottom: 10px;
 	@media (min-width: $screen-lg-min) {
 		margin-bottom: 15px;
+	}
+}
+
+.p {
+	figure {
+		img {
+			width:100%;
+			height:auto;
+		}
 	}
 }

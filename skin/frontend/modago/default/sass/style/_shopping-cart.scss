@@ -421,8 +421,12 @@
 	}
 	#cart-summary {
 		padding:24px 15px;
-		@media (max-width: 360px) {
-			padding:24px 4px;
+		@media (max-width: $screen-md-max) {
+			position:relative;
+			padding:24px 27px;
+		}
+		@media (max-width: $screen-xs-max) {
+			padding: 10px 15px;
 		}
 		> header {
 			margin-bottom: 30px;
@@ -536,6 +540,7 @@
 					border-left: 1px solid #ededed;
 					border-right: 1px solid #ededed;
 					width:195px;
+					display:block;
 					i {
 						position:absolute;
 						right: 4px;
@@ -572,6 +577,25 @@
 		}
 		.form-action {
 			text-align: center;
+			@media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {
+				position:absolute;
+				bottom: 41px;
+				right: 15px;
+				width: 100%;
+				max-width: 250px;
+			}
+			@media (min-width:641px) and (max-width:767px) {
+				text-align: center;
+			}
+			@media (min-width:640px) and (max-width:640px) and (orientation : landscape) {
+				text-align: right;
+			}
+			@media (min-width:481px) and (max-width:639px)  {
+				text-align: center;
+			}
+			@media (min-width:480px) and (max-width:480px) and (orientation : landscape) {
+				text-align: right;
+			}
 		}
 		.button.button-primary {
 				width:100%;
@@ -583,9 +607,12 @@
 		}
 	}
 	#payment-methods {
-		padding:24px 20px;
+		padding:24px 15px;
+		@media (max-width: $screen-md-max) {
+			padding:24px 27px;
+		}
 		@media (max-width: $screen-xs-max) {
-			padding:10px 4px;
+			padding: 10px 15px;
 		}
 		> header {
 			margin-bottom: 27px;
@@ -602,11 +629,16 @@
 		.payment-methods-list {
 			a {
 				@include inline-block;
+				max-width: 83px;
 				margin-bottom: 12px;
 				&:nth-child(4n+0) {
 					@media (max-width: $screen-xs-max) {
 
 					}
+				}
+				img {
+					width:100%;
+					height:auto;
 				}
 			}
 		}

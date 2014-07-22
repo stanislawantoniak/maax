@@ -10,11 +10,11 @@
             <orbacommon>
                 <class>Orba_Common_Block</class>
             </orbacommon>
-            <page>
-                <rewrite>
-                    <html_head>Orba_Common_Block_Page_Html_Head</html_head>
-                </rewrite>
-            </page>
+            <!--<page>-->
+                <!--<rewrite>-->
+                    <!--<html_head>Orba_Common_Block_Page_Html_Head</html_head>-->
+                <!--</rewrite>-->
+            <!--</page>-->
         </blocks>
         <models>
             <orbacommon>
