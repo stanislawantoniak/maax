@@ -103,7 +103,13 @@ class Zolago_Catalog_Model_Queue_Pricetype extends Zolago_Common_Model_Queue_Abs
                         Mage::helper('zolagocatalog/pricetype')->_logQueue("New price {$priceType}: {$newPrice}");
 
                         $margin = (isset($priceMarginValuesByStore[$store]) && isset($priceMarginValuesByStore[$store][$productId])) ? $priceMarginValuesByStore[$store][$productId] : 0;
-
+                        if ($store <> Mage_Core_Model_App::ADMIN_STORE_ID
+                            && !isset($priceMarginValuesByStore[$store][$productId])
+                            && isset($priceMarginValuesByStore[Mage_Core_Model_App::ADMIN_STORE_ID][$productId])
+                        ) {
+                            //Use Default Value
+                            $margin = $priceMarginValuesByStore[Mage_Core_Model_App::ADMIN_STORE_ID][$productId];
+                        }
                         Mage::helper('zolagocatalog/pricetype')->_logQueue("Margin {$priceType}: {$margin}%");
 
                         $newPriceWithMargin = $newPrice + $newPrice * ((int)$margin / 100);
