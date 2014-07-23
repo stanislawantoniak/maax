@@ -281,6 +281,19 @@ class Zolago_Solrsearch_Model_Observer {
 		}
 		
 	}
+
+    public function zolagoCatalogAfterUpdateProducts(Varien_Event_Observer $observer)
+    {
+        $event = $observer->getEvent();
+        $productIds = $event->getProductIds();
+
+        $storeIds = array_keys(Mage::app()->getStores());
+        foreach ($this->_filterStoreIds($storeIds) as $storeId) {
+            foreach ($productIds as $productId) {
+                $this->collectProduct($productId, $storeId);
+            }
+        }
+    }
 	
 	
 	/**

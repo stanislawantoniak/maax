@@ -25,6 +25,7 @@ class Zolago_Catalog_Model_Queue_Pricetype extends Zolago_Common_Model_Queue_Abs
 
     protected function _execute()
     {
+        $recalculateConfigurableIds = array();
         Mage::helper('zolagocatalog/pricetype')->_logQueue( "Start process queue");
         $collection = $this->_collection;
 
@@ -63,12 +64,12 @@ class Zolago_Catalog_Model_Queue_Pricetype extends Zolago_Common_Model_Queue_Abs
         try {
             $converter = Mage::getModel('zolagoconverter/client');
         } catch (Exception $e) {
-            Mage::throwException("DHL client is unavailable");
+            Mage::throwException("Converter is unavailable");
             return;
         }
         $productAction = Mage::getSingleton('catalog/product_action');
         if (!empty($skuvs)) {
-            $recalculateConfigurableIds = array();
+
             foreach ($skuvs as $productId => $productData) {
                 $vendorSku = $productData['skuv'];
                 $sku = $productData['sku'];
@@ -147,6 +148,13 @@ class Zolago_Catalog_Model_Queue_Pricetype extends Zolago_Common_Model_Queue_Abs
             }
         }
 
+        //zolago_catalog_after_update_price_type
+        Mage::dispatchEvent(
+            "zolago_catalog_after_update_price_type",
+            array(
+                 "product_ids" => array_keys($recalculateConfigurableIds)
+            )
+        );
 
         if(!empty($recalculateConfigurableIds)){
             Mage::helper('zolagocatalog/pricetype')->_logQueue( "Add to configurable recalculation queue");
