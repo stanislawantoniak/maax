@@ -208,7 +208,7 @@
             <block name="product.vendor.info" type="zolagocatalog/product_vendor_info" template="catalog/product/vendor/info.phtml">
                 <block name="product.vendor.deliveryreturn" type="zolagocatalog/product_vendor_deliveryreturn" />
             </block>
-
+            <block name="product.vendor.sizecomments" type="zolagocatalog/product_vendor_sizecomments" />
         </reference>
 
         <reference name="product.info.addto">

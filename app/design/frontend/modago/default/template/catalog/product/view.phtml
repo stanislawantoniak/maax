@@ -783,10 +783,10 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"></button>
-                <h4 class="title_section">Tabela rozmiarów</h4>
+                <h4 class="title_section"><?php echo $this->__("Size table"); ?></h4>
             </div>
             <div class="modal-body">
-                ...
+                <?php echo $this->getChildHtml("product.vendor.sizecomments"); ?>
             </div>
         </div>
     </div>
@@ -794,8 +794,8 @@
 <div id="lightbox" style="z-index: 1050">
     <div id="inner-lightbox">
         <div id="hl" class="clearfix">
-            <img src="skin/frontend/modago/default/images/logo_header_lightbox.png" alt="Modago - Galeria handlowa" class="pull-left">
-            <button id="remove-lightbox" class="button button-third pull-right">Zamknij</button>
+            <img src="<?php echo $this->getSkinUrl('images/logo_header_lightbox.png'); ?>" alt="<?php echo $this->getLogoAlt(); ?>" class="pull-left">
+            <button id="remove-lightbox" class="button button-third pull-right"><?php echo $this->__("Close"); ?></button>
         </div>
 
         <div class="bl"></div>
