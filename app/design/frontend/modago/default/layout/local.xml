@@ -211,6 +211,9 @@
             </block>
             <block name="product.vendor.sizecomments" type="zolagocatalog/product_vendor_sizecomments" />
             <block name="udqa.product.question" type="udqa/product_question" />
+            <block name="product.review.section" type="review/product_view" template="catalog/product/view/review-section.phtml">
+                <block name="product.review.form" type="zolagomodago/review_form"/>
+            </block>
         </reference>
 
         <reference name="product.info.addto">
