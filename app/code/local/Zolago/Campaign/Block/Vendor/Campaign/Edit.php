@@ -42,7 +42,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
 		$general->addField("url_key", "text", array(
 			"name"	 => "url_key",
 			"required" => true,
-			"class"  => "form-control urlKey campaignUrlKey",
+			"class"  => "form-control urlKeyFormat urlKeyExists",
 			"label"  => $helper->__('URL Key')
 		));
 		

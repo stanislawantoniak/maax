@@ -115,6 +115,13 @@ var App = function($) {
 			$(".numeric").numeric({min:0, allowMinus: false});
 			$(".alphanum").alphanum();
 			$(".alpha").alpha();
+			$(".urlKeyFormat").alphanum({
+				allowUpper: false,
+				allowSpace: false,
+				allow: "-_",
+				allowOtherCharSets: false,
+				maxLength: 100,
+			});
 		}
 			
 		//===== loading btn =====//	
