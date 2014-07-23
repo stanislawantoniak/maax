@@ -28,7 +28,7 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
             ->from(array("s"=>$this->getTable("core/store")), array('store_id'))
             ->join(
 				array("g"=>$this->getTable("core/store_group")),
-				"g.store_id=s.store_id",
+				"g.group_id=s.group_id",
 				array())
 			->join(
 				array("c"=>$this->getTable("catalog/product_website")),

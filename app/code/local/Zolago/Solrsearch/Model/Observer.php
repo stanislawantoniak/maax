@@ -20,12 +20,6 @@ class Zolago_Solrsearch_Model_Observer {
 	
 	
 	/**
-	 * Are colleced product handled?
-	 * @var bool
-	 */
-	protected $_handled = false;
-	
-	/**
 	 * Shoul queue by handled
 	 * @var bool
 	 */
@@ -247,17 +241,11 @@ class Zolago_Solrsearch_Model_Observer {
 		 * @todo add check solr-used attribute changed?
 		 */
 		
-		if($storeId==Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID){
-			$storeIds = array_keys(Mage::app()->getStores());
-		}else{
-			$storeIds = array($storeId);
+		foreach($productIds as $productId){
+			$this->collectProduct($productId, $storeId, true);
 		}
 		
-		foreach($this->_filterStoreIds($storeIds) as $storeId){
-			foreach($productIds as $productId){
-				$this->collectProduct($productId, $storeId, true);
-			}
-		}
+		$this->processCollectedProducts();
 	}
 	
 	
@@ -272,13 +260,11 @@ class Zolago_Solrsearch_Model_Observer {
 		$event = $observer->getEvent();
 		$productIds = $event->getProductIds();
 	
-		$storeIds = array_keys(Mage::app()->getStores());
-		
-		foreach($this->_filterStoreIds($storeIds) as $storeId){
-			foreach($productIds as $productId){
-				$this->collectProduct($productId, $storeId);
-			}
+		foreach($productIds as $productId){
+			$this->collectProduct($productId, Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID, true);
 		}
+		
+		$this->processCollectedProducts();
 		
 	}
 
@@ -287,12 +273,9 @@ class Zolago_Solrsearch_Model_Observer {
         $event = $observer->getEvent();
         $productIds = $event->getProductIds();
 
-        $storeIds = array_keys(Mage::app()->getStores());
-        foreach ($this->_filterStoreIds($storeIds) as $storeId) {
-            foreach ($productIds as $productId) {
-                $this->collectProduct($productId, $storeId);
-            }
-        }
+		foreach ($productIds as $productId) {
+			$this->collectProduct($productId, Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID);
+		}
     }
 	
 	
@@ -310,10 +293,10 @@ class Zolago_Solrsearch_Model_Observer {
 	 */
 	public function controllerFrontSendResponseAfter(
 			Varien_Event_Observer $observer=null) {
+		
 		if($this->_collectedProdutcs){
 			$this->processCollectedProducts();
 		}
-		$this->_handled = true;
 	}
 	
 	
@@ -351,6 +334,7 @@ class Zolago_Solrsearch_Model_Observer {
 	 */
 	public function processCollectedProducts() {
 		
+		//var_export($this->_collectedProdutcs);
 		if(!$this->_canBeHandled){
 			return;
 		}
@@ -358,7 +342,6 @@ class Zolago_Solrsearch_Model_Observer {
 		$resource = Mage::getResourceModel("zolagosolrsearch/improve");;
 		/* @var $resource Zolago_Solrsearch_Model_Resource_Improve */
 	
-		
 		foreach($this->_collectedProdutcs as $storeId=>$products){
 			
 			$stores = array();
@@ -401,6 +384,9 @@ class Zolago_Solrsearch_Model_Observer {
 			}
 			
 		}
+		
+		$this->_collectedProdutcs = array();
+		$this->_collectedCheckParents = array();
 		
 	}
 	
@@ -500,14 +486,6 @@ class Zolago_Solrsearch_Model_Observer {
 		Mage::log("Nothing");
 	}
 	
-	/**
-	 * If no after dispatch - handle collected in destruct
-	 */
-	public function __destruct() {
-		if(!$this->_handled){
-			$this->processCollectedProducts();
-		}
-	}
 	
 	public function handleCatalogLayoutRender($observer)
 	{
