@@ -53,4 +53,15 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
     {
         return '/dla-niej.html';
     }
+
+    /**
+     * @todo Implementation
+     *
+     * @return mixed
+     */
+    public function getProductFlagLabel()
+    {
+        $flags = array('', 'new', 'hit', 'percent', 'sale');
+        return $flags[rand(0, 4)];
+    }
 }
