@@ -6419,13 +6419,13 @@ html.fb-static .fb-slidebar, .fb-slidebar.fb-static {
 /* line 42, ../sass/modules/_sidebar.scss */
 #filter_size label input[type=checkbox]:checked {
   outline: none !important; }
-/* line 45, ../sass/modules/_sidebar.scss */
-#filter_size label input[type=checkbox]:checked + span {
+/* line 46, ../sass/modules/_sidebar.scss */
+#filter_size label input[type=checkbox]:checked + span, #filter_size label input.checked + span {
   background: #000;
   border-color: #000;
   color: #fff; }
 
-/* line 55, ../sass/modules/_sidebar.scss */
+/* line 56, ../sass/modules/_sidebar.scss */
 #filter_manufacturer input[type="text"] {
   padding: 0 23px 0 5px;
   float: left;
@@ -6433,22 +6433,22 @@ html.fb-static .fb-slidebar, .fb-slidebar.fb-static {
   width: 122px;
   border: 1px solid #d6d6d6;
   float: left; }
-/* line 62, ../sass/modules/_sidebar.scss */
+/* line 63, ../sass/modules/_sidebar.scss */
 #filter_manufacturer input[type="text"]:focus {
   outline: none; }
-/* line 66, ../sass/modules/_sidebar.scss */
+/* line 67, ../sass/modules/_sidebar.scss */
 #filter_manufacturer input[type="image"] {
   height: 23px;
   margin-left: 2px;
   float: left;
   outline: none; }
-/* line 72, ../sass/modules/_sidebar.scss */
+/* line 73, ../sass/modules/_sidebar.scss */
 #filter_manufacturer .form-group {
   position: relative; }
-/* line 75, ../sass/modules/_sidebar.scss */
+/* line 76, ../sass/modules/_sidebar.scss */
 #filter_manufacturer > .form-group {
   margin-bottom: 15px; }
-/* line 79, ../sass/modules/_sidebar.scss */
+/* line 80, ../sass/modules/_sidebar.scss */
 #filter_manufacturer #filter_manufacturer_search + label {
   position: absolute;
   right: 0px;
@@ -6458,56 +6458,56 @@ html.fb-static .fb-slidebar, .fb-slidebar.fb-static {
   margin: 0px;
   height: 23px;
   width: 23px; }
-/* line 88, ../sass/modules/_sidebar.scss */
+/* line 89, ../sass/modules/_sidebar.scss */
 #filter_manufacturer #filter_manufacturer_search + label i {
   position: static;
   margin: 4px 0 0 4px;
   color: #000; }
 
-/* line 97, ../sass/modules/_sidebar.scss */
+/* line 98, ../sass/modules/_sidebar.scss */
 #filter_price > .form-checkbox {
   margin-left: 0px; }
-/* line 101, ../sass/modules/_sidebar.scss */
+/* line 102, ../sass/modules/_sidebar.scss */
 #filter_price .form-horizontal + .form-horizontal {
   margin-left: 5px; }
-/* line 104, ../sass/modules/_sidebar.scss */
+/* line 105, ../sass/modules/_sidebar.scss */
 #filter_price .form-horizontal input {
   margin: 0 5px; }
-/* line 106, ../sass/modules/_sidebar.scss */
+/* line 107, ../sass/modules/_sidebar.scss */
 #filter_price .form-horizontal input[type="text"] {
   padding: 0px;
   margin: 0px 5px;
   text-align: center;
   height: 22px;
   width: 38px; }
-/* line 114, ../sass/modules/_sidebar.scss */
+/* line 115, ../sass/modules/_sidebar.scss */
 #filter_price .form-horizontal label {
   font-weight: normal; }
-/* line 117, ../sass/modules/_sidebar.scss */
+/* line 118, ../sass/modules/_sidebar.scss */
 #filter_price .form-horizontal [type="image"] {
   width: 34px;
   height: 19px; }
-/* line 122, ../sass/modules/_sidebar.scss */
+/* line 123, ../sass/modules/_sidebar.scss */
 #filter_price #checkSlider {
   float: left;
   margin: 0 14px 0 -16px;
   position: relative;
   top: 2px; }
-/* line 128, ../sass/modules/_sidebar.scss */
+/* line 129, ../sass/modules/_sidebar.scss */
 #filter_price #od_do {
   padding-left: 16px; }
-/* line 130, ../sass/modules/_sidebar.scss */
+/* line 131, ../sass/modules/_sidebar.scss */
 #filter_price #od_do #slider-range {
   margin-top: 10px; }
-/* line 134, ../sass/modules/_sidebar.scss */
+/* line 135, ../sass/modules/_sidebar.scss */
 #filter_price #od_do .form-horizontal {
   width: 40px;
   float: left;
   margin-left: -6px; }
-/* line 138, ../sass/modules/_sidebar.scss */
+/* line 139, ../sass/modules/_sidebar.scss */
 #filter_price #od_do .form-horizontal + .form-horizontal {
   margin-left: 11px; }
-/* line 142, ../sass/modules/_sidebar.scss */
+/* line 143, ../sass/modules/_sidebar.scss */
 #filter_price #od_do .form-action {
   margin-bottom: 5px;
   margin-right: -7px;
@@ -6515,11 +6515,11 @@ html.fb-static .fb-slidebar, .fb-slidebar.fb-static {
   width: 35px;
   position: relative;
   left: -3px; }
-/* line 149, ../sass/modules/_sidebar.scss */
+/* line 150, ../sass/modules/_sidebar.scss */
 #filter_price #od_do .form-action .btn {
   position: relative;
   top: 0px; }
-/* line 152, ../sass/modules/_sidebar.scss */
+/* line 153, ../sass/modules/_sidebar.scss */
 #filter_price #od_do .form-action .btn.black {
   width: 35px !important;
   height: 22px !important;
@@ -6528,21 +6528,21 @@ html.fb-static .fb-slidebar, .fb-slidebar.fb-static {
   min-width: 35px;
   padding: 0px; }
 
-/* line 166, ../sass/modules/_sidebar.scss */
+/* line 167, ../sass/modules/_sidebar.scss */
 #filter_color [type="checkbox"] {
   outline: none !important;
   margin: 3px 0 0 3px; }
-/* line 170, ../sass/modules/_sidebar.scss */
+/* line 171, ../sass/modules/_sidebar.scss */
 #filter_color label {
   display: inline-block;
   width: 34px;
   height: 34px;
   margin: 5px 7px;
   position: relative; }
-/* line 176, ../sass/modules/_sidebar.scss */
+/* line 177, ../sass/modules/_sidebar.scss */
 #filter_color label:nth-child(3n+1) {
   margin-left: 0; }
-/* line 179, ../sass/modules/_sidebar.scss */
+/* line 180, ../sass/modules/_sidebar.scss */
 #filter_color label > span {
   display: block;
   width: 33px;
@@ -6557,50 +6557,54 @@ html.fb-static .fb-slidebar, .fb-slidebar.fb-static {
   -ms-border-radius: 5px;
   -o-border-radius: 5px;
   border-radius: 5px; }
-/* line 189, ../sass/modules/_sidebar.scss */
+/* line 190, ../sass/modules/_sidebar.scss */
 #filter_color label > span span {
   display: inline-block;
   width: 27px;
   height: 27px;
   border: 1px solid #afafaf; }
-/* line 197, ../sass/modules/_sidebar.scss */
+/* line 198, ../sass/modules/_sidebar.scss */
 #filter_color label [type="checkbox"]:hover + span {
   background: #999;
   cursor: pointer; }
-/* line 201, ../sass/modules/_sidebar.scss */
-#filter_color label [type="checkbox"]:checked + span {
+/* line 203, ../sass/modules/_sidebar.scss */
+#filter_color label [type="checkbox"]:checked + span, #filter_color label span.checked {
   background: #000; }
-/* line 204, ../sass/modules/_sidebar.scss */
+/* line 206, ../sass/modules/_sidebar.scss */
 #filter_color label:hover span {
   background: #999;
   cursor: pointer; }
 
-/* line 211, ../sass/modules/_sidebar.scss */
+/* line 213, ../sass/modules/_sidebar.scss */
 .manufacturerList {
   margin: 0px !important;
   padding: 5px 0 5px 0;
   list-style: none;
   margin-bottom: 10px; }
-/* line 218, ../sass/modules/_sidebar.scss */
+/* line 220, ../sass/modules/_sidebar.scss */
 .manufacturerList li {
   padding-left: 5px;
   padding-right: 19px; }
-/* line 221, ../sass/modules/_sidebar.scss */
+/* line 223, ../sass/modules/_sidebar.scss */
 .manufacturerList li .form-group {
   margin-bottom: 5px; }
-/* line 224, ../sass/modules/_sidebar.scss */
+/* line 226, ../sass/modules/_sidebar.scss */
 .manufacturerList li.lastChecked {
   border-bottom: 1px solid #d0cfcf;
   margin-bottom: 5px; }
 
-/* line 233, ../sass/modules/_sidebar.scss */
+/* line 235, ../sass/modules/_sidebar.scss */
 #filter_style .select-group.medium {
   width: 140px;
   max-width: 140px; }
-/* line 236, ../sass/modules/_sidebar.scss */
+/* line 238, ../sass/modules/_sidebar.scss */
 #filter_style .select-group.medium .button-select {
   width: 140px;
   min-width: 140px; }
+
+/* line 246, ../sass/modules/_sidebar.scss */
+span.checked {
+  background: #000; }
 
 @media (max-width: 768px) {
   /* line 4, ../sass/modules/_current-filter.scss */
@@ -7196,15 +7200,15 @@ html.fb-static .fb-slidebar, .fb-slidebar.fb-static {
 /* line 114, ../sass/modules/_rwdCarousel.scss */
 .rwd-fade-out {
   z-index: 10;
-  -webkit-animation: fadeOut .7s both ease;
-  -moz-animation: fadeOut .7s both ease;
-  animation: fadeOut .7s both ease; }
+  -webkit-animation: fadeOut .0s both ease;
+  -moz-animation: fadeOut .0s both ease;
+  animation: fadeOut .0s both ease; }
 
 /* line 120, ../sass/modules/_rwdCarousel.scss */
 .rwd-fade-in {
-  -webkit-animation: fadeIn .7s both ease;
-  -moz-animation: fadeIn .7s both ease;
-  animation: fadeIn .7s both ease; }
+  -webkit-animation: fadeIn .0s both ease;
+  -moz-animation: fadeIn .0s both ease;
+  animation: fadeIn .0s both ease; }
 
 /* backSlide */
 /* line 126, ../sass/modules/_rwdCarousel.scss */
@@ -7222,28 +7226,28 @@ html.fb-static .fb-slidebar, .fb-slidebar.fb-static {
 /* goDown */
 /* line 137, ../sass/modules/_rwdCarousel.scss */
 .rwd-goDown-out {
-  -webkit-animation: scaleToFade .7s ease both;
-  -moz-animation: scaleToFade .7s ease both;
-  animation: scaleToFade .7s ease both; }
+  -webkit-animation: scaleToFade .1s ease both;
+  -moz-animation: scaleToFade .1s ease both;
+  animation: scaleToFade .1s ease both; }
 
 /* line 142, ../sass/modules/_rwdCarousel.scss */
 .rwd-goDown-in {
-  -webkit-animation: goDown .6s ease both;
-  -moz-animation: goDown .6s ease both;
-  animation: goDown .6s ease both; }
+  -webkit-animation: goDown .1s ease both;
+  -moz-animation: goDown .1s ease both;
+  animation: goDown .1s ease both; }
 
 /* scaleUp */
 /* line 148, ../sass/modules/_rwdCarousel.scss */
 .rwd-fadeUp-in {
-  -webkit-animation: scaleUpFrom .5s ease both;
-  -moz-animation: scaleUpFrom .5s ease both;
-  animation: scaleUpFrom .5s ease both; }
+  -webkit-animation: scaleUpFrom .0s ease both;
+  -moz-animation: scaleUpFrom .0s ease both;
+  animation: scaleUpFrom .0s ease both; }
 
 /* line 154, ../sass/modules/_rwdCarousel.scss */
 .rwd-fadeUp-out {
-  -webkit-animation: scaleUpTo .5s ease both;
-  -moz-animation: scaleUpTo .5s ease both;
-  animation: scaleUpTo .5s ease both; }
+  -webkit-animation: scaleUpTo .0s ease both;
+  -moz-animation: scaleUpTo .0s ease both;
+  animation: scaleUpTo .0s ease both; }
 
 /* Keyframes */
 /*empty*/
@@ -14662,19 +14666,23 @@ i.flag.hit {
   /* line 14, ../sass/style/_checkout.scss */
   #checkout section header h2 {
     padding-left: 45px; } }
+@media (max-width: 359px) {
+  /* line 14, ../sass/style/_checkout.scss */
+  #checkout section header h2 {
+    font-size: 16px; } }
 @media (max-width: 480px) {
-  /* line 20, ../sass/style/_checkout.scss */
+  /* line 23, ../sass/style/_checkout.scss */
   #checkout section header h2:before {
     left: 14px; } }
-/* line 26, ../sass/style/_checkout.scss */
+/* line 29, ../sass/style/_checkout.scss */
 #checkout section header p {
   margin-left: 35px; }
-/* line 31, ../sass/style/_checkout.scss */
+/* line 34, ../sass/style/_checkout.scss */
 #checkout h4 {
   margin-top: 10px;
   margin-bottom: 15px;
   padding: 0; }
-/* line 36, ../sass/style/_checkout.scss */
+/* line 39, ../sass/style/_checkout.scss */
 #checkout .panel {
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
@@ -14682,114 +14690,123 @@ i.flag.hit {
   -o-border-radius: 2px;
   border-radius: 2px;
   border-color: #eeedf0; }
-/* line 39, ../sass/style/_checkout.scss */
+/* line 42, ../sass/style/_checkout.scss */
 #checkout .panel .panel-body {
   position: relative; }
-/* line 41, ../sass/style/_checkout.scss */
+/* line 44, ../sass/style/_checkout.scss */
 #checkout .panel .panel-body .current-addres {
   margin: -15px -15px 0 -15px;
   padding: 15px;
   border-bottom: 1px solid #eeedf0;
   background: #fcfcfc; }
-/* line 50, ../sass/style/_checkout.scss */
+/* line 53, ../sass/style/_checkout.scss */
 #checkout .panel .panel-body .btn-select {
   position: absolute;
   right: 15px;
   bottom: 15px; }
 @media (max-width: 360px) {
-  /* line 50, ../sass/style/_checkout.scss */
+  /* line 53, ../sass/style/_checkout.scss */
   #checkout .panel .panel-body .btn-select {
     position: static;
     margin-top: 15px;
     clear: both;
     float: none !important; } }
-/* line 62, ../sass/style/_checkout.scss */
+/* line 65, ../sass/style/_checkout.scss */
 #checkout .panel .panel-heading {
   background: none;
   border-bottom: none;
   text-transform: uppercase;
   color: #000;
   padding-top: 25px; }
-/* line 69, ../sass/style/_checkout.scss */
+/* line 72, ../sass/style/_checkout.scss */
 #checkout .panel .panel-footer {
   background: transparent;
   border: none;
   padding: 0 15px 15px; }
-/* line 75, ../sass/style/_checkout.scss */
+/* line 78, ../sass/style/_checkout.scss */
 #checkout .panel.current {
   border-color: #d9d9d9; }
-/* line 79, ../sass/style/_checkout.scss */
+/* line 82, ../sass/style/_checkout.scss */
 #checkout .panel .panel h4 {
   text-transform: uppercase; }
-/* line 84, ../sass/style/_checkout.scss */
+@media (max-width: 359px) {
+  /* line 82, ../sass/style/_checkout.scss */
+  #checkout .panel .panel h4 {
+    font-size: 16px; } }
+/* line 90, ../sass/style/_checkout.scss */
 #checkout .panel .panel .form-group .form-group {
   margin-bottom: 0px;
   padding-right: 5px; }
 @media (min-width: 730px) and (max-width: 767px) {
-  /* line 87, ../sass/style/_checkout.scss */
+  /* line 93, ../sass/style/_checkout.scss */
   #checkout .panel .panel .form-group .form-group.col-xs-6 {
     max-width: 264px !important; } }
-/* line 92, ../sass/style/_checkout.scss */
+/* line 98, ../sass/style/_checkout.scss */
 #checkout .panel .panel .form-group .form-group + .form-group {
   padding-right: 15px;
   padding-left: 5px; }
-/* line 103, ../sass/style/_checkout.scss */
+/* line 109, ../sass/style/_checkout.scss */
 #checkout dd.separator {
   margin-top: 15px; }
 @media (min-width: 481px) {
-  /* line 105, ../sass/style/_checkout.scss */
+  /* line 111, ../sass/style/_checkout.scss */
   #checkout dd.separator.large {
     margin-bottom: -15px;
     margin-top: 36px; } }
-/* line 114, ../sass/style/_checkout.scss */
+/* line 120, ../sass/style/_checkout.scss */
 #checkout dd.action a {
   margin-right: 15px; }
-/* line 118, ../sass/style/_checkout.scss */
+@media (max-width: 359px) {
+  /* line 120, ../sass/style/_checkout.scss */
+  #checkout dd.action a {
+    font-size: 12px; } }
+/* line 127, ../sass/style/_checkout.scss */
 #checkout #invoice {
   margin-bottom: 15px; }
-/* line 121, ../sass/style/_checkout.scss */
+/* line 130, ../sass/style/_checkout.scss */
 #checkout .staining_delivery_address {
   position: absolute;
   right: 15px;
-  top: 50%;
+  bottom: -7px;
   margin-top: -10px;
   text-transform: uppercase;
   font-weight: bold; }
-@media (max-width: 360px) {
-  /* line 121, ../sass/style/_checkout.scss */
+@media (max-width: 640px) {
+  /* line 130, ../sass/style/_checkout.scss */
   #checkout .staining_delivery_address {
     position: static;
     padding-top: 15px;
     display: block;
-    clear: both; } }
-/* line 135, ../sass/style/_checkout.scss */
+    clear: both;
+    margin-bottom: 0px; } }
+/* line 145, ../sass/style/_checkout.scss */
 #checkout .border-top {
   border-top: 1px solid #eeedf0;
   padding-top: 15px; }
 @media (max-width: 767px) {
-  /* line 135, ../sass/style/_checkout.scss */
+  /* line 145, ../sass/style/_checkout.scss */
   #checkout .border-top {
     padding-top: 6px; } }
-/* line 141, ../sass/style/_checkout.scss */
+/* line 151, ../sass/style/_checkout.scss */
 #checkout .border-top:first-child {
   border-top: none; }
-/* line 146, ../sass/style/_checkout.scss */
+/* line 156, ../sass/style/_checkout.scss */
 #checkout .sidebar-secound .main {
   padding: 30px 30px;
   margin-bottom: 15px; }
 @media (max-width: 480px) {
-  /* line 146, ../sass/style/_checkout.scss */
+  /* line 156, ../sass/style/_checkout.scss */
   #checkout .sidebar-secound .main {
     padding: 15px 15px; } }
-/* line 154, ../sass/style/_checkout.scss */
+/* line 164, ../sass/style/_checkout.scss */
 #checkout .sidebar-secound header {
   margin-left: -30px;
   margin-bottom: 15px; }
 @media (max-width: 767px) {
-  /* line 154, ../sass/style/_checkout.scss */
+  /* line 164, ../sass/style/_checkout.scss */
   #checkout .sidebar-secound header {
     margin-left: -15px; } }
-/* line 161, ../sass/style/_checkout.scss */
+/* line 171, ../sass/style/_checkout.scss */
 #checkout .sidebar-secound h2 {
   font-size: 18px;
   font-family: "latoregular";
@@ -14807,10 +14824,10 @@ i.flag.hit {
   margin-bottom: 8px;
   margin-top: 0px; }
 @media (max-width: 480px) {
-  /* line 161, ../sass/style/_checkout.scss */
+  /* line 171, ../sass/style/_checkout.scss */
   #checkout .sidebar-secound h2 {
     padding-left: 45px; } }
-/* line 181, ../sass/style/_checkout.scss */
+/* line 191, ../sass/style/_checkout.scss */
 #checkout .sidebar-secound h2:before {
   content: ' ';
   display: block;
@@ -14821,31 +14838,31 @@ i.flag.hit {
   top: 0px;
   background: #6fffcf; }
 @media (max-width: 480px) {
-  /* line 181, ../sass/style/_checkout.scss */
+  /* line 191, ../sass/style/_checkout.scss */
   #checkout .sidebar-secound h2:before {
     left: 14px; } }
-/* line 195, ../sass/style/_checkout.scss */
+/* line 205, ../sass/style/_checkout.scss */
 #checkout .sidebar-secound h4 {
   font-size: 13px;
   font-weight: bold;
   text-transform: uppercase; }
-/* line 200, ../sass/style/_checkout.scss */
+/* line 210, ../sass/style/_checkout.scss */
 #checkout .sidebar-secound ul, #checkout .sidebar-secound ol {
   margin-left: 0px;
   padding-left: 25px; }
-/* line 206, ../sass/style/_checkout.scss */
+/* line 216, ../sass/style/_checkout.scss */
 #checkout #sidebar .main {
   padding: 15px 30px;
   margin-bottom: 15px; }
 @media (max-width: 480px) {
-  /* line 206, ../sass/style/_checkout.scss */
+  /* line 216, ../sass/style/_checkout.scss */
   #checkout #sidebar .main {
     padding: 15px 15px; } }
-/* line 213, ../sass/style/_checkout.scss */
+/* line 223, ../sass/style/_checkout.scss */
 #checkout #sidebar header {
   margin-left: -30px;
   margin-bottom: 15px; }
-/* line 218, ../sass/style/_checkout.scss */
+/* line 228, ../sass/style/_checkout.scss */
 #checkout #sidebar h2 {
   font-size: 18px;
   font-family: "latoregular";
@@ -14863,10 +14880,10 @@ i.flag.hit {
   margin-bottom: 8px;
   margin-top: 0px; }
 @media (max-width: 480px) {
-  /* line 218, ../sass/style/_checkout.scss */
+  /* line 228, ../sass/style/_checkout.scss */
   #checkout #sidebar h2 {
     padding-left: 45px; } }
-/* line 238, ../sass/style/_checkout.scss */
+/* line 248, ../sass/style/_checkout.scss */
 #checkout #sidebar h2:before {
   content: ' ';
   display: block;
@@ -14877,53 +14894,53 @@ i.flag.hit {
   top: 0px;
   background: #6fffcf; }
 @media (max-width: 480px) {
-  /* line 238, ../sass/style/_checkout.scss */
+  /* line 248, ../sass/style/_checkout.scss */
   #checkout #sidebar h2:before {
     left: 14px; } }
-/* line 252, ../sass/style/_checkout.scss */
+/* line 262, ../sass/style/_checkout.scss */
 #checkout #sidebar h4 {
   font-size: 13px;
   font-weight: bold;
   text-transform: uppercase; }
-/* line 257, ../sass/style/_checkout.scss */
+/* line 267, ../sass/style/_checkout.scss */
 #checkout #sidebar ul, #checkout #sidebar ol {
   margin-left: -15px;
   margin-right: -15px;
   padding-left: 0; }
-/* line 263, ../sass/style/_checkout.scss */
+/* line 273, ../sass/style/_checkout.scss */
 #checkout #sidebar .list-group li {
   border: none; }
-/* line 265, ../sass/style/_checkout.scss */
+/* line 275, ../sass/style/_checkout.scss */
 #checkout #sidebar .list-group li.list-group-item {
   padding: 5px 0px 5px 5px; }
-/* line 268, ../sass/style/_checkout.scss */
+/* line 278, ../sass/style/_checkout.scss */
 #checkout #sidebar .list-group li a {
   font-size: 13px; }
-/* line 282, ../sass/style/_checkout.scss */
+/* line 292, ../sass/style/_checkout.scss */
 #checkout form .form-group {
   margin-bottom: 10px; }
 @media (max-width: 767px) {
-  /* line 282, ../sass/style/_checkout.scss */
+  /* line 292, ../sass/style/_checkout.scss */
   #checkout form .form-group {
     margin-bottom: 15px; } }
-/* line 287, ../sass/style/_checkout.scss */
+/* line 297, ../sass/style/_checkout.scss */
 #checkout form .form-group .form-group {
   margin-bottom: 0px; }
-/* line 292, ../sass/style/_checkout.scss */
+/* line 302, ../sass/style/_checkout.scss */
 #checkout form fieldset {
   margin-bottom: 15px; }
-/* line 294, ../sass/style/_checkout.scss */
+/* line 304, ../sass/style/_checkout.scss */
 #checkout form fieldset.no-border {
   border: none;
   margin-bottom: 20px; }
-/* line 299, ../sass/style/_checkout.scss */
+/* line 309, ../sass/style/_checkout.scss */
 #checkout form fieldset.default_pay .form-radio {
   margin-top: 15px; }
 @media (min-width: 361px) and (max-width: 767px) {
-  /* line 304, ../sass/style/_checkout.scss */
+  /* line 314, ../sass/style/_checkout.scss */
   #checkout form fieldset#doc_pay .form-radio {
     width: 150px !important; } }
-/* line 312, ../sass/style/_checkout.scss */
+/* line 322, ../sass/style/_checkout.scss */
 #checkout form fieldset legend {
   font-size: 14px;
   font-weight: bold;
@@ -14932,10 +14949,10 @@ i.flag.hit {
   margin-bottom: 15px;
   border-color: #eeedf0; }
 @media (max-width: 760px) {
-  /* line 319, ../sass/style/_checkout.scss */
+  /* line 329, ../sass/style/_checkout.scss */
   #checkout form fieldset legend.first {
     margin-bottom: 6px; } }
-/* line 333, ../sass/style/_checkout.scss */
+/* line 343, ../sass/style/_checkout.scss */
 #checkout form label {
   font-size: 12px;
   line-height: 29px;
@@ -14943,97 +14960,97 @@ i.flag.hit {
   text-align: right;
   font-weight: normal; }
 @media (max-width: 767px) {
-  /* line 333, ../sass/style/_checkout.scss */
+  /* line 343, ../sass/style/_checkout.scss */
   #checkout form label {
     text-align: left; } }
-/* line 342, ../sass/style/_checkout.scss */
+/* line 352, ../sass/style/_checkout.scss */
 #checkout form label.double-line {
   line-height: 1.2; }
-/* line 346, ../sass/style/_checkout.scss */
+/* line 356, ../sass/style/_checkout.scss */
 #checkout form .form-checkbox {
   margin-bottom: 15px;
   margin-left: 20px; }
 @media (max-width: 767px) {
-  /* line 346, ../sass/style/_checkout.scss */
+  /* line 356, ../sass/style/_checkout.scss */
   #checkout form .form-checkbox {
     margin-bottom: 10px; } }
 @media (max-width: 767px) {
-  /* line 356, ../sass/style/_checkout.scss */
+  /* line 366, ../sass/style/_checkout.scss */
   #checkout form .form-checkbox.default_pay {
     text-align: left; } }
 @media (max-width: 480px) {
-  /* line 356, ../sass/style/_checkout.scss */
+  /* line 366, ../sass/style/_checkout.scss */
   #checkout form .form-checkbox.default_pay {
     margin-left: 15px; } }
-/* line 365, ../sass/style/_checkout.scss */
+/* line 375, ../sass/style/_checkout.scss */
 #checkout form .form-checkbox label {
   line-height: 17px !important;
   height: auto; }
-/* line 372, ../sass/style/_checkout.scss */
+/* line 382, ../sass/style/_checkout.scss */
 #checkout form .form-radio label {
   text-align: left;
   padding-left: 30px;
   line-height: 15px;
   width: 100%; }
-/* line 377, ../sass/style/_checkout.scss */
+/* line 387, ../sass/style/_checkout.scss */
 #checkout form .form-radio label span {
   position: relative;
   top: -6px;
   margin-bottom: -6px; }
 @media (max-width: 360px) {
-  /* line 377, ../sass/style/_checkout.scss */
+  /* line 387, ../sass/style/_checkout.scss */
   #checkout form .form-radio label span {
     top: -17px; } }
-/* line 390, ../sass/style/_checkout.scss */
+/* line 400, ../sass/style/_checkout.scss */
 #checkout form input[type="text"], #checkout form input[type="email"], #checkout form input[type="password"] {
   height: 29px;
   line-height: 29px;
   padding: 0 15px 0 15px; }
-/* line 396, ../sass/style/_checkout.scss */
+/* line 406, ../sass/style/_checkout.scss */
 #checkout form #remember_data > .row {
   margin-bottom: 20px; }
-/* line 398, ../sass/style/_checkout.scss */
+/* line 408, ../sass/style/_checkout.scss */
 #checkout form #remember_data > .row + .row {
   margin-bottom: 0; }
-/* line 406, ../sass/style/_checkout.scss */
+/* line 416, ../sass/style/_checkout.scss */
 #checkout form #login_social {
   position: relative; }
 @media (min-width: 768px) {
-  /* line 406, ../sass/style/_checkout.scss */
+  /* line 416, ../sass/style/_checkout.scss */
   #checkout form #login_social {
     top: -32px;
     margin-bottom: -30px; } }
-/* line 412, ../sass/style/_checkout.scss */
+/* line 422, ../sass/style/_checkout.scss */
 #checkout form #login_social p {
   margin-bottom: 10px; }
-/* line 415, ../sass/style/_checkout.scss */
+/* line 425, ../sass/style/_checkout.scss */
 #checkout form #login_social a {
   margin-right: 10px; }
 @media (min-width: 768px) and (max-width: 1199px) {
-  /* line 417, ../sass/style/_checkout.scss */
+  /* line 427, ../sass/style/_checkout.scss */
   #checkout form #login_social a.g-plus {
     margin-bottom: 5px; } }
 @media (max-width: 339px) {
-  /* line 417, ../sass/style/_checkout.scss */
+  /* line 427, ../sass/style/_checkout.scss */
   #checkout form #login_social a.g-plus {
     margin-left: -10px; } }
-/* line 425, ../sass/style/_checkout.scss */
+/* line 435, ../sass/style/_checkout.scss */
 #checkout form #login_social a.fb {
   margin-right: 0px; }
 @media (min-width: 768px) and (max-width: 1199px) {
-  /* line 425, ../sass/style/_checkout.scss */
+  /* line 435, ../sass/style/_checkout.scss */
   #checkout form #login_social a.fb {
     margin-bottom: 5px; } }
 @media (max-width: 339px) {
-  /* line 425, ../sass/style/_checkout.scss */
+  /* line 435, ../sass/style/_checkout.scss */
   #checkout form #login_social a.fb {
     margin-right: -10px; } }
-/* line 436, ../sass/style/_checkout.scss */
+/* line 446, ../sass/style/_checkout.scss */
 #checkout form #selected_bank {
   list-style: none;
   margin: 0px;
   padding: 0px; }
-/* line 440, ../sass/style/_checkout.scss */
+/* line 450, ../sass/style/_checkout.scss */
 #checkout form #selected_bank li {
   display: inline-block;
   width: 132px;
@@ -15041,59 +15058,59 @@ i.flag.hit {
   margin-right: 10px;
   margin-bottom: 15px; }
 @media (max-width: 380px) {
-  /* line 440, ../sass/style/_checkout.scss */
+  /* line 450, ../sass/style/_checkout.scss */
   #checkout form #selected_bank li {
     width: 47%;
     height: 89px; } }
 @media (min-width: 380px) and (max-width: 400px) {
-  /* line 440, ../sass/style/_checkout.scss */
+  /* line 450, ../sass/style/_checkout.scss */
   #checkout form #selected_bank li {
     width: 47%;
     height: 100px; } }
 @media (min-width: 401px) and (max-width: 640px) {
-  /* line 440, ../sass/style/_checkout.scss */
+  /* line 450, ../sass/style/_checkout.scss */
   #checkout form #selected_bank li {
     width: 30.666%;
     height: 100px; } }
 @media (min-width: 641px) and (max-width: 767px) {
-  /* line 440, ../sass/style/_checkout.scss */
+  /* line 450, ../sass/style/_checkout.scss */
   #checkout form #selected_bank li {
     width: 23%;
     height: 110px; } }
 @media (min-width: 768px) and (max-width: 992px) {
-  /* line 440, ../sass/style/_checkout.scss */
+  /* line 450, ../sass/style/_checkout.scss */
   #checkout form #selected_bank li {
     width: 18.333%;
     height: 110px; } }
 @media (min-width: 993px) {
-  /* line 440, ../sass/style/_checkout.scss */
+  /* line 450, ../sass/style/_checkout.scss */
   #checkout form #selected_bank li {
     width: 18.333%;
     height: 110px; } }
 @media (max-width: 400px) {
-  /* line 471, ../sass/style/_checkout.scss */
+  /* line 481, ../sass/style/_checkout.scss */
   #checkout form #selected_bank li:nth-child(even) {
     margin-right: 0px; } }
 @media (min-width: 401px) and (max-width: 640px) {
-  /* line 476, ../sass/style/_checkout.scss */
+  /* line 486, ../sass/style/_checkout.scss */
   #checkout form #selected_bank li:nth-child(3n) {
     margin-right: 0px; } }
 @media (min-width: 641px) and (max-width: 767px) {
-  /* line 482, ../sass/style/_checkout.scss */
+  /* line 492, ../sass/style/_checkout.scss */
   #checkout form #selected_bank li:nth-child(4n) {
     margin-right: 0px; } }
 @media (min-width: 768px) and (max-width: 992px) {
-  /* line 488, ../sass/style/_checkout.scss */
+  /* line 498, ../sass/style/_checkout.scss */
   #checkout form #selected_bank li:nth-child(5n) {
     margin-right: 0px; } }
 @media (min-width: 993px) {
-  /* line 488, ../sass/style/_checkout.scss */
+  /* line 498, ../sass/style/_checkout.scss */
   #checkout form #selected_bank li:nth-child(5n) {
     margin-right: 0px; } }
-/* line 496, ../sass/style/_checkout.scss */
+/* line 506, ../sass/style/_checkout.scss */
 #checkout form #selected_bank .form-group {
   position: relative; }
-/* line 499, ../sass/style/_checkout.scss */
+/* line 509, ../sass/style/_checkout.scss */
 #checkout form #selected_bank label {
   position: absolute;
   top: 0px;
@@ -15105,7 +15122,7 @@ i.flag.hit {
   text-align: center;
   cursor: pointer;
   padding-right: 0px; }
-/* line 510, ../sass/style/_checkout.scss */
+/* line 520, ../sass/style/_checkout.scss */
 #checkout form #selected_bank label img {
   border: 1px solid #eeedf0;
   margin-bottom: 5px;
@@ -15113,158 +15130,158 @@ i.flag.hit {
   background: #fff;
   width: 100%;
   height: auto; }
-/* line 518, ../sass/style/_checkout.scss */
+/* line 528, ../sass/style/_checkout.scss */
 #checkout form #selected_bank label span {
   position: static; }
-/* line 523, ../sass/style/_checkout.scss */
+/* line 533, ../sass/style/_checkout.scss */
 #checkout form #selected_bank label:hover img {
   border-color: #d9d9d9; }
-/* line 530, ../sass/style/_checkout.scss */
+/* line 540, ../sass/style/_checkout.scss */
 #checkout form #selected_bank input[type=radio]:checked + label img {
   border-color: #d9d9d9; }
-/* line 537, ../sass/style/_checkout.scss */
+/* line 547, ../sass/style/_checkout.scss */
 #checkout form .action a {
   position: relative; }
-/* line 541, ../sass/style/_checkout.scss */
+/* line 551, ../sass/style/_checkout.scss */
 #checkout form .action button {
   min-width: 120px; }
-/* line 546, ../sass/style/_checkout.scss */
+/* line 556, ../sass/style/_checkout.scss */
 #checkout form #remember_data .row {
   margin-bottom: 0px; }
-/* line 548, ../sass/style/_checkout.scss */
+/* line 558, ../sass/style/_checkout.scss */
 #checkout form #remember_data .row p {
   margin-bottom: 15px; }
-/* line 553, ../sass/style/_checkout.scss */
+/* line 563, ../sass/style/_checkout.scss */
 #checkout form .default_delivery {
   margin-bottom: 0px; }
 @media (max-width: 530px) {
-  /* line 555, ../sass/style/_checkout.scss */
+  /* line 565, ../sass/style/_checkout.scss */
   #checkout form .default_delivery.small-no-float {
     float: none !important;
     margin-bottom: 10px;
     clear: both; } }
 @media (max-width: 525px) {
-  /* line 564, ../sass/style/_checkout.scss */
+  /* line 574, ../sass/style/_checkout.scss */
   #checkout form .phone {
     display: inline-block;
     margin-bottom: 15px; } }
 @media (max-width: 359px) {
-  /* line 564, ../sass/style/_checkout.scss */
+  /* line 574, ../sass/style/_checkout.scss */
   #checkout form .phone {
     display: block;
     margin-bottom: 15px; } }
 @media (max-width: 359px) {
-  /* line 573, ../sass/style/_checkout.scss */
+  /* line 583, ../sass/style/_checkout.scss */
   #checkout form .phone span {
     display: block; } }
-/* line 581, ../sass/style/_checkout.scss */
+/* line 591, ../sass/style/_checkout.scss */
 #checkout form #back {
   position: relative;
   top: 12px; }
-/* line 586, ../sass/style/_checkout.scss */
+/* line 596, ../sass/style/_checkout.scss */
 #checkout .text-align-left {
   text-align: left !important; }
-/* line 587, ../sass/style/_checkout.scss */
+/* line 597, ../sass/style/_checkout.scss */
 #checkout .text-align-left label {
   text-align: left !important; }
 
 @media (max-width: 767px) {
-  /* line 596, ../sass/style/_checkout.scss */
+  /* line 606, ../sass/style/_checkout.scss */
   #checkout #content-main {
     padding-left: 0px;
     padding-right: 0px; } }
 @media (min-width: 768px) and (max-width: 991px) {
-  /* line 603, ../sass/style/_checkout.scss */
+  /* line 613, ../sass/style/_checkout.scss */
   #checkout .sidebar-secound {
     margin-top: -15px; } }
 @media (max-width: 991px) {
-  /* line 603, ../sass/style/_checkout.scss */
+  /* line 613, ../sass/style/_checkout.scss */
   #checkout .sidebar-secound {
     padding-left: 15px;
     padding-right: 15px; } }
 @media (max-width: 767px) {
-  /* line 603, ../sass/style/_checkout.scss */
+  /* line 613, ../sass/style/_checkout.scss */
   #checkout .sidebar-secound {
     padding-left: 0px;
     padding-right: 0px; } }
-/* line 616, ../sass/style/_checkout.scss */
+/* line 626, ../sass/style/_checkout.scss */
 #checkout .panel {
   box-shadow: none;
   background: #fefefe; }
-/* line 621, ../sass/style/_checkout.scss */
+/* line 631, ../sass/style/_checkout.scss */
 #checkout .current-addres + .panel {
   margin-top: 15px; }
-/* line 629, ../sass/style/_checkout.scss */
+/* line 639, ../sass/style/_checkout.scss */
 #checkout .toggle {
   display: none; }
-/* line 634, ../sass/style/_checkout.scss */
+/* line 644, ../sass/style/_checkout.scss */
 #checkout .panel-body dl {
   margin-bottom: 0px; }
 @media (max-width: 360px) {
-  /* line 637, ../sass/style/_checkout.scss */
+  /* line 647, ../sass/style/_checkout.scss */
   #checkout .panel-body dl.pull-left.small-no-float {
     float: none !important; } }
 @media (max-width: 480px) {
-  /* line 644, ../sass/style/_checkout.scss */
+  /* line 654, ../sass/style/_checkout.scss */
   #checkout .panel-body dl + figure {
     width: 115px; } }
 @media (max-width: 480px) {
-  /* line 648, ../sass/style/_checkout.scss */
+  /* line 658, ../sass/style/_checkout.scss */
   #checkout .panel-body dl + figure img {
     width: 100%; } }
-/* line 655, ../sass/style/_checkout.scss */
+/* line 665, ../sass/style/_checkout.scss */
 #checkout .panel-body .panel {
   display: none;
   margin-bottom: 15px;
   background: #fff; }
-/* line 659, ../sass/style/_checkout.scss */
+/* line 669, ../sass/style/_checkout.scss */
 #checkout .panel-body .panel.selected {
   border-color: #d9d9d9; }
-/* line 661, ../sass/style/_checkout.scss */
+/* line 671, ../sass/style/_checkout.scss */
 #checkout .panel-body .panel.selected .selected_bank {
   display: block; }
-/* line 667, ../sass/style/_checkout.scss */
+/* line 677, ../sass/style/_checkout.scss */
 #checkout #block_invoice {
   display: none; }
-/* line 670, ../sass/style/_checkout.scss */
+/* line 680, ../sass/style/_checkout.scss */
 #checkout .button-primary {
   min-width: 120px; }
-/* line 676, ../sass/style/_checkout.scss */
+/* line 686, ../sass/style/_checkout.scss */
 #checkout .default_pay > .panel > .panel-body > .panel {
   display: block; }
-/* line 678, ../sass/style/_checkout.scss */
+/* line 688, ../sass/style/_checkout.scss */
 #checkout .default_pay > .panel > .panel-body > .panel:hover {
   border-color: #d9d9d9; }
-/* line 684, ../sass/style/_checkout.scss */
+/* line 694, ../sass/style/_checkout.scss */
 #checkout .default_pay .selected_bank {
   display: none; }
 @media (max-width: 767px) {
-  /* line 687, ../sass/style/_checkout.scss */
+  /* line 697, ../sass/style/_checkout.scss */
   #checkout .default_pay .flag_pay_method {
     display: none; } }
 
-/* line 705, ../sass/style/_checkout.scss */
+/* line 715, ../sass/style/_checkout.scss */
 .logged #checkout .default_pay > .panel > .panel-heading {
   padding-bottom: 0px; }
-/* line 709, ../sass/style/_checkout.scss */
+/* line 719, ../sass/style/_checkout.scss */
 .logged #checkout .default_pay > .panel > .panel-heading + .panel-body .default_pay_selected_bank figure {
   position: relative;
   top: -35px;
   margin-bottom: -20px; }
-/* line 717, ../sass/style/_checkout.scss */
+/* line 727, ../sass/style/_checkout.scss */
 .logged #checkout .default_pay > .panel > .panel-footer {
   text-align: right; }
-/* line 721, ../sass/style/_checkout.scss */
+/* line 731, ../sass/style/_checkout.scss */
 .logged #checkout .default_pay > .panel > .panel-body .default_pay_selected_bank {
   text-align: right; }
-/* line 727, ../sass/style/_checkout.scss */
+/* line 737, ../sass/style/_checkout.scss */
 .logged #checkout .default_pay > .panel > .panel-body > .panel {
   display: none; }
-/* line 730, ../sass/style/_checkout.scss */
+/* line 740, ../sass/style/_checkout.scss */
 .logged #checkout .default_pay > .panel > .panel-body .form-checkbox.default_pay {
   margin-bottom: 0px; }
 
-/* line 739, ../sass/style/_checkout.scss */
+/* line 749, ../sass/style/_checkout.scss */
 #invoice_data {
   display: none; }
 
