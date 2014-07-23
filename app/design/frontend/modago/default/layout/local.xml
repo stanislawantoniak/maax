@@ -206,9 +206,11 @@
             </action>
             <block name="product.info.media.modal" type="catalog/product_view_media" template="catalog/product/view/modal.gallery.phtml"/>
             <block name="product.vendor.info" type="zolagocatalog/product_vendor_info" template="catalog/product/vendor/info.phtml">
-                <block name="product.vendor.deliveryreturn" type="zolagocatalog/product_vendor_deliveryreturn" />
+                <block name="product.vendor.deliveryreturn" type="zolagocatalog/product_vendor_deliveryreturn"/>
+                <block name="udqa.product.question.mobile" type="udqa/product_question" template="catalog/product/question-mobile.phtml" />
             </block>
             <block name="product.vendor.sizecomments" type="zolagocatalog/product_vendor_sizecomments" />
+            <block name="udqa.product.question" type="udqa/product_question" />
         </reference>
 
         <reference name="product.info.addto">
@@ -219,6 +221,14 @@
 
 
     </catalog_product_view>
+
+    <udqa_catalog_product_view>
+        <reference name="udqa.product.question">
+            <action method="setTemplate">
+                <template>catalog/product/question.phtml</template>
+            </action>
+        </reference>
+    </udqa_catalog_product_view>
 
 
 </layout>
