@@ -44,8 +44,7 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
      */
     public function getProductFlagLabel()
     {
-        $flags = array('', 'new', 'hit', 'percent', 'sale');
-        return $flags[rand(0, 4)];
+        return Mage::helper("zolagocatalog/product")->getProductBestFlag($this->getProduct());
     }
 	
 	/**

@@ -5,6 +5,9 @@
 class Zolago_Catalog_Model_Product_Source_Flag 
         extends Mage_Eav_Model_Entity_Attribute_Source_Abstract {
 
+	const FLAG_PROMOTION = 1;
+	const FLAG_SALE = 2;
+	
 //	public function getOptionText($value)
 //    {
 //        $isMultiple = false;
@@ -41,11 +44,11 @@ class Zolago_Catalog_Model_Product_Source_Flag
                     'label' => '',
                 ),				
                 array (
-                    'value' => '1',
+                    'value' => self::FLAG_PROMOTION,
                     'label' => Mage::helper('zolagocatalog')->__('Promotion'),
                 ),
                 array (
-                    'value' => '2',
+                    'value' => self::FLAG_SALE,
                     'label' => Mage::helper('zolagocatalog')->__('Sale'),
                 )
             );
