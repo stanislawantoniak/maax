@@ -118,7 +118,7 @@ var App = function($) {
 			$(".urlKeyFormat").alphanum({
 				allowUpper: false,
 				allowSpace: false,
-				allow: "-_",
+				allow: "-_.",
 				allowOtherCharSets: false,
 				maxLength: 100,
 			});
