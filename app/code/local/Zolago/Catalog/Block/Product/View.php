@@ -33,4 +33,24 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
 		}
 		return $vendor->getStoreReturnHeadline();
 	}
+
+    /**
+     * @todo Implementation
+     *
+     * @return string
+     */
+    public function getParentCategoryName()
+    {
+        return 'Sukienki';
+    }
+
+    /**
+     * @todo Implementation
+     *
+     * @return string
+     */
+    public function getParentCategoryUrl()
+    {
+        return '/dla-niej.html';
+    }
 }
