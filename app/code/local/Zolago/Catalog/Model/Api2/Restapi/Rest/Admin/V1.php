@@ -43,6 +43,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
      */
     protected function _create($data)
     {
+        Mage::log($data, 0, 'converter_log.log');
         $json = json_encode($data);
 
         if (!empty($data)) {
@@ -51,15 +52,15 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                     case 'ProductPricesUpdate':
                         $batchFile = self::CONVERTER_PRICE_UPDATE_LOG;
                         Mage::log(microtime() . ' Start', 0, $batchFile);
-                        Mage::log(microtime() . " {$json}", 0, $batchFile);
+                        //Mage::log(microtime() . " {$json}", 0, $batchFile);
 
-                        Mage::log(microtime() . ' Get prices array', 0, $batchFile);
+                        //Mage::log(microtime() . ' Get prices array', 0, $batchFile);
                         $priceBatch = array();
                         if(!empty($batch)){
                             $batch = (array)$batch;
                             foreach($batch as $dataPrice){
-                                $merchant = $dataPrice->merchant;
-                                $prices = $dataPrice->data;
+                                $merchant = $dataPrice['merchant'];
+                                $prices = $dataPrice['data'];
 
                                 if (!empty($prices)) {
                                     foreach ($prices as $skuV => $priceByType) {
@@ -78,16 +79,17 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                     case 'ProductStockUpdate':
                         $batchFile = self::CONVERTER_STOCK_UPDATE_LOG;
                         Mage::log(microtime() . ' Start', 0, $batchFile);
-                        Mage::log(microtime() . " {$json}", 0, $batchFile);
+                        //Mage::log(microtime() . " {$json}", 0, $batchFile);
 
-                        Mage::log(microtime() . ' Get stock array', 0, $batchFile);
+                        //Mage::log(microtime() . ' Get stock array', 0, $batchFile);
 
                         $stockBatch = array();
 
                         if(!empty($batch)){
                             foreach($batch as $dataStock){
-                                $merchant = $dataStock->merchant;
-                                $stock = $dataStock->data;
+
+                                $merchant = $dataStock['merchant'];
+                                $stock = $dataStock['data'];
 
                                 if (!empty($stock)) {
                                     foreach ($stock as $skuV => $stockByPOS) {
@@ -166,7 +168,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         $cataloginventoryStockStatus0 = array();
         $cataloginventoryStockStatus1 = array();
 
-        Mage::log(microtime() . ' Get price types', 0, $batchFile);
+        //Mage::log(microtime() . ' Get price types', 0, $batchFile);
         $availableStockByMerchant = array();
         foreach($stockBatch as $merchant => $stockData){
             $s = Zolago_Catalog_Helper_Stock::getAvailableStock($stockData,$merchant);

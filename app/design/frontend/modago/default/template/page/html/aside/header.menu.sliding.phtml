@@ -1,0 +1,25 @@
+<?php
+/**
+ * Author: Paweł Chyl <pawel.chyl@orba.pl>
+ * Date: 14.05.14
+ */
+/** @var $this Zolago_Modago_Block_Catalog_Category */
+$categories = $this->getMainCategoriesForSlidingMenu();
+?>
+<?php if(count($categories) > 0) : ?>
+    <li><a href="#" class="sb-toggle-submenu">Kategorie: <span class="sb-caret"></span></a>
+        <ul class="sb-submenu">
+            <?php foreach ($categories as $cat) : ?>
+            <li><a href="<?php echo $cat['has_dropdown'] ? '#' : $cat['url'] ?>" class="<?php echo $cat['has_dropdown'] ? 'sb-toggle-submenu' : ''; ?>"><?php echo $this->escapeHtml($cat['name']); ?></a>
+                <?php if($cat['has_dropdown']) : ?>
+                <ul>
+                    <?php foreach ($cat['children'] as $child) : ?>
+                    <li><a href="<?php echo $child['url']; ?>"><?php echo $this->escapeHtml($child['name']); ?></a></li>
+                    <?php endforeach; ?>
+                </ul>
+                <?php endif; ?>
+            </li>
+            <?php endforeach; ?>
+        </ul>
+    </li>
+<?php endif; ?>

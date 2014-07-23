@@ -72,6 +72,7 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 		return false;
 	}
 	
+	
 	public function getItemClass($item) {
 		return $this->isItemActive($item) ? "active" : "inactive";
 	}
@@ -80,10 +81,20 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
     {
 		return $this->getFilterContainer()->getRemoveFacesUrl($key, $value);
     }
-
-	public function getFacesUrl($params=array())
+	
+	public function getRemoveFacesJson($key,$value)
     {
-		return $this->getFilterContainer()->getFacesUrl($params);
+		return $this->getFilterContainer()->getRemoveFacesJson($key, $value);
+    }
+
+	public function getFacesUrl($params=array(), $paramss=NULL)
+    {
+		return $this->getFilterContainer()->getFacesUrl($params, $paramss);
+    }
+	
+	public function getFacesJson($params=array(), $paramss=NULL)
+    {
+		return $this->getFilterContainer()->getFacesJson($params, $paramss);
     }
 	
 	public function getItemUrl($item) {
@@ -95,8 +106,25 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 		return $facetUrl;
 	}
 	
+	public function getItemJson($item) {
+		$face_key = $this->getAttributeCode();
+		if($this->isItemActive($item)){
+			$json = $this->getRemoveFacesJson($face_key, $item);
+		}else{
+			$json = $this->getFacesJson(array('fq' => array($face_key => $item)));
+		}
+		return $json;
+	}
+	
 	public function isFilterActive() {
 		return $this->getFilterContainer()->isFilterActive($this->getAttributeCode());
+	}
+	
+	public function isFilterRolled() {
+		if($this->getFilterModel()){
+			return $this->getFilterModel()->getIsRolled() && !$this->isFilterActive();
+		}
+		return false;
 	}
 	
 	public function getAllOptions() {
