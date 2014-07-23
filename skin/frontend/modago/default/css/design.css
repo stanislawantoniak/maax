@@ -3886,8 +3886,8 @@ form .col-50 + .col-50 {
 form .form-group {
   position: relative;
   margin-bottom: 15px; }
-/* line 479, ../sass/_typo.scss */
-form .form-group [type="text"], form .form-group [type="email"], form .form-group [type="password"] {
+/* line 480, ../sass/_typo.scss */
+form .form-group [type="text"], form .form-group [type="email"], form .form-group [type="password"], form .form-group [type="tel"] {
   border: 1px solid #bcbcbc;
   border-radius: 1px;
   box-shadow: inset 2px 2px 7px rgba(1, 1, 1, 0.1);
@@ -3898,42 +3898,42 @@ form .form-group [type="text"], form .form-group [type="email"], form .form-grou
   font-family: "latoregular";
   height: 42px;
   outline: none !important; }
-/* line 492, ../sass/_typo.scss */
+/* line 493, ../sass/_typo.scss */
 form .form-group .firstName {
   max-width: 296px; }
-/* line 493, ../sass/_typo.scss */
+/* line 494, ../sass/_typo.scss */
 form .form-group .lastName {
   max-width: 296px; }
-/* line 494, ../sass/_typo.scss */
+/* line 495, ../sass/_typo.scss */
 form .form-group .firm {
   max-width: 415px; }
-/* line 495, ../sass/_typo.scss */
+/* line 496, ../sass/_typo.scss */
 form .form-group .city {
   max-width: 314px; }
-/* line 496, ../sass/_typo.scss */
+/* line 497, ../sass/_typo.scss */
 form .form-group .street {
   max-width: 415px; }
-/* line 497, ../sass/_typo.scss */
+/* line 498, ../sass/_typo.scss */
 form .form-group .zipcode {
   max-width: 72px; }
-/* line 498, ../sass/_typo.scss */
+/* line 499, ../sass/_typo.scss */
 form .form-group .phone {
   max-width: 115px; }
-/* line 499, ../sass/_typo.scss */
+/* line 500, ../sass/_typo.scss */
 form .form-group .email {
   max-width: 296px; }
-/* line 500, ../sass/_typo.scss */
+/* line 501, ../sass/_typo.scss */
 form .form-group .password {
   max-width: 235px; }
-/* line 501, ../sass/_typo.scss */
+/* line 502, ../sass/_typo.scss */
 form .form-group .nip {
   max-width: 115px; }
-/* line 505, ../sass/_typo.scss */
+/* line 506, ../sass/_typo.scss */
 form .form-group input:disabled {
   border-color: #d9d9d9;
   color: #f0f0f0;
   box-shadow: none; }
-/* line 510, ../sass/_typo.scss */
+/* line 511, ../sass/_typo.scss */
 form .form-group textarea {
   border: 1px solid #bcbcbc;
   border-radius: 1px;
@@ -3946,10 +3946,10 @@ form .form-group textarea {
   font-family: "latoregular";
   resize: vertical;
   outline: none !important; }
-/* line 524, ../sass/_typo.scss */
+/* line 525, ../sass/_typo.scss */
 form .form-group input[type=checkbox].css-checkbox, form .form-group input[type=radio].css-radio {
   display: none; }
-/* line 531, ../sass/_typo.scss */
+/* line 532, ../sass/_typo.scss */
 form .form-group input[type=checkbox].css-checkbox + label.css-label, form .form-group input[type=checkbox].css-checkbox:active + label.css-label, form .form-group input[type=radio].css-radio + label.css-label {
   padding-left: 23px;
   height: 17px;
@@ -3962,7 +3962,7 @@ form .form-group input[type=checkbox].css-checkbox + label.css-label, form .form
   cursor: pointer;
   font-weight: normal;
   touch-action: none; }
-/* line 545, ../sass/_typo.scss */
+/* line 546, ../sass/_typo.scss */
 form .form-group label.css-label {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -3970,29 +3970,29 @@ form .form-group label.css-label {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none; }
-/* line 554, ../sass/_typo.scss */
+/* line 555, ../sass/_typo.scss */
 form .form-group input[type=checkbox].css-checkbox + label.css-label {
   background-image: url("../images/checkbox.png"); }
-/* line 557, ../sass/_typo.scss */
+/* line 558, ../sass/_typo.scss */
 form .form-group input[type=radio].css-radio + label.css-label {
   background-image: url("../images/radio.png"); }
-/* line 562, ../sass/_typo.scss */
+/* line 563, ../sass/_typo.scss */
 form .form-group input[type=checkbox].css-checkbox + label.css-label:hover, form .form-group input[type=radio].css-radio + label.css-label:hover {
   background-position: 0 -28px;
   color: #1e1e1e; }
-/* line 567, ../sass/_typo.scss */
+/* line 568, ../sass/_typo.scss */
 form .form-group input[type=checkbox].css-checkbox:checked + label.css-label, form .form-group input[type=radio].css-radio:checked + label.css-label {
   background-position: 0 -55px;
   color: #1e1e1e; }
-/* line 572, ../sass/_typo.scss */
+/* line 573, ../sass/_typo.scss */
 form .form-group input[type=checkbox].css-checkbox:disabled + label.css-label, form .form-group input[type=radio].css-radio:disabled + label.css-label {
   background-position: 0 -82px;
   color: #bcbcbc; }
-/* line 577, ../sass/_typo.scss */
+/* line 578, ../sass/_typo.scss */
 form .form-group input[type=checkbox].css-checkbox:checked:disabled + label.css-label, form .form-group input[type=radio].css-radio:checked:disabled + label.css-label {
   background-position: 0 -110px;
   color: #bcbcbc; }
-/* line 584, ../sass/_typo.scss */
+/* line 585, ../sass/_typo.scss */
 form .form-group.has-feedback i {
   position: absolute;
   color: #ec695d;
@@ -4000,7 +4000,7 @@ form .form-group.has-feedback i {
   top: 0 !important;
   right: -11px !important;
   top: 16px; }
-/* line 591, ../sass/_typo.scss */
+/* line 592, ../sass/_typo.scss */
 form .form-group.has-feedback i.form-ico-checked {
   position: absolute;
   background: url('../images/sprites/form_feedback-s816a3dca1f.png');
@@ -4009,7 +4009,7 @@ form .form-group.has-feedback i.form-ico-checked {
   width: 16px;
   top: 16px !important;
   right: -27px !important; }
-/* line 599, ../sass/_typo.scss */
+/* line 600, ../sass/_typo.scss */
 form .form-group.has-feedback i.form-ico-times {
   position: absolute;
   background: url('../images/sprites/form_feedback-s816a3dca1f.png');
@@ -4018,19 +4018,19 @@ form .form-group.has-feedback i.form-ico-times {
   width: 14px;
   top: 16px !important;
   right: -24px !important; }
-/* line 610, ../sass/_typo.scss */
+/* line 611, ../sass/_typo.scss */
 form .form-group.has-success i.fa {
   right: -5%;
   color: #2ecc71; }
-/* line 616, ../sass/_typo.scss */
+/* line 617, ../sass/_typo.scss */
 form .form-group.has-warning i.fa {
   position: absolute;
   right: -5%;
   color: #6fffcf; }
-/* line 624, ../sass/_typo.scss */
+/* line 625, ../sass/_typo.scss */
 form .form-group.has-error {
   margin-bottom: 5px; }
-/* line 626, ../sass/_typo.scss */
+/* line 627, ../sass/_typo.scss */
 form .form-group.has-error label.error {
   color: #e84c3d;
   font-size: 12px;
@@ -4038,16 +4038,16 @@ form .form-group.has-error label.error {
   padding: 10px 0 5px 15px;
   clear: both;
   display: block; }
-/* line 636, ../sass/_typo.scss */
+/* line 637, ../sass/_typo.scss */
 form .form-group.has-error.form-checkbox label.error {
   padding: 0 0 0 0; }
-/* line 643, ../sass/_typo.scss */
+/* line 644, ../sass/_typo.scss */
 form .form-group.has-error [type="text"], form .form-group.has-error [type="email"], form .form-group.has-error [type="password"] {
   border-color: #ec695d; }
-/* line 647, ../sass/_typo.scss */
+/* line 648, ../sass/_typo.scss */
 form .form-group .action {
   padding: 10px; }
-/* line 651, ../sass/_typo.scss */
+/* line 652, ../sass/_typo.scss */
 form .form-group .topHint {
   background: #f0f0f0;
   height: 29px;
@@ -4058,7 +4058,7 @@ form .form-group .topHint {
   right: 0px;
   top: 0px;
   z-index: 800; }
-/* line 661, ../sass/_typo.scss */
+/* line 662, ../sass/_typo.scss */
 form .form-group .topHint:after {
   right: 100%;
   top: 50%;
@@ -4072,20 +4072,20 @@ form .form-group .topHint:after {
   border-right-color: #f0f0f0;
   border-width: 5px;
   margin-top: -5px; }
-/* line 680, ../sass/_typo.scss */
+/* line 681, ../sass/_typo.scss */
 form .form-control {
   -webkit-border-radius: 1px;
   -moz-border-radius: 1px;
   -ms-border-radius: 1px;
   -o-border-radius: 1px;
   border-radius: 1px; }
-/* line 683, ../sass/_typo.scss */
+/* line 684, ../sass/_typo.scss */
 form .hidden {
   display: none; }
-/* line 691, ../sass/_typo.scss */
+/* line 692, ../sass/_typo.scss */
 form .form-group.form-checkbox.small {
   margin-bottom: 0px; }
-/* line 694, ../sass/_typo.scss */
+/* line 695, ../sass/_typo.scss */
 form .form-group.form-checkbox.small input[type=checkbox].css-checkbox + label.css-label, form .form-group.form-checkbox.small input[type=radio].css-radio + label.css-label {
   padding-left: 20px;
   height: 17px;
@@ -4099,39 +4099,39 @@ form .form-group.form-checkbox.small input[type=checkbox].css-checkbox + label.c
   cursor: pointer;
   font-weight: normal;
   color: #1e1e1e; }
-/* line 707, ../sass/_typo.scss */
+/* line 708, ../sass/_typo.scss */
 form .form-group.form-checkbox.small input[type=checkbox].css-checkbox + label.css-label img, form .form-group.form-checkbox.small input[type=radio].css-radio + label.css-label img {
   float: left;
   position: relative;
   top: 2px;
   margin-right: 5px; }
-/* line 713, ../sass/_typo.scss */
+/* line 714, ../sass/_typo.scss */
 form .form-group.form-checkbox.small input[type=checkbox].css-checkbox + label.css-label .suffix, form .form-group.form-checkbox.small input[type=radio].css-radio + label.css-label .suffix {
   color: #b0b0b0;
   font-size: 12px; }
-/* line 719, ../sass/_typo.scss */
+/* line 720, ../sass/_typo.scss */
 form .form-group.form-checkbox.small input[type=checkbox].css-checkbox + label.css-label {
   background-position: 0 -430px; }
-/* line 725, ../sass/_typo.scss */
+/* line 726, ../sass/_typo.scss */
 form .form-group.form-checkbox.small input[type=radio].css-radio + label.css-label {
   background-image: url("../images/radio.png"); }
-/* line 730, ../sass/_typo.scss */
+/* line 731, ../sass/_typo.scss */
 form .form-group.form-checkbox.small input[type=checkbox].css-checkbox + label.css-label:hover, form .form-group.form-checkbox.small input[type=radio].css-radio + label.css-label:hover {
   background-position: 0 -215px;
   color: #999999; }
-/* line 736, ../sass/_typo.scss */
+/* line 737, ../sass/_typo.scss */
 form .form-group.form-checkbox.small input[type=checkbox].css-checkbox:checked + label.css-label, form .form-group.form-checkbox.small input[type=radio].css-radio:checked + label.css-label {
   background-position: 0 0;
   color: #1e1e1e; }
 
-/* line 746, ../sass/_typo.scss */
+/* line 747, ../sass/_typo.scss */
 .ico-submenu-mobile-right {
   width: 10px;
   height: 17px;
   display: inline-block;
   background: url("../images/arrow-menu-mobile-r.png"); }
 
-/* line 752, ../sass/_typo.scss */
+/* line 753, ../sass/_typo.scss */
 .btn {
   display: -moz-inline-stack;
   display: inline-block;
@@ -4149,7 +4149,7 @@ form .form-group.form-checkbox.small input[type=checkbox].css-checkbox:checked +
   outline: none;
   text-align: center;
   border: none; }
-/* line 764, ../sass/_typo.scss */
+/* line 765, ../sass/_typo.scss */
 .btn.clearAll {
   background: url('../images/sprites/buttons-s5b68c866f4.png');
   background-position: -1px -29px;
@@ -4162,7 +4162,7 @@ form .form-group.form-checkbox.small input[type=checkbox].css-checkbox:checked +
   font-size: 12px;
   position: relative;
   top: -2px; }
-/* line 778, ../sass/_typo.scss */
+/* line 779, ../sass/_typo.scss */
 .btn.sending {
   background: url("../images/sprites/sprite_send.png") no-repeat 0 -1px !important;
   display: inline-block;
@@ -4174,14 +4174,14 @@ form .form-group.form-checkbox.small input[type=checkbox].css-checkbox:checked +
   font-family: "latoregular";
   font-weight: bold;
   text-transform: uppercase; }
-/* line 789, ../sass/_typo.scss */
+/* line 790, ../sass/_typo.scss */
 .btn.sending:hover {
   background-position: 0 -42px !important; }
-/* line 793, ../sass/_typo.scss */
+/* line 794, ../sass/_typo.scss */
 .btn.sending:active, .btn.sending:focus {
   background-position: 0 -85px !important;
   outline: none; }
-/* line 798, ../sass/_typo.scss */
+/* line 799, ../sass/_typo.scss */
 .btn.addBasket {
   display: inline-block;
   height: 42px;
@@ -4196,7 +4196,7 @@ form .form-group.form-checkbox.small input[type=checkbox].css-checkbox:checked +
   text-align: left;
   outline: none;
   float: right; }
-/* line 814, ../sass/_typo.scss */
+/* line 815, ../sass/_typo.scss */
 .btn.addBasket.ico:before {
   content: ' ';
   display: block;
@@ -4208,20 +4208,20 @@ form .form-group.form-checkbox.small input[type=checkbox].css-checkbox:checked +
   margin-top: 8px;
   margin-right: 9px; }
 @media (max-width: 1200px) {
-  /* line 814, ../sass/_typo.scss */
+  /* line 815, ../sass/_typo.scss */
   .btn.addBasket.ico:before {
     display: none; } }
 @media (max-width: 767px) {
-  /* line 798, ../sass/_typo.scss */
+  /* line 799, ../sass/_typo.scss */
   .btn.addBasket {
     padding-left: 0;
     text-align: center; } }
 @media (max-width: 320px) {
-  /* line 798, ../sass/_typo.scss */
+  /* line 799, ../sass/_typo.scss */
   .btn.addBasket {
     position: relative;
     top: -1px; } }
-/* line 839, ../sass/_typo.scss */
+/* line 840, ../sass/_typo.scss */
 .btn.clearAll {
   background: #fff;
   display: inline-block;
@@ -4237,23 +4237,23 @@ form .form-group.form-checkbox.small input[type=checkbox].css-checkbox:checked +
   text-transform: uppercase;
   font-size: 12px; }
 @media (max-width: 768px) {
-  /* line 839, ../sass/_typo.scss */
+  /* line 840, ../sass/_typo.scss */
   .btn.clearAll {
     height: 23px;
     line-height: 20px; } }
-/* line 852, ../sass/_typo.scss */
+/* line 853, ../sass/_typo.scss */
 .btn.clearAll:hover {
   background: #000;
   border-color: #000;
   color: #fff;
   outline: none; }
-/* line 859, ../sass/_typo.scss */
+/* line 860, ../sass/_typo.scss */
 .btn.clearAll:active, .btn.clearAll:focus {
   background: #fff;
   border-color: #c6a662;
   outline: none;
   color: #c6a662; }
-/* line 866, ../sass/_typo.scss */
+/* line 867, ../sass/_typo.scss */
 .btn.clear {
   background: url("../images/sprites/sprite_clear.png") no-repeat 0 -1px;
   display: inline-block;
@@ -4263,17 +4263,17 @@ form .form-group.form-checkbox.small input[type=checkbox].css-checkbox:checked +
   color: #4f4f4f;
   text-transform: uppercase;
   font-size: 12px; }
-/* line 875, ../sass/_typo.scss */
+/* line 876, ../sass/_typo.scss */
 .btn.clear:hover {
   background-position: 0 -30px;
   color: #fff;
   outline: none; }
-/* line 881, ../sass/_typo.scss */
+/* line 882, ../sass/_typo.scss */
 .btn.clear:active, .btn.clear:focus {
   background-position: 0 -58px;
   outline: none;
   color: #c6a662; }
-/* line 887, ../sass/_typo.scss */
+/* line 888, ../sass/_typo.scss */
 .btn.add {
   background: url("../images/sprites/sprite_add.png") no-repeat 0 0;
   display: inline-block;
@@ -4285,15 +4285,15 @@ form .form-group.form-checkbox.small input[type=checkbox].css-checkbox:checked +
   font-family: "latoblack";
   font-weight: normal;
   color: #fff; }
-/* line 898, ../sass/_typo.scss */
+/* line 899, ../sass/_typo.scss */
 .btn.add:hover {
   background-position: 0 -27px;
   color: #fff; }
-/* line 903, ../sass/_typo.scss */
+/* line 904, ../sass/_typo.scss */
 .btn.add:active, .btn.add:focus {
   background-position: 0 -54px;
   outline: none; }
-/* line 909, ../sass/_typo.scss */
+/* line 910, ../sass/_typo.scss */
 .btn.black {
   background: #313131;
   height: 27px;
@@ -4305,17 +4305,17 @@ form .form-group.form-checkbox.small input[type=checkbox].css-checkbox:checked +
   color: #fff;
   padding: 0 12px;
   border: 1px solid #c5c5c5; }
-/* line 920, ../sass/_typo.scss */
+/* line 921, ../sass/_typo.scss */
 .btn.black:hover {
   background: #515151; }
-/* line 924, ../sass/_typo.scss */
+/* line 925, ../sass/_typo.scss */
 .btn.black:active, .btn.black:focus {
   background: #c6a662;
   border-color: #c6a662;
   box-shadow: none;
   outline: none; }
 
-/* line 934, ../sass/_typo.scss */
+/* line 935, ../sass/_typo.scss */
 #btn_continue_shopping {
   border: 2px solid #000;
   height: 24px;
@@ -4330,7 +4330,7 @@ form .form-group.form-checkbox.small input[type=checkbox].css-checkbox:checked +
   line-height: 24px;
   text-transform: uppercase;
   background: #fff; }
-/* line 944, ../sass/_typo.scss */
+/* line 945, ../sass/_typo.scss */
 #btn_continue_shopping .fa-arrow-btn-right {
   background: url('../images/sprites/arrow-s9ee80ff52b.png');
   display: -moz-inline-stack;
@@ -4345,24 +4345,24 @@ form .form-group.form-checkbox.small input[type=checkbox].css-checkbox:checked +
   position: absolute;
   right: 5px;
   top: 5px; }
-/* line 953, ../sass/_typo.scss */
+/* line 954, ../sass/_typo.scss */
 #btn_continue_shopping:hover {
   background: #000;
   color: #fff; }
-/* line 956, ../sass/_typo.scss */
+/* line 957, ../sass/_typo.scss */
 #btn_continue_shopping:hover .fa-arrow-btn-right {
   background-position: 0 -14px; }
-/* line 961, ../sass/_typo.scss */
+/* line 962, ../sass/_typo.scss */
 #btn_continue_shopping:active, #btn_continue_shopping:focus {
   border-color: #c6a662;
   background: #fff;
   outline: none;
   color: #c6a662; }
-/* line 966, ../sass/_typo.scss */
+/* line 967, ../sass/_typo.scss */
 #btn_continue_shopping:active .fa-arrow-btn-right, #btn_continue_shopping:focus .fa-arrow-btn-right {
   background-position: 0 0; }
 
-/* line 973, ../sass/_typo.scss */
+/* line 974, ../sass/_typo.scss */
 .ico {
   display: -moz-inline-stack;
   display: inline-block;
@@ -4373,7 +4373,7 @@ form .form-group.form-checkbox.small input[type=checkbox].css-checkbox:checked +
   position: relative;
   float: left;
   top: 50%; }
-/* line 979, ../sass/_typo.scss */
+/* line 980, ../sass/_typo.scss */
 .ico.ico_note {
   display: -moz-inline-stack;
   display: inline-block;
@@ -4389,7 +4389,7 @@ form .form-group.form-checkbox.small input[type=checkbox].css-checkbox:checked +
   line-height: 16px;
   margin-right: 12px; }
 
-/* line 989, ../sass/_typo.scss */
+/* line 990, ../sass/_typo.scss */
 .view_lupa {
   display: -moz-inline-stack;
   display: inline-block;
@@ -4401,7 +4401,7 @@ form .form-group.form-checkbox.small input[type=checkbox].css-checkbox:checked +
   width: 41px;
   height: 41px; }
 
-/* line 997, ../sass/_typo.scss */
+/* line 998, ../sass/_typo.scss */
 a.view_basket {
   float: right;
   width: 140px !important;
@@ -4432,7 +4432,7 @@ a.view_basket {
   /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#c6a662', endColorstr='#907e42',GradientType=1 ) !important;
   /* IE6-8 fallback on horizontal gradient */ }
-/* line 1020, ../sass/_typo.scss */
+/* line 1021, ../sass/_typo.scss */
 a.view_basket:hover, a.view_basket.hover {
   background: #b08944 !important;
   /* Old browsers */
@@ -4452,7 +4452,7 @@ a.view_basket:hover, a.view_basket.hover {
   /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#b08944', endColorstr='#705e29',GradientType=1 ) !important;
   /* IE6-8 fallback on horizontal gradient */ }
-/* line 1035, ../sass/_typo.scss */
+/* line 1036, ../sass/_typo.scss */
 a.view_basket:active, a.view_basket:focus, a.view_basket.active {
   background: #6d5920 !important;
   /* Old browsers */
@@ -4471,7 +4471,7 @@ a.view_basket:active, a.view_basket:focus, a.view_basket.active {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#6d5920', endColorstr='#af8438',GradientType=1 ) !important;
   /* IE6-9 fallback on horizontal gradient */ }
 
-/* line 1050, ../sass/_typo.scss */
+/* line 1051, ../sass/_typo.scss */
 .bullet-plusik {
   display: -moz-inline-stack;
   display: inline-block;
@@ -4488,7 +4488,7 @@ a.view_basket:active, a.view_basket:focus, a.view_basket.active {
   top: 50%;
   left: 177px; }
 
-/* line 1061, ../sass/_typo.scss */
+/* line 1062, ../sass/_typo.scss */
 .bullet-strzalka-down {
   display: -moz-inline-stack;
   display: inline-block;
@@ -4505,7 +4505,7 @@ a.view_basket:active, a.view_basket:focus, a.view_basket.active {
   top: 50%;
   right: 10px; }
 
-/* line 1071, ../sass/_typo.scss */
+/* line 1072, ../sass/_typo.scss */
 .bullet-strzalka-up {
   display: -moz-inline-stack;
   display: inline-block;
@@ -4523,19 +4523,19 @@ a.view_basket:active, a.view_basket:focus, a.view_basket.active {
   right: 10px; }
 
 /* LISTING */
-/* line 1085, ../sass/_typo.scss */
+/* line 1086, ../sass/_typo.scss */
 .list {
   list-style: none;
   margin: 0px;
   padding: 0px; }
-/* line 1089, ../sass/_typo.scss */
+/* line 1090, ../sass/_typo.scss */
 .list li {
   position: relative;
   line-height: 1.7; }
-/* line 1094, ../sass/_typo.scss */
+/* line 1095, ../sass/_typo.scss */
 .list.bullet_01 li {
   padding-left: 15px; }
-/* line 1096, ../sass/_typo.scss */
+/* line 1097, ../sass/_typo.scss */
 .list.bullet_01 li:before {
   content: ' ';
   display: block;
@@ -4547,10 +4547,10 @@ a.view_basket:active, a.view_basket:focus, a.view_basket.active {
   left: 0;
   top: 0;
   margin-top: 8px; }
-/* line 1110, ../sass/_typo.scss */
+/* line 1111, ../sass/_typo.scss */
 .list.bullet_02 li {
   padding-left: 25px; }
-/* line 1112, ../sass/_typo.scss */
+/* line 1113, ../sass/_typo.scss */
 .list.bullet_02 li:before {
   content: ' ';
   display: block;
@@ -4563,13 +4563,13 @@ a.view_basket:active, a.view_basket:focus, a.view_basket.active {
   top: 0;
   margin-top: 5.5px; }
 
-/* line 1129, ../sass/_typo.scss */
+/* line 1130, ../sass/_typo.scss */
 .recommend, .icons-checked {
   position: relative;
   line-height: 1.7;
   padding-left: 15px;
   text-transform: uppercase; }
-/* line 1134, ../sass/_typo.scss */
+/* line 1135, ../sass/_typo.scss */
 .recommend:before, .icons-checked:before {
   content: ' ';
   display: block;
@@ -4582,13 +4582,13 @@ a.view_basket:active, a.view_basket:focus, a.view_basket.active {
   top: 50%;
   margin-top: -4.5px; }
 
-/* line 1148, ../sass/_typo.scss */
+/* line 1149, ../sass/_typo.scss */
 .not_recommend, .icons-interjection {
   position: relative;
   line-height: 1.7;
   padding-left: 15px;
   text-transform: uppercase; }
-/* line 1153, ../sass/_typo.scss */
+/* line 1154, ../sass/_typo.scss */
 .not_recommend:before, .icons-interjection:before {
   content: ' ';
   display: block;
@@ -4601,10 +4601,10 @@ a.view_basket:active, a.view_basket:focus, a.view_basket.active {
   top: 50%;
   margin-top: -5.5px; }
 
-/* line 1167, ../sass/_typo.scss */
+/* line 1168, ../sass/_typo.scss */
 .modal-content {
   border-radius: 0px !important; }
-/* line 1170, ../sass/_typo.scss */
+/* line 1171, ../sass/_typo.scss */
 .modal-content button.close {
   background: url("../images/btn-close.png") 0 0 no-repeat;
   height: 32px;
@@ -4614,11 +4614,11 @@ a.view_basket:active, a.view_basket:focus, a.view_basket.active {
   right: -16px;
   z-index: 900;
   opacity: 1; }
-/* line 1179, ../sass/_typo.scss */
+/* line 1180, ../sass/_typo.scss */
 .modal-content button.close:focus {
   outline: none; }
 
-/* line 1188, ../sass/_typo.scss */
+/* line 1189, ../sass/_typo.scss */
 .fa-delete-coupon {
   background: url('../images/sprites/bullet-s02a9b99310.png');
   display: -moz-inline-stack;
@@ -4631,7 +4631,7 @@ a.view_basket:active, a.view_basket:focus, a.view_basket.active {
   height: 11px;
   width: 13px; }
 
-/* line 1195, ../sass/_typo.scss */
+/* line 1196, ../sass/_typo.scss */
 .fa-remove {
   background: url('../images/sprites/bullet-s02a9b99310.png');
   display: -moz-inline-stack;
@@ -4644,17 +4644,17 @@ a.view_basket:active, a.view_basket:focus, a.view_basket.active {
   height: 13px;
   width: 10px; }
 @media (max-width: 767px) {
-  /* line 1195, ../sass/_typo.scss */
+  /* line 1196, ../sass/_typo.scss */
   .fa-remove {
     background-position: 0 -8px;
     height: 16px;
     width: 13px; } }
 
-/* line 1206, ../sass/_typo.scss */
+/* line 1207, ../sass/_typo.scss */
 a > .fa-remove {
   float: left; }
 
-/* line 1213, ../sass/_typo.scss */
+/* line 1214, ../sass/_typo.scss */
 [class^=ico_] {
   background: url('../images/desktop/ico-sb74b016674.png');
   display: -moz-inline-stack;
@@ -4664,54 +4664,54 @@ a > .fa-remove {
   zoom: 1;
   *display: inline; }
 @media screen and (max-width: 991px) {
-  /* line 1213, ../sass/_typo.scss */
+  /* line 1214, ../sass/_typo.scss */
   [class^=ico_] {
     background: url('../images/mobile/ico-s6fdf742bed.png'); } }
-/* line 1219, ../sass/_typo.scss */
+/* line 1220, ../sass/_typo.scss */
 [class^=ico_].ico_basket {
   background-position: 0 -30px;
   height: 30px;
   width: 30px; }
 @media screen and (max-width: 991px) {
-  /* line 1219, ../sass/_typo.scss */
+  /* line 1220, ../sass/_typo.scss */
   [class^=ico_].ico_basket {
     background-position: 0 -37px;
     height: 20px;
     width: 15px; } }
-/* line 1227, ../sass/_typo.scss */
+/* line 1228, ../sass/_typo.scss */
 [class^=ico_].ico_favorites {
   background-position: 0 0;
   height: 30px;
   width: 30px; }
 @media screen and (max-width: 991px) {
-  /* line 1227, ../sass/_typo.scss */
+  /* line 1228, ../sass/_typo.scss */
   [class^=ico_].ico_favorites {
     background-position: 0 -20px;
     height: 17px;
     width: 23px; } }
-/* line 1235, ../sass/_typo.scss */
+/* line 1236, ../sass/_typo.scss */
 [class^=ico_].ico_your_account {
   background-position: 0 -60px;
   height: 30px;
   width: 30px; }
-/* line 1240, ../sass/_typo.scss */
+/* line 1241, ../sass/_typo.scss */
 [class^=ico_].ico_menu {
   background-position: 0 -90px;
   height: 26px;
   width: 27px; }
 @media screen and (max-width: 991px) {
-  /* line 1240, ../sass/_typo.scss */
+  /* line 1241, ../sass/_typo.scss */
   [class^=ico_].ico_menu {
     background-position: 0 -57px;
     height: 17px;
     width: 18px; } }
-/* line 1248, ../sass/_typo.scss */
+/* line 1249, ../sass/_typo.scss */
 [class^=ico_].ico_search_mobile {
   background-position: 0 -219px;
   height: 38px;
   width: 38px; }
 @media screen and (max-width: 991px) {
-  /* line 1248, ../sass/_typo.scss */
+  /* line 1249, ../sass/_typo.scss */
   [class^=ico_].ico_search_mobile {
     background-position: 0 0;
     height: 20px;
@@ -4720,17 +4720,17 @@ a > .fa-remove {
     position: relative;
     cursor: pointer; } }
 
-/* line 1260, ../sass/_typo.scss */
+/* line 1261, ../sass/_typo.scss */
 .followUs {
   text-align: center;
   padding-top: 10px;
   clear: both; }
-/* line 1264, ../sass/_typo.scss */
+/* line 1265, ../sass/_typo.scss */
 .followUs ul {
   margin: 0;
   padding: 0;
   list-style: none; }
-/* line 1268, ../sass/_typo.scss */
+/* line 1269, ../sass/_typo.scss */
 .followUs ul li {
   display: inline-block;
   font-size: 10px;
@@ -4738,13 +4738,13 @@ a > .fa-remove {
   margin-right: 5px;
   text-transform: uppercase;
   line-height: 18px; }
-/* line 1275, ../sass/_typo.scss */
+/* line 1276, ../sass/_typo.scss */
 .followUs ul li:first-child {
   position: relative;
   top: 1px;
   margin-right: 5px; }
 
-/* line 1283, ../sass/_typo.scss */
+/* line 1284, ../sass/_typo.scss */
 .follow_us {
   background: url('../images/sprites/follow_us-s5c9a0a5574.png');
   display: -moz-inline-stack;
@@ -4753,80 +4753,80 @@ a > .fa-remove {
   *vertical-align: auto;
   zoom: 1;
   *display: inline; }
-/* line 1286, ../sass/_typo.scss */
+/* line 1287, ../sass/_typo.scss */
 .follow_us.fb {
   background-position: 0 -90px;
   height: 18px;
   width: 18px; }
-/* line 1289, ../sass/_typo.scss */
+/* line 1290, ../sass/_typo.scss */
 .follow_us.fb:hover {
   background-position: 0 -126px;
   height: 18px;
   width: 18px; }
-/* line 1294, ../sass/_typo.scss */
+/* line 1295, ../sass/_typo.scss */
 .follow_us.twitter {
   background-position: 0 -54px;
   height: 18px;
   width: 18px; }
-/* line 1297, ../sass/_typo.scss */
+/* line 1298, ../sass/_typo.scss */
 .follow_us.twitter:hover {
   background-position: 0 -108px;
   height: 18px;
   width: 18px; }
-/* line 1302, ../sass/_typo.scss */
+/* line 1303, ../sass/_typo.scss */
 .follow_us.pinterest {
   background-position: 0 -18px;
   height: 18px;
   width: 18px; }
-/* line 1305, ../sass/_typo.scss */
+/* line 1306, ../sass/_typo.scss */
 .follow_us.pinterest:hover {
   background-position: 0 -72px;
   height: 18px;
   width: 18px; }
-/* line 1310, ../sass/_typo.scss */
+/* line 1311, ../sass/_typo.scss */
 .follow_us.gplus {
   background-position: 0 0;
   height: 18px;
   width: 18px; }
-/* line 1313, ../sass/_typo.scss */
+/* line 1314, ../sass/_typo.scss */
 .follow_us.gplus:hover {
   background-position: 0 -36px;
   height: 18px;
   width: 18px; }
 
-/* line 1321, ../sass/_typo.scss */
+/* line 1322, ../sass/_typo.scss */
 figure .figure-border {
   border: 1px solid #f1f1f1; }
 
-/* line 1326, ../sass/_typo.scss */
+/* line 1327, ../sass/_typo.scss */
 .thumbnail {
   border: none; }
-/* line 1328, ../sass/_typo.scss */
+/* line 1329, ../sass/_typo.scss */
 .thumbnail img {
   border: 1px solid #f0f0f0; }
-/* line 1331, ../sass/_typo.scss */
+/* line 1332, ../sass/_typo.scss */
 .thumbnail.large {
   width: 160px; }
-/* line 1333, ../sass/_typo.scss */
+/* line 1334, ../sass/_typo.scss */
 .thumbnail.large img {
   width: 100%;
   height: auto; }
-/* line 1338, ../sass/_typo.scss */
+/* line 1339, ../sass/_typo.scss */
 .thumbnail.medium {
   width: 109px; }
-/* line 1340, ../sass/_typo.scss */
+/* line 1341, ../sass/_typo.scss */
 .thumbnail.medium img {
   width: 100%;
   height: auto; }
-/* line 1345, ../sass/_typo.scss */
+/* line 1346, ../sass/_typo.scss */
 .thumbnail.small {
   width: 64px; }
-/* line 1347, ../sass/_typo.scss */
+/* line 1348, ../sass/_typo.scss */
 .thumbnail.small img {
   width: 100%;
   height: auto; }
 
-/* line 1356, ../sass/_typo.scss */
+/* line 1357, ../sass/_typo.scss */
 .button {
   display: -moz-inline-stack;
   display: inline-block;
@@ -4843,70 +4843,70 @@ figure .figure-border {
   outline: none;
   text-decoration: none !important;
   text-transform: uppercase; }
-/* line 1363, ../sass/_typo.scss */
+/* line 1364, ../sass/_typo.scss */
 .button.btn-social {
   border-radius: 0px;
   background: url('../images/sprites/btn-social-s7b95784508.png');
   border: none; }
-/* line 1367, ../sass/_typo.scss */
+/* line 1368, ../sass/_typo.scss */
 .button.btn-social.small {
   font-size: 13.33px;
   color: #545151;
   padding-left: 52px;
   text-transform: none;
   line-height: 35px; }
-/* line 1373, ../sass/_typo.scss */
+/* line 1374, ../sass/_typo.scss */
 .button.btn-social.small.g-plus {
   background-position: 0 -175px;
   height: 35px;
   width: 132px; }
-/* line 1376, ../sass/_typo.scss */
+/* line 1377, ../sass/_typo.scss */
 .button.btn-social.small.g-plus:hover {
   background-position: 0 -35px; }
-/* line 1379, ../sass/_typo.scss */
+/* line 1380, ../sass/_typo.scss */
 .button.btn-social.small.g-plus:active {
   background-position: 0 -105px; }
-/* line 1383, ../sass/_typo.scss */
+/* line 1384, ../sass/_typo.scss */
 .button.btn-social.small.fb {
   background-position: 0 -385px;
   height: 35px;
   width: 132px; }
-/* line 1386, ../sass/_typo.scss */
+/* line 1387, ../sass/_typo.scss */
 .button.btn-social.small.fb:hover {
   background-position: 0 -245px; }
-/* line 1389, ../sass/_typo.scss */
+/* line 1390, ../sass/_typo.scss */
 .button.btn-social.small.fb:active {
   background-position: 0 -315px; }
-/* line 1394, ../sass/_typo.scss */
+/* line 1395, ../sass/_typo.scss */
 .button.btn-social.medium {
   font-size: 13.33px;
   color: #545151;
   padding-left: 52px;
   text-transform: none;
   line-height: 35px; }
-/* line 1400, ../sass/_typo.scss */
+/* line 1401, ../sass/_typo.scss */
 .button.btn-social.medium.g-plus {
   background-position: 0 -140px;
   height: 35px;
   width: 177px; }
-/* line 1403, ../sass/_typo.scss */
+/* line 1404, ../sass/_typo.scss */
 .button.btn-social.medium.g-plus:hover {
   background-position: 0 0; }
-/* line 1406, ../sass/_typo.scss */
+/* line 1407, ../sass/_typo.scss */
 .button.btn-social.medium.g-plus:active {
   background-position: 0 -70px; }
-/* line 1410, ../sass/_typo.scss */
+/* line 1411, ../sass/_typo.scss */
 .button.btn-social.medium.fb {
   background-position: 0 -350px;
   height: 35px;
   width: 177px; }
-/* line 1413, ../sass/_typo.scss */
+/* line 1414, ../sass/_typo.scss */
 .button.btn-social.medium.fb:hover {
   background-position: 0 -210px; }
-/* line 1416, ../sass/_typo.scss */
+/* line 1417, ../sass/_typo.scss */
 .button.btn-social.medium.fb:active {
   background-position: 0 -280px; }
-/* line 1423, ../sass/_typo.scss */
+/* line 1424, ../sass/_typo.scss */
 .button.button-primary {
   padding: 10px 15px;
   color: #fff;
@@ -4933,40 +4933,40 @@ figure .figure-border {
   /* IE6-8 fallback on horizontal gradient */
   white-space: nowrap; }
 @media (max-width: 767px) {
-  /* line 1423, ../sass/_typo.scss */
+  /* line 1424, ../sass/_typo.scss */
   .button.button-primary {
     padding: 10px 15px; } }
 @media screen and (max-width: 767px) and (-webkit-min-device-pixel-ratio: 0) {
-  /* line 1423, ../sass/_typo.scss */
+  /* line 1424, ../sass/_typo.scss */
   .button.button-primary {
     font-weight: bold; } }
 @media (max-width: 360px) {
-  /* line 1423, ../sass/_typo.scss */
+  /* line 1424, ../sass/_typo.scss */
   .button.button-primary {
     padding: 10px 10px; } }
 @media screen and (max-width: 360px) and (-webkit-min-device-pixel-ratio: 0) {
-  /* line 1423, ../sass/_typo.scss */
+  /* line 1424, ../sass/_typo.scss */
   .button.button-primary {
     font-weight: normal; } }
 @media (max-width: 319px) {
-  /* line 1423, ../sass/_typo.scss */
+  /* line 1424, ../sass/_typo.scss */
   .button.button-primary {
     padding: 10px 10px; } }
-/* line 1456, ../sass/_typo.scss */
+/* line 1457, ../sass/_typo.scss */
 .button.button-primary.large {
   padding: 10px 15px;
   font-size: 14px; }
-/* line 1460, ../sass/_typo.scss */
+/* line 1461, ../sass/_typo.scss */
 .button.button-primary.medium {
   padding: 5px 15px;
   font-size: 14px;
   font-weight: normal; }
-/* line 1465, ../sass/_typo.scss */
+/* line 1466, ../sass/_typo.scss */
 .button.button-primary.small {
   padding: 2.5px 15px;
   font-size: 14px;
   font-weight: normal; }
-/* line 1471, ../sass/_typo.scss */
+/* line 1472, ../sass/_typo.scss */
 .button.button-primary:hover, .button.button-primary.hover {
   background: #b08944;
   /* Old browsers */
@@ -4986,7 +4986,7 @@ figure .figure-border {
   /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#b08944', endColorstr='#705e29',GradientType=1 );
   /* IE6-8 fallback on horizontal gradient */ }
-/* line 1486, ../sass/_typo.scss */
+/* line 1487, ../sass/_typo.scss */
 .button.button-primary:active, .button.button-primary:focus, .button.button-primary.active {
   background: #6d5920;
   /* Old browsers */
@@ -5004,7 +5004,7 @@ figure .figure-border {
   /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#6d5920', endColorstr='#af8438',GradientType=1 );
   /* IE6-9 fallback on horizontal gradient */ }
-/* line 1500, ../sass/_typo.scss */
+/* line 1501, ../sass/_typo.scss */
 .button.button-secondary {
   padding: 1.5px 15px;
   color: #fff;
@@ -5016,14 +5016,14 @@ figure .figure-border {
   background: #000;
   border: 1px solid #c5c5c5;
   border-radius: 0; }
-/* line 1513, ../sass/_typo.scss */
+/* line 1514, ../sass/_typo.scss */
 .button.button-secondary:hover, .button.button-secondary.hover {
   background: #515151; }
-/* line 1518, ../sass/_typo.scss */
+/* line 1519, ../sass/_typo.scss */
 .button.button-secondary:active, .button.button-secondary:focus, .button.button-secondary.active {
   background: #c6a662;
   border-color: #c6a662; }
-/* line 1523, ../sass/_typo.scss */
+/* line 1524, ../sass/_typo.scss */
 .button.button-third {
   padding: 3px 15px;
   color: #4f4f4f;
@@ -5040,23 +5040,23 @@ figure .figure-border {
   -ms-border-radius: 3px;
   -o-border-radius: 3px;
   border-radius: 3px; }
-/* line 1536, ../sass/_typo.scss */
+/* line 1537, ../sass/_typo.scss */
 .button.button-third:hover, .button.button-third.hover {
   background: #1e1e1e;
   border-color: #2e2e2e;
   color: #fff;
   box-shadow: none; }
-/* line 1543, ../sass/_typo.scss */
+/* line 1544, ../sass/_typo.scss */
 .button.button-third:active, .button.button-third.active {
   background: #fff;
   border-color: #c9ac6d;
   color: #c9ac6d; }
 
-/* line 1551, ../sass/_typo.scss */
+/* line 1552, ../sass/_typo.scss */
 .select-group {
   position: relative;
   display: inline-block; }
-/* line 1554, ../sass/_typo.scss */
+/* line 1555, ../sass/_typo.scss */
 .select-group .button-select {
   display: inline-block;
   border: 1px solid #afafaf;
@@ -5065,7 +5065,7 @@ figure .figure-border {
   padding-left: 5px;
   width: 100%;
   min-width: 150px; }
-/* line 1562, ../sass/_typo.scss */
+/* line 1563, ../sass/_typo.scss */
 .select-group .button-select .down {
   height: 27px;
   width: 29px;
@@ -5075,20 +5075,20 @@ figure .figure-border {
   top: 0px;
   background: url('../images/sprites/select-sb1f58e57ff.png');
   text-indent: -999em; }
-/* line 1573, ../sass/_typo.scss */
+/* line 1574, ../sass/_typo.scss */
 .select-group .button-select:hover {
   border-color: #000; }
-/* line 1575, ../sass/_typo.scss */
+/* line 1576, ../sass/_typo.scss */
 .select-group .button-select:hover .caret {
   background-position: 0 -54px; }
-/* line 1579, ../sass/_typo.scss */
+/* line 1580, ../sass/_typo.scss */
 .select-group .button-select.disabled {
   background: #f5f5f5;
   border-color: #e2e2e2; }
-/* line 1582, ../sass/_typo.scss */
+/* line 1583, ../sass/_typo.scss */
 .select-group .button-select.disabled .caret {
   background-position: 0 0; }
-/* line 1586, ../sass/_typo.scss */
+/* line 1587, ../sass/_typo.scss */
 .select-group .button-select + .dropdown-select {
   display: none;
   position: absolute;
@@ -5097,42 +5097,42 @@ figure .figure-border {
   border: 1px solid #afafaf;
   background: #fff;
   z-index: 900; }
-/* line 1595, ../sass/_typo.scss */
+/* line 1596, ../sass/_typo.scss */
 .select-group .button-select + .dropdown-select ul {
   margin: 0px 2px 0 0;
   padding: 0px;
   list-style: none; }
-/* line 1599, ../sass/_typo.scss */
+/* line 1600, ../sass/_typo.scss */
 .select-group .button-select + .dropdown-select ul li {
   padding: 0 0 0 0; }
-/* line 1601, ../sass/_typo.scss */
+/* line 1602, ../sass/_typo.scss */
 .select-group .button-select + .dropdown-select ul li a {
   display: block;
   padding: 3px 5px 3px 5px; }
-/* line 1605, ../sass/_typo.scss */
+/* line 1606, ../sass/_typo.scss */
 .select-group .button-select + .dropdown-select ul li:hover {
   background: #f2f1f0; }
-/* line 1607, ../sass/_typo.scss */
+/* line 1608, ../sass/_typo.scss */
 .select-group .button-select + .dropdown-select ul li:hover a {
   text-decoration: none; }
-/* line 1609, ../sass/_typo.scss */
+/* line 1610, ../sass/_typo.scss */
 .select-group .button-select + .dropdown-select ul li:hover a span {
   text-decoration: none; }
-/* line 1611, ../sass/_typo.scss */
+/* line 1612, ../sass/_typo.scss */
 .select-group .button-select + .dropdown-select ul li:hover a span + span {
   text-decoration: none; }
-/* line 1621, ../sass/_typo.scss */
+/* line 1622, ../sass/_typo.scss */
 .select-group.medium {
   width: 170px;
   max-width: 170px; }
-/* line 1624, ../sass/_typo.scss */
+/* line 1625, ../sass/_typo.scss */
 .select-group.medium .button-select {
   height: 29px;
   line-height: 29px;
   padding-right: 35px;
   min-width: 150px;
   outline: none; }
-/* line 1630, ../sass/_typo.scss */
+/* line 1631, ../sass/_typo.scss */
 .select-group.medium .button-select .down {
   height: 27px;
   width: 29px;
@@ -5142,17 +5142,17 @@ figure .figure-border {
 /* line 43, ../../../../../../../../../Ruby/lib/ruby/gems/1.9.1/gems/compass-0.12.5/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
 .select-group.medium .button-select .down:hover, .select-group.medium .button-select .down.select_styled_hover, .select-group.medium .button-select .down.select_styled-hover {
   background-position: 0 -54px; }
-/* line 1636, ../sass/_typo.scss */
+/* line 1637, ../sass/_typo.scss */
 .select-group.medium .button-select + .dropdown-select {
   top: 29px;
   border-top: none; }
-/* line 1642, ../sass/_typo.scss */
+/* line 1643, ../sass/_typo.scss */
 .select-group.small {
   max-width: 135px; }
-/* line 1644, ../sass/_typo.scss */
+/* line 1645, ../sass/_typo.scss */
 .select-group.small .suffix {
   font-size: 10px !important; }
-/* line 1647, ../sass/_typo.scss */
+/* line 1648, ../sass/_typo.scss */
 .select-group.small .button-select {
   height: 20px;
   line-height: 18px;
@@ -5161,88 +5161,88 @@ figure .figure-border {
   max-width: 135px;
   border-color: #dad8d8;
   outline: none; }
-/* line 1655, ../sass/_typo.scss */
+/* line 1656, ../sass/_typo.scss */
 .select-group.small .button-select .down {
   height: 20px;
   width: 22px;
   background-position: 0 -81px;
   height: 18px;
   width: 20px; }
-/* line 1661, ../sass/_typo.scss */
+/* line 1662, ../sass/_typo.scss */
 .select-group.small .button-select + .dropdown-select {
   top: 20px;
   border-color: #dad8d8;
   border-top: none; }
-/* line 1669, ../sass/_typo.scss */
+/* line 1670, ../sass/_typo.scss */
 .select-group.small li a {
   font-size: 10px;
   font-family: "OpenSansRegular" !important; }
 
 /* columns of same height styles */
-/* line 1679, ../sass/_typo.scss */
+/* line 1680, ../sass/_typo.scss */
 .container-xs-height {
   display: table;
   padding-left: 0px;
   padding-right: 0px; }
 
-/* line 1684, ../sass/_typo.scss */
+/* line 1685, ../sass/_typo.scss */
 .row-xs-height {
   display: table-row; }
 
-/* line 1687, ../sass/_typo.scss */
+/* line 1688, ../sass/_typo.scss */
 .col-xs-height {
   display: table-cell;
   float: none; }
 
 @media (min-width: 768px) {
-  /* line 1692, ../sass/_typo.scss */
+  /* line 1693, ../sass/_typo.scss */
   .container-sm-height {
     display: table;
     padding-left: 0px;
     padding-right: 0px; }
 
-  /* line 1697, ../sass/_typo.scss */
+  /* line 1698, ../sass/_typo.scss */
   .row-sm-height {
     display: table-row; }
 
-  /* line 1700, ../sass/_typo.scss */
+  /* line 1701, ../sass/_typo.scss */
   .col-sm-height {
     display: table-cell;
     float: none; } }
 @media (min-width: 992px) {
-  /* line 1706, ../sass/_typo.scss */
+  /* line 1707, ../sass/_typo.scss */
   .container-md-height {
     display: table;
     padding-left: 0px;
     padding-right: 0px; }
 
-  /* line 1711, ../sass/_typo.scss */
+  /* line 1712, ../sass/_typo.scss */
   .row-md-height {
     display: table-row; }
 
-  /* line 1714, ../sass/_typo.scss */
+  /* line 1715, ../sass/_typo.scss */
   .col-md-height {
     display: table-cell;
     float: none; } }
 @media (min-width: 1200px) {
-  /* line 1720, ../sass/_typo.scss */
+  /* line 1721, ../sass/_typo.scss */
   .container-lg-height {
     display: table;
     padding-left: 0px;
     padding-right: 0px; }
 
-  /* line 1725, ../sass/_typo.scss */
+  /* line 1726, ../sass/_typo.scss */
   .row-lg-height {
     display: table-row; }
 
-  /* line 1728, ../sass/_typo.scss */
+  /* line 1729, ../sass/_typo.scss */
   .col-lg-height {
     display: table-cell;
     float: none; } }
-/* line 1734, ../sass/_typo.scss */
+/* line 1735, ../sass/_typo.scss */
 .tooltip {
   border-radius: 0px; }
-/* line 1736, ../sass/_typo.scss */
+/* line 1737, ../sass/_typo.scss */
 .tooltip .tooltip-inner {
   background: #f0f0f0;
   white-space: normal;
@@ -5250,20 +5250,20 @@ figure .figure-border {
   color: #000;
   border-radius: 0px;
   max-width: 400px; }
-/* line 1749, ../sass/_typo.scss */
+/* line 1750, ../sass/_typo.scss */
 .tooltip.top .tooltip-arrow {
   border-top-color: #f0f0f0; }
-/* line 1754, ../sass/_typo.scss */
+/* line 1755, ../sass/_typo.scss */
 .tooltip.right .tooltip-arrow {
   border-right-color: #f0f0f0; }
-/* line 1759, ../sass/_typo.scss */
+/* line 1760, ../sass/_typo.scss */
 .tooltip.left .tooltip-arrow {
   border-left-color: #f0f0f0; }
-/* line 1764, ../sass/_typo.scss */
+/* line 1765, ../sass/_typo.scss */
 .tooltip.bottom .tooltip-arrow {
   border-bottom-color: #f0f0f0; }
 
-/* line 1770, ../sass/_typo.scss */
+/* line 1771, ../sass/_typo.scss */
 .line-separator {
   height: 1px;
   width: auto;
@@ -5272,11 +5272,11 @@ figure .figure-border {
   margin-right: -15px;
   margin-bottom: 10px; }
 @media (min-width: 1200px) {
-  /* line 1770, ../sass/_typo.scss */
+  /* line 1771, ../sass/_typo.scss */
   .line-separator {
     margin-bottom: 15px; } }
 
-/* line 1785, ../sass/_typo.scss */
+/* line 1786, ../sass/_typo.scss */
 .p figure img {
   width: 100%;
   height: auto; }
@@ -7200,15 +7200,15 @@ span.checked {
 /* line 114, ../sass/modules/_rwdCarousel.scss */
 .rwd-fade-out {
   z-index: 10;
-  -webkit-animation: fadeOut .0s both ease;
-  -moz-animation: fadeOut .0s both ease;
-  animation: fadeOut .0s both ease; }
+  -webkit-animation: fadeOut .4s both ease;
+  -moz-animation: fadeOut .4s both ease;
+  animation: fadeOut .4s both ease; }
 
 /* line 120, ../sass/modules/_rwdCarousel.scss */
 .rwd-fade-in {
-  -webkit-animation: fadeIn .0s both ease;
-  -moz-animation: fadeIn .0s both ease;
-  animation: fadeIn .0s both ease; }
+  -webkit-animation: fadeIn .4s both ease;
+  -moz-animation: fadeIn .4s both ease;
+  animation: fadeIn .4s both ease; }
 
 /* backSlide */
 /* line 126, ../sass/modules/_rwdCarousel.scss */
@@ -7239,15 +7239,15 @@ span.checked {
 /* scaleUp */
 /* line 148, ../sass/modules/_rwdCarousel.scss */
 .rwd-fadeUp-in {
-  -webkit-animation: scaleUpFrom .0s ease both;
-  -moz-animation: scaleUpFrom .0s ease both;
-  animation: scaleUpFrom .0s ease both; }
+  -webkit-animation: scaleUpFrom .4s ease both;
+  -moz-animation: scaleUpFrom .4s ease both;
+  animation: scaleUpFrom .4s ease both; }
 
 /* line 154, ../sass/modules/_rwdCarousel.scss */
 .rwd-fadeUp-out {
-  -webkit-animation: scaleUpTo .0s ease both;
-  -moz-animation: scaleUpTo .0s ease both;
-  animation: scaleUpTo .0s ease both; }
+  -webkit-animation: scaleUpTo .4s ease both;
+  -moz-animation: scaleUpTo .4s ease both;
+  animation: scaleUpTo .4s ease both; }
 
 /* Keyframes */
 /*empty*/
@@ -15001,56 +15001,56 @@ i.flag.hit {
   /* line 387, ../sass/style/_checkout.scss */
   #checkout form .form-radio label span {
     top: -17px; } }
-/* line 400, ../sass/style/_checkout.scss */
-#checkout form input[type="text"], #checkout form input[type="email"], #checkout form input[type="password"] {
+/* line 401, ../sass/style/_checkout.scss */
+#checkout form input[type="text"], #checkout form input[type="email"], #checkout form input[type="password"], #checkout form input[type="tel"] {
   height: 29px;
   line-height: 29px;
   padding: 0 15px 0 15px; }
-/* line 406, ../sass/style/_checkout.scss */
+/* line 407, ../sass/style/_checkout.scss */
 #checkout form #remember_data > .row {
   margin-bottom: 20px; }
-/* line 408, ../sass/style/_checkout.scss */
+/* line 409, ../sass/style/_checkout.scss */
 #checkout form #remember_data > .row + .row {
   margin-bottom: 0; }
-/* line 416, ../sass/style/_checkout.scss */
+/* line 417, ../sass/style/_checkout.scss */
 #checkout form #login_social {
   position: relative; }
 @media (min-width: 768px) {
-  /* line 416, ../sass/style/_checkout.scss */
+  /* line 417, ../sass/style/_checkout.scss */
   #checkout form #login_social {
     top: -32px;
     margin-bottom: -30px; } }
-/* line 422, ../sass/style/_checkout.scss */
+/* line 423, ../sass/style/_checkout.scss */
 #checkout form #login_social p {
   margin-bottom: 10px; }
-/* line 425, ../sass/style/_checkout.scss */
+/* line 426, ../sass/style/_checkout.scss */
 #checkout form #login_social a {
   margin-right: 10px; }
 @media (min-width: 768px) and (max-width: 1199px) {
-  /* line 427, ../sass/style/_checkout.scss */
+  /* line 428, ../sass/style/_checkout.scss */
   #checkout form #login_social a.g-plus {
     margin-bottom: 5px; } }
 @media (max-width: 339px) {
-  /* line 427, ../sass/style/_checkout.scss */
+  /* line 428, ../sass/style/_checkout.scss */
   #checkout form #login_social a.g-plus {
     margin-left: -10px; } }
-/* line 435, ../sass/style/_checkout.scss */
+/* line 436, ../sass/style/_checkout.scss */
 #checkout form #login_social a.fb {
   margin-right: 0px; }
 @media (min-width: 768px) and (max-width: 1199px) {
-  /* line 435, ../sass/style/_checkout.scss */
+  /* line 436, ../sass/style/_checkout.scss */
   #checkout form #login_social a.fb {
     margin-bottom: 5px; } }
 @media (max-width: 339px) {
-  /* line 435, ../sass/style/_checkout.scss */
+  /* line 436, ../sass/style/_checkout.scss */
   #checkout form #login_social a.fb {
     margin-right: -10px; } }
-/* line 446, ../sass/style/_checkout.scss */
+/* line 447, ../sass/style/_checkout.scss */
 #checkout form #selected_bank {
   list-style: none;
   margin: 0px;
   padding: 0px; }
-/* line 450, ../sass/style/_checkout.scss */
+/* line 451, ../sass/style/_checkout.scss */
 #checkout form #selected_bank li {
   display: inline-block;
   width: 132px;
@@ -15058,59 +15058,59 @@ i.flag.hit {
   margin-right: 10px;
   margin-bottom: 15px; }
 @media (max-width: 380px) {
-  /* line 450, ../sass/style/_checkout.scss */
+  /* line 451, ../sass/style/_checkout.scss */
   #checkout form #selected_bank li {
     width: 47%;
     height: 89px; } }
 @media (min-width: 380px) and (max-width: 400px) {
-  /* line 450, ../sass/style/_checkout.scss */
+  /* line 451, ../sass/style/_checkout.scss */
   #checkout form #selected_bank li {
     width: 47%;
     height: 100px; } }
 @media (min-width: 401px) and (max-width: 640px) {
-  /* line 450, ../sass/style/_checkout.scss */
+  /* line 451, ../sass/style/_checkout.scss */
   #checkout form #selected_bank li {
     width: 30.666%;
     height: 100px; } }
 @media (min-width: 641px) and (max-width: 767px) {
-  /* line 450, ../sass/style/_checkout.scss */
+  /* line 451, ../sass/style/_checkout.scss */
   #checkout form #selected_bank li {
     width: 23%;
     height: 110px; } }
 @media (min-width: 768px) and (max-width: 992px) {
-  /* line 450, ../sass/style/_checkout.scss */
+  /* line 451, ../sass/style/_checkout.scss */
   #checkout form #selected_bank li {
     width: 18.333%;
     height: 110px; } }
 @media (min-width: 993px) {
-  /* line 450, ../sass/style/_checkout.scss */
+  /* line 451, ../sass/style/_checkout.scss */
   #checkout form #selected_bank li {
     width: 18.333%;
     height: 110px; } }
 @media (max-width: 400px) {
-  /* line 481, ../sass/style/_checkout.scss */
+  /* line 482, ../sass/style/_checkout.scss */
   #checkout form #selected_bank li:nth-child(even) {
     margin-right: 0px; } }
 @media (min-width: 401px) and (max-width: 640px) {
-  /* line 486, ../sass/style/_checkout.scss */
+  /* line 487, ../sass/style/_checkout.scss */
   #checkout form #selected_bank li:nth-child(3n) {
     margin-right: 0px; } }
 @media (min-width: 641px) and (max-width: 767px) {
-  /* line 492, ../sass/style/_checkout.scss */
+  /* line 493, ../sass/style/_checkout.scss */
   #checkout form #selected_bank li:nth-child(4n) {
     margin-right: 0px; } }
 @media (min-width: 768px) and (max-width: 992px) {
-  /* line 498, ../sass/style/_checkout.scss */
+  /* line 499, ../sass/style/_checkout.scss */
   #checkout form #selected_bank li:nth-child(5n) {
     margin-right: 0px; } }
 @media (min-width: 993px) {
-  /* line 498, ../sass/style/_checkout.scss */
+  /* line 499, ../sass/style/_checkout.scss */
   #checkout form #selected_bank li:nth-child(5n) {
     margin-right: 0px; } }
-/* line 506, ../sass/style/_checkout.scss */
+/* line 507, ../sass/style/_checkout.scss */
 #checkout form #selected_bank .form-group {
   position: relative; }
-/* line 509, ../sass/style/_checkout.scss */
+/* line 510, ../sass/style/_checkout.scss */
 #checkout form #selected_bank label {
   position: absolute;
   top: 0px;
@@ -15122,7 +15122,7 @@ i.flag.hit {
   text-align: center;
   cursor: pointer;
   padding-right: 0px; }
-/* line 520, ../sass/style/_checkout.scss */
+/* line 521, ../sass/style/_checkout.scss */
 #checkout form #selected_bank label img {
   border: 1px solid #eeedf0;
   margin-bottom: 5px;
@@ -15130,158 +15130,158 @@ i.flag.hit {
   background: #fff;
   width: 100%;
   height: auto; }
-/* line 528, ../sass/style/_checkout.scss */
+/* line 529, ../sass/style/_checkout.scss */
 #checkout form #selected_bank label span {
   position: static; }
-/* line 533, ../sass/style/_checkout.scss */
+/* line 534, ../sass/style/_checkout.scss */
 #checkout form #selected_bank label:hover img {
   border-color: #d9d9d9; }
-/* line 540, ../sass/style/_checkout.scss */
+/* line 541, ../sass/style/_checkout.scss */
 #checkout form #selected_bank input[type=radio]:checked + label img {
   border-color: #d9d9d9; }
-/* line 547, ../sass/style/_checkout.scss */
+/* line 548, ../sass/style/_checkout.scss */
 #checkout form .action a {
   position: relative; }
-/* line 551, ../sass/style/_checkout.scss */
+/* line 552, ../sass/style/_checkout.scss */
 #checkout form .action button {
   min-width: 120px; }
-/* line 556, ../sass/style/_checkout.scss */
+/* line 557, ../sass/style/_checkout.scss */
 #checkout form #remember_data .row {
   margin-bottom: 0px; }
-/* line 558, ../sass/style/_checkout.scss */
+/* line 559, ../sass/style/_checkout.scss */
 #checkout form #remember_data .row p {
   margin-bottom: 15px; }
-/* line 563, ../sass/style/_checkout.scss */
+/* line 564, ../sass/style/_checkout.scss */
 #checkout form .default_delivery {
   margin-bottom: 0px; }
 @media (max-width: 530px) {
-  /* line 565, ../sass/style/_checkout.scss */
+  /* line 566, ../sass/style/_checkout.scss */
   #checkout form .default_delivery.small-no-float {
     float: none !important;
     margin-bottom: 10px;
     clear: both; } }
 @media (max-width: 525px) {
-  /* line 574, ../sass/style/_checkout.scss */
+  /* line 575, ../sass/style/_checkout.scss */
   #checkout form .phone {
     display: inline-block;
     margin-bottom: 15px; } }
 @media (max-width: 359px) {
-  /* line 574, ../sass/style/_checkout.scss */
+  /* line 575, ../sass/style/_checkout.scss */
   #checkout form .phone {
     display: block;
     margin-bottom: 15px; } }
 @media (max-width: 359px) {
-  /* line 583, ../sass/style/_checkout.scss */
+  /* line 584, ../sass/style/_checkout.scss */
   #checkout form .phone span {
     display: block; } }
-/* line 591, ../sass/style/_checkout.scss */
+/* line 592, ../sass/style/_checkout.scss */
 #checkout form #back {
   position: relative;
   top: 12px; }
-/* line 596, ../sass/style/_checkout.scss */
+/* line 597, ../sass/style/_checkout.scss */
 #checkout .text-align-left {
   text-align: left !important; }
-/* line 597, ../sass/style/_checkout.scss */
+/* line 598, ../sass/style/_checkout.scss */
 #checkout .text-align-left label {
   text-align: left !important; }
 
 @media (max-width: 767px) {
-  /* line 606, ../sass/style/_checkout.scss */
+  /* line 607, ../sass/style/_checkout.scss */
   #checkout #content-main {
     padding-left: 0px;
     padding-right: 0px; } }
 @media (min-width: 768px) and (max-width: 991px) {
-  /* line 613, ../sass/style/_checkout.scss */
+  /* line 614, ../sass/style/_checkout.scss */
   #checkout .sidebar-secound {
     margin-top: -15px; } }
 @media (max-width: 991px) {
-  /* line 613, ../sass/style/_checkout.scss */
+  /* line 614, ../sass/style/_checkout.scss */
   #checkout .sidebar-secound {
     padding-left: 15px;
     padding-right: 15px; } }
 @media (max-width: 767px) {
-  /* line 613, ../sass/style/_checkout.scss */
+  /* line 614, ../sass/style/_checkout.scss */
   #checkout .sidebar-secound {
     padding-left: 0px;
     padding-right: 0px; } }
-/* line 626, ../sass/style/_checkout.scss */
+/* line 627, ../sass/style/_checkout.scss */
 #checkout .panel {
   box-shadow: none;
   background: #fefefe; }
-/* line 631, ../sass/style/_checkout.scss */
+/* line 632, ../sass/style/_checkout.scss */
 #checkout .current-addres + .panel {
   margin-top: 15px; }
-/* line 639, ../sass/style/_checkout.scss */
+/* line 640, ../sass/style/_checkout.scss */
 #checkout .toggle {
   display: none; }
-/* line 644, ../sass/style/_checkout.scss */
+/* line 645, ../sass/style/_checkout.scss */
 #checkout .panel-body dl {
   margin-bottom: 0px; }
 @media (max-width: 360px) {
-  /* line 647, ../sass/style/_checkout.scss */
+  /* line 648, ../sass/style/_checkout.scss */
   #checkout .panel-body dl.pull-left.small-no-float {
     float: none !important; } }
 @media (max-width: 480px) {
-  /* line 654, ../sass/style/_checkout.scss */
+  /* line 655, ../sass/style/_checkout.scss */
   #checkout .panel-body dl + figure {
     width: 115px; } }
 @media (max-width: 480px) {
-  /* line 658, ../sass/style/_checkout.scss */
+  /* line 659, ../sass/style/_checkout.scss */
   #checkout .panel-body dl + figure img {
     width: 100%; } }
-/* line 665, ../sass/style/_checkout.scss */
+/* line 666, ../sass/style/_checkout.scss */
 #checkout .panel-body .panel {
   display: none;
   margin-bottom: 15px;
   background: #fff; }
-/* line 669, ../sass/style/_checkout.scss */
+/* line 670, ../sass/style/_checkout.scss */
 #checkout .panel-body .panel.selected {
   border-color: #d9d9d9; }
-/* line 671, ../sass/style/_checkout.scss */
+/* line 672, ../sass/style/_checkout.scss */
 #checkout .panel-body .panel.selected .selected_bank {
   display: block; }
-/* line 677, ../sass/style/_checkout.scss */
+/* line 678, ../sass/style/_checkout.scss */
 #checkout #block_invoice {
   display: none; }
-/* line 680, ../sass/style/_checkout.scss */
+/* line 681, ../sass/style/_checkout.scss */
 #checkout .button-primary {
   min-width: 120px; }
-/* line 686, ../sass/style/_checkout.scss */
+/* line 687, ../sass/style/_checkout.scss */
 #checkout .default_pay > .panel > .panel-body > .panel {
   display: block; }
-/* line 688, ../sass/style/_checkout.scss */
+/* line 689, ../sass/style/_checkout.scss */
 #checkout .default_pay > .panel > .panel-body > .panel:hover {
   border-color: #d9d9d9; }
-/* line 694, ../sass/style/_checkout.scss */
+/* line 695, ../sass/style/_checkout.scss */
 #checkout .default_pay .selected_bank {
   display: none; }
 @media (max-width: 767px) {
-  /* line 697, ../sass/style/_checkout.scss */
+  /* line 698, ../sass/style/_checkout.scss */
   #checkout .default_pay .flag_pay_method {
     display: none; } }
 
-/* line 715, ../sass/style/_checkout.scss */
+/* line 716, ../sass/style/_checkout.scss */
 .logged #checkout .default_pay > .panel > .panel-heading {
   padding-bottom: 0px; }
-/* line 719, ../sass/style/_checkout.scss */
+/* line 720, ../sass/style/_checkout.scss */
 .logged #checkout .default_pay > .panel > .panel-heading + .panel-body .default_pay_selected_bank figure {
   position: relative;
   top: -35px;
   margin-bottom: -20px; }
-/* line 727, ../sass/style/_checkout.scss */
+/* line 728, ../sass/style/_checkout.scss */
 .logged #checkout .default_pay > .panel > .panel-footer {
   text-align: right; }
-/* line 731, ../sass/style/_checkout.scss */
+/* line 732, ../sass/style/_checkout.scss */
 .logged #checkout .default_pay > .panel > .panel-body .default_pay_selected_bank {
   text-align: right; }
-/* line 737, ../sass/style/_checkout.scss */
+/* line 738, ../sass/style/_checkout.scss */
 .logged #checkout .default_pay > .panel > .panel-body > .panel {
   display: none; }
-/* line 740, ../sass/style/_checkout.scss */
+/* line 741, ../sass/style/_checkout.scss */
 .logged #checkout .default_pay > .panel > .panel-body .form-checkbox.default_pay {
   margin-bottom: 0px; }
 
-/* line 749, ../sass/style/_checkout.scss */
+/* line 750, ../sass/style/_checkout.scss */
 #invoice_data {
   display: none; }
 

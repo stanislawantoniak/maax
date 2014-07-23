@@ -113,14 +113,14 @@
 /* fade */
 .rwd-fade-out {
   z-index: 10;
-  -webkit-animation: fadeOut .0s both ease;
-  -moz-animation: fadeOut .0s both ease;
-  animation: fadeOut .0s both ease;
+  -webkit-animation: fadeOut .4s both ease;
+  -moz-animation: fadeOut .4s both ease;
+  animation: fadeOut .4s both ease;
 }
 .rwd-fade-in {
-  -webkit-animation: fadeIn .0s both ease;
-  -moz-animation: fadeIn .0s both ease;
-  animation: fadeIn .0s both ease;
+  -webkit-animation: fadeIn .4s both ease;
+  -moz-animation: fadeIn .4s both ease;
+  animation: fadeIn .4s both ease;
 }
 /* backSlide */
 .rwd-backSlide-out {
@@ -146,15 +146,15 @@
 }
 /* scaleUp */
 .rwd-fadeUp-in {
-  -webkit-animation: scaleUpFrom .0s ease both;
-  -moz-animation: scaleUpFrom .0s ease both;
-  animation: scaleUpFrom .0s ease both;
+  -webkit-animation: scaleUpFrom .4s ease both;
+  -moz-animation: scaleUpFrom .4s ease both;
+  animation: scaleUpFrom .4s ease both;
 }
 
 .rwd-fadeUp-out {
-  -webkit-animation: scaleUpTo .0s ease both;
-  -moz-animation: scaleUpTo .0s ease both;
-  animation: scaleUpTo .0s ease both;
+  -webkit-animation: scaleUpTo .4s ease both;
+  -moz-animation: scaleUpTo .4s ease both;
+  animation: scaleUpTo .4s ease both;
 }
 /* Keyframes */
 /*empty*/

@@ -3,6 +3,9 @@ jQuery.noConflict();
 (function( $ ) {
   $(function() {
 
+   
+
+
     $.ajaxSetup ({
         // Disable caching of AJAX responses
         cache: false
@@ -57,16 +60,16 @@ jQuery.noConflict();
 var ua = navigator.userAgent.toLowerCase();
 var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
 if(!isAndroid) {
- //$(".zipcode").inputmask("99-999",{ "placeholder": "  -   ", showMaskOnHover: false });
- //$(".nip").inputmask("999-999-99-99",{ "placeholder": "   -   -  -  ", showMaskOnHover: false });
+ $(".zipcode").mask("99-999");
+ $(".nip").mask("999-999-99-99");
 } else {
-  //$(".zipcode").attr('pattern','[0-9]{2}\-[0-9]{3}').attr('title','Format wpisania danych: 99-999').attr('maxlength','6');
-  //$(".nip").attr('pattern','[0-9]{3}\-[0-9]{3}\-[0-9]{2}\-[0-9]{2}').attr('title','Format wpisania danych: 999-999-99-99').attr('maxlength','13')
+  $(".zipcode").mask("99-999");
+  $(".nip").mask("999-999-99-99");
 }
 
 
 
-
+/*
 var zipcode = ['#zip_code'];
   $.each(zipcode, function(index, value) {
       var value = $(value);
@@ -133,36 +136,18 @@ var vatzipcode = ['#vat_zip_code'];
 
 ////////////////////////////////////////////////////////////////////
 
-var nip = ['#nip'];
-  $.each(nip, function(index, value) {
-      var value = $(value);
-      value.keydown(function(event) {
-    if (value.val().length == 3) {
-        event.target.value = event.target.value + "-";
-    } else if (value.val().length > 10 && (event.keyCode != 46) && event.keyCode != 8 && event.keyCode != 9 && event.keyCode != 27 && event.keyCode != 13 && !(event.keyCode >= 35 && event.keyCode <= 39)) {
-        return false;
-    } else if (value.val().length > 3) {
-        // Jesli wieksze niz 3, ale nie ma myslnikato dostawiamy - lag fix 
-        if (value.val().split('-').length == 2) {
-            value.val(value.val().substring(0, 3) + '-' + value.val().substring(3, 6));
-        }
-    }
-    // Allow: backspace, delete, tab, escape, and enter
-    if (event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 || event.keyCode == 13 || 
-         // Allow: Ctrl+A
-        (event.keyCode == 65 && event.ctrlKey === true) || 
-         // Allow: home, end, left, right
-        (event.keyCode >= 35 && event.keyCode <= 39)) {
-       return;
-    }
-    else {
-        // Ensure that it is a number and stop the keypress
-        if (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105 )) {   
-      event.preventDefault(); 
-        }   
-    }
-      });
-  });
+
+
+// assumes a print function is defined
+var anyString = "8761058000";
+
+// Displays
+console.log(anyString.substring(0,3));
+console.log(anyString.substring(3,6));
+console.log(anyString.substring(6,8));
+console.log(anyString.substring(8,10));
+
+*/
 
 
 
@@ -736,17 +721,25 @@ function galeriaProduktu(){
   });
 
 
-
+/*
 $('#product-gallery #sync1').on('click', 'a', function(event) {
   event.preventDefault();
 
     $( "#lightbox .bl" ).html($("#galeria-lightbox-wr").html());
-    $('#lightbox').show(50,function(){
+    
+    setTimeout(function(){
+      //$('#lightbox').css({display:'block'}).click();
+                 galeriaProduktu();
+    }, 1500);
      
-    });
+           
+      
+   
     $('body').addClass('lightbox');
-    galeriaProduktu();
-    flagProductGallery();
+
+
+     
+    
 
           
           //center(numberProduct)
@@ -755,7 +748,7 @@ $('#product-gallery #sync1').on('click', 'a', function(event) {
           //};
 
 });
-
+*/
 
  
   function syncPosition(el){
@@ -855,47 +848,25 @@ $('#product-gallery #sync1').on('click', 'a', function(event) {
   }
 ////////////////////////////////////////////////////////////////////
 
-/*
-$('#lightbox').hide();
-$.ajax({
-    url: "_include/galeria_produktu.php",
-    cache: false
-  })
-    .done(function( html ) {
-      $('#lightbox').show();
-      $( "#lightbox .bl" ).append( html );
-      $('body').addClass('lightbox');
-      galeriaProduktu();
-    });*/
+
 var widthWindow = $(window).width();
 if (widthWindow >= 768) {
 $('#product-gallery #sync1').on('click', 'a', function(event) {
   event.preventDefault();
 
-
-
     
-  
-
-
-
-    $( "#lightbox .bl" ).html($("#galeria-lightbox-wr").html());
-    $('#lightbox').show();
+    
+$( "#lightbox .bl" ).html($("#galeria-lightbox-wr").html());
+     
+      $('#lightbox').css({display:'block'});
+      $('#lightbox').find('.inner-item').css({visibility:'hidden'})
+    setTimeout(function(){  
+       $('#lightbox').find('.inner-item').css({visibility:'visible'})
+    }, 500);
     $('body').addClass('lightbox');
     galeriaProduktu();
-
-//  $.ajax({
-//    url: "_include/galeria_produktu.php",
-//    cache: true
-//  })
-//    .done(function( html ) {
-//      $( "#lightbox .bl" ).append( html );
-//      $('#lightbox').show();
-//      $('body').addClass('lightbox');
-//      galeriaProduktu();
-//    });
-
-});
+    $('body').addClass('lightbox');
+  });
 };
 
 var lightbox = $('#lightbox');
@@ -1420,7 +1391,7 @@ if($(window).width() != prevW) {
       });
    
 
-   
+
     //control sidebar
     if ($('body').hasClass('filter-sidebar')) {
 
