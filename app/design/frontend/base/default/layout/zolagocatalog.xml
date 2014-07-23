@@ -11,6 +11,8 @@
             <action method="addItem"><type>skin_js</type><name>../../../frontend/default/udropship/js/melon/vendor_mass.js</name></action>
             <action method="addItem"><type>skin_js</type><name>../../../frontend/default/udropship/plugins/bootbox/bootbox.js</name></action>
             <action method="addItem"><type>skin_js</type><name>../../../frontend/default/default/js/imagesloaded/imagesloaded.pkgd.min.js</name></action>
+            <action method="addItem"><type>skin_js</type><name>../../../frontend/default/default/js/throttle/jquery.ba-throttle-debounce.min.js</name></action>
+            <action method="addItem"><type>skin_js</type><name>../../../frontend/default/default/js/mousewheel/jquery.mousewheel.js</name></action>
             <action method="addItem"><type>skin_js</type><name>../../../frontend/default/default/js/tablefreezer/jquery.tableFreezer.js</name></action>
             <action method="addItem">
                 <type>skin_js</type>

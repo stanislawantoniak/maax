@@ -1,6 +1,9 @@
 <div class="grid z-grid" id="<?php echo $this->buildFieldId("editor");?>">
 	<?php if($this->getGrid()): ?>
 	<table style="display: none;">
+<!--            HIDE IT FOR TESTING-->
+<!--            NEEDS UPDATE-->
+        <?php if(false): ?>
 		<tfoot id="<?php echo $this->buildFieldId("foot");?>">
 			<tr id="<?php echo $this->buildFieldId("change");?>">
 				<?php $i=0;?>
@@ -23,9 +26,6 @@
 				<?php endforeach;?>
 			</tr>
 
-<!--            HIDE IT FOR TESTING-->
-<!--            NEEDS UPDATE-->
-            <?php if(false): ?>
 
 			<tr class="filter" style="display:none;" id="<?php echo $this->buildFieldId("fields");?>">
 				<?php $i=0;?>
@@ -85,10 +85,10 @@
 			if(!table.select("tfoot").length){
 				table.insert({bottom: content});
 			}
-			$("<?php echo $this->buildFieldId("submit"); ?>").observe("click", submitHandler);
-			$("<?php echo $this->buildFieldId("change");?>").select(".changer").each(function(el){
-				el.observe("change", changerHandler)
-			});
+<!--			$("--><?php ////echo $this->buildFieldId("submit"); ?><!--").observe("click", submitHandler);-->
+<!--			$("--><?php ////echo $this->buildFieldId("change");?><!--").select(".changer").each(function(el){-->
+<!--				el.observe("change", changerHandler)-->
+<!--			});-->
 			
 			// Prepare form
 			var formEl = new Element("form", {id:"<?php echo $this->buildFieldId("editor_form");?>"});
