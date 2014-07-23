@@ -34,25 +34,8 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
 		return $vendor->getStoreReturnHeadline();
 	}
 
-    /**
-     * @todo Implementation
-     *
-     * @return string
-     */
-    public function getParentCategoryName()
-    {
-        return 'Sukienki';
-    }
-
-    /**
-     * @todo Implementation
-     *
-     * @return string
-     */
-    public function getParentCategoryUrl()
-    {
-        return '/dla-niej.html';
-    }
+  
+   
 
     /**
      * @todo Implementation
@@ -64,4 +47,42 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
         $flags = array('', 'new', 'hit', 'percent', 'sale');
         return $flags[rand(0, 4)];
     }
+	
+	/**
+	 * @param Mage_Catalog_Model_Category $category
+	 * @return string
+	 */
+	public function getParentCategoryName(Mage_Catalog_Model_Category $category=null) {
+		if(is_null($category)){
+			$category = $this->getParentCategory();
+		}
+		return $category->getName();
+	}
+	
+	/**
+	 * @param Mage_Catalog_Model_Category $category
+	 * @return string
+	 */
+	public function getParentCategoryUrl(Mage_Catalog_Model_Category $category = null) {
+		if(is_null($category)){
+			$category = $this->getParentCategory();
+		}
+        return $category->getUrl();
+	}
+	
+	/**
+	 * @return Mage_Catalog_Model_Category
+	 */
+	public function getParentCategory() {
+		if(!$this->hasData("parent_category")){
+			if(Mage::registry('current_category') instanceof Mage_Catalog_Model_Category){
+				$model = Mage::registry('current_category');
+			}else{
+				$model = Mage::getModel('catalog/category')->load(Mage::app()->getStore()->getRootCategoryId());
+			}
+			$this->setData("parent_category", $model);
+		}
+		
+		return $this->getData("parent_category");
+	}
 }
