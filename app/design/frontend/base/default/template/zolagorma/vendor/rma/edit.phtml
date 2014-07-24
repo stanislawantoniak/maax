@@ -64,7 +64,7 @@ jQuery(document).ready(function() {
 						<dt><?php echo $_helper->__("RMA date");?>:</dt> 
 						<dd><?php echo $this->formatDate($_rma->getCreatedAt());?></dd> 
 						<dt><?php echo $_helper->__("Response deadline");?>:</dt> 
-						<dd><?php echo $this->formatDate();?> [dev]</dd> 
+						<dd><?php echo ($_rma->getResponseDeadline()) ? $this->formatDate($_rma->getResponseDeadline()) : $this->__('Not specified');?></dd>
 						<dt><?php echo $_helper->__("Vendor");?>:</dt> 
 						<dd><?php echo $this->escapeHtml($_vendor->getVendorName())?></dd> 
 						<dt><?php echo $_helper->__("Refund payment");?>:</dt>

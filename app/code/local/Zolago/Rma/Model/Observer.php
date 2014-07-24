@@ -88,9 +88,23 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 		$rma = $observer->getEvent()->getData('rma');
 		$newStatus = $observer->getEvent()->getData("new_status");
 		$oldStatus = $observer->getEvent()->getData("old_status");
+
+
 		$helper = Mage::helper("zolagorma");
 		/* @var $rma Zolago_Rma_Model_Rma */
 		$statusModel = $rma->getStatusModel();
+
+        //Calculate response deadline
+        if($response_deadline = Mage::helper('zolagoholidays/datecalculator')->calculateMaxRmaResponseDeadline($rma, $statusModel->getStatusObject($newStatus), true)){
+            try{
+                $rma->setResponseDeadline($response_deadline->toString('YYYY-MM-dd'));
+                $rma->save();
+            }
+            catch(Exception $e){
+                Mage::logException($e);
+            }
+        }
+
 		$this->_logEvent($rma, Mage::helper('zolagorma')->
 			__("Status changed (%s&rarr;%s)", 
 					$helper->__($statusModel->getStatusObject($oldStatus)->getTitle()), 
