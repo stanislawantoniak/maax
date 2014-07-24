@@ -1,7 +1,7 @@
 <?php
 
 
-class Zolago_Catalog_Model_Product_Configurable_Data
+class Zolago_Catalog_Model_Resource_Product_Configurable
     extends Mage_Core_Model_Resource_Db_Abstract
 {
     const PRICE_ATTRIBUTE_CODE = 'price';

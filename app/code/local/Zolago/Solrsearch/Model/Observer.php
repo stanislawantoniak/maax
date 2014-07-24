@@ -276,6 +276,7 @@ class Zolago_Solrsearch_Model_Observer {
 		foreach ($productIds as $productId) {
 			$this->collectProduct($productId, Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID);
 		}
+
     }
 	
 	
