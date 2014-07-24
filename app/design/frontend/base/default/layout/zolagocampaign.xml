@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+	<zolagocampaign_vendor_index>
+		<update handle="udropship_vendor" />
+        <update handle="adminhtml_head" />
+		<update handle="bootstrap"/>
+		<reference name="content">
+			<block name="campaign" type="zolagocampaign/vendor_campaign" template="zolagocampaign/dropship/campaign.phtml"></block>		    
+		</reference>
+	</zolagocampaign_vendor_index>
+	
+	<zolagocampaign_vendor_edit>
+		<update handle="udropship_vendor" />
+        <update handle="adminhtml_head" />
+		<update handle="bootstrap"/>
+		<update handle="forms"/>
+		<reference name="content">
+			<block name="campaign.edit" type="zolagocampaign/vendor_campaign_edit" template="zolagocampaign/dropship/campaign/edit.phtml"></block>		    
+		</reference>
+	</zolagocampaign_vendor_edit>
+	
+</layout>

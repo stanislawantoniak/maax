@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Campaign>
-            <version>0.0.1</version>
+            <version>0.0.2</version>
         </Zolago_Campaign>
     </modules>
     <global>
@@ -48,15 +48,31 @@
 		</events>
     </global>
 	<frontend>
-		<routes>
+		<routers>
 			<zolagocampaign>
 				<use>standard</use>
 				<args>
-					<module>Zolago_Dropship</module>
+					<module>Zolago_Campaign</module>
 					<frontName>campaign</frontName>
 				</args>
 			</zolagocampaign>
-		</routes>
+		</routers>
+		<layout>
+			<updates>
+				<zolagocampaign>
+					<file>zolagocampaign.xml</file>
+				</zolagocampaign>
+			</updates>
+		</layout>
+		<translate>
+			<modules>
+				<zolagocampaign>
+					<files>
+						<default>Zolago_Campaign.csv</default>
+					</files>
+				</zolagocampaign>
+			</modules>
+		</translate>
 	</frontend>
 
     <crontab>
