@@ -30,7 +30,9 @@ class Zolago_Modago_Helper_Data extends Mage_Core_Helper_Abstract
             if ($category->hasChildren()) {
                 $children = Mage::getModel('catalog/category')->getCategories($category->getId());
                 $tree[$category->getId()]['has_dropdown'] = self::getCategoriesTree($children, $level + 1, $span);
-            }
+            }else{
+				$tree[$category->getId()]['has_dropdown']  = false;
+			}
         }
 
         return $tree;

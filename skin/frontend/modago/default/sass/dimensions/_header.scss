@@ -323,3 +323,11 @@
 }
 
 
+.node-type-page-shop {
+    #header {
+        min-height: 40px;
+        @media (min-width: $screen-md-min) {
+            min-height: 56px;
+        }
+    }
+}

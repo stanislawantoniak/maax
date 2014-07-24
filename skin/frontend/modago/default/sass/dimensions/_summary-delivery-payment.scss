@@ -1,12 +1,6 @@
 
 .node-type-summary-delivery-payment {
-	 #header {
-    	min-height: 41px;
-	}
-	#header-main {
-		 padding-top: 0px;
-    	 padding-bottom: 0px;
-	}
+	 
 	#content-main {
 		@media (max-width: $screen-sm-max) {
 		margin-bottom: 15px;
@@ -252,4 +246,17 @@
 			}
 		}
 	} 
+}
+
+.podziekowanie_nieudane_view_summary {
+	display:none;
+	@media(max-width:991px) {
+		//loat:right;
+		display:inline-block;
+		position:relative;
+		padding-right: 30px;
+	}
+	&.open {
+		margin-bottom:15px;
+	}
 }

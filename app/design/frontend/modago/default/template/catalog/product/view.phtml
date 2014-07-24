@@ -14,6 +14,10 @@
  */
 ?>
 
+<?php
+    $_reviewBlock = Mage::getBlockSingleton('review/product_view');
+?>
+
 <?php $_helper = $this->helper('catalog/output'); ?>
 <?php $_product = $this->getProduct(); ?>
 <script type="text/javascript">
@@ -31,113 +35,10 @@
 <!-- GALLERY PRODUCT -->
 <div class="path_back_to_category visible-xs">
     <div class="col-xs-12">
-        <a href="#"><i class="fa fa-angle-left"></i> Sukienki</a>
+        <a href="<?php echo $this->getParentCategoryUrl(); ?>"><i class="fa fa-angle-left"></i> <?php echo $this->getParentCategoryName(); ?>></a>
     </div>
 </div>
-<div id="product-gallery" class="col-lg-5 col-xs-12 clearfix">
-    <div class="connected-carousels">
-        <!-- ============================================= -->
-
-        <div class="navigation hidden-xs">
-            <a href="#" class="prev prev-navigation"></a>
-            <div class="carousel carousel-navigation">
-                <ul>
-                    <li><img src="skin/frontend/modago/default/images/product/thumb/product-thumb.png" width="67" height="86" alt=""></li>
-                    <li><img src="skin/frontend/modago/default/images/product/thumb/product-thumb-03.png" width="67" height="86" alt=""></li>
-                    <li><img src="skin/frontend/modago/default/images/product/thumb/product-thumb-04.png" width="67" height="86" alt=""></li>
-                    <li><img src="skin/frontend/modago/default/images/product/thumb/product-thumb-05.png" width="67" height="86" alt=""></li>
-                    <li><img src="skin/frontend/modago/default/images/product/thumb/product-thumb.png" width="67" height="86" alt=""></li>
-                    <li><img src="skin/frontend/modago/default/images/product/thumb/product-thumb-03.png" width="67" height="86" alt=""></li>
-                    <li><img src="skin/frontend/modago/default/images/product/thumb/product-thumb-04.png" width="67" height="86" alt=""></li>
-                    <li><img src="skin/frontend/modago/default/images/product/thumb/product-thumb-05.png" width="67" height="86" alt=""></li>
-                </ul>
-            </div>
-            <a href="#" class="next next-navigation"></a>
-        </div>
-
-        <div class="stage">
-            <div class="carousel carousel-stage">
-                <ul>
-
-                    <li>
-                        <div>
-                            <a href="#" data-toggle="modal" data-target="#product_gallery" data-flags="sale">
-                                <img src="skin/frontend/modago/default/images/product/images/product-medium-1.png"  alt="">
-                                <span class="view_lupa"></span>
-                            </a>
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <a href="#" data-toggle="modal" data-target="#product_gallery" data-flags="hit">
-                                <img src="skin/frontend/modago/default/images/product/images/product-medium-2.png"  alt="">
-                                <span class="view_lupa"></span>
-                            </a>
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <a href="#" data-toggle="modal" data-target="#product_gallery" data-flags="now">
-                                <img src="skin/frontend/modago/default/images/product/images/product-medium-3.png"  alt="">
-                                <span class="view_lupa"></span>
-                            </a>
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <a href="#" data-toggle="modal" data-target="#product_gallery" data-flags="percent">
-                                <img src="skin/frontend/modago/default/images/product/images/product-medium-4.png"  alt="">
-                                <span class="view_lupa"></span>
-                            </a>
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <a href="#" data-toggle="modal" data-target="#product_gallery">
-                                <img src="skin/frontend/modago/default/images/product/images/product-medium-5.png"  alt="">
-                                <span class="view_lupa"></span>
-                            </a>
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <a href="#" data-toggle="modal" data-target="#product_gallery">
-                                <img src="skin/frontend/modago/default/images/product/images/product-medium-6.png"  alt="">
-                                <span class="view_lupa"></span>
-                            </a>
-                        </div>
-                    </li>
-                    <li>
-                        <div>
-                            <a href="#" data-toggle="modal" data-target="#product_gallery">
-                                <img src="skin/frontend/modago/default/images/product/images/product-medium-7.png"  alt="">
-                                <span class="view_lupa"></span>
-                            </a>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-            <a href="#" class="prev prev-stage btn-arrow"><span></span></a>
-            <a href="#" class="next next-stage btn-arrow"><span></span></a>
-            <div class="pagination visible-xs">
-                <p class="jcarousel-pagination"></p>
-            </div>
-            <div class="followUs hidden-xs">
-                <ul>
-                    <li>Podziel się:</li>
-                    <li><a href="#" class="follow_us fb"></a></li>
-                    <li><a href="#" class="follow_us twitter"></a></li>
-                    <li><a href="#" class="follow_us pinterest"></a></li>
-                    <li><a href="#" class="follow_us gplus"></a></li>
-
-                </ul>
-            </div>
-        </div>
-        <!-- ============================================= -->
-
-    </div>
-
-</div>
+    <?php echo $this->getChildHtml('media') ?>
 <!-- END GALERY PRODUCT -->
 <div id="block-bundle" class="col-lg-7 col-xs-12">
 
@@ -164,8 +65,8 @@
                 </p>
             </div>
             <ul>
-                <li>DOSTAWA GRATIS</li>
-                <li>30 DNI NA ZWROT</li>
+                <li><?php echo $this->getStoreDeliveryHeadline(); ?></li>
+                <li><?php echo $this->getStoreReturnHeadline(); ?></li>
             </ul>
         </div>
         <div class="color-box-bundle">
@@ -277,139 +178,19 @@
 <!-- SELLER BOX BUNDLE -->
 <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 pull-right clearfix">
     <div class="row">
-        <div id="seller-box-bundle">
-            <div class="row">
-                <div class="col-lg-12 col-md-6 clearfix">
-                    <span class="seller-label">Sprzedawca</span>
-                    <figure>
-                        <img src="skin/frontend/modago/default/images/seller/logo.png" alt="">
-                    </figure>
-                    <div class="seller"><a href="#">Paprocki & Brzozowski</a></div>
-                </div>
-                <div class="col-lg-12 col-md-6 hidden-xs">
-                    <div class="seller-box-description block">
-                        <h3>
-                            <a href="#" data-toggle="modal" data-target="#seller_description"><span>Informacje o sprzedawcy <i class="bullet-plusik"></i></span>
-                            </a>
-                        </h3>
-                    </div>
-                    <div class="seller-box-question block">
-                        <h3>
-                            <a href="#"><span>Zadaj pytanie sprzedawcy <i class="bullet-plusik"></i></span> </a>
-                        </h3>
-                    </div>
-                    <div class="descripionProduct-box-comments block">
-                        <h3>
-                            <a href="#" data-toggle="modal" data-target="#terms_delivery"><span>warunki dostawy i zwrotu <i class="bullet-plusik"></i></span>
-                            </a>
-                        </h3>
-                    </div>
-                </div>
-                <div class="col-lg-12 col-md-6 visible-xs">
-                    <div class="panel-group" id="accordion">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h4 class="panel-title">
-                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-                                        Informacje o sprzedawcy <i class="bullet-strzalka-down"></i>
-                                    </a>
-                                </h4>
-                            </div>
-                            <div id="collapseOne" class="panel-collapse collapse">
-                                <div class="panel-body">
-                                    <ul>
-                                        <li>
-                                            <strong>Sprzedawca:</strong> ZARA
-                                        </li>
-                                    </ul>
-                                    <div class="logo_salles">
-                                        <img src="skin/frontend/modago/default/images/seller/logo.png" alt="">
-                                        <a href="#" class="view-store button button-secondary link">Przejdź do sklepu <span class="glyphicon glyphicon-chevron-right"></span></a>
-                                    </div>
-                                    <dl>
-                                        <dd>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent pellentesque eget turpis ut sodales. Nunc aliquam id dui a imperdiet. Fusce pharetra luctus tristique. Vivamus varius quis mi at dictum. Maecenas rhoncus nulla quis luctus mattis. Integer urna eros, accumsan sit amet sollicitudin quis, lobortis sed turpis. Curabitur sodales tristique tellus vel viverra. Morbi pulvinar non mi a semper. Donec hendrerit sollicitudin nisl, quis fermentum tellus mattis eget. Fusce egestas eleifend pharetra. Pellentesque nec sodales urna, a adipiscing tortor. Duis elementum hendrerit enim et vulputate. </dd>
-                                    </dl>
-                                    <dl>
-                                        <dt>Warunki dostawy i zwrotu:</dt>
-                                        <dd>Darmowa dostawa kurierem 24h</dd>
-                                        <dd>Możliwość zwrotu do 30 dni w sklepie ZARA</dd>
-                                    </dl>
-
-                                    <dl>
-                                        <dt>Dane sklepu:</dt>
-                                        <dd>Średnia ocena 3 (3 opinii)</dd>
-                                        <dd>99% pozytywnych opinii</dd>
-                                        <dd class="separator"></dd>
-                                        <dd class="visual">zgodność produktu z opisem <span class="visual_block"><span></span></span> 2</dd>
-                                        <dd class="visual">kontakt sprzedawcy <span class="visual_block"><span></span></span> 5</dd>
-                                        <dd class="visual">realizacja zamówienia <span class="visual_block"><span></span></span> 0</dd>
-                                    </dl>
-                                    <a href="" class="view-store hidden-xs">przejdź do sklepu</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h4 class="panel-title">
-                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
-                                        Zadaj pytanie sprzedawcy <i class="bullet-strzalka-down"></i>
-                                    </a>
-                                </h4>
-                            </div>
-                            <div id="collapseTwo" class="panel-collapse collapse">
-                                <div class="panel-body">
-                                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                                </div>
-                            </div>
-                        </div>
-                        <div class="panel panel-default last">
-                            <div class="panel-heading">
-                                <h4 class="panel-title">
-                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
-                                        Warunki dostawy i zwrotu <i class="bullet-strzalka-down"></i>
-                                    </a>
-                                </h4>
-                            </div>
-                            <div id="collapseThree" class="panel-collapse collapse">
-                                <div class="panel-body">
-                                    <ul>
-                                        <li>
-                                            <strong>Koszt dostawy:</strong> Darmowa dostawa
-                                        </li>
-                                        <li>
-                                            <strong>Czas dostawy:</strong> 24h, doręczenie 1-2 dni robocze
-                                        </li>
-                                        <li>
-                                            <strong>pcje płatności:</strong> przelew elektroniczny, płatność gotówką przy odbiorze
-                                        </li>
-
-                                    </ul>
-                                    <dl>
-                                        <dt>Możliwość zwrotu w ciągu 30 dni</dt>
-                                        <dd>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent pellentesque eget turpis ut sodales. Nunc aliquam id dui a imperdiet. Fusce pharetra luctus tristique. Vivamus varius quis mi at dictum. Maecenas rhoncus nulla quis luctus mattis. Integer urna eros, accumsan sit amet sollicitudin quis, lobortis sed turpis. Curabitur sodales tristique tellus vel viverra. Morbi pulvinar non mi a semper. Donec hendrerit sollicitudin nisl, quis fermentum tellus mattis eget. Fusce egestas eleifend pharetra. Pellentesque nec sodales urna, a adipiscing tortor. Duis elementum hendrerit enim et vulputate. </dd>
-                                    </dl>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-
-        </div>
+        <?php echo $this->getChildHtml('product.vendor.info'); ?>
         <div class="descripionProduct-box-bundle visible-lg">
 
-            <span class="descripionProduct-label">O produkcie</span>
+            <span class="descripionProduct-label"><?php echo $this->__("About product"); ?></span>
             <div class="descripionProduct-box-description block">
-                <h3><a href="#description_product" class="scrollTo">Opis produktu <i class="bullet-strzalka-down"></i></a></h3>
+                <h3><a href="#description_product" class="scrollTo"><?php echo $this->__("Product description"); ?> <i class="bullet-strzalka-down"></i></a></h3>
             </div>
             <div class="descripionProduct-box-comments block">
                 <h3>
-                    <a href="#note_product" class="scrollTo">Opinie o produkcie <i class="bullet-strzalka-down"></i>
+                    <a href="#note_product" class="scrollTo"><?php echo $this->__("Product reviews"); ?> <i class="bullet-strzalka-down"></i>
 				<span id="average_note_client">
 					<span class="note" data-number="5" data-score="2"></span>
-					<span>(3 opinie)</span>
+					<span>(<?php echo count($_reviewBlock->getReviewsCollection()); ?> <?php echo $this->__("review"); ?>)</span>
 				</span>
                     </a>
 
@@ -654,13 +435,13 @@
     <div class="main">
         <ul class="list">
             <li>
-                <strong>Nazwa produktu: </strong> ZARA Krótki płaszcz z guzikami długa nazwa produktu tego sklepu
+                <strong>Nazwa produktu: </strong> <?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?>
             </li>
             <li>
-                <strong>Numer katalogowy: </strong> 3456788
+                <strong>Numer katalogowy: </strong> <?php echo $_helper->productAttribute($_product, $_product->getSku(), 'sku') ?>
             </li>
         </ul>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent pellentesque eget turpis ut sodales. Nunc aliquam id dui a imperdiet. Fusce pharetra luctus tristique. Vivamus varius quis mi at dictum. Maecenas rhoncus nulla quis luctus mattis. Integer urna eros, accumsan sit amet sollicitudin quis, lobortis sed turpis. Curabitur sodales tristique tellus vel viverra. Morbi pulvinar non mi a semper. Donec hendrerit sollicitudin nisl, quis fermentum tellus mattis eget. Fusce egestas eleifend pharetra. Pellentesque nec sodales urna, a adipiscing tortor. Duis elementum hendrerit enim et vulputate.  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent pellentesque eget turpis ut sodales. Nunc aliquam id dui a imperdiet. Fusce pharetra luctus tristique. Vivamus varius quis mi at dictum. Maecenas rhoncus nulla quis luctus mattis. Integer urna eros, accumsan sit amet sollicitudin quis, lobortis sed turpis. Curabitur sodales tristique tellus vel viverra. Morbi pulvinar non mi a semper. Donec hendrerit sollicitudin nisl, quis fermentum tellus mattis eget. Fusce egestas eleifend pharetra. Pellentesque nec sodales urna, a adipiscing tortor. Duis elementum hendrerit enim et vulputate. </p>
+        <p><?php echo $_helper->productAttribute($_product, nl2br($_product->getDescription()), 'description'); ?></p>
         <ul class="list">
             <li>
                 <strong>Kolekcja: </strong> Sport
@@ -906,7 +687,7 @@
 </style>
 <aside class="fb-slidebar fb-left" style="z-index: 1050">
     <div class="fb-slidebar-inner">
-        <?php //include '_include/sidebar-mobile.inc'; ?>
+
     </div>
 </aside>
 <div class="modal fade" id="tabelaRozmiarow" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="z-index: 1050">
@@ -914,10 +695,10 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"></button>
-                <h4 class="title_section">Tabela rozmiarów</h4>
+                <h4 class="title_section"><?php echo $this->__("Size table"); ?></h4>
             </div>
             <div class="modal-body">
-                ...
+                <?php echo $this->getChildHtml("product.vendor.sizecomments"); ?>
             </div>
         </div>
     </div>
@@ -925,82 +706,33 @@
 <div id="lightbox" style="z-index: 1050">
     <div id="inner-lightbox">
         <div id="hl" class="clearfix">
-            <img src="skin/frontend/modago/default/images/logo_header_lightbox.png" alt="Modago - Galeria handlowa" class="pull-left">
-            <button id="remove-lightbox" class="button button-third pull-right">Zamknij</button>
+            <img src="<?php echo $this->getSkinUrl('images/logo_header_lightbox.png'); ?>" alt="<?php echo $this->getLogoAlt(); ?>" class="pull-left">
+            <button id="remove-lightbox" class="button button-third pull-right"><?php echo $this->__("Close"); ?></button>
         </div>
 
         <div class="bl"></div>
     </div>
 </div>
-<div class="modal fade bs-example-modal-lg" id="terms_delivery" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="z-index: 1050">
+
+
+<!--zadaj pytanie sprzedajacemu-->
+
+<div class="modal fade bs-example-modal-lg" id="ask_question" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"></button>
-                <h2 class="title_section">DOSTAWA I ZWROTY</h2>
+                <h2 class="title_section"><?php echo $this->__("Ask Vendor A Question"); ?></h2>
             </div>
             <div class="modal-body">
-                <ul>
-                    <li>
-                        <strong>Koszt dostawy:</strong> Darmowa dostawa
-                    </li>
-                    <li>
-                        <strong>Czas dostawy:</strong> 24h, doręczenie 1-2 dni robocze
-                    </li>
-                    <li>
-                        <strong>pcje płatności:</strong> przelew elektroniczny, płatność gotówką przy odbiorze
-                    </li>
-
-                </ul>
-                <dl>
-                    <dt>Możliwość zwrotu w ciągu 30 dni</dt>
-                    <dd>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent pellentesque eget turpis ut sodales. Nunc aliquam id dui a imperdiet. Fusce pharetra luctus tristique. Vivamus varius quis mi at dictum. Maecenas rhoncus nulla quis luctus mattis. Integer urna eros, accumsan sit amet sollicitudin quis, lobortis sed turpis. Curabitur sodales tristique tellus vel viverra. Morbi pulvinar non mi a semper. Donec hendrerit sollicitudin nisl, quis fermentum tellus mattis eget. Fusce egestas eleifend pharetra. Pellentesque nec sodales urna, a adipiscing tortor. Duis elementum hendrerit enim et vulputate. </dd>
-                </dl>
+                <?php echo $this->getChildHtml('udqa.product.question'); ?>
             </div>
         </div>
     </div>
 </div>
 
-<div class="modal fade bs-example-modal-lg" id="seller_description" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="z-index: 1050">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"></button>
-                <h2 class="title_section">INFORMACJE O SKLEPIE</h2>
-            </div>
-            <div class="modal-body">
-                <ul>
-                    <li>
-                        <strong>Sprzedawca:</strong> ZARA
-                    </li>
-                </ul>
-                <div class="logo_salles">
-                    <img src="skin/frontend/modago/default/images/seller/logo.png" alt="">
-                    <a href="#" class="view-store button button-secondary link">Przejdź do sklepu <span class="glyphicon glyphicon-chevron-right"></span></a>
-                </div>
-                <dl>
-                    <dd>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent pellentesque eget turpis ut sodales. Nunc aliquam id dui a imperdiet. Fusce pharetra luctus tristique. Vivamus varius quis mi at dictum. Maecenas rhoncus nulla quis luctus mattis. Integer urna eros, accumsan sit amet sollicitudin quis, lobortis sed turpis. Curabitur sodales tristique tellus vel viverra. Morbi pulvinar non mi a semper. Donec hendrerit sollicitudin nisl, quis fermentum tellus mattis eget. Fusce egestas eleifend pharetra. Pellentesque nec sodales urna, a adipiscing tortor. Duis elementum hendrerit enim et vulputate. </dd>
-                </dl>
-                <dl>
-                    <dt>Warunki dostawy i zwrotu:</dt>
-                    <dd>Darmowa dostawa kurierem 24h</dd>
-                    <dd>Możliwość zwrotu do 30 dni w sklepie ZARA</dd>
-                </dl>
+<!--end zadaj pytanie sprzedajacemu-->
 
-                <dl>
-                    <dt>Dane sklepu:</dt>
-                    <dd>Średnia ocena 3 (3 opinii)</dd>
-                    <dd>99% pozytywnych opinii</dd>
-                    <dd class="separator"></dd>
-                    <dd class="visual">zgodność produktu z opisem <span class="visual_block"><span></span></span> 2</dd>
-                    <dd class="visual">kontakt sprzedawcy <span class="visual_block"><span></span></span> 5</dd>
-                    <dd class="visual">realizacja zamówienia <span class="visual_block"><span></span></span> 0</dd>
-                </dl>
-                <a href="" class="view-store button button-secondary link">przejdź do sklepu</a>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 
@@ -1142,6 +874,6 @@
 </div>
 
 
-
+<?php echo $this->getChildHtml('product.info.media.modal'); ?>
 
 

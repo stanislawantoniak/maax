@@ -141,6 +141,16 @@
 		}
 		
 	}
+	.color-box-bundle  {
+		.color-label {
+			line-height: 57px;
+		}
+		.form-group {
+			label {
+				height:54px;
+			}
+		}
+	}
 	.color {
 		.form-group {
 			input[type="radio"] {
@@ -377,6 +387,40 @@
 		}
 	}
 }
+#wrapper-rwd-color {
+	width:300px;
+	float:left;
+	overflow:hidden;
+	position:relative;
+	z-index: 1;
+}
+#rwd-color {
+	width: 300px;
+	padding: 0 10px 0 20px;
+	.rwd-prev,
+	.rwd-next {
+		background:$arrowMap;
+		text-indent: -999em;
+		position:absolute;
+		top: 19px;
+	}
+	.rwd-prev {
+		@include sprite($arrowMap, arrow-rwd-slider-prev-mobile);
+		@include sprite-dimensions($arrowMap, arrow-rwd-slider-prev-mobile);
+		left:0;
+		&.disabled {
+			visibility:hidden;
+		}
+	}
+	.rwd-next {
+		@include sprite($arrowMap, arrow-rwd-slider-next-mobile);
+		@include sprite-dimensions($arrowMap, arrow-rwd-slider-next-mobile);
+		right:0;
+		&.disabled {
+			visibility:hidden;
+		}
+	}
+}
 #product-shop  {
 	.size-box-bundle {
 		.listSelect {
@@ -395,15 +439,18 @@
 .zoom_plus,
 .zoom_minus {
 	display:block;
-	@include sprite-dimensions($icoMapDesktop, zoom_plus);
+	width:41px;
+	height:41px;
 	position:absolute;
 	top:0px;
 	right:15px;
 	margin-left:-45px;
+	z-index: 900;
 	span {
-		background:$icoMapDesktop;
+		background:url('../images/sprites/btz-zoom.png') no-repeat;
 		display:block;
-		@include sprite-dimensions($icoMapDesktop, zoom_plus);
+		width:41px;
+		height:41px;
 	}
 	&.full {
 		right:20px!important;
@@ -425,15 +472,52 @@
 		top: 5px;
 		left: 1px;
 		
-		@include sprite($icoMapDesktop, zoom_plus);	
+		background-position: top right;
 		
 	} 
 }
 .zoom_minus {
-	top:55px;
+	top:62px;
  	span {
  		top: 6px;
  		left: -1px;
- 		@include sprite($icoMapDesktop, zoom_minus);	
+ 		background-position: bottom left;
  	}
 }
+
+
+	i.flag {
+		background:$flagMap;
+		display:inline-block;
+		position: absolute;
+		z-index: 1000;
+		top: 10px;
+		right: 15px;
+		z-index: 800;
+		
+		&.sale {
+			@include sprite($flagMap, sale);
+			@include sprite-dimensions($flagMap, sale);
+		}
+		&.percent {
+			@include sprite($flagMap, percent);
+			@include sprite-dimensions($flagMap, percent);
+		}
+		&.new {
+			@include sprite($flagMap, new);
+			@include sprite-dimensions($flagMap, new);
+		}
+		&.hit {
+			@include sprite($flagMap, hit);
+			@include sprite-dimensions($flagMap, hit);
+		}
+		
+		
+	}
+
+	#galeria-lightbox {
+		i.flag {
+			left: 15px;
+			right:auto;
+		}
+	}

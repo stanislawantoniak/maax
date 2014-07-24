@@ -7,3 +7,23 @@
         padding-left: 0;
     }
 }
+
+.node-type-page-shop {
+	.block-promoted-banners {
+	.customNavigation {
+			a {
+				top:50%;
+				&.prev {
+					@media (max-width: 360px) { 
+						left:45px;
+					}
+				}
+				&.next {
+					@media (max-width: 360px) {
+						right:45px;
+					 }
+				}
+			}
+		}
+	}
+}

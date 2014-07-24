@@ -25,12 +25,15 @@ class Zolago_Adminhtml_Catalog_Product_SetController extends Mage_Adminhtml_Cata
 
         /** @var $helper Mage_Adminhtml_Helper_Data */
         $helper = Mage::helper('adminhtml');
-
         try {
             if ($isNewSet) {
                 //filter html tags
                 $name = $helper->stripTags($this->getRequest()->getParam('attribute_set_name'));
                 $model->setAttributeSetName(trim($name));
+
+                $useToCreateProduct = $this->getRequest()->getParam('attribute_set_use_to_create_product');
+                $model->setData('use_to_create_product',$useToCreateProduct);
+                Mage::log('New ');
             } else {
                 if ($attributeSetId) {
                     $model->load($attributeSetId);
@@ -39,11 +42,14 @@ class Zolago_Adminhtml_Catalog_Product_SetController extends Mage_Adminhtml_Cata
                     Mage::throwException(Mage::helper('catalog')->__('This attribute set no longer exists.'));
                 }
                 $data = Mage::helper('core')->jsonDecode($this->getRequest()->getPost('data'));
-
                 //filter html tags
                 $data['attribute_set_name'] = $helper->stripTags($data['attribute_set_name']);
 
                 $model->organizeData($data);
+
+                $useToCreateProduct = isset($data['attribute_set_use_to_create_product'])
+                    ? (int)$data['attribute_set_use_to_create_product'] : 0;
+                $model->setData('use_to_create_product', $useToCreateProduct);
             }
 
             $model->validate();
