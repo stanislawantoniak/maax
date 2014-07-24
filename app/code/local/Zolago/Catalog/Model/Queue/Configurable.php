@@ -47,9 +47,7 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
             $_storeId = Mage::app()->getStore($_eachStoreId)->getId();
             $storeId[] = $_storeId;
         }
-
-        $zolagoCatalogModelProductConfigurableData = Mage::getModel('zolagocatalog/product_configurable_data');
-
+        $zolagoCatalogModelProductConfigurableData = Mage::getResourceModel('zolagocatalog/product_configurable');
 
         //define parent products (configurable) by child (simple)
         $configurableSimpleRelation = $zolagoCatalogModelProductConfigurableData->getConfigurableSimpleRelation(

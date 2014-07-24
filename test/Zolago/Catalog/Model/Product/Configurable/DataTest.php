@@ -47,7 +47,7 @@ class Zolago_Catalog_Model_Product_Configurable_DataTest extends ZolagoDb_TestCa
         $storeId = $this->_store;
 
         //1. configurable prices
-        $catalogModelProductConfigurableData = Mage::getModel('zolagocatalog/product_configurable_data');
+        $catalogModelProductConfigurableData = Mage::getResourceModel('zolagocatalog/product_configurable');
         $configurablePrices = $catalogModelProductConfigurableData->getConfigurablePrices($storeId, 10);
 
         $configurableProductsIds = array_keys($configurablePrices);
