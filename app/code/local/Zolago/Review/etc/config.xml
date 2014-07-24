@@ -21,12 +21,12 @@
                 </setup>
             </zolagoreview_setup>
         </resources>
-        <blocks>
-            <adminhtml>
-                <rewrite>
-                    <review_edit_form>Zolago_Adminhtml_Block_Review_Edit_Form</review_edit_form>
-                </rewrite>
-            </adminhtml>
-        </blocks>
+        <!--<blocks>-->
+            <!--<adminhtml>-->
+                <!--<rewrite>-->
+                    <!--<review_edit_form>Zolago_Adminhtml_Block_Review_Edit_Form</review_edit_form>-->
+                <!--</rewrite>-->
+            <!--</adminhtml>-->
+        <!--</blocks>-->
     </global>
 </config>
