@@ -8,15 +8,58 @@
 $mainCategories = $this->getMainCategories();
 ?>
 
-<?php if(count($mainCategories) > 0) : ?>
-    <?php foreach($mainCategories as $cat) : ?>
-<li class="">
-<a href="<?php echo $cat['has_dropdown'] ? '#' : $cat['url']; ?>" class="<?php echo $cat['has_dropdown'] ? 'children' : '' ?>"><?php echo $this->escapeHtml($cat['name']); ?> <?php echo $cat['has_dropdown'] ? '<i class="fa fa-caret-down"></i>' : ''; ?></a>
-<?php if($cat['has_dropdown']): ?>
-    <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('navigation-dropdown-c-' . $cat['category_id'])->toHtml(); ?>
-<!-- end drop down menu -->
-<?php endif; ?>
-</li>
-        <?php endforeach; ?>
+<?php if (count($mainCategories) > 0) : ?>
+    <?php foreach ($mainCategories as $catFirstLevel) : ?>
+        <li class="">
+            <a href="<?php echo (isset($catFirstLevel['has_dropdown']) && $catFirstLevel['has_dropdown']) ? '' : $catFirstLevel['url']; ?>"
+               class="<?php echo (isset($catFirstLevel['has_dropdown']) && $catFirstLevel['has_dropdown']) ? 'children' : '' ?>">
+                <?php echo $this->escapeHtml($catFirstLevel['name']); ?> <?php echo (isset($catFirstLevel['has_dropdown']) && $catFirstLevel['has_dropdown'])
+                    ? '<i class="fa fa-caret-down"></i>' : ''; ?></a>
+            <?php if (isset($catFirstLevel['has_dropdown']) && $catFirstLevel['has_dropdown']): ?>
+                <ul>
+                    <li>
+                        <div class="row clearfix">
+                            <div class="col-left">
+                                <div class="jsMasonry">
+                                    <?php foreach ($catFirstLevel['has_dropdown'] as $catSecondLevel): ?>
+                                        <div class="box col-sm-2 col-xs-6">
+                                            <dl>
+                                                <dt>
+                                                    <a rel="category" data-description="<?php echo $catSecondLevel['name']; ?>" href="<?php echo $catSecondLevel['url']; ?>">
+                                                        <?php echo $catSecondLevel['name']; ?>
+                                                    </a>
+                                                </dt>
+                                                <?php if (isset($catSecondLevel['has_dropdown']) && is_array($catSecondLevel['has_dropdown'])): ?>
+                                                    <?php foreach ($catSecondLevel['has_dropdown'] as $catThirdLevel): ?>
+                                                        <dd><a rel="category" data-description="<?php echo $catThirdLevel['name']; ?>" href="<?php echo $catThirdLevel['url']; ?>"><?php echo $catThirdLevel['name']; ?></a></dd>
+                                                    <?php endforeach; ?>
+                                                    <dd><a data-description="ReadMore" href="<?php echo $catSecondLevel['url']; ?>">Czytaj więcej <i class="fa fa-angle-right"></i></a></dd>
+                                                <?php endif; ?>
+                                            </dl>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                                <a href="<?php echo $catFirstLevel['url']; ?>" class="view-all-category">zobacz
+                                    wszystkie kategorie <i class="fa fa-angle-right"></i></a>
+                            </div>
+                            <?php if ($catFirstLevel['image']): ?>
+                                <div class="col-right hidden-xs">
+                                    <figure>
+                                        <img src="<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA) ."/catalog/category/". $catFirstLevel['image']; ?>" alt="<?php echo $catFirstLevel['name']; ?>"  class="img-responsive">
+                                    </figure>
+                                </div>
+                            <?php endif; ?>
 
+                        </div>
+                        <div class="row">
+                            <a href="" class="closeSubMenu">ZWIŃ</i></a>
+                        </div>
+                        <!-- end row -->
+                    </li>
+                    <!-- end grid demo -->
+                </ul>
+                <!-- end drop down menu -->
+            <?php endif; ?>
+        </li>
+    <?php endforeach; ?>
 <?php endif; ?>

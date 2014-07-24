@@ -184,8 +184,17 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
 		return $status;
 	}
 
+	/**
+	 * @param Zolago_Dropship_Model_Vendor $vendor
+	 * @param int $width
+	 * @param int $height
+	 * @return null|string
+	 */
     public function getVendorLogoResizedUrl($vendor, $width, $height)
     {
-        return '/skin/frontend/modago/default/images/ck-logo-small.jpg';
+		if(!$vendor->getLogo()){
+			return null;
+		}
+		return Mage::helper('udropship')->getResizedVendorLogoUrl($vendor, $width, $height);
     }
 }

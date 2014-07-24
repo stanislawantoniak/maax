@@ -80,12 +80,23 @@
 .sidebar-first {
 	&.node-type-list {
 		#sidebar {
-			@media (max-width: $screen-sm-min) { 
+			@media (max-width: $screen-xs-max) { 
 				display: none;
 				position:absolute !important;
 				left:-200px;
 				top:0px;
 			 }
+		}
+	}
+}
+.sidebar-first {
+	&.node-type-list {
+		#content-main {
+		margin-left: 205px; 
+		overflow: hidden;
+			@media (max-width: $screen-xs-max) { 
+				margin-left: 0; 
+			}
 		}
 	}
 }
@@ -98,12 +109,12 @@
 				border:none;
 				box-shadow: none;
 			}
-			@media (max-width: $screen-sm-min) { 
+			@media (max-width: $screen-xs-max) { 
 				display: block;
 				width:100%;
 			 }
 			 .sidebar {
-			 	@media (max-width: $screen-sm-min) { 
+			 	@media (max-width: $screen-xs-max) { 
 				display: block;
 				width:100%;
 				

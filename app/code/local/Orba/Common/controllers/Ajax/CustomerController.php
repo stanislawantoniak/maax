@@ -12,6 +12,7 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
 			'user_account_url' => Mage::getUrl('customer/account'),
 			'logged_in' => Mage::helper('customer')->isLoggedIn(),
 			'favorites_count' => $this->_getFavorites(),
+            'favorites_url' => Mage::helper('zolagowishlist')->getListUrl(),
 			'cart' => array(
 				'all_products_count' =>	Mage::helper('checkout/cart')->getSummaryCount(),
 				'products' => $this->_getShoppingCartProducts(),
@@ -49,18 +50,18 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
 				'name' => $product->getName(),
 				'qty' => $item->getQty(),
 				'unit_price' => round($item->getPrice(), 2),
-				'image_url' => Mage::getModel('catalog/product_media_config')->getMediaUrl($image),
+				'image_url' => (string) $image,
 				'options' => $options
 			);
 			
         }
 		
-		return $array;
+		return (sizeof($array) > 0) ? $array : 0;
 	}
 	
 	public function _getFavorites(){
 		$wishlist = Mage::helper('zolagowishlist')->getWishlist();
-		return $wishlist->getItemsCount();		
+		return $wishlist->getItemsCount();
 	}
 	
 	public function _getProductOptions($item){

@@ -60,6 +60,7 @@
 			<catalog>
 				<rewrite>
 					<breadcrumbs>Zolago_Catalog_Block_Breadcrumbs</breadcrumbs>
+					<product_view>Zolago_Catalog_Block_Product_View</product_view>
 				</rewrite>
 			</catalog>
         </blocks>
