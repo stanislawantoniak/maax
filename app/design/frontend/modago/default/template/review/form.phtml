@@ -47,6 +47,7 @@
                                 foreach ($_rating->getOptions() as $_option) {
                                     $_options[] = $_option->getId();
                                 }
+
                             ?>
                         <tr>
                             <th><?php echo $this->escapeHtml($_rating->getRatingCode()) ?>:</th>
@@ -70,10 +71,22 @@
                             <label for="review_field" class=""><?php echo $this->__('Review') ?></label>
                             <textarea name="detail" id="review_field" cols="5" rows="3" class="required-entry"><?php echo $this->escapeHtml($data->getDetail()) ?></textarea>
                         </div>
-                        <div class="title form-group form-checkbox">
 
-                            <input type="checkbox" class="" id="recommend" name="recommend" data-toggle="tooltip" title="<?php echo $this->__('Recommend product') ?>" value="<?php echo $this->escapeHtml($data->getRecommend()) ?>" />
-                            <label for="recommend" class=""><?php echo $this->__('Recommend product') ?></label>
+                        <div class="form-group clearfix">
+                            <div class="row">
+                                <div class="col-sm-3"><label for="recommend_product">Czy polecasz produkt</label></div>
+                                <div class="col-sm-9">
+                                    <div class="form-group form-radio">
+                                        <input type="radio" name="recommend_product" id="recommend_product_yes" class="css-radio" value="1">
+                                        <label for="recommend_product_yes" class="css-label">Tak</label>
+                                    </div>
+                                    <div class="form-group form-radio">
+                                        <input type="radio" name="recommend_product" id="recommend_product_no" class="css-radio" value="0">
+                                        <label for="recommend_product_no" class="css-label">Nie</label>
+                                    </div>
+
+                                </div>
+                            </div>
                         </div>
                         <div class="nickname_field form-group clearfix">
                             <div class="row">
