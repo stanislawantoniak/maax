@@ -41,12 +41,13 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
         }
         unset($productId);
 
-
-        $storeId = array(0, 1, 2);
-
-
-        $zolagoCatalogModelProductConfigurableData = Mage::getModel('zolagocatalog/product_configurable_data');
-
+        $storeId = array(Mage_Core_Model_App::ADMIN_STORE_ID);
+        $allStores = Mage::app()->getStores();
+        foreach ($allStores as $_eachStoreId => $val) {
+            $_storeId = Mage::app()->getStore($_eachStoreId)->getId();
+            $storeId[] = $_storeId;
+        }
+        $zolagoCatalogModelProductConfigurableData = Mage::getResourceModel('zolagocatalog/product_configurable');
 
         //define parent products (configurable) by child (simple)
         $configurableSimpleRelation = $zolagoCatalogModelProductConfigurableData->getConfigurableSimpleRelation(
@@ -113,9 +114,33 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
         Mage::log(microtime() . "{$hash} Reindex ", 0, 'configurable_update.log');
 
 
+        $productsToReindex = array_merge($listUpdatedProducts, $productConfigurableIds);
         Mage::getResourceSingleton('catalog/product_indexer_price')
-            ->reindexProductIds($productConfigurableIds);
+            ->reindexProductIds($productsToReindex);
+        $indexers = array(
+            'source'  => Mage::getResourceModel('catalog/product_indexer_eav_source'),
+            'decimal' => Mage::getResourceModel('catalog/product_indexer_eav_decimal'),
+        );
+        foreach ($indexers as $indexer) {
+            /** @var $indexer Mage_Catalog_Model_Resource_Product_Indexer_Eav_Abstract */
+            $indexer->reindexEntities($productsToReindex);
+        }
+        if (Mage::helper('catalog/category_flat')->isEnabled()) {
+            $fI = new Mage_Catalog_Model_Resource_Product_Flat_Indexer();
+            $entityTypeID = Mage::getModel('catalog/product')->getResource()->getTypeId();
+            $attribute = Mage::getModel('eav/entity_attribute')->loadByCode($entityTypeID, 'price');
+            foreach ($storeId as $storesId) {
+                $fI->updateAttribute($attribute, $storesId, $productsToReindex);
+            }
+        }
 
+        //zolago_catalog_after_update_price_type
+        Mage::dispatchEvent(
+            "zolago_catalog_after_update_price_type",
+            array(
+                 "product_ids" => $listUpdatedProducts
+            )
+        );
         Mage::log(microtime() . "{$hash} End ", 0, 'configurable_update.log');
 
 

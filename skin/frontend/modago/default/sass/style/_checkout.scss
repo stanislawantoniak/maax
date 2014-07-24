@@ -17,6 +17,9 @@
 				@media (max-width:480px) {
 					padding-left: 45px;
 				}
+				@media (max-width:359px) {
+					font-size: 16px;
+				}
 				&:before {
 					@media (max-width:480px) {
 					left: 14px;
@@ -78,6 +81,9 @@
 		.panel {
 			h4 {
 				text-transform: uppercase;
+				@media (max-width:359px) {
+					font-size: 16px;
+				}
 			}
 
 			.form-group {
@@ -113,6 +119,9 @@
 	dd.action {
 		a {
 			margin-right: 15px;
+			@media(max-width:359px) {
+				font-size: 12px;
+			}
 		}
 	}
 	#invoice {
@@ -121,15 +130,16 @@
 	.staining_delivery_address {
 		position:absolute;
 		right:15px;
-		top:50%;
+		bottom: -7px;
 		margin-top:-10px;
 		text-transform: uppercase;
 		font-weight: bold;
-		@media (max-width:360px) {
+		@media (max-width:640px) {
 				position: static;
 				padding-top: 15px;
 				display: block;
 				clear: both;
+				margin-bottom: 0px;
 				}
 	}
 	.border-top {
@@ -387,7 +397,8 @@
 
 		input[type="text"],
 		input[type="email"],
-		input[type="password"] {
+		input[type="password"],
+		input[type="tel"] {
 			height:29px;
 			line-height: 29px;
 			padding:0 15px 0 15px;
