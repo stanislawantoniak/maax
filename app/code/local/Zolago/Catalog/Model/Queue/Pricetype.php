@@ -65,6 +65,7 @@ class Zolago_Catalog_Model_Queue_Pricetype extends Zolago_Common_Model_Queue_Abs
             $converter = Mage::getModel('zolagoconverter/client');
         } catch (Exception $e) {
             Mage::throwException("Converter is unavailable");
+            Mage::helper('zolagocatalog/pricetype')->_logQueue("Converter is unavailable: check credentials");
             return;
         }
         $productAction = Mage::getSingleton('catalog/product_action');
