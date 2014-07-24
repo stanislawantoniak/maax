@@ -290,7 +290,7 @@ class Zolago_Solrsearch_Model_Observer {
         $storeIds = array_keys(Mage::app()->getStores());
         foreach ($this->_filterStoreIds($storeIds) as $storeId) {
             foreach ($productIds as $productId) {
-                $this->collectProduct($productId, $storeId);
+                $this->collectProduct($productId, $storeId, true);
             }
         }
     }
