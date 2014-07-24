@@ -84,4 +84,51 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
 		
 		return $this->getData("parent_category");
 	}
+
+    /**
+     * $excludeAttr is optional array of attribute codes to
+     * exclude them from additional data array
+
+     * @return array
+     */
+    public function getAdditionalDataDetailed($shortForm = false)
+    {
+        $data = array();
+        $product = $this->getProduct();
+        $attributes = $product->getAttributes();
+        foreach ($attributes as $attribute) {
+            if ($attribute->getIsVisibleOnFront()) {
+                $value = $attribute->getFrontend()->getValue($product);
+
+                if (!$product->hasData($attribute->getAttributeCode())) {
+                    $value = Mage::helper('catalog')->__('N/A');
+                } elseif ((string)$value == '') {
+                    $value = Mage::helper('catalog')->__('No');
+                } elseif ($attribute->getFrontendInput() == 'price' && is_string($value)) {
+                    $value = Mage::app()->getStore()->convertPrice($value, true);
+                }
+
+                if($shortForm){
+                    if (is_string($value) && strlen($value)) {
+                        $data[$attribute->getAttributeCode()] = array(
+                            'label' => $attribute->getStoreLabel(),
+                            'value' => ($attribute->getFrontendInput() == "multiselect") ? explode(",", $value) : $value
+                        );
+                    }
+                } else {
+                    if (is_string($value) && strlen($value)) {
+                        $data[$attribute->getAttributeCode()] = array(
+                            'label' => $attribute->getStoreLabel(),
+                            'value' => ($attribute->getFrontendInput() == "multiselect") ? explode(",", $value) : $value,
+                            'code'  => $attribute->getAttributeCode(),
+                            'frontend_type' => $attribute->getFrontendInput()
+                        );
+                    }
+                }
+
+            }
+        }
+
+        return $data;
+    }
 }
