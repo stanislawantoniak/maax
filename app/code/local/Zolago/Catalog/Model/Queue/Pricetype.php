@@ -129,8 +129,8 @@ class Zolago_Catalog_Model_Queue_Pricetype extends Zolago_Common_Model_Queue_Abs
 
         Mage::helper('zolagocatalog/pricetype')->_logQueue( "Reindex");
 
-//        Mage::getResourceSingleton('catalog/product_indexer_price')
-//            ->reindexProductIds(array_keys($ids));
+        Mage::getResourceSingleton('catalog/product_indexer_price')
+            ->reindexProductIds(array_keys($ids));
 
         $indexers = array(
             'source'  => Mage::getResourceModel('catalog/product_indexer_eav_source'),
@@ -142,7 +142,8 @@ class Zolago_Catalog_Model_Queue_Pricetype extends Zolago_Common_Model_Queue_Abs
         }
         if (Mage::helper('catalog/category_flat')->isEnabled()) {
             $fI = new Mage_Catalog_Model_Resource_Product_Flat_Indexer();
-            $attribute = Mage::getModel('eav/entity_attribute')->loadByCode(4, 'price');
+            $entityTypeID = Mage::getModel('catalog/product')->getResource()->getTypeId();
+            $attribute = Mage::getModel('eav/entity_attribute')->loadByCode($entityTypeID, 'price');
             foreach ($stores as $storesId) {
                 $fI->updateAttribute($attribute, $storesId, $ids);
             }
