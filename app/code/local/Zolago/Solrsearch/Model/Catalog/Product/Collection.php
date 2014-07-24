@@ -75,6 +75,7 @@ class Zolago_Solrsearch_Model_Catalog_Product_Collection extends Varien_Data_Col
 		$resource = Mage::getResourceSingleton('zolagosolrsearch/improve');
 		/* @var $resource Zolago_Solrsearch_Model_Resource_Improve */
 			
+		
 		$resource->loadAttributesDataForFrontend($this, $storeId, $customerGroupId);
 	
 	}
