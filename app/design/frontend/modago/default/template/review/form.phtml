@@ -71,6 +71,11 @@
                             <label for="review_field" class=""><?php echo $this->__('Review') ?></label>
                             <textarea name="detail" id="review_field" cols="5" rows="3" class="required-entry"><?php echo $this->escapeHtml($data->getDetail()) ?></textarea>
                         </div>
+                        <div class="title form-group">
+
+                            <input type="checkbox" class="form-control" id="recommend" name="recommend" data-toggle="tooltip" title="<?php echo $this->__('Recommend product') ?>" value="<?php echo $this->escapeHtml($data->getRecommend()) ?>" />
+                            <label for="recommend" class=""><?php echo $this->__('Recommend product') ?></label>
+                        </div>
                         <div class="form-group clearfix">
                             <div class="row">
                                 <div class="col-sm-3"><label for="czy_polecasz_produkt">Czy polecasz produkt</label></div>
