@@ -25,6 +25,7 @@ class Zolago_Catalog_Model_Queue_Pricetype extends Zolago_Common_Model_Queue_Abs
 
     protected function _execute()
     {
+        $recalculateConfigurableIds = array();
         Mage::helper('zolagocatalog/pricetype')->_logQueue( "Start process queue");
         $collection = $this->_collection;
 
@@ -63,12 +64,13 @@ class Zolago_Catalog_Model_Queue_Pricetype extends Zolago_Common_Model_Queue_Abs
         try {
             $converter = Mage::getModel('zolagoconverter/client');
         } catch (Exception $e) {
-            Mage::throwException("DHL client is unavailable");
+            Mage::throwException("Converter is unavailable");
+            Mage::helper('zolagocatalog/pricetype')->_logQueue("Converter is unavailable: check credentials");
             return;
         }
         $productAction = Mage::getSingleton('catalog/product_action');
         if (!empty($skuvs)) {
-            $recalculateConfigurableIds = array();
+
             foreach ($skuvs as $productId => $productData) {
                 $vendorSku = $productData['skuv'];
                 $sku = $productData['sku'];
@@ -130,6 +132,31 @@ class Zolago_Catalog_Model_Queue_Pricetype extends Zolago_Common_Model_Queue_Abs
 
         Mage::getResourceSingleton('catalog/product_indexer_price')
             ->reindexProductIds(array_keys($ids));
+
+        $indexers = array(
+            'source'  => Mage::getResourceModel('catalog/product_indexer_eav_source'),
+            'decimal' => Mage::getResourceModel('catalog/product_indexer_eav_decimal'),
+        );
+        foreach ($indexers as $indexer) {
+            /** @var $indexer Mage_Catalog_Model_Resource_Product_Indexer_Eav_Abstract */
+            $indexer->reindexEntities($ids);
+        }
+        if (Mage::helper('catalog/category_flat')->isEnabled()) {
+            $fI = new Mage_Catalog_Model_Resource_Product_Flat_Indexer();
+            $entityTypeID = Mage::getModel('catalog/product')->getResource()->getTypeId();
+            $attribute = Mage::getModel('eav/entity_attribute')->loadByCode($entityTypeID, 'price');
+            foreach ($stores as $storesId) {
+                $fI->updateAttribute($attribute, $storesId, $ids);
+            }
+        }
+
+        //zolago_catalog_after_update_price_type
+        Mage::dispatchEvent(
+            "zolago_catalog_after_update_price_type",
+            array(
+                 "product_ids" => array_keys($recalculateConfigurableIds)
+            )
+        );
 
         if(!empty($recalculateConfigurableIds)){
             Mage::helper('zolagocatalog/pricetype')->_logQueue( "Add to configurable recalculation queue");

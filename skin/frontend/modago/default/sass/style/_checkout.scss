@@ -17,6 +17,9 @@
 				@media (max-width:480px) {
 					padding-left: 45px;
 				}
+				@media (max-width:359px) {
+					font-size: 16px;
+				}
 				&:before {
 					@media (max-width:480px) {
 					left: 14px;
@@ -38,6 +41,12 @@
 		border-color:$bc-primary;
 		.panel-body {
 			position:relative;
+			.current-addres {
+				margin:-15px -15px 0 -15px;
+				padding:15px;
+				border-bottom: 1px solid $bc-primary;
+				background:$panel-top;
+			}
 			dl.pull-left {
 				
 			}
@@ -62,6 +71,8 @@
 			}
 		.panel-footer {
 			background:transparent;
+			border:none;
+			padding: 0 15px 15px;
 		}
 		
 		&.current {
@@ -70,11 +81,24 @@
 		.panel {
 			h4 {
 				text-transform: uppercase;
+				@media (max-width:359px) {
+					font-size: 16px;
+				}
 			}
 
 			.form-group {
 				.form-group {
 					margin-bottom: 0px;
+					padding-right: 5px;
+					&.col-xs-6 {
+						@media(min-width: 730px) and (max-width:767px) {
+							max-width:264px!important
+						}
+					}
+					&+.form-group {
+						padding-right: 15px;
+						padding-left: 5px;
+					}
 				}
 			}
 			
@@ -95,6 +119,9 @@
 	dd.action {
 		a {
 			margin-right: 15px;
+			@media(max-width:359px) {
+				font-size: 12px;
+			}
 		}
 	}
 	#invoice {
@@ -103,15 +130,16 @@
 	.staining_delivery_address {
 		position:absolute;
 		right:15px;
-		top:50%;
+		bottom: -7px;
 		margin-top:-10px;
 		text-transform: uppercase;
 		font-weight: bold;
-		@media (max-width:360px) {
+		@media (max-width:640px) {
 				position: static;
 				padding-top: 15px;
 				display: block;
 				clear: both;
+				margin-bottom: 0px;
 				}
 	}
 	.border-top {
@@ -126,7 +154,8 @@
 	}
 	.sidebar-secound {
 		.main {
-			padding:15px 30px;
+			//padding:15px 30px;
+			padding:30px 30px;
 			margin-bottom: 15px;
 			@media (max-width:480px) {
 				padding:15px 15px;
@@ -368,7 +397,8 @@
 
 		input[type="text"],
 		input[type="email"],
-		input[type="password"] {
+		input[type="password"],
+		input[type="tel"] {
 			height:29px;
 			line-height: 29px;
 			padding:0 15px 0 15px;
@@ -533,6 +563,14 @@
 		}
 		.default_delivery {
 			margin-bottom: 0px;
+			&.small-no-float {
+				@media(max-width:530px) {
+					float:none!important;
+					margin-bottom: 10px;
+					clear:both;
+				}
+			}
+			
 		}
 		.phone {
 			@media (max-width:525px){
@@ -588,7 +626,7 @@
 	}
 	.panel {
 		box-shadow:none;
-		background:#f8f8f7;
+		background:$panel-bottom;
 	}
 	.current-addres {
 		+ .panel {

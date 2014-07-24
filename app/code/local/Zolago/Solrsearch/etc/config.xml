@@ -145,6 +145,16 @@
 				</observers>
 			</zolago_mapper_after_assign_products>
 
+            <!-- Process update price type and margin -->
+            <zolago_catalog_after_update_price_type>
+                <observers>
+                    <zolagosolrsearch>
+                        <class>zolagosolrsearch/observer</class>
+                        <method>zolagoCatalogAfterUpdateProducts</method>
+                    </zolagosolrsearch>
+                </observers>
+            </zolago_catalog_after_update_price_type>
+
 			<!-- Procesing after response send -->
 			<controller_front_send_response_after>
 				<observers>

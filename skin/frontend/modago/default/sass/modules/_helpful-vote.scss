@@ -16,6 +16,12 @@
 			color: #1E1E1E;
 			margin: 0px;
 			padding:0px;
+
+			@media (max-width: $screen-xs-max) {font-size: 25px;}
+			@media (max-width: 360px) {font-size: 20px;}
+			@media (min-width: $screen-sm-min) and (max-width: $screen-sm-max) {font-size: 30px;}
+			@media (min-width: $screen-md-min) and (max-width: $screen-md-max) {font-size: 35px;}
+			@media (min-width: $screen-lg-min) {}
 		}
 		margin-bottom: 15px;
 	}
