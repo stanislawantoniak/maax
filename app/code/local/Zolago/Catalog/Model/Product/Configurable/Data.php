@@ -8,7 +8,7 @@ class Zolago_Catalog_Model_Product_Configurable_Data
 
     protected function _construct()
     {
-        $this->_init('zolagocatalog/pricessizes');
+        $this->_init('zolagocatalog/pricessizes', null);
     }
 
 
