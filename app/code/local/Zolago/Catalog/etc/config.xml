@@ -84,6 +84,16 @@
                 </connection>
             </zolagocatalog_read>
         </resources>
+        <events>
+            <catalog_product_attribute_update_after>
+                <observers>
+                    <zolago_catalog_converter_mass>
+                        <class>Zolago_Catalog_Model_Observer</class>
+                        <method>productAttributeMassUpdate</method>
+                    </zolago_catalog_converter_mass>
+                </observers>
+            </catalog_product_attribute_update_after>
+        </events>
     </global>
     <frontend>
         <routers>
@@ -131,6 +141,16 @@
 				</Zolago_Catalog>
 			</modules>
 		</translate>
+        <events>
+            <catalog_product_save_after>
+                <observers>
+                    <zolago_catalog_converter>
+                        <class>Zolago_Catalog_Model_Observer</class>
+                        <method>productAfterUpdate</method>
+                    </zolago_catalog_converter>
+                </observers>
+            </catalog_product_save_after>
+        </events>
     </adminhtml>
     <crontab>
         <jobs>

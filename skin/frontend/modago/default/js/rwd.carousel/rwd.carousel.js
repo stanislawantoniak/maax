@@ -1182,7 +1182,7 @@ if (typeof Object.create !== "function") {
                 $item.data("rwd-loaded", "loaded").removeClass("loading");
                 $lazyImg.removeAttr("data-src");
                 if (primal.options.lazyEffect === "fade") {
-                    $lazyImg.fadeIn(400);
+                    $lazyImg.fadeIn(10);
                 } else {
                     $lazyImg.show();
                 }

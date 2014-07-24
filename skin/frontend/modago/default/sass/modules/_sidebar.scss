@@ -42,7 +42,8 @@
         input[type=checkbox]:checked {
           outline:none!important;
         }
-         input[type=checkbox]:checked + span  {
+         input[type=checkbox]:checked + span,
+         input.checked + span  {
             background:#000;
             border-color:#000;
             color:#fff;
@@ -198,7 +199,8 @@
           background:#999;
           cursor:pointer;
         }
-        [type="checkbox"]:checked + span {
+        [type="checkbox"]:checked + span,
+        span.checked {
           background:#000;
         }
         &:hover span {
@@ -240,3 +242,7 @@
     }
   }
 }
+
+span.checked {
+          background:#000;
+        }

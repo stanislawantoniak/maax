@@ -1,14 +1,14 @@
 <?php
 
 
-class Zolago_Catalog_Model_Product_Configurable_Data
+class Zolago_Catalog_Model_Resource_Product_Configurable
     extends Mage_Core_Model_Resource_Db_Abstract
 {
-    const PRICE_ATTRIBUTE_ID = 75;
+    const PRICE_ATTRIBUTE_CODE = 'price';
 
     protected function _construct()
     {
-        $this->_init('zolagocatalog/pricessizes');
+        $this->_init('zolagocatalog/pricessizes', null);
     }
 
 
@@ -19,7 +19,7 @@ class Zolago_Catalog_Model_Product_Configurable_Data
      *
      * @return array
      */
-    public function getConfigurableMinPrice($configurableProductsIds = array(), $storeId)
+    public function getConfigurableMinPrice($configurableProductsIds = array(), $storeId = 0)
     {
         $result = array();
 
@@ -41,12 +41,18 @@ class Zolago_Catalog_Model_Product_Configurable_Data
                 array()
             )
             ->join(
+                array('attribute' => 'eav_attribute'),
+                'attribute.attribute_id=prices.attribute_id',
+                array()
+            )
+            ->join(
                 array('product_relation' => 'catalog_product_relation'),
                 'product_relation.child_id = prices.entity_id',
                 array()
             )
-            ->where('products.type_id=?', 'simple') //choose from simple products
-            ->where('prices.attribute_id=?', self::PRICE_ATTRIBUTE_ID);
+
+            ->where('products.type_id=?', Mage_Catalog_Model_Product_Type::TYPE_SIMPLE) //choose from simple products
+            ->where('attribute.attribute_code=?', self::PRICE_ATTRIBUTE_CODE);
 
 
         $select->where("prices.store_id=?", $storeId);
@@ -60,7 +66,6 @@ class Zolago_Catalog_Model_Product_Configurable_Data
 
         $select->group('product_relation.parent_id');
 
-        echo $select;
         $result = $adapter->fetchAssoc($select);
 
 
@@ -120,7 +125,7 @@ class Zolago_Catalog_Model_Product_Configurable_Data
                      'price' => 'prices.value'
                 )
             )
-            ->where("prices.attribute_id=?", self::PRICE_ATTRIBUTE_ID)
+            ->where("prices.attribute_id=?", self::PRICE_ATTRIBUTE_CODE)
             ->where("products.type_id=?", Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE)
 //            ->where("prices.store_id IN (".implode(',',$storeId).")")
             ->order('products.entity_id');
@@ -165,7 +170,7 @@ class Zolago_Catalog_Model_Product_Configurable_Data
                      'min_price' => 'MIN(product_entity_decimal.value)'
                 )
             )
-            ->where("product_entity_decimal.attribute_id=?", self::PRICE_ATTRIBUTE_ID)
+            ->where("product_entity_decimal.attribute_id=?", self::PRICE_ATTRIBUTE_CODE)
 //            ->where("product_entity_decimal.store_id IN (".implode(',',$storeId).")" )
 
             ->group('product_relation.parent_id');

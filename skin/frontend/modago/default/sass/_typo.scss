@@ -476,7 +476,8 @@ form {
 		margin-bottom: 15px;
 		[type="text"],
 		[type="email"],
-		[type="password"] {
+		[type="password"],
+		[type="tel"] {
 			border: 1px solid #bcbcbc;
 			border-radius:1px;
 			box-shadow: inset 2px 2px 7px rgba(1,1,1,.1);

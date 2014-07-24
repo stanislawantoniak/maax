@@ -3,6 +3,14 @@ jQuery.noConflict();
 (function( $ ) {
   $(function() {
 
+   
+
+
+    $.ajaxSetup ({
+        // Disable caching of AJAX responses
+        cache: false
+    });
+
   
       $(document).ajaxComplete(function(event, xhr, settings) {
         dropDownSelectListAjax();
@@ -49,9 +57,99 @@ jQuery.noConflict();
 
 
 /* ===================== MASK INPUT ================== */
+var ua = navigator.userAgent.toLowerCase();
+var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
+if(!isAndroid) {
+ $(".zipcode").mask("99-999");
+ $(".nip").mask("999-999-99-99");
+} else {
+  $(".zipcode").mask("99-999");
+  $(".nip").mask("999-999-99-99");
+}
 
-$(".zipcode").inputmask("99-999",{ "placeholder": "  -   ", showMaskOnHover: false });
-$(".nip").inputmask("999-999-99-99",{ "placeholder": "   -   -  -  ", showMaskOnHover: false });
+
+
+/*
+var zipcode = ['#zip_code'];
+  $.each(zipcode, function(index, value) {
+      var value = $(value);
+      value.keydown(function(event) {
+    if (value.val().length == 2) {
+        event.target.value = event.target.value + "-";
+    } else if (value.val().length > 5 && (event.keyCode != 46) && event.keyCode != 8 && event.keyCode != 9 && event.keyCode != 27 && event.keyCode != 13 && !(event.keyCode >= 35 && event.keyCode <= 39)) {
+        return false;
+    } else if (value.val().length > 2) {
+        // Jesli wieksze niz 2, ale nie ma myslnikato dostawiamy - lag fix 
+        if (value.val().split('-').length == 1) {
+            value.val(value.val().substring(0, 2) + '-' + value.val().substring(2, 5));
+        }
+    }
+    // Allow: backspace, delete, tab, escape, and enter
+    if (event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 || event.keyCode == 13 || 
+         // Allow: Ctrl+A
+        (event.keyCode == 65 && event.ctrlKey === true) || 
+         // Allow: home, end, left, right
+        (event.keyCode >= 35 && event.keyCode <= 39)) {
+       return;
+    }
+    else {
+        // Ensure that it is a number and stop the keypress
+        if (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105 )) {   
+      event.preventDefault(); 
+        }   
+    }
+      });
+  });
+
+var vatzipcode = ['#vat_zip_code'];
+  $.each(vatzipcode, function(index, value) {
+      var value = $(value);
+      value.keydown(function(event) {
+    if (value.val().length == 2) {
+        event.target.value = event.target.value + "-";
+    } else if (value.val().length > 5 && (event.keyCode != 46) && event.keyCode != 8 && event.keyCode != 9 && event.keyCode != 27 && event.keyCode != 13 && !(event.keyCode >= 35 && event.keyCode <= 39)) {
+        return false;
+    } else if (value.val().length > 2) {
+        // Jesli wieksze niz 2, ale nie ma myslnikato dostawiamy - lag fix 
+        if (value.val().split('-').length == 1) {
+      value.val(value.val().substring(0, 2) + '-' + value.val().substring(2, 5));
+        }
+    }
+    // Allow: backspace, delete, tab, escape, and enter
+    if (event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 || event.keyCode == 13 || 
+         // Allow: Ctrl+A
+        (event.keyCode == 65 && event.ctrlKey === true) || 
+         // Allow: home, end, left, right
+        (event.keyCode >= 35 && event.keyCode <= 39)) {
+       return;
+    }
+    else {
+        // Ensure that it is a number and stop the keypress
+        if (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105 )) {   
+      event.preventDefault(); 
+        }   
+    }
+      });
+  });
+
+
+
+////////////////////////////////////////////////////////////////////
+
+
+
+// assumes a print function is defined
+var anyString = "8761058000";
+
+// Displays
+console.log(anyString.substring(0,3));
+console.log(anyString.substring(3,6));
+console.log(anyString.substring(6,8));
+console.log(anyString.substring(8,10));
+
+*/
+
+
 
 /* ===================== invoice data ================== */
 
@@ -454,7 +552,6 @@ flagProduct();
   }
 
   function flagProductGallery() {
-    console.log('test')
     var sync3 = $('#sync3 .rwd-item');
     sync3.each(function( i, l ){
       var flags3 = $(this).find('.inner-item');
@@ -512,14 +609,19 @@ function galeriaProduktu(){
     rewindNav : false,
     itemsScaleUp:true,
     transitionStyle : "fade",
+    slideSpeed:10,
     afterUpdate: function() {
         //var number_trigger = $(this).closest('.rwd-item').data("currentItem");
         //console.log(number_trigger)
         //$('#sync3').trigger("rwd.jumpTo",number_trigger);
     },
     afterInit:function() {
+
       imagesLoaded( document.querySelector('#galeria-lightbox #sync3 .rwd-item .item'), function( instance ) {
         $('#galeria-lightbox #sync3 .rwd-item').each(function(index, el) {
+          var numberProduct = $('#sync1').data("rwdCarousel").rwd.visibleItems;
+          $('#sync4').find( ".rwd-item" ).eq( numberProduct ).trigger("click");
+
           flagProductGallery();
           var img = $(this).find('img');
           var a = $(this).find('img');
@@ -611,8 +713,7 @@ function galeriaProduktu(){
 
          
             
-
-
+            
         });
         
       });
@@ -620,41 +721,39 @@ function galeriaProduktu(){
   });
 
 
-
+/*
 $('#product-gallery #sync1').on('click', 'a', function(event) {
   event.preventDefault();
 
-
-
-   //var number_trigger = $(this).closest('.rwd-item').data("number");
-   //console.log(number_trigger)
-   //$('#sync3').trigger("rwd.jumpTo",number_trigger);
-  
-
-
-
     $( "#lightbox .bl" ).html($("#galeria-lightbox-wr").html());
-    $('#lightbox').show();
+    
+    setTimeout(function(){
+      //$('#lightbox').css({display:'block'}).click();
+                 galeriaProduktu();
+    }, 1500);
+     
+           
+      
+   
     $('body').addClass('lightbox');
-    galeriaProduktu();
-    flagProductGallery();
-//  $.ajax({
-//    url: "_include/galeria_produktu.php",
-//    cache: true
-//  })
-//    .done(function( html ) {
-//      $( "#lightbox .bl" ).append( html );
-//      $('#lightbox').show();
-//      $('body').addClass('lightbox');
-//      galeriaProduktu();
-//    });
+
+
+     
+    
+
+          
+          //center(numberProduct)
+          //if (numberProduct) {
+          //  console.log(numberProduct);
+          //};
 
 });
-
+*/
 
  
   function syncPosition(el){
     var current = this.currentItem;
+    
     $("#lightbox #sync4")
       .find(".rwd-item")
       .removeClass("synced")
@@ -749,47 +848,25 @@ $('#product-gallery #sync1').on('click', 'a', function(event) {
   }
 ////////////////////////////////////////////////////////////////////
 
-/*
-$('#lightbox').hide();
-$.ajax({
-    url: "_include/galeria_produktu.php",
-    cache: false
-  })
-    .done(function( html ) {
-      $('#lightbox').show();
-      $( "#lightbox .bl" ).append( html );
-      $('body').addClass('lightbox');
-      galeriaProduktu();
-    });*/
+
 var widthWindow = $(window).width();
 if (widthWindow >= 768) {
 $('#product-gallery #sync1').on('click', 'a', function(event) {
   event.preventDefault();
 
-
-
     
-  
-
-
-
-    $( "#lightbox .bl" ).html($("#galeria-lightbox-wr").html());
-    $('#lightbox').show();
+    
+$( "#lightbox .bl" ).html($("#galeria-lightbox-wr").html());
+     
+      $('#lightbox').css({display:'block'});
+      $('#lightbox').find('.inner-item').css({visibility:'hidden'})
+    setTimeout(function(){  
+       $('#lightbox').find('.inner-item').css({visibility:'visible'})
+    }, 500);
     $('body').addClass('lightbox');
     galeriaProduktu();
-
-//  $.ajax({
-//    url: "_include/galeria_produktu.php",
-//    cache: true
-//  })
-//    .done(function( html ) {
-//      $( "#lightbox .bl" ).append( html );
-//      $('#lightbox').show();
-//      $('body').addClass('lightbox');
-//      galeriaProduktu();
-//    });
-
-});
+    $('body').addClass('lightbox');
+  });
 };
 
 var lightbox = $('#lightbox');
@@ -1314,6 +1391,7 @@ if($(window).width() != prevW) {
       });
    
 
+
     //control sidebar
     if ($('body').hasClass('filter-sidebar')) {
 
@@ -1511,14 +1589,15 @@ $(document).on('mouseup touchstart', function (e){
 
 $('.actionViewFilter').on('click', function(event){
         event.preventDefault();
-        var colorFilter = $(this).data('color');
-         var srcImg = $(this).data('img');
+        $("#sidebar").find('.sidebar').remove();
+        $(".fb-slidebar-inner").find('.sidebar').remove();
         $(".fb-slidebar-inner").load("_include/sidebar.inc", function(){
           
                   init();
                   initScrollBarFilterMarka();
                   clearFilterManufacturerCheked();
                   visibleBtnClearFilterSize();
+                  filterColor();
                   $( "#slider-range" ).slider({
                           range: true,
                           min: 0,
@@ -1546,7 +1625,7 @@ $('.actionViewFilter').on('click', function(event){
                       $('body').addClass('noscroll').append('<div class="noscroll" style="width:100%; height:'+screenHeight+'px"></div>');
                 
                 });
-       
+        
             //$("#sidebar").slideToggle();    
    });
 
@@ -2225,7 +2304,26 @@ function filterColor() {
       });
     };
 
+    $(this).on('mouseenter', function(){
 
+      if (colorFilter) {
+        
+        $(this).find('span').children('span').css({
+          'background-image': 'none'
+        })
+      };
+
+    });
+    $(this).on('mouseleave', function(){
+
+      if (srcImg) {
+        console.log(srcImg);
+        $(this).find('span').children('span').css({
+          'background-image':  'url('+srcImg+')'
+        })
+      };
+
+    })
 
 
 
@@ -2233,7 +2331,6 @@ function filterColor() {
   var filterColor = $('#filter_color');
   filterColor.on('click', ':checkbox', function(event) {
     $('#filter_color .clear').removeClass('hidden');
-
       var filterColorLenght = $('#filter_color input:checked').length;
         if (filterColorLenght >= 1) {
           $('#filter_color .action').removeClass('hidden');
