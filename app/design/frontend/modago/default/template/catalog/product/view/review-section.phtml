@@ -58,6 +58,7 @@ foreach ($reviews as $review) {
 }
 krsort($p);
 $avg = count($ratings) > 0 ? ceil(array_sum($ratings)/count($ratings)/10/2) : 0;
+Mage::getBlockSingleton('page/html_pager')->setCollection($this->getReviewsCollection());
 ?>
 
 <section id="note_product" class="section toggle-xs bg-w clearfix">
@@ -90,6 +91,7 @@ $avg = count($ratings) > 0 ? ceil(array_sum($ratings)/count($ratings)/10/2) : 0;
                             <?php endforeach; ?>
                         </dl>
                     </div>
+                    <?php echo $this->getChildHtml('product_review_list.toolbar'); ?>
                 </div>
             </div>
             <div class="add_opinion col-md-3 col-sm-12 hidden-xs">
