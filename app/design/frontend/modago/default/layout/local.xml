@@ -40,6 +40,7 @@
 
             <!--<action method="addItem"><type>skin_js</type><script>js/vendor/jquery-1.10.2.min.js</script></action>-->
             <action method="addJs"><script>jquery/jquery-1.11.0.min.js</script></action>
+            <action method="addItem"><type>skin_js</type><script>js/mall.js</script></action>
             <action method="addJs"><script>bootstrap/bootstrap.min.js</script></action>
             <action method="addItem"><type>skin_js</type><script>js/vendor/modernizr-2.6.2.min.js</script></action>
             <!--<action method="addItem"><type>skin_js</type><script>js/modago.js</script></action>-->
@@ -56,7 +57,6 @@
             <action method="addItem"><type>skin_js</type><script>js/zoomsl-3.0.min.js</script></action>
             <action method="addItem"><type>skin_js</type><script>js/plugins.js</script></action>
             <action method="addItem"><type>skin_js</type><script>js/fns.js</script></action>
-            <action method="addItem"><type>skin_js</type><script>js/mall.js</script></action>
             <block type="orbacommon/page_html_head" name="orba.jslib" template="orbacommon/js/script.phtml" />
         </reference>
 
@@ -211,6 +211,9 @@
             </block>
             <block name="product.vendor.sizecomments" type="zolagocatalog/product_vendor_sizecomments" />
             <block name="udqa.product.question" type="udqa/product_question" />
+            <block name="product.review.section" type="review/product_view" template="catalog/product/view/review-section.phtml">
+                <block name="product.review.form" type="zolagomodago/review_form"/>
+            </block>
         </reference>
 
         <reference name="product.info.addto">

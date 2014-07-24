@@ -18,6 +18,28 @@
     $_reviewBlock = Mage::getBlockSingleton('review/product_view');
 ?>
 
+<?php
+// review label
+$_reviewsCount = count($_reviewBlock->getReviewsCollection());
+$_reviewsLabel = '';
+switch($_reviewsCount) {
+    case 0:
+        $_reviewsLabel = $this->__('Zero reviews');
+        break;
+    case 1:
+        $_reviewsLabel = $this->__('Singular review');
+        break;
+    case 2:
+    case 3:
+    case 4:
+        $_reviewsLabel = $this->__('review');
+        break;
+    default:
+        $_reviewsLabel = $this->__('Zero reviews');
+        break;
+}
+?>
+
 <?php $_helper = $this->helper('catalog/output'); ?>
 <?php $_product = $this->getProduct(); ?>
 <script type="text/javascript">
@@ -190,7 +212,7 @@
                     <a href="#note_product" class="scrollTo"><?php echo $this->__("Product reviews"); ?> <i class="bullet-strzalka-down"></i>
 				<span id="average_note_client">
 					<span class="note" data-number="5" data-score="2"></span>
-					<span>(<?php echo count($_reviewBlock->getReviewsCollection()); ?> <?php echo $this->__("review"); ?>)</span>
+					<span>(<?php echo $_reviewsCount; ?> <?php echo $_reviewsLabel; ?>)</span>
 				</span>
                     </a>
 
@@ -459,208 +481,9 @@
     </div>
 </section>
 <!-- SECTION : OPIS PRODUKTU -->
-<!-- SECTION : OPINIE O PRODUKCIE -->
-<section id="note_product" class="section toggle-xs bg-w clearfix">
-    <header>
-        <h2 class="title_section">Opinie o produkcie <i class="bullet-strzalka-down visible-xs"></i>
-        <span id="average_note_client" class="visible-xs">
-            <span class="note" data-number="5" data-score="2"></span>
-            <span>(3 opinie)</span>
-        </span>
-        </h2>
-
-    </header>
-    <div class="main clearfix no-padding-bottom">
-        <div id="statystyki_opinii" class="row">
-            <div class="col-md-9 col-sm-12">
-                <div class="row">
-                    <div class="col-sm-5">
-                        <dl class="raty_note">
-                            <dt><strong>Średnia ocena:</strong><div id="average_rating" data-number="5" data-score="2"></div>
-                            <!--<span class="suffix">(3 opinii o produkcie)</span>--></dt>
-                            <dd><strong>Wygląd</strong> <div id ="appearance_rating" data-number="5" data-score="2"></div></dd>
-                            <dd><strong>Wygoda</strong> <div id="convenience_rating" data-number="5" data-score="3"></div></dd>
-                            <dd><strong>Jakość</strong> <div id="quality_rating" data-number="5" data-score="2"></div></dd>
-                            <dd><strong>Trwałość</strong> <div id="durability_rating" data-number="5" data-score="5"></div></dd>
-                            <dd><strong>Jakość / Cena</strong> <div id="quality_price_rating" data-number="5" data-score="2"></div></dd>
-                        </dl>
-                    </div>
-                    <div class="col-md-4 col-sm-5">
-                        <dl class="rating_note">
-                            <dt>Ilość opinii o produkcie: <span>5<span></dt>
-                            <dd><span class="prefix">ocena 5/5</span><span class="rating" data-percent="100"><span></span></span><span class="suffix">0</span></dd>
-                            <dd><span class="prefix">ocena 4/5</span><span class="rating" data-percent="80"><span></span></span><span class="suffix">5</span></dd>
-                            <dd><span class="prefix">ocena 3/5</span><span class="rating" data-percent="60"><span></span></span><span class="suffix">0</span></dd>
-                            <dd><span class="prefix">ocena 2/5</span><span class="rating" data-percent="40"><span></span></span><span class="suffix">0</span></dd>
-                            <dd><span class="prefix">ocena 1/5</span><span class="rating" data-percent="20"><span></span></span><span class="suffix">0</span></dd>
-                        </dl>
-                    </div>
-                </div>
-            </div>
-            <div class="add_opinion col-md-3 col-sm-12 hidden-xs">
-                <p>Podziel się własną opinią z użytkownikami<br><a href="#block-review-form" class="btn black viewFormComments"><span class="ico ico_note"></span> Dodaj opinię</a></p>
-            </div>
-        </div>
-
-    </div>
-    <!-- ==================== COMMENTS ================================ -->
-    <div class="main clearfix">
-        <div class="col-sm-12" id="comments">
-            <div class="row">
-                <div class="comment row">
-                    <div class="wrapper-header col-sm-6">
-                        <div class="header">
-                            <div class="comment_rating" data-number="5" data-score="2"></div>
-                            <h3 class="title_comment">Super ciepły płaszcz na jesienne chłody!</h3>
-                        </div>
-                        <div class="meta">
-                            <span class="meta-label">Opinia napisana:</span><span class="date">20 lipca 2014</span> przez <span class="name_user">Jan Kowalski</span>
-                        </div>
-                    </div>
-                    <aside class="col-sm-6"><span class="not_recommend">Nie Polecam produktu</span></aside>
-                    <div class="body_comments col-sm-12">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent pellentesque eget turpis ut sodales. Nunc aliquam id dui a imperdiet. Fusce pharetra luctus tristique. Vivamus varius quis mi at dictum. Maecenas rhoncus nulla quis luctus mattis. Integer urna eros, accumsan sit amet sollicitudin quis, lobortis sed turpis. Curabitur sodales tristique tellus vel viverra. Morbi pulvinar non mi a semper. Donec hendrerit sollicitudin nisl, quis fermentum tellus mattis eget. Fusce egestas eleifend pharetra. Pellentesque nec sodales urna, a adipiscing tortor. Duis elementum hendrerit enim et vulputate. </p>
-                    </div>
-
-                </div>
-                <div class="comment row">
-                    <div class="wrapper-header col-sm-6">
-                        <div class="header">
-                            <div class="comment_rating" data-number="5" data-score="2"></div>
-                            <h3 class="title_comment">Super ciepły płaszcz na jesienne chłody!</h3>
-                        </div>
-                        <div class="meta">
-                            <span class="meta-label">Opinia napisana:</span><span class="date">20 lipca 2014</span> przez <span class="name_user">Jan Kowalski</span>
-                        </div>
-                    </div>
-                    <aside class="col-sm-6"><span class="recommend">Polecam produkt</span></aside>
-                    <div class="body_comments col-sm-12">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent pellentesque eget turpis ut sodales. Nunc aliquam id dui a imperdiet. Fusce pharetra luctus tristique. Vivamus varius quis mi at dictum. Maecenas rhoncus nulla quis luctus mattis. Integer urna eros, accumsan sit amet sollicitudin quis, lobortis sed turpis. Curabitur sodales tristique tellus vel viverra. Morbi pulvinar non mi a semper. Donec hendrerit sollicitudin nisl, quis fermentum tellus mattis eget. Fusce egestas eleifend pharetra. Pellentesque nec sodales urna, a adipiscing tortor. Duis elementum hendrerit enim et vulputate. </p>
-                    </div>
-
-                </div>
-                <div class="comment row">
-                    <div class="wrapper-header col-sm-6">
-                        <div class="header">
-                            <div class="comment_rating" data-number="5" data-score="2"></div>
-                            <h3 class="title_comment">Super ciepły płaszcz na jesienne chłody!</h3>
-                        </div>
-                        <div class="meta">
-                            <span class="meta-label">Opinia napisana:</span><span class="date">20 lipca 2014</span> przez <span class="name_user">Jan Kowalski</span>
-                        </div>
-                    </div>
-                    <aside class="col-sm-6"><span class="recommend">Polecam produkt</span></aside>
-                    <div class="body_comments col-sm-12">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent pellentesque eget turpis ut sodales. Nunc aliquam id dui a imperdiet. Fusce pharetra luctus tristique. Vivamus varius quis mi at dictum. Maecenas rhoncus nulla quis luctus mattis. Integer urna eros, accumsan sit amet sollicitudin quis, lobortis sed turpis. Curabitur sodales tristique tellus vel viverra. Morbi pulvinar non mi a semper. Donec hendrerit sollicitudin nisl, quis fermentum tellus mattis eget. Fusce egestas eleifend pharetra. Pellentesque nec sodales urna, a adipiscing tortor. Duis elementum hendrerit enim et vulputate. </p>
-                    </div>
-                </div>
-                <div class="footer_comments clearfix">
-
-                    <ul class="pag">
-                        <!--<li><span>1-5 opini z 75</span></li>-->
-                        <li><a href="#">&laquo; poprzednia</a></li>
-                        <li><a href="#">1</a></li>
-                        <li class="current"><span>2</span></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">4</a></li>
-                        <li><a href="#">5</a></li>
-                        <li><a href="#">następna &raquo;</a></li>
-                    </ul>
-                    <a href="#block-review-form" class="btn black viewFormComments"><span class="ico ico_note"></span> Dodaj opinię</a>
-                </div>
-                <div id="block-review-form" class="row">
-                    <div class="col-sm-12">
-                        <form action="#" method="post" id="review-form" class="form clearfix" rel="form">
-                            <input name="form_key" type="hidden" value="3744mbGr7Ts18NYA">
-                            <h4>ZARA PŁASZCZ Z GUZIKAMI - <strong>dodaj opinię</strong></h4>
-                            <div class="fieldset">
-                                <input type="hidden" name="validate_rating" class="validate-rating" value="">
-
-                                <fieldset>
-                                    <table class="data-table review-summary-table ratings table raty_note" id="product-review-table">
-                                        <caption>Cechy produktu:</caption>
-                                        <tbody>
-                                        <tr>
-                                            <th>Wygląd:</th>
-                                            <td><div id="appearance_rating" data-number="5" data-score="0"></div></td>
-                                        </tr>
-                                        <tr>
-                                            <th>Wygoda:</th>
-                                            <td><div id="convenience_rating" data-number="5" data-score="0"></div></td>
-                                        </tr>
-                                        <tr>
-                                            <th>Jakość:</th>
-                                            <td><div id="quality_rating" data-number="5" data-score="0"></div></td>
-                                        </tr>
-                                        <tr>
-                                            <th>Trwałość:</th>
-                                            <td><div id="durability_rating" data-number="5" data-score="0"></div></td>
-                                        </tr>
-                                        <tr>
-                                            <th>Jakość/cena:</th>
-                                            <td><div id="quality_price_rating" data-number="5" data-score="0"></div></td>
-                                        </tr>
-
-                                        </tbody>
-                                    </table>
-                                </fieldset>
-
-                                <fieldset class="col-sm-10">
-                                    <div class="row">
-
-                                        <div class="title form-group">
-                                            <label for="title" class="">Tytuł opinii:</label>
-                                            <input type="text" class="form-control" id="title" name="title" data-toggle="tooltip" title="Podaj temat komentarza">
-
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="review_field" class="">Opinia o produkcie (minimum 5 słów):</label>
-                                            <textarea name="detail" id="review_field" cols="5" rows="3" class="required-entry"></textarea>
-                                        </div>
-                                        <div class="form-group clearfix">
-                                            <div class="row">
-                                                <div class="col-sm-3"><label for="czy_polecasz_produkt">Czy polecasz produkt</label></div>
-                                                <div class="col-sm-9">
-                                                    <div class="form-group form-radio">
-                                                        <input type="radio" name="czy_polecasz_produkt" id="czy_polecasz_produkt_yes" class="css-radio">
-                                                        <label for="czy_polecasz_produkt_yes" class="css-label">Tak</label>
-                                                    </div>
-                                                    <div class="form-group form-radio">
-                                                        <input type="radio" name="czy_polecasz_produkt" id="czy_polecasz_produkt_no" class="css-radio">
-                                                        <label for="czy_polecasz_produkt_no" class="css-label">Nie</label>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="nickname_field form-group clearfix">
-                                            <div class="row">
-                                                <div class="col-sm-3"><label for="nickname_field" class="">Twoje imię/nick (opcjonalnie)</label></div>
-                                                <div class="col-sm-6">
-                                                    <input type="text" class="form-control hint" id="nickname_field" name="nickname" data-toggle="tooltip" title="Wprowadź Swój NICK">
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <button type="submit" title="Submit Review" class="button button-primary large pull-right">
-                    <span>
-                        <span>Dodaj opinię</span>
-                    </span>
-                                        </button>
-                                    </div>
-                                </fieldset>
-
-                            </div>
-
-                        </form>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- ====================== END :// COMMENTS ================================== -->
-</section>
+<!--reviews-->
+<?php echo $this->getChildHtml('product.review.section'); ?>
+<!--end reviews-->
 <section id="share" class="section clearfix">
     <div class="followUs visible-xs">
         <ul>

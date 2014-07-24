@@ -1711,6 +1711,9 @@ $('.ratings tr td div').raty({
   hints: ['zły', 'słaby', 'satysfakcjonujący', 'dobry', 'świetny'],
   //readOnly: true,
   size   : 17,
+    scoreName: function() {
+        return $(this).attr("data-score-name");
+    },
 
   number: function() {
     return $(this).attr('data-number');
