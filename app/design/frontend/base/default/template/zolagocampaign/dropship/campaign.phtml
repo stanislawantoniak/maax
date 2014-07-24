@@ -1,0 +1,15 @@
+<?php $_helper = Mage::helper("zolagocampaign");?>
+<div class="container">
+	<div class="page-heading row">
+		<div class="col-lg-6">
+			<h3><?php echo $_helper->__("Campaigns");?></h3>
+			<span class="tageline"><?php echo Mage::helper("zolagopo")->__("Campaigns managment");?></span>
+		</div>
+		<div class="main-actions align-right col-md-6">
+			<a class="btn btn-success" href="<?php echo Mage::getUrl('zolagocampaign/vendor/new');?>">
+					<i class="icon-plus"></i>
+					<?php echo $_helper->__("New campaign");?>
+				</a> 
+		</div>
+	</div>
+</div>

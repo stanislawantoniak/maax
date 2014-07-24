@@ -228,8 +228,6 @@ class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
 
     public function sendNewRmaNotificationEmail($rma, $comment='')
     {
-        Mage::log('Hello1');
-        Mage::log('Step51');
         $order = $rma->getOrder();
         $store = $order->getStore();
 

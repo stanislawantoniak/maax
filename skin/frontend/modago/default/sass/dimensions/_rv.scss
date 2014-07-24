@@ -1,4 +1,11 @@
 .recently-viewed {
+    .rwd-wrapper{
+        margin: 0 -5px;
+    }
+
+    .rwd-item {
+        margin:0 5px 0 5px;
+    }
 	h3.title-section {
 		padding-top:0px;
 		padding-bottom:0px;
@@ -31,6 +38,7 @@
 		}
 		.name_product {
 			padding:0px;
+            text-align: center;
 		}
 	}
 	.item {

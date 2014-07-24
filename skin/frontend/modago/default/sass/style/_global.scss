@@ -49,3 +49,35 @@ border-radius: 2px;
 .clr {clear: both}
 .talcen {text-align: center;}
 .border1px-rd2-img-gray {border: 1px solid #dbdbdb;border-radius: 2px;}
+
+
+#content {
+	.p {
+		padding:15px;
+		margin-bottom: 15px;
+		header {
+			margin-left:0;
+			margin-bottom:15px;
+			h1,h2,h3 {
+				margin: 0px;
+				padding:0px;
+			}
+		}
+		p {
+			&:last-child {
+				margin-bottom: 0px;
+			}
+		}
+	}
+}
+
+.node-type-page-shop {
+	.blockCarouselTop {
+		@media (max-width: $screen-xs-max) {
+			max-width: 320px;
+			margin-top: 15px;
+			margin-left:auto;
+			margin-right:auto;
+		}
+	}
+}

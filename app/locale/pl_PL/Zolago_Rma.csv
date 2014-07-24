@@ -18,3 +18,6 @@
 "Origin billing address restored", "Przywrócono adres płatnika z zamówienia"
 "Shipping address changed (%s)", "Zmiana adresu dostawy (%s)"
 "Billing address changed (%s)", "Zmiana adresu płatnika (%s)"
+"Not Exceeded","Nieprzekroczona"
+"Exceeded","Przekroczona"
+"Response deadline","Maksymalna data reakcji"

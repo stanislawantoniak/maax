@@ -58,7 +58,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                             foreach($batch as $dataPrice){
                                 $merchant = $dataPrice['merchant'];
                                 $prices = $dataPrice['data'];
-                                Mage::log($prices, 0, $batchFile);
+
                                 if (!empty($prices)) {
                                     foreach ($prices as $skuV => $priceByType) {
                                         $sku = $merchant . "-" . $skuV;
@@ -82,17 +82,15 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                         if(!empty($batch)){
                             $batch = (array)$batch;
                             foreach($batch as $dataStock){
-
                                 $merchant = $dataStock['merchant'];
                                 $stock = $dataStock['data'];
-                                Mage::log($stock, 0, $batchFile);
+
                                 if (!empty($stock)) {
                                     foreach ($stock as $skuV => $stockByPOS) {
                                         $sku = $merchant . "-" . $skuV;
                                         $stockBatch[$merchant][$sku] = $stockByPOS;
                                     }
                                 }
-                                Mage::log($stockBatch, 0, $batchFile);
                                 unset($sku);
                                 unset($skuV);
                                 unset($stockByPOS);
@@ -146,6 +144,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
      */
     public static function updateStockConverter($stockBatch){
         $batchFile = self::CONVERTER_STOCK_UPDATE_LOG;
+
         if(empty($stockBatch)){
             Mage::log(microtime() . ' Empty source', 0, $batchFile);
             return;
@@ -173,7 +172,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
         /*Prepare data to insert*/
         if(empty($availableStockByMerchant)){
-            Mage::log(microtime() . ' Empty source ', 0, $batchFile);
+            Mage::log(microtime() . ' No available Stock By Merchant ', 0, $batchFile);
             return;
         }
 
