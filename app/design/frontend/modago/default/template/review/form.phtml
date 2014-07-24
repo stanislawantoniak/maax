@@ -71,22 +71,18 @@
                             <label for="review_field" class=""><?php echo $this->__('Review') ?></label>
                             <textarea name="detail" id="review_field" cols="5" rows="3" class="required-entry"><?php echo $this->escapeHtml($data->getDetail()) ?></textarea>
                         </div>
-                        <div class="title form-group">
 
-                            <input type="checkbox" class="form-control" id="recommend" name="recommend" data-toggle="tooltip" title="<?php echo $this->__('Recommend product') ?>" value="<?php echo $this->escapeHtml($data->getRecommend()) ?>" />
-                            <label for="recommend" class=""><?php echo $this->__('Recommend product') ?></label>
-                        </div>
                         <div class="form-group clearfix">
                             <div class="row">
-                                <div class="col-sm-3"><label for="czy_polecasz_produkt">Czy polecasz produkt</label></div>
+                                <div class="col-sm-3"><label for="recommend_product">Czy polecasz produkt</label></div>
                                 <div class="col-sm-9">
                                     <div class="form-group form-radio">
-                                        <input type="radio" name="czy_polecasz_produkt" id="czy_polecasz_produkt_yes" class="css-radio">
-                                        <label for="czy_polecasz_produkt_yes" class="css-label">Tak</label>
+                                        <input type="radio" name="recommend_product" id="recommend_product_yes" class="css-radio" value="1">
+                                        <label for="recommend_product_yes" class="css-label">Tak</label>
                                     </div>
                                     <div class="form-group form-radio">
-                                        <input type="radio" name="czy_polecasz_produkt" id="czy_polecasz_produkt_no" class="css-radio">
-                                        <label for="czy_polecasz_produkt_no" class="css-label">Nie</label>
+                                        <input type="radio" name="recommend_product" id="recommend_product_no" class="css-radio" value="0">
+                                        <label for="recommend_product_no" class="css-label">Nie</label>
                                     </div>
 
                                 </div>
