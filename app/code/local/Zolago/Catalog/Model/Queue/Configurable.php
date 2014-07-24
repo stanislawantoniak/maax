@@ -116,24 +116,33 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
         Mage::log(microtime() . "{$hash} Reindex ", 0, 'configurable_update.log');
 
 
-//        Mage::getResourceSingleton('catalog/product_indexer_price')
-//            ->reindexProductIds($productConfigurableIds);
+        $productsToReindex = array_merge($listUpdatedProducts, $productConfigurableIds);
+        Mage::getResourceSingleton('catalog/product_indexer_price')
+            ->reindexProductIds($productsToReindex);
         $indexers = array(
             'source'  => Mage::getResourceModel('catalog/product_indexer_eav_source'),
             'decimal' => Mage::getResourceModel('catalog/product_indexer_eav_decimal'),
         );
         foreach ($indexers as $indexer) {
             /** @var $indexer Mage_Catalog_Model_Resource_Product_Indexer_Eav_Abstract */
-            $indexer->reindexEntities($productConfigurableIds);
+            $indexer->reindexEntities($productsToReindex);
         }
         if (Mage::helper('catalog/category_flat')->isEnabled()) {
             $fI = new Mage_Catalog_Model_Resource_Product_Flat_Indexer();
-            $attribute = Mage::getModel('eav/entity_attribute')->loadByCode(4, 'price');
+            $entityTypeID = Mage::getModel('catalog/product')->getResource()->getTypeId();
+            $attribute = Mage::getModel('eav/entity_attribute')->loadByCode($entityTypeID, 'price');
             foreach ($storeId as $storesId) {
-                $fI->updateAttribute($attribute, $storesId, $productConfigurableIds);
+                $fI->updateAttribute($attribute, $storesId, $productsToReindex);
             }
         }
 
+        //zolago_catalog_after_update_price_type
+        Mage::dispatchEvent(
+            "zolago_catalog_after_update_price_type",
+            array(
+                 "product_ids" => $listUpdatedProducts
+            )
+        );
         Mage::log(microtime() . "{$hash} End ", 0, 'configurable_update.log');
 
 
