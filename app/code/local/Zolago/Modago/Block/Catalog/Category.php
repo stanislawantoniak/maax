@@ -16,7 +16,18 @@ class Zolago_Modago_Block_Catalog_Category extends Mage_Core_Block_Template
     {
         $rootCatId = Mage::app()->getStore()->getRootCategoryId();
         $categories = Mage::getModel('catalog/category')->getCategories($rootCatId);
-        return Mage::helper('zolagomodago')->getCategoriesTree($categories, 1, 3);
+        $catTree = array();
+        foreach ($categories as $categoryData) {
+            $catId = (int)$categoryData->getId();
+            $cat = Mage::getModel('catalog/category')->load($catId);
+            $catTree[$catId] = array(
+                'name' => $categoryData->getName(),
+                'url' => rtrim(Mage::getUrl($cat->getUrlPath()), "/"),
+                'category_id' => $catId,
+                'has_dropdown' => (bool) $this->getLayout()->createBlock('cms/block')->setBlockId("navigation-dropdown-c-{$catId}")->toHtml()
+            );
+        }
+        return $catTree;
     }
 
     /**
