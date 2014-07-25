@@ -26,9 +26,9 @@ class Zolago_Solrsearch_Model_Resource_Solr extends SolrBridge_Solrsearch_Model_
 		
 		$url = trim($solrServerUrl,'/').'/'.$core.
 			'/update?stream.body=<delete>'.$queryProduct.'</delete>&commit=true&json.nl=map&wt=json';
-		Mage::log("Delete start ($core) / connection start");
+		//Mage::log("Delete start ($core) / connection start");
     	$this->doRequest($url);
-		Mage::log("Delete stop ($core) / connection end");
+		//Mage::log("Delete stop ($core) / connection end");
 		return true;		
 	}
 	
@@ -55,13 +55,13 @@ class Zolago_Solrsearch_Model_Resource_Solr extends SolrBridge_Solrsearch_Model_
 	protected function _doReindex(Mage_Catalog_Model_Resource_Product_Collection $collection,
 			Mage_Core_Model_Store $store, $core) {
 		
-		Mage::log("Reindex ($core) start");
+		//Mage::log("Reindex ($core) start");
 		$solrServerUrl = $this->getSolrServerUrl();
     	$updateUrl = trim($solrServerUrl,'/').'/'.$core.'/update/json?commit=true&wt=json';
 		$dataArray = $this->ultility->parseJsonData($collection, $store);
-		Mage::log("Data prepare after / connection start");
+		//Mage::log("Data prepare after / connection start");
 		$returnNoOfDocuments = $this->postJsonData($dataArray['jsondata'], $updateUrl, $core);
-		Mage::log("Reindex ($core) stop / connection end");
+		//Mage::log("Reindex ($core) stop / connection end");
 		
 	}
 	

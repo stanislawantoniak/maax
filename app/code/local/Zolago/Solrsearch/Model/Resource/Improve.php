@@ -647,7 +647,6 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 						$customerGroupId,
 						$product->getId()
 					);
-
 					$product->setCalculatedFinalPrice($finalPrice);
 				}
 			}
