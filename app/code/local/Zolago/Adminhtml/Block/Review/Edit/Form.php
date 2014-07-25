@@ -109,7 +109,7 @@ class Zolago_Adminhtml_Block_Review_Edit_Form extends Mage_Adminhtml_Block_Revie
             'recommend_product', 'select',
             array(
                  'label'    => Mage::helper('review')->__('Recommend product'),
-                 'required' => false,
+                 'required' => true,
                  'name'     => 'recommend_product',
                  'values'   => array(
                      0 => Mage::helper('review')->__('No'),
