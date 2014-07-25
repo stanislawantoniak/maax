@@ -331,6 +331,30 @@ ol.breadcrumb li.active {
 #checkout .panel.panel-custom .panel-footer {
   border-top: 1px solid #eeedf0; }
 
+/* line 26, ../sass/override/_summary-delivery-payment.scss */
+.node-type-summary-checkout #checkout .panel.panel-custom {
+  border-color: #bfbfbf; }
+/* line 28, ../sass/override/_summary-delivery-payment.scss */
+.node-type-summary-checkout #checkout .panel.panel-custom .panel-heading {
+  border-color: #dddddd; }
+/* line 31, ../sass/override/_summary-delivery-payment.scss */
+.node-type-summary-checkout #checkout .panel.panel-custom .panel-footer {
+  border-color: #dddddd; }
+/* line 35, ../sass/override/_summary-delivery-payment.scss */
+.node-type-summary-checkout #checkout .panel.panel-custom .block_info_order .block {
+  border-color: #dddddd; }
+/* line 44, ../sass/override/_summary-delivery-payment.scss */
+.node-type-summary-checkout.node-type-summary-checkout #change_payment legend {
+  border: none;
+  font-size: 14px;
+  margin-bottom: 5px; }
+/* line 54, ../sass/override/_summary-delivery-payment.scss */
+.node-type-summary-checkout #checkout .summary-order form#change_payment {
+  margin-bottom: 7px; }
+/* line 58, ../sass/override/_summary-delivery-payment.scss */
+.node-type-summary-checkout #checkout .summary-order form .panel + .panel {
+  margin-bottom: 10px; }
+
 /* line 7, ../sass/dimensions/_global.scss */
 #header {
   padding-top: 57px; }
@@ -1317,12 +1341,9 @@ section.section h2.title_section i {
 .item .col-price .label {
   text-align: left; }
 
-/* line 2, ../sass/dimensions/_rv.scss */
-.recently-viewed .rwd-wrapper {
-  margin: 0 -5px; }
 /* line 6, ../sass/dimensions/_rv.scss */
 .recently-viewed .rwd-item {
-  margin: 0 5px 0 5px; }
+  padding: 0px 5px; }
 /* line 9, ../sass/dimensions/_rv.scss */
 .recently-viewed h3.title-section {
   padding-top: 0px;
@@ -1430,7 +1451,7 @@ section.section h2.title_section i {
   text-indent: -999em; }
 /* line 120, ../sass/dimensions/_rv.scss */
 .recently-viewed .rwd-controls .rwd-buttons .rwd-prev {
-  left: -15px;
+  left: -23px;
   background-position: 0 -339px;
   height: 27px;
   width: 16px; }
@@ -1453,7 +1474,7 @@ section.section h2.title_section i {
     width: 11px; } }
 /* line 139, ../sass/dimensions/_rv.scss */
 .recently-viewed .rwd-controls .rwd-buttons .rwd-next {
-  right: -15px;
+  right: -26px;
   background-position: 0 -312px;
   height: 27px;
   width: 16px; }
@@ -1520,10 +1541,10 @@ section.section h2.title_section i {
 /* line 47, ../sass/dimensions/_summary-delivery-payment.scss */
 #summary-delivery-payment img {
   width: 100%;
-  max-width: 150px;
+  max-width: 75px;
   height: auto;
   position: absolute;
-  top: 15px;
+  top: 35px;
   right: 0px;
   border: 1px solid #1a1a1a; }
 @media (min-width: 1200px) {
@@ -1690,27 +1711,40 @@ section.section h2.title_section i {
 /* line 234, ../sass/dimensions/_summary-delivery-payment.scss */
 .panel-group .panel .panel-heading a.external {
   margin-right: 15px; }
-@media (max-width: 480px) {
+@media (max-width: 545px) {
   /* line 234, ../sass/dimensions/_summary-delivery-payment.scss */
   .panel-group .panel .panel-heading a.external {
-    float: left !important; } }
+    float: none !important;
+    display: block;
+    max-width: 155px; } }
 @media (max-width: 360px) {
-  /* line 241, ../sass/dimensions/_summary-delivery-payment.scss */
+  /* line 243, ../sass/dimensions/_summary-delivery-payment.scss */
   .panel-group .panel .panel-heading strong + span {
     display: block; } }
 
-/* line 251, ../sass/dimensions/_summary-delivery-payment.scss */
+/* line 253, ../sass/dimensions/_summary-delivery-payment.scss */
 .podziekowanie_nieudane_view_summary {
   display: none; }
 @media (max-width: 991px) {
-  /* line 251, ../sass/dimensions/_summary-delivery-payment.scss */
+  /* line 253, ../sass/dimensions/_summary-delivery-payment.scss */
   .podziekowanie_nieudane_view_summary {
     display: inline-block;
     position: relative;
     padding-right: 30px; } }
-/* line 259, ../sass/dimensions/_summary-delivery-payment.scss */
+/* line 261, ../sass/dimensions/_summary-delivery-payment.scss */
 .podziekowanie_nieudane_view_summary.open {
   margin-bottom: 15px; }
+
+/* line 268, ../sass/dimensions/_summary-delivery-payment.scss */
+.acknowledgements .table-group:last-child {
+  margin-bottom: 0px; }
+/* line 274, ../sass/dimensions/_summary-delivery-payment.scss */
+.acknowledgements #checkout section header {
+  margin-bottom: 9px; }
+@media (max-width: 480px) {
+  /* line 282, ../sass/dimensions/_summary-delivery-payment.scss */
+  .acknowledgements #checkout .summary-order dl {
+    margin-left: 6px; } }
 
 /* line 1, ../sass/override/_override-layout.scss */
 .customNavigation a {

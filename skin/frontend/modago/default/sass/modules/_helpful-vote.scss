@@ -198,13 +198,16 @@
 				label {
 					span {
 						top: -6px;
-						
+						@media (max-width: 767px) {
+							width: 70%;
+							display: inline-block;
+						}
 						@media (max-width: 480px) {
 							width: 60%;
 							display: inline-block;
 							top: -10px;
 						}
-						@media (max-width: 360px) {
+						@media (max-width: 400px) {
 							width: 90%;
 							display: inline-block;
 							top: -10px;
@@ -212,9 +215,14 @@
 						+img {
 							position:relative;
 							top:-3px;
-							@media (max-width: 360px){
+							@media (max-width: 400px){
 								display:none;
 							}
+						}
+					}
+					&[for='default_pay_1'] {
+						@media (max-width: 480px) {
+							top: -6px;
 						}
 					}
 				}
