@@ -132,6 +132,7 @@ $avg = count($ratings) > 0 ? ceil(array_sum($ratings)/count($ratings)/10/2) : 0;
                     <?php
                     $ratingModel = Mage::getSingleton('rating/rating')->getReviewSummary($review->getReviewId());
                     $sum = ceil($ratingModel->getSum()/10/3/2);
+                    $recommend = $review->getRecommendProduct();
                     ?>
                     <div class="comment row">
                         <div class="wrapper-header col-sm-6">

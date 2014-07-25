@@ -10,6 +10,7 @@
             <review_resource>
                 <rewrite>
                     <review>Zolago_Review_Model_Resource_Review</review>
+                    <review_collection>Zolago_Review_Model_Resource_Review_Collection</review_collection>
                 </rewrite>
             </review_resource>
         </models>
