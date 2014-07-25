@@ -90,13 +90,15 @@ class Zolago_Modago_Block_Catalog_CategoryTest extends Zolago_TestCase {
         $block = new Zolago_Modago_Block_Catalog_Category();
         $label = $block->getCategoryLabel();
         $this->assertNotEmpty($label);
+        $this->assertInternalType('string',$label);
     }
 
     public function testGetMoveUpUrl()
     {
         $block = new Zolago_Modago_Block_Catalog_Category();
-        $label = $block->getMoveUpUrl();
-        $this->assertNotEmpty($label);
+        $url = $block->getMoveUpUrl();
+        $this->assertNotEmpty($url);
+        $this->assertInternalType('string',$url);
     }
 
     public function testGetCategoryCollection()
