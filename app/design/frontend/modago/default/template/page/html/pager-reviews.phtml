@@ -66,7 +66,7 @@
 
     <div class="footer_comments clearfix">
 
-        <ul class="pag">
+        <ul class="pag <?php if ($this->isFirstPage()): ?>first-page<?php endif; ?>">
 
             <?php if (!$this->isFirstPage()): ?>
             <li><a href="<?php echo $this->getPreviousPageUrl() ?>">&laquo; <?php echo $this->__("previous"); ?></a></li>
