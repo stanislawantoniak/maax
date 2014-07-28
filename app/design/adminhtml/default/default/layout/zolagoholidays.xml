@@ -18,7 +18,7 @@
 		<update handle="zolagoholidays_update_menu"/>
 		<reference name="content">
 			<block name="zolagoholidays.new" type="zolagoholidays/adminhtml_holidays_edit" as="zolagoholidays_new">
-				<block type="zolagoholidays/adminhtml_holiday_edit_form" name="zolagoholidays_holidays_edit_form"/>
+				<block type="zolagoholidays/adminhtml_holidays_edit_form" name="zolagoholidays_holidays_edit_form"/>
 			</block>
 		</reference>
 	</adminhtml_holidays_new>
@@ -26,7 +26,7 @@
 		<update handle="zolagoholidays_update_menu"/>
 		<reference name="content">
 			<block name="zolagoholidays.new" type="zolagoholidays/adminhtml_holidays_edit" as="zolagoholidays_new">
-				<block type="zolagoholidays/adminhtml_holiday_edit_form" name="zolagoholidays_holidays_edit_form"/>
+				<block type="zolagoholidays/adminhtml_holidays_edit_form" name="zolagoholidays_holidays_edit_form"/>
 			</block>
 		</reference>
 	</adminhtml_holidays_edit>

@@ -46,8 +46,8 @@ class Zolago_Adminhtml_Block_Catalog_Product_Attribute_Set_Main extends Mage_Adm
 			'id'		=> $this->_getSetId(),
 			'saveAndEdit'	=> true)
 		);
-    }	
-	
+    }
+
 	public function getAllAttributeSets($withEmpty = true)
 	{
 		return Mage::getModel('zolagoeav/entity_attribute_source_set')->getAllOptions($withEmpty);

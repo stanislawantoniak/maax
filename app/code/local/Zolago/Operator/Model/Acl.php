@@ -49,6 +49,9 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 	// Tiership manage
 	const RES_UTIERSHIP_OPERATOR					= "udtiership/vendor";
 	
+	// Campaign managment
+	const RES_CAMPAIGN_VENDOR						= "zolagocampaign/vendor";
+	
 	
 
 	// Resources as array
@@ -80,6 +83,8 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		self::RES_UDROPSHIP_POS						=> "POS Manage",
 		// Operator manage
 		self::RES_UDROPSHIP_OPERATOR				=> "Operator manage",
+		// Campaign managment
+		self::RES_CAMPAIGN_VENDOR					=> "Campaign manage"
 	
 	);
 	
@@ -121,6 +126,7 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		// Build ACL Rules - Marketing officer
 		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MARKETING_OFFICER, self::RES_UDROPSHIP_VENDOR_PREFERENCES);
 		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MARKETING_OFFICER, self::RES_UDROPSHIP_VENDOR_PREFERENCES_POST);
+		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MARKETING_OFFICER, self::RES_CAMPAIGN_VENDOR);
 		
 		// Build ACL Rules - RMA Operator
 		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_RMA_OPERATOR, self::RES_URMA_VENDOR);

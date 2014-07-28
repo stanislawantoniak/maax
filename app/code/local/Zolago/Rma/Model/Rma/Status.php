@@ -171,6 +171,12 @@ class Zolago_Rma_Model_Rma_Status
 			$status = self::STATUS_PENDING_PICKUP;
 		}
 		$rma->setRmaStatus($status);
+
+        //Calculate response deadline
+        if($response_deadline = Mage::helper('zolagoholidays/datecalculator')->calculateMaxRmaResponseDeadline($rma, $this->getStatusObject($status), true)){
+            $rma->setResponseDeadline($response_deadline->toString('YYYY-MM-dd'));
+        }
+
 		return $this;
 	}
 	

@@ -343,6 +343,7 @@
                             return;
                         }
                         editSet.req.attribute_set_name = $('attribute_set_name').value;
+                        editSet.req.attribute_set_use_to_create_product = $('attribute_set_use_to_create_product').value;
                         if (!editSet.req.form_key) {
                             editSet.req.form_key = FORM_KEY;
                         }
@@ -460,6 +461,7 @@
 							return;
 						}
 						editSet.req.attribute_set_name = $('attribute_set_name').value;
+                        editSet.req.attribute_set_use_to_create_product = $('attribute_set_use_to_create_product').value;
 						if (!editSet.req.form_key) {
 							editSet.req.form_key = FORM_KEY;
 						}
@@ -475,6 +477,7 @@
                 editSet.req.groups = new Array();
                 editSet.req.not_attributes = false;
                 editSet.req.attribute_set_name = false;
+                editSet.req.attribute_set_use_to_create_product = 0;
                 editSet.req.removeGroups = new Array();
             }
 
