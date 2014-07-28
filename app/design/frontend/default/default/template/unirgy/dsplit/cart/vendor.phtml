@@ -26,6 +26,13 @@ $_v = $this->getVendor();
             <?php echo $this->__('Subtotal:')?>
             <strong><?php echo Mage::helper('core')->formatPrice($this->getSubtotal()) ?></strong>
         </div>
+		<?php if(($bestRate=$this->getMinimalShippingRate())!==null):?>
+        <div class="udsplit-vendor-subtotal" style="float:right; margin-right: 10px;">
+            <?php echo $this->__('Shippign from:')?>
+            <strong><?php echo Mage::helper('core')->formatPrice($bestRate->getPrice()) ?> </strong>
+			(<?php echo $bestRate->getMethodTitle();?>)
+        </div>
+		<?php endif;?>
         <?php if (!$this->isVirtual()): ?>
         <?php if ($this->getErrorsOnly()): ?>
             <?php echo htmlspecialchars(Mage::getStoreConfig('carriers/udsplit/specificerrmsg')) ?>
