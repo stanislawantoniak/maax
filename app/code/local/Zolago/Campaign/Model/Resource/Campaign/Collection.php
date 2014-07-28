@@ -24,7 +24,7 @@ class Zolago_Campaign_Model_Resource_Campaign_Collection
 		if($vendor instanceof Unirgy_Dropship_Model_Vendor){
 			$vendor = $vendor->getId();
 		}
-		$this->addFieldToFilter('vendor_id',$vendor);
+		$this->addFieldToFilter('vendor_id',(int)$vendor);
 		return $this;
     }
 	/**
