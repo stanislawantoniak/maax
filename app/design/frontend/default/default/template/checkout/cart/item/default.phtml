@@ -188,8 +188,14 @@ $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage
         <?php endif; ?>
     <?php endif; ?>
     <td class="a-center">
-        <input name="cart[<?php echo $_item->getId() ?>][qty]" value="<?php echo $this->getQty() ?>" size="4" title="<?php echo $this->__('Qty') ?>" class="input-text qty" maxlength="12" />
-    </td>
+        <input name="cart[<?php echo $_item->getId() ?>][qty]" value="<?php echo $this->getQty() ?>" size="4" title="<?php echo $this->__('Qty') ?>" class="input-text qty" maxlength="12" max="<?php echo $_helper->getMaxSaleQty($_item);?>" />
+		<br/>
+		<select name="cart[<?php echo $_item->getId() ?>][qty]">
+			<?php foreach($_helper->getCartQtyList($_item) as $key=>$value):?>
+			<option <?php if($this->getQty($_item)==$key):?>selected="selected"<?php endif;?> value="<?php echo $this->escapeHtml($key);?>"><?php echo $this->escapeHtml($value);?></option>
+			<?php endforeach;?>
+		</select>
+	</td>
 
     <!--Sub total starts here -->
     <?php if (($this->helper('tax')->displayCartPriceExclTax() || $this->helper('tax')->displayCartBothPrices()) && !$_item->getNoSubtotal()): ?>

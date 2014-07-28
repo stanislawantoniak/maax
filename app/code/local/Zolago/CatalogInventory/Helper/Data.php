@@ -11,6 +11,8 @@ class Zolago_CatalogInventory_Helper_Data extends Mage_Core_Helper_Abstract {
 	const FLAG_LAST_IN_STOCK	= 1;
 	const FLAG_OUT_OF_STOCK		= 0;
 	const FLAG_NO_STOCK_INFO	=-1;
+	
+	const MAX_CART_LIST_QTY		= 10;
 
 	/**
 	 * @param Mage_Sales_Model_Quote_Item $item
@@ -25,6 +27,39 @@ class Zolago_CatalogInventory_Helper_Data extends Mage_Core_Helper_Abstract {
 			}
 		}
 		return true;
+	}
+	
+	/**
+	 * @param Mage_Sales_Model_Quote_Item $item
+	 */
+	public function getMaxSaleQty(Mage_Sales_Model_Quote_Item $item) {
+		$stockModel = Mage::getModel("cataloginventory/stock_item");
+		/* @var $stockModel Mage_CatalogInventory_Model_Stock_Item */
+		$product = $item->getProduct();
+		
+		if($product && $product->getId()){
+			if($product->getTypeId()==Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE){
+				foreach($item->getChildren() as $childItem){
+					$product = $childItem->getProduct();
+					break;
+				}
+			}
+		}
+		$stockModel->loadByProduct($product);
+		return min($stockModel->getMaxSaleQty(), self::MAX_CART_LIST_QTY);
+	}
+	
+	/**
+	 * @param Mage_Sales_Model_Quote_Item $item
+	 * @return array
+	 */
+	public function getCartQtyList(Mage_Sales_Model_Quote_Item $item) {
+		$maxQty = $this->getMaxSaleQty($item);
+		$out = array();
+		for($i=1;$i<$maxQty+1;$i++){
+			$out[$i] = $i;
+		}
+		return $out;
 	}
 	
 	/**
