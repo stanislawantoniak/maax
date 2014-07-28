@@ -39,13 +39,37 @@
 	.panel {
 		@include border-radius(2px);
 		border-color:$bc-primary;
+		&.panel-color {
+				background:$panel-top;
+			}
 		.panel-body {
 			position:relative;
-			.current-addres {
+
+			.current-addres,
+			.top-panel {
 				margin:-15px -15px 0 -15px;
 				padding:15px;
 				border-bottom: 1px solid $bc-primary;
 				background:$panel-top;
+			}
+			.top-panel {
+				h4 {
+					font-family: $fontRegular;
+					font-weight: 700;
+					font-size: 14px;
+					margin-top: 0px;
+					margin-bottom: 15px;
+					&.default {
+						margin-top:10px;
+					}
+				}
+				&+.panel-default {
+					
+						margin-top:15px;
+					&+.panel-default {
+						margin-top:0px;
+					}
+				}
 			}
 			dl.pull-left {
 				
@@ -110,8 +134,8 @@
 		margin-top:15px;
 		&.large {
 			@media(min-width:481px) {
-				margin-bottom: -15px;
-				margin-top: 36px;
+				//margin-bottom: -15px;
+				margin-top: 25px;
 			}
 			
 		}
@@ -161,11 +185,21 @@
 				padding:15px 15px;
 			}
 		}
+		.main {
+			&.p {
+				h2 {
+					padding-left: 25px;
+				}
+			}
+		}
 		header {
 			margin-left:-30px;
 			margin-bottom:15px;
-			@media (max-width:767px) {
+			@media (max-width:481px) and (max-width:767px) {
 				margin-left:-15px;
+			}
+			@media (max-width:480px) {
+				margin-left:-30px;
 			}
 		}
 		h2 {
@@ -353,6 +387,7 @@
 					line-height: 1.2;
 				}
 		}
+
 		.form-checkbox {
 			margin-bottom: 15px;
 			margin-left: 20px;
@@ -389,11 +424,35 @@
 					top:-6px;
 					margin-bottom: -6px;
 					@media (max-width: 360px) {
-						top:-17px;
+						top:-15px;
 					}
 				}
 			}
 		}
+		#default_pay_selected_bank {
+			@media (max-width: 640px) {
+			margin-bottom: 18px;
+			}
+		}
+		#pay_01 {
+			.form-radio {
+				label {
+					
+					span {
+						
+						@media (max-width: 360px) {
+							top: -6px;
+						}
+					}
+				}
+			}
+		}
+		#pay_02 {
+			.selected_bank {
+				padding-top:12px;
+			}
+		}
+		
 
 		input[type="text"],
 		input[type="email"],
@@ -463,7 +522,7 @@
 						height:100px;
 					}
 					@media (min-width: 401px) and (max-width: 640px){
-						width:30.666%;
+						width:30.333%;
 						height:100px;
 					}
 					@media (min-width: 641px) and (max-width: 767px){
@@ -471,11 +530,11 @@
 						height:110px;
 					}
 					@media (min-width: 768px) and (max-width: 992px){
-						width:18.333%;
+						width:17.666%;
 						height:110px;
 					}
 					@media (min-width: 993px){
-						width:18.333%;
+						width:17.666%;
 						height:110px;
 					}
 					
@@ -532,14 +591,19 @@
 					}
 					&:hover {
 						img {
-							border-color: $bc-secondary;
+							border-color: #9F9F9F;//$bc-secondary;
 						}
-						
+						span {
+							//text-decoration: underline
+						}
 					}
 				}
 				input[type=radio]:checked + label {
 					img {
-						border-color: $bc-secondary;
+						border-color: #9F9F9F;// $bc-secondary;
+					}
+					span {
+						text-decoration: underline
 					}
 				}
 			
@@ -679,7 +743,7 @@
 			display:none;
 		}
 		.button-primary {
-			min-width: 120px;
+			min-width: 130px;
 		}
 		.default_pay {
 		> .panel {
@@ -688,6 +752,9 @@
 					display:block;
 					&:hover {
 						border-color :$bc-secondary;
+					}
+					&:last-child {
+						margin-bottom: 0px;
 					}
 				}
 			}
@@ -749,4 +816,10 @@
 
 #invoice_data {
 	display:none;
+}
+
+#zmien_produkty {
+	@media(max-width: 480px){
+		display:none;
+	}
 }

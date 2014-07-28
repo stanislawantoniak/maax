@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Zolago_Review>
+            <version>0.0.1</version>
+        </Zolago_Review>
+    </modules>
+    <global>
+        <models>
+            <review_resource>
+                <rewrite>
+                    <review>Zolago_Review_Model_Resource_Review</review>
+                    <review_collection>Zolago_Review_Model_Resource_Review_Collection</review_collection>
+                </rewrite>
+            </review_resource>
+        </models>
+        <resources>
+            <zolagoreview_setup>
+                <setup>
+                    <module>Zolago_Review</module>
+                    <class>Zolago_Review_Model_Resource_Setup</class>
+                </setup>
+            </zolagoreview_setup>
+        </resources>
+        <!--<blocks>-->
+            <!--<adminhtml>-->
+                <!--<rewrite>-->
+                    <!--<review_edit_form>Zolago_Adminhtml_Block_Review_Edit_Form</review_edit_form>-->
+                <!--</rewrite>-->
+            <!--</adminhtml>-->
+        <!--</blocks>-->
+    </global>
+</config>

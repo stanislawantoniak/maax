@@ -133,6 +133,9 @@ var Mall = {
                         jQuery("#product-list").append(Mall.replace(Mall._product_template, products[key]));
                     }
                 });
+
+                // replace favorites url
+                jQuery("#link_favorites > a").attr("href", data.content.favorites_url);
             },
             url: "/orbacommon/ajax_customer/get_account_information"
         });

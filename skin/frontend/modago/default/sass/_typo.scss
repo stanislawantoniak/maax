@@ -21,6 +21,15 @@ body {
 :placeholder {  
    color: #000 !important;  
 }
+::-ms-clear {
+display: none;
+}
+:-ms-clear {
+display: none;
+}
+::-ms-reveal{
+  display: none;
+  }
 
 dl, ul, ol, {
 	margin-bottom: 15px;
