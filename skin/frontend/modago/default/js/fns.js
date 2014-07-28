@@ -998,13 +998,13 @@ if ($('body').hasClass('node-type-list')) {
 
 function equalizeHeights() {
   var heights = new Array();
-  $('#items-product .item').each(function() {
+  $('.node-type-list #items-product .item').each(function() {
     heights.push($(this).height());
   });
   var min = Math.min.apply( Math, heights );
   var con = $('#items-product').innerHeight();
-  $('#items-product').css('height', 'auto');
-  $('#items-product').css('height', con-min);
+  $('#items-product').not('.list-shop-product').css('height', 'auto');
+  $('#items-product').not('.list-shop-product').css('height', con-min);
 }
 
 
@@ -2094,7 +2094,7 @@ function initScrollBarFilterStyle() {
 // MENU MOBILE
 
 function showSubMenuMobile(){
-  var mobileMenu = $('#nav_mobile');
+  var mobileMenu = $('#nav_mobile,#shop_nav_mobile');
 
   mobileMenu.on('click', 'a', function(event) {
     event.preventDefault();
@@ -2475,7 +2475,12 @@ var rwd_banners = $("#rwd-banners .rwd-carousel");
           itemsMobile : [480,1], // itemsMobile disabled - inherit from itemsTablet option
           pagination : false,
           itemsScaleUp:true,
-          rewindNav : false
+          rewindNav : false,
+          navigation: true,
+          navigationText: [
+                "<i class='fa fa-chevron-left'></i>",
+                "<i class='fa fa-chevron-right'></i>"
+                ]
       });
      
       // Custom Navigation Events
@@ -2492,6 +2497,12 @@ var rwd_banners = $("#rwd-banners .rwd-carousel");
         rwd_banners.trigger('rwd.stop');
       });
 
+
+
+      
+
+
+
     var rwd_inspiration = $("#rwd-inspiration .rwd-carousel");
 
       rwd_inspiration.rwdCarousel({
@@ -2501,7 +2512,7 @@ var rwd_banners = $("#rwd-banners .rwd-carousel");
           itemsTablet: [600,3], //2 items between 600 and 0
           itemsMobile : [480,1], // itemsMobile disabled - inherit from itemsTablet option
           pagination : false,
-
+          navigation: true,
            rewindNav : false,
            itemsScaleUp:true
       });
