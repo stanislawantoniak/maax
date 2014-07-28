@@ -6,7 +6,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
 		$helper = Mage::helper('zolagocampaign');
         $form = Mage::getModel('zolagodropship/form'); 
 		/* @var $form Zolago_Dropship_Model_Form */
-        $form->setAction($this->getUrl("udropship/operator/save"));
+        $form->setAction($this->getUrl("campaign/vendor/save"));
 		
 		$general = $form->addFieldset("general", array(
 			"legend"=>$helper->__("General")
@@ -59,15 +59,13 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
 		));
 		
 		// Websites
-		
-		$websiteOptions = array();
-		foreach(Mage::app()->getWebsites() as $websiteId=>$website){
-			$websiteOptions[] = array(
-				"label"=>$website->getName(),
-				"value"=>$website->getId()
-			);
-		}
-			
+        $websiteOptions = array();
+        foreach (Mage::app()->getWebsites() as $websiteId => $website) {
+            $websiteOptions[] = array(
+                "label" => $website->getName(),
+                "value" => $website->getId()
+            );
+        }
 		
 		$general->addField("website_ids", "multiselect", array(
 			"name"	 => "website_ids",
@@ -100,17 +98,22 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
 			"class"  => "form-control numeric",
 			"label"  => $helper->__('Price SRP')
 		));
-		
-		
-		
-		$form->setValues($this->getModel()->getData());
+
+		$values = $this->getModel()->getData();
+        $websiteIdsSelected = $this->getModel()->getAllowedWebsites();
+
+        $values = array_merge($values, array('website_ids'=> $websiteIdsSelected) );
+		$form->setValues($values);
 		$this->setForm($form);
 	}
 	/**
 	 * @return Zolago_Campaign_Model_Campaign
 	 */
 	public function getModel() {
-		return Mage::registry('current_campaign');
+        if(!Mage::registry("current_campaign")){
+            Mage::register("current_campaign", Mage::getModel("zolagocampaign/campaign"));
+        }
+        return Mage::registry("current_campaign");
 	}
 	
 	public function isModelNew() {
