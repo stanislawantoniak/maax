@@ -293,7 +293,7 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Mage_Core_Model_Abstract {
         $message->authData = $this->_auth;
         $print = new StdClass();
         foreach ($tracking as $track) {
-            if ($track->getCarrierCode() == Zolago_Dhl_Helper_Data::DHL_CARRIER_CODE) {
+            if ($track->getCarrierCode() == Orba_Shipping_Model_Carrier_Dhl::CODE) {
                 $obj = new StdClass();
                 $obj->labelType = self::DHL_LABEL_TYPE;
                 $obj->shipmentId = $track->getNumber();

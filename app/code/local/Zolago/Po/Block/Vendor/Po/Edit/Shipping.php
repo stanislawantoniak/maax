@@ -5,7 +5,7 @@ class Zolago_Po_Block_Vendor_Po_Edit_Shipping
 {
 
 	public function isMethodChecked($code){
-		return $code == Zolago_Dhl_Model_Carrier::CODE;
+		return $code == Orba_Shipping_Model_Carrier_Dhl::CODE;
 	}
 	
 	public function getFormUrl() {

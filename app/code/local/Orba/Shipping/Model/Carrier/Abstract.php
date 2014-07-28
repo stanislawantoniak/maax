@@ -6,7 +6,6 @@ class Orba_Shipping_Model_Carrier_Abstract extends
     Mage_Shipping_Model_Carrier_Abstract implements
         Mage_Shipping_Model_Carrier_Interface {
 
-    protected $_code = self::CODE;
 	
 	/**
 	 * Empyt collect
