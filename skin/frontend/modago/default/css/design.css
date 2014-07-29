@@ -2050,6 +2050,10 @@ ol.breadcrumb li.active {
   /* line 70, ../sass/override/_summary-delivery-payment.scss */
   .node-type-summary-delivery-payment #checkout .sidebar-secound header {
     margin-left: -15px; } }
+@media (max-width: 480px) {
+  /* line 70, ../sass/override/_summary-delivery-payment.scss */
+  .node-type-summary-delivery-payment #checkout .sidebar-secound header {
+    margin-left: -30px; } }
 
 /* line 7, ../sass/dimensions/_global.scss */
 #header {
@@ -11650,124 +11654,125 @@ yx-axis
 /* line 182, ../sass/modules/_helpful-vote.scss */
 #bank_transfer_details tr td {
   border: none;
-  padding: 4px 8px; }
+  padding: 4px 8px;
+  vertical-align: bottom; }
 
-/* line 194, ../sass/modules/_helpful-vote.scss */
+/* line 195, ../sass/modules/_helpful-vote.scss */
 #checkout .summary-order form .panel {
   background: none; }
-/* line 197, ../sass/modules/_helpful-vote.scss */
+/* line 198, ../sass/modules/_helpful-vote.scss */
 #checkout .summary-order form .panel-body {
   padding: 27.5px 15px; }
-/* line 200, ../sass/modules/_helpful-vote.scss */
+/* line 201, ../sass/modules/_helpful-vote.scss */
 #checkout .summary-order form .form-group {
   margin-bottom: 0px; }
-/* line 204, ../sass/modules/_helpful-vote.scss */
+/* line 205, ../sass/modules/_helpful-vote.scss */
 #checkout .summary-order form .form-group.form-radio label span {
   top: -6px; }
 @media (max-width: 767px) {
-  /* line 204, ../sass/modules/_helpful-vote.scss */
+  /* line 205, ../sass/modules/_helpful-vote.scss */
   #checkout .summary-order form .form-group.form-radio label span {
     width: 70%;
     display: inline-block; } }
 @media (max-width: 480px) {
-  /* line 204, ../sass/modules/_helpful-vote.scss */
+  /* line 205, ../sass/modules/_helpful-vote.scss */
   #checkout .summary-order form .form-group.form-radio label span {
     width: 60%;
     display: inline-block;
     top: -10px; } }
 @media (max-width: 400px) {
-  /* line 204, ../sass/modules/_helpful-vote.scss */
+  /* line 205, ../sass/modules/_helpful-vote.scss */
   #checkout .summary-order form .form-group.form-radio label span {
     width: 90%;
     display: inline-block;
     top: -10px; } }
-/* line 220, ../sass/modules/_helpful-vote.scss */
+/* line 221, ../sass/modules/_helpful-vote.scss */
 #checkout .summary-order form .form-group.form-radio label span + img {
   position: relative;
   top: -3px; }
 @media (max-width: 400px) {
-  /* line 220, ../sass/modules/_helpful-vote.scss */
+  /* line 221, ../sass/modules/_helpful-vote.scss */
   #checkout .summary-order form .form-group.form-radio label span + img {
     display: none; } }
 @media (max-width: 480px) {
-  /* line 228, ../sass/modules/_helpful-vote.scss */
+  /* line 229, ../sass/modules/_helpful-vote.scss */
   #checkout .summary-order form .form-group.form-radio label[for='default_pay_1'] {
     top: -6px; } }
 
-/* line 240, ../sass/modules/_helpful-vote.scss */
+/* line 241, ../sass/modules/_helpful-vote.scss */
 #breadcrumbs_checkout_helpful_votes {
   padding-bottom: 25px;
   margin-top: 2px; }
 @media (max-width: 767px) {
-  /* line 240, ../sass/modules/_helpful-vote.scss */
+  /* line 241, ../sass/modules/_helpful-vote.scss */
   #breadcrumbs_checkout_helpful_votes {
     padding-bottom: 15px; } }
-/* line 247, ../sass/modules/_helpful-vote.scss */
+/* line 248, ../sass/modules/_helpful-vote.scss */
 #breadcrumbs_checkout_helpful_votes h1 {
   font-size: 36px;
   padding-bottom: 0px;
   padding-top: 12px; }
 @media (max-width: 480px) {
-  /* line 247, ../sass/modules/_helpful-vote.scss */
+  /* line 248, ../sass/modules/_helpful-vote.scss */
   #breadcrumbs_checkout_helpful_votes h1 {
     font-size: 18px; } }
-/* line 255, ../sass/modules/_helpful-vote.scss */
+/* line 256, ../sass/modules/_helpful-vote.scss */
 #breadcrumbs_checkout_helpful_votes .breadcrumb {
   margin-bottom: 0px; }
 
 @media (max-width: 767px) {
-  /* line 265, ../sass/modules/_helpful-vote.scss */
+  /* line 266, ../sass/modules/_helpful-vote.scss */
   #summary-order-group .panel-body .block_info_order > .col-md-6 + .col-md-6 {
     display: none; } }
 @media (max-width: 767px) {
-  /* line 274, ../sass/modules/_helpful-vote.scss */
+  /* line 275, ../sass/modules/_helpful-vote.scss */
   #summary-order-group .block_info_order + .table-summary-product {
     display: none; } }
 @media (max-width: 767px) {
-  /* line 280, ../sass/modules/_helpful-vote.scss */
+  /* line 281, ../sass/modules/_helpful-vote.scss */
   #summary-order-group .panel-footer {
     display: none; } }
 
-/* line 288, ../sass/modules/_helpful-vote.scss */
+/* line 289, ../sass/modules/_helpful-vote.scss */
 .open-details-order-info.current {
   display: inline-block;
   margin-bottom: 15px; }
 
-/* line 296, ../sass/modules/_helpful-vote.scss */
+/* line 297, ../sass/modules/_helpful-vote.scss */
 .acknowledgements .block {
   height: auto; }
 @media (min-width: 768px) {
-  /* line 296, ../sass/modules/_helpful-vote.scss */
+  /* line 297, ../sass/modules/_helpful-vote.scss */
   .acknowledgements .block {
     height: 176px; } }
 @media (min-width: 792px) {
-  /* line 296, ../sass/modules/_helpful-vote.scss */
+  /* line 297, ../sass/modules/_helpful-vote.scss */
   .acknowledgements .block {
     height: 155px; } }
 @media (min-width: 930px) {
-  /* line 296, ../sass/modules/_helpful-vote.scss */
+  /* line 297, ../sass/modules/_helpful-vote.scss */
   .acknowledgements .block {
     height: 140px; } }
 @media (min-width: 980px) {
-  /* line 296, ../sass/modules/_helpful-vote.scss */
+  /* line 297, ../sass/modules/_helpful-vote.scss */
   .acknowledgements .block {
     height: 140px; } }
 @media (min-width: 992px) {
-  /* line 296, ../sass/modules/_helpful-vote.scss */
+  /* line 297, ../sass/modules/_helpful-vote.scss */
   .acknowledgements .block {
     height: 153px; } }
 @media (min-width: 1024px) {
-  /* line 296, ../sass/modules/_helpful-vote.scss */
+  /* line 297, ../sass/modules/_helpful-vote.scss */
   .acknowledgements .block {
     height: 157px; } }
 @media (min-width: 1200px) {
-  /* line 296, ../sass/modules/_helpful-vote.scss */
+  /* line 297, ../sass/modules/_helpful-vote.scss */
   .acknowledgements .block {
     height: 110px; } }
-/* line 319, ../sass/modules/_helpful-vote.scss */
+/* line 320, ../sass/modules/_helpful-vote.scss */
 .acknowledgements .block.date-traditional-transfer {
   height: auto; }
-/* line 323, ../sass/modules/_helpful-vote.scss */
+/* line 324, ../sass/modules/_helpful-vote.scss */
 .acknowledgements .adres_dostawy {
   padding-right: 0px; }
 
@@ -13352,23 +13357,23 @@ i.flag.sale {
   background-position: 0 -54px;
   height: 54px;
   width: 53px; }
-/* line 502, ../sass/style/_shop_product.scss */
-i.flag.percent {
+/* line 503, ../sass/style/_shop_product.scss */
+i.flag.percent, i.flag.promotion {
   background-position: 0 -108px;
   height: 54px;
   width: 54px; }
-/* line 506, ../sass/style/_shop_product.scss */
+/* line 507, ../sass/style/_shop_product.scss */
 i.flag.new {
   background-position: 0 0;
   height: 54px;
   width: 55px; }
-/* line 510, ../sass/style/_shop_product.scss */
-i.flag.hit {
+/* line 512, ../sass/style/_shop_product.scss */
+i.flag.hit, i.flag.bsesseller {
   background-position: 0 -162px;
   height: 54px;
   width: 53px; }
 
-/* line 519, ../sass/style/_shop_product.scss */
+/* line 521, ../sass/style/_shop_product.scss */
 #galeria-lightbox i.flag {
   left: 15px;
   right: auto; }

@@ -1,3 +1,6 @@
+
+
+
 var prevW = -1, prevH = -1;
 jQuery.noConflict();
 (function( $ ) {
