@@ -656,3 +656,30 @@ jQuery.validator.addMethod('price', function(value, element) {
 jQuery.validator.addMethod('pricePositive', function(value, element) {
 	return this.optional(element) || /^(?:\d+((?:,|\.)\d+)?)$/.test(value);
 }, jQuery.format("Enter vaild price"));
+
+// urlkey validate format
+jQuery.validator.addMethod('urlKeyFormat', function(value, element) {
+	return this.optional(element) || (/^[a-z0-9][a-z0-9\_\-\.]{3,99}[a-z0-9]$/.test(value) && !/\-\-+|\.\.+|\_\_+/.test(value));	
+}, jQuery.format("Url can have [a-b0-9]_-. chars. Minimum 5, maximum 100 chars. Stars with alphanumeric. No '--', '__', '..'."));
+
+// urlkey validate
+jQuery.validator.addMethod('urlKeyExists', function(value, element) {
+	
+	if(this.optional(element)){
+		return true;
+	}
+
+	var result = jQuery.ajax({ 
+		async:false, 
+		url:"/campaign/vendor/validateKey",
+		data: {key: value} 
+	});
+	
+	if(result && result.responseJSON && typeof result.responseJSON == 'object' 
+			&& result.responseJSON.content==1){
+		return true;
+	}
+	
+	return false;
+			
+}, jQuery.format("Url key already exists"));

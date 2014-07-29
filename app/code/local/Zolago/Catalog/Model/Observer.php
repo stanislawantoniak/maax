@@ -32,4 +32,56 @@ class Zolago_Catalog_Model_Observer
     {
         Mage::getResourceModel('zolagocatalog/queue_configurable')->clearQueue();
     }
+
+    /**
+     * After added/update a product
+     *
+     * @param Varien_Event_Observer $observer
+     */
+    public function productAfterUpdate($observer)
+    {
+        $product = $observer->getProduct();
+        $productId = $product->getId();
+
+        $attributesAffected = false;
+
+        //Price should be switched/saved/calculated only if are different
+        if ($product->dataHasChangedFor(Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER_PRICE_TYPE_CODE)) {
+            $attributesAffected = true;
+        }
+
+        if ($product->dataHasChangedFor(Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_PRICE_MARGIN_CODE)) {
+            $attributesAffected = true;
+        }
+        if ($attributesAffected) {
+            Mage::helper('zolagocatalog/pricetype')->_log("{$productId} Converter price type attributes affected");
+            //Add to queue
+            Zolago_Catalog_Helper_Pricetype::queueProduct($productId);
+            //------Add to queue
+        }
+    }
+
+    /**
+     * After attribute changed
+     *
+     * @param Varien_Event_Observer $observer
+     */
+    public function productAttributeMassUpdate($observer)
+    {
+        $productIds = $observer->getData('product_ids');
+        $attributesData = $observer->getData('attributes_data');
+
+        $converterPriceType = isset($attributesData['converter_price_type']) ? $attributesData['converter_price_type']
+            : 0;
+        $priceMargin = isset($attributesData['price_margin']) ? $attributesData['price_margin'] : 0;
+
+        $productIdsLog = implode(",", $productIds);
+        if (!empty($converterPriceType) || !empty($priceMargin)) {
+            Mage::helper('zolagocatalog/pricetype')->_log(
+                "{$productIdsLog} Converter price type attributes affected: converterPriceType - {$converterPriceType}, priceMargin: {$priceMargin}"
+            );
+            //Add to queue
+            Zolago_Catalog_Helper_Pricetype::queue($productIds);
+        }
+    }
 }
