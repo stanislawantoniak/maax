@@ -91,35 +91,7 @@ switch($_reviewsCount) {
                 <li><?php echo $this->getStoreReturnHeadline(); ?></li>
             </ul>
         </div>
-        <div class="color-box-bundle">
-            <div class="color-box">
-                <div class="color">
-                    <span class="color-label">inne kolory:</span>
-                    <div class="form-group form-radio">
-                        <label for="color_1">
-                            <input type="radio" name="color" id="color_1" >
-                            <img src="/skin/frontend/modago/default/images/color/color.png" alt="">
-                        </label>
-                        <label for="color_2">
-                            <input type="radio" name="color" id="color_2" >
-                            <img src="/skin/frontend/modago/default/images/color/color-02.png" alt="">
-                        </label>
-                        <label for="color_3">
-                            <input type="radio" name="color" id="color_3" >
-                            <img src="/skin/frontend/modago/default/images/color/color-03.png" alt="">
-                        </label>
-                        <label for="color_4">
-                            <input type="radio" name="color" id="color_4" >
-                            <img src="/skin/frontend/modago/default/images/color/color-04.png" alt="">
-                        </label>
-                        <label for="color_5">
-                            <input type="radio" name="color" id="color_5" >
-                            <img src="/skin/frontend/modago/default/images/color/color-05.png" alt="">
-                        </label>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <?php echo $this->getChildHtml('catalog.product.related'); ?>
         <div class="size-box-bundle">
             <div class="size-box clearfix">
                 <div class="size">
