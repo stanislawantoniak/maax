@@ -42,6 +42,11 @@ switch($_reviewsCount) {
 
 <?php $_helper = $this->helper('catalog/output'); ?>
 <?php $_product = $this->getProduct(); ?>
+<?php
+    // prices
+    $price = $_product->getPrice();
+    $finalPrice = $_product->getFinalPrice();
+?>
 <script type="text/javascript">
     var optionsPrice = new Product.OptionsPrice(<?php echo $this->getJsonConfig() ?>);
 </script>
@@ -78,19 +83,25 @@ switch($_reviewsCount) {
         <p class="short-description hidden-xs">
             <?php echo $_helper->productAttribute($_product, nl2br($_product->getShortDescription()), 'short_description') ?>
         </p>
-        <div class="price-box-bundle">
-            <div class="price-box">
-                <p class="price">
-                    <span class="price-label">cena:</span>
-                    <span class="old-price">255 zł</span>
-                    <span class="price">199 zł</span>
-                </p>
+
+        <?php if ($_product->getCanShowPrice() !== false): ?>
+            <div class="price-box-bundle">
+                <div class="price-box">
+                    <p class="price">
+                        <span class="price-label"><?php echo $this->__("price"); ?>:</span>
+                        <?php if($price != $finalPrice) : ?>
+                        <span class="old-price"><?php echo $this->helper('core')->currency($price, true, false); ?></span>
+                        <?php endif; ?>
+                        <span class="price"><?php echo $this->helper('core')->currency($finalPrice, true, false); ?></span>
+                    </p>
+                </div>
+                <ul>
+                    <li><?php echo $this->getStoreDeliveryHeadline(); ?></li>
+                    <li><?php echo $this->getStoreReturnHeadline(); ?></li>
+                </ul>
             </div>
-            <ul>
-                <li><?php echo $this->getStoreDeliveryHeadline(); ?></li>
-                <li><?php echo $this->getStoreReturnHeadline(); ?></li>
-            </ul>
-        </div>
+        <?php endif; ?>
+
         <?php echo $this->getChildHtml('catalog.product.related'); ?>
         <div class="size-box-bundle">
             <div class="size-box clearfix">
