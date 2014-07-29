@@ -60,63 +60,18 @@ class Zolago_Modago_Block_Catalog_Category extends Mage_Core_Block_Template
     }
     /**/
     /**
-     * Returns categories for sliding menu(hamburger menu)
-     *
-     * @todo implement true logic here, preserve data structure.
-     * @return array
-     *
-    public function getMainCategoriesForSlidingMenu()
-    {
-        return array(
-            array(
-                'name' => 'Ona',
-                'url' => '/',
-                'category_id' => 1,
-                'has_dropdown' => true,
-                'children' => array(
-                    array(
-                        'name' => 'podkategoria 1',
-                        'url' => '/pod-1',
-                        'category_id' => 10
-                    ),
-                    array(
-                        'name' => 'podkategoria 1',
-                        'url' => '/pod-1',
-                        'category_id' => 10
-                    ),
-                    array(
-                        'name' => 'podkategoria 1',
-                        'url' => '/pod-1',
-                        'category_id' => 10
-                    ),
-                )
-            ),
-            array(
-                'name' => 'On',
-                'url' => '/',
-                'category_id' => 2,
-                'has_dropdown' => false,
-                'children' => array()
-            ),
-            array(
-                'name' => 'Dziecko',
-                'url' => '/dziecko',
-                'category_id' => 3,
-                'has_dropdown' => false,
-                'children' => array()
-            ),
-        );
-    }
-    */
-    /**
      * Returns category label for mobile menu in main category page
      *
-     * @todo implement full logic
      * @return string
      */
     public function getCategoryLabel()
     {
-        return 'Dla kobiet';
+        $categoryLabel = '';
+        $currentCategory = Mage::registry('current_category');
+        if (!empty($currentCategory)) {
+            $categoryLabel = $currentCategory->getName();
+        }
+        return $categoryLabel;
     }
 
     /**
@@ -125,42 +80,26 @@ class Zolago_Modago_Block_Catalog_Category extends Mage_Core_Block_Template
      */
     public function getMoveUpUrl()
     {
-        return '/';
+        $parentCategoryPath = '/';
+        $currentCategory = Mage::registry('current_category');
+        if (!empty($currentCategory)) {
+            $parentCategoryPath = Mage::getUrl($currentCategory->getParentCategory()->getUrlPath());
+        }
+        return $parentCategoryPath;
     }
 
     /**
      * Return array of mobile menu in main category page.
      *
-     * @todo implement full logic
      * @return array
      */
     public function getCategoryCollection()
     {
-        return array(
-                   array(
-                       'url' => '/dla-niej.html',
-                       'label' => 'Dla niej'
-                   ),
-                   array(
-                       'url' => '/dla-niej.html',
-                       'label' => 'Podwiazki'
-                   ),
-                   array(
-                       'url' => '/dla-niej.html',
-                       'label' => 'Staniki'
-                   ),
-                   array(
-                       'url' => '/dla-niej.html',
-                       'label' => 'Plaszcze'
-                   ),
-                   array(
-                       'url' => '/dla-niej.html',
-                       'label' => 'Kapelusze'
-                   ),
-                   array(
-                       'url' => '/dla-niej.html',
-                       'label' => 'Marynarki'
-                   ),
-               );
+        $subCategories = array();
+        $currentCategory = Mage::registry('current_category');
+        if(!empty($currentCategory)) {
+            $subCategories = Mage::helper('zolagomodago')->getSubCategories($currentCategory->getId());
+        }
+        return $subCategories;
     }
 }
