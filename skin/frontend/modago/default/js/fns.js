@@ -2634,7 +2634,7 @@ var rwd_banners = $("#rwd-banners .rwd-carousel");
 function customDataSuccess(data){
     var content = "";
     if(data.content.length == 0) {
-        $("#bottom-rv.recently-viewed-cls").hide();
+        $("#recently-viewed.recently-viewed-cls").hide();
     }
 
     for(var i in data["content"]){
