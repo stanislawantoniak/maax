@@ -186,9 +186,87 @@ var Mall = {
         // set basket url
         jQuery("#link_basket>a").attr("href", content.cart.show_cart_url);
         userBlock.show();
+    },
+
+    addToWishlist: function(url, id) {
+        id = id || 0;
+
+        jQuery.ajax({
+            cache: false,
+            data: {},
+            error: function(jqXhr, status, error) {
+                // do nothing at the moment
+            },
+            success: function(data, status) {
+                if(data.status == true) {
+                    if(id == 0) {
+                        // we are in product context
+                        jQuery("#notadded-wishlist").hide();
+                        jQuery("#added-wishlist").show();
+                    } else {
+
+                        if(id == 0) {
+                            // we are in product context
+                            jQuery("#notadded-wishlist").hide();
+                            jQuery("#added-wishlist").show();
+                        } else {
+                            var item = jQuery('div[data-idproduct="'+ id +'"]');
+                            item.addClass("liked");
+                            item.attr("data-status", 1);
+                            item.find("span.like_count>span").html("Ty +");
+                        }
+                    }
+                }
+            },
+            url: url
+        });
+    },
+
+    removeFromWishlist: function(url, id) {
+        id = id || 0;
+
+        jQuery.ajax({
+            cache: false,
+            data: {},
+            error: function(jqXhr, status, error) {
+                // do nothing at the moment
+            },
+            success: function(data, status) {
+                if(data.status == true) {
+                    if(id == 0) {
+                        // we are in product context
+                        jQuery("#notadded-wishlist").show();
+                        jQuery("#added-wishlist").hide();
+                    } else {
+
+                        if(id == 0) {
+                            // we are in product context
+                            jQuery("#notadded-wishlist").show();
+                            jQuery("#added-wishlist").hide();
+                        } else {
+                            var item = jQuery('div[data-idproduct="'+ id +'"]');
+                            item.removeClass("liked");
+                            item.attr("data-status", 0);
+                            item.find("span.like_count>span").html("");
+                        }
+                    }
+                }
+            },
+            url: url
+        });
+    },
+
+    toggleWishlist: function(item) {
+        var urlRemove = jQuery(item).attr("data-removeurl");
+        var urlAdd = jQuery(item).attr("data-addurl");
+        var status = jQuery(item).attr("data-status");
+        var id = jQuery(item).attr("data-idproduct");
+        if(status == 0) {
+            Mall.addToWishlist(urlAdd, id);
+        } else {
+            Mall.removeFromWishlist(urlRemove, id);
+        }
     }
-
-
 
 }
 

@@ -221,6 +221,7 @@
             <block name="product.review.section" type="zolagomodago/review_product_view_list" template="review/product/view/list.phtml">
                 <block name="product.review.form" type="zolagomodago/review_form"/>
             </block>
+            <block type="catalog/product_list_crosssell" name="product.info.crosssell" as="crosssell" template="catalog/product/view/crosssell.phtml"/>
         </reference>
 
         <reference name="product.info.addto">
