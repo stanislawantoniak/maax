@@ -64,3 +64,14 @@
 	}
 }
 
+.node-type-summary-delivery-payment {
+	#checkout {
+		.sidebar-secound {
+			header {
+				@media(max-width: 767px) {
+					margin-left: -15px;
+				}
+			}
+		}
+	}
+}
