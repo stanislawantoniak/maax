@@ -12,6 +12,12 @@
 *.DS_Store
 /downloader/
 /app/etc/solrbridge.conf
+.idea
+.idea/
+.sass-cache
+listingrev2
+skin/frontend/modago/default_orig
+skin/frontend/modago/default_orig_2
 /vendor/
 /Vagrantfile
 /puphpet/
@@ -25,3 +31,4 @@ composer.*
 app/code/community/Alanstormdotcom
 app/etc/modules/Alanstormdotcom_Configviewer.xml
 app/etc/modules/Alanstormdotcom_Layoutviewer.xml
+/info.php

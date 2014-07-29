@@ -225,4 +225,73 @@ class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
 		}
 		
 	}
-} 
+
+    public function sendNewRmaNotificationEmail($rma, $comment='')
+    {
+        $order = $rma->getOrder();
+        $store = $order->getStore();
+
+        $vendor = $rma->getVendor();
+
+        $hlp = Mage::helper('udropship');
+        $data = array();
+
+        $hlp->setDesignStore($store);
+        $shippingAddress = $order->getShippingAddress();
+        if (!$shippingAddress) {
+            $shippingAddress = $order->getBillingAddress();
+        }
+        $data += array(
+            'rma'              => $rma,
+            'order'           => $order,
+            'vendor'          => $vendor,
+            'comment'         => $comment,
+            'is_admin_comment'=> $comment&&$rma->getIsAdmin(),
+            'is_customer_comment'=> $comment&&$rma->getIsCustomer(),
+            'store_name'      => $store->getName(),
+            'vendor_name'     => $vendor->getVendorName(),
+            'rma_id'           => $rma->getIncrementId(),
+            'order_id'        => $order->getIncrementId(),
+            'customer_info'   => Mage::helper('udropship')->formatCustomerAddress($shippingAddress, 'html', $vendor),
+            'rma_url'          => Mage::getUrl('urma/vendor/', array('_query'=>'filter_rma_id_from='.$rma->getIncrementId().'&filter_rma_id_to='.$rma->getIncrementId())),
+        );
+
+        $template = $store->getConfig('urma/general/new_rma_vendor_email_template');
+        $identity = $store->getConfig('udropship/vendor/vendor_email_identity');
+
+
+        $emailM = Mage::getModel('udropship/email');
+        $data['_BCC'] = $vendor->getNewOrderCcEmails();
+        if (($emailField = $store->getConfig('udropship/vendor/vendor_notification_field'))) {
+            $email = $vendor->getData($emailField) ? $vendor->getData($emailField) : $vendor->getEmail();
+            $data['recepient'] = $vendor->getVendorName();
+            $emailM->sendTransactional($template, $identity, $email, $vendor->getVendorName(), $data);
+        } else {
+//            $email = $vendor->getEmail();
+
+            //Send Email to vendor agents of super vendor
+            $vendorM = Mage::getResourceModel('udropship/vendor');
+            $superVendorAgents = $vendorM->getSuperVendorAgentEmails($vendor->getId());
+            if(!empty($superVendorAgents)){
+                foreach ($superVendorAgents as $email => $_) {
+                    $data['recepient'] = implode(' ', array($_['firstname'], $_['lastname']));
+                    $emailM
+                        ->sendTransactional($template, $identity, $email, $vendor->getVendorName(), $data);
+                }
+            }
+            //Send Email to vendor agents of vendor
+            $vendorAgents = $vendorM->getVendorAgentEmails($vendor->getId());
+            if(!empty($vendorAgents)){
+                foreach ($vendorAgents as $email => $_) {
+                    $data['recepient'] = implode(' ', array($_['firstname'], $_['lastname']));
+                    $emailM
+                        ->sendTransactional($template, $identity, $email, $vendor->getVendorName(), $data);
+                }
+            }
+        }
+
+
+
+        $hlp->setDesignStore();
+    }
+}

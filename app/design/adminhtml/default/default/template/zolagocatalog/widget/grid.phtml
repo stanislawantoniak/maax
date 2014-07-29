@@ -86,6 +86,8 @@ $numColumns = sizeof($this->getColumns());
                         <button class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm">Show/Hide columns</button>
 
                         <?php echo $this->getMainButtonsHtml() ?>
+
+<!--                        <button id="filter-btn" class="btn btn-secondary" title="Filters">Filters</button>-->
                     </div>
                 <?php endif;?>
                 <div class="pull-right form-inline">
@@ -151,7 +153,7 @@ $numColumns = sizeof($this->getColumns());
         <div class="hor-scroll">
             <table cellspacing="0" class="data table table-bordered table-hover table-striped" id="<?php echo $this->getId() ?>_table">
                 <?php foreach ($this->getColumns() as $_column): ?>
-                    <col <?php echo $_column->getHtmlProperty() ?> />
+                    <!-- <col <?php //echo $_column->getHtmlProperty() ?> /> -->
                 <?php endforeach; ?>
                 <?php if ($this->getHeadersVisibility() || $this->getFilterVisibility()): ?>
                     <thead>

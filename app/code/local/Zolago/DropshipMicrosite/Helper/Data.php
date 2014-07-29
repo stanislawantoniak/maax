@@ -9,9 +9,32 @@ class Zolago_DropshipMicrosite_Helper_Data extends Mage_Core_Helper_Abstract
 	const URL_MODE_SUBDOMAIN	= 3; //URL Pattern: http://vendor_url.baseurl.com
 	const URL_REDIRECT_MODE		= 301;
 	
-	public function getVendorRootUrl()
-	{
-		$_vendor		= Mage::helper('umicrosite')->getCurrentVendor();
+	protected $_rootCategory;
+	
+	/**
+	 * Return vendor root category if exists or store root category
+	 * @return Mage_Catalog_Model_Category
+	 */
+	public function getVendorRootCategoryObject() {
+		if(!$this->_rootCategory){
+			$vendor =  Mage::helper('umicrosite')->getCurrentVendor();
+			$categoryId = null;
+			if($vendor && $vendor->getId()){
+				Mage::helper('udropship')->loadCustomData($vendor);
+				$categoryId = $vendor->getRootCategory();
+			}
+			if(!$categoryId){
+				$categoryId = Mage::app()->getStore()->getRootCategoryId();
+			}
+			$this->_rootCategory = Mage::getModel("catalog/category")->load($categoryId);
+		}
+		return $this->_rootCategory;
+	}
+	
+	protected function _getVendorUrl($vendor=null) {
+		if(!($vendor instanceof Unirgy_Dropship_Model_Vendor)){
+			$_vendor	= Mage::helper('umicrosite')->getCurrentVendor();
+		}
 		$vendorUrlKey	= $_vendor->getUrlKey();
 		$urlMode		= Mage::getStoreConfig(self::URL_MODE_PATH);
 		$unsecureUrl	= Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB);
@@ -36,7 +59,16 @@ class Zolago_DropshipMicrosite_Helper_Data extends Mage_Core_Helper_Abstract
 			$vendorRootUrl = $unsecureUrl;
 		}
 
-		return $vendorRootUrl;		
+		return $vendorRootUrl;	
+	}
+	
+	public function getVendorUrl($vendor=null) {
+		return $this->_getVendorUrl($vendor);
+	}
+	
+	public function getVendorRootUrl()
+	{
+		return $this->_getVendorUrl();
 	}
 
 	public function getVendorCurrentUrl()
@@ -60,7 +92,7 @@ class Zolago_DropshipMicrosite_Helper_Data extends Mage_Core_Helper_Abstract
 		Mage::helper('udropship')->loadCustomData($vendor);
 		$rootCategories = $vendor->getRootCategory();
 		if (array_key_exists($websiteId, $rootCategories)) {
-			$rootCategoryConfigId = $rootCategories[$websiteId];
+			$rootCategoryId = $rootCategories[$websiteId];
 		}
 		return $rootCategoryId;    	
     }

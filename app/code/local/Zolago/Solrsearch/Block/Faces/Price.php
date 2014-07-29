@@ -190,8 +190,8 @@ class Zolago_Solrsearch_Block_Faces_Price extends Zolago_Solrsearch_Block_Faces_
         return $this->applyPriceRangeProductCount();
     }
 
-    public function getFacesUrl($params = array())
+    public function getFacesUrl($params = array(), $paramss = NULL)
     {
-        return $this->getParentBlock()->getFacesUrl($params);
+        return $this->getParentBlock()->getFacesUrl($params, $paramss);
     }
 }

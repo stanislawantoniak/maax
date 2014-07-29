@@ -1,6 +1,9 @@
 <div class="grid z-grid" id="<?php echo $this->buildFieldId("editor");?>">
 	<?php if($this->getGrid()): ?>
 	<table style="display: none;">
+<!--            HIDE IT FOR TESTING-->
+<!--            NEEDS UPDATE-->
+        <?php if(true): ?>
 		<tfoot id="<?php echo $this->buildFieldId("foot");?>">
 			<tr id="<?php echo $this->buildFieldId("change");?>">
 				<?php $i=0;?>
@@ -22,6 +25,8 @@
 					<?php endif;?>
 				<?php endforeach;?>
 			</tr>
+
+
 			<tr class="filter" style="display:none;" id="<?php echo $this->buildFieldId("fields");?>">
 				<?php $i=0;?>
 				<?php foreach ($this->getGrid()->getColumns() as $_column): ?>
@@ -56,6 +61,8 @@
 
 				</td>
 			<tr>
+
+            <?php endif; ?>
 		</tfoot>
 	</table>
 	<?php endif;?>

@@ -1,0 +1,31 @@
+<?php $_collection = $this->getCollection();?>
+<?php if($_collection->count()):?>
+	<ul>
+	<?php foreach($_collection as $product):?>
+		<?php $_productImageUrl = $product->getListingResizedImageUrl();?>
+		<li style="margin-bottom: 20px;">
+				<?php if($_productImageUrl): ?>
+				<img src="<?php echo $_productImageUrl;?>"/><br/>
+				<?php endif;?>
+				Id: <?php echo $product->getId();?><br/>
+				Name / img alt: <?php echo $product->getName();?></br>
+				Price: <?php echo $product->getPrice();?><br/>
+				Special price: <?php echo $product->getFinalPrice();?><br/>
+				Is discounted: <?php echo (int)$product->isDiscounted();?><br/>
+				Currency: <?php echo $product->getCurrency(); ?><br/>
+				URL: <?php echo $product->getCurrentUrl();?><br/>
+				Image url: <?php echo $_productImageUrl;?><br/>
+				Vendor logo: <?php echo $product->getUdropshipVendorLogoUrl();?><br/>
+				Vendor name /  logo alt: <?php echo $product->getUdropshipVendorName();?><br/>
+				Wishlist count: <?php echo $product->getWishlistCount();?><br/>
+				In my wishlist: <?php echo (int)$product->getInMyWishlist();?><br/>
+				Is New: <?php echo (int)$product->getIsNew();?><br/>
+				Is Bestseller: <?php echo (int)$product->getIsBestseller();?><br/>
+				Rating: <?php echo (int)$product->getProductRating();?><br/>
+				Product Flag: <?php echo (int)$product->getProductFlag();?><br/>
+		</li>
+	<?php endforeach;?>
+	</ul>
+<?php else:?>
+	No items
+<?php endif; ?>

@@ -11,6 +11,46 @@
 				<class>Zolago_DropshipVendorAskQuestion_Block</class>
 			</zolagoudqa>
 		</blocks>
+        <models>
+            <udqa>
+                <rewrite>
+                    <question>Zolago_DropshipVendorAskQuestion_Model_Question</question>
+                </rewrite>
+            </udqa>
+            <zolagoudqa>
+                <class>Zolago_DropshipVendorAskQuestion_Model</class>
+                <resourceModel>zolagoudqa_resource</resourceModel>
+            </zolagoudqa>
+            <zolagoudqa_resource>
+                <class>Zolago_DropshipVendorAskQuestion_Model_Resource</class>
+            </zolagoudqa_resource>
+        </models>
+        <resources>
+            <zolagoudqa_setup>
+                <setup>
+                    <module>Zolago_DropshipVendorAskQuestion</module>
+                    <class>Mage_Sales_Model_Mysql4_Setup</class>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </zolagoudqa_setup>
+            <zolagoudqa_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </zolagoudqa_write>
+            <zolagoudqa_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </zolagoudqa_read>
+        </resources>
+        <helpers>
+            <zolagoudqa>
+                <class>Zolago_DropshipVendorAskQuestion_Helper</class>
+            </zolagoudqa>
+        </helpers>
 	</global>
     <frontend>
 		<routers>
@@ -30,4 +70,11 @@
             </updates>
         </layout>
     </frontend>
+    <default>
+        <udqa>
+            <general>
+                <send_vendor_agent_notifications>1</send_vendor_agent_notifications>
+            </general>
+        </udqa>
+    </default>
 </config>

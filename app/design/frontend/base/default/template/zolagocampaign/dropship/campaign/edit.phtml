@@ -1,0 +1,116 @@
+<?php /* @var $this Zolago_Campaign_Block_Vendor_Campaign_Edit */ ?>
+<?php $_helper = Mage::helper("zolagocampaign");?>
+<?php $_model = $this->getModel();?>
+<div class="container">
+	<div class="page-heading row">
+		<div class="col-lg-6">
+			<h3>
+				<?php if($this->isModelNew()):?>
+					<?php echo Mage::helper("zolagopo")->__("New campaign");?>
+				<?php else: ?>
+					<?php echo Mage::helper("zolagopo")->__("Edit campaign '%s'", $_model->getName());?>
+				<?php endif;?>
+			</h3>
+			<span class="tageline"><?php echo $_helper->__("Campaign form");?></h3></span>
+		</div>
+		
+	</div>
+</div>
+
+<div class="container">
+	<form id="edit-campaign" class="form-horizontal row-border" action="<?php echo $this->getForm()->getAction();?>" method="POST">
+		<input type="hidden" name="campaign_id" value="<?php echo $_model->getId();?>"/>
+		<?php echo $this->getLayout()->getBlock('formkey')->toHtml();?>
+		<?php echo $this->getForm()->toHtml();?>
+		<div class="widget box"> 
+			<div class="widget-header"> 
+				<h4>
+					<i class="icon-reorder"></i> 
+					Products		
+				</h4> 
+				<div class="toolbar no-padding"> 
+					<div class="btn-group"> 
+						<span data-toggle="modal" data-target="#browseProducts" class="btn btn-xs">
+							<i class="icon-plus"></i> 
+							<?php echo $_helper->__("Add products");?>
+						</span> 
+					</div> 
+				</div>
+			</div> 
+			<div class="widget-content no-padding table-striped">
+				<table class="table no">
+					<colgroup>
+						<col>
+						<col>
+						<col width="150">
+						<col width="100">
+					</colgroup>
+					<thead>
+						<tr>
+							<th>Product</th>
+							<th>Sku</th>
+							<th class="align-right">Regular price</th>
+							<th class="align-right">Remove</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Some product</td>
+							<td>23434</td>
+							<td class="align-right">123,12zł</td>
+							<td class="align-right"><a href="#" class="btn btn-xs"><i class="icon-remove"></i></a></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="form-actions"> <input type="submit" value="<?php echo $_helper->__("Save");?>" class="btn btn-primary pull-right"> </div>
+	</form>
+</div>
+
+<div class="modal fade" id="browseProducts">
+	<div class="modal-dialog" style="width: 80%">
+		<form id="shipping-form" action=""  class="form-horizontal row-border" method="post">
+			<input type="hidden" name="campaign_id" value="<?php echo $_model->getId();?>"/>
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title"><?php echo $_helper->__("Add products");?></h4>
+				</div>
+				<div class="modal-body">
+					Grid
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_helper->__("Cancel");?></button>
+					<button type="submit" class="btn form-btn-loading btn-primary" data-loading-text="<?php echo $_helper->__("Loading...");?>"><?php echo $_helper->__("Add");?></button>
+				</div>
+			</div>
+		</form>
+	</div>
+	<script type="text/javascript">
+		jQuery(function($){
+			$("#browseProducts form").submit(function(){
+				$("#browseProducts").modal("hide");
+				return false;
+			});
+			$("#browseProducts").on("show.bs.modal", function(){
+				console.log("Init loading products")
+			});
+		});
+	</script>
+</div>
+
+<script type="text/javascript">
+jQuery(function($){
+	var form = $("#edit-campaign");
+	new Zolago.formIntegrator(form);
+    form.validate({
+		rules:{
+			"percent": {
+				max: 100
+			}
+		}
+	});
+	$( ".datepicker" ).datepicker();
+});
+</script>

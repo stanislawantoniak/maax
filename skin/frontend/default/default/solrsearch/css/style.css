@@ -41,12 +41,12 @@
     opacity: 0.5;
 }
 
-#solr_search_facets ul li ul{
-	padding-left:15px;
+#solr_search_facets #category-layered-nav li a:hover{
+	background:none;
 }
 
-#solr_search_facets #category-layered-nav a:hover{
-	background:none;
+#solr_search_facets ul li ul{
+	padding-left:15px;
 }
 
 #solr_search_price_slider {

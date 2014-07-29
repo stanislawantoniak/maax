@@ -7,6 +7,11 @@ class Zolago_Catalog_AuthController extends Mage_Core_Controller_Front_Action
 {
 
     public function indexAction(){
+
+        $categoriesBlock = new Zolago_Modago_Block_Catalog_Category();
+        $categories = $categoriesBlock->getMainCategories();
+        Mage::log($categories);
+        die('test');
         $apiModel = new Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1();
 
 

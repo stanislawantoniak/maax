@@ -16,6 +16,8 @@
 					<vendor>Zolago_Dropship_Model_Vendor</vendor>
 					<!-- overide order shippign address id to shipment shipping address id -->
 					<pdf_shipment>Zolago_Dropship_Model_Pdf_Shipment</pdf_shipment>
+					<!-- Vendor model -->
+					<vendor>Zolago_Dropship_Model_Vendor</vendor>
 				</rewrite>
 			</udropship>
 			<udropship_mysql4>

@@ -1,0 +1,42 @@
+<?php /* @var $this Zolago_Modago_Block_Home_Vendor */ ?>
+<?php
+    $vendors = $this->getVendorColleciton();
+?>
+<?php if(count($vendors) > 0) : ?>
+<section id="popular-brands">
+    <div class="container-fluid">
+        <div class="col-sm-12">
+
+            <!--    popular-->
+            <div class="row">
+
+                <div class="popular-shops">
+                    <h3><?php echo $this->__("popular brands"); ?></h3>
+                    <?php
+                        $k = 0;
+
+                        //TODO: Loop added only to test layout
+                        for($i=0; $i < 20; $i++){
+                            $vendors->addItem($vendors->getFirstItem()->setId(NULL));
+                        }
+
+                        foreach ($vendors as $v) :
+                    ?>
+                    <?php if($k %3 == 0) : ?>
+                    <ul class="pop-shop-lst">
+                    <?php endif; ?>
+                        <li><a href="<?php echo $this->getVendorBaseUrl($v); ?>"><span class="pop-shop-img-wr"><img
+                                        src="<?php echo $this->getVendorResizedLogoUrl($v); ?>"
+                                        alt=""></span><span><?php echo $this->getVendorName($v); ?> &gt;</span></a></li>
+                    <?php if($k++ % 3 == 2): ?>
+                    </ul>
+                    <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+                <a class="pop-shop-seemore" href="<?php echo $this->getViewMoreUrl(); ?>"><?php echo $this->__("see more brands"); ?></a>
+
+            </div>
+        </div>
+    </div>
+</section>
+<?php endif; ?>

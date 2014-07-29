@@ -1,0 +1,45 @@
+<?php
+/**
+ * Author: Paweł Chyl <pawel.chyl@orba.pl>
+ * Date: 29.04.14
+ */
+
+/** @var $this Zolago_Modago_Block_Page_Header_Bottommenu */
+?>
+
+<header id="header">
+<!--  class="navbar-fixed-top" -->
+    <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('navigation-main-wrapper')->toHtml(); ?>
+<div class="header_top">
+    <div class="container-fluid clearfix">
+        <div class="col-xs-12">
+            <!-- START HEADER BOTTOM BLOCK LEFT -->
+            <div id="header_top_block_left">
+
+                <?php echo $this->getChildHtml('page.header.leftmenu'); ?>
+
+                <?php echo $this->getChildHtml('page.header.search'); ?>
+
+                <!-- END :// MOBILE -->
+            </div>
+            <!-- END:/ HEADER BOTTOM BLOCK LEFT -->
+            <!-- LOGO -->
+            <div id="header_top_block_center">
+                <div id="logo">
+                    <a href="<?php echo $this->getUrl('/'); ?>" class="logo">
+                        <img src="<?php echo $this->getLogoSrc(); ?>" alt="<?php echo $this->getLogoAlt(); ?>">
+                    </a>
+                </div>
+            </div>
+
+            <?php echo $this->getChildHtml('page.header.right.menu'); ?>
+
+        </div>
+        <!-- TOGGLE BLOCK || SEARCH & BASKET -->
+        <?php echo $this->getChildHtml('page.header.right.cartdropdown'); ?>
+        <?php echo $this->getChildHtml('page.header.search.dropdown'); ?>
+
+        <!-- END:/ TOGGLE BLOCK -->
+    </div>
+</div>
+</header>

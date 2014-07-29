@@ -20,12 +20,6 @@ class Zolago_Solrsearch_Model_Observer {
 	
 	
 	/**
-	 * Are colleced product handled?
-	 * @var bool
-	 */
-	protected $_handled = false;
-	
-	/**
 	 * Shoul queue by handled
 	 * @var bool
 	 */
@@ -93,6 +87,7 @@ class Zolago_Solrsearch_Model_Observer {
 		$this->_pushProduct($product, $product->getStoreId(), true);
 		
 	}
+
 	
 	/**
 	 * Collect affected products ids
@@ -100,20 +95,27 @@ class Zolago_Solrsearch_Model_Observer {
 	 */
 	public function catalogruleApplyAfter(Varien_Event_Observer $observer)
 	{
-		$productCondition = $observer->getEvent()->getData('product_condition');
-		$adapter = Mage::getSingleton('core/resource')->getConnection('core_read');
-		$productCondition = $productCondition->getIdsSelect($adapter)->__toString();
-		$effectedProducts = $adapter->fetchAll($productCondition);
-		$availableStores = $this->_filterStoreIds(array_keys(Mage::app()->getStores()));
+		/**
+		 * Important
+		 * @todo add apply rule with disabled status before rule delte or delete form caralog_rule_product_price
+		 * Then should work - now prices are from Magento not solr in listing
+		 * Catalog rule price applied - queue matched products
+		 */
 		
-		foreach ($effectedProducts as $item)
+		/*
+		$affectedProductsIds = Mage::getResourceModel("zolagosolrsearch/improve")
+				->getRuleAppliedAffectedProducts();
+		$availableStores = $this->_filterStoreIds(array_keys(Mage::app()->getStores()));
+
+		foreach ($affectedProductsIds as $productId)
 		{
-			if (isset($item['product_id']) && $item['product_id'] > 0) {
+			if ($productId > 0) {
 				foreach($availableStores as $storeId){
-					$this->collectProduct($item['product_id'], $storeId);
+					$this->collectProduct($productId, $storeId);
 				}
 			}
 		}
+		*/
 	}
 	
 
@@ -239,17 +241,11 @@ class Zolago_Solrsearch_Model_Observer {
 		 * @todo add check solr-used attribute changed?
 		 */
 		
-		if($storeId==Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID){
-			$storeIds = array_keys(Mage::app()->getStores());
-		}else{
-			$storeIds = array($storeId);
+		foreach($productIds as $productId){
+			$this->collectProduct($productId, $storeId, true);
 		}
 		
-		foreach($this->_filterStoreIds($storeIds) as $storeId){
-			foreach($productIds as $productId){
-				$this->collectProduct($productId, $storeId, true);
-			}
-		}
+		$this->processCollectedProducts();
 	}
 	
 	
@@ -264,15 +260,24 @@ class Zolago_Solrsearch_Model_Observer {
 		$event = $observer->getEvent();
 		$productIds = $event->getProductIds();
 	
-		$storeIds = array_keys(Mage::app()->getStores());
-		
-		foreach($this->_filterStoreIds($storeIds) as $storeId){
-			foreach($productIds as $productId){
-				$this->collectProduct($productId, $storeId);
-			}
+		foreach($productIds as $productId){
+			$this->collectProduct($productId, Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID, true);
 		}
 		
+		$this->processCollectedProducts();
+		
 	}
+
+    public function zolagoCatalogAfterUpdateProducts(Varien_Event_Observer $observer)
+    {
+        $event = $observer->getEvent();
+        $productIds = $event->getProductIds();
+
+		foreach ($productIds as $productId) {
+			$this->collectProduct($productId, Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID);
+		}
+
+    }
 	
 	
 	/**
@@ -289,10 +294,10 @@ class Zolago_Solrsearch_Model_Observer {
 	 */
 	public function controllerFrontSendResponseAfter(
 			Varien_Event_Observer $observer=null) {
+		
 		if($this->_collectedProdutcs){
 			$this->processCollectedProducts();
 		}
-		$this->_handled = true;
 	}
 	
 	
@@ -330,6 +335,7 @@ class Zolago_Solrsearch_Model_Observer {
 	 */
 	public function processCollectedProducts() {
 		
+		//var_export($this->_collectedProdutcs);
 		if(!$this->_canBeHandled){
 			return;
 		}
@@ -337,7 +343,6 @@ class Zolago_Solrsearch_Model_Observer {
 		$resource = Mage::getResourceModel("zolagosolrsearch/improve");;
 		/* @var $resource Zolago_Solrsearch_Model_Resource_Improve */
 	
-		
 		foreach($this->_collectedProdutcs as $storeId=>$products){
 			
 			$stores = array();
@@ -380,6 +385,9 @@ class Zolago_Solrsearch_Model_Observer {
 			}
 			
 		}
+		
+		$this->_collectedProdutcs = array();
+		$this->_collectedCheckParents = array();
 		
 	}
 	
@@ -479,13 +487,21 @@ class Zolago_Solrsearch_Model_Observer {
 		Mage::log("Nothing");
 	}
 	
-	/**
-	 * If no after dispatch - handle collected in destruct
-	 */
-	public function __destruct() {
-		if(!$this->_handled){
-			$this->processCollectedProducts();
-		}
+	
+	public function handleCatalogLayoutRender($observer)
+	{
+	    if(Mage::getModel('zolagosolrsearch/catalog_product_list')->getMode() === Zolago_Solrsearch_Model_Catalog_Product_List::MODE_CATEGORY){
+			
+			$replaceCatalogLayerNavigation = (int) Mage::Helper('solrsearch')->getSetting('replace_catalog_layer_nav');
+		    if ($replaceCatalogLayerNavigation > 0)
+		    {
+		        $layoutUpdate = Mage::getSingleton('core/layout')->getUpdate();
+		        if ($category = Mage::registry('current_category') && !Mage::registry('current_product'))
+		        {
+		            $layoutUpdate->addHandle('solrbridge_solrsearch_category_view');
+		        }
+		    }
+	    }
 	}
 	
 }
