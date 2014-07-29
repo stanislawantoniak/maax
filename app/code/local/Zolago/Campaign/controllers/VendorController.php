@@ -142,5 +142,20 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
 		$session = $this->_getSession();
 		return $model->getVendorId()==$session->getVendorId();
 	}
+
+    public function saveProductsAction() {
+        $helper = Mage::helper('zolagocampaign');
+
+        // Try save
+        $products = $this->getRequest()->getParam("products", array());
+
+        $campaignId = $this->getRequest()->getParam("campaignId", array());
+
+        if (!empty($products)) {
+            $model = Mage::getResourceModel("zolagocampaign/campaign");
+            $model->setProducts($campaignId, emplode("," , $products));
+        }
+
+    }
    
 }

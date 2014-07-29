@@ -69,15 +69,19 @@
 
 <div class="modal fade" id="browseProducts">
 	<div class="modal-dialog" style="width: 80%">
-		<form id="shipping-form" action=""  class="form-horizontal row-border" method="post">
+		<form id="campaign_products" action="/campaign/vendor/saveProducts"  class="form-horizontal row-border" method="post">
 			<input type="hidden" name="campaign_id" value="<?php echo $_model->getId();?>"/>
+
 			<div class="modal-content">
+
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					<h4 class="modal-title"><?php echo $_helper->__("Add products");?></h4>
 				</div>
 				<div class="modal-body">
-					Grid
+
+                    Enter SKUs Comma-separated
+					<textarea type="text" name="campaign_products" class="form-control input-text" rows="10" ></textarea>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_helper->__("Cancel");?></button>
@@ -87,29 +91,54 @@
 		</form>
 	</div>
 	<script type="text/javascript">
-		jQuery(function($){
-			$("#browseProducts form").submit(function(){
-				$("#browseProducts").modal("hide");
-				return false;
-			});
-			$("#browseProducts").on("show.bs.modal", function(){
-				console.log("Init loading products")
-			});
-		});
-	</script>
-</div>
+        jQuery(function ($) {
 
-<script type="text/javascript">
-jQuery(function($){
-	var form = $("#edit-campaign");
-	new Zolago.formIntegrator(form);
-    form.validate({
-		rules:{
-			"percent": {
-				max: 100
-			}
-		}
-	});
-	$( ".datepicker" ).datepicker();
+            $("#browseProducts form").submit(function () {
+                //$("#browseProducts").modal("hide");
+                var values = {};
+                $.each($(this).serializeArray(), function(i, field) {
+                    values[field.name] = field.value;
+                });
+
+                saveCampaignProducts(values);
+
+                return false;
+            });
+            $("#browseProducts").on("show.bs.modal", function () {
+                console.log("Init loading products")
+            });
+            function saveCampaignProducts(values) {
+                console.log(values);
+                //validate
+                var campaignId = values.campaign_id;
+                var campaignProducts = values.campaign_products;
+
+                if(campaignProducts.length <= 0){
+                    noty({
+                        text: "Enter product SKUs please",
+                        type: 'error',
+                        timeout: 2000
+                    });
+                } else {
+                    $.ajax({
+                        url: "/campaign/vendor/saveProducts",
+                        data : {campaignId : campaignId, products: campaignProducts},
+                        success: function(result){
+                            console.log(result);
+                        }
+                    })
+                }
+            }
+
+            var form = $("#edit-campaign");
+            new Zolago.formIntegrator(form);
+            form.validate({
+                rules: {
+                    "percent": {
+                        max: 100
+                    }
+                }
+            });
+            $(".datepicker").datepicker();
 });
 </script>
