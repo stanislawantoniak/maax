@@ -355,6 +355,11 @@ ol.breadcrumb li.active {
 .node-type-summary-checkout #checkout .summary-order form .panel + .panel {
   margin-bottom: 10px; }
 
+@media (max-width: 767px) {
+  /* line 70, ../sass/override/_summary-delivery-payment.scss */
+  .node-type-summary-delivery-payment #checkout .sidebar-secound header {
+    margin-left: -15px; } }
+
 /* line 7, ../sass/dimensions/_global.scss */
 #header {
   padding-top: 57px; }
@@ -1836,8 +1841,8 @@ section.section h2.title_section i {
 @media (max-width: 360px) {
   /* line 34, ../sass/override/_override-layout.scss */
   .node-type-page-shop .block-promoted-banners .rwd-controls .rwd-buttons .rwd-prev {
-    left: 45px; } }
+    left: -20px; } }
 @media (max-width: 360px) {
   /* line 39, ../sass/override/_override-layout.scss */
   .node-type-page-shop .block-promoted-banners .rwd-controls .rwd-buttons .rwd-next {
-    right: 45px; } }
+    right: -20px; } }

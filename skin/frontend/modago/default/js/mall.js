@@ -125,14 +125,18 @@ var Mall = {
                 var products = data.content.cart.products;
                 // build object for filling products template
                 Mall._data = data.content;
-                jQuery.each(products, function(key) {
-                    if(typeof products[key].options[0] != "undefined") {
-                        products[key].attr_label = products[key].options[0].label;
-                        products[key].attr_value = products[key].options[0].value;
-                        products[key].currency_symbol = Mall._data.cart.currency_symbol;
-                        jQuery("#product-list").append(Mall.replace(Mall._product_template, products[key]));
-                    }
-                });
+                if(data.content.cart.all_products_count == 0) {
+                    jQuery("#product-list").html('<p style="text-align: center;margin-top:20px;">Brak produktów w koszyku.</p>');
+                } else {
+                    jQuery.each(products, function(key) {
+                        if(typeof products[key].options[0] != "undefined") {
+                            products[key].attr_label = products[key].options[0].label;
+                            products[key].attr_value = products[key].options[0].value;
+                            products[key].currency_symbol = Mall._data.cart.currency_symbol;
+                            jQuery("#product-list").append(Mall.replace(Mall._product_template, products[key]));
+                        }
+                    });
+                }
 
                 // replace favorites url
                 jQuery("#link_favorites > a").attr("href", data.content.favorites_url);

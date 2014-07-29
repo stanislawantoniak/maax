@@ -140,9 +140,13 @@
 
 .summary-order {
 	margin-bottom: 15px;
+	dl {
+		margin-bottom: 17px;
+	}
 	.col-sm-6 {
 		margin-left: -15px;
 		padding-right: 0px;
+		margin-bottom: 10px;
 	}
 		.popover-dismiss {
 			&.badge {
@@ -172,7 +176,7 @@
 			font-weight: 700;
 			border:none;
 			padding:4px 8px;
-			text-align: right;
+			text-align: left;
 		}
 		td{
 			border:none;
@@ -190,7 +194,7 @@
 				background:none;
 			}
 			.panel-body {
-				padding: 20px 15px 20px 15px;
+				padding: 27.5px 15px;
 			}
 			.form-group {
 				margin-bottom: 0px;
@@ -285,4 +289,37 @@
 		margin-bottom: 15px;
 	}
 	
+}
+
+.acknowledgements {
+	.block {
+		height:auto;
+		@media(min-width: 768px) {
+			height:176px;
+		}
+		@media(min-width: 792px) {
+			height:155px;
+		}
+		@media(min-width: 930px) {
+			height:140px;
+		}
+		@media(min-width: 980px) {
+			height:140px;
+		}
+		@media(min-width: 992px) {
+			height: 153px;
+		}
+		@media(min-width: 1024px) {
+			height:157px;
+		}
+		@media(min-width: 1200px) {
+			height:110px;
+		}
+		&.date-traditional-transfer {
+			height:auto;
+		}
+	}
+	.adres_dostawy {
+		padding-right: 0px;
+	}
 }
