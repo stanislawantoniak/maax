@@ -3,6 +3,7 @@ var dojoConfig;
 	var baseUrl = "/skin/frontend/default/udropship/dojo/";//location.pathname.replace(/\/[^/]*$/, '/../../dojo/');
 	dojoConfig = {
 		async: 1,
+		isDebug: true,
 		cacheBust: '1.9.3-0.3.15',
 		// Load dgrid and its dependencies from a local copy.
 		// If we were loading everything locally, this would not

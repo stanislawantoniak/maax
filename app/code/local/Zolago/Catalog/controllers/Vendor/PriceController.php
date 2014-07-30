@@ -56,6 +56,11 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Dropship_Controller_V
 					setHeader('Content-Range', 'items ' . $out['start']. '-' . $out['end']. '/' . $out['total'])->
 					setBody(Mage::helper("core")->jsonEncode($out['items']));
 			break;
+			case "PUT":
+				$data = Mage::helper("core")->jsonDecode(($this->getRequest()->getRawBody()));
+				$data['name'] = $data['name'] . " Edited";
+				$reposnse->setBody(json_encode($data));
+			break;
 		}
 		
 		$reposnse->setHeader('Content-type', 'application/json');
@@ -141,6 +146,8 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Dropship_Controller_V
 		
 		foreach($items as &$item){
 			$item['can_collapse'] = true;//
+			$item['entity_id'] = (int)$item['entity_id'];
+			$item['id'] = (int)$item['entity_id'];
 		}
 		
 		return array(

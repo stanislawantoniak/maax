@@ -3,6 +3,7 @@ define([
 	"dgrid/extensions/CompoundColumns",
 	"dgrid/Selection",
 	"dgrid/Keyboard",
+	"dgrid/editor",
 	"dojo/_base/declare",
 	"dojo/dom-construct",
 	"dojo/on",
@@ -17,7 +18,7 @@ define([
     'dgrid/selector',
     "dojo/_base/lang",
 	"dojo/request"
-], function(Grid, CompoundColumns, Selection, Keyboard, declare, domConstruct, on, query, Memory, Observable, put, descriptionHtml, Cache, JsonRest, Selection, selector, lang, request){
+], function(Grid, CompoundColumns, Selection, Keyboard, editor, declare, domConstruct, on, query, Memory, Observable, put, descriptionHtml, Cache, JsonRest, Selection, selector, lang, request){
 	
 	
 	var states = {
@@ -260,14 +261,14 @@ define([
 			
 			
 	var storeRest = new JsonRest({
-		target:"/udprod/vendor_price/rest", 
+		target:"/udprod/vendor_price/rest",
 		idProperty: "entity_id"
 	});
 	
 	
-	var testStore = new Observable(new Cache(storeRest, new Memory()));
+	var testStore =  Observable(Cache(storeRest, Memory()));
 	
-	var PriceGrid = declare([Grid, Selection, CompoundColumns]);
+	var PriceGrid = declare([Grid, Selection,Keyboard, CompoundColumns]);
 	
 	grid = new PriceGrid({
 		columns: {
@@ -291,13 +292,17 @@ define([
 			name: {
 				label: "Name",
 				field: "name",
+				
 				children: [
-					{
+					editor({
 						renderHeaderCell: nameRenderer,
 						sortable: false, 
 						field: "name",
-						className: "filterable"
-					}
+						editor: "text",
+						editOn: "dblclick",
+						className: "filterable",
+						autoSave: true
+					})
 				]
 			},
 			entity_id: {
@@ -315,7 +320,10 @@ define([
 		pagingDelay: 100,
 		bufferRows: 100,
 		renderRow: renderer,
-		store: testStore
+		store: testStore,
+		deselectOnRefresh: false,
+		getBeforePut: false,
+		sort: "entity_id"
 	}, "grid-holder");
 	
 	
