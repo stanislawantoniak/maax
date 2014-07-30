@@ -8,6 +8,11 @@
 (function($) {
     $.fn.extend({
         tableFreezer: function(options) {
+            var that = this,
+                scrollXFactor,
+                scrollYFactor,
+                scrollErrorFactor = 0.00645; //Fix for scrolling rows not equal
+
             var cfg = $.extend(true, {
                 parent: '#container',
                 freezeHeader: true,
@@ -15,6 +20,8 @@
                 freezeColumnsLeft: false,  // provide integer as a number of columns you want to freeze on the left hand side
                 freezeColumnsRight: false,  // provide integer as a number of columns you want to freeze on the right hand side
                 lockScroller: false,
+                recalculateScrollbarsOn: false,
+                syncEvents: false,
                 css:{
                     cellBorder: '1px solid #CCC',
                     footerBgColor: "#EEE"
@@ -41,6 +48,72 @@
                     init($table);
                 });
             });
+
+            this.recalculateWidths = function(){
+                var tableW = $table.outerWidth();
+
+                $("#tf-viewport").css('width', tableW + 'px');
+                $(".tf-header").css('width', (tableW + 5) + 'px');
+
+
+            };
+
+            this.recalculateColumnsWidth = function(){
+
+                var rowWidth;
+
+                // Recalculate header
+                if(cfg.freezeHeader){
+                    $table.find('thead th').each(function(i){
+                        rowWidth = $(this).outerWidth();
+                        $(".tf-header .tf-cell").eq(i).css('width', rowWidth + "px");
+                    });
+                }
+
+                // Recalculate left columns header
+                if(cfg.freezeColumnsLeft){
+                    $table.find('thead th').each(function(i){
+
+                        if(i == cfg.freezeColumnsLeft){
+                            return false;
+                        }
+
+                        rowWidth = $(this).outerWidth();
+                        $(".tf-columns-left .tf-thead .tf-cell").eq(i).css('width', rowWidth + "px");
+                    });
+                }
+
+            };
+
+            this.recalculateScrollBars = function(){
+
+                var $scrollBarContainerX = $("#scrollbar-container-x"),
+                    $scrollBarContainerY = $('#scrollbar-container-y'),
+                    $scrollHandleX = $("#scroll-handle-x"),
+                    $scrollHandleY = $("#scroll-handle-y"),
+                    scrollHandleWidth,
+                    scrollHandleHeight;
+
+                scrollHandleWidth = ( $(cfg.parent).outerWidth() * $scrollBarContainerX.width()) / $table.outerWidth()
+                $scrollHandleX.width(scrollHandleWidth);
+                scrollXFactor = ($table.outerWidth())  / $scrollBarContainerX.outerWidth();
+
+                scrollHandleHeight = ( $(cfg.parent).outerHeight() * $scrollBarContainerY.height()) / $table.outerHeight()
+                $scrollHandleY.height(scrollHandleHeight);
+                scrollYFactor = ($table.outerHeight())  / $scrollBarContainerY.outerHeight();
+            }
+
+            this.appendRowsToLeftColumns = function(currentRows){
+
+                if(cfg.freezeColumnsLeft){
+
+//                    imagesLoaded( cfg.parent, function() {
+//                    });
+                        $body = buildColumns($table.find('tr:gt(' + (currentRows + 1) + ')'), 'td', 'tf-tbody', 'tf-row', 'tf-cell');
+
+                }
+                $('.tf-columns-left .tf-tbody').append($body.find('.tf-row'));
+            }
 
             function buildRows($sourceRow, sourceCellElem, elemClass, rowClass, cellClass){
 
@@ -199,15 +272,6 @@
                 return $elem;
             }
 
-            function aScrollbars(){
-
-                var $scrollbarContainerX = $('<div id="scrollbar-container-x"></div>'),
-                    $scrollbarContainerY = $('<div id="scrollbar-container-y"></div>');
-
-                $(cfg.parent).append($scrollbarContainerX);
-                $(cfg.parent).append($scrollbarContainerY);
-            }
-
             function positionScrollbars($scrollX, $scrollY){
 
                 var $scrollX = $scrollX || $("#scrollbar-container-x"),
@@ -247,6 +311,11 @@
 
                 var $scrollHandleY = $(cfg.parent).find('#scroll-handle-y');
                 var $scrollbarContainerY = $scrollHandleY.parent();
+
+                if(!$scrollbarContainerY.length){
+                    return false;
+                }
+
                 var currHandleTop = $scrollHandleY.position().top;
                 var newHandleTop = currHandleTop + speed;
 
@@ -259,25 +328,42 @@
                 if(newHandleTop < 0 && direction == 'up'){
                     $scrollHandleY.css('top', 0 + 'px');
                     $('#tf-viewport').scrollTop(0);
+                    $('.tf-tbody').scrollTop(0);
                     return false;
                 }
                 else if(newHandleTop >= ($scrollbarContainerY.height() - $scrollHandleY.height()) && direction == 'down'){
                     $scrollHandleY.css('top', ($scrollbarContainerY.height() - $scrollHandleY.height()) + 'px');
+                    $('#tf-viewport').scrollTop($('#tf-viewport')[0].scrollHeight);
+                    $('.tf-tbody').scrollTop($('#tf-viewport')[0].scrollHeight);
                     return false;
                 }
 
-                $scrollHandleY.css('top', newHandleTop + 'px');
+                $scrollHandleY.css('top', (newHandleTop) + 'px');
                 $('#tf-viewport').scrollTop((newHandleTop * scrollYFactor));
+                $('.tf-tbody').scrollTop((newHandleTop * scrollYFactor - (newHandleTop * scrollYFactor * scrollErrorFactor)));
+
+//                $('#tf-viewport').scrollTop((newHandleTop * scrollYFactor));
+//                $('.tf-tbody').scrollTop((newHandleTop * scrollYFactor));
 
                 return newHandleTop;
+            }
+
+            function syncFilterEvents($overlayElem, $orgElem){
+
+                var value = $overlayElem.val();
+
+                if($orgElem.length){
+                    $orgElem.val(value);
+
+                    $orgElem.focus();
+                    $overlayElem.focus();
+                }
             }
 
             function init($table) {
 
                 var $tableContainer = $table.parent(),
-                    tableContainerW = $tableContainer.width(),
                     tableW = $table.outerWidth(),
-                    $overlayTable = $table.clone(true),
                     $overlayTableHeader = getHeader($table),
                     $overlayTableFooter = getFooter($table),
                     $overlayTableColumns = getColumns($table),
@@ -286,12 +372,10 @@
                     $scrollbarContainerY = $('<div id="scrollbar-container-y"></div>'),
                     $scrollHandleX = $('<div id="scroll-handle-x"></div>'),
                     $scrollHandleY = $('<div id="scroll-handle-y"></div>'),
-                    scrollXFactor,
-                    scrollYFactor,
+                    $loader = $('<div id="loader"></div>'),
                     scrollHandleWidth,
                     scrollHandleHeight,
-                    viewportH,
-                    $scrollbars;
+                    viewportH;
 
                 $(cfg.parent).css('position', 'relative')
                              .css('border-right', cfg.css.cellBorder)
@@ -304,6 +388,12 @@
                     .css('position', 'absolute')
                     .css('top', 0)
                     .css('left', 0);
+
+                // Hide filters
+                $("#attr-filters").remove();
+
+                // Add loader
+                $(cfg.parent).append($loader);
 
                 if(cfg.freezeFooter){
                     $overlayTableFooter.css('width', (tableW + 5) + 'px')
@@ -334,19 +424,23 @@
                 // Set height
                 viewportH = getAbsHeight($("#tf-viewport"));
 
-                $("#tf-viewport").css("height", viewportH + "px");
-
-                $overlayTableColumns.find('.tf-tbody').css('height', (viewportH - $overlayTableHeader.outerHeight() - $overlayTableFooter.outerHeight()) + 'px')
-                    .css('overflow-y', 'hidden')
-                    .css('overflow-x', 'hidden');
+                if(viewportH < $table.outerHeight()){
+                    $("#tf-viewport").css("height", viewportH + "px");
+                    $overlayTableColumns.find('.tf-tbody').css('height', (viewportH - $overlayTableHeader.outerHeight() - $overlayTableFooter.outerHeight()) + 'px')
+                        .css('overflow-y', 'hidden')
+                        .css('overflow-x', 'hidden');
+                }
 
                 // Scroll bars
-                $scrollbarContainerX.append($scrollHandleX);
-                $scrollbarContainerY.append($scrollHandleY);
+                if($(cfg.parent).outerHeight() < $table.outerHeight()){
+                    $scrollbarContainerY.append($scrollHandleY);
+                    $(cfg.parent).append($scrollbarContainerY);
+                }
 
-
-                $(cfg.parent).append($scrollbarContainerX);
-                $(cfg.parent).append($scrollbarContainerY);
+                if($(cfg.parent).outerWidth() < $table.outerWidth()){
+                    $scrollbarContainerX.append($scrollHandleX);
+                    $(cfg.parent).append($scrollbarContainerX);
+                }
 
                 positionScrollbars($scrollbarContainerX, $scrollbarContainerY);
 
@@ -376,11 +470,6 @@
                     }
                 });
 
-
-                $('#tf-viewport').on('scroll', function () {
-                    $overlayTableColumns.find('.tf-tbody').scrollTop($(this).scrollTop());
-                });
-
                 $scrollHandleY.draggable({
                     axis: "y",
                     containment: "parent",
@@ -391,6 +480,7 @@
                     drag: function(){
                         var posTop = $(this).position().top;
                         $('#tf-viewport').scrollTop(posTop * scrollYFactor);
+                        $('.tf-tbody').scrollTop((posTop * scrollYFactor - (posTop * scrollYFactor * scrollErrorFactor)));
                     },
                     stop: function(){
                         $(this).parent().removeClass('dragging');
@@ -398,19 +488,58 @@
                     }
                 });
 
+                // Table sorting
+                $('.tf-header .nobr a, .tf-thead .nobr a').on('click', function(e){
+
+                    var name = $(this).attr('name');
+                    $table.find('.nobr a[name="' + name + '"]')[0].click();
+
+                    return false;
+                });
+
+                // Table filters
+                var orgTextFieldValue;
+                $('.tf-header input, .tf-thead input').on('focus', function(){
+
+                    orgTextFieldValue = $(this).val();
+
+                });
+                $('.tf-header input, .tf-thead input').on('blur', function(){
+
+                    if(orgTextFieldValue != $(this).val()){
+                        syncFilterEvents($(this), $table.find("#" + $(this).attr('id')));
+                    }
+
+                });
+
+                $('.tf-header input, .tf-thead input').on('keypress', function(e){
+                    var code = e.keyCode || e.which;
+                    if(code == 13){
+                       syncFilterEvents($(this), $table.find("#" + $(this).attr('id')));
+                    }
+
+                });
+
+                $('.tf-header select, .tf-thead select').on('change', function(){
+
+                    syncFilterEvents($(this), $table.find("#" + $(this).attr('id')));
+
+                });
+
                 // Mousewheel
                 $(cfg.parent).on('mousewheel', function(event) {
 
-                    var speed = 0.1 * Math.abs(event.deltaY),
-                        direction = (event.deltaY > 0) ? 'down' : 'up';
+                    var speed = $("#scroll-handle-y").height() / 5,
+                        direction = (event.deltaY > 0) ? 'up' : 'down';
 
                     scrollTableY(speed, scrollYFactor, direction);
 
                 });
 
+                // Key press
                 $(document).keydown(function(e){
 
-                    var speed = 5;
+                    var speed = $("#scroll-handle-y").height() / 5;
 
                     // Move up
                     if (e.keyCode == 38) {
@@ -432,11 +561,15 @@
                 // Window resize
                 $(window).on('resize', $.throttle( 250, function(){
 
+                    // Set height
                     viewportH = getAbsHeight($("#tf-viewport"));
 
-                    $("#tf-viewport").css("height", viewportH + "px");
-                    $overlayTableColumns.find('.tf-tbody').css('height', (viewportH - $overlayTableHeader.outerHeight() - $overlayTableFooter.outerHeight()) + 'px');
+                    if(viewportH < $table.outerHeight()){
+                        $("#tf-viewport").css("height", viewportH + "px");
+                        $overlayTableColumns.find('.tf-tbody').css('height', (viewportH - $overlayTableHeader.outerHeight() - $overlayTableFooter.outerHeight()) + 'px');
+                    }
 
+                    // Set scrollbars
                     positionScrollbars($scrollbarContainerX, $scrollbarContainerY);
 
                     scrollHandleWidth = ( $(cfg.parent).outerWidth() * $scrollbarContainerX.width()) / $table.outerWidth()
@@ -447,6 +580,55 @@
                     $scrollHandleY.height(scrollHandleHeight);
                     scrollYFactor = ($table.outerHeight())  / $scrollbarContainerY.outerHeight();
                 } ));
+
+
+                // Recalculate scrollbars event
+                if(cfg.recalculateScrollbarsOn){
+
+                    for(var i=0; i<cfg.recalculateScrollbarsOn.length; i++){
+
+                        var obj = cfg.recalculateScrollbarsOn[i];
+                        $(obj.targetElem).on(obj.event, function(){
+
+                            //TODO: REFACTOR
+                            positionScrollbars($scrollbarContainerX, $scrollbarContainerY);
+
+                            scrollHandleWidth = ( $(cfg.parent).outerWidth() * $scrollbarContainerX.width()) / $table.outerWidth()
+                            $scrollHandleX.width(scrollHandleWidth);
+                            scrollXFactor = ($table.outerWidth())  / $scrollbarContainerX.outerWidth();
+
+                            scrollHandleHeight = ( $(cfg.parent).outerHeight() * $scrollbarContainerY.height()) / $table.outerHeight()
+                            $scrollHandleY.height(scrollHandleHeight);
+                            scrollYFactor = ($table.outerHeight())  / $scrollbarContainerY.outerHeight();
+                        });
+
+                    }
+                }
+
+                if(cfg.syncEvents){
+
+                    for(var i=0; i<cfg.syncEvents.length; i++){
+
+                        var obj = cfg.syncEvents[i];
+
+                        if(obj.many){
+                            $(obj.sourceElem).each(function(){
+
+                                $('body').on(obj.sourceEvent, $(this), function(){
+                                    if(obj.callback) obj.callback.apply(null, [$(this)]);
+                                    if(obj.tfEvent) obj.tfEvent.apply(null, [$(this)]);
+                                });
+
+                            });
+                        }
+                        else{
+                            $('body').on(obj.sourceEvent, obj.sourceElem, function(){
+                                if(obj.callback) obj.callback.apply(null, [$(this)]);
+                                if(obj.tfEvent) obj.tfEvent.apply(null, [$(this)]);
+                            });
+                        }
+                    }
+                }
             }
 
             return this;

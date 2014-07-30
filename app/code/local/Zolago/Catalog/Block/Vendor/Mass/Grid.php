@@ -3,6 +3,7 @@
 class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_Grid {
 
 	protected $_denyColumnList = null;
+    protected $_useLazyLoad = false;
 
     public function __construct() {
         parent::__construct();
@@ -11,7 +12,7 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
         $this->setDefaultDir('desc');
         $this->setGridClass('z-grid');
 
-        $this->setSaveParametersInSession(true);
+        $this->setSaveParametersInSession(false);
 		$this->setTemplate("zolagocatalog/widget/grid.phtml");
 		// Add custom renderes
 		$this->setColumnRenderers(array(
@@ -24,6 +25,14 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 			"multiselect"	=>	'zolagoadminhtml/widget_grid_column_filter_multiselect',
 			'status'		=>	'adminhtml/widget_grid_column_filter_select',
 		));
+    }
+
+    public function useLazyLoad(){
+        $this->_useLazyLoad = true;
+    }
+
+    public function isLazyLoad(){
+        return $this->_useLazyLoad;
     }
 
 	protected function _setCollectionOrder($column) {

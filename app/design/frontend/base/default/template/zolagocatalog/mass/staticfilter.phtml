@@ -4,114 +4,8 @@ $activeFilters	= $this->getCurrentStaticFilterValues();
 ?>
 
 	<?php if ($this->getStaticFilters($this->getCurrentAttributeSetId()) && $this->getCurrentAttributeSetId()): ?>
-        <div class="form-group next-row">
-
-
-        <!-- Static Filters from All Attribute Groups: Start -->
-
-        <?php foreach ($this->getStaticFilters($this->getCurrentAttributeSetId()) as $singleFilter): ?>
-            <?php if ($singleFilter): ?>
-                <?php
-                $firstFilter = current($singleFilter);
-                ?>
-                <?php if ($firstFilter['group'] !== Zolago_Catalog_Helper_Data::ADDITIONAL_ATTRIBUTES_GROUP): ?>
-
-            <div class="col-md-6">
-                    <?php
-                    list ($filterLabel, $labelsCount) = $this->getStaticFilterLabel($singleFilter);
-                    $updateValues = $this->updateStaticFilterValues($singleFilter, $labelsCount);
-                    ?>
-                    <div class="row  next-row">
-                        <label for="staticFilter" class="col-md-4 control-label">
-                            <?php echo $filterLabel; ?>:
-                        </label>
-
-                        <div class="col-md-8">
-                            <select name="staticFilter" id="staticFilter-<?php echo $firstFilter['attribute_id']; ?>"
-                                    class="form-control staticFilter">
-                                <option
-                                    value=""><?php echo Mage::helper("zolagocatalog")->__("--- Select ---"); ?></option>
-                                <?php foreach ($singleFilter as $value): ?>
-                                    <?php if (isset($value['option'])):
-                                        $filterValue = $value['option'];
-                                        $displayValue = $this->getOptionLabelbyId($filterValue, $storeId);
-                                        if (!$displayValue):
-                                            $displayValue = $this->getOptionLabelbyId($filterValue, 0);
-                                        endif;
-                                    else:
-                                        $filterValue = $this->escapeHtml($value['value']);
-                                        $displayValue = $this->escapeHtml($value['value']);
-                                    endif;
-                                    ?>
-                                    <?php if ($displayValue && $value['group'] !== Zolago_Catalog_Helper_Data::ADDITIONAL_ATTRIBUTES_GROUP): ?>
-                                        <option
-                                            value="<?php echo $value['attribute_id']; ?>" <?php if ($this->isFilterActive($activeFilters, $value['attribute_id'], $displayValue, $filterValue)): ?> selected="selected"<?php endif; ?>
-                                            filterValue="<?php echo $this->escapeHtml($filterValue); ?>"><?php echo $this->getUpdatedFilterValues($displayValue, $filterLabel, $updateValues); ?></option>
-                                    <?php endif; ?>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-
-                    </div>
-            </div>
-                <?php endif; ?>
-            <?php endif; ?>
-        <?php endforeach; ?>
-        <!-- Static Filters from All Attribute Groups: End -->
-
-        <!-- Static Filters from Special Attribute Group: Start -->
-        <?php foreach ($this->getStaticFilters($this->getCurrentAttributeSetId()) as $singleFilter): ?>
-            <?php if ($singleFilter): ?>
-                <?php
-                $firstFilter = current($singleFilter);
-                ?>
-                <?php if ($firstFilter['group'] == Zolago_Catalog_Helper_Data::ADDITIONAL_ATTRIBUTES_GROUP): ?>
-                    <div class="col-md-6">
-                    <?php
-                    list ($filterLabel, $labelsCount) = $this->getStaticFilterLabel($singleFilter);
-                    $updateValues = $this->updateStaticFilterValues($singleFilter, $labelsCount);
-                    ?>
-                    <div class="row  next-row">
-                        <label for="staticFilter" class="col-md-4 control-label"><?php echo $filterLabel; ?>
-                            :</label>
-
-                        <div class="col-md-8">
-
-                            <select name="staticFilter" id="staticFilter-<?php echo $firstFilter['attribute_id']; ?>"
-                                    class="form-control staticFilter">
-                                <option
-                                    value=""><?php echo Mage::helper("zolagocatalog")->__("--- Select ---"); ?></option>
-                                <?php foreach ($singleFilter as $value): ?>
-                                    <?php if (isset($value['option'])):
-                                        $filterValue = $value['option'];
-                                        $displayValue = $this->getOptionLabelbyId($filterValue, $storeId);
-                                        if (!$displayValue):
-                                            $displayValue = $this->getOptionLabelbyId($filterValue, 0);
-                                        endif;
-                                    else:
-                                        $filterValue = $this->escapeHtml($value['value']);
-                                        $displayValue = $this->escapeHtml($value['value']);
-                                    endif;
-                                    ?>
-                                    <?php if ($displayValue && $value['group'] == Zolago_Catalog_Helper_Data::ADDITIONAL_ATTRIBUTES_GROUP): ?>
-                                        <option
-                                            value="<?php echo $value['attribute_id']; ?>" <?php if ($this->isFilterActive($activeFilters, $value['attribute_id'], $displayValue, $filterValue)): ?> selected="selected"<?php endif; ?>
-                                            filterValue="<?php echo $this->escapeHtml($filterValue); ?>"><?php echo $this->getUpdatedFilterValues($displayValue, $filterLabel, $updateValues); ?></option>
-                                    <?php endif; ?>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-
-                    </div>
-                    </div>
-                <?php endif; ?>
-            <?php endif; ?>
-        <?php endforeach; ?>
-        <!-- Static Filters from Special Attribute Group: End -->
-
-        </div>
         <div class="form-actions">
-            <button type="button" title="<?php echo $this->__('Reset Filter') ?>" class="btn btn-primary pull-right" onclick="resetStaticFilter(this);"><span><span><?php echo $this->__('Reset Filter') ?></span></span></button>
+            <button type="button" title="<?php echo $this->__('Cancel') ?>" class="cancel-btn btn btn-secondary pull-right"><span><span><?php echo $this->__('Cancel') ?></span></span></button>
             <button type="button" title="<?php echo $this->__('Search') ?>" class="btn btn-primary pull-right" onclick="changeStaticFilter(this);"><span><span><?php echo $this->__('Search') ?></span></span></button>
         </div>
 	<?php else: ?>
@@ -129,18 +23,6 @@ $activeFilters	= $this->getCurrentStaticFilterValues();
 	<?php endif; ?>
 
 <script type="text/javascript">
-function resetStaticFilter(select){
-	var location = '<?php echo $this->getChangeUrl();?>';
-
-	if ($("attribute_set_switcher") && $F("attribute_set_switcher")) {
-		location += "attribute_set/" + $F("attribute_set_switcher") + "/";
-	}
-	if ($("store_switcher") && $F("store_switcher")) {
-		location += "store/" + $F("store_switcher") + "/";
-	}
-	setLocation(location);
-}
-
 function changeStaticFilter(select){
 	var location = '<?php echo $this->getChangeUrl();?>';
 	var filtersCount = $$('.staticFilter').length;

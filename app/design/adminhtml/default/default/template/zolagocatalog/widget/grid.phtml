@@ -57,39 +57,63 @@ $numColumns = sizeof($this->getColumns());
 
         <?php if($this->getPagerVisibility()): ?>
             <div class="actions">
-                <div class="pull-left form-inline">
-                    <div class="text-holder">
-                        <label>
-                            <?php echo $this->__('Total %d records found.', $this->getCollection()->getSize()) ?>
-                            <span id="<?php echo $this->getHtmlId() ?>-total-count" class="hidden"><?php echo $this->getCollection()->getSize() ?></span>
-                        </label>
+
+                <?php if($this->isLazyLoad()): ?>
+
+                    <div class="pull-left form-inline">
+                        <div class="text-holder">
+                            <label>
+                                <span><?php echo $this->__('Loaded'); ?>: <strong><span class="loaded-records-count"><?php echo $this->getCollection()->getPageSize(); ?></span>/<?php echo $this->getCollection()->getSize(); ?></strong> <small class="percent-loaded"></small></span>
+                            </label>
+                        </div>
+                        <div class="loader-indicator text-holder">
+                            <label></label>
+                        </div>
                     </div>
-                    <div class="text-holder">
-                        <label><?php echo $this->__('View') ?></label>
+
+                <?php else: ?>
+
+                    <div class="pull-left form-inline">
+                        <div class="text-holder">
+                            <label>
+                                <?php echo $this->__('Total %d records found.', $this->getCollection()->getSize()) ?>
+                                <span id="<?php echo $this->getHtmlId() ?>-total-count" class="hidden"><?php echo $this->getCollection()->getSize() ?></span>
+                            </label>
+                        </div>
+                        <div class="text-holder">
+                            <label><?php echo $this->__('View') ?></label>
+                        </div>
+                        <div class="form-group">
+                            <select class="form-control" name="<?php echo $this->getVarNameLimit() ?>" onchange="<?php echo $this->getJsObjectName() ?>.loadByElement(this)">
+                                <option value="20"<?php if($this->getCollection()->getPageSize()==20): ?> selected="selected"<?php endif; ?>>20</option>
+                                <option value="30"<?php if($this->getCollection()->getPageSize()==30): ?> selected="selected"<?php endif; ?>>30</option>
+                                <option value="50"<?php if($this->getCollection()->getPageSize()==50): ?> selected="selected"<?php endif; ?>>50</option>
+                                <option value="100"<?php if($this->getCollection()->getPageSize()==100): ?> selected="selected"<?php endif; ?>>100</option>
+                                <option value="200"<?php if($this->getCollection()->getPageSize()==200): ?> selected="selected"<?php endif; ?>>200</option>
+                            </select>
+                        </div>
+                        <div class="text-holder">
+                            <label><?php echo $this->__('per page.') ?></label>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <select class="form-control" name="<?php echo $this->getVarNameLimit() ?>" onchange="<?php echo $this->getJsObjectName() ?>.loadByElement(this)">
-                            <option value="20"<?php if($this->getCollection()->getPageSize()==20): ?> selected="selected"<?php endif; ?>>20</option>
-                            <option value="30"<?php if($this->getCollection()->getPageSize()==30): ?> selected="selected"<?php endif; ?>>30</option>
-                            <option value="50"<?php if($this->getCollection()->getPageSize()==50): ?> selected="selected"<?php endif; ?>>50</option>
-                            <option value="100"<?php if($this->getCollection()->getPageSize()==100): ?> selected="selected"<?php endif; ?>>100</option>
-                            <option value="200"<?php if($this->getCollection()->getPageSize()==200): ?> selected="selected"<?php endif; ?>>200</option>
-                        </select>
-                    </div>
-                    <div class="text-holder">
-                        <label><?php echo $this->__('per page.') ?></label>
-                    </div>
-                </div>
+
+                <?php endif; ?>
+
                 <?php if($this->getMainButtonsHtml()):?>
                     <div class="pull-right  form-inline main-buttons">
 
                         <button class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm">Show/Hide columns</button>
 
-                        <?php echo $this->getMainButtonsHtml() ?>
+                        <?php //echo $this->getMainButtonsHtml() ?>
 
                         <button id="filter-btn" class="btn btn-secondary" title="Filters">Filters</button>
+                        <button title="<?php echo $this->__('Reset Filter') ?>" class="btn btn-danger" onclick="resetStaticFilter(this);"><span><span><?php echo $this->__('Reset Filter') ?></span></span></button>
+
                     </div>
                 <?php endif;?>
+
+                <?php if(!$this->isLazyLoad()): ?>
+
                 <div class="pull-right form-inline">
                     <?php $_curPage  = $this->getCollection()->getCurPage() ?>
                     <?php $_lastPage = $this->getCollection()->getLastPageNumber() ?>
@@ -126,6 +150,9 @@ $numColumns = sizeof($this->getColumns());
                         </label>
                     </div>
                 </div>
+
+                <?php endif; ?>
+
                 <div class="clearfix"></div>
             </div>
             <hr/>
@@ -153,7 +180,7 @@ $numColumns = sizeof($this->getColumns());
         <div class="hor-scroll">
             <table cellspacing="0" class="data table table-bordered table-hover table-striped" id="<?php echo $this->getId() ?>_table">
                 <?php foreach ($this->getColumns() as $_column): ?>
-                    <col <?php echo $_column->getHtmlProperty() ?> />
+                    <!-- <col <?php //echo $_column->getHtmlProperty() ?> /> -->
                 <?php endforeach; ?>
                 <?php if ($this->getHeadersVisibility() || $this->getFilterVisibility()): ?>
                     <thead>
@@ -256,6 +283,22 @@ $numColumns = sizeof($this->getColumns());
             <?php echo $this->getMassactionBlock()->getJavaScript() ?>
             <?php endif ?>
             <?php echo $this->getAdditionalJavaScript(); ?>
+
+            var totalPages = <?php echo $this->getCollection()->getLastPageNumber(); ?>;
+            var totalRecords = <?php echo $this->getCollection()->getSize(); ?>;
+            var nextToLoadCount = <?php echo $this->getCollection()->getPageSize(); ?>;
+
+            function resetStaticFilter(select){
+                var location = '<?php echo $this->getParentBlock()->getChangeUrl();?>';
+                console.log(location);
+                if ($("attribute_set_switcher") && $F("attribute_set_switcher")) {
+                    location += "attribute_set/" + $F("attribute_set_switcher") + "/";
+                }
+                if ($("store_switcher") && $F("store_switcher")) {
+                    location += "store/" + $F("store_switcher") + "/";
+                }
+                setLocation(location);
+            }
             //]]>
         </script>
 

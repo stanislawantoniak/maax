@@ -69,17 +69,17 @@
 </div>
 <script type="text/javascript">
 	(function(){
-	
+
 		var gridObj = <?php echo $this->getGrid()->getId();?>JsObject;
-		var gridDom = $(gridObj.containerId); 
+		var gridDom = $(gridObj.containerId);
 		var form ;
 		var foot = $("<?php echo $this->buildFieldId("foot");?>");
 		var loading = $("<?php echo $this->buildFieldId("loading");?>");
-		
+
 		var oldInitGrid = gridObj.initGrid;
 		var oldSetCheckboxChecked = gridObj.setCheckboxChecked;
 		var	oldCheckCheckboxes = gridObj.massaction.checkCheckboxes;
-		
+
 		var appendContent = function(grid, content){
 			var table = $(grid.containerId).select("table.data")[0];
 			if(!table.select("tfoot").length){
@@ -89,13 +89,13 @@
 <!--			$("--><?php ////echo $this->buildFieldId("change");?><!--").select(".changer").each(function(el){-->
 <!--				el.observe("change", changerHandler)-->
 <!--			});-->
-			
+
 			// Prepare form
 			var formEl = new Element("form", {id:"<?php echo $this->buildFieldId("editor_form");?>"});
 			gridDom.select(".data")[0].wrap(formEl);
 			form = new VarienForm("<?php echo $this->buildFieldId("editor_form");?>");
 		}
-		
+
 		var updateSelectCheckbox = function(checkbox){
 			var el = checkbox.up("tr");
 			if(checkbox.checked){
@@ -104,7 +104,7 @@
 				el.removeClassName("row-selected");
 			}
 		}
-		
+
 		varienGlobalEvents.attachEventHandler("gridRowClick", function(event){
 			var el = $(event.currentTarget);
 			if(!el.up("#"+gridObj.containerId)){
@@ -113,42 +113,42 @@
 			var checkbox = el.select(".massaction-checkbox")[0];
 			updateSelectCheckbox(checkbox);
 		});
-		
-		
-		
+
+
+
 		gridObj.massaction.checkCheckboxes = function(){
 			oldCheckCheckboxes.apply(gridObj.massaction, arguments);
 			gridObj.massaction.getCheckboxes().each(updateSelectCheckbox);
 		}
-		
+
 		gridObj.setCheckboxChecked = function(element){
 			oldSetCheckboxChecked.apply(gridObj, arguments);
 			updateSelectCheckbox(element);
 		}
-		
+
 		gridObj.initGrid = function(){
 			oldInitGrid.apply(gridObj, arguments);
 			loading.hide();
 			appendContent(gridObj, foot);
 		}
-		
-		
+
+
 		var submitHandler = function(){
-		
-			var productIds = gridObj.massaction.getCheckedValues();	
+
+			var productIds = gridObj.massaction.getCheckedValues();
 			if(productIds==""){
                 bootbox.alert("<?php echo Mage::helper("zolagocatalog")->__("Select some products");?>");
 				return;
 			}
-			
+
 			if(!form.validator.validate()){
 				return false;
 			}
-			
+
 			var tmpData = $(form.form).serialize(true);
 			var key;
 			var data = {};
-			
+
 			for(key in tmpData){
 				if(/^attributes/.test(key) && tmpData.hasOwnProperty(key)){
 					data[key] = tmpData[key];
@@ -158,11 +158,11 @@
                 bootbox.alert("<?php echo Mage::helper("zolagocatalog")->__("No attribute selected");?>");
 				return;
 			}
-			
+
 			data.store = $F("store_switcher");
 			data.attribute_set =  $F("attribute_set_switcher");
 			data.product_ids=  productIds;
-						
+
 			new Ajax.Request("<?php echo $this->getSaveUrl();?>", {
 				parameters: data,
 				method: "post",
@@ -183,17 +183,17 @@
 				}
 			});
 		}
-	
+
 		var changerHandler = function(e){
 			var el = $(e.currentTarget);
 			var target = $(el.up('.relChanger').getAttribute("data-rel"));
 			if(target){
 				switchVisible(target.id, el.checked);
 			}
-			
+
 		}
-		
-		
+
+
 		var currentEditCount = 0;
 
 		var switchVisible = function(fieldId, mode){
@@ -206,7 +206,7 @@
 				$(fieldId+"_wrapper").hide();
 				currentEditCount--;
 			}
-				
+
 			if(currentEditCount>0){
 				$("<?php echo $this->buildFieldId("fields");?>").show();
 				$("<?php echo $this->buildFieldId("confirm");?>").show();
@@ -214,10 +214,10 @@
 				$("<?php echo $this->buildFieldId("fields");?>").hide();
 				$("<?php echo $this->buildFieldId("confirm");?>").hide();
 			}
-			
+
 			disableAdditionalFields(fieldId, mode);
 		}
-		
+
 		var disableAdditionalFields = function(fieldId, mode){
 			$(fieldId).up(".element-wrapper").select(".additional_field").each(function(el){
 				$(el).disabled = mode ? "" : "disabled";
@@ -230,7 +230,7 @@
 				mode ? $(el).show() : $(el).hide();
 			});
 		}
-		
+
 		appendContent(gridObj, foot);
 	})();
 </script>

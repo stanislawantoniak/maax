@@ -8,8 +8,24 @@ class Zolago_Catalog_Vendor_MassController
 	public function indexAction() {
 		Mage::register('as_frontend', true);// Tell block class to use regular URL's
 		$this->_saveHiddenColumns();
-		$this->_renderPage(null, 'udprod_mass');
-	}
+
+        $useLazyLoad = $this->getRequest()->getParam('uselazyload');
+
+        if(isset($useLazyLoad)){
+
+            $this->loadLayout();
+
+            $block = $this->getLayout()->createBlock("zolagocatalog/vendor_mass_grid", "vendor_mass_grid", array('area' => 'adminhtml'));
+
+            $block->setTemplate('zolagocatalog/widget/grid/rows.phtml');
+
+            $this->getResponse()->setBody($block->toHtml());
+        }
+        else{
+            $this->_renderPage(null, 'udprod_mass');
+        }
+
+    }
 	protected function _saveHiddenColumns() {
 		if ($this->getRequest()->isPost()) {
 			$listColumns = $this->getRequest()->getParam('listColumn',array());

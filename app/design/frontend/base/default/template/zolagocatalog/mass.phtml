@@ -4,12 +4,12 @@
 }
 #scrollbar-container-x{
     width:100%;
-    height:15px;
+    height:10px;
     bottom:0;
     left:0;
 }
 #scrollbar-container-y{
-    width:15px;
+    width:10px;
     height:100%;
     top:0;
     right:0;
@@ -50,49 +50,59 @@
 #scrollbar-container-x.dragging #scroll-handle-x, #scrollbar-container-y.dragging #scroll-handle-y{
     background:#666;
 }
+.popover-content{
+    padding:20px 0 0 0;
+}
+#attr-filters{
+    /*display:none;*/
+}
+#attribute_set_switcher{
+    background: #666;
+    color: white;
+}
+#mass-table{
+    margin-top:10px;
+}
+table.table{
+    margin:0 !important;
+    padding:0 !important;
+}
+#loader{
+    width:100%;
+    height:100%;
+    background-color:rgba(0,0,0,0.3);
+    position:absolute;
+    top:0;
+    left:0;
+    z-index:100;
+    display:none;
+}
 </style>
-<div class="container">
-    <div class="page-header">
-        <div class="page-title">
-            <h3><?php echo Mage::helper("zolagocatalog")->__("Product mass actions");?></h3>
-        </div>
-    </div>
+<div id="mass-table" class="container">
 
-    <div id="attr-filters" class="row">
+    <div id="attr-filters" class="row" <?php if(($this->getStaticFilters($this->getCurrentAttributeSetId()) && $this->getCurrentAttributeSetId())) echo 'style="display:none;"'; ?>>
        <div class="col-md-12">
            <div class="widget box">
                <div class="widget-header">
 <!--                   Filters-->
                    <h4><i class="icon-filter"></i><?php echo Mage::helper("zolagocatalog")->__("Filters");?></h4>
-                   <div class="toolbar no-padding">
-                       <div class="btn-group"><span class="btn btn-xs widget-collapse"><i class="icon-angle-down"></i></span></div>
-                   </div>
+
                </div>
                <div class="widget-content fiters">
                    <form class="form-horizontal">
                        <div class="form-group">
-
-                           <?php if ($this->getStoreSwitcherHtml()): ?>
-                               <div class="col-md-6">
-                                   <div class="row">
-                                       <?php echo $this->getChildHtml("attribute_set_switcher"); ?>
-                                   </div>
+                           <div class="col-md-4">
+                               <div class="attribute-switcher row next-row">
+                                   <?php echo $this->getChildHtml("attribute_set_switcher"); ?>
                                </div>
-                               <div class="col-md-6">
-                                   <div class="row">
-                                       <?php echo $this->getStoreSwitcherHtml(); ?>
-                                   </div>
+                               <?php echo $this->getChildHtml("other_filter"); ?>
+                           </div>
+                           <div class="col-md-8">
+                               <div class="row">
+                                   <?php echo $this->getChildHtml("additional_filter"); ?>
                                </div>
-                           <?php else: ?>
-                               <div class="col-md-6">
-                                   <div class="row">
-                                       <?php echo $this->getChildHtml("attribute_set_switcher"); ?>
-                                   </div>
-                               </div>
-                           <?php endif; ?>
+                           </div>
                        </div>
-
-
                        <?php echo $this->getChildHtml("static_filter"); ?>
                    </form>
                </div>
@@ -105,7 +115,6 @@
 
     <?php echo $this->getMessagesBlock()->getGroupedHtml(); ?>
 
-    <?php if($this->getCurrentAttributeSetId()):?>
         <script type="text/javascript">
             FORM_KEY = "<?php echo Mage::getSingleton('core/session')->getFormKey() ?>";
         </script>
@@ -115,85 +124,268 @@
         <div class="container z-grid">
             <div class="widget box">
                 <div class="widget-content">
-                    <?php
-
-                    echo $this->getGridHtml(); ?>
+                    <?php echo $this->getGridHtml(); ?>
                 </div>
             </div>
         </div>
-        <script type="text/javascript">
-            (function(){
-                gridObj = <?php echo $this->getGridJsObjectName();?>;
-                var topForm = $("filter_form");
-                // create integrator
-                new Zolago.gridIntegrator(gridObj);
-
-                gridObj.doFilter = (function(){
-                    var filters = $$('#'+this.containerId+' .filter input', '#'+this.containerId+' .filter select');
-                    var filters2 = $$('#'+topForm.id+' input', '#'+topForm.id+' select');
-                    var elements = [],
-                        elements2 = [];
-                    for(var i in filters){
-                        if(filters[i].value && filters[i].value.length) elements.push(filters[i]);
-                    }
-                    for(var i in filters2){
-                        if(filters2[i].value && filters2[i].value.length) elements2.push(filters2[i]);
-                    }
-
-                    var serialized = Form.serializeElements(elements);
-                    var serialized2 = Form.serializeElements(elements2);
-                    var params = []
-
-                    if(serialized){
-                        params.push(serialized);
-                    }
-                    if(serialized2){
-                        params.push(serialized2);
-                    }
-
-                    if (!this.doFilterCallback || (this.doFilterCallback && this.doFilterCallback())) {
-                        this.reload(this.addVarToUrl(this.filterVar, encode_base64(params.join("&"))));
-                    }
-                }).bind(gridObj);
 
 
-                topForm.observe("submit", function(e){
-                    gridObj.doFilter();
-                    e.preventDefault();
-                });
-                topForm.observe("reset", function(e){
-                    gridObj.resetFilter();
-                    e.preventDefault();
-                });
+<script type="text/javascript">
+    (function(){
+        gridObj = <?php echo $this->getGridJsObjectName();?>;
+        var topForm = $("filter_form");
 
-            })();
-            // Do pickers
-            jQuery(function($){
-                $( ".datepicker" ).datepicker();
+        var inputs = $$('#'+gridObj.containerId+' .filter input', '#'+topForm.id+' input');
+        var selects = $$('#'+gridObj.containerId+' .filter select', '#'+topForm.id+' select');
 
-                $('#myModal').modal();
+        // create integrator
+        new Zolago.gridIntegrator(gridObj);
 
-                $table = $("#zolagocatalog_mass_grid_table");
+        gridObj.doFilter = (function(){
+            var filters = $$('#'+this.containerId+' .filter input', '#'+this.containerId+' .filter select');
+            var filters2 = $$('#'+topForm.id+' input', '#'+topForm.id+' select');
 
-                $table.tableFreezer({parent: '#zolagocatalog_mass_grid .grid', freezeColumnsLeft: 3, lockScroller: true});
+            var elements = [],
+                elements2 = [];
+            for(var i in filters){
+                if(filters[i].value && filters[i].value.length) elements.push(filters[i]);
+            }
+            for(var i in filters2){
+                if(filters2[i].value && filters2[i].value.length) elements2.push(filters2[i]);
+            }
 
-                // Hide filters
-                $("#attr-filters").hide();
+            var serialized = Form.serializeElements(elements);
+            var serialized2 = Form.serializeElements(elements2);
+            var params = []
 
-                var $popover = $("#filter-btn").popover({
-                    content: $("#attr-filters").html(),
-                    html: true,
-                    container: "#content",
-                    placement: "left",
-                });
+            if(serialized){
+                params.push(serialized);
+            }
+            if(serialized2){
+                params.push(serialized2);
+            }
 
-                $popover.on("show.bs.popover", function(e){
-                    $popover.data()["bs.popover"].$tip.css("max-width", "850px").css("width", "850px");
-                });
+            if (!this.doFilterCallback || (this.doFilterCallback && this.doFilterCallback())) {
+                this.reload(this.addVarToUrl(this.filterVar, encode_base64(params.join("&"))));
+            }
+        }).bind(gridObj);
 
+        inputs.each(function (el) {
+            $(el).observe('blur', function(e) {
+                gridObj.doFilter();
+                e.preventDefault();
             });
 
-        </script>
-        <?php echo $this->getChildHtml("editor");?>
+            $(el).observe('keypress', function(e) {
 
-    <?php endif;?>
+                if(e.KEY_RETURN){
+                    gridObj.doFilter();
+                    e.preventDefault();
+                }
+            });
+        });
+
+        selects.each(function (el) {
+            $(el).observe('blur', function(e) {
+                gridObj.doFilter();
+                e.preventDefault();
+            });
+
+            $(el).observe('change', function(e) {
+                gridObj.doFilter();
+                e.preventDefault();
+            });
+        });
+
+        topForm.observe("submit", function(e){
+            gridObj.doFilter();
+            e.preventDefault();
+        });
+        topForm.observe("reset", function(e){
+            gridObj.resetFilter();
+            e.preventDefault();
+        });
+
+    })();
+    // Do pickers
+    jQuery(function($){
+        $( ".datepicker" ).datepicker();
+
+        $('#myModal').modal();
+
+        $table = $("#zolagocatalog_mass_grid_table");
+
+        var tableFreezer = $table.tableFreezer({parent: '#zolagocatalog_mass_grid .grid',
+             freezeColumnsLeft: 3,
+             lockScroller: true,
+             recalculateScrollbarsOn: [
+                 {
+                     targetElem: '.toggle-sidebar',
+                     event: 'click'
+                 }
+             ],
+             syncEvents: [
+
+                 {
+                     sourceElem: '.tf-tbody .massaction-checkbox',
+                     sourceEvent: 'click',
+                     callback: function($sourceElem){
+                         var value = $sourceElem.val();
+
+                         $sourceElem.parent().toggleClass('checked');
+                         $table.find('.massaction-checkbox[value="' + value + '"]').click();
+                     }
+                 }
+             ]
+        });
+
+        // Selectors
+        $("#zolagocatalog_mass_grid_massaction a.select-all-btn").on('click', function(){
+            $table.find('.massaction-checkbox').prop('checked',true);
+            $('.tf-columns-left .massaction-checkbox').prop('checked',true);
+
+            $table.find('.massaction-checkbox').parent().addClass('checked');
+            $('.tf-columns-left .massaction-checkbox').parent().addClass('checked');
+
+            $table.find('.massaction-checkbox').closest('tr').addClass('row-selected');
+
+            recalculateTotalSelected();
+        });
+
+        $("#zolagocatalog_mass_grid_massaction a.unselect-all-btn").on('click', function(){
+            $table.find('.massaction-checkbox').prop('checked',false);
+            $('.tf-columns-left .massaction-checkbox').prop('checked',false);
+
+            $table.find('.massaction-checkbox').parent().removeClass('checked');
+            $('.tf-columns-left .massaction-checkbox').parent().removeClass('checked');
+
+            $table.find('.massaction-checkbox').closest('tr').removeClass('row-selected');
+
+            recalculateTotalSelected();
+        });
+
+        function recalculateTotalSelected(){
+            var totalSelected = $table.find('.massaction-checkbox:checked').length;
+            $("#zolagocatalog_mass_grid_massaction .items-count").text(totalSelected);
+        }
+
+        // Popover
+        var $popover = $("#filter-btn").popover({
+            content: $("#attr-filters").html(),
+            html: true,
+            container: "#content",
+            placement: "left"
+        });
+
+        setPopoverWidth($popover);
+
+        $('body').on('click', '.popover .form-actions .cancel-btn', function(){
+            $("#filter-btn").popover('hide');
+        });
+
+        recalculateTotalLoaded();
+
+        // Window resize end
+        $(window).resize( $.debounce( 250, function(){
+            setPopoverWidth($popover);
+        }) );
+
+
+        var interval = setInterval(loadMoreRows, 2000),
+            page = 1,
+            limit = 100,
+            prevRequestCompleted = true;
+
+        function loadMoreRows(){
+
+            var currentUrl = window.location.pathname,
+                totalLoaded = $table.find('tbody tr').length,
+                currentLoadCount;
+
+            if(prevRequestCompleted){
+
+                page = page + 1;
+                prevRequestCompleted = false;
+
+                if(page <= totalPages || totalLoaded < totalRecords){
+
+                    // Show loading indicator
+                    if((totalRecords - totalLoaded) > limit){
+                        currentLoadCount = limit;
+                    }
+                    else{
+                        currentLoadCount = totalRecords - totalLoaded;
+                    }
+
+                    if(currentLoadCount <= 0){
+                        return;
+                    }
+
+                    // Set page on url
+                    if(currentUrl.match(/page\/\d+/)){
+                        currentUrl = currentUrl.replace(/page\/\d+/, 'page/' + page);
+                    }
+                    else{
+                        currentUrl = stripTrailingSlash(currentUrl) + "/page/" + page;
+                    }
+
+                    // Set limit on url
+                    if(currentUrl.match(/limit\/\d+/)){
+                        currentUrl = currentUrl.replace(/limit\/\d+/, 'limit/' + currentLoadCount);
+                    }
+                    else{
+                        currentUrl = stripTrailingSlash(currentUrl) + "/limit/" + currentLoadCount;
+                    }
+
+
+                    $("#zolagocatalog_mass_grid .actions .loader-indicator").text("Loading next " + currentLoadCount + " records...");
+
+                    $.get( currentUrl + "?uselazyload=true", function( data ) {
+
+                        prevRequestCompleted = true;
+
+                        $table.find('tbody').append($(data).children());
+
+                        tableFreezer.appendRowsToLeftColumns(totalLoaded);
+                        tableFreezer.recalculateWidths();
+                        tableFreezer.recalculateColumnsWidth();
+                        tableFreezer.recalculateScrollBars();
+
+                        recalculateTotalLoaded();
+
+                        $("#zolagocatalog_mass_grid .actions .loader-indicator").text("");
+                    });
+                }
+            }
+        }
+
+        function stripTrailingSlash(str) {
+            if(str.substr(-1) == '/') {
+                return str.substr(0, str.length - 1);
+            }
+            return str;
+        }
+
+        function recalculateTotalLoaded(){
+            var totalLoaded = $table.find('tbody tr').length,
+                percentLoaded = Math.round((totalLoaded/totalRecords) * 100);
+
+            $("#zolagocatalog_mass_grid .actions .loaded-records-count").text(totalLoaded);
+            $("#zolagocatalog_mass_grid .actions .percent-loaded").text("(" + percentLoaded + "%)");
+        }
+
+        function setPopoverWidth($popover){
+            var $button = $("#filter-btn"),
+                buttonOffsetLeft = $button.offset().left,
+                $sidebar = $('#sidebar'),
+                sidebarWidth = $sidebar.outerWidth(),
+                offset = 20,
+                popoverWidth = buttonOffsetLeft - sidebarWidth - offset;
+
+            $popover.on("show.bs.popover", function(e){
+                $popover.data()["bs.popover"].$tip.css("max-width", popoverWidth + "px").css("width", popoverWidth + "px");
+            });
+        }
+    });
+
+</script>
