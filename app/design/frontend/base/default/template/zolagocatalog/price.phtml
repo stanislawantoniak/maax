@@ -25,13 +25,30 @@
 }
 #grid-holder .expando {
 	/* style of area containing summary, expanded on click */
-	padding: 0.7em 1em 0.5em 3em;
+	padding: 10px 6px;
 	background: #fff;
 	border-bottom: 1px #ddd solid;
 }
 
 #grid-holder .collapsed .expando {
 	display: none;
+}
+
+#grid-holder .dgrid-no-data span,
+#grid-holder .dgrid-loading span{
+   position: absolute;
+   top: 50%;
+   width: 100%;
+   margin-top: -5px;
+   color: #aaa;
+   text-align: center;
+}
+
+#grid-holder .filterable input{
+	border: 1px #ddd solid;
+	height: 20px;
+	display: block;
+	width: 100%;
 }
 
 </style>
