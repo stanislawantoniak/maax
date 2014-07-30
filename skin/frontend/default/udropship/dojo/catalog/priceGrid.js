@@ -266,7 +266,8 @@ define([
 	});
 	
 	
-	var testStore =  Observable(Cache(storeRest, Memory()));
+	//var testStore =  Observable(Cache(storeRest, Memory()));
+	var testStore =  Observable(storeRest);
 	
 	var PriceGrid = declare([Grid, Selection,Keyboard, CompoundColumns]);
 	
