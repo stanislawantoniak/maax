@@ -16,7 +16,7 @@
 	</div>
 </div>
 
-<div class="container">
+<div class="container z-grid">
 	<form id="edit-campaign" class="form-horizontal row-border" action="<?php echo $this->getForm()->getAction();?>" method="POST">
 		<input type="hidden" name="campaign_id" value="<?php echo $_model->getId();?>"/>
 		<?php echo $this->getLayout()->getBlock('formkey')->toHtml();?>
@@ -36,31 +36,9 @@
 					</div> 
 				</div>
 			</div> 
-			<div class="widget-content no-padding table-striped">
-				<table class="table no">
-					<colgroup>
-						<col>
-						<col>
-						<col width="150">
-						<col width="100">
-					</colgroup>
-					<thead>
-						<tr>
-							<th>Product</th>
-							<th>Sku</th>
-							<th class="align-right">Regular price</th>
-							<th class="align-right">Remove</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>Some product</td>
-							<td>23434</td>
-							<td class="align-right">123,12zł</td>
-							<td class="align-right"><a href="#" class="btn btn-xs"><i class="icon-remove"></i></a></td>
-						</tr>
-					</tbody>
-				</table>
+			<div class="widget-content">
+                <?php echo $this->getGridHtml(); ?>
+
 			</div>
 		</div>
 		<div class="form-actions"> <input type="submit" value="<?php echo $_helper->__("Save");?>" class="btn btn-primary pull-right"> </div>
@@ -73,16 +51,15 @@
 			<input type="hidden" name="campaign_id" value="<?php echo $_model->getId();?>"/>
 
 			<div class="modal-content">
-
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					<h4 class="modal-title"><?php echo $_helper->__("Add products");?></h4>
 				</div>
-				<div class="modal-body">
-
-                    Enter SKUs Comma-separated
-					<textarea type="text" name="campaign_products" class="form-control input-text" rows="10" ></textarea>
-				</div>
+                <div class="modal-body">
+                    <?php echo $_helper->__("Enter SKUs Comma-separated"); ?>
+                    <textarea type="text" name="campaign_products_source" class="form-control input-text"
+                              rows="10"><?php echo $this->getCampaignProducts(); ?></textarea>
+                </div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_helper->__("Cancel");?></button>
 					<button type="submit" class="btn form-btn-loading btn-primary" data-loading-text="<?php echo $_helper->__("Loading...");?>"><?php echo $_helper->__("Add");?></button>
@@ -92,42 +69,35 @@
 	</div>
 	<script type="text/javascript">
         jQuery(function ($) {
-
-            $("#browseProducts form").submit(function () {
-                //$("#browseProducts").modal("hide");
-                var values = {};
-                $.each($(this).serializeArray(), function(i, field) {
-                    values[field.name] = field.value;
-                });
-
-                saveCampaignProducts(values);
-
-                return false;
-            });
-            $("#browseProducts").on("show.bs.modal", function () {
-                console.log("Init loading products")
-            });
-            function saveCampaignProducts(values) {
-                console.log(values);
-                //validate
-                var campaignId = values.campaign_id;
-                var campaignProducts = values.campaign_products;
-
-                if(campaignProducts.length <= 0){
+            $("#browseProducts form").submit(function (e) {
+                e.preventDefault();
+                var campaignProductsSource = $("textarea[name=campaign_products_source]").val();
+                if (campaignProductsSource.length <= 0) {
                     noty({
                         text: "Enter product SKUs please",
                         type: 'error',
                         timeout: 2000
                     });
                 } else {
-                    $.ajax({
-                        url: "/campaign/vendor/saveProducts",
-                        data : {campaignId : campaignId, products: campaignProducts},
-                        success: function(result){
-                            console.log(result);
-                        }
-                    })
+                    //push products to campaign form field
+                    $("input[name=campaign_products]").val(campaignProductsSource);
+                    $("#browseProducts").modal("hide");
                 }
+            });
+            $("#browseProducts").on("show.bs.modal", function () {
+                console.log("Init loading products")
+            });
+
+            $(".btn[data-action=remove]").click(function (e) {
+                e.preventDefault();
+                var campaignId = $("input[name=campaign_id]").val();
+                var productId = $(this).data("item");
+                removeCampaignProductLink(campaignId, productId);
+            })
+            function removeCampaignProductLink(campaignId, productId) {
+                var baseUrl = '<?php echo Mage::getBaseUrl(); ?>';
+                var link = baseUrl + "campaign/vendor/removeProduct?campaignId=" + campaignId + "&productId=" + productId;
+                window.location = link;
             }
 
             var form = $("#edit-campaign");

@@ -76,7 +76,12 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
             "label" => $helper->__('Websites'),
             "values" => $websiteOptions
         ));
-
+        $prices->addField("campaign_products", "hidden", array(
+            "name" => "campaign_products",
+            "required" => false,
+            "class" => "form-control",
+            "label" => $helper->__('Campaign Products')
+        ));
 
         // Prices definition
 
@@ -110,10 +115,50 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
 
 
         $websiteIdsSelected = $this->getModel()->getAllowedWebsites();
+        $productsSelected = $this->getCampaignProducts();
 
-        $values = array_merge($values, array('website_ids' => $websiteIdsSelected));
+        $values = array_merge($values,
+            array(
+                'website_ids' => $websiteIdsSelected,
+                "campaign_products" => $productsSelected
+            )
+        );
+
         $form->setValues($values);
         $this->setForm($form);
+    }
+    public function _prepareLayout() {
+        $this->_prepareGrid();
+        $this->unsetChild("reset_filter_button");
+        $this->unsetChild("search_button");
+        parent::_prepareLayout();
+    }
+
+    public function _prepareGrid() {
+        $design = Mage::getDesign();
+        //$design->setArea("adminhtml");
+        $block = $this->getLayout()
+            ->createBlock("zolagocampaign/vendor_campaign_product_grid", "vendor_campaign_product_grid")
+        //->setTemplate("zolagoadminhtml/widget/grid.phtml")
+            ->setTemplate("zolagocampaign/dropship/campaign/product/grid.phtml")
+        ;
+        $block->setParentBlock($this);
+        $this->setGridHtml($block->toHtml());
+        $this->setGrid($block);
+        $design->setArea("frontend");
+    }
+    /**
+     * @return array
+     */
+    public function getCampaignProducts(){
+        return $this->getModel()->getCampaignProducts();
+    }
+
+    /**
+     * @return array
+     */
+    public function getCampaignProductsInfo(){
+        return $this->getModel()->getCampaignProductsInfo();
     }
 
     /**

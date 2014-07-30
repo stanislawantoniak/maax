@@ -18,9 +18,57 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         if ($object->hasData("website_ids")) {
             $this->_setWebsites($object, $object->getData("website_ids"));
         }
+        // Products Assignment
+        Mage::log("_afterSave");
+        Mage::log($object->getData("campaign_products"));
+        Mage::log("_afterSave");
+        if ($object->hasData("campaign_products")) {
+            $productsStr = $object->getData("campaign_products");
+            $products = array();
+            if(is_string($productsStr)){
+                $products = array_map('trim', explode("," , $productsStr));
+            }
+            $this->_setProducts($object, $products);
+        }
         return parent::_afterSave($object);
     }
 
+    /**
+     * @param $campaignId
+     * @param $productId
+     */
+    public function removeProduct($campaignId,$productId){
+        $table = $this->getTable("zolagocampaign/campaign_product");
+
+        $where = "campaign_id={$campaignId} AND product_id={$productId}";
+        echo $where;
+        $this->_getWriteAdapter()->delete($table, $where);
+    }
+    /**
+     * @param Mage_Core_Model_Abstract $object
+     * @param array $skuS
+     * @return Zolago_Campaign_Model_Resource_Campaign
+     */
+    protected function _setProducts(Mage_Core_Model_Abstract $object, array $skuS)
+    {
+        $table = $this->getTable("zolagocampaign/campaign_product");
+        $where = $this->getReadConnection()
+            ->quoteInto("campaign_id=?", $object->getId());
+        $this->_getWriteAdapter()->delete($table, $where);
+
+        $toInsert = array();
+        $collection = Mage::getModel('catalog/product')
+            ->getCollection()
+            ->addAttributeToFilter('SKU', array('in' => $skuS))
+            ->getAllIds();
+        foreach ($collection as $productId) {
+            $toInsert[] = array("campaign_id" => $object->getId(), "product_id" => $productId);
+        }
+        if (count($toInsert)) {
+            $this->_getWriteAdapter()->insertMultiple($table, $toInsert);
+        }
+        return $this;
+    }
     /**
      * @param Mage_Core_Model_Abstract $object
      * @param array $websites
@@ -42,32 +90,9 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         }
         return $this;
     }
-    public function setProducts($campaignId, $skuS)
-    {
-        if (!empty($skuS)) {
-            $table = $this->getTable("zolagocampaign/campaign_product");
-            $where = $this->getReadConnection()
-                ->quoteInto("campaign_id=?", $campaignId);
-            $this->_getWriteAdapter()->delete($table, $where);
-
-            $toInsert = array();
-            $collection = Mage::getModel('catalog/product')->getCollection()
-                ->addAttributeToSelect('entity_id')
-                ->addAttributeToFilter('SKU', array('in' => array('5-9943')))
-                ->getAllIds();
-            foreach ($collection as $productId) {
-                $toInsert[] = array("campaign_id" => $campaignId, "product_id" => $productId);
-            }
-            if (count($toInsert)) {
-                $this->_getWriteAdapter()->insertMultiple($table, $toInsert);
-            }
-        }
-
-        return $this;
-    }
     /**
      * @param Mage_Core_Model_Abstract $object
-     * @return type
+     * @return array
      */
     public function getAllowedWebsites(Mage_Core_Model_Abstract $object)
     {
@@ -80,5 +105,29 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $select->where("campaign_website.campaign_id=?", $object->getId());
         return $this->getReadConnection()->fetchCol($select);
     }
+
+    /**
+     * @param Mage_Core_Model_Abstract $object
+     * @return array
+     */
+    public function getCampaignProducts(Mage_Core_Model_Abstract $object)
+    {
+        if (!$object->getId()) {
+            return array();
+        }
+        $table = $this->getTable("zolagocampaign/campaign_product");
+        $select = $this->getReadConnection()->select();
+        $select->from(array("campaign_product" => $table), array());
+        $select->join(
+            array('product' => 'catalog_product_entity'),
+            'product.entity_id = campaign_product.product_id',
+            array(
+                'sku' => 'product.sku'
+            )
+        );
+        $select->where("campaign_product.campaign_id=?", $object->getId());
+        return $this->getReadConnection()->fetchCol($select);
+    }
+
 }
 

@@ -12,6 +12,7 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
     }
 	
     public function editAction() {
+        Mage::register('as_frontend', true);
         $campaign = $this->_initModel();
         $vendor = $this->_getSession()->getVendor();
 
@@ -45,13 +46,13 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
         if (!$this->getRequest()->isPost()) {
             return $this->_redirectReferer();
         }
-
+Mage::log($_POST);
         $campaign = $this->_initModel();
         $vendor = $this->_getSession()->getVendor();
 
         // Try save
         $data = $this->getRequest()->getParams();
-
+//Mage::log($data);
         $this->_getSession()->setFormData(null);
         $modelId = $this->getRequest()->getParam("id");
 
@@ -95,6 +96,17 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
 
         return $this->_redirect("*/*");
 	}
+
+    public function removeProductAction(){
+        $campaignId = $this->getRequest()->getParam("campaignId");
+        $productId = $this->getRequest()->getParam("productId");
+
+        if(!empty($campaignId) && !empty($productId)){
+            $model = Mage::getResourceModel("zolagocampaign/campaign");
+            $model->removeProduct($campaignId,$productId);
+        }
+        return $this->_redirectReferer();
+    }
 	
 	public function validateKeyAction() {
 		$key = $this->getRequest()->getParam('key');
@@ -142,20 +154,5 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
 		$session = $this->_getSession();
 		return $model->getVendorId()==$session->getVendorId();
 	}
-
-    public function saveProductsAction() {
-        $helper = Mage::helper('zolagocampaign');
-
-        // Try save
-        $products = $this->getRequest()->getParam("products", array());
-
-        $campaignId = $this->getRequest()->getParam("campaignId", array());
-
-        if (!empty($products)) {
-            $model = Mage::getResourceModel("zolagocampaign/campaign");
-            $model->setProducts($campaignId, emplode("," , $products));
-        }
-
-    }
    
 }

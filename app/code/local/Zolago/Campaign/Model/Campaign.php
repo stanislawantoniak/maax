@@ -45,7 +45,17 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         return $this->getData("website_ids");
     }
 
-    public function setProducts($campaignId, $skuS){
-        $this->getResource()->setProducts($campaignId, $skuS);
+    /**
+     * @return array
+     */
+    public function getCampaignProducts() {
+        if(!$this->hasData("campaign_products")){
+            $campaignProducts = array();
+            if($this->getId()){
+                $campaignProducts = $this->getResource()->getCampaignProducts($this);
+            }
+            $this->setData("campaign_products", implode("," , $campaignProducts));
+        }
+        return $this->getData("campaign_products");
     }
 }

@@ -11,7 +11,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Grid extends Mage_Adminhtml_Block_Wi
         $this->setGridClass('z-grid');
 		$this->setTemplate("zolagoadminhtml/widget/grid.phtml");
     }
-	
+
 	protected function _prepareCollection(){
 		$vendor = Mage::getSingleton('udropship/session')->getVendor();
 		/* @var $vendor Unirgy_Dropship_Model_Vendor */
