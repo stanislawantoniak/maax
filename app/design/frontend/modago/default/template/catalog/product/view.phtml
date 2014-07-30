@@ -41,11 +41,17 @@ switch($_reviewsCount) {
 ?>
 
 <?php $_helper = $this->helper('catalog/output'); ?>
+<?php /** @var $_product Mage_Catalog_Model_Product */ ?>
 <?php $_product = $this->getProduct(); ?>
 <?php
     // prices
     $price = $_product->getPrice();
     $finalPrice = $_product->getFinalPrice();
+    $sizeAttr = $_product->getResource()->getAttribute('size');
+    $productAttrs = array();
+    if($_product->getTypeId() == 'configurable') {
+        $productAttrs = $_product->getTypeInstance(true)->getConfigurableAttributesAsArray($_product);
+    }
 ?>
 <script type="text/javascript">
     var optionsPrice = new Product.OptionsPrice(<?php echo $this->getJsonConfig() ?>);
@@ -101,61 +107,32 @@ switch($_reviewsCount) {
                 </ul>
             </div>
         <?php endif; ?>
-
         <?php echo $this->getChildHtml('catalog.product.related'); ?>
+
         <div class="size-box-bundle">
-            <div class="size-box clearfix">
-                <div class="size">
-                    <span class="size-label">wybierz rozmiar:</span>
+            <?php if (!empty($productAttrs)) : ?>
+                <?php foreach($productAttrs as $_attribute) : ?>
+                    <?php if(array_key_exists('attribute_code', $_attribute) && $_attribute['attribute_code'] == 'size') : ?>
+                <div class="size-box clearfix">
+                    <div class="size">
+                        <span class="size-label"><?php echo $this->__("Select size"); ?>:</span>
 
-                    <div class="form-group form-radio">
-
-                        <label for="size_xs">
-                            <input type="radio" id="size_xs" name="size"><span>XS</span>
-                        </label>
-                        <label for="size_s">
-                            <input type="radio" id="size_s" name="size"><span>S</span>
-                        </label>
-                        <label for="size_m">
-                            <input type="radio" id="size_m" name="size"><span>M</span>
-                        </label>
-                        <label for="size_l">
-                            <input type="radio" id="size_l" name="size"><span>L</span>
-                        </label>
-                        <label for="size_xl">
-                            <input type="radio" id="size_xl" name="size"><span>XL</span>
-                        </label>
-                        <label for="size_xxl">
-                            <input type="radio" id="size_xxl" name="size"><span>XXL</span>
-                        </label>
-                        <a href="" class="view-sizing underline pull-left" data-toggle="modal" data-target="#tabelaRozmiarow">tabela rozmiarów </a>
+                        <div class="form-group form-radio">
+                            <?php foreach($_attribute['values'] as $_val) : ?>
+                            <label for="size_<?php echo $_val['value_index']; ?>">
+                                <input type="radio" id="size_<?php echo $_val['value_index']; ?>" data-id="<?php echo $_attribute['attribute_id']; ?>" name="super_attribute[<?php echo $_attribute['attribute_id']; ?>]" value="<?php echo $_val['value_index']; ?>" onclick="Mall.setSuperAttribute(this);"><span><?php echo $this->escapeHtml($_val['label']); ?></span>
+                            </label>
+                            <?php endforeach; ?>
+                            <br />
+                            <a href="#" class="view-sizing underline pull-left" data-toggle="modal"
+                               data-target="#tabelaRozmiarow"><?php echo $this->__("Sizes"); ?> </a>
+                        </div>
                     </div>
+
                 </div>
-                <div class="size hidden listSelect">
-                    <span class="size-label">wybierz rozmiar:</span>
-                    <a href="#" class="view-sizing visible-xs underline" data-toggle="modal" data-target="#tabelaRozmiarow">tabela rozmiarów </a>
-                    <div class="form-group styledSelected">
-
-                        <select name="size_select" class="form-control select-styled">
-                            <option value="">XS</option>
-                            <option value="">S</option>
-                            <option value="">M</option>
-                            <option value="">L</option>
-                            <option value="">XL</option>
-                            <option value="">XXL</option>
-                            <option value="">XS</option>
-                            <option value="">S</option>
-                            <option value="">M</option>
-                            <option value="">L</option>
-                            <option value="">XL</option>
-                            <option value="">XXL</option>
-                        </select>
-
-                    </div>
-                    <a href="" class="view-sizing underline hidden-xs pull-left" data-toggle="modal" data-target="#tabelaRozmiarow">tabela rozmiarów </a>
-                </div>
-
-            </div>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+            <?php endif; ?>
 
             <div class="row">
                 <div class="action-box-bundle clearfix">
@@ -173,7 +150,7 @@ switch($_reviewsCount) {
                     </div>
 
                     <div class="col-xs-6 text-right">
-                        <button class="btn button button-primary ico addBasket">dodaj do koszyka</button>
+                        <button class="btn button button-primary ico addBasket" onclick="Mall.addToCart(<?php echo $_product->getId(); ?>, <?php echo !$_product->getStockItem()->getMinSaleQty() ? 1 : $_product->getStockItem()->getMinSaleQty(); ?>);return false;">dodaj do koszyka</button>
                     </div>
                 </div>
             </div>

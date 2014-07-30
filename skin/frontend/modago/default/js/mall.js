@@ -6,6 +6,7 @@ var Mall = {
     _data: {},
     _product_template: '<tr><td class="thumb"><img src="{{image_url}}" alt=""></td><td class="desc"><p class="name_product">{{name}}</p><p class="size">{{attr_label}}:<span>{{attr_value}}</span></p><p class="quantity">ilość:<span>{{qty}}</span></p></td><td class="price">{{unit_price}} {{currency_symbol}}</td></tr>',
     _recently_viewed_item_template: '<div class="item"><a href="{{redirect_url}}" class="simple"><div class="box_listing_product"><figure class="img_product"><img src="{{image_url}}" alt="" /></figure><div class="name_product hidden-xs">{{title}}</div></div></a></div>',
+    _current_superattribute: null,
     extend: function(subclass, superclass) {
         function Dummy(){}
         Dummy.prototype = superclass.prototype;
@@ -98,6 +99,10 @@ var Mall = {
 
     dispatch: function() {
         // fetch shopping cart and favourites informations
+        this.getAccountInfo();
+    },
+
+    getAccountInfo: function() {
         jQuery.ajax({
             cache: false,
             dataType: "json",
@@ -125,6 +130,8 @@ var Mall = {
                 var products = data.content.cart.products;
                 // build object for filling products template
                 Mall._data = data.content;
+                // clear products
+                jQuery("#product-list").html('');
                 if(data.content.cart.all_products_count == 0) {
                     jQuery("#product-list").html('<p style="text-align: center;margin-top:20px;">Brak produktów w koszyku.</p>');
                 } else {
@@ -266,8 +273,29 @@ var Mall = {
         } else {
             Mall.removeFromWishlist(urlRemove, id);
         }
+    },
+
+    setSuperAttribute: function(currentSelection) {
+        this._current_superattribute = currentSelection;
+    },
+
+    addToCart: function(id, qty) {
+        var superLabel = jQuery(this._current_superattribute).attr("name");
+        var attr = {};
+        attr[jQuery(this._current_superattribute).attr("data-id")] = jQuery(this._current_superattribute).attr("value");
+        OrbaLib.Cart.add({
+            "product_id": id,
+            "super_attribute": attr,
+            "qty": qty
+        }, addtocartcallback);
+        return false;
     }
 
+}
+
+function addtocartcallback(response) {
+    console.log(response);
+    Mall.getAccountInfo();
 }
 
 jQuery(document).ready(function() {
