@@ -1,3 +1,6 @@
+
+
+
 var prevW = -1, prevH = -1;
 jQuery.noConflict();
 (function( $ ) {
@@ -2551,8 +2554,8 @@ var rwd_banners = $("#rwd-banners .rwd-carousel");
           itemsMobile : [480,3], // itemsMobile disabled - inherit from itemsTablet option
           pagination : false,
           navigation: true,
-           rewindNav : false,
-           itemsScaleUp:true,
+          rewindNav : false,
+          itemsScaleUp:false,
            afterUpdate: function(){
               var imgHeight = rwd_complementary_product.find('img').height()/2;
               var imgHeightplus = rwd_complementary_product.find('img').height()/2-20;
