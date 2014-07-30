@@ -12781,8 +12781,9 @@ div.noscroll {
   padding-right: 0px !important; }
 /* line 177, ../sass/style/_list-product.scss */
 .box_listing_product .price.like-two-line .like .icoLike {
-  top: 22px; }
-/* line 183, ../sass/style/_list-product.scss */
+  top: 22px;
+  min-width: 21px; }
+/* line 184, ../sass/style/_list-product.scss */
 .box_listing_product .promotion {
   background: #aefbe1;
   border: 2px solid #ffd9fc;
@@ -12790,7 +12791,7 @@ div.noscroll {
   text-align: center;
   padding: 5px 10px;
   color: #4f4f4f; }
-/* line 190, ../sass/style/_list-product.scss */
+/* line 191, ../sass/style/_list-product.scss */
 .box_listing_product .promotion p {
   margin: 0px;
   padding: 0px;
@@ -12798,7 +12799,7 @@ div.noscroll {
   font-style: italic;
   font-family: "latoblack"; }
 
-/* line 199, ../sass/style/_list-product.scss */
+/* line 200, ../sass/style/_list-product.scss */
 .shapes_listing {
   height: 60px;
   /* IE9 SVG, needs conditional override of 'filter' to 'none' */
@@ -12824,12 +12825,12 @@ div.noscroll {
   text-align: center;
   z-index: 900; }
 
-/* line 218, ../sass/style/_list-product.scss */
+/* line 219, ../sass/style/_list-product.scss */
 .addNewPositionListProductWrapper {
   text-align: center;
   margin-top: -15px; }
 
-/* line 224, ../sass/style/_list-product.scss */
+/* line 225, ../sass/style/_list-product.scss */
 .addNewPositionListProduct:link, .addNewPositionListProduct:visited {
   height: 38px;
   width: 245px;
@@ -12842,10 +12843,10 @@ div.noscroll {
   position: relative;
   z-index: 901;
   outline: none; }
-/* line 238, ../sass/style/_list-product.scss */
+/* line 239, ../sass/style/_list-product.scss */
 .addNewPositionListProduct:hover {
   color: #fff; }
-/* line 242, ../sass/style/_list-product.scss */
+/* line 243, ../sass/style/_list-product.scss */
 .addNewPositionListProduct:hover, .addNewPositionListProduct.hover {
   background: #b08944;
   /* Old browsers */
@@ -12865,7 +12866,7 @@ div.noscroll {
   /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#b08944', endColorstr='#705e29',GradientType=1 );
   /* IE6-8 fallback on horizontal gradient */ }
-/* line 257, ../sass/style/_list-product.scss */
+/* line 258, ../sass/style/_list-product.scss */
 .addNewPositionListProduct:active, .addNewPositionListProduct:focus, .addNewPositionListProduct.active {
   background: #6d5920;
   /* Old browsers */
@@ -12884,7 +12885,7 @@ div.noscroll {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#6d5920', endColorstr='#af8438',GradientType=1 );
   /* IE6-9 fallback on horizontal gradient */ }
 
-/* line 277, ../sass/style/_list-product.scss */
+/* line 278, ../sass/style/_list-product.scss */
 #items-product .item .box_listing_product:hover .name_product, #items-product .item .box_listing_product.hover .name_product {
   text-decoration: underline; }
 
@@ -13368,7 +13369,7 @@ i.flag.new {
   height: 54px;
   width: 55px; }
 /* line 512, ../sass/style/_shop_product.scss */
-i.flag.hit, i.flag.bsesseller {
+i.flag.hit, i.flag.bestseller {
   background-position: 0 -162px;
   height: 54px;
   width: 53px; }

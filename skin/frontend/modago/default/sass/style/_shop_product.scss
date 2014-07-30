@@ -509,7 +509,7 @@
 			@include sprite-dimensions($flagMap, new);
 		}
 		&.hit,
-		&.bsesseller  {
+		&.bestseller  {
 			@include sprite($flagMap, hit);
 			@include sprite-dimensions($flagMap, hit);
 		}
