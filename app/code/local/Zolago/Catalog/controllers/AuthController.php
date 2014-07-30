@@ -7,11 +7,6 @@ class Zolago_Catalog_AuthController extends Mage_Core_Controller_Front_Action
 {
 
     public function indexAction(){
-        $m = new Zolago_Campaign_Model_Campaign();
-        $p = $m->getCampaignProductsInfo();
-        krumo($p);
-
-        die('test');
         $apiModel = new Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1();
 
 
