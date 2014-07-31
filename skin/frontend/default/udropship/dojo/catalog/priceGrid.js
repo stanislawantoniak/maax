@@ -93,7 +93,6 @@ define([
 		_queue: [],
 		_grid: null,
 		_timeout: null,
-		_limit: 200,
 		_yes: "-",//"▾",
 		_can: "+",//"▸",
 		_not: "",
@@ -213,9 +212,10 @@ define([
 			
 			while(this._queue.length){
 				buffer.push(this._queue.splice(0,1));
-				if(++i>this._limit){
+				if(++i>this.getGrid().get('maxRowsPerPage')){
 					this._doXhr(buffer);
 					buffer = [];
+					i = 0;
 				}
 			}
 			if(buffer.length){
@@ -267,6 +267,7 @@ define([
 	
 	
 	//var testStore =  Observable(Cache(storeRest, Memory()));
+	// cache crakcs edit
 	var testStore =  Observable(storeRest);
 	
 	var PriceGrid = declare([Grid, Selection,Keyboard, CompoundColumns]);
@@ -317,9 +318,9 @@ define([
 		noDataMessage: "<span>No results found</span>.",
         selectionMode: 'none',
 		minRowsPerPage: 50,
-		maxRowsPerPage: 200,
-		pagingDelay: 100,
-		bufferRows: 100,
+		maxRowsPerPage: 100,
+		pagingDelay: 200,
+		bufferRows: 50,
 		renderRow: renderer,
 		store: testStore,
 		deselectOnRefresh: false,
@@ -331,7 +332,7 @@ define([
 	updater.setGrid(grid);
 	
 	// listen for clicks to trigger expand/collapse in table view mode
-	expandoListener = on.pausable(grid.domNode, ".dgrid-row td:not(.field-selector) :click", function(evt){
+	expandoListener = on.pausable(grid.domNode, ".dgrid-row td.field-expander :click", function(evt){
 		updater.toggle(grid.row(evt));		
 	});
 	
