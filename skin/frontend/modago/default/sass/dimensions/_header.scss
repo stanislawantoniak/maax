@@ -331,3 +331,80 @@
         }
     }
 }
+
+
+.top_bottom {
+    // NAV DESKPOT
+    //#nav_desc {
+        .navigation {
+            margin-left:-10px;
+            margin-right: 0px;
+            margin-top:4px;
+            margin-bottom: 3px;
+            padding:0px;
+            li {
+                display:inline-block;
+                height:41px;
+                    @include max-screen($screen-sm - 1) {
+                        display:block;
+                    }      
+                a:link,
+                a:visited {
+                   padding:8px 20px 8px 10px !important;
+                }
+                
+    /* === SUBMENU === */
+                ul {
+                    display:none;
+                    li {
+                        margin-left: 38px;
+                        
+                    }
+                }
+            }
+        }
+    //}
+    // END NAV DESCOPT
+
+    #shop_nav_mobile {
+        > li {
+            display:block;
+            height:auto;
+            > a:link,
+            > a:visited {
+            text-decoration: none;
+            position:relative;
+            display:block;
+            padding-left:15px;
+                i.fa {
+                    position:absolute;
+                    right:7px;
+                    top:50%;
+                    margin-top:-8px;
+                }
+            }
+            > a:hover {
+                text-decoration: underline;
+            }
+           
+            ul {
+                &.open {
+                    -webkit-padding-start: 0px !important;
+                    display:block;
+                }
+            }
+            li {
+                margin-left: 0;
+                a {
+                    width:249px;
+                    display:block;
+                    padding-left:25px!important;
+                    font-size: 15px;
+                }
+                a:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+}

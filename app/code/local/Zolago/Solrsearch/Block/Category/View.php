@@ -5,17 +5,29 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
         parent::_construct();
         $this->setTemplate("zolagosolrsearch/category/view.phtml");
     }
+	
+	protected function _prepareLayout() {
+		if($this->isContentMode()){
+			$this->getLayout()->getBlock('content')->
+					unsetChild('solrsearch_result_title')->
+					unsetChild('solrsearch_product_list_active')->
+					unsetChild('solrsearch_product_list_toolbar');
+			
+		}
+		return parent::_prepareLayout();
+	}
+	
     public function isContentMode() {
         $category = $this->getCurrentCategory();
         $res = false;
         if ($category->getDisplayMode()==Mage_Catalog_Model_Category::DM_PAGE) {
             $res = true;
-            if ($category->getIsAnchor()) {
+           /* if ($category->getIsAnchor()) {
                 $state = Mage::getSingleton('catalog/layer')->getState();
                 if ($state && $state->getFilters()) {
                     $res = false;
                 }
-            }
+            }*/
         }
         return $res;
     }

@@ -258,7 +258,7 @@ class SolrBridge_Solrsearch_Model_Price
 				'website_id' => $store->getWebsiteId()
 		);
 		
-		Mage::log("Incl tax:" . $priceIncTax . " / Excl:" . $priceExcTax);
+		//Mage::log("Incl tax:" . $priceIncTax . " / Excl:" . $priceExcTax);
 
 		Mage::app ()->setCurrentStore ( $oldStore );
 

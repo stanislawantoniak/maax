@@ -1,10 +1,10 @@
 .recently-viewed {
     .rwd-wrapper{
-        margin: 0 -5px;
+        
     }
 
     .rwd-item {
-        margin:0 5px 0 5px;
+        padding:0px 5px;
     }
 	h3.title-section {
 		padding-top:0px;
@@ -118,7 +118,7 @@
 				text-indent: -999em;	
 			}
 			.rwd-prev {
-				left:-15px;
+				left:-23px;
 				
 				@include sprite($arrowMap, arrow-slider-latest-left-l);
 				@include sprite-dimensions($arrowMap, arrow-slider-latest-left-l);
@@ -137,7 +137,7 @@
 
 			}
 			.rwd-next {
-				right:-15px;
+				right:-26px;
 				@include sprite($arrowMap, arrow-slider-latest-right-l);
 				@include sprite-dimensions($arrowMap, arrow-slider-latest-right-l);
 				@media (max-width: $screen-xs-max) {

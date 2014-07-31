@@ -72,9 +72,25 @@ border-radius: 2px;
 }
 
 .node-type-page-shop {
+	#header {
+		#navigation {
+			display:none!important;
+		}
+	}
+	.top_bottom {
+		margin-bottom: 15px;
+		margin-top:-1px;
+		&.bg-w {
+			border-top:none;
+		}
+		//padding-top: 2px;
+		.overlay-color {
+			//border-top:1px solid #CFCDD2;
+		}
+	}
 	.blockCarouselTop {
 		@media (max-width: $screen-xs-max) {
-			max-width: 320px;
+			padding: 0 30px;
 			margin-top: 15px;
 			margin-left:auto;
 			margin-right:auto;

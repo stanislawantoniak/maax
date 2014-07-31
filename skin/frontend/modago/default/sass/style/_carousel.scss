@@ -65,6 +65,10 @@
     height: 30px;
     line-height: 30px;
     left:90%;
+    @media (max-width:480px) {
+    	width: 15%;
+    	left:85%;
+    }
 }
 #carousel-top-mobile-generic {
 	.item {

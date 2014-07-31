@@ -25,5 +25,23 @@
 				}
 			}
 		}
+		.rwd-controls {
+			.rwd-buttons {
+				.rwd-prev,
+				.rwd-next {
+					top:50%;
+				}
+				.rwd-prev {
+					@media (max-width: 360px) { 
+						left:-20px;
+					}
+				}
+				.rwd-next {
+					@media (max-width: 360px) {
+						right:-20px;
+					 }
+				}
+			}
+		}
 	}
 }

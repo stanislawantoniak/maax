@@ -77,6 +77,9 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 			$_product = $product->getData();
 			$_product['listing_resized_image_url'] = (string)$product->getListingResizedImageUrl();
 			$_product['udropship_vendor_logo_url'] = (string)$product->getUdropshipVendorLogoUrl();
+			$_product['is_discounted'] = (int)$product->isDiscounted();
+			$_product['price'] = (float)$product->getPrice();
+		    $_product['final_price'] = (float)$product->getFinalPrice();
 			$_product['currency'] = (string)$product->getCurrency();
 			$products[] = $_product;
 		}

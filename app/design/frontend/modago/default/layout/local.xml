@@ -40,6 +40,7 @@
 
             <!--<action method="addItem"><type>skin_js</type><script>js/vendor/jquery-1.10.2.min.js</script></action>-->
             <action method="addJs"><script>jquery/jquery-1.11.0.min.js</script></action>
+            <action method="addItem"><type>skin_js</type><script>js/mall.js</script></action>
             <action method="addJs"><script>bootstrap/bootstrap.min.js</script></action>
             <action method="addItem"><type>skin_js</type><script>js/vendor/modernizr-2.6.2.min.js</script></action>
             <!--<action method="addItem"><type>skin_js</type><script>js/modago.js</script></action>-->
@@ -56,8 +57,14 @@
             <action method="addItem"><type>skin_js</type><script>js/zoomsl-3.0.min.js</script></action>
             <action method="addItem"><type>skin_js</type><script>js/plugins.js</script></action>
             <action method="addItem"><type>skin_js</type><script>js/fns.js</script></action>
-            <action method="addItem"><type>skin_js</type><script>js/mall.js</script></action>
             <block type="orbacommon/page_html_head" name="orba.jslib" template="orbacommon/js/script.phtml" />
+            <block type="core/text" name="addthis.javascript">
+                <action method="setText">
+                    <text>
+                        <![CDATA[<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-53d0e56923edc13e"></script> ]]>
+                    </text>
+                </action>
+            </block>
         </reference>
 
         <reference name="root">
@@ -207,10 +214,15 @@
             <block name="product.info.media.modal" type="catalog/product_view_media" template="catalog/product/view/modal.gallery.phtml"/>
             <block name="product.vendor.info" type="zolagocatalog/product_vendor_info" template="catalog/product/vendor/info.phtml">
                 <block name="product.vendor.deliveryreturn" type="zolagocatalog/product_vendor_deliveryreturn"/>
-                <block name="udqa.product.question.mobile" type="udqa/product_question" template="catalog/product/question-mobile.phtml" />
+                <block name="udqa.product.question.mobile" type="udqa/product_question" template="catalog/product/question-mobile.phtml"/>
             </block>
-            <block name="product.vendor.sizecomments" type="zolagocatalog/product_vendor_sizecomments" />
-            <block name="udqa.product.question" type="udqa/product_question" />
+            <block name="product.vendor.sizecomments" type="zolagocatalog/product_vendor_sizecomments"/>
+            <block name="udqa.product.question" type="udqa/product_question"/>
+            <block name="product.review.section" type="zolagomodago/review_product_view_list" template="review/product/view/list.phtml">
+                <block name="product.review.form" type="zolagomodago/review_form"/>
+            </block>
+            <block type="catalog/product_list_crosssell" name="product.info.crosssell" as="crosssell" template="catalog/product/view/crosssell.phtml"/>
+            <block type="catalog/product_list_related" name="catalog.product.related" before="-" template="catalog/product/list/related.phtml"/>
         </reference>
 
         <reference name="product.info.addto">
