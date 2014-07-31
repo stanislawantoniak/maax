@@ -164,6 +164,10 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
         return $this->getModel()->getCampaignProductsInfo();
     }
 
+    public function getRemoveProductPath()
+    {
+        return Mage::getBaseUrl() . "campaign/vendor/removeProduct";
+    }
     /**
      * @return Zolago_Campaign_Model_Campaign
      */

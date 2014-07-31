@@ -61,6 +61,33 @@ jQuery.validator.addMethod("integer", function(value, element) {
 	return this.optional(element) || /^-?\d+$/.test(value);
 }, "A positive or negative non-decimal number please");
 
+jQuery.validator.addMethod('dateBefore', function(value, element, params) {
+    // if end date is valid, validate it as well
+    var end = jQuery(params);
+    if (!end.data('validation.running')) {
+        jQuery(element).data('validation.running', true);
+        this.element(end);
+        jQuery(element).data('validation.running', false);
+    }
+    console.log(value);
+    console.log(new Date(value));
+    console.log(new Date(value) < new Date(end.val()));
+    return this.optional(element) || this.optional(end[0]) || new Date(value) < new Date(end.val());
+
+}, 'Must be before corresponding end date');
+
+jQuery.validator.addMethod('dateAfter', function(value, element, params) {
+    // if start date is valid, validate it as well
+    var start = jQuery(params);
+    if (!start.data('validation.running')) {
+        jQuery(element).data('validation.running', true);
+        this.element(start);
+        jQuery(element).data('validation.running', false);
+    }
+    console.log(new Date(value) > new Date(jQuery(params).val()));
+    return this.optional(element) || this.optional(start[0]) || new Date(value) > new Date(jQuery(params).val());
+
+}, 'Must be after corresponding start date');
 /**
  * Return true, if the value is a valid vehicle identification number (VIN).
  *

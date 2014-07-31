@@ -96,8 +96,8 @@
                 removeCampaignProductLink(campaignId, productId);
             })
             function removeCampaignProductLink(campaignId, productId) {
-                var baseUrl = '<?php echo Mage::getBaseUrl(); ?>';
-                var link = baseUrl + "campaign/vendor/removeProduct?campaignId=" + campaignId + "&productId=" + productId;
+                var removePath = '<?php echo $this->getRemoveProductPath(); ?>';
+                var link = removePath + "?campaignId=" + campaignId + "&productId=" + productId;
                 window.location = link;
             }
 
@@ -108,6 +108,9 @@
                     "percent": {
                         max: 100
                     }
+//                    ,
+//                    date_from: {dateBefore: '#date_to'},
+//                    date_to: {dateAfter: '#date_from'}
                 }
             });
             //$(".datepicker").datepicker();
