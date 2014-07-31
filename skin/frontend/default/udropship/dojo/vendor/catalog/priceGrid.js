@@ -17,8 +17,11 @@ define([
     'dgrid/Selection',
     'dgrid/selector',
     "dojo/_base/lang",
-	"dojo/request"
-], function(Grid, CompoundColumns, Selection, Keyboard, editor, declare, domConstruct, on, query, Memory, Observable, put, descriptionHtml, Cache, JsonRest, Selection, selector, lang, request){
+	"dojo/request",
+	"vendor/grid/ObserverFilter",
+], function(Grid, CompoundColumns, Selection, Keyboard, editor, declare, domConstruct, 
+	on, query, Memory, Observable, put, descriptionHtml, Cache, JsonRest, Selection, 
+	selector, lang, request, ObserverFilter){
 	
 	
 	var states = {
@@ -28,63 +31,52 @@ define([
 	}
 	
 	
-	 var ObserverFilter = declare(null, {
-		interval: null,
-		field: null,
-		grid: null,
-		oldValue: null,
-		dataField: null, 
-		constructor: function(field, grid, dataField){
-			this.field = field;
-			this.grid = grid;
-			this.dataField = dataField;
-			this.oldValue = field.value;
-		},
-		// Zaczyna sprawdzanie
-		start: function(){
-			var self = this;
-			this._clear();
-			this.interval = setInterval(function(){
-				self.update();
-			}, 300);
-		},
-		// Stopuje interwal
-		stop: function(){
-			this._clear();
-		},
-		// Czysci interwal
-		_clear: function(){
-			if(this.interval){
-				clearInterval(this.interval);
-			}
-		},
-		update: function(){
-			var value = this.field.value;
+	var filterRendererFacory = function(type, name, config){
+		type = type || "text";
+		config = config || {};
+		switch(type){
+			case "text":
+				return function(){
+					var element = domConstruct.create("input", {
+						"type": "text",
+						"className": "text-filter"
+					}),
+					observer = new ObserverFilter(element, this.grid, name);
 
-			if(value!=this.oldValue){
-				// need query factory
-				if(value!=""){
-					grid.set('query', {name: value});
-				}else{
-					grid.set('query', {});
+					on(element, 'focus',	lang.hitch(observer, observer.start));
+					on(element, 'keyup',	lang.hitch(observer, observer.start));
+					on(element, 'keydown',	lang.hitch(observer, observer.start));
+					on(element, 'blur',		lang.hitch(observer, observer.stop));
+					
+					return element;
 				}
-				this.oldValue = value;
-			}
+			break;
+			case "range":
+				return function(){
+					var grid = this.grid;
+					var wrapper = domConstruct.create("div");
+					["from", "to"].forEach(function(type){
+						var element = domConstruct.create("input", {
+							"type": "text",
+							"placeholder": type[0].toUpperCase() + type.slice(1),
+							"className": "range-field" + " " + "range-field-" + type
+						});
+						
+						var observer = new ObserverFilter(element, grid, name + '['+type+']');
+						
+						on(element, 'focus',	lang.hitch(observer, observer.start));
+						on(element, 'keyup',	lang.hitch(observer, observer.start));
+						on(element, 'keydown',	lang.hitch(observer, observer.start));
+						on(element, 'blur',		lang.hitch(observer, observer.stop));
+						
+						put(wrapper, element);
+					});
+
+					
+					return wrapper;
+				}
+			break;
 		}
-	})
-	
-	 var nameRenderer = function(){
-		var element = domConstruct.create("input", {
-			"type": "text"
-		}),
-		observer = new ObserverFilter(element, this.grid, 'name');
-
-		on(element, 'focus', lang.hitch(observer, observer.start));
-		on(element, 'keyup', lang.hitch(observer, observer.start));
-		on(element, 'keydown', lang.hitch(observer, observer.start));
-		on(element, 'blur', lang.hitch(observer, observer.stop));
-
-		return element;
 	}
 	
 	var RowUpdater = declare(null, {
@@ -294,10 +286,9 @@ define([
 			name: {
 				label: "Name",
 				field: "name",
-				
 				children: [
 					editor({
-						renderHeaderCell: nameRenderer,
+						renderHeaderCell: filterRendererFacory("text", "name"),
 						sortable: false, 
 						field: "name",
 						editor: "text",
@@ -307,12 +298,47 @@ define([
 					})
 				]
 			},
+			price: {
+				label: "Price",
+				field: "final_price",
+				className: "column-medium",
+				children: [
+					editor({
+						renderHeaderCell: filterRendererFacory("range", "final_price"),
+						sortable: false, 
+						field: "final_price",
+						editor: "text",
+						editOn: "dblclick",
+						className: "filterable align-right column-medium",
+						autoSave: true
+					})
+				]
+			},
+			margin: {
+				label: "Margin",
+				field: "price_margin",
+				className: "column-medium",
+				children: [
+					editor({
+						renderHeaderCell: filterRendererFacory("range", "margin"),
+						sortable: false, 
+						field: "price_margin",
+						editor: "text",
+						editOn: "dblclick",
+						className: "filterable align-right column-medium",
+						autoSave: true
+					})
+				]
+			},
 			entity_id: {
 				label: "Product Id",
 				field: "entity_id"
 			},
-			sku: { label: "Sku", field: "sku" },
-			type: { label: "Type", field: "type_id" }
+			type: { 
+				label: "Type", 
+				field: "type_id",
+				className: "column-medium"
+			}
 		},
 		loadingMessage: "<span>Loading data...</span>",
 		noDataMessage: "<span>No results found</span>.",

@@ -76,14 +76,85 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Dropship_Controller_V
 		$collection = Mage::getResourceModel("catalog/product_collection");
 		/* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
 		
+		$storeId = 1;
+		$store = Mage::app()->getStore($storeId);
+		
+		$collection->setStoreId($storeId);
+		
+		
 		// Filter visible
 		$collection->addAttributeToFilter("visibility", 
 				array("neq"=>$visibilityModel::VISIBILITY_NOT_VISIBLE), "inner");
 		// Filter dropship
 		$collection->addAttributeToFilter("udropship_vendor", $this->getVendor()->getId(), "inner");
 		
-		// Add some attribs
-		$collection->addAttributeToSelect("name", "left");
+		// Add non-o attribs
+		$attributesToSelect = array(
+			"converter_price_type",
+			"price_margin",
+			//"campaign_regular_id",
+			//"campaign_info_id",
+			"msrp",
+			"is_new",
+			"is_bestseller",
+			"status",
+			"product_flag",
+			"skuv"
+		);
+		
+		foreach($attributesToSelect as $attribute){
+			$collection->joinAttribute($attribute, 'catalog_product/'.$attribute, 'entity_id', null, 'left', $storeId);
+		}
+		
+		$neededAttributes = array(
+			"name"
+		);
+		
+		foreach($neededAttributes as $attribute){
+			$collection->joinAttribute($attribute, 'catalog_product/'.$attribute, 'entity_id', null, 'inner', $storeId);
+		}
+		
+		$select = $collection->getSelect();
+		$adapter = $select->getAdapter();
+		
+		
+		// Join stock index
+		$collection->getSelect()->joinLeft(
+			array("stock"=>$collection->getTable('cataloginventory/stock_status_indexer_idx')),
+			$adapter->quoteInto("stock.product_id=e.entity_id AND stock.website_id=?", $store->getWebsiteId()),
+			array("stock_status"=>"stock.stock_status", "stock_qty"=>"stock.qty")
+		);
+		
+		
+		// Join prices data
+		$joinCond = array(
+			'price_index.entity_id = e.entity_id',
+			$adapter->quoteInto('price_index.website_id = ?', $store->getWebsiteId()),
+			// Default not logged in
+			$adapter->quoteInto('price_index.customer_group_id = ?', Mage_Customer_Model_Group::NOT_LOGGED_IN_ID)
+		);
+
+		$least = $adapter->getLeastSql(
+			array('price_index.min_price', 'price_index.tier_price')
+		);
+		$minimalExpr = $adapter->getCheckSql(
+				'price_index.tier_price IS NOT NULL', $least, 'price_index.min_price'
+		);
+
+		$colls = array(
+			'price', 
+			'tax_class_id', 
+			'final_price',
+			'minimal_price' => $minimalExpr , 
+			'min_price', 
+			'max_price', 
+			'tier_price'
+		);
+
+		$tableName = array('price_index' => $collection->getTable('catalog/product_index_price'));
+
+		$select->join($tableName, implode(' AND ', $joinCond), $colls);
+		
 
 		return $collection;
 	}

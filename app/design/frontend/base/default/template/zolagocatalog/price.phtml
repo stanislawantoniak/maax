@@ -15,8 +15,11 @@
 	</div>
 </div>
 <style>
-	#grid-holder .field-expander,
-	#grid-holder .field-selector{
+	#grid-holder{
+		height: 600px;
+	}
+#grid-holder .field-expander,
+#grid-holder .field-selector{
 		width: 25px;
 		text-align: center;
 	}
@@ -32,6 +35,12 @@
 
 #grid-holder .collapsed .expando {
 	display: none;
+}
+#grid-holder  .align-right {
+	text-align: right;
+}
+#grid-holder  .column-medium {
+	width: 100px;
 }
 
 #grid-holder .dgrid-no-data span,
@@ -51,11 +60,19 @@
 	width: 100%;
 }
 
+#grid-holder .filterable .range-field{
+	display: inline-block;
+	width: 49.5%;
+}
+#grid-holder .filterable .range-field-from{
+	margin-right: 1%;
+}
+
 </style>
 <script type="text/javascript">
 	
 	
-	require(['catalog/priceGrid', 'dojo/store/Memory', 'dojo/store/Observable'], function(priceGrid, Memory, Observable){
+	require(['vendor/catalog/priceGrid', 'dojo/store/Memory', 'dojo/store/Observable'], function(priceGrid, Memory, Observable){
 		<?php /*
 		var store = new Observable(new Memory({ idProperty: "entity_id", data: <?php echo $this->getJsonCollection();?>}));
 		
