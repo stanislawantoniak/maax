@@ -294,8 +294,11 @@ var Mall = {
 }
 
 function addtocartcallback(response) {
-    console.log(response);
-    Mall.getAccountInfo();
+    if(response.status == false) {
+        alert(response.message);
+    } else {
+        Mall.getAccountInfo();
+    }
 }
 
 jQuery(document).ready(function() {
