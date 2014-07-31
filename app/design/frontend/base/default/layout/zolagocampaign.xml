@@ -10,6 +10,16 @@
 	</zolagocampaign_vendor_index>
 	
 	<zolagocampaign_vendor_edit>
+        <reference name="head">
+            <action method="addItem">
+                <type>skin_css</type>
+                <name>js/plugins/datetimepicker/jquery.datetimepicker.css</name>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>js/plugins/datetimepicker/jquery.datetimepicker.js</name>
+            </action>
+        </reference>
 		<update handle="udropship_vendor" />
         <update handle="adminhtml_head" />
         <update handle="bootstrap"/>
