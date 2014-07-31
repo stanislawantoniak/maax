@@ -12,8 +12,9 @@
 	<zolagocampaign_vendor_edit>
 		<update handle="udropship_vendor" />
         <update handle="adminhtml_head" />
-		<update handle="forms"/>
         <update handle="bootstrap"/>
+		<update handle="forms"/>
+
         <update handle="noty"/>
 		<reference name="content">
 			<block name="campaign.edit" type="zolagocampaign/vendor_campaign_edit" template="zolagocampaign/dropship/campaign/edit.phtml">
