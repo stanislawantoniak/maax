@@ -19,9 +19,6 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
             $this->_setWebsites($object, $object->getData("website_ids"));
         }
         // Products Assignment
-        Mage::log("_afterSave");
-        Mage::log($object->getData("campaign_products"));
-        Mage::log("_afterSave");
         if ($object->hasData("campaign_products")) {
             $productsStr = $object->getData("campaign_products");
             $products = array();

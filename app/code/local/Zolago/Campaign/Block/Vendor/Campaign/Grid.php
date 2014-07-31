@@ -28,14 +28,14 @@ class Zolago_Campaign_Block_Vendor_Campaign_Grid extends Mage_Adminhtml_Block_Wi
 		$this->addColumn("name", array(
 			"type"		=>	"text",
 			"index"		=>	"name",
-			"class"		=>  "form-controll",
+			"class"		=>  "form-control",
 			"header"	=>	$_helper->__("Campaign"),
 		));
 		
 		$this->addColumn("url_key", array(
 			"type"		=>	"text",
 			"index"		=>	"url_key",
-			"class"		=>  "form-controll",
+			"class"		=>  "form-control",
 			"header"	=>	$_helper->__("Url"),
 		));
 		
@@ -43,38 +43,38 @@ class Zolago_Campaign_Block_Vendor_Campaign_Grid extends Mage_Adminhtml_Block_Wi
             "type"		=>	"options",
             "options"	=> Mage::getSingleton('zolagocampaign/campaign_type')->toOptionHash(),
 			"index"		=>	"type",
-			"class"		=>  "form-controll",
+			"class"		=>  "form-control",
 			"header"	=>	$_helper->__("Campaign Type"),
 		));
         $this->addColumn("date_from", array(
             "type"		=>	"date",
             "index"		=>	"date_from",
-            "class"		=>  "form-controll",
+            "class"		=>  "form-control",
             "header"	=>	$_helper->__("Date From"),
         ));
         $this->addColumn("date_to", array(
             "type"		=>	"date",
             "index"		=>	"date_to",
-            "class"		=>  "form-controll",
+            "class"		=>  "form-control",
             "header"	=>	$_helper->__("Date To"),
         ));
         $this->addColumn("price_source_id", array(
             "type"		=>	"options",
             "options"	=>  Mage::getSingleton('zolagocampaign/campaign_pricesource')->toOptionHash(),
             "index"		=>	"price_source_id",
-            "class"		=>  "form-controll",
+            "class"		=>  "form-control",
             "header"	=>	$_helper->__("Price source"),
         ));
         $this->addColumn("percent", array(
             "type"		=>	"text",
             "index"		=>	"percent",
-            "class"		=>  "form-controll",
+            "class"		=>  "form-control",
             "header"	=>	$_helper->__("Discount percent"),
         ));
         $this->addColumn("price_srp", array(
             "type"		=>	"text",
             "index"		=>	"price_srp",
-            "class"		=>  "form-controll",
+            "class"		=>  "form-control",
             "header"	=>	$_helper->__("Price SRP"),
         ));
 
@@ -82,7 +82,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Grid extends Mage_Adminhtml_Block_Wi
             "type"		=>	"options",
             "options"	=>  Mage::getSingleton('zolagocampaign/campaign_status')->toOptionHash(),
 			"index"		=>	"status",
-			"class"		=>  "form-controll",
+			"class"		=>  "form-control",
 			"header"	=>	$_helper->__("Status"),
 		));
 

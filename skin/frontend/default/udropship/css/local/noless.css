@@ -72,3 +72,11 @@
     text-align:center;
     margin:2px;
 }
+
+#zolagocampaign_campaign_product_grid .form-group {
+    margin: 0px;
+    border-top: none;
+}
+#zolagocampaign_campaign_product_grid .pull-right .form-group {
+    padding-top: 17px;
+}

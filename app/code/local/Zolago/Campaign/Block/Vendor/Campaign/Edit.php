@@ -5,6 +5,16 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
 
     protected function _construct()
     {
+        parent::_construct();
+    }
+    public function _prepareLayout() {
+
+        $this->_prepareGrid();
+        $this->_prepareForm();
+        parent::_prepareLayout();
+    }
+
+    public function _prepareForm(){
         $helper = Mage::helper('zolagocampaign');
         $form = Mage::getModel('zolagodropship/form');
         /* @var $form Zolago_Dropship_Model_Form */
@@ -127,23 +137,14 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
         $form->setValues($values);
         $this->setForm($form);
     }
-    public function _prepareLayout() {
-        $this->_prepareGrid();
-        $this->unsetChild("reset_filter_button");
-        $this->unsetChild("search_button");
-        parent::_prepareLayout();
-    }
-
     public function _prepareGrid() {
         $design = Mage::getDesign();
-        //$design->setArea("adminhtml");
+        $design->setArea("adminhtml");
         $block = $this->getLayout()
             ->createBlock("zolagocampaign/vendor_campaign_product_grid", "vendor_campaign_product_grid")
-        //->setTemplate("zolagoadminhtml/widget/grid.phtml")
             ->setTemplate("zolagocampaign/dropship/campaign/product/grid.phtml")
         ;
         $block->setParentBlock($this);
-        $this->setGridHtml($block->toHtml());
         $this->setGrid($block);
         $design->setArea("frontend");
     }

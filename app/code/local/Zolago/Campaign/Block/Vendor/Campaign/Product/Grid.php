@@ -9,32 +9,31 @@ class Zolago_Campaign_Block_Vendor_Campaign_Product_Grid extends Mage_Adminhtml_
          $this->setDefaultDir('desc');
          // Need
          $this->setGridClass('z-grid');
-         $this->setTemplate("zolagoadminhtml/widget/grid.phtml");
-         //$this->setSaveParametersInSession(true);
-         //$this->setUseAjax(true);
+         $this->setTemplate("zolagocatalog/widget/grid.phtml");
+
     }
 
-	protected function _prepareCollection(){
+    protected function _prepareCollection()
+    {
         $campaignId = $this->getRequest()->getParam("id");
 
-		$collection = Mage::getResourceModel("catalog/product_collection")
+        $collection = Mage::getResourceModel("catalog/product_collection")
             ->addAttributeToSelect('name')
-            ->addAttributeToSelect('price')
-        ;
-        $collection->getSelect()->join( array('zolago_campaign_product'=> 'zolago_campaign_product'),
+            ->addAttributeToSelect('price');
+        $collection->getSelect()->join(
+            array('zolago_campaign_product' => 'zolago_campaign_product'),
             'zolago_campaign_product.product_id = e.entity_id')
-        ->where("zolago_campaign_product.campaign_id=?",$campaignId);
+            ->where("zolago_campaign_product.campaign_id=?", $campaignId);
 
         $collection->setPageSize(10);
 
-		$this->setCollection($collection);
+        $this->setCollection($collection);
 
         return parent::_prepareCollection();
-	}
-
-    public function getMainButtonsHtml(){
-
     }
+
+    public function getMainButtonsHtml(){}
+
     protected function _prepareColumns()
     {
         $_helper = Mage::helper("zolagocampaign");
@@ -43,14 +42,14 @@ class Zolago_Campaign_Block_Vendor_Campaign_Product_Grid extends Mage_Adminhtml_
             array(
                 'header' => $_helper->__('Sku'),
                 'index' => 'sku',
-                "class"		=>  "form-controll",
+                "class" => "form-control",
                 'width' => '50px',
             ));
-        $this->addColumn('name',
+        $this->addColumn('campaign_name',
             array(
                 'header' => $_helper->__('Name'),
                 'index' => 'name',
-                "class"		=>  "form-controll",
+                "class" => "form-control",
                 'width' => '50px',
             ));
         $this->addColumn('price',
@@ -58,7 +57,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Product_Grid extends Mage_Adminhtml_
                 'header' => $_helper->__('Price'),
                 'width' => '50px',
                 'type' => 'number',
-                "class"		=>  "form-controll",
+                "class" => "form-control",
                 'index' => 'price',
             ));
 
