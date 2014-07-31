@@ -12,21 +12,27 @@ class Zolago_Catalog_Block_Vendor_Mass_Staticfilter extends Mage_Core_Block_Temp
     }
 
     public function getRawStaticFilters() {
-        $array = Mage::getResourceSingleton('zolagocatalog/vendor_mass')
-                 ->getStaticFiltersForVendor(
-                     $this->getVendor(),
-                     $this->getCurrentAttributeSetId()
-                 );
+        $attributeSet = $this->getRequest()->getParam('attribute_set');
 
-        $arrayDropdown = Mage::getResourceSingleton('zolagocatalog/vendor_mass')
-                         ->getStaticDropdownFiltersForVendor(
-                             $this->getVendor(),
-                             $this->getCurrentAttributeSetId(),
-                             $this->getStore()->getId()
-                         );
+        $staticFilters = array();
+        if(!empty($attributeSet)){
+            $array = Mage::getResourceSingleton('zolagocatalog/vendor_mass')
+                ->getStaticFiltersForVendor(
+                    $this->getVendor(),
+                    $this->getCurrentAttributeSetId()
+                );
 
-        $staticFilters = array_merge($array, $arrayDropdown);
-        $staticFilters = $this->_sortStaticFiltersbyColumns($staticFilters, array('groupOrder' => SORT_ASC, 'sortOrder' => SORT_ASC));
+            $arrayDropdown = Mage::getResourceSingleton('zolagocatalog/vendor_mass')
+                ->getStaticDropdownFiltersForVendor(
+                    $this->getVendor(),
+                    $this->getCurrentAttributeSetId(),
+                    $this->getStore()->getId()
+                );
+
+            $staticFilters = array_merge($array, $arrayDropdown);
+            $staticFilters = $this->_sortStaticFiltersbyColumns($staticFilters, array('groupOrder' => SORT_ASC, 'sortOrder' => SORT_ASC));
+        }
+
         return $staticFilters;
     }
 

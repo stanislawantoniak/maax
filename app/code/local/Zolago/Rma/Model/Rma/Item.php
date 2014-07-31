@@ -18,5 +18,21 @@ class Zolago_Rma_Model_Rma_Item extends Unirgy_Rma_Model_Rma_Item
 		   return $this->getData('vendor_simple_sku');
 	   }
 	   return $this->getData('vendor_sku');
-	}	
+	}
+
+    public function getItemConditionName()
+    {
+        $id = $this->getItemCondition();
+
+        $itemConditionsA = Mage::helper('urma')->getItemConditionTitles();
+        $code = $id;
+        if (!empty($itemConditionsA)) {
+            foreach ($itemConditionsA as $idD => $dataD) {
+                if ($id == $idD) {
+                    $code = $dataD;
+                }
+            }
+        }
+        return Mage::helper('urma')->getItemConditionTitle($code);
+    }
 }

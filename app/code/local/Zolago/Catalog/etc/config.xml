@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Catalog>
-            <version>0.0.14</version>
+            <version>0.0.15</version>
         </Zolago_Catalog>
     </modules>
     <default>
@@ -60,6 +60,8 @@
 			<catalog>
 				<rewrite>
 					<breadcrumbs>Zolago_Catalog_Block_Breadcrumbs</breadcrumbs>
+					<product_view>Zolago_Catalog_Block_Product_View</product_view>
+                    <product_view_attributes>Zolago_Catalog_Block_Product_View_Attributes</product_view_attributes>
 				</rewrite>
 			</catalog>
         </blocks>
@@ -83,6 +85,16 @@
                 </connection>
             </zolagocatalog_read>
         </resources>
+        <events>
+            <catalog_product_attribute_update_after>
+                <observers>
+                    <zolago_catalog_converter_mass>
+                        <class>Zolago_Catalog_Model_Observer</class>
+                        <method>productAttributeMassUpdate</method>
+                    </zolago_catalog_converter_mass>
+                </observers>
+            </catalog_product_attribute_update_after>
+        </events>
     </global>
     <frontend>
         <routers>
@@ -130,6 +142,16 @@
 				</Zolago_Catalog>
 			</modules>
 		</translate>
+        <events>
+            <catalog_product_save_after>
+                <observers>
+                    <zolago_catalog_converter>
+                        <class>Zolago_Catalog_Model_Observer</class>
+                        <method>productAfterUpdate</method>
+                    </zolago_catalog_converter>
+                </observers>
+            </catalog_product_save_after>
+        </events>
     </adminhtml>
     <crontab>
         <jobs>

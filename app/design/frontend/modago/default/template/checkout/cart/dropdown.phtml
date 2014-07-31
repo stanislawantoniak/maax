@@ -1,0 +1,26 @@
+<?php
+/**
+ * Author: Paweł Chyl <pawel.chyl@orba.pl>
+ * Date: 02.05.14
+ * @see Zolago_Modago_Block_Checkout_Cart
+ */
+?>
+
+<div id="dropdown-basket" class="dropdown dropdown-anchor-right basket" style="display: none;">
+    <div class="dropdown-panel">
+        <div class="dropdown-panel-inner">
+            <table>
+                <tbody id="product-list">
+                </tbody>
+            </table>
+            <div class="summary_basket">
+                <ul>
+                    <li><?php echo $this->__("Products count"); ?>: {{all_products_count}}</li>
+                    <li><?php echo $this->__("Products worth"); ?>: {{total_amount}} {{currency_symbol}}</li>
+                    <li><?php echo $this->__("Shipping cost"); ?>: {{shipping_cost}}</li>
+                </ul>
+                <a href="{{show_cart_url}}" class="view_basket button button-primary medium link"><?php echo $this->__("See your cart"); ?></a>
+            </div>
+        </div>
+    </div>
+</div>

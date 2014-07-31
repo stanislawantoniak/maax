@@ -61,8 +61,9 @@ class Zolago_Solrsearch_Model_Catalog_Product_Collection extends Varien_Data_Col
 			Mage::helper('zolagosolrsearch')->mapSolrDocToProduct($item, $prodcut);
 			$this->addItem($prodcut);
 		}
-		
+		Mage::log("Start loading data");
 		$this->_loadAttributesData();
+		Mage::log("Stop loading data");
 		// Add urls, prices, i like it for all collection
 		
 		return parent::loadData($printQuery, $logQuery);
@@ -75,8 +76,19 @@ class Zolago_Solrsearch_Model_Catalog_Product_Collection extends Varien_Data_Col
 		$resource = Mage::getResourceSingleton('zolagosolrsearch/improve');
 		/* @var $resource Zolago_Solrsearch_Model_Resource_Improve */
 			
+		
 		$resource->loadAttributesDataForFrontend($this, $storeId, $customerGroupId);
 	
+	}
+	
+	/**
+	 * @return int
+	 */
+	public function getSize() {
+		if(null!==$this->getSolrData("response", "numFound")){
+			return $this->getSolrData("response", "numFound");
+		}
+		return parent::getSize();
 	}
 	
 	/**

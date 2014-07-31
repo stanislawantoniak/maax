@@ -1,0 +1,67 @@
+.nav a {
+    color: #ffffff;
+}
+
+/*popular shops*/
+.popular-shops {
+    text-align: justify;
+    >h3 {
+        font-size:18px;
+        text-transform: uppercase;
+        text-align: left;
+    }
+    .pop-shop-lst {
+        list-style: none;
+        >li {
+            >a {
+                >span {
+                    font-size: 11px;
+                    text-align: center;
+                }
+                >span.pop-shop-img-wr {background: #ffffff;
+                    text-align: center;
+                    img {
+                        vertical-align: middle;
+                    }
+                }
+            }
+        }
+
+    }
+}
+
+.pop-shop-seemore {
+    font-size: 12px;
+    background-color: #000000;
+    background-image:none;
+    text-align: center;
+    color: #ffffff !important;
+    text-transform: uppercase;
+}
+
+.pop-shop-seemore:hover {
+    text-decoration: none;
+    background: url("../images/popular-brands-hover-bg-btn.png") no-repeat;
+}
+
+.small-banners {
+    .row {
+        @media (max-width: 643px) {
+            div:nth-child(3) {
+                clear: left;
+            }
+        }
+    }
+}
+
+.path_back_to_category {
+    padding: 5px 0px 5px;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    overflow:hidden;
+    border-top:1px solid #dedce1;
+    border-bottom:1px solid #dedce1;
+    a {
+        font-size: 18px;
+    }
+}

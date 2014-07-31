@@ -28,7 +28,7 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
             ->from(array("s"=>$this->getTable("core/store")), array('store_id'))
             ->join(
 				array("g"=>$this->getTable("core/store_group")),
-				"g.store_id=s.store_id",
+				"g.group_id=s.group_id",
 				array())
 			->join(
 				array("c"=>$this->getTable("catalog/product_website")),
@@ -284,7 +284,6 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 		if (!$collection->count()) {
             return $this;
         }
-		
 		$attrIds = $attrbiuteCollection->getAllIds();
 
         $entity = $this->getEntity();
@@ -439,7 +438,7 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 	}
 	
     protected function _getLoadAttributesSelect($allIds, $table, array $attributeIds, $storeId = null)
-    {	
+    {
         if ($storeId) {
             $adapter        = $this->getReadConnection();
             $entityIdField  = $this->getEntity()->getEntityIdField();
@@ -589,6 +588,7 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 		$taxClasses = array();
 		foreach($collection as $product){
 			$taxClasses[$product->getTaxClassId()] = true;
+			$product->setInMyWishlist(0);
 		}
 		$taxClasses = array_keys($taxClasses);
 		
@@ -647,7 +647,6 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 						$customerGroupId,
 						$product->getId()
 					);
-
 					$product->setCalculatedFinalPrice($finalPrice);
 				}
 			}
@@ -683,48 +682,38 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 		$select->where("url_main.store_id=?", $storeId);
 		$select->where("url_main.category_id IS NULL");
 		
+		$mainUrls=$this->getReadConnection()->fetchPairs($select);
+
 		// Add category url
 		
+		$catUrls = array();
 		if($category && $category->getId()){
-			$joinConds = array(
-				"url_cat.product_id=url_main.product_id",
-				"url_cat.store_id=url_main.store_id",
-				$this->getReadConnection()->quoteInto("url_cat.category_id=?", $category->getId()),
-			);
-			$select->joinLeft(
+			$select = $this->getReadConnection()->select();
+			$select->from(
 				array("url_cat"			=>	$this->getTable("core/url_rewrite")), 
-				implode(" AND ", $joinConds),
 				array(
-					"cat_request_path"	=> "url_cat.request_path"
-				)
-			);
-		}else{
-			$select->columns(array(
-				"cat_request_path"		=> new Zend_Db_Expr("NULL")
-			));
+					"product_id"			=> "url_cat.product_id", 
+					"cat_request_path"		=> "url_cat.request_path"
+				));
+			$select->where("url_cat.product_id IN (?)", $collection->getAllIds());
+			$select->where("url_cat.store_id=?", $storeId);
+			$select->where("url_cat.category_id=?",  $category->getId());
+			
+			$catUrls=$this->getReadConnection()->fetchPairs($select);
 		}
-		
-		$groupedUrls=array();
-		foreach($this->getReadConnection()->fetchAll($select) as $row){
-			$groupedUrls[$row['product_id']] = $row;
-		}
-		
 		
 		foreach ($collection as $product){
 			$productUrl = null;
-			if(isset($groupedUrls[$product->getId()])){
-				$row = $groupedUrls[$product->getId()];
-				if(isset($row['cat_request_path'])){
-					$productUrl = Mage::getBaseUrl().$row['cat_request_path'];
-				}elseif(isset($row['main_request_path'])){
-					$productUrl = Mage::getBaseUrl().$row['main_request_path'];
-				}
-			}
-			if(!$productUrl){
-				$productUrl = Mage::getUrl("catalog/product/view", array("id"=>$productId));
+			if(isset($catUrls[$product->getId()])){
+				$productUrl = Mage::getBaseUrl().$catUrls[$product->getId()];
+			}elseif(isset($mainUrls[$product->getId()])){
+				$productUrl = Mage::getBaseUrl().$mainUrls[$product->getId()];
+			}else{
+				$productUrl = Mage::getUrl("catalog/product/view", array("id"=>$product->getId()));
 			}
 			$product->setCurrentUrl($productUrl);
 		}
+		
 		
 		return $this;
 	}

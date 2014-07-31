@@ -55,8 +55,8 @@ class Zolago_Rma_Block_Vendor_Rma_Grid extends Mage_Adminhtml_Block_Widget_Grid
 		
 		$this->addColumn("date_max", array(
 			"type"		=>	"date",
-			"index"		=>	"date_max",
-			"header"	=>	Mage::helper("zolagorma")->__("Date max. [dev]"),
+			"index"		=>	"response_deadline",
+			"header"	=>	Mage::helper("zolagorma")->__("Response deadline"),
 			"filter"	=>	false,
 			"width"		=>	"100px"
 		));
@@ -147,6 +147,37 @@ class Zolago_Rma_Block_Vendor_Rma_Grid extends Mage_Adminhtml_Block_Widget_Grid
 			$this->_applayDateFilter($collection, "main_table.created_at", $date);
 		}
 
+        // Response Deadline
+        if($max_date_exceed_array=$this->getFilterValueByIndex("max_date_exceed")){
+
+            if(sizeof($max_date_exceed_array) === 1){
+
+                $current_timestamp = Mage::getModel('core/date')->timestamp(time());
+
+                $storeId = Mage::app()->getStore();
+                $locale = Mage::getStoreConfig('general/locale/code', $storeId);
+
+                $timezone = Mage::getStoreConfig('general/locale/timezone', $storeId);
+                $date = new Zend_Date($current_timestamp, null, $locale);
+                $date->setTimezone($timezone);
+
+                $now_date = $date->toString('yyyy-MM-dd');
+
+                foreach($max_date_exceed_array as $max_date_exceed){
+                    if($max_date_exceed == '1'){
+
+                        $collection->addAttributeToFilter("main_table.response_deadline", array('date' => true, 'lt' => $now_date));
+
+                    }
+                    elseif($max_date_exceed == '0'){
+
+                        $collection->addAttributeToFilter("main_table.response_deadline", array('date' => true, 'gteq' => $now_date));
+
+                    }
+                }
+            }
+        }
+
 		// Condition
 		$conditions = $this->getFilterValueByIndex("rma_item_condition");
 		if(is_null($conditions)){
@@ -164,6 +195,7 @@ class Zolago_Rma_Block_Vendor_Rma_Grid extends Mage_Adminhtml_Block_Widget_Grid
 		if($statuses){
 			$collection->addAttributeToFilter("main_table.rma_status", array("in"=>$statuses));
 		}
+
 		return $this;
 	}
 	

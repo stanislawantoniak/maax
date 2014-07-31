@@ -16,21 +16,9 @@
             </zolago_cataloginventory_resource>
         </models>
         <helpers>
-            <zolago_cataloginventory>
+            <zolagocataloginventory>
                 <class>Zolago_CatalogInventory_Helper</class>
-            </zolago_cataloginventory>
+            </zolagocataloginventory>
         </helpers>
     </global>
-    <adminhtml>
-        <events>
-            <catalog_product_save_before>
-                <observers>
-                    <zolago_cataloginventory_converter>
-                        <class>Zolago_CatalogInventory_Model_Observer</class>
-                        <method>productBeforeUpdate</method>
-                    </zolago_cataloginventory_converter>
-                </observers>
-            </catalog_product_save_before>
-        </events>
-    </adminhtml>
 </config>

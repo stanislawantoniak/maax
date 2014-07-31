@@ -112,9 +112,16 @@ var App = function($) {
 		if($.fn.alphanum){
 			$(".positiveInteger").numeric("positiveInteger");
 			$(".integer").numeric("integer");
-			$(".numeric").numeric();
+			$(".numeric").numeric({min:0, allowMinus: false});
 			$(".alphanum").alphanum();
 			$(".alpha").alpha();
+			$(".urlKeyFormat").alphanum({
+				allowUpper: false,
+				allowSpace: false,
+				allow: "-_.",
+				allowOtherCharSets: false,
+				maxLength: 100,
+			});
 		}
 			
 		//===== loading btn =====//	

@@ -20,13 +20,13 @@ $host = $_SERVER['HTTP_HOST'];
 
 
 // $callbackUrl is a path to your file with OAuth authentication example for the Admin user
-$callbackUrl = "http://modago.local/rest.php";
-$temporaryCredentialsRequestUrl = "http://modago.local/index.php/oauth/initiate?oauth_callback=" . urlencode($callbackUrl);
-$adminAuthorizationUrl = 'http://modago.local/admin/oauth_authorize';
-$accessTokenRequestUrl = 'http://modago.local/oauth/token';
-$apiUrl = 'http://modago.local/api/rest';
-$consumerKey = '76cc2b14a5bfd31f13245303baaa321a';
-$consumerSecret = '71bed0926360cd79cbecbb14fbbc01b2';
+$callbackUrl = "https://admin.dev01.lorante.com/rest.php";
+$temporaryCredentialsRequestUrl = "https://admin.dev01.lorante.com/index.php/oauth/initiate?oauth_callback=" . urlencode($callbackUrl);
+$adminAuthorizationUrl = 'https://admin.dev01.lorante.com/admin/oauth_authorize';
+$accessTokenRequestUrl = 'https://admin.dev01.lorante.com/oauth/token';
+$apiUrl = 'https://admin.dev01.lorante.com/api/rest';
+$consumerKey = '1dc998cafdd1048381fbb58833912868';
+$consumerSecret = '7e6ab7a1a98aa59d94943d4058810447';
 //die('test');
 session_start();
 if (!isset($_GET['oauth_token']) && isset($_SESSION['state']) && $_SESSION['state'] == 1) {
@@ -36,8 +36,9 @@ try {
     $authType = ($_SESSION['state'] == 2) ? OAUTH_AUTH_TYPE_AUTHORIZATION : OAUTH_AUTH_TYPE_URI;
     $oauthClient = new OAuth($consumerKey, $consumerSecret, OAUTH_SIG_METHOD_HMACSHA1, $authType);
     $oauthClient->enableDebug();
-
+    echo 'Step 1';
     if (!isset($_GET['oauth_token']) && empty($_SESSION['state'])) {
+        echo 'Step 2';
         echo 'request';
         $requestToken = $oauthClient->getRequestToken($temporaryCredentialsRequestUrl);
         echo 'after';
@@ -46,8 +47,11 @@ try {
         header('Location: ' . $adminAuthorizationUrl . '?oauth_token=' . $requestToken['oauth_token']);
         exit;
     } else if ($_SESSION['state'] == 1) {
+        echo 'Step 4';
         $oauthClient->setToken($_GET['oauth_token'], $_SESSION['secret']);
+        echo 'Step 5';
         $accessToken = $oauthClient->getAccessToken($accessTokenRequestUrl);
+        echo 'Step 6';
         $_SESSION['state'] = 2;
         $_SESSION['token'] = $accessToken['oauth_token'];
         $_SESSION['secret'] = $accessToken['oauth_token_secret'];
@@ -55,6 +59,8 @@ try {
         header('Location: ' . $callbackUrl);
         exit;
     } else {
+
+
         $oauthClient->setToken($_SESSION['token'], $_SESSION['secret']);
 
         $resourceUrl = "$apiUrl/convertproduct";
@@ -122,7 +128,7 @@ try {
 
         $productData = json_encode($data);
         //print_r($oauthClient->getLastResponse());
-        $oauthClient->fetch($resourceUrl, $productData,  OAUTH_HTTP_METHOD_PUT , array('Content-Type' => 'application/json'));
+        $oauthClient->fetch($resourceUrl, $productData,  OAUTH_HTTP_METHOD_POST , array('Content-Type' => 'application/json', 'Accept' => '*/*'));
 
         //print_r($oauthClient->getLastResponse());
 
@@ -131,7 +137,7 @@ try {
 
     }
 } catch (OAuthException $e) {
-    echo '--error<br />';
+    echo '--error2<br />';
     print_r($e->getMessage());
     echo "<br/>";
     print_r($e->lastResponse);

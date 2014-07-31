@@ -57,7 +57,18 @@
             <?php if ($this->canEmailToFriend()): ?>
                 <p class="email-friend"><a href="<?php echo $this->helper('catalog/product')->getEmailToFriendUrl($_product) ?>"><?php echo $this->__('Email to a Friend') ?></a></p>
             <?php endif; ?>
-
+			<?php $_deliveryInfo = $this->getStoreDeliveryHeadline();?>
+			<?php $_returnInfo = $this->getStoreReturnHeadline();?>
+			<?php if($_deliveryInfo || $_returnInfo):?>
+				<p>
+				<?php if($_deliveryInfo):?>
+					<?php echo $this->__("Delivery info");?>: <?php echo $this->escapeHtml($_deliveryInfo);?><br/>
+				<?php endif;?>
+				<?php if($_returnInfo):?>
+					<?php echo $this->__("Return info");?>: <?php echo $this->escapeHtml($_returnInfo);?><br/>
+				<?php endif;?>
+				</p>
+			<?php endif;?>
             <?php echo $this->getReviewsSummaryHtml($_product, false, true)?>
             <?php echo $this->getChildHtml('alert_urls') ?>
             <?php echo $this->getChildHtml('product_type_data') ?>
@@ -87,7 +98,23 @@
                     <div class="std"><?php echo $_helper->productAttribute($_product, nl2br($_product->getShortDescription()), 'short_description') ?></div>
                 </div>
             <?php endif;?>
-
+				
+			<?php if($_vendorInfo = $this->getChild("product.vendor.info")):?>
+				<h4><?php echo $this->__("Vendor info");?></h4>
+				<ul>
+					<li><?php echo $this->__("Logo");?>: <?php echo $this->escapeHtml($_vendorInfo->getLogoUrl());?></li>
+					<li><?php echo $this->__("Vendor name");?>: <?php echo $this->escapeHtml($_vendorInfo->getVendorName());?></li>
+					<li><?php echo $this->__("Vendor url");?>: <?php echo $this->escapeHtml($_vendorInfo->getVendorUrl());?></li>
+				</ul>
+			<?php endif;?>
+				
+			<?php if($_deliveryreturnInfo = $this->getChild("product.vendor.deliveryreturn")):?>
+				<h4><?php echo $this->__("Delivery & return info");?></h4>
+				<p><?php echo $_deliveryreturnInfo->getDeliveryreturnHtml();?></p>
+			<?php endif;?>
+				
+			<?php echo $this->getChildHtml("product.vendor.sizecomments");?>
+				
             <?php echo $this->getChildHtml('other');?>
 
             <?php if ($_product->isSaleable() && $this->hasOptions()):?>

@@ -36,16 +36,16 @@
 								</div>
 								<div class="row">
 									<label for="filter_rma_max_data_over" class="col-md-4 control-label">
-										<?php echo $_helper->__("RMA max date");?> [dev]</label>
+										<?php echo $_helper->__("Response deadline");?></label>
 									<div class="col-md-8">
 										<input type="hidden" name="max_data_exceed" value="0"/>
 										<label for="filter_rma_max_data_exceed" class="checkbox">
 											<input id="filter_rma_max_data_exceed" name="max_date_exceed[]" <?php if(null!==$this->getMaxDateExceed(0)):?>checked="checked"<?php endif;?> value="0" type="checkbox" class="form-control uniform"/>
-											<?php echo $_helper->__("Not Exceed");?>
+											<?php echo $_helper->__("Not Exceeded");?>
 										</label>
 										<label for="filter_rma_max_data_exceed_not" class="checkbox">
 											<input id="filter_rma_max_data_exceed_not" name="max_date_exceed[]" <?php if(null!==$this->getMaxDateExceed(1)):?>checked="checked"<?php endif;?> value="1" type="checkbox" class="form-control uniform"/>
-											<?php echo $_helper->__("Exceed");?>
+											<?php echo $_helper->__("Exceeded");?>
 										</label>
 									</div>
 									

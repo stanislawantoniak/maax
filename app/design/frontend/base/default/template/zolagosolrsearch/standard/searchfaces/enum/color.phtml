@@ -11,7 +11,7 @@
 					<?php $_color = $_value->getColor();?>
 					<?php $_image = $_value->getNormalImage();?>
 					<li>	
-						<a href="<?php echo $this->getItemUrl($item) ?>" class="facet-item <?php echo $this->getItemClass($item); ?>">
+						<a  data-params='<?php echo $this->getItemJson($item);?>' href="<?php echo $this->getItemUrl($item) ?>" class="facet-item <?php echo $this->getItemClass($item); ?>">
 							<?php echo $item ?>&nbsp;<span>(<?php echo $count ?>)</span>
 						</a> 
 						<div style="float: right; width: 12px; height: 12px; display: inline-block; background-color: <?php echo $_color?> ; <?php if($_image):?>background-image: url(<?php echo Mage::getBaseUrl("media") . "/m-image/" . $_image;?>); background-repeat: no-repeat; background-size: cover;<?php endif;?>"></div>
@@ -28,7 +28,7 @@
 						<?php $_color = $_value->getColor();?>
 						<?php $_image = $_value->getNormalImage();?>
 						<li>	
-							<a href="<?php echo $this->getItemUrl($item) ?>" class="facet-item <?php echo $this->getItemClass($item); ?>">
+							<a data-params='<?php echo $this->getItemJson($item);?>' href="<?php echo $this->getItemUrl($item) ?>" class="facet-item <?php echo $this->getItemClass($item); ?>">
 								<?php echo $item ?>&nbsp;<span>(<?php echo $count ?>)</span>
 							</a> 
 							<div style="float: right; width: 12px; height: 12px; display: inline-block; background-color: <?php echo $_color?> ; <?php if($_image):?>background-image: url(<?php echo Mage::getBaseUrl("media") . "/m-image/" . $_image;?>); background-repeat: no-repeat; background-size: cover;<?php endif;?>"></div>

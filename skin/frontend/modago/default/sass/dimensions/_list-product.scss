@@ -1,0 +1,79 @@
+
+
+
+
+#items-product {
+	margin-top:-4px;
+	.item {
+		margin-bottom: 0px;
+		@media (min-width: $screen-lg-min) {
+			//width:100px;
+		}
+		&[class*="col"] {
+			padding:5px 2.5px 0;
+
+		}
+		&.col-phone {
+			@media(max-width:540px) {
+				width: 50%;
+				float: left;
+				min-height: 1px;
+			}
+		}
+		//width:47.55555555%;
+		.box_listing_product {
+			padding: 0 0 0 0;
+		}
+		
+		//margin:4px;
+		
+		/*@media (min-width: 480px) { 
+			width:47%;
+		 }
+		@media (min-width: $screen-sm-min) { 
+			width:48%;
+		 }
+		@media (min-width: $screen-md-min) { 
+			width:32%;
+		 }
+		@media (min-width: $screen-lg-min) { 
+			width:24.10%;
+		 }*/
+		 figure {
+		 	img {
+		 		width:100%;
+		 		height: auto;
+		 	}
+		 }
+	 
+	.like {
+		float:right;
+	    padding-right:27px;
+	    position:relative;
+	    margin-top: 9px;
+	    &:before {
+	        display:block;
+	        width:21px;
+	        height:16px;
+	        position:absolute;
+	        right:0px;
+	        top:0px;
+		}
+	}
+	}
+}
+
+
+#items-product.jsMasonryContent {
+	overflow:hidden
+}
+
+.item {
+	.col-price {
+		float:left;
+		text-align: left;
+		.label {
+			text-align: left;
+			}
+		}
+}

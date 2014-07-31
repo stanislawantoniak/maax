@@ -56,6 +56,8 @@ class SolrBridge_Solrsearch_Model_Price
 		}
 
 
+		/* @var $_taxHelper Mage_Tax_Helper_Data */
+		
 		$_storeId = $store->getId();
 		$_id = $_product->getId();
 		$_weeeSeparator = '';
@@ -79,7 +81,10 @@ class SolrBridge_Solrsearch_Model_Price
 			$_price = $_taxHelper->getPrice($_product, $_product->getPrice());
 			$_regularPrice = $_taxHelper->getPrice($_product, $_product->getPrice(), $_simplePricesTax);
 			$_finalPrice = $_taxHelper->getPrice($_product, $_product->getFinalPrice());
-			$_finalPriceInclTax = $_taxHelper->getPrice($_product, $_product->getFinalPrice(), true);
+			
+			$_finalPriceInclTax = $_taxHelper->getPrice($_product, $_product->getFinalPrice(), true, 
+					null, null, null, $_storeId, $_taxHelper->priceIncludesTax($_storeId));
+			
 			$_weeeDisplayType = $_weeeHelper->getPriceDisplayType();
 			if ($_finalPrice >= $_price){
 				//DISPLAY BOTH PRICE INC & EXC TAX
@@ -122,6 +127,29 @@ class SolrBridge_Solrsearch_Model_Price
 						{
 							$priceExcTax = $this->currencyByStore($_finalPrice, $store, false, false);
 						}
+						//Including tax
+						$priceIncTax = $this->currencyByStore($_finalPriceInclTax, $store, false, false);
+					}
+				}
+				elseif($_taxHelper->displayPriceIncludingTax()){
+
+					if ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 0)){ // including
+						$priceIncTax = $this->currencyByStore($_finalPriceInclTax + $_weeeTaxAmountInclTaxes, $store, false, false);
+					}
+					elseif ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 1)) // incl. + weee
+					{
+						$priceIncTax = $this->currencyByStore($_finalPriceInclTax + $_weeeTaxAmountInclTaxes, $store, false, false);
+					}
+					elseif ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 4)) // incl. + weee
+					{
+						$priceIncTax = $this->currencyByStore($_finalPriceInclTax + $_weeeTaxAmountInclTaxes, $store, false, false);
+					}
+					elseif ($_weeeTaxAmount && $_weeeHelper->typeOfDisplay($_product, 2)) // excl. + weee + final
+					{
+						$priceIncTax = $this->currencyByStore($_finalPriceInclTax + $_weeeTaxAmountInclTaxes, $store, false, false);
+					}
+					else
+					{
 						//Including tax
 						$priceIncTax = $this->currencyByStore($_finalPriceInclTax, $store, false, false);
 					}
@@ -229,6 +257,8 @@ class SolrBridge_Solrsearch_Model_Price
 				'store' => $store,
 				'website_id' => $store->getWebsiteId()
 		);
+		
+		//Mage::log("Incl tax:" . $priceIncTax . " / Excl:" . $priceExcTax);
 
 		Mage::app ()->setCurrentStore ( $oldStore );
 
