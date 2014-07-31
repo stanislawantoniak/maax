@@ -121,8 +121,8 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
         $values = $this->getModel()->getData();
         //reformat date_from date_to
         if (!empty($values)) {
-            $values['date_from'] = !empty($values['date_from']) ? date('d-m-y H:i', strtotime($values['date_from'])) : $values['date_from'];
-            $values['date_to'] = !empty($values['date_to']) ? date('d-m-y H:i', strtotime($values['date_to'])) : $values['date_to'];
+            $values['date_from'] = !empty($values['date_from']) ? date('d-m-Y H:i', strtotime($values['date_from'])) : $values['date_from'];
+            $values['date_to'] = !empty($values['date_to']) ? date('d-m-Y H:i', strtotime($values['date_to'])) : $values['date_to'];
         }
 
 
