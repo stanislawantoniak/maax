@@ -224,6 +224,8 @@
             </block>
             <block type="catalog/product_list_crosssell" name="product.info.crosssell" as="crosssell" template="catalog/product/view/crosssell.phtml"/>
             <block type="catalog/product_list_related" name="catalog.product.related" before="-" template="catalog/product/list/related.phtml"/>
+
+            <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml" />
         </reference>
 
         <reference name="product.info.addto">
