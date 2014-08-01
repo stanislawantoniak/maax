@@ -50,7 +50,10 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Dropship_Controller_V
 					$collection->addAttributeToFilter($key, $value);
 				}
 				
+				
 				$out = $this->_prepareRestResponse($collection);
+				
+				//Mage::log($collection->getSelect()."");
 
 				$reposnse->
 					setHeader('Content-Range', 'items ' . $out['start']. '-' . $out['end']. '/' . $out['total'])->
@@ -67,6 +70,13 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Dropship_Controller_V
 	}
 	
 	/**
+	 * @return int
+	 */
+	protected function _getStoreId() {
+		return $this->getRequest()->getParam("store_id");
+	}
+	
+	/**
 	 * collection dont use after load - just flat selects
 	 * @return Mage_Catalog_Model_Resource_Product_Collection
 	 */
@@ -76,7 +86,7 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Dropship_Controller_V
 		$collection = Mage::getResourceModel("catalog/product_collection");
 		/* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
 		
-		$storeId = 1;
+		$storeId = $this->_getStoreId();
 		$store = Mage::app()->getStore($storeId);
 		
 		$collection->setStoreId($storeId);
@@ -97,8 +107,10 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Dropship_Controller_V
 			"msrp",
 			"is_new",
 			"is_bestseller",
-			"status",
 			"product_flag",
+			"status",
+			"special_price",
+			"price",
 			"skuv"
 		);
 		
@@ -114,46 +126,27 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Dropship_Controller_V
 			$collection->joinAttribute($attribute, 'catalog_product/'.$attribute, 'entity_id', null, 'inner', $storeId);
 		}
 		
+		
 		$select = $collection->getSelect();
 		$adapter = $select->getAdapter();
 		
-		
-		// Join stock index
-		$collection->getSelect()->joinLeft(
-			array("stock"=>$collection->getTable('cataloginventory/stock_status_indexer_idx')),
-			$adapter->quoteInto("stock.product_id=e.entity_id AND stock.website_id=?", $store->getWebsiteId()),
-			array("stock_status"=>"stock.stock_status", "stock_qty"=>"stock.qty")
+		// Join tables
+		$priceExpression = $adapter->getCheckSql(
+			'0', // @todo after new attribure add
+			 $adapter->getCheckSql("at_special_price.value_id>0", "at_special_price.value", "at_special_price_default.value"),
+			 $adapter->getCheckSql("at_price.value_id>0", "at_price.value", "at_price_default.value")
 		);
 		
+		$collection->addExpressionAttributeToSelect('display_price', $priceExpression, array());
 		
-		// Join prices data
-		$joinCond = array(
-			'price_index.entity_id = e.entity_id',
-			$adapter->quoteInto('price_index.website_id = ?', $store->getWebsiteId()),
-			// Default not logged in
-			$adapter->quoteInto('price_index.customer_group_id = ?', Mage_Customer_Model_Group::NOT_LOGGED_IN_ID)
+		// Join stock item
+		$collection->joinTable(
+				$collection->getTable('cataloginventory/stock_item'), 
+				'product_id=entity_id',
+				array('is_in_stock'=>'is_in_stock', 'stock_qty'=>'qty'), 
+				$adapter->quoteInto("{{table}}.stock_id=?", Mage_CatalogInventory_Model_Stock::DEFAULT_STOCK_ID),
+				'left'
 		);
-
-		$least = $adapter->getLeastSql(
-			array('price_index.min_price', 'price_index.tier_price')
-		);
-		$minimalExpr = $adapter->getCheckSql(
-				'price_index.tier_price IS NOT NULL', $least, 'price_index.min_price'
-		);
-
-		$colls = array(
-			'price', 
-			'tax_class_id', 
-			'final_price',
-			'minimal_price' => $minimalExpr , 
-			'min_price', 
-			'max_price', 
-			'tier_price'
-		);
-
-		$tableName = array('price_index' => $collection->getTable('catalog/product_index_price'));
-
-		$select->join($tableName, implode(' AND ', $joinCond), $colls);
 		
 
 		return $collection;
@@ -172,13 +165,41 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Dropship_Controller_V
 	protected function _getRestQuery() {
 		$params = array();
 		foreach($this->_getAvailableQueryParams() as $key){
-			if(($value=$this->getRequest()->getQuery($key))!==null && trim($value)!=""){
-				$params[$key] = array("like"=>'%'.$value.'%');
+			if(($value=$this->getRequest()->getQuery($key))!==null){
+				if(is_string($value) && trim($value)==""){
+					continue;
+				}elseif(is_array($value) && !$value){
+					continue;
+				}
+				$params[$key] = $this->_getSqlCondition($key, $value);
 			}
 		}
 		return $params;
 	}
 	
+	/**
+	 * @param string $key
+	 * @param mixed $value
+	 * @return array
+	 */
+	protected function _getSqlCondition($key, $value) {
+		if(is_array($value)){
+			return $value;
+		}
+		switch ($key) {
+			case "is_new":
+			case "is_bestseller":
+			case "product_flags":
+			case "converter_price_type":
+			case "is_in_stock":
+				return array("eq"=>$value);
+			break;
+			case "msrp":
+				return $value==1 ? array("notnull"=>true) : array("null"=>true, "neq"=>"");
+			break;
+		}
+		return array("like"=>'%'.$value.'%');
+	}
 	
 	/**
 	 * @param Mage_Catalog_Model_Resource_Product_Collection $collection
@@ -199,7 +220,7 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Dropship_Controller_V
 		
 		$totalSelect->reset(Zend_Db_Select::COLUMNS);
 		$totalSelect->reset(Zend_Db_Select::ORDER);
-		$totalSelect->resetJoinLeft();
+		//$totalSelect->resetJoinLeft();
 		$totalSelect->columns(new Zend_Db_Expr("COUNT(e.entity_id)"));
 
 		$total = $adapter->fetchOne($totalSelect);
@@ -218,7 +239,8 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Dropship_Controller_V
 		foreach($items as &$item){
 			$item['can_collapse'] = true;//
 			$item['entity_id'] = (int)$item['entity_id'];
-			$item['id'] = (int)$item['entity_id'];
+			$item['campaign_regular_id'] = "Lorem ipsum dolor sit manet"; /** @todo impelemnt **/
+			$item['store_id'] = $collection->getStoreId();
 		}
 		
 		return array(
@@ -268,15 +290,55 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Dropship_Controller_V
 	/**
 	 * @return array
 	 */
+	protected function _getEditableAttributes() {
+		return array(
+			"display_price", 
+			"converter_price_type", 
+			"is_new", 
+			"is_bestseller", 
+			"product_flag", 
+			"is_in_stock",
+			"status"
+		);
+	}
+	
+	/**
+	 * @return array
+	 */
 	protected function _getAvailableQueryParams() {
-		return array("name");
+		return array(
+			"name", 
+			"display_price", 
+			"converter_price_type", 
+			"price_margin", 
+			"msrp", 
+			"is_new", 
+			"is_bestseller", 
+			"product_flag",
+			"is_in_stock",
+			"stock_qty",
+			"status",
+			"type_id",
+		);
 	}
 	
 	/**
 	 * @return array
 	 */
 	protected function _getAvailableSortParams() {
-		return array_merge($this->_getAvailableQueryParams(), array("entity_id", "sku", "type"));
+		return array_merge($this->_getAvailableQueryParams(), array(
+			"display_price", 
+			"converter_price_type", 
+			"price_margin", 
+			"msrp", 
+			"is_new",
+			"is_bestseller",
+			"product_flag",
+			"is_in_stock",
+			"stock_qty",
+			"status",
+			"type_id"
+		));
 	}
 
 }

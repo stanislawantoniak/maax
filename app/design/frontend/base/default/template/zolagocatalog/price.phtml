@@ -1,9 +1,19 @@
 
 <div class="container">
-    <div class="page-header">
-        <div class="page-title">
+    <div class="page-header row">
+        <div class="col-lg-9 page-title">
             <h3><?php echo Mage::helper("zolagocatalog")->__("Product prices");?></h3>
+			<span class="tageline"><?php echo Mage::helper("zolagocatalog")->__("Manage prices and stocks");?></span>
         </div>
+		<div class="main-actions align-right col-md-3" style="padding-right: 0;">
+			<form>
+				<select id="store-switcher" class="form-control">
+					<?php foreach($this->getAllowedStores() as $store):?>
+					<option value="<?php echo $this->escapeHtml($store->getId());?>" <?php if($this->getCurrentStoreId()==$store->getId()):?>selected="selected"<?php endif;?>><?php echo $this->escapeHtml($store->getName());?></option>
+					<?php endforeach;?>
+				</select>
+			</form>
+		</div>
     </div>
 </div>
 
@@ -15,9 +25,10 @@
 	</div>
 </div>
 <style>
-	#grid-holder{
-		height: 600px;
-	}
+#grid-holder{
+	height: 600px;
+}
+
 #grid-holder .field-expander,
 #grid-holder .field-selector{
 		width: 25px;
@@ -29,18 +40,37 @@
 #grid-holder .expando {
 	/* style of area containing summary, expanded on click */
 	padding: 10px 6px;
-	background: #fff;
+	background: #f9f9f9;
 	border-bottom: 1px #ddd solid;
 }
 
 #grid-holder .collapsed .expando {
 	display: none;
 }
+#grid-holder .dgrid-sort-arrow {
+	margin:0;
+}
+#grid-holder .text-overflow {
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
 #grid-holder  .align-right {
 	text-align: right;
 }
+#grid-holder  .align-center {
+	text-align: center;
+}
+#grid-holder  .column-short {
+	width: 60px;
+}
 #grid-holder  .column-medium {
 	width: 100px;
+}
+#grid-holder  .column-long {
+	width: 150px;
+}
+#grid-holder  .field-name {
+	width: 250px;
 }
 
 #grid-holder .dgrid-no-data span,
@@ -53,8 +83,10 @@
    text-align: center;
 }
 
-#grid-holder .filterable input{
+#grid-holder .filterable input,
+#grid-holder .filterable select{
 	border: 1px #ddd solid;
+	background: #fff;
 	height: 20px;
 	display: block;
 	width: 100%;
