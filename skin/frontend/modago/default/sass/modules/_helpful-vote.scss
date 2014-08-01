@@ -321,7 +321,19 @@
 			height:auto;
 		}
 	}
+	.block_info_order {
+		> .col-sm-5 {
+			@media (max-width: $screen-xs-max) {
+				padding-right: 0px;
+				padding-left: 0px;
+			}
+		}
+	}
 	.adres_dostawy {
 		padding-right: 0px;
+		@media (max-width: $screen-xs-max) {
+			padding-right: 0px;
+			padding-left: 0px;
+		}
 	}
 }

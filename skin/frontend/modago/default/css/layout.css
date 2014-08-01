@@ -1816,6 +1816,13 @@ section.section h2.title_section i {
   .acknowledgements #checkout .summary-order dl {
     margin-left: 6px; } }
 
+/*#summary-panel-product {
+	.info_delivery {
+		@media(max-width: 430px) {
+			visibility:hidden;
+		}
+	}
+}*/
 /* line 1, ../sass/override/_override-layout.scss */
 .customNavigation a {
   top: 38%; }

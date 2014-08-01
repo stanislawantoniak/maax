@@ -40,6 +40,7 @@
 
             <!--<action method="addItem"><type>skin_js</type><script>js/vendor/jquery-1.10.2.min.js</script></action>-->
             <action method="addJs"><script>jquery/jquery-1.11.0.min.js</script></action>
+            <action method="addItem"><type>skin_js</type><script>js/config.js</script></action>
             <action method="addItem"><type>skin_js</type><script>js/mall.js</script></action>
             <action method="addJs"><script>bootstrap/bootstrap.min.js</script></action>
             <action method="addItem"><type>skin_js</type><script>js/vendor/modernizr-2.6.2.min.js</script></action>
