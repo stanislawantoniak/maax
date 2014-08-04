@@ -72,9 +72,12 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
     }
 
     /*
- * @return array
- */
-    public function getCampaigns() {
-        return $this->getResource()->getCampaigns();
+     * @return array
+     */
+    public function getProductCampaignInfo($productId) {
+        if (empty($productId)) {
+            return array();
+        }
+        return $this->getResource()->getProductCampaignInfo($productId);
     }
 }

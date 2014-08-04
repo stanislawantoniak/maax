@@ -140,25 +140,41 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
             array('campaign_product' => 'zolago_campaign_product'),
             'campaign_product.campaign_id=campaign.campaign_id',
             array(
-                'campaign_id' => 'campaign.campaign_id'
+                 'campaign_id' => 'campaign.campaign_id',
+                 'campaign_name' => 'campaign.name'
             )
         );
         $select->where("campaign_product.product_id=?", $productId);
-        return $this->getReadConnection()->fetchOne($select);
+        $select->where(
+            "campaign.type IN (?)",
+            array(Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION, Zolago_Campaign_Model_Campaign_Type::TYPE_SALE)
+        );
+
+        return $this->getReadConnection()->fetchAll($select);
     }
 
     /**
      * @param $productId
+     *
      * @return array
      */
-    public function getCampaigns()
+    public function getProductCampaignInfo($productId)
     {
         $table = $this->getTable("zolagocampaign/campaign");
         $select = $this->getReadConnection()->select();
-        $select->from(array("campaign" => $table), array(
-            'campaign_id' => 'campaign.campaign_id',
-            'campaign_name' => 'campaign.name'
-        ));
+        $select->from(array("campaign" => $table), array());
+        $select->join(
+            array('campaign_product' => 'zolago_campaign_product'),
+            'campaign_product.campaign_id=campaign.campaign_id',
+            array(
+                 'campaign_id'   => 'campaign.campaign_id',
+                 'campaign_name' => 'campaign.name'
+            )
+        );
+        $select->where("campaign_product.product_id=?", $productId);
+        $select->where(
+            "campaign.type=?", Zolago_Campaign_Model_Campaign_Type::TYPE_INFO
+        );
 
         return $this->getReadConnection()->fetchAll($select);
     }

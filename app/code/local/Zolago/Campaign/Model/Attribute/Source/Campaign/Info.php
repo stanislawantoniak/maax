@@ -1,13 +1,12 @@
 <?php
 
-class Zolago_Campaign_Model_Attribute_Source_Campaign extends Mage_Eav_Model_Entity_Attribute_Source_Abstract
+class Zolago_Campaign_Model_Attribute_Source_Campaign_Info extends Mage_Eav_Model_Entity_Attribute_Source_Abstract
 {
-
     public function getAllOptions()
     {
         $productId = Mage::registry('current_product')->getId();
         $campaignModel = Mage::getModel("zolagocampaign/campaign");
-        $campaigns = $campaignModel->getProductCampaign($productId);
+        $campaigns = $campaignModel->getProductCampaignInfo($productId);
 
 
         $options = $this->_prepareCampaignOptions($campaigns);
