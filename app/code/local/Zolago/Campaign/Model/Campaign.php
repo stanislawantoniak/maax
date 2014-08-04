@@ -2,6 +2,8 @@
 
 class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 {
+    const ZOLAGO_CAMPAIGN_ID_CODE = "campaign_regular_id";
+    const ZOLAGO_CAMPAIGN_INFO_CODE = "campaign_info_id";
 
     protected function _construct()
     {
@@ -57,5 +59,22 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
             $this->setData("campaign_products", implode("," , $campaignProducts));
         }
         return $this->getData("campaign_products");
+    }
+
+    /*
+     * @return array
+     */
+    public function getProductCampaign($productId) {
+        if (empty($productId)) {
+            return array();
+        }
+        return $this->getResource()->getProductCampaign($productId);
+    }
+
+    /*
+ * @return array
+ */
+    public function getCampaigns() {
+        return $this->getResource()->getCampaigns();
     }
 }

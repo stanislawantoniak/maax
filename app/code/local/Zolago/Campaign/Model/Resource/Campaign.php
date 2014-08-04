@@ -126,5 +126,42 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         return $this->getReadConnection()->fetchCol($select);
     }
 
+
+    /**
+     * @param $productId
+     * @return array
+     */
+    public function getProductCampaign($productId)
+    {
+        $table = $this->getTable("zolagocampaign/campaign");
+        $select = $this->getReadConnection()->select();
+        $select->from(array("campaign" => $table), array());
+        $select->join(
+            array('campaign_product' => 'zolago_campaign_product'),
+            'campaign_product.campaign_id=campaign.campaign_id',
+            array(
+                'campaign_id' => 'campaign.campaign_id'
+            )
+        );
+        $select->where("campaign_product.product_id=?", $productId);
+        return $this->getReadConnection()->fetchOne($select);
+    }
+
+    /**
+     * @param $productId
+     * @return array
+     */
+    public function getCampaigns()
+    {
+        $table = $this->getTable("zolagocampaign/campaign");
+        $select = $this->getReadConnection()->select();
+        $select->from(array("campaign" => $table), array(
+            'campaign_id' => 'campaign.campaign_id',
+            'campaign_name' => 'campaign.name'
+        ));
+
+        return $this->getReadConnection()->fetchAll($select);
+    }
+
 }
 
