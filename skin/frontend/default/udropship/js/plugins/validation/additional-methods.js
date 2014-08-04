@@ -69,10 +69,33 @@ jQuery.validator.addMethod('dateBefore', function(value, element, params) {
         this.element(end);
         jQuery(element).data('validation.running', false);
     }
-    console.log(value);
-    console.log(new Date(value));
-    console.log(new Date(value) < new Date(end.val()));
-    return this.optional(element) || this.optional(end[0]) || new Date(value) < new Date(end.val());
+    //format if dd-mm-yy to mm-dd-yy
+    var fValue = value.replace(/-/g, '/');
+    var fValue = fValue.replace(/ /g, '/');
+    var fValue = fValue.replace(/:/g, '/');
+
+
+    var time = fValue.split("/");
+
+    var date = [time[1],time[0],time[2]].join("/");
+    var time = [time[3],time[4]].join(":");
+    value = date + " " + time;
+
+    var endDate = end.val();
+    var fValue = endDate.replace(/-/g, '/');
+    var fValue = fValue.replace(/ /g, '/');
+    var fValue = fValue.replace(/:/g, '/');
+
+
+    var time = fValue.split("/");
+
+    var date = [time[1],time[0],time[2]].join("/");
+    var time = [time[3],time[4]].join(":");
+    endDate = date + " " + time;
+    //format if dd-mm-yy to mm-dd-yy
+
+
+    return this.optional(element) || this.optional(end[0]) || new Date(value) < new Date(endDate);
 
 }, 'Must be before corresponding end date');
 
@@ -84,8 +107,32 @@ jQuery.validator.addMethod('dateAfter', function(value, element, params) {
         this.element(start);
         jQuery(element).data('validation.running', false);
     }
-    console.log(new Date(value) > new Date(jQuery(params).val()));
-    return this.optional(element) || this.optional(start[0]) || new Date(value) > new Date(jQuery(params).val());
+    //format if dd-mm-yy to mm-dd-yy
+    var fValue = value.replace(/-/g, '/');
+    var fValue = fValue.replace(/ /g, '/');
+    var fValue = fValue.replace(/:/g, '/');
+
+
+    var time = fValue.split("/");
+
+    var date = [time[1],time[0],time[2]].join("/");
+    var time = [time[3],time[4]].join(":");
+    value = date + " " + time;
+
+    var startDate = jQuery(params).val();
+    var fValue = startDate.replace(/-/g, '/');
+    var fValue = fValue.replace(/ /g, '/');
+    var fValue = fValue.replace(/:/g, '/');
+
+
+    var time = fValue.split("/");
+
+    var date = [time[1],time[0],time[2]].join("/");
+    var time = [time[3],time[4]].join(":");
+    startDate = date + " " + time;
+    //format if dd-mm-yy to mm-dd-yy
+
+    return this.optional(element) || this.optional(start[0]) || new Date(value) > new Date(startDate);
 
 }, 'Must be after corresponding start date');
 /**
