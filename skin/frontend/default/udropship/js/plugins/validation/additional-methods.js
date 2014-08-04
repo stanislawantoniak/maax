@@ -70,9 +70,7 @@ jQuery.validator.addMethod('dateBefore', function(value, element, params) {
         jQuery(element).data('validation.running', false);
     }
     //format if dd-mm-yy to mm-dd-yy
-    var fValue = value.replace(/-/g, '/');
-    var fValue = fValue.replace(/ /g, '/');
-    var fValue = fValue.replace(/:/g, '/');
+    var fValue = value.replace(/([\s:\-]+)/g, '/');
 
 
     var time = fValue.split("/");
@@ -82,9 +80,7 @@ jQuery.validator.addMethod('dateBefore', function(value, element, params) {
     value = date + " " + time;
 
     var endDate = end.val();
-    var fValue = endDate.replace(/-/g, '/');
-    var fValue = fValue.replace(/ /g, '/');
-    var fValue = fValue.replace(/:/g, '/');
+    var fValue = endDate.replace(/([\s:\-]+)/g, '/');
 
 
     var time = fValue.split("/");
@@ -108,9 +104,7 @@ jQuery.validator.addMethod('dateAfter', function(value, element, params) {
         jQuery(element).data('validation.running', false);
     }
     //format if dd-mm-yy to mm-dd-yy
-    var fValue = value.replace(/-/g, '/');
-    var fValue = fValue.replace(/ /g, '/');
-    var fValue = fValue.replace(/:/g, '/');
+    var fValue = value.replace(/([\s:\-]+)/g, '/');
 
 
     var time = fValue.split("/");
@@ -120,9 +114,7 @@ jQuery.validator.addMethod('dateAfter', function(value, element, params) {
     value = date + " " + time;
 
     var startDate = jQuery(params).val();
-    var fValue = startDate.replace(/-/g, '/');
-    var fValue = fValue.replace(/ /g, '/');
-    var fValue = fValue.replace(/:/g, '/');
+    var fValue = startDate.replace(/([\s:\-]+)/g, '/');
 
 
     var time = fValue.split("/");
