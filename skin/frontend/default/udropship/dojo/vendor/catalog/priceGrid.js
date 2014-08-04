@@ -22,6 +22,9 @@ define([
 	on, query, Memory, Observable, put, Cache, JsonRest, Selection, 
 	selector, lang, request, ObserverFilter){
 	
+	/**
+	 * @todo Make source options it dynamicly
+	 */
 	
 	var converterPriceTypeOptions = [
 		{value: 799, label: "A"},
@@ -39,7 +42,7 @@ define([
 	var statusOptions = [
 		{value: '1', label: "Enabled"},
 		{value: '2', label: "Disabled"},
-		{value: '3', label: "Panding"},
+		{value: '3', label: "Pending"},
 		{value: '4', label: "Fix"},
 		{value: '5', label: "Discard"},
 		{value: '6', label: "Vacation"},
@@ -58,7 +61,8 @@ define([
 	var states = {
 		expanded: {},
 		checked: {},
-		loaded: {}
+		loaded: {},
+		changed: {}
 	}
 	
 	var formatPrice = function(value, currency){
@@ -331,6 +335,15 @@ define([
 			}
 			return JsonRest.prototype.query.call(this, query, options);
 		},
+		
+		put: function(obj){
+			obj.changed = states.changed[obj.entity_id];
+			var def = JsonRest.prototype.put.apply(this, arguments);
+			def.then(function(){
+				obj.changed = states.changed[obj.entity_id] = [];
+			});
+			return def;
+		}
 	});
 	
 	
@@ -384,7 +397,10 @@ define([
 						editOn: "dblclick",
 						className: "filterable align-right column-medium",
 						autoSave: true,
-						formatter: formatPrice
+						formatter: formatPrice,
+						canEdit: function(object,value){
+							return true;
+						}
 					})
 				]
 			},
@@ -510,7 +526,7 @@ define([
 				children: [
 					editor({
 						editor: "select",
-						editorArgs: {options: flagOptions, required: true},
+						editorArgs: {options: flagOptions, required: false},
 						editOn: "dblclick",
 						autoSave: true,
 						renderHeaderCell: filterRendererFacory("select", "product_flag", {options: flagOptions}),
@@ -554,15 +570,15 @@ define([
 				]
 			},
 			variant_qty: {
-				label: "Variant Stock",
+				label: "Variants",
 				field: "available_child_count",
-				className: "column-medium",
+				className: "column-center",
 				children: [
 					{
 						renderHeaderCell: filterRendererFacory("range", "available_child_count"),
 						sortable: false, 
 						field: "available_child_count",
-						className: "filterable align-right column-medium",
+						className: "filterable align-center column-medium",
 						formatter: function(value, item){
 							if(item.type_id=="configurable" || item.type_id=="grouped"){
 								return item.available_child_count + "/" + item.all_child_count;
@@ -591,7 +607,11 @@ define([
 				field: "status",
 				className: "column-medium",
 				children: [
-					{
+					editor({
+						editor: "select",
+						editorArgs: {options: statusOptions, required: true},
+						editOn: "dblclick",
+						autoSave: true,
 						renderHeaderCell: filterRendererFacory("select", "status", {options: statusOptions}),
 						sortable: false, 
 						field: "status",
@@ -604,7 +624,7 @@ define([
 							}
 							return "";
 						}
-					}
+					})
 				]
 			},
 			type_id: { 
@@ -651,9 +671,24 @@ define([
 	})
 	
 	// listen for clicks to trigger expand/collapse in table view mode
-	expandoListener = on.pausable(grid.domNode, ".dgrid-row td.field-expander :click", function(evt){
+	on.pausable(grid.domNode, ".dgrid-row td.field-expander :click", function(evt){
 		updater.toggle(grid.row(evt));		
 	});
+	
+	//Chandel data change
+	on.pausable(grid.domNode, "dgrid-datachange", function(evt){
+		var col = evt.cell.column,
+			data = evt.cell.row.data;
+			
+		if(!states.changed[data.entity_id]){
+			states.changed[data.entity_id] = [];
+		}
+		if(states.changed[data.entity_id].indexOf(col.field)<0){
+			states.changed[data.entity_id].push(col.field);
+		}
+		
+	});
+	
 	
 	return grid;
 	

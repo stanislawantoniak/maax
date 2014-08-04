@@ -7,30 +7,7 @@ class Zolago_Catalog_Block_Vendor_Price extends Mage_Core_Block_Template
 	 * @return array
 	 */
 	public function getAllowedStores() {
-		$allowed = array();
-		$limitedWebsites = $this->getVendor()->getLimitWebsites();
-		
-		if(!is_array($limitedWebsites)){
-			$realWebsites = array();
-		}elseif(!count($limitedWebsites)){
-			$realWebsites = array();
-		}elseif(count($limitedWebsites)==1 && $limitedWebsites[0]==""){
-			$realWebsites = array();
-		}else{
-			foreach($limitedWebsites as $websiteId){
-				if($websiteId){
-					$realWebsites[] = $websiteId;
-				}
-			}
-		}
-		foreach(Mage::app()->getStores() as $store){
-			if($realWebsites && in_array($store->getWebsiteId(), $realWebsites)){
-				$allowed[] = $store;
-			}elseif(!$realWebsites){
-				$allowed[] = $store;
-			}
-		}
-		return $allowed;
+		return Mage::helper("zolagodropship")->getAllowedStores($this->getVendor());
 	}
 	
 	/**

@@ -221,7 +221,11 @@ function createEditor(column){
 			options.forEach(function(option){
 				put(cmp, "option", {innerHTML: option.label, value: option.value})
 			});
+			
 		}
+		
+		
+		//on(cmp, "blur", function(evt){handleChange(evt)});
 		
 		if(has("ie") < 9 || (has("ie") && has("quirks"))){
 			// IE<9 / quirks doesn't fire change events for all the right things,

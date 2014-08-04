@@ -3,6 +3,38 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
 	const TRACK_SINGLE			= 1;
 	protected $trackingHelperPath = 'zolagodhl/tracking';
 	
+	
+	/**
+	 * @return array
+	 */
+	public function getAllowedStores($vendor) {
+		$allowed = array();
+		$limitedWebsites = $vendor->getLimitWebsites();
+		
+		if(!is_array($limitedWebsites)){
+			$realWebsites = array();
+		}elseif(!count($limitedWebsites)){
+			$realWebsites = array();
+		}elseif(count($limitedWebsites)==1 && $limitedWebsites[0]==""){
+			$realWebsites = array();
+		}else{
+			foreach($limitedWebsites as $websiteId){
+				if($websiteId){
+					$realWebsites[] = $websiteId;
+				}
+			}
+		}
+		foreach(Mage::app()->getStores() as $store){
+			if($realWebsites && in_array($store->getWebsiteId(), $realWebsites)){
+				$allowed[] = $store;
+			}elseif(!$realWebsites){
+				$allowed[] = $store;
+			}
+		}
+		return $allowed;
+	}
+	
+	
     /**
      * @param string
      */
