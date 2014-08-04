@@ -61,6 +61,11 @@ define([
 		loaded: {}
 	}
 	
+	var formatPrice = function(value, currency){
+		currency = "PLN";
+		return parseFloat(value).toFixed(2).replace("\.", ",") + " " + currency;
+	}
+	
 	
 	var filterRendererFacory = function(type, name, config){
 		type = type || "text";
@@ -77,7 +82,7 @@ define([
 					on(element, 'focus',	lang.hitch(observer, observer.start));
 					on(element, 'keyup',	lang.hitch(observer, observer.start));
 					on(element, 'keydown',	lang.hitch(observer, observer.start));
-					on(element, 'blur',		lang.hitch(observer, observer.stop));
+					on(element, 'blur',		lang.hitch(observer, observer.start));
 					
 					return element;
 				}
@@ -129,7 +134,7 @@ define([
 						on(element, 'focus',	lang.hitch(observer, observer.start));
 						on(element, 'keyup',	lang.hitch(observer, observer.start));
 						on(element, 'keydown',	lang.hitch(observer, observer.start));
-						on(element, 'blur',		lang.hitch(observer, observer.stop));
+						on(element, 'blur',		lang.hitch(observer, observer.start));
 						
 						put(wrapper, element);
 					});
@@ -378,7 +383,8 @@ define([
 						editor: "text",
 						editOn: "dblclick",
 						className: "filterable align-right column-medium",
-						autoSave: true
+						autoSave: true,
+						formatter: formatPrice
 					})
 				]
 			},
@@ -547,29 +553,36 @@ define([
 					})
 				]
 			},
-			varian_qty: {
+			variant_qty: {
 				label: "Variant Stock",
-				field: "variant_qty",
+				field: "available_child_count",
 				className: "column-medium",
 				children: [
 					{
-						renderHeaderCell: filterRendererFacory("range", "variant_qty"),
+						renderHeaderCell: filterRendererFacory("range", "available_child_count"),
 						sortable: false, 
-						field: "variant_qty",
+						field: "available_child_count",
 						className: "filterable align-right column-medium",
+						formatter: function(value, item){
+							if(item.type_id=="configurable" || item.type_id=="grouped"){
+								return item.available_child_count + "/" + item.all_child_count;
+							}
+							return "";
+						},
 					}
 				]
 			},
-			stock_qty: {
+			stock: {
 				label: "Stock Qty",
-				field: "stock_qty",
+				field: "stock",
 				className: "column-medium",
 				children: [
 					{
-						renderHeaderCell: filterRendererFacory("range", "stock_qty"),
+						renderHeaderCell: filterRendererFacory("range", "stock"),
 						sortable: false, 
-						field: "stock_qty",
+						field: "stock",
 						className: "filterable align-right column-medium",
+						formatter: function(value){return parseInt(value);}
 					}
 				]
 			},

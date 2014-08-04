@@ -46,15 +46,16 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Dropship_Controller_V
 			case "GET":
 				$collection = $this->_prepareCollection();
 				
+				$select = $collection->getSelect();
 				foreach($this->_getRestQuery() as $key=>$value){
 					$collection->addAttributeToFilter($key, $value);
 				}
 				
+				Mage::log($collection->getSelect()."");
+
 				
 				$out = $this->_prepareRestResponse($collection);
 				
-				//Mage::log($collection->getSelect()."");
-
 				$reposnse->
 					setHeader('Content-Range', 'items ' . $out['start']. '-' . $out['end']. '/' . $out['total'])->
 					setBody(Mage::helper("core")->jsonEncode($out['items']));
@@ -130,7 +131,12 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Dropship_Controller_V
 		$select = $collection->getSelect();
 		$adapter = $select->getAdapter();
 		
-		// Join tables
+		
+		$stockTable = $collection->getTable('cataloginventory/stock_item');
+		$linkTabel = $collection->getTable("catalog/product_super_link");
+		
+		
+		// Join price attrib
 		$priceExpression = $adapter->getCheckSql(
 			'0', // @todo after new attribure add
 			 $adapter->getCheckSql("at_special_price.value_id>0", "at_special_price.value", "at_special_price_default.value"),
@@ -141,14 +147,46 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Dropship_Controller_V
 		
 		// Join stock item
 		$collection->joinTable(
-				$collection->getTable('cataloginventory/stock_item'), 
+				$stockTable, 
 				'product_id=entity_id',
-				array('is_in_stock'=>'is_in_stock', 'stock_qty'=>'qty'), 
+				array('is_in_stock'=>'is_in_stock'), 
 				$adapter->quoteInto("{{table}}.stock_id=?", Mage_CatalogInventory_Model_Stock::DEFAULT_STOCK_ID),
 				'left'
 		);
 		
-
+		
+		// Join all childs
+		$subSelect = $adapter->select();
+		$subSelect->from(array("link_all"=>$linkTabel), array("COUNT(link_all.link_id)"));
+		$subSelect->where("link_all.parent_id=e.entity_id");
+	
+		$collection->addExpressionAttributeToSelect('all_child_count', $subSelect, array());
+		
+		// Join available child count
+		$subSelect = $adapter->select();
+		$subSelect->from(array("link_available"=>$linkTabel), array("COUNT(link_available.link_id)"));
+		$subSelect->join(
+				array("child_stock_available"=>$stockTable), 
+				"link_available.product_id=child_stock_available.product_id", 
+				array());
+		$subSelect->where("link_available.parent_id=e.entity_id");
+		$subSelect->where("child_stock_available.is_in_stock=?",1);
+		$collection->addExpressionAttributeToSelect('available_child_count', 
+				"IF(e.type_id IN ('configurable', 'grouped'), (".$subSelect."), null)", array());
+		
+		// Join child qtys
+		$subSelect = $adapter->select();
+		$subSelect->from(array("link_qty"=>$linkTabel), array("SUM(child_qty.qty)"));
+		$subSelect->join(
+				array("child_qty"=>$stockTable), 
+				"link_qty.product_id=child_qty.product_id", 
+				array());
+		$subSelect->where("link_qty.parent_id=e.entity_id");
+		$subSelect->where("child_qty.is_in_stock=?",1);
+		// Use subselect only for parent products
+		$collection->addExpressionAttributeToSelect('stock', 
+				"IF(e.type_id IN ('configurable', 'grouped'), (".$subSelect."), $stockTable.qty)", array());
+		
 		return $collection;
 	}
 	
@@ -316,7 +354,8 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Dropship_Controller_V
 			"is_bestseller", 
 			"product_flag",
 			"is_in_stock",
-			"stock_qty",
+			"available_child_count",
+			"stock",
 			"status",
 			"type_id",
 		);
@@ -335,9 +374,10 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Dropship_Controller_V
 			"is_bestseller",
 			"product_flag",
 			"is_in_stock",
-			"stock_qty",
+			"available_child_count",
+			"stock",
 			"status",
-			"type_id"
+			"type_id",
 		));
 	}
 
