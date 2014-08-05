@@ -9,7 +9,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 		$attributesToSelect = array(
 			"converter_price_type",
 			"price_margin",
-			//"campaign_regular_id",
+			"campaign_regular_id",
 			//"campaign_info_id",
 			"msrp",
 			"is_new",
@@ -45,7 +45,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 		
 		// Join price attrib
 		$priceExpression = $adapter->getCheckSql(
-			'0', // @todo after new attribure add
+			'(at_campaign_regular_id.value IS NOT NULL) AND (at_campaign_regular_id.value > 0)', 
 			 $adapter->getCheckSql("at_special_price.value_id>0", "at_special_price.value", "at_special_price_default.value"),
 			 $adapter->getCheckSql("at_price.value_id>0", "at_price.value", "at_price_default.value")
 		);
@@ -136,7 +136,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 		foreach($items as &$item){
 			$item['can_collapse'] = true;//
 			$item['entity_id'] = (int)$item['entity_id'];
-			$item['campaign_regular_id'] = "Lorem ipsum dolor sit manet"; /** @todo impelemnt **/
+			//$item['campaign_regular_id'] = "Lorem ipsum dolor sit manet"; /** @todo impelemnt **/
 			$item['store_id'] = $collection->getStoreId();
 		}
 		
@@ -170,6 +170,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 		return array(
 			"name", 
 			"display_price", 
+			"campaign_regular_id",
 			"converter_price_type", 
 			"price_margin", 
 			"msrp", 
@@ -190,6 +191,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 	public function getAvailableSortParams() {
 		return array_merge($this->getAvailableQueryParams(), array(
 			"display_price", 
+			"campaign_regular_id",
 			"converter_price_type", 
 			"price_margin", 
 			"msrp", 

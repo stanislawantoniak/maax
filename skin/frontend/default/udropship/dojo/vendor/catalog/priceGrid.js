@@ -322,6 +322,9 @@ define([
 					updater.doRowCollapse(obj, div);
 				}
 			
+				
+				states.orig[obj.entity_id] = lang.mixin({}, obj);
+			
 				return div;
 			};
 			
@@ -393,9 +396,6 @@ define([
 					node.id =  "expand-toggler";
 					
 					return updater.getExpandSign();
-				},
-				renderCell: function(item){
-					states.orig[item.entity_id] = lang.mixin({}, item);
 				}
 			},
 			name: {
@@ -425,7 +425,7 @@ define([
 						autoSave: true,
 						formatter: formatPrice,
 						canEdit: function(object,value){
-							return true;
+							return !object.campaign_regular_id;
 						}
 					})
 				]
