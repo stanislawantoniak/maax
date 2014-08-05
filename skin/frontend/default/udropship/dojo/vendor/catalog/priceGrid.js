@@ -26,37 +26,13 @@ define([
 	 * @todo Make source options it dynamicly
 	 */
 	
-	var converterPriceTypeOptions = [
-		{value: 799, label: "A"},
-		{value: 800, label: "B"},
-		{value: 801, label: "C"},
-		{value: 802, label: "Z"},
-	];
-	
-	var flagOptions = [
-		{value: 1, label: "Promotion"},
-		{value: 2, label: "Sale"}
-	];
-	
-	
-	var statusOptions = [
-		{value: '1', label: "Enabled"},
-		{value: '2', label: "Disabled"},
-		{value: '3', label: "Pending"},
-		{value: '4', label: "Fix"},
-		{value: '5', label: "Discard"},
-		{value: '6', label: "Vacation"},
-	];
-	
-	var typeIdOptions = [
-		{value: 'configurable', label: "Configurable"},
-		{value: 'simple', label: "Simple"}
-	];
-	
-	var boolOptions = [
-		{value: 1, label: "Yes"},
-		{value: 0, label: "No"}
-	];
+	var campainRegularIdOptions = sourceOptions.campaign_regular_id,
+		converterPriceTypeOptions = sourceOptions.converter_price_type,
+		flagOptions = sourceOptions.product_flag,
+		statusOptions = sourceOptions.status,
+		typeIdOptions = sourceOptions.type_id,
+		boolOptions = sourceOptions.bool;
+		
 	
 	var states = {
 		expanded: {},
@@ -420,10 +396,14 @@ define([
 						sortable: false, 
 						field: "display_price",
 						editor: "text",
+						editorArgs: {price: true},
 						editOn: "dblclick",
 						className: "filterable align-right column-medium",
 						autoSave: true,
-						formatter: formatPrice,
+						formatter: formatPrice,/*
+						set: function(value){
+							return value.toFixed(4)
+						},*/
 						canEdit: function(object,value){
 							return !object.campaign_regular_id;
 						}
@@ -436,10 +416,18 @@ define([
 				className: "column-medium",
 				children: [
 					{
-						renderHeaderCell: filterRendererFacory("select", "campaign_regular_id", {options: []}),
+						renderHeaderCell: filterRendererFacory("select", "campaign_regular_id", {options: campainRegularIdOptions}),
 						sortable: false, 
 						field: "campaign_regular_id",
 						className: "filterable column-medium align-center text-overflow",
+						formatter: function(value, item){
+							for(var i=0; i<campainRegularIdOptions.length; i++){
+								if(campainRegularIdOptions[i].value+'' == value+''){
+									return campainRegularIdOptions[i].label;
+								}
+							}
+							return "";
+						}
 					}
 				]
 			},
@@ -558,7 +546,7 @@ define([
 						renderHeaderCell: filterRendererFacory("select", "product_flag", {options: flagOptions}),
 						sortable: false, 
 						field: "product_flag",
-						className: "filterable align-center column-short",
+						className: "filterable align-center column-short text-overflow",
 						formatter: function(value, item){
 							for(var i=0; i<flagOptions.length; i++){
 								if(flagOptions[i].value+'' == value+''){
@@ -662,7 +650,7 @@ define([
 						renderHeaderCell: filterRendererFacory("select", "type_id", {options: typeIdOptions}),
 						sortable: false, 
 						field: "type_id",
-						className: "filterable align-center column-medium",
+						className: "filterable column-medium text-overflow",
 						formatter: function(value, item){
 							for(var i=0; i<typeIdOptions.length; i++){
 								if(typeIdOptions[i].value+'' == value+''){

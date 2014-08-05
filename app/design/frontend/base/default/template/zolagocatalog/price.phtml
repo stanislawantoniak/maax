@@ -103,6 +103,7 @@
 </style>
 <script type="text/javascript">
 	
+	sourceOptions = <?php echo $this->getAttributeSourceJson();?>;
 	
 	require(['vendor/catalog/priceGrid', 'dojo/store/Memory', 'dojo/store/Observable'], function(priceGrid, Memory, Observable){
 		<?php /*

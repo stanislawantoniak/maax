@@ -9,10 +9,17 @@ define([
 	"dojo/query",
 	"dgrid/Grid",
 	"put-selector/put",
+	"dojo/dom-class",
 	"dojo/_base/sniff"
-], function(kernel, lang, arrayUtil, Deferred, on, aspect, has, query, Grid, put){
+], function(kernel, lang, arrayUtil, Deferred, on, aspect, has, query, Grid, put, domClass){
 
 function updateInputValue(input, value){
+	
+	if(domClass.contains(input, "number-editor")){
+		
+		value = (""+parseFloat(value).toFixed(2)).replace(".", ",");
+	}
+	
 	// common code for updating value of a standard input
 	input.value = value;
 	if(input.type == "radio" || input.type == "checkbox"){
@@ -23,6 +30,7 @@ function updateInputValue(input, value){
 function dataFromValue(value, oldValue){
 	// Default logic for translating values from editors;
 	// tries to preserve type if possible.
+	
 	if(typeof oldValue == "number"){
 		value = isNaN(value) ? value : parseFloat(value);
 	}else if(typeof oldValue == "boolean"){
@@ -36,6 +44,11 @@ function dataFromValue(value, oldValue){
 
 // intermediary frontend to dataFromValue for HTML and widget editors
 function dataFromEditor(column, cmp){
+	
+	if(domClass.contains(cmp, "number-editor")){
+		cmp.value = cmp.value.replace(",", ".");
+	}
+	
 	if(typeof cmp.get == "function"){ // widget
 		return dataFromValue(cmp.get("value"));
 	}else{ // HTML input
@@ -222,6 +235,13 @@ function createEditor(column){
 				put(cmp, "option", {innerHTML: option.label, value: option.value})
 			});
 			
+		}
+		
+		if(editor=="text" && args.price){
+			put(cmp, ".number-editor");
+			if(jQuery && jQuery.fn.numeric){
+				jQuery(cmp).numeric({min:0, allowMinus: false, maxDecimalPlaces: 2});
+			}
 		}
 		
 		

@@ -36,6 +36,11 @@ class Zolago_Campaign_Model_Resource_Campaign_Collection
 		$this->addActiveFilter();
 		return $this;
 	}
+	
+    protected function _toOptionArray($valueField='campaign_id', $labelField='name', $additional=array())
+    {
+		return parent::_toOptionArray($valueField, $labelField, $additional);
+    }
 
     
 }
