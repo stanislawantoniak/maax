@@ -46,13 +46,13 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
         if (!$this->getRequest()->isPost()) {
             return $this->_redirectReferer();
         }
-Mage::log($_POST);
+
         $campaign = $this->_initModel();
         $vendor = $this->_getSession()->getVendor();
 
         // Try save
         $data = $this->getRequest()->getParams();
-//Mage::log($data);
+
         $this->_getSession()->setFormData(null);
         $modelId = $this->getRequest()->getParam("id");
 

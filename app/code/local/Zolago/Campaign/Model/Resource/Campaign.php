@@ -60,7 +60,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
                 $productIds[] = $productId;
             }
         }
-        Mage::log($productIds);
+
         $storeId = array(Mage_Core_Model_App::ADMIN_STORE_ID);
         $allStores = Mage::app()->getStores();
         foreach ($allStores as $_eachStoreId => $val) {
@@ -90,14 +90,24 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
 
         $campaignInfoIds = $this->getProductsInfoCampaigns($productIds);
 
+        $dataToUpdate = array();
+        if (!empty($campaignInfoIds)) {
+            foreach ($campaignInfoIds as $resItem) {
+                $dataToUpdate[$resItem['product_id']][] = $resItem['campaign_id'];
+            }
+        }
+
         switch($object->getType()){
             case Zolago_Campaign_Model_Campaign_Type::TYPE_INFO:
-                $campaignIds = array_merge($campaignInfoIds, array($object->getId()));
-                $attributesData = array('campaign_info_id' => implode("," , $campaignIds));
-                foreach ($storeIds as $storeId) {
-                    $actionModel
-                        ->updateAttributesNoIndex($productIds, $attributesData, $storeId);
+                foreach($dataToUpdate as $productId => $campaignIds){
+                    $campaignIds = array_merge($campaignIds , array($object->getId()));
+                    $attributesData = array('campaign_info_id' => implode("," , $campaignIds));
+                    foreach ($storeIds as $storeId) {
+                        $actionModel
+                            ->updateAttributesNoIndex(array($productId), $attributesData, $storeId);
+                    }
                 }
+
                 break;
             case Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION:
                 $attributesData = array('campaign_regular_id' => $object->getId());
@@ -266,16 +276,35 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
             array('campaign_product' => 'zolago_campaign_product'),
             'campaign_product.campaign_id=campaign.campaign_id',
             array(
-                'campaign_id'   => 'campaign.campaign_id'
+                'campaign_id'   => 'campaign.campaign_id',
+                'product_id' => 'campaign_product.product_id'
             )
         );
         $select->where("campaign_product.product_id IN (?)", $ids);
         $select->where(
             "campaign.type  IN (?)", array(Zolago_Campaign_Model_Campaign_Type::TYPE_INFO)
         )
-        ->distinct(true);
-        return $this->getReadConnection()->fetchCol($select);
+        ;
+
+        return $this->getReadConnection()->fetchAll($select);
     }
+
+
+    public function getExpiredCampaigns(){
+        $table = $this->getTable("zolagocampaign/campaign");
+        $select = $this->getReadConnection()->select();
+        $select->from(array("campaign" => $table), array("campaign.type as type",'campaign.campaign_id as campaign_id'));
+        $select->join(
+            array('campaign_product' => 'zolago_campaign_product'),
+            'campaign_product.campaign_id=campaign.campaign_id',
+            array(
+                'product_id'   => 'campaign_product.product_id'
+            )
+        );
+        $select->where('campaign.date_to', array('lteq' => date("Y-m-d H:i")));
+        return $this->getReadConnection()->fetchAll($select);
+    }
+
 
 }
 
