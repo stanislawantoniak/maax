@@ -9,7 +9,6 @@ class Zolago_Campaign_Model_Attribute_Source_Campaign extends Mage_Eav_Model_Ent
         $campaignModel = Mage::getModel("zolagocampaign/campaign");
         $campaigns = $campaignModel->getProductCampaign($productId);
 
-
         $options = $this->_prepareCampaignOptions($campaigns);
         if (is_null($this->_options)) {
             $this->_options = $options;
@@ -23,9 +22,14 @@ class Zolago_Campaign_Model_Attribute_Source_Campaign extends Mage_Eav_Model_Ent
         return $this->getAllOptions();
     }
 
+    /**
+     * format options
+     * @param $campaigns
+     * @return array
+     */
     private function _prepareCampaignOptions($campaigns)
     {
-        $options = array();
+        $options = array( 0 => '  ');
         if (!empty($campaigns)) {
             foreach ($campaigns as $campaign) {
                 $options[] = array(
