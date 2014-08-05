@@ -8,7 +8,6 @@ class Zolago_Campaign_Model_Attribute_Source_Campaign_Info extends Mage_Eav_Mode
         $campaignModel = Mage::getModel("zolagocampaign/campaign");
         $campaigns = $campaignModel->getProductCampaignInfo($productId);
 
-
         $options = $this->_prepareCampaignOptions($campaigns);
         if (is_null($this->_options)) {
             $this->_options = $options;

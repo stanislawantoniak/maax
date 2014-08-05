@@ -80,4 +80,61 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         }
         return $this->getResource()->getProductCampaignInfo($productId);
     }
+
+
+    public function processCampaignAttributes(){
+        //Select campaigns with expired date
+        $expiredCampaigns = $this->getResource()->getExpiredCampaigns();
+        Mage::log($expiredCampaigns . " ExpiredCampaigns ", 0, 'processCampaignAttributes.log');
+        if(empty($expiredCampaigns)){
+            return;
+        }
+        //unset products campaign attributes
+        $dataToUpdate = array();
+        foreach($expiredCampaigns as $expiredCampaign){
+            $dataToUpdate[$expiredCampaign['type']][$expiredCampaign['campaign_id']][] = $expiredCampaign['product_id'];
+        }
+
+        if (!empty($dataToUpdate)) {
+            $actionModel = Mage::getSingleton('catalog/product_action');
+
+            $storeId = array(Mage_Core_Model_App::ADMIN_STORE_ID);
+            $allStores = Mage::app()->getStores();
+            foreach ($allStores as $_eachStoreId => $val) {
+                $_storeId = Mage::app()->getStore($_eachStoreId)->getId();
+                $storeId[] = $_storeId;
+            }
+            foreach ($dataToUpdate as $type => $campaignData) {
+                foreach ($campaignData as $campaignId => $productIds) {
+                    if ($type == Zolago_Campaign_Model_Campaign_Type::TYPE_INFO) {
+                        foreach ($storeId as $store) {
+                            foreach ($productIds as $productId) {
+                                $val = Mage::getResourceModel('catalog/product')->getAttributeRawValue($productId, self::ZOLAGO_CAMPAIGN_INFO_CODE, $store);
+                                $campaignIds = explode(",", $val);
+                                $campaignIds = array_diff($campaignIds, array($campaignId));
+                                if (!empty($campaignIds)) {
+                                    $attributesData = array(self::ZOLAGO_CAMPAIGN_INFO_CODE => $campaignIds);
+                                    $actionModel
+                                        ->updateAttributesNoIndex($productIds, $attributesData, (int)$store);
+                                }
+                            }
+                        }
+
+                    } elseif ($type == Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION || $type == Zolago_Campaign_Model_Campaign_Type::TYPE_SALE) {
+                        $attributesData = array(self::ZOLAGO_CAMPAIGN_ID_CODE => 0);
+                        foreach ($storeId as $store) {
+                            $actionModel
+                                ->updateAttributesNoIndex($productIds, $attributesData, (int)$store);
+                        }
+                    }
+                }
+            }
+            $actionModel->reindexAfterMassAttributeChange();
+        }
+
+    }
+
+    public function getExpiredCampaigns(){
+        return $this->getResource()->getExpiredCampaigns();
+    }
 }
