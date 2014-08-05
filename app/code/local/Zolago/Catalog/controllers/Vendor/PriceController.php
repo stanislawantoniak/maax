@@ -46,9 +46,18 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Dropship_Controller_V
 		
 		switch ($this->getRequest()->getMethod()) {
 			case "GET":
+				$productId = null;
+				if(preg_match("/\/([0-9]+)$/", $this->getRequest()->getPathInfo(), $matches)){
+					$productId = $matches[1];
+				}
+				
 				$collection = $this->_getCollection();
 				
 				$select = $collection->getSelect();
+				
+				if($productId){
+					$collection->addIdFilter($productId);
+				}
 				
 				// Make filters
 				foreach($this->_getRestQuery() as $key=>$value){
@@ -61,18 +70,144 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Dropship_Controller_V
 						$this->_getRestRange()
 				);
 				
-				$reposnse->
-					setHeader('Content-Range', 'items ' . $out['start']. '-' . $out['end']. '/' . $out['total'])->
-					setBody(Mage::helper("core")->jsonEncode($out['items']));
+				if($productId && $out['items']){
+					$reposnse->
+						setBody(Mage::helper("core")->jsonEncode($out['items'][0]));
+				}else{
+					$reposnse->
+						setHeader('Content-Range', 'items ' . $out['start']. '-' . $out['end']. '/' . $out['total'])->
+						setBody(Mage::helper("core")->jsonEncode($out['items']));
+				}
 			break;
 			case "PUT":
 				$data = Mage::helper("core")->jsonDecode(($this->getRequest()->getRawBody()));
-				$data['name'] = $data['name'] . " Edited";
+				
+				try{
+					$productIds = $data['entity_id'];
+					$attributeChanged = $data['changed'];
+					$attributeData = array();
+					$storeId = $data['store_id'];
+					
+					foreach($attributeChanged as $attribute){
+						if(isset($data[$attribute])){
+							$attributeData[$attribute] = $data[$attribute];
+						}
+					}
+					if($attributeData){
+						$this->_processAttributresSave(array($productIds), $attributeData, $storeId);
+					}
+					
+				} catch (Mage_Core_Exception $ex) {
+					$reposnse->setHttpResponseCode(500);
+					$reposnse->setBody($ex->getMessage());
+					return;
+				} catch (Exception $ex) {
+					Mage::logException($ex);
+					$reposnse->setHttpResponseCode(500);
+					$reposnse->setBody("Some error occured");
+					return;
+				}
+				
+				/** dev tool **/
+				$data['name'] = $data['name'] . " changed";
+				$data['changed'] = array();
+				
 				$reposnse->setBody(json_encode($data));
 			break;
 		}
 		
 		$reposnse->setHeader('Content-type', 'application/json');
+	}
+	
+	/**
+	 * @param array $productIds
+	 * @param array $attributes
+	 * @param type $storeId
+	 * @throws Mage_Core_Exception
+	 */
+	protected function _processAttributresSave(array $productIds, array $attributes, $storeId) {
+		
+		$collection = Mage::getResourceModel("zolagocatalog/vendor_price_collection");
+		$inventoryData = array();
+		
+		// Vaild collection
+		$collection->addAttributeToFilter('udropship_vendor', $this->getVendor()->getId());
+		$collection->addIdFilter($productIds);
+		
+		if($collection->getSize()<count($productIds)){
+			throw new Mage_Core_Exception("You are trying to edit not your product");
+		}
+		
+		/* @var $collection Zolago_Catalog_Model_Resource_Vendor_Price_Collection */
+		
+		foreach($attributes as $attributeCode=>$value){
+			if(!in_array($attributeCode, $collection->getEditableAttributes())){
+				throw new Mage_Core_Exception("You are trying to edit not editable attribute");
+			}
+			
+			// Process modified flow attributes
+			switch($attributeCode){
+				case "display_price":
+					$attributes['price'] = $value;
+					unset($attributes[$attributeCode]);
+				break;
+				case "is_in_stock":
+					$inventoryData['is_in_stock'] = $value;
+					unset($attributes[$attributeCode]);
+				break;
+			
+			}
+		}
+		
+		
+		$actionModel = Mage::getSingleton('catalog/product_action');
+		/* @var $actionModel Mage_Catalog_Model_Product_Action */
+		
+		if($attributes){
+			$actionModel->updateAttributes($productIds, $attributes, $storeId);
+		}
+		
+		
+		// Prepare stock
+		foreach (Mage::helper('cataloginventory')->getConfigItemOptions() as $option) {
+            if (isset($inventoryData[$option]) && !isset($inventoryData['use_config_' . $option])) {
+                $inventoryData['use_config_' . $option] = 0;
+            }
+        }
+		
+		// Stock save
+		if ($inventoryData) {
+			/** @var $stockItem Mage_CatalogInventory_Model_Stock_Item */
+			$stockItem = Mage::getModel('cataloginventory/stock_item');
+			$stockItem->setProcessIndexEvents(false);
+			$stockItemSaved = false;
+
+			foreach ($productIds as $productId) {
+				$stockItem->setData(array());
+				$stockItem->loadByProduct($productId)
+					->setProductId($productId);
+
+				$stockDataChanged = false;
+				foreach ($inventoryData as $k => $v) {
+					$stockItem->setDataUsingMethod($k, $v);
+					if ($stockItem->dataHasChangedFor($k)) {
+						$stockDataChanged = true;
+					}
+				}
+				if ($stockDataChanged) {
+					$stockItem->save();
+					$stockItemSaved = true;
+				}
+			}
+
+			if ($stockItemSaved) {
+				Mage::getSingleton('index/indexer')->indexEvents(
+					Mage_CatalogInventory_Model_Stock_Item::ENTITY,
+					Mage_Index_Model_Event::TYPE_SAVE
+				);
+			}
+		}
+		
 	}
 	
 	/**

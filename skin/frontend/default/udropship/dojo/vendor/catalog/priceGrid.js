@@ -62,7 +62,8 @@ define([
 		expanded: {},
 		checked: {},
 		loaded: {},
-		changed: {}
+		changed: {},
+		orig: {}
 	}
 	
 	var formatPrice = function(value, currency){
@@ -308,6 +309,8 @@ define([
 	});
 	
 	var grid,
+		testStore,
+		storeRest,
 		updater = new RowUpdater(),
 		renderer = function(obj, options){
 				var div = put("div", Grid.prototype.renderRow.apply(this, arguments)),
@@ -326,7 +329,7 @@ define([
 	
 
 			
-	var storeRest = new JsonRest({
+	 storeRest = new JsonRest({
 		target:"/udprod/vendor_price/rest",
 		idProperty: "entity_id",
 		query: function(query, options){
@@ -341,6 +344,26 @@ define([
 			var def = JsonRest.prototype.put.apply(this, arguments);
 			def.then(function(){
 				obj.changed = states.changed[obj.entity_id] = [];
+			}, function(evt){
+				obj.changed = states.changed[obj.entity_id] = [];
+
+				var id = obj.entity_id;
+						
+				if(states.orig[id]){
+					if (grid.dirty.hasOwnProperty(id)) {
+						delete grid.dirty[id]; // delete dirty data
+						testStore.notify(states.orig[id], obj.entity_id);
+					}
+				}else{
+					storeRest.get(obj.entity_id).then(function(result){
+						if (grid.dirty.hasOwnProperty(id)) {
+						   delete grid.dirty[id]; // delete dirty data
+						   testStore.notify(result, obj.entity_id);
+					   }
+					});
+				}
+				
+				alert(evt.response.data)
 			});
 			return def;
 		}
@@ -349,7 +372,7 @@ define([
 	
 	//var testStore =  Observable(Cache(storeRest, Memory()));
 	// cache crakcs edit
-	var testStore =  Observable(storeRest);
+	testStore =  Observable(storeRest);
 	
 	var PriceGrid = declare([Grid, Selection,Keyboard, CompoundColumns]);
 	
@@ -370,6 +393,9 @@ define([
 					node.id =  "expand-toggler";
 					
 					return updater.getExpandSign();
+				},
+				renderCell: function(item){
+					states.orig[item.entity_id] = lang.mixin({}, item);
 				}
 			},
 			name: {
