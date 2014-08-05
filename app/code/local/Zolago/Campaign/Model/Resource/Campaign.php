@@ -284,10 +284,9 @@ Mage::log($skuvs);
 
 
     /**
-     * @param $productId
      * @return array
      */
-    public function getProductCampaign($productId)
+    public function getProductCampaign()
     {
         $table = $this->getTable("zolagocampaign/campaign");
         $select = $this->getReadConnection()->select();
@@ -300,7 +299,7 @@ Mage::log($skuvs);
                  'campaign_name' => 'campaign.name'
             )
         );
-        //$select->where("campaign_product.product_id=?", $productId);
+
         $select->where(
             "campaign.type IN (?)",
             array(Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION, Zolago_Campaign_Model_Campaign_Type::TYPE_SALE)
@@ -315,7 +314,7 @@ Mage::log($skuvs);
      *
      * @return array
      */
-    public function getProductCampaignInfo($productId)
+    public function getProductCampaignInfo()
     {
         $table = $this->getTable("zolagocampaign/campaign");
         $select = $this->getReadConnection()->select();
@@ -328,7 +327,6 @@ Mage::log($skuvs);
                  'campaign_name' => 'campaign.name'
             )
         );
-        //$select->where("campaign_product.product_id=?", $productId);
         $select->where(
             "campaign.type  IN (?)", array(Zolago_Campaign_Model_Campaign_Type::TYPE_INFO)
         )

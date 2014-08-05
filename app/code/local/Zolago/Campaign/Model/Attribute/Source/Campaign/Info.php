@@ -4,9 +4,8 @@ class Zolago_Campaign_Model_Attribute_Source_Campaign_Info extends Mage_Eav_Mode
 {
     public function getAllOptions()
     {
-        $productId = Mage::registry('current_product')->getId();
         $campaignModel = Mage::getModel("zolagocampaign/campaign");
-        $campaigns = $campaignModel->getProductCampaignInfo($productId);
+        $campaigns = $campaignModel->getProductCampaignInfo();
 
         $options = $this->_prepareCampaignOptions($campaigns);
         if (is_null($this->_options)) {
