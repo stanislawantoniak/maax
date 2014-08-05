@@ -8,45 +8,6 @@ class Zolago_Catalog_AuthController extends Mage_Core_Controller_Front_Action
 
     public function indexAction(){
 
-        $websites = array(0=>1);
-        $storeIds = array(0);
-        foreach (Mage::app()->getWebsites() as $website) {
-            if(in_array($website->getId(),$websites)){
-                foreach ($website->getGroups() as $group) {
-                    $stores = $group->getStores();
-                    foreach ($stores as $store) {
-                        //$store is a store object
-                        $storeIds[] = $store->getId();
-                    }
-                }
-            }
-        }
-krumo($storeIds);
-        die('Test');
-        $actionModel = Mage::getSingleton('catalog/product_action');
-        $productIds = array(25701,32334,25707);
-        $model = Mage::getResourceModel("zolagocampaign/campaign");
-        $campaignInfoIds = $model->getProductsInfoCampaigns($productIds);
-        krumo($campaignInfoIds);
-        $storeId = array(Mage_Core_Model_App::ADMIN_STORE_ID);
-        $allStores = Mage::app()->getStores();
-        foreach ($allStores as $_eachStoreId => $val) {
-            $_storeId = Mage::app()->getStore($_eachStoreId)->getId();
-            $storeId[] = $_storeId;
-        }
-        $campaignInfoId = 5;
-        $campaignIds = array_merge($campaignInfoIds, array($campaignInfoId));
-        krumo(implode("," , $campaignIds));
-        $attributesData = array('campaign_regular_id' => 7,'campaign_info_id' => implode("," , $campaignIds));
-
-        foreach($storeId as $store){
-            krumo($store);
-            $actionModel
-                ->updateAttributesNoIndex($productIds, $attributesData, (int)$store);
-        }
-        $actionModel->reindexAfterMassAttributeChange();
-        die('Test');
-
         $apiModel = new Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1();
 
 
