@@ -1,4 +1,13 @@
 var OrbaLib = {
+	Wishlist: {
+		/** @todo add form_key **/
+		add: function(data, callback) {
+            OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_wishlist/add'); ?>', data, callback, 'GET');
+        },
+		remove: function(data, callback) {
+            OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_wishlist/remove'); ?>', data, callback, 'GET');
+        },
+	},
 	Customer: {
 		getAccountInformation: function(data, callback) {
             OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_customer/get_account_information'); ?>', data, callback, 'GET');

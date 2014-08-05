@@ -1,0 +1,65 @@
+
+<div class="container">
+    <div class="page-header">
+        <div class="page-title">
+            <h3><?php echo Mage::helper("zolagocatalog")->__("Product prices");?></h3>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+	<div class="row">
+		<div class="col-lg-12">
+			<div id="grid-holder"></div>
+		</div>
+	</div>
+</div>
+<style>
+	#grid-holder .field-expander,
+	#grid-holder .field-selector{
+		width: 25px;
+		text-align: center;
+	}
+#grid-holder .ui-state-default {
+	border:0;
+}
+#grid-holder .expando {
+	/* style of area containing summary, expanded on click */
+	padding: 10px 6px;
+	background: #fff;
+	border-bottom: 1px #ddd solid;
+}
+
+#grid-holder .collapsed .expando {
+	display: none;
+}
+
+#grid-holder .dgrid-no-data span,
+#grid-holder .dgrid-loading span{
+   position: absolute;
+   top: 50%;
+   width: 100%;
+   margin-top: -5px;
+   color: #aaa;
+   text-align: center;
+}
+
+#grid-holder .filterable input{
+	border: 1px #ddd solid;
+	height: 20px;
+	display: block;
+	width: 100%;
+}
+
+</style>
+<script type="text/javascript">
+	
+	
+	require(['catalog/priceGrid', 'dojo/store/Memory', 'dojo/store/Observable'], function(priceGrid, Memory, Observable){
+		<?php /*
+		var store = new Observable(new Memory({ idProperty: "entity_id", data: <?php echo $this->getJsonCollection();?>}));
+		
+		priceGrid.set("store", store);
+		*/ ?>
+	});
+</script>
