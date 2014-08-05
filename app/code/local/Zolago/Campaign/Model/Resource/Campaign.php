@@ -18,17 +18,127 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         if ($object->hasData("website_ids")) {
             $this->_setWebsites($object, $object->getData("website_ids"));
         }
+
         // Products Assignment
         if ($object->hasData("campaign_products")) {
+            //Prepare data
             $productsStr = $object->getData("campaign_products");
-            $products = array();
-            if(is_string($productsStr)){
-                $products = array_map('trim', explode("," , $productsStr));
+            $skuS = array();
+            if (is_string($productsStr)) {
+                $skuS = array_map('trim', explode(",", $productsStr));
             }
-            $this->_setProducts($object, $products);
-            $this->_setCampaignAttributes($object, $products);
+            $collection = Mage::getModel('catalog/product')
+                ->getCollection()
+                ->addAttributeToFilter('SKU', array('in' => $skuS))
+                ->getAllIds();
+            $productIds = array();
+            if (!empty($collection)) {
+                foreach ($collection as $productId) {
+                    $productIds[] = $productId;
+                }
+            }
+            $websites = $object->getWebsiteIds();
+            $storeIds = array(Mage_Core_Model_App::ADMIN_STORE_ID);
+            foreach (Mage::app()->getWebsites() as $website) {
+                if (in_array($website->getId(), $websites)) {
+                    foreach ($website->getGroups() as $group) {
+                        $stores = $group->getStores();
+                        foreach ($stores as $store) {
+                            //$store is a store object
+                            $storeIds[] = $store->getId();
+                        }
+                    }
+                }
+            }
+            //-----Prepare data
+
+
+            $this->_setProducts($object, $productIds);
+            $this->_setCampaignAttributes($object, $productIds, $storeIds);
+
+            //Assignment Special Price From Date and Special Price To Date
+            if ($object->hasData("date_from") || $object->hasData("date_to")) {
+                $this->_setSpecialPriceDate($object, $productIds, $object->getData("date_from"), $object->getData("date_to"),$storeIds);
+            }
+
+            //Assignment Special Price
+            if ($object->hasData("price_source_id") && $object->hasData("percent")) {
+                $this->_setSpecialPrice($object, $productIds, $object->getData("price_source_id"), $object->getData("percent"),$storeIds);
+            }
+
+            Mage::getSingleton('catalog/product_action')
+                ->reindexAfterMassAttributeChange();
         }
         return parent::_afterSave($object);
+    }
+
+    public function _setSpecialPrice($object, $productIds, $priceSourceId, $percent,$storeIds)
+    {
+        $actionModel = Mage::getSingleton('catalog/product_action');
+
+        $queueModel = Mage::getResourceModel('zolagocatalog/queue_pricetype');
+        $skuvs = $queueModel->getVendorSkuAssoc($productIds);
+Mage::log($skuvs);
+        //Ping converter to get special price
+        try {
+            $converter = Mage::getModel('zolagoconverter/client');
+        } catch (Exception $e) {
+            Mage::throwException("Converter is unavailable: check credentials");
+            return;
+        }
+        $attr = Mage::getResourceModel('catalog/product')
+            ->getAttribute(Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER_PRICE_TYPE_CODE);
+        if ($attr->usesSource()) {
+            $priceType = $attr->getSource()->getOptionText($priceSourceId);
+        }
+        foreach ($skuvs as $productId => $productData) {
+            $vendorSku = $productData['skuv'];
+            $sku = $productData['sku'];
+
+            $res = explode('-', $sku);
+            $vendorExternalId = (!empty($res) && isset($res[0])) ? (int)$res[0] : false;
+            if (!$vendorExternalId) {
+                return;
+            }
+            foreach ($storeIds as $storeId) {
+                $newPrice = $converter->getPrice($vendorExternalId, $vendorSku, $priceType);
+                Mage::log($newPrice);
+                if (!empty($newPrice)) {
+                    $newPriceWithPercent = $newPrice + $newPrice * ((int)$percent / 100);
+
+                    $attributesData = array('special_price' => $newPriceWithPercent);
+                    $actionModel
+                        ->updateAttributesNoIndex(array($productId), $attributesData, $storeId);
+
+                }
+            }
+
+        }
+    }
+
+    /**
+     * @param Mage_Core_Model_Abstract $object
+     * @param $skuS
+     * @param $dateFrom
+     * @param $dateTo
+     */
+    public function _setSpecialPriceDate(Mage_Core_Model_Abstract $object, $productIds, $dateFrom, $dateTo, $storeIds)
+    {
+        $actionModel = Mage::getSingleton('catalog/product_action');
+        if (!empty($dateFrom)) {
+            $attributesData = array('special_from_date' => date('Y-m-d', strtotime($dateFrom)));
+            foreach ($storeIds as $storeId) {
+                $actionModel
+                    ->updateAttributesNoIndex($productIds, $attributesData, $storeId);
+            }
+        }
+        if (!empty($dateTo)) {
+            $attributesData = array('special_to_date' => date('Y-m-d', strtotime($dateTo)));
+            foreach ($storeIds as $storeId) {
+                $actionModel
+                    ->updateAttributesNoIndex($productIds, $attributesData, $storeId);
+            }
+        }
     }
 
     /**
@@ -47,45 +157,8 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
      * @param array $skuS
      * @return Zolago_Campaign_Model_Resource_Campaign
      */
-    protected function _setCampaignAttributes(Mage_Core_Model_Abstract $object, array $skuS)
+    protected function _setCampaignAttributes(Mage_Core_Model_Abstract $object, array $productIds, $storeIds)
     {
-
-        $collection = Mage::getModel('catalog/product')
-            ->getCollection()
-            ->addAttributeToFilter('SKU', array('in' => $skuS))
-            ->getAllIds();
-        $productIds = array();
-        if (!empty($collection)) {
-            foreach ($collection as $productId) {
-                $productIds[] = $productId;
-            }
-        }
-
-        $storeId = array(Mage_Core_Model_App::ADMIN_STORE_ID);
-        $allStores = Mage::app()->getStores();
-        foreach ($allStores as $_eachStoreId => $val) {
-            $_storeId = Mage::app()->getStore($_eachStoreId)->getId();
-            $storeId[] = $_storeId;
-        }
-
-        $websites = $object->getWebsiteIds();
-        $storeIds = array(Mage_Core_Model_App::ADMIN_STORE_ID);
-        foreach (Mage::app()->getWebsites() as $website) {
-            if(in_array($website->getId(),$websites)){
-                foreach ($website->getGroups() as $group) {
-                    $stores = $group->getStores();
-                    foreach ($stores as $store) {
-                        //$store is a store object
-                        $storeIds[] = $store->getId();
-                    }
-                }
-            }
-        }
-        unset($stores);
-        unset($store);
-        unset($website);
-
-
         $actionModel = Mage::getSingleton('catalog/product_action');
 
         $campaignInfoIds = $this->getProductsInfoCampaigns($productIds);
@@ -124,7 +197,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
                 }
                 break;
         }
-        $actionModel->reindexAfterMassAttributeChange();
+
         return $this;
     }
     /**
@@ -132,7 +205,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
      * @param array $skuS
      * @return Zolago_Campaign_Model_Resource_Campaign
      */
-    protected function _setProducts(Mage_Core_Model_Abstract $object, array $skuS)
+    protected function _setProducts(Mage_Core_Model_Abstract $object, array $productIds)
     {
         $table = $this->getTable("zolagocampaign/campaign_product");
         $where = $this->getReadConnection()
@@ -140,11 +213,8 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $this->_getWriteAdapter()->delete($table, $where);
 
         $toInsert = array();
-        $collection = Mage::getModel('catalog/product')
-            ->getCollection()
-            ->addAttributeToFilter('SKU', array('in' => $skuS))
-            ->getAllIds();
-        foreach ($collection as $productId) {
+
+        foreach ($productIds as $productId) {
             $toInsert[] = array("campaign_id" => $object->getId(), "product_id" => $productId);
         }
         if (count($toInsert)) {

@@ -89,7 +89,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         if(empty($expiredCampaigns)){
             return;
         }
-        //unset products campaign attributes
+
         $dataToUpdate = array();
         foreach($expiredCampaigns as $expiredCampaign){
             $dataToUpdate[$expiredCampaign['type']][$expiredCampaign['campaign_id']][] = $expiredCampaign['product_id'];
@@ -104,8 +104,11 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                 $_storeId = Mage::app()->getStore($_eachStoreId)->getId();
                 $storeId[] = $_storeId;
             }
+            $productIdsToUpdate = array();
             foreach ($dataToUpdate as $type => $campaignData) {
+                //unset products campaign attributes
                 foreach ($campaignData as $campaignId => $productIds) {
+                    $productIdsToUpdate = array_merge($productIdsToUpdate, $productIds);
                     if ($type == Zolago_Campaign_Model_Campaign_Type::TYPE_INFO) {
                         foreach ($storeId as $store) {
                             foreach ($productIds as $productId) {
@@ -128,6 +131,17 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                         }
                     }
                 }
+                unset($attributesData);
+
+                //unset special price
+                //unset special price dates
+                $attributesData = array('special_price' => '', 'special_from_date' => '', 'special_to_date' => '');
+                foreach ($storeId as $store) {
+                    $actionModel
+                        ->updateAttributesNoIndex($productIdsToUpdate, $attributesData, (int)$store);
+                }
+
+
             }
             $actionModel->reindexAfterMassAttributeChange();
         }

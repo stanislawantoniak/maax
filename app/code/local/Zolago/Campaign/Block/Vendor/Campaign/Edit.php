@@ -102,7 +102,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
             "name" => "price_source_id",
             "required" => true,
             "class" => "form-control",
-            "label" => $helper->__('Price source'),
+            "label" => $helper->__('Special Price source'),
             "values" => Mage::getSingleton('zolagocampaign/campaign_pricesource')->toOptionHash()
         ));
 

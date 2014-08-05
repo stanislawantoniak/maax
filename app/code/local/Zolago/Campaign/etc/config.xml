@@ -76,5 +76,16 @@
 	</frontend>
 
     <crontab>
+        <jobs>
+            <zolagocampaign_process_campaign_attributes>
+                <schedule>
+                    <!-- Run every 5 minutes -->
+                    <cron_expr>0,5,10,15,20,25,30,35,40,45,50,55 * * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>zolagocampaign/observer::processCampaignAttributes</model>
+                </run>
+            </zolagocampaign_process_campaign_attributes>
+        </jobs>
     </crontab>
 </config>
