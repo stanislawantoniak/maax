@@ -121,12 +121,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
 
         $values = $this->getModel()->getData();
 
-        $values = array_merge($values,
-            array(
-                'date_from_unformat' => date("m/d/Y H:i:s",strtotime($values['date_from'])),
-                "date_to_unformat" => date("m/d/Y H:i:s",strtotime($values['date_to']))
-            )
-        );
+
         //reformat date_from date_to
         if (!empty($values)) {
             $values['date_from'] = !empty($values['date_from']) ? date('d-m-Y H:i', strtotime($values['date_from'])) : $values['date_from'];
