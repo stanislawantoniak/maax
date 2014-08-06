@@ -129,11 +129,14 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
 
                 //unset special price
                 //unset special price dates
-                $attributesData = array('special_price' => '', 'special_from_date' => '', 'special_to_date' => '');
+                //unset SRP price
+                $attributesData = array('special_price' => '', 'special_from_date' => '', 'special_to_date' => '', 'msrp' => '');
                 foreach ($storeId as $store) {
                     $actionModel
                         ->updateAttributesNoIndex($productIdsToUpdate, $attributesData, (int)$store);
                 }
+
+
 
 
             }

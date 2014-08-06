@@ -14,6 +14,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
      */
     protected function _afterSave(Mage_Core_Model_Abstract $object)
     {
+        Mage::log($object->getData());
         // Website Assignment
         if ($object->hasData("website_ids")) {
             $this->_setWebsites($object, $object->getData("website_ids"));
@@ -58,21 +59,36 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
 
             //Assignment Special Price From Date and Special Price To Date
             if ($object->hasData("date_from") || $object->hasData("date_to")) {
-                $this->_setSpecialPriceDate($object, $productIds, $object->getData("date_from"), $object->getData("date_to"),$storeIds);
+                $this->_setSpecialPriceDate($productIds, $object->getData("date_from"), $object->getData("date_to"),$storeIds);
             }
 
             //Assignment Special Price
             if ($object->hasData("price_source_id") && $object->hasData("percent")) {
-                $this->_setSpecialPrice($object, $productIds, $object->getData("price_source_id"), $object->getData("percent"),$storeIds);
+                $this->_setSpecialPrice($productIds, $object->getData("price_source_id"), $object->getData("percent"),$storeIds);
             }
-
+            //Assignment Suggested Retail Price
+            if ($object->hasData("price_srp")) {
+                $this->_setSRPPrice($productIds, $object->getData("price_srp"),$storeIds);
+            }
             Mage::getSingleton('catalog/product_action')
                 ->reindexAfterMassAttributeChange();
         }
         return parent::_afterSave($object);
     }
 
-    public function _setSpecialPrice($object, $productIds, $priceSourceId, $percent,$storeIds)
+    public function _setSRPPrice($productIds, $srpPrice, $storeIds)
+    {
+        $actionModel = Mage::getSingleton('catalog/product_action');
+        foreach ($storeIds as $storeId) {
+            $attributesData = array('msrp' => $srpPrice);
+            $actionModel
+                ->updateAttributesNoIndex($productIds, $attributesData, $storeId);
+
+        }
+    }
+
+
+    public function _setSpecialPrice($productIds, $priceSourceId, $percent,$storeIds)
     {
         $actionModel = Mage::getSingleton('catalog/product_action');
 
@@ -122,7 +138,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
      * @param $dateFrom
      * @param $dateTo
      */
-    public function _setSpecialPriceDate(Mage_Core_Model_Abstract $object, $productIds, $dateFrom, $dateTo, $storeIds)
+    public function _setSpecialPriceDate($productIds, $dateFrom, $dateTo, $storeIds)
     {
         $actionModel = Mage::getSingleton('catalog/product_action');
         if (!empty($dateFrom)) {
