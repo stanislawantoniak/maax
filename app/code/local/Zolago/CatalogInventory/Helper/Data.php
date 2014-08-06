@@ -67,10 +67,7 @@ class Zolago_CatalogInventory_Helper_Data extends Mage_Core_Helper_Abstract {
 	 * @return int
 	 */
 	public function getQuoteItemAvailableFlag(Mage_Sales_Model_Quote_Item $item) {
-		if(!$item->hasData("available_flag")){
-			 $item->setData("available_flag", $this->_getQuoteItemAvailableFlag($item));
-		}
-		return $item->getData("available_flag");
+		return  $this->_getQuoteItemAvailableFlag($item);
 	}
 	
 	/**
