@@ -10,6 +10,7 @@ class Orba_Shipping_Helper_Carrier_Tracking extends Mage_Core_Helper_Abstract {
      * @return 
      */
     public function setHelper($helper) {
+        $helper->setTrackingHelper($this);
         $this->_helper = $helper;
     }
     //}}}
@@ -20,7 +21,7 @@ class Orba_Shipping_Helper_Carrier_Tracking extends Mage_Core_Helper_Abstract {
      * @param string $status
      * @return boolean
      */
-     protected function _addComment($track,$shipmentIdMessage,$carrierMessage,$status) {
+     public function addComment($track,$shipmentIdMessage,$carrierMessage,$status) {
         $comment = $this->__($this->_helper->getHeader()) . PHP_EOL;
 
 		/* @var $shipment Mage_Sales_Model_Order_Shipment */
@@ -103,7 +104,7 @@ class Orba_Shipping_Helper_Carrier_Tracking extends Mage_Core_Helper_Abstract {
 		foreach ($trackIds as $_trackId => $_tracks) {
 			foreach ($_tracks as $_track) {
 			    // processing
-			    $this->_process($carrierClient,$_track);
+			    $this->_helper->process($carrierClient,$_track);
 			    
 				if (empty($processTracks[$_track->getParentId()])) {
 					$processTracks[$_track->getParentId()] = array();

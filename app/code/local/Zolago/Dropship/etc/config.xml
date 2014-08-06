@@ -320,10 +320,10 @@
 		<events>
 			<sales_order_shipment_track_save_before>
 				<observers>
-					<add_zolago_dhl_data>
+					<add_orba_shipping_data>
 						<class>zolagodropship/observer</class>
-						<method>addZolagoDhlData</method>
-					</add_zolago_dhl_data>
+						<method>addOrbaShippingData</method>
+					</add_orba_shipping_data>
 				</observers>				
 			</sales_order_shipment_track_save_before>
 		</events>		

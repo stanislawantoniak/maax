@@ -93,7 +93,7 @@
       </orbadhl>
       <orbaups>
         <active>1</active>
-        <gateway>https://testowy.ups/webapi</gateway>
+        <gateway>http://zolago01.dev/skin/adminhtml/default/default/ups/TrackTest.wsdl</gateway>
         <sallowspecific>0</sallowspecific>
         <model>orbashipping/carrier_ups</model>
         <title>UPS</title>

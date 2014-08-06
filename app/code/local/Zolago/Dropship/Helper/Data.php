@@ -1,7 +1,7 @@
 <?php
 class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
 	const TRACK_SINGLE			= 1;
-	protected $trackingHelperPath = 'zolagodhl/tracking';
+	protected $trackingHelperPath = 'orbashipping/carrier_tracking';
 	
     /**
      * @param string
@@ -57,7 +57,7 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
 	}
 	
 	public function getAllowedCarriers() {
-		return array(/*"", "custom", */"orbadhl","orbaups");
+		return array(/*"", "custom", */Orba_Shipping_Model_Carrier_Dhl::CODE,Orba_Shipping_Model_Carrier_Ups::CODE);
 	}
 	
     //{{{ 
@@ -69,10 +69,10 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
     public function getAllowedCarriersForPos($pos) {
         $out = array();
         if ($pos->getUseDhl()) {
-            $out[] = 'orbadhl';
+            $out[] = Orba_Shipping_Model_Carrier_Dhl::CODE;
         }
         if ($pos->getUseOrbaups()) {
-            $out[] = 'orbaups';
+            $out[] = Orba_Shipping_Model_Carrier_Ups::CODE;
         }
         return $out;
     }
@@ -87,20 +87,20 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
      public function getAllowedCarriersForVendor($vendor,$rmaMode = false) {
          $out = array();
          if ($vendor->getUseDhl()) {
-             $out[] = 'orbadhl';
+            $out[] = Orba_Shipping_Model_Carrier_Dhl::CODE;
          }
          if ($vendor->getDhlRma() && $rmaMode) {
-             $out[] = 'orbadhl';
+            $out[] = Orba_Shipping_Model_Carrier_Dhl::CODE;
          }
          if ($vendor->getUseOrbaups()) {
-             $out[] = 'orbaups';
+            $out[] = Orba_Shipping_Model_Carrier_Ups::CODE;
          }
          return array_unique($out);
      }
 
     //}}}
 	public function isUdpoMpsAvailable($carrierCode, $vendor = null) {
-		if(in_array($carrierCode, array("orbadhl","orbaups"))){
+		if(in_array($carrierCode, array(Orba_Shipping_Model_Carrier_Dhl::CODE,Orba_Shipping_Model_Carrier_Ups::CODE))){
 			return true;
 		}
 		return parent::isUdpoMpsAvailable($carrierCode, $vendor);
@@ -121,7 +121,7 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
             }
             $vId = $track->getShipment()->getUdropshipVendor();
             $v = Mage::helper('udropship')->getVendor($vId);
-			if ($cCode !== Zolago_Dhl_Model_Carrier::CODE) {
+			if (!in_array($cCode,array(Orba_Shipping_Model_Carrier_Dhl::CODE,Orba_Shipping_Model_Carrier_Ups::CODE))) {
 				if (!$v->getTrackApi($cCode) || !$v->getId()) {
 					continue;
 				}
@@ -133,7 +133,6 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
 			
 			$requests[$cCode][$vId][$track->getNumber()][] = $track;
         }
-		
         foreach ($requests as $cCode => $vendors) {        	
             foreach ($vendors as $vId => $trackIds) {
                 $_track = null;
@@ -142,12 +141,15 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
                 }
                 try {
                     if ($_track) Mage::helper('udropship/label')->beforeShipmentLabel($v, $_track);
+                    $helper = Mage::helper($this->trackingHelperPath);
                     switch ($cCode) {
-                        case Zolago_Dhl_Model_Carrier::CODE:
-    						$result = Mage::helper($this->trackingHelperPath)->collectDhlTracking($trackIds);
+                        case Orba_Shipping_Model_Carrier_Dhl::CODE:
+                            $helper->setHelper(Mage::helper('orbashipping/carrier_dhl'));
+    						$result = $helper->collectTracking($trackIds);
                             break;
-                        case Zolago_Ups_Model_Carrier::CODE:
-    						$result = Mage::helper($this->trackingHelperPath)->collectUpsTracking($trackIds);
+                        case Orba_Shipping_Model_Carrier_Ups::CODE:
+                            $helper->setHelper(Mage::helper('orbashipping/carrier_ups'));
+    						$result = $helper->collectTracking($trackIds);
                             break;
                         default:
     						$result = $v->getTrackApi($cCode)->collectTracking($v, array_keys($trackIds));
@@ -159,7 +161,7 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
                     continue;
                 }
 				
-				if(!result) continue;
+				if(!is_array($result)) continue;
 				
                 $processTracks = array();
                 foreach ($result as $trackId=>$status) {

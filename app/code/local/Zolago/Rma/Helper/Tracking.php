@@ -1,5 +1,5 @@
 <?php
-class Zolago_Rma_Helper_Tracking extends Zolago_Carrier_Helper_Tracking {
+class Zolago_Rma_Helper_Tracking extends Orba_Shipping_Helper_Carrier_Tracking {
 
 
     /**

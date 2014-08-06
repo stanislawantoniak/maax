@@ -953,11 +953,11 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
     /**
      * creating dhl shipping
      * @param Zolago_Po_Model_Po $udpo
-     * @param Mage_Sales_Model_Order_Shipment &$shipment
+     * @param Mage_Sales_Model_Order_Shipment $shipment
      * @param Unirgy_DropshipMicrosite_Model_Store $store
      * @return string
      */
-    protected function _addShippingDhl($udpo,&$shipment,$store) {
+    protected function _addShippingDhl($udpo,$shipment,$store) {
         /**
          * DHL: Make a WebApi Call to get T&T Data
          */
@@ -1001,7 +1001,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                 $session->addError($this->__('Shipping creation fail'));
                 $udpoHlp->cancelShipment($shipment, true);
                 $udpo->getStatusModel()->processStartPacking($udpo, true);
-                return $this->_redirectReferer();
+                return null;
             }
         }
         return $number;
@@ -1025,8 +1025,16 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
      * creating ups shipping
      * @return string 
      */
-    protected function _addShippingUps() {
+    protected function _addShippingUps($udpo,$shipment) {
         $number = $this->getRequest()->getParam('tracking_id');
+            if (!$number) {                
+                $udpoHlp = Mage::helper('udpo');
+                $session = $this->_getSession();
+                $session->addError($this->__('Shipping creation fail'));
+                $udpoHlp->cancelShipment($shipment, true);
+                $udpo->getStatusModel()->processStartPacking($udpo, true);
+                return null;
+            }
         return $number;
     }
     //}}}
@@ -1117,23 +1125,24 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 
             //}
 
-
             switch($carrier) {
             case Orba_Shipping_Model_Carrier_Dhl::CODE:
                 $number = $this->_addShippingDhl($udpo,$shipment,$store);
                 break;
             case Orba_Shipping_Model_Carrier_Ups::CODE:
-                $number = $this->_addShippingUps();
+                $number = $this->_addShippingUps($udpo,$shipment);
                 break;
             default:
                 $number = $this->_addShippingManually();
                 ;
             }
+            if (!$number) {
+                return $this->_redirectReferer();
+
+            }
             $autoComplete = Mage::getStoreConfig('udropship/vendor/auto_shipment_complete', $store);
             $poStatus = $r->getParam('status');
 
-            $poStatusShipped = Unirgy_DropshipPo_Model_Source::UDPO_STATUS_SHIPPED;
-            $poStatusDelivered = Unirgy_DropshipPo_Model_Source::UDPO_STATUS_DELIVERED;
 
             $isShipped = $poStatus == $poStatusShipped || $poStatus==$poStatusDelivered || $autoComplete && ($poStatus==='' || is_null($poStatus));
             $method = explode('_', $shipment->getUdropshipMethod(), 2);
@@ -1151,7 +1160,6 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             $shipment->addTrack($track);
 
             Mage::helper('udropship')->processTrackStatus($track, true, $isShipped);
-
             Mage::helper('udropship')->addShipmentComment(
                 $shipment,
                 $this->__('%s added tracking ID %s', $vendor->getVendorName(), $number)

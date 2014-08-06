@@ -5,7 +5,11 @@
 class Orba_Shipping_Helper_Carrier extends Mage_Core_Helper_Abstract {
 
 	const USER_NAME_COMMENT		= 'API';
-
+	
+    /**
+     * @var tracking helper
+     */
+    protected $_trackingHelper = null;
 	/**
 	 * Special Log Message Function
 	 * 
@@ -20,6 +24,16 @@ class Orba_Shipping_Helper_Carrier extends Mage_Core_Helper_Abstract {
 		Mage::log($message, null, $logFile, true);
 	}
 	
+    //{{{ 
+    /**
+     * setting specify helper for tracking 
+     * @param Orba_Shipping_Helper_Carrier_Tracking $helper
+     * @return 
+     */
+     public function setTrackingHelper($helper) {
+         $this->_trackingHelper = $helper;
+     }
+    //}}}
     //{{{ 
     /**
      * @param array $settings 
