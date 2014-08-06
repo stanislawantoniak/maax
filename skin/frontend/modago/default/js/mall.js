@@ -111,45 +111,49 @@ var Mall = {
                 // do nothing at the moment
             },
             success: function(data, status) {
-                // determine status
-                if(data.status == false) {
-                    return;
-                }
-                Mall.setUserBlockData(data.content);
-                if(data.content.cart.all_products_count == null) {
-                    data.content.cart.all_products_count = 0;
-                }
-                // set products count badge
-                Mall.setFavoritesCountBadge(data.content.favorites_count);
-                // set products count badge
-                Mall.setProductsCountBadge(data.content.cart.all_products_count);
-                var dropdownBasket = jQuery("#dropdown-basket");
-                dropdownBasket.html(Mall.replace(dropdownBasket.html(), data.content.cart));
-
-                // build product list
-                var products = data.content.cart.products;
-                // build object for filling products template
-                Mall._data = data.content;
-                // clear products
-                jQuery("#product-list").html('');
-                if(data.content.cart.all_products_count == 0) {
-                    jQuery("#product-list").html('<p style="text-align: center;margin-top:20px;">Brak produktów w koszyku.</p>');
-                } else {
-                    jQuery.each(products, function(key) {
-                        if(typeof products[key].options[0] != "undefined") {
-                            products[key].attr_label = products[key].options[0].label;
-                            products[key].attr_value = products[key].options[0].value;
-                            products[key].currency_symbol = Mall._data.cart.currency_symbol;
-                            jQuery("#product-list").append(Mall.replace(Mall._product_template, products[key]));
-                        }
-                    });
-                }
-
-                // replace favorites url
-                jQuery("#link_favorites > a").attr("href", data.content.favorites_url);
+                Mall.buildAccountInfo(data, status);
             },
             url: "/orbacommon/ajax_customer/get_account_information"
         });
+    },
+
+    buildAccountInfo: function(data, status) {
+        // determine status
+        if(data.status == false) {
+            return;
+        }
+        Mall.setUserBlockData(data.content);
+        if(data.content.cart.all_products_count == null) {
+            data.content.cart.all_products_count = 0;
+        }
+        // set products count badge
+        Mall.setFavoritesCountBadge(data.content.favorites_count);
+        // set products count badge
+        Mall.setProductsCountBadge(data.content.cart.all_products_count);
+        var dropdownBasket = jQuery("#dropdown-basket");
+        dropdownBasket.html(Mall.replace(dropdownBasket.html(), data.content.cart));
+
+        // build product list
+        var products = data.content.cart.products;
+        // build object for filling products template
+        Mall._data = data.content;
+        // clear products
+        jQuery("#product-list").html('');
+        if(data.content.cart.all_products_count == 0) {
+            jQuery("#product-list").html('<p style="text-align: center;margin-top:20px;">Brak produktów w koszyku.</p>');
+        } else {
+            jQuery.each(products, function(key) {
+                if(typeof products[key].options[0] != "undefined") {
+                    products[key].attr_label = products[key].options[0].label;
+                    products[key].attr_value = products[key].options[0].value;
+                    products[key].currency_symbol = Mall._data.cart.currency_symbol;
+                    jQuery("#product-list").append(Mall.replace(Mall._product_template, products[key]));
+                }
+            });
+        }
+
+        // replace favorites url
+        jQuery("#link_favorites > a").attr("href", data.content.favorites_url);
     },
 
     setProductsCountBadge : function(count) {
@@ -195,57 +199,48 @@ var Mall = {
         userBlock.show();
     },
 
-    addToWishlist: function(url, id) {
-        id = id || 0;
-
-        jQuery.ajax({
-            cache: false,
-            data: {},
-            error: function(jqXhr, status, error) {
-                // do nothing at the moment
-            },
-            success: function(data, status) {
-                if(data.status == true) {
+    addToWishlist: function(id, context) {
+        OrbaLib.Wishlist.add({product: id}, function(){
+            context = context || "product";
+            id = id || 0;
+            if(arguments[0].status == true) {
+                if(context == "product") {
+                    // we are in product context
+                    jQuery("#notadded-wishlist").hide();
+                    jQuery("#added-wishlist").removeClass("hidden");
+                    jQuery("#added-wishlist").show();
+                    jQuery("#added-wishlist .product-context-like-count").first().html(parseInt(jQuery("#added-wishlist .product-context-like-count").text()) + 1);
+                    jQuery("#notadded-wishlist .product-context-like-count").first().html(parseInt(jQuery("#added-wishlist .product-context-like-count").text()) - 1);
+                } else {
                     if(id == 0) {
                         // we are in product context
                         jQuery("#notadded-wishlist").hide();
+                        jQuery("#added-wishlist").removeClass("hidden");
                         jQuery("#added-wishlist").show();
                     } else {
-
-                        if(id == 0) {
-                            // we are in product context
-                            jQuery("#notadded-wishlist").hide();
-                            jQuery("#added-wishlist").show();
-                        } else {
-                            var item = jQuery('div[data-idproduct="'+ id +'"]');
-                            item.addClass("liked");
-                            item.attr("data-status", 1);
-                            item.find("span.like_count>span").html("Ty +");
-                        }
+                        var item = jQuery('div[data-idproduct="'+ id +'"]');
+                        item.addClass("liked");
+                        item.attr("data-status", 1);
+                        item.find("span.like_count>span").html("Ty +");
                     }
                 }
-            },
-            url: url
+                Mall.buildAccountInfo(arguments[0], true);
+            }
         });
     },
 
-    removeFromWishlist: function(url, id) {
-        id = id || 0;
-
-        jQuery.ajax({
-            cache: false,
-            data: {},
-            error: function(jqXhr, status, error) {
-                // do nothing at the moment
-            },
-            success: function(data, status) {
-                if(data.status == true) {
-                    if(id == 0) {
+    removeFromWishlist: function(id, context) {
+        OrbaLib.Wishlist.remove({product: id}, function(){
+            context = context || "product";
+            id = id || 0;
+                if(arguments[0].status == true) {
+                    if(context == "product") {
                         // we are in product context
-                        jQuery("#notadded-wishlist").show();
+                        jQuery("#notadded-wishlist").show().removeClass("hidden");
                         jQuery("#added-wishlist").hide();
+                        jQuery("#added-wishlist .product-context-like-count").first().html(parseInt(jQuery("#added-wishlist .product-context-like-count").text()) - 1);
+                        jQuery("#notadded-wishlist .product-context-like-count").first().html(parseInt(jQuery("#added-wishlist .product-context-like-count").text()) + 1);
                     } else {
-
                         if(id == 0) {
                             // we are in product context
                             jQuery("#notadded-wishlist").show();
@@ -257,21 +252,18 @@ var Mall = {
                             item.find("span.like_count>span").html("");
                         }
                     }
+                    Mall.buildAccountInfo(arguments[0], true);
                 }
-            },
-            url: url
         });
     },
 
     toggleWishlist: function(item) {
-        var urlRemove = jQuery(item).attr("data-removeurl");
-        var urlAdd = jQuery(item).attr("data-addurl");
         var status = jQuery(item).attr("data-status");
         var id = jQuery(item).attr("data-idproduct");
         if(status == 0) {
-            Mall.addToWishlist(urlAdd, id);
+            Mall.addToWishlist(id, "small-box");
         } else {
-            Mall.removeFromWishlist(urlRemove, id);
+            Mall.removeFromWishlist(id, "small-box");
         }
     },
 
@@ -299,6 +291,34 @@ function addtocartcallback(response) {
     } else {
         Mall.getAccountInfo();
     }
+}
+
+function number_format(number, decimals, dec_point, thousands_sep) {
+    number = (number + '')
+        .replace(/[^0-9+\-Ee.]/g, '');
+    var n = !isFinite(+number) ? 0 : +number,
+        prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
+        sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+        dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
+        s = '',
+        toFixedFix = function (n, prec) {
+            var k = Math.pow(10, prec);
+            return '' + (Math.round(n * k) / k)
+                .toFixed(prec);
+        };
+    // Fix for IE parseFloat(0.55).toFixed(0) = 0;
+    s = (prec ? toFixedFix(n, prec) : '' + Math.round(n))
+        .split('.');
+    if (s[0].length > 3) {
+        s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
+    }
+    if ((s[1] || '')
+        .length < prec) {
+        s[1] = s[1] || '';
+        s[1] += new Array(prec - s[1].length + 1)
+            .join('0');
+    }
+    return s.join(dec);
 }
 
 jQuery(document).ready(function() {
