@@ -19,14 +19,16 @@ class Zolago_Campaign_Block_Vendor_Campaign_Product_Grid extends Mage_Adminhtml_
 
         $collection = Mage::getResourceModel("catalog/product_collection")
             ->addAttributeToSelect('name')
-            ->addAttributeToSelect('price');
-        $collection->getSelect()->join(
-            array('zolago_campaign_product' => 'zolago_campaign_product'),
-            'zolago_campaign_product.product_id = e.entity_id')
-            ->where("zolago_campaign_product.campaign_id=?", $campaignId);
+            ->addAttributeToSelect('price')
+            ->addAttributeToSelect('skuv');
+        $collection->getSelect()
+            ->join(
+                array('campaign_product' => 'zolago_campaign_product'),
+                'campaign_product.product_id = e.entity_id')
+            ->where("campaign_product.campaign_id=?", $campaignId);
 
         $collection->setPageSize(10);
-
+        //$collection->printLogQuery(true);
         $this->setCollection($collection);
 
         return parent::_prepareCollection();
@@ -38,10 +40,10 @@ class Zolago_Campaign_Block_Vendor_Campaign_Product_Grid extends Mage_Adminhtml_
     {
         $_helper = Mage::helper("zolagocampaign");
 
-        $this->addColumn('sku',
+        $this->addColumn('skuv',
             array(
                 'header' => $_helper->__('Sku'),
-                'index' => 'sku',
+                'index' => 'skuv',
                 "class" => "form-control",
                 'width' => '50px',
             ));
@@ -64,7 +66,8 @@ class Zolago_Campaign_Block_Vendor_Campaign_Product_Grid extends Mage_Adminhtml_
         $this->addColumn('Remove',
             array(
                 'header' => $_helper->__('Remove'),
-                'renderer' => Mage::getConfig()->getBlockClassName("zolagoadminhtml/widget_grid_column_renderer_removebutton"),
+                'renderer' => Mage::getConfig()
+                        ->getBlockClassName("zolagoadminhtml/widget_grid_column_renderer_removebutton"),
                 'index' => 'product_id',
                 'link_action' => "*/*/deleteProduct",
                 'width' => '50px',

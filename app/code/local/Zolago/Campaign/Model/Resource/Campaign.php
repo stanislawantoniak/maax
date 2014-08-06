@@ -29,7 +29,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
             }
             $collection = Mage::getModel('catalog/product')
                 ->getCollection()
-                ->addAttributeToFilter('SKU', array('in' => $skuS))
+                ->addAttributeToFilter('skuv', array('in' => $skuS))
                 ->getAllIds();
             $productIds = array();
             if (!empty($collection)) {
@@ -78,7 +78,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
 
         $queueModel = Mage::getResourceModel('zolagocatalog/queue_pricetype');
         $skuvs = $queueModel->getVendorSkuAssoc($productIds);
-Mage::log($skuvs);
+
         //Ping converter to get special price
         try {
             $converter = Mage::getModel('zolagoconverter/client');
@@ -268,18 +268,19 @@ Mage::log($skuvs);
         if (!$object->getId()) {
             return array();
         }
-        $table = $this->getTable("zolagocampaign/campaign_product");
-        $select = $this->getReadConnection()->select();
-        $select->from(array("campaign_product" => $table), array());
-        $select->join(
-            array('product' => 'catalog_product_entity'),
-            'product.entity_id = campaign_product.product_id',
-            array(
-                'sku' => 'product.sku'
-            )
-        );
-        $select->where("campaign_product.campaign_id=?", $object->getId());
-        return $this->getReadConnection()->fetchCol($select);
+        $collection = Mage::getResourceModel("catalog/product_collection")
+            ->addAttributeToSelect('skuv');
+        $collection->getSelect()
+            ->join(
+                array('campaign_product' => 'zolago_campaign_product'),
+                'campaign_product.product_id = e.entity_id')
+            ->where("campaign_product.campaign_id=?", $object->getId());
+        $skuvS = array();
+        foreach ($collection as $collectionItem) {
+            $skuvS[] = $collectionItem->getSkuv();
+        }
+
+        return $skuvS;
     }
 
 
