@@ -281,14 +281,31 @@ var Mall = {
             "qty": qty
         }, addtocartcallback);
         return false;
+    },
+
+    showMessage: function(message, type) {
+        switch(type) {
+            case "success":
+                alert(message);
+                break;
+
+            case "error":
+                alert(message);
+                break;
+
+            case "notice":
+                alert(message);
+                break;
+        }
     }
 
 }
 
 function addtocartcallback(response) {
     if(response.status == false) {
-        alert(response.message);
+        Mall.showMessage(response.message, "error");
     } else {
+        Mall.showMessage(response.content.message, "success");
         Mall.getAccountInfo();
     }
 }
