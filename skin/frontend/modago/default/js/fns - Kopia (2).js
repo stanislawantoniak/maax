@@ -5,159 +5,6 @@ var prevW = -1, prevH = -1;
 jQuery.noConflict();
 (function( $ ) {
   $(function() {   
-  /////////////////////////////////////// Validator Form ////////////////////////////////////////////
-  jQuery.validator.addMethod("zipcode", function(value, element) {
-    return this.optional(element) || /^[0-9]{2}(-[0-9]{3})?$/.test(value);
-  }, "Please provide a valid zipcode.");
-  jQuery.validator.addMethod("nip", function(value, element) {
-    return this.optional(element) || /^((\d{3}[- ]\d{3}[- ]\d{2}[- ]\d{2})|(\d{3}[- ]\d{2}[- ]\d{2}[- ]\d{3}))$/.test(value);
-  }, "Please provide a valid nip.");
-  $("form").validate({   
-    success: "valid",
-    errorElement: "span",
-    onfocusout: function (element) {
-            $(element).valid();
-        },
-    onsubmit: function (element) {
-            $(element).valid();
-        },
-    rules: {
-      firstname: {
-        required: true,
-        minlength: 2
-      },
-      lastname: {
-        required: true,
-        minlength: 2
-      },
-      firm_name: {
-        required: true,
-        minlength: 2
-      },
-      invoice_data_firm_name : {
-        required: true,
-        minlength: 2
-      },
-      city: {
-        required: true,
-        minlength: 2
-      },
-      invoice_data_city: {
-        required: true,
-        minlength: 2
-      },
-      street: {
-        required: true,
-        minlength: 2
-      },
-      invoice_data_street: {
-        required: true,
-        minlength: 2
-      },
-      nip: {
-        nip: true,
-        required: true
-      },
-      zipcode: {
-        zipcode: true,
-        required: true
-        
-      },
-      invoice_data_zip_code : {
-         zipcode: true,
-         required: true
-      },
-      phone_number: {
-        required: true,
-        minlength: 2
-      },
-      password: {
-        required: true,
-        minlength: 5
-      },
-      confirm_password: {
-        required: true,
-        minlength: 5,
-        equalTo: "#password"
-      },
-      email: {
-        required: true,
-        email: true
-      },
-      agree: {
-        required: true,
-        minlength: 1
-      },
-      declare: {
-        required: true,
-        minlength: 1
-      }
-    },
-
-    messages: {
-      firstname: "Please enter your firstname",
-      lastname: "Please enter your lastname",
-      firm_name: "Please enter a firm name",
-      invoice_data_firm_name: "Please enter a firm name",
-      city: "Please enter a firm city",
-      invoice_data_city:"Please enter a firm city",
-      street:{
-        required: "Please provide a street",
-        minlength: "Your street must be at least 5 characters long"
-      },
-      invoice_data_street:{
-        required: "Please provide a street",
-        minlength: "Your street must be at least 5 characters long"
-      },
-      nip:"Please provide a NIP",
-      zipcode:"Please provide a Zip Code",
-      invoice_data_zip_code:"Please provide a Zip Code",
-      phone_number:"Please provide a Phone Number",
-      password: {
-        required: "Please provide a password",
-        minlength: "Your password must be at least 5 characters long"
-      },
-      confirm_password: {
-        required: "Please provide a password",
-        minlength: "Your password must be at least 5 characters long",
-        equalTo: "Please enter the same password as above"
-      },
-      email: "Please enter a valid email address",
-      agree: "Please accept our policy",
-      declare: "Please accept our policy"
-    },
-      highlight: function(element, errorClass, validClass) {
-                  var we = $(element).width()+55;
-                  var el = $(element).attr('type');
-                  console.log(el);
-                  $(element).closest("div").addClass('has-error has-feedback').removeClass('has-success');
-                  $(element).closest("div").find('.form-ico-times').remove();
-                  
-                    $(element).closest("div").not( ".form-checkbox" ).append('<i style="left:'+we+'px; right:auto" class="form-ico-times form-control-feedback "></i>');
-                  
-                  $(element).closest("div").find('.form-ico-checked').remove();
-               },
-       unhighlight: function(element, errorClass, validClass) {
-                  var we = $(element).width()+55;
-                  $(element).closest("div").removeClass('has-error').addClass('has-success has-feedback');
-                  $(element).closest("div").find('.form-ico-checked').remove();
-                  //if (element.attr("type") != "checkbox"){
-                  $(element).closest("div").append('<i style="left:'+we+'px; right:auto" class="form-ico-checked form-control-feedback"></i>');
-                  //}
-                  $(element).closest("div").find('.form-ico-times').remove();
-       },
-       errorPlacement: function(error, element) {
-          if (element.attr("type") == "checkbox"){
-            $(element).closest('div').append(error).hide().slideToggle(300);
-            //error.prepend(element).hide().slideToggle(300);
-          } else {
-            error.insertAfter(element).hide().slideToggle(300);
-          }
-         
-     }
-  });
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 // OBLICZANIE DŁUGOŚCI POLA
     $.fn.textWidth = function(text, font) {
         if (!$.fn.textWidth.fakeEl) $.fn.textWidth.fakeEl = $('<span>').hide().appendTo(document.body);
@@ -615,10 +462,7 @@ $('.sidebar-secound').on('click', 'h2.open', function(){
   var ww = $(window).innerWidth();
   if(ww <=767) {
     $(this).closest('header').next('.panel-group').toggle(50);
-    $(this).closest('header').toggleClass('open');
-    var arrow = $(this).closest('header').hasClass('open') ? 'bullet-strzalka-down' : 'bullet-strzalka-up';
-    $(this).find('i').toggleClass('bullet-strzalka-down bullet-strzalka-up')
-    
+    $(this).closest('header').addClass('open');
   }
 });
 
@@ -941,13 +785,9 @@ function galeriaProduktu(){
         mouseDrag:false,
         touchDrag: false,
         transitionStyle: "fade",
-        afterAction : function() {
-          
+        afterUpdate: function() {
+
         },
-        afterMove: function() {
-         
-        },
-        
         afterInit : function(el){
             el.find(".rwd-item").eq(0).addClass("synced");
             
@@ -956,6 +796,7 @@ function galeriaProduktu(){
               if (sync4ItemLength <= 4 ) {
                 $('#wrapper-sync4 .up').addClass('disabled');
                 $('#wrapper-sync4 .down').addClass('disabled');
+                console.log(sync4ItemLength)
               };
            
             
@@ -966,9 +807,9 @@ function galeriaProduktu(){
     slideSpeed : 1000,
     navigation: true,
     pagination:true,
-    afterAction : syncPosition2,
+    afterAction : syncPosition,
     responsiveRefreshRate : 200,
-    mouseDrag:true,
+    mouseDrag:false,
     rewindNav : false,
     itemsScaleUp:true,
     transitionStyle : "fade",
@@ -981,6 +822,7 @@ function galeriaProduktu(){
         var top = body.scrollTop();
         if(top!=0) {
           $("#inner-lightbox").animate({ scrollTop: 0 }, "slow");
+          console.log(top);
         }
     },
     afterInit:function(elem) {
@@ -1035,7 +877,7 @@ function galeriaProduktu(){
               top: innerItemHeight/2
             });
 
-          var aImage = $(this).find('img');
+          var aImage = $(this).find('img')
           var aImageWidth = parseInt(aImage.css('width'));
           
           
@@ -1050,13 +892,9 @@ function galeriaProduktu(){
               $('#lightbox .rwd-buttons').show();
             };
             a.closest('.inner-item').css({'width': innerItem, 'margin': '0 auto' });
-            ///$(this).removeClass('full').addClass('disabled');
-            ///$(this).prev('.zoom_plus').removeClass('full disabled');
-            $('.rwd-buttons').width(aImageWidth);
-            $(this).closest('.rwd-wrapper').find('.rwd-item').each(function(){
-              $(this).find('.zoom_minus').addClass('full disabled').removeClass('full').addClass('disabled');
-              $(this).find('.zoom_plus').removeClass('full disabled');
-            });
+            $(this).removeClass('full').addClass('disabled');
+            $(this).prev('.zoom_plus').removeClass('full disabled');
+            $('.rwd-buttons').width(aImageWidth)
           });
           $('.zoom_plus').on('click', function(event) {
             event.preventDefault();
@@ -1097,7 +935,7 @@ function galeriaProduktu(){
                   
 
 
-          });
+          });   
 
 
          $('#lightbox').find('.loader').remove();
@@ -1106,6 +944,9 @@ function galeriaProduktu(){
         });
         
       });
+    },
+    afterAction:function() {
+
     }
   });
 
@@ -1138,98 +979,21 @@ $('#product-gallery #sync1').on('click', 'a', function(event) {
 
 });
 */
-updateCarousel();
-function updateCarousel(el){
-  //var current = $("#sync4").find('.synced').index();
-  
-  
-}
 
  
- function syncPosition2(el){
+  function syncPosition(el){
     var current = this.currentItem;
-    var hri = $("#sync4").find('.rwd-item').height();
-    var currentLength = $("#sync4").find('.rwd-item').length;
-
-   
-
-    $("#sync4")
+    
+    $("#lightbox #sync4")
       .find(".rwd-item")
       .removeClass("synced")
       .eq(current)
       .addClass("synced")
-    if($("#sync4").data("rwdCarousel") !== undefined){
-      //center(current)
+    if($("#lightbox #sync4").data("rwdCarousel") !== undefined){
+      center(current)
     }
-   
-    
-    
   }
-  $('#sync3').on('click', '.rwd-next', function(e){
-    e.preventDefault();
-        
-      var current = $('#sync4 .rwd-item').index($('.synced'));
-      var number = $('#sync4').data("rwdItem");
-      var hri = $("#sync4").find('.rwd-item').height();
-     
-
-      var currentLength = $("#sync4").find('.rwd-item').length;
-      console.log('Current: ' +  this.currentItem + '|| Height Item: ' + hri + '|| Length: ' + currentLength);
-    if(current >= 4 && current <= currentLength) {
-       
-       $("#sync4 .rwd-wrapper").animate({
-          marginTop: '-=98px'
-       });
-       if (current >= 4) {
-        $("#wrapper-sync4").find('.up').removeClass('disabled')
-       } else {
-        $("#wrapper-sync4").find('.up').addClass('disabled')
-       }
-       if (current === currentLength-1) {
-        $("#wrapper-sync4").find('.down').addClass('disabled')
-       } else {
-        $("#wrapper-sync4").find('.down').removeClass('disabled')
-       }
-       
-    }
-  });
-
  
-  $("#sync4").on("click", ".rwd-item", function(e){
-    e.preventDefault();
-    var number = $(this).data("rwdItem");
-    sync1.trigger("rwd.goTo",number);
-  });
- 
-  function center(number){
-    var sync4visible = sync4.data("rwdCarousel").rwd.visibleItems;
-    var num = number;
-    var found = false;
-    for(var i in sync4visible){
-      if(num === sync4visible[i]){
-        //var found = true;
-      }
-    }
- 
-    if(found===false){
-      if(num>sync4visible[sync4visible.length-1]){
-        //sync4.trigger("rwd.goTo", num - sync4visible.length+2)
-      }else{
-        if(num - 1 === -1){
-        //  num = 0;
-        }
-       // sync2.trigger("rwd.goTo", num);
-      }
-    } else if(num === sync4visible[sync4visible.length-1]){
-      //sync4.trigger("rwd.goTo", sync4visible[1])
-    } else if(num === sync4visible[0]){
-      //sync4.trigger("rwd.goTo", num-1)
-    }
-    
-  }
-  
-
-
   $("#lightbox #sync4").on("click", ".rwd-item", function(e){
     e.preventDefault();
     var number = $(this).data("rwdItem");
@@ -1286,7 +1050,32 @@ function updateCarousel(el){
 
   });
  
-  
+  function center(number){
+    var sync4visible = sync4.data("rwdCarousel").rwd.visibleItems;
+    var num = number;
+    var found = false;
+    for(var i in sync4visible){
+      if(num === sync4visible[i]){
+        var found = true;
+      }
+    }
+ 
+    if(found===false){
+      if(num>sync4visible[sync4visible.length-1]){
+        //sync2.trigger("rwd.goTo", num - sync2visible.length+2)
+      }else{
+        if(num - 1 === -1){
+          num = 0;
+        }
+       // sync2.trigger("rwd.goTo", num);
+      }
+    } else if(num === sync4visible[sync4visible.length-1]){
+     // sync2.trigger("rwd.goTo", sync2visible[1])
+    } else if(num === sync4visible[0]){
+     // sync2.trigger("rwd.goTo", num-1)
+    }
+    
+  }
 // end
   }
 ////////////////////////////////////////////////////////////////////

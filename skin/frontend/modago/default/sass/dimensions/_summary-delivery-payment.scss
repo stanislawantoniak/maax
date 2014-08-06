@@ -296,3 +296,33 @@
 		}
 	}
 }*/
+
+
+.node-type-summary-delivery-payment {
+	#checkout {
+		&.podsumowanie {
+			.title-section {
+				&+#summary-panel-product {
+					@media(max-width: 767px) {
+						display:none
+					}
+					
+				}
+			}
+			#order-show-products {
+					display:block;
+				}
+			.opened-panel-group {
+				.title-section {
+					&+#summary-panel-product {
+						display:block
+					}
+				}
+				#order-show-products {
+					display:none;
+				}
+			}
+
+		}
+	}
+}
