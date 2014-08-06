@@ -58,6 +58,13 @@
             <action method="addItem"><type>skin_js</type><script>js/plugins.js</script></action>
             <action method="addItem"><type>skin_js</type><script>js/fns.js</script></action>
             <block type="orbacommon/page_html_head" name="orba.jslib" template="orbacommon/js/script.phtml" />
+            <block type="core/text" name="addthis.javascript">
+                <action method="setText">
+                    <text>
+                        <![CDATA[<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-53d0e56923edc13e"></script> ]]>
+                    </text>
+                </action>
+            </block>
         </reference>
 
         <reference name="root">
@@ -214,6 +221,8 @@
             <block name="product.review.section" type="zolagomodago/review_product_view_list" template="review/product/view/list.phtml">
                 <block name="product.review.form" type="zolagomodago/review_form"/>
             </block>
+            <block type="catalog/product_list_crosssell" name="product.info.crosssell" as="crosssell" template="catalog/product/view/crosssell.phtml"/>
+            <block type="catalog/product_list_related" name="catalog.product.related" before="-" template="catalog/product/list/related.phtml"/>
         </reference>
 
         <reference name="product.info.addto">

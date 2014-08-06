@@ -33,12 +33,12 @@
 				}
 				.rwd-prev {
 					@media (max-width: 360px) { 
-						left:45px;
+						left:-20px;
 					}
 				}
 				.rwd-next {
 					@media (max-width: 360px) {
-						right:45px;
+						right:-20px;
 					 }
 				}
 			}

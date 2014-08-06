@@ -6,6 +6,7 @@ var Mall = {
     _data: {},
     _product_template: '<tr><td class="thumb"><img src="{{image_url}}" alt=""></td><td class="desc"><p class="name_product">{{name}}</p><p class="size">{{attr_label}}:<span>{{attr_value}}</span></p><p class="quantity">ilość:<span>{{qty}}</span></p></td><td class="price">{{unit_price}} {{currency_symbol}}</td></tr>',
     _recently_viewed_item_template: '<div class="item"><a href="{{redirect_url}}" class="simple"><div class="box_listing_product"><figure class="img_product"><img src="{{image_url}}" alt="" /></figure><div class="name_product hidden-xs">{{title}}</div></div></a></div>',
+    _current_superattribute: null,
     extend: function(subclass, superclass) {
         function Dummy(){}
         Dummy.prototype = superclass.prototype;
@@ -98,6 +99,10 @@ var Mall = {
 
     dispatch: function() {
         // fetch shopping cart and favourites informations
+        this.getAccountInfo();
+    },
+
+    getAccountInfo: function() {
         jQuery.ajax({
             cache: false,
             dataType: "json",
@@ -125,14 +130,20 @@ var Mall = {
                 var products = data.content.cart.products;
                 // build object for filling products template
                 Mall._data = data.content;
-                jQuery.each(products, function(key) {
-                    if(typeof products[key].options[0] != "undefined") {
-                        products[key].attr_label = products[key].options[0].label;
-                        products[key].attr_value = products[key].options[0].value;
-                        products[key].currency_symbol = Mall._data.cart.currency_symbol;
-                        jQuery("#product-list").append(Mall.replace(Mall._product_template, products[key]));
-                    }
-                });
+                // clear products
+                jQuery("#product-list").html('');
+                if(data.content.cart.all_products_count == 0) {
+                    jQuery("#product-list").html('<p style="text-align: center;margin-top:20px;">Brak produktów w koszyku.</p>');
+                } else {
+                    jQuery.each(products, function(key) {
+                        if(typeof products[key].options[0] != "undefined") {
+                            products[key].attr_label = products[key].options[0].label;
+                            products[key].attr_value = products[key].options[0].value;
+                            products[key].currency_symbol = Mall._data.cart.currency_symbol;
+                            jQuery("#product-list").append(Mall.replace(Mall._product_template, products[key]));
+                        }
+                    });
+                }
 
                 // replace favorites url
                 jQuery("#link_favorites > a").attr("href", data.content.favorites_url);
@@ -182,10 +193,112 @@ var Mall = {
         // set basket url
         jQuery("#link_basket>a").attr("href", content.cart.show_cart_url);
         userBlock.show();
+    },
+
+    addToWishlist: function(url, id) {
+        id = id || 0;
+
+        jQuery.ajax({
+            cache: false,
+            data: {},
+            error: function(jqXhr, status, error) {
+                // do nothing at the moment
+            },
+            success: function(data, status) {
+                if(data.status == true) {
+                    if(id == 0) {
+                        // we are in product context
+                        jQuery("#notadded-wishlist").hide();
+                        jQuery("#added-wishlist").show();
+                    } else {
+
+                        if(id == 0) {
+                            // we are in product context
+                            jQuery("#notadded-wishlist").hide();
+                            jQuery("#added-wishlist").show();
+                        } else {
+                            var item = jQuery('div[data-idproduct="'+ id +'"]');
+                            item.addClass("liked");
+                            item.attr("data-status", 1);
+                            item.find("span.like_count>span").html("Ty +");
+                        }
+                    }
+                }
+            },
+            url: url
+        });
+    },
+
+    removeFromWishlist: function(url, id) {
+        id = id || 0;
+
+        jQuery.ajax({
+            cache: false,
+            data: {},
+            error: function(jqXhr, status, error) {
+                // do nothing at the moment
+            },
+            success: function(data, status) {
+                if(data.status == true) {
+                    if(id == 0) {
+                        // we are in product context
+                        jQuery("#notadded-wishlist").show();
+                        jQuery("#added-wishlist").hide();
+                    } else {
+
+                        if(id == 0) {
+                            // we are in product context
+                            jQuery("#notadded-wishlist").show();
+                            jQuery("#added-wishlist").hide();
+                        } else {
+                            var item = jQuery('div[data-idproduct="'+ id +'"]');
+                            item.removeClass("liked");
+                            item.attr("data-status", 0);
+                            item.find("span.like_count>span").html("");
+                        }
+                    }
+                }
+            },
+            url: url
+        });
+    },
+
+    toggleWishlist: function(item) {
+        var urlRemove = jQuery(item).attr("data-removeurl");
+        var urlAdd = jQuery(item).attr("data-addurl");
+        var status = jQuery(item).attr("data-status");
+        var id = jQuery(item).attr("data-idproduct");
+        if(status == 0) {
+            Mall.addToWishlist(urlAdd, id);
+        } else {
+            Mall.removeFromWishlist(urlRemove, id);
+        }
+    },
+
+    setSuperAttribute: function(currentSelection) {
+        this._current_superattribute = currentSelection;
+    },
+
+    addToCart: function(id, qty) {
+        var superLabel = jQuery(this._current_superattribute).attr("name");
+        var attr = {};
+        attr[jQuery(this._current_superattribute).attr("data-id")] = jQuery(this._current_superattribute).attr("value");
+        OrbaLib.Cart.add({
+            "product_id": id,
+            "super_attribute": attr,
+            "qty": qty
+        }, addtocartcallback);
+        return false;
     }
 
+}
 
-
+function addtocartcallback(response) {
+    if(response.status == false) {
+        alert(response.message);
+    } else {
+        Mall.getAccountInfo();
+    }
 }
 
 jQuery(document).ready(function() {

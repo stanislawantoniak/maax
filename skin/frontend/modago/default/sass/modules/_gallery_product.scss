@@ -758,3 +758,19 @@ body.lightbox {
         }
     }
 }
+
+#product-gallery {
+    .followUs {
+        margin-left: 97px;
+        margin-right: 16px;
+        ul {
+            li:last-child {
+                margin-right: 0px;
+            }
+        }
+        @media(max-width: 932px) {
+            margin-left: 0px;
+            margin-right:0px;
+        }
+    }
+}

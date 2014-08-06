@@ -12,7 +12,7 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
 			'user_account_url' => Mage::getUrl('customer/account'),
 			'logged_in' => Mage::helper('customer')->isLoggedIn(),
 			'favorites_count' => $this->_getFavorites(),
-            'favorites_url' => Mage::helper('zolagowishlist')->getListUrl(),
+            'favorites_url' => Mage::getUrl("wishlist"),
 			'cart' => array(
 				'all_products_count' =>	Mage::helper('checkout/cart')->getSummaryCount(),
 				'products' => $this->_getShoppingCartProducts(),

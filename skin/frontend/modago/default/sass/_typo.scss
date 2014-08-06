@@ -170,6 +170,7 @@ a.underline {
 	color:#5A5A5A;
 	position:relative;
 	text-decoration: underline;
+	outline:none;
 	&:hover {
 		color:#000;
 		text-decoration: underline;
