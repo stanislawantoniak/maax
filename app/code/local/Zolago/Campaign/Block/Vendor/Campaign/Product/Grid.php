@@ -23,7 +23,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Product_Grid extends Mage_Adminhtml_
             ->addAttributeToSelect('skuv');
         $collection->getSelect()
             ->join(
-                array('campaign_product' => 'zolago_campaign_product'),
+                array('campaign_product' => Mage::getSingleton('core/resource')->getTableName("zolagocampaign/campaign_product")),
                 'campaign_product.product_id = e.entity_id')
             ->where("campaign_product.campaign_id=?", $campaignId);
 
