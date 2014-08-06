@@ -16,8 +16,13 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Dropship_Controller_V
 	 */
 	public function detailsAction() {
 		$ids = $this->getRequest()->getParam("ids", array());
-		
+		$storeId = $this->getRequest()->getParam("store");
 		$out = array();
+		$collection = Mage::getResourceModel("zolagocatalog/vendor_price_detail_collection");
+		/* @var $collection Zolago_Catalog_Model_Resource_Vendor_Price_Detail_Collection */
+		$collection->setStoreId($storeId);
+		
+		
 		
 		foreach($ids as $id){
 			$out[] = array(
@@ -30,6 +35,26 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Dropship_Controller_V
 				setHeader('Content-type', 'application/json')->
 				setBody(Mage::helper("core")->jsonEncode($out));
 		
+	}
+	
+	/**
+	 * Get html of product price modal
+	 */
+	public function pricemodalAction() {
+		
+		$product = Mage::getModel('catalog/product')->load(
+			$this->getRequest()->getParam('id')
+		);
+		
+		if($product->getUdropshipVendor()!=$this->_getSession()->getVendorId()){
+			$this->norouteAction();
+			return;
+		}
+		
+		Mage::register("current_product", $product);
+		
+		$this->loadLayout();
+		$this->renderLayout();
 	}
 	
 	/**

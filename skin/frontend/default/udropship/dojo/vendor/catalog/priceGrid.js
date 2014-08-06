@@ -1,4 +1,5 @@
 define([
+	"dgrid/Grid",
 	"dgrid/OnDemandGrid",
 	"dgrid/extensions/CompoundColumns",
 	"dgrid/Selection",
@@ -18,9 +19,11 @@ define([
     "dojo/_base/lang",
 	"dojo/request",
 	"vendor/grid/ObserverFilter",
-], function(Grid, CompoundColumns, Selection, Keyboard, editor, declare, domConstruct, 
+	"vendor/catalog/priceGrid/singlePriceUpdater",
+	"vendor/catalog/priceGrid/RowUpdater",
+], function(BaseGrid, Grid, CompoundColumns, Selection, Keyboard, editor, declare, domConstruct, 
 	on, query, Memory, Observable, put, Cache, JsonRest, Selection, 
-	selector, lang, request, ObserverFilter){
+	selector, lang, request, ObserverFilter, singlePriceUpdater, RowUpdater){
 	
 	/**
 	 * @todo Make source options it dynamicly
@@ -35,8 +38,6 @@ define([
 		
 	
 	var states = {
-		expanded: {},
-		checked: {},
 		loaded: {},
 		changed: {},
 		orig: {}
@@ -44,7 +45,15 @@ define([
 	
 	var formatPrice = function(value, currency){
 		currency = "PLN";
-		return parseFloat(value).toFixed(2).replace("\.", ",") + " " + currency;
+		return formatNumber(value) + " " + currency;
+	}
+	
+	var formatNumber = function(number){
+		return parseFloat(number).toFixed(2).replace("\.", ",");
+	}
+	
+	var priceEditPriceMeta = function(object,value){
+		return !object.campaign_regular_id;
 	}
 	
 	
@@ -127,182 +136,26 @@ define([
 		}
 	}
 	
-	var RowUpdater = declare(null, {
-		
-		_cache: {},
-		_queue: [],
-		_grid: null,
-		_timeout: null,
-		_yes: "-",//"▾",
-		_can: "+",//"▸",
-		_not: "",
-		_expandAll: false,
-		
-		getExpandSign: function(){
-			return this._can;
-		},
-		getCollapseSign: function(){
-			return this._yes;
-		},
-		setExpandAll: function(value){
-			this._expandAll = value;
-			// reset current
-			for(var key in states.expanded){
-				if(states.expanded.hasOwnProperty(key)){
-					states.expanded[key] = value;
-				}
-			};
-	
-			query("#expand-toggler")[0].innerHTML = value ? 
-				this.getCollapseSign() : this.getExpandSign();
-				
-			this.getGrid().refresh();
-		},
-		getExpandAll: function(value){
-			return this._expandAll;
-		},
-		toggleExpandAll: function(){
-			this.setExpandAll(!this.getExpandAll());
-		},
-		setGrid: function(grid){
-			this._grid = grid;
-		},
-		getGrid: function(){
-			return this._grid;
-		},
-		can: function(item){
-			return !!item.can_collapse;
-		},
-		is: function(item){
-			return this._get(item);
-		},
-		_set: function(item, state){
-			states.expanded[item.entity_id] = state;
-		},
-		_get: function(item){
-			if(typeof states.expanded[item.entity_id] != "undefined"){
-				return !!states.expanded[item.entity_id];
-			}
-			return this.getExpandAll();
-		},
-		toggle: function(row){
-			this._set(row.data, !this._get(row.data));
-			var self = this;
-			query("td.field-expander", row.element).forEach(function(item){
-				item.innerHTML = self.cellRender(row.data);
-			});
-			// toggle state of node which was clicked
-			if(this.is(row.data)){
-				this.doRowExpand(row.data, row.element);
-			}else{
-				this.doRowCollapse(row.data, row.element)
-			}
-		},
-		doRowExpand: function(item, node){
-			this.load(item, node);
-			put(node, "!collapsed");
-		},
-		doRowCollapse: function(item, node){
-			put(node, ".collapsed");
-		},
-		cellRender: function(item){
-			return this.is(item) ? this._yes : this._can;
-		},
-		queueItem: function(item){
-			if(this._queue.indexOf(item.entity_id)<0){
-				this._queue.push(item.entity_id);
-			}
-		},
-		load: function(item, node){
-			var cached = this.fetchFromCache(item);
-			if(cached){
-				this._renderSubRow(node, cached);
-				return;
-			}
-			
-			this.queueItem(item);
-			this._loading(node);
-			
-			// set timout prcess
-			this._clearTimeout();
-			this._timeout = setTimeout(lang.hitch(this, this._process), 500);
-		},
-		
-		fetchFromCache: function(item){
-			if(this._cache[item.entity_id]){
-				return this._cache[item.entity_id];
-			}
-			return null;
-		},
-		_cacheItem: function(item){
-			this._cache[item.entity_id] = item;
-		},
-		_loading: function(node){
-			query(".expando", node)[0].innerHTML = 'loading...';
-		},
-		
-		_renderSubRow: function(node, data){
-			query(".expando", node)[0].innerHTML = "loaded, id: " + data.entity_id +  ", var:" + data.var;
-		},
-		
-		_process: function(){
-			// make request here
-			// after that make render
-			var buffer = [], i = 0;
-			
-			while(this._queue.length){
-				buffer.push(this._queue.splice(0,1));
-				if(++i>this.getGrid().get('maxRowsPerPage')){
-					this._doXhr(buffer);
-					buffer = [];
-					i = 0;
-				}
-			}
-			if(buffer.length){
-				this._doXhr(buffer);
-			}
-		},
-		_doXhr: function(ids){
-			var self = this;
-			request("/udprod/vendor_price/details", {
-				query: {"ids[]": ids},
-				handleAs: "json"
-			}).then(function(result){
-				var id, row, grid = self.getGrid();
-				
-				if(result && result.length){
-					result.forEach(function(item){
-						row = grid.row(item.entity_id);
-						self._cacheItem(item);
-						self._renderSubRow(row.element, item);
-					});
-				}
-			});
-		},
-		_clearTimeout: function(){
-			clearTimeout(this._timeout);
-		}
-	});
 	
 	var grid,
 		testStore,
 		storeRest,
 		updater = new RowUpdater(),
 		renderer = function(obj, options){
-				var div = put("div", Grid.prototype.renderRow.apply(this, arguments)),
-					expando = put(div, "div.expando");
-			
-				if(updater.is(obj)){
-					updater.doRowExpand(obj, div);
-				}else{
-					updater.doRowCollapse(obj, div);
-				}
-			
-				
-				states.orig[obj.entity_id] = lang.mixin({}, obj);
-			
-				return div;
-			};
+			var div = put("div", Grid.prototype.renderRow.apply(this, arguments)),
+				expando = put(div, "div.expando");
+
+			if(updater.is(obj)){
+				updater.doRowExpand(obj, div);
+			}else{
+				updater.doRowCollapse(obj, div);
+			}
+
+
+			states.orig[obj.entity_id] = lang.mixin({}, obj);
+
+			return div;
+		};
 			
 	var switcher = query("#store-switcher")[0];
 	
@@ -362,6 +215,7 @@ define([
 				label: '',
 				get: lang.hitch(updater, updater.cellRender),
 				sortable: false,
+				className: 'expander',
 				renderHeaderCell: function(node){
 					on(node, "click", function(){
 						updater.toggleExpandAll();
@@ -396,16 +250,19 @@ define([
 						sortable: false, 
 						field: "display_price",
 						editor: "text",
-						editorArgs: {price: true},
+						editorArgs: {isNumber: true},
 						editOn: "dblclick",
 						className: "filterable align-right column-medium",
 						autoSave: true,
-						formatter: formatPrice,/*
-						set: function(value){
-							return value.toFixed(4)
-						},*/
-						canEdit: function(object,value){
-							return !object.campaign_regular_id;
+						formatter: formatPrice,
+						renderCell: function(item,value,node){
+							if(!item.converter_price_type && priceEditPriceMeta(item, value)){
+								put(node, ".editable");
+							}
+							BaseGrid.defaultRenderCell.apply(this, arguments);
+						},
+						canEdit: function(item){
+							return !item.converter_price_type && priceEditPriceMeta(item);
 						}
 					})
 				]
@@ -426,7 +283,7 @@ define([
 									return campainRegularIdOptions[i].label;
 								}
 							}
-							return "";
+							return "Standard";
 						}
 					}
 				]
@@ -437,10 +294,23 @@ define([
 				className: "column-medium",
 				children: [
 					{
+						className: "filterable align-right column-medium",
 						renderHeaderCell: filterRendererFacory("range", "price_margin"),
 						sortable: false, 
 						field: "price_margin",
-						className: "filterable align-right column-medium",
+						get: function(item){
+							return (item.price_margin!==null)  ? item.price_margin : 0
+						},
+						formatter: function(value){
+							return formatNumber(value) + "%";
+						},
+						renderCell: function(item,value,node){
+							if(priceEditPriceMeta(item, value)){
+								put(node, ".editable");
+							}
+							BaseGrid.defaultRenderCell.apply(this, arguments);
+						},
+						className: "filterable align-right column-medium signle-price-edit",
 					}
 				]
 			},
@@ -449,16 +319,11 @@ define([
 				field: "converter_price_type",
 				className: "column-medium",
 				children: [
-					editor({
-						/** @todo add dynamic **/
+					{
 						renderHeaderCell: filterRendererFacory("select", "converter_price_type", {options: converterPriceTypeOptions}),
 						sortable: false, 
 						field: "converter_price_type",
-						editor: "select",
-						editorArgs: {options: converterPriceTypeOptions},
-						editOn: "dblclick",
-						autoSave: true,
-						className: "filterable align-center column-medium",
+						className: "filterable align-center column-medium signle-price-edit",
 						formatter: function(value, item){
 							for(var i=0; i<converterPriceTypeOptions.length; i++){
 								if(converterPriceTypeOptions[i].value+'' == value+''){
@@ -466,8 +331,14 @@ define([
 								}
 							}
 							return "";
+						},
+						renderCell: function(item,value,node){
+							if(priceEditPriceMeta(item, value)){
+								put(node, ".editable");
+							}
+							BaseGrid.defaultRenderCell.apply(this, arguments);
 						}
-					})
+					}
 				]
 			},
 			msrp: {
@@ -496,7 +367,7 @@ define([
 						renderHeaderCell: filterRendererFacory("select", "is_new", {options: boolOptions}),
 						sortable: false, 
 						field: "is_new",
-						className: "filterable align-center column-short",
+						className: "filterable align-center column-short editable",
 						formatter: function(value, item){
 							for(var i=0; i<boolOptions.length; i++){
 								if(boolOptions[i].value+'' == value+''){
@@ -521,7 +392,7 @@ define([
 						renderHeaderCell: filterRendererFacory("select", "is_bestseller", {options: boolOptions}),
 						sortable: false, 
 						field: "is_bestseller",
-						className: "filterable align-center column-short",
+						className: "filterable align-center column-short editable",
 						formatter: function(value, item){
 							for(var i=0; i<boolOptions.length; i++){
 								if(boolOptions[i].value+'' == value+''){
@@ -546,7 +417,7 @@ define([
 						renderHeaderCell: filterRendererFacory("select", "product_flag", {options: flagOptions}),
 						sortable: false, 
 						field: "product_flag",
-						className: "filterable align-center column-short text-overflow",
+						className: "filterable align-center column-short text-overflow editable",
 						formatter: function(value, item){
 							for(var i=0; i<flagOptions.length; i++){
 								if(flagOptions[i].value+'' == value+''){
@@ -571,7 +442,7 @@ define([
 						renderHeaderCell: filterRendererFacory("select", "is_in_stock", {options: boolOptions}),
 						sortable: false, 
 						field: "is_in_stock",
-						className: "filterable align-center column-short",
+						className: "filterable align-center column-short editable",
 						formatter: function(value, item){
 							for(var i=0; i<boolOptions.length; i++){
 								if(boolOptions[i].value+'' == value+''){
@@ -629,7 +500,7 @@ define([
 						renderHeaderCell: filterRendererFacory("select", "status", {options: statusOptions}),
 						sortable: false, 
 						field: "status",
-						className: "filterable align-center column-medium",
+						className: "filterable align-center column-medium editable",
 						formatter: function(value, item){
 							for(var i=0; i<statusOptions.length; i++){
 								if(statusOptions[i].value+'' == value+''){
@@ -681,13 +552,20 @@ define([
 	updater.setGrid(grid);
 	
 	on(switcher, "change", function(){
+		updater.setStoreId(this.value);
 		grid.refresh();
 	})
 	
 	// listen for clicks to trigger expand/collapse in table view mode
-	on.pausable(grid.domNode, ".dgrid-row td.field-expander :click", function(evt){
+	on.pausable(grid.domNode, ".dgrid-row td.expander :click", function(evt){
 		updater.toggle(grid.row(evt));		
 	});
+	
+	// Open dialo to single price edit
+	on.pausable(grid.domNode, ".dgrid-row td.signle-price-edit.editable :dblclick", function(evt){
+		singlePriceUpdater.handleDbClick(grid.row(evt));
+	});
+			
 	
 	//Chandel data change
 	on.pausable(grid.domNode, "dgrid-datachange", function(evt){
@@ -703,6 +581,8 @@ define([
 		
 	});
 	
+	
+	updater.setStoreId(switcher.value);
 	
 	return grid;
 	

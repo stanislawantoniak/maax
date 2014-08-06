@@ -237,7 +237,7 @@ function createEditor(column){
 			
 		}
 		
-		if(editor=="text" && args.price){
+		if(editor=="text" && args.isNumber){
 			put(cmp, ".number-editor");
 			if(jQuery && jQuery.fn.numeric){
 				jQuery(cmp).numeric({min:0, allowMinus: false, maxDecimalPlaces: 2});

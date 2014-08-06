@@ -154,6 +154,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 	public function getEditableAttributes() {
 		return array(
 			"display_price", 
+			"price_margin",
 			"converter_price_type", 
 			"is_new", 
 			"is_bestseller", 
