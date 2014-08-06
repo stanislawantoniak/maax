@@ -2,17 +2,22 @@
 <config>
     <modules>
         <Zolago_Banner>
-            <version>0.1.0</version>
+            <version>0.0.1</version>
         </Zolago_Banner>
     </modules>
     <global>
         <models>
             <zolagobanner>
                 <class>Zolago_Banner_Model</class>
-                <resourceModel>zolago_banner_resource</resourceModel>
+                <resourceModel>zolagobanner_resource</resourceModel>
             </zolagobanner>
             <zolagobanner_resource>
                 <class>Zolago_Banner_Model_Resource</class>
+                <entities>
+                    <banner>
+                        <table>zolago_banner</table>
+                    </banner>
+                </entities>
             </zolagobanner_resource>
         </models>
         <blocks>
@@ -33,4 +38,31 @@
             </zolagobanner_setup>
         </resources>
     </global>
+    <frontend>
+        <routers>
+            <zolagobanner>
+                <use>standard</use>
+                <args>
+                    <module>Zolago_Banner</module>
+                    <frontName>zolagobanner</frontName>
+                </args>
+            </zolagobanner>
+        </routers>
+        <layout>
+            <updates>
+                <zolagobanner>
+                    <file>zolagobanner.xml</file>
+                </zolagobanner>
+            </updates>
+        </layout>
+        <translate>
+            <modules>
+                <zolagobanner>
+                    <files>
+                        <default>Zolago_Banner.csv</default>
+                    </files>
+                </zolagobanner>
+            </modules>
+        </translate>
+    </frontend>
 </config>
