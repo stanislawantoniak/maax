@@ -41,4 +41,69 @@ $session = Mage::getSingleton('customer/session');
         <button type="submit" title="<?php echo $this->__('Submit') ?>" class="btn sending"><span><span><?php echo $this->__('Submit') ?></span></span></button>
     </div>
 </form>
+    <script type="text/javascript">
+        jQuery("#question-form").validate({
+            highlight: function(element, errorClass, validClass) {
+                var we = jQuery(element).width()+55;
+                var el = jQuery(element).attr('type');
+                jQuery(element).closest("div").addClass('has-error has-feedback').removeClass('has-success');
+                jQuery(element).closest("div").find('.form-ico-times').remove();
+
+                jQuery(element).closest("div").not( ".form-checkbox" ).append('<i style="left:'+we+'px; right:auto" class="form-ico-times form-control-feedback "></i>');
+
+                jQuery(element).closest("div").find('.form-ico-checked').remove();
+            },
+            unhighlight: function(element, errorClass, validClass) {
+                var we = jQuery(element).width()+55;
+                jQuery(element).closest("div").removeClass('has-error').addClass('has-success has-feedback');
+                jQuery(element).closest("div").find('.form-ico-checked').remove();
+                //if (element.attr("type") != "checkbox"){
+                jQuery(element).closest("div").append('<i style="left:'+we+'px; right:auto" class="form-ico-checked form-control-feedback"></i>');
+                //}
+                jQuery(element).closest("div").find('.form-ico-times').remove();
+            },
+            errorPlacement: function(error, element) {
+                if (element.attr("type") == "checkbox"){
+                    jQuery(element).closest('div').append(error).hide().slideToggle(300);
+                    //error.prepend(element).hide().slideToggle(300);
+                } else {
+                    error.insertAfter(element).hide().slideToggle(300);
+                }
+
+            },
+            success: "valid",
+            errorElement: "span",
+            onfocusout: function (element) {
+                jQuery(element).valid();
+            },
+            onsubmit: function (element) {
+                jQuery(element).valid();
+            },
+            messages: {
+                "question[customer_email]" : {
+                    required: "<?php echo $this->__("This field is required"); ?>",
+                    email: "<?php echo $this->__("Valid email is required."); ?>"
+                },
+                "question[customer_name]": {
+                    required: "<?php echo $this->__("This field is required"); ?>"
+                },
+                "question[question_text]": {
+                    required: "<?php echo $this->__("This field is required"); ?>"
+                }
+
+            },
+            rules: {
+                "question[customer_email]": {
+                    email: true,
+                    required: true
+                },
+                "question[customer_name]": {
+                    required: true
+                },
+                "question[question_text]": {
+                    required: true
+                }
+            }
+        });
+    </script>
 <?php endif;?>
