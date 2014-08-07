@@ -15,11 +15,14 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
     }
 
     public function _prepareForm(){
+        $type = $this->getRequest()->getParam('type',null);
+
         $helper = Mage::helper('zolagobanner');
         $form = Mage::getModel('zolagodropship/form');
         /* @var $form Zolago_Dropship_Model_Form */
         $form->setAction($this->getUrl("banner/vendor/save"));
 
+        //Common edit banner fields
         $general = $form->addFieldset("general", array(
             "legend" => $helper->__("General")
         ));
@@ -31,12 +34,12 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
             "label" => $helper->__('Name')
         ));
 
-        $general->addField("type", "select", array(
-            "name" => "type",
+        $general->addField("campaign_id", "select", array(
+            "name" => "campaign_id",
             "required" => true,
             "class" => "form-control",
-            "label" => $helper->__('Type'),
-            "values" => Mage::getSingleton('zolagobanner/banner_type')->toOptionHash()
+            "label" => $helper->__('Campaign'),
+            "values" => Mage::getSingleton('zolagobanner/banner_campaign')->toOptionHash()
         ));
 
         $general->addField("status", "select", array(
@@ -46,20 +49,88 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
             "label" => $helper->__('Status'),
             "values" => Mage::getSingleton('zolagobanner/banner_status')->toOptionHash()
         ));
+        //--Common edit banner fields
 
-        // Websites
-        $websiteOptions = array();
-        foreach (Mage::app()->getWebsites() as $websiteId => $website) {
-            $websiteOptions[] = array(
-                "label" => $website->getName(),
-                "value" => $website->getId()
-            );
-        }
+        //Additional banner fields depends on type
+        $this->_completeForm($form, $type);
 
         $values = $this->getModel()->getData();
         $form->setValues($values);
         $this->setForm($form);
     }
+
+    public function _completeForm(Zolago_Dropship_Model_Form $form, $type)
+    {
+        $helper = Mage::helper('zolagobanner');
+
+        switch ($type) {
+            case Zolago_Banner_Model_Banner_Type::BANNER_TYPE_SLIDER:
+                $content = $form->addFieldset("banner_content", array(
+                    "legend" => $helper->__("Banner Content Type")
+                ));
+                $content->addField("slider_type", "select", array(
+                    "name" => "slider_type",
+                    "class" => "form-control",
+                    "required" => true,
+                    "label" => $helper->__('Slider Type'),
+                    'values' => array('html' => 'HTML' , 'image' => 'Image')
+                ));
+
+
+                $sliderTypeHtml = $form->addFieldset("slider_type_html", array(
+                    "legend" => $helper->__("Slider HTML"),
+                    'attr_data' => array((object)array('name' => 'type', 'value' => 'html'), (object)array('name' => 'name', 'value' => 'slider_type'))
+                ));
+                $sliderTypeHtml->addField("html", "textarea", array(
+                    "name" => "html",
+                    "class" => "form-control",
+                    "required" => false,
+                    "label" => $helper->__('HTML')
+                ));
+
+                $sliderTypeImage = $form->addFieldset("slider_type_image", array(
+                    "legend" => $helper->__("Slider Content"),
+                    'class' => 'hidden',
+                    'attr_data' => array((object)array('name' => 'type', 'value' => 'image'), (object)array('name' => 'name', 'value' => 'slider_type'))
+                ));
+                $sliderTypeImage->addField("add_slider", "link", array(
+                    "name" => "add_slider",
+                    "label" => $helper->__("ADD"),
+                    "href" => "",
+                    'inside'  => '<span class="glyphicon glyphicon-plus"></span>',
+                ));
+//                $sliderTypeImage->addField("slider_image", "image", array(
+//                    "name" => "slider_image",
+//                    "class" => "form-control",
+//                    "required" => false,
+//                    "label" => $helper->__('Slider Image')
+//                ));
+//                $sliderTypeImage->addField("slider_link_url", "text", array(
+//                    "name" => "slider_link_url",
+//                    "class" => "form-control",
+//                    "required" => true,
+//                    "label" => $helper->__('Slider Link Url')
+//                ));
+//
+//                $sliderTypeImage->addField("slider_link_text", "text", array(
+//                    "name" => "slider_link_text",
+//                    "class" => "form-control",
+//                    "required" => true,
+//                    'wrapper_class' => 'col-md-9',
+//                    "label" => $helper->__('Slider Link Text')
+//                ));
+
+                break;
+            case Zolago_Banner_Model_Banner_Type::BANNER_TYPE_BOX:
+                echo '2';
+                break;
+            case Zolago_Banner_Model_Banner_Type::BANNER_TYPE_INSPIRATION:
+                echo '3';
+                break;
+        }
+        return $form;
+    }
+
     public function _prepareGrid() {
         $design = Mage::getDesign();
         $design->setArea("adminhtml");

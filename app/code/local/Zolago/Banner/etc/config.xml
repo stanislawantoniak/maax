@@ -44,7 +44,7 @@
                 <use>standard</use>
                 <args>
                     <module>Zolago_Banner</module>
-                    <frontName>zolagobanner</frontName>
+                    <frontName>banner</frontName>
                 </args>
             </zolagobanner>
         </routers>

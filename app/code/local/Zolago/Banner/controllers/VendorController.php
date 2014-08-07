@@ -16,8 +16,6 @@ class Zolago_Banner_VendorController extends Zolago_Dropship_Controller_Vendor_A
         $banner = $this->_initModel();
         $vendor = $this->_getSession()->getVendor();
 
-        $type = $this->getRequest()->getParam('type',null);
-
         // Existing banner
         if ($banner->getId()) {
             if ($banner->getVendorId() != $vendor->getId()) {
@@ -46,6 +44,20 @@ class Zolago_Banner_VendorController extends Zolago_Dropship_Controller_Vendor_A
     public function typeAction(){
         Mage::register('as_frontend', true);
         $this->_renderPage(null, 'zolagobanner');
+    }
+
+    /**
+     * Redirect to edit form depends on banner type
+     */
+    public function setTypeAction()
+    {
+        $type = $this->getRequest()->getParam('type', null);
+        if (empty($type)) {
+            $this->_redirectUrl(Mage::helper('zolagobanner')->bannerTypeUrl());
+        } else {
+            $this->_redirectUrl(Mage::helper('zolagobanner')->bannerEditUrl($type));
+        }
+
     }
 
     /**
@@ -78,5 +90,15 @@ class Zolago_Banner_VendorController extends Zolago_Dropship_Controller_Vendor_A
         }
         $session = $this->_getSession();
         return $model->getVendorId()==$session->getVendorId();
+    }
+
+    public function saveAction(){
+        Mage::log($_REQUEST);
+        Mage::log($_FILES);
+        foreach ($_FILES['slider']['tmp_name'] as $key => $file) {
+            move_uploaded_file($file["image"],
+                Mage::getBaseDir() . "/media/vendorSliders/" . $_FILES["slider"]["name"][$key]['image']);
+            echo "Stored in: " . "upload/" . $_FILES["slider"]["name"][$key]['image'];
+        }
     }
 }
