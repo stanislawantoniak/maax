@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<layout version="0.0.1">
+	<zolagobanner_vendor_index>
+		<update handle="udropship_vendor" />
+        <update handle="adminhtml_head" />
+		<update handle="bootstrap"/>
+		<reference name="content">
+			<block name="zolagobanner" type="zolagobanner/vendor_banner" template="zolagobanner/dropship/banner.phtml"></block>
+		</reference>
+	</zolagobanner_vendor_index>
+
+    <zolagobanner_vendor_type>
+        <update handle="udropship_vendor" />
+        <update handle="adminhtml_head" />
+        <update handle="bootstrap"/>
+        <update handle="noty"/>
+        <update handle="forms"/>
+        <reference name="content">
+            <block name="banner.type" type="zolagobanner/vendor_banner_type" template="zolagobanner/dropship/banner/type.phtml"></block>
+        </reference>
+    </zolagobanner_vendor_type>
+
+	<zolagobanner_vendor_edit>
+		<update handle="udropship_vendor" />
+        <update handle="adminhtml_head" />
+        <update handle="bootstrap"/>
+        <update handle="noty"/>
+        <update handle="forms"/>
+		<reference name="content">
+			<block name="banner.edit" type="zolagobanner/vendor_banner_edit" template="zolagobanner/dropship/banner/edit.phtml"></block>
+		</reference>
+	</zolagobanner_vendor_edit>
+	
+</layout>

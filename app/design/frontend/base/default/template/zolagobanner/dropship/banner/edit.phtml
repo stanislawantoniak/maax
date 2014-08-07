@@ -1,0 +1,35 @@
+<?php /* @var $this Zolago_Banner_Block_Vendor_Banner_Edit */ ?>
+<?php $_helper = Mage::helper("zolagobanner");?>
+<?php $_model = $this->getModel();?>
+<div class="container">
+	<div class="page-heading row">
+		<div class="col-lg-6">
+			<h3>
+				<?php if($this->isModelNew()):?>
+					<?php echo Mage::helper("zolagobanner")->__("New Banner");?>
+				<?php else: ?>
+					<?php echo Mage::helper("zolagopo")->__("Edit Banner '%s'", $_model->getName());?>
+				<?php endif;?>
+			</h3>
+		</div>
+		
+	</div>
+</div>
+
+<div class="container z-grid">
+	<form id="edit-campaign" class="form-horizontal row-border" action="<?php echo $this->getForm()->getAction();?>" method="POST">
+		<input type="hidden" name="campaign_id" value="<?php echo $_model->getId();?>"/>
+		<?php echo $this->getLayout()->getBlock('formkey')->toHtml();?>
+		<?php echo $this->getForm()->toHtml();?>
+
+		<div class="form-actions"> <input type="submit" value="<?php echo $_helper->__("Save");?>" class="btn btn-primary pull-right"> </div>
+	</form>
+</div>
+
+<script type="text/javascript">
+    jQuery(function ($) {
+        var form = $("#edit-campaign");
+        new Zolago.formIntegrator(form);
+        form.validate();
+    });
+</script>
