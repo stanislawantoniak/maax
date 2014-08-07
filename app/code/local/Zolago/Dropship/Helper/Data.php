@@ -57,7 +57,8 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
 	}
 	
 	public function getAllowedCarriers() {
-		return array(/*"", "custom", */Orba_Shipping_Model_Carrier_Dhl::CODE,Orba_Shipping_Model_Carrier_Ups::CODE);
+        $allowCarriers = Mage::helper('orbashipping/carrier_tracking')->getTrackingCarriersList();
+        return $allowCarriers;	
 	}
 	
     //{{{ 
@@ -100,7 +101,8 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
 
     //}}}
 	public function isUdpoMpsAvailable($carrierCode, $vendor = null) {
-		if(in_array($carrierCode, array(Orba_Shipping_Model_Carrier_Dhl::CODE,Orba_Shipping_Model_Carrier_Ups::CODE))){
+        $allowCarriers = Mage::helper('orbashipping/carrier_tracking')->getTrackingCarriersList();
+		if(in_array($carrierCode, $allowCarriers)){
 			return true;
 		}
 		return parent::isUdpoMpsAvailable($carrierCode, $vendor);
@@ -121,7 +123,8 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
             }
             $vId = $track->getShipment()->getUdropshipVendor();
             $v = Mage::helper('udropship')->getVendor($vId);
-			if (!in_array($cCode,array(Orba_Shipping_Model_Carrier_Dhl::CODE,Orba_Shipping_Model_Carrier_Ups::CODE))) {
+            $allowCarriers = Mage::helper('orbashipping/carrier_tracking')->getTrackingCarriersList();
+			if (!in_array($cCode,$allowCarriers)) {
 				if (!$v->getTrackApi($cCode) || !$v->getId()) {
 					continue;
 				}

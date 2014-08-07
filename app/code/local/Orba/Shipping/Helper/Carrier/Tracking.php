@@ -3,6 +3,24 @@ class Orba_Shipping_Helper_Carrier_Tracking extends Mage_Core_Helper_Abstract {
     
     protected $_helper = null;    
     
+
+    //{{{ 
+    /**
+     * list of carriers allowed to autotracking
+     * @return array
+     */
+    public function getTrackingCarriersList() {
+        $out = array();
+        if (Mage::helper('orbashipping/carrier_dhl')->isActive()) {
+            $out[] = Orba_Shipping_Model_Carrier_Dhl::CODE;
+        }
+        if (Mage::helper('orbashipping/carrier_ups')->isActive()) {
+            $out[] = Orba_Shipping_Model_Carrier_Ups::CODE;
+        }
+        return $out;
+    }
+    //}}}
+
     //{{{ 
     /**
      * helper for specific carrier type

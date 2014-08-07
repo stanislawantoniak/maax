@@ -82,19 +82,6 @@ class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
             $helper = Mage::helper('udropship');
             $helper->setTrackingHelperPath('zolagorma/tracking');
             $helper->collectTracking($tracks);
-/*
-            try {
-                Mage::helper('zolagorma')->collectTracking($tracks);
-            } catch (Exception $e) {
-                $tracksByStore = array();
-                foreach ($tracks as $track) {
-                    $tracksByStore[$track->getShipment()->getOrder()->getStoreId()][] = $track;
-                }
-                foreach ($tracksByStore as $sId => $_tracks) {
-                    Mage::helper('udropship/error')->sendPollTrackingFailedNotification($_tracks, "$e", $sId);
-                }
-            }
-*/        
         }
 
     }
