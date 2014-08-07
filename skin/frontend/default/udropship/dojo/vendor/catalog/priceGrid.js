@@ -151,7 +151,6 @@ define([
 				updater.doRowCollapse(obj, div);
 			}
 
-
 			states.orig[obj.entity_id] = lang.mixin({}, obj);
 
 			return div;
@@ -206,7 +205,7 @@ define([
 	// cache crakcs edit
 	testStore =  Observable(storeRest);
 	
-	var PriceGrid = declare([Grid, Selection,Keyboard, CompoundColumns]);
+	var PriceGrid = declare([Grid, Selection, Keyboard, CompoundColumns]);
 	
 	grid = new PriceGrid({
 		columns: {

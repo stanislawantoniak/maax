@@ -56,7 +56,14 @@ var Keyboard = declare(null, {
 		function handledEvent(event){
 			// text boxes and other inputs that can use direction keys should be ignored and not affect cell/row navigation
 			var target = event.target;
-			return target.type && (!delegatingInputTypes[target.type] || event.keyCode == 32);
+			
+			// Select fix for FF
+			var tagName = target.tagName.toLowerCase();
+			
+			if(["select", "option"].indexOf(tagName)>-1){
+				return true;
+			}
+			return (target.type) && (!delegatingInputTypes[target.type] || event.keyCode == 32 );
 		}
 		
 		function enableNavigation(areaNode){

@@ -232,7 +232,7 @@ function createEditor(column){
 			}
 			
 			options.forEach(function(option){
-				put(cmp, "option", {innerHTML: option.label, value: option.value})
+				put(cmp, "option", {'innerHTML': option.label, 'value': option.value})
 			});
 			
 		}
