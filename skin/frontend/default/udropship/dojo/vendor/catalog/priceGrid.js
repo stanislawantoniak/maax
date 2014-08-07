@@ -108,18 +108,19 @@ define([
 				return function(){
 					var grid = this.grid;
 					var wrapper = domConstruct.create("div");
+					var valueType = config.valueType || "number";
 					["from", "to"].forEach(function(type){
 						var element = domConstruct.create("input", {
 							"type": "text",
 							"placeholder": type[0].toUpperCase() + type.slice(1),
-							"className": "range-field" + " " + "range-field-" + type,
+							"className": "range-field" + " " + "range-field-" + type + " " + "range-field-" + valueType,
 						});
 						
 						if(jQuery && jQuery.fn.numeric){
 							jQuery(element).numeric(config);
 						}
 						
-						var observer = new ObserverFilter(element, grid, name + '['+type+']');
+						var observer = new ObserverFilter(element, grid, name + '['+type+']', {valueType: valueType});
 						
 						on(element, 'focus',	lang.hitch(observer, observer.start));
 						on(element, 'keyup',	lang.hitch(observer, observer.start));

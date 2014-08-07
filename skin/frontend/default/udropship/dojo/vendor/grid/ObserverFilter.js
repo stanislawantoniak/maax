@@ -12,11 +12,24 @@ define([
 		grid: null,
 		oldValue: null,
 		dataField: null, 
-		constructor: function(field, grid, dataField){
+		options: null,
+		type: null,
+		constructor: function(field, grid, dataField, options){
 			this.field = field;
 			this.grid = grid;
+			this.options = options || {};
+			this.valueType = this.options.valueType || "text";
 			this.dataField = dataField;
-			this.oldValue = field.value;
+			this.oldValue = this.getValue(field.value);
+		},
+		getValue: function(value){
+			if(value==""){
+				return value;
+			}
+			if(this.valueType=="number"){
+				return parseFloat(value.replace(",","."))
+			}
+			return value;
 		},
 		// Zaczyna sprawdzanie
 		start: function(){
@@ -37,7 +50,7 @@ define([
 			}
 		},
 		update: function(){
-			var value = this.field.value;
+			var value = this.getValue(this.field.value);
 			if(value!==this.oldValue){
 				// need query factory
 				var query = this.grid.get("query");

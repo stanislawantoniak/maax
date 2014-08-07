@@ -133,9 +133,7 @@ define([
 		},
 		
 		_renderSubRow: function(node, data){
-			// Make re
-			// dering here
-			
+			// Make rendering
 			var html = "loaded, id: " + data.entity_id +  ", var:" + data.var;
 			switch(data.type_id){
 				case "configurable":
