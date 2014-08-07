@@ -21,7 +21,7 @@ $session = Mage::getSingleton('customer/session');
             <li class="wide">
                 <label for="customer_email" class="required"><em>*</em><?php echo $this->__('Email') ?></label>
                 <div class="input-box">
-                    <input type="text" name="question[customer_email]" id="customer_email" class="validate-email required-entry input-text form-control hint" required email />
+                    <input type="text" name="question[customer_email]" id="customer_email" class="validate-email required-entry input-text form-control hint" />
                 </div>
             </li>
 			<?php else:?>
@@ -78,6 +78,31 @@ $session = Mage::getSingleton('customer/session');
             },
             onsubmit: function (element) {
                 jQuery(element).valid();
+            },
+            messages: {
+                "question[customer_email]" : {
+                    required: "<?php echo $this->__("This field is required"); ?>",
+                    email: "<?php echo $this->__("Valid email is required."); ?>"
+                },
+                "question[customer_name]": {
+                    required: "<?php echo $this->__("This field is required"); ?>"
+                },
+                "question[question_text]": {
+                    required: "<?php echo $this->__("This field is required"); ?>"
+                }
+
+            },
+            rules: {
+                "question[customer_email]": {
+                    email: true,
+                    required: true
+                },
+                "question[customer_name]": {
+                    required: true
+                },
+                "question[question_text]": {
+                    required: true
+                }
             }
         });
     </script>

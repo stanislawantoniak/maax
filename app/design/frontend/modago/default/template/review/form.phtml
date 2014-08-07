@@ -108,6 +108,75 @@
             </div>
 
         </form>
+
+            <script type="text/javascript">
+                jQuery("#review-form").validate({
+                    highlight: function(element, errorClass, validClass) {
+                        var we = jQuery(element).width()+55;
+                        var el = jQuery(element).attr('type');
+                        jQuery(element).closest("div").addClass('has-error has-feedback').removeClass('has-success');
+                        jQuery(element).closest("div").find('.form-ico-times').remove();
+
+                        jQuery(element).closest("div").not( ".form-checkbox" ).append('<i style="left:'+we+'px; right:auto" class="form-ico-times form-control-feedback "></i>');
+
+                        jQuery(element).closest("div").find('.form-ico-checked').remove();
+                    },
+                    unhighlight: function(element, errorClass, validClass) {
+                        var we = jQuery(element).width()+55;
+                        jQuery(element).closest("div").removeClass('has-error').addClass('has-success has-feedback');
+                        jQuery(element).closest("div").find('.form-ico-checked').remove();
+                        //if (element.attr("type") != "checkbox"){
+                        jQuery(element).closest("div").append('<i style="left:'+we+'px; right:auto" class="form-ico-checked form-control-feedback"></i>');
+                        //}
+                        jQuery(element).closest("div").find('.form-ico-times').remove();
+                    },
+                    errorPlacement: function(error, element) {
+                        if (element.attr("type") == "checkbox"){
+                            jQuery(element).closest('div').append(error).hide().slideToggle(300);
+                            //error.prepend(element).hide().slideToggle(300);
+                        } else {
+                            error.insertAfter(element).hide().slideToggle(300);
+                        }
+
+                    },
+                    success: "valid",
+                    errorElement: "span",
+                    onfocusout: function (element) {
+                        jQuery(element).valid();
+                    },
+                    onsubmit: function (element) {
+                        jQuery(element).valid();
+                    },
+                    messages: {
+                        "nickname" : {
+                            required: "<?php echo $this->__("This field is required"); ?>"
+                        },
+                        "title": {
+                            required: "<?php echo $this->__("This field is required"); ?>"
+                        },
+                        "detail": {
+                            required: "<?php echo $this->__("This field is required"); ?>"
+                        },
+                        "recommend_product": {
+                            required: "<?php echo $this->__("This field is required"); ?>"
+                        }
+                    },
+                    rules: {
+                        "nickname": {
+                            required: true
+                        },
+                        "title": {
+                            required: true
+                        },
+                        "detail": {
+                            required: true
+                        },
+                        "recommend_product": {
+                            required: true
+                        }
+                    }
+                });
+            </script>
         <?php else: ?>
             <h4 class="review-nologged" id="review-form">
                 <?php echo $this->__('Only registered users can write reviews. Please, <a href="%s">log in</a> or <a href="%s">register</a>', $this->getLoginLink(), Mage::helper('customer')->getRegisterUrl()) ?>
