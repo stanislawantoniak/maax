@@ -46,7 +46,7 @@ define([
 			var btn = _modal.find(".btn-primary").attr("disabled", "disabled");
 			var body = _modal.find(".modal-body");
 			jQuery.ajax({
-				url: "/udprod/vendor_price/pricemodal",
+				url: "/udprod/vendor_price_detail/pricemodal",
 				data: {id: data.entity_id},
 				success: function(response){
 					body.html(response);
