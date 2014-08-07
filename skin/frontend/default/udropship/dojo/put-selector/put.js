@@ -61,7 +61,9 @@ define([], forDocument = function(doc, newFragmentFasterHeuristic){
 				}else{
 					// an object hash
 					for(var key in argument){
-						current[key] = argument[key];
+						try{
+							current[key] = argument[key];
+						}catch(e){}
 					}				
 				}
 			}else if(lastSelectorArg){
