@@ -63,12 +63,9 @@ jQuery.validator.addMethod("integer", function(value, element) {
 
 jQuery.validator.addMethod('dateBefore', function(value, element, params) {
     // if end date is valid, validate it as well
+
     var end = jQuery(params);
-    if (!end.data('validation.running')) {
-        jQuery(element).data('validation.running', true);
-        this.element(end);
-        jQuery(element).data('validation.running', false);
-    }
+
     //format if dd-mm-yy to mm-dd-yy
     var fValue = value.replace(/([\s:\-]+)/g, '/');
 
@@ -98,11 +95,7 @@ jQuery.validator.addMethod('dateBefore', function(value, element, params) {
 jQuery.validator.addMethod('dateAfter', function(value, element, params) {
     // if start date is valid, validate it as well
     var start = jQuery(params);
-    if (!start.data('validation.running')) {
-        jQuery(element).data('validation.running', true);
-        this.element(start);
-        jQuery(element).data('validation.running', false);
-    }
+
     //format if dd-mm-yy to mm-dd-yy
     var fValue = value.replace(/([\s:\-]+)/g, '/');
 

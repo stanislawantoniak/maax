@@ -64,21 +64,15 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
     /*
      * @return array
      */
-    public function getProductCampaign($productId) {
-        if (empty($productId)) {
-            return array();
-        }
-        return $this->getResource()->getProductCampaign($productId);
+    public function getProductCampaign() {
+        return $this->getResource()->getProductCampaign();
     }
 
     /*
      * @return array
      */
-    public function getProductCampaignInfo($productId) {
-        if (empty($productId)) {
-            return array();
-        }
-        return $this->getResource()->getProductCampaignInfo($productId);
+    public function getProductCampaignInfo() {
+        return $this->getResource()->getProductCampaignInfo();
     }
 
 
@@ -89,7 +83,7 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
         if(empty($expiredCampaigns)){
             return;
         }
-        //unset products campaign attributes
+
         $dataToUpdate = array();
         foreach($expiredCampaigns as $expiredCampaign){
             $dataToUpdate[$expiredCampaign['type']][$expiredCampaign['campaign_id']][] = $expiredCampaign['product_id'];
@@ -104,8 +98,11 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                 $_storeId = Mage::app()->getStore($_eachStoreId)->getId();
                 $storeId[] = $_storeId;
             }
+            $productIdsToUpdate = array();
             foreach ($dataToUpdate as $type => $campaignData) {
+                //unset products campaign attributes
                 foreach ($campaignData as $campaignId => $productIds) {
+                    $productIdsToUpdate = array_merge($productIdsToUpdate, $productIds);
                     if ($type == Zolago_Campaign_Model_Campaign_Type::TYPE_INFO) {
                         foreach ($storeId as $store) {
                             foreach ($productIds as $productId) {
@@ -128,6 +125,20 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
                         }
                     }
                 }
+                unset($attributesData);
+
+                //unset special price
+                //unset special price dates
+                //unset SRP price
+                $attributesData = array('special_price' => '', 'special_from_date' => '', 'special_to_date' => '', 'msrp' => '');
+                foreach ($storeId as $store) {
+                    $actionModel
+                        ->updateAttributesNoIndex($productIdsToUpdate, $attributesData, (int)$store);
+                }
+
+
+
+
             }
             $actionModel->reindexAfterMassAttributeChange();
         }

@@ -101,6 +101,13 @@
                 window.location = link;
             }
 
+
+            //$(".datepicker").datepicker();
+
+            $('.datetimepicker').datetimepicker({
+                format: 'd-m-Y H:i'
+            });
+
             var form = $("#edit-campaign");
             new Zolago.formIntegrator(form);
             form.validate({
@@ -108,14 +115,10 @@
                     "percent": {
                         max: 100
                     },
-                    date_from: {dateBefore: '#date_to'},
-                    date_to: {dateAfter: '#date_from'}
+                    "date_from": {dateBefore: '#date_to'},
+                    "date_to": {dateAfter: '#date_from'}
                 }
             });
-            //$(".datepicker").datepicker();
 
-            $('.datetimepicker').datetimepicker({
-                format: 'd-m-Y H:i'
-            });
 });
 </script>
