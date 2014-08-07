@@ -137,14 +137,13 @@ switch($_reviewsCount) {
             <div class="row">
                 <div class="action-box-bundle clearfix">
                     <div class="col-xs-6">
-
-                        <div class="addLike-box <?php if(!Mage::getBlockSingleton('zolagomodago/wishlist')->isInWishlist($this->getProduct())) : ?>hidden<?php endif; ?>" id="notadded-wishlist">
-                            <?php echo (int) $this->getProduct()->getWishlistCount(); ?> osób lubi ten produkt <a href="#" onclick="Mall.addToWishlist('<?php echo Mage::getBlockSingleton('zolagomodago/wishlist_links')->getAddToWishlstUrl($this->getProduct()); ?>')" class="addLike"><?php echo $this->__("Add to<br />favorites"); ?></a>
+                        <div class="addLike-box <?php if(Mage::helper('zolagowishlist')->productBelongsToMyWishlist($_product)) : ?>hidden<?php endif; ?>" id="notadded-wishlist">
+                            <span class="product-context-like-count"><?php echo (int) $this->getProduct()->getWishlistCount(); ?></span> osób lubi ten produkt <a href="#" onclick="Mall.addToWishlist(<?php echo $_product->getId(); ?>, 'product')" class="addLike"><?php echo $this->__("Add to<br />favorites"); ?></a>
                         </div>
 
-                        <div class="addedLike-box <?php if(Mage::getBlockSingleton('zolagomodago/wishlist')->isInWishlist($this->getProduct())) : ?>hidden<?php endif; ?>" id="added-wishlist">
-                            <a href="#" class="likeAdded" onclick="Mall.removeFromWishlist(<?php echo Mage::getBlockSingleton('zolagomodago/wishlist_links')->getRemoveFromWishlstUrl($this->getProduct()); ?>);">
-                                Ty i <?php echo (int) $this->getProduct()->getWishlistCount(); ?> osób lubicie ten produkt<br><span>usuń z ulubionych</span>
+                        <div class="addedLike-box <?php if(!Mage::helper('zolagowishlist')->productBelongsToMyWishlist($_product)) : ?>hidden<?php endif; ?>" id="added-wishlist">
+                            <a href="#" class="likeAdded" onclick="Mall.removeFromWishlist(<?php echo $this->getProduct()->getId(); ?>, 'product');">
+                                Ty i <span class="product-context-like-count" style="color: #4f4f4f"><?php echo ((int) $this->getProduct()->getWishlistCount())-1; ?></span> osób lubicie ten produkt<br><span>usuń z ulubionych</span>
                             </a>
                         </div>
                     </div>
@@ -299,4 +298,4 @@ switch($_reviewsCount) {
 
 <?php echo $this->getChildHtml('product.info.media.modal'); ?>
 
-
+<?php echo $this->getChildHtml('zolago_modago_home_sliderlastseen'); ?>

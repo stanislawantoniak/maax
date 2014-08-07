@@ -157,6 +157,8 @@ jQuery.noConflict();
      }
   });
 
+    
+})*/
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // OBLICZANIE DŁUGOŚCI POLA
     $.fn.textWidth = function(text, font) {
@@ -1060,44 +1062,78 @@ function galeriaProduktu(){
           });
           $('.zoom_plus').on('click', function(event) {
             event.preventDefault();
-            var img = $(this).closest('.item').find('img');
-            var imgScaleWidth = parseInt(img.width());
-            var imgWidth   =    $(this).closest('.item').find('img').data('width');
-            var imgHeight  =  $(this).closest('.item').find('img').data('height');
+            $(this).closest('.rwd-wrapper').find('.rwd-item').each(function(){
+                var img = $(this).find('img');
+                var imgScaleWidth = parseInt(img.width());
+                var imgWidth   =    $(this).find('img').data('width');
+                var imgHeight  =  $(this).find('img').data('height');
+                console.log('IMG Width:' + imgScaleWidth+ '|| IMG DATA Width:' + imgWidth + '|| IMG DATA Height:' + imgHeight)
+                var divWidth   = $(this).find('.item').css("width"),
+                    divWidth = parseInt(divWidth);
+                var divHeight  = $(this).find('.item').css("height") ;
+                $(img).width(divWidth) //Set the width to the div's width
+                $('.rwd-buttons').width(imgScaleWidth);
+                //$(this).closest('.inner-item').css({width:'100%',margin:0});
+                $(img).css("height", 'auto');
 
-            var divWidth   = $(this).closest('.item').css("width"),
-                divWidth = parseInt(divWidth);
-            var divHeight  = $(this).closest('.item').css("height") ;
+
+                if (imgWidth < divWidth) {
+                           //var heightDiff = imgHeight  - divHeight;
+                           //var widthDiff = imgWidth  - divWidth;
+                               $(img).width(imgWidth+'px') //Set the width to the div's width
+                               $(this).find('.inner-item').css({width:imgWidth,margin:'0 auto'});
+                               $(img).css("height", 'auto');
+                    } else if (imgWidth >= divWidth) {
+                                $(img).width('100%') //Set the width to the div's width
+                                $(this).find('.inner-item').css({width:'100%',margin:'0 auto'});
+                                $(img).css("height", 'auto');
+
+                    } else if (imgScaleWidth > imgWidth){
+                        //alert ("zdjęcie mniejsze")
+                    }
+                      $(this).find('.zoom_plus').addClass('full disabled');
+                      $(this).find('.zoom_minus').addClass('full').removeClass('disabled');
+                      //console.log('WidthScale:'+ imgScaleWidth + '|| WidthOriginal:' + imgWidth );
+            })
+            
+            ///var img = $(this).closest('.item').find('img');
+            ///var imgScaleWidth = parseInt(img.width());
+            ///var imgWidth   =    $(this).closest('.item').find('img').data('width');
+            ///var imgHeight  =  $(this).closest('.item').find('img').data('height');
+
+            ///var divWidth   = $(this).closest('.item').css("width"),
+            ///    divWidth = parseInt(divWidth);
+            ///var divHeight  = $(this).closest('.item').css("height") ;
             
             //$('#lightbox .rwd-buttons').hide();
-            $(img).width(divWidth) //Set the width to the div's width
-            $('.rwd-buttons').width(imgScaleWidth);
+            ///$(img).width(divWidth) //Set the width to the div's width
+            ///$('.rwd-buttons').width(imgScaleWidth);
             //$(this).closest('.inner-item').css({width:'100%',margin:0});
-            $(img).css("height", 'auto');
+            ///$(img).css("height", 'auto');
 
 
-            if (imgWidth < divWidth) {
+            ///if (imgWidth < divWidth) {
                        //var heightDiff = imgHeight  - divHeight;
                        //var widthDiff = imgWidth  - divWidth;
-                           $(img).width(imgWidth+'px') //Set the width to the div's width
-                           $(this).closest('.inner-item').css({width:imgWidth,margin:'0 auto'});
-                           $(img).css("height", 'auto');
-                } else if (imgWidth >= divWidth) {
-                            $(img).width('100%') //Set the width to the div's width
-                            $(this).closest('.inner-item').css({width:'100%',margin:'0 auto'});
-                            $(img).css("height", 'auto');
+            ///               $(img).width(imgWidth+'px') //Set the width to the div's width
+            ///              $(this).closest('.inner-item').css({width:imgWidth,margin:'0 auto'});
+            ///               $(img).css("height", 'auto');
+            ///    } else if (imgWidth >= divWidth) {
+            ///                $(img).width('100%') //Set the width to the div's width
+            ///                $(this).closest('.inner-item').css({width:'100%',margin:'0 auto'});
+            ///                $(img).css("height", 'auto');
 
-                } else if (imgScaleWidth > imgWidth){
+            ///    } else if (imgScaleWidth > imgWidth){
                     //alert ("zdjęcie mniejsze")
-                }
-                  $(this).addClass('full disabled');
-                  $(this).next('.zoom_minus').addClass('full').removeClass('disabled');
+            ///    }
+            ///      $(this).addClass('full disabled');
+            ///      $(this).next('.zoom_minus').addClass('full').removeClass('disabled');
                   //console.log('WidthScale:'+ imgScaleWidth + '|| WidthOriginal:' + imgWidth );
          
                   
 
 
-          });
+          });   
 
 
          $('#lightbox').find('.loader').remove();

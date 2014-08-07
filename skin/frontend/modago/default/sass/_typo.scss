@@ -480,7 +480,74 @@ form {
 		margin:0 0 0 4%;
 		}
 	}
+	.has-feedback {
+		i {
+			position:absolute;
+			color:#ec695d;
+			position:absolute;
+			top:0!important;
+			right:-11px!important;
+			top:16px;
+			&.form-ico-checked {
+					position:absolute;
+					background:$formIcoMap;
+					@include sprite($formIcoMap, form-ico-checked);	
+					@include sprite-dimensions($formIcoMap, form-ico-checked);
+					top:8px!important;
+					right:-27px!important;
+				}
+			&.form-ico-times {
+					position:absolute;
+					background:$formIcoMap;
+					@include sprite($formIcoMap, form-ico-times);	
+					@include sprite-dimensions($formIcoMap,form-ico-times);
+					top:8px!important;
+					right:-24px!important;
+				}
+			}
+	}
+	.has-success {
+		i.fa {
+			right:-5%;
+			color:#2ecc71;
+		}
+	}
+	.has-warning {
+		i.fa {
+			position:absolute;
+			
+			right:-5%;
+			color:#6fffcf;
+		}
 
+	}
+	.has-error {
+		margin-bottom:5px;
+		label.error,
+		span.error {
+			color:#e84c3d;
+			font-size: 12px;
+			font-weight: normal;
+			line-height: 1.0!important;
+			padding:10px 0 0px 15px!important;
+			clear:both;
+			display:block;
+			text-align: left!important;
+
+		}
+		&.form-checkbox {
+			label.error,
+			span.error {
+				padding:0 0 0 0;
+			}
+		}
+		
+		[type="text"],
+		[type="email"],
+		[type="password"] {
+			border-color : #ec695d;
+		}
+	}
 	.form-group {
 		position:relative;
 		margin-bottom: 15px;
@@ -533,7 +600,11 @@ form {
 		}
 		input[type=checkbox].css-checkbox,
 		input[type=radio].css-radio {
-				display:none;
+				//display:none;
+				visibility:hidden;
+				position:absolute;
+				top:-200px;
+				left:-200px
 			}
 
 			input[type=checkbox].css-checkbox + label.css-label,
@@ -591,70 +662,7 @@ form {
 			}
 			
 		
-		&.has-feedback {
-			i {
-				position:absolute;
-				color:#ec695d;
-				position:absolute;
-				top:0!important;
-				right:-11px!important;
-				top:16px;
-				&.form-ico-checked {
-						position:absolute;
-						background:$formIcoMap;
-						@include sprite($formIcoMap, form-ico-checked);	
-						@include sprite-dimensions($formIcoMap, form-ico-checked);
-						top:16px!important;
-						right:-27px!important;
-					}
-				&.form-ico-times {
-						position:absolute;
-						background:$formIcoMap;
-						@include sprite($formIcoMap, form-ico-times);	
-						@include sprite-dimensions($formIcoMap,form-ico-times);
-						top:16px!important;
-						right:-24px!important;
-					}
-				}
-		}
-		&.has-success {
-			i.fa {
-				right:-5%;
-				color:#2ecc71;
-			}
-		}
-		&.has-warning {
-			i.fa {
-				position:absolute;
-				
-				right:-5%;
-				color:#6fffcf;
-			}
-
-		}
-		&.has-error {
-			margin-bottom:5px;
-			label.error {
-				color:#e84c3d;
-				font-size: 12px;
-				font-weight: normal;
-				padding:10px 0 5px 15px;
-				clear:both;
-				display:block;
-
-			}
-			&.form-checkbox {
-				label.error {
-					padding:0 0 0 0;
-				}
-			}
-			
-			[type="text"],
-			[type="email"],
-			[type="password"] {
-				border-color : #ec695d;
-			}
-		}
+		
 		.action {
 			padding:10px;
 		}
@@ -1545,6 +1553,7 @@ figure {
 		@include border-radius(3px);
 		&:hover,
 		&.hover {
+
 			background: #1e1e1e;
 			border-color:#2e2e2e;
 			color:#fff;
@@ -1552,9 +1561,11 @@ figure {
 		}
 		&:active,
 		&.active {
+			@media(min-width:1024px){
 			background: #fff;
 			border-color:#c9ac6d;
 			color:#c9ac6d;
+			}
 		}
 	}
 }
@@ -1797,5 +1808,14 @@ figure {
 			width:100%;
 			height:auto;
 		}
+	}
+}
+
+.form-checkbox,
+.form-radio {
+	.error {
+		//position: absolute;
+		//top: 30px;
+		//left: 15px;
 	}
 }
