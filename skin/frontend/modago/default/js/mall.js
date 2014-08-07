@@ -131,6 +131,7 @@ var Mall = {
         // set products count badge
         Mall.setProductsCountBadge(data.content.cart.all_products_count);
         var dropdownBasket = jQuery("#dropdown-basket");
+        data.content.cart.total_amount = number_format(data.content.cart.total_amount, 2, ",", " ");
         dropdownBasket.html(Mall.replace(dropdownBasket.html(), data.content.cart));
 
         // build product list
@@ -147,6 +148,7 @@ var Mall = {
                     products[key].attr_label = products[key].options[0].label;
                     products[key].attr_value = products[key].options[0].value;
                     products[key].currency_symbol = Mall._data.cart.currency_symbol;
+                    products[key].unit_price = number_format(products[key].unit_price, 2, ",", " ");
                     jQuery("#product-list").append(Mall.replace(Mall._product_template, products[key]));
                 }
             });
