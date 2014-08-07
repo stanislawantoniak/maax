@@ -38,6 +38,40 @@ switch($_reviewsCount) {
         $_reviewsLabel = $this->__('Zero reviews');
         break;
 }
+
+// avarage rating
+$reviews = Mage::getModel('review/review')->getResourceCollection()->addStoreFilter(Mage::app()->getStore()->getId())
+    ->addEntityFilter('product', $this->getProduct()->getId())
+    ->addStatusFilter(Mage_Review_Model_Review::STATUS_APPROVED)
+    ->setDateOrder()
+    ->addRateVotes();
+
+$avg = 0;
+$ratings = array();
+$v = array();
+$p = array_fill(1, 5, 0);
+$voteCount = 0;
+/** @var $vote Mage_Rating_Model_Rating_Option_Vote */
+foreach ($reviews as $review) {
+    foreach ($review->getRatingVotes() as $vote) {
+        $voteCount++;
+        $ratings[] = $vote->getPercent();
+        if(array_key_exists($vote->getRatingCode(), $v)) {
+            $v[$vote->getRatingCode()] += $vote->getPercent();
+        } else  {
+            $v[$vote->getRatingCode()] = $vote->getPercent();
+        }
+
+        if(array_key_exists($vote->getPercent()/10/2, $p)) {
+            $p[$vote->getPercent()/10/2]++;
+        } else {
+            $p[$vote->getPercent()/10/2] = 1;
+        }
+    }
+
+}
+krsort($p);
+$avg = count($ratings) > 0 ? ceil(array_sum($ratings)/count($ratings)/10/2) : 0;
 ?>
 
 <?php $_helper = $this->helper('catalog/output'); ?>
@@ -172,7 +206,7 @@ switch($_reviewsCount) {
                 <h3>
                     <a href="#note_product" class="scrollTo"><?php echo $this->__("Product reviews"); ?> <i class="bullet-strzalka-down"></i>
 				<span id="average_note_client">
-					<span class="note" data-number="5" data-score="2"></span>
+					<span class="note" data-number="5" data-score="<?php echo $avg; ?>"></span>
 					<span>(<?php echo $_reviewsCount; ?> <?php echo $_reviewsLabel; ?>)</span>
 				</span>
                     </a>
