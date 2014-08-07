@@ -23,22 +23,6 @@
                 <type>skin_css</type>
                 <name>dojo/dgrid/css/skins/tundra.css</name>
             </action>
-<!--			<action method="addItem"><type>skin_js</type><name>dojo/dgrid/demos/multiview/multiview.js</name></action>
-			<action method="addItem"><type>skin_js</type><name>dojo/dgrid/OnDemandGrid.js</name></action>
-			<action method="addItem"><type>skin_js</type><name>dojo/dgrid/Selection.js</name></action>
-			<action method="addItem"><type>skin_js</type><name>dojo/dgrid/Keyboard.js</name></action>
-			<action method="addItem"><type>skin_js</type><name>dojo/dojo/store/Memory.js</name></action>
-			<action method="addItem"><type>skin_js</type><name>dojo/put-selector/put.js</name></action>
-			<action method="addItem"><type>skin_js</type><name>dojo/dgrid/Grid.js</name></action>
-			<action method="addItem"><type>skin_js</type><name>dojo/dgrid/OnDemandList.js</name></action>
-			<action method="addItem"><type>skin_js</type><name>dojo/dgrid/List.js</name></action>
-			<action method="addItem"><type>skin_js</type><name>dojo/dojo/store/util/QueryResults.js</name></action>
-			<action method="addItem"><type>skin_js</type><name>dojo/dojo/store/util/SimpleQueryEngine.js</name></action>
-			<action method="addItem"><type>skin_js</type><name>dojo/xstyle/has-class.js</name></action>
-			<action method="addItem"><type>skin_js</type><name>dojo/xstyle/css.js</name></action>
-			<action method="addItem"><type>skin_js</type><name>dojo/dgrid/_StoreMixin.js</name></action>
-			<action method="addItem"><type>skin_js</type><name>dojo/xstyle/xstyle.js</name></action>-->
-            
 		</reference>
 	</dgrid>
 
@@ -59,6 +43,12 @@
 			<block name="price" type="zolagocatalog/vendor_price" template="zolagocatalog/price.phtml"/>
 		</reference>
 	</udprod_vendor_price_index>
+	
+	<udprod_vendor_price_pricemodal>
+		<block type="core/text_list" name="root" output="toHtml">
+            <block type="zolagocatalog/vendor_price_modal" template="zolagocatalog/price/modal.phtml"/>
+        </block>
+	</udprod_vendor_price_pricemodal>
 	
 	<udprod_vendor_mass_index>
 		<update handle="udropship_vendor" />

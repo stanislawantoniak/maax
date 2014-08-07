@@ -1,5 +1,6 @@
 <?php $_helper = Mage::helper("zolagocampaign");?>
 <div class="container">
+    <!--=== Page Header ===-->
 	<div class="page-heading row">
 		<div class="col-lg-6">
 			<h3><?php echo $_helper->__("Campaigns");?></h3>
@@ -13,3 +14,18 @@
 		</div>
 	</div>
 </div>
+<div class="container z-grid">
+    <div class="widget box">
+        <div class="widget-content">
+            <?php echo $this->getGridHtml(); ?>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    (function(){
+        var gridObj = <?php echo $this->getGridJsObjectName();?>;
+        // create integrator
+        new Zolago.gridIntegrator(gridObj);
+    })();;
+</script>

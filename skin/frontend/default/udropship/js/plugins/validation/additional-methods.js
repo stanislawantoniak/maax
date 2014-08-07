@@ -61,6 +61,72 @@ jQuery.validator.addMethod("integer", function(value, element) {
 	return this.optional(element) || /^-?\d+$/.test(value);
 }, "A positive or negative non-decimal number please");
 
+jQuery.validator.addMethod('dateBefore', function(value, element, params) {
+    // if end date is valid, validate it as well
+    var end = jQuery(params);
+    if (!end.data('validation.running')) {
+        jQuery(element).data('validation.running', true);
+        this.element(end);
+        jQuery(element).data('validation.running', false);
+    }
+    //format if dd-mm-yy to mm-dd-yy
+    var fValue = value.replace(/([\s:\-]+)/g, '/');
+
+
+    var time = fValue.split("/");
+
+    var date = [time[1],time[0],time[2]].join("/");
+    var time = [time[3],time[4]].join(":");
+    value = date + " " + time;
+
+    var endDate = end.val();
+    var fValue = endDate.replace(/([\s:\-]+)/g, '/');
+
+
+    var time = fValue.split("/");
+
+    var date = [time[1],time[0],time[2]].join("/");
+    var time = [time[3],time[4]].join(":");
+    endDate = date + " " + time;
+    //format if dd-mm-yy to mm-dd-yy
+
+
+    return this.optional(element) || this.optional(end[0]) || new Date(value) < new Date(endDate);
+
+}, 'Must be before corresponding end date');
+
+jQuery.validator.addMethod('dateAfter', function(value, element, params) {
+    // if start date is valid, validate it as well
+    var start = jQuery(params);
+    if (!start.data('validation.running')) {
+        jQuery(element).data('validation.running', true);
+        this.element(start);
+        jQuery(element).data('validation.running', false);
+    }
+    //format if dd-mm-yy to mm-dd-yy
+    var fValue = value.replace(/([\s:\-]+)/g, '/');
+
+
+    var time = fValue.split("/");
+
+    var date = [time[1],time[0],time[2]].join("/");
+    var time = [time[3],time[4]].join(":");
+    value = date + " " + time;
+
+    var startDate = jQuery(params).val();
+    var fValue = startDate.replace(/([\s:\-]+)/g, '/');
+
+
+    var time = fValue.split("/");
+
+    var date = [time[1],time[0],time[2]].join("/");
+    var time = [time[3],time[4]].join(":");
+    startDate = date + " " + time;
+    //format if dd-mm-yy to mm-dd-yy
+
+    return this.optional(element) || this.optional(start[0]) || new Date(value) > new Date(startDate);
+
+}, 'Must be after corresponding start date');
 /**
  * Return true, if the value is a valid vehicle identification number (VIN).
  *
