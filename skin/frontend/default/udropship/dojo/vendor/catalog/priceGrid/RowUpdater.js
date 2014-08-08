@@ -137,6 +137,9 @@ define([
 			// Make rendering
 			var divLeft=jQuery("<div>").addClass("p50 pull-left left");
 			var divRight=jQuery("<div>").addClass("p50 pull-left right");
+			var buttons = [
+				{"label": "Change prices"}
+			];
 			
 			switch(data.type_id){
 				case "configurable":
@@ -197,7 +200,10 @@ define([
 				tbody.append(
 					jQuery("<tr>").addClass("header-row").
 						append(jQuery("<td>").attr("colspan", 8).
-							addClass("align-center").text("Campaign")
+							addClass("align-center").
+							append(jQuery("<span>").text(campaign.type)).
+							append(jQuery("<span>").text(": ")).
+							append(jQuery("<a>").text(campaign.name))
 					)
 				);
 		
@@ -225,9 +231,18 @@ define([
 						append(jQuery("<td>").text(misc.currency(campaign.price)))
 				)
 		
+				buttons.unshift({"label": "Remove from campaign"});
+		
 				divRight.append(table);
 		
 			}
+			
+			var buttonsDiv = jQuery("<div>").addClass("sub-row-actions")
+			jQuery.each(buttons, function(){
+				buttonsDiv.append(jQuery("<a>").text(this.label))
+			});
+			
+			divRight.append(buttonsDiv);
 			
 			jQuery(".expando", node).
 					html('').
