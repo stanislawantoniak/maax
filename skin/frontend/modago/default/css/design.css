@@ -2841,7 +2841,7 @@ section.section h2.title_section i {
 /* line 3, ../sass/dimensions/_mainpage.scss */
 .small-banners .row {
   margin: 0 -20px; }
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   /* line 6, ../sass/dimensions/_mainpage.scss */
   .small-banners .row div:nth-child(3) {
     clear: both; } }
