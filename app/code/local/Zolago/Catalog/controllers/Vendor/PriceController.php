@@ -141,6 +141,19 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Catalog_Controller_Ve
 	 */
 	protected function _getSqlCondition($key, $value) {
 		if(is_array($value)){
+			
+			if(isset($value['to']) && is_numeric($value['to'])){
+				$value['to'] = (float)$value['to'];
+			}
+			if(isset($value['from']) && is_numeric($value['from'])){
+				$value['from'] = (float)$value['from'];
+			}
+			
+			if(isset($value['to']) && is_numeric($value['to']) && 
+					(!isset($value['from']) || (isset($value['from']) && $value['from']==0))){
+				$value = array($value, array("null"=>true));
+			}
+			
 			return $value;
 		}
 		switch ($key) {
