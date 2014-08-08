@@ -45,7 +45,7 @@ $fieldSetName = $this->getFieldSetName();
                 </td>
                 <td>
                     <span><?php echo Mage::helper('zolagobanner')->__('Can Be Empty')?></span>
-                    <input alt="is_required" value="1" name="<?php echo $this->getFieldName()?>[is_required]" style="width:50px" type="checkbox" />
+                    <input alt="is_required" value="1" name="<?php echo $this->getFieldName()?>[is_picture_url_required]" style="width:50px" type="checkbox" />
                 </td>
             <?php elseif ($fieldSetName == 'caption_def'): ?>
                 <td>
@@ -56,7 +56,7 @@ $fieldSetName = $this->getFieldSetName();
                 </td>
                 <td>
                     <span><?php echo Mage::helper('zolagobanner')->__('Can Be Empty')?></span>
-                    <input alt="is_required" value="1" name="<?php echo $this->getFieldName()?>[is_required]" style="width:50px" type="checkbox" />
+                    <input alt="is_required" value="1" name="<?php echo $this->getFieldName()?>[is_caption_url_required]" style="width:50px" type="checkbox" />
                 </td>
             <?php endif; ?>
 
