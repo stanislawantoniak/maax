@@ -342,4 +342,16 @@ function number_format(number, decimals, dec_point, thousands_sep) {
 
 jQuery(document).ready(function() {
     Mall.dispatch();
+    Mall.i18nValidation.apply();
 });
+
+Mall.i18nValidation = {
+    _translate_messages: {},
+    add: function(key, translation) {
+        this._translate_messages[key] = translation;
+    },
+
+    apply: function() {
+        jQuery.extend(jQuery.validator.messages, this._translate_messages);
+    }
+};

@@ -3,7 +3,7 @@ $vendors = $this->getVendors();
 $visibility = Mage::getSingleton('udqa/source')->setPath('visibility')->toOptionHash();
 $session = Mage::getSingleton('customer/session');
 /* @var $session Mage_Customer_Model_Session */
-?>mobile
+?>
 <?php if($this->getProduct()->getUdropshipVendor()):?>
 <form action="<?php echo $this->getFormAction(); ?>" id="question-form-mobile" method="post">
     <input type="hidden" name="question[product_id]" value="<?php echo $this->getProduct()->getId()?>" />
