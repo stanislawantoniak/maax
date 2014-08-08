@@ -355,3 +355,33 @@ Mall.i18nValidation = {
         jQuery.extend(jQuery.validator.messages, this._translate_messages);
     }
 };
+
+// function that extends rwdCarousel
+Mall.rwdCarousel = {
+    findTallestItem: function(obj) {
+        var height = 0;
+        jQuery.each(obj.rwd.rwdItems, function() {
+            if(this.clientHeight > height) {
+                height = this.clientHeight;
+            }
+        })
+
+        return height;
+    },
+
+    alignComplementaryProductsPrices: function(obj) {
+        var tallestItem = this.findTallestItem(obj);
+        var h = 0;
+        var diff = 0;
+        jQuery.each(obj.rwd.rwdItems, function() {
+
+            if((h = this.clientHeight) < tallestItem) {
+                diff = tallestItem - h;
+                if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1) {
+                    diff /= 2;
+                }
+                jQuery(this).find(".price").css("top", diff);
+            }
+        });
+    }
+};
