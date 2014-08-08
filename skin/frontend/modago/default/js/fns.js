@@ -69,7 +69,6 @@ jQuery.noConflict();
       highlight: function(element, errorClass, validClass) {
                   var we = $(element).innerWidth()+25;
                   var el = $(element).attr('type');
-                  console.log(el);
                   $(element).closest("div").addClass('has-error has-feedback').removeClass('has-success');
                   $(element).closest("div").find('.form-ico-times').remove();
                   
