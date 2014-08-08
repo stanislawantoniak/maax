@@ -4,6 +4,7 @@ class Zolago_Banner_Model_Banner_Status {
 	const TYPE_ACTIVE   = 1;
 	const TYPE_ARCHIVE  = -1;
 	const TYPE_INACTIVE = 0;
+ 	
 	
 	/**
 	 * @return array
