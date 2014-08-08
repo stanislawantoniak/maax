@@ -20,6 +20,7 @@ jQuery.noConflict();
   });
 
   //var emptyValue = $(".review-summary-table.ratings").find('input[value='']').length
+  console.log(valueH)
   });
     $(".review-summary-table").on('click', 'img', function(){
         $(".review-summary-table").find('input[type="hidden"]').each(function(){
