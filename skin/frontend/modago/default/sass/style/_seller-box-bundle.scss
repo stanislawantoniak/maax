@@ -32,7 +32,9 @@
 		@media (max-width: $screen-xs-max) {
 			position:absolute;
 			right:35px;
-			top:16px;
+            top: 50%;
+            transform: translateY(-50%);
+//			top:16px;
 		}
 	}
 	.seller {
