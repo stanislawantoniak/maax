@@ -8,6 +8,8 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 	protected $_attributeLabelCache = array();
 	protected $_optionLabelCache = array();
 	
+	protected $_campaignAttribute;
+	
 	protected function _construct() {
 		$this->_init("catalog/product", null);
 	}
@@ -21,6 +23,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 		
 		$out = array();
 		
+		
 		$adapter = $this->getReadConnection();
 		$baseSelect = $adapter->select();
 		
@@ -33,18 +36,33 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 			));
 		}
 		
+		// Child data
 		foreach($this->_getChilds($ids, $storeId) as $child){
 			if(!isset($out[$child['parent_id']]['children'][$child['attribute_id']])){
 				$out[$child['parent_id']]['children'][$child['attribute_id']] = array(
 					"children"		=> array(),
-					"label"			=> $this->getAttributeLabel($child['attribute_id'], $storeId),
+					"label"			=> $this->_getAttributeLabel($child['attribute_id'], $storeId),
 					"attribute_id"	=> $child['attribute_id']
 				);
 			}
 			
-			$child['option_text'] = $this->getAttributeOption($child['value'], $child['attribute_id'], $storeId);
+			$child['option_text'] = $this->_getAttributeOption($child['value'], $child['attribute_id'], $storeId);
 			
 			$out[$child['parent_id']]['children'][$child['attribute_id']]['children'][]=$child;
+		}
+		
+		// Camapign data
+		
+		$statuses = Mage::getSingleton("zolagocampaign/campaign_status")->toOptionHash();
+		
+		foreach($this->_getCampaign($ids, $storeId) as $campaign){
+			$campaign['price_source_id_text'] = $this->_getAttributeOption(
+					$campaign['price_source_id'], 
+					Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER_PRICE_TYPE_CODE,
+					$storeId
+			);
+			$campaign['status_text'] = isset($statuses[$campaign['status']]) ? $statuses[$campaign['status']] : "";
+			$out[$campaign['entity_id']]['campaign'] = $campaign;
 		}
 		
 		foreach ($out as &$item){
@@ -56,11 +74,70 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 	}
 	
 	/**
+	 * @param array $ids
+	 * @param type $storeId
+	 * @return array
+	 */
+	protected function _getCampaign(array $ids, $storeId) {
+		$websiteId = Mage::app()->getStore($storeId)->getWebsiteId();
+		$collection = Mage::getResourceModel('catalog/product_collection');
+		/* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
+		
+		$collection->addAttributeToSelect(array(
+			"price", 
+			"special_price", 
+			"campaign_regular_id",
+			"price_margin",
+			"msrp"
+		), 'left');
+		
+		$select = $collection->getSelect();
+		
+		$joinConds = array(
+			"camapign.campaign_id=at_campaign_regular_id.value"
+		);
+		
+		$select->join(
+				array("camapign"=>$this->getTable("zolagocampaign/campaign")),
+				implode(" AND ", $joinConds)
+		);
+		
+		$joinConds = array(
+			"camapign_website.campaign_id=camapign.campaign_id",
+			$this->getReadConnection()->quoteInto("camapign_website.website_id=?", $websiteId)
+		);
+		
+		$select->join(
+				array("camapign_website"=>$this->getTable("zolagocampaign/campaign_website")),
+				implode(" AND ", $joinConds)
+		);
+		
+		$select->where("e.entity_id IN (?)", $ids);
+		
+		
+		return $this->getReadConnection()->fetchAll($select);
+	}
+	
+	/**
+	 * @return Mage_Catalog_Model_Resource_Eav_Attribute
+	 */
+	protected function _getCampaignAttribute() {
+		if(!$this->_campaignAttribute){
+			$attribute = Mage::getSingleton('eav/config')->getAttribute(
+				Mage_Catalog_Model_Product::ENTITY, 
+				"campaign_regular_id"
+			);
+			$this->_campaignAttribute = $attribute;
+		}
+		return $this->_campaignAttribute;
+	}
+	
+	/**
 	 * @param int $attributeId
 	 * @param int $storeId
 	 * @return string
 	 */
-	protected function getAttributeLabel($attributeId, $storeId) {
+	protected function _getAttributeLabel($attributeId, $storeId) {
 		if(!isset($this->_attributeLabelCache[$storeId][$attributeId])){
 			$attribute = Mage::getSingleton('eav/config')->
 				getAttribute(Mage_Catalog_Model_Product::ENTITY, $attributeId);
@@ -75,7 +152,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 	 * @param int $storeId
 	 * @return string
 	 */
-	protected function getAttributeOption($optionId, $attributeId, $storeId) {
+	protected function _getAttributeOption($optionId, $attributeId, $storeId) {
 		if(!isset($this->_optionLabelCache[$storeId][$attributeId][$optionId])){
 			$attribute = Mage::getSingleton('eav/config')->
 				getAttribute(Mage_Catalog_Model_Product::ENTITY, $attributeId)->

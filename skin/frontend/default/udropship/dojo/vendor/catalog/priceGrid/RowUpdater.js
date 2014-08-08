@@ -3,8 +3,9 @@ define([
 	"dojo/_base/lang",
 	"put-selector/put",
 	"dojo/query",
-	"dojo/request"
-], function(declare, lang, put, query, request){
+	"dojo/request",
+	"vendor/misc"
+], function(declare, lang, put, query, request, misc){
 	
 	var RowUpdater = declare(null, {
 		
@@ -129,22 +130,110 @@ define([
 			this._cache[item.entity_id] = item;
 		},
 		_loading: function(node){
-			query(".expando", node)[0].innerHTML = 'loading...';
+			jQuery(".expando", node).html(jQuery("<div>").addClass("sub-row-loading").text("loading..."))
 		},
 		
 		_renderSubRow: function(node, data){
 			// Make rendering
-			var html = "loaded, id: " + data.entity_id +  ", var:" + data.var;
+			var divLeft=jQuery("<div>").addClass("p50 pull-left left");
+			var divRight=jQuery("<div>").addClass("p50 pull-left right");
 			
 			switch(data.type_id){
 				case "configurable":
-					html = "Configurable product - " + html;
+					if(data.children){
+						var table = jQuery("<table><tbody></tbody></table>").
+								addClass("table table-condensed table-subrow"),
+							tbody = table.find('tbody');
+							
+						tbody.append(
+							jQuery("<tr>").addClass("header-row").
+								append(jQuery("<td>").attr("colspan", 6).
+									addClass("align-center").text("Child products")
+							)
+						);	
+							
+						data.children.forEach(function(item){
+							tbody.append(
+								jQuery("<tr>").addClass("header-row").
+									append(jQuery("<td>").addClass("sub-checkbox")).
+									append(jQuery("<td>").text(item.label)).
+									append(jQuery("<td>").text("Price Variation")).
+									append(jQuery("<td>").text("Availability")).
+									append(jQuery("<td>").text("Stock")).
+									append(jQuery("<td>").text("POS Stock"))
+							)
+					
+							item.children.forEach(function(child){
+								tbody.append(
+									jQuery("<tr>").
+										append(jQuery("<td>").addClass("sub-checkbox").append("<input type=\"checkbox\"/>")).
+										append(jQuery("<td>").text(child.option_text)).
+										append(jQuery("<td>").text(child.price)).
+										append(jQuery("<td>").text(child.is_in_stock ? "Yes" : "No")).
+										append(jQuery("<td>").text(parseInt(child.qty))).
+										append(jQuery("<td>").append(jQuery("<a>").text("View")))
+								)
+							})
+						});
+						divLeft.append(table);
+					}
 				break;
 				case "simple":
+					divLeft.append(
+						jQuery("<a>").
+							addClass("sub-row-pos").
+							text("View POS Stock")
+					);
 				break;
 			}
 			
-			query(".expando", node)[0].innerHTML = html;
+			
+			if(data.campaign){
+				var table = jQuery("<table><tbody></tbody></table>").
+						addClass("table table-condensed table-subrow"),
+					tbody = table.find('tbody'),
+					campaign = data.campaign;
+			
+				tbody.append(
+					jQuery("<tr>").addClass("header-row").
+						append(jQuery("<td>").attr("colspan", 8).
+							addClass("align-center").text("Campaign")
+					)
+				);
+		
+				tbody.append(
+					jQuery("<tr>").addClass("header-row").
+						append(jQuery("<td>").text("State")).
+						append(jQuery("<td>").text("Date from")).
+						append(jQuery("<td>").text("Date to")).
+						append(jQuery("<td>").text("Price source")).
+						append(jQuery("<td>").text("Margin")).
+						append(jQuery("<td>").text("Camapign price")).
+						append(jQuery("<td>").text("Msrp")).
+						append(jQuery("<td>").text("Regular price"))
+				)
+		
+				tbody.append(
+					jQuery("<tr>").
+						append(jQuery("<td>").text(campaign.status_text)).
+						append(jQuery("<td>").text(campaign.date_from)).
+						append(jQuery("<td>").text(campaign.date_to)).
+						append(jQuery("<td>").text(campaign.price_source_id)).
+						append(jQuery("<td>").text(misc.percent(campaign.price_margin))).
+						append(jQuery("<td>").text(misc.currency(campaign.special_price))).
+						append(jQuery("<td>").text(misc.currency(campaign.msrp))).
+						append(jQuery("<td>").text(misc.currency(campaign.price)))
+				)
+		
+				divRight.append(table);
+		
+			}
+			
+			jQuery(".expando", node).
+					html('').
+					append(divLeft).
+					append(divRight).
+					append(jQuery("<div>").addClass("clearfix"))
 		},
 		
 		_process: function(){
