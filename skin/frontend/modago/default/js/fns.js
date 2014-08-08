@@ -2900,7 +2900,7 @@ var rwd_banners = $("#rwd-banners .rwd-carousel");
               rwd_complementary_product.next('.customNavigation').find('.next').css({top:imgHeight+'px'});
               rwd_complementary_product.find('.rwd-controls').find('.rwd-prev').css({top:imgHeightplus+'px'});
               rwd_complementary_product.find('.rwd-controls').find('.rwd-next').css({top:imgHeightplus+'px'});
-
+               Mall.rwdCarousel.alignComplementaryProductsPrices(this);
            },
            afterInit:function(){
            imagesLoaded( document.querySelector('#rwd-complementary-product'), function( instance ) {
