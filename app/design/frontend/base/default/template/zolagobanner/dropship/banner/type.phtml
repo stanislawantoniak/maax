@@ -2,30 +2,43 @@
 <?php $_helper = Mage::helper("zolagobanner");?>
 <?php $_model = $this->getModel();?>
 <div class="container">
-    <div class="page-heading row">
-        <div class="col-lg-6">
+    <div class="page-header">
+        <div class="page-title">
             <h3>
-                <?php echo Mage::helper("zolagobanner")->__("New Banner: Select Banner Type"); ?>
+                <?php echo Mage::helper("zolagobanner")->__("New Banner"); ?>
             </h3>
         </div>
-
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="widget box">
+                <div class="widget-header">
+                    <!--                   Banner Type-->
+                    <h4><i class="icon-filter"></i>Banner Type</h4>
+                    <div class="toolbar no-padding">
+                        <div class="btn-group"><span class="btn btn-xs widget-collapse"><i class="icon-angle-down"></i></span></div>
+                    </div>
+                </div>
+                <div class="widget-content fiters">
+                    <select name="banner_type" class="form-control">
+                        <?php foreach($this->getTypes() as $type => $label): ?>
+                            <option value="<?php echo $type; ?>"><?php echo $label; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <script type="text/javascript">
+                        jQuery(function ($) {
+                            $("select[name=banner_type]").change(function () {
+                                var type = $(this).val();
+                                var setTypePath = '<?php echo $_helper->setBannerTypeUrl(); ?>';
+                                window.location = setTypePath + "type/" + type;
+                            })
+                        });
+                    </script>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="col-lg-4">
-    <select name="banner_type" class="form-control">
-        <?php foreach($this->getTypes() as $type => $label): ?>
-            <option value="<?php echo $type; ?>"><?php echo $label; ?></option>
-        <?php endforeach; ?>
-    </select>
-</div>
 
-<script type="text/javascript">
-    jQuery(function ($) {
-        $("select[name=banner_type]").change(function () {
-            var type = $(this).val();
-            var setTypePath = '<?php echo $_helper->setBannerTypeUrl(); ?>';
-            window.location = setTypePath + "type/" + type;
-        })
-    });
-</script>
+

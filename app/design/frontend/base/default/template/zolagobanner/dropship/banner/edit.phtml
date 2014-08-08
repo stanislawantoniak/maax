@@ -51,67 +51,6 @@
 
         changeDependingSelector('slider_type');
 
-        $("#add_slider").click(function(){
-            var sliderNumber = $("[data-type=slider]").size();
-
-            var template = '<div data-type=slider data-slidernumber='+sliderNumber+'>' +
-                '<div class="form-group">' +
-                '<a id="remove_slider" href="" style="position: relative;top: 10px;left: 60px;"><span class="glyphicon glyphicon-remove-circle"></span></a>' +
-                '<a href="" id="add_slider_link"  style="float: right;position: absolute;right: 100px;"><span class="glyphicon glyphicon-plus"></span></a>' +
-                '<div class="row"><label class="col-md-2 control-label"><label for="slider_image">Slider Image</label>' +
-                '</label>' +
-                '<div class="col-md-9"><input type="file" class="input-file" value="" name="slider['+sliderNumber+'][image]"></div></div>' +
-
-                '<div data-type="url-container">' +
-                '<div data-type="url-container-item">' +
-                '<div class="row" ><label class="col-md-2 control-label"><label for="slider_link_url">Slider Link Url </label>' +
-                '</label>' +
-                '<div class="col-md-9"><input type="text" class="form-control input-text required-entry" value="" name="slider['+sliderNumber+'][0][ulr]">' +
-                '</div></div>' +
-
-                '<div class="row"><label class="col-md-2 control-label"><label for="slider_link_text">Slider Link Text </label>' +
-                '</label>' +
-                '<div class="col-md-9"><input type="text" class="form-control input-text required-entry" value="" name="slider['+sliderNumber+'][0][text]">' +
-                '</div></div>' +
-
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</div>';
-
-
-            $(this).parents('.form-group').after(template);
-            return false;
-        })
-        $(document.body).on('click', '#remove_slider', function(e){
-            e.preventDefault();
-            $(this).parents('[data-type=slider]').remove();
-
-        })
-        $(document.body).on('click', '#add_slider_link', function(e){
-            e.preventDefault();
-            var sliderNumber = $(this).parents("[data-type=slider]").data('slidernumber');
-            var linksNumber = $(this).parents('[data-type=slider]').find('[data-type="url-container-item"]').size();
-            console.log(sliderNumber);
-            var template =
-                '<div data-type="url-container-item">' +
-                    '<a id="remove_slider_link" href="" style="float: right;position: relative;right: 100px;top: 25px;"><span class="glyphicon glyphicon-remove-circle"></span></a>' +
-                '<div class="row"><label class="col-md-2 control-label"><label for="slider_link_url">Slider Link Url </label>' +
-                '</label>' +
-                '<div class="col-md-9"><input type="text" class="form-control input-text required-entry" value="" name="slider['+sliderNumber+']['+linksNumber+'][ulr]" >' +
-                '</div></div>' +
-                '<div class="row"><label class="col-md-2 control-label"><label for="slider_link_text">Slider Link Text </label>' +
-                '</label>' +
-                '<div class="col-md-9"><input type="text" class="form-control input-text required-entry" value="" name="slider['+sliderNumber+']['+linksNumber+'][text]" >' +
-                '</div>' +
-                    '</div>' +
-                    '</div>';
-                $(this).parents('[data-type=slider]').find('[data-type="url-container"]').append(template);
-        })
-        $(document.body).on('click', '#remove_slider_link', function(e){
-            e.preventDefault();
-            $(this).parents('[data-type=url-container-item]').remove();
-        })
 
     });
 

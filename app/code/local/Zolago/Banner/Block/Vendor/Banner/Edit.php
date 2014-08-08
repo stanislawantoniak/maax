@@ -7,8 +7,9 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
     {
         parent::_construct();
     }
-    public function _prepareLayout() {
 
+    public function _prepareLayout()
+    {
         $this->_prepareGrid();
         $this->_prepareForm();
         parent::_prepareLayout();
@@ -93,32 +94,38 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
                     'class' => 'hidden',
                     'attr_data' => array((object)array('name' => 'type', 'value' => 'image'), (object)array('name' => 'name', 'value' => 'slider_type'))
                 ));
-                $sliderTypeImage->addField("add_slider", "link", array(
-                    "name" => "add_slider",
-                    "label" => $helper->__("ADD"),
-                    "href" => "",
-                    'inside'  => '<span class="glyphicon glyphicon-plus"></span>',
+//                $sliderTypeImage->addField("add_slider", "link", array(
+//                    "name" => "add_slider",
+//                    "label" => $helper->__("ADD"),
+//                    "href" => "",
+//                    'inside'  => '<span class="glyphicon glyphicon-plus"></span>',
+//                ));
+                $sliderTypeImage->addField("slider_image_desktop", "image", array(
+                    "name" => "slider[0][image_desktop]",
+                    "class" => "form-control",
+                    "required" => false,
+                    "label" => $helper->__('Slider Image Desktop')
                 ));
-//                $sliderTypeImage->addField("slider_image", "image", array(
-//                    "name" => "slider_image",
-//                    "class" => "form-control",
-//                    "required" => false,
-//                    "label" => $helper->__('Slider Image')
-//                ));
-//                $sliderTypeImage->addField("slider_link_url", "text", array(
-//                    "name" => "slider_link_url",
-//                    "class" => "form-control",
-//                    "required" => true,
-//                    "label" => $helper->__('Slider Link Url')
-//                ));
-//
-//                $sliderTypeImage->addField("slider_link_text", "text", array(
-//                    "name" => "slider_link_text",
-//                    "class" => "form-control",
-//                    "required" => true,
-//                    'wrapper_class' => 'col-md-9',
-//                    "label" => $helper->__('Slider Link Text')
-//                ));
+                $sliderTypeImage->addField("slider_image_mobile", "image", array(
+                    "name" => "slider[0][image_mobile]",
+                    "class" => "form-control",
+                    "required" => false,
+                    "label" => $helper->__('Slider Image Mobile')
+                ));
+                $sliderTypeImage->addField("slider_link_url", "text", array(
+                    "name" => "slider[0][link_url][0]",
+                    "class" => "form-control",
+                    "required" => true,
+                    "label" => $helper->__('Caption Url')
+                ));
+
+                $sliderTypeImage->addField("slider_link_text", "text", array(
+                    "name" => "slider[0][link_text][0]",
+                    "class" => "form-control",
+                    "required" => true,
+                    'wrapper_class' => 'col-md-9',
+                    "label" => $helper->__('Caption Text')
+                ));
 
                 break;
             case Zolago_Banner_Model_Banner_Type::BANNER_TYPE_BOX:

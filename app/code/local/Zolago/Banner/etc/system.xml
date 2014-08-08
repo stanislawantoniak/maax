@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<config>
+    <sections>
+        <zolagobanner translate="label" module="zolagobanner">
+            <label>Content Box Configuration</label>
+            <tab>service</tab>
+            <frontend_type>text</frontend_type>
+            <sort_order>301</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>0</show_in_website>
+            <show_in_store>0</show_in_store>
+            <groups>
+                <config translate="label">
+                    <label>Banner types definition</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>1</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <zolagobannertypes translate="label">
+                            <label>Types</label>
+                            <frontend_type>select</frontend_type>
+                            <frontend_model>zolagobanner/adminhtml_systemConfigField_TypesConfig</frontend_model>
+                            <backend_model>zolagobanner/systemConfig_backend_TypesConfig</backend_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </zolagobannertypes>
+                    </fields>
+                </config>
+            </groups>
+        </zolagobanner>
+    </sections>
+</config>
