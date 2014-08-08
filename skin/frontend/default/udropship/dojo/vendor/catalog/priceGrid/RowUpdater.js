@@ -135,6 +135,7 @@ define([
 		_renderSubRow: function(node, data){
 			// Make rendering
 			var html = "loaded, id: " + data.entity_id +  ", var:" + data.var;
+			
 			switch(data.type_id){
 				case "configurable":
 					html = "Configurable product - " + html;
@@ -165,7 +166,7 @@ define([
 		},
 		_doXhr: function(ids){
 			var self = this;
-			request("/udprod/vendor_price/details", {
+			request("/udprod/vendor_price_detail/detail", {
 				query: {"ids[]": ids, "store": this.getStoreId()},
 				handleAs: "json"
 			}).then(function(result){
