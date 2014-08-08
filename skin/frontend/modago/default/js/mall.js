@@ -139,8 +139,8 @@ var Mall = {
         // build object for filling products template
         Mall._data = data.content;
         // clear products
-        jQuery("#product-list").html('');
-        if(data.content.cart.all_products_count == 0) {
+        jQuery("#product-list").html("");
+        if(products.length == 0) {
             jQuery("#product-list").html('<p style="text-align: center;margin-top:20px;">Brak produktów w koszyku.</p>');
         } else {
             jQuery.each(products, function(key) {
