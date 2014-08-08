@@ -104,7 +104,7 @@ $avg = count($ratings) > 0 ? ceil(array_sum($ratings)/count($ratings)/10/2) : 0;
                         <dl class="raty_note">
                             <dt><strong><?php echo $this->__("Avarage"); ?>:</strong><div id="average_rating" data-number="5" data-score="<?php echo $avg; ?>"></div></dt>
                             <?php foreach($v as $k => $_vote) : ?>
-                                <dd><strong><?php echo $k; ?></strong> <div id ="<?php echo $k; ?>_rating" data-number="5" data-score="<?php echo ceil($_vote/count($ratings)/10); ?>"></div></dd>
+                                <dd><strong><?php echo $k; ?></strong> <div id ="<?php echo $k; ?>_rating" data-number="5" data-score="<?php echo ceil($_vote/count($reviews)/2/10); ?>"></div></dd>
                             <?php endforeach; ?>
                         </dl>
                     </div>
@@ -131,7 +131,7 @@ $avg = count($ratings) > 0 ? ceil(array_sum($ratings)/count($ratings)/10/2) : 0;
                 <?php foreach($this->getReviewsCollection()->getItems() as $review) : ?>
                     <?php
                     $ratingModel = Mage::getSingleton('rating/rating')->getReviewSummary($review->getReviewId());
-                    $sum = ceil($ratingModel->getSum()/10/3/2);
+                    $sum = ceil($ratingModel->getSum()/$voteCount/10/2);
                     $recommend = $review->getRecommendProduct();
                     ?>
                     <div class="comment row">
