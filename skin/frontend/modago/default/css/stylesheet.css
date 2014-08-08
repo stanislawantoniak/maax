@@ -1756,7 +1756,7 @@ figure .figure-border {
   background-position: 0 -27px;
   height: 27px;
   width: 29px; }
-/* line 43, ../../../../../../../../../Ruby/lib/ruby/gems/1.9.1/gems/compass-0.12.5/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 43, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-0.12.6/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
 .select-group.medium .button-select .down:hover, .select-group.medium .button-select .down.select_styled_hover, .select-group.medium .button-select .down.select_styled-hover {
   background-position: 0 -54px; }
 /* line 1659, ../sass/_typo.scss */
@@ -3820,19 +3820,19 @@ span.checked {
   position: absolute;
   right: 0;
   top: 0; }
-/* line 43, ../../../../../../../../../Ruby/lib/ruby/gems/1.9.1/gems/compass-0.12.5/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 43, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-0.12.6/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
 .sbToggle:hover, .sbToggle.select_styled_hover, .sbToggle.select_styled-hover {
   background-position: 0 -54px; }
 /* line 62, ../sass/modules/_selected-styled.scss */
 .sbToggle:link {
   background-position: 0 -27px; }
-/* line 43, ../../../../../../../../../Ruby/lib/ruby/gems/1.9.1/gems/compass-0.12.5/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 43, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-0.12.6/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
 .sbToggle:link:hover, .sbToggle:link.select_styled_hover, .sbToggle:link.select_styled-hover {
   background-position: 0 -54px; }
 /* line 65, ../sass/modules/_selected-styled.scss */
 .sbToggle:visited {
   background-position: 0 -27px; }
-/* line 43, ../../../../../../../../../Ruby/lib/ruby/gems/1.9.1/gems/compass-0.12.5/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 43, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-0.12.6/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
 .sbToggle:visited:hover, .sbToggle:visited.select_styled_hover, .sbToggle:visited.select_styled-hover {
   background-position: 0 -54px; }
 /* line 68, ../sass/modules/_selected-styled.scss */
@@ -6110,7 +6110,7 @@ body.lightbox {
   margin: 0;
   padding: 0;
   margin-bottom: 25px; }
-/* line 11, ../../../../../../../../../Ruby/lib/ruby/gems/1.9.1/gems/compass-0.12.5/frameworks/compass/stylesheets/compass/typography/lists/_bullets.scss */
+/* line 11, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-0.12.6/frameworks/compass/stylesheets/compass/typography/lists/_bullets.scss */
 .modal-content ul li {
   list-style-image: none;
   list-style-type: none;
@@ -14258,7 +14258,7 @@ i.flag.hit, i.flag.bestseller {
   background-position: 0 -168px;
   height: 24px;
   width: 27px; }
-/* line 43, ../../../../../../../../../Ruby/lib/ruby/gems/1.9.1/gems/compass-0.12.5/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 43, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-0.12.6/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
 #footer .ico_social_twitter:hover, #footer .ico_social_twitter.ico_social_twitter_hover, #footer .ico_social_twitter.ico_social_twitter-hover {
   background-position: 0 -144px; }
 @media (max-width: 320px) {
@@ -14268,7 +14268,7 @@ i.flag.hit, i.flag.bestseller {
 /* line 89, ../sass/style/_footer.scss */
 #footer .ico_social_twitter:hover {
   background-position: 0 -168px; }
-/* line 43, ../../../../../../../../../Ruby/lib/ruby/gems/1.9.1/gems/compass-0.12.5/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 43, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-0.12.6/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
 #footer .ico_social_twitter:hover:hover, #footer .ico_social_twitter:hover.ico_social_twitter_hover, #footer .ico_social_twitter:hover.ico_social_twitter-hover {
   background-position: 0 -144px; }
 /* line 93, ../sass/style/_footer.scss */
@@ -14277,7 +14277,7 @@ i.flag.hit, i.flag.bestseller {
   height: 24px;
   width: 27px;
   margin-left: 8px; }
-/* line 43, ../../../../../../../../../Ruby/lib/ruby/gems/1.9.1/gems/compass-0.12.5/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 43, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-0.12.6/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
 #footer .ico_social_fb:hover, #footer .ico_social_fb.ico_social_fb_hover, #footer .ico_social_fb.ico_social_fb-hover {
   background-position: 0 -192px; }
 /* line 97, ../sass/style/_footer.scss */
@@ -14289,13 +14289,13 @@ i.flag.hit, i.flag.bestseller {
   height: 24px;
   width: 26px;
   margin-left: 9px; }
-/* line 43, ../../../../../../../../../Ruby/lib/ruby/gems/1.9.1/gems/compass-0.12.5/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 43, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-0.12.6/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
 #footer .ico_social_instagram:hover, #footer .ico_social_instagram.ico_social_instagram_hover, #footer .ico_social_instagram.ico_social_instagram-hover {
   background-position: 0 -48px; }
 /* line 106, ../sass/style/_footer.scss */
 #footer .ico_social_instagram:hover {
   background-position: 0 -120px; }
-/* line 43, ../../../../../../../../../Ruby/lib/ruby/gems/1.9.1/gems/compass-0.12.5/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 43, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-0.12.6/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
 #footer .ico_social_instagram:hover:hover, #footer .ico_social_instagram:hover.ico_social_instagram_hover, #footer .ico_social_instagram:hover.ico_social_instagram-hover {
   background-position: 0 -48px; }
 /* line 110, ../sass/style/_footer.scss */
@@ -14304,13 +14304,13 @@ i.flag.hit, i.flag.bestseller {
   height: 24px;
   width: 26px;
   margin-left: 16px; }
-/* line 43, ../../../../../../../../../Ruby/lib/ruby/gems/1.9.1/gems/compass-0.12.5/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 43, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-0.12.6/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
 #footer .ico_social_gplus:hover, #footer .ico_social_gplus.ico_social_gplus_hover, #footer .ico_social_gplus.ico_social_gplus-hover {
   background-position: 0 0; }
 /* line 114, ../sass/style/_footer.scss */
 #footer .ico_social_gplus:hover {
   background-position: 0 -72px; }
-/* line 43, ../../../../../../../../../Ruby/lib/ruby/gems/1.9.1/gems/compass-0.12.5/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 43, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-0.12.6/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
 #footer .ico_social_gplus:hover:hover, #footer .ico_social_gplus:hover.ico_social_gplus_hover, #footer .ico_social_gplus:hover.ico_social_gplus-hover {
   background-position: 0 0; }
 /* line 118, ../sass/style/_footer.scss */
@@ -14319,13 +14319,13 @@ i.flag.hit, i.flag.bestseller {
   height: 24px;
   width: 27px;
   margin-left: 12px; }
-/* line 43, ../../../../../../../../../Ruby/lib/ruby/gems/1.9.1/gems/compass-0.12.5/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 43, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-0.12.6/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
 #footer .ico_social_pinterest:hover, #footer .ico_social_pinterest.ico_social_pinterest_hover, #footer .ico_social_pinterest.ico_social_pinterest-hover {
   background-position: 0 -24px; }
 /* line 122, ../sass/style/_footer.scss */
 #footer .ico_social_pinterest:hover {
   background-position: 0 -96px; }
-/* line 43, ../../../../../../../../../Ruby/lib/ruby/gems/1.9.1/gems/compass-0.12.5/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 43, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-0.12.6/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
 #footer .ico_social_pinterest:hover:hover, #footer .ico_social_pinterest:hover.ico_social_pinterest_hover, #footer .ico_social_pinterest:hover.ico_social_pinterest-hover {
   background-position: 0 -24px; }
 
@@ -14459,6 +14459,10 @@ i.flag.hit, i.flag.bestseller {
 /* line 280, ../sass/style/_footer.scss */
 .noscroll #footer {
   position: absolute !important; }
+
+/* line 1, ../sass/override/_override-design.scss */
+.clr {
+  clear: both; }
 
 /* line 1, ../sass/override/_override-layout.scss */
 .customNavigation a {
