@@ -32,7 +32,8 @@ jQuery.noConflict();
             $('#review-form').find('.review-summary-table').find('.error').addClass('hidden');
            }
       });
-  })
+  });
+
   /////////////////////////////////////// Validator Form ////////////////////////////////////////////
  
   
@@ -44,10 +45,25 @@ jQuery.noConflict();
   jQuery.validator.addMethod("nip", function(value, element) {
     return this.optional(element) || /^((\d{3}[- ]\d{3}[- ]\d{2}[- ]\d{2})|(\d{3}[- ]\d{2}[- ]\d{2}[- ]\d{3}))$/.test(value);
   }, "Please provide a valid nip.");
+    jQuery.validator.addMethod("stars", function(value, element) {
+        var valid = false;
+        $(".review-summary-table").find('input[type="hidden"]').each(function(){
+            if($(this).val() == '')
+            {
+                $('#review-form').find('.review-summary-table').find('.error.hidden').removeClass('hidden');
+                return valid = false;
+            } else {
+                $('#review-form').find('.review-summary-table').find('.error').addClass('hidden');
+                return valid = true;
+            }
+        });
+        return valid;
+    }, "Wszystkie gwiazdki muszą być zaznaczone.");
   $("form").each(function () {
 
   $(this).validate({   
     success: "valid",
+    focusInvalid: false,
     errorElement: "span",
     onfocusout: function (element) {
             $(element).valid();
@@ -55,13 +71,15 @@ jQuery.noConflict();
     onsubmit: true,
     rules: {
       title: {
-        required:true,
-        maxlengh:1
+        required:true
       },
       czy_polecasz_produkt : {
         required:true,
         maxlengh:1
-      }
+      },
+        stars: {
+            stars: true
+        }
     },
 
     messages: {
