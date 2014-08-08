@@ -327,7 +327,8 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
 	}
 	
 	public function canUseCarrier() {
-		return Mage::helper('orbashipping')->canPosUseCarrier($this->getPo()->getDefaultPos());
+		return Mage::helper('orbashipping')->canPosUseCarrier($this->getPo()->getDefaultPos()) ||
+		    Mage::helper('orbashipping')->canVendorUseCarrier($this->getPo()->getVendor());
 	}
 	
 	public function canPosUseDhl() {
