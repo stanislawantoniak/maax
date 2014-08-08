@@ -1060,6 +1060,9 @@ function galeriaProduktu(){
               $(this).find('.zoom_plus').removeClass('full disabled');
             });
           });
+          /////
+          //$('.rwd-buttons').width(imgScaleWidth);
+          ////
           $('.zoom_plus').on('click', function(event) {
             event.preventDefault();
             $(this).closest('.rwd-wrapper').find('.rwd-item').each(function(){
@@ -1072,7 +1075,7 @@ function galeriaProduktu(){
                     divWidth = parseInt(divWidth);
                 var divHeight  = $(this).find('.item').css("height") ;
                 $(img).width(divWidth) //Set the width to the div's width
-                $('.rwd-buttons').width(imgScaleWidth);
+                
                 //$(this).closest('.inner-item').css({width:'100%',margin:0});
                 $(img).css("height", 'auto');
 

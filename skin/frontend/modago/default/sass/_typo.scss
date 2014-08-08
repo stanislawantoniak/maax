@@ -539,6 +539,7 @@ form {
 			label.error,
 			span.error {
 				padding:0 0 0 0;
+				height:0px;
 			}
 		}
 		
@@ -1811,11 +1812,76 @@ figure {
 	}
 }
 
+.wrappError {
+	//height:0px;
+}
+
 .form-checkbox,
 .form-radio {
 	.error {
 		//position: absolute;
 		//top: 30px;
 		//left: 15px;
+	}
+}
+
+// NEW STYLE
+
+.error {
+  color:#e84c3d;
+      font-size: 12px;
+      font-weight: normal;
+      line-height: 1.0!important;
+      padding:10px 0 0px 15px!important;
+      clear:both;
+      display:block;
+      text-align: left!important;
+}
+
+#question-form {
+	h4 {
+		padding-top:10px;
+		strong{
+			text-transform: uppercase;
+		}
+	}
+	input[type="text"],
+	input[type="email"],
+	input[type="password"] {
+		height: 29px;
+		line-height: 29px;
+		padding:0 0 0 15px
+	}
+	label {
+		font-weight: normal;
+	}
+	.title {
+		.topHint {
+			right: -175px !important;
+			top:23px;
+			@media (max-width: 767px) {
+				display:none!important
+			}
+		}
+	}
+	.form-radio {
+		float:left;
+		margin-right: 20px;
+	}
+	.nickname_field {
+		margin-top:-15px;
+		label {
+			line-height: 29px;
+		}
+		.col-sm-6 {
+			position:relative;
+		}
+		.topHint {
+			right: -150px !important;
+			top:0;
+			@media (max-width: 767px) {
+				display:none!important
+			}
+		}
 	}
 }
