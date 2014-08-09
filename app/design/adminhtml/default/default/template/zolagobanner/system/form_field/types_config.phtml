@@ -50,12 +50,28 @@ $fValue = $_element->getValue();
                                             <input type="text" class="input-text" type="text"  name="<?php echo $this->getFieldName()?>[$$ROW][pictures_number]" style="width:50px;" value="$$PICTURES_NUMBER" />
                                         </td>
                                         <td>
-                                            <div><?php echo Mage::helper('zolagobanner')->__('Desktop Image') ?></div>
-                                            <?php echo Mage::helper('zolagobanner')->__('Width') ?>: <input type="text" class="input-text" name="<?php echo $this->getFieldName()?>[$$ROW][pictures_w]" value="$$PICTURES_W" style="width:50px;" /> px <br /><br />
-                                            <?php echo Mage::helper('zolagobanner')->__('Height') ?>: <input type="text" class="input-text" name="<?php echo $this->getFieldName()?>[$$ROW][pictures_h]" value="$$PICTURES_H" style="width:50px;" /> px <br /><br />
-                                            <div><?php echo Mage::helper('zolagobanner')->__('Mobile Devices Image') ?></div>
-                                            <?php echo Mage::helper('zolagobanner')->__('Width') ?>: <input type="text" class="input-text" name="<?php echo $this->getFieldName()?>[$$ROW][pictures_w_m]" value="$$PICTURES_W_M" style="width:50px;" /> px <br /><br />
-                                            <?php echo Mage::helper('zolagobanner')->__('Height') ?>: <input type="text" class="input-text" name="<?php echo $this->getFieldName()?>[$$ROW][pictures_h_m]" value="$$PICTURES_H_M" style="width:50px;" /> px <br /><br />
+                                            <table>
+                                                <tr>
+                                                    <td>
+                                                        <?php echo Mage::helper('zolagobanner')->__('Desktop Image') ?>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><?php echo Mage::helper('zolagobanner')->__('Width') ?>: <input type="text" class="input-text" name="<?php echo $this->getFieldName()?>[$$ROW][pictures_w]" value="$$PICTURES_W" style="width:50px;" /> px</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><?php echo Mage::helper('zolagobanner')->__('Height') ?>: <input type="text" class="input-text" name="<?php echo $this->getFieldName()?>[$$ROW][pictures_h]" value="$$PICTURES_H" style="width:50px;" /> px</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><?php echo Mage::helper('zolagobanner')->__('Mobile Devices Image') ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><?php echo Mage::helper('zolagobanner')->__('Width') ?>: <input type="text" class="input-text" name="<?php echo $this->getFieldName()?>[$$ROW][pictures_w_m]" value="$$PICTURES_W_M" style="width:50px;" /> px</td>
+                                                </tr>
+                                                <tr>
+                                                    <td><?php echo Mage::helper('zolagobanner')->__('Height') ?>: <input type="text" class="input-text" name="<?php echo $this->getFieldName()?>[$$ROW][pictures_h_m]" value="$$PICTURES_H_M" style="width:50px;" /> px</td>
+                                                </tr>
+                                            </table>
                                         </td>
                                         <td>
                                             <span><?php echo Mage::helper('zolagobanner')->__('Can Be Empty')?></span>
@@ -74,7 +90,6 @@ $fValue = $_element->getValue();
 
                     <div class="caption_def-fieldset">
                         <div class="grid">
-
                             <table cellspacing="0" class="data" id="<?php echo $this->suffixId('cfgTable')?>" style="width:70px">
                                 <col width="150" />
                                 <col width="70" />
