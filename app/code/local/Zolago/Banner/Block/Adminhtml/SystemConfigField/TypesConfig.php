@@ -64,13 +64,4 @@ class Zolago_Banner_Block_Adminhtml_SystemConfigField_TypesConfig extends Mage_A
     {
         return Mage::helper('zolagobanner')->getEditFieldsConfigSelect2Json();
     }
-
-    public function getFieldContainerBlock($fieldName, $fieldSetName = '')
-    {
-        return Mage::app()->getLayout()->getBlockSingleton('zolagobanner/adminhtml_systemConfigField_typesColumnConfig')
-            ->setTemplate('zolagobanner/system/form_field/types_column_config.phtml')
-            ->setFieldName($fieldName)
-            ->setFieldSetName($fieldSetName);
-    }
-
 }
