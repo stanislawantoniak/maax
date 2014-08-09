@@ -289,6 +289,7 @@
             text-align: center;
             cursor: pointer;
             float: none;
+            //border: 1px solid #fff;
             &.synced,
             &:hover {
                 img {
@@ -555,7 +556,7 @@ body.lightbox {
         margin-left: 7px;
         margin-right: 10px;
         position: relative;
-
+                z-index: 9000;
         @media (max-width:1023px) {
             display:none;
         }
@@ -565,7 +566,7 @@ body.lightbox {
         margin-top: 10.5px;
 
         .rwd-wrapper-outer {
-            height: 379px;
+            height: 383px;
         }
         .rwd-wrapper  {
             width: 72px!important;
@@ -580,6 +581,10 @@ body.lightbox {
             text-align: center;
             cursor: pointer;
             float: none;
+            
+            img {
+                border: 1px solid #fff;
+            }
             &.synced,
             &:hover {
                 img {
@@ -630,7 +635,8 @@ body.lightbox {
                 height:50px;
                 margin-top: -25px;
                 font-size: 0px;
-
+                z-index: 10000;
+                //outline:1px solid red;
                 //background:rgba(0 ,0 ,0 ,0.3);
                 @include hide-text;
                 &:before {
@@ -640,8 +646,8 @@ body.lightbox {
                     top:41%;
                     z-index: 900;
                 }
-                @media (min-width: 932px){
-                    //display:none;
+                @media (min-width: 1024px){
+                    display:none;
                 }
             }
             .rwd-prev {
@@ -683,17 +689,20 @@ body.lightbox {
     .up,
     .down {
         display:inline-block;
-        width:15px;
-        height:75px;
+        width:67px;
+        height:50px;
         background:#fff;
         position:absolute;
-        left:35px;
+        left:9px;
         margin-left: -(image-width(sprite-file($arrowMap, arrow_top_j)) / 2) ;
-        background:$arrowMap;
-        z-index: 999;
+        z-index: 9999;
         text-indent: -999em;
         outline:none;
         overflow:hidden;
+        //outline:1px solid red;
+         &:before {
+            background:$arrowMap;
+         }
         &.inactive {
             visibility:hidden;
         }
@@ -702,14 +711,27 @@ body.lightbox {
         }
     }
     .up {
-        top:0px;
-        @include sprite($arrowMap, arrow_top_j);
-        @include sprite-dimensions($arrowMap, arrow_top_j);
+        top: -34px;
+         &:before {
+            content: '';
+            display:block;
+            @include sprite($arrowMap, arrow_top_j);
+            @include sprite-dimensions($arrowMap, arrow_top_j);
+            margin: 29px 0 0 26px;
+        }
+       
     }
     .down {
-        top: 395px;
+        top: 394px;
+        &:before {
+            content: '';
+            display:block;
+
         @include sprite($arrowMap,arrow_bottom_j);
         @include sprite-dimensions($arrowMap, arrow_bottom_j);
+        margin: 12px 0 0 26px;
+        }
+        
     }
 }
 
@@ -755,6 +777,22 @@ body.lightbox {
                 background:#fff;
                 border:1px solid #d0cfcf;
             }
+        }
+    }
+}
+
+#product-gallery {
+    .followUs {
+        margin-left: 97px;
+        margin-right: 16px;
+        ul {
+            li:last-child {
+                margin-right: 0px;
+            }
+        }
+        @media(max-width: 932px) {
+            margin-left: 0px;
+            margin-right:0px;
         }
     }
 }

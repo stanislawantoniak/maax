@@ -248,6 +248,7 @@
 			position: absolute;
 			bottom: -10px;
 			left: 0px;
+			white-space: nowrap;
 			@media (max-width: 814px) {
 				
 			}
@@ -499,7 +500,8 @@
 			@include sprite($flagMap, sale);
 			@include sprite-dimensions($flagMap, sale);
 		}
-		&.percent {
+		&.percent,
+		&.promotion  {
 			@include sprite($flagMap, percent);
 			@include sprite-dimensions($flagMap, percent);
 		}
@@ -507,7 +509,8 @@
 			@include sprite($flagMap, new);
 			@include sprite-dimensions($flagMap, new);
 		}
-		&.hit {
+		&.hit,
+		&.bestseller  {
 			@include sprite($flagMap, hit);
 			@include sprite-dimensions($flagMap, hit);
 		}

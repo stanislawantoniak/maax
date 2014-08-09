@@ -61,6 +61,65 @@ jQuery.validator.addMethod("integer", function(value, element) {
 	return this.optional(element) || /^-?\d+$/.test(value);
 }, "A positive or negative non-decimal number please");
 
+jQuery.validator.addMethod('dateBefore', function(value, element, params) {
+    // if end date is valid, validate it as well
+
+    var end = jQuery(params);
+
+    //format if dd-mm-yy to mm-dd-yy
+    var fValue = value.replace(/([\s:\-]+)/g, '/');
+
+
+    var time = fValue.split("/");
+
+    var date = [time[1],time[0],time[2]].join("/");
+    var time = [time[3],time[4]].join(":");
+    value = date + " " + time;
+
+    var endDate = end.val();
+    var fValue = endDate.replace(/([\s:\-]+)/g, '/');
+
+
+    var time = fValue.split("/");
+
+    var date = [time[1],time[0],time[2]].join("/");
+    var time = [time[3],time[4]].join(":");
+    endDate = date + " " + time;
+    //format if dd-mm-yy to mm-dd-yy
+
+
+    return this.optional(element) || this.optional(end[0]) || new Date(value) < new Date(endDate);
+
+}, 'Must be before corresponding end date');
+
+jQuery.validator.addMethod('dateAfter', function(value, element, params) {
+    // if start date is valid, validate it as well
+    var start = jQuery(params);
+
+    //format if dd-mm-yy to mm-dd-yy
+    var fValue = value.replace(/([\s:\-]+)/g, '/');
+
+
+    var time = fValue.split("/");
+
+    var date = [time[1],time[0],time[2]].join("/");
+    var time = [time[3],time[4]].join(":");
+    value = date + " " + time;
+
+    var startDate = jQuery(params).val();
+    var fValue = startDate.replace(/([\s:\-]+)/g, '/');
+
+
+    var time = fValue.split("/");
+
+    var date = [time[1],time[0],time[2]].join("/");
+    var time = [time[3],time[4]].join(":");
+    startDate = date + " " + time;
+    //format if dd-mm-yy to mm-dd-yy
+
+    return this.optional(element) || this.optional(start[0]) || new Date(value) > new Date(startDate);
+
+}, 'Must be after corresponding start date');
 /**
  * Return true, if the value is a valid vehicle identification number (VIN).
  *
@@ -656,3 +715,30 @@ jQuery.validator.addMethod('price', function(value, element) {
 jQuery.validator.addMethod('pricePositive', function(value, element) {
 	return this.optional(element) || /^(?:\d+((?:,|\.)\d+)?)$/.test(value);
 }, jQuery.format("Enter vaild price"));
+
+// urlkey validate format
+jQuery.validator.addMethod('urlKeyFormat', function(value, element) {
+	return this.optional(element) || (/^[a-z0-9][a-z0-9\_\-\.]{3,99}[a-z0-9]$/.test(value) && !/\-\-+|\.\.+|\_\_+/.test(value));	
+}, jQuery.format("Url can have [a-b0-9]_-. chars. Minimum 5, maximum 100 chars. Stars with alphanumeric. No '--', '__', '..'."));
+
+// urlkey validate
+jQuery.validator.addMethod('urlKeyExists', function(value, element) {
+	
+	if(this.optional(element)){
+		return true;
+	}
+
+	var result = jQuery.ajax({ 
+		async:false, 
+		url:"/campaign/vendor/validateKey",
+		data: {key: value} 
+	});
+	
+	if(result && result.responseJSON && typeof result.responseJSON == 'object' 
+			&& result.responseJSON.content==1){
+		return true;
+	}
+	
+	return false;
+			
+}, jQuery.format("Url key already exists"));

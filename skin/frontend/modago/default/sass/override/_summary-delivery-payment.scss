@@ -19,3 +19,69 @@
 		}
 	}
 }
+
+.node-type-summary-checkout {
+	#checkout {
+		.panel {
+			&.panel-custom {
+				border-color: #bfbfbf;
+				.panel-heading {
+					border-color: #dddddd;
+				}
+				.panel-footer {
+					border-color: #dddddd;
+				}
+				.block_info_order {
+					.block {
+						border-color: #dddddd;
+					}
+				}
+			}
+		}
+	}
+	&.node-type-summary-checkout {
+		#change_payment {
+			legend {
+				border:none;
+				font-size: 14px;
+				margin-bottom: 5px;
+			}
+		}
+	}
+	#checkout {
+		.summary-order {
+			 form {
+			 	&#change_payment {
+			 		margin-bottom: 7px;
+			 	}
+			 	.panel {
+			 		&+ .panel {
+			 			margin-bottom: 10px;
+			 		}
+			 	}
+			 }
+		}
+	}
+}
+
+.node-type-summary-delivery-payment {
+	#checkout {
+		.sidebar-secound {
+			header {
+				
+				@media(max-width: 767px) {
+					margin-left: -15px;
+				}
+				@media(max-width: 480px) {
+					margin-left: -30px;
+				}
+				&.open {
+					@media(max-width: 767px) {
+					margin-bottom: -5px;
+					
+					}
+				}
+			}
+		}
+	}
+}

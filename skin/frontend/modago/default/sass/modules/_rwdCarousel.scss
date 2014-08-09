@@ -80,7 +80,60 @@
 		}
 	}
 }
-
+.block-promoted-banners {
+	.rwd-controls {
+		.rwd-buttons {
+			.rwd-prev,
+			.rwd-next {
+				font-size: 30px;
+				color:#ccc;
+				position:absolute;
+				top:50%;
+				margin-top:-20px;
+				cursor:pointer;
+				&.disabled {
+					visibility:hidden;
+				}
+				&:hover {
+					color:#808080
+				}
+			}
+			.rwd-prev {
+				left:-20px;
+			}
+			.rwd-next {
+				right:-20px;
+			}
+		}
+	}
+}
+.block-inspiration {
+	.rwd-controls {
+		.rwd-buttons {
+			.rwd-prev,
+			.rwd-next {
+				font-size: 30px;
+				color:#ccc;
+				position:absolute;
+				top: 37%;
+				margin-top:-10px;
+				cursor:pointer;
+				&.disabled {
+					visibility:hidden;
+				}
+				&:hover {
+					color:#808080
+				}
+			}
+			.rwd-prev {
+				left:-55px;
+			}
+			.rwd-next {
+				right:-55px;
+			}
+		}
+	}
+}
 
 
 /* mouse grab icon */

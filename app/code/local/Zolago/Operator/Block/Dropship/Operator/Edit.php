@@ -23,7 +23,6 @@ class Zolago_Operator_Block_Dropship_Operator_Edit extends Mage_Core_Block_Templ
             'phone',
         ));
 		$acl = $this->getModel()->getAcl();
-		
 		$roles = $form->addFieldset("privileges", array("legend"=>$helper->__('Privileges')));
 		$roles->addField("roles", "multiselect", array(
 			"name"	 => "roles",

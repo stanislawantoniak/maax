@@ -1,0 +1,29 @@
+<?php /* @var $this Zolago_Banner_Block_Vendor_Banner_Type */ ?>
+<?php $_helper = Mage::helper("zolagobanner");?>
+<?php $_model = $this->getModel();?>
+<div class="container">
+    <div class="page-heading row">
+        <div class="col-lg-6">
+            <h3>
+                <?php echo Mage::helper("zolagobanner")->__("New Banner: Select Banner Type"); ?>
+            </h3>
+        </div>
+
+    </div>
+</div>
+
+<div class="col-lg-5">
+    <select name="banner_type" class="form-control">
+        <?php foreach($this->getTypes() as $type => $label): ?>
+            <option value="<?php echo $type; ?>"><?php echo $label; ?></option>
+        <?php endforeach; ?>
+    </select>
+</div>
+
+<script type="text/javascript">
+    jQuery(function ($) {
+        $("select[name=banner_type]").change(function(){
+            console.log($(this).val());
+        })
+    });
+</script>

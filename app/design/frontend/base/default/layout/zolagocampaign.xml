@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+	<zolagocampaign_vendor_index>
+		<update handle="udropship_vendor" />
+        <update handle="adminhtml_head" />
+		<update handle="bootstrap"/>
+		<reference name="content">
+			<block name="campaign" type="zolagocampaign/vendor_campaign" template="zolagocampaign/dropship/campaign.phtml"></block>		    
+		</reference>
+	</zolagocampaign_vendor_index>
+	
+	<zolagocampaign_vendor_edit>
+        <reference name="head">
+            <action method="addItem">
+                <type>skin_css</type>
+                <name>js/plugins/datetimepicker/jquery.datetimepicker.css</name>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <name>js/plugins/datetimepicker/jquery.datetimepicker.js</name>
+            </action>
+        </reference>
+		<update handle="udropship_vendor" />
+        <update handle="adminhtml_head" />
+        <update handle="bootstrap"/>
+        <update handle="noty"/>
+        <update handle="forms"/>
+		<reference name="content">
+			<block name="campaign.edit" type="zolagocampaign/vendor_campaign_edit" template="zolagocampaign/dropship/campaign/edit.phtml">
+                <block name="vendor_campaign_product_grid" as="vendor_campaign_product_grid"  type="zolagocampaign/vendor_campaign_product_grid" template="zolagocampaign/dropship/campaign/product/grid.phtml"></block>
+			</block>
+		</reference>
+	</zolagocampaign_vendor_edit>
+	
+</layout>

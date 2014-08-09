@@ -13,8 +13,17 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         $this->setTemplate('zolagosolrsearch/standard/searchfaces.phtml');
     }
 	
+//	protected function _toHtml() {
+//		Mage::log("Before hmtl");
+//		$ret = parent::_toHtml();
+//		Mage::log("After html");
+//		return $ret;
+//	}
+	
 	public function _prepareLayout(){
-		
+		if($this->getSkip()){
+			return parent::_prepareLayout();
+		}
 		// Build breadcrumbs
 		if($this->getMode()==self::MODE_SEARCH){
 			

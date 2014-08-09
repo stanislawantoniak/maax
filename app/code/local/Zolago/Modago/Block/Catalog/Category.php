@@ -16,8 +16,20 @@ class Zolago_Modago_Block_Catalog_Category extends Mage_Core_Block_Template
     {
         $rootCatId = Mage::app()->getStore()->getRootCategoryId();
         $categories = Mage::getModel('catalog/category')->getCategories($rootCatId);
-        return Mage::helper('zolagomodago')->getCategoriesTree($categories, 1, 3);
+        $catTree = array();
+        foreach ($categories as $categoryData) {
+            $catId = (int)$categoryData->getId();
+            $cat = Mage::getModel('catalog/category')->load($catId);
+            $catTree[$catId] = array(
+                                   'name' => $categoryData->getName(),
+                                   'url' => rtrim(Mage::getUrl($cat->getUrlPath()), "/"),
+                                   'category_id' => $catId,
+                                   'has_dropdown' => (bool) $this->getLayout()->createBlock('cms/block')->setBlockId("navigation-dropdown-c-{$catId}")->toHtml()
+                               );
+        }
+        return $catTree;
     }
+
 
     /**
      * Returns main categories for mobile navigation menu under black header
@@ -31,7 +43,6 @@ class Zolago_Modago_Block_Catalog_Category extends Mage_Core_Block_Template
         return Mage::helper('zolagomodago')->getCategoriesTree($categories, 1, 2);
     }
 
-
     /**
      * Returns categories for sliding menu(hamburger menu)
      *
@@ -39,12 +50,15 @@ class Zolago_Modago_Block_Catalog_Category extends Mage_Core_Block_Template
      */
     public function getMainCategoriesForSlidingMenu()
     {
+
         $rootCatId = Mage::app()->getStore()->getRootCategoryId();
         $categories = Mage::getModel('catalog/category')
-            ->getCategories($rootCatId);
-        return Mage::helper('zolagomodago')->getCategoriesTree($categories, 1, 2);
-    }
+                      ->getCategories($rootCatId);
 
+        $tree = Mage::helper('zolagomodago')->getCategoriesTree($categories, 1, 2);
+        return $tree;
+    }
+    /**/
     /**
      * Returns category label for mobile menu in main category page
      *
@@ -83,9 +97,9 @@ class Zolago_Modago_Block_Catalog_Category extends Mage_Core_Block_Template
     {
         $subCategories = array();
         $currentCategory = Mage::registry('current_category');
-        if(!empty($currentCategory)){
+        if(!empty($currentCategory)) {
             $subCategories = Mage::helper('zolagomodago')->getSubCategories($currentCategory->getId());
         }
         return $subCategories;
     }
-} 
+}

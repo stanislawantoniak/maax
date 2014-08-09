@@ -5,6 +5,18 @@
 class Zolago_Solrsearch_Model_Catalog_Product extends Mage_Catalog_Model_Product {
 	
 	/**
+	 * @todo test it
+	 * @param type $qty
+	 * @return type
+	 */
+	public function getFinalPrice($qty=null) {
+		if($this->getCalculatedFinalPrice()!==null){
+			return $this->getCalculatedFinalPrice();
+		}
+		return parent::getFinalPrice();
+	}
+	
+	/**
 	 * @return string
 	 */
 	public function getCurrency() {
@@ -45,6 +57,6 @@ class Zolago_Solrsearch_Model_Catalog_Product extends Mage_Catalog_Model_Product
 	 * @return bool
 	 */
 	public function isDiscounted() {
-		return $this->getFinalPrice()<$this->getPrice();
+		return $this->getFinalPrice()<$this->getPrice() && $this->getFinalPrice()>0 && $this->getPrice()>0;
 	}
 }
