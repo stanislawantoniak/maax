@@ -31,7 +31,9 @@ class Zolago_Catalog_Block_Product_Vendor_Info
 	 * @return string|null
 	 */
 	public function getVendorInfoHtml() {
-		return "Lorem ipsum [dev]";
+	    $vendor = $this->getVendor();
+	    $info = $vendor->getTermsSellerInformation();	    
+		return $info;
 	}
 	
 	/**
