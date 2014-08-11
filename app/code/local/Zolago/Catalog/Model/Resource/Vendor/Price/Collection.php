@@ -120,8 +120,6 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 		$totalSelect->reset(Zend_Db_Select::ORDER);
 		$totalSelect->resetJoinLeft();
 		$totalSelect->columns(new Zend_Db_Expr("COUNT(e.entity_id)"));
-
-		Mage::log("Select total " . $totalSelect);
 		
 		$total = $adapter->fetchOne($totalSelect);
 
@@ -135,8 +133,6 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 		$select->limit($end-$start, $start);
 		$items = $adapter->fetchAll($select);
 		
-		
-		Mage::log("Select origin " . $select);
 		
 		foreach($items as &$item){
 			$item['can_collapse'] = true;//

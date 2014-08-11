@@ -21,9 +21,10 @@ define([
 	"vendor/grid/ObserverFilter",
 	"vendor/catalog/priceGrid/singlePriceUpdater",
 	"vendor/catalog/priceGrid/RowUpdater",
+	"vendor/misc"
 ], function(BaseGrid, Grid, CompoundColumns, Selection, Keyboard, editor, declare, domConstruct, 
 	on, query, Memory, Observable, put, Cache, JsonRest, Selection, 
-	selector, lang, request, ObserverFilter, singlePriceUpdater, RowUpdater){
+	selector, lang, request, ObserverFilter, singlePriceUpdater, RowUpdater, misc){
 	
 	/**
 	 * @todo Make source options it dynamicly
@@ -41,15 +42,6 @@ define([
 		loaded: {},
 		changed: {},
 		orig: {}
-	}
-	
-	var formatPrice = function(value, currency){
-		currency = "PLN";
-		return formatNumber(value) + " " + currency;
-	}
-	
-	var formatNumber = function(number){
-		return parseFloat(number).toFixed(2).replace("\.", ",");
 	}
 	
 	var priceEditPriceMeta = function(object,value){
@@ -254,7 +246,7 @@ define([
 						editOn: "dblclick",
 						className: "filterable align-right column-medium",
 						autoSave: true,
-						formatter: formatPrice,
+						formatter: misc.currency,
 						renderCell: function(item,value,node){
 							if(!item.converter_price_type && priceEditPriceMeta(item, value)){
 								put(node, ".editable");
@@ -302,7 +294,7 @@ define([
 							return (item.price_margin!==null)  ? item.price_margin : 0
 						},
 						formatter: function(value){
-							return formatNumber(value) + "%";
+							return misc.number(value) + "%";
 						},
 						renderCell: function(item,value,node){
 							if(priceEditPriceMeta(item, value)){

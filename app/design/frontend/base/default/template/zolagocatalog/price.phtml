@@ -29,6 +29,7 @@
 	height: 600px;
 }
 
+
 #grid-holder .field-expander,
 #grid-holder .field-selector{
 		width: 25px;
@@ -37,12 +38,7 @@
 #grid-holder .ui-state-default {
 	border:0;
 }
-#grid-holder .expando {
-	/* style of area containing summary, expanded on click */
-	padding: 10px 6px;
-	background: #f9f9f9;
-	border-bottom: 1px #ddd solid;
-}
+
 
 #grid-holder .collapsed .expando {
 	display: none;
@@ -104,6 +100,74 @@
 }
 #grid-holder .filterable .range-field-from{
 	margin-right: 1%;
+}
+
+#grid-holder .expando {
+	/* style of area containing summary, expanded on click */
+	background: #f9f9f9;
+	border-bottom: 1px #ddd solid;
+	font-size: 11px;
+}
+
+#grid-holder .dgrid-row:hover .expando,
+#grid-holder .dgrid-selected .expando {
+	/* style of area containing summary, expanded on click */
+	background: #F1F4F9;
+	
+}
+
+#grid-holder div.p50{
+	width:50%;
+	box-sizing: border-box;
+}
+#grid-holder div.p50.left{
+	border-right: 1px #dddddd solid;
+}
+#grid-holder .table-subrow{
+	margin:  0 !important;
+	border-collapse: collapse;
+	border: none;
+	empty-cells: show;
+}
+#grid-holder .table-subrow input[type="checkbox"]{
+	margin-top: 0 !important;
+}
+
+#grid-holder .table-subrow td{
+	padding: 4px 6px 2px 6px;
+}
+#grid-holder .table-subrow tr.header-row td{
+	font-weight: bold;
+}
+#grid-holder .table-subrow tr:first-child td{
+	table-layout: fixed;
+	border-top:0;
+}
+#grid-holder .table-subrow tr td.sub-checkbox {
+	padding-left:8px;
+	width: 56px;
+}
+#grid-holder .sub-row-pos,
+#grid-holder .sub-row-loading
+{
+	display: block;
+	padding: 1px 2px;
+	
+}
+
+#grid-holder .sub-row-actions
+{
+	padding: 4px 6px;
+	
+}
+
+#grid-holder .sub-row-actions a{
+	display: inline-block;
+	margin-right: 10px;
+}
+
+#grid-holder .campaign-date{
+	width: 250px;
 }
 
 </style>

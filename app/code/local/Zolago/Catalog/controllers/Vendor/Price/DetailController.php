@@ -40,7 +40,8 @@ class Zolago_Catalog_Vendor_Price_DetailController extends Zolago_Catalog_Contro
 			throw new Mage_Core_Exception("You are trying to edit not your product");
 		}
 		
-		$out = Mage::getResourceSingleton('zolagocatalog/vendor_price')->getDetails($ids, $storeId);
+		$out = Mage::getResourceSingleton('zolagocatalog/vendor_price')
+				->getDetails($ids, $storeId);
 		
 		$this->getResponse()->
 				setHeader('Content-type', 'application/json')->
