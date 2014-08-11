@@ -143,7 +143,8 @@
 	dl {
 		margin-bottom: 17px;
 	}
-	.col-sm-6 {
+	.col-sm-6,
+	.col-sm-7 {
 		margin-left: -15px;
 		padding-right: 0px;
 		margin-bottom: 10px;
@@ -181,6 +182,7 @@
 		td{
 			border:none;
 			padding:4px 8px;
+			vertical-align: bottom;
 		}
 	}
 }
@@ -319,7 +321,19 @@
 			height:auto;
 		}
 	}
+	.block_info_order {
+		> .col-sm-5 {
+			@media (max-width: $screen-xs-max) {
+				padding-right: 0px;
+				padding-left: 0px;
+			}
+		}
+	}
 	.adres_dostawy {
 		padding-right: 0px;
+		@media (max-width: $screen-xs-max) {
+			padding-right: 0px;
+			padding-left: 0px;
+		}
 	}
 }

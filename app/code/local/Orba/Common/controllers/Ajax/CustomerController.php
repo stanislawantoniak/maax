@@ -49,7 +49,7 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
 			$array[] = array(
 				'name' => $product->getName(),
 				'qty' => $item->getQty(),
-				'unit_price' => round($item->getPrice(), 2),
+				'unit_price' => round($item->getPriceInclTax(), 2),
 				'image_url' => (string) $image,
 				'options' => $options
 			);

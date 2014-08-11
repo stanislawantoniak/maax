@@ -1,130 +1,164 @@
+
+
+
 var prevW = -1, prevH = -1;
 jQuery.noConflict();
 (function( $ ) {
   $(function() {   
-  // Validate Raty
-  //appearance_rating
-  //$('#appearance_rating').find('input').attr('required', true);
-  $('#review-form').on('click', 'input[type="text"], textarea', function(){
-    
-    var valueH = $(".review-summary-table").find('input[type="hidden"]').val();
-    var valid = false;
-    $(".review-summary-table").find('input[type="hidden"]').each(function(){
-       if($(this).val() == '')
-       {
-         $('#review-form').find('.review-summary-table').find('.error.hidden').removeClass('hidden');
-         return valid = false;
-       } else {
-        $('#review-form').find('.review-summary-table').find('.error').addClass('hidden');
-           return valid = true;
-       }
-  });
-    return valid;
-  //var emptyValue = $(".review-summary-table.ratings").find('input[value='']').length
-  console.log(valueH)
-  });
-    $(".review-summary-table").on('click', 'img', function(){
-        jQuery("#stars").valid();
-        var valid = false;
-        $(".review-summary-table").find('input[type="hidden"]').each(function(){
-           if($(this).val() == '')
-           {
-             $('#review-form').find('.review-summary-table').find('.error.hidden').removeClass('hidden');
-             return valid = false;
-           } else {
-            $('#review-form').find('.review-summary-table').find('.error').addClass('hidden');
-               return valid = true;
-           }
-      });
-        return valid;
-  });
-
   /////////////////////////////////////// Validator Form ////////////////////////////////////////////
- 
-  
-
-  /////////////////////////////////////////
   jQuery.validator.addMethod("zipcode", function(value, element) {
     return this.optional(element) || /^[0-9]{2}(-[0-9]{3})?$/.test(value);
   }, "Please provide a valid zipcode.");
   jQuery.validator.addMethod("nip", function(value, element) {
     return this.optional(element) || /^((\d{3}[- ]\d{3}[- ]\d{2}[- ]\d{2})|(\d{3}[- ]\d{2}[- ]\d{2}[- ]\d{3}))$/.test(value);
   }, "Please provide a valid nip.");
-    jQuery.validator.addMethod("stars", function(value, element) {
-        var valid = false;
-        $(".review-summary-table").find('input[type="hidden"]').each(function(){
-            if($(this).val() == '')
-            {
-                $('#review-form').find('.review-summary-table').find('.error.hidden').removeClass('hidden');
-                return valid = false;
-            } else {
-                $('#review-form').find('.review-summary-table').find('.error').addClass('hidden');
-                return valid = true;
-            }
-        });
-        return valid;
-    }, "");
-  $("form").each(function () {
-
-  $(this).validate({   
+  $("form").validate({   
     success: "valid",
-    focusInvalid: false,
     errorElement: "span",
     onfocusout: function (element) {
             $(element).valid();
         },
-    onsubmit: true,
+    onsubmit: function (element) {
+            $(element).valid();
+        },
     rules: {
-      title: {
-        required:true
+      firstname: {
+        required: true,
+        minlength: 2
       },
-      czy_polecasz_produkt : {
-        required:true,
-        maxlengh:1
+      lastname: {
+        required: true,
+        minlength: 2
       },
-        stars: {
-            stars: true
-        }
+      firm_name: {
+        required: true,
+        minlength: 2
+      },
+      invoice_data_firm_name : {
+        required: true,
+        minlength: 2
+      },
+      city: {
+        required: true,
+        minlength: 2
+      },
+      invoice_data_city: {
+        required: true,
+        minlength: 2
+      },
+      street: {
+        required: true,
+        minlength: 2
+      },
+      invoice_data_street: {
+        required: true,
+        minlength: 2
+      },
+      nip: {
+        nip: true,
+        required: true
+      },
+      zipcode: {
+        zipcode: true,
+        required: true
+        
+      },
+      invoice_data_zip_code : {
+         zipcode: true,
+         required: true
+      },
+      phone_number: {
+        required: true,
+        minlength: 2
+      },
+      password: {
+        required: true,
+        minlength: 5
+      },
+      confirm_password: {
+        required: true,
+        minlength: 5,
+        equalTo: "#password"
+      },
+      email: {
+        required: true,
+        email: true
+      },
+      agree: {
+        required: true,
+        minlength: 1
+      },
+      declare: {
+        required: true,
+        minlength: 1
+      }
     },
 
     messages: {
-
+      firstname: "Please enter your firstname",
+      lastname: "Please enter your lastname",
+      firm_name: "Please enter a firm name",
+      invoice_data_firm_name: "Please enter a firm name",
+      city: "Please enter a firm city",
+      invoice_data_city:"Please enter a firm city",
+      street:{
+        required: "Please provide a street",
+        minlength: "Your street must be at least 5 characters long"
+      },
+      invoice_data_street:{
+        required: "Please provide a street",
+        minlength: "Your street must be at least 5 characters long"
+      },
+      nip:"Please provide a NIP",
+      zipcode:"Please provide a Zip Code",
+      invoice_data_zip_code:"Please provide a Zip Code",
+      phone_number:"Please provide a Phone Number",
+      password: {
+        required: "Please provide a password",
+        minlength: "Your password must be at least 5 characters long"
+      },
+      confirm_password: {
+        required: "Please provide a password",
+        minlength: "Your password must be at least 5 characters long",
+        equalTo: "Please enter the same password as above"
+      },
+      email: "Please enter a valid email address",
+      agree: "Please accept our policy",
+      declare: "Please accept our policy"
     },
       highlight: function(element, errorClass, validClass) {
-                  var we = $(element).innerWidth()+25;
+                  var we = $(element).width()+55;
                   var el = $(element).attr('type');
+                  console.log(el);
                   $(element).closest("div").addClass('has-error has-feedback').removeClass('has-success');
                   $(element).closest("div").find('.form-ico-times').remove();
                   
-                  $(element).closest("div").not( ".form-checkbox" ).not( ".form-radio" ).append('<i style="left:'+we+'px; right:auto" class="form-ico-times form-control-feedback "></i>');
+                    $(element).closest("div").not( ".form-checkbox" ).append('<i style="left:'+we+'px; right:auto" class="form-ico-times form-control-feedback "></i>');
                   
                   $(element).closest("div").find('.form-ico-checked').remove();
                },
        unhighlight: function(element, errorClass, validClass) {
-                  var we = $(element).innerWidth()+25;
+                  var we = $(element).width()+55;
                   $(element).closest("div").removeClass('has-error').addClass('has-success has-feedback');
                   $(element).closest("div").find('.form-ico-checked').remove();
                   //if (element.attr("type") != "checkbox"){
-
                   $(element).closest("div").append('<i style="left:'+we+'px; right:auto" class="form-ico-checked form-control-feedback"></i>');
                   //}
                   $(element).closest("div").find('.form-ico-times').remove();
        },
        errorPlacement: function(error, element) {
-          if (element.attr("type") == "checkbox" ){
-            $(element).closest('div').append(error)
+          if (element.attr("type") == "checkbox"){
+            $(element).closest('div').append(error).hide().slideToggle(300);
             //error.prepend(element).hide().slideToggle(300);
-          } else if (element.attr("type") == "radio") {
-            $(element).closest('div').append(error)
-          }else {
-            error.insertAfter(element)
+          } else {
+            error.insertAfter(element).hide().slideToggle(300);
           }
          
      }
   });
-});
 
-
+    
+})*/
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // OBLICZANIE DŁUGOŚCI POLA
     $.fn.textWidth = function(text, font) {
@@ -1026,7 +1060,83 @@ function galeriaProduktu(){
               $(this).find('.zoom_plus').removeClass('full disabled');
             });
           });
-          
+          /////
+          //$('.rwd-buttons').width(imgScaleWidth);
+          ////
+          $('.zoom_plus').on('click', function(event) {
+            event.preventDefault();
+            $(this).closest('.rwd-wrapper').find('.rwd-item').each(function(){
+                var img = $(this).find('img');
+                var imgScaleWidth = parseInt(img.width());
+                var imgWidth   =    $(this).find('img').data('width');
+                var imgHeight  =  $(this).find('img').data('height');
+                console.log('IMG Width:' + imgScaleWidth+ '|| IMG DATA Width:' + imgWidth + '|| IMG DATA Height:' + imgHeight)
+                var divWidth   = $(this).find('.item').css("width"),
+                    divWidth = parseInt(divWidth);
+                var divHeight  = $(this).find('.item').css("height") ;
+                $(img).width(divWidth) //Set the width to the div's width
+                
+                //$(this).closest('.inner-item').css({width:'100%',margin:0});
+                $(img).css("height", 'auto');
+
+
+                if (imgWidth < divWidth) {
+                           //var heightDiff = imgHeight  - divHeight;
+                           //var widthDiff = imgWidth  - divWidth;
+                               $(img).width(imgWidth+'px') //Set the width to the div's width
+                               $(this).find('.inner-item').css({width:imgWidth,margin:'0 auto'});
+                               $(img).css("height", 'auto');
+                    } else if (imgWidth >= divWidth) {
+                                $(img).width('100%') //Set the width to the div's width
+                                $(this).find('.inner-item').css({width:'100%',margin:'0 auto'});
+                                $(img).css("height", 'auto');
+
+                    } else if (imgScaleWidth > imgWidth){
+                        //alert ("zdjęcie mniejsze")
+                    }
+                      $(this).find('.zoom_plus').addClass('full disabled');
+                      $(this).find('.zoom_minus').addClass('full').removeClass('disabled');
+                      //console.log('WidthScale:'+ imgScaleWidth + '|| WidthOriginal:' + imgWidth );
+            })
+            
+            ///var img = $(this).closest('.item').find('img');
+            ///var imgScaleWidth = parseInt(img.width());
+            ///var imgWidth   =    $(this).closest('.item').find('img').data('width');
+            ///var imgHeight  =  $(this).closest('.item').find('img').data('height');
+
+            ///var divWidth   = $(this).closest('.item').css("width"),
+            ///    divWidth = parseInt(divWidth);
+            ///var divHeight  = $(this).closest('.item').css("height") ;
+            
+            //$('#lightbox .rwd-buttons').hide();
+            ///$(img).width(divWidth) //Set the width to the div's width
+            ///$('.rwd-buttons').width(imgScaleWidth);
+            //$(this).closest('.inner-item').css({width:'100%',margin:0});
+            ///$(img).css("height", 'auto');
+
+
+            ///if (imgWidth < divWidth) {
+                       //var heightDiff = imgHeight  - divHeight;
+                       //var widthDiff = imgWidth  - divWidth;
+            ///               $(img).width(imgWidth+'px') //Set the width to the div's width
+            ///              $(this).closest('.inner-item').css({width:imgWidth,margin:'0 auto'});
+            ///               $(img).css("height", 'auto');
+            ///    } else if (imgWidth >= divWidth) {
+            ///                $(img).width('100%') //Set the width to the div's width
+            ///                $(this).closest('.inner-item').css({width:'100%',margin:'0 auto'});
+            ///                $(img).css("height", 'auto');
+
+            ///    } else if (imgScaleWidth > imgWidth){
+                    //alert ("zdjęcie mniejsze")
+            ///    }
+            ///      $(this).addClass('full disabled');
+            ///      $(this).next('.zoom_minus').addClass('full').removeClass('disabled');
+                  //console.log('WidthScale:'+ imgScaleWidth + '|| WidthOriginal:' + imgWidth );
+         
+                  
+
+
+          });   
 
 
          $('#lightbox').find('.loader').remove();
@@ -1038,39 +1148,6 @@ function galeriaProduktu(){
     }
   });
 
-
-$('.zoom_plus').on('click', function(event) {
-  event.preventDefault();
-  $('#sync3 .rwd-item').each(function(){
-      var img = $(this).find('img');
-      console.log($(this).length)
-      var imgScaleWidth = parseInt(img.width());
-      var imgWidth   =    $(this).find('img').data('width');
-      var imgHeight  =  $(this).find('img').data('height');
-      var divWidth   = $(this).find('.item').css("width"),
-          divWidth = parseInt(divWidth);
-      var divHeight  = $(this).find('.item').css("height") ;
-      $(img).width(divWidth) 
-      $('.rwd-buttons').width(imgScaleWidth);
-      $(img).css("height", 'auto');
-
-
-      if (imgWidth < divWidth) {
-                     $(img).width(imgWidth+'px') //Set the width to the div's width
-                     $(this).find('.inner-item').css({width:imgWidth,margin:'0 auto'});
-                     $(img).css("height", 'auto');
-          } else if (imgWidth >= divWidth) {
-                      $(img).width('100%') //Set the width to the div's width
-                      $(this).find('.inner-item').css({width:'100%',margin:'0 auto'});
-                      $(img).css("height", 'auto');
-
-          } else if (imgScaleWidth > imgWidth){
-          }
-            $(this).find('.zoom_plus').addClass('full disabled');
-            $(this).find('.zoom_minus').addClass('full').removeClass('disabled');
-  })
-
-});   
 
 /*
 $('#product-gallery #sync1').on('click', 'a', function(event) {
@@ -2905,8 +2982,6 @@ var rwd_banners = $("#rwd-banners .rwd-carousel");
               rwd_complementary_product.next('.customNavigation').find('.next').css({top:imgHeight+'px'});
               rwd_complementary_product.find('.rwd-controls').find('.rwd-prev').css({top:imgHeightplus+'px'});
               rwd_complementary_product.find('.rwd-controls').find('.rwd-next').css({top:imgHeightplus+'px'});
-
-               Mall.rwdCarousel.alignComplementaryProductsPrices(this);
            },
            afterInit:function(){
            imagesLoaded( document.querySelector('#rwd-complementary-product'), function( instance ) {
@@ -2918,7 +2993,6 @@ var rwd_banners = $("#rwd-banners .rwd-carousel");
               rwd_complementary_product.find('.rwd-controls').find('.rwd-next').css({top:imgHeightplus+'px'});
             });
               //alert(imgHeight)
-               Mall.rwdCarousel.alignComplementaryProductsPrices(this);
            }
       });
 

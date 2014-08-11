@@ -6,6 +6,8 @@ var Mall = {
     _data: {},
     _product_template: '<tr><td class="thumb"><img src="{{image_url}}" alt=""></td><td class="desc"><p class="name_product">{{name}}</p><p class="size">{{attr_label}}:<span>{{attr_value}}</span></p><p class="quantity">ilość:<span>{{qty}}</span></p></td><td class="price">{{unit_price}} {{currency_symbol}}</td></tr>',
     _recently_viewed_item_template: '<div class="item"><a href="{{redirect_url}}" class="simple"><div class="box_listing_product"><figure class="img_product"><img src="{{image_url}}" alt="" /></figure><div class="name_product hidden-xs">{{title}}</div></div></a></div>',
+    _summary_basket: '<ul><li>{{products_count_msg}}: {{all_products_count}}</li><li>{{products_worth_msg}}: {{total_amount}} {{currency_symbol}}</li><li>{{shipping_cost_msg}}: {{shipping_cost}}</li></ul><a href="{{show_cart_url}}" class="view_basket button button-primary medium link">{{see_your_cart_msg}}</a>',
+    _current_superattribute: null,
     extend: function(subclass, superclass) {
         function Dummy(){}
         Dummy.prototype = superclass.prototype;
@@ -98,6 +100,10 @@ var Mall = {
 
     dispatch: function() {
         // fetch shopping cart and favourites informations
+        this.getAccountInfo();
+    },
+
+    getAccountInfo: function() {
         jQuery.ajax({
             cache: false,
             dataType: "json",
@@ -106,43 +112,56 @@ var Mall = {
                 // do nothing at the moment
             },
             success: function(data, status) {
-                // determine status
-                if(data.status == false) {
-                    return;
-                }
-                Mall.setUserBlockData(data.content);
-                if(data.content.cart.all_products_count == null) {
-                    data.content.cart.all_products_count = 0;
-                }
-                // set products count badge
-                Mall.setFavoritesCountBadge(data.content.favorites_count);
-                // set products count badge
-                Mall.setProductsCountBadge(data.content.cart.all_products_count);
-                var dropdownBasket = jQuery("#dropdown-basket");
-                dropdownBasket.html(Mall.replace(dropdownBasket.html(), data.content.cart));
-
-                // build product list
-                var products = data.content.cart.products;
-                // build object for filling products template
-                Mall._data = data.content;
-                if(data.content.cart.all_products_count == 0) {
-                    jQuery("#product-list").html('<p style="text-align: center;margin-top:20px;">Brak produktów w koszyku.</p>');
-                } else {
-                    jQuery.each(products, function(key) {
-                        if(typeof products[key].options[0] != "undefined") {
-                            products[key].attr_label = products[key].options[0].label;
-                            products[key].attr_value = products[key].options[0].value;
-                            products[key].currency_symbol = Mall._data.cart.currency_symbol;
-                            jQuery("#product-list").append(Mall.replace(Mall._product_template, products[key]));
-                        }
-                    });
-                }
-
-                // replace favorites url
-                jQuery("#link_favorites > a").attr("href", data.content.favorites_url);
+                Mall.buildAccountInfo(data, status);
             },
             url: "/orbacommon/ajax_customer/get_account_information"
         });
+    },
+
+    buildAccountInfo: function(data, status) {
+        // determine status
+        if(data.status == false) {
+            return;
+        }
+        Mall.setUserBlockData(data.content);
+        if(data.content.cart.all_products_count == null) {
+            data.content.cart.all_products_count = 0;
+        }
+        // set products count badge
+        Mall.setFavoritesCountBadge(data.content.favorites_count);
+        // set products count badge
+        Mall.setProductsCountBadge(data.content.cart.all_products_count);
+        var dropdownBasket = jQuery("#dropdown-basket");
+        data.content.cart.total_amount = number_format(data.content.cart.total_amount, 2, ",", " ");
+        data.content.cart.see_your_cart_msg = Mall.i18nValidation.__("see_your_cart_msg", "See your cart");
+        data.content.cart.products_count_msg = Mall.i18nValidation.__("products_count_msg", "See your cart");
+        data.content.cart.products_worth_msg = Mall.i18nValidation.__("products_worth_msg", "See your cart");
+        data.content.cart.shipping_cost_msg = Mall.i18nValidation.__("shipping_cost_msg", "See your cart");
+        jQuery("#dropdown-basket").find(".summary_basket").html(Mall.replace(Mall._summary_basket, data.content.cart));
+//        dropdownBasket.html(Mall.replace(dropdownBasket.html(), data.content.cart));
+
+        // build product list
+        var products = data.content.cart.products == 0 ? [] : data.content.cart.products;
+        // build object for filling products template
+        Mall._data = data.content;
+        // clear products
+        jQuery("#product-list").html("");
+        if(products.length == 0) {
+            jQuery("#product-list").html('<p style="text-align: center;margin-top:20px;">Brak produktów w koszyku.</p>');
+        } else {
+            jQuery.each(products, function(key) {
+                if(typeof products[key].options[0] != "undefined") {
+                    products[key].attr_label = products[key].options[0].label;
+                    products[key].attr_value = products[key].options[0].value;
+                    products[key].currency_symbol = Mall._data.cart.currency_symbol;
+                    products[key].unit_price = number_format(products[key].unit_price, 2, ",", " ");
+                    jQuery("#product-list").append(Mall.replace(Mall._product_template, products[key]));
+                }
+            });
+        }
+
+        // replace favorites url
+        jQuery("#link_favorites > a").attr("href", data.content.favorites_url);
     },
 
     setProductsCountBadge : function(count) {
@@ -186,12 +205,197 @@ var Mall = {
         // set basket url
         jQuery("#link_basket>a").attr("href", content.cart.show_cart_url);
         userBlock.show();
+    },
+
+    addToWishlist: function(id, context) {
+        OrbaLib.Wishlist.add({product: id}, function(){
+            context = context || "product";
+            id = id || 0;
+            if(arguments[0].status == true) {
+                if(context == "product") {
+                    // we are in product context
+                    jQuery("#notadded-wishlist").hide();
+                    jQuery("#added-wishlist").removeClass("hidden");
+                    jQuery("#added-wishlist").show();
+                    jQuery("#added-wishlist .product-context-like-count").first().html(parseInt(jQuery("#added-wishlist .product-context-like-count").text()) + 1);
+                    jQuery("#notadded-wishlist .product-context-like-count").first().html(parseInt(jQuery("#added-wishlist .product-context-like-count").text()) - 1);
+                } else {
+                    if(id == 0) {
+                        // we are in product context
+                        jQuery("#notadded-wishlist").hide();
+                        jQuery("#added-wishlist").removeClass("hidden");
+                        jQuery("#added-wishlist").show();
+                    } else {
+                        var item = jQuery('div[data-idproduct="'+ id +'"]');
+                        item.addClass("liked");
+                        item.attr("data-status", 1);
+                        item.find("span.like_count>span").html("Ty +");
+                    }
+                }
+                Mall.buildAccountInfo(arguments[0], true);
+            }
+        });
+    },
+
+    removeFromWishlist: function(id, context) {
+        OrbaLib.Wishlist.remove({product: id}, function(){
+            context = context || "product";
+            id = id || 0;
+                if(arguments[0].status == true) {
+                    if(context == "product") {
+                        // we are in product context
+                        jQuery("#notadded-wishlist").show().removeClass("hidden");
+                        jQuery("#added-wishlist").hide();
+                        jQuery("#added-wishlist .product-context-like-count").first().html(parseInt(jQuery("#added-wishlist .product-context-like-count").text()) - 1);
+                        jQuery("#notadded-wishlist .product-context-like-count").first().html(parseInt(jQuery("#added-wishlist .product-context-like-count").text()) + 1);
+                    } else {
+                        if(id == 0) {
+                            // we are in product context
+                            jQuery("#notadded-wishlist").show();
+                            jQuery("#added-wishlist").hide();
+                        } else {
+                            var item = jQuery('div[data-idproduct="'+ id +'"]');
+                            item.removeClass("liked");
+                            item.attr("data-status", 0);
+                            item.find("span.like_count>span").html("");
+                        }
+                    }
+                    Mall.buildAccountInfo(arguments[0], true);
+                }
+        });
+    },
+
+    toggleWishlist: function(item) {
+        var status = jQuery(item).attr("data-status");
+        var id = jQuery(item).attr("data-idproduct");
+        if(status == 0) {
+            Mall.addToWishlist(id, "small-box");
+        } else {
+            Mall.removeFromWishlist(id, "small-box");
+        }
+    },
+
+    setSuperAttribute: function(currentSelection) {
+        this._current_superattribute = currentSelection;
+    },
+
+    addToCart: function(id, qty) {
+        var superLabel = jQuery(this._current_superattribute).attr("name");
+        var attr = {};
+        attr[jQuery(this._current_superattribute).attr("data-id")] = jQuery(this._current_superattribute).attr("value");
+        OrbaLib.Cart.add({
+            "product_id": id,
+            "super_attribute": attr,
+            "qty": qty
+        }, addtocartcallback);
+        return false;
+    },
+
+    showMessage: function(message, type) {
+        switch(type) {
+            case "success":
+                alert(message);
+                break;
+
+            case "error":
+                alert(message);
+                break;
+
+            case "notice":
+                alert(message);
+                break;
+        }
     }
 
+}
 
+function addtocartcallback(response) {
+    if(response.status == false) {
+        Mall.showMessage(response.message, "error");
+    } else {
+        Mall.showMessage(response.content.message, "success");
+        Mall.getAccountInfo();
+    }
+}
 
+function number_format(number, decimals, dec_point, thousands_sep) {
+    number = (number + '')
+        .replace(/[^0-9+\-Ee.]/g, '');
+    var n = !isFinite(+number) ? 0 : +number,
+        prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
+        sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+        dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
+        s = '',
+        toFixedFix = function (n, prec) {
+            var k = Math.pow(10, prec);
+            return '' + (Math.round(n * k) / k)
+                .toFixed(prec);
+        };
+    // Fix for IE parseFloat(0.55).toFixed(0) = 0;
+    s = (prec ? toFixedFix(n, prec) : '' + Math.round(n))
+        .split('.');
+    if (s[0].length > 3) {
+        s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
+    }
+    if ((s[1] || '')
+        .length < prec) {
+        s[1] = s[1] || '';
+        s[1] += new Array(prec - s[1].length + 1)
+            .join('0');
+    }
+    return s.join(dec);
 }
 
 jQuery(document).ready(function() {
     Mall.dispatch();
+    Mall.i18nValidation.apply();
 });
+
+Mall.i18nValidation = {
+    _translate_messages: {},
+    add: function(key, translation) {
+        this._translate_messages[key] = translation;
+    },
+
+    apply: function() {
+        jQuery.extend(jQuery.validator.messages, this._translate_messages);
+    },
+
+    __: function(key, defaultMsg) {
+        if(typeof this._translate_messages[key] != undefined) {
+            return this._translate_messages[key];
+        }
+
+        return defaultMsg;
+    }
+};
+
+// function that extends rwdCarousel
+Mall.rwdCarousel = {
+    findTallestItem: function(obj) {
+        var height = 0;
+        jQuery.each(obj.rwd.rwdItems, function() {
+            if(this.clientHeight > height) {
+                height = this.clientHeight;
+            }
+        })
+
+        return height;
+    },
+
+    alignComplementaryProductsPrices: function(obj) {
+        var tallestItem = this.findTallestItem(obj);
+        var h = 0;
+        var diff = 0;
+        jQuery.each(obj.rwd.rwdItems, function() {
+
+            if((h = this.clientHeight) < tallestItem) {
+                diff = tallestItem - h;
+                if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1) {
+                    diff /= 2;
+                }
+                jQuery(this).find(".price").css("top", diff);
+            }
+        });
+    }
+};
