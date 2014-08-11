@@ -238,6 +238,23 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         }
         return $this;
     }
+    public  function saveProducts($campaignId, array $productIds)
+    {
+        $table = $this->getTable("zolagocampaign/campaign_product");
+        $where = $this->getReadConnection()
+            ->quoteInto("campaign_id=?", $campaignId);
+        $this->_getWriteAdapter()->delete($table, $where);
+
+        $toInsert = array();
+
+        foreach ($productIds as $productId) {
+            $toInsert[] = array("campaign_id" => $campaignId, "product_id" => $productId);
+        }
+        if (count($toInsert)) {
+            $this->_getWriteAdapter()->insertMultiple($table, $toInsert);
+        }
+        return $this;
+    }
     /**
      * @param Mage_Core_Model_Abstract $object
      * @param array $websites

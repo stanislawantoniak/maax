@@ -40,7 +40,31 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
     public function newAction() {
        return $this->_forward('edit');
     }
-	
+
+    public function productsAction()
+    {
+        $campaignId = $this->getRequest()->getParam('id',null);
+        $productsStr = $this->getRequest()->getParam('products',array());
+
+        $skuS = array();
+        if (is_string($productsStr)) {
+            $skuS = array_map('trim', explode(",", $productsStr));
+        }
+        $collection = Mage::getModel('catalog/product')
+            ->getCollection()
+            ->addAttributeToFilter('skuv', array('in' => $skuS))
+            ->getAllIds();
+        $productIds = array();
+        if (!empty($collection)) {
+            foreach ($collection as $productId) {
+                $productIds[] = $productId;
+            }
+        }
+        $model = Mage::getModel("zolagocampaign/campaign");
+        $model->getResource()->saveProducts($campaignId, $productIds);
+
+        $this->_renderPage(null, 'zolagocampaign');
+    }
 	public function saveAction() {
         $helper = Mage::helper('zolagocampaign');
         if (!$this->getRequest()->isPost()) {
