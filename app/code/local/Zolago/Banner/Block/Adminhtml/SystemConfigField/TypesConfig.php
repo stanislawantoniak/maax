@@ -13,6 +13,13 @@ class Zolago_Banner_Block_Adminhtml_SystemConfigField_TypesConfig extends Mage_A
         }
     }
 
+    protected function _prepareLayout()
+    {
+        $this->getLayout()->getBlock('head')->addItem('skin_js','../../../frontend/default/udropship/plugins/jquery-tmpl/jquery.tmpl.js');
+        $this->getLayout()->getBlock('head')->addJs('zolagobanner.js');
+
+        return parent::_prepareLayout();
+    }
     public function getElementHtml(Varien_Data_Form_Element_Abstract $element)
     {
         return $this->_getElementHtml($element);

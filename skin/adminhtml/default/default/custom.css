@@ -20,3 +20,11 @@
  * @copyright  Copyright (c) 2008 Irubin Consulting Inc. DBA Varien (http://www.varien.com)
  * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
+.banner-config-row {
+    display: block;
+    padding-bottom: 10px;
+}
+.banner-config-item {
+    margin: 5px;
+    width: 100%;
+}
