@@ -34,9 +34,9 @@
 
     <zolagocampaign_vendor_products>
         <update handle="udropship_vendor" />
-        <update handle="adminhtml_head" />
-        <update handle="bootstrap"/>
-        <update handle="forms"/>
+        <!--<update handle="adminhtml_head" />-->
+        <!--<update handle="bootstrap"/>-->
+        <!--<update handle="forms"/>-->
         <reference name="root">
             <action method="setTemplate"><template>page/empty.phtml</template></action>
         </reference>

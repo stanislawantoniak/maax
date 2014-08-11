@@ -43,8 +43,11 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
 
     public function productsAction()
     {
+        $this->loadLayout();
+
         $campaignId = $this->getRequest()->getParam('id',null);
         $productsStr = $this->getRequest()->getParam('products',array());
+        $isAjax = $this->getRequest()->getParam('isAjax',false);
 
         $skuS = array();
         if (is_string($productsStr)) {
@@ -63,7 +66,10 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
         $model = Mage::getModel("zolagocampaign/campaign");
         $model->getResource()->saveProducts($campaignId, $productIds);
 
-        $this->_renderPage(null, 'zolagocampaign');
+        $this->renderLayout();
+        if (!$isAjax) {
+            return $this->_redirectReferer();
+        }
     }
 	public function saveAction() {
         $helper = Mage::helper('zolagocampaign');

@@ -90,9 +90,11 @@
                             url: '/campaign/vendor/products',
                             contentType: "application/json; charset=utf-8",
                             type: 'GET',
-                            data: {id: modelId, products: campaignProductsSource},
+                            data: {id: modelId, products: campaignProductsSource, isAjax: true},
                             success: function(result){
-                                console.log(result);
+                                $(('#zolagocampaign_campaign_product_grid')).html($(result).find('#zolagocampaign_campaign_product_grid').html());
+                                $("#zolagocampaign_campaign_product_grid_table .filter input")
+                                    .addClass("form-control");
                             }
                         })
                     }
