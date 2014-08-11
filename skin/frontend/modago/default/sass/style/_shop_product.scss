@@ -248,6 +248,7 @@
 			position: absolute;
 			bottom: -10px;
 			left: 0px;
+			white-space: nowrap;
 			@media (max-width: 814px) {
 				
 			}
@@ -318,6 +319,12 @@
 			}
 
 		}
+        .addedLike-box {
+            @media (max-width: 810px) {
+//                margin-top: -7px;
+            }
+            margin-top: 7px !important;
+        }
 		.addLike {
 			width:149px;
 			height:42px;

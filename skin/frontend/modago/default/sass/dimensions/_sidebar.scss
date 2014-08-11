@@ -103,19 +103,21 @@
 .sidebar-first {
 	&.node-type-main_categories {
 		#sidebar {
+			@media (max-width: $screen-xs-max) { 
 			background:none;
+			}
 			.sidebar {
 				background:none;
 				border:none;
 				box-shadow: none;
 			}
 			@media (max-width: $screen-xs-max) { 
-				display: block;
+				//display: block;
 				width:100%;
 			 }
 			 .sidebar {
 			 	@media (max-width: $screen-xs-max) { 
-				display: block;
+				display: none;
 				width:100%;
 				
 			 }
