@@ -104,7 +104,7 @@ define([
 					["from", "to"].forEach(function(type){
 						var element = domConstruct.create("input", {
 							"type": "text",
-							"placeholder": type[0].toUpperCase() + type.slice(1),
+							"placeholder": Translator.translate(type[0].toUpperCase() + type.slice(1)),
 							"className": "range-field" + " " + "range-field-" + type + " " + "range-field-" + valueType,
 						});
 						
@@ -199,7 +199,7 @@ define([
 	testStore =  Observable(storeRest);
 	
 	var PriceGrid = declare([Grid, Selection, Keyboard, CompoundColumns]);
-	
+
 	grid = new PriceGrid({
 		columns: {
 			selector: selector({ label: ''}),
@@ -221,7 +221,7 @@ define([
 				}
 			},
 			name: {
-				label: "Name",
+				label: Translator.translate("Name"),
 				field: "name",
 				children: [
 					{
@@ -233,7 +233,7 @@ define([
 				]
 			},
 			price: {
-				label: "Price",
+				label: Translator.translate("Price"),
 				field: "display_price",
 				className: "column-medium",
 				children: [
@@ -260,7 +260,7 @@ define([
 				]
 			},
 			campaign_regular_id: {
-				label: "Price type",
+				label: Translator.translate("Price type"),
 				field: "campaign_regular_id",
 				className: "column-medium",
 				children: [
@@ -281,7 +281,7 @@ define([
 				]
 			},
 			price_margin: {
-				label: "Margin",
+				label: Translator.translate("Margin"),
 				field: "price_margin",
 				className: "column-medium",
 				children: [
@@ -307,7 +307,7 @@ define([
 				]
 			},
 			converter_price_type: {
-				label: "Price source",
+				label: Translator.translate("Price source"),
 				field: "converter_price_type",
 				className: "column-medium",
 				children: [
@@ -334,7 +334,7 @@ define([
 				]
 			},
 			msrp: {
-				label: "Msrp",
+				label: Translator.translate("Msrp"),
 				field: "msrp",
 				className: "column-medium",
 				children: [
@@ -347,7 +347,7 @@ define([
 				]
 			},
 			is_new: editor({
-				label: "New",
+				label: Translator.translate("New"),
 				field: "is_new",
 				className: "column-short",
 				children: [
@@ -372,7 +372,7 @@ define([
 				]
 			}),
 			is_bestseller: {
-				label: "Best",
+				label: Translator.translate("Best"),
 				field: "is_bestseller",
 				className: "column-short",
 				children: [
@@ -397,7 +397,7 @@ define([
 				]
 			},
 			product_flag: {
-				label: "Flag",
+				label: Translator.translate("Flag"),
 				field: "product_flag",
 				className: "column-short",
 				children: [
@@ -422,7 +422,7 @@ define([
 				]
 			},
 			is_in_stock: {
-				label: "In stock",
+				label: Translator.translate("In stock"),
 				field: "is_in_stock",
 				className: "column-short",
 				children: [
@@ -447,7 +447,7 @@ define([
 				]
 			},
 			variant_qty: {
-				label: "Variants",
+				label: Translator.translate("Variants"),
 				field: "available_child_count",
 				className: "column-center",
 				children: [
@@ -466,7 +466,7 @@ define([
 				]
 			},
 			stock: {
-				label: "Stock Qty",
+				label: Translator.translate("Stock Qty"),
 				field: "stock",
 				className: "column-medium",
 				children: [
@@ -505,7 +505,7 @@ define([
 				]
 			},
 			type_id: { 
-				label: "Type", 
+				label: Translator.translate("Type"), 
 				field: "type_id",
 				className: "column-medium",
 				children: [
@@ -526,8 +526,8 @@ define([
 				]
 			}
 		},
-		loadingMessage: "<span>Loading data...</span>",
-		noDataMessage: "<span>No results found</span>.",
+		loadingMessage: "<span>" + Translator.translate("Loading...") + "</span>",
+		noDataMessage: "<span>" + Translator.translate("No results found") + "</span>.",
         selectionMode: 'none',
 		minRowsPerPage: 50,
 		maxRowsPerPage: 100,

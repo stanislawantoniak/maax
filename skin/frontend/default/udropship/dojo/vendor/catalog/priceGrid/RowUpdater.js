@@ -130,7 +130,7 @@ define([
 			this._cache[item.entity_id] = item;
 		},
 		_loading: function(node){
-			jQuery(".expando", node).html(jQuery("<div>").addClass("sub-row-loading").text("loading..."))
+			jQuery(".expando", node).html(jQuery("<div>").addClass("sub-row-loading").text(Translator.translate("Loading...")))
 		},
 		
 		_renderSubRow: function(node, data){
@@ -138,7 +138,7 @@ define([
 			var divLeft=jQuery("<div>").addClass("p50 pull-left left");
 			var divRight=jQuery("<div>").addClass("p50 pull-left right");
 			var buttons = [
-				{"label": "Change prices"}
+				{"label": Translator.translate("Change prices")}
 			];
 			
 			switch(data.type_id){
@@ -151,7 +151,7 @@ define([
 						tbody.append(
 							jQuery("<tr>").addClass("header-row").
 								append(jQuery("<td>").attr("colspan", 6).
-									addClass("align-center").text("Child products")
+									addClass("align-center").text(Translator.translate("Child products"))
 							)
 						);	
 							
@@ -160,10 +160,10 @@ define([
 								jQuery("<tr>").addClass("header-row").
 									append(jQuery("<td>").addClass("sub-checkbox")).
 									append(jQuery("<td>").text(item.label)).
-									append(jQuery("<td>").text("Price Variation")).
-									append(jQuery("<td>").text("Availability")).
-									append(jQuery("<td>").text("Stock")).
-									append(jQuery("<td>").text("POS Stock"))
+									append(jQuery("<td>").text(Translator.translate("Price Variation"))).
+									append(jQuery("<td>").text(Translator.translate("In stock"))).
+									append(jQuery("<td>").text(Translator.translate("Stock Qty"))).
+									append(jQuery("<td>").text(Translator.translate("POS Stock")))
 							)
 					
 							item.children.forEach(function(child){
@@ -172,9 +172,9 @@ define([
 										append(jQuery("<td>").addClass("sub-checkbox").append("<input type=\"checkbox\"/>")).
 										append(jQuery("<td>").text(child.option_text)).
 										append(jQuery("<td>").text(child.price)).
-										append(jQuery("<td>").text(child.is_in_stock ? "Yes" : "No")).
+										append(jQuery("<td>").text(Translator.translate(child.is_in_stock ? "Yes" : "No"))).
 										append(jQuery("<td>").text(parseInt(child.qty))).
-										append(jQuery("<td>").append(jQuery("<a>").text("View")))
+										append(jQuery("<td>").append(jQuery("<a>").text(Translator.translate("View POS Stock"))))
 								)
 							})
 						});
@@ -185,7 +185,7 @@ define([
 					divLeft.append(
 						jQuery("<a>").
 							addClass("sub-row-pos").
-							text("View POS Stock")
+							text(Translator.translate("View POS Stock"))
 					);
 				break;
 			}
@@ -209,14 +209,14 @@ define([
 		
 				tbody.append(
 					jQuery("<tr>").addClass("header-row").
-						append(jQuery("<td>").text("State")).
-						append(jQuery("<td>").text("Date from")).
-						append(jQuery("<td>").text("Date to")).
-						append(jQuery("<td>").text("Price source")).
-						append(jQuery("<td>").text("Margin")).
-						append(jQuery("<td>").text("Camapign price")).
-						append(jQuery("<td>").text("Msrp")).
-						append(jQuery("<td>").text("Regular price"))
+						append(jQuery("<td>").text(Translator.translate("Status"))).
+						append(jQuery("<td>").text(Translator.translate("From"))).
+						append(jQuery("<td>").text(Translator.translate("To"))).
+						append(jQuery("<td>").text(Translator.translate("Price source"))).
+						append(jQuery("<td>").text(Translator.translate("Margin"))).
+						append(jQuery("<td>").text(Translator.translate("Camapign price"))).
+						append(jQuery("<td>").text(Translator.translate("Msrp"))).
+						append(jQuery("<td>").text(Translator.translate("Regular price")))
 				)
 		
 				tbody.append(
@@ -231,7 +231,7 @@ define([
 						append(jQuery("<td>").text(misc.currency(campaign.price)))
 				)
 		
-				buttons.unshift({"label": "Remove from campaign"});
+				buttons.unshift({"label": Translator.translate("Remove from campaign")});
 		
 				divRight.append(table);
 		
