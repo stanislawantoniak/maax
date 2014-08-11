@@ -12,12 +12,29 @@
 				<?php endif;?>
 			</h3>
 		</div>
-		
 	</div>
+    <div class="page-heading row">
+        <div class="col-lg-6">
+            <ol class="breadcrumb">
+                <?php if($this->isModelNew()):?>
+                    <li>
+                        <a href="<?php echo $_helper->setBannerTypeUrl(); ?>">
+                            <?php echo $_helper->__('Choose Banner Type') ?>
+                        </a>
+                    </li>
+                <?php endif;?>
+                <?php if($this->isModelNew()):?>
+                    <li class="active"><?php echo $_helper->__("New Banner");?></li>
+                <?php else: ?>
+                    <li class="active"><?php echo $_helper->__("Edit Banner '%s'", $_model->getName());?></li>
+                <?php endif;?>
+            </ol>
+        </div>
+    </div>
 </div>
 
 <div class="container z-grid">
-	<form id="edit-campaign" class="form-horizontal row-border" action="<?php echo $this->getForm()->getAction();?>" method="POST">
+	<form id="edit-banner" class="form-horizontal row-border" action="<?php echo $this->getForm()->getAction();?>" method="POST" enctype="multipart/form-data">
 		<input type="hidden" name="campaign_id" value="<?php echo $_model->getId();?>"/>
 		<?php echo $this->getLayout()->getBlock('formkey')->toHtml();?>
 		<?php echo $this->getForm()->toHtml();?>
@@ -31,5 +48,20 @@
         var form = $("#edit-campaign");
         new Zolago.formIntegrator(form);
         form.validate();
+
+        changeDependingSelector('slider_type');
+
+
     });
+
+    function changeDependingSelector(name) {
+        jQuery('select[name=' + name + ']').change(function () {
+            var form = jQuery('#edit-banner');
+            var type = jQuery(this).val();
+            form.find('[data-name=' + name + ']').addClass('hidden');
+            form.find('[data-name=' + name + '][data-type=' + type + ']').removeClass('hidden');
+        })
+    }
+
+
 </script>
