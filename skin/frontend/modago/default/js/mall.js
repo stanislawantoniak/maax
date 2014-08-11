@@ -6,6 +6,7 @@ var Mall = {
     _data: {},
     _product_template: '<tr><td class="thumb"><img src="{{image_url}}" alt=""></td><td class="desc"><p class="name_product">{{name}}</p><p class="size">{{attr_label}}:<span>{{attr_value}}</span></p><p class="quantity">ilość:<span>{{qty}}</span></p></td><td class="price">{{unit_price}} {{currency_symbol}}</td></tr>',
     _recently_viewed_item_template: '<div class="item"><a href="{{redirect_url}}" class="simple"><div class="box_listing_product"><figure class="img_product"><img src="{{image_url}}" alt="" /></figure><div class="name_product hidden-xs">{{title}}</div></div></a></div>',
+    _summary_basket: '<ul><li>{{products_count_msg}}: {{all_products_count}}</li><li>{{products_worth_msg}}: {{total_amount}} {{currency_symbol}}</li><li>{{shipping_cost_msg}}: {{shipping_cost}}</li></ul><a href="{{show_cart_url}}" class="view_basket button button-primary medium link">{{see_your_cart_msg}}</a>',
     _current_superattribute: null,
     extend: function(subclass, superclass) {
         function Dummy(){}
@@ -132,7 +133,12 @@ var Mall = {
         Mall.setProductsCountBadge(data.content.cart.all_products_count);
         var dropdownBasket = jQuery("#dropdown-basket");
         data.content.cart.total_amount = number_format(data.content.cart.total_amount, 2, ",", " ");
-        dropdownBasket.html(Mall.replace(dropdownBasket.html(), data.content.cart));
+        data.content.cart.see_your_cart_msg = Mall.i18nValidation.__("see_your_cart_msg", "See your cart");
+        data.content.cart.products_count_msg = Mall.i18nValidation.__("products_count_msg", "See your cart");
+        data.content.cart.products_worth_msg = Mall.i18nValidation.__("products_worth_msg", "See your cart");
+        data.content.cart.shipping_cost_msg = Mall.i18nValidation.__("shipping_cost_msg", "See your cart");
+        jQuery("#dropdown-basket").find(".summary_basket").html(Mall.replace(Mall._summary_basket, data.content.cart));
+//        dropdownBasket.html(Mall.replace(dropdownBasket.html(), data.content.cart));
 
         // build product list
         var products = data.content.cart.products;
@@ -353,6 +359,14 @@ Mall.i18nValidation = {
 
     apply: function() {
         jQuery.extend(jQuery.validator.messages, this._translate_messages);
+    },
+
+    __: function(key, defaultMsg) {
+        if(typeof this._translate_messages[key] != undefined) {
+            return this._translate_messages[key];
+        }
+
+        return defaultMsg;
     }
 };
 
