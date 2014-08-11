@@ -54,8 +54,8 @@ define([
 			if(value!==this.oldValue){
 				// need query factory
 				var query = this.grid.get("query");
-			
-				if(value!=""){
+	
+				if(value!==""){
 					query[this.dataField] = value;
 				}else{
 					query[this.dataField] = null;
