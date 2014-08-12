@@ -40,15 +40,6 @@ class Zolago_Banner_Block_Vendor_Banner_Grid extends Mage_Adminhtml_Block_Widget
 			"header"	=>	$_helper->__("Banner Type"),
 		));
 
-
-		$this->addColumn("status", array(
-            "type"		=>	"options",
-            "options"	=>  Mage::getSingleton('zolagobanner/banner_status')->toOptionHash(),
-			"index"		=>	"status",
-			"class"		=>  "form-control",
-			"header"	=>	$_helper->__("Status"),
-		));
-
 		
 		$this->addColumn("actions", array(
                 'header'    => Mage::helper('zolagopos')->__('Action'),

@@ -152,12 +152,18 @@ $fValue = $_element->getValue();
 
                     <br /><br />
                     <h3><?php echo Mage::helper('zolagobanner')->__('Show As')?></h3>
-                    <?php $showAs = isset($fV['show_as']) && !empty($fV['show_as']) ? $fV['show_as'] : 'image'?>
-                    <select name="<?php echo $this->getFieldName()?>[<?php echo $row; ?>][show_as]">
-                        <option value="image" <?php if($showAs == 'image'): ?> selected <?php endif; ?>>Image</option>
-                        <option value="html" <?php if($showAs == 'html'): ?> selected <?php endif; ?>>HTML</option>
-                    </select>
+                    <?php
+                    $availableShow = Mage::getSingleton('zolagobanner/banner_show')->toOptionHash();
+                    $showAs = isset($fV['show_as']) && !empty($fV['show_as']) ? $fV['show_as'] : current($availableShow);
+                    ?>
 
+                    <select name="<?php echo $this->getFieldName()?>[<?php echo $row; ?>][show_as]">
+                        <?php foreach($availableShow as $value => $label): ?>
+                            <option value="<?php echo $value; ?>" <?php if($showAs == $value): ?> selected <?php endif; ?>>
+                                <?php echo $label; ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
                 </td>
                 <td>
                     <h3><?php echo Mage::helper('zolagobanner')->__('Image Definition')?></h3>
@@ -198,14 +204,14 @@ $fValue = $_element->getValue();
                                                 <div class="banner-config-row">
                                                     <div class="banner-config-item">
                                                         <?php $pictureLabel = isset($pictureConfig['picture_label']) ? $pictureConfig['picture_label'] : ''; ?>
-                                                        <label>Field Label: </label>
+                                                        <label><?php echo Mage::helper('zolagobanner')->__('Field Label'); ?>: </label>
                                                         <input type="text" class="input-text"
                                                                name="groups[config][fields][zolagobannertypes][value][<?php echo $row; ?>][picture][<?php echo $picN; ?>][picture_label]"
                                                                value="<?php echo $pictureLabel; ?>"
                                                                style="width:250px;"></div>
                                                     <div class="banner-config-item">
                                                         <?php $picturesW = isset($pictureConfig['pictures_w']) ? $pictureConfig['pictures_w'] : 0; ?>
-                                                        Width: <input type="text"
+                                                        <?php echo Mage::helper('zolagobanner')->__('Width'); ?>: <input type="text"
                                                                       class="input-text"
                                                                       name="groups[config][fields][zolagobannertypes][value][<?php echo $row; ?>][picture][<?php echo $picN; ?>][pictures_w]"
                                                                       value="<?php echo $picturesW; ?>"
@@ -214,7 +220,7 @@ $fValue = $_element->getValue();
                                                     </div>
                                                     <div class="banner-config-item">
                                                         <?php $picturesH = isset($pictureConfig['pictures_h']) ? $pictureConfig['pictures_h'] : 0; ?>
-                                                        Height: <input type="text"
+                                                        <?php echo Mage::helper('zolagobanner')->__('Height'); ?>: <input type="text"
                                                                        class="input-text"
                                                                        name="groups[config][fields][zolagobannertypes][value][<?php echo $row; ?>][picture][<?php echo $picN; ?>][pictures_h]"
                                                                        value="<?php echo $picturesH; ?>"
@@ -275,7 +281,7 @@ $fValue = $_element->getValue();
                                             <?php foreach($fV['caption'] as $capN => $captionConfig): ?>
                                                 <div class="caption-config-row">
                                                     <div class="caption-config-item">
-                                                        <label>Field Label: </label>
+                                                        <label><?php echo Mage::helper('zolagobanner')->__('Field Label'); ?>: </label>
                                                         <?php $captionLabel = isset($captionConfig['caption_label']) ? $captionConfig['caption_label'] : ''; ?>
                                                         <input
                                                             type="text" class="input-text"
