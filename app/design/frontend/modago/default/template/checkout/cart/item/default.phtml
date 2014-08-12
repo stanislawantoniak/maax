@@ -58,14 +58,6 @@ $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage
                 <?php if ($addInfoBlock): ?>
                     <?php echo $addInfoBlock->setItem($_item)->toHtml() ?>
                 <?php endif;?>
-
-                <?php if($_item->getHasError()):?>
-                    <?php if ($messages = $this->getMessages()): ?>
-                        <?php foreach ($messages as $message): ?>
-                            <p class="item-msg <?php echo $message['type'] ?>">* <?php echo $this->escapeHtml($message['text']) ?></p>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
-                <?php endif;?>
             </div>
         </div>
     </div>
