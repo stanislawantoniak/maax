@@ -176,7 +176,7 @@
         </reference>
 
         <reference name="content">
-            <block type="udsplit/cart_vendor" />
+            <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml" />
         </reference>
     </checkout_cart_index>
 
