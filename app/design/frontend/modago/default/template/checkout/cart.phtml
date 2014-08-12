@@ -29,356 +29,33 @@
  * Shopping cart template
  *
  * @see Mage_Checkout_Block_Cart
+ * @var $this Zolago_DropshipSplit_Block_Cart
  */
+?>
+
+<?php
+
+$_items = $this->getItems();
+
 ?>
 
 <div id="content" class="container-fluid">
     <div id="shopping-cart" class="row">
-        <form action=""><!-- col-lg-9 col-md-8 || col-sm-12 col-xs-12-->
+        <form action="<?php echo $this->getUrl('checkout/cart/updatePost') ?>" method="post">
+            <?php echo $this->getBlockHtml('formkey'); ?>
             <div id="content-main" class="col-lg-9 col-md-8  section">
                 <div class="main bg-w">
                     <section>
                         <header>
-                            <h1>Twój Koszyk</h1>
-                            <p class="ff_os fz_11 hidden-xs">W Modago.pl kupujesz bezpośrednio u sprzedającego. Płacisz tylko raz. </p>
+                            <h1><?php echo $this->__("Shopping Cart"); ?></h1>
+                            <p class="ff_os fz_11 hidden-xs"><?php echo $this->__("In modago.pl you buy directly in vendor. You pay only once."); ?></p>
                         </header>
 
-                        <div class="panel panel-default">
-                            <div class="panel-heading">Sklep: <strong>ZARA</strong></div>
-                            <div class="panel-body">
+                        <?php foreach($_items as $_item) : ?>
 
+                            <?php echo $this->getItemHtml($_item); ?>
 
-                                <div class="tableWrapper table-cart">
-                                    <!-- Thead -->
-
-                                    <!-- TBody -->
-                                    <div class="table-row clearfix">
-                                        <div class="colgroup-01 clearfix">
-                                            <div class="clearfix">
-                                                <figure><img src="/skin/frontend/modago/default/images/product/thumb/thumnail-53.png" alt="" /></figure>
-                                                <div class="description_checked_product">
-                                                    <div class="product_name">SELECTED: Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
-                                                    <div class="product_size">rozmiar: 38</div>
-                                                    <div class="product_availability"><span class="icons-checked">Dostępne na magazynie!</span></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="colgroup-02 clearfix">
-                                            <div class="colgroup naglowek">
-
-                                                <div class="cena">Cena</div>
-                                                <div class="ilosc">Ilość</div>
-                                                <div class="wartosc">Wartość</div>
-                                                <div class="usun"></div>
-
-                                            </div>
-                                            <div class="colgroup clearfix">
-                                                <div class="usun"><a href="#" class="delet_product"><i class="fa-remove"></i></a></div>
-                                                <div class="col">
-                                                    <div class="cena"><span class="stara_cena">800,00 zł</span><span class="cena_zakupu">600,00 zł</span></div>
-                                                    <div class="ilosc">
-                                                        <input type="text" class="amount_product hidden-xs" name="amount_product_001" value="1">
-
-                                                        <div class="select-group medium">
-                                                            <a class="button-select no-ajax visible-xs" href="#"><span>1</span> <span class="down"></span></a>
-                                                            <div class="dropdown-select mCustomScrollbar">
-                                                                <ul>
-                                                                    <li><a href="#" data-value="1"><span>1</span></a></li>
-                                                                    <li><a href="#" data-value="2"><span>2</span></a></li>
-                                                                    <li><a href="#" data-value="3"><span>3</span></a></li>
-                                                                    <li><a href="#" data-value="4"><span>4</span></a></li>
-                                                                    <li><a href="#" data-value="5"><span>5</span></a></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="wartosc">600,00 zł</div>
-                                                </div>
-
-
-                                            </div>
-
-
-                                        </div>
-                                    </div>
-                                    <div class="table-row clearfix">
-                                        <div class="colgroup-01 clearfix">
-                                            <div class="clearfix">
-                                                <figure><img src="/skin/frontend/modago/default/images/product/thumb/thumnail-53.png" alt="" /></figure>
-                                                <div class="description_checked_product">
-                                                    <div class="product_name">SELECTED Sukienka floral 1</div>
-                                                    <div class="product_size">rozmiar: 38</div>
-                                                    <div class="product_availability"><span class="icons-checked">Dostępne na magazynie!</span></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="colgroup-02 clearfix">
-                                            <div class="colgroup naglowek">
-
-                                                <div class="cena">Cena</div>
-                                                <div class="ilosc">Ilość</div>
-                                                <div class="wartosc">Wartość</div>
-                                                <div class="usun"></div>
-
-                                            </div>
-                                            <div class="colgroup clearfix">
-                                                <div class="usun"><a href="#" class="delet_product"><i class="fa-remove"></i></a></div>
-                                                <div class="col">
-                                                    <div class="cena"><span class="stara_cena">800,00 zł</span><span class="cena_zakupu">600,00 zł</span></div>
-                                                    <div class="ilosc">
-                                                        <input type="text" class="amount_product hidden-xs" name="amount_product_001" value="1">
-
-                                                        <div class="select-group medium">
-                                                            <a class="button-select no-ajax visible-xs" href="#"><span>1</span> <span class="down"></span></a>
-                                                            <div class="dropdown-select mCustomScrollbar">
-                                                                <ul>
-                                                                    <li><a href="#" data-value="1"><span>1</span></a></li>
-                                                                    <li><a href="#" data-value="2"><span>2</span></a></li>
-                                                                    <li><a href="#" data-value="3"><span>3</span></a></li>
-                                                                    <li><a href="#" data-value="4"><span>4</span></a></li>
-                                                                    <li><a href="#" data-value="5"><span>5</span></a></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="wartosc">600,00 zł</div>
-                                                </div>
-
-
-                                            </div>
-
-
-                                        </div>
-                                    </div>
-                                    <!-- TFoot -->
-                                    <div class="table-footer-group hidden-xs">
-                                        <div class="table-row clearfix">
-                                            <div class="table-cell cell-01 td">
-                                                <p>WYSYŁKA KURIEREM 24 H<br>DARMOWY ZWROT DO 30 DNI</p>
-                                                <a class="trigger_conditions_shipping ff_os fz_11 underline" href="#" data-toggle="modal" data-target="#trigger_conditions_shipping" >Warunki i koszty dostawy</a>
-
-                                            </div>
-
-                                            <div class="table-cell cell-03 label_value td">
-                                                <div class="value_quality_price">Suma:</div>
-                                                <div class="value_quality_delivery">
-                                                    Koszt dostawy od:
-                                                    <div class="bubble visible-lg">
-                                                        <div>
-                                                            <p>Brakuje Ci <strong>50</strong> zł aby otrzymać<br>darmową dostawę!</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="table-cell cell-04 td"><div class="quality_price">3600,00 zł</div><div class="quality_delivery">9,90 zł</div></div>
-                                            <div class="table-cell cell-05 td"></div>
-
-
-                                        </div>
-
-                                    </div>
-                                    <!-- TFoot mobile-->
-                                    <div class="table-footer-group visible-xs">
-                                        <div class="table-row clearfix">
-                                            <div class="table-cell cell-03 label_value td">
-                                                <div class="value_quality_price">WARTOŚĆ PRODUKTÓW ZE SKLEPU:</div>
-                                                <div class="value_quality_delivery">KOSZT DOSTAWY OD:</div>
-                                            </div>
-                                            <div class="table-cell cell-04 td"><div class="quality_price">3600,00 zł</div><div class="quality_delivery">9,90 zł</div></div>
-                                        </div>
-                                        <div class="table-row clearfix">
-                                            <div class="bubble visible-lg">
-                                                <div>
-                                                    <p>Brakuje Ci <strong>50</strong> zł aby otrzymać<br>darmową dostawę!</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="table-row clearfix">
-                                            <div class="table-cell cell-01 td  no-border">
-                                                <p>WYSYŁKA KURIEREM 24 H<br>DARMOWY ZWROT DO 30 DNI </p>
-                                                <a class="trigger_conditions_shipping ff_os fz_11 underline" href="#" data-toggle="modal" data-target="#trigger_conditions_shipping" >Warunki i koszty dostawy</a>
-
-                                            </div>
-                                        </div>
-                                        <div class="conditions_shipping panel panel-default">
-                                            <div class="panel-heading"><h2>Warunki i koszty dostawy : ZARA</h2></div>
-                                            <div class="panel-body">
-                                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis accusantium voluptate, autem hic sunt vero placeat rerum, tenetur illum vel esse, accusamus atque similique. Magnam voluptas alias laboriosam ea soluta?</p>
-                                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis accusantium voluptate, autem hic sunt vero placeat rerum, tenetur illum vel esse, accusamus atque similique. Magnam voluptas alias laboriosam ea soluta?</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="panel panel-default">
-                            <div class="panel-heading">Sklep: <strong>SELECTED FEMME</strong></div>
-                            <div class="panel-body">
-
-
-                                <div class="tableWrapper table-cart">
-                                    <!-- Thead -->
-
-                                    <!-- TBody -->
-                                    <div class="table-row clearfix">
-                                        <div class="colgroup-01 clearfix">
-                                            <div class="clearfix">
-                                                <figure><img src="/skin/frontend/modago/default/images/product/thumb/thumnail-53.png" alt="" /></figure>
-                                                <div class="description_checked_product">
-                                                    <div class="product_name">SELECTED Sukienka floral</div>
-                                                    <div class="product_size">rozmiar: 38</div>
-                                                    <div class="product_availability"><span class="icons-checked">Dostępne na magazynie!</span></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="colgroup-02 clearfix">
-                                            <div class="colgroup naglowek">
-
-                                                <div class="cena">Cena</div>
-                                                <div class="ilosc">Ilość</div>
-                                                <div class="wartosc">Wartość</div>
-                                                <div class="usun"></div>
-
-                                            </div>
-                                            <div class="colgroup clearfix">
-                                                <div class="usun"><a href="#" class="delet_product"><i class="fa-remove"></i></a></div>
-                                                <div class="col">
-                                                    <div class="cena"><span class="stara_cena">800,00 zł</span><span class="cena_zakupu">600,00 zł</span></div>
-                                                    <div class="ilosc">
-                                                        <input type="text" class="amount_product hidden-xs" name="amount_product_001" value="1">
-
-                                                        <div class="select-group medium">
-                                                            <a class="button-select no-ajax visible-xs" href="#"><span>1</span> <span class="down"></span></a>
-                                                            <div class="dropdown-select mCustomScrollbar">
-                                                                <ul>
-                                                                    <li><a href="#" data-value="1"><span>1</span></a></li>
-                                                                    <li><a href="#" data-value="2"><span>2</span></a></li>
-                                                                    <li><a href="#" data-value="3"><span>3</span></a></li>
-                                                                    <li><a href="#" data-value="4"><span>4</span></a></li>
-                                                                    <li><a href="#" data-value="5"><span>5</span></a></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="wartosc">600,00 zł</div>
-                                                </div>
-
-
-                                            </div>
-
-
-                                        </div>
-                                    </div>
-                                    <div class="table-row clearfix">
-                                        <div class="colgroup-01 clearfix">
-                                            <div class="clearfix">
-                                                <figure><img src="/skin/frontend/modago/default/images/product/thumb/thumnail-53.png" alt="" /></figure>
-                                                <div class="description_checked_product">
-                                                    <div class="product_name">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</div>
-                                                    <div class="product_size">rozmiar: 38</div>
-                                                    <div class="product_availability"><span class="icons-checked">Dostępne na magazynie!</span></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="colgroup-02 clearfix">
-                                            <div class="colgroup naglowek">
-
-                                                <div class="cena">Cena</div>
-                                                <div class="ilosc">Ilość</div>
-                                                <div class="wartosc">Wartość</div>
-                                                <div class="usun"></div>
-
-                                            </div>
-                                            <div class="colgroup clearfix">
-                                                <div class="usun"><a href="#" class="delet_product"><i class="fa-remove"></i></a></div>
-                                                <div class="col">
-                                                    <div class="cena"><span class="stara_cena">800,00 zł</span><span class="cena_zakupu">600,00 zł</span></div>
-                                                    <div class="ilosc">
-                                                        <input type="text" class="amount_product hidden-xs" name="amount_product_001" value="1">
-
-                                                        <div class="select-group medium">
-                                                            <a class="button-select no-ajax visible-xs" href="#"><span>1</span> <span class="down"></span></a>
-                                                            <div class="dropdown-select mCustomScrollbar">
-                                                                <ul>
-                                                                    <li><a href="#" data-value="1"><span>1</span></a></li>
-                                                                    <li><a href="#" data-value="2"><span>2</span></a></li>
-                                                                    <li><a href="#" data-value="3"><span>3</span></a></li>
-                                                                    <li><a href="#" data-value="4"><span>4</span></a></li>
-                                                                    <li><a href="#" data-value="5"><span>5</span></a></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="wartosc">600,00 zł</div>
-                                                </div>
-
-
-                                            </div>
-
-
-                                        </div>
-                                    </div>
-                                    <!-- TFoot -->
-                                    <div class="table-footer-group hidden-xs">
-                                        <div class="table-row clearfix">
-                                            <div class="table-cell cell-01 td">
-                                                <p>WYSYŁKA KURIEREM 24 H<br>DARMOWY ZWROT DO 30 DNI</p>
-                                                <a class="trigger_conditions_shipping ff_os fz_11 underline" href="#" data-toggle="modal" data-target="#trigger_conditions_shipping" >Warunki i koszty dostawy</a>
-                                            </div>
-
-                                            <div class="table-cell cell-03 label_value td">
-                                                <div class="value_quality_price">Suma:</div>
-                                                <div class="value_quality_delivery">
-                                                    Koszt dostawy od:
-                                                    <div class="bubble visible-lg">
-                                                        <div>
-                                                            <p>Brakuje Ci <strong>50</strong> zł aby otrzymać<br>darmową dostawę!</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="table-cell cell-04 td"><div class="quality_price">3600,00 zł</div><div class="quality_delivery">9,90 zł</div></div>
-                                            <div class="table-cell cell-05 td"></div>
-                                        </div>
-                                    </div>
-                                    <!-- TFoot mobile-->
-                                    <div class="table-footer-group visible-xs">
-                                        <div class="table-row clearfix">
-                                            <div class="table-cell cell-03 label_value td">
-                                                <div class="value_quality_price">WARTOŚĆ PRODUKTÓW ZE SKLEPU:</div>
-                                                <div class="value_quality_delivery">KOSZT DOSTAWY OD:</div>
-                                            </div>
-                                            <div class="table-cell cell-04 td"><div class="quality_price">3600,00 zł</div><div class="quality_delivery">9,90 zł</div></div>
-                                        </div>
-                                        <div class="table-row clearfix">
-                                            <div class="bubble visible-lg">
-                                                <div>
-                                                    <p>Brakuje Ci <strong>50</strong> zł aby otrzymać<br>darmową dostawę!</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="table-row clearfix">
-                                            <div class="table-cell cell-01 td  no-border">
-                                                <p>WYSYŁKA KURIEREM 24 H<br>DARMOWY ZWROT DO 30 DNI</p>
-                                                <!--<a class="deliver_info ff_os fz_11 underline" href="#">Warunki i koszty dostawy</a> -->
-                                                <a class="trigger_conditions_shipping ff_os fz_11 underline" href="#" data-toggle="modal" data-target="#trigger_conditions_shipping" >Warunki i koszty dostawy</a>
-                                            </div>
-
-
-                                        </div>
-                                        <div class="conditions_shipping panel panel-default">
-                                            <div class="panel-heading"><h2>Warunki i koszty dostawy : SELECTED FEMME</h2></div>
-                                            <div class="panel-body">
-                                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis accusantium voluptate, autem hic sunt vero placeat rerum, tenetur illum vel esse, accusamus atque similique. Magnam voluptas alias laboriosam ea soluta?</p>
-                                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis accusantium voluptate, autem hic sunt vero placeat rerum, tenetur illum vel esse, accusamus atque similique. Magnam voluptas alias laboriosam ea soluta?</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
+                        <?php endforeach; ?>
 
                         <div class="modal fade" id="trigger_conditions_shipping" tabindex="-1" role="dialog" aria-labelledby="trigger_conditions_shipping" aria-hidden="true">
                             <div class="modal-dialog">
@@ -392,7 +69,7 @@
 
                         <footer class="hidden-xs">
                             <a href="#" id="clearAllShopping" class="simple"><i class="fa-remove"></i> Wyczyść koszyk</a>
-                            <a href="#" id="btn_continue_shopping">Kontynuuj Zakupy <i class="fa-arrow-btn-right"></i></a>
+                            <a href="<?php echo $this->getContinueShoppingUrl() ?>" id="btn_continue_shopping"><?php echo $this->__("Continue shopping at the mall."); ?> <i class="fa-arrow-btn-right"></i></a>
                         </footer>
                     </section>
                 </div>
@@ -473,7 +150,7 @@
             </div>
             <aside id="aside-shopping-cart" class="main bg-w visible-xs">
                 <a href="#" id="clearAllShopping"><i class="fa-remove"></i> Wyczyść koszyk</a>
-                <a href="#" id="btn_continue_shopping">Kontynuuj Zakupy <i class="fa-arrow-btn-right"></i></a>
+                <a href="<?php echo $this->getContinueShoppingUrl() ?>" id="btn_continue_shopping"><?php echo $this->__("Continue shopping at the mall."); ?> <i class="fa-arrow-btn-right"></i></a>
             </aside>
         </form>
     </div>

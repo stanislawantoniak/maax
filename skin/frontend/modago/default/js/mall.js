@@ -305,6 +305,12 @@ var Mall = {
                 alert(message);
                 break;
         }
+    },
+
+    emptyCart: function() {
+        jQuery.ajax({
+            type: 'POST'
+        });
     }
 
 }
