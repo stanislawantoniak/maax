@@ -440,7 +440,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
                 'website_id' => 'campaign_website.website_id'
             )
         );
-        $startTime = date("Y-m-d H:i:s", Mage::getModel('core/date')->timestamp(strtotime('-30 minutes', time())));;
+        $startTime = date("Y-m-d H:i:s", Mage::getModel('core/date')->timestamp(strtotime(time())));
         $endYTime = date("Y-m-d H:i:s", Mage::getModel('core/date')->timestamp(strtotime('+30 minutes', time())));
 
         $select->where("campaign.date_from BETWEEN '{$startTime}' AND '{$endYTime}'");
