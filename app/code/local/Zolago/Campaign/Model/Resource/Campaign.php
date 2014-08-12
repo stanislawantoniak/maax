@@ -409,18 +409,21 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         return $this->getReadConnection()->fetchAll($select);
     }
 
-    public function getUpDateCampaigns()
+    public function getUpDateCampaigns(array $type)
     {
         $table = $this->getTable("zolagocampaign/campaign");
         $select = $this->getReadConnection()->select();
         $select->from(
             array("campaign" => $table),
             array(
-                 "campaign.type as type",
-                  'campaign.campaign_id as campaign_id',
-                  'campaign.price_source_id as price_source',
-                  'campaign.percent as price_percent',
-                  'campaign.price_srp as price_srp'
+                "campaign.type as type",
+                'campaign.campaign_id as campaign_id',
+                'campaign.date_from as date_from',
+                'campaign.date_to as date_to',
+                'campaign.campaign_id as campaign_id',
+                'campaign.price_source_id as price_source',
+                'campaign.percent as price_percent',
+                'campaign.price_srp as price_srp'
             )
         );
         $select->join(
@@ -430,13 +433,21 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
                  'product_id' => 'campaign_product.product_id'
             )
         );
-        $startTime = date("Y-m-d H:i", strtotime('-10 minutes', time()));
-        $endYTime = date("Y-m-d H:i", strtotime('+10 minutes', time()));
-        krumo($startTime);
-        krumo($endYTime);
+        $select->join(
+            array('campaign_website' => 'zolago_campaign_website'),
+            'campaign_website.campaign_id=campaign.campaign_id',
+            array(
+                'website_id' => 'campaign_website.website_id'
+            )
+        );
+        $startTime = date("Y-m-d H:i:s", Mage::getModel('core/date')->timestamp(strtotime('-30 minutes', time())));;
+        $endYTime = date("Y-m-d H:i:s", Mage::getModel('core/date')->timestamp(strtotime('+30 minutes', time())));
+
         $select->where("campaign.date_from BETWEEN '{$startTime}' AND '{$endYTime}'");
+        $select->where("type in(?)", $type);
         $select->where("status=?", Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE);
-        echo $select;
+        $select->order('campaign.date_from ASC');
+
         return $this->getReadConnection()->fetchAll($select);
     }
 
