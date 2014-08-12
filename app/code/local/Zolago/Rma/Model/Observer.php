@@ -59,9 +59,9 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 		/* @var $rma Zolago_Rma_Model_Rma */
 		$track = $observer->getEvent()->getData('track');
 		/* @var $track Zolago_Rma_Model_Rma_Track */
-		
+		$allowCarriers = Mage::helper('orbashipping/carrier_tracking')->getTrackingCarriersList();
 		$carrierCode = $track->getCarrierCode () ;
-		if ($carrierCode == Zolago_Dhl_Model_Carrier::CODE 
+		if (in_array($carrierCode,$allowCarriers) 
     	    // zolagodhl
 			&& Mage::getSingleton('shipping/config')->getCarrierInstance($carrierCode)->isTrackingAvailable()
 			&& !$track->getWebApi()) {

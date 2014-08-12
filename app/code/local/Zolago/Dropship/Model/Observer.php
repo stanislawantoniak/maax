@@ -25,18 +25,18 @@ class Zolago_Dropship_Model_Observer {
     }
 
     /**
-     * Add Zolago Dhl Data to Save Action
+     * Add Data to Save Action
      *
      * @param $observer Varien_Event_Observer
 	 * 
      * @return Zolago_Dropship_Model_Observer
      */	
-	public function addZolagoDhlData(Varien_Event_Observer $observer)
+	public function addOrbaShippingData(Varien_Event_Observer $observer)
 	{
         $track = $observer->getEvent()->getTrack();
 		$carrierCode = $track->getCarrierCode();
 		
-		if ($carrierCode == 'zolagodhl'
+		if (in_array($carrierCode,array(Orba_Shipping_Model_Carrier_Dhl::CODE,Orba_Shipping_Model_Carrier_Ups::CODE))
 			&& Mage::getSingleton('shipping/config')->getCarrierInstance($carrierCode)->isTrackingAvailable()
 			&& !$track->getWebApi()) {
 				$track->setNextCheck(date('Y-m-d H:i:s', time()));

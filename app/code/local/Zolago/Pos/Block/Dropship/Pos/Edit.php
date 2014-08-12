@@ -57,6 +57,16 @@ class Zolago_Pos_Block_Dropship_Pos_Edit extends Mage_Core_Block_Template {
             'dhl_terminal',
         ));
         
+        $ups = $form->addFieldset('ups', array('legend'=>$helper->__('UPS Settings')));
+        $builder = Mage::getModel('zolagopos/form_fieldset_ups'); 
+        $builder->setFieldset($ups);
+        $builder->prepareForm(array(
+            'use_ups',
+            'ups_account',
+            'ups_login',
+            'ups_password',
+        ));
+        
 		
         $form->setValues($this->getModel()->getData());
         $this->setForm($form);

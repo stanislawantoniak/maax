@@ -11,13 +11,12 @@
 					<?php echo Mage::helper("zolagopo")->__("Edit campaign '%s'", $_model->getName());?>
 				<?php endif;?>
 			</h3>
-			<span class="tageline"><?php echo $_helper->__("Campaign form");?></h3></span>
 		</div>
 		
 	</div>
 </div>
 
-<div class="container">
+<div class="container z-grid">
 	<form id="edit-campaign" class="form-horizontal row-border" action="<?php echo $this->getForm()->getAction();?>" method="POST">
 		<input type="hidden" name="campaign_id" value="<?php echo $_model->getId();?>"/>
 		<?php echo $this->getLayout()->getBlock('formkey')->toHtml();?>
@@ -37,31 +36,9 @@
 					</div> 
 				</div>
 			</div> 
-			<div class="widget-content no-padding table-striped">
-				<table class="table no">
-					<colgroup>
-						<col>
-						<col>
-						<col width="150">
-						<col width="100">
-					</colgroup>
-					<thead>
-						<tr>
-							<th>Product</th>
-							<th>Sku</th>
-							<th class="align-right">Regular price</th>
-							<th class="align-right">Remove</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>Some product</td>
-							<td>23434</td>
-							<td class="align-right">123,12zł</td>
-							<td class="align-right"><a href="#" class="btn btn-xs"><i class="icon-remove"></i></a></td>
-						</tr>
-					</tbody>
-				</table>
+			<div class="widget-content">
+                <?php echo $this->getGrid()->toHtml(); ?>
+
 			</div>
 		</div>
 		<div class="form-actions"> <input type="submit" value="<?php echo $_helper->__("Save");?>" class="btn btn-primary pull-right"> </div>
@@ -70,16 +47,19 @@
 
 <div class="modal fade" id="browseProducts">
 	<div class="modal-dialog" style="width: 80%">
-		<form id="shipping-form" action=""  class="form-horizontal row-border" method="post">
+		<form id="campaign_products" action="/campaign/vendor/saveProducts"  class="form-horizontal row-border" method="post">
 			<input type="hidden" name="campaign_id" value="<?php echo $_model->getId();?>"/>
+
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					<h4 class="modal-title"><?php echo $_helper->__("Add products");?></h4>
 				</div>
-				<div class="modal-body">
-					Grid
-				</div>
+                <div class="modal-body">
+                    <?php echo $_helper->__("Enter SKUs Comma-separated"); ?>
+                    <textarea type="text" name="campaign_products_source" class="form-control input-text"
+                              rows="10"><?php echo $this->getCampaignProducts(); ?></textarea>
+                </div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_helper->__("Cancel");?></button>
 					<button type="submit" class="btn form-btn-loading btn-primary" data-loading-text="<?php echo $_helper->__("Loading...");?>"><?php echo $_helper->__("Add");?></button>
@@ -88,29 +68,57 @@
 		</form>
 	</div>
 	<script type="text/javascript">
-		jQuery(function($){
-			$("#browseProducts form").submit(function(){
-				$("#browseProducts").modal("hide");
-				return false;
-			});
-			$("#browseProducts").on("show.bs.modal", function(){
-				console.log("Init loading products")
-			});
-		});
-	</script>
-</div>
+        jQuery(function ($) {
+            $("#browseProducts form").submit(function (e) {
+                e.preventDefault();
+                var campaignProductsSource = $("textarea[name=campaign_products_source]").val();
+                if (campaignProductsSource.length <= 0) {
+                    noty({
+                        text: "Enter product SKUs please",
+                        type: 'error',
+                        timeout: 2000
+                    });
+                } else {
+                    //push products to campaign form field
+                    $("input[name=campaign_products]").val(campaignProductsSource);
+                    $("#browseProducts").modal("hide");
+                }
+            });
+            $("#browseProducts").on("show.bs.modal", function () {
+                console.log("Init loading products")
+            });
+            $("#zolagocampaign_campaign_product_grid_table .filter input")
+                .addClass("form-control");
+            $(".btn[data-action=remove]").click(function (e) {
+                e.preventDefault();
+                var campaignId = $("input[name=campaign_id]").val();
+                var productId = $(this).data("item");
+                removeCampaignProductLink(campaignId, productId);
+            })
+            function removeCampaignProductLink(campaignId, productId) {
+                var removePath = '<?php echo $this->getRemoveProductPath(); ?>';
+                var link = removePath + "?campaignId=" + campaignId + "&productId=" + productId;
+                window.location = link;
+            }
 
-<script type="text/javascript">
-jQuery(function($){
-	var form = $("#edit-campaign");
-	new Zolago.formIntegrator(form);
-    form.validate({
-		rules:{
-			"percent": {
-				max: 100
-			}
-		}
-	});
-	$( ".datepicker" ).datepicker();
+
+            //$(".datepicker").datepicker();
+
+            $('.datetimepicker').datetimepicker({
+                format: 'd-m-Y H:i'
+            });
+
+            var form = $("#edit-campaign");
+            new Zolago.formIntegrator(form);
+            form.validate({
+                rules: {
+                    "percent": {
+                        max: 100
+                    },
+                    "date_from": {dateBefore: '#date_to'},
+                    "date_to": {dateAfter: '#date_from'}
+                }
+            });
+
 });
 </script>

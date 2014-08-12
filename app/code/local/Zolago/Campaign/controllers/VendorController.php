@@ -12,16 +12,28 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
     }
 	
     public function editAction() {
-		try{
-			$this->_initModel();
-		} catch (Mage_Core_Exception $ex) {
-			$this->_getSession()->addError($ex->getMessage());
-			return $this->_redirectReferer();
-		}catch(Exception $ex){
-			Mage::logException($ex);
-			$this->_getSession()->addError("Some error occured");
-			return $this->_redirectReferer();
-		}
+        Mage::register('as_frontend', true);
+        $campaign = $this->_initModel();
+        $vendor = $this->_getSession()->getVendor();
+
+        // Existing campaign
+        if ($campaign->getId()) {
+            if ($campaign->getVendorId() != $vendor->getId()) {
+                $this->_getSession()->addError(Mage::helper('zolagocampaign')->__("Campaign does not exists"));
+                return $this->_redirect("*/*");
+            }
+        } elseif($this->getRequest()->getParam('campaign_id',null) !== null) {
+            $this->_getSession()->addError(Mage::helper('zolagocampaign')->__("Campaign does not exists"));
+            return $this->_redirect("*/*");
+        }
+
+        // Process request & session data
+        $sessionData = $this->_getSession()->getFormData();
+        if (!empty($sessionData)) {
+            $campaign->addData($sessionData);
+            $this->_getSession()->setFormData(null);
+        }
+
 		$this->_renderPage(null, 'zolagocampaign');
     }
 	
@@ -30,16 +42,71 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
     }
 	
 	public function saveAction() {
-		try{
-			$model = $this->_initModel();
-		} catch (Mage_Core_Exception $ex) {
-			$this->_getSession()->addError($ex->getMessage());
-		}catch(Exception $ex){
-			Mage::logException($ex);
-			$this->_getSession()->addError("Some error occured");
-		}
-		return $this->_redirectReferer();
+        $helper = Mage::helper('zolagocampaign');
+        if (!$this->getRequest()->isPost()) {
+            return $this->_redirectReferer();
+        }
+
+        $campaign = $this->_initModel();
+        $vendor = $this->_getSession()->getVendor();
+
+        // Try save
+        $data = $this->getRequest()->getParams();
+
+        $this->_getSession()->setFormData(null);
+        $modelId = $this->getRequest()->getParam("id");
+
+        try {
+            // If Edit
+            if (!empty($modelId) && !$campaign->getId()) {
+                throw new Mage_Core_Exception($helper->__("Campaign not found"));
+            }
+
+            $campaign->addData($data);
+            $validErrors = $campaign->validate();
+            if ($validErrors === true) {
+                // Fix empty value
+                if($campaign->getId()==""){
+                    $campaign->setId(null);
+                }
+                // Add stuff for new campaign
+                if(!$campaign->getId()) {
+                    // Set Vendor Owner
+                    $campaign->setVendorId($vendor->getId());
+                }
+                $campaign->save();
+            } else {
+                $this->_getSession()->setFormData($data);
+                foreach ($validErrors as $error) {
+                    $this->_getSession()->addError($error);
+                }
+                return $this->_redirectReferer();
+            }
+            $this->_getSession()->addSuccess($helper->__("Campaign Saved"));
+        } catch (Mage_Core_Exception $e) {
+            $this->_getSession()->addError($e->getMessage());
+            $this->_getSession()->setFormData($data);
+            return $this->_redirectReferer();
+        } catch (Exception $e) {
+            $this->_getSession()->addError($helper->__("Some error occure"));
+            $this->_getSession()->setFormData($data);
+            Mage::logException($e);
+            return $this->_redirectReferer();
+        }
+
+        return $this->_redirect("*/*");
 	}
+
+    public function removeProductAction(){
+        $campaignId = $this->getRequest()->getParam("campaignId");
+        $productId = $this->getRequest()->getParam("productId");
+
+        if(!empty($campaignId) && !empty($productId)){
+            $model = Mage::getResourceModel("zolagocampaign/campaign");
+            $model->removeProduct($campaignId,$productId);
+        }
+        return $this->_redirectReferer();
+    }
 	
 	public function validateKeyAction() {
 		$key = $this->getRequest()->getParam('key');

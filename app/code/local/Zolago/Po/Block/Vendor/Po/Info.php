@@ -2,16 +2,16 @@
 
 class Zolago_Po_Block_Vendor_Po_Info extends Unirgy_DropshipPo_Block_Vendor_Po_Info
 {
-    
+        
     public function getCarriers()
     {
-        return array_intersect_key(parent::getCarriers(), array_flip($this->getAllowedKeys()));
-	}
-	
-	protected function getAllowedKeys(){
-		return Mage::helper('zolagodropship')->getAllowedCarriers();
-	}
-	
+        $po = $this->getPo();
+        $posId = $po->getDefaultPosId();
+        $pos = Mage::getModel('zolagopos/pos')->load($posId);
+        $out = array_intersect_key(parent::getCarriers(), array_flip(Mage::helper('zolagodropship')->getAllowedCarriersForPos($pos)));
+        return $out;
+    }
+
     public function getPo()
     {
         if (!$this->hasData('po')) {
@@ -26,20 +26,20 @@ class Zolago_Po_Block_Vendor_Po_Info extends Unirgy_DropshipPo_Block_Vendor_Po_I
         }
         return $this->getData('po');
     }
-	
+
     public function getRemainingShippingAmount()
     {
-		$hlp = Mage::helper('udropship');
-		$_shipmentStatuses = Mage::getSingleton('udropship/source')->setPath('shipment_statuses')->toOptionHash();
+        $hlp = Mage::helper('udropship');
+        $_shipmentStatuses = Mage::getSingleton('udropship/source')->setPath('shipment_statuses')->toOptionHash();
         $sa = 0;
         $po = $this->getPo();
         foreach ($po->getShipmentsCollection() as $_s) {
-			$status = $hlp->__(isset($_shipmentStatuses[$_s->getUdropshipStatus()]) ? $_shipmentStatuses[$_s->getUdropshipStatus()] : 'Unknown');
-			if (!in_array($status, array($hlp->__('Canceled')))) {
-				$sa += $_s->getBaseShippingAmount();
-			}
+            $status = $hlp->__(isset($_shipmentStatuses[$_s->getUdropshipStatus()]) ? $_shipmentStatuses[$_s->getUdropshipStatus()] : 'Unknown');
+            if (!in_array($status, array($hlp->__('Canceled')))) {
+                $sa += $_s->getBaseShippingAmount();
+            }
         }
-		
-		return max(0,$po->getBaseShippingAmount() + $po->getBaseShippingTax() -$sa);
-    }	
+
+        return max(0,$po->getBaseShippingAmount() + $po->getBaseShippingTax() -$sa);
+    }
 }
