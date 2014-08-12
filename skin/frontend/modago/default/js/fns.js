@@ -64,7 +64,7 @@ jQuery.noConflict();
         });
         return valid;
     }, "");
-  $("form").each(function () {
+  $("#question-form, #review-form").each(function () {
 
   $(this).validate({   
     success: "valid",
@@ -90,6 +90,8 @@ jQuery.noConflict();
     messages: {
 
     },
+      ignore: "#cart-form",
+      ignoreTitle: true,
       highlight: function(element, errorClass, validClass) {
                   var we = $(element).innerWidth()+25;
                   var el = $(element).attr('type');

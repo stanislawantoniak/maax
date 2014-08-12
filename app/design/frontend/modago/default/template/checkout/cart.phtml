@@ -41,7 +41,7 @@ $_items = $this->getItems();
 
 <div id="content" class="container-fluid">
     <div id="shopping-cart" class="row">
-        <form action="<?php echo $this->getUrl('checkout/cart/updatePost') ?>" method="post">
+        <form action="<?php echo $this->getUrl('checkout/cart/updatePost') ?>" method="post" id="cart-form">
             <?php echo $this->getBlockHtml('formkey'); ?>
             <div id="content-main" class="col-lg-9 col-md-8  section">
                 <div class="main bg-w">
