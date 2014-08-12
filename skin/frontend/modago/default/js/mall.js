@@ -307,11 +307,7 @@ var Mall = {
         }
     },
 
-    emptyCart: function() {
-        jQuery.ajax({
-            type: 'POST'
-        });
-    }
+
 
 }
 

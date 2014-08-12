@@ -175,21 +175,13 @@ $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage
                 <?php endif; ?>
             <?php endif; ?>
                 <div class="ilosc">
-                    <input type="text" class="amount_product" name="cart[<?php echo $_item->getId() ?>][qty]" value="<?php echo $this->getQty() ?>" title="<?php echo $this->__('Qty') ?>" max="<?php echo $_helper->getMaxSaleQty($_item);?>">
-                    <select name="cart[<?php echo $_item->getId() ?>][qty]" class="hidden-xs">
+
+                    <div class="form-group styledSelected">
+                    <select name="cart[<?php echo $_item->getId() ?>][qty]" class="form-control select-styled" onchange="jQuery('#cart-form').submit();">
                         <?php foreach($_helper->getCartQtyList($_item) as $key=>$value):?>
                             <option <?php if($this->getQty($_item)==$key):?>selected="selected"<?php endif;?> value="<?php echo $this->escapeHtml($key);?>"><?php echo $this->escapeHtml($value);?></option>
                         <?php endforeach;?>
                     </select>
-                    <div class="select-group medium">
-                        <a class="button-select no-ajax" href="#"><span><?php echo $this->getQty() ?></span> <span class="down"></span></a>
-                        <div class="dropdown-select mCustomScrollbar">
-                            <ul>
-                                <?php foreach($_helper->getCartQtyList($_item) as $key=>$value):?>
-                                    <li><a href="#" data-value="<?php echo $this->escapeHtml($key);?>"><span><?php echo $this->escapeHtml($key);?></span></a></li>
-                                <?php endforeach;?>
-                            </ul>
-                        </div>
                     </div>
                 </div>
 
