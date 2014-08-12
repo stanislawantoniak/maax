@@ -42,14 +42,6 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
             "label" => $helper->__('Campaign'),
             "values" => Mage::getSingleton('zolagobanner/banner_campaign')->toOptionHash()
         ));
-
-        $general->addField("status", "select", array(
-            "name" => "status",
-            "required" => true,
-            "class" => "form-control",
-            "label" => $helper->__('Status'),
-            "values" => Mage::getSingleton('zolagobanner/banner_status')->toOptionHash()
-        ));
         //--Common edit banner fields
 
         //Additional banner fields depends on type
