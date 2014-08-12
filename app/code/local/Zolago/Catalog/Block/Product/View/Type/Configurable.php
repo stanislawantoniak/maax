@@ -2,7 +2,11 @@
 
 class Zolago_Catalog_Block_Product_View_Type_Configurable extends Mage_Catalog_Block_Product_View_Type_Configurable
 {
-	
+	/**
+	 * Add is salable flag to ptoduct option
+	 * Flag is positive of any option-valued product is salable
+	 * @return array
+	 */
 	public function getJsonConfig() {
 		$return = Mage::helper("core")->jsonDecode(parent::getJsonConfig());
 		
@@ -11,7 +15,8 @@ class Zolago_Catalog_Block_Product_View_Type_Configurable extends Mage_Catalog_B
 		foreach($attributes as $keyAttr=>$attribute){
 			if(is_array($attribute['options'])){
 				foreach($attribute['options'] as $keyValue=>$value){
-					$return['attributes'][$keyAttr]['options'][$keyValue]['is_salable'] = $this->getIsOptionSalable($attribute['code'], $value['id']);
+					$return['attributes'][$keyAttr]['options'][$keyValue]['is_salable'] = 
+						$this->getIsOptionSalable($attribute['code'], $value['id']);
 				}
 			}
 		}
