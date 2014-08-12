@@ -7,6 +7,8 @@ class Zolago_Catalog_AuthController extends Mage_Core_Controller_Front_Action
 {
 
     public function indexAction(){
+        Zolago_Campaign_Model_Observer::setProductAttributes();
+        die('test');
 
         $installer = new Mage_Eav_Model_Entity_Setup('core_setup');
 
