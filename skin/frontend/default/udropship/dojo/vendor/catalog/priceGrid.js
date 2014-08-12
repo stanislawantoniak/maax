@@ -465,15 +465,15 @@ define([
 					}
 				]
 			},
-			stock: {
+			stock_qty: {
 				label: Translator.translate("Stock Qty"),
-				field: "stock",
+				field: "stock_qty",
 				className: "column-medium",
 				children: [
 					{
-						renderHeaderCell: filterRendererFacory("range", "stock"),
+						renderHeaderCell: filterRendererFacory("range", "stock_qty"),
 						sortable: false, 
-						field: "stock",
+						field: "stock_qty",
 						className: "filterable align-right column-medium",
 						formatter: function(value){return parseInt(value);}
 					}

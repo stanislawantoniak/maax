@@ -135,10 +135,11 @@ define([
 		
 		_renderSubRow: function(node, data){
 			// Make rendering
-			var divLeft=jQuery("<div>").addClass("p50 pull-left left");
-			var divRight=jQuery("<div>").addClass("p50 pull-left right");
+			var divLeft=jQuery("<div>").addClass("sub-row-left");
+			var divRight=jQuery("<div>").addClass("sub-row-left");
 			var buttons = [
-				{"label": Translator.translate("Change prices")}
+				{"label": Translator.translate("Change prices")},
+				{"label": Translator.translate("View POS Stock")}
 			];
 			
 			switch(data.type_id){
@@ -172,7 +173,7 @@ define([
 										append(jQuery("<td>").addClass("sub-checkbox").append("<input type=\"checkbox\"/>")).
 										append(jQuery("<td>").text(child.option_text)).
 										append(jQuery("<td>").text(child.price)).
-										append(jQuery("<td>").text(Translator.translate(child.is_in_stock ? "Yes" : "No"))).
+										append(jQuery("<td>").text(Translator.translate(parseInt(child.is_in_stock) ? "Yes" : "No"))).
 										append(jQuery("<td>").text(parseInt(child.qty))).
 										append(jQuery("<td>").append(jQuery("<a>").text(Translator.translate("View POS Stock"))))
 								)
@@ -182,11 +183,7 @@ define([
 					}
 				break;
 				case "simple":
-					divLeft.append(
-						jQuery("<a>").
-							addClass("sub-row-pos").
-							text(Translator.translate("View POS Stock"))
-					);
+					
 				break;
 			}
 			
@@ -195,15 +192,20 @@ define([
 				var table = jQuery("<table><tbody></tbody></table>").
 						addClass("table table-condensed table-subrow"),
 					tbody = table.find('tbody'),
-					campaign = data.campaign;
+					campaign = data.campaign,
+					campaignHeader = jQuery(campaign.is_allowed ? "<a>" : "<span>").text(campaign.name);
+			
+				if(campaign.is_allowed){
+					campaignHeader.attr("href", campaign.url)
+				}
 			
 				tbody.append(
 					jQuery("<tr>").addClass("header-row").
 						append(jQuery("<td>").attr("colspan", 8).
 							addClass("align-center").
-							append(jQuery("<span>").text(campaign.type)).
+							append(jQuery("<span>").text(Translator.translate(campaign.type_text))).
 							append(jQuery("<span>").text(": ")).
-							append(jQuery("<a>").text(campaign.name))
+							append(campaignHeader)
 					)
 				);
 		
@@ -221,7 +223,7 @@ define([
 		
 				tbody.append(
 					jQuery("<tr>").
-						append(jQuery("<td>").text(campaign.status_text)).
+						append(jQuery("<td>").text(Translator.translate(campaign.status_text))).
 						append(jQuery("<td>").text(campaign.date_from)).
 						append(jQuery("<td>").text(campaign.date_to)).
 						append(jQuery("<td>").text(campaign.price_source_id)).
@@ -231,7 +233,7 @@ define([
 						append(jQuery("<td>").text(misc.currency(campaign.price)))
 				)
 		
-				buttons.unshift({"label": Translator.translate("Remove from campaign")});
+				buttons.push({"label": Translator.translate("Remove from campaign")});
 		
 				divRight.append(table);
 		
