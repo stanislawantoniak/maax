@@ -96,4 +96,7 @@
     <price-archive translate="message" module="zolagocatalog">
         <message>Archive</message>
     </price-archive>
+    <price-change-product-price translate="message" module="zolagocatalog">
+        <message>Change product price</message>
+    </price-change-product-price>
 </jstranslator>

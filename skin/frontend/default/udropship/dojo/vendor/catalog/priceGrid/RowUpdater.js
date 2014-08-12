@@ -150,7 +150,9 @@ define([
 			this._cache[item.entity_id] = item;
 		},
 		_loading: function(node){
-			jQuery(".expando", node).html(jQuery("<div>").addClass("sub-row-loading").text(Translator.translate("Loading...")))
+			jQuery(".expando", node).html(jQuery("<div>").
+				addClass("sub-row-loading").
+				text(Translator.translate("Loading...")))
 		},
 		
 		_renderSubRow: function(node, data){
@@ -158,8 +160,8 @@ define([
 			var divLeft=jQuery("<div>").addClass("sub-row-left");
 			var divRight=jQuery("<div>").addClass("sub-row-left");
 			var buttons = [
-				{"label": Translator.translate("Change prices")},
-				{"label": Translator.translate("View POS Stock")}
+				{"label": Translator.translate("Change prices"), className: "signle-price-edit editable"},
+				{"label": Translator.translate("View POS Stock"), className: "signle-stock-edit editable"}
 			];
 			
 			switch(data.type_id){
@@ -190,12 +192,18 @@ define([
 							item.children.forEach(function(child){
 								tbody.append(
 									jQuery("<tr>").
-										append(jQuery("<td>").addClass("sub-checkbox").append("<input type=\"checkbox\"/>")).
+										append(jQuery("<td>").addClass("sub-checkbox").append(jQuery("<input/>").attr({
+											"type": "checkbox",
+											"disabled": "disabled"
+										}))).
 										append(jQuery("<td>").text(child.option_text)).
-										append(jQuery("<td>").text(child.price)).
-										append(jQuery("<td>").text(Translator.translate(parseInt(child.is_in_stock) ? "Yes" : "No"))).
+										append(jQuery("<td>").addClass("editable signle-price-edit").
+											text(misc.currency(child.price))).
+										append(jQuery("<td>").text(
+											Translator.translate(parseInt(child.is_in_stock) ? "Yes" : "No"))).
 										append(jQuery("<td>").text(parseInt(child.qty))).
-										append(jQuery("<td>").append(jQuery("<a>").text(Translator.translate("View POS Stock"))))
+										append(jQuery("<td>").append(jQuery("<a>").
+											addClass("editable signle-stock-edit").text(Translator.translate("View POS Stock"))))
 								)
 							})
 						});
@@ -261,7 +269,7 @@ define([
 			
 			var buttonsDiv = jQuery("<div>").addClass("sub-row-actions")
 			jQuery.each(buttons, function(){
-				buttonsDiv.append(jQuery("<a>").text(this.label))
+				buttonsDiv.append(jQuery("<a>").text(this.label).addClass(this.className))
 			});
 			
 			divRight.append(buttonsDiv);
