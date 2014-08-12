@@ -154,7 +154,14 @@
                     <a href="<?php echo $this->getVendorUrl(); ?>" class="view-store button button-secondary link"><?php echo $this->__("Go to vendor's store"); ?> <span class="glyphicon glyphicon-chevron-right"></span></a>
                 </div>
                 <dl>
-                    <dd><?php echo $this->getVendorInfoHtml(); ?></dd>
+					<?php if ($this->getVendorInfoHtml()): ?>
+	                    <dd><?php echo $this->getVendorInfoHtml(); ?></dd>
+					<?php else: ?>
+						<dd>
+		                    <img src="<?php echo $this->getLogoUrl(); ?>" alt="<?php echo $this->escapeHtml($this->getVendorName()); ?>"><br/>
+	                        <strong><?php echo $this->__("Seller"); ?>:</strong> <?php echo $this->getVendorName(); ?>
+						</dd>
+					<?php endif;?>
                 </dl>
                 <dl>
                     <dt><?php echo $this->__("RMA rules"); ?>:</dt>

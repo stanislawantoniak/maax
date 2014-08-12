@@ -134,7 +134,7 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 			if($po->getAggregatedId()){
 				$currentlyHas[] = $po->getIncrementId();
 			}
-			$poses[$po->getDefaultPosId()] = true;
+			$poses[$po->getDefaultPosId()] = $po->getDefaultPosId();
 			$carriers[$po->getCurrentCarrier()] = true;
 		}
 		

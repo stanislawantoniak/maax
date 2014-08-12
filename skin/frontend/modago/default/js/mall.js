@@ -141,7 +141,7 @@ var Mall = {
 //        dropdownBasket.html(Mall.replace(dropdownBasket.html(), data.content.cart));
 
         // build product list
-        var products = data.content.cart.products;
+        var products = data.content.cart.products == 0 ? [] : data.content.cart.products;
         // build object for filling products template
         Mall._data = data.content;
         // clear products

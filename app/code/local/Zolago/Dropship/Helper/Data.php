@@ -102,10 +102,10 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
     public function getAllowedCarriersForPos($pos) {
         $out = array();
         if ($pos->getUseDhl()) {
-            $out[] = Orba_Shipping_Model_Carrier_Dhl::CODE;
+            $out[Orba_Shipping_Model_Carrier_Dhl::CODE] = Orba_Shipping_Model_Carrier_Dhl::CODE;
         }
         if ($pos->getUseOrbaups()) {
-            $out[] = Orba_Shipping_Model_Carrier_Ups::CODE;
+            $out[Orba_Shipping_Model_Carrier_Ups::CODE] = Orba_Shipping_Model_Carrier_Ups::CODE;
         }
         return $out;
     }
@@ -120,13 +120,16 @@ class Zolago_Dropship_Helper_Data extends Unirgy_Dropship_Helper_Data {
      public function getAllowedCarriersForVendor($vendor,$rmaMode = false) {
          $out = array();
          if ($vendor->getUseDhl()) {
-            $out[] = Orba_Shipping_Model_Carrier_Dhl::CODE;
+            $out[Orba_Shipping_Model_Carrier_Dhl::CODE] = Orba_Shipping_Model_Carrier_Dhl::CODE;
          }
          if ($vendor->getDhlRma() && $rmaMode) {
-            $out[] = Orba_Shipping_Model_Carrier_Dhl::CODE;
+            $out[Orba_Shipping_Model_Carrier_Dhl::CODE] = Orba_Shipping_Model_Carrier_Dhl::CODE;
          }
          if ($vendor->getUseOrbaups()) {
-            $out[] = Orba_Shipping_Model_Carrier_Ups::CODE;
+            $out[Orba_Shipping_Model_Carrier_Ups::CODE] = Orba_Shipping_Model_Carrier_Ups::CODE;
+         }
+         if ($vendor->getOrbaupsRma() && $rmaMode) {
+            $out[Orba_Shipping_Model_Carrier_Ups::CODE] = Orba_Shipping_Model_Carrier_Ups::CODE;
          }
          return array_unique($out);
      }
