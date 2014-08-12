@@ -5,66 +5,131 @@ class Zolago_Campaign_Model_Observer
 
     static function setProductAttributes(){
         $actionModel = Mage::getSingleton('catalog/product_action');
-
-        $storeId = array(Mage_Core_Model_App::ADMIN_STORE_ID);
-        $allStores = Mage::app()->getStores();
-        foreach ($allStores as $_eachStoreId => $val) {
-            $_storeId = Mage::app()->getStore($_eachStoreId)->getId();
-            $storeId[] = $_storeId;
+        $storesToUpdate = array(Mage_Core_Model_App::ADMIN_STORE_ID);
+        foreach (Mage::app()->getWebsites() as $website) {
+            foreach ($website->getGroups() as $group) {
+                $stores = $group->getStores();
+                foreach ($stores as $store) {
+                    $storesToUpdate[] = $store->getId();
+                }
+                unset($store);
+            }
+            unset($group);
         }
 
+
+        //1. Set campaign attributes
+        //info campaign
         $model = Mage::getModel('zolagocampaign/campaign');
-        $campaignProducts = $model->getResource()->getUpDateCampaigns();
-        $data = array();
-        if (!empty($campaignProducts)) {
-            foreach ($campaignProducts as $campaignProductsItem) {
-                $data[$campaignProductsItem['type']][] = $campaignProductsItem;
+        $campaignInfo = $model->getResource()
+            ->getUpDateCampaigns(array(Zolago_Campaign_Model_Campaign_Type::TYPE_INFO));
+
+        $dataToUpdate = array();
+        if (!empty($campaignInfo)) {
+            foreach ($campaignInfo as $campaignInfoItem) {
+                $dataToUpdate[$campaignInfoItem['product_id']][] = $campaignInfoItem['campaign_id'];
             }
+            unset($campaignInfoItem);
         }
 
-        $info = isset($data['info'])?  $data['info']: array();
-        $sale = isset($data['sale'])?  $data['sale']: array();
-        $promotion = isset($data['promotion'])?  $data['promotion']: array();
-        $dataToUpdate = array();
-        if (!empty($info)) {
-            foreach ($info as $infoItem) {
-                $dataToUpdate[$infoItem['product_id']][] = $infoItem['campaign_id'];
-            }
-        }
-        if (empty($dataToUpdate)) {
+        if (!empty($dataToUpdate)) {
             foreach ($dataToUpdate as $productId => $campaignIds) {
                 $attributesData = array('campaign_info_id' => implode(",", $campaignIds));
-                foreach ($storeId as $store) {
+                foreach ($storesToUpdate as $store) {
                     $actionModel
                         ->updateAttributesNoIndex(array($productId), $attributesData, $store);
                 }
             }
         }
+        unset($dataToUpdate);
 
+        //sales/promo campaign
+        $model = Mage::getModel('zolagocampaign/campaign');
+        $campaignSalesPromo = $model->getResource()
+            ->getUpDateCampaigns(
+                array(
+                    Zolago_Campaign_Model_Campaign_Type::TYPE_SALE,
+                    Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION
+                )
+            );
 
-        $regular = array_merge($sale, $promotion);
 
         $dataToUpdate = array();
-        if (!empty($regular)) {
-            foreach ($regular as $regularItem) {
-                $dataToUpdate[$regularItem['product_id']] = $regularItem['campaign_id'];
+        if (!empty($campaignSalesPromo)) {
+            foreach ($campaignSalesPromo as $campaignSalesPromoItem) {
+                $dataToUpdate[$campaignSalesPromoItem['product_id']] = $campaignSalesPromoItem;
             }
+            unset($campaignSalesPromoItem);
         }
-        if (empty($dataToUpdate)) {
-            foreach ($dataToUpdate as $productId => $campaignId) {
-                $attributesData = array('campaign_regular_id' => $campaignId);
-                foreach ($storeId as $store) {
+
+        $priceTypeSource = array();
+        if (!empty($dataToUpdate)) {
+            foreach ($dataToUpdate as $productId => $data) {
+                $attributesData = array(
+                    'campaign_regular_id' => $data['campaign_id'],
+                    'special_from_date' => date('Y-m-d', strtotime($data['date_from'])),
+                    'special_to_date' => date('Y-m-d', strtotime($data['date_to'])),
+                    'msrp' => $data['price_srp']
+                );
+                foreach ($storesToUpdate as $store) {
                     $actionModel
                         ->updateAttributesNoIndex(array($productId), $attributesData, $store);
                 }
+                unset($store);
+                $priceTypeSource[$data['product_id']] = $data['price_source'];
+            }
+        }
+        //2. Set special price
+        $productIds = array_keys($dataToUpdate);
+
+        $queueModel = Mage::getResourceModel('zolagocatalog/queue_pricetype');
+        $skuvS = $queueModel->getVendorSkuAssoc($productIds);
+
+        //Ping converter to get special price
+        try {
+            $converter = Mage::getModel('zolagoconverter/client');
+        } catch (Exception $e) {
+            Mage::throwException("Converter is unavailable: check credentials");
+            return;
+        }
+        $attr = Mage::getResourceModel('catalog/product')
+            ->getAttribute(Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER_PRICE_TYPE_CODE);
+
+        if (!empty($priceTypeSource)) {
+            foreach ($priceTypeSource as $productId => $priceSourceId) {
+                $priceType[$productId] = $attr->getSource()->getOptionText($priceSourceId);
             }
         }
 
+        //Special Price
+        foreach ($dataToUpdate as $productId => $data) {
+            $vendorSku = isset($skuvS[$productId]) ? $skuvS[$productId]['skuv'] : FALSE;
 
+            if ($vendorSku) {
+                $sku = $skuvS[$productId]['sku'];
+                $res = explode('-', $sku);
+                $vendorExternalId = (!empty($res) && isset($res[0])) ? (int)$res[0] : false;
+                if ($vendorExternalId) {
+                    foreach ($storesToUpdate as $store) {
+                        $percent = $data['price_percent'];
 
+                        $newPrice = $converter->getPrice($vendorExternalId, $vendorSku, $priceType[$productId]);
+                        if (!empty($newPrice)) {
+                            $newPriceWithPercent = $newPrice + $newPrice * ((int)$percent / 100);
+                            Mage::log('newPriceWithPercent ' . $newPriceWithPercent);
+                            $attributesData = array('special_price' => $newPriceWithPercent);
+                            $actionModel
+                                ->updateAttributesNoIndex(array($productId), $attributesData, $store);
+                        }
+                        unset($store);
+                    }
+                }
 
-//        Mage::getSingleton('catalog/product_action')
-//            ->reindexAfterMassAttributeChange();
+            }
+        }
+
+        Mage::getSingleton('catalog/product_action')
+            ->reindexAfterMassAttributeChange();
     }
     static public function processCampaignAttributes()
     {

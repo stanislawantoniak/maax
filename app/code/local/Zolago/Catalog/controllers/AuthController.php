@@ -7,6 +7,7 @@ class Zolago_Catalog_AuthController extends Mage_Core_Controller_Front_Action
 {
 
     public function indexAction(){
+<<<<<<< HEAD
         Zolago_Campaign_Model_Observer::setProductAttributes();
         die('test');
 
@@ -55,6 +56,9 @@ class Zolago_Catalog_AuthController extends Mage_Core_Controller_Front_Action
 
         $installer->getConnection()->createTable($table);
         $installer->endSetup();
+=======
+        $apiModel = new Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1();
+>>>>>>> 25b02c9661518872c03f88e584982fafd7b5c25b
 
         die('test');
 
