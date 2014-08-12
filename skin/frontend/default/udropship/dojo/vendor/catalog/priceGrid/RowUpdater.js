@@ -19,7 +19,14 @@ define([
 		_expandAll: false,
 		_states: {},
 		_storeId: null,
+		_canProcess: true,
 		
+		setCanProcess: function(canProcess){
+			this._canProcess= canProcess;
+		},
+		getCanProcess: function(canProcess){
+			return this._canProcess;
+		},
 		setStoreId: function(storeIdl){
 			this._storeId= storeIdl;
 			this.clear();
@@ -115,9 +122,22 @@ define([
 			this.queueItem(item);
 			this._loading(node);
 			
-			// set timout prcess
-			this._clearTimeout();
-			this._timeout = setTimeout(lang.hitch(this, this._process), 500);
+			// Start process
+			this.process();
+		},
+		
+		process: function(){
+			
+			// If has same not responsed store queries do waiting
+			if(this.getCanProcess()){
+				this._clearTimeout();
+				this._timeout = setTimeout(lang.hitch(this, this._process), 500);
+			// else wait for posibility
+			}else{
+				console.log("Waiting...");
+				this._clearWaitTimeout();
+				this._waitTimeout = setTimeout(lang.hitch(this, this.process), 1000);
+			}
 		},
 		
 		fetchFromCache: function(item){
@@ -289,7 +309,10 @@ define([
 		},
 		_clearTimeout: function(){
 			clearTimeout(this._timeout);
-		}
+		},
+		_clearWaitTimeout: function(){
+			clearTimeout(this._waitTimeout);
+		},
 	});
 	
 	return RowUpdater;
