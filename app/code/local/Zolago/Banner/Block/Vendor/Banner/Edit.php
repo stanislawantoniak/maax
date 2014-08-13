@@ -68,7 +68,7 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
                 $data = $typesConfigType;
             }
         }
-        krumo('-----------------',$data);
+        //krumo('-----------------',$data);
         $bannerContent = $form->addFieldset("banner_content", array(
             "legend" => $helper->__("Content")
         ));
