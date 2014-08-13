@@ -41,7 +41,7 @@ $_items = $this->getItems();
 
 <div id="content" class="container-fluid">
     <div id="shopping-cart" class="row">
-        <form action="<?php echo $this->getUrl('checkout/cart/updatePost') ?>" method="post">
+        <form action="<?php echo $this->getUrl('checkout/cart/updatePost') ?>" method="post" id="cart-form">
             <?php echo $this->getBlockHtml('formkey'); ?>
             <div id="content-main" class="col-lg-9 col-md-8  section">
                 <div class="main bg-w">
@@ -60,7 +60,7 @@ $_items = $this->getItems();
                         <div class="modal fade" id="trigger_conditions_shipping" tabindex="-1" role="dialog" aria-labelledby="trigger_conditions_shipping" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
-                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only"><?php echo $this->__("Close"); ?></span></button>
                                     <div class="modal-body"></div>
 
                                 </div>
@@ -68,90 +68,30 @@ $_items = $this->getItems();
                         </div>
 
                         <footer class="hidden-xs">
-                            <a href="#" id="clearAllShopping" class="simple"><i class="fa-remove"></i> Wyczyść koszyk</a>
+                            <a href="#" id="clearAllShopping" class="simple"><i class="fa-remove"></i> <?php echo $this->__("Empty cart"); ?></a>
                             <a href="<?php echo $this->getContinueShoppingUrl() ?>" id="btn_continue_shopping"><?php echo $this->__("Continue shopping at the mall."); ?> <i class="fa-arrow-btn-right"></i></a>
                         </footer>
                     </section>
                 </div>
             </div><!-- col-lg-3 col-md-4 || col-sm-12 col-xs-12-->
-            <div id="sidebar-secondary" class="sidebar-secound col-lg-3 col-md-4 ">
-                <aside id="cart-summary" class="main bg-w clearfix">
-                    <!--<div class="inner-cart-summary">-->
-                    <header>
-                        <h2>ZAKUPY RAZEM  <strong>(4 produkty)</strong></h2>
-                    </header>
-                    <div class="col-sidebar-cart-summary clearfix">
-                        <ul id="product_summary">
-                            <li id="value_products">
-                                <span class="val_value_products">Wartość Produktów:</span>
-                                <span>3800,00 zł</span>
-                            </li>
-                            <li id="delivery_cost">
-                                <span class="val_delivery_cost">Koszt dostawy Od:</span>
-                                <span>90,00 zł</span>
-                            </li>
-                        </ul>
-                        <div id="discount_voucher">
-                            <div class="form-group clearfix">
-                                <a href="#" class="info_discount_voucher ff_os fz_11 underline">Czy posiadasz bon rabatowy?</a>
-                                <div class="form_discount_voucher clearfix">
-                                    <input type="text" id="num_discount_voucher" name="num_discount_voucher" placeholder="Wpisz numer bonu..." />
-                                    <input type="submit" class="btn btn_black" value="Zrealizuj">
-                                </div>
-                            </div>
-                            <dl class="coupon-list">
-                                <dt>Twój kupon rabatowy:</dt>
-                                <dd class="ff_os fz_12">Rabar-20% na zakupy w ZARA <i class="fa-delete-coupon"></i></dd>
-                            </dl>
-                        </div>
-                        <div id="sum_price">
-                            <span class="val_value_sum_price">Suma</span>
-                            <span class="value_sum_price">9876,00 zł</span>
-                        </div>
-                    </div>
-                    <div class="form-action">
-                        <input type="submit" class="button button-primary" value="Kupuję">
-                    </div>
-                    <!--</div>-->
-                </aside>
-                <aside id="payment-methods" class="main bg-w">
-                    <!--<div class="inner-payment-methods">-->
-                    <header>
-                        <h2>DOSTĘPNE FORMY ZAPŁATY:</h2>
-                    </header>
-                    <div class="payment-methods-list">
-                        <a href="#"><img src="/skin/frontend/modago/default/images/payment_methods/payment_methods.png" alt=""></a>
-                        <a href="#"><img src="/skin/frontend/modago/default/images/payment_methods/payment_methods-02.png" alt=""></a>
-                        <a href="#"><img src="/skin/frontend/modago/default/images/payment_methods/payment_methods-03.png" alt=""></a><br>
-                        <a href="#"><img src="/skin/frontend/modago/default/images/payment_methods/payment_methods-04.png" alt=""></a>
-                        <a href="#"><img src="/skin/frontend/modago/default/images/payment_methods/payment_methods-05.png" alt=""></a>
-                    </div>
-                    <div class="form-action">
-                        <a href="#" class="ff_os fz_11 simple" data-toggle="modal" data-target="#learn_more">Dowiedz się więcej</a>
 
-                        <!-- Modal -->
-                        <div class="modal fade learn_more" id="learn_more" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-lg">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal"></button>
-                                        <h2 class="title_section">Dowiedz się więcej</h2>
-                                    </div>
-                                    <div class="modal-body">
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis accusantium voluptate, autem hic sunt vero placeat rerum, tenetur illum vel esse, accusamus atque similique. Magnam voluptas alias laboriosam ea soluta?</p>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis accusantium voluptate, autem hic sunt vero placeat rerum, tenetur illum vel esse, accusamus atque similique. Magnam voluptas alias laboriosam ea soluta?</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--</div>-->
-                </aside>
-            </div>
+            <?php echo $this->getChildHtml('zolagomodago.checkout.cart.sidebar'); ?>
+
+
             <aside id="aside-shopping-cart" class="main bg-w visible-xs">
-                <a href="#" id="clearAllShopping"><i class="fa-remove"></i> Wyczyść koszyk</a>
+                <a href="#" id="clearAllShopping"><i class="fa-remove"></i> <?php echo $this->__("Empty cart"); ?></a>
                 <a href="<?php echo $this->getContinueShoppingUrl() ?>" id="btn_continue_shopping"><?php echo $this->__("Continue shopping at the mall."); ?> <i class="fa-arrow-btn-right"></i></a>
             </aside>
         </form>
     </div>
 </div>
+
+
+<?php echo $this->getChildHtml('zolago_modago_home_sliderlastseen'); ?>
+
+<style type="text/css">
+    .table-cart .colgroup-02 .colgroup .ilosc .select-group.medium {
+        display: inline; }
+    .styledSelected {width: 80px;}
+</style>
+

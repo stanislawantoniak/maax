@@ -7,6 +7,7 @@ var Mall = {
     _product_template: '<tr><td class="thumb"><img src="{{image_url}}" alt=""></td><td class="desc"><p class="name_product">{{name}}</p><p class="size">{{attr_label}}:<span>{{attr_value}}</span></p><p class="quantity">ilość:<span>{{qty}}</span></p></td><td class="price">{{unit_price}} {{currency_symbol}}</td></tr>',
     _recently_viewed_item_template: '<div class="item"><a href="{{redirect_url}}" class="simple"><div class="box_listing_product"><figure class="img_product"><img src="{{image_url}}" alt="" /></figure><div class="name_product hidden-xs">{{title}}</div></div></a></div>',
     _summary_basket: '<ul><li>{{products_count_msg}}: {{all_products_count}}</li><li>{{products_worth_msg}}: {{total_amount}} {{currency_symbol}}</li><li>{{shipping_cost_msg}}: {{shipping_cost}}</li></ul><a href="{{show_cart_url}}" class="view_basket button button-primary medium link">{{see_your_cart_msg}}</a>',
+    _delete_coupon_template: '<i class="fa-delete-coupon"></i>',
     _current_superattribute: null,
     extend: function(subclass, superclass) {
         function Dummy(){}
@@ -307,13 +308,90 @@ var Mall = {
         }
     },
 
-    emptyCart: function() {
-        jQuery.ajax({
-            type: 'POST'
-        });
-    }
+
 
 }
+
+
+Mall.i18nValidation = {
+    _translate_messages: {},
+    add: function(key, translation) {
+        this._translate_messages[key] = translation;
+    },
+
+    apply: function() {
+        jQuery.extend(jQuery.validator.messages, this._translate_messages);
+    },
+
+    __: function(key, defaultMsg) {
+        var msg = "";
+        if(typeof this._translate_messages[key] != "undefined") {
+            return this._translate_messages[key];
+        } else {
+            jQuery.each(this._translate_messages, function(index, value) {
+                if(value == key) {
+                    msg = value;
+                    return msg;
+                }
+            });
+        }
+
+        return msg != "" ? msg : defaultMsg;
+    }
+};
+
+Mall.translate = {};
+jQuery.extend(Mall.translate, Mall.i18nValidation);
+
+// function that extends rwdCarousel
+Mall.rwdCarousel = {
+    findTallestItem: function(obj) {
+        var height = 0;
+        jQuery.each(obj.rwd.rwdItems, function() {
+            if(this.clientHeight > height) {
+                height = this.clientHeight;
+            }
+        })
+
+        return height;
+    },
+
+    alignComplementaryProductsPrices: function(obj) {
+        var tallestItem = this.findTallestItem(obj);
+        var h = 0;
+        var diff = 0;
+        jQuery.each(obj.rwd.rwdItems, function() {
+
+            if((h = this.clientHeight) < tallestItem) {
+                diff = tallestItem - h;
+                if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1) {
+                    diff /= 2;
+                }
+                jQuery(this).find(".price").css("top", diff);
+            }
+        });
+    }
+};
+
+Mall.Cart = {
+    applyCoupon: function() {
+        var coupon = jQuery("#num_discount_voucher").val();
+        if(coupon == '') {
+            OrbaLib.Cart.Coupon.remove({}, cart_remove_coupon_callback);
+        } else {
+            OrbaLib.Cart.Coupon.add({
+                code: coupon
+            }, cart_add_coupon_callback);
+        }
+    },
+
+    removeCoupon: function() {
+        jQuery("#num_discount_voucher").val("");
+        Mall.Cart.applyCoupon();
+    }
+}
+
+// callbacks
 
 function addtocartcallback(response) {
     if(response.status == false) {
@@ -352,56 +430,29 @@ function number_format(number, decimals, dec_point, thousands_sep) {
     return s.join(dec);
 }
 
+function cart_add_coupon_callback(response) {
+    if(response.status == false) {
+        // show message
+        Mall.showMessage(response.message, "error");
+    } else {
+        // show message and reload the page
+        Mall.showMessage(response.content.message, "success");
+        location.reload();
+    }
+}
+
+function cart_remove_coupon_callback(response) {
+    var type = response.status == true ? "success" : "error";
+    Mall.showMessage(response.content.message, type);
+    location.reload();
+}
+
 jQuery(document).ready(function() {
     Mall.dispatch();
     Mall.i18nValidation.apply();
+
+    jQuery(".messages").find('span').append('<i class="fa fa-times"></i>');
+    jQuery(".messages").find("i").bind('click', function() {
+        jQuery(this).parents("li").first().hide();
+    });
 });
-
-Mall.i18nValidation = {
-    _translate_messages: {},
-    add: function(key, translation) {
-        this._translate_messages[key] = translation;
-    },
-
-    apply: function() {
-        jQuery.extend(jQuery.validator.messages, this._translate_messages);
-    },
-
-    __: function(key, defaultMsg) {
-        if(typeof this._translate_messages[key] != undefined) {
-            return this._translate_messages[key];
-        }
-
-        return defaultMsg;
-    }
-};
-
-// function that extends rwdCarousel
-Mall.rwdCarousel = {
-    findTallestItem: function(obj) {
-        var height = 0;
-        jQuery.each(obj.rwd.rwdItems, function() {
-            if(this.clientHeight > height) {
-                height = this.clientHeight;
-            }
-        })
-
-        return height;
-    },
-
-    alignComplementaryProductsPrices: function(obj) {
-        var tallestItem = this.findTallestItem(obj);
-        var h = 0;
-        var diff = 0;
-        jQuery.each(obj.rwd.rwdItems, function() {
-
-            if((h = this.clientHeight) < tallestItem) {
-                diff = tallestItem - h;
-                if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1) {
-                    diff /= 2;
-                }
-                jQuery(this).find(".price").css("top", diff);
-            }
-        });
-    }
-};
