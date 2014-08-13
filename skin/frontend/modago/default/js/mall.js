@@ -450,4 +450,9 @@ function cart_remove_coupon_callback(response) {
 jQuery(document).ready(function() {
     Mall.dispatch();
     Mall.i18nValidation.apply();
+
+    jQuery(".messages").find('span').append('<i class="fa fa-times"></i>');
+    jQuery(".messages").find("i").bind('click', function() {
+        jQuery(this).parents("li").first().hide();
+    });
 });
