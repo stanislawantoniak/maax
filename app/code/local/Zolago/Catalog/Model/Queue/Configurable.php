@@ -95,7 +95,7 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
 
                     $superAttributeId = isset($superAttributes[$productConfigurableId])
                         ? (int)$superAttributes[$productConfigurableId]['super_attribute'] : false;
-
+                    Mage::log($superAttributeId, 0, 'configurable_update.log');
                     if ($superAttributeId) {
                         $zolagoCatalogModelProductConfigurableData->insertProductSuperAttributePricing(
                             $productConfigurableId, $superAttributeId, $productMinPrice, $store
