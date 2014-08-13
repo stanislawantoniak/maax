@@ -20,16 +20,11 @@
     <div class="container-fluid">
 
 
-        <div class="row"><div class="col-sm-12"><ul class="messages">
-            <li class="error-msg">
-                <ul>
-                    <li><span>Review summary can't be empty</span></li>
-                    <li><span>Nickname can't be empty</span></li>
-                    <li><span>Recommend product can't be unchecked</span></li>
-                    <li><span>Review can't be empty</span></li>
-                </ul>
-            </li>
-        </ul></div></div>
+        <div class="row">
+            <div class="col-sm-12">
+                <?php echo $this->getChildHtml('global_messages') ?>
+            </div>
+        </div>
 
     </div>
 
@@ -43,7 +38,6 @@
                 </div>
             </div>
         </header>
-        <?php echo $this->getChildHtml('global_messages') ?>
 
 
         <style type="text/css">
