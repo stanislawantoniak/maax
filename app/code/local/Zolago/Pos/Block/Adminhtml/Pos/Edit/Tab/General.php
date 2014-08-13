@@ -76,6 +76,16 @@ class Zolago_Pos_Block_Adminhtml_Pos_Edit_Tab_General extends Mage_Adminhtml_Blo
             'dhl_ecas',
             'dhl_terminal',
         ));
+
+		$ups = $form->addFieldset('ups', array('legend'=>$helper->__('UPS Settings')));
+        $builder = Mage::getModel('zolagopos/form_fieldset_ups'); 
+        $builder->setFieldset($ups);
+        $builder->prepareForm(array(
+            'use_ups',
+            'ups_account',
+            'ups_login',
+            'ups_password',
+        ));
 		
 		$review = $form->addFieldset('review', array('legend'=>$helper->__('Product Review Settings')));
         $builder = Mage::getModel('zolagopos/form_fieldset_review'); 

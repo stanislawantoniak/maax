@@ -4,6 +4,25 @@
  */
 class Zolago_Modago_Block_Catalog_CategoryTest extends Zolago_TestCase {
 
+    public function __construct() {
+        $out = parent::__construct();
+        $this->_registerCurrentCategory();
+        return $out;
+    }
+    //{{{ 
+    /**
+     * register category
+     */
+    protected function _registerCurrentCategory() {
+        if (!Mage::registry('current_category')) {
+            $rootCatId = Mage::app()->getStore()->getRootCategoryId();
+            $subCategories = Mage::helper('zolagomodago')->getSubCategories($rootCatId);
+            $catId = next(array_keys($subCategories));
+            $category = Mage::getModel('catalog/category')->load($catId);
+            Mage::register('current_category',$category);        
+        }
+    }
+    //}}}
     /**
      * @requires function no_coverage
      */

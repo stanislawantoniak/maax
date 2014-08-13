@@ -1,0 +1,101 @@
+<?php
+$_v = $this->getVendor();
+?>
+
+<?php switch ($this->getPart()): case 'header': ?>
+
+<div class="panel panel-default">
+    <?php if ($_v->getId()): ?>
+    <div class="panel-heading"><?php echo $this->__("Shop"); ?>: <strong><?php echo $_v->getVendorName() ?></strong></div>
+    <?php else: ?>
+    <div class="panel-heading">Unknown vendor</div>
+    <?php endif ?>
+    <div class="panel-body">
+
+
+        <div class="tableWrapper table-cart">
+            <!-- Thead -->
+
+
+<?php break; case 'footer': ?>
+
+
+    <!-- TFoot -->
+    <div class="table-footer-group hidden-xs">
+        <div class="table-row clearfix">
+            <div class="table-cell cell-01 td">
+<!--                <p>WYSYŁKA KURIEREM 24 H<br>DARMOWY ZWROT DO 30 DNI</p>-->
+                <a class="trigger_conditions_shipping ff_os fz_11 underline" href="#" data-toggle="modal" data-target="#trigger_conditions_shipping" >Warunki i koszty dostawy</a>
+
+            </div>
+
+            <div class="table-cell cell-03 label_value td">
+                <div class="value_quality_price"><?php echo $this->__('Subtotal:')?></div>
+                <div class="value_quality_delivery">
+                    <?php if(($bestRate=$this->getMinimalShippingRate())!==null):?>
+                    Koszt dostawy od:
+                    <?php endif; ?>
+
+                    <?php if($this->isHintAvailable()):?>
+                        <div class="bubble visible-lg">
+                            <div>
+                                <p><?php echo $this->__("Free shippign from");?>: <strong><?php echo Mage::helper('core')->formatPrice($this->getNominalPrice()); ?> </strong></p>
+                            </div>
+                        </div>
+                    <?php endif;?>
+                </div>
+            </div>
+            <div class="table-cell cell-04 td"><div class="quality_price"><?php echo Mage::helper('core')->formatPrice($this->getSubtotal()) ?></div><div class="quality_delivery"><?php if($bestRate): ?><?php echo Mage::helper('core')->formatPrice($bestRate->getPrice()) ?><?php endif; ?></div></div>
+            <div class="table-cell cell-05 td"></div>
+
+
+        </div>
+
+    </div>
+    <!-- TFoot mobile-->
+    <div class="table-footer-group visible-xs">
+        <div class="table-row clearfix">
+            <div class="table-cell cell-03 label_value td">
+                <div class="value_quality_price">WARTOŚĆ PRODUKTÓW ZE SKLEPU:</div>
+                <div class="value_quality_delivery">KOSZT DOSTAWY OD:</div>
+            </div>
+            <div class="table-cell cell-04 td"><div class="quality_price"><?php echo Mage::helper('core')->formatPrice($this->getSubtotal()) ?></div><div class="quality_delivery"><?php if($bestRate): ?><?php echo Mage::helper('core')->formatPrice($bestRate->getPrice()) ?><?php endif; ?></div></div>
+        </div>
+        <div class="table-row clearfix">
+
+            <?php if($this->isHintAvailable()):?>
+                <div class="bubble visible-lg">
+                    <div>
+                        <p><?php echo $this->__("Free shippign from");?>: <strong><?php echo Mage::helper('core')->formatPrice($this->getNominalPrice()); ?> </strong></p>
+                    </div>
+                </div>
+                <div class="udsplit-vendor-subtotal" style="float:right; margin-right: 10px;">
+                    <?php echo $this->__("Free shippign from");?>:
+                    <strong><?php echo Mage::helper('core')->formatPrice($this->getNominalPrice()); ?> </strong>
+                </div>
+            <?php endif;?>
+        </div>
+        <div class="table-row clearfix">
+            <div class="table-cell cell-01 td  no-border">
+<!--                <p>WYSYŁKA KURIEREM 24 H<br>DARMOWY ZWROT DO 30 DNI </p>-->
+                <a class="trigger_conditions_shipping ff_os fz_11 underline" href="#" data-toggle="modal" data-target="#trigger_conditions_shipping" >Warunki i koszty dostawy</a>
+
+            </div>
+        </div>
+        <div class="conditions_shipping panel panel-default">
+            <div class="panel-heading"><h2>Warunki i koszty dostawy : <?php echo $_v->getVendorName() ?></h2></div>
+            <div class="panel-body">
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis accusantium voluptate, autem hic sunt vero placeat rerum, tenetur illum vel esse, accusamus atque similique. Magnam voluptas alias laboriosam ea soluta?</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis accusantium voluptate, autem hic sunt vero placeat rerum, tenetur illum vel esse, accusamus atque similique. Magnam voluptas alias laboriosam ea soluta?</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+</div>
+
+
+
+
+<?php endswitch ?>

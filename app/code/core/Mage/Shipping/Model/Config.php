@@ -69,7 +69,7 @@ class Mage_Shipping_Model_Config extends Varien_Object
         $carriers = array();
         $config = Mage::getStoreConfig('carriers', $store);
         foreach ($config as $code => $carrierConfig) {
-            $model = $this->_getCarrier($code, $carrierConfig, $store);
+            $model = $this->_getCarrier($code, $carrierConfig, $store);            
             if ($model) {
                 $carriers[$code] = $model;
             }
@@ -107,7 +107,6 @@ class Mage_Shipping_Model_Config extends Varien_Object
             return false;
         }
         $modelName = $config['model'];
-
         /**
          * Added protection from not existing models usage.
          * Related with module uninstall process

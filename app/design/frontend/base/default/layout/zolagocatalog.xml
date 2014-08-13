@@ -10,6 +10,22 @@
 		<!--</reference>-->
 	<!--</default>-->
 
+	<dgrid>
+		<reference name="root">
+			<action method="addBodyClass">
+				<class>tundra</class>
+			</action>
+		</reference>
+		<reference name="head">
+			<action method="addItem"><type>skin_js</type><name>dojo/config.js</name></action>
+			<action method="addItem"><type>skin_js</type><name>dojo/dojo/dojo.js</name></action>
+            <action method="addItem">
+                <type>skin_css</type>
+                <name>dojo/dgrid/css/skins/tundra.css</name>
+            </action>
+		</reference>
+	</dgrid>
+
 	<catalog_product_view>
 		<reference name="product.info">
 			<block name="product.vendor.info" type="zolagocatalog/product_vendor_info"/>
@@ -17,6 +33,22 @@
 			<block name="product.vendor.sizecomments" type="zolagocatalog/product_vendor_sizecomments"/>
 		</reference>
 	</catalog_product_view>
+	
+	<udprod_vendor_price_index>
+		<update handle="udropship_vendor" />
+        <update handle="bootstrap" />
+        <update handle="forms" />
+        <update handle="dgrid" />
+		<reference name="content">
+			<block name="price" type="zolagocatalog/vendor_price" template="zolagocatalog/price.phtml"/>
+		</reference>
+	</udprod_vendor_price_index>
+	
+	<udprod_vendor_price_detail_pricemodal>
+		<block type="core/text_list" name="root" output="toHtml">
+            <block type="zolagocatalog/vendor_price_modal" template="zolagocatalog/price/modal.phtml"/>
+        </block>
+	</udprod_vendor_price_detail_pricemodal>
 	
 	<udprod_vendor_mass_index>
 		<update handle="udropship_vendor" />

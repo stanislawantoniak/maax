@@ -166,7 +166,14 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 				"url"	 => $this->getUrl('zolagocampaign/vendor/index')
 			);
 		}
-		
+        if($this->isModuleActive('zolagobanner') && $this->isAllowed("zolagobanner/vendor")){
+            $groupOne[] = array(
+                "active" => $this->isActive("zolagobanner"),
+                "icon"	 => "icon-eye-open",
+                "label"	 => $this->__('Banners'),
+                "url"	 => $this->getUrl('zolagobanner/vendor/index')
+            );
+        }
 		$grouped = $this->_processGroups($groupOne);
 		
 		if(count($grouped)){
@@ -268,6 +275,16 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 				"icon"		=> "icon-picture"
 			);
 		}
+		
+		// Mass price
+		if ($this->isModuleActive('Zolago_Catalog') && $this->isAllowed("udprod/vendor_price")){
+			$groupOne[] = array(
+				"active"	=> $this->isActive("udprod_price"),
+				"label"		=> $this->__('Mass Price'),
+				"url"		=> $this->getUrl('udprod/vendor_price'),
+				"icon"		=> "icon-euro"
+			);
+		}
 
 		$grouped = $this->_processGroups($groupOne, $groupTwo);
 		
@@ -275,7 +292,7 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 			
 			return array(
 				"label"		=> $this->__("Products"),
-				"active"	=> $this->isActive(array("udprod", "udprod_mass", "udprod_image")),
+				"active"	=> $this->isActive(array("udprod", "udprod_mass", "udprod_image", "udprod_price")),
 				"icon"		=> "icon-folder-open",
 				"url"		=> "#",
 				"children"	=> $grouped

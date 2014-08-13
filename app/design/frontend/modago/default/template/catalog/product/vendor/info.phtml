@@ -1,3 +1,4 @@
+<?php /* @var $this Zolago_Catalog_Block_Product_Vendor_Info */ ?>
 <?php
 /**
  * Author: Paweł Chyl <pawel.chyl@orba.pl>
@@ -16,7 +17,7 @@
             <figure>
                 <img src="<?php echo $this->getLogoUrl(); ?>" alt="<?php echo $this->escapeHtml($this->getVendorName()); ?>">
             </figure>
-            <div class="seller"><a href="<?php echo $this->getVendorUrl(); ?>"><?php $this->escapeHtml($this->getVendorName()); ?></a></div>
+            <div class="seller"><a href="<?php echo $this->getVendorUrl(); ?>"><?php echo $this->escapeHtml($this->getVendorName()); ?></a></div>
         </div>
         <div class="col-lg-12 col-md-6 hidden-xs">
             <div class="seller-box-description block">
@@ -153,7 +154,14 @@
                     <a href="<?php echo $this->getVendorUrl(); ?>" class="view-store button button-secondary link"><?php echo $this->__("Go to vendor's store"); ?> <span class="glyphicon glyphicon-chevron-right"></span></a>
                 </div>
                 <dl>
-                    <dd><?php echo $this->getVendorInfoHtml(); ?></dd>
+					<?php if ($this->getVendorInfoHtml()): ?>
+	                    <dd><?php echo $this->getVendorInfoHtml(); ?></dd>
+					<?php else: ?>
+						<dd>
+		                    <img src="<?php echo $this->getLogoUrl(); ?>" alt="<?php echo $this->escapeHtml($this->getVendorName()); ?>"><br/>
+	                        <strong><?php echo $this->__("Seller"); ?>:</strong> <?php echo $this->getVendorName(); ?>
+						</dd>
+					<?php endif;?>
                 </dl>
                 <dl>
                     <dt><?php echo $this->__("RMA rules"); ?>:</dt>

@@ -1,9 +1,10 @@
 <?php
-class Zolago_Campaign_Model_Campaign_Status{
+class Zolago_Campaign_Model_Campaign_Status {
 	
 	const TYPE_ACTIVE   = 1;
 	const TYPE_ARCHIVE  = -1;
 	const TYPE_INACTIVE = 0;
+ 	
 	
 	/**
 	 * @return array

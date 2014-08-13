@@ -1,0 +1,373 @@
+<?php
+$_element = $this->getElement();
+$this->setFieldName($_element->getName());
+$fValue = $_element->getValue();
+?>
+
+<div class="grid">
+    <input id="<?php echo $this->getFieldName()?>" type="hidden" />
+    <table cellspacing="0" class="data" id="<?php echo $this->suffixId('cfgTable')?>" style="width:70px" class="config">
+        <col width="200" />
+        <col width="300" />
+        <col width="300" />
+        <col width="100" />
+        <thead>
+            <tr class="headings">
+                <th><?php echo Mage::helper('zolagobanner')->__('Type Name') ?></th>
+                <th><?php echo Mage::helper('zolagobanner')->__('Images') ?></th>
+                <th><?php echo Mage::helper('zolagobanner')->__('Captions') ?></th>
+                <th><?php echo Mage::helper('zolagobanner')->__('Action') ?></th>
+            </tr>
+
+            <tr id="<?php echo $this->suffixId('rowTpl')?>" style="display:none">
+                <td>
+                    <h3><?php echo Mage::helper('zolagobanner')->__('Name')?></h3>
+                    <input type="text" class="input-text" name="<?php echo $this->getFieldName()?>[$$ROW][title]" value="" style="width:200px" />
+                    <input id="<?php echo $this->getFieldName()?>[$$ROW]" type="hidden" />
+
+                    <br /><br />
+                    <h3><?php echo Mage::helper('zolagobanner')->__('Show As')?></h3>
+                    <select name="<?php echo $this->getFieldName()?>[$$ROW][show_as]">
+                        <option value="image">Image</option>
+                        <option value="html">HTML</option>
+                    </select>
+
+
+
+
+                </td>
+                <td>
+                    <h3><?php echo Mage::helper('zolagobanner')->__('Image Definition')?></h3>
+
+                    <div class="image_def-fieldset">
+                        <div class="grid">
+
+                            <table cellspacing="0" class="data" id="<?php echo $this->suffixId('cfgTable')?>" style="width:70px">
+                                <col width="150" />
+                                <col width="150" />
+                                <thead>
+                                <tr class="headings">
+                                        <th><?php echo Mage::helper('zolagobanner')->__('Number Of Pictures') ?></th>
+                                        <th><?php echo Mage::helper('zolagobanner')->__('Picture Url') ?></th>
+                                </tr>
+                                </thead>
+                                <tfoot>
+                                </tfoot>
+                                <tbody>
+                                <tr>
+                                        <td>
+                                            <input type="text" class="input-text" type="text"  name="<?php echo $this->getFieldName()?>[$$ROW][pictures_number]" style="width:50px;" value="0" onkeyup="var imagesCount = jQuery(this).val();var target = jQuery(this).closest('table').find('td[data-place=pictures-config]');var row = jQuery(this).parents('tr[data-row]').data('row');console.log(target,row);addPictureForm(imagesCount, row, target);"/>
+                                        </td>
+                                        <td>
+                                            <span><?php echo Mage::helper('zolagobanner')->__('Can Be Empty')?></span>
+                                            <input alt="is_required" name="<?php echo $this->getFieldName()?>[$$ROW][picture_can_be_empty]" value="1" style="width:50px" type="checkbox" />
+                                        </td>
+
+                                </tr>
+                                <tr class="headings">
+                                    <th colspan="2"><?php echo Mage::helper('zolagobanner')->__('Image Resolution') ?></th>
+                                </tr>
+                                <tr>
+                                    <td data-place="pictures-config" colspan="2"></td>
+
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </td>
+                <td>
+                    <h3><?php echo Mage::helper('zolagobanner')->__('Caption Definition')?></h3>
+
+                    <div class="caption_def-fieldset">
+                        <div class="grid">
+                            <table cellspacing="0" class="data" id="<?php echo $this->suffixId('cfgTable')?>" style="width:70px">
+                                <col width="150" />
+                                <col width="70" />
+                                <col width="70" />
+                                <thead>
+                                <tr class="headings">
+                                    <th><?php echo Mage::helper('zolagobanner')->__('Number Of Captions') ?></th>
+                                    <th><?php echo Mage::helper('zolagobanner')->__('Caption Max. Symbols') ?></th>
+                                    <th><?php echo Mage::helper('zolagobanner')->__('Caption Url') ?></th>
+                                </tr>
+                                </thead>
+                                <tfoot>
+                                </tfoot>
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <input type="text" class="input-text"  name="<?php echo $this->getFieldName()?>[$$ROW][captions_number]" style="width:50px;" value="0" onkeyup="var captionsCount = jQuery(this).val();var target = jQuery(this).closest('table').find('td[data-place=caption-config]');var row = jQuery(this).parents('tr[data-row]').data('row');console.log(target,row);addCaptionForm(captionsCount, row, target);"/>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="input-text" name="<?php echo $this->getFieldName()?>[$$ROW][caption_max_symbols]" value="0" style="width:50px;" />
+                                    </td>
+                                    <td>
+                                        <span><?php echo Mage::helper('zolagobanner')->__('Can Be Empty')?></span>
+                                        <input alt="is_required" name="<?php echo $this->getFieldName()?>[$$ROW][caption_can_be_empty]" value="1" style="width:50px" type="checkbox" />
+                                    </td>
+                                </tr>
+                                <tr class="headings">
+                                    <th colspan="3"><?php echo Mage::helper('zolagobanner')->__('Caption Labels') ?></th>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" data-place="caption-config">
+
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+
+
+                </td>
+                <td>
+                    <button type="button" class="scalable delete delete-fieldset"><span><?php echo $this->__('Remove') ?></span></button>
+                </td>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th colspan="5" class="a-left">
+                    <div class="left"><button type="button" class="scalable add" id="<?php echo $this->suffixId('addBtn')?>">
+                            <span>+ <?php echo $this->__('Add Type') ?></span>
+                        </button>
+                    </div>
+                </th>
+            </tr>
+        </tfoot>
+        <tbody class="fieldset_config_body">
+        <?php if (is_array($fValue)): foreach ($fValue as $row => $fV):?>
+            <?php $rowClass = ($row%2) ? 'odd' : 'even'; ?>
+            <tr data-row="<?php echo $row; ?>" class="<?php echo $rowClass; ?>" >
+                <td>
+                    <h3><?php echo Mage::helper('zolagobanner')->__('Name')?></h3>
+                    <?php $title = isset($fV['title']) ? $fV['title'] : ''; ?>
+                    <input type="text" class="input-text" name="<?php echo $this->getFieldName()?>[<?php echo $row; ?>][title]" value="<?php echo $title; ?>" style="width:200px" />
+                    <input id="<?php echo $this->getFieldName()?>[<?php echo $row; ?>]" type="hidden" />
+
+
+                    <br /><br />
+                    <h3><?php echo Mage::helper('zolagobanner')->__('Show As')?></h3>
+                    <?php $showAs = isset($fV['show_as']) && !empty($fV['show_as']) ? $fV['show_as'] : 'image'?>
+                    <select name="<?php echo $this->getFieldName()?>[<?php echo $row; ?>][show_as]">
+                        <option value="image" <?php if($showAs == 'image'): ?> selected <?php endif; ?>>Image</option>
+                        <option value="html" <?php if($showAs == 'html'): ?> selected <?php endif; ?>>HTML</option>
+                    </select>
+
+                </td>
+                <td>
+                    <h3><?php echo Mage::helper('zolagobanner')->__('Image Definition')?></h3>
+
+                    <div class="image_def-fieldset">
+                        <div class="grid">
+
+                            <table cellspacing="0" class="data" style="width:300px">
+                                <col width="150" />
+                                <col width="150" />
+                                <thead>
+                                <tr class="headings">
+                                    <th><?php echo Mage::helper('zolagobanner')->__('Number Of Pictures') ?></th>
+                                    <th><?php echo Mage::helper('zolagobanner')->__('Picture Url') ?></th>
+                                </tr>
+                                </thead>
+                                <tfoot>
+                                </tfoot>
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <?php $picturesNumber = isset($fV['pictures_number']) ? $fV['pictures_number'] : 0; ?>
+                                        <input type="text" class="input-text" type="text"  name="<?php echo $this->getFieldName()?>[<?php echo $row; ?>][pictures_number]" style="width:50px;" value="<?php echo $picturesNumber; ?>" onkeyup="var imagesCount = jQuery(this).val();var target = jQuery(this).closest('table').find('td[data-place=pictures-config]');var row = jQuery(this).parents('tr[data-row]').data('row');console.log(target,row);addPictureForm(imagesCount, row, target);"/>
+                                    </td>
+                                    <td>
+                                        <span><?php echo Mage::helper('zolagobanner')->__('Can Be Empty')?></span>
+                                        <input type="checkbox" name="<?php echo $this->getFieldName()?>[<?php echo $row; ?>][picture_can_be_empty]" <?php if(isset($fV['picture_can_be_empty']) && $fV['picture_can_be_empty'] == 1): ?> checked <?php endif; ?>  />
+                                    </td>
+
+                                </tr>
+                                <tr class="headings">
+                                    <th colspan="2"><?php echo Mage::helper('zolagobanner')->__('Image Resolution') ?></th>
+                                </tr>
+                                <tr>
+                                    <td data-place="pictures-config" colspan="2">
+                                        <?php if(isset($fV['picture']) && !empty($fV['picture'])): ?>
+                                            <?php foreach($fV['picture'] as $picN => $pictureConfig): ?>
+                                                <div class="banner-config-row">
+                                                    <div class="banner-config-item">
+                                                        <?php $pictureLabel = isset($pictureConfig['picture_label']) ? $pictureConfig['picture_label'] : ''; ?>
+                                                        <label>Field Label: </label>
+                                                        <input type="text" class="input-text"
+                                                               name="groups[config][fields][zolagobannertypes][value][<?php echo $row; ?>][picture][<?php echo $picN; ?>][picture_label]"
+                                                               value="<?php echo $pictureLabel; ?>"
+                                                               style="width:250px;"></div>
+                                                    <div class="banner-config-item">
+                                                        <?php $picturesW = isset($pictureConfig['pictures_w']) ? $pictureConfig['pictures_w'] : 0; ?>
+                                                        Width: <input type="text"
+                                                                      class="input-text"
+                                                                      name="groups[config][fields][zolagobannertypes][value][<?php echo $row; ?>][picture][<?php echo $picN; ?>][pictures_w]"
+                                                                      value="<?php echo $picturesW; ?>"
+                                                                      style="width:50px;">
+                                                        px
+                                                    </div>
+                                                    <div class="banner-config-item">
+                                                        <?php $picturesH = isset($pictureConfig['pictures_h']) ? $pictureConfig['pictures_h'] : 0; ?>
+                                                        Height: <input type="text"
+                                                                       class="input-text"
+                                                                       name="groups[config][fields][zolagobannertypes][value][<?php echo $row; ?>][picture][<?php echo $picN; ?>][pictures_h]"
+                                                                       value="<?php echo $picturesH; ?>"
+                                                                       style="width:50px;">
+                                                        px
+                                                    </div>
+                                                </div>
+                                            <?php endforeach; ?>
+                                        <?php endif; ?>
+                                    </td>
+
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </td>
+                <td>
+                    <h3><?php echo Mage::helper('zolagobanner')->__('Caption Definition')?></h3>
+
+                    <div class="caption_def-fieldset">
+                        <div class="grid">
+                            <table cellspacing="0" class="data" id="<?php echo $this->suffixId('cfgTable')?>" style="width:300px">
+                                <col width="150" />
+                                <col width="70" />
+                                <col width="70" />
+                                <thead>
+                                <tr class="headings">
+                                    <th><?php echo Mage::helper('zolagobanner')->__('Number Of Captions') ?></th>
+                                    <th><?php echo Mage::helper('zolagobanner')->__('Caption Max. Symbols') ?></th>
+                                    <th><?php echo Mage::helper('zolagobanner')->__('Caption Url') ?></th>
+                                </tr>
+                                </thead>
+                                <tfoot>
+                                </tfoot>
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <?php $captionsNumber = isset($fV['captions_number']) ? $fV['captions_number'] : 0;?>
+                                        <input type="text" class="input-text"  name="<?php echo $this->getFieldName()?>[<?php echo $row; ?>][captions_number]" style="width:50px;" value="<?php echo $captionsNumber; ?>" onkeyup="var captionsCount = jQuery(this).val();var target = jQuery(this).closest('table').find('td[data-place=caption-config]');var row = jQuery(this).parents('tr[data-row]').data('row');console.log(target,row);addCaptionForm(captionsCount, row, target);"/>
+                                    </td>
+                                    <td>
+                                        <?php $captionMaxSymbols = isset($fV['caption_max_symbols']) ? $fV['caption_max_symbols'] : 0; ?>
+                                        <input type="text" class="input-text" name="<?php echo $this->getFieldName()?>[<?php echo $row; ?>][caption_max_symbols]" value="<?php echo $captionMaxSymbols; ?>" style="width:50px;" />
+                                    </td>
+                                    <td>
+                                        <span><?php echo Mage::helper('zolagobanner')->__('Can Be Empty')?></span>
+                                        <input type="checkbox" name="<?php echo $this->getFieldName()?>[<?php echo $row; ?>][caption_can_be_empty]"  style="width:50px" <?php if(isset($fV['caption_can_be_empty']) && $fV['caption_can_be_empty'] == 1): ?> checked <?php endif; ?> />
+                                    </td>
+                                </tr>
+                                <tr class="headings">
+                                    <th colspan="3"><?php echo Mage::helper('zolagobanner')->__('Caption Labels') ?></th>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" data-place="caption-config">
+                                        <?php if(isset($fV['caption']) && !empty($fV['caption'])): ?>
+                                            <?php foreach($fV['caption'] as $capN => $captionConfig): ?>
+                                                <div class="caption-config-row">
+                                                    <div class="caption-config-item">
+                                                        <label>Field Label: </label>
+                                                        <?php $captionLabel = isset($captionConfig['caption_label']) ? $captionConfig['caption_label'] : ''; ?>
+                                                        <input
+                                                            type="text" class="input-text"
+                                                            name="groups[config][fields][zolagobannertypes][value][<?php echo $row; ?>][caption][<?php echo $capN; ?>][caption_label]"
+                                                            value="<?php echo $captionLabel; ?>"
+                                                            style="width:250px;">
+                                                    </div>
+                                                </div>
+                                            <?php endforeach; ?>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+
+
+                </td>
+                <td>
+                    <button type="button" class="scalable delete delete-fieldset"  onclick="jQuery(this).closest('tr').remove();"><span><?php echo $this->__('Remove') ?></span></button>
+                </td>
+            </tr>
+        <?php endforeach; endif; ?>
+        </tbody>
+    </table>
+</div>
+
+<style type="text/css">
+</style>
+<script type="text/javascript">
+//<![CDATA[
+(function ()
+{
+
+    window['bannerValues'] = <?php echo Zend_Json::encode($fValue); ?>;
+
+    var tbody = $$('#<?php echo $this->suffixId('cfgTable')?> tbody.fieldset_config_body')[0]
+
+    function addRow(inData)
+    {
+        var rowHtml = $('<?php echo $this->suffixId('rowTpl')?>').innerHTML
+        var data = {}
+        Object.extend(data, inData);
+        var lastRowNum = (jQuery('.fieldset_config_body tr[data-row]').size() > 0) ? parseInt(jQuery('.fieldset_config_body tr[data-row]').last().data('row'))+1 : 1;
+        data.row = lastRowNum;
+
+        var isIE = (/msie [1-8]\./i).test(navigator.userAgent);
+        var numericVars = ['sort_order'];
+        var forcedNumericVars = [];
+        var keys = $H(data).keys().sortBy(function(s){return (''+s).length}).reverse();
+        for (j=0; j<keys.length; j++) {
+            var i=keys[j];
+            value = data[i] || ''
+            if (-1 != numericVars.indexOf(i) && data[i]
+                || -1 != forcedNumericVars.indexOf(i)
+            ) {
+                value *= 1;
+                data[i] = value;
+            }
+            if (i!=='row' && isIE) value = '"'+value+'"';
+
+            rowHtml = rowHtml.replace(new RegExp('\\$\\$'+i.toUpperCase(), 'g'), value);
+
+        }
+
+        tbody.insert('<tr  class=odd data-row="' + data.row + '">'+rowHtml+'</tr>')
+        var trs = tbody.childElements()
+        var tr = trs[trs.length-1]
+        tr.addClassName(lastRowNum%2 ? 'odd' : 'even')
+        var del = $(tr).select('button.delete-fieldset')[0];
+        if (del) {
+            $(del).observe('click', function(e) { e.stop(); $(del.parentNode.parentNode).remove() })
+        }
+        (function () {
+        $A(['image_def','caption_def']).each(function(colKey){
+            if (Object.isArray(data[colKey]) && data[colKey].length>0) {
+                var colAddBtnId = tr.down('.'+colKey+'-fieldset button.add').id;
+                $A((data[colKey])).each(function(colRowData){
+                    window[colAddBtnId+'udpAddRow'](colRowData);
+                });
+            }
+        });
+        }).defer();
+    }
+
+    $('<?php echo $this->suffixId('addBtn')?>').observe('click', function(e) { e.stop(); addRow() });
+
+})();
+//]]>
+</script>
+
+
+
