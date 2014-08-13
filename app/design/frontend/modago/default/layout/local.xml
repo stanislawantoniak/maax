@@ -175,8 +175,9 @@
             </action>
         </reference>
 
-        <reference name="content">
+        <reference name="checkout.cart">
             <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml" />
+            <block type="zolagomodago/checkout_cart_sidebar" name="zolagomodago.checkout.cart.sidebar" template="checkout/cart/sidebar.phtml" />
         </reference>
     </checkout_cart_index>
 

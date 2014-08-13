@@ -392,7 +392,7 @@ $('#invoice_vat').on('click', function(){
 
 /* ==================== KUPON RABATOWY =============== */
 $('.form_discount_voucher').hide();
-$('.coupon-list').hide();
+//$('.coupon-list').hide();
 $('#discount_voucher').on('click', '.info_discount_voucher', function(e){
   e.preventDefault();
   $('.form_discount_voucher').show(50);

@@ -74,75 +74,10 @@ $_items = $this->getItems();
                     </section>
                 </div>
             </div><!-- col-lg-3 col-md-4 || col-sm-12 col-xs-12-->
-            <div id="sidebar-secondary" class="sidebar-secound col-lg-3 col-md-4 ">
-                <aside id="cart-summary" class="main bg-w clearfix">
-                    <!--<div class="inner-cart-summary">-->
-                    <header>
-                        <h2><?php echo $this->__("Your shopping"); ?>  <strong>(4 <?php echo $this->__("product(s)"); ?>)</strong></h2>
-                    </header>
-                    <div class="col-sidebar-cart-summary clearfix">
-                        <ul id="product_summary">
-                            <li id="value_products">
-                                <span class="val_value_products"><?php echo $this->__("Products worth"); ?>:</span>
-                                <span>3800,00 zł</span>
-                            </li>
-                            <li id="delivery_cost">
-                                <span class="val_delivery_cost"><?php echo $this->__("Min shipping cost:"); ?></span>
-                                <span>90,00 zł</span>
-                            </li>
-                        </ul>
-                        <div id="discount_voucher">
-                            <div class="form-group clearfix">
-                                <a href="#" class="info_discount_voucher ff_os fz_11 underline"><?php echo $this->__("Do you have promo code?"); ?></a>
-                                <div class="form_discount_voucher clearfix">
-                                    <input type="text" id="num_discount_voucher" name="num_discount_voucher" placeholder="<?php echo $this->__("Enter your coupon"); ?>" />
-                                    <input type="submit" class="btn btn_black" value="<?php echo $this->__("Apply coupon"); ?>">
-                                </div>
-                            </div>
-                            <dl class="coupon-list">
-                                <dt><?php echo $this->__("Your coupon:"); ?></dt>
-                                <dd class="ff_os fz_12">Rabar-20% na zakupy w ZARA <i class="fa-delete-coupon"></i></dd>
-                            </dl>
-                        </div>
-                        <div id="sum_price">
-                            <span class="val_value_sum_price"><?php echo $this->__("Total"); ?></span>
-                            <span class="value_sum_price">9876,00 zł</span>
-                        </div>
-                    </div>
-                    <div class="form-action">
-                        <a href="<?php echo Mage::getUrl('checkout/onepage'); ?>" class="button button-primary"><?php echo $this->__("Checkout"); ?></a>
-                    </div>
-                    <!--</div>-->
-                </aside>
-                <aside id="payment-methods" class="main bg-w">
-                    <!--<div class="inner-payment-methods">-->
-                    <header>
-                        <h2><?php echo $this->__("Available payment methods:"); ?></h2>
-                    </header>
-                    <div class="payment-methods-list">
-                        <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('pl-cart-available-payment-methods-icons')->toHtml(); ?>
-                    </div>
-                    <div class="form-action">
-                        <a href="#" class="ff_os fz_11 simple" data-toggle="modal" data-target="#learn_more"><?php echo $this->__("Learn more"); ?></a>
 
-                        <!-- Modal -->
-                        <div class="modal fade learn_more" id="learn_more" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-lg">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal"></button>
-                                        <h2 class="title_section"><?php echo $this->__("Learn more"); ?></h2>
-                                    </div>
-                                    <div class="modal-body">
-                                        <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('pl-cart-available-payment-methods-learn-more-popup')->toHtml(); ?>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--</div>-->
-                </aside>
-            </div>
+            <?php echo $this->getChildHtml('zolagomodago.checkout.cart.sidebar'); ?>
+
+
             <aside id="aside-shopping-cart" class="main bg-w visible-xs">
                 <a href="#" id="clearAllShopping"><i class="fa-remove"></i> <?php echo $this->__("Empty cart"); ?></a>
                 <a href="<?php echo $this->getContinueShoppingUrl() ?>" id="btn_continue_shopping"><?php echo $this->__("Continue shopping at the mall."); ?> <i class="fa-arrow-btn-right"></i></a>
