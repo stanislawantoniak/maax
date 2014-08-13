@@ -38,4 +38,10 @@ class Zolago_Banner_Model_Banner_Type
         $code = preg_replace(array('/[^a-z0-9]/i', '/[-]+/'), '_', $code);
         return strtolower(trim($code, '_'));
     }
+
+
+    public function getTypCodeByTitle($title)
+    {
+        return $this->_prepareBannerTypeCode($title);
+    }
 }
