@@ -64,7 +64,7 @@ jQuery.noConflict();
         });
         return valid;
     }, "");
-  $("form").each(function () {
+  $("#question-form, #review-form").each(function () {
 
   $(this).validate({   
     success: "valid",
@@ -90,6 +90,8 @@ jQuery.noConflict();
     messages: {
 
     },
+      ignore: "#cart-form",
+      ignoreTitle: true,
       highlight: function(element, errorClass, validClass) {
                   var we = $(element).innerWidth()+25;
                   var el = $(element).attr('type');
@@ -390,7 +392,7 @@ $('#invoice_vat').on('click', function(){
 
 /* ==================== KUPON RABATOWY =============== */
 $('.form_discount_voucher').hide();
-$('.coupon-list').hide();
+//$('.coupon-list').hide();
 $('#discount_voucher').on('click', '.info_discount_voucher', function(e){
   e.preventDefault();
   $('.form_discount_voucher').show(50);
