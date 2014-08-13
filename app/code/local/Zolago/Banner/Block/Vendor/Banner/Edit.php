@@ -2,6 +2,7 @@
 
 class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
 {
+    private $_type;
 
     protected function _construct()
     {
@@ -10,13 +11,31 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
 
     public function _prepareLayout()
     {
-        $this->_prepareGrid();
         $this->_prepareForm();
         parent::_prepareLayout();
     }
 
+    /**
+     * @param mixed $type
+     */
+    public function setType()
+    {
+        $type = $this->getRequest()->getParam('type', $this->getModel()->getType());
+        $this->_type = $type;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getType()
+    {
+        return $this->_type;
+    }
+
+
     public function _prepareForm(){
-        $type = $this->getRequest()->getParam('type',null);
+        $id = $this->getRequest()->getParam('id',null);
+        $type = $this->_type;
 
         $helper = Mage::helper('zolagobanner');
         $form = Mage::getModel('zolagodropship/form');
@@ -52,32 +71,42 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
         $this->setForm($form);
     }
 
+    public function getTypeConfiguration()
+    {
+        $type = $this->_type;
+        $config = array();
+        if (!empty($type)) {
+            //fetch config
+            $configPath = Zolago_Banner_Model_Banner_Type::BANNER_TYPES_CONFIG;
+            $configValue = Mage::getStoreConfig($configPath);
+            $typesConfig = json_decode($configValue);
+
+            foreach ($typesConfig as $typesConfigType) {
+                if (
+                    Mage::getSingleton('zolagobanner/banner_type')->getTypCodeByTitle($typesConfigType->title) == $type
+                ) {
+                    $config = $typesConfigType;
+                }
+            }
+        }
+        return $config;
+    }
+
     public function _completeForm(Zolago_Dropship_Model_Form $form, $type)
     {
         $helper = Mage::helper('zolagobanner');
 
-        //fetch config
-        $configPath = Zolago_Banner_Model_Banner_Type::BANNER_TYPES_CONFIG;
-        $configValue = Mage::getStoreConfig($configPath);
-        $typesConfig = json_decode($configValue);
-        $data = array();
-        foreach ($typesConfig as $typesConfigType) {
-            if (
-                Mage::getSingleton('zolagobanner/banner_type')->getTypCodeByTitle($typesConfigType->title) == $type
-            ) {
-                $data = $typesConfigType;
-            }
-        }
-        //krumo('-----------------',$data);
+        $data = $this->getTypeConfiguration($type);
+
         $bannerContent = $form->addFieldset("banner_content", array(
             "legend" => $helper->__("Content")
         ));
         switch ($data->show_as) {
             case Zolago_Banner_Model_Banner_Show::BANNER_SHOW_IMAGE:
                 $picturesNumber = $data->pictures_number;
-                $pictureUrlCanBeEmpty = $data->picture_can_be_empty;
-                $pictureUrlRequired = ($pictureUrlCanBeEmpty == 1) ? FALSE : TRUE;
+
                 if ($picturesNumber > 0) {
+                    $pictureUrlRequired = (isset($data->picture_can_be_empty) && $data->picture_can_be_empty == 1) ? FALSE : TRUE;
                     foreach ($data->picture as $n => $picture) {
                         $bannerContent->addField("image_" . $n, "image", array(
                             "name" => "image[" . $n . "]",
@@ -96,25 +125,39 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
                 }
 
                 $captionsNumber = $data->captions_number;
-                $captionUrlCanBeEmpty = $data->caption_can_be_empty;
-                $captionUrlRequired = ($captionUrlCanBeEmpty == 1) ? FALSE : TRUE;
+
                 if ($captionsNumber > 0) {
+
+                    $captionUrlRequired = (isset($data->caption_can_be_empty) && $data->caption_can_be_empty == 1) ? FALSE : TRUE;
                     foreach ($data->caption as $n => $caption) {
                         $bannerContent->addField("caption_url_" . $n, "text", array(
                             "name" => "caption_url[" . $n . "]",
                             "class" => "form-control",
-                            "required" => true,
+                            "required" => $captionUrlRequired,
                             "label" => $caption->caption_label . ": url"
                         ));
-
-                        $bannerContent->addField("caption_text_" . $n, "text", array(
+                        $captionOptions = array(
                             "name" => "caption_text[" . $n . "]",
                             "class" => "form-control",
                             "required" => $captionUrlRequired,
                             "label" => $caption->caption_label . ": text"
-                        ));
+                        );
+                        $captionMaxSymbols = (isset($data->caption_max_symbols) && $data->caption_max_symbols > 0) ? $data->caption_max_symbols : FALSE;
 
+                        if ($captionMaxSymbols) {
+                            $afterElementHtml = '<p class="nm"><span class="glyphicon glyphicon-exclamation-sign"></span> '  . 'Max length is ' . $captionMaxSymbols . '</p>';
+                            $captionOptions = array_merge($captionOptions,
+                                array(
+                                    'maxlength' => $captionMaxSymbols,
+                                    'after_element_html' => $afterElementHtml
+                                )
+                            );
+                        }
+                        $bannerContent->addField("caption_text_" . $n, "text", $captionOptions);
+                        unset($captionOptions);
                     }
+                    unset($n);
+
                 }
                 break;
             case Zolago_Banner_Model_Banner_Show::BANNER_SHOW_HTML:
@@ -126,86 +169,7 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
                 ));
                 break;
         }
-
-//        switch ($type) {
-//            case Zolago_Banner_Model_Banner_Type::BANNER_TYPE_SLIDER:
-//                $content = $form->addFieldset("banner_content", array(
-//                    "legend" => $helper->__("Banner Content Type")
-//                ));
-//                $content->addField("slider_type", "select", array(
-//                    "name" => "slider_type",
-//                    "class" => "form-control",
-//                    "required" => true,
-//                    "label" => $helper->__('Slider Type'),
-//                    'values' => array('html' => 'HTML' , 'image' => 'Image')
-//                ));
-//
-//
-//                $sliderTypeHtml = $form->addFieldset("slider_type_html", array(
-//                    "legend" => $helper->__("Slider HTML"),
-//                    'attr_data' => array((object)array('name' => 'type', 'value' => 'html'), (object)array('name' => 'name', 'value' => 'slider_type'))
-//                ));
-//                $sliderTypeHtml->addField("html", "textarea", array(
-//                    "name" => "html",
-//                    "class" => "form-control",
-//                    "required" => false,
-//                    "label" => $helper->__('HTML')
-//                ));
-//
-//                $sliderTypeImage = $form->addFieldset("slider_type_image", array(
-//                    "legend" => $helper->__("Slider Content"),
-//                    'class' => 'hidden',
-//                    'attr_data' => array((object)array('name' => 'type', 'value' => 'image'), (object)array('name' => 'name', 'value' => 'slider_type'))
-//                ));
-////                $sliderTypeImage->addField("add_slider", "link", array(
-////                    "name" => "add_slider",
-////                    "label" => $helper->__("ADD"),
-////                    "href" => "",
-////                    'inside'  => '<span class="glyphicon glyphicon-plus"></span>',
-////                ));
-//                $sliderTypeImage->addField("slider_image_desktop", "image", array(
-//                    "name" => "slider[0][image_desktop]",
-//                    "class" => "form-control",
-//                    "required" => false,
-//                    "label" => $helper->__('Slider Image Desktop')
-//                ));
-//                $sliderTypeImage->addField("slider_image_mobile", "image", array(
-//                    "name" => "slider[0][image_mobile]",
-//                    "class" => "form-control",
-//                    "required" => false,
-//                    "label" => $helper->__('Slider Image Mobile')
-//                ));
-//                $sliderTypeImage->addField("slider_link_url", "text", array(
-//                    "name" => "slider[0][link_url][0]",
-//                    "class" => "form-control",
-//                    "required" => true,
-//                    "label" => $helper->__('Caption Url')
-//                ));
-//
-//                $sliderTypeImage->addField("slider_link_text", "text", array(
-//                    "name" => "slider[0][link_text][0]",
-//                    "class" => "form-control",
-//                    "required" => true,
-//                    'wrapper_class' => 'col-md-9',
-//                    "label" => $helper->__('Caption Text')
-//                ));
-//
-//                break;
-//            case Zolago_Banner_Model_Banner_Type::BANNER_TYPE_BOX:
-//                echo '2';
-//                break;
-//            case Zolago_Banner_Model_Banner_Type::BANNER_TYPE_INSPIRATION:
-//                echo '3';
-//                break;
-//        }
         return $form;
-    }
-
-    public function _prepareGrid() {
-        $design = Mage::getDesign();
-        $design->setArea("adminhtml");
-
-        $design->setArea("frontend");
     }
 
     /**
