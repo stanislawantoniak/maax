@@ -73,13 +73,13 @@ class Zolago_Catalog_Helper_Stock extends Mage_Core_Helper_Abstract
 
         //-------Prepare data
 
-        if (!empty($minPOSValues)) {
+        //if (!empty($minPOSValues)) {
             foreach ($dataStock as $sku => $dataStockItem) {
                 $dataStockItems = (array)$dataStockItem;
                 if (!empty($dataStockItems)) {
                     foreach ($dataStockItems as $stockId => $posStockConverter) {
                         //false if POS is not active
-                        $minimalStockPOS = isset($minPOSValues[$stockId]) ? (int)$minPOSValues[$stockId] : false;
+                        $minimalStockPOS = isset($minPOSValues[$stockId]) ? (int)$minPOSValues[$stockId] : 0;
                         if ($minimalStockPOS) {
                             $openOrderQty = isset($openOrdersQty[$sku]) ? (int)$openOrdersQty[$sku]['qty'] : 0;
 
@@ -95,7 +95,7 @@ class Zolago_Catalog_Helper_Stock extends Mage_Core_Helper_Abstract
                 }
             }
             unset($dataStockItem);
-        }
+        //}
 
         $skus = array_keys($data);
         $skuIdAssoc = Zolago_Catalog_Helper_Data::getSkuAssoc($skus);
