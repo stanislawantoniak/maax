@@ -53,6 +53,7 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
         $configurableSimpleRelation = $zolagoCatalogModelProductConfigurableData->getConfigurableSimpleRelation(
             $listUpdatedProducts
         );
+
         if (empty($configurableSimpleRelation)) {
             Mage::log(microtime() . "{$hash} Found 0 configurable products ", 0, 'configurable_update.log');
             return;
@@ -74,6 +75,7 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
 
         //super attribute ids
         $superAttributes = $zolagoCatalogModelProductConfigurableData->getSuperAttributes();
+        Mage::log($superAttributes, 0, 'configurable_update.log');
         //--super attribute ids
 
 
@@ -95,7 +97,7 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
 
                     $superAttributeId = isset($superAttributes[$productConfigurableId])
                         ? (int)$superAttributes[$productConfigurableId]['super_attribute'] : false;
-
+                    Mage::log($superAttributeId, 0, 'configurable_update.log');
                     if ($superAttributeId) {
                         $zolagoCatalogModelProductConfigurableData->insertProductSuperAttributePricing(
                             $productConfigurableId, $superAttributeId, $productMinPrice, $store

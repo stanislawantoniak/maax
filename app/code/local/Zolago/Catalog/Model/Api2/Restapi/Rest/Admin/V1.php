@@ -188,14 +188,6 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                 $cataloginventoryStockItem []= "({$id},{$qty},{$is_in_stock},{$stockId})";
             }
         }
-        Mage::log('cataloginventoryStockStatus0', 0, $batchFile);
-        Mage::log($cataloginventoryStockStatus0, 0, $batchFile);
-
-        Mage::log('cataloginventoryStockStatus1', 0, $batchFile);
-        Mage::log($cataloginventoryStockStatus1, 0, $batchFile);
-
-        Mage::log('cataloginventoryStockItem', 0, $batchFile);
-        Mage::log($cataloginventoryStockItem, 0, $batchFile);
 
         $insert1 = implode(',',$cataloginventoryStockItem);
         $insertA = implode(',',$cataloginventoryStockStatus0);
