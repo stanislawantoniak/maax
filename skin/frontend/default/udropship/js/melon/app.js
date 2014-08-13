@@ -109,20 +109,7 @@ var App = function($) {
 		}
 		
 		//===== price plugin =====//
-		if($.fn.alphanum){
-			$(".positiveInteger").numeric("positiveInteger");
-			$(".integer").numeric("integer");
-			$(".numeric").numeric({min:0, allowMinus: false});
-			$(".alphanum").alphanum();
-			$(".alpha").alpha();
-			$(".urlKeyFormat").alphanum({
-				allowUpper: false,
-				allowSpace: false,
-				allow: "-_.",
-				allowOtherCharSets: false,
-				maxLength: 100,
-			});
-		}
+			applyNumeric();
 			
 		//===== loading btn =====//	
 		$('.form-btn-loading').each(function(){
@@ -222,6 +209,27 @@ var App = function($) {
 		});
 		$(window).bind('enterBreakpoint1200', function() {
 			handleElements();
+		});
+	}
+	
+	
+	var applyNumeric = function(){
+		
+		if(!$.fn.alphanum){
+			return
+		}
+		
+		$(".positiveInteger").numeric("positiveInteger");
+		$(".integer").numeric("integer");
+		$(".numeric").numeric({min:0, allowMinus: false});
+		$(".alphanum").alphanum();
+		$(".alpha").alpha();
+		$(".urlKeyFormat").alphanum({
+			allowUpper: false,
+			allowSpace: false,
+			allow: "-_.",
+			allowOtherCharSets: false,
+			maxLength: 100,
 		});
 	}
 
@@ -820,7 +828,9 @@ var App = function($) {
 					$(el).removeAttr("style");
 				}
 			});
-		}
+		},
+		
+		applyNumeric: applyNumeric
 
 	};
 

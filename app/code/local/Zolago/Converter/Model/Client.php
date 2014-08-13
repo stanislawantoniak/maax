@@ -74,6 +74,33 @@ class Zolago_Converter_Model_Client{
         return null;
     }
 	
+    /**
+     * @param $vendorExternalId
+     * @param $priceType
+     * @param $vendorSku
+     *
+     * @return null
+     */
+    public function getPrices($vendorExternalId, $vendorSku)
+    {
+        $key = "\"" . $vendorExternalId . ":" . $vendorSku . "\"";
+        $url = $this->_replaceUrlKey($this->getConfig('url_price'), $key);
+        $result = $this->_makeConnection($url);
+        
+        if(isset($result['error'])){
+            Mage::log(implode(' ,' , $result));
+            return null;
+        }
+        if (is_array($result) && isset($result['rows'])) {
+            foreach ($result['rows'] as $row) {
+                if (isset($row['value']['price']) && !empty($row['value']['price'])) {
+                   return $row['value']['price'];
+                }
+            }
+        }
+        return null;
+    }
+	
 	/**
 	 * @param string $url
 	 * @param string $key

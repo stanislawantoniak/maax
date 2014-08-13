@@ -6,6 +6,7 @@ define([
 
 
 	  var Updater = declare([_base], {
+		  _url: "/udprod/vendor_price_detail/stockmodal",
 		  _modalTemplate:
 			'<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">\
 			   <div class="modal-dialog">\

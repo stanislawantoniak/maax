@@ -1,14 +1,36 @@
 define([
 	"dojo/_base/declare",
-], function(declare){
+	"vendor/misc"
+], function(declare, misc){
 	
 	return declare(null, {
 		
-		_modalTemplate: "",
+		_modalTemplate:
+			'<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">\
+				<form action="" class="form-horizontal row-border">\
+					<div class="modal-dialog modal-lg">\
+					  <div class="modal-content">\
+						<div class="modal-header">\
+						  <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>\
+						  <h4 class="modal-title">{{title}}</h4>\
+						</div>\
+						<div class="modal-body">\
+						</div>\
+						<div class="modal-footer">\
+						  <button type="button" class="btn btn-default" data-dismiss="modal">' + Translator.translate('Close')  + '</button>\
+						  <button type="button submit" class="btn btn-primary" data-loading-text="' + Translator.translate("Loading...") + '">' + Translator.translate('Save changes') + '</button>\
+						</div>\
+					  </div>\
+					</div>\
+			   </form>\
+			 </div>',
+	
 		_grid: null,
+		_className: "",
 		_modal: null,
 		_storeId: null,
 		_currentRow: null,
+		_url: "",
 		
 		constructor: function(){
 			
@@ -31,31 +53,41 @@ define([
 		},
 		
 		handleDbClick: function(row){
-			var modal = this._triggerModal();
+			var modal = this._triggerModal(row);
 			this._currentRow = row;
 			modal.modal('show');
 			this.loadContent(row.data);
 		},
 		
 		handleSave: function(){
-			var self= this;
 			var grid = this.getGrid();
 			var store = grid.get('store');
+			var rowUpdater = grid.get('rowUpdater');
+			var id = this._currentRow.id;
+			var button = this._modal.find(".btn-primary");
+			var modal = this._modal;
+			
+			rowUpdater.clear(id);
+			button.button('loading');
+			
 			// Refresh grid row
-			store.get(this._currentRow.id).then(function(data){
-				store.notify(data, self._currentRow.id);
+			store.get(id).then(function(data){
+				store.notify(data, id);
+			}).always(function(){
+				button.button('reset');
+				modal.modal('hide');
 			});
-			this._modal.modal('hide');
 		},
 		
 		loadContent: function(data){
 			var btn = this._modal.find(".btn-primary").attr("disabled", "disabled");
 			var body = this._modal.find(".modal-body");
+			var self = this;
 			jQuery.ajax({
-				url: "/udprod/vendor_price_detail/pricemodal",
-				data: {id: data.entity_id},
+				url: this._url,
+				data: {id: data.entity_id, store_id: data.store_id},
 				success: function(response){
-					body.html(response);
+					self._afterLoad.apply(self, [body, response]);
 					btn.attr("disabled", null);
 				},
 				error: function(){
@@ -67,15 +99,21 @@ define([
 			})
 		},
 		
-		_triggerModal: function(){
+		_triggerModal: function(row){
 			var self = this;
 			if(!this._modal){
-				this._modal = jQuery(this._modalTemplate);
-				this._modal.find(".btn-primary").click(function(){
-					self.handleSave.apply(self, arguments);
-				})
+				this._modal = jQuery(this._modalTemplate).addClass(this._className);
 			}
+			// set tile
+			this._afterRender(row);
 			return this._modal;
+		},
+		
+		_afterRender: function(row){
+			
+		},
+		_afterLoad: function(node, response){
+			node.html(response);
 		}
 	});
 });

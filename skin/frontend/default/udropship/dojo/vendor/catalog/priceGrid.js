@@ -253,7 +253,7 @@ define([
 						className: "filterable align-right column-medium signle-price-edit",
 						formatter: misc.currency,
 						renderCell: function(item,value,node){
-							if(!item.converter_price_type && priceEditPriceMeta(item, value)){
+							if(priceEditPriceMeta(item, value)){
 								put(node, ".editable");
 							}
 							BaseGrid.defaultRenderCell.apply(this, arguments);
@@ -347,7 +347,19 @@ define([
 						renderHeaderCell: filterRendererFacory("select", "msrp", {options: boolOptions}),
 						sortable: false, 
 						field: "msrp",
-						className: "filterable align-right column-medium",
+						className: "filterable align-right column-medium signle-price-edit",
+						formatter: function(value){
+							if(value!==null){
+								return misc.currency(value);
+							}
+							return "";
+						},
+						renderCell: function(item,value,node){
+							if(priceEditPriceMeta(item, value)){
+								put(node, ".editable");
+							}
+							BaseGrid.defaultRenderCell.apply(this, arguments);
+						}
 					}
 				]
 			},

@@ -99,4 +99,7 @@
     <price-change-product-price translate="message" module="zolagocatalog">
         <message>Change product price</message>
     </price-change-product-price>
+    <price-change-product-price-name translate="message" module="zolagocatalog">
+        <message>Change product price {{name}}</message>
+    </price-change-product-price-name>
 </jstranslator>

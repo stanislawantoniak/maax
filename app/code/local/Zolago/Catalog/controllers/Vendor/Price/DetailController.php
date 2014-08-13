@@ -9,9 +9,9 @@ class Zolago_Catalog_Vendor_Price_DetailController extends Zolago_Catalog_Contro
 	 */
 	public function pricemodalAction() {
 		
-		$product = Mage::getModel('catalog/product')->load(
-			$this->getRequest()->getParam('id')
-		);
+		$product = Mage::getModel('catalog/product')->
+				setStoreId($this->getRequest()->getParam('store_id'))->
+				load($this->getRequest()->getParam('id'));
 		
 		if($product->getUdropshipVendor()!=$this->_getSession()->getVendorId()){
 			$this->norouteAction();
@@ -41,7 +41,7 @@ class Zolago_Catalog_Vendor_Price_DetailController extends Zolago_Catalog_Contro
 		}
 		
 		$out = Mage::getResourceSingleton('zolagocatalog/vendor_price')
-				->getDetails($ids, $storeId, $this->_getSession()->isAllowed("campaign"));
+				->getDetails($ids, $storeId, true, $this->_getSession()->isAllowed("campaign"));
 		
 		
 		

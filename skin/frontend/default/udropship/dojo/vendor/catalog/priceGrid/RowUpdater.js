@@ -61,6 +61,7 @@ define([
 			this.setExpandAll(!this.getExpandAll());
 		},
 		setGrid: function(grid){
+			grid.set('rowUpdater', this);
 			this._grid = grid;
 		},
 		getGrid: function(){
@@ -94,8 +95,12 @@ define([
 				this.doRowCollapse(row.data, row.element)
 			}
 		},
-		clear: function(){
-			this._cache = {};
+		clear: function(id){
+			if(id){
+				delete this._cache[id];
+			}else{
+				this._cache = {};
+			}
 		},
 		doRowExpand: function(item, node){
 			this.load(item, node);
