@@ -73,14 +73,14 @@ class Zolago_Catalog_Helper_Stock extends Mage_Core_Helper_Abstract
 
         //-------Prepare data
 
-        if (!empty($minPOSValues)) {
+        //if (!empty($minPOSValues)) {
             foreach ($dataStock as $sku => $dataStockItem) {
                 $dataStockItems = (array)$dataStockItem;
                 if (!empty($dataStockItems)) {
                     foreach ($dataStockItems as $stockId => $posStockConverter) {
                         //false if POS is not active
-                        $minimalStockPOS = isset($minPOSValues[$stockId]) ? (int)$minPOSValues[$stockId] : false;
-                        if ($minimalStockPOS) {
+                        $minimalStockPOS = isset($minPOSValues[$stockId]) ? (int)$minPOSValues[$stockId] : 0;
+                        //if ($minimalStockPOS) {
                             $openOrderQty = isset($openOrdersQty[$sku]) ? (int)$openOrdersQty[$sku]['qty'] : 0;
 
                             //available stock = if [POS stock from converter]>[minimal stock from POS] then [POS stock from converter] - [minimal stock from POS] else 0
@@ -88,14 +88,14 @@ class Zolago_Catalog_Helper_Stock extends Mage_Core_Helper_Abstract
                                 ? ($posStockConverter - $minimalStockPOS - $openOrderQty) : 0;
 
                             Mage::log(microtime() . "{$sku}: {$stockId} - POS stock from converter {$posStockConverter}, minimal stock from POS {$minimalStockPOS}, Open orders stock {$openOrderQty} ", 0, $batchFile);
-                        }
+                        //}
 
                     }
                     unset($posStockConverter);
                 }
             }
             unset($dataStockItem);
-        }
+        //}
 
         $skus = array_keys($data);
         $skuIdAssoc = Zolago_Catalog_Helper_Data::getSkuAssoc($skus);
