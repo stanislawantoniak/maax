@@ -223,6 +223,7 @@ var App = function($) {
 		$(".integer").numeric("integer");
 		$(".numeric").numeric({min:0, allowMinus: false});
 		$(".numericSigned").numeric({allowMinus: true});
+		$(".marignPercent").numeric({allowMinus: true,min: -100, max: 1000});
 		$(".alphanum").alphanum();
 		$(".alpha").alpha();
 		$(".urlKeyFormat").alphanum({

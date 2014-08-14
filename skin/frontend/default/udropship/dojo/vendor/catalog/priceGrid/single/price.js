@@ -22,7 +22,7 @@ define([
 				this.inherited(arguments);
 				
 				var price = jQuery("#price", node),
-					numeric = jQuery(".numericSigned, .numeric", node),
+					numeric = jQuery(".marignPercent, .numeric", node),
 					source = jQuery("#converter_price_type", node),
 					margin = jQuery("#price_margin", node),
 					rows = jQuery("table tbody tr", node),
