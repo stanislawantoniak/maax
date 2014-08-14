@@ -281,6 +281,9 @@ var Mall = {
     },
 
     addToCart: function(id, qty) {
+        if(Mall._current_superattribute == null) {
+            return false;
+        }
         var superLabel = jQuery(this._current_superattribute).attr("name");
         var attr = {};
         attr[jQuery(this._current_superattribute).attr("data-id")] = jQuery(this._current_superattribute).attr("value");
