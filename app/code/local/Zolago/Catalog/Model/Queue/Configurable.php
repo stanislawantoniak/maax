@@ -25,7 +25,7 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
 
         $hash = md5(microtime());
 
-        Mage::log(microtime() . "{$hash} Start ", 0, "configurable_update_{$hash}.log");
+        Mage::log(microtime() . "{$hash} Start ", 0, "configurable_update_{$hash}_A.log");
         $collection = $this->_collection;
 
         $websites = array();
@@ -55,7 +55,7 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
         );
 
         if (empty($configurableSimpleRelation)) {
-            Mage::log("Found 0 configurable products ", 0, "configurable_update_{$hash}.log");
+            Mage::log("Found 0 configurable products ", 0, "configurable_update_{$hash}_A.log");
             return;
         }
 
@@ -69,20 +69,20 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
             $minPrices[$store] = $zolagoCatalogModelProductConfigurableData
                 ->getConfigurableMinPrice($configurableProductsIds, $store);
         }
-        Mage::log('minPrices', 0, "configurable_update_{$hash}.log");
-        Mage::log($minPrices, 0, "configurable_update_{$hash}.log");
+        Mage::log('minPrices', 0, "configurable_update_{$hash}_minPrices.log");
+        Mage::log($minPrices, 0, "configurable_update_{$hash}_minPrices.log");
         //--min prices
 
 
         //super attribute ids
         $superAttributes = $zolagoCatalogModelProductConfigurableData->getSuperAttributes();
-        //Mage::log($superAttributes, 0, "configurable_update_{$hash}.log");
+        Mage::log($superAttributes, 0, "configurable_update_{$hash}_superAttributes.log");
         //--super attribute ids
 
 
         $productAction = Mage::getSingleton('catalog/product_action');
         $productConfigurableIds = array();
-        Mage::log(microtime() . "{$hash} {$relations} relations found ", 0, "configurable_update_{$hash}.log");
+        Mage::log($configurableSimpleRelation, 0, "configurable_update_{$hash}_configurableSimpleRelation.log");
 
 
 
