@@ -91,8 +91,8 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
 
             //update configurable product price
             foreach ($storeId as $store) {
-                $productMinPrice = isset($minPrices[$store][$productConfigurableId])
-                    ? $minPrices[$store][$productConfigurableId]['min_price'] : false;
+                $productMinPrice = isset($minPrices[Mage_Core_Model_App::ADMIN_STORE_ID][$productConfigurableId])
+                    ? $minPrices[Mage_Core_Model_App::ADMIN_STORE_ID][$productConfigurableId]['min_price'] : false;
 
                 if ($productMinPrice) {
                     $productAction->updateAttributesNoIndex(
