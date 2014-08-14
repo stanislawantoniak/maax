@@ -116,11 +116,15 @@
 	
 }
 
-#grid-holder div.p50{
-	width:50%;
-	box-sizing: border-box;
+#grid-holder .expando{
+	display: table;
+	width: 100%;
 }
-#grid-holder div.p50.left{
+#grid-holder .expando > div{
+	display: table-cell;
+	width: 50%;
+}
+#grid-holder div.sub-row-left{
 	border-right: 1px #dddddd solid;
 }
 #grid-holder .table-subrow{

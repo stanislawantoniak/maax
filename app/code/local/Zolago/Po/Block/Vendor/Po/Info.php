@@ -7,8 +7,16 @@ class Zolago_Po_Block_Vendor_Po_Info extends Unirgy_DropshipPo_Block_Vendor_Po_I
     {
         $po = $this->getPo();
         $posId = $po->getDefaultPosId();
+        $vendor = $po->getVendor();
         $pos = Mage::getModel('zolagopos/pos')->load($posId);
-        $out = array_intersect_key(parent::getCarriers(), array_flip(Mage::helper('zolagodropship')->getAllowedCarriersForPos($pos)));
+        $myCarriers = array_merge(
+            array_flip(Mage::helper('zolagodropship')->getAllowedCarriersForPos($pos)),
+            array_flip(Mage::helper('zolagodropship')->getAllowedCarriersForVendor($vendor))
+        );
+        $out = array_intersect_key(
+            parent::getCarriers(), 
+            $myCarriers
+        );
         return $out;
     }
 

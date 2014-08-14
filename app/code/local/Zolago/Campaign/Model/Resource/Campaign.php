@@ -55,23 +55,25 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
 
 
             $this->_setProducts($object, $productIds);
-            $this->_setCampaignAttributes($object, $productIds, $storeIds);
 
-            //Assignment Special Price From Date and Special Price To Date
-            if ($object->hasData("date_from") || $object->hasData("date_to")) {
-                $this->_setSpecialPriceDate($productIds, $object->getData("date_from"), $object->getData("date_to"),$storeIds);
-            }
 
-            //Assignment Special Price
-            if ($object->hasData("price_source_id") && $object->hasData("percent")) {
-                $this->_setSpecialPrice($productIds, $object->getData("price_source_id"), $object->getData("percent"),$storeIds);
-            }
-            //Assignment Suggested Retail Price
-            if ($object->hasData("price_srp")) {
-                $this->_setSRPPrice($productIds, $object->getData("price_srp"),$storeIds);
-            }
-            Mage::getSingleton('catalog/product_action')
-                ->reindexAfterMassAttributeChange();
+//            $this->_setCampaignAttributes($object, $productIds, $storeIds);
+//
+//            //Assignment Special Price From Date and Special Price To Date
+//            if ($object->hasData("date_from") || $object->hasData("date_to")) {
+//                $this->_setSpecialPriceDate($productIds, $object->getData("date_from"), $object->getData("date_to"),$storeIds);
+//            }
+//
+//            //Assignment Special Price
+//            if ($object->hasData("price_source_id") && $object->hasData("percent")) {
+//                $this->_setSpecialPrice($productIds, $object->getData("price_source_id"), $object->getData("percent"),$storeIds);
+//            }
+//            //Assignment Suggested Retail Price
+//            if ($object->hasData("price_srp")) {
+//                $this->_setSRPPrice($productIds, $object->getData("price_srp"),$storeIds);
+//            }
+//            Mage::getSingleton('catalog/product_action')
+//                ->reindexAfterMassAttributeChange();
         }
         return parent::_afterSave($object);
     }
@@ -173,7 +175,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
      * @param array $skuS
      * @return Zolago_Campaign_Model_Resource_Campaign
      */
-    protected function _setCampaignAttributes(Mage_Core_Model_Abstract $object, array $productIds, $storeIds)
+    public function _setCampaignAttributes(Mage_Core_Model_Abstract $object, array $productIds, $storeIds)
     {
         $actionModel = Mage::getSingleton('catalog/product_action');
 
@@ -232,6 +234,23 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
 
         foreach ($productIds as $productId) {
             $toInsert[] = array("campaign_id" => $object->getId(), "product_id" => $productId);
+        }
+        if (count($toInsert)) {
+            $this->_getWriteAdapter()->insertMultiple($table, $toInsert);
+        }
+        return $this;
+    }
+    public  function saveProducts($campaignId, array $productIds)
+    {
+        $table = $this->getTable("zolagocampaign/campaign_product");
+        $where = $this->getReadConnection()
+            ->quoteInto("campaign_id=?", $campaignId);
+        $this->_getWriteAdapter()->delete($table, $where);
+
+        $toInsert = array();
+
+        foreach ($productIds as $productId) {
+            $toInsert[] = array("campaign_id" => $campaignId, "product_id" => $productId);
         }
         if (count($toInsert)) {
             $this->_getWriteAdapter()->insertMultiple($table, $toInsert);
@@ -390,6 +409,47 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         return $this->getReadConnection()->fetchAll($select);
     }
 
+    public function getUpDateCampaigns(array $type)
+    {
+        $table = $this->getTable("zolagocampaign/campaign");
+        $select = $this->getReadConnection()->select();
+        $select->from(
+            array("campaign" => $table),
+            array(
+                "campaign.type as type",
+                'campaign.campaign_id as campaign_id',
+                'campaign.date_from as date_from',
+                'campaign.date_to as date_to',
+                'campaign.campaign_id as campaign_id',
+                'campaign.price_source_id as price_source',
+                'campaign.percent as price_percent',
+                'campaign.price_srp as price_srp'
+            )
+        );
+        $select->join(
+            array('campaign_product' => 'zolago_campaign_product'),
+            'campaign_product.campaign_id=campaign.campaign_id',
+            array(
+                 'product_id' => 'campaign_product.product_id'
+            )
+        );
+        $select->join(
+            array('campaign_website' => 'zolago_campaign_website'),
+            'campaign_website.campaign_id=campaign.campaign_id',
+            array(
+                'website_id' => 'campaign_website.website_id'
+            )
+        );
+        $startTime = date("Y-m-d H:i:s", Mage::getModel('core/date')->timestamp(strtotime(time())));
+        $endYTime = date("Y-m-d H:i:s", Mage::getModel('core/date')->timestamp(strtotime('+30 minutes', time())));
+
+        $select->where("campaign.date_from BETWEEN '{$startTime}' AND '{$endYTime}'");
+        $select->where("type in(?)", $type);
+        $select->where("status=?", Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE);
+        $select->order('campaign.date_from ASC');
+
+        return $this->getReadConnection()->fetchAll($select);
+    }
 
 }
 

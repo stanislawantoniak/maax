@@ -1,4 +1,7 @@
 <?php
+/**
+ * @method Zolago_Dropship_Model_Session _getSession()
+ */
 class Zolago_Catalog_Controller_Vendor_Price_Abstract extends Zolago_Dropship_Controller_Vendor_Abstract
 {
 
