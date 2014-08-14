@@ -127,36 +127,73 @@ class Zolago_Banner_VendorController extends Zolago_Dropship_Controller_Vendor_A
                     $banner->setVendorId($vendor->getId());
                 }
                 $banner->save();
-Mage::log($banner->getId());
-                Mage::log($data);
+
                 //Save Banner Content
                 Mage::log($data);
-                Mage::log($_FILES);
                 $bannerContentToSave = array();
-                if(isset($_FILES['image'])) {
-                    $images = $_FILES['image'];
+                if($data['show'] == Zolago_Banner_Model_Banner_Show::BANNER_SHOW_IMAGE){
+                    if (isset($_FILES['image'])) {
 
-                    $tmpName = $images['tmp_name'];
-                    $name = $images['name'];
+                        $images = $_FILES['image'];
 
-                    foreach($tmpName as $n => $imageName){
-                        if(!empty($imageName)){
-                            $path = Mage::getBaseDir() . "/media/banners/" . $name[$n];
-                            $bannerContentToSave['image'][$n]['path'] = "/media/banners/" . $name[$n];
-                            try {
-                                move_uploaded_file($imageName, $path);
-                            } catch (Exception $e) {
-                                Mage::logException($e);
+                        $tmpName = $images['tmp_name'];
+                        $name = $images['name'];
+
+                        foreach ($tmpName as $n => $imageName) {
+                            if (!empty($imageName)) {
+                                $path = Mage::getBaseDir() . "/media/banners/" . $name[$n];
+
+                                try {
+                                    move_uploaded_file($imageName, $path);
+                                } catch (Exception $e) {
+                                    Mage::logException($e);
+                                }
+                                $bannerContentToSave['image'][$n]['path'] = "/banners/" . $name[$n];
+                            } elseif (isset($data['image'])&& !empty($data['image'])) {
+                                $bannerContentToSave['image'][$n]['path'] = isset($data['image'][$n]) ? $data['image'][$n]['value'] : '';
                             }
                         }
-
+                        unset($n);
                     }
+                    foreach($data as $i => $dataItem){
+                        $bannerContentToSave['banner_id'] = $banner->getId();
+                        $bannerContentToSave['show'] = $data['show'];
+                        $bannerContentToSave['html'] = '';
 
+                        if ($i == 'image_url') {
+                            foreach ($dataItem as $n => $imageUrl) {
+                                $bannerContentToSave['image'][$n]['url'] = $imageUrl;
+                            }
+                            unset($n);
+                        }
+
+                        if ($i == 'caption_url') {
+                            foreach ($dataItem as $n => $captionUrl) {
+                                $bannerContentToSave['caption'][$n]['url'] = $captionUrl;
+                            }
+                            unset($n);
+                        }
+                        if ($i == 'caption_text') {
+                            foreach ($dataItem as $n => $captionText) {
+                                $bannerContentToSave['caption'][$n]['text'] = $captionText;
+                            }
+                            unset($n);
+                        }
+                    }
                 }
-                foreach($data as $dataItem){
-                    $bannerContentToSave['banner_id'] = $banner->getId();
-                    $bannerContentToSave['show'] = $data['show'];
+                if($data['show'] == Zolago_Banner_Model_Banner_Show::BANNER_SHOW_HTML){
+                    foreach($data as $i => $dataItem){
+                        $bannerContentToSave['banner_id'] = $banner->getId();
+                        $bannerContentToSave['show'] = $data['show'];
+                        $bannerContentToSave['html'] = $data['banner_html'];
+                    }
                 }
+
+
+
+
+
+                Mage::getModel('zolagobanner/banner')->saveBannerContent($bannerContentToSave);
 
 
             } else {
@@ -172,17 +209,13 @@ Mage::log($banner->getId());
             $this->_getSession()->setFormData($data);
             return $this->_redirectReferer();
         } catch (Exception $e) {
-            $this->_getSession()->addError($helper->__("Some error occured"));
+            $this->_getSession()->addError($helper->__("Some error occure"));
             $this->_getSession()->setFormData($data);
             Mage::logException($e);
             return $this->_redirectReferer();
         }
-
-//        foreach ($_FILES['slider']['tmp_name'] as $key => $file) {
-//            move_uploaded_file($file["image"],
-//                Mage::getBaseDir() . "/media/vendorSliders/" . $_FILES["slider"]["name"][$key]['image']);
-//            echo "Stored in: " . "upload/" . $_FILES["slider"]["name"][$key]['image'];
-//        }
         return $this->_redirect("*/*");
     }
+
+
 }

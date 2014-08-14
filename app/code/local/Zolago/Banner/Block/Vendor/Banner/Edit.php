@@ -71,9 +71,44 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
         $this->_completeForm($form, $data);
 
         $values = $this->getModel()->getData();
-        $values = array_merge($values, array('show' => $data->show_as, 'type' => $type ));
+
+        $contentData = $this->getModel()->getResource()->getBannerContent($id);
+
+        $contentValues = $this->_prepareContentDataToSet($contentData);
+
+        $values = array_merge($values, array('show' => $data->show_as, 'type' => $type  ));
+        $values = array_merge($values, $contentValues);
+
         $form->setValues($values);
         $this->setForm($form);
+    }
+
+    private function _prepareContentDataToSet($contentData){
+        $data = array();
+        if($contentData){
+            if($contentData['show'] == Zolago_Banner_Model_Banner_Show::BANNER_SHOW_IMAGE){
+                $image = unserialize($contentData['image']);
+                $caption = unserialize($contentData['caption']);
+
+                if(!empty($image)){
+                    foreach($image as $n => $imageItem){
+                        $data['image_'.$n] = isset($imageItem['path']) ? $imageItem['path'] : '';
+                        $data['image_url_'.$n] = isset($imageItem['url']) ? $imageItem['url'] : '';
+                    }
+                }
+                if(!empty($caption)){
+                    foreach($caption as $n => $captionItem){
+                        $data['caption_text_'.$n] = isset($captionItem['text']) ? $captionItem['text'] : '';
+                        $data['caption_url_'.$n] = isset($captionItem['url']) ? $captionItem['url'] : '';
+                    }
+                }
+            }
+            if($contentData['show'] == Zolago_Banner_Model_Banner_Show::BANNER_SHOW_HTML){
+                $data['banner_html'] = $contentData['html'];
+            }
+        }
+        return $data;
+
     }
 
     public function getTypeConfiguration()
