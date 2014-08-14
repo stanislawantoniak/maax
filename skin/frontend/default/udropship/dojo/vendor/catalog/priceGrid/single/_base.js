@@ -31,6 +31,7 @@ define([
 		_storeId: null,
 		_currentRow: null,
 		_url: "",
+		_saveUrl: "",
 		
 		constructor: function(){
 			
@@ -66,17 +67,32 @@ define([
 			var id = this._currentRow.id;
 			var button = this._modal.find(".btn-primary");
 			var modal = this._modal;
+			var self = this;
 			
 			rowUpdater.clear(id);
 			button.button('loading');
 			
-			// Refresh grid row
-			store.get(id).then(function(data){
-				store.notify(data, id);
-			}).always(function(){
-				button.button('reset');
-				modal.modal('hide');
+			// make request
+			var data = modal.find("form").serialize();
+			jQuery.ajax({
+				method: "post",
+				data: data,
+				url: this._saveUrl,
+				success: function(data){
+					store.notify(data, id);
+				},
+				complete: function(){
+					button.button('reset');
+					modal.modal('hide');
+				}
 			});
+			
+			// Refresh grid row
+//			store.get(id).then(function(data){
+//				
+//			}).always(function(){
+//				
+//			});
 		},
 		
 		loadContent: function(data){

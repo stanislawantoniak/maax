@@ -3,6 +3,9 @@ class Zolago_Catalog_Vendor_Price_DetailController extends Zolago_Catalog_Contro
 {
 	
 	
+	public function pricemodalSaveAction() {
+		$this->_forward("get", "vendor_price", "udprod");
+	}
 	
 	/**
 	 * Get html of product price modal

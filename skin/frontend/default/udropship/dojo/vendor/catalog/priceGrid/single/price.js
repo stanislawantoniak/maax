@@ -7,6 +7,7 @@ define([
 
 		var Updater = declare([_base], {
 			_url: "/udprod/vendor_price_detail/pricemodal",
+			_saveUrl: "/udprod/vendor_price_detail/pricemodalSave",
 			_title: Translator.translate('Change product price {{name}}'),
 			_className: "price-modal",
 			
@@ -25,8 +26,10 @@ define([
 					numeric = jQuery(".marignPercent, .numeric", node),
 					source = jQuery("#converter_price_type", node),
 					margin = jQuery("#price_margin", node),
+					// Composite
 					rows = jQuery("table tbody tr", node),
 					minRow = jQuery("table tbody tr.minimal-price", node),
+					// Misc
 					form = node.parents("form"),
 					self = this;
 			
@@ -129,10 +132,16 @@ define([
 						generalValue = 0;
 					}
 					
+					var value = rowValue + generalValue;
+					
 					el.
 						parents("tr").
-						find(".effective-price").
-						text(misc.currency(rowValue + generalValue))
+						find(".effective-price span").
+						text(misc.currency(value))
+					el.
+						parents("tr").
+						find(".effective-price input").
+						val(value);
 				}
 				
 				rows.find("input").each(function(){
