@@ -365,7 +365,6 @@ $avg = count($ratings) > 0 ? ceil(array_sum($ratings)/count($ratings)/10/2) : 0;
 <?php echo $this->getChildHtml('zolago_modago_home_sliderlastseen'); ?>
 <?php if($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) : ?>
 <script type="text/javascript">
-    var productJson = <?php echo Mage::getBlockSingleton('zolagocatalog/product_view_type_configurable')->getJsonConfig(); ?>;
     Mall.product.productOptions(<?php echo Mage::getBlockSingleton('zolagocatalog/product_view_type_configurable')->getJsonConfig(); ?>);
     Mall.product._current_product_type = "<?php echo Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE; ?>";
 </script>
