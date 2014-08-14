@@ -25,7 +25,7 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
 
         $hash = md5(microtime());
 
-        Mage::log(microtime() . "{$hash} Start ", 0, 'configurable_update.log');
+        Mage::log(microtime() . "{$hash} Start ", 0, "configurable_update_{$hash}.log");
         $collection = $this->_collection;
 
         $websites = array();
@@ -55,7 +55,7 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
         );
 
         if (empty($configurableSimpleRelation)) {
-            Mage::log("Found 0 configurable products ", 0, 'configurable_update.log');
+            Mage::log("Found 0 configurable products ", 0, "configurable_update_{$hash}.log");
             return;
         }
 
@@ -69,20 +69,20 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
             $minPrices[$store] = $zolagoCatalogModelProductConfigurableData
                 ->getConfigurableMinPrice($configurableProductsIds, $store);
         }
-        Mage::log('minPrices', 0, 'configurable_update.log');
-        Mage::log($minPrices, 0, 'configurable_update.log');
+        Mage::log('minPrices', 0, "configurable_update_{$hash}.log");
+        Mage::log($minPrices, 0, "configurable_update_{$hash}.log");
         //--min prices
 
 
         //super attribute ids
         $superAttributes = $zolagoCatalogModelProductConfigurableData->getSuperAttributes();
-        //Mage::log($superAttributes, 0, 'configurable_update.log');
+        //Mage::log($superAttributes, 0, "configurable_update_{$hash}.log");
         //--super attribute ids
 
 
         $productAction = Mage::getSingleton('catalog/product_action');
         $productConfigurableIds = array();
-        Mage::log(microtime() . "{$hash} {$relations} relations found ", 0, 'configurable_update.log');
+        Mage::log(microtime() . "{$hash} {$relations} relations found ", 0, "configurable_update_{$hash}.log");
 
 
 
@@ -117,7 +117,7 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
         }
 
 
-        Mage::log(microtime() . "{$hash} Reindex ", 0, 'configurable_update.log');
+        Mage::log(microtime() . "{$hash} Reindex ", 0, "configurable_update_{$hash}.log");
 
 
         $productsToReindex = array_merge($listUpdatedProducts, $productConfigurableIds);
@@ -147,7 +147,7 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
                  "product_ids" => $listUpdatedProducts
             )
         );
-        Mage::log(microtime() . "{$hash} End ", 0, 'configurable_update.log');
+        Mage::log(microtime() . "{$hash} End ", 0, "configurable_update_{$hash}.log");
 
 
     }

@@ -208,7 +208,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
 
                 $insert[] = "({$superAttributeId},{$size},{$priceIncrement},{$website})";
             }
-            Mage::log($insert, 0, 'configurable_update.log');
+
             if (!empty($insert)) {
                 $lineQuery = implode(",", $insert);
 
