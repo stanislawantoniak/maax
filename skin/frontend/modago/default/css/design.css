@@ -5653,6 +5653,29 @@ figure .figure-border {
   line-height: 1.5;
   text-align: left; }
 
+/* line 156, ../sass/modules/_dropdown-search-basket.scss */
+#popup-after-add-to-cart {
+  /* PANEL KOSZYKA */ }
+/* line 157, ../sass/modules/_dropdown-search-basket.scss */
+#popup-after-add-to-cart table {
+  width: 100%; }
+/* line 160, ../sass/modules/_dropdown-search-basket.scss */
+#popup-after-add-to-cart table td {
+  padding: 8px 0;
+  vertical-align: top; }
+/* line 163, ../sass/modules/_dropdown-search-basket.scss */
+#popup-after-add-to-cart table td img {
+  border: 1px solid #adadad; }
+/* line 166, ../sass/modules/_dropdown-search-basket.scss */
+#popup-after-add-to-cart table td + td {
+  padding-left: 5px; }
+/* line 169, ../sass/modules/_dropdown-search-basket.scss */
+#popup-after-add-to-cart table td p {
+  margin: 0px;
+  padding: 0px;
+  font-size: 12px;
+  line-height: 1.3; }
+
 /* line 2, ../sass/modules/_header-block-search.scss */
 #header [role="search"] {
   margin: 0px;
@@ -16187,15 +16210,14 @@ ul.messages > li ul > li > span {
   height: 100%;
   display: block;
   min-height: 50px;
-  padding-left: 15px;
-  line-height: 50px;
+  padding: 15px 30px 15px 15px;
   position: relative; }
 
-/* line 30, ../sass/override/_override-design.scss */
+/* line 29, ../sass/override/_override-design.scss */
 ul.messages > li.error-msg ul > li > span {
   background-color: #f2e6e6; }
 
-/* line 34, ../sass/override/_override-design.scss */
+/* line 33, ../sass/override/_override-design.scss */
 ul.messages ul > li > span > i {
   position: absolute;
   right: 16px;

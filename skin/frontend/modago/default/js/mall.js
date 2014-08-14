@@ -397,7 +397,7 @@ function addtocartcallback(response) {
     if(response.status == false) {
         Mall.showMessage(response.message, "error");
     } else {
-        Mall.showMessage(response.content.message, "success");
+        jQuery("#popup-after-add-to-cart").modal('show');
         Mall.getAccountInfo();
     }
 }
@@ -447,6 +447,8 @@ function cart_remove_coupon_callback(response) {
     location.reload();
 }
 
+
+
 jQuery(document).ready(function() {
     Mall.dispatch();
     Mall.i18nValidation.apply();
@@ -454,5 +456,28 @@ jQuery(document).ready(function() {
     jQuery(".messages").find('span').append('<i class="fa fa-times"></i>');
     jQuery(".messages").find("i").bind('click', function() {
         jQuery(this).parents("li").first().hide();
+    });
+
+
+    jQuery("#add-to-cart").tooltip();
+    jQuery("#add-to-cart").on('mouseover', function() {
+        if(Mall._current_superattribute != null) {
+            jQuery("#add-to-cart").tooltip('destroy');
+        }
+    });
+
+    jQuery('#popup-after-add-to-cart').on('shown.bs.modal', function (e) {
+        var backdrop =  jQuery('#sb-site').find('.modal-backdrop');
+        if (backdrop.length == 0) {
+            jQuery('#sb-site').append('<div class="modal-backdrop fade in"></div>');
+        };
+
+    });
+    jQuery('#popup-after-add-to-cart').on('show.bs.modal', function (e) {
+        jQuery('html').find('body > .modal-backdrop').remove();
+    });
+    jQuery('#popup-after-add-to-cart').on('hidden.bs.modal', function (e) {
+        jQuery('html').find('.modal-backdrop').remove();
+
     });
 });
