@@ -222,6 +222,7 @@ var App = function($) {
 		$(".positiveInteger").numeric("positiveInteger");
 		$(".integer").numeric("integer");
 		$(".numeric").numeric({min:0, allowMinus: false});
+		$(".numericSigned").numeric({allowMinus: true});
 		$(".alphanum").alphanum();
 		$(".alpha").alpha();
 		$(".urlKeyFormat").alphanum({

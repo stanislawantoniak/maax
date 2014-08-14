@@ -86,7 +86,7 @@ class Zolago_Converter_Model_Client{
         $key = "\"" . $vendorExternalId . ":" . $vendorSku . "\"";
         $url = $this->_replaceUrlKey($this->getConfig('url_price'), $key);
         $result = $this->_makeConnection($url);
-        
+		
         if(isset($result['error'])){
             Mage::log(implode(' ,' , $result));
             return null;
