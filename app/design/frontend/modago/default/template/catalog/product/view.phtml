@@ -330,8 +330,8 @@ $avg = count($ratings) > 0 ? ceil(array_sum($ratings)/count($ratings)/10/2) : 0;
 <!--end zadaj pytanie sprzedajacemu-->
 
 
-<div class="modal fade bs-example-modal-lg" id="popup-after-add-to-cart" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" style="width: 450px;">
+<div class="modal fade bs-example-modal-lg container-fluid" id="popup-after-add-to-cart" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="max-width: 450px;">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"></button>
@@ -354,8 +354,14 @@ $avg = count($ratings) > 0 ? ceil(array_sum($ratings)/count($ratings)/10/2) : 0;
                     </tbody>
                 </table>
                 <br /><br />
-                <a href="#" data-dismiss="modal" class="button button-third"><?php echo $this->__("Continue shopping at the mall."); ?></a>
-                <a href="<?php echo Mage::getUrl('checkout/cart'); ?>" class="button button-primary medium pull-right link"><?php echo $this->__("Go to shopping cart"); ?></a>
+                <div class="container-fluid"><div class="row" style="text-align: center;">
+                    <div class="col-md-6" style="margin-bottom: 15px; "><a href="#" data-dismiss="modal"
+                                             class="button button-third"><?php echo $this->__("Continue shopping at the mall."); ?></a>
+                    </div>
+                    <div class="col-md-6"><a href="<?php echo Mage::getUrl('checkout/cart'); ?>"
+                                             class="button button-primary medium link"><?php echo $this->__("Go to shopping cart"); ?></a>
+                    </div>
+                </div></div>
             </div>
         </div>
     </div>
