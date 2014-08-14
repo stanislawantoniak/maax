@@ -81,4 +81,19 @@
     <price-remove-form-campaign translate="message" module="zolagocatalog">
         <message>Remove from campaign</message>
     </price-remove-form-campaign>
+    <price-sale translate="message" module="zolagocatalog">
+        <message>Sale</message>
+    </price-sale>
+    <price-promotion translate="message" module="zolagocatalog">
+        <message>Promotion</message>
+    </price-promotion>
+    <price-inactive translate="message" module="zolagocatalog">
+        <message>Inactive</message>
+    </price-inactive>
+    <price-active translate="message" module="zolagocatalog">
+        <message>Active</message>
+    </price-active>
+    <price-archive translate="message" module="zolagocatalog">
+        <message>Archive</message>
+    </price-archive>
 </jstranslator>

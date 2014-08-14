@@ -7,6 +7,8 @@ class Zolago_Dropship_VendorController extends Unirgy_Dropship_VendorController 
 	 * Index
 	 */
 	public function indexAction() {
+		return $this->_forward('dashboard');
+		/*
 		if (Mage::helper('udropship')->isUdpoActive()) {
 			$session = $this->_getSession();
 			if($session->isOperatorMode()){
@@ -19,7 +21,7 @@ class Zolago_Dropship_VendorController extends Unirgy_Dropship_VendorController 
 			}
 		}
 		return parent::indexAction();
-		
+		*/
 	}
 	
 	/**

@@ -4,7 +4,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 	extends Mage_Core_Model_Resource_Db_Abstract{
 	
 	protected $_options = array();
-	
+
 	protected $_attributeLabelCache = array();
 	protected $_optionLabelCache = array();
 	
@@ -13,13 +13,12 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 	protected function _construct() {
 		$this->_init("catalog/product", null);
 	}
-
 	
 	/**
 	 * @param array $ids
 	 * @return array
 	 */
-	public function getDetails($ids=array(), $storeId) {
+	public function getDetails($ids=array(), $storeId, $isAllowedToCampaign) {
 		
 		$out = array();
 		
@@ -62,6 +61,8 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 					$storeId
 			);
 			$campaign['status_text'] = isset($statuses[$campaign['status']]) ? $statuses[$campaign['status']] : "";
+			$campaign['type_text'] = isset($campaign['type']) ? ucfirst($campaign['type']) : "";
+			$campaign['is_allowed'] = $isAllowedToCampaign;
 			$out[$campaign['entity_id']]['campaign'] = $campaign;
 		}
 		

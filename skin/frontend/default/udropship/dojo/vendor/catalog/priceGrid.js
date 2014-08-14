@@ -1,6 +1,7 @@
 define([
 	"dgrid/Grid",
 	"dgrid/OnDemandGrid",
+	"dgrid/extensions/Pagination",
 	"dgrid/extensions/CompoundColumns",
 	"dgrid/Selection",
 	"dgrid/Keyboard",
@@ -22,7 +23,7 @@ define([
 	"vendor/catalog/priceGrid/singlePriceUpdater",
 	"vendor/catalog/priceGrid/RowUpdater",
 	"vendor/misc"
-], function(BaseGrid, Grid, CompoundColumns, Selection, Keyboard, editor, declare, domConstruct, 
+], function(BaseGrid, Grid, Pagination, CompoundColumns, Selection, Keyboard, editor, declare, domConstruct, 
 	on, query, Memory, Observable, put, Cache, JsonRest, Selection, 
 	selector, lang, request, ObserverFilter, singlePriceUpdater, RowUpdater, misc){
 	
@@ -160,7 +161,14 @@ define([
 			if(switcher){
 				query['store_id'] = switcher.value;
 			}
-			return JsonRest.prototype.query.call(this, query, options);
+			//updater.setCanProcess(false);
+			
+			
+			var ret = JsonRest.prototype.query.call(this, query, options);
+			
+			//ret.then(function(){updater.setCanProcess(true);})
+			
+			return ret;
 		},
 		
 		put: function(obj){
@@ -198,7 +206,7 @@ define([
 	// cache crakcs edit
 	testStore =  Observable(storeRest);
 	
-	var PriceGrid = declare([Grid, Selection, Keyboard, CompoundColumns]);
+	var PriceGrid = declare([/*BaseGrid, Pagination,*/Grid, Selection, Keyboard, CompoundColumns]);
 
 	grid = new PriceGrid({
 		columns: {
@@ -465,15 +473,15 @@ define([
 					}
 				]
 			},
-			stock: {
+			stock_qty: {
 				label: Translator.translate("Stock Qty"),
-				field: "stock",
+				field: "stock_qty",
 				className: "column-medium",
 				children: [
 					{
-						renderHeaderCell: filterRendererFacory("range", "stock"),
+						renderHeaderCell: filterRendererFacory("range", "stock_qty"),
 						sortable: false, 
-						field: "stock",
+						field: "stock_qty",
 						className: "filterable align-right column-medium",
 						formatter: function(value){return parseInt(value);}
 					}
@@ -529,10 +537,19 @@ define([
 		loadingMessage: "<span>" + Translator.translate("Loading...") + "</span>",
 		noDataMessage: "<span>" + Translator.translate("No results found") + "</span>.",
         selectionMode: 'none',
+		
 		minRowsPerPage: 50,
 		maxRowsPerPage: 100,
 		pagingDelay: 200,
-		bufferRows: 50,
+		bufferRows: 20,
+	
+		/* Paginatior  */
+		/* rowsPerPage: 500,
+		pagingLinks: 1,
+        pagingTextBox: true,
+        firstLastArrows: true,
+        pageSizeOptions: [10, 15, 25],*/
+		
 		renderRow: renderer,
 		store: testStore,
 		deselectOnRefresh: false,
