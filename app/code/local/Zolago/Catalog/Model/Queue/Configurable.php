@@ -55,7 +55,7 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
         );
 
         if (empty($configurableSimpleRelation)) {
-            Mage::log(microtime() . "{$hash} Found 0 configurable products ", 0, 'configurable_update.log');
+            Mage::log("Found 0 configurable products ", 0, 'configurable_update.log');
             return;
         }
 
@@ -69,13 +69,14 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
             $minPrices[$store] = $zolagoCatalogModelProductConfigurableData
                 ->getConfigurableMinPrice($configurableProductsIds, $store);
         }
-
+        Mage::log('minPrices', 0, 'configurable_update.log');
+        Mage::log($minPrices, 0, 'configurable_update.log');
         //--min prices
 
 
         //super attribute ids
         $superAttributes = $zolagoCatalogModelProductConfigurableData->getSuperAttributes();
-        Mage::log($superAttributes, 0, 'configurable_update.log');
+        //Mage::log($superAttributes, 0, 'configurable_update.log');
         //--super attribute ids
 
 
@@ -83,8 +84,7 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
         $productConfigurableIds = array();
         Mage::log(microtime() . "{$hash} {$relations} relations found ", 0, 'configurable_update.log');
 
-        Mage::log('minPrices', 0, 'configurable_update.log');
-        Mage::log($minPrices, 0, 'configurable_update.log');
+
 
         foreach ($configurableSimpleRelation as $productConfigurableId => $configurableSimpleRelationItem) {
 
