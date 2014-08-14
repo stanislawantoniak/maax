@@ -183,7 +183,7 @@ $avg = count($ratings) > 0 ? ceil(array_sum($ratings)/count($ratings)/10/2) : 0;
                     </div>
 
                     <div class="col-xs-6 text-right">
-                        <button class="btn button button-primary ico addBasket" onclick="Mall.addToCart(<?php echo $_product->getId(); ?>, <?php echo !$_product->getStockItem()->getMinSaleQty() ? 1 : $_product->getStockItem()->getMinSaleQty(); ?>);return false;">dodaj do koszyka</button>
+                        <button class="btn button button-primary ico addBasket" title="Wybierz wpierw rozmiar" id="add-to-cart" data-toggle="tooltip" data-placemen="top" onclick="Mall.addToCart(<?php echo $_product->getId(); ?>, <?php echo !$_product->getStockItem()->getMinSaleQty() ? 1 : $_product->getStockItem()->getMinSaleQty(); ?>);return false;"><?php echo $this->__("add to cart"); ?></button>
                     </div>
                 </div>
             </div>
@@ -330,6 +330,41 @@ $avg = count($ratings) > 0 ? ceil(array_sum($ratings)/count($ratings)/10/2) : 0;
 <!--end zadaj pytanie sprzedajacemu-->
 
 
+<div class="modal fade bs-example-modal-lg" id="popup-after-add-to-cart" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="width: 450px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"></button>
+                <h2 class="title_section"><?php echo $this->__("Product has been added to cart:"); ?></h2>
+            </div>
+            <div class="modal-body">
+                <table>
+                    <tbody id="product-added">
+                    <tr>
+                        <td class="thumb" style="width: 55px;"><img
+                                src="<?php echo Mage::helper('catalog/image')->init($_product, 'image')->resize(40, 50) ?>"
+                                alt=""></td>
+                        <td class="desc"><p class="name_product"><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></p>
+
+                            <p class="size"><?php echo ucfirst($this->__("size")); ?>:<span>DEV</span></p>
+
+                            <p class="quantity"><?php echo ucfirst($this->__("quantity")); ?>:<span>1</span></p></td>
+                        <td class="price"><?php echo $this->helper('core')->currency($finalPrice, true, false); ?></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <br /><br />
+                <a href="#" data-dismiss="modal" class="button button-third"><?php echo $this->__("Continue shopping at the mall."); ?></a>
+                <a href="<?php echo Mage::getUrl('checkout/cart'); ?>" class="button button-primary medium pull-right link"><?php echo $this->__("Go to shopping cart"); ?></a>
+            </div>
+        </div>
+    </div>
+</div>
+
 <?php echo $this->getChildHtml('product.info.media.modal'); ?>
 
 <?php echo $this->getChildHtml('zolago_modago_home_sliderlastseen'); ?>
+
+<script type="text/javascript">
+
+</script>
