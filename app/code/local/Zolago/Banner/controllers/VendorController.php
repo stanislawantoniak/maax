@@ -127,10 +127,12 @@ class Zolago_Banner_VendorController extends Zolago_Dropship_Controller_Vendor_A
                     $banner->setVendorId($vendor->getId());
                 }
                 $banner->save();
-
+Mage::log($banner->getId());
+                Mage::log($data);
                 //Save Banner Content
                 Mage::log($data);
                 Mage::log($_FILES);
+                $bannerContentToSave = array();
                 if(isset($_FILES['image'])) {
                     $images = $_FILES['image'];
 
@@ -140,7 +142,7 @@ class Zolago_Banner_VendorController extends Zolago_Dropship_Controller_Vendor_A
                     foreach($tmpName as $n => $imageName){
                         if(!empty($imageName)){
                             $path = Mage::getBaseDir() . "/media/banners/" . $name[$n];
-                            Mage::log($path);
+                            $bannerContentToSave['image'][$n]['path'] = "/media/banners/" . $name[$n];
                             try {
                                 move_uploaded_file($imageName, $path);
                             } catch (Exception $e) {
@@ -150,6 +152,10 @@ class Zolago_Banner_VendorController extends Zolago_Dropship_Controller_Vendor_A
 
                     }
 
+                }
+                foreach($data as $dataItem){
+                    $bannerContentToSave['banner_id'] = $banner->getId();
+                    $bannerContentToSave['show'] = $data['show'];
                 }
 
 
@@ -166,7 +172,7 @@ class Zolago_Banner_VendorController extends Zolago_Dropship_Controller_Vendor_A
             $this->_getSession()->setFormData($data);
             return $this->_redirectReferer();
         } catch (Exception $e) {
-            $this->_getSession()->addError($helper->__("Some error occure"));
+            $this->_getSession()->addError($helper->__("Some error occured"));
             $this->_getSession()->setFormData($data);
             Mage::logException($e);
             return $this->_redirectReferer();

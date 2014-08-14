@@ -36,7 +36,6 @@
 <div class="container z-grid">
 	<form id="edit-banner" class="form-horizontal row-border" action="<?php echo $this->getForm()->getAction();?>" method="POST" enctype="multipart/form-data">
 		<input type="hidden" name="banner_id" value="<?php echo $_model->getId();?>"/>
-        <input type="hidden" name="type" value="<?php echo $this->getType();?>"/>
 		<?php echo $this->getLayout()->getBlock('formkey')->toHtml();?>
 		<?php echo $this->getForm()->toHtml();?>
 

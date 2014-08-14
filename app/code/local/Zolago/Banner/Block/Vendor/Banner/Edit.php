@@ -61,12 +61,17 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
             "label" => $helper->__('Campaign'),
             "values" => Mage::getSingleton('zolagobanner/banner_campaign')->toOptionHash()
         ));
+        $general->addField("type", "hidden", array(
+            "name" => "type"
+        ));
         //--Common edit banner fields
+        $data = $this->getTypeConfiguration($type);
 
         //Additional banner fields depends on type
-        $this->_completeForm($form, $type);
+        $this->_completeForm($form, $data);
 
         $values = $this->getModel()->getData();
+        $values = array_merge($values, array('show' => $data->show_as, 'type' => $type ));
         $form->setValues($values);
         $this->setForm($form);
     }
@@ -92,14 +97,16 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
         return $config;
     }
 
-    public function _completeForm(Zolago_Dropship_Model_Form $form, $type)
+    public function _completeForm(Zolago_Dropship_Model_Form $form, $data)
     {
         $helper = Mage::helper('zolagobanner');
 
-        $data = $this->getTypeConfiguration($type);
-
         $bannerContent = $form->addFieldset("banner_content", array(
             "legend" => $helper->__("Content")
+        ));
+
+        $bannerContent->addField("show", "hidden", array(
+            "name" => "show"
         ));
         switch ($data->show_as) {
             case Zolago_Banner_Model_Banner_Show::BANNER_SHOW_IMAGE:
