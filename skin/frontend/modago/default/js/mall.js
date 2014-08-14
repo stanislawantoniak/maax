@@ -7,6 +7,7 @@ var Mall = {
     _product_template: '<tr><td class="thumb"><img src="{{image_url}}" alt=""></td><td class="desc"><p class="name_product">{{name}}</p><p class="size">{{attr_label}}:<span>{{attr_value}}</span></p><p class="quantity">ilość:<span>{{qty}}</span></p></td><td class="price">{{unit_price}} {{currency_symbol}}</td></tr>',
     _recently_viewed_item_template: '<div class="item"><a href="{{redirect_url}}" class="simple"><div class="box_listing_product"><figure class="img_product"><img src="{{image_url}}" alt="" /></figure><div class="name_product hidden-xs">{{title}}</div></div></a></div>',
     _summary_basket: '<ul><li>{{products_count_msg}}: {{all_products_count}}</li><li>{{products_worth_msg}}: {{total_amount}} {{currency_symbol}}</li><li>{{shipping_cost_msg}}: {{shipping_cost}}</li></ul><a href="{{show_cart_url}}" class="view_basket button button-primary medium link">{{see_your_cart_msg}}</a>',
+    _delete_coupon_template: '<i class="fa-delete-coupon"></i>',
     _current_superattribute: null,
     extend: function(subclass, superclass) {
         function Dummy(){}
@@ -277,9 +278,21 @@ var Mall = {
 
     setSuperAttribute: function(currentSelection) {
         this._current_superattribute = currentSelection;
+        // change prices
+        var optionId = jQuery(this._current_superattribute).attr("value");
+        var superOptionId = jQuery(this._current_superattribute).attr("data-id");
+        jQuery.each(Mall.product._options.attributes[superOptionId].options, function(index, opt) {
+            if(optionId == opt.id) {
+                Mall.product.setPrices((parseFloat(Mall.product._options.basePrice) - parseFloat(opt.price)), (parseFloat(Mall.product._options.oldPrice) - parseFloat(opt.oldPrice)), Mall.product._options.template);
+            }
+            return ;
+        });
     },
 
     addToCart: function(id, qty) {
+        if(Mall._current_superattribute == null && Mall.product._current_product_type == "configurable") {
+            return false;
+        }
         var superLabel = jQuery(this._current_superattribute).attr("name");
         var attr = {};
         attr[jQuery(this._current_superattribute).attr("data-id")] = jQuery(this._current_superattribute).attr("value");
@@ -305,15 +318,197 @@ var Mall = {
                 alert(message);
                 break;
         }
-    }
+    },
+
+
 
 }
+
+
+Mall.i18nValidation = {
+    _translate_messages: {},
+    add: function(key, translation) {
+        this._translate_messages[key] = translation;
+    },
+
+    apply: function() {
+        jQuery.extend(jQuery.validator.messages, this._translate_messages);
+    },
+
+    __: function(key, defaultMsg) {
+        var msg = "";
+        if(typeof this._translate_messages[key] != "undefined") {
+            return this._translate_messages[key];
+        } else {
+            jQuery.each(this._translate_messages, function(index, value) {
+                if(value == key) {
+                    msg = value;
+                    return msg;
+                }
+            });
+        }
+
+        return msg != "" ? msg : defaultMsg;
+    }
+};
+
+Mall.translate = {};
+jQuery.extend(Mall.translate, Mall.i18nValidation);
+
+// function that extends rwdCarousel
+Mall.rwdCarousel = {
+    findTallestItem: function(obj) {
+        var height = 0;
+        jQuery.each(obj.rwd.rwdItems, function() {
+            if(this.clientHeight > height) {
+                height = this.clientHeight;
+            }
+        })
+
+        return height;
+    },
+
+    alignComplementaryProductsPrices: function(obj) {
+        var tallestItem = this.findTallestItem(obj);
+        var h = 0;
+        var diff = 0;
+        jQuery.each(obj.rwd.rwdItems, function() {
+
+            if((h = this.clientHeight) < tallestItem) {
+                diff = tallestItem - h;
+                if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1) {
+                    diff /= 2;
+                }
+                jQuery(this).find(".price").css("top", diff);
+            }
+        });
+    }
+};
+
+Mall.Cart = {
+    applyCoupon: function() {
+        var coupon = jQuery("#num_discount_voucher").val();
+        if(coupon == '') {
+            OrbaLib.Cart.Coupon.remove({}, cart_remove_coupon_callback);
+        } else {
+            OrbaLib.Cart.Coupon.add({
+                code: coupon
+            }, cart_add_coupon_callback);
+        }
+    },
+
+    removeCoupon: function() {
+        jQuery("#num_discount_voucher").val("");
+        Mall.Cart.applyCoupon();
+    }
+}
+
+Mall.product = {
+    _size_table_template: "",
+    _options_group_template: "",
+    _options: {},
+    _current_product_type: "simple",
+
+    productOptions: function(jsonOptions) {
+        this._options = jsonOptions;
+        // set prices
+        this.setPrices(jsonOptions.basePrice, jsonOptions.oldPrice, jsonOptions.template);
+        if(typeof jsonOptions.attributes != "undefined") {
+            this.setAttributes(jsonOptions.attributes);
+        }
+    },
+
+    setChooseText: function(text) {
+
+    },
+
+    setPrices: function(price, oldPrice, template) {
+        // set old price
+        var old_price_selector = jQuery(".price-box").find(".old-price");
+        var price_selector = jQuery(".price-box").find("span.price");
+        if(price != oldPrice) {
+            old_price_selector.html(template.replace("#{price}", number_format(oldPrice, "2", ",", " ")));
+        } else {
+            old_price_selector.html("");
+        }
+
+        // set price
+        price_selector.html(template.replace("#{price}", number_format(price, "2", ",", " ")));
+    },
+
+    setAttributes: function(attributes) {
+        this.clearAttributesContainer();
+
+        jQuery.each(attributes, function(index, e) {
+            Mall.product.createOptionGroup(e);
+        });
+    },
+
+    clearAttributesContainer: function() {
+        this._size_table_template = jQuery(".size-box").find("a.view-sizing")[0].outerHTML;
+        jQuery(".size-box").find("div.size").remove();
+    },
+
+    applyAdditionalRules: function(optionGroup, selector) {
+        if(optionGroup.code == "size") {
+            selector.append(this._size_table_template);
+        }
+    },
+
+    createOptionGroup: function(group) {
+        // insert option group
+        var groupElement = jQuery("<div/>", {
+            "class": "size"
+        }).appendTo(".size-box");
+        jQuery(".size-box").append(this._options_group_template);
+        // create label group
+        jQuery("<span/>", {
+            "class": "size-label",
+            "html": (group.label + ":")
+        }).appendTo(groupElement);
+
+        // create form group for options
+        var formGroupElement = jQuery("<div/>", {
+            class: "form-group form-radio"
+        }).appendTo(groupElement);
+
+        jQuery.each(group.options, function(index, option) {
+            Mall.product.createOption(group.id, option, formGroupElement);
+        });
+
+        this.applyAdditionalRules(group, formGroupElement);
+    },
+
+    createOption: function(id, option, groupElement) {
+        var label = jQuery("<label/>", {
+            "for": ("size_" + option.id)
+        }).appendTo(groupElement);
+        var _options = {
+            type: "radio",
+            id: ("size_" + option.id),
+            "data-id": id,
+            name: ("super_attribute["+ id +"]"),
+            value: option.id,
+            onclick: "Mall.setSuperAttribute(this);"
+        };
+
+        if(!option.is_salable) {
+            _options["disabled"] = "";
+        }
+        var optElement = jQuery("<input/>", _options).appendTo(label);
+        jQuery("<span/>", {
+            "html": option.label
+        }).appendTo(label);
+    }
+};
+
+// callbacks
 
 function addtocartcallback(response) {
     if(response.status == false) {
         Mall.showMessage(response.message, "error");
     } else {
-        Mall.showMessage(response.content.message, "success");
+        jQuery("#popup-after-add-to-cart").modal('show');
         Mall.getAccountInfo();
     }
 }
@@ -346,56 +541,54 @@ function number_format(number, decimals, dec_point, thousands_sep) {
     return s.join(dec);
 }
 
+function cart_add_coupon_callback(response) {
+    if(response.status == false) {
+        // show message
+        Mall.showMessage(response.message, "error");
+    } else {
+        // show message and reload the page
+        Mall.showMessage(response.content.message, "success");
+        location.reload();
+    }
+}
+
+function cart_remove_coupon_callback(response) {
+    var type = response.status == true ? "success" : "error";
+    Mall.showMessage(response.content.message, type);
+    location.reload();
+}
+
+
+
 jQuery(document).ready(function() {
     Mall.dispatch();
     Mall.i18nValidation.apply();
-});
 
-Mall.i18nValidation = {
-    _translate_messages: {},
-    add: function(key, translation) {
-        this._translate_messages[key] = translation;
-    },
+    jQuery(".messages").find('span').append('<i class="fa fa-times"></i>');
+    jQuery(".messages").find("i").bind('click', function() {
+        jQuery(this).parents("li").first().hide();
+    });
 
-    apply: function() {
-        jQuery.extend(jQuery.validator.messages, this._translate_messages);
-    },
 
-    __: function(key, defaultMsg) {
-        if(typeof this._translate_messages[key] != undefined) {
-            return this._translate_messages[key];
+    jQuery("#add-to-cart").tooltip();
+    jQuery("#add-to-cart").on('mouseover', function() {
+        if(Mall._current_superattribute != null) {
+            jQuery("#add-to-cart").tooltip('destroy');
         }
+    });
 
-        return defaultMsg;
-    }
-};
+    jQuery('#popup-after-add-to-cart').on('shown.bs.modal', function (e) {
+        var backdrop =  jQuery('#sb-site').find('.modal-backdrop');
+        if (backdrop.length == 0) {
+            jQuery('#sb-site').append('<div class="modal-backdrop fade in"></div>');
+        };
 
-// function that extends rwdCarousel
-Mall.rwdCarousel = {
-    findTallestItem: function(obj) {
-        var height = 0;
-        jQuery.each(obj.rwd.rwdItems, function() {
-            if(this.clientHeight > height) {
-                height = this.clientHeight;
-            }
-        })
+    });
+    jQuery('#popup-after-add-to-cart').on('show.bs.modal', function (e) {
+        jQuery('html').find('body > .modal-backdrop').remove();
+    });
+    jQuery('#popup-after-add-to-cart').on('hidden.bs.modal', function (e) {
+        jQuery('html').find('.modal-backdrop').remove();
 
-        return height;
-    },
-
-    alignComplementaryProductsPrices: function(obj) {
-        var tallestItem = this.findTallestItem(obj);
-        var h = 0;
-        var diff = 0;
-        jQuery.each(obj.rwd.rwdItems, function() {
-
-            if((h = this.clientHeight) < tallestItem) {
-                diff = tallestItem - h;
-                if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1) {
-                    diff /= 2;
-                }
-                jQuery(this).find(".price").css("top", diff);
-            }
-        });
-    }
-};
+    });
+});

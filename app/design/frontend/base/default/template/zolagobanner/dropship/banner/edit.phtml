@@ -35,7 +35,8 @@
 
 <div class="container z-grid">
 	<form id="edit-banner" class="form-horizontal row-border" action="<?php echo $this->getForm()->getAction();?>" method="POST" enctype="multipart/form-data">
-		<input type="hidden" name="campaign_id" value="<?php echo $_model->getId();?>"/>
+		<input type="hidden" name="banner_id" value="<?php echo $_model->getId();?>"/>
+        <input type="hidden" name="type" value="<?php echo $this->getType();?>"/>
 		<?php echo $this->getLayout()->getBlock('formkey')->toHtml();?>
 		<?php echo $this->getForm()->toHtml();?>
 
@@ -45,16 +46,18 @@
 
 <script type="text/javascript">
     jQuery(function ($) {
-        var form = $("#edit-campaign");
+        var form = $("#edit-banner");
         new Zolago.formIntegrator(form);
         form.validate();
 
-        changeDependingSelector('slider_type');
-
-
+        changeDependingSelectorHandler('slider_type');
     });
 
-    function changeDependingSelector(name) {
+    /**
+     *
+     * @param name
+     */
+    function changeDependingSelectorHandler(name) {
         jQuery('select[name=' + name + ']').change(function () {
             var form = jQuery('#edit-banner');
             var type = jQuery(this).val();
@@ -62,6 +65,4 @@
             form.find('[data-name=' + name + '][data-type=' + type + ']').removeClass('hidden');
         })
     }
-
-
 </script>

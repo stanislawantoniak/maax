@@ -124,15 +124,15 @@ class Zolago_CatalogInventory_Helper_Data extends Mage_Core_Helper_Abstract {
 	public function getQuoteItemAvailableText(Mage_Sales_Model_Quote_Item $item) {
 		switch ($this->getQuoteItemAvailableFlag($item)) {
 			case self::FLAG_IN_STOCK:
-				return "In stock";
+				return Mage::helper('zolagomodago')->__("In stock");
 			break;
 			case self::FLAG_LAST_IN_STOCK:
-				return "Last in stock";
+				return Mage::helper('zolagomodago')->__("Last in stock");
 			break;
 			case self::FLAG_OUT_OF_STOCK:
-				return "Out of stock";
+				return Mage::helper('zolagomodago')->__("Out of stock");
 			break;
 		}
-		return "No stock info";
+		return Mage::helper('zolagomodago')->__("No stock info");
 	}
 }

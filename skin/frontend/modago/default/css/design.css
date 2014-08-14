@@ -5653,6 +5653,29 @@ figure .figure-border {
   line-height: 1.5;
   text-align: left; }
 
+/* line 156, ../sass/modules/_dropdown-search-basket.scss */
+#popup-after-add-to-cart {
+  /* PANEL KOSZYKA */ }
+/* line 157, ../sass/modules/_dropdown-search-basket.scss */
+#popup-after-add-to-cart table {
+  width: 100%; }
+/* line 160, ../sass/modules/_dropdown-search-basket.scss */
+#popup-after-add-to-cart table td {
+  padding: 8px 0;
+  vertical-align: top; }
+/* line 163, ../sass/modules/_dropdown-search-basket.scss */
+#popup-after-add-to-cart table td img {
+  border: 1px solid #adadad; }
+/* line 166, ../sass/modules/_dropdown-search-basket.scss */
+#popup-after-add-to-cart table td + td {
+  padding-left: 5px; }
+/* line 169, ../sass/modules/_dropdown-search-basket.scss */
+#popup-after-add-to-cart table td p {
+  margin: 0px;
+  padding: 0px;
+  font-size: 12px;
+  line-height: 1.3; }
+
 /* line 2, ../sass/modules/_header-block-search.scss */
 #header [role="search"] {
   margin: 0px;
@@ -16160,3 +16183,43 @@ i.flag.hit, i.flag.bestseller {
 /* line 1, ../sass/override/_override-design.scss */
 .clr {
   clear: both; }
+
+/* line 4, ../sass/override/_override-design.scss */
+ul.messages, ul.messages ul {
+  list-style: none;
+  padding-left: 0; }
+
+/* line 8, ../sass/override/_override-design.scss */
+ul.messages ul {
+  padding-left: 0; }
+
+/* line 11, ../sass/override/_override-design.scss */
+ul.messages > li.success-msg ul > li {
+  background: #73ac18 url("/skin/frontend/modago/default/images/msg_ico_success.png") no-repeat 5px 21px;
+  margin-top: 10px; }
+
+/* line 15, ../sass/override/_override-design.scss */
+ul.messages > li.error-msg ul > li, ul.messages > li.notice-msg ul > li {
+  background: #e25856 url("/skin/frontend/modago/default/images/msg-ico-error.png") no-repeat 8px 18px;
+  margin-top: 10px; }
+
+/* line 19, ../sass/override/_override-design.scss */
+ul.messages > li ul > li > span {
+  background-color: #deeaca;
+  margin-left: 20px;
+  height: 100%;
+  display: block;
+  min-height: 50px;
+  padding: 15px 30px 15px 15px;
+  position: relative; }
+
+/* line 29, ../sass/override/_override-design.scss */
+ul.messages > li.error-msg ul > li > span {
+  background-color: #f2e6e6; }
+
+/* line 33, ../sass/override/_override-design.scss */
+ul.messages ul > li > span > i {
+  position: absolute;
+  right: 16px;
+  top: 17px;
+  cursor: pointer; }

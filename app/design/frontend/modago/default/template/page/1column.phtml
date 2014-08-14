@@ -17,9 +17,16 @@
 
     <?php echo $this->getChildHtml('header') ?>
 
+    <div class="container-fluid">
 
 
-    <?php echo $this->getChildHtml('global_messages') ?>
+        <div class="row">
+            <div class="col-sm-12">
+                <?php echo $this->getChildHtml('global_messages') ?>
+            </div>
+        </div>
+
+    </div>
 
     <section id="main" class="<?php echo $this->getElementClass(); ?>">
         <header id="header-main">
@@ -31,6 +38,7 @@
                 </div>
             </div>
         </header>
+
         <?php echo $this->getChildHtml('content') ?>
     </section>
 
