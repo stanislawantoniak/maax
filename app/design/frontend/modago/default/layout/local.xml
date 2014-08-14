@@ -261,6 +261,10 @@
             </action>
         </reference>
 
+        <reference name="head">
+            <action method="removeItem"><type>js</type><script>varien/product.js</script></action>
+            <action method="removeItem"><type>js</type><script>varien/configurable.js</script></action>
+        </reference>
 
     </catalog_product_view>
 
