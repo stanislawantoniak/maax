@@ -67,7 +67,7 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
         $minPrices = array();
         foreach ($storeId as $store) {
             $minPrices[$store] = $zolagoCatalogModelProductConfigurableData
-                ->getConfigurableMinPrice($configurableProductsIds, $store);
+                ->getConfigurableMinPrice($configurableProductsIds, $store, $hash);
         }
         Mage::log('minPrices', 0, "configurable_update_{$hash}_minPrices.log");
         Mage::log($minPrices, 0, "configurable_update_{$hash}_minPrices.log");
