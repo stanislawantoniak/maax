@@ -35,9 +35,9 @@ $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage
 <div class="table-row clearfix">
     <div class="colgroup-01 clearfix">
         <div class="clearfix">
-            <figure><img src="<?php echo $this->getProductThumbnail()->resize(53, 69); ?>" alt="<?php echo $this->escapeHtml($this->getProductName()) ?>" /></figure>
+            <figure><a href="<?php echo $this->getProductUrl(); ?>"><img src="<?php echo $this->getProductThumbnail()->resize(53, 69); ?>" alt="<?php echo $this->escapeHtml($this->getProductName()) ?>" /></a></figure>
             <div class="description_checked_product">
-                <div class="product_name"><?php echo $this->escapeHtml($this->getProductName()) ?></div>
+                <div class="product_name"><a href="<?php echo $this->getProductUrl(); ?>"><?php echo $this->escapeHtml($this->getProductName()) ?></a></div>
                 <?php if ($_options = $this->getOptionList()):?>
                     <?php foreach ($_options as $_option) : ?>
                         <?php $_formatedOptionValue = $this->getFormatedOptionValue($_option) ?>
