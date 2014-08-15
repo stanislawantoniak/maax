@@ -52,10 +52,11 @@ class Zolago_Banner_VendorController extends Zolago_Dropship_Controller_Vendor_A
     public function setTypeAction()
     {
         $type = $this->getRequest()->getParam('type', null);
+        $campaignId = $this->getRequest()->getParam("campaign_id");
         if (empty($type)) {
-            $this->_redirectUrl(Mage::helper('zolagobanner')->bannerTypeUrl());
+            $this->_redirectUrl(Mage::helper('zolagobanner')->bannerTypeUrl($campaignId));
         } else {
-            $this->_redirectUrl(Mage::helper('zolagobanner')->bannerEditUrl($type));
+            $this->_redirectUrl(Mage::helper('zolagobanner')->bannerEditUrl($campaignId, $type));
         }
 
     }
@@ -214,7 +215,7 @@ class Zolago_Banner_VendorController extends Zolago_Dropship_Controller_Vendor_A
             Mage::logException($e);
             return $this->_redirectReferer();
         }
-        return $this->_redirect("*/*");
+        return $this->_redirect("campaign/vendor/edit/", array('id' => $data['campaign_id'], '_fragment' => 'tab_banners'));
     }
 
 

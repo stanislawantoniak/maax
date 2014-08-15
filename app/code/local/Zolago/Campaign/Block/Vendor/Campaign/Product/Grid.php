@@ -82,7 +82,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Product_Grid extends Mage_Adminhtml_
                  'renderer'    => Mage::getConfig()
                          ->getBlockClassName("zolagoadminhtml/widget_grid_column_renderer_removebutton"),
                  'index'       => 'product_id',
-                 'link_action' => "*/*/deleteProduct",
+                 'link_action' => "*/*/removeProduct",
                  'width'       => '50px',
                  'link_target' => '_self',
                  'link_param'  => 'id',

@@ -1,11 +1,11 @@
 <?php
 
-class Zolago_Campaign_Block_Vendor_Campaign_Product_Grid extends Mage_Adminhtml_Block_Widget_Grid
+class Zolago_Campaign_Block_Vendor_Campaign_Banner_Grid extends Mage_Adminhtml_Block_Widget_Grid
 {
     public function __construct()
     {
         parent::__construct();
-        $this->setId('zolagocampaign_campaign_product_grid');
+        $this->setId('zolagocampaign_campaign_banner_grid');
         $this->setDefaultSort('entity_id');
         $this->setDefaultDir('desc');
         // Need
@@ -18,18 +18,15 @@ class Zolago_Campaign_Block_Vendor_Campaign_Product_Grid extends Mage_Adminhtml_
     {
         $campaignId = $this->getRequest()->getParam("id");
 
-        $collection = Mage::getResourceModel("catalog/product_collection")
-            ->addAttributeToSelect('name')
-            ->addAttributeToSelect('price')
-            ->addAttributeToSelect('skuv');
+        $collection = Mage::getResourceModel("zolagobanner/banner_collection");
         $collection->getSelect()
             ->join(
-                array('campaign_product' => Mage::getSingleton('core/resource')->getTableName(
-                        "zolagocampaign/campaign_product"
+                array('banner_content' => Mage::getSingleton('core/resource')->getTableName(
+                        "zolagobanner/banner_content"
                     )),
-                'campaign_product.product_id = e.entity_id'
+                'banner_content.banner_id = main_table.banner_id'
             )
-            ->where("campaign_product.campaign_id=?", $campaignId);
+            ->where("campaign_id=?", $campaignId);
 
         $collection->setPageSize(10);
         //$collection->printLogQuery(true);
@@ -47,43 +44,55 @@ class Zolago_Campaign_Block_Vendor_Campaign_Product_Grid extends Mage_Adminhtml_
         $_helper = Mage::helper("zolagocampaign");
 
         $this->addColumn(
-            'skuv',
-            array(
-                 'header' => $_helper->__('Sku'),
-                 'index'  => 'skuv',
-                 "class"  => "form-control",
-                 'width'  => '50px',
-            )
-        );
-        $this->addColumn(
-            'campaign_name',
+            'banner_name',
             array(
                  'header' => $_helper->__('Name'),
                  'index'  => 'name',
                  "class"  => "form-control",
-                 'width'  => '50px',
+                 'width'  => '200px',
             )
         );
         $this->addColumn(
-            'price',
+            'banner_type',
             array(
-                 'header' => $_helper->__('Price'),
+                 'header' => $_helper->__('Type'),
                  'width'  => '50px',
-                 'type'   => 'number',
+                 "type"		=>	"options",
                  "class"  => "form-control",
-                 'index'  => 'price',
+                 'index'  => 'type',
+                 "options"	=> Mage::getSingleton('zolagobanner/banner_type')->toOptionHash(),
             )
         );
-
+        $this->addColumn('action',
+            array(
+                 'header'    => Mage::helper('catalog')->__('Action'),
+                 'width'     => '10px',
+                 'align' =>'right',
+                 'type'      => 'action',
+                 'getter'     => 'getId',
+                 'actions'   => array(
+                     array(
+                         'caption' => Mage::helper('catalog')->__('Edit'),
+                         'url'     => array(
+                             'base'=>'banner/vendor/edit'
+                         ),
+                         'field'   => 'id'
+                     )
+                 ),
+                 'filter'    => false,
+                 'sortable'  => false,
+                 'index'     => 'banner_id',
+            ));
         $this->addColumn(
             'Remove',
             array(
+                 'align' =>'right',
                  'header'      => $_helper->__('Remove'),
                  'renderer'    => Mage::getConfig()
                          ->getBlockClassName("zolagoadminhtml/widget_grid_column_renderer_removebutton"),
-                 'index'       => 'product_id',
-                 'link_action' => "*/*/deleteProduct",
-                 'width'       => '50px',
+                 'index'       => 'banner_id',
+                 'link_action' => "*/*/removeBanner",
+                 'width'       => '10px',
                  'link_target' => '_self',
                  'link_param'  => 'id',
                  'type'        => 'action',

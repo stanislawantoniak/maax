@@ -54,7 +54,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
             //-----Prepare data
 
 
-            $this->_setProducts($object, $productIds);
+            //$this->_setProducts($object, $productIds);
 
 
 //            $this->_setCampaignAttributes($object, $productIds, $storeIds);
@@ -168,6 +168,17 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
 
         $where = "campaign_id={$campaignId} AND product_id={$productId}";
         echo $where;
+        $this->_getWriteAdapter()->delete($table, $where);
+    }
+
+    /**
+     * @param $campaignId
+     * @param $bannerId
+     */
+    public function removeBanner($campaignId, $bannerId)
+    {
+        $table = $this->getTable("zolagobanner/banner");
+        $where = "campaign_id={$campaignId} AND banner_id={$bannerId}";
         $this->_getWriteAdapter()->delete($table, $where);
     }
     /**
@@ -432,8 +443,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         );
         $startTime = date("Y-m-d H:i", strtotime('-10 minutes', time()));
         $endYTime = date("Y-m-d H:i", strtotime('+10 minutes', time()));
-        krumo($startTime);
-        krumo($endYTime);
+
         $select->where("campaign.date_from BETWEEN '{$startTime}' AND '{$endYTime}'");
         $select->where("status=?", Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE);
         echo $select;

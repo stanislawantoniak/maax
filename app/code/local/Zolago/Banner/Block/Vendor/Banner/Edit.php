@@ -15,8 +15,9 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
         parent::_prepareLayout();
     }
 
+
     /**
-     * @param mixed $type
+     *
      */
     public function setType()
     {
@@ -35,7 +36,9 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
 
     public function _prepareForm(){
         $id = $this->getRequest()->getParam('id',null);
+
         $type = $this->_type;
+        $campaignId = $this->getRequest()->getParam('campaign_id', $this->getModel()->getCampaignId());
 
         $helper = Mage::helper('zolagobanner');
         $form = Mage::getModel('zolagodropship/form');
@@ -54,13 +57,15 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
             "label" => $helper->__('Name')
         ));
 
-        $general->addField("campaign_id", "select", array(
-            "name" => "campaign_id",
-            "required" => true,
-            "class" => "form-control",
-            "label" => $helper->__('Campaign'),
-            "values" => Mage::getSingleton('zolagobanner/banner_campaign')->toOptionHash()
-        ));
+        if(!empty($campaignId)){
+
+        }
+        $general->addField(
+            "campaign_id", "hidden",
+            array(
+                 "name"     => "campaign_id",
+                 "required" => true)
+        );
         $general->addField("type", "hidden", array(
             "name" => "type"
         ));
@@ -77,6 +82,7 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
         $contentValues = $this->_prepareContentDataToSet($contentData);
 
         $values = array_merge($values, array('show' => $data->show_as, 'type' => $type  ));
+        $values = array_merge($values, array('campaign_id'=> $campaignId));
         $values = array_merge($values, $contentValues);
 
         $form->setValues($values);

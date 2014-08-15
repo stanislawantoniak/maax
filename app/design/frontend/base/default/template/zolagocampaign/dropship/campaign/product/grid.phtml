@@ -63,7 +63,7 @@ $numColumns = sizeof($this->getColumns());
             <div class="form-group">
                 <input type="text" size="1" name="<?php echo $this->getVarNamePage() ?>" value="<?php echo $_curPage ?>" class="page align-right form-control" onkeypress="<?php echo $this->getJsObjectName() ?>.inputPage(event, '<?php echo $_lastPage ?>')"/>
             </div>
-            <div class="text-holder">
+            <div class="form-group text-holder">
                 <label>
                     <?php echo $this->__('of %s', $this->getCollection()->getLastPageNumber()) ?>
                 </label>

@@ -40,7 +40,37 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
     public function newAction() {
        return $this->_forward('edit');
     }
-	
+
+    public function productsAction()
+    {
+        $this->loadLayout();
+
+        $campaignId = $this->getRequest()->getParam('id',null);
+        $productsStr = $this->getRequest()->getParam('products',array());
+        $isAjax = $this->getRequest()->getParam('isAjax',false);
+
+        $skuS = array();
+        if (is_string($productsStr)) {
+            $skuS = array_map('trim', explode(",", $productsStr));
+        }
+        $collection = Mage::getModel('catalog/product')
+            ->getCollection()
+            ->addAttributeToFilter('skuv', array('in' => $skuS))
+            ->getAllIds();
+        $productIds = array();
+        if (!empty($collection)) {
+            foreach ($collection as $productId) {
+                $productIds[] = $productId;
+            }
+        }
+        $model = Mage::getModel("zolagocampaign/campaign");
+        $model->getResource()->saveProducts($campaignId, $productIds);
+
+        $this->renderLayout();
+        if (!$isAjax) {
+            return $this->_redirectReferer();
+        }
+    }
 	public function saveAction() {
         $helper = Mage::helper('zolagocampaign');
         if (!$this->getRequest()->isPost()) {
@@ -97,16 +127,36 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
         return $this->_redirect("*/*");
 	}
 
-    public function removeProductAction(){
+    /**
+     * @return Mage_Core_Controller_Varien_Action
+     */
+    public function removeProductAction()
+    {
         $campaignId = $this->getRequest()->getParam("campaignId");
-        $productId = $this->getRequest()->getParam("productId");
+        $productId = $this->getRequest()->getParam("id");
 
-        if(!empty($campaignId) && !empty($productId)){
+        if (!empty($campaignId) && !empty($productId)) {
             $model = Mage::getResourceModel("zolagocampaign/campaign");
-            $model->removeProduct($campaignId,$productId);
+            $model->removeProduct($campaignId, $productId);
         }
         return $this->_redirectReferer();
     }
+
+    /**
+     * @return Mage_Core_Controller_Varien_Action
+     */
+    public function removeBannerAction()
+    {
+        $campaignId = $this->getRequest()->getParam("campaignId");
+        $bannerId = $this->getRequest()->getParam("id");
+
+        if (!empty($campaignId) && !empty($bannerId)) {
+            $model = Mage::getResourceModel("zolagocampaign/campaign");
+            $model->removeBanner($campaignId, $bannerId);
+        }
+        return $this->_redirectReferer();
+    }
+
 	
 	public function validateKeyAction() {
 		$key = $this->getRequest()->getParam('key');
