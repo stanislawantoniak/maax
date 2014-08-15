@@ -72,6 +72,7 @@
             $("#browseProducts form").submit(function (e) {
                 e.preventDefault();
                 var campaignProductsSource = $("textarea[name=campaign_products_source]").val();
+                console.log(campaignProductsSource);
                 if (campaignProductsSource.length <= 0) {
                     noty({
                         text: "Enter product SKUs please",
@@ -82,6 +83,21 @@
                     //push products to campaign form field
                     $("input[name=campaign_products]").val(campaignProductsSource);
                     $("#browseProducts").modal("hide");
+                    //update grid if edit
+                    var modelId = '<?php echo $_model->getId();?>';
+                    if (modelId.length > 0) {
+                        $.ajax({
+                            url: '/campaign/vendor/products',
+                            contentType: "application/json; charset=utf-8",
+                            type: 'GET',
+                            data: {id: modelId, products: campaignProductsSource, isAjax: true},
+                            success: function(result){
+                                $(('#zolagocampaign_campaign_product_grid')).html($(result).find('#zolagocampaign_campaign_product_grid').html());
+                                $("#zolagocampaign_campaign_product_grid_table .filter input")
+                                    .addClass("form-control");
+                            }
+                        })
+                    }
                 }
             });
             $("#browseProducts").on("show.bs.modal", function () {
@@ -100,9 +116,6 @@
                 var link = removePath + "?campaignId=" + campaignId + "&productId=" + productId;
                 window.location = link;
             }
-
-
-            //$(".datepicker").datepicker();
 
             $('.datetimepicker').datetimepicker({
                 format: 'd-m-Y H:i'
