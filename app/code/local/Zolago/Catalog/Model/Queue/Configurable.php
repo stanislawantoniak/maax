@@ -38,8 +38,22 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
             $websiteId = $colItem->getWebsiteId();
 
             $websites[$websiteId] = $websiteId;
-            $listUpdatedProducts[$productId] = $productId;
+            //$listUpdatedProducts[$productId] = $productId;
         }
+
+        $model = Mage::getModel('zolagocatalog/queue_configurable');
+        $collection = $model->getCollection();
+        $idsSelect = clone $collection->getSelect();
+        $idsSelect->reset(Zend_Db_Select::ORDER);
+        $idsSelect->reset(Zend_Db_Select::LIMIT_OFFSET);
+        $idsSelect->reset(Zend_Db_Select::COLUMNS);
+        $idsSelect->where("status=0");
+        $idsSelect->columns('product_id', 'main_table');
+        $idsSelect->limit(5000);
+        $resource = Mage::getSingleton('core/resource');
+        $readConnection = $resource->getConnection('core_read');
+        $listUpdatedProducts = $readConnection->fetchCol($idsSelect);
+
         unset($productId);
 
         $storeId = array(Mage_Core_Model_App::ADMIN_STORE_ID);
