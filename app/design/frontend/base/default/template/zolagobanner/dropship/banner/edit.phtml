@@ -18,7 +18,7 @@
             <ol class="breadcrumb">
                 <?php if($this->isModelNew()):?>
                     <li>
-                        <a href="<?php echo $_helper->setBannerTypeUrl(); ?>">
+                        <a href="<?php echo $_helper->setBannerTypeUrl($this->getCampaignId()); ?>">
                             <?php echo $_helper->__('Choose Banner Type') ?>
                         </a>
                     </li>

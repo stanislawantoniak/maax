@@ -33,12 +33,15 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
         return $this->_type;
     }
 
-
+    public function getCampaignId(){
+        $campaignId = $this->getRequest()->getParam('campaign_id', $this->getModel()->getCampaignId());
+        return $campaignId;
+    }
     public function _prepareForm(){
         $id = $this->getRequest()->getParam('id',null);
 
         $type = $this->_type;
-        $campaignId = $this->getRequest()->getParam('campaign_id', $this->getModel()->getCampaignId());
+        $campaignId = $this->getCampaignId();
 
         $helper = Mage::helper('zolagobanner');
         $form = Mage::getModel('zolagodropship/form');
