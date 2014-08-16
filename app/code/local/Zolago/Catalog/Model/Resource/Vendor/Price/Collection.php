@@ -84,7 +84,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 		
 		// Join child qtys
 		$subSelect = $adapter->select();
-		$subSelect->from(array("link_qty"=>$linkTabel), array("SUM(child_qty.qty)"));
+		$subSelect->from(array("link_qty"=>$linkTabel), array("IFNULL(SUM(child_qty.qty),0)"));
 		$subSelect->join(
 				array("child_qty"=>$stockTable), 
 				"link_qty.product_id=child_qty.product_id", 
@@ -92,7 +92,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 		$subSelect->where("link_qty.parent_id=e.entity_id");
 		$subSelect->where("child_qty.is_in_stock=?",1);
 		// Use subselect only for parent products
-		$this->addExpressionAttributeToSelect('stock', 
+		$this->addExpressionAttributeToSelect('stock_qty', 
 				"IF(e.type_id IN ('configurable', 'grouped'), (".$subSelect."), $stockTable.qty)", array());
 		
 		return $this;
@@ -120,8 +120,6 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 		$totalSelect->reset(Zend_Db_Select::ORDER);
 		$totalSelect->resetJoinLeft();
 		$totalSelect->columns(new Zend_Db_Expr("COUNT(e.entity_id)"));
-
-		Mage::log("Select total " . $totalSelect);
 		
 		$total = $adapter->fetchOne($totalSelect);
 
@@ -135,8 +133,6 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 		$select->limit($end-$start, $start);
 		$items = $adapter->fetchAll($select);
 		
-		
-		Mage::log("Select origin " . $select);
 		
 		foreach($items as &$item){
 			$item['can_collapse'] = true;//

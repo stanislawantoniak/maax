@@ -7,6 +7,9 @@ class Zolago_Banner_Block_Vendor_Banner_Type extends Mage_Core_Block_Template
         parent::__construct();
     }
 
+    /**
+     * @return array
+     */
     public function getTypes()
     {
         $types = array_merge(

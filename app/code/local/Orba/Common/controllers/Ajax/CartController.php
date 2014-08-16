@@ -89,6 +89,67 @@ class Orba_Common_Ajax_CartController extends Orba_Common_Controller_Ajax {
             $this->_processException($e);
         }
     }
+
+    public function applycouponAction()
+    {
+        $response = array();
+        /**
+         * No reason continue with empty shopping cart
+         */
+        if (!$this->_getCart()->getQuote()->getItemsCount()) {
+            $response['error_message'] = Mage::helper('zolagomodago')->__("There is no items in your cart.");
+            $response['status'] = false;
+            $this->_setSuccessResponse($response);
+            return;
+        }
+
+        $couponCode = (string) $this->getRequest()->getParam('coupon_code');
+        if ($this->getRequest()->getParam('remove') == 1) {
+            $couponCode = '';
+        }
+        $oldCouponCode = $this->_getQuote()->getCouponCode();
+
+        if (!strlen($couponCode) && !strlen($oldCouponCode)) {
+            $response['error_message'] = Mage::helper('zolagomodago')->__("There is nothing to apply.");
+            $response['status'] = false;
+            return;
+        }
+
+        try {
+            $codeLength = strlen($couponCode);
+            $isCodeLengthValid = $codeLength && $codeLength <= Mage_Checkout_Helper_Cart::COUPON_CODE_MAX_LENGTH;
+
+            $this->_getQuote()->getShippingAddress()->setCollectShippingRates(true);
+            $this->_getQuote()->setCouponCode($isCodeLengthValid ? $couponCode : '')
+                ->collectTotals()
+                ->save();
+
+            if ($codeLength) {
+                if ($isCodeLengthValid && $couponCode == $this->_getQuote()->getCouponCode()) {
+                    $response['label'] = $couponCode;
+                    $this->_formatSuccessContentForResponse($response);
+                } else {
+                    $response['error_message'] = Mage::helper('zolagomodago')->__('Coupon code "%s" is not valid.', Mage::helper('core')->escapeHtml($couponCode));
+                    $response['status'] = false;
+                    $this->_setSuccessResponse($response);
+                    return ;
+                }
+            } else {
+                $response['message'] = Mage::helper('zolagomodago')->__('Coupon code was canceled.');
+            }
+
+            $this->_formatSuccessContentForResponse($response);
+        } catch (Mage_Core_Exception $e) {
+            $response['error_message'] = Mage::helper('zolagomodago')->__('Cannot apply the coupon code.');
+            $response['status'] = false;
+        } catch (Exception $e) {
+            $response['error_message'] = Mage::helper('zolagomodago')->__('Cannot apply the coupon code.');
+            $response['status'] = false;
+        }
+
+        $this->_setSuccessResponse($response);
+        return ;
+    }
     
     /**
      * Geneartes response array for get method
@@ -116,6 +177,16 @@ class Orba_Common_Ajax_CartController extends Orba_Common_Controller_Ajax {
             $result = $this->_generateBasicSuccessResponse($message);
             $this->_setSuccessResponse($result);
         }
+    }
+
+    public function _getCart()
+    {
+        return Mage::getSingleton('checkout/cart');
+    }
+
+    public function _getQuote()
+    {
+        return $this->_getCart()->getQuote();
     }
     
 }

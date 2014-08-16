@@ -32,7 +32,7 @@
         <form action="<?php echo Mage::getUrl('review/product/post', array('id' => $this->getProduct()->getId())); ?>" method="post" id="review-form" class="form clearfix" rel="form">
             <?php echo $this->getBlockHtml('formkey'); ?>
             <h4><?php echo $this->escapeHtml($this->getProductInfo()->getName()); ?> - <strong><?php echo $this->__("Add your review"); ?></strong></h4>
-            <div class="fieldset">
+            <div class="fieldset review-stars-form">
                 <input type="hidden" name="validate_rating" class="validate-rating" value="">
 
                 <fieldset>
@@ -56,7 +56,7 @@
                         <?php endforeach; ?>
                         <tr>
                             <td colspan="2">
-                                <input type="text" style="position: absolute; top: -2000px;" name="stars" value="" />
+                                <input type="text" style="position: absolute; top: -20000px;left:-2000px;" name="stars" value="" id="stars" />
                                 <span  class="error hidden"><?php echo $this->__("All star groups must be selected."); ?></span>
                             </td>
                         </tr>
@@ -73,7 +73,7 @@
                             <input type="text" class="form-control" id="title" name="title" data-toggle="tooltip" title="<?php echo $this->__('Summary of Your Review') ?>" value="<?php echo $this->escapeHtml($data->getTitle()) ?>" required />
 
                         </div>
-                        <div class="form-group">
+                        <div class="form-group detail">
                             <label for="review_field" class=""><?php echo $this->__('Review') ?></label>
                             <textarea name="detail" id="review_field" cols="5" rows="3" class="required-entry" required><?php echo $this->escapeHtml($data->getDetail()) ?></textarea>
                         </div>
@@ -118,9 +118,16 @@
     Mall.i18nValidation.add("stars", "<?php echo $this->__("All star groups must be selected."); ?>");
 </script>
             <style type="text/css">
-                div.has-feedback>.form-ico-checked{
+                div.form-radio>i.form-ico-checked {
                     left: auto !important;
+                    top: 3px !important;
+                }
+                div.review-stars-form>i.form-control-feedback {
+                    left: 178px !important;
                     top: 0 !important;
+                }
+                div.title>i.form-control-feedback,div.detail>i.form-control-feedback {
+                    top: 28px !important;
                 }
             </style>
         <?php else: ?>

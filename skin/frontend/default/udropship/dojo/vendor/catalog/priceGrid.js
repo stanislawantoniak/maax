@@ -1,6 +1,7 @@
 define([
 	"dgrid/Grid",
 	"dgrid/OnDemandGrid",
+	"dgrid/extensions/Pagination",
 	"dgrid/extensions/CompoundColumns",
 	"dgrid/Selection",
 	"dgrid/Keyboard",
@@ -21,9 +22,10 @@ define([
 	"vendor/grid/ObserverFilter",
 	"vendor/catalog/priceGrid/singlePriceUpdater",
 	"vendor/catalog/priceGrid/RowUpdater",
-], function(BaseGrid, Grid, CompoundColumns, Selection, Keyboard, editor, declare, domConstruct, 
+	"vendor/misc"
+], function(BaseGrid, Grid, Pagination, CompoundColumns, Selection, Keyboard, editor, declare, domConstruct, 
 	on, query, Memory, Observable, put, Cache, JsonRest, Selection, 
-	selector, lang, request, ObserverFilter, singlePriceUpdater, RowUpdater){
+	selector, lang, request, ObserverFilter, singlePriceUpdater, RowUpdater, misc){
 	
 	/**
 	 * @todo Make source options it dynamicly
@@ -41,15 +43,6 @@ define([
 		loaded: {},
 		changed: {},
 		orig: {}
-	}
-	
-	var formatPrice = function(value, currency){
-		currency = "PLN";
-		return formatNumber(value) + " " + currency;
-	}
-	
-	var formatNumber = function(number){
-		return parseFloat(number).toFixed(2).replace("\.", ",");
 	}
 	
 	var priceEditPriceMeta = function(object,value){
@@ -112,7 +105,7 @@ define([
 					["from", "to"].forEach(function(type){
 						var element = domConstruct.create("input", {
 							"type": "text",
-							"placeholder": type[0].toUpperCase() + type.slice(1),
+							"placeholder": Translator.translate(type[0].toUpperCase() + type.slice(1)),
 							"className": "range-field" + " " + "range-field-" + type + " " + "range-field-" + valueType,
 						});
 						
@@ -168,7 +161,14 @@ define([
 			if(switcher){
 				query['store_id'] = switcher.value;
 			}
-			return JsonRest.prototype.query.call(this, query, options);
+			//updater.setCanProcess(false);
+			
+			
+			var ret = JsonRest.prototype.query.call(this, query, options);
+			
+			//ret.then(function(){updater.setCanProcess(true);})
+			
+			return ret;
 		},
 		
 		put: function(obj){
@@ -206,8 +206,8 @@ define([
 	// cache crakcs edit
 	testStore =  Observable(storeRest);
 	
-	var PriceGrid = declare([Grid, Selection, Keyboard, CompoundColumns]);
-	
+	var PriceGrid = declare([/*BaseGrid, Pagination,*/Grid, Selection, Keyboard, CompoundColumns]);
+
 	grid = new PriceGrid({
 		columns: {
 			selector: selector({ label: ''}),
@@ -229,7 +229,7 @@ define([
 				}
 			},
 			name: {
-				label: "Name",
+				label: Translator.translate("Name"),
 				field: "name",
 				children: [
 					{
@@ -241,7 +241,7 @@ define([
 				]
 			},
 			price: {
-				label: "Price",
+				label: Translator.translate("Price"),
 				field: "display_price",
 				className: "column-medium",
 				children: [
@@ -254,7 +254,7 @@ define([
 						editOn: "dblclick",
 						className: "filterable align-right column-medium",
 						autoSave: true,
-						formatter: formatPrice,
+						formatter: misc.currency,
 						renderCell: function(item,value,node){
 							if(!item.converter_price_type && priceEditPriceMeta(item, value)){
 								put(node, ".editable");
@@ -268,7 +268,7 @@ define([
 				]
 			},
 			campaign_regular_id: {
-				label: "Price type",
+				label: Translator.translate("Price type"),
 				field: "campaign_regular_id",
 				className: "column-medium",
 				children: [
@@ -289,7 +289,7 @@ define([
 				]
 			},
 			price_margin: {
-				label: "Margin",
+				label: Translator.translate("Margin"),
 				field: "price_margin",
 				className: "column-medium",
 				children: [
@@ -302,7 +302,7 @@ define([
 							return (item.price_margin!==null)  ? item.price_margin : 0
 						},
 						formatter: function(value){
-							return formatNumber(value) + "%";
+							return misc.number(value) + "%";
 						},
 						renderCell: function(item,value,node){
 							if(priceEditPriceMeta(item, value)){
@@ -315,7 +315,7 @@ define([
 				]
 			},
 			converter_price_type: {
-				label: "Price source",
+				label: Translator.translate("Price source"),
 				field: "converter_price_type",
 				className: "column-medium",
 				children: [
@@ -342,7 +342,7 @@ define([
 				]
 			},
 			msrp: {
-				label: "Msrp",
+				label: Translator.translate("Msrp"),
 				field: "msrp",
 				className: "column-medium",
 				children: [
@@ -355,7 +355,7 @@ define([
 				]
 			},
 			is_new: editor({
-				label: "New",
+				label: Translator.translate("New"),
 				field: "is_new",
 				className: "column-short",
 				children: [
@@ -380,7 +380,7 @@ define([
 				]
 			}),
 			is_bestseller: {
-				label: "Best",
+				label: Translator.translate("Best"),
 				field: "is_bestseller",
 				className: "column-short",
 				children: [
@@ -405,7 +405,7 @@ define([
 				]
 			},
 			product_flag: {
-				label: "Flag",
+				label: Translator.translate("Flag"),
 				field: "product_flag",
 				className: "column-short",
 				children: [
@@ -430,7 +430,7 @@ define([
 				]
 			},
 			is_in_stock: {
-				label: "In stock",
+				label: Translator.translate("In stock"),
 				field: "is_in_stock",
 				className: "column-short",
 				children: [
@@ -455,7 +455,7 @@ define([
 				]
 			},
 			variant_qty: {
-				label: "Variants",
+				label: Translator.translate("Variants"),
 				field: "available_child_count",
 				className: "column-center",
 				children: [
@@ -473,15 +473,15 @@ define([
 					}
 				]
 			},
-			stock: {
-				label: "Stock Qty",
-				field: "stock",
+			stock_qty: {
+				label: Translator.translate("Stock Qty"),
+				field: "stock_qty",
 				className: "column-medium",
 				children: [
 					{
-						renderHeaderCell: filterRendererFacory("range", "stock"),
+						renderHeaderCell: filterRendererFacory("range", "stock_qty"),
 						sortable: false, 
-						field: "stock",
+						field: "stock_qty",
 						className: "filterable align-right column-medium",
 						formatter: function(value){return parseInt(value);}
 					}
@@ -513,7 +513,7 @@ define([
 				]
 			},
 			type_id: { 
-				label: "Type", 
+				label: Translator.translate("Type"), 
 				field: "type_id",
 				className: "column-medium",
 				children: [
@@ -534,13 +534,22 @@ define([
 				]
 			}
 		},
-		loadingMessage: "<span>Loading data...</span>",
-		noDataMessage: "<span>No results found</span>.",
+		loadingMessage: "<span>" + Translator.translate("Loading...") + "</span>",
+		noDataMessage: "<span>" + Translator.translate("No results found") + "</span>.",
         selectionMode: 'none',
+		
 		minRowsPerPage: 50,
 		maxRowsPerPage: 100,
 		pagingDelay: 200,
-		bufferRows: 50,
+		bufferRows: 20,
+	
+		/* Paginatior  */
+		/* rowsPerPage: 500,
+		pagingLinks: 1,
+        pagingTextBox: true,
+        firstLastArrows: true,
+        pageSizeOptions: [10, 15, 25],*/
+		
 		renderRow: renderer,
 		store: testStore,
 		deselectOnRefresh: false,

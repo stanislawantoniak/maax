@@ -80,3 +80,13 @@
 #zolagocampaign_campaign_product_grid .pull-right .form-group {
     padding-top: 17px;
 }
+
+/*Banners*/
+.widget-content div[data-type="slider"] {
+    border: 1px solid #d3d3d3;
+    margin-bottom: 5px;
+}
+.widget-content div[data-type="url-container-item"] {
+    padding: 5px;
+    clear: both;
+}

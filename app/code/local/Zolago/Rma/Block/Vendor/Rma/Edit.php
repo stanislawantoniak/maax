@@ -26,7 +26,7 @@ class Zolago_Rma_Block_Vendor_Rma_Edit extends Mage_Core_Block_Template {
 	 */
 	public function isLetterable(Varien_Object $tracking) {
 		switch ($tracking->getCarrierCode()) {
-			case Zolago_Dhl_Model_Carrier::CODE:
+			case Orba_Shipping_Model_Carrier_Dhl::CODE:
 				return true;
 			break;
 		}

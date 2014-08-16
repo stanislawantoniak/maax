@@ -57,6 +57,7 @@
             <action method="addItem"><type>skin_js</type><script>js/icheck.min.js</script></action>
             <action method="addItem"><type>skin_js</type><script>js/zoomsl-3.0.min.js</script></action>
             <action method="addItem"><type>skin_js</type><script>js/plugins.js</script></action>
+            <action method="addItem"><type>skin_js</type><script>js/jquery.mCustomScrollbar.concat.min.js</script></action>
             <action method="addItem"><type>skin_js</type><script>js/fns.js</script></action>
             <block type="orbacommon/page_html_head" name="orba.jslib" template="orbacommon/js/script.phtml" />
             <block type="core/text" name="addthis.javascript">
@@ -150,7 +151,33 @@
 
     <checkout_cart_index>
         <reference name="root">
-            <action method="setTemplate"><template>page/modagopage.phtml</template></action>
+            <action method="setTemplate">
+                <template>page/1column.phtml</template>
+            </action>
+            <action method="addBodyClass">
+                <value>sidebar-secondary</value>
+            </action>
+            <action method="addBodyClass">
+                <value>node-type-shopping-cart</value>
+            </action>
+        </reference>
+        <reference name="head">
+            <action method="removeItem"><type>js</type><script>varien/weee.js</script></action>
+        </reference>
+        <reference name="breadcrumbs">
+            <action method="addCrumb">
+                <crumbName>Home</crumbName>
+                <crumbInfo><label>Home</label><title>Home</title><link>/</link></crumbInfo>
+            </action>
+            <action method="addCrumb">
+                <crumbName>Shopping Cart</crumbName>
+                <crumbInfo><label>Shopping Cart</label><title>Shopping Cart</title><link>/checkout/cart</link></crumbInfo>
+            </action>
+        </reference>
+
+        <reference name="checkout.cart">
+            <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml" />
+            <block type="zolagomodago/checkout_cart_sidebar" name="zolagomodago.checkout.cart.sidebar" template="checkout/cart/sidebar.phtml" />
         </reference>
     </checkout_cart_index>
 

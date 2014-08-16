@@ -8,30 +8,35 @@ jQuery.noConflict();
   $('#review-form').on('click', 'input[type="text"], textarea', function(){
     
     var valueH = $(".review-summary-table").find('input[type="hidden"]').val();
-
+    var valid = false;
     $(".review-summary-table").find('input[type="hidden"]').each(function(){
        if($(this).val() == '')
        {
          $('#review-form').find('.review-summary-table').find('.error.hidden').removeClass('hidden');
-         return false;
+         return valid = false;
        } else {
         $('#review-form').find('.review-summary-table').find('.error').addClass('hidden');
+           return valid = true;
        }
   });
-
+    return valid;
   //var emptyValue = $(".review-summary-table.ratings").find('input[value='']').length
   console.log(valueH)
   });
     $(".review-summary-table").on('click', 'img', function(){
+        jQuery("#stars").valid();
+        var valid = false;
         $(".review-summary-table").find('input[type="hidden"]').each(function(){
            if($(this).val() == '')
            {
              $('#review-form').find('.review-summary-table').find('.error.hidden').removeClass('hidden');
-             return false;
+             return valid = false;
            } else {
             $('#review-form').find('.review-summary-table').find('.error').addClass('hidden');
+               return valid = true;
            }
       });
+        return valid;
   });
 
   /////////////////////////////////////// Validator Form ////////////////////////////////////////////
@@ -58,8 +63,8 @@ jQuery.noConflict();
             }
         });
         return valid;
-    }, "Wszystkie gwiazdki muszą być zaznaczone.");
-  $("form").each(function () {
+    }, "");
+  $("#question-form, #review-form").each(function () {
 
   $(this).validate({   
     success: "valid",
@@ -85,6 +90,8 @@ jQuery.noConflict();
     messages: {
 
     },
+      ignore: "#cart-form",
+      ignoreTitle: true,
       highlight: function(element, errorClass, validClass) {
                   var we = $(element).innerWidth()+25;
                   var el = $(element).attr('type');
@@ -385,7 +392,7 @@ $('#invoice_vat').on('click', function(){
 
 /* ==================== KUPON RABATOWY =============== */
 $('.form_discount_voucher').hide();
-$('.coupon-list').hide();
+//$('.coupon-list').hide();
 $('#discount_voucher').on('click', '.info_discount_voucher', function(e){
   e.preventDefault();
   $('.form_discount_voucher').show(50);
@@ -2900,6 +2907,7 @@ var rwd_banners = $("#rwd-banners .rwd-carousel");
               rwd_complementary_product.next('.customNavigation').find('.next').css({top:imgHeight+'px'});
               rwd_complementary_product.find('.rwd-controls').find('.rwd-prev').css({top:imgHeightplus+'px'});
               rwd_complementary_product.find('.rwd-controls').find('.rwd-next').css({top:imgHeightplus+'px'});
+
                Mall.rwdCarousel.alignComplementaryProductsPrices(this);
            },
            afterInit:function(){

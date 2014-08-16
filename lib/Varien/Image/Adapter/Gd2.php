@@ -68,8 +68,10 @@ class Varien_Image_Adapter_Gd2 extends Varien_Image_Adapter_Abstract
     protected function _isMemoryLimitReached()
     {
         $limit = $this->_convertToByte(ini_get('memory_limit'));
+		Mage::log(ini_get('memory_limit'));
         $size = getimagesize($this->_fileName);
         $requiredMemory = $size[0] * $size[1] * 3;
+		Mage::log($requiredMemory);
         return (memory_get_usage(true) + $requiredMemory) > $limit;
     }
 

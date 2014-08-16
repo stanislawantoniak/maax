@@ -143,7 +143,10 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
      * @param $stockBatch
      */
     public static function updateStockConverter($stockBatch){
+
+
         $batchFile = self::CONVERTER_STOCK_UPDATE_LOG;
+        Mage::log($stockBatch, 0, $batchFile);
 
         if(empty($stockBatch)){
             Mage::log(microtime() . ' Empty source', 0, $batchFile);
@@ -314,7 +317,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
             }
         }
         Mage::log(microtime() . ' End update', 0, $batchFile);
-
+        Mage::log($ids, 0, 'configurable_to_queue_update.log');
         if (!empty($insert)) {
             $model->savePriceValues($insert);
             Zolago_Catalog_Helper_Configurable::queue($ids);

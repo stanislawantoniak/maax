@@ -396,7 +396,11 @@
 					}
 						
 				});
-				
+				<?php  $vendor = $_po->getVendor();?>				
+				<?php  if (!Mage::helper('orbashipping/carrier_dhl')->isEnabledForVendor($vendor)): ?>
+					isAcknowledged = true;
+				<?php endif; ?>
+
 				if(isAcknowledged){
 			  		$('pickup-address-form').hide();
 			  		$('pickup-date-form').hide();

@@ -3,8 +3,9 @@ define([
 	"dojo/_base/lang",
 	"put-selector/put",
 	"dojo/query",
-	"dojo/request"
-], function(declare, lang, put, query, request){
+	"dojo/request",
+	"vendor/misc"
+], function(declare, lang, put, query, request, misc){
 	
 	var RowUpdater = declare(null, {
 		
@@ -18,7 +19,14 @@ define([
 		_expandAll: false,
 		_states: {},
 		_storeId: null,
+		_canProcess: true,
 		
+		setCanProcess: function(canProcess){
+			this._canProcess= canProcess;
+		},
+		getCanProcess: function(canProcess){
+			return this._canProcess;
+		},
 		setStoreId: function(storeIdl){
 			this._storeId= storeIdl;
 			this.clear();
@@ -114,9 +122,22 @@ define([
 			this.queueItem(item);
 			this._loading(node);
 			
-			// set timout prcess
-			this._clearTimeout();
-			this._timeout = setTimeout(lang.hitch(this, this._process), 500);
+			// Start process
+			this.process();
+		},
+		
+		process: function(){
+			
+			// If has same not responsed store queries do waiting
+			if(this.getCanProcess()){
+				this._clearTimeout();
+				this._timeout = setTimeout(lang.hitch(this, this._process), 500);
+			// else wait for posibility
+			}else{
+				console.log("Waiting...");
+				this._clearWaitTimeout();
+				this._waitTimeout = setTimeout(lang.hitch(this, this.process), 1000);
+			}
 		},
 		
 		fetchFromCache: function(item){
@@ -129,22 +150,127 @@ define([
 			this._cache[item.entity_id] = item;
 		},
 		_loading: function(node){
-			query(".expando", node)[0].innerHTML = 'loading...';
+			jQuery(".expando", node).html(jQuery("<div>").addClass("sub-row-loading").text(Translator.translate("Loading...")))
 		},
 		
 		_renderSubRow: function(node, data){
 			// Make rendering
-			var html = "loaded, id: " + data.entity_id +  ", var:" + data.var;
+			var divLeft=jQuery("<div>").addClass("sub-row-left");
+			var divRight=jQuery("<div>").addClass("sub-row-left");
+			var buttons = [
+				{"label": Translator.translate("Change prices")},
+				{"label": Translator.translate("View POS Stock")}
+			];
 			
 			switch(data.type_id){
 				case "configurable":
-					html = "Configurable product - " + html;
+					if(data.children){
+						var table = jQuery("<table><tbody></tbody></table>").
+								addClass("table table-condensed table-subrow"),
+							tbody = table.find('tbody');
+							
+						tbody.append(
+							jQuery("<tr>").addClass("header-row").
+								append(jQuery("<td>").attr("colspan", 6).
+									addClass("align-center").text(Translator.translate("Child products"))
+							)
+						);	
+							
+						data.children.forEach(function(item){
+							tbody.append(
+								jQuery("<tr>").addClass("header-row").
+									append(jQuery("<td>").addClass("sub-checkbox")).
+									append(jQuery("<td>").text(item.label)).
+									append(jQuery("<td>").text(Translator.translate("Price Variation"))).
+									append(jQuery("<td>").text(Translator.translate("In stock"))).
+									append(jQuery("<td>").text(Translator.translate("Stock Qty"))).
+									append(jQuery("<td>").text(Translator.translate("POS Stock")))
+							)
+					
+							item.children.forEach(function(child){
+								tbody.append(
+									jQuery("<tr>").
+										append(jQuery("<td>").addClass("sub-checkbox").append("<input type=\"checkbox\"/>")).
+										append(jQuery("<td>").text(child.option_text)).
+										append(jQuery("<td>").text(child.price)).
+										append(jQuery("<td>").text(Translator.translate(parseInt(child.is_in_stock) ? "Yes" : "No"))).
+										append(jQuery("<td>").text(parseInt(child.qty))).
+										append(jQuery("<td>").append(jQuery("<a>").text(Translator.translate("View POS Stock"))))
+								)
+							})
+						});
+						divLeft.append(table);
+					}
 				break;
 				case "simple":
+					
 				break;
 			}
 			
-			query(".expando", node)[0].innerHTML = html;
+			
+			if(data.campaign){
+				var table = jQuery("<table><tbody></tbody></table>").
+						addClass("table table-condensed table-subrow"),
+					tbody = table.find('tbody'),
+					campaign = data.campaign,
+					campaignHeader = jQuery(campaign.is_allowed ? "<a>" : "<span>").text(campaign.name);
+			
+				if(campaign.is_allowed){
+					campaignHeader.attr("href", campaign.url)
+				}
+			
+				tbody.append(
+					jQuery("<tr>").addClass("header-row").
+						append(jQuery("<td>").attr("colspan", 8).
+							addClass("align-center").
+							append(jQuery("<span>").text(Translator.translate(campaign.type_text))).
+							append(jQuery("<span>").text(": ")).
+							append(campaignHeader)
+					)
+				);
+		
+				tbody.append(
+					jQuery("<tr>").addClass("header-row").
+						append(jQuery("<td>").text(Translator.translate("Status"))).
+						append(jQuery("<td>").text(Translator.translate("From"))).
+						append(jQuery("<td>").text(Translator.translate("To"))).
+						append(jQuery("<td>").text(Translator.translate("Price source"))).
+						append(jQuery("<td>").text(Translator.translate("Margin"))).
+						append(jQuery("<td>").text(Translator.translate("Camapign price"))).
+						append(jQuery("<td>").text(Translator.translate("Msrp"))).
+						append(jQuery("<td>").text(Translator.translate("Regular price")))
+				)
+		
+				tbody.append(
+					jQuery("<tr>").
+						append(jQuery("<td>").text(Translator.translate(campaign.status_text))).
+						append(jQuery("<td>").text(campaign.date_from)).
+						append(jQuery("<td>").text(campaign.date_to)).
+						append(jQuery("<td>").text(campaign.price_source_id)).
+						append(jQuery("<td>").text(misc.percent(campaign.price_margin))).
+						append(jQuery("<td>").text(misc.currency(campaign.special_price))).
+						append(jQuery("<td>").text(misc.currency(campaign.msrp))).
+						append(jQuery("<td>").text(misc.currency(campaign.price)))
+				)
+		
+				buttons.push({"label": Translator.translate("Remove from campaign")});
+		
+				divRight.append(table);
+		
+			}
+			
+			var buttonsDiv = jQuery("<div>").addClass("sub-row-actions")
+			jQuery.each(buttons, function(){
+				buttonsDiv.append(jQuery("<a>").text(this.label))
+			});
+			
+			divRight.append(buttonsDiv);
+			
+			jQuery(".expando", node).
+					html('').
+					append(divLeft).
+					append(divRight).
+					append(jQuery("<div>").addClass("clearfix"))
 		},
 		
 		_process: function(){
@@ -183,7 +309,10 @@ define([
 		},
 		_clearTimeout: function(){
 			clearTimeout(this._timeout);
-		}
+		},
+		_clearWaitTimeout: function(){
+			clearTimeout(this._waitTimeout);
+		},
 	});
 	
 	return RowUpdater;

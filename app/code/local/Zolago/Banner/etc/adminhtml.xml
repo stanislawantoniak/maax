@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<config>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <zolagobanner translate="title" module="zolagobanner">
+                                        <title>Content Box Configuration</title>
+                                    </zolagobanner>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+    <menu>
+        <vendors>
+            <children>
+                <zolagobanner translate="title">
+                    <title>Content Box Configuration</title>
+                    <sort_order>100</sort_order>
+                    <action>adminhtml/system_config/edit/section/zolagobanner</action>
+                </zolagobanner>
+            </children>
+        </vendors>
+    </menu>
+</config>
+
