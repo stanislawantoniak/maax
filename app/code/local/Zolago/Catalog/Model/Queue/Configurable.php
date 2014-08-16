@@ -33,7 +33,7 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
 
 
         foreach ($collection as $colItem) {
-            Mage::log($colItem->getData(), 0, "configurable_update_{$hash}_0.log");
+            Mage::log($colItem->getData(), 0, "configurable_update_{$hash}_collection.log");
             $productId = $colItem->getProductId();
             $websiteId = $colItem->getWebsiteId();
 
