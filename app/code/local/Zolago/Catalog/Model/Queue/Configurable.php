@@ -72,7 +72,7 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
 
         if (empty($configurableSimpleRelation)) {
             Mage::log("Found 0 configurable products ", 0, "configurable_update_{$hash}_A.log");
-            return;
+            //return;
         }
 
         $relations = count($configurableSimpleRelation);
