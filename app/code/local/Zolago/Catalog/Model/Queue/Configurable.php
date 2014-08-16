@@ -49,7 +49,7 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
         $idsSelect->reset(Zend_Db_Select::COLUMNS);
         //$idsSelect->where("status=0");
         $idsSelect->columns('product_id', 'main_table');
-        $idsSelect->limit(5000);
+        //$idsSelect->limit(5000);
         $resource = Mage::getSingleton('core/resource');
         $readConnection = $resource->getConnection('core_read');
         $listUpdatedProducts = $readConnection->fetchCol($idsSelect);
