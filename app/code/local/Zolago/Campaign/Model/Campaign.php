@@ -79,7 +79,8 @@ class Zolago_Campaign_Model_Campaign extends Mage_Core_Model_Abstract
     public function processCampaignAttributes(){
         //Select campaigns with expired date
         $expiredCampaigns = $this->getResource()->getExpiredCampaigns();
-        Mage::log($expiredCampaigns . " ExpiredCampaigns ", 0, 'processCampaignAttributes.log');
+        Mage::log("ExpiredCampaigns ", 0, 'processCampaignAttributes.log');
+        Mage::log($expiredCampaigns, 0, 'processCampaignAttributes.log');
         if(empty($expiredCampaigns)){
             return;
         }
