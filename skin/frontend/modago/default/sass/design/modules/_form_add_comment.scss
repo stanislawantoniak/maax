@@ -1,0 +1,35 @@
+#review-form {
+	h4 {
+		strong{
+			text-transform: uppercase;
+		}
+	}
+	input[type="text"],
+	input[type="email"],
+	input[type="password"] {
+		line-height: 29px;
+	}
+	label {
+		font-weight: normal;
+	}
+	.nickname_field {
+		label {
+			line-height: 29px;
+		}
+	}
+}
+
+.review-summary-table {
+	border:none;
+	caption {
+		text-align: left;
+		font-weight: bold;
+	}
+	tr,th,td {
+		text-align: left;
+		border:none!important;
+	}
+	th {
+		font-weight: normal;
+	}
+}

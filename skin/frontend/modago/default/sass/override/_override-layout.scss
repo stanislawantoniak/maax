@@ -116,12 +116,12 @@
             position:absolute;
             height: 100%;
             right:35px;
-            //            top: 50%;
-            top: 0;
-            //            transform: translateY(-50%);
+                        top: 50%;
+//            top: 0;
+                        transform: translateY(-50%);
             display: inline-block;
             line-height: 60px;
-            //			top:16px;
+//            			top:16px;
         }
     }
     .seller {
@@ -505,6 +505,7 @@
             }
         }
         .addLike-box {
+            margin-top: -15px !important;
             @media (max-width: 360px) {
                 margin-top: 1px;
                 @media screen and (-webkit-min-device-pixel-ratio:0) {
@@ -515,9 +516,8 @@
         }
         .addedLike-box {
             @media (max-width: 810px) {
-                //                margin-top: -7px;
+                margin-top: -7px;
             }
-            margin-top: 7px !important;
         }
         .addLike {
             width:149px;
@@ -606,17 +606,11 @@ form {
             top:16px;
             &.form-ico-checked {
                 position:absolute;
-                background:$formIcoMap;
-                @include sprite($formIcoMap, form-ico-checked);
-                @include sprite-dimensions($formIcoMap, form-ico-checked);
                 top:8px!important;
                 right:-27px!important;
             }
             &.form-ico-times {
                 position:absolute;
-                background:$formIcoMap;
-                @include sprite($formIcoMap, form-ico-times);
-                @include sprite-dimensions($formIcoMap,form-ico-times);
                 top:8px!important;
                 right:-24px!important;
             }

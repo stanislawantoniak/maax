@@ -318,7 +318,7 @@ var Mall = {
                 alert(message);
                 break;
         }
-    },
+    }
 
 
 
