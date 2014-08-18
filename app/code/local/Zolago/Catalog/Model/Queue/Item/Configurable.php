@@ -12,6 +12,5 @@ class Zolago_Catalog_Model_Queue_Item_Configurable extends Zolago_Common_Model_Q
             Mage::throwException(Mage::helper('zolagocatalog')->__('Error: wrong type of queue element'));
         }
         $this->setProductId($itemId['product_id']);
-        $this->setWebsiteId(isset($itemId['website_id'])? $itemId['website_id']:0);
     }
 }
