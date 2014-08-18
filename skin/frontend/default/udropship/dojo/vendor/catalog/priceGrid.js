@@ -250,16 +250,13 @@ define([
 						renderHeaderCell: filterRendererFacory("range", "display_price"),
 						sortable: false, 
 						field: "display_price",
-						className: "filterable align-right column-medium signle-price-edit",
+						className: "filterable align-right column-medium signle-price-edit popup-trigger ",
 						formatter: misc.currency,
 						renderCell: function(item,value,node){
 							if(priceEditPriceMeta(item, value)){
 								put(node, ".editable");
 							}
 							BaseGrid.defaultRenderCell.apply(this, arguments);
-						},
-						canEdit: function(item){
-							return !item.converter_price_type && priceEditPriceMeta(item);
 						}
 					}
 				]
@@ -307,7 +304,7 @@ define([
 							}
 							BaseGrid.defaultRenderCell.apply(this, arguments);
 						},
-						className: "filterable align-right column-medium signle-price-edit",
+						className: "filterable align-right column-medium signle-price-edit popup-trigger",
 					}
 				]
 			},
@@ -320,7 +317,7 @@ define([
 						renderHeaderCell: filterRendererFacory("select", "converter_price_type", {options: converterPriceTypeOptions}),
 						sortable: false, 
 						field: "converter_price_type",
-						className: "filterable align-center column-medium signle-price-edit",
+						className: "filterable align-center column-medium signle-price-edit popup-trigger",
 						formatter: function(value, item){
 							for(var i=0; i<converterPriceTypeOptions.length; i++){
 								if(converterPriceTypeOptions[i].value+'' == value+''){
@@ -347,7 +344,7 @@ define([
 						renderHeaderCell: filterRendererFacory("select", "msrp", {options: boolOptions}),
 						sortable: false, 
 						field: "msrp",
-						className: "filterable align-right column-medium signle-price-edit",
+						className: "filterable align-right column-medium signle-price-edit popup-trigger",
 						formatter: function(value){
 							if(value!==null){
 								return misc.currency(value);
@@ -575,21 +572,14 @@ define([
 	});
 	
 	// Open dialog to single price edit
-	on.pausable(grid.domNode, ".dgrid-row td.signle-price-edit.editable :dblclick", function(evt){
+	on.pausable(grid.domNode, ".dgrid-row td.signle-price-edit.editable :click", function(evt){
 		singlePriceUpdater.handleDbClick(grid.row(evt), evt);
 	});
 	
-	on.pausable(grid.domNode, ".dgrid-row .expando .signle-price-edit.editable :click", function(evt){
-		singlePriceUpdater.handleClick(grid.row(evt), evt);
-	});
 	
+
 	// Open dialog to single stock edit
-	on.pausable(grid.domNode, ".dgrid-row .signle-stock-edit.editable :dblclick", function(evt){
-		singleStockUpdater.handleDbClick(grid.row(evt), evt);
-	});
-	
-	// Open dialog to single stock edit
-	on.pausable(grid.domNode, ".dgrid-row .expando .signle-stock-edit.editable :click", function(evt){
+	on.pausable(grid.domNode, ".dgrid-row .signle-stock-edit.editable :click", function(evt){
 		singleStockUpdater.handleClick(grid.row(evt), evt);
 	});
 			

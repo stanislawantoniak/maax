@@ -8,6 +8,7 @@ define([
 	var Updater = declare([_base], {
 		_url: "/udprod/vendor_price_detail/stockmodal",
 		_title: Translator.translate('Stock of {{name}}'),
+		_saveBtn: false,
 		
 		handleClick: function(row, evt){
 			this.setProductId(jQuery(evt.toElement).data('product_id'));

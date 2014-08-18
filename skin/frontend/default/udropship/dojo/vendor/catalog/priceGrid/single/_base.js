@@ -24,7 +24,7 @@ define([
 					</div>\
 			   </form>\
 			 </div>',
-	
+		_saveBtn: true,
 		_grid: null,
 		_className: "",
 		_modal: null,
@@ -124,6 +124,12 @@ define([
 			var self = this;
 			if(!this._modal){
 				this._modal = jQuery(this._modalTemplate).addClass(this._className);
+				var btn = this._modal.find(".btn-primary");
+				if(!this._saveBtn){
+					btn.hide();
+				}else{
+					btn.show();
+				}
 			}
 			// set tile
 			this._afterRender(row);

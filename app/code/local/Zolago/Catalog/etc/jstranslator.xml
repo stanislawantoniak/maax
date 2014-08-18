@@ -108,4 +108,7 @@
     <price-stock-of translate="message" module="zolagocatalog">
         <message>Stock of {{name}}</message>
     </price-stock-of>
+    <price-close translate="message" module="zolagocatalog">
+        <message>Close</message>
+    </price-close>
 </jstranslator>
