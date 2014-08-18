@@ -13,6 +13,7 @@
     $_totalWithShipment = $this->getQuote()->getGrandTotal() + $this->getShippingTotal();
     $_hasCoupon = (bool) $this->getQuote()->getCouponCode();
     $_couponLabel = '';
+    $_couponDescription = '';
     if($_hasCoupon) {
         $_salesRuleId = Mage::getModel('salesrule/coupon')->loadByCode($this->getQuote()->getCouponCode())->getRuleId();
         $_ruleModel = Mage::getModel('salesrule/rule')->load($_salesRuleId);
@@ -48,7 +49,7 @@
 
                 <dl class="coupon-list" id="cart_coupon" style="display: <?php if(!$_hasCoupon): ?>none;<?php endif; ?>">
                     <dt><?php echo $this->__("Your coupon:"); ?></dt>
-                    <dd class="ff_os fz_12" <?php if($_couponDescription): ?>data-toggle="tooltip" data-placement="top" title="<?php echo $_couponDescription; ?>" <?php endif; ?> style="height: auto; background: none;"><?php echo $_couponLabel; ?> <i class="fa-delete-coupon" onclick="Mall.Cart.removeCoupon();"></i></dd>
+                    <dd class="ff_os fz_12" <?php if($_hasCoupon && $_couponDescription): ?>data-toggle="tooltip" data-placement="top" title="<?php echo $_couponDescription; ?>" <?php endif; ?> style="height: auto; background: none;"><?php echo $_couponLabel; ?> <i class="fa-delete-coupon" onclick="Mall.Cart.removeCoupon();"></i></dd>
                 </dl>
 
             </div>
