@@ -1,8 +1,20 @@
 <?php
 class Zolago_Catalog_Vendor_Price_DetailController extends Zolago_Catalog_Controller_Vendor_Price_Abstract
 {
-	
-	
+	/**
+	 * Stockmodal
+	 */
+	public function stockmodalAction() {
+
+		$this->_registerProduct();
+		
+		$this->loadLayout();
+		$this->renderLayout();
+	}
+	/**
+	 * Save prices
+	 * @return type
+	 */
 	public function pricemodalSaveAction() {
 		
 		$request = $this->getRequest();
@@ -70,27 +82,18 @@ class Zolago_Catalog_Vendor_Price_DetailController extends Zolago_Catalog_Contro
 	}
 	
 	/**
-	 * Get html of product price modal
+	 * Get html of product price modal (HTML)
 	 */
 	public function pricemodalAction() {
 		
-		$product = Mage::getModel('catalog/product')->
-				setStoreId($this->getRequest()->getParam('store_id'))->
-				load($this->getRequest()->getParam('id'));
-		
-		if($product->getUdropshipVendor()!=$this->_getSession()->getVendorId()){
-			$this->norouteAction();
-			return;
-		}
-		
-		Mage::register("current_product", $product);
+		$this->_registerProduct();
 		
 		$this->loadLayout();
 		$this->renderLayout();
 	}
 	
 	/**
-	 * Details action
+	 * Details action (JSON)
 	 */
 	
 	public function detailAction() {
@@ -116,7 +119,18 @@ class Zolago_Catalog_Vendor_Price_DetailController extends Zolago_Catalog_Contro
 		
 	}
 	
-	
+	protected function _registerProduct() {
+		$product = Mage::getModel('catalog/product')->
+				setStoreId($this->getRequest()->getParam('store_id'))->
+				load($this->getRequest()->getParam('id'));
+		
+		if($product->getUdropshipVendor()!=$this->_getSession()->getVendorId()){
+			$this->norouteAction();
+			return;
+		}
+		
+		Mage::register("current_product", $product);
+	}
 
 }
 

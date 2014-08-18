@@ -201,13 +201,17 @@ define([
 											"disabled": "disabled"
 										}))).
 										append(jQuery("<td>").text(child.option_text)).
-										append(jQuery("<td>").addClass("signle-price-edit" + (data.campaign ? "" : " editable")).
-											text(misc.currency(child.price))).
+										append(jQuery("<td>").
+											addClass("signle-price-edit" + (data.campaign ? "" : " editable")).
+											append(jQuery("<a>").
+											text(misc.currency(child.price)))).
 										append(jQuery("<td>").text(
 											Translator.translate(parseInt(child.is_in_stock) ? "Yes" : "No"))).
 										append(jQuery("<td>").text(parseInt(child.qty))).
 										append(jQuery("<td>").append(jQuery("<a>").
-											addClass("editable signle-stock-edit").text(Translator.translate("View POS Stock"))))
+											data("product_id", child.product_id).
+											addClass("editable signle-stock-edit").
+											text(Translator.translate("View POS Stock"))))
 								)
 							})
 						});
@@ -215,7 +219,11 @@ define([
 					}
 				break;
 				case "simple":
-					buttons.push({"label": Translator.translate("View POS Stock"), className: "signle-stock-edit editable"});
+					buttons.push({
+						"label": Translator.translate("View POS Stock"), 
+						className: "signle-stock-edit editable", 
+						data: {product_id: data.entity_id}
+					});
 				break;
 			}
 			
@@ -273,7 +281,7 @@ define([
 			
 			var buttonsDiv = jQuery("<div>").addClass("sub-row-actions")
 			jQuery.each(buttons, function(){
-				buttonsDiv.append(jQuery("<a>").text(this.label).addClass(this.className))
+				buttonsDiv.append(jQuery("<a>").text(this.label).addClass(this.className).data(this.data || {}))
 			});
 			
 			divRight.append(buttonsDiv);

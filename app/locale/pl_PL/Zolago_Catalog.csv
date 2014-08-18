@@ -87,3 +87,7 @@
 "Source price", "Źródło ceny"
 "Minimal price", "Najniższa cena"
 "The converter price of product or one of child product is not available", "Cena produktu (lub jednego ze składowych produktów) w konwerterach jest niedostępna"
+"Stock of {{name}}", "Stany magazynowe - {{name}}"
+"Stock in import file", "Stan magazynowy zaimportowany"
+"Minimal stock in POS", "Modyfikator ilości dla POS"
+"Stock excluding minimal", "Stan magzynowy z modyfikatorem"

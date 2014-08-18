@@ -5,26 +5,21 @@ define([
 	
 
 
-	  var Updater = declare([_base], {
-		  _url: "/udprod/vendor_price_detail/stockmodal",
-		  _modalTemplate:
-			'<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">\
-			   <div class="modal-dialog">\
-				 <div class="modal-content">\
-				   <div class="modal-header">\
-					 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>\
-					 <h4 class="modal-title">' + Translator.translate('Stock') + '</h4>\
-				   </div>\
-				   <div class="modal-body">\
-				   </div>\
-				   <div class="modal-footer">\
-					 <button type="button" class="btn btn-default" data-dismiss="modal">' + Translator.translate('Close')  + '</button>\
-					 <button type="button" class="btn btn-primary">' + Translator.translate('Save changes') + '</button>\
-				   </div>\
-				 </div>\
-			   </div>\
-			 </div>'
-	  });
+	var Updater = declare([_base], {
+		_url: "/udprod/vendor_price_detail/stockmodal",
+		_title: Translator.translate('Stock of {{name}}'),
+		
+		handleClick: function(row, evt){
+			this.setProductId(jQuery(evt.toElement).data('product_id'));
+			return this.inherited(arguments);
+		},
+
+		handleDbClick: function(row, evt){
+			this.setProductId(jQuery(evt.toElement).data('product_id'));
+			return this.inherited(arguments);
+		},
+
+	});
 	  
 	  
 	

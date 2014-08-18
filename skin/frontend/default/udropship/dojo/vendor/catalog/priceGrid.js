@@ -447,7 +447,7 @@ define([
 						renderHeaderCell: filterRendererFacory("select", "is_in_stock", {options: boolOptions}),
 						sortable: false, 
 						field: "is_in_stock",
-						className: "filterable align-center signle-stock-edit editable  column-short",
+						className: "filterable align-center  column-short",
 						formatter: function(value, item){
 							for(var i=0; i<boolOptions.length; i++){
 								if(boolOptions[i].value+'' == value+''){
@@ -487,7 +487,7 @@ define([
 						renderHeaderCell: filterRendererFacory("range", "stock_qty"),
 						sortable: false, 
 						field: "stock_qty",
-						className: "filterable align-right signle-stock-edit editable column-medium",
+						className: "filterable align-right  column-medium",
 						formatter: function(value){return parseInt(value);}
 					}
 				]
@@ -576,21 +576,21 @@ define([
 	
 	// Open dialog to single price edit
 	on.pausable(grid.domNode, ".dgrid-row td.signle-price-edit.editable :dblclick", function(evt){
-		singlePriceUpdater.handleDbClick(grid.row(evt));
+		singlePriceUpdater.handleDbClick(grid.row(evt), evt);
 	});
 	
 	on.pausable(grid.domNode, ".dgrid-row .expando .signle-price-edit.editable :click", function(evt){
-		singlePriceUpdater.handleClick(grid.row(evt));
+		singlePriceUpdater.handleClick(grid.row(evt), evt);
 	});
 	
 	// Open dialog to single stock edit
 	on.pausable(grid.domNode, ".dgrid-row .signle-stock-edit.editable :dblclick", function(evt){
-		singleStockUpdater.handleDbClick(grid.row(evt));
+		singleStockUpdater.handleDbClick(grid.row(evt), evt);
 	});
 	
 	// Open dialog to single stock edit
 	on.pausable(grid.domNode, ".dgrid-row .expando .signle-stock-edit.editable :click", function(evt){
-		singleStockUpdater.handleClick(grid.row(evt));
+		singleStockUpdater.handleClick(grid.row(evt), evt);
 	});
 			
 	

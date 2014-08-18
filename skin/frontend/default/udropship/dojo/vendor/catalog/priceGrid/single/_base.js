@@ -32,6 +32,7 @@ define([
 		_currentRow: null,
 		_url: "",
 		_saveUrl: "",
+		_productId: null,
 		
 		constructor: function(){
 			
@@ -42,6 +43,12 @@ define([
 		getGrid: function(){
 			return this._grid;
 		},
+		setProductId: function(productId){
+			this._productId = productId;
+		},
+		getProductId: function(){
+			return this._productId;
+		},
 		setStoreId: function(storeId){
 			this._storeId= storeId;
 		},
@@ -50,10 +57,12 @@ define([
 		},
 		
 		handleClick: function(row){
-			this.handleDbClick(row);
+			this.setStoreId(row.data.store_id);
+			this.handleDbClick.apply(this, arguments);
 		},
 		
 		handleDbClick: function(row){
+			this.setStoreId(row.data.store_id);
 			var modal = this._triggerModal(row);
 			this._currentRow = row;
 			modal.modal('show');
@@ -97,7 +106,7 @@ define([
 			var self = this;
 			jQuery.ajax({
 				url: this._url,
-				data: {id: data.entity_id, store_id: data.store_id},
+				data: {id: this.getProductId(), store_id: this.getStoreId()},
 				success: function(response){
 					self._afterLoad.apply(self, [body, response]);
 					btn.attr("disabled", null);
@@ -121,9 +130,15 @@ define([
 			return this._modal;
 		},
 		
+
+		// Set title of product
 		_afterRender: function(row){
-			
+			this._modal.find("h4").text(
+				misc.replace(this._title, {name: row.data.name})
+			);
 		},
+		
+		// Set content
 		_afterLoad: function(node, response){
 			node.html(response);
 		}

@@ -11,11 +11,15 @@ define([
 			_title: Translator.translate('Change product price {{name}}'),
 			_className: "price-modal",
 			
-			// Set title of product
-			_afterRender: function(row){
-				this._modal.find("h4").text(
-					misc.replace(this._title, {name: row.data.name})
-				);
+					
+			handleClick: function(row){
+				this.setProductId(row.data.entity_id);
+				return this.inherited(arguments);
+			},
+
+			handleDbClick: function(row){
+				this.setProductId(row.data.entity_id);
+				return this.inherited(arguments);
 			},
 			
 			// After load content

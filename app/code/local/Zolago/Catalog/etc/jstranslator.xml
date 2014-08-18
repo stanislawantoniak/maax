@@ -105,4 +105,7 @@
     <price-converter-source translate="message" module="zolagocatalog">
         <message>The converter price of product or one of child product is not available</message>
     </price-converter-source>
+    <price-stock-of translate="message" module="zolagocatalog">
+        <message>Stock of {{name}}</message>
+    </price-stock-of>
 </jstranslator>
