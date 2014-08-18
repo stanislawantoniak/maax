@@ -957,7 +957,7 @@ function galeriaProduktu(){
       var that = this
       that.rwdControls.prependTo(elem)
       $('#lightbox').find('.inner-item').css({visibility:'hidden'});
-      $('#lightbox').find('#galeria-lightbox #sync3 .rwd-wrapper-outer').prepend('<div class="loader" style="text-align:center;"><img src="skin/frontend/modago/default/images/ajax-loader.gif" /></div>')
+      $('#lightbox').find('#galeria-lightbox #sync3 .rwd-wrapper-outer').prepend('<div class="loader" style="text-align:center;"><img src="'+Config.path.ajaxLoader+'" /></div>')
       imagesLoaded( document.querySelector('#galeria-lightbox #sync3 .rwd-item .item'), function( instance ) {
 
          setTimeout(function(){  
@@ -2098,10 +2098,10 @@ $('.sb-toggle-submenu').off('click').on('click', function() {
 // RATY{ path: 'assets/images' }
 
 $('#average_rating').raty({
-  path: 'skin/frontend/modago/default/images/raty',
-  starOff : 'star-off-big-custom.png',
-  starOn  : 'star-on-big-custom.png',
-  starHalf  : 'star-half-big-custom.png',
+  path: Config.path.averageRating.averageRatingPath,
+  starOff : Config.path.averageRating.averageRatingStarOff,
+  starOn  : Config.path.averageRating.averageRatingStarOn,
+  starHalf  : Config.path.averageRating.averageRatingStarHalf,
   size   : 22,
   readOnly: true,
   hints: ['zły', 'słaby', 'satysfakcjonujący', 'dobry', 'świetny'],
@@ -2115,9 +2115,9 @@ $('#average_rating').raty({
 });
 
 $('.raty_note dd div').raty({
-  path: 'skin/frontend/modago/default/images/raty',
-  starOff : 'star-off-custom.png',
-  starOn  : 'star-on-custom.png',
+  path: Config.path.ratyNote.ratyNotePath,
+  starOff : Config.path.ratyNote.ratyNoteStarOff,
+  starOn  : Config.path.ratyNote.ratyNoteStarOn,
   hints: ['zły', 'słaby', 'satysfakcjonujący', 'dobry', 'świetny'],
   readOnly: true,
   size   : 17,
@@ -2131,9 +2131,9 @@ $('.raty_note dd div').raty({
 });
 
 $('.ratings tr td div').raty({
-  path: 'skin/frontend/modago/default/images/raty',
-  starOff : 'star-off-custom.png',
-  starOn  : 'star-on-custom.png',
+  path: Config.path.ratings.ratingsPath,
+  starOff : Config.path.ratings.ratingsStarOff,
+  starOn  : Config.path.ratings.ratingsStarOn,
   hints: ['zły', 'słaby', 'satysfakcjonujący', 'dobry', 'świetny'],
   //readOnly: true,
   size   : 17,
@@ -2150,9 +2150,9 @@ $('.ratings tr td div').raty({
 });
 
 $('.comment_rating').raty({
-  path: 'skin/frontend/modago/default/images/raty',
-  starOff : 'star-off-custom.png',
-  starOn  : 'star-on-custom.png',
+  path: Config.path.commentRating.commentRatingPath,
+  starOff : Config.path.commentRating.commentRatingStarOff,
+  starOn  : Config.path.commentRating.commentRatingStarOn,
   size   : 17,
   readOnly: true,
   hints: ['zły', 'słaby', 'satysfakcjonujący', 'dobry', 'świetny'],
@@ -2164,9 +2164,9 @@ $('.comment_rating').raty({
   }
 });
 $('#average_note_client .note').raty({
-    path: 'skin/frontend/modago/default/images/raty',
-    starOff : 'star-small-off.png',
-    starOn  : 'star-small.png',
+    path: Config.path.averageNoteClient.averageNoteClientPath,
+    starOff : Config.path.averageNoteClient.averageNoteClientStarOff,
+    starOn  : Config.path.averageNoteClient.averageNoteClientStarOn,
     size   : 13,
     readOnly: true,
     hints: ['zły', 'słaby', 'satysfakcjonujący', 'dobry', 'świetny'],

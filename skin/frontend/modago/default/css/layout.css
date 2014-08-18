@@ -1887,3 +1887,746 @@ section.section h2.title_section i {
   /* line 53, ../sass/override/_override-layout.scss */
   .cart-qty-field {
     margin-left: 0; } }
+
+/* line 60, ../sass/override/_override-layout.scss */
+#popup-after-add-to-cart {
+  /* PANEL KOSZYKA */ }
+/* line 61, ../sass/override/_override-layout.scss */
+#popup-after-add-to-cart table {
+  width: 100%; }
+/* line 64, ../sass/override/_override-layout.scss */
+#popup-after-add-to-cart table td {
+  padding: 8px 0;
+  vertical-align: top; }
+/* line 67, ../sass/override/_override-layout.scss */
+#popup-after-add-to-cart table td img {
+  border: 1px solid #adadad; }
+/* line 70, ../sass/override/_override-layout.scss */
+#popup-after-add-to-cart table td + td {
+  padding-left: 5px; }
+/* line 73, ../sass/override/_override-layout.scss */
+#popup-after-add-to-cart table td p {
+  margin: 0px;
+  padding: 0px;
+  font-size: 12px;
+  line-height: 1.3; }
+
+/* line 87, ../sass/override/_override-layout.scss */
+#seller-box-bundle, .descripionProduct-box-bundle {
+  border: 1px solid #d9d9d9;
+  padding: 9px 9px 0px;
+  text-align: center;
+  margin-bottom: 10px; }
+@media (max-width: 767px) {
+  /* line 87, ../sass/override/_override-layout.scss */
+  #seller-box-bundle, .descripionProduct-box-bundle {
+    margin-bottom: 0px;
+    padding-bottom: 0px; } }
+/* line 96, ../sass/override/_override-layout.scss */
+#seller-box-bundle .seller-label, .descripionProduct-box-bundle .seller-label {
+  font-size: 18px;
+  color: #1d1e1c;
+  text-transform: uppercase;
+  margin-top: 9px;
+  margin-bottom: 13px;
+  display: block; }
+@media (max-width: 767px) {
+  /* line 96, ../sass/override/_override-layout.scss */
+  #seller-box-bundle .seller-label, .descripionProduct-box-bundle .seller-label {
+    float: left;
+    text-align: left;
+    clear: left;
+    margin-left: 25px;
+    display: inline-block;
+    margin-bottom: 7px; } }
+/* line 113, ../sass/override/_override-layout.scss */
+#seller-box-bundle figure, .descripionProduct-box-bundle figure {
+  margin-bottom: 14px; }
+@media (max-width: 767px) {
+  /* line 113, ../sass/override/_override-layout.scss */
+  #seller-box-bundle figure, .descripionProduct-box-bundle figure {
+    position: absolute;
+    height: 100%;
+    right: 35px;
+    top: 0;
+    display: inline-block;
+    line-height: 60px; } }
+/* line 127, ../sass/override/_override-layout.scss */
+#seller-box-bundle .seller, #seller-box-bundle .seller a, .descripionProduct-box-bundle .seller #seller-box-bundle a, .descripionProduct-box-bundle .seller, .descripionProduct-box-bundle #seller-box-bundle .seller a, #seller-box-bundle .seller .descripionProduct-box-bundle a, .descripionProduct-box-bundle .seller a {
+  font-size: 12px;
+  color: #000;
+  margin-bottom: 17px; }
+@media (max-width: 767px) {
+  /* line 127, ../sass/override/_override-layout.scss */
+  #seller-box-bundle .seller, #seller-box-bundle .seller a, .descripionProduct-box-bundle .seller #seller-box-bundle a, .descripionProduct-box-bundle .seller, .descripionProduct-box-bundle #seller-box-bundle .seller a, #seller-box-bundle .seller .descripionProduct-box-bundle a, .descripionProduct-box-bundle .seller a {
+    float: left;
+    text-align: left;
+    clear: left;
+    margin-left: 13px;
+    display: inline-block;
+    margin-bottom: 10px; } }
+/* line 143, ../sass/override/_override-layout.scss */
+#seller-box-bundle .block, .descripionProduct-box-bundle .block {
+  padding: 12px 0;
+  border-top: 1px solid #ebeaed; }
+@media (min-width: 992px) and (max-width: 1199px) {
+  /* line 149, ../sass/override/_override-layout.scss */
+  #seller-box-bundle .seller-box-description.block, .descripionProduct-box-bundle .seller-box-description.block {
+    border-top: none; } }
+/* line 156, ../sass/override/_override-layout.scss */
+#seller-box-bundle h3, .descripionProduct-box-bundle h3 {
+  font-size: 11px;
+  color: #000;
+  text-transform: uppercase;
+  margin: 0px;
+  display: block;
+  text-align: left;
+  padding: 0 0 0 10px;
+  position: relative; }
+/* line 165, ../sass/override/_override-layout.scss */
+#seller-box-bundle h3 a, .descripionProduct-box-bundle h3 a {
+  font-size: 11px;
+  color: #000;
+  text-decoration: none;
+  display: block; }
+/* line 173, ../sass/override/_override-layout.scss */
+#seller-box-bundle h3 span#average_note_client, .descripionProduct-box-bundle h3 span#average_note_client {
+  padding-top: 5px;
+  display: block;
+  position: relative;
+  overflow: hidden; }
+/* line 178, ../sass/override/_override-layout.scss */
+#seller-box-bundle h3 span#average_note_client span.note, .descripionProduct-box-bundle h3 span#average_note_client span.note {
+  margin-right: 0px;
+  float: left; }
+/* line 181, ../sass/override/_override-layout.scss */
+#seller-box-bundle h3 span#average_note_client span.note + span, .descripionProduct-box-bundle h3 span#average_note_client span.note + span {
+  float: none;
+  font-size: 11px;
+  color: #646464;
+  font-family: 'OpenSansRegular';
+  line-height: 13px;
+  float: left; }
+
+/* line 196, ../sass/override/_override-layout.scss */
+#product-shop h1 {
+  font-family: "latolight";
+  text-transform: uppercase;
+  font-size: 34px;
+  padding-bottom: 15px;
+  padding-top: 0px;
+  margin-bottom: 15px;
+  margin-top: 0;
+  border-bottom: 1px solid #eeedf0; }
+@media (max-width: 767px) {
+  /* line 196, ../sass/override/_override-layout.scss */
+  #product-shop h1 {
+    font-size: 22px;
+    margin-top: 15px; } }
+/* line 212, ../sass/override/_override-layout.scss */
+#product-shop .short-description {
+  font-size: 11px;
+  color: #383838;
+  margin-bottom: 6px; }
+/* line 216, ../sass/override/_override-layout.scss */
+#product-shop .short-description a {
+  color: #959595; }
+/* line 218, ../sass/override/_override-layout.scss */
+#product-shop .short-description a span {
+  color: #1dd8a0;
+  margin-left: 30px; }
+@media (max-width: 1199px) {
+  /* line 212, ../sass/override/_override-layout.scss */
+  #product-shop .short-description {
+    display: none; } }
+/* line 227, ../sass/override/_override-layout.scss */
+#product-shop .price-box-bundle {
+  position: relative;
+  margin-bottom: 16px; }
+@media (min-width: 768px) and (max-width: 819px) {
+  /* line 227, ../sass/override/_override-layout.scss */
+  #product-shop .price-box-bundle {
+    margin-bottom: 0px; } }
+/* line 234, ../sass/override/_override-layout.scss */
+#product-shop .price-box-bundle .price-label, #product-shop .price-box-bundle .old-price {
+  font-size: 24px;
+  color: #000;
+  font-family: "latolight"; }
+/* line 239, ../sass/override/_override-layout.scss */
+#product-shop .price-box-bundle .old-price {
+  text-decoration: line-through; }
+/* line 242, ../sass/override/_override-layout.scss */
+#product-shop .price-box-bundle .price {
+  font-size: 36px;
+  color: #000;
+  font-family: "latoblack"; }
+@media (min-width: 768px) and (max-width: 819px) {
+  /* line 242, ../sass/override/_override-layout.scss */
+  #product-shop .price-box-bundle .price {
+    margin-bottom: 0px; } }
+@media (min-width: 481px) and (max-width: 767px) {
+  /* line 242, ../sass/override/_override-layout.scss */
+  #product-shop .price-box-bundle .price {
+    display: inline-block;
+    margin: 0px;
+    padding: 0px;
+    line-height: 1.0; } }
+@media (max-width: 480px) {
+  /* line 242, ../sass/override/_override-layout.scss */
+  #product-shop .price-box-bundle .price {
+    display: block;
+    margin: 0px;
+    padding: 0px;
+    line-height: 1.0;
+    display: block; } }
+/* line 263, ../sass/override/_override-layout.scss */
+#product-shop .price-box-bundle ul {
+  list-style-image: none;
+  list-style-type: none;
+  margin-left: 0;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  right: 0px;
+  top: 10px; }
+/* line 269, ../sass/override/_override-layout.scss */
+#product-shop .price-box-bundle ul li {
+  font-size: 12px;
+  color: #4f4f4f;
+  line-height: 1.5; }
+/* line 279, ../sass/override/_override-layout.scss */
+#product-shop .color-box-bundle .color-label, #product-shop .color-box-bundle .size-label, #product-shop .size-box-bundle .color-label, #product-shop .size-box-bundle .size-label {
+  line-height: 47px;
+  width: 135px;
+  display: inline-block;
+  float: left;
+  text-transform: uppercase;
+  font-size: 11px;
+  color: #020202;
+  font-weight: normal; }
+@media (min-width: 768px) and (max-width: 814px) {
+  /* line 279, ../sass/override/_override-layout.scss */
+  #product-shop .color-box-bundle .color-label, #product-shop .color-box-bundle .size-label, #product-shop .size-box-bundle .color-label, #product-shop .size-box-bundle .size-label {
+    float: none;
+    display: block;
+    width: 100%;
+    line-height: 29px; } }
+@media (max-width: 767px) {
+  /* line 279, ../sass/override/_override-layout.scss */
+  #product-shop .color-box-bundle .color-label, #product-shop .color-box-bundle .size-label, #product-shop .size-box-bundle .color-label, #product-shop .size-box-bundle .size-label {
+    float: none;
+    display: block;
+    line-height: 29px; } }
+/* line 300, ../sass/override/_override-layout.scss */
+#product-shop .color-box-bundle .form-group, #product-shop .size-box-bundle .form-group {
+  display: inline-block; }
+/* line 302, ../sass/override/_override-layout.scss */
+#product-shop .color-box-bundle .form-group label, #product-shop .size-box-bundle .form-group label {
+  position: relative;
+  width: 43px;
+  height: 43px;
+  display: inline-block;
+  margin-right: 8px;
+  cursor: pointer; }
+/* line 309, ../sass/override/_override-layout.scss */
+#product-shop .color-box-bundle .form-group label:first-child, #product-shop .size-box-bundle .form-group label:first-child {
+  margin-left: -2px; }
+/* line 312, ../sass/override/_override-layout.scss */
+#product-shop .color-box-bundle .form-group label img, #product-shop .size-box-bundle .form-group label img {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: auto;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+  border: 1px solid #fff; }
+/* line 322, ../sass/override/_override-layout.scss */
+#product-shop .color-box-bundle .form-group label:hover + img, #product-shop .size-box-bundle .form-group label:hover + img {
+  border-color: #999; }
+/* line 326, ../sass/override/_override-layout.scss */
+#product-shop .color-box-bundle .form-group label img:hover, #product-shop .size-box-bundle .form-group label img:hover {
+  border-color: #999; }
+/* line 330, ../sass/override/_override-layout.scss */
+#product-shop .color-box-bundle .form-group label [type="radio"]:checked + img, #product-shop .size-box-bundle .form-group label [type="radio"]:checked + img {
+  border-color: #000; }
+/* line 339, ../sass/override/_override-layout.scss */
+#product-shop .color-box-bundle .color-label {
+  line-height: 57px; }
+/* line 343, ../sass/override/_override-layout.scss */
+#product-shop .color-box-bundle .form-group label {
+  height: 54px; }
+/* line 350, ../sass/override/_override-layout.scss */
+#product-shop .color .form-group input[type="radio"] {
+  margin-left: 50%;
+  margin-top: 50%;
+  float: left; }
+/* line 359, ../sass/override/_override-layout.scss */
+#product-shop .size {
+  position: relative; }
+/* line 364, ../sass/override/_override-layout.scss */
+#product-shop .size .form-group input[type="radio"] {
+  margin-left: 30%;
+  margin-top: 30%;
+  float: left; }
+/* line 371, ../sass/override/_override-layout.scss */
+#product-shop .size-box-bundle {
+  margin-bottom: 20px; }
+@media (min-width: 992px) and (max-width: 1197px) {
+  /* line 371, ../sass/override/_override-layout.scss */
+  #product-shop .size-box-bundle {
+    margin-bottom: 0px; } }
+@media (min-width: 768px) and (max-width: 991px) {
+  /* line 371, ../sass/override/_override-layout.scss */
+  #product-shop .size-box-bundle {
+    margin-bottom: 0px; } }
+/* line 380, ../sass/override/_override-layout.scss */
+#product-shop .size-box-bundle .size-label {
+  line-height: 29px; }
+@media (min-width: 768px) and (max-width: 814px) {
+  /* line 380, ../sass/override/_override-layout.scss */
+  #product-shop .size-box-bundle .size-label {
+    display: block;
+    width: 100%; } }
+@media (max-width: 767px) {
+  /* line 380, ../sass/override/_override-layout.scss */
+  #product-shop .size-box-bundle .size-label {
+    float: none;
+    display: block;
+    float: none; } }
+/* line 392, ../sass/override/_override-layout.scss */
+#product-shop .size-box-bundle .form-group {
+  margin-bottom: 5px;
+  margin-left: 2px; }
+/* line 395, ../sass/override/_override-layout.scss */
+#product-shop .size-box-bundle .form-group label {
+  width: 31px;
+  height: 31px;
+  position: relative; }
+/* line 399, ../sass/override/_override-layout.scss */
+#product-shop .size-box-bundle .form-group label span {
+  width: 31px;
+  height: 31px;
+  display: block;
+  background: #fff;
+  border: 1px solid #afafaf;
+  text-align: center;
+  line-height: 29px;
+  color: #858585;
+  font-size: 12px;
+  font-family: "latoregular";
+  font-weight: normal;
+  position: absolute;
+  top: 0px;
+  left: 0px; }
+/* line 416, ../sass/override/_override-layout.scss */
+#product-shop .size-box-bundle .form-group label [type="radio"]:hover + span {
+  border-color: #999;
+  background: #999;
+  color: #fff; }
+/* line 422, ../sass/override/_override-layout.scss */
+#product-shop .size-box-bundle .form-group label span:hover {
+  border-color: #999;
+  background: #999;
+  color: #fff; }
+/* line 429, ../sass/override/_override-layout.scss */
+#product-shop .size-box-bundle .form-group label [type="radio"]:checked + span, #product-shop .size-box-bundle .form-group label [type="radio"]:hover:checked + span {
+  border-color: #000;
+  background: #000;
+  color: #fff; }
+/* line 438, ../sass/override/_override-layout.scss */
+#product-shop .size-box-bundle .view-sizing {
+  display: block;
+  font-size: 11px;
+  float: right;
+  position: absolute;
+  bottom: -10px;
+  left: 0px;
+  white-space: nowrap; }
+@media (max-width: 767px) {
+  /* line 438, ../sass/override/_override-layout.scss */
+  #product-shop .size-box-bundle .view-sizing {
+    margin-left: 0px; } }
+/* line 453, ../sass/override/_override-layout.scss */
+#product-shop .size-box-bundle .view-sizing .linkToModal {
+  text-align: right;
+  top: -24px;
+  position: relative;
+  padding-left: 100px; }
+@media (max-width: 814px) {
+  /* line 459, ../sass/override/_override-layout.scss */
+  #product-shop .size-box-bundle .view-sizing.hidden-xs {
+    display: none !important; } }
+@media (min-width: 815px) {
+  /* line 459, ../sass/override/_override-layout.scss */
+  #product-shop .size-box-bundle .view-sizing.hidden-xs {
+    display: inline-block !important; } }
+@media (max-width: 814px) {
+  /* line 467, ../sass/override/_override-layout.scss */
+  #product-shop .size-box-bundle .view-sizing.visible-xs {
+    display: inline-block !important;
+    position: static; } }
+/* line 480, ../sass/override/_override-layout.scss */
+#product-shop .size-box-bundle .size-box {
+  margin-bottom: 25px; }
+/* line 482, ../sass/override/_override-layout.scss */
+#product-shop .size-box-bundle .size-box .sbHolder {
+  width: 167px; }
+/* line 487, ../sass/override/_override-layout.scss */
+#product-shop .action-box-bundle {
+  margin-bottom: 20px;
+  font-size: 11px;
+  color: #000; }
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  /* line 487, ../sass/override/_override-layout.scss */
+  #product-shop .action-box-bundle {
+    margin-top: 4.5px; } }
+@media (max-width: 360px) {
+  /* line 487, ../sass/override/_override-layout.scss */
+  #product-shop .action-box-bundle {
+    font-size: 9px; } }
+/* line 498, ../sass/override/_override-layout.scss */
+#product-shop .action-box-bundle .col-xs-6.text-right {
+  margin-top: 16px; }
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  /* line 498, ../sass/override/_override-layout.scss */
+  #product-shop .action-box-bundle .col-xs-6.text-right {
+    margin-top: 15px; } }
+@media (max-width: 320px) {
+  /* line 498, ../sass/override/_override-layout.scss */
+  #product-shop .action-box-bundle .col-xs-6.text-right {
+    margin-top: 15px; } }
+@media (max-width: 360px) {
+  /* line 507, ../sass/override/_override-layout.scss */
+  #product-shop .action-box-bundle .addLike-box {
+    margin-top: 1px; } }
+@media screen and (max-width: 360px) and (-webkit-min-device-pixel-ratio: 0) {
+  /* line 507, ../sass/override/_override-layout.scss */
+  #product-shop .action-box-bundle .addLike-box {
+    margin-top: 2px; } }
+/* line 516, ../sass/override/_override-layout.scss */
+#product-shop .action-box-bundle .addedLike-box {
+  margin-top: 7px !important; }
+/* line 522, ../sass/override/_override-layout.scss */
+#product-shop .action-box-bundle .addLike {
+  width: 149px;
+  height: 42px;
+  display: block;
+  border: 2px solid #a6a6a6;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  border-radius: 5px;
+  line-height: 1.2;
+  padding: 7px 0 0 43px;
+  font-size: 11px;
+  color: #4f4f4f;
+  text-transform: uppercase;
+  font-family: "latoregular";
+  background: white url("../images/heart.png") 8px 11px no-repeat; }
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  /* line 522, ../sass/override/_override-layout.scss */
+  #product-shop .action-box-bundle .addLike {
+    height: 42px; } }
+/* line 538, ../sass/override/_override-layout.scss */
+#product-shop .action-box-bundle .addLike:hover {
+  text-decoration: none;
+  background: white url("../images/heart-like.png") 8px 11px no-repeat; }
+/* line 543, ../sass/override/_override-layout.scss */
+#product-shop .action-box-bundle .likeAdded {
+  display: block;
+  height: 43px;
+  padding: 7px 0 0 43px;
+  color: #4f4f4f;
+  background: white url("../images/heart-like.png") 8px 11px no-repeat; }
+/* line 549, ../sass/override/_override-layout.scss */
+#product-shop .action-box-bundle .likeAdded span {
+  color: #dcdcdc; }
+/* line 552, ../sass/override/_override-layout.scss */
+#product-shop .action-box-bundle .likeAdded:hover {
+  text-decoration: none;
+  background: white url("../images/heart.png") 8px 11px no-repeat; }
+/* line 555, ../sass/override/_override-layout.scss */
+#product-shop .action-box-bundle .likeAdded:hover span {
+  color: #4f4f4f; }
+/* line 560, ../sass/override/_override-layout.scss */
+#product-shop .action-box-bundle .addBasket {
+  width: 100%;
+  max-width: 165px;
+  overflow: hidden; }
+@media (min-width: 1200px) {
+  /* line 560, ../sass/override/_override-layout.scss */
+  #product-shop .action-box-bundle .addBasket {
+    max-width: 190px; } }
+@media (max-width: 320px) {
+  /* line 560, ../sass/override/_override-layout.scss */
+  #product-shop .action-box-bundle .addBasket {
+    font-size: 11px;
+    font-weight: normal; } }
+
+/* line 578, ../sass/override/_override-layout.scss */
+.small-banners .row {
+  margin: 0 -20px; }
+@media (max-width: 767px) {
+  /* line 581, ../sass/override/_override-layout.scss */
+  .small-banners .row div:nth-child(3) {
+    clear: both; } }
+
+/* line 591, ../sass/override/_override-layout.scss */
+form .col-50 {
+  width: 48%;
+  float: left; }
+/* line 595, ../sass/override/_override-layout.scss */
+form .col-50 + .col-50 {
+  margin: 0 0 0 4%; }
+/* line 600, ../sass/override/_override-layout.scss */
+form .has-feedback i {
+  position: absolute;
+  color: #ec695d;
+  position: absolute;
+  top: 0 !important;
+  right: -11px !important;
+  top: 16px; }
+/* line 607, ../sass/override/_override-layout.scss */
+form .has-feedback i.form-ico-checked {
+  position: absolute;
+  background: url('../images/sprites/form_feedback-s816a3dca1f.png');
+  background-position: 0 -13px;
+  height: 12px;
+  width: 16px;
+  top: 8px !important;
+  right: -27px !important; }
+/* line 615, ../sass/override/_override-layout.scss */
+form .has-feedback i.form-ico-times {
+  position: absolute;
+  background: url('../images/sprites/form_feedback-s816a3dca1f.png');
+  background-position: 0 0;
+  height: 13px;
+  width: 14px;
+  top: 8px !important;
+  right: -24px !important; }
+/* line 626, ../sass/override/_override-layout.scss */
+form .has-success i.fa {
+  right: -5%;
+  color: #2ecc71; }
+/* line 632, ../sass/override/_override-layout.scss */
+form .has-warning i.fa {
+  position: absolute;
+  right: -5%;
+  color: #6fffcf; }
+/* line 640, ../sass/override/_override-layout.scss */
+form .has-error {
+  margin-bottom: 5px; }
+/* line 643, ../sass/override/_override-layout.scss */
+form .has-error label.error, form .has-error span.error {
+  color: #e84c3d;
+  font-size: 12px;
+  font-weight: normal;
+  line-height: 1 !important;
+  padding: 10px 0 0px 15px !important;
+  clear: both;
+  display: block;
+  text-align: left !important; }
+/* line 656, ../sass/override/_override-layout.scss */
+form .has-error.form-checkbox label.error, form .has-error.form-checkbox span.error {
+  padding: 0 0 0 0;
+  height: 0px; }
+/* line 664, ../sass/override/_override-layout.scss */
+form .has-error [type="text"], form .has-error [type="email"], form .has-error [type="password"] {
+  border-color: #ec695d; }
+/* line 668, ../sass/override/_override-layout.scss */
+form .form-group {
+  position: relative;
+  margin-bottom: 15px; }
+/* line 674, ../sass/override/_override-layout.scss */
+form .form-group [type="text"], form .form-group [type="email"], form .form-group [type="password"], form .form-group [type="tel"] {
+  border: 1px solid #bcbcbc;
+  border-radius: 1px;
+  box-shadow: inset 2px 2px 7px rgba(1, 1, 1, 0.1);
+  color: #1e1e1e;
+  font-size: 12px;
+  padding: 13px 15px 13px 15px;
+  width: 100%;
+  font-family: "latoregular";
+  height: 42px;
+  outline: none !important; }
+/* line 687, ../sass/override/_override-layout.scss */
+form .form-group .firstName {
+  max-width: 296px; }
+/* line 688, ../sass/override/_override-layout.scss */
+form .form-group .lastName {
+  max-width: 296px; }
+/* line 689, ../sass/override/_override-layout.scss */
+form .form-group .firm {
+  max-width: 415px; }
+/* line 690, ../sass/override/_override-layout.scss */
+form .form-group .city {
+  max-width: 314px; }
+/* line 691, ../sass/override/_override-layout.scss */
+form .form-group .street {
+  max-width: 415px; }
+/* line 692, ../sass/override/_override-layout.scss */
+form .form-group .zipcode {
+  max-width: 72px; }
+/* line 693, ../sass/override/_override-layout.scss */
+form .form-group .phone {
+  max-width: 115px; }
+/* line 694, ../sass/override/_override-layout.scss */
+form .form-group .email {
+  max-width: 296px; }
+/* line 695, ../sass/override/_override-layout.scss */
+form .form-group .password {
+  max-width: 235px; }
+/* line 696, ../sass/override/_override-layout.scss */
+form .form-group .nip {
+  max-width: 115px; }
+/* line 700, ../sass/override/_override-layout.scss */
+form .form-group input:disabled {
+  border-color: #d9d9d9;
+  color: #f0f0f0;
+  box-shadow: none; }
+/* line 705, ../sass/override/_override-layout.scss */
+form .form-group textarea {
+  border: 1px solid #bcbcbc;
+  border-radius: 1px;
+  min-height: 132px;
+  box-shadow: inset 2px 2px 7px rgba(1, 1, 1, 0.1);
+  padding: 12px 0 12px 15px;
+  color: #1e1e1e;
+  font-size: 12px;
+  width: 100%;
+  font-family: "latoregular";
+  resize: vertical;
+  outline: none !important; }
+/* line 719, ../sass/override/_override-layout.scss */
+form .form-group input[type=checkbox].css-checkbox, form .form-group input[type=radio].css-radio {
+  visibility: hidden;
+  position: absolute;
+  top: -200px;
+  left: -200px; }
+/* line 730, ../sass/override/_override-layout.scss */
+form .form-group input[type=checkbox].css-checkbox + label.css-label, form .form-group input[type=checkbox].css-checkbox:active + label.css-label, form .form-group input[type=radio].css-radio + label.css-label {
+  padding-left: 23px;
+  height: 17px;
+  display: inline-block;
+  line-height: 17px;
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  font-size: 12px;
+  vertical-align: middle;
+  cursor: pointer;
+  font-weight: normal;
+  touch-action: none; }
+/* line 744, ../sass/override/_override-layout.scss */
+form .form-group label.css-label {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none; }
+/* line 753, ../sass/override/_override-layout.scss */
+form .form-group input[type=checkbox].css-checkbox + label.css-label {
+  background-image: url("../images/checkbox.png"); }
+/* line 756, ../sass/override/_override-layout.scss */
+form .form-group input[type=radio].css-radio + label.css-label {
+  background-image: url("../images/radio.png"); }
+/* line 761, ../sass/override/_override-layout.scss */
+form .form-group input[type=checkbox].css-checkbox + label.css-label:hover, form .form-group input[type=radio].css-radio + label.css-label:hover {
+  background-position: 0 -28px;
+  color: #1e1e1e; }
+/* line 766, ../sass/override/_override-layout.scss */
+form .form-group input[type=checkbox].css-checkbox:checked + label.css-label, form .form-group input[type=radio].css-radio:checked + label.css-label {
+  background-position: 0 -55px;
+  color: #1e1e1e; }
+/* line 771, ../sass/override/_override-layout.scss */
+form .form-group input[type=checkbox].css-checkbox:disabled + label.css-label, form .form-group input[type=radio].css-radio:disabled + label.css-label {
+  background-position: 0 -82px;
+  color: #bcbcbc; }
+/* line 776, ../sass/override/_override-layout.scss */
+form .form-group input[type=checkbox].css-checkbox:checked:disabled + label.css-label, form .form-group input[type=radio].css-radio:checked:disabled + label.css-label {
+  background-position: 0 -110px;
+  color: #bcbcbc; }
+/* line 783, ../sass/override/_override-layout.scss */
+form .form-group .action {
+  padding: 10px; }
+/* line 787, ../sass/override/_override-layout.scss */
+form .form-group .topHint {
+  background: #f0f0f0;
+  height: 29px;
+  line-height: 29px;
+  display: inline-block;
+  padding: 0 14px;
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  z-index: 800; }
+/* line 797, ../sass/override/_override-layout.scss */
+form .form-group .topHint:after {
+  right: 100%;
+  top: 50%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+  border-color: rgba(240, 240, 240, 0);
+  border-right-color: #f0f0f0;
+  border-width: 5px;
+  margin-top: -5px; }
+/* line 816, ../sass/override/_override-layout.scss */
+form .form-control {
+  -webkit-border-radius: 1px;
+  -moz-border-radius: 1px;
+  -ms-border-radius: 1px;
+  -o-border-radius: 1px;
+  border-radius: 1px; }
+/* line 819, ../sass/override/_override-layout.scss */
+form .hidden {
+  display: none; }
+/* line 827, ../sass/override/_override-layout.scss */
+form .form-group.form-checkbox.small {
+  margin-bottom: 0px; }
+/* line 830, ../sass/override/_override-layout.scss */
+form .form-group.form-checkbox.small input[type=checkbox].css-checkbox + label.css-label, form .form-group.form-checkbox.small input[type=radio].css-radio + label.css-label {
+  padding-left: 20px;
+  height: 17px;
+  display: inline-block;
+  line-height: 17px;
+  background: url('../images/check_filter-sb1101b04c7.png');
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  font-size: 12px;
+  vertical-align: middle;
+  cursor: pointer;
+  font-weight: normal;
+  color: #1e1e1e; }
+/* line 843, ../sass/override/_override-layout.scss */
+form .form-group.form-checkbox.small input[type=checkbox].css-checkbox + label.css-label img, form .form-group.form-checkbox.small input[type=radio].css-radio + label.css-label img {
+  float: left;
+  position: relative;
+  top: 2px;
+  margin-right: 5px; }
+/* line 849, ../sass/override/_override-layout.scss */
+form .form-group.form-checkbox.small input[type=checkbox].css-checkbox + label.css-label .suffix, form .form-group.form-checkbox.small input[type=radio].css-radio + label.css-label .suffix {
+  color: #b0b0b0;
+  font-size: 12px; }
+/* line 855, ../sass/override/_override-layout.scss */
+form .form-group.form-checkbox.small input[type=checkbox].css-checkbox + label.css-label {
+  background-position: 0 -430px; }
+/* line 861, ../sass/override/_override-layout.scss */
+form .form-group.form-checkbox.small input[type=radio].css-radio + label.css-label {
+  background-image: url("../images/radio.png"); }
+/* line 866, ../sass/override/_override-layout.scss */
+form .form-group.form-checkbox.small input[type=checkbox].css-checkbox + label.css-label:hover, form .form-group.form-checkbox.small input[type=radio].css-radio + label.css-label:hover {
+  background-position: 0 -215px;
+  color: #999999; }
+/* line 872, ../sass/override/_override-layout.scss */
+form .form-group.form-checkbox.small input[type=checkbox].css-checkbox:checked + label.css-label, form .form-group.form-checkbox.small input[type=radio].css-radio:checked + label.css-label {
+  background-position: 0 0;
+  color: #1e1e1e; }
