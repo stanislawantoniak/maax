@@ -56,8 +56,8 @@ define([
 					var marginValue = misc.toNumber(margin.val());
 					
 					price.attr("readonly", !!value);
-					rows.find("input").attr("readonly", !!value);
-					margin.attr("readonly", !value);
+					rows.find(".price-deviation input").attr("readonly", !!value);
+					margin.attr("disabled", !value); // margin is not required
 					
 					if(value){
 						var src = minRow.find("td[data-source='"+value+"']");
@@ -81,7 +81,7 @@ define([
 					rows.each(function(){
 						var row = jQuery(this);
 						var src = row.find("td[data-source='"+value+"']");
-						var input = row.find("input");
+						var input = row.find(".price-deviation input");
 						
 						if(src.length && newVal){
 							var rowPrice = src.data('price');
@@ -91,10 +91,10 @@ define([
 									if(!isNaN(marginValue)){
 										rowPrice = rowPrice * (1 + (marginValue/100));
 									}
-									input.val(misc.number(rowPrice - newVal)); 
+									input.val(misc.numberEmpty(rowPrice - newVal)); 
 								}else{
 									// use stored price deviation
-									input.val(misc.number(rowPrice)); 
+									input.val(misc.numberEmpty(rowPrice)); 
 								}
 							}
 						}
@@ -144,7 +144,7 @@ define([
 						val(value);
 				}
 				
-				rows.find("input").each(function(){
+				rows.find(".price-deviation input").each(function(){
 					rowObservers.push(new FancyObserver(this, rowHandler));
 				})
 				

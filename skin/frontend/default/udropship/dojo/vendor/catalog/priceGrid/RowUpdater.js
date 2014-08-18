@@ -165,8 +165,7 @@ define([
 			var divLeft=jQuery("<div>").addClass("sub-row-left");
 			var divRight=jQuery("<div>").addClass("sub-row-left");
 			var buttons = [
-				{"label": Translator.translate("Change prices"), className: "signle-price-edit editable"},
-				{"label": Translator.translate("View POS Stock"), className: "signle-stock-edit editable"}
+				{"label": Translator.translate("Change prices"), className: "signle-price-edit editable"}
 			];
 			
 			switch(data.type_id){
@@ -202,7 +201,7 @@ define([
 											"disabled": "disabled"
 										}))).
 										append(jQuery("<td>").text(child.option_text)).
-										append(jQuery("<td>").addClass("editable signle-price-edit").
+										append(jQuery("<td>").addClass("signle-price-edit" + (data.campaign ? "" : " editable")).
 											text(misc.currency(child.price))).
 										append(jQuery("<td>").text(
 											Translator.translate(parseInt(child.is_in_stock) ? "Yes" : "No"))).
@@ -216,7 +215,7 @@ define([
 					}
 				break;
 				case "simple":
-					
+					buttons.push({"label": Translator.translate("View POS Stock"), className: "signle-stock-edit editable"});
 				break;
 			}
 			

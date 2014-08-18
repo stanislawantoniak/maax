@@ -181,7 +181,8 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 	 * @return type
 	 */
 	public function getChilds(array $ids, $storeId) {
-		// 
+		$websiteId = Mage::app()->getStore($storeId)->getWebsiteId();
+		
 		$select = $this->getReadConnection()->select();
 		$select->from(
 			array("link"=>$this->getTable("catalog/product_super_link")),
@@ -192,14 +193,14 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 		$select->join(
 			array("sa"=>$this->getTable("catalog/product_super_attribute")),
 			"sa.product_id=link.parent_id",
-			array("attribute_id")
+			array("attribute_id", "product_super_attribute_id")
 		);
 		
 		// Add values of attributes
 		$select->join(
 			array("product_int"=>$this->getValueTable("catalog/product", "int")),
 			"product_int.entity_id=link.product_id AND product_int.attribute_id=sa.attribute_id",
-			array("value")
+			array("value", "value_id")
 		);
 		
 		// Add stock
@@ -210,9 +211,15 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 		);
 				
 		// Add optional pricing
+		$conds = array(
+			"sa_price.product_super_attribute_id=sa.product_super_attribute_id",
+			"sa_price.value_index=product_int.value",
+			$this->getReadConnection()->quoteInto("sa_price.website_id=?", $websiteId)
+		);
+		
 		$select->joinLeft(
 			array("sa_price"=>$this->getTable("catalog/product_super_attribute_pricing")),
-			"sa_price.product_super_attribute_id=sa.product_super_attribute_id AND sa_price.value_index=product_int.value",
+			implode(" AND ", $conds),
 			array()
 		);
 		

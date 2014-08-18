@@ -81,6 +81,9 @@ class Zolago_Catalog_Block_Vendor_Price_Modal extends Mage_Core_Block_Template
 		return $this->getData('children');
 	}
 	
+	/**
+	 * @return array
+	 */
 	public function getPriceTyps() {
 		return array(
 			"A"	=>"Price A", 
@@ -101,18 +104,25 @@ class Zolago_Catalog_Block_Vendor_Price_Modal extends Mage_Core_Block_Template
 	public function getMinimalPrices($index=null) {
 		if(!$this->hasData("minimal_prices")){
 			$prices = array();
+			$ignorePrices = array();
 			foreach($this->getChildren($this->getProduct()) as $attribute){
 				foreach($attribute['children'] as $child){
 					if(!isset($child['converters'])){
-						continue;
+						$prices = array();
+						// Some row have no prices - break all
+						break 2;
 					}
 
 					foreach($child['converters'] as $type=>$price){
+						if(is_null($price) || $price==="" || $price===0){
+							// Some price is not set - skip whole price group
+							$ignorePrices[$type] = true;
+						}
 						$prices[$type][] = $price;
 					}
 				}
 				foreach($prices as $key=>&$group){
-					$prices[$key] = $group ? min($group) : null;
+					$prices[$key] = ($group && !isset($ignorePrices[$key])) ? min($group) : null;
 				}
 			}
 			$this->setData("minimal_prices", $prices);

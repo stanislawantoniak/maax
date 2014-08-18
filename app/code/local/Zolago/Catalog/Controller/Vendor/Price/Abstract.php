@@ -5,6 +5,27 @@
 class Zolago_Catalog_Controller_Vendor_Price_Abstract extends Zolago_Dropship_Controller_Vendor_Abstract
 {
 
+	/**
+	 * @param string $number
+	 * @return float
+	 */
+	protected function _formatNumber($number) {
+		return (float) str_replace(",", ".", $number);
+	}
+	/**
+	 * @param int $productId
+	 * @param int $storeId
+	 * @return Mage_Catalog_Model_Product
+	 * @throws Mage_Core_Exception
+	 */
+	protected function _getProduct($productId, $storeId) {
+		$product = Mage::getModel("catalog/product")->setStoreId($storeId)->load($productId);
+		/* @var $product Mage_Catalog_Model_Product */
+		if($product->getUdropshipVendor()==$this->_getSession()->getVendorId()){
+			return $product;
+		}
+		throw new Mage_Core_Exception("Product not allowed");
+	}
 	
 	/**
 	 * collection dont use after load - just flat selects
@@ -57,15 +78,11 @@ class Zolago_Catalog_Controller_Vendor_Price_Abstract extends Zolago_Dropship_Co
 		
 		foreach($attributes as $attributeCode=>$value){
 			if(!in_array($attributeCode, $collection->getEditableAttributes())){
-				throw new Mage_Core_Exception("You are trying to edit not editable attribute");
+				throw new Mage_Core_Exception("You are trying to edit not editable attribute (".htmlspecialchars($attributeCode).")");
 			}
 			
 			// Process modified flow attributes
 			switch($attributeCode){
-				case "display_price":
-					$attributes['price'] = $value;
-					unset($attributes[$attributeCode]);
-				break;
 				case "is_in_stock":
 					$inventoryData['is_in_stock'] = $value;
 					unset($attributes[$attributeCode]);

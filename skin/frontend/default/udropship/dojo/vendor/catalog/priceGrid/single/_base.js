@@ -84,15 +84,11 @@ define([
 				complete: function(){
 					button.button('reset');
 					modal.modal('hide');
+				},
+				error: function(data){
+					alert(data.responseText)
 				}
 			});
-			
-			// Refresh grid row
-//			store.get(id).then(function(data){
-//				
-//			}).always(function(){
-//				
-//			});
 		},
 		
 		loadContent: function(data){

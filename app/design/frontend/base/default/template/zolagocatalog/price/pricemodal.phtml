@@ -6,16 +6,16 @@
 <div class="row" style="margin-bottom: 30px">
 	<div class="col-md-3 form-group">
 		<span class="help-block"><?php echo $this->__("Source price");?></span>
-		<select id="converter_price_type"  name="converter_price_type" type="text" class="form-control">
+		<select id="converter_price_type"  name="converter_price_type" type="text" class="form-control priceSource">
 			<?php foreach ($this->getPriceSourceOptions() as $option):?>
 			<?php $_selected = $option['value']==$_product->getData('converter_price_type');?>
-			<option data-source="<?php echo $this->escapeHtml($option['label']);?>" data-price="<?php echo $option['price'];?>" <?php if($_selected):?>selected="selected"<?php endif;?> value="<?php echo $this->escapeHtml($option['value']);?>"><?php echo $this->escapeHtml($option['label']);?></option>
+			<option data-pointer="price-pointer-<?php echo $this->escapeHtml($option['label']);?>" data-source="<?php echo $this->escapeHtml($option['label']);?>" data-price="<?php echo $option['price'];?>" <?php if($_selected):?>selected="selected"<?php endif;?> value="<?php echo $this->escapeHtml($option['value']);?>"><?php echo $this->escapeHtml($option['label']);?></option>
 			<?php endforeach;?>
 		</select>
 	</div>
 	<div class="col-md-3 form-group">
 		<span class="help-block"><?php echo $this->__("Margin");?></span>
-		<input id="price_margin" name="price_margin"  value="<?php echo $_product->getPriceMargin();?>" type="text" class="marignPercent form-control"/>
+		<input id="price_margin" name="price_margin" data-margin="<?php echo $_product->getPriceMargin();?>"  value="<?php echo $_product->getPriceMargin();?>" type="text" class="marignPercent form-control"/>
 	</div>
 	<div class="col-md-3 form-group">
 		<span class="help-block"><?php echo $this->__("Regular price");?></span>
@@ -55,7 +55,7 @@
 				<td colspan="3" class="caption"><?php echo $this->__("Minimal price");?></td>
 				<?php foreach($this->getPriceTyps() as $type=>$label):?>
 				<?php $_minimal = $this->getMinimalPrice($type); ?>
-				<td data-source="<?php echo $type;?>" data-price="<?php echo is_null($_minimal) ? "" : $_minimal;?>">
+				<td id="price-pointer-<?php echo $type;?>" data-source="<?php echo $type;?>" data-price="<?php echo is_null($_minimal) ? "" : $_minimal;?>">
 					<?php if(!is_null($_minimal)):?>
 					<?php echo Mage::helper("core")->formatPrice($_minimal, false);?>
 					<?php else:?>
@@ -65,15 +65,21 @@
 				<?php endforeach;?>
 			</tr>
 			<?php foreach($attribute['children'] as $child):?>
+			<?php $_valueNameKey = "attributes[".$child['product_super_attribute_id']."][". $child['value']."]";?>
 			<tr>
-				<td class="option-text"><?php echo $this->escapeHtml($child['option_text']);?></td>
+				<td class="option-text">
+					<input type="hidden" name="<?php echo $_valueNameKey."[product_super_attribute_id]";?>" value="<?php echo $child['product_super_attribute_id'];?>"/>
+					<input type="hidden" name="<?php echo $_valueNameKey."[value_index]";?>" value="<?php echo $child['value'];?>"/>
+					<input type="hidden" name="<?php echo $_valueNameKey."[value_id]";?>" value="<?php echo $child['value_id'];?>"/>
+					<?php echo $this->escapeHtml($child['option_text']);?>
+				</td>
 				<td class="effective-price">
 					<span></span>
 					<input type="hidden" name="child_price[<?php echo $child['product_id'];?>]" value="<?php echo $this->escapeHtml($child['price']);?>"/>
 				</td>
 				<td class="price-deviation" data-source="" data-price="<?php echo $this->escapeHtml($child['price']);?>">
-					<input name="pricing[<?php echo $attribute['attribute_id'];?>][<?php echo $child['value'];?>]" 
-						   type="text" class="numeric form-control" value="<?php echo $this->escapeHtml($child['price']);?>"/>
+					<input name="<?php echo $_valueNameKey."[pricing_value]";?>" 
+						   type="text" class="numeric form-control" value="<?php echo $child['price']!=0 ? $child['price'] : "";?>"/>
 				</td>
 				<?php foreach($this->getPriceTyps() as $type=>$label):?>
 				<?php $_price = $this->getConverterPrice($child, $type); ?>

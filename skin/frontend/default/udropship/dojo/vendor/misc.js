@@ -19,6 +19,13 @@ define([
 		return parseFloat(number).toFixed(2).replace("\.", ",");
 	}
 	
+	var formatNumberEmpty = function(number){
+		if(!parseFloat(number)){
+			return "";
+		}
+		return formatNumber(number);
+	}
+	
 	var toNumber = function(number){
 		return parseFloat(number.replace(",", "."));
 	}
@@ -39,6 +46,7 @@ define([
 	return {
 		currency: formatPrice,
 		number: formatNumber,
+		numberEmpty: formatNumberEmpty,
 		percent: formatPercent,
 		replace: replace,
 		toNumber: toNumber
