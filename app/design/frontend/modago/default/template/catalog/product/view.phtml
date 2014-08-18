@@ -15,12 +15,13 @@
 ?>
 
 <?php
-    $_reviewBlock = Mage::getBlockSingleton('review/product_view');
+    /** @var Zolago_Modago_Block_Review_Product_View_List $_reviewBlock */
+    $_reviewBlock = Mage::getBlockSingleton('zolagomodago/review_product_view_list');
 ?>
 
 <?php
 // review label
-$_reviewsCount = count($_reviewBlock->getReviewsCollection());
+$_reviewsCount = count($_reviewBlock->getReviewsForProduct());
 $_reviewsLabel = '';
 switch($_reviewsCount) {
     case 0:
@@ -38,40 +39,7 @@ switch($_reviewsCount) {
         $_reviewsLabel = $this->__('Zero reviews');
         break;
 }
-
-// avarage rating
-$reviews = Mage::getModel('review/review')->getResourceCollection()->addStoreFilter(Mage::app()->getStore()->getId())
-    ->addEntityFilter('product', $this->getProduct()->getId())
-    ->addStatusFilter(Mage_Review_Model_Review::STATUS_APPROVED)
-    ->setDateOrder()
-    ->addRateVotes();
-
-$avg = 0;
-$ratings = array();
-$v = array();
-$p = array_fill(1, 5, 0);
-$voteCount = 0;
-/** @var $vote Mage_Rating_Model_Rating_Option_Vote */
-foreach ($reviews as $review) {
-    foreach ($review->getRatingVotes() as $vote) {
-        $voteCount++;
-        $ratings[] = $vote->getPercent();
-        if(array_key_exists($vote->getRatingCode(), $v)) {
-            $v[$vote->getRatingCode()] += $vote->getPercent();
-        } else  {
-            $v[$vote->getRatingCode()] = $vote->getPercent();
-        }
-
-        if(array_key_exists($vote->getPercent()/10/2, $p)) {
-            $p[$vote->getPercent()/10/2]++;
-        } else {
-            $p[$vote->getPercent()/10/2] = 1;
-        }
-    }
-
-}
-krsort($p);
-$avg = count($ratings) > 0 ? ceil(array_sum($ratings)/count($ratings)/10/2) : 0;
+$avg = $_reviewBlock->getAvarageRating();
 ?>
 
 <?php $_helper = $this->helper('catalog/output'); ?>
