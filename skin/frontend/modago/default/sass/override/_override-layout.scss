@@ -45,3 +45,15 @@
 		}
 	}
 }
+
+.value_quality_price {
+    margin-bottom: 7px;
+}
+
+.cart-qty-field {
+    margin: 0 auto;
+    @media (max-width: 768px) {
+        margin-left: 0;
+    }
+}
+

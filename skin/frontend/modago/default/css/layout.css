@@ -1875,3 +1875,15 @@ section.section h2.title_section i {
   /* line 39, ../sass/override/_override-layout.scss */
   .node-type-page-shop .block-promoted-banners .rwd-controls .rwd-buttons .rwd-next {
     right: -20px; } }
+
+/* line 49, ../sass/override/_override-layout.scss */
+.value_quality_price {
+  margin-bottom: 7px; }
+
+/* line 53, ../sass/override/_override-layout.scss */
+.cart-qty-field {
+  margin: 0 auto; }
+@media (max-width: 768px) {
+  /* line 53, ../sass/override/_override-layout.scss */
+  .cart-qty-field {
+    margin-left: 0; } }

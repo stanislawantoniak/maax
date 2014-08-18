@@ -176,7 +176,7 @@ $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage
             <?php endif; ?>
                 <div class="ilosc">
 
-                    <div class="form-group styledSelected">
+                    <div class="form-group styledSelected cart-qty-field" style="width: 60px;">
                     <select name="cart[<?php echo $_item->getId() ?>][qty]" class="form-control select-styled" onchange="jQuery('#cart-form').submit();">
                         <?php foreach($_helper->getCartQtyList($_item) as $key=>$value):?>
                             <option <?php if($this->getQty($_item)==$key):?>selected="selected"<?php endif;?> value="<?php echo $this->escapeHtml($key);?>"><?php echo $this->escapeHtml($value);?></option>
@@ -184,7 +184,11 @@ $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage
                     </select>
                     </div>
                 </div>
-
+<style type="text/css">
+     .sbSelector:link, .sbSelector:visited, .sbSelector:hover {
+        text-align: left;
+    }
+</style>
                 <!--Sub total starts here -->
                 <?php if (($this->helper('tax')->displayCartPriceExclTax() || $this->helper('tax')->displayCartBothPrices()) && !$_item->getNoSubtotal()): ?>
                     <div class="a-right" style="font-family:latoblack;padding-top:5px;">
