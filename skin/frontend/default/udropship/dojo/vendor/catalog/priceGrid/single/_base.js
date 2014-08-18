@@ -103,10 +103,10 @@ define([
 					btn.attr("disabled", null);
 				},
 				error: function(){
-					body.text("Some error occured. Contact admin.")
+					body.text(Translator.translate("Some error occured. Contact admin."))
 				},
 				beforeSend: function(){
-					body.text("Loading...")
+					body.text(Translator.translate("Loading..."))
 				}
 			})
 		},

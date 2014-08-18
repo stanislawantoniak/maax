@@ -155,6 +155,11 @@ define([
 					submitHandler: function(){
 						self.handleSave.apply(self, arguments);
 						return false;
+					},
+					messages: {
+						"converter_price_type": {
+							"priceSource": Translator.translate("The converter price of product or one of child product is not available")
+						}
 					}
 				});
 				

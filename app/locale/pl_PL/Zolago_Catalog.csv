@@ -86,3 +86,4 @@
 "Price Z", "Cena Z" 
 "Source price", "Źródło ceny"
 "Minimal price", "Najniższa cena"
+"The converter price of product or one of child product is not available", "Cena produktu (lub jednego ze składowych produktów) w konwerterach jest niedostępna"
