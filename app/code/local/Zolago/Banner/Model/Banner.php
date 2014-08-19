@@ -33,4 +33,8 @@ class Zolago_Banner_Model_Banner extends Mage_Core_Model_Abstract
     }
 
 
+    public function saveBannerContent($content){
+        $this->getResource()->saveBannerContent($content);
+    }
+
 }

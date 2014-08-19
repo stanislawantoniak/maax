@@ -9,7 +9,8 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
     }
     public function _prepareLayout() {
 
-        $this->_prepareGrid();
+        $this->_prepareProductsGrid();
+        $this->_prepareBannersGrid();
         $this->_prepareForm();
         parent::_prepareLayout();
     }
@@ -141,7 +142,21 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
         $form->setValues($values);
         $this->setForm($form);
     }
-    public function _prepareGrid() {
+
+
+    public function _prepareBannersGrid() {
+        $design = Mage::getDesign();
+        $design->setArea("adminhtml");
+        $block = $this->getLayout()
+            ->createBlock("zolagocampaign/vendor_campaign_banner_grid", "vendor_campaign_banner_grid")
+            ->setTemplate("zolagocampaign/dropship/campaign/banner/grid.phtml")
+        ;
+        $block->setParentBlock($this);
+        $this->setBannersGrid($block);
+        $design->setArea("frontend");
+    }
+
+    public function _prepareProductsGrid() {
         $design = Mage::getDesign();
         $design->setArea("adminhtml");
         $block = $this->getLayout()
@@ -149,7 +164,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
             ->setTemplate("zolagocampaign/dropship/campaign/product/grid.phtml")
         ;
         $block->setParentBlock($this);
-        $this->setGrid($block);
+        $this->setProductsGrid($block);
         $design->setArea("frontend");
     }
     /**
@@ -166,9 +181,14 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
         return $this->getModel()->getCampaignProductsInfo();
     }
 
-    public function getRemoveProductPath()
-    {
-        return Mage::getBaseUrl() . "campaign/vendor/removeProduct";
+//    public function getRemoveProductPath()
+//    {
+//        return Mage::getBaseUrl() . "campaign/vendor/removeProduct";
+//    }
+
+    public function getAddNewBannerPath(){
+        $campaignId = $this->getRequest()->getParam("id");
+        return Mage::getUrl('banner/vendor/new', array('campaign_id' => $campaignId));
     }
     /**
      * @return Zolago_Campaign_Model_Campaign

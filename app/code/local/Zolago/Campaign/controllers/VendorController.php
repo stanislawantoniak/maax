@@ -127,16 +127,36 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
         return $this->_redirect("*/*");
 	}
 
-    public function removeProductAction(){
+    /**
+     * @return Mage_Core_Controller_Varien_Action
+     */
+    public function removeProductAction()
+    {
         $campaignId = $this->getRequest()->getParam("campaignId");
-        $productId = $this->getRequest()->getParam("productId");
+        $productId = $this->getRequest()->getParam("id");
 
-        if(!empty($campaignId) && !empty($productId)){
+        if (!empty($campaignId) && !empty($productId)) {
             $model = Mage::getResourceModel("zolagocampaign/campaign");
-            $model->removeProduct($campaignId,$productId);
+            $model->removeProduct($campaignId, $productId);
         }
         return $this->_redirectReferer();
     }
+
+    /**
+     * @return Mage_Core_Controller_Varien_Action
+     */
+    public function removeBannerAction()
+    {
+        $campaignId = $this->getRequest()->getParam("campaignId");
+        $bannerId = $this->getRequest()->getParam("id");
+
+        if (!empty($campaignId) && !empty($bannerId)) {
+            $model = Mage::getResourceModel("zolagocampaign/campaign");
+            $model->removeBanner($campaignId, $bannerId);
+        }
+        return $this->_redirectReferer();
+    }
+
 	
 	public function validateKeyAction() {
 		$key = $this->getRequest()->getParam('key');
