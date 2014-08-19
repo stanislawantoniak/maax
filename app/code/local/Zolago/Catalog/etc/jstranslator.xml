@@ -96,4 +96,19 @@
     <price-archive translate="message" module="zolagocatalog">
         <message>Archive</message>
     </price-archive>
+    <price-change-product-price translate="message" module="zolagocatalog">
+        <message>Change product price</message>
+    </price-change-product-price>
+    <price-change-product-price-name translate="message" module="zolagocatalog">
+        <message>Change product price {{name}}</message>
+    </price-change-product-price-name>
+    <price-converter-source translate="message" module="zolagocatalog">
+        <message>The converter price of product or one of child product is not available</message>
+    </price-converter-source>
+    <price-stock-of translate="message" module="zolagocatalog">
+        <message>Stock of {{name}}</message>
+    </price-stock-of>
+    <price-close translate="message" module="zolagocatalog">
+        <message>Close</message>
+    </price-close>
 </jstranslator>

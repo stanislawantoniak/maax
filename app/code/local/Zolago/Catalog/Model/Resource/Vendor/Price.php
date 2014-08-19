@@ -18,7 +18,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 	 * @param array $ids
 	 * @return array
 	 */
-	public function getDetails($ids=array(), $storeId, $isAllowedToCampaign) {
+	public function getDetails($ids=array(), $storeId, $includeCampaign=true, $isAllowedToCampaign=false) {
 		
 		$out = array();
 		
@@ -29,6 +29,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 		$baseSelect->from(array("product"=>$this->getMainTable()));
 		$baseSelect->where("product.entity_id IN (?)", $ids);
 		
+		// Tmp var
 		foreach($adapter->fetchAll($baseSelect) as $row){
 			$out[$row['entity_id']] = array_merge($row, array(
 				"var" => rand(0,10000),
@@ -36,7 +37,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 		}
 		
 		// Child data
-		foreach($this->_getChilds($ids, $storeId) as $child){
+		foreach($this->getChilds($ids, $storeId) as $child){
 			if(!isset($out[$child['parent_id']]['children'][$child['attribute_id']])){
 				$out[$child['parent_id']]['children'][$child['attribute_id']] = array(
 					"children"		=> array(),
@@ -52,17 +53,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 		
 		// Camapign data
 		
-		$statuses = Mage::getSingleton("zolagocampaign/campaign_status")->toOptionHash();
-		
-		foreach($this->_getCampaign($ids, $storeId) as $campaign){
-			$campaign['price_source_id_text'] = $this->_getAttributeOption(
-					$campaign['price_source_id'], 
-					Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER_PRICE_TYPE_CODE,
-					$storeId
-			);
-			$campaign['status_text'] = isset($statuses[$campaign['status']]) ? $statuses[$campaign['status']] : "";
-			$campaign['type_text'] = isset($campaign['type']) ? ucfirst($campaign['type']) : "";
-			$campaign['is_allowed'] = $isAllowedToCampaign;
+		foreach($this->_getCampaign($ids, $storeId, $isAllowedToCampaign) as $campaign){
 			$out[$campaign['entity_id']]['campaign'] = $campaign;
 		}
 		
@@ -76,10 +67,11 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 	
 	/**
 	 * @param array $ids
-	 * @param type $storeId
+	 * @param int $storeId
+	 * @param bool $storeId
 	 * @return array
 	 */
-	protected function _getCampaign(array $ids, $storeId) {
+	protected function _getCampaign(array $ids, $storeId, $isAllowedToCampaign) {
 		$websiteId = Mage::app()->getStore($storeId)->getWebsiteId();
 		$collection = Mage::getResourceModel('catalog/product_collection');
 		/* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
@@ -115,8 +107,25 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 		
 		$select->where("e.entity_id IN (?)", $ids);
 		
+		$results = $this->getReadConnection()->fetchAll($select);
 		
-		return $this->getReadConnection()->fetchAll($select);
+		
+		$statuses = Mage::getSingleton("zolagocampaign/campaign_status")->toOptionHash();
+		
+		// Add some data
+		foreach($results as &$campaign){
+			$campaign['price_source_id_text'] = $this->_getAttributeOption(
+					$campaign['price_source_id'], 
+					Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER_PRICE_TYPE_CODE,
+					$storeId
+			);
+			$campaign['status_text'] = isset($statuses[$campaign['status']]) ? $statuses[$campaign['status']] : "";
+			$campaign['type_text'] = isset($campaign['type']) ? ucfirst($campaign['type']) : "";
+			$campaign['is_allowed'] = $isAllowedToCampaign;
+			$campaign['url'] = Mage::getUrl("campaign/vendor/edit", array("id"=>$campaign['campaign_id']));
+		}
+		
+		return $results;
 	}
 	
 	/**
@@ -171,8 +180,9 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 	 * @param int $storeId
 	 * @return type
 	 */
-	protected function _getChilds(array $ids, $storeId) {
-		// 
+	public function getChilds(array $ids, $storeId) {
+		$websiteId = Mage::app()->getStore($storeId)->getWebsiteId();
+		
 		$select = $this->getReadConnection()->select();
 		$select->from(
 			array("link"=>$this->getTable("catalog/product_super_link")),
@@ -183,14 +193,14 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 		$select->join(
 			array("sa"=>$this->getTable("catalog/product_super_attribute")),
 			"sa.product_id=link.parent_id",
-			array("attribute_id")
+			array("attribute_id", "product_super_attribute_id")
 		);
 		
 		// Add values of attributes
 		$select->join(
 			array("product_int"=>$this->getValueTable("catalog/product", "int")),
 			"product_int.entity_id=link.product_id AND product_int.attribute_id=sa.attribute_id",
-			array("value")
+			array("value", "value_id")
 		);
 		
 		// Add stock
@@ -201,9 +211,15 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 		);
 				
 		// Add optional pricing
+		$conds = array(
+			"sa_price.product_super_attribute_id=sa.product_super_attribute_id",
+			"sa_price.value_index=product_int.value",
+			$this->getReadConnection()->quoteInto("sa_price.website_id=?", $websiteId)
+		);
+		
 		$select->joinLeft(
 			array("sa_price"=>$this->getTable("catalog/product_super_attribute_pricing")),
-			"sa_price.product_super_attribute_id=sa.product_super_attribute_id AND sa_price.value_index=product_int.value",
+			implode(" AND ", $conds),
 			array()
 		);
 		
