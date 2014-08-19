@@ -1,3 +1,7 @@
+<?php /* @var $this Mage_Catalog_Block_Product_List */ ?>
+<?php /* @var $this SolrBridge_Solrsearch_Block_Product_List */ ?>
+<?php /* @var $this Unirgy_DropshipMicrosite_Block_Frontend_VendorProducts */ ?>
+<?php /* @var $this Zolago_Solrsearch_Block_Catalog_Product_List */ ?>
 <?php
 /**
  * Author: Paweł Chyl <pawel.chyl@orba.pl>
@@ -22,7 +26,7 @@ $_productImageUrl = '';
                                 alt="<?php $this->escapeHtml($product->getName()); ?>"
                                 class="img-responsive"/></figure>
                         <div class="logo_manufacturer"><img src="<?php echo $product->getUdropshipVendorLogoUrl(); ?>"
-                                                            alt=""/></div>
+                                                            alt="<?php echo $this->escapeHtml($product->getUdropshipVendorName()); ?>"/></div>
                         <div class="name_product"><?php echo $this->escapeHtml($product->getName()); ?></div>
                         <div class="price clearfix">
                             <div class="col-price">
@@ -36,10 +40,10 @@ $_productImageUrl = '';
                                  data-idproduct="<?php echo $product->getId(); ?>"
                                  data-status="<?php echo (int)$product->getInMyWishlist(); ?>"
                                  onclick="Mall.toggleWishlist(this);">
-        <span class="icoLike">
-          <img class="img-01" src="<?php echo $this->getSkinUrl('images/heart.png'); ?>" alt=""/>
-          <img class="img-02" src="<?php echo $this->getSkinUrl('images/heart-like.png'); ?>" alt=""/>
-        </span>
+                                <span class="icoLike">
+                                  <img class="img-01" src="<?php echo $this->getSkinUrl('images/heart.png'); ?>" alt=""/>
+                                  <img class="img-02" src="<?php echo $this->getSkinUrl('images/heart-like.png'); ?>" alt=""/>
+                                </span>
                                 <span
                                     class="like_count"><span><?php if ($product->getInMyWishlist()): ?>Ty+ <?php endif; ?></span><?php echo (int)$product->getWishlistCount(); ?></span>
 
@@ -59,3 +63,11 @@ $_productImageUrl = '';
     </div>
 
 </div>
+
+<!-- END jsMasonryContent -->
+<div class="addNewPositionListProductWrapper">
+    <a href="javascript:;" onclick="Mall.listing.getMoreProducts();" class="addNewPositionListProduct"><?php echo $this->__("Load next %s products", $this->getLoadLimit()); ?></a>
+</div>
+<script type="text/javascript">
+    Mall.listing.setScat(<?php echo $this->getLayer()->getCurrentCategory()->getId(); ?>);
+</script>

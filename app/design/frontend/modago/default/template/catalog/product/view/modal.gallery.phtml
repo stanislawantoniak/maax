@@ -33,7 +33,7 @@
                 ?>
             <div class="item">
                 <div class="inner-item" data-flags="<?php echo $_zolagoCatalogBlock->getProductFlagLabel(); ?>">
-                    <img src="<?php echo $_imageInitialized->resize(500); ?>"  alt="<?php echo $this->escapeHtml($_image->getLabel()) ?>" data-width="<?php echo $_imageInitialized->getOriginalWidth(); ?>" data-height="<?php echo $_imageInitialized->getOriginalHeight(); ?>">
+                    <img src="<?php echo $_imageInitialized->keepAspectRatio(true)->constrainOnly(true)->keepFrame(false)->resize(500); ?>"  alt="<?php echo $this->escapeHtml($_image->getLabel()) ?>" data-width="<?php echo $_imageInitialized->getOriginalWidth(); ?>" data-height="<?php echo $_imageInitialized->getOriginalHeight(); ?>">
                     <a href="#" class="zoom_plus <?php echo 500 > $_imageInitialized->getOriginalWidth() ? 'disabled' : '' ?>"><span></span></a><a href="#" class="zoom_minus disabled"><span></span></a>
                 </div>
             </div>

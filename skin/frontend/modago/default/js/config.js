@@ -31,7 +31,9 @@ var Config = {
 			averageNoteClientStarOff 		: 'star-small-off.png',
 			averageNoteClientStarOn 		: 'star-small.png'
 			//averageNoteClientStarHalf 		: 'star--small-half-custom.png'
-		}
+		},
+        heartLike: "/skin/frontend/modago/default/images/heart.png",
+        heartLiked: "/skin/frontend/modago/default/images/heart-like.png"
 	}
 }
 

@@ -3429,7 +3429,7 @@ html.fb-static .fb-slidebar, .fb-slidebar.fb-static {
 /* line 262, ../sass/layout/modules/_gallery_product.scss */
 #product-gallery .item > div .view_lupa {
   position: absolute;
-  top: 88%;
+  top: 355px;
   right: 10px;
   z-index: 900; }
 @media (max-width: 361px) {
@@ -5877,6 +5877,10 @@ body.modal-open #sb-site {
   /* line 101, ../sass/layout/override/_global.scss */
   .node-type-page-shop .block-promoted-banners .rwd-controls .rwd-buttons .rwd-next {
     right: -20px; } }
+
+/* line 111, ../sass/layout/override/_global.scss */
+.modal {
+  overflow-y: hidden !important; }
 
 /* line 62, ../sass/other/_variable.scss */
 #header a:link, #header a:visited, #header a:hover, #header a:focus {
