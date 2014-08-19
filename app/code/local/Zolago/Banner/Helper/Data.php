@@ -2,8 +2,9 @@
 
 class Zolago_Banner_Helper_Data extends Mage_Core_Helper_Abstract {
 
-    public function setBannerTypeUrl($campaignId){
-        return Mage::getUrl('zolagobanner/vendor/setType', array('campaign_id' => $campaignId));
+    public function setBannerTypeUrl(){
+
+        return Mage::getUrl('zolagobanner/vendor/setType');
     }
 
     public function bannerTypeUrl($campaignId)

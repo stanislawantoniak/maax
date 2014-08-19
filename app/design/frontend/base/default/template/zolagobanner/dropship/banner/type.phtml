@@ -32,6 +32,7 @@
                                 var type = $(this).val();
                                 var campaignId = $("input[name=campaign_id]").val();
                                 var setTypePath = '<?php echo $_helper->setBannerTypeUrl(); ?>';
+                                console.log(setTypePath);
                                 window.location = setTypePath + "type/" + type + "/campaign_id/" + campaignId;
                             })
                         });
