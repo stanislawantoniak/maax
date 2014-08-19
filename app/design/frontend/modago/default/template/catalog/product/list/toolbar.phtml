@@ -1,17 +1,28 @@
 <?php /* @var $this Zolago_Solrsearch_Block_Catalog_Product_List_Toolbar */ ?>
-<div style="margin-bottom: 20px;">
-	<div class="left">
 		<?php $_total = $this->getNumFound();?>
-		<?php echo $this->__("Total %d products found", $_total);?>
-	</div>
-	<div class="left" style="margin-left: 20px;">
-		<label for="sort">Sort by</label>
-		<select onChange="document.location.href=this.options[this.selectedIndex].value" name="sort" id="sort">
-			<?php foreach($this->getSortOptions() as $option):?>
-			<option <?php if($this->getCurrentOrder()==$option['value'] && $this->getCurrentDir()==$option['dir']):?>selected="selected"<?php endif;?> 
-				value="<?php echo $this->getSortUrl($option);?>"><?php echo $this->escapeHtml($option['label']);?></option>
-			<?php endforeach;?>
-		</select>
-	</div>
-	<div class="clearer"></div>
-</div>
+
+<aside id="sort-criteria" class="container-fluid">
+    <div class="col-sm-12">
+        <ul class="sort clearfix">
+            <li id="number_products" class=""><span class="label"><?php echo $this->__("Total products count:"); ?> </span> <span class="value"> <?php echo $_total; ?></span></li>
+            <li>
+                <form action="">
+                    <div class="form-group clearfix">
+                        <div class="sort-by clearfix">
+                            <label for="sort-by"><?php echo $this->__("Sort by:"); ?></label>
+
+                            <div class="form-group small styledSelected">
+
+                                <select name="" class="form-control select-styled ">
+                                    <?php foreach($this->getSortOptions() as $option):?>
+                                    <option value="<?php echo $option['value']; ?>" data-dir="<?php echo $option['dir']; ?>" <?php if($this->getCurrentOrder()==$option['value'] && $this->getCurrentDir()==$option['dir']):?>selected="selected"<?php endif;?>><?php echo $this->escapeHtml($option['label']);?></option>
+                                    <?php endforeach;?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </li>
+        </ul>
+    </div>
+</aside>
