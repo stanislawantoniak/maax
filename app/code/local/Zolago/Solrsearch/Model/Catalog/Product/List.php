@@ -114,7 +114,7 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object{
 	 * @return int
 	 */
 	public function getCurrentOrder() {
-		return Mage::app()->getRequest()->getParam("order", $this->getDefaultOrder());
+		return Mage::app()->getRequest()->getParam("sort", $this->getDefaultOrder());
 	}
 	
 	/**
