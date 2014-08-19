@@ -81,7 +81,7 @@ class Zolago_Modago_Block_Review_Product_View_List extends Mage_Review_Block_Pro
             if($subSum == 0) {
                 continue;
             }
-            $sum += ceil($subSum / $this->_total_divider / count($review->getRatingVotes())); // 400 / 20 / 4 = 20/4 = 5 // OK
+            $sum += count($review->getRatingVotes()) > 0 ? ceil($subSum / $this->_total_divider / count($review->getRatingVotes())) : 0;
         }
 
         return ceil($sum / count($reviews));
@@ -148,12 +148,12 @@ class Zolago_Modago_Block_Review_Product_View_List extends Mage_Review_Block_Pro
             if($subSum == 0) {
                 continue;
             }
-            $avg = ceil($subSum / $this->_total_divider / count($review->getRatingVotes()));
+             $avg = count($review->getRatingVotes()) > 0 ? ceil($subSum / $this->_total_divider / count($review->getRatingVotes())) : 0;
             $strips[$avg] += 100;
         }
 
         foreach ($strips as $k => $v) {
-            $strips[$k] = ceil($v / count($reviews));
+            $strips[$k] = count($reviews) > 0 ? ceil($v / count($reviews)) : 0;
         }
 
         return $strips;
@@ -173,7 +173,7 @@ class Zolago_Modago_Block_Review_Product_View_List extends Mage_Review_Block_Pro
             $sum += $vote->getPercent();
         }
 
-        $avg = ceil($sum / $this->_total_divider / count($review->getRatingVotes()));
+        $avg = count($review->getRatingVotes()) > 0 ? ceil($sum / $this->_total_divider / count($review->getRatingVotes())) : 0;
 
         return $avg;
 
