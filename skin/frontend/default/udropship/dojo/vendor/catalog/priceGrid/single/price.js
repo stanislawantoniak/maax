@@ -140,12 +140,8 @@ define([
 					
 					el.
 						parents("tr").
-						find(".effective-price span").
+						find(".effective-price").
 						text(misc.currency(value))
-					el.
-						parents("tr").
-						find(".effective-price input").
-						val(value);
 				}
 				
 				rows.find(".price-deviation input").each(function(){

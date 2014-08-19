@@ -92,6 +92,8 @@ class Zolago_Catalog_Block_Vendor_Price_Modal extends Zolago_Catalog_Block_Vendo
 	/**
 	 * @param type $index
 	 * @return array
+	 * 
+	 * @todo fix to multiple prodcutc per option
 	 */
 	public function getMinimalPrices($index=null) {
 		if(!$this->hasData("minimal_prices")){
@@ -99,13 +101,13 @@ class Zolago_Catalog_Block_Vendor_Price_Modal extends Zolago_Catalog_Block_Vendo
 			$ignorePrices = array();
 			foreach($this->getChildren($this->getProduct()) as $attribute){
 				foreach($attribute['children'] as $child){
-					if(!isset($child['converters'])){
+					if(!isset($child['children'][0]['converter'])){
 						$prices = array();
 						// Some row have no prices - break all
 						break 2;
 					}
 
-					foreach($child['converters'] as $type=>$price){
+					foreach($child['children'][0]['converter'] as $type=>$price){
 						if(is_null($price) || $price==="" || $price===0){
 							// Some price is not set - skip whole price group
 							$ignorePrices[$type] = true;
@@ -134,10 +136,12 @@ class Zolago_Catalog_Block_Vendor_Price_Modal extends Zolago_Catalog_Block_Vendo
 	 * @param array $child
 	 * @param string $priceType
 	 * @return float|null
+	 * 
+	 * @todo fix for multiple configurable attributes
 	 */
 	public function getConverterPrice(array $child, $priceType) {
-		if(isset($child['converters']) && isset($child['converters'][$priceType])){
-			return $child['converters'][$priceType];
+		if(isset($child['children'][0]['converter'][$priceType])){
+			return $child['children'][0]['converter'][$priceType];
 		}
 		return null;
 	}
@@ -149,47 +153,61 @@ class Zolago_Catalog_Block_Vendor_Price_Modal extends Zolago_Catalog_Block_Vendo
 	 */
 	protected function _addConverterDataToChilds(array $children, $storeId) {
 		
-		foreach($children as $attrKey=>$attribute){
-			$ids = array();
-			foreach($attribute['children'] as $child){
-				$ids[]=$child['product_id'];
-			}
+		$vendor = $this->_getVendor();
 
-			$vendor = $this->_getVendor();
+		$convertert = Mage::getSingleton('zolagoconverter/client');
+		/* @var $convertert Zolago_Converter_Model_Client */
 
-			$convertert = Mage::getSingleton('zolagoconverter/client');
-			/* @var $convertert Zolago_Converter_Model_Client */
+		$collection = Mage::getResourceModel("catalog/product_collection");
+		/* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
+		$collection->addAttributeToSelect("skuv", "left");
+		$collection->setStoreId($storeId);
+		$collection->addIdFilter($this->_extractIdsFromAttributes($children));
 
-			$collection = Mage::getResourceModel("catalog/product_collection");
-			/* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
-			$collection->addAttributeToSelect("skuv", "left");
-			$collection->setStoreId($storeId);
-			$collection->addIdFilter($ids);
+		$converterData = array();
 
-			$converterData = array();
-
-			foreach($collection as $product){
-				try{
-					$response = $convertert->getPrices(
-						$vendor->getExternalId(), 
-						$product->getSkuv()
-					);
-					if($response){
-						$converterData[$product->getId()] = $response;
-					}
-				}catch(Exception $e){
-					
+		foreach($collection as $product){
+			try{
+				$response = $convertert->getPrices(
+					$vendor->getExternalId(), 
+					$product->getSkuv()
+				);
+				if($response){
+					$converterData[$product->getId()] = $response;
 				}
+			}catch(Exception $e){
+
 			}
-			
-			foreach($attribute['children'] as $key=>$child){
-				if(isset($converterData[$child['product_id']])){
-					$children[$attrKey]['children'][$key]['converters'] = $converterData[$child['product_id']];
+		}
+
+		foreach($children as $attrKey=>$attribute){
+			foreach($attribute['children'] as $childKey=>$child){
+				foreach($child['children'] as $productRowKey=>$productRow){
+					if(isset($converterData[$productRow['entity_id']])){
+						$children[$attrKey]['children'][$childKey]['children'][$productRowKey]['converter'] = $converterData[$productRow['entity_id']];
+					}
 				}
 			}
 		}
 		
 		return $children;
+	}
+	
+	/**
+	 * 
+	 * @param array $children
+	 * @return array
+	 */
+	protected function _extractIdsFromAttributes($children) {
+		$ids = array();
+		foreach($children as $attrKey=>$attribute){
+			foreach($attribute['children'] as $child){
+				foreach($child['children'] as $productRow){
+					$ids[]=$productRow['entity_id'];
+				}
+			}
+		}
+		return $ids;
 	}
 
 }

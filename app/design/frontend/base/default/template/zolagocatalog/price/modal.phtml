@@ -65,18 +65,16 @@
 				<?php endforeach;?>
 			</tr>
 			<?php foreach($attribute['children'] as $child):?>
-			<?php $_valueNameKey = "attributes[".$child['product_super_attribute_id']."][". $child['value']."]";?>
+			<?php $_valueNameKey = "attributes[".$attribute['product_super_attribute_id']."][". $child['value']."]";?>
 			<tr>
 				<td class="option-text">
-					<input type="hidden" name="<?php echo $_valueNameKey."[product_super_attribute_id]";?>" value="<?php echo $child['product_super_attribute_id'];?>"/>
+					<input type="hidden" name="<?php echo $_valueNameKey."[product_super_attribute_id]";?>" value="<?php echo $attribute['product_super_attribute_id'];?>"/>
 					<input type="hidden" name="<?php echo $_valueNameKey."[value_index]";?>" value="<?php echo $child['value'];?>"/>
 					<input type="hidden" name="<?php echo $_valueNameKey."[value_id]";?>" value="<?php echo $child['value_id'];?>"/>
+					<input type="hidden" name="<?php echo $_valueNameKey."[attribute_id]";?>" value="<?php echo $attribute['attribute_id'];?>"/>
 					<?php echo $this->escapeHtml($child['option_text']);?>
 				</td>
-				<td class="effective-price">
-					<span></span>
-					<input type="hidden" name="child_price[<?php echo $child['product_id'];?>]" value="<?php echo $this->escapeHtml($child['price']);?>"/>
-				</td>
+				<td class="effective-price"></td>
 				<td class="price-deviation" data-source="" data-price="<?php echo $this->escapeHtml($child['price']);?>">
 					<input name="<?php echo $_valueNameKey."[pricing_value]";?>" 
 						   type="text" class="numeric form-control" value="<?php echo $child['price']!=0 ? $child['price'] : "";?>"/>

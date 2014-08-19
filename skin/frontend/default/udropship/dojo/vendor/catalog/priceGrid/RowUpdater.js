@@ -206,10 +206,10 @@ define([
 											append(jQuery("<a>").
 											text(misc.currency(child.price)))).
 										append(jQuery("<td>").text(
-											Translator.translate(parseInt(child.is_in_stock) ? "Yes" : "No"))).
-										append(jQuery("<td>").text(parseInt(child.qty))).
+											Translator.translate(parseInt(child.children[0].is_in_stock) ? "Yes" : "No"))).
+										append(jQuery("<td>").text(parseInt(child.children[0].qty))).
 										append(jQuery("<td>").append(jQuery("<a>").
-											data("product_id", child.product_id).
+											data("product_id", child.children[0].entity_id). // @todo can be lot of matched products
 											addClass("editable signle-stock-edit").
 											text(Translator.translate("View POS Stock"))))
 								)

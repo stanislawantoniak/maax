@@ -17,6 +17,60 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 	/**
 	 * @param array $ids
 	 * @return array
+	 * 
+	 * The struc of data:
+	 * 
+	 * [  
+		{  
+		   "entity_id":"1096",
+		   "entity_type_id":"4",
+		   "attribute_set_id":"15",
+		   "type_id":"configurable",
+		   "sku":"4-20375-00X",
+		   "has_options":"1",
+		   "required_options":"1",
+		   "created_at":"2014-04-04 13:20:11",
+		   "updated_at":"2014-05-13 16:10:58",
+		   "var":2861,
+		   "children":[  
+				 {  
+					"label":"Rozmiar",
+					"attribute_id":"281",
+					"product_super_attribute_id":"8",
+					"children":[  
+					   {  
+						  "option_text":"65B",
+						  "value_id":"1228",
+						  "value":"399",
+						  "price":"1.0000",
+						  "children":[  
+							 {  
+								"entity_id":"168",
+								"qty":"115.0000",
+								"is_in_stock":"1"
+							 }
+						  ]
+					   },
+					   {  
+						  "option_text":"65C",
+						  "value_id":"1232",
+						  "value":"403",
+						  "price":"0.0000",
+						  "children":[  
+							 {  
+								"entity_id":"169",
+								"qty":"115.0000",
+								"is_in_stock":"1"
+							 }
+						  ]
+					   },
+					   ...
+					]
+				 }
+			  ]
+		   },
+		   ...
+		]
 	 */
 	public function getDetails($ids=array(), $storeId, $includeCampaign=true, $isAllowedToCampaign=false) {
 		
@@ -42,13 +96,27 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 				$out[$child['parent_id']]['children'][$child['attribute_id']] = array(
 					"children"		=> array(),
 					"label"			=> $this->_getAttributeLabel($child['attribute_id'], $storeId),
-					"attribute_id"	=> $child['attribute_id']
+					"attribute_id"	=> $child['attribute_id'],
+					"product_super_attribute_id" => $child['product_super_attribute_id']
 				);
 			}
 			
-			$child['option_text'] = $this->_getAttributeOption($child['value'], $child['attribute_id'], $storeId);
-			
-			$out[$child['parent_id']]['children'][$child['attribute_id']]['children'][]=$child;
+			// Group products by option
+			if(!isset($out[$child['parent_id']]['children'][$child['attribute_id']]['children'][$child['value_id']])){
+				$out[$child['parent_id']]['children'][$child['attribute_id']]['children'][$child['value_id']] = array(
+					'option_text' => $this->_getAttributeOption($child['value'], $child['attribute_id'], $storeId),
+					'value_id'=> $child['value_id'],
+					'value' => $child['value'],
+					'price' => $child['price'],
+					'children'=>array()
+				);
+			}
+			$out[$child['parent_id']]['children'][$child['attribute_id']]
+					['children'][$child['value_id']]['children'][]  = array(
+				'entity_id'=>$child['product_id'],
+				'qty'=>$child['qty'],
+				'is_in_stock' => $child['is_in_stock']
+			);
 		}
 		
 		// Camapign data
@@ -57,8 +125,12 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 			$out[$campaign['entity_id']]['campaign'] = $campaign;
 		}
 		
+		// Make flat arrays
 		foreach ($out as &$item){
 			if(isset($item['children'])){
+				foreach($item['children'] as &$option){
+					$option['children'] = array_values($option['children']);
+				}
 				$item['children'] = array_values($item['children']);
 			}
 		}
