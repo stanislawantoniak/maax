@@ -35,9 +35,9 @@ $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage
 <div class="table-row clearfix">
     <div class="colgroup-01 clearfix">
         <div class="clearfix">
-            <figure><img src="<?php echo $this->getProductThumbnail()->resize(53, 69); ?>" alt="<?php echo $this->escapeHtml($this->getProductName()) ?>" /></figure>
+            <figure><a href="<?php echo $this->getProductUrl(); ?>"><img src="<?php echo $this->getProductThumbnail()->resize(53, 69); ?>" alt="<?php echo $this->escapeHtml($this->getProductName()) ?>" /></a></figure>
             <div class="description_checked_product">
-                <div class="product_name"><?php echo $this->escapeHtml($this->getProductName()) ?></div>
+                <div class="product_name"><a href="<?php echo $this->getProductUrl(); ?>"><?php echo $this->escapeHtml($this->getProductName()) ?></a></div>
                 <?php if ($_options = $this->getOptionList()):?>
                     <?php foreach ($_options as $_option) : ?>
                         <?php $_formatedOptionValue = $this->getFormatedOptionValue($_option) ?>
@@ -176,7 +176,7 @@ $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage
             <?php endif; ?>
                 <div class="ilosc">
 
-                    <div class="form-group styledSelected">
+                    <div class="form-group styledSelected cart-qty-field" style="width: 60px;">
                     <select name="cart[<?php echo $_item->getId() ?>][qty]" class="form-control select-styled" onchange="jQuery('#cart-form').submit();">
                         <?php foreach($_helper->getCartQtyList($_item) as $key=>$value):?>
                             <option <?php if($this->getQty($_item)==$key):?>selected="selected"<?php endif;?> value="<?php echo $this->escapeHtml($key);?>"><?php echo $this->escapeHtml($value);?></option>
@@ -184,7 +184,11 @@ $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage
                     </select>
                     </div>
                 </div>
-
+<style type="text/css">
+     .sbSelector:link, .sbSelector:visited, .sbSelector:hover {
+        text-align: left;
+    }
+</style>
                 <!--Sub total starts here -->
                 <?php if (($this->helper('tax')->displayCartPriceExclTax() || $this->helper('tax')->displayCartBothPrices()) && !$_item->getNoSubtotal()): ?>
                     <div class="a-right" style="font-family:latoblack;padding-top:5px;">

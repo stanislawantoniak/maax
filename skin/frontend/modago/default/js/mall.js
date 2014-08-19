@@ -278,9 +278,21 @@ var Mall = {
 
     setSuperAttribute: function(currentSelection) {
         this._current_superattribute = currentSelection;
+        // change prices
+        var optionId = jQuery(this._current_superattribute).attr("value");
+        var superOptionId = jQuery(this._current_superattribute).attr("data-id");
+        jQuery.each(Mall.product._options.attributes[superOptionId].options, function(index, opt) {
+            if(optionId == opt.id) {
+                Mall.product.setPrices((parseFloat(Mall.product._options.basePrice) + parseFloat(opt.price)), (parseFloat(Mall.product._options.oldPrice) + parseFloat(opt.oldPrice)), Mall.product._options.template);
+            }
+            return ;
+        });
     },
 
     addToCart: function(id, qty) {
+        if(Mall._current_superattribute == null && Mall.product._current_product_type == "configurable") {
+            return false;
+        }
         var superLabel = jQuery(this._current_superattribute).attr("name");
         var attr = {};
         attr[jQuery(this._current_superattribute).attr("data-id")] = jQuery(this._current_superattribute).attr("value");
@@ -306,7 +318,7 @@ var Mall = {
                 alert(message);
                 break;
         }
-    },
+    }
 
 
 
@@ -390,6 +402,105 @@ Mall.Cart = {
         Mall.Cart.applyCoupon();
     }
 }
+
+Mall.product = {
+    _size_table_template: "",
+    _options_group_template: "",
+    _options: {},
+    _current_product_type: "simple",
+
+    productOptions: function(jsonOptions) {
+        this._options = jsonOptions;
+        // set prices
+        this.setPrices(jsonOptions.basePrice, jsonOptions.oldPrice, jsonOptions.template);
+        if(typeof jsonOptions.attributes != "undefined") {
+            this.setAttributes(jsonOptions.attributes);
+        }
+    },
+
+    setChooseText: function(text) {
+
+    },
+
+    setPrices: function(price, oldPrice, template) {
+        // set old price
+        var old_price_selector = jQuery(".price-box").find(".old-price");
+        var price_selector = jQuery(".price-box").find("span.price");
+        if(price != oldPrice) {
+            old_price_selector.html(template.replace("#{price}", number_format(oldPrice, "2", ",", " ")));
+        } else {
+            old_price_selector.html("");
+        }
+
+        // set price
+        price_selector.html(template.replace("#{price}", number_format(price, "2", ",", " ")));
+    },
+
+    setAttributes: function(attributes) {
+        this.clearAttributesContainer();
+
+        jQuery.each(attributes, function(index, e) {
+            Mall.product.createOptionGroup(e);
+        });
+    },
+
+    clearAttributesContainer: function() {
+        this._size_table_template = jQuery(".size-box").find("a.view-sizing")[0].outerHTML;
+        jQuery(".size-box").find("div.size").remove();
+    },
+
+    applyAdditionalRules: function(optionGroup, selector) {
+        if(optionGroup.code == "size") {
+            selector.append(this._size_table_template);
+        }
+    },
+
+    createOptionGroup: function(group) {
+        // insert option group
+        var groupElement = jQuery("<div/>", {
+            "class": "size"
+        }).appendTo(".size-box");
+        jQuery(".size-box").append(this._options_group_template);
+        // create label group
+        jQuery("<span/>", {
+            "class": "size-label",
+            "html": (group.label + ":")
+        }).appendTo(groupElement);
+
+        // create form group for options
+        var formGroupElement = jQuery("<div/>", {
+            class: "form-group form-radio"
+        }).appendTo(groupElement);
+
+        jQuery.each(group.options, function(index, option) {
+            Mall.product.createOption(group.id, option, formGroupElement);
+        });
+
+        this.applyAdditionalRules(group, formGroupElement);
+    },
+
+    createOption: function(id, option, groupElement) {
+        var label = jQuery("<label/>", {
+            "for": ("size_" + option.id)
+        }).appendTo(groupElement);
+        var _options = {
+            type: "radio",
+            id: ("size_" + option.id),
+            "data-id": id,
+            name: ("super_attribute["+ id +"]"),
+            value: option.id,
+            onclick: "Mall.setSuperAttribute(this);"
+        };
+
+        if(!option.is_salable) {
+            _options["disabled"] = "";
+        }
+        var optElement = jQuery("<input/>", _options).appendTo(label);
+        jQuery("<span/>", {
+            "html": option.label
+        }).appendTo(label);
+    }
+};
 
 // callbacks
 

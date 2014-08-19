@@ -1,0 +1,124 @@
+#filter_size {
+     
+      label {
+        cursor:pointer;
+        span {          
+          border:1px solid #afafaf;
+          text-align:center;
+          line-height: 38px;
+          font-size:14px;
+          color:#313131;
+          background:#fff;          
+        }
+        &:hover {
+          span {
+            background-color:#999;
+            border-color:#999;
+            color:#fff;
+          }
+           
+          }
+        input[type=checkbox]:hover + span  {
+            background-color:#999;
+            border-color:#999;
+            color:#fff;
+        }
+        input[type=checkbox]:checked {
+          outline:none!important;
+        }
+         input[type=checkbox]:checked + span,
+         input.checked + span  {
+            background:#000;
+            border-color:#000;
+            color:#fff;
+
+        }
+      }
+    }
+#filter_manufacturer {
+
+      input[type="text"] {
+        border:1px solid #d6d6d6;
+        &:focus {
+          outline:none;
+        }
+      }
+      input[type="image"] {
+        outline:none;
+      }
+      #filter_manufacturer_search {
+        &+label {
+          i {
+            color:#000;
+          }
+        }
+      }    
+    }
+#filter_price {
+      
+      .form-horizontal {
+        
+        input {
+          
+          &[type="text"] {
+            text-align: center;
+          }
+        }
+        label {
+          font-weight: normal
+        }
+        
+      }
+      
+      #od_do {
+        .form-action {
+          .btn {
+            &.black {
+              line-height: 21px!important;
+              font-size: 15px!important;
+            }
+          }
+        }
+      }
+    }
+#filter_color {
+      [type="checkbox"] {
+        outline:none!important;
+      }
+      label {
+        > span {
+          background:#fff;
+          @include border-radius(5px);
+          span {
+            border:1px solid #afafaf;
+          }
+          
+        }
+        [type="checkbox"]:hover + span {
+          background:#999;
+          cursor:pointer;
+        }
+        [type="checkbox"]:checked + span,
+        span.checked {
+          background:#000;
+        }
+        &:hover span {
+          background:#999;
+          cursor:pointer;
+        }
+      }
+    }
+
+.manufacturerList {
+  list-style: none;
+  li {
+    
+    &.lastChecked {
+      border-bottom: 1px solid #d0cfcf;
+     
+    }
+  }
+} 
+span.checked {
+    background:#000;
+}

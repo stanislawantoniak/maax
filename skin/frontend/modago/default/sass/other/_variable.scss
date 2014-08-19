@@ -1,4 +1,4 @@
-@import "../../vendor/bootstrap/variables";
+@import "../vendor/bootstrap/variables";
 @import "media-queries";
 
 
@@ -83,20 +83,24 @@ $fontLight : 'latolight';
 $fontRegular :'latoregular';
 $fontBlack : 'latoblack';
 // SPRITES MAP 
+$allMap: sprite-map("sprites/all/*.png", $layout: smart, $spacing:50px); 
 
-$icoMapDesktop: sprite-map("desktop/ico/*.png");
+/*$icoMapDesktop: sprite-map("desktop/ico/*.png");
 $icoMapMobile: sprite-map("mobile/ico/*.png");
 $bulletMap: sprite-map("sprites/bullet/*.png");
-$selectMap: sprite-map("sprites/select/*.png"); 
-$buttonMap: sprite-map("sprites/buttons/*.png");
-$arrowMap: sprite-map("sprites/arrow/*.png"); 
+$arrowMap: sprite-map("sprites/arrow/*.png");
 $socialMap: sprite-map("sprites/social/*.png"); 
 $followUsMap: sprite-map("sprites/follow_us/*.png"); 
-$formIcoMap: sprite-map("sprites/form_feedback/*.png"); 
-$bgMap: sprite-map("sprites/bg/*.png");
+$formIcoMap: sprite-map("sprites/form_feedback/*.png");
 $formMap: sprite-map("sprites/form/*.png");
 $btnSocialMap: sprite-map("sprites/btn-social/*.png");
+$flagMap: sprite-map("sprites/flags/*.png");*/
+//////////////////////////////////////////////
+ 
 
-$flagMap: sprite-map("sprites/flags/*.png");
-
-$btnCheck: sprite-map("check_filter/*.png", $spacing:200px);
+// Dodatkowe sprites
+$btnCheck: sprite-map("sprites/check_filter/*.png", $spacing:200px);
+$checkboxMap: sprite-map("sprites/checkbox/*.png", $spacing:200px);
+$radioMap: sprite-map("sprites/radio/*.png", $spacing:200px);
+$selectMap: sprite-map("sprites/select/*.png");
+$bgMap: sprite-map("sprites/bg/*.png"); 

@@ -5,6 +5,13 @@ class Zolago_DropshipSplit_Block_Cart_Vendor extends Unirgy_DropshipSplit_Block_
 	const NOMINAL_PRICE = 500;
 	
 	/**
+	 * @return string | null
+	 */
+	public function getDeliveryreturnHtml() {
+		return $this->getVendor()->getProductShortInformation();
+	}
+	
+	/**
 	 * @return boolean
 	 */
 	public function isHintAvailable() {

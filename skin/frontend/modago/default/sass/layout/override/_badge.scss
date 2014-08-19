@@ -1,0 +1,42 @@
+.user-navigation {
+	a {
+		position:relative;
+		.badge {
+		    padding: 5px 5px 5px 3px;
+		    position:absolute;
+		    top:11px;
+		    right:10px;
+		   @include max-screen($screen-sm-max) {
+		        padding: 3px 3px 2px 2px;
+		        top:9px;
+		    	right:-3px;
+		   }
+		}
+		&.dropdown-toggle {
+			.badge {
+				right:15px;
+				top:11px;
+				 @include max-screen($screen-sm-max) {
+				 	right:4px;
+				 }
+			}
+		}
+	}
+}
+
+@-moz-document url-prefix() { 
+  .user-navigation {
+  	a {
+  		&.dropdown-toggle {
+	  		.badge {
+	  			@include max-screen($screen-sm-max) {
+	  				top:12px;
+	  			}
+  			}
+  		}
+  	}
+  }
+}
+#link_basket {
+    top: -1px;
+}

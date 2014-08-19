@@ -33,9 +33,10 @@
 
             <action method="addCss"><stylesheet>css/font-awesome.css</stylesheet></action>
             <action method="addCss"><stylesheet>css/bootstrap.css</stylesheet></action>
-            <action method="addCss"><stylesheet>css/layout.css</stylesheet></action>
+            <action method="addCss"><stylesheet>css/typography.css</stylesheet></action>
             <action method="addCss"><stylesheet>css/design.css</stylesheet></action>
-            <action method="addCss"><stylesheet>css/stylesheet.css</stylesheet></action>
+            <action method="addCss"><stylesheet>css/layout.css</stylesheet></action>
+            <!--<action method="addCss"><stylesheet>css/stylesheet.css</stylesheet></action>-->
             <action method="addCss"><stylesheet>css/local.css</stylesheet></action>
 
             <!--<action method="addItem"><type>skin_js</type><script>js/vendor/jquery-1.10.2.min.js</script></action>-->
@@ -261,6 +262,10 @@
             </action>
         </reference>
 
+        <reference name="head">
+            <action method="removeItem"><type>js</type><script>varien/product.js</script></action>
+            <action method="removeItem"><type>js</type><script>varien/configurable.js</script></action>
+        </reference>
 
     </catalog_product_view>
 
