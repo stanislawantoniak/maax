@@ -156,6 +156,8 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 		return array(
 			"display_price", 
 			"price_margin",
+			"price",
+			"msrp",
 			"converter_price_type", 
 			"is_new", 
 			"is_bestseller", 
