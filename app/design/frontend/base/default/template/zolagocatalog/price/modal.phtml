@@ -1,0 +1,100 @@
+<?php /* @var $this Zolago_Catalog_Block_Vendor_Price_Modal */ ?>
+<?php $_product = $this->getProduct();?>
+<?php $_helper = Mage::helper('core');?>
+<input type="hidden" name="entity_id" value="<?php echo $_product->getId();?>"/>
+<input type="hidden" name="store_id" value="<?php echo $_product->getStoreId();?>"/>
+<div class="row" style="margin-bottom: 30px">
+	<div class="col-md-3 form-group">
+		<span class="help-block"><?php echo $this->__("Source price");?></span>
+		<select id="converter_price_type"  name="converter_price_type" type="text" class="form-control priceSource">
+			<?php foreach ($this->getPriceSourceOptions() as $option):?>
+			<?php $_selected = $option['value']==$_product->getData('converter_price_type');?>
+			<option data-pointer="price-pointer-<?php echo $this->escapeHtml($option['label']);?>" data-source="<?php echo $this->escapeHtml($option['label']);?>" data-price="<?php echo $option['price'];?>" <?php if($_selected):?>selected="selected"<?php endif;?> value="<?php echo $this->escapeHtml($option['value']);?>"><?php echo $this->escapeHtml($option['label']);?></option>
+			<?php endforeach;?>
+		</select>
+	</div>
+	<div class="col-md-3 form-group">
+		<span class="help-block"><?php echo $this->__("Margin");?></span>
+		<input id="price_margin" name="price_margin" data-margin="<?php echo $_product->getPriceMargin();?>"  value="<?php echo $_product->getPriceMargin();?>" type="text" class="marignPercent form-control"/>
+	</div>
+	<div class="col-md-3 form-group">
+		<span class="help-block"><?php echo $this->__("Regular price");?></span>
+		<input id="price" name="price" value="<?php echo $_product->getPrice();?>" required="required" type="text" class="numeric form-control"/>
+	</div>
+	<div class="col-md-3 form-group">
+		<span class="help-block"><?php echo $this->__("Msrp");?></span>
+		<input id="msrp" name="msrp" value="<?php echo $_product->getMsrp();?>" type="text" class="numeric form-control"/>
+	</div>
+</div>
+<?php /* Use child products */ ?>
+<?php if($_product->isComposite()):?>
+<div class="next-row">
+	<table class="table table-condensed table-striped">
+		<colgroup>
+			<col width="100"/>
+			<col width="100"/>
+			<col width="150"/>
+			<col/>
+			<col/>
+			<col/>
+			<col/>
+			<col/>
+			<col/>
+		</colgroup>
+		<tbody>
+		<?php foreach ($this->getChildren($_product) as $attribute):?>
+			<tr>
+				<th><?php echo $this->escapeHtml($attribute['label']);?></th>
+				<th><?php echo $this->__("Effective price");?></th>
+				<th><?php echo $this->__("Price deviation");?></th>
+				<?php foreach($this->getPriceTyps() as $type=>$label):?>
+				<th><?php echo $this->__($label);?></th>
+				<?php endforeach;?>
+			</tr>
+			<tr  class="minimal-price">
+				<td colspan="3" class="caption"><?php echo $this->__("Minimal price");?></td>
+				<?php foreach($this->getPriceTyps() as $type=>$label):?>
+				<?php $_minimal = $this->getMinimalPrice($type); ?>
+				<td id="price-pointer-<?php echo $type;?>" data-source="<?php echo $type;?>" data-price="<?php echo is_null($_minimal) ? "" : $_minimal;?>">
+					<?php if(!is_null($_minimal)):?>
+					<?php echo Mage::helper("core")->formatPrice($_minimal, false);?>
+					<?php else:?>
+					<?php echo $this->__("N/A");?>
+					<?php endif;?>
+				</td>
+				<?php endforeach;?>
+			</tr>
+			<?php foreach($attribute['children'] as $child):?>
+			<?php $_valueNameKey = "attributes[".$child['product_super_attribute_id']."][". $child['value']."]";?>
+			<tr>
+				<td class="option-text">
+					<input type="hidden" name="<?php echo $_valueNameKey."[product_super_attribute_id]";?>" value="<?php echo $child['product_super_attribute_id'];?>"/>
+					<input type="hidden" name="<?php echo $_valueNameKey."[value_index]";?>" value="<?php echo $child['value'];?>"/>
+					<input type="hidden" name="<?php echo $_valueNameKey."[value_id]";?>" value="<?php echo $child['value_id'];?>"/>
+					<?php echo $this->escapeHtml($child['option_text']);?>
+				</td>
+				<td class="effective-price">
+					<span></span>
+					<input type="hidden" name="child_price[<?php echo $child['product_id'];?>]" value="<?php echo $this->escapeHtml($child['price']);?>"/>
+				</td>
+				<td class="price-deviation" data-source="" data-price="<?php echo $this->escapeHtml($child['price']);?>">
+					<input name="<?php echo $_valueNameKey."[pricing_value]";?>" 
+						   type="text" class="numeric form-control" value="<?php echo $child['price']!=0 ? $child['price'] : "";?>"/>
+				</td>
+				<?php foreach($this->getPriceTyps() as $type=>$label):?>
+				<?php $_price = $this->getConverterPrice($child, $type); ?>
+				<td data-source="<?php echo $type;?>" data-price="<?php echo is_null($_price) ? "" : $_price;?>">
+				<?php if(!is_null($_price)):?>
+					<?php echo Mage::helper("core")->formatPrice($_price, false);?></td>
+					<?php else:?>
+					<?php echo $this->__("N/A");?>
+					<?php endif;?>
+				<?php endforeach;?>
+				</td>
+			</tr>
+			<?php endforeach;?>
+		<?php endforeach;?>
+		</tbody>
+	</table>
+</div>
+<?php endif;?>

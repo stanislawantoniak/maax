@@ -1,6 +1,9 @@
 <?php
 class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
 {
+	
+	
+	
 	/**
 	 * @return Zolago_Dropship_Model_Vendor
 	 */

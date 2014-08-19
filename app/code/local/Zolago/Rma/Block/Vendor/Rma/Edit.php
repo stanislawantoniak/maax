@@ -26,7 +26,7 @@ class Zolago_Rma_Block_Vendor_Rma_Edit extends Mage_Core_Block_Template {
 	 */
 	public function isLetterable(Varien_Object $tracking) {
 		switch ($tracking->getCarrierCode()) {
-			case Zolago_Dhl_Model_Carrier::CODE:
+			case Orba_Shipping_Model_Carrier_Dhl::CODE:
 				return true;
 			break;
 		}
@@ -163,7 +163,7 @@ class Zolago_Rma_Block_Vendor_Rma_Edit extends Mage_Core_Block_Template {
 	 * @return bool
 	 */
 	public function canUseCarrier() {
-		return $this->canVendorUseDhl();
+		return Mage::helper('orbashipping')->canVendorUseCarrier($this->getVendor());
 	}
 	
 	
@@ -200,7 +200,7 @@ class Zolago_Rma_Block_Vendor_Rma_Edit extends Mage_Core_Block_Template {
         }
         return  array_intersect_key(
 			$carriers, 
-			array_flip(Mage::helper('zolagodropship')->getAllowedCarriers())
+			array_flip(Mage::helper('zolagodropship')->getAllowedCarriersForVendor($this->getVendor(),true))
 		);
     }
 	

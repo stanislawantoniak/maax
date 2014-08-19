@@ -100,11 +100,6 @@ EOD
         <div class="item border-gray-1x "><a href=""><img src="skin/frontend/modago/default/images/banner-small-3.jpg" alt=""></a></div>
         <div class="item border-gray-1x "><a href=""><img src="skin/frontend/modago/default/images/banner-small-4.jpg" alt=""></a></div>
     </div>
-
-    <div class="customNavigation">
-        <a class="prev"><i class="fa fa-chevron-left"></i></a>
-        <a class="next"><i class="fa fa-chevron-right"></i></a>
-    </div>
 </div>
 EOD
 ,
@@ -202,11 +197,6 @@ EOD
                     </div>
                 </a>
             </div>
-        </div>
-
-        <div class="customNavigation">
-          <a class="prev"><i class="fa fa-chevron-left"></i></a>
-          <a class="next"><i class="fa fa-chevron-right"></i></a>
         </div>
     </div>
 </section>

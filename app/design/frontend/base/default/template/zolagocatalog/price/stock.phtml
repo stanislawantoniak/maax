@@ -1,0 +1,39 @@
+<?php /* @var $this Zolago_Catalog_Block_Vendor_Price_Stock*/ ?>
+<?php $_product = $this->getProduct();?>
+<?php $_helper = Mage::helper('core');?>
+<?php $_items = $this->getItems();?>
+<input type="hidden" name="entity_id" value="<?php echo $_product->getId();?>"/>
+<input type="hidden" name="store_id" value="<?php echo $_product->getStoreId();?>"/>
+<?php if($_items):?>
+<table class="table table-condensed table-striped">
+	<colgroup>
+		<col/>
+		<col/>
+		<col/>
+		<col/>
+	</colgroup>
+	<thead>
+		<tr>
+			<th><?php echo $this->__("POS Name");?></th>
+			<th><?php echo $this->__("Stock in import file");?></th>
+			<th><?php echo $this->__("Minimal stock in POS");?></th>
+			<th><?php echo $this->__("Stock excluding minimal");?></th>
+		</tr>
+	</thead>
+	<tbody>
+		<?php foreach($_items as $item):?>
+		<?php $_pos = $item->getPos();?>
+		<tr>
+			<td><?php echo $this->formatNumber($_pos->getName());?></td>
+			<td><?php echo $this->formatNumber($item->getImportedStock());?></td>
+			<td><?php echo $this->formatNumber($_pos->getMinimalStock());?></td>
+			<td><?php echo $this->formatNumber($item->getFinalStock());?></td>
+		</tr>
+		<?php endforeach;?>
+	</tbody>
+</table>
+<?php else:?>
+	<div class="alert alert-warning fade in"> 
+		<?php echo $this->__("Stock status is not avaialble");?>
+	</div>
+<?php endif; ?>

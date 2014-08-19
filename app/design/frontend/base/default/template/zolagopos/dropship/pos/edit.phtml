@@ -47,17 +47,35 @@ jQuery(function($){
 				$("use_dhl").observe("change", function(e){
 					posControl.enableDhl($F(e.target)=="1");
 				});
-				posControl.enableDhl($F("use_dhl")=="1");
+				$("use_orbaups").observe("change", function(e){
+					posControl.enableUps($F(e.target)=="1");
+				});
+				posControl.enableUps($F("use_orbaups")=="1");
 			},
 			enableDhl: function(state){
 				if(!!state){
 					$("dhl_login").up('.form-group').show();
 					$("dhl_password").up('.form-group').show();
 					$("dhl_account").up('.form-group').show();
+					$("dhl_ecas").up('.form-group').show();
+					$("dhl_terminal").up('.form-group').show();
 				}else{
 					$("dhl_login").up('.form-group').hide();
 					$("dhl_password").up('.form-group').hide();
 					$("dhl_account").up('.form-group').hide();
+					$("dhl_ecas").up('.form-group').hide();
+					$("dhl_terminal").up('.form-group').hide();
+				}
+			},
+			enableUps: function(state){
+				if(!!state){
+					$("orbaups_login").up('.form-group').show();
+					$("orbaups_password").up('.form-group').show();
+					$("orbaups_account").up('.form-group').show();
+				}else{
+					$("orbaups_login").up('.form-group').hide();
+					$("orbaups_password").up('.form-group').hide();
+					$("orbaups_account").up('.form-group').hide();
 				}
 			}
 		};

@@ -38,13 +38,55 @@ switch($_reviewsCount) {
         $_reviewsLabel = $this->__('Zero reviews');
         break;
 }
+
+// avarage rating
+$reviews = Mage::getModel('review/review')->getResourceCollection()->addStoreFilter(Mage::app()->getStore()->getId())
+    ->addEntityFilter('product', $this->getProduct()->getId())
+    ->addStatusFilter(Mage_Review_Model_Review::STATUS_APPROVED)
+    ->setDateOrder()
+    ->addRateVotes();
+
+$avg = 0;
+$ratings = array();
+$v = array();
+$p = array_fill(1, 5, 0);
+$voteCount = 0;
+/** @var $vote Mage_Rating_Model_Rating_Option_Vote */
+foreach ($reviews as $review) {
+    foreach ($review->getRatingVotes() as $vote) {
+        $voteCount++;
+        $ratings[] = $vote->getPercent();
+        if(array_key_exists($vote->getRatingCode(), $v)) {
+            $v[$vote->getRatingCode()] += $vote->getPercent();
+        } else  {
+            $v[$vote->getRatingCode()] = $vote->getPercent();
+        }
+
+        if(array_key_exists($vote->getPercent()/10/2, $p)) {
+            $p[$vote->getPercent()/10/2]++;
+        } else {
+            $p[$vote->getPercent()/10/2] = 1;
+        }
+    }
+
+}
+krsort($p);
+$avg = count($ratings) > 0 ? ceil(array_sum($ratings)/count($ratings)/10/2) : 0;
 ?>
 
 <?php $_helper = $this->helper('catalog/output'); ?>
+<?php /** @var $_product Mage_Catalog_Model_Product */ ?>
 <?php $_product = $this->getProduct(); ?>
-<script type="text/javascript">
-    var optionsPrice = new Product.OptionsPrice(<?php echo $this->getJsonConfig() ?>);
-</script>
+<?php
+    // prices
+    $price = $_product->getPrice();
+    $finalPrice = $_product->getFinalPrice();
+    $sizeAttr = $_product->getResource()->getAttribute('size');
+    $productAttrs = array();
+    if($_product->getTypeId() == 'configurable') {
+        $productAttrs = $_product->getTypeInstance(true)->getConfigurableAttributesAsArray($_product);
+    }
+?>
 
 <div id="content" class="container-fluid">
 <div class="row">
@@ -57,7 +99,7 @@ switch($_reviewsCount) {
 <!-- GALLERY PRODUCT -->
 <div class="path_back_to_category visible-xs">
     <div class="col-xs-12">
-        <a href="<?php echo $this->getParentCategoryUrl(); ?>"><i class="fa fa-angle-left"></i> <?php echo $this->getParentCategoryName(); ?>></a>
+        <a href="<?php echo $this->getParentCategoryUrl(); ?>"><i class="fa fa-angle-left"></i> <?php echo $this->getParentCategoryName(); ?></a>
     </div>
 </div>
     <?php echo $this->getChildHtml('media') ?>
@@ -78,117 +120,63 @@ switch($_reviewsCount) {
         <p class="short-description hidden-xs">
             <?php echo $_helper->productAttribute($_product, nl2br($_product->getShortDescription()), 'short_description') ?>
         </p>
-        <div class="price-box-bundle">
-            <div class="price-box">
-                <p class="price">
-                    <span class="price-label">cena:</span>
-                    <span class="old-price">255 zł</span>
-                    <span class="price">199 zł</span>
-                </p>
-            </div>
-            <ul>
-                <li><?php echo $this->getStoreDeliveryHeadline(); ?></li>
-                <li><?php echo $this->getStoreReturnHeadline(); ?></li>
-            </ul>
-        </div>
-        <div class="color-box-bundle">
-            <div class="color-box">
-                <div class="color">
-                    <span class="color-label">inne kolory:</span>
-                    <div class="form-group form-radio">
-                        <label for="color_1">
-                            <input type="radio" name="color" id="color_1" >
-                            <img src="/skin/frontend/modago/default/images/color/color.png" alt="">
-                        </label>
-                        <label for="color_2">
-                            <input type="radio" name="color" id="color_2" >
-                            <img src="/skin/frontend/modago/default/images/color/color-02.png" alt="">
-                        </label>
-                        <label for="color_3">
-                            <input type="radio" name="color" id="color_3" >
-                            <img src="/skin/frontend/modago/default/images/color/color-03.png" alt="">
-                        </label>
-                        <label for="color_4">
-                            <input type="radio" name="color" id="color_4" >
-                            <img src="/skin/frontend/modago/default/images/color/color-04.png" alt="">
-                        </label>
-                        <label for="color_5">
-                            <input type="radio" name="color" id="color_5" >
-                            <img src="/skin/frontend/modago/default/images/color/color-05.png" alt="">
-                        </label>
-                    </div>
+
+        <?php if ($_product->getCanShowPrice() !== false): ?>
+            <div class="price-box-bundle">
+                <div class="price-box">
+                    <p class="price">
+                        <span class="price-label"><?php echo $this->__("price"); ?>:</span>
+                        <span class="old-price"><?php if($_product->getTypeId() != Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE && $_product->getPrice() != $_product->getFinalPrice()) : ?><?php echo Mage::helper('core')->currency($_product->getPrice(), true, false); ?><?php endif; ?></span>
+                        <span class="price"><?php if($_product->getTypeId() != Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE):  ?><?php echo Mage::helper('core')->currency($_product->getFinalPrice(), true, false); ?><?php endif; ?></span>
+                    </p>
                 </div>
+                <ul>
+                    <li><?php echo $this->getStoreDeliveryHeadline(); ?></li>
+                    <li><?php echo $this->getStoreReturnHeadline(); ?></li>
+                </ul>
             </div>
-        </div>
-        <div class="size-box-bundle">
-            <div class="size-box clearfix">
-                <div class="size">
-                    <span class="size-label">wybierz rozmiar:</span>
+        <?php endif; ?>
+        <?php echo $this->getChildHtml('catalog.product.related'); ?>
 
-                    <div class="form-group form-radio">
+        <div class="size-box-bundle" id="product-options">
+            <?php if($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) : ?>
+            <?php if (!empty($productAttrs)) : ?>
+                <?php foreach($productAttrs as $_attribute) : ?>
+                <?php if(array_key_exists('attribute_code', $_attribute) && $_attribute['attribute_code'] == 'size') : ?>
+                <div class="size-box clearfix clr">
+                    <div class="size">
+                        <span class="size-label"><?php echo $this->__("Select size"); ?>:</span>
 
-                        <label for="size_xs">
-                            <input type="radio" id="size_xs" name="size"><span>XS</span>
-                        </label>
-                        <label for="size_s">
-                            <input type="radio" id="size_s" name="size"><span>S</span>
-                        </label>
-                        <label for="size_m">
-                            <input type="radio" id="size_m" name="size"><span>M</span>
-                        </label>
-                        <label for="size_l">
-                            <input type="radio" id="size_l" name="size"><span>L</span>
-                        </label>
-                        <label for="size_xl">
-                            <input type="radio" id="size_xl" name="size"><span>XL</span>
-                        </label>
-                        <label for="size_xxl">
-                            <input type="radio" id="size_xxl" name="size"><span>XXL</span>
-                        </label>
-                        <a href="" class="view-sizing underline pull-left" data-toggle="modal" data-target="#tabelaRozmiarow">tabela rozmiarów </a>
+                        <div class="form-group form-radio">
+
+                            <br />
+                            <a href="#" class="view-sizing underline pull-left" data-toggle="modal"
+                               data-target="#tabelaRozmiarow"><?php echo $this->__("Sizes"); ?> </a>
+                        </div>
                     </div>
+
                 </div>
-                <div class="size hidden listSelect">
-                    <span class="size-label">wybierz rozmiar:</span>
-                    <a href="#" class="view-sizing visible-xs underline" data-toggle="modal" data-target="#tabelaRozmiarow">tabela rozmiarów </a>
-                    <div class="form-group styledSelected">
-
-                        <select name="size_select" class="form-control select-styled">
-                            <option value="">XS</option>
-                            <option value="">S</option>
-                            <option value="">M</option>
-                            <option value="">L</option>
-                            <option value="">XL</option>
-                            <option value="">XXL</option>
-                            <option value="">XS</option>
-                            <option value="">S</option>
-                            <option value="">M</option>
-                            <option value="">L</option>
-                            <option value="">XL</option>
-                            <option value="">XXL</option>
-                        </select>
-
-                    </div>
-                    <a href="" class="view-sizing underline hidden-xs pull-left" data-toggle="modal" data-target="#tabelaRozmiarow">tabela rozmiarów </a>
-                </div>
-
-            </div>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+            <?php endif; ?>
+            <?php endif; ?>
 
             <div class="row">
                 <div class="action-box-bundle clearfix">
                     <div class="col-xs-6">
-                        <div class="addLike-box">
-                            139 osób lubi ten produkt <a href="#" class="addLike">Dodaj<br>do ulubionych</a>
+                        <div class="addLike-box <?php if(Mage::helper('zolagowishlist')->productBelongsToMyWishlist($_product)) : ?>hidden<?php endif; ?>" id="notadded-wishlist">
+                            <span class="product-context-like-count"><?php echo (int) $this->getProduct()->getWishlistCount(); ?></span> osób lubi ten produkt <a href="#" onclick="Mall.addToWishlist(<?php echo $_product->getId(); ?>, 'product')" class="addLike"><?php echo $this->__("Add to<br />favorites"); ?></a>
                         </div>
-                        <div class="addedLike-box hidden">
-                            <a href="#" class="likeAdded">
-                                Ty i 139 osób lubicie ten produkt<br><span>usuń z ulubionych</span>
+
+                        <div class="addedLike-box <?php if(!Mage::helper('zolagowishlist')->productBelongsToMyWishlist($_product)) : ?>hidden<?php endif; ?>" id="added-wishlist">
+                            <a href="#" class="likeAdded" onclick="Mall.removeFromWishlist(<?php echo $this->getProduct()->getId(); ?>, 'product');">
+                                Ty i <span class="product-context-like-count" style="color: #4f4f4f"><?php echo ((int) $this->getProduct()->getWishlistCount())-1; ?></span> osób lubicie ten produkt<br><span>usuń z ulubionych</span>
                             </a>
                         </div>
                     </div>
 
                     <div class="col-xs-6 text-right">
-                        <button class="btn button button-primary ico addBasket">dodaj do koszyka</button>
+                        <button class="btn button button-primary ico addBasket" title="Wybierz wpierw rozmiar" id="add-to-cart" data-toggle="tooltip" data-placemen="top" onclick="Mall.addToCart(<?php echo $_product->getId(); ?>, <?php echo !$_product->getStockItem()->getMinSaleQty() ? 1 : $_product->getStockItem()->getMinSaleQty(); ?>);return false;"><?php echo $this->__("add to cart"); ?></button>
                     </div>
                 </div>
             </div>
@@ -211,7 +199,7 @@ switch($_reviewsCount) {
                 <h3>
                     <a href="#note_product" class="scrollTo"><?php echo $this->__("Product reviews"); ?> <i class="bullet-strzalka-down"></i>
 				<span id="average_note_client">
-					<span class="note" data-number="5" data-score="2"></span>
+					<span class="note" data-number="5" data-score="<?php echo $avg; ?>"></span>
 					<span>(<?php echo $_reviewsCount; ?> <?php echo $_reviewsLabel; ?>)</span>
 				</span>
                     </a>
@@ -228,226 +216,7 @@ switch($_reviewsCount) {
 </div>
 </section>
 <!-- SECTION : SKOMPLETUJ CAŁOŚĆ -->
-<section id="complementary_product" class="section bg-w clearfix">
-<div class="block-complementary-product toggle-xs">
-<header>
-    <h2 class="title_section" >SKOMPLETUJ CAŁOŚĆ <i class="bullet-strzalka-up visible-xs"></i></h2>
-</header>
-<div id="rwd-complementary-product" class="rwdCarousel">
-<div class="rwd-carousel rwd-theme">
-<div class="item">
-    <a href="#">
-
-        <div class="box_listing_product">
-            <figure class="img_product"><img src="skin/frontend/modago/default/images/product/skomletuj.png" alt="" class="img-responsive"></figure>
-            <div class="name_product hidden-xs">Krótsza nazwa produktu oddzielona od marki</div>
-            <div class="price clearfix hidden-xs like-two-line">
-                <div class="col-price">
-                    <span class="label">cena:</span><span>99 zł</span>
-                </div>
-                <div class="like liked" data-idproduct="001">
-                              <span class="icoLike">
-                                <img class="img-01" src="skin/frontend/modago/default/images/heart.png" alt="" />
-                                <img class="img-02" src="skin/frontend/modago/default/images/heart-like.png" alt="" />
-                              </span>
-                    <span class="like_count">Ty + 10000</span>
-                    <div class="toolLike"></div>
-                </div>
-            </div>
-        </div>
-
-    </a>
-</div>
-<div class="item">
-    <a href="#">
-
-        <div class="box_listing_product">
-            <figure class="img_product"><img src="skin/frontend/modago/default/images/product/skomletuj.png" alt="" class="img-responsive"></figure>
-            <div class="name_product hidden-xs">Krótsza nazwa produktu oddzielona od marki</div>
-            <div class="price clearfix hidden-xs price-two-line like-two-line">
-                <div class="col-price">
-                    <span class="label">cena:</span><span>990.90 zł</span>
-                </div>
-                <div class="like liked" data-idproduct="001">
-                              <span class="icoLike">
-                                <img class="img-01" src="skin/frontend/modago/default/images/heart.png" alt="" />
-                                <img class="img-02" src="skin/frontend/modago/default/images/heart-like.png" alt="" />
-                              </span>
-                    <span class="like_count">Ty + 10000</span>
-                    <div class="toolLike"></div>
-                </div>
-            </div>
-        </div>
-
-    </a>
-</div>
-<div class="item">
-    <a href="#">
-
-        <div class="box_listing_product">
-            <figure class="img_product"><img src="skin/frontend/modago/default/images/product/skomletuj.png" alt="" class="img-responsive"></figure>
-            <div class="name_product hidden-xs">Krótsza nazwa produktu oddzielona od marki</div>
-            <div class="price clearfix hidden-xs price-two-line">
-                <div class="col-price">
-                    <span class="label">cena:</span><span>99.00 zł</span>
-                </div>
-                <div class="like" data-idproduct="001">
-                                      <span class="icoLike">
-                                        <img class="img-01" src="skin/frontend/modago/default/images/heart.png" alt="" />
-                                        <img class="img-02" src="skin/frontend/modago/default/images/heart-like.png" alt="" />
-                                      </span>
-                    <span class="like_count">100</span>
-                    <div class="toolLike"></div>
-                </div>
-            </div>
-        </div>
-
-    </a>
-</div>
-<div class="item">
-    <a href="#">
-
-        <div class="box_listing_product">
-            <figure class="img_product"><img src="skin/frontend/modago/default/images/product/skomletuj.png" alt="" class="img-responsive"></figure>
-            <div class="name_product hidden-xs">Krótsza nazwa produktu oddzielona od marki</div>
-            <div class="price clearfix hidden-xs ">
-                <div class="col-price">
-                    <span class="label">cena:</span><span>9 zł</span>
-                </div>
-                <div class="like" data-idproduct="001">
-                              <span class="icoLike">
-                                <img class="img-01" src="skin/frontend/modago/default/images/heart.png" alt="" />
-                                <img class="img-02" src="skin/frontend/modago/default/images/heart-like.png" alt="" />
-                              </span>
-                    <span class="like_count">10</span>
-                    <div class="toolLike"></div>
-                </div>
-            </div>
-        </div>
-
-    </a>
-</div>
-<div class="item">
-    <a href="#">
-
-        <div class="box_listing_product">
-            <figure class="img_product"><img src="skin/frontend/modago/default/images/product/skomletuj.png" alt="" class="img-responsive"></figure>
-            <div class="name_product hidden-xs">Krótsza nazwa produktu oddzielona od marki</div>
-            <div class="price clearfix hidden-xs price-two-line like-two-line">
-                <div class="col-price">
-                    <span class="label">cena:</span><span>990.90 zł</span>
-                </div>
-                <div class="like liked" data-idproduct="001">
-                              <span class="icoLike">
-                                <img class="img-01" src="skin/frontend/modago/default/images/heart.png" alt="" />
-                                <img class="img-02" src="skin/frontend/modago/default/images/heart-like.png" alt="" />
-                              </span>
-                    <span class="like_count">Ty + 10000</span>
-                    <div class="toolLike"></div>
-                </div>
-            </div>
-        </div>
-
-    </a>
-</div>
-<div class="item">
-    <a href="#">
-
-        <div class="box_listing_product">
-            <figure class="img_product"><img src="skin/frontend/modago/default/images/product/skomletuj.png" alt="" class="img-responsive"></figure>
-            <div class="name_product hidden-xs">Krótsza nazwa produktu oddzielona od marki</div>
-            <div class="price clearfix hidden-xs price-two-line">
-                <div class="col-price">
-                    <span class="label">cena:</span><span>99.00 zł</span>
-                </div>
-                <div class="like" data-idproduct="001">
-                                      <span class="icoLike">
-                                        <img class="img-01" src="skin/frontend/modago/default/images/heart.png" alt="" />
-                                        <img class="img-02" src="skin/frontend/modago/default/images/heart-like.png" alt="" />
-                                      </span>
-                    <span class="like_count">100</span>
-                    <div class="toolLike"></div>
-                </div>
-            </div>
-        </div>
-
-    </a>
-</div>
-<div class="item">
-    <a href="#">
-
-        <div class="box_listing_product">
-            <figure class="img_product"><img src="skin/frontend/modago/default/images/product/skomletuj.png" alt="" class="img-responsive"></figure>
-            <div class="name_product hidden-xs">Krótsza nazwa produktu oddzielona od marki</div>
-            <div class="price clearfix hidden-xs like-two-line">
-                <div class="col-price">
-                    <span class="label">cena:</span><span>99 zł</span>
-                </div>
-                <div class="like liked" data-idproduct="001">
-                              <span class="icoLike">
-                                <img class="img-01" src="skin/frontend/modago/default/images/heart.png" alt="" />
-                                <img class="img-02" src="skin/frontend/modago/default/images/heart-like.png" alt="" />
-                              </span>
-                    <span class="like_count">Ty + 10000</span>
-                    <div class="toolLike"></div>
-                </div>
-            </div>
-        </div>
-
-    </a>
-</div>
-<div class="item">
-    <a href="#">
-
-        <div class="box_listing_product">
-            <figure class="img_product"><img src="skin/frontend/modago/default/images/product/skomletuj.png" alt="" class="img-responsive"></figure>
-            <div class="name_product hidden-xs">Krótsza nazwa produktu oddzielona od marki</div>
-            <div class="price clearfix hidden-xs price-two-line like-two-line">
-                <div class="col-price">
-                    <span class="label">cena:</span><span>990.90 zł</span>
-                </div>
-                <div class="like liked" data-idproduct="001">
-                              <span class="icoLike">
-                                <img class="img-01" src="skin/frontend/modago/default/images/heart.png" alt="" />
-                                <img class="img-02" src="skin/frontend/modago/default/images/heart-like.png" alt="" />
-                              </span>
-                    <span class="like_count">Ty + 10000</span>
-                    <div class="toolLike"></div>
-                </div>
-            </div>
-        </div>
-
-    </a>
-</div>
-<div class="item">
-    <a href="#">
-
-        <div class="box_listing_product">
-            <figure class="img_product"><img src="skin/frontend/modago/default/images/product/skomletuj.png" alt="" class="img-responsive"></figure>
-            <div class="name_product hidden-xs">Krótsza nazwa produktu oddzielona od marki</div>
-            <div class="price clearfix hidden-xs price-two-line">
-                <div class="col-price">
-                    <span class="label">cena:</span><span>99.00 zł</span>
-                </div>
-                <div class="like" data-idproduct="001">
-                                      <span class="icoLike">
-                                        <img class="img-01" src="skin/frontend/modago/default/images/heart.png" alt="" />
-                                        <img class="img-02" src="skin/frontend/modago/default/images/heart-like.png" alt="" />
-                                      </span>
-                    <span class="like_count">100</span>
-                    <div class="toolLike"></div>
-                </div>
-            </div>
-        </div>
-
-    </a>
-</div>
-</div>
-
-
-</div>
-</div>
-</section>
+<?php echo $this->getChildHtml('crosssell'); ?>
 <!-- END:/ SKOMPLETUJ CAŁOŚĆ -->
 <!-- SECTION : OPIS PRODUKTU -->
 <section id="description_product" class="section toggle-xs bg-w clearfix">
@@ -458,43 +227,39 @@ switch($_reviewsCount) {
     <div class="main">
         <ul class="list">
             <li>
-                <strong>Nazwa produktu: </strong> <?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?>
+                <strong><?php echo $this->__("Product name"); ?>: </strong> <?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?>
             </li>
             <li>
-                <strong>Numer katalogowy: </strong> <?php echo $_helper->productAttribute($_product, $_product->getSku(), 'sku') ?>
+                <strong><?php echo $this->__("Sku"); ?>: </strong> <?php echo $_helper->productAttribute($_product, $_product->getSku(), 'sku') ?>
             </li>
         </ul>
         <p><?php echo $_helper->productAttribute($_product, nl2br($_product->getDescription()), 'description'); ?></p>
-        <ul class="list">
-            <li>
-                <strong>Kolekcja: </strong> Sport
-            </li>
-            <li>
-                <strong>Materiał: </strong> 100% baełna
-            </li>
-        </ul>
-
-        <ul class="list bullet_02">
-            <li>pranie w pralce</li>
-            <li>nie wybielać</li>
-            <li>nie suszyć</li>
-        </ul>
+        <?php if (!empty($attributesData)) : ?>
+            <ul class="list">
+                <?php foreach ($attributesData as $attr) : ?>
+                <li>
+                    <strong><?php echo array_key_exists('label', $attr) ? $attr['label'] : ""; ?>: </strong>
+                    <?php if (array_key_exists('value', $attr) && !is_array($attr['value'])) : ?>
+                        <?php echo $this->escapeHtml($attr['value']); ?>
+                    <?php else: ?>
+                        <ul class="list bullet_02">
+                            <?php foreach ($attr['value'] as $opt) : ?>
+                                <li><?php echo $this->escapeHtml($opt); ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    <?php endif; ?>
+                </li>
+                    <?php endforeach; ?>
+            </ul>
+        <?php endif; ?>
     </div>
 </section>
 <!-- SECTION : OPIS PRODUKTU -->
 <!--reviews-->
 <?php echo $this->getChildHtml('product.review.section'); ?>
 <!--end reviews-->
-<section id="share" class="section clearfix">
-    <div class="followUs visible-xs">
-        <ul>
-            <li>Podziel się:</li>
-            <li><a href="#" class="follow_us fb"></a></li>
-            <li><a href="#" class="follow_us twitter"></a></li>
-            <li><a href="#" class="follow_us pinterest"></a></li>
-            <li><a href="#" class="follow_us gplus"></a></li>
-        </ul>
-    </div>
+<section id="share" class="section clearfix visible-xs">
+    <div class="addthis_sharing_toolbox"></div>
 </section>
 
 </div>
@@ -558,146 +323,49 @@ switch($_reviewsCount) {
 <!--end zadaj pytanie sprzedajacemu-->
 
 
-
-
-
-
-<div class="product-view">
-    <div class="product-essential">
-        <form action="<?php echo $this->getSubmitUrl($_product) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
-            <?php echo $this->getBlockHtml('formkey') ?>
-            <div class="no-display">
-                <input type="hidden" name="product" value="<?php echo $_product->getId() ?>" />
-                <input type="hidden" name="related_product" id="related-products-field" value="" />
+<div class="modal fade bs-example-modal-lg container-fluid" id="popup-after-add-to-cart" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="max-width: 450px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"></button>
+                <h2 class="title_section"><?php echo $this->__("Product has been added to cart:"); ?></h2>
             </div>
+            <div class="modal-body">
+                <table>
+                    <tbody id="product-added">
+                    <tr>
+                        <td class="thumb" style="width: 55px;"><img
+                                src="<?php echo Mage::helper('catalog/image')->init($_product, 'image')->resize(40, 50) ?>"
+                                alt=""></td>
+                        <td class="desc"><p class="name_product"><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></p>
 
-            <div class="product-shop">
-                <div class="product-name">
-                    <h1><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></h1>
-                </div>
-                <?php $_wishlistCount = (int)$_product->getWishlistCount();?>
-                <?php if($_wishlistCount): ?>
-                    <div><small><?php echo $this->__("Favourites: <strong>%s</strong>", $_wishlistCount);?></small></div>
-                <?php endif;?>
-                <?php if ($this->canEmailToFriend()): ?>
-                    <p class="email-friend"><a href="<?php echo $this->helper('catalog/product')->getEmailToFriendUrl($_product) ?>"><?php echo $this->__('Email to a Friend') ?></a></p>
-                <?php endif; ?>
+                            <p class="size"><?php echo ucfirst($this->__("size")); ?>:<span>DEV</span></p>
 
-                <?php echo $this->getReviewsSummaryHtml($_product, false, true)?>
-                <?php echo $this->getChildHtml('alert_urls') ?>
-                <?php echo $this->getChildHtml('product_type_data') ?>
-                <?php echo $this->getTierPriceHtml() ?>
-                <?php echo $this->getChildHtml('extrahint') ?>
-
-                <?php if (!$this->hasOptions()):?>
-                    <div class="add-to-box">
-                        <?php if($_product->isSaleable()): ?>
-                            <?php echo $this->getChildHtml('addtocart') ?>
-                            <?php if( $this->helper('wishlist')->isAllow() || $_compareUrl=$this->helper('catalog/product_compare')->getAddUrl($_product)): ?>
-                                <span class="or"><?php echo $this->__('OR') ?></span>
-                            <?php endif; ?>
-                        <?php endif; ?>
-                        <?php echo $this->getChildHtml('addto') ?>
+                            <p class="quantity"><?php echo ucfirst($this->__("quantity")); ?>:<span>1</span></p></td>
+                        <td class="price"><?php echo $this->helper('core')->currency($finalPrice, true, false); ?></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <br /><br />
+                <div class="container-fluid"><div class="row" style="text-align: center;">
+                    <div class="col-md-6" style="margin-bottom: 15px; "><a href="#" data-dismiss="modal"
+                                             class="button button-third"><?php echo $this->__("Continue shopping at the mall."); ?></a>
                     </div>
-                    <?php echo $this->getChildHtml('extra_buttons') ?>
-                <?php elseif (!$_product->isSaleable()): ?>
-                    <div class="add-to-box">
-                        <?php echo $this->getChildHtml('addto') ?>
+                    <div class="col-md-6"><a href="<?php echo Mage::getUrl('checkout/cart'); ?>"
+                                             class="button button-primary medium link"><?php echo $this->__("Go to shopping cart"); ?></a>
                     </div>
-                <?php endif; ?>
-
-                <?php if ($_product->getShortDescription()):?>
-                    <div class="short-description">
-                        <h2><?php echo $this->__('Quick Overview') ?></h2>
-                        <div class="std"><?php echo $_helper->productAttribute($_product, nl2br($_product->getShortDescription()), 'short_description') ?></div>
-                    </div>
-                <?php endif;?>
-
-                <?php echo $this->getChildHtml('other');?>
-
-                <?php if ($_product->isSaleable() && $this->hasOptions()):?>
-                    <?php echo $this->getChildChildHtml('container1', '', true, true) ?>
-                <?php endif;?>
-
+                </div></div>
             </div>
-
-            <div class="product-img-box">
-                <?php echo $this->getChildHtml('media') ?>
-            </div>
-
-            <div class="clearer"></div>
-            <?php if ($_product->isSaleable() && $this->hasOptions()):?>
-                <?php echo $this->getChildChildHtml('container2', '', true, true) ?>
-            <?php endif;?>
-        </form>
-        <script type="text/javascript">
-            //<![CDATA[
-            var productAddToCartForm = new VarienForm('product_addtocart_form');
-            productAddToCartForm.submit = function(button, url) {
-                if (this.validator.validate()) {
-                    var form = this.form;
-                    var oldUrl = form.action;
-
-                    if (url) {
-                        form.action = url;
-                    }
-                    var e = null;
-                    try {
-                        this.form.submit();
-                    } catch (e) {
-                    }
-                    this.form.action = oldUrl;
-                    if (e) {
-                        throw e;
-                    }
-
-                    if (button && button != 'undefined') {
-                        button.disabled = true;
-                    }
-                }
-            }.bind(productAddToCartForm);
-
-            productAddToCartForm.submitLight = function(button, url){
-                if(this.validator) {
-                    var nv = Validation.methods;
-                    delete Validation.methods['required-entry'];
-                    delete Validation.methods['validate-one-required'];
-                    delete Validation.methods['validate-one-required-by-name'];
-                    // Remove custom datetime validators
-                    for (var methodName in Validation.methods) {
-                        if (methodName.match(/^validate-datetime-.*/i)) {
-                            delete Validation.methods[methodName];
-                        }
-                    }
-
-                    if (this.validator.validate()) {
-                        if (url) {
-                            this.form.action = url;
-                        }
-                        this.form.submit();
-                    }
-                    Object.extend(Validation.methods, nv);
-                }
-            }.bind(productAddToCartForm);
-            //]]>
-        </script>
-    </div>
-
-    <div class="product-collateral">
-        <?php foreach ($this->getChildGroup('detailed_info', 'getChildHtml') as $alias => $html):?>
-            <div class="box-collateral <?php echo "box-{$alias}"?>">
-                <?php if ($title = $this->getChildData($alias, 'title')):?>
-                    <h2><?php echo $this->escapeHtml($title); ?></h2>
-                <?php endif;?>
-                <?php echo $html; ?>
-            </div>
-        <?php endforeach;?>
-        <?php echo $this->getChildHtml('upsell_products') ?>
-        <?php echo $this->getChildHtml('product_additional_data') ?>
+        </div>
     </div>
 </div>
 
-
 <?php echo $this->getChildHtml('product.info.media.modal'); ?>
 
-
+<?php echo $this->getChildHtml('zolago_modago_home_sliderlastseen'); ?>
+<?php if($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) : ?>
+<script type="text/javascript">
+    Mall.product.productOptions(<?php echo Mage::getBlockSingleton('zolagocatalog/product_view_type_configurable')->getJsonConfig(); ?>);
+    Mall.product._current_product_type = "<?php echo Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE; ?>";
+</script>
+<?php endif; ?>

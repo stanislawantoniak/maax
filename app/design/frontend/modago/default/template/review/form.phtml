@@ -32,7 +32,7 @@
         <form action="<?php echo Mage::getUrl('review/product/post', array('id' => $this->getProduct()->getId())); ?>" method="post" id="review-form" class="form clearfix" rel="form">
             <?php echo $this->getBlockHtml('formkey'); ?>
             <h4><?php echo $this->escapeHtml($this->getProductInfo()->getName()); ?> - <strong><?php echo $this->__("Add your review"); ?></strong></h4>
-            <div class="fieldset">
+            <div class="fieldset review-stars-form">
                 <input type="hidden" name="validate_rating" class="validate-rating" value="">
 
                 <fieldset>
@@ -54,6 +54,12 @@
                             <td><div id="<?php echo $this->escapeHtml($_rating->getRatingCode()); ?>_rating" data-number="5" data-score="0" data-score-name="ratings[<?php echo $_rating->getId(); ?>]" data-score-range="<?php echo implode(',', $_options); ?>"></div></td>
                         </tr>
                         <?php endforeach; ?>
+                        <tr>
+                            <td colspan="2">
+                                <input type="text" style="position: absolute; top: -20000px;left:-2000px;" name="stars" value="" id="stars" />
+                                <span  class="error hidden"><?php echo $this->__("All star groups must be selected."); ?></span>
+                            </td>
+                        </tr>
                         </tbody>
                     </table>
                     <?php endif; ?>
@@ -64,25 +70,25 @@
 
                         <div class="title form-group">
                             <label for="title" class=""><?php echo $this->__('Summary of Your Review') ?></label>
-                            <input type="text" class="form-control" id="title" name="title" data-toggle="tooltip" title="<?php echo $this->__('Summary of Your Review') ?>" value="<?php echo $this->escapeHtml($data->getTitle()) ?>" />
+                            <input type="text" class="form-control" id="title" name="title" data-toggle="tooltip" title="<?php echo $this->__('Summary of Your Review') ?>" value="<?php echo $this->escapeHtml($data->getTitle()) ?>" required />
 
                         </div>
-                        <div class="form-group">
+                        <div class="form-group detail">
                             <label for="review_field" class=""><?php echo $this->__('Review') ?></label>
-                            <textarea name="detail" id="review_field" cols="5" rows="3" class="required-entry"><?php echo $this->escapeHtml($data->getDetail()) ?></textarea>
+                            <textarea name="detail" id="review_field" cols="5" rows="3" class="required-entry" required><?php echo $this->escapeHtml($data->getDetail()) ?></textarea>
                         </div>
 
                         <div class="form-group clearfix">
                             <div class="row">
-                                <div class="col-sm-3"><label for="recommend_product">Czy polecasz produkt</label></div>
+                                <div class="col-sm-3"><label for="recommend_product"><?php echo $this->__("Do you recommend this product"); ?></label></div>
                                 <div class="col-sm-9">
                                     <div class="form-group form-radio">
-                                        <input type="radio" name="recommend_product" id="recommend_product_yes" class="css-radio" value="1">
-                                        <label for="recommend_product_yes" class="css-label">Tak</label>
+                                        <input type="radio" name="recommend_product" id="recommend_product_yes" class="css-radio required" value="1">
+                                        <label for="recommend_product_yes" class="css-label"><?php echo $this->__("Yes"); ?></label>&nbsp;&nbsp;&nbsp;
+                                        <input type="radio" name="recommend_product" id="recommend_product_no" class="css-radio" value="0">
+                                        <label for="recommend_product_no" class="css-label"><?php echo $this->__("No"); ?></label>
                                     </div>
                                     <div class="form-group form-radio">
-                                        <input type="radio" name="recommend_product" id="recommend_product_no" class="css-radio" value="0">
-                                        <label for="recommend_product_no" class="css-label">Nie</label>
                                     </div>
 
                                 </div>
@@ -92,12 +98,12 @@
                             <div class="row">
                                 <div class="col-sm-3"><label for="nickname_field" class=""><?php echo $this->__("Your nickname"); ?></label></div>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control hint" id="nickname_field" name="nickname" data-toggle="tooltip" title="Wprowadź Swój NICK" value="<?php echo $this->escapeHtml($data->getNickname()) ?>" />
+                                    <input type="text" class="form-control hint" id="nickname_field" name="nickname" data-toggle="tooltip" title="<?php echo $this->__("Enter your nickname"); ?>" value="<?php echo $this->escapeHtml($data->getNickname()) ?>" required />
 
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" title="<?php echo $this->__('Submit Review') ?>" class="button button-primary large pull-right">
+                        <button type="submit" title="<?php echo $this->__('Submit Review') ?>" class="button button-primary large pull-right" id="submit-review">
                     <span>
                         <span><?php echo $this->__('Submit Review') ?></span>
                     </span>
@@ -108,6 +114,22 @@
             </div>
 
         </form>
+<script type="text/javascript">
+    Mall.i18nValidation.add("stars", "<?php echo $this->__("All star groups must be selected."); ?>");
+</script>
+            <style type="text/css">
+                div.form-radio>i.form-ico-checked {
+                    left: auto !important;
+                    top: 3px !important;
+                }
+                div.review-stars-form>i.form-control-feedback {
+                    left: 178px !important;
+                    top: 0 !important;
+                }
+                div.title>i.form-control-feedback,div.detail>i.form-control-feedback {
+                    top: 28px !important;
+                }
+            </style>
         <?php else: ?>
             <h4 class="review-nologged" id="review-form">
                 <?php echo $this->__('Only registered users can write reviews. Please, <a href="%s">log in</a> or <a href="%s">register</a>', $this->getLoginLink(), Mage::helper('customer')->getRegisterUrl()) ?>

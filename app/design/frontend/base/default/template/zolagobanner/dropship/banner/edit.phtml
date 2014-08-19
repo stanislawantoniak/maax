@@ -1,0 +1,68 @@
+<?php /* @var $this Zolago_Banner_Block_Vendor_Banner_Edit */ ?>
+<?php $_helper = Mage::helper("zolagobanner");?>
+<?php $_model = $this->getModel();?>
+<div class="container">
+	<div class="page-heading row">
+		<div class="col-lg-6">
+			<h3>
+				<?php if($this->isModelNew()):?>
+					<?php echo Mage::helper("zolagobanner")->__("New Banner");?>
+				<?php else: ?>
+					<?php echo Mage::helper("zolagopo")->__("Edit Banner '%s'", $_model->getName());?>
+				<?php endif;?>
+			</h3>
+		</div>
+	</div>
+    <div class="page-heading row">
+        <div class="col-lg-6">
+            <ol class="breadcrumb">
+                <?php if($this->isModelNew()):?>
+                    <li>
+                        <a href="<?php echo $_helper->setBannerTypeUrl(); ?>">
+                            <?php echo $_helper->__('Choose Banner Type') ?>
+                        </a>
+                    </li>
+                <?php endif;?>
+                <?php if($this->isModelNew()):?>
+                    <li class="active"><?php echo $_helper->__("New Banner");?></li>
+                <?php else: ?>
+                    <li class="active"><?php echo $_helper->__("Edit Banner '%s'", $_model->getName());?></li>
+                <?php endif;?>
+            </ol>
+        </div>
+    </div>
+</div>
+
+<div class="container z-grid">
+	<form id="edit-banner" class="form-horizontal row-border" action="<?php echo $this->getForm()->getAction();?>" method="POST" enctype="multipart/form-data">
+		<input type="hidden" name="banner_id" value="<?php echo $_model->getId();?>"/>
+        <input type="hidden" name="type" value="<?php echo $this->getType();?>"/>
+		<?php echo $this->getLayout()->getBlock('formkey')->toHtml();?>
+		<?php echo $this->getForm()->toHtml();?>
+
+		<div class="form-actions"> <input type="submit" value="<?php echo $_helper->__("Save");?>" class="btn btn-primary pull-right"> </div>
+	</form>
+</div>
+
+<script type="text/javascript">
+    jQuery(function ($) {
+        var form = $("#edit-banner");
+        new Zolago.formIntegrator(form);
+        form.validate();
+
+        changeDependingSelectorHandler('slider_type');
+    });
+
+    /**
+     *
+     * @param name
+     */
+    function changeDependingSelectorHandler(name) {
+        jQuery('select[name=' + name + ']').change(function () {
+            var form = jQuery('#edit-banner');
+            var type = jQuery(this).val();
+            form.find('[data-name=' + name + ']').addClass('hidden');
+            form.find('[data-name=' + name + '][data-type=' + type + ']').removeClass('hidden');
+        })
+    }
+</script>

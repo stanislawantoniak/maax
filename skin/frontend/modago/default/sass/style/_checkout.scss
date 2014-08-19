@@ -36,6 +36,11 @@
 		margin-bottom:15px;
 		padding:0;
 	}
+	fieldset {
+		> h4 {
+			margin-top:0px;
+		}
+	}
 	.panel {
 		@include border-radius(2px);
 		border-color:$bc-primary;
@@ -735,6 +740,7 @@
 					border-color :$bc-secondary;
 					.selected_bank {
 						display:block;
+						margin-top: 21px;
 					}
 				}
 			}
@@ -820,6 +826,6 @@
 
 #zmien_produkty {
 	@media(max-width: 480px){
-		display:none;
+		//display:none;
 	}
 }

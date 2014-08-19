@@ -15,12 +15,18 @@
             </table>
             <div class="summary_basket">
                 <ul>
-                    <li><?php echo $this->__("Products count"); ?>: {{all_products_count}}</li>
-                    <li><?php echo $this->__("Products worth"); ?>: {{total_amount}} {{currency_symbol}}</li>
-                    <li><?php echo $this->__("Shipping cost"); ?>: {{shipping_cost}}</li>
+                    <li>{{products_count_msg}}: {{all_products_count}}</li>
+                    <li>{{products_worth_msg}}: {{total_amount}} {{currency_symbol}}</li>
+                    <li>{{shipping_cost_msg}}: {{shipping_cost}}</li>
                 </ul>
-                <a href="{{show_cart_url}}" class="view_basket button button-primary medium link"><?php echo $this->__("See your cart"); ?></a>
+                <a href="{{show_cart_url}}" class="view_basket button button-primary medium link">{{see_your_cart_msg}}</a>
             </div>
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    Mall.i18nValidation.add("see_your_cart_msg","<?php echo $this->__("See your cart"); ?>");
+    Mall.i18nValidation.add("products_count_msg","<?php echo $this->__("Products count"); ?>");
+    Mall.i18nValidation.add("products_worth_msg","<?php echo $this->__("Products worth"); ?>");
+    Mall.i18nValidation.add("shipping_cost_msg","<?php echo $this->__("Shipping cost"); ?>");
+</script>

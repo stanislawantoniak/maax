@@ -61,6 +61,65 @@ jQuery.validator.addMethod("integer", function(value, element) {
 	return this.optional(element) || /^-?\d+$/.test(value);
 }, "A positive or negative non-decimal number please");
 
+jQuery.validator.addMethod('dateBefore', function(value, element, params) {
+    // if end date is valid, validate it as well
+
+    var end = jQuery(params);
+
+    //format if dd-mm-yy to mm-dd-yy
+    var fValue = value.replace(/([\s:\-]+)/g, '/');
+
+
+    var time = fValue.split("/");
+
+    var date = [time[1],time[0],time[2]].join("/");
+    var time = [time[3],time[4]].join(":");
+    value = date + " " + time;
+
+    var endDate = end.val();
+    var fValue = endDate.replace(/([\s:\-]+)/g, '/');
+
+
+    var time = fValue.split("/");
+
+    var date = [time[1],time[0],time[2]].join("/");
+    var time = [time[3],time[4]].join(":");
+    endDate = date + " " + time;
+    //format if dd-mm-yy to mm-dd-yy
+
+
+    return this.optional(element) || this.optional(end[0]) || new Date(value) < new Date(endDate);
+
+}, 'Must be before corresponding end date');
+
+jQuery.validator.addMethod('dateAfter', function(value, element, params) {
+    // if start date is valid, validate it as well
+    var start = jQuery(params);
+
+    //format if dd-mm-yy to mm-dd-yy
+    var fValue = value.replace(/([\s:\-]+)/g, '/');
+
+
+    var time = fValue.split("/");
+
+    var date = [time[1],time[0],time[2]].join("/");
+    var time = [time[3],time[4]].join(":");
+    value = date + " " + time;
+
+    var startDate = jQuery(params).val();
+    var fValue = startDate.replace(/([\s:\-]+)/g, '/');
+
+
+    var time = fValue.split("/");
+
+    var date = [time[1],time[0],time[2]].join("/");
+    var time = [time[3],time[4]].join(":");
+    startDate = date + " " + time;
+    //format if dd-mm-yy to mm-dd-yy
+
+    return this.optional(element) || this.optional(start[0]) || new Date(value) > new Date(startDate);
+
+}, 'Must be after corresponding start date');
 /**
  * Return true, if the value is a valid vehicle identification number (VIN).
  *
@@ -683,3 +742,24 @@ jQuery.validator.addMethod('urlKeyExists', function(value, element) {
 	return false;
 			
 }, jQuery.format("Url key already exists"));
+
+// validate converter price
+jQuery.validator.addMethod('priceSource', function(value, element) {
+	var selectedOption = jQuery(element).find(":selected");
+	var sourcePointer = jQuery("#" + selectedOption.data("pointer"))
+	var checkValue = null;
+	
+	if(this.optional(element)){
+		return true;
+	}
+	
+	// Has minimal price pointer?
+	if(sourcePointer.length){
+		checkValue = sourcePointer.data('price');
+	}else{
+		checkValue = selectedOption.data('price');
+	}
+	
+	
+	return this.optional(element) || !isNaN(parseFloat(checkValue));
+}, jQuery.format("The converter price of product or one of child product is not available"));
