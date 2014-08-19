@@ -318,6 +318,17 @@ var Mall = {
                 alert(message);
                 break;
         }
+    },
+
+    getCurrencyBasedOnCode: function(code) {
+        var currency = "zł";
+        switch(code) {
+            case "PLN":
+                currency = "zł";
+                break;
+        }
+
+        return currency;
     }
 
 
@@ -499,6 +510,237 @@ Mall.product = {
         jQuery("<span/>", {
             "html": option.label
         }).appendTo(label);
+    }
+};
+
+Mall.listing = {
+    _current_page: 1,
+
+    _current_dir: "asc",
+
+    _current_sort: "",
+
+    _current_query: "",
+
+    _current_scat: "",
+
+    getMoreProducts: function() {
+        var query = this.getQuery();
+        var page = this.getPage();
+        var sort = this.getSort();
+        var dir = this.getDir();
+        var scat = this.getScat();
+        var filtersArray = this.getFiltersArray();
+
+        OrbaLib.Listing.getProducts({
+            q: query,
+            page: page,
+            sort: sort,
+            dir: dir,
+            scat: scat,
+            fq: filtersArray
+        }, Mall.listing.getMoreProductsCallback);
+    },
+
+    getMoreProductsCallback: function(data) {
+        if(data.status == true) {
+            var msnry;
+            var container = jQuery("#items-product").masonry();
+            var sortArray = data.content.sort.split(" ");
+            var items;
+            Mall.listing.setPageIncrement();
+            Mall.listing.setSort(sortArray[0]);
+            Mall.listing.setDir(sortArray[1]);
+            items = Mall.listing.appendToList(data.content.products);
+            container.imagesLoaded(function() {
+                container.masonry("appended", items);
+                jQuery(".shapes_listing").css("top", jQuery(".addNewPositionListProduct").position().top - 180);
+            });
+        } else {
+            // do something to inform customer that something went wrong
+            alert("Something went wrong, try again");
+            return false;
+        }
+    },
+
+    appendToList: function(products) {
+        var items = [];
+        var _item;
+        jQuery.each(products, function(index, item) {
+            _item = Mall.listing.createProductEntity(item);
+            jQuery("#items-product").find(".shapes_listing").before(_item);
+            items.push(_item[0]);
+        });
+
+        // attach events
+        this.attachEventsToProducts();
+
+        return items;
+    },
+
+    createProductEntity: function(product) {
+        var container = jQuery("<div/>", {
+            class: "item col-phone col-xs-4 col-sm-4 col-md-3 col-lg-3 size14"
+        });
+        var box = jQuery("<div/>", {
+            class: "box_listing_product"
+        }).appendTo(container);
+        var link = jQuery("<a/>", {
+            href: product.current_url
+        }).appendTo(box);
+        var figure = jQuery("<figure/>", {
+            class: "img_product"
+        }).appendTo(link);
+        jQuery("<img/>", {
+            src: product.listing_resized_image_url,
+            alt: product.name,
+            class: "img-responsive"
+        }).appendTo(figure);
+        var vendor = jQuery("<div/>", {
+            class: "logo_manufacturer"
+        }).appendTo(link);
+        jQuery("<img/>", {
+            src: product.udropship_vendor_logo_url,
+            alt: product.udropship_vendor_name
+        }).appendTo(vendor);
+        jQuery("<div/>", {
+            class: "name_product",
+            html: product.name
+        }).appendTo(link);
+        var priceBox = jQuery("<div/>", {
+            class: "price clearfix"
+        }).appendTo(link);
+        var colPrice = jQuery("<div/>", {
+            class: "col-price"
+        }).appendTo(priceBox);
+        if(product.price != product.final_price) {
+            jQuery("<span/>", {
+                class: "old",
+                html: product.price + " " + Mall.getCurrencyBasedOnCode(product.currency)
+            }).appendTo(colPrice);
+        }
+        jQuery("<span/>", {
+            html: product.final_price + " " + Mall.getCurrencyBasedOnCode(product.currency)
+        }).appendTo(colPrice);
+        var likeClass = "like";
+        var likeText = "<span></span>";
+        if(product.in_my_wishlist) {
+            likeClass += " liked";
+            likeText = "<span>Ty+</span>";
+        }
+        var like = jQuery("<div/>", {
+            class: likeClass,
+            "data-idproduct": product.entity_id,
+            "data-status": product.in_my_wishlist,
+            onclick: "Mall.toggleWishlist(this);"
+        }).appendTo(priceBox);
+
+        var likeIco = jQuery("<span/>", {
+            class: "icoLike"
+        }).appendTo(like);
+
+        jQuery("<img/>", {
+            src: Config.path.heartLike,
+            class: "img-01",
+            alt: ""
+        }).appendTo(likeIco);
+
+        jQuery("<img/>", {
+            src: Config.path.heartLiked,
+            alt: "",
+            class: "img-02"
+        }).appendTo(likeIco);
+
+        jQuery("<span/>", {
+            class: "like_count",
+            html: likeText + product.wishlist_count
+        }).appendTo(like);
+
+        jQuery("<div/>", {
+            class: "toolLike"
+        }).appendTo(like);
+
+        return container;
+    },
+
+    attachEventsToProducts: function() {
+
+        var itemProduct = jQuery('.box_listing_product');
+        itemProduct.on('click', '.like', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+            var itemProductId = jQuery(this).data('idproduct');
+        });
+        itemProduct.on('mouseenter', '.like', function(event) {
+            event.preventDefault();
+            if (jQuery(this).hasClass('liked')) {
+                var textLike = 'Dodane do ulubionych';
+            } else {
+                var textLike = 'Dodaj do ulubionych';
+            };
+            jQuery(this).find('.toolLike').show().text(textLike);
+        });
+        itemProduct.on('mouseleave mouseup', '.like', function(event) {
+            event.preventDefault();
+            jQuery(this).find('.toolLike').hide().text('');
+        });
+        itemProduct.on('mousedown', '.like', function(event) {
+            event.preventDefault();
+            jQuery(this).find('img:visible').animate({transform: 'scale(1.2)'}, 200);
+        });
+        itemProduct.on('mouseup', '.like', function(event) {
+            event.preventDefault();
+            jQuery(this).find('img:visible').animate({transform: 'scale(1.0)'}, 200)
+        });
+        itemProduct.on('mousedown', '.liked', function(event) {
+            event.preventDefault();
+            var textLike = 'Usunięte z ulubionych';
+            jQuery(this).find('.toolLike').show().text(textLike);
+        });
+    },
+
+    getQuery: function() {
+        return this._current_query;
+    },
+
+    getPage: function() {
+        return this._current_page + 1;
+    },
+
+    getSort: function() {
+        return this._current_sort;
+    },
+
+    getDir: function() {
+        return this._current_dir;
+    },
+
+    getScat: function() {
+        return this._current_scat;
+    },
+
+    getFiltersArray: function() {
+        return {};
+    },
+
+    setPageIncrement: function() {
+        this._current_page += 1;
+    },
+
+    setDir: function(dir) {
+        this._current_dir = dir;
+    },
+
+    setSort: function(sort) {
+        this._current_sort = sort;
+    },
+
+    setQuery: function(query) {
+        this._current_query = query;
+    },
+
+    setScat: function(scat) {
+        this._current_scat = scat;
     }
 };
 
