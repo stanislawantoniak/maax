@@ -18,4 +18,8 @@ class Zolago_Banner_Block_Vendor_Banner_Type extends Mage_Core_Block_Template
         );
         return $types;
     }
+
+    public function getCampaignId(){
+        return $this->getRequest()->getParam("campaign_id");
+    }
 }

@@ -15,8 +15,9 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
         parent::_prepareLayout();
     }
 
+
     /**
-     * @param mixed $type
+     *
      */
     public function setType()
     {
@@ -32,10 +33,15 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
         return $this->_type;
     }
 
-
+    public function getCampaignId(){
+        $campaignId = $this->getRequest()->getParam('campaign_id', $this->getModel()->getCampaignId());
+        return $campaignId;
+    }
     public function _prepareForm(){
         $id = $this->getRequest()->getParam('id',null);
+
         $type = $this->_type;
+        $campaignId = $this->getCampaignId();
 
         $helper = Mage::helper('zolagobanner');
         $form = Mage::getModel('zolagodropship/form');
@@ -54,21 +60,64 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
             "label" => $helper->__('Name')
         ));
 
-        $general->addField("campaign_id", "select", array(
-            "name" => "campaign_id",
-            "required" => true,
-            "class" => "form-control",
-            "label" => $helper->__('Campaign'),
-            "values" => Mage::getSingleton('zolagobanner/banner_campaign')->toOptionHash()
+        if(!empty($campaignId)){
+
+        }
+        $general->addField(
+            "campaign_id", "hidden",
+            array(
+                 "name"     => "campaign_id",
+                 "required" => true)
+        );
+        $general->addField("type", "hidden", array(
+            "name" => "type"
         ));
         //--Common edit banner fields
+        $data = $this->getTypeConfiguration($type);
 
         //Additional banner fields depends on type
-        $this->_completeForm($form, $type);
+        $this->_completeForm($form, $data);
 
         $values = $this->getModel()->getData();
+
+        $contentData = $this->getModel()->getResource()->getBannerContent($id);
+
+        $contentValues = $this->_prepareContentDataToSet($contentData);
+
+        $values = array_merge($values, array('show' => $data->show_as, 'type' => $type  ));
+        $values = array_merge($values, array('campaign_id'=> $campaignId));
+        $values = array_merge($values, $contentValues);
+
         $form->setValues($values);
         $this->setForm($form);
+    }
+
+    private function _prepareContentDataToSet($contentData){
+        $data = array();
+        if($contentData){
+            if($contentData['show'] == Zolago_Banner_Model_Banner_Show::BANNER_SHOW_IMAGE){
+                $image = unserialize($contentData['image']);
+                $caption = unserialize($contentData['caption']);
+
+                if(!empty($image)){
+                    foreach($image as $n => $imageItem){
+                        $data['image_'.$n] = isset($imageItem['path']) ? $imageItem['path'] : '';
+                        $data['image_url_'.$n] = isset($imageItem['url']) ? $imageItem['url'] : '';
+                    }
+                }
+                if(!empty($caption)){
+                    foreach($caption as $n => $captionItem){
+                        $data['caption_text_'.$n] = isset($captionItem['text']) ? $captionItem['text'] : '';
+                        $data['caption_url_'.$n] = isset($captionItem['url']) ? $captionItem['url'] : '';
+                    }
+                }
+            }
+            if($contentData['show'] == Zolago_Banner_Model_Banner_Show::BANNER_SHOW_HTML){
+                $data['banner_html'] = $contentData['html'];
+            }
+        }
+        return $data;
+
     }
 
     public function getTypeConfiguration()
@@ -92,14 +141,16 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
         return $config;
     }
 
-    public function _completeForm(Zolago_Dropship_Model_Form $form, $type)
+    public function _completeForm(Zolago_Dropship_Model_Form $form, $data)
     {
         $helper = Mage::helper('zolagobanner');
 
-        $data = $this->getTypeConfiguration($type);
-
         $bannerContent = $form->addFieldset("banner_content", array(
             "legend" => $helper->__("Content")
+        ));
+
+        $bannerContent->addField("show", "hidden", array(
+            "name" => "show"
         ));
         switch ($data->show_as) {
             case Zolago_Banner_Model_Banner_Show::BANNER_SHOW_IMAGE:
