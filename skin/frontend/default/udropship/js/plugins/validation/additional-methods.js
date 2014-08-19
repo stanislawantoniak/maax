@@ -742,3 +742,24 @@ jQuery.validator.addMethod('urlKeyExists', function(value, element) {
 	return false;
 			
 }, jQuery.format("Url key already exists"));
+
+// validate converter price
+jQuery.validator.addMethod('priceSource', function(value, element) {
+	var selectedOption = jQuery(element).find(":selected");
+	var sourcePointer = jQuery("#" + selectedOption.data("pointer"))
+	var checkValue = null;
+	
+	if(this.optional(element)){
+		return true;
+	}
+	
+	// Has minimal price pointer?
+	if(sourcePointer.length){
+		checkValue = sourcePointer.data('price');
+	}else{
+		checkValue = selectedOption.data('price');
+	}
+	
+	
+	return this.optional(element) || !isNaN(parseFloat(checkValue));
+}, jQuery.format("The converter price of product or one of child product is not available"));

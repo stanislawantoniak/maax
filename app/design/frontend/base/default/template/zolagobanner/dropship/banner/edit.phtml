@@ -1,6 +1,20 @@
 <?php /* @var $this Zolago_Banner_Block_Vendor_Banner_Edit */ ?>
 <?php $_helper = Mage::helper("zolagobanner");?>
 <?php $_model = $this->getModel();?>
+<script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
+<script>
+    tinymce.init({
+        selector:'textarea[name=banner_html]',
+        height : 400,
+        plugins: [
+            "advlist autolink lists link image charmap preview anchor textcolor",
+            "searchreplace visualblocks code",
+            "insertdatetime table contextmenu paste"
+        ],
+        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
+    });
+</script>
+
 <div class="container">
 	<div class="page-heading row">
 		<div class="col-lg-6">
@@ -18,7 +32,7 @@
             <ol class="breadcrumb">
                 <?php if($this->isModelNew()):?>
                     <li>
-                        <a href="<?php echo $_helper->setBannerTypeUrl(); ?>">
+                        <a href="<?php echo $_helper->setBannerTypeUrl(); ?>campaign_id/<?php echo $this->getCampaignId(); ?>">
                             <?php echo $_helper->__('Choose Banner Type') ?>
                         </a>
                     </li>
@@ -36,7 +50,6 @@
 <div class="container z-grid">
 	<form id="edit-banner" class="form-horizontal row-border" action="<?php echo $this->getForm()->getAction();?>" method="POST" enctype="multipart/form-data">
 		<input type="hidden" name="banner_id" value="<?php echo $_model->getId();?>"/>
-        <input type="hidden" name="type" value="<?php echo $this->getType();?>"/>
 		<?php echo $this->getLayout()->getBlock('formkey')->toHtml();?>
 		<?php echo $this->getForm()->toHtml();?>
 

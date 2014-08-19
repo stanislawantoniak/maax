@@ -225,6 +225,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         $batchFile = self::CONVERTER_PRICE_UPDATE_LOG;
         $skuS = array_keys($priceBatch);
         $itemsToChange = count($skuS);
+        Mage::log($priceBatch, 0, $batchFile);
         Mage::log(microtime() . " Got items from converter {$itemsToChange}", 0, $batchFile);
 
         //Get price types
@@ -316,7 +317,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
             }
         }
         Mage::log(microtime() . ' End update', 0, $batchFile);
-
+        Mage::log($ids, 0, 'configurable_to_queue_update.log');
         if (!empty($insert)) {
             $model->savePriceValues($insert);
             Zolago_Catalog_Helper_Configurable::queue($ids);

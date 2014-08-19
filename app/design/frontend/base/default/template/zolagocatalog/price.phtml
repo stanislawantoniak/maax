@@ -46,14 +46,27 @@
 #grid-holder .dgrid-sort-arrow {
 	margin:0;
 }
-#grid-holder .text-overflow {
+#grid-holder .text-overflow,
+#grid-holder th.dgrid-cell{
 	text-overflow: ellipsis;
 	white-space: nowrap;
 }
-#grid-holder td.dgrid-cell {
-}
 #grid-holder td.editable {
 	font-weight: bold;
+}
+#grid-holder td.editable.popup-trigger,
+#grid-holder .expando td.editable
+{
+	font-weight: normal;
+}
+#grid-holder td.editable.popup-trigger{
+	color: #4d7496;
+}
+#grid-holder td.editable.popup-trigger:hover{
+	text-decoration: underline;
+}
+#grid-holder .dgrid-row:hover td.editable.popup-trigger{
+	color: #000
 }
 #grid-holder  .align-right {
 	text-align: right;
@@ -174,6 +187,58 @@
 
 #grid-holder .campaign-date{
 	width: 250px;
+}
+
+/******************************************************************************
+ * Modal 
+ ******************************************************************************/
+
+.price-modal table{
+	table-layout: fixed;
+}
+.price-modal tbody td{
+	text-align: right;
+	color: #999;
+}
+.price-modal .minimal-price td{
+	font-weight: bold;
+}
+.price-modal .minimal-price td.caption{
+	text-align: left;
+}
+.price-modal tbody td.effective-price{
+	color: #468847;
+	font-weight:bold;
+}
+
+.price-modal tbody td.option-text,
+.price-modal tbody td.price-deviation{
+	color: inherit;
+}
+.price-modal tbody td.option-text,
+.price-modal tbody td.price-deviation{
+	text-align: left;
+}
+.price-modal table .price-deviation{
+	padding-top:4px;
+	padding-bottom:3px;
+}
+.price-modal table .price-deviation input{
+	height: 20px;
+	padding: 0 2px !important;
+}
+.help-block{
+	color: inherit;
+}
+
+.price-modal .help-block{
+	font-weight: bold;
+}
+
+.price-modal .form-group{
+	margin:0 !important;
+	border:0 !important;
+	padding:0 15px !important;
 }
 
 </style>

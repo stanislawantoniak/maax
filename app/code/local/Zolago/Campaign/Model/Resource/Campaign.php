@@ -14,149 +14,11 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
      */
     protected function _afterSave(Mage_Core_Model_Abstract $object)
     {
-        Mage::log($object->getData());
         // Website Assignment
         if ($object->hasData("website_ids")) {
             $this->_setWebsites($object, $object->getData("website_ids"));
         }
-
-        // Products Assignment
-        if ($object->hasData("campaign_products")) {
-            //Prepare data
-            $productsStr = $object->getData("campaign_products");
-            $skuS = array();
-            if (is_string($productsStr)) {
-                $skuS = array_map('trim', explode(",", $productsStr));
-            }
-            $collection = Mage::getModel('catalog/product')
-                ->getCollection()
-                ->addAttributeToFilter('skuv', array('in' => $skuS))
-                ->getAllIds();
-            $productIds = array();
-            if (!empty($collection)) {
-                foreach ($collection as $productId) {
-                    $productIds[] = $productId;
-                }
-            }
-            $websites = $object->getWebsiteIds();
-            $storeIds = array(Mage_Core_Model_App::ADMIN_STORE_ID);
-            foreach (Mage::app()->getWebsites() as $website) {
-                if (in_array($website->getId(), $websites)) {
-                    foreach ($website->getGroups() as $group) {
-                        $stores = $group->getStores();
-                        foreach ($stores as $store) {
-                            //$store is a store object
-                            $storeIds[] = $store->getId();
-                        }
-                    }
-                }
-            }
-            //-----Prepare data
-
-
-            $this->_setProducts($object, $productIds);
-
-
-//            $this->_setCampaignAttributes($object, $productIds, $storeIds);
-//
-//            //Assignment Special Price From Date and Special Price To Date
-//            if ($object->hasData("date_from") || $object->hasData("date_to")) {
-//                $this->_setSpecialPriceDate($productIds, $object->getData("date_from"), $object->getData("date_to"),$storeIds);
-//            }
-//
-//            //Assignment Special Price
-//            if ($object->hasData("price_source_id") && $object->hasData("percent")) {
-//                $this->_setSpecialPrice($productIds, $object->getData("price_source_id"), $object->getData("percent"),$storeIds);
-//            }
-//            //Assignment Suggested Retail Price
-//            if ($object->hasData("price_srp")) {
-//                $this->_setSRPPrice($productIds, $object->getData("price_srp"),$storeIds);
-//            }
-//            Mage::getSingleton('catalog/product_action')
-//                ->reindexAfterMassAttributeChange();
-        }
         return parent::_afterSave($object);
-    }
-
-    public function _setSRPPrice($productIds, $srpPrice, $storeIds)
-    {
-        $actionModel = Mage::getSingleton('catalog/product_action');
-        foreach ($storeIds as $storeId) {
-            $attributesData = array('msrp' => $srpPrice);
-            $actionModel
-                ->updateAttributesNoIndex($productIds, $attributesData, $storeId);
-
-        }
-    }
-
-
-    public function _setSpecialPrice($productIds, $priceSourceId, $percent,$storeIds)
-    {
-        $actionModel = Mage::getSingleton('catalog/product_action');
-
-        $queueModel = Mage::getResourceModel('zolagocatalog/queue_pricetype');
-        $skuvs = $queueModel->getVendorSkuAssoc($productIds);
-
-        //Ping converter to get special price
-        try {
-            $converter = Mage::getModel('zolagoconverter/client');
-        } catch (Exception $e) {
-            Mage::throwException("Converter is unavailable: check credentials");
-            return;
-        }
-        $attr = Mage::getResourceModel('catalog/product')
-            ->getAttribute(Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER_PRICE_TYPE_CODE);
-        if ($attr->usesSource()) {
-            $priceType = $attr->getSource()->getOptionText($priceSourceId);
-        }
-        foreach ($skuvs as $productId => $productData) {
-            $vendorSku = $productData['skuv'];
-            $sku = $productData['sku'];
-
-            $res = explode('-', $sku);
-            $vendorExternalId = (!empty($res) && isset($res[0])) ? (int)$res[0] : false;
-            if (!$vendorExternalId) {
-                return;
-            }
-            foreach ($storeIds as $storeId) {
-                $newPrice = $converter->getPrice($vendorExternalId, $vendorSku, $priceType);
-                Mage::log($newPrice);
-                if (!empty($newPrice)) {
-                    $newPriceWithPercent = $newPrice + $newPrice * ((int)$percent / 100);
-
-                    $attributesData = array('special_price' => $newPriceWithPercent);
-                    $actionModel
-                        ->updateAttributesNoIndex(array($productId), $attributesData, $storeId);
-
-                }
-            }
-
-        }
-    }
-
-    /**
-     * @param Mage_Core_Model_Abstract $object
-     * @param $skuS
-     * @param $dateFrom
-     * @param $dateTo
-     */
-    public function _setSpecialPriceDate($productIds, $dateFrom, $dateTo, $storeIds)
-    {
-        $actionModel = Mage::getSingleton('catalog/product_action');
-        if (!empty($dateFrom)) {
-            $attributesData = array('special_from_date' => date('Y-m-d', strtotime($dateFrom)));
-            foreach ($storeIds as $storeId) {
-                $actionModel
-                    ->updateAttributesNoIndex($productIds, $attributesData, $storeId);
-            }
-        }
-        if (!empty($dateTo)) {
-            $attributesData = array('special_to_date' => date('Y-m-d', strtotime($dateTo)));
-            foreach ($storeIds as $storeId) {
-                $actionModel
-                    ->updateAttributesNoIndex($productIds, $attributesData, $storeId);
-            }
-        }
     }
 
     /**
@@ -170,76 +32,18 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         echo $where;
         $this->_getWriteAdapter()->delete($table, $where);
     }
+
     /**
-     * @param Mage_Core_Model_Abstract $object
-     * @param array $skuS
-     * @return Zolago_Campaign_Model_Resource_Campaign
+     * @param $campaignId
+     * @param $bannerId
      */
-    public function _setCampaignAttributes(Mage_Core_Model_Abstract $object, array $productIds, $storeIds)
+    public function removeBanner($campaignId, $bannerId)
     {
-        $actionModel = Mage::getSingleton('catalog/product_action');
-
-        $campaignInfoIds = $this->getProductsInfoCampaigns($productIds);
-
-        $dataToUpdate = array();
-        if (!empty($campaignInfoIds)) {
-            foreach ($campaignInfoIds as $resItem) {
-                $dataToUpdate[$resItem['product_id']][] = $resItem['campaign_id'];
-            }
-        }
-
-        switch($object->getType()){
-            case Zolago_Campaign_Model_Campaign_Type::TYPE_INFO:
-                foreach($dataToUpdate as $productId => $campaignIds){
-                    $campaignIds = array_merge($campaignIds , array($object->getId()));
-                    $attributesData = array('campaign_info_id' => implode("," , $campaignIds));
-                    foreach ($storeIds as $storeId) {
-                        $actionModel
-                            ->updateAttributesNoIndex(array($productId), $attributesData, $storeId);
-                    }
-                }
-
-                break;
-            case Zolago_Campaign_Model_Campaign_Type::TYPE_PROMOTION:
-                $attributesData = array('campaign_regular_id' => $object->getId());
-                foreach ($storeIds as $storeId) {
-                    $actionModel
-                        ->updateAttributesNoIndex($productIds, $attributesData, $storeId);
-                }
-                break;
-            case Zolago_Campaign_Model_Campaign_Type::TYPE_SALE:
-                $attributesData = array('campaign_regular_id' => $object->getId());
-                foreach ($storeIds as $storeId) {
-                    $actionModel
-                        ->updateAttributesNoIndex($productIds, $attributesData, $storeId);
-                }
-                break;
-        }
-
-        return $this;
-    }
-    /**
-     * @param Mage_Core_Model_Abstract $object
-     * @param array $skuS
-     * @return Zolago_Campaign_Model_Resource_Campaign
-     */
-    protected function _setProducts(Mage_Core_Model_Abstract $object, array $productIds)
-    {
-        $table = $this->getTable("zolagocampaign/campaign_product");
-        $where = $this->getReadConnection()
-            ->quoteInto("campaign_id=?", $object->getId());
+        $table = $this->getTable("zolagobanner/banner");
+        $where = "campaign_id={$campaignId} AND banner_id={$bannerId}";
         $this->_getWriteAdapter()->delete($table, $where);
-
-        $toInsert = array();
-
-        foreach ($productIds as $productId) {
-            $toInsert[] = array("campaign_id" => $object->getId(), "product_id" => $productId);
-        }
-        if (count($toInsert)) {
-            $this->_getWriteAdapter()->insertMultiple($table, $toInsert);
-        }
-        return $this;
     }
+
     public  function saveProducts($campaignId, array $productIds)
     {
         $table = $this->getTable("zolagocampaign/campaign_product");
@@ -409,21 +213,18 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         return $this->getReadConnection()->fetchAll($select);
     }
 
-    public function getUpDateCampaigns(array $type)
+    public function getUpDateCampaigns()
     {
         $table = $this->getTable("zolagocampaign/campaign");
         $select = $this->getReadConnection()->select();
         $select->from(
             array("campaign" => $table),
             array(
-                "campaign.type as type",
-                'campaign.campaign_id as campaign_id',
-                'campaign.date_from as date_from',
-                'campaign.date_to as date_to',
-                'campaign.campaign_id as campaign_id',
-                'campaign.price_source_id as price_source',
-                'campaign.percent as price_percent',
-                'campaign.price_srp as price_srp'
+                 "campaign.type as type",
+                  'campaign.campaign_id as campaign_id',
+                  'campaign.price_source_id as price_source',
+                  'campaign.percent as price_percent',
+                  'campaign.price_srp as price_srp'
             )
         );
         $select->join(
@@ -433,21 +234,12 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
                  'product_id' => 'campaign_product.product_id'
             )
         );
-        $select->join(
-            array('campaign_website' => 'zolago_campaign_website'),
-            'campaign_website.campaign_id=campaign.campaign_id',
-            array(
-                'website_id' => 'campaign_website.website_id'
-            )
-        );
-        $startTime = date("Y-m-d H:i:s", Mage::getModel('core/date')->timestamp(strtotime(time())));
-        $endYTime = date("Y-m-d H:i:s", Mage::getModel('core/date')->timestamp(strtotime('+30 minutes', time())));
+        $startTime = date("Y-m-d H:i", strtotime('-10 minutes', time()));
+        $endYTime = date("Y-m-d H:i", strtotime('+10 minutes', time()));
 
         $select->where("campaign.date_from BETWEEN '{$startTime}' AND '{$endYTime}'");
-        $select->where("type in(?)", $type);
         $select->where("status=?", Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE);
-        $select->order('campaign.date_from ASC');
-
+        echo $select;
         return $this->getReadConnection()->fetchAll($select);
     }
 
