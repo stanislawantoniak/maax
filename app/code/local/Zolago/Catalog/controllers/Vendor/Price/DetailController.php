@@ -35,10 +35,15 @@ class Zolago_Catalog_Vendor_Price_DetailController extends Zolago_Catalog_Contro
 		);
 		
 		try{
+			$affectedIds = array($product->getId());
 			
+			$actionModel = Mage::getModel('catalog/product_action');
+			/* @var $actionModel Zolago_Catalog_Model_Product_Action */
+			$actionModel->setSkipPricetypeQueue(true);
+			$actionModel->setSkipConfigurableQueue(true);
 			
 			// Save product data
-			$this->_processAttributresSave(array($product->getId()), $productData, $storeId);
+			$actionModel->updateAttributesNoIndex(array($product->getId()), $productData, $storeId);
 			
 			// Process childs if needed
 			if($attributes && is_array($attributes) && $isConfigurable){
@@ -106,10 +111,7 @@ class Zolago_Catalog_Vendor_Price_DetailController extends Zolago_Catalog_Contro
 				////////////////////////////////////////////////////////////////
 				// Save configurable prices
 				////////////////////////////////////////////////////////////////
-				$actionModel = Mage::getModel('catalog/product_action');
-				/* @var $actionModel Zolago_Catalog_Model_Product_Action */
-				$actionModel->setSkipPricetypeQueue(true);
-				$actionModel->setSkipConfigurableQueue(true);
+				
 				
 				$collection = Mage::getResourceModel('catalog/product_collection');
 				/* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
@@ -120,7 +122,6 @@ class Zolago_Catalog_Vendor_Price_DetailController extends Zolago_Catalog_Contro
 				$collection->addPriceData();
 				$collection->load();
 				
-				$affectedIds = array();
 				
 				foreach($priceVariations as $childProductId=>$price){
 					$collectionProduct = $collection->getItemById($childProductId);
@@ -139,11 +140,11 @@ class Zolago_Catalog_Vendor_Price_DetailController extends Zolago_Catalog_Contro
 					);
 					$affectedIds[] = $childProductId;
 				}
-				
-				if($affectedIds){
-					$this->_reindexPrices($affectedIds, $product->getWebsiteIds());
-				}
-				
+			}
+			
+			// Reindex if needed
+			if($affectedIds){
+				$this->_reindexPrices($affectedIds, $product->getWebsiteIds());
 			}
 		}
 		catch(Exception $e){
@@ -203,7 +204,7 @@ class Zolago_Catalog_Vendor_Price_DetailController extends Zolago_Catalog_Contro
 	 * @param array $websiteIds
 	 */
 	protected function _reindexPrices(array $ids = array(), array $websiteIds = array()) {
-		
+		Mage::log($ids);
         Mage::getResourceSingleton('catalog/product_indexer_price')
             ->reindexProductIds($ids);
         $indexers = array(
