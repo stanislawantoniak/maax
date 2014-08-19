@@ -217,13 +217,17 @@
         <remove name="solrsearch_category_view"/>
 
         <reference name="root">
+            <action method="setTemplate"><template>page/2columns-left.phtml</template></action>
             <action method="addBodyClass"><value>sidebar-first</value></action>
+            <action method="addBodyClass"><value>filter-sidebar</value></action>
             <action method="addBodyClass"><value>node-type-main_categories</value></action>
             <action method="addBodyClass"><value>view-menu-category</value></action>
             <action method="addBodyClass"><value>not-menu-mobile</value></action>
         </reference>
         <reference name="head">
             <action method="addJs"><script>jquery/jquery.jcarousel.min.js</script></action>
+            <action method="removeItem"><type>js</type><script>solrsearch/slider.js</script></action>
+            <action method="removeItem"><type>skin_js</type><script>js/manapro_filtercolors.js</script></action>
         </reference>
     </solrbridge_solrsearch_category_view>
 
