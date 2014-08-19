@@ -204,7 +204,7 @@ class Zolago_Catalog_Vendor_Price_DetailController extends Zolago_Catalog_Contro
 	 * @param array $websiteIds
 	 */
 	protected function _reindexPrices(array $ids = array(), array $websiteIds = array()) {
-		Mage::log($ids);
+		
         Mage::getResourceSingleton('catalog/product_indexer_price')
             ->reindexProductIds($ids);
         $indexers = array(

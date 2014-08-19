@@ -572,7 +572,7 @@ define([
 	});
 	
 	// Open dialog to single price edit
-	on.pausable(grid.domNode, ".dgrid-row td.signle-price-edit.editable :click", function(evt){
+	on.pausable(grid.domNode, ".dgrid-row .signle-price-edit.editable :click", function(evt){
 		singlePriceUpdater.handleDbClick(grid.row(evt), evt);
 	});
 	
