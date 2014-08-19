@@ -821,7 +821,9 @@ jQuery(document).ready(function() {
     });
 
 
-    jQuery("#add-to-cart").tooltip();
+    jQuery("#add-to-cart").tooltip({
+        template: '<div class="tooltip top" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner" style="color: #ea687e"></div></div>'
+    });
     jQuery("#add-to-cart").on('mouseover', function() {
         if(Mall._current_superattribute != null) {
             jQuery("#add-to-cart").tooltip('destroy');
