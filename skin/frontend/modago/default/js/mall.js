@@ -544,7 +544,6 @@ Mall.listing = {
 
     getMoreProductsCallback: function(data) {
         if(data.status == true) {
-            var msnry;
             var container = jQuery("#items-product").masonry();
             var sortArray = data.content.sort.split(" ");
             var items;
@@ -585,43 +584,53 @@ Mall.listing = {
         var box = jQuery("<div/>", {
             class: "box_listing_product"
         }).appendTo(container);
+
         var link = jQuery("<a/>", {
             href: product.current_url
         }).appendTo(box);
+
         var figure = jQuery("<figure/>", {
             class: "img_product"
         }).appendTo(link);
+
         jQuery("<img/>", {
             src: product.listing_resized_image_url,
             alt: product.name,
             class: "img-responsive"
         }).appendTo(figure);
+
         var vendor = jQuery("<div/>", {
             class: "logo_manufacturer"
         }).appendTo(link);
+
         jQuery("<img/>", {
             src: product.udropship_vendor_logo_url,
             alt: product.udropship_vendor_name
         }).appendTo(vendor);
+
         jQuery("<div/>", {
             class: "name_product",
             html: product.name
         }).appendTo(link);
+
         var priceBox = jQuery("<div/>", {
             class: "price clearfix"
         }).appendTo(link);
+
         var colPrice = jQuery("<div/>", {
             class: "col-price"
         }).appendTo(priceBox);
+
         if(product.price != product.final_price) {
             jQuery("<span/>", {
                 class: "old",
-                html: product.price + " " + Mall.getCurrencyBasedOnCode(product.currency)
+                html: number_format(product.price, 2, ",", " ") + " " + Mall.getCurrencyBasedOnCode(product.currency)
             }).appendTo(colPrice);
         }
         jQuery("<span/>", {
-            html: product.final_price + " " + Mall.getCurrencyBasedOnCode(product.currency)
+            html: number_format(product.final_price, 2, ",", " ") + " " + Mall.getCurrencyBasedOnCode(product.currency)
         }).appendTo(colPrice);
+
         var likeClass = "like";
         var likeText = "<span></span>";
         if(product.in_my_wishlist) {
