@@ -1,6 +1,20 @@
 <?php /* @var $this Zolago_Banner_Block_Vendor_Banner_Edit */ ?>
 <?php $_helper = Mage::helper("zolagobanner");?>
 <?php $_model = $this->getModel();?>
+<script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
+<script>
+    tinymce.init({
+        selector:'textarea[name=banner_html]',
+        height : 400,
+        plugins: [
+            "advlist autolink lists link image charmap preview anchor textcolor",
+            "searchreplace visualblocks code",
+            "insertdatetime table contextmenu paste"
+        ],
+        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
+    });
+</script>
+
 <div class="container">
 	<div class="page-heading row">
 		<div class="col-lg-6">
