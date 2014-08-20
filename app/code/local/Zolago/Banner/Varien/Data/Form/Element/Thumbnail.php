@@ -12,9 +12,9 @@ class Zolago_Banner_Varien_Data_Form_Element_Thumbnail extends Varien_Data_Form_
     {
         $html = '';
         Mage::log($this->getDataAttribute());
+        $data = "";
         if ($this->getValue()) {
             $dataAttribute = $this->getDataAttribute();
-            $data = "";
 
             if(!empty($dataAttribute)){
                 foreach($dataAttribute as $attributeName => $attributeValue){
