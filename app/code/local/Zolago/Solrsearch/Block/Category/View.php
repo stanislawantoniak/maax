@@ -3,7 +3,7 @@ class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
 
     public function _construct() {
         parent::_construct();
-        $this->setTemplate("catalog/category/view.phtml");
+        $this->setTemplate("zolagosolrsearch/category/view.phtml");
     }
 	
 	protected function _prepareLayout() {
