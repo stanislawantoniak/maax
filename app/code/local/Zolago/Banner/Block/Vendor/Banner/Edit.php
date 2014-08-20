@@ -37,6 +37,12 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
         $campaignId = $this->getRequest()->getParam('campaign_id', $this->getModel()->getCampaignId());
         return $campaignId;
     }
+
+    public function getCampaignName(){
+        $campaignId = $this->getRequest()->getParam('campaign_id', $this->getModel()->getCampaignId());
+        $campaignModel = Mage::getModel('zolagocampaign/campaign')->load($campaignId);
+        return $campaignModel->getName();
+    }
     public function _prepareForm(){
         $id = $this->getRequest()->getParam('id',null);
 

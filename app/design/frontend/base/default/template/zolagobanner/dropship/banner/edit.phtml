@@ -20,27 +20,36 @@
 		<div class="col-lg-6">
 			<h3>
 				<?php if($this->isModelNew()):?>
-					<?php echo Mage::helper("zolagobanner")->__("New Banner");?>
+					<?php echo Mage::helper("zolagobanner")->__("New campaign creative");?>
 				<?php else: ?>
-					<?php echo Mage::helper("zolagopo")->__("Edit Banner '%s'", $_model->getName());?>
+					<?php echo Mage::helper("zolagopo")->__("Edit campaign creative '%s'", $_model->getName());?>
 				<?php endif;?>
 			</h3>
 		</div>
 	</div>
     <div class="page-heading row">
-        <div class="col-lg-6">
+        <div class="container">
             <ol class="breadcrumb">
+                <li>
+                    <a href="/campaign/vendor/edit/id/<?php echo $this->getCampaignId(); ?>">
+                        <?php echo $_helper->__('Campaign') ?>: <?php echo $this->getCampaignName(); ?>
+                    </a>
+                </li>
                 <?php if($this->isModelNew()):?>
                     <li>
                         <a href="<?php echo $_helper->setBannerTypeUrl(); ?>campaign_id/<?php echo $this->getCampaignId(); ?>">
-                            <?php echo $_helper->__('Choose Banner Type') ?>
+                            <?php echo $_helper->__('Choose campaign creative type') ?>
                         </a>
+                    </li>
+                <?php else: ?>
+                    <li>
+                        <?php echo $_helper->__("Campaign creative type");?>: <?php echo $this->getType(); ?>
                     </li>
                 <?php endif;?>
                 <?php if($this->isModelNew()):?>
-                    <li class="active"><?php echo $_helper->__("New Banner");?></li>
+                    <li class="active"><?php echo $_helper->__("New campaign creative");?></li>
                 <?php else: ?>
-                    <li class="active"><?php echo $_helper->__("Edit Banner '%s'", $_model->getName());?></li>
+                    <li class="active"><?php echo $_helper->__("Edit campaign creative '%s'", $_model->getName());?></li>
                 <?php endif;?>
             </ol>
         </div>
@@ -61,13 +70,15 @@
     jQuery(function ($) {
         var form = $("#edit-banner");
         new Zolago.formIntegrator(form);
-        form.validate({
-            rules: {
-                "image[1]": {
-                    imageResolution: 10
-                }
-            }
-        });
+        form.validate(
+//            {
+//            rules: {
+//                "image[1]": {
+//                    imageResolution: 10
+//                }
+//            }
+//        }
+        );
 
         changeDependingSelectorHandler('slider_type');
 
