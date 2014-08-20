@@ -510,6 +510,19 @@ Mall.product = {
         jQuery("<span/>", {
             "html": option.label
         }).appendTo(label);
+    },
+
+    getLabelById: function(id, superId) {
+        var label = "";
+        if(this._options && typeof this._options.attributes[superId] != "undefined") {
+            jQuery.each(this._options.attributes[superId].options, function(index, opt) {
+                if(opt.id == id) {
+                    label = opt.label;
+                }
+            });
+        }
+
+        return label;
     }
 };
 
@@ -759,6 +772,15 @@ function addtocartcallback(response) {
     if(response.status == false) {
         Mall.showMessage(response.message, "error");
     } else {
+        var popup = jQuery("#popup-after-add-to-cart");
+        if(Mall.product._current_product_type == 'configurable') {
+            var superAttr = jQuery(Mall._current_superattribute);
+            var label = Mall.product.getLabelById(superAttr.val(), superAttr.attr("data-id"));
+            popup.find("p.size>span").show();
+            popup.find("p.size>span").html(label);
+        } else {
+            popup.find("p.size>span").hide();
+        }
         jQuery("#popup-after-add-to-cart").modal('show');
         Mall.getAccountInfo();
     }
@@ -809,8 +831,6 @@ function cart_remove_coupon_callback(response) {
     location.reload();
 }
 
-
-
 jQuery(document).ready(function() {
     Mall.dispatch();
     Mall.i18nValidation.apply();
@@ -819,7 +839,6 @@ jQuery(document).ready(function() {
     jQuery(".messages").find("i").bind('click', function() {
         jQuery(this).parents("li").first().hide();
     });
-
 
     jQuery("#add-to-cart").tooltip({
         template: '<div class="tooltip top" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner" style="color: #ea687e"></div></div>'
@@ -843,5 +862,15 @@ jQuery(document).ready(function() {
     jQuery('#popup-after-add-to-cart').on('hidden.bs.modal', function (e) {
         jQuery('html').find('.modal-backdrop').remove();
 
+    });
+
+    jQuery("#product-listing-sort-control").selectbox({
+        onOpen: function (inst) {
+            initScrollBarFilterStyle();
+        },
+
+        onChange: function(value, inst) {
+            location.href = value;
+        }
     });
 });

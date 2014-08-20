@@ -306,9 +306,9 @@ $avg = $_reviewBlock->getAvarageRating();
                                 alt=""></td>
                         <td class="desc"><p class="name_product"><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></p>
 
-                            <p class="size"><?php echo ucfirst($this->__("size")); ?>:<span>DEV</span></p>
+                            <p class="size"><?php echo ucfirst($this->__("size")); ?>: <span></span></p>
 
-                            <p class="quantity"><?php echo ucfirst($this->__("quantity")); ?>:<span>1</span></p></td>
+                            <p class="quantity"><?php echo ucfirst($this->__("quantity")); ?>: <span>1</span></p></td>
                         <td class="price"><?php echo $this->helper('core')->currency($finalPrice, true, false); ?></td>
                     </tr>
                     </tbody>
