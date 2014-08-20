@@ -17,7 +17,7 @@ class Zolago_Catalog_Vendor_MassController
 
             $block = $this->getLayout()->createBlock("zolagocatalog/vendor_mass_grid", "vendor_mass_grid", array('area' => 'adminhtml'));
 
-            $block->setTemplate('zolagocatalog/widget/grid/rows.phtml');
+            $block->setTemplate('zolagocatalog/widget/grid/rowsblock.phtml');
 
             $this->getResponse()->setBody($block->toHtml());
         }
@@ -186,7 +186,7 @@ class Zolago_Catalog_Vendor_MassController
      */
     public function massStatusAction()
     {
-        $productIds			= array_unique(explode(',', $this->getRequest()->getParam('product', '')));
+        $productIds			= array_unique(explode(',', $this->getRequest()->getParam('product_ids', '')));
         $storeId			= (int)$this->getRequest()->getParam('store', 0);
 		$attributeSet		= (int)$this->getRequest()->getParam('attribute_set', null);
         $status				= (int)$this->getRequest()->getParam('status');
@@ -196,31 +196,50 @@ class Zolago_Catalog_Vendor_MassController
 		$staticFilters		= $this->_getCurrentStaticFilterValues();
 		$postParams			= array('store'=> $storeId, 'attribute_set' => $attributeSet, 'staticFilters' => $staticFiltersCount);
 		$postParams			= array_merge($postParams, $staticFilters);
-		
+
+        $response = array();
+
         try {
+
 			if ($productReview) {
 				$this->_validateProductAttributes($productIds, $attributeSet, $storeId);
-				$this->_redirect('*/*/', $postParams);
-				$status = Mage::helper('zolagodropship')->getProductStatusForVendor($this->_getSession()->getVendor());
+                $response = array(
+                    "status"=>1,
+                    "content"=>$this->__('Total of %d record(s) have been validated.', count($productIds))
+                );
 			}
+
+            $status = Mage::helper('zolagodropship')->getProductStatusForVendor($this->_getSession()->getVendor());
             $this->_validateMassStatus($productIds, $status);
             Mage::getSingleton('catalog/product_action')
                 ->updateAttributes($productIds, array('status' => $status), $storeId);
 
-            $this->_getSession()->addSuccess(
-                $this->__('Total of %d record(s) have been updated.', count($productIds))
+            $response = array(
+                "status"=>1,
+                "content"=>$this->__('Total of %d record(s) have been updated.', count($productIds))
             );
         }
         catch (Mage_Core_Model_Exception $e) {
-            $this->_getSession()->addError($e->getMessage());
+            $response = array(
+                "status"=>0,
+                "content"=>Mage::helper("zolagocatalog")->__($e->getMessage())
+            );
         } catch (Mage_Core_Exception $e) {
-            $this->_getSession()->addError($e->getMessage());
+            $response = array(
+                "status"=>0,
+                "content"=>Mage::helper("zolagocatalog")->__($e->getMessage())
+            );
         } catch (Exception $e) {
-            $this->_getSession()
-                ->addException($e, $this->__('An error occurred while updating the product(s) status.'));
+            $response = array(
+                "status"=>0,
+                "content"=>Mage::helper("zolagocatalog")->__($this->__('An error occurred while updating the product(s) status.'))
+            );
         }
-		
-        $this->_redirect('*/*/', $postParams);
+
+        // Send response
+        $this->getResponse()->
+            setBody(Zend_Json::encode($response))->
+            setHeader('content-type', 'application/json');
     }
 	
     /**

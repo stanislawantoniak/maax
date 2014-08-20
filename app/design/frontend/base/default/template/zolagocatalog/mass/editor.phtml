@@ -1,9 +1,6 @@
-<div class="grid z-grid" id="<?php echo $this->buildFieldId("editor");?>">
+<div class="grid z-grid" id="grid-editor">
 	<?php if($this->getGrid()): ?>
 	<table style="display: none;">
-<!--            HIDE IT FOR TESTING-->
-<!--            NEEDS UPDATE-->
-        <?php if(false): ?>
 		<tfoot id="<?php echo $this->buildFieldId("foot");?>">
 			<tr id="<?php echo $this->buildFieldId("change");?>">
 				<?php $i=0;?>
@@ -26,7 +23,6 @@
 				<?php endforeach;?>
 			</tr>
 
-
 			<tr class="filter" style="display:none;" id="<?php echo $this->buildFieldId("fields");?>">
 				<?php $i=0;?>
 				<?php foreach ($this->getGrid()->getColumns() as $_column): ?>
@@ -35,16 +31,22 @@
 						<td>
 							<?php if($_field = $this->getField($_column)):?>
 								<div class="filter-field-100 element-wrapper" style="display: none;" id="<?php echo $_field->getId() . "_wrapper";?>">
-									<?php echo $this->getEmptyValueField($_field);?>
-									<?php echo $_field->toHtml();?>
-									<div>
-									<?php foreach($this->getAdditionalFields($_column) as $_field):?>
-										<?php echo $_field->toHtml();?>
-									<?php endforeach;?>
-									</div>
-									<?php if($_column->getAttribute()):?>
-									<div class="scope">[<?php echo $this->getScope($_column->getAttribute());?>]</div>
-									<?php endif;?>
+                                    <form>
+                                        <?php echo $this->getEmptyValueField($_field);?>
+                                        <?php echo $_field->toHtml();?>
+                                        <div>
+                                        <?php foreach($this->getAdditionalFields($_column) as $_field):?>
+                                            <?php echo $_field->toHtml();?>
+                                        <?php endforeach;?>
+                                        </div>
+                                        <?php if($_column->getAttribute()):?>
+    <!--									<div class="scope">[--><?php ////echo $this->getScope($_column->getAttribute());?><!--]</div>-->
+                                        <?php endif;?>
+                                        <div class="apply-all-selected">
+                                            <input type="checkbox" name="apply_all_selected"> <?php echo $this->__('Apply to all selected'); ?>
+                                        </div>
+                                        <?php echo $this->getSubmitButtonHtml(); ?>
+                                    </form>
 								</div>
 							<?php endif;?>
 						</td>
@@ -52,185 +54,13 @@
 				</td>
 				<?php endforeach;?>
 			</tr>
-			<tr style="display:none;"  id="<?php echo $this->buildFieldId("confirm");?>">
-				<td  class="totals a-center" colspan="<?php echo $this->getGrid()->getColumnCount();?>">
-                    <?php echo $this->getSubmitButtonHtml(); ?>
-                    <span style="display: none;" class="notice" id="<?php echo $this->buildFieldId("loading");?>">
-						<?php echo Mage::helper("zolagocatalog")->__("Saving...");?>
-					</span>
 
-				</td>
-			<tr>
-
-            <?php endif; ?>
 		</tfoot>
 	</table>
 	<?php endif;?>
 </div>
 <script type="text/javascript">
-	(function(){
 
-		var gridObj = <?php echo $this->getGrid()->getId();?>JsObject;
-		var gridDom = $(gridObj.containerId);
-		var form ;
-		var foot = $("<?php echo $this->buildFieldId("foot");?>");
-		var loading = $("<?php echo $this->buildFieldId("loading");?>");
+    var saveGridLocation = '<?php echo $this->getSaveUrl();?>';
 
-		var oldInitGrid = gridObj.initGrid;
-		var oldSetCheckboxChecked = gridObj.setCheckboxChecked;
-		var	oldCheckCheckboxes = gridObj.massaction.checkCheckboxes;
-
-		var appendContent = function(grid, content){
-			var table = $(grid.containerId).select("table.data")[0];
-			if(!table.select("tfoot").length){
-				table.insert({bottom: content});
-			}
-<!--			$("--><?php ////echo $this->buildFieldId("submit"); ?><!--").observe("click", submitHandler);-->
-<!--			$("--><?php ////echo $this->buildFieldId("change");?><!--").select(".changer").each(function(el){-->
-<!--				el.observe("change", changerHandler)-->
-<!--			});-->
-
-			// Prepare form
-			var formEl = new Element("form", {id:"<?php echo $this->buildFieldId("editor_form");?>"});
-			gridDom.select(".data")[0].wrap(formEl);
-			form = new VarienForm("<?php echo $this->buildFieldId("editor_form");?>");
-		}
-
-		var updateSelectCheckbox = function(checkbox){
-			var el = checkbox.up("tr");
-			if(checkbox.checked){
-				el.addClassName("row-selected");
-			}else{
-				el.removeClassName("row-selected");
-			}
-		}
-
-		varienGlobalEvents.attachEventHandler("gridRowClick", function(event){
-			var el = $(event.currentTarget);
-			if(!el.up("#"+gridObj.containerId)){
-				return;
-			}
-			var checkbox = el.select(".massaction-checkbox")[0];
-			updateSelectCheckbox(checkbox);
-		});
-
-
-
-		gridObj.massaction.checkCheckboxes = function(){
-			oldCheckCheckboxes.apply(gridObj.massaction, arguments);
-			gridObj.massaction.getCheckboxes().each(updateSelectCheckbox);
-		}
-
-		gridObj.setCheckboxChecked = function(element){
-			oldSetCheckboxChecked.apply(gridObj, arguments);
-			updateSelectCheckbox(element);
-		}
-
-		gridObj.initGrid = function(){
-			oldInitGrid.apply(gridObj, arguments);
-			loading.hide();
-			appendContent(gridObj, foot);
-		}
-
-
-		var submitHandler = function(){
-
-			var productIds = gridObj.massaction.getCheckedValues();
-			if(productIds==""){
-                bootbox.alert("<?php echo Mage::helper("zolagocatalog")->__("Select some products");?>");
-				return;
-			}
-
-			if(!form.validator.validate()){
-				return false;
-			}
-
-			var tmpData = $(form.form).serialize(true);
-			var key;
-			var data = {};
-
-			for(key in tmpData){
-				if(/^attributes/.test(key) && tmpData.hasOwnProperty(key)){
-					data[key] = tmpData[key];
-				}
-			}
-			if(!Object.keys(data).length){
-                bootbox.alert("<?php echo Mage::helper("zolagocatalog")->__("No attribute selected");?>");
-				return;
-			}
-
-			data.store = $F("store_switcher");
-			data.attribute_set =  $F("attribute_set_switcher");
-			data.product_ids=  productIds;
-
-			new Ajax.Request("<?php echo $this->getSaveUrl();?>", {
-				parameters: data,
-				method: "post",
-				onSuccess: function(transport){
-					if(transport.responseJSON){
-						if(!transport.responseJSON.status){
-                            bootbox.alert(transport.responseJSON.content);
-							return;
-						}
-						gridObj.reload();
-					}
-				},
-				onLoading: function(){
-					loading.show();
-				},
-				onError: function(transport){
-                    bootbox.alert("<?php echo Mage::helper("zolagocatalog")->__("Other error - contact administrator");?>");
-				}
-			});
-		}
-
-		var changerHandler = function(e){
-			var el = $(e.currentTarget);
-			var target = $(el.up('.relChanger').getAttribute("data-rel"));
-			if(target){
-				switchVisible(target.id, el.checked);
-			}
-
-		}
-
-
-		var currentEditCount = 0;
-
-		var switchVisible = function(fieldId, mode){
-			if(mode){
-				$(fieldId).disabled = "";
-				$(fieldId+"_wrapper").show();
-				currentEditCount++;
-			}else{
-				$(fieldId).disabled = "disabled";
-				$(fieldId+"_wrapper").hide();
-				currentEditCount--;
-			}
-
-			if(currentEditCount>0){
-				$("<?php echo $this->buildFieldId("fields");?>").show();
-				$("<?php echo $this->buildFieldId("confirm");?>").show();
-			}else{
-				$("<?php echo $this->buildFieldId("fields");?>").hide();
-				$("<?php echo $this->buildFieldId("confirm");?>").hide();
-			}
-
-			disableAdditionalFields(fieldId, mode);
-		}
-
-		var disableAdditionalFields = function(fieldId, mode){
-			$(fieldId).up(".element-wrapper").select(".additional_field").each(function(el){
-				$(el).disabled = mode ? "" : "disabled";
-			});
-			$(fieldId).up(".element-wrapper").select(".empty_field").each(function(el){
-				$(el).disabled = mode ? "" : "disabled";
-			});
-			// Datepicker
-			$(fieldId).up(".element-wrapper").select("img.v-middle").each(function(el){
-				mode ? $(el).show() : $(el).hide();
-			});
-		}
-
-		appendContent(gridObj, foot);
-	})();
 </script>

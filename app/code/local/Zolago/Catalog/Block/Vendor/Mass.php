@@ -61,7 +61,6 @@ class Zolago_Catalog_Block_Vendor_Mass extends Mage_Core_Block_Template
 				Mage::app()->getRequest()->getParam("attribute_set")
 			));
 		}
-        Mage::log($this->getData("current_attribute_set")->getId());
 		return $this->getData("current_attribute_set");
 	}
 	

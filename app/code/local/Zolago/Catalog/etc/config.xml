@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Catalog>
-            <version>0.0.14</version>
+            <version>0.0.15</version>
         </Zolago_Catalog>
     </modules>
     <default>
@@ -67,6 +67,7 @@
             <zolagocatalog_setup>
                 <setup>
                     <module>Zolago_Catalog</module>
+                    <class>Zolago_Catalog_Model_Resource_Setup</class>
                 </setup>
                 <connection>
                     <use>core_setup</use>
@@ -83,6 +84,16 @@
                 </connection>
             </zolagocatalog_read>
         </resources>
+        <events>
+            <adminhtml_catalog_product_attribute_edit_prepare_form>
+                <observers>
+                    <add_column_width_field>
+                        <class>zolagocatalog/observer</class>
+                        <method>addColumnWidthField</method>
+                    </add_column_width_field>
+                </observers>
+            </adminhtml_catalog_product_attribute_edit_prepare_form>
+        </events>
     </global>
     <frontend>
         <routers>

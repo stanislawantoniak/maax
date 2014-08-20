@@ -497,35 +497,6 @@
                     return false;
                 });
 
-                // Table filters
-                var orgTextFieldValue;
-                $('.tf-header input, .tf-thead input').on('focus', function(){
-
-                    orgTextFieldValue = $(this).val();
-
-                });
-                $('.tf-header input, .tf-thead input').on('blur', function(){
-
-                    if(orgTextFieldValue != $(this).val()){
-                        syncFilterEvents($(this), $table.find("#" + $(this).attr('id')));
-                    }
-
-                });
-
-                $('.tf-header input, .tf-thead input').on('keypress', function(e){
-                    var code = e.keyCode || e.which;
-                    if(code == 13){
-                       syncFilterEvents($(this), $table.find("#" + $(this).attr('id')));
-                    }
-
-                });
-
-                $('.tf-header select, .tf-thead select').on('change', function(){
-
-                    syncFilterEvents($(this), $table.find("#" + $(this).attr('id')));
-
-                });
-
                 // Mousewheel
                 $(cfg.parent).on('mousewheel', function(event) {
 

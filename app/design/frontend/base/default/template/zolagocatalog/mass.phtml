@@ -1,28 +1,21 @@
 <style>
-#zolagocatalog_mass_grid .hor-scroll{
-    overflow: hidden !important;
-}
 #scrollbar-container-x{
     width:100%;
     height:10px;
-    bottom:0;
+    bottom:-11px;
     left:0;
 }
 #scrollbar-container-y{
     width:10px;
     height:100%;
     top:0;
-    right:0;
+    right:-11px;
 }
 #scrollbar-container-x, #scrollbar-container-y{
     background:#CCC;
     position: absolute;
     opacity:0.4;
     /*display:none;*/
-}
-#zolagocatalog_mass_grid .grid:hover #scrollbar-container-x,
-#zolagocatalog_mass_grid .grid:hover #scrollbar-container-y{
-    /*display:block;*/
 }
 #scrollbar-container-x:hover, #scrollbar-container-y:hover,
 #scrollbar-container-x.dragging, #scrollbar-container-y.dragging{
@@ -67,16 +60,6 @@ table.table{
     margin:0 !important;
     padding:0 !important;
 }
-#loader{
-    width:100%;
-    height:100%;
-    background-color:rgba(0,0,0,0.3);
-    position:absolute;
-    top:0;
-    left:0;
-    z-index:100;
-    display:none;
-}
 </style>
 <div id="mass-table" class="container">
 
@@ -90,20 +73,37 @@ table.table{
                </div>
                <div class="widget-content fiters">
                    <form class="form-horizontal">
-                       <div class="form-group">
-                           <div class="col-md-4">
-                               <div class="attribute-switcher row next-row">
-                                   <?php echo $this->getChildHtml("attribute_set_switcher"); ?>
+
+                       <?php if($this->getCurrentAttributeSetId()): ?>
+
+                           <div class="form-group">
+                               <div class="col-md-4">
+                                   <div class="attribute-switcher row next-row">
+                                       <?php echo $this->getChildHtml("attribute_set_switcher"); ?>
+                                   </div>
+                                   <?php echo $this->getChildHtml("other_filter"); ?>
                                </div>
-                               <?php echo $this->getChildHtml("other_filter"); ?>
-                           </div>
-                           <div class="col-md-8">
-                               <div class="row">
-                                   <?php echo $this->getChildHtml("additional_filter"); ?>
+                               <div class="col-md-8">
+                                   <div class="row">
+                                       <?php echo $this->getChildHtml("additional_filter"); ?>
+                                   </div>
                                </div>
                            </div>
-                       </div>
-                       <?php echo $this->getChildHtml("static_filter"); ?>
+                           <?php echo $this->getChildHtml("static_filter"); ?>
+
+                       <?php else: ?>
+
+                           <div class="form-group">
+                               <div class="col-md-12">
+                                   <div class="attribute-switcher row next-row">
+                                       <?php echo $this->getChildHtml("attribute_set_switcher"); ?>
+                                   </div>
+                                   <?php echo $this->getChildHtml("other_filter"); ?>
+                               </div>
+                           </div>
+
+                       <?php endif; ?>
+
                    </form>
                </div>
            </div>
@@ -111,281 +111,945 @@ table.table{
     </div>
 </div>
 
-
-
-    <?php echo $this->getMessagesBlock()->getGroupedHtml(); ?>
-
-        <script type="text/javascript">
-            FORM_KEY = "<?php echo Mage::getSingleton('core/session')->getFormKey() ?>";
-        </script>
-        <script type="text/javascript">
-            var gridObj;
-        </script>
-        <div class="container z-grid">
-            <div class="widget box">
-                <div class="widget-content">
-                    <?php echo $this->getGridHtml(); ?>
-                </div>
-            </div>
-        </div>
-
+<?php echo $this->getMessagesBlock()->getGroupedHtml(); ?>
 
 <script type="text/javascript">
-    (function(){
-        gridObj = <?php echo $this->getGridJsObjectName();?>;
-        var topForm = $("filter_form");
+    FORM_KEY = "<?php echo Mage::getSingleton('core/session')->getFormKey() ?>";
+</script>
+<script type="text/javascript">
+    var gridObj;
+    var massActionLocation = '<?php echo Mage::getUrl('*/*/massStatus'); ?>';
+    var cleanLocation = '<?php echo Mage::getBlockSingleton('zolagocatalog/vendor_mass_staticfilter')->getChangeUrl(); ?>';
+    var limit = 100;
+</script>
 
-        var inputs = $$('#'+gridObj.containerId+' .filter input', '#'+topForm.id+' input');
-        var selects = $$('#'+gridObj.containerId+' .filter select', '#'+topForm.id+' select');
+<?php if($this->getCurrentAttributeSetId()): ?>
+    <script type="text/javascript">
+        var currentAttributeSetId = <?php echo $this->getCurrentAttributeSetId(); ?>;
+    </script>
+    <div class="container z-grid">
+        <div class="widget box">
+            <div class="widget-content">
+                <?php echo $this->getGridHtml(); ?>
+            </div>
+        </div>
+    </div>
 
-        // create integrator
-        new Zolago.gridIntegrator(gridObj);
+    <?php echo $this->getChildHtml("editor"); ?>
 
-        gridObj.doFilter = (function(){
-            var filters = $$('#'+this.containerId+' .filter input', '#'+this.containerId+' .filter select');
-            var filters2 = $$('#'+topForm.id+' input', '#'+topForm.id+' select');
+    <script type="text/javascript">
 
-            var elements = [],
-                elements2 = [];
-            for(var i in filters){
-                if(filters[i].value && filters[i].value.length) elements.push(filters[i]);
-            }
-            for(var i in filters2){
-                if(filters2[i].value && filters2[i].value.length) elements2.push(filters2[i]);
-            }
-
-            var serialized = Form.serializeElements(elements);
-            var serialized2 = Form.serializeElements(elements2);
-            var params = []
-
-            if(serialized){
-                params.push(serialized);
-            }
-            if(serialized2){
-                params.push(serialized2);
-            }
-
-            if (!this.doFilterCallback || (this.doFilterCallback && this.doFilterCallback())) {
-                this.reload(this.addVarToUrl(this.filterVar, encode_base64(params.join("&"))));
-            }
-        }).bind(gridObj);
-
-        inputs.each(function (el) {
-            $(el).observe('blur', function(e) {
-                gridObj.doFilter();
-                e.preventDefault();
-            });
-
-            $(el).observe('keypress', function(e) {
-
-                if(e.KEY_RETURN){
-                    gridObj.doFilter();
-                    e.preventDefault();
-                }
-            });
-        });
-
-        selects.each(function (el) {
-            $(el).observe('blur', function(e) {
-                gridObj.doFilter();
-                e.preventDefault();
-            });
-
-            $(el).observe('change', function(e) {
-                gridObj.doFilter();
-                e.preventDefault();
-            });
-        });
-
-        topForm.observe("submit", function(e){
-            gridObj.doFilter();
-            e.preventDefault();
-        });
-        topForm.observe("reset", function(e){
-            gridObj.resetFilter();
-            e.preventDefault();
-        });
-
-    })();
-    // Do pickers
     jQuery(function($){
-        $( ".datepicker" ).datepicker();
 
-        $('#myModal').modal();
+            var filterAjaxFired = false,
+                $scrollHandleX = $('#scroll-handle-x'),
+                $scrollHandleY = $('#scroll-handle-y'),
+                scrollXFactor,
+                scrollYFactor,
+                interval,
+                page = 1,
+                prevRequestCompleted = true,
+                allRowsSelected = false;
 
-        $table = $("#zolagocatalog_mass_grid_table");
+            $( ".datepicker" ).datepicker();
 
-        var tableFreezer = $table.tableFreezer({parent: '#zolagocatalog_mass_grid .grid',
-             freezeColumnsLeft: 3,
-             lockScroller: true,
-             recalculateScrollbarsOn: [
-                 {
-                     targetElem: '.toggle-sidebar',
-                     event: 'click'
-                 }
-             ],
-             syncEvents: [
+            $('#myModal').modal();
 
-                 {
-                     sourceElem: '.tf-tbody .massaction-checkbox',
-                     sourceEvent: 'click',
-                     callback: function($sourceElem){
-                         var value = $sourceElem.val();
+            // Turn off main scrollbars
+            $("body").css("overflow", "hidden");
 
-                         $sourceElem.parent().toggleClass('checked');
-                         $table.find('.massaction-checkbox[value="' + value + '"]').click();
-                     }
-                 }
-             ]
-        });
+            interval = setInterval(loadMoreRows, 2000);
 
-        // Selectors
-        $("#zolagocatalog_mass_grid_massaction a.select-all-btn").on('click', function(){
-            $table.find('.massaction-checkbox').prop('checked',true);
-            $('.tf-columns-left .massaction-checkbox').prop('checked',true);
+            //Resize columns
+            calculateLeftColumnWidth();
 
-            $table.find('.massaction-checkbox').parent().addClass('checked');
-            $('.tf-columns-left .massaction-checkbox').parent().addClass('checked');
+            calculateTableWidth();
 
-            $table.find('.massaction-checkbox').closest('tr').addClass('row-selected');
+            calculateViewportHeight();
 
-            recalculateTotalSelected();
-        });
+            calculateScrollBars();
 
-        $("#zolagocatalog_mass_grid_massaction a.unselect-all-btn").on('click', function(){
-            $table.find('.massaction-checkbox').prop('checked',false);
-            $('.tf-columns-left .massaction-checkbox').prop('checked',false);
+            calculateTotalLoaded();
 
-            $table.find('.massaction-checkbox').parent().removeClass('checked');
-            $('.tf-columns-left .massaction-checkbox').parent().removeClass('checked');
+            $('body').on('click', '.toggle-sidebar', function(){
+                calculateScrollBars();
+            });
 
-            $table.find('.massaction-checkbox').closest('tr').removeClass('row-selected');
+            $scrollHandleX.draggable({
+                axis: "x",
+                containment: "parent",
+                start: function(){
+                    $(this).parent().addClass('dragging');
+                },
+                drag: function(){
+                    var posLeft = $(this).position().left;
+                    $('#grid-body').scrollLeft(posLeft * scrollXFactor);
 
-            recalculateTotalSelected();
-        });
+                },
+                stop: function(){
+                    $(this).parent().removeClass('dragging');
+                }
+            });
 
-        function recalculateTotalSelected(){
-            var totalSelected = $table.find('.massaction-checkbox:checked').length;
-            $("#zolagocatalog_mass_grid_massaction .items-count").text(totalSelected);
-        }
+            $scrollHandleY.draggable({
+                axis: "y",
+                containment: "parent",
+                start: function(){
+                    $(this).parent().addClass('dragging');
+                },
+                drag: function(){
+                    var posTop = $(this).position().top;
+                    $('#mass-grid .tbody').scrollTop(posTop * scrollYFactor);
+                },
+                stop: function(){
+                    $(this).parent().removeClass('dragging');
+                }
+            });
 
-        // Popover
-        var $popover = $("#filter-btn").popover({
-            content: $("#attr-filters").html(),
-            html: true,
-            container: "#content",
-            placement: "left"
-        });
+            // Mousewheel
+            $('#mass-grid').on('mousewheel', function(event) {
 
-        setPopoverWidth($popover);
+                var speed = $("#scroll-handle-y").height() / 5,
+                    direction = (event.deltaY > 0) ? 'up' : 'down';
 
-        $('body').on('click', '.popover .form-actions .cancel-btn', function(){
-            $("#filter-btn").popover('hide');
-        });
+                // When editor popover opened block mouse scrolling
+                if($("#editor-popover").css("visibility") == 'visible'){
+                    return false;
+                }
 
-        recalculateTotalLoaded();
+                if($("#image-modal").is(":visible")){
+                    return false;
+                }
 
-        // Window resize end
-        $(window).resize( $.debounce( 250, function(){
+                scrollTableY(speed, scrollYFactor, direction);
+
+            });
+
+            // Key press
+            $(document).keydown(function(e){
+
+                var speed = $("#scroll-handle-y").height() / 5,
+                    editorVisible = ($("#editor-popover").css("visibility") == 'visible') ? true : false;
+
+                // Move up
+                if (e.keyCode == 38 && !editorVisible) {
+
+                    scrollTableY(speed, scrollYFactor, 'up');
+
+                    return false;
+                }
+                // Move down
+                else if(e.keyCode == 40 && !editorVisible){
+
+                    scrollTableY(speed, scrollYFactor, 'down');
+
+                    return false;
+                }
+
+            });
+
+            // Selectors
+            $("#zolagocatalog_mass_grid_massaction a.select-all-btn").on('click', function(){
+
+                allRowsSelected = true;
+
+                $('.grid .table .massaction-checkbox').prop('checked',true);
+
+                $('.grid .table .massaction-checkbox').parent().addClass('checked');
+
+                calculateTotalSelected();
+            });
+
+            $("#zolagocatalog_mass_grid_massaction a.unselect-all-btn").on('click', function(){
+
+                allRowsSelected = false;
+
+                $('.grid .table .massaction-checkbox').prop('checked',false);
+
+                $('.grid .table .massaction-checkbox').parent().removeClass('checked');
+
+                calculateTotalSelected();
+            });
+
+            $('body').on('click', '.grid .table .massaction-checkbox', function(){
+
+                var $checkbox = $(this),
+                    rowIndex = $checkbox.closest('.cell').parent().index();
+
+                $('#grid-left-columns .table .tbody > div:eq(' + rowIndex + ')').toggleClass('selected');
+                $('#grid-body .table .tbody > div:eq(' + rowIndex + ')').toggleClass('selected');
+
+                allRowsSelected = false;
+            });
+
+            // Tooltip
+            $('body').on('mouseover', '.table .cell', function(){
+
+                var $cellContainer = $(this),
+                    $cell = $cellContainer.find("> div"),
+                    cellContainerH = $cellContainer.outerHeight(),
+                    cellH = $cell[0].scrollHeight,
+                    text = $cell.text();
+
+                if(cellH > cellContainerH){
+                    $cellContainer.attr('data-title', text);
+                    $cellContainer.tooltip('show');
+                }
+            });
+
+            // Popover
+            var $popover = $("#filter-btn").popover({
+                content: $("#attr-filters").html(),
+                html: true,
+                container: "#content",
+                placement: "left"
+            });
+
             setPopoverWidth($popover);
-        }) );
 
+            $('body').on('click', '.popover .form-actions .cancel-btn', function(){
+                $("#filter-btn").popover('hide');
+            });
 
-        var interval = setInterval(loadMoreRows, 2000),
-            page = 1,
-            limit = 100,
-            prevRequestCompleted = true;
+            $('body').on('click', '.popover .form-actions .search-btn', function(){
 
-        function loadMoreRows(){
+                applyFilters();
 
-            var currentUrl = window.location.pathname,
-                totalLoaded = $table.find('tbody tr').length,
-                currentLoadCount;
+                return false;
 
-            if(prevRequestCompleted){
+            });
 
-                page = page + 1;
-                prevRequestCompleted = false;
+            $("body").on('click', '#reset-filter-btn', function(){
 
-                if(page <= totalPages || totalLoaded < totalRecords){
+                reloadWithAttributeSet();
 
-                    // Show loading indicator
-                    if((totalRecords - totalLoaded) > limit){
-                        currentLoadCount = limit;
+                return false;
+            });
+
+            $("body").on('change', '#attribute_set_switcher', function(){
+
+                reloadWithAttributeSet($(this).val());
+
+            });
+
+            // Inline Editor
+            var $activeCell;
+
+            $("body").on('click', "#grid-body .cell", function(){
+
+                var $cell = $(this),
+                    index = $cell.index(),
+                    attributeName = $("#grid-body .headings > div:eq(" + index + ") a").attr('name'),
+                    attributeTitle = $("#grid-body .headings > div:eq(" + index + ") a span").html(),
+                    $formField = $("#grid-editor *[name='attributes[" + attributeName + "]']"),
+                    $wrapper = $formField.closest('.element-wrapper'),
+                    positionLeft = $cell.position().left,
+                    positionTop = $cell.position().top,
+                    cellOffsetTop = $cell.offset().top,
+                    cellOffsetLeft = $cell.offset().left,
+                    gridBodyOffsetTop = $("#grid-body .tbody").offset().top,
+                    gridBodyOffsetLeft = $("#grid-body").offset().left,
+                    gridBodyW = $("#grid-body").width(),
+                    gridBodyH = $("#grid-body .tbody").height(),
+                    gridBodyMiddleX = gridBodyOffsetLeft + (gridBodyW / 2),
+                    gridBodyMiddleY = gridBodyOffsetTop + (gridBodyH / 2),
+                    cellW = $cell.outerWidth(),
+                    cellH = $cell.outerHeight(),
+                    anySelected = ($('.grid .table .massaction-checkbox:checked').length) ? true : false,
+                    popoverH,
+                    popoverW;
+
+                $activeCell = $cell;
+
+                $("#grid-body .cell").removeClass('active');
+
+                if(!anySelected){
+                    $cell.addClass('active');
+                }
+
+                hideEditorPopover();
+
+                // Set content
+                $("#editor-popover h4").html(attributeTitle);
+                $("#editor-popover .content").html($wrapper.html());
+
+                if(!anySelected){
+                    $("#editor-popover .content .apply-all-selected").hide();
+                }
+
+                // Position popover
+                popoverH = $("#editor-popover").outerHeight();
+                popoverW = $("#editor-popover").outerWidth();
+
+                // Top
+                if(cellOffsetTop < gridBodyMiddleY){
+                    $("#editor-popover").css('top', positionTop + "px");
+                }
+                // Bottom
+                else{
+                    $("#editor-popover").css('top', (positionTop - popoverH + cellH) + "px");
+                }
+
+                // Right
+                if(cellOffsetLeft < gridBodyMiddleX){
+                    $("#editor-popover").css('left', (positionLeft + cellW) + "px");
+                }
+                // Left
+                else{
+                    $("#editor-popover").css('left', (positionLeft - popoverW) + "px");
+                }
+
+                showEditorPopover();
+
+            });
+
+            $("body").on('click', '#editor-popover #mass-grid-submit', function(){
+
+                var $checkedCheckboxes = $('.grid .table .massaction-checkbox:checked'),
+                    anySelected = ($checkedCheckboxes.length) ? true : false,
+                    $form = $("#editor-popover form"),
+                    url = saveGridLocation,
+                    checkedIds = [],
+                    value,
+                    params,
+                    rowIndex,
+                    colIndex = $activeCell.index(),
+                    clickedId;
+
+                // Get selected value
+                if($form.find('option:selected').length){
+                    value = $form.find('option:selected').text()
+                }
+                else if($form.find('input[type="text"]').length){
+                    value = $form.find('input[type="text"]').val();
+                }
+                else if($form.find('textarea').length){
+                    value = $form.find('textarea').val();
+                }
+                else{
+                    alert("Option cannot be blank");
+                    return false;
+                }
+
+                if(anySelected){
+
+                    if(allRowsSelected){
+                        checkedIds = gridIds;
                     }
                     else{
-                        currentLoadCount = totalRecords - totalLoaded;
+
+                        $checkedCheckboxes.each(function(){
+                            checkedIds.push($(this).val());
+                        })
                     }
 
-                    if(currentLoadCount <= 0){
-                        return;
-                    }
+                }
+                else{
 
-                    // Set page on url
-                    if(currentUrl.match(/page\/\d+/)){
-                        currentUrl = currentUrl.replace(/page\/\d+/, 'page/' + page);
-                    }
-                    else{
-                        currentUrl = stripTrailingSlash(currentUrl) + "/page/" + page;
-                    }
+                    rowIndex = $activeCell.parent().index();
 
-                    // Set limit on url
-                    if(currentUrl.match(/limit\/\d+/)){
-                        currentUrl = currentUrl.replace(/limit\/\d+/, 'limit/' + currentLoadCount);
-                    }
-                    else{
-                        currentUrl = stripTrailingSlash(currentUrl) + "/limit/" + currentLoadCount;
-                    }
+                    $checkedCheckboxes = $('#grid-left-columns .table .tbody > div:eq(' + rowIndex + ') .massaction-checkbox');
+                    clickedId = $checkedCheckboxes.val();
 
+                    checkedIds.push(clickedId);
+                }
 
-                    $("#zolagocatalog_mass_grid .actions .loader-indicator").text("Loading next " + currentLoadCount + " records...");
+                params = $form.serialize();
 
-                    $.get( currentUrl + "?uselazyload=true", function( data ) {
+                params += "&product_ids=" + checkedIds.join(",");
+                params += "&attribute_set=" + currentAttributeSetId;
 
-                        prevRequestCompleted = true;
+                hideEditorPopover();
 
-                        $table.find('tbody').append($(data).children());
+                showLoader();
 
-                        tableFreezer.appendRowsToLeftColumns(totalLoaded);
-                        tableFreezer.recalculateWidths();
-                        tableFreezer.recalculateColumnsWidth();
-                        tableFreezer.recalculateScrollBars();
+                $.post( url, params, function( data ) {
 
-                        recalculateTotalLoaded();
+                    var status = data.status,
+                        $cell,
+                        $row,
+                        i;
 
-                        $("#zolagocatalog_mass_grid .actions .loader-indicator").text("");
+                    $checkedCheckboxes.each(function(){
+                        $row = $(this).closest(".cell").parent();
+                        i = $row.index();
+
+                        $cell = $("#grid-body .tbody > div:eq(" + i + ") .cell:eq(" + colIndex + ")");
+
+                        $cell.text(value);
                     });
+
+                    hideEditorPopover();
+
+                    $("#grid-body .cell").removeClass('active');
+
+                    hideLoader();
+
+                }, "json");
+
+                return false;
+            });
+
+            $("body").on('click', '#editor-popover .close-btn', function(){
+
+                hideEditorPopover();
+
+                $("#grid-body .cell").removeClass('active');
+
+                return false;
+
+            });
+
+            // Mass actions
+            $('body').on('click', '#mass-submit-btn', function(){
+
+                var $checkedCheckboxes = $('.grid .table .massaction-checkbox:checked'),
+                    anySelected = ($checkedCheckboxes.length) ? true : false,
+                    optionSelected = $("#zolagocatalog_mass_grid_massaction-select").val(),
+                    url = massActionLocation,
+                    checkedIds = [],
+                    params = '';
+
+                if(anySelected){
+
+                    if(allRowsSelected){
+                        checkedIds = gridIds;
+                    }
+                    else{
+
+                        $checkedCheckboxes.each(function(){
+                            checkedIds.push($(this).val());
+                        })
+                    }
+
+                    params += "product_ids=" + checkedIds.join(",");
+
+                    url += "attribute_set/" + currentAttributeSetId + "/";
+
+                    if(optionSelected == 'status'){
+                        url += "status/2/";
+                    }
+                    else if(optionSelected == 'review'){
+                        url += "review/1/";
+                    }
+                    else{
+                        alert("Please select an option to apply for selected products");
+                        return false;
+                    }
+
+                    showLoader();
+
+                    $.post( url, params, function( data ) {
+
+                        console.log(data);
+
+                        hideLoader();
+
+                    }, "json");
+                }
+                else{
+                    alert("Please select at least one row");
+                }
+
+                return false;
+            });
+
+            // Table filters
+            var orgTextFieldValue;
+            var $filterInputs = $('.table .thead input, .table .thead input');
+            var $filterSelects = $('.table .thead select, .table .thead select');
+            $filterInputs.each(function(){
+                $(this).on('focus', function(){
+                    $(this).data('org-value', $(this).val());
+                });
+
+            });
+
+            $filterInputs.each(function(){
+
+                $(this).on('blur', function(){
+
+                    if($(this).data('org-value') != $(this).val()){
+                        applyFilters();
+                    }
+
+                });
+            });
+
+            $filterInputs.each(function(){
+
+                $(this).on('keypress', function(e){
+                    var code = e.keyCode || e.which;
+                    if(code == 13){
+                        applyFilters();
+                    }
+
+                });
+            });
+
+            $filterSelects.each(function(){
+
+                $(this).on('change', function(){
+
+                    applyFilters();
+
+                });
+            });
+
+            $('.grid .table .headings a').on('click', function(){
+
+                applySort($(this));
+
+                return false;
+            });
+
+            // Thumbnails
+            $('body').on('click', '.cell.thumb a', function(){
+
+                var $link = $(this),
+                    $cell = $link.closest(".cell"),
+                    $row = $cell.parent(),
+                    rowIndex = $row.index(),
+                    imageUrl = $link.attr('href'),
+                    $titleElem = $(".table .tbody > div:eq(" + rowIndex + ") .cell.product-name > div"),
+                    title = ($titleElem.length) ? $titleElem.text() : "Image",
+                    $modal = $("#image-modal"),
+                    screenW = $(window).height(),
+                    modalPadding = 250;
+
+                $modal.find('.modal-title').text(title);
+                $modal.find('.modal-body img').attr('src', imageUrl)
+                                              .css('height', (screenW - modalPadding) + "px");
+
+                $("#image-modal").modal('show');
+
+                return false;
+            });
+
+            // Window resize
+            $(window).on('resize', $.throttle( 250, function(){
+
+                calculateViewportHeight();
+
+                calculateScrollBars();
+
+            } ));
+
+            // Window resize end
+            $(window).resize( $.debounce( 250, function(){
+                setPopoverWidth($popover);
+            }) );
+
+            function getAbsHeight($elem) {
+                var windowH = $(window).height(),
+                    heightBottomPadding = 30;
+
+                return windowH - $elem.offset().top - heightBottomPadding;
+            }
+
+            function scrollTableY(speed, scrollYFactor, direction){
+
+                var $scrollHandleY = $('#mass-grid').find('#scroll-handle-y');
+                var $scrollbarContainerY = $scrollHandleY.parent();
+
+                if(!$scrollbarContainerY.length){
+                    return false;
+                }
+
+                var currHandleTop = $scrollHandleY.position().top;
+                var newHandleTop = currHandleTop + speed;
+
+                if (direction == 'down') {
+                    newHandleTop = currHandleTop + speed;
+                } else {
+                    newHandleTop = currHandleTop - speed;
+                }
+
+                if(newHandleTop < 0 && direction == 'up'){
+                    $scrollHandleY.css('top', 0 + 'px');
+                    $('#mass-grid .tbody').scrollTop(0);
+                    return false;
+                }
+                else if(newHandleTop >= ($scrollbarContainerY.height() - $scrollHandleY.height()) && direction == 'down'){
+                    $scrollHandleY.css('top', ($scrollbarContainerY.height() - $scrollHandleY.height()) + 'px');
+                    $('#mass-grid .tbody').scrollTop($('#mass-grid .tbody')[0].scrollHeight);
+                    return false;
+                }
+
+                $scrollHandleY.css('top', (newHandleTop) + 'px');
+                $('#mass-grid .tbody').scrollTop((newHandleTop * scrollYFactor));
+
+                return newHandleTop;
+            }
+
+            function showEditorPopover(){
+
+                $("#editor-popover").css('visibility', 'visible');
+            }
+
+            function hideEditorPopover(){
+
+                $("#editor-popover").css('visibility', 'hidden');
+            }
+
+            function showLoader(){
+                $("#grid-loader").show();
+            }
+
+            function hideLoader(){
+                $("#grid-loader").hide();
+            }
+
+            function applyFilters(){
+
+                var url = getUrl(),
+                    $leftColumns,
+                    $bodyColumns;
+
+                filterAjaxFired = true;
+
+                clearInterval(interval);
+
+                $("#filter-btn").popover('hide');
+
+                showLoader();
+
+                $.get( url + "?uselazyload=true", function( data ) {
+
+                    $leftColumns = $(data).find('#grid-left-columns .tbody');
+                    $bodyColumns = $(data).find('#grid-body .tbody');
+
+                    history.pushState({}, "next page", url);
+
+                    $("#mass-grid #grid-left-columns .tbody").replaceWith($leftColumns);
+                    $("#mass-grid #grid-body .tbody").replaceWith($bodyColumns);
+
+                    //Recalculate total loaded
+                    totalRecords = $(data).find('#total-records').val();
+                    $('.total-records-count').text(totalRecords);
+
+                    calculateViewportHeight();
+
+                    calculateTotalLoaded();
+
+                    //Recalculate selected
+                    calculateTotalSelected();
+
+                    //Resize scrollers
+                    calculateScrollBars();
+
+                    //Apply uniform
+                    $("input[type='checkbox']").uniform();
+
+                    hideLoader();
+
+                    filterAjaxFired = false;
+
+                    interval = setInterval(loadMoreRows, 2000);
+                });
+            }
+
+            function applySort($link){
+
+                var name = $link.attr('name'),
+                    title = $link.attr('title'),
+                    url = getUrl();
+
+                if(name && title){
+
+                    url += varNameSort + "/" + name + "/" + varNameDir + "/" + title + "/";
+
+                    showLoader();
+
+                    window.location.href = url;
                 }
             }
-        }
 
-        function stripTrailingSlash(str) {
-            if(str.substr(-1) == '/') {
-                return str.substr(0, str.length - 1);
+            function getUrl(params){
+
+                var location = cleanLocation;
+                var filtersCount = $('.popover .staticFilter').length;
+                var activeFilter = 1;
+                var serializedTableFilters = [];
+
+                var options = $.extend(true, {
+                    attributeSet: true,
+                    staticFilters: true,
+                    tableFilters: true,
+                    paging: true
+                }, params);
+
+                // Popover filters
+                if(options.staticFilters){
+
+                    $('.popover .staticFilter').each(function() {
+                        if ($(this).val() != "") {
+
+                            var filterValue = $(this).find("option:selected").attr('filtervalue');
+                            location += "staticFilterId-"+activeFilter+"/" + $(this).val() + "/" + "staticFilterValue-"+activeFilter+"/" + encodeURIComponent(filterValue) + "/";
+                            activeFilter++;
+                        } else {
+                            filtersCount--;
+                        }
+                    });
+
+                    location += "staticFilters/" + filtersCount + "/";
+                }
+
+
+                // Table filters
+                if(options.tableFilters){
+
+                    $('.table .thead select, .table .thead select, .table .thead input, .table .thead input').each(function(){
+                        var filterValue = $(this).val(),
+                            filterName;
+
+                        if(filterValue != ""){
+                            filterName = $(this).attr('name');
+                            serializedTableFilters.push(filterName + "=" + encodeURIComponent(filterValue));
+                        }
+                    });
+
+                    if(serializedTableFilters.length > 0){
+                        location += "filter/" + encode_base64(serializedTableFilters.join("&")) + "/";
+                    }
+                }
+
+                // Current attribute
+                if (options.attributeSet && currentAttributeSetId) {
+                    location += "attribute_set/" + currentAttributeSetId + "/";
+                }
+
+                // Add paging and limit
+                if(options.paging){
+                    location += "page/" + 1 + "/limit/" + 100 + "/";
+                }
+
+                return location;
             }
-            return str;
-        }
 
-        function recalculateTotalLoaded(){
-            var totalLoaded = $table.find('tbody tr').length,
-                percentLoaded = Math.round((totalLoaded/totalRecords) * 100);
+            function loadMoreRows(){
 
-            $("#zolagocatalog_mass_grid .actions .loaded-records-count").text(totalLoaded);
-            $("#zolagocatalog_mass_grid .actions .percent-loaded").text("(" + percentLoaded + "%)");
-        }
+                var currentUrl = window.location.pathname,
+                    totalLoaded = $('#grid-left-columns .tbody > div').length,
+                    currentLoadCount;
 
-        function setPopoverWidth($popover){
-            var $button = $("#filter-btn"),
-                buttonOffsetLeft = $button.offset().left,
-                $sidebar = $('#sidebar'),
-                sidebarWidth = $sidebar.outerWidth(),
-                offset = 20,
-                popoverWidth = buttonOffsetLeft - sidebarWidth - offset;
+                if(prevRequestCompleted && !filterAjaxFired){
 
-            $popover.on("show.bs.popover", function(e){
-                $popover.data()["bs.popover"].$tip.css("max-width", popoverWidth + "px").css("width", popoverWidth + "px");
-            });
-        }
+                    page = page + 1;
+                    prevRequestCompleted = false;
+
+                    if(page <= totalPages || totalLoaded < totalRecords){
+
+                        // Show loading indicator
+                        if((totalRecords - totalLoaded) > limit){
+                            currentLoadCount = limit;
+                        }
+                        else{
+                            currentLoadCount = totalRecords - totalLoaded;
+                        }
+
+                        if(currentLoadCount <= 0){
+                            return;
+                        }
+
+                        // Set page on url
+                        if(currentUrl.match(/page\/\d+/)){
+                            currentUrl = currentUrl.replace(/page\/\d+/, 'page/' + page);
+                        }
+                        else{
+                            currentUrl = stripTrailingSlash(currentUrl) + "/page/" + page;
+                        }
+
+                        // Set limit on url
+                        if(currentUrl.match(/limit\/\d+/)){
+                            currentUrl = currentUrl.replace(/limit\/\d+/, 'limit/' + currentLoadCount);
+                        }
+                        else{
+                            currentUrl = stripTrailingSlash(currentUrl) + "/limit/" + currentLoadCount;
+                        }
+
+
+                        $("#mass-grid-container .actions .loader-indicator").text("Loading next " + currentLoadCount + " records...");
+
+                        $.get( currentUrl + "?uselazyload=true", function( data ) {
+
+                            prevRequestCompleted = true;
+
+                            var $leftColumns = $(data).find('#grid-left-columns .tbody').children();
+                            var $bodyColumns = $(data).find('#grid-body .tbody').children();
+
+                            $("#mass-grid #grid-left-columns .tbody").append($leftColumns);
+                            $("#mass-grid #grid-body .tbody").append($bodyColumns);
+
+                            //Recalculate total loaded
+                            calculateTotalLoaded();
+
+                            //Resize scrollers
+                            calculateScrollBars();
+
+                            //Apply uniform
+                            $("input[type='checkbox']").uniform();
+
+                            $("#mass-grid-container .actions .loader-indicator").text("");
+                        });
+                    }
+                    else{
+                        clearInterval(interval);
+                    }
+                }
+            }
+
+            function stripTrailingSlash(str) {
+                if(str.substr(-1) == '/') {
+                    return str.substr(0, str.length - 1);
+                }
+                return str;
+            }
+
+            function calculateTotalSelected(){
+                var totalSelected = (allRowsSelected) ? totalRecords : $('.grid .table .massaction-checkbox:checked').length;
+
+                $("#zolagocatalog_mass_grid_massaction .items-count").text(totalSelected);
+            }
+
+            function calculateViewportHeight(){
+
+                var tableContentH = $('#grid-body .tbody')[0].scrollHeight,
+                    viewportH = getAbsHeight($("#grid-body .tbody"));
+
+                if(viewportH < tableContentH){
+                    $(".grid .table .tbody").css("height", viewportH + "px");
+                }
+            }
+
+            function calculateScrollBars(){
+
+                var $scrollbarContainerX = $('#scrollbar-container-x'),
+                    $scrollbarContainerY = $('#scrollbar-container-y'),
+                    $scrollHandleX = $('#scroll-handle-x'),
+                    $scrollHandleY = $('#scroll-handle-y'),
+                    tableContentH = $('#grid-body .tbody')[0].scrollHeight,
+                    tableContentW = $('#grid-body .tbody')[0].scrollWidth,
+                    tableW = $('#grid-body .table').outerWidth(),
+                    headerH = $('#grid-body .thead').outerHeight(),
+                    leftColumnsW = $('#grid-left-columns').outerWidth(),
+                    tableH = $('#grid-body .tbody').outerHeight(),
+                    scrollHandleWidth,
+                    scrollHandleHeight;
+
+                // Show/Hide scrollbars
+                if(tableH < tableContentH){
+                    $scrollbarContainerY.show();
+                }
+                else{
+                    $scrollbarContainerY.hide();
+                }
+
+                if(tableW < tableContentW){
+                    $scrollbarContainerX.show();
+                }
+                else{
+                    $scrollbarContainerX.hide();
+                }
+
+                // Position and width of scrollbars
+                $scrollbarContainerX.css('width', ($('#mass-grid').outerWidth() - leftColumnsW) + 'px')
+                    .css('left', leftColumnsW + 'px');
+
+                $scrollbarContainerY.css('height', ($('#mass-grid').outerHeight() - headerH) + 'px')
+                    .css('top', headerH + 'px');
+
+                // Width/Height of scrollbar handles
+                scrollHandleWidth = (($('#mass-grid').outerWidth() - leftColumnsW) * $scrollbarContainerX.width()) / tableContentW;
+                $scrollHandleX.width(scrollHandleWidth);
+                scrollXFactor = (tableContentW)  / $scrollbarContainerX.outerWidth();
+
+                scrollHandleHeight = (($('#mass-grid').outerHeight() - headerH) * $scrollbarContainerY.height()) / tableContentH;
+                $scrollHandleY.height(scrollHandleHeight);
+                scrollYFactor = (tableContentH)  / $scrollbarContainerY.outerHeight();
+            }
+
+            function calculateTotalLoaded(){
+                var totalLoaded = $('#grid-left-columns .tbody > div').length,
+                    percentLoaded = Math.round((totalLoaded/totalRecords) * 100);
+
+                $("#mass-grid-container .actions .loaded-records-count").text(totalLoaded);
+                $("#mass-grid-container .actions .percent-loaded").text("(" + percentLoaded + "%)");
+            }
+
+            function calculateLeftColumnWidth(){
+
+                var $columns = $('#grid-left-columns .headings > div'),
+                    totalW = 0;
+
+                $columns.each(function(){
+                    totalW += $(this).outerWidth();
+                });
+
+                $("#grid-left-columns").width(totalW);
+                $("#grid-body").css("margin-left", totalW + "px");
+
+            }
+
+            function calculateTableWidth(){
+
+                var $lastColumn = $("#grid-body .thead .headings > div:last-of-type"),
+                    $container = $lastColumn.closest("#grid-body"),
+                    containerOffsetL = $container.offset().left,
+                    offsetL = $lastColumn.offset().left,
+                    w = $lastColumn.outerWidth(),
+                    boxW = offsetL + w - containerOffsetL;
+
+                $("#grid-body .thead").width(boxW);
+                $("#grid-body .tbody").width(boxW);
+
+            }
+
+            function setPopoverWidth($popover){
+                var $button = $("#filter-btn"),
+                    buttonOffsetLeft = $button.offset().left,
+                    $sidebar = $('#sidebar'),
+                    sidebarWidth = $sidebar.outerWidth(),
+                    offset = 20,
+                    popoverWidth = buttonOffsetLeft - sidebarWidth - offset;
+
+                $popover.on("show.bs.popover", function(e){
+                    $popover.data()["bs.popover"].$tip.css("max-width", popoverWidth + "px").css("width", popoverWidth + "px");
+                });
+            }
+
+        });
+
+    </script>
+<?php endif; ?>
+
+<script type="application/javascript">
+
+    jQuery(function($){
+
+        $("body").on('change', '#attribute_set_switcher', function(){
+
+            reloadWithAttributeSet($(this).val());
+
+        });
+
     });
 
+
+    function reloadWithAttributeSet(attributeSetId){
+
+        var location;
+
+        if(!attributeSetId) attributeSetId = currentAttributeSetId;
+
+        if (attributeSetId) {
+            location = cleanLocation + "attribute_set/" + attributeSetId + "/limit/" + limit + "/";
+        }
+
+//        $("#grid-loader").show();
+
+        window.location.href = location;
+
+    }
 </script>

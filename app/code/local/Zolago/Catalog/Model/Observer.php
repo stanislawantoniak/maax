@@ -9,6 +9,16 @@
 class Zolago_Catalog_Model_Observer
 {
 
+    public function addColumnWidthField(Varien_Event_Observer $observer)
+    {
+        $fieldset = $observer->getForm()->getElement('front_fieldset');
+        $fieldset->addField('column_width', 'text', array(
+            'name' => 'column_width',
+            'label' => Mage::helper('catalog')->__('Column width (px)'),
+            'title' => Mage::helper('catalog')->__('Column width (px)')
+        ));
+    }
+
     static public function processConfigurableQueue()
     {
         Mage::log(microtime() . " Starting processConfigurableQueue ", 0, 'configurable_update.log');

@@ -49,7 +49,8 @@ $numColumns = sizeof($this->getColumns());
             </div>
         <?php endif ?>
 
-        <div id="<?php echo $this->getId() ?>" class="<?php echo $this->getGridClass();?>">
+        <div id="grid-loader"></div>
+        <div id="mass-grid-container" class="<?php echo $this->getGridClass();?>">
     <?php else: ?>
         <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
     <?php endif; ?>
@@ -63,7 +64,7 @@ $numColumns = sizeof($this->getColumns());
                     <div class="pull-left form-inline">
                         <div class="text-holder">
                             <label>
-                                <span><?php echo $this->__('Loaded'); ?>: <strong><span class="loaded-records-count"><?php echo $this->getCollection()->getPageSize(); ?></span>/<?php echo $this->getCollection()->getSize(); ?></strong> <small class="percent-loaded"></small></span>
+                                <span><?php echo $this->__('Loaded'); ?>: <strong><span class="loaded-records-count"><?php echo $this->getCollection()->getPageSize(); ?></span>/<span class='total-records-count'><?php echo $this->getCollection()->getSize(); ?></span></strong> <small class="percent-loaded"></small></span>
                             </label>
                         </div>
                         <div class="loader-indicator text-holder">
@@ -176,123 +177,288 @@ $numColumns = sizeof($this->getColumns());
     <?php if($this->getMassactionBlock()->isAvailable()): ?>
         <?php echo $this->getMassactionBlockHtml() ?>
     <?php endif ?>
-    <div class="grid">
-        <div class="hor-scroll">
-            <table cellspacing="0" class="data table table-bordered table-hover table-striped" id="<?php echo $this->getId() ?>_table">
-                <?php foreach ($this->getColumns() as $_column): ?>
-                    <!-- <col <?php //echo $_column->getHtmlProperty() ?> /> -->
-                <?php endforeach; ?>
+
+    <style>
+    #attr-filters{
+        display:none;
+    }
+    #grid-loader{
+        width:100%;
+        height:100%;
+        background-color: rgba(255,255,255,0.9);
+        background-image:url('/skin/adminhtml/default/default/images/ajax-loader-long.gif');
+        background-position: center center;
+        background-repeat: no-repeat;
+        position:absolute;
+        top:0;
+        left:0;
+        z-index: 100;
+        display:none;
+    }
+    .grid{
+        border:1px solid #CCC;
+        position:relative;
+    }
+    .grid .table{
+        margin:0;
+    }
+    .grid .table .thead .headings{
+        border-bottom:1px solid #CCC;
+    }
+    .grid .table .thead .headings > div,
+    .grid .table .thead .filter > div,
+    .grid .table .tbody .cell{
+        border-right:1px solid #CCC;
+    }
+    .grid .table .thead .headings > div:last-of-type,
+    .grid .table .thead .filter > div:last-of-type,
+    .grid .table .tbody .cell:last-of-type{
+        border-right:none;
+    }
+    .grid .table .thead .filter{
+        border-bottom:2px solid #CCC;
+    }
+    .grid .table .thead .filter input,
+    .grid .table .thead .filter select{
+        width:100%;
+        border:1px solid #cccccc;
+    }
+    #grid-left-columns{
+        border-right:2px solid #CCC;
+    }
+    .grid .table .tbody{
+        overflow: hidden;
+    }
+    .grid .table .tbody > div{
+        border-bottom:1px solid #CCC;
+    }
+    .grid .table .tbody > div:nth-child(odd){
+        background:#EEE;
+    }
+    .grid .table .tbody > div:last-of-type{
+        border-bottom:none;
+    }
+    .grid .table .thead .headings > div,
+    .grid .table .thead .filter > div,
+    .grid .table .tbody .cell{
+        height:40px;
+        padding:10px;
+        float:left;
+    }
+    .grid .table .tbody .cell{
+        height:50px
+    }
+    #grid-body .table .tbody .cell:hover,
+    #grid-body .table .tbody .cell.active{
+        background:#DDD;
+        cursor: pointer;
+    }
+    .grid .table .thead .headings > div,
+    .grid .table .tbody .cell{
+        overflow: hidden;
+    }
+    .grid .table .tbody .cell.thumb{
+        padding-top:0px;
+        padding-bottom:0px;
+        text-align: center;
+    }
+    .grid .table .tbody .cell.thumb img{
+        height:50px;
+    }
+    #image-modal .modal-body{
+        text-align: center;
+    }
+    .grid .table .thead .filter > div input{
+        padding:0 !important;
+    }
+    #grid-left-columns{
+        width:400px;
+        float:left;
+        overflow: hidden;
+    }
+    .grid .table .tbody > div.selected{
+        background: #ffffee;
+    }
+    #grid-body{
+        margin-left:400px;
+        overflow:hidden;
+    }
+    #grid-body .table .thead,
+    #grid-body .table .tbody{
+        width:10000px;
+    }
+    #grid-body .tbody{
+        overflow:hidden;
+    }
+    #editor-popover{
+        padding:0 15px 15px 15px;
+        border:1px solid #999;
+        background:white;
+        position:absolute;
+        visibility:hidden;
+    }
+    #editor-popover .apply-all-selected{
+        margin:6px 0 0 0;
+    }
+    #editor-popover button{
+        margin:6px 0 0 0;
+    }
+    #editor-popover .close-btn{
+        position:absolute;
+        top:3px;
+        right:8px;
+    }
+    </style>
+
+    <?php $columns = $this->getColumns(); ?>
+    <?php $leftColumnsCount = 3; ?>
+    <?php $leftColumns = array_splice($columns, 0, $leftColumnsCount); ?>
+    <?php $bodyColumns = array_splice($columns, $leftColumnsCount); ?>
+
+    <div id="mass-grid" class="grid clearfix">
+        <div id="grid-left-columns">
+            <div class="table">
                 <?php if ($this->getHeadersVisibility() || $this->getFilterVisibility()): ?>
-                    <thead>
-                    <?php if ($this->getHeadersVisibility()): ?>
-                        <tr class="headings">
-                            <?php foreach ($this->getColumns() as $_column): ?>
-                                <th<?php echo $_column->getHeaderHtmlProperty() ?>><span class="nobr"><?php echo $_column->getHeaderHtml() ?></span></th>
-                            <?php endforeach; ?>
-                        </tr>
-                    <?php endif; ?>
-                    <?php if ($this->getFilterVisibility()): ?>
-                        <tr class="filter">
-                            <?php $i=0;foreach ($this->getColumns() as $_column): ?>
-                                <th<?php echo $_column->getHeaderHtmlProperty() ?>><?php echo $_column->getFilterHtml() ?></th>
-                            <?php endforeach; ?>
-                        </tr>
-                    <?php endif ?>
-                    </thead>
-                <?php endif; ?>
-                <?php if ($this->getCountTotals()): ?>
-                    <tfoot>
-                    <tr class="totals">
-                        <?php foreach ($this->getColumns() as $_column): ?>
-                            <th class="<?php echo $_column->getCssProperty() ?>"><?php echo ($_column->hasTotalsLabel()) ? $_column->getTotalsLabel() : $_column->getRowField($_column->getGrid()->getTotals()) ?>&nbsp;</th>
-                        <?php endforeach; ?>
-                    </tr>
-                    </tfoot>
+                    <div class="thead">
+                        <?php if ($this->getHeadersVisibility()): ?>
+                            <div class="headings clearfix">
+
+                                <?php foreach ($leftColumns as $_column): ?>
+
+                                    <div<?php echo $_column->getHeaderHtmlProperty() ?> <?php echo $this->getColumnWidthStyle($_column); ?>><span class="nobr"><?php echo $_column->getHeaderHtml() ?></span></div>
+
+                                <?php endforeach; ?>
+
+                            </div>
+                        <?php endif; ?>
+                        <?php if ($this->getFilterVisibility()): ?>
+                            <div class="filter clearfix">
+                                <?php $i=0; foreach ($leftColumns as $_column): ?>
+
+                                    <div<?php echo $_column->getHeaderHtmlProperty() ?> <?php echo $this->getColumnWidthStyle($_column); ?>><?php echo $_column->getFilterHtml() ?></div>
+
+                                <?php endforeach; ?>
+                            </div>
+                        <?php endif ?>
+                    </div>
                 <?php endif; ?>
 
-                <tbody>
+                <div class="tbody">
+                    <?php if (($this->getCollection()->getSize()>0) && (!$this->getIsCollapsed())): ?>
+                        <?php foreach ($this->getCollection() as $_index=>$_item): ?>
+                            <div title="<?php echo $this->getRowUrl($_item) ?>" class="clearfix <?php if ($_class = $this->getRowClass($_item)) echo $_class; ?>" >
+                                <?php foreach ($leftColumns as $_column): ?>
+
+                                    <?php if ($this->shouldRenderCell($_item, $_column)):?>
+                                        <div class="cell <?php echo $_column->getCssProperty() ?> <?php echo $this->getCellClass($_column, $_item);?>" <?php echo $this->getColumnWidthStyle($_column); ?>>
+                                            <div>
+                                                <?php echo (($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?>
+                                            </div>
+                                        </div>
+                                    <?php endif;?>
+
+                                <?php endforeach; ?>
+                            </div>
+
+                        <?php endforeach; ?>
+                    <?php elseif ($this->getEmptyText()): ?>
+                        <div>
+                            <div class="empty-text <?php echo $this->getEmptyTextClass() ?>" colspan="<?php echo $numColumns ?>"><?php echo $this->getEmptyText() ?></div>
+                        </div>
+                    <?php endif; ?>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="grid-body">
+            <div class="table">
+                <?php if ($this->getHeadersVisibility() || $this->getFilterVisibility()): ?>
+                    <div class="thead">
+                    <?php if ($this->getHeadersVisibility()): ?>
+                        <div class="headings clearfix">
+                            <?php foreach ($bodyColumns as $_column): ?>
+
+                                <div<?php echo $_column->getHeaderHtmlProperty() ?> <?php echo $this->getColumnWidthStyle($_column); ?>><span class="nobr"><?php echo $_column->getHeaderHtml() ?></span></div>
+
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
+                    <?php if ($this->getFilterVisibility()): ?>
+                        <div class="filter clearfix">
+                            <?php foreach ($bodyColumns as $_column): ?>
+                                <div <?php echo $this->getColumnWidthStyle($_column); ?>><?php echo $_column->getFilterHtml() ?></div>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif ?>
+                    </div>
+                <?php endif; ?>
+
+                <div class="tbody">
                 <?php if (($this->getCollection()->getSize()>0) && (!$this->getIsCollapsed())): ?>
                     <?php foreach ($this->getCollection() as $_index=>$_item): ?>
-                        <tr title="<?php echo $this->getRowUrl($_item) ?>"<?php if ($_class = $this->getRowClass($_item)):?> class="<?php echo $_class; ?>"<?php endif;?> >
-                            <?php $i=0;foreach ($this->getColumns() as $_column): ?>
+                        <div title="<?php echo $this->getRowUrl($_item) ?>" class="clearfix <?php if ($_class = $this->getRowClass($_item)) echo $_class; ?>" >
+                            <?php foreach($bodyColumns as $_column): ?>
 
                                 <?php if ($this->shouldRenderCell($_item, $_column)):?>
                                     <?php $_rowspan = $this->getRowspan($_item, $_column);?>
-                                    <td <?php echo ($_rowspan ? 'rowspan="' . $_rowspan . '" ' : '') ?>class="<?php echo $_column->getCssProperty() ?> <?php echo $this->getCellClass($_column, $_item);?> <?php echo ++$i==$numColumns? 'last':'' ?>">
-                                        <?php echo (($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?>
-                                    </td>
-                                    <?php if ($this->shouldRenderEmptyCell($_item, $_column)):?>
-                                        <td colspan="<?php echo $this->getEmptyCellColspan($_item)?>" class="last"><?php echo $this->getEmptyCellLabel()?></td>
-                                    <?php endif;?>
+                                    <div class="cell <?php echo $_column->getCssProperty() ?> <?php echo $this->getCellClass($_column, $_item);?>" <?php echo $this->getColumnWidthStyle($_column); ?>>
+                                        <div>
+                                            <?php echo (($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?>
+                                        </div>
+                                    </div>
                                 <?php endif;?>
 
                             <?php endforeach; ?>
-                        </tr>
-                        <?php if ($_multipleRows = $this->getMultipleRows($_item)):?>
-                            <?php foreach ($_multipleRows as $_i):?>
-                                <tr>
-                                    <?php $i=0;foreach ($this->getMultipleRowColumns($_i) as $_column): ?>
-                                        <td class="<?php echo $_column->getCssProperty() ?> <?php echo ++$i==$numColumns-1? 'last':'' ?>">
-                                            <?php echo (($_html = $_column->getRowField($_i)) != '' ? $_html : '&nbsp;') ?>
-                                        </td>
-                                    <?php endforeach; ?>
-                                </tr>
-                            <?php endforeach;?>
-                        <?php endif;?>
+                        </div>
 
-                        <?php if ($this->shouldRenderSubTotal($_item)): ?>
-                            <tr class="subtotals">
-                                <?php $i = 0; foreach ($this->getSubTotalColumns() as $_column): ?>
-                                    <td class="<?php echo $_column->getCssProperty() ?> <?php echo ++$i == $numColumns ? 'last' : '' ?>">
-                                        <?php echo ($_column->hasSubtotalsLabel() ? $_column->getSubtotalsLabel() :
-                                            $_column->getRowField($this->getSubTotalItem($_item))
-                                        );
-                                        ?>
-                                    </td>
-                                <?php endforeach; ?>
-                            </tr>
-                        <?php endif; ?>
                     <?php endforeach; ?>
                 <?php elseif ($this->getEmptyText()): ?>
-                    <tr>
-                        <td class="empty-text <?php echo $this->getEmptyTextClass() ?>" colspan="<?php echo $numColumns ?>"><?php echo $this->getEmptyText() ?></td>
-                    </tr>
+                    <div>
+                        <div class="empty-text <?php echo $this->getEmptyTextClass() ?>" colspan="<?php echo $numColumns ?>"><?php echo $this->getEmptyText() ?></div>
+                    </div>
                 <?php endif; ?>
-                </tbody>
+                </div>
 
-            </table>
+            </div>
+        </div>
+
+        <div id="scrollbar-container-y"><div id="scroll-handle-y"></div></div>
+        <div id="scrollbar-container-x"><div id="scroll-handle-x"></div></div>
+
+        <div id="editor-popover"><h4></h4><div class="content"></div><a class="close-btn" href="#">x</a></div>
+        <div id="image-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="ImageLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="ImageLabel"></h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="image">
+                            <img src="" height="100%"/>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <?php if($this->canDisplayContainer()): ?>
+    <script type="text/javascript">
+        <?php if($this->canDisplayContainer()): ?>
 
-        <script type="text/javascript">
             //<![CDATA[
-            <?php echo $this->getJsObjectName() ?> = new varienGrid('<?php echo $this->getId() ?>', '<?php echo $this->getGridUrl() ?>', '<?php echo $this->getVarNamePage() ?>', '<?php echo $this->getVarNameSort() ?>', '<?php echo $this->getVarNameDir() ?>', '<?php echo $this->getVarNameFilter() ?>');
-            <?php echo $this->getJsObjectName() ?>.useAjax = '<?php echo $this->getUseAjax() ?>';
-            <?php if($this->getRowClickCallback()): ?>
-            <?php echo $this->getJsObjectName() ?>.rowClickCallback = <?php echo $this->getRowClickCallback() ?>;
-            <?php endif; ?>
-            <?php if($this->getCheckboxCheckCallback()): ?>
-            <?php echo $this->getJsObjectName() ?>.checkboxCheckCallback = <?php echo $this->getCheckboxCheckCallback() ?>;
-            <?php endif; ?>
-            <?php if($this->getRowInitCallback()): ?>
-            <?php echo $this->getJsObjectName() ?>.initRowCallback = <?php echo $this->getRowInitCallback() ?>;
-            <?php echo $this->getJsObjectName() ?>.initGridRows();
-            <?php endif; ?>
-            <?php if($this->getMassactionBlock()->isAvailable()): ?>
-            <?php echo $this->getMassactionBlock()->getJavaScript() ?>
-            <?php endif ?>
-            <?php echo $this->getAdditionalJavaScript(); ?>
-
             var totalPages = <?php echo $this->getCollection()->getLastPageNumber(); ?>;
             var totalRecords = <?php echo $this->getCollection()->getSize(); ?>;
             var nextToLoadCount = <?php echo $this->getCollection()->getPageSize(); ?>;
-            var cleanLocation = '<?php echo Mage::getBlockSingleton('zolagocatalog/vendor_mass_staticfilter')->getChangeUrl(); ?>';
-
+            var varNameSort = '<?php echo $this->getVarNameSort() ?>';
+            var varNameDir = '<?php echo $this->getVarNameDir() ?>';
             //]]>
-        </script>
 
-    <?php endif; ?>
+        <?php endif; ?>
+    </script>
 <?php endif ?>
     <!-- modal -->
 

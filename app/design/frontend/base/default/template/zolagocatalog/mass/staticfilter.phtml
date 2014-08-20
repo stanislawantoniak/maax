@@ -6,7 +6,7 @@ $activeFilters	= $this->getCurrentStaticFilterValues();
 	<?php if ($this->getStaticFilters($this->getCurrentAttributeSetId()) && $this->getCurrentAttributeSetId()): ?>
         <div class="form-actions">
             <button type="button" title="<?php echo $this->__('Cancel') ?>" class="cancel-btn btn btn-secondary pull-right"><span><span><?php echo $this->__('Cancel') ?></span></span></button>
-            <button type="button" title="<?php echo $this->__('Search') ?>" class="btn btn-primary pull-right" onclick="changeStaticFilter(this);"><span><span><?php echo $this->__('Search') ?></span></span></button>
+            <button type="button" title="<?php echo $this->__('Search') ?>" class="search-btn btn btn-primary pull-right"><span><span><?php echo $this->__('Search') ?></span></span></button>
         </div>
 	<?php else: ?>
         <div class="form-group">
@@ -21,35 +21,3 @@ $activeFilters	= $this->getCurrentStaticFilterValues();
             </div>
         </div>
 	<?php endif; ?>
-
-<script type="text/javascript">
-function changeStaticFilter(select){
-	var location = '<?php echo $this->getChangeUrl();?>';
-	var filtersCount = $$('.staticFilter').length;
-	var activeFilter = 1;
-	$$('.staticFilter').each(function(element) {
-		if ($F(element)) {
-			var selectedFilterOption = $$('#' + element.id + ' option').find(function(ele){
-				return !!ele.selected;
-			});
-
-			var filterValue = selectedFilterOption.getAttribute('filtervalue');
-			location += "staticFilterId-"+activeFilter+"/" + $F(element) + "/" + "staticFilterValue-"+activeFilter+"/" + encodeURIComponent(filterValue) + "/";
-			activeFilter++;
-		} else {
-			filtersCount--;
-		}
-	});
-
-	location += "staticFilters/" + filtersCount + "/";
-
-	if ($("attribute_set_switcher") && $F("attribute_set_switcher")) {
-		location += "attribute_set/" + $F("attribute_set_switcher") + "/";
-	}
-	if ($("store_switcher") && $F("store_switcher")) {
-		location += "store/" + $F("store_switcher") + "/";
-	}
-
-	setLocation(location);
-}
-</script>

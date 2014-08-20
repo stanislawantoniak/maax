@@ -29,8 +29,12 @@
 					<span class="outer-span" id="<?php echo $this->getHtmlId() ?>-form-hiddens"></span>
 					<span class="outer-span" id="<?php echo $this->getHtmlId() ?>-form-additional"></span>
 					<span class="field-row">
-						<?php echo $this->getApplyButtonHtml() ?>
+                        <?php if($this->getParentBlock()->isBlockType()): ?>
+                            <button class="btn btn-secondary scalable " type="button" title="Submit" id="mass-submit-btn"><span>Submit</span></button>
+                        <?php else: ?>
+						    <?php echo $this->getApplyButtonHtml() ?>
 <!--						<button class="scalable btn" type="button" id="filter_submit" onclick="gridObj.doFilter()">--><?php //echo Mage::helper('zolagocatalog')->__('Search');?><!--</button>-->
+                        <?php endif; ?>
 					</span>
 				</div>
 			<?php if ($this->getHideFormElement() !== true):?>
@@ -53,8 +57,15 @@
 </div>
 <hr/>
 
-<?php if(!$this->getParentBlock()->canDisplayContainer()): ?>
-<script type="text/javascript">
-    <?php echo $this->getJsObjectName() ?>.setGridIds('<?php echo $this->getGridIdsJson() ?>');
-</script>
+<?php if($this->getParentBlock()->isBlockType()): ?>
+    <script type="text/javascript">
+        var gridIds = [<?php echo $this->getGridIdsJson() ?>];
+    </script>
+<?php else: ?>
+    <?php if(!$this->getParentBlock()->canDisplayContainer()): ?>
+    <script type="text/javascript">
+        <?php echo $this->getJsObjectName() ?>.setGridIds('<?php echo $this->getGridIdsJson() ?>');
+    </script>
+    <?php endif; ?>
 <?php endif; ?>
+
