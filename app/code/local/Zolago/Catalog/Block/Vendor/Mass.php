@@ -17,9 +17,12 @@ class Zolago_Catalog_Block_Vendor_Mass extends Mage_Core_Block_Template
 			$design->setArea("adminhtml");
 			$block = $this->getLayout()->
 					createBlock("zolagocatalog/vendor_mass_grid");
+            $block->useLazyLoad();
 			$block->setParentBlock($this);
 			$this->setGridHtml($block->toHtml());
 			$this->setGrid($block);
+
+
 			$design->setArea("frontend");
 		}
 	}
