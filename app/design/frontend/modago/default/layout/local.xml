@@ -215,6 +215,7 @@
     <solrbridge_solrsearch_category_view>
         <remove name="mana.catalog.leftnav" />
         <remove name="solrsearch_category_view"/>
+        <remove name="solrsearch_product_list_active" />
 
         <reference name="root">
             <action method="setTemplate"><template>page/2columns-left.phtml</template></action>
@@ -226,6 +227,9 @@
             <action method="addJs"><script>jquery/jquery.jcarousel.min.js</script></action>
             <action method="removeItem"><type>js</type><script>solrsearch/slider.js</script></action>
             <action method="removeItem"><type>skin_js</type><script>js/manapro_filtercolors.js</script></action>
+        </reference>
+        <reference name="solrsearch_product_list_header">
+            <block type="zolagosolrsearch/active" name="solrsearch_product_list_activefaces" template="searchfaces/standard/active.phtml"/>
         </reference>
     </solrbridge_solrsearch_category_view>
 

@@ -809,8 +809,6 @@ function cart_remove_coupon_callback(response) {
     location.reload();
 }
 
-
-
 jQuery(document).ready(function() {
     Mall.dispatch();
     Mall.i18nValidation.apply();
@@ -819,7 +817,6 @@ jQuery(document).ready(function() {
     jQuery(".messages").find("i").bind('click', function() {
         jQuery(this).parents("li").first().hide();
     });
-
 
     jQuery("#add-to-cart").tooltip({
         template: '<div class="tooltip top" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner" style="color: #ea687e"></div></div>'
@@ -843,5 +840,15 @@ jQuery(document).ready(function() {
     jQuery('#popup-after-add-to-cart').on('hidden.bs.modal', function (e) {
         jQuery('html').find('.modal-backdrop').remove();
 
+    });
+
+    jQuery("#product-listing-sort-control").selectbox({
+        onOpen: function (inst) {
+            initScrollBarFilterStyle();
+        },
+
+        onChange: function(value, inst) {
+            location.href = value;
+        }
     });
 });
