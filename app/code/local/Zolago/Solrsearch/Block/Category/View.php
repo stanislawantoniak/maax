@@ -1,5 +1,5 @@
 <?php
-class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Template {
+class Zolago_Solrsearch_Block_Category_View extends Mage_Core_Block_Category_View {
 
     public function _construct() {
         parent::_construct();
