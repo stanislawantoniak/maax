@@ -123,10 +123,8 @@ jQuery.validator.addMethod('dateAfter', function(value, element, params) {
 }, 'Must be after corresponding start date');
 
 //jQuery.validator.addMethod("imageResolution", function(value, element) {
-//    console.log(value, element);
-//    var F = jQuery("input[type=file][id^=image_]").files;
-//    console.log(F);
-//    return false;
+//    var resolution = jQuery(element).data("resolution");
+//    return resolution;
 //}, "Wrong image resolution");
 /**
  * Return true, if the value is a valid vehicle identification number (VIN).

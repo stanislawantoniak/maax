@@ -15,7 +15,7 @@ class Zolago_Banner_Varien_Data_Form_Element_Thumbnail extends Varien_Data_Form_
         if ($this->getValue()) {
             $dataAttribute = $this->getDataAttribute();
             $data = "";
-            $dataAttr  = array();
+
             if(!empty($dataAttribute)){
                 foreach($dataAttribute as $attributeName => $attributeValue){
                     $data .= " data-{$attributeName}=$attributeValue";

@@ -143,9 +143,10 @@ class Zolago_Banner_VendorController extends Zolago_Dropship_Controller_Vendor_A
 
                         foreach ($tmpName as $n => $imageName) {
                             if (!empty($imageName)) {
-//                                $imageSize = getimagesize($imageName);
-//                                $imageW = $imageSize[0];
-//                                $imageH = $imageSize[1];
+                                $imageSize = getimagesize($imageName);
+                                $imageW = $imageSize[0];
+
+                                $imageH = $imageSize[1];
                                 $path = Mage::getBaseDir() . "/media/banners/" . $name[$n];
                                 try {
                                     move_uploaded_file($imageName, $path);
