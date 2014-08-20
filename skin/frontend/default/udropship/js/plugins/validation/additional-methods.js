@@ -17,6 +17,7 @@
 		// remove punctuation
 		.replace(/[.(),;:!?%#$'"_+=\/\-]*/g,'');
 	}
+
 	jQuery.validator.addMethod("maxWords", function(value, element, params) {
 		return this.optional(element) || stripHtml(value).match(/\b\w+\b/g).length <= params;
 	}, jQuery.validator.format("Please enter {0} words or less."));
@@ -120,6 +121,11 @@ jQuery.validator.addMethod('dateAfter', function(value, element, params) {
     return this.optional(element) || this.optional(start[0]) || new Date(value) > new Date(startDate);
 
 }, 'Must be after corresponding start date');
+
+//jQuery.validator.addMethod("imageResolution", function(value, element) {
+//    var resolution = jQuery(element).data("resolution");
+//    return resolution;
+//}, "Wrong image resolution");
 /**
  * Return true, if the value is a valid vehicle identification number (VIN).
  *

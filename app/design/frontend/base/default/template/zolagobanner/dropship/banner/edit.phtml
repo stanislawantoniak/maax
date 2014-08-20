@@ -20,27 +20,36 @@
 		<div class="col-lg-6">
 			<h3>
 				<?php if($this->isModelNew()):?>
-					<?php echo Mage::helper("zolagobanner")->__("New Banner");?>
+					<?php echo Mage::helper("zolagobanner")->__("New campaign creative");?>
 				<?php else: ?>
-					<?php echo Mage::helper("zolagopo")->__("Edit Banner '%s'", $_model->getName());?>
+					<?php echo Mage::helper("zolagopo")->__("Edit campaign creative '%s'", $_model->getName());?>
 				<?php endif;?>
 			</h3>
 		</div>
 	</div>
     <div class="page-heading row">
-        <div class="col-lg-6">
+        <div class="container">
             <ol class="breadcrumb">
+                <li>
+                    <a href="/campaign/vendor/edit/id/<?php echo $this->getCampaignId(); ?>">
+                        <?php echo $_helper->__('Campaign') ?>: <?php echo $this->getCampaignName(); ?>
+                    </a>
+                </li>
                 <?php if($this->isModelNew()):?>
                     <li>
                         <a href="<?php echo $_helper->setBannerTypeUrl(); ?>campaign_id/<?php echo $this->getCampaignId(); ?>">
-                            <?php echo $_helper->__('Choose Banner Type') ?>
+                            <?php echo $_helper->__('Choose campaign creative type') ?>
                         </a>
+                    </li>
+                <?php else: ?>
+                    <li>
+                        <?php echo $_helper->__("Campaign creative type");?>: <?php echo $this->getType(); ?>
                     </li>
                 <?php endif;?>
                 <?php if($this->isModelNew()):?>
-                    <li class="active"><?php echo $_helper->__("New Banner");?></li>
+                    <li class="active"><?php echo $_helper->__("New campaign creative");?></li>
                 <?php else: ?>
-                    <li class="active"><?php echo $_helper->__("Edit Banner '%s'", $_model->getName());?></li>
+                    <li class="active"><?php echo $_helper->__("Edit campaign creative '%s'", $_model->getName());?></li>
                 <?php endif;?>
             </ol>
         </div>
@@ -61,11 +70,21 @@
     jQuery(function ($) {
         var form = $("#edit-banner");
         new Zolago.formIntegrator(form);
-        form.validate();
+        form.validate(
+//            {
+//            rules: {
+//                "image[1]": {
+//                    imageResolution: 10
+//                }
+//            }
+//        }
+        );
+
+
 
         changeDependingSelectorHandler('slider_type');
 
-//        function readImage(file) {
+//        function readImage(input, file, thumb, id) {
 //
 //            var reader = new FileReader();
 //            var image  = new Image();
@@ -74,13 +93,26 @@
 //            reader.onload = function(_file) {
 //                image.src    = _file.target.result;              // url.createObjectURL(file);
 //                image.onload = function() {
-//                    console.log(this.width, this.height);
-//                    var w = this.width,
-//                        h = this.height,
-//                        t = file.type,                           // ext only: // file.type.split('/')[1],
-//                        n = file.name,
-//                        s = ~~(file.size/1024) +'KB';
-//                    $(this).parents(".col-md-10").append('<img src="'+ this.src +'"> '+w+'x'+h+' '+s+' '+t+' '+n+'<br>');
+//                    $(input).data('resolution', 0);
+//                    var restrictH = parseInt($(input).data("restricth"));
+//                    var restrictW = parseInt($(input).data("restrictw"));
+//                    if(parseInt(this.width)-restrictW !=0 && parseInt(this.height)-restrictH !=0){
+//                        $(input).data('resolution', 0);
+//                    } else {
+//                        $(input).data('resolution', 1);
+//                        var id = $(input).attr('id');
+//                        var thumbPlace = $(input).parents('.banner-image-container').find('.banner-thumbnail');
+//
+//                        var preview = '<div class="banner-thumbnail"><a href="' +this.src+ '" '
+//                            + ' onclick="imagePreview(\''+id+'_image\'); return false;">'
+//                            + '<img src="' + this.src + '" id="'+id+'_image" title="title"'
+//                            + ' alt="title" height="50" width="50" class="small-image-preview v-middle" />'
+//                            + '</a> </div>';
+//
+//                        thumbPlace.replaceWith(preview);
+//                    }
+//
+//
 //                };
 //                image.onerror= function() {
 //                    alert('Invalid file type: '+ file.type);
@@ -88,10 +120,11 @@
 //            };
 //
 //        }
-//        $("#image_1").change(function (e) {
+//        $("input[type=file][id^=image_]").change(function (e) {
 //            if(this.disabled) return alert('File upload not supported!');
 //            var F = this.files;
-//            if(F && F[0]) for(var i=0; i<F.length; i++) readImage( F[i] );
+//            console.log(F);
+//            readImage($(this), F[0]);
 //        });
 
 
