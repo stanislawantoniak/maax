@@ -130,8 +130,9 @@ class Zolago_Banner_VendorController extends Zolago_Dropship_Controller_Vendor_A
                 $banner->save();
 
                 //Save Banner Content
-                Mage::log($data);
+
                 $bannerContentToSave = array();
+
                 if($data['show'] == Zolago_Banner_Model_Banner_Show::BANNER_SHOW_IMAGE){
                     if (isset($_FILES['image'])) {
 
@@ -142,8 +143,10 @@ class Zolago_Banner_VendorController extends Zolago_Dropship_Controller_Vendor_A
 
                         foreach ($tmpName as $n => $imageName) {
                             if (!empty($imageName)) {
+//                                $imageSize = getimagesize($imageName);
+//                                $imageW = $imageSize[0];
+//                                $imageH = $imageSize[1];
                                 $path = Mage::getBaseDir() . "/media/banners/" . $name[$n];
-
                                 try {
                                     move_uploaded_file($imageName, $path);
                                 } catch (Exception $e) {
@@ -182,17 +185,11 @@ class Zolago_Banner_VendorController extends Zolago_Dropship_Controller_Vendor_A
                         }
                     }
                 }
-                if($data['show'] == Zolago_Banner_Model_Banner_Show::BANNER_SHOW_HTML){
-                    foreach($data as $i => $dataItem){
-                        $bannerContentToSave['banner_id'] = $banner->getId();
-                        $bannerContentToSave['show'] = $data['show'];
-                        $bannerContentToSave['html'] = $data['banner_html'];
-                    }
+                if ($data['show'] == Zolago_Banner_Model_Banner_Show::BANNER_SHOW_HTML) {
+                    $bannerContentToSave['banner_id'] = $banner->getId();
+                    $bannerContentToSave['show'] = $data['show'];
+                    $bannerContentToSave['html'] = $data['banner_html'];
                 }
-
-
-
-
 
                 Mage::getModel('zolagobanner/banner')->saveBannerContent($bannerContentToSave);
 

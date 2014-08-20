@@ -152,6 +152,7 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
         $bannerContent->addField("show", "hidden", array(
             "name" => "show"
         ));
+
         switch ($data->show_as) {
             case Zolago_Banner_Model_Banner_Show::BANNER_SHOW_IMAGE:
                 $picturesNumber = $data->pictures_number;
@@ -159,12 +160,29 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
                 if ($picturesNumber > 0) {
                     $pictureUrlRequired = (isset($data->picture_can_be_empty) && $data->picture_can_be_empty == 1) ? FALSE : TRUE;
                     foreach ($data->picture as $n => $picture) {
-                        $bannerContent->addField("image_" . $n, "image", array(
+                        $pictureW = (isset($picture->pictures_w) && !empty($picture->pictures_w)) ? $picture->pictures_w : "-";
+                        $pictureH = (isset($picture->pictures_h) && !empty($picture->pictures_h)) ? $picture->pictures_h : "-";
+                        Mage::log($pictureW);
+                        Mage::log($pictureH);
+                        $imageOptions = array(
                             "name" => "image[" . $n . "]",
                             "class" => "form-control",
                             "required" => true,
                             "label" => $picture->picture_label
-                        ));
+                        );
+                        if ((isset($picture->pictures_w) && !empty($picture->pictures_w))
+                            && (isset($picture->pictures_h) && !empty($picture->pictures_h))
+                        ) {
+                            $afterImageElementHtml = "<p class='nm'><span class='glyphicon glyphicon-exclamation-sign'> Width: {$pictureW}px Height: {$pictureH}px</span></p>";
+                            $imageOptions = array_merge($imageOptions,
+                                array(
+                                     'after_element_html' => $afterImageElementHtml
+                                )
+                            );
+                        }
+
+                        $bannerContent->addField("image_" . $n, "image", $imageOptions);
+
                         $bannerContent->addField("image_url_" . $n, "text", array(
                             "name" => "image_url[" . $n . "]",
                             "class" => "form-control",
