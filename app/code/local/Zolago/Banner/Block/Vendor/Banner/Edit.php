@@ -159,7 +159,7 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
         $bannerContent->addField("show", "hidden", array(
             "name" => "show"
         ));
-
+        $bannerContent->addType("thumb","Zolago_Banner_Varien_Data_Form_Element_Thumbnail");
         switch ($data->show_as) {
             case Zolago_Banner_Model_Banner_Show::BANNER_SHOW_IMAGE:
                 $picturesNumber = $data->pictures_number;
@@ -169,6 +169,7 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
                     foreach ($data->picture as $n => $picture) {
                         $pictureW = (isset($picture->pictures_w) && !empty($picture->pictures_w)) ? $picture->pictures_w : "-";
                         $pictureH = (isset($picture->pictures_h) && !empty($picture->pictures_h)) ? $picture->pictures_h : "-";
+
 
                         $imageOptions = array(
                             "name" => "image[" . $n . "]",
@@ -187,9 +188,9 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
                                 )
                             );
                         }
-                        $bannerContent->addType('thumbnail','Zolago_Banner_Varien_Data_Form_Element_Thumbnail');
 
-                        $bannerContent->addField("image_" . $n, "image", $imageOptions);
+
+                        $bannerContent->addField("image_" . $n, "thumb", $imageOptions);
 
                         $bannerContent->addField("image_url_" . $n, "text", array(
                             "name" => "image_url[" . $n . "]",

@@ -1,6 +1,6 @@
 <?php
 
-class Zolago_Banner_Varien_Data_Form_Element_Thumbnail extends Varien_Data_Form_Element_Abstract
+class Zolago_Banner_Varien_Data_Form_Element_Thumbnail extends Varien_Data_Form_Element_Image
 {
     public function __construct($data)
     {
@@ -10,40 +10,40 @@ class Zolago_Banner_Varien_Data_Form_Element_Thumbnail extends Varien_Data_Form_
 
     public function getElementHtml()
     {
-        $html = '<div class="banner-image-container">';
-
+        $html = '';
+        $html .= '<div class="banner-image-container">';
         $html .= '<div class="banner-thumbnail">';
-        if ($this->getValue()) {
 
+
+        if ((string)$this->getValue()) {
             $url = $this->_getUrl();
-            if (!preg_match("/^http\:\/\/|https\:\/\//", $url)) {
+
+            if( !preg_match("/^http\:\/\/|https\:\/\//", $url) ) {
                 $url = Mage::getBaseUrl('media') . $url;
             }
             $html .= '<a href="' . $url . '"'
                 . ' onclick="imagePreview(\'' . $this->getHtmlId() . '_image\'); return false;">'
                 . '<img src="' . $url . '" id="' . $this->getHtmlId() . '_image" title="' . $this->getValue() . '"'
-                . ' alt="' . $this->getValue() . '" height="50" width="50" class="small-image-preview v-middle" />'
+                . ' alt="' . $this->getValue() . '" height="200" width="200" class="small-image-preview v-middle" />'
                 . '</a> ';
         }
         $html .= '</div>';
-        $this->setClass('input-file');
+
         $dataAttribute = $this->getDataAttribute();
         $data = "";
         if(!empty($dataAttribute)){
             foreach($dataAttribute as $attributeName => $attributeValue){
-                $data .= " data-{$attributeName}=$attributeValue";
+                $data .= ' data-' . $attributeName . '=' . $attributeValue;
             }
         }
-        Mage::log($data);
+        $this->setClass('input-file');
+        $required = ($this->getRequired()) ? 'required' : '';
 
-//        $html .= '<input type="file" id="'.$this->getHtmlId().'"  data-resolution="1" '.$data.' name="'.$this->getName()
-//            .'" value="'.$this->getEscapedValue().'" '.$this->serialize($this->getHtmlAttributes()).'  />'."\n";
-//        $html.= $this->getAfterElementHtml();
-
-        $html = '<input id="'.$this->getHtmlId().'"  data-resolution="1" '.$data.' name="'.$this->getName()
-            .'" value="'.$this->getEscapedValue().'" '.$this->serialize($this->getHtmlAttributes()).'/>'."\n";
+        $html .= '<input  id="'.$this->getHtmlId().'" name="'.$this->getName()
+            .'" value="'.$this->getEscapedValue().'" '.$this->serialize($this->getHtmlAttributes()).' data-resolution="1" '.$data.'  />'."\n";
+        $html .= '<input type="hidden"  name="'.$this->getName()
+            .'[value]" value="'.$this->getEscapedValue().'" '.$required.'  />'."\n";
         $html.= $this->getAfterElementHtml();
-
         $html .= '</div>';
 
         return $html;
