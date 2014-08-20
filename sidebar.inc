@@ -103,7 +103,7 @@
       <div class="content"  id="filter_manufacturer">
        <div class="form-group clearfix ">
          <input type="text" name="filter_manufacturer" id="filter_manufacturer_search" />
-         <input type="image" src="skin/frontend/modago/default/images/btn-search-filter.png" alt="Szukaj po markach">
+         <input type="image" src="/skin/frontend/modago/default/images/btn-search-filter.png" alt="Szukaj po markach">
        </div>
        <div class="wrapper-filter_manufacturerScrollbar">
          <div class="manufacturerListChecked"></div>
@@ -269,15 +269,15 @@
       <div id="note_client" class="content">
         <div class="form-group form-checkbox">
             <input type="checkbox" name="note_client_5" id="note_client_5" class="css-checkbox">
-            <label for="note_client_5" class="css-label simple"><img src="skin/frontend/modago/default/images/raty/opinie-klientow_01.png" alt=""><span class="suffix">(230)</span></label>
+            <label for="note_client_5" class="css-label simple"><img src="/skin/frontend/modago/default/images/raty/opinie-klientow_01.png" alt=""><span class="suffix">(230)</span></label>
         </div>
          <div class="form-group form-checkbox">
             <input type="checkbox" name="note_client_4" id="note_client_4" class="css-checkbox">
-            <label for="note_client_4" class="css-label simple"><img src="skin/frontend/modago/default/images/raty/opinie-klientow_02.png" alt="">i wyżej <span class="suffix">(23)</span></label>
+            <label for="note_client_4" class="css-label simple"><img src="/skin/frontend/modago/default/images/raty/opinie-klientow_02.png" alt="">i wyżej <span class="suffix">(23)</span></label>
         </div>
          <div class="form-group form-checkbox">
             <input type="checkbox" name="note_client_3" id="note_client_3" class="css-checkbox">
-            <label for="note_client_3" class="css-label simple"><img src="skin/frontend/modago/default/images/raty/opinie-klientow_03.png" alt="">i wyżej <span class="suffix">(230)</span></label>
+            <label for="note_client_3" class="css-label simple"><img src="/skin/frontend/modago/default/images/raty/opinie-klientow_03.png" alt="">i wyżej <span class="suffix">(230)</span></label>
         </div>
         <div class="action clear clearfix hidden">
            <a href="#" class="button button-third clear">Wyczyść</a> 
@@ -295,7 +295,7 @@
                 <td class="first-td">
                   <div>
                     <input type="checkbox" name="filter_type_01" id="filter_type_01">
-                    <label for="filter_type_01"><img src="skin/frontend/modago/default/images/img-filter-type.png" alt=""></label>
+                    <label for="filter_type_01"><img src="/skin/frontend/modago/default/images/img-filter-type.png" alt=""></label>
                   </div>
                 </td>
                 <td class="last-td"><label for="filter_type_01"><span>Staniki z fiszbinkami</span> <span class="suffix">(200)</span></label></td>
@@ -304,7 +304,7 @@
                 <td class="first-td">
                   <div>
                     <input type="checkbox" name="filter_type_02" id="filter_type_02">
-                    <label for="filter_type_02"><img src="skin/frontend/modago/default/images/img-filter-type.png" alt=""></label>
+                    <label for="filter_type_02"><img src="/skin/frontend/modago/default/images/img-filter-type.png" alt=""></label>
                   </div>
                 </td>
                 <td class="last-td"><label for="filter_type_02"><span>Podwiazki</span> <span class="suffix">(200)</span></label></td>
@@ -313,7 +313,7 @@
                 <td class="first-td">
                   <div>
                     <input type="checkbox" name="filter_type_03" id="filter_type_03">
-                    <label for="filter_type_03"><img src="skin/frontend/modago/default/images/img-filter-type.png" alt=""></label>
+                    <label for="filter_type_03"><img src="/skin/frontend/modago/default/images/img-filter-type.png" alt=""></label>
                   </div>
                 </td>
                 <td class="last-td"><label for="filter_type_03"><span>Rajstopy modelujace</span> <span class="suffix">(200)</span></label></td>
@@ -359,13 +359,13 @@
     <div class="section clearfix">
       <h3 class="open">Kolor <i class="fa fa-chevron-up"></i></h3>
       <div class="content"  id="filter_color">
-         <label for="color_01" data-img="skin/frontend/modago/default/images/filter_color/1.png">
+         <label for="color_01" data-img="/skin/frontend/modago/default/images/filter_color/1.png">
            <input type="checkbox" id="color_01" name="color[]"/><span><span></span></span>
          </label>
-         <label for="color_02" data-color="#6f3e18" data-img="skin/frontend/modago/default/images/filter_color/2.png">
+         <label for="color_02" data-color="#6f3e18" data-img="/skin/frontend/modago/default/images/filter_color/2.png">
            <input type="checkbox" id="color_02" name="color[]"/><span><span></span></span>
          </label>
-         <label for="color_03" data-img="skin/frontend/modago/default/images/filter_color/1.png" data-imghover="skin/frontend/modago/default/images/filter_color/2.png">
+         <label for="color_03" data-img="/skin/frontend/modago/default/images/filter_color/1.png" data-imghover="/skin/frontend/modago/default/images/filter_color/2.png">
            <input type="checkbox" id="color_03" name="color[]"/><span><span></span></span>
          </label>
          <label for="color_04" data-color="#838383">
