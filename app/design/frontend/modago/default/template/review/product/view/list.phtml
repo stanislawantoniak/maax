@@ -80,7 +80,7 @@ switch($_reviewsCount) {
                         <dl class="rating_note">
                             <dt><?php echo $this->__("Product reviews count"); ?>: <span><?php echo $_reviewsCount; ?><span></dt>
                             <?php foreach($this->getStripsRatings() as $k => $v) : ?>
-                                <dd><span class="prefix"><?php echo $this->__("rating"); ?> <?php echo $k; ?>/5</span><span class="rating" data-percent="<?php echo $v; ?>"><span></span></span><span class="suffix"><?php echo ($v * $_reviewsCount / 100); ?></span></dd>
+                                <dd><span class="prefix"><?php echo $this->__("rating"); ?> <?php echo $k; ?>/5</span><span class="rating" data-percent="<?php echo $v; ?>"><span></span></span><span class="suffix"><?php echo  (int) ceil($v * $_reviewsCount / 100); ?></span></dd>
                             <?php endforeach; ?>
                         </dl>
                     </div>
