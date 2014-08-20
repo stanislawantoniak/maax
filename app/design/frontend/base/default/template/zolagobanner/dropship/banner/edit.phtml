@@ -61,11 +61,17 @@
     jQuery(function ($) {
         var form = $("#edit-banner");
         new Zolago.formIntegrator(form);
-        form.validate();
+        form.validate({
+            rules: {
+                "image[1]": {
+                    imageResolution: 10
+                }
+            }
+        });
 
         changeDependingSelectorHandler('slider_type');
 
-//        function readImage(file) {
+//        function readImage(file, thumb, id) {
 //
 //            var reader = new FileReader();
 //            var image  = new Image();
@@ -80,7 +86,12 @@
 //                        t = file.type,                           // ext only: // file.type.split('/')[1],
 //                        n = file.name,
 //                        s = ~~(file.size/1024) +'KB';
-//                    $(this).parents(".col-md-10").append('<img src="'+ this.src +'"> '+w+'x'+h+' '+s+' '+t+' '+n+'<br>');
+//                    var preview = '<a href="' +this.src+ '" class="banner-thumbnail"'
+//                        + ' onclick="imagePreview(\''+id+'_image\'); return false;">'
+//                        + '<img src="' + this.src + '" id="'+id+'_image" title="title"'
+//                        + ' alt="title" height="50" width="50" class="small-image-preview v-middle" />'
+//                        + '</a> ';
+//                    thumb.replaceWith(preview);
 //                };
 //                image.onerror= function() {
 //                    alert('Invalid file type: '+ file.type);
@@ -88,10 +99,10 @@
 //            };
 //
 //        }
-//        $("#image_1").change(function (e) {
+//        $("input[type=file][id^=image_]").change(function (e) {
 //            if(this.disabled) return alert('File upload not supported!');
 //            var F = this.files;
-//            if(F && F[0]) for(var i=0; i<F.length; i++) readImage( F[i] );
+//            if(F && F[0]) for(var i=0; i<F.length; i++) readImage( F[i] , $(this).parents('.col-md-10').find('a.banner-thumbnail'), $(this).attr('id'));
 //        });
 
 
