@@ -1,0 +1,28 @@
+<?php $filterQuery = $this->getFilterQuery(); ?>
+<?php if(sizeof($filterQuery) > 0 && $this->isSelectedFacetActive()) : ?>
+
+<dl class="clearfix">
+    <dt><?php echo $this->__('Currently Shopping by') ?></dt>
+    <dd>
+		<?php foreach($filterQuery as $key=>$values): ?>
+			<?php foreach($values as $v): ?>
+				<?php if ($key != 'category_id'):?>
+                    <?php $face_key = substr($key, 0, strrpos($key, '_'))?>
+                    <?php
+                    $selectedFacetValue = $v;
+                    if ($face_key == 'price'){
+                        $selectedFacetValue = $this->formatFacetPrice($v);
+                    }
+                    ?>
+                    <span class="label"><?php echo $this->__($this->getFacetLabel($key)); ?>: <span class="value"><?php echo $this->facetFormat($selectedFacetValue) ?></span><i data-params="<?php echo $this->getRemoveFacesJson($face_key, $v);?>" class="fa fa-times"></i></span>
+
+                    <?php if ($face_key != 'price'):?>
+                    <input type="hidden" name="fq[<?php echo $face_key ?>]" value="<?php echo $v?>" />
+                    <?php endif;?>
+				<?php endif;?>
+			<?php endforeach; ?>
+		<?php endforeach; ?>
+    </dd>
+    <dd class="action"><a data-params="<?php echo $this->getRemoveAllJson();?>" href="<?php echo $this->getRemoveAllUrl()?>" class="button button-third"><?php echo $this->__('Clear all') ?></a></dd>
+</dl>
+<?php endif; ?>
