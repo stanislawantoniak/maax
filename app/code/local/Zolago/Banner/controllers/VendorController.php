@@ -132,7 +132,7 @@ class Zolago_Banner_VendorController extends Zolago_Dropship_Controller_Vendor_A
                 //Save Banner Content
 
                 $bannerContentToSave = array();
-Mage::log($data);
+
                 if($data['show'] == Zolago_Banner_Model_Banner_Show::BANNER_SHOW_IMAGE){
                     if (isset($_FILES['image'])) {
 
