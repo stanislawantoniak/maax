@@ -124,7 +124,6 @@ jQuery.validator.addMethod('dateAfter', function(value, element, params) {
 
 jQuery.validator.addMethod("imageResolution", function(value, element) {
     var resolution = jQuery(element).data("resolution");
-    console.log(resolution);
     return resolution;
 }, "Wrong image resolution");
 /**

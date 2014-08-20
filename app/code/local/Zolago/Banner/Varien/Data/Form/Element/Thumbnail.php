@@ -37,12 +37,13 @@ class Zolago_Banner_Varien_Data_Form_Element_Thumbnail extends Varien_Data_Form_
             }
         }
         $this->setClass('input-file');
-        $required = ($this->getRequired()) ? 'required' : '';
 
         $html .= '<input  id="'.$this->getHtmlId().'" name="'.$this->getName()
-            .'" value="'.$this->getEscapedValue().'" '.$this->serialize($this->getHtmlAttributes()).' data-resolution="1" '.$data.'  />'."\n";
-        $html .= '<input type="hidden"  name="'.$this->getName()
-            .'[value]" value="'.$this->getEscapedValue().'" '.$required.'  />'."\n";
+            .'" value="'.$this->getEscapedValue().'" '.$this->serialize($this->getHtmlAttributes()).' data-resolution="1" '.$data.' />'."\n";
+        $html .= '<input type="text"  name="'.$this->getName()
+            .'[value]" value="'.$this->getEscapedValue().'" style="background-color: transparent;
+    border: medium none;
+    height: 0;position: absolute;"  />'."\n";
         $html.= $this->getAfterElementHtml();
         $html .= '</div>';
 

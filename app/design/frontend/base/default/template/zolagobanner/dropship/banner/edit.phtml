@@ -77,14 +77,19 @@ $picturesNumber = (int)$config->pictures_number;
         var ruleResolution = {
             imageResolution: 1
         };
+        var ruleResolutionReq = {
+            required: true
+        };
 
         var picturesNumber = '<?php echo $picturesNumber; ?>';
 
         var rulesEx = {};
         if(parseInt(picturesNumber) > 0){
             for (var i = 1; i <= 2; i++) {
-                val = "image["+i+"]"
+                val = "image["+i+"]";
+                val1 = "image["+i+"][value]";
                 rulesEx[val] = ruleResolution;
+                rulesEx[val1] = ruleResolutionReq;
             }
         }
 
@@ -123,6 +128,7 @@ $picturesNumber = (int)$config->pictures_number;
                             + ' alt="'+this.src+'" height="200" width="200" class="small-image-preview v-middle" />'
                             + '</a>';
 
+                        $(input).parents('.banner-image-container').find('input[type=text]').val(this.src);
                         thumbPlace.html(preview);
                     }
 
