@@ -231,6 +231,18 @@
         <reference name="solrsearch_product_list_header">
             <block type="zolagosolrsearch/active" name="solrsearch_product_list_activefaces" template="searchfaces/standard/active.phtml"/>
         </reference>
+        <reference name="solrsearch_product_list">
+            <action method="setTemplate"><template>catalog/product/list.phtml</template></action>
+        </reference>
+        <reference name="zolagosolrsearch_category_view">
+            <action method="setTemplate"><template>catalog/category/view.phtml</template></action>
+        </reference>
+        <reference name="solrsearch_product_list_header">
+            <action method="setTemplate"><template>catalog/product/list/header/category.phtml</template></action>
+        </reference>
+        <reference name="solrsearch_product_list_toolbar">
+            <action method="setTemplate"><template>catalog/product/list/toolbar.phtml</template></action>
+        </reference>
     </solrbridge_solrsearch_category_view>
 
     <catalog_product_view>
