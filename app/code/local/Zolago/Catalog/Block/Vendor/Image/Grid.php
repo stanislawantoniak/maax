@@ -3,6 +3,7 @@
 class Zolago_Catalog_Block_Vendor_Image_Grid extends Mage_Adminhtml_Block_Widget_Grid
 {
      // pager visible in footer
+     protected $_isblockType = false;
      protected $pagerFooter = true;
      public function __construct() {
         parent::__construct();
@@ -112,5 +113,8 @@ class Zolago_Catalog_Block_Vendor_Image_Grid extends Mage_Adminhtml_Block_Widget
 	public function getRowUrl($item) {
 		return null;
 	}
-	
+    public function isBlockType(){
+        return $this->_isblockType;
+    }
+
 }

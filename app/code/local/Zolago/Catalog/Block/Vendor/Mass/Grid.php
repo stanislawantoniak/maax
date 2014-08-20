@@ -3,6 +3,8 @@
 class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_Grid {
 
 	protected $_denyColumnList = null;
+    protected $_useLazyLoad = false;
+    protected $_isblockType = true;
 
     public function __construct() {
         parent::__construct();
@@ -11,8 +13,8 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
         $this->setDefaultDir('desc');
         $this->setGridClass('z-grid');
 
-        $this->setSaveParametersInSession(true);
-		$this->setTemplate("zolagocatalog/widget/grid.phtml");
+        $this->setSaveParametersInSession(false);
+		$this->setTemplate("zolagocatalog/widget/gridblock.phtml");
 		// Add custom renderes
 		$this->setColumnRenderers(array(
 			'multiselect'	=>	'zolagoadminhtml/widget_grid_column_renderer_multiselect',
@@ -24,6 +26,18 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 			"multiselect"	=>	'zolagoadminhtml/widget_grid_column_filter_multiselect',
 			'status'		=>	'adminhtml/widget_grid_column_filter_select',
 		));
+    }
+
+    public function useLazyLoad(){
+        $this->_useLazyLoad = true;
+    }
+
+    public function isLazyLoad(){
+        return $this->_useLazyLoad;
+    }
+
+    public function isBlockType(){
+        return $this->_isblockType;
     }
 
 	protected function _setCollectionOrder($column) {
@@ -57,6 +71,23 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 	public function getHideColumnsButtonHtml() {
 		return $this->getChildHtml('hide_column_button');
 	}
+    public function getColumnWidthStyle($column){
+
+        $data = $column->getData();
+        $width = NULL;
+
+        if($data['index'] == 'entity_id'){
+            $width = 40;
+        }
+        else{
+            if(isset($data['attribute'])){
+                $width = $data['attribute']->getColumnWidth();
+            }
+        }
+
+        return ($width) ? "style='width: " . $width . "px;'" : '';
+    }
+
 	protected function _prepareLayout() {
         $ret = parent::_prepareLayout();
 		$this->setChild('popup_content',
@@ -280,17 +311,17 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 			// End columns
 			$columnEnd = array();
 
-			$columnEnd["edit"] = array(
-				"index"			=> "entity_id",
-				'type'			=> 'link',
-				'link_action'	=> 'udprod/vendor/productEdit',
-				'link_param'	=> 'id',
-				'link_label'	=> Mage::helper("zolagocatalog")->__("Edit form"),
-				"header"		=> Mage::helper("zolagocatalog")->__("Edit"),
-				"width"			=> "100px",
-				"filter"		=> false,
-				"sortable"		=> false
-			);
+//			$columnEnd["edit"] = array(
+//				"index"			=> "entity_id",
+//				'type'			=> 'link',
+//				'link_action'	=> 'udprod/vendor/productEdit',
+//				'link_param'	=> 'id',
+//				'link_label'	=> Mage::helper("zolagocatalog")->__("Edit form"),
+//				"header"		=> Mage::helper("zolagocatalog")->__("Edit"),
+//				"width"			=> "100px",
+//				"filter"		=> false,
+//				"sortable"		=> false
+//			);
 
 			$this->setData("fixed_columns", array(
 				"start" => $columnStart,
@@ -614,6 +645,14 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 
 	public function getCellClass(Mage_Adminhtml_Block_Widget_Grid_Column $column, Varien_Object $row) {
 		$classes = array();
+
+        $data = $column->getData();
+        if($data['index'] == 'thumbnail'){
+            $classes[] = 'thumb';
+        }
+        elseif($data['index'] == 'name'){
+            $classes[] = 'product-name';
+        }
 		if($column->getAttribute() instanceof Mage_Catalog_Model_Resource_Eav_Attribute){
 			$data = $row->getData($column->getIndex());
 			if($column->getAttribute()->getAttributeCode()=="status"){
