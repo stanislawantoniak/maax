@@ -1,0 +1,28 @@
+<?php /* @var $this Zolago_Solrsearch_Block_Catalog_Product_List_Toolbar */ ?>
+		<?php $_total = $this->getNumFound();?>
+
+<aside id="sort-criteria" class="container-fluid">
+    <div class="col-sm-12">
+        <ul class="sort clearfix">
+            <li id="number_products" class=""><span class="label"><?php echo $this->__("Total products count:"); ?> </span> <span class="value"> <?php echo $_total; ?></span></li>
+            <li>
+                <form action="">
+                    <div class="form-group clearfix">
+                        <div class="sort-by clearfix">
+                            <label for="sort-by"><?php echo $this->__("Sort by:"); ?></label>
+
+                            <div class="form-group small styledSelected">
+
+                                <select name="" class="form-control select-styled ">
+                                    <?php foreach($this->getSortOptions() as $option):?>
+                                    <option value="<?php echo $option['value']; ?>" data-dir="<?php echo $option['dir']; ?>" <?php if($this->getCurrentOrder()==$option['value'] && $this->getCurrentDir()==$option['dir']):?>selected="selected"<?php endif;?>><?php echo $this->escapeHtml($option['label']);?></option>
+                                    <?php endforeach;?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </li>
+        </ul>
+    </div>
+</aside>

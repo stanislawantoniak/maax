@@ -1,0 +1,39 @@
+<?php if($this->isContentMode()): ?>
+    <?php echo $this->getCmsBlockHtml() ?>
+
+<?php elseif($this->isMixedMode()): ?>
+    <?php echo $this->getCmsBlockHtml() ?>
+    <?php echo $this->getProductListHtml() ?>
+
+<?php else: ?>
+
+        <?php echo $this->getChildHtml('solrsearch_result_title'); ?>
+        <?php echo $this->getChildHtml('solrsearch_product_list_toolbar'); ?>
+
+        <div id="content" class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div id="sidebar" class="hidden-xs">
+
+                    </div>
+                    <div id="content-main">
+
+                        <?php echo $this->getProductListHtml() ?>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+
+
+
+
+
+
+
+
+
+<?php endif; ?>
