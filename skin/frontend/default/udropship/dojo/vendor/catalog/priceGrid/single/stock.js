@@ -11,12 +11,12 @@ define([
 		_saveBtn: false,
 		
 		handleClick: function(row, evt){
-			this.setProductId(jQuery(evt.toElement).data('product_id'));
+			this.setProductId(jQuery(evt.toElement || evt.target).data('product_id'));
 			return this.inherited(arguments);
 		},
 
 		handleDbClick: function(row, evt){
-			this.setProductId(jQuery(evt.toElement).data('product_id'));
+			this.setProductId(jQuery(evt.toElement || evt.target).data('product_id'));
 			return this.inherited(arguments);
 		},
 
