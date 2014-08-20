@@ -10,32 +10,41 @@ class Zolago_Banner_Varien_Data_Form_Element_Thumbnail extends Varien_Data_Form_
 
     public function getElementHtml()
     {
-        $html = '';
-        Mage::log($this->getDataAttribute());
-        if ($this->getValue()) {
-            $dataAttribute = $this->getDataAttribute();
-            $data = "";
+        $html = '<div class="banner-image-container">';
 
-            if(!empty($dataAttribute)){
-                foreach($dataAttribute as $attributeName => $attributeValue){
-                    $data .= " data-{$attributeName}=$attributeValue";
-                }
-            }
-            Mage::log($data);
+        $html .= '<div class="banner-thumbnail">';
+        if ($this->getValue()) {
+
             $url = $this->_getUrl();
             if (!preg_match("/^http\:\/\/|https\:\/\//", $url)) {
                 $url = Mage::getBaseUrl('media') . $url;
             }
-            $html = '<a href="' . $url . '" class="banner-thumbnail"'
+            $html .= '<a href="' . $url . '"'
                 . ' onclick="imagePreview(\'' . $this->getHtmlId() . '_image\'); return false;">'
                 . '<img src="' . $url . '" id="' . $this->getHtmlId() . '_image" title="' . $this->getValue() . '"'
                 . ' alt="' . $this->getValue() . '" height="50" width="50" class="small-image-preview v-middle" />'
                 . '</a> ';
         }
+        $html .= '</div>';
         $this->setClass('input-file');
-        $html .= '<input id="'.$this->getHtmlId().'" '.$data.' name="'.$this->getName()
+        $dataAttribute = $this->getDataAttribute();
+        $data = "";
+        if(!empty($dataAttribute)){
+            foreach($dataAttribute as $attributeName => $attributeValue){
+                $data .= " data-{$attributeName}=$attributeValue";
+            }
+        }
+        Mage::log($data);
+
+//        $html .= '<input type="file" id="'.$this->getHtmlId().'"  data-resolution="1" '.$data.' name="'.$this->getName()
+//            .'" value="'.$this->getEscapedValue().'" '.$this->serialize($this->getHtmlAttributes()).'  />'."\n";
+//        $html.= $this->getAfterElementHtml();
+
+        $html = '<input id="'.$this->getHtmlId().'"  data-resolution="1" '.$data.' name="'.$this->getName()
             .'" value="'.$this->getEscapedValue().'" '.$this->serialize($this->getHtmlAttributes()).'/>'."\n";
         $html.= $this->getAfterElementHtml();
+
+        $html .= '</div>';
 
         return $html;
     }
