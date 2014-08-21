@@ -181,7 +181,7 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
                         if ((isset($picture->pictures_w) && !empty($picture->pictures_w))
                             && (isset($picture->pictures_h) && !empty($picture->pictures_h))
                         ) {
-                            $afterImageElementHtml = "<p><span class='glyphicon glyphicon-exclamation-sign'> Width: {$pictureW}px Height: {$pictureH}px</span></p>";
+                            $afterImageElementHtml = "<p><span class='glyphicon glyphicon-exclamation-sign'> ".$helper->__('Width').": {$pictureW}px ".$helper->__('Height').": {$pictureH}px</span></p>";
                             $imageOptions = array_merge($imageOptions,
                                 array(
                                      'after_element_html' => $afterImageElementHtml
@@ -223,10 +223,10 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
                         $captionMaxSymbols = (isset($data->caption_max_symbols) && $data->caption_max_symbols > 0) ? $data->caption_max_symbols : FALSE;
 
                         if ($captionMaxSymbols) {
-                            $afterElementHtml = '<p><span class="glyphicon glyphicon-exclamation-sign"></span> '  . 'Max length is ' . $captionMaxSymbols . '</p>';
+                            $afterElementHtml = '<p><span class="glyphicon glyphicon-exclamation-sign"></span> '  . $helper->__('Max length is ') . $captionMaxSymbols . '</p>';
                             $captionOptions = array_merge($captionOptions,
                                 array(
-                                    'maxlength' => $captionMaxSymbols,
+                                    //'maxlength' => $captionMaxSymbols,
                                     'after_element_html' => $afterElementHtml
                                 )
                             );

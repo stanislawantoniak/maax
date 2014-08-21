@@ -42,7 +42,7 @@ class Zolago_Banner_Varien_Data_Form_Element_Thumbnail extends Varien_Data_Form_
             .'" value="'.$this->getEscapedValue().'" '.$this->serialize($this->getHtmlAttributes()).' data-resolution="1" '.$data.' />'."\n";
         $html .= '<input type="text"  name="'.$this->getName()
             .'[value]" value="'.$this->getEscapedValue().'" style="background-color: transparent;
-            border: medium none;
+            border: medium none;width: 0;
             height: 0;position: absolute;"  />'."\n";
         $html.= $this->getAfterElementHtml();
         $html .= '</div>';

@@ -542,7 +542,7 @@ define([
 		
 		minRowsPerPage: 50,
 		maxRowsPerPage: 100,
-		pagingDelay: 200,
+		pagingDelay: 50,
 		bufferRows: 20,
 	
 		/* Paginatior  */
