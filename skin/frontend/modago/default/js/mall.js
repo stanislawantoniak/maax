@@ -543,6 +543,8 @@ Mall.listing = {
 
     _current_total: 0,
 
+    _current_mobile_filter_state: 0,
+
     init: function() {
 //        this.canLoadMoreProducts();
     },
@@ -756,6 +758,10 @@ Mall.listing = {
         return this;
     },
 
+    getCurrentMobileFilterState: function() {
+        return this._current_mobile_filter_state;
+    },
+
     getQuery: function() {
         return this._current_query;
     },
@@ -822,6 +828,12 @@ Mall.listing = {
 
     setTotal: function(total) {
         this._current_total = total;
+
+        return this;
+    },
+
+    setCurrentMobileFilterState: function(state) {
+        this._current_mobile_filter_state = state;
 
         return this;
     }

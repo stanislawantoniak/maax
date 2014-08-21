@@ -1,0 +1,26 @@
+<?php if ($this->isLayerNavigationActive()):?>
+<?php $filterQuery = $this->getFilterQuery(); ?>
+    <div class="sidebar">
+        <div class="block block-layered-nav" id="solr_search_facets">
+            <div class="block-title">
+                <strong><span><?php echo $this->__('Shop By') ?></span></strong>
+            </div>
+            <div class="block-content">
+                <form name="searchFacets" method="get"
+                      action="<?php echo $this->helper('solrsearch')->getResultUrl() ?>">
+                    <input type="hidden" name="q" value="<?php echo $this->getData('querytext') ?>"/>
+                    <?php if ($this->isShoppingOptionsActive()): ?>
+                        <p class="block-subtitle"><?php echo $this->__('Shopping Options') ?></p>
+                        <dl id="narrow-by-list">
+                            <?php foreach ($this->getFilterBlocks() as $filterBlock): ?>
+                                <!-- Blocks here -->
+                                <?php echo $filterBlock->toHtml(); ?>
+                            <?php endforeach; ?>
+                            <?php /* echo $this->getPriceFacets()*/ ?>
+                        </dl>
+                    <?php endif; ?>
+                </form>
+            </div>
+        </div>
+    </div>
+<?php endif;?>

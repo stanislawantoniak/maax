@@ -1822,13 +1822,13 @@ if($(window).width() != prevW) {
     if ($('body').hasClass('filter-sidebar')) {
 
     if($(window).width() <= 768) {
-       $("#sidebar").find('.sidebar').remove();
-       $(".fb-slidebar-inner").load("_include/sidebar.inc", function(){
-          init();
-          initScrollBarFilterMarka();
-          visibleBtnClearFilterSize();
-          
-       });
+//       $("#sidebar").find('.sidebar').remove();
+//       $(".fb-slidebar-inner").load("_include/sidebar.inc", function(){
+//          init();
+//          initScrollBarFilterMarka();
+//          visibleBtnClearFilterSize();
+//
+//       });
         
      } else {
 //        $(".fb-slidebar-inner").find('.sidebar').remove();
@@ -1858,14 +1858,14 @@ if($(window).width() != prevW) {
 
         if(intFrameWidth < 768) {
             if (sidebarMain.length === 0) {
-              $("#sidebar").find('.sidebar').remove();
-              $(".fb-slidebar-inner").load("_include/sidebar.inc", function(){
-                init();
-                initScrollBarFilterMarka();
-                clearFilterManufacturerCheked();
-                visibleBtnClearFilterSize();
-                
-              });
+//              $("#sidebar").find('.sidebar').remove();
+//              $(".fb-slidebar-inner").load("_include/sidebar.inc", function(){
+//                init();
+//                initScrollBarFilterMarka();
+//                clearFilterManufacturerCheked();
+//                visibleBtnClearFilterSize();
+//
+//              });
             };
             if ($('body').hasClass('noscroll')) {
               var screenWidth = $(window).width();
@@ -1880,35 +1880,35 @@ if($(window).width() != prevW) {
             
          } else {
             if (sidebarMain.length === 0) {
-              $(".fb-slidebar-inner").find('.sidebar').remove();
-              $("#sidebar").load("/sidebar.inc", function(){
-                init();
-                initScrollBarFilterMarka();
-                clearFilterManufacturerCheked();
-                visibleBtnClearFilterSize();
-                
-                $( "#slider-range" ).slider({
-                   range: true,
-                   min: 0,
-                   max: 500,
-                   values: [ 75, 300 ],
-                   slide: function(event, ui) {
-                       $("#zakres_min").val(ui.values[0]);
-                       $("#zakres_max").val(ui.values[1]);
-                      
-
-                   }
-                  
-                 }); 
-                  $('#slider-range').on('click', 'a', function(event) {
-                  var checkSlider = $('#checkSlider').find('input');
-                  if (!checkSlider.is(':checked')) {
-                   checkSlider.prop('checked', true);
-                    $('#filter_price').find('.action').removeClass('hidden');
-                  }
-                });
-
-              });
+//              $(".fb-slidebar-inner").find('.sidebar').remove();
+//              $("#sidebar").load("/sidebar.inc", function(){
+//                init();
+//                initScrollBarFilterMarka();
+//                clearFilterManufacturerCheked();
+//                visibleBtnClearFilterSize();
+//
+//                $( "#slider-range" ).slider({
+//                   range: true,
+//                   min: 0,
+//                   max: 500,
+//                   values: [ 75, 300 ],
+//                   slide: function(event, ui) {
+//                       $("#zakres_min").val(ui.values[0]);
+//                       $("#zakres_max").val(ui.values[1]);
+//
+//
+//                   }
+//
+//                 });
+//                  $('#slider-range').on('click', 'a', function(event) {
+//                  var checkSlider = $('#checkSlider').find('input');
+//                  if (!checkSlider.is(':checked')) {
+//                   checkSlider.prop('checked', true);
+//                    $('#filter_price').find('.action').removeClass('hidden');
+//                  }
+//                });
+//
+//              });
             };
             $('#sb-site').removeClass('open');
             $('.fb-slidebar').removeClass('open');
@@ -1985,7 +1985,7 @@ $(document).on('mouseup touchstart', function (e){
     
     if (!container.is(e.target) && container.has(e.target).length === 0) {
     //hide here
-    container.find('.sidebar').remove()
+//    container.find('.sidebar').remove()
      $('#sb-site').removeClass('open');
      $('.fb-slidebar').removeClass('open');
      $('body').removeClass('noscroll');
@@ -2015,44 +2015,62 @@ $(document).on('mouseup touchstart', function (e){
 
 $('.actionViewFilter').on('click', function(event){
         event.preventDefault();
-        $("#sidebar").find('.sidebar').remove();
-        $(".fb-slidebar-inner").find('.sidebar').remove();
-        $(".fb-slidebar-inner").load("_include/sidebar.inc", function(){
-          
-                  init();
-                  initScrollBarFilterMarka();
-                  clearFilterManufacturerCheked();
-                  visibleBtnClearFilterSize();
-                  filterColor();
-                  $( "#slider-range" ).slider({
-                          range: true,
-                          min: 0,
-                          max: 500,
-                          values: [ 75, 300 ],
-                          slide: function(event, ui) {
-                              $("#zakres_min").val(ui.values[0]);
-                              $("#zakres_max").val(ui.values[1]);
-        
-                          }
-                          
-                        }); 
-                  $('#slider-range').on('click', 'a', function(event) {
-                  var checkSlider = $('#checkSlider').find('input');
-                  if (!checkSlider.is(':checked')) {
-                    checkSlider.prop('checked', true);
-                    $('#filter_price').find('.action').removeClass('hidden');
-                  }
-                });
-
+        if(Mall.listing.getCurrentMobileFilterState() == 0) {
+            var currentSidebar = $("#sidebar").clone(true, true);
+            $("#sidebar").find(".sidebar").remove();
+            $(".fb-slidebar-inner").find('.sidebar').remove();
+            $(".fb-slidebar-inner").html(currentSidebar.html());
+            Mall.listing.setCurrentMobileFilterState(1);
+        }
                   $('#sb-site').toggleClass('open');
                   $('.fb-slidebar').toggleClass('open');
                       var screenWidth = $(window).width();
                       var screenHeight = $(window).height();
                       $('body').addClass('noscroll').append('<div class="noscroll" style="width:100%; height:'+screenHeight+'px"></div>');
-                
-                });
-        
-            //$("#sidebar").slideToggle();    
+//
+//                });
+
+//            $("#sidebar").slideToggle();
+
+
+
+//        $(".fb-slidebar-inner")
+//        $(".fb-slidebar-inner").load("/sidebar.inc", function(){
+//
+//                  init();
+//                  initScrollBarFilterMarka();
+//                  clearFilterManufacturerCheked();
+//                  visibleBtnClearFilterSize();
+//                  filterColor();
+//                  $( "#slider-range" ).slider({
+//                          range: true,
+//                          min: 0,
+//                          max: 500,
+//                          values: [ 75, 300 ],
+//                          slide: function(event, ui) {
+//                              $("#zakres_min").val(ui.values[0]);
+//                              $("#zakres_max").val(ui.values[1]);
+//
+//                          }
+//
+//                        });
+//                  $('#slider-range').on('click', 'a', function(event) {
+//                  var checkSlider = $('#checkSlider').find('input');
+//                  if (!checkSlider.is(':checked')) {
+//                    checkSlider.prop('checked', true);
+//                    $('#filter_price').find('.action').removeClass('hidden');
+//                  }
+//                });
+//
+//                  $('#sb-site').toggleClass('open');
+//                  $('.fb-slidebar').toggleClass('open');
+//                      var screenWidth = $(window).width();
+//                      var screenHeight = $(window).height();
+//                      $('body').addClass('noscroll').append('<div class="noscroll" style="width:100%; height:'+screenHeight+'px"></div>');
+//
+//                });
+
+//            $("#sidebar").slideToggle();
    });
 
 
