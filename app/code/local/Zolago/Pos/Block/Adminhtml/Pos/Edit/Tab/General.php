@@ -35,14 +35,20 @@ class Zolago_Pos_Block_Adminhtml_Pos_Edit_Tab_General extends Mage_Adminhtml_Blo
             'name',
             'is_active',
             'vendor_owner_id',
-            'minimal_stock',
-            'priority',
             'external_id',
         ));         
 
         
         
+        $contact = $form->addFieldset('contact', array('legend'=>$helper->__('Contact')));
+        $builder = Mage::getModel('zolagopos/form_fieldset_contact');
+        $builder->setFieldset($contact);
+        $builder->prepareForm(array(
+            'phone',
+            'email',
+        ));        
         
+
         $address = $form->addFieldset('address', array('legend'=>$helper->__('Address')));
         $builder = Mage::getModel('zolagopos/form_fieldset_address'); 
         $builder->setFieldset($address);
@@ -56,14 +62,14 @@ class Zolago_Pos_Block_Adminhtml_Pos_Edit_Tab_General extends Mage_Adminhtml_Blo
             'company',
         ));
                     
-        
-        $contact = $form->addFieldset('contact', array('legend'=>$helper->__('Contact')));
-        $builder = Mage::getModel('zolagopos/form_fieldset_contact');
-        $builder->setFieldset($contact);
+        $stock = $form->addFieldset('stock', array('legend'=>$helper->__('Stock settings')));
+        $builder = Mage::getModel('zolagopos/form_fieldset_stock');
+        $builder->setFieldset($stock);
         $builder->prepareForm(array(
-            'phone',
-            'email',
+            'minimal_stock',
+            'priority',
         ));        
+        
 		
 		$dhl = $form->addFieldset('dhl', array('legend'=>$helper->__('DHL Settings')));
         $builder = Mage::getModel('zolagopos/form_fieldset_dhl'); 

@@ -537,6 +537,18 @@ Mall.listing = {
 
     _current_scat: "",
 
+    _current_filters: [],
+
+    _current_visible_items: 0,
+
+    _current_total: 0,
+
+    _current_mobile_filter_state: 0,
+
+    init: function() {
+//        this.canLoadMoreProducts();
+    },
+
     getMoreProducts: function() {
         var query = this.getQuery();
         var page = this.getPage();
@@ -551,7 +563,7 @@ Mall.listing = {
             sort: sort,
             dir: dir,
             scat: scat,
-            fq: filtersArray
+            fq: filtersArray === [] ? [] : filtersArray.fq
         }, Mall.listing.getMoreProductsCallback);
     },
 
@@ -566,8 +578,12 @@ Mall.listing = {
             items = Mall.listing.appendToList(data.content.products);
             container.imagesLoaded(function() {
                 container.masonry("appended", items);
-                jQuery(".shapes_listing").css("top", jQuery(".addNewPositionListProduct").position().top - 180);
+                setTimeout(function() {jQuery(".shapes_listing").css("top", jQuery(".addNewPositionListProduct").position().top - 40);}, 1000);
             });
+            // set current items count
+            Mall.listing.addToVisibleItems(data.content.rows);
+            Mall.listing.setTotal(data.content.total);
+            Mall.listing.canLoadMoreProducts();
         } else {
             // do something to inform customer that something went wrong
             alert("Something went wrong, try again");
@@ -721,6 +737,55 @@ Mall.listing = {
         });
     },
 
+    canLoadMoreProducts: function() {
+        if(this._current_visible_items >= this._current_total) {
+            this.hideLoadMoreButton()
+                .hideShapesListing();
+        }
+
+        return this;
+    },
+
+    hideShapesListing: function() {
+        jQuery("#items-product").find(".shapes_listing").hide();
+
+        return this;
+    },
+
+    hideLoadMoreButton: function() {
+        jQuery("#content-main").find(".addNewPositionListProductWrapper").hide();
+
+        return this;
+    },
+
+    insertMobileSidebar: function() {
+        if(this.getCurrentMobileFilterState() == 0) {
+            var currentSidebar = jQuery("#sidebar").clone(true, true);
+            jQuery("#sidebar").find(".sidebar").remove();
+            jQuery(".fb-slidebar-inner").find('.sidebar').remove();
+            jQuery(".fb-slidebar-inner").html(currentSidebar.html());
+            this.setCurrentMobileFilterState(1);
+        }
+
+        return this;
+    },
+
+    insertDesktopSidebar: function() {
+        if(this.getCurrentMobileFilterState() == 1) {
+            var currentSidebar = jQuery(".fb-slidebar-inner").clone(true, true);
+            jQuery(".fb-slidebar-inner").find('.sidebar').remove();
+            jQuery("#sidebar").find(".sidebar").remove();
+            jQuery("#sidebar").append(currentSidebar);
+            this.setCurrentMobileFilterState(0);
+        }
+
+        return this;
+    },
+
+    getCurrentMobileFilterState: function() {
+        return this._current_mobile_filter_state;
+    },
+
     getQuery: function() {
         return this._current_query;
     },
@@ -742,7 +807,15 @@ Mall.listing = {
     },
 
     getFiltersArray: function() {
-        return {};
+        return this._current_filters;
+    },
+
+    getCurrentVisibleItems: function() {
+        return this._current_visible_items;
+    },
+
+    getTotal: function() {
+        return this._current_total;
     },
 
     setPageIncrement: function() {
@@ -763,6 +836,30 @@ Mall.listing = {
 
     setScat: function(scat) {
         this._current_scat = scat;
+    },
+
+    setFiltersArray: function(filters) {
+        this._current_filters = filters;
+
+        return this;
+    },
+
+    addToVisibleItems: function(itemsCount) {
+        this._current_visible_items += parseInt(itemsCount);
+
+        return this;
+    },
+
+    setTotal: function(total) {
+        this._current_total = total;
+
+        return this;
+    },
+
+    setCurrentMobileFilterState: function(state) {
+        this._current_mobile_filter_state = state;
+
+        return this;
     }
 };
 
@@ -873,4 +970,6 @@ jQuery(document).ready(function() {
             location.href = value;
         }
     });
+
+    Mall.listing.init();
 });

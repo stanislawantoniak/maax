@@ -74,13 +74,13 @@ $captionsNumber = (int)$config->captions_number;
 
 <script type="text/javascript">
     jQuery(function ($) {
+        var imageSize = 60; //KB
+
         var form = $("#edit-banner");
         new Zolago.formIntegrator(form);
         var ruleResolution = {
-            imageResolution: 1
-        };
-        var ruleResolutionReq = {
-            required: true
+            imageRequired: true,
+            imageSize: imageSize
         };
 
         var picturesNumber = '<?php echo $picturesNumber; ?>';
@@ -93,7 +93,6 @@ $captionsNumber = (int)$config->captions_number;
                 val = "image["+i+"]";
                 val1 = "image["+i+"][value]";
                 rulesEx[val] = ruleResolution;
-                rulesEx[val1] = ruleResolutionReq;
             }
         }
         var captionMaxSymbols = '<?php echo $captionMaxSymbols; ?>';
@@ -123,28 +122,26 @@ $captionsNumber = (int)$config->captions_number;
             var image  = new Image();
 
             reader.readAsDataURL(file);
+
             reader.onload = function(_file) {
                 image.src    = _file.target.result;              // url.createObjectURL(file);
                 image.onload = function() {
-                    $(input).data('resolution', 0);
-                    var restrictH = parseInt($(input).data("restricth"));
-                    var restrictW = parseInt($(input).data("restrictw"));
-                    if(parseInt(this.width)-restrictW !=0 && parseInt(this.height)-restrictH !=0){
-                        $(input).data('resolution', 0);
-                    } else {
-                        $(input).data('resolution', 1);
-                        var id = $(input).attr('id');
-                        var thumbPlace = $(input).parents('.banner-image-container').find('.banner-thumbnail');
+                    if(jQuery.type(file) !=="undefined"){
+                        if (jQuery.type(file) !=="undefined" && file.size <= (imageSize * 1000)) {
+                            var id = $(input).attr('id');
+                            var thumbPlace = $(input).parents('.banner-image-container').find('.banner-thumbnail');
 
-                        var preview = '<a href="' +this.src+ '" '
-                            + ' onclick="imagePreview(\''+id+'_image\'); return false;">'
-                            + '<img src="' + this.src + '" id="'+id+'_image" title="'+this.src+'"'
-                            + ' alt="'+this.src+'" height="200" width="200" class="small-image-preview v-middle" />'
-                            + '</a>';
+                            var preview = '<a href="' +this.src+ '" '
+                                + ' onclick="imagePreview(\''+id+'_image\'); return false;">'
+                                + '<img src="' + this.src + '" id="'+id+'_image" title="'+this.src+'"'
+                                + ' alt="'+this.src+'" height="200" width="200" class="small-image-preview v-middle" />'
+                                + '</a>';
 
-                        $(input).parents('.banner-image-container').find('input[type=text]').val(this.src);
-                        thumbPlace.html(preview);
+
+                            thumbPlace.html(preview);
+                        }
                     }
+
 
 
                 };
