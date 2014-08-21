@@ -6,11 +6,21 @@
 
 class Zolago_Modago_Block_Solrsearch_Faces_Category extends Zolago_Solrsearch_Block_Faces_Category
 {
+    /**
+     * Returns model of current category.
+     *
+     * @return Mage_Catalog_Model_Category
+     */
     public function getCurrentCategory()
     {
         return Mage::getSingleton('zolagosolrsearch/catalog_product_list')->getCurrentCategory();
     }
 
+    /**
+     * Returns URL for parent category.
+     *
+     * @return null|string
+     */
     public function getParentCategoryUrl()
     {
         $category = $this->getCurrentCategory()->getParentCategory();
@@ -31,6 +41,11 @@ class Zolago_Modago_Block_Solrsearch_Faces_Category extends Zolago_Solrsearch_Bl
         return $parentCategoryUrl;
     }
 
+    /**
+     * Returns name(label) for parent category.
+     *
+     * @return string
+     */
     public function getParentCategoryLabel()
     {
         return $this->getCurrentCategory()->getParentCategory()->getName();
