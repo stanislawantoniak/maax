@@ -1,3 +1,3 @@
-.banner-thumbnail {
+.banner-thumbnail:not(:empty) {
     float: left; padding: 5px;
 }
