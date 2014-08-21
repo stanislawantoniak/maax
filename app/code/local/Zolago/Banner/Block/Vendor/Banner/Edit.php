@@ -226,7 +226,7 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
                             $afterElementHtml = '<p><span class="glyphicon glyphicon-exclamation-sign"></span> '  . 'Max length is ' . $captionMaxSymbols . '</p>';
                             $captionOptions = array_merge($captionOptions,
                                 array(
-                                    'maxlength' => $captionMaxSymbols,
+                                    //'maxlength' => $captionMaxSymbols,
                                     'after_element_html' => $afterElementHtml
                                 )
                             );
