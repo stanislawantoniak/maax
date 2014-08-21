@@ -213,7 +213,7 @@
         }
         .item{
             padding:0px;
-            height: 406px;
+            height: auto;
         }
     }
 
@@ -261,7 +261,7 @@
             position:relative;
             .view_lupa {
                 position:absolute;
-                top:355px;
+                top:88%;
                 right:10px;
                 z-index: 900;
                 @media (max-width: 361px) {

@@ -866,7 +866,7 @@ jQuery(document).ready(function() {
 
     jQuery("#product-listing-sort-control").selectbox({
         onOpen: function (inst) {
-            initScrollBarFilterStyle();
+//            initScrollBarFilterStyle();
         },
 
         onChange: function(value, inst) {

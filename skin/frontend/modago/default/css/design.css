@@ -4889,23 +4889,24 @@ i.flag.hit, i.flag.bestseller {
 /* line 4, ../sass/override/_override-design.scss */
 ul.messages, ul.messages ul {
   list-style: none;
-  padding-left: 0; }
+  padding-left: 0;
+  margin-bottom: 0; }
 
-/* line 8, ../sass/override/_override-design.scss */
+/* line 9, ../sass/override/_override-design.scss */
 ul.messages ul {
   padding-left: 0; }
 
-/* line 11, ../sass/override/_override-design.scss */
+/* line 12, ../sass/override/_override-design.scss */
 ul.messages > li.success-msg ul > li {
   background: #73ac18 url("/skin/frontend/modago/default/images/msg_ico_success.png") no-repeat 5px 21px;
   margin-top: 10px; }
 
-/* line 15, ../sass/override/_override-design.scss */
+/* line 16, ../sass/override/_override-design.scss */
 ul.messages > li.error-msg ul > li, ul.messages > li.notice-msg ul > li {
   background: #e25856 url("/skin/frontend/modago/default/images/msg-ico-error.png") no-repeat 8px 18px;
   margin-top: 10px; }
 
-/* line 19, ../sass/override/_override-design.scss */
+/* line 20, ../sass/override/_override-design.scss */
 ul.messages > li ul > li > span {
   background-color: #deeaca;
   margin-left: 20px;
@@ -4915,11 +4916,11 @@ ul.messages > li ul > li > span {
   padding: 15px 30px 15px 15px;
   position: relative; }
 
-/* line 29, ../sass/override/_override-design.scss */
+/* line 30, ../sass/override/_override-design.scss */
 ul.messages > li.error-msg ul > li > span {
   background-color: #f2e6e6; }
 
-/* line 33, ../sass/override/_override-design.scss */
+/* line 34, ../sass/override/_override-design.scss */
 ul.messages ul > li > span > i {
   position: absolute;
   right: 16px;
