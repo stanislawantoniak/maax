@@ -54,6 +54,7 @@ jQuery(function($){
 					posControl.enableUps($F(e.target)=="1");
 				});
 				posControl.enableUps($F("use_orbaups")=="1");
+				posControl.enableDhl($F("use_dhl")=="1");
 			},
 			enableDhl: function(state){
 				if(!!state){
