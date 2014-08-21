@@ -543,10 +543,9 @@ Mall.listing = {
 
     _current_total: 0,
 
-    _current_mobile_filter_state: 0,
-
     init: function() {
 //        this.canLoadMoreProducts();
+        this.attachFilterColorEvents();
     },
 
     getMoreProducts: function() {
@@ -784,6 +783,38 @@ Mall.listing = {
 
     getCurrentMobileFilterState: function() {
         return this._current_mobile_filter_state;
+    },
+
+    attachShowMoreEvent: function() {
+        jQuery(".showmore-filters").on("click", function(e) {
+            var target = e.target;
+            e.preventDefault();
+            if(jQuery(this).attr("data-state") == "0") {
+                jQuery(this).parents(".content").find("label[data-state='hidden']").show(500);
+            } else {
+                jQuery(this).parents(".content").find("label[data-state='hidden']").hide(500);
+            }
+            Mall.listing.toggleShowMoreState(this);
+        });
+    },
+
+    attachFilterColorEvents: function() {
+        this.attachShowMoreEvent();
+        jQuery("#filter_color").find("label[data-url]").on("click", function(e) {
+            // @todo ajax logic
+            location.href = jQuery(this).attr("data-url");
+        });
+    },
+
+    toggleShowMoreState: function(item) {
+        var state = jQuery(item).attr("data-state");
+        if(state == "0") {
+            jQuery(item).text("Pokaż mniej");
+            jQuery(item).attr("data-state", "1");
+        } else {
+            jQuery(item).text("Pokaż więcej");
+            jQuery(item).attr("data-state", "0");
+        }
     },
 
     getQuery: function() {
