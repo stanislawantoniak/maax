@@ -20,12 +20,13 @@ define([
     "dojo/_base/lang",
 	"dojo/request",
 	"vendor/grid/ObserverFilter",
-	"vendor/catalog/priceGrid/singlePriceUpdater",
+	"vendor/catalog/priceGrid/single/price",
+	"vendor/catalog/priceGrid/single/stock",
 	"vendor/catalog/priceGrid/RowUpdater",
 	"vendor/misc"
 ], function(BaseGrid, Grid, Pagination, CompoundColumns, Selection, Keyboard, editor, declare, domConstruct, 
 	on, query, Memory, Observable, put, Cache, JsonRest, Selection, 
-	selector, lang, request, ObserverFilter, singlePriceUpdater, RowUpdater, misc){
+	selector, lang, request, ObserverFilter, singlePriceUpdater, singleStockUpdater, RowUpdater, misc){
 	
 	/**
 	 * @todo Make source options it dynamicly
@@ -245,26 +246,19 @@ define([
 				field: "display_price",
 				className: "column-medium",
 				children: [
-					editor({
+					{
 						renderHeaderCell: filterRendererFacory("range", "display_price"),
 						sortable: false, 
 						field: "display_price",
-						editor: "text",
-						editorArgs: {isNumber: true},
-						editOn: "dblclick",
-						className: "filterable align-right column-medium",
-						autoSave: true,
+						className: "filterable align-right column-medium signle-price-edit popup-trigger ",
 						formatter: misc.currency,
 						renderCell: function(item,value,node){
-							if(!item.converter_price_type && priceEditPriceMeta(item, value)){
+							if(priceEditPriceMeta(item, value)){
 								put(node, ".editable");
 							}
 							BaseGrid.defaultRenderCell.apply(this, arguments);
-						},
-						canEdit: function(item){
-							return !item.converter_price_type && priceEditPriceMeta(item);
 						}
-					})
+					}
 				]
 			},
 			campaign_regular_id: {
@@ -310,7 +304,7 @@ define([
 							}
 							BaseGrid.defaultRenderCell.apply(this, arguments);
 						},
-						className: "filterable align-right column-medium signle-price-edit",
+						className: "filterable align-right column-medium signle-price-edit popup-trigger",
 					}
 				]
 			},
@@ -323,7 +317,7 @@ define([
 						renderHeaderCell: filterRendererFacory("select", "converter_price_type", {options: converterPriceTypeOptions}),
 						sortable: false, 
 						field: "converter_price_type",
-						className: "filterable align-center column-medium signle-price-edit",
+						className: "filterable align-center column-medium signle-price-edit popup-trigger",
 						formatter: function(value, item){
 							for(var i=0; i<converterPriceTypeOptions.length; i++){
 								if(converterPriceTypeOptions[i].value+'' == value+''){
@@ -350,7 +344,19 @@ define([
 						renderHeaderCell: filterRendererFacory("select", "msrp", {options: boolOptions}),
 						sortable: false, 
 						field: "msrp",
-						className: "filterable align-right column-medium",
+						className: "filterable align-right column-medium signle-price-edit popup-trigger",
+						formatter: function(value){
+							if(value!==null){
+								return misc.currency(value);
+							}
+							return "";
+						},
+						renderCell: function(item,value,node){
+							if(priceEditPriceMeta(item, value)){
+								put(node, ".editable");
+							}
+							BaseGrid.defaultRenderCell.apply(this, arguments);
+						}
 					}
 				]
 			},
@@ -434,15 +440,11 @@ define([
 				field: "is_in_stock",
 				className: "column-short",
 				children: [
-					editor({
-						editor: "select",
-						editorArgs: {options: boolOptions, required: true},
-						editOn: "dblclick",
-						autoSave: true,
+					{
 						renderHeaderCell: filterRendererFacory("select", "is_in_stock", {options: boolOptions}),
 						sortable: false, 
 						field: "is_in_stock",
-						className: "filterable align-center column-short editable",
+						className: "filterable align-center  column-short",
 						formatter: function(value, item){
 							for(var i=0; i<boolOptions.length; i++){
 								if(boolOptions[i].value+'' == value+''){
@@ -451,7 +453,7 @@ define([
 							}
 							return "";
 						}
-					})
+					}
 				]
 			},
 			variant_qty: {
@@ -482,7 +484,7 @@ define([
 						renderHeaderCell: filterRendererFacory("range", "stock_qty"),
 						sortable: false, 
 						field: "stock_qty",
-						className: "filterable align-right column-medium",
+						className: "filterable align-right  column-medium",
 						formatter: function(value){return parseInt(value);}
 					}
 				]
@@ -540,7 +542,7 @@ define([
 		
 		minRowsPerPage: 50,
 		maxRowsPerPage: 100,
-		pagingDelay: 200,
+		pagingDelay: 50,
 		bufferRows: 20,
 	
 		/* Paginatior  */
@@ -558,7 +560,6 @@ define([
 	}, "grid-holder");
 	
 	
-	updater.setGrid(grid);
 	
 	on(switcher, "change", function(){
 		updater.setStoreId(this.value);
@@ -570,9 +571,16 @@ define([
 		updater.toggle(grid.row(evt));		
 	});
 	
-	// Open dialo to single price edit
-	on.pausable(grid.domNode, ".dgrid-row td.signle-price-edit.editable :dblclick", function(evt){
-		singlePriceUpdater.handleDbClick(grid.row(evt));
+	// Open dialog to single price edit
+	on.pausable(grid.domNode, ".dgrid-row .signle-price-edit.editable :click", function(evt){
+		singlePriceUpdater.handleDbClick(grid.row(evt), evt);
+	});
+	
+	
+
+	// Open dialog to single stock edit
+	on.pausable(grid.domNode, ".dgrid-row .signle-stock-edit.editable :click", function(evt){
+		singleStockUpdater.handleClick(grid.row(evt), evt);
 	});
 			
 	
@@ -591,7 +599,15 @@ define([
 	});
 	
 	
+	// Connect objects
+	updater.setGrid(grid);
 	updater.setStoreId(switcher.value);
+	
+	singlePriceUpdater.setGrid(grid);
+	singlePriceUpdater.setStoreId(switcher.value);
+	
+	singleStockUpdater.setStoreId(switcher.value);
+	singleStockUpdater.setGrid(grid);
 	
 	return grid;
 	

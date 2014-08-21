@@ -1,0 +1,23 @@
+.node-type-shopping-cart {
+	#content-main {
+		.panel {
+			&.panel-default {
+				@include border-radius(1px);
+				border-color:#bfbfbf;
+			}
+			.panel-heading {
+				background:transparent;
+				border: none;
+				font-size: 18px;
+				color:#000;
+				&:before {
+					background: #6fffcf;
+				}
+				strong {
+					font-family: $fontRegular;
+					font-weight: bold;
+				}
+			}
+		}
+	}
+}

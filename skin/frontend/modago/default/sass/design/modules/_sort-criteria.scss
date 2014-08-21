@@ -1,0 +1,36 @@
+#sort-criteria {
+	ul {
+		list-style: none;
+		li {
+			line-height: 27px;
+			color:#000;
+			label,
+			.label,
+			.value {
+				font-size: 12px!important;
+				font-family: $fontRegular;
+				font-weight: normal;
+				color:#000;
+			}
+		}
+	}
+	.select-group {
+		&.small {
+			width: 180px;
+			.button-select {
+				font-size: 12px;
+			}
+		}
+	}
+	.styledSelected {
+	label[for^=sort-by] {
+		line-height: 27px;
+		font-size: 12px;
+	}
+	.sbHolder {
+			font-size: 12px;
+		}
+}
+}
+
+

@@ -16,89 +16,110 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Catalog_Controller_Ve
 	 * Handle whole JOSN API
 	 */
 	public function restAction() {
-		
-		$profiler = Mage::helper("zolagocommon/profiler");
-		/* @var $profiler Zolago_Common_Helper_Profiler */
-		
-		$profiler->start();
-		
-		$reposnse = $this->getResponse();
-		
 		switch ($this->getRequest()->getMethod()) {
 			case "GET":
 				$productId = null;
 				if(preg_match("/\/([0-9]+)$/", $this->getRequest()->getPathInfo(), $matches)){
 					$productId = $matches[1];
 				}
-				
-				$collection = $this->_getCollection();
-				
-				$select = $collection->getSelect();
-				
-				if($productId){
-					$collection->addIdFilter($productId);
-				}
-				
-				// Make filters
-				foreach($this->_getRestQuery() as $key=>$value){
-					$collection->addAttributeToFilter($key, $value);
-				}
-				
-				// Make order and limit
-				$out = $collection->prepareRestResponse(
-						$this->_getRestSort(), 
-						$this->_getRestRange()
-				);
-				
-				if($productId && $out['items']){
-					$reposnse->
-						setBody(Mage::helper("core")->jsonEncode($out['items'][0]));
-				}else{
-					$reposnse->
-						setHeader('Content-Range', 'items ' . $out['start']. '-' . $out['end']. '/' . $out['total'])->
-						setBody(Mage::helper("core")->jsonEncode($out['items']));
-				}
+				$this->_handleRestGet($productId);
 			break;
 			case "PUT":
-				$data = Mage::helper("core")->jsonDecode(($this->getRequest()->getRawBody()));
-				
-				try{
-					$productIds = $data['entity_id'];
-					$attributeChanged = $data['changed'];
-					$attributeData = array();
-					$storeId = $data['store_id'];
-					
-					foreach($attributeChanged as $attribute){
-						if(isset($data[$attribute])){
-							$attributeData[$attribute] = $data[$attribute];
-						}
-					}
-					if($attributeData){
-						$this->_processAttributresSave(array($productIds), $attributeData, $storeId);
-					}
-					
-				} catch (Mage_Core_Exception $ex) {
-					$reposnse->setHttpResponseCode(500);
-					$reposnse->setBody($ex->getMessage());
-					return;
-				} catch (Exception $ex) {
-					Mage::logException($ex);
-					$reposnse->setHttpResponseCode(500);
-					$reposnse->setBody("Some error occured");
-					return;
-				}
-				
-				/** dev tool **/
-				$data['name'] = $data['name'] . " changed";
-				$data['changed'] = array();
-				
-				$reposnse->setBody(json_encode($data));
+				$this->_handleRestPut();
 			break;
 		}
 		
-		$reposnse->setHeader('Content-type', 'application/json');
+	}
+	
+	/**
+	 * Handle additional get action
+	 */
+	public function getAction() {
+		$productId = $this->getRequest()->getParam("entity_id");
+		$this->_handleRestGet($productId);
+	}
+	
+	/**
+	 * Handle rest put action
+	 */
+	protected function _handleRestPut() {
+		
+		$reposnse = $this->getResponse();
+		$data = Mage::helper("core")->jsonDecode(($this->getRequest()->getRawBody()));
+				
+		try{
+			$productIds = $data['entity_id'];
+			$attributeChanged = $data['changed'];
+			$attributeData = array();
+			$storeId = $data['store_id'];
+
+			foreach($attributeChanged as $attribute){
+				if(isset($data[$attribute])){
+					$attributeData[$attribute] = $data[$attribute];
+				}
+			}
+			if($attributeData){
+				$this->_processAttributresSave(array($productIds), $attributeData, $storeId);
+			}
+
+		} catch (Mage_Core_Exception $ex) {
+			$reposnse->setHttpResponseCode(500);
+			$reposnse->setBody($ex->getMessage());
+			return;
+		} catch (Exception $ex) {
+			Mage::logException($ex);
+			$reposnse->setHttpResponseCode(500);
+			$reposnse->setBody("Some error occured");
+			return;
+		}
+
+		/** dev tool **/
+		$data['changed'] = array();
+
+		$reposnse->setBody(json_encode($data));
+		$this->_prepareRestResponse();
+	}
+	
+	/**
+	 * handle Get method
+	 */
+	protected function _handleRestGet($productId=null) {
+		$reposnse = $this->getResponse();
+		
+		$collection = $this->_getCollection();
+
+		if($productId){
+			$collection->addIdFilter($productId);
+		}
+
+		// Make filters
+		foreach($this->_getRestQuery() as $key=>$value){
+			$collection->addAttributeToFilter($key, $value);
+		}
+
+		// Make order and limit
+		$out = $collection->prepareRestResponse(
+				$this->_getRestSort(), 
+				$this->_getRestRange()
+		);
+
+		if($productId && $out['items']){
+			$reposnse->
+				setBody(Mage::helper("core")->jsonEncode($out['items'][0]));
+		}else{
+			$reposnse->
+				setHeader('Content-Range', 'items ' . $out['start']. '-' . $out['end']. '/' . $out['total'])->
+				setBody(Mage::helper("core")->jsonEncode($out['items']));
+		}
+		$this->_prepareRestResponse();
 	}
 
+	/**
+	 * Prepare headers
+	 */
+	protected function _prepareRestResponse() {
+		$this->getResponse()->setHeader('Content-type', 'application/json');
+	}
 	
 	/**
 	 * @return Zolago_Catalog_Model_Resource_Vendor_Price_Collection

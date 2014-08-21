@@ -278,9 +278,21 @@ var Mall = {
 
     setSuperAttribute: function(currentSelection) {
         this._current_superattribute = currentSelection;
+        // change prices
+        var optionId = jQuery(this._current_superattribute).attr("value");
+        var superOptionId = jQuery(this._current_superattribute).attr("data-id");
+        jQuery.each(Mall.product._options.attributes[superOptionId].options, function(index, opt) {
+            if(optionId == opt.id) {
+                Mall.product.setPrices((parseFloat(Mall.product._options.basePrice) + parseFloat(opt.price)), (parseFloat(Mall.product._options.oldPrice) + parseFloat(opt.oldPrice)), Mall.product._options.template);
+            }
+            return ;
+        });
     },
 
     addToCart: function(id, qty) {
+        if(Mall._current_superattribute == null && Mall.product._current_product_type == "configurable") {
+            return false;
+        }
         var superLabel = jQuery(this._current_superattribute).attr("name");
         var attr = {};
         attr[jQuery(this._current_superattribute).attr("data-id")] = jQuery(this._current_superattribute).attr("value");
@@ -307,6 +319,17 @@ var Mall = {
                 break;
         }
     },
+
+    getCurrencyBasedOnCode: function(code) {
+        var currency = "zł";
+        switch(code) {
+            case "PLN":
+                currency = "zł";
+                break;
+        }
+
+        return currency;
+    }
 
 
 
@@ -391,13 +414,374 @@ Mall.Cart = {
     }
 }
 
+Mall.product = {
+    _size_table_template: "",
+    _options_group_template: "",
+    _options: {},
+    _current_product_type: "simple",
+
+    productOptions: function(jsonOptions) {
+        this._options = jsonOptions;
+        // set prices
+        this.setPrices(jsonOptions.basePrice, jsonOptions.oldPrice, jsonOptions.template);
+        if(typeof jsonOptions.attributes != "undefined") {
+            this.setAttributes(jsonOptions.attributes);
+        }
+    },
+
+    setChooseText: function(text) {
+
+    },
+
+    setPrices: function(price, oldPrice, template) {
+        // set old price
+        var old_price_selector = jQuery(".price-box").find(".old-price");
+        var price_selector = jQuery(".price-box").find("span.price");
+        if(price != oldPrice) {
+            old_price_selector.html(template.replace("#{price}", number_format(oldPrice, "2", ",", " ")));
+        } else {
+            old_price_selector.html("");
+        }
+
+        // set price
+        price_selector.html(template.replace("#{price}", number_format(price, "2", ",", " ")));
+    },
+
+    setAttributes: function(attributes) {
+        this.clearAttributesContainer();
+
+        jQuery.each(attributes, function(index, e) {
+            Mall.product.createOptionGroup(e);
+        });
+    },
+
+    clearAttributesContainer: function() {
+        this._size_table_template = jQuery(".size-box").find("a.view-sizing")[0].outerHTML;
+        jQuery(".size-box").find("div.size").remove();
+    },
+
+    applyAdditionalRules: function(optionGroup, selector) {
+        if(optionGroup.code == "size") {
+            selector.append(this._size_table_template);
+        }
+    },
+
+    createOptionGroup: function(group) {
+        // insert option group
+        var groupElement = jQuery("<div/>", {
+            "class": "size"
+        }).appendTo(".size-box");
+        jQuery(".size-box").append(this._options_group_template);
+        // create label group
+        jQuery("<span/>", {
+            "class": "size-label",
+            "html": (group.label + ":")
+        }).appendTo(groupElement);
+
+        // create form group for options
+        var formGroupElement = jQuery("<div/>", {
+            class: "form-group form-radio"
+        }).appendTo(groupElement);
+
+        jQuery.each(group.options, function(index, option) {
+            Mall.product.createOption(group.id, option, formGroupElement);
+        });
+
+        this.applyAdditionalRules(group, formGroupElement);
+    },
+
+    createOption: function(id, option, groupElement) {
+        var label = jQuery("<label/>", {
+            "for": ("size_" + option.id)
+        }).appendTo(groupElement);
+        var _options = {
+            type: "radio",
+            id: ("size_" + option.id),
+            "data-id": id,
+            name: ("super_attribute["+ id +"]"),
+            value: option.id,
+            onclick: "Mall.setSuperAttribute(this);"
+        };
+
+        if(!option.is_salable) {
+            _options["disabled"] = "";
+        }
+        var optElement = jQuery("<input/>", _options).appendTo(label);
+        jQuery("<span/>", {
+            "html": option.label
+        }).appendTo(label);
+    },
+
+    getLabelById: function(id, superId) {
+        var label = "";
+        if(this._options && typeof this._options.attributes[superId] != "undefined") {
+            jQuery.each(this._options.attributes[superId].options, function(index, opt) {
+                if(opt.id == id) {
+                    label = opt.label;
+                }
+            });
+        }
+
+        return label;
+    }
+};
+
+Mall.listing = {
+    _current_page: 1,
+
+    _current_dir: "asc",
+
+    _current_sort: "",
+
+    _current_query: "",
+
+    _current_scat: "",
+
+    getMoreProducts: function() {
+        var query = this.getQuery();
+        var page = this.getPage();
+        var sort = this.getSort();
+        var dir = this.getDir();
+        var scat = this.getScat();
+        var filtersArray = this.getFiltersArray();
+
+        OrbaLib.Listing.getProducts({
+            q: query,
+            page: page,
+            sort: sort,
+            dir: dir,
+            scat: scat,
+            fq: filtersArray
+        }, Mall.listing.getMoreProductsCallback);
+    },
+
+    getMoreProductsCallback: function(data) {
+        if(data.status == true) {
+            var container = jQuery("#items-product").masonry();
+            var sortArray = data.content.sort.split(" ");
+            var items;
+            Mall.listing.setPageIncrement();
+            Mall.listing.setSort(sortArray[0]);
+            Mall.listing.setDir(sortArray[1]);
+            items = Mall.listing.appendToList(data.content.products);
+            container.imagesLoaded(function() {
+                container.masonry("appended", items);
+                jQuery(".shapes_listing").css("top", jQuery(".addNewPositionListProduct").position().top - 180);
+            });
+        } else {
+            // do something to inform customer that something went wrong
+            alert("Something went wrong, try again");
+            return false;
+        }
+    },
+
+    appendToList: function(products) {
+        var items = [];
+        var _item;
+        jQuery.each(products, function(index, item) {
+            _item = Mall.listing.createProductEntity(item);
+            jQuery("#items-product").find(".shapes_listing").before(_item);
+            items.push(_item[0]);
+        });
+
+        // attach events
+        this.attachEventsToProducts();
+
+        return items;
+    },
+
+    createProductEntity: function(product) {
+        var container = jQuery("<div/>", {
+            class: "item col-phone col-xs-4 col-sm-4 col-md-3 col-lg-3 size14"
+        });
+        var box = jQuery("<div/>", {
+            class: "box_listing_product"
+        }).appendTo(container);
+
+        var link = jQuery("<a/>", {
+            href: product.current_url
+        }).appendTo(box);
+
+        var figure = jQuery("<figure/>", {
+            class: "img_product"
+        }).appendTo(link);
+
+        jQuery("<img/>", {
+            src: product.listing_resized_image_url,
+            alt: product.name,
+            class: "img-responsive"
+        }).appendTo(figure);
+
+        var vendor = jQuery("<div/>", {
+            class: "logo_manufacturer"
+        }).appendTo(link);
+
+        jQuery("<img/>", {
+            src: product.udropship_vendor_logo_url,
+            alt: product.udropship_vendor_name
+        }).appendTo(vendor);
+
+        jQuery("<div/>", {
+            class: "name_product",
+            html: product.name
+        }).appendTo(link);
+
+        var priceBox = jQuery("<div/>", {
+            class: "price clearfix"
+        }).appendTo(link);
+
+        var colPrice = jQuery("<div/>", {
+            class: "col-price"
+        }).appendTo(priceBox);
+
+        if(product.price != product.final_price) {
+            jQuery("<span/>", {
+                class: "old",
+                html: number_format(product.price, 2, ",", " ") + " " + Mall.getCurrencyBasedOnCode(product.currency)
+            }).appendTo(colPrice);
+        }
+        jQuery("<span/>", {
+            html: number_format(product.final_price, 2, ",", " ") + " " + Mall.getCurrencyBasedOnCode(product.currency)
+        }).appendTo(colPrice);
+
+        var likeClass = "like";
+        var likeText = "<span></span>";
+        if(product.in_my_wishlist) {
+            likeClass += " liked";
+            likeText = "<span>Ty+</span>";
+        }
+        var like = jQuery("<div/>", {
+            class: likeClass,
+            "data-idproduct": product.entity_id,
+            "data-status": product.in_my_wishlist,
+            onclick: "Mall.toggleWishlist(this);"
+        }).appendTo(priceBox);
+
+        var likeIco = jQuery("<span/>", {
+            class: "icoLike"
+        }).appendTo(like);
+
+        jQuery("<img/>", {
+            src: Config.path.heartLike,
+            class: "img-01",
+            alt: ""
+        }).appendTo(likeIco);
+
+        jQuery("<img/>", {
+            src: Config.path.heartLiked,
+            alt: "",
+            class: "img-02"
+        }).appendTo(likeIco);
+
+        jQuery("<span/>", {
+            class: "like_count",
+            html: likeText + product.wishlist_count
+        }).appendTo(like);
+
+        jQuery("<div/>", {
+            class: "toolLike"
+        }).appendTo(like);
+
+        return container;
+    },
+
+    attachEventsToProducts: function() {
+
+        var itemProduct = jQuery('.box_listing_product');
+        itemProduct.on('click', '.like', function(event) {
+            event.preventDefault();
+            /* Act on the event */
+            var itemProductId = jQuery(this).data('idproduct');
+        });
+        itemProduct.on('mouseenter', '.like', function(event) {
+            event.preventDefault();
+            if (jQuery(this).hasClass('liked')) {
+                var textLike = 'Dodane do ulubionych';
+            } else {
+                var textLike = 'Dodaj do ulubionych';
+            };
+            jQuery(this).find('.toolLike').show().text(textLike);
+        });
+        itemProduct.on('mouseleave mouseup', '.like', function(event) {
+            event.preventDefault();
+            jQuery(this).find('.toolLike').hide().text('');
+        });
+        itemProduct.on('mousedown', '.like', function(event) {
+            event.preventDefault();
+            jQuery(this).find('img:visible').animate({transform: 'scale(1.2)'}, 200);
+        });
+        itemProduct.on('mouseup', '.like', function(event) {
+            event.preventDefault();
+            jQuery(this).find('img:visible').animate({transform: 'scale(1.0)'}, 200)
+        });
+        itemProduct.on('mousedown', '.liked', function(event) {
+            event.preventDefault();
+            var textLike = 'Usunięte z ulubionych';
+            jQuery(this).find('.toolLike').show().text(textLike);
+        });
+    },
+
+    getQuery: function() {
+        return this._current_query;
+    },
+
+    getPage: function() {
+        return this._current_page + 1;
+    },
+
+    getSort: function() {
+        return this._current_sort;
+    },
+
+    getDir: function() {
+        return this._current_dir;
+    },
+
+    getScat: function() {
+        return this._current_scat;
+    },
+
+    getFiltersArray: function() {
+        return {};
+    },
+
+    setPageIncrement: function() {
+        this._current_page += 1;
+    },
+
+    setDir: function(dir) {
+        this._current_dir = dir;
+    },
+
+    setSort: function(sort) {
+        this._current_sort = sort;
+    },
+
+    setQuery: function(query) {
+        this._current_query = query;
+    },
+
+    setScat: function(scat) {
+        this._current_scat = scat;
+    }
+};
+
 // callbacks
 
 function addtocartcallback(response) {
     if(response.status == false) {
         Mall.showMessage(response.message, "error");
     } else {
-        Mall.showMessage(response.content.message, "success");
+        var popup = jQuery("#popup-after-add-to-cart");
+        if(Mall.product._current_product_type == 'configurable') {
+            var superAttr = jQuery(Mall._current_superattribute);
+            var label = Mall.product.getLabelById(superAttr.val(), superAttr.attr("data-id"));
+            popup.find("p.size>span").show();
+            popup.find("p.size>span").html(label);
+        } else {
+            popup.find("p.size>span").hide();
+        }
+        jQuery("#popup-after-add-to-cart").modal('show');
         Mall.getAccountInfo();
     }
 }
@@ -454,5 +838,39 @@ jQuery(document).ready(function() {
     jQuery(".messages").find('span').append('<i class="fa fa-times"></i>');
     jQuery(".messages").find("i").bind('click', function() {
         jQuery(this).parents("li").first().hide();
+    });
+
+    jQuery("#add-to-cart").tooltip({
+        template: '<div class="tooltip top" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner" style="color: #ea687e"></div></div>'
+    });
+    jQuery("#add-to-cart").on('mouseover', function() {
+        if(Mall._current_superattribute != null) {
+            jQuery("#add-to-cart").tooltip('destroy');
+        }
+    });
+
+    jQuery('#popup-after-add-to-cart').on('shown.bs.modal', function (e) {
+        var backdrop =  jQuery('#sb-site').find('.modal-backdrop');
+        if (backdrop.length == 0) {
+            jQuery('#sb-site').append('<div class="modal-backdrop fade in"></div>');
+        };
+
+    });
+    jQuery('#popup-after-add-to-cart').on('show.bs.modal', function (e) {
+        jQuery('html').find('body > .modal-backdrop').remove();
+    });
+    jQuery('#popup-after-add-to-cart').on('hidden.bs.modal', function (e) {
+        jQuery('html').find('.modal-backdrop').remove();
+
+    });
+
+    jQuery("#product-listing-sort-control").selectbox({
+        onOpen: function (inst) {
+//            initScrollBarFilterStyle();
+        },
+
+        onChange: function(value, inst) {
+            location.href = value;
+        }
     });
 });

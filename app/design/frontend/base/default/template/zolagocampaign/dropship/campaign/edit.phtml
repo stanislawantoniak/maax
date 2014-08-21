@@ -21,58 +21,105 @@
 		<input type="hidden" name="campaign_id" value="<?php echo $_model->getId();?>"/>
 		<?php echo $this->getLayout()->getBlock('formkey')->toHtml();?>
 		<?php echo $this->getForm()->toHtml();?>
-		<div class="widget box"> 
-			<div class="widget-header"> 
-				<h4>
-					<i class="icon-reorder"></i> 
-					Products		
-				</h4> 
-				<div class="toolbar no-padding"> 
-					<div class="btn-group"> 
-						<span data-toggle="modal" data-target="#browseProducts" class="btn btn-xs">
-							<i class="icon-plus"></i> 
-							<?php echo $_helper->__("Add products");?>
-						</span> 
-					</div> 
-				</div>
-			</div> 
-			<div class="widget-content">
-                <?php echo $this->getGrid()->toHtml(); ?>
 
-			</div>
-		</div>
+
+
 		<div class="form-actions"> <input type="submit" value="<?php echo $_helper->__("Save");?>" class="btn btn-primary pull-right"> </div>
 	</form>
 </div>
 
-<div class="modal fade" id="browseProducts">
-	<div class="modal-dialog" style="width: 80%">
-		<form id="campaign_products" action="/campaign/vendor/saveProducts"  class="form-horizontal row-border" method="post">
-			<input type="hidden" name="campaign_id" value="<?php echo $_model->getId();?>"/>
+<!--        Show product tab and banners tab only on edit page-->
+<?php if(!$this->isModelNew()) :?>
+<ul style="margin-top:6px" class="nav nav-tabs">
+    <li style="float:right" class="">
+        <a name="tmp"></a>
+    </li>
+    <li style="float:right" class="">
+        <a href="#tab_banners" data-toggle="tab"><?php echo $_helper->__('Campaign creatives'); ?></a>
+    </li>
+    <li style="float:right" class="active">
+        <a href="#tab_products" data-toggle="tab">Products</a>
+    </li>
+</ul>
+<div class="tab-content">
+    <div id="tab_products" class="tab-pane active">
+        <br>
+        <div class="container z-grid">
 
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title"><?php echo $_helper->__("Add products");?></h4>
-				</div>
+            <div class="widget box">
+                <div class="widget-header">
+                    <h4><i class="icon-reorder"></i><?php echo $_helper->__("Products"); ?></h4>
+                    <div class="toolbar no-padding">
+                        <div class="btn-group">
+						<span data-toggle="modal" data-target="#browseProducts" class="btn btn-xs">
+							<i class="icon-plus"></i>
+                            <?php echo $_helper->__("Add products");?>
+						</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="widget-content">
+                    <?php echo $this->getProductsGrid()->toHtml(); ?>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div id="tab_banners" class="tab-pane">
+        <br>
+        <div class="container z-grid">
+            <div class="widget box">
+                <div class="widget-header">
+                    <h4><i class="icon-reorder"></i><?php echo $_helper->__("Campaign creatives"); ?></h4>
+                    <div class="toolbar no-padding">
+                        <div class="btn-group">
+                            <a href="<?php echo $this->getAddNewBannerPath(); ?>">
+                                <span class="btn btn-xs"><i class="icon-plus"></i>
+                                    <?php echo $_helper->__("Add new campaign creative"); ?>
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="widget-content">
+                    <?php echo $this->getBannersGrid()->toHtml(); ?>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!--Products tab-->
+<div class="modal fade" id="browseProducts">
+    <div class="modal-dialog" style="width: 80%">
+        <form id="campaign_products" action="/campaign/vendor/saveProducts"  class="form-horizontal row-border" method="post">
+            <input type="hidden" name="campaign_id" value="<?php echo $_model->getId();?>"/>
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title"><?php echo $_helper->__("Add products");?></h4>
+                </div>
                 <div class="modal-body">
                     <?php echo $_helper->__("Enter SKUs Comma-separated"); ?>
                     <textarea type="text" name="campaign_products_source" class="form-control input-text"
                               rows="10"><?php echo $this->getCampaignProducts(); ?></textarea>
                 </div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_helper->__("Cancel");?></button>
-					<button type="submit" class="btn form-btn-loading btn-primary" data-loading-text="<?php echo $_helper->__("Loading...");?>"><?php echo $_helper->__("Add");?></button>
-				</div>
-			</div>
-		</form>
-	</div>
-	<script type="text/javascript">
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_helper->__("Cancel");?></button>
+                    <button type="submit" class="btn form-btn-loading btn-primary" data-loading-text="<?php echo $_helper->__("Loading...");?>"><?php echo $_helper->__("Add");?></button>
+                </div>
+            </div>
+        </form>
+    </div>
+<?php endif; ?>
+    <script type="text/javascript">
         jQuery(function ($) {
+
             $("#browseProducts form").submit(function (e) {
                 e.preventDefault();
                 var campaignProductsSource = $("textarea[name=campaign_products_source]").val();
-                console.log(campaignProductsSource);
+
                 if (campaignProductsSource.length <= 0) {
                     noty({
                         text: "Enter product SKUs please",
@@ -100,35 +147,20 @@
                     }
                 }
             });
+
             $("#browseProducts").on("show.bs.modal", function () {
                 console.log("Init loading products")
             });
-            //If info campaign selected price data fieldset should not to be visible
-            var typeSelected = $('#edit-campaign select[name=type]').val();
-            if (typeSelected == 'info') {
-                $('#price_source_id').parents('.widget.box').hide();
-            }
-            $('#edit-campaign select[name=type]').change(function () {
-                var pricesContainer = $('#price_source_id').parents('.widget.box');
-                var type = $(this).val();
-                if (type == 'info') {
-                    pricesContainer.hide();
-                } else {
-                    pricesContainer.show();
-                }
-            })
-
-            $("#zolagocampaign_campaign_product_grid_table .filter input")
+            $(".grid table .filter input,.grid table .filter select")
                 .addClass("form-control");
-            $(".btn[data-action=remove]").click(function (e) {
+            $(document).on('click', '.btn[data-action=remove]', function(e){
                 e.preventDefault();
                 var campaignId = $("input[name=campaign_id]").val();
-                var productId = $(this).data("item");
-                removeCampaignProductLink(campaignId, productId);
+                var path = $(this).attr('href');
+                removeCampaignGridItemLink(path,campaignId);
             })
-            function removeCampaignProductLink(campaignId, productId) {
-                var removePath = '<?php echo $this->getRemoveProductPath(); ?>';
-                var link = removePath + "?campaignId=" + campaignId + "&productId=" + productId;
+            function removeCampaignGridItemLink(path, campaignId) {
+                var link = path + "campaignId/" + campaignId;
                 window.location = link;
             }
 
@@ -148,5 +180,5 @@
                 }
             });
 
-});
-</script>
+        });
+    </script>

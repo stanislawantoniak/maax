@@ -22,8 +22,7 @@
 
 	<zolagobanner_vendor_edit>
         <reference name="head">
-            <action method="addItem"><type>skin_js</type><name>../../../frontend/default/udropship/js/melon/zolagobanner.js</name></action>
-            <action method="addItem"><type>skin_js</type><name>../../../frontend/default/udropship/plugins/jquery-tmpl/jquery.tmpl.js</name></action>
+            <action method="addItem"><type>skin_css</type><name>../../../frontend/default/udropship/css/zolagobanner.css</name></action>
         </reference>
 		<update handle="udropship_vendor" />
         <update handle="adminhtml_head" />

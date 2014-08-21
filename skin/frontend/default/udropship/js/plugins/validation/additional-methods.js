@@ -17,6 +17,7 @@
 		// remove punctuation
 		.replace(/[.(),;:!?%#$'"_+=\/\-]*/g,'');
 	}
+
 	jQuery.validator.addMethod("maxWords", function(value, element, params) {
 		return this.optional(element) || stripHtml(value).match(/\b\w+\b/g).length <= params;
 	}, jQuery.validator.format("Please enter {0} words or less."));
@@ -120,6 +121,27 @@ jQuery.validator.addMethod('dateAfter', function(value, element, params) {
     return this.optional(element) || this.optional(start[0]) || new Date(value) > new Date(startDate);
 
 }, 'Must be after corresponding start date');
+
+jQuery.validator.addMethod("imageResolution", function(value, element) {
+    var resolution = jQuery(element).data("resolution");
+    return resolution;
+}, "Wrong image resolution");
+
+jQuery.validator.addMethod("imageRequired", function (value, element) {
+    var F = element.files;
+    var result;
+    var id = jQuery(element).attr('id');
+
+    var value = jQuery(element).parents('.banner-image-container').find('input[id="' + id + '_value"]').val(); //image set
+    var imageUploaded = jQuery.type(F[0]) !=="undefined";
+
+    result = 0;
+
+    if (value.length > 0  || imageUploaded) {
+        result = 1;
+    }
+    return result;
+}, "Image is required");
 /**
  * Return true, if the value is a valid vehicle identification number (VIN).
  *
@@ -742,3 +764,24 @@ jQuery.validator.addMethod('urlKeyExists', function(value, element) {
 	return false;
 			
 }, jQuery.format("Url key already exists"));
+
+// validate converter price
+jQuery.validator.addMethod('priceSource', function(value, element) {
+	var selectedOption = jQuery(element).find(":selected");
+	var sourcePointer = jQuery("#" + selectedOption.data("pointer"))
+	var checkValue = null;
+	
+	if(this.optional(element)){
+		return true;
+	}
+	
+	// Has minimal price pointer?
+	if(sourcePointer.length){
+		checkValue = sourcePointer.data('price');
+	}else{
+		checkValue = selectedOption.data('price');
+	}
+	
+	
+	return this.optional(element) || !isNaN(parseFloat(checkValue));
+}, jQuery.format("The converter price of product or one of child product is not available"));

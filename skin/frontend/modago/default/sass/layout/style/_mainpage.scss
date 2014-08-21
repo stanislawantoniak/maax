@@ -1,0 +1,16 @@
+/*popular shops*/
+.small-banners {
+    .row {
+        @media (max-width: 643px) {
+            div:nth-child(3) {
+                clear: left;
+            }
+        }
+    }
+}
+
+.path_back_to_category {
+    padding: 5px 0px 5px;
+    margin-bottom: 5px;
+    overflow:hidden;
+}

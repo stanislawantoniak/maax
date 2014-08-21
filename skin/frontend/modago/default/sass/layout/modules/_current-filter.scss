@@ -1,0 +1,90 @@
+
+#view-current-filter {
+	@media (max-width: $screen-sm-min) { 
+	padding-bottom: 25px;
+	margin-top: 2px;
+	}
+	h1 {
+		padding-bottom: 0px;
+		padding-top:12px;
+		margin-bottom: 10px;
+		@media (max-width: $screen-sm-min) { 
+			padding-bottom: 0px;
+			padding-top:12px;
+		 }
+	}
+	dl {
+	    dt,dd {
+	        float:left;
+
+	    }
+	    dt {
+	        margin-right:20px;
+	        margin-bottom: 7px;
+	    }
+	    dd {
+	        margin-right:20px;
+	        
+	        .label {
+	            display:block;
+	            float:left;
+	            padding:0px 20px 0 6px;
+	            min-width: 60px;
+	            display:inline-block;
+	            float:left;
+	            height:21px;
+	            margin: 0px 10px 7px 0px;
+	            position:relative;
+
+	        }
+	            .fa {
+	                position:absolute;
+	                right:5px;
+	                top:4px;
+	                margin-left:5px;
+	            }
+	             
+	        
+	        &.action {
+	        	position:relative;
+	        	top:-4px;
+    	        @media (max-width: $screen-sm-min) { 
+	    			position: absolute;
+	    			top:auto;
+		        	right: 0px;
+		        	bottom: 11px;
+	    		 }
+	        	
+	            a {
+
+	            }
+	        }
+
+	    }
+	    
+	}
+	.actionViewFilter {
+		position:absolute;
+		left: 0px;
+		bottom: 10px;
+		width:40%;	
+		min-width: 168px;
+		
+		&.visible-xs {
+			@media (min-width:768px) and (max-width: 768px) {
+				display:block!important;
+			}
+		}
+		
+	}
+	.backToCategory {
+	    position:absolute;
+		right: 15px;
+		top:10px;  
+		
+	        }
+	.breadcrumb {
+		margin-bottom: 0;
+	}
+}
+

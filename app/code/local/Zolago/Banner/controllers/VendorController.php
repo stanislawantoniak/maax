@@ -19,11 +19,11 @@ class Zolago_Banner_VendorController extends Zolago_Dropship_Controller_Vendor_A
         // Existing banner
         if ($banner->getId()) {
             if ($banner->getVendorId() != $vendor->getId()) {
-                $this->_getSession()->addError(Mage::helper('zolagobanner')->__("Banner does not exists"));
+                $this->_getSession()->addError(Mage::helper('zolagobanner')->__("Campaign creative does not exists"));
                 return $this->_redirect("*/*");
             }
         } elseif($this->getRequest()->getParam('id',null) !== null) {
-            $this->_getSession()->addError(Mage::helper('zolagobanner')->__("Banner does not exists"));
+            $this->_getSession()->addError(Mage::helper('zolagobanner')->__("Campaign creative does not exists"));
             return $this->_redirect("*/*");
         }
 
@@ -52,10 +52,11 @@ class Zolago_Banner_VendorController extends Zolago_Dropship_Controller_Vendor_A
     public function setTypeAction()
     {
         $type = $this->getRequest()->getParam('type', null);
+        $campaignId = $this->getRequest()->getParam("campaign_id");
         if (empty($type)) {
-            $this->_redirectUrl(Mage::helper('zolagobanner')->bannerTypeUrl());
+            $this->_redirectUrl(Mage::helper('zolagobanner')->bannerTypeUrl($campaignId));
         } else {
-            $this->_redirectUrl(Mage::helper('zolagobanner')->bannerEditUrl($type));
+            $this->_redirectUrl(Mage::helper('zolagobanner')->bannerEditUrl($campaignId, $type));
         }
 
     }
@@ -110,7 +111,7 @@ class Zolago_Banner_VendorController extends Zolago_Dropship_Controller_Vendor_A
         try {
             // If Edit
             if (!empty($modelId) && !$banner->getId()) {
-                throw new Mage_Core_Exception($helper->__("Banner not found"));
+                throw new Mage_Core_Exception($helper->__("Campaign creative not found"));
             }
 
             $banner->addData($data);
@@ -129,28 +130,69 @@ class Zolago_Banner_VendorController extends Zolago_Dropship_Controller_Vendor_A
                 $banner->save();
 
                 //Save Banner Content
-                Mage::log($data);
-                Mage::log($_FILES);
-                if(isset($_FILES['image'])) {
-                    $images = $_FILES['image'];
 
-                    $tmpName = $images['tmp_name'];
-                    $name = $images['name'];
+                $bannerContentToSave = array();
 
-                    foreach($tmpName as $n => $imageName){
-                        if(!empty($imageName)){
-                            $path = Mage::getBaseDir() . "/media/banners/" . $name[$n];
-                            Mage::log($path);
-                            try {
-                                move_uploaded_file($imageName, $path);
-                            } catch (Exception $e) {
-                                Mage::logException($e);
+                if($data['show'] == Zolago_Banner_Model_Banner_Show::BANNER_SHOW_IMAGE){
+                    if (isset($_FILES['image'])) {
+
+                        $images = $_FILES['image'];
+
+                        $tmpName = $images['tmp_name'];
+                        $name = $images['name'];
+
+                        foreach ($tmpName as $n => $imageName) {
+                            if (!empty($imageName)) {
+                                $imageSize = getimagesize($imageName);
+                                $imageW = $imageSize[0];
+
+                                $imageH = $imageSize[1];
+                                $path = Mage::getBaseDir() . "/media/banners/" . $name[$n];
+                                try {
+                                    move_uploaded_file($imageName, $path);
+                                } catch (Exception $e) {
+                                    Mage::logException($e);
+                                }
+                                $bannerContentToSave['image'][$n]['path'] = "/banners/" . $name[$n];
+                            } elseif (isset($data['image'])&& !empty($data['image'])) {
+                                $bannerContentToSave['image'][$n]['path'] = isset($data['image'][$n]) ? $data['image'][$n]['value'] : '';
                             }
                         }
-
+                        unset($n);
                     }
+                    foreach($data as $i => $dataItem){
+                        $bannerContentToSave['banner_id'] = $banner->getId();
+                        $bannerContentToSave['show'] = $data['show'];
+                        $bannerContentToSave['html'] = '';
 
+                        if ($i == 'image_url') {
+                            foreach ($dataItem as $n => $imageUrl) {
+                                $bannerContentToSave['image'][$n]['url'] = $imageUrl;
+                            }
+                            unset($n);
+                        }
+
+                        if ($i == 'caption_url') {
+                            foreach ($dataItem as $n => $captionUrl) {
+                                $bannerContentToSave['caption'][$n]['url'] = $captionUrl;
+                            }
+                            unset($n);
+                        }
+                        if ($i == 'caption_text') {
+                            foreach ($dataItem as $n => $captionText) {
+                                $bannerContentToSave['caption'][$n]['text'] = $captionText;
+                            }
+                            unset($n);
+                        }
+                    }
                 }
+                if ($data['show'] == Zolago_Banner_Model_Banner_Show::BANNER_SHOW_HTML) {
+                    $bannerContentToSave['banner_id'] = $banner->getId();
+                    $bannerContentToSave['show'] = $data['show'];
+                    $bannerContentToSave['html'] = $data['banner_html'];
+                }
+
+                Mage::getModel('zolagobanner/banner')->saveBannerContent($bannerContentToSave);
 
 
             } else {
@@ -160,7 +202,7 @@ class Zolago_Banner_VendorController extends Zolago_Dropship_Controller_Vendor_A
                 }
                 return $this->_redirectReferer();
             }
-            $this->_getSession()->addSuccess($helper->__("Banner Saved"));
+            $this->_getSession()->addSuccess($helper->__("Campaign creative Saved"));
         } catch (Mage_Core_Exception $e) {
             $this->_getSession()->addError($e->getMessage());
             $this->_getSession()->setFormData($data);
@@ -171,12 +213,8 @@ class Zolago_Banner_VendorController extends Zolago_Dropship_Controller_Vendor_A
             Mage::logException($e);
             return $this->_redirectReferer();
         }
-
-//        foreach ($_FILES['slider']['tmp_name'] as $key => $file) {
-//            move_uploaded_file($file["image"],
-//                Mage::getBaseDir() . "/media/vendorSliders/" . $_FILES["slider"]["name"][$key]['image']);
-//            echo "Stored in: " . "upload/" . $_FILES["slider"]["name"][$key]['image'];
-//        }
-        return $this->_redirect("*/*");
+        return $this->_redirect("campaign/vendor/edit/", array('id' => $data['campaign_id'], '_fragment' => 'tab_banners'));
     }
+
+
 }

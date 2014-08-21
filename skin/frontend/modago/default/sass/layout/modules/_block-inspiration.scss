@@ -1,0 +1,46 @@
+.block-inspiration {
+	.rwdCarousel {
+	//	width: 100%;
+		padding:15px 55px;
+		position:relative;
+		//display: inline-block;
+		.item {
+			.carousel-caption {
+				position:static;
+				margin:0px;
+				padding:0px;
+				span {
+					display:block;
+					padding:0px;
+					margin:0px;
+					&.title-caption {
+						padding: 5px 0px;
+						display: block;
+						margin: 0 auto;
+						margin-top: 5px;
+					}
+					&.body-caption {
+						padding: 5px 0px;
+						display: block;
+						margin: 0 auto;
+					}
+					&.seemore-caption {
+						padding: 5px 0px;
+						display: block;
+						margin: 0 auto;
+					}
+
+				}
+			}
+
+		}
+	}
+
+	#rwd-inspiration .item{
+	  margin: 5px;
+	    img {
+		  	width:100%;
+		  	height:auto;
+		}
+	}
+}

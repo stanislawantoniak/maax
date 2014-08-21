@@ -19,7 +19,7 @@ var OrbaLib = {
         },
 		getProducts: function(data, callback) {
             OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_listing/get_products', array('_secure' => Mage::app()->getFrontController()->getRequest()->isSecure())); ?>', data, callback, 'GET');
-        },
+        }
 	},
     Product: {
     	getRecentlyViewed: function(data, callback) {

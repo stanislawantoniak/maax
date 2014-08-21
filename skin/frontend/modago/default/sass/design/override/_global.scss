@@ -1,0 +1,16 @@
+.browsehappy {
+	background:#fff;
+	text-align: center;
+	color:red;
+}
+
+.modal-content {
+	button.close {
+    background:$allMap;
+	@include sprite($allMap, btn-close);
+	@include sprite-dimensions($allMap, btn-close);
+    opacity: 1;
+    color: #fff;
+    text-shadow: none;
+}
+}

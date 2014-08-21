@@ -1,32 +1,61 @@
 <?php /* @var $this Zolago_Banner_Block_Vendor_Banner_Edit */ ?>
 <?php $_helper = Mage::helper("zolagobanner");?>
 <?php $_model = $this->getModel();?>
+<script src="//tinymce.cachefly.net/4.1/tinymce.min.js"></script>
+<script>
+    tinymce.init({
+        selector:'textarea[name=banner_html]',
+        height : 400,
+        plugins: [
+            "advlist autolink lists link image charmap preview anchor textcolor",
+            "searchreplace visualblocks code",
+            "insertdatetime table contextmenu paste"
+        ],
+        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
+    });
+</script>
+<?php
+$config = $this->getTypeConfiguration();
+$picturesNumber = (int)$config->pictures_number;
+$captionMaxSymbols = (int)$config->caption_max_symbols;
+$captionsNumber = (int)$config->captions_number;
+?>
+
 <div class="container">
 	<div class="page-heading row">
 		<div class="col-lg-6">
 			<h3>
 				<?php if($this->isModelNew()):?>
-					<?php echo Mage::helper("zolagobanner")->__("New Banner");?>
+					<?php echo Mage::helper("zolagobanner")->__("New campaign creative");?>
 				<?php else: ?>
-					<?php echo Mage::helper("zolagopo")->__("Edit Banner '%s'", $_model->getName());?>
+					<?php echo Mage::helper("zolagopo")->__("Edit campaign creative '%s'", $_model->getName());?>
 				<?php endif;?>
 			</h3>
 		</div>
 	</div>
     <div class="page-heading row">
-        <div class="col-lg-6">
+        <div class="container">
             <ol class="breadcrumb">
+                <li>
+                    <a href="/campaign/vendor/edit/id/<?php echo $this->getCampaignId(); ?>">
+                        <?php echo $_helper->__('Campaign') ?>: <?php echo $this->getCampaignName(); ?>
+                    </a>
+                </li>
                 <?php if($this->isModelNew()):?>
                     <li>
-                        <a href="<?php echo $_helper->setBannerTypeUrl(); ?>">
-                            <?php echo $_helper->__('Choose Banner Type') ?>
+                        <a href="<?php echo $_helper->setBannerTypeUrl(); ?>campaign_id/<?php echo $this->getCampaignId(); ?>">
+                            <?php echo $_helper->__('Choose campaign creative type') ?>
                         </a>
+                    </li>
+                <?php else: ?>
+                    <li>
+                        <?php echo $_helper->__("Campaign creative type");?>: <?php echo $this->getType(); ?>
                     </li>
                 <?php endif;?>
                 <?php if($this->isModelNew()):?>
-                    <li class="active"><?php echo $_helper->__("New Banner");?></li>
+                    <li class="active"><?php echo $_helper->__("New campaign creative");?></li>
                 <?php else: ?>
-                    <li class="active"><?php echo $_helper->__("Edit Banner '%s'", $_model->getName());?></li>
+                    <li class="active"><?php echo $_helper->__("Edit campaign creative '%s'", $_model->getName());?></li>
                 <?php endif;?>
             </ol>
         </div>
@@ -36,7 +65,6 @@
 <div class="container z-grid">
 	<form id="edit-banner" class="form-horizontal row-border" action="<?php echo $this->getForm()->getAction();?>" method="POST" enctype="multipart/form-data">
 		<input type="hidden" name="banner_id" value="<?php echo $_model->getId();?>"/>
-        <input type="hidden" name="type" value="<?php echo $this->getType();?>"/>
 		<?php echo $this->getLayout()->getBlock('formkey')->toHtml();?>
 		<?php echo $this->getForm()->toHtml();?>
 
@@ -48,9 +76,91 @@
     jQuery(function ($) {
         var form = $("#edit-banner");
         new Zolago.formIntegrator(form);
-        form.validate();
+        var ruleResolution = {
+            imageRequired: true,
+            imageResolution: true
+        };
+
+        var picturesNumber = '<?php echo $picturesNumber; ?>';
+
+        var rulesEx = {};
+
+        if(parseInt(picturesNumber) > 0){
+            var val, val1;
+            for (var i = 1; i <= picturesNumber; i++) {
+                val = "image["+i+"]";
+                val1 = "image["+i+"][value]";
+                rulesEx[val] = ruleResolution;
+            }
+        }
+        var captionMaxSymbols = '<?php echo $captionMaxSymbols; ?>';
+        var captionsNumber = '<?php echo $captionsNumber; ?>';
+        if(parseInt(captionMaxSymbols) > 0 && parseInt(captionsNumber) > 0){
+            var val3;
+            for (var l = 1; l <= captionsNumber; l++) {
+                val3 = "caption_text["+l+"]";
+                rulesEx[val3] = {maxlength: captionMaxSymbols};
+            }
+        }
+
+console.log(rulesEx);
+        form.validate(
+            {
+                rules: rulesEx
+            }
+        );
+
+
 
         changeDependingSelectorHandler('slider_type');
+
+        function readImage(input, file) {
+
+            var reader = new FileReader();
+            var image  = new Image();
+
+            reader.readAsDataURL(file);
+
+            reader.onload = function(_file) {
+                image.src    = _file.target.result;              // url.createObjectURL(file);
+                image.onload = function() {
+                    $(input).data('resolution', 0);
+                    var restrictH = parseInt($(input).data("restricth"));
+                    var restrictW = parseInt($(input).data("restrictw"));
+                    if(parseInt(this.width)-restrictW !=0 && parseInt(this.height)-restrictH !=0){
+                        $(input).data('resolution', 0);
+                    } else {
+                        $(input).data('resolution', 1);
+//                        $(input).parents('.banner-image-container').find('input[type=text]').val(this.src);
+//                        $(input).parents('.banner-image-container').find('input[type=hidden]').val(this.src);
+                        var id = $(input).attr('id');
+                        var thumbPlace = $(input).parents('.banner-image-container').find('.banner-thumbnail');
+
+                        var preview = '<a href="' +this.src+ '" '
+                            + ' onclick="imagePreview(\''+id+'_image\'); return false;">'
+                            + '<img src="' + this.src + '" id="'+id+'_image" title="'+this.src+'"'
+                            + ' alt="'+this.src+'" height="200" width="200" class="small-image-preview v-middle" />'
+                            + '</a>';
+
+
+                        thumbPlace.html(preview);
+                    }
+
+
+                };
+                image.onerror= function() {
+                    alert('Invalid file type: '+ file.type);
+                };
+            };
+
+        }
+        $("input[type=file][id^=image_]").change(function (e) {
+            if(this.disabled) return alert('File upload not supported!');
+            var F = this.files;
+            readImage($(this), F[0]);
+        });
+
+
     });
 
     /**

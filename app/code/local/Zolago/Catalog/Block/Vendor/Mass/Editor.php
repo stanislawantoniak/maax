@@ -18,7 +18,7 @@ class Zolago_Catalog_Block_Vendor_Mass_Editor extends Mage_Core_Block_Template {
 		$btn = $this->getLayout()->
 				createBlock("adminhtml/widget_button")->
 				setType("button")->
-				setId($this->buildFieldId("submit"))->
+				setId('mass-grid-submit')->
 				setLabel($this->__("Confirm changes"))->
 				setClass("confirm-changes btn btn-primary");
 		return $btn->toHtml();
@@ -50,7 +50,6 @@ class Zolago_Catalog_Block_Vendor_Mass_Editor extends Mage_Core_Block_Template {
 		$type = $this->parseInputType($attribute);
 		$config = array(
 			"name"=>"attributes[".$attribute->getAttributeCode()."]",
-			"disabled" => "disabled",
             'class' => 'form-control'
 		);
 		$field = $this->getForm()->addField(

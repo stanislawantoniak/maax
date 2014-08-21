@@ -1,4 +1,4 @@
-<div class="grid z-grid" id="<?php echo $this->buildFieldId("editor");?>">
+<div class="grid z-grid" id="grid-editor">
 	<?php if($this->getGrid()): ?>
 	<table style="display: none;">
 <!--            HIDE IT FOR TESTING-->
@@ -26,7 +26,6 @@
 				<?php endforeach;?>
 			</tr>
 
-
 			<tr class="filter" style="display:none;" id="<?php echo $this->buildFieldId("fields");?>">
 				<?php $i=0;?>
 				<?php foreach ($this->getGrid()->getColumns() as $_column): ?>
@@ -35,16 +34,22 @@
 						<td>
 							<?php if($_field = $this->getField($_column)):?>
 								<div class="filter-field-100 element-wrapper" style="display: none;" id="<?php echo $_field->getId() . "_wrapper";?>">
-									<?php echo $this->getEmptyValueField($_field);?>
-									<?php echo $_field->toHtml();?>
-									<div>
-									<?php foreach($this->getAdditionalFields($_column) as $_field):?>
-										<?php echo $_field->toHtml();?>
-									<?php endforeach;?>
-									</div>
-									<?php if($_column->getAttribute()):?>
-									<div class="scope">[<?php echo $this->getScope($_column->getAttribute());?>]</div>
-									<?php endif;?>
+                                    <form>
+                                        <?php echo $this->getEmptyValueField($_field);?>
+                                        <?php echo $_field->toHtml();?>
+                                        <div>
+                                        <?php foreach($this->getAdditionalFields($_column) as $_field):?>
+                                            <?php echo $_field->toHtml();?>
+                                        <?php endforeach;?>
+                                        </div>
+                                        <?php if($_column->getAttribute()):?>
+    <!--									<div class="scope">[--><?php ////echo $this->getScope($_column->getAttribute());?><!--]</div>-->
+                                        <?php endif;?>
+                                        <div class="apply-all-selected">
+                                            <input type="checkbox" name="apply_all_selected"> <?php echo $this->__('Apply to all selected'); ?>
+                                        </div>
+                                        <?php echo $this->getSubmitButtonHtml(); ?>
+                                    </form>
 								</div>
 							<?php endif;?>
 						</td>
@@ -52,17 +57,7 @@
 				</td>
 				<?php endforeach;?>
 			</tr>
-			<tr style="display:none;"  id="<?php echo $this->buildFieldId("confirm");?>">
-				<td  class="totals a-center" colspan="<?php echo $this->getGrid()->getColumnCount();?>">
-                    <?php echo $this->getSubmitButtonHtml(); ?>
-                    <span style="display: none;" class="notice" id="<?php echo $this->buildFieldId("loading");?>">
-						<?php echo Mage::helper("zolagocatalog")->__("Saving...");?>
-					</span>
 
-				</td>
-			<tr>
-
-            <?php endif; ?>
 		</tfoot>
 	</table>
 	<?php endif;?>
@@ -196,41 +191,6 @@
 		
 		var currentEditCount = 0;
 
-		var switchVisible = function(fieldId, mode){
-			if(mode){
-				$(fieldId).disabled = "";
-				$(fieldId+"_wrapper").show();
-				currentEditCount++;
-			}else{
-				$(fieldId).disabled = "disabled";
-				$(fieldId+"_wrapper").hide();
-				currentEditCount--;
-			}
-				
-			if(currentEditCount>0){
-				$("<?php echo $this->buildFieldId("fields");?>").show();
-				$("<?php echo $this->buildFieldId("confirm");?>").show();
-			}else{
-				$("<?php echo $this->buildFieldId("fields");?>").hide();
-				$("<?php echo $this->buildFieldId("confirm");?>").hide();
-			}
-			
-			disableAdditionalFields(fieldId, mode);
-		}
-		
-		var disableAdditionalFields = function(fieldId, mode){
-			$(fieldId).up(".element-wrapper").select(".additional_field").each(function(el){
-				$(el).disabled = mode ? "" : "disabled";
-			});
-			$(fieldId).up(".element-wrapper").select(".empty_field").each(function(el){
-				$(el).disabled = mode ? "" : "disabled";
-			});
-			// Datepicker
-			$(fieldId).up(".element-wrapper").select("img.v-middle").each(function(el){
-				mode ? $(el).show() : $(el).hide();
-			});
-		}
-		
-		appendContent(gridObj, foot);
-	})();
+    var saveGridLocation = '<?php echo $this->getSaveUrl();?>';
+
 </script>

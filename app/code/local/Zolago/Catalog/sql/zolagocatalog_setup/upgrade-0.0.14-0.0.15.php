@@ -55,4 +55,7 @@ $setup->addAttribute(Mage_Catalog_Model_Category::ENTITY, 'long_name', array(
     '2'                    
 );
 
-$this->endSetup();
+
+$installer->getConnection()->addColumn($installer->getTable('catalog/eav_attribute'), "column_width", "VARCHAR( 255 ) NULL");
+
+$installer->endSetup();

@@ -13,16 +13,19 @@
     $_totalWithShipment = $this->getQuote()->getGrandTotal() + $this->getShippingTotal();
     $_hasCoupon = (bool) $this->getQuote()->getCouponCode();
     $_couponLabel = '';
+    $_couponDescription = '';
     if($_hasCoupon) {
         $_salesRuleId = Mage::getModel('salesrule/coupon')->loadByCode($this->getQuote()->getCouponCode())->getRuleId();
-        $_couponLabel = Mage::getModel('salesrule/rule')->load($_salesRuleId)->getStoreLabel();
+        $_ruleModel = Mage::getModel('salesrule/rule')->load($_salesRuleId);
+        $_couponLabel = $_ruleModel->getStoreLabel();
+        $_couponDescription = $_ruleModel->getDescription();
     }
 ?>
 <div id="sidebar-secondary" class="sidebar-secound col-lg-3 col-md-4 ">
     <aside id="cart-summary" class="main bg-w clearfix">
         <!--<div class="inner-cart-summary">-->
         <header>
-            <h2><?php echo $this->__("Your shopping"); ?>  <strong>(<?php echo $this->getSummaryCount(); ?> <?php echo $this->__("product(s)"); ?>)</strong></h2>
+            <h2><?php echo $this->__("Your shopping"); ?></h2>
         </header>
         <div class="col-sidebar-cart-summary clearfix">
             <ul id="product_summary">
@@ -46,7 +49,7 @@
 
                 <dl class="coupon-list" id="cart_coupon" style="display: <?php if(!$_hasCoupon): ?>none;<?php endif; ?>">
                     <dt><?php echo $this->__("Your coupon:"); ?></dt>
-                    <dd class="ff_os fz_12"><?php echo $_couponLabel; ?> <i class="fa-delete-coupon" onclick="Mall.Cart.removeCoupon();"></i></dd>
+                    <dd class="ff_os fz_12" <?php if($_hasCoupon && $_couponDescription): ?>data-toggle="tooltip" data-placement="top" title="<?php echo $_couponDescription; ?>" <?php endif; ?> style="height: auto; background: none;"><?php echo $_couponLabel; ?> <i class="fa-delete-coupon" onclick="Mall.Cart.removeCoupon();"></i></dd>
                 </dl>
 
             </div>
@@ -112,4 +115,5 @@
 
 <script type="text/javascript">
     Mall.translate.add("coupon_code_invalid","<?php echo $this->__("Coupon code is invalid."); ?>");
+    jQuery(".ff_os").tooltip();
 </script>

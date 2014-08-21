@@ -1,0 +1,92 @@
+@import "../../other/variable";
+.header_top {
+    min-height: 57px;
+    @include max-screen($screen-sm-max) {
+        min-height: 41px;
+    }
+  
+}
+
+#toggleSearch {
+    > a { 
+      @include inline-block;
+    }
+}
+
+/* USER MENU */
+.user-navigation  {
+            @include reset-l;
+            a {
+                position:relative;
+            }
+            
+        }
+/* HEADER BOTTOM */
+.header_bottom {
+     #nav_desc {
+        &.navigation > li > a:hover,
+        &.navigation > li > a.active  {
+            position:relative;
+            &:before {
+                content: ' ';
+                height:4px;
+                width: 100%;
+                position:absolute;
+                left:0px;
+                bottom:-6px;
+            }
+        }
+    }
+// END NAV DESCOPT
+
+    #nav_mobile {
+        > li {
+            > a:link,
+            > a:visited {
+            position:relative;
+            }
+            li {
+                a {
+                   display:block;
+                   width:100%;
+                }
+            }
+        }
+    }
+}
+.node-type-page-shop {
+    #name-shop {
+        margin-right: -15px;
+        margin-left: -15px;
+    }
+}
+
+
+
+.top_bottom {
+        
+        
+     #shop_nav_mobile {
+        margin:0px;
+        padding:0px;
+        > li {
+            > a:link,
+            > a:visited {
+            position:relative;
+            display:block;
+            }
+            
+            ul {
+                display:none;
+                
+            }
+            li {
+
+                a {
+                   display:block;
+                   width:100%;
+                }
+            }
+        }
+    }
+}

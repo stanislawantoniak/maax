@@ -33,9 +33,10 @@
 
             <action method="addCss"><stylesheet>css/font-awesome.css</stylesheet></action>
             <action method="addCss"><stylesheet>css/bootstrap.css</stylesheet></action>
-            <action method="addCss"><stylesheet>css/layout.css</stylesheet></action>
+            <action method="addCss"><stylesheet>css/typography.css</stylesheet></action>
             <action method="addCss"><stylesheet>css/design.css</stylesheet></action>
-            <action method="addCss"><stylesheet>css/stylesheet.css</stylesheet></action>
+            <action method="addCss"><stylesheet>css/layout.css</stylesheet></action>
+            <!--<action method="addCss"><stylesheet>css/stylesheet.css</stylesheet></action>-->
             <action method="addCss"><stylesheet>css/local.css</stylesheet></action>
 
             <!--<action method="addItem"><type>skin_js</type><script>js/vendor/jquery-1.10.2.min.js</script></action>-->
@@ -214,15 +215,41 @@
     <solrbridge_solrsearch_category_view>
         <remove name="mana.catalog.leftnav" />
         <remove name="solrsearch_category_view"/>
+        <remove name="solrsearch_product_list_active" />
 
         <reference name="root">
+            <action method="setTemplate"><template>page/2columns-left.phtml</template></action>
             <action method="addBodyClass"><value>sidebar-first</value></action>
-            <action method="addBodyClass"><value>node-type-main_categories</value></action>
             <action method="addBodyClass"><value>view-menu-category</value></action>
             <action method="addBodyClass"><value>not-menu-mobile</value></action>
         </reference>
         <reference name="head">
             <action method="addJs"><script>jquery/jquery.jcarousel.min.js</script></action>
+            <action method="removeItem"><type>js</type><script>solrsearch/slider.js</script></action>
+            <action method="removeItem"><type>skin_js</type><script>js/manapro_filtercolors.js</script></action>
+        </reference>
+        <reference name="solrsearch_product_list_header">
+            <block type="zolagosolrsearch/active" name="solrsearch_product_list_activefaces" template="searchfaces/standard/active.phtml"/>
+        </reference>
+        <reference name="solrsearch_product_list">
+            <action method="setTemplate"><template>catalog/product/list.phtml</template></action>
+        </reference>
+        <reference name="zolagosolrsearch_category_view">
+            <action method="setTemplate"><template>catalog/category/view.phtml</template></action>
+            <block type="solrsearch/faces" name="searchfaces" as="searchFaces" before="-" >
+                <block type="solrsearch/faces_price" name="solr_price_facets" as="solr_price_facets" />
+                <block type="solrsearch/faces_range" name="solr_range_facets" as="solr_range_facets" />
+            </block>
+        </reference>
+        <reference name="solrsearch_product_list_header">
+            <action method="setTemplate"><template>catalog/product/list/header/category.phtml</template></action>
+        </reference>
+        <reference name="solrsearch_product_list_toolbar">
+            <action method="setTemplate"><template>catalog/product/list/toolbar.phtml</template></action>
+        </reference>
+
+        <reference name="left">
+            <action method="unsetChild"><name>searchfaces</name></action>
         </reference>
     </solrbridge_solrsearch_category_view>
 
@@ -261,6 +288,10 @@
             </action>
         </reference>
 
+        <reference name="head">
+            <action method="removeItem"><type>js</type><script>varien/product.js</script></action>
+            <action method="removeItem"><type>js</type><script>varien/configurable.js</script></action>
+        </reference>
 
     </catalog_product_view>
 

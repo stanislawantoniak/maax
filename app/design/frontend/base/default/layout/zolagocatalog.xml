@@ -37,7 +37,7 @@
 	<udprod_vendor_price_index>
 		<update handle="udropship_vendor" />
         <update handle="bootstrap" />
-        <update handle="forms" />
+		<update handle="forms"/>
         <update handle="dgrid" />
 		<reference name="content">
 			<block name="price" type="zolagocatalog/vendor_price" template="zolagocatalog/price.phtml"/>
@@ -49,6 +49,12 @@
             <block type="zolagocatalog/vendor_price_modal" template="zolagocatalog/price/modal.phtml"/>
         </block>
 	</udprod_vendor_price_detail_pricemodal>
+	
+	<udprod_vendor_price_detail_stockmodal>
+		<block type="core/text_list" name="root" output="toHtml">
+            <block type="zolagocatalog/vendor_price_stock" template="zolagocatalog/price/stock.phtml"/>
+        </block>
+	</udprod_vendor_price_detail_stockmodal>
 	
 	<udprod_vendor_mass_index>
 		<update handle="udropship_vendor" />
@@ -79,6 +85,8 @@
 
 			<block name="mass" type="zolagocatalog/vendor_mass" template="zolagocatalog/mass.phtml">
 				<block type="zolagocatalog/vendor_mass_attributesetswitcher" name="attribute_set_switcher" as="attribute_set_switcher" template="zolagocatalog/mass/attributesetswitcher.phtml"/>
+				<block type="zolagocatalog/vendor_mass_staticfilter" name="static_filter" as="other_filter" template="zolagocatalog/mass/otherfilter.phtml"/>
+				<block type="zolagocatalog/vendor_mass_staticfilter" name="static_filter" as="additional_filter" template="zolagocatalog/mass/additionalcolumnfilter.phtml"/>
 				<block type="zolagocatalog/vendor_mass_staticfilter" name="static_filter" as="static_filter" template="zolagocatalog/mass/staticfilter.phtml"/>
 				<block type="zolagocatalog/vendor_mass_editor" name="editor" as="editor" template="zolagocatalog/mass/editor.phtml"/>
 			</block>
