@@ -27,10 +27,6 @@
                                 <?php endif;?>
                             <?php endforeach; ?>
                             <?php endif; ?>
-                    <?php else: ?>
-                        <?php if($this->getCanShowItem($item, $count)): ?>
-                            <dd><a data-params="<?php echo $this->getItemJson($item);?>" href="<?php echo $this->getItemUrl($item) ?>" class="simpleChild"><span><?php echo $this->getItemText($item); ?></span>&nbsp;<span class="suffix">(<?php echo $count ?>)</span></a></dd>
-                        <?php endif;?>
                     <?php endif; ?>
                 <?php endforeach; ?>
                 </dl>
