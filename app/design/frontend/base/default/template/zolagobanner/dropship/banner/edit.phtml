@@ -14,6 +14,10 @@
         toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
     });
 </script>
+<?php
+$config = $this->getTypeConfiguration();
+$picturesNumber = (int)$config->pictures_number;
+?>
 
 <div class="container">
 	<div class="page-heading row">
@@ -70,62 +74,77 @@
     jQuery(function ($) {
         var form = $("#edit-banner");
         new Zolago.formIntegrator(form);
+        var ruleResolution = {
+            imageResolution: 1
+        };
+        var ruleResolutionReq = {
+            required: true
+        };
+
+        var picturesNumber = '<?php echo $picturesNumber; ?>';
+
+        var rulesEx = {};
+        if(parseInt(picturesNumber) > 0){
+            for (var i = 1; i <= 2; i++) {
+                val = "image["+i+"]";
+                val1 = "image["+i+"][value]";
+                rulesEx[val] = ruleResolution;
+                rulesEx[val1] = ruleResolutionReq;
+            }
+        }
+
         form.validate(
-//            {
-//            rules: {
-//                "image[1]": {
-//                    imageResolution: 10
-//                }
-//            }
-//        }
+            {
+                rules: rulesEx
+            }
         );
 
 
 
         changeDependingSelectorHandler('slider_type');
 
-//        function readImage(input, file, thumb, id) {
-//
-//            var reader = new FileReader();
-//            var image  = new Image();
-//
-//            reader.readAsDataURL(file);
-//            reader.onload = function(_file) {
-//                image.src    = _file.target.result;              // url.createObjectURL(file);
-//                image.onload = function() {
-//                    $(input).data('resolution', 0);
-//                    var restrictH = parseInt($(input).data("restricth"));
-//                    var restrictW = parseInt($(input).data("restrictw"));
-//                    if(parseInt(this.width)-restrictW !=0 && parseInt(this.height)-restrictH !=0){
-//                        $(input).data('resolution', 0);
-//                    } else {
-//                        $(input).data('resolution', 1);
-//                        var id = $(input).attr('id');
-//                        var thumbPlace = $(input).parents('.banner-image-container').find('.banner-thumbnail');
-//
-//                        var preview = '<div class="banner-thumbnail"><a href="' +this.src+ '" '
-//                            + ' onclick="imagePreview(\''+id+'_image\'); return false;">'
-//                            + '<img src="' + this.src + '" id="'+id+'_image" title="title"'
-//                            + ' alt="title" height="50" width="50" class="small-image-preview v-middle" />'
-//                            + '</a> </div>';
-//
-//                        thumbPlace.replaceWith(preview);
-//                    }
-//
-//
-//                };
-//                image.onerror= function() {
-//                    alert('Invalid file type: '+ file.type);
-//                };
-//            };
-//
-//        }
-//        $("input[type=file][id^=image_]").change(function (e) {
-//            if(this.disabled) return alert('File upload not supported!');
-//            var F = this.files;
-//            console.log(F);
-//            readImage($(this), F[0]);
-//        });
+        function readImage(input, file) {
+
+            var reader = new FileReader();
+            var image  = new Image();
+
+            reader.readAsDataURL(file);
+            reader.onload = function(_file) {
+                image.src    = _file.target.result;              // url.createObjectURL(file);
+                image.onload = function() {
+                    $(input).data('resolution', 0);
+                    var restrictH = parseInt($(input).data("restricth"));
+                    var restrictW = parseInt($(input).data("restrictw"));
+                    if(parseInt(this.width)-restrictW !=0 && parseInt(this.height)-restrictH !=0){
+                        $(input).data('resolution', 0);
+                    } else {
+                        $(input).data('resolution', 1);
+                        var id = $(input).attr('id');
+                        var thumbPlace = $(input).parents('.banner-image-container').find('.banner-thumbnail');
+
+                        var preview = '<a href="' +this.src+ '" '
+                            + ' onclick="imagePreview(\''+id+'_image\'); return false;">'
+                            + '<img src="' + this.src + '" id="'+id+'_image" title="'+this.src+'"'
+                            + ' alt="'+this.src+'" height="200" width="200" class="small-image-preview v-middle" />'
+                            + '</a>';
+
+                        $(input).parents('.banner-image-container').find('input[type=text]').val(this.src);
+                        thumbPlace.html(preview);
+                    }
+
+
+                };
+                image.onerror= function() {
+                    alert('Invalid file type: '+ file.type);
+                };
+            };
+
+        }
+        $("input[type=file][id^=image_]").change(function (e) {
+            if(this.disabled) return alert('File upload not supported!');
+            var F = this.files;
+            readImage($(this), F[0]);
+        });
 
 
     });
