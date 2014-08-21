@@ -211,7 +211,7 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 				"url"	 => $this->getUrl('udropship/pos')
 			);
 		}
-		
+        /*		
 		if($this->getVendor()->getAllowTiershipModify() && $this->isAllowed("udtiership")){
 			$groupOne[] = array(
 				"active" => $this->isActive("tiership_rates"),
@@ -220,7 +220,7 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 				"url"	 => $this->getUrl('udtiership/vendor/rates')
 			);
 		}
-		
+		*/
 		$grouped = $this->_processGroups($groupOne);
 		
 		if(count($grouped)){
