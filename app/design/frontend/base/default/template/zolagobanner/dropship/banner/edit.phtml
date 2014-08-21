@@ -17,6 +17,8 @@
 <?php
 $config = $this->getTypeConfiguration();
 $picturesNumber = (int)$config->pictures_number;
+$captionMaxSymbols = (int)$config->caption_max_symbols;
+$captionsNumber = (int)$config->captions_number;
 ?>
 
 <div class="container">
@@ -84,14 +86,26 @@ $picturesNumber = (int)$config->pictures_number;
         var picturesNumber = '<?php echo $picturesNumber; ?>';
 
         var rulesEx = {};
+
         if(parseInt(picturesNumber) > 0){
-            for (var i = 1; i <= 2; i++) {
+            var val, val1;
+            for (var i = 1; i <= picturesNumber; i++) {
                 val = "image["+i+"]";
                 val1 = "image["+i+"][value]";
                 rulesEx[val] = ruleResolution;
                 rulesEx[val1] = ruleResolutionReq;
             }
         }
+        var captionMaxSymbols = '<?php echo $captionMaxSymbols; ?>';
+        var captionsNumber = '<?php echo $captionsNumber; ?>';
+        if(parseInt(captionMaxSymbols) > 0 && parseInt(captionsNumber) > 0){
+            var val3;
+            for (var l = 1; l <= captionsNumber; l++) {
+                val3 = "caption_text["+l+"]";
+                rulesEx[val3] = {maxlength: captionMaxSymbols};
+            }
+        }
+
 
         form.validate(
             {
