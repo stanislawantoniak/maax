@@ -100,6 +100,7 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
 
     private function _prepareContentDataToSet($contentData){
         $data = array();
+
         if($contentData){
             if($contentData['show'] == Zolago_Banner_Model_Banner_Show::BANNER_SHOW_IMAGE){
                 $image = unserialize($contentData['image']);
@@ -158,7 +159,7 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
         $bannerContent->addField("show", "hidden", array(
             "name" => "show"
         ));
-
+        $bannerContent->addType("thumb","Zolago_Banner_Varien_Data_Form_Element_Thumbnail");
         switch ($data->show_as) {
             case Zolago_Banner_Model_Banner_Show::BANNER_SHOW_IMAGE:
                 $picturesNumber = $data->pictures_number;
@@ -168,8 +169,8 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
                     foreach ($data->picture as $n => $picture) {
                         $pictureW = (isset($picture->pictures_w) && !empty($picture->pictures_w)) ? $picture->pictures_w : "-";
                         $pictureH = (isset($picture->pictures_h) && !empty($picture->pictures_h)) ? $picture->pictures_h : "-";
-                        Mage::log($pictureW);
-                        Mage::log($pictureH);
+
+
                         $imageOptions = array(
                             "name" => "image[" . $n . "]",
                             "class" => "form-control",
@@ -180,16 +181,16 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
                         if ((isset($picture->pictures_w) && !empty($picture->pictures_w))
                             && (isset($picture->pictures_h) && !empty($picture->pictures_h))
                         ) {
-                            $afterImageElementHtml = "<p><span class='glyphicon glyphicon-exclamation-sign'> Width: {$pictureW}px Height: {$pictureH}px</span></p>";
+                            $afterImageElementHtml = "<p><span class='glyphicon glyphicon-exclamation-sign'> ".$helper->__('Width').": {$pictureW}px ".$helper->__('Height').": {$pictureH}px</span></p>";
                             $imageOptions = array_merge($imageOptions,
                                 array(
                                      'after_element_html' => $afterImageElementHtml
                                 )
                             );
                         }
-                        $bannerContent->addType('thumbnail','Zolago_Banner_Varien_Data_Form_Element_Thumbnail');
 
-                        $bannerContent->addField("image_" . $n, "thumbnail", $imageOptions);
+
+                        $bannerContent->addField("image_" . $n, "thumb", $imageOptions);
 
                         $bannerContent->addField("image_url_" . $n, "text", array(
                             "name" => "image_url[" . $n . "]",
@@ -222,10 +223,10 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
                         $captionMaxSymbols = (isset($data->caption_max_symbols) && $data->caption_max_symbols > 0) ? $data->caption_max_symbols : FALSE;
 
                         if ($captionMaxSymbols) {
-                            $afterElementHtml = '<p><span class="glyphicon glyphicon-exclamation-sign"></span> '  . 'Max length is ' . $captionMaxSymbols . '</p>';
+                            $afterElementHtml = '<p><span class="glyphicon glyphicon-exclamation-sign"></span> '  . $helper->__('Max length is ') . $captionMaxSymbols . '</p>';
                             $captionOptions = array_merge($captionOptions,
                                 array(
-                                    'maxlength' => $captionMaxSymbols,
+                                    //'maxlength' => $captionMaxSymbols,
                                     'after_element_html' => $afterElementHtml
                                 )
                             );
