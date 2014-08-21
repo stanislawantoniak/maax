@@ -3429,7 +3429,7 @@ html.fb-static .fb-slidebar, .fb-slidebar.fb-static {
 /* line 262, ../sass/layout/modules/_gallery_product.scss */
 #product-gallery .item > div .view_lupa {
   position: absolute;
-  top: 355px;
+  top: 88%;
   right: 10px;
   z-index: 900; }
 @media (max-width: 361px) {
