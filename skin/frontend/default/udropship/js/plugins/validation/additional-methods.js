@@ -126,6 +126,22 @@ jQuery.validator.addMethod("imageResolution", function(value, element) {
     var resolution = jQuery(element).data("resolution");
     return resolution;
 }, "Wrong image resolution");
+
+jQuery.validator.addMethod("imageRequired", function (value, element) {
+    var F = element.files;
+    var result;
+    var id = jQuery(element).attr('id');
+
+    var value = jQuery(element).parents('.banner-image-container').find('input[id="' + id + '_value"]').val(); //image set
+    var imageUploaded = jQuery.type(F[0]) !=="undefined";
+
+    result = 0;
+
+    if (value.length > 0  || imageUploaded) {
+        result = 1;
+    }
+    return result;
+}, "Image is required");
 /**
  * Return true, if the value is a valid vehicle identification number (VIN).
  *

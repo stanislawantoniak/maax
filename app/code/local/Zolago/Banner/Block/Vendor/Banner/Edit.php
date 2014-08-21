@@ -123,6 +123,7 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
                 $data['banner_html'] = $contentData['html'];
             }
         }
+
         return $data;
 
     }
