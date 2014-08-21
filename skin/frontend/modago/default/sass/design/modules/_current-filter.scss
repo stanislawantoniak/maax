@@ -1,0 +1,63 @@
+#view-current-filter {
+	
+	h1 {
+		text-transform: uppercase;
+		@media (max-width: $screen-sm-min) { 
+			font-size: 18px;
+		 }
+	}
+	dl {
+	    dt {
+	        text-transform:uppercase;
+	        line-height: 20px;
+	        font-weight:normal;
+	        @media (max-width: $screen-sm-min) { 
+			font-weight:normal;
+		 }
+	    }
+	    dd {	        
+	        .label {
+	            color:#000;
+	            font-size: 12px;
+	            text-align: left;
+	            line-height:20px;
+	            border:1px solid #ededed;
+	            font-weight: normal;
+	        }
+	            .fa {
+	                color:#949494;
+	                font-size: 11px;
+	            }
+	             &:hover {
+	                .fa {
+	                    cursor:pointer;
+	                 }
+	             }
+	        
+	        &.action {
+	        	@include border-radius(3px);
+	        }
+	    }   
+	}
+	.actionViewFilter {
+		white-space: nowrap;
+		-webkit-border-top-right-radius: 5px!important;
+		-webkit-border-bottom-right-radius: 5px!important;
+		-moz-border-radius-topright: 5px!important;
+		-moz-border-radius-bottomright: 5px!important;
+		border-top-right-radius: 5px!important;
+		border-bottom-right-radius: 5px!important;
+
+		-webkit-border-top-left-radius: 0px!important;
+		-webkit-border-bottom-left-radius: 0px!important;
+		-moz-border-radius-topleft: 0px!important;
+		-moz-border-radius-bottomleft: 0px!important;
+		border-top-left-radius: 0px!important;
+		border-bottom-left-radius: 0px!important;		
+	}
+	.backToCategory {  
+		text-decoration: underline; 
+		font-size: 12px; 		
+	        }
+}
+

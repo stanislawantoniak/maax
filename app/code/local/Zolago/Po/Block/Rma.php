@@ -27,7 +27,6 @@ class Zolago_Po_Block_Rma extends Mage_Core_Block_Template
             // remove po without shipment
             $out = array();
             foreach ($collection as $po) {
-            	
                 if ($po->getLastNotCanceledShipment() && $po->canBeReturned()) {
                     $this->_poList[] = $po;
                 }

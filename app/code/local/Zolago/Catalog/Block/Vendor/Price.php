@@ -2,7 +2,96 @@
 
 class Zolago_Catalog_Block_Vendor_Price extends Mage_Core_Block_Template
 {
+	/**
+	 * 
+	 * @return string
+	 */
+	public function getAttributeSourceJson() {
+		
+		$campaign =  Mage::getResourceModel("zolagocampaign/campaign_collection");
+		/* @var $campaign Zolago_Campaign_Model_Resource_Campaign_Collection */
+		$campaign->addVendorFilter($this->getVendor());
+		
+		$priceType = Mage::getSingleton('eav/config')->getAttribute(
+			Mage_Catalog_Model_Product::ENTITY,
+			Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER_PRICE_TYPE_CODE
+		);
+		$priceType->setStoreId($this->getCurrentStoreId());
+		/* @var $priceType Mage_Catalog_Model_Resource_Eav_Attribute */
+		
+		$status = Mage::getSingleton('eav/config')->getAttribute(
+			Mage_Catalog_Model_Product::ENTITY,
+			"status"
+		);
+		$status->setStoreId($this->getCurrentStoreId());
+		/* @var $priceType Mage_Catalog_Model_Resource_Eav_Attribute */
+		
+		$typeModel = Mage::getSingleton('catalog/product_type');
+		
+		
+		$flags = Mage::getSingleton('eav/config')->getAttribute(
+			Mage_Catalog_Model_Product::ENTITY,
+			"product_flag"
+		);
+		$flags->setStoreId($this->getCurrentStoreId());
+		
+		$bool = Mage::getSingleton("eav/entity_attribute_source_boolean");
+		/* @var $bool Mage_Eav_Model_Entity_Attribute_Source_Boolean */
+		
+		$source=array(
+			"campaign_regular_id"	=> $this->_clearEmpty($campaign->toOptionArray()),
+			"converter_price_type"	=> $this->_clearEmpty($priceType->getSource()->getAllOptions(false)),
+			"status"				=> $this->_clearEmpty($status->getSource()->getAllOptions(false)),
+			"type_id"				=> $this->_clearEmpty($typeModel::getAllOptions()),
+			"product_flag"			=> $this->_clearEmpty($flags->getSource()->getAllOptions(false)),
+			"bool"					=> $this->_clearEmpty($bool->getAllOptions())
+		);
+		
+		
+		return Mage::helper("core")->jsonEncode($source);
+	}
 	
+	/**
+	 * @param array $array
+	 * @return array
+	 */
+	protected function _clearEmpty($array) {
+		foreach($array as $key=>$item){
+			if($item['value']===""){
+				unset($array[$key]);
+			}
+		}
+		return array_values($array);
+	}
+
+
+	/**
+	 * @return array
+	 */
+	public function getAllowedStores() {
+		return Mage::helper("zolagodropship")->getAllowedStores($this->getVendor());
+	}
+	
+	/**
+	 * @return int
+	 */
+	public function getCurrentStoreId() {
+		return Mage::app()->getRequest()->getParam('store_id', $this->getDefaultStoreId());
+	}
+	
+	/**
+	 * @return id
+	 */
+	public function getDefaultStoreId() {
+		if($this->getVendor()->getLabelStore()){
+			return $this->getVendor()->getLabelStore();
+		}
+		$allowed = $this->getAllowedStores();
+		if($allowed){
+			return $allowed[0]->getId();
+		}
+		throw new Mage_Core_Exception("No store defined");
+	}
 	
 	/**
 	 * @return Unirgy_Dropship_Model_Vendor

@@ -12,6 +12,12 @@
                 <po_open_order>0,11,9,5,4,3,11</po_open_order>
             </config>
         </zolagocatalog>
+		
+		<cataloginventory>
+			<options>
+				<include_not_salable>1</include_not_salable>
+            </options>
+		</cataloginventory>
     </default>
     <global>
         <models>
@@ -62,6 +68,7 @@
 					<breadcrumbs>Zolago_Catalog_Block_Breadcrumbs</breadcrumbs>
 					<product_view>Zolago_Catalog_Block_Product_View</product_view>
                     <product_view_attributes>Zolago_Catalog_Block_Product_View_Attributes</product_view_attributes>
+					<product_view_type_configurable>Zolago_Catalog_Block_Product_View_Type_Configurable</product_view_type_configurable>
 				</rewrite>
 			</catalog>
         </blocks>
@@ -69,6 +76,7 @@
             <zolagocatalog_setup>
                 <setup>
                     <module>Zolago_Catalog</module>
+                    <class>Zolago_Catalog_Model_Resource_Setup</class>
                 </setup>
                 <connection>
                     <use>core_setup</use>
@@ -94,6 +102,14 @@
                     </zolago_catalog_converter_mass>
                 </observers>
             </catalog_product_attribute_update_after>
+            <adminhtml_catalog_product_attribute_edit_prepare_form>
+                <observers>
+                    <add_column_width_field>
+                        <class>zolagocatalog/observer</class>
+                        <method>addColumnWidthField</method>
+                    </add_column_width_field>
+                </observers>
+            </adminhtml_catalog_product_attribute_edit_prepare_form>
         </events>
     </global>
     <frontend>

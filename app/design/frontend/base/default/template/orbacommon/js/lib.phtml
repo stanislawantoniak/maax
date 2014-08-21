@@ -2,55 +2,55 @@ var OrbaLib = {
 	Wishlist: {
 		/** @todo add form_key **/
 		add: function(data, callback) {
-            OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_wishlist/add'); ?>', data, callback, 'GET');
+            OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_wishlist/add', array('_secure' => Mage::app()->getFrontController()->getRequest()->isSecure())); ?>', data, callback, 'GET');
         },
 		remove: function(data, callback) {
-            OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_wishlist/remove'); ?>', data, callback, 'GET');
+            OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_wishlist/remove', array('_secure' => Mage::app()->getFrontController()->getRequest()->isSecure())); ?>', data, callback, 'GET');
         },
 	},
 	Customer: {
 		getAccountInformation: function(data, callback) {
-            OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_customer/get_account_information'); ?>', data, callback, 'GET');
+            OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_customer/get_account_information', array('_secure' => Mage::app()->getFrontController()->getRequest()->isSecure())); ?>', data, callback, 'GET');
         }
 	},
 	Listing: {
 		getBlocks: function(data, callback) {
-            OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_listing/get_blocks'); ?>', data, callback, 'GET');
+            OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_listing/get_blocks', array('_secure' => Mage::app()->getFrontController()->getRequest()->isSecure())); ?>', data, callback, 'GET');
         },
 		getProducts: function(data, callback) {
-            OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_listing/get_products'); ?>', data, callback, 'GET');
-        },
+            OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_listing/get_products', array('_secure' => Mage::app()->getFrontController()->getRequest()->isSecure())); ?>', data, callback, 'GET');
+        }
 	},
     Product: {
     	getRecentlyViewed: function(data, callback) {
-            OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_product/get_recently_viewed'); ?>', data, callback, 'GET');
+            OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_product/get_recently_viewed', array('_secure' => Mage::app()->getFrontController()->getRequest()->isSecure())); ?>', data, callback, 'GET');
         },
         getOne: function(data, callback) {
-            OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_product/get_one'); ?>', data, callback, 'GET');
+            OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_product/get_one', array('_secure' => Mage::app()->getFrontController()->getRequest()->isSecure())); ?>', data, callback, 'GET');
         },
         getMany: function(data, callback) {
-            OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_product/get_many'); ?>', data, callback, 'GET');
+            OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_product/get_many', array('_secure' => Mage::app()->getFrontController()->getRequest()->isSecure())); ?>', data, callback, 'GET');
         }
     },
     Cart: {
         get: function(data, callback) {
-            OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_cart/get'); ?>', data, callback, 'GET');
+            OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_cart/get', array('_secure' => Mage::app()->getFrontController()->getRequest()->isSecure())); ?>', data, callback, 'GET');
         },
         add: function(data, callback) {
-            OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_cart/add'); ?>', data, callback, 'POST');
+            OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_cart/add', array('_secure' => Mage::app()->getFrontController()->getRequest()->isSecure())); ?>', data, callback, 'POST');
         },
         update: function(data, callback) {
-            OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_cart/update'); ?>', data, callback, 'POST');
+            OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_cart/update', array('_secure' => Mage::app()->getFrontController()->getRequest()->isSecure())); ?>', data, callback, 'POST');
         },
         remove: function(data, callback) {
-            OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_cart/remove'); ?>', data, callback, 'POST');
+            OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_cart/remove', array('_secure' => Mage::app()->getFrontController()->getRequest()->isSecure())); ?>', data, callback, 'POST');
         },
         Coupon: {
             add: function(data, callback) {
-                OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_cart_coupon/add'); ?>', data, callback, 'POST');
+                OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_cart_coupon/add', array('_secure' => Mage::app()->getFrontController()->getRequest()->isSecure())); ?>', data, callback, 'POST');
             },
             remove: function(data, callback) {
-                OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_cart_coupon/remove'); ?>', data, callback, 'POST');
+                OrbaLib._ajax('<?php echo Mage::getUrl('orbacommon/ajax_cart_coupon/remove', array('_secure' => Mage::app()->getFrontController()->getRequest()->isSecure())); ?>', data, callback, 'POST');
             }
         }
     },

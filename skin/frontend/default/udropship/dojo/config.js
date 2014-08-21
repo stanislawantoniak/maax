@@ -13,7 +13,7 @@ var dojoConfig;
 			{ name: 'dgrid', location: baseUrl + 'dgrid' },
 			{ name: 'xstyle', location: baseUrl + 'xstyle' },
 			{ name: 'put-selector', location: baseUrl + 'put-selector' },
-			{ name: 'catalog', location: baseUrl + 'catalog' }
+			{ name: 'vendor', location: baseUrl + 'vendor' }
 		]
 	};
 }());

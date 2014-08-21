@@ -1,0 +1,18 @@
+.popular-shops {   
+    .pop-shop-lst {
+        vertical-align: top;
+        >li {
+            >a {
+                >span.pop-shop-img-wr {
+                    line-height: 74px;
+                }
+            }
+            >a:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+}
+.pop-shop-seemore {
+    line-height: 38px;
+}

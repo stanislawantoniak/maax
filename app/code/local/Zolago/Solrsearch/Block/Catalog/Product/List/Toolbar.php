@@ -36,7 +36,7 @@ class Zolago_Solrsearch_Block_Catalog_Product_List_Toolbar extends Mage_Core_Blo
 	 * @return array
 	 */
 	public function getSortUrl($option) {
-		return $this->getPagerUrl(array("order"=>$option['value'], "dir"=>$option['dir']));
+		return $this->getPagerUrl(array("sort"=>$option['value'], "dir"=>$option['dir']));
 	}
 	
 	/**

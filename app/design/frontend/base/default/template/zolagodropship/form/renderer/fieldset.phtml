@@ -1,7 +1,13 @@
 <?php
 $element = $this->getElement(); //->getElements()->getIterator();
+$attrData = $element->getAttrData();
 ?>
-<div class="widget box"> 
+<div class="widget box <?php echo $element->getClass(); ?>"
+    <?php if (!empty($attrData)): ?>
+        <?php foreach ($attrData as $data): ?>
+            data-<?php echo $data->name; ?>="<?php echo $data->value; ?>"
+        <?php endforeach; ?>
+    <?php endif; ?>>
 	<div class="widget-header"> 
 		<h4>
 			<i class="icon-reorder"></i> 

@@ -112,11 +112,6 @@ $cmsNavigationBlocks = array(
                                 </a>
                             </div>
                         </div>
-
-                        <div class="customNavigation">
-                            <a class="prev"><i class="fa fa-chevron-left"></i></a>
-                            <a class="next"><i class="fa fa-chevron-right"></i></a>
-                        </div>
                     </div>
                 </section>
                 <!-- END:/ BLOCK INSPIRACJE -->

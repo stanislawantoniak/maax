@@ -19,8 +19,10 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
      *
      * @return array
      */
-    public function getConfigurableMinPrice($configurableProductsIds = array(), $storeId = 0)
+    public function getConfigurableMinPrice($configurableProductsIds = array(), $storeId = 0, $hash = '')
     {
+        Mage::log('configurableProductsIds', 0, "configurable_update_{$hash}_getConfigurableMinPrice.log");
+        Mage::log($configurableProductsIds, 0, "configurable_update_{$hash}_getConfigurableMinPrice.log");
         $result = array();
 
 
@@ -67,7 +69,8 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         $select->group('product_relation.parent_id');
 
         $result = $adapter->fetchAssoc($select);
-
+        Mage::log('getConfigurableMinPrice result', 0, "configurable_update_{$hash}_getConfigurableMinPrice.log");
+        Mage::log($result, 0, "configurable_update_{$hash}_getConfigurableMinPrice.log");
 
         return $result;
     }
@@ -193,8 +196,9 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
     public function insertProductSuperAttributePricing(
         $productConfigurableId, $superAttributeId, $productMinPrice, $store
     ) {
+        Mage::log('_getProductRelationPricesSizes', 0, 'configurable_update.log');
         $productRelations = $this->_getProductRelationPricesSizes($productConfigurableId, $store);
-
+        Mage::log($productRelations, 0, 'configurable_update.log');
         if (!empty($productRelations)) {
             $insert = array();
             foreach ($productRelations as $productRelation) {
@@ -207,6 +211,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
 
                 $insert[] = "({$superAttributeId},{$size},{$priceIncrement},{$website})";
             }
+
             if (!empty($insert)) {
                 $lineQuery = implode(",", $insert);
 

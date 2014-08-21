@@ -1,0 +1,114 @@
+<?xml version="1.0"?>
+<jstranslator>
+    <price-name translate="message" module="zolagocatalog">
+        <message>Name</message>
+    </price-name>
+    <price-price translate="message" module="zolagocatalog">
+        <message>Price</message>
+    </price-price>
+    <price-from translate="message" module="zolagocatalog">
+        <message>From</message>
+    </price-from>
+    <price-to translate="message" module="zolagocatalog">
+        <message>To</message>
+    </price-to>
+    <price-price-type translate="message" module="zolagocatalog">
+        <message>Price type</message>
+    </price-price-type>
+    <price-margin translate="message" module="zolagocatalog">
+        <message>Margin</message>
+    </price-margin>
+    <price-price-source translate="message" module="zolagocatalog">
+        <message>Price source</message>
+    </price-price-source>
+    <price-msrp translate="message" module="zolagocatalog">
+        <message>Msrp</message>
+    </price-msrp>
+    <price-new translate="message" module="zolagocatalog">
+        <message>New</message>
+    </price-new>
+    <price-best translate="message" module="zolagocatalog">
+        <message>Best</message>
+    </price-best>
+    <price-flag translate="message" module="zolagocatalog">
+        <message>Flag</message>
+    </price-flag>
+    <price-in-stock translate="message" module="zolagocatalog">
+        <message>In stock</message>
+    </price-in-stock>
+    <price-variants translate="message" module="zolagocatalog">
+        <message>Variants</message>
+    </price-variants>
+    <price-stock-qty translate="message" module="zolagocatalog">
+        <message>Stock Qty</message>
+    </price-stock-qty>
+    <price-status translate="message" module="zolagocatalog">
+        <message>Status</message>
+    </price-status>
+    <price-type translate="message" module="zolagocatalog">
+        <message>Type</message>
+    </price-type>
+    <price-loading translate="message" module="zolagocatalog">
+        <message>Loading...</message>
+    </price-loading>
+    <price-child-products translate="message" module="zolagocatalog">
+        <message>Child products</message>
+    </price-child-products>
+    <price-price-variation translate="message" module="zolagocatalog">
+        <message>Price Variation</message>
+    </price-price-variation>
+    <price-pos-stock translate="message" module="zolagocatalog">
+        <message>POS Stock</message>
+    </price-pos-stock>
+    <price-view-pos-stock translate="message" module="zolagocatalog">
+        <message>View POS Stock</message>
+    </price-view-pos-stock>
+    <price-yes translate="message" module="zolagocatalog">
+        <message>Yes</message>
+    </price-yes>
+    <price-no translate="message" module="zolagocatalog">
+        <message>No</message>
+    </price-no>
+    <price-change-prices translate="message" module="zolagocatalog">
+        <message>Change prices</message>
+    </price-change-prices>
+    <price-campaign-price translate="message" module="zolagocatalog">
+        <message>Camapign price</message>
+    </price-campaign-price>
+    <price-regular-price translate="message" module="zolagocatalog">
+        <message>Regular price</message>
+    </price-regular-price>
+    <price-remove-form-campaign translate="message" module="zolagocatalog">
+        <message>Remove from campaign</message>
+    </price-remove-form-campaign>
+    <price-sale translate="message" module="zolagocatalog">
+        <message>Sale</message>
+    </price-sale>
+    <price-promotion translate="message" module="zolagocatalog">
+        <message>Promotion</message>
+    </price-promotion>
+    <price-inactive translate="message" module="zolagocatalog">
+        <message>Inactive</message>
+    </price-inactive>
+    <price-active translate="message" module="zolagocatalog">
+        <message>Active</message>
+    </price-active>
+    <price-archive translate="message" module="zolagocatalog">
+        <message>Archive</message>
+    </price-archive>
+    <price-change-product-price translate="message" module="zolagocatalog">
+        <message>Change product price</message>
+    </price-change-product-price>
+    <price-change-product-price-name translate="message" module="zolagocatalog">
+        <message>Change product price {{name}}</message>
+    </price-change-product-price-name>
+    <price-converter-source translate="message" module="zolagocatalog">
+        <message>The converter price of product or one of child product is not available</message>
+    </price-converter-source>
+    <price-stock-of translate="message" module="zolagocatalog">
+        <message>Stock of {{name}}</message>
+    </price-stock-of>
+    <price-close translate="message" module="zolagocatalog">
+        <message>Close</message>
+    </price-close>
+</jstranslator>

@@ -34,7 +34,11 @@
             $("use_dhl").observe("change", function(e){
 				posControl.enableDhl($F(e.target)=="1");
 			});
+            $("use_orbaups").observe("change", function(e){
+				posControl.enableUps($F(e.target)=="1");
+			});
 			posControl.enableDhl($F("use_dhl")=="1");
+			posControl.enableUps($F("use_orbaups")=="1");
             updater.update();
         },
         save: function() {
@@ -62,7 +66,35 @@
 		enableDhl: function(state){
 				var login = $("dhl_login"),
 					password = $("dhl_password"),
-					account = $("dhl_account");
+					account = $("dhl_account"),
+					ecas	= $("dhl_ecas"),
+					terminal =$("dhl_terminal");
+					
+			
+				if(!!state){
+					login.className += " required-entry";
+					login.up('tr').show();
+					password.className += " required-entry";
+					password.up('tr').show();
+					account.className += " required-entry";
+					account.up('tr').show();
+					ecas.up('tr').show();
+					terminal.up('tr').show();
+				}else{
+					login.className = login.className.replace(/\srequired-entry/g, "");
+					login.up('tr').hide();
+					password.className = password.className.replace(/\srequired-entry/g, "");
+					password.up('tr').hide();
+					account.className = account.className.replace(/\srequired-entry/g, "");
+					account.up('tr').hide();
+					ecas.up('tr').hide();
+					terminal.up('tr').hide();
+				}
+		},
+		enableUps: function(state){
+				var login = $("orbaups_login"),
+					password = $("orbaups_password"),
+					account = $("orbaups_account");
 					
 			
 				if(!!state){
@@ -80,7 +112,7 @@
 					account.className = account.className.replace(/\srequired-entry/g, "");
 					account.up('tr').hide();
 				}
-			}
+		}
     };
     posControl.init();
     

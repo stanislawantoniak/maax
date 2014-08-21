@@ -25,6 +25,7 @@
  */
 ?>
 <?php /* @var $this Mage_Review_Block_Product_View */ ?>
+<?php /* @var $this Zolago_Modago_Block_Review_Product_View_List */ ?>
 <?php
 /**
  * Author: Paweł Chyl <pawel.chyl@orba.pl>
@@ -33,7 +34,7 @@
 ?>
 <?php
 // review label
-$_reviewsCount = count($this->getReviewsCollection());
+$_reviewsCount = count($this->getReviewsForProduct());
 $_reviewsLabel = '';
 switch($_reviewsCount) {
     case 0:
@@ -51,46 +52,13 @@ switch($_reviewsCount) {
         $_reviewsLabel = $this->__('Zero reviews');
         break;
 }
-// avarage rating
-$reviews = Mage::getModel('review/review')->getResourceCollection()->addStoreFilter(Mage::app()->getStore()->getId())
-    ->addEntityFilter('product', $this->getProduct()->getId())
-    ->addStatusFilter(Mage_Review_Model_Review::STATUS_APPROVED)
-    ->setDateOrder()
-    ->addRateVotes();
-
-$avg = 0;
-$ratings = array();
-$v = array();
-$p = array_fill(1, 5, 0);
-$voteCount = 0;
-/** @var $vote Mage_Rating_Model_Rating_Option_Vote */
-foreach ($reviews as $review) {
-    foreach ($review->getRatingVotes() as $vote) {
-        $voteCount++;
-        $ratings[] = $vote->getPercent();
-        if(array_key_exists($vote->getRatingCode(), $v)) {
-            $v[$vote->getRatingCode()] += $vote->getPercent();
-        } else  {
-            $v[$vote->getRatingCode()] = $vote->getPercent();
-        }
-
-        if(array_key_exists($vote->getPercent()/10/2, $p)) {
-            $p[$vote->getPercent()/10/2]++;
-        } else {
-            $p[$vote->getPercent()/10/2] = 1;
-        }
-    }
-
-}
-krsort($p);
-$avg = count($ratings) > 0 ? ceil(array_sum($ratings)/count($ratings)/10/2) : 0;
 ?>
 
 <section id="note_product" class="section toggle-xs bg-w clearfix">
     <header>
         <h2 class="title_section"><?php echo $this->__("Product reviews"); ?> <i class="bullet-strzalka-down visible-xs"></i>
         <span id="average_note_client" class="visible-xs">
-            <span class="note" data-number="5" data-score="<?php echo $avg; ?>"></span>
+            <span class="note" data-number="5" data-score="<?php echo $this->getAvarageRating(); ?>"></span>
             <span>(<?php echo $_reviewsCount; ?> <?php echo $_reviewsLabel; ?>)</span>
         </span>
         </h2>
@@ -102,17 +70,17 @@ $avg = count($ratings) > 0 ? ceil(array_sum($ratings)/count($ratings)/10/2) : 0;
                 <div class="row">
                     <div class="col-sm-5">
                         <dl class="raty_note">
-                            <dt><strong><?php echo $this->__("Avarage"); ?>:</strong><div id="average_rating" data-number="5" data-score="<?php echo $avg; ?>"></div></dt>
-                            <?php foreach($v as $k => $_vote) : ?>
-                                <dd><strong><?php echo $k; ?></strong> <div id ="<?php echo $k; ?>_rating" data-number="5" data-score="<?php echo ceil($_vote/count($ratings)/10); ?>"></div></dd>
+                            <dt><strong><?php echo $this->__("Avarage"); ?>:</strong><div id="average_rating" data-number="5" data-score="<?php echo $this->getAvarageRating(); ?>"></div></dt>
+                            <?php foreach($this->getRatingsAvarage() as $k => $v) : ?>
+                                <dd><strong><?php echo $k; ?></strong> <div id ="<?php echo $k; ?>_rating" data-number="5" data-score="<?php echo $v['avg']; ?>"></div></dd>
                             <?php endforeach; ?>
                         </dl>
                     </div>
                     <div class="col-md-4 col-sm-5">
                         <dl class="rating_note">
                             <dt><?php echo $this->__("Product reviews count"); ?>: <span><?php echo $_reviewsCount; ?><span></dt>
-                            <?php foreach($p as $k => $v) : ?>
-                                <dd><span class="prefix"><?php echo $this->__("rating"); ?> <?php echo $k; ?>/5</span><span class="rating" data-percent="<?php echo $voteCount > 0 ? ceil($v / $voteCount * 100) : 0; ?>"><span></span></span><span class="suffix"><?php echo $v; ?></span></dd>
+                            <?php foreach($this->getStripsRatings() as $k => $v) : ?>
+                                <dd><span class="prefix"><?php echo $this->__("rating"); ?> <?php echo $k; ?>/5</span><span class="rating" data-percent="<?php echo $v; ?>"><span></span></span><span class="suffix"><?php echo (int) ($v * $_reviewsCount / 100); ?></span></dd>
                             <?php endforeach; ?>
                         </dl>
                     </div>
@@ -121,6 +89,7 @@ $avg = count($ratings) > 0 ? ceil(array_sum($ratings)/count($ratings)/10/2) : 0;
             <div class="add_opinion col-md-3 col-sm-12 hidden-xs">
                 <p><?php echo $this->__("Share your review with other users"); ?><br><a href="#block-review-form" class="btn black viewFormComments"><span class="ico ico_note"></span> <?php echo $this->__("Add your review"); ?></a></p>
             </div>
+            <a href="#block-review-form" class="btn black viewFormComments visible-xs"><span class="ico ico_note"></span> <?php echo $this->__("Add your review"); ?></a>
         </div>
 
     </div>
@@ -128,20 +97,19 @@ $avg = count($ratings) > 0 ? ceil(array_sum($ratings)/count($ratings)/10/2) : 0;
     <div class="main clearfix">
         <div class="col-sm-12" id="comments">
             <div class="row">
-                <?php foreach($this->getReviewsCollection()->getItems() as $review) : ?>
+                <?php foreach($this->getReviewsForProduct() as $review) : ?>
                     <?php
-                    $ratingModel = Mage::getSingleton('rating/rating')->getReviewSummary($review->getReviewId());
-                    $sum = ceil($ratingModel->getSum()/10/3/2);
+                    $avgReview = $this->getSingleReviewAvarage($review);
                     $recommend = $review->getRecommendProduct();
                     ?>
                     <div class="comment row">
                         <div class="wrapper-header col-sm-6">
                             <div class="header">
-                                <div class="comment_rating" data-number="5" data-score="<?php echo $sum; ?>"></div>
+                                <div class="comment_rating" data-number="5" data-score="<?php echo $avgReview; ?>"></div>
                                 <h3 class="title_comment"><?php echo $this->escapeHtml($review->getTitle()); ?></h3>
                             </div>
                             <div class="meta">
-                                <span class="meta-label"><?php echo $this->__("Review written by"); ?>:</span><span class="date"><?php echo date("Y-m-d", strtotime($review->getCreatedAt())); ?></span> <?php echo $this->__("by"); ?> <span class="name_user"><?php echo $review->getNickname(); ?></span>
+                                <span class="meta-label"><?php echo $this->__("Review written by"); ?></span><span class="date"> <?php echo date("Y-m-d", strtotime($review->getCreatedAt())); ?></span> <?php echo $this->__("by"); ?> <span class="name_user"><?php echo $review->getNickname(); ?></span>
                             </div>
 
                         </div>

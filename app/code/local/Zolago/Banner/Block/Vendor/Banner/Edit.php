@@ -1,0 +1,269 @@
+<?php
+
+class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
+{
+    private $_type;
+
+    protected function _construct()
+    {
+        parent::_construct();
+    }
+
+    public function _prepareLayout()
+    {
+        $this->_prepareForm();
+        parent::_prepareLayout();
+    }
+
+
+    /**
+     *
+     */
+    public function setType()
+    {
+        $type = $this->getRequest()->getParam('type', $this->getModel()->getType());
+        $this->_type = $type;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getType()
+    {
+        return $this->_type;
+    }
+
+    public function getCampaignId(){
+        $campaignId = $this->getRequest()->getParam('campaign_id', $this->getModel()->getCampaignId());
+        return $campaignId;
+    }
+
+    public function getCampaignName(){
+        $campaignId = $this->getRequest()->getParam('campaign_id', $this->getModel()->getCampaignId());
+        $campaignModel = Mage::getModel('zolagocampaign/campaign')->load($campaignId);
+        return $campaignModel->getName();
+    }
+    public function _prepareForm(){
+        $id = $this->getRequest()->getParam('id',null);
+
+        $type = $this->_type;
+        $campaignId = $this->getCampaignId();
+
+        $helper = Mage::helper('zolagobanner');
+        $form = Mage::getModel('zolagodropship/form');
+        /* @var $form Zolago_Dropship_Model_Form */
+        $form->setAction($this->getUrl("banner/vendor/save"));
+
+        //Common edit banner fields
+        $general = $form->addFieldset("general", array(
+            "legend" => $helper->__("General")
+        ));
+
+        $general->addField("name", "text", array(
+            "name" => "name",
+            "class" => "form-control",
+            "required" => true,
+            "label" => $helper->__('Name')
+        ));
+
+        if(!empty($campaignId)){
+
+        }
+        $general->addField(
+            "campaign_id", "hidden",
+            array(
+                 "name"     => "campaign_id",
+                 "required" => true)
+        );
+        $general->addField("type", "hidden", array(
+            "name" => "type"
+        ));
+        //--Common edit banner fields
+        $data = $this->getTypeConfiguration($type);
+
+        //Additional banner fields depends on type
+        $this->_completeForm($form, $data);
+
+        $values = $this->getModel()->getData();
+
+        $contentData = $this->getModel()->getResource()->getBannerContent($id);
+
+        $contentValues = $this->_prepareContentDataToSet($contentData);
+
+        $values = array_merge($values, array('show' => $data->show_as, 'type' => $type  ));
+        $values = array_merge($values, array('campaign_id'=> $campaignId));
+        $values = array_merge($values, $contentValues);
+
+        $form->setValues($values);
+        $this->setForm($form);
+    }
+
+    private function _prepareContentDataToSet($contentData){
+        $data = array();
+
+        if($contentData){
+            if($contentData['show'] == Zolago_Banner_Model_Banner_Show::BANNER_SHOW_IMAGE){
+                $image = unserialize($contentData['image']);
+                $caption = unserialize($contentData['caption']);
+
+                if(!empty($image)){
+                    foreach($image as $n => $imageItem){
+                        $data['image_'.$n] = isset($imageItem['path']) ? $imageItem['path'] : '';
+                        $data['image_url_'.$n] = isset($imageItem['url']) ? $imageItem['url'] : '';
+                    }
+                }
+                if(!empty($caption)){
+                    foreach($caption as $n => $captionItem){
+                        $data['caption_text_'.$n] = isset($captionItem['text']) ? $captionItem['text'] : '';
+                        $data['caption_url_'.$n] = isset($captionItem['url']) ? $captionItem['url'] : '';
+                    }
+                }
+            }
+            if($contentData['show'] == Zolago_Banner_Model_Banner_Show::BANNER_SHOW_HTML){
+                $data['banner_html'] = $contentData['html'];
+            }
+        }
+
+        return $data;
+
+    }
+
+    public function getTypeConfiguration()
+    {
+        $type = $this->_type;
+        $config = array();
+        if (!empty($type)) {
+            //fetch config
+            $configPath = Zolago_Banner_Model_Banner_Type::BANNER_TYPES_CONFIG;
+            $configValue = Mage::getStoreConfig($configPath);
+            $typesConfig = json_decode($configValue);
+
+            foreach ($typesConfig as $typesConfigType) {
+                if (
+                    Mage::getSingleton('zolagobanner/banner_type')->getTypCodeByTitle($typesConfigType->title) == $type
+                ) {
+                    $config = $typesConfigType;
+                }
+            }
+        }
+        return $config;
+    }
+
+    public function _completeForm(Zolago_Dropship_Model_Form $form, $data)
+    {
+        $helper = Mage::helper('zolagobanner');
+
+        $bannerContent = $form->addFieldset("banner_content", array(
+            "legend" => $helper->__("Content")
+        ));
+
+        $bannerContent->addField("show", "hidden", array(
+            "name" => "show"
+        ));
+        $bannerContent->addType("thumb","Zolago_Banner_Varien_Data_Form_Element_Thumbnail");
+        switch ($data->show_as) {
+            case Zolago_Banner_Model_Banner_Show::BANNER_SHOW_IMAGE:
+                $picturesNumber = $data->pictures_number;
+
+                if ($picturesNumber > 0) {
+                    $pictureUrlRequired = (isset($data->picture_can_be_empty) && $data->picture_can_be_empty == 1) ? FALSE : TRUE;
+                    foreach ($data->picture as $n => $picture) {
+                        $pictureW = (isset($picture->pictures_w) && !empty($picture->pictures_w)) ? $picture->pictures_w : "-";
+                        $pictureH = (isset($picture->pictures_h) && !empty($picture->pictures_h)) ? $picture->pictures_h : "-";
+
+
+                        $imageOptions = array(
+                            "name" => "image[" . $n . "]",
+                            "class" => "form-control",
+                            "required" => true,
+                            "data_attribute" => array('restrictw' => $pictureW, 'restricth' => $pictureH),
+                            "label" => $picture->picture_label
+                        );
+                        if ((isset($picture->pictures_w) && !empty($picture->pictures_w))
+                            && (isset($picture->pictures_h) && !empty($picture->pictures_h))
+                        ) {
+                            $afterImageElementHtml = "<p><span class='glyphicon glyphicon-exclamation-sign'> ".$helper->__('Width').": {$pictureW}px ".$helper->__('Height').": {$pictureH}px</span></p>";
+                            $imageOptions = array_merge($imageOptions,
+                                array(
+                                     'after_element_html' => $afterImageElementHtml
+                                )
+                            );
+                        }
+
+
+                        $bannerContent->addField("image_" . $n, "thumb", $imageOptions);
+
+                        $bannerContent->addField("image_url_" . $n, "text", array(
+                            "name" => "image_url[" . $n . "]",
+                            "class" => "form-control",
+                            "required" => $pictureUrlRequired,
+                            "label" => $picture->picture_label . ": url"
+                        ));
+                    }
+                    unset($n);
+                }
+
+                $captionsNumber = $data->captions_number;
+
+                if ($captionsNumber > 0) {
+
+                    $captionUrlRequired = (isset($data->caption_can_be_empty) && $data->caption_can_be_empty == 1) ? FALSE : TRUE;
+                    foreach ($data->caption as $n => $caption) {
+                        $bannerContent->addField("caption_url_" . $n, "text", array(
+                            "name" => "caption_url[" . $n . "]",
+                            "class" => "form-control",
+                            "required" => $captionUrlRequired,
+                            "label" => $caption->caption_label . ": url"
+                        ));
+                        $captionOptions = array(
+                            "name" => "caption_text[" . $n . "]",
+                            "class" => "form-control",
+                            "required" => $captionUrlRequired,
+                            "label" => $caption->caption_label . ": text"
+                        );
+                        $captionMaxSymbols = (isset($data->caption_max_symbols) && $data->caption_max_symbols > 0) ? $data->caption_max_symbols : FALSE;
+
+                        if ($captionMaxSymbols) {
+                            $afterElementHtml = '<p><span class="glyphicon glyphicon-exclamation-sign"></span> '  . $helper->__('Max length is ') . $captionMaxSymbols . '</p>';
+                            $captionOptions = array_merge($captionOptions,
+                                array(
+                                    //'maxlength' => $captionMaxSymbols,
+                                    'after_element_html' => $afterElementHtml
+                                )
+                            );
+                        }
+                        $bannerContent->addField("caption_text_" . $n, "text", $captionOptions);
+                        unset($captionOptions);
+                    }
+                    unset($n);
+
+                }
+                break;
+            case Zolago_Banner_Model_Banner_Show::BANNER_SHOW_HTML:
+                $bannerContent->addField("banner_html", "textarea", array(
+                    "name" => "banner_html",
+                    "class" => "form-control",
+                    "required" => true,
+                    "label" => $helper->__('HTML')
+                ));
+                break;
+        }
+        return $form;
+    }
+
+    /**
+     * @return Zolago_Banner_Model_Banner
+     */
+    public function getModel()
+    {
+        if (!Mage::registry("current_banner")) {
+            Mage::register("current_banner", Mage::getModel("zolagobanner/banner"));
+        }
+        return Mage::registry("current_banner");
+    }
+
+    public function isModelNew()
+    {
+        return $this->getModel()->isObjectNew();
+    }
+}

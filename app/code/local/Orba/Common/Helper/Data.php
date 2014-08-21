@@ -30,7 +30,9 @@ class Orba_Common_Helper_Data extends Mage_Core_Helper_Abstract {
      * @return string
      */
     public function getJsLibUrl() {
-        $base = Mage::getUrl('orbacommon/js/lib');
+        $base = Mage::getUrl('orbacommon/js/lib', array(
+            '_secure' => Mage::app()->getFrontController()->getRequest()->isSecure()
+        ));
         $hash = md5(Mage::app()->getLayout()->createBlock('core/template')->setTemplate('orbacommon/js/lib.phtml')->toHtml());
         return $base . '?' . $hash;
     }

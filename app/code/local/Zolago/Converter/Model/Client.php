@@ -22,6 +22,30 @@ class Zolago_Converter_Model_Client{
 
 	/**
 	 * @param string $vendorExternalId
+	 * @param string $vendorSku
+	 * @return array | null
+	 */
+	public function getQtys($vendorExternalId, $vendorSku) {
+		$key = "\"" . $vendorExternalId . ":" . $vendorSku . "\"";
+		$url = $this->_replaceUrlKey($this->getConfig('url_stock'), $key);
+		$result=$this->_makeConnection($url);
+		$out = array();
+		
+		if(is_array($result) && isset($result['rows'])){
+			foreach($result['rows'] as $row){
+				if(isset($row['value']['pos']) && isset($row['value']['stock'])){
+					$out[] = $row['value'];
+				}
+			}
+		}
+		if($out){
+			return $out;
+		}
+		return null;
+	}
+	
+	/**
+	 * @param string $vendorExternalId
 	 * @param string $posExternalId
 	 * @param string $vendorSku
 	 * @return int | null
@@ -30,7 +54,6 @@ class Zolago_Converter_Model_Client{
 		$key = "\"" . $vendorExternalId . ":" . $vendorSku . "\"";
 		$url = $this->_replaceUrlKey($this->getConfig('url_stock'), $key);
 		$result=$this->_makeConnection($url);
-				
 		if(is_array($result) && isset($result['rows'])){
 			foreach($result['rows'] as $row){
 				if(isset($row['value']['pos']) && isset($row['value']['stock']) &&
@@ -68,6 +91,33 @@ class Zolago_Converter_Model_Client{
                             return $pricesItem;
                         }
                     }
+                }
+            }
+        }
+        return null;
+    }
+	
+    /**
+     * @param $vendorExternalId
+     * @param $priceType
+     * @param $vendorSku
+     *
+     * @return null
+     */
+    public function getPrices($vendorExternalId, $vendorSku)
+    {
+        $key = "\"" . $vendorExternalId . ":" . $vendorSku . "\"";
+        $url = $this->_replaceUrlKey($this->getConfig('url_price'), $key);
+        $result = $this->_makeConnection($url);
+		
+        if(isset($result['error'])){
+            Mage::log(implode(' ,' , $result));
+            return null;
+        }
+        if (is_array($result) && isset($result['rows'])) {
+            foreach ($result['rows'] as $row) {
+                if (isset($row['value']['price']) && !empty($row['value']['price'])) {
+                   return $row['value']['price'];
                 }
             }
         }

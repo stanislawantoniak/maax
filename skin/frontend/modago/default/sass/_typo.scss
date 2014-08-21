@@ -117,11 +117,11 @@ a.simple:visited
 		&:after {
 			content:' ';
 			@include inline-block;
-			background:$bulletMap;
-			@include sprite($bulletMap, arrow-external-link);
-			@include sprite-dimensions($bulletMap, arrow-external-link);
+			background:$allMap;
+			@include sprite($allMap, arrow-external-link);
+			@include sprite-dimensions($allMap, arrow-external-link);
 			position:absolute;
-			right:-(image-width(sprite-file($bulletMap, arrow-external-link)))*1.5;
+			right:-(image-width(sprite-file($allMap, arrow-external-link)))*1.5;
 			top:0;
 			margin-top:5px;
 		}
@@ -155,11 +155,11 @@ a.simpleChild:visited
 		&:after {
 			content:' ';
 			@include inline-block;
-			background:$bulletMap;
-			@include sprite($bulletMap, arrow-external-link);
-			@include sprite-dimensions($bulletMap, arrow-external-link);
+			background:$allMap;
+			@include sprite($allMap, arrow-external-link);
+			@include sprite-dimensions($allMap, arrow-external-link);
 			position:absolute;
-			right:-(image-width(sprite-file($bulletMap, arrow-external-link)))*1.5;
+			right:-(image-width(sprite-file($allMap, arrow-external-link)))*1.5;
 			top:0;
 			margin-top:5px;
 		}
@@ -182,11 +182,11 @@ a.underline {
 		&:after {
 			content:' ';
 			@include inline-block;
-			background:$bulletMap;
-			@include sprite($bulletMap, arrow-external-link);
-			@include sprite-dimensions($bulletMap, arrow-external-link);
+			background:$allMap;
+			@include sprite($allMap, arrow-external-link);
+			@include sprite-dimensions($allMap, arrow-external-link);
 			position:absolute;
-			right:-(image-width(sprite-file($bulletMap, arrow-external-link)))*1.5;
+			right:-(image-width(sprite-file($allMap, arrow-external-link)))*1.5;
 			top:2.5px;
 			margin-top: 5px;
 		}
@@ -480,7 +480,75 @@ form {
 		margin:0 0 0 4%;
 		}
 	}
+	.has-feedback {
+		i {
+			position:absolute;
+			color:#ec695d;
+			position:absolute;
+			top:0!important;
+			right:-11px!important;
+			top:16px;
+			&.form-ico-checked {
+					position:absolute;
+					background:$allMap;
+					@include sprite($allMap, form-ico-checked);	
+					@include sprite-dimensions($allMap, form-ico-checked);
+					top:8px!important;
+					right:-27px!important;
+				}
+			&.form-ico-times {
+					position:absolute;
+					background:$allMap;
+					@include sprite($allMap, form-ico-times);	
+					@include sprite-dimensions($allMap,form-ico-times);
+					top:8px!important;
+					right:-24px!important;
+				}
+			}
+	}
+	.has-success {
+		i.fa {
+			right:-5%;
+			color:#2ecc71;
+		}
+	}
+	.has-warning {
+		i.fa {
+			position:absolute;
+			
+			right:-5%;
+			color:#6fffcf;
+		}
 
+	}
+	.has-error {
+		margin-bottom:5px;
+		label.error,
+		span.error {
+			color:#e84c3d;
+			font-size: 12px;
+			font-weight: normal;
+			line-height: 1.0!important;
+			padding:10px 0 0px 15px!important;
+			clear:both;
+			display:block;
+			text-align: left!important;
+
+		}
+		&.form-checkbox {
+			label.error,
+			span.error {
+				padding:0 0 0 0;
+				height:0px;
+			}
+		}
+		
+		[type="text"],
+		[type="email"],
+		[type="password"] {
+			border-color : #ec695d;
+		}
+	}
 	.form-group {
 		position:relative;
 		margin-bottom: 15px;
@@ -533,7 +601,11 @@ form {
 		}
 		input[type=checkbox].css-checkbox,
 		input[type=radio].css-radio {
-				display:none;
+				//display:none;
+				visibility:hidden;
+				position:absolute;
+				top:-200px;
+				left:-200px
 			}
 
 			input[type=checkbox].css-checkbox + label.css-label,
@@ -563,98 +635,48 @@ form {
 			user-select: none;
 			}
 			input[type=checkbox].css-checkbox + label.css-label {
-				background-image:url('../images/checkbox.png');
+				background:$checkboxMap no-repeat;
+				@include sprite($checkboxMap, checkbox);
 			}
 			input[type=radio].css-radio + label.css-label {
-				background-image:url('../images/radio.png');
+				background:$radioMap no-repeat;
+				@include sprite($radioMap, radio);
 			}
-			input[type=checkbox].css-checkbox + label.css-label:hover,
-
+			input[type=checkbox].css-checkbox + label.css-label:hover {
+				@include sprite($checkboxMap, checkbox-h);
+				color:#1e1e1e;
+			}
 			input[type=radio].css-radio + label.css-label:hover {
-				background-position: 0 -28px;
+				@include sprite($radioMap, radio-h);
 				color:#1e1e1e;
 			}
-			input[type=checkbox].css-checkbox:checked + label.css-label,
+			input[type=checkbox].css-checkbox:checked + label.css-label {
+				@include sprite($checkboxMap, checkbox-c);
+				color:#1e1e1e;
+			}
 			input[type=radio].css-radio:checked + label.css-label {
-				background-position: 0 -55px;
+				@include sprite($radioMap, radio-h);
 				color:#1e1e1e;
 			}
-			input[type=checkbox].css-checkbox:disabled + label.css-label,
-			input[type=radio].css-radio:disabled + label.css-label { 
-				background-position: 0 -82px;
+			input[type=checkbox].css-checkbox:disabled + label.css-label {
+				@include sprite($checkboxMap, checkbox-d);
 				color:#bcbcbc;
 			}
-			input[type=checkbox].css-checkbox:checked:disabled + label.css-label,
+			input[type=radio].css-radio:disabled + label.css-label { 
+				@include sprite($radioMap, radio-h);
+				color:#bcbcbc;
+			}
+			input[type=checkbox].css-checkbox:checked:disabled + label.css-label {
+				@include sprite($checkboxMap, checkbox-h-d);
+				color:#bcbcbc;
+			}
 			input[type=radio].css-radio:checked:disabled + label.css-label {
-				background-position: 0 -110px;
+				@include sprite($radioMap, radio-h-d);
 				color:#bcbcbc;
 			}
 			
 		
-		&.has-feedback {
-			i {
-				position:absolute;
-				color:#ec695d;
-				position:absolute;
-				top:0!important;
-				right:-11px!important;
-				top:16px;
-				&.form-ico-checked {
-						position:absolute;
-						background:$formIcoMap;
-						@include sprite($formIcoMap, form-ico-checked);	
-						@include sprite-dimensions($formIcoMap, form-ico-checked);
-						top:16px!important;
-						right:-27px!important;
-					}
-				&.form-ico-times {
-						position:absolute;
-						background:$formIcoMap;
-						@include sprite($formIcoMap, form-ico-times);	
-						@include sprite-dimensions($formIcoMap,form-ico-times);
-						top:16px!important;
-						right:-24px!important;
-					}
-				}
-		}
-		&.has-success {
-			i.fa {
-				right:-5%;
-				color:#2ecc71;
-			}
-		}
-		&.has-warning {
-			i.fa {
-				position:absolute;
-				
-				right:-5%;
-				color:#6fffcf;
-			}
-
-		}
-		&.has-error {
-			margin-bottom:5px;
-			label.error {
-				color:#e84c3d;
-				font-size: 12px;
-				font-weight: normal;
-				padding:10px 0 5px 15px;
-				clear:both;
-				display:block;
-
-			}
-			&.form-checkbox {
-				label.error {
-					padding:0 0 0 0;
-				}
-			}
-			
-			[type="text"],
-			[type="email"],
-			[type="password"] {
-				border-color : #ec695d;
-			}
-		}
+		
 		.action {
 			padding:10px;
 		}
@@ -728,13 +750,12 @@ form {
 	    }
 	
 	    input[type=checkbox].css-checkbox + label.css-label {
-	        //background-image:url('../images/checkbox_filter.png');
 	         @include sprite($btnCheck, check);	
-			//@include sprite-dimensions($bulletMap, remove-coupon);
 
 	    }
 	    input[type=radio].css-radio + label.css-label {
-	        background-image:url('../images/radio.png');
+	        background:$radioMap no-repeat;
+			@include sprite($radioMap, radio);
 
 	    }
 	    input[type=checkbox].css-checkbox + label.css-label:hover,
@@ -755,16 +776,18 @@ form {
 
 }
 .ico-submenu-mobile-right {
-	width:10px;
-	height:17px;
+	//width:10px;
+	//height:17px;
 	display:inline-block;
-	background:url('../images/arrow-menu-mobile-r.png');
+	//background:url('../images/arrow-menu-mobile-r.png');
+	background:$allMap;
+	@include sprite($allMap, arrow-menu-mobile-r);	
+	@include sprite-dimensions($allMap, arrow-menu-mobile-r);
 }
 .btn {
 	@include inline-block;
 	margin:0px;
 	padding:0px;
-	background:$buttonMap; 
 	border-radius:0;
 	cursor: pointer;
 	font-style: normal;
@@ -772,40 +795,6 @@ form {
 	outline:none;
 	text-align:center;
 	border:none;
-	&.clearAll {
-		background:$buttonMap;
-		background-position:-1px -29px;
-		 width: 158px;
-		 height: 24px;
-		 line-height: 23px;
-		 padding:0px;
-		 color:#434343;
-		 text-transform:uppercase;
-		 font-size: 12px;
-		 position:relative;
-		 top:-2px;
-		  
-	}
-	&.sending {
-		background:url('../images/sprites/sprite_send.png') no-repeat 0 -1px !important;
-		display:inline-block;	
-		width:133px;
-		height:42px;
-		line-height: 42px;
-		color:#fff;
-		font-size:14px;
-		font-family:$fontRegular;
-		font-weight: bold;
-		text-transform: uppercase;
-		&:hover {
-			background-position:0 -42px !important;
-		}
-		&:active,
-		&:focus {
-			background-position:0 -85px !important;
-			outline:none;
-		}
-	}
 	&.addBasket {
 	  display:inline-block;	
 	  height:42px;
@@ -825,9 +814,9 @@ form {
 	  	&:before {
 	  		content:' ';
 	  		display:block;
-	  		background:$icoMapDesktop;
-			@include sprite($icoMapDesktop, ico_basket_btn);	
-			@include sprite-dimensions($icoMapDesktop, ico_basket_btn);
+	  		background:$allMap;
+			@include sprite($allMap, ico_basket_btn);	
+			@include sprite-dimensions($allMap, ico_basket_btn);
 			float:left;
 			margin-top: 8px;
 			margin-right: 9px;
@@ -875,46 +864,56 @@ form {
 		}
 	}
 	&.clear {
-		background:url('../images/sprites/sprite_clear.png') no-repeat 0 -1px;	
-		display:inline-block;
-		width:93px;
-		height:26px;
-		line-height: 25px;
+		padding: 3px 15px;
 		color:#4f4f4f;
+		min-width: 92px;
+		font-size: 12px;
+		font-family: $fontRegular;
+		font-weight: normal;
+		text-align: center;
+		background:#fff;
+		border:2px solid #1e1e1e;
+		box-shadow: inset 1px 1px 0 0 #e6e6e6;
 		text-transform: uppercase;
-		font-size:12px;
-		&:hover {
-			background-position:0 -30px;
+		@include border-radius(3px);
+
+		&:hover,
+		&.hover {
+			background: #1e1e1e;
+			border-color:#2e2e2e;
 			color:#fff;
-			outline:none;
+			box-shadow:none;
 		}
 		&:active,
 		&:focus {
-			background-position:0 -58px;
-			outline:none;
-			color:#c6a662;
+			@media(min-width:1024px){
+				background: #fff;
+				border-color:#c9ac6d;
+				color:#c9ac6d;
+			}
 		}
 	}
 	&.add {
-		background:url('../images/sprites/sprite_add.png') no-repeat 0 0;
-		display:inline-block;	
-		width:150px;
-		height:27px;
-		line-height: 27px;
-		text-transform: uppercase;
-		font-size:16px;
-		font-family:$fontBlack;
-		font-weight: normal;
+		padding: 1.5px 15px;
 		color:#fff;
-		&:hover {
-			background-position:0 -27px;
-			color:#fff;
+		font-weight: bold;
+		font-size: 16px;
+		font-family: $fontRegular;
+		min-width: 148px;
+		text-align: center;
+		background:#000;
+		border:1px solid #c5c5c5;
+		border-radius: 0;
+		text-transform: uppercase;
+		&:hover,
+		&.hover {
+			background: #515151;
 		}
 		&:active,
-		&:focus {
-			background-position:0 -54px;
-			outline:none;
-			
+		&:focus,
+		&.active {
+			background: #c6a662;
+			border-color:#c6a662;
 		}
 	}
 	&.black {
@@ -953,10 +952,10 @@ form {
 	text-transform: uppercase;
 	background:#fff;
 	.fa-arrow-btn-right {
-		background:$arrowMap;
+		background:$allMap;
 		@include inline-block;
-		@include sprite($arrowMap, arrow-btn-continue-shopping-link);	
-		@include sprite-dimensions($arrowMap, arrow-btn-continue-shopping-link);
+		@include sprite($allMap, arrow-btn-continue-shopping-link);	
+		@include sprite-dimensions($allMap, arrow-btn-continue-shopping-link);
 		position:absolute;
 		right:5px;
 		top:5px;		
@@ -965,7 +964,7 @@ form {
 		background:#000;
 		color:#fff;
 		.fa-arrow-btn-right {		
-			@include sprite($arrowMap, arrow-btn-continue-shopping-hover);			
+			@include sprite($allMap, arrow-btn-continue-shopping-hover);			
 		}
 	}
 	&:active,
@@ -975,7 +974,7 @@ form {
 		outline:none;
 		color:#c6a662;
 		.fa-arrow-btn-right {		
-			@include sprite($arrowMap, arrow-btn-continue-shopping-active);			
+			@include sprite($allMap, arrow-btn-continue-shopping-active);			
 		}
 	}
 	
@@ -989,19 +988,19 @@ form {
 		
 	&.ico_note {
 		@include inline-block;
-		background:$icoMapDesktop;
-		@include sprite($icoMapDesktop, ico_note);	
-		@include sprite-dimensions($icoMapDesktop, ico_note);
-		margin-top: -(image-height(sprite-file($icoMapDesktop, ico_note)) / 2) ;
-		line-height:  image-height(sprite-file($icoMapDesktop, ico_note));
+		background:$allMap;
+		@include sprite($allMap, ico_note);	
+		@include sprite-dimensions($allMap, ico_note);
+		margin-top: -(image-height(sprite-file($allMap, ico_note)) / 2) ;
+		line-height:  image-height(sprite-file($allMap, ico_note));
 		margin-right: 12px
 	}
 }
 .view_lupa {
 	@include inline-block;
-	background:url('../images/sprites/ico/view_lupa.png') !important;
-	width:41px;
-	height:41px;
+	background:$allMap;
+	@include sprite($allMap, view_lupa);	
+	@include sprite-dimensions($allMap, view_lupa);
 }
 
 
@@ -1060,32 +1059,32 @@ a.view_basket {
 
 .bullet-plusik {
 	@include inline-block;
-	background:$bulletMap;
-	@include sprite($bulletMap, plusik);	
-	@include sprite-dimensions($bulletMap, plusik);
+	background:$allMap;
+	@include sprite($allMap, plusik);	
+	@include sprite-dimensions($allMap, plusik);
 	position:absolute;
-	margin-top:-(image-height(sprite-file($bulletMap, plusik)) / 2) ;
+	margin-top:-(image-height(sprite-file($allMap, plusik)) / 2) ;
 	top:50%;
 	left: 177px;
 }
 
 .bullet-strzalka-down {
 	@include inline-block;
-	background:$bulletMap;
-	@include sprite($bulletMap, strzalka_down);	
-	@include sprite-dimensions($bulletMap, strzalka_down);
+	background:$allMap;
+	@include sprite($allMap, strzalka_down);	
+	@include sprite-dimensions($allMap, strzalka_down);
 	position:absolute;
-	margin-top:-(image-height(sprite-file($bulletMap, strzalka_down)) / 2) ;
+	margin-top:-(image-height(sprite-file($allMap, strzalka_down)) / 2) ;
 	top:50%;
 	right:10px;
 }
 .bullet-strzalka-up {
 	@include inline-block;
-	background:$bulletMap;
-	@include sprite($bulletMap, strzalka_up);	
-	@include sprite-dimensions($bulletMap, strzalka_up);
+	background:$allMap;
+	@include sprite($allMap, strzalka_up);	
+	@include sprite-dimensions($allMap, strzalka_up);
 	position:absolute;
-	margin-top:-(image-height(sprite-file($bulletMap, strzalka_up)) / 2) ;
+	margin-top:-(image-height(sprite-file($allMap, strzalka_up)) / 2) ;
 	top:50%;
 	right:10px;
 }
@@ -1107,13 +1106,13 @@ a.view_basket {
 			&:before {
 				content:' ';
 				display:block;
-				background:$bulletMap;
-				@include sprite($bulletMap, bullet_01);
-				@include sprite-dimensions($bulletMap, bullet_01);
+				background:$allMap;
+				@include sprite($allMap, bullet_01);
+				@include sprite-dimensions($allMap, bullet_01);
 				position:absolute;
 				left:0;
 				top:0;
-				margin-top: image-height(sprite-file($bulletMap, bullet_01));
+				margin-top: image-height(sprite-file($allMap, bullet_01));
 			}
 		}
 	}
@@ -1123,13 +1122,13 @@ a.view_basket {
 			&:before {
 				content:' ';
 				display:block;
-				background:$bulletMap;
-				@include sprite($bulletMap, bullet_02);
-				@include sprite-dimensions($bulletMap, bullet_02);
+				background:$allMap;
+				@include sprite($allMap, bullet_02);
+				@include sprite-dimensions($allMap, bullet_02);
 				position:absolute;
 				left:0;
 				top:0;
-				margin-top: image-height(sprite-file($bulletMap, bullet_02))/2;
+				margin-top: image-height(sprite-file($allMap, bullet_02))/2;
 			}
 		}
 	}
@@ -1145,13 +1144,13 @@ a.view_basket {
 	&:before {
 		content:' ';
 		display:block;
-		background:$bulletMap;
-		@include sprite($bulletMap, recommend);
-		@include sprite-dimensions($bulletMap, recommend);
+		background:$allMap;
+		@include sprite($allMap, recommend);
+		@include sprite-dimensions($allMap, recommend);
 		position:absolute;
 		left:0;
 		top:50%;
-		margin-top: -(image-height(sprite-file($bulletMap, recommend))/2);
+		margin-top: -(image-height(sprite-file($allMap, recommend))/2);
 	}
 }
 
@@ -1164,13 +1163,13 @@ a.view_basket {
 	&:before {
 		content:' ';
 		display:block;
-		background:$bulletMap;
-		@include sprite($bulletMap, not_recommend);
-		@include sprite-dimensions($bulletMap, not_recommend);
+		background:$allMap;
+		@include sprite($allMap, not_recommend);
+		@include sprite-dimensions($allMap, not_recommend);
 		position:absolute;
 		left:0;
 		top:50%;
-		margin-top: -(image-height(sprite-file($bulletMap, not_recommend))/2);
+		margin-top: -(image-height(sprite-file($allMap, not_recommend))/2);
 	}
 }
 
@@ -1179,9 +1178,9 @@ a.view_basket {
 	border-radius: 0px !important;
 	button {
 		&.close {
-			background:url('../images/btn-close.png') 0 0 no-repeat;
-			height:32px;
-			width:34px;
+			background:$allMap;
+			@include sprite($allMap, btn-close);
+			@include sprite-dimensions($allMap, btn-close);
 			position:absolute;
 			top:-16px;
 			right:-16px;
@@ -1197,20 +1196,20 @@ a.view_basket {
 // Icon
 
 .fa-delete-coupon {
-	background:$bulletMap;
+	background:$allMap;
     @include inline-block;
-    @include sprite($bulletMap, remove-coupon);	
-	@include sprite-dimensions($bulletMap, remove-coupon);
+    @include sprite($allMap, remove-coupon);	
+	@include sprite-dimensions($allMap, remove-coupon);
 }
 
 .fa-remove {
-	background:$bulletMap;
+	background:$allMap;
     @include inline-block;
-    @include sprite($bulletMap, remove-table-item);	
-	@include sprite-dimensions($bulletMap, remove-table-item);
+    @include sprite($allMap, remove-table-item);	
+	@include sprite-dimensions($allMap, remove-table-item);
 		@media (max-width: $screen-xs-max) {
-			@include sprite($bulletMap, remove-table-item-mobile);	
-			@include sprite-dimensions($bulletMap, remove-table-item-mobile);
+			@include sprite($allMap, remove-table-item-mobile);	
+			@include sprite-dimensions($allMap, remove-table-item-mobile);
 		}
 }
 a {
@@ -1222,46 +1221,46 @@ a {
 
 
 [class^=ico_] {
-    background:$icoMapDesktop;
+    background:$allMap;
     @include inline-block;
     @include max-screen($screen-sm-max) {
-		background:$icoMapMobile;
+		background:$allMap;
 	}
     &.ico_basket {
-        @include sprite($icoMapDesktop, ico_basket);	
-		@include sprite-dimensions($icoMapDesktop, ico_basket);
+        @include sprite($allMap, ico_basket);	
+		@include sprite-dimensions($allMap, ico_basket);
 		 @include max-screen($screen-sm-max) {
-			@include sprite($icoMapMobile, ico_basket);	
-			@include sprite-dimensions($icoMapMobile, ico_basket);
+			@include sprite($allMap, m_ico_basket);	
+			@include sprite-dimensions($allMap, m_ico_basket);
 		}
     }
     &.ico_favorites {
-        @include sprite($icoMapDesktop, ico_favorites);	
-		@include sprite-dimensions($icoMapDesktop, ico_favorites);
+        @include sprite($allMap, ico_favorites);	
+		@include sprite-dimensions($allMap, ico_favorites);
 		 @include max-screen($screen-sm-max) {
-			@include sprite($icoMapMobile, ico_favorites);	
-			@include sprite-dimensions($icoMapMobile, ico_favorites);
+			@include sprite($allMap, m_ico_favorites);	
+			@include sprite-dimensions($allMap, m_ico_favorites);
 		}
     }
     &.ico_your_account {
-        @include sprite($icoMapDesktop, ico_your_account);	
-		@include sprite-dimensions($icoMapDesktop, ico_your_account);
+        @include sprite($allMap, ico_your_account);	
+		@include sprite-dimensions($allMap, ico_your_account);
 		
     }
     &.ico_menu {
-        @include sprite($icoMapDesktop, ico_menu);	
-		@include sprite-dimensions($icoMapDesktop, ico_menu);
+        @include sprite($allMap, ico_menu);	
+		@include sprite-dimensions($allMap, ico_menu);
 	    @include max-screen($screen-sm-max) {
-			@include sprite($icoMapMobile, ico_menu);	
-			@include sprite-dimensions($icoMapMobile, ico_menu);
+			@include sprite($allMap, m_ico_menu);	
+			@include sprite-dimensions($allMap, m_ico_menu);
 		}
     }
     &.ico_search_mobile {
-        @include sprite($icoMapDesktop, search_ico_mobile);	
-		@include sprite-dimensions($icoMapDesktop, search_ico_mobile);
+        @include sprite($allMap, search_ico_mobile);	
+		@include sprite-dimensions($allMap, search_ico_mobile);
 		 @include max-screen($screen-sm-max) {
-			@include sprite($icoMapMobile, search_ico_mobile);	
-			@include sprite-dimensions($icoMapMobile, search_ico_mobile);
+			@include sprite($allMap, m_search_ico_mobile);	
+			@include sprite-dimensions($allMap, m_search_ico_mobile);
 			top: -2px;
 			position: relative;
 			cursor:pointer;
@@ -1282,7 +1281,7 @@ a {
 			color:#4f4f4f;
 			margin-right: 5px;
 			text-transform: uppercase;
-			line-height: image-height(sprite-file($followUsMap, follow_us_fb));
+			line-height: image-height(sprite-file($allMap, follow_us_fb));
 			&:first-child {
 				position:relative;
 				top:1px;
@@ -1292,38 +1291,38 @@ a {
 	}
 }
 .follow_us {
-	background:$followUsMap;
+	background:$allMap;
     @include inline-block;
     &.fb {
-	    @include sprite($followUsMap, follow_us_fb);	
-		@include sprite-dimensions($followUsMap, follow_us_fb);
+	    @include sprite($allMap, follow_us_fb);	
+		@include sprite-dimensions($allMap, follow_us_fb);
 		&:hover {
-			    @include sprite($followUsMap, follow_us_fb-h);	
-				@include sprite-dimensions($followUsMap, follow_us_fb-h);
+			    @include sprite($allMap, follow_us_fb-h);	
+				@include sprite-dimensions($allMap, follow_us_fb-h);
 		}
     }
     &.twitter {
-	    @include sprite($followUsMap, follow_us_twetter);	
-		@include sprite-dimensions($followUsMap, follow_us_twetter);
+	    @include sprite($allMap, follow_us_twetter);	
+		@include sprite-dimensions($allMap, follow_us_twetter);
 		&:hover {
-			    @include sprite($followUsMap, follow_us_twetter-h);	
-				@include sprite-dimensions($followUsMap, follow_us_twetter-h);
+			    @include sprite($allMap, follow_us_twetter-h);	
+				@include sprite-dimensions($allMap, follow_us_twetter-h);
 		}
     }
     &.pinterest {
-	    @include sprite($followUsMap, follow_us_pinterest);	
-		@include sprite-dimensions($followUsMap, follow_us_pinterest);
+	    @include sprite($allMap, follow_us_pinterest);	
+		@include sprite-dimensions($allMap, follow_us_pinterest);
 		&:hover {
-			    @include sprite($followUsMap, follow_us_pinterest-h);	
-				@include sprite-dimensions($followUsMap, follow_us_pinterest-h);
+			    @include sprite($allMap, follow_us_pinterest-h);	
+				@include sprite-dimensions($allMap, follow_us_pinterest-h);
 		}
     }
     &.gplus {
-	    @include sprite($followUsMap, follow_us_gplus);	
-		@include sprite-dimensions($followUsMap, follow_us_gplus);
+	    @include sprite($allMap, follow_us_gplus);	
+		@include sprite-dimensions($allMap, follow_us_gplus);
 		&:hover {
-			    @include sprite($followUsMap, follow_us_gplus-h);	
-				@include sprite-dimensions($followUsMap, follow_us_gplus-h);
+			    @include sprite($allMap, follow_us_gplus-h);	
+				@include sprite-dimensions($allMap, follow_us_gplus-h);
 		}
     }
 }
@@ -1373,32 +1372,32 @@ figure {
 	text-transform: uppercase;
 	&.btn-social {
 		border-radius: 0px;
-		background:$btnSocialMap;
+		background:$allMap;
 		border:none;
 		&.small {
 			font-size: 13.33px;
 			color:#545151;
 			padding-left:52px;
 			text-transform: none;
-			line-height: image-height(sprite-file($btnSocialMap, google-small-l));
+			line-height: image-height(sprite-file($allMap, google-small-l));
 			&.g-plus {
-				@include sprite($btnSocialMap, google-small-l);	
-				@include sprite-dimensions($btnSocialMap, google-small-l);
+				@include sprite($allMap, google-small-l);	
+				@include sprite-dimensions($allMap, google-small-l);
 				&:hover {
-					@include sprite($btnSocialMap, google-small-h);	
+					@include sprite($allMap, google-small-h);	
 				}
 				&:active {
-					@include sprite($btnSocialMap, google-small-a);	
+					@include sprite($allMap, google-small-a);	
 				}
 			}
 			&.fb {
-				@include sprite($btnSocialMap, fb-small-l);	
-				@include sprite-dimensions($btnSocialMap, fb-small-l);
+				@include sprite($allMap, fb-small-l);	
+				@include sprite-dimensions($allMap, fb-small-l);
 				&:hover {
-					@include sprite($btnSocialMap, fb-small-h);	
+					@include sprite($allMap, fb-small-h);	
 				}
 				&:active {
-					@include sprite($btnSocialMap, fb-small-a);	
+					@include sprite($allMap, fb-small-a);	
 				}
 			}
 		}
@@ -1407,25 +1406,25 @@ figure {
 			color:#545151;
 			padding-left:52px;
 			text-transform: none;
-			line-height: image-height(sprite-file($btnSocialMap, google-medium-l));
+			line-height: image-height(sprite-file($allMap, google-medium-l));
 			&.g-plus {
-				@include sprite($btnSocialMap, google-medium-l);	
-				@include sprite-dimensions($btnSocialMap, google-medium-l);
+				@include sprite($allMap, google-medium-l);	
+				@include sprite-dimensions($allMap, google-medium-l);
 				&:hover {
-					@include sprite($btnSocialMap, google-medium-h);	
+					@include sprite($allMap, google-medium-h);	
 				}
 				&:active {
-					@include sprite($btnSocialMap, google-medium-a);	
+					@include sprite($allMap, google-medium-a);	
 				}
 			}
 			&.fb {
-				@include sprite($btnSocialMap, fb-medium-l);	
-				@include sprite-dimensions($btnSocialMap, fb-medium-l);
+				@include sprite($allMap, fb-medium-l);	
+				@include sprite-dimensions($allMap, fb-medium-l);
 				&:hover {
-					@include sprite($btnSocialMap, fb-medium-h);	
+					@include sprite($allMap, fb-medium-h);	
 				}
 				&:active {
-					@include sprite($btnSocialMap, fb-medium-a);	
+					@include sprite($allMap, fb-medium-a);	
 				}
 			}
 
@@ -1545,6 +1544,7 @@ figure {
 		@include border-radius(3px);
 		&:hover,
 		&.hover {
+
 			background: #1e1e1e;
 			border-color:#2e2e2e;
 			color:#fff;
@@ -1552,9 +1552,11 @@ figure {
 		}
 		&:active,
 		&.active {
+			@media(min-width:1024px){
 			background: #fff;
 			border-color:#c9ac6d;
 			color:#c9ac6d;
+			}
 		}
 	}
 }
@@ -1798,4 +1800,28 @@ figure {
 			height:auto;
 		}
 	}
+}
+
+.wrappError {
+	//height:0px;
+}
+
+.form-checkbox,
+.form-radio {
+	.error {
+		//position: absolute;
+		//top: 30px;
+		//left: 15px;
+	}
+}
+
+.error {
+  color:#e84c3d;
+      font-size: 12px;
+      font-weight: normal;
+      line-height: 1.0!important;
+      padding:10px 0 0px 15px!important;
+      clear:both;
+      display:block;
+      text-align: left!important;
 }

@@ -6,8 +6,8 @@
 
 class Zolago_Modago_Block_Wishlist extends Mage_Wishlist_Block_Abstract
 {
-    public function isInWishlist($item)
+    public function isInWishlist(Mage_Catalog_Model_Product $item)
     {
-        return rand(1, 2) == 1 ? true : false;
+        return Mage::helper('zolagowishlist')->productBelongsToMyWishlist($item);
     }
 } 

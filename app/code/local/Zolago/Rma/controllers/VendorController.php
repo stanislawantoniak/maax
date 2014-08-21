@@ -152,12 +152,12 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
      */
     protected function _getTrackingDhlNumber() {
         $request = $this->getRequest();
-        $width = (float)$request->getParam('specify_zolagodhl_width');
-        $height = (float)$request->getParam('specify_zolagodhl_height');
-        $length = (float)$request->getParam('specify_zolagodhl_length');
-        $date = $request->getParam('specify_zolagodhl_shipping_date');
+        $width = (float)$request->getParam('specify_orbadhl_width');
+        $height = (float)$request->getParam('specify_orbadhl_height');
+        $length = (float)$request->getParam('specify_orbadhl_length');
+        $date = $request->getParam('specify_orbadhl_shipping_date');
         $weight = ceil((float)$request->getParam('weight'));
-        $type = $request->getParam('specify_zolagodhl_type');
+        $type = $request->getParam('specify_orbadhl_type');
         switch ($type) {
             case 'PACKAGE':
                 $dhlType = Zolago_Dhl_Model_Client::SHIPMENT_TYPE_PACKAGE;
@@ -177,7 +177,7 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
             'type' => $dhlType,
             'vendor' => true,
         );
-        if (!$request->getParam('specify_zolagodhl_custom_dim')) {
+        if (!$request->getParam('specify_orbadhl_custom_dim')) {
             $dhlParams['nonStandard'] = true;
         }
         $rma = $this->_registerRma();
@@ -222,8 +222,11 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
                 // N.O.
                 $trackingNumber = 'dev';
                 break;
-            case Zolago_Dhl_Model_Carrier::CODE:
+            case Orba_Shipping_Model_Carrier_Dhl::CODE:
                 $trackingNumber = $this->_getTrackingDhlNumber();
+                break;
+            case Orba_Shipping_Model_Carrier_Ups::CODE:
+                $trackingNumber = $request->getParam('tracking_id');
                 break;
             default:
                 throw new Mage_Core_Exception(Mage::helper("zolagorma")->__("Unknown carrier"));

@@ -33,13 +33,15 @@
 
             <action method="addCss"><stylesheet>css/font-awesome.css</stylesheet></action>
             <action method="addCss"><stylesheet>css/bootstrap.css</stylesheet></action>
-            <action method="addCss"><stylesheet>css/layout.css</stylesheet></action>
+            <action method="addCss"><stylesheet>css/typography.css</stylesheet></action>
             <action method="addCss"><stylesheet>css/design.css</stylesheet></action>
-            <action method="addCss"><stylesheet>css/stylesheet.css</stylesheet></action>
+            <action method="addCss"><stylesheet>css/layout.css</stylesheet></action>
+            <!--<action method="addCss"><stylesheet>css/stylesheet.css</stylesheet></action>-->
             <action method="addCss"><stylesheet>css/local.css</stylesheet></action>
 
             <!--<action method="addItem"><type>skin_js</type><script>js/vendor/jquery-1.10.2.min.js</script></action>-->
             <action method="addJs"><script>jquery/jquery-1.11.0.min.js</script></action>
+            <action method="addItem"><type>skin_js</type><script>js/config.js</script></action>
             <action method="addItem"><type>skin_js</type><script>js/mall.js</script></action>
             <action method="addJs"><script>bootstrap/bootstrap.min.js</script></action>
             <action method="addItem"><type>skin_js</type><script>js/vendor/modernizr-2.6.2.min.js</script></action>
@@ -56,6 +58,7 @@
             <action method="addItem"><type>skin_js</type><script>js/icheck.min.js</script></action>
             <action method="addItem"><type>skin_js</type><script>js/zoomsl-3.0.min.js</script></action>
             <action method="addItem"><type>skin_js</type><script>js/plugins.js</script></action>
+            <action method="addItem"><type>skin_js</type><script>js/jquery.mCustomScrollbar.concat.min.js</script></action>
             <action method="addItem"><type>skin_js</type><script>js/fns.js</script></action>
             <block type="orbacommon/page_html_head" name="orba.jslib" template="orbacommon/js/script.phtml" />
             <block type="core/text" name="addthis.javascript">
@@ -149,7 +152,33 @@
 
     <checkout_cart_index>
         <reference name="root">
-            <action method="setTemplate"><template>page/modagopage.phtml</template></action>
+            <action method="setTemplate">
+                <template>page/1column.phtml</template>
+            </action>
+            <action method="addBodyClass">
+                <value>sidebar-secondary</value>
+            </action>
+            <action method="addBodyClass">
+                <value>node-type-shopping-cart</value>
+            </action>
+        </reference>
+        <reference name="head">
+            <action method="removeItem"><type>js</type><script>varien/weee.js</script></action>
+        </reference>
+        <reference name="breadcrumbs">
+            <action method="addCrumb">
+                <crumbName>Home</crumbName>
+                <crumbInfo><label>Home</label><title>Home</title><link>/</link></crumbInfo>
+            </action>
+            <action method="addCrumb">
+                <crumbName>Shopping Cart</crumbName>
+                <crumbInfo><label>Shopping Cart</label><title>Shopping Cart</title><link>/checkout/cart</link></crumbInfo>
+            </action>
+        </reference>
+
+        <reference name="checkout.cart">
+            <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml" />
+            <block type="zolagomodago/checkout_cart_sidebar" name="zolagomodago.checkout.cart.sidebar" template="checkout/cart/sidebar.phtml" />
         </reference>
     </checkout_cart_index>
 
@@ -186,15 +215,41 @@
     <solrbridge_solrsearch_category_view>
         <remove name="mana.catalog.leftnav" />
         <remove name="solrsearch_category_view"/>
+        <remove name="solrsearch_product_list_active" />
 
         <reference name="root">
+            <action method="setTemplate"><template>page/2columns-left.phtml</template></action>
             <action method="addBodyClass"><value>sidebar-first</value></action>
-            <action method="addBodyClass"><value>node-type-main_categories</value></action>
             <action method="addBodyClass"><value>view-menu-category</value></action>
             <action method="addBodyClass"><value>not-menu-mobile</value></action>
         </reference>
         <reference name="head">
             <action method="addJs"><script>jquery/jquery.jcarousel.min.js</script></action>
+            <action method="removeItem"><type>js</type><script>solrsearch/slider.js</script></action>
+            <action method="removeItem"><type>skin_js</type><script>js/manapro_filtercolors.js</script></action>
+        </reference>
+        <reference name="solrsearch_product_list_header">
+            <block type="zolagosolrsearch/active" name="solrsearch_product_list_activefaces" template="searchfaces/standard/active.phtml"/>
+        </reference>
+        <reference name="solrsearch_product_list">
+            <action method="setTemplate"><template>catalog/product/list.phtml</template></action>
+        </reference>
+        <reference name="zolagosolrsearch_category_view">
+            <action method="setTemplate"><template>catalog/category/view.phtml</template></action>
+            <block type="solrsearch/faces" name="searchfaces" as="searchFaces" before="-" >
+                <block type="solrsearch/faces_price" name="solr_price_facets" as="solr_price_facets" />
+                <block type="solrsearch/faces_range" name="solr_range_facets" as="solr_range_facets" />
+            </block>
+        </reference>
+        <reference name="solrsearch_product_list_header">
+            <action method="setTemplate"><template>catalog/product/list/header/category.phtml</template></action>
+        </reference>
+        <reference name="solrsearch_product_list_toolbar">
+            <action method="setTemplate"><template>catalog/product/list/toolbar.phtml</template></action>
+        </reference>
+
+        <reference name="left">
+            <action method="unsetChild"><name>searchfaces</name></action>
         </reference>
     </solrbridge_solrsearch_category_view>
 
@@ -223,6 +278,8 @@
             </block>
             <block type="catalog/product_list_crosssell" name="product.info.crosssell" as="crosssell" template="catalog/product/view/crosssell.phtml"/>
             <block type="catalog/product_list_related" name="catalog.product.related" before="-" template="catalog/product/list/related.phtml"/>
+
+            <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml" />
         </reference>
 
         <reference name="product.info.addto">
@@ -231,6 +288,10 @@
             </action>
         </reference>
 
+        <reference name="head">
+            <action method="removeItem"><type>js</type><script>varien/product.js</script></action>
+            <action method="removeItem"><type>js</type><script>varien/configurable.js</script></action>
+        </reference>
 
     </catalog_product_view>
 

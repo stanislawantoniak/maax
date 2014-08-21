@@ -1,0 +1,119 @@
+<?php /* @var $this Mage_Checkout_Block_Cart_Sidebar */ ?>
+<?php /* @var $this Zolago_Modago_Block_Checkout_Cart_Sidebar */ ?>
+<?php
+/**
+ * Author: Paweł Chyl <pawel.chyl@orba.pl>
+ * Date: 13.08.2014
+ */
+
+?>
+
+<?php
+
+    $_totalWithShipment = $this->getQuote()->getGrandTotal() + $this->getShippingTotal();
+    $_hasCoupon = (bool) $this->getQuote()->getCouponCode();
+    $_couponLabel = '';
+    $_couponDescription = '';
+    if($_hasCoupon) {
+        $_salesRuleId = Mage::getModel('salesrule/coupon')->loadByCode($this->getQuote()->getCouponCode())->getRuleId();
+        $_ruleModel = Mage::getModel('salesrule/rule')->load($_salesRuleId);
+        $_couponLabel = $_ruleModel->getStoreLabel();
+        $_couponDescription = $_ruleModel->getDescription();
+    }
+?>
+<div id="sidebar-secondary" class="sidebar-secound col-lg-3 col-md-4 ">
+    <aside id="cart-summary" class="main bg-w clearfix">
+        <!--<div class="inner-cart-summary">-->
+        <header>
+            <h2><?php echo $this->__("Your shopping"); ?></h2>
+        </header>
+        <div class="col-sidebar-cart-summary clearfix">
+            <ul id="product_summary">
+                <li id="value_products">
+                    <span class="val_value_products"><?php echo $this->__("Products worth"); ?>:</span>
+                    <span><?php echo Mage::helper('core')->currency($this->getQuote()->getGrandTotal(), true, false); ?></span>
+                </li>
+                <li id="delivery_cost">
+                    <span class="val_delivery_cost"><?php echo $this->__("Min shipping cost:"); ?></span>
+                    <span><?php echo Mage::helper('core')->currency($this->getShippingTotal(), true, false); ?></span>
+                </li>
+            </ul>
+            <div id="discount_voucher">
+                <div class="form-group clearfix">
+                    <a href="#" class="info_discount_voucher ff_os fz_11 underline"><?php echo $this->__("Do you have promo code?"); ?></a>
+                    <div class="form_discount_voucher clearfix">
+                        <input type="text" id="num_discount_voucher" name="num_discount_voucher" placeholder="<?php echo $this->__("Enter your coupon"); ?>" />
+                        <a class="btn btn_black" onclick="Mall.Cart.applyCoupon();" href="javascript:void();"><?php echo $this->__("Apply coupon"); ?></a>
+                    </div>
+                </div>
+
+                <dl class="coupon-list" id="cart_coupon" style="display: <?php if(!$_hasCoupon): ?>none;<?php endif; ?>">
+                    <dt><?php echo $this->__("Your coupon:"); ?></dt>
+                    <dd class="ff_os fz_12" <?php if($_hasCoupon && $_couponDescription): ?>data-toggle="tooltip" data-placement="top" title="<?php echo $_couponDescription; ?>" <?php endif; ?> style="height: auto; background: none;"><?php echo $_couponLabel; ?> <i class="fa-delete-coupon" onclick="Mall.Cart.removeCoupon();"></i></dd>
+                </dl>
+
+            </div>
+            <div id="sum_price">
+                <span class="val_value_sum_price"><?php echo $this->__("Total"); ?></span>
+                <span class="value_sum_price"><?php echo Mage::helper('core')->currency($_totalWithShipment, true, false); ?></span>
+            </div>
+        </div>
+        <div class="form-action">
+            <a href="<?php echo $this->getCheckoutUrl(); ?>" class="button button-primary"><?php echo $this->__("Checkout"); ?></a>
+        </div>
+        <!--</div>-->
+    </aside>
+    <aside id="payment-methods" class="main bg-w">
+        <!--<div class="inner-payment-methods">-->
+        <header>
+            <h2><?php echo $this->__("Available payment methods:"); ?></h2>
+        </header>
+        <div class="payment-methods-list">
+            <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('pl-cart-available-payment-methods-icons')->toHtml(); ?>
+        </div>
+        <div class="form-action">
+            <a href="#" class="ff_os fz_11 simple" data-toggle="modal" data-target="#learn_more"><?php echo $this->__("Learn more"); ?></a>
+
+            <!-- Modal -->
+            <div class="modal fade learn_more" id="learn_more" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal"></button>
+                            <h2 class="title_section"><?php echo $this->__("Learn more"); ?></h2>
+                        </div>
+                        <div class="modal-body">
+                            <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('pl-cart-available-payment-methods-learn-more-popup')->toHtml(); ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--</div>-->
+    </aside>
+</div>
+
+<style type="text/css">
+    #sidebar-secondary #cart-summary #discount_voucher .form-group a.btn_black {
+        display: -moz-inline-stack;
+        display: inline-block;
+        vertical-align: middle;
+        *vertical-align: auto;
+        zoom: 1;
+        *display: inline;
+        background: #000;
+        line-height: 22px;
+        height: 22px;
+        width: 72px;
+        border: none;
+        color: #fff;
+        font-size: 12px;
+        text-align: center;
+        text-transform: uppercase;
+        float: left; }
+</style>
+
+<script type="text/javascript">
+    Mall.translate.add("coupon_code_invalid","<?php echo $this->__("Coupon code is invalid."); ?>");
+    jQuery(".ff_os").tooltip();
+</script>
