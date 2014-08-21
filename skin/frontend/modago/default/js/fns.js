@@ -1879,9 +1879,9 @@ if($(window).width() != prevW) {
             //$('.toggle-xs').find('.main').attr('style', '').stop();
             
          } else {
-            console.log('wiecej');
             if (sidebarMain.length === 0) {
                 Mall.listing.insertDesktopSidebar();
+                init();
 //              $(".fb-slidebar-inner").find('.sidebar').remove();
 //              $("#sidebar").load("/sidebar.inc", function(){
 //                init();
