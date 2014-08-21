@@ -1831,14 +1831,14 @@ if($(window).width() != prevW) {
        });
         
      } else {
-        $(".fb-slidebar-inner").find('.sidebar').remove();
-        $("#sidebar").load("/sidebar.inc", function(){
-          //filterManufacturerUnCheked()
-          init();
-          initScrollBarFilterMarka();
-          visibleBtnClearFilterSize();
-          
-        });
+//        $(".fb-slidebar-inner").find('.sidebar').remove();
+//        $("#sidebar").load("/sidebar.inc", function(){
+//          //filterManufacturerUnCheked()
+//          init();
+//          initScrollBarFilterMarka();
+//          visibleBtnClearFilterSize();
+//
+//        });
         
      }
   prevW = $(window).width();
