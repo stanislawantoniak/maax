@@ -415,15 +415,11 @@ define([
 				field: "product_flag",
 				className: "column-short",
 				children: [
-					editor({
-						editor: "select",
-						editorArgs: {options: flagOptions, required: false},
-						editOn: "dblclick",
-						autoSave: true,
+					{
 						renderHeaderCell: filterRendererFacory("select", "product_flag", {options: flagOptions}),
 						sortable: false, 
 						field: "product_flag",
-						className: "filterable align-center column-short text-overflow editable",
+						className: "filterable align-center column-short text-overflow",
 						formatter: function(value, item){
 							for(var i=0; i<flagOptions.length; i++){
 								if(flagOptions[i].value+'' == value+''){
@@ -432,7 +428,7 @@ define([
 							}
 							return "";
 						}
-					})
+					}
 				]
 			},
 			is_in_stock: {

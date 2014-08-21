@@ -7,13 +7,9 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 		
 		// Add non-o attribs
 		$attributesToSelect = array(
-			"converter_price_type",
 			"price_margin",
 			"campaign_regular_id",
-			//"campaign_info_id",
 			"msrp",
-			"is_new",
-			"is_bestseller",
 			"product_flag",
 			"status",
 			"special_price",
@@ -23,6 +19,16 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 		
 		foreach($attributesToSelect as $attribute){
 			$this->joinAttribute($attribute, 'catalog_product/'.$attribute, 'entity_id', null, 'left', $this->getStoreId());
+		}
+		
+		$boolAttributes = array(
+			"is_new",
+			"is_bestseller",
+			"converter_price_type"
+		);
+				
+		foreach($boolAttributes as $attribute){
+			$this->addExpressionAttributeToSelect($attribute, "IFNULL({{attribute}}, 0)", $attribute);
 		}
 		
 		$neededAttributes = array(
@@ -154,15 +160,8 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 	 */
 	public function getEditableAttributes() {
 		return array(
-			"display_price", 
-			"price_margin",
-			"price",
-			"msrp",
-			"converter_price_type", 
 			"is_new", 
 			"is_bestseller", 
-			"product_flag", 
-			"is_in_stock",
 			"status"
 		);
 	}
@@ -183,7 +182,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 			"product_flag",
 			"is_in_stock",
 			"available_child_count",
-			"stock",
+			"stock_qty",
 			"status",
 			"type_id",
 		);

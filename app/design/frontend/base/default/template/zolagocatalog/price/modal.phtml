@@ -8,8 +8,14 @@
 		<span class="help-block"><?php echo $this->__("Source price");?></span>
 		<select id="converter_price_type"  name="converter_price_type" type="text" class="form-control priceSource">
 			<?php foreach ($this->getPriceSourceOptions() as $option):?>
+			<?php $_label = $option['label'] ? $option['label'] : $this->__("Manual");?>
 			<?php $_selected = $option['value']==$_product->getData('converter_price_type');?>
-			<option data-pointer="price-pointer-<?php echo $this->escapeHtml($option['label']);?>" data-source="<?php echo $this->escapeHtml($option['label']);?>" data-price="<?php echo $option['price'];?>" <?php if($_selected):?>selected="selected"<?php endif;?> value="<?php echo $this->escapeHtml($option['value']);?>"><?php echo $this->escapeHtml($option['label']);?></option>
+			<option data-pointer="price-pointer-<?php echo $this->escapeHtml($option['label']);?>" 
+					data-source="<?php echo $this->escapeHtml($option['label']);?>" 
+					data-price="<?php echo $option['price'];?>" 
+					<?php if($_selected):?>selected="selected"<?php endif;?> 
+					value="<?php echo $this->escapeHtml($option['value']);?>">
+						<?php echo $this->escapeHtml($_label);?></option>
 			<?php endforeach;?>
 		</select>
 	</div>
