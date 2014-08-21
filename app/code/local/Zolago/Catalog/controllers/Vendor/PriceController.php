@@ -74,7 +74,6 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Catalog_Controller_Ve
 		}
 
 		/** dev tool **/
-		$data['name'] = $data['name'] . " changed";
 		$data['changed'] = array();
 
 		$reposnse->setBody(json_encode($data));
