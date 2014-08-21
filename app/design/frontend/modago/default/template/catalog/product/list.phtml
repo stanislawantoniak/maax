@@ -70,4 +70,5 @@ $_productImageUrl = '';
 </div>
 <script type="text/javascript">
     Mall.listing.setScat(<?php echo $this->getLayer()->getCurrentCategory()->getId(); ?>);
+    Mall.listing.addToVisibleItems(<?php echo count($this->getCollection()); ?>);
 </script>

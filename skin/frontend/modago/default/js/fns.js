@@ -1881,7 +1881,7 @@ if($(window).width() != prevW) {
          } else {
             if (sidebarMain.length === 0) {
               $(".fb-slidebar-inner").find('.sidebar').remove();
-              $("#sidebar").load("_include/sidebar.inc", function(){
+              $("#sidebar").load("/sidebar.inc", function(){
                 init();
                 initScrollBarFilterMarka();
                 clearFilterManufacturerCheked();
@@ -2573,7 +2573,9 @@ function actionViewFilter() {
 }
 // AKTYWNE FILTRY
 function deleteCurrentFilter() {
-  $('.current-filter, .view_filter').on('click', '.label', function(event) {
+  $('.current-filter, .view_filter').on('click', '.label>i', function(event) {
+      var removeUrl = jQuery(event.target).attr("data-params");
+      location.href = removeUrl;
     event.preventDefault();
     var lLabel = $(this).closest('dd').find('.label').length - 1;
     if (lLabel >= 1) {
@@ -2587,7 +2589,7 @@ function deleteCurrentFilter() {
     }
   });
   $('.current-filter, .view_filter').on('click', '.action a', function(event) {
-    event.preventDefault();
+//    event.preventDefault();
     $(this).closest('dl').remove();
     $('#view-current-filter').find('.view_filter').css('margin-top', 24);
   });
