@@ -1879,7 +1879,9 @@ if($(window).width() != prevW) {
             //$('.toggle-xs').find('.main').attr('style', '').stop();
             
          } else {
+            console.log('wiecej');
             if (sidebarMain.length === 0) {
+                Mall.listing.insertDesktopSidebar();
 //              $(".fb-slidebar-inner").find('.sidebar').remove();
 //              $("#sidebar").load("/sidebar.inc", function(){
 //                init();
@@ -2015,18 +2017,12 @@ $(document).on('mouseup touchstart', function (e){
 
 $('.actionViewFilter').on('click', function(event){
         event.preventDefault();
-        if(Mall.listing.getCurrentMobileFilterState() == 0) {
-            var currentSidebar = $("#sidebar").clone(true, true);
-            $("#sidebar").find(".sidebar").remove();
-            $(".fb-slidebar-inner").find('.sidebar').remove();
-            $(".fb-slidebar-inner").html(currentSidebar.html());
-            Mall.listing.setCurrentMobileFilterState(1);
-        }
-                  $('#sb-site').toggleClass('open');
-                  $('.fb-slidebar').toggleClass('open');
-                      var screenWidth = $(window).width();
-                      var screenHeight = $(window).height();
-                      $('body').addClass('noscroll').append('<div class="noscroll" style="width:100%; height:'+screenHeight+'px"></div>');
+        Mall.listing.insertMobileSidebar();
+        $('#sb-site').toggleClass('open');
+        $('.fb-slidebar').toggleClass('open');
+        var screenWidth = $(window).width();
+        var screenHeight = $(window).height();
+        $('body').addClass('noscroll').append('<div class="noscroll" style="width:100%; height:'+screenHeight+'px"></div>');
 //
 //                });
 

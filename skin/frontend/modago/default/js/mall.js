@@ -758,6 +758,30 @@ Mall.listing = {
         return this;
     },
 
+    insertMobileSidebar: function() {
+        if(this.getCurrentMobileFilterState() == 0) {
+            var currentSidebar = jQuery("#sidebar").clone(true, true);
+            jQuery("#sidebar").find(".sidebar").remove();
+            jQuery(".fb-slidebar-inner").find('.sidebar').remove();
+            jQuery(".fb-slidebar-inner").html(currentSidebar.html());
+            this.setCurrentMobileFilterState(1);
+        }
+
+        return this;
+    },
+
+    insertDesktopSidebar: function() {
+        if(this.getCurrentMobileFilterState() == 1) {
+            var currentSidebar = jQuery(".fb-slidebar-inner").clone(true, true);
+            jQuery(".fb-slidebar-inner").find('.sidebar').remove();
+            jQuery("#sidebar").find(".sidebar").remove();
+            jQuery("#sidebar").append(currentSidebar);
+            this.setCurrentMobileFilterState(0);
+        }
+
+        return this;
+    },
+
     getCurrentMobileFilterState: function() {
         return this._current_mobile_filter_state;
     },
