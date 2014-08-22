@@ -54,12 +54,12 @@ class Zolago_Pos_Block_Adminhtml_Pos_Edit_Tab_General extends Mage_Adminhtml_Blo
         $builder->setFieldset($address);
         $builder->setModel($this->_getModel());
         $builder->prepareForm(array(
+            'company',
             'city',
             'country_id',
             'region_id',
             'street',
             'postcode',
-            'company',
         ));
                     
         $stock = $form->addFieldset('stock', array('legend'=>$helper->__('Stock settings')));
