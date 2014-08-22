@@ -16,6 +16,17 @@ class Zolago_Banner_VendorController extends Zolago_Dropship_Controller_Vendor_A
         $banner = $this->_initModel();
         $vendor = $this->_getSession()->getVendor();
 
+        //validate vendor
+        $campaignId = $this->getRequest()->getParam('campaign_id',null);
+        if(!empty($campaignId)){
+            $modelCampaign = Mage::getModel("zolagocampaign/campaign");
+            $modelCampaign->load($campaignId);
+            if ($modelCampaign->getVendorId() != $vendor->getId()) {
+                $this->_getSession()->addError(Mage::helper('zolagobanner')->__("Campaign does not exists"));
+                return $this->_redirect("campaign/vendor/index");
+            }
+        }
+
         // Existing banner
         if ($banner->getId()) {
             if ($banner->getVendorId() != $vendor->getId()) {
@@ -23,6 +34,7 @@ class Zolago_Banner_VendorController extends Zolago_Dropship_Controller_Vendor_A
                 return $this->_redirect("*/*");
             }
         } elseif($this->getRequest()->getParam('id',null) !== null) {
+
             $this->_getSession()->addError(Mage::helper('zolagobanner')->__("Campaign creative does not exists"));
             return $this->_redirect("*/*");
         }
