@@ -545,7 +545,9 @@ Mall.listing = {
 
     init: function() {
 //        this.canLoadMoreProducts();
+        this.attachShowMoreEvent();
         this.attachFilterColorEvents();
+        this.attachFilterEnumEvents();
     },
 
     getMoreProducts: function() {
@@ -790,17 +792,23 @@ Mall.listing = {
             var target = e.target;
             e.preventDefault();
             if(jQuery(this).attr("data-state") == "0") {
-                jQuery(this).parents(".content").find("label[data-state='hidden']").show(500);
+                jQuery(this).parents(".content").find("[data-state='hidden']").show(500);
             } else {
-                jQuery(this).parents(".content").find("label[data-state='hidden']").hide(500);
+                jQuery(this).parents(".content").find("[data-state='hidden']").hide(500);
             }
             Mall.listing.toggleShowMoreState(this);
         });
     },
 
     attachFilterColorEvents: function() {
-        this.attachShowMoreEvent();
-        jQuery("#filter_color").find("label[data-url]").on("click", function(e) {
+        jQuery(".filter-color").find("[data-url]").on("click", function(e) {
+            // @todo ajax logic
+            location.href = jQuery(this).attr("data-url");
+        });
+    },
+
+    attachFilterEnumEvents: function() {
+        jQuery(".filter-enum").find("[data-url]").on("click", function(e) {
             // @todo ajax logic
             location.href = jQuery(this).attr("data-url");
         });

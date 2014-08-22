@@ -4,10 +4,12 @@
     $sectionClass = $this->isFilterRolled() ? 'closed' : 'open';
     $iconClass = $this->isFilterRolled() ? "fa-chevron-down" : "fa-chevron-up";
     $isOptionSelected = false;
+    $key_withoutFacet = explode("_", $key);
+    array_pop($key_withoutFacet);
     ?>
     <div class="section clearfix">
         <h3 class="<?php echo $sectionClass; ?>"><?php echo $this->getFacetLabel(); ?> <i class="fa <?php echo $iconClass; ?>"></i></h3>
-        <div class="content"  id="filter_color">
+        <div class="content filter-color"  id="filter_<?php echo $key; ?>">
     <?php foreach ($this->getItems() as $item => $count): ?>
         <?php if ($this->getCanShowItem($item, $count)): ?>
             <?php $_value = $this->getValueObject($item);?>
@@ -42,11 +44,11 @@
             <?php endif; ?>
         <?php endforeach; ?>
             <div class="actions text-right clearfix">
-                <a href="#" class="go_read_filter underline showmore-filters" data-state="0">Pokaż więcej</a>
+                <a href="#" class="go_read_filter underline showmore-filters" data-state="0"><?php echo $this->__("Show more"); ?></a>
             </div>
     <?php endif; ?>
             <div class="action clear clearfix <?php if(!$isOptionSelected) : ?>hidden<?php endif; ?>">
-                <a href="#" data-filter-type="color" onclick="Mall.listing.removeSingleFilterType(this);Mall.listing.reloadListing();return false;" class="button button-third clear clearfilter-color">Wyczyść</a>
+                <a href="#" data-filter-type="<?php echo implode("_", $key_withoutFacet); ?>" onclick="Mall.listing.removeSingleFilterType(this);Mall.listing.reloadListing();return false;" class="button button-third clear clearfilter-color"><?php echo $this->__("Clear"); ?></a>
             </div>
 
         </div>
