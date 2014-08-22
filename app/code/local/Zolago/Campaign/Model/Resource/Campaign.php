@@ -14,7 +14,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
      */
     protected function _afterSave(Mage_Core_Model_Abstract $object)
     {
-        Mage::log($object->getData());
+        //Mage::log($object->getData());
         // Website Assignment
         if ($object->hasData("website_ids")) {
             $this->_setWebsites($object, $object->getData("website_ids"));

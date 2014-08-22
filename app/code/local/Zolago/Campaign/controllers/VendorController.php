@@ -82,6 +82,7 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
 
         // Try save
         $data = $this->getRequest()->getParams();
+        Mage::log($data);
 
         $this->_getSession()->setFormData(null);
         $modelId = $this->getRequest()->getParam("id");
@@ -104,6 +105,17 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
                     // Set Vendor Owner
                     $campaign->setVendorId($vendor->getId());
                 }
+
+
+                if($data["url_type"] == Zolago_Campaign_Model_Campaign_Urltype::TYPE_LANDING_PAGE){
+                    Mage::log("Generate user friendly url");
+                    $nameForCustomer = $data["name_customer"];
+                    $urlKey = Mage::helper("zolagocampaign")->createCampaignSlug($nameForCustomer);
+                    $campaign->addData(array('url_key' => $urlKey));
+                    Mage::log($urlKey);
+                }
+
+
                 $campaign->save();
             } else {
                 $this->_getSession()->setFormData($data);
