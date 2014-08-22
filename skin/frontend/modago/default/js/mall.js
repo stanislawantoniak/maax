@@ -817,6 +817,35 @@ Mall.listing = {
         }
     },
 
+    reloadListing: function() {
+        var protocol  = window.location.protocol;
+        var host = window.location.host;
+        var pathname = window.location.pathname;
+
+        window.location.href = protocol + "//" + host + pathname + "?" + jQuery.param(this.getQueryParams());
+    },
+
+    getQueryParams: function() {
+        var q = {
+            fq: this.getFiltersArray() == [] ? [] : this.getFiltersArray().fq,
+            q: this.getQuery(),
+            page: this.getPage(),
+            sort: this.getSort(),
+            dir: this.getDir(),
+            scat: this.getScat()
+        };
+
+        return q;
+    },
+
+    removeSingleFilterType: function(filter) {
+        var filterType = jQuery(filter).attr("data-filter-type");
+        var filters = this.getFiltersArray() == [] ? [] : this.getFiltersArray().fq;
+        delete filters[filterType];
+
+        return this;
+    },
+
     getQuery: function() {
         return this._current_query;
     },
