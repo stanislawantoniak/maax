@@ -5,7 +5,7 @@
 <input type="hidden" name="entity_id" value="<?php echo $_product->getId();?>"/>
 <input type="hidden" name="store_id" value="<?php echo $_product->getStoreId();?>"/>
 <?php if($_items):?>
-<table class="table table-condensed table-striped">
+<table class="table table-condensed table-striped table-bordered">
 	<colgroup>
 		<col/>
 		<col/>
@@ -24,10 +24,10 @@
 		<?php foreach($_items as $item):?>
 		<?php $_pos = $item->getPos();?>
 		<tr>
-			<td><?php echo $this->formatNumber($_pos->getName());?></td>
-			<td><?php echo $this->formatNumber($item->getImportedStock());?></td>
-			<td><?php echo $this->formatNumber($_pos->getMinimalStock());?></td>
-			<td><?php echo $this->formatNumber($item->getFinalStock());?></td>
+			<td><?php echo $this->escapeHtml($_pos->getName());?></td>
+			<td class="align-right"><?php echo $this->formatNumber($item->getImportedStock());?></td>
+			<td class="align-right"><?php echo $this->formatNumber($_pos->getMinimalStock());?></td>
+			<td class="align-right"><?php echo $this->formatNumber($item->getFinalStock());?></td>
 		</tr>
 		<?php endforeach;?>
 	</tbody>

@@ -187,10 +187,11 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Catalog_Controller_Ve
 				return array("eq"=>$value);
 			break;
 			case "converter_price_type":
+			case "converter_msrp_type":
 				return $value!=0 ? array("eq"=>$value) : array("null"=>true);
 			break;
 			case "msrp":
-				return $value==1 ? array("notnull"=>true) : array(array("null"=>true), array("neq"=>""));
+				return $value==1 ? array("notnull"=>true) : array(array("null"=>true));
 			break;
 		}
 		return array("like"=>'%'.$value.'%');

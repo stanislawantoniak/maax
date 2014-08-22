@@ -28,10 +28,11 @@ class Zolago_Catalog_Vendor_Price_DetailController extends Zolago_Catalog_Contro
 		$isConfigurable = $product->isComposite();
 		
 		$productData = array(
-			"converter_price_type" => $request->getParam("converter_price_type"),
-			"price_margin"	=> $margin != 0 ? $margin : null,
-			"price"			=> $currentPrice,
-			"msrp"			=> $msrp > 0 ? $msrp : null
+			"converter_price_type"	=> $request->getParam("converter_price_type"),
+			"converter_msrp_type"	=> $this->_formatNumber($request->getParam("converter_msrp_type", 0)),
+			"price_margin"			=> $margin != 0 ? $margin : null,
+			"price"					=> $currentPrice,
+			"msrp"					=> $msrp > 0 ? $msrp : null
 		);
 		
 		try{

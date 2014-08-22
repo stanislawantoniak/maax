@@ -33,6 +33,7 @@ define([
 	 */
 	
 	var campainRegularIdOptions = sourceOptions.campaign_regular_id,
+		converterMsrpTypeOptions = sourceOptions.converter_msrp_type,
 		converterPriceTypeOptions = sourceOptions.converter_price_type,
 		flagOptions = sourceOptions.product_flag,
 		statusOptions = sourceOptions.status,
@@ -317,7 +318,7 @@ define([
 						renderHeaderCell: filterRendererFacory("select", "converter_price_type", {options: converterPriceTypeOptions}),
 						sortable: false, 
 						field: "converter_price_type",
-						className: "filterable align-center column-medium signle-price-edit popup-trigger",
+						className: "filterable align-center column-short signle-price-edit popup-trigger",
 						formatter: function(value, item){
 							for(var i=0; i<converterPriceTypeOptions.length; i++){
 								if(converterPriceTypeOptions[i].value+'' == value+''){
@@ -344,10 +345,37 @@ define([
 						renderHeaderCell: filterRendererFacory("select", "msrp", {options: boolOptions}),
 						sortable: false, 
 						field: "msrp",
-						className: "filterable align-right column-medium signle-price-edit popup-trigger",
+						className: "filterable align-right column-short signle-price-edit popup-trigger",
 						formatter: function(value){
 							if(value!==null){
 								return misc.currency(value);
+							}
+							return "";
+						},
+						renderCell: function(item,value,node){
+							if(priceEditPriceMeta(item, value)){
+								put(node, ".editable");
+							}
+							BaseGrid.defaultRenderCell.apply(this, arguments);
+						}
+					}
+				]
+			},
+			converter_msrp_type: {
+				label: Translator.translate("MSRP Source"),
+				field: "converter_msrp_type",
+				className: "column-medium",
+				children: [
+					{
+						renderHeaderCell: filterRendererFacory("select", "converter_msrp_type", {options: converterMsrpTypeOptions}),
+						sortable: false, 
+						field: "converter_msrp_type",
+						className: "filterable align-center column-short signle-price-edit popup-trigger",
+						formatter: function(value, item){
+							for(var i=0; i<converterMsrpTypeOptions.length; i++){
+								if(converterMsrpTypeOptions[i].value+'' == value+''){
+									return converterMsrpTypeOptions[i].label;
+								}
 							}
 							return "";
 						},
