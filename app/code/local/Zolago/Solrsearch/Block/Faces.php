@@ -660,25 +660,25 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
      * @return string
      */
     protected function _getRatingRenderer() {
-        return "zolagosolrsearch/faces_rating";
+        return $this->_rewriteBlockType("zolagosolrsearch/faces_rating");
     }
     /**
      * @return string
      */
     protected function _getFlagRenderer() {
-        return "zolagosolrsearch/faces_flag";
+        return $this->_rewriteBlockType("zolagosolrsearch/faces_flag");
     }
     /**
      * @return string
      */
     protected function _getPriceRenderer() {
-        return "zolagosolrsearch/faces_price";
+        return $this->_rewriteBlockType("zolagosolrsearch/faces_price");
     }
     /**
      * @return string
      */
     protected function _getCategoryRenderer() {
-        return "zolagosolrsearch/faces_category";
+        return $this->_rewriteBlockType("zolagosolrsearch/faces_category");
     }
     /**
      * @return boolean
@@ -760,7 +760,9 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
                         $renderer = $filter->getFrontendRenderer();
                     }
 
-                    $block = $this->getLayout()->createBlock($renderer);
+                    $block = $this->getLayout()->createBlock(
+							$this->_rewriteBlockType($renderer)
+					);
                     /* @var $block Zolago_Solrsearch_Block_Faces_Abstract */
 
 
@@ -812,7 +814,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
      * @return string
      */
     public function getDefaultRenderer() {
-        return self::DEFAULT_RNDERER;
+        return $this->_rewriteBlockType(self::DEFAULT_RNDERER);
     }
 
     /**
@@ -1120,5 +1122,14 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 		}
 		
 		return array_merge($productFlagFacet, $bestsellerFacet, $isNewFacet);
+	}
+	
+	/**
+	 * Do optional rewrite block filter
+	 * @param string $block
+	 * @return string
+	 */
+	protected function _rewriteBlockType($block) {
+		return $block;
 	}
 }
