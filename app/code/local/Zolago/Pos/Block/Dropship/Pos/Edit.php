@@ -36,12 +36,12 @@ class Zolago_Pos_Block_Dropship_Pos_Edit extends Mage_Core_Block_Template {
         $builder->setFieldset($address);
         $builder->setModel($this->getModel());
         $builder->prepareForm(array(
+            'company',
             'city',
             'country_id',
             'region_id',
             'street',
-            'postcode',
-            'company'
+            'postcode'
         ));
         $stock = $form->addFieldset('stock', array('legend'=>$helper->__('Stock settings')));
         $builder = Mage::getModel('zolagopos/form_fieldset_stock'); 
