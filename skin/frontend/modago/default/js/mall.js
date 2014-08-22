@@ -543,10 +543,11 @@ Mall.listing = {
 
     _current_total: 0,
 
-    _current_mobile_filter_state: 0,
-
     init: function() {
 //        this.canLoadMoreProducts();
+        this.attachShowMoreEvent();
+        this.attachFilterColorEvents();
+        this.attachFilterEnumEvents();
     },
 
     getMoreProducts: function() {
@@ -784,6 +785,73 @@ Mall.listing = {
 
     getCurrentMobileFilterState: function() {
         return this._current_mobile_filter_state;
+    },
+
+    attachShowMoreEvent: function() {
+        jQuery(".showmore-filters").on("click", function(e) {
+            var target = e.target;
+            e.preventDefault();
+            if(jQuery(this).attr("data-state") == "0") {
+                jQuery(this).parents(".content").find("[data-state='hidden']").show(500);
+            } else {
+                jQuery(this).parents(".content").find("[data-state='hidden']").hide(500);
+            }
+            Mall.listing.toggleShowMoreState(this);
+        });
+    },
+
+    attachFilterColorEvents: function() {
+        jQuery(".filter-color").find("[data-url]").on("click", function(e) {
+            // @todo ajax logic
+            location.href = jQuery(this).attr("data-url");
+        });
+    },
+
+    attachFilterEnumEvents: function() {
+        jQuery(".filter-enum").find("[data-url]").on("click", function(e) {
+            // @todo ajax logic
+            location.href = jQuery(this).attr("data-url");
+        });
+    },
+
+    toggleShowMoreState: function(item) {
+        var state = jQuery(item).attr("data-state");
+        if(state == "0") {
+            jQuery(item).text("Pokaż mniej");
+            jQuery(item).attr("data-state", "1");
+        } else {
+            jQuery(item).text("Pokaż więcej");
+            jQuery(item).attr("data-state", "0");
+        }
+    },
+
+    reloadListing: function() {
+        var protocol  = window.location.protocol;
+        var host = window.location.host;
+        var pathname = window.location.pathname;
+
+        window.location.href = protocol + "//" + host + pathname + "?" + jQuery.param(this.getQueryParams());
+    },
+
+    getQueryParams: function() {
+        var q = {
+            fq: this.getFiltersArray() == [] ? [] : this.getFiltersArray().fq,
+            q: this.getQuery(),
+            page: this.getPage(),
+            sort: this.getSort(),
+            dir: this.getDir(),
+            scat: this.getScat()
+        };
+
+        return q;
+    },
+
+    removeSingleFilterType: function(filter) {
+        var filterType = jQuery(filter).attr("data-filter-type");
+        var filters = this.getFiltersArray() == [] ? [] : this.getFiltersArray().fq;
+        delete filters[filterType];
+
+        return this;
     },
 
     getQuery: function() {

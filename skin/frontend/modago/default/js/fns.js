@@ -2735,7 +2735,7 @@ function clearFilterManufacturerCheked() {
 
 function filterColor() {
   
-  $('#filter_color label').each(function(index, el) {
+  $('.filter-color label').each(function(index, el) {
     var colorFilter = $(this).data('color');
     var srcImg = $(this).data('img');
     var srcImgHover = $(this).data('imghover');
@@ -2783,12 +2783,12 @@ function filterColor() {
 
   var filterColor = $('#filter_color');
   filterColor.on('click', ':checkbox', function(event) {
-    $('#filter_color .clear').removeClass('hidden');
-      var filterColorLenght = $('#filter_color input:checked').length;
+    $('.filter-color .clear').removeClass('hidden');
+      var filterColorLenght = $('.filter-color input:checked').length;
         if (filterColorLenght >= 1) {
-          $('#filter_color .action').removeClass('hidden');
+          $('.filter-color .action').removeClass('hidden');
         } else {
-          $('#filter_color .action').addClass('hidden');
+          $('.filter-color .action').addClass('hidden');
           };
   });
    filterColor.on('click', '.clear', function(event) {
