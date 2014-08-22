@@ -318,7 +318,7 @@ define([
 						renderHeaderCell: filterRendererFacory("select", "converter_price_type", {options: converterPriceTypeOptions}),
 						sortable: false, 
 						field: "converter_price_type",
-						className: "filterable align-center column-medium signle-price-edit popup-trigger",
+						className: "filterable align-center column-short signle-price-edit popup-trigger",
 						formatter: function(value, item){
 							for(var i=0; i<converterPriceTypeOptions.length; i++){
 								if(converterPriceTypeOptions[i].value+'' == value+''){
@@ -345,7 +345,7 @@ define([
 						renderHeaderCell: filterRendererFacory("select", "msrp", {options: boolOptions}),
 						sortable: false, 
 						field: "msrp",
-						className: "filterable align-right column-medium signle-price-edit popup-trigger",
+						className: "filterable align-right column-short signle-price-edit popup-trigger",
 						formatter: function(value){
 							if(value!==null){
 								return misc.currency(value);
@@ -370,7 +370,7 @@ define([
 						renderHeaderCell: filterRendererFacory("select", "converter_msrp_type", {options: converterMsrpTypeOptions}),
 						sortable: false, 
 						field: "converter_msrp_type",
-						className: "filterable align-center column-medium signle-price-edit popup-trigger",
+						className: "filterable align-center column-short signle-price-edit popup-trigger",
 						formatter: function(value, item){
 							for(var i=0; i<converterMsrpTypeOptions.length; i++){
 								if(converterMsrpTypeOptions[i].value+'' == value+''){
