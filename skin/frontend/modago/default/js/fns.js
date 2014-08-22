@@ -1502,8 +1502,8 @@ $('#product-gallery .stage a').on('click', '.selector', function(event) {
     });
 
     function dropDownSelectListAjax() {
-      var headList = $('.button-select.ajax');
-      var listSelect = $('.dropdown-select ul');
+      var headList = $('.button-select.ajax').not(".filter-droplist");
+      var listSelect = $('.dropdown-select ul').not(".filter-droplist");
       headList.on('click', function(event) {
         event.preventDefault();
         $(this).next('.dropdown-select').stop(true).slideToggle(200);
