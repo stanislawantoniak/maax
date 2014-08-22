@@ -74,7 +74,7 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
     public function getColumnWidthStyle($column){
 
         $data = $column->getData();
-        $width = NULL;
+        $default_width = 100;
 
         if($data['index'] == 'entity_id'){
             $width = 40;
@@ -85,7 +85,9 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
             }
         }
 
-        return ($width) ? "style='width: " . $width . "px;'" : '';
+        if(!$width) $width = $default_width;
+
+        return "style='width: " . $width . "px;'";
     }
 
 	protected function _prepareLayout() {
@@ -519,11 +521,11 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
         $this->getMassactionBlock()->setTemplate("zolagocatalog/widget/grid/massaction.phtml");
 
         $this->getMassactionBlock()->addItem('status', array(
-            'label'=> Mage::helper('zolagocatalog')->__('Disabled'),
+            'label'=> Mage::helper('zolagocatalog')->__('Disable Products'),
             'url'  => $this->getUrl('*/*/massStatus', array('_current'=>true, 'status' => Mage_Catalog_Model_Product_Status::STATUS_DISABLED)),
         ));
         $this->getMassactionBlock()->addItem('review', array(
-            'label'=> Mage::helper('zolagocatalog')->__('Product Review'),
+            'label'=> Mage::helper('zolagocatalog')->__('Launch products'),
             'url'  => $this->getUrl('*/*/massStatus', array('_current'=>true, 'review' => true)),
         ));
         return $this;
