@@ -44,5 +44,23 @@
             <block name="vendor_campaign_product_grid" as="vendor_campaign_product_grid"  type="zolagocampaign/vendor_campaign_product_grid" template="zolagocampaign/dropship/campaign/product/grid.phtml"></block>
         </reference>
     </zolagocampaign_vendor_products>
+
+    <zolagocampaign_placement_index>
+        <update handle="udropship_vendor" />
+        <update handle="adminhtml_head" />
+        <update handle="bootstrap"/>
+        <reference name="content">
+            <block name="campaign_placement" type="zolagocampaign/vendor_campaign_placement" template="zolagocampaign/dropship/campaign/placement.phtml"></block>
+        </reference>
+    </zolagocampaign_placement_index>
+
+    <zolagocampaign_placement_category_index>
+        <update handle="udropship_vendor" />
+        <update handle="adminhtml_head" />
+        <update handle="bootstrap"/>
+        <reference name="content">
+            <block name="campaign_placement" type="zolagocampaign/vendor_campaign_placement_category" template="zolagocampaign/dropship/campaign/placement/category.phtml"></block>
+        </reference>
+    </zolagocampaign_placement_category_index>
 	
 </layout>

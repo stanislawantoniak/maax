@@ -1,0 +1,47 @@
+<?php
+$bannerTypes = Mage::helper('zolagocampaign')->getBannerTypesList();
+$vendorSlots = array(
+    'box' => array('label' => 'Position', 'count' => 8),
+    'slider' => array('label' => 'SLOT', 'count' => 3)
+);
+?>
+<div class="container">
+    <div class="page-heading row">
+        <div class="col-lg-6">
+            <h3>Women's clothing</h3>
+        </div>
+    </div>
+    <?php if (!empty($bannerTypes)): ?>
+        <?php foreach ($bannerTypes as $type => $typeTitle): ?>
+            <div class="row">
+                <!--=== Example Box ===-->
+                <div class="col-md-12">
+                    <div class="widget box">
+                        <div class="widget-header">
+                            <h4><i class="icon-pin-flag"></i> <?php echo $typeTitle; ?></h4>
+                            <div class="toolbar no-padding"> <div class="btn-group"> <span class="btn btn-xs widget-collapse"><i class="icon-angle-down"></i></span> </div> </div>
+                        </div>
+                        <div class="widget-content banner-type" style="display: block;">
+                            <?php if (isset($vendorSlots[$type]) && !empty($vendorSlots[$type])): ?>
+                                <?php for($i=1; $i<= $vendorSlots[$type]['count']; $i++): ?>
+                                    <div class="row">
+                                        <div class="col-md-6 pull-left">
+                                            <?php echo $vendorSlots[$type]['label']; ?> <?php echo $i; ?>
+                                        </div>
+                                        <div class="col-md-6 pull-right">
+                                            drag to change order - priority
+                                            <button class="btn btn-primary" title="Add" id="add-slot-item-btn">
+                                                <i class="icon-plus-sign"></i><span><span> Add</span></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                <?php endfor; ?>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div> <!-- /.col-md-12 -->
+                <!-- /Example Box -->
+            </div>
+        <?php endforeach; ?>
+    <?php endif; ?>
+</div>
