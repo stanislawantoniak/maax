@@ -49,7 +49,7 @@ class Zolago_Solrsearch_Model_Resource_Queue_Item extends Mage_Core_Model_Resour
 	 * @param Varien_Object $item
 	 * @return boolean
 	 */
-	public function fetchProductId(Varien_Object $item) {
+	public function fetchItemId(Varien_Object $item) {
 		if($item->getProductId() && $item->getStoreId() && $item->getStatus()){
 			$select = $this->getReadConnection()->select();
 			$select->from($this->getMainTable(), array("queue_id"));
@@ -59,7 +59,8 @@ class Zolago_Solrsearch_Model_Resource_Queue_Item extends Mage_Core_Model_Resour
 			$select->where("delete_only=?", $item->getDeleteOnly());
 		    if($result=$this->getReadConnection()->fetchOne($select)){
 				$item->setId($result);
-				return true;
+				$item->setCreatedAt(Varien_Date::now());
+				return $result;
 			}
 		}
 		return false;

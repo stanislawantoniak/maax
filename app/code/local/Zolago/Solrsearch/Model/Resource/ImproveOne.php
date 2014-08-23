@@ -17,67 +17,6 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 	}
 	
 	/**
-	 * @param Mage_Catalog_Model_Resource_Product_Collection $collection
-	 * @return type
-	 */
-	public function getAllIdsToSolveAsianTricks(Mage_Catalog_Model_Resource_Product_Collection $collection) {
-		$select = clone $collection->getSelect();
-		$select->reset(Zend_Db_Select::COLUMNS);
-		$select->columns($collection->getEntity()->getEntityIdField());
-		return $this->getReadConnection()->fetchCol($select);
-	}
-	 /* Load from eav index
-	 * @param Varien_Data_Collection $collection
-	 * @param Mage_Catalog_Model_Resource_Product_Attribute_Collection $attributesColleciton
-	 * @param array $allIds
-	 * @param int $storeId
-	 * @return \Zolago_Solrsearch_Model_Ultility
-	 */
-	public function loadAttributesDataFromIndex(
-			Zolago_Solrsearch_Model_Improve_Collection $collection,
-			Mage_Catalog_Model_Resource_Product_Attribute_Collection $attrbiuteCollection, 
-			array $allIds, $storeId) {
-		
-		$values = $this->getEavIndexAttributeValues($allIds, $storeId);
-		
-		foreach($values as $productId=>$attributes){
-			$item = $collection->getItemById($productId);
-			if(!$item){
-				continue;
-			}
-			foreach($attributes as $attributeId=>$attributeValues){
-				$attributeModel = $attrbiuteCollection->getItemById($attributeId);
-				$item->setOrigData($attributeModel->getAttributeCode() . "_facet", $attributeValues);
-			}
-			Mage::getSingleton("zolagosolrsearch/data")->extendConfigurable($item, $attrbiuteCollection);
-		}
-	}
-	/**
-	 * 
-	 * @param array $entityIds
-	 * @param type $storeId
-	 * @return array
-	 */
-	public function getEavIndexAttributeValues(array $entityIds, $storeId) {
-		$tabel = $this->getTable('catalog/product_index_eav');
-		$select = $this->getReadConnection()->select();
-		$select->from(array("index"=>$tabel), array("entity_id", "attribute_id", "value"));
-		$select->where("index.entity_id IN (?)", $entityIds);
-		$select->where("store_id=?",$storeId);
-		
-		$out = array();
-		foreach($this->getReadConnection()->fetchAll($select) as $row){
-			if(!isset($out[$row['entity_id']][$row['attribute_id']])){
-				$out[$row['entity_id']][$row['attribute_id']] = array();
-			}
-			$out[$row['entity_id']][$row['attribute_id']][] = $row['value'];
-		}
-		
-		return $out;
-		
-	}
-	
-	/**
 	 * @param int|array $childId
 	 * @return array
 	 */
