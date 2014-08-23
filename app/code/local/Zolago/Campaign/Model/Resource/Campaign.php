@@ -213,7 +213,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         return $this->getReadConnection()->fetchAll($select);
     }
 
-    public function getUpDateCampaigns()
+    public function getUpDateCampaigns(array $type)
     {
         $table = $this->getTable("zolagocampaign/campaign");
         $select = $this->getReadConnection()->select();

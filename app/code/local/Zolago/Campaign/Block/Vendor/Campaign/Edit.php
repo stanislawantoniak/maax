@@ -33,9 +33,14 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
             "name" => "name",
             "class" => "form-control",
             "required" => true,
-            "label" => $helper->__('Name')
+            "label" => $helper->__('Campaign name for internal use')
         ));
-
+        $general->addField("name_customer", "text", array(
+            "name" => "name_customer",
+            "class" => "form-control",
+            "required" => true,
+            "label" => $helper->__('Campaign name for customers')
+        ));
         $general->addField("type", "select", array(
             "name" => "type",
             "required" => true,
@@ -51,7 +56,13 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
             "label" => $helper->__('Status'),
             "values" => Mage::getSingleton('zolagocampaign/campaign_status')->toOptionHash()
         ));
-
+        $general->addField("url_type", "radios", array(
+            "name" => "url_type",
+            "required" => true,
+            "label" => $helper->__('URL type'),
+            "values" => Mage::getSingleton('zolagocampaign/campaign_urltype')->toOptionArray(),
+            "value" => Zolago_Campaign_Model_Campaign_Urltype::TYPE_MANUAL_LINK
+        ));
         $general->addField("url_key", "text", array(
             "name" => "url_key",
             "required" => true,
@@ -127,6 +138,8 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
         if (!empty($values)) {
             $values['date_from'] = !empty($values['date_from']) ? date('d-m-Y H:i', strtotime($values['date_from'])) : $values['date_from'];
             $values['date_to'] = !empty($values['date_to']) ? date('d-m-Y H:i', strtotime($values['date_to'])) : $values['date_to'];
+
+            $values["url_type"] = !empty($values['url_type']) ? $values['url_type'] : Zolago_Campaign_Model_Campaign_Urltype::TYPE_MANUAL_LINK;
         }
 
 
@@ -139,6 +152,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Edit extends Mage_Core_Block_Templat
                 "campaign_products" => $productsSelected
             )
         );
+//        Zend_Debug::dump($values);
         $form->setValues($values);
         $this->setForm($form);
     }
