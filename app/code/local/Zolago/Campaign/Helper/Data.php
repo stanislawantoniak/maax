@@ -25,7 +25,7 @@ class Zolago_Campaign_Helper_Data extends Mage_Core_Helper_Abstract
             ->getCollection()
             ->addFieldToFilter('target_path', $string . '.html');
 
-        if ($slugExist || count($oUrlRewriteCollection) == 0) {
+        if ($slugExist || count($oUrlRewriteCollection) > 0) {
             $slug = $slug . '-1.html';
         } else {
             $slug = $slug . '.html';
