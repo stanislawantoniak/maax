@@ -31,10 +31,13 @@ $fValue = $_element->getValue();
                         <option value="image">Image</option>
                         <option value="html">HTML</option>
                     </select>
-
-
-
-
+                    <br /><br />
+                    <h3><?php echo Mage::helper('zolagobanner')->__('Position label')?></h3>
+                    <input type="text" class="input-text"  name="<?php echo $this->getFieldName()?>[$$ROW][position_label]" />
+                    <br />
+                    <h3><?php echo Mage::helper('zolagobanner')->__('Positions count')?></h3>
+                    <input type="text" class="input-text"  name="<?php echo $this->getFieldName()?>[$$ROW][position_count]" />
+                    <br />
                 </td>
                 <td>
                     <h3><?php echo Mage::helper('zolagobanner')->__('Image Definition')?></h3>
@@ -140,7 +143,7 @@ $fValue = $_element->getValue();
             </tr>
         </tfoot>
         <tbody class="fieldset_config_body">
-        <?php if (is_array($fValue)): foreach ($fValue as $row => $fV):?>
+        <?php if (is_array($fValue)): foreach ($fValue as $row => $fV): ?>
             <?php $rowClass = ($row%2) ? 'odd' : 'even'; ?>
             <tr data-row="<?php echo $row; ?>" class="<?php echo $rowClass; ?>" >
                 <td>
@@ -164,6 +167,15 @@ $fValue = $_element->getValue();
                             </option>
                         <?php endforeach; ?>
                     </select>
+                    <br /><br />
+                    <?php $positionLabel = isset($fV['position_label']) ? $fV['position_label'] : 0; ?>
+                    <h3><?php echo Mage::helper('zolagobanner')->__('Position label')?></h3>
+                    <input type="text" class="input-text"  name="<?php echo $this->getFieldName()?>[<?php echo $row; ?>][position_label]" value="<?php echo $positionLabel; ?>" />
+                    <br />
+                    <?php $positionCount = isset($fV['position_count']) ? $fV['position_count'] : 0; ?>
+                    <h3><?php echo Mage::helper('zolagobanner')->__('Positions count')?></h3>
+                    <input type="text" class="input-text"  name="<?php echo $this->getFieldName()?>[<?php echo $row; ?>][position_count]" value="<?php echo $positionCount; ?>" />
+                    <br />
                 </td>
                 <td>
                     <h3><?php echo Mage::helper('zolagobanner')->__('Image Definition')?></h3>
