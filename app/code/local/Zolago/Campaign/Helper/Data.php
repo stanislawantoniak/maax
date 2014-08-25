@@ -34,8 +34,10 @@ class Zolago_Campaign_Helper_Data extends Mage_Core_Helper_Abstract
         return $slug;
     }
 
-    public function getBannerTypesList()
+    public function getBannerTypesSlots()
     {
         return Mage::getSingleton('zolagobanner/banner_type')->toOptionHash();
     }
+
+
 }

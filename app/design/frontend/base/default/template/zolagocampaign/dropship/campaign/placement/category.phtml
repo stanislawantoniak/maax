@@ -1,5 +1,7 @@
 <?php
-$bannerTypes = Mage::helper('zolagocampaign')->getBannerTypesList();
+$bannerHelper = Mage::helper('zolagpbanner');
+$data = $bannerHelper->getBannersConfiguration();
+Zend_Debug::dump($data);
 $vendorSlots = array(
     'box' => array('label' => 'Position', 'count' => 8),
     'slider' => array('label' => 'SLOT', 'count' => 3)
