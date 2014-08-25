@@ -8,28 +8,46 @@
 		<span class="help-block"><?php echo $this->__("Source price");?></span>
 		<select id="converter_price_type"  name="converter_price_type" type="text" class="form-control priceSource">
 			<?php foreach ($this->getPriceSourceOptions() as $option):?>
+			<?php $_label = $option['label'] ? $option['label'] : $this->__("Manual");?>
 			<?php $_selected = $option['value']==$_product->getData('converter_price_type');?>
-			<option data-pointer="price-pointer-<?php echo $this->escapeHtml($option['label']);?>" data-source="<?php echo $this->escapeHtml($option['label']);?>" data-price="<?php echo $option['price'];?>" <?php if($_selected):?>selected="selected"<?php endif;?> value="<?php echo $this->escapeHtml($option['value']);?>"><?php echo $this->escapeHtml($option['label']);?></option>
+			<option data-pointer="price-pointer-<?php echo $this->escapeHtml($option['label']);?>" 
+					data-source="<?php echo $this->escapeHtml($option['label']);?>" 
+					data-price="<?php echo $option['price'];?>" 
+					<?php if($_selected):?>selected="selected"<?php endif;?> 
+					value="<?php echo $this->escapeHtml($option['value']);?>">
+						<?php echo $this->escapeHtml($_label);?></option>
 			<?php endforeach;?>
 		</select>
 	</div>
 	<div class="col-md-3 form-group">
 		<span class="help-block"><?php echo $this->__("Margin");?></span>
-		<input id="price_margin" name="price_margin" data-margin="<?php echo $_product->getPriceMargin();?>"  value="<?php echo $_product->getPriceMargin();?>" type="text" class="marignPercent form-control"/>
+		<input id="price_margin" name="price_margin" data-margin="<?php echo $_product->getPriceMargin();?>"  
+			   value="<?php echo $_product->getPriceMargin();?>" type="text" class="marignPercent form-control"/>
 	</div>
 	<div class="col-md-3 form-group">
 		<span class="help-block"><?php echo $this->__("Regular price");?></span>
-		<input id="price" name="price" value="<?php echo $_product->getPrice();?>" required="required" type="text" class="numeric form-control"/>
+		<input id="price" name="price" value="<?php echo $_product->getPrice();?>" required="required" 
+			   type="text" class="numeric form-control"/>
 	</div>
 	<div class="col-md-3 form-group">
 		<span class="help-block"><?php echo $this->__("Msrp");?></span>
-		<input id="msrp" name="msrp" value="<?php echo $_product->getMsrp();?>" type="text" class="numeric form-control"/>
+		<input id="msrp" name="msrp" data-price="<?php echo $_product->getMsrp();?>" value="<?php echo $_product->getMsrp();?>" type="text" class="numeric form-control"/>
+		<?php foreach($this->getMsrpSourceOptions() as $option):?>
+		<label class="radio-inline" for="converter_msrp_type-<?php echo $option['value'];?>">
+			<input <?php if($option['value']==$_product->getData('converter_msrp_type')):?>checked="chekced"<?php endif;?> 
+					data-price="<?php echo $option['price']?>"
+					type="radio" class="uniform" id="converter_msrp_type-<?php echo $option['value'];?>" 
+					name="converter_msrp_type" value="<?php echo $option['value'];?>"/> 
+			<?php echo $option['label'];?>
+		</label>
+		<?php endforeach;?>
+		
 	</div>
 </div>
 <?php /* Use child products */ ?>
 <?php if($_product->isComposite()):?>
 <div class="next-row">
-	<table class="table table-condensed table-striped">
+	<table class="table table-condensed table-striped table-bordered">
 		<colgroup>
 			<col width="100"/>
 			<col width="100"/>

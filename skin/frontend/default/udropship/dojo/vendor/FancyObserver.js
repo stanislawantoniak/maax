@@ -46,6 +46,11 @@ define([
 			}
 			return value;
 		},
+		setValue: function(val){
+			this._clear();
+			this.oldValue = this.getValue(val);
+			this.field.value = val;
+		},
 		// Zaczyna sprawdzanie
 		registerEvent: function(){
 			var self = this;

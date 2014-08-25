@@ -30,6 +30,9 @@ define([
 					numeric = jQuery(".marignPercent, .numeric", node),
 					source = jQuery("#converter_price_type", node),
 					margin = jQuery("#price_margin", node),
+					msrp = jQuery("#msrp", node),
+					msrpTypeManual = jQuery("#converter_msrp_type-1", node),
+					msrpTypeAuto = jQuery("#converter_msrp_type-0", node),
 					// Composite
 					rows = jQuery("table tbody tr", node),
 					minRow = jQuery("table tbody tr.minimal-price", node),
@@ -148,8 +151,44 @@ define([
 					rowObservers.push(new FancyObserver(this, rowHandler));
 				})
 				
-				App.applyNumeric(); // Apply numeric plugin
+				// Process msrp
+				// Set minimal price from conerters
+				var msrpObserver = new FancyObserver(msrp[0], function(){
+					msrpTypeManual.prop('checked', true);
+					if(jQuery.fn.uniform){
+						jQuery.uniform.update(msrpTypeManual);
+						jQuery.uniform.update(msrpTypeAuto);
+					}
+				});
 				
+				msrpTypeAuto.add(msrpTypeManual).change(function(){
+					var el = jQuery(this), value;
+					if(el.is(":checked")){
+						// Auto price
+						if(el.val()==0){
+							value = el.data('price');
+							//value = msrp.data('price');
+							if(!isNaN(parseFloat(value))){
+								msrpObserver.setValue(misc.number(value));
+							}else{
+								msrpObserver.setValue('');
+							}
+						// Manual price - do nth
+						}else{
+							
+						}
+					}
+					// Make disable?
+					// msrp.prop('readonly', jQuery(this).val()==0);
+				});
+				
+				if(msrpTypeAuto.is(":checked")){
+					msrpTypeAuto.change();
+				}
+				
+				
+				App.applyNumeric(); // Apply numeric plugin
+				App.uniform();
 				
 				form.validate({
 					submitHandler: function(){

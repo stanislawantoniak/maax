@@ -74,11 +74,13 @@ $captionsNumber = (int)$config->captions_number;
 
 <script type="text/javascript">
     jQuery(function ($) {
+        var imageSize = 60; //KB
+
         var form = $("#edit-banner");
         new Zolago.formIntegrator(form);
         var ruleResolution = {
             imageRequired: true,
-            imageResolution: true
+            imageSize: imageSize
         };
 
         var picturesNumber = '<?php echo $picturesNumber; ?>';
@@ -103,7 +105,7 @@ $captionsNumber = (int)$config->captions_number;
             }
         }
 
-console.log(rulesEx);
+
         form.validate(
             {
                 rules: rulesEx
@@ -124,27 +126,22 @@ console.log(rulesEx);
             reader.onload = function(_file) {
                 image.src    = _file.target.result;              // url.createObjectURL(file);
                 image.onload = function() {
-                    $(input).data('resolution', 0);
-                    var restrictH = parseInt($(input).data("restricth"));
-                    var restrictW = parseInt($(input).data("restrictw"));
-                    if(parseInt(this.width)-restrictW !=0 && parseInt(this.height)-restrictH !=0){
-                        $(input).data('resolution', 0);
-                    } else {
-                        $(input).data('resolution', 1);
-//                        $(input).parents('.banner-image-container').find('input[type=text]').val(this.src);
-//                        $(input).parents('.banner-image-container').find('input[type=hidden]').val(this.src);
-                        var id = $(input).attr('id');
-                        var thumbPlace = $(input).parents('.banner-image-container').find('.banner-thumbnail');
+                    if(jQuery.type(file) !=="undefined"){
+                        if (jQuery.type(file) !=="undefined" && file.size <= (imageSize * 1000)) {
+                            var id = $(input).attr('id');
+                            var thumbPlace = $(input).parents('.banner-image-container').find('.banner-thumbnail');
 
-                        var preview = '<a href="' +this.src+ '" '
-                            + ' onclick="imagePreview(\''+id+'_image\'); return false;">'
-                            + '<img src="' + this.src + '" id="'+id+'_image" title="'+this.src+'"'
-                            + ' alt="'+this.src+'" height="200" width="200" class="small-image-preview v-middle" />'
-                            + '</a>';
+                            var preview = '<a href="' +this.src+ '" '
+                                + ' onclick="imagePreview(\''+id+'_image\'); return false;">'
+                                + '<img src="' + this.src + '" id="'+id+'_image" title="'+this.src+'"'
+                                + ' alt="'+this.src+'" height="200" width="200" class="small-image-preview v-middle" />'
+                                + '</a>';
 
 
-                        thumbPlace.html(preview);
+                            thumbPlace.html(preview);
+                        }
                     }
+
 
 
                 };

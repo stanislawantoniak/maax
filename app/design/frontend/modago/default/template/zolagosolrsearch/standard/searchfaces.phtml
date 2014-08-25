@@ -1,0 +1,35 @@
+<?php if ($this->isLayerNavigationActive()):?>
+<?php $filterQuery = $this->getFilterQuery(); ?>
+    <div class="current-filter visible-xs">
+        <dl class="clearfix">
+            <dt>Aktualnie ogladasz:</dt>
+            <dd>
+                <span class="label">Rozmiar: <span class="value">M</span><i class="fa fa-times"></i></span>
+                <span class="label">Rozmiar: <span class="value">M</span><i class="fa fa-times"></i></span>
+                <span class="label">Marka: <span class="value">Adidas</span><i class="fa fa-times"></i></span>
+                <span class="label">Marka: <span class="value">Adidas</span><i class="fa fa-times"></i></span>
+            </dd>
+            <dd class="action"><a href="#" class="button button-third">wyczyść wszystko</a></dd>
+        </dl>
+    </div>
+    <div class="sidebar">
+
+        <div class="block block-layered-nav" id="solr_search_facets">
+            <div class="block-content">
+                <form name="searchFacets" method="get"
+                      action="<?php echo $this->helper('solrsearch')->getResultUrl() ?>">
+                    <input type="hidden" name="q" value="<?php echo $this->getData('querytext') ?>"/>
+                    <?php if ($this->isShoppingOptionsActive()): ?>
+                        <dl id="narrow-by-list">
+                            <?php foreach ($this->getFilterBlocks() as $filterBlock): ?>
+                                <!-- Blocks here -->
+                                <?php echo $filterBlock->toHtml(); ?>
+                            <?php endforeach; ?>
+                            <?php /* echo $this->getPriceFacets()*/ ?>
+                        </dl>
+                    <?php endif; ?>
+                </form>
+            </div>
+        </div>
+    </div>
+<?php endif;?>

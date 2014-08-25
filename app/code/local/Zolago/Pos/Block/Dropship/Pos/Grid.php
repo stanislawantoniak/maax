@@ -32,26 +32,27 @@ class Zolago_Pos_Block_Dropship_Pos_Grid extends Mage_Adminhtml_Block_Widget_Gri
 			"class"		=>  "form-controll",
 			"header"	=>	$_helper->__("POS Name"),
 		));
-		
-		$this->addColumn("client_number", array(
+		$this->addColumn("city", array(
 			"type"		=>	"text",
-			"index"		=>	"client_number",
+			"index"		=>	"city",
 			"class"		=>  "form-controll",
-			"header"	=>	$_helper->__("Client number"),
+			"header"	=>	$_helper->__("City"),
 		));
-		
-		$this->addColumn("phone", array(
+		$this->addColumn("dhl_account", array(
 			"type"		=>	"text",
-			"index"		=>	"phone",
+			"index"		=>	"dhl_account",
 			"class"		=>  "form-controll",
-			"header"	=>	$_helper->__("Phone"),
-		));
-		
-		$this->addColumn("external_id", array(
-			"type"		=>	"text",
-			"index"		=>	"external_id",
+			"header"	=>	$_helper->__("Dhl account"),
+		));		
+		$this->addColumn("is_active", array(
+			"type"		=>	"options",
+			"options"	=> array(
+				Zolago_Pos_Model_Pos::STATUS_ACTIVE => $this->__("Active"),
+				Zolago_Pos_Model_Pos::STATUS_INACTIVE => $this->__("Not Active")
+			),
+			"index"		=>	"is_active",
 			"class"		=>  "form-controll",
-			"header"	=>	$_helper->__("External ID"),
+			"header"	=>	$_helper->__("Is active"),
 		));
 		
 		$this->addColumn("priority", array(
@@ -67,18 +68,6 @@ class Zolago_Pos_Block_Dropship_Pos_Grid extends Mage_Adminhtml_Block_Widget_Gri
 			"class"		=>  "form-controll",
 			"header"	=>	$_helper->__("Minimal stock"),
 		));
-		
-		$this->addColumn("is_active", array(
-			"type"		=>	"options",
-			"options"	=> array(
-				Zolago_Pos_Model_Pos::STATUS_ACTIVE => $this->__("Active"),
-				Zolago_Pos_Model_Pos::STATUS_INACTIVE => $this->__("Not Active")
-			),
-			"index"		=>	"is_active",
-			"class"		=>  "form-controll",
-			"header"	=>	$_helper->__("Is active"),
-		));
-		
 		$this->addColumn("actions", array(
                 'header'    => Mage::helper('zolagopos')->__('Action'),
 				'renderer'	=> Mage::getConfig()->getBlockClassName("zolagoadminhtml/widget_grid_column_renderer_link"),
