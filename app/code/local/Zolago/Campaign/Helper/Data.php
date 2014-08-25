@@ -19,13 +19,17 @@ class Zolago_Campaign_Helper_Data extends Mage_Core_Helper_Abstract
         //$collection->printLogQuery(true);
         $slugExist = $collection->getFirstItem()->getUrlKey();
 
-        //2. Check if slug exist among the URL Rewrite
+        //2. Check if slug exist among the URL Rewrite (products)
         $oUrlRewriteCollection = Mage::getModel('core/url_rewrite')
             ->getCollection()
-            ->addFieldToFilter('target_path', $string . '.html')
-        ->printLogQuery(true);;
+            ->addFieldToFilter('target_path', $slug . '.html')
+        ->printLogQuery(true);
 
-        if ($slugExist || count($oUrlRewriteCollection) > 0) {
+        //3. Check if slug exist among the categories URL
+        $categoriesWithPath = Mage::getResourceModel('zolagocampaign/campaign')
+            ->getCategoriesWithPath($slug . '.html');
+
+        if ($slugExist || count($oUrlRewriteCollection) > 0 || count($categoriesWithPath) > 0) {
             $slug = $slug . '-1.html';
         } else {
             $slug = $slug . '.html';
