@@ -543,6 +543,8 @@ Mall.listing = {
 
     _current_total: 0,
 
+    _current_price_rage: [0, 0],
+
     init: function() {
 //        this.canLoadMoreProducts();
         this.attachShowMoreEvent();
@@ -550,6 +552,7 @@ Mall.listing = {
         this.attachFilterEnumEvents();
         this.attachFilterDroplistEvents();
         this.attachFilterFlagEvents();
+        this.attachFilterPriceSliderEvents();
     },
 
     getMoreProducts: function() {
@@ -846,6 +849,37 @@ Mall.listing = {
 
     },
 
+    attachFilterPriceSliderEvents: function() {
+        var sliderRange = jQuery( "#slider-range" );
+        if (sliderRange.length >= 1) {
+            jQuery( "#slider-range" ).slider({
+                range: true,
+                min: Mall.listing.getCurrentPriceRange()[0],
+                max: Mall.listing.getCurrentPriceRange()[1],
+                values: Mall.listing.getCurrentPriceRange(),
+                slide: function(event, ui) {
+                    jQuery("#zakres_min").val(ui.values[0]);
+                    jQuery("#zakres_max").val(ui.values[1]);
+
+                }
+
+
+            });
+
+            jQuery("#zakres_min").val(jQuery("#slider-range").slider("values", 0));
+            jQuery("#zakres_max").val(jQuery("#slider-range").slider("values", 1));
+            jQuery('#slider-range').on('click', 'a', function(event) {
+                var checkSlider = jQuery('#checkSlider').find('input');
+                if (!checkSlider.is(':checked')) {
+                    checkSlider.prop('checked', true);
+                    jQuery('#filter_price').find('.action').removeClass('hidden');
+                }
+            });
+
+
+        };
+    },
+
     toggleShowMoreState: function(item) {
         var state = jQuery(item).attr("data-state");
         if(state == "0") {
@@ -918,6 +952,10 @@ Mall.listing = {
         return this._current_total;
     },
 
+    getCurrentPriceRange: function() {
+        return this._current_price_rage;
+    },
+
     setPageIncrement: function() {
         this._current_page += 1;
     },
@@ -958,6 +996,12 @@ Mall.listing = {
 
     setCurrentMobileFilterState: function(state) {
         this._current_mobile_filter_state = state;
+
+        return this;
+    },
+
+    setCurrentPriceRange: function(min, max) {
+        this._current_price_rage = [min, max];
 
         return this;
     }

@@ -237,34 +237,34 @@ jQuery.noConflict();
                 }
               });
           };
-          var sliderRange = $( "#slider-range" );
-          if (sliderRange.length >= 1) {
-          $( "#slider-range" ).slider({
-                  range: true,
-                  min: 0,
-                  max: 500,
-                  values: [ 75, 300 ],
-                  slide: function(event, ui) {
-                      $("#zakres_min").val(ui.values[0]);
-                      $("#zakres_max").val(ui.values[1]);
-                      
-                  }
-                  
-
-                }); 
-
-               $("#zakres_min").val($("#slider-range").slider("values", 0));
-               $("#zakres_max").val($("#slider-range").slider("values", 1));
-               $('#slider-range').on('click', 'a', function(event) {
-                  var checkSlider = $('#checkSlider').find('input');
-                  if (!checkSlider.is(':checked')) {
-                    checkSlider.prop('checked', true);
-                    $('#filter_price').find('.action').removeClass('hidden');
-                  }
-                });
-
-               
-          };
+//          var sliderRange = $( "#slider-range" );
+//          if (sliderRange.length >= 1) {
+//          $( "#slider-range" ).slider({
+//                  range: true,
+//                  min: 0,
+//                  max: 500,
+//                  values: [ 75, 300 ],
+//                  slide: function(event, ui) {
+//                      $("#zakres_min").val(ui.values[0]);
+//                      $("#zakres_max").val(ui.values[1]);
+//
+//                  }
+//
+//
+//                });
+//
+//               $("#zakres_min").val($("#slider-range").slider("values", 0));
+//               $("#zakres_max").val($("#slider-range").slider("values", 1));
+//               $('#slider-range').on('click', 'a', function(event) {
+//                  var checkSlider = $('#checkSlider').find('input');
+//                  if (!checkSlider.is(':checked')) {
+//                    checkSlider.prop('checked', true);
+//                    $('#filter_price').find('.action').removeClass('hidden');
+//                  }
+//                });
+//
+//
+//          };
       });
 
 
