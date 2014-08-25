@@ -3,7 +3,7 @@ $bannerHelper = Mage::helper('zolagobanner');
 $bannerTypes = $bannerHelper->getBannersConfiguration();
 $vendor = Mage::getSingleton('udropship/session')->getVendor();
 
-$campaigns = $this->getCampaigns();
+//$campaigns = $this->getCampaigns();
 //Zend_Debug::dump($campaigns);
 ?>
 <div class="container">
@@ -35,7 +35,7 @@ $campaigns = $this->getCampaigns();
 
                                             <a href="#" class="btn btn-primary"
                                                data-toggle="modal"
-                                               data-target="#basicModal"><i class="icon-plus-sign"></i><span><span> Add</span></span></a>
+                                               data-target="#basicModal"><i class="icon-plus-sign"></i><span><span> <?php echo $this->__('Add'); ?></span></span></a>
 <!--                                            --><?php //$titleCode = Mage::getSingleton('zolagobanner/banner_type')->getTypCodeByTitle($bannerType->title); echo $titleCode;?>
 <!--                                            --><?php //if (isset($campaigns[$titleCode]) && !empty($campaigns[$titleCode])): ?>
 <!--                                                --><?php //foreach ($campaigns[$titleCode] as $campaign): ?>
@@ -69,29 +69,35 @@ $campaigns = $this->getCampaigns();
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
                 <h4 class="modal-title" id="myModalLabel">
                     Add new creative for:
-                    <span data-val="category">Women's clothes</span>
-                    - <span data-val="banner-type">Slider</span> - <span data-val="position">Slot 2</span>
+                    <span data-val="category"></span>
+                    - <span data-val="banner-type"></span> - <span data-val="position"></span>
                 </h4>
             </div>
             <div class="modal-body row">
                 <div class="col-md-6">
-                    <h3>Choose campaign: </h3>
-                    <select name="campaign">
-                        <option value="1">1</option>
-                    </select>
-
-                    <h3>Choose creative: </h3>
-                    <select name="banner">
-                        <option value="1">1</option>
-                    </select>
-
-                    <h3>Set priority: </h3>
-                    <select name="priority">
-                        <option value="1">1</option>
-                    </select>
+                    <div class="row">
+                        <label>Choose campaign: </label>
+                        <select name="campaign">
+                            <option value="1">1</option>
+                        </select>
+                    </div>
+                    <div class="row">
+                        <label>Choose creative: </label>
+                        <select name="banner">
+                            <option value="1">1</option>
+                        </select>
+                    </div>
+                    <div class="row">
+                        <label>Set priority: </label>
+                        <select name="priority">
+                            <option value="1">1</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="col-md-6">
-                    <h3>Preview: </h3>
+                    <div class="row">
+                        <label>Preview: </label>
+                    </div>
                 </div>
 
             </div>
@@ -102,3 +108,23 @@ $campaigns = $this->getCampaigns();
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    jQuery(function ($) {
+        $("#basicModal").on("show.bs.modal", function (e) {
+            var category = $('[data-source="category"]').html();
+            var bannerType = $(e.relatedTarget).parents('.widget').find('[data-source="banner-type"]').html();
+            var position = $(e.relatedTarget).parents('.widget .row').find('[data-source="position"]').html();
+
+            $(this).find('[data-val="category"]').html(category);
+            $(this).find('[data-val="banner-type"]').html(bannerType);
+            $(this).find('[data-val="position"]').html(position);
+
+        });
+
+        $("#basicModal").on("hide.bs.modal", function (e) {
+            $(this).find('[data-val="category"]').html('');
+            $(this).find('[data-val="banner-type"]').html('');
+            $(this).find('[data-val="position"]').html('');
+        });
+    })
+</script>
