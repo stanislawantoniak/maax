@@ -25,15 +25,16 @@ $vendorSlots = array(
                             <?php if (isset($vendorSlots[$type]) && !empty($vendorSlots[$type])): ?>
                                 <?php for($i=1; $i<= $vendorSlots[$type]['count']; $i++): ?>
                                     <div class="row">
-                                        <div class="col-md-6 pull-left">
+                                        <div class="col-md-6">
                                             <?php echo $vendorSlots[$type]['label']; ?> <?php echo $i; ?>
                                         </div>
-                                        <div class="col-md-6 pull-right">
+                                        <div class="col-md-6 align-right">
                                             drag to change order - priority
                                             <button class="btn btn-primary" title="Add" id="add-slot-item-btn">
                                                 <i class="icon-plus-sign"></i><span><span> Add</span></span>
                                             </button>
                                         </div>
+                                        <br /><br /><br />
                                     </div>
                                 <?php endfor; ?>
                             <?php endif; ?>

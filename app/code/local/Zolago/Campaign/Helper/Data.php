@@ -22,9 +22,10 @@ class Zolago_Campaign_Helper_Data extends Mage_Core_Helper_Abstract
         //2. Check if slug exist among the URL Rewrite
         $oUrlRewriteCollection = Mage::getModel('core/url_rewrite')
             ->getCollection()
-            ->addFieldToFilter('target_path', $string . '.html');
+            ->addFieldToFilter('target_path', $string . '.html')
+        ->printLogQuery(true);;
 
-        if ($slugExist || count($oUrlRewriteCollection) == 0) {
+        if ($slugExist || count($oUrlRewriteCollection) > 0) {
             $slug = $slug . '-1.html';
         } else {
             $slug = $slug . '.html';
@@ -32,8 +33,7 @@ class Zolago_Campaign_Helper_Data extends Mage_Core_Helper_Abstract
 
         return $slug;
     }
-class Zolago_Campaign_Helper_Data extends Mage_Core_Helper_Abstract
-{
+
     public function getBannerTypesList()
     {
         return Mage::getSingleton('zolagobanner/banner_type')->toOptionHash();
