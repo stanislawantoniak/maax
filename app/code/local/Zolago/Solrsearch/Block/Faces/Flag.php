@@ -82,4 +82,56 @@ class Zolago_Solrsearch_Block_Faces_Flag extends Zolago_Solrsearch_Block_Faces_A
 		
 		return $facetValue;
 	}
+
+    public function isBestseller($item)
+    {
+        if(strtolower(Mage::helper('zolagosolrsearch')->__($item)) == "bestseller") {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isSale($item)
+    {
+        if(strtolower(Mage::helper('zolagosolrsearch')->__($item)) == 'wyprzedaż') {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isNew($item)
+    {
+        if(strtolower(Mage::helper('zolagosolrsearch')->__($item)) == 'nowość') {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isPromotion($item)
+    {
+        if(strtolower(Mage::helper('zolagosolrsearch')->__($item)) == 'promocja') {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function getNameBasedOnContent($item)
+    {
+        $name = '';
+        if($this->isBestseller($item)) {
+            $name = 'filter_recommended_products_bestseler';
+        } else if($this->isNew($item)) {
+            $name = 'filter_recommended_products_news';
+        } else if($this->isPromotion($item)) {
+            $name = 'filter_recommended_products_propotion';
+        } else if($this->isSale($item)) {
+            $name = 'filter_recommended_products_sale';
+        }
+
+        return $name;
+    }
 }
