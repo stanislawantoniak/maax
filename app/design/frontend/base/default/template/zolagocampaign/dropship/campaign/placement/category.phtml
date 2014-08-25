@@ -138,7 +138,7 @@ $vendor = Mage::getSingleton('udropship/session')->getVendor();
             $(this).find('[data-val="banner-type"]').html(bannerType);
             $(this).find('[data-val="position"]').html(position);
 
-            $(e.relatedTarget).parents('.row').find('.col-md-12').append("<div data-targ='add'></div>");
+            $(e.relatedTarget).closest('.row').find('.col-md-12').append("<div data-targ='add'></div>");
 
         });
 
@@ -161,8 +161,10 @@ $vendor = Mage::getSingleton('udropship/session')->getVendor();
                 '<i class="icon-warning-sign"></i> 01.07.2014 12:00 - 01.08.2014 12:00' +
                 '</div>' +
                 '</div>';
-            console.log($(this).parents('.row'));
+
             $('[data-targ="add"]').replaceWith(campaignBlock);
+            $('#basicModal').modal('hide');
+
         })
     })
 </script>
