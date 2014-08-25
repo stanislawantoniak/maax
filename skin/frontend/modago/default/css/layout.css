@@ -737,11 +737,11 @@ section.section h2.title_section i {
 .sidebar-first.node-type-main_categories #sidebar .section {
   margin-bottom: 12px; }
 
-/* line 124, ../sass/layout/dimensions/_sidebar.scss */
-#filter_style .form-group, .filter-enum .form-group, #note_client .form-group {
+/* line 125, ../sass/layout/dimensions/_sidebar.scss */
+#filter_style .form-group, .filter-droplist .form-group, .filter-enum .form-group, #note_client .form-group {
   margin-bottom: 5px; }
 
-/* line 131, ../sass/layout/dimensions/_sidebar.scss */
+/* line 132, ../sass/layout/dimensions/_sidebar.scss */
 #note_client .form-group .note {
   top: -2px;
   position: relative; }
@@ -2285,12 +2285,12 @@ html.fb-static .fb-slidebar, .fb-slidebar.fb-static {
 .manufacturerList li.lastChecked {
   margin-bottom: 5px; }
 
-/* line 178, ../sass/layout/modules/_sidebar.scss */
-#filter_style .select-group.medium, .filter-enum .select-group.medium {
+/* line 179, ../sass/layout/modules/_sidebar.scss */
+#filter_style .select-group.medium, .filter-droplist .select-group.medium, .filter-enum .select-group.medium {
   width: 140px;
   max-width: 140px; }
-/* line 181, ../sass/layout/modules/_sidebar.scss */
-#filter_style .select-group.medium .button-select, .filter-enum .select-group.medium .button-select {
+/* line 182, ../sass/layout/modules/_sidebar.scss */
+#filter_style .select-group.medium .button-select, .filter-droplist .select-group.medium .button-select, .filter-enum .select-group.medium .button-select {
   width: 140px;
   min-width: 140px; }
 
@@ -6414,7 +6414,7 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
   top: -4px; }
 
 /* line 122, ../sass/layout/style/_sidebar.scss */
-#filter_style, .filter-enum {
+#filter_style, .filter-droplist .filter-enum {
   padding-left: 0px; }
 
 /* line 129, ../sass/layout/style/_sidebar.scss */

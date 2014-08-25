@@ -96,6 +96,7 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Catalog_Controller_Ve
 		foreach($this->_getRestQuery() as $key=>$value){
 			$collection->addAttributeToFilter($key, $value);
 		}
+		Mage::log($collection->getSelect()."");
 
 		// Make order and limit
 		$out = $collection->prepareRestResponse(
