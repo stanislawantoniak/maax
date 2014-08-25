@@ -109,7 +109,8 @@ class Zolago_Solrsearch_Model_Queue extends Varien_Data_Collection{
 		$resource = Mage::getResourceModel("zolagosolrsearch/queue_item");
 		$item->setStatus(Zolago_Solrsearch_Model_Queue_Item::STATUS_WAIT);
 		// Skup double items
-		if(!$item->getId() && !$resource->fetchProductId($item)){
+		if(!$item->getId()){
+			$resource->fetchItemId($item);
 			//$this->_log("Single product {$item->getProductId()} added to queue with store {$item->getStoreId()}");
 			$item->save();
 		}
@@ -220,9 +221,12 @@ class Zolago_Solrsearch_Model_Queue extends Varien_Data_Collection{
 		
 		$collection->addFieldToFilter("core_name", $core);
 		$collection->addFieldToFilter("status", Zolago_Solrsearch_Model_Queue_Item::STATUS_WAIT);
-		$collection->setOrder("delete_only", "desc");
+		
+		// Sort by inset 
 		$collection->setOrder("created_at", "asc");
 		$collection->setOrder("product_id", "asc");
+		$collection->setOrder("delete_only", "desc");
+		
 		$collection->getSelect()->limit($this->_limit);
 		
 		// Load and count
