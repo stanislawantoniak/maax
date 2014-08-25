@@ -37,6 +37,10 @@ class Zolago_DropshipVendorAskQuestion_VendorController extends Unirgy_DropshipV
 						!in_array($questionVendorId, $vendor->getChildVendorIds())){
 					Mage::throwException('Question not found');
 				}
+				
+				if($question->getAnswerStatus()){
+					Mage::throwException('Question answered!');
+				}
 
 				/*
 				if (!$question->validateVendor($session->getVendorId())) {

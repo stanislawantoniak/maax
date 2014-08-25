@@ -7,6 +7,7 @@ class Zolago_DropshipVendorAskQuestion_Block_Vendor_Question_Grid extends Mage_A
         $this->setId('zolagopos_pos_grid');
         $this->setDefaultSort('question_date');
         $this->setDefaultDir('desc');
+		$this->setSaveParametersInSession(1);
 		// Need
         $this->setGridClass('z-grid');
 		$this->setTemplate("zolagoadminhtml/widget/grid.phtml");
@@ -15,7 +16,6 @@ class Zolago_DropshipVendorAskQuestion_Block_Vendor_Question_Grid extends Mage_A
 	protected function _prepareCollection(){
 		$collection = Mage::getModel('udqa/question')->getCollection();
 		$collection->
-				joinShipments()->
 				joinProducts()->
 				joinVendors();
 		
@@ -27,7 +27,10 @@ class Zolago_DropshipVendorAskQuestion_Block_Vendor_Question_Grid extends Mage_A
 		$collection->addFieldToFilter("main_table.vendor_id", 
 			array("in"=>  array_unique($vendorsIds)));
 		
-		$collection->getSelect()->columns(array('is_replied' => new Zend_Db_Expr('if(LENGTH(answer_text)>0,1,0)')));
+		$collection->getSelect()->columns(array(
+			'is_replied' => new Zend_Db_Expr('if(LENGTH(answer_text)>0,1,0)'),
+			'answer_date' => new Zend_Db_Expr('if(main_table.answer_date>0, main_table.answer_date, NULL)')
+		));
 
         $this->setCollection($collection);
         return parent::_prepareCollection();
@@ -89,12 +92,6 @@ class Zolago_DropshipVendorAskQuestion_Block_Vendor_Question_Grid extends Mage_A
 			"header"	=>	$_helper->__("Visibility"),
 		));
 		
-		$this->addColumn("shipment_increment_id", array(
-			"type"		=>	"text",
-			"index"		=>	"shipment_increment_id",
-			"class"		=>  "form-controll",
-			"header"	=>	$_helper->__("Shipment"),
-		));
 		
 		$this->addColumn("order_increment_id", array(
 			"type"		=>	"text",
