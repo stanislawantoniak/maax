@@ -18,6 +18,16 @@ class Zolago_Catalog_Block_Vendor_Price extends Mage_Core_Block_Template
 		);
 		$priceType->setStoreId($this->getCurrentStoreId());
 		/* @var $priceType Mage_Catalog_Model_Resource_Eav_Attribute */
+		$priceTypes = array_merge(
+				array(array("value"=>0, "label"=>"Manual")), 
+				$this->_clearEmpty($priceType->getSource()->getAllOptions(false))
+		);
+		
+		$msrpType = Mage::getSingleton('eav/config')->getAttribute(
+			Mage_Catalog_Model_Product::ENTITY,
+			Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER_MSRP_TYPE_CODE
+		);
+		/* @var $msrpTypes Mage_Catalog_Model_Resource_Eav_Attribute */
 		
 		$status = Mage::getSingleton('eav/config')->getAttribute(
 			Mage_Catalog_Model_Product::ENTITY,
@@ -39,8 +49,9 @@ class Zolago_Catalog_Block_Vendor_Price extends Mage_Core_Block_Template
 		/* @var $bool Mage_Eav_Model_Entity_Attribute_Source_Boolean */
 		
 		$source=array(
+			"converter_price_type"	=> $priceTypes,
+			"converter_msrp_type"	=> $this->_clearEmpty($msrpType->getSource()->getAllOptions(false)),
 			"campaign_regular_id"	=> $this->_clearEmpty($campaign->toOptionArray()),
-			"converter_price_type"	=> $this->_clearEmpty($priceType->getSource()->getAllOptions(false)),
 			"status"				=> $this->_clearEmpty($status->getSource()->getAllOptions(false)),
 			"type_id"				=> $this->_clearEmpty($typeModel::getAllOptions()),
 			"product_flag"			=> $this->_clearEmpty($flags->getSource()->getAllOptions(false)),

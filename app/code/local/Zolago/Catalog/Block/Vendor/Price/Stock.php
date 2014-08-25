@@ -14,6 +14,19 @@ class Zolago_Catalog_Block_Vendor_Price_Stock extends Zolago_Catalog_Block_Vendo
 	}
 	
 	/**
+	 * @return Mage_CatalogInventory_Model_Stock_Item
+	 */
+	public function getStockItem() {
+			if(!$this->getData("stock_item")){
+			$stockItem = Mage::getModel("cataloginventory/stock_item");
+			/* @var $stockItem Mage_CatalogInventory_Model_Stock_Item */
+			$stockItem->loadByProduct($this->getProduct());
+			$this->setData("stock_item", $stockItem);
+		}
+		return $this->getData("stock_item");
+	}
+	
+	/**
 	 * @return array
 	 */
 	public function getItems() {
@@ -24,7 +37,7 @@ class Zolago_Catalog_Block_Vendor_Price_Stock extends Zolago_Catalog_Block_Vendo
 			/* @var $pos Zolago_Pos_Model_Pos */
 			$item = new Varien_Object;
 			$item->setPos($pos);
-			$item->setImportedStock(null);
+			$item->setImportedStock($this->getStockItem()->getQty());
 			$item->setConverterStock($this->_extractConverterStock($data, $pos));
 			
 			$finalStock = null;
@@ -72,7 +85,7 @@ class Zolago_Catalog_Block_Vendor_Price_Stock extends Zolago_Catalog_Block_Vendo
 	 * @return strning
 	 */
 	public function formatNumber($number) {
-		return is_null($number) ? $this->__("N/A")  : $number;
+		return is_null($number) ? $this->__("N/A")  : round($number,2);
 	}
 
 }

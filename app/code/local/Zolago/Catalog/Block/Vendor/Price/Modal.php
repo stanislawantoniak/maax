@@ -6,10 +6,76 @@ class Zolago_Catalog_Block_Vendor_Price_Modal extends Zolago_Catalog_Block_Vendo
 	/**
 	 * @return array
 	 */
+	public function getMsrpSourceOptions() {
+		
+		$product = $this->getProduct();
+		
+		$priceType = Mage::getSingleton('eav/config')->getAttribute(
+			Mage_Catalog_Model_Product::ENTITY,
+			Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER_MSRP_TYPE_CODE
+		);
+		$priceType->setStoreId($this->getCurrentStoreId());
+		
+		$options = $priceType->getSource()->getAllOptions();
+		
+		/* Set price values - @todo? */
+		foreach($options as &$option){
+			if($option['value']==0){
+				$value = null;
+				if($product->isComposite()){
+					$value = $this->getMinimalPrice("salePriceBefore");
+				}else{
+					$response = $this->_getProductPriceData(
+							$this->_getVendor()->getExternalId(), 
+							$product->getSkuv()
+					);
+					if($response){
+						$value = $response['salePriceBefore'];
+					}
+				}
+				
+				$option['price'] = $value;
+			}else{
+				$option['price'] = $this->getProduct()->getMsrp();
+			}
+		}
+		
+		return $options;
+	}
+	
+	/**
+	 * @param int $vendorExtranlId
+	 * @param string $vSku
+	 * @return mixed
+	 */
+	protected function _getProductPriceData($vendorExtranlId, $vSku) {
+		$key = "_" . $vendorExtranlId . "_" . $vSku;
+		if(!$this->hasData($key)){
+			
+			$convertert = Mage::getSingleton('zolagoconverter/client');
+			/* @var $convertert Zolago_Converter_Model_Client */
+			
+			$reponse = null;
+		
+			try{
+				$response = $convertert->getPrices(
+					$vendorExtranlId, 
+					$vSku
+				);
+			}catch(Exception $e){
+
+			}
+			
+			$this->setData($key, $reponse);
+		}
+		return $this->getData($key);
+	}
+	
+	/**
+	 * @return array
+	 */
 	public function getPriceSourceOptions() {
 		
-		$convertert = Mage::getSingleton('zolagoconverter/client');
-		/* @var $convertert Zolago_Converter_Model_Client */
 		
 		$vendor = $this->_getVendor();
 		$product = $this->getProduct();
@@ -24,15 +90,12 @@ class Zolago_Catalog_Block_Vendor_Price_Modal extends Zolago_Catalog_Block_Vendo
 		
 		$reponse = null;
 		
-		if($product->isComposite()){
-			try{
-				$response = $convertert->getPrices(
-					$vendor->getExternalId(), 
-					$product->getSkuv()
-				);
-			}catch(Exception $e){
-
-			}
+		// Check direct price for simple product
+		if(!$product->isComposite()){
+			$response = $this->_getProductPriceData(
+				$vendor->getExternalId(), 
+				$product->getSkuv()
+			);
 		}
 		
 		foreach($options as &$option){
