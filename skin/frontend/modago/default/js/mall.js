@@ -549,6 +549,7 @@ Mall.listing = {
         this.attachFilterColorEvents();
         this.attachFilterEnumEvents();
         this.attachFilterDroplistEvents();
+        this.attachFilterFlagEvents();
     },
 
     getMoreProducts: function() {
@@ -803,6 +804,13 @@ Mall.listing = {
 
     attachFilterColorEvents: function() {
         jQuery(".filter-color").find("[data-url]").on("click", function(e) {
+            // @todo ajax logic
+            location.href = jQuery(this).attr("data-url");
+        });
+    },
+
+    attachFilterFlagEvents: function() {
+        jQuery(".filter-flags").find("[data-url]").on("click", function(e) {
             // @todo ajax logic
             location.href = jQuery(this).attr("data-url");
         });
