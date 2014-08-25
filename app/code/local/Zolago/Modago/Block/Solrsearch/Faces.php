@@ -26,6 +26,10 @@ class Zolago_Modago_Block_Solrsearch_Faces extends Zolago_Solrsearch_Block_Faces
             case "zolagosolrsearch/faces_price":
                 $block = "zolagomodago/solrsearch_faces_price";
                 break;
+
+            case "zolagosolrsearch/faces_enum_size":
+                $block = "zolagomodago/solrsearch_faces_enum_size";
+                break;
         }
 
         return $block;

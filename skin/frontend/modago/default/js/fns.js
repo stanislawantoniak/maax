@@ -2386,11 +2386,11 @@ function visibleBtnClearFilterSize() {
 
     
 
-      var filterSize = $('#filter_size');
+      var filterSize = $('.filter-size');
       var btnClear = $('.action.clear');
       filterSize.on('click', ':checkbox', function(event) {
         /* Act on the event */
-        var filterSizeLenght = $('#filter_size').find(':checked').length;
+        var filterSizeLenght = $('.filter-size').find(':checked').length;
         if (filterSizeLenght >= 1) {
           filterSize.find('.action').removeClass('hidden');
         } else {
@@ -2398,7 +2398,7 @@ function visibleBtnClearFilterSize() {
           };
       });
       filterSize.on('click', '.clear', function(event) {
-        var filterSizeLenght = $('#filter_size').find(':checked').length;
+        var filterSizeLenght = $('.filter-size').find(':checked').length;
         event.preventDefault();
         //if (filterSizeLenght === 0) {
           $(this).closest('div.action.clear').addClass('hidden');
