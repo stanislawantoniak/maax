@@ -860,10 +860,7 @@ Mall.listing = {
                 slide: function(event, ui) {
                     jQuery("#zakres_min").val(ui.values[0]);
                     jQuery("#zakres_max").val(ui.values[1]);
-
                 }
-
-
             });
 
             jQuery("#zakres_min").val(jQuery("#slider-range").slider("values", 0));
@@ -875,9 +872,21 @@ Mall.listing = {
                     jQuery('#filter_price').find('.action').removeClass('hidden');
                 }
             });
-
-
         };
+
+        jQuery("#filter_price").find("input.filter-price-range-submit").on("click", function(e) {
+            e.preventDefault();
+            // pop price from fq
+            Mall.listing.removeSingleFilterType(this);
+            var fq = Mall.listing.getFiltersArray();
+            if(jQuery.isEmptyObject(fq) || jQuery.isEmptyObject(fq.fq)) {
+                fq = {fq: {}};
+            }
+
+            fq.fq.price = Mall.listing.getMinPriceFromSlider() + " TO " + Mall.listing.getMaxPriceFromSlider();
+            Mall.listing.setFiltersArray(fq);
+            Mall.listing.reloadListing();
+        });
     },
 
     toggleShowMoreState: function(item) {
@@ -914,10 +923,20 @@ Mall.listing = {
 
     removeSingleFilterType: function(filter) {
         var filterType = jQuery(filter).attr("data-filter-type");
-        var filters = this.getFiltersArray() == [] ? [] : this.getFiltersArray().fq;
+        var filters = jQuery.isEmptyObject(this.getFiltersArray()) || jQuery.isEmptyObject(this.getFiltersArray().fq) ? [] : this.getFiltersArray().fq;
         delete filters[filterType];
 
         return this;
+    },
+
+    getMinPriceFromSlider: function() {
+        var price = jQuery("#zakres_min").val();
+        return price == '' ? 0 : price;
+    },
+
+    getMaxPriceFromSlider: function() {
+        var price = jQuery("#zakres_max").val();
+        return price == '' ? 0 : price;
     },
 
     getQuery: function() {
