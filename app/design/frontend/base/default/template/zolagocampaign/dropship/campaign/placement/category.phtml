@@ -30,12 +30,25 @@ $vendor = Mage::getSingleton('udropship/session')->getVendor();
                                         <div class="col-md-6">
                                             <?php echo $bannerType->position_label; ?> <span data-source="position"><?php echo $i; ?></span>
                                         </div>
-                                        <div class="col-md-6 align-right">
-                                            drag to change order - priority
+                                        <div class="col-md-6">
+                                            <div class="align-right">
+                                                drag to change order - priority
 
-                                            <a href="#" class="btn btn-primary"
-                                               data-toggle="modal"
-                                               data-target="#basicModal"><i class="icon-plus-sign"></i><span><span> <?php echo $this->__('Add'); ?></span></span></a>
+                                                <a href="#" class="btn btn-primary"
+                                                   data-toggle="modal"
+                                                   data-target="#basicModal"><i class="icon-plus-sign"></i><span><span> <?php echo $this->__('Add'); ?></span></span></a>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="col-md-3 banner-item">
+                                                <h5>Campaign Name</h5>
+                                                <h5>Vendor Name</h5>
+                                                <div class="dates">
+                                                    <i class="icon-warning-sign"></i> 01.07.2014 12:00 - 01.08.2014 12:00
+                                                </div>
+                                            </div>
+                                        </div>
+
 <!--                                            --><?php //$titleCode = Mage::getSingleton('zolagobanner/banner_type')->getTypCodeByTitle($bannerType->title); echo $titleCode;?>
 <!--                                            --><?php //if (isset($campaigns[$titleCode]) && !empty($campaigns[$titleCode])): ?>
 <!--                                                --><?php //foreach ($campaigns[$titleCode] as $campaign): ?>
@@ -46,7 +59,7 @@ $vendor = Mage::getSingleton('udropship/session')->getVendor();
 <!--                                                    </div>-->
 <!--                                                --><?php //endforeach; ?>
 <!--                                            --><?php //endif; ?>
-                                        </div>
+
                                         <br /><br /><br />
                                     </div>
                                 <?php endfor; ?>
@@ -78,19 +91,25 @@ $vendor = Mage::getSingleton('udropship/session')->getVendor();
                     <div class="row">
                         <label>Choose campaign: </label>
                         <select name="campaign">
-                            <option value="1">1</option>
+                            <option value="1">Campaign Name</option>
+                            <option value="2">Campaign Name 2</option>
+                            <option value="3">Campaign Name 3</option>
                         </select>
                     </div>
                     <div class="row">
                         <label>Choose creative: </label>
                         <select name="banner">
-                            <option value="1">1</option>
+                            <option value="1">Creative 1</option>
+                            <option value="2">Creative 2</option>
+                            <option value="3">Creative 3</option>
                         </select>
                     </div>
                     <div class="row">
                         <label>Set priority: </label>
                         <select name="priority">
                             <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
                         </select>
                     </div>
                 </div>
@@ -119,6 +138,8 @@ $vendor = Mage::getSingleton('udropship/session')->getVendor();
             $(this).find('[data-val="banner-type"]').html(bannerType);
             $(this).find('[data-val="position"]').html(position);
 
+            $(e.relatedTarget).parents('.row').find('.col-md-12').append("<div data-targ='add'></div>");
+
         });
 
         $("#basicModal").on("hide.bs.modal", function (e) {
@@ -126,5 +147,22 @@ $vendor = Mage::getSingleton('udropship/session')->getVendor();
             $(this).find('[data-val="banner-type"]').html('');
             $(this).find('[data-val="position"]').html('');
         });
+        $('#basicModal .btn.btn-primary').click(function(){
+            var category = $('#basicModal').find('[name=campaign] option:selected').val();
+            var categoryName = jQuery('#basicModal').find('[name=campaign] option:selected').text();
+            var bannerType = $('#basicModal').find('[name=banner] option:selected').val();
+            var position = $('#basicModal').find('[name=priority] option:selected').val();
+            console.log(category,categoryName,bannerType,position);
+
+            var campaignBlock = '<div class="col-md-3 banner-item">' +
+                "<h5>"+categoryName+"</h5>" +
+                "<h5>Vendor Name</h5>" +
+                '<div class="dates">' +
+                '<i class="icon-warning-sign"></i> 01.07.2014 12:00 - 01.08.2014 12:00' +
+                '</div>' +
+                '</div>';
+            console.log($(this).parents('.row'));
+            $('[data-targ="add"]').replaceWith(campaignBlock);
+        })
     })
 </script>

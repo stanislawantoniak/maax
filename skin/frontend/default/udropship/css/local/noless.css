@@ -93,3 +93,8 @@
 .modal-lg{
 	width: 900px;
 }
+.banner-item {
+    border: 1px solid #d3d3d3;
+    padding: 5px;
+    margin-right: 5px;
+}
