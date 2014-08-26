@@ -1,0 +1,156 @@
+<?php
+$solrData = $this->getSolrData ();
+
+$priceFieldName = Mage::helper ( 'solrsearch' )->getPriceFieldName ();
+
+$prefix = 'solrbridge-price';
+
+$fromValue = 0;
+$toValue = 0;
+
+$min = 0;
+if (isset ( $solrData ['stats'] ['stats_fields'] [$priceFieldName] ['min'] )) {
+	$min = $solrData ['stats'] ['stats_fields'] [$priceFieldName] ['min'];
+	$min = number_format ( $min, 0, '', '');
+	$fromValue = $min;
+	
+	if (isset ( $_GET ['min'] ) && is_numeric ( $_GET ['min'] )) {
+		$min = $_GET ['min'];
+	}
+}
+
+$max = 0;
+if (isset ( $solrData ['stats'] ['stats_fields'] [$priceFieldName] ['max'] )) {
+	$max = $solrData ['stats'] ['stats_fields'] [$priceFieldName] ['max'];
+	$max = number_format ( $max, 0, '', '');
+	$toValue = $max;
+	if (isset ( $_GET ['max'] ) && is_numeric ( $_GET ['max'] )) {
+		$max = $_GET ['max'];
+	}
+}
+
+$min = intval($min);
+$max = intval($max);
+
+if (isset($_GET['fq']['price'])) {
+	if(!empty($_GET['fq']['price'])){
+		$priceValue = explode('TO', $_GET['fq']['price']);
+		if (isset($priceValue[0]) && isset($priceValue[1]) && is_numeric(trim($priceValue[0])) && is_numeric(trim($priceValue[1]))) {
+			$fromValue = trim($priceValue[0]);
+			$toValue = trim($priceValue[1]);
+		}
+	}
+}
+$fromValue = intval($fromValue);
+$toValue = intval($toValue);
+
+
+/*
+ * Holds state of initial price position
+ */
+$initialState = false;
+
+if (!is_numeric ( $fromValue )) {
+	$fromValue = $min;
+	$initialState = true;
+}
+
+/*
+ * User changed price in text boxes
+ */
+if ($fromValue <= $min) {
+	$initialState = true;
+}
+
+if (!is_numeric ( $toValue )) {
+	$toValue = $max;
+}
+
+$from = min ( $fromValue, $min );
+$to = max ( $toValue, $max );
+
+if ($from < 0.01 && $to < 0.01) {
+	$to = sprintf ( '%.00f', $to );
+}
+
+$width = 170;
+
+$ratePP = ($to - $from) / $width;
+
+$firstOffset = ($max > 0.01 && ! $initialState) ? ($fromValue - $min) / $ratePP : 0;
+$secondOffset = ($to && $max > 0.01 && $toValue < $max) ? ($toValue - $min) / $ratePP : $width;
+
+$params = implode ( ':', array (
+		$width,
+		$firstOffset,
+		$secondOffset,
+		$to,
+		$prefix,
+		$from,
+		$ratePP 
+) );
+
+$priceFilter = array (
+				'fq' => array (
+						'price' => $from.'TO'.$to
+				),
+				'min' => 'MINPRICE',
+				'max' => 'MAXPRICE',
+				);
+
+?>
+
+<?php
+$key = "price_facet";
+$sectionClass = $this->isFilterRolled() ? 'closed' : 'open';
+$iconClass = $this->isFilterRolled() ? "fa-chevron-down" : "fa-chevron-up";
+$isOptionSelected = $initialState;
+$key_withoutFacet = explode("_", $key);
+array_pop($key_withoutFacet);
+$name = '';
+?>
+<?php if ($max > 0):?>
+
+
+    <div class="section clearfix">
+        <h3 class="<?php echo $sectionClass; ?>"><?php echo $this->__("Price"); ?> <i class="fa <?php echo $iconClass; ?>"></i></h3>
+        <div class="content"  id="filter_price">
+<!--            <div class="form-group form-checkbox">-->
+<!--                <input type="checkbox" name="filter_price_200_500" id="filter_price_200_500" class="css-checkbox"/>-->
+<!--                <label for="filter_price_200_500" class="css-label"><span>od --><?php //echo $this->getPriceFormat($min) ?><!-- do --><?php //echo $this->getPriceFormat($max) ?><!--</span></label>-->
+<!--            </div>-->
+            <div id="od_do" class="clearfix">
+                <div class="clearfix">
+                    <div id="checkSlider" class="form-group form-checkbox">
+                        <input type="checkbox" name="filter_slider" id="filter_slider" class="css-checkbox" <?php if($isOptionSelected) : ?>checked="checked"<?php endif; ?>/>
+                        <label for="filter_slider" class="css-label"></label>
+                    </div>
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <input type="text" id="zakres_min" value="<?php echo $fromValue; ?>" /><label for="zakres_od">-</label>
+                        </div>
+                    </div>
+                    <div class=" form-horizontal">
+                        <div class="form-group">
+                            <input id="zakres_max" value="<?php echo $toValue; ?>" type="text" />
+                        </div>
+                    </div>
+                    <div class="form-action">
+                        <div class="form-group">
+                            <input type="submit" class="btn black pull-right filter-price-range-submit" data-filter-type="price" value="OK"/>
+                        </div>
+                    </div>
+                </div>
+                <div id="slider-range"></div>
+
+            </div><br />
+            <div class="action clear clearfix <?php if(!$isOptionSelected): ?>hidden<?php endif; ?>">
+                <a href="#" class="button button-third clear"  data-filter-type="<?php echo implode("_", $key_withoutFacet); ?>" onclick="Mall.listing.removeSingleFilterType(this);Mall.listing.reloadListing();return false;" ><?php echo $this->__("Clear"); ?></a>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        Mall.listing.setCurrentPriceRange(<?php echo $fromValue; ?>, <?php echo $toValue; ?>);
+    </script>
+<?php endif;?>
+

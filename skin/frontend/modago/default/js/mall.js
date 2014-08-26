@@ -543,6 +543,8 @@ Mall.listing = {
 
     _current_total: 0,
 
+    _current_price_rage: [0, 0],
+
     init: function() {
 //        this.canLoadMoreProducts();
         this.attachShowMoreEvent();
@@ -550,6 +552,10 @@ Mall.listing = {
         this.attachFilterEnumEvents();
         this.attachFilterDroplistEvents();
         this.attachFilterFlagEvents();
+        this.attachFilterPriceSliderEvents();
+        this.attachFilterSizeEvents();
+        this.reloadListingItemsAfterPageLoad();
+        this.placeListingFadeContainer();
     },
 
     getMoreProducts: function() {
@@ -573,25 +579,32 @@ Mall.listing = {
     getMoreProductsCallback: function(data) {
         if(data.status == true) {
             var container = jQuery("#items-product").masonry();
-            var sortArray = data.content.sort.split(" ");
+            var sortArray = typeof data.content.sort == "string" || data.content.sort instanceof String ? data.content.sort.split(" ") : [];
             var items;
             Mall.listing.setPageIncrement();
-            Mall.listing.setSort(sortArray[0]);
-            Mall.listing.setDir(sortArray[1]);
+            Mall.listing.setSort(typeof sortArray[0] == "undefined" ? "" : sortArray[0]);
+            Mall.listing.setDir(typeof sortArray[1] == "undefined" ? "" : sortArray[1]);
             items = Mall.listing.appendToList(data.content.products);
             container.imagesLoaded(function() {
-                container.masonry("appended", items);
-                setTimeout(function() {jQuery(".shapes_listing").css("top", jQuery(".addNewPositionListProduct").position().top - 40);}, 1000);
+                container.masonry("reloadItems");
+                container.masonry();
+//                container.masonry("appended", items);
+                setTimeout(function() {Mall.listing.placeListingFadeContainer()}, 1000);
             });
             // set current items count
             Mall.listing.addToVisibleItems(data.content.rows);
             Mall.listing.setTotal(data.content.total);
-            Mall.listing.canLoadMoreProducts();
+            Mall.listing.placeListingFadeContainer();
+//            Mall.listing.canLoadMoreProducts();
         } else {
             // do something to inform customer that something went wrong
             alert("Something went wrong, try again");
             return false;
         }
+    },
+
+    loadProductsOnScroll: function() {
+        // detect if this is good time for showing next part of products
     },
 
     appendToList: function(products) {
@@ -823,6 +836,13 @@ Mall.listing = {
         });
     },
 
+    attachFilterSizeEvents: function() {
+        jQuery(".filter-size").find("[data-url]").on("click", function(e) {
+            // @todo ajax logic
+            location.href = jQuery(this).attr("data-url");
+        });
+    },
+
     attachFilterDroplistEvents: function() {
         var headList = jQuery('.button-select.ajax');
         var listSelect = jQuery('.dropdown-select ul');
@@ -844,6 +864,46 @@ Mall.listing = {
             }
         });
 
+    },
+
+    attachFilterPriceSliderEvents: function() {
+        var sliderRange = jQuery( "#slider-range" );
+        if (sliderRange.length >= 1) {
+            jQuery( "#slider-range" ).slider({
+                range: true,
+                min: Mall.listing.getCurrentPriceRange()[0],
+                max: Mall.listing.getCurrentPriceRange()[1],
+                values: Mall.listing.getCurrentPriceRange(),
+                slide: function(event, ui) {
+                    jQuery("#zakres_min").val(ui.values[0]);
+                    jQuery("#zakres_max").val(ui.values[1]);
+                }
+            });
+
+            jQuery("#zakres_min").val(jQuery("#slider-range").slider("values", 0));
+            jQuery("#zakres_max").val(jQuery("#slider-range").slider("values", 1));
+            jQuery('#slider-range').on('click', 'a', function(event) {
+                var checkSlider = jQuery('#checkSlider').find('input');
+                if (!checkSlider.is(':checked')) {
+                    checkSlider.prop('checked', true);
+                    jQuery('#filter_price').find('.action').removeClass('hidden');
+                }
+            });
+        };
+
+        jQuery("#filter_price").find("input.filter-price-range-submit").on("click", function(e) {
+            e.preventDefault();
+            // pop price from fq
+            Mall.listing.removeSingleFilterType(this);
+            var fq = Mall.listing.getFiltersArray();
+            if(jQuery.isEmptyObject(fq) || jQuery.isEmptyObject(fq.fq)) {
+                fq = {fq: {}};
+            }
+
+            fq.fq.price = Mall.listing.getMinPriceFromSlider() + " TO " + Mall.listing.getMaxPriceFromSlider();
+            Mall.listing.setFiltersArray(fq);
+            Mall.listing.reloadListing();
+        });
     },
 
     toggleShowMoreState: function(item) {
@@ -880,10 +940,61 @@ Mall.listing = {
 
     removeSingleFilterType: function(filter) {
         var filterType = jQuery(filter).attr("data-filter-type");
-        var filters = this.getFiltersArray() == [] ? [] : this.getFiltersArray().fq;
+        var filters = jQuery.isEmptyObject(this.getFiltersArray()) || jQuery.isEmptyObject(this.getFiltersArray().fq) ? [] : this.getFiltersArray().fq;
         delete filters[filterType];
 
         return this;
+    },
+
+    placeListingFadeContainer: function() {
+        // check if body has proper class
+        if(jQuery("body").hasClass("node-type-list")
+            && this.getTotal() > 20
+            && this.canLoadMoreProducts()) {
+            var heights = new Array();
+            jQuery('.node-type-list #items-product .item').each(function() {
+                heights.push(jQuery(this).height());
+            });
+            var min = Math.min.apply( Math, heights );
+            var con = jQuery('#items-product').innerHeight();
+            jQuery('#items-product').not('.list-shop-product').css('height', 'auto');
+            jQuery('#items-product').not('.list-shop-product').css('height', con-min);
+            jQuery(".shapes_listing").css("top", jQuery(".addNewPositionListProduct").position().top - 40);
+        } else {
+            this.hideLoadMoreButton();
+            this.hideShapesListing();
+        }
+    },
+
+    reloadListingItemsAfterPageLoad: function() {
+//        jQuery("#items-product").masonry().imagesLoaded(function() {
+//            container.masonry("reloadItems");
+//            container.masonry();
+//            setTimeout(function() {Mall.listing.placeListingFadeContainer()}, 1000);
+//        });
+
+        return this;
+    },
+
+    /**
+     *
+     * SETTERS / GETTERS
+     *
+     */
+
+    /**
+     * Returns min price which is set in price slider
+     *
+     * @returns {number}
+     */
+    getMinPriceFromSlider: function() {
+        var price = jQuery("#zakres_min").val();
+        return price == '' ? 0 : price;
+    },
+
+    getMaxPriceFromSlider: function() {
+        var price = jQuery("#zakres_max").val();
+        return price == '' ? 0 : price;
     },
 
     getQuery: function() {
@@ -916,6 +1027,10 @@ Mall.listing = {
 
     getTotal: function() {
         return this._current_total;
+    },
+
+    getCurrentPriceRange: function() {
+        return this._current_price_rage;
     },
 
     setPageIncrement: function() {
@@ -958,6 +1073,12 @@ Mall.listing = {
 
     setCurrentMobileFilterState: function(state) {
         this._current_mobile_filter_state = state;
+
+        return this;
+    },
+
+    setCurrentPriceRange: function(min, max) {
+        this._current_price_rage = [min, max];
 
         return this;
     }
