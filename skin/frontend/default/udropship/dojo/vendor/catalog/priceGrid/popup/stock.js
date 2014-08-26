@@ -1,6 +1,6 @@
 define([
 	"dojo/_base/declare",
-	"vendor/catalog/priceGrid/single/_base",
+	"vendor/catalog/priceGrid/popup/_base",
 ], function(declare, _base){
 	
 

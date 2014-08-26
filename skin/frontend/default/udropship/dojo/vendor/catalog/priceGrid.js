@@ -20,8 +20,8 @@ define([
     "dojo/_base/lang",
 	"dojo/request",
 	"vendor/grid/ObserverFilter",
-	"vendor/catalog/priceGrid/single/price",
-	"vendor/catalog/priceGrid/single/stock",
+	"vendor/catalog/priceGrid/popup/price",
+	"vendor/catalog/priceGrid/popup/stock",
 	"vendor/catalog/priceGrid/RowUpdater",
 	"vendor/misc"
 ], function(BaseGrid, Grid, Pagination, CompoundColumns, Selection, Keyboard, editor, declare, domConstruct, 
