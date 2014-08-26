@@ -50,7 +50,7 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 	const RES_UTIERSHIP_OPERATOR					= "udtiership/vendor";
 	
 	// Campaign managment
-	const RES_CAMPAIGN_VENDOR						= "zolagocampaign/vendor";
+	const RES_CAMPAIGN_VENDOR						= "campaign/vendor";
 	
 	
 
