@@ -4,7 +4,9 @@ $_hlp = Mage::helper('udropship');
 $_session = Mage::getSingleton('udropship/session');
 $_vendor = Mage::getSingleton('udropship/session')->getVendor();
 $_question = $this->getQuestion();
+$_isEditable = $this->isEditable($_question);
 ?>
+
 <div class="container">
 	<!--=== Page Header ===-->
 	<div class="page-heading row">
@@ -30,49 +32,13 @@ $_question = $this->getQuestion();
 		<?php foreach ($this->getForm()->getElements() as $element): ?>
 			<?php echo $element->toHtml(); ?>
 		<?php endforeach; ?>
-		<div class="form-actions"> <input type="submit" value="<?php echo $_helper->__("Save");?>" class="btn btn-primary pull-right"> </div>
+		<div class="form-actions"> 
+			<?php if($_isEditable):?>
+			<input type="submit" value="<?php echo $_helper->__("Save");?>" class="btn btn-primary pull-right"> 
+			<a href="<?php echo $this->getUrl("*/*");?>" class="btn pull-right"><?php echo $_helper->__("Cancel");?></a>
+			<?php else:?>
+			<a href="<?php echo $this->getUrl("*/*");?>" class="btn pull-right"><?php echo $_helper->__("Back");?></a>
+			<?php endif;?>
+		</div>
 	</form>
 </div>
-<?php /*
-<!--
-<script type="text/javascript">
-jQuery(function($){
-	var form = $("#edit-pos");
-	new Zolago.formIntegrator(form);
-	form.validate();
-});
-</script>
-
-<script type="text/javascript">
-	
-		var posControl = {
-			init: function () {
-				var regionSelect= $('region_id');
-				var regionText = new Element("input", {"type": "text", "id": "region", "class": "input-text form-control", "name": "region", "value": "<?php echo $this->escapeHtml($this->getModel()->getRegion());?>"});
-				regionText.hide();
-				regionSelect.insert({before: regionText});
-
-				var updater = new RegionUpdater('country_id', 'region', 'region_id', <?php echo $this->helper('directory')->getRegionJson() ?>, undefined);
-				$("use_dhl").observe("change", function(e){
-					posControl.enableDhl($F(e.target)=="1");
-				});
-				posControl.enableDhl($F("use_dhl")=="1");
-			},
-			enableDhl: function(state){
-				if(!!state){
-					$("dhl_login").up('.form-group').show();
-					$("dhl_password").up('.form-group').show();
-					$("dhl_account").up('.form-group').show();
-				}else{
-					$("dhl_login").up('.form-group').hide();
-					$("dhl_password").up('.form-group').hide();
-					$("dhl_account").up('.form-group').hide();
-				}
-			}
-		};
-		document.observe("dom:loaded", function() {
-			posControl.init();
-		});
-</script>-->
- 
- */ ?>

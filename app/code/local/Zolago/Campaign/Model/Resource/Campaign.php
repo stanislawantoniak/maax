@@ -239,7 +239,25 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
 
         $select->where("campaign.date_from BETWEEN '{$startTime}' AND '{$endYTime}'");
         $select->where("status=?", Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE);
-        echo $select;
+
+        return $this->getReadConnection()->fetchAll($select);
+    }
+
+    public function getCategoriesWithPath($path)
+    {
+        $table = "catalog_category_entity_varchar";
+        $select = $this->getReadConnection()->select();
+        $select->from(array("catalog_category" => $table), array("catalog_category.value_id"));
+        $select->join(
+            array('attribute' => 'eav_attribute'),
+            'attribute.attribute_id = catalog_category.attribute_id',
+            array()
+        );
+        $select->where('attribute.attribute_code=?', 'url_path');
+        $entityTypeID = Mage::getModel('catalog/category')->getResource()->getTypeId();
+        $select->where('catalog_category.entity_type_id=?', $entityTypeID);
+        $select->where('catalog_category.value=?', $path);
+
         return $this->getReadConnection()->fetchAll($select);
     }
 
