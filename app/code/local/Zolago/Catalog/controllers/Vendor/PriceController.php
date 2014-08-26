@@ -40,6 +40,14 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Catalog_Controller_Ve
 	}
 	
 	/**
+	 * Handle mass
+	 */
+	public function massAction() {
+		$this->loadLayout();
+		$this->renderLayout();
+	}
+	
+	/**
 	 * Handle rest put action
 	 */
 	protected function _handleRestPut() {

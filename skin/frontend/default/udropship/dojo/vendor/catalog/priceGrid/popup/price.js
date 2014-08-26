@@ -22,6 +22,13 @@ define([
 				return this.inherited(arguments);
 			},
 			
+			_afterRender: function(row){
+				this.inherited(arguments);
+				this._modal.find("h4").text(
+					misc.replace(this._title, {name: row.data.name})
+				);
+			},
+			
 			// After load content
 			_afterLoad: function(node, response){
 				this.inherited(arguments);

@@ -611,10 +611,12 @@ define([
 	
 	// Price changer 
 	on(priceChanger, "click", function(){
+		var global = jQuery(".dgrid-selector input", grid.domNode).attr("aria-checked")==="true";
 		massPriceUpdater.handleClick({
-			"global": jQuery(".dgrid-selector input", grid.domNode).attr("aria-checked")==="true",
-			"query": grid.get("query"),
-			"selected": grid.selection
+			"global":	global ? 1 : 0,
+			"query":	global ? jQuery.param(grid.get("query")) : "",
+			"selected": global ? [] : Object.keys(grid.selection).join(","),
+			"store_id": switcher.value
 		});
 	});
 	
@@ -660,6 +662,9 @@ define([
 	// Connect objects
 	updater.setGrid(grid);
 	updater.setStoreId(switcher.value);
+	
+	massPriceUpdater.setGrid(grid);
+	massPriceUpdater.setStoreId(switcher.value);
 	
 	singlePriceUpdater.setGrid(grid);
 	singlePriceUpdater.setStoreId(switcher.value);

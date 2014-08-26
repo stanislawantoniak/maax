@@ -1,0 +1,22 @@
+<?php /* @var $this Zolago_Catalog_Block_Vendor_Price_Mass */ ?>
+<?php $_helper = Mage::helper('core');?>
+<input type="hidden" name="store_id" value="<?php echo $this->getCurrentStoreId();?>"/>
+<input type="hidden" name="global" value="<?php echo $this->getGlobal() ? "1" : "0";?>"/>
+<input type="hidden" name="query" value="<?php echo $this->getEncodedQuery();?>"/>
+<input type="hidden" name="selected" value="<?php echo $this->getSelected();?>"/>
+
+<div class="row">
+	<div class="col-md-6 form-group">
+		<span class="help-block"><?php echo $this->__("Source price");?></span>
+		<select id="converter_price_type_2"  name="converter_price_type" type="text" class="form-control converterPriceType">
+			<?php foreach ($this->getPriceSourceOptions() as $option):?>
+			<?php $_label = $option['label'] ? $option['label'] : $this->__("Manual");?>
+			<option value="<?php echo $this->escapeHtml($option['value']);?>"><?php echo $this->escapeHtml($_label);?></option>
+			<?php endforeach;?>
+		</select>
+	</div>
+	<div class="col-md-6 form-group">
+		<span class="help-block"><?php echo $this->__("Margin");?></span>
+		<input id="price_margin" name="price_margin" value="" type="text" class="marignPercent form-control"/>
+	</div>
+</div>
