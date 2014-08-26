@@ -24,9 +24,11 @@ define([
 	"vendor/catalog/priceGrid/popup/stock",
 	"vendor/catalog/priceGrid/RowUpdater",
 	"vendor/misc"
-], function(BaseGrid, Grid, Pagination, CompoundColumns, Selection, Keyboard, editor, declare, domConstruct, 
-	on, query, Memory, Observable, put, Cache, JsonRest, Selection, 
-	selector, lang, request, ObserverFilter, singlePriceUpdater, singleStockUpdater, RowUpdater, misc){
+], function(BaseGrid, Grid, Pagination, CompoundColumns, Selection, 
+	Keyboard, editor, declare, domConstruct, on, query, Memory, 
+	Observable, put, Cache, JsonRest, Selection, selector, lang, 
+	request, ObserverFilter, singlePriceUpdater, singleStockUpdater, 
+	RowUpdater, misc){
 	
 	/**
 	 * @todo Make source options it dynamicly
