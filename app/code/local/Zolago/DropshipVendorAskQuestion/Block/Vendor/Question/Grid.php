@@ -17,7 +17,8 @@ class Zolago_DropshipVendorAskQuestion_Block_Vendor_Question_Grid extends Mage_A
 		$collection = Mage::getModel('udqa/question')->getCollection();
 		$collection->
 				joinProducts()->
-				joinVendors();
+				joinVendors()->
+				joinShipments();
 		
 		$vendor = Mage::getSingleton('udropship/session')->getVendor();
 		/* @var $vendor Zolago_Dropship_Model_Vendor */
