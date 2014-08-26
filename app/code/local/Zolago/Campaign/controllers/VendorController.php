@@ -216,5 +216,29 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
 		$session = $this->_getSession();
 		return $model->getVendorId()==$session->getVendorId();
 	}
+
+    /**
+     * @return array
+     */
+    public function getCompaignDataAction(){
+        $campaignData = array();
+        $modelId = (int)$this->getRequest()->getParam("id");
+        $model = Mage::getModel("zolagocampaign/campaign");
+        $campaign = $model->load($modelId);
+
+        if (!empty($campaign)) {
+            $format = "d.m.Y H:i:s";
+            $dateFrom = $campaign->getData('date_from');
+            $dateTo = $campaign->getData('date_to');
+
+            $campaignData = array(
+                'campaign_id' => $campaign->getId(),
+                'vendor_id' => $campaign->getVendorId(),
+                'date_from' => date($format, strtotime($dateFrom)),
+                'date_to' => date($format, strtotime($dateTo))
+            );
+        }
+        echo Mage::helper('core')->jsonEncode($campaignData);
+    }
    
 }

@@ -90,12 +90,24 @@
     padding: 5px;
     clear: both;
 }
-.modal-lg{
+.modal-lg {
 	width: 900px;
 }
-.banner-item {
+.campaign-list .banner-item {
+    list-style: none;
     border: 1px solid #d3d3d3;
-    padding: 5px;
+    padding: 10px;
     margin-right: 5px;
     margin-bottom: 5px;
+    background-color: white;
+    min-height: 170px;
+}
+
+.banner-positions {
+    border: 1px solid lightgrey;
+    clear: both;
+    display: table;
+    margin-bottom: 20px;
+    min-height: 260px;
+    width: 100%;
 }

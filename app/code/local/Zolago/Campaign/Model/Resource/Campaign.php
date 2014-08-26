@@ -243,6 +243,37 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         return $this->getReadConnection()->fetchAll($select);
     }
 
+    /**
+     * Get campaigns with banners
+     * @return array
+     */
+    public function getCampaigns()
+    {
+        $vendor = Mage::getSingleton('udropship/session')->getVendor();
+        $vendor = $vendor->getId();
+
+        $table = $this->getTable("zolagocampaign/campaign");
+        $select = $this->getReadConnection()->select();
+        $select->from(array("campaign" => $table),
+            array(
+                "campaign.campaign_id",
+                "campaign.name",
+                "DATE_FORMAT(campaign.date_from, '%d.%m.%Y %H:%i:%s') AS date_from",
+                "DATE_FORMAT(campaign.date_to, '%d.%m.%Y %H:%i:%s') AS date_to"
+            )
+        );
+        $select->join(
+            array('banner' => 'zolago_banner'),
+            'banner.campaign_id = campaign.campaign_id',
+            array("banner.type as banner_type")
+        );
+        $select->where('campaign.vendor_id=?', $vendor);
+        $select->order("campaign.date_from DESC");
+
+        return $this->getReadConnection()->fetchAssoc($select);
+    }
+
+
     public function getCategoriesWithPath($path)
     {
         $table = "catalog_category_entity_varchar";

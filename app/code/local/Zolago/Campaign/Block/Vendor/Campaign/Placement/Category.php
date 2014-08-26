@@ -20,21 +20,13 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement_Category extends Mage_Core
         $vendor = Mage::getSingleton('udropship/session')->getVendor();
         $vendor = $vendor->getId();
         /* @var $vendor Unirgy_Dropship_Model_Vendor */
-        $collection = Mage::getResourceModel("zolagocampaign/campaign_collection");
-        $collection->getSelect()
-            ->join( array(
-                'banner' => 'zolago_banner'),
-                'banner.campaign_id=main_table.campaign_id',
-                array('banner_type' => "banner.type")
-            );
-        $collection->addFieldToFilter('main_table.vendor_id',(int)$vendor);
-        $collection->setOrder('main_table.date_from','DESC');
-        //$collection->printLogQuery(true);
+        $campaign = Mage::getResourceModel("zolagocampaign/campaign");
+        $campaignBank = $campaign->getCampaigns();
 
         $campaigns = array();
         //prepare campaigns group by type
-        foreach($collection as $campaign){
-            $campaigns[$campaign->getData("banner_type")][] = $campaign;
+        foreach($campaignBank as $campaign){
+            $campaigns[$campaign["banner_type"]][] = $campaign;
         }
         return $campaigns;
     }

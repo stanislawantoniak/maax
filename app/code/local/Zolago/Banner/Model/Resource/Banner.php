@@ -46,5 +46,23 @@ class Zolago_Banner_Model_Resource_Banner extends Mage_Core_Model_Resource_Db_Ab
 
         return $data;
     }
+
+    /**
+     * @param $campaign
+     * @return array
+     */
+    public function getCampaignBanners($campaign)
+    {
+        $table = $this->getTable("zolagobanner/banner");
+        $where = $this->getReadConnection()
+            ->quoteInto("campaign_id=?", $campaign);
+        $select = $this->_getReadAdapter()->select()
+            ->from($table)
+            ->where($where);
+
+        $data = $this->_getReadAdapter()->fetchAssoc($select);
+
+        return $data;
+    }
 }
 
