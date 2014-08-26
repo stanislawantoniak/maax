@@ -15,10 +15,11 @@ class Zolago_DropshipVendorAskQuestion_Block_Vendor_Question_Grid extends Mage_A
 	
 	protected function _prepareCollection(){
 		$collection = Mage::getModel('udqa/question')->getCollection();
+		/* @var $collection Unirgy_DropshipVendorAskQuestion_Model_Mysql4_Question_Collection */
 		$collection->
+				joinShipments()->
 				joinProducts()->
-				joinVendors()->
-				joinShipments();
+				joinVendors();
 		
 		$vendor = Mage::getSingleton('udropship/session')->getVendor();
 		/* @var $vendor Zolago_Dropship_Model_Vendor */
@@ -28,13 +29,24 @@ class Zolago_DropshipVendorAskQuestion_Block_Vendor_Question_Grid extends Mage_A
 		$collection->addFieldToFilter("main_table.vendor_id", 
 			array("in"=>  array_unique($vendorsIds)));
 		
-		$collection->getSelect()->columns(array(
-			'is_replied' => new Zend_Db_Expr('if(LENGTH(answer_text)>0,1,0)'),
-			'answer_date' => new Zend_Db_Expr('if(main_table.answer_date>0, main_table.answer_date, NULL)')
-		));
+		$collection->addExpressionFieldToSelect('is_replied', 
+				'IF(LENGTH(answer_text)>0,1,0)', 'is_replied');
+		$collection->addExpressionFieldToSelect('answer_date', 
+				'IF(main_table.answer_date>0,main_table.answer_date, NULL)', 'answer_date');
+
 
         $this->setCollection($collection);
         return parent::_prepareCollection();
+	}
+	
+
+    protected function _addColumnFilterToCollection($column){
+		if($column->getIndex()=="is_replied"){
+			$this->getCollection()->getSelect()->
+				where("IF(LENGTH(answer_text)>0,1,0)=?", $column->getFilter()->getValue());
+			return $this;
+		}
+		return parent::_addColumnFilterToCollection($column);
 	}
 	
 	protected function _prepareColumns() {
