@@ -644,64 +644,64 @@ section.section .main {
   float: left;
   line-height: 53px; }
 
-/* line 3, ../sass/design/modules/_sidebar.scss */
-#filter_size label {
+/* line 4, ../sass/design/modules/_sidebar.scss */
+#filter_size label, .filter-size label {
   cursor: pointer; }
-/* line 5, ../sass/design/modules/_sidebar.scss */
-#filter_size label span {
+/* line 6, ../sass/design/modules/_sidebar.scss */
+#filter_size label span, .filter-size label span {
   border: 1px solid #afafaf;
   text-align: center;
   line-height: 38px;
   font-size: 14px;
   color: #313131;
   background: #fff; }
-/* line 14, ../sass/design/modules/_sidebar.scss */
-#filter_size label:hover span {
+/* line 15, ../sass/design/modules/_sidebar.scss */
+#filter_size label:hover span, .filter-size label:hover span {
   background-color: #999;
   border-color: #999;
   color: #fff; }
-/* line 21, ../sass/design/modules/_sidebar.scss */
-#filter_size label input[type=checkbox]:hover + span {
+/* line 22, ../sass/design/modules/_sidebar.scss */
+#filter_size label input[type=checkbox]:hover + span, .filter-size label input[type=checkbox]:hover + span {
   background-color: #999;
   border-color: #999;
   color: #fff; }
-/* line 26, ../sass/design/modules/_sidebar.scss */
-#filter_size label input[type=checkbox]:checked {
+/* line 27, ../sass/design/modules/_sidebar.scss */
+#filter_size label input[type=checkbox]:checked, .filter-size label input[type=checkbox]:checked {
   outline: none !important; }
-/* line 30, ../sass/design/modules/_sidebar.scss */
-#filter_size label input[type=checkbox]:checked + span, #filter_size label input.checked + span {
+/* line 31, ../sass/design/modules/_sidebar.scss */
+#filter_size label input[type=checkbox]:checked + span, #filter_size label input.checked + span, .filter-size label input[type=checkbox]:checked + span, .filter-size label input.checked + span {
   background: #000;
   border-color: #000;
   color: #fff; }
 
-/* line 40, ../sass/design/modules/_sidebar.scss */
+/* line 41, ../sass/design/modules/_sidebar.scss */
 #filter_manufacturer input[type="text"] {
   border: 1px solid #d6d6d6; }
-/* line 42, ../sass/design/modules/_sidebar.scss */
+/* line 43, ../sass/design/modules/_sidebar.scss */
 #filter_manufacturer input[type="text"]:focus {
   outline: none; }
-/* line 46, ../sass/design/modules/_sidebar.scss */
+/* line 47, ../sass/design/modules/_sidebar.scss */
 #filter_manufacturer input[type="image"] {
   outline: none; }
-/* line 51, ../sass/design/modules/_sidebar.scss */
+/* line 52, ../sass/design/modules/_sidebar.scss */
 #filter_manufacturer #filter_manufacturer_search + label i {
   color: #000; }
 
-/* line 63, ../sass/design/modules/_sidebar.scss */
+/* line 64, ../sass/design/modules/_sidebar.scss */
 #filter_price .form-horizontal input[type="text"] {
   text-align: center; }
-/* line 67, ../sass/design/modules/_sidebar.scss */
+/* line 68, ../sass/design/modules/_sidebar.scss */
 #filter_price .form-horizontal label {
   font-weight: normal; }
-/* line 76, ../sass/design/modules/_sidebar.scss */
+/* line 77, ../sass/design/modules/_sidebar.scss */
 #filter_price #od_do .form-action .btn.black {
   line-height: 21px !important;
   font-size: 15px !important; }
 
-/* line 85, ../sass/design/modules/_sidebar.scss */
+/* line 86, ../sass/design/modules/_sidebar.scss */
 .filter-color [type="checkbox"] {
   outline: none !important; }
-/* line 89, ../sass/design/modules/_sidebar.scss */
+/* line 90, ../sass/design/modules/_sidebar.scss */
 .filter-color label > span {
   background: #fff;
   -webkit-border-radius: 5px;
@@ -709,29 +709,29 @@ section.section .main {
   -ms-border-radius: 5px;
   -o-border-radius: 5px;
   border-radius: 5px; }
-/* line 92, ../sass/design/modules/_sidebar.scss */
+/* line 93, ../sass/design/modules/_sidebar.scss */
 .filter-color label > span span {
   border: 1px solid #afafaf; }
-/* line 97, ../sass/design/modules/_sidebar.scss */
+/* line 98, ../sass/design/modules/_sidebar.scss */
 .filter-color label [type="checkbox"]:hover + span {
   background: #999;
   cursor: pointer; }
-/* line 102, ../sass/design/modules/_sidebar.scss */
+/* line 103, ../sass/design/modules/_sidebar.scss */
 .filter-color label [type="checkbox"]:checked + span, .filter-color label span.checked {
   background: #000; }
-/* line 105, ../sass/design/modules/_sidebar.scss */
+/* line 106, ../sass/design/modules/_sidebar.scss */
 .filter-color label:hover span {
   background: #999;
   cursor: pointer; }
 
-/* line 112, ../sass/design/modules/_sidebar.scss */
+/* line 113, ../sass/design/modules/_sidebar.scss */
 .manufacturerList {
   list-style: none; }
-/* line 116, ../sass/design/modules/_sidebar.scss */
+/* line 117, ../sass/design/modules/_sidebar.scss */
 .manufacturerList li.lastChecked {
   border-bottom: 1px solid #d0cfcf; }
 
-/* line 122, ../sass/design/modules/_sidebar.scss */
+/* line 123, ../sass/design/modules/_sidebar.scss */
 span.checked {
   background: #000; }
 

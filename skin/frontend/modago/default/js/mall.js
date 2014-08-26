@@ -543,6 +543,8 @@ Mall.listing = {
 
     _current_total: 0,
 
+    _current_price_rage: [0, 0],
+
     init: function() {
 //        this.canLoadMoreProducts();
         this.attachShowMoreEvent();
@@ -550,6 +552,8 @@ Mall.listing = {
         this.attachFilterEnumEvents();
         this.attachFilterDroplistEvents();
         this.attachFilterFlagEvents();
+        this.attachFilterPriceSliderEvents();
+        this.attachFilterSizeEvents();
     },
 
     getMoreProducts: function() {
@@ -823,6 +827,13 @@ Mall.listing = {
         });
     },
 
+    attachFilterSizeEvents: function() {
+        jQuery(".filter-size").find("[data-url]").on("click", function(e) {
+            // @todo ajax logic
+            location.href = jQuery(this).attr("data-url");
+        });
+    },
+
     attachFilterDroplistEvents: function() {
         var headList = jQuery('.button-select.ajax');
         var listSelect = jQuery('.dropdown-select ul');
@@ -844,6 +855,46 @@ Mall.listing = {
             }
         });
 
+    },
+
+    attachFilterPriceSliderEvents: function() {
+        var sliderRange = jQuery( "#slider-range" );
+        if (sliderRange.length >= 1) {
+            jQuery( "#slider-range" ).slider({
+                range: true,
+                min: Mall.listing.getCurrentPriceRange()[0],
+                max: Mall.listing.getCurrentPriceRange()[1],
+                values: Mall.listing.getCurrentPriceRange(),
+                slide: function(event, ui) {
+                    jQuery("#zakres_min").val(ui.values[0]);
+                    jQuery("#zakres_max").val(ui.values[1]);
+                }
+            });
+
+            jQuery("#zakres_min").val(jQuery("#slider-range").slider("values", 0));
+            jQuery("#zakres_max").val(jQuery("#slider-range").slider("values", 1));
+            jQuery('#slider-range').on('click', 'a', function(event) {
+                var checkSlider = jQuery('#checkSlider').find('input');
+                if (!checkSlider.is(':checked')) {
+                    checkSlider.prop('checked', true);
+                    jQuery('#filter_price').find('.action').removeClass('hidden');
+                }
+            });
+        };
+
+        jQuery("#filter_price").find("input.filter-price-range-submit").on("click", function(e) {
+            e.preventDefault();
+            // pop price from fq
+            Mall.listing.removeSingleFilterType(this);
+            var fq = Mall.listing.getFiltersArray();
+            if(jQuery.isEmptyObject(fq) || jQuery.isEmptyObject(fq.fq)) {
+                fq = {fq: {}};
+            }
+
+            fq.fq.price = Mall.listing.getMinPriceFromSlider() + " TO " + Mall.listing.getMaxPriceFromSlider();
+            Mall.listing.setFiltersArray(fq);
+            Mall.listing.reloadListing();
+        });
     },
 
     toggleShowMoreState: function(item) {
@@ -880,10 +931,20 @@ Mall.listing = {
 
     removeSingleFilterType: function(filter) {
         var filterType = jQuery(filter).attr("data-filter-type");
-        var filters = this.getFiltersArray() == [] ? [] : this.getFiltersArray().fq;
+        var filters = jQuery.isEmptyObject(this.getFiltersArray()) || jQuery.isEmptyObject(this.getFiltersArray().fq) ? [] : this.getFiltersArray().fq;
         delete filters[filterType];
 
         return this;
+    },
+
+    getMinPriceFromSlider: function() {
+        var price = jQuery("#zakres_min").val();
+        return price == '' ? 0 : price;
+    },
+
+    getMaxPriceFromSlider: function() {
+        var price = jQuery("#zakres_max").val();
+        return price == '' ? 0 : price;
     },
 
     getQuery: function() {
@@ -916,6 +977,10 @@ Mall.listing = {
 
     getTotal: function() {
         return this._current_total;
+    },
+
+    getCurrentPriceRange: function() {
+        return this._current_price_rage;
     },
 
     setPageIncrement: function() {
@@ -958,6 +1023,12 @@ Mall.listing = {
 
     setCurrentMobileFilterState: function(state) {
         this._current_mobile_filter_state = state;
+
+        return this;
+    },
+
+    setCurrentPriceRange: function(min, max) {
+        this._current_price_rage = [min, max];
 
         return this;
     }
