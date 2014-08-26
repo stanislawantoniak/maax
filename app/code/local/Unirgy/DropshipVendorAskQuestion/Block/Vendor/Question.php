@@ -20,7 +20,7 @@ class Unirgy_DropshipVendorAskQuestion_Block_Vendor_Question extends Mage_Core_B
     }
 	
 	public function isEditable(Zolago_DropshipVendorAskQuestion_Model_Question $question) {
-		return !$question->getAnswerStatus();
+		return !$question->getAnswerText();
 	}
 	
     public function getForm()
