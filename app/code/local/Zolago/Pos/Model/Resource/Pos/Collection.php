@@ -23,7 +23,17 @@ class Zolago_Pos_Model_Resource_Pos_Collection
 		$this->addFieldToFilter("is_active", 1);
 		return $this;
 	}
-
+	
+    //{{{ 
+    /**
+     * add account number with check active
+     * @return Zolago_Pos_Model_Resource_Pos_Collection
+     */
+    public function addAccountField() {
+        $this->getSelect()->columns("IF(use_dhl = '1',dhl_account,'') as my_dhl_account");
+        return $this;
+    }
+    //}}}
 	/**
      * @return Zolago_Pos_Model_Resource_Pos_Collection
      */

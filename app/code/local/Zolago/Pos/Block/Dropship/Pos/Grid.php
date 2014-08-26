@@ -18,6 +18,7 @@ class Zolago_Pos_Block_Dropship_Pos_Grid extends Mage_Adminhtml_Block_Widget_Gri
 		$collection = Mage::getResourceModel("zolagopos/pos_collection");
 		/* @var $collection Zolago_Pos_Model_Resource_Pos_Collection */
 		$collection->addVendorFilter($vendor);
+		$collection->addAccountField();
 		$collection->setOrder("priority", "DESC");
         $this->setCollection($collection);
         return parent::_prepareCollection();
@@ -40,7 +41,7 @@ class Zolago_Pos_Block_Dropship_Pos_Grid extends Mage_Adminhtml_Block_Widget_Gri
 		));
 		$this->addColumn("dhl_account", array(
 			"type"		=>	"text",
-			"index"		=>	"dhl_account",
+			"index"		=>	"my_dhl_account",
 			"class"		=>  "form-controll",
 			"header"	=>	$_helper->__("Dhl account"),
 		));		
