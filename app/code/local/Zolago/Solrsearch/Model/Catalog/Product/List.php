@@ -141,7 +141,8 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object{
 	 * @return string
 	 */
 	public function getCurrentDir() {
-		return Mage::app()->getRequest()->getParam("dir", $this->getDefaultDir());
+		$dir = Mage::app()->getRequest()->getParam("dir");
+		return in_array($dir, array("asc", "desc")) ? $dir : $this->getDefaultDir();
 	}
 	
 	/**

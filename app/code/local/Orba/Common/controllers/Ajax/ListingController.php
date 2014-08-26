@@ -89,7 +89,8 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 			"start"			=> $this->_getSolrParam($listModel, 'start'),
 			"rows"			=> $this->_getSolrParam($listModel, 'rows'),
 			"query"			=> $this->_getSolrParam($listModel, 'q'),
-			"sort"			=> $this->_getSolrParam($listModel, 'sort'),
+			"sort"			=> $listModel->getCurrentOrder(),
+			"dir"			=> $listModel->getCurrentDir(),
 			"products"		=> $products,
 		);
 	}
