@@ -258,8 +258,8 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
             array(
                 "campaign.campaign_id",
                 "campaign.name",
-                "DATE_FORMAT(campaign.date_from, '%d.%m.%Y %H:%i:%s') AS date_from",
-                "DATE_FORMAT(campaign.date_to, '%d.%m.%Y %H:%i:%s') AS date_to"
+                "campaign.date_from",
+                "campaign.date_to"
             )
         );
         $select->join(

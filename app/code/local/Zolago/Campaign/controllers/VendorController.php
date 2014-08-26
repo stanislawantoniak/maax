@@ -234,8 +234,8 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
             $campaignData = array(
                 'campaign_id' => $campaign->getId(),
                 'vendor_id' => $campaign->getVendorId(),
-                'date_from' => date($format, strtotime($dateFrom)),
-                'date_to' => date($format, strtotime($dateTo))
+                'date_from' => !empty($dateFrom) ? date($format, strtotime($dateFrom)) : '',
+                'date_to' => !empty($dateTo) ? date($format, strtotime($dateTo)) : ''
             );
         }
         echo Mage::helper('core')->jsonEncode($campaignData);

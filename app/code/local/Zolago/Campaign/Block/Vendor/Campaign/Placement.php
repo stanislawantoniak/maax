@@ -15,4 +15,5 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement extends Mage_Core_Block_Te
     {
         return Mage::getSingleton('udropship/session');
     }
+
 }

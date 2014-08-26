@@ -26,8 +26,19 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement_Category extends Mage_Core
         $campaigns = array();
         //prepare campaigns group by type
         foreach($campaignBank as $campaign){
-            $campaigns[$campaign["banner_type"]][] = $campaign;
+            $campaigns[$campaign["banner_type"]][] = array(
+                'campaign_id' => $campaign['campaign_id'],
+                'name' => $campaign['name'],
+                'date_from' => !empty($campaign['date_from']) ? date("d.m.Y H:i:s",$campaign['date_from']) : '',
+                'date_to' => !empty($campaign['date_to']) ? date("d.m.Y H:i:s",$campaign['date_to']) : ''
+            );
         }
         return $campaigns;
+    }
+
+    public function getCategoryId()
+    {
+        $category = $this->getRequest()->getParam('category', null);
+        return $category;
     }
 }

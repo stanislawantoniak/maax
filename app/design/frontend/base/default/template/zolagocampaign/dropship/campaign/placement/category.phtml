@@ -9,20 +9,19 @@ $campaigns = Mage::helper('core')->jsonEncode($campaigns);
 
 $vendorName = $vendor->getVendorName();
 ?>
-<?php //$titleCode = Mage::getSingleton('zolagobanner/banner_type')->getTypCodeByTitle($bannerType->title); echo $titleCode;?>
-<?php //if (isset($campaigns[$titleCode]) && !empty($campaigns[$titleCode])): ?>
-<!--    --><?php //foreach ($campaigns[$titleCode] as $campaign): ?>
-<!--        <div class="col-md-6">-->
-<!--            <h4>--><?php //echo $campaign->name; ?><!--</h4>-->
-<!--            <h4>--><?php //echo $vendor->getName(); ?><!--</h4>-->
-<!--            --><?php //Zend_Debug::dump($campaign->getData()); ?>
-<!--        </div>-->
-<!--    --><?php //endforeach; ?>
-<?php //endif; ?>
+
 <div class="container">
+<form name="campaign-position" type="POST">
+    <input type="text" name="category" value="<?php echo $this->getCategoryId(); ?>" />
     <div class="page-heading row">
         <div class="col-lg-6">
             <h3><span data-source="category">Women's clothing</span></h3>
+        </div>
+        <div class="col-lg-6">
+            <h3><span></span></h3>
+            <div class="pull-right">
+                <a href="#" class="btn btn-primary"><?php echo $_helper->__('Save'); ?></a>
+            </div>
         </div>
     </div>
     <?php if (!empty($bannerTypes)): ?>
@@ -34,16 +33,19 @@ $vendorName = $vendor->getVendorName();
                     <div class="widget box">
                         <div class="widget-header">
                             <h4><i class="icon-pin-flag"></i> <span data-source="banner-type"><?php echo $bannerType->title; ?></span></h4>
+
                             <?php $titleCode = Mage::getSingleton('zolagobanner/banner_type')->getTypCodeByTitle($bannerType->title); ?>
-                            <span data-source="banner-type-code" class="hidden"><?php echo $titleCode; ?></span>
+
+
                             <div class="toolbar no-padding"> <div class="btn-group"> <span class="btn btn-xs widget-collapse"><i class="icon-angle-down"></i></span> </div> </div>
                         </div>
                         <div class="widget-content banner-type" style="display: block;">
-
+                            <span data-source="banner-type-code" class="hidden"><?php echo $titleCode; ?></span>
                                 <?php for($i=1; $i<= $bannerType->position_count; $i++): ?>
                                     <div class="banner-positions">
                                         <div class="col-md-6">
                                             <span data-source="position"><?php echo $bannerType->position_label; ?> <?php echo $i; ?></span>
+                                            <span data-source="position-n" class="hidden"><?php echo $i; ?></span>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="align-right">
@@ -56,28 +58,7 @@ $vendorName = $vendor->getVendorName();
                                                 </a>
                                             </div>
                                         </div>
-                                        <ul class="col-md-12 campaign-list">
-                                            <li class="col-md-3 banner-item">
-                                                <img src="/skin/frontend/modago/default/images/logo_header_lightbox.png" />
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <h5>Campaign Name</h5>
-                                                        <h5>Vendor Name</h5>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <a href="#" class="btn btn-info edit-campaign"
-                                                           data-toggle="modal"
-                                                           data-target="#editModal"><span class="glyphicon glyphicon-pencil"></span>
-                                                            <span><span> <?php echo $_helper->__('Edit'); ?></span></span>
-                                                        </a>
-                                                    </div>
-                                                </div>
-
-                                                <div class="dates">
-                                                    <i class="icon-warning-sign"></i> 01.07.2014 12:00 - 01.08.2014 12:00
-                                                </div>
-                                            </li>
-                                        </ul>
+                                        <ul class="col-md-12 campaign-list"></ul>
                                         <br /><br /><br />
                                     </div>
                                 <?php endfor; ?>
@@ -90,6 +71,7 @@ $vendorName = $vendor->getVendorName();
             <?php endif; ?>
         <?php endforeach; ?>
     <?php endif; ?>
+</form>
 </div>
 
 
@@ -117,6 +99,7 @@ $vendorName = $vendor->getVendorName();
                     <div class="row">
                         <label>Set priority: </label>
                         <select name="priority">
+                            <option value="0">0</option>
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
@@ -186,10 +169,17 @@ $vendorName = $vendor->getVendorName();
 <script type="text/javascript">
     jQuery(function ($) {
         $(document).on('mouseover', '.banner-type .campaign-list', function () {
-            $(this).sortable();
+            $(this).sortable({
+                stop: function(event, ui) {
+                    console.log("Start position: " + ui.item.startPos);
+                    console.log("New position: " + ui.item.index());
+                }
+            });
             $(this).disableSelection();
         })
         var compaigns = '<?php echo $campaigns; ?>';
+        var compaignsObj = jQuery.parseJSON(compaigns);
+        console.log(compaignsObj);
 
         $(document).on('change', 'select[name=campaign]', function () {
             var campaign = $(this).val();
@@ -224,57 +214,76 @@ $vendorName = $vendor->getVendorName();
 
         });
         $('.add-new').click(function(){
-            console.log('New');
-            $(this).closest('.banner-positions').find('.campaign-list').append("<div data-targ='add'></div>");
+            var position = $(this).closest('.banner-positions')
+                .find('[data-source="position-n"]').text();
+            var typeCode = $(this).closest('.banner-type').find('[data-source="banner-type-code"]').text();
+            $(this).closest('.banner-positions')
+                .find('.campaign-list')
+                .append("<div data-targ='add' data-position='"+position+"' data-banner-type='"+typeCode+"'></div>");
 
         })
         $('[data-dismiss="modal"]').click(function(){
             $("[data-targ='add']").remove();
+            clearOptions();
         })
 
         $("#basicModal").on("hide.bs.modal", function (e) {
             $(this).find('[data-val="category"]').html('');
             $(this).find('[data-val="banner-type"]').html('');
             $(this).find('[data-val="position"]').html('');
+
         });
         $('#basicModal .btn.btn-primary').click(function () {
-            var category = $('#basicModal').find('[name=campaign] option:selected').val();
-            var categoryName = $('#basicModal').find('[name=campaign] option:selected').text();
-            var bannerType = $('#basicModal').find('[name=banner] option:selected').val();
-            var position = $('#basicModal').find('[name=priority] option:selected').val();
+            var modal = $("#basicModal");
+            var campaign = modal.find('[name=campaign] option:selected').val();
+            var campaignName = modal.find('[name=campaign] option:selected').text();
+            var banner = modal.find('[name=banner] option:selected').val();
+            var bannerName = modal.find('[name=banner] option:selected').text();
+            var position = modal.find('[name=priority] option:selected').val();
 
-            var dateFrom = $('#basicModal').find('[data-val="campaign-date-from"]').text();
-            var dateTo = $('#basicModal').find('[data-val="campaign-date-to"]').text();
 
+            var bannerType = $('[data-targ="add"]').data('banner-type');
+            var pos = $('[data-targ="add"]').data('position');
+            console.log(bannerType);
+            var dateFrom = modal.find('[data-val="campaign-date-from"]').text();
+            var dateTo = modal.find('[data-val="campaign-date-to"]').text();
 
-            console.log(category, categoryName, bannerType, position);
+            if ($.type(bannerType) !== "undefined") {
+                var edit = '<?php echo $this->__('Edit'); ?>';
+                var vendorName = '<?php echo $vendorName; ?>';
+                var dates = '';
+                if (dateFrom.length > 0 && dateTo.length > 0) {
+                    dates = dateFrom + ' - ' + dateTo;
+                }
+                var campaignBlock = '<li class="col-md-3 banner-item">' +
+                    '<img src="/skin/frontend/modago/default/images/logo_header_lightbox.png" />' +
+                    '<div class="row">' +
+                    '<div class= "col-md-6" >' +
+                    '<input type="text" name="campaign_id[]" value="'+campaign+'">' +
+                    '<input type="text" name="banner_id[]" value="'+banner+'">' +
+                    '<input type="text" name="type[]" value="'+bannerType+'">' +
+                    '<input type="text" name="position[]" value="'+pos+'">' +
+                    '<h5>' + campaignName + '</h5>' +
+                    '<h5>' + bannerName + '</h5>' +
+                    '<h5>' + vendorName + '</h5>' +
+                    '</div>' +
+                    '<div class="col-md-4">' +
+                    '<a href="#" class="btn btn-info" data-toggle="modal" data-target="#editModal">' +
+                    '<span class="glyphicon glyphicon-pencil"></span>' +
+                    '<span><span> ' + edit + '</span></span>' +
+                    '</a>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="dates">' +
+                    '<i class="icon-warning-sign"></i> ' + dates +
+                    '</div>' +
+                    '</li>';
 
-            var edit = '<?php echo $this->__('Edit'); ?>';
-            var vendorName = '<?php echo $vendorName; ?>';
-            var campaignBlock = '<li class="col-md-3 banner-item">' +
-                '<img src="/skin/frontend/modago/default/images/logo_header_lightbox.png" />' +
-                '<div class="row">' +
-                '<div class= "col-md-6" >' +
-                '<h5>' + categoryName + '</h5>' +
-                '<h5>' + vendorName + '</h5>' +
-                '</div>' +
-                '<div class="col-md-4">' +
-                '<a href="#" class="btn btn-info" data-toggle="modal" data-target="#editModal">' +
-                '<span class="glyphicon glyphicon-pencil"></span>' +
-                '<span><span> ' + edit + '</span></span>' +
-                '</a>' +
-                '</div>' +
-                '</div>' +
-                '<div class="dates">' +
-                '<i class="icon-warning-sign"></i> ' + dateFrom + ' - ' + dateTo +
-                '</div>' +
-                '</li>';
-
-            $('[data-targ="add"]').replaceWith(campaignBlock);
-            $('#basicModal').modal('hide');
+                $('[data-targ="add"]').replaceWith(campaignBlock);
+            }
+            clearOptions();
 
         })
-
 
 
         //edit
@@ -287,6 +296,15 @@ $vendorName = $vendor->getVendorName();
             $(this).find('[data-val="banner-type"]').html(bannerType);
             $(this).find('[data-val="position"]').html(position);
         });
+
+
+        function clearOptions() {
+            var modal = $("#basicModal");
+            modal.find('select[name="campaign"]').html('');
+            modal.find('select[name="banner"]').html('');
+            modal.find('select[name="priority"]').html('');
+            modal.modal('hide');
+        }
 
         /**
          *
