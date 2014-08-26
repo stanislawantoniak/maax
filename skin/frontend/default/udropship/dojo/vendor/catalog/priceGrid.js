@@ -22,13 +22,14 @@ define([
 	"vendor/grid/ObserverFilter",
 	"vendor/catalog/priceGrid/popup/price",
 	"vendor/catalog/priceGrid/popup/stock",
+	"vendor/catalog/priceGrid/popup/mass/price",
 	"vendor/catalog/priceGrid/RowUpdater",
 	"vendor/misc"
 ], function(BaseGrid, Grid, Pagination, CompoundColumns, Selection, 
 	Keyboard, editor, declare, domConstruct, on, query, Memory, 
 	Observable, put, Cache, JsonRest, Selection, selector, lang, 
 	request, ObserverFilter, singlePriceUpdater, singleStockUpdater, 
-	RowUpdater, misc){
+	massPriceUpdater, RowUpdater, misc){
 	
 	/**
 	 * @todo Make source options it dynamicly
@@ -610,12 +611,12 @@ define([
 	
 	// Price changer 
 	on(priceChanger, "click", function(){
-		if(jQuery(".dgrid-selector input", grid.domNode).attr("aria-checked")==="true"){
-			console.log("Full selection: ", grid.get("query"));
-		}else{
-			console.log("Only pointed", grid.selection);
-		}
-	})
+		massPriceUpdater.handleClick({
+			"global": jQuery(".dgrid-selector input", grid.domNode).attr("aria-checked")==="true",
+			"query": grid.get("query"),
+			"selected": grid.selection
+		});
+	});
 	
 	// listen for selection
 	on.pausable(grid.domNode, "dgrid-select", updateSelectionButtons);
