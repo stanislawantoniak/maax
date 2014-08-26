@@ -554,6 +554,8 @@ Mall.listing = {
         this.attachFilterFlagEvents();
         this.attachFilterPriceSliderEvents();
         this.attachFilterSizeEvents();
+        this.reloadListingItemsAfterPageLoad();
+        this.placeListingFadeContainer();
     },
 
     getMoreProducts: function() {
@@ -577,25 +579,32 @@ Mall.listing = {
     getMoreProductsCallback: function(data) {
         if(data.status == true) {
             var container = jQuery("#items-product").masonry();
-            var sortArray = data.content.sort.split(" ");
+            var sortArray = typeof data.content.sort == "string" || data.content.sort instanceof String ? data.content.sort.split(" ") : [];
             var items;
             Mall.listing.setPageIncrement();
-            Mall.listing.setSort(sortArray[0]);
-            Mall.listing.setDir(sortArray[1]);
+            Mall.listing.setSort(typeof sortArray[0] == "undefined" ? "" : sortArray[0]);
+            Mall.listing.setDir(typeof sortArray[1] == "undefined" ? "" : sortArray[1]);
             items = Mall.listing.appendToList(data.content.products);
             container.imagesLoaded(function() {
-                container.masonry("appended", items);
-                setTimeout(function() {jQuery(".shapes_listing").css("top", jQuery(".addNewPositionListProduct").position().top - 40);}, 1000);
+                container.masonry("reloadItems");
+                container.masonry();
+//                container.masonry("appended", items);
+                setTimeout(function() {Mall.listing.placeListingFadeContainer()}, 1000);
             });
             // set current items count
             Mall.listing.addToVisibleItems(data.content.rows);
             Mall.listing.setTotal(data.content.total);
-            Mall.listing.canLoadMoreProducts();
+            Mall.listing.placeListingFadeContainer();
+//            Mall.listing.canLoadMoreProducts();
         } else {
             // do something to inform customer that something went wrong
             alert("Something went wrong, try again");
             return false;
         }
+    },
+
+    loadProductsOnScroll: function() {
+        // detect if this is good time for showing next part of products
     },
 
     appendToList: function(products) {
@@ -937,6 +946,47 @@ Mall.listing = {
         return this;
     },
 
+    placeListingFadeContainer: function() {
+        // check if body has proper class
+        if(jQuery("body").hasClass("node-type-list")
+            && this.getTotal() > 20
+            && this.canLoadMoreProducts()) {
+            var heights = new Array();
+            jQuery('.node-type-list #items-product .item').each(function() {
+                heights.push(jQuery(this).height());
+            });
+            var min = Math.min.apply( Math, heights );
+            var con = jQuery('#items-product').innerHeight();
+            jQuery('#items-product').not('.list-shop-product').css('height', 'auto');
+            jQuery('#items-product').not('.list-shop-product').css('height', con-min);
+            jQuery(".shapes_listing").css("top", jQuery(".addNewPositionListProduct").position().top - 40);
+        } else {
+            this.hideLoadMoreButton();
+            this.hideShapesListing();
+        }
+    },
+
+    reloadListingItemsAfterPageLoad: function() {
+//        jQuery("#items-product").masonry().imagesLoaded(function() {
+//            container.masonry("reloadItems");
+//            container.masonry();
+//            setTimeout(function() {Mall.listing.placeListingFadeContainer()}, 1000);
+//        });
+
+        return this;
+    },
+
+    /**
+     *
+     * SETTERS / GETTERS
+     *
+     */
+
+    /**
+     * Returns min price which is set in price slider
+     *
+     * @returns {number}
+     */
     getMinPriceFromSlider: function() {
         var price = jQuery("#zakres_min").val();
         return price == '' ? 0 : price;

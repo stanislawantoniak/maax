@@ -1318,29 +1318,29 @@ var flags_container = $('.carousel-stage');
 if (flags_container.length > 0 ) {
   
 };
-
-if ($('body').hasClass('node-type-list')) {
-  equalizeHeights();
-  var container = document.querySelector('.jsMasonryContent');
-  notifElem = document.querySelector('#notification'); 
-    imagesLoaded( document.querySelector('#items-product'), function( instance ) {
-        var msnry = new Masonry( container, {
-         itemSelector: '.item',
-         isResizable: true
-      });
-        msnry.on( 'layoutComplete', function( msnryInstance, laidOutItems ) {
-          equalizeHeights()
-        });
-        equalizeHeights()
-
-    });
-
-
-
-
-
-
-};
+//
+//if ($('body').hasClass('node-type-list')) {
+////  equalizeHeights();
+//  var container = document.querySelector('.jsMasonryContent');
+//  notifElem = document.querySelector('#notification');
+//    imagesLoaded( document.querySelector('#items-product'), function( instance ) {
+//        var msnry = new Masonry( container, {
+//         itemSelector: '.item',
+//         isResizable: true
+//      });
+//        msnry.on( 'layoutComplete', function( msnryInstance, laidOutItems ) {
+////          equalizeHeights()
+//        });
+////        equalizeHeights()
+//
+//    });
+//
+//
+//
+//
+//
+//
+//};
 
 
 
