@@ -648,6 +648,19 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 		$websiteId = Mage::app()->getStore($storeId)->getWebsiteId();
 		$category = $collection->getCurrentCategory();
 		
+		// Load basic attributes data
+		$select = $this->getReadConnection()->select();
+		
+		$attributes = array(
+			"special_from_date"=>$this->getValueTable("catalog/product", "datetime"), 
+			"special_to_date"=>$this->getValueTable("catalog/product", "datetime"), 
+			"special_price"=>$this->getValueTable("catalog/product", "decimal")
+		);
+		
+		foreach($attributes as $key=>$table){
+			
+		}
+		
 		// Load price data
 		$taxClasses = array();
 		foreach($collection as $product){
@@ -698,13 +711,13 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 					unset($row['entity_id']);
 					
 					$product->addData($row);
-					//$product->setPriceCalculation(false);
 					
 					$basePrice = $product->getPrice();
 					$specialPrice = $product->getSpecialPrice();
 				    $specialPriceFrom = $product->getSpecialFromDate();
 					$specialPriceTo = $product->getSpecialToDate();
 					$rulePrice = $product->getData('_rule_price');
+					
 					
 					$finalPrice = $product->getPriceModel()->calculatePrice(
 						$basePrice,
@@ -717,6 +730,7 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 						$product->getId()
 					);
 					$product->setCalculatedFinalPrice($finalPrice);
+					
 					//$profiler->log("For " . $product->getId(), false);
 				}
 			}
