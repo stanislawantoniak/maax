@@ -8,6 +8,9 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object{
 	const DEFAULT_ORDER = "wishlist_count";
 	const DEFAULT_LIMIT = 40;
 	
+	const DEFAULT_START = 0;
+	const DEFAULT_PAGE = 1;
+	
 	
 	/**
 	 * @return int
@@ -111,33 +114,61 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object{
 	}
 	
 	/**
+	 * Query param: sort
 	 * @return int
 	 */
 	public function getCurrentOrder() {
 		return Mage::app()->getRequest()->getParam("sort", $this->getDefaultOrder());
 	}
 	
+	
 	/**
+	 * Query param: start
+	 * Get colleciton start row (offset) - ignored if page is set
+	 * @return int
+	 */
+	public function getCurrentStart() {
+		$request = Mage::app()->getRequest();
+		
+		// Page is set so start is callucled by bage
+		if((int)$request->getParam("page")){
+			return ($this->getCurrentPage()-1) * $this->getCurrentLimit();
+		}
+		
+		return $request->getParam("start", self::DEFAULT_START);
+	}
+	
+	/**
+	 * Query param: page
 	 * @return int
 	 */
 	public function getCurrentPage() {
 		$request = Mage::app()->getRequest();
 		// Ajax request or Google bot - serve paged content
 		if($request->isAjax() || $this->isGoogleBot()){
-			return (int)$request->getParam("page", 1);
+			$page = (int)$request->getParam("page");
+			if($page>0){
+				return $page;
+			}
 		}
 		// Normal request by human - only first page served
-		return 1;
+		return self::DEFAULT_PAGE;
 	}
 	
 	/**
+	 * Query param: rows
 	 * @return int
 	 */
 	public function getCurrentLimit() {
+		$queryLimit = (int)Mage::app()->getRequest()->getParam("rows");
+		if($queryLimit>0){
+			return $queryLimit;
+		}
 		return $this->getDefaultLimit();
 	}
 	
 	/**
+	 * Query param: dir
 	 * @return string
 	 */
 	public function getCurrentDir() {
