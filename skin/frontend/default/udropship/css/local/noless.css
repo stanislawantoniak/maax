@@ -100,7 +100,7 @@
     margin-right: 5px;
     margin-bottom: 5px;
     background-color: white;
-    min-height: 170px;
+    min-height: 300px;
 }
 
 .banner-positions {
@@ -108,6 +108,6 @@
     clear: both;
     display: table;
     margin-bottom: 20px;
-    min-height: 260px;
+    min-height: 310px;
     width: 100%;
 }

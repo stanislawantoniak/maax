@@ -61,6 +61,58 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         }
         return $this;
     }
+
+
+    /**
+     * @param $categoryId
+     * @param array $placements
+     * @return $this
+     */
+    public function setCampaignPlacements($categoryId, array $placements)
+    {
+        $table = $this->getTable("zolagocampaign/campaign_placement");
+        $where = $this->getReadConnection()
+            ->quoteInto("category_id=?", $categoryId);
+        $this->_getWriteAdapter()->delete($table, $where);
+
+        if (count($placements)) {
+            $this->_getWriteAdapter()->insertMultiple($table, $placements);
+        }
+        return $this;
+    }
+
+
+    /**
+     * @param $categoryId
+     * @param $vendorId
+     * @return array
+     */
+    public function getCategoryPlacements($categoryId, $vendorId)
+    {
+        $table = $this->getTable("zolagocampaign/campaign_placement");
+        $select = $this->getReadConnection()->select();
+        $select->from(array("campaign_placement" => $table), array("*"));
+        $select->joinLeft(
+            array('campaign' => 'zolago_campaign'),
+            'campaign.campaign_id=campaign_placement.campaign_id',
+            array(
+                'campaign_name' => 'campaign.name',
+                'campaign_date_from' => 'campaign.date_from',
+                'campaign_date_to' => 'campaign.date_to'
+            )
+        );
+        $select->joinLeft(
+            array('banner' => 'zolago_banner'),
+            'banner.banner_id=campaign_placement.banner_id',
+            array(
+                'banner_name' => 'banner.name'
+            )
+        );
+        $select->where("campaign_placement.category_id=?", $categoryId);
+        $select->where("campaign_placement.vendor_id=?", $vendorId);
+        return $this->getReadConnection()->fetchAssoc($select);
+    }
+
     /**
      * @param Mage_Core_Model_Abstract $object
      * @param array $websites
