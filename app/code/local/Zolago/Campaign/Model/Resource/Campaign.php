@@ -108,6 +108,15 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
                 'banner_name' => 'banner.name'
             )
         );
+        $select->joinLeft(
+            array('banner_content' => 'zolago_banner_content'),
+            'banner.banner_id=banner_content.banner_id',
+            array(
+                 'banner_show' => 'banner_content.show',
+                 'banner_html' => 'banner_content.html',
+                 'banner_image' => 'banner_content.image'
+            )
+        );
         $select->where("campaign_placement.category_id=?", $categoryId);
         $select->where("campaign_placement.vendor_id=?", $vendorId);
         return $this->getReadConnection()->fetchAssoc($select);

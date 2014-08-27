@@ -8,6 +8,7 @@ $vendorName = $vendor->getVendorName();
 $campaigns = Mage::helper('core')->jsonEncode($this->getCampaigns());
 
 $placements = $this->getCategoryPlacements();
+Zend_Debug::dump($placements);
 ?>
 
 <div class="container">
@@ -63,11 +64,12 @@ $placements = $this->getCategoryPlacements();
                                                 <?php foreach ($placements[$titleCode] as $placement): ?>
                                                     <?php if($i == $placement['position']): ?>
                                                         <li class="col-md-3 banner-item">
-                                                            <img src="/skin/frontend/modago/default/images/logo_header_lightbox.png">
+                                                            <?php if(isset($placement['preview_image']) && !empty($placement['preview_image'])): ?>
+                                                                <img src="<?php echo $placement['preview_image']; ?>">
+                                                            <?php endif; ?>
 
                                                             <div class="row">
                                                                 <div class="col-md-6">
-
                                                                     <input type="text" name="placement_id[]" value="<?php echo $placement['placement_id']; ?>">
                                                                     <input type="text" name="campaign_id[]" value="<?php echo $placement['campaign_id']; ?>">
                                                                     <input type="text" name="banner_id[]" value="<?php echo $placement['banner_id']; ?>">
@@ -150,18 +152,18 @@ $placements = $this->getCategoryPlacements();
                         <select name="banner"></select>
                     </div>
                     <div class="row">
-<!--                        <label>Set priority: </label>-->
-<!--                        <select name="priority">-->
-<!--                            <option value="0">0</option>-->
-<!--                            <option value="1">1</option>-->
-<!--                            <option value="2">2</option>-->
-<!--                            <option value="3">3</option>-->
-<!--                        </select>-->
+                        <label><?php echo $_helper->__('Set priority'); ?>: </label>
+                        <select name="priority">
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                        </select>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="row">
-                        <label><?php $_helper->__('Preview'); ?>: </label>
+                        <label><?php echo $_helper->__('Preview'); ?>: </label>
                     </div>
                 </div>
                 <div class="hidden">
@@ -212,17 +214,17 @@ $placements = $this->getCategoryPlacements();
                         To restart., <a data-edit-val="link-edit" href="" target="_blank"><?php echo $_helper->__('go to campaign'); ?></a>.
                     </div>
                     <div class="row">
-<!--                        <label>Change priority: </label>-->
-<!--                        <select name="priority">-->
-<!--                            <option value="0">0</option>-->
-<!--                            <option value="1">1</option>-->
-<!--                            <option value="2">2</option>-->
-<!--                            <option value="3">3</option>-->
-<!--                        </select>-->
+                        <label><?php echo $_helper->__('Change priority'); ?>: </label>
+                        <select name="priority">
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                        </select>
                     </div>
                     <div class="row">
                         <a data-edit-val="link-delete" href="">
-                            <?php echo $_helper->__('Delete this creative from the placement'); ?>
+                            <?php echo $_helper->__("Delete this creative from the placement"); ?>
                         </a>
                     </div>
                 </div>
@@ -343,8 +345,8 @@ $placements = $this->getCategoryPlacements();
                     '<input type="text" name="type[]" value="'+bannerType+'">' +
                     '<input type="text" name="position[]" value="'+pos+'">' +
                     '<input type="text" name="priority[]" value="0">' +
-                    '<h5>' + campaignName + '</h5>' +
-                    '<h5>' + bannerName + '</h5>' +
+                    '<h5><span data-edit-source="campaign_name">' + campaignName + '</span></h5>' +
+                    '<h5><span data-edit-source="banner_name">' + bannerName + '</span></h5>' +
                     '<h5>' + vendorName + '</h5>' +
                     '</div>' +
                     '<div class="col-md-4">' +
@@ -398,9 +400,6 @@ $placements = $this->getCategoryPlacements();
             if(parseInt(placementId) > 0){
                 modal.find('[data-edit-val="link-delete"]').attr("href", "/campaign/placement_category/remove/id/" + placementId);
             }
-
-
-
 
         });
 
