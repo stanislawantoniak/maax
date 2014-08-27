@@ -16,6 +16,10 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 		Mage::register("current_category", $catModel);
 	}
 	
+	public function emptyAction() {
+		echo "Works";
+	}
+	
 	/**
 	 * Get list plus blocks
 	 */

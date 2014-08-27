@@ -52,8 +52,15 @@ class Zolago_Solrsearch_Model_Catalog_Product_Collection extends Varien_Data_Col
 	}
 	
 	public function loadData($printQuery = false, $logQuery = false) {
+		//$profiler = Mage::helper("zolagocommon/profiler");
+		/* @var $profiler Zolago_Common_Helper_Profiler */
+		
+		//$profiler->start();
 		
 		$data = $this->getSolrData("response", "docs");
+		
+		//$profiler->log("Solr");
+		
 		foreach($data as $item){
 			// Build product product
 			$prodcut = Mage::getModel("zolagosolrsearch/catalog_product");
@@ -61,10 +68,13 @@ class Zolago_Solrsearch_Model_Catalog_Product_Collection extends Varien_Data_Col
 			Mage::helper('zolagosolrsearch')->mapSolrDocToProduct($item, $prodcut);
 			$this->addItem($prodcut);
 		}
-		Mage::log("Start loading data");
-		$this->_loadAttributesData();
-		Mage::log("Stop loading data");
+		
+		//$profiler->log("Adding items");
+		
 		// Add urls, prices, i like it for all collection
+		$this->_loadAttributesData();
+		
+		//$profiler->log("Attributes loaded");
 		
 		return parent::loadData($printQuery, $logQuery);
 	}

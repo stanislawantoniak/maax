@@ -642,6 +642,9 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 			$storeId, $customerGroupId) {
 		
 		
+		$profiler = Mage::helper("zolagocommon/profiler");
+		$profiler->start();
+		
 		$websiteId = Mage::app()->getStore($storeId)->getWebsiteId();
 		$category = $collection->getCurrentCategory();
 		
@@ -676,21 +679,26 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 				array("price_index"=>$this->getTable('catalog/product_index_price')),
 				$colls
 		);
+		$ids = $collection->getAllIds();
+		array_walk($ids, function($item){return (int)$item;});
 		
-		
-		$select->where("entity_id IN (?)", $collection->getAllIds());
+		$select->where("entity_id IN (?)", $ids);
 		$select->where("tax_class_id IN (?)", $taxClasses);
 		$select->where("website_id=?", $websiteId);
 		$select->where("customer_group_id=?", $customerGroupId);
 
+		$reasults = $this->getReadConnection()->fetchAll($select);
+		//$profiler->log("Prices query done");
+		
 		// Calculate final price
-		foreach($this->getReadConnection()->fetchAll($select) as $row){
+		foreach($reasults as $row){
 			if($product = $collection->getItemById($row['entity_id'])){
 				/* @var $product Mage_Catalog_Model_Product */
 				if($row['tax_class_id']==$product->getTaxClassId()){
 					unset($row['entity_id']);
 					
 					$product->addData($row);
+					//$product->setPriceCalculation(false);
 					
 					$basePrice = $product->getPrice();
 					$specialPrice = $product->getSpecialPrice();
@@ -709,9 +717,11 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 						$product->getId()
 					);
 					$product->setCalculatedFinalPrice($finalPrice);
+					//$profiler->log("For " . $product->getId(), false);
 				}
 			}
 		}
+		//$profiler->log("After loop");
 		
 		// Add is in my wishlist
 		$wishlist = Mage::helper("zolagowishlist")->getWishlist();
