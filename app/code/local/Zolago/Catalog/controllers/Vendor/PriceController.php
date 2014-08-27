@@ -48,6 +48,68 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Catalog_Controller_Ve
 	}
 	
 	/**
+	 * Handle mass save
+	 */
+	public function massSaveAction() {
+		
+		$time = microtime(true);
+		
+		$response = $this->getResponse();
+		$request = $this->getRequest();
+		
+		$storeId = $this->_getStoreId();
+		$global = $request->getParam("global");
+		$productsIds = explode(",", $request->getParam("selected", ""));
+		$query = Mage::helper("core")->jsonDecode(base64_decode($request->getParam("encoded_query")));
+		$attributeData = array();
+		
+		foreach(array("converter_price_type", "price_margin") as $key){
+			$value = $request->getParam($key);
+			if(!is_null($value)){
+				$attributeData[$key] = $value;
+			}
+		}
+		
+		try{
+			
+			$collection = $this->_prepareCollection();
+			if($global && is_array($query)){
+				foreach($this->_getRestQuery($query) as $key=>$value){
+					$collection->addAttributeToFilter($key, $value);
+				}
+			}elseif($productsIds){
+				$collection->addIdFilter($productsIds);
+			}else{
+				// empty collection if no result found
+				$collection->addIdFilter(-1);
+			}
+			$allIds = $collection->getAllIds();
+			$allIds = array_map(function($item){return (int)$item;}, $allIds);
+			
+			if($allIds && $attributeData){
+				$this->_processAttributresSave($allIds, $attributeData, $storeId);
+			}
+			
+			// Prepare response data
+			$data = array(
+				"status"	=> 1,
+				"content"	=> array(
+					"changed_ids" => $allIds,
+					"changes"	  => $attributeData,
+					"global"	  => (int)$global,
+					"time"		  => microtime(true)-$time
+				)
+			);
+			
+			$response->setBody(Mage::helper('core')->jsonEncode($data));
+		} catch (Exception $ex) {
+			$response->setHttpResponseCode(500);
+			$response->setBody($ex->getMessage());
+		}
+		$this->_prepareRestResponse();
+	}
+	
+	/**
 	 * Handle rest put action
 	 */
 	protected function _handleRestPut() {
@@ -144,13 +206,19 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Catalog_Controller_Ve
 	}
 	
 	
+
 	/**
+	 * @param array $inParams
 	 * @return array
 	 */
-	protected function _getRestQuery() {
+	protected function _getRestQuery(array $inParams = array()) {
+		if(empty($inParams)){
+			$inParams = $this->getRequest()->getQuery();
+		}
 		$params = array();
 		foreach($this->_getCollection()->getAvailableQueryParams() as $key){
-			if(($value=$this->getRequest()->getQuery($key))!==null){
+			if(isset($inParams[$key])){
+				$value = $inParams[$key];
 				if(is_string($value) && trim($value)==""){
 					continue;
 				}elseif(is_array($value) && !$value){

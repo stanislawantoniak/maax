@@ -111,4 +111,10 @@
     <price-close translate="message" module="zolagocatalog">
         <message>Close</message>
     </price-close>
+    <save-changes translate="message" module="zolagocatalog">
+        <message>Save changes</message>
+    </save-changes>
+    <mass-price-change translate="message" module="zolagocatalog">
+        <message>Mass price change</message>
+    </mass-price-change>
 </jstranslator>

@@ -12,7 +12,7 @@ class Zolago_Catalog_Block_Vendor_Price_Mass extends Zolago_Catalog_Block_Vendor
 	}
 	
 	public function getEncodedQuery() {
-		return base64_encode($this->getRequest()->getParam("query"));
+		return base64_encode(Mage::helper("core")->jsonEncode($this->getRequest()->getParam("query")));
 	}
 	
 	public function getPriceSourceOptions() {

@@ -33,25 +33,36 @@ define([
 			//rowUpdater.clear(id);
 			button.button('loading');
 			
-			console.log(data);
-			
 			// make request
-//			
-//			jQuery.ajax({
-//				method: "post",
-//				data: data,
-//				url: this._saveUrl,
-//				success: function(data){
-//					store.notify(data, id);
-//				},
-//				complete: function(){
-//					button.button('reset');
-//					modal.modal('hide');
-//				},
-//				error: function(data){
-//					alert(data.responseText)
-//				}
-//			});
+			
+			jQuery.ajax({
+				method: "post",
+				data: data,
+				url: this._saveUrl,
+				success: function(data){
+					
+					var data = data.content;
+					
+					// Restore selection just changed prices
+					grid.refresh().then(function(){
+						if(data.global){
+							grid.selectAll();
+						}else{
+							jQuery.each(data.changed_ids, function(){
+								grid.select(this + 0); // Cast to number
+							});
+						}
+					})
+					
+				},
+				complete: function(){
+					button.button('reset');
+					modal.modal('hide');
+				},
+				error: function(data){
+					alert(data.responseText)
+				}
+			});
 		},
 		_afterRender: function(data){
 			this.inherited(arguments);
@@ -63,12 +74,31 @@ define([
 
 			var source = jQuery(".converterPriceType", node),
 				margin = jQuery(".marignPercent", node),
+				sourceChange = jQuery(".converterPriceTypeChange", node),
+				marginChange = jQuery(".marignPercentChange", node),
 				form = node.parents("form"),
+				btn = jQuery(".btn-primary", form),
 				self = this;
 
+		    var refreshSaveBtn = function(){
+				console.log(!jQuery(":checkbox:checked", node).length);
+				btn.prop("disabled", !jQuery(":checkbox:checked", node).length);
+			}
+				
+			// Enable disable controll
 
+			sourceChange.change(function(){
+				source.prop("disabled", !this.checked);
+				refreshSaveBtn();
+			});
+			
+			marginChange.change(function(){
+				margin.prop("disabled", !this.checked);
+				refreshSaveBtn();
+			})	
 
 			App.applyNumeric(); // Apply numeric plugin
+			App.uniform(); // Apply uniform
 
 			form.validate({
 				submitHandler: function(){
@@ -76,6 +106,8 @@ define([
 					return false;
 				}
 			});
+			
+			refreshSaveBtn();
 		}
 	});
 	  

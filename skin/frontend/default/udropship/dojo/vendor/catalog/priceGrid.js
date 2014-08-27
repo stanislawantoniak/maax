@@ -566,11 +566,23 @@ define([
 				]
 			}
 		},
+		
+		getSelectedIds: function(){
+			var selected = [];
+			jQuery.each(grid.selection, function(k){
+				if(true==this){
+					selected.push(k);
+				}
+			});
+			return selected;
+		},
+		
 		loadingMessage: "<span>" + Translator.translate("Loading...") + "</span>",
 		noDataMessage: "<span>" + Translator.translate("No results found") + "</span>.",
         
 		selectionMode: 'none',
 		allowSelectAll: true,
+		deselectOnRefresh: true,
 				
 		minRowsPerPage: 50,
 		maxRowsPerPage: 100,
@@ -588,7 +600,6 @@ define([
 		
 		renderRow: renderer,
 		store: testStore,
-		deselectOnRefresh: true,
 		getBeforePut: false,
 		sort: "entity_id"
 	}, "grid-holder");
@@ -612,10 +623,17 @@ define([
 	// Price changer 
 	on(priceChanger, "click", function(){
 		var global = jQuery(".dgrid-selector input", grid.domNode).attr("aria-checked")==="true";
+		var query = grid.get("query");
+		var selected = [];
+		
+		if(!global){
+			selected = grid.getSelectedIds();
+		}
+		
 		massPriceUpdater.handleClick({
 			"global":	global ? 1 : 0,
-			"query":	global ? jQuery.param(grid.get("query")) : "",
-			"selected": global ? [] : Object.keys(grid.selection).join(","),
+			"query":	global ? query : {},
+			"selected": selected.join(","),
 			"store_id": switcher.value
 		});
 	});
@@ -674,7 +692,7 @@ define([
 	
 	updateSelectionButtons();
 	
-	return grid;
+	return grid; 
 	
 	
 });
