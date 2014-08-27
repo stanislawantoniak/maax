@@ -234,6 +234,12 @@ var App = function($) {
 			maxLength: 100,
 		});
 	}
+	
+	var uniform = function(collection){
+		if ($.fn.uniform) {
+			$(':radio.uniform, :checkbox.uniform', collection).uniform();
+		}
+	}
 
 	var calculateHeight = function() {
 		$('body').height('100%');
@@ -832,7 +838,8 @@ var App = function($) {
 			});
 		},
 		
-		applyNumeric: applyNumeric
+		applyNumeric: applyNumeric,
+		uniform: uniform
 
 	};
 

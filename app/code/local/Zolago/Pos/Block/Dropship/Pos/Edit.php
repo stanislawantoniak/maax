@@ -17,26 +17,11 @@ class Zolago_Pos_Block_Dropship_Pos_Edit extends Mage_Core_Block_Template {
         $builder->prepareForm(array(
             'name',
             'is_active',
-            'minimal_stock',
-            'priority',
             'external_id',
         ));         
         
 		$settings->addField("pos_id", "hidden", array("name"=>"pos_id"));
 		        
-        $address = $form->addFieldset('address', array('legend'=>$helper->__('Address')));
-        $builder = Mage::getModel('zolagopos/form_fieldset_address'); 
-        $builder->setFieldset($address);
-        $builder->setModel($this->getModel());
-        $builder->prepareForm(array(
-            'city',
-            'country_id',
-            'region_id',
-            'street',
-            'postcode',
-            'company'
-        ));
-                            
         $contact = $form->addFieldset('contact', array('legend'=>$helper->__('Contact')));
         $builder = Mage::getModel('zolagopos/form_fieldset_contact'); 
         $builder->setFieldset($contact);
@@ -44,6 +29,28 @@ class Zolago_Pos_Block_Dropship_Pos_Edit extends Mage_Core_Block_Template {
             'phone',
             'email',
         ));
+
+
+        $address = $form->addFieldset('address', array('legend'=>$helper->__('Address')));
+        $builder = Mage::getModel('zolagopos/form_fieldset_address'); 
+        $builder->setFieldset($address);
+        $builder->setModel($this->getModel());
+        $builder->prepareForm(array(
+            'company',
+            'city',
+            'country_id',
+            'region_id',
+            'street',
+            'postcode'
+        ));
+        $stock = $form->addFieldset('stock', array('legend'=>$helper->__('Stock settings')));
+        $builder = Mage::getModel('zolagopos/form_fieldset_stock'); 
+        $builder->setFieldset($stock);
+        $builder->prepareForm(array(
+            'minimal_stock',
+            'priority',
+        ));
+                            
 		
         $dhl = $form->addFieldset('dhl', array('legend'=>$helper->__('DHL Settings')));
         $builder = Mage::getModel('zolagopos/form_fieldset_dhl'); 

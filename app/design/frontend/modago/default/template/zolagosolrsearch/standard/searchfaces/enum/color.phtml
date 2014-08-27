@@ -1,0 +1,56 @@
+<?php $key = $this->getFacetKey(); ?>
+<?php if ($this->getCanShow()): ?>
+    <?php
+    $sectionClass = $this->isFilterRolled() ? 'closed' : 'open';
+    $iconClass = $this->isFilterRolled() ? "fa-chevron-down" : "fa-chevron-up";
+    $isOptionSelected = false;
+    $key_withoutFacet = explode("_", $key);
+    array_pop($key_withoutFacet);
+    ?>
+    <div class="section clearfix">
+        <h3 class="<?php echo $sectionClass; ?>"><?php echo $this->getFacetLabel(); ?> <i class="fa <?php echo $iconClass; ?>"></i></h3>
+        <div class="content filter-color"  id="filter_<?php echo $key; ?>">
+    <?php foreach ($this->getItems() as $item => $count): ?>
+        <?php if ($this->getCanShowItem($item, $count)): ?>
+            <?php $_value = $this->getValueObject($item);?>
+            <?php $_color = $_value->getColor();?>
+            <?php $_image = $_value->getNormalImage();?>
+            <?php
+            if(!$isOptionSelected && $this->isItemActive($item)) {
+                $isOptionSelected = true;
+            }
+            ?>
+            <label for="color_<?php echo $item ?>" <?php if($_image): ?>data-img="<?php echo Mage::getBaseUrl("media") . "/m-image/" . $_image;?>"<?php endif; ?> data-param="<?php echo $this->getItemJson($item);?>" data-color="<?php echo $_color?>" data-url="<?php echo $this->getItemUrl($item) ?>">
+                <input type="checkbox" id="color_<?php echo $item ?>" name="color[]" <?php if($this->isItemActive($item)): ?>checked="checked"<?php endif; ?> /><span><span></span></span>
+            </label>
+        <?php endif; ?>
+    <?php endforeach; ?>
+
+
+    <?php if ($this->getCanShowHidden()): ?>
+        <?php foreach ($this->getHiddenItems() as $item => $count): ?>
+            <?php if ($this->getCanShowItem($item, $count)): ?>
+                <?php $_value = $this->getValueObject($item);?>
+                <?php $_color = $_value->getColor();?>
+                <?php $_image = $_value->getNormalImage();?>
+                <?php
+                if(!$isOptionSelected && $this->isItemActive($item)) {
+                    $isOptionSelected = true;
+                }
+                ?>
+                <label data-state="hidden" for="color_<?php echo $item ?>" <?php if($_image): ?>data-img="<?php echo Mage::getBaseUrl("media") . "/m-image/" . $_image;?>"<?php endif; ?> data-param="<?php echo $this->getItemJson($item);?>" data-color="<?php echo $_color?>" data-url="<?php echo $this->getItemUrl($item) ?>" style="display: none;">
+                    <input type="checkbox" id="color_<?php echo $item ?>" name="color[]" <?php if($this->isItemActive($item)): ?>checked="checked"<?php endif; ?> /><span><span></span></span>
+                </label>
+            <?php endif; ?>
+        <?php endforeach; ?>
+            <div class="actions text-right clearfix">
+                <a href="#" class="go_read_filter underline showmore-filters" data-state="0"><?php echo $this->__("Show more"); ?></a>
+            </div>
+    <?php endif; ?>
+            <div class="action clear clearfix <?php if(!$isOptionSelected) : ?>hidden<?php endif; ?>">
+                <a href="#" data-filter-type="<?php echo implode("_", $key_withoutFacet); ?>" onclick="Mall.listing.removeSingleFilterType(this);Mall.listing.reloadListing();return false;" class="button button-third clear clearfilter-color"><?php echo $this->__("Clear"); ?></a>
+            </div>
+
+        </div>
+    </div>
+<?php endif; ?>

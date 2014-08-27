@@ -33,6 +33,7 @@ define([
 	 */
 	
 	var campainRegularIdOptions = sourceOptions.campaign_regular_id,
+		converterMsrpTypeOptions = sourceOptions.converter_msrp_type,
 		converterPriceTypeOptions = sourceOptions.converter_price_type,
 		flagOptions = sourceOptions.product_flag,
 		statusOptions = sourceOptions.status,
@@ -360,6 +361,33 @@ define([
 					}
 				]
 			},
+			converter_msrp_type: {
+				label: Translator.translate("MSRP Source"),
+				field: "converter_msrp_type",
+				className: "column-medium",
+				children: [
+					{
+						renderHeaderCell: filterRendererFacory("select", "converter_msrp_type", {options: converterMsrpTypeOptions}),
+						sortable: false, 
+						field: "converter_msrp_type",
+						className: "filterable align-center column-medium signle-price-edit popup-trigger",
+						formatter: function(value, item){
+							for(var i=0; i<converterMsrpTypeOptions.length; i++){
+								if(converterMsrpTypeOptions[i].value+'' == value+''){
+									return converterMsrpTypeOptions[i].label;
+								}
+							}
+							return "";
+						},
+						renderCell: function(item,value,node){
+							if(priceEditPriceMeta(item, value)){
+								put(node, ".editable");
+							}
+							BaseGrid.defaultRenderCell.apply(this, arguments);
+						}
+					}
+				]
+			},
 			is_new: editor({
 				label: Translator.translate("New"),
 				field: "is_new",
@@ -415,15 +443,11 @@ define([
 				field: "product_flag",
 				className: "column-short",
 				children: [
-					editor({
-						editor: "select",
-						editorArgs: {options: flagOptions, required: false},
-						editOn: "dblclick",
-						autoSave: true,
+					{
 						renderHeaderCell: filterRendererFacory("select", "product_flag", {options: flagOptions}),
 						sortable: false, 
 						field: "product_flag",
-						className: "filterable align-center column-short text-overflow editable",
+						className: "filterable align-center column-short text-overflow",
 						formatter: function(value, item){
 							for(var i=0; i<flagOptions.length; i++){
 								if(flagOptions[i].value+'' == value+''){
@@ -432,7 +456,7 @@ define([
 							}
 							return "";
 						}
-					})
+					}
 				]
 			},
 			is_in_stock: {
