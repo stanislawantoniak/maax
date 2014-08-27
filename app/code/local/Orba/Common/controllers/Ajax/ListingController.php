@@ -76,8 +76,13 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 	protected function _getProducts(Zolago_Solrsearch_Model_Catalog_Product_List $listModel) {
 		// Create product list 
 		$products = array();
+		
+		$profiler = Mage::helper("zolagocommon/profiler");
+		/* @var $profiler Zolago_Common_Helper_Profiler */
+		$profiler->start();
+		
 		foreach ($listModel->getCollection() as $product){
-			/* @var $_product Zolago_Solrsearch_Model_Catalog_Product */
+			/* @var $product Zolago_Solrsearch_Model_Catalog_Product */
 			$_product = $product->getData();
 			$_product['listing_resized_image_url'] = (string)$product->getListingResizedImageUrl();
 			$_product['udropship_vendor_logo_url'] = (string)$product->getUdropshipVendorLogoUrl();

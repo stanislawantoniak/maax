@@ -52,7 +52,7 @@ class Zolago_Solrsearch_Model_Catalog_Product_Collection extends Varien_Data_Col
 	}
 	
 	public function loadData($printQuery = false, $logQuery = false) {
-		//$profiler = Mage::helper("zolagocommon/profiler");
+		$profiler = Mage::helper("zolagocommon/profiler");
 		/* @var $profiler Zolago_Common_Helper_Profiler */
 		
 		//$profiler->start();

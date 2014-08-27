@@ -648,18 +648,6 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 		$websiteId = Mage::app()->getStore($storeId)->getWebsiteId();
 		$category = $collection->getCurrentCategory();
 		
-		// Load basic attributes data
-		$select = $this->getReadConnection()->select();
-		
-		$attributes = array(
-			"special_from_date"=>$this->getValueTable("catalog/product", "datetime"), 
-			"special_to_date"=>$this->getValueTable("catalog/product", "datetime"), 
-			"special_price"=>$this->getValueTable("catalog/product", "decimal")
-		);
-		
-		foreach($attributes as $key=>$table){
-			
-		}
 		
 		// Load price data
 		$taxClasses = array();
@@ -692,13 +680,59 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 				array("price_index"=>$this->getTable('catalog/product_index_price')),
 				$colls
 		);
+		
+		// Join attributes for special price
+		$attributes = array(
+			"special_from_date",
+			"special_to_date",
+			"special_price",
+			"msrp"
+		);
+		
+		foreach($attributes as $key){
+			$attribute = Mage::getSingleton('eav/config')->getAttribute(Mage_Catalog_Model_Product::ENTITY, $key);
+			/* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
+			
+			$tableAliasDefault = "at_" . $key . "_d";
+			$tableAlaisStore = "at_" . $key . "_s";
+			
+			$joinConds = array(
+				"$tableAliasDefault.entity_id=price_index.entity_id",
+				$this->getReadConnection()->quoteInto("$tableAliasDefault.store_id=?", Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID),
+				$this->getReadConnection()->quoteInto("$tableAliasDefault.attribute_id=?", $attribute->getId())
+			);
+			
+			$select->joinLeft(
+				array($tableAliasDefault=>$attribute->getBackendTable()), 
+				implode(" AND ", $joinConds),
+				array()
+			);
+			
+			$joinConds = array(
+				"$tableAlaisStore.entity_id=price_index.entity_id",
+				$this->getReadConnection()->quoteInto("$tableAlaisStore.store_id=?", $storeId),
+				$this->getReadConnection()->quoteInto("$tableAlaisStore.attribute_id=?", $attribute->getId())
+			);
+			
+			$select->joinLeft(
+				array($tableAlaisStore=>$attribute->getBackendTable()), 
+				implode(" AND ", $joinConds),
+				array()
+			);
+			
+			$select->columns(array(
+				$key => new Zend_Db_Expr("IF($tableAlaisStore.value_id>0, $tableAlaisStore.value, $tableAliasDefault.value)")
+			));
+			
+		}
+		
 		$ids = $collection->getAllIds();
 		array_walk($ids, function($item){return (int)$item;});
 		
-		$select->where("entity_id IN (?)", $ids);
-		$select->where("tax_class_id IN (?)", $taxClasses);
-		$select->where("website_id=?", $websiteId);
-		$select->where("customer_group_id=?", $customerGroupId);
+		$select->where("price_index.entity_id IN (?)", $ids);
+		$select->where("price_index.tax_class_id IN (?)", $taxClasses);
+		$select->where("price_index.website_id=?", $websiteId);
+		$select->where("price_index.customer_group_id=?", $customerGroupId);
 
 		$reasults = $this->getReadConnection()->fetchAll($select);
 		//$profiler->log("Prices query done");
