@@ -123,6 +123,21 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
     }
 
     /**
+     * @param $bannerId
+     *
+     * @return array
+     */
+    public function getBannerImageData($bannerId)
+    {
+        $table = $this->getTable("zolagobanner/banner_content");
+        $select = $this->getReadConnection()->select();
+        $select->from(array("banner_content" => $table), array("*"));
+
+        $select->where("banner_content.banner_id=?", $bannerId);
+        return $this->getReadConnection()->fetchRow($select);
+    }
+
+    /**
      * @param Mage_Core_Model_Abstract $object
      * @param array $websites
      * @return Zolago_Campaign_Model_Resource_Campaign

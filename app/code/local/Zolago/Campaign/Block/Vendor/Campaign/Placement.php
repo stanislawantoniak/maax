@@ -26,9 +26,8 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement extends Mage_Core_Block_Te
         //1. Get vendor root category
         // /udropshipadmin/adminhtml_vendor/edit/ -> Preferences -> Root categories -> Category ID
         $storeId = Mage::app()->getStore()->getId();
-        $rootId = Mage::app()->getStore($storeId)->getRootCategoryId();;
+        $rootId = Mage::app()->getStore($storeId)->getRootCategoryId();
 
-        $vendorId = $this->getVendor()->getId();
         $customVendorVars = Mage::helper('core')->jsonDecode($this->getVendor()->getCustomVarsCombined());
         $vendorRootCategory = (isset($customVendorVars['root_category']) && !empty($customVendorVars['root_category'])) ?
             (int)reset($customVendorVars['root_category']) :

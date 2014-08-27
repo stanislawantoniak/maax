@@ -111,3 +111,12 @@
     min-height: 310px;
     width: 100%;
 }
+
+.banner-preview-image {
+    height: 95px;
+    width: 280px;
+}
+.image-preview-big {
+    width: 540px;
+    height: 185px;
+}

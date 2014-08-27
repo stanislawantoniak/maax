@@ -30,6 +30,9 @@
 					<campaign_product>
 						<table>zolago_campaign_product</table>
 					</campaign_product>
+                    <campaign_placement>
+                        <table>zolago_campaign_placement</table>
+                    </campaign_placement>
 				</entities>
 			</zolagocampaign_resource>
 		</models>

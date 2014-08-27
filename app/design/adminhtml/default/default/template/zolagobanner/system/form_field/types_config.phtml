@@ -144,6 +144,7 @@ $fValue = $_element->getValue();
         </tfoot>
         <tbody class="fieldset_config_body">
         <?php if (is_array($fValue)): foreach ($fValue as $row => $fV): ?>
+            <?php if($row == "no_image") continue;?>
             <?php $rowClass = ($row%2) ? 'odd' : 'even'; ?>
             <tr data-row="<?php echo $row; ?>" class="<?php echo $rowClass; ?>" >
                 <td>
@@ -311,8 +312,6 @@ $fValue = $_element->getValue();
 
                         </div>
                     </div>
-
-
                 </td>
                 <td>
                     <button type="button" class="scalable delete delete-fieldset"  onclick="jQuery(this).closest('tr').remove();"><span><?php echo $this->__('Remove') ?></span></button>
@@ -321,6 +320,9 @@ $fValue = $_element->getValue();
         <?php endforeach; endif; ?>
         </tbody>
     </table>
+    <br />
+    <h3><?php echo Mage::helper('zolagobanner')->__('No Image Placeholder')?></h3>
+    <input type="text" class="input-text" name="<?php echo $this->getFieldName()?>[no_image]" value="<?php echo $fValue['no_image']; ?>" style="width:400px" />
 </div>
 
 <style type="text/css">

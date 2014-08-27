@@ -49,15 +49,22 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement_Category extends Mage_Core
 //Zend_Debug::dump($placements);
         $placementsByType = array();
         if (!empty($placements)) {
+            $bannersConfiguration = Mage::helper('zolagobanner')->getBannersConfiguration();
+
             foreach ($placements as $placement) {
                 $placement['campaign_date_from'] = !empty($placement['campaign_date_from']) ? date("d.m.Y H:i:s", strtotime($placement['campaign_date_from'])) : '';
                 $placement['campaign_date_to'] = !empty($placement['campaign_date_to']) ? date("d.m.Y H:i:s", strtotime($placement['campaign_date_to'])) : '';
                 if($placement['banner_show'] == Zolago_Banner_Model_Banner_Show::BANNER_SHOW_IMAGE){
-                    $placement['banner_image'] = unserialize($placement['banner_image']);
+                    $placementImage = unserialize($placement['banner_image']);
                 }
 
                 //preview image
-                $placement['preview_image'] = "/skin/frontend/default/default/images/banner_no_image.png";
+                $placement['preview_image'] = $bannersConfiguration->no_image;
+                if(!empty($placementImage)){
+                    $firstImage = reset($placementImage);
+                    $placement['preview_image'] = Mage::getBaseUrl('media').$firstImage['path'];
+                }
+
 
                 $placementsByType[$placement['type']][] = $placement;
             }

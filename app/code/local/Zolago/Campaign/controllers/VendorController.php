@@ -239,5 +239,30 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
         }
         echo Mage::helper('core')->jsonEncode($campaignData);
     }
-   
+
+    /**
+     * @return array
+     */
+    public function getBannerPreviewImageAction()
+    {
+        $id = (int)$this->getRequest()->getParam("id");
+        //preview image
+        $bannersConfiguration = Mage::helper('zolagobanner')->getBannersConfiguration();
+        $previewImage = $bannersConfiguration->no_image;
+
+        $bannerShow = Mage::getResourceModel('zolagocampaign/campaign')
+            ->getBannerImageData($id);
+
+        if (!empty($bannerShow)) {
+            if ($bannerShow['show'] == Zolago_Banner_Model_Banner_Show::BANNER_SHOW_IMAGE) {
+                $placementImage = unserialize($bannerShow['image']);
+            }
+
+            if (!empty($placementImage)) {
+                $placementImage = reset($placementImage);
+                $previewImage = Mage::getBaseUrl('media') . $placementImage['path'];
+            }
+        }
+        echo $previewImage;
+    }
 }

@@ -8,12 +8,11 @@ $vendorName = $vendor->getVendorName();
 $campaigns = Mage::helper('core')->jsonEncode($this->getCampaigns());
 
 $placements = $this->getCategoryPlacements();
-Zend_Debug::dump($placements);
 ?>
 
 <div class="container">
 <form name="campaign-position" method="POST" action="/campaign/placement_category/save">
-    <input type="text" name="category" value="<?php echo $this->getCategoryId(); ?>" />
+    <input type="hidden" name="category" value="<?php echo $this->getCategoryId(); ?>" />
     <div class="page-heading row">
         <div class="col-lg-6">
             <h3><span data-source="category"><?php echo $this->getCategoryName(); ?></span></h3>
@@ -65,17 +64,17 @@ Zend_Debug::dump($placements);
                                                     <?php if($i == $placement['position']): ?>
                                                         <li class="col-md-3 banner-item">
                                                             <?php if(isset($placement['preview_image']) && !empty($placement['preview_image'])): ?>
-                                                                <img src="<?php echo $placement['preview_image']; ?>">
+                                                                <img src="<?php echo $placement['preview_image']; ?>" class="banner-preview-image" />
                                                             <?php endif; ?>
 
                                                             <div class="row">
                                                                 <div class="col-md-6">
-                                                                    <input type="text" name="placement_id[]" value="<?php echo $placement['placement_id']; ?>">
-                                                                    <input type="text" name="campaign_id[]" value="<?php echo $placement['campaign_id']; ?>">
-                                                                    <input type="text" name="banner_id[]" value="<?php echo $placement['banner_id']; ?>">
-                                                                    <input type="text" name="type[]" value="<?php echo $placement['type']; ?>">
-                                                                    <input type="text" name="position[]" value="<?php echo $placement['position']; ?>">
-                                                                    <input type="text" name="priority[]" value="<?php echo $placement['priority']; ?>">
+                                                                    <input type="hidden" name="placement_id[]" value="<?php echo $placement['placement_id']; ?>">
+                                                                    <input type="hidden" name="campaign_id[]" value="<?php echo $placement['campaign_id']; ?>">
+                                                                    <input type="hidden" name="banner_id[]" value="<?php echo $placement['banner_id']; ?>">
+                                                                    <input type="hidden" name="type[]" value="<?php echo $placement['type']; ?>">
+                                                                    <input type="hidden" name="position[]" value="<?php echo $placement['position']; ?>">
+                                                                    <input type="hidden" name="priority[]" value="<?php echo $placement['priority']; ?>">
                                                                     <h5>
                                                                         <span data-edit-source="campaign_name">
                                                                             <?php echo $placement['campaign_name']; ?>
@@ -142,18 +141,18 @@ Zend_Debug::dump($placements);
                 </h4>
             </div>
             <div class="modal-body row">
-                <div class="col-md-8">
+                <div class="col-md-6">
                     <div class="row">
                         <label><?php echo $_helper->__('Choose campaign'); ?>: </label>
-                        <select name="campaign"></select>
+                        <select name="campaign" class="form-control"></select>
                     </div>
                     <div class="row">
                         <label><?php echo $_helper->__('Choose creative'); ?>: </label>
-                        <select name="banner"></select>
+                        <select name="banner" class="form-control"></select>
                     </div>
                     <div class="row">
                         <label><?php echo $_helper->__('Set priority'); ?>: </label>
-                        <select name="priority">
+                        <select name="priority" class="form-control" style="width:50px">
                             <option value="0">0</option>
                             <option value="1">1</option>
                             <option value="2">2</option>
@@ -161,18 +160,14 @@ Zend_Debug::dump($placements);
                         </select>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="row">
-                        <label><?php echo $_helper->__('Preview'); ?>: </label>
-                    </div>
-                </div>
+                <div class="col-md-6" data-banner="preview"></div>
                 <div class="hidden">
                     <span data-val="campaign-date-from"></span>
                     <span data-val="campaign-date-to"></span>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal" id="add-placement-dismiss">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
                     <?php echo $_helper->__('Cancel'); ?>
                 </button>
                 <button type="button" class="btn btn-primary" id="add-placement">
@@ -194,7 +189,7 @@ Zend_Debug::dump($placements);
             </div>
             <div class="modal-body row">
                 <div class="col-md-12">
-                    <img src="/skin/frontend/modago/default/images/banner1.jpg" />
+                    <img src="" class="image-preview-big"/>
                 </div>
                 <div class="col-md-12">
                     <div class="row">
@@ -215,7 +210,7 @@ Zend_Debug::dump($placements);
                     </div>
                     <div class="row">
                         <label><?php echo $_helper->__('Change priority'); ?>: </label>
-                        <select name="priority">
+                        <select name="priority" class="form-control" style="width:50px">
                             <option value="0">0</option>
                             <option value="1">1</option>
                             <option value="2">2</option>
@@ -230,10 +225,10 @@ Zend_Debug::dump($placements);
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" id="save-edit" data-dismiss="modal">
+                <button type="button" class="btn btn-default"  data-dismiss="modal">
                     <?php echo $_helper->__('Cancel'); ?>
                 </button>
-                <button type="button" class="btn btn-primary">
+                <button type="button" class="btn btn-primary" id="edit-placement">
                     <?php echo $_helper->__('Save'); ?>
                 </button>
             </div>
@@ -256,13 +251,16 @@ Zend_Debug::dump($placements);
             getCampaignAdditionalInfo(campaign);
         })
 
+        $(document).on('change', 'select[name=banner]', function () {
+            var banner = $(this).val();
+            getBannerImage(banner);
+        })
+
         $("#basicModal").on("show.bs.modal", function (e) {
             var category = $('[data-source="category"]').html();
             var bannerType = $(e.relatedTarget).parents('.widget').find('[data-source="banner-type"]').html();
             var bannerTypeCode = $(e.relatedTarget).parents('.widget').find('[data-source="banner-type-code"]').html();
             var position = $(e.relatedTarget).parents('.widget .banner-positions').find('[data-source="position"]').html();
-
-            //var compaignsObj = jQuery.parseJSON(compaigns);
 
             var options = '<option value="0">      </option>';
             if ($.type(compaignsObj[bannerTypeCode]) !== "undefined") {
@@ -287,7 +285,7 @@ Zend_Debug::dump($placements);
                 .append("<div data-targ='add' data-position='"+position+"' data-banner-type='"+typeCode+"'></div>");
 
         })
-        $('#add-placement-dismiss[data-dismiss="modal"]').click(function(){
+        $('#basicModal [data-dismiss="modal"]').click(function(){
             $("[data-targ='add']").remove();
             clearOptions();
         })
@@ -313,13 +311,24 @@ Zend_Debug::dump($placements);
             $(this).find('[data-val="position"]').html('');
 
         });
+        $('#editModal [data-dismiss="modal"]').click(function(){
+            clearEditWindowOptions();
+        })
+
+        $('#editModal #edit-placement').click(function () {
+            clearEditWindowOptions();
+            $('#editModal').modal('hide');
+        })
+
         $('#basicModal #add-placement').click(function () {
+            //get data
             var modal = $("#basicModal");
             var campaign = modal.find('[name=campaign] option:selected').val();
             var campaignName = modal.find('[name=campaign] option:selected').text();
             var banner = modal.find('[name=banner] option:selected').val();
             var bannerName = modal.find('[name=banner] option:selected').text();
             var position = modal.find('[name=priority] option:selected').val();
+            var previewImage = modal.find('[data-banner="preview"] img').attr("src");
 
 
             var bannerType = $('[data-targ="add"]').data('banner-type');
@@ -328,6 +337,7 @@ Zend_Debug::dump($placements);
             var dateFrom = modal.find('[data-val="campaign-date-from"]').text();
             var dateTo = modal.find('[data-val="campaign-date-to"]').text();
 
+            //set data
             if (parseInt(banner) > 0) {
                 var edit = '<?php echo $this->__('Edit'); ?>';
                 var vendorName = '<?php echo $vendorName; ?>';
@@ -336,15 +346,15 @@ Zend_Debug::dump($placements);
                     dates = dateFrom + ' - ' + dateTo;
                 }
                 var campaignBlock = '<li class="col-md-3 banner-item">' +
-                    '<img src="/skin/frontend/modago/default/images/logo_header_lightbox.png" />' +
+                    '<img src="'+previewImage+'" class="banner-preview-image" />' +
                     '<div class="row">' +
                     '<div class= "col-md-6" >' +
-                    '<input type="text" name="placement_id[]" value="0">' +
-                    '<input type="text" name="campaign_id[]" value="'+campaign+'">' +
-                    '<input type="text" name="banner_id[]" value="'+banner+'">' +
-                    '<input type="text" name="type[]" value="'+bannerType+'">' +
-                    '<input type="text" name="position[]" value="'+pos+'">' +
-                    '<input type="text" name="priority[]" value="0">' +
+                    '<input type="hidden" name="placement_id[]" value="0">' +
+                    '<input type="hidden" name="campaign_id[]" value="'+campaign+'">' +
+                    '<input type="hidden" name="banner_id[]" value="'+banner+'">' +
+                    '<input type="hidden" name="type[]" value="'+bannerType+'">' +
+                    '<input type="hidden" name="position[]" value="'+pos+'">' +
+                    '<input type="hidden" name="priority[]" value="0">' +
                     '<h5><span data-edit-source="campaign_name">' + campaignName + '</span></h5>' +
                     '<h5><span data-edit-source="banner_name">' + bannerName + '</span></h5>' +
                     '<h5>' + vendorName + '</h5>' +
@@ -382,11 +392,14 @@ Zend_Debug::dump($placements);
 
             var vendorName = '<?php echo $vendorName; ?>';
 
+            var previewImage = nameSpace.find('.banner-preview-image').attr("src");
+console.log(previewImage);
             var campaignDateFrom = nameSpace.find('[data-edit-source="campaign_date_from"]').text();
             var campaignDateDash = nameSpace.find('[data-edit-source="campaign_date_dash"]').text();
             var campaignDateTo = nameSpace.find('[data-edit-source="campaign_date_to"]').text();
 
             var placementId = nameSpace.find('[name="placement_id[]"]').val();
+            console.log(placementId);
 
             var dates = [campaignDateFrom, campaignDateDash, campaignDateTo].join(" ");
             //set data to modal
@@ -394,11 +407,15 @@ Zend_Debug::dump($placements);
             modal.find('[data-edit-val="campaign_name"]').text(campaignName);
             modal.find('[data-edit-val="banner_name"]').text(bannerName);
             modal.find('[data-edit-val="dates"]').text(dates);
+            modal.find('img.image-preview-big').attr("src",previewImage)
+
 
             modal.find('[data-edit-val="link-edit"]').attr("href", "/campaign/vendor/edit/id/" + campaign);
 
-            if(parseInt(placementId) > 0){
+            if (placementId > 0) {
                 modal.find('[data-edit-val="link-delete"]').attr("href", "/campaign/placement_category/remove/id/" + placementId);
+            } else {
+                modal.find('[data-edit-val="link-delete"]').attr("href", "");
             }
 
         });
@@ -406,7 +423,6 @@ Zend_Debug::dump($placements);
         $("#editModal").find('[data-edit-val="link-delete"]').click(function (e) {
             e.preventDefault();
             var href = $(this).attr("href");
-
             console.log(href);
             if(href.length > 0){
                 //remove from db
@@ -424,7 +440,17 @@ Zend_Debug::dump($placements);
             modal.find('select[name="campaign"]').html('');
             modal.find('select[name="banner"]').html('');
             modal.find('select[name="priority"]').html('');
+            modal.find('[data-banner="preview"]').html('');
             modal.modal('hide');
+        }
+
+        function clearEditWindowOptions(){
+            var modal = $("#editModal");
+            modal.find('[data-edit-val="campaign_name"]').html('');
+            modal.find('[data-edit-val="banner_name"]').html('');
+            modal.find('[data-edit-val="dates"]').html('');
+            modal.find('img.image-preview-big').attr("src",'');
+
         }
 
         /**
@@ -450,6 +476,25 @@ Zend_Debug::dump($placements);
                         optionsContainer.html(bannerOptions);
                     }
                 })
+            }
+        }
+
+        function getBannerImage(banner) {
+            banner = parseInt(banner);
+            if (banner > 0) {
+                $.ajax({
+                    url : "/campaign/vendor/getBannerPreviewImage",
+                    data: {id : banner},
+                    success: function(src){
+                        var wrapper = '<div class="row"><label>';
+                        wrapper += '<?php echo $_helper->__('Preview'); ?>';
+                        wrapper += ': </label></div><div class="row"><img src="'+src+'" /></div>';
+
+                        $('#basicModal').find('[data-banner="preview"]').html(wrapper);
+                    }
+                })
+            } else {
+                $('#basicModal').find('[data-banner="preview"]').html("");
             }
         }
 
