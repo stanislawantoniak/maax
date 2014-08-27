@@ -3,41 +3,92 @@
  */
 
 /**
- *
+ * Object for processing product listing.
  */
 Mall.listing = {
+    /**
+     * Current listing page.
+     */
     _current_page: 1,
 
+    /**
+     * Selected sorting direction.
+     */
     _current_dir: "asc",
 
+    /**
+     * Selected sorting type.
+     */
     _current_sort: "",
 
+    /**
+     * Current query string - search listing.
+     */
     _current_query: "",
 
+    /**
+     * Current category.
+     */
     _current_scat: "",
 
+    /**
+     * Current filters set.
+     */
     _current_filters: [],
 
+    /**
+     * How many items are visible on listing at the moment.
+     */
     _current_visible_items: 0,
 
+    /**
+     * Total items for current listing.
+     */
     _current_total: 0,
 
+    /**
+     * Current price range - filter.
+     */
     _current_price_rage: [0, 0],
 
+    /**
+     * Lock for loading and showing items when scrolling.
+     */
     _scroll_load_lock: false,
 
+    /**
+     * How many items will be appended to listing when scrolling.
+     */
     _scroll_load_offset: 8,
 
+    /**
+     * How many items will be loaded when load more action is performed.
+     */
     _load_next_offset: 500,
 
+    /**
+     * From which point products loading will be started.
+     */
     _load_next_start: 0,
 
+    /**
+     * When to start showing new products - from bottom of the page.
+     */
     _scroll_load_bottom_offset: 100,
 
+    /**
+     * Queue for preloaded products.
+     */
     _product_queue: [],
 
+    /**
+     * Can auto append method can be used for autoloaded products?
+     */
     _autoappend: false,
 
+    /**
+     * Performs initialization for listing object.
+     */
     init: function () {
         this.attachShowMoreEvent();
         this.attachFilterColorEvents();
@@ -55,6 +106,11 @@ Mall.listing = {
         this.loadToQueue();
     },
 
+    /**
+     * Loads products after clicking on Load more button.
+     *
+     * @deprecated since loadMoreProducts method intruduced.
+     */
     getMoreProducts: function () {
         var query = this.getQuery(),
             page = this.getPage(),
@@ -73,6 +129,13 @@ Mall.listing = {
         }, Mall.listing.getMoreProductsCallback);
     },
 
+    /**
+     * Callback for getMoreProducts
+     *
+     * @see Mall.listing.getMoreProducts
+     * @param data
+     * @returns {boolean}
+     */
     getMoreProductsCallback: function (data) {
         if (data.status === true) {
             var container = jQuery("#items-product").masonry(),
@@ -86,14 +149,12 @@ Mall.listing = {
             container.imagesLoaded(function () {
                 container.masonry("reloadItems");
                 container.masonry();
-//                container.masonry("appended", items);
                 setTimeout(function () {Mall.listing.placeListingFadeContainer();}, 1000);
             });
             // set current items count
             Mall.listing.addToVisibleItems(data.content.rows);
             Mall.listing.setTotal(data.content.total);
             Mall.listing.placeListingFadeContainer();
-//            Mall.listing.canLoadMoreProducts();
         } else {
             // do something to inform customer that something went wrong
             alert("Something went wrong, try again");
@@ -113,6 +174,11 @@ Mall.listing = {
         return this;
     },
 
+    /**
+     * Listens for scroll event and loads products from queue.
+     *
+     * @returns {Mall.listing}
+     */
     loadProductsOnScroll: function () {
         // detect if this is good time for showing next part of products
         jQuery(window).scroll(function () {
@@ -126,8 +192,15 @@ Mall.listing = {
                 }
             }
         });
+
+        return this;
     },
 
+    /**
+     * Appends products from queue to listing.
+     *
+     * @returns {Mall.listing}
+     */
     appendFromQueue: function () {
         "use strict";
 
@@ -157,14 +230,26 @@ Mall.listing = {
             Mall.listing.showShapesListing();
             Mall.listing.placeListingFadeContainer();
         }
+
+        return this;
     },
 
+    /**
+     * Loads products to queue and auto append first part of them to listing.
+     *
+     * @returns {Mall.listing}
+     */
     loadMoreProducts: function () {
         "use strict";
         this.setAutoappend(true);
         this.loadToQueue();
+
+        return this;
     },
 
+    /**
+     * Loads products to queue.
+     */
     loadToQueue: function () {
         // ajax load
         var query = this.getQuery(),
@@ -245,6 +330,11 @@ Mall.listing = {
         return this;
     },
 
+    /**
+     * Callback function called after loadToQueue.
+     *
+     * @param data
+     */
     appendToQueueCallback: function (data) {
         if (!jQuery.isEmptyObject(data) && data.status !== undefined && data.status === true) {
             var sortArray = typeof data.content.sort === "string"
@@ -268,7 +358,7 @@ Mall.listing = {
                 }
             } else {
                 // @todo hide buttons etc
-                alert("Products list is empty");
+                Mall.listing.removeLockFromQueue(); // this is dummy expression
             }
         } else {
             alert("Something went wrong, try again later");
@@ -277,6 +367,13 @@ Mall.listing = {
         Mall.listing.removeLockFromQueue();
     },
 
+    /**
+     * Appending products to listing's HTML.
+     * Returns array of appended products - html nodes.
+     *
+     * @param products
+     * @returns {Array}
+     */
     appendToList: function (products) {
         var items = [];
         var _item;
@@ -299,18 +396,30 @@ Mall.listing = {
      * @returns {*}
      */
     createProductEntity: function(product) {
-        var container = jQuery("<div/>", {
+        var container,
+            box,
+            link,
+            figure,
+            vendor,
+            priceBox,
+            colPrice,
+            likeClass,
+            likeText,
+            like,
+            likeIco;
+
+        container = jQuery("<div/>", {
             "class": "item col-phone col-xs-4 col-sm-4 col-md-3 col-lg-3 size14"
         });
-        var box = jQuery("<div/>", {
+        box = jQuery("<div/>", {
             "class": "box_listing_product"
         }).appendTo(container);
 
-        var link = jQuery("<a/>", {
+        link = jQuery("<a/>", {
             href: product.current_url
         }).appendTo(box);
 
-        var figure = jQuery("<figure/>", {
+        figure = jQuery("<figure/>", {
             "class": "img_product"
         }).appendTo(link);
 
@@ -320,7 +429,7 @@ Mall.listing = {
             "class": "img-responsive"
         }).appendTo(figure);
 
-        var vendor = jQuery("<div/>", {
+        vendor = jQuery("<div/>", {
             "class": "logo_manufacturer"
         }).appendTo(link);
 
@@ -334,11 +443,11 @@ Mall.listing = {
             html: product.name
         }).appendTo(link);
 
-        var priceBox = jQuery("<div/>", {
+        priceBox = jQuery("<div/>", {
             "class": "price clearfix"
         }).appendTo(link);
 
-        var colPrice = jQuery("<div/>", {
+        colPrice = jQuery("<div/>", {
             "class": "col-price"
         }).appendTo(priceBox);
 
@@ -354,20 +463,20 @@ Mall.listing = {
                 + Mall.getCurrencyBasedOnCode(product.currency)
         }).appendTo(colPrice);
 
-        var likeClass = "like",
-            likeText = "<span></span>";
+        likeClass = "like";
+        likeText = "<span></span>";
         if(product.in_my_wishlist) {
             likeClass += " liked";
             likeText = "<span>Ty+</span>";
         }
-        var like = jQuery("<div/>", {
+        like = jQuery("<div/>", {
             "class": likeClass,
             "data-idproduct": product.entity_id,
             "data-status": product.in_my_wishlist,
             onclick: "Mall.toggleWishlist(this);"
         }).appendTo(priceBox);
 
-        var likeIco = jQuery("<span/>", {
+        likeIco = jQuery("<span/>", {
             "class": "icoLike"
         }).appendTo(like);
 
@@ -395,21 +504,26 @@ Mall.listing = {
         return container;
     },
 
+    /**
+     * Attaches events to products inserted to listing.
+     */
     attachEventsToProducts: function() {
 
-        var itemProduct = jQuery('.box_listing_product');
+        var itemProduct = jQuery('.box_listing_product'),
+            textLike,
+            itemProductId;
         itemProduct.on('click', '.like', function(event) {
             event.preventDefault();
             /* Act on the event */
-            var itemProductId = jQuery(this).data('idproduct');
+            itemProductId = jQuery(this).data('idproduct');
         });
         itemProduct.on('mouseenter', '.like', function(event) {
             event.preventDefault();
             if (jQuery(this).hasClass('liked')) {
-                var textLike = 'Dodane do ulubionych';
+                textLike = 'Dodane do ulubionych';
             } else {
-                var textLike = 'Dodaj do ulubionych';
-            };
+                textLike = 'Dodaj do ulubionych';
+            }
             jQuery(this).find('.toolLike').show().text(textLike);
         });
         itemProduct.on('mouseleave mouseup', '.like', function(event) {
@@ -422,7 +536,7 @@ Mall.listing = {
         });
         itemProduct.on('mouseup', '.like', function(event) {
             event.preventDefault();
-            jQuery(this).find('img:visible').animate({transform: 'scale(1.0)'}, 200)
+            jQuery(this).find('img:visible').animate({transform: 'scale(1.0)'}, 200);
         });
         itemProduct.on('mousedown', '.liked', function(event) {
             event.preventDefault();
@@ -431,6 +545,12 @@ Mall.listing = {
         });
     },
 
+    /**
+     * Return whether loading more products is possible,
+     * in addition hide show more button and shape listing.
+     *
+     * @returns {Mall.listing}
+     */
     canLoadMoreProducts: function() {
         if(this._current_visible_items >= this._current_total) {
             this.hideLoadMoreButton()
@@ -440,30 +560,55 @@ Mall.listing = {
         return this;
     },
 
+    /**
+     * Hides shape listing.
+     *
+     * @returns {Mall.listing}
+     */
     hideShapesListing: function() {
         jQuery("#items-product").find(".shapes_listing").hide();
 
         return this;
     },
 
+    /**
+     * Shows shape listing.
+     *
+     * @returns {Mall.listing}
+     */
     showShapesListing: function() {
         jQuery("#items-product").find(".shapes_listing").show();
 
         return this;
     },
 
+    /**
+     * Hides load more button from frontend.
+     *
+     * @returns {Mall.listing}
+     */
     hideLoadMoreButton: function() {
         jQuery("#content-main").find(".addNewPositionListProductWrapper").hide();
 
         return this;
     },
 
+    /**
+     * Shows load more button.
+     *
+     * @returns {Mall.listing}
+     */
     showLoadMoreButton: function() {
         jQuery("#content-main").find(".addNewPositionListProductWrapper").show();
 
         return this;
     },
 
+    /**
+     * Moves filters sidebar to mobile container.
+     *
+     * @returns {Mall.listing}
+     */
     insertMobileSidebar: function() {
         if(this.getCurrentMobileFilterState() == 0) {
             var currentSidebar = jQuery("#sidebar").clone(true, true);
@@ -476,6 +621,11 @@ Mall.listing = {
         return this;
     },
 
+    /**
+     * Moves filters sidebar to desktop container.
+     *
+     * @returns {Mall.listing}
+     */
     insertDesktopSidebar: function() {
         if(this.getCurrentMobileFilterState() == 1) {
             var currentSidebar = jQuery(".fb-slidebar-inner").clone(true, true);
@@ -488,10 +638,20 @@ Mall.listing = {
         return this;
     },
 
+    /**
+     * Return current mobile filters state. Is mobile or not.
+     *
+     * @returns {*}
+     */
     getCurrentMobileFilterState: function() {
         return this._current_mobile_filter_state;
     },
 
+    /**
+     * Attaches event for show more button in filter section.
+     *
+     * @returns {Mall.listing}
+     */
     attachShowMoreEvent: function() {
         jQuery(".showmore-filters").on("click", function(e) {
             var target = e.target;
@@ -503,48 +663,85 @@ Mall.listing = {
             }
             Mall.listing.toggleShowMoreState(this);
         });
+
+        return this;
     },
 
+    /**
+     * Attaches events to color filter.
+     *
+     * @returns {Mall.listing}
+     */
     attachFilterColorEvents: function() {
         jQuery(".filter-color").find("[data-url]").on("click", function(e) {
             // @todo ajax logic
             location.href = jQuery(this).attr("data-url");
         });
+
+        return this;
     },
 
+    /**
+     * Attaches events to flag filters.
+     *
+     * @returns {Mall.listing}
+     */
     attachFilterFlagEvents: function() {
         jQuery(".filter-flags").find("[data-url]").on("click", function(e) {
             // @todo ajax logic
             location.href = jQuery(this).attr("data-url");
         });
+
+        return this;
     },
 
+    /**
+     * Attaches events to Enum filters.
+     * @returns {Mall.listing}
+     */
     attachFilterEnumEvents: function() {
         jQuery(".filter-enum").find("[data-url]").on("click", function(e) {
             // @todo ajax logic
             location.href = jQuery(this).attr("data-url");
         });
+
+        return this;
     },
 
+    /**
+     * Attaches events to size filters.
+     *
+     * @returns {Mall.listing}
+     */
     attachFilterSizeEvents: function() {
         jQuery(".filter-size").find("[data-url]").on("click", function(e) {
             // @todo ajax logic
             location.href = jQuery(this).attr("data-url");
         });
+
+        return this;
     },
 
+    /**
+     * Attaches events for droplist filters.
+     *
+     * @returns {Mall.listing}
+     */
     attachFilterDroplistEvents: function() {
-        var headList = jQuery('.button-select.ajax');
-        var listSelect = jQuery('.dropdown-select ul');
+        var headList = jQuery('.button-select.ajax'),
+            listSelect = jQuery('.dropdown-select ul'),
+            thisVal,
+            thisUrl;
         headList.on('click', function(event) {
             event.preventDefault();
             jQuery(this).next('.dropdown-select').stop(true).slideToggle(200);
         });
         listSelect.on('click', 'a', function(event) {
             event.preventDefault();
-            var thisVal = jQuery(this).html();
-            var thisUrl = jQuery(this).attr("data-url");
-            jQuery(this).closest('.select-group').find('.button-select').html(thisVal+'<span class="down"></span>');
+            thisVal = jQuery(this).html();
+            thisUrl = jQuery(this).attr("data-url");
+            jQuery(this).closest('.select-group').find('.button-select')
+                .html(thisVal+'<span class="down"></span>');
             jQuery(this).closest('.dropdown-select').slideUp(200);
             window.location.href = thisUrl;
         });
@@ -554,8 +751,14 @@ Mall.listing = {
             }
         });
 
+        return this;
     },
 
+    /**
+     * Attaches events for price slider filters.
+     *
+     * @returns {Mall.listing}
+     */
     attachFilterPriceSliderEvents: function() {
         var sliderRange = jQuery( "#slider-range" );
         if (sliderRange.length >= 1) {
@@ -579,7 +782,7 @@ Mall.listing = {
                     jQuery('#filter_price').find('.action').removeClass('hidden');
                 }
             });
-        };
+        }
 
         jQuery("#filter_price").find("input.filter-price-range-submit").on("click", function(e) {
             e.preventDefault();
@@ -590,12 +793,22 @@ Mall.listing = {
                 fq = {fq: {}};
             }
 
-            fq.fq.price = Mall.listing.getMinPriceFromSlider() + " TO " + Mall.listing.getMaxPriceFromSlider();
+            fq.fq.price = Mall.listing.getMinPriceFromSlider()
+                + " TO "
+                + Mall.listing.getMaxPriceFromSlider();
             Mall.listing.setFiltersArray(fq);
             Mall.listing.reloadListing();
         });
+
+        return this;
     },
 
+    /**
+     * Toggles show more / hide more state link in filter section.
+     *
+     * @param item
+     * @returns {Mall.listing}
+     */
     toggleShowMoreState: function(item) {
         var state = jQuery(item).attr("data-state");
         if(state == "0") {
@@ -605,16 +818,27 @@ Mall.listing = {
             jQuery(item).text("Pokaż więcej");
             jQuery(item).attr("data-state", "0");
         }
+
+        return this;
     },
 
+    /**
+     * Reloads listing - takes current params in count.
+     *
+     */
     reloadListing: function() {
-        var protocol  = window.location.protocol;
-        var host = window.location.host;
-        var pathname = window.location.pathname;
+        var protocol  = window.location.protocol,
+            host = window.location.host,
+            pathname = window.location.pathname;
 
         window.location.href = protocol + "//" + host + pathname + "?" + jQuery.param(this.getQueryParams());
     },
 
+    /**
+     * Returns complete array of params for querying solr.
+     *
+     * @returns {{fq: Array, q: *, page: *, sort: *, dir: *, scat: *, rows: *, start: *}}
+     */
     getQueryParams: function() {
         var q = {
             fq: this.getFiltersArray() == [] ? [] : this.getFiltersArray().fq,
@@ -630,33 +854,51 @@ Mall.listing = {
         return q;
     },
 
+    /**
+     * Removes single filter from filters array.
+     *
+     * @param filter
+     * @returns {Mall.listing}
+     */
     removeSingleFilterType: function(filter) {
-        var filterType = jQuery(filter).attr("data-filter-type");
-        var filters = jQuery.isEmptyObject(this.getFiltersArray()) || jQuery.isEmptyObject(this.getFiltersArray().fq) ? [] : this.getFiltersArray().fq;
+        var filterType = jQuery(filter).attr("data-filter-type"),
+            filters = jQuery.isEmptyObject(this.getFiltersArray())
+                || jQuery.isEmptyObject(this.getFiltersArray().fq) ? [] : this.getFiltersArray().fq;
         delete filters[filterType];
 
         return this;
     },
 
+    /**
+     * Calculates position and places shape listing fade block.
+     *
+     * @returns {Mall.listing}
+     */
     placeListingFadeContainer: function() {
+        var heights = [],
+            min,
+            con;
         // check if body has proper class
         if(jQuery("body").hasClass("node-type-list")
             && this.getTotal() > 20
             && this.canLoadMoreProducts()
             && this.canShowLoadMoreButton()) {
-            var heights = new Array();
+
             jQuery('.node-type-list #items-product .item').each(function() {
                 heights.push(jQuery(this).height());
             });
-            var min = Math.min.apply( Math, heights );
-            var con = jQuery('#items-product').innerHeight();
+                min = Math.min.apply( Math, heights );
+                con = jQuery('#items-product').innerHeight();
             jQuery('#items-product').not('.list-shop-product').css('height', 'auto');
             jQuery('#items-product').not('.list-shop-product').css('height', con-min);
-            jQuery(".shapes_listing").css("top", jQuery(".addNewPositionListProduct").position().top - 40);
+            jQuery(".shapes_listing").css("top"
+                , jQuery(".addNewPositionListProduct").position().top - 40);
         } else {
             this.hideLoadMoreButton();
             this.hideShapesListing();
         }
+
+        return this;
     },
 
     /**
@@ -681,7 +923,7 @@ Mall.listing = {
             var container = jQuery("#items-product").masonry();
             container.masonry("reloadItems");
             container.masonry();
-            setTimeout(function() {Mall.listing.placeListingFadeContainer()}, 1000);
+            setTimeout(function() {Mall.listing.placeListingFadeContainer();}, 1000);
 
             // hide load more button
             if (Mall.listing.getTotal() > Mall.listing.getCurrentVisibleItems()) {
@@ -710,69 +952,149 @@ Mall.listing = {
         return price == '' ? 0 : price;
     },
 
+    /**
+     * Returns max price set in slider price.
+     *
+     * @returns {number}
+     */
     getMaxPriceFromSlider: function() {
         var price = jQuery("#zakres_max").val();
         return price == '' ? 0 : price;
     },
 
+    /**
+     * Returns query from search field which is set by backend.
+     *
+     * @returns {string}
+     */
     getQuery: function() {
         return this._current_query;
     },
 
+    /**
+     * Returns current page. Currently turned off.
+     *
+     * @returns {string}
+     */
     getPage: function() {
         // for now it's turned off
         return "";
 //        return this._current_page;
     },
 
+    /**
+     * Returns current sort type.
+     *
+     * @returns {string}
+     */
     getSort: function() {
         return this._current_sort;
     },
 
+    /**
+     * Returns current sort direction.
+     *
+     * @returns {string}
+     */
     getDir: function() {
         return this._current_dir;
     },
 
+    /**
+     * Returns current category.
+     *
+     * @returns {string}
+     */
     getScat: function() {
         return this._current_scat;
     },
 
+    /**
+     * Returns current filters.
+     *
+     * @returns {*}
+     */
     getFiltersArray: function() {
         return this._current_filters;
     },
 
+    /**
+     * Returns currently visible items on listing.
+     *
+     * @returns {number}
+     */
     getCurrentVisibleItems: function() {
         return this._current_visible_items;
     },
 
+    /**
+     * Returns total number of items in current filter/category listing.
+     *
+     * @returns {number}
+     */
     getTotal: function() {
         return this._current_total;
     },
 
+    /**
+     * Returns current price range from price filter.
+     *
+     * @returns {*}
+     */
     getCurrentPriceRange: function() {
         return this._current_price_rage;
     },
 
+    /**
+     * Returns how many pixels from bottom show new products will be started.
+     *
+     * @returns {number}
+     */
     getScrollBottomOffset: function() {
         return this._scroll_load_bottom_offset;
     },
 
+    /**
+     * Returns current scroll load offset.
+     *
+     * @returns {number}
+     */
     getScrollLoadOffset: function () {
         return this._scroll_load_offset;
     },
 
+    /**
+     * Returns state for scroll load lock.
+     *
+     * @returns {boolean}
+     */
     getScrollLoadLock: function () {
         return this._scroll_load_lock;
     },
 
+    /**
+     * Returns start point for load more products.
+     *
+     * @returns {number}
+     */
     getLoadNextStart: function () {
         return this._load_next_start;
     },
 
+    /**
+     * Returns current product queue.
+     *
+     * @returns {*}
+     */
     getProductQueue: function () {
         return this._product_queue;
     },
 
+    /**
+     * Returns how many products should be loaded in next load request.
+     *
+     * @returns {number}
+     */
     getLoadNextOffset: function () {
         return this._load_next_offset;
     },
@@ -801,56 +1123,132 @@ Mall.listing = {
         return this;
     },
 
+    /**
+     * Sets product queue to given value.
+     *
+     * @param queue
+     * @returns {Mall.listing}
+     */
     setProductQueue: function (queue) {
         this._product_queue = queue;
 
         return this;
     },
 
+    /**
+     * Increments current page.
+     *
+     * @returns {Mall.listing}
+     */
     setPageIncrement: function() {
         this._current_page += 1;
+
+        return this;
     },
 
+    /**
+     * Sets sort direction.
+     *
+     * @param dir
+     * @returns {Mall.listing}
+     */
     setDir: function(dir) {
         this._current_dir = dir;
+
+        return this;
     },
 
+    /**
+     * Sets sort type.
+     *
+     * @param sort
+     * @returns {Mall.listing}
+     */
     setSort: function(sort) {
         this._current_sort = sort;
+
+        return this;
     },
 
+    /**
+     * Sets query.
+     *
+     * @param query
+     * @returns {Mall.listing}
+     */
     setQuery: function(query) {
         this._current_query = query;
+
+        return this;
     },
 
+    /**
+     * Sets current category.
+     *
+     * @param scat
+     * @returns {Mall.listing}
+     */
     setScat: function(scat) {
         this._current_scat = scat;
+
+        return this;
     },
 
+    /**
+     * Sets current filters.
+     *
+     * @param filters
+     * @returns {Mall.listing}
+     */
     setFiltersArray: function(filters) {
         this._current_filters = filters;
 
         return this;
     },
 
+    /**
+     * Adds given items count to visible items on listing.
+     *
+     * @param itemsCount
+     * @returns {Mall.listing}
+     */
     addToVisibleItems: function(itemsCount) {
         this._current_visible_items += parseInt(itemsCount);
 
         return this;
     },
 
+    /**
+     * Sets total items.
+     *
+     * @param total
+     * @returns {Mall.listing}
+     */
     setTotal: function(total) {
         this._current_total = parseInt(total);
 
         return this;
     },
 
+    /**
+     * Sets current mobile filters state.
+     *
+     * @param state
+     * @returns {Mall.listing}
+     */
     setCurrentMobileFilterState: function(state) {
         this._current_mobile_filter_state = state;
 
         return this;
     },
 
+    /**
+     * Sets current price range selected in price slider filter.
+     *
+     * @param min
+     * @param max
+     * @returns {Mall.listing}
+     */
     setCurrentPriceRange: function(min, max) {
         this._current_price_rage = [min, max];
 
