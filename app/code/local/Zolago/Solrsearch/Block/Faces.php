@@ -186,6 +186,15 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 		}else{
 			$urlArray = array();
 		}
+		// Clear null values
+		foreach($urlArray as $key=>$value){
+			if($value===null){
+				unset($urlArray[$key]);
+			}
+		}
+		if(empty($urlArray)){
+			$urlArray = new stdClass; //force as object
+		}
 		return Mage::helper("core")->jsonEncode($urlArray);
 	}
 	
@@ -217,8 +226,8 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         if(isset($paramss['page'])) {
         	$finalParams['page'] = $paramss['page'];
         }
-        if(isset($paramss['order'])) {
-        	$finalParams['order'] = $paramss['order'];
+        if(isset($paramss['sort'])) {
+        	$finalParams['sort'] = $paramss['sort'];
         }
         if(isset($paramss['dir'])) {
         	$finalParams['dir'] = $paramss['dir'];
