@@ -13,6 +13,16 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         $this->setTemplate('zolagosolrsearch/standard/searchfaces.phtml');
     }
 	
+	
+	
+	public function prepareSolrData() {
+		//return parent::prepareSolrData();
+		$data = Mage::getSingleton('zolagosolrsearch/catalog_product_list')->getSolrData();
+		$this->solrData = $data;
+		$this->solrModel = Mage::getModel('solrsearch/solr');
+		$this->solrModel->setSolrData($data);
+	}
+	
 //	protected function _toHtml() {
 //		Mage::log("Before hmtl");
 //		$ret = parent::_toHtml();
@@ -246,7 +256,6 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 
     public function getRemoveFacesUrl($key,$value)
     {
-		Mage::log($this->_parseRemoveFacesUrl($key, $value));
 		return Mage::getUrl('*/*/*', $this->_parseRemoveFacesUrl($key, $value));
 	}
 	

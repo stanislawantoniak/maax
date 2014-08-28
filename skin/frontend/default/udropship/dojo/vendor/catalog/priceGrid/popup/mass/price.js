@@ -44,15 +44,17 @@ define([
 					var data = data.content;
 					
 					// Restore selection just changed prices
-					grid.refresh().then(function(){
-						if(data.global){
-							grid.selectAll();
-						}else{
-							jQuery.each(data.changed_ids, function(){
-								grid.select(this + 0); // Cast to number
-							});
-						}
-					})
+					grid.
+						refresh({keepScrollPosition: true}).
+						then(function(){
+							if(data.global){
+								grid.selectAll();
+							}else{
+								jQuery.each(data.changed_ids, function(){
+									grid.select(this + 0); // Cast to number
+								});
+							}
+						})
 					
 				},
 				complete: function(){
