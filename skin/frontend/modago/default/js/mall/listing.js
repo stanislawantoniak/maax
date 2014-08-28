@@ -812,23 +812,34 @@ Mall.listing = {
                 Mall.listing.reloadListing();
             }
         });
+
         jQuery("#filter_price").find("input.filter-price-range-submit").on("mouseover"
             , function(e) {
             "use strict";
             minPrice = Mall.listing.getMinPriceFromSlider();
             maxPrice = Mall.listing.getMaxPriceFromSlider();
-//            jQuery(this).tooltip("enable");
+            jQuery(this).tooltip({
+                title: Mall.translate.__("price-filter-not-valid", "Prices in filter are not valid.")
+            });
             if(isNaN(parseInt(minPrice, 10))
                 || isNaN(parseInt(maxPrice, 10))
                 || parseInt(minPrice, 10) < 0
                 || parseInt(maxPrice, 10) < 0
                 || parseInt(minPrice, 10) >= parseInt(maxPrice, 10)) {
-                jQuery(this).tooltip({
-                    title: "Prosimy o poprawne uzupełnienie cen w filtrze.",
-                    trigger: "hover focus manual"
-                }).tooltip("enable");
+                jQuery(this).tooltip("enable");
+                jQuery(this).tooltip("show");
             } else {
+                jQuery(this).tooltip("hide");
                 jQuery(this).tooltip("disable");
+            }
+        });
+
+        jQuery("#zakres_min, #zakres_max").on("keyup keypress", function (e) {
+            "use strict";
+            var code = e.keyCode || e.which;
+            if (code === 13) {
+                e.preventDefault();
+                return false;
             }
         });
 
