@@ -81,6 +81,17 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         return $this;
     }
 
+    public function removeCampaignPlacements(array $placements)
+    {
+        $table = $this->getTable("zolagocampaign/campaign_placement");
+        foreach($placements as $placement){
+            $where = $this->getReadConnection()
+                ->quoteInto("placement_id=?", $placement);
+            $this->_getWriteAdapter()->delete($table, $where);
+        }
+        return $this;
+    }
+
 
     /**
      * @param $categoryId

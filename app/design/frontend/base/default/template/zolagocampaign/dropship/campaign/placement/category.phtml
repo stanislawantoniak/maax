@@ -62,7 +62,7 @@ $placements = $this->getCategoryPlacements();
                                             <?php if (!empty($placements) && isset($placements[$titleCode])): ?>
                                                 <?php foreach ($placements[$titleCode] as $placement): ?>
                                                     <?php if($i == $placement['position']): ?>
-                                                        <li class="col-md-3 banner-item">
+                                                        <li class="col-md-3 banner-item" data-placement="<?php echo $placement['placement_id']; ?>">
                                                             <?php if(isset($placement['preview_image']) && !empty($placement['preview_image'])): ?>
                                                                 <img src="<?php echo $placement['preview_image']; ?>" class="banner-preview-image" />
                                                             <?php endif; ?>
@@ -88,7 +88,8 @@ $placements = $this->getCategoryPlacements();
                                                                     <h5><?php echo $vendorName; ?></h5>
                                                                 </div>
                                                                 <div class="col-md-4">
-                                                                    <a href="#" class="btn btn-info"
+                                                                    <a href="#" data-placementid="<?php echo $placement['placement_id']; ?>"
+                                                                       class="btn btn-info edit-placement"
                                                                        data-toggle="modal"
                                                                        data-target="#editModal">
                                                                         <span class="glyphicon glyphicon-pencil"></span>
@@ -188,6 +189,7 @@ $placements = $this->getCategoryPlacements();
                 </h4>
             </div>
             <div class="modal-body row">
+                <span data-edit-val="placement_id" class="hidden"></span>
                 <div class="col-md-12">
                     <img src="" class="image-preview-big"/>
                 </div>
@@ -315,7 +317,7 @@ $placements = $this->getCategoryPlacements();
             clearEditWindowOptions();
         })
 
-        $('#editModal #edit-placement').click(function () {
+        $('#editModal #edit-placement').click(function (e) {
             clearEditWindowOptions();
             $('#editModal').modal('hide');
         })
@@ -360,7 +362,7 @@ $placements = $this->getCategoryPlacements();
                     '<h5>' + vendorName + '</h5>' +
                     '</div>' +
                     '<div class="col-md-4">' +
-                    '<a href="#" class="btn btn-info" data-toggle="modal" data-target="#editModal">' +
+                    '<a href="#" class="btn btn-info edit-placement" data-toggle="modal" data-target="#editModal">' +
                     '<span class="glyphicon glyphicon-pencil"></span>' +
                     '<span><span> ' + edit + '</span></span>' +
                     '</a>' +
@@ -380,6 +382,7 @@ $placements = $this->getCategoryPlacements();
         })
 
 
+
         //edit
         $("#editModal").on("show.bs.modal", function (e) {
             //get data
@@ -393,7 +396,7 @@ $placements = $this->getCategoryPlacements();
             var vendorName = '<?php echo $vendorName; ?>';
 
             var previewImage = nameSpace.find('.banner-preview-image').attr("src");
-console.log(previewImage);
+
             var campaignDateFrom = nameSpace.find('[data-edit-source="campaign_date_from"]').text();
             var campaignDateDash = nameSpace.find('[data-edit-source="campaign_date_dash"]').text();
             var campaignDateTo = nameSpace.find('[data-edit-source="campaign_date_to"]').text();
@@ -407,7 +410,8 @@ console.log(previewImage);
             modal.find('[data-edit-val="campaign_name"]').text(campaignName);
             modal.find('[data-edit-val="banner_name"]').text(bannerName);
             modal.find('[data-edit-val="dates"]').text(dates);
-            modal.find('img.image-preview-big').attr("src",previewImage)
+            modal.find('img.image-preview-big').attr("src",previewImage);
+            modal.find('[data-edit-val="placement_id"]').text(placementId);
 
 
             modal.find('[data-edit-val="link-edit"]').attr("href", "/campaign/vendor/edit/id/" + campaign);
@@ -422,17 +426,24 @@ console.log(previewImage);
 
         $("#editModal").find('[data-edit-val="link-delete"]').click(function (e) {
             e.preventDefault();
-            var href = $(this).attr("href");
-            console.log(href);
-            if(href.length > 0){
+
+            var placement = $(this).closest('#editModal').find('[data-edit-val="placement_id"]').text();
+            if (placement.length > 0) {
                 //remove from db
                 console.log('remove from db');
+                $('form').append('<input type="text" name="remove[]" value="' + placement + '" />');
+                $('form').find('[data-placement="' + placement + '"]').closest('.banner-item').remove();
             } else {
                 //remove added html
                 console.log('remove added html');
+                $('form').find('.banner-item[data-status="current"]').remove();
             }
+            $("#editModal").modal('hide');
+        })
 
-
+        $('.edit-placement').click(function(){
+            $('.banner-item').data("status","");
+            $(this).closest('.banner-item').data("status","current");
         })
 
         function clearOptions() {

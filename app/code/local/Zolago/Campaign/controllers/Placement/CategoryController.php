@@ -33,6 +33,7 @@ class Zolago_Campaign_Placement_CategoryController extends Zolago_Dropship_Contr
         }
 
         $data = $this->getRequest()->getParams();
+
         $categoryId = (int)$data['category'];
 
         if(empty($categoryId)){
@@ -44,7 +45,17 @@ class Zolago_Campaign_Placement_CategoryController extends Zolago_Dropship_Contr
             $this->_getSession()->addError($helper->__("Category does not exist"));
             return $this->_redirect("campaign/placement/index");
         }
-
+        $campaign = Mage::getResourceModel('zolagocampaign/campaign');
+        //remove items
+        if(isset($data['remove'])){
+            try {
+                $campaign->removeCampaignPlacements($data['remove']);
+            } catch (Exception $e) {
+                $this->_getSession()->addError($helper->__("Some error occure"));
+                Mage::logException($e);
+                return $this->_redirect("campaign/placement/index");
+            }
+        }
         $placements = array();
         if (!empty($data)) {
             $itemsCount = count($data['campaign_id']);
@@ -63,13 +74,12 @@ class Zolago_Campaign_Placement_CategoryController extends Zolago_Dropship_Contr
             }
         }
         if (!empty($placements)) {
-            $campaign = Mage::getResourceModel('zolagocampaign/campaign');
             try {
                 $campaign->setCampaignPlacements($categoryId, $placements);
             } catch (Exception $e) {
                 $this->_getSession()->addError($helper->__("Some error occure"));
                 Mage::logException($e);
-                return $this->_redirectReferer();
+                return $this->_redirect("campaign/placement/index");
             }
 
         }
