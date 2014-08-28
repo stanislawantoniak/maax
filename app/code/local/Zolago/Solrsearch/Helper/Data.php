@@ -12,6 +12,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 	const ZOLAGO_SEARCH_CONTEXT_CURRENT_VENDOR = 'current_vendor';
 	const ZOLAGO_SEARCH_CONTEXT_CURRENT_CATEGORY = "current_category";
 	
+	
 	/**
 	 * @var array
 	 */
@@ -50,6 +51,25 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 	 * @var array
 	 */
 	protected $_availableStoreIds;
+	
+	/**
+	 * @param array $params
+	 * @return array
+	 */
+	public function processFinalParams(array $params = array(), $force = false) {
+		
+		// Unset positition if regular http request
+		
+		if(!Mage::helper("zolagocommon")->isGoogleBot() || $force){
+			
+				$params['rows'] = null;
+				$params['start'] = null;
+				$params['page'] = null;
+			
+		}
+		
+		return $params;
+	}
 	
 	/**
 	 * 

@@ -237,14 +237,8 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         		}
         	}
 			
-			if(isset($finalParams['start'])){
-				unset($finalParams['start']);
-			}
-			if(isset($finalParams['rows'])){
-				unset($finalParams['rows']);
-			}
 
-        	$urlParams['_query']    = $finalParams;
+        	$urlParams['_query']    = $this->processFinalParams($finalParams);
         }
 
         return $urlParams;
@@ -252,6 +246,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 
     public function getRemoveFacesUrl($key,$value)
     {
+		Mage::log($this->_parseRemoveFacesUrl($key, $value));
 		return Mage::getUrl('*/*/*', $this->_parseRemoveFacesUrl($key, $value));
 	}
 	
@@ -320,15 +315,8 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
                     unset($finalParams['id']);
                 }
             }
-			
-			if(isset($finalParams['start'])){
-				unset($finalParams['start']);
-			}
-			if(isset($finalParams['rows'])){
-				unset($finalParams['rows']);
-			}
 
-            $urlParams['_query']    = $finalParams;
+            $urlParams['_query']    = $this->processFinalParams($finalParams);
         }
 
         return $urlParams;
@@ -1068,6 +1056,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         $urlParams['_current']  = false;
         $urlParams['_escape']   = true;
         $urlParams['_use_rewrite']   = true;
+		
         if (sizeof($finalParams) > 0) {
 
             if (Mage::app()->getRequest()->getRouteName() == 'catalog') {
@@ -1078,21 +1067,23 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
                     unset($finalParams['id']);
                 }
             }
-
-			if(isset($finalParams['start'])){
-				unset($finalParams['start']);
-			}
-			if(isset($finalParams['rows'])){
-				unset($finalParams['rows']);
-			}
 			
-            $urlParams['_query']    = $finalParams;
+            $urlParams['_query']    = $this->processFinalParams($finalParams);
         }
 		
 		
 		
         return $urlParams;
     }
+	
+	/**
+	 * 
+	 * @param array $params
+	 * @return array
+	 */
+	public function processFinalParams(array $params = array()) {
+		return Mage::helper("zolagosolrsearch")->processFinalParams($params);
+	}
 	
 	/**
 	 * @return Unirgy_Dropship_Model_Vendor|null
