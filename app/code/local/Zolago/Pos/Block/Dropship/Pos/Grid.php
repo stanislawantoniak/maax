@@ -27,7 +27,7 @@ class Zolago_Pos_Block_Dropship_Pos_Grid extends Mage_Adminhtml_Block_Widget_Gri
     protected function _addColumnFilterToCollection($column){        
 		if($column->getIndex()=="my_dhl_account"){
 			$this->getCollection()->getSelect()->
-				where("IF(use_dhl=1,dhl_account,'')=?", $column->getFilter()->getValue());
+				where("IF(use_dhl=1,dhl_account,'') like ?", '%'.$column->getFilter()->getValue().'%');
 			return $this;
 		}
 		return parent::_addColumnFilterToCollection($column);
