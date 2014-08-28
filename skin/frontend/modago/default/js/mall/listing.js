@@ -894,7 +894,8 @@ Mall.listing = {
             host = window.location.host,
             pathname = window.location.pathname;
 
-        window.location.href = protocol + "//" + host + pathname + "?" + jQuery.param(this.getQueryParams());
+        window.location.href = protocol + "//" + host + pathname + "?"
+            + jQuery.param(this.getQueryParams());
     },
 
     /**
@@ -905,7 +906,8 @@ Mall.listing = {
      */
     getQueryParams: function() {
         var q = {
-            fq: this.getFiltersArray() == [] ? [] : this.getFiltersArray().fq,
+            fq: jQuery.isEmptyObject(this.getFiltersArray())
+                || this.getFiltersArray().fq === undefined ? [] : this.getFiltersArray().fq,
             q: this.getQuery(),
             page: this.getPage(),
             sort: this.getSort(),
