@@ -135,7 +135,23 @@ $placements = $this->getCategoryPlacements();
     <?php endif; ?>
 </form>
 </div>
-
+<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <a href="#" data-dismiss="modal" aria-hidden="true" class="close">×</a>
+                <h3>Are you sure</h3>
+            </div>
+            <div class="modal-body">
+                <p>Do you want to delete placement?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <a href="#" class="btn btn-danger danger" id="delete-placement">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="modal fade" id="basicModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
     <div class="modal-dialog">
@@ -244,7 +260,7 @@ $placements = $this->getCategoryPlacements();
                         </select>
                     </div>
                     <div class="row">
-                        <a data-edit-val="link-delete" href="">
+                        <a data-edit-val="link-delete" href="" data-toggle="modal" data-target="#confirm-delete">
                             <?php echo $_helper->__("Delete this creative from the placement"); ?>
                         </a>
                     </div>
@@ -265,7 +281,7 @@ $placements = $this->getCategoryPlacements();
 <script type="text/javascript">
     jQuery(function ($) {
         $(document).on('mouseover', '.banner-type .campaign-list', function () {
-            $(this).sortable();
+            $(this).sortable({ opacity: 0.9,scrollSensitivity: 10,scrollSpeed: 40,zIndex: 9999});
             $(this).disableSelection();
         })
         var compaigns = '<?php echo $campaigns; ?>';
@@ -352,8 +368,6 @@ $placements = $this->getCategoryPlacements();
                 var placementItem = $('.banner-item[data-placement="'+placementId+'"]');
                 changePlacementItemPriority(placementItem, priority);
             }
-
-            console.log(priority);
             clearEditWindowOptions();
             $('#editModal').modal('hide');
         })
@@ -493,29 +507,38 @@ $placements = $this->getCategoryPlacements();
 
             modal.find('[data-edit-val="link-edit"]').attr("href", "/campaign/vendor/edit/id/" + campaign);
 
-            if (placementId > 0) {
-                modal.find('[data-edit-val="link-delete"]').attr("href", "/campaign/placement_category/remove/id/" + placementId);
-            } else {
-                modal.find('[data-edit-val="link-delete"]').attr("href", "");
-            }
+//            if (placementId > 0) {
+//                modal.find('[data-edit-val="link-delete"]').attr("href", "/campaign/placement_category/remove/id/" + placementId);
+//            } else {
+//                modal.find('[data-edit-val="link-delete"]').attr("href", "");
+//            }
 
         });
 
         $("#editModal").find('[data-edit-val="link-delete"]').click(function (e) {
             e.preventDefault();
-
             var placement = $(this).closest('#editModal').find('[data-edit-val="placement_id"]').text();
+            console.log(placement);
+            $("#editModal").modal('hide');
+            $('#confirm-delete').append('<input type="hidden" name="placement_id" value="'+placement+'">');
+            $('#modal-dialog').modal('show');
+        })
+        $('#delete-placement').click(function(){
+            var placement = $(this).closest('#confirm-delete').find('[name="placement_id"]').val();
+            console.log(placement);
             if (placement.length > 0) {
                 //remove from db
                 console.log('remove from db');
-                $('form').append('<input type="text" name="remove[]" value="' + placement + '" />');
+                $('form').append('<input type="hidden" name="remove[]" value="' + placement + '" />');
+                console.log($('form [data-placement="' + placement + '"]').closest('.banner-item'));
                 $('form').find('[data-placement="' + placement + '"]').closest('.banner-item').remove();
             } else {
                 //remove added html
                 console.log('remove added html');
                 $('form').find('.banner-item[data-status="current"]').remove();
             }
-            $("#editModal").modal('hide');
+            $('#confirm-delete [name="placement_id"]').remove();
+            $("#confirm-delete").modal('hide');
         })
 
         $('.edit-placement').click(function(){
