@@ -256,7 +256,6 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 
     public function getRemoveFacesUrl($key,$value)
     {
-		Mage::log($this->_parseRemoveFacesUrl($key, $value));
 		return Mage::getUrl('*/*/*', $this->_parseRemoveFacesUrl($key, $value));
 	}
 	
