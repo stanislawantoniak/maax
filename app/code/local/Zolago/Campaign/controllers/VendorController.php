@@ -256,11 +256,15 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
         if (!empty($bannerShow)) {
             if ($bannerShow['show'] == Zolago_Banner_Model_Banner_Show::BANNER_SHOW_IMAGE) {
                 $placementImage = unserialize($bannerShow['image']);
+                if (!empty($placementImage)) {
+                    $placementImage = reset($placementImage);
+                    $previewImage = Mage::getBaseUrl('media') . $placementImage['path'];
+                }
             }
 
-            if (!empty($placementImage)) {
-                $placementImage = reset($placementImage);
-                $previewImage = Mage::getBaseUrl('media') . $placementImage['path'];
+
+            if($bannerShow['show'] == Zolago_Banner_Model_Banner_Show::BANNER_SHOW_HTML){
+                $previewImage = '/skin/frontend/base/default/images/banner_html_content.png';
             }
         }
         echo $previewImage;

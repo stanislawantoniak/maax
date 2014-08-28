@@ -93,12 +93,19 @@ $placements = $this->getCategoryPlacements();
                                                                        data-toggle="modal"
                                                                        data-target="#editModal">
                                                                         <span class="glyphicon glyphicon-pencil"></span>
-                                                                        <span><span> <?php echo $_helper->__('Edit'); ?></span></span>
                                                                     </a>
                                                                 </div>
                                                             </div>
                                                             <div class="dates">
-                                                                <i class="icon-warning-sign"></i>
+                                                                <i class="<?php echo $placement['status']['icon']; ?>"></i>
+                                                                <span data-edit-source="campaign_status" class="hidden">
+                                                                    <i class="<?php echo $placement['status']['icon']; ?>"></i>
+                                                                    <?php echo $placement['status']['message']; ?>
+                                                                    To edit <a data-edit-val="link-edit" href=""
+                                                                       target="_blank">
+                                                                        <?php echo $_helper->__('go to campaign'); ?>
+                                                                    </a>.
+                                                                </span>
                                                                 <span data-edit-source="campaign_date_from">
                                                                     <?php echo $placement['campaign_date_from']; ?>
                                                                 </span>
@@ -154,10 +161,19 @@ $placements = $this->getCategoryPlacements();
                     <div class="row">
                         <label><?php echo $_helper->__('Set priority'); ?>: </label>
                         <select name="priority" class="form-control" style="width:50px">
-                            <option value="0">0</option>
+
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
+
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
                         </select>
                     </div>
                 </div>
@@ -207,16 +223,24 @@ $placements = $this->getCategoryPlacements();
                         <span data-edit-val="dates"></span>
                     </div>
                     <div class="row">
-                        <span class="glyphicon-ban-circle"></span> Campaign has ended. Creative is not active.
-                        To restart., <a data-edit-val="link-edit" href="" target="_blank"><?php echo $_helper->__('go to campaign'); ?></a>.
+                        <span data-edit-val="campaign_status"></span>
                     </div>
                     <div class="row">
                         <label><?php echo $_helper->__('Change priority'); ?>: </label>
                         <select name="priority" class="form-control" style="width:50px">
-                            <option value="0">0</option>
+
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
+
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
                         </select>
                     </div>
                     <div class="row">
@@ -258,6 +282,7 @@ $placements = $this->getCategoryPlacements();
             getBannerImage(banner);
         })
 
+        //Construct add new modal
         $("#basicModal").on("show.bs.modal", function (e) {
             var category = $('[data-source="category"]').html();
             var bannerType = $(e.relatedTarget).parents('.widget').find('[data-source="banner-type"]').html();
@@ -290,6 +315,7 @@ $placements = $this->getCategoryPlacements();
         $('#basicModal [data-dismiss="modal"]').click(function(){
             $("[data-targ='add']").remove();
             clearOptions();
+            $('#basicModal').modal('hide');
         })
 
         $('#save-positions').click(function(){
@@ -318,9 +344,52 @@ $placements = $this->getCategoryPlacements();
         })
 
         $('#editModal #edit-placement').click(function (e) {
+            //set priority
+            var priority = $('#editModal').find("select[name=priority] option:selected").val();
+            var placementId = $('#editModal').find('[data-edit-val="placement_id"]').text();
+            if(placementId>0){
+                //find modal source
+                var placementItem = $('.banner-item[data-placement="'+placementId+'"]');
+                changePlacementItemPriority(placementItem, priority);
+            }
+
+            console.log(priority);
             clearEditWindowOptions();
             $('#editModal').modal('hide');
         })
+
+        function changePlacementItemPriority(placementItem, priority) {
+            var currentPriority = parseInt(placementItem.index()) + 1;
+            var placementItemHtml = $(placementItem)[0].outerHTML;
+
+            if (priority < currentPriority) {
+                //move placement before
+
+
+                $(placementItem).closest('.campaign-list').find('.banner-item:eq(' + (priority - 1) + ')')
+                    .before(placementItemHtml);
+                //destroy item
+                $(placementItem).remove();
+
+            }
+            if (priority > currentPriority) {
+                //move placement after
+
+                if ($(placementItem).closest('.campaign-list').find('.banner-item:eq(' + (priority) + ')').length > 0) {
+                    console.log('index found');
+                    $(placementItem).closest('.campaign-list').find('.banner-item:eq(' + (priority) + ')')
+                        .before(placementItemHtml);
+                } else {
+                    console.log('index not found - get last');
+                    $(placementItem).closest('.campaign-list').find('.banner-item').last()
+                        .after(placementItemHtml);
+                }
+
+//                //destroy item
+                $(placementItem).remove();
+
+            }
+        }
 
         $('#basicModal #add-placement').click(function () {
             //get data
@@ -329,7 +398,7 @@ $placements = $this->getCategoryPlacements();
             var campaignName = modal.find('[name=campaign] option:selected').text();
             var banner = modal.find('[name=banner] option:selected').val();
             var bannerName = modal.find('[name=banner] option:selected').text();
-            var position = modal.find('[name=priority] option:selected').val();
+            var priority = modal.find('[name=priority] option:selected').val();
             var previewImage = modal.find('[data-banner="preview"] img').attr("src");
 
 
@@ -341,7 +410,6 @@ $placements = $this->getCategoryPlacements();
 
             //set data
             if (parseInt(banner) > 0) {
-                var edit = '<?php echo $this->__('Edit'); ?>';
                 var vendorName = '<?php echo $vendorName; ?>';
                 var dates = '';
                 if (dateFrom.length > 0 && dateTo.length > 0) {
@@ -364,7 +432,6 @@ $placements = $this->getCategoryPlacements();
                     '<div class="col-md-4">' +
                     '<a href="#" class="btn btn-info edit-placement" data-toggle="modal" data-target="#editModal">' +
                     '<span class="glyphicon glyphicon-pencil"></span>' +
-                    '<span><span> ' + edit + '</span></span>' +
                     '</a>' +
                     '</div>' +
                     '</div>' +
@@ -373,11 +440,13 @@ $placements = $this->getCategoryPlacements();
                     '</div>' +
                     '</li>';
 
+                changePlacementItemPriority($('[data-targ="add"]'), priority);
                 $('[data-targ="add"]').replaceWith(campaignBlock);
             } else {
                 $('[data-targ="add"]').remove();
             }
             clearOptions();
+            $('#basicModal').modal('hide');
 
         })
 
@@ -393,6 +462,8 @@ $placements = $this->getCategoryPlacements();
             var bannerName = nameSpace.find('[data-edit-source="banner_name"]').text();
             var banner = nameSpace.find('[name="banner_id[]"]').val();
 
+            var priority = nameSpace.index() +1;
+
             var vendorName = '<?php echo $vendorName; ?>';
 
             var previewImage = nameSpace.find('.banner-preview-image').attr("src");
@@ -400,6 +471,8 @@ $placements = $this->getCategoryPlacements();
             var campaignDateFrom = nameSpace.find('[data-edit-source="campaign_date_from"]').text();
             var campaignDateDash = nameSpace.find('[data-edit-source="campaign_date_dash"]').text();
             var campaignDateTo = nameSpace.find('[data-edit-source="campaign_date_to"]').text();
+
+            var status = nameSpace.find('[data-edit-source="campaign_status"]').html();
 
             var placementId = nameSpace.find('[name="placement_id[]"]').val();
             console.log(placementId);
@@ -412,6 +485,10 @@ $placements = $this->getCategoryPlacements();
             modal.find('[data-edit-val="dates"]').text(dates);
             modal.find('img.image-preview-big').attr("src",previewImage);
             modal.find('[data-edit-val="placement_id"]').text(placementId);
+
+            modal.find('[data-edit-val="campaign_status"]').html(status);
+
+            modal.find('[name=priority]').val(priority);
 
 
             modal.find('[data-edit-val="link-edit"]').attr("href", "/campaign/vendor/edit/id/" + campaign);
@@ -450,9 +527,8 @@ $placements = $this->getCategoryPlacements();
             var modal = $("#basicModal");
             modal.find('select[name="campaign"]').html('');
             modal.find('select[name="banner"]').html('');
-            modal.find('select[name="priority"]').html('');
+            //modal.find('select[name="priority"]').html('');
             modal.find('[data-banner="preview"]').html('');
-            modal.modal('hide');
         }
 
         function clearEditWindowOptions(){

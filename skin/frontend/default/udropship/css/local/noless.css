@@ -96,7 +96,7 @@
 .campaign-list .banner-item {
     list-style: none;
     border: 1px solid #d3d3d3;
-    padding: 10px;
+    padding: 2px;
     margin-right: 5px;
     margin-bottom: 5px;
     background-color: white;
@@ -110,13 +110,23 @@
     margin-bottom: 20px;
     min-height: 310px;
     width: 100%;
+    padding: 10px;
 }
 
 .banner-preview-image {
-    height: 95px;
-    width: 280px;
+    max-height: 190px;
+    max-width: 260px;
 }
 .image-preview-big {
-    width: 540px;
-    height: 185px;
+    /*width: 540px;*/
+    /*height: 185px;*/
+}
+.banner-preview-image {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.banner-item .row {
+    margin-top: 10px;
 }
