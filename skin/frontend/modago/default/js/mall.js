@@ -633,6 +633,4 @@ jQuery(document).ready(function() {
             location.href = value;
         }
     });
-
-    Mall.listing.init();
 });
