@@ -577,17 +577,14 @@ function number_format(number, decimals, dec_point, thousands_sep) {
 function cart_add_coupon_callback(response) {
     if(response.status == false) {
         // show message
-        Mall.showMessage(response.message, "error");
+        location.reload();
     } else {
-        // show message and reload the page
-        Mall.showMessage(response.content.message, "success");
         location.reload();
     }
 }
 
 function cart_remove_coupon_callback(response) {
     var type = response.status == true ? "success" : "error";
-    Mall.showMessage(response.content.message, type);
     location.reload();
 }
 
