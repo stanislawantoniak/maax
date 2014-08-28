@@ -20,6 +20,12 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 		parent::__construct();
 	}
 	
+	
+	public function setSolrData($data) {
+        $this->_solrData = $data;
+	}
+
+
 	/**
 	 * Solr query with register results
 	 * @param array $queryText
