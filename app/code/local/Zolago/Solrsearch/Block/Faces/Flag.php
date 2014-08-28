@@ -28,7 +28,7 @@ class Zolago_Solrsearch_Block_Faces_Flag extends Zolago_Solrsearch_Block_Faces_A
 	public function getItemUrl($item) {
 		$originalItem	= $item;
 		$face_key		= $this->getAttributeCode();
-		
+
 		if ($this->getProductFlagsFacetValue($item, true)) {
 			list($face_key, $item) = $this->getProductFlagsFacetValue($item);
 		}
@@ -79,7 +79,7 @@ class Zolago_Solrsearch_Block_Faces_Flag extends Zolago_Solrsearch_Block_Faces_A
 			default:
 				break;
 		}
-		
+
 		return $facetValue;
 	}
 
@@ -127,7 +127,7 @@ class Zolago_Solrsearch_Block_Faces_Flag extends Zolago_Solrsearch_Block_Faces_A
         } else if($this->isNew($item)) {
             $name = 'filter_recommended_products_news';
         } else if($this->isPromotion($item)) {
-            $name = 'filter_recommended_products_propotion';
+            $name = 'filter_recommended_products_promotion';
         } else if($this->isSale($item)) {
             $name = 'filter_recommended_products_sale';
         }
