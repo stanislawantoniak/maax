@@ -70,6 +70,11 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Catalog_Controller_Ve
 			}
 		}
 		
+		// Parse commma
+		if(isset($attributeData['price_margin'])){
+			$attributeData['price_margin'] = $this->_formatNumber($attributeData['price_margin']);
+		}
+		
 		try{
 			
 			$collection = $this->_prepareCollection();

@@ -27,7 +27,11 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 	 * @return array
 	 */
 	public function queryRegister($queryText, $params = array()) {
+		$profiler = Mage::helper("zolagocommon/profiler");
+		/* @var $profiler Zolago_Common_Helper_Profiler */
+		//$profiler->start();
 		Mage::register(self::REGISTER_KEY, $this->query($queryText, $params));
+		//$profiler->log("Lor loading");
 		return Mage::registry(self::REGISTER_KEY);
 	}
 	

@@ -236,6 +236,13 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         			unset($finalParams['id']);
         		}
         	}
+			
+			if(isset($finalParams['start'])){
+				unset($finalParams['start']);
+			}
+			if(isset($finalParams['rows'])){
+				unset($finalParams['rows']);
+			}
 
         	$urlParams['_query']    = $finalParams;
         }
@@ -302,6 +309,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         $urlParams['_current']  = true;
         $urlParams['_escape']   = true;
         $urlParams['_use_rewrite']   = true;
+		
 
         if (isset($finalParams)) {
             if (Mage::app()->getRequest()->getRouteName() == 'catalog') {
@@ -312,6 +320,13 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
                     unset($finalParams['id']);
                 }
             }
+			
+			if(isset($finalParams['start'])){
+				unset($finalParams['start']);
+			}
+			if(isset($finalParams['rows'])){
+				unset($finalParams['rows']);
+			}
 
             $urlParams['_query']    = $finalParams;
         }
@@ -1064,8 +1079,18 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
                 }
             }
 
+			if(isset($finalParams['start'])){
+				unset($finalParams['start']);
+			}
+			if(isset($finalParams['rows'])){
+				unset($finalParams['rows']);
+			}
+			
             $urlParams['_query']    = $finalParams;
         }
+		
+		
+		
         return $urlParams;
     }
 	

@@ -59,7 +59,7 @@ Mall.listing = {
     /**
      * How many items will be appended to listing when scrolling.
      */
-    _scroll_load_offset: 8,
+    _scroll_load_offset: 20,
 
     /**
      * How many items will be loaded when load more action is performed.
@@ -74,7 +74,7 @@ Mall.listing = {
     /**
      * When to start showing new products - from bottom of the page.
      */
-    _scroll_load_bottom_offset: 100,
+    _scroll_load_bottom_offset: 500,
 
     /**
      * Queue for preloaded products.
