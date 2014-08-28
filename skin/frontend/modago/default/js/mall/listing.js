@@ -714,9 +714,28 @@ Mall.listing = {
      * @returns {Mall.listing}
      */
     attachFilterSizeEvents: function() {
+        var filterSize = jQuery('.filter-size'),
+            btnClear = jQuery('.action.clear'),
+            filterSizeLength;
+
         jQuery(".filter-size").find("[data-url]").on("click", function(e) {
             // @todo ajax logic
             location.href = jQuery(this).attr("data-url");
+        });
+
+        filterSize.on('click', ':checkbox', function(e) {
+            filterSizeLength = jQuery(this).parents(".filter-size").find(':checked').length;
+            if (filterSizeLength > 0) {
+                jQuery(this).parents(".filter-size").find("div.action.clear").removeClass("hidden");
+            } else {
+                jQuery(this).parents(".filter-size").find(".div.action.clear").addClass("hidden");
+            }
+        });
+
+        filterSize.on('click', '.clear', function(event) {
+            event.preventDefault();
+            jQuery(this).closest('div.action.clear').addClass('hidden');
+
         });
 
         return this;
