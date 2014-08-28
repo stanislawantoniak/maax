@@ -140,10 +140,6 @@
                 <type>skin_js</type>
                 <script>js/mall.js</script>
             </action>
-            <action method="addItem">
-                <type>skin_js</type>
-                <script>js/mall/listing.js</script>
-            </action>
             <action method="addJs">
                 <script>bootstrap/bootstrap.min.js</script>
             </action>
@@ -417,6 +413,10 @@
             <action method="removeItem">
                 <type>skin_js</type>
                 <script>js/manapro_filtercolors.js</script>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <script>js/mall/listing.js</script>
             </action>
         </reference>
         <reference name="solrsearch_product_list_header">

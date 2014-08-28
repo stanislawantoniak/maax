@@ -760,7 +760,9 @@ Mall.listing = {
      * @returns {Mall.listing}
      */
     attachFilterPriceSliderEvents: function() {
-        var sliderRange = jQuery( "#slider-range" );
+        var sliderRange = jQuery( "#slider-range"),
+            minPrice,
+            maxPrice;
         if (sliderRange.length >= 1) {
             jQuery( "#slider-range" ).slider({
                 range: true,
@@ -786,19 +788,50 @@ Mall.listing = {
 
         jQuery("#filter_price").find("input.filter-price-range-submit").on("click", function(e) {
             e.preventDefault();
-            // pop price from fq
-            Mall.listing.removeSingleFilterType(this);
-            var fq = Mall.listing.getFiltersArray();
-            if(jQuery.isEmptyObject(fq) || jQuery.isEmptyObject(fq.fq)) {
-                fq = {fq: {}};
-            }
+            // validate prices
+            minPrice = Mall.listing.getMinPriceFromSlider();
+            maxPrice = Mall.listing.getMaxPriceFromSlider();
+            if(isNaN(parseInt(minPrice, 10))
+                || isNaN(parseInt(maxPrice, 10))
+                || parseInt(minPrice, 10) < 0
+                || parseInt(maxPrice, 10) < 0
+                || parseInt(minPrice, 10) >= parseInt(maxPrice, 10)) {
 
-            fq.fq.price = Mall.listing.getMinPriceFromSlider()
-                + " TO "
-                + Mall.listing.getMaxPriceFromSlider();
-            Mall.listing.setFiltersArray(fq);
-            Mall.listing.reloadListing();
+            } else {
+                // pop price from fq
+                Mall.listing.removeSingleFilterType(this);
+                var fq = Mall.listing.getFiltersArray();
+                if(jQuery.isEmptyObject(fq) || jQuery.isEmptyObject(fq.fq)) {
+                    fq = {fq: {}};
+                }
+
+                fq.fq.price = Mall.listing.getMinPriceFromSlider()
+                    + " TO "
+                    + Mall.listing.getMaxPriceFromSlider();
+                Mall.listing.setFiltersArray(fq);
+                Mall.listing.reloadListing();
+            }
         });
+        jQuery("#filter_price").find("input.filter-price-range-submit").on("mouseover"
+            , function(e) {
+            "use strict";
+            minPrice = Mall.listing.getMinPriceFromSlider();
+            maxPrice = Mall.listing.getMaxPriceFromSlider();
+//            jQuery(this).tooltip("enable");
+            if(isNaN(parseInt(minPrice, 10))
+                || isNaN(parseInt(maxPrice, 10))
+                || parseInt(minPrice, 10) < 0
+                || parseInt(maxPrice, 10) < 0
+                || parseInt(minPrice, 10) >= parseInt(maxPrice, 10)) {
+                jQuery(this).tooltip({
+                    title: "Prosimy o poprawne uzupełnienie cen w filtrze.",
+                    trigger: "hover focus manual"
+                }).tooltip("enable");
+            } else {
+                jQuery(this).tooltip("disable");
+            }
+        });
+
 
         return this;
     },
@@ -836,6 +869,7 @@ Mall.listing = {
 
     /**
      * Returns complete array of params for querying solr.
+     * Reloading supresses page, and start param.
      *
      * @returns {{fq: Array, q: *, page: *, sort: *, dir: *, scat: *, rows: *, start: *}}
      */
@@ -847,8 +881,8 @@ Mall.listing = {
             sort: this.getSort(),
             dir: this.getDir(),
             scat: this.getScat(),
-            rows: this.getLoadNextOffset(),
-            start: this.getLoadNextStart()
+            rows: this.getScrollLoadOffset(),
+            start: 0
         };
 
         return q;
@@ -1267,3 +1301,8 @@ Mall.listing = {
         return this;
     }
 };
+
+jQuery(document).ready(function () {
+    "use strict";
+    Mall.listing.init();
+});
