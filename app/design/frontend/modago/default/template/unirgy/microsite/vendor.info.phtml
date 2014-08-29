@@ -1,0 +1,21 @@
+<div class="modal fade bs-example-modal-lg" id="seller_description" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="z-index: 1050">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"></button>
+                <h2 class="title_section"><?php echo $this->__("SHOP INFO"); ?></h2>
+            </div>
+
+            <div class="modal-body">
+                <?php if ($this->getVendorInfoHtml()): ?>
+                    <?php echo $this->getVendorInfoHtml(); ?>
+                <?php else: ?>
+                    <dd>
+                        <img src="<?php echo $this->getLogoUrl(); ?>" alt="<?php echo $this->escapeHtml($this->getVendorName()); ?>"><br/>
+                        <strong><?php echo $this->__("Seller"); ?>:</strong> <?php echo $this->getVendorName(); ?>
+                    </dd>
+                <?php endif;?>
+            </div>
+        </div>
+    </div>
+</div>

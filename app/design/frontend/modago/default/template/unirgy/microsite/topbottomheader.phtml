@@ -1,0 +1,72 @@
+<?php
+/**
+ * User: Andrzej Spólnicki
+ */
+$vendor = Mage::helper('umicrosite')->getCurrentVendor();
+?>
+
+<div class="top_bottom  bg-w hidden-xs clearfix">
+    <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('top-bottom-header-desktop-v-'.$vendor['vendor_id'])->toHtml(); ?>
+</div>
+
+<div class="top_bottom visible-xs bg-w clearfix">
+    <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('top-bottom-header-mobile-v-'.$vendor['vendor_id'])->toHtml(); ?>
+    <div id="shop_navigation" class="col-sm-12">
+        <ul id="shop_nav_mobile" class="navigation visible-xs" role="navigation">
+            <li><a href="#">Kategorie w sklepie <i class="fa fa-chevron-down"></i></a>
+                <ul>
+                    <?php echo $this->getChildHtml('vendor.menu.mobile');?>
+                </ul>
+            </li>
+
+            <!-- vendor details -->
+            <li>
+                <a href="#">Shop details<i class="fa fa-chevron-down"></i></a>
+                <ul>
+                    <li style="height: inherit; padding: 8px 20px 8px 10px;">
+<!--                        <div>-->
+<!--                            <dl>-->
+<!--                                <dd>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent pellentesque eget turpis ut sodales. Nunc aliquam id dui a imperdiet. Fusce pharetra luctus tristique. Vivamus varius quis mi at dictum. Maecenas rhoncus nulla quis luctus mattis. Integer urna eros, accumsan sit amet sollicitudin quis, lobortis sed turpis. Curabitur sodales tristique tellus vel viverra. Morbi pulvinar non mi a semper. Donec hendrerit sollicitudin nisl, quis fermentum tellus mattis eget. Fusce egestas eleifend pharetra. Pellentesque nec sodales urna, a adipiscing tortor. Duis elementum hendrerit enim et vulputate. </dd>-->
+<!--                            </dl>-->
+<!--                        </div>-->
+                        <?php //echo $this->getChildHtml('vendor.info'); ?>
+                    </li>
+                </ul>
+            </li>
+            <!-- end vendor details -->
+
+            <!-- vendor Shipping and Returns -->
+            <li>
+                <a href="#">Shipping and Returns<i class="fa fa-chevron-down"></i></a>
+                <ul>
+                    <li style="height: inherit; padding: 8px 20px 8px 10px;">
+                        <div>
+                            <dl>
+                                <dd>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent pellentesque eget turpis ut sodales. Nunc aliquam id dui a imperdiet. Fusce pharetra luctus tristique. Vivamus varius quis mi at dictum. Maecenas rhoncus nulla quis luctus mattis. Integer urna eros, accumsan sit amet sollicitudin quis, lobortis sed turpis. Curabitur sodales tristique tellus vel viverra. Morbi pulvinar non mi a semper. Donec hendrerit sollicitudin nisl, quis fermentum tellus mattis eget. Fusce egestas eleifend pharetra. Pellentesque nec sodales urna, a adipiscing tortor. Duis elementum hendrerit enim et vulputate. </dd>
+                            </dl>
+                            <dl>
+                                <dt>Warunki dostawy i zwrotu:</dt>
+                                <dd>Darmowa dostawa kurierem 24h</dd>
+                                <dd>Możliwość zwrotu do 30 dni w sklepie</dd>
+                            </dl>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+            <!-- end vendor Shipping and Returns -->
+
+            <!-- question form -->
+            <li><a href="#">Question<i class="fa fa-chevron-down"></i></a>
+                <ul>
+                    <li style="height: inherit; padding: 8px 20px 8px 10px;">
+                        <div>
+                            <?php echo $this->getChildHtml('vendor.question.mobile'); ?>
+<!--                            {{block type="zolagomodago/dropshipmicrositepro_vendor_menu" name="vendor.question.mobile" template="unirgy/microsite/question.mobile.phtml"}}-->
+                        </div>
+                    </li>
+                </ul>
+            </li>
+            <!-- question form end-->
+        </ul>
+    </div>
+</div>

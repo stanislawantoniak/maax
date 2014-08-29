@@ -1,0 +1,21 @@
+<?php
+/**
+ * User: Andrzej Spólnicki
+ */
+
+$_vendor = Mage::helper('umicrosite')->getCurrentVendor();
+?>
+
+<!-- vendor menu desktop -->
+<div id="sidebar" class="clearfix">
+    <div class="sidebar">
+        <div class="section clearfix hidden-xs">
+            <h3 class="open">Kategorie </h3>
+            <ul class="nav nav-pills nav-stacked">
+                <?php echo $this->getChildHtml('vendor.menu.desktop'); ?>
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- vendor menu desktop end -->
+
