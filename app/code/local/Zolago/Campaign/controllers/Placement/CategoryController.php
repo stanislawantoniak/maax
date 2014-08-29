@@ -9,18 +9,6 @@ class Zolago_Campaign_Placement_CategoryController extends Zolago_Dropship_Contr
     public function indexAction()
     {
         $helper = Mage::helper('zolagocampaign');
-        $categoryId = $this->getRequest()->getParam('category', null);
-
-        if (empty($categoryId)) {
-            $this->_getSession()->addError($helper->__("Category not found"));
-            return $this->_redirect("campaign/placement/index");
-        }
-        $categoryObj = Mage::getModel('catalog/category')->load($categoryId);
-        $category = $categoryObj->getId();
-        if (empty($category)) {
-            $this->_getSession()->addError($helper->__("Category not found"));
-            return $this->_redirect("campaign/placement/index");
-        }
         Mage::register('as_frontend', true);
         $this->_renderPage(null, 'zolagocampaign');
     }
@@ -36,9 +24,6 @@ class Zolago_Campaign_Placement_CategoryController extends Zolago_Dropship_Contr
 
         $categoryId = (int)$data['category'];
 
-        if(empty($categoryId)){
-            echo $helper->__("Category does not exist");
-        }
         $categoryObj = Mage::getModel('catalog/category')->load($categoryId);
         if(empty($categoryObj)){
             echo $helper->__("Category does not exist");
