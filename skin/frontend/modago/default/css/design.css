@@ -4378,8 +4378,7 @@ i.flag.hit, i.flag.bestseller {
   text-transform: none; }
 /* line 202, ../sass/design/style/_shopping-cart.scss */
 #sidebar-secondary #cart-summary #product_summary li span:first-child {
-  font-size: 14px;
-  line-height: 0px; }
+  font-size: 14px; }
 /* line 206, ../sass/design/style/_shopping-cart.scss */
 #sidebar-secondary #cart-summary #product_summary li span:last-child {
   font-size: 16px;

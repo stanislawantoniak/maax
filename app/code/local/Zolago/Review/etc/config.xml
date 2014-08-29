@@ -7,6 +7,11 @@
     </modules>
     <global>
         <models>
+			<review>
+				<rewrite>
+                    <review>Zolago_Review_Model_Review</review>
+				</rewrite>
+			</review>
             <review_resource>
                 <rewrite>
                     <review>Zolago_Review_Model_Resource_Review</review>

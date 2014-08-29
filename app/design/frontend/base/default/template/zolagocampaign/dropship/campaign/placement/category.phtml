@@ -99,12 +99,19 @@ $placements = $this->getCategoryPlacements();
                                                                 <?php endif; ?>
 
                                                                 <span data-edit-source="campaign_status" class="hidden">
+                                                                    <?php if(!empty($placement['status'])): ?>
                                                                     <i class="<?php echo $placement['status']['icon']; ?>"></i>
                                                                     <?php echo $placement['status']['message']; ?>
                                                                     To edit <a data-edit-val="link-edit" href=""
                                                                        target="_blank">
                                                                         <?php echo $_helper->__('go to campaign'); ?>
                                                                     </a>.
+                                                                        <?php else:?>
+                                                                        To edit <a data-edit-val="link-edit" href=""
+                                                                                   target="_blank">
+                                                                            <?php echo $_helper->__('go to campaign'); ?>
+                                                                        </a>.
+                                                                    <?php endif; ?>
                                                                 </span>
                                                                 <span data-edit-source="campaign_date_from">
                                                                     <?php echo $placement['campaign_date_from']; ?>
@@ -305,6 +312,32 @@ jQuery(function ($) {
         getBannerImage(banner);
     })
 
+    $(document).on('click', '.edit-placement', function () {
+        $('[name="status"]').remove();
+        $(this).closest('.col-md-3.banner-item').append('<input type="hidden" name="status" value="active" />');
+    })
+    $(document).on('click', '#delete-placement', function (e) {
+        e.preventDefault();
+        var placement = $(this).closest('#confirm-delete').find('[name="placement_id"]').val();
+        console.log(placement);
+        if (parseInt(placement) > 0) {
+            //remove from db
+            console.log('remove from db');
+            $('form').append('<input type="hidden" name="remove[]" value="' + placement + '" />');
+            console.log($('form [data-placement="' + placement + '"]').closest('.banner-item'));
+            $('form').find('[data-placement="' + placement + '"]').closest('.banner-item').remove();
+        } else {
+            //remove added html
+            console.log('remove added html');
+
+            $('form').find('[name="status"]').parents('.banner-item').remove();
+        }
+        $('#confirm-delete [name="placement_id"]').remove();
+        savePresentation();
+        $("#confirm-delete").modal('hide');
+    })
+
+
     function savePresentation() {
         console.log('savePresentation');
         setPriority();
@@ -453,9 +486,11 @@ jQuery(function ($) {
             var vendorName = '<?php echo $vendorName; ?>';
             var dates = '';
             if (dateFrom.length > 0 && dateTo.length > 0) {
-                dates = dateFrom + ' - ' + dateTo;
+                dates = '<span data-edit-source="campaign_date_from">'+dateFrom
+                    + '</span><span data-edit-source="campaign_date_dash"> - </span>'
+                    + '<span data-edit-source="campaign_date_to">'+dateTo+'</span>';
             }
-            var campaignBlock = '<li class="col-md-3 banner-item">' +
+            var campaignBlock = '<li class="col-md-3 banner-item" data-status="">' +
                 '<img src="'+previewImage+'" class="banner-preview-image" />' +
                 '<div class="row">' +
                 '<div class= "col-md-8" >' +
@@ -476,7 +511,7 @@ jQuery(function ($) {
                 '</div>' +
                 '</div>' +
                 '<div class="dates">' +
-                '<i class="icon-warning-sign"></i> ' + dates +
+                 dates +
                 '</div>' +
                 '</li>';
 
@@ -545,30 +580,9 @@ jQuery(function ($) {
 
         $('#modal-dialog').modal('show');
     })
-    $('#delete-placement').click(function(e){
-        e.preventDefault();
-        var placement = $(this).closest('#confirm-delete').find('[name="placement_id"]').val();
-        console.log(placement);
-        if (placement.length > 0) {
-            //remove from db
-            console.log('remove from db');
-            $('form').append('<input type="hidden" name="remove[]" value="' + placement + '" />');
-            console.log($('form [data-placement="' + placement + '"]').closest('.banner-item'));
-            $('form').find('[data-placement="' + placement + '"]').closest('.banner-item').remove();
-        } else {
-            //remove added html
-            console.log('remove added html');
-            $('form').find('.banner-item[data-status="current"]').remove();
-        }
-        $('#confirm-delete [name="placement_id"]').remove();
-        savePresentation();
-        $("#confirm-delete").modal('hide');
-    })
 
-    $('.edit-placement').click(function(){
-        $('.banner-item').data("status","");
-        $(this).closest('.banner-item').data("status","current");
-    })
+
+
 
     function clearOptions() {
         var modal = $("#basicModal");
