@@ -3,10 +3,11 @@
  *source for flag options
  */
 class Zolago_Catalog_Model_Product_Source_Flag 
-        extends Mage_Eav_Model_Entity_Attribute_Source_Abstract {
+        extends Zolago_Catalog_Model_Product_Source_Abstract {
 
 	const FLAG_PROMOTION = 1;
 	const FLAG_SALE = 2;
+	
 	
 //	public function getOptionText($value)
 //    {
@@ -36,8 +37,10 @@ class Zolago_Catalog_Model_Product_Source_Flag
 //        return false;
 //    }
 	
+	
+	
     public function getAllOptions() {
-        if (!$this->_options) {
+        if (!$this->_options || $this->_force) {
             $this->_options = array (
                 array (
                     'value' => '',
@@ -52,7 +55,7 @@ class Zolago_Catalog_Model_Product_Source_Flag
                     'label' => Mage::helper('zolagocatalog')->__('Sale'),
                 )
             );
-        } 
+        }
         return $this->_options;
     }
     /**

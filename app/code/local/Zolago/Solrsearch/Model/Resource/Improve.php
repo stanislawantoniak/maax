@@ -382,14 +382,6 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
         $selectGroups = Mage::getResourceHelper('eav')->getLoadAttributesSelectGroups($selects);
 		
 		
-		
-		// Swap locale
-		$oldLocale = Mage::app()->getLocale()->getLocaleCode();
-		$newLocale = Mage::getStoreConfig("general/locale/code", $storeId);
-		
-		Mage::app()->getLocale()->setLocale($newLocale);
-		Mage::app()->getTranslator()->setLocale($newLocale);
-		
         foreach ($selectGroups as $selects) {
             if (!empty($selects)) {
                 try {
@@ -406,8 +398,6 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
             }
         }
 		
-		Mage::app()->getLocale()->setLocale($oldLocale);
-		Mage::app()->getTranslator()->setLocale($oldLocale);
 		
 	}
 	
