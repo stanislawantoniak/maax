@@ -94,7 +94,10 @@ $placements = $this->getCategoryPlacements();
                                                             </div>
                                                             <div class="row">
                                                             <div class="col-md-12 dates">
-                                                                <i class="<?php echo $placement['status']['icon']; ?>"></i>
+                                                                <?php if (!empty($placement['campaign_date_from']) && !empty($placement['campaign_date_to'])): ?>
+                                                                    <i class="<?php echo $placement['status']['icon']; ?>"></i>
+                                                                <?php endif; ?>
+
                                                                 <span data-edit-source="campaign_status" class="hidden">
                                                                     <i class="<?php echo $placement['status']['icon']; ?>"></i>
                                                                     <?php echo $placement['status']['message']; ?>
@@ -393,12 +396,12 @@ jQuery(function ($) {
         if (priority < currentPriority) {
             //move placement before
 
-
-            $(placementItem).closest('.campaign-list').find('.banner-item:eq(' + (priority - 1) + ')')
-                .before(placementItemHtml);
-            //destroy item
-            $(placementItem).remove();
-
+            if($(placementItem).closest('.campaign-list').find('.banner-item:eq(' + (priority - 1) + ')').length > 0){
+                $(placementItem).closest('.campaign-list').find('.banner-item:eq(' + (priority - 1) + ')')
+                    .before(placementItemHtml);
+                //destroy item
+                $(placementItem).remove();
+            }
         }
         if (priority > currentPriority) {
             //move placement after
@@ -409,8 +412,13 @@ jQuery(function ($) {
                     .before(placementItemHtml);
             } else {
                 console.log('index not found - get last');
-                $(placementItem).closest('.campaign-list').find('.banner-item').last()
-                    .after(placementItemHtml);
+                if($(placementItem).closest('.campaign-list').find('.banner-item').last().length > 0){
+                    $(placementItem).closest('.campaign-list').find('.banner-item').last()
+                        .after(placementItemHtml);
+                } else {
+                    $(placementItem).closest('.campaign-list').append(placementItemHtml);
+                }
+
             }
 
 //                //destroy item
