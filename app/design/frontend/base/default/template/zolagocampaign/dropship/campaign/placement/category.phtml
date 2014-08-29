@@ -281,7 +281,10 @@ $placements = $this->getCategoryPlacements();
 <script type="text/javascript">
     jQuery(function ($) {
         $(document).on('mouseover', '.banner-type .campaign-list', function () {
-            $(this).sortable({ opacity: 0.9,scrollSensitivity: 10,scrollSpeed: 40,zIndex: 9999});
+            $(this).sortable({ opacity: 0.9, scrollSensitivity: 10, scrollSpeed: 40, zIndex: 9999,
+                stop: function () {
+                    savePresentation();
+                }});
             $(this).disableSelection();
         })
         var compaigns = '<?php echo $campaigns; ?>';
@@ -297,6 +300,17 @@ $placements = $this->getCategoryPlacements();
             var banner = $(this).val();
             getBannerImage(banner);
         })
+
+        function savePresentation() {
+            console.log('savePresentation');
+            setPriority();
+            $.ajax({
+                url: '/campaign/placement_category/save',
+                method: 'POST',
+                data: $('form').serialize()
+
+            })
+        }
 
         //Construct add new modal
         $("#basicModal").on("show.bs.modal", function (e) {
@@ -369,6 +383,7 @@ $placements = $this->getCategoryPlacements();
                 changePlacementItemPriority(placementItem, priority);
             }
             clearEditWindowOptions();
+            savePresentation();
             $('#editModal').modal('hide');
         })
 
@@ -460,6 +475,7 @@ $placements = $this->getCategoryPlacements();
                 $('[data-targ="add"]').remove();
             }
             clearOptions();
+            savePresentation();
             $('#basicModal').modal('hide');
 
         })
@@ -507,12 +523,6 @@ $placements = $this->getCategoryPlacements();
 
             modal.find('[data-edit-val="link-edit"]').attr("href", "/campaign/vendor/edit/id/" + campaign);
 
-//            if (placementId > 0) {
-//                modal.find('[data-edit-val="link-delete"]').attr("href", "/campaign/placement_category/remove/id/" + placementId);
-//            } else {
-//                modal.find('[data-edit-val="link-delete"]').attr("href", "");
-//            }
-
         });
 
         $("#editModal").find('[data-edit-val="link-delete"]').click(function (e) {
@@ -521,6 +531,7 @@ $placements = $this->getCategoryPlacements();
             console.log(placement);
             $("#editModal").modal('hide');
             $('#confirm-delete').append('<input type="hidden" name="placement_id" value="'+placement+'">');
+            savePresentation();
             $('#modal-dialog').modal('show');
         })
         $('#delete-placement').click(function(){
