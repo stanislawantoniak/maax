@@ -71,7 +71,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement_Category extends Mage_Core
                 if($placement['banner_show'] == Zolago_Banner_Model_Banner_Show::BANNER_SHOW_HTML){
                     $placement['preview_image'] = '/skin/frontend/base/default/images/banner_html_content.png';
                 }
-                $status = '';
+                $status = array();
                 //status
                 if(!empty($dateTo) && !empty($dateFrom)){
                     $statuses = Mage::getSingleton('zolagocampaign/campaign_PlacementStatus')->toOptionArray();

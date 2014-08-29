@@ -99,12 +99,14 @@ $placements = $this->getCategoryPlacements();
                                                                 <?php endif; ?>
 
                                                                 <span data-edit-source="campaign_status" class="hidden">
+                                                                    <?php if(!empty($placement['status'])): ?>
                                                                     <i class="<?php echo $placement['status']['icon']; ?>"></i>
                                                                     <?php echo $placement['status']['message']; ?>
                                                                     To edit <a data-edit-val="link-edit" href=""
                                                                        target="_blank">
                                                                         <?php echo $_helper->__('go to campaign'); ?>
                                                                     </a>.
+                                                                    <?php endif; ?>
                                                                 </span>
                                                                 <span data-edit-source="campaign_date_from">
                                                                     <?php echo $placement['campaign_date_from']; ?>
