@@ -140,6 +140,14 @@
                 <type>skin_js</type>
                 <script>js/mall.js</script>
             </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <script>js/mall/plural.js</script>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <script>js/mall/wishlist.js</script>
+            </action>
             <action method="addJs">
                 <script>bootstrap/bootstrap.min.js</script>
             </action>
