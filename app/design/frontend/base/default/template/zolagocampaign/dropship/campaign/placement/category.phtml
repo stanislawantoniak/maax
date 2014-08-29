@@ -478,8 +478,9 @@ jQuery(function ($) {
         if (parseInt(banner) > 0) {
             var vendorName = '<?php echo $vendorName; ?>';
             var dates = '';
+            var sign = '<i class="icon-warning-sign"></i> ';
             if (dateFrom.length > 0 && dateTo.length > 0) {
-                dates = dateFrom + ' - ' + dateTo;
+                dates = sign + dateFrom + ' - ' + dateTo;
             }
             var campaignBlock = '<li class="col-md-3 banner-item" data-status="">' +
                 '<img src="'+previewImage+'" class="banner-preview-image" />' +
@@ -502,7 +503,7 @@ jQuery(function ($) {
                 '</div>' +
                 '</div>' +
                 '<div class="dates">' +
-                '<i class="icon-warning-sign"></i> ' + dates +
+                 + dates +
                 '</div>' +
                 '</li>';
 
