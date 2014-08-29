@@ -35,6 +35,7 @@ $placements = $this->getCategoryPlacements();
                             <div class="toolbar no-padding"> <div class="btn-group"> <span class="btn btn-xs widget-collapse"><i class="icon-angle-down"></i></span> </div> </div>
                         </div>
                         <div class="widget-content banner-type" style="display: block;">
+
                             <span data-source="banner-type-code" class="hidden"><?php echo $titleCode; ?></span>
                                 <?php for($i=1; $i<= $bannerType->position_count; $i++): ?>
                                     <div class="banner-positions">
@@ -62,6 +63,8 @@ $placements = $this->getCategoryPlacements();
                                                             <?php if(isset($placement['preview_image']) && !empty($placement['preview_image'])): ?>
                                                                 <img src="<?php echo $placement['preview_image']; ?>" class="banner-preview-image" />
                                                             <?php endif; ?>
+
+
 
                                                             <div class="row">
                                                                 <div class="col-md-8">
@@ -124,6 +127,7 @@ $placements = $this->getCategoryPlacements();
                                                                 </span>
                                                             </div>
                                                             </div>
+
                                                         </div>
                                                         </li>
                                                         <?php endif; ?>
@@ -173,40 +177,43 @@ $placements = $this->getCategoryPlacements();
                     - <span data-val="banner-type"></span> - <span data-val="position"></span>
                 </h4>
             </div>
-            <div class="modal-body row">
-                <div class="col-md-6">
-                    <div class="row">
-                        <label><?php echo $_helper->__('Choose campaign'); ?>: </label>
-                        <select name="campaign" class="form-control"></select>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row form-group">
+                            <label><?php echo $_helper->__('Choose campaign'); ?>: </label>
+                            <select name="campaign" class="form-control"></select>
+                        </div>
+                        <div class="row form-group">
+                            <label><?php echo $_helper->__('Choose creative'); ?>: </label>
+                            <select name="banner" class="form-control"></select>
+                        </div>
+                        <div class="row form-group">
+                            <label><?php echo $_helper->__('Set priority'); ?>: </label>
+                            <select name="priority" class="form-control" style="width:50px">
+
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="row">
-                        <label><?php echo $_helper->__('Choose creative'); ?>: </label>
-                        <select name="banner" class="form-control"></select>
-                    </div>
-                    <div class="row">
-                        <label><?php echo $_helper->__('Set priority'); ?>: </label>
-                        <select name="priority" class="form-control" style="width:50px">
-
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                        </select>
+                    <div class="col-md-6" data-banner="preview"></div>
+                    <div class="hidden">
+                        <span data-val="campaign-date-from"></span>
+                        <span data-val="campaign-date-to"></span>
                     </div>
                 </div>
-                <div class="col-md-6" data-banner="preview"></div>
-                <div class="hidden">
-                    <span data-val="campaign-date-from"></span>
-                    <span data-val="campaign-date-to"></span>
-                </div>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">

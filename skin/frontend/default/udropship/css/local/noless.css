@@ -113,6 +113,7 @@
     padding: 10px;
 }
 
+
 .banner-preview-image {
     /*max-height: 30%;*/
     max-width: 95%;
@@ -128,5 +129,10 @@
 }
 
 .banner-item .row {
-    margin-top: 10px;
+    margin: 10px auto 0 auto;
+}
+
+
+#basicModal .row, #editModal .row {
+    margin: 10px auto;
 }

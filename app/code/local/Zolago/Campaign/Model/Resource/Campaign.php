@@ -68,11 +68,10 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
      * @param array $placements
      * @return $this
      */
-    public function setCampaignPlacements($categoryId, array $placements)
+    public function setCampaignPlacements($categoryId, $vendorId, array $placements)
     {
         $table = $this->getTable("zolagocampaign/campaign_placement");
-        $where = $this->getReadConnection()
-            ->quoteInto("category_id=?", $categoryId);
+        $where = "category_id={$categoryId} AND vendor_id={$vendorId}";
         $this->_getWriteAdapter()->delete($table, $where);
 
         if (count($placements)) {
