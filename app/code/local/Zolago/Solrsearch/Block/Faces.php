@@ -605,7 +605,6 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         if (isset($solrData['facet_counts']['facet_fields']) && is_array($solrData['facet_counts']['facet_fields'])) {
             $facetFileds = $solrData['facet_counts']['facet_fields'];
         }
-
         if (isset($facetFileds['is_bestseller_facet'][Mage::helper('core')->__('Yes')])) {
             $bestsellerFacet	= array(Mage::helper('zolagosolrsearch')->__('Bestseller') => $facetFileds['is_bestseller_facet'][Mage::helper('core')->__('Yes')]);
         }
@@ -613,24 +612,23 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         if (isset($facetFileds['is_new_facet'][Mage::helper('core')->__('Yes')])) {
             $isNewFacet			= array(Mage::helper('zolagosolrsearch')->__('New') => $facetFileds['is_new_facet'][Mage::helper('core')->__('Yes')]);
         }
-		
         if(isset($facetFileds['product_flag_facet'])) {
             $data = $facetFileds['product_flag_facet'];
-			
+            
             if($this->getSpecialMultiple()) {
                 $data = $this->_prepareMultiValues('product_flag_facet', $data);
             }
-			$data = array_merge($data, $bestsellerFacet, $isNewFacet, $cleanSolrData);
-			//Remove Boolean "False" Values
-			if (isset($data[Mage::helper('core')->__('No')])) {
-				unset($data[Mage::helper('core')->__('No')]);
-			}
-			
-			ksort($data);
-			
+            $out = array();
+			$data = array_merge($data, $bestsellerFacet, $isNewFacet);
+            foreach ($cleanSolrData as $key=>$val) {
+                if (!empty($data[$key])) {
+                    $out[$key] = $data[$key];
+                }
+            }
+			ksort($out);
             $block = $this->getLayout()->createBlock($this->_getFlagRenderer());
             $block->setParentBlock($this);
-            $block->setAllItems($data);
+            $block->setAllItems($out);
             $block->setAttributeCode("product_flag");
             $block->setFacetKey("product_flag_facet");
             return $block;
