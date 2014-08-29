@@ -307,7 +307,7 @@ jQuery(function ($) {
 
     $(document).on('click', '.edit-placement', function () {
         $('[name="status"]').remove();
-        $(this).closest('.col-md-3.banner-item').append('<input type="text" name="status" value="active" />');
+        $(this).closest('.col-md-3.banner-item').append('<input type="hidden" name="status" value="active" />');
     })
     $(document).on('click', '#delete-placement', function (e) {
         e.preventDefault();
