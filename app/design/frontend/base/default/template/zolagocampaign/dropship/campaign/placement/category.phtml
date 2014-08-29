@@ -17,12 +17,7 @@ $placements = $this->getCategoryPlacements();
         <div class="col-lg-6">
             <h3><span data-source="category"><?php echo $this->getCategoryName(); ?></span></h3>
         </div>
-        <div class="col-lg-6">
-            <h3><span></span></h3>
-            <div class="pull-right">
-                <button id="save-positions" class="btn btn-primary" type="button"><?php echo $_helper->__('Save'); ?></button>
-            </div>
-        </div>
+
     </div>
     <?php if (!empty($bannerTypes)): ?>
         <?php foreach ($bannerTypes as $bannerType): ?>
@@ -531,7 +526,7 @@ $placements = $this->getCategoryPlacements();
             console.log(placement);
             $("#editModal").modal('hide');
             $('#confirm-delete').append('<input type="hidden" name="placement_id" value="'+placement+'">');
-            savePresentation();
+
             $('#modal-dialog').modal('show');
         })
         $('#delete-placement').click(function(){
@@ -549,6 +544,7 @@ $placements = $this->getCategoryPlacements();
                 $('form').find('.banner-item[data-status="current"]').remove();
             }
             $('#confirm-delete [name="placement_id"]').remove();
+            savePresentation();
             $("#confirm-delete").modal('hide');
         })
 
