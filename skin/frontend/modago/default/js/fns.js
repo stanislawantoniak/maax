@@ -237,34 +237,34 @@ jQuery.noConflict();
                 }
               });
           };
-          var sliderRange = $( "#slider-range" );
-          if (sliderRange.length >= 1) {
-          $( "#slider-range" ).slider({
-                  range: true,
-                  min: 0,
-                  max: 500,
-                  values: [ 75, 300 ],
-                  slide: function(event, ui) {
-                      $("#zakres_min").val(ui.values[0]);
-                      $("#zakres_max").val(ui.values[1]);
-                      
-                  }
-                  
-
-                }); 
-
-               $("#zakres_min").val($("#slider-range").slider("values", 0));
-               $("#zakres_max").val($("#slider-range").slider("values", 1));
-               $('#slider-range').on('click', 'a', function(event) {
-                  var checkSlider = $('#checkSlider').find('input');
-                  if (!checkSlider.is(':checked')) {
-                    checkSlider.prop('checked', true);
-                    $('#filter_price').find('.action').removeClass('hidden');
-                  }
-                });
-
-               
-          };
+//          var sliderRange = $( "#slider-range" );
+//          if (sliderRange.length >= 1) {
+//          $( "#slider-range" ).slider({
+//                  range: true,
+//                  min: 0,
+//                  max: 500,
+//                  values: [ 75, 300 ],
+//                  slide: function(event, ui) {
+//                      $("#zakres_min").val(ui.values[0]);
+//                      $("#zakres_max").val(ui.values[1]);
+//
+//                  }
+//
+//
+//                });
+//
+//               $("#zakres_min").val($("#slider-range").slider("values", 0));
+//               $("#zakres_max").val($("#slider-range").slider("values", 1));
+//               $('#slider-range').on('click', 'a', function(event) {
+//                  var checkSlider = $('#checkSlider').find('input');
+//                  if (!checkSlider.is(':checked')) {
+//                    checkSlider.prop('checked', true);
+//                    $('#filter_price').find('.action').removeClass('hidden');
+//                  }
+//                });
+//
+//
+//          };
       });
 
 
@@ -1318,29 +1318,29 @@ var flags_container = $('.carousel-stage');
 if (flags_container.length > 0 ) {
   
 };
-
-if ($('body').hasClass('node-type-list')) {
-  equalizeHeights();
-  var container = document.querySelector('.jsMasonryContent');
-  notifElem = document.querySelector('#notification'); 
-    imagesLoaded( document.querySelector('#items-product'), function( instance ) {
-        var msnry = new Masonry( container, {
-         itemSelector: '.item',
-         isResizable: true
-      });
-        msnry.on( 'layoutComplete', function( msnryInstance, laidOutItems ) {
-          equalizeHeights()
-        });
-        equalizeHeights()
-
-    });
-
-
-
-
-
-
-};
+//
+//if ($('body').hasClass('node-type-list')) {
+////  equalizeHeights();
+//  var container = document.querySelector('.jsMasonryContent');
+//  notifElem = document.querySelector('#notification');
+//    imagesLoaded( document.querySelector('#items-product'), function( instance ) {
+//        var msnry = new Masonry( container, {
+//         itemSelector: '.item',
+//         isResizable: true
+//      });
+//        msnry.on( 'layoutComplete', function( msnryInstance, laidOutItems ) {
+////          equalizeHeights()
+//        });
+////        equalizeHeights()
+//
+//    });
+//
+//
+//
+//
+//
+//
+//};
 
 
 
@@ -1502,8 +1502,8 @@ $('#product-gallery .stage a').on('click', '.selector', function(event) {
     });
 
     function dropDownSelectListAjax() {
-      var headList = $('.button-select.ajax');
-      var listSelect = $('.dropdown-select ul');
+      var headList = $('.button-select.ajax').not(".filter-droplist");
+      var listSelect = $('.dropdown-select ul').not(".filter-droplist");
       headList.on('click', function(event) {
         event.preventDefault();
         $(this).next('.dropdown-select').stop(true).slideToggle(200);
@@ -2386,25 +2386,25 @@ function visibleBtnClearFilterSize() {
 
     
 
-      var filterSize = $('#filter_size');
-      var btnClear = $('.action.clear');
-      filterSize.on('click', ':checkbox', function(event) {
-        /* Act on the event */
-        var filterSizeLenght = $('#filter_size').find(':checked').length;
-        if (filterSizeLenght >= 1) {
-          filterSize.find('.action').removeClass('hidden');
-        } else {
-          filterSize.find('.action').addClass('hidden');
-          };
-      });
-      filterSize.on('click', '.clear', function(event) {
-        var filterSizeLenght = $('#filter_size').find(':checked').length;
-        event.preventDefault();
-        //if (filterSizeLenght === 0) {
-          $(this).closest('div.action.clear').addClass('hidden');
-        //};
-        
-      });
+//      var filterSize = $('.filter-size');
+//      var btnClear = $('.action.clear');
+//      filterSize.on('click', ':checkbox', function(event) {
+//        /* Act on the event */
+//        var filterSizeLenght = $('.filter-size').find(':checked').length;
+//        if (filterSizeLenght >= 1) {
+//          filterSize.find('.action').removeClass('hidden');
+//        } else {
+//          filterSize.find('.action').addClass('hidden');
+//          };
+//      });
+//      filterSize.on('click', '.clear', function(event) {
+//        var filterSizeLenght = $('.filter-size').find(':checked').length;
+//        event.preventDefault();
+//        //if (filterSizeLenght === 0) {
+//          $(this).closest('div.action.clear').addClass('hidden');
+//        //};
+//
+//      });
     }
 
 // STYLED SELECTBOX
@@ -2735,7 +2735,7 @@ function clearFilterManufacturerCheked() {
 
 function filterColor() {
   
-  $('#filter_color label').each(function(index, el) {
+  $('.filter-color label').each(function(index, el) {
     var colorFilter = $(this).data('color');
     var srcImg = $(this).data('img');
     var srcImgHover = $(this).data('imghover');
@@ -2783,12 +2783,12 @@ function filterColor() {
 
   var filterColor = $('#filter_color');
   filterColor.on('click', ':checkbox', function(event) {
-    $('#filter_color .clear').removeClass('hidden');
-      var filterColorLenght = $('#filter_color input:checked').length;
+    $('.filter-color .clear').removeClass('hidden');
+      var filterColorLenght = $('.filter-color input:checked').length;
         if (filterColorLenght >= 1) {
-          $('#filter_color .action').removeClass('hidden');
+          $('.filter-color .action').removeClass('hidden');
         } else {
-          $('#filter_color .action').addClass('hidden');
+          $('.filter-color .action').addClass('hidden');
           };
   });
    filterColor.on('click', '.clear', function(event) {

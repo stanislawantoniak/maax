@@ -1,4 +1,5 @@
-#filter_size {
+#filter_size
+, .filter-size {
      
       label {
         width:38px;
@@ -163,7 +164,7 @@
         }
       }
     }
-#filter_color {
+.filter-color {
       [type="checkbox"] {
         outline:none!important;
         margin:3px 0 0 3px;
@@ -230,7 +231,7 @@
   }
 } 
 
-#filter_style {
+#filter_style, .filter-droplist, .filter-enum {
   .select-group {
     &.medium {
       width:140px;

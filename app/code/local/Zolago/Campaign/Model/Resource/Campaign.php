@@ -61,6 +61,93 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         }
         return $this;
     }
+
+
+    /**
+     * @param $categoryId
+     * @param array $placements
+     * @return $this
+     */
+    public function setCampaignPlacements($categoryId, array $placements)
+    {
+        $table = $this->getTable("zolagocampaign/campaign_placement");
+        $where = $this->getReadConnection()
+            ->quoteInto("category_id=?", $categoryId);
+        $this->_getWriteAdapter()->delete($table, $where);
+
+        if (count($placements)) {
+            $this->_getWriteAdapter()->insertMultiple($table, $placements);
+        }
+        return $this;
+    }
+
+    public function removeCampaignPlacements(array $placements)
+    {
+        $table = $this->getTable("zolagocampaign/campaign_placement");
+        foreach($placements as $placement){
+            $where = $this->getReadConnection()
+                ->quoteInto("placement_id=?", $placement);
+            $this->_getWriteAdapter()->delete($table, $where);
+        }
+        return $this;
+    }
+
+
+    /**
+     * @param $categoryId
+     * @param $vendorId
+     * @return array
+     */
+    public function getCategoryPlacements($categoryId, $vendorId)
+    {
+        $table = $this->getTable("zolagocampaign/campaign_placement");
+        $select = $this->getReadConnection()->select();
+        $select->from(array("campaign_placement" => $table), array("*"));
+        $select->joinLeft(
+            array('campaign' => 'zolago_campaign'),
+            'campaign.campaign_id=campaign_placement.campaign_id',
+            array(
+                'campaign_name' => 'campaign.name',
+                'campaign_date_from' => 'campaign.date_from',
+                'campaign_date_to' => 'campaign.date_to'
+            )
+        );
+        $select->joinLeft(
+            array('banner' => 'zolago_banner'),
+            'banner.banner_id=campaign_placement.banner_id',
+            array(
+                'banner_name' => 'banner.name'
+            )
+        );
+        $select->joinLeft(
+            array('banner_content' => 'zolago_banner_content'),
+            'banner.banner_id=banner_content.banner_id',
+            array(
+                 'banner_show' => 'banner_content.show',
+                 'banner_html' => 'banner_content.html',
+                 'banner_image' => 'banner_content.image'
+            )
+        );
+        $select->where("campaign_placement.category_id=?", $categoryId);
+        $select->where("campaign_placement.vendor_id=?", $vendorId);
+        return $this->getReadConnection()->fetchAssoc($select);
+    }
+
+    /**
+     * @param $bannerId
+     *
+     * @return array
+     */
+    public function getBannerImageData($bannerId)
+    {
+        $table = $this->getTable("zolagobanner/banner_content");
+        $select = $this->getReadConnection()->select();
+        $select->from(array("banner_content" => $table), array("*"));
+
+        $select->where("banner_content.banner_id=?", $bannerId);
+        return $this->getReadConnection()->fetchRow($select);
+    }
+
     /**
      * @param Mage_Core_Model_Abstract $object
      * @param array $websites
@@ -213,7 +300,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         return $this->getReadConnection()->fetchAll($select);
     }
 
-    public function getUpDateCampaigns()
+    public function getUpDateCampaigns(array $type)
     {
         $table = $this->getTable("zolagocampaign/campaign");
         $select = $this->getReadConnection()->select();
@@ -239,7 +326,56 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
 
         $select->where("campaign.date_from BETWEEN '{$startTime}' AND '{$endYTime}'");
         $select->where("status=?", Zolago_Campaign_Model_Campaign_Status::TYPE_ACTIVE);
-        echo $select;
+
+        return $this->getReadConnection()->fetchAll($select);
+    }
+
+    /**
+     * Get campaigns with banners
+     * @return array
+     */
+    public function getCampaigns()
+    {
+        $vendor = Mage::getSingleton('udropship/session')->getVendor();
+        $vendor = $vendor->getId();
+
+        $table = $this->getTable("zolagocampaign/campaign");
+        $select = $this->getReadConnection()->select();
+        $select->from(array("campaign" => $table),
+            array(
+                "campaign.campaign_id",
+                "campaign.name",
+                "campaign.date_from",
+                "campaign.date_to"
+            )
+        );
+        $select->join(
+            array('banner' => 'zolago_banner'),
+            'banner.campaign_id = campaign.campaign_id',
+            array("banner.type as banner_type")
+        );
+        $select->where('campaign.vendor_id=?', $vendor);
+        $select->order("campaign.date_from DESC");
+
+        return $this->getReadConnection()->fetchAssoc($select);
+    }
+
+
+    public function getCategoriesWithPath($path)
+    {
+        $table = "catalog_category_entity_varchar";
+        $select = $this->getReadConnection()->select();
+        $select->from(array("catalog_category" => $table), array("catalog_category.value_id"));
+        $select->join(
+            array('attribute' => 'eav_attribute'),
+            'attribute.attribute_id = catalog_category.attribute_id',
+            array()
+        );
+        $select->where('attribute.attribute_code=?', 'url_path');
+        $entityTypeID = Mage::getModel('catalog/category')->getResource()->getTypeId();
+        $select->where('catalog_category.entity_type_id=?', $entityTypeID);
+        $select->where('catalog_category.value=?', $path);
+
         return $this->getReadConnection()->fetchAll($select);
     }
 

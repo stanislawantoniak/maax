@@ -23,6 +23,12 @@ class Zolago_Catalog_Block_Vendor_Price extends Mage_Core_Block_Template
 				$this->_clearEmpty($priceType->getSource()->getAllOptions(false))
 		);
 		
+		$msrpType = Mage::getSingleton('eav/config')->getAttribute(
+			Mage_Catalog_Model_Product::ENTITY,
+			Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER_MSRP_TYPE_CODE
+		);
+		/* @var $msrpTypes Mage_Catalog_Model_Resource_Eav_Attribute */
+		
 		$status = Mage::getSingleton('eav/config')->getAttribute(
 			Mage_Catalog_Model_Product::ENTITY,
 			"status"
@@ -44,6 +50,7 @@ class Zolago_Catalog_Block_Vendor_Price extends Mage_Core_Block_Template
 		
 		$source=array(
 			"converter_price_type"	=> $priceTypes,
+			"converter_msrp_type"	=> $this->_clearEmpty($msrpType->getSource()->getAllOptions(false)),
 			"campaign_regular_id"	=> $this->_clearEmpty($campaign->toOptionArray()),
 			"status"				=> $this->_clearEmpty($status->getSource()->getAllOptions(false)),
 			"type_id"				=> $this->_clearEmpty($typeModel::getAllOptions()),

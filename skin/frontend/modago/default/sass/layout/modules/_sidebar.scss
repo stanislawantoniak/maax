@@ -1,4 +1,5 @@
-#filter_size {
+#filter_size
+, .filter-size {
      
       label {
         width:38px;
@@ -99,7 +100,7 @@
           float:left;
           margin-left:-6px;
          & + .form-horizontal {
-          margin-left:11px;
+          margin-left:8px;
           }
         }
         .form-action {
@@ -123,7 +124,7 @@
         }
       }
     }
-#filter_color {
+.filter-color {
       [type="checkbox"] {
         margin:3px 0 0 3px;
       }
@@ -172,7 +173,9 @@
   }
 } 
 
-#filter_style {
+#filter_style,
+.filter-droplist,
+.filter-enum {
   .select-group {
     &.medium {
       width:140px;

@@ -104,6 +104,17 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
                     // Set Vendor Owner
                     $campaign->setVendorId($vendor->getId());
                 }
+
+
+                if($data["url_type"] == Zolago_Campaign_Model_Campaign_Urltype::TYPE_LANDING_PAGE){
+                    Mage::log("Generate user friendly url");
+                    $nameForCustomer = $data["name_customer"];
+                    $urlKey = Mage::helper("zolagocampaign")->createCampaignSlug($nameForCustomer);
+                    $campaign->addData(array('url_key' => $urlKey));
+
+                }
+
+
                 $campaign->save();
             } else {
                 $this->_getSession()->setFormData($data);
@@ -204,5 +215,59 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
 		$session = $this->_getSession();
 		return $model->getVendorId()==$session->getVendorId();
 	}
-   
+
+    /**
+     * @return array
+     */
+    public function getCompaignDataAction(){
+        $campaignData = array();
+        $modelId = (int)$this->getRequest()->getParam("id");
+        $model = Mage::getModel("zolagocampaign/campaign");
+        $campaign = $model->load($modelId);
+
+        if (!empty($campaign)) {
+            $format = "d.m.Y H:i:s";
+            $dateFrom = $campaign->getData('date_from');
+            $dateTo = $campaign->getData('date_to');
+
+            $campaignData = array(
+                'campaign_id' => $campaign->getId(),
+                'vendor_id' => $campaign->getVendorId(),
+                'date_from' => !empty($dateFrom) ? date($format, strtotime($dateFrom)) : '',
+                'date_to' => !empty($dateTo) ? date($format, strtotime($dateTo)) : ''
+            );
+        }
+        echo Mage::helper('core')->jsonEncode($campaignData);
+    }
+
+    /**
+     * @return array
+     */
+    public function getBannerPreviewImageAction()
+    {
+        $id = (int)$this->getRequest()->getParam("id");
+        //preview image
+        $bannersConfiguration = Mage::helper('zolagobanner')->getBannersConfiguration();
+        $previewImage = $bannersConfiguration->no_image;
+        $previewImageHtml = $bannersConfiguration->image_html;
+
+        $bannerShow = Mage::getResourceModel('zolagocampaign/campaign')
+            ->getBannerImageData($id);
+
+        if (!empty($bannerShow)) {
+            if ($bannerShow['show'] == Zolago_Banner_Model_Banner_Show::BANNER_SHOW_IMAGE) {
+                $placementImage = unserialize($bannerShow['image']);
+                if (!empty($placementImage)) {
+                    $placementImage = reset($placementImage);
+                    $previewImage = Mage::getBaseUrl('media') . $placementImage['path'];
+                }
+            }
+
+
+            if($bannerShow['show'] == Zolago_Banner_Model_Banner_Show::BANNER_SHOW_HTML){
+                $previewImage = $previewImageHtml;
+            }
+        }
+        echo $previewImage;
+    }
 }

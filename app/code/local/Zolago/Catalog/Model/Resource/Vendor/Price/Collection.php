@@ -24,7 +24,8 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 		$boolAttributes = array(
 			"is_new",
 			"is_bestseller",
-			"converter_price_type"
+			"converter_price_type",
+			"converter_msrp_type"
 		);
 				
 		foreach($boolAttributes as $attribute){
@@ -162,7 +163,9 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 		return array(
 			"is_new", 
 			"is_bestseller", 
-			"status"
+			"status",
+			"converter_price_type",
+			"price_margin"
 		);
 	}
 	
@@ -175,6 +178,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 			"display_price", 
 			"campaign_regular_id",
 			"converter_price_type", 
+			"converter_msrp_type",
 			"price_margin", 
 			"msrp", 
 			"is_new", 
@@ -196,6 +200,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 			"display_price", 
 			"campaign_regular_id",
 			"converter_price_type", 
+			"converter_msrp_type", 
 			"price_margin", 
 			"msrp", 
 			"is_new",

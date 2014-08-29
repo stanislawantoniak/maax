@@ -1,4 +1,5 @@
-#filter_size {
+#filter_size
+, .filter-size {
      
       label {
         cursor:pointer;
@@ -81,7 +82,7 @@
         }
       }
     }
-#filter_color {
+.filter-color {
       [type="checkbox"] {
         outline:none!important;
       }

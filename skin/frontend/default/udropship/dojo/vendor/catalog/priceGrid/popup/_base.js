@@ -100,16 +100,20 @@ define([
 			});
 		},
 		
+		getLoadData: function(){
+			return {id: this.getProductId(), store_id: this.getStoreId()};
+		},
+		
 		loadContent: function(data){
-			var btn = this._modal.find(".btn-primary").attr("disabled", "disabled");
+			var btn = this._modal.find(".btn-primary").prop("disabled", true);
 			var body = this._modal.find(".modal-body");
 			var self = this;
 			jQuery.ajax({
 				url: this._url,
-				data: {id: this.getProductId(), store_id: this.getStoreId()},
+				data: this.getLoadData(data),
 				success: function(response){
+					btn.prop("disabled", false);
 					self._afterLoad.apply(self, [body, response]);
-					btn.attr("disabled", null);
 				},
 				error: function(){
 					body.text(Translator.translate("Some error occured. Contact admin."))
@@ -139,9 +143,7 @@ define([
 
 		// Set title of product
 		_afterRender: function(row){
-			this._modal.find("h4").text(
-				misc.replace(this._title, {name: row.data.name})
-			);
+			
 		},
 		
 		// Set content

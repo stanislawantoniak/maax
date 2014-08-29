@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Campaign>
-            <version>0.0.3</version>
+            <version>0.0.5</version>
         </Zolago_Campaign>
     </modules>
     <global>
@@ -30,6 +30,9 @@
 					<campaign_product>
 						<table>zolago_campaign_product</table>
 					</campaign_product>
+                    <campaign_placement>
+                        <table>zolago_campaign_placement</table>
+                    </campaign_placement>
 				</entities>
 			</zolagocampaign_resource>
 		</models>

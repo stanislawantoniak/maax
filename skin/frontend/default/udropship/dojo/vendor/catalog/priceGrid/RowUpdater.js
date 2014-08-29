@@ -164,9 +164,12 @@ define([
 			// Make rendering
 			var divLeft=jQuery("<div>").addClass("sub-row-left");
 			var divRight=jQuery("<div>").addClass("sub-row-left");
-			var buttons = [
-				{"label": Translator.translate("Change prices"), className: "signle-price-edit editable"}
-			];
+			var buttons = [];
+			
+			// Product has no cmapaign - price editable
+			if(!data.campaign){
+				buttons.push({"label": Translator.translate("Change prices"), className: "signle-price-edit editable"});
+			}
 			
 			switch(data.type_id){
 				case "configurable":
@@ -202,8 +205,8 @@ define([
 										}))).
 										append(jQuery("<td>").text(child.option_text)).
 										append(jQuery("<td>").
-											addClass("signle-price-edit" + (data.campaign ? "" : " editable")).
-											append(jQuery("<a>").
+											addClass("signle-price-edit" + (!data.campaign ? " editable" : "")).
+											append(jQuery("<" + (!data.campaign ? "a" : "span") + ">").
 											text(misc.currency(child.price)))).
 										append(jQuery("<td>").text(
 											Translator.translate(parseInt(child.children[0].is_in_stock) ? "Yes" : "No"))).

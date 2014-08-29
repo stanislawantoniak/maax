@@ -26,7 +26,7 @@
 	
     <umicrosite_landing>
 		<remove name="catalog.leftnav" />
-        <remove name="enterprisecatalog.leftnav"/> 
+        <remove name="enterprisecatalog.leftnav"/>
 		<reference name="left">
            <block type="solrsearch/faces" name="searchfaces" as="searchFaces" before="-" >
             	<block type="solrsearch/faces_price" name="solr_price_facets" as="solr_price_facets" />

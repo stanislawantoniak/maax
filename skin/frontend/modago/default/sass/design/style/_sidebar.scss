@@ -9,6 +9,7 @@
   .section {
     border-bottom: 1px solid #d2d2d2;
     text-align:center;
+      -webkit-backface-visibility: hidden;
   }
   h3 {
     font-size: 14px;
@@ -92,7 +93,7 @@
   .go_read_filter {
     font-size: 12px;
   }
-  #filter_recommended_products {
+  #filter_recommended_products, #filter_product_flag_facet {
     label {
       span {
       color:#fff;

@@ -20,6 +20,12 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 		parent::__construct();
 	}
 	
+	
+	public function setSolrData($data) {
+        $this->_solrData = $data;
+	}
+
+
 	/**
 	 * Solr query with register results
 	 * @param array $queryText
@@ -27,7 +33,11 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 	 * @return array
 	 */
 	public function queryRegister($queryText, $params = array()) {
+		$profiler = Mage::helper("zolagocommon/profiler");
+		/* @var $profiler Zolago_Common_Helper_Profiler */
+		//$profiler->start();
 		Mage::register(self::REGISTER_KEY, $this->query($queryText, $params));
+		//$profiler->log("Lor loading");
 		return Mage::registry(self::REGISTER_KEY);
 	}
 	
@@ -55,8 +65,7 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 		
 		// Paginaton
 		$itemsPerPage = $this->getListModel()->getCurrentLimit();
-		$currentPage = $this->getListModel()->getCurrentPage();
-		$start = $itemsPerPage * ($currentPage - 1);
+		$start = $this->getListModel()->getCurrentStart();
 		$this->start = $start;
         $this->rows = $itemsPerPage;
 	}

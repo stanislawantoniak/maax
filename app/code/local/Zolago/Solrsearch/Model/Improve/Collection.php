@@ -13,6 +13,26 @@ class Zolago_Solrsearch_Model_Improve_Collection extends Varien_Data_Collection 
 		"parent"    => array()	
 	);
 	
+	protected $_handledAttributes = array();
+	
+	/**
+	 * @param Mage_Eav_Model_Entity_Abstract $attributeObject
+	 */
+	public function addHandledAttribute(Mage_Eav_Model_Entity_Abstract $attributeObject) {
+		$this->_handledAttributes[$attributeObject->getAttributeCode()] = $attributeObject;
+	}
+	
+	/** 
+	 * @param string|Mage_Eav_Model_Entity_Abstract $attribute
+	 * @return bool
+	 */
+	public function isAttributeHandled($attribute) {
+		if($attribute instanceof Mage_Eav_Model_Entity_Abstract){
+			$attribute = $attribute->getAttributesByCode();
+		}
+		return isset($this->_handledAttributes[$attribute]);
+	}
+	
 	/**
 	 * @param array $items
 	 * @return Zolago_Solrsearch_Model_Improve_Collection

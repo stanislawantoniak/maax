@@ -8,7 +8,7 @@ class Unirgy_DropshipVendorAskQuestion_Block_Vendor_Question extends Mage_Core_B
     protected function _beforeToHtml()
     {
         parent::_beforeToHtml();
-
+		
         Varien_Data_Form::setFieldsetRenderer(
             $this->getLayout()->createBlock('udqa/vendor_question_renderer_fieldset')
         );
@@ -18,6 +18,11 @@ class Unirgy_DropshipVendorAskQuestion_Block_Vendor_Question extends Mage_Core_B
 
         return $this;
     }
+	
+	public function isEditable(Zolago_DropshipVendorAskQuestion_Model_Question $question) {
+		return !$question->getAnswerText();
+	}
+	
     public function getForm()
     {
         if (null === $this->_form) {
@@ -129,7 +134,7 @@ class Unirgy_DropshipVendorAskQuestion_Block_Vendor_Question extends Mage_Core_B
             'text' => $data->getQuestionText()
         ));
 
-        $fieldset->addField('answer_text', 'editor', array(
+        $fieldset->addField('answer_text', $this->isEditable($question) ? 'editor' : 'note', array(
             'name' => 'answer_text',
             'label' => $this->__('Answer Text'),
             'title' => $this->__('Answer Text'),
@@ -138,6 +143,7 @@ class Unirgy_DropshipVendorAskQuestion_Block_Vendor_Question extends Mage_Core_B
             'required' => true,
             'is_wide'=>true,
             'is_bottom'=>true,
+			'text' => !$this->isEditable($question)  ? $question->getAnswerText() : ""
         ));
         
         $this->_prepareFieldsetColumns($fieldset);
@@ -145,7 +151,16 @@ class Unirgy_DropshipVendorAskQuestion_Block_Vendor_Question extends Mage_Core_B
 
     public function getShipmentUrl($question)
     {
-        return Mage::getUrl('udropship/vendor/', array('_query'=>'filter_order_id_from='.$question->getOrderIncrementId().'&filter_order_id_to='.$question->getOrderIncrementId()));
+		$shipping = Mage::getModel("sales/order_shipment")->
+			load($question->getShipmentId());
+		
+		if($shipping->getUdpoId()){
+			
+			return Mage::getUrl("udpo/vendor/edit", array("id"=>$shipping->getUdpoId()));
+		}
+		return Mage::getUrl("udpo/vendor");
+		
+        //return Mage::getUrl('udropship/vendor/', array('_query'=>'filter_order_id_from='.$question->getOrderIncrementId().'&filter_order_id_to='.$question->getOrderIncrementId()));
     }
     public function getProductUrl($question)
     {
