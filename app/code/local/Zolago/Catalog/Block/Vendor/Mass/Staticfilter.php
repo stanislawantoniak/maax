@@ -212,7 +212,6 @@ class Zolago_Catalog_Block_Vendor_Mass_Staticfilter extends Mage_Core_Block_Temp
     public function isFilterActive($activeFilters, $attributeId, $displayValue, $filterValue)
     {
         $active = false;
-
         if (($activeFilters
                 && array_key_exists($attributeId, $activeFilters)
                 && $this->escapeHtml($activeFilters[$attributeId]) == $displayValue)

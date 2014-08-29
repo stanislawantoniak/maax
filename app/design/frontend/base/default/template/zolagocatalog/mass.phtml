@@ -118,8 +118,12 @@ table.table{
        <div class="col-md-12">
            <div class="widget box">
                <div class="widget-header">
-<!--                   Filters-->
-                   <h4><i class="icon-filter"></i><?php echo Mage::helper("zolagocatalog")->__("Filters");?></h4>
+                   <?php if($this->getCurrentAttributeSetId()): ?>
+                       <!--Filters-->
+                       <h4><i class="icon-filter"></i><?php echo Mage::helper("zolagocatalog")->__("Filters");?></h4>
+                   <?php else: ?>
+                       <h4><i class="icon-filter"></i><?php echo Mage::helper("zolagocatalog")->__("Browsing Category");?></h4>
+                   <?php endif; ?>
 
                </div>
                <div class="widget-content fiters">
@@ -129,9 +133,6 @@ table.table{
 
                            <div class="form-group">
                                <div class="col-md-4">
-                                   <div class="attribute-switcher row next-row">
-                                       <?php echo $this->getChildHtml("attribute_set_switcher"); ?>
-                                   </div>
                                    <?php echo $this->getChildHtml("other_filter"); ?>
                                </div>
                                <div class="col-md-8">
@@ -149,7 +150,6 @@ table.table{
                                    <div class="attribute-switcher row next-row">
                                        <?php echo $this->getChildHtml("attribute_set_switcher"); ?>
                                    </div>
-                                   <?php echo $this->getChildHtml("other_filter"); ?>
                                </div>
                            </div>
 
@@ -171,7 +171,7 @@ table.table{
     var gridObj;
     var massActionLocation = '<?php echo Mage::getUrl('*/*/massStatus'); ?>';
     var cleanLocation = '<?php echo Mage::getBlockSingleton('zolagocatalog/vendor_mass_staticfilter')->getChangeUrl(); ?>';
-    var limit = 100;
+    var limit = 50;
 </script>
 
 <?php if($this->getCurrentAttributeSetId()): ?>
@@ -200,14 +200,16 @@ table.table{
                 interval,
                 page = 1,
                 prevRequestCompleted = true,
-                allRowsSelected = false;
+                allRowsSelected = false,
+                tablePageHeight;
 
             $( ".datepicker" ).datepicker();
 
             $('#myModal').modal();
 
             // Turn off main scrollbars
-            $("body").css("overflow", "hidden");
+            $("body").css("overflow", "hidden")
+                     .css('height', 'auto');
 
             interval = setInterval(loadMoreRows, 2000);
 
@@ -221,6 +223,8 @@ table.table{
             calculateScrollBars();
 
             calculateTotalLoaded();
+
+            calculateTablePageHeight();
 
             $('body').on('click', '.toggle-sidebar', function(){
                 calculateScrollBars();
@@ -308,6 +312,9 @@ table.table{
 
                 $('.grid .table .massaction-checkbox').parent().addClass('checked');
 
+                $('#grid-left-columns .table .tbody > div').addClass('selected');
+                $('#grid-body .table .tbody > div').addClass('selected');
+
                 calculateTotalSelected();
             });
 
@@ -318,6 +325,9 @@ table.table{
                 $('.grid .table .massaction-checkbox').prop('checked',false);
 
                 $('.grid .table .massaction-checkbox').parent().removeClass('checked');
+
+                $('#grid-left-columns .table .tbody > div').removeClass('selected');
+                $('#grid-body .table .tbody > div').removeClass('selected');
 
                 calculateTotalSelected();
             });
@@ -339,8 +349,15 @@ table.table{
                 var $cellContainer = $(this),
                     $cell = $cellContainer.find("> div"),
                     cellContainerH = $cellContainer.outerHeight(),
-                    cellH = $cell[0].scrollHeight,
-                    text = $cell.text();
+                    cellH,
+                    text;
+
+                if(!$cell.length){
+                    return;
+                }
+
+                cellH = $cell[0].scrollHeight,
+                text = $cell.text();
 
                 if(cellH > cellContainerH){
                     $cellContainer.attr('data-title', text);
@@ -350,7 +367,7 @@ table.table{
 
             // Popover
             var $popover = $("#filter-btn").popover({
-                content: $("#attr-filters").html(),
+                content: function() { return $("#attr-filters").html() },
                 html: true,
                 container: "#content",
                 placement: "left"
@@ -382,6 +399,15 @@ table.table{
                 reloadWithAttributeSet($(this).val());
 
             });
+
+//            $("body").on('change', '.popover .staticFilter', function(){
+//
+//                var id = $(this).attr('id'),
+//                    index = $(this).find('option:selected').index();
+//
+//                $("#attr-filters #" + id + " option[selected='selected']").removeAttr('selected');
+//                $("#attr-filters #" + id + " option:eq(" + index + ")").attr('selected', 'selected');
+//            });
 
             // Inline Editor
             var $activeCell;
@@ -459,17 +485,29 @@ table.table{
                 var $checkedCheckboxes = $('.grid .table .massaction-checkbox:checked'),
                     anySelected = ($checkedCheckboxes.length) ? true : false,
                     $form = $("#editor-popover form"),
+                    $applyAllSelectedCheckbox = $form.find('[name="apply_all_selected"]'),
                     url = saveGridLocation,
+                    $attributesMode = $form.find('[name^="attributes_mode"]:checked'),
+                    mode = ($attributesMode.length) ? $attributesMode.val() : 'set',
                     checkedIds = [],
+                    currentValue,
                     value,
                     params,
                     rowIndex,
                     colIndex = $activeCell.index(),
-                    clickedId;
+                    clickedId,
+                    multiValues = [];
 
                 // Get selected value
-                if($form.find('option:selected').length){
+                if($form.find('option:selected').length == 1){
                     value = $form.find('option:selected').text()
+                }
+                else if($form.find('option:selected').length > 1){
+
+                    $form.find('option:selected').each(function(){
+                       multiValues.push($(this).text());
+                    });
+                    value = multiValues.join(", ");
                 }
                 else if($form.find('input[type="text"]').length){
                     value = $form.find('input[type="text"]').val();
@@ -482,7 +520,7 @@ table.table{
                     return false;
                 }
 
-                if(anySelected){
+                if(anySelected && $applyAllSelectedCheckbox.length && $applyAllSelectedCheckbox.is(":checked")){
 
                     if(allRowsSelected){
                         checkedIds = gridIds;
@@ -517,6 +555,7 @@ table.table{
                 $.post( url, params, function( data ) {
 
                     var status = data.status,
+                        valueA,
                         $cell,
                         $row,
                         i;
@@ -525,9 +564,22 @@ table.table{
                         $row = $(this).closest(".cell").parent();
                         i = $row.index();
 
-                        $cell = $("#grid-body .tbody > div:eq(" + i + ") .cell:eq(" + colIndex + ")");
+                        $cell = $("#grid-body .tbody > div:eq(" + i + ") .cell:eq(" + colIndex + ") div");
 
-                        $cell.text(value);
+                        currentValue = $cell.text().trim();
+
+                        if(mode == 'add'){
+                            valueA = currentValue.split(",");
+                            valueA.push(value);
+                            value = valueA.join(", ");
+                        }
+                        else if(mode == 'sub'){
+                            valueA = currentValue.split(",");
+                            valueA = removeValueFromArray(valueA, value);
+                            value = valueA.join(", ");
+                        }
+
+                        $cell.html(value);
                     });
 
                     hideEditorPopover();
@@ -634,7 +686,6 @@ table.table{
                     if(code == 13){
                         applyFilters();
                     }
-
                 });
             });
 
@@ -645,6 +696,34 @@ table.table{
                     applyFilters();
 
                 });
+            });
+
+            // Page up/Page down buttons
+            $(document).keydown(function(e) {
+                var code = (e.keyCode ? e.keyCode : e.which),
+                    scala = $('#mass-grid .tbody')[0].scrollHeight / $("#scrollbar-container-y").outerHeight(),
+                    speed = tablePageHeight / scala;
+
+                if (code == 40) {
+                    scrollTableY(speed, scrollYFactor, 'down');
+                } else if (code == 38) {
+                    scrollTableY(speed, scrollYFactor, 'up');
+                }
+
+                return false;
+            });
+
+            // Page up/Page down clicks
+            $("#container").on('click', "#scrollbar-container-y", function(e){
+
+                var handleTop = $("#scroll-handle-y").offset().top,
+                    direction = (handleTop > e.clientY) ? 'up' : 'down',
+                    scala = $('#mass-grid .tbody')[0].scrollHeight / $("#scrollbar-container-y").outerHeight(),
+                    speed = tablePageHeight / scala;
+
+                scrollTableY(speed, scrollYFactor, direction);
+
+                return false;
             });
 
             $('.grid .table .headings a').on('click', function(){
@@ -683,12 +762,13 @@ table.table{
                 calculateViewportHeight();
 
                 calculateScrollBars();
-
             } ));
 
             // Window resize end
             $(window).resize( $.debounce( 250, function(){
                 setPopoverWidth($popover);
+
+                calculateTablePageHeight();
             }) );
 
             function getAbsHeight($elem) {
@@ -731,6 +811,17 @@ table.table{
                 $('#mass-grid .tbody').scrollTop((newHandleTop * scrollYFactor));
 
                 return newHandleTop;
+            }
+
+            function removeValueFromArray(arr) {
+                var what, a = arguments, L = a.length, ax;
+                while (L > 1 && arr.length) {
+                    what = a[--L];
+                    while ((ax= arr.indexOf(what)) !== -1) {
+                        arr.splice(ax, 1);
+                    }
+                }
+                return arr;
             }
 
             function showEditorPopover(){
@@ -796,6 +887,8 @@ table.table{
 
                     filterAjaxFired = false;
 
+                    prevRequestCompleted = true;
+
                     interval = setInterval(loadMoreRows, 2000);
                 });
             }
@@ -810,23 +903,6 @@ table.table{
 
                     url += varNameSort + "/" + name + "/" + varNameDir + "/" + title + "/";
 
-//                $table = $("#zolagocatalog_mass_grid_table");
-//
-//                $table.tableFreezer({parent: '#zolagocatalog_mass_grid .grid', freezeColumnsLeft: 3, lockScroller: true});
-//
-//                // Hide filters
-//                $("#attr-filters").hide();
-//
-//                var $popover = $("#filter-btn").popover({
-//                    content: $("#attr-filters").html(),
-//                    html: true,
-//                    container: "#content",
-//                    placement: "left",
-//                });
-//
-//                $popover.on("show.bs.popover", function(e){
-//                    $popover.data()["bs.popover"].$tip.css("max-width", "850px").css("width", "850px");
-//                });
                     showLoader();
 
                     window.location.href = url;
@@ -1039,8 +1115,8 @@ table.table{
             }
 
             function calculateTotalLoaded(){
-                var totalLoaded = $('#grid-left-columns .tbody > div').length,
-                    percentLoaded = Math.round((totalLoaded/totalRecords) * 100);
+                var totalLoaded = (totalRecords > 0) ? $('#grid-left-columns .tbody > div').length : 0,
+                    percentLoaded = (totalRecords > 0) ? Math.round((totalLoaded/totalRecords) * 100) : 0;
 
                 $("#mass-grid-container .actions .loaded-records-count").text(totalLoaded);
                 $("#mass-grid-container .actions .percent-loaded").text("(" + percentLoaded + "%)");
@@ -1072,6 +1148,13 @@ table.table{
                 $("#grid-body .thead").width(boxW);
                 $("#grid-body .tbody").width(boxW);
 
+            }
+
+            function calculateTablePageHeight(){
+
+                var offset = 10;
+
+                tablePageHeight = $("#grid-body .tbody").outerHeight() - offset;
             }
 
             function setPopoverWidth($popover){
