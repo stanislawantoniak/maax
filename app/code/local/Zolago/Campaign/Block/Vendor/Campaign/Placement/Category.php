@@ -32,6 +32,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement_Category extends Mage_Core
                 'date_to' => !empty($campaign['date_to']) ? date("d.m.Y H:i:s",strtotime($campaign['date_to'])) : ''
             );
         }
+
         return $campaigns;
     }
 
