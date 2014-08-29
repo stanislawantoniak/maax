@@ -518,7 +518,6 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 			return $attribute->getFrontEnd()->getValue($product);
 		}
 		
-		// @todo add cache for arrays
 		if(is_array($data)){
 			foreach($data as $optionId){
 				$return = array();
