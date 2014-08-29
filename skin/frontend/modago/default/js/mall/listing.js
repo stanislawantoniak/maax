@@ -728,7 +728,7 @@ Mall.listing = {
             if (filterSizeLength > 0) {
                 jQuery(this).parents(".filter-size").find("div.action.clear").removeClass("hidden");
             } else {
-                jQuery(this).parents(".filter-size").find(".div.action.clear").addClass("hidden");
+                jQuery(this).parents(".filter-size").find("div.action.clear").addClass("hidden");
             }
         });
 
