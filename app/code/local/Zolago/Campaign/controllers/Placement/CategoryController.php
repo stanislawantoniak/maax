@@ -89,11 +89,12 @@ class Zolago_Campaign_Placement_CategoryController extends Zolago_Dropship_Contr
     public function getCampaignCreationsAction()
     {
         $campaign = $this->getRequest()->getParam('campaign', null);
+        $bannerType = $this->getRequest()->getParam('type', null);
         if (empty($campaign)) {
             return Mage::helper('core')->jsonEncode(null);
         }
         $model = Mage::getResourceModel('zolagobanner/banner');
-        $banners = $model->getCampaignBanners($campaign);
+        $banners = $model->getCampaignBanners($campaign, $bannerType);
 
         $bannersOptions = array();
         if (!empty($banners)) {

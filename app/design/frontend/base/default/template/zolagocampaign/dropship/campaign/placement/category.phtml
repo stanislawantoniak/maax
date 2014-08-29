@@ -94,7 +94,10 @@ $placements = $this->getCategoryPlacements();
                                                             </div>
                                                             <div class="row">
                                                             <div class="col-md-12 dates">
-                                                                <i class="<?php echo $placement['status']['icon']; ?>"></i>
+                                                                <?php if (!empty($placement['campaign_date_from']) && !empty($placement['campaign_date_to'])): ?>
+                                                                    <i class="<?php echo $placement['status']['icon']; ?>"></i>
+                                                                <?php endif; ?>
+
                                                                 <span data-edit-source="campaign_status" class="hidden">
                                                                     <i class="<?php echo $placement['status']['icon']; ?>"></i>
                                                                     <?php echo $placement['status']['message']; ?>
@@ -289,13 +292,15 @@ jQuery(function ($) {
     var compaigns = '<?php echo $campaigns; ?>';
     var compaignsObj = jQuery.parseJSON(compaigns);
 
-    $(document).on('change', 'select[name=campaign]', function () {
+    $(document).on('change', '#basicModal select[name=campaign]', function () {
         var campaign = $(this).val();
-        getCampaignCreations(campaign, $('select[name=banner]'));
+        var type= $(this).closest('#basicModal').find('[name="creation_type"]').val();
+
+        getCampaignCreations(campaign,type, $('#basicModal select[name=banner]'));
         getCampaignAdditionalInfo(campaign);
     })
 
-    $(document).on('change', 'select[name=banner]', function () {
+    $(document).on('change', '#basicModal select[name=banner]', function () {
         var banner = $(this).val();
         getBannerImage(banner);
     })
@@ -329,6 +334,8 @@ jQuery(function ($) {
         $(this).find('[data-val="category"]').html(category);
         $(this).find('[data-val="banner-type"]').html(bannerType);
         $(this).find('[data-val="position"]').html(position);
+
+        $(this).append('<input type="hidden"  name="creation_type" value="'+bannerTypeCode+'"  />');
 
 
     });
@@ -393,12 +400,12 @@ jQuery(function ($) {
         if (priority < currentPriority) {
             //move placement before
 
-
-            $(placementItem).closest('.campaign-list').find('.banner-item:eq(' + (priority - 1) + ')')
-                .before(placementItemHtml);
-            //destroy item
-            $(placementItem).remove();
-
+            if($(placementItem).closest('.campaign-list').find('.banner-item:eq(' + (priority - 1) + ')').length > 0){
+                $(placementItem).closest('.campaign-list').find('.banner-item:eq(' + (priority - 1) + ')')
+                    .before(placementItemHtml);
+                //destroy item
+                $(placementItem).remove();
+            }
         }
         if (priority > currentPriority) {
             //move placement after
@@ -409,8 +416,13 @@ jQuery(function ($) {
                     .before(placementItemHtml);
             } else {
                 console.log('index not found - get last');
-                $(placementItem).closest('.campaign-list').find('.banner-item').last()
-                    .after(placementItemHtml);
+                if($(placementItem).closest('.campaign-list').find('.banner-item').last().length > 0){
+                    $(placementItem).closest('.campaign-list').find('.banner-item').last()
+                        .after(placementItemHtml);
+                } else {
+                    $(placementItem).closest('.campaign-list').append(placementItemHtml);
+                }
+
             }
 
 //                //destroy item
@@ -564,6 +576,7 @@ jQuery(function ($) {
         modal.find('select[name="banner"]').html('');
         //modal.find('select[name="priority"]').html('');
         modal.find('[data-banner="preview"]').html('');
+        modal.find('[name=creation_type]').remove();
     }
 
     function clearEditWindowOptions(){
@@ -578,16 +591,17 @@ jQuery(function ($) {
     /**
      *
      * @param campaign
+     * @param type
      * @param optionsContainer
      */
-    function getCampaignCreations(campaign, optionsContainer) {
+    function getCampaignCreations(campaign,type, optionsContainer) {
         var loading = '<?php echo $_helper->__("Loading..."); ?>';
         optionsContainer.html('<option value="0">'+loading+'</option>');
         campaign = parseInt(campaign);
         if(campaign > 0){
             $.ajax({
                 url : "/campaign/placement_category/getCampaignCreations",
-                data: {campaign : campaign},
+                data: {campaign : campaign, type: type},
                 success: function(result){
                     var banners = jQuery.parseJSON(result);
                     var bannerOptions = '<option value="0">      </option>';
