@@ -346,10 +346,8 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
      * @return array(attrCode=>blockObject, ...)
      */
     public function getFilterBlocks() {
-
         $solrData = $this->getSolrData();
         $outBlock = $this->_getRegularFilterBlocks($solrData);
-		
         $additionalBlocks = array(
                                 $this->getCategoryBlock($solrData),
                                 $this->getPriceBlock($solrData),
@@ -371,10 +369,10 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 	
 	/**
 	 * @param array $data
-	 * 
+	 * @param bool $show_brothers if true solr gets two querys (first about current category, second about brothers), if false is only one query
 	 * @return array
 	 */
-    protected function _processCategoryData($data) {
+    protected function _processCategoryData($data,$show_brothers = true) {
     	
 		$category = NULL;
 		
@@ -501,10 +499,8 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 			'total' => $chosen_cat_total,
 			'children' => $children
 		);
-		
 		// Sibling categories		
-		if(!$is_root_category && $show_siblings){
-			
+		if(!$is_root_category && $show_siblings && $show_brothers){		
 			// Get all category data from Solr		
 			$all_data = Mage::helper('zolagosolrsearch')->getAllCatgoryData($parent_category, $category);
 		
@@ -575,10 +571,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         }
         if(isset($facetFileds['category_facet'])) {
             $data = $facetFileds['category_facet'];
-            if($this->getSpecialMultiple()) {
-                $data = $this->_prepareMultiValues('category_facet', $data);
-            }
-            $data = $this->_processCategoryData($data);
+            $data = $this->_processCategoryData($data,false);
             $block = $this->getLayout()->createBlock($this->_getCategoryRenderer());
             $block->setParentBlock($this);
             $block->setAllItems($data);
@@ -945,7 +938,6 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         }
 
         $filters = $this->getFilterQuery();
-
 
         // Force unset category id
         if($paramKey=="category_path") {
