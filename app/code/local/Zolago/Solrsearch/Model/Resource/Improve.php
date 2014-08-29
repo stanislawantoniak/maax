@@ -67,7 +67,6 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 		$select->from(array("index"=>$tabel), array("entity_id", "attribute_id", "value"));
 		$select->where("index.entity_id IN (?)", $entityIds);
 		$select->where("store_id=?",$storeId);
-		Mage::log($select."");
 		$out = array();
 		foreach($this->getReadConnection()->fetchAll($select) as $row){
 			if(!isset($out[$row['entity_id']][$row['attribute_id']])){
@@ -348,8 +347,12 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 		if (!$collection->count()) {
             return $this;
         }
+		
 		$attrIds = $attrbiuteCollection->getAllIds();
-
+		array_walk($attrIds, function($item){return (int)$item;});
+		
+		array_walk($allIds, function($item){return (int)$item;});
+		
         $entity = $this->getEntity();
 
         $tableAttributes = array();
