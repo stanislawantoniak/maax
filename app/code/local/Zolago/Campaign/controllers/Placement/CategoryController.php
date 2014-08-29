@@ -36,14 +36,15 @@ class Zolago_Campaign_Placement_CategoryController extends Zolago_Dropship_Contr
 
         $categoryId = (int)$data['category'];
 
+
         if(empty($categoryId)){
             $this->_getSession()->addError($helper->__("Category does not exist"));
-            return $this->_redirect("campaign/placement/index");
+            //return $this->_redirect("campaign/placement/index");
         }
         $categoryObj = Mage::getModel('catalog/category')->load($categoryId);
         if(empty($categoryObj)){
             $this->_getSession()->addError($helper->__("Category does not exist"));
-            return $this->_redirect("campaign/placement/index");
+            //return $this->_redirect("campaign/placement/index");
         }
         $campaign = Mage::getResourceModel('zolagocampaign/campaign');
         //remove items
@@ -51,11 +52,13 @@ class Zolago_Campaign_Placement_CategoryController extends Zolago_Dropship_Contr
             try {
                 $campaign->removeCampaignPlacements($data['remove']);
             } catch (Exception $e) {
+                echo $helper->__("Some error occure");
                 $this->_getSession()->addError($helper->__("Some error occure"));
                 Mage::logException($e);
-                return $this->_redirect("campaign/placement/index");
+                //return $this->_redirect("campaign/placement/index");
             }
         }
+        echo 'removed';
         $placements = array();
         if (!empty($data)) {
             $itemsCount = count($data['campaign_id']);
@@ -77,13 +80,14 @@ class Zolago_Campaign_Placement_CategoryController extends Zolago_Dropship_Contr
             try {
                 $campaign->setCampaignPlacements($categoryId, $placements);
             } catch (Exception $e) {
+                echo $helper->__("Some error occure");
                 $this->_getSession()->addError($helper->__("Some error occure"));
                 Mage::logException($e);
-                return $this->_redirect("campaign/placement/index");
+                //return $this->_redirect("campaign/placement/index");
             }
 
         }
-        return $this->_redirect("campaign/placement/index");
+        //return $this->_redirect("campaign/placement/index");
     }
 
     public function getCampaignCreationsAction()
