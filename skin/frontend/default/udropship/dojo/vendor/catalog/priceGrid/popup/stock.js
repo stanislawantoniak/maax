@@ -1,7 +1,8 @@
 define([
 	"dojo/_base/declare",
-	"vendor/catalog/priceGrid/single/_base",
-], function(declare, _base){
+	"vendor/catalog/priceGrid/popup/_base",
+	"vendor/misc"
+], function(declare, _base, misc){
 	
 
 
@@ -18,6 +19,13 @@ define([
 		handleDbClick: function(row, evt){
 			this.setProductId(jQuery(evt.toElement || evt.target).data('product_id'));
 			return this.inherited(arguments);
+		},
+		
+		_afterRender: function(row){
+			this.inherited(arguments);
+			this._modal.find("h4").text(
+				misc.replace(this._title, {name: row.data.name})
+			);
 		},
 
 	});

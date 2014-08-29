@@ -20,13 +20,16 @@ define([
     "dojo/_base/lang",
 	"dojo/request",
 	"vendor/grid/ObserverFilter",
-	"vendor/catalog/priceGrid/single/price",
-	"vendor/catalog/priceGrid/single/stock",
+	"vendor/catalog/priceGrid/popup/price",
+	"vendor/catalog/priceGrid/popup/stock",
+	"vendor/catalog/priceGrid/popup/mass/price",
 	"vendor/catalog/priceGrid/RowUpdater",
 	"vendor/misc"
-], function(BaseGrid, Grid, Pagination, CompoundColumns, Selection, Keyboard, editor, declare, domConstruct, 
-	on, query, Memory, Observable, put, Cache, JsonRest, Selection, 
-	selector, lang, request, ObserverFilter, singlePriceUpdater, singleStockUpdater, RowUpdater, misc){
+], function(BaseGrid, Grid, Pagination, CompoundColumns, Selection, 
+	Keyboard, editor, declare, domConstruct, on, query, Memory, 
+	Observable, put, Cache, JsonRest, Selection, selector, lang, 
+	request, ObserverFilter, singlePriceUpdater, singleStockUpdater, 
+	massPriceUpdater, RowUpdater, misc){
 	
 	/**
 	 * @todo Make source options it dynamicly
@@ -153,6 +156,7 @@ define([
 		};
 			
 	var switcher = query("#store-switcher")[0];
+	var priceChanger = query("#change-prices")[0];
 	
 
 			
@@ -212,7 +216,9 @@ define([
 
 	grid = new PriceGrid({
 		columns: {
-			selector: selector({ label: ''}),
+			selector: selector({ 
+				label: ''
+			}),
 			expander: {
 				label: '',
 				get: lang.hitch(updater, updater.cellRender),
@@ -560,14 +566,30 @@ define([
 				]
 			}
 		},
+		
+		getSelectedIds: function(){
+			var selected = [];
+			jQuery.each(grid.selection, function(k){
+				if(true==this){
+					selected.push(k);
+				}
+			});
+			return selected;
+		},
+		
 		loadingMessage: "<span>" + Translator.translate("Loading...") + "</span>",
 		noDataMessage: "<span>" + Translator.translate("No results found") + "</span>.",
-        selectionMode: 'none',
-		
+        
+		selectionMode: 'none',
+		allowSelectAll: true,
+		deselectOnRefresh: true,
+				
 		minRowsPerPage: 50,
 		maxRowsPerPage: 100,
 		pagingDelay: 50,
 		bufferRows: 20,
+		
+		
 	
 		/* Paginatior  */
 		/* rowsPerPage: 500,
@@ -578,17 +600,49 @@ define([
 		
 		renderRow: renderer,
 		store: testStore,
-		deselectOnRefresh: false,
 		getBeforePut: false,
 		sort: "entity_id"
 	}, "grid-holder");
 	
+	var updateSelectionButtons = function(){
+		var disabled = true;
+		for(var k in grid.selection){
+			if(grid.selection.hasOwnProperty(k)){
+				disabled = false;
+			}
+		}
+		jQuery(priceChanger).prop("disabled", disabled);
+	}
 	
-	
+	// Store switcher 
 	on(switcher, "change", function(){
 		updater.setStoreId(this.value);
 		grid.refresh();
 	})
+	
+	// Price changer 
+	on(priceChanger, "click", function(){
+		var global = jQuery(".dgrid-selector input", grid.domNode).attr("aria-checked")==="true";
+		var query = grid.get("query");
+		var selected = [];
+		
+		if(!global){
+			selected = grid.getSelectedIds();
+		}
+		
+		massPriceUpdater.handleClick({
+			"global":	global ? 1 : 0,
+			"query":	global ? query : {},
+			"selected": selected.join(","),
+			"store_id": switcher.value
+		});
+	});
+	
+	// listen for selection
+	on.pausable(grid.domNode, "dgrid-select", updateSelectionButtons);
+	
+	// listen for selection
+	on.pausable(grid.domNode, "dgrid-deselect", updateSelectionButtons);
 	
 	// listen for clicks to trigger expand/collapse in table view mode
 	on.pausable(grid.domNode, ".dgrid-row td.expander :click", function(evt){
@@ -627,13 +681,18 @@ define([
 	updater.setGrid(grid);
 	updater.setStoreId(switcher.value);
 	
+	massPriceUpdater.setGrid(grid);
+	massPriceUpdater.setStoreId(switcher.value);
+	
 	singlePriceUpdater.setGrid(grid);
 	singlePriceUpdater.setStoreId(switcher.value);
 	
 	singleStockUpdater.setStoreId(switcher.value);
 	singleStockUpdater.setGrid(grid);
 	
-	return grid;
+	updateSelectionButtons();
+	
+	return grid; 
 	
 	
 });

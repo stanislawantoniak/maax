@@ -178,6 +178,9 @@ class Zolago_Catalog_Vendor_Price_DetailController extends Zolago_Catalog_Contro
 	
 	public function detailAction() {
 		$ids = $this->getRequest()->getParam("ids", array());
+		
+		$ids = array_map(function($item){return (int)$item;}, $ids);
+		
 		$storeId = $this->getRequest()->getParam("store");
 		$out = array();
 		
@@ -190,8 +193,6 @@ class Zolago_Catalog_Vendor_Price_DetailController extends Zolago_Catalog_Contro
 		
 		$out = Mage::getResourceSingleton('zolagocatalog/vendor_price')
 				->getDetails($ids, $storeId, true, $this->_getSession()->isAllowed("campaign"));
-		
-		
 		
 		$this->getResponse()->
 				setHeader('Content-type', 'application/json')->

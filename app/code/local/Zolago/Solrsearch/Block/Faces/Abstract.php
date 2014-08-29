@@ -82,6 +82,10 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 		return $this->getFilterContainer()->getRemoveFacesUrl($key, $value);
     }
 	
+	public function processFinalParams(array $params) {
+		return $this->getFilterContainer()->processFinalParams($params);
+	}
+	
 	public function getRemoveFacesJson($key,$value)
     {
 		return $this->getFilterContainer()->getRemoveFacesJson($key, $value);

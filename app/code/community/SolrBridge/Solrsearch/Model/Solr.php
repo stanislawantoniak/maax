@@ -20,7 +20,6 @@ class SolrBridge_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr_
         if (!empty($params)) {
             $options = array_merge($options, $params);
         }
-		
         $resultSet = $this->init($options)->prepareQueryData()->execute();
 
         $this->_solrData = $resultSet;

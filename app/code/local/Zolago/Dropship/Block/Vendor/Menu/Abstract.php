@@ -158,7 +158,7 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 	public function getAdvertiseSection() {
 		$groupOne = array();
 		
-		if($this->isModuleActive('zolagocampaign') && $this->isAllowed("zolagocampaign/vendor")){
+		if($this->isModuleActive('zolagocampaign') && $this->isAllowed("campaign/vendor")){
 			$groupOne[] = array(
 				"active" => $this->isActive("zolagocampaign"),
 				"icon"	 => "icon-star",
