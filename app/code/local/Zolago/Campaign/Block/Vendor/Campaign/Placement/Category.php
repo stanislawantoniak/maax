@@ -73,22 +73,25 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement_Category extends Mage_Core
                 }
                 $status = '';
                 //status
-                $statuses = Mage::getSingleton('zolagocampaign/campaign_PlacementStatus')->toOptionArray();
-                //Zend_Debug::dump($statuses);
-                //1.Expired
-                if (strtotime($dateTo) < time()) {
-                    $status = $statuses[Zolago_Campaign_Model_Campaign_PlacementStatus::TYPE_EXPIRED];
+                if(!empty($dateTo) && !empty($dateFrom)){
+                    $statuses = Mage::getSingleton('zolagocampaign/campaign_PlacementStatus')->toOptionArray();
+                    //Zend_Debug::dump($statuses);
+                    //1.Expired
+                    if (strtotime($dateTo) < time()) {
+                        $status = $statuses[Zolago_Campaign_Model_Campaign_PlacementStatus::TYPE_EXPIRED];
+                    }
+                    if (strtotime($dateFrom) < time() && time() < strtotime($dateTo)) {
+                        $status = $statuses[Zolago_Campaign_Model_Campaign_PlacementStatus::TYPE_ACTIVE];
+                    }
+                    if (time() < strtotime($dateFrom)) {
+                        $status = $statuses[Zolago_Campaign_Model_Campaign_PlacementStatus::TYPE_FUTURE];
+                    }
+                    $h = 48;
+                    if (strtotime($dateTo) < strtotime('now +'.$h.' hours')) {
+                        $status = $statuses[Zolago_Campaign_Model_Campaign_PlacementStatus::TYPE_EXPIRES_SOON];
+                    }
                 }
-                if (strtotime($dateFrom) < time() && time() < strtotime($dateTo)) {
-                    $status = $statuses[Zolago_Campaign_Model_Campaign_PlacementStatus::TYPE_ACTIVE];
-                }
-                if (time() < strtotime($dateFrom)) {
-                    $status = $statuses[Zolago_Campaign_Model_Campaign_PlacementStatus::TYPE_FUTURE];
-                }
-                $h = 48;
-                if (strtotime($dateTo) < strtotime('now +'.$h.' hours')) {
-                    $status = $statuses[Zolago_Campaign_Model_Campaign_PlacementStatus::TYPE_EXPIRES_SOON];
-                }
+
                 $placement['status'] = $status;
 
 
