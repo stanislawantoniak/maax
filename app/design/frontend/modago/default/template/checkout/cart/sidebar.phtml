@@ -29,14 +29,7 @@
         </header>
         <div class="col-sidebar-cart-summary clearfix">
             <ul id="product_summary">
-                <li id="value_products">
-                    <span class="val_value_products"><?php echo $this->__("Products worth"); ?>:</span>
-                    <span><?php echo Mage::helper('core')->currency($this->getQuote()->getGrandTotal(), true, false); ?></span>
-                </li>
-                <li id="delivery_cost">
-                    <span class="val_delivery_cost"><?php echo $this->__("Min shipping cost:"); ?></span>
-                    <span><?php echo Mage::helper('core')->currency($this->getShippingTotal(), true, false); ?></span>
-                </li>
+                <?php echo $this->getChildHtml('totals'); ?>
             </ul>
             <div id="discount_voucher">
                 <div class="form-group clearfix">

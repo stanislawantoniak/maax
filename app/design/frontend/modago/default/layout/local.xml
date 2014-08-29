@@ -140,6 +140,14 @@
                 <type>skin_js</type>
                 <script>js/mall.js</script>
             </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <script>js/mall/plural.js</script>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <script>js/mall/wishlist.js</script>
+            </action>
             <action method="addJs">
                 <script>bootstrap/bootstrap.min.js</script>
             </action>
@@ -347,7 +355,9 @@
 
         <reference name="checkout.cart">
             <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
-            <block type="zolagomodago/checkout_cart_sidebar" name="zolagomodago.checkout.cart.sidebar" template="checkout/cart/sidebar.phtml"/>
+            <block type="zolagomodago/checkout_cart_sidebar" name="zolagomodago.checkout.cart.sidebar" template="checkout/cart/sidebar.phtml">
+                <block type="checkout/cart_totals" name="checkout.cart.totals" as="totals" template="checkout/cart/totals.phtml"/>
+            </block>
         </reference>
     </checkout_cart_index>
 

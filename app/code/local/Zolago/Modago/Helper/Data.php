@@ -57,4 +57,20 @@ class Zolago_Modago_Helper_Data extends Mage_Core_Helper_Abstract
         }
         return $subCategories;
     }
+
+    protected function _calculatePluralIndex($num)
+    {
+        $few = 1;
+        if($num === 1) {
+            return 0;
+        }
+
+        return ($num % 10 >= 2 && $num % 10 <= 4 && ($num % 100 < 10 || $num % 100 >= 20)) ? 1 : 2;
+    }
+
+    public function getPluralForm($num, array $forms)
+    {
+        Mage::log($num);
+        return array_key_exists($num, $forms) ? $forms[$this->_calculatePluralIndex($num)] : "";
+    }
 }

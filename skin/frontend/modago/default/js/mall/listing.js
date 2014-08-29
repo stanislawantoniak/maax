@@ -64,7 +64,7 @@ Mall.listing = {
     /**
      * How many items will be loaded when load more action is performed.
      */
-    _load_next_offset: 500,
+    _load_next_offset: 100,
 
     /**
      * From which point products loading will be started.
@@ -728,7 +728,7 @@ Mall.listing = {
             if (filterSizeLength > 0) {
                 jQuery(this).parents(".filter-size").find("div.action.clear").removeClass("hidden");
             } else {
-                jQuery(this).parents(".filter-size").find(".div.action.clear").addClass("hidden");
+                jQuery(this).parents(".filter-size").find("div.action.clear").addClass("hidden");
             }
         });
 

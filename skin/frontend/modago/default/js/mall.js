@@ -9,6 +9,7 @@ var Mall = {
     _summary_basket: '<ul><li>{{products_count_msg}}: {{all_products_count}}</li><li>{{products_worth_msg}}: {{total_amount}} {{currency_symbol}}</li><li>{{shipping_cost_msg}}: {{shipping_cost}}</li></ul><a href="{{show_cart_url}}" class="view_basket button button-primary medium link">{{see_your_cart_msg}}</a>',
     _delete_coupon_template: '<i class="fa-delete-coupon"></i>',
     _current_superattribute: null,
+
     extend: function(subclass, superclass) {
         function Dummy(){}
         Dummy.prototype = superclass.prototype;
@@ -365,6 +366,13 @@ Mall.i18nValidation = {
 
 Mall.translate = {};
 jQuery.extend(Mall.translate, Mall.i18nValidation);
+Mall.translate.ext = {
+    __: function (key, defaultMsg) {
+        "use strict";
+
+        return Mall.translate.__(key, defaultMsg);
+    }
+};
 
 // function that extends rwdCarousel
 Mall.rwdCarousel = {

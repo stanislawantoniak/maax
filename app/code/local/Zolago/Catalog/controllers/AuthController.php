@@ -6,7 +6,42 @@
 class Zolago_Catalog_AuthController extends Mage_Core_Controller_Front_Action
 {
 
+    public function getCategoriesDisplayModePage($parentId)
+    {
+        $allCats = Mage::getModel('catalog/category')->getCollection()
+            ->addAttributeToSelect('*')
+            ->addAttributeToFilter('is_active', '1')
+            ->addAttributeToFilter('include_in_menu', '1')
+            ->addAttributeToFilter('parent_id', array('eq' => $parentId))
+            ->addAttributeToSort('position', 'asc');
+
+
+        $ids = '';
+
+        foreach ($allCats as $category) {
+            if ($category->getDisplayMode() == 'PAGE') {
+                $ids .= ','.$category->getId();
+            }
+
+            $subcats = $category->getChildren();
+            if ($subcats != '') {
+                $ids .= $this->getCategoriesDisplayModePage($category->getId());
+            }
+        }
+
+        return $ids;
+    }
+
     public function indexAction(){
+
+
+        $rootCatId = 8;
+        $catlist= $this->getCategoriesDisplayModePage($rootCatId);
+        Zend_Debug::dump($catlist);
+
+
+die('test');
+
 
         $apiModel = new Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1();
 

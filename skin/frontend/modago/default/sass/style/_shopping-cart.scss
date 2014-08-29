@@ -455,7 +455,7 @@
 			li {
 				margin-bottom: 4px;
 				text-transform: uppercase;
-				overflow:hidden;
+//				overflow:hidden;
 				span + span{
 
 					text-transform: none;
@@ -468,7 +468,7 @@
 					@include inline-block;
 					width:174px;
 					font-size: 14px;
-					line-height: 0px;
+//					line-height: 0px;
 				}
 				span:last-child {
 					@include inline-block;
