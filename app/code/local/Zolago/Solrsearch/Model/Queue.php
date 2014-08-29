@@ -165,6 +165,7 @@ class Zolago_Solrsearch_Model_Queue extends Varien_Data_Collection{
 	public function process() {
 		$helepr = Mage::helper("zolagosolrsearch");
 		$time = time();
+		$processedCores = array();
 		/* @var $helepr Zolago_Solrsearch_Helper_Data */
 		$this->prepareToProcessing();
 		foreach($helepr->getAvailableCores() as $core){
@@ -172,11 +173,17 @@ class Zolago_Solrsearch_Model_Queue extends Varien_Data_Collection{
 			if($coreCount){
 				$this->_processedItems += $coreCount;
 				$this->_processedCores++;
+				$processedCores[] = $core;
 			}
 			if($this->getHardException()){
 				return false;
 			}
 		}
+		
+		foreach($processedCores as $core){
+			$this->_getSolr()->sendCommit($core);
+		}
+		
 		$this->_processingTime = time()-$time; 
 		return true;
 	}
