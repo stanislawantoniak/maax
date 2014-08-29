@@ -11,6 +11,12 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 	protected $_attrCache = array();
 	
 	/**
+	 * @var array  array(storeId=>array(attributeId=>value))) 
+	 */
+	protected $_storeLabels = array();
+	
+	
+	/**
 	 * @var Mage_Catalog_Model_Product
 	 */
 	protected $_tmpProduct;
@@ -429,7 +435,7 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 					$addData[$attributeCode.'_relative_boost'] = $attributeVal;
 					$addData[$attributeCode.'_text'] = $attributeVal;
 					$addData[$attributeKey] = $attributeVal;
-					$this->pushTextSearchToObject ($item, $attributeObj->getStoreLabel() . ' ' . $attributeVal );
+					$this->pushTextSearchToObject ($item, $this->getStoreLabel($attributeObj) . ' ' . $attributeVal );
 				}
 			}
 			
@@ -452,6 +458,20 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 		}
 		
 		return $this;
+	}
+	
+	/**
+	 * 
+	 * @param Mage_Catalog_Model_Resource_Eav_Attribute $attribute
+	 * @return string
+	 */
+	protected function getStoreLabel(Mage_Catalog_Model_Resource_Eav_Attribute $attribute) {
+		if(!isset($this->_storeLabels[$attribute->getStoreId()][$attribute->getId()])){
+			$attribute->unsetData('store_label');
+			$this->_storeLabels[$attribute->getStoreId()][$attribute->getId()] = 
+					$attribute->getStoreLabel($attribute->getStoreId()) ;
+		}
+		return $this->_storeLabels[$attribute->getStoreId()][$attribute->getId()];
 	}
 	
 	/**
