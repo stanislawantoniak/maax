@@ -64,7 +64,7 @@ $placements = $this->getCategoryPlacements();
                                                             <?php endif; ?>
 
                                                             <div class="row">
-                                                                <div class="col-md-6">
+                                                                <div class="col-md-8">
                                                                     <input type="hidden" name="placement_id[]" value="<?php echo $placement['placement_id']; ?>">
                                                                     <input type="hidden" name="campaign_id[]" value="<?php echo $placement['campaign_id']; ?>">
                                                                     <input type="hidden" name="banner_id[]" value="<?php echo $placement['banner_id']; ?>">
@@ -146,7 +146,7 @@ $placements = $this->getCategoryPlacements();
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <a href="#" class="btn btn-danger danger" id="delete-placement">Delete</a>
+                <a href="" class="btn btn-danger danger" id="delete-placement">Delete</a>
             </div>
         </div>
     </div>
@@ -446,7 +446,7 @@ $placements = $this->getCategoryPlacements();
                 var campaignBlock = '<li class="col-md-3 banner-item">' +
                     '<img src="'+previewImage+'" class="banner-preview-image" />' +
                     '<div class="row">' +
-                    '<div class= "col-md-6" >' +
+                    '<div class= "col-md-8" >' +
                     '<input type="hidden" name="placement_id[]" value="0">' +
                     '<input type="hidden" name="campaign_id[]" value="'+campaign+'">' +
                     '<input type="hidden" name="banner_id[]" value="'+banner+'">' +
@@ -533,7 +533,8 @@ $placements = $this->getCategoryPlacements();
 
             $('#modal-dialog').modal('show');
         })
-        $('#delete-placement').click(function(){
+        $('#delete-placement').click(function(e){
+            e.preventDefault();
             var placement = $(this).closest('#confirm-delete').find('[name="placement_id"]').val();
             console.log(placement);
             if (placement.length > 0) {
