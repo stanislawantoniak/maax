@@ -24,10 +24,7 @@ class Zolago_Campaign_Placement_CategoryController extends Zolago_Dropship_Contr
 
         $categoryId = (int)$data['category'];
 
-        $categoryObj = Mage::getModel('catalog/category')->load($categoryId);
-        if(empty($categoryObj)){
-            echo $helper->__("Category does not exist");
-        }
+        echo $categoryId;
         $campaign = Mage::getResourceModel('zolagocampaign/campaign');
         //remove items
         if(isset($data['remove'])){
@@ -56,7 +53,7 @@ class Zolago_Campaign_Placement_CategoryController extends Zolago_Dropship_Contr
         }
         if (!empty($placements)) {
             try {
-                $campaign->setCampaignPlacements($categoryId, $placements);
+                $campaign->setCampaignPlacements($categoryId, $vendorId, $placements);
             } catch (Exception $e) {
                 echo $helper->__("Some error occure");
             }
