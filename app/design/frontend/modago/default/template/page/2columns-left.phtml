@@ -30,33 +30,6 @@
 
     <?php echo $this->getChildHtml('content'); ?>
 
-    <script>
-        (function($){
-            $(window).load(function(){
-
-
-
-
-                $( "#slider-range" ).slider({
-                    range: true,
-                    min: 0,
-                    max: 500,
-                    values: [ 75, 300 ],
-                    slide: function(event, ui) {
-                        $("#zakres_min").val(ui.values[0]);
-                        $("#zakres_max").val(ui.values[1]);
-                    }
-
-                });
-
-                $("#zakres_min").val($("#slider-range").slider("values", 0));
-                $("#zakres_max").val($("#slider-range").slider("values", 1));
-
-
-            });
-        })(jQuery);
-    </script>
-
     <?php echo $this->getChildHtml('footer') ?>
     <?php echo $this->getChildHtml('global_cookie_notice') ?>
     <?php echo $this->getChildHtml('before_body_end') ?>

@@ -7,6 +7,7 @@ class Zolago_DropshipVendorAskQuestion_Block_Vendor_Question_Grid extends Mage_A
         $this->setId('zolagopos_pos_grid');
         $this->setDefaultSort('question_date');
         $this->setDefaultDir('desc');
+		$this->setSaveParametersInSession(1);
 		// Need
         $this->setGridClass('z-grid');
 		$this->setTemplate("zolagoadminhtml/widget/grid.phtml");
@@ -14,6 +15,7 @@ class Zolago_DropshipVendorAskQuestion_Block_Vendor_Question_Grid extends Mage_A
 	
 	protected function _prepareCollection(){
 		$collection = Mage::getModel('udqa/question')->getCollection();
+		/* @var $collection Unirgy_DropshipVendorAskQuestion_Model_Mysql4_Question_Collection */
 		$collection->
 				joinShipments()->
 				joinProducts()->
@@ -27,10 +29,24 @@ class Zolago_DropshipVendorAskQuestion_Block_Vendor_Question_Grid extends Mage_A
 		$collection->addFieldToFilter("main_table.vendor_id", 
 			array("in"=>  array_unique($vendorsIds)));
 		
-		$collection->getSelect()->columns(array('is_replied' => new Zend_Db_Expr('if(LENGTH(answer_text)>0,1,0)')));
+		$collection->addExpressionFieldToSelect('is_replied', 
+				'IF(LENGTH(answer_text)>0,1,0)', 'is_replied');
+		$collection->addExpressionFieldToSelect('answer_date', 
+				'IF(main_table.answer_date>0,main_table.answer_date, NULL)', 'answer_date');
+
 
         $this->setCollection($collection);
         return parent::_prepareCollection();
+	}
+	
+
+    protected function _addColumnFilterToCollection($column){
+		if($column->getIndex()=="is_replied"){
+			$this->getCollection()->getSelect()->
+				where("IF(LENGTH(answer_text)>0,1,0)=?", $column->getFilter()->getValue());
+			return $this;
+		}
+		return parent::_addColumnFilterToCollection($column);
 	}
 	
 	protected function _prepareColumns() {
@@ -89,12 +105,6 @@ class Zolago_DropshipVendorAskQuestion_Block_Vendor_Question_Grid extends Mage_A
 			"header"	=>	$_helper->__("Visibility"),
 		));
 		
-		$this->addColumn("shipment_increment_id", array(
-			"type"		=>	"text",
-			"index"		=>	"shipment_increment_id",
-			"class"		=>  "form-controll",
-			"header"	=>	$_helper->__("Shipment"),
-		));
 		
 		$this->addColumn("order_increment_id", array(
 			"type"		=>	"text",

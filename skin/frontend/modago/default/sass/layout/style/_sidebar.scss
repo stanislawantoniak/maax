@@ -54,7 +54,7 @@
     margin-bottom: 5px;
     display: inline-block;
   }
-  #filter_recommended_products {
+  #filter_recommended_products, #filter_product_flag_facet {
     label {
       position:relative;
       span {
@@ -139,7 +139,7 @@
           margin-bottom: 0px;
             input[type=checkbox].css-checkbox + label.css-label,
             input[type=radio].css-radio + label.css-label {
-                padding-left:20px;
+                padding-left:23px;
                 height:auto;
                 min-height:17px; 
                 display:inline-block;

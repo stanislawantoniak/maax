@@ -1,0 +1,33 @@
+<?php /* @var $this Zolago_Catalog_Block_Vendor_Price_Mass */ ?>
+<?php $_helper = Mage::helper('core');?>
+<input type="hidden" name="store_id" value="<?php echo $this->getCurrentStoreId();?>"/>
+<input type="hidden" name="global" value="<?php echo $this->getGlobal() ? "1" : "0";?>"/>
+<input type="hidden" name="encoded_query" value="<?php echo $this->getEncodedQuery();?>"/>
+<input type="hidden" name="selected" value="<?php echo $this->getSelected();?>"/>
+<p class="alert alert-info">
+	<strong><?php echo $this->__("Information");?>:</strong>
+	<?php echo $this->__("Matched product(s) prices will update after que processed");?>
+</p>
+<div class="row">
+	<div class="col-md-6 form-group">
+		<span class="help-block"><?php echo $this->__("Source price");?></span>
+		<select disabled="disabled" id="converter_price_type_2"  name="converter_price_type" type="text" class="form-control converterPriceType">
+			<?php foreach ($this->getPriceSourceOptions() as $option):?>
+			<?php $_label = $option['label'] ? $option['label'] : $this->__("Manual");?>
+			<option value="<?php echo $this->escapeHtml($option['value']);?>"><?php echo $this->escapeHtml($_label);?></option>
+			<?php endforeach;?>
+		</select>
+		<label class="checkbox-inline" for="converter_price_type_2-1">
+			<input type="checkbox" class="uniform converterPriceTypeChange" id="converter_price_type_2-1" name="converter_price_type_change" value="1"/> 
+			<?php echo $this->__("Change");?>
+		</label>
+	</div>
+	<div class="col-md-6 form-group">
+		<span class="help-block"><?php echo $this->__("Margin");?></span>
+		<input disabled="disabled" id="price_margin_2" name="price_margin" value="" type="text" class="marignPercent form-control"/>
+		<label class="checkbox-inline" for="price_margin_2-1">
+			<input  type="checkbox" class="uniform marignPercentChange" id="price_margin_2-1" name="price_margin_change" value="1"/> 
+			<?php echo $this->__("Change");?>
+		</label>
+	</div>
+</div>

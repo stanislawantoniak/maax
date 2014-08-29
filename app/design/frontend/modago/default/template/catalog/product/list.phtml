@@ -14,7 +14,7 @@ $_productImageUrl = '';
 
 <div id="items-product" class="jsMasonryContent">
     <!-- START LIST PRODUCT -->
-    <?php $_collection = $this->getCollection(); ?>
+    <?php if (($_collection = $this->getCollection())): ?>
     <?php if ($_collection->count()): ?>
         <?php foreach ($_collection as $product): ?>
             <?php $_productImageUrl = $product->getListingResizedImageUrl(); ?>
@@ -57,6 +57,7 @@ $_productImageUrl = '';
     <?php else: ?>
         No items
     <?php endif; ?>
+    <?php endif; ?>
 
     <div class="shapes_listing">
 
@@ -66,7 +67,7 @@ $_productImageUrl = '';
 
 <!-- END jsMasonryContent -->
 <div class="addNewPositionListProductWrapper">
-    <a href="javascript:;" onclick="Mall.listing.getMoreProducts();" class="addNewPositionListProduct"><?php echo $this->__("Load next %s products", $this->getLoadLimit()); ?></a>
+    <a href="javascript:;" onclick="Mall.listing.loadMoreProducts();" class="addNewPositionListProduct"><?php echo $this->__("Load next %s products", $this->getLoadLimit()); ?></a>
 </div>
 <script type="text/javascript">
     Mall.listing.setScat(<?php echo $this->getLayer()->getCurrentCategory()->getId(); ?>);

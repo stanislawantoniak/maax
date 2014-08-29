@@ -46,7 +46,13 @@ class Zolago_CatalogInventory_Helper_Data extends Mage_Core_Helper_Abstract {
 			}
 		}
 		$stockModel->loadByProduct($product);
-		return min($stockModel->getMaxSaleQty(), self::MAX_CART_LIST_QTY);
+		
+		$minimalStock = min(
+			$stockModel->getMaxSaleQty(), 
+			max($stockModel->getQty(),0)
+		);
+		
+		return max(0, min($minimalStock-$stockModel->getMinQty(), self::MAX_CART_LIST_QTY));
 	}
 	
 	/**

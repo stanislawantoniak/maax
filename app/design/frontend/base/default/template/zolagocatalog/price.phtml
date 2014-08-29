@@ -1,11 +1,18 @@
 
 <div class="container">
     <div class="page-header row">
-        <div class="col-lg-9 page-title">
-            <h3><?php echo Mage::helper("zolagocatalog")->__("Product prices");?></h3>
+        <div class="col-lg-4 page-title">
+            <h3><?php echo Mage::helper("zolagocatalog")->__("Mass prices");?></h3>
 			<span class="tageline"><?php echo Mage::helper("zolagocatalog")->__("Manage prices and stocks");?></span>
         </div>
-		<div class="main-actions align-right col-md-3" style="padding-right: 0;">
+		<div class="col-lg-4 main-actions ">
+			<label><?php echo Mage::helper("zolagocatalog")->__("Selected");?>: </label>
+			<button class="btn" disabled="disabled" id="change-prices">
+				<i class="icon icon-pencil"></i> 
+				<?php echo Mage::helper("zolagocatalog")->__("Change prices");?>
+			</button>
+		</div>
+		<div class="main-actions align-right col-lg-4 " style="padding-right: 0;">
 			<form>
 				<select id="store-switcher" class="form-control">
 					<?php foreach($this->getAllowedStores() as $store):?>

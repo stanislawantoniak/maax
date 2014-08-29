@@ -10,6 +10,42 @@
  *
  */
 class Mana_Filters_Resource_Indexer_Source extends Mage_Catalog_Model_Resource_Eav_Mysql4_Product_Indexer_Eav_Source {
+	
+	
+	/**
+     * Fix convert string ids to ints (DB load)
+     *
+     * @param bool $multiSelect
+     * @return array
+     */
+	protected function _getIndexableAttributes($multiSelect) {
+		$result = parent::_getIndexableAttributes($multiSelect);
+		return array_map(function($item){return (int)$item;}, $result);
+	}
+	
+	 /**
+     * Fix convert string ids to ints (DB load)
+     *
+     * @param array $entityIds      the entity ids limitation
+     * @param int $attributeId      the attribute id limitation
+     * @return Mage_Catalog_Model_Resource_Product_Indexer_Eav_Source
+     */
+    protected function _prepareSelectIndex($entityIds = null, $attributeId = null)
+    {
+		if(is_array($entityIds)){
+			$entityIds = array_map(function($item){return (int)$item;}, $entityIds);
+		}elseif(is_numeric($entityIds)){
+			$entityIds = (int)$entityIds;
+		}
+		
+		if(!is_null($attributeId)){
+			$attributeId = (int)$attributeId;
+		}
+		
+		return parent::_prepareSelectIndex($entityIds, $attributeId);
+		
+    }
+	
     public function reindexEntities($processIds) {
 //        if (Mage::helper('mana_core')->isMageVersionEqualOrGreater('1.7')) {
 //            return parent::reindexEntities($processIds);
