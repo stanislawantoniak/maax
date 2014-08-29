@@ -87,7 +87,9 @@ Mall.wishlist = {
     getOptions: function (options) {
         "use strict";
 
-        return jQuery.extend(this.getDefaults(), options);
+        var _opts = jQuery.extend({}, this.getDefaults());
+
+        return jQuery.extend(_opts, options);
     },
 
     /**
@@ -335,6 +337,136 @@ Mall.wishlist = {
         jQuery("#notadded-wishlist").html(likeHtml);
 
         Mall.buildAccountInfo(data, true);
+    },
+
+    addFromSmallBlock: function (obj) {
+        "use strict";
+
+        // fetch id
+        var id = jQuery(obj).attr("data-idproduct"),
+            product,
+            ico, likeCount, wrapper;
+        // prceed only if product is in wishlist collection
+        if (!this.getIsProductExists(id)) {
+            return false;
+        }
+
+        product = this.getProduct(id);
+        this.added(id);
+
+        OrbaLib.Wishlist.add({product: id}, function (data) {
+            if(data.status === true) {
+
+                // build element
+                wrapper = jQuery("<div/>", {
+                    "class": "like liked",
+                    "data-idproduct": id,
+                    "data-status": (Mall.wishlist.getIsInYourWishlist(id) === true ? 1 : 0),
+                    onclick: "Mall.wishlist.removeFromSmallBlock(this);"
+                });
+                ico = jQuery("<span/>", {
+                    "class": "icoLike"
+                }).appendTo(wrapper);
+
+                jQuery("<img/>", {
+                    "class": "img-01",
+                    src: Config.path.heartLike,
+                    alt: ""
+                }).appendTo(ico);
+
+                jQuery("<img/>", {
+                    "class": "img-02",
+                    src: Config.path.heartLiked,
+                    alt: ""
+                }).appendTo(ico);
+
+                likeCount = jQuery("<span/>", {
+                    "class": "like_count"
+                }).appendTo(wrapper);
+
+                jQuery("<span/>", {
+                    html: Mall.wishlist.__("you", "You")
+                        + (Mall.wishlist.getWishlistCount(id) > 1
+                        ? " + " + (Mall.wishlist.getWishlistCount(id) - 1) : "")
+                }).prependTo(likeCount);
+
+                jQuery("<div/>", {
+                    "class": "toolLike"
+                }).appendTo(wrapper);
+
+                // replace blocks
+                jQuery(obj).parent().append(wrapper);
+                jQuery(obj).remove();
+
+                Mall.buildAccountInfo(data, true);
+            }
+        });
+
+    },
+
+    removeFromSmallBlock: function (obj) {
+        "use strict";
+
+        // fetch id
+        var id = jQuery(obj).attr("data-idproduct"),
+            product,
+            ico, likeCount, wrapper;
+        // prceed only if product is in wishlist collection
+        if (!this.getIsProductExists(id)) {
+            return false;
+        }
+
+        product = this.getProduct(id);
+        this.removed(id);
+
+        OrbaLib.Wishlist.remove({product: id}, function (data) {
+            if(data.status === true) {
+
+                // build element
+                wrapper = jQuery("<div/>", {
+                    "class": "like",
+                    "data-idproduct": id,
+                    "data-status": (Mall.wishlist.getIsInYourWishlist(id) === true ? 1 : 0),
+                    onclick: "Mall.wishlist.addFromSmallBlock(this);"
+                });
+                ico = jQuery("<span/>", {
+                    "class": "icoLike"
+                }).appendTo(wrapper);
+
+                jQuery("<img/>", {
+                    "class": "img-01",
+                    src: Config.path.heartLike,
+                    alt: ""
+                }).appendTo(ico);
+
+                jQuery("<img/>", {
+                    "class": "img-02",
+                    src: Config.path.heartLiked,
+                    alt: ""
+                }).appendTo(ico);
+
+                likeCount = jQuery("<span/>", {
+                    "class": "like_count",
+                    html: (Mall.wishlist.getWishlistCount(id) > 0
+                        ? Mall.wishlist.getWishlistCount(id) : "")
+                }).appendTo(wrapper);
+
+                jQuery("<span/>", {
+                    html: ""
+                }).prependTo(likeCount);
+
+                jQuery("<div/>", {
+                    "class": "toolLike"
+                }).appendTo(wrapper);
+
+                // replace blocks
+                jQuery(obj).parent().append(wrapper);
+                jQuery(obj).remove();
+
+                Mall.buildAccountInfo(data, true);
+            }
+        });
+
     }
 };
 
