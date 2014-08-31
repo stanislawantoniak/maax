@@ -40,8 +40,6 @@ class Zolago_Campaign_Helper_Data extends Mage_Core_Helper_Abstract
             ->addFieldToFilter('url_key', $slug);
         //$collectionCampaign->printLogQuery(true);
         $slugCampaignExist = $collectionCampaign->getFirstItem()->getUrlKey();
-        var_dump(empty($slugCampaignExist));
-        var_dump((int)($collection->getSize() == 0));
 
         $slugExists = (empty($slugCampaignExist) && $collection->getSize() == 0) ? false : true;
         return $slugExists;
