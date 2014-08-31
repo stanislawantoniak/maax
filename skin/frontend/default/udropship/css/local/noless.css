@@ -115,8 +115,8 @@
 }
 
 .banner-preview-image {
-    max-height: 190px;
-    max-width: 260px;
+    /*max-height: 30%;*/
+    max-width: 95%;
 }
 .image-preview-big {
     /*width: 540px;*/

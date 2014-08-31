@@ -31,7 +31,7 @@
             <?php if($_crumbInfo['link']): ?>
                 <a href="<?php echo $_crumbInfo['link'] ?>" title="<?php echo $this->escapeHtml($this->__($_crumbInfo['title'])) ?>"><?php echo $this->escapeHtml($this->__($_crumbInfo['label'])) ?></a>
             <?php elseif($_crumbInfo['last']): ?>
-                <strong><?php echo $this->escapeHtml($this->__($_crumbInfo['label'])) ?></strong>
+                <?php echo $this->escapeHtml($this->__($_crumbInfo['label'])) ?>
             <?php else: ?>
                 <?php echo $this->escapeHtml($this->__($_crumbInfo['label'])) ?>
             <?php endif; ?>

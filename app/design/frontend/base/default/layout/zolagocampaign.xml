@@ -62,5 +62,5 @@
             <block name="campaign_placement" type="zolagocampaign/vendor_campaign_placement_category" template="zolagocampaign/dropship/campaign/placement/category.phtml"></block>
         </reference>
     </zolagocampaign_placement_category_index>
-	
+
 </layout>

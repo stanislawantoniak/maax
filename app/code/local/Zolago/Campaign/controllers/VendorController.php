@@ -249,6 +249,7 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
         //preview image
         $bannersConfiguration = Mage::helper('zolagobanner')->getBannersConfiguration();
         $previewImage = $bannersConfiguration->no_image;
+        $previewImageHtml = $bannersConfiguration->image_html;
 
         $bannerShow = Mage::getResourceModel('zolagocampaign/campaign')
             ->getBannerImageData($id);
@@ -264,7 +265,7 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
 
 
             if($bannerShow['show'] == Zolago_Banner_Model_Banner_Show::BANNER_SHOW_HTML){
-                $previewImage = '/skin/frontend/base/default/images/banner_html_content.png';
+                $previewImage = $previewImageHtml;
             }
         }
         echo $previewImage;

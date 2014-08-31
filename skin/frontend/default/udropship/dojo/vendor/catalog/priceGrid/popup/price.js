@@ -1,6 +1,6 @@
 define([
 	"dojo/_base/declare",
-	"vendor/catalog/priceGrid/single/_base",
+	"vendor/catalog/priceGrid/popup/_base",
 	"vendor/misc",
 	"vendor/FancyObserver",
 ], function(declare, _base, misc, FancyObserver){
@@ -20,6 +20,13 @@ define([
 			handleDbClick: function(row){
 				this.setProductId(row.data.entity_id);
 				return this.inherited(arguments);
+			},
+			
+			_afterRender: function(row){
+				this.inherited(arguments);
+				this._modal.find("h4").text(
+					misc.replace(this._title, {name: row.data.name})
+				);
 			},
 			
 			// After load content
