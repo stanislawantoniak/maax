@@ -44,11 +44,12 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 
 		$collection = Mage::getResourceModel ( 'solrsearch/product_collection' );
 
-		$collection->addAttributeToSelect ( '*' )
-		->addMinimalPrice ()
-		->addFinalPrice ()
-		->addTaxPercents ()
-		->addUrlRewrite ();
+		//$collection->addAttributeToSelect ( '*' )
+		$collection
+			->addMinimalPrice ()
+			->addFinalPrice ()
+			->addTaxPercents ()
+			->addUrlRewrite ();
 
 		Mage::getSingleton ( 'catalog/product_status' )->addVisibleFilterToCollection ( $collection );
 		Mage::getSingleton ( 'catalog/product_visibility' )->addVisibleInSearchFilterToCollection ( $collection );
@@ -168,14 +169,16 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 		Mage::log("Base collection " . $this->_formatTime($this->getMicrotime()-$time));
 		
 
+		
+		
 		////////////////////////////////////////////////////////////////////////
-		// Load attributes data & process values
+		// Load attributes data from source EAV
 		////////////////////////////////////////////////////////////////////////
 		$time = $this->getMicrotime();
 		
 		$resourceModel->loadAttributesData($finalCollection, $attibutes, $finalCollection->getAllIds(), $storeId);
 		
-		Mage::log("Attributes load " . $this->_formatTime($this->getMicrotime()-$time));
+		Mage::log("Attributes load from EAV " . $this->_formatTime($this->getMicrotime()-$time));
 		
 		////////////////////////////////////////////////////////////////////////
 		// Add tax percents
@@ -198,18 +201,17 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 		
 		////////////////////////////////////////////////////////////////////////
 		// Extend configurable product with child data
+		// Load attributes data from index EAV
 		////////////////////////////////////////////////////////////////////////
 		$time = $this->getMicrotime();
 		
-		foreach($finalCollection->getParentIds() as $id=>$childs){
-			if(($item = $finalCollection->getItemById($id)) && $finalCollection->isParentItem($item)){
-				foreach($childs as $childId){
-					if($childItem = $finalCollection->getItemById($childId)){
-						$dataModel->extendConfigurable($item, $childItem, $attibutes);
-					}
-				}
-			}
-		}
+		$resourceModel->loadAttributesDataFromIndex(
+				$finalCollection, 
+				$attibutes, 
+				array_keys($finalCollection->getParentIds()), 
+				$storeId
+		);
+		
 		
 		Mage::log("Extending configurable with child data " . $this->_formatTime($this->getMicrotime()-$time));
 		
@@ -253,9 +255,13 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 		return Mage::helper('solrsearch')->getSetting('display_brand_suggestion');
 	}
 	
+	
 	/**
 	 * Returns used by Solr regular attributes
+	 * 
 	 * @return Mage_Catalog_Model_Resource_Product_Attribute_Collection
+	 * @todo add file cache
+	 * 
 	 */
 	public function getSolrUsedAttributes() {
 		if(!$this->_solrAttributesCollection){
@@ -295,9 +301,9 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 					array("eq"=>1),
 				)
 			);
-			/*foreach($collection as $attr){
-				Mage::log($attr->getAttributeCode());
-			}*/
+			//foreach($collection as $attr){ 
+			//	Mage::log("Used attribs: " . $attr->getAttributeCode());
+			//}
 			//Mage::log($collection->getSelect()."");
 			$this->_solrAttributesCollection=$collection;
 		}
@@ -335,16 +341,22 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 		/* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
 		//  Price - use original method
 		if($onlyprice){
+			$collection->addAttributeToSelect ( '*' ); // trivk
 			return parent::parseJsonData($collection, $store, $onlyprice);
 		}
 		
 		$mainTime = $this->getMicrotime();
 		$ignoreFields = array('sku', 'price', 'status');
+		
+		$resourceModel = Mage::getResourceModel("zolagosolrsearch/improve");
+		/* @var $resourceModel Zolago_Solrsearch_Model_Resource_Improve */
+		
 		$storeId = $collection->getStoreId();
 		Mage::log("Start");
 		
 	   
-		$collecitonIds = array_keys($collection->getItems());
+		//$collecitonIds = array_keys($collection->getItems());
+		$collecitonIds = $resourceModel->getAllIdsToSolveAsianTricks($collection);
 		
 		//included sub products for search
 		$included_subproduct = (int)Mage::helper('solrsearch')->getSetting('included_subproduct');
@@ -364,11 +376,13 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 		// Collect configuration children
 		$this->_collectConfigurableChildIds($collection);
 		
-		$allIds = array_unique(array_merge(
-				$collecitonIds,
-				$this->_configurableChildIdsFlat, 
-				$this->_groupedChildIdsFlat
-		));
+		//$allIds = array_unique(array_merge(
+		//		$collecitonIds,
+		//		$this->_configurableChildIdsFlat, 
+		//		$this->_groupedChildIdsFlat
+		//));
+		
+		$allIds = $collecitonIds;
 		Mage::log("Collecting childs " . $this->_formatTime($this->getMicrotime()-$time));
 		
 		// Final collection is a set with all types of products
@@ -400,9 +414,11 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 			/* @var $item Varien_Object */
 			
 			if($item = $finalCollection->getItemById($id)){
+				//Mage::log("Product " . $id . " added");
 				$documents .= '"add": '.json_encode(array('doc'=>$item->getData())).",";
-				// Log first item
-				//Mage::log(var_export($item->getData(),1));
+				//if($index==3){
+				//	Mage::log(var_export($item->getData(),1));
+				//}
 				
 			}
 			
