@@ -16,6 +16,11 @@ Mall.wishlist = {
         in_your_wishlist: false
     },
 
+    init: function () {
+        "use strict";
+        setTimeout(function () {Mall.wishlist.calculateWidths();}, 500);
+    },
+
     /**
      * Returns all products that are in current context.
      *
@@ -339,6 +344,12 @@ Mall.wishlist = {
         Mall.buildAccountInfo(data, true);
     },
 
+    /**
+     * Adds to wishlist from small product block - listing and crosssells.
+     *
+     * @param obj
+     * @returns {boolean}
+     */
     addFromSmallBlock: function (obj) {
         "use strict";
 
@@ -399,11 +410,18 @@ Mall.wishlist = {
                 jQuery(obj).remove();
 
                 Mall.buildAccountInfo(data, true);
+                Mall.wishlist.calculateWidths();
             }
         });
 
     },
 
+    /**
+     * Removes from wishlist in small product block.
+     *
+     * @param obj
+     * @returns {boolean}
+     */
     removeFromSmallBlock: function (obj) {
         "use strict";
 
@@ -464,13 +482,40 @@ Mall.wishlist = {
                 jQuery(obj).remove();
 
                 Mall.buildAccountInfo(data, true);
+                Mall.wishlist.calculateWidths();
             }
         });
 
+        return true;
+    },
+
+    /**
+     * Calculates and set like count with ico in one line or two.
+     *
+     * @returns {Mall.wishlist}
+     */
+    calculateWidths: function () {
+        "use strict";
+
+        jQuery(".like").each(function (index, item) {
+            var wrapperWidth = jQuery(item).parent().outerWidth(true),
+                priceWidth = jQuery(item).parent().find(".col-price").outerWidth(true),
+                icoWidth = jQuery(item).find(".icoLike").outerWidth(true),
+                likeCountWidth = jQuery(item).find(".like_count").outerWidth(true);
+
+            if (icoWidth + likeCountWidth + priceWidth + 10 < wrapperWidth) {
+                jQuery(item).parent().removeClass("like-two-line");
+            } else {
+                jQuery(item).parent().addClass("like-two-line");
+            }
+        });
+
+        return this;
     }
 };
 
 jQuery(document).ready(function () {
     "use strict";
-   jQuery.extend(Mall.wishlist, Mall.translate.ext);
+    jQuery.extend(Mall.wishlist, Mall.translate.ext);
+    Mall.wishlist.init();
 });

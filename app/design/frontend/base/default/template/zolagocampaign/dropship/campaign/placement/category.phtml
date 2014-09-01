@@ -296,6 +296,7 @@ $placements = $this->getCategoryPlacements();
 
 <script type="text/javascript">
 jQuery(function ($) {
+    recountHeight();
     $(document).on('mouseover', '.banner-type .campaign-list', function () {
         $(this).sortable({ opacity: 0.9, scrollSensitivity: 10, scrollSpeed: 40, zIndex: 9999,
             stop: function () {
@@ -348,11 +349,29 @@ jQuery(function ($) {
     function savePresentation() {
         console.log('savePresentation');
         setPriority();
+        recountHeight();
         $.ajax({
             url: '/campaign/placement_category/save',
             method: 'POST',
             data: $('form').serialize()
 
+        })
+    }
+
+    function recountHeight() {
+        $('.banner-positions .campaign-list').each(function (i, item) {
+            var maxHeight = [];
+            $(this).find('.banner-item').each(function (k, bannerItem) {
+                maxHeight.push($(bannerItem).height());
+                console.log($(bannerItem).height());
+            })
+
+            if (maxHeight.length > 0) {
+                var maxValue = Math.max.apply(Math, maxHeight);
+                $(this).find('.banner-item').each(function (k, bannerItem) {
+                    $(bannerItem).height(maxValue);
+                })
+            }
         })
     }
 
@@ -517,7 +536,7 @@ jQuery(function ($) {
                 '</a>' +
                 '</div>' +
                 '</div>' +
-                '<div class="dates">' +
+                '<div class="col-md-12 dates">' +
                  dates +
                 '</div>' +
                 '</li>';
