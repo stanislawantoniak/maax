@@ -356,6 +356,15 @@ Mall.listing = {
                     Mall.listing.appendFromQueue();
                     Mall.listing.setAutoappend(false);
                 }
+                // build wishlist collection
+                jQuery.each(data.content.products, function (index, item) {
+                    "use strict";
+                    Mall.wishlist.addProduct({
+                        id: item.entity_id,
+                        wishlist_count: item.wishlist_count,
+                        in_your_wishlist: item.in_my_wishlist ? true : false
+                    });
+                });
             } else {
                 // @todo hide buttons etc
                 Mall.listing.removeLockFromQueue(); // this is dummy expression
