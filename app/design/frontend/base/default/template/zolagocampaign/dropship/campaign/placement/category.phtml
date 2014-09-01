@@ -197,11 +197,11 @@ $placements = $this->getCategoryPlacements();
                 <div class="row">
                     <div class="col-md-6">
                         <div class="row form-group">
-                            <label><?php echo $_helper->__('Choose campaign'); ?>: </label>
+                            <label><?php echo $_helper->__('Choose campaign'); ?> <span class="required">*</span>: </label>
                             <select name="campaign" class="form-control"></select>
                         </div>
                         <div class="row form-group">
-                            <label><?php echo $_helper->__('Choose creative'); ?>: </label>
+                            <label><?php echo $_helper->__('Choose creative'); ?> <span class="required">*</span>: </label>
                             <select name="banner" class="form-control"></select>
                         </div>
                         <div class="row form-group">
@@ -575,7 +575,7 @@ jQuery(function ($) {
             $('#basicModal').modal('hide');
 
         } else {
-            var alertMessageTemplate = getAlertTemplate('<?php echo $_helper->__('Please choose creative'); ?>');
+            var alertMessageTemplate = getAlertTemplate('<?php echo $_helper->__('Please fill the required fields'); ?>');
             $('#basicModal .modal-body .message-container').html(alertMessageTemplate);
         }
 
