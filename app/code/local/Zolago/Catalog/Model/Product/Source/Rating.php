@@ -3,14 +3,14 @@
  *source for rating options
  */
 class Zolago_Catalog_Model_Product_Source_Rating
-        extends Mage_Eav_Model_Entity_Attribute_Source_Abstract {
+        extends Zolago_Catalog_Model_Product_Source_Abstract {
 
     public function getAllOptions() {
-        if (!$this->_options) {
+        if (!$this->_options || $this->_force) {
             $this->_options = array (
                 array (
                     'value' => '0',
-                    'label' => 'No rating',
+                    'label' => Mage::helper("zolagocatalog")->__('No rating'),
                 ),
                 array (
                     'value' => '1',

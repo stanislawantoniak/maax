@@ -69,7 +69,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement_Category extends Mage_Core
                     }
                 }
                 if($placement['banner_show'] == Zolago_Banner_Model_Banner_Show::BANNER_SHOW_HTML){
-                    $placement['preview_image'] = '/skin/frontend/base/default/images/banner_html_content.png';
+                    $placement['preview_image'] = $bannersConfiguration->image_html;
                 }
                 $status = array();
                 //status
@@ -86,7 +86,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement_Category extends Mage_Core
                     if (time() < strtotime($dateFrom)) {
                         $status = $statuses[Zolago_Campaign_Model_Campaign_PlacementStatus::TYPE_FUTURE];
                     }
-                    $h = 48;
+                    $h = !empty($bannersConfiguration->campaign_expires) ? $bannersConfiguration->campaign_expires : 48;
                     if (strtotime($dateTo) < strtotime('now +'.$h.' hours')) {
                         $status = $statuses[Zolago_Campaign_Model_Campaign_PlacementStatus::TYPE_EXPIRES_SOON];
                     }
@@ -116,6 +116,8 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement_Category extends Mage_Core
             $categoryModel = Mage::getModel('catalog/category');
             $categoryObj = $categoryModel->load($category);
             $categoryName = $categoryObj->getName();
+        } else {
+            $categoryName = Mage::helper('zolagocampaign') -> __('Vendor landing page');
         }
         return $categoryName;
     }
