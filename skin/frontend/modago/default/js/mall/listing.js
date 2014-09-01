@@ -476,7 +476,7 @@ Mall.listing = {
         likeText = "<span></span>";
         if(product.in_my_wishlist) {
             likeClass += " liked";
-            likeText = "<span>Ty+</span>";
+            likeText = "<span>Ty + </span>";
         }
         like = jQuery("<div/>", {
             "class": likeClass,
@@ -503,7 +503,8 @@ Mall.listing = {
 
         jQuery("<span/>", {
             "class": "like_count",
-            html: likeText + product.wishlist_count
+            html: likeText + (parseInt(product.wishlist_count, 10) > 0
+                ? product.wishlist_count : "")
         }).appendTo(like);
 
         jQuery("<div/>", {
