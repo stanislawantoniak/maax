@@ -34,11 +34,11 @@
  *  getPagerVisibility()
  *  getVarNamePage()
  */
+$columns = $this->getColumns();
+$leftColumnsCount = 3;
+$leftColumns = array_splice($columns, 0, $leftColumnsCount);
+$bodyColumns = array_splice($columns, $leftColumnsCount);
 ?>
-<?php $columns = $this->getColumns(); ?>
-<?php $leftColumnsCount = 3; ?>
-<?php $leftColumns = array_splice($columns, 0, $leftColumnsCount); ?>
-<?php $bodyColumns = $columns; ?>
 
 <?php if($this->getCollection()): ?>
 
