@@ -10,7 +10,7 @@ $_vendor = Mage::helper('umicrosite')->getCurrentVendor();
 <div id="sidebar" class="clearfix">
     <div class="sidebar">
         <div class="section clearfix hidden-xs">
-            <h3 class="open">Kategorie </h3>
+            <h3 class="open"><?php echo $this->__("categories"); ?></h3>
             <ul class="nav nav-pills nav-stacked">
                 <?php echo $this->getChildHtml('vendor.menu.desktop'); ?>
             </ul>

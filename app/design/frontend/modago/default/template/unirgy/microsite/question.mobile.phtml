@@ -3,11 +3,12 @@ $vendor = Mage::helper('umicrosite')->getCurrentVendor();
 //$visibility = Mage::getSingleton('udqa/source')->setPath('visibility')->toOptionHash();
 $session = Mage::getSingleton('customer/session');
 /* @var $session Mage_Customer_Model_Session */
+
 ?>
 
     <form action="<?php echo $this->getFormAction(); ?>" id="question-form-mobile" method="post">
 
-        <input type="hidden" name="question[vendor_id]" value="0" />
+        <input type="hidden" name="question[vendor_id]" value="<?php echo $vendor['vendor_id']; ?>" />
         <input type="hidden" name="question[visibility]" value="0" />
 
         <div class="row">

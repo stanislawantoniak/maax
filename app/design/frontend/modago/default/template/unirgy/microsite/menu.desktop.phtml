@@ -6,15 +6,12 @@
 $categories = $this->getMainVendorCategories();
 ?>
 
-<?php if(count($categories) > 0) : ?>
-    <?php foreach($categories as $cat) : ?>
-        <li class="">
-            <a href="<?php echo $cat['has_dropdown'] ? '#' : $cat['url']; ?>" class="<?php echo $cat['has_dropdown'] ? 'children' : 'simple' ?>"><?php echo $this->escapeHtml($cat['name']); ?> <?php echo $cat['has_dropdown'] ? '<i class="fa fa-caret-down"></i>' : ''; ?></a>
-            <?php if($cat['has_dropdown']): ?>
-                <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('navigation-dropdown-c-' . $cat['category_id'])->toHtml(); ?>
-                <!-- end drop down menu -->
-            <?php endif; ?>
+<?php if (count($categories) > 0) : ?>
+    <?php foreach ($categories as $cat) : ?>
+        <li>
+            <a href="<?php echo (isset($cat['url'])) ? $cat['url'] : '#'; ?>" style="color: #000000;">
+                <?php echo $this->escapeHtml($cat['name']); ?>
+            </a>
         </li>
     <?php endforeach; ?>
-
 <?php endif; ?>
