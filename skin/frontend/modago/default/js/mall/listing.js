@@ -340,7 +340,7 @@ Mall.listing = {
             var sortArray = typeof data.content.sort === "string"
                 || data.content.sort instanceof String ? data.content.sort.split(" ") : [];
             Mall.listing.setSort(sortArray[0] === undefined ? "" : sortArray[0]);
-            Mall.listing.setDir(sortArray[1] === undefined ? "" : sortArray[1]);
+            Mall.listing.setDir(data.content.dir === undefined ? "" : data.content.dir);
 
             if (data.content !== undefined && data.content.products !== undefined
                 && !jQuery.isEmptyObject(data.content.products)) {
