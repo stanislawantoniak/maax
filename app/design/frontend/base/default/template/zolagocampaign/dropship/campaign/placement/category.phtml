@@ -622,11 +622,14 @@ jQuery(function ($) {
     $("#editModal").find('[data-edit-val="link-delete"]').click(function (e) {
         e.preventDefault();
         var placement = $(this).closest('#editModal').find('[data-edit-val="placement_id"]').text();
-        console.log(placement);
-        $("#editModal").modal('hide');
+
         $('#confirm-delete').append('<input type="hidden" name="placement_id" value="'+placement+'">');
 
         $('#modal-dialog').modal('show');
+    })
+
+    $('#basicModal,#editModal').on('hidden.bs.modal', function () {
+        clearOptions();
     })
 
 
