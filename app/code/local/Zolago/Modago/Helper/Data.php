@@ -70,7 +70,6 @@ class Zolago_Modago_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function getPluralForm($num, array $forms)
     {
-        Mage::log($num);
-        return array_key_exists($num, $forms) ? $forms[$this->_calculatePluralIndex($num)] : "";
+        return array_key_exists($this->_calculatePluralIndex($num), $forms) ? $forms[$this->_calculatePluralIndex($num)] : "";
     }
 }

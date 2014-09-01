@@ -3453,16 +3453,16 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
   font-size: 12px;
   text-align: left; }
 /* line 114, ../sass/design/style/_sidebar.scss */
-.sidebar #filter_recommended_products label[for="filter_recommended_products_news"] > span, .sidebar #filter_product_flag_facet label[for="filter_recommended_products_news"] > span {
+.sidebar #filter_recommended_products label[for="filter_recommended_products_news"] > span, .sidebar #filter_recommended_products .new > span, .sidebar #filter_product_flag_facet label[for="filter_recommended_products_news"] > span, .sidebar #filter_product_flag_facet .new > span {
   background: #7fce25; }
 /* line 120, ../sass/design/style/_sidebar.scss */
-.sidebar #filter_recommended_products label[for="filter_recommended_products_sale"] > span, .sidebar #filter_product_flag_facet label[for="filter_recommended_products_sale"] > span {
+.sidebar #filter_recommended_products label[for="filter_recommended_products_sale"] > span, .sidebar #filter_recommended_products .sale > span, .sidebar #filter_product_flag_facet label[for="filter_recommended_products_sale"] > span, .sidebar #filter_product_flag_facet .sale > span {
   background: #de0e59; }
 /* line 126, ../sass/design/style/_sidebar.scss */
-.sidebar #filter_recommended_products label[for="filter_recommended_products_bestseler"] > span, .sidebar #filter_product_flag_facet label[for="filter_recommended_products_bestseler"] > span {
+.sidebar #filter_recommended_products label[for="filter_recommended_products_bestseler"] > span, .sidebar #filter_recommended_products .bestseller > span, .sidebar #filter_product_flag_facet label[for="filter_recommended_products_bestseler"] > span, .sidebar #filter_product_flag_facet .bestseller > span {
   background: #3ca89b; }
 /* line 132, ../sass/design/style/_sidebar.scss */
-.sidebar #filter_recommended_products label[for="filter_recommended_products_propotion"] > span, .sidebar #filter_product_flag_facet label[for="filter_recommended_products_propotion"] > span {
+.sidebar #filter_recommended_products label[for="filter_recommended_products_propotion"] > span, .sidebar #filter_recommended_products .promotion > span, .sidebar #filter_product_flag_facet label[for="filter_recommended_products_propotion"] > span, .sidebar #filter_product_flag_facet .promotion > span {
   background: #ec4920; }
 
 /* line 146, ../sass/design/style/_sidebar.scss */
