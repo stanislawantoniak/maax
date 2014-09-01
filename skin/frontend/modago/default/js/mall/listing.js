@@ -482,7 +482,9 @@ Mall.listing = {
             "class": likeClass,
             "data-idproduct": product.entity_id,
             "data-status": product.in_my_wishlist,
-            onclick: "Mall.toggleWishlist(this);"
+            onclick: product.in_my_wishlist
+                ? "Mall.wishlist.removeFromSmallBlock(this);return false;"
+                : "Mall.wishlist.addFromSmallBlock(this);return false;"
         }).appendTo(priceBox);
 
         likeIco = jQuery("<span/>", {

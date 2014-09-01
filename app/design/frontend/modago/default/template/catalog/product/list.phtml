@@ -36,6 +36,26 @@ $_productImageUrl = '';
                                 <?php endif; ?>
                                 <span><?php echo $this->helper('core')->currency($product->getFinalPrice(), true, false); ?></span>
                             </div>
+                            <?php
+                            // like count
+                            $wishlistCount = "";
+                            $inMyWishlist = "";
+                            $plusSign = "";
+                            if ($product->getWishlistCount() - 1 > 0) {
+                                $wishlistCount = $product->getWishlistCount();
+                                if ($product->getInMyWishlist()) {
+                                    $wishlistCount -= 1;
+                                }
+                            }
+
+                            if ($product->getInMyWishlist()) {
+                                $inMyWishlist = $this->__("You");
+                                if ($product->getWishlistCount() > 1) {
+                                    $plusSign = " + ";
+                                }
+                            }
+
+                            ?>
                             <div class="like <?php if ($product->getInMyWishlist()): ?>liked<?php endif; ?>"
                                  data-idproduct="<?php echo $product->getId(); ?>"
                                  data-status="<?php echo (int)$product->getInMyWishlist(); ?>"
@@ -45,7 +65,7 @@ $_productImageUrl = '';
                                   <img class="img-02" src="<?php echo $this->getSkinUrl('images/heart-like.png'); ?>" alt=""/>
                                 </span>
                                 <span
-                                    class="like_count"><span><?php if($product->getInMyWishlist()): ?><?php echo $this->__("You"); ?><?php endif; ?><?php echo $product->getWishlistCount() > 1 && $product->getInMyWishlist() ? " + " : ""; ?></span><?php echo $product->getWishlistCount() > 1 && $product->getInMyWishlist() ? ((int) $product->getWishlistCount() - 1) : ($product->getWishlistCount() && !$product->getInMyWishlist() > 0 ? $product->getWishlistCount() : ""); ?></span>
+                                    class="like_count"><span><?php echo $inMyWishlist; ?><?php echo $plusSign; ?></span><?php echo $wishlistCount; ?></span>
 
                                 <div class="toolLike"></div>
                             </div>
