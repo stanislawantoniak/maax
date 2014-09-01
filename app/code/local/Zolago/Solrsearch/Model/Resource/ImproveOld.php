@@ -17,69 +17,6 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 	}
 	
 	/**
-	 * @param Mage_Catalog_Model_Resource_Product_Collection $collection
-	 * @return type
-	 */
-	public function getAllIdsToSolveAsianTricks(Mage_Catalog_Model_Resource_Product_Collection $collection) {
-		$select = clone $collection->getSelect();
-		$select->reset(Zend_Db_Select::COLUMNS);
-		$select->columns($collection->getEntity()->getEntityIdField());
-		return $this->getReadConnection()->fetchCol($select);
-	}
-	 /* Load from eav index
-	 * @param Varien_Data_Collection $collection
-	 * @param Mage_Catalog_Model_Resource_Product_Attribute_Collection $attributesColleciton
-	 * @param array $allIds
-	 * @param int $storeId
-	 * @return \Zolago_Solrsearch_Model_Ultility
-	 */
-	public function loadAttributesDataFromIndex(
-			Zolago_Solrsearch_Model_Improve_Collection $collection,
-			Mage_Catalog_Model_Resource_Product_Attribute_Collection $attrbiuteCollection, 
-			array $allIds, $storeId) {
-		
-		$values = $this->getEavIndexAttributeValues($allIds, $storeId);
-		
-		foreach($values as $productId=>$attributes){
-			$item = $collection->getItemById($productId);
-			if(!$item){
-				continue;
-			}
-			foreach($attributes as $attributeId=>$attributeValues){
-				$attributeModel = $attrbiuteCollection->getItemById($attributeId);
-				$item->setOrigData($attributeModel->getAttributeCode() . "_facet", $attributeValues);
-			}
-			Mage::getSingleton("zolagosolrsearch/data")->extendConfigurable($item, $attrbiuteCollection);
-		}
-	}
-	/**
-	 * 
-	 * @param array $entityIds
-	 * @param type $storeId
-	 * @return array
-	 */
-	public function getEavIndexAttributeValues(array $entityIds, $storeId) {
-		
-		array_walk($entityIds, function($item){return (int)$item;});
-		
-		$tabel = $this->getTable('catalog/product_index_eav');
-		$select = $this->getReadConnection()->select();
-		$select->from(array("index"=>$tabel), array("entity_id", "attribute_id", "value"));
-		$select->where("index.entity_id IN (?)", $entityIds);
-		$select->where("store_id=?",$storeId);
-		$out = array();
-		foreach($this->getReadConnection()->fetchAll($select) as $row){
-			if(!isset($out[$row['entity_id']][$row['attribute_id']])){
-				$out[$row['entity_id']][$row['attribute_id']] = array();
-			}
-			$out[$row['entity_id']][$row['attribute_id']][] = $row['value'];
-		}
-		
-		return $out;
-		
-	}
-	
-	/**
 	 * @param int|array $childId
 	 * @return array
 	 */
@@ -347,12 +284,8 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 		if (!$collection->count()) {
             return $this;
         }
-		
 		$attrIds = $attrbiuteCollection->getAllIds();
-		//array_walk($attrIds, function($item){return (int)$item;});
-		
-		//array_walk($allIds, function($item){return (int)$item;});
-		
+
         $entity = $this->getEntity();
 
         $tableAttributes = array();
@@ -403,7 +336,6 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
                 }
             }
         }
-		
 		
 	}
 	
@@ -649,12 +581,8 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 			$storeId, $customerGroupId) {
 		
 		
-		$profiler = Mage::helper("zolagocommon/profiler");
-		$profiler->start();
-		
 		$websiteId = Mage::app()->getStore($storeId)->getWebsiteId();
 		$category = $collection->getCurrentCategory();
-		
 		
 		// Load price data
 		$taxClasses = array();
@@ -688,64 +616,14 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 				$colls
 		);
 		
-		// Join attributes for special price
-		$attributes = array(
-			"special_from_date",
-			"special_to_date",
-			"special_price",
-			"msrp"
-		);
 		
-		foreach($attributes as $key){
-			$attribute = Mage::getSingleton('eav/config')->getAttribute(Mage_Catalog_Model_Product::ENTITY, $key);
-			/* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
-			
-			$tableAliasDefault = "at_" . $key . "_d";
-			$tableAlaisStore = "at_" . $key . "_s";
-			
-			$joinConds = array(
-				"$tableAliasDefault.entity_id=price_index.entity_id",
-				$this->getReadConnection()->quoteInto("$tableAliasDefault.store_id=?", Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID),
-				$this->getReadConnection()->quoteInto("$tableAliasDefault.attribute_id=?", $attribute->getId())
-			);
-			
-			$select->joinLeft(
-				array($tableAliasDefault=>$attribute->getBackendTable()), 
-				implode(" AND ", $joinConds),
-				array()
-			);
-			
-			$joinConds = array(
-				"$tableAlaisStore.entity_id=price_index.entity_id",
-				$this->getReadConnection()->quoteInto("$tableAlaisStore.store_id=?", $storeId),
-				$this->getReadConnection()->quoteInto("$tableAlaisStore.attribute_id=?", $attribute->getId())
-			);
-			
-			$select->joinLeft(
-				array($tableAlaisStore=>$attribute->getBackendTable()), 
-				implode(" AND ", $joinConds),
-				array()
-			);
-			
-			$select->columns(array(
-				$key => new Zend_Db_Expr("IF($tableAlaisStore.value_id>0, $tableAlaisStore.value, $tableAliasDefault.value)")
-			));
-			
-		}
-		
-		$ids = $collection->getAllIds();
-		array_walk($ids, function($item){return (int)$item;});
-		
-		$select->where("price_index.entity_id IN (?)", $ids);
-		$select->where("price_index.tax_class_id IN (?)", $taxClasses);
-		$select->where("price_index.website_id=?", $websiteId);
-		$select->where("price_index.customer_group_id=?", $customerGroupId);
+		$select->where("entity_id IN (?)", $collection->getAllIds());
+		$select->where("tax_class_id IN (?)", $taxClasses);
+		$select->where("website_id=?", $websiteId);
+		$select->where("customer_group_id=?", $customerGroupId);
 
-		$reasults = $this->getReadConnection()->fetchAll($select);
-		//$profiler->log("Prices query done");
-		
 		// Calculate final price
-		foreach($reasults as $row){
+		foreach($this->getReadConnection()->fetchAll($select) as $row){
 			if($product = $collection->getItemById($row['entity_id'])){
 				/* @var $product Mage_Catalog_Model_Product */
 				if($row['tax_class_id']==$product->getTaxClassId()){
@@ -759,7 +637,6 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 					$specialPriceTo = $product->getSpecialToDate();
 					$rulePrice = $product->getData('_rule_price');
 					
-					
 					$finalPrice = $product->getPriceModel()->calculatePrice(
 						$basePrice,
 						$specialPrice,
@@ -771,12 +648,9 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 						$product->getId()
 					);
 					$product->setCalculatedFinalPrice($finalPrice);
-					
-					//$profiler->log("For " . $product->getId(), false);
 				}
 			}
 		}
-		//$profiler->log("After loop");
 		
 		// Add is in my wishlist
 		$wishlist = Mage::helper("zolagowishlist")->getWishlist();
