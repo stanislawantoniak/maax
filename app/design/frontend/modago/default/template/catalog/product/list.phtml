@@ -45,7 +45,7 @@ $_productImageUrl = '';
                                   <img class="img-02" src="<?php echo $this->getSkinUrl('images/heart-like.png'); ?>" alt=""/>
                                 </span>
                                 <span
-                                    class="like_count"><span><?php if ($product->getInMyWishlist()): ?>Ty+ <?php endif; ?></span><?php echo (int)$product->getWishlistCount(); ?></span>
+                                    class="like_count"><span><?php if($product->getInMyWishlist()): ?><?php echo $this->__("You"); ?><?php endif; ?><?php echo $product->getWishlistCount() > 1 && $product->getInMyWishlist() ? " + " : ""; ?></span><?php echo $product->getWishlistCount() > 1 && $product->getInMyWishlist() ? ((int) $product->getWishlistCount() - 1) : ($product->getWishlistCount() && !$product->getInMyWishlist() > 0 ? $product->getWishlistCount() : ""); ?></span>
 
                                 <div class="toolLike"></div>
                             </div>
