@@ -189,6 +189,7 @@ $placements = $this->getCategoryPlacements();
                 </h4>
             </div>
             <div class="modal-body row">
+                <div class="message-container"></div>
                 <div class="col-md-6">
                     <div class="row">
                         <label><?php echo $_helper->__('Choose campaign'); ?>: </label>
@@ -568,7 +569,7 @@ jQuery(function ($) {
 
         } else {
             var alertMessageTemplate = getAlertTemplate('<?php echo $_helper->__('Please choose creative'); ?>');
-            $('#basicModal .modal-body').prepend(alertMessageTemplate);
+            $('#basicModal .modal-body .message-container').html(alertMessageTemplate);
         }
 
 
