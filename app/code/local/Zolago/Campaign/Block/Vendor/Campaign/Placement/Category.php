@@ -116,6 +116,8 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement_Category extends Mage_Core
             $categoryModel = Mage::getModel('catalog/category');
             $categoryObj = $categoryModel->load($category);
             $categoryName = $categoryObj->getName();
+        } else {
+            $categoryName = Mage::helper('zolagocampaign') -> __('Vendor landing page');
         }
         return $categoryName;
     }

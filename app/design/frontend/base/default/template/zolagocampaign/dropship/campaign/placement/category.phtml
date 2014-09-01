@@ -17,8 +17,23 @@ $placements = $this->getCategoryPlacements();
         <div class="col-lg-6">
             <h3><span data-source="category"><?php echo $this->getCategoryName(); ?></span></h3>
         </div>
-
     </div>
+    <div class="page-heading row">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li>
+                    <a href="/campaign/placement/index/">
+                        <?php echo $_helper->__('Manage placements') ?>
+                    </a>
+                </li>
+                <li>
+                    <?php echo $this->getCategoryName(); ?>
+                </li>
+            </ol>
+        </div>
+    </div>
+
+
     <?php if (!empty($bannerTypes)): ?>
         <?php foreach ($bannerTypes as $bannerType): ?>
             <?php if (!empty($bannerType->position_count)): ?>
@@ -178,14 +193,15 @@ $placements = $this->getCategoryPlacements();
                 </h4>
             </div>
             <div class="modal-body">
+                <div class="message-container"></div>
                 <div class="row">
                     <div class="col-md-6">
                         <div class="row form-group">
-                            <label><?php echo $_helper->__('Choose campaign'); ?>: </label>
+                            <label><?php echo $_helper->__('Choose campaign'); ?> <span class="required">*</span>: </label>
                             <select name="campaign" class="form-control"></select>
                         </div>
                         <div class="row form-group">
-                            <label><?php echo $_helper->__('Choose creative'); ?>: </label>
+                            <label><?php echo $_helper->__('Choose creative'); ?> <span class="required">*</span>: </label>
                             <select name="banner" class="form-control"></select>
                         </div>
                         <div class="row form-group">
@@ -317,6 +333,9 @@ jQuery(function ($) {
 
     $(document).on('change', '#basicModal select[name=banner]', function () {
         var banner = $(this).val();
+        if (banner.length > 0) {
+            $("#basicModal .alert.alert-warning").remove();
+        }
         getBannerImage(banner);
     })
 
@@ -356,6 +375,13 @@ jQuery(function ($) {
             data: $('form').serialize()
 
         })
+    }
+
+    function getAlertTemplate(message) {
+        var tmpl = '<div class="alert alert-warning">' +
+            '<a href="#" class="close" data-dismiss="alert">&times;</a>' + message +
+            '</div>';
+        return tmpl;
     }
 
     function recountHeight() {
@@ -543,12 +569,16 @@ jQuery(function ($) {
 
             changePlacementItemPriority($('[data-targ="add"]'), priority);
             $('[data-targ="add"]').replaceWith(campaignBlock);
+
+            clearOptions();
+            savePresentation();
+            $('#basicModal').modal('hide');
+
         } else {
-            $('[data-targ="add"]').remove();
+            var alertMessageTemplate = getAlertTemplate('<?php echo $_helper->__('Please fill the required fields'); ?>');
+            $('#basicModal .modal-body .message-container').html(alertMessageTemplate);
         }
-        clearOptions();
-        savePresentation();
-        $('#basicModal').modal('hide');
+
 
     })
 
@@ -600,11 +630,14 @@ jQuery(function ($) {
     $("#editModal").find('[data-edit-val="link-delete"]').click(function (e) {
         e.preventDefault();
         var placement = $(this).closest('#editModal').find('[data-edit-val="placement_id"]').text();
-        console.log(placement);
-        $("#editModal").modal('hide');
+
         $('#confirm-delete').append('<input type="hidden" name="placement_id" value="'+placement+'">');
 
         $('#modal-dialog').modal('show');
+    })
+
+    $('#basicModal,#editModal').on('hidden.bs.modal', function () {
+        clearOptions();
     })
 
 
@@ -614,9 +647,10 @@ jQuery(function ($) {
         var modal = $("#basicModal");
         modal.find('select[name="campaign"]').html('');
         modal.find('select[name="banner"]').html('');
-        //modal.find('select[name="priority"]').html('');
+        modal.find('select[name="priority"]').val(1);
         modal.find('[data-banner="preview"]').html('');
         modal.find('[name=creation_type]').remove();
+        modal.find('.alert.alert-warning').remove();
     }
 
     function clearEditWindowOptions(){

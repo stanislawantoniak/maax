@@ -1,0 +1,32 @@
+<!-- vendor details -->
+<li>
+    <a href="#"><?php echo $this->__("SHOP INFO"); ?><i class="fa fa-chevron-down"></i></a>
+    <ul>
+        <li style="height: inherit; padding: 8px 20px 8px 10px;">
+            <div>
+                <?php if ($this->getVendorInfoHtml()): ?>
+                    <?php echo $this->getVendorInfoHtml(); ?>
+                <?php else: ?>
+                    <dd>
+                        <img src="<?php echo $this->getLogoUrl(); ?>" alt="<?php echo $this->escapeHtml($this->getVendorName()); ?>"><br/>
+                        <strong><?php echo $this->__("Seller"); ?>:</strong> <?php echo $this->getVendorName(); ?>
+                    </dd>
+                <?php endif;?>
+            </div>
+        </li>
+    </ul>
+</li>
+<!-- end vendor details -->
+
+<!-- vendor Shipping and Returns -->
+<li>
+    <a href="#"><?php echo $this->__("DELIVERY & RETURNS"); ?><i class="fa fa-chevron-down"></i></a>
+    <ul>
+        <li style="height: inherit; padding: 8px 20px 8px 10px;">
+            <div>
+                <?php echo $this->getVendorDeliveryHtml(); ?>
+            </div>
+        </li>
+    </ul>
+</li>
+<!-- end vendor Shipping and Returns -->

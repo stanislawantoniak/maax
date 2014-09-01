@@ -12,7 +12,6 @@ class Zolago_Catalog_Vendor_MassController
         $useLazyLoad = $this->getRequest()->getParam('uselazyload');
 
         if(isset($useLazyLoad)){
-
             $this->loadLayout();
 
             $block = $this->getLayout()->createBlock("zolagocatalog/vendor_mass_grid", "vendor_mass_grid", array('area' => 'adminhtml'));
@@ -130,7 +129,7 @@ class Zolago_Catalog_Vendor_MassController
 						}
                     }
                 }
-				
+
 				// Write attribs & make reindex
                 Mage::getSingleton('catalog/product_action')
                     ->updateAttributes($productIds, $attributesData, $store->getId());

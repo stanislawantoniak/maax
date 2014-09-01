@@ -1,0 +1,98 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     default_default
+ * @copyright   Copyright (c) 2013 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Template for Mage_Adminhtml_Block_Widget_Grid
+ *
+ *  getId()
+ *  getCollection()
+ *  getColumns()
+ *  getPagerVisibility()
+ *  getVarNamePage()
+ */
+$columns = $this->getColumns();
+$leftColumnsCount = 3;
+$leftColumns = array_splice($columns, 0, $leftColumnsCount);
+$bodyColumns = array_splice($columns, $leftColumnsCount);
+?>
+
+<?php if($this->getCollection()): ?>
+
+    <div id="mass-grid" class="grid">
+        <div id="grid-left-columns">
+            <div class="table">
+                <div class="tbody">
+                    <?php foreach ($this->getCollection() as $_index=>$_item): ?>
+                        <div title="<?php echo $this->getRowUrl($_item) ?>" class="clearfix <?php if ($_class = $this->getRowClass($_item)) echo $_class; ?>" >
+                            <?php foreach ($leftColumns as $_column): ?>
+
+                                <?php if ($this->shouldRenderCell($_item, $_column)):?>
+                                    <?php $_rowspan = $this->getRowspan($_item, $_column);?>
+                                    <div class="cell <?php echo $_column->getCssProperty() ?> <?php echo $this->getCellClass($_column, $_item);?>" <?php echo $this->getColumnWidthStyle($_column); ?>>
+                                        <div>
+                                            <?php echo (($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?>
+                                        </div>
+                                    </div>
+                                <?php endif;?>
+
+                            <?php endforeach; ?>
+                        </div>
+
+                    <?php endforeach; ?>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="grid-body">
+            <div class="table">
+                <div class="tbody">
+                    <?php foreach ($this->getCollection() as $_index=>$_item): ?>
+                        <div title="<?php echo $this->getRowUrl($_item) ?>" class="clearfix <?php if ($_class = $this->getRowClass($_item)) echo $_class; ?>" >
+                            <?php foreach($bodyColumns as $_column): ?>
+
+                                <?php if ($this->shouldRenderCell($_item, $_column)):?>
+                                    <?php $_rowspan = $this->getRowspan($_item, $_column);?>
+                                    <div class="cell <?php echo $_column->getCssProperty() ?> <?php echo $this->getCellClass($_column, $_item);?>" <?php echo $this->getColumnWidthStyle($_column); ?>>
+                                        <div>
+                                            <?php echo (($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?>
+                                        </div>
+                                    </div>
+                                <?php endif;?>
+
+                            <?php endforeach; ?>
+                        </div>
+
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        </div>
+
+        <input id="total-records" type="hidden" value="<?php echo $this->getCollection()->getSize(); ?>" />
+    </div>
+
+<?php endif ?>

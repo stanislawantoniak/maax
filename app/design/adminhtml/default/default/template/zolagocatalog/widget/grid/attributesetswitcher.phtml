@@ -1,0 +1,11 @@
+<label class="col-md-4 control-label" for="attribute_switcher">
+    <?php echo Mage::helper("zolagocatalog")->__("Browsing category"); ?>:
+</label>
+<div class="col-md-8">
+    <select name="attribute_switcher" id="attribute_set_switcher" class="form-control" >
+        <option value="" ><?php echo Mage::helper("zolagocatalog")->__("--- Select ---"); ?></option>
+        <?php foreach($this->getAttributeSets() as $value=>$label):?>
+            <option value="<?php echo $value;?>" <?php if($this->getParentBlock()->getParentBlock()->getCurrentAttributeSetId()==$value):?> selected="selected"<?php endif;?>><?php echo $this->escapeHtml($label);?></option>
+        <?php endforeach;?>
+    </select>
+</div>
