@@ -17,7 +17,7 @@ var Config = {
 		ratings : {
 			ratingsPath 		: '/skin/frontend/modago/default/images/raty',
 			ratingsStarOff 		: 'star-off-custom.png',
-			ratingsStarOn 		: 'star-on-custom.png',
+			ratingsStarOn 		: 'star-on-custom.png'
 			//ratingsStarHalf 	: 'star-half-custom.png'
 		},
 		commentRating : {

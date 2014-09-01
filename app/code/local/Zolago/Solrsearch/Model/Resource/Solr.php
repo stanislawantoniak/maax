@@ -24,8 +24,10 @@ class Zolago_Solrsearch_Model_Resource_Solr extends SolrBridge_Solrsearch_Model_
 		}
 		$queryProduct = "<query>" . trim($queryProduct, $separator) . "</query>";
 		
+//		$url = trim($solrServerUrl,'/').'/'.$core.
+//			'/update?stream.body=<delete>'.$queryProduct.'</delete>&commit=true&json.nl=map&wt=json';
 		$url = trim($solrServerUrl,'/').'/'.$core.
-			'/update?stream.body=<delete>'.$queryProduct.'</delete>&commit=true&json.nl=map&wt=json';
+			'/update?stream.body=<delete>'.$queryProduct.'</delete>&json.nl=map&wt=json';
 		//Mage::log("Delete start ($core) / connection start");
     	///Mage::log($url);
 		Mage::log("Make push to slor DEV");
@@ -59,7 +61,8 @@ class Zolago_Solrsearch_Model_Resource_Solr extends SolrBridge_Solrsearch_Model_
 		
 		//Mage::log("Reindex ($core) start");
 		$solrServerUrl = $this->getSolrServerUrl();
-    	$updateUrl = trim($solrServerUrl,'/').'/'.$core.'/update/json?commit=true&wt=json';
+    	$updateUrl = trim($solrServerUrl,'/').'/'.$core.'/update/json?&wt=json';
+    	//$updateUrl = trim($solrServerUrl,'/').'/'.$core.'/update/json?commit=true&wt=json';
 		$dataArray = $this->ultility->parseJsonData($collection, $store);
 		//Mage::log("Data prepare after / connection start ($core)");
 		//Mage::log($updateUrl);
@@ -69,6 +72,15 @@ class Zolago_Solrsearch_Model_Resource_Solr extends SolrBridge_Solrsearch_Model_
 		Mage::log("Reindex ($core) stop / connection end");
 		
 	}
+	
+	public function sendCommit($core) {
+		$solrServerUrl = $this->getSolrServerUrl();
+		$url = trim($solrServerUrl,'/').'/'.$core.'/update/json?commit=true&wt=json';
+		Mage::log("Commit update start");
+		$this->doRequest($url);
+		Mage::log("Commit update end");
+	}
+	
 	
 	
 	/**
