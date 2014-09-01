@@ -1,6 +1,6 @@
 <?php
 
-class Zolago_DropshipMicrositePro_Block_Vendor_Register extends Unirgy_DropshipMicrositePro_Block_Vendor_Register
+class Zolago_DropshipMicrositePro_Block_Vendor_Register extends Unirungy_DropshipMicrositePro_Block_Vendor_Register
 {
     protected function _beforeToHtml()
     {
