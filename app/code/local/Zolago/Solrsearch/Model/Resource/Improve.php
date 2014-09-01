@@ -349,9 +349,9 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
         }
 		
 		$attrIds = $attrbiuteCollection->getAllIds();
-		array_walk($attrIds, function($item){return (int)$item;});
+		//array_walk($attrIds, function($item){return (int)$item;});
 		
-		array_walk($allIds, function($item){return (int)$item;});
+		//array_walk($allIds, function($item){return (int)$item;});
 		
         $entity = $this->getEntity();
 
