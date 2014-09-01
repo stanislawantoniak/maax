@@ -643,9 +643,10 @@ jQuery(function ($) {
         var modal = $("#basicModal");
         modal.find('select[name="campaign"]').html('');
         modal.find('select[name="banner"]').html('');
-        //modal.find('select[name="priority"]').html('');
+        modal.find('select[name="priority"]').val(1);
         modal.find('[data-banner="preview"]').html('');
         modal.find('[name=creation_type]').remove();
+        modal.find('.alert.alert-warning').remove();
     }
 
     function clearEditWindowOptions(){
