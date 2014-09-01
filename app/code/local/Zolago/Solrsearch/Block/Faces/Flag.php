@@ -121,7 +121,6 @@ class Zolago_Solrsearch_Block_Faces_Flag extends Zolago_Solrsearch_Block_Faces_A
 
     public function getNameBasedOnContent($item)
     {
-        Mage::log($item);
         $name = '';
         if($this->isBestseller($item)) {
             $name = 'filter_recommended_products_bestseler';
@@ -138,7 +137,6 @@ class Zolago_Solrsearch_Block_Faces_Flag extends Zolago_Solrsearch_Block_Faces_A
 
     public function getClassBasedOnContent($item)
     {
-        Mage::log($item);
         $name = '';
         if($this->isBestseller($item)) {
             $name = 'bestseller';
