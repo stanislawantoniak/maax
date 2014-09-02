@@ -21,11 +21,12 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement_Category extends Mage_Core
         /* @var $vendor Unirgy_Dropship_Model_Vendor */
         $campaign = Mage::getResourceModel("zolagocampaign/campaign");
         $campaignBank = $campaign->getCampaigns();
+        $result = array();
 
         $campaigns = array();
         //prepare campaigns group by type
         foreach($campaignBank as $campaign){
-            $campaigns[$campaign["banner_type"]][] = array(
+            $campaigns[$campaign["banner_type"]][$campaign['campaign_id']] = array(
                 'campaign_id' => $campaign['campaign_id'],
                 'name' => $campaign['name'],
                 'date_from' => !empty($campaign['date_from']) ? date("d.m.Y H:i:s",strtotime($campaign['date_from'])) : '',
@@ -33,7 +34,14 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement_Category extends Mage_Core
             );
         }
 
-        return $campaigns;
+        //reformat result
+        if (!empty($campaigns)) {
+            foreach ($campaigns as $type => $_) {
+                $result[$type] = array_values($_);
+            }
+        }
+
+        return $result;
     }
 
     /**
