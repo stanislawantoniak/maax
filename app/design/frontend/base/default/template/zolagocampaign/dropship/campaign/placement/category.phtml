@@ -78,7 +78,7 @@ $placements = $this->getCategoryPlacements();
                                                         <li class="col-md-3 banner-item" data-placement="<?php echo $placement['placement_id']; ?>">
                                                             <div class="content">
                                                             <?php if(isset($placement['preview_image']) && !empty($placement['preview_image'])): ?>
-                                                                <img src="<?php echo $placement['preview_image']; ?>" class="banner-preview-image"  />
+                                                                <img src="<?php echo $placement['preview_image']; ?>" class="banner-preview-image" style="height: 120px;"  />
                                                             <?php endif; ?>
 
 
@@ -394,9 +394,8 @@ jQuery(function ($) {
             $('.banner-positions .campaign-list').each(function (i, item) {
                 var maxHeight = [];
                 $(this).find('.banner-item').each(function (k, bannerItem) {
-                    maxHeight.push($(bannerItem).outerHeight(true));
+                    maxHeight.push($(bannerItem).height());
                 })
-
                 if (maxHeight.length > 0) {
                     var maxValue = Math.max.apply(Math, maxHeight);
                     $(this).find('.banner-item').each(function (k, bannerItem) {
@@ -552,7 +551,7 @@ jQuery(function ($) {
                     + '<span data-edit-source="campaign_date_to">'+dateTo+'</span>';
             }
             var campaignBlock = '<li class="col-md-3 banner-item" data-status="">' +
-                '<img src="'+previewImage+'" class="banner-preview-image"  />' +
+                '<img src="'+previewImage+'" class="banner-preview-image" style="height: 120px;" />' +
                 '<div class="row">' +
                 '<div class= "col-md-8" >' +
                 '<input type="hidden" name="placement_id[]" value="0">' +
@@ -662,6 +661,8 @@ jQuery(function ($) {
         modal.find('[data-banner="preview"]').html('');
         modal.find('[name=creation_type]').remove();
         modal.find('.alert.alert-warning').remove();
+        modal.find('[data-val="campaign-status"]').html('');
+
     }
 
     function clearEditWindowOptions(){
