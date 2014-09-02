@@ -3,6 +3,8 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 {
     const MODE_CATEGORY = 1;
     const MODE_SEARCH = 2;
+	
+	const FLAGS_FACET = "flags_facet";
 
     const DEFAULT_RNDERER = "zolagosolrsearch/faces_enum";
 
@@ -13,6 +15,16 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         $this->setTemplate('zolagosolrsearch/standard/searchfaces.phtml');
     }
 	
+	/**
+	 * @param stirng $facetCode
+	 * @return string
+	 */
+	public function getFacetLabel($facetCode){
+		if($facetCode==self::FLAGS_FACET){
+			return Mage::helper('zolagosolrsearch')->__('Product Flags');
+		}
+		return parent::getFacetLabel($facetCode);
+	}
 	
 	
 	public function prepareSolrData() {
@@ -591,49 +603,79 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
     }
 
     public function getFlagBlock($solrData) {
+		
+		// Only in category ?
         if($this->getMode()==self::MODE_CATEGORY&& !$this->getCurrentCategory()->getUseFlagFilter()) {
             return null;
         }
-		
-		//Emulate Multi-Filter Behavior - Start
-		$cleanSolrData = $this->getCleanFlagFacetData();
-		//Emulate Multi-Filter Behavior - End
-		
+	
         $facetFileds		= array();
-        $bestsellerFacet	= array();
-        $isNewFacet			= array();
+       
         if (isset($solrData['facet_counts']['facet_fields']) && is_array($solrData['facet_counts']['facet_fields'])) {
             $facetFileds = $solrData['facet_counts']['facet_fields'];
         }
-        if (isset($facetFileds['is_bestseller_facet'][Mage::helper('core')->__('Yes')])) {
-            $bestsellerFacet	= array(Mage::helper('zolagosolrsearch')->__('Bestseller') => $facetFileds['is_bestseller_facet'][Mage::helper('core')->__('Yes')]);
-        }
-
-        if (isset($facetFileds['is_new_facet'][Mage::helper('core')->__('Yes')])) {
-            $isNewFacet			= array(Mage::helper('zolagosolrsearch')->__('New') => $facetFileds['is_new_facet'][Mage::helper('core')->__('Yes')]);
-        }
-        if(isset($facetFileds['product_flag_facet'])) {
-            $data = $facetFileds['product_flag_facet'];
+       
+        if(isset($facetFileds[self::FLAGS_FACET])) {
+            $data = $facetFileds[self::FLAGS_FACET];
             
             if($this->getSpecialMultiple()) {
-                $data = $this->_prepareMultiValues('product_flag_facet', $data);
+                $data = $this->_prepareMultiValues(self::FLAGS_FACET, $data);
             }
-            $out = array();
-			$data = array_merge($data, $bestsellerFacet, $isNewFacet);
-            foreach ($cleanSolrData as $key=>$val) {
-                if (!empty($data[$key])) {
-                    $out[$key] = $data[$key];
-                }
-            }
-			ksort($out);
+			
+			ksort($data);
             $block = $this->getLayout()->createBlock($this->_getFlagRenderer());
             $block->setParentBlock($this);
-            $block->setAllItems($out);
-            $block->setAttributeCode("product_flag");
-            $block->setFacetKey("product_flag_facet");
+            $block->setAllItems($data);
+            $block->setFacetKey(self::FLAGS_FACET);
+            $block->setAttributeCode("flags");
             return $block;
         }
     }
+	
+//    public function getFlagBlock($solrData) {
+//        if($this->getMode()==self::MODE_CATEGORY&& !$this->getCurrentCategory()->getUseFlagFilter()) {
+//            return null;
+//        }
+//		
+//		//Emulate Multi-Filter Behavior - Start
+//		$cleanSolrData = $this->getCleanFlagFacetData();
+//		//Emulate Multi-Filter Behavior - End
+//		
+//        $facetFileds		= array();
+//        $bestsellerFacet	= array();
+//        $isNewFacet			= array();
+//        if (isset($solrData['facet_counts']['facet_fields']) && is_array($solrData['facet_counts']['facet_fields'])) {
+//            $facetFileds = $solrData['facet_counts']['facet_fields'];
+//        }
+//        if (isset($facetFileds['is_bestseller_facet'][Mage::helper('core')->__('Yes')])) {
+//            $bestsellerFacet	= array(Mage::helper('zolagosolrsearch')->__('Bestseller') => $facetFileds['is_bestseller_facet'][Mage::helper('core')->__('Yes')]);
+//        }
+//
+//        if (isset($facetFileds['is_new_facet'][Mage::helper('core')->__('Yes')])) {
+//            $isNewFacet			= array(Mage::helper('zolagosolrsearch')->__('New') => $facetFileds['is_new_facet'][Mage::helper('core')->__('Yes')]);
+//        }
+//        if(isset($facetFileds['product_flag_facet'])) {
+//            $data = $facetFileds['product_flag_facet'];
+//            
+//            if($this->getSpecialMultiple()) {
+//                $data = $this->_prepareMultiValues('product_flag_facet', $data);
+//            }
+//            $out = array();
+//			$data = array_merge($data, $bestsellerFacet, $isNewFacet);
+//            foreach ($cleanSolrData as $key=>$val) {
+//                if (!empty($data[$key])) {
+//                    $out[$key] = $data[$key];
+//                }
+//            }
+//			ksort($out);
+//            $block = $this->getLayout()->createBlock($this->_getFlagRenderer());
+//            $block->setParentBlock($this);
+//            $block->setAllItems($out);
+//            $block->setAttributeCode("product_flag");
+//            $block->setFacetKey("product_flag_facet");
+//            return $block;
+//        }
+//    }
 
     public function getRatingBlock($solrData) {
         if($this->getMode()==self::MODE_CATEGORY&& !$this->getCurrentCategory()->getUseReviewFilter()) {

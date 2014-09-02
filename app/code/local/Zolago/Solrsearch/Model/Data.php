@@ -323,7 +323,6 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 			$item->setData('textSearchText', array());
 		}
 
-		
 		// Unique data
 		foreach($item->getData() as $key=>$value){
 			if(is_array($value) && preg_match("/_facet$/", $key)){
@@ -331,18 +330,51 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 			}
 		}
 
+		// Final fags aggregated
+		$docData['flags_facet'] = $this->_prepareAggregatedFalgs($item);
+		
+		// Prepare other values
 		$docData['filter_visibility_int'] = $item->getOrigData('visibility');
 		$docData['instock_int'] = $item->getOrigData('stock_status');
 		$docData['product_status'] = $item->getOrigData('status');
-		
 		$docData['textSearchStandard'] = $item->getData('textSearch');
+		
 		
 		
 		$item->addData($docData);
 		
 		// Finally clear id
 		$item->unsetData('id');
+		
 		return $this;
+	}
+	
+	/**
+	 * Prepare aggregated field with all flags
+	 * @param Varien_Object $item
+	 * @return array
+	 */
+	protected function _prepareAggregatedFalgs(Varien_Object $item) {
+		$aggrgatedFlags = array();
+		
+		if((int)$item->getOrigData('is_new')){
+			$aggrgatedFlags[] = Mage::helper("zolagocatalog")->__("New");
+		}
+		if((int)$item->getOrigData("is_bestseller")){
+			$aggrgatedFlags[] = Mage::helper("zolagocatalog")->__("Bestseller");
+		}
+		if((int)$item->getOrigData("product_flag")){
+			switch($item->getOrigData("product_flag")){
+				case Zolago_Catalog_Model_Product_Source_Flag::FLAG_PROMOTION:
+					$aggrgatedFlags[] = Mage::helper("zolagocatalog")->__("Promotion");
+				break;
+				case Zolago_Catalog_Model_Product_Source_Flag::FLAG_SALE;
+					$aggrgatedFlags[] = Mage::helper("zolagocatalog")->__("Sale");
+				break;
+			}
+		}
+		
+		return $aggrgatedFlags;
 	}
 	
 
