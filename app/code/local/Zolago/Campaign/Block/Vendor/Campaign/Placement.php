@@ -40,13 +40,19 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement extends Mage_Core_Block_Te
 
             $collection = Mage::getModel("catalog/category")->getCollection()
                 ->addFieldToFilter('entity_id', array('in' => explode(",", $cats)))
-                ->addAttributeToSelect('name');
+                ->addAttributeToSelect('name')
+                ->addAttributeToSort('level', 'ASC');
 
             foreach ($collection as $collectionItem) {
-                $categories[] = array(
-                    'id' => $collectionItem->getId(),
-                    'name' => $collectionItem->getName(),
-                    'edit_url' => '/campaign/placement_category/index/category/' . $collectionItem->getId());
+                $path = $collectionItem->getPath();
+
+                if(in_array($vendorRootCategory, explode("/", $path))){
+                    $categories[] = array(
+                        'id' => $collectionItem->getId(),
+                        'name' => $collectionItem->getName(),
+                        'edit_url' => '/campaign/placement_category/index/category/' . $collectionItem->getId());
+                }
+
             }
         }
 
