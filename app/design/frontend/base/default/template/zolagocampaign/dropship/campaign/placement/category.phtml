@@ -394,7 +394,7 @@ jQuery(function ($) {
             $('.banner-positions .campaign-list').each(function (i, item) {
                 var maxHeight = [];
                 $(this).find('.banner-item').each(function (k, bannerItem) {
-                    maxHeight.push($(bannerItem).height());
+                    maxHeight.push($(bannerItem).outerHeight(true));
                 })
 
                 if (maxHeight.length > 0) {
