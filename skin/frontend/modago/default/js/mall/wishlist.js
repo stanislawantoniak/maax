@@ -324,9 +324,9 @@ Mall.wishlist = {
                 html: Mall.wishlist.getWishlistCount(id)
             }).wrap("<div/>").parent().html();
             likeHtml += " " + Plural.get(this.getWishlistCount(id), [
-                this.__("person", "person"),
-                this.__("people", "people"),
-                this.__("people-polish-more-than-few", "osób")
+                this.__("person like", "person like"),
+                this.__("people likes", "people likes"),
+                this.__("people-polish-more-than-few likes", "osób lubi")
             ]) + " "
                 + this.__("likes-this-product", "likes this product") + " ";
             likeHtml += jQuery("<a/>", {
