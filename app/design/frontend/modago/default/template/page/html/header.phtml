@@ -9,7 +9,7 @@
 
 <header id="header">
 <!--  class="navbar-fixed-top" -->
-    <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('navigation-main-wrapper')->toHtml(); ?>
+<?php echo $this->getChildHtml('header_menu');?>
 <div class="header_top">
     <div class="container-fluid clearfix">
         <div class="col-xs-12">

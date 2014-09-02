@@ -17,7 +17,7 @@ class Zolago_Adminhtml_Block_Widget_Grid_Column_Renderer_Multiselect
 					$res[] = $this->escapeHtml($item);
 				}
 			}
-			return implode('<br/>', $res);
+			return implode(', ', $res);
 
         }
 	}

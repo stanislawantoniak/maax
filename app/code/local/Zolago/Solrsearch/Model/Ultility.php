@@ -54,7 +54,7 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 		Mage::getSingleton ( 'catalog/product_status' )->addVisibleFilterToCollection ( $collection );
 		Mage::getSingleton ( 'catalog/product_visibility' )->addVisibleInSearchFilterToCollection ( $collection );
 
-		Mage::helper ( 'solrsearch' )->applyInstockCheck ( $collection );
+		//Mage::helper ( 'solrsearch' )->applyInstockCheck ( $collection );
 
 		Mage::app ()->setCurrentStore ( $oldStore );
 
@@ -414,6 +414,7 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 			/* @var $item Varien_Object */
 			
 			if($item = $finalCollection->getItemById($id)){
+				//Mage::log("Product " . $id . " added");
 				$documents .= '"add": '.json_encode(array('doc'=>$item->getData())).",";
 				//if($index==3){
 				//	Mage::log(var_export($item->getData(),1));

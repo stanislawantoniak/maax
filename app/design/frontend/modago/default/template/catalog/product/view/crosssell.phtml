@@ -35,12 +35,12 @@
                                         <div class="col-price">
                                             <span class="label"><?php echo $this->__("price"); ?>:</span><span><?php echo $_item->getFinalPrice(); ?> <?php echo Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol(); ?></span>
                                         </div>
-                                        <div class="like <?php if(Mage::getBlockSingleton('zolagomodago/wishlist')->isInWishlist($_item)): ?>liked<?php endif; ?>" data-idproduct="<?php echo $_item->getId(); ?>" data-status="<?php echo (int) Mage::helper('zolagowishlist')->productBelongsToMyWishlist($_item); ?>" onclick="Mall.toggleWishlist(this);">
-                              <span class="icoLike">
-                                <img class="img-01" src="<?php echo $this->getSkinUrl('images/heart.png'); ?>" alt=""/>
-                                <img class="img-02" src="<?php echo $this->getSkinUrl('images/heart-like.png'); ?>" alt=""/>
-                              </span>
-                                            <span class="like_count"><span><?php if(Mage::getBlockSingleton('zolagomodago/wishlist')->isInWishlist($_item)): ?>Ty + <?php endif; ?></span><?php echo (int) $_item->getWishlistCount(); ?></span>
+                                        <div class="like <?php if(Mage::getBlockSingleton('zolagomodago/wishlist')->isInWishlist($_item)): ?>liked<?php endif; ?>" data-idproduct="<?php echo $_item->getId(); ?>" data-status="<?php echo (int) Mage::helper('zolagowishlist')->productBelongsToMyWishlist($_item); ?>" onclick="Mall.wishlist.<?php if(Mage::helper('zolagowishlist')->productBelongsToMyWishlist($_item)) : ?>remove<?php else: ?>add<?php endif; ?>FromSmallBlock(this);return false;">
+                                            <span class="icoLike">
+                                                <img class="img-01" src="<?php echo $this->getSkinUrl('images/heart.png'); ?>" alt=""/>
+                                                <img class="img-02" src="<?php echo $this->getSkinUrl('images/heart-like.png'); ?>" alt=""/>
+                                            </span>
+                                            <span class="like_count"><span><?php if(Mage::getBlockSingleton('zolagomodago/wishlist')->isInWishlist($_item)): ?><?php echo $this->__("You"); ?><?php endif; ?><?php echo $_item->getWishlistCount() > 1 && Mage::helper('zolagowishlist')->productBelongsToMyWishlist($_item) ? " + " : ""; ?></span><?php echo $_item->getWishlistCount() > 1 && Mage::helper('zolagowishlist')->productBelongsToMyWishlist($_item) ? ((int) $_item->getWishlistCount() - 1) : ($_item->getWishlistCount() && !Mage::helper('zolagowishlist')->productBelongsToMyWishlist($_item) > 0 ? $_item->getWishlistCount() : ""); ?></span>
 
                                             <div class="toolLike"></div>
                                         </div>
@@ -55,4 +55,14 @@
             </div>
         </div>
     </section>
+    <script type="text/javascript">
+        <?php foreach($this->getItems() as $_item) : ?>
+        Mall.wishlist.addProduct({
+            id: <?php echo (int) $_item->getId(); ?>,
+            wishlist_count: <?php echo (int) $_item->getWishlistCount(); ?>,
+            in_your_wishlist: <?php echo Mage::helper('zolagowishlist')->productBelongsToMyWishlist($_item) ? "true" : "false" ;?>
+        });
+        <?php endforeach; ?>
+        Mall.translate.add("you", "<?php echo $this->__("You"); ?>");
+    </script>
 <?php endif; ?>

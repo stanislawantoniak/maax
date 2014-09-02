@@ -17,4 +17,9 @@ class Zolago_DropshipMicrositePro_IndexController
         }
         $this->_forward('index', 'index', 'cms');
     }
+
+    public function landingpageAction(){
+        $this->loadLayout();
+        $this->renderLayout();
+    }
 }

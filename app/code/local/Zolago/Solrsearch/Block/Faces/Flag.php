@@ -94,7 +94,7 @@ class Zolago_Solrsearch_Block_Faces_Flag extends Zolago_Solrsearch_Block_Faces_A
 
     public function isSale($item)
     {
-        if(strtolower(Mage::helper('zolagosolrsearch')->__($item)) == 'wyprzedaż') {
+        if(strtolower(Mage::helper('zolagosolrsearch')->__($item)) == 'sale') {
             return true;
         }
 
@@ -103,7 +103,7 @@ class Zolago_Solrsearch_Block_Faces_Flag extends Zolago_Solrsearch_Block_Faces_A
 
     public function isNew($item)
     {
-        if(strtolower(Mage::helper('zolagosolrsearch')->__($item)) == 'nowość') {
+        if(strtolower(Mage::helper('zolagosolrsearch')->__($item)) == 'new') {
             return true;
         }
 
@@ -112,7 +112,7 @@ class Zolago_Solrsearch_Block_Faces_Flag extends Zolago_Solrsearch_Block_Faces_A
 
     public function isPromotion($item)
     {
-        if(strtolower(Mage::helper('zolagosolrsearch')->__($item)) == 'promocja') {
+        if(strtolower(Mage::helper('zolagosolrsearch')->__($item)) == 'promotion') {
             return true;
         }
 
@@ -130,6 +130,22 @@ class Zolago_Solrsearch_Block_Faces_Flag extends Zolago_Solrsearch_Block_Faces_A
             $name = 'filter_recommended_products_promotion';
         } else if($this->isSale($item)) {
             $name = 'filter_recommended_products_sale';
+        }
+
+        return $name;
+    }
+
+    public function getClassBasedOnContent($item)
+    {
+        $name = '';
+        if($this->isBestseller($item)) {
+            $name = 'bestseller';
+        } else if($this->isNew($item)) {
+            $name = 'new';
+        } else if($this->isPromotion($item)) {
+            $name = 'promotion';
+        } else if($this->isSale($item)) {
+            $name = 'sale';
         }
 
         return $name;

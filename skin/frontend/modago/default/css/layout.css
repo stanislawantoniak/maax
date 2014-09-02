@@ -8025,7 +8025,7 @@ i.flag.hit, i.flag.bestseller {
   padding: 0 5px;
   padding-right: 20px;
   position: relative;
-  width: 195px;
+  width: auto;
   display: block; }
 /* line 423, ../sass/layout/style/_shopping-cart.scss */
 #sidebar-secondary #cart-summary #discount_voucher .coupon-list dd i {
