@@ -236,6 +236,31 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
                 'date_from' => !empty($dateFrom) ? date($format, strtotime($dateFrom)) : '',
                 'date_to' => !empty($dateTo) ? date($format, strtotime($dateTo)) : ''
             );
+
+
+            $status = array();
+            //status
+            if(!empty($dateTo) && !empty($dateFrom)){
+                $bannersConfiguration = Mage::helper('zolagobanner')->getBannersConfiguration();
+
+                $statuses = Mage::getSingleton('zolagocampaign/campaign_PlacementStatus')->toOptionArray();
+                //Zend_Debug::dump($statuses);
+                //1.Expired
+                if (strtotime($dateTo) < time()) {
+                    $status = $statuses[Zolago_Campaign_Model_Campaign_PlacementStatus::TYPE_EXPIRED];
+                }
+                if (strtotime($dateFrom) < time() && time() < strtotime($dateTo)) {
+                    $status = $statuses[Zolago_Campaign_Model_Campaign_PlacementStatus::TYPE_ACTIVE];
+                }
+                if (time() < strtotime($dateFrom)) {
+                    $status = $statuses[Zolago_Campaign_Model_Campaign_PlacementStatus::TYPE_FUTURE];
+                }
+                $h = !empty($bannersConfiguration->campaign_expires) ? $bannersConfiguration->campaign_expires : 48;
+                if (strtotime($dateTo) < strtotime('now +'.$h.' hours')) {
+                    $status = $statuses[Zolago_Campaign_Model_Campaign_PlacementStatus::TYPE_EXPIRES_SOON];
+                }
+            }
+            $campaignData['status'] = $status;
         }
         echo Mage::helper('core')->jsonEncode($campaignData);
     }
