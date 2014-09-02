@@ -107,7 +107,7 @@
 .banner-positions {
     border: 1px solid lightgrey;
     clear: both;
-    display: table;
+    display: inline-block;
     margin-bottom: 20px;
     min-height: 310px;
     width: 100%;
