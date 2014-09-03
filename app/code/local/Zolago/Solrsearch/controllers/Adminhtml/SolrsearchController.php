@@ -62,6 +62,7 @@ class Zolago_Solrsearch_Adminhtml_SolrsearchController
 					Mage::helper("zolagosolrsearch")->__("Queue is empty")
 				);
 			}else{
+				set_time_limit(3600);
 				$queue->process();
 				if($queue->getHardException()){
 					$session->addError(

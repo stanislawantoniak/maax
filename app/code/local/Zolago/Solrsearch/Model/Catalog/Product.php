@@ -40,7 +40,7 @@ class Zolago_Solrsearch_Model_Catalog_Product extends Mage_Catalog_Model_Product
 				keepAspectRatio(true)->
 				constrainOnly(true)->
 				keepFrame(false)->
-				resize(214,null);
+				resize(300,null);
 	}
 	
 	/**

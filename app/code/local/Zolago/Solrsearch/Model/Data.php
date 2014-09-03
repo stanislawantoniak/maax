@@ -121,11 +121,15 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 				$specialPriceFromDate = 0;
 
 				$specialPriceToDate = 0;
+				
+				$data[$code.'_special_price_fromdate_int'] = 0;
+				$data[$code.'_special_price_todate_int'] = 0;
 
 				if ($specialPrice > 0 && isset($returnData['product']) && is_object($returnData['product'])) {
 					$specialPriceFromDate = $returnData['product']->getSpecialFromDate();
 					$specialPriceToDate = $returnData['product']->getSpecialToDate();
 				}
+				
 				if ($specialPriceFromDate > 0 && $specialPriceToDate > 0) {
 					$data[$code.'_special_price_fromdate_int'] = strtotime($specialPriceFromDate);
 					$data[$code.'_special_price_todate_int'] = strtotime($specialPriceToDate);
@@ -139,22 +143,25 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 				}
 
 				if(isset($data[$code.'_special_price_fromdate_int']) && !is_numeric($data[$code.'_special_price_fromdate_int'])){
-					//$data[$code.'_special_price_fromdate_int'] = strtotime($data[$code.'_special_price_fromdate_int']);
-					$data[$code.'_special_price_fromdate_int'] = 0;
+					$data[$code.'_special_price_fromdate_int'] = strtotime($data[$code.'_special_price_fromdate_int']);
+					
 				}
 				if(isset($data[$code.'_special_price_todate_int']) && !is_numeric($data[$code.'_special_price_todate_int'])){
-					//$data[$code.'_special_price_todate_int'] = strtotime($data[$code.'_special_price_todate_int']);
-					$data[$code.'_special_price_fromdate_int'] = 0;
+					$data[$code.'_special_price_todate_int'] = strtotime($data[$code.'_special_price_todate_int']);
 				}
+				
+				$data[$code.'_special_price_fromdate_int'] = (int)$data[$code.'_special_price_fromdate_int'];
+				$data[$code.'_special_price_todate_int'] = (int)$data[$code.'_special_price_todate_int'];
 
-				if (!isset($data[$code.'_special_price_fromdate_int'])) {
+				/*if (!isset($data[$code.'_special_price_fromdate_int'])) {
 					$data[$code.'_special_price_fromdate_int'] = 0;
 				}
 				if (!isset($data[$code.'_special_price_todate_int'])) {
 					$data[$code.'_special_price_todate_int'] = 0;
-				}
+				}*/
 			}
 		}
+		
 		
 		$item->addData($data);
 		
@@ -323,7 +330,6 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 			$item->setData('textSearchText', array());
 		}
 
-		
 		// Unique data
 		foreach($item->getData() as $key=>$value){
 			if(is_array($value) && preg_match("/_facet$/", $key)){
@@ -331,18 +337,51 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 			}
 		}
 
+		// Final fags aggregated
+		$docData['flags_facet'] = $this->_prepareAggregatedFalgs($item);
+		
+		// Prepare other values
 		$docData['filter_visibility_int'] = $item->getOrigData('visibility');
 		$docData['instock_int'] = $item->getOrigData('stock_status');
 		$docData['product_status'] = $item->getOrigData('status');
-		
 		$docData['textSearchStandard'] = $item->getData('textSearch');
+		
 		
 		
 		$item->addData($docData);
 		
 		// Finally clear id
 		$item->unsetData('id');
+		
 		return $this;
+	}
+	
+	/**
+	 * Prepare aggregated field with all flags
+	 * @param Varien_Object $item
+	 * @return array
+	 */
+	protected function _prepareAggregatedFalgs(Varien_Object $item) {
+		$aggrgatedFlags = array();
+		
+		if((int)$item->getOrigData('is_new')){
+			$aggrgatedFlags[] = Mage::helper("zolagocatalog")->__("New");
+		}
+		if((int)$item->getOrigData("is_bestseller")){
+			$aggrgatedFlags[] = Mage::helper("zolagocatalog")->__("Bestseller");
+		}
+		if((int)$item->getOrigData("product_flag")){
+			switch($item->getOrigData("product_flag")){
+				case Zolago_Catalog_Model_Product_Source_Flag::FLAG_PROMOTION:
+					$aggrgatedFlags[] = Mage::helper("zolagocatalog")->__("Promotion");
+				break;
+				case Zolago_Catalog_Model_Product_Source_Flag::FLAG_SALE;
+					$aggrgatedFlags[] = Mage::helper("zolagocatalog")->__("Sale");
+				break;
+			}
+		}
+		
+		return $aggrgatedFlags;
 	}
 	
 
