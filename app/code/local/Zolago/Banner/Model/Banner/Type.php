@@ -5,6 +5,10 @@ class Zolago_Banner_Model_Banner_Type
 
     const BANNER_TYPES_CONFIG = 'zolagobanner/config/zolagobannertypes';
 
+    const TYPE_SLIDER = 'slider';
+    const TYPE_BOX = 'box';
+    const TYPE_INSPIRATION = 'inspiration';
+
     /**
      * @return array
      */
