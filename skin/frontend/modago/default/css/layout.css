@@ -6363,22 +6363,22 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
   margin-bottom: 5px;
   display: inline-block; }
 /* line 58, ../sass/layout/style/_sidebar.scss */
-.sidebar #filter_recommended_products label, .sidebar #filter_product_flag_facet label {
+.sidebar #filter_recommended_products label, .sidebar #filter_product_flag_facet label, .sidebar #filter_flags_facet label {
   position: relative; }
 /* line 60, ../sass/layout/style/_sidebar.scss */
-.sidebar #filter_recommended_products label span, .sidebar #filter_product_flag_facet label span {
+.sidebar #filter_recommended_products label span, .sidebar #filter_product_flag_facet label span, .sidebar #filter_flags_facet label span {
   display: inline-block;
   height: 17px;
   width: 85px;
   padding-left: 0; }
 /* line 65, ../sass/layout/style/_sidebar.scss */
-.sidebar #filter_recommended_products label span + .suffix, .sidebar #filter_product_flag_facet label span + .suffix {
+.sidebar #filter_recommended_products label span + .suffix, .sidebar #filter_product_flag_facet label span + .suffix, .sidebar #filter_flags_facet label span + .suffix {
   position: absolute;
   left: 115px;
   top: 0px;
   width: auto; }
 /* line 75, ../sass/layout/style/_sidebar.scss */
-.sidebar #filter_recommended_products .form-group + .action, .sidebar #filter_product_flag_facet .form-group + .action {
+.sidebar #filter_recommended_products .form-group + .action, .sidebar #filter_product_flag_facet .form-group + .action, .sidebar #filter_flags_facet .form-group + .action {
   margin-top: 10px; }
 
 /* line 86, ../sass/layout/style/_sidebar.scss */
