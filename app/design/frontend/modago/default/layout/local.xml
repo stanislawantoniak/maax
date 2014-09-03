@@ -451,6 +451,7 @@
             <action method="setTemplate">
                 <template>catalog/product/list/header/category.phtml</template>
             </action>
+            <block type="page/html_breadcrumbs" name="breadcrumbs" as="breadcrumbs"/>
         </reference>
         <reference name="solrsearch_product_list_toolbar">
             <action method="setTemplate">

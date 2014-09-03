@@ -9,15 +9,17 @@
                 <form action="">
                     <div class="form-group clearfix">
                         <div class="sort-by clearfix">
-                            <label for="sort-by" style="float: left;"><?php echo $this->__("Sort by:"); ?></label>
+                            <label for="sort-by"><?php echo $this->__("Sort by:"); ?></label>
 
-                            <div class="form-group small styledSelected">
-
-                                <select name="product_listing_sort" class="form-control select-styled " id="product-listing-sort-control">
-                                    <?php foreach($this->getSortOptions() as $option):?>
-                                    <option value="<?php echo $this->getSortUrl($option); ?>" data-dir="<?php echo $option['dir']; ?>" <?php if($this->getCurrentOrder()==$option['value'] && $this->getCurrentDir()==$option['dir']):?>selected="selected"<?php endif;?>><?php echo $this->__($this->escapeHtml($option['label']));?></option>
+                            <div class="select-group small test">
+                                <a class="button-select no-ajax" href="#"><span><?php echo $this->__("by:"); ?></span> <span class="down"></span></a>
+                                <div class="dropdown-select mCustomScrollbar" style="height: 166px !important;">
+                                    <ul  data-role="listview">
+                                    <?php foreach($this->getSortOptions() as $option): ?>
+                                        <li><a href="#" data-url="<?php echo $this->getSortUrl($option); ?>" data-dir="<?php echo $option['dir']; ?>" data-value="<?php echo $this->__($this->escapeHtml($option['label']));?>"><span><?php echo $this->__($this->escapeHtml($option['label']));?></span></a></li>
                                     <?php endforeach;?>
-                                </select>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
