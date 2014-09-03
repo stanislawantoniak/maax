@@ -74,7 +74,7 @@ Mall.listing = {
     /**
      * When to start showing new products - from bottom of the page.
      */
-    _scroll_load_bottom_offset: 500,
+    _scroll_load_bottom_offset: 2000,
 
     /**
      * Queue for preloaded products.
@@ -109,6 +109,7 @@ Mall.listing = {
 
         // load additional products to queue after page is loaded
         this.loadToQueue();
+        this.setLoadMoreLabel();
     },
 
     /**
@@ -162,10 +163,18 @@ Mall.listing = {
             Mall.listing.placeListingFadeContainer();
         } else {
             // do something to inform customer that something went wrong
-            alert("Something went wrong, try again");
+            console.log("Something went wrong, try again");
             return false;
         }
         return true;
+    },
+
+    setLoadMoreLabel: function () {
+        "use strict";
+
+        jQuery(".addNewPositionListProduct").find("span").text(this.getLoadNextOffset());
+
+        return this;
     },
 
     /**
@@ -375,7 +384,7 @@ Mall.listing = {
                 Mall.listing.removeLockFromQueue(); // this is dummy expression
             }
         } else {
-            alert("Something went wrong, try again later");
+            console.log("Something went wrong, try again later | appendToQueueCallback");
         }
 
         Mall.listing.removeLockFromQueue();
