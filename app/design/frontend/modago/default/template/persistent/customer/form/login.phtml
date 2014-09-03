@@ -2,7 +2,6 @@
 /** @var $this Mage_Customer_Block_Form_Login */
 $_hlp = Mage::helper("zolagocustomer");
 $_isCheckout = $this->getRequest()->getParam("is_checkout");
-$_referrerCheckout = $this->getUrl("checkout/onepage/index");
 ?>
 
 <div id="content" class="container-fluid">
@@ -13,7 +12,7 @@ $_referrerCheckout = $this->getUrl("checkout/onepage/index");
 					<form action="<?php echo $this->getPostActionUrl() ?>" method="post" id="login-form" class="form-horizontal" autocomplete="off" role="form">
 						<?php echo $this->getBlockHtml('formkey'); ?>
 						<?php if($_isCheckout):?>
-						<input name="<?php echo Mage_Customer_Helper_Data::REFERER_QUERY_PARAM_NAME;?>" type="hidden" value="<?php echo Mage::helper("core")->urlEncode($_referrerCheckout);?>"/>
+						<input name="is_checkout" type="hidden" value="1"/>
 						<?php endif;?>
 						<section class="section clearfix">
 							<header class="title-section">

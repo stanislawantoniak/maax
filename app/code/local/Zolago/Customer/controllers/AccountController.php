@@ -69,5 +69,16 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
         }
         
     }
+	
+	/**
+	 * Handle checkout context login
+	 * @return type
+	 */
+	protected function _loginPostRedirect() {
+		if($this->_getSession()->isLoggedIn() && $this->getRequest()->getParam("is_checkout")){
+			$this->_getSession()->setBeforeAuthUrl(Mage::getUrl("checkout/onepage/index"));
+		}
+		return parent::_loginPostRedirect();
+	}
    
 }
