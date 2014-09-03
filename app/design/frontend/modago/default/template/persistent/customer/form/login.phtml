@@ -1,6 +1,8 @@
 <?php
 /** @var $this Mage_Customer_Block_Form_Login */
 $_hlp = Mage::helper("zolagocustomer");
+$_isCheckout = $this->getRequest()->getParam("is_checkout");
+$_referrerCheckout = $this->getUrl("checkout/onepage/index");
 ?>
 
 <div id="content" class="container-fluid">
@@ -10,6 +12,9 @@ $_hlp = Mage::helper("zolagocustomer");
 				<div class="main bg-w equalBlock col-01">  
 					<form action="<?php echo $this->getPostActionUrl() ?>" method="post" id="login-form" class="form-horizontal" autocomplete="off" role="form">
 						<?php echo $this->getBlockHtml('formkey'); ?>
+						<?php if($_isCheckout):?>
+						<input name="<?php echo Mage_Customer_Helper_Data::REFERER_QUERY_PARAM_NAME;?>" type="hidden" value="<?php echo Mage::helper("core")->urlEncode($_referrerCheckout);?>"/>
+						<?php endif;?>
 						<section class="section clearfix">
 							<header class="title-section">
 								<h2><?php echo $_hlp->__('Do you have account already?') ?></h2>

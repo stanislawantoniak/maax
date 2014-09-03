@@ -23,6 +23,7 @@ class Zolago_Checkout_GuestController extends Zolago_Checkout_Controller_Abstrac
 		parent::indexAction();
 	}
 	
+	
 	/**
 	 * Do login if nesseery
 	 * @return type
@@ -34,17 +35,13 @@ class Zolago_Checkout_GuestController extends Zolago_Checkout_Controller_Abstrac
 			return $this->_forward("index", "onepage");
 		}
 		
-		// Set redirect to onepage logged afetr login
-		$this->_getCustomerSession()->setAfterAuthUrl(
-				Mage::getUrl("checkout/onepage/index")
-		);
-		
 		// Set checkout context
 		$this->getRequest()->setParam("is_checkout", true);
 		
 		// Forward to Magento login
 		return $this->_forward("login", "account", "customer");
 	}
+	
 	
 	/**
 	 * Set guest mode
