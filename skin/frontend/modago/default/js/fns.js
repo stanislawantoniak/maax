@@ -1546,7 +1546,7 @@ $('#product-gallery .stage a').on('click', '.selector', function(event) {
     var scroll = $('body').find('.mCustomScrollbar');
     if (scroll.length >= 1) {
     scroll.mCustomScrollbar({
-          setHeight:100,
+//          setHeight:100,
           theme:"dark-thick",
           scrollButtons:{
              enable:true
