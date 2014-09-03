@@ -65,6 +65,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement extends Mage_Core_Block_Te
         $allCats = Mage::getModel('catalog/category')->getCollection()
             ->addAttributeToSelect('*')
             ->addAttributeToFilter('is_active', '1')
+            ->addAttributeToFilter('display_mode', Mage_Catalog_Model_Category::DM_PAGE)
             ->addAttributeToFilter('include_in_menu', '1')
             ->addAttributeToFilter('parent_id', array('eq' => $parentId))
             ->addAttributeToSort('position', 'asc');
@@ -73,9 +74,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement extends Mage_Core_Block_Te
         $ids = '';
 
         foreach ($allCats as $category) {
-            if ($category->getDisplayMode() == 'PAGE') {
-                $ids .= ',' . $category->getId();
-            }
+            $ids .= ',' . $category->getId();
 
             $subcats = $category->getChildren();
             if ($subcats != '') {

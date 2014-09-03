@@ -15,10 +15,12 @@ class Zolago_Banner_Model_Banner_Type
         $typesConfig = $this->getTypesConfig();
 
         if (!empty($typesConfig)) {
-            foreach ($typesConfig as $typesConfigItem) {
-                $title = $typesConfigItem->title;
-                $code = $this->_prepareBannerTypeCode($title);
-                $types[$code] = $typesConfigItem->title;
+            foreach ($typesConfig as $i => $typesConfigItem) {
+                if ((int)$i > 0) {
+                    $title = $typesConfigItem->title;
+                    $code = $this->_prepareBannerTypeCode($title);
+                    $types[$code] = $typesConfigItem->title;
+                }
             }
         }
 

@@ -87,6 +87,11 @@ Mall.listing = {
     _autoappend: false,
 
     /**
+     * Current filters state - mobile / desktop.
+     */
+    _current_mobile_filter_state: 0,
+
+    /**
      * Performs initialization for listing object.
      */
     init: function () {
@@ -628,7 +633,45 @@ Mall.listing = {
             jQuery(".fb-slidebar-inner").find('.sidebar').remove();
             jQuery(".fb-slidebar-inner").html(currentSidebar.html());
             this.setCurrentMobileFilterState(1);
+            this.attachShowMoreEvent();
+            this.attachFilterColorEvents();
+            this.attachFilterEnumEvents();
+            this.attachFilterDroplistEvents();
+            this.attachFilterFlagEvents();
+            this.attachFilterPriceSliderEvents();
+            this.attachFilterSizeEvents();
+            this.attachDeleteCurrentFilter();
         }
+
+        return this;
+    },
+
+    /**
+     * Attaches delete single filter action.
+     *
+     * @returns {Mall.listing}
+     */
+    attachDeleteCurrentFilter: function () {
+        "use strict";
+        jQuery('.current-filter, .view_filter').on('click', '.label>i', function(event) {
+            var removeUrl = jQuery(event.target).attr("data-params");
+            location.href = removeUrl;
+            event.preventDefault();
+            var lLabel = jQuery(this).closest('dd').find('.label').length - 1;
+            if (lLabel >= 1) {
+                jQuery(this).closest('.label').remove();
+
+            } else {
+                jQuery(this).closest('dl').remove();
+            };
+            if (lLabel == 0) {
+                jQuery('#view-current-filter').find('.view_filter').css('margin-top', 20);
+            }
+        });
+        jQuery('.current-filter, .view_filter').on('click', '.action a', function(event) {
+            jQuery(this).closest('dl').remove();
+            jQuery('#view-current-filter').find('.view_filter').css('margin-top', 24);
+        });
 
         return this;
     },
@@ -645,6 +688,13 @@ Mall.listing = {
             jQuery("#sidebar").find(".sidebar").remove();
             jQuery("#sidebar").append(currentSidebar);
             this.setCurrentMobileFilterState(0);
+            this.attachShowMoreEvent();
+            this.attachFilterColorEvents();
+            this.attachFilterEnumEvents();
+            this.attachFilterDroplistEvents();
+            this.attachFilterFlagEvents();
+            this.attachFilterPriceSliderEvents();
+            this.attachFilterSizeEvents();
         }
 
         return this;
