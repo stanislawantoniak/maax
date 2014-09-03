@@ -574,9 +574,13 @@
 
         </reference>
     </umicrosite_index_landingpage>
+	
+	<!-- ################################################################### -->
+	<!-- Customer section													 -->
+	<!-- ################################################################### -->
 	<customer_account_login>
 		<reference name="customer_form_login">
-			<block type="core/template"></block>
+			<block type="zolagomodago/customer_form_login_continue" name="form.register.continue"></block>
 		</reference>
 	</customer_account_login>
 </layout>
