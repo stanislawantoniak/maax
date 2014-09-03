@@ -591,4 +591,12 @@
             </action>
         </reference>
 	</customer_account_login>
+	<customer_account_forgotpassword>
+        <reference name="head">
+            <action method="addItem">
+                <type>skin_js</type>
+                <script>js/mall/customer.js</script>
+            </action>
+        </reference>
+	</customer_account_forgotpassword>
 </layout>
