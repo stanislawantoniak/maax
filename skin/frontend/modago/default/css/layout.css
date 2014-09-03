@@ -7244,69 +7244,72 @@ i.flag.hit, i.flag.bestseller {
     padding-bottom: 15px; } }
 /* line 84, ../sass/layout/style/_customer-account-login.scss */
 #logIn .form-list .forgot-password {
-  position: absolute;
-  top: -20px; }
-/* line 90, ../sass/layout/style/_customer-account-login.scss */
+  position: absolute; }
+@media (max-width: 991px) {
+  /* line 84, ../sass/layout/style/_customer-account-login.scss */
+  #logIn .form-list .forgot-password {
+    top: -20px; } }
+/* line 92, ../sass/layout/style/_customer-account-login.scss */
 #logIn .form-list #pass + .forgot-password {
   top: auto;
   bottom: -8px; }
-/* line 95, ../sass/layout/style/_customer-account-login.scss */
+/* line 97, ../sass/layout/style/_customer-account-login.scss */
 #logIn .form-list .form-checkbox {
   margin-left: 5px !important; }
-/* line 97, ../sass/layout/style/_customer-account-login.scss */
+/* line 99, ../sass/layout/style/_customer-account-login.scss */
 #logIn .form-list .form-checkbox .badge {
   margin-left: 4px; }
-/* line 101, ../sass/layout/style/_customer-account-login.scss */
+/* line 103, ../sass/layout/style/_customer-account-login.scss */
 #logIn .form-list .col-sm-offset-3 {
   padding-left: 25px; }
-/* line 105, ../sass/layout/style/_customer-account-login.scss */
+/* line 107, ../sass/layout/style/_customer-account-login.scss */
 #logIn footer {
   padding-top: 19px; }
-/* line 107, ../sass/layout/style/_customer-account-login.scss */
+/* line 109, ../sass/layout/style/_customer-account-login.scss */
 #logIn footer .button {
   margin: 0 9px 0 0; }
 @media (max-width: 767px) {
-  /* line 107, ../sass/layout/style/_customer-account-login.scss */
+  /* line 109, ../sass/layout/style/_customer-account-login.scss */
   #logIn footer .button {
     margin-bottom: 5px; } }
-/* line 120, ../sass/layout/style/_customer-account-login.scss */
+/* line 122, ../sass/layout/style/_customer-account-login.scss */
 #logIn .benefits {
   margin-left: 10px;
   margin-bottom: 10px; }
 @media (min-width: 1200px) {
-  /* line 120, ../sass/layout/style/_customer-account-login.scss */
+  /* line 122, ../sass/layout/style/_customer-account-login.scss */
   #logIn .benefits {
     height: 102px; } }
 @media (min-width: 889px) and (max-width: 991px) {
-  /* line 120, ../sass/layout/style/_customer-account-login.scss */
+  /* line 122, ../sass/layout/style/_customer-account-login.scss */
   #logIn .benefits {
     height: 147px !important; } }
 @media (max-width: 1199px) {
-  /* line 120, ../sass/layout/style/_customer-account-login.scss */
+  /* line 122, ../sass/layout/style/_customer-account-login.scss */
   #logIn .benefits {
     height: 102px; } }
 @media (max-width: 991px) {
-  /* line 120, ../sass/layout/style/_customer-account-login.scss */
+  /* line 122, ../sass/layout/style/_customer-account-login.scss */
   #logIn .benefits {
     height: 161px; } }
 @media (max-width: 767px) {
-  /* line 120, ../sass/layout/style/_customer-account-login.scss */
+  /* line 122, ../sass/layout/style/_customer-account-login.scss */
   #logIn .benefits {
     height: auto; } }
 
-/* line 144, ../sass/layout/style/_customer-account-login.scss */
+/* line 146, ../sass/layout/style/_customer-account-login.scss */
 #logIn .column-block .col-01, #logIn .column-block .col-02 {
   position: relative;
   padding-bottom: 175px; }
 @media (min-width: 768px) and (max-width: 991px) {
-  /* line 144, ../sass/layout/style/_customer-account-login.scss */
+  /* line 146, ../sass/layout/style/_customer-account-login.scss */
   #logIn .column-block .col-01, #logIn .column-block .col-02 {
     padding-bottom: 143px; } }
 @media (max-width: 767px) {
-  /* line 144, ../sass/layout/style/_customer-account-login.scss */
+  /* line 146, ../sass/layout/style/_customer-account-login.scss */
   #logIn .column-block .col-01, #logIn .column-block .col-02 {
     padding-bottom: 146px; } }
-/* line 154, ../sass/layout/style/_customer-account-login.scss */
+/* line 156, ../sass/layout/style/_customer-account-login.scss */
 #logIn .column-block .footer-section {
   position: absolute;
   bottom: 0px;
@@ -7316,14 +7319,14 @@ i.flag.hit, i.flag.bestseller {
   margin: 0 35px;
   padding-bottom: 27px;
   height: 85px; }
-/* line 163, ../sass/layout/style/_customer-account-login.scss */
+/* line 165, ../sass/layout/style/_customer-account-login.scss */
 #logIn .column-block .footer-section .button + .button + .button {
   margin-right: -5px !important; }
 @media (max-width: 340px) {
-  /* line 163, ../sass/layout/style/_customer-account-login.scss */
+  /* line 165, ../sass/layout/style/_customer-account-login.scss */
   #logIn .column-block .footer-section .button + .button + .button {
     margin-right: -18px !important; } }
-/* line 169, ../sass/layout/style/_customer-account-login.scss */
+/* line 171, ../sass/layout/style/_customer-account-login.scss */
 #logIn .column-block .footer-section .button-primary {
   position: relative;
   top: -78px;
@@ -7331,49 +7334,49 @@ i.flag.hit, i.flag.bestseller {
   margin-right: 0px !important;
   min-width: 150px; }
 @media (min-width: 768px) and (max-width: 991px) {
-  /* line 169, ../sass/layout/style/_customer-account-login.scss */
+  /* line 171, ../sass/layout/style/_customer-account-login.scss */
   #logIn .column-block .footer-section .button-primary {
     top: -78px;
     margin-bottom: -78px !important; } }
 @media (max-width: 767px) {
-  /* line 169, ../sass/layout/style/_customer-account-login.scss */
+  /* line 171, ../sass/layout/style/_customer-account-login.scss */
   #logIn .column-block .footer-section .button-primary {
     top: -78px;
     margin-bottom: -78px !important; } }
 @media (max-width: 340px) {
-  /* line 184, ../sass/layout/style/_customer-account-login.scss */
+  /* line 186, ../sass/layout/style/_customer-account-login.scss */
   #logIn .column-block .footer-section .g-plus {
     margin-left: -10px !important; } }
 @media (max-width: 340px) {
-  /* line 189, ../sass/layout/style/_customer-account-login.scss */
+  /* line 191, ../sass/layout/style/_customer-account-login.scss */
   #logIn .column-block .footer-section .fb {
     margin-right: -18px !important; } }
-/* line 195, ../sass/layout/style/_customer-account-login.scss */
+/* line 197, ../sass/layout/style/_customer-account-login.scss */
 #logIn .column-block .col-01 {
   margin-bottom: 30px; }
 @media (max-width: 767px) {
-  /* line 198, ../sass/layout/style/_customer-account-login.scss */
+  /* line 200, ../sass/layout/style/_customer-account-login.scss */
   #logIn .column-block .col-02 {
     padding-bottom: 83px !important;
     margin-bottom: 5px; } }
-/* line 204, ../sass/layout/style/_customer-account-login.scss */
+/* line 206, ../sass/layout/style/_customer-account-login.scss */
 #logIn .column-block .col-02 .footer-section {
   border: none !important; }
 @media (max-width: 767px) {
-  /* line 204, ../sass/layout/style/_customer-account-login.scss */
+  /* line 206, ../sass/layout/style/_customer-account-login.scss */
   #logIn .column-block .col-02 .footer-section {
     height: auto;
     padding-bottom: 30px;
     overflow: hidden; } }
-/* line 212, ../sass/layout/style/_customer-account-login.scss */
+/* line 214, ../sass/layout/style/_customer-account-login.scss */
 #logIn .column-block .col-02 .footer-section .button-primary {
   top: -80px; }
 @media (min-width: 768px) and (max-width: 991px) {
-  /* line 212, ../sass/layout/style/_customer-account-login.scss */
+  /* line 214, ../sass/layout/style/_customer-account-login.scss */
   #logIn .column-block .col-02 .footer-section .button-primary {
     top: -80px; } }
 @media (max-width: 767px) {
-  /* line 212, ../sass/layout/style/_customer-account-login.scss */
+  /* line 214, ../sass/layout/style/_customer-account-login.scss */
   #logIn .column-block .col-02 .footer-section .button-primary {
     position: static;
     margin-bottom: 0px !important; } }
@@ -9716,8 +9719,8 @@ form .form-group .zipcode {
 form .form-group .phone {
   max-width: 115px; }
 /* line 688, ../sass/override/_override-layout.scss */
-form .form-group .email {
-  max-width: 296px; }
+form .form-group .email, form .form-group .login-text-field {
+  max-width: 296px !important; }
 /* line 689, ../sass/override/_override-layout.scss */
 form .form-group .password {
   max-width: 235px; }
