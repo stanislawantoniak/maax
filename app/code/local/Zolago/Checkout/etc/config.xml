@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Zolago_Checkout>
+            <version>0.0.1</version>
+        </Zolago_Checkout>
+    </modules>
+    <global>
+    </global>
+	<frontend>
+		<routers>
+			<checkout>  
+                <args>  
+                    <modules>  
+                        <Zolago_Checkout before="Mage_Checkout">Zolago_Checkout</Zolago_Checkout>  
+                    </modules>  
+                </args>  
+            </checkout> 
+		</routers>
+	</frontend>
+</config>

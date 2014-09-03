@@ -31,5 +31,5 @@ class Zolago_Campaign_Model_Campaign_Urltype {
         }
         return $options;
     }
-
+    
 }

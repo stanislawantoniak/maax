@@ -185,10 +185,10 @@ jQuery.noConflict();
     $(window).on('load resize', function(){
       var link = $('.forgot-password');
       $.each( link, function( key, value ) {
-        var p = $( "#pass" );    
+        var p = $( "#pass" );
         var pw = p.innerWidth();
         var offset = p.offset();
-        
+
         var position = parseInt(pw - 108);
           $(this).css({
           left:position+'px'
@@ -1546,7 +1546,7 @@ $('#product-gallery .stage a').on('click', '.selector', function(event) {
     var scroll = $('body').find('.mCustomScrollbar');
     if (scroll.length >= 1) {
     scroll.mCustomScrollbar({
-          setHeight:100,
+//          setHeight:100,
           theme:"dark-thick",
           scrollButtons:{
              enable:true
@@ -2752,7 +2752,7 @@ function filterColor() {
 
     $(this).on('mouseenter', function(){
 
-      if (colorFilter) {
+      if (colorFilter && !$(this).attr("data-img")) {
         
         $(this).find('span').children('span').css({
           'background-image': 'none'

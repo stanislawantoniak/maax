@@ -12,6 +12,9 @@
                     <vendor_register>Zolago_DropshipMicrositePro_Block_Vendor_Register</vendor_register>
                 </rewrite>
             </udmspro>
+            <zolagoudmspro>
+                <class>Zolago_DropshipMicrositePro_Block</class>
+            </zolagoudmspro>
         </blocks>
 		<models>
 			<zolagoudmspro>

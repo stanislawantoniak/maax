@@ -144,6 +144,7 @@ $fValue = $_element->getValue();
         </tfoot>
         <tbody class="fieldset_config_body">
         <?php if (is_array($fValue)): foreach ($fValue as $row => $fV): ?>
+            <?php if(!is_int($row)) continue;?>
             <?php $rowClass = ($row%2) ? 'odd' : 'even'; ?>
             <tr data-row="<?php echo $row; ?>" class="<?php echo $rowClass; ?>" >
                 <td>
@@ -321,6 +322,17 @@ $fValue = $_element->getValue();
         <?php endforeach; endif; ?>
         </tbody>
     </table>
+    <br />
+    <h3><?php echo Mage::helper('zolagobanner')->__('No Image Placeholder')?></h3>
+    <input type="text" class="input-text" name="<?php echo $this->getFieldName()?>[no_image]" value="<?php echo $fValue['no_image']; ?>" style="width:400px" />
+
+    <br />
+    <h3><?php echo Mage::helper('zolagobanner')->__('Html Image Placeholder')?></h3>
+    <input type="text" class="input-text" name="<?php echo $this->getFieldName()?>[image_html]" value="<?php echo $fValue['image_html']; ?>" style="width:400px" />
+
+    <br />
+    <h3><?php echo Mage::helper('zolagobanner')->__('Campaign expires in')?></h3>
+    <input type="text" class="input-text" name="<?php echo $this->getFieldName()?>[campaign_expires]" value="<?php echo $fValue['campaign_expires']; ?>" style="width:40px" /> <?php echo Mage::helper('zolagobanner')->__('hours')?>
 </div>
 
 <style type="text/css">

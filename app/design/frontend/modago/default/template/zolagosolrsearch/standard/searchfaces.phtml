@@ -2,14 +2,7 @@
 <?php $filterQuery = $this->getFilterQuery(); ?>
     <div class="current-filter visible-xs">
         <dl class="clearfix">
-            <dt>Aktualnie ogladasz:</dt>
-            <dd>
-                <span class="label">Rozmiar: <span class="value">M</span><i class="fa fa-times"></i></span>
-                <span class="label">Rozmiar: <span class="value">M</span><i class="fa fa-times"></i></span>
-                <span class="label">Marka: <span class="value">Adidas</span><i class="fa fa-times"></i></span>
-                <span class="label">Marka: <span class="value">Adidas</span><i class="fa fa-times"></i></span>
-            </dd>
-            <dd class="action"><a href="#" class="button button-third">wyczyść wszystko</a></dd>
+            <?php echo $this->getChildHtml('solrsearch_product_list_activefaces'); ?>
         </dl>
     </div>
     <div class="sidebar">

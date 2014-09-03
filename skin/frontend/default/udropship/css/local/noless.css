@@ -90,6 +90,51 @@
     padding: 5px;
     clear: both;
 }
-.modal-lg{
+.modal-lg {
 	width: 900px;
+}
+.campaign-list .banner-item {
+    list-style: none;
+    border: 1px solid #d3d3d3;
+    padding: 2px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    background-color: white;
+    min-height: 300px;
+    overflow: hidden;
+    width: 23%;
+}
+
+.banner-positions {
+    border: 1px solid lightgrey;
+    clear: both;
+    display: inline-block;
+    margin-bottom: 20px;
+    min-height: 310px;
+    width: 100%;
+    padding: 10px;
+}
+
+
+.banner-preview-image {
+    /*height: 120px;*/
+    /*max-width: 95%;*/
+}
+.image-preview-big {
+    /*width: 540px;*/
+    /*height: 185px;*/
+}
+.banner-preview-image {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.banner-item .row {
+    margin: 10px auto 0 auto;
+}
+
+
+#basicModal .row, #editModal .row {
+    margin: 10px auto;
 }

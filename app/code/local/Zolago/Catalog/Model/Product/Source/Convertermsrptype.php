@@ -3,13 +3,13 @@
  *source for flag options
  */
 class Zolago_Catalog_Model_Product_Source_Convertermsrptype
-        extends Mage_Eav_Model_Entity_Attribute_Source_Abstract {
+        extends Zolago_Catalog_Model_Product_Source_Abstract {
 
 	const FLAG_AUTO = 0;
 	const FLAG_MANUAL = 1;
 	
     public function getAllOptions() {
-        if (!$this->_options) {
+        if (!$this->_options || $this->_force) {
             $this->_options = array (
                 array (
                     'value' => self::FLAG_AUTO,

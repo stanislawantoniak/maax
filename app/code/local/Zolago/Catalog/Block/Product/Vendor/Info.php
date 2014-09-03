@@ -39,7 +39,11 @@ class Zolago_Catalog_Block_Product_Vendor_Info
 	 */
 	public function getVendorInfoHtml() {
 	    $vendor = $this->getVendor();
-	    $info = $vendor->getTermsSellerInformation();	    
+        //echo var_export($vendor);
+
+	    $info = $vendor->getTermsSellerInformation();
+        //echo "info=";
+        //echo $info;
 		return $info;
 	}
 	

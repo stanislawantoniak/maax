@@ -1,0 +1,16 @@
+<?php
+/**
+* User: Andrzej Spólnicki
+*/
+
+$categories = $this->getMainVendorCategoriesMobile(); ?>
+
+<?php if (count($categories) > 0) : ?>
+    <?php foreach ($categories as $cat) : ?>
+        <li>
+            <a href="<?php echo (isset($cat['url'])) ? $cat['url'] : '#'; ?>">
+                <?php echo $this->escapeHtml($cat['name']); ?>
+            </a>
+        </li>
+    <?php endforeach; ?>
+<?php endif; ?>

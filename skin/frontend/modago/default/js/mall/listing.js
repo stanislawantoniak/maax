@@ -64,7 +64,7 @@ Mall.listing = {
     /**
      * How many items will be loaded when load more action is performed.
      */
-    _load_next_offset: 500,
+    _load_next_offset: 100,
 
     /**
      * From which point products loading will be started.
@@ -74,7 +74,7 @@ Mall.listing = {
     /**
      * When to start showing new products - from bottom of the page.
      */
-    _scroll_load_bottom_offset: 500,
+    _scroll_load_bottom_offset: 2000,
 
     /**
      * Queue for preloaded products.
@@ -85,6 +85,11 @@ Mall.listing = {
      * Can auto append method can be used for autoloaded products?
      */
     _autoappend: false,
+
+    /**
+     * Current filters state - mobile / desktop.
+     */
+    _current_mobile_filter_state: 0,
 
     /**
      * Performs initialization for listing object.
@@ -104,6 +109,7 @@ Mall.listing = {
 
         // load additional products to queue after page is loaded
         this.loadToQueue();
+        this.setLoadMoreLabel();
     },
 
     /**
@@ -157,10 +163,18 @@ Mall.listing = {
             Mall.listing.placeListingFadeContainer();
         } else {
             // do something to inform customer that something went wrong
-            alert("Something went wrong, try again");
+            console.log("Something went wrong, try again");
             return false;
         }
         return true;
+    },
+
+    setLoadMoreLabel: function () {
+        "use strict";
+
+        jQuery(".addNewPositionListProduct").find("span").text(this.getLoadNextOffset());
+
+        return this;
     },
 
     /**
@@ -340,7 +354,7 @@ Mall.listing = {
             var sortArray = typeof data.content.sort === "string"
                 || data.content.sort instanceof String ? data.content.sort.split(" ") : [];
             Mall.listing.setSort(sortArray[0] === undefined ? "" : sortArray[0]);
-            Mall.listing.setDir(sortArray[1] === undefined ? "" : sortArray[1]);
+            Mall.listing.setDir(data.content.dir === undefined ? "" : data.content.dir);
 
             if (data.content !== undefined && data.content.products !== undefined
                 && !jQuery.isEmptyObject(data.content.products)) {
@@ -356,12 +370,21 @@ Mall.listing = {
                     Mall.listing.appendFromQueue();
                     Mall.listing.setAutoappend(false);
                 }
+                // build wishlist collection
+                jQuery.each(data.content.products, function (index, item) {
+                    "use strict";
+                    Mall.wishlist.addProduct({
+                        id: item.entity_id,
+                        wishlist_count: item.wishlist_count,
+                        in_your_wishlist: item.in_my_wishlist ? true : false
+                    });
+                });
             } else {
                 // @todo hide buttons etc
                 Mall.listing.removeLockFromQueue(); // this is dummy expression
             }
         } else {
-            alert("Something went wrong, try again later");
+            console.log("Something went wrong, try again later | appendToQueueCallback");
         }
 
         Mall.listing.removeLockFromQueue();
@@ -467,13 +490,15 @@ Mall.listing = {
         likeText = "<span></span>";
         if(product.in_my_wishlist) {
             likeClass += " liked";
-            likeText = "<span>Ty+</span>";
+            likeText = "<span>Ty + </span>";
         }
         like = jQuery("<div/>", {
             "class": likeClass,
             "data-idproduct": product.entity_id,
             "data-status": product.in_my_wishlist,
-            onclick: "Mall.toggleWishlist(this);"
+            onclick: product.in_my_wishlist
+                ? "Mall.wishlist.removeFromSmallBlock(this);return false;"
+                : "Mall.wishlist.addFromSmallBlock(this);return false;"
         }).appendTo(priceBox);
 
         likeIco = jQuery("<span/>", {
@@ -494,7 +519,8 @@ Mall.listing = {
 
         jQuery("<span/>", {
             "class": "like_count",
-            html: likeText + product.wishlist_count
+            html: likeText + (parseInt(product.wishlist_count, 10) > 0
+                ? product.wishlist_count : "")
         }).appendTo(like);
 
         jQuery("<div/>", {
@@ -616,7 +642,45 @@ Mall.listing = {
             jQuery(".fb-slidebar-inner").find('.sidebar').remove();
             jQuery(".fb-slidebar-inner").html(currentSidebar.html());
             this.setCurrentMobileFilterState(1);
+            this.attachShowMoreEvent();
+            this.attachFilterColorEvents();
+            this.attachFilterEnumEvents();
+            this.attachFilterDroplistEvents();
+            this.attachFilterFlagEvents();
+            this.attachFilterPriceSliderEvents();
+            this.attachFilterSizeEvents();
+            this.attachDeleteCurrentFilter();
         }
+
+        return this;
+    },
+
+    /**
+     * Attaches delete single filter action.
+     *
+     * @returns {Mall.listing}
+     */
+    attachDeleteCurrentFilter: function () {
+        "use strict";
+        jQuery('.current-filter, .view_filter').on('click', '.label>i', function(event) {
+            var removeUrl = jQuery(event.target).attr("data-params");
+            location.href = removeUrl;
+            event.preventDefault();
+            var lLabel = jQuery(this).closest('dd').find('.label').length - 1;
+            if (lLabel >= 1) {
+                jQuery(this).closest('.label').remove();
+
+            } else {
+                jQuery(this).closest('dl').remove();
+            };
+            if (lLabel == 0) {
+                jQuery('#view-current-filter').find('.view_filter').css('margin-top', 20);
+            }
+        });
+        jQuery('.current-filter, .view_filter').on('click', '.action a', function(event) {
+            jQuery(this).closest('dl').remove();
+            jQuery('#view-current-filter').find('.view_filter').css('margin-top', 24);
+        });
 
         return this;
     },
@@ -633,6 +697,13 @@ Mall.listing = {
             jQuery("#sidebar").find(".sidebar").remove();
             jQuery("#sidebar").append(currentSidebar);
             this.setCurrentMobileFilterState(0);
+            this.attachShowMoreEvent();
+            this.attachFilterColorEvents();
+            this.attachFilterEnumEvents();
+            this.attachFilterDroplistEvents();
+            this.attachFilterFlagEvents();
+            this.attachFilterPriceSliderEvents();
+            this.attachFilterSizeEvents();
         }
 
         return this;
@@ -728,7 +799,7 @@ Mall.listing = {
             if (filterSizeLength > 0) {
                 jQuery(this).parents(".filter-size").find("div.action.clear").removeClass("hidden");
             } else {
-                jQuery(this).parents(".filter-size").find(".div.action.clear").addClass("hidden");
+                jQuery(this).parents(".filter-size").find("div.action.clear").addClass("hidden");
             }
         });
 

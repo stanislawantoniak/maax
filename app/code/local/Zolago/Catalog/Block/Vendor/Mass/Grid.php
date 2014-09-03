@@ -71,10 +71,15 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 	public function getHideColumnsButtonHtml() {
 		return $this->getChildHtml('hide_column_button');
 	}
+    public function getAttributeSetSwitcherHtml() {
+        return $this->getChildHtml('attribute_set_switcher');
+    }
+
     public function getColumnWidthStyle($column){
 
         $data = $column->getData();
         $default_width = 100;
+        $width = null;
 
         if($data['index'] == 'entity_id'){
             $width = 40;
@@ -105,6 +110,13 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
                     'label'     => Mage::helper('zolagocatalog')->__('Show/Hide columns'),
                     'onclick'   => 'javascript:openMyPopup()',
                     'class'   => 'task'
+                ))
+        );
+        $this->setChild('attribute_set_switcher',
+            $this->getLayout()->createBlock('zolagocatalog/vendor_mass_attributesetswitcher')
+                ->setTemplate("zolagocatalog/widget/grid/attributesetswitcher.phtml")
+                ->setData(array(
+                    'parent' => $this
                 ))
         );
 
