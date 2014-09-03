@@ -2752,7 +2752,7 @@ function filterColor() {
 
     $(this).on('mouseenter', function(){
 
-      if (colorFilter) {
+      if (colorFilter && !$(this).attr("data-img")) {
         
         $(this).find('span').children('span').css({
           'background-image': 'none'

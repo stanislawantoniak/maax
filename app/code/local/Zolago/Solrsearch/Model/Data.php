@@ -121,11 +121,15 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 				$specialPriceFromDate = 0;
 
 				$specialPriceToDate = 0;
+				
+				$data[$code.'_special_price_fromdate_int'] = 0;
+				$data[$code.'_special_price_todate_int'] = 0;
 
 				if ($specialPrice > 0 && isset($returnData['product']) && is_object($returnData['product'])) {
 					$specialPriceFromDate = $returnData['product']->getSpecialFromDate();
 					$specialPriceToDate = $returnData['product']->getSpecialToDate();
 				}
+				
 				if ($specialPriceFromDate > 0 && $specialPriceToDate > 0) {
 					$data[$code.'_special_price_fromdate_int'] = strtotime($specialPriceFromDate);
 					$data[$code.'_special_price_todate_int'] = strtotime($specialPriceToDate);
@@ -139,22 +143,25 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 				}
 
 				if(isset($data[$code.'_special_price_fromdate_int']) && !is_numeric($data[$code.'_special_price_fromdate_int'])){
-					//$data[$code.'_special_price_fromdate_int'] = strtotime($data[$code.'_special_price_fromdate_int']);
-					$data[$code.'_special_price_fromdate_int'] = 0;
+					$data[$code.'_special_price_fromdate_int'] = strtotime($data[$code.'_special_price_fromdate_int']);
+					
 				}
 				if(isset($data[$code.'_special_price_todate_int']) && !is_numeric($data[$code.'_special_price_todate_int'])){
-					//$data[$code.'_special_price_todate_int'] = strtotime($data[$code.'_special_price_todate_int']);
-					$data[$code.'_special_price_fromdate_int'] = 0;
+					$data[$code.'_special_price_todate_int'] = strtotime($data[$code.'_special_price_todate_int']);
 				}
+				
+				$data[$code.'_special_price_fromdate_int'] = (int)$data[$code.'_special_price_fromdate_int'];
+				$data[$code.'_special_price_todate_int'] = (int)$data[$code.'_special_price_todate_int'];
 
-				if (!isset($data[$code.'_special_price_fromdate_int'])) {
+				/*if (!isset($data[$code.'_special_price_fromdate_int'])) {
 					$data[$code.'_special_price_fromdate_int'] = 0;
 				}
 				if (!isset($data[$code.'_special_price_todate_int'])) {
 					$data[$code.'_special_price_todate_int'] = 0;
-				}
+				}*/
 			}
 		}
+		
 		
 		$item->addData($data);
 		

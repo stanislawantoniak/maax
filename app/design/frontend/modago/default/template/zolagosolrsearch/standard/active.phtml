@@ -2,7 +2,7 @@
 <?php $filterQuery = $this->getFilterQuery(); ?>
 <?php if(sizeof($filterQuery) > 0 && $this->isSelectedFacetActive()) : ?>
 <dl class="clearfix">
-    <dt><?php echo $this->__('Currently Shopping') ?></dt>
+    <dt><?php echo $this->__('Currently Shopping:') ?></dt>
     <dd>
 		<?php foreach($filterQuery as $key=>$values): ?>
 			<?php foreach($values as $v): ?>
