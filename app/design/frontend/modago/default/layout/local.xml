@@ -572,5 +572,9 @@
 
         </reference>
     </umicrosite_index_landingpage>
-
+	<customer_account_login>
+		<reference name="customer_form_login">
+			<block type="core/template"></block>
+		</reference>
+	</customer_account_login>
 </layout>
