@@ -25,7 +25,7 @@ $_isCheckout = $this->getRequest()->getParam("is_checkout");
 										<label for="email" class="col-md-3 col-sm-12 col-xs-12 control-label"><?php echo $_hlp->__("Email address");?></label>
 
 										<div class="col-md-9 col-sm-12 col-xs-12">
-											<input type="email" name="login[username]" value="" id="email" class="form-control email input-text required-entry validate-email" autocomplete="off" data-original-title="" title="">
+											<input type="email" name="login[username]" value="" id="email" class="form-control email input-text required-entry validate-email" autocomplete="off" title="">
 										</div>
 									</div>
 								</li>
@@ -36,8 +36,8 @@ $_isCheckout = $this->getRequest()->getParam("is_checkout");
 										<div class="col-md-9 col-sm-12 col-xs-12">
 											<div class="inner-form-group">
 												<a class="forgot-password underline visible-sm visible-xs" href="#" style="left: 186px;"><?php echo $this->__('Forgot Your Password?') ?></a>
-												<input type="password" name="login[password]" class="form-control email input-text required-entry validate-password" id="pass" title="" autocomplete="off" data-original-title="Hasło musi mieć przynajmniej 6 znaków, nie może zawierać spacji.">
-												<a class="forgot-password underline hidden-sm hidden-xs" href="<?php echo $this->getForgotPasswordUrl() ?>" style="left: 186px;">Nie pamiętasz hasła?</a>
+												<input type="password" name="login[password]" class="form-control input-text required-entry validate-password login-text-field" id="pass" title="" autocomplete="off">
+												<a class="forgot-password underline hidden-sm hidden-xs" href="<?php echo $this->getForgotPasswordUrl() ?>" style="left: 186px;"><?php echo $_hlp->__("You don't remember password?"); ?></a>
 											</div>
 										</div>
 									</div>
@@ -47,8 +47,6 @@ $_isCheckout = $this->getRequest()->getParam("is_checkout");
 							</ul>
 							<footer class="footer-section">
 								<button type="submit" name="send" class="button button-primary large link pull-right"><?php echo $_hlp->__('Login') ?></button>
-								<a href="#" class="button btn-social g-plus small"><?php echo $_hlp->__('Login') ?></a>
-								<a href="#" class="button btn-social fb small"><?php echo $_hlp->__('Login') ?></a>
 							</footer>
 						</section>
 					</form>
@@ -62,6 +60,11 @@ $_isCheckout = $this->getRequest()->getParam("is_checkout");
 		</div>
 	</div>
 </div>
+
+    <script type="text/javascript">
+        Mall.i18nValidation.add("required", "<?php echo $this->__('This field is required') ?>");
+        Mall.i18nValidation.add("email", "<?php echo $this->__('Valid email is required.') ?>");
+    </script>
 <?php /*
 <div class="account-login">
     <div class="page-title">

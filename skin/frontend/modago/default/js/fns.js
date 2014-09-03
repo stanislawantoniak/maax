@@ -185,10 +185,10 @@ jQuery.noConflict();
     $(window).on('load resize', function(){
       var link = $('.forgot-password');
       $.each( link, function( key, value ) {
-        var p = $( "#pass" );    
+        var p = $( "#pass" );
         var pw = p.innerWidth();
         var offset = p.offset();
-        
+
         var position = parseInt(pw - 108);
           $(this).css({
           left:position+'px'
