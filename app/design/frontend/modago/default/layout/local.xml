@@ -570,6 +570,7 @@
                 <block type="zolagomodago/dropshipmicrositepro_vendor_menu" name="vendor.menu" template="unirgy/microsite/menu.phtml">
                     <block type="zolagomodago/dropshipmicrositepro_vendor_menu" name="vendor.menu.desktop" template="unirgy/microsite/menu.desktop.phtml"/>
                 </block>
+                <block type="zolagomodago/dropshipmicrositepro_vendor_banner" name="vendor.banner" template="unirgy/microsite/vendor/banner.phtml"/>
             </block>
 
         </reference>

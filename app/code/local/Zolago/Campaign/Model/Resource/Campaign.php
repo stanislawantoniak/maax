@@ -124,7 +124,8 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
             array(
                  'banner_show' => 'banner_content.show',
                  'banner_html' => 'banner_content.html',
-                 'banner_image' => 'banner_content.image'
+                 'banner_image' => 'banner_content.image',
+                 'banner_caption' => 'banner_content.caption'
             )
         );
         $select->where("campaign_placement.category_id=?", $categoryId);
