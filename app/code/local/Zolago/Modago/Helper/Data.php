@@ -74,4 +74,10 @@ class Zolago_Modago_Helper_Data extends Mage_Core_Helper_Abstract
     {
         return array_key_exists($this->_calculatePluralIndex($num), $forms) ? $forms[$this->_calculatePluralIndex($num)] : "";
     }
+
+    public function getVendorQuestionFormAction()
+    {
+        return Mage::getUrl('udqa/customer/post');
+
+    }
 }
