@@ -105,9 +105,9 @@
                 <stylesheet>solrsearch/css/style.css</stylesheet>
             </action>
 
-            <action method="addCss">
-                <stylesheet>css/font-awesome.css</stylesheet>
-            </action>
+            <!--<action method="addCss">-->
+                <!--<stylesheet>css/font-awesome.css</stylesheet>-->
+            <!--</action>-->
             <action method="addCss">
                 <stylesheet>css/bootstrap.css</stylesheet>
             </action>

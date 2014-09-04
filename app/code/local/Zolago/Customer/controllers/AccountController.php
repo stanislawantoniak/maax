@@ -10,7 +10,29 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
 	 * Override mesagge
 	 */
 	public function loginPostAction() {
+		
+		if(!$this->getRequest()->isPost()){
+            $this->_redirect('*/*/');
+			return;
+		}
+		
+		if (!$this->_validateFormKey()) {
+            $this->_redirect('*/*/');
+            return;
+        }
+
+        if ($this->_getSession()->isLoggedIn()) {
+            $this->_redirect('*/*/');
+            return;
+        }
+		
 		parent::loginPostAction();
+		
+		// Add remeber setIsPersistent state
+		$this->_getSession()->setIsPersistent(
+			$this->getRequest()->getParam("persistent_remember_me", 0)
+		);
+		
 		// Add success if login sucessful (by core session - visable in both customer / checkout)
 		if($this->_getSession()->isLoggedIn()){
 			Mage::getSingleton('core/session')->addSuccess(
@@ -167,8 +189,12 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
 	 * @return type
 	 */
 	protected function _loginPostRedirect() {
-		if($this->_getSession()->isLoggedIn() && $this->getRequest()->getParam("is_checkout")){
-			$this->_getSession()->setBeforeAuthUrl(Mage::getUrl("checkout/onepage/index"));
+		if($this->getRequest()->getParam("is_checkout")){
+			if($this->_getSession()->isLoggedIn()){
+				$this->_getSession()->setBeforeAuthUrl(Mage::getUrl("checkout/onepage/index"));
+			}else{
+				$this->_getSession()->setBeforeAuthUrl(Mage::getUrl("checkout/guest/login"));
+			}
 		}
 		return parent::_loginPostRedirect();
 	}
