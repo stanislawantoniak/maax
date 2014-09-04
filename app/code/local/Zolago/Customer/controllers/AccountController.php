@@ -164,7 +164,37 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
         $this->loadLayout();
         $this->renderLayout();
     }
-    
+
+    /**
+     * Display reset forgotten password form
+     *
+     * User is redirected on this action when he clicks on the corresponding link in password reset confirmation email
+     *
+     */
+    public function resetPasswordAction()
+    {
+        $resetPasswordLinkToken = (string) $this->getRequest()->getQuery('token');
+        $customerId = (int) $this->getRequest()->getQuery('id');
+        try {
+            $this->_validateResetPasswordLinkToken($customerId, $resetPasswordLinkToken);
+            $this->loadLayout();
+            // Pass received parameters to the reset forgotten password form
+            $customer = $this->_getModel("customer/customer")->load($customerId);
+            $this->getLayout()->getBlock('resetPassword')
+                ->setCustomerId($customerId)
+                ->setResetPasswordLinkToken($resetPasswordLinkToken)
+                ->setEmail($customer->getEmail());
+
+            // autologin
+            $this->_getSession()->setCustomerAsLoggedIn($customer);
+
+            $this->renderLayout();
+        } catch (Exception $exception) {
+            $this->_getSession()->addError( $this->_getHelper('customer')->__('Your password reset link has expired.'));
+            $this->_redirect('*/*/forgotpassword');
+        }
+    }
+
     protected function _registerEmailToken(
         Mage_Customer_Model_Customer $customer, $newEmail
     ){
