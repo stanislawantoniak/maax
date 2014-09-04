@@ -41,6 +41,8 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
         $placementsByTypeBySlot = array();
         $elementsInSlot = array();
         $numberPositions = array();
+		
+		Mage::log($placements);
 
         $imagesToScale = array();
         if (!empty($placements)) {
