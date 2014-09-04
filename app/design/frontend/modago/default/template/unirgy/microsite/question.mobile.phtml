@@ -10,6 +10,7 @@ $session = Mage::getSingleton('customer/session');
         <?php echo $this->getBlockHtml('formkey'); ?>
         <input type="hidden" name="question[vendor_id]" value="<?php echo $vendor['vendor_id']; ?>" />
         <input type="hidden" name="question[visibility]" value="0" />
+        <input type="hidden" name="redirect_referer" value="1"/>
 
         <div class="row">
             <fieldset class="fieldset col-xs-11">
