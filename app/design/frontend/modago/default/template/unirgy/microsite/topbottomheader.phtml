@@ -7,23 +7,23 @@ $baseUrl = Mage::helper("zolagodropshipmicrosite")->getBaseUrl();
 ?>
 
 <div class="top_bottom  bg-w hidden-xs clearfix">
-    <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('top-bottom-header-desktop-v-'.$vendor['vendor_id'])->toHtml(); ?>
+    <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('top-bottom-header-desktop-v-' . $vendor['vendor_id'])->toHtml(); ?>
 </div>
 <!--mobile part-->
 <div class="top_bottom visible-xs bg-w clearfix">
-    <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('top-bottom-header-mobile-v-'.$vendor['vendor_id'])->toHtml(); ?>
+    <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('top-bottom-header-mobile-v-' . $vendor['vendor_id'])->toHtml(); ?>
     <div id="shop_navigation" class="col-sm-12">
         <ul id="shop_nav_mobile" class="navigation visible-xs" role="navigation">
 
-                    <?php echo $this->getChildHtml('vendor.menu.mobile');?>
+            <?php echo $this->getChildHtml('vendor.menu.mobile'); ?>
 
-
-<!--            vendor.info.mobile-->
+            <!--            vendor.info.mobile-->
             <?php echo $this->getChildHtml('vendor.info.mobile'); ?>
-<!--            vendor.info.mobile end-->
+            <!--            vendor.info.mobile end-->
 
             <!-- question form mobile-->
-            <li><a href="#"><?php echo $this->__("Submit a question to seller"); ?><i class="fa fa-chevron-down"></i></a>
+            <li><a href="#"><?php echo $this->__("Submit a question to seller"); ?><i
+                        class="fa fa-chevron-down"></i></a>
                 <ul>
                     <li style="height: inherit; padding: 8px 20px 8px 10px;">
                         <div>
