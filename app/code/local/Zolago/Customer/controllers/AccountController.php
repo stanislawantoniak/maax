@@ -48,29 +48,6 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
         if (!$this->getRequest()->isDispatched()) {
             return;
         }
-
-        $openActions = array(
-            'create',
-            'login',
-            'logoutsuccess',
-            'forgotpassword',
-            'forgotpasswordpost',
-            'resetpassword',
-            'resetpasswordpost',
-            'confirm',
-            'confirmation',
-            'forgotpasswordmessage',
-            'logout'
-        );
-        $pattern = '/^(' . implode('|', $openActions) . ')/i';
-
-        if (!preg_match($pattern, $action)) {
-            if (!$this->_getSession()->authenticate($this)) {
-                $this->setFlag('', 'no-dispatch', true);
-            }
-        } else {
-            $this->_getSession()->setNoReferer(true);
-        }
     }
 	
     public function editPostAction() {
