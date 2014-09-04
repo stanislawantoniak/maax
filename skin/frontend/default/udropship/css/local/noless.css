@@ -102,12 +102,13 @@
     background-color: white;
     min-height: 300px;
     overflow: hidden;
+    width: 23%;
 }
 
 .banner-positions {
     border: 1px solid lightgrey;
     clear: both;
-    display: table;
+    display: inline-block;
     margin-bottom: 20px;
     min-height: 310px;
     width: 100%;
@@ -116,8 +117,8 @@
 
 
 .banner-preview-image {
-    /*max-height: 30%;*/
-    max-width: 95%;
+    /*height: 120px;*/
+    /*max-width: 95%;*/
 }
 .image-preview-big {
     /*width: 540px;*/

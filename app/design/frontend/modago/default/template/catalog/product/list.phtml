@@ -87,7 +87,7 @@ $_productImageUrl = '';
 
 <!-- END jsMasonryContent -->
 <div class="addNewPositionListProductWrapper">
-    <a href="javascript:;" onclick="Mall.listing.loadMoreProducts();" class="addNewPositionListProduct"><?php echo $this->__("Load next %s products", $this->getLoadLimit()); ?></a>
+    <a href="javascript:;" onclick="Mall.listing.loadMoreProducts();" class="addNewPositionListProduct"><?php echo $this->__("Load next <span>%s</span> products", $this->getLoadLimit()); ?></a>
 </div>
 <script type="text/javascript">
     Mall.listing.setScat(<?php echo $this->getLayer()->getCurrentCategory()->getId(); ?>);

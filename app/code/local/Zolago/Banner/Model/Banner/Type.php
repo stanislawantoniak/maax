@@ -5,6 +5,10 @@ class Zolago_Banner_Model_Banner_Type
 
     const BANNER_TYPES_CONFIG = 'zolagobanner/config/zolagobannertypes';
 
+    const TYPE_SLIDER = 'slider';
+    const TYPE_BOX = 'box';
+    const TYPE_INSPIRATION = 'inspiration';
+
     /**
      * @return array
      */
@@ -15,10 +19,12 @@ class Zolago_Banner_Model_Banner_Type
         $typesConfig = $this->getTypesConfig();
 
         if (!empty($typesConfig)) {
-            foreach ($typesConfig as $typesConfigItem) {
-                $title = $typesConfigItem->title;
-                $code = $this->_prepareBannerTypeCode($title);
-                $types[$code] = $typesConfigItem->title;
+            foreach ($typesConfig as $i => $typesConfigItem) {
+                if ((int)$i > 0) {
+                    $title = $typesConfigItem->title;
+                    $code = $this->_prepareBannerTypeCode($title);
+                    $types[$code] = $typesConfigItem->title;
+                }
             }
         }
 

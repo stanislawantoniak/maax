@@ -1,8 +1,7 @@
-<?php
-$_vendor = Mage::helper('umicrosite')->getCurrentVendor();
-?>
+<?php $_vendor = Mage::helper('umicrosite')->getCurrentVendor(); ?>
 
 <div id="content" class="container-fluid">
+
 <div class="row">
 
 <div class="col-sm-12">
@@ -35,10 +34,17 @@ $_vendor = Mage::helper('umicrosite')->getCurrentVendor();
                     <a href="">przeglądaj stylizacje <i class="fa fa-caret-right"></i></a>
                     <a class="margin-top-20px" href="">wejdź do sklepu <i class="fa fa-caret-right"></i></a>
                 </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <?php echo $this->getChildHtml('vendor.menu'); ?>
+            <div id="content-main">
+                <?php echo $this->getChildHtml('vendor.banner'); ?>
+
             </div>
         </div>
-        <!-- Controls -->
     </div>
+
 </section>
 <section class="block-promoted-banners">
     <div id="rwd-banners" class="rwdCarousel">
@@ -57,4 +63,5 @@ $_vendor = Mage::helper('umicrosite')->getCurrentVendor();
 </div>
 </div>
 </div>
+
 </div>

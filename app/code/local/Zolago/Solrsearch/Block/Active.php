@@ -11,4 +11,5 @@ class Zolago_Solrsearch_Block_Active extends Zolago_Solrsearch_Block_Faces
 		$this->setSkip(1);
 		return parent::_prepareLayout();
 	}
+	
 }

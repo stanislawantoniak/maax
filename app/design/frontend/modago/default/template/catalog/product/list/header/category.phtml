@@ -1,6 +1,7 @@
 <?php /* @var $this Zolago_Solrsearch_Block_Catalog_Product_List_Header_Category */?>
 <?php
     $_categoryBlock = Mage::getBlockSingleton('zolagomodago/catalog_category');
+    $breadcrumbs = Mage::getBlockSingleton('zolagocatalog/breadcrumbs');
 ?>
 <section id="main" class="<?php echo $this->getElementClass(); ?>">
     <header id="header-main">
@@ -8,7 +9,7 @@
             <div class="container-fluid">
                 <div class="row ">
                     <div id="view-current-filter" class="col-sm-12 ">
-                        <?php echo $this->getChildHtml('breadcrumbs') ?>
+                        <?php echo $this->getChildHtml('breadcrumbs'); ?>
 
                         <h1><?php echo $this->getCategory()->getName(); ?></h1>
                         <a href="<?php echo $_categoryBlock->getMoveUpUrl(); ?>" class="backToCategory underline visible-xs"><?php echo $this->__("Go up"); ?></a>

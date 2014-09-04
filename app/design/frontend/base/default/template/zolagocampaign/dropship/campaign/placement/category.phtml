@@ -8,8 +8,10 @@ $vendorName = $vendor->getVendorName();
 $campaigns = Mage::helper('core')->jsonEncode($this->getCampaigns());
 
 $placements = $this->getCategoryPlacements();
-?>
 
+
+?>
+<script type="text/javascript" src="/skin/frontend/modago/default/js/imagesloaded.pkgd.min.js"></script>
 <div class="container">
 <form name="campaign-position" method="POST" action="/campaign/placement_category/save">
     <input type="hidden" name="category" value="<?php echo $this->getCategoryId(); ?>" />
@@ -76,7 +78,7 @@ $placements = $this->getCategoryPlacements();
                                                         <li class="col-md-3 banner-item" data-placement="<?php echo $placement['placement_id']; ?>">
                                                             <div class="content">
                                                             <?php if(isset($placement['preview_image']) && !empty($placement['preview_image'])): ?>
-                                                                <img src="<?php echo $placement['preview_image']; ?>" class="banner-preview-image" />
+                                                                <img src="<?php echo $placement['preview_image']; ?>" class="banner-preview-image" style="height: 120px;"  />
                                                             <?php endif; ?>
 
 
@@ -112,10 +114,12 @@ $placements = $this->getCategoryPlacements();
                                                             </div>
                                                             <div class="row">
                                                             <div class="col-md-12 dates">
-                                                                <?php if (!empty($placement['campaign_date_from']) && !empty($placement['campaign_date_to'])): ?>
-                                                                    <i class="<?php echo $placement['status']['icon']; ?>"></i>
+                                                                <?php $iconClass = ''; ?>
+                                                                <?php if (!empty($placement['campaign_date_from']) && !empty($placement['campaign_date_to'])):
+                                                                    $iconClass = $placement['status']['icon'];
+                                                                    ?>
                                                                 <?php endif; ?>
-
+                                                                <i data-edit-val="link-edit-status" class="<?php echo $iconClass; ?>"></i>
                                                                 <span data-edit-source="campaign_status" class="hidden">
                                                                     <?php if(!empty($placement['status'])): ?>
                                                                     <i class="<?php echo $placement['status']['icon']; ?>"></i>
@@ -225,6 +229,7 @@ $placements = $this->getCategoryPlacements();
                     </div>
                     <div class="col-md-6" data-banner="preview"></div>
                     <div class="hidden">
+                        <span data-val="campaign-status"></span>
                         <span data-val="campaign-date-from"></span>
                         <span data-val="campaign-date-to"></span>
                     </div>
@@ -385,20 +390,21 @@ jQuery(function ($) {
     }
 
     function recountHeight() {
-        $('.banner-positions .campaign-list').each(function (i, item) {
-            var maxHeight = [];
-            $(this).find('.banner-item').each(function (k, bannerItem) {
-                maxHeight.push($(bannerItem).height());
-                console.log($(bannerItem).height());
-            })
-
-            if (maxHeight.length > 0) {
-                var maxValue = Math.max.apply(Math, maxHeight);
+        $('.banner-type').imagesLoaded(function() {
+            $('.banner-positions .campaign-list').each(function (i, item) {
+                var maxHeight = [];
                 $(this).find('.banner-item').each(function (k, bannerItem) {
-                    $(bannerItem).height(maxValue);
+                    maxHeight.push($(bannerItem).height());
                 })
-            }
-        })
+                if (maxHeight.length > 0) {
+                    var maxValue = Math.max.apply(Math, maxHeight);
+                    $(this).find('.banner-item').each(function (k, bannerItem) {
+                        $(bannerItem).height(maxValue);
+                    })
+                }
+            })
+        });
+
     }
 
     //Construct add new modal
@@ -533,6 +539,8 @@ jQuery(function ($) {
         var dateFrom = modal.find('[data-val="campaign-date-from"]').text();
         var dateTo = modal.find('[data-val="campaign-date-to"]').text();
 
+        var status = modal.find('[data-val="campaign-status"]').text();
+
         //set data
         if (parseInt(banner) > 0) {
             var vendorName = '<?php echo $vendorName; ?>';
@@ -543,7 +551,7 @@ jQuery(function ($) {
                     + '<span data-edit-source="campaign_date_to">'+dateTo+'</span>';
             }
             var campaignBlock = '<li class="col-md-3 banner-item" data-status="">' +
-                '<img src="'+previewImage+'" class="banner-preview-image" />' +
+                '<img src="'+previewImage+'" class="banner-preview-image" style="height: 120px;" />' +
                 '<div class="row">' +
                 '<div class= "col-md-8" >' +
                 '<input type="hidden" name="placement_id[]" value="0">' +
@@ -563,6 +571,7 @@ jQuery(function ($) {
                 '</div>' +
                 '</div>' +
                 '<div class="col-md-12 dates">' +
+                '<i class="'+status+'" data-edit-val="link-edit-status"></i>'+
                  dates +
                 '</div>' +
                 '</li>';
@@ -633,6 +642,7 @@ jQuery(function ($) {
 
         $('#confirm-delete').append('<input type="hidden" name="placement_id" value="'+placement+'">');
 
+        $('#editModal').modal('hide');
         $('#modal-dialog').modal('show');
     })
 
@@ -651,6 +661,8 @@ jQuery(function ($) {
         modal.find('[data-banner="preview"]').html('');
         modal.find('[name=creation_type]').remove();
         modal.find('.alert.alert-warning').remove();
+        modal.find('[data-val="campaign-status"]').html('');
+
     }
 
     function clearEditWindowOptions(){
@@ -718,6 +730,8 @@ jQuery(function ($) {
                     var data = jQuery.parseJSON(result);
                     $("#basicModal").find('[data-val="campaign-date-from"]').html(data.date_from);
                     $("#basicModal").find('[data-val="campaign-date-to"]').html(data.date_to);
+
+                    $("#basicModal").find('[data-val="campaign-status"]').html(data.status.icon);
                 }
             })
         }

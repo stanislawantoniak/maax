@@ -4,6 +4,31 @@ require_once Mage::getModuleDir("controllers", "Mage_Customer") . DS . "AccountC
 
 class Zolago_Customer_AccountController extends Mage_Customer_AccountController
 {
+	protected $_wasLogged;
+	
+	public function preDispatch()
+    {
+		parent::preDispatch();
+		// Skip logout error
+		if($this->getRequest()->getActionName()=="logout"){
+			$this->setFlag('', 'no-dispatch', false);
+		}
+
+    }
+	
+	/**
+	 * Override mesagge
+	 */
+	public function loginPostAction() {
+		parent::loginPostAction();
+		// Add success if login sucessful (by core session - visable in both customer / checkout)
+		if($this->_getSession()->isLoggedIn()){
+			Mage::getSingleton('core/session')->addSuccess(
+				Mage::helper("zolagocustomer")->__("You have been logged in")
+			);
+		}
+	}
+	
     public function editPostAction() {
         if (!$this->_validateFormKey()) {
             return $this->_redirect('*/*/edit');
@@ -68,5 +93,16 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
         }
         
     }
+	
+	/**
+	 * Handle checkout context login
+	 * @return type
+	 */
+	protected function _loginPostRedirect() {
+		if($this->_getSession()->isLoggedIn() && $this->getRequest()->getParam("is_checkout")){
+			$this->_getSession()->setBeforeAuthUrl(Mage::getUrl("checkout/onepage/index"));
+		}
+		return parent::_loginPostRedirect();
+	}
    
 }

@@ -1,0 +1,103 @@
+<?php $bannerPositionsByType = $this->getBannerPositions();
+
+$sliderType = Zolago_Banner_Model_Banner_Type::TYPE_SLIDER;
+$boxType = Zolago_Banner_Model_Banner_Type::TYPE_BOX;
+$inspirationType = Zolago_Banner_Model_Banner_Type::TYPE_INSPIRATION;
+//Zend_Debug::dump($bannerPositionsByType);
+?>
+
+
+<?php if (!empty($bannerPositionsByType)): ?>
+    <?php foreach ($bannerPositionsByType as $type => $bannerPositions): ?>
+
+            <?php if($type == $sliderType): ?>
+            <?php $slidesCount = count($bannerPositions); ?>
+                <?php if($slidesCount > 0): ?>
+                <section class="blockCarouselTop">
+                    <div id="carousel-top-generic" class="carousel slide border-gray-1x" data-ride="carousel">
+
+                        <!-- Indicators -->
+                        <ol class="carousel-indicators " id="carousel-top-indicators">
+                            <?php for($n = 0; $n< $slidesCount; $n++): ?>
+                                <li data-target="#carousel-top-generic" data-slide-to="<?php echo $n; ?>" class="<?php if($n == 0): ?>active<?php endif; ?>"></li>
+                            <?php endfor; ?>
+                        </ol>
+                        <?php unset($n); ?>
+
+                        <!-- Wrapper for slides -->
+                        <div class="carousel-inner">
+                            <?php foreach($bannerPositions as $n => $bannerPosition): ?>
+                                <div class="item <?php if($n == 0): ?>active<?php endif; ?>">
+                                    <?php $slides = $bannerPosition['images']; ?>
+                                    <?php $captions = $bannerPosition['caption']; ?>
+                                    <?php foreach($slides as $i => $slide): ?>
+                                        <?php if(!empty($slide['url'])): ?>
+                                        <a href="<?php echo $slide['url']; ?>">
+                                        <?php endif; ?>
+                                            <img src="<?php echo Mage::getBaseUrl('media') . DS . $this->getImageResizePath($sliderType).$slide['path']; ?>" alt="" class="<?php if($i == 1): ?>hidden-xs<?php else: ?>visible-xs<?php endif; ?>" >
+                                        <?php if(!empty($slide['url'])): ?>
+                                        </a>
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
+                                    <?php unset($i); ?>
+                                    <div class="carousel-caption">
+                                        <?php foreach($captions as $i => $caption): ?>
+                                            <?php  $captionText = $caption['text'];  ?>
+                                            <?php if(!empty($captionText)): ?>
+                                            <?php if(!empty($caption['url'])): ?>
+                                                <a href="<?php echo $caption['url']; ?>" class="<?php if($i > 1): ?>margin-top-20px<?php endif; ?>">
+                                            <?php endif; ?>
+                                            <?php echo $caption['text']; ?> <i class="fa fa-caret-right"></i>
+                                            <?php if(!empty($caption['url'])): ?>
+                                                </a>
+                                            <?php endif; ?>
+
+                                            <?php endif; ?>
+                                        <?php endforeach; ?>
+                                        <?php unset($i); ?>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                            <?php unset($n); ?>
+                            <?php unset($slide); ?>
+                            <?php unset($caption); ?>
+                        </div>
+                        <!-- Controls -->
+                    </div>
+                </section>
+                <?php endif; ?>
+            <?php endif; ?>
+
+            <?php if($type == $boxType): ?>
+            <section class="block-promoted-banners">
+                <div id="rwd-banners" class="rwdCarousel">
+                    <div class="rwd-carousel rwd-theme">
+                    <?php foreach($bannerPositions as $n => $bannerPosition): ?>
+                        <?php $boxes = isset($bannerPosition['images']) ? $bannerPosition['images'] : array(); ?>
+                        <?php if(!empty($boxes)): ?>
+                        <?php foreach($boxes as $i => $box): ?>
+                            <div class="item border-gray-1x ">
+                                <?php if(!empty($box['url'])): ?>
+                                <a href="<?php echo $box['url']; ?>">
+                                    <?php endif; ?>
+                                    <img src="<?php echo Mage::getBaseUrl('media') . DS . $this->getImageResizePath($boxType).$box['path']; ?>" alt="">
+                                    <?php if(!empty($box['url'])): ?>
+                                </a>
+                            <?php endif; ?>
+                            </div>
+                        <?php endforeach; ?>
+                        <?php unset($i); ?>
+                        <?php unset($box); ?>
+                        <?php unset($caption); ?>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                    </div>
+                </div>
+            </section>
+            <?php endif; ?>
+
+            <?php if($type == $inspirationType): ?>
+            <?php endif; ?>
+
+    <?php endforeach; ?>
+<?php endif; ?>
