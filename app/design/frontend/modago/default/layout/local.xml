@@ -465,6 +465,10 @@
                 <name>searchfaces</name>
             </action>
         </reference>
+
+        <reference name="header">
+            <remove name="header_menu" />
+        </reference>
     </solrbridge_solrsearch_category_view>
 
     <catalog_product_view>
