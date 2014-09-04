@@ -34,7 +34,7 @@ $inspirationType = Zolago_Banner_Model_Banner_Type::TYPE_INSPIRATION;
                                         <?php if(!empty($slide['url'])): ?>
                                         <a href="<?php echo $slide['url']; ?>">
                                         <?php endif; ?>
-                                            <img src="/media/<?php echo $slide['path']; ?>" alt="" class="<?php if($i == 1): ?>hidden-xs<?php else: ?>visible-xs<?php endif; ?>" style="height: 397px;">
+                                            <img src="<?php echo Mage::getBaseUrl('media') . DS . $this->getImageResizePath($sliderType).$slide['path']; ?>" alt="" class="<?php if($i == 1): ?>hidden-xs<?php else: ?>visible-xs<?php endif; ?>" >
                                         <?php if(!empty($slide['url'])): ?>
                                         </a>
                                         <?php endif; ?>
@@ -42,6 +42,8 @@ $inspirationType = Zolago_Banner_Model_Banner_Type::TYPE_INSPIRATION;
                                     <?php unset($i); ?>
                                     <div class="carousel-caption">
                                         <?php foreach($captions as $i => $caption): ?>
+                                            <?php  $captionText = $caption['text'];  ?>
+                                            <?php if(!empty($captionText)): ?>
                                             <?php if(!empty($caption['url'])): ?>
                                                 <a href="<?php echo $caption['url']; ?>" class="<?php if($i > 1): ?>margin-top-20px<?php endif; ?>">
                                             <?php endif; ?>
@@ -49,12 +51,16 @@ $inspirationType = Zolago_Banner_Model_Banner_Type::TYPE_INSPIRATION;
                                             <?php if(!empty($caption['url'])): ?>
                                                 </a>
                                             <?php endif; ?>
+
+                                            <?php endif; ?>
                                         <?php endforeach; ?>
                                         <?php unset($i); ?>
                                     </div>
                                 </div>
                             <?php endforeach; ?>
                             <?php unset($n); ?>
+                            <?php unset($slide); ?>
+                            <?php unset($caption); ?>
                         </div>
                         <!-- Controls -->
                     </div>
@@ -67,19 +73,23 @@ $inspirationType = Zolago_Banner_Model_Banner_Type::TYPE_INSPIRATION;
                 <div id="rwd-banners" class="rwdCarousel">
                     <div class="rwd-carousel rwd-theme">
                     <?php foreach($bannerPositions as $n => $bannerPosition): ?>
-                        <?php $boxes = $bannerPosition['images']; ?>
+                        <?php $boxes = isset($bannerPosition['images']) ? $bannerPosition['images'] : array(); ?>
+                        <?php if(!empty($boxes)): ?>
                         <?php foreach($boxes as $i => $box): ?>
                             <div class="item border-gray-1x ">
                                 <?php if(!empty($box['url'])): ?>
                                 <a href="<?php echo $box['url']; ?>">
                                     <?php endif; ?>
-                                    <img src="/media/<?php echo $box['path']; ?>" alt="">
+                                    <img src="<?php echo Mage::getBaseUrl('media') . DS . $this->getImageResizePath($boxType).$box['path']; ?>" alt="">
                                     <?php if(!empty($box['url'])): ?>
                                 </a>
                             <?php endif; ?>
                             </div>
                         <?php endforeach; ?>
                         <?php unset($i); ?>
+                        <?php unset($box); ?>
+                        <?php unset($caption); ?>
+                        <?php endif; ?>
                     <?php endforeach; ?>
                     </div>
                 </div>
