@@ -4,7 +4,9 @@ class Unirgy_DropshipVendorAskQuestion_Block_Product_Question extends Mage_Catal
 {
     public function getFormAction()
     {
+//        echo "getFormAction test";
         return $this->getUrl('udqa/customer/post');
+
     }
     public function getVendors()
     {
