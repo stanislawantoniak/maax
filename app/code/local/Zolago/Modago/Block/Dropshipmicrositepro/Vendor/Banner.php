@@ -37,7 +37,10 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
         $campaignModel = Mage::getResourceModel('zolagocampaign/campaign');
         $placements = $campaignModel->getCategoryPlacements($rootCatId, $vendorId);
 
-        $bannersByType = array();
+        $data = array();
+        $placementsByTypeBySlot = array();
+        $elementsInSlot = array();
+        $numberPositions = array();
 
         $imagesToScale = array();
         if (!empty($placements)) {
@@ -54,14 +57,40 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
                 unset($placement['banner_image']);
                 unset($placement['banner_caption']);
 
-                $bannersByType[$placement['type']][] = $placement;
+                $placementsByTypeBySlot[$placement['type']][$placement['position']][$placement['priority']] = $placement;
             }
+
+
+            foreach ($placementsByTypeBySlot as $type => $placementsByTypeBySlotItem) {
+                foreach ($placementsByTypeBySlotItem as $position => $positionItem) {
+                    $elementsInSlot[$type][] = count($positionItem);
+                    $numberPositions[$type][] = $position;
+                }
+            }
+            unset($type);
+            unset($position);
+
+            foreach ($elementsInSlot as $type => $elements) {
+                $max = max($elements);
+                for ($n = 1; $n <= $max; $n++) { //priority
+                    for ($i = 1; $i <= count($numberPositions[$type]); $i++) { //position
+                        if (isset($placementsByTypeBySlot[$type][$i][$n])) {
+                            $data['items'][$type][] = $placementsByTypeBySlot[$type][$i][$n];
+                        } else {
+                            //start from the beginning
+                            $data['items'][$type][] = $placementsByTypeBySlot[$type][$i][$n - $i - 1];
+                        }
+                    }
+                }
+            }
+            $data['positions'] = $numberPositions;
+            unset($elementsInSlot);
+            unset($numberPositions);
         }
         if(!empty($imagesToScale)){
             $this->scaleBannerImages($imagesToScale);
         }
-
-        return $bannersByType;
+        return $data;
 
     }
 

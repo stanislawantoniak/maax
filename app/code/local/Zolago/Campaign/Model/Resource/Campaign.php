@@ -130,6 +130,8 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         );
         $select->where("campaign_placement.category_id=?", $categoryId);
         $select->where("campaign_placement.vendor_id=?", $vendorId);
+        $select->order("banner.type DESC");
+        $select->order("campaign_placement.priority ASC");
         return $this->getReadConnection()->fetchAssoc($select);
     }
 
