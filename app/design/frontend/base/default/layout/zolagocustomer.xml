@@ -7,4 +7,10 @@
             </action>
         </reference>
     </customer_account_edit>
+
+    <customer_account_forgotpasswordmessage>
+        <reference name="content">
+            <block type="zolagocustomer/account_forgotpasswordmessage" name="forgot.password.message" template="forgotpasswordmessage.phtml"/>
+        </reference>
+    </customer_account_forgotpasswordmessage>
 </layout>
