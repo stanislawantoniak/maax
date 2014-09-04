@@ -64,7 +64,7 @@ jQuery.noConflict();
         });
         return valid;
     }, "");
-  $("#question-form, #review-form").each(function () {
+  $("#question-form, #review-form, #question-form-mobile").each(function () {
 
   $(this).validate({   
     success: "valid",
@@ -1783,8 +1783,7 @@ if($(window).width() != prevW) {
 
     
       $('#header').on('click', '.toggleMenu', function(event) {
-        event.preventDefault();
-        var screenWidth = $(window).width();
+        event.preventDefault(); var screenWidth = $(window).width();
         var screenHeight = $(window).height();
         var docHeight = $(window).innerHeight();
         $('body').toggleClass('sb-open noscroll');
@@ -2456,7 +2455,13 @@ function initScrollBarFilterStyle() {
 // MENU MOBILE
 
 function showSubMenuMobile(){
-  var mobileMenu = $('#nav_mobile > li > a,#shop_nav_mobile > li > a');
+  var mobileMenu = $('#nav_mobile > li > a,#shop_nav_mobile > li > a,#shop_nav_mobile > li > ul > li > a');
+
+    //dodanie filtra aby w navigation mozna bylo dac klikalnego linka
+    //wystarczy dodac do anchor'a class="clickable"
+    mobileMenu = $(mobileMenu).filter(function( index ) {
+        return !$(this ).hasClass('clickable');
+    });
 
   mobileMenu.on('click', function(event) {
     event.preventDefault();

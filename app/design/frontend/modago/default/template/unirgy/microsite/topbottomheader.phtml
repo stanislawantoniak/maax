@@ -3,12 +3,13 @@
  * User: Andrzej Spólnicki
  */
 $vendor = Mage::helper('umicrosite')->getCurrentVendor();
+$baseUrl = Mage::helper("zolagodropshipmicrosite")->getBaseUrl();
 ?>
 
 <div class="top_bottom  bg-w hidden-xs clearfix">
     <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('top-bottom-header-desktop-v-'.$vendor['vendor_id'])->toHtml(); ?>
 </div>
-
+<!--mobile part-->
 <div class="top_bottom visible-xs bg-w clearfix">
     <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('top-bottom-header-mobile-v-'.$vendor['vendor_id'])->toHtml(); ?>
     <div id="shop_navigation" class="col-sm-12">
@@ -34,6 +35,13 @@ $vendor = Mage::helper('umicrosite')->getCurrentVendor();
                 </ul>
             </li>
             <!-- question form mobile end-->
+
+            <!-- back to main gallery -->
+            <li><a href="<?php echo $baseUrl; ?>" class="clickable"><?php echo $this->__("Back to main gallery"); ?></a>
+
+            </li>
+            <!-- back to main gallery -->
         </ul>
     </div>
 </div>
+<!--mobile part end-->

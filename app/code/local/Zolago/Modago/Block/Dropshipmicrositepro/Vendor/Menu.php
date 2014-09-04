@@ -16,9 +16,10 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Menu extends Mage_Core_Blo
     public function getMainVendorCategories()
     {
 
-        $_vendor = Mage::helper('umicrosite')->getCurrentVendor();
-        $rootCatId = $_vendor->getRootCategory();
-        $rootCatId = $rootCatId[1];
+        $vendor = Mage::helper('umicrosite')->getCurrentVendor();
+        $websiteId = Mage::app()->getWebsite()->getId();
+
+        $rootCatId = $this->helper('zolagodropshipmicrosite')->getVendorRootCategory($vendor, $websiteId);
         if(empty($rootCatId)) {
             $rootCatId = Mage::app()->getStore()->getRootCategoryId();
         }

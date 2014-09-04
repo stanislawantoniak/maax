@@ -21,16 +21,16 @@ $_vendor = Mage::helper('umicrosite')->getCurrentVendor();
         <!-- Wrapper for slides -->
         <div class="carousel-inner">
             <div class="item active">
-                <img src="skin/frontend/modago/default/images/banner1.jpg" alt="" class="hidden-xs">
-                <img src="skin/frontend/modago/default/images/bannermobile1.jpg" alt="" class="visible-xs">
+                <img src="<?php echo $this->getSkinUrl('images/banner1.jpg'); ?>" alt="" class="hidden-xs">
+                <img src="<?php echo $this->getSkinUrl('images/bannermobile1.jpg'); ?>" alt="" class="visible-xs">
                 <div class="carousel-caption">
                     <a href="">przeglądaj stylizacje <i class="fa fa-caret-right"></i></a>
                     <a class="margin-top-20px" href="">wejdź do sklepu <i class="fa fa-caret-right"></i></a>
                 </div>
             </div>
             <div class="item">
-                <img src="skin/frontend/modago/default/images/banner1.jpg" alt="" class="hidden-xs">
-                <img src="skin/frontend/modago/default/images/bannermobile1.jpg" alt="" class="visible-xs">
+                <img src="<?php echo $this->getSkinUrl('images/banner1.jpg'); ?>" alt="" class="hidden-xs">
+                <img src="<?php echo $this->getSkinUrl('images/bannermobile1.jpg'); ?>" alt="" class="visible-xs">
                 <div class="carousel-caption">
                     <a href="">przeglądaj stylizacje <i class="fa fa-caret-right"></i></a>
                     <a class="margin-top-20px" href="">wejdź do sklepu <i class="fa fa-caret-right"></i></a>
@@ -43,10 +43,10 @@ $_vendor = Mage::helper('umicrosite')->getCurrentVendor();
 <section class="block-promoted-banners">
     <div id="rwd-banners" class="rwdCarousel">
         <div class="rwd-carousel rwd-theme">
-            <div class="item border-gray-1x "><a href=""><img src="skin/frontend/modago/default/images/banner-small-1.jpg" alt=""></a></div>
-            <div class="item border-gray-1x "><a href=""><img src="skin/frontend/modago/default/images/banner-small-2.jpg" alt=""></a></div>
-            <div class="item border-gray-1x "><a href=""><img src="skin/frontend/modago/default/images/banner-small-3.jpg" alt=""></a></div>
-            <div class="item border-gray-1x "><a href=""><img src="skin/frontend/modago/default/images/banner-small-4.jpg" alt=""></a></div>
+            <div class="item border-gray-1x "><a href=""><img src="<?php echo $this->getSkinUrl('images/banner-small-1.jpg');?>" alt=""></a></div>
+            <div class="item border-gray-1x "><a href=""><img src="<?php echo $this->getSkinUrl('images/banner-small-2.jpg');?>" alt=""></a></div>
+            <div class="item border-gray-1x "><a href=""><img src="<?php echo $this->getSkinUrl('images/banner-small-3.jpg');?>" alt=""></a></div>
+            <div class="item border-gray-1x "><a href=""><img src="<?php echo $this->getSkinUrl('images/banner-small-4.jpg');?>" alt=""></a></div>
         </div>
     </div>
 </section>
