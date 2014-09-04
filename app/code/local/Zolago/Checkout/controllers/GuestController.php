@@ -32,7 +32,7 @@ class Zolago_Checkout_GuestController extends Zolago_Checkout_Controller_Abstrac
 		
 		// Is logged in ?
 		if($this->_getCustomerSession()->isLoggedIn()){
-			return $this->_forward("index", "onepage");
+			return $this->_redirect("checkout/onepage/index");
 		}
 		
 		// Set checkout context
