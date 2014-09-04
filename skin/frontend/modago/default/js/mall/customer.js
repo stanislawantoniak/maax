@@ -36,6 +36,8 @@ Mall.customer = {
             }
             jQuery(element).closest("div").removeClass('has-error').addClass('has-success has-feedback');
             jQuery(element).closest("div").find('.form-ico-checked').remove();
+            jQuery(element).closest("div").find('#pass-error').remove();
+
             //if (element.attr("type") != "checkbox"){
 
             jQuery(element).closest("div").append('<i style="left:'+we+'px; right:auto" class="form-ico-checked form-control-feedback"></i>');
