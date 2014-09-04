@@ -1,0 +1,160 @@
+<?php $bannerPositionsByType = $this->getBannerInspirationPositions();
+
+$sliderType = Zolago_Banner_Model_Banner_Type::TYPE_SLIDER;
+$boxType = Zolago_Banner_Model_Banner_Type::TYPE_BOX;
+$inspirationType = Zolago_Banner_Model_Banner_Type::TYPE_INSPIRATION;
+?>
+
+
+<?php if (!empty($bannerPositionsByType) && isset($bannerPositionsByType['items']) && !empty($bannerPositionsByType['items'])): ?>
+
+    <section class="block-inspiration">
+        <header class="title-section">
+            <div class="inspiration-strips "></div>
+            <h2 ><?php echo $this->__('inspiracje'); ?></h2>
+        </header>
+        <div id="rwd-inspiration" class="rwdCarousel">
+            <div class="rwd-carousel rwd-theme">
+                <?php foreach ($bannerPositionsByType['items'] as $type => $bannerPositions): ?>
+
+                    <?php if($type == $inspirationType): ?>
+
+                <?php foreach($bannerPositions as $n => $bannerPosition): ?>
+                            <?php $inspirations = isset($bannerPosition['images']) ? $bannerPosition['images'] : array();  ?>
+                            <?php $captions = $bannerPosition['caption']; ?>
+                            <?php if(!empty($inspirations)): ?>
+                                <?php foreach($inspirations as $i => $inspiration): ?>
+                                    <div class="item">
+                                        <!--                                --><?php //echo $bannerPosition['placement_id']; ?><!--<br />-->
+                                        <?php if(!empty($inspiration['url'])): ?>
+                                        <a href="<?php echo $inspiration['url']; ?>">
+                                            <?php endif; ?>
+                                            <img src="<?php echo Mage::getBaseUrl('media') . DS . $this->getImageResizePath($inspirationType).$inspiration['path']; ?>" alt="">
+                                            <?php if(!empty($inspiration['url'])): ?>
+
+
+                                            <div class="carousel-caption">
+                                                <?php foreach($captions as $i => $caption): ?>
+                                                    <?php  $captionText = $caption['text'];  ?>
+                                                    <?php if(!empty($captionText)): ?>
+                                                        <?php if(!empty($caption['url'])): ?>
+                                                            <a href="<?php echo $caption['url']; ?>" class="<?php if($i > 1): ?>margin-top-20px<?php endif; ?>">
+                                                        <?php endif; ?>
+                                                        <span class="<?php if($i == 1): ?>title-caption<?php else: ?>body-caption<?php endif; ?>"><?php echo $caption['text']; ?></span>
+                                                        <?php if(!empty($caption['url'])): ?>
+                                                            </a>
+                                                        <?php endif; ?>
+
+                                                    <?php endif; ?>
+                                                <?php endforeach; ?>
+                                                <?php unset($i); ?>
+                                                <a href="<?php echo $inspiration['url']; ?>">
+                                                    <span class="seemore-caption"><?php echo $this->__('zobacz'); ?> &gt;</span>
+                                                </a>
+
+                                            </div>
+
+                                        </a>
+                                    <?php endif; ?>
+                                    </div>
+                                <?php endforeach; ?>
+                                <?php unset($i); ?>
+                                <?php unset($box); ?>
+                                <?php unset($caption); ?>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+
+
+                    <?php endif; ?>
+
+                <?php endforeach; ?>
+<!--                <div class="item">-->
+<!--                    <a href="">-->
+<!--                        <img src="/skin/frontend/modago/default/images/insp-1.jpg" alt="">-->
+<!--                        <div class="carousel-caption">-->
+<!--                            <span class="title-caption">lady in the bushes</span>-->
+<!--                            <span class="body-caption">Drugi wiersz opisu</span>-->
+<!--                            <span class="seemore-caption">zobacz &gt;</span>-->
+<!--                        </div>-->
+<!--                    </a>-->
+<!--                </div>-->
+<!--                <div class="item">-->
+<!--                    <a href="">-->
+<!--                        <img src="/skin/frontend/modago/default/images/insp-2.jpg" alt="">-->
+<!--                        <div class="carousel-caption">-->
+<!--                            <span class="title-caption">lady in the bushes</span>-->
+<!--                            <span class="body-caption">Drugi wiersz opisu</span>-->
+<!--                            <span class="seemore-caption">zobacz &gt;</span>-->
+<!--                        </div>-->
+<!--                    </a>-->
+<!--                </div>-->
+<!--                <div class="item">-->
+<!--                    <a href="">-->
+<!--                        <img src="/skin/frontend/modago/default/images/insp-3.jpg" alt="">-->
+<!--                        <div class="carousel-caption">-->
+<!--                            <span class="title-caption">lady in the bushes</span>-->
+<!--                            <span class="body-caption">Drugi wiersz opisu</span>-->
+<!--                            <span class="seemore-caption">zobacz &gt;</span>-->
+<!--                        </div>-->
+<!--                    </a>-->
+<!--                </div>-->
+<!--                <div class="item">-->
+<!--                    <a href="">-->
+<!--                        <img src="/skin/frontend/modago/default/images/insp-4.jpg" alt="">-->
+<!--                        <div class="carousel-caption">-->
+<!--                            <span class="title-caption">lady in the bushes</span>-->
+<!--                            <span class="body-caption">Drugi wiersz opisu</span>-->
+<!--                            <span class="seemore-caption">zobacz &gt;</span>-->
+<!--                        </div>-->
+<!--                    </a>-->
+<!--                </div>-->
+<!--                <div class="item">-->
+<!--                    <a href="">-->
+<!--                        <img src="/skin/frontend/modago/default/images/insp-1.jpg" alt="">-->
+<!--                        <div class="carousel-caption">-->
+<!--                            <span class="title-caption">lady in the bushes</span>-->
+<!--                            <span class="body-caption">Drugi wiersz opisu</span>-->
+<!--                            <span class="seemore-caption">zobacz &gt;</span>-->
+<!--                        </div>-->
+<!--                    </a>-->
+<!--                </div>-->
+<!--                <div class="item">-->
+<!--                    <a href="">-->
+<!--                        <img src="/skin/frontend/modago/default/images/insp-2.jpg" alt="">-->
+<!--                        <div class="carousel-caption">-->
+<!--                            <span class="title-caption">lady in the bushes</span>-->
+<!--                            <span class="body-caption">Drugi wiersz opisu</span>-->
+<!--                            <span class="seemore-caption">zobacz &gt;</span>-->
+<!--                        </div>-->
+<!--                    </a>-->
+<!--                </div>-->
+<!--                <div class="item">-->
+<!--                    <a href="">-->
+<!--                        <img src="/skin/frontend/modago/default/images/insp-3.jpg" alt="">-->
+<!--                        <div class="carousel-caption">-->
+<!--                            <span class="title-caption">lady in the bushes</span>-->
+<!--                            <span class="body-caption">Drugi wiersz opisu</span>-->
+<!--                            <span class="seemore-caption">zobacz &gt;</span>-->
+<!--                        </div>-->
+<!--                    </a>-->
+<!--                </div>-->
+<!--                <div class="item">-->
+<!--                    <a href="">-->
+<!--                        <img src="/skin/frontend/modago/default/images/insp-4.jpg" alt="">-->
+<!--                        <div class="carousel-caption">-->
+<!--                            <span class="title-caption">lady in the bushes</span>-->
+<!--                            <span class="body-caption">Drugi wiersz opisu</span>-->
+<!--                            <span class="seemore-caption">zobacz &gt;</span>-->
+<!--                        </div>-->
+<!--                    </a>-->
+<!--                </div>-->
+            </div>
+
+            <div class="customNavigation">
+                <a class="prev"><i class="fa fa-chevron-left"></i></a>
+                <a class="next"><i class="fa fa-chevron-right"></i></a>
+            </div>
+        </div>
+    </section>
+
+<?php endif; ?>
