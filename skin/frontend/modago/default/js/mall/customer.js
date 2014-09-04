@@ -3,7 +3,13 @@
  */
 
 
+/**
+ * Javascript object for customer area in Mall.
+ */
 Mall.customer = {
+    /**
+     * Default validation options.
+     */
     _default_validation_options: {
         success: "valid",
         focusInvalid: false,
@@ -57,13 +63,22 @@ Mall.customer = {
         }
     },
 
+    /**
+     * Setup for customer area.
+     */
     init: function () {
         "use strict";
 
         this.attachLoginValidation();
         this.attachForgotPasswordValidation();
+        this.attachResetPasswordValidation();
     },
 
+    /**
+     * Attaches validation for login form.
+     *
+     * @returns {Mall.customer}
+     */
     attachLoginValidation: function () {
         "use strict";
         
@@ -81,8 +96,15 @@ Mall.customer = {
                 }
             }));
         }
+
+        return this;
     },
 
+    /**
+     * Attaches validation for forgotten password form.
+     *
+     * @returns {Mall.customer}
+     */
     attachForgotPasswordValidation: function () {
         "use strict";
 
@@ -97,15 +119,53 @@ Mall.customer = {
                 }
             }));
         }
+
+        return this;
     },
 
+    /**
+     * Attaches validation for reset password form.
+     *
+     * @returns {Mall.customer}
+     */
+    attachResetPasswordValidation: function () {
+        "use strict";
 
+        if (jQuery("#resetpassword-form")) {
+
+            jQuery("#resetpassword-form").validate(this.getOptions({
+                rules: {
+                    "password": {
+                        required: true
+                    },
+                    confirmation: {
+                        required: true,
+                        equalTo: "#password"
+                    }
+                }
+            }));
+        }
+
+        return this;
+    },
+
+    /**
+     * Return default validation object for customer area.
+     *
+     * @returns {*}
+     */
     getDefaultValidationOptions: function () {
         "use strict";
 
         return this._default_validation_options;
     },
 
+    /**
+     * Merges given options object with default options object.
+     *
+     * @param options
+     * @returns {*}
+     */
     getOptions: function (options) {
         "use strict";
 

@@ -601,8 +601,14 @@
 
     <customer_account_forgotpasswordmessage>
         <update handle="zolago_modago_customer_handle" />
-        <reference name="content">
-            <block type="zolagocustomer/account_forgotpasswordmessage" name="forgot.password.message" template="customer/forgotpasswordmessage.phtml"/>
+        <reference name="forgot.password.message">
+            <action method="setTemplate">
+                <template>customer/forgotpasswordmessage.phtml</template>
+            </action>
         </reference>
     </customer_account_forgotpasswordmessage>
+    
+    <customer_account_resetpassword>
+        <update handle="zolago_modago_customer_handle" />
+    </customer_account_resetpassword>
 </layout>
