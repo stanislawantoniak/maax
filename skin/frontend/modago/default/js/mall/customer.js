@@ -62,6 +62,7 @@ Mall.customer = {
 
         this.attachLoginValidation();
         this.attachForgotPasswordValidation();
+        this.attachResetPasswordValidation();
     },
 
     attachLoginValidation: function () {
@@ -93,6 +94,25 @@ Mall.customer = {
                     "email": {
                         required: true,
                         email: true
+                    }
+                }
+            }));
+        }
+    },
+
+    attachResetPasswordValidation: function () {
+        "use strict";
+
+        if (jQuery("#resetpassword-form")) {
+
+            jQuery("#resetpassword-form").validate(this.getOptions({
+                rules: {
+                    "password": {
+                        required: true
+                    },
+                    confirmation: {
+                        required: true,
+                        equalTo: "#password"
                     }
                 }
             }));
