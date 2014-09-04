@@ -3,15 +3,14 @@
 $sliderType = Zolago_Banner_Model_Banner_Type::TYPE_SLIDER;
 $boxType = Zolago_Banner_Model_Banner_Type::TYPE_BOX;
 $inspirationType = Zolago_Banner_Model_Banner_Type::TYPE_INSPIRATION;
-//Zend_Debug::dump($bannerPositionsByType);
 ?>
 
 
 <?php if (!empty($bannerPositionsByType)): ?>
-    <?php foreach ($bannerPositionsByType as $type => $bannerPositions): ?>
+    <?php foreach ($bannerPositionsByType['items'] as $type => $bannerPositions): ?>
 
             <?php if($type == $sliderType): ?>
-            <?php $slidesCount = count($bannerPositions); ?>
+            <?php $slidesCount = count($bannerPositionsByType['positions'][$type]); ?>
                 <?php if($slidesCount > 0): ?>
                 <section class="blockCarouselTop">
                     <div id="carousel-top-generic" class="carousel slide border-gray-1x" data-ride="carousel">
@@ -28,6 +27,7 @@ $inspirationType = Zolago_Banner_Model_Banner_Type::TYPE_INSPIRATION;
                         <div class="carousel-inner">
                             <?php foreach($bannerPositions as $n => $bannerPosition): ?>
                                 <div class="item <?php if($n == 0): ?>active<?php endif; ?>">
+                                    <?php echo $bannerPosition['placement_id']; ?>
                                     <?php $slides = $bannerPosition['images']; ?>
                                     <?php $captions = $bannerPosition['caption']; ?>
                                     <?php foreach($slides as $i => $slide): ?>
@@ -73,10 +73,12 @@ $inspirationType = Zolago_Banner_Model_Banner_Type::TYPE_INSPIRATION;
                 <div id="rwd-banners" class="rwdCarousel">
                     <div class="rwd-carousel rwd-theme">
                     <?php foreach($bannerPositions as $n => $bannerPosition): ?>
+
                         <?php $boxes = isset($bannerPosition['images']) ? $bannerPosition['images'] : array(); ?>
                         <?php if(!empty($boxes)): ?>
                         <?php foreach($boxes as $i => $box): ?>
                             <div class="item border-gray-1x ">
+                                <?php echo $bannerPosition['placement_id']; ?><br />
                                 <?php if(!empty($box['url'])): ?>
                                 <a href="<?php echo $box['url']; ?>">
                                     <?php endif; ?>
