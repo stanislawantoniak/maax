@@ -4,6 +4,54 @@ require_once Mage::getModuleDir("controllers", "Mage_Customer") . DS . "AccountC
 
 class Zolago_Customer_AccountController extends Mage_Customer_AccountController
 {
+
+    /**
+     * Action predispatch
+     *
+     * Check customer authentication for some actions
+     */
+    public function preDispatch()
+    {
+        // a brute-force protection here would be nice
+
+        parent::preDispatch();
+
+        $action = $this->getRequest()->getActionName();
+
+        if (preg_match("/^(forgotpasswordmessage)/i", $action)) {
+            if ($this->getFlag($action, "no-dispatch")) {
+                unset($this->_flags[$action]['no-dispatch']);
+                $this->getResponse()->clearHeader('Location');
+                $this->getResponse()->setHttpResponseCode(200);
+            }
+        }
+
+        if (!$this->getRequest()->isDispatched()) {
+            return;
+        }
+
+        $openActions = array(
+            'create',
+            'login',
+            'logoutsuccess',
+            'forgotpassword',
+            'forgotpasswordpost',
+            'resetpassword',
+            'resetpasswordpost',
+            'confirm',
+            'confirmation',
+            'forgotpasswordmessage'
+        );
+        $pattern = '/^(' . implode('|', $openActions) . ')/i';
+
+        if (!preg_match($pattern, $action)) {
+            if (!$this->_getSession()->authenticate($this)) {
+                $this->setFlag('', 'no-dispatch', true);
+            }
+        } else {
+            $this->_getSession()->setNoReferer(true);
+        }
+    }
 	
     public function editPostAction() {
         if (!$this->_validateFormKey()) {
@@ -49,6 +97,53 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
         }
         
         return parent::editPostAction();
+    }
+
+    /**
+     * Forgot customer password action
+     */
+    public function forgotPasswordPostAction()
+    {
+        $email = (string) $this->getRequest()->getPost('email');
+        if ($email) {
+            if (!Zend_Validate::is($email, 'EmailAddress')) {
+                $this->_getSession()->setForgottenEmail($email);
+                $this->_getSession()->addError($this->__('Invalid email address.'));
+                $this->_redirect('*/*/forgotpassword');
+                return;
+            }
+
+            /** @var $customer Mage_Customer_Model_Customer */
+            $customer = $this->_getModel('customer/customer')
+                ->setWebsiteId(Mage::app()->getStore()->getWebsiteId())
+                ->loadByEmail($email);
+
+            if ($customer->getId()) {
+                try {
+                    $newResetPasswordLinkToken =  $this->_getHelper('customer')->generateResetPasswordLinkToken();
+                    $customer->changeResetPasswordLinkToken($newResetPasswordLinkToken);
+                    $customer->sendPasswordResetConfirmationEmail();
+                } catch (Exception $exception) {
+                    $this->_getSession()->addError($exception->getMessage());
+                    $this->_redirect('*/*/forgotpassword');
+                    return;
+                }
+            }
+            $this->_getSession()->setData("forgotpassword_customer_email", $this->_getHelper("customer")
+                ->escapeHtml($email));
+            $this->_redirect('*/*/forgotpasswordmessage');
+            return;
+        } else {
+            $this->_getSession()->addError($this->__('Please enter your email.'));
+            $this->_redirect('*/*/forgotpassword');
+            return;
+        }
+    }
+
+    public function forgotPasswordMessageAction()
+    {
+        $this->loadLayout();
+        $this->renderLayout();
     }
     
     protected function _registerEmailToken(

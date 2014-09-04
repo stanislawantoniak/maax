@@ -579,24 +579,30 @@
 	<!-- ################################################################### -->
 	<!-- Customer section													 -->
 	<!-- ################################################################### -->
-	<customer_account_login>
-		<reference name="customer_form_login">
-			<block type="zolagomodago/customer_form_login_continue" name="form.register.continue"></block>
-		</reference>
+    <zolago_modago_customer_handle>
+        <reference name="head">
+            <action method="addItem">
+                <type>skin_js</type>
+                <script>js/mall/customer.js</script>
+            </action>
+        </reference>
+    </zolago_modago_customer_handle>
 
-        <reference name="head">
-            <action method="addItem">
-                <type>skin_js</type>
-                <script>js/mall/customer.js</script>
-            </action>
+    <customer_account_login>
+        <reference name="customer_form_login">
+            <block type="zolagomodago/customer_form_login_continue" name="form.register.continue"></block>
         </reference>
-	</customer_account_login>
+
+        <update handle="zolago_modago_customer_handle" />
+    </customer_account_login>
 	<customer_account_forgotpassword>
-        <reference name="head">
-            <action method="addItem">
-                <type>skin_js</type>
-                <script>js/mall/customer.js</script>
-            </action>
-        </reference>
+        <update handle="zolago_modago_customer_handle" />
 	</customer_account_forgotpassword>
+
+    <customer_account_forgotpasswordmessage>
+        <update handle="zolago_modago_customer_handle" />
+        <reference name="content">
+            <block type="zolagocustomer/account_forgotpasswordmessage" name="forgot.password.message" template="customer/forgotpasswordmessage.phtml"/>
+        </reference>
+    </customer_account_forgotpasswordmessage>
 </layout>
