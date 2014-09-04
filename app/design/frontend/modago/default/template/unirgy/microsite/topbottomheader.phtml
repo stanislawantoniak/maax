@@ -14,11 +14,9 @@ $baseUrl = Mage::helper("zolagodropshipmicrosite")->getBaseUrl();
     <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('top-bottom-header-mobile-v-'.$vendor['vendor_id'])->toHtml(); ?>
     <div id="shop_navigation" class="col-sm-12">
         <ul id="shop_nav_mobile" class="navigation visible-xs" role="navigation">
-            <li><a href="#"><?php echo $this->__("categories"); ?><i class="fa fa-chevron-down"></i></a>
-                <ul>
+
                     <?php echo $this->getChildHtml('vendor.menu.mobile');?>
-                </ul>
-            </li>
+
 
 <!--            vendor.info.mobile-->
             <?php echo $this->getChildHtml('vendor.info.mobile'); ?>

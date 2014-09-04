@@ -2455,7 +2455,7 @@ function initScrollBarFilterStyle() {
 // MENU MOBILE
 
 function showSubMenuMobile(){
-  var mobileMenu = $('#nav_mobile > li > a,#shop_nav_mobile > li > a,#shop_nav_mobile > li > ul > li > a');
+  var mobileMenu = $('#nav_mobile > li > a,#shop_nav_mobile > li > a');
 
     //dodanie filtra aby w navigation mozna bylo dac klikalnego linka
     //wystarczy dodac do anchor'a class="clickable"
