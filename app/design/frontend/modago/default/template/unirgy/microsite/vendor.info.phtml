@@ -77,9 +77,8 @@ $baseUrl = Mage::helper("zolagodropshipmicrosite")->getBaseUrl();
             </div>
             <div class="modal-body" style="color: #000000;">
 
-                <?php echo get_class($this); ?>
 <form action="<?php echo $this->getFormAction(); ?>" id="question-form" method="post" novalidate="novalidate" class="form clearfix">
-
+    <?php echo $this->getBlockHtml('formkey'); ?>
     <input type="hidden" name="question[vendor_id]" value="<?php echo $vendor['vendor_id']; ?>" />
     <input type="hidden" name="question[visibility]" value="0" />
 

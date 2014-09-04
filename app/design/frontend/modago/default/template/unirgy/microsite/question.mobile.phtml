@@ -7,7 +7,7 @@ $session = Mage::getSingleton('customer/session');
 ?>
 
     <form action="<?php echo $this->getFormAction(); ?>" id="question-form-mobile" method="post">
-
+        <?php echo $this->getBlockHtml('formkey'); ?>
         <input type="hidden" name="question[vendor_id]" value="<?php echo $vendor['vendor_id']; ?>" />
         <input type="hidden" name="question[visibility]" value="0" />
 
