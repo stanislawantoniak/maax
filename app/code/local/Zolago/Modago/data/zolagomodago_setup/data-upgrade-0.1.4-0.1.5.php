@@ -287,6 +287,11 @@ EOD;
 Mage::getModel('cms/block')->load('navigation-main-wrapper')->setData('content', $newNavigationWrapperContent)->save();
 
 foreach ($cmsNavigationBlocks as $data) {
-    Mage::getModel('cms/block')->load($data['identifier'])->setData($data)->save();
+    $block = Mage::getModel('cms/block')->load($data['identifier']);
+    if ($block->getBlockId()) {
+        $oldData = $block->getData();
+        $data = array_merge($oldData,$data);
+    }
+    $block->setData($data)->save();
 }
 
