@@ -467,10 +467,6 @@
                 <name>searchfaces</name>
             </action>
         </reference>
-
-        <reference name="header">
-            <remove name="header_menu" />
-        </reference>
     </solrbridge_solrsearch_category_view>
 
     <catalog_product_view>
@@ -570,7 +566,7 @@
                 <block type="zolagomodago/dropshipmicrositepro_vendor_menu" name="vendor.menu.mobile" template="unirgy/microsite/menu.mobile.phtml"/>
                 <block name="vendor.info.mobile" type="zolagoudmspro/vendor_info" template="unirgy/microsite/vendor.info.mobile.phtml"/>
                 <!--<block name="vendor.info" type="udqa/product_question" template="unirgy/microsite/vendor.info.phtml"/>-->
-                <block type="udqa/product_question" name="vendor.question.desktop" template="unirgy/microsite/question.desktop.phtml"/>
+                <block type="udqa/product_question" name="vendor.question.mobile" template="unirgy/microsite/question.mobile.phtml"/>
             </block>
             <block type="core/template" name="vendor.test" template="unirgy/microsite/home.phtml">
                 <block type="zolagomodago/dropshipmicrositepro_vendor_menu" name="vendor.menu" template="unirgy/microsite/menu.phtml">

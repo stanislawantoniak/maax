@@ -17,7 +17,10 @@ class Orba_Common_Ajax_ProductController extends Orba_Common_Controller_Ajax {
 			
 			foreach($products as $product){
 				
-				$image = Mage::helper('catalog/image')->init($product, 'thumbnail')->resize(110, 143);
+				$image = Mage::helper('catalog/image')->init($product, 'thumbnail')
+                    ->keepAspectRatio(true)
+                    ->constrainOnly(true)
+                    ->keepFrame(false)->resize(200, null);
 				$content[] = array(
 					'title' => Mage::helper('catalog/output')->productAttribute($product, $product->getName() , 'name'),
 					'image_url' => (string) $image,
