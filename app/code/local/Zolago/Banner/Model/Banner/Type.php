@@ -56,7 +56,7 @@ class Zolago_Banner_Model_Banner_Type
     public function getTypesConfig(){
         $configPath = self::BANNER_TYPES_CONFIG;
         $configValue = Mage::getStoreConfig($configPath);
-        $typesConfig = json_decode($configValue);
+        $typesConfig = Mage::helper('core')->jsonDecode($configValue);
         return $typesConfig;
     }
 }
