@@ -5,28 +5,24 @@ class Zolago_Banner_Model_Finder extends Varien_Object
 	
 	public function __construct() {
 		$inItems = func_get_arg(0);
+		
 		$grouped = array();
 		$items = array();
-		$now = new Zend_Date();
 		
-		if(is_array($inItems)){
+		if(!is_array($inItems)){
 			Mage::throwException("No banner items");
 		}
 		
 		foreach($inItems as $item){
 			$_item = new Varien_Object($item);
-			$start = new Zend_Date($_item->getCampaignDateFrom());
-			$stop = new Zend_Date($_item->getCampaignDateTo());
-			
-			if($now->compare($start)>0 && $now->compare($stop)<0){
-				$grouped[$_item->getBannerShow()]
-					  [$_item->getType()]
-					  [$_item->getPosition()]
-					  [$_item->getPriority()] = $item;
-				$items[] = $item;
-			}
-			
+			$grouped[$_item->getBannerShow()]
+				  [$_item->getType()]
+				  [$_item->getPosition()]
+				  [$_item->getPriority()] = $_item;
+			$items[] = $_item;
 		}
+		
+			
 		parent::__construct(array(
 			"grouped"=>$grouped,
 			"items" => $items
@@ -59,15 +55,15 @@ class Zolago_Banner_Model_Finder extends Varien_Object
 		
 		// 
 		$out = array();
-		$slotIndex = 1;
+		$slotIndex = 0;
 		$positionIndex = 0;
 		
 		
-		while($slotIndex<$request->getSlots() && !$empty($candidates)){
+		while($slotIndex<$request->getSlots() && !empty($candidates)){
 			// Increment lookup position
 			$positionIndex++;
 			if(isset($candidates[$positionIndex]) && count($candidates[$positionIndex])){
-				$key = min(array_keys($candidates));
+				$key = min(array_keys($candidates[$positionIndex]));
 				$out[] = $candidates[$positionIndex][$key];
 				$slotIndex++;
 				// Remove item
@@ -81,6 +77,8 @@ class Zolago_Banner_Model_Finder extends Varien_Object
 			
 			
 		}
+		
+		return $out;
 		
 	}
 	
