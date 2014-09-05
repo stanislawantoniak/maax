@@ -4,16 +4,28 @@ class Zolago_Banner_Model_Finder extends Varien_Object
 {
 	
 	public function __construct() {
+		$inItems = func_get_arg(0);
 		$grouped = array();
 		$items = array();
+		$now = new Zend_Date();
 		
-		foreach(func_get_args() as $item){
+		if(is_array($inItems)){
+			Mage::throwException("No banner items");
+		}
+		
+		foreach($inItems as $item){
 			$_item = new Varien_Object($item);
-			$grouped[$_item->getBannerShow()]
-				  [$_item->getType()]
-				  [$_item->getPosition()]
-				  [$_item->getPriority()] = $item;
-			$items[] = $item;
+			$start = new Zend_Date($_item->getCampaignDateFrom());
+			$stop = new Zend_Date($_item->getCampaignDateTo());
+			
+			if($now->compare($start)>0 && $now->compare($stop)<0){
+				$grouped[$_item->getBannerShow()]
+					  [$_item->getType()]
+					  [$_item->getPosition()]
+					  [$_item->getPriority()] = $item;
+				$items[] = $item;
+			}
+			
 		}
 		parent::__construct(array(
 			"grouped"=>$grouped,
@@ -25,86 +37,50 @@ class Zolago_Banner_Model_Finder extends Varien_Object
 	 * @param Varien_Object $request - 
 	 *      banner_show - string (required)
 	 *		type - string (required)
-	 *		position - int (required)
-	 *		priority - int (required)
+	 *		slots - int (required)
 	 */
-	public function request(Varien_Object $request) {
-		$candidate = null;
+	public function request($request) {
+		
 		$grouped = $this->getGrouped();
 		$items = $this->getItems();
 		
-		// Empty items - null returned
-		if(empty($items)){
-			return null;
-		}
-		
-		// Just one item - return it
-		if(count($items)==1){
-			return $items[0];
-		}
 		
 		$requestToArray = array(
 			$request->getBannerShow(),
-			$request->getType(),
-			$request->getPosition(),
-			$request->getPriority()
+			$request->getType()
 		);
 		
-		$candidate = $this->_requestArray($grouped, $requestToArray);
-		
-		// Prefect match
-		if(!is_null($candidate)){
-			return $candidate;
-		}
-		
-		////////////////////////////////////////////////////////////////////////
-		// Fallbacks....
-		////////////////////////////////////////////////////////////////////////
-		
-		// Not found but some priorioty in current position exists
-		// Return the first priority
-		$priorioty = array_pop($requestToArray);
 		$candidates = $this->_requestArray($grouped, $requestToArray);
-		if(is_array($candidates) && !empty($candidates)){
-			return $this->_getFirstItem($candidates);
+		
+		// Empty items - null returned
+		if(empty($items)){
+			return array();
 		}
 		
-		// Not found in candiadate in - check other positions
-		// Return after and before positions best priorioty 
-		// or first priorioty
-		$position = array_pop($requestToArray);
-		$positions = $this->_requestArray($grouped, $requestToArray);
-		if(is_array($positions) && !empty($positions)){
-			unset($positions[$position]);
-			$before = $after = array();
-			foreach(array_values($positions) as $_position){
-				if($item = current($_position)){
-					// Start from after, then add before positions
-					if($item->getPosition()>$position){
-						$before[] = $_position;
-					}else{
-						$after[] = $_position;
-					}
-				}
+		// 
+		$out = array();
+		$slotIndex = 1;
+		$positionIndex = 0;
+		
+		
+		while($slotIndex<$request->getSlots() && $i<count($items)){
+			// Increment lookup position
+			$positionIndex++;
+			if(isset($candidates[$positionIndex]) && count($candidates[$positionIndex])){
+				$key = min(array_keys($candidates));
+				$out[] = $candidates[$positionIndex][$key];
+				$slotIndex++;
+				// Remove item
+				unset($candidates[$positionIndex][$key]);
 			}
-			// Reordered array
-			$positions = $before + $after; 
 			
-			foreach($positions as $_position){
-				if(empty($_position)){
-					continue;
-				}
-				// Prefered priorioty found in posiotion
-				if(isset($_position[$priorioty])){
-					return $_position[$priorioty];
-				}
-				
-				return $this->_getFirstItem($_position);
-				
+			// Circular
+			if($positionIndex<$request->getSlots()){
+				$positionIndex = 0;
 			}
+			
+			
 		}
-		
-		return null;
 		
 	}
 	
