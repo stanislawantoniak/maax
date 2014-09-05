@@ -33,14 +33,15 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 		"is_new_int"			=> "is_new",
 		"product_rating_int"	=> "product_rating",
 		"is_bestseller_int"		=> "is_bestseller",
-		"product_flag_int"	=> "product_flag",
+		"product_flag_int"		=> "product_flag",
 		"special_price_decimal"	=> "special_price",
 		"special_from_date_varchar"			=> "special_from_date",
 		"special_to_date_varchar"			=> "special_to_date",
 		"udropship_vendor_id_int"			=> "udropship_vendor",
 		"udropship_vendor_logo_varchar"		=> "udropship_vendor_logo",
 		"udropship_vendor_url_key_varchar"	=> "udropship_vendor_url_key",
-		"udropship_vendor_varchar"			=> "udropship_vendor_name"
+		"udropship_vendor_varchar"			=> "udropship_vendor_name",
+		"manufacturer_logo_varchar"			=> "manufacturer_logo"
 	);
 
 	/**
