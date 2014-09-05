@@ -108,7 +108,8 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
             array(
                 'campaign_name' => 'campaign.name',
                 'campaign_date_from' => 'campaign.date_from',
-                'campaign_date_to' => 'campaign.date_to'
+                'campaign_date_to' => 'campaign.date_to',
+                'campaign_status' => 'campaign.status',
             )
         );
         $select->joinLeft(

@@ -55,7 +55,6 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
                 array(Zolago_Banner_Model_Banner_Type::TYPE_SLIDER, Zolago_Banner_Model_Banner_Type::TYPE_BOX)
             );
 
-
             $placementsByTypeBySlot = array();
             $elementsInSlot = array();
             $numberPositions = array();
@@ -114,13 +113,25 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
 
     }
 	
-	
-	
-	public function getInspirations() {
+    public function getBoxes() {
 		$request = new Varien_Object();
 		$request->setBannerShow("image");
 		$request->setType(Zolago_Banner_Model_Banner_Type::TYPE_BOX);
-		$request->setSlots(4);
+		$request->setStatus(1); // only active
+		$request->setDate(date('Y-m-d H:i:s')); // only not expired
+		
+		$finder = $this->getFinder();
+		
+		return $finder->request($request);
+    }	
+	
+	public function getSliders() {
+		$request = new Varien_Object();
+		$request->setBannerShow("image");
+		$request->setType(Zolago_Banner_Model_Banner_Type::TYPE_SLIDER);
+		$request->setStatus(1); // only active
+		$request->setDate(date('Y-m-d H:i:s')); // only not expired
+//		$request->setSlots(4);
 		
 		$finder = $this->getFinder();
 		

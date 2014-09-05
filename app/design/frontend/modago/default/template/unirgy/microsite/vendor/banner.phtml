@@ -1,24 +1,16 @@
-<?php $bannerPositionsByType = $this->getBannerPositions();
-
+<?php
 $sliderType = Zolago_Banner_Model_Banner_Type::TYPE_SLIDER;
 $boxType = Zolago_Banner_Model_Banner_Type::TYPE_BOX;
-//$inspirationType = Zolago_Banner_Model_Banner_Type::TYPE_INSPIRATION;
 ?>
+<?php $sliders = $this->getSliders(); ?>
 
-<?php /* var_export($this->getInspirations()); */ ?>
-
-<?php if (!empty($bannerPositionsByType)): ?>
-    <?php foreach ($bannerPositionsByType['items'] as $type => $bannerPositions): ?>
-
-            <?php if($type == $sliderType): ?>
-            <?php $slidesCount = count($bannerPositionsByType['positions'][$type]); ?>
-                <?php if($slidesCount > 0): ?>
+            <?php if($sliders): ?>
                 <section class="blockCarouselTop">
                     <div id="carousel-top-generic" class="carousel slide border-gray-1x" data-ride="carousel">
 
                         <!-- Indicators -->
                         <ol class="carousel-indicators " id="carousel-top-indicators">
-                            <?php for($n = 0; $n< $slidesCount; $n++): ?>
+                            <?php for($n = 0; $n< count($sliders); $n++): ?>
                                 <li data-target="#carousel-top-generic" data-slide-to="<?php echo $n; ?>" class="<?php if($n == 0): ?>active<?php endif; ?>"></li>
                             <?php endfor; ?>
                         </ol>
@@ -26,11 +18,10 @@ $boxType = Zolago_Banner_Model_Banner_Type::TYPE_BOX;
 
                         <!-- Wrapper for slides -->
                         <div class="carousel-inner">
-                            <?php foreach($bannerPositions as $n => $bannerPosition): ?>
+                            <?php foreach($sliders as $n => $slider): ?>
                                 <div class="item <?php if($n == 0): ?>active<?php endif; ?>">
-<!--                                    --><?php //echo $bannerPosition['placement_id']; ?>
-                                    <?php $slides = $bannerPosition['images']; ?>
-                                    <?php $captions = $bannerPosition['caption']; ?>
+                                    <?php $slides = !empty($slider['banner_image']) ?unserialize($slider['banner_image']):array(); ?>
+                                    <?php $captions = !empty($slider['banner_caption'])? unserialize($slider['banner_caption']):array(); ?>
                                     <?php foreach($slides as $i => $slide): ?>
                                         <?php if(!empty($slide['url'])): ?>
                                         <a href="<?php echo $slide['url']; ?>">
@@ -67,31 +58,28 @@ $boxType = Zolago_Banner_Model_Banner_Type::TYPE_BOX;
                         <!-- Controls -->
                     </div>
                 </section>
-                <?php endif; ?>
             <?php endif; ?>
-
-            <?php if($type == $boxType): ?>
+<?php $boxes = $this->getBoxes(); ?>
+	<?php if ($boxes) : ?>
             <section class="block-promoted-banners">
                 <div id="rwd-banners" class="rwdCarousel">
                     <div class="rwd-carousel rwd-theme">
-                    <?php foreach($bannerPositions as $n => $bannerPosition): ?>
-
-                        <?php $boxes = isset($bannerPosition['images']) ? $bannerPosition['images'] : array(); ?>
-                        <?php if(!empty($boxes)): ?>
-                        <?php foreach($boxes as $i => $box): ?>
+                    <?php foreach($boxes as $n => $box): ?>
+                        <?php $boxe = empty($box['banner_image'])? array():unserialize($box['banner_image']) ?>
+                        <?php if(!empty($boxe)): ?>
+                        <?php foreach($boxe as $i => $b): ?>
                             <div class="item border-gray-1x ">
-<!--                                --><?php //echo $bannerPosition['placement_id']; ?><!--<br />-->
-                                <?php if(!empty($box['url'])): ?>
-                                <a href="<?php echo $box['url']; ?>">
+                                <?php if(!empty($b['url'])): ?>
+                                <a href="<?php echo $b['url']; ?>">
                                     <?php endif; ?>
-                                    <img src="<?php echo Mage::getBaseUrl('media') . DS . $this->getImageResizePath($boxType).$box['path']; ?>" alt="">
-                                    <?php if(!empty($box['url'])): ?>
+                                    <img src="<?php echo Mage::getBaseUrl('media') . DS . $this->getImageResizePath($boxType).$b['path']; ?>" alt="">
+                                    <?php if(!empty($b['url'])): ?>
                                 </a>
                             <?php endif; ?>
                             </div>
                         <?php endforeach; ?>
                         <?php unset($i); ?>
-                        <?php unset($box); ?>
+                        <?php unset($b); ?>
                         <?php unset($caption); ?>
                         <?php endif; ?>
                     <?php endforeach; ?>
@@ -100,8 +88,4 @@ $boxType = Zolago_Banner_Model_Banner_Type::TYPE_BOX;
             </section>
             <?php endif; ?>
 
-<!--            --><?php //if($type == $inspirationType): ?>
-<!--            --><?php //endif; ?>
 
-    <?php endforeach; ?>
-<?php endif; ?>
