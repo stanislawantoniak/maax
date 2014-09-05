@@ -35,7 +35,9 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
         if(!empty($vendor)){
             $vendorId = $vendor->getId();
             $rootCatId = $vendor->getRootCategory();
-            $rootCatId = reset($rootCatId);
+            $websiteId = Mage::app()->getWebsite()->getId();
+            $rootCatId = isset($rootCatId[$websiteId]) ? $rootCatId[$websiteId] : 0;
+
 
             if (empty($rootCatId)) {
                 $rootCatId = Mage::app()->getStore()->getRootCategoryId();
@@ -122,7 +124,9 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
         if(!empty($vendor)){
             $vendorId = $vendor->getId();
             $rootCatId = $vendor->getRootCategory();
-            $rootCatId = reset($rootCatId);
+            $websiteId = Mage::app()->getWebsite()->getId();
+            $rootCatId = isset($rootCatId[$websiteId]) ? $rootCatId[$websiteId] : 0;
+
 
             if (empty($rootCatId)) {
                 $rootCatId = Mage::app()->getStore()->getRootCategoryId();
