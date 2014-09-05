@@ -112,7 +112,7 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
                                 $data['items'][$type][] = $placementsByTypeBySlot[$type][$i][$n];
                             } else {
                                 //start from the beginning
-                                $data['items'][$type][] = $placementsByTypeBySlot[$type][$i][$n - $i - 1];
+                                //$data['items'][$type][] = $placementsByTypeBySlot[$type][$i][$n - $i - 1];
                             }
                         }
                     }
