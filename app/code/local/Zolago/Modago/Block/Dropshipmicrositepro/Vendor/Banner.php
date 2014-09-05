@@ -57,7 +57,8 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
 
             $campaignModel = Mage::getResourceModel('zolagocampaign/campaign');
             $placements = $campaignModel->getCategoryPlacements($rootCatId, $vendorId,
-                array(Zolago_Banner_Model_Banner_Type::TYPE_SLIDER, Zolago_Banner_Model_Banner_Type::TYPE_BOX)
+                array(Zolago_Banner_Model_Banner_Type::TYPE_SLIDER, Zolago_Banner_Model_Banner_Type::TYPE_BOX),
+                TRUE
             );
 
             $placementsByTypeBySlot = array();
@@ -210,7 +211,10 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
 
 
             $campaignModel = Mage::getResourceModel('zolagocampaign/campaign');
-            $placements = $campaignModel->getCategoryPlacements($rootCatId, $vendorId, array(Zolago_Banner_Model_Banner_Type::TYPE_INSPIRATION));
+            $placements = $campaignModel->getCategoryPlacements($rootCatId, $vendorId,
+                array(Zolago_Banner_Model_Banner_Type::TYPE_INSPIRATION),
+                TRUE
+            );
 
 
             $placementsByTypeBySlot = array();
