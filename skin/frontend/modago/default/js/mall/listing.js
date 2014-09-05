@@ -457,8 +457,9 @@ Mall.listing = {
         }).appendTo(link);
 
         jQuery("<img/>", {
-            src: product.udropship_vendor_logo_url,
-            alt: product.udropship_vendor_name
+            src: product.manufacturer_logo_url,
+            alt: product.udropship_vendor_name,
+            "class": "img-responsive"
         }).appendTo(vendor);
 
         jQuery("<div/>", {
