@@ -9,6 +9,9 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
     const BANNER_SLIDER_WIDTH = 969;
     const BANNER_SLIDER_HEIGHT = 327;
 
+    const BANNER_SLIDER_M_WIDTH = 320;
+    const BANNER_SLIDER_M_HEIGHT = 316;
+
     const BANNER_BOX_WIDTH = 280;
     const BANNER_BOX_HEIGHT = 323;
 
@@ -16,6 +19,7 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
     const BANNER_INSPIRATION_HEIGHT = 304;
 
     const BANNER_RESIZE_DIRECTORY = 'bannerresized';
+    const BANNER_RESIZE_M_DIRECTORY = 'bannerresized/mobile';
 
 
     public function getVendor()
@@ -209,8 +213,12 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
 
                                 $imageSliderPath = Mage::getBaseDir('media') . $sliderImage['path'];
                                 $imageSliderResizePath = Mage::getBaseDir('media') . DS . $this->getImageResizePath($type) . $sliderImage['path'];
+                                $imageSliderResizePathMobile = Mage::getBaseDir('media') . DS . $this->getImageResizeMobilePath($type) . $sliderImage['path'];
 
+                                //Desktop
                                 $this->scaleBannerImage($imageSliderPath, $imageSliderResizePath, self::BANNER_SLIDER_WIDTH, self::BANNER_SLIDER_HEIGHT);
+                                //Mobile
+                                $this->scaleBannerImage($imageSliderPath, $imageSliderResizePathMobile, self::BANNER_SLIDER_M_WIDTH, self::BANNER_SLIDER_M_HEIGHT);
 
                             }
                         }
@@ -248,10 +256,13 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
     {
         return self::BANNER_RESIZE_DIRECTORY . DS . $type;
     }
+    public function getImageResizeMobilePath($type)
+    {
+        return self::BANNER_RESIZE_M_DIRECTORY . DS . $type;
+    }
 
     public function scaleBannerImage($imagePath, $imageResizePath, $width, $height)
     {
-        //Zend_Debug::dump($imageSliderPath, $imageSliderResizePath);
         $image = new Varien_Image($imagePath);
 
         $image->constrainOnly(false);
