@@ -136,7 +136,7 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
             //fetch config
             $configPath = Zolago_Banner_Model_Banner_Type::BANNER_TYPES_CONFIG;
             $configValue = Mage::getStoreConfig($configPath);
-            $typesConfig = Mage::helper('core')->jsonDecode($configValue);
+            $typesConfig = json_decode($configValue);
 
             foreach ($typesConfig as $typesConfigType) {
                 if (
