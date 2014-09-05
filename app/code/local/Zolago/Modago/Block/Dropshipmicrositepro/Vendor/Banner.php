@@ -113,7 +113,61 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
         return $data;
 
     }
+	
+	
+	
+	public function getInspirations() {
+		$request = new Varien_Object();
+		$request->setBannerShow("image");
+		$request->setType(Zolago_Banner_Model_Banner_Type::TYPE_BOX);
+		$request->setSlots(4);
+		
+		$finder = $this->getFinder();
+		
+		return $finder->request($request);
+	}
 
+	/**
+	 * @return Zolago_Banner_Model_Finder
+	 */
+	public function getFinder() {
+		if(!$this->hasData("finder")){
+			$placements = array();
+			$vendor = $this->getVendor();
+			if(!empty($vendor)){
+				$vendorId = $vendor->getId();
+				$rootCatId = $vendor->getRootCategory();
+				/**
+				 * FIX NEED!!!!
+				 */
+				$rootCatId = reset($rootCatId);
+
+				if (empty($rootCatId)) {
+					$rootCatId = Mage::app()->getStore()->getRootCategoryId();
+				}
+
+				//get current category
+				$currentCategory = Mage::registry('current_category');
+				if (!empty($currentCategory) && $currentCategory->getDisplayMode() == Mage_Catalog_Model_Category::DM_PAGE) {
+					$rootCatId = $currentCategory->getId();
+				}
+
+
+				$campaignModel = Mage::getResourceModel('zolagocampaign/campaign');
+				/**
+				 * NEED ADD UNDERILIZE IMAGES ETC
+				 */
+				$placements = $campaignModel->getCategoryPlacements($rootCatId, $vendorId,
+					array(
+						Zolago_Banner_Model_Banner_Type::TYPE_SLIDER, 
+						Zolago_Banner_Model_Banner_Type::TYPE_BOX
+					)
+				);
+			}	
+			$this->setData("finder", Mage::getModel("zolagobanner/finder", $placements));
+		}
+		return $this->getData("finder");
+	}
 
 
     public function getBannerInspirationPositions()

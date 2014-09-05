@@ -3,17 +3,6 @@
  * User: Andrzej Spólnicki
  */
 $vendor = Mage::helper('umicrosite')->getCurrentVendor();
-//$categories = $this->getMainVendorCategories();
 ?>
-
-<?php //if (count($categories) > 0) : ?>
-<!--    --><?php //foreach ($categories as $cat) : ?>
-<!--        <li>-->
-<!--            <a href="--><?php //echo (isset($cat['url'])) ? $cat['url'] : '#'; ?><!--" style="color: #000000;">-->
-<!--                --><?php //echo $this->escapeHtml($cat['name']); ?>
-<!--            </a>-->
-<!--        </li>-->
-<!--    --><?php //endforeach; ?>
-<?php //endif; ?>
 
 <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('category-navigation-desktop-v-'.$vendor['vendor_id'])->toHtml(); ?>
