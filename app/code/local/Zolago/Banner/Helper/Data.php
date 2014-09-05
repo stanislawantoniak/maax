@@ -22,7 +22,7 @@ class Zolago_Banner_Helper_Data extends Mage_Core_Helper_Abstract {
         //fetch config
         $configPath = Zolago_Banner_Model_Banner_Type::BANNER_TYPES_CONFIG;
         $configValue = Mage::getStoreConfig($configPath);
-        $typesConfig = Mage::helper('core')->jsonDecode($configValue);
+        $typesConfig = json_decode($configValue);
 
         return $typesConfig;
     }
