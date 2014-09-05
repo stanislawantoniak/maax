@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Zolago_Image>
+            <version>0.1.0</version>
+        </Zolago_Image>
+    </modules>
+    <global>
+        <models>
+            <zolago_image>
+                <class>Zolago_Image_Model</class>
+                <resourceModel>zolago_image_resource</resourceModel>
+            </zolago_image>
+            <zolago_image_resource>
+                <class>Zolago_Image_Model_Resource</class>
+            </zolago_image_resource>
+        </models>
+        <helpers>
+            <zolago_image>
+                <class>Zolago_Image_Helper</class>
+            </zolago_image>
+        </helpers>
+    </global>
+</config>
