@@ -71,7 +71,7 @@ class Zolago_Banner_Model_Finder extends Varien_Object
 			}
 			
 			// Circular
-			if($positionIndex<$request->getSlots()){
+			if($positionIndex>=$request->getSlots()){
 				$positionIndex = 0;
 			}
 			
