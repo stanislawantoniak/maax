@@ -1,36 +1,31 @@
-<?php $bannerPositionsByType = $this->getBannerInspirationPositions();
-
+<?php
 $sliderType = Zolago_Banner_Model_Banner_Type::TYPE_SLIDER;
 $boxType = Zolago_Banner_Model_Banner_Type::TYPE_BOX;
 $inspirationType = Zolago_Banner_Model_Banner_Type::TYPE_INSPIRATION;
-?>
+$inspirations = $this->getInspirations(); ?>
 
 
-<?php if (!empty($bannerPositionsByType) && isset($bannerPositionsByType['items']) && !empty($bannerPositionsByType['items'])): ?>
-
+<?php if ($inspirations) : ?>
     <section class="block-inspiration">
         <header class="title-section">
             <div class="inspiration-strips "></div>
-            <h2 ><?php echo $this->__('inspiracje'); ?></h2>
+            <h2 ><?php echo $this->__('inspirations'); ?></h2>
         </header>
         <div id="rwd-inspiration" class="rwdCarousel">
             <div class="rwd-carousel rwd-theme">
-                <?php foreach ($bannerPositionsByType['items'] as $type => $bannerPositions): ?>
 
-                    <?php if($type == $inspirationType): ?>
 
-                <?php foreach($bannerPositions as $n => $bannerPosition): ?>
-                            <?php $inspirations = isset($bannerPosition['images']) ? $bannerPosition['images'] : array();  ?>
-                            <?php $captions = $bannerPosition['caption']; ?>
-                            <?php if(!empty($inspirations)): ?>
-                                <?php foreach($inspirations as $i => $inspiration): ?>
+                <?php foreach($inspirations as $n => $inspiration): ?>
+                            <?php $inspiratio = empty($inspiration['banner_image']) ?array():unserialize($inspiration['banner_image']); ?>
+                            <?php $captions = empty($inspiration['banner_caption'])? array():unserialize($inspiration['banner_caption']); ?>
+                            <?php if(!empty($inspiratio)): ?>
+                                <?php foreach($inspiratio as $i => $insp): ?>
                                     <div class="item">
-                                        <!--                                --><?php //echo $bannerPosition['placement_id']; ?><!--<br />-->
-                                        <?php if(!empty($inspiration['url'])): ?>
-                                        <a href="<?php echo $inspiration['url']; ?>">
+                                        <?php if(!empty($insp['url'])): ?>
+                                        <a href="<?php echo $insp['url']; ?>">
                                             <?php endif; ?>
-                                            <img src="<?php echo Mage::getBaseUrl('media') . DS . $this->getImageResizePath($inspirationType).$inspiration['path']; ?>" alt="">
-                                            <?php if(!empty($inspiration['url'])): ?>
+                                            <img src="<?php echo Mage::getBaseUrl('media') . DS . $this->getImageResizePath($inspirationType).$insp['path']; ?>" alt="">
+                                            <?php if(!empty($insp['url'])): ?>
 
 
                                             <div class="carousel-caption">
@@ -48,7 +43,7 @@ $inspirationType = Zolago_Banner_Model_Banner_Type::TYPE_INSPIRATION;
                                                     <?php endif; ?>
                                                 <?php endforeach; ?>
                                                 <?php unset($i); ?>
-                                                <a href="<?php echo $inspiration['url']; ?>">
+                                                <a href="<?php echo $insp['url']; ?>">
                                                     <span class="seemore-caption"><?php echo $this->__('zobacz'); ?> &gt;</span>
                                                 </a>
 
@@ -64,10 +59,6 @@ $inspirationType = Zolago_Banner_Model_Banner_Type::TYPE_INSPIRATION;
                             <?php endif; ?>
                         <?php endforeach; ?>
 
-
-                    <?php endif; ?>
-
-                <?php endforeach; ?>
             </div>
 
             <div class="customNavigation">

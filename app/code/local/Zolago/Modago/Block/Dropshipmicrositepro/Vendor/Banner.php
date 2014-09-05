@@ -21,6 +21,11 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
     const BANNER_RESIZE_DIRECTORY = 'bannerresized';
     const BANNER_RESIZE_M_DIRECTORY = 'bannerresized/mobile';
 
+    protected $boxTypes = array(
+						Zolago_Banner_Model_Banner_Type::TYPE_SLIDER, 
+						Zolago_Banner_Model_Banner_Type::TYPE_BOX
+					);
+
 
     public function getVendor()
     {
@@ -112,32 +117,35 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
         return $data;
 
     }
-	
-    public function getBoxes() {
+    
+    //{{{ 
+    /**
+     * 
+     * @return Varien_Object
+     */
+    protected function _prepareRequest() {
 		$request = new Varien_Object();
 		$request->setBannerShow("image");
-		$request->setType(Zolago_Banner_Model_Banner_Type::TYPE_BOX);
 		$request->setStatus(1); // only active
 		$request->setDate(date('Y-m-d H:i:s')); // only not expired
+		return $request;
+    }
+    //}}}	
+    public function getBoxes() {
 		
 		$finder = $this->getFinder();
-		
+		$request = $this->_prepareRequest();
+		$request->setType(Zolago_Banner_Model_Banner_Type::TYPE_BOX);
 		return $finder->request($request);
     }	
 	
 	public function getSliders() {
-		$request = new Varien_Object();
-		$request->setBannerShow("image");
-		$request->setType(Zolago_Banner_Model_Banner_Type::TYPE_SLIDER);
-		$request->setStatus(1); // only active
-		$request->setDate(date('Y-m-d H:i:s')); // only not expired
-//		$request->setSlots(4);
-		
-		$finder = $this->getFinder();
-		
+		$request = $this->_prepareRequest();
+		$request->setType(Zolago_Banner_Model_Banner_Type::TYPE_SLIDER);		
+		$finder = $this->getFinder();		
 		return $finder->request($request);
 	}
-
+	
 	/**
 	 * @return Zolago_Banner_Model_Finder
 	 */
@@ -169,10 +177,7 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
 				 * NEED ADD UNDERILIZE IMAGES ETC
 				 */
 				$placements = $campaignModel->getCategoryPlacements($rootCatId, $vendorId,
-					array(
-						Zolago_Banner_Model_Banner_Type::TYPE_SLIDER, 
-						Zolago_Banner_Model_Banner_Type::TYPE_BOX
-					)
+				    $this->boxTypes
 				);
 			}	
 			$this->setData("finder", Mage::getModel("zolagobanner/finder", $placements));
