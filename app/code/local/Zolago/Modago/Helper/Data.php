@@ -78,6 +78,5 @@ class Zolago_Modago_Helper_Data extends Mage_Core_Helper_Abstract
     public function getVendorQuestionFormAction()
     {
         return Mage::getUrl('udqa/customer/post');
-
     }
 }
