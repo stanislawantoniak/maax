@@ -70,6 +70,7 @@ if (file_exists($maintenanceFile)) {
 require_once $mageFilename;
 
 if (isset($_SERVER['MAGE_IS_DEVELOPER_MODE'])) {
+    include_once('developer/class.krumo.php');
     Mage::setIsDeveloperMode(true);
 	Varien_Profiler::enable();
 	#ini_set('display_errors', 1);
