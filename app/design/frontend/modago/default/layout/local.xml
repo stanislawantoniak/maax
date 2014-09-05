@@ -442,6 +442,8 @@
             <action method="setTemplate">
                 <template>catalog/category/view.phtml</template>
             </action>
+            <block type="zolagomodago/dropshipmicrositepro_vendor_banner" name="vendor.banner" template="unirgy/microsite/vendor/banner.phtml"/>
+            <block type="zolagomodago/dropshipmicrositepro_vendor_banner" name="vendor.banner.inspiration" template="unirgy/microsite/vendor/category/banner.phtml"/>
             <block type="zolagomodago/solrsearch_faces" name="searchfaces" as="searchFaces" before="-">
                 <block type="zolagosolrsearch/active" name="solrsearch_product_list_activefaces"/>
                 <block type="solrsearch/faces_price" name="solr_price_facets" as="solr_price_facets"/>
@@ -563,8 +565,7 @@
             <block type="zolagomodago/dropshipmicrositepro_vendor_header" name="vendor.header" template="unirgy/microsite/topbottomheader.phtml">
                 <block type="zolagomodago/dropshipmicrositepro_vendor_menu" name="vendor.menu.mobile" template="unirgy/microsite/menu.mobile.phtml"/>
                 <block name="vendor.info.mobile" type="zolagoudmspro/vendor_info" template="unirgy/microsite/vendor.info.mobile.phtml"/>
-                <block name="vendor.info" type="udqa/product_question" template="unirgy/microsite/vendor.info.phtml"/>
-                <!--<block type="udqa/product_question" name="vendor.question.desktop" template="unirgy/microsite/question.desktop.phtml"/>-->
+                <!--<block name="vendor.info" type="udqa/product_question" template="unirgy/microsite/vendor.info.phtml"/>-->
                 <block type="udqa/product_question" name="vendor.question.mobile" template="unirgy/microsite/question.mobile.phtml"/>
             </block>
             <block type="core/template" name="vendor.test" template="unirgy/microsite/home.phtml">

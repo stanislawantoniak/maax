@@ -71,6 +71,6 @@ EOD
 );
 
 foreach ($cmsNavigationBlocks as $data) {
-    Mage::getModel('cms/block')->setData($data)->save();
+    Mage::getModel('cms/block')->load($data['identifier'])->setData($data)->save();
 }
 

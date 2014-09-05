@@ -97,7 +97,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
      * @param $vendorId
      * @return array
      */
-    public function getCategoryPlacements($categoryId, $vendorId)
+    public function getCategoryPlacements($categoryId, $vendorId, $bannerTypes = array())
     {
         $table = $this->getTable("zolagocampaign/campaign_placement");
         $select = $this->getReadConnection()->select();
@@ -130,6 +130,9 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         );
         $select->where("campaign_placement.category_id=?", $categoryId);
         $select->where("campaign_placement.vendor_id=?", $vendorId);
+        if(!empty($bannerTypes)){
+            $select->where("banner.type in(?)", $bannerTypes);
+        }
         $select->order("banner.type DESC");
         $select->order("campaign_placement.priority ASC");
         return $this->getReadConnection()->fetchAssoc($select);

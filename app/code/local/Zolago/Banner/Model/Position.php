@@ -63,7 +63,7 @@ class Zolago_Banner_Model_Finder extends Varien_Object
 		$positionIndex = 0;
 		
 		
-		while($slotIndex<$request->getSlots() && $i<count($items)){
+		while($slotIndex<$request->getSlots() && !$empty($candidates)){
 			// Increment lookup position
 			$positionIndex++;
 			if(isset($candidates[$positionIndex]) && count($candidates[$positionIndex])){
@@ -84,10 +84,11 @@ class Zolago_Banner_Model_Finder extends Varien_Object
 		
 	}
 	
-	protected function _getFirstItem(array $candidates) {
-		return $candidates[min(array_keys($candidates))];
-	}
-	
+	/**
+	 * @param array $array
+	 * @param array $requestArray
+	 * @return array
+	 */
 	protected function _requestArray(array $array, array $requestArray){
 		$candidate = $array;
 		foreach ($requestArray as $key){

@@ -2,7 +2,7 @@
 
 $sliderType = Zolago_Banner_Model_Banner_Type::TYPE_SLIDER;
 $boxType = Zolago_Banner_Model_Banner_Type::TYPE_BOX;
-$inspirationType = Zolago_Banner_Model_Banner_Type::TYPE_INSPIRATION;
+//$inspirationType = Zolago_Banner_Model_Banner_Type::TYPE_INSPIRATION;
 ?>
 
 
@@ -34,7 +34,8 @@ $inspirationType = Zolago_Banner_Model_Banner_Type::TYPE_INSPIRATION;
                                         <?php if(!empty($slide['url'])): ?>
                                         <a href="<?php echo $slide['url']; ?>">
                                         <?php endif; ?>
-                                            <img src="<?php echo Mage::getBaseUrl('media') . DS . $this->getImageResizePath($sliderType).$slide['path']; ?>" alt="" class="<?php if($i == 1): ?>hidden-xs<?php else: ?>visible-xs<?php endif; ?>" >
+
+                                            <img src="<?php if($i == 1): ?><?php echo Mage::getBaseUrl('media') . DS . $this->getImageResizePath($sliderType).$slide['path']; ?><?php else: ?><?php echo Mage::getBaseUrl('media') . DS . $this->getImageResizeMobilePath($sliderType).$slide['path']; ?><?php endif; ?>" alt="" class="<?php if($i == 1): ?>hidden-xs<?php else: ?>visible-xs<?php endif; ?>" >
                                         <?php if(!empty($slide['url'])): ?>
                                         </a>
                                         <?php endif; ?>
@@ -98,8 +99,8 @@ $inspirationType = Zolago_Banner_Model_Banner_Type::TYPE_INSPIRATION;
             </section>
             <?php endif; ?>
 
-            <?php if($type == $inspirationType): ?>
-            <?php endif; ?>
+<!--            --><?php //if($type == $inspirationType): ?>
+<!--            --><?php //endif; ?>
 
     <?php endforeach; ?>
 <?php endif; ?>
