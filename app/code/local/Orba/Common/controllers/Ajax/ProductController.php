@@ -16,12 +16,11 @@ class Orba_Common_Ajax_ProductController extends Orba_Common_Controller_Ajax {
 		if($products->count() > 0){
 			
 			foreach($products as $product){
-				
-				$image = Mage::helper('catalog/image')->init($product, 'thumbnail')
-                    ->keepAspectRatio(true)
-                    ->constrainOnly(false)
-                    ->keepFrame(true)
-                    ->resize(200, 312);
+
+                $image = Mage::helper("zolago_image")
+                    ->init($product, 'small_image')
+                    ->setCropPosition(Zolago_Image_Model_Catalog_Product_Image::POSITION_CENTER)
+                    ->adaptiveResize(200,312);
 				$content[] = array(
 					'title' => Mage::helper('catalog/output')->productAttribute($product, $product->getName() , 'name'),
 					'image_url' => (string) $image,
