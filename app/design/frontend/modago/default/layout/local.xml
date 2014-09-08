@@ -637,7 +637,7 @@
 			<remove name="page.header.bottom.menu"/>
 			<remove name="page.header.bottom.category.items"/>
 			<remove name="page.header.bottom.category.items.mobile"/>
-			<block type="core/template" name="checkout.page.header.progeress" template="checkout/progress.phtml" />
+			<block type="core/template" name="page.header.progeress" template="checkout/onepage/progress.phtml" />
 		</reference>
 		<reference name="footer">
 			
@@ -646,19 +646,20 @@
 	
 	<checkout_onepage_index>
         <update handle="checkout_updater" />
-		<!-- redefine block -->
+		<!-- redefine block same name as origin -->
 		<reference name="content">
-			<block type="checkout/onepage" name="checkout.onepage" template="checkout/onepage.phtml">
-				<block type="core/template" name="checkout.onepage.address" template="checkout/onepage/address.phtml"/>
+			<block type="checkout/onepage" name="checkout.onepage" template="checkout/onepage/logged.phtml">
+				<block type="core/template" name="checkout.onepage.logged.address" template="checkout/onepage/logged/address.phtml"/>
 			</block>
 		</reference>
 	</checkout_onepage_index>
 	
 	<checkout_guest_index>
         <update handle="checkout_updater" />
+		<!-- redefine block same name as origin -->
 		<reference name="content">
-			<block type="checkout/onepage" name="checkout.onepage" template="checkout/guest.phtml">
-				<block type="core/template" name="checkout.guest.address" template="checkout/guest/address.phtml"/>
+			<block type="checkout/onepage" name="checkout.onepage" template="checkout/onepage/guest.phtml">
+				<block type="core/template" name="checkout.onepage.guest.address" template="checkout/onepage/guest/address.phtml"/>
 			</block>
 		</reference>
 	</checkout_guest_index>
