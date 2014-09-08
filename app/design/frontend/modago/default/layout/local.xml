@@ -664,9 +664,9 @@
 	<checkout_guest_index>
         <update handle="checkout_updater" />
 		<reference name="content">
-			<block type="checkout/onepage" name="checkout.onepage" template="checkout/onepage/guest.phtml">
-				<block type="core/template" name="checkout.onepage.guest.address" template="checkout/onepage/guest/address.phtml"/>
-			</block>
+            <block type="checkout/onepage" name="checkout.onepage" template="checkout/onepage/guest.phtml">
+                <block type="zolagomodago/checkout_address" name="checkout.onepage.guest.address" template="checkout/onepage/guest/address.phtml"/>
+            </block>
 		</reference>
 	</checkout_guest_index>
 
