@@ -652,8 +652,9 @@
 	
 	<checkout_onepage_index>
         <update handle="checkout_updater" />
-		<!-- redefine block same name as origin -->
 		<reference name="content">
+			<!-- Remove previous blocks -->
+            <action method="unsetChildren"></action>
 			<block type="checkout/onepage" name="checkout.onepage" template="checkout/onepage/logged.phtml">
 				<block type="core/template" name="checkout.onepage.logged.address" template="checkout/onepage/logged/address.phtml"/>
 			</block>
@@ -662,7 +663,6 @@
 	
 	<checkout_guest_index>
         <update handle="checkout_updater" />
-		<!-- redefine block same name as origin -->
 		<reference name="content">
 			<block type="checkout/onepage" name="checkout.onepage" template="checkout/onepage/guest.phtml">
 				<block type="core/template" name="checkout.onepage.guest.address" template="checkout/onepage/guest/address.phtml"/>
