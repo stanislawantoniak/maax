@@ -35,7 +35,7 @@ $_isCheckout = $this->getRequest()->getParam("is_checkout");
 
 										<div class="col-md-9 col-sm-12 col-xs-12">
 											<div class="inner-form-group">
-												<a class="forgot-password underline visible-sm visible-xs" href="#" style="left: 186px;"><?php echo $this->__('Forgot Your Password?') ?></a>
+												<a class="forgot-password underline visible-sm visible-xs" href="<?php echo $this->getForgotPasswordUrl() ?>" style="left: 186px;"><?php echo $this->__('Forgot Your Password?') ?></a>
 												<input type="password" name="login[password]" class="form-control input-text required-entry validate-password login-text-field" id="pass" title="" autocomplete="off">
 												<a class="forgot-password underline hidden-sm hidden-xs" href="<?php echo $this->getForgotPasswordUrl() ?>" style="left: 186px;"><?php echo $_hlp->__("You don't remember password?"); ?></a>
 											</div>
@@ -65,6 +65,10 @@ $_isCheckout = $this->getRequest()->getParam("is_checkout");
         Mall.i18nValidation.add("required", "<?php echo $this->__('This field is required') ?>");
         Mall.i18nValidation.add("email", "<?php echo $this->__('Valid email is required.') ?>");
     </script>
+    <style type="text/css">
+        #nav_mobile {display: none !important;}
+        #header-main {display: none !important;}
+    </style>
 <?php /*
 <div class="account-login">
     <div class="page-title">

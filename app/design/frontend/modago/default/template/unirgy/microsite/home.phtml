@@ -2,8 +2,9 @@
 
 <div id="content" class="container-fluid">
 
-    <div class="row">
+    <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
 
+    <div class="row">
         <div class="col-sm-12">
             <?php echo $this->getChildHtml('vendor.menu'); ?>
             <div id="content-main">
