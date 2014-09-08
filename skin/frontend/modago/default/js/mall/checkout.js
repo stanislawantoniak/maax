@@ -196,6 +196,14 @@
 	}
 	
 	/**
+	 * @param int step
+	 * @returns Boolean
+	 */
+	Mall.Checkout.prototype.placeOrder = function(){
+		alert("Placing order...");
+	}
+	
+	/**
 	 * Prepare step object
 	 * @param object config
 	 * @return object
@@ -216,7 +224,6 @@
 			onLeave: config.onLeave || function(){},	// Frame leave
 			onEnable: config.onEnable || function(){},	// Frame enable
 			onDisable: config.onDisable || function(){}	// Frame disable
-			
 		};
 		
 		// Submit nadle
@@ -229,7 +236,7 @@
 		}
 		
 		// Trigger on prepare
-		object.onPrepare.apply(object, arguments);
+		object.onPrepare.apply(object, [self, config]);
 		
 		return object;
 	}
