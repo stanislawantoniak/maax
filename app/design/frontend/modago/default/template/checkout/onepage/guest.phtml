@@ -16,6 +16,8 @@
 	(function(){
 		var checkout = new Mall.CheckoutGuest();
 		
+		checkout.setProgressObject(jQuery("#step ol"));
+		
 		checkout.addStep({
 			id: "step-0",
 			onPrepare: function(){

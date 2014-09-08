@@ -3,10 +3,22 @@
 	Mall.Checkout = function(){
       this._steps = [];
 	  this._activeIndex = 0;
-	  
+	  this._progressObject = null;
     };
     
+	/**
+	 * @param object progresObject
+	 * @returns Mall.Chceckout
+	 */
+	Mall.Checkout.prototype.setProgressObject = function(progresObject){
+		this._progressObject = progresObject;
+	}
 	
+	/**
+	 * 
+	 * @param {type} stepIndex
+	 * @returns {undefined}
+	 */
     Mall.Checkout.prototype.init = function(stepIndex){
 		this.go(stepIndex || 0);
 	}
@@ -82,10 +94,33 @@
 		
 		this._activeIndex = stepIndex;
 		
-		
+		this._updateInterface();
 		// Update interface here
 		
 		return this;
+	}
+	
+	/**
+	 * @param int step
+	 * @returns {undefined}
+	 */
+	Mall.Checkout.prototype._updateInterface = function(){
+		var progress = this._progressObject;
+		
+		progress.attr("class", "");
+		// Enable card
+		progress.addClass("step_01");
+		progress.children().removeClass("current-checkout");
+		progress.children(":first").addClass("current-checkout");
+		
+		for(var i=0; i<=this._activeIndex; i++){
+			progress.addClass("step_0" + this._mapProgressIndex(i));
+			progress.children("#step_0" + this._mapProgressIndex(i)).addClass("current-checkout");
+		}
+	}
+	
+	Mall.Checkout.prototype._mapProgressIndex = function(stepIndex){
+		return stepIndex + 2;
 	}
 	
 	/**
