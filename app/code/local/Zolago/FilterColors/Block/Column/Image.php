@@ -22,7 +22,7 @@ class Zolago_FilterColors_Block_Column_Image extends ManaPro_FilterColors_Block_
         <div style="<?php //echo $this->_getStyle($row)?>"
              class="ct-container input-image <?php echo $this->getColumn()->getInlineCss() ?>"
              id="<?php echo $cellId ?>">&nbsp;
-            <img src="<?php echo $imageUrl; ?>" width="100px" />
+            <img src="<?php echo $imageUrl; ?>" width="50px" />
         </div>
         <?php
         $html = ob_get_clean();//.$this->renderCellOptions($cellId, $row);

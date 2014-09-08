@@ -89,7 +89,7 @@
                         value: responseJSON.relativeUrl
                     });
                     //$('#'+responseJSON.id).css({'background-image': 'url(' + responseJSON.url + ')'});
-                    $('#'+responseJSON.id).html('<img width="100px" src="'+responseJSON.url+'">');
+                    $('#'+responseJSON.id).html('<img width="50px" src="'+responseJSON.url+'">');
                     $('#m-image-helper .add.m-button').val('');
                 }
                 $.hideHelperPopup();
@@ -113,7 +113,7 @@
                         value: responseJSON.relativeUrl
                     });
                     //$('#'+responseJSON.id).css({'background-image': 'url(' + responseJSON.url + ')'});
-                    $('#'+responseJSON.id).html('<img width="100px" src="'+responseJSON.url+'">');
+                    $('#'+responseJSON.id).html('<img width="50px" src="'+responseJSON.url+'">');
                     $('#m-image-helper .change.m-button').val('');
                 }
                 $.hideHelperPopup();
