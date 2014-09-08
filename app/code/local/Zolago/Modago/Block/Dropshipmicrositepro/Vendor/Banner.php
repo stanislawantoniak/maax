@@ -60,7 +60,7 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
                 array(Zolago_Banner_Model_Banner_Type::TYPE_SLIDER, Zolago_Banner_Model_Banner_Type::TYPE_BOX),
                 TRUE
             );
-
+            Mage::log($placements);
             $placementsByTypeBySlot = array();
             $elementsInSlot = array();
             $numberPositions = array();
@@ -72,6 +72,7 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
                         $images = unserialize($placement['banner_image']);
                         $placement['images'] = $images;
                         $imagesToScale[$placement['type']][] = $images;
+                        Mage::log($images);
                         $placement['caption'] = unserialize($placement['banner_caption']);
                     }
                     if ($placement['banner_show'] == Zolago_Banner_Model_Banner_Show::BANNER_SHOW_HTML) {
@@ -110,6 +111,7 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
                 unset($elementsInSlot);
                 unset($numberPositions);
             }
+
             if(!empty($imagesToScale)){
                 $this->scaleBannerImages($imagesToScale);
             }
@@ -174,12 +176,27 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
 
 
 				$campaignModel = Mage::getResourceModel('zolagocampaign/campaign');
-				/**
-				 * NEED ADD UNDERILIZE IMAGES ETC
-				 */
+
 				$placements = $campaignModel->getCategoryPlacements($rootCatId, $vendorId,
 				    $this->boxTypes
 				);
+
+
+                $imagesToScale = array();
+                if (!empty($placements)) {
+                    foreach ($placements as $placement) {
+                        if ($placement['banner_show'] == Zolago_Banner_Model_Banner_Show::BANNER_SHOW_IMAGE) {
+                            $images = unserialize($placement['banner_image']);
+                            $placement['images'] = $images;
+                            $imagesToScale[$placement['type']][] = $images;
+                        }
+                    }
+                }
+
+                if(!empty($imagesToScale)){
+                    $this->scaleBannerImages($imagesToScale);
+                }
+
 			}	
 			$this->setData("finder", Mage::getModel("zolagobanner/finder", $placements));
 		}
@@ -334,6 +351,8 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
     {
         return self::BANNER_RESIZE_DIRECTORY . DS . $type;
     }
+
+
     public function getImageResizeMobilePath($type)
     {
         return self::BANNER_RESIZE_M_DIRECTORY . DS . $type;
