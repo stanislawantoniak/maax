@@ -82,11 +82,14 @@
 		    // when upload complete we should update image in grid
 		    onComplete: function(id, fileName, responseJSON){
 		        if (responseJSON.id) {
+                    console.log('2');
+                    console.log(responseJSON.url);
                     var baseUrl = $.options('#m-image-helper').baseUrl + '/';
                     $.gridData($('#'+responseJSON.id).parent()[0], {
                         value: responseJSON.relativeUrl
                     });
-                    $('#'+responseJSON.id).css({'background-image': 'url(' + responseJSON.url + ')'});
+                    //$('#'+responseJSON.id).css({'background-image': 'url(' + responseJSON.url + ')'});
+                    $('#'+responseJSON.id).html('<img width="100px" src="'+responseJSON.url+'">');
                     $('#m-image-helper .add.m-button').val('');
                 }
                 $.hideHelperPopup();
@@ -103,12 +106,14 @@
             },
             // when upload complete we should update image in grid
             onComplete: function(id, fileName, responseJSON){
+                console.log('4');
                 if (responseJSON.id) {
                     var baseUrl = $.options('#m-image-helper').baseUrl + '/';
                     $.gridData($('#'+responseJSON.id).parent()[0], {
                         value: responseJSON.relativeUrl
                     });
-                    $('#'+responseJSON.id).css({'background-image': 'url(' + responseJSON.url + ')'});
+                    //$('#'+responseJSON.id).css({'background-image': 'url(' + responseJSON.url + ')'});
+                    $('#'+responseJSON.id).html('<img width="100px" src="'+responseJSON.url+'">');
                     $('#m-image-helper .change.m-button').val('');
                 }
                 $.hideHelperPopup();
