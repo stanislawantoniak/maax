@@ -20,10 +20,9 @@ class Zolago_DropshipMicrositePro_IndexController
     }
 
     public function landingpageAction(){
-        $this->_initLayoutMessages(array('catalog/session', 'udqa/session', 'core/session'));
-
-
         $this->loadLayout();
+		// Load after layout render
+        $this->_initLayoutMessages(array('catalog/session', 'udqa/session', 'core/session'));
         $this->renderLayout();
     }
 }
