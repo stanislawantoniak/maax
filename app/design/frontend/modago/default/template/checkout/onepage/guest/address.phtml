@@ -1,49 +1,13 @@
+<?php /* @var $this Zolago_Modago_Block_Checkout_Address */ ?>
 
-<div class="sidebar-secound col-lg-3 col-md-4 col-sm-12 col-xs-12 col-lg-push-9 col-md-push-8">
-	<section class="p main bg-w hidden-sm hidden-xs">
-		<header>
-			<h2 class="open">Blok CMS</h2>
-		</header>
-		<div class="clearfix border-top">
-			<ul>
-				<li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
-				<li>Pellentesque ultrices lectus ut felis tempor, eget rutrum nulla sodales.</li>
-				<li>Nullam vel nunc eu enim hendrerit hendrerit eget non leo.</li>
-				<li>Quisque sit amet diam elementum, aliquet risus non, dignissim tortor.</li>
-			</ul>
-			<figure>
-				<img src="skin/frontend/modago/default/images/home_main_callout.jpg" alt="">
-			</figure>
-		</div>
-		<div class="clearfix border-top">
-			<ol>
-				<li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
-				<li>Pellentesque oltrices lectus ut felis tempor, eget rutrum nulla sodales.</li>
-				<li>Nullam vel nunc eu enim hendrerit hendrerit eget non leo.</li>
-				<li>Quisque sit amet diam elementum, aliquet risus non, dignissim tortor.</li>
+<?php echo $this->getStep1Sidebar(); ?>
 
-			</ol></div>
-		<div class="clearfix border-top">
-			<dl>
-				<dt>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</dt>
-				<dd class="separator">Pellentesque ultrices lectus ut fedds tempor, eget rutrum nulla sodales.</dd>
-				<dd>Nullam vel nunc eu enim hendrerit hendrerit eget non leo.</dd>
-				<dd class="separator">Quisque sit amet diam elementum, addquet risus non, dignissim tortor.</dd>
-			</dl>
-			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.Pellentesque ultrices lectus ut fedds tempor, eget rutrum nulla sodales.</p>
-			<figure>
-				<img src="skin/frontend/modago/default/images/home_main_callout.jpg" alt="">
-			</figure>
-
-		</div>
-	</section>
-</div> 
 <div id="content-main" class="col-lg-9 col-md-8 col-sm-12 col-xs-12 col-lg-pull-3 col-md-pull-4 section">
 	<section class="main bg-w">
 		<header class="title-section">
 			<h2>Podaj dane do realizacji</h2>
 		</header>
-		<form action="" class="form">
+		<form action="<?php echo $this->getSaveUrl(); ?>" class="form" id="co-address">
 			<fieldset>
 				<legend class="first">Dane osoby zamawiającej:</legend>
 

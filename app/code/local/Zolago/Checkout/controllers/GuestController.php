@@ -50,4 +50,11 @@ class Zolago_Checkout_GuestController extends Zolago_Checkout_Controller_Abstrac
 		$this->_getCustomerSession()->setIsCheckout(true);
 		return $this->_redirect("*/*/index");
 	}
+
+    public function testAction()
+    {
+        $this->loadLayout();
+
+        $this->renderLayout();
+    }
 }
