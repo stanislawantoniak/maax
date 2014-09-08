@@ -16,4 +16,5 @@ class Zolago_Checkout_OnepageController extends Zolago_Checkout_Controller_Abstr
 		// Display checkout page for loged in
 		parent::indexAction();
 	}
+	
 }
