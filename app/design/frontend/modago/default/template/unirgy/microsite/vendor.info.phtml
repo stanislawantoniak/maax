@@ -10,29 +10,6 @@ $vendorQuestionFormAction = Mage::helper('zolagomodago')->getVendorQuestionFormA
 
 ?>
 
-<div class="container-fluid">
-    <div class="action-box-bundle clearfix" style="margin-bottom: 20px;">
-        <div class="row" style="margin-bottom: 15px;">
-            <div class="col-sm-6 col-md-4 col-lg-3" style="text-align: center;">
-                <button class="btn button button-primary" style="margin-top: 15px;" data-toggle="modal"
-                        data-target="#seller_description"><?php echo $this->__("Seller's info"); ?></button>
-            </div>
-            <div class="col-sm-6 col-md-4 col-lg-3" style="text-align: center;">
-                <button class="btn button button-primary" style="margin-top: 15px;" data-toggle="modal"
-                        data-target="#terms_delivery"><?php echo $this->__("RMA rules"); ?></button>
-            </div>
-
-            <div class="col-sm-6 col-md-4 col-lg-3" style="text-align: center;">
-                <button class="btn button button-primary" style="margin-top: 15px;" data-toggle="modal"
-                        data-target="#ask_question"><?php echo $this->__("Submit a question to seller"); ?></button>
-            </div>
-            <div class="col-sm-6 col-md-4 col-md-offset-4 col-lg-3 col-lg-offset-0" style="text-align: center;">
-                <a href="<?php echo $baseUrl; ?>" class="btn button button-primary"
-                   style="margin-top: 15px;"><?php echo $this->__("Back to main gallery"); ?></a>
-            </div>
-        </div>
-    </div>
-</div>
 
 <!--SHOP INFO-->
 <div class="modal fade bs-example-modal-lg" id="seller_description" tabindex="-1" role="dialog"
