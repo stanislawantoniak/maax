@@ -58,7 +58,7 @@ class Zolago_Solrsearch_Model_Catalog_Product_Collection extends Varien_Data_Col
         //$profiler->start();
 
         $data = $this->getSolrData("response", "docs");
-        if (empty($data['error'])) {
+        if (!empty($data) && empty($data['error'])) {
 
             //$profiler->log("Solr");
             foreach($data as $item) {
