@@ -7,6 +7,7 @@ class Zolago_Checkout_OnepageController extends Zolago_Checkout_Controller_Abstr
 	 * @return type
 	 */
 	public function indexAction() {
+		
 		// Not logged user - redirect to guest controller
 		if(!$this->_getCustomerSession()->isLoggedIn()){
 			return $this->_redirect("*/guest/login");

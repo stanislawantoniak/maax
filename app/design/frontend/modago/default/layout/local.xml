@@ -619,4 +619,55 @@
             <block type="core/template" name="checkout" template="checkout/onepage/test.phtml" />
         </reference>
     </checkout_guest_test>
+	
+	<!-- ################################################################### -->
+	<!-- Checkout section													 -->
+	<!-- ################################################################### -->
+	<checkout_updater>
+		<reference name="root">
+			<action method="setIsCheckout">
+				<value>1</value>
+			</action>
+			<action method="setTemplate">
+                <template>page/1column.phtml</template>
+            </action>
+		</reference>
+		
+		<reference name="header">
+			<remove name="header_menu"/>
+			<remove name="page.header.leftmenu"/>
+			<remove name="page.header.search"/>
+			<remove name="page.header.search.dropdown"/>
+			<remove name="page.header.right.menu"/>
+			<remove name="page.header.right.cartdropdown"/>
+			<remove name="page.header.bottom.menu"/>
+			<remove name="page.header.bottom.category.items"/>
+			<remove name="page.header.bottom.category.items.mobile"/>
+			<block type="core/template" name="page.header.progeress" template="checkout/onepage/progress.phtml" />
+		</reference>
+		<reference name="footer">
+			
+		</reference>
+	</checkout_updater>
+	
+	<checkout_onepage_index>
+        <update handle="checkout_updater" />
+		<!-- redefine block same name as origin -->
+		<reference name="content">
+			<block type="checkout/onepage" name="checkout.onepage" template="checkout/onepage/logged.phtml">
+				<block type="core/template" name="checkout.onepage.logged.address" template="checkout/onepage/logged/address.phtml"/>
+			</block>
+		</reference>
+	</checkout_onepage_index>
+	
+	<checkout_guest_index>
+        <update handle="checkout_updater" />
+		<!-- redefine block same name as origin -->
+		<reference name="content">
+			<block type="checkout/onepage" name="checkout.onepage" template="checkout/onepage/guest.phtml">
+				<block type="core/template" name="checkout.onepage.guest.address" template="checkout/onepage/guest/address.phtml"/>
+			</block>
+		</reference>
+	</checkout_guest_index>
+
 </layout>
