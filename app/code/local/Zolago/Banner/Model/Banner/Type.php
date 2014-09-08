@@ -20,10 +20,10 @@ class Zolago_Banner_Model_Banner_Type
 
         if (!empty($typesConfig)) {
             foreach ($typesConfig as $i => $typesConfigItem) {
-                if ((int)$i > 0) {
-                    $title = $typesConfigItem->title;
+                if ((int)$i > 0 && is_array($typesConfigItem)) {
+                    $title = $typesConfigItem['title'];
                     $code = $this->_prepareBannerTypeCode($title);
-                    $types[$code] = $typesConfigItem->title;
+                    $types[$code] = $typesConfigItem['title'];
                 }
             }
         }
@@ -56,7 +56,7 @@ class Zolago_Banner_Model_Banner_Type
     public function getTypesConfig(){
         $configPath = self::BANNER_TYPES_CONFIG;
         $configValue = Mage::getStoreConfig($configPath);
-        $typesConfig = json_decode($configValue);
+        $typesConfig = Mage::helper('core')->jsonDecode($configValue);
         return $typesConfig;
     }
 }

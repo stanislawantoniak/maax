@@ -1,0 +1,41 @@
+<div id="content" class="container-fluid">
+	<div id="checkout" class="row">
+		<div class="step step-0 hidden" id="step-0">
+			<?php echo $this->getChildHtml("checkout.onepage.guest.address");?>
+		</div>
+		<div class="step step-1 hidden" id="step-1">
+			Step 2
+		</div>
+		<div class="step step-2 hidden" id="step-2">
+			Step 3
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	(function(){
+		var checkout = new Mall.CheckoutGuest();
+		
+		checkout.setProgressObject(jQuery("#step ol"));
+		
+		checkout.addStep({
+			id: "step-0",
+			onPrepare: function(){
+				var self = this;
+				this.content.find("#step-0-submit").click(function(){
+					self.submit();
+				})
+			}
+		});
+		
+		checkout.addStep({
+			id: "step-1",
+		});
+		
+		checkout.addStep({
+			id: "step-2"
+		});
+		
+		checkout.init(0);
+	})();
+</script>

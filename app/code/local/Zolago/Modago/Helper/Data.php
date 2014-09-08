@@ -16,11 +16,13 @@ class Zolago_Modago_Helper_Data extends Mage_Core_Helper_Abstract
 
             $tree[$category->getId()] = array(
                 'name'           => $category->getName(),
-                'url'            => rtrim(Mage::getUrl($cat->getUrlPath()), "/"),
+                'url'            => $cat->getUrl(),
                 'category_id'    => $category->getId(),
                 'level'          => $level,
                 'products_count' => $cat->getProductCount()
             );
+
+//            echo Mage::getUrl($cat->getUrlPath())."\n";
             if ($level == 1) {
                 $tree[$category->getId()]['image'] = $cat->getImage();
             }
@@ -71,5 +73,10 @@ class Zolago_Modago_Helper_Data extends Mage_Core_Helper_Abstract
     public function getPluralForm($num, array $forms)
     {
         return array_key_exists($this->_calculatePluralIndex($num), $forms) ? $forms[$this->_calculatePluralIndex($num)] : "";
+    }
+
+    public function getVendorQuestionFormAction()
+    {
+        return Mage::getUrl('udqa/customer/post');
     }
 }
