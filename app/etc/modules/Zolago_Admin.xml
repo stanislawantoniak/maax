@@ -4,6 +4,9 @@
         <Zolago_Admin>
             <active>true</active>
             <codePool>local</codePool>
+            <depends>
+                <Mana_Admin/>
+            </depends>
         </Zolago_Admin>
     </modules>
 </config>

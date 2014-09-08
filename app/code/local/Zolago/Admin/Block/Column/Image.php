@@ -1,13 +1,8 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: victory
- * Date: 9/5/14
- * Time: 5:10 PM
- */ 
+
 class Zolago_Admin_Block_Column_Image extends Mana_Admin_Block_Column_Image {
     public function render(Varien_Object $row) {
-
+        Mage::log('Hello');
         ob_start();
         $cellId = $this->generateId();
         ?>
