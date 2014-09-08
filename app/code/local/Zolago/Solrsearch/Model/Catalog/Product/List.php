@@ -32,7 +32,10 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object{
 			$collection = Mage::getModel("zolagosolrsearch/catalog_product_collection");
 			/* @var $collection Zolago_Solrsearch_Model_Catalog_Product_Collection */
 			$collection->setFlag("store_id", Mage::app()->getStore()->getId());
-			$collection->setSolrData($this->getSolrData());
+			$data = $this->getSolrData();
+			if (is_array($data)) {
+    			$collection->setSolrData($this->getSolrData());
+			}
 			$collection->setCurrentCategory($this->getCurrentCategory());
 			$collection->load();
 			$this->setData("collection", $collection);
