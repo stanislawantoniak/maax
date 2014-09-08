@@ -1,9 +1,8 @@
 <?php $_vendor = Mage::helper('umicrosite')->getCurrentVendor(); ?>
-
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
 <div id="content" class="container-fluid">
 
     <div class="row">
-
         <div class="col-sm-12">
             <?php echo $this->getChildHtml('vendor.menu'); ?>
             <div id="content-main">
