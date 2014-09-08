@@ -121,7 +121,8 @@
         });
         $('#m-image-helper .delete.m-button').click(function() {
             $.gridData(_td, { value: ''});
-            $(_td).find('div').css({'background-image': ''});
+//            $(_td).find('div').css({'background-image': ''});
+            $(_td).find('div').html('');
             $.hideHelperPopup();
         });
         $('#m-image-helper input.m-default').click(function() {
