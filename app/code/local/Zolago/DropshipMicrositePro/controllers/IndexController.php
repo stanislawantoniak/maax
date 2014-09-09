@@ -7,6 +7,7 @@ class Zolago_DropshipMicrositePro_IndexController
     public function indexAction()
     {
         $vendor = Mage::helper('umicrosite')->getCurrentVendor();
+
         if ($vendor) {
         	
 			// Set root category
@@ -20,6 +21,8 @@ class Zolago_DropshipMicrositePro_IndexController
 
     public function landingpageAction(){
         $this->loadLayout();
+		// Load after layout render
+        $this->_initLayoutMessages(array('catalog/session', 'udqa/session', 'core/session'));
         $this->renderLayout();
     }
 }

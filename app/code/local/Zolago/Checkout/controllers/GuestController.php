@@ -12,7 +12,7 @@ class Zolago_Checkout_GuestController extends Zolago_Checkout_Controller_Abstrac
 	public function indexAction() {
 		// Customer logged in - forward to logged controller
 		if($this->_getCustomerSession()->isLoggedIn()){
-			return $this->_forward("index", "onepage");
+			return $this->_redirect("*/onepage/index");
 		}
 		// No is guest checkout flag - go to login
 		// Reset flag - every refresh will show login
