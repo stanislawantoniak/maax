@@ -78,17 +78,18 @@
 	Mall.Checkout.prototype.setActive = function(stepIndex){
 		var steps = this.getSteps();
 		var currentStep = steps[stepIndex];
+		var self= this;
 		
 		jQuery.each(steps, function(i){
 			if(i==this._activeIndex){
-				this.onLeave.apply(this);
+				this.onLeave.apply(this, [self]);
 			}
 			this.active = 0;
 			this.content.addClass("hidden");
 		});
 		
 	
-		currentStep.onEnter.apply(currentStep);
+		currentStep.onEnter.apply(currentStep, [self]);
 		currentStep.content.removeClass("hidden");
 		currentStep.active = 1;
 		
@@ -131,7 +132,7 @@
 		if(typeof step != 'object'){
 			step = this.getStep(step);
 		}
-		step.onEnable.apply(step);
+		step.onEnable.apply(step, [this]);
 		step.enabled = true;
 		step.content.addClass("enabled");
 		return this;
@@ -145,7 +146,7 @@
 		if(typeof step != 'object'){
 			step = this.getStep(step);
 		}
-		step.onDisable.apply(step);
+		step.onDisable.apply(step, [this]);
 		step.enabled = false;
 		step.content.removeClass("enabled");
 		return this;
@@ -218,28 +219,28 @@
 			enabled: config.enabled || false,
 			active: config.active || false,
 			content: jQuery('#'+config.id),
-			// step.collect() - this at body is this step object. 
-			// Should returns the serialized values
+			// step.collect() - this = set. 
+			// Should returns the serialized values. this = step
 			collect: config.collect || function(){return {}},
-			// before add to checkout object
-			onPrepare: config.onPrepare || function(){},
-			// before submit - validation here. 
+			// before add to checkout object, this = step
+			onPrepare: config.onPrepare || function(checkoutObject, config){},
+			// before submit - validation here. this = step
 			// if returns false - stop process
-			onSubmit: config.onSubmit || function(){},
-			// before step shown
-			onEnter: config.onEnter || function(){},
-			// after step leave
-			onLeave: config.onLeave || function(){},
-			// when step is enabled (possible to enter) [DEV]
+			onSubmit: config.onSubmit || function(checkoutObject){},
+			// before step shown; this = step 
+			onEnter: config.onEnter || function(checkoutObject){},
+			// after step leave; this = step
+			onLeave: config.onLeave || function(checkoutObject){},
+			// when step is enabled (possible to enter); this = step [DEV]
 			onEnable: config.onEnable || function(){},
-			// when step is disabled (inpossible to enter) [DEV]
+			// when step is disabled (inpossible to enter); this = step [DEV]
 			onDisable: config.onDisable || function(){}	
 		};
 		
 		// Submit action - call from 
 		object.submit = function(){
 			// Is valdidated
-			if(object.onSubmit.apply(object)===false){
+			if(object.onSubmit.apply(self)===false){
 				return;
 			}
 			self.next();
