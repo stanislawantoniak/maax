@@ -4,14 +4,37 @@
       this._steps = [];
 	  this._activeIndex = 0;
 	  this._progressObject = null;
+	  this._config = {};
     };
     
+	
+	
+	/**
+	 * @param string 
+	 * @param mixed 
+	 * @returns Mall.Chceckout
+	 */
+	Mall.Checkout.prototype.set = function(key, value){
+		this._config[key] = value;
+		return this;
+	}
+	
+	/**
+	 * @param string 
+	 * @param mixed 
+	 * @returns Mall.Chceckout
+	 */
+	Mall.Checkout.prototype.get = function(key){
+		return this._config[key];
+	}
+	
 	/**
 	 * @param object progresObject
 	 * @returns Mall.Chceckout
 	 */
 	Mall.Checkout.prototype.setProgressObject = function(progresObject){
 		this._progressObject = progresObject;
+		return this;
 	}
 	
 	/**
@@ -78,17 +101,18 @@
 	Mall.Checkout.prototype.setActive = function(stepIndex){
 		var steps = this.getSteps();
 		var currentStep = steps[stepIndex];
+		var self= this;
 		
 		jQuery.each(steps, function(i){
 			if(i==this._activeIndex){
-				this.onLeave.apply(this);
+				this.onLeave.apply(this, [self]);
 			}
 			this.active = 0;
 			this.content.addClass("hidden");
 		});
 		
 	
-		currentStep.onEnter.apply(currentStep);
+		currentStep.onEnter.apply(currentStep, [self]);
 		currentStep.content.removeClass("hidden");
 		currentStep.active = 1;
 		
@@ -115,7 +139,8 @@
 		
 		for(var i=0; i<=this._activeIndex; i++){
 			progress.addClass("step_0" + this._mapProgressIndex(i));
-			progress.children("#step_0" + this._mapProgressIndex(i)).addClass("current-checkout");
+			progress.children("#step_0" + this._mapProgressIndex(i)).
+					addClass("current-checkout");
 		}
 	}
 	
@@ -131,7 +156,7 @@
 		if(typeof step != 'object'){
 			step = this.getStep(step);
 		}
-		step.onEnable.apply(step);
+		step.onEnable.apply(step, [this]);
 		step.enabled = true;
 		step.content.addClass("enabled");
 		return this;
@@ -145,7 +170,7 @@
 		if(typeof step != 'object'){
 			step = this.getStep(step);
 		}
-		step.onDisable.apply(step);
+		step.onDisable.apply(step, [this]);
 		step.enabled = false;
 		step.content.removeClass("enabled");
 		return this;
@@ -204,6 +229,14 @@
 	}
 	
 	/**
+	 * Return all checkout data
+	 * @returns array [{name: "", value: ""},...]
+	 */
+	Mall.Checkout.prototype.collect = function(){
+		return [];
+	}
+	
+	/**
 	 * Prepare step object
 	 * @param object config
 	 * @return object
@@ -218,18 +251,28 @@
 			enabled: config.enabled || false,
 			active: config.active || false,
 			content: jQuery('#'+config.id),
-			onPrepare: config.onPrepare || function(){},// Frame prepare
-			onSubmit: config.onSubmit || function(){},	// Next clicked
-			onEnter: config.onEnter || function(){},	// Frme enter
-			onLeave: config.onLeave || function(){},	// Frame leave
-			onEnable: config.onEnable || function(){},	// Frame enable
-			onDisable: config.onDisable || function(){}	// Frame disable
+			// step.collect() - this = set. 
+			// Should returns the serialized values. this = step
+			collect: config.collect || function(){return {}},
+			// before add to checkout object, this = step
+			onPrepare: config.onPrepare || function(checkoutObject, config){},
+			// before submit - validation here. this = step
+			// if returns false - stop process
+			onSubmit: config.onSubmit || function(checkoutObject){},
+			// before step shown; this = step 
+			onEnter: config.onEnter || function(checkoutObject){},
+			// after step leave; this = step
+			onLeave: config.onLeave || function(checkoutObject){},
+			// when step is enabled (possible to enter); this = step [DEV]
+			onEnable: config.onEnable || function(){},
+			// when step is disabled (inpossible to enter); this = step [DEV]
+			onDisable: config.onDisable || function(){}	
 		};
 		
-		// Submit nadle
+		// Submit action - call from 
 		object.submit = function(){
 			// Is valdidated
-			if(object.onSubmit.apply(object)===false){
+			if(object.onSubmit.apply(self)===false){
 				return;
 			}
 			self.next();
