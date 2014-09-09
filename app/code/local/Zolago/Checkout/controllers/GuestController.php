@@ -18,7 +18,7 @@ class Zolago_Checkout_GuestController extends Zolago_Checkout_Controller_Abstrac
 		// Reset flag - every refresh will show login
 		// Devs can remove true argument for tests
 		if(!$this->_getCustomerSession()->getIsCheckout(true)){
-			return $this->_redirect("*/*/login");
+			//return $this->_redirect("*/*/login");
 		}
 		parent::indexAction();
 	}
@@ -32,7 +32,7 @@ class Zolago_Checkout_GuestController extends Zolago_Checkout_Controller_Abstrac
 		
 		// Is logged in ?
 		if($this->_getCustomerSession()->isLoggedIn()){
-			return $this->_forward("index", "onepage");
+			return $this->_redirect("checkout/onepage/index");
 		}
 		
 		// Set checkout context
@@ -50,4 +50,11 @@ class Zolago_Checkout_GuestController extends Zolago_Checkout_Controller_Abstrac
 		$this->_getCustomerSession()->setIsCheckout(true);
 		return $this->_redirect("*/*/index");
 	}
+
+    public function testAction()
+    {
+        $this->loadLayout();
+
+        $this->renderLayout();
+    }
 }

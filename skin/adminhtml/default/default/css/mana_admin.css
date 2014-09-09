@@ -65,3 +65,7 @@ td div.input-image { margin:  0 auto; }
 #catalog-wysiwyg-editor.m-editor .textarea {
     width: 600px !important;
 }
+
+.grid table td.ct-image {
+    vertical-align: middle;
+}

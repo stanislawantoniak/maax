@@ -26,6 +26,9 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 	 */
 	protected $_groupCollection;
 	
+	protected $_manaCollection;
+	
+	
 	/**
 	 * @param Varien_Object $product
 	 * @return Zolago_Solrsearch_Model_Data
@@ -54,7 +57,7 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 	}
 	
 	public function getBrandAttributeCode() {
-		return trim(Mage::helper('solrsearch')->getSetting('display_brand_suggestion'));
+		return trim(Mage::helper('solrsearch')->getSetting('brand_attribute_code'));
 	}
 	
 	public function useInSugestions() {
@@ -277,6 +280,18 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 			$docData['udropship_vendor_logo_varchar'] = $vendor->getLogo();
 		}
 		
+		
+		// Mana manufacturer logo
+		if($this->getBrandAttributeCode() && $item->getOrigData($this->getBrandAttributeCode())){
+			$manaValueObejct = $this->_getManaManufacturerByOptionId(
+				$item->getOrigData($this->getBrandAttributeCode())
+			);
+			if($manaValueObejct && $manaValueObejct->getNormalImage()){
+				$docData[$this->getBrandAttributeCode() . '_logo_varchar'] = 
+					"m-image" . DS . $manaValueObejct->getNormalImage();
+			}
+		}
+		
 		// Wishlist count
 		$docData['wishlist_count_int'] = (int)$item->getOrigData('wishlist_count');
 		
@@ -431,6 +446,8 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 			}
 		}
 		
+		
+		
 		if (empty($attributeVal) || $attributeVal == $helper->__('No') || $attributeVal == $helper->__('None')) {
 			unset($addData[$attributeKey]);
 			unset($addData[$attributeKeyFacets]);
@@ -455,8 +472,6 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 			
 				
 			if($attributeObj->getIsSearchable()){
-				
-				
 				if ($attributeVal != $helper->__('No') && $attributeCode != 'status' && $attributeCode != 'sku' && $attributeCode != 'price'){
 					if (strlen($attributeVal) > 255) {
 						$this->pushTextSearchToObject ($item, $attributeVal, 'textSearchText');
@@ -497,6 +512,40 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 		}
 		
 		return $this;
+	}
+	
+	/**
+	 * @param int $optionId
+	 * @return Mana_Filters_Model_Filter2_Value | Mana_Filters_Model_Filter2_Store | null
+	 */
+	protected function _getManaManufacturerByOptionId($optionId) {
+		return $this->_getManaManufacturerValueCollection()->
+			getItemByColumnValue("option_id", (int)$optionId);
+	}
+	
+	/**
+	 * @return Mana_Filters_Resource_Filter2_Value_Collection
+	 */
+	protected function _getManaManufacturerValueCollection() {
+		
+		if(!$this->_manaCollection){
+			
+			$manaFilter = Mage::getModel("mana_filters/filter2");
+			/* @var $manaFilter Mana_Filters_Model_Filter2 */
+			$manaFilter->load($this->getBrandAttributeCode(), "code");
+			
+			$collection = Mage::getResourceModel(
+						'mana_filters/filter2_value_' . 
+						(Mage::helper('mana_admin')->isGlobal() ? "" : "store_") . 
+						"collection"
+			);
+			if(!Mage::helper('mana_admin')->isGlobal()){
+				$collection->addFieldToFilter("store_id", Mage::app()->getStore()->getId());
+			}
+			$collection->addFieldToFilter("filter_id", $manaFilter->getId());
+			$this->_manaCollection =  $collection;
+		}
+		return $this->_manaCollection;
 	}
 	
 	/**
@@ -655,8 +704,12 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 			if ($attributeVal == 'No') {
 				continue;
 			}
-			// 
-			$attributeValFacets[] = trim($attributeVal);
+			
+			if(!is_array($attributeVal)){
+				$attributeValFacets[] = trim($attributeVal);
+			}else{
+				$attributeValFacets = array_merge($attributeValFacets, $attributeVal);
+			}
 			
 			
 			if ($backendType == 'datetime') {

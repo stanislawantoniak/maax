@@ -77,6 +77,7 @@ $placements = $this->getCategoryPlacements();
                                                     <?php if($i == $placement['position']): ?>
                                                         <li class="col-md-3 banner-item" data-placement="<?php echo $placement['placement_id']; ?>">
                                                             <div class="content">
+<!--                                                                --><?php //echo $placement['placement_id']; ?><!--<br />-->
                                                             <?php if(isset($placement['preview_image']) && !empty($placement['preview_image'])): ?>
                                                                 <img src="<?php echo $placement['preview_image']; ?>" class="banner-preview-image" style="height: 120px;"  />
                                                             <?php endif; ?>
@@ -371,7 +372,7 @@ jQuery(function ($) {
 
 
     function savePresentation() {
-        console.log('savePresentation');
+
         setPriority();
         recountHeight();
         $.ajax({
@@ -550,9 +551,11 @@ jQuery(function ($) {
                     + '</span><span data-edit-source="campaign_date_dash"> - </span>'
                     + '<span data-edit-source="campaign_date_to">'+dateTo+'</span>';
             }
-            var campaignBlock = '<li class="col-md-3 banner-item" data-status="">' +
-                '<img src="'+previewImage+'" class="banner-preview-image" style="height: 120px;" />' +
-                '<div class="row">' +
+            var campaignBlock = '<li class="col-md-3 banner-item" data-status="">' ;
+            if($.type(previewImage) !== "undefined"){
+                campaignBlock += '<img src="'+previewImage+'" class="banner-preview-image" style="height: 120px;" />' ;
+            }
+            campaignBlock +=    '<div class="row">' +
                 '<div class= "col-md-8" >' +
                 '<input type="hidden" name="placement_id[]" value="0">' +
                 '<input type="hidden" name="campaign_id[]" value="'+campaign+'">' +
@@ -700,10 +703,20 @@ jQuery(function ($) {
             })
         }
     }
-
+    function disableSaveButton(){
+        $('#basicModal #add-placement').addClass('btn-disabled');
+        $('#basicModal #add-placement').attr('disabled','disabled');
+        $('#basicModal #add-placement').prop('disabled',true);
+    }
+    function enableSaveButton(){
+        $('#basicModal #add-placement').removeClass('btn-disabled');
+        $('#basicModal #add-placement').attr('disabled','');
+        $('#basicModal #add-placement').prop('disabled',false);
+    }
     function getBannerImage(banner) {
         banner = parseInt(banner);
         if (banner > 0) {
+            disableSaveButton();
             $.ajax({
                 url : "/campaign/vendor/getBannerPreviewImage",
                 data: {id : banner},
@@ -713,6 +726,8 @@ jQuery(function ($) {
                     wrapper += ': </label></div><div class="row"><img src="'+src+'" /></div>';
 
                     $('#basicModal').find('[data-banner="preview"]').html(wrapper);
+
+                    enableSaveButton();
                 }
             })
         } else {

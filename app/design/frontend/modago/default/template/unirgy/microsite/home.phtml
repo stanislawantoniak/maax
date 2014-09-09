@@ -1,11 +1,14 @@
 <?php $_vendor = Mage::helper('umicrosite')->getCurrentVendor(); ?>
 
 <div id="content" class="container-fluid">
+	<?php /* Messges are twice time **/ ?>
+    <?php /* echo $this->getMessagesBlock()->getGroupedHtml() */  ?>
+
     <div class="row">
         <div class="col-sm-12">
             <?php echo $this->getChildHtml('vendor.menu'); ?>
             <div id="content-main">
-                <?php echo $this->getChildHtml('vendor.banner'); ?>
+                  <?php echo $this->getChildHtml('vendor.banner'); ?>
             </div>
         </div>
     </div>

@@ -140,7 +140,7 @@ class Zolago_Banner_Block_Vendor_Banner_Edit extends Mage_Core_Block_Template
 
             foreach ($typesConfig as $typesConfigType) {
                 if (
-                    Mage::getSingleton('zolagobanner/banner_type')->getTypCodeByTitle($typesConfigType->title) == $type
+                    is_object($typesConfigType) && Mage::getSingleton('zolagobanner/banner_type')->getTypCodeByTitle($typesConfigType->title) == $type
                 ) {
                     $config = $typesConfigType;
                 }

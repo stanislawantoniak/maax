@@ -4,6 +4,73 @@ require_once Mage::getModuleDir("controllers", "Mage_Customer") . DS . "AccountC
 
 class Zolago_Customer_AccountController extends Mage_Customer_AccountController
 {
+	protected $_wasLogged;
+
+	/**
+	 * Override mesagge
+	 */
+	public function loginPostAction() {
+		
+		if(!$this->getRequest()->isPost()){
+            $this->_redirect('*/*/');
+			return;
+		}
+		
+		if (!$this->_validateFormKey()) {
+            $this->_redirect('*/*/');
+            return;
+        }
+
+        if ($this->_getSession()->isLoggedIn()) {
+            $this->_redirect('*/*/');
+            return;
+        }
+		
+		parent::loginPostAction();
+		
+		// Add remeber setIsPersistent state
+		$this->_getSession()->setIsPersistent(
+			$this->getRequest()->getParam("persistent_remember_me", 0)
+		);
+		
+		// Add success if login sucessful (by core session - visable in both customer / checkout)
+		if($this->_getSession()->isLoggedIn()){
+			Mage::getSingleton('core/session')->addSuccess(
+				Mage::helper("zolagocustomer")->__("You have been logged in")
+			);
+		}
+	}
+
+    /**
+     * Action predispatch
+     *
+     * Check customer authentication for some actions
+     */
+    public function preDispatch()
+    {
+        // a brute-force protection here would be nice
+
+        parent::preDispatch();
+
+        $action = $this->getRequest()->getActionName();
+
+        if (preg_match("/^(forgotpasswordmessage)/i", $action)) {
+            if ($this->getFlag($action, "no-dispatch")) {
+                unset($this->_flags[$action]['no-dispatch']);
+                $this->getResponse()->clearHeader('Location');
+                $this->getResponse()->setHttpResponseCode(200);
+            }
+        }
+
+        // Skip logout error - @httpdocs changes
+        if($this->getRequest()->getActionName()=="logout"){
+            $this->setFlag('', 'no-dispatch', false);
+        }
+
+        if (!$this->getRequest()->isDispatched()) {
+            return;
+        }
+    }
 	
     public function editPostAction() {
         if (!$this->_validateFormKey()) {
@@ -50,7 +117,84 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
         
         return parent::editPostAction();
     }
-    
+
+    /**
+     * Forgot customer password action
+     */
+    public function forgotPasswordPostAction()
+    {
+        $email = (string) $this->getRequest()->getPost('email');
+        if ($email) {
+            if (!Zend_Validate::is($email, 'EmailAddress')) {
+                $this->_getSession()->setForgottenEmail($email);
+                $this->_getSession()->addError($this->__('Invalid email address.'));
+                $this->_redirect('*/*/forgotpassword');
+                return;
+            }
+
+            /** @var $customer Mage_Customer_Model_Customer */
+            $customer = $this->_getModel('customer/customer')
+                ->setWebsiteId(Mage::app()->getStore()->getWebsiteId())
+                ->loadByEmail($email);
+
+            if ($customer->getId()) {
+                try {
+                    $newResetPasswordLinkToken =  $this->_getHelper('customer')->generateResetPasswordLinkToken();
+                    $customer->changeResetPasswordLinkToken($newResetPasswordLinkToken);
+                    $customer->sendPasswordResetConfirmationEmail();
+                } catch (Exception $exception) {
+                    $this->_getSession()->addError($exception->getMessage());
+                    $this->_redirect('*/*/forgotpassword');
+                    return;
+                }
+            }
+            $this->_getSession()->setData("forgotpassword_customer_email", $this->_getHelper("customer")
+                ->escapeHtml($email));
+            $this->_redirect('*/*/forgotpasswordmessage');
+            return;
+        } else {
+            $this->_getSession()->addError($this->__('Please enter your email.'));
+            $this->_redirect('*/*/forgotpassword');
+            return;
+        }
+    }
+
+    public function forgotPasswordMessageAction()
+    {
+        $this->loadLayout();
+        $this->renderLayout();
+    }
+
+    /**
+     * Display reset forgotten password form
+     *
+     * User is redirected on this action when he clicks on the corresponding link in password reset confirmation email
+     *
+     */
+    public function resetPasswordAction()
+    {
+        $resetPasswordLinkToken = (string) $this->getRequest()->getQuery('token');
+        $customerId = (int) $this->getRequest()->getQuery('id');
+        try {
+            $this->_validateResetPasswordLinkToken($customerId, $resetPasswordLinkToken);
+            $this->loadLayout();
+            // Pass received parameters to the reset forgotten password form
+            $customer = $this->_getModel("customer/customer")->load($customerId);
+            $this->getLayout()->getBlock('resetPassword')
+                ->setCustomerId($customerId)
+                ->setResetPasswordLinkToken($resetPasswordLinkToken)
+                ->setEmail($customer->getEmail());
+
+            // autologin
+            $this->_getSession()->setCustomerAsLoggedIn($customer);
+
+            $this->renderLayout();
+        } catch (Exception $exception) {
+            $this->_getSession()->addError( $this->_getHelper('customer')->__('Your password reset link has expired.'));
+            $this->_redirect('*/*/forgotpassword');
+        }
+    }
+
     protected function _registerEmailToken(
         Mage_Customer_Model_Customer $customer, $newEmail
     ){
@@ -75,8 +219,12 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
 	 * @return type
 	 */
 	protected function _loginPostRedirect() {
-		if($this->_getSession()->isLoggedIn() && $this->getRequest()->getParam("is_checkout")){
-			$this->_getSession()->setBeforeAuthUrl(Mage::getUrl("checkout/onepage/index"));
+		if($this->getRequest()->getParam("is_checkout")){
+			if($this->_getSession()->isLoggedIn()){
+				$this->_getSession()->setBeforeAuthUrl(Mage::getUrl("checkout/onepage/index"));
+			}else{
+				$this->_getSession()->setBeforeAuthUrl(Mage::getUrl("checkout/guest/login"));
+			}
 		}
 		return parent::_loginPostRedirect();
 	}
