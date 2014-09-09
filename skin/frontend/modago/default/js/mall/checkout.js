@@ -218,15 +218,25 @@
 			enabled: config.enabled || false,
 			active: config.active || false,
 			content: jQuery('#'+config.id),
-			onPrepare: config.onPrepare || function(){},// Frame prepare
-			onSubmit: config.onSubmit || function(){},	// Next clicked
-			onEnter: config.onEnter || function(){},	// Frme enter
-			onLeave: config.onLeave || function(){},	// Frame leave
-			onEnable: config.onEnable || function(){},	// Frame enable
-			onDisable: config.onDisable || function(){}	// Frame disable
+			// step.collect() - this at body is this step object. 
+			// Should returns the serialized values
+			collect: config.collect || function(){return {}},
+			// before add to checkout object
+			onPrepare: config.onPrepare || function(){},
+			// before submit - validation here. 
+			// if returns false - stop process
+			onSubmit: config.onSubmit || function(){},
+			// before step shown
+			onEnter: config.onEnter || function(){},
+			// after step leave
+			onLeave: config.onLeave || function(){},
+			// when step is enabled (possible to enter) [DEV]
+			onEnable: config.onEnable || function(){},
+			// when step is disabled (inpossible to enter) [DEV]
+			onDisable: config.onDisable || function(){}	
 		};
 		
-		// Submit nadle
+		// Submit action - call from 
 		object.submit = function(){
 			// Is valdidated
 			if(object.onSubmit.apply(object)===false){
