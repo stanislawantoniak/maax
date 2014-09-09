@@ -74,7 +74,7 @@ $captionsNumber = (int)$config->captions_number;
 
 <script type="text/javascript">
     jQuery(function ($) {
-        var imageSize = 60; //KB
+        var imageSize = <?php echo $_helper->getMaxFileSize(); ?>; //KB
 
         var form = $("#edit-banner");
         new Zolago.formIntegrator(form);

@@ -155,17 +155,14 @@ class Zolago_Banner_VendorController extends Zolago_Dropship_Controller_Vendor_A
 
                         foreach ($tmpName as $n => $imageName) {
                             if (!empty($imageName)) {
-                                $imageSize = getimagesize($imageName);
-                                $imageW = $imageSize[0];
-
-                                $imageH = $imageSize[1];
-                                $path = Mage::getBaseDir() . "/media/banners/" . $name[$n];
+                                $uniqName = uniqid() . "_" . $name[$n];
+                                $path = Mage::getBaseDir() . "/media/banners/" . $uniqName;
                                 try {
                                     move_uploaded_file($imageName, $path);
                                 } catch (Exception $e) {
                                     Mage::logException($e);
                                 }
-                                $bannerContentToSave['image'][$n]['path'] = "/banners/" . $name[$n];
+                                $bannerContentToSave['image'][$n]['path'] = "/banners/" . $uniqName;
                             } elseif (isset($data['image'])&& !empty($data['image'])) {
                                 $bannerContentToSave['image'][$n]['path'] = isset($data['image'][$n]) ? $data['image'][$n]['value'] : '';
                             }
