@@ -119,7 +119,10 @@ abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_Onepage
 		 */
 		$shipping = $request->getParam("shipping");
 		if(is_array($shipping)){
-			$onepage->saveShipping($shipping, $shippingAddressId);
+			$shippingResponse = $onepage->saveShipping($shipping, $shippingAddressId);
+			if(isset($shippingResponse['error']) && $shippingResponse['error']==1){
+				throw new Mage_Core_Exception(implode("\n", $shippingResponse['message']));
+			}
 			$onepage->getQuote()->setTotalsCollectedFlag(false);
 		}
 		
