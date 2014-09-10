@@ -42,6 +42,17 @@
 <?php echo $this->getChildChildHtml('additional'); ?>
 <script type="text/javascript">
     //<![CDATA[
-    jQuery('#payment_form_zolagopayment').show();
+    jQuery('[name="payment[method]"]').click(function () {
+        if (jQuery(this).val() == "zolagopayment") {
+            jQuery('#payment_form_zolagopayment').show();
+        } else {
+            jQuery('#payment_form_zolagopayment').hide();
+        }
+    })
+
+
+    if (jQuery('[name="payment[method]"]').is(':checked') && jQuery('[name="payment[method]"]').val() == 'zolagopayment') {
+        jQuery('#payment_form_zolagopayment').show();
+    }
     //]]>
 </script>
