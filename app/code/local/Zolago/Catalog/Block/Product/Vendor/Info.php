@@ -34,25 +34,22 @@ class Zolago_Catalog_Block_Product_Vendor_Info
 	}
 	
 	/**
-	 * @todo implement
 	 * @return string|null
 	 */
 	public function getVendorInfoHtml() {
 	    $vendor = $this->getVendor();
-        //echo var_export($vendor);
-
 	    $info = $vendor->getTermsSellerInformation();
-        //echo "info=";
-        //echo $info;
 		return $info;
 	}
 	
 	/**
-	 * @todo implement
 	 * @return string|null
 	 */
 	public function getVendorDeliveryHtml() {
-		return "Lorem ipsum [dev]";
+		$vendor = $this->getVendor();
+        $info = '<div id="termsDeliveryInformation">' . $vendor->getTermsDeliveryInformation() . '</div>';
+        $info .= '<div id="termsReturnInformation">' . $vendor->getTermsReturnInformation() . '</div>';
+        return  $info;
 	}
 	
 	/**
