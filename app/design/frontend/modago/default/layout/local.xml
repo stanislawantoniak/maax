@@ -689,4 +689,12 @@
 		</reference>
 	</checkout_guest_index>
 
+    <checkout_onepage_success>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/1column.phtml</template>
+            </action>
+        </reference>
+    </checkout_onepage_success>
+    
 </layout>
