@@ -9,17 +9,25 @@ abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_Onepage
 		$this->importPostData();
 		
 	}
+	
+	/**
+	 * @return Zolago_Checkout_Model_Type_Onepage
+	 */
+	public function getOnepage() {
+		return Mage::getSingleton('zolagocheckout/type_onepage');
+	}
+	
 	/**
 	 * Process place order action
 	 * Make parial save of all data to quote
 	 * Then make save process
 	 */
-	public function saveOrderAction() {
+	public function placeOrderAction() {
 		if (!$this->_validateFormKey()) {
             $this->_redirect('*/*');
             return;
         }
-		$this->importPostData();
+		//$this->importPostData();
 		parent::saveOrderAction();
 		
 		$response = Mage::helper('core')->jsonDecode(
@@ -42,10 +50,22 @@ abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_Onepage
 		/**
 		method:guest
 		 */
-		$method	= $request->getData("method"); // chekcout method
+		$method	= $request->getParam("method"); // chekcout method
 		if($method){
 			$onepage->saveCheckoutMethod($method);
 			$onepage->getQuote()->setTotalsCollectedFlag(false);
+		}
+		/**
+		 account[firstname]:abc
+		 account[lastname]:abc
+		 account[email]:abc
+		 account[phone]:abc
+		 account[password]:abc
+		 account[password_confirmation]:abc
+		 */
+		$accountData = $request->getData("account");
+		if(is_array($accountData)){
+			$onepage->saveAccountData($accountData);
 		}
 		
 		/**
@@ -128,12 +148,16 @@ abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_Onepage
 	 * Save addresses
 	 */
 	public function saveAddressesAction() {
+		if (!$this->_validateFormKey()) {
+            $this->_redirect('*/*');
+            return;
+        }
 		$response = array(
 			"status"=>true,
 			"content" => array()
 		);
 		try{
-			$this->importPostData();
+			//$this->importPostData();
 		} catch (Exception $ex) {
 			$response = array(
 				"status"=>0,
@@ -142,7 +166,11 @@ abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_Onepage
 				)
 			);
 		}
-		$this->_prepareJsonResponse($response);
+		if($this->getRequest()->isAjax()){
+			$this->_prepareJsonResponse($response);
+		}else{
+			$this->_redirectReferer();
+		}
 	}
 	
 	/**
