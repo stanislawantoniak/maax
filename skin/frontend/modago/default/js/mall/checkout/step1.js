@@ -6,11 +6,28 @@
     "use strict";
     Mall.Checkout.prototype.step1 = {
 
+        id: "step-0",
+
+        code: "address",
+
+        doSave: true,
+
         _invoice_copy_shipping_fields: [
             "#billing\\:company",
             "#billing\\:street",
             "#billing\\:postcode",
             "#billing\\:city"
+        ],
+
+        _billing_names: [
+            "billing[firstname]",
+            "billing[lastname]",
+            "billing[telephone]",
+            "billing[company]",
+            "billing[vat_id]",
+            "billing[street][]",
+            "billing[postcode]",
+            "billing[city]"
         ],
 
         init: function () {
@@ -74,6 +91,68 @@
             });
 
             return this;
+        },
+
+        getIsNeedInvoice: function () {
+            return jQuery("#invoice_vat").is(":checked");
+        },
+
+        onPrepare: function(checkoutObject){
+            // init step
+            checkoutObject.step1.init();
+            var self = this;
+            this.content.find("#step-0-submit").click(function(){
+                console.log(checkoutObject.getActiveStep().collect());
+                self.submit();
+                return false;
+            });
+        },
+        isPasswordNotEmpty: function(){
+            return this.content.find("[name='billing[customer_password]']").val().length>0;
+        },
+        getBillingFromShipping: function () {
+            var self = this,
+                billingData = [],
+                selector;
+            jQuery.each(this._billing_names, function (idx, item) {
+                selector = item.replace("billing", "shipping");
+                billingData.push({
+                    name: item,
+                    value: jQuery("[name='"+ selector +"']").val()
+                });
+            });
+
+            return billingData;
+        },
+        collect: function () {
+            var form = jQuery("#co-address"),
+                password = form.find("#account\\:password").val(),
+                billingData,
+                stepData = [];
+
+            // set password confirmation
+            if (password.length > 0) {
+                form.find("#account\\:confirmation").val(password);
+            }
+            // set billing data
+            form.find("[name='billing[firstname]']").val(form.find("[name='account[firstname]']").val());
+            form.find("[name='billing[lastname]']").val(form.find("[name='account[lastname]']").val());
+
+            // copy shipping data if order will be delivered to myself
+            if (!form.find("[name='shipping[different_shipping_address]']").is(":checked")) {
+                form.find("#shipping\\:firstname").val(form.find("#account\\:firstname").val());
+                form.find("#shipping\\:lastname").val(form.find("#account\\:lastname").val());
+                form.find("#shipping\\:telephone").val(form.find("#account\\:telephone").val());
+            }
+
+            stepData = form.serializeArray();
+            // fill billing data with shipping
+            if (!this.getIsNeedInvoice()) {
+                billingData = this.getBillingFromShipping();
+                jQuery.merge(stepData, billingData);
+            }
+
+            return stepData;
         }
     };
 })();

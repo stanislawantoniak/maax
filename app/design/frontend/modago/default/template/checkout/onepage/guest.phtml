@@ -22,45 +22,7 @@
 		
 		checkout.setProgressObject(jQuery("#step ol"));
 		
-		checkout.addStep({
-			id: "step-0",
-			code: "address",
-			doSave: true,
-			onPrepare: function(checkoutObject){
-                // init step
-                checkoutObject.step1.init();
-				var self = this;
-				this.content.find("#step-0-submit").click(function(){
-                    checkoutObject.getActiveStep().collect();
-					self.submit();
-					return false;
-				})
-			},
-			isPasswordNotEmpty: function(){
-				return this.content.find("[name='billing[customer_password]']").val().length>0;
-			},
-            collect: function () {
-                var form = jQuery("#co-address"),
-                    password = form.find("#account\\:password").val();
-
-                // set password confirmation
-                if (password.length > 0) {
-                    form.find("#account\\:confirmation").val(password);
-                }
-                // set billing data
-                form.find("[name='billing[firstname]']").val(form.find("[name='account[firstname]']").val());
-                form.find("[name='billing[lastname]']").val(form.find("[name='account[lastname]']").val());
-
-                // copy shipping data if order will be delivered to myself
-                if (!form.find("[name='shipping[different_shipping_address]']").is(":checked")) {
-                    form.find("#shipping\\:firstname").val(form.find("#account\\:firstname").val());
-                    form.find("#shipping\\:lastname").val(form.find("#account\\:lastname").val());
-                    form.find("#shipping\\:telephone").val(form.find("#account\\:telephone").val());
-                }
-
-                return form.serializeArray();
-            }
-		});
+		checkout.addStep(checkout.step1);
 		
 		checkout.addStep({
 			id: "step-1",
