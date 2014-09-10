@@ -1,3 +1,4 @@
+<?php /* @var $this Zolago_Modago_Block_Checkout_Onepage_Shared_Address */ ?>
 <?php
 /**
  * Author: Paweł Chyl <pawel.chyl@orba.pl>
@@ -12,7 +13,7 @@
     <input type="hidden" name="billing[lastname]" value="">
     <input type="hidden" name="billing[region_id]" value="">
     <input type="hidden" name="billing[region]" value="">
-    <input type="hidden" name="billing[country_id]" value="">
+    <input type="hidden" name="billing[country_id]" value="<?php echo $this->getCountryId(); ?>">
     <input type="hidden" name="billing[telephone]" value="">
     <input type="hidden" name="billing[fax]" value="">
     <input type="hidden" name="billing[use_for_shipping]" value="0">
