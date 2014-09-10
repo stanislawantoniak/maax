@@ -27,9 +27,38 @@
 			onPrepare: function(checkoutObject){
 				var self = this;
 				this.content.find("#step-0-submit").click(function(){
+                    checkoutObject.getActiveStep().collect();
+                    return false;
 					self.submit();
 				})
-			}
+			},
+            collect: function () {
+                var form = jQuery("#co-address"),
+                    loggedIn = parseInt(form.find("[name='customer_logged_in']").val(), 10),
+                    password = form.find("[name='billing[customer_password]']").val();
+
+                // change checkout method
+                if (loggedIn === 0 && password.length > 0) {
+                    form.find("[name='method']").val("register");
+                }
+                // set password confirmation
+                if (password.length > 0) {
+                    form.find("#billing\\:confirm_password").val(password);
+                }
+                // set billing data
+                form.find("[name='billing[firstname]']").val(form.find("[name='account[firstname]']").val());
+                form.find("[name='billing[lastname]']").val(form.find("[name='account[lastname]']").val());
+
+                // copy shipping data if order will be delivered to myself
+                if (!form.find("[name='shipping[different_shipping_address]']").is(":checked")) {
+                    form.find("#shipping\\:firstname").val(form.find("#account\\:firstname").val());
+                    form.find("#shipping\\:lastname").val(form.find("#account\\:lastname").val());
+                    form.find("#shipping\\:telephone").val(form.find("#account\\:telephone").val());
+                }
+
+                console.log(form.serializeArray());
+                return false;
+            }
 		});
 		
 		checkout.addStep({
