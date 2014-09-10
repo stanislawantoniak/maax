@@ -21,8 +21,7 @@
 	
 	/**
 	 * @param string 
-	 * @param mixed 
-	 * @returns Mall.Chceckout
+	 * @returns mixed
 	 */
 	Mall.Checkout.prototype.get = function(key){
 		return this._config[key];
@@ -196,6 +195,20 @@
 	 */
 	Mall.Checkout.prototype.getStep = function(stepIndex){
 		return this._steps[stepIndex];
+	}
+	
+	/**
+	 * @param index stepIndex
+	 * @returns object
+	 */
+	Mall.Checkout.prototype.getStepByCode = function(code){
+		var steps = this.getSteps();
+		for(var i=0; steps.length < i; i++){
+			if(steps[i].code == code){
+				return steps[i];
+			}
+		}
+		return null;
 	}
 	
 	/**

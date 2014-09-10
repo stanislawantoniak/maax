@@ -613,12 +613,6 @@
     <customer_account_resetpassword>
         <update handle="zolago_modago_customer_handle" />
     </customer_account_resetpassword>
-
-    <checkout_guest_test>
-        <reference name="content">
-            <block type="core/template" name="checkout" template="checkout/onepage/test.phtml" />
-        </reference>
-    </checkout_guest_test>
 	
 	<!-- ################################################################### -->
 	<!-- Checkout section													 -->
@@ -682,7 +676,11 @@
 		</reference>
 		<reference name="content">
             <block type="checkout/onepage" name="checkout.onepage" template="checkout/onepage/guest.phtml">
-                <block type="zolagomodago/checkout_address" name="checkout.onepage.guest.address" template="checkout/onepage/guest/address.phtml"/>
+                <block type="zolagomodago/checkout_address" name="checkout.onepage.guest.address" template="checkout/onepage/guest/address.phtml">
+                    <block type="core/template" name="checkout.onepage.guest.password" template="checkout/onepage/guest/password.phtml"/>
+                    <block type="core/template" name="checkout.onepage.guest.billing" template="checkout/onepage/guest/billing.phtml"/>
+                    <block type="core/template" name="checkout.onepage.guest.shipping" template="checkout/onepage/guest/shipping.phtml"/>
+                </block>
             </block>
 		</reference>
 	</checkout_guest_index>
