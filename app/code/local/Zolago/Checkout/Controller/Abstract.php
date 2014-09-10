@@ -5,10 +5,7 @@
 require_once Mage::getConfig()->getModuleDir("controllers", "Mage_Checkout") . DS . "OnepageController.php";
 
 abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_OnepageController{
-	public function saveAddresses() {
-		$this->importPostData();
-		
-	}
+	
 	
 	/**
 	 * @return Zolago_Checkout_Model_Type_Onepage
@@ -63,7 +60,7 @@ abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_Onepage
 		 account[password]:abc
 		 account[password_confirmation]:abc
 		 */
-		$accountData = $request->getData("account");
+		$accountData = $request->getParam("account");
 		if(is_array($accountData)){
 			$onepage->saveAccountData($accountData);
 		}
@@ -71,7 +68,7 @@ abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_Onepage
 		/**
 		billing_address_id:1
 		 */
-		$billingAddressId = $request->getData("billing_address_id");
+		$billingAddressId = $request->getParam("billing_address_id");
 		/**
 		billing[address_id]:52
 		billing[firstname]:mciej
@@ -90,7 +87,7 @@ abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_Onepage
 		billing[save_in_address_book]:1
 		billing[vat_id]:1
 		 */
-		$billing = $request->getData("billing");
+		$billing = $request->getParam("billing");
 		if(is_array($billing)){
 			$onepage->saveBilling($billing, $billingAddressId);
 			$onepage->getQuote()->setTotalsCollectedFlag(false);
@@ -100,7 +97,7 @@ abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_Onepage
 		/**
 		shipping_address_id:1
 		 */
-		$shippingAddressId = $request->getData("shipping_address_id");
+		$shippingAddressId = $request->getParam("shipping_address_id");
 		/**
 		shipping[address_id]:
 		shipping[firstname]:asdfa
@@ -117,7 +114,7 @@ abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_Onepage
 		shipping[fax]:
 		shipping[save_in_address_book]:1
 		 */
-		$shipping = $request->getData("shipping");
+		$shipping = $request->getParam("shipping");
 		if(is_array($shipping)){
 			$onepage->saveShipping($shipping, $shippingAddressId);
 			$onepage->getQuote()->setTotalsCollectedFlag(false);
@@ -126,7 +123,7 @@ abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_Onepage
 		/**
 		shipping_method[4]:udtiership_1
 		 */
-		if($shippingMethod = $request->getData("shipping_method")){
+		if($shippingMethod = $request->getParam("shipping_method")){
 			$onepage->saveShippingMethod($shippingMethod);
 			$onepage->getQuote()->setTotalsCollectedFlag(false);
 		}
@@ -135,7 +132,7 @@ abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_Onepage
 		payment[method]:zolagopayment
 		payment[additional_information][provider]:m
 		 */
-		$payment = $request->getData("payment");
+		$payment = $request->getParam("payment");
 		if(is_array($payment)){
 			$onepage->savePayment($payment);
 			$onepage->getQuote()->setTotalsCollectedFlag(false);
@@ -157,7 +154,7 @@ abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_Onepage
 			"content" => array()
 		);
 		try{
-			//$this->importPostData();
+		    $this->importPostData();
 		} catch (Exception $ex) {
 			$response = array(
 				"status"=>0,
