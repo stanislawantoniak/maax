@@ -58,11 +58,11 @@ class Zolago_Checkout_GuestController extends Zolago_Checkout_Controller_Abstrac
         $this->renderLayout();
     }
 
-    public function successAction()
-    {
-        $this->loadLayout();
-        $this->renderLayout();
-
+//    public function successAction()
+//    {
+//        $this->loadLayout();
+//        $this->renderLayout();
+//
 //        $session = $this->getOnepage()->getCheckout();
 //        if (!$session->getLastSuccessQuoteId()) {
 //            $this->_redirect('checkout/cart');
@@ -82,5 +82,5 @@ class Zolago_Checkout_GuestController extends Zolago_Checkout_Controller_Abstrac
 //        $this->_initLayoutMessages('checkout/session');
 //        Mage::dispatchEvent('checkout_onepage_controller_success_action', array('order_ids' => array($lastOrderId)));
 //        $this->renderLayout();
-    }
+//    }
 }

@@ -22,7 +22,7 @@ abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_Onepage
 	 * Make parial save of all data to quote
 	 * Then make save process
 	 */
-	public function saveOrderAction() {
+	public function placeOrderAction() {
 		if (!$this->_validateFormKey()) {
             $this->_redirect('*/*');
             return;
