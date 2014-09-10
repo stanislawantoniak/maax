@@ -142,6 +142,14 @@
             </action>
             <action method="addItem">
                 <type>skin_js</type>
+                <script>js/mall/validate.js</script>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <script>js/mall/validators.js</script>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
                 <script>js/mall/plural.js</script>
             </action>
             <action method="addItem">
@@ -631,6 +639,10 @@
                 <type>skin_js</type>
                 <script>js/mall/checkout.js</script>
             </action>
+			<action method="addItem">
+			   <type>skin_js</type>
+			   <script>js/mall/checkout/steps.js</script>
+		   </action>
 		</reference>
 		<reference name="header">
 			<remove name="header_menu"/>
@@ -672,10 +684,6 @@
 			<action method="addItem">
 			   <type>skin_js</type>
 			   <script>js/mall/checkout/guest.js</script>
-		   </action>
-			<action method="addItem">
-			   <type>skin_js</type>
-			   <script>js/mall/checkout/step1.js</script>
 		   </action>
 		</reference>
 		<reference name="content">
