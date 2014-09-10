@@ -41,11 +41,11 @@
 			},
             collect: function () {
                 var form = jQuery("#co-address"),
-                    password = form.find("[name='billing[customer_password]']").val();
+                    password = form.find("#account\\:password").val();
 
                 // set password confirmation
                 if (password.length > 0) {
-                    form.find("#billing\\:confirm_password").val(password);
+                    form.find("#account\\:confirmation").val(password);
                 }
                 // set billing data
                 form.find("[name='billing[firstname]']").val(form.find("[name='account[firstname]']").val());
