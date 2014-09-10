@@ -5,6 +5,10 @@
 require_once Mage::getConfig()->getModuleDir("controllers", "Mage_Checkout") . DS . "OnepageController.php";
 
 abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_OnepageController{
+	public function saveAddresses() {
+		$this->importPostData();
+		
+	}
 	/**
 	 * Process place order action
 	 * Make parial save of all data to quote
@@ -63,6 +67,8 @@ abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_Onepage
 		billing[telephone]:605308690
 		billing[fax]:maciej.babol@gmail.com
 		billing[use_for_shipping]:1
+		billing[save_in_address_book]:1
+		billing[vat_id]:1
 		 */
 		$billing = $request->getData("billing");
 		if(is_array($billing)){
@@ -118,11 +124,24 @@ abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_Onepage
 		$onepage->getQuote()->collectTotals()->save();
 	}
 	
+	/**
+	 * Save addresses
+	 */
 	public function saveAddressesAction() {
 		$response = array(
-			"status"=>1,
-			"content" => true
+			"status"=>true,
+			"content" => array()
 		);
+		try{
+			$this->importPostData();
+		} catch (Exception $ex) {
+			$response = array(
+				"status"=>0,
+				"content"=>array(
+					"error_message"=>$ex->getMessage()
+				)
+			);
+		}
 		$this->_prepareJsonResponse($response);
 	}
 	

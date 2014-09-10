@@ -133,13 +133,16 @@
 		progress.attr("class", "");
 		// Enable card
 		progress.addClass("step_01");
-		progress.children().removeClass("current-checkout");
-		progress.children(":first").addClass("current-checkout");
+		progress.children().removeClass("current-checkout executed");
+		progress.children(":first").addClass("current-checkout executed");
 		
 		for(var i=0; i<=this._activeIndex; i++){
 			progress.addClass("step_0" + this._mapProgressIndex(i));
-			progress.children("#step_0" + this._mapProgressIndex(i)).
+			var child = progress.children("#step_0" + this._mapProgressIndex(i)).
 					addClass("current-checkout");
+			if(i<this._activeIndex){
+				child.addClass("executed");
+			}
 		}
 	}
 	
@@ -238,6 +241,7 @@
 	 * @returns Boolean
 	 */
 	Mall.Checkout.prototype.placeOrder = function(){
+		console.log(this.collect());
 		alert("Placing order...");
 	}
 	
@@ -246,7 +250,15 @@
 	 * @returns array [{name: "", value: ""},...]
 	 */
 	Mall.Checkout.prototype.collect = function(){
-		return [];
+		var data = []
+		jQuery.each(this.getSteps(), function(){
+			if(typeof this.collect == "function"){
+				jQuery.each(this.collect(), function(){
+					data.push(this);
+				})
+			}
+		});
+		return data;
 	}
 	
 	/**
@@ -266,7 +278,9 @@
 			content: jQuery('#'+config.id),
 			// step.collect() - this = set. 
 			// Should returns the serialized values. this = step
-			collect: config.collect || function(){return {}},
+			collect: config.collect || function(){
+				return this.content.find("form").serializeArray();
+			},
 			// before add to checkout object, this = step
 			onPrepare: config.onPrepare || function(checkoutObject, config){},
 			// before submit - validation here. this = step
