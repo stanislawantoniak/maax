@@ -13,7 +13,7 @@ $formKey = Mage::getSingleton('core/session')->getFormKey();?>
 		<header class="title-section">
 			<h2><?php echo $this->__("User data"); ?></h2>
 		</header>
-		<form action="<?php echo $this->getSaveUrl(); ?>" class="form" id="co-address">
+		<form autocomplete="off" action="<?php echo $this->getSaveUrl(); ?>" class="form" id="co-address">
         <input type="hidden" name="form_key" value="<?php echo $formKey; ?>">
 			<fieldset>
 				<legend class="first"><?php echo $this->__("Information about you:"); ?></legend>
