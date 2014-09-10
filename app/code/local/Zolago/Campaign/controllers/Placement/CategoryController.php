@@ -8,7 +8,6 @@ class Zolago_Campaign_Placement_CategoryController extends Zolago_Dropship_Contr
 
     public function indexAction()
     {
-        $helper = Mage::helper('zolagocampaign');
         Mage::register('as_frontend', true);
         $this->_renderPage(null, 'zolagocampaign');
     }
