@@ -25,6 +25,8 @@
 		checkout.addStep({
 			id: "step-0",
 			onPrepare: function(checkoutObject){
+                // init step
+                checkoutObject.step1.init();
 				var self = this;
 				this.content.find("#step-0-submit").click(function(){
                     checkoutObject.getActiveStep().collect();
