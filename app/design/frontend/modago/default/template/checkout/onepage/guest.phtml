@@ -56,8 +56,7 @@
                     form.find("#shipping\\:telephone").val(form.find("#account\\:telephone").val());
                 }
 
-                console.log(form.serializeArray());
-                return false;
+                return form.serializeArray();
             }
 		});
 		
