@@ -25,12 +25,13 @@
 		checkout.addStep({
 			id: "step-0",
 			code: "address",
+			doSave: true,
 			onPrepare: function(checkoutObject){
 				var self = this;
 				this.content.find("#step-0-submit").click(function(){
                     checkoutObject.getActiveStep().collect();
-                    return false;
 					self.submit();
+					return false;
 				})
 			},
 			isPasswordNotEmpty: function(){
@@ -38,7 +39,6 @@
 			},
             collect: function () {
                 var form = jQuery("#co-address"),
-                    loggedIn = parseInt(form.find("[name='customer_logged_in']").val(), 10),
                     password = form.find("[name='billing[customer_password]']").val();
 
                 // set password confirmation

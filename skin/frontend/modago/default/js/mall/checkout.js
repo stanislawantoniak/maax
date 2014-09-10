@@ -286,6 +286,20 @@
 	}
 	
 	/**
+	 * 
+	 * @param {type} url
+	 * @param {type} data
+	 * @returns defered
+	 */
+	Mall.Checkout.prototype.saveStepData = function(url, data){
+		return jQuery.ajax({
+			"method": "POST",
+			"url": url,
+			"data": data
+		});
+	}
+	
+	/**
 	 * Prepare step object
 	 * @param object config
 	 * @return object
@@ -302,6 +316,7 @@
 			index: this.getSteps().length,
 			enabled: false,
 			active: false,
+			doSave: false,
 			content: jQuery('#'+config.id),
 			// step.collect() - this = set. 
 			// Should returns the serialized values. this = step
@@ -329,6 +344,14 @@
 			if(proto.onSubmit.apply(self)===false){
 				return;
 			}
+			
+			if(proto.content.find("form").length && proto.save){
+				var saveUrl = proto.content.find("form").attr("action");
+				self.saveStepData(saveUrl, proto.collect()).then(function(response){
+					console.log(response)
+				})
+			}
+			
 			self.next();
 		}
 		
