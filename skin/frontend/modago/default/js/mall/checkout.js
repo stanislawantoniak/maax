@@ -345,7 +345,7 @@
 				return;
 			}
 			
-			if(proto.content.find("form").length && proto.save){
+			if(proto.content.find("form").length && proto.doSave){
 				var saveUrl = proto.content.find("form").attr("action");
 				self.saveStepData(saveUrl, proto.collect()).then(function(response){
 					console.log(response)
