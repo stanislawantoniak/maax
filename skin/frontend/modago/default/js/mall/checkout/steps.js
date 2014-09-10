@@ -158,6 +158,7 @@
                 telephone = form.find("#account\\:telephone").val();
                 if (!form.find("#orders_someone_else").is(":checked")) {
                     form.find("#shipping\\:telephone").val(telephone);
+                    form.find("#billing\\:telephone").val(telephone);
                 }
 
 				stepData = form.serializeArray();
