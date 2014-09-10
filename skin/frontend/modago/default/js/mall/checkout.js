@@ -4,14 +4,36 @@
       this._steps = [];
 	  this._activeIndex = 0;
 	  this._progressObject = null;
+	  this._config = {};
     };
     
+	
+	
+	/**
+	 * @param string 
+	 * @param mixed 
+	 * @returns Mall.Chceckout
+	 */
+	Mall.Checkout.prototype.set = function(key, value){
+		this._config[key] = value;
+		return this;
+	}
+	
+	/**
+	 * @param string 
+	 * @returns mixed
+	 */
+	Mall.Checkout.prototype.get = function(key){
+		return this._config[key];
+	}
+	
 	/**
 	 * @param object progresObject
 	 * @returns Mall.Chceckout
 	 */
 	Mall.Checkout.prototype.setProgressObject = function(progresObject){
 		this._progressObject = progresObject;
+		return this;
 	}
 	
 	/**
@@ -116,7 +138,8 @@
 		
 		for(var i=0; i<=this._activeIndex; i++){
 			progress.addClass("step_0" + this._mapProgressIndex(i));
-			progress.children("#step_0" + this._mapProgressIndex(i)).addClass("current-checkout");
+			progress.children("#step_0" + this._mapProgressIndex(i)).
+					addClass("current-checkout");
 		}
 	}
 	
@@ -175,6 +198,20 @@
 	}
 	
 	/**
+	 * @param index stepIndex
+	 * @returns object
+	 */
+	Mall.Checkout.prototype.getStepByCode = function(code){
+		var steps = this.getSteps();
+		for(var i=0; steps.length < i; i++){
+			if(steps[i].code == code){
+				return steps[i];
+			}
+		}
+		return null;
+	}
+	
+	/**
 	 * @returns int
 	 */
 	Mall.Checkout.prototype.getActiveStepIndex = function(){
@@ -202,6 +239,14 @@
 	 */
 	Mall.Checkout.prototype.placeOrder = function(){
 		alert("Placing order...");
+	}
+	
+	/**
+	 * Return all checkout data
+	 * @returns array [{name: "", value: ""},...]
+	 */
+	Mall.Checkout.prototype.collect = function(){
+		return [];
 	}
 	
 	/**

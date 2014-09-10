@@ -1,13 +1,16 @@
 <?php /* @var $this Zolago_Modago_Block_Checkout_Address */ ?>
 
 <?php echo $this->getStep1Sidebar(); ?>
+<?php
 
+$formKey = Mage::getSingleton('core/session')->getFormKey();?>
 <div id="content-main" class="col-lg-9 col-md-8 col-sm-12 col-xs-12 col-lg-pull-3 col-md-pull-4 section">
 	<section class="main bg-w">
 		<header class="title-section">
 			<h2><?php echo $this->__("User data"); ?></h2>
 		</header>
 		<form action="<?php echo $this->getSaveUrl(); ?>" class="form" id="co-address">
+        <input type="hidden" name="form_key" value="<?php echo $formKey; ?>" />
 			<fieldset>
 				<legend class="first"><?php echo $this->__("Information about you:"); ?></legend>
 
