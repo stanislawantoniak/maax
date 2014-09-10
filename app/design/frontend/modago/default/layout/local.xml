@@ -613,12 +613,6 @@
     <customer_account_resetpassword>
         <update handle="zolago_modago_customer_handle" />
     </customer_account_resetpassword>
-
-    <checkout_guest_test>
-        <reference name="content">
-            <block type="core/template" name="checkout" template="checkout/onepage/test.phtml" />
-        </reference>
-    </checkout_guest_test>
 	
 	<!-- ################################################################### -->
 	<!-- Checkout section													 -->
@@ -648,7 +642,7 @@
 			<remove name="page.header.bottom.menu"/>
 			<remove name="page.header.bottom.category.items"/>
 			<remove name="page.header.bottom.category.items.mobile"/>
-			<block type="core/template" name="page.header.progeress" template="checkout/onepage/progress.phtml" />
+			<block type="zolagomodago/checkout_onepage_progress" name="page.header.progeress" template="checkout/onepage/progress.phtml" />
 		</reference>
 		<reference name="footer">
 			
@@ -666,8 +660,8 @@
 		<reference name="content">
 			<!-- Remove previous blocks -->
             <action method="unsetChildren"></action>
-			<block type="checkout/onepage" name="checkout.onepage" template="checkout/onepage/logged.phtml">
-				<block type="core/template" name="checkout.onepage.logged.address" template="checkout/onepage/logged/address.phtml"/>
+			<block type="zolagomodago/checkout_onepage_logged" name="checkout.onepage" template="checkout/onepage/logged.phtml">
+				<block type="zolagomodago/checkout_onepage_shared_address" name="checkout.onepage.logged.address" template="checkout/onepage/shared/address.phtml"/>
 			</block>
 		</reference>
 	</checkout_onepage_index>
@@ -681,8 +675,8 @@
 		   </action>
 		</reference>
 		<reference name="content">
-            <block type="checkout/onepage" name="checkout.onepage" template="checkout/onepage/guest.phtml">
-                <block type="zolagomodago/checkout_address" name="checkout.onepage.guest.address" template="checkout/onepage/guest/address.phtml"/>
+            <block type="zolagomodago/checkout_onepage_guest" name="checkout.onepage" template="checkout/onepage/guest.phtml">
+                <block type="zolagomodago/checkout_onepage_shared_address" name="checkout.onepage.guest.address" template="checkout/onepage/shared/address.phtml"/>
             </block>
 		</reference>
 	</checkout_guest_index>
