@@ -350,13 +350,16 @@
 				self.saveStepData(saveUrl, proto.collect()).then(function(response){
 					if(response.status==1){
 						console.log(response);
+						//self.next();
 					}else{
 						alert(response.content);
 					}
 				})
+			}else{
+				//self.next();
 			}
-			
 			self.next();
+			
 		}
 		
 		jQuery.extend(proto, config);
