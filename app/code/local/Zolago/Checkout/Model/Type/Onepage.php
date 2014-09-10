@@ -60,6 +60,7 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
             // Additional form data, not fetched by extractData (as it fetches only attributes)
             $address->setSaveInAddressBook(empty($data['save_in_address_book']) ? 0 : 1);
         }
+		
 
         // set email for newly created user
         if (!$address->getEmail() && $this->getQuote()->getCustomerEmail()) {
@@ -120,7 +121,6 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
                     break;
             }
         }
-
         $this->getQuote()->collectTotals();
         $this->getQuote()->save();
 

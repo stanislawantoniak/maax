@@ -10,7 +10,7 @@
     <input type="hidden" name="shipping[address_id]" value="">
     <input type="hidden" name="shipping[region_id]" value="">
     <input type="hidden" name="shipping[region]" value="">
-    <input type="hidden" name="shipping[country_id]" value="PL">
+    <input type="hidden" name="shipping[country_id]" value="<?php echo $this->getStoreDefaultCountryId();?>">
     <input type="hidden" name="shipping[fax]" value="">
     <input type="hidden" name="shipping[save_in_address_book]" value="1">
     <legend><?php echo $this->__("Shipping address:"); ?></legend>

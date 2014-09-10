@@ -348,7 +348,11 @@
 			if(proto.content.find("form").length && proto.doSave){
 				var saveUrl = proto.content.find("form").attr("action");
 				self.saveStepData(saveUrl, proto.collect()).then(function(response){
-					console.log(response)
+					if(response.status==1){
+						console.log(response);
+					}else{
+						alert(response.content);
+					}
 				})
 			}
 			

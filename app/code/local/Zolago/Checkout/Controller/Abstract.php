@@ -89,7 +89,10 @@ abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_Onepage
 		 */
 		$billing = $request->getParam("billing");
 		if(is_array($billing)){
-			$onepage->saveBilling($billing, $billingAddressId);
+			$billingResponse = $onepage->saveBilling($billing, $billingAddressId);
+			if(isset($billingResponse['error']) && $billingResponse['error']==1){
+				throw new Mage_Core_Exception(implode("\n", $billingResponse['message']));
+			}
 			$onepage->getQuote()->setTotalsCollectedFlag(false);
 		}
 		
@@ -158,9 +161,7 @@ abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_Onepage
 		} catch (Exception $ex) {
 			$response = array(
 				"status"=>0,
-				"content"=>array(
-					"error_message"=>$ex->getMessage()
-				)
+				"content"=>$ex->getMessage()
 			);
 		}
 		if($this->getRequest()->isAjax()){
