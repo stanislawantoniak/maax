@@ -683,6 +683,14 @@
 		<reference name="content">
             <block type="checkout/onepage" name="checkout.onepage" template="checkout/onepage/guest.phtml">
                 <block type="zolagomodago/checkout_address" name="checkout.onepage.guest.address" template="checkout/onepage/guest/address.phtml"/>
+                <block type="zolagomodago/checkout_shippingpayment" name="checkout.onepage.guest.shippingpayment" template="checkout/onepage/guest/shippingpayment.phtml" >
+                    <block type="zolagomodago/checkout_shippingpayment_shipping" name="checkout.onepage.guest.shippingpayment.shipping" template="checkout/onepage/guest/shippingpayment/shipping.phtml" />
+                    <block type="zolagomodago/checkout_shippingpayment_payment" name="checkout.onepage.guest.shippingpayment.payment" template="checkout/onepage/guest/shippingpayment/payment.phtml">
+                        <block type="zolagomodago/checkout_shippingpayment_payment_methods" name="checkout.onepage.guest.shippingpayment.payment.methods" as="methods" template="checkout/onepage/guest/shippingpayment/payment/methods.phtml" />
+
+                    </block>
+                </block>
+
             </block>
 		</reference>
 	</checkout_guest_index>

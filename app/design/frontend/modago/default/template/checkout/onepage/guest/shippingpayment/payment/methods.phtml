@@ -1,0 +1,47 @@
+<?php
+    $methods = $this->getMethods();
+    $oneMethod = count($methods) <= 1;
+?>
+
+<?php if (empty($methods)): ?>
+
+
+        <?php echo $this->__('No Payment Methods') ?>
+
+<?php else:
+    foreach ($methods as $_method):
+        $_code = $_method->getCode();
+?>
+        <div class="panel panel-default">
+        <div class="panel-body">
+                <div class="form-group form-radio">
+                    <?php if(!$oneMethod): ?>
+                        <input id="p_method_<?php echo $_code ?>" value="<?php echo $_code ?>" type="radio" name="payment[method]" title="<?php echo $this->escapeHtml($_method->getTitle()) ?>" onclick="payment.switchMethod('<?php echo $_code ?>')"<?php if($this->getSelectedMethodCode()==$_code): ?> checked="checked"<?php endif; ?> class="radio" />
+                    <?php else: ?>
+                        <span class="no-display"><input id="p_method_<?php echo $_code ?>" value="<?php echo $_code ?>" type="radio" name="payment[method]" checked="checked" class="radio" /></span>
+                        <?php $oneMethod = $_code; ?>
+                    <?php endif; ?>
+                    <label class="css-label clearfix" for="p_method_<?php echo $_code ?>">
+                        <span class="pull-left"><strong><?php echo $this->escapeHtml($this->getMethodTitle($_method)) ?></strong><br>
+                            <?php echo $this->getMethodLabelAfterHtml($_method) ?>
+                        </span>
+                    </label>
+<!--                    <img alt="" src="/skin/frontend/modago/default/images/payment_methods/payment_methods-03.png" class="pull-right flag_pay_method">-->
+                    <?php if ($html = $this->getPaymentMethodFormHtml($_method)): ?>
+                        <dd>
+                            <?php echo $html; ?>
+                        </dd>
+                    <?php endif; ?>
+                </div>
+        </div>
+        </div>
+
+<?php endforeach; ?>
+
+<?php    endif; ?>
+
+<script type="text/javascript">
+    //<![CDATA[
+    //payment widget
+    //]]>
+</script>

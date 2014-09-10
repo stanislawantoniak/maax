@@ -4,9 +4,10 @@
 			<?php echo $this->getChildHtml("checkout.onepage.guest.address");?>
 		</div>
 		<div class="step step-1 hidden" id="step-1">
-			Step 2
-			<button class="btn" id="step-1-prev">Prev</button>
-			<button class="btn" id="step-1-submit">Next</button>
+            Step 2
+            <?php echo $this->getChildHtml("checkout.onepage.guest.shippingpayment");?>
+<!--			<button class="btn" id="step-1-prev">Prev</button>-->
+<!--			<button class="btn" id="step-1-submit">Next</button>-->
 		</div>
 		<div class="step step-2 hidden" id="step-2">
 			Step 3
@@ -36,10 +37,10 @@
 			id: "step-1",
 			onPrepare: function(checkoutObject){
 				var self = this;
-				this.content.find("#step-1-submit").click(function(){
+				this.content.find("[id^=step-1-submit]").click(function(){
 					self.submit();
 				})
-				this.content.find("#step-1-prev").click(function(){
+				this.content.find("[id^=step-1-prev]").click(function(){
 					checkoutObject.prev();
 				})
 			}
@@ -49,11 +50,11 @@
 			id: "step-2",
 			onPrepare: function(checkoutObject){
 				var self = this;
-				this.content.find("#step-2-submit").click(function(){
+				this.content.find("[id^=step-2-submit]").click(function(){
 					// Add validation
 					checkoutObject.placeOrder()
 				});
-				this.content.find("#step-2-prev").click(function(){
+				this.content.find("[id^=step-2-prev]").click(function(){
 					checkoutObject.prev();
 				})
 			}
