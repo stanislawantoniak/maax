@@ -5882,6 +5882,10 @@ body.modal-open #sb-site {
 .modal {
   overflow-y: hidden !important; }
 
+/* line 115, ../sass/layout/override/_global.scss */
+span.valid {
+  padding-top: 0 !important; }
+
 /* line 62, ../sass/other/_variable.scss */
 #header a:link, #header a:visited, #header a:hover, #header a:focus {
   margin: 0px;
