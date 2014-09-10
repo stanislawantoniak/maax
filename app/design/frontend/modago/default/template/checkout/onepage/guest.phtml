@@ -25,12 +25,15 @@
 		checkout.addStep({
 			id: "step-0",
 			code: "address",
+			doSave: true,
 			onPrepare: function(checkoutObject){
+                // init step
+                checkoutObject.step1.init();
 				var self = this;
 				this.content.find("#step-0-submit").click(function(){
                     checkoutObject.getActiveStep().collect();
-                    return false;
 					self.submit();
+					return false;
 				})
 			},
 			isPasswordNotEmpty: function(){
@@ -38,12 +41,11 @@
 			},
             collect: function () {
                 var form = jQuery("#co-address"),
-                    loggedIn = parseInt(form.find("[name='customer_logged_in']").val(), 10),
-                    password = form.find("[name='billing[customer_password]']").val();
+                    password = form.find("#account\\:password").val();
 
                 // set password confirmation
                 if (password.length > 0) {
-                    form.find("#billing\\:confirm_password").val(password);
+                    form.find("#account\\:confirmation").val(password);
                 }
                 // set billing data
                 form.find("[name='billing[firstname]']").val(form.find("[name='account[firstname]']").val());

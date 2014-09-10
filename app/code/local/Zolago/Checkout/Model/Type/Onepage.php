@@ -5,7 +5,6 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
 	
 	public function saveAccountData(array $accountData) {
 		$quote = $this->getQuote();
-		$isGuest = $quote->getCustomerIsGuest();
 		$customer = $this->getQuote()->getCustomer();
         $form       = $this->_getCustomerForm();
         $form->setEntity($customer);
@@ -24,7 +23,6 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
         if (isset($data['customer_group_id'])) {
             $groupModel = Mage::getModel('customer/group')->load($data['customer_group_id']);
             $data['customer_tax_class_id'] = $groupModel->getTaxClassId();
-            $this->setRecollect(true);
         }
 
         $this->getQuote()->addData($data)->save();

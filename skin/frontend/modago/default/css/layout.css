@@ -1,4 +1,4 @@
-@charset "US-ASCII";
+@charset "UTF-8";
                                    /*$icoMapDesktop: sprite-map("desktop/ico/*.png");
 $icoMapMobile: sprite-map("mobile/ico/*.png");
 $bulletMap: sprite-map("sprites/bullet/*.png");
@@ -9730,7 +9730,7 @@ form .form-group .nip {
 /* line 694, ../sass/override/_override-layout.scss */
 form .form-group input:disabled {
   border-color: #d9d9d9;
-  color: #f0f0f0;
+  color: gray;
   box-shadow: none; }
 /* line 699, ../sass/override/_override-layout.scss */
 form .form-group textarea {

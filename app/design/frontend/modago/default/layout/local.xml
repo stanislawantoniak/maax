@@ -673,6 +673,10 @@
 			   <type>skin_js</type>
 			   <script>js/mall/checkout/guest.js</script>
 		   </action>
+			<action method="addItem">
+			   <type>skin_js</type>
+			   <script>js/mall/checkout/step1.js</script>
+		   </action>
 		</reference>
 		<reference name="content">
             <block type="zolagomodago/checkout_onepage_guest" name="checkout.onepage" template="checkout/onepage/guest.phtml">

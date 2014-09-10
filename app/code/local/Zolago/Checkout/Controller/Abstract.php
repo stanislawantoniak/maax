@@ -27,7 +27,7 @@ abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_Onepage
             $this->_redirect('*/*');
             return;
         }
-		$this->importPostData();
+		//$this->importPostData();
 		parent::saveOrderAction();
 		
 		$response = Mage::helper('core')->jsonDecode(
@@ -50,7 +50,7 @@ abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_Onepage
 		/**
 		method:guest
 		 */
-		$method	= $request->getData("method"); // chekcout method
+		$method	= $request->getParam("method"); // chekcout method
 		if($method){
 			$onepage->saveCheckoutMethod($method);
 			$onepage->getQuote()->setTotalsCollectedFlag(false);
@@ -148,12 +148,16 @@ abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_Onepage
 	 * Save addresses
 	 */
 	public function saveAddressesAction() {
+		if (!$this->_validateFormKey()) {
+            $this->_redirect('*/*');
+            return;
+        }
 		$response = array(
 			"status"=>true,
 			"content" => array()
 		);
 		try{
-			$this->importPostData();
+			//$this->importPostData();
 		} catch (Exception $ex) {
 			$response = array(
 				"status"=>0,
@@ -162,7 +166,11 @@ abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_Onepage
 				)
 			);
 		}
-		$this->_prepareJsonResponse($response);
+		if($this->getRequest()->isAjax()){
+			$this->_prepareJsonResponse($response);
+		}else{
+			$this->_redirectReferer();
+		}
 	}
 	
 	/**

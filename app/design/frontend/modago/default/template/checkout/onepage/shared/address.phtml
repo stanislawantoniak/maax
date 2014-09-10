@@ -15,8 +15,6 @@ $formKey = Mage::getSingleton('core/session')->getFormKey();?>
 		</header>
 		<form action="<?php echo $this->getSaveUrl(); ?>" class="form" id="co-address">
         <input type="hidden" name="form_key" value="<?php echo $formKey; ?>">
-        <input type="hidden" name="method" value="<?php echo $method; ?>">
-        <input type="hidden" name="customer_logged_in" value="<?php echo (int) $this->isCustomerLoggedIn(); ?>">
 			<fieldset>
 				<legend class="first"><?php echo $this->__("Information about you:"); ?></legend>
 
