@@ -9,6 +9,14 @@ abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_Onepage
 		$this->importPostData();
 		
 	}
+	
+	/**
+	 * @return Zolago_Checkout_Model_Type_Onepage
+	 */
+	public function getOnepage() {
+		return Mage::getSingleton('zolagocheckout/type_onepage');
+	}
+	
 	/**
 	 * Process place order action
 	 * Make parial save of all data to quote
@@ -46,6 +54,18 @@ abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_Onepage
 		if($method){
 			$onepage->saveCheckoutMethod($method);
 			$onepage->getQuote()->setTotalsCollectedFlag(false);
+		}
+		/**
+		 account[firstname]:abc
+		 account[lastname]:abc
+		 account[email]:abc
+		 account[phone]:abc
+		 account[password]:abc
+		 account[password_confirmation]:abc
+		 */
+		$accountData = $request->getData("account");
+		if(is_array($accountData)){
+			$onepage->saveAccountData($accountData);
 		}
 		
 		/**

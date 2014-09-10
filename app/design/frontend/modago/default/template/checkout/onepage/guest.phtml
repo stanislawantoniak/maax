@@ -24,16 +24,21 @@
 		
 		checkout.addStep({
 			id: "step-0",
+			code: "address",
 			onPrepare: function(checkoutObject){
 				var self = this;
 				this.content.find("#step-0-submit").click(function(){
 					self.submit();
 				})
+			},
+			isPasswordNotEmpty: function(){
+				return true;//!!this.content.find("[name='billing[customer_password]'").val().length;
 			}
 		});
 		
 		checkout.addStep({
 			id: "step-1",
+			code: "deliverypayment",
 			onPrepare: function(checkoutObject){
 				var self = this;
 				this.content.find("#step-1-submit").click(function(){
@@ -47,6 +52,7 @@
 		
 		checkout.addStep({
 			id: "step-2",
+			code: "review",
 			onPrepare: function(checkoutObject){
 				var self = this;
 				this.content.find("#step-2-submit").click(function(){
