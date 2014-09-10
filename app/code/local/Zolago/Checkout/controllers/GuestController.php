@@ -18,7 +18,7 @@ class Zolago_Checkout_GuestController extends Zolago_Checkout_Controller_Abstrac
 		// Reset flag - every refresh will show login
 		// Devs can remove true argument for tests
 		if(!$this->_getCustomerSession()->getIsCheckout(true)){
-			return $this->_redirect("*/*/login");
+			//return $this->_redirect("*/*/login");
 		}
 		parent::indexAction();
 	}
@@ -57,4 +57,30 @@ class Zolago_Checkout_GuestController extends Zolago_Checkout_Controller_Abstrac
 
         $this->renderLayout();
     }
+
+//    public function successAction()
+//    {
+//        $this->loadLayout();
+//        $this->renderLayout();
+//
+//        $session = $this->getOnepage()->getCheckout();
+//        if (!$session->getLastSuccessQuoteId()) {
+//            $this->_redirect('checkout/cart');
+//            return;
+//        }
+//
+//        $lastQuoteId = $session->getLastQuoteId();
+//        $lastOrderId = $session->getLastOrderId();
+//        $lastRecurringProfiles = $session->getLastRecurringProfileIds();
+//        if (!$lastQuoteId || (!$lastOrderId && empty($lastRecurringProfiles))) {
+//            $this->_redirect('checkout/cart');
+//            return;
+//        }
+//
+//        $session->clear();
+//        $this->loadLayout();
+//        $this->_initLayoutMessages('checkout/session');
+//        Mage::dispatchEvent('checkout_onepage_controller_success_action', array('order_ids' => array($lastOrderId)));
+//        $this->renderLayout();
+//    }
 }

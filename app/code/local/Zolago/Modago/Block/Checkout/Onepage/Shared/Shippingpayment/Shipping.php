@@ -1,6 +1,6 @@
 <?php
 
-class Zolago_Modago_Block_Checkout_Shippingpayment_Shipping extends Zolago_Modago_Block_Checkout_Abstract
+class Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment_Shipping extends Zolago_Modago_Block_Checkout_Onepage_Abstract
 {
     protected $_rates;
     protected $_address;

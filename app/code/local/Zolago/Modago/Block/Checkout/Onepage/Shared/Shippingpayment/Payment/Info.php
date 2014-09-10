@@ -1,6 +1,6 @@
 <?php
 
-class Zolago_Modago_Block_Checkout_Shippingpayment_Payment_Info extends Mage_Checkout_Block_Onepage_Payment_Info
+class Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment_Payment_Info extends Mage_Checkout_Block_Onepage_Payment_Info
 {
     /**
      * Retrieve payment info model

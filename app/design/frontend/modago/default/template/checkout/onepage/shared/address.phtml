@@ -1,0 +1,105 @@
+<?php /* @var $this Zolago_Modago_Block_Checkout_Onepage_Shared_Address */ ?>
+
+
+<?php echo $this->getStep1Sidebar(); ?>
+<?php
+$method = "guest";
+if ($this->isCustomerLoggedIn()) {
+    $method = "";
+}
+$formKey = Mage::getSingleton('core/session')->getFormKey();?>
+<div id="content-main" class="col-lg-9 col-md-8 col-sm-12 col-xs-12 col-lg-pull-3 col-md-pull-4 section">
+	<section class="main bg-w">
+		<header class="title-section">
+			<h2><?php echo $this->__("User data"); ?></h2>
+		</header>
+		<form action="<?php echo $this->getSaveUrl(); ?>" class="form" id="co-address">
+        <input type="hidden" name="form_key" value="<?php echo $formKey; ?>">
+			<fieldset>
+				<legend class="first"><?php echo $this->__("Information about you:"); ?></legend>
+
+				<div class="form-group clearfix">
+					<div class="row">
+						<label class="col-sm-3" for="account:firstname"><?php echo $this->__("First name"); ?></label>
+						<div class="col-sm-5">
+							<input type="text" class="form-control firstName hint" id="account:firstname" title="" name="account[firstname]" data-rule-required="true" data-original-title="<?php echo $this->__("Enter your name."); ?>">
+						</div>
+					</div>
+
+				</div>
+				<div class="form-group clearfix border-top">
+					<div class="row">
+						<label class="col-sm-3" for="account:lastname"><?php echo $this->__("Last name"); ?></label>
+						<div class="col-sm-5">
+							<input type="text" class="form-control lastName hint" id="account:lastname" title="" name="account[lastname]" data-rule-required="true" data-original-title="<?php echo $this->__("Enter your lastname."); ?>">
+						</div>
+					</div>
+				</div>
+				<div class="form-group clearfix border-top">
+					<div class="row">
+						<label class="col-sm-3" for="account:email"><?php echo $this->__("Email"); ?></label>
+						<div class="col-sm-5">
+							<input type="email" class="form-control email hint" id="account:email" title="" name="account[email]" data-original-title="<?php echo $this->__("Email address."); ?>">
+						</div>
+					</div>
+				</div>
+				<div class="form-group clearfix border-top">
+					<div class="row">
+						<label class="col-sm-3" for="account:telephone"><?php echo $this->__("Telephone number"); ?></label>
+						<div class="col-sm-5">
+							<input type="text" class="form-control phone hint" id="account:telephone" title="" name="account[telephone]" data-original-title="<?php echo $this->__("We need your telephone number only to complete the order."); ?>">
+						</div>
+					</div>
+				</div>
+			</fieldset>
+
+            <?php echo $this->getChildHtml("checkout.onepage.guest.shipping"); ?>
+
+            <?php echo $this->getChildHtml("checkout.onepage.guest.billing"); ?>
+
+			<fieldset id="remember_data">
+				<legend><?php echo $this->__("Remember me(optional):"); ?></legend>
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="row">
+							<div class="col-sm-6">  
+								<p><?php echo $this->__("Set up your password to track your order and easly buy next time."); ?></p>
+							</div>
+						</div> 
+					</div>
+				</div> 
+				<div class="row">
+					<div id="add_pass" class="col-sm-6">
+
+                        <?php echo $this->getChildHtml("checkout.onepage.guest.password"); ?>
+
+					</div>
+				</div>
+			</fieldset>
+			<div class="row">
+				<div class="form-group form-checkbox small text-align-left">
+					<input type="checkbox" id="agreement:2" class="css-checkbox invoice_vat" name="agreement[2]">
+					<label for="agreement:2" class="css-label"><?php echo $this->__("Agreement for marketing works"); ?></label>
+				</div>
+
+				<div class="form-group form-checkbox small text-align-left">
+					<input type="checkbox" id="agreement:1" class="css-checkbox invoice_vat" name="agreement[1]">
+					<label for="agreement:1" class="css-label"><?php echo $this->__("TOS Agreement"); ?></label>
+				</div>
+			</div>
+			<div class="row action">
+				<div class="col-sm-6">
+					<a id="back" href="<?php echo $this->getPreviousStepUrl(); ?>" class="button button-third large pull-left"><?php echo $this->__("Back"); ?></a>
+				</div>
+				<div class="col-sm-6">
+					<button class="button button-primary large link pull-right" id="step-0-submit"><?php echo $this->__("Next"); ?></button>
+				</div>
+			</div>
+
+
+
+		</form>
+	</section>
+
+</div>  
+

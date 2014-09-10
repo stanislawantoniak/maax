@@ -23,18 +23,11 @@
 		
 		checkout.setProgressObject(jQuery("#step ol"));
 		
-		checkout.addStep({
-			id: "step-0",
-			onPrepare: function(checkoutObject){
-				var self = this;
-				this.content.find("#step-0-submit").click(function(){
-					self.submit();
-				})
-			}
-		});
+		checkout.addStep(checkout.step1);
 		
 		checkout.addStep({
 			id: "step-1",
+			code: "deliverypayment",
 			onPrepare: function(checkoutObject){
 				var self = this;
 				this.content.find("[id^=step-1-submit]").click(function(){
@@ -48,6 +41,7 @@
 		
 		checkout.addStep({
 			id: "step-2",
+			code: "review",
 			onPrepare: function(checkoutObject){
 				var self = this;
 				this.content.find("[id^=step-2-submit]").click(function(){

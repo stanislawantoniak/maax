@@ -613,12 +613,6 @@
     <customer_account_resetpassword>
         <update handle="zolago_modago_customer_handle" />
     </customer_account_resetpassword>
-
-    <checkout_guest_test>
-        <reference name="content">
-            <block type="core/template" name="checkout" template="checkout/onepage/test.phtml" />
-        </reference>
-    </checkout_guest_test>
 	
 	<!-- ################################################################### -->
 	<!-- Checkout section													 -->
@@ -648,7 +642,7 @@
 			<remove name="page.header.bottom.menu"/>
 			<remove name="page.header.bottom.category.items"/>
 			<remove name="page.header.bottom.category.items.mobile"/>
-			<block type="core/template" name="page.header.progeress" template="checkout/onepage/progress.phtml" />
+			<block type="zolagomodago/checkout_onepage_progress" name="page.header.progeress" template="checkout/onepage/progress.phtml" />
 		</reference>
 		<reference name="footer">
 			
@@ -679,20 +673,34 @@
 			   <type>skin_js</type>
 			   <script>js/mall/checkout/guest.js</script>
 		   </action>
+			<action method="addItem">
+			   <type>skin_js</type>
+			   <script>js/mall/checkout/step1.js</script>
+		   </action>
 		</reference>
 		<reference name="content">
-            <block type="checkout/onepage" name="checkout.onepage" template="checkout/onepage/guest.phtml">
-                <block type="zolagomodago/checkout_address" name="checkout.onepage.guest.address" template="checkout/onepage/guest/address.phtml"/>
-                <block type="zolagomodago/checkout_shippingpayment" name="checkout.onepage.guest.shippingpayment" template="checkout/onepage/guest/shippingpayment.phtml" >
-                    <block type="zolagomodago/checkout_shippingpayment_shipping" name="checkout.onepage.guest.shippingpayment.shipping" template="checkout/onepage/guest/shippingpayment/shipping.phtml" />
-                    <block type="zolagomodago/checkout_shippingpayment_payment" name="checkout.onepage.guest.shippingpayment.payment" template="checkout/onepage/guest/shippingpayment/payment.phtml">
-                        <block type="zolagomodago/checkout_shippingpayment_payment_methods" name="checkout.onepage.guest.shippingpayment.payment.methods" as="methods" template="checkout/onepage/guest/shippingpayment/payment/methods.phtml" />
-
+            <block type="zolagomodago/checkout_onepage_guest" name="checkout.onepage" template="checkout/onepage/guest.phtml">
+                <block type="zolagomodago/checkout_onepage_shared_address" name="checkout.onepage.guest.address" template="checkout/onepage/shared/address.phtml">
+                    <block type="core/template" name="checkout.onepage.guest.shipping" template="checkout/onepage/shared/address/shipping.phtml"/>
+                    <block type="core/template" name="checkout.onepage.guest.billing" template="checkout/onepage/shared/address/billing.phtml"/>
+                    <block type="core/template" name="checkout.onepage.guest.password" template="checkout/onepage/shared/account/password.phtml"/>
+                </block>
+                <block type="zolagomodago/checkout_onepage_shared_shippingpayment" name="checkout.onepage.guest.shippingpayment" template="checkout/onepage/shared/shippingpayment.phtml" >
+                    <block type="zolagomodago/checkout_onepage_shared_shippingpayment_shipping" name="checkout.onepage.guest.shippingpayment.shipping" template="checkout/onepage/shared/shippingpayment/shipping.phtml" />
+                    <block type="zolagomodago/checkout_onepage_shared_shippingpayment_payment" name="checkout.onepage.guest.shippingpayment.payment" template="checkout/onepage/shared/shippingpayment/payment.phtml">
+                        <block type="zolagomodago/checkout_onepage_shared_shippingpayment_payment_methods" name="checkout.onepage.guest.shippingpayment.payment.methods" as="methods" template="checkout/onepage/shared/shippingpayment/payment/methods.phtml" />
                     </block>
                 </block>
-
             </block>
 		</reference>
 	</checkout_guest_index>
 
+    <checkout_onepage_success>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/1column.phtml</template>
+            </action>
+        </reference>
+    </checkout_onepage_success>
+    
 </layout>

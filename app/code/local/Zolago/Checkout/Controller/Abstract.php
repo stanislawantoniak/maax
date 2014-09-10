@@ -5,30 +5,70 @@
 require_once Mage::getConfig()->getModuleDir("controllers", "Mage_Checkout") . DS . "OnepageController.php";
 
 abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_OnepageController{
+	
+	
+	/**
+	 * @return Zolago_Checkout_Model_Type_Onepage
+	 */
+	public function getOnepage() {
+		return Mage::getSingleton('zolagocheckout/type_onepage');
+	}
+	
 	/**
 	 * Process place order action
 	 * Make parial save of all data to quote
 	 * Then make save process
 	 */
 	public function placeOrderAction() {
-		$this->_transferDataToQuote();
+		if (!$this->_validateFormKey()) {
+            $this->_redirect('*/*');
+            return;
+        }
+		//$this->importPostData();
+		parent::saveOrderAction();
+		
+		$response = Mage::helper('core')->jsonDecode(
+				$this->getResponse()->getBody());
+		
+		$newResponse = array(
+			"status" => (!isset($response['error']) || $response['status']==false),
+			"content" => $response
+		);
+		
+		$this->getResponse()->
+				setBody( Mage::helper('core')->jsonEncode($newResponse));
 		
 	}
 	
-	protected function _transferDataToQuote(){
+	public function importPostData(){
 		$request = $this->getRequest();
 		$onepage = $this->getOnepage();
 		
 		/**
 		method:guest
 		 */
-		$method	= $request->getData("method"); // chekcout method
-		$onepage->saveCheckoutMethod($method);
+		$method	= $request->getParam("method"); // chekcout method
+		if($method){
+			$onepage->saveCheckoutMethod($method);
+			$onepage->getQuote()->setTotalsCollectedFlag(false);
+		}
+		/**
+		 account[firstname]:abc
+		 account[lastname]:abc
+		 account[email]:abc
+		 account[phone]:abc
+		 account[password]:abc
+		 account[password_confirmation]:abc
+		 */
+		$accountData = $request->getParam("account");
+		if(is_array($accountData)){
+			$onepage->saveAccountData($accountData);
+		}
 		
 		/**
 		billing_address_id:1
 		 */
-		$billingAddressId = $request->getData("billing_address_id");
+		$billingAddressId = $request->getParam("billing_address_id");
 		/**
 		billing[address_id]:52
 		billing[firstname]:mciej
@@ -44,15 +84,20 @@ abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_Onepage
 		billing[telephone]:605308690
 		billing[fax]:maciej.babol@gmail.com
 		billing[use_for_shipping]:1
+		billing[save_in_address_book]:1
+		billing[vat_id]:1
 		 */
-		$billing = $request->getData("billing");
-		$onepage->saveBilling($billing, $billingAddressId);
+		$billing = $request->getParam("billing");
+		if(is_array($billing)){
+			$onepage->saveBilling($billing, $billingAddressId);
+			$onepage->getQuote()->setTotalsCollectedFlag(false);
+		}
 		
 		
 		/**
 		shipping_address_id:1
 		 */
-		$shippingAddressId = $request->getData("shipping_address_id");
+		$shippingAddressId = $request->getParam("shipping_address_id");
 		/**
 		shipping[address_id]:
 		shipping[firstname]:asdfa
@@ -69,31 +114,60 @@ abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_Onepage
 		shipping[fax]:
 		shipping[save_in_address_book]:1
 		 */
-		$shipping = $request->getData("shipping");
-		$onepage->saveShipping($shipping, $shippingAddressId);
+		$shipping = $request->getParam("shipping");
+		if(is_array($shipping)){
+			$onepage->saveShipping($shipping, $shippingAddressId);
+			$onepage->getQuote()->setTotalsCollectedFlag(false);
+		}
 		
 		/**
 		shipping_method[4]:udtiership_1
 		 */
-		$shippingMethod = $request->getData("shipping_method");
-		$onepage->saveShippingMethod($shippingMethod);
+		if($shippingMethod = $request->getParam("shipping_method")){
+			$onepage->saveShippingMethod($shippingMethod);
+			$onepage->getQuote()->setTotalsCollectedFlag(false);
+		}
 		
 		/**
 		payment[method]:zolagopayment
 		payment[additional_information][provider]:m
 		 */
-		$payment = $request->getData("payment");
-		$onepage->savePayment($payment);
+		$payment = $request->getParam("payment");
+		if(is_array($payment)){
+			$onepage->savePayment($payment);
+			$onepage->getQuote()->setTotalsCollectedFlag(false);
+		}
+		// Override collect totals - make final collect totals
+		$onepage->getQuote()->collectTotals()->save();
 	}
 	
+	/**
+	 * Save addresses
+	 */
 	public function saveAddressesAction() {
-		$onepage = $this->getOnepage();
-		
+		if (!$this->_validateFormKey()) {
+            $this->_redirect('*/*');
+            return;
+        }
 		$response = array(
-			"status"=>1,
-			"content" => true
+			"status"=>true,
+			"content" => array()
 		);
-		$this->_prepareJsonResponse($response);
+		try{
+		    $this->importPostData();
+		} catch (Exception $ex) {
+			$response = array(
+				"status"=>0,
+				"content"=>array(
+					"error_message"=>$ex->getMessage()
+				)
+			);
+		}
+		if($this->getRequest()->isAjax()){
+			$this->_prepareJsonResponse($response);
+		}else{
+			$this->_redirectReferer();
+		}
 	}
 	
 	/**
