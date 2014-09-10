@@ -8,10 +8,28 @@ $baseUrl = Mage::helper("zolagodropshipmicrosite")->getBaseUrl();
 
 <div class="top_bottom  bg-w hidden-xs clearfix">
     <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('top-bottom-header-desktop-v-' . $vendor['vendor_id'])->toHtml(); ?>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12" style="padding-bottom: 15px;">
+                <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+            </div>
+        </div>
+    </div>
+
 </div>
 <!--mobile part-->
 <div class="top_bottom visible-xs bg-w clearfix">
     <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('top-bottom-header-mobile-v-' . $vendor['vendor_id'])->toHtml(); ?>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12" style="padding-bottom: 15px;">
+                <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+            </div>
+        </div>
+    </div>
+
     <div id="shop_navigation" class="col-sm-12">
         <ul id="shop_nav_mobile" class="navigation visible-xs" role="navigation">
 
@@ -43,3 +61,10 @@ $baseUrl = Mage::helper("zolagodropshipmicrosite")->getBaseUrl();
     </div>
 </div>
 <!--mobile part end-->
+
+<script>
+    <?php /* Messges are twice time **/ ?>
+    jQuery(document).ready(function () {
+        jQuery('ul.messages').first().remove();
+    });
+</script>
