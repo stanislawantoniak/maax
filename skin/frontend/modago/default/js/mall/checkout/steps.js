@@ -131,7 +131,8 @@
 				var form = jQuery("#co-address"),
 					password = form.find("#account\\:password").val(),
 					billingData,
-					stepData = [];
+					stepData = [],
+                    telephone;
 
 				// set password confirmation
 				if (password.length > 0) {
@@ -152,6 +153,12 @@
 					form.find("#shipping\\:lastname").val(form.find("#account\\:lastname").val());
 					form.find("#shipping\\:telephone").val(form.find("#account\\:telephone").val());
 				}
+
+                // copy phone
+                telephone = form.find("#account\\:telephone").val();
+                if (!form.find("#orders_someone_else").is(":checked")) {
+                    form.find("#shipping\\:telephone").val(telephone);
+                }
 
 				stepData = form.serializeArray();
 				// fill billing data with shipping
