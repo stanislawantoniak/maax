@@ -10,12 +10,28 @@ abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_Onepage
 	 * Make parial save of all data to quote
 	 * Then make save process
 	 */
-	public function placeOrderAction() {
-		$this->_transferDataToQuote();
+	public function saveOrderAction() {
+		if (!$this->_validateFormKey()) {
+            $this->_redirect('*/*');
+            return;
+        }
+		$this->importPostData();
+		parent::saveOrderAction();
+		
+		$response = Mage::helper('core')->jsonDecode(
+				$this->getResponse()->getBody());
+		
+		$newResponse = array(
+			"status" => (!isset($response['error']) || $response['status']==false),
+			"content" => $response
+		);
+		
+		$this->getResponse()->
+				setBody( Mage::helper('core')->jsonEncode($newResponse));
 		
 	}
 	
-	protected function _transferDataToQuote(){
+	public function importPostData(){
 		$request = $this->getRequest();
 		$onepage = $this->getOnepage();
 		
@@ -23,7 +39,10 @@ abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_Onepage
 		method:guest
 		 */
 		$method	= $request->getData("method"); // chekcout method
-		$onepage->saveCheckoutMethod($method);
+		if($method){
+			$onepage->saveCheckoutMethod($method);
+			$onepage->getQuote()->setTotalsCollectedFlag(false);
+		}
 		
 		/**
 		billing_address_id:1
@@ -46,7 +65,10 @@ abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_Onepage
 		billing[use_for_shipping]:1
 		 */
 		$billing = $request->getData("billing");
-		$onepage->saveBilling($billing, $billingAddressId);
+		if(is_array($billing)){
+			$onepage->saveBilling($billing, $billingAddressId);
+			$onepage->getQuote()->setTotalsCollectedFlag(false);
+		}
 		
 		
 		/**
@@ -70,25 +92,33 @@ abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_Onepage
 		shipping[save_in_address_book]:1
 		 */
 		$shipping = $request->getData("shipping");
-		$onepage->saveShipping($shipping, $shippingAddressId);
+		if(is_array($shipping)){
+			$onepage->saveShipping($shipping, $shippingAddressId);
+			$onepage->getQuote()->setTotalsCollectedFlag(false);
+		}
 		
 		/**
 		shipping_method[4]:udtiership_1
 		 */
-		$shippingMethod = $request->getData("shipping_method");
-		$onepage->saveShippingMethod($shippingMethod);
+		if($shippingMethod = $request->getData("shipping_method")){
+			$onepage->saveShippingMethod($shippingMethod);
+			$onepage->getQuote()->setTotalsCollectedFlag(false);
+		}
 		
 		/**
 		payment[method]:zolagopayment
 		payment[additional_information][provider]:m
 		 */
 		$payment = $request->getData("payment");
-		$onepage->savePayment($payment);
+		if(is_array($payment)){
+			$onepage->savePayment($payment);
+			$onepage->getQuote()->setTotalsCollectedFlag(false);
+		}
+		// Override collect totals - make final collect totals
+		$onepage->getQuote()->collectTotals()->save();
 	}
 	
 	public function saveAddressesAction() {
-		$onepage = $this->getOnepage();
-		
 		$response = array(
 			"status"=>1,
 			"content" => true
