@@ -11,6 +11,12 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 	protected $_attrCache = array();
 	
 	/**
+	 * @var array  array(storeId=>array(attributeId=>value))) 
+	 */
+	protected $_storeLabels = array();
+	
+	
+	/**
 	 * @var Mage_Catalog_Model_Product
 	 */
 	protected $_tmpProduct;
@@ -19,6 +25,9 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 	 * @var Mage_Customer_Model_Resource_Group_Collection 
 	 */
 	protected $_groupCollection;
+	
+	protected $_manaCollection;
+	
 	
 	/**
 	 * @param Varien_Object $product
@@ -48,7 +57,7 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 	}
 	
 	public function getBrandAttributeCode() {
-		return trim(Mage::helper('solrsearch')->getSetting('display_brand_suggestion'));
+		return trim(Mage::helper('solrsearch')->getSetting('brand_attribute_code'));
 	}
 	
 	public function useInSugestions() {
@@ -115,11 +124,15 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 				$specialPriceFromDate = 0;
 
 				$specialPriceToDate = 0;
+				
+				$data[$code.'_special_price_fromdate_int'] = 0;
+				$data[$code.'_special_price_todate_int'] = 0;
 
 				if ($specialPrice > 0 && isset($returnData['product']) && is_object($returnData['product'])) {
 					$specialPriceFromDate = $returnData['product']->getSpecialFromDate();
 					$specialPriceToDate = $returnData['product']->getSpecialToDate();
 				}
+				
 				if ($specialPriceFromDate > 0 && $specialPriceToDate > 0) {
 					$data[$code.'_special_price_fromdate_int'] = strtotime($specialPriceFromDate);
 					$data[$code.'_special_price_todate_int'] = strtotime($specialPriceToDate);
@@ -133,22 +146,25 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 				}
 
 				if(isset($data[$code.'_special_price_fromdate_int']) && !is_numeric($data[$code.'_special_price_fromdate_int'])){
-					//$data[$code.'_special_price_fromdate_int'] = strtotime($data[$code.'_special_price_fromdate_int']);
-					$data[$code.'_special_price_fromdate_int'] = 0;
+					$data[$code.'_special_price_fromdate_int'] = strtotime($data[$code.'_special_price_fromdate_int']);
+					
 				}
 				if(isset($data[$code.'_special_price_todate_int']) && !is_numeric($data[$code.'_special_price_todate_int'])){
-					//$data[$code.'_special_price_todate_int'] = strtotime($data[$code.'_special_price_todate_int']);
-					$data[$code.'_special_price_fromdate_int'] = 0;
+					$data[$code.'_special_price_todate_int'] = strtotime($data[$code.'_special_price_todate_int']);
 				}
+				
+				$data[$code.'_special_price_fromdate_int'] = (int)$data[$code.'_special_price_fromdate_int'];
+				$data[$code.'_special_price_todate_int'] = (int)$data[$code.'_special_price_todate_int'];
 
-				if (!isset($data[$code.'_special_price_fromdate_int'])) {
+				/*if (!isset($data[$code.'_special_price_fromdate_int'])) {
 					$data[$code.'_special_price_fromdate_int'] = 0;
 				}
 				if (!isset($data[$code.'_special_price_todate_int'])) {
 					$data[$code.'_special_price_todate_int'] = 0;
-				}
+				}*/
 			}
 		}
+		
 		
 		$item->addData($data);
 		
@@ -264,6 +280,18 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 			$docData['udropship_vendor_logo_varchar'] = $vendor->getLogo();
 		}
 		
+		
+		// Mana manufacturer logo
+		if($this->getBrandAttributeCode() && $item->getOrigData($this->getBrandAttributeCode())){
+			$manaValueObejct = $this->_getManaManufacturerByOptionId(
+				$item->getOrigData($this->getBrandAttributeCode())
+			);
+			if($manaValueObejct && $manaValueObejct->getNormalImage()){
+				$docData[$this->getBrandAttributeCode() . '_logo_varchar'] = 
+					"m-image" . DS . $manaValueObejct->getNormalImage();
+			}
+		}
+		
 		// Wishlist count
 		$docData['wishlist_count_int'] = (int)$item->getOrigData('wishlist_count');
 		
@@ -317,7 +345,6 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 			$item->setData('textSearchText', array());
 		}
 
-		
 		// Unique data
 		foreach($item->getData() as $key=>$value){
 			if(is_array($value) && preg_match("/_facet$/", $key)){
@@ -325,18 +352,51 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 			}
 		}
 
+		// Final fags aggregated
+		$docData['flags_facet'] = $this->_prepareAggregatedFalgs($item);
+		
+		// Prepare other values
 		$docData['filter_visibility_int'] = $item->getOrigData('visibility');
 		$docData['instock_int'] = $item->getOrigData('stock_status');
 		$docData['product_status'] = $item->getOrigData('status');
-		
 		$docData['textSearchStandard'] = $item->getData('textSearch');
+		
 		
 		
 		$item->addData($docData);
 		
 		// Finally clear id
 		$item->unsetData('id');
+		
 		return $this;
+	}
+	
+	/**
+	 * Prepare aggregated field with all flags
+	 * @param Varien_Object $item
+	 * @return array
+	 */
+	protected function _prepareAggregatedFalgs(Varien_Object $item) {
+		$aggrgatedFlags = array();
+		
+		if((int)$item->getOrigData('is_new')){
+			$aggrgatedFlags[] = Mage::helper("zolagocatalog")->__("New");
+		}
+		if((int)$item->getOrigData("is_bestseller")){
+			$aggrgatedFlags[] = Mage::helper("zolagocatalog")->__("Bestseller");
+		}
+		if((int)$item->getOrigData("product_flag")){
+			switch($item->getOrigData("product_flag")){
+				case Zolago_Catalog_Model_Product_Source_Flag::FLAG_PROMOTION:
+					$aggrgatedFlags[] = Mage::helper("zolagocatalog")->__("Promotion");
+				break;
+				case Zolago_Catalog_Model_Product_Source_Flag::FLAG_SALE;
+					$aggrgatedFlags[] = Mage::helper("zolagocatalog")->__("Sale");
+				break;
+			}
+		}
+		
+		return $aggrgatedFlags;
 	}
 	
 
@@ -386,6 +446,8 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 			}
 		}
 		
+		
+		
 		if (empty($attributeVal) || $attributeVal == $helper->__('No') || $attributeVal == $helper->__('None')) {
 			unset($addData[$attributeKey]);
 			unset($addData[$attributeKeyFacets]);
@@ -410,8 +472,6 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 			
 				
 			if($attributeObj->getIsSearchable()){
-				
-				
 				if ($attributeVal != $helper->__('No') && $attributeCode != 'status' && $attributeCode != 'sku' && $attributeCode != 'price'){
 					if (strlen($attributeVal) > 255) {
 						$this->pushTextSearchToObject ($item, $attributeVal, 'textSearchText');
@@ -429,7 +489,7 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 					$addData[$attributeCode.'_relative_boost'] = $attributeVal;
 					$addData[$attributeCode.'_text'] = $attributeVal;
 					$addData[$attributeKey] = $attributeVal;
-					$this->pushTextSearchToObject ($item, $attributeObj->getStoreLabel() . ' ' . $attributeVal );
+					$this->pushTextSearchToObject ($item, $this->getStoreLabel($attributeObj) . ' ' . $attributeVal );
 				}
 			}
 			
@@ -452,6 +512,54 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 		}
 		
 		return $this;
+	}
+	
+	/**
+	 * @param int $optionId
+	 * @return Mana_Filters_Model_Filter2_Value | Mana_Filters_Model_Filter2_Store | null
+	 */
+	protected function _getManaManufacturerByOptionId($optionId) {
+		return $this->_getManaManufacturerValueCollection()->
+			getItemByColumnValue("option_id", (int)$optionId);
+	}
+	
+	/**
+	 * @return Mana_Filters_Resource_Filter2_Value_Collection
+	 */
+	protected function _getManaManufacturerValueCollection() {
+		
+		if(!$this->_manaCollection){
+			
+			$manaFilter = Mage::getModel("mana_filters/filter2");
+			/* @var $manaFilter Mana_Filters_Model_Filter2 */
+			$manaFilter->load($this->getBrandAttributeCode(), "code");
+			
+			$collection = Mage::getResourceModel(
+						'mana_filters/filter2_value_' . 
+						(Mage::helper('mana_admin')->isGlobal() ? "" : "store_") . 
+						"collection"
+			);
+			if(!Mage::helper('mana_admin')->isGlobal()){
+				$collection->addFieldToFilter("store_id", Mage::app()->getStore()->getId());
+			}
+			$collection->addFieldToFilter("filter_id", $manaFilter->getId());
+			$this->_manaCollection =  $collection;
+		}
+		return $this->_manaCollection;
+	}
+	
+	/**
+	 * 
+	 * @param Mage_Catalog_Model_Resource_Eav_Attribute $attribute
+	 * @return string
+	 */
+	protected function getStoreLabel(Mage_Catalog_Model_Resource_Eav_Attribute $attribute) {
+		if(!isset($this->_storeLabels[$attribute->getStoreId()][$attribute->getId()])){
+			$attribute->unsetData('store_label');
+			$this->_storeLabels[$attribute->getStoreId()][$attribute->getId()] = 
+					$attribute->getStoreLabel($attribute->getStoreId()) ;
+		}
+		return $this->_storeLabels[$attribute->getStoreId()][$attribute->getId()];
 	}
 	
 	/**
@@ -518,7 +626,14 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 			return $attribute->getFrontEnd()->getValue($product);
 		}
 		
-		// @todo add cache for arrays
+		$source = $attribute->getSource();
+		
+		// Force our models
+		if(method_exists($source, "setForceTranslate")){
+			$source->setForceTranslate(true);
+		}
+		
+		
 		if(is_array($data)){
 			foreach($data as $optionId){
 				$return = array();
@@ -526,7 +641,7 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 					return $this->_attrCache[$attribute->getStoreId()][$attribute->getId()][$optionId];
 				}else{
 					$this->_attrCache[$attribute->getStoreId()][$attribute->getId()][$optionId] = 
-						$attribute->getFrontEnd()->getValue($product);
+						$this->_rewriteValue($attribute->getFrontEnd()->getValue($product), $attribute);
 				}
 				$return[] = $this->_attrCache[$attribute->getStoreId()][$attribute->getId()][$optionId];
 			}
@@ -535,11 +650,28 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 				return $this->_attrCache[$attribute->getStoreId()][$attribute->getId()][$data];
 			}else{
 				$this->_attrCache[$attribute->getStoreId()][$attribute->getId()][$data] = 
-					$attribute->getFrontEnd()->getValue($product);
+					$this->_rewriteValue($attribute->getFrontEnd()->getValue($product), $attribute);
 			}
+			
 			$return = $this->_attrCache[$attribute->getStoreId()][$attribute->getId()][$data];
 		}
 		return $return;
+	}
+	
+	/**
+	 * @param $string $value
+	 * @param Mage_Catalog_Model_Resource_Eav_Attribute $attribute
+	 * @return string
+	 */
+	protected function _rewriteValue($value, Mage_Catalog_Model_Resource_Eav_Attribute $attribute) {
+		$helper = Mage::helper("zolagocatalog");
+		switch ($value) {
+			case "Yes":
+			case "No":
+				return $helper->__($value);
+			break;
+		}
+		return $value;
 	}
 	
 	/**
@@ -572,8 +704,12 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 			if ($attributeVal == 'No') {
 				continue;
 			}
-			// 
-			$attributeValFacets[] = trim($attributeVal);
+			
+			if(!is_array($attributeVal)){
+				$attributeValFacets[] = trim($attributeVal);
+			}else{
+				$attributeValFacets = array_merge($attributeValFacets, $attributeVal);
+			}
 			
 			
 			if ($backendType == 'datetime') {

@@ -25,6 +25,11 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
         $this->_solrData = $data;
 	}
 
+	
+	public function prepareFacetAndBoostFields() {
+		parent::prepareFacetAndBoostFields();
+		$this->facetFields[] = Zolago_Solrsearch_Block_Faces::FLAGS_FACET;
+	}
 
 	/**
 	 * Solr query with register results
@@ -159,9 +164,9 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
                     }else if($key == 'price'){
                         $query .= $this->priceFieldName.':['.urlencode(trim($value).'.99999').']+OR+';
 					}
-					else if(in_array($key, $this->_specialKeys, true)) {
+					/*else if(in_array($key, $this->_specialKeys, true)) {
 						$extendedQuery .= $key.':%22'.urlencode(trim(addslashes($value))).'%22+OR+';
-					}
+					}*/
                     else if($key == 'category_id') {
                         $cats[] = "category_id:%22{$value}%22";
                     }
@@ -303,9 +308,9 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
                     }else if($key == 'price'){
                         $query .= $this->priceFieldName.':['.urlencode(trim($value).'.99999').']+OR+';
 					}
-					else if(in_array($key, $this->_specialKeys, true)) {
+					/*else if(in_array($key, $this->_specialKeys, true)) {
 						continue;
-					}
+					}*/
                     else if($key == 'category_id') {
                         $cats[] = "category_id:%22{$value}%22";
                     }

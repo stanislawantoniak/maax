@@ -132,18 +132,31 @@ $avg = $_reviewBlock->getAvarageRating();
                 <div class="action-box-bundle clearfix">
                     <div class="col-xs-6">
                         <div class="addLike-box <?php if(Mage::helper('zolagowishlist')->productBelongsToMyWishlist($_product)) : ?>hidden<?php endif; ?>" id="notadded-wishlist">
-                            <span class="product-context-like-count"><?php echo (int) $this->getProduct()->getWishlistCount(); ?></span> osób lubi ten produkt <a href="#" onclick="Mall.addToWishlist(<?php echo $_product->getId(); ?>, 'product')" class="addLike"><?php echo $this->__("Add to<br />favorites"); ?></a>
+                            <span class="product-context-like-count">&nbsp;<?php if($this->getProduct()->getWishlistCount() > 0) : ?><?php echo (int) $this->getProduct()->getWishlistCount(); ?></span> <?php echo $this->helper("zolagomodago")->getPluralForm((int) $this->getProduct()->getWishlistCount(), array(
+                                $this->__("person like"),
+                                $this->__("people likes"),
+                                $this->__("people polish more than few likes"),
+                            )); ?> <?php echo $this->__("this product"); ?><?php endif; ?><a href="#" onclick="Mall.wishlist.addToWishlistFromProduct(<?php echo $_product->getId(); ?>);return false;" class="addLike"><?php echo $this->__("Add to<br />favorites"); ?></a>
                         </div>
 
                         <div class="addedLike-box <?php if(!Mage::helper('zolagowishlist')->productBelongsToMyWishlist($_product)) : ?>hidden<?php endif; ?>" id="added-wishlist">
-                            <a href="#" class="likeAdded" onclick="Mall.removeFromWishlist(<?php echo $this->getProduct()->getId(); ?>, 'product');">
-                                Ty i <span class="product-context-like-count" style="color: #4f4f4f"><?php echo ((int) $this->getProduct()->getWishlistCount())-1; ?></span> osób lubicie ten produkt<br><span>usuń z ulubionych</span>
+                            <a href="#" class="likeAdded" onclick="Mall.wishlist.removeFromWishlistFromProduct(<?php echo $this->getProduct()->getId(); ?>);return false;">
+                            <?php if((int) $this->getProduct()->getWishlistCount() - 1 == 0): ?>
+                                <?php echo $this->__("You like this"); ?><span class="product-context-like-count" style="color: #4f4f4f"></span><br><span><?php echo $this->__("remove from favorites"); ?></span>
+                            <?php else: ?>
+                                <?php echo $this->__("You and"); ?> <span class="product-context-like-count" style="color: #4f4f4f"><?php echo ((int) $this->getProduct()->getWishlistCount())-1; ?></span> <?php echo $this->helper('zolagomodago')->getPluralForm(
+                                    (int) $this->getProduct()->getWishlistCount() - 1, array(
+                                        $this->__("person"),
+                                        $this->__("people"),
+                                        $this->__("people polish more than few"),
+                                )); ?> <?php echo $this->__("like this product"); ?><br><span><?php echo $this->__("remove from favorites"); ?></span>
+                            <?php endif; ?>
                             </a>
                         </div>
                     </div>
 
                     <div class="col-xs-6 text-right">
-                        <button class="btn button button-primary ico addBasket" title="Wybierz wpierw rozmiar" id="add-to-cart" data-toggle="tooltip" data-placemen="top" onclick="Mall.addToCart(<?php echo $_product->getId(); ?>, <?php echo !$_product->getStockItem()->getMinSaleQty() ? 1 : $_product->getStockItem()->getMinSaleQty(); ?>);return false;"><?php echo $this->__("add to cart"); ?></button>
+                        <button class="btn button button-primary ico addBasket" title="<?php echo $this->__("Choose size first"); ?>" id="add-to-cart" data-toggle="tooltip" data-placemen="top" onclick="Mall.addToCart(<?php echo $_product->getId(); ?>, <?php echo !$_product->getStockItem()->getMinSaleQty() ? 1 : $_product->getStockItem()->getMinSaleQty(); ?>);return false;"><?php echo $this->__("add to cart"); ?></button>
                     </div>
                 </div>
             </div>
@@ -336,3 +349,22 @@ $avg = $_reviewBlock->getAvarageRating();
     Mall.product._current_product_type = "<?php echo Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE; ?>";
 </script>
 <?php endif; ?>
+<script type="text/javascript">
+    Mall.wishlist.addProduct({
+        id: <?php echo $_product->getId(); ?>,
+        wishlist_count: <?php echo (int) $this->getProduct()->getWishlistCount() ?>,
+        in_your_wishlist: <?php echo Mage::helper('zolagowishlist')->productBelongsToMyWishlist($_product) ? "true" : "false"; ?>
+    });
+    Mall.translate.add("you-like-this", "<?php echo $this->__("You like this"); ?>");
+    Mall.translate.add("remove-from-favorites", "<?php echo $this->__("remove from favorites"); ?>");
+    Mall.translate.add("add-to-br-favorites", "<?php echo $this->__("Add to<br />favorites"); ?>");
+    Mall.translate.add("like-this-product", "<?php echo $this->__("like this product"); ?>");
+    Mall.translate.add("likes-this-product", "<?php echo $this->__("likes this product"); ?>");
+    Mall.translate.add("you-and", "<?php echo $this->__("You and"); ?>");
+    Mall.translate.add("person", "<?php echo $this->__("person"); ?>");
+    Mall.translate.add("person like", "<?php echo $this->__("person like"); ?>");
+    Mall.translate.add("people", "<?php echo $this->__("people"); ?>");
+    Mall.translate.add("people likes", "<?php echo $this->__("people likes"); ?>");
+    Mall.translate.add("people-polish-more-than-few", "<?php echo $this->__("people polish more than few"); ?>");
+    Mall.translate.add("people-polish-more-than-few likes", "<?php echo $this->__("people polish more than few likes"); ?>");
+</script>

@@ -267,7 +267,7 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 		if(!$this->_solrAttributesCollection){
 			
 			$codes = array("name", "tax_class_id", "status", "visibility", "sku", 
-				'is_new', 'is_bestseller', 'product_flag', "image", 
+				'is_new', 'is_bestseller', 'product_flag', "image",
 				"special_price", "special_from_date", "special_to_date");
 			
 			//display brand suggestion attribute code
@@ -323,8 +323,9 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 	 *		4.3 Process attributes data (labels, values)
 	 *		4.4 Load category data
 	 *		4.5 Process final data (textSearch, skus, prices etc...)
-	 * 5. Build json string via Varien_Object flatten
-	 * 6. Process request
+	 * 6. Extend With configurable
+	 * 7. Build json string via Varien_Object flatten
+	 * 8. Process request
 	 * 
 	 * Time ~0.05s per congigurable with 10 childs (150 in 7s)
 	 * 
@@ -414,6 +415,7 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 			/* @var $item Varien_Object */
 			
 			if($item = $finalCollection->getItemById($id)){
+				//Mage::log("Product " . $id . " added");
 				$documents .= '"add": '.json_encode(array('doc'=>$item->getData())).",";
 				//if($index==3){
 				//	Mage::log(var_export($item->getData(),1));

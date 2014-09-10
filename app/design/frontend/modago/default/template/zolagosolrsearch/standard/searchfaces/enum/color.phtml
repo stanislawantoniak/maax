@@ -15,12 +15,13 @@
             <?php $_value = $this->getValueObject($item);?>
             <?php $_color = $_value->getColor();?>
             <?php $_image = $_value->getNormalImage();?>
+            <?php $_imageHover = $_value->getNormalHoveredImage();?>
             <?php
             if(!$isOptionSelected && $this->isItemActive($item)) {
                 $isOptionSelected = true;
             }
             ?>
-            <label for="color_<?php echo $item ?>" <?php if($_image): ?>data-img="<?php echo Mage::getBaseUrl("media") . "/m-image/" . $_image;?>"<?php endif; ?> data-param="<?php echo $this->getItemJson($item);?>" data-color="<?php echo $_color?>" data-url="<?php echo $this->getItemUrl($item) ?>">
+            <label title="<?php echo $item ?>" for="color_<?php echo $item ?>" <?php if($_image): ?>data-img="<?php echo Mage::getBaseUrl("media") . "/m-image/" . $_image;?>"<?php endif; ?> data-param="<?php echo $this->getItemJson($item);?>" data-color="<?php echo $_color?>" data-url="<?php echo $this->getItemUrl($item) ?>" <?php if($_imageHover) : ?>data-imghover="<?php echo Mage::getBaseUrl("media") . "/m-image/" . $_imageHover;?>"<?php endif; ?>>
                 <input type="checkbox" id="color_<?php echo $item ?>" name="color[]" <?php if($this->isItemActive($item)): ?>checked="checked"<?php endif; ?> /><span><span></span></span>
             </label>
         <?php endif; ?>
@@ -38,7 +39,7 @@
                     $isOptionSelected = true;
                 }
                 ?>
-                <label data-state="hidden" for="color_<?php echo $item ?>" <?php if($_image): ?>data-img="<?php echo Mage::getBaseUrl("media") . "/m-image/" . $_image;?>"<?php endif; ?> data-param="<?php echo $this->getItemJson($item);?>" data-color="<?php echo $_color?>" data-url="<?php echo $this->getItemUrl($item) ?>" style="display: none;">
+                <label title="<?php echo $item ?>" data-state="hidden" for="color_<?php echo $item ?>" <?php if($_image): ?>data-img="<?php echo Mage::getBaseUrl("media") . "/m-image/" . $_image;?>"<?php endif; ?> data-param="<?php echo $this->getItemJson($item);?>" data-color="<?php echo $_color?>" data-url="<?php echo $this->getItemUrl($item) ?>" <?php if($_imageHover) : ?>data-imghover="<?php echo Mage::getBaseUrl("media") . "/m-image/" . $_imageHover;?>"<?php endif; ?> style="display: none;">
                     <input type="checkbox" id="color_<?php echo $item ?>" name="color[]" <?php if($this->isItemActive($item)): ?>checked="checked"<?php endif; ?> /><span><span></span></span>
                 </label>
             <?php endif; ?>

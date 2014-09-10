@@ -64,7 +64,7 @@ jQuery.noConflict();
         });
         return valid;
     }, "");
-  $("#question-form, #review-form").each(function () {
+  $("#question-form, #review-form, #question-form-mobile").each(function () {
 
   $(this).validate({   
     success: "valid",
@@ -185,10 +185,10 @@ jQuery.noConflict();
     $(window).on('load resize', function(){
       var link = $('.forgot-password');
       $.each( link, function( key, value ) {
-        var p = $( "#pass" );    
+        var p = $( "#pass" );
         var pw = p.innerWidth();
         var offset = p.offset();
-        
+
         var position = parseInt(pw - 108);
           $(this).css({
           left:position+'px'
@@ -1546,7 +1546,7 @@ $('#product-gallery .stage a').on('click', '.selector', function(event) {
     var scroll = $('body').find('.mCustomScrollbar');
     if (scroll.length >= 1) {
     scroll.mCustomScrollbar({
-          setHeight:100,
+//          setHeight:100,
           theme:"dark-thick",
           scrollButtons:{
              enable:true
@@ -1783,8 +1783,7 @@ if($(window).width() != prevW) {
 
     
       $('#header').on('click', '.toggleMenu', function(event) {
-        event.preventDefault();
-        var screenWidth = $(window).width();
+        event.preventDefault(); var screenWidth = $(window).width();
         var screenHeight = $(window).height();
         var docHeight = $(window).innerHeight();
         $('body').toggleClass('sb-open noscroll');
@@ -2458,6 +2457,12 @@ function initScrollBarFilterStyle() {
 function showSubMenuMobile(){
   var mobileMenu = $('#nav_mobile > li > a,#shop_nav_mobile > li > a');
 
+    //dodanie filtra aby w navigation mozna bylo dac klikalnego linka
+    //wystarczy dodac do anchor'a class="clickable"
+    mobileMenu = $(mobileMenu).filter(function( index ) {
+        return !$(this ).hasClass('clickable');
+    });
+
   mobileMenu.on('click', function(event) {
     event.preventDefault();
     //$(this).closest(mobileMenu).find('.open').removeClass('open');
@@ -2752,7 +2757,7 @@ function filterColor() {
 
     $(this).on('mouseenter', function(){
 
-      if (colorFilter) {
+      if (colorFilter && !$(this).attr("data-img")) {
         
         $(this).find('span').children('span').css({
           'background-image': 'none'

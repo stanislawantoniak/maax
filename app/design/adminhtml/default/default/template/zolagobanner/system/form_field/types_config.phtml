@@ -329,6 +329,10 @@ $fValue = $_element->getValue();
     <br />
     <h3><?php echo Mage::helper('zolagobanner')->__('Html Image Placeholder')?></h3>
     <input type="text" class="input-text" name="<?php echo $this->getFieldName()?>[image_html]" value="<?php echo $fValue['image_html']; ?>" style="width:400px" />
+
+    <br />
+    <h3><?php echo Mage::helper('zolagobanner')->__('Campaign expires in')?></h3>
+    <input type="text" class="input-text" name="<?php echo $this->getFieldName()?>[campaign_expires]" value="<?php echo $fValue['campaign_expires']; ?>" style="width:40px" /> <?php echo Mage::helper('zolagobanner')->__('hours')?>
 </div>
 
 <style type="text/css">

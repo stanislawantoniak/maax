@@ -19,10 +19,11 @@
                 $isOptionSelected = true;
             }
             $name = $this->getNameBasedOnContent($item);
+            $class = $this->getClassBasedOnContent($item);
             ?>
             <div class="form-group form-checkbox">
-                <input type="checkbox" name="<?php echo $name; ?>" id="<?php echo $name; ?>" class="css-checkbox" data-url="<?php echo $this->getItemUrl($item) ?>">
-                <label for="<?php echo $name; ?>" class="css-label"><span><?php echo $item; ?></span> <span class="suffix">(<?php echo $count; ?>)</span></label>
+                <input type="checkbox" name="<?php echo $name; ?>" id="<?php echo $name; ?>" class="css-checkbox" data-url="<?php echo $this->getItemUrl($item) ?>" <?php if ($this->isItemActive($item)): ?>checked<?php endif; ?>>
+                <label for="<?php echo $name; ?>" class="css-label <?php echo $class; ?>"><span><?php echo $item; ?></span> <span class="suffix">(<?php echo $count; ?>)</span></label>
             </div>
 
         <?php endif; ?>

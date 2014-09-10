@@ -2,6 +2,7 @@
 
 class Zolago_Banner_Block_Vendor_Banner_Type extends Mage_Core_Block_Template
 {
+
     public function __construct()
     {
         parent::__construct();

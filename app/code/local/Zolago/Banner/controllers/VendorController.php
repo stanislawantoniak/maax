@@ -155,18 +155,22 @@ class Zolago_Banner_VendorController extends Zolago_Dropship_Controller_Vendor_A
 
                         foreach ($tmpName as $n => $imageName) {
                             if (!empty($imageName)) {
-                                $imageSize = getimagesize($imageName);
-                                $imageW = $imageSize[0];
+                                $uniqName = uniqid() . "_" . $name[$n];
 
-                                $imageH = $imageSize[1];
-                                $path = Mage::getBaseDir() . "/media/banners/" . $name[$n];
+                                $image = md5_file($imageName);
+                                $image = md5(mt_rand() . $image);
+                                $folder = $image[0] . "/" . $image[1] . "/" . $image[2] . "/";
+
+                                mkdir(Mage::getBaseDir() . "/media/banners/" . $folder, 0777, true);
+
+                                $path = Mage::getBaseDir() . "/media/banners/" . $folder . $uniqName;
                                 try {
                                     move_uploaded_file($imageName, $path);
                                 } catch (Exception $e) {
                                     Mage::logException($e);
                                 }
-                                $bannerContentToSave['image'][$n]['path'] = "/banners/" . $name[$n];
-                            } elseif (isset($data['image'])&& !empty($data['image'])) {
+                                $bannerContentToSave['image'][$n]['path'] = "/banners/" . $folder . $uniqName;
+                            } elseif (isset($data['image']) && !empty($data['image'])) {
                                 $bannerContentToSave['image'][$n]['path'] = isset($data['image'][$n]) ? $data['image'][$n]['value'] : '';
                             }
                         }

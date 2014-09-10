@@ -685,7 +685,7 @@ form {
         .street 	{max-width: 415px;}
         .zipcode 	{max-width: 72px;}
         .phone 		{max-width: 115px;}
-        .email 		{max-width: 296px;}
+        .email,.login-text-field 		{max-width: 296px !important;}
         .password 	{max-width: 235px;}
         .nip 		{max-width: 115px}
 

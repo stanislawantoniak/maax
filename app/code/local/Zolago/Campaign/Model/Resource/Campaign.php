@@ -68,11 +68,10 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
      * @param array $placements
      * @return $this
      */
-    public function setCampaignPlacements($categoryId, array $placements)
+    public function setCampaignPlacements($categoryId, $vendorId, array $placements)
     {
         $table = $this->getTable("zolagocampaign/campaign_placement");
-        $where = $this->getReadConnection()
-            ->quoteInto("category_id=?", $categoryId);
+        $where = "category_id={$categoryId} AND vendor_id={$vendorId}";
         $this->_getWriteAdapter()->delete($table, $where);
 
         if (count($placements)) {
@@ -98,7 +97,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
      * @param $vendorId
      * @return array
      */
-    public function getCategoryPlacements($categoryId, $vendorId)
+    public function getCategoryPlacements($categoryId, $vendorId, $bannerTypes = array(), $notExpired = FALSE)
     {
         $table = $this->getTable("zolagocampaign/campaign_placement");
         $select = $this->getReadConnection()->select();
@@ -109,7 +108,8 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
             array(
                 'campaign_name' => 'campaign.name',
                 'campaign_date_from' => 'campaign.date_from',
-                'campaign_date_to' => 'campaign.date_to'
+                'campaign_date_to' => 'campaign.date_to',
+                'campaign_status' => 'campaign.status',
             )
         );
         $select->joinLeft(
@@ -125,11 +125,22 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
             array(
                  'banner_show' => 'banner_content.show',
                  'banner_html' => 'banner_content.html',
-                 'banner_image' => 'banner_content.image'
+                 'banner_image' => 'banner_content.image',
+                 'banner_caption' => 'banner_content.caption'
             )
         );
         $select->where("campaign_placement.category_id=?", $categoryId);
         $select->where("campaign_placement.vendor_id=?", $vendorId);
+        if(!empty($bannerTypes)){
+            $select->where("banner.type in(?)", $bannerTypes);
+        }
+        if($notExpired){
+            $endYTime = date("Y-m-d H:i:s", Mage::getModel('core/date')->timestamp(time()));
+
+            $select->where("campaign.date_to >= '{$endYTime}'");
+        }
+        $select->order("banner.type DESC");
+        $select->order("campaign_placement.priority ASC");
         return $this->getReadConnection()->fetchAssoc($select);
     }
 
@@ -339,6 +350,8 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $vendor = Mage::getSingleton('udropship/session')->getVendor();
         $vendor = $vendor->getId();
 
+        $result = array();
+
         $table = $this->getTable("zolagocampaign/campaign");
         $select = $this->getReadConnection()->select();
         $select->from(array("campaign" => $table),
@@ -357,7 +370,14 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
         $select->where('campaign.vendor_id=?', $vendor);
         $select->order("campaign.date_from DESC");
 
-        return $this->getReadConnection()->fetchAssoc($select);
+        try {
+            $result = $this->getReadConnection()->fetchAll($select);
+        } catch (Exception $e) {
+            Mage::throwException($e);
+
+        }
+
+        return $result;
     }
 
 

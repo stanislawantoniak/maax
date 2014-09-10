@@ -29,18 +29,34 @@ class Zolago_Solrsearch_Model_Catalog_Product extends Mage_Catalog_Model_Product
 	}
 	
 	/**
-	 * @return string
+	 * @return string | null;
 	 */
 	public function getListingResizedImageUrl() {
 		/** 
 		 * @todo move configurable values of helpert do admin conif per website
 		 */
-		return Mage::helper('catalog/image')->
+		$return = null;
+		try{
+			$return = Mage::helper('catalog/image')->
 				init($this, 'image')->
 				keepAspectRatio(true)->
 				constrainOnly(true)->
 				keepFrame(false)->
-				resize(214,null);
+				resize(300,null);
+		} catch (Exception $ex) {
+			Mage::logException($ex);
+		}
+		return $return;
+	}
+	
+	/**
+	 * @return string|null
+	 */
+	public function getManufacturerLogoUrl() {
+		if($this->getData("manufacturer_logo")){
+			return Mage::getBaseUrl('media') . $this->getData("manufacturer_logo");
+		}
+		return null;
 	}
 	
 	/**

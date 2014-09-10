@@ -1,0 +1,8 @@
+<?php
+/**
+ * User: Andrzej Spólnicki
+ */
+$vendor = Mage::helper('umicrosite')->getCurrentVendor();
+?>
+
+<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('category-navigation-desktop-v-'.$vendor['vendor_id'])->toHtml(); ?>

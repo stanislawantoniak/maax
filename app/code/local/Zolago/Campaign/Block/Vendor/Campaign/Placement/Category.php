@@ -21,18 +21,27 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement_Category extends Mage_Core
         /* @var $vendor Unirgy_Dropship_Model_Vendor */
         $campaign = Mage::getResourceModel("zolagocampaign/campaign");
         $campaignBank = $campaign->getCampaigns();
+        $result = array();
 
         $campaigns = array();
         //prepare campaigns group by type
         foreach($campaignBank as $campaign){
-            $campaigns[$campaign["banner_type"]][] = array(
+            $campaigns[$campaign["banner_type"]][$campaign['campaign_id']] = array(
                 'campaign_id' => $campaign['campaign_id'],
                 'name' => $campaign['name'],
                 'date_from' => !empty($campaign['date_from']) ? date("d.m.Y H:i:s",strtotime($campaign['date_from'])) : '',
                 'date_to' => !empty($campaign['date_to']) ? date("d.m.Y H:i:s",strtotime($campaign['date_to'])) : ''
             );
         }
-        return $campaigns;
+
+        //reformat result
+        if (!empty($campaigns)) {
+            foreach ($campaigns as $type => $_) {
+                $result[$type] = array_values($_);
+            }
+        }
+
+        return $result;
     }
 
     /**
@@ -68,26 +77,33 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement_Category extends Mage_Core
                     }
                 }
                 if($placement['banner_show'] == Zolago_Banner_Model_Banner_Show::BANNER_SHOW_HTML){
-                    $placement['preview_image'] = '/skin/frontend/base/default/images/banner_html_content.png';
+                    $placement['preview_image'] = $bannersConfiguration->image_html;
                 }
-                $status = '';
+                $status = array();
                 //status
-                $statuses = Mage::getSingleton('zolagocampaign/campaign_PlacementStatus')->toOptionArray();
-                //Zend_Debug::dump($statuses);
-                //1.Expired
-                if (strtotime($dateTo) < time()) {
-                    $status = $statuses[Zolago_Campaign_Model_Campaign_PlacementStatus::TYPE_EXPIRED];
+                if(!empty($dateTo) && !empty($dateFrom)){
+                    $statuses = Mage::getSingleton('zolagocampaign/campaign_PlacementStatus')->toOptionArray();
+                    //Zend_Debug::dump($statuses);
+                    //1.Expired
+                    $now = Mage::getModel('core/date')->timestamp(time());
+
+                    if (strtotime($dateFrom) < $now && $now < strtotime($dateTo)) {
+                        $status = $statuses[Zolago_Campaign_Model_Campaign_PlacementStatus::TYPE_ACTIVE];
+                    }
+                    if ($now < strtotime($dateFrom)) {
+                        $status = $statuses[Zolago_Campaign_Model_Campaign_PlacementStatus::TYPE_FUTURE];
+                    }
+                    $h = !empty($bannersConfiguration->campaign_expires) ? $bannersConfiguration->campaign_expires : 48;
+
+                    if (strtotime($dateTo) >= $now && strtotime($dateTo) < ($now + $h * 3600)) {
+                        $status = $statuses[Zolago_Campaign_Model_Campaign_PlacementStatus::TYPE_EXPIRES_SOON];
+                    }
+
+                    if (strtotime($dateTo) < $now) {
+                        $status = $statuses[Zolago_Campaign_Model_Campaign_PlacementStatus::TYPE_EXPIRED];
+                    }
                 }
-                if (strtotime($dateFrom) < time() && time() < strtotime($dateTo)) {
-                    $status = $statuses[Zolago_Campaign_Model_Campaign_PlacementStatus::TYPE_ACTIVE];
-                }
-                if (time() < strtotime($dateFrom)) {
-                    $status = $statuses[Zolago_Campaign_Model_Campaign_PlacementStatus::TYPE_FUTURE];
-                }
-                $h = 48;
-                if (strtotime($dateTo) < strtotime('now +'.$h.' hours')) {
-                    $status = $statuses[Zolago_Campaign_Model_Campaign_PlacementStatus::TYPE_EXPIRES_SOON];
-                }
+
                 $placement['status'] = $status;
 
 
@@ -112,6 +128,8 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement_Category extends Mage_Core
             $categoryModel = Mage::getModel('catalog/category');
             $categoryObj = $categoryModel->load($category);
             $categoryName = $categoryObj->getName();
+        } else {
+            $categoryName = Mage::helper('zolagocampaign') -> __('Vendor landing page');
         }
         return $categoryName;
     }
