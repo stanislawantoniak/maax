@@ -111,7 +111,10 @@
 				});
 			},
 			isPasswordNotEmpty: function(){
-				return this.content.find("[name='billing[customer_password]']").val().length>0;
+				if(this.content.find("[name='account[password]']").length){
+					return this.content.find("[name='account[password]']").val().length>0;
+				}
+				return false;
 			},
 			getBillingFromShipping: function () {
 				var self = this,
@@ -167,6 +170,9 @@
 					billingData = this.getBillingFromShipping();
 					stepData = this.mergeArraysOfObjects(stepData, billingData);
 				}
+				
+				// Push method
+				stepData.push({name: "method", value: this.checkout.getMethod()});
 
 				return stepData;
 			},
