@@ -105,7 +105,6 @@
 				this.init();
 				var self = this;
 				this.content.find("form").submit(function(){
-                    console.log(checkoutObject.getActiveStep().collect());
 					self.submit();
 					return false;
 				});
