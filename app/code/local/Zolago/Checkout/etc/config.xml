@@ -11,6 +11,11 @@
 				<class>Zolago_Checkout_Helper</class>
 			</zolagocheckout>
 		</helpers>
+		<models>
+			<zolagocheckout>
+				<class>Zolago_Checkout_Model</class>
+			</zolagocheckout>
+		</models>
     </global>
 	<frontend>
 		<routers>

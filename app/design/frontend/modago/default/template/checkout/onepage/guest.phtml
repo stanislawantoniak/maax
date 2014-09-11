@@ -4,9 +4,10 @@
 			<?php echo $this->getChildHtml("checkout.onepage.guest.address");?>
 		</div>
 		<div class="step step-1 hidden" id="step-1">
-			Step 2
-			<button class="btn" id="step-1-prev">Prev</button>
-			<button class="btn" id="step-1-submit">Next</button>
+
+            <?php echo $this->getChildHtml("checkout.onepage.guest.shippingpayment");?>
+<!--			<button class="btn" id="step-1-prev">Prev</button>-->
+<!--			<button class="btn" id="step-1-submit">Next</button>-->
 		</div>
 		<div class="step step-2 hidden" id="step-2">
 			<?php echo $this->getChildHtml("checkout.onepage.guest.review");?>
@@ -22,24 +23,17 @@
 		
 		checkout.setProgressObject(jQuery("#step ol"));
 		
-		checkout.addStep({
-			id: "step-0",
-			onPrepare: function(checkoutObject){
-				var self = this;
-				this.content.find("#step-0-submit").click(function(){
-					self.submit();
-				})
-			}
-		});
+		checkout.addStep(Mall.Checkout.steps.address);
 		
 		checkout.addStep({
 			id: "step-1",
+			code: "deliverypayment",
 			onPrepare: function(checkoutObject){
 				var self = this;
-				this.content.find("#step-1-submit").click(function(){
+				this.content.find("[id^=step-1-submit]").click(function(){
 					self.submit();
 				})
-				this.content.find("#step-1-prev").click(function(){
+				this.content.find("[id^=step-1-prev]").click(function(){
 					checkoutObject.prev();
 				})
 			}
@@ -47,13 +41,14 @@
 		
 		checkout.addStep({
 			id: "step-2",
+			code: "review",
 			onPrepare: function(checkoutObject){
 				var self = this;
-				this.content.find("#step-2-submit").click(function(){
+				this.content.find("[id^=step-2-submit]").click(function(){
 					// Add validation
 					checkoutObject.placeOrder()
 				});
-				this.content.find("#step-2-prev").click(function(){
+				this.content.find("[id^=step-2-prev]").click(function(){
 					checkoutObject.prev();
 				})
 			}

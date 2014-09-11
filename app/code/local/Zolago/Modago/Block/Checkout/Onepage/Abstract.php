@@ -13,4 +13,11 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract
 		return (bool)$this->getQuote()->getCustomer()->getAddressCollection()->count();
 	}
 	
+	/**
+	 * @return type
+	 */
+	public function getStoreDefaultCountryId() {
+		return "PL";Mage::app()->getStore()->getConfig("general/country/default");
+	}
+	
 } 
