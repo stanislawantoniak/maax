@@ -1,52 +1,28 @@
 Mall.validate.validators = {
     emailbackend: function (params) {
         "use strict";
+        //pamietac o params : form key
         return true;
     },
-    phone_numbermber: function(params) {
+    telephone: function(value, elem, params) {
         "use strict";
-        return true;
+
+        return (value.match(/^((\+)?[1-9]{1,2})?([-\s\.])?((\(\d{1,4}\))|\d{1,4})(([-\s\.])?[0-9]{1,12}){1,2}(\s*(ext|x)\s*\.?:?\s*([0-9]+))?$/));
     },
-    zipcode: function(params){
+    postcode: function(value, elem, params){
         "use strict";
-        return true;
+        var r = /^\d{2}-\d{3}$/.test(value);
+        if(/^00-000$/.test(value)) {
+            r = false;
+        }
+        return r;
     },
-    password: function(value, elem, params){
+    passwordbackend: function(value, elem, params){
         "use strict";
-        console.log(value);
-        if(value.length >= 4) {
+        if(value.length >= params.minLength || value.length == 0) {
             return true;
         } else {
             return false;
         }
-    },
-    checkboxagreement1: function(){
-        "use strict";
-
-        jQuery('#co-address').validate(Mall.validate.getOptions({
-            debug: true,
-            rules: {
-                "agreement[1]": {
-                    required: true
-                }
-            }
-        }));
-
-        return this;
-    },
-    checkboxagreement2: function(){
-        "use strict";
-
-        jQuery('#co-address').validate(Mall.customer.getOptions({
-            debug: true,
-            rules: {
-                "agreement[2]": {
-                    required: true
-                }
-            }
-        }));
-
-        return this;
     }
-
 };

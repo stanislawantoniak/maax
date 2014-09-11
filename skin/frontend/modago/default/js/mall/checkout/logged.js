@@ -18,7 +18,7 @@
 	/**
 	 * @returns string
 	 */
-	Mall.CheckoutGuest.prototype.getMethod = function(){
+	Mall.CheckoutLogged.prototype.getMethod = function(){
 		  return this.METHOD_CUSTOMER;
 	}
 	
