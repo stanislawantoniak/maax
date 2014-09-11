@@ -77,12 +77,41 @@
                         <?php endforeach; ?>
 
 
+		<div class="panel panel-default panel-color">
+            <div class="panel-body">
+	        <div class="tableWrapper table-cart" style="border-top:0px">
+			    <div class="table-footer-group hidden-xs">
+
+		        <div class="table-row clearfix">
+
+	    	        <div class="table-cell cell-01 td">
+    	    	        <a class="button button-third large pull-left" id="back" href="<?php echo $this->getBasketUrl(); ?>"><?php echo $this->__('Change basket'); ?></a>
+					</div>
+		            <div class="table-cell cell-03 label_value td">
+						<div>[dev]<?php echo $this->__('Summary value');?>:</div>
+						<div>[dev]<?php echo $this->__('Shipping cost');?>:</div>
+						<div><span style="font-family:latoblack">[dev]<?php echo $this->__('To pay');?>:</span></div>
+					</div>
+		            <div class="table-cell cell-04 label_value td">
+						<div><?php echo Mage::helper('core')->formatPrice(999);?></div>
+						<div><?php echo Mage::helper('core')->formatPrice(9);?></div>
+						<div><?php echo Mage::helper('core')->formatPrice(1999);?></div>
+					</div>
+		            <div class="table-cell cell-05 td"></div>
+				</div>
+				</div>
+            </div>			
+			</div>
+		</div>
         <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-3">
                 <a class="button button-third large pull-left" id="step-2-prev">Wróć</a>
             </div>
-            <div class="col-sm-6">
-                <button class="button button-primary large link pull-right" id="step-2-submit">Dalej</button>
+			<div class="col-sm-6">
+				<?php echo $this->getCheckoutReviewInfo(); ?>
+			</div>
+            <div class="col-sm-3">
+                <button class="button button-primary large link pull-right" id="step-2-submit">Zamawiam</button>
             </div>
         </div>   
 

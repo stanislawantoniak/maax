@@ -70,4 +70,24 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Review
     }
     
     //{{{ 
+    
+    //{{{ 
+    /**
+     * footer info
+     */
+    public function getCheckoutReviewInfo() {
+        $storeId = Mage::app()->getStore()->getId();
+        return $this->getLayout()->createBlock('cms/block')->setBlockId('checkout-review-footer-'.$storeId)->toHtml();
+    }
+    //}}}
+    
+    //{{{ 
+    /**
+     * url to basket
+     * @return string
+     */
+     public function getBasketUrl() {
+         return $this->getUrl('checkout/cart');
+     }
+    //}}}
 } 
