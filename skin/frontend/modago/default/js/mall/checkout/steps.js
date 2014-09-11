@@ -99,6 +99,7 @@
 					if (jQuery("#invoice_data_address").is(":checked")) {
 						self.invoiceCopyShippingData();
 						self.invoiceDisableFields(self._invoice_copy_shipping_fields);
+                        self.setSameAsBilling(1);
 					}
 				});
 
