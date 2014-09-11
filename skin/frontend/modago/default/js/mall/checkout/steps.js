@@ -175,6 +175,19 @@
                 return arr1;
             }
 		},
+        delivery: {
+            id: "step-1",
+            code: "delivery",
+            doSave: true,
+            collect: function () {
+                var form = jQuery("#co-delivery");
+
+                var stepData = form.serializeArray();
+                console.log(stepData);
+
+                //return stepData;
+            }
+        },
 
         getIsObjectKeyExistsInArray: function (key, arr) {
             var exists = false;

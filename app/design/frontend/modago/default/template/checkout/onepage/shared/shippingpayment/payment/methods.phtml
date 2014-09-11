@@ -12,7 +12,7 @@
     foreach ($methods as $_method):
         $_code = $_method->getCode();
 ?>
-        <div class="panel panel-default">
+        <div class="panel panel-default" id="payment-methods">
         <div class="panel-body">
                 <div class="form-group form-radio">
                     <?php if(!$oneMethod): ?>
@@ -43,16 +43,12 @@
 <script type="text/javascript">
     //<![CDATA[
     jQuery('[name="payment[method]"]').click(function () {
-        if (jQuery(this).val() == "zolagopayment") {
-            jQuery('#payment_form_zolagopayment').show();
+        if (jQuery(this).is(':checked')) {
+            jQuery('#payment-methods .form-group dd ul').hide();
+            jQuery(this).parents('.form-group').find('dd ul').show();
         } else {
-            jQuery('#payment_form_zolagopayment').hide();
+            jQuery(this).parents('.form-group').find('dd ul').hide();
         }
     })
-
-
-    if (jQuery('[name="payment[method]"]').is(':checked') && jQuery('[name="payment[method]"]').val() == 'zolagopayment') {
-        jQuery('#payment_form_zolagopayment').show();
-    }
     //]]>
 </script>
