@@ -3,6 +3,82 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
 {
 	protected $_customerForm;
 	
+	/**
+     * Initialize quote state to be valid for one page checkout
+     *
+     * @return Mage_Checkout_Model_Type_Onepage
+     */
+    public function initCheckout()
+    {
+        $checkout = $this->getCheckout();
+        $customerSession = $this->getCustomerSession();
+        if (is_array($checkout->getStepData())) {
+            foreach ($checkout->getStepData() as $step=>$data) {
+                if (!($step==='login' || $customerSession->isLoggedIn() && $step==='billing')) {
+                    $checkout->setStepData($step, 'allow', false);
+                }
+            }
+        }
+
+        /**
+         * Reset multishipping flag before any manipulations with quote address
+         * addAddress method for quote object related on this flag
+         */
+        if ($this->getQuote()->getIsMultiShipping()) {
+            $this->getQuote()->setIsMultiShipping(false);
+            $this->getQuote()->save();
+        }
+		
+		
+		$quote = $this->getQuote();
+
+		$billing = $quote->getBillingAddress();
+		$shipping = $quote->getShippingAddress();
+
+        /*
+        * want to load the correct customer information by assigning to address
+        * instead of just loading from sales/quote_address
+		* assign only if logged in!
+        */
+        $customer = $customerSession->getCustomer();
+        /* @var $customer Mage_Customer_Model_Customer */
+		if ($customer ) {
+			// Logged in
+			if(Mage::getSingleton('customer/session')->isLoggedIn()){
+				$defaultBilling = $customer->getDefaultBillingAddress();
+				$defaultShipping = $customer->getDefaultBillingAddress();
+
+
+				// Import defualt billing
+				if($defaultBilling && $this->_isAddressNotFilled($billing)){
+					$billing = null;
+				}
+
+				// Import defualt shipping
+				if($defaultShipping && $this->_isAddressNotFilled($shipping)){
+					$shipping = null;
+				}
+			
+				$this->getQuote()->assignCustomerWithAddressChange($customer, $billing, $shipping);
+			
+				if(is_null($billing) || is_null($shipping)){
+					$quote->save();
+				}
+			}
+			
+        }
+        return $this;
+    }
+	
+	/**
+	 * Is the address filed with some data?
+	 * @param Mage_Sales_Model_Quote_Address $adress
+	 * @return bool
+	 */
+	protected function _isAddressNotFilled(Mage_Sales_Model_Quote_Address $adress) {
+		return !$adress->getId() || !$adress->getFirstname() || !$adress->getLastname();
+	}
+	
 	
 	/**
      * Specify checkout method

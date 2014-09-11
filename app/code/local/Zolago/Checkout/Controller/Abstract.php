@@ -20,24 +20,13 @@ abstract class Zolago_Checkout_Controller_Abstract
 	 * Make parial save of all data to quote
 	 * Then make save process
 	 */
-	public function placeOrderAction() {
+	public function saveOrderAction() {
 		if (!$this->_validateFormKey()) {
             $this->_redirect('*/*');
             return;
         }
 		//$this->importPostData();
 		parent::saveOrderAction();
-		
-		$response = Mage::helper('core')->jsonDecode(
-				$this->getResponse()->getBody());
-		
-		$newResponse = array(
-			"status" => (!isset($response['error']) || $response['status']==false),
-			"content" => $response
-		);
-		
-		$this->getResponse()->
-				setBody( Mage::helper('core')->jsonEncode($newResponse));
 	}
 	
 	/**
