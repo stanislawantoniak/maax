@@ -1,6 +1,7 @@
 Mall.validate.validators = {
     emailbackend: function (params) {
         "use strict";
+        //pamietac o params : form key
         return true;
     },
     phone_numbermber: function(params) {
@@ -13,26 +14,16 @@ Mall.validate.validators = {
     },
     password: function(value, elem, params){
         "use strict";
-        console.log(value);
-        if(value.length >= 4) {
+        if(value.length >= params.minLength || value.length == 0) {
             return true;
         } else {
             return false;
         }
     },
-    checkboxagreement1: function(){
+    checkboxagreement1: function(value, elem, params){
         "use strict";
-
-        jQuery('#co-address').validate(Mall.customer.getOptions({
-            debug: true,
-            rules: {
-                "agreement[1]": {
-                    required: true
-                }
-            }
-        }));
-
-        return this;
+        console.log(value, elem, params);
+        return true;
     },
     checkboxagreement2: function(){
         "use strict";
