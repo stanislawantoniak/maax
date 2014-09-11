@@ -9,6 +9,7 @@ $_billingAddress = $this->getQuote()->getBillingAddress();
 $streetArr = $_billingAddress->getStreet(-1);
 $street = is_array($streetArr) ? explode(" ", $streetArr) : $streetArr;
 $needInvoice = $_billingAddress->getNeedInvoice();
+$sameAsBilling = $this->getQuote()->getShippingAddress()->getSameAsBilling();
 ?>
 <fieldset>
     <input type="hidden" name="billing[address_id]" value="<?php echo $_billingAddress->getId(); ?>">
@@ -31,7 +32,7 @@ $needInvoice = $_billingAddress->getNeedInvoice();
 <fieldset id="invoice_data">
 
     <div class="form-group form-checkbox small">
-        <input type="checkbox" name="invoice_data_address" id="invoice_data_address" class="css-checkbox invoice_data_address" <?php if (!$needInvoice) : ?>checked<?php endif; ?>>
+        <input type="checkbox" name="invoice_data_address" id="invoice_data_address" class="css-checkbox invoice_data_address" <?php if ($sameAsBilling) : ?>checked<?php endif; ?>>
         <label for="invoice_data_address" class="css-label"><?php echo $this->__("Billing address same as shipping address."); ?></label>
     </div>
 

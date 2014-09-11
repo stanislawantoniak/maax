@@ -37,7 +37,27 @@
 			init: function () {
 				this.attachInvoiceCopyShippingDataEvent();
 				this.attachInvoiceEvent();
+                this.setInvoiceDataVisiblity();
 			},
+
+            toggleInvoiceData: function (state) {
+                jQuery('#invoice_data').css({
+                    display: state ? "block" : "none"
+                });
+
+                return this;
+            },
+
+            setInvoiceDataVisiblity: function () {
+                var sameAsBilling = parseInt(jQuery("[name='shipping[same_as_billing]']").val(), 10);
+                if (sameAsBilling) {
+                    this.toggleInvoiceData(true);
+                } else {
+                    this.toggleInvoiceData(false);
+                }
+
+                return this;
+            },
 
 			invoiceCopyShippingData: function () {
 				jQuery("#billing\\:company").val(jQuery("#shipping\\:company").val());
