@@ -73,6 +73,7 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Review
      */
      public function getOptionList() {
          $block = $this->_getCartBlock('split');
+         echo '**'.get_class($block);
          return $block->getOptionList();
      }
     //}}}

@@ -52,10 +52,7 @@ $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage
                 <?php endif;?>
 				
                 <?php $addInfoBlock = $this->getProductAdditionalInformationBlock(); ?>
-<?php				echo get_class($this); ?>
                 <?php if ($addInfoBlock): ?>
-				ajajajaja
-				<?php	echo get_class($addInfoBlock) ?>
                     <?php echo $addInfoBlock->setItem($_item)->toHtml() ?>
                 <?php endif;?>
             </div>
@@ -67,7 +64,6 @@ $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage
             <div class="cena"><?php echo $this->__("price"); ?></div>
             <div class="ilosc"><?php echo $this->__("Qty"); ?></div>
             <div class="wartosc"><?php echo $this->__("Worth"); ?></div>
-            <div class="usun"></div>
 
         </div>
         <div class="colgroup clearfix">
