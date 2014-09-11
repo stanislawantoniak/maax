@@ -289,5 +289,4 @@
 jQuery(document).ready(function () {
     "use strict";
     Mall.Checkout.steps.address.init();
-    Mall.Checkout.steps.delivery.init();
 });
