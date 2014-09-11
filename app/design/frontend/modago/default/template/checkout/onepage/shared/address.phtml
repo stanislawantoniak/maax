@@ -7,7 +7,10 @@ $method = "guest";
 if ($this->isCustomerLoggedIn()) {
     $method = "";
 }
-$formKey = Mage::getSingleton('core/session')->getFormKey();?>
+$formKey = Mage::getSingleton('core/session')->getFormKey();
+$_quote = $this->getQuote();
+$_billingAddress = $_quote->getBillingAddress();
+?>
 <div id="content-main" class="col-lg-9 col-md-8 col-sm-12 col-xs-12 col-lg-pull-3 col-md-pull-4 section">
 	<section class="main bg-w">
 		<header class="title-section">
@@ -22,7 +25,7 @@ $formKey = Mage::getSingleton('core/session')->getFormKey();?>
 					<div class="row">
 						<label class="col-sm-3" for="account:firstname"><?php echo $this->__("First name"); ?></label>
 						<div class="col-sm-5">
-							<input type="text" class="form-control firstName hint" id="account:firstname" title="" name="account[firstname]" data-original-title="<?php echo $this->__("Enter your name."); ?>">
+							<input type="text" value="<?php echo $this->escapeHtml($_quote->getCustomerFirstname()); ?>" class="form-control firstName hint" id="account:firstname" title="" name="account[firstname]" data-original-title="<?php echo $this->__("Enter your name."); ?>">
 						</div>
 					</div>
 
@@ -31,7 +34,7 @@ $formKey = Mage::getSingleton('core/session')->getFormKey();?>
 					<div class="row">
 						<label class="col-sm-3" for="account:lastname"><?php echo $this->__("Last name"); ?></label>
 						<div class="col-sm-5">
-							<input type="text" class="form-control lastName hint" id="account:lastname" title="" name="account[lastname]" data-rule-required="true" data-original-title="<?php echo $this->__("Enter your lastname."); ?>">
+							<input type="text" value="<?php echo $this->escapeHtml($_quote->getCustomerLastname()); ?>" class="form-control lastName hint" id="account:lastname" title="" name="account[lastname]" data-rule-required="true" data-original-title="<?php echo $this->__("Enter your lastname."); ?>">
 						</div>
 					</div>
 				</div>
@@ -39,7 +42,7 @@ $formKey = Mage::getSingleton('core/session')->getFormKey();?>
 					<div class="row">
 						<label class="col-sm-3" for="account:email"><?php echo $this->__("Email"); ?></label>
 						<div class="col-sm-5">
-							<input type="email" class="form-control email hint" id="account:email" title="" name="account[email]" data-original-title="<?php echo $this->__("Email address."); ?>">
+							<input type="email" value="<?php echo $this->escapeHtml($_quote->getCustomerEmail()); ?>" <?php if ($this->isCustomerLoggedIn()) : ?>readonly<?php endif; ?> class="form-control email hint" id="account:email" title="" name="account[email]" data-original-title="<?php echo $this->__("Email address."); ?>">
 						</div>
 					</div>
 				</div>
@@ -47,7 +50,7 @@ $formKey = Mage::getSingleton('core/session')->getFormKey();?>
 					<div class="row">
 						<label class="col-sm-3" for="account:telephone"><?php echo $this->__("Telephone number"); ?></label>
 						<div class="col-sm-5">
-							<input type="text" class="form-control phone hint" id="account:telephone" title="" name="account[telephone]" data-original-title="<?php echo $this->__("We need your telephone number only to complete the order."); ?>">
+							<input type="text" value="<?php echo $this->escapeHtml($_billingAddress->getTelephone()); ?>" class="form-control phone hint" id="account:telephone" title="" name="account[telephone]" data-original-title="<?php echo $this->__("We need your telephone number only to complete the order."); ?>">
 						</div>
 					</div>
 				</div>
@@ -57,6 +60,7 @@ $formKey = Mage::getSingleton('core/session')->getFormKey();?>
 
             <?php echo $this->getChildHtml("checkout.onepage.guest.billing"); ?>
 
+            <?php if (!$this->isCustomerLoggedIn()) : ?>
 			<fieldset id="remember_data">
 				<legend><?php echo $this->__("Remember me(optional):"); ?></legend>
 				<div class="row">
@@ -76,6 +80,7 @@ $formKey = Mage::getSingleton('core/session')->getFormKey();?>
 					</div>
 				</div>
 			</fieldset>
+            <?php endif; ?>
 			<div class="row">
 				<div class="form-group form-checkbox small text-align-left">
 					<input type="checkbox" id="agreement:2" class="css-checkbox invoice_vat" name="agreement[2]">
