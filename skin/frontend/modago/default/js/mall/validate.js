@@ -69,7 +69,8 @@ Mall.validate = {
         "use strict";
 
         // add customer methods
-        jQuery.validator.addMethod("password", this.validators.password, "Złe hasło");
+        jQuery.validator.addMethod("password", this.validators.password, "Hasło musi być przynajmniej 5 literowe");
+//        jQuery.validator.addMethod("checkboxagreement1", this.validators.checkboxagreement1, "To pole musi być zaznaczone");
     },
 
     /**

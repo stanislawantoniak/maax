@@ -240,7 +240,12 @@
                     jQuery('#co-address').validate(Mall.validate.getOptions({
                         rules: {
                             'account[password]': {
-                                "password": true
+                                "password": {
+                                    minLength: 5
+                                }
+                            },
+                            'agreement[1]': {
+                                required: true
                             }
                         }
                     }));
