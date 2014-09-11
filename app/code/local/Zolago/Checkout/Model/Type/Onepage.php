@@ -5,6 +5,152 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
 	
 	
 	/**
+     * Specify checkout method
+     *
+     * @param   string $method
+     * @return  array
+     */
+    public function saveCheckoutMethod($method)
+    {
+        if (empty($method)) {
+            return array('error' => -1, 'message' => Mage::helper('checkout')->__('Invalid data.'));
+        }
+
+        $this->getQuote()->setCheckoutMethod($method);//->save();
+        return array();
+    }
+	
+	/**
+     * Specify quote shipping method
+     *
+     * @param   string $shippingMethod
+     * @return  array
+     */
+    public function saveShippingMethod($shippingMethod)
+    {
+        if (empty($shippingMethod)) {
+            return array('error' => -1, 'message' => Mage::helper('checkout')->__('Invalid shipping method.'));
+        }
+        $rate = $this->getQuote()->getShippingAddress()->getShippingRateByCode($shippingMethod);
+        if (!$rate) {
+            return array('error' => -1, 'message' => Mage::helper('checkout')->__('Invalid shipping method.'));
+        }
+        $this->getQuote()->getShippingAddress()
+            ->setShippingMethod($shippingMethod);
+
+        return array();
+    }
+	
+	
+    /**
+     * Specify quote payment method
+     *
+     * @param   array $data
+     * @return  array
+     */
+    public function savePayment($data)
+    {
+        if (empty($data)) {
+            return array('error' => -1, 'message' => Mage::helper('checkout')->__('Invalid data.'));
+        }
+        $quote = $this->getQuote();
+        if ($quote->isVirtual()) {
+            $quote->getBillingAddress()->setPaymentMethod(isset($data['method']) ? $data['method'] : null);
+        } else {
+            $quote->getShippingAddress()->setPaymentMethod(isset($data['method']) ? $data['method'] : null);
+        }
+
+        // shipping totals may be affected by payment method
+        if (!$quote->isVirtual() && $quote->getShippingAddress()) {
+            $quote->getShippingAddress()->setCollectShippingRates(true);
+        }
+
+        $data['checks'] = Mage_Payment_Model_Method_Abstract::CHECK_USE_CHECKOUT
+            | Mage_Payment_Model_Method_Abstract::CHECK_USE_FOR_COUNTRY
+            | Mage_Payment_Model_Method_Abstract::CHECK_USE_FOR_CURRENCY
+            | Mage_Payment_Model_Method_Abstract::CHECK_ORDER_TOTAL_MIN_MAX
+            | Mage_Payment_Model_Method_Abstract::CHECK_ZERO_TOTAL;
+
+        $payment = $quote->getPayment();
+        $payment->importData($data);
+
+        //$quote->save();
+
+        return array();
+    }
+	
+    /**
+     * Save checkout shipping address
+     *
+     * @param   array $data
+     * @param   int $customerAddressId
+     * @return  Mage_Checkout_Model_Type_Onepage
+     */
+    public function saveShipping($data, $customerAddressId)
+    {
+        if (empty($data)) {
+            return array('error' => -1, 'message' => Mage::helper('checkout')->__('Invalid data.'));
+        }
+        $address = $this->getQuote()->getShippingAddress();
+
+        /* @var $addressForm Mage_Customer_Model_Form */
+        $addressForm    = Mage::getModel('customer/form');
+        $addressForm->setFormCode('customer_address_edit')
+            ->setEntityType('customer_address')
+            ->setIsAjaxRequest(Mage::app()->getRequest()->isAjax());
+
+        if (!empty($customerAddressId)) {
+            $customerAddress = Mage::getModel('customer/address')->load($customerAddressId);
+            if ($customerAddress->getId()) {
+                if ($customerAddress->getCustomerId() != $this->getQuote()->getCustomerId()) {
+                    return array('error' => 1,
+                        'message' => Mage::helper('checkout')->__('Customer Address is not valid.')
+                    );
+                }
+
+                $address->importCustomerAddress($customerAddress)->setSaveInAddressBook(0);
+                $addressForm->setEntity($address);
+                $addressErrors  = $addressForm->validateData($address->getData());
+                if ($addressErrors !== true) {
+                    return array('error' => 1, 'message' => $addressErrors);
+                }
+            }
+        } else {
+            $addressForm->setEntity($address);
+            // emulate request object
+            $addressData    = $addressForm->extractData($addressForm->prepareRequest($data));
+            $addressErrors  = $addressForm->validateData($addressData);
+            if ($addressErrors !== true) {
+                return array('error' => 1, 'message' => $addressErrors);
+            }
+            $addressForm->compactData($addressData);
+            // unset shipping address attributes which were not shown in form
+            foreach ($addressForm->getAttributes() as $attribute) {
+                if (!isset($data[$attribute->getAttributeCode()])) {
+                    $address->setData($attribute->getAttributeCode(), NULL);
+                }
+            }
+
+            $address->setCustomerAddressId(null);
+            // Additional form data, not fetched by extractData (as it fetches only attributes)
+            $address->setSaveInAddressBook(empty($data['save_in_address_book']) ? 0 : 1);
+            $address->setSameAsBilling(empty($data['same_as_billing']) ? 0 : 1);
+        }
+
+        $address->implodeStreetAddress();
+        $address->setCollectShippingRates(true);
+
+        if (($validateRes = $address->validate())!==true) {
+            return array('error' => 1, 'message' => $validateRes);
+        }
+		
+		
+        //$this->getQuote()->collectTotals()->save();
+
+        return array();
+    }
+	
+	/**
      * Save billing address information to quote
      * This method is called by One Page Checkout JS (AJAX) while saving the billing information.
      *
@@ -60,6 +206,7 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
             // Additional form data, not fetched by extractData (as it fetches only attributes)
             $address->setSaveInAddressBook(empty($data['save_in_address_book']) ? 0 : 1);
         }
+		
 
         // set email for newly created user
         if (!$address->getEmail() && $this->getQuote()->getCustomerEmail()) {
@@ -120,9 +267,9 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
                     break;
             }
         }
-
-        $this->getQuote()->collectTotals();
-        $this->getQuote()->save();
+        
+		/*$this->getQuote()->collectTotals();
+        $this->getQuote()->save();*/
 
         if (!$this->getQuote()->isVirtual() && $this->getCheckout()->getStepData('shipping', 'complete') == true) {
             //Recollect Shipping rates for shipping methods
@@ -165,7 +312,7 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
             $quote->setPasswordHash($customer->encryptPassword($customer->getPassword()));
         }
 		
-        $this->getQuote()->addData($data)->save();
+        $this->getQuote()->addData($data);//->save();
         return $this;
 		
 	}

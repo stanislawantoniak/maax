@@ -4,15 +4,10 @@
 			<?php echo $this->getChildHtml("checkout.onepage.guest.address");?>
 		</div>
 		<div class="step step-1 hidden" id="step-1">
-
             <?php echo $this->getChildHtml("checkout.onepage.guest.shippingpayment");?>
-<!--			<button class="btn" id="step-1-prev">Prev</button>-->
-<!--			<button class="btn" id="step-1-submit">Next</button>-->
 		</div>
 		<div class="step step-2 hidden" id="step-2">
-			Step 3
-			<button class="btn" id="step-2-prev">Prev</button>
-			<button class="btn" id="step-2-submit">Next</button>
+			<?php echo $this->getChildHtml("checkout.onepage.guest.review");?>
 		</div>
 	</div>
 </div>

@@ -271,10 +271,6 @@
 	 */
 	Mall.Checkout.prototype.collect = function(){
 		var data = [];
-		
-		// Collect cehckout method
-		data.push({name: "method", value: this.getMethod()});
-		
 		jQuery.each(this.getSteps(), function(){
 			if(typeof this.collect == "function"){
 				jQuery.each(this.collect(), function(){
@@ -317,6 +313,7 @@
 			enabled: false,
 			active: false,
 			doSave: false,
+			checkout: self,
 			content: jQuery('#'+config.id),
 			// step.collect() - this = set. 
 			// Should returns the serialized values. this = step
@@ -348,11 +345,18 @@
 			if(proto.content.find("form").length && proto.doSave){
 				var saveUrl = proto.content.find("form").attr("action");
 				self.saveStepData(saveUrl, proto.collect()).then(function(response){
-					console.log(response)
+					if(response.status==1){
+						console.log(response);
+						//self.next();
+					}else{
+						alert(response.content);
+					}
 				})
+			}else{
+				//self.next();
 			}
-			
 			self.next();
+			
 		}
 		
 		jQuery.extend(proto, config);

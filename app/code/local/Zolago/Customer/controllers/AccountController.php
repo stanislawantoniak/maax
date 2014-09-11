@@ -221,7 +221,7 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
 	protected function _loginPostRedirect() {
 		if($this->getRequest()->getParam("is_checkout")){
 			if($this->_getSession()->isLoggedIn()){
-				$this->_getSession()->setBeforeAuthUrl(Mage::getUrl("checkout/onepage/index"));
+				$this->_getSession()->setBeforeAuthUrl(Mage::getUrl("checkout/singlepage/index"));
 			}else{
 				$this->_getSession()->setBeforeAuthUrl(Mage::getUrl("checkout/guest/login"));
 			}

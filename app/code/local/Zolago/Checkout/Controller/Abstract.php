@@ -2,10 +2,11 @@
 /**
  * Define multi logic here
  */
-require_once Mage::getConfig()->getModuleDir("controllers", "Mage_Checkout") . DS . "OnepageController.php";
+require_once Mage::getConfig()->getModuleDir("controllers", "Mage_Checkout") . 
+		DS . "OnepageController.php";
 
-abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_OnepageController{
-	
+abstract class Zolago_Checkout_Controller_Abstract 
+	extends Mage_Checkout_OnepageController{
 	
 	/**
 	 * @return Zolago_Checkout_Model_Type_Onepage
@@ -37,9 +38,12 @@ abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_Onepage
 		
 		$this->getResponse()->
 				setBody( Mage::helper('core')->jsonEncode($newResponse));
-		
 	}
 	
+	/**
+	 * Save post data to quote
+	 * @throws Mage_Core_Exception
+	 */
 	public function importPostData(){
 		$request = $this->getRequest();
 		$onepage = $this->getOnepage();
@@ -48,9 +52,11 @@ abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_Onepage
 		method:guest
 		 */
 		$method	= $request->getParam("method"); // chekcout method
-		if($method){
-			$onepage->saveCheckoutMethod($method);
-			$onepage->getQuote()->setTotalsCollectedFlag(false);
+		if($method && $method==$this->getOnepage()->getCheckoutMehod()){
+			$methodResponse = $onepage->saveCheckoutMethod($method);
+			if(isset($methodResponse['error']) && $methodResponse['error']==1){
+				throw new Mage_Core_Exception($methodResponse['message']);
+			}
 		}
 		/**
 		 account[firstname]:abc
@@ -89,8 +95,10 @@ abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_Onepage
 		 */
 		$billing = $request->getParam("billing");
 		if(is_array($billing)){
-			$onepage->saveBilling($billing, $billingAddressId);
-			$onepage->getQuote()->setTotalsCollectedFlag(false);
+			$billingResponse = $onepage->saveBilling($billing, $billingAddressId);
+			if(isset($billingResponse['error']) && $billingResponse['error']==1){
+				throw new Mage_Core_Exception(implode("\n", $billingResponse['message']));
+			}
 		}
 		
 		
@@ -116,16 +124,20 @@ abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_Onepage
 		 */
 		$shipping = $request->getParam("shipping");
 		if(is_array($shipping)){
-			$onepage->saveShipping($shipping, $shippingAddressId);
-			$onepage->getQuote()->setTotalsCollectedFlag(false);
+			$shippingResponse = $onepage->saveShipping($shipping, $shippingAddressId);
+			if(isset($shippingResponse['error']) && $shippingResponse['error']==1){
+				throw new Mage_Core_Exception(implode("\n", $shippingResponse['message']));
+			}
 		}
 		
 		/**
 		shipping_method[4]:udtiership_1
 		 */
 		if($shippingMethod = $request->getParam("shipping_method")){
-			$onepage->saveShippingMethod($shippingMethod);
-			$onepage->getQuote()->setTotalsCollectedFlag(false);
+			$shippingMethodResponse = $onepage->saveShippingMethod($shippingMethod);
+			if(isset($shippingMethodResponse['error']) && $shippingMethodResponse['error']==1){
+				throw new Mage_Core_Exception($shippingMethodResponse['message']);
+			}
 		}
 		
 		/**
@@ -134,11 +146,18 @@ abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_Onepage
 		 */
 		$payment = $request->getParam("payment");
 		if(is_array($payment)){
-			$onepage->savePayment($payment);
-			$onepage->getQuote()->setTotalsCollectedFlag(false);
+			$paymentResponse = $onepage->savePayment($payment);
+			if(isset($paymentResponse['error']) && $paymentResponse['error']==1){
+				throw new Mage_Core_Exception($paymentResponse['message']);
+			}
 		}
+		
 		// Override collect totals - make final collect totals
-		$onepage->getQuote()->collectTotals()->save();
+		$onepage->getQuote()->
+			setTotalsCollectedFlag(false)->
+			collectTotals()->
+			save();
+		
 	}
 	
 	/**
@@ -158,9 +177,7 @@ abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_Onepage
 		} catch (Exception $ex) {
 			$response = array(
 				"status"=>0,
-				"content"=>array(
-					"error_message"=>$ex->getMessage()
-				)
+				"content"=>$ex->getMessage()
 			);
 		}
 		if($this->getRequest()->isAjax()){

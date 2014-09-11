@@ -1,0 +1,29 @@
+<?php /* @var $this Zolago_Modago_Block_Checkout_Onepage_Shared_Review */ ?>
+
+<?php echo $this->getStep3Sidebar(); ?>
+<?php $_items = $this->getItems(); ?>
+<div id="content-main" class="col-lg-9 col-md-8 col-sm-12 col-xs-12 col-lg-pull-3 col-md-pull-4 section">
+	<section class="main bg-w">
+		<header class="title-section">
+			<h2><?php echo $this->__("Your order"); ?></h2>
+		</header>
+
+                        <?php foreach($_items as $_item) : ?>
+
+                            <?php echo $this->getItemHtml($_item); ?>
+
+                        <?php endforeach; ?>
+
+
+        <div class="row">
+            <div class="col-sm-6">
+                <a class="button button-third large pull-left" id="step-2-prev">Wróć</a>
+            </div>
+            <div class="col-sm-6">
+                <button class="button button-primary large link pull-right" id="step-2-submit">Dalej</button>
+            </div>
+        </div>   
+
+</div>
+</section>
+</div>

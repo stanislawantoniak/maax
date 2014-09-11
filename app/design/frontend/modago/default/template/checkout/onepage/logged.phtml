@@ -1,7 +1,55 @@
 <div id="content" class="container-fluid">
 	<div id="checkout" class="row">
-		<div class="step step-1">
+		<div class="step step-0 hidden" id="step-0">
+			<?php /* has addresses in address book? */?>
 			<?php echo $this->getChildHtml("checkout.onepage.logged.address");?>
+		</div>
+		<div class="step step-1 hidden" id="step-1">
+            <?php echo $this->getChildHtml("checkout.onepage.logged.shippingpayment");?>
+		</div>
+		<div class="step step-2 hidden" id="step-2">
+			<?php echo $this->getChildHtml("checkout.onepage.logged.review");?>
 		</div>
 	</div>
 </div>
+
+<script type="text/javascript">
+	(function(){
+		var checkout = new Mall.CheckoutLogged();
+		
+		checkout.setProgressObject(jQuery("#step ol"));
+		
+		checkout.addStep(Mall.Checkout.steps.address);
+		
+		checkout.addStep({
+			id: "step-1",
+			code: "deliverypayment",
+			onPrepare: function(checkoutObject){
+				var self = this;
+				this.content.find("[id^=step-1-submit]").click(function(){
+					self.submit();
+				})
+				this.content.find("[id^=step-1-prev]").click(function(){
+					checkoutObject.prev();
+				})
+			}
+		});
+		
+		checkout.addStep({
+			id: "step-2",
+			code: "review",
+			onPrepare: function(checkoutObject){
+				var self = this;
+				this.content.find("[id^=step-2-submit]").click(function(){
+					// Add validation
+					checkoutObject.placeOrder()
+				});
+				this.content.find("[id^=step-2-prev]").click(function(){
+					checkoutObject.prev();
+				})
+			}
+		});
+		
+		checkout.init(0);
+	})();
+</script>
