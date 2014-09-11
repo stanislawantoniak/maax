@@ -17,7 +17,7 @@
 		var checkout = new Mall.CheckoutGuest();
 		
 		checkout.setProgressObject(jQuery("#step ol"));
-		checkout.set("placeUrl", '<?php echo $this->getSaveUrl();?>');
+		checkout.set("placeUrl", '<?php echo $this->getPlaceUrl();?>');
 		checkout.addStep(Mall.Checkout.steps.address);
 		checkout.addStep(Mall.Checkout.steps.shippingpayment);
 		checkout.addStep(Mall.Checkout.steps.review);

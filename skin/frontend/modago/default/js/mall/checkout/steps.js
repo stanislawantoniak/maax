@@ -244,7 +244,9 @@
 
             validate: {
                 init: function () {
-
+					return;
+					
+					// Throes errors!!!!
                     jQuery('#' + Mall.Checkout.steps.address._self_form_id)
                         .validate(Mall.validate.getOptions({
                         ignore: ":hidden",
