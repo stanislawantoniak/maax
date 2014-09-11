@@ -11,18 +11,14 @@ Mall.validate.validators = {
         "use strict";
         return true;
     },
-    password: function(){
+    password: function(value, elem, params){
         "use strict";
-
-        jQuery('#co-address').validate(Mall.customer.getOptions({
-            rules: {
-                "account[firstname]": {
-                    minlength: 4
-                }
-            }
-        }));
-
-        return this;
+        console.log(value);
+        if(value.length >= 4) {
+            return true;
+        } else {
+            return false;
+        }
     },
     checkboxagreement1: function(){
         "use strict";

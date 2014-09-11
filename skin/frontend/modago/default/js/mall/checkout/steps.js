@@ -17,10 +17,10 @@
 			doSave: true,
 
 			_invoice_copy_shipping_fields: [
-				"#billing\\:company",
-				"#billing\\:street",
-				"#billing\\:postcode",
-				"#billing\\:city"
+				"#billing_company",
+				"#billing_street",
+				"#billing_postcode",
+				"#billing_city"
 			],
 
 			_billing_names: [
@@ -40,10 +40,10 @@
 			},
 
 			invoiceCopyShippingData: function () {
-				jQuery("#billing\\:company").val(jQuery("#shipping\\:company").val());
-				jQuery("#billing\\:street").val(jQuery("#shipping\\:street").val());
-				jQuery("#billing\\:postcode").val(jQuery("#shipping\\:postcode").val());
-				jQuery("#billing\\:city").val(jQuery("#shipping\\:city").val());
+				jQuery("#billing_company").val(jQuery("#shipping_company").val());
+				jQuery("#billing_street").val(jQuery("#shipping_street").val());
+				jQuery("#billing_postcode").val(jQuery("#shipping_postcode").val());
+				jQuery("#billing_city").val(jQuery("#shipping_city").val());
 
 				return this;
 			},
@@ -129,14 +129,14 @@
 			},
 			collect: function () {
 				var form = jQuery("#co-address"),
-					password = form.find("#account\\:password").val(),
+					password = form.find("#account_password").val(),
 					billingData,
 					stepData = [],
                     telephone;
 
 				// set password confirmation
 				if (password.length > 0) {
-					form.find("#account\\:confirmation").val(password);
+					form.find("#account_confirmation").val(password);
 				}
 				// set billing data
                 if (jQuery("#orders_someone_else").is(":checked")) {
@@ -149,16 +149,16 @@
 
 				// copy shipping data if order will be delivered to myself
 				if (!form.find("[name='shipping[different_shipping_address]']").is(":checked")) {
-					form.find("#shipping\\:firstname").val(form.find("#account\\:firstname").val());
-					form.find("#shipping\\:lastname").val(form.find("#account\\:lastname").val());
-					form.find("#shipping\\:telephone").val(form.find("#account\\:telephone").val());
+					form.find("#shipping_firstname").val(form.find("#account_firstname").val());
+					form.find("#shipping_lastname").val(form.find("#account_lastname").val());
+					form.find("#shipping_telephone").val(form.find("#account_telephone").val());
 				}
 
                 // copy phone
-                telephone = form.find("#account\\:telephone").val();
+                telephone = form.find("#account_telephone").val();
                 if (!form.find("#orders_someone_else").is(":checked")) {
-                    form.find("#shipping\\:telephone").val(telephone);
-                    form.find("#billing\\:telephone").val(telephone);
+                    form.find("#shipping_telephone").val(telephone);
+                    form.find("#billing_telephone").val(telephone);
                 }
 
 				stepData = form.serializeArray();
