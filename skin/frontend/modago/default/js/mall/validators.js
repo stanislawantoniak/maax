@@ -10,8 +10,6 @@ Mall.validate.validators = {
             },
             cache: false,
             complete: params.collback
-        }).done(function() {
-            $( this ).addClass( "done" );
         });
 
         return true;

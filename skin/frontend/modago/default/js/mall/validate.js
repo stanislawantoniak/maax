@@ -72,6 +72,7 @@ Mall.validate = {
         jQuery.validator.addMethod("password", this.validators.password, "Hasło musi być przynajmniej 5 literowe");
         jQuery.validator.addMethod("postcode", this.validators.postcode, "Kod pocztowy nie jest poprawny");
         jQuery.validator.addMethod("telephone", this.validators.telephone, "Numer telefonu nie jest poprawny");
+        jQuery.validator.addMethod("emailbackend", this.validators.emailbackend, "Podanego adresu email nie ma w bazie");
     },
 
     /**
