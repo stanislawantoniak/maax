@@ -78,12 +78,20 @@
 					if (jQuery(this).is(":checked")) {
 						self.invoiceCopyShippingData();
 						self.invoiceDisableFields(self._invoice_copy_shipping_fields);
+                        self.setSameAsBilling(1);
 					} else {
 						self.invoiceClearCopiedFields(self._invoice_copy_shipping_fields);
 						self.invoiceEnableFields(self._invoice_copy_shipping_fields);
+                        self.setSameAsBilling(0);
 					}
 				});
 			},
+
+            setSameAsBilling: function (state) {
+                jQuery("[name='shipping[same_as_billing]']").val(state);
+
+                return this;
+            },
 
 			attachInvoiceEvent: function () {
 				var self = this;
