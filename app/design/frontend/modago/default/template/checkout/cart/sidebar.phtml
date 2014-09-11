@@ -9,8 +9,8 @@
 ?>
 
 <?php
-
-    $_totalWithShipment = $this->getQuote()->getGrandTotal() + $this->getShippingTotal();
+    $_totals = $this->getQuote()->getData();
+    $_totalWithShipment = $_totals['grand_total']; // $this->getQuote()->getGrandTotal()+ $this->getShippingTotal();
     $_hasCoupon = (bool) $this->getQuote()->getCouponCode();
     $_couponLabel = '';
     $_couponDescription = '';
