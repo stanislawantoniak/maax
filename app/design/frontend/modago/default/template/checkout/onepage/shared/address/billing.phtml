@@ -5,21 +5,25 @@
  * Date: 08.09.2014
  */
 
+$_billingAddress = $this->getQuote()->getBillingAddress();
+$streetArr = $_billingAddress->getStreet(-1);
+$street = is_array($streetArr) ? explode(" ", $streetArr) : $streetArr;
+$needInvoice = $_billingAddress->getNeedInvoice();
 ?>
 <fieldset>
-    <input type="hidden" name="billing[address_id]" value="">
-    <input type="hidden" name="billing[firstname]" value="">
-    <input type="hidden" name="billing[lastname]" value="">
-    <input type="hidden" name="billing[region_id]" value="">
-    <input type="hidden" name="billing[region]" value="">
+    <input type="hidden" name="billing[address_id]" value="<?php echo $_billingAddress->getId(); ?>">
+    <input type="hidden" name="billing[firstname]" value="<?php echo $this->escapeHtml($_billingAddress->getFirstname()); ?>">
+    <input type="hidden" name="billing[lastname]" value="<?php echo $this->escapeHtml($_billingAddress->getLastname()); ?>">
+    <input type="hidden" name="billing[region_id]" value="<?php echo $this->escapeHtml($_billingAddress->getRegionId()); ?>">
+    <input type="hidden" name="billing[region]" value="<?php echo $this->escapeHtml($_billingAddress->getRegion()); ?>">
     <input type="hidden" name="billing[country_id]" value="<?php echo $this->getStoreDefaultCountryId();?>">
-    <input type="hidden" name="billing[telephone]" id="billing_telephone" value="">
-    <input type="hidden" name="billing[fax]" value="">
+    <input type="hidden" name="billing[telephone]" id="billing:telephone" value="<?php echo $this->escapeHtml($_billingAddress->getTelephone()); ?>">
+    <input type="hidden" name="billing[fax]" value="<?php echo $this->escapeHtml($_billingAddress->getFax()); ?>">
     <input type="hidden" name="billing[use_for_shipping]" value="0">
     <input type="hidden" name="billing[save_in_address_book]" value="1">
     <legend><?php echo $this->__("Billing address:"); ?></legend>
     <div class="form-group form-checkbox small">
-        <input type="checkbox" name="billing[need_invoice]" id="invoice_vat" class="css-checkbox invoice_vat" value="1">
+        <input type="checkbox" name="billing[need_invoice]" id="invoice_vat" class="css-checkbox invoice_vat" value="1" <?php if ($needInvoice): ?>checked<?php endif; ?>>
         <label for="invoice_vat" class="css-label"><?php echo $this->__("I want an invoice"); ?></label>
     </div>
 </fieldset>
@@ -27,7 +31,7 @@
 <fieldset id="invoice_data">
 
     <div class="form-group form-checkbox small">
-        <input type="checkbox" name="invoice_data_address" id="invoice_data_address" class="css-checkbox invoice_data_address" checked="">
+        <input type="checkbox" name="invoice_data_address" id="invoice_data_address" class="css-checkbox invoice_data_address" <?php if (!$needInvoice) : ?>checked<?php endif; ?>>
         <label for="invoice_data_address" class="css-label"><?php echo $this->__("Billing address same as shipping address."); ?></label>
     </div>
 
@@ -35,7 +39,7 @@
         <div class="row">
             <label class="col-sm-3" for="billing_company"><?php echo $this->__("Company"); ?></label>
             <div class="col-lg-7 col-md-5 col-sm-5">
-                <input type="text" value="" class="form-control firm hint" id="billing_company" title="" name="billing[company]" data-original-title="<?php echo $this->__("Company"); ?>">
+                <input type="text" value="<?php echo $this->escapeHtml($_billingAddress->getCompany()); ?>" class="form-control firm hint" id="billing_company" title="" name="billing[company]" data-original-title="<?php echo $this->__("Company"); ?>">
             </div>
         </div>
     </div>
@@ -53,7 +57,7 @@
         <div class="row">
             <label class="col-sm-3" for="billing_street"><?php echo $this->__("Street and number"); ?></label>
             <div class="col-lg-7 col-md-5 col-sm-5">
-                <input type="text" value="" class="form-control street" id="billing_street" title="" name="billing[street][]" data-original-title="<?php echo $this->__("Street and number"); ?>">
+                <input type="text" value="<?php echo $this->escapeHtml($street); ?>" class="form-control street" id="billing_street" title="" name="billing[street][]" data-original-title="<?php echo $this->__("Street and number"); ?>">
             </div>
         </div>
     </div>
@@ -62,7 +66,7 @@
         <div class="row">
             <label class="col-sm-3" for="billing_postcode"><?php echo $this->__("Zip code"); ?></label>
             <div class="col-sm-5">
-                <input type="text" value="" class="form-control zipcode" id="billing_postcode" title="" name="billing[postcode]" data-original-title="<?php echo $this->__("Zip code"); ?>">
+                <input type="text" value="<?php echo $this->escapeHtml($_billingAddress->getPostcode()); ?>" class="form-control zipcode" id="billing_postcode" title="" name="billing[postcode]" data-original-title="<?php echo $this->__("Zip code"); ?>">
             </div>
         </div>
     </div>
@@ -71,7 +75,7 @@
         <div class="row">
             <label class="col-sm-3" for="billing_city"><?php echo $this->__("City"); ?></label>
             <div class="col-sm-5">
-                <input type="text" value="" class="form-control city hint" id="billing_city" title="" name="billing[city]" data-original-title="<?php echo $this->__("City"); ?>">
+                <input type="text" value="<?php echo $this->escapeHtml($_billingAddress->getCity()); ?>" class="form-control city hint" id="billing_city" title="" name="billing[city]" data-original-title="<?php echo $this->__("City"); ?>">
             </div>
         </div>
     </div>

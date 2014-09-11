@@ -78,12 +78,20 @@
 					if (jQuery(this).is(":checked")) {
 						self.invoiceCopyShippingData();
 						self.invoiceDisableFields(self._invoice_copy_shipping_fields);
+                        self.setSameAsBilling(1);
 					} else {
 						self.invoiceClearCopiedFields(self._invoice_copy_shipping_fields);
 						self.invoiceEnableFields(self._invoice_copy_shipping_fields);
+                        self.setSameAsBilling(0);
 					}
 				});
 			},
+
+            setSameAsBilling: function (state) {
+                jQuery("[name='shipping[same_as_billing]']").val(state);
+
+                return this;
+            },
 
 			attachInvoiceEvent: function () {
 				var self = this;
@@ -91,6 +99,7 @@
 					if (jQuery("#invoice_data_address").is(":checked")) {
 						self.invoiceCopyShippingData();
 						self.invoiceDisableFields(self._invoice_copy_shipping_fields);
+                        self.setSameAsBilling(1);
 					}
 				});
 
@@ -105,13 +114,15 @@
 				this.init();
 				var self = this;
 				this.content.find("form").submit(function(){
-                    console.log(checkoutObject.getActiveStep().collect());
 					self.submit();
 					return false;
 				});
 			},
 			isPasswordNotEmpty: function(){
-				return this.content.find("[name='billing[customer_password]']").val().length>0;
+				if(this.content.find("[name='account[password]']").length){
+					return this.content.find("[name='account[password]']").val().length>0;
+				}
+				return false;
 			},
 			getBillingFromShipping: function () {
 				var self = this,
@@ -129,15 +140,20 @@
 			},
 			collect: function () {
 				var form = jQuery("#co-address"),
-					password = form.find("#account_password").val(),
+
+					password,
 					billingData,
 					stepData = [],
                     telephone;
 
-				// set password confirmation
-				if (password.length > 0) {
-					form.find("#account_confirmation").val(password);
-				}
+                if (parseInt(jQuery("#customer_logged_in").val(), 10)) {
+                    password = form.find("#account_password").val();
+                    // set password confirmation
+                    if (password.length > 0) {
+                        form.find("#account_confirmation").val(password);
+                    }
+                }
+
 				// set billing data
                 if (jQuery("#orders_someone_else").is(":checked")) {
                     form.find("[name='billing[firstname]']").val(form.find("[name='shipping[firstname]']").val());
@@ -167,6 +183,9 @@
 					billingData = this.getBillingFromShipping();
 					stepData = this.mergeArraysOfObjects(stepData, billingData);
 				}
+				
+				// Push method
+				stepData.push({name: "method", value: this.checkout.getMethod()});
 
 				return stepData;
 			},

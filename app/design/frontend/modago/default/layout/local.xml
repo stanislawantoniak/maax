@@ -675,9 +675,20 @@
 		</reference>
 		<reference name="content">
 			<!-- Remove previous blocks -->
-			<block type="checkout/onepage" name="checkout.onepage" template="checkout/onepage/logged.phtml">
+			<block type="zolagomodago/checkout_onepage_logged" name="checkout.onepage" template="checkout/onepage/logged.phtml">
 				<block type="core/template" name="checkout.onepage.logged.address" template="checkout/onepage/logged/addressbook.phtml"/>
-			</block>
+                <block type="zolagomodago/checkout_onepage_shared_address" name="checkout.onepage.logged.address" template="checkout/onepage/shared/address.phtml">
+                    <block type="zolagomodago/checkout_onepage_shared_address_shipping" as="shipping" name="checkout.onepage.logged.shipping" template="checkout/onepage/shared/address/shipping.phtml"/>
+                    <block type="zolagomodago/checkout_onepage_shared_address_billing" as="billing" name="checkout.onepage.logged.billing" template="checkout/onepage/shared/address/billing.phtml"/>
+                 </block>
+                <block type="zolagomodago/checkout_onepage_shared_review" name="checkout.onepage.logged.review" template="checkout/onepage/shared/review.phtml"/>
+                <block type="zolagomodago/checkout_onepage_shared_shippingpayment" name="checkout.onepage.logged.shippingpayment" template="checkout/onepage/shared/shippingpayment.phtml" >
+                    <block type="zolagomodago/checkout_onepage_shared_shippingpayment_shipping" name="checkout.onepage.logged.shippingpayment.shipping" template="checkout/onepage/shared/shippingpayment/shipping.phtml" />
+                    <block type="zolagomodago/checkout_onepage_shared_shippingpayment_payment" name="checkout.onepage.logged.shippingpayment.payment" template="checkout/onepage/shared/shippingpayment/payment.phtml">
+                        <block type="zolagomodago/checkout_onepage_shared_shippingpayment_payment_methods" name="checkout.onepage.logged.shippingpayment.payment.methods" as="methods" template="checkout/onepage/shared/shippingpayment/payment/methods.phtml" />
+                    </block>
+                </block>
+            </block>
 		</reference>
 	</checkout_singlepage_index>
 	
@@ -696,9 +707,9 @@
 		<reference name="content">
             <block type="zolagomodago/checkout_onepage_guest" name="checkout.onepage" template="checkout/onepage/guest.phtml">
                 <block type="zolagomodago/checkout_onepage_shared_address" name="checkout.onepage.guest.address" template="checkout/onepage/shared/address.phtml">
-                    <block type="zolagomodago/checkout_onepage_shared_address_shipping" name="checkout.onepage.guest.shipping" template="checkout/onepage/shared/address/shipping.phtml"/>
-                    <block type="zolagomodago/checkout_onepage_shared_address_billing" name="checkout.onepage.guest.billing" template="checkout/onepage/shared/address/billing.phtml"/>
-                    <block type="core/template" name="checkout.onepage.guest.password" template="checkout/onepage/shared/account/password.phtml"/>
+                    <block type="zolagomodago/checkout_onepage_shared_address_shipping" as="shipping" name="checkout.onepage.guest.shipping" template="checkout/onepage/shared/address/shipping.phtml"/>
+                    <block type="zolagomodago/checkout_onepage_shared_address_billing" as="billing" name="checkout.onepage.guest.billing" template="checkout/onepage/shared/address/billing.phtml"/>
+                    <block type="core/template" name="checkout.onepage.guest.password" as="password" template="checkout/onepage/shared/account/password.phtml"/>
                 </block>
                 <block type="zolagomodago/checkout_onepage_shared_review" name="checkout.onepage.guest.review" template="checkout/onepage/shared/review.phtml"/>
                 <block type="zolagomodago/checkout_onepage_shared_shippingpayment" name="checkout.onepage.guest.shippingpayment" template="checkout/onepage/shared/shippingpayment.phtml" >
