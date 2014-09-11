@@ -4,10 +4,6 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment_Shipping
     extends Zolago_Modago_Block_Checkout_Onepage_Abstract
 {
 
-    public function getSaveUrl()
-    {
-        return Mage::getUrl("checkout/onepage/saveShippingMethod");
-    }
 
     public function getItems()
     {
