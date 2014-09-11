@@ -37,7 +37,37 @@
 			init: function () {
 				this.attachInvoiceCopyShippingDataEvent();
 				this.attachInvoiceEvent();
+                this.setInvoiceDataVisiblity();
+                this.onLoadDisableInvoiceFields();
 			},
+
+            toggleInvoiceData: function (state) {
+                jQuery('#invoice_data').css({
+                    display: state ? "block" : "none"
+                });
+
+                return this;
+            },
+
+            setInvoiceDataVisiblity: function () {
+                var needInvoice = jQuery("#invoice_vat").is(":checked");
+                if (needInvoice) {
+                    this.toggleInvoiceData(true);
+                } else {
+                    this.toggleInvoiceData(false);
+                }
+
+                return this;
+            },
+
+            onLoadDisableInvoiceFields: function () {
+                if (jQuery("#invoice_data_address")
+                    && jQuery("#invoice_data_address").is(":checked")) {
+                    this.invoiceDisableFields(this._invoice_copy_shipping_fields);
+                }
+
+                return this;
+            },
 
 			invoiceCopyShippingData: function () {
 				jQuery("#billing_company").val(jQuery("#shipping_company").val());
@@ -228,3 +258,8 @@
         }
     };
 })();
+
+jQuery(document).ready(function () {
+    "use strict";
+    Mall.Checkout.steps.address.init();
+});
