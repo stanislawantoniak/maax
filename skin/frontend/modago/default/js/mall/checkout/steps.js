@@ -237,31 +237,31 @@
 
             validate: {
                 init: function () {
-//                    jQuery('#co-address').validate(Mall.validate.getOptions({
-//                        rules: {
-//                            'account[password]': {
-//                                "password": {
-//                                    minLength: 5
-//                                }
-//                            },
-//                            'agreement[1]': { //dane osobowe
-//                                required: true
-//                            },
-//                            'agreement[2]': { //regulamin
-//                                required: true
-//                            },
-//                            "shipping[postcode]": {
-//                                "postcode": true
-//                            },
-//                            "shipping[telephone]": {
-//                                "telephone": {
-//                                    required: true,
-//                                    "telephone" : true
-//                                }
-//                            }
-//
-//                        }
-//                    }));
+                    jQuery('#co-address').validate(Mall.validate.getOptions({
+                        rules: {
+                            'account[password]': {
+                                "password": {
+                                    minLength: 5
+                                }
+                            },
+                            'agreement[1]': { //dane osobowe
+                                required: true
+                            },
+                            'agreement[2]': { //regulamin
+                                required: true
+                            },
+                            "shipping[postcode]": {
+                                "postcode": true
+                            },
+                            "shipping[telephone]": {
+                                "telephone": {
+                                    required: true,
+                                    "telephone" : true
+                                }
+                            }
+
+                        }
+                    }));
                 }
             }
 		},

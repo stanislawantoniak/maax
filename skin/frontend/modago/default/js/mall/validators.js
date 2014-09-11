@@ -1,14 +1,28 @@
 Mall.validate.validators = {
-    emailbackend: function (params) {
+
+    emailbackend: function (value, elem, params) {
         "use strict";
-        //pamietac o params : form key
+        $.ajax({
+            url: "emailtest",
+            data: {
+                formkey: params.formkey,
+                email: value
+            },
+            cache: false,
+            complete: params.collback
+        }).done(function() {
+            $( this ).addClass( "done" );
+        });
+
         return true;
     },
+
     telephone: function(value, elem, params) {
         "use strict";
 
-        return (value.match(/^((\+)?[1-9]{1,2})?([-\s\.])?((\(\d{1,4}\))|\d{1,4})(([-\s\.])?[0-9]{1,12}){1,2}(\s*(ext|x)\s*\.?:?\s*([0-9]+))?$/));
+        return (/^((\+)?[1-9]{1,2})?([-\s\.])?([0-9\-\ ]{9,12})$/.test(value));
     },
+
     postcode: function(value, elem, params){
         "use strict";
         var r = /^\d{2}-\d{3}$/.test(value);
@@ -17,6 +31,7 @@ Mall.validate.validators = {
         }
         return r;
     },
+
     password: function(value, elem, params){
         "use strict";
         if(value.length >= params.minLength || value.length == 0) {
