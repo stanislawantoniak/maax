@@ -39,7 +39,7 @@ $sameAsBilling = (int) $this->getQuote()->getShippingAddress()->getSameAsBilling
         </div>
     </div>
 
-    <div class="form-group clearfix border-top hidden orders_someone_else">
+    <div class="form-group clearfix border-top <?php if (!$this->getOrderSomeoneElseFlag()) : ?>hidden<?php endif; ?> orders_someone_else">
         <div class="row">
             <label class="col-sm-3" for="shipping_telephone"><?php echo $this->__("Telephone number"); ?></label>
             <div class="col-sm-5">
