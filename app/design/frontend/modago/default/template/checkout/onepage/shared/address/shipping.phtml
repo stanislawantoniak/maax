@@ -22,7 +22,7 @@ $sameAsBilling = (int) $this->getQuote()->getShippingAddress()->getSameAsBilling
         <label for="orders_someone_else" class="css-label orders_someone_else"><?php echo $this->__("I'm buing for someone else."); ?></label>
     </div>
 
-    <div class="form-group clearfix hidden border-top orders_someone_else">
+    <div class="form-group clearfix <?php if (!$this->getOrderSomeoneElseFlag()) : ?>hidden<?php endif; ?> border-top orders_someone_else">
         <div class="form-group clearfix">
             <div class="row">
                 <label class="col-sm-3" for="shipping_firstname"><?php echo $this->__("First name"); ?></label>
