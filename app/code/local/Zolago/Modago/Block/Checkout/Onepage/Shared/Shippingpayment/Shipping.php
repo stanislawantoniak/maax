@@ -16,6 +16,11 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment_Shipping
             $details = Zend_Json::decode($details);
             $methods = isset($details['methods']) ? $details['methods'] : array();
         }
+        $methodsByCode = array();
+        foreach($methods as $method){
+            $methodsByCode[$method['code']] = $method;
+        }
+        unset($method);
 
         $qRates = $this->getRates();
         $vendors = array();
@@ -46,7 +51,7 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment_Shipping
             }
         }
 
-        return (object)array('rates' => $rates, 'allVendorsMethod' => $allVendorsMethod, 'vendors' => $vendors);
+        return (object)array('rates' => $rates, 'allVendorsMethod' => $allVendorsMethod, 'vendors' => $vendors, 'methods' => $methodsByCode);
 
     }
 

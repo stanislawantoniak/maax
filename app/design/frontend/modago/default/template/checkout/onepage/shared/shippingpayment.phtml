@@ -1,4 +1,6 @@
+<?php $formKey = Mage::getSingleton('core/session')->getFormKey(); ?>
 <form autocomplete="off" action="<?php echo $this->getSaveUrl(); ?>" class="form" id="co-shippingpayment">
+    <input type="hidden" name="form_key" value="<?php echo $formKey; ?>" />
 <div class="sidebar-secound col-lg-3 col-md-4 col-sm-12 col-xs-12 col-lg-push-9 col-md-push-8">
 	
     <section class="main bg-w  hidden-sm hidden-xs">

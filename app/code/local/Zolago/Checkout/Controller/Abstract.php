@@ -182,11 +182,59 @@ abstract class Zolago_Checkout_Controller_Abstract
 		}
 		if($this->getRequest()->isAjax()){
 			$this->_prepareJsonResponse($response);
-		}else{
-			$this->_redirectReferer();
 		}
 	}
-	
+    /**
+     * Save addresses
+     */
+    public function saveShippingpaymentAction() {
+        if (!$this->_validateFormKey()) {
+            $this->_redirect('*/*');
+            return;
+        }
+        $response = array(
+            "status"=>true,
+            "content" => array()
+        );
+        try{
+            $this->importPostData();
+        } catch (Exception $ex) {
+            $response = array(
+                "status"=>0,
+                "content"=>$ex->getMessage()
+            );
+        }
+        if($this->getRequest()->isAjax()){
+            $this->_prepareJsonResponse($response);
+        }else{
+            $this->_redirectReferer();
+        }
+    }
+	/**
+	 * Save shipping data
+	 */
+	public function saveShippingpaymentAction() {
+		if (!$this->_validateFormKey()) {
+            $this->_redirect('*/*');
+            return;
+        }
+		$response = array(
+			"status"=>true,
+			"content" => array()
+		);
+		try{
+		    $this->importPostData();
+		} catch (Exception $ex) {
+			$response = array(
+				"status"=>0,
+				"content"=>$ex->getMessage()
+			);
+		}
+		if($this->getRequest()->isAjax()){
+			$this->_prepareJsonResponse($response);
+		}
+	}
+
 	/**
 	 * @param mixed $response
 	 */
