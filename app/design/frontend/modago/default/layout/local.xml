@@ -668,10 +668,6 @@
 			   <type>skin_js</type>
 			   <script>js/mall/checkout/logged.js</script>
 		    </action>
-            <action method="addItem">
-                <type>skin_js</type>
-                <script>js/mall/customer.js</script>
-            </action>
 		</reference>
 		<reference name="content">
 			<!-- Remove previous blocks -->
@@ -699,10 +695,6 @@
 			   <type>skin_js</type>
 			   <script>js/mall/checkout/guest.js</script>
 		    </action>
-            <action method="addItem">
-                <type>skin_js</type>
-                <script>js/mall/customer.js</script>
-            </action>
 		</reference>
 		<reference name="content">
             <block type="zolagomodago/checkout_onepage_guest" name="checkout.onepage" template="checkout/onepage/guest.phtml">

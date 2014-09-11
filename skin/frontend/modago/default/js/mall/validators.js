@@ -23,7 +23,7 @@ Mall.validate.validators = {
     checkboxagreement1: function(){
         "use strict";
 
-        jQuery('#co-address').validate(Mall.customer.getOptions({
+        jQuery('#co-address').validate(Mall.validate.getOptions({
             debug: true,
             rules: {
                 "agreement[1]": {
