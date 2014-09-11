@@ -19,25 +19,5 @@ Mall.validate.validators = {
         } else {
             return false;
         }
-    },
-    checkboxagreement1: function(value, elem, params){
-        "use strict";
-        console.log(value, elem, params);
-        return true;
-    },
-    checkboxagreement2: function(){
-        "use strict";
-
-        jQuery('#co-address').validate(Mall.customer.getOptions({
-            debug: true,
-            rules: {
-                "agreement[2]": {
-                    required: true
-                }
-            }
-        }));
-
-        return this;
     }
-
 };

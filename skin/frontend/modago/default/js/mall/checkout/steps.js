@@ -39,6 +39,9 @@
 				this.attachInvoiceEvent();
                 this.setInvoiceDataVisiblity();
                 this.onLoadDisableInvoiceFields();
+
+                // add validation to form
+                this.validate.init();
 			},
 
             toggleInvoiceData: function (state) {
@@ -230,6 +233,23 @@
                 });
 
                 return arr1;
+            },
+
+            validate: {
+                init: function () {
+                    jQuery('#co-address').validate(Mall.validate.getOptions({
+                        rules: {
+                            'account[password]': {
+                                "password": {
+                                    minLength: 5
+                                }
+                            },
+                            'agreement[1]': {
+                                required: true
+                            }
+                        }
+                    }));
+                }
             }
 		},
 
