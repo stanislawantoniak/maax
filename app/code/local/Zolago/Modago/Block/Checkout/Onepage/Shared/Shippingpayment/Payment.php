@@ -1,12 +1,9 @@
 <?php
 
-class Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment_Payment extends Zolago_Modago_Block_Checkout_Onepage_Abstract
+class Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment_Payment 
+	extends Zolago_Modago_Block_Checkout_Onepage_Abstract
 {
 
-    public function getSaveUrl()
-    {
-        return Mage::getUrl("checkout/onepage/savePayment");
-    }
     /**
      * Getter
      *

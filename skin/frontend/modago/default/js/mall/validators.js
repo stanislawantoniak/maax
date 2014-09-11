@@ -1,66 +1,41 @@
 Mall.validate.validators = {
-    emailbackend: function (params) {
+
+    emailbackend: function (value, elem, params) {
         "use strict";
+        $.ajax({
+            url: "emailtest",
+            data: {
+                formkey: params.formkey,
+                email: value
+            },
+            cache: false,
+            complete: params.collback
+        });
+
         return true;
     },
-    phone_numbermber: function(params) {
+
+    telephone: function(value, elem, params) {
         "use strict";
-        return true;
+
+        return (/^((\+)?[1-9]{1,2})?([-\s\.])?([0-9\-\ ]{9,12})$/.test(value));
     },
-    zipcode: function(params){
+
+    postcode: function(value, elem, params){
         "use strict";
-        return true;
+        var r = /^\d{2}-\d{3}$/.test(value);
+        if(/^00-000$/.test(value)) {
+            r = false;
+        }
+        return r;
     },
-    password: function(){
+
+    passwordbackend: function(value, elem, params){
         "use strict";
-        console.log(Mall.customer.getOptions({
-            debug: true,
-            rules: {
-                "account[firstname]": {
-                    email: true
-                }
-            }
-        }));
-
-
-        jQuery('#co-address').validate(Mall.customer.getOptions({
-            debug: true,
-            rules: {
-                "account[firstname]": {
-                    email: true
-                }
-            }
-        }));
-
-        return this;
-    },
-    checkboxagreement1: function(){
-        "use strict";
-
-        jQuery('#co-address').validate(Mall.customer.getOptions({
-            debug: true,
-            rules: {
-                "agreement[1]": {
-                    required: true
-                }
-            }
-        }));
-
-        return this;
-    },
-    checkboxagreement2: function(){
-        "use strict";
-
-        jQuery('#co-address').validate(Mall.customer.getOptions({
-            debug: true,
-            rules: {
-                "agreement[2]": {
-                    required: true
-                }
-            }
-        }));
-
-        return this;
+        if(value.length >= params.minLength || value.length == 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
-
 };

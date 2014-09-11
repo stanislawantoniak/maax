@@ -1,7 +1,29 @@
 <div id="content" class="container-fluid">
 	<div id="checkout" class="row">
-		<div class="step step-1">
+		<div class="step step-0 hidden" id="step-0">
+			<?php /* has addresses in address book? */?>
 			<?php echo $this->getChildHtml("checkout.onepage.logged.address");?>
+		</div>
+		<div class="step step-1 hidden" id="step-1">
+            <?php echo $this->getChildHtml("checkout.onepage.logged.shippingpayment");?>
+		</div>
+		<div class="step step-2 hidden" id="step-2">
+			<?php echo $this->getChildHtml("checkout.onepage.logged.review");?>
 		</div>
 	</div>
 </div>
+
+<script type="text/javascript">
+	(function(){
+		var checkout = new Mall.CheckoutLogged();
+		
+		checkout.setProgressObject(jQuery("#step ol"));
+		
+		<?php /* has addresses in address book? */?>
+		checkout.addStep(Mall.Checkout.steps.address);
+		checkout.addStep(Mall.Checkout.steps.shippingpayment);
+		checkout.addStep(Mall.Checkout.steps.review);
+		
+		checkout.init(0);
+	})();
+</script>

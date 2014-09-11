@@ -10,6 +10,8 @@
 		////////////////////////////////////////////////////////////////////////
 		address: {
 
+            _self_form_id: "co-address",
+
 			id: "step-0",
 
 			code: "address",
@@ -17,10 +19,10 @@
 			doSave: true,
 
 			_invoice_copy_shipping_fields: [
-				"#billing\\:company",
-				"#billing\\:street",
-				"#billing\\:postcode",
-				"#billing\\:city"
+				"#billing_company",
+				"#billing_street",
+				"#billing_postcode",
+				"#billing_city"
 			],
 
 			_billing_names: [
@@ -37,13 +39,46 @@
 			init: function () {
 				this.attachInvoiceCopyShippingDataEvent();
 				this.attachInvoiceEvent();
+                this.setInvoiceDataVisiblity();
+                this.onLoadDisableInvoiceFields();
+
+                // add validation to form
+                this.validate.init();
 			},
 
+            toggleInvoiceData: function (state) {
+                jQuery('#invoice_data').css({
+                    display: state ? "block" : "none"
+                });
+
+                return this;
+            },
+
+            setInvoiceDataVisiblity: function () {
+                var needInvoice = jQuery("#invoice_vat").is(":checked");
+                if (needInvoice) {
+                    this.toggleInvoiceData(true);
+                } else {
+                    this.toggleInvoiceData(false);
+                }
+
+                return this;
+            },
+
+            onLoadDisableInvoiceFields: function () {
+                if (jQuery("#invoice_data_address")
+                    && jQuery("#invoice_data_address").is(":checked")) {
+                    this.invoiceDisableFields(this._invoice_copy_shipping_fields);
+                }
+
+                return this;
+            },
+
 			invoiceCopyShippingData: function () {
-				jQuery("#billing\\:company").val(jQuery("#shipping\\:company").val());
-				jQuery("#billing\\:street").val(jQuery("#shipping\\:street").val());
-				jQuery("#billing\\:postcode").val(jQuery("#shipping\\:postcode").val());
-				jQuery("#billing\\:city").val(jQuery("#shipping\\:city").val());
+				jQuery("#billing_company").val(jQuery("#shipping_company").val());
+				jQuery("#billing_street").val(jQuery("#shipping_street").val());
+				jQuery("#billing_postcode").val(jQuery("#shipping_postcode").val());
+				jQuery("#billing_city").val(jQuery("#shipping_city").val());
 
 				return this;
 			},
@@ -78,12 +113,20 @@
 					if (jQuery(this).is(":checked")) {
 						self.invoiceCopyShippingData();
 						self.invoiceDisableFields(self._invoice_copy_shipping_fields);
+                        self.setSameAsBilling(1);
 					} else {
 						self.invoiceClearCopiedFields(self._invoice_copy_shipping_fields);
 						self.invoiceEnableFields(self._invoice_copy_shipping_fields);
+                        self.setSameAsBilling(0);
 					}
 				});
 			},
+
+            setSameAsBilling: function (state) {
+                jQuery("[name='shipping[same_as_billing]']").val(state);
+
+                return this;
+            },
 
 			attachInvoiceEvent: function () {
 				var self = this;
@@ -91,6 +134,7 @@
 					if (jQuery("#invoice_data_address").is(":checked")) {
 						self.invoiceCopyShippingData();
 						self.invoiceDisableFields(self._invoice_copy_shipping_fields);
+                        self.setSameAsBilling(1);
 					}
 				});
 
@@ -105,13 +149,17 @@
 				this.init();
 				var self = this;
 				this.content.find("form").submit(function(){
-                    console.log(checkoutObject.getActiveStep().collect());
-					self.submit();
+                    if (jQuery(this).valid()) {
+                        self.submit();
+                    }
 					return false;
 				});
 			},
 			isPasswordNotEmpty: function(){
-				return this.content.find("[name='billing[customer_password]']").val().length>0;
+				if(this.content.find("[name='account[password]']").length){
+					return this.content.find("[name='account[password]']").val().length>0;
+				}
+				return false;
 			},
 			getBillingFromShipping: function () {
 				var self = this,
@@ -129,15 +177,19 @@
 			},
 			collect: function () {
 				var form = jQuery("#co-address"),
-					password = form.find("#account\\:password").val(),
+					password,
 					billingData,
 					stepData = [],
                     telephone;
 
-				// set password confirmation
-				if (password.length > 0) {
-					form.find("#account\\:confirmation").val(password);
-				}
+                if (parseInt(jQuery("#customer_logged_in").val(), 10)) {
+                    password = form.find("#account_password").val();
+                    // set password confirmation
+                    if (password.length > 0) {
+                        form.find("#account_confirmation").val(password);
+                    }
+                }
+
 				// set billing data
                 if (jQuery("#orders_someone_else").is(":checked")) {
                     form.find("[name='billing[firstname]']").val(form.find("[name='shipping[firstname]']").val());
@@ -149,16 +201,16 @@
 
 				// copy shipping data if order will be delivered to myself
 				if (!form.find("[name='shipping[different_shipping_address]']").is(":checked")) {
-					form.find("#shipping\\:firstname").val(form.find("#account\\:firstname").val());
-					form.find("#shipping\\:lastname").val(form.find("#account\\:lastname").val());
-					form.find("#shipping\\:telephone").val(form.find("#account\\:telephone").val());
+					form.find("#shipping_firstname").val(form.find("#account_firstname").val());
+					form.find("#shipping_lastname").val(form.find("#account_lastname").val());
+					form.find("#shipping_telephone").val(form.find("#account_telephone").val());
 				}
 
                 // copy phone
-                telephone = form.find("#account\\:telephone").val();
+                telephone = form.find("#account_telephone").val();
                 if (!form.find("#orders_someone_else").is(":checked")) {
-                    form.find("#shipping\\:telephone").val(telephone);
-                    form.find("#billing\\:telephone").val(telephone);
+                    form.find("#shipping_telephone").val(telephone);
+                    form.find("#billing_telephone").val(telephone);
                 }
 
 				stepData = form.serializeArray();
@@ -167,6 +219,9 @@
 					billingData = this.getBillingFromShipping();
 					stepData = this.mergeArraysOfObjects(stepData, billingData);
 				}
+				
+				// Push method
+				stepData.push({name: "method", value: this.checkout.getMethod()});
 
 				return stepData;
 			},
@@ -181,7 +236,133 @@
                 });
 
                 return arr1;
+            },
+
+            getBuingForSomeoneElse: function () {
+                return jQuery("#orders_someone_else").is(":checked");
+            },
+
+            validate: {
+                init: function () {
+
+                    jQuery('#' + Mall.Checkout.steps.address._self_form_id)
+                        .validate(Mall.validate.getOptions({
+                        ignore: ":hidden",
+
+                        rules: {
+                            'account[password]': {
+                                "password": {
+                                    minLength: 5
+                                }
+                            },
+//                            'agreement[1]': {
+//                                required: true
+//                            },
+//                            'agreement[2]': {
+//                                required: true
+//                            },
+
+                            "account[firstname]": {
+                                required: true
+                            },
+                            "account[lastname]": {
+                                required: true
+                            },
+                            "account[email]": {
+                                required: true,
+                                email: true
+//                                ,
+//                                "emailbackend": true
+                            },
+                            "account[telephone]": {
+                                required: true
+//                                ,
+//                                "telephone" : true
+                            },
+                            "shipping[firstname]": {
+                                required: true
+                            },
+                            "shipping[lastname]": {
+                                required: true
+                            },
+                            "shipping[telephone]": {
+                                required: true
+//                                ,
+//                                "telephone" : true
+                            },
+                            "shipping[street][]": {
+                                required: true
+                            },
+                            "shipping[postcode]": {
+                                required: true
+//                                ,
+//                                "postcode": true
+                            },
+                            "shipping[city]": {
+                                required: true
+                            },
+                            "shipping[company]": {
+
+                            },
+                            "billing[company]": {
+                                required: true
+                            },
+                            "billing[vat_id]": {
+                                required: true
+                            },
+                            "billing[street][]": {
+                                required: true
+                            },
+                            "billing[postcode]": {
+                                required: true
+                            },
+                            "billing[city]": {
+                                required: true
+                            }
+                        }
+                    }));
+                }
             }
+		},
+		
+		////////////////////////////////////////////////////////////////////////
+		// shipping & payment step
+		////////////////////////////////////////////////////////////////////////
+        shippingpayment: {
+            id: "step-1",
+            code: "shippingpayment",
+            doSave: true,
+			onPrepare: function(checkoutObject){
+				var self = this;
+				this.content.find("form").submit(function(){
+					self.submit();
+					return false;
+                });
+				this.content.find("[id^=step-1-prev]").click(function(){
+					checkoutObject.prev();
+				});
+			},
+            collect: function () {
+                return this.content.find("form").serializeArray();
+            }
+        },
+		
+		////////////////////////////////////////////////////////////////////////
+		// review step
+		////////////////////////////////////////////////////////////////////////
+		review: {
+			id: "step-2",
+			code: "review",
+			onPrepare: function(checkoutObject){
+				var self = this;
+				this.content.find("[id^=step-2-submit]").click(function(){
+					// Add validation
+					checkoutObject.placeOrder()
+				});
+				this.content.find("[id^=step-2-prev]").click(function(){
+					checkoutObject.prev();
+				});
+			}
 		},
 
         getIsObjectKeyExistsInArray: function (key, arr) {
@@ -209,3 +390,4 @@
         }
     };
 })();
+

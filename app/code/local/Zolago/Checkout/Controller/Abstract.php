@@ -2,10 +2,11 @@
 /**
  * Define multi logic here
  */
-require_once Mage::getConfig()->getModuleDir("controllers", "Mage_Checkout") . DS . "OnepageController.php";
+require_once Mage::getConfig()->getModuleDir("controllers", "Mage_Checkout") . 
+		DS . "OnepageController.php";
 
-abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_OnepageController{
-	
+abstract class Zolago_Checkout_Controller_Abstract 
+	extends Mage_Checkout_OnepageController{
 	
 	/**
 	 * @return Zolago_Checkout_Model_Type_Onepage
@@ -37,7 +38,6 @@ abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_Onepage
 		
 		$this->getResponse()->
 				setBody( Mage::helper('core')->jsonEncode($newResponse));
-		
 	}
 	
 	/**
@@ -52,7 +52,7 @@ abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_Onepage
 		method:guest
 		 */
 		$method	= $request->getParam("method"); // chekcout method
-		if($method){
+		if($method && $method==$this->getOnepage()->getCheckoutMehod()){
 			$methodResponse = $onepage->saveCheckoutMethod($method);
 			if(isset($methodResponse['error']) && $methodResponse['error']==1){
 				throw new Mage_Core_Exception($methodResponse['message']);
@@ -153,8 +153,11 @@ abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_Onepage
 		}
 		
 		// Override collect totals - make final collect totals
-		$onepage->getQuote()->setTotalsCollectedFlag(false);
-		$onepage->getQuote()->collectTotals()->save();
+		$onepage->getQuote()->
+			setTotalsCollectedFlag(false)->
+			collectTotals()->
+			save();
+		
 	}
 	
 	/**
@@ -179,11 +182,34 @@ abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_Onepage
 		}
 		if($this->getRequest()->isAjax()){
 			$this->_prepareJsonResponse($response);
-		}else{
-			$this->_redirectReferer();
 		}
 	}
-	
+    
+	/**
+	 * Save shipping data
+	 */
+	public function saveShippingpaymentAction() {
+		if (!$this->_validateFormKey()) {
+            $this->_redirect('*/*');
+            return;
+        }
+		$response = array(
+			"status"=>true,
+			"content" => array()
+		);
+		try{
+		    $this->importPostData();
+		} catch (Exception $ex) {
+			$response = array(
+				"status"=>0,
+				"content"=>$ex->getMessage()
+			);
+		}
+		if($this->getRequest()->isAjax()){
+			$this->_prepareJsonResponse($response);
+		}
+	}
+
 	/**
 	 * @param mixed $response
 	 */
