@@ -244,9 +244,22 @@
                                     minLength: 5
                                 }
                             },
-                            'agreement[1]': {
+                            'agreement[1]': { //dane osobowe
                                 required: true
+                            },
+                            'agreement[2]': { //regulamin
+                                required: true
+                            },
+                            "shipping[postcode]": {
+                                "postcode": true
+                            },
+                            "shipping[telephone]": {
+                                "telephone": {
+                                    required: true,
+                                    "telephone" : true
+                                }
                             }
+
                         }
                     }));
                 }
