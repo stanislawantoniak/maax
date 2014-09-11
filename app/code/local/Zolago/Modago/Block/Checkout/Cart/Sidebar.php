@@ -26,4 +26,11 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar extends Mage_Checkout_Block_Cart
     {
         return $this->getParentBlock()->getIgnoreTotal();
     }
+	
+	/**
+	 * @return string
+	 */
+	public function getCheckoutUrl() {
+		return Mage::getUrl("checkout/singlepage");
+	}
 } 
