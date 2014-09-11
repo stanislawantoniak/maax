@@ -62,6 +62,19 @@ Mall.validate = {
                 error.insertAfter(element);
             }
 
+        },
+
+        invalidHandler: function (form, validator) {
+            "use strict";
+
+            if (!validator.numberOfInvalids()) {
+                return true;
+            }
+
+            jQuery('html, body').animate({
+                scrollTop: jQuery(validator.errorList[0].element).offset().top
+                    - Mall.getMallHeaderHeight()
+            }, 1000);
         }
     },
 
@@ -69,10 +82,10 @@ Mall.validate = {
         "use strict";
 
         // add customer methods
-        jQuery.validator.addMethod("password", this.validators.password, "Hasło musi być przynajmniej 5 literowe");
-        jQuery.validator.addMethod("postcode", this.validators.postcode, "Kod pocztowy nie jest poprawny");
-        jQuery.validator.addMethod("telephone", this.validators.telephone, "Numer telefonu nie jest poprawny");
-        jQuery.validator.addMethod("emailbackend", this.validators.emailbackend, "Podanego adresu email nie ma w bazie");
+        jQuery.validator.addMethod("passwordbackend", function (v, e, p) {return Mall.validate.validators.passwordbackend(v,e,p);}, "Hasło musi być przynajmniej 5 literowe");
+        jQuery.validator.addMethod("postcode", function (v,e,p) {return Mall.validate.validators.postcode(v,e,p);}, "Kod pocztowy nie jest poprawny");
+        jQuery.validator.addMethod("telephone", function (v,e,p) {return Mall.validate.validators.telephone(v,e,p);}, "Numer telefonu nie jest poprawny");
+        jQuery.validator.addMethod("emailbackend", function (v,e,p) {return Mall.validate.validators.emailbackend(v,e,p);}, "Numer telefonu nie jest poprawny");
     },
 
     /**

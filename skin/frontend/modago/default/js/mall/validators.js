@@ -30,7 +30,7 @@ Mall.validate.validators = {
         return r;
     },
 
-    password: function(value, elem, params){
+    passwordbackend: function(value, elem, params){
         "use strict";
         if(value.length >= params.minLength || value.length == 0) {
             return true;
