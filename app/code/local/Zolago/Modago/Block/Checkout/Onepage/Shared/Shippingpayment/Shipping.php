@@ -9,13 +9,13 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment_Shipping
     {
         $q = Mage::getSingleton('checkout/session')->getQuote();
         $a = $q->getShippingAddress();
-//        $methods = array();
-//
-//        $details = $a->getUdropshipShippingDetails();
-//        if ($details) {
-//            $details = Zend_Json::decode($details);
-//            $methods = isset($details['methods']) ? $details['methods'] : array();
-//        }
+        $methods = array();
+
+        $details = $a->getUdropshipShippingDetails();
+        if ($details) {
+            $details = Zend_Json::decode($details);
+            $methods = isset($details['methods']) ? $details['methods'] : array();
+        }
 
         $qRates = $this->getRates();
         $vendors = array();
@@ -33,10 +33,8 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment_Shipping
             unset($rate);
         }
         $methodToFind = array();
-        foreach ($rates as $vendorId => $cRates) {
-            foreach ($cRates as $code => $rate) {
-                $methodToFind[$code][] = $vendorId;
-            }
+        foreach ($methods as $vendorId => $methodData) {
+                $methodToFind[$methodData['code']][] = $vendorId;
         }
 
         //Find good method
