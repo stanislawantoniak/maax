@@ -265,12 +265,12 @@
                 }
             }
 		},
-        delivery: {
+        shipping: {
             id: "step-1",
             code: "delivery",
             doSave: true,
             collect: function () {
-                var form = jQuery("#co-delivery");
+                var form = jQuery("#co-shipping");
 
                 var stepData = form.serializeArray();
 
