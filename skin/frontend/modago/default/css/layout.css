@@ -6033,6 +6033,35 @@ ol.breadcrumb li:not(:first-child):before {
 .node-type-shopping-cart #content-main .panel .panel-body {
   padding: 0 0 15px 0; }
 
+/* line 4, ../sass/layout/override/_review-cart.scss */
+.checkout-guest-index #content-main .panel.panel-default {
+  -webkit-border-radius: 1px;
+  -moz-border-radius: 1px;
+  -ms-border-radius: 1px;
+  -o-border-radius: 1px;
+  border-radius: 1px; }
+/* line 7, ../sass/layout/override/_review-cart.scss */
+.checkout-guest-index #content-main .panel .panel-heading {
+  padding: 14.86px 0 0 29.41px;
+  position: relative;
+  margin-bottom: 13px; }
+@media (max-width: 767px) {
+  /* line 7, ../sass/layout/override/_review-cart.scss */
+  .checkout-guest-index #content-main .panel .panel-heading {
+    padding: 14.86px 0 0px 29.41px; } }
+/* line 14, ../sass/layout/override/_review-cart.scss */
+.checkout-guest-index #content-main .panel .panel-heading:before {
+  content: ' ';
+  display: block;
+  width: 18px;
+  height: 18px;
+  position: absolute;
+  left: 0px;
+  top: 18px; }
+/* line 24, ../sass/layout/override/_review-cart.scss */
+.checkout-guest-index #content-main .panel .panel-body {
+  padding: 0 0 15px 0; }
+
 /* line 4, ../sass/layout/override/_summary-delivery-payment.scss */
 #checkout .panel.panel-custom .panel-heading {
   padding-top: 15px;

@@ -28,6 +28,8 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Review
             case 'cart':
                 $block = $this->getLayout()->createBlock('checkout/cart');            
                 $block->addItemRender('default','checkout/cart_item_renderer','checkout/cart/item/review.phtml');                
+                $block->addItemRender('configurable','checkout/cart_item_renderer_configurable','checkout/cart/item/review.phtml');                
+                $block->addItemRender('grouped','checkout/cart_item_renderer_grouped','checkout/cart/item/review.phtml');                
                 break;
             case 'split':
                 $block = $this->getLayout()->createBlock('udsplit/cart_vendor');            
@@ -63,18 +65,9 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Review
     //}}}
     public function getItemHtml($item) {
         $block = $this->_getCartBlock('cart');
+        $block->setHtmlBlock('udsplit/cart_review');
         return $block->getItemHtml($item);
     }
     
     //{{{ 
-    /**
-     * 
-     * @return array
-     */
-     public function getOptionList() {
-         $block = $this->_getCartBlock('split');
-         echo '**'.get_class($block);
-         return $block->getOptionList();
-     }
-    //}}}
 } 

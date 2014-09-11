@@ -15,6 +15,7 @@
 			<udsplit>
 				<rewrite>
 					<cart_vendor>Zolago_DropshipSplit_Block_Cart_Vendor</cart_vendor>
+					<cart_review>Zolago_DropshipSplit_Block_Cart_Review</cart_review>
 				</rewrite>
 			</udsplit>		
 		</blocks>
