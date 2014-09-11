@@ -12,7 +12,7 @@ class Zolago_Checkout_GuestController extends Zolago_Checkout_Controller_Abstrac
 	public function indexAction() {
 		// Customer logged in - forward to logged controller
 		if($this->_getCustomerSession()->isLoggedIn()){
-			return $this->_redirect("*/onepage/index");
+			return $this->_redirect("*/singlepage/index");
 		}
 		// No is guest checkout flag - go to login
 		// Reset flag - every refresh will show login
@@ -32,7 +32,7 @@ class Zolago_Checkout_GuestController extends Zolago_Checkout_Controller_Abstrac
 		
 		// Is logged in ?
 		if($this->_getCustomerSession()->isLoggedIn()){
-			return $this->_redirect("checkout/onepage/index");
+			return $this->_redirect("checkout/singlepage/index");
 		}
 		
 		// Set checkout context
@@ -51,36 +51,4 @@ class Zolago_Checkout_GuestController extends Zolago_Checkout_Controller_Abstrac
 		return $this->_redirect("*/*/index");
 	}
 
-    public function testAction()
-    {
-        $this->loadLayout();
-
-        $this->renderLayout();
-    }
-
-//    public function successAction()
-//    {
-//        $this->loadLayout();
-//        $this->renderLayout();
-//
-//        $session = $this->getOnepage()->getCheckout();
-//        if (!$session->getLastSuccessQuoteId()) {
-//            $this->_redirect('checkout/cart');
-//            return;
-//        }
-//
-//        $lastQuoteId = $session->getLastQuoteId();
-//        $lastOrderId = $session->getLastOrderId();
-//        $lastRecurringProfiles = $session->getLastRecurringProfileIds();
-//        if (!$lastQuoteId || (!$lastOrderId && empty($lastRecurringProfiles))) {
-//            $this->_redirect('checkout/cart');
-//            return;
-//        }
-//
-//        $session->clear();
-//        $this->loadLayout();
-//        $this->_initLayoutMessages('checkout/session');
-//        Mage::dispatchEvent('checkout_onepage_controller_success_action', array('order_ids' => array($lastOrderId)));
-//        $this->renderLayout();
-//    }
 }

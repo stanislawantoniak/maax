@@ -661,7 +661,7 @@
 		</reference>
 	</checkout_updater>
 	
-	<checkout_onepage_index>
+	<checkout_singlepage_index>
         <update handle="checkout_updater" />
 		<reference name="head">
 			<action method="addItem">
@@ -671,12 +671,11 @@
 		</reference>
 		<reference name="content">
 			<!-- Remove previous blocks -->
-            <action method="unsetChildren"></action>
 			<block type="checkout/onepage" name="checkout.onepage" template="checkout/onepage/logged.phtml">
-				<block type="core/template" name="checkout.onepage.logged.address" template="checkout/onepage/logged/address.phtml"/>
+				<block type="core/template" name="checkout.onepage.logged.address" template="checkout/onepage/logged/addressbook.phtml"/>
 			</block>
 		</reference>
-	</checkout_onepage_index>
+	</checkout_singlepage_index>
 	
 	<checkout_guest_index>
         <update handle="checkout_updater" />
@@ -703,12 +702,12 @@
 		</reference>
 	</checkout_guest_index>
 
-    <checkout_onepage_success>
+    <checkout_singlepage_success>
         <reference name="root">
             <action method="setTemplate">
                 <template>page/1column.phtml</template>
             </action>
         </reference>
-    </checkout_onepage_success>
+    </checkout_singlepage_success>
     
 </layout>
