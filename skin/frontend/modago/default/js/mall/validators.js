@@ -13,21 +13,11 @@ Mall.validate.validators = {
     },
     password: function(){
         "use strict";
-        console.log(Mall.customer.getOptions({
-            debug: true,
-            rules: {
-                "account[firstname]": {
-                    email: true
-                }
-            }
-        }));
-
 
         jQuery('#co-address').validate(Mall.customer.getOptions({
-            debug: true,
             rules: {
                 "account[firstname]": {
-                    email: true
+                    minlength: 4
                 }
             }
         }));
