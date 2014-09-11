@@ -8,6 +8,7 @@
 $_billingAddress = $this->getQuote()->getBillingAddress();
 $streetArr = $_billingAddress->getStreet(-1);
 $street = is_array($streetArr) ? explode(" ", $streetArr) : $streetArr;
+$needInvoice = $_billingAddress->getNeedInvoice();
 ?>
 <fieldset>
     <input type="hidden" name="billing[address_id]" value="<?php echo $_billingAddress->getId(); ?>">
@@ -22,7 +23,7 @@ $street = is_array($streetArr) ? explode(" ", $streetArr) : $streetArr;
     <input type="hidden" name="billing[save_in_address_book]" value="1">
     <legend><?php echo $this->__("Billing address:"); ?></legend>
     <div class="form-group form-checkbox small">
-        <input type="checkbox" name="billing[need_invoice]" id="invoice_vat" class="css-checkbox invoice_vat" value="1">
+        <input type="checkbox" name="billing[need_invoice]" id="invoice_vat" class="css-checkbox invoice_vat" value="1" <?php if ($needInvoice): ?>checked<?php endif; ?>>
         <label for="invoice_vat" class="css-label"><?php echo $this->__("I want an invoice"); ?></label>
     </div>
 </fieldset>
@@ -30,7 +31,7 @@ $street = is_array($streetArr) ? explode(" ", $streetArr) : $streetArr;
 <fieldset id="invoice_data">
 
     <div class="form-group form-checkbox small">
-        <input type="checkbox" name="invoice_data_address" id="invoice_data_address" class="css-checkbox invoice_data_address" checked="">
+        <input type="checkbox" name="invoice_data_address" id="invoice_data_address" class="css-checkbox invoice_data_address" <?php if (!$needInvoice) : ?>checked<?php endif; ?>>
         <label for="invoice_data_address" class="css-label"><?php echo $this->__("Billing address same as shipping address."); ?></label>
     </div>
 
