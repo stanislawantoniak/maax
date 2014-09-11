@@ -18,7 +18,7 @@ $sameAsBilling = (int) $this->getQuote()->getShippingAddress()->getSameAsBilling
     <input type="hidden" name="shipping[same_as_billing]" value="<?php echo $sameAsBilling; ?>">
     <legend><?php echo $this->__("Shipping address:"); ?></legend>
     <div class="form-group form-checkbox small">
-        <input type="checkbox" name="shipping[different_shipping_address]" id="orders_someone_else" class="css-checkbox orders_someone_else">
+        <input type="checkbox" name="shipping[different_shipping_address]" id="orders_someone_else" class="css-checkbox orders_someone_else" <?php if ($this->getOrderSomeoneElseFlag()) : ?>checked<?php endif; ?>>
         <label for="orders_someone_else" class="css-label orders_someone_else"><?php echo $this->__("I'm buing for someone else."); ?></label>
     </div>
 
