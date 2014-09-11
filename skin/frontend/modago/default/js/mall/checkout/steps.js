@@ -38,6 +38,7 @@
 				this.attachInvoiceCopyShippingDataEvent();
 				this.attachInvoiceEvent();
                 this.setInvoiceDataVisiblity();
+                this.onLoadDisableInvoiceFields();
 			},
 
             toggleInvoiceData: function (state) {
@@ -54,6 +55,15 @@
                     this.toggleInvoiceData(true);
                 } else {
                     this.toggleInvoiceData(false);
+                }
+
+                return this;
+            },
+
+            onLoadDisableInvoiceFields: function () {
+                if (jQuery("#invoice_data_address")
+                    && jQuery("#invoice_data_address").is(":checked")) {
+                    this.invoiceDisableFields(this._invoice_copy_shipping_fields);
                 }
 
                 return this;
