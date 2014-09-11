@@ -140,15 +140,19 @@
 			},
 			collect: function () {
 				var form = jQuery("#co-address"),
-					password = form.find("#account\\:password").val(),
+					password,
 					billingData,
 					stepData = [],
                     telephone;
 
-				// set password confirmation
-				if (password.length > 0) {
-					form.find("#account\\:confirmation").val(password);
-				}
+                if (parseInt(jQuery("#customer_logged_in").val(), 10)) {
+                    password = form.find("#account\\:password").val();
+                    // set password confirmation
+                    if (password.length > 0) {
+                        form.find("#account\\:confirmation").val(password);
+                    }
+                }
+
 				// set billing data
                 if (jQuery("#orders_someone_else").is(":checked")) {
                     form.find("[name='billing[firstname]']").val(form.find("[name='shipping[firstname]']").val());
