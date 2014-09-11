@@ -3,8 +3,28 @@
 $vendors = $items->vendors;
 
 $allVendorsMethod = $items->allVendorsMethod;
+
+$methods = $items->methods;
 ?>
 
 <?php foreach($vendors as $vendor): ?>
-    <input type="text" value="<?php echo $allVendorsMethod; ?>" name="shipping_method[<?php echo $vendor; ?>]">
+    <input type="hidden" value="<?php echo $allVendorsMethod; ?>" name="shipping_method[<?php echo $vendor; ?>]">
 <?php endforeach; ?>
+
+
+<?php foreach($methods as $method): ?>
+    <div class="panel panel-default panel-color">
+        <div class="panel-body">
+            <dl class="pull-left">
+                <dt><?php echo $method['carrier_title']?></dt>
+                <dd><?php echo $method['method_title']?></dd>
+                <dd class="separator large">Koszt przesyłki: <strong><?php echo $method['price']?> zł</strong></dd>
+            </dl>
+            <figure class="logo-courier pull-right">
+                <img alt="" src="skin/frontend/modago/default/images/def-logo-kurier.png">
+            </figure>
+        </div>
+    </div>
+<?php endforeach; ?>
+
+

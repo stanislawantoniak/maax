@@ -173,7 +173,7 @@ abstract class Zolago_Checkout_Controller_Abstract
 			$this->_prepareJsonResponse($response);
 		}
 	}
-	
+    
 	/**
 	 * Save shipping data
 	 */

@@ -1,40 +1,49 @@
 <?xml version="1.0"?>
 <config>
-    <modules>
+  <modules>
+    <Zolago_Checkout>
+      <version>0.0.2</version>
+    </Zolago_Checkout>
+  </modules>
+  <global>
+    <helpers>
+      <zolagocheckout>
+        <class>Zolago_Checkout_Helper</class>
+      </zolagocheckout>
+    </helpers>
+    <models>
+      <zolagocheckout>
+        <class>Zolago_Checkout_Model</class>
+      </zolagocheckout>
+    </models>
+    <resources>
+      <zolagocheckout_setup>
+        <setup>
+          <module>Zolago_Checkout</module>
+        </setup>
+      </zolagocheckout_setup>
+    </resources>
+  </global>
+  <frontend>
+    <routers>
+      <checkout>
+        <args>
+          <modules>
+            <Zolago_Checkout before="Mage_Checkout">Zolago_Checkout</Zolago_Checkout>
+          </modules>
+        </args>
+      </checkout>
+    </routers>
+    <translate>
+      <modules>
         <Zolago_Checkout>
-            <version>0.0.1</version>
+          <files>
+            <default>Zolago_Checkout.csv</default>
+          </files>
         </Zolago_Checkout>
-    </modules>
-    <global>
-		<helpers>
-			<zolagocheckout>
-				<class>Zolago_Checkout_Helper</class>
-			</zolagocheckout>
-		</helpers>
-		<models>
-			<zolagocheckout>
-				<class>Zolago_Checkout_Model</class>
-			</zolagocheckout>
-		</models>
-    </global>
-	<frontend>
-		<routers>
-			<checkout>  
-                <args>  
-                    <modules>  
-                        <Zolago_Checkout before="Mage_Checkout">Zolago_Checkout</Zolago_Checkout>  
-                    </modules>  
-                </args>  
-            </checkout> 
-		</routers>
-		<translate>
-		     <modules>
-                <Zolago_Checkout>
-                    <files>
-                        <default>Zolago_Checkout.csv</default>
-                    </files>
-                </Zolago_Checkout>
-            </modules>
-        </translate>
-	</frontend>
+      </modules>
+    </translate>
+  </frontend>
 </config>
+
+
