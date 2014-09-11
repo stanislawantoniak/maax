@@ -19,36 +19,10 @@
 		
 		checkout.setProgressObject(jQuery("#step ol"));
 		
+		<?php /* has addresses in address book? */?>
 		checkout.addStep(Mall.Checkout.steps.address);
-		
-		checkout.addStep({
-			id: "step-1",
-			code: "shipping",
-			onPrepare: function(checkoutObject){
-				var self = this;
-				this.content.find("[id^=step-1-submit]").click(function(){
-					self.submit();
-				})
-				this.content.find("[id^=step-1-prev]").click(function(){
-					checkoutObject.prev();
-				})
-			}
-		});
-		
-		checkout.addStep({
-			id: "step-2",
-			code: "review",
-			onPrepare: function(checkoutObject){
-				var self = this;
-				this.content.find("[id^=step-2-submit]").click(function(){
-					// Add validation
-					checkoutObject.placeOrder()
-				});
-				this.content.find("[id^=step-2-prev]").click(function(){
-					checkoutObject.prev();
-				})
-			}
-		});
+		checkout.addStep(Mall.Checkout.steps.shippingpayment);
+		checkout.addStep(Mall.Checkout.steps.review);
 		
 		checkout.init(0);
 	})();

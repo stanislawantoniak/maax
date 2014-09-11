@@ -4,8 +4,7 @@ $vendors = $items->vendors;
 
 $allVendorsMethod = $items->allVendorsMethod;
 ?>
-<form id="co-shipping">
+
 <?php foreach($vendors as $vendor): ?>
     <input type="text" value="<?php echo $allVendorsMethod; ?>" name="shipping_method[<?php echo $vendor; ?>]">
 <?php endforeach; ?>
-</form>

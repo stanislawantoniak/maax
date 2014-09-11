@@ -252,18 +252,46 @@
                 }
             }
 		},
-        shipping: {
+		
+		////////////////////////////////////////////////////////////////////////
+		// shipping & payment step
+		////////////////////////////////////////////////////////////////////////
+        shippingpayment: {
             id: "step-1",
-            code: "delivery",
+            code: "shippingpayment",
             doSave: true,
+			onPrepare: function(checkoutObject){
+				var self = this;
+				this.content.find("form").submit(function(){
+					self.submit();
+					return false;
+				})
+				this.content.find("[id^=step-1-prev]").click(function(){
+					checkoutObject.prev();
+				})
+			},
             collect: function () {
-                var form = jQuery("#co-shipping");
-
-                var stepData = form.serializeArray();
-
-                return stepData;
+                return this.content.find("form").serializeArray();
             }
         },
+		
+		////////////////////////////////////////////////////////////////////////
+		// review step
+		////////////////////////////////////////////////////////////////////////
+		review: {
+			id: "step-2",
+			code: "review",
+			onPrepare: function(checkoutObject){
+				var self = this;
+				this.content.find("[id^=step-2-submit]").click(function(){
+					// Add validation
+					checkoutObject.placeOrder()
+				});
+				this.content.find("[id^=step-2-prev]").click(function(){
+					checkoutObject.prev();
+				})
+			}
+		},
 
         getIsObjectKeyExistsInArray: function (key, arr) {
             var exists = false;
