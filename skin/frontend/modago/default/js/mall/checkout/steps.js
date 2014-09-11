@@ -255,9 +255,8 @@
                 var form = jQuery("#co-delivery");
 
                 var stepData = form.serializeArray();
-                console.log(stepData);
 
-                //return stepData;
+                return stepData;
             }
         },
 
@@ -290,4 +289,5 @@
 jQuery(document).ready(function () {
     "use strict";
     Mall.Checkout.steps.address.init();
+    Mall.Checkout.steps.delivery.init();
 });
