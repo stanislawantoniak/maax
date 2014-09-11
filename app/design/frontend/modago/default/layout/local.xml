@@ -678,9 +678,9 @@
                     <block type="zolagomodago/checkout_onepage_shared_address_billing" as="billing" name="checkout.onepage.logged.billing" template="checkout/onepage/shared/address/billing.phtml"/>
                  </block>
                 <block type="zolagomodago/checkout_onepage_shared_review" name="checkout.onepage.logged.review" template="checkout/onepage/shared/review.phtml"/>
-                <block type="zolagomodago/checkout_onepage_shared_shippingpayment" as="shippingpayment" name="checkout.onepage.logged.shippingpayment" template="checkout/onepage/shared/shippingpayment.phtml" >
+                <block type="zolagomodago/checkout_onepage_shared_shippingpayment"  name="checkout.onepage.logged.shippingpayment" template="checkout/onepage/shared/shippingpayment.phtml" >
                     <block type="zolagomodago/checkout_onepage_shared_shippingpayment_shipping" as="shipping" name="checkout.onepage.logged.shippingpayment.shipping" template="checkout/onepage/shared/shippingpayment/shipping.phtml" />
-                    <block type="zolagomodago/checkout_onepage_shared_shippingpayment_payment" as="billing" name="checkout.onepage.logged.shippingpayment.payment" template="checkout/onepage/shared/shippingpayment/payment.phtml">
+                    <block type="zolagomodago/checkout_onepage_shared_shippingpayment_payment" as="payment" name="checkout.onepage.logged.shippingpayment.payment" template="checkout/onepage/shared/shippingpayment/payment.phtml">
                         <block type="zolagomodago/checkout_onepage_shared_shippingpayment_payment_methods" name="checkout.onepage.logged.shippingpayment.payment.methods" as="methods" template="checkout/onepage/shared/shippingpayment/payment/methods.phtml" />
                     </block>
                 </block>
