@@ -10,6 +10,8 @@
 		////////////////////////////////////////////////////////////////////////
 		address: {
 
+            _self_form_id: "co-address",
+
 			id: "step-0",
 
 			code: "address",
@@ -147,7 +149,9 @@
 				this.init();
 				var self = this;
 				this.content.find("form").submit(function(){
-					self.submit();
+                    if (jQuery(this).valid()) {
+                        self.submit();
+                    }
 					return false;
 				});
 			},
@@ -173,7 +177,6 @@
 			},
 			collect: function () {
 				var form = jQuery("#co-address"),
-
 					password,
 					billingData,
 					stepData = [],
@@ -235,12 +238,69 @@
                 return arr1;
             },
 
+            getBuingForSomeoneElse: function () {
+                return jQuery("#orders_someone_else").is(":checked");
+            },
+
             validate: {
                 init: function () {
-                    jQuery('#co-address').validate(Mall.validate.getOptions({
+
+                    jQuery('#' + Mall.Checkout.steps.address._self_form_id)
+                        .validate(Mall.validate.getOptions({
+                        ignore: ":hidden",
+
                         rules: {
                             'account[password]': {
                                 "password": true
+                            },
+                            "account[firstname]": {
+                                required: true
+                            },
+                            "account[lastname]": {
+                                required: true
+                            },
+                            "account[email]": {
+                                required: true,
+                                email: true
+                            },
+                            "account[telephone]": {
+                                required: true
+                            },
+                            "shipping[firstname]": {
+                                required: true
+                            },
+                            "shipping[lastname]": {
+                                required: true
+                            },
+                            "shipping[telephone]": {
+                                required: true
+                            },
+                            "shipping[street][]": {
+                                required: true
+                            },
+                            "shipping[postcode]": {
+                                required: true
+                            },
+                            "shipping[city]": {
+                                required: true
+                            },
+                            "shipping[company]": {
+
+                            },
+                            "billing[company]": {
+                                required: true
+                            },
+                            "billing[vat_id]": {
+                                required: true
+                            },
+                            "billing[street][]": {
+                                required: true
+                            },
+                            "billing[postcode]": {
+                                required: true
+                            },
+                            "billing[city]": {
+                                required: true
                             }
                         }
                     }));
@@ -274,7 +334,3 @@
     };
 })();
 
-jQuery(document).ready(function () {
-    "use strict";
-    Mall.Checkout.steps.address.init();
-});

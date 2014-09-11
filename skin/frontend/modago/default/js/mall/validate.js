@@ -62,6 +62,19 @@ Mall.validate = {
                 error.insertAfter(element);
             }
 
+        },
+
+        invalidHandler: function (form, validator) {
+            "use strict";
+
+            if (!validator.numberOfInvalids()) {
+                return true;
+            }
+
+            jQuery('html, body').animate({
+                scrollTop: jQuery(validator.errorList[0].element).offset().top
+                    - Mall.getMallHeaderHeight()
+            }, 1000);
         }
     },
 
@@ -69,7 +82,7 @@ Mall.validate = {
         "use strict";
 
         // add customer methods
-        jQuery.validator.addMethod("password", this.validators.password, "Złe hasło");
+        jQuery.validator.addMethod("password_backend", this.validators.password, "Złe hasło");
     },
 
     /**
