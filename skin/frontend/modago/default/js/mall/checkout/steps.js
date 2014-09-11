@@ -49,8 +49,8 @@
             },
 
             setInvoiceDataVisiblity: function () {
-                var sameAsBilling = parseInt(jQuery("[name='shipping[same_as_billing]']").val(), 10);
-                if (sameAsBilling) {
+                var needInvoice = jQuery("#invoice_vat").is(":checked");
+                if (needInvoice) {
                     this.toggleInvoiceData(true);
                 } else {
                     this.toggleInvoiceData(false);
@@ -247,3 +247,8 @@
         }
     };
 })();
+
+jQuery(document).ready(function () {
+    "use strict";
+    Mall.Checkout.steps.address.init();
+});
