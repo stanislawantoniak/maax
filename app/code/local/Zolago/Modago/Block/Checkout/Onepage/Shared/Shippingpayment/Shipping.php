@@ -1,79 +1,81 @@
 <?php
 
-class Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment_Shipping extends Zolago_Modago_Block_Checkout_Onepage_Abstract
+class Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment_Shipping
+    extends Zolago_Modago_Block_Checkout_Onepage_Abstract
 {
-    protected $_rates;
-    protected $_address;
 
     public function getSaveUrl()
     {
-        return Mage::getUrl("checkout/onepage/saveShipping");
+        return Mage::getUrl("checkout/onepage/saveShippingMethod");
     }
 
-    public function getShippingRates()
+    public function getItems()
     {
+        $q = Mage::getSingleton('checkout/session')->getQuote();
+        $a = $q->getShippingAddress();
+//        $methods = array();
+//
+//        $details = $a->getUdropshipShippingDetails();
+//        if ($details) {
+//            $details = Zend_Json::decode($details);
+//            $methods = isset($details['methods']) ? $details['methods'] : array();
+//        }
 
-        if (empty($this->_rates)) {
-
-            $a = $this->getQuote()->getShippingAddress();
-            $this->getAddress()->collectShippingRates()->save();
-
-            $groups = $this->getAddress()->getGroupedAllShippingRates();
-
-            /**
-             * Fix rate quto query
-             */
-            if(!$groups){
-                $a->setCountryId(Mage::app()->getStore()->getConfig("general/country/default"));
-                $a->setCollectShippingRates(true);
-                $a->collectShippingRates();
-                $groups = $a->getGroupedAllShippingRates();
-            }
-
-            /*
-            if (!empty($groups)) {
-                $ratesFilter = new Varien_Filter_Object_Grid();
-                $ratesFilter->addFilter(Mage::app()->getStore()->getPriceFilter(), 'price');
-
-                foreach ($groups as $code => $groupItems) {
-                    $groups[$code] = $ratesFilter->filter($groupItems);
+        $qRates = $this->getRates();
+        $vendors = array();
+        foreach ($qRates as $cCode => $cRates) {
+            foreach ($cRates as $rate) {
+                $vId = $rate->getUdropshipVendor();
+                if (!$vId) {
+                    continue;
                 }
+
+                $rates[$vId][$cCode][] = $rate;
+                $vendors[$vId] = $vId;
             }
-            */
-
-            return $this->_rates = $groups;
+            unset($cRates);
+            unset($rate);
+        }
+        $methodToFind = array();
+        foreach ($rates as $vendorId => $cRates) {
+            foreach ($cRates as $code => $rate) {
+                $methodToFind[$code][] = $vendorId;
+            }
         }
 
-        return $this->_rates;
-    }
-    public function getAddress()
-    {
-        if (empty($this->_address)) {
-            $this->_address = $this->getQuote()->getShippingAddress();
+        //Find good method
+        $allVendorsMethod = '';
+        foreach ($methodToFind as $method => $vendorsInMethod) {
+            $diff = array_diff($vendors, $vendorsInMethod);
+            if (empty($diff)) {
+                $allVendorsMethod = $method;
+            }
         }
-        return $this->_address;
+
+        return (object)array('rates' => $rates, 'allVendorsMethod' => $allVendorsMethod, 'vendors' => $vendors);
+
     }
-    public function getCarrierName($carrierCode)
-    {
-        if ($name = Mage::getStoreConfig('carriers/'.$carrierCode.'/title')) {
-            return $name;
+
+
+    /**
+     * @return mixed
+     */
+    public function getRates(){
+        $q = Mage::getSingleton('checkout/session')->getQuote();
+        $a = $q->getShippingAddress();
+
+        $qRates = $a->getGroupedAllShippingRates();
+        /**
+         * Fix rate quto query
+         */
+        if(!$qRates){
+            $a->setCountryId(Mage::app()->getStore()->getConfig("general/country/default"));
+            $a->setCollectShippingRates(true);
+            $a->collectShippingRates();
+            $qRates = $a->getGroupedAllShippingRates();
         }
-        return $carrierCode;
+
+        return $qRates;
     }
 
-    public function getAddressShippingMethod()
-    {
-        return $this->getAddress()->getShippingMethod();
-    }
-
-    public function getShippingPrice($price, $flag)
-    {
-        return $this->getQuote()->getStore()->convertPrice(Mage::helper('tax')->getShippingPrice($price, $flag, $this->getAddress()), true);
-    }
-
-
-    public function getQuoteBaseGrandTotal()
-    {
-        return (float)$this->getQuote()->getBaseGrandTotal();
-    }
 } 

@@ -705,8 +705,8 @@
                 </block>
                 <block type="zolagomodago/checkout_onepage_shared_review" name="checkout.onepage.guest.review" template="checkout/onepage/shared/review.phtml"/>
                 <block type="zolagomodago/checkout_onepage_shared_shippingpayment" name="checkout.onepage.guest.shippingpayment" template="checkout/onepage/shared/shippingpayment.phtml" >
-                    <block type="zolagomodago/checkout_onepage_shared_shippingpayment_shipping" name="checkout.onepage.guest.shippingpayment.shipping" template="checkout/onepage/shared/shippingpayment/shipping.phtml" />
-                    <block type="zolagomodago/checkout_onepage_shared_shippingpayment_payment" name="checkout.onepage.guest.shippingpayment.payment" template="checkout/onepage/shared/shippingpayment/payment.phtml">
+                    <block type="zolagomodago/checkout_onepage_shared_shippingpayment_shipping" name="checkout.onepage.guest.shippingpayment.shipping" as="shipping" template="checkout/onepage/shared/shippingpayment/shipping.phtml" />
+                    <block type="zolagomodago/checkout_onepage_shared_shippingpayment_payment" name="checkout.onepage.guest.shippingpayment.payment" as="payment" template="checkout/onepage/shared/shippingpayment/payment.phtml">
                         <block type="zolagomodago/checkout_onepage_shared_shippingpayment_payment_methods" name="checkout.onepage.guest.shippingpayment.payment.methods" as="methods" template="checkout/onepage/shared/shippingpayment/payment/methods.phtml" />
                     </block>
                 </block>

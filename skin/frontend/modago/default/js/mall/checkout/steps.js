@@ -252,6 +252,18 @@
                 }
             }
 		},
+        delivery: {
+            id: "step-1",
+            code: "delivery",
+            doSave: true,
+            collect: function () {
+                var form = jQuery("#co-delivery");
+
+                var stepData = form.serializeArray();
+
+                return stepData;
+            }
+        },
 
         getIsObjectKeyExistsInArray: function (key, arr) {
             var exists = false;
