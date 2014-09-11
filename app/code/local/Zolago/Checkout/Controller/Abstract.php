@@ -40,6 +40,10 @@ abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_Onepage
 		
 	}
 	
+	/**
+	 * Save post data to quote
+	 * @throws Mage_Core_Exception
+	 */
 	public function importPostData(){
 		$request = $this->getRequest();
 		$onepage = $this->getOnepage();
@@ -49,8 +53,10 @@ abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_Onepage
 		 */
 		$method	= $request->getParam("method"); // chekcout method
 		if($method){
-			$onepage->saveCheckoutMethod($method);
-			$onepage->getQuote()->setTotalsCollectedFlag(false);
+			$methodResponse = $onepage->saveCheckoutMethod($method);
+			if(isset($methodResponse['error']) && $methodResponse['error']==1){
+				throw new Mage_Core_Exception($methodResponse['message']);
+			}
 		}
 		/**
 		 account[firstname]:abc
@@ -93,7 +99,6 @@ abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_Onepage
 			if(isset($billingResponse['error']) && $billingResponse['error']==1){
 				throw new Mage_Core_Exception(implode("\n", $billingResponse['message']));
 			}
-			$onepage->getQuote()->setTotalsCollectedFlag(false);
 		}
 		
 		
@@ -123,15 +128,16 @@ abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_Onepage
 			if(isset($shippingResponse['error']) && $shippingResponse['error']==1){
 				throw new Mage_Core_Exception(implode("\n", $shippingResponse['message']));
 			}
-			$onepage->getQuote()->setTotalsCollectedFlag(false);
 		}
 		
 		/**
 		shipping_method[4]:udtiership_1
 		 */
 		if($shippingMethod = $request->getParam("shipping_method")){
-			$onepage->saveShippingMethod($shippingMethod);
-			$onepage->getQuote()->setTotalsCollectedFlag(false);
+			$shippingMethodResponse = $onepage->saveShippingMethod($shippingMethod);
+			if(isset($shippingMethodResponse['error']) && $shippingMethodResponse['error']==1){
+				throw new Mage_Core_Exception($shippingMethodResponse['message']);
+			}
 		}
 		
 		/**
@@ -140,10 +146,14 @@ abstract class Zolago_Checkout_Controller_Abstract extends Mage_Checkout_Onepage
 		 */
 		$payment = $request->getParam("payment");
 		if(is_array($payment)){
-			$onepage->savePayment($payment);
-			$onepage->getQuote()->setTotalsCollectedFlag(false);
+			$paymentResponse = $onepage->savePayment($payment);
+			if(isset($paymentResponse['error']) && $paymentResponse['error']==1){
+				throw new Mage_Core_Exception($paymentResponse['message']);
+			}
 		}
+		
 		// Override collect totals - make final collect totals
+		$onepage->getQuote()->setTotalsCollectedFlag(false);
 		$onepage->getQuote()->collectTotals()->save();
 	}
 	
