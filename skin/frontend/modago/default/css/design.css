@@ -3078,10 +3078,10 @@ ol.breadcrumb li.active {
   font-weight: bold; }
 
 /* line 3, ../sass/design/override/_review-cart.scss */
-.checkout-guest-index #content-main .panel {
+.checkout-shared-review #content-main .panel {
   background-color: white; }
 /* line 4, ../sass/design/override/_review-cart.scss */
-.checkout-guest-index #content-main .panel.panel-default {
+.checkout-shared-review #content-main .panel.panel-default {
   border-color: #bfbfbf; }
 
 /* line 3, ../sass/design/override/_summary-delivery-payment.scss */
@@ -4548,106 +4548,106 @@ i.flag.hit, i.flag.bestseller {
   font-size: 18px !important; }
 
 /* line 1, ../sass/design/style/_review-cart.scss */
-.checkout-guest-index {
+.checkout-shared-review {
   color: #000; }
 /* line 6, ../sass/design/style/_review-cart.scss */
-.checkout-guest-index #content-main section > header h1 {
+.checkout-shared-review #content-main section > header h1 {
   font-size: 24px;
   font-weight: normal;
   font-family: "latolight";
   text-transform: uppercase; }
 @media (max-width: 767px) {
   /* line 6, ../sass/design/style/_review-cart.scss */
-  .checkout-guest-index #content-main section > header h1 {
+  .checkout-shared-review #content-main section > header h1 {
     font-size: 18px;
     text-align: center; } }
 /* line 18, ../sass/design/style/_review-cart.scss */
-.checkout-guest-index #content-main section > footer a#clearAllShopping {
+.checkout-shared-review #content-main section > footer a#clearAllShopping {
   line-height: 13px;
   font-size: 10px;
   text-transform: uppercase; }
 /* line 27, ../sass/design/style/_review-cart.scss */
-.checkout-guest-index #content-main .tableWrapper .table-row .table-cell {
+.checkout-shared-review #content-main .tableWrapper .table-row .table-cell {
   text-align: center; }
 @media (max-width: 767px) {
   /* line 27, ../sass/design/style/_review-cart.scss */
-  .checkout-guest-index #content-main .tableWrapper .table-row .table-cell {
+  .checkout-shared-review #content-main .tableWrapper .table-row .table-cell {
     text-align: left; } }
 /* line 32, ../sass/design/style/_review-cart.scss */
-.checkout-guest-index #content-main .tableWrapper .table-row .table-cell.cell-01.td {
+.checkout-shared-review #content-main .tableWrapper .table-row .table-cell.cell-01.td {
   text-align: left; }
 @media (max-width: 767px) {
   /* line 35, ../sass/design/style/_review-cart.scss */
-  .checkout-guest-index #content-main .tableWrapper .table-row .table-cell.cell-02 {
+  .checkout-shared-review #content-main .tableWrapper .table-row .table-cell.cell-02 {
     text-align: left; } }
 /* line 40, ../sass/design/style/_review-cart.scss */
-.checkout-guest-index #content-main .tableWrapper .table-row .table-cell.cell-04.td {
+.checkout-shared-review #content-main .tableWrapper .table-row .table-cell.cell-04.td {
   text-align: right; }
 /* line 43, ../sass/design/style/_review-cart.scss */
-.checkout-guest-index #content-main .tableWrapper .table-row .table-cell.cell-05 {
+.checkout-shared-review #content-main .tableWrapper .table-row .table-cell.cell-05 {
   text-align: left; }
 /* line 46, ../sass/design/style/_review-cart.scss */
-.checkout-guest-index #content-main .tableWrapper .table-row .table-cell figure {
+.checkout-shared-review #content-main .tableWrapper .table-row .table-cell figure {
   border: 1px solid #f1f1f1; }
 /* line 50, ../sass/design/style/_review-cart.scss */
-.checkout-guest-index #content-main .tableWrapper .table-row .table-cell .description_checked_product .product_name {
+.checkout-shared-review #content-main .tableWrapper .table-row .table-cell .description_checked_product .product_name {
   font-size: 16px;
   color: #000; }
 /* line 54, ../sass/design/style/_review-cart.scss */
-.checkout-guest-index #content-main .tableWrapper .table-row .table-cell .description_checked_product .product_size {
+.checkout-shared-review #content-main .tableWrapper .table-row .table-cell .description_checked_product .product_size {
   font-size: 12px; }
 /* line 59, ../sass/design/style/_review-cart.scss */
-.checkout-guest-index #content-main .tableWrapper .table-row .table-cell .description_checked_product .product_availability .icons-checked, .checkout-guest-index #content-main .tableWrapper .table-row .table-cell .description_checked_product .product_availability .icons-interjection {
+.checkout-shared-review #content-main .tableWrapper .table-row .table-cell .description_checked_product .product_availability .icons-checked, .checkout-shared-review #content-main .tableWrapper .table-row .table-cell .description_checked_product .product_availability .icons-interjection {
   font-size: 12px;
   text-transform: none; }
 /* line 66, ../sass/design/style/_review-cart.scss */
-.checkout-guest-index #content-main .tableWrapper .table-row .table-cell .product_price {
+.checkout-shared-review #content-main .tableWrapper .table-row .table-cell .product_price {
   font-size: 16px;
   font-family: "latoregular"; }
 /* line 69, ../sass/design/style/_review-cart.scss */
-.checkout-guest-index #content-main .tableWrapper .table-row .table-cell .product_price span {
+.checkout-shared-review #content-main .tableWrapper .table-row .table-cell .product_price span {
   font-size: 11px;
   color: #565655;
   text-decoration: line-through; }
 /* line 75, ../sass/design/style/_review-cart.scss */
-.checkout-guest-index #content-main .tableWrapper .table-row .table-cell .amount_product {
+.checkout-shared-review #content-main .tableWrapper .table-row .table-cell .amount_product {
   text-align: center;
   font-size: 11px;
   border: 1px solid #afafaf;
   line-height: 22px; }
 /* line 84, ../sass/design/style/_review-cart.scss */
-.checkout-guest-index #content-main .tableWrapper .table-row .table-cell.cell-03 .styledSelected .sbSelector, .checkout-guest-index #content-main .tableWrapper .table-row .table-cell.cell-03 .styledSelected .sbOptions {
+.checkout-shared-review #content-main .tableWrapper .table-row .table-cell.cell-03 .styledSelected .sbSelector, .checkout-shared-review #content-main .tableWrapper .table-row .table-cell.cell-03 .styledSelected .sbOptions {
   text-align: left; }
 /* line 89, ../sass/design/style/_review-cart.scss */
-.checkout-guest-index #content-main .tableWrapper .table-row .table-cell.cell-03 .select-group.medium .button-select {
+.checkout-shared-review #content-main .tableWrapper .table-row .table-cell.cell-03 .select-group.medium .button-select {
   font-size: 11px;
   text-align: center; }
 /* line 96, ../sass/design/style/_review-cart.scss */
-.checkout-guest-index #content-main .tableWrapper .table-row .table-cell.cell-04.td {
+.checkout-shared-review #content-main .tableWrapper .table-row .table-cell.cell-04.td {
   font-size: 16px;
   font-family: "latoblack"; }
 /* line 110, ../sass/design/style/_review-cart.scss */
-.checkout-guest-index #content-main .tableWrapper .table-footer-group .table-row .table-cell.td {
+.checkout-shared-review #content-main .tableWrapper .table-footer-group .table-row .table-cell.td {
   border-top: 1px solid #ebeaed; }
 /* line 114, ../sass/design/style/_review-cart.scss */
-.checkout-guest-index #content-main .tableWrapper .table-footer-group .table-row .table-cell.cell-01 p {
+.checkout-shared-review #content-main .tableWrapper .table-footer-group .table-row .table-cell.cell-01 p {
   font-size: 14px;
   white-space: nowrap; }
 @media (max-width: 767px) {
   /* line 114, ../sass/design/style/_review-cart.scss */
-  .checkout-guest-index #content-main .tableWrapper .table-footer-group .table-row .table-cell.cell-01 p {
+  .checkout-shared-review #content-main .tableWrapper .table-footer-group .table-row .table-cell.cell-01 p {
     font-size: 11px; } }
 /* line 122, ../sass/design/style/_review-cart.scss */
-.checkout-guest-index #content-main .tableWrapper .table-footer-group .table-row .table-cell.label_value {
+.checkout-shared-review #content-main .tableWrapper .table-footer-group .table-row .table-cell.label_value {
   text-align: right;
   font-size: 16px; }
 @media (max-width: 767px) {
   /* line 122, ../sass/design/style/_review-cart.scss */
-  .checkout-guest-index #content-main .tableWrapper .table-footer-group .table-row .table-cell.label_value {
+  .checkout-shared-review #content-main .tableWrapper .table-footer-group .table-row .table-cell.label_value {
     text-align: left;
     font-size: 11px; } }
 /* line 130, ../sass/design/style/_review-cart.scss */
-.checkout-guest-index #content-main .tableWrapper .table-footer-group .table-row .table-cell.cell-04 {
+.checkout-shared-review #content-main .tableWrapper .table-footer-group .table-row .table-cell.cell-04 {
   text-align: right; }
 
 /* line 4, ../sass/design/style/_checkout.scss */

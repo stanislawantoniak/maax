@@ -2,16 +2,31 @@ Mall.validate.validators = {
 
     emailbackend: function (value, elem, params) {
         "use strict";
-        $.ajax({
-            url: "emailtest",
+        var respone;
+        var baseUrl = window.location.protocol+"//"+window.location.host+"/";
+
+        console.log('emailbackend start');
+        jQuery.ajax({
+            url: baseUrl + "customer/account/checkExistingAccount",
             data: {
                 formkey: params.formkey,
                 email: value
             },
+            dataType: 'json',
             cache: false,
-            complete: params.collback
+            async: false
+        }).done(function(data){
+            console.log('done');
+//            console.log(data);
+            respone = data;
         });
 
+//        if(){
+//
+//        }
+
+
+        console.log('emailbackend stop');
         return true;
     },
 
