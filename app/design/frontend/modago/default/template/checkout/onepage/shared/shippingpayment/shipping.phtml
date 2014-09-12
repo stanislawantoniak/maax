@@ -6,6 +6,9 @@ $allVendorsMethod = $items->allVendorsMethod;
 
 $methods = $items->methods;
 $rates = $items->rates;
+$cost = $this->getItemsShippingCost();
+$cost = array_sum($cost);
+$formattedCost = Mage::helper('core')->currency($cost, true, false);
 
 ?>
 <?php if(!empty($rates)): ?>
@@ -20,7 +23,7 @@ $rates = $items->rates;
             <dl class="pull-left">
                 <dt><?php echo $method['carrier_title']?></dt>
                 <dd><?php echo $method['method_title']?></dd>
-                <dd class="separator large">Koszt przesyłki: <strong><?php echo $method['price']?> zł</strong></dd>
+                <dd class="separator large">Koszt przesyłki: <strong><?php echo $formattedCost; ?> </strong></dd>
             </dl>
             <figure class="logo-courier pull-right">
                 <img alt="" src="/skin/frontend/modago/default/images/def-logo-kurier.png">

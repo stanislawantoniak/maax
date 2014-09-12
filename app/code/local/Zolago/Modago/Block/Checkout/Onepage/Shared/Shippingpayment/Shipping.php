@@ -27,6 +27,7 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment_Shipping
         $vendors = array();
         foreach ($qRates as $cCode => $cRates) {
             foreach ($cRates as $rate) {
+
                 $vId = $rate->getUdropshipVendor();
                 if (!$vId) {
                     continue;
@@ -56,7 +57,28 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment_Shipping
 
     }
 
+    /**
+     * Shipping cost by vendor
+     * [[vendor_1] => cost_1, [vendor_2] => cost_2]
+     * @return array
+     */
+    public function getItemsShippingCost()
+    {
+        $data = array();
+        $qRates = $this->getRates();
 
+        foreach ($qRates as $cCode => $cRates) {
+            foreach ($cRates as $rate) {
+
+                $vId = $rate->getUdropshipVendor();
+                if (!$vId) {
+                    continue;
+                }
+                $data[$vId] = $rate->getPrice();
+            }
+        }
+        return $data;
+    }
     /**
      * @return mixed
      */

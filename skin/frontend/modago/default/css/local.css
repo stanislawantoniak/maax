@@ -1,4 +1,8 @@
 #payment_form_zolagopayment .left {
     float: left;
-    list-style: none;
+}
+#checkout form #payment_form_zolagopayment {
+    list-style: none outside none;
+    margin: 0;
+    padding: 0;
 }
