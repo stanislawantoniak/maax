@@ -21,7 +21,7 @@
                     <label class="css-label clearfix" for="p_method_<?php echo $_code ?>">
                         <span class="pull-left"><strong><?php echo $this->escapeHtml($this->getMethodTitle($_method)) ?></strong>
                             <br>
-                            Płatne przy odbiorze przesyłki
+                            Payment description here
                             <?php echo $this->getMethodLabelAfterHtml($_method) ?>
                         </span>
                         <img alt="" src="/skin/frontend/modago/default/images/payment_methods/payment_methods.png" class="pull-right flag_pay_method">
@@ -47,7 +47,10 @@
     jQuery('[name="payment[method]"]').click(function () {
         if (jQuery(this).is(':checked')) {
             jQuery('.default_pay .form-group .selected_bank ul').hide();
+            jQuery('.default_pay .form-group').find('.selected_bank ul input[type="radio"]').attr("disabled", "disabled").prop("disabled",true);
+            jQuery(this).parents('.form-group').find('.selected_bank ul input[type="radio"]').attr("disabled", "").prop("disabled",false);
             jQuery(this).parents('.form-group').find('.selected_bank ul').show();
+
         } else {
             jQuery(this).parents('.form-group').find('.selected_bank ul').hide();
         }
