@@ -92,7 +92,7 @@ Mall.validate = {
 
         jQuery.validator.addMethod('validate-telephone', function () {
             return Mall.validate.validators.telephone.apply(this, arguments);
-        }, jQuery.validator.format("Numer telefonu nie jest poprawny"));
+        }, jQuery.validator.format("Numer telefonu musi być dziewięciocyfrowy"));
 
         jQuery.validator.addMethod('validate-emailbackend', function () {
             return Mall.validate.validators.emailbackend.apply(this, arguments);

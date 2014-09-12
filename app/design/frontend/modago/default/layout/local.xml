@@ -724,8 +724,15 @@
             </action>
         </reference>
     </checkout_singlepage_success>
+
     <checkout_guest_success>
-		<update handle="checkout_singlepage_success"/>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/1column.phtml</template>
+            </action>
+        </reference>
     </checkout_guest_success>
+
+
     
 </layout>
