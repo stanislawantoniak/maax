@@ -52,6 +52,7 @@ Mall.validate.validators = {
         }
         return r;
     },
+	
 
     passwordbackend: function(value, elem, params){
         "use strict";

@@ -289,11 +289,6 @@
                             "shipping[street][]": {
                                 required: true
                             },
-                            "shipping[postcode]": {
-                                required: true
-//                                ,
-//                                "postcode": true
-                            },
                             "shipping[city]": {
                                 required: true
                             },

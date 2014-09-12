@@ -81,9 +81,13 @@ Mall.validate = {
     init: function () {
         "use strict";
 
+		jQuery.validator.addMethod('validate-postcode', function () {
+				return Mall.validate.validators.postcode.apply(this, arguments);
+		}, jQuery.validator.format("My error"));
+
         // add customer methods
         jQuery.validator.addMethod("passwordbackend", function (v, e, p) {return Mall.validate.validators.passwordbackend(v,e,p);}, "Hasło musi być przynajmniej 5 literowe");
-        jQuery.validator.addMethod("postcode", function (v,e,p) {return Mall.validate.validators.postcode(v,e,p);}, "Kod pocztowy nie jest poprawny");
+        //jQuery.validator.addMethod("postcode", function (v,e,p) {console.log('works'); return Mall.validate.validators.postcode(v,e,p);}, "Kod pocztowy nie jest poprawny");
         jQuery.validator.addMethod("telephone", function (v,e,p) {return Mall.validate.validators.telephone(v,e,p);}, "Numer telefonu nie jest poprawny");
         jQuery.validator.addMethod("emailbackend", function (v,e,p) {return Mall.validate.validators.emailbackend(v,e,p);}, "Nie ma jeszcze takiego konta");
     },
