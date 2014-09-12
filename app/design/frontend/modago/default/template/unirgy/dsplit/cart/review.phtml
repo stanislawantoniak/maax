@@ -23,7 +23,11 @@ $_v = $this->getVendor();
     <div class="table-footer-group hidden-xs">
         <div class="table-row clearfix">
             <div class="table-cell cell-01 td">
-				<div>Wysyłka kurierem 24 h [dev]</div>
+				<?php if ($shipping = $this->getShippingMethod()): ?>				
+				<div><?php echo $shipping['method_title'];?></div>
+				<?php else: ?>
+				<div>&nbsp;</div>
+				<?php endif; ?>
 				<div>Darmowy zwrot do 30 dni [dev]</div>
             </div>
 
@@ -35,7 +39,11 @@ $_v = $this->getVendor();
                 </div>
             </div>
             <div class="table-cell cell-04 td"><div class="quality_price"><?php echo Mage::helper('core')->formatPrice($this->getSubtotal()) ?></div>
-			<div class="quality_delivery">[dev]<?php echo Mage::helper('core')->formatPrice(9.99) ?></div></div>
+			<?php if ($shipping) : ?>
+			<div class="quality_delivery"><?php echo Mage::helper('core')->formatPrice($shipping['price']) ?></div></div>
+			<?php else: ?>
+			<div class="quality_delivery">&nbsp;</div></div>
+			<?php endif; ?>
             <div class="table-cell cell-05 td"></div>
         </div>
 
