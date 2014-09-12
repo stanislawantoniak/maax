@@ -4,10 +4,7 @@
 ?>
 
 <?php if (empty($methods)): ?>
-
-
         <?php echo $this->__('No Payment Methods') ?>
-
 <?php else:
     foreach ($methods as $_method):
         $_code = $_method->getCode();
@@ -42,6 +39,8 @@
 <?php echo $this->getChildChildHtml('additional'); ?>
 <script type="text/javascript">
     //<![CDATA[
+    jQuery('[name="payment[method]"]:checked').parents('.form-group').find('dd ul').show();
+
     jQuery('[name="payment[method]"]').click(function () {
         if (jQuery(this).is(':checked')) {
             jQuery('#payment-methods .form-group dd ul').hide();
@@ -50,5 +49,6 @@
             jQuery(this).parents('.form-group').find('dd ul').hide();
         }
     })
+
     //]]>
 </script>
