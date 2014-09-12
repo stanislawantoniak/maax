@@ -25,7 +25,20 @@ abstract class Zolago_Checkout_Controller_Abstract
             $this->_redirect('*/*');
             return;
         }
-		//$this->importPostData();
+		
+		try{
+			$this->importPostData();
+		} catch (Exception $ex) {
+			$response = array(
+				"status" => false,
+				"content" => array(
+					"redirect"	=> null,
+					"message"	=> $ex->getMessage()
+				)
+			);
+			return $this->_prepareJsonResponse($response);
+		}
+		
 		parent::saveOrderAction();
 		
 		$helper = Mage::helper('core');
