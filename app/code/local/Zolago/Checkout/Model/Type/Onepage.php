@@ -2,9 +2,11 @@
 class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepage
 {
 	protected $_customerForm;
+
 	
 	/**
      * Initialize quote state to be valid for one page checkout
+	 * Modificaton: do not handle presisten data if not logged in
      *
      * @return Mage_Checkout_Model_Type_Onepage
      */
@@ -12,16 +14,9 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
     {
         $checkout = $this->getCheckout();
         $customerSession = $this->getCustomerSession();
-        if (is_array($checkout->getStepData())) {
-            foreach ($checkout->getStepData() as $step=>$data) {
-                if (!($step==='login' || $customerSession->isLoggedIn() && $step==='billing')) {
-                    $checkout->setStepData($step, 'allow', false);
-                }
-            }
-        }
 
         /**
-         * Reset multishipping flag before any manipulations with quote address
+         * Reset multishipping flag before any manipulations xwith quote address
          * addAddress method for quote object related on this flag
          */
         if ($this->getQuote()->getIsMultiShipping()) {
@@ -82,6 +77,7 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
 	
 	/**
      * Specify checkout method
+	 * Modificaton: removed quote save
      *
      * @param   string $method
      * @return  array
@@ -98,6 +94,7 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
 	
 	/**
      * Specify quote shipping method
+	 * Modificaton: removed quote save
      *
      * @param   string $shippingMethod
      * @return  array
@@ -157,6 +154,7 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
 	
     /**
      * Save checkout shipping address
+	 * Modificaton: removed quote save
      *
      * @param   array $data
      * @param   int $customerAddressId
@@ -363,8 +361,10 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
 	public function saveAccountData(array $accountData) {
 		$quote = $this->getQuote();
 		$customer = $this->getQuote()->getCustomer();
-        $form       = $this->_getCustomerForm();
+		
+        $form = $this->_getCustomerForm();
         $form->setEntity($customer);
+		
 
         // emulate request
         $request = $form->prepareRequest($accountData);
@@ -372,6 +372,8 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
 
         $form->restoreData($data);		
         $data = array();
+		
+		// Add all form attributes - There is no password
         foreach ($form->getAttributes() as $attribute) {
             $code = sprintf('customer_%s', $attribute->getAttributeCode());
             $data[$code] = $customer->getData($attribute->getAttributeCode());
@@ -381,18 +383,89 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
             $groupModel = Mage::getModel('customer/group')->load($data['customer_group_id']);
             $data['customer_tax_class_id'] = $groupModel->getTaxClassId();
         }
-
 		
-        if ($quote->getCheckoutMethod() == self::METHOD_REGISTER) {
+        if ($quote->getCheckoutMethod(true) == self::METHOD_REGISTER) {
+			$websiteId = null;
+			if(Mage::getStoreConfig("customer/account_share/scope")==1){
+				$websiteId = Mage::app()->getWebsite()->getId();
+			}
+			if($this->_customerEmailExists($customer->getEmail(), $websiteId)){
+				throw new Mage_Core_Exception("Email already exists");
+			}
             // save customer encrypted password in quote
+			$password = isset($accountData['password']) ? $accountData['password'] : "";
+			if(empty($password)){
+				throw new Mage_Core_Exception("No password transfered");
+			}
+			// Set customer password
+			$customer->setPassword($password);
             $quote->setPasswordHash($customer->encryptPassword($customer->getPassword()));
-        }
+		}
 		
         $this->getQuote()->addData($data);//->save();
         return $this;
 		
 	}
 	
+	
+    /**
+     * Prepare quote for customer registration and customer order submit
+     *
+     * @return Mage_Checkout_Model_Type_Onepage
+     */
+    protected function _prepareNewCustomerQuote()
+    {
+        $quote      = $this->getQuote();
+        $billing    = $quote->getBillingAddress();
+        $shipping   = $quote->isVirtual() ? null : $quote->getShippingAddress();
+
+		Mage::log("Prepare for new customer");
+		
+		// Customer should be new object - even presitance
+		
+        $customer = Mage::getModel('customer/customer');
+		
+        /* @var $customer Mage_Customer_Model_Customer */
+        $customerBilling = $billing->exportCustomerAddress();
+        $customer->addAddress($customerBilling);
+        $billing->setCustomerAddress($customerBilling);
+        $customerBilling->setIsDefaultBilling(true);
+        if ($shipping && !$shipping->getSameAsBilling()) {
+            $customerShipping = $shipping->exportCustomerAddress();
+            $customer->addAddress($customerShipping);
+            $shipping->setCustomerAddress($customerShipping);
+            $customerShipping->setIsDefaultShipping(true);
+        } else {
+            $customerBilling->setIsDefaultShipping(true);
+        }
+
+        Mage::helper('core')->copyFieldset('checkout_onepage_quote', 'to_customer', $quote, $customer);
+        $customer->setPassword($customer->decryptPassword($quote->getPasswordHash()));
+        $customer->setPasswordHash($customer->hashPassword($customer->getPassword()));
+		Mage::log("Customer with password saved: " . $customer->getPassword());
+        $quote->setCustomer($customer)
+            ->setCustomerId(true);
+    }
+	
+	/**
+     * Override true flag in getter quote method - original method name not logged in...
+     *
+     * @return string
+     */
+    public function getCheckoutMethod()
+    {
+        if ($this->getCustomerSession()->isLoggedIn()) {
+            return self::METHOD_CUSTOMER;
+        }
+        if (!$this->getQuote()->getCheckoutMethod(true)) {
+            if ($this->_helper->isAllowedGuestCheckout($this->getQuote())) {
+                $this->getQuote()->setCheckoutMethod(self::METHOD_GUEST);
+            } else {
+                $this->getQuote()->setCheckoutMethod(self::METHOD_REGISTER);
+            }
+        }
+        return $this->getQuote()->getCheckoutMethod(true);
+    }
 	
 	
 	/**
@@ -407,5 +480,9 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
 				->setIsAjaxRequest(Mage::app()->getRequest()->isAjax());
         }
         return $this->_customerForm;
+    }
+
+    public function customerEmailExists($email, $websiteId = null){
+        return $this->_customerEmailExists($email, $websiteId);
     }
 }

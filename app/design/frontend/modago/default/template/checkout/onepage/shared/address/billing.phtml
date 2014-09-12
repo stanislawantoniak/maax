@@ -42,7 +42,7 @@ $_cutomerAddressId = $_billingAddress->getCustomerAddressId();
         <div class="row">
             <label class="col-sm-3" for="billing_company"><?php echo $this->__("Company"); ?></label>
             <div class="col-lg-7 col-md-5 col-sm-5">
-                <input type="text" value="<?php echo $this->escapeHtml($_billingAddress->getCompany()); ?>" class="form-control firm hint" id="billing_company" title="" name="billing[company]" data-original-title="<?php echo $this->__("Company"); ?>">
+                <input type="text" value="<?php echo $this->escapeHtml($_billingAddress->getCompany()); ?>" class="form-control firm hint" id="billing_company" title="" name="billing[company]" required="true" data-original-title="<?php echo $this->__("Company"); ?>">
             </div>
         </div>
     </div>
@@ -51,7 +51,7 @@ $_cutomerAddressId = $_billingAddress->getCustomerAddressId();
         <div class="row">
             <label class="col-sm-3" for="billing_vat_id"><?php echo $this->__("VAT ID"); ?></label>
             <div class="col-lg-3 col-md-5 col-sm-5">
-                <input type="text" value="<?php echo $this->escapeHtml($_billingAddress->getVatId()); ?>" class="form-control nip hint" name="billing[vat_id]" id="billing_vat_id" title="" data-original-title="<?php echo $this->__("VAT ID"); ?>">
+                <input type="text" value="<?php echo $this->escapeHtml($_billingAddress->getVatId()); ?>" class="form-control nip hint" name="billing[vat_id]" required="true" id="billing_vat_id" title="" data-original-title="<?php echo $this->__("VAT ID"); ?>">
             </div>
         </div>
     </div>
@@ -60,7 +60,7 @@ $_cutomerAddressId = $_billingAddress->getCustomerAddressId();
         <div class="row">
             <label class="col-sm-3" for="billing_street"><?php echo $this->__("Street and number"); ?></label>
             <div class="col-lg-7 col-md-5 col-sm-5">
-                <input type="text" value="<?php echo $this->escapeHtml($street); ?>" class="form-control street" id="billing_street" title="" name="billing[street][]" data-original-title="<?php echo $this->__("Street and number"); ?>">
+                <input type="text" value="<?php echo $this->escapeHtml($street); ?>" class="form-control street" id="billing_street" title="" name="billing[street][]" required="true" data-original-title="<?php echo $this->__("Street and number"); ?>">
             </div>
         </div>
     </div>
@@ -69,7 +69,7 @@ $_cutomerAddressId = $_billingAddress->getCustomerAddressId();
         <div class="row">
             <label class="col-sm-3" for="billing_postcode"><?php echo $this->__("Zip code"); ?></label>
             <div class="col-sm-5">
-                <input type="text" value="<?php echo $this->escapeHtml($_billingAddress->getPostcode()); ?>" class="form-control zipcode" id="billing_postcode" title="" name="billing[postcode]" data-original-title="<?php echo $this->__("Zip code"); ?>">
+                <input type="text" value="<?php echo $this->escapeHtml($_billingAddress->getPostcode()); ?>" class="form-control zipcode" id="billing_postcode" title="" name="billing[postcode]" required="true" data-original-title="<?php echo $this->__("Zip code"); ?>">
             </div>
         </div>
     </div>
@@ -78,7 +78,7 @@ $_cutomerAddressId = $_billingAddress->getCustomerAddressId();
         <div class="row">
             <label class="col-sm-3" for="billing_city"><?php echo $this->__("City"); ?></label>
             <div class="col-sm-5">
-                <input type="text" value="<?php echo $this->escapeHtml($_billingAddress->getCity()); ?>" class="form-control city hint" id="billing_city" title="" name="billing[city]" data-original-title="<?php echo $this->__("City"); ?>">
+                <input type="text" value="<?php echo $this->escapeHtml($_billingAddress->getCity()); ?>" class="form-control city hint" id="billing_city" title="" name="billing[city]" required="true" data-original-title="<?php echo $this->__("City"); ?>">
             </div>
         </div>
     </div>

@@ -25,15 +25,38 @@ abstract class Zolago_Checkout_Controller_Abstract
             $this->_redirect('*/*');
             return;
         }
-		//$this->importPostData();
+		
+		try{
+			$this->importPostData();
+		} catch (Exception $ex) {
+			$response = array(
+				"status" => false,
+				"content" => array(
+					"redirect"	=> null,
+					"message"	=> $ex->getMessage()
+				)
+			);
+			return $this->_prepareJsonResponse($response);
+		}
+		
 		parent::saveOrderAction();
 		
 		$helper = Mage::helper('core');
 		$oldResponse  = $helper->jsonDecode($this->getResponse()->getBody());
 		
 		$success = isset($oldResponse['success']) ? $oldResponse['success'] : false;
-		$redirect = isset($oldResponse['redirect']) ? $oldResponse['redirect'] : 
-			Mage::getUrl("*/*/" . ($success ? "success" : "error"));
+		$logged = Mage::getSingleton('customer/session')->isLoggedIn();
+		
+		if(!isset($oldResponse['redirect'])){
+			$urlArray = array(
+				"*",
+				$logged ? "singlepage" : "guest",
+				$success ? "success" : "error"
+			);
+			$redirect = Mage::getUrl(implode("/", $urlArray));
+		}else{
+			$redirect = $oldResponse['redirect'];
+		}
 		
 		$newResponse = array(
 			"status" => $success,
@@ -239,4 +262,27 @@ abstract class Zolago_Checkout_Controller_Abstract
 	protected function _getCheckoutSession() {
 		 return Mage::getSingleton('checkout/session');
 	}
+
+    /**
+     * Checking does account (email) exist in DB with ajax
+     */
+    public function checkExistingAccountAction(){
+
+        if (!$this->_validateFormKey()) {
+            return;
+        }
+
+        $onepage = $this->getOnepage();
+        $email = $this->getRequest()->getParam("email");
+        $isExits = $onepage->customerEmailExists($email, Mage::app()->getWebsite()->getId());
+        $isExits = $isExits === false ? false : true;
+
+        $response = array(
+            "status"=>$isExits,
+            "content" => ''
+        );
+
+        $this->_prepareJsonResponse($response);
+
+    }
 }

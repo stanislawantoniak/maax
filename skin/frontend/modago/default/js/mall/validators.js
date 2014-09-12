@@ -1,39 +1,48 @@
 Mall.validate.validators = {
 
+    /**
+     *
+     * @param value
+     * @param elem
+     * @param params
+     * param.url (required) example : http://.../ + checkout/singlepage/checkExistingAccount
+     * param.form_key (required)
+     * @returns {boolean}
+     */
     emailbackend: function (value, elem, params) {
         "use strict";
-        var respone;
-        var baseUrl = window.location.protocol+"//"+window.location.host+"/";
 
-        console.log('emailbackend start');
+        if(value.length < 3) { return false;}
+        if(params.form_key === undefined) {return false;}
+        if(!params.url.length) {return false;}
+
+        var respone = {status: false, content: ''};
+
         jQuery.ajax({
-            url: baseUrl + "customer/account/checkExistingAccount",
+            url: params.url,
             data: {
-                formkey: params.formkey,
+                form_key: params.form_key,
                 email: value
             },
             dataType: 'json',
             cache: false,
-            async: false
+            async: false,
+            type: "POST"
         }).done(function(data){
-            console.log('done');
-//            console.log(data);
             respone = data;
         });
 
-//        if(){
-//
-//        }
-
-
-        console.log('emailbackend stop');
-        return true;
+        if(respone.status){
+            return true;
+        } else {
+            return false;
+        }
     },
 
     telephone: function(value, elem, params) {
         "use strict";
 
-        return (/^((\+)?[1-9]{1,2})?([-\s\.])?([0-9\-\ ]{9,12})$/.test(value));
+        return this.optional(elem) || (/^((\+)?[1-9]{1,2})?([-\s\.])?([0-9\-\ ]{9,12})$/.test(value));
     },
 
     postcode: function(value, elem, params){
@@ -44,9 +53,14 @@ Mall.validate.validators = {
         }
         return r;
     },
+	
 
     passwordbackend: function(value, elem, params){
         "use strict";
+        if(!params.hasOwnProperty('minLength')) {
+            params = { minLength: 5};
+        }
+
         if(value.length >= params.minLength || value.length == 0) {
             return true;
         } else {

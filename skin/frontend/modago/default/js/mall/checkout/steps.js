@@ -10,14 +10,12 @@
 		////////////////////////////////////////////////////////////////////////
 		address: {
 
-            _self_form_id: "co-address",
-
 			id: "step-0",
-
 			code: "address",
-
 			doSave: true,
-
+			
+            _self_form_id: "co-address",
+			
 			_invoice_copy_shipping_fields: [
 				"#billing_company",
 				"#billing_street",
@@ -244,83 +242,24 @@
 
             validate: {
                 init: function () {
-					return;
-					
-					// Throes errors!!!!
+//                    return;
+
                     jQuery('#' + Mall.Checkout.steps.address._self_form_id)
                         .validate(Mall.validate.getOptions({
                         ignore: ":hidden",
 
                         rules: {
-                            'account[password]': {
-                                "passwordbackend": {
-                                    minLength: 5
-                                }
-                            },
+
 //                            'agreement[1]': {
 //                                required: true
 //                            },
 //                            'agreement[2]': {
 //                                required: true
 //                            },
-
-                            "account[firstname]": {
-                                required: true
-                            },
-                            "account[lastname]": {
-                                required: true
-                            },
-                            "account[email]": {
-                                required: true,
-                                email: true
-//                                ,
-//                                "emailbackend": true
-                            },
-                            "account[telephone]": {
-                                required: true
-//                                ,
-//                                "telephone" : true
-                            },
-                            "shipping[firstname]": {
-                                required: true
-                            },
-                            "shipping[lastname]": {
-                                required: true
-                            },
-                            "shipping[telephone]": {
-                                required: true
-//                                ,
-//                                "telephone" : true
-                            },
-                            "shipping[street][]": {
-                                required: true
-                            },
-                            "shipping[postcode]": {
-                                required: true
-//                                ,
-//                                "postcode": true
-                            },
-                            "shipping[city]": {
-                                required: true
-                            },
                             "shipping[company]": {
 
-                            },
-                            "billing[company]": {
-                                required: true
-                            },
-                            "billing[vat_id]": {
-                                required: true
-                            },
-                            "billing[street][]": {
-                                required: true
-                            },
-                            "billing[postcode]": {
-                                required: true
-                            },
-                            "billing[city]": {
-                                required: true
                             }
+
                         }
                     }));
                 }
