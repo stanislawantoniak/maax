@@ -20,4 +20,11 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract
 		return "PL";Mage::app()->getStore()->getConfig("general/country/default");
 	}
 	
+	/**
+	 * @return string
+	 */
+	public function getPlaceUrl() {
+		return $this->getUrl("*/*/saveOrder");
+	}
+	
 } 

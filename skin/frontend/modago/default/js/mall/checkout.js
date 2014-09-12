@@ -257,12 +257,56 @@
 	}
 	
 	/**
-	 * @param int step
 	 * @returns Boolean
 	 */
 	Mall.Checkout.prototype.placeOrder = function(){
-		console.log(this.collect());
-		alert("Placing order...");
+		this._savePlaceOrder();
+	}
+	
+	/**
+	 * 
+	 */
+	Mall.Checkout.prototype.beforePlaceOrder = function(xhr){
+		console.log("Before data send");
+	}
+	
+	/**
+	 * @param object response
+	 */
+	Mall.Checkout.prototype.successPlaceOrder = function(response){
+		console.log("Sucess data send", response);
+	}
+	
+	/**
+	 * @param object response
+	 */
+	Mall.Checkout.prototype.errorPlaceOrder = function(response){
+		console.log("Error data send");
+	}
+	
+	/**
+	 * @param object response
+	 */
+	Mall.Checkout.prototype.completePlaceOrder = function(xhr){
+		console.log("After data send");
+	}
+	
+
+	
+	/**
+	 * @returns Deffered
+	 */
+	Mall.Checkout.prototype._savePlaceOrder = function(){
+		var self = this;
+		var url = this.get("placeUrl");
+		return jQuery.ajax(url, {
+			method:		"post",
+			data:		this.collect(),
+			beforeSend:	function(){self.beforePlaceOrder.apply(self, arguments)}, 
+			success:	function(){self.successPlaceOrder.apply(self, arguments)}, 
+			error:		function(){self.errorPlaceOrder.apply(self, arguments)}, 
+			complete:	function(){self.completePlaceOrder.apply(self, arguments)}, 
+		});
 	}
 	
 	/**

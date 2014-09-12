@@ -6,6 +6,7 @@
  */
 $_shippingAddress = $this->getQuote()->getShippingAddress();
 $sameAsBilling = (int) $this->getQuote()->getShippingAddress()->getSameAsBilling();
+$_cutomerAddressId = $_shippingAddress->getCustomerAddressId();
 ?>
 
 <fieldset>
@@ -16,6 +17,7 @@ $sameAsBilling = (int) $this->getQuote()->getShippingAddress()->getSameAsBilling
     <input type="hidden" name="shipping[fax]" value="<?php echo $this->escapeHtml($_shippingAddress->getFax()); ?>">
     <input type="hidden" name="shipping[save_in_address_book]" value="1">
     <input type="hidden" name="shipping[same_as_billing]" value="<?php echo $sameAsBilling; ?>">
+    <input type="hidden" name="shipping_address_id" value="<?php /*echo $_cutomerAddressId;*/ ?>">
     <legend><?php echo $this->__("Shipping address:"); ?></legend>
     <div class="form-group form-checkbox small">
         <input type="checkbox" name="shipping[different_shipping_address]" id="orders_someone_else" class="css-checkbox orders_someone_else" <?php if ($this->getOrderSomeoneElseFlag()) : ?>checked<?php endif; ?>>

@@ -18,6 +18,7 @@
 		var checkout = new Mall.CheckoutLogged();
 		
 		checkout.setProgressObject(jQuery("#step ol"));
+		checkout.set("placeUrl", '<?php echo $this->getPlaceUrl();?>');
 		
 		<?php /* has addresses in address book? */?>
 		checkout.addStep(Mall.Checkout.steps.address);
