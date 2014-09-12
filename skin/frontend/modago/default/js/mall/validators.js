@@ -1,33 +1,41 @@
 Mall.validate.validators = {
 
+    /**
+     *
+     * @param value
+     * @param elem
+     * @param params
+     * param.url (required) example : http://.../ + checkout/singlepage/checkExistingAccount
+     * param.form_key (required)
+     * @returns {boolean}
+     */
     emailbackend: function (value, elem, params) {
         "use strict";
-        var respone;
-        var baseUrl = window.location.protocol+"//"+window.location.host+"/";
+        if(value.length < 3) { return false;}
+        if(params.form_key === undefined) {return false;}
+        if(!params.url.length) {return false;}
 
-        console.log('emailbackend start');
+        var respone = {status: false, content: ''};
+
         jQuery.ajax({
-            url: baseUrl + "customer/account/checkExistingAccount",
+            url: params.url,
             data: {
-                formkey: params.formkey,
+                form_key: params.form_key,
                 email: value
             },
             dataType: 'json',
             cache: false,
-            async: false
+            async: false,
+            type: "POST"
         }).done(function(data){
-            console.log('done');
-//            console.log(data);
             respone = data;
         });
 
-//        if(){
-//
-//        }
-
-
-        console.log('emailbackend stop');
-        return true;
+        if(respone.status){
+            return true;
+        } else {
+            return false;
+        }
     },
 
     telephone: function(value, elem, params) {
