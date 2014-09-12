@@ -724,5 +724,8 @@
             </action>
         </reference>
     </checkout_singlepage_success>
+    <checkout_guest_success>
+		<update handle="checkout_singlepage_success"/>
+    </checkout_guest_success>
     
 </layout>
