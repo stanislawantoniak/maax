@@ -13,7 +13,7 @@
 						<?php $total = 0; ?>
                         <?php foreach($_items as $_item) : ?>
                             <?php echo $this->getItemHtml($_item); ?>
-							<?php $total += $this->helper('checkout')->getPriceInclTax($_item); ?>
+							<?php $total +=  $_item->getData('row_total_incl_tax'); ?>
                         <?php endforeach; ?>
 
 
