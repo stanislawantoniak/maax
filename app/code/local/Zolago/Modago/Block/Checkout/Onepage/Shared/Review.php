@@ -66,6 +66,7 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Review
     public function getItemHtml($item) {
         $block = $this->_getCartBlock('cart');
         $block->setHtmlBlock('udsplit/cart_review');
+        $block->setItemsShippingCost($this->getItemsShippingCost());
         return $block->getItemHtml($item);
     }
     
