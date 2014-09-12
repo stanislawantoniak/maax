@@ -28,7 +28,7 @@
 			_billing_names: [
 				"billing[firstname]",
 				"billing[lastname]",
-				"billing[telephone]",
+				/*"billing[telephone]", - skip telphone - always from account*/
 				"billing[company]",
 				"billing[vat_id]",
 				"billing[street][]",
@@ -208,9 +208,9 @@
 
                 // copy phone
                 telephone = form.find("#account_telephone").val();
+				form.find("#billing_telephone").val(telephone);
                 if (!form.find("#orders_someone_else").is(":checked")) {
                     form.find("#shipping_telephone").val(telephone);
-                    form.find("#billing_telephone").val(telephone);
                 }
 
 				stepData = form.serializeArray();

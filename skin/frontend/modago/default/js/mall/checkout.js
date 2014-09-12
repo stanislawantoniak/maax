@@ -275,6 +275,14 @@
 	 */
 	Mall.Checkout.prototype.successPlaceOrder = function(response){
 		console.log("Sucess data send", response);
+		if(response.status==1){
+			console.log(response.content)
+			if(response.content.redirect){
+				window.location.replace(response.content.redirect);
+			}
+		}else{
+			alert(response.message);
+		}
 	}
 	
 	/**

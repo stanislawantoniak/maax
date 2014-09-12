@@ -27,6 +27,25 @@ abstract class Zolago_Checkout_Controller_Abstract
         }
 		//$this->importPostData();
 		parent::saveOrderAction();
+		
+		$helper = Mage::helper('core');
+		$oldResponse  = $helper->jsonDecode($this->getResponse()->getBody());
+		
+		$success = isset($oldResponse['success']) ? $oldResponse['success'] : false;
+		$redirect = isset($oldResponse['redirect']) ? $oldResponse['redirect'] : 
+			Mage::getUrl("*/*/" . ($success ? "success" : "error"));
+		
+		$newResponse = array(
+			"status" => $success,
+			"content" => array(
+				"redirect"	=> $redirect,
+				"message"	=> isset($oldResponse['error_messages']) ? $oldResponse['error_messages'] : false
+			)
+		);
+				
+		$this->getResponse()->
+				setHeader("content-type", "application/json")->
+				setBody($helper->jsonEncode($newResponse));
 	}
 	
 	/**
@@ -41,7 +60,7 @@ abstract class Zolago_Checkout_Controller_Abstract
 		method:guest
 		 */
 		$method	= $request->getParam("method"); // chekcout method
-		if($method && $method==$this->getOnepage()->getCheckoutMehod()){
+		if($method && $method!=$this->getOnepage()->getCheckoutMehod()){
 			$methodResponse = $onepage->saveCheckoutMethod($method);
 			if(isset($methodResponse['error']) && $methodResponse['error']==1){
 				throw new Mage_Core_Exception($methodResponse['message']);
