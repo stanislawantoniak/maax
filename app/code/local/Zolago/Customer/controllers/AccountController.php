@@ -228,5 +228,5 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
 		}
 		return parent::_loginPostRedirect();
 	}
-   
+
 }
