@@ -16,5 +16,6 @@ class Zolago_Checkout_SinglepageController extends Zolago_Checkout_Controller_Ab
 		// Display checkout page for loged in
 		parent::indexAction();
 	}
-	
+
+
 }
