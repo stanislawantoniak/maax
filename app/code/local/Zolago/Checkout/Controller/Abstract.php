@@ -32,8 +32,18 @@ abstract class Zolago_Checkout_Controller_Abstract
 		$oldResponse  = $helper->jsonDecode($this->getResponse()->getBody());
 		
 		$success = isset($oldResponse['success']) ? $oldResponse['success'] : false;
-		$redirect = isset($oldResponse['redirect']) ? $oldResponse['redirect'] : 
-			Mage::getUrl("*/*/" . ($success ? "success" : "error"));
+		$logged = Mage::getSingleton('customer/session')->isLoggedIn();
+		
+		if(!isset($oldResponse['redirect'])){
+			$urlArray = array(
+				"*",
+				$logged ? "singlepage" : "guest",
+				$success ? "success" : "error"
+			);
+			$redirect = Mage::getUrl(implode("/", $urlArray));
+		}else{
+			$redirect = $oldResponse['redirect'];
+		}
 		
 		$newResponse = array(
 			"status" => $success,
