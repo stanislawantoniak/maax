@@ -33,7 +33,8 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment_Shipping
                     'vendor_id' => $vId,
                     'code' => $rate->getCode(),
                     'carrier_title' => $rate->getData('carrier_title'),
-                    'method_title' => $rate->getData('method_title')
+                    'method_title' => $rate->getData('method_title'),
+                    'cost' => $rate->getPrice()
                 );
 
             }
@@ -41,11 +42,13 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment_Shipping
             unset($rate);
         }
         $methodToFind = array();
-
+        $cost = array();
+//krumo($allMethodsByCode);
         foreach ($allMethodsByCode as $code => $methodDataArr) {
             foreach ($methodDataArr as $methodData) {
                 $vendorId = $methodData['vendor_id'];
                 $methodToFind[$code][$vendorId] = $vendorId;
+                $cost[$code][] = $methodData['cost'];
             }
         }
 
@@ -59,13 +62,17 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment_Shipping
             }
         }
 
-        return (object)array('rates' => $rates, 'allVendorsMethod' => $allVendorsMethod, 'vendors' => $vendors, 'methods' => $methodsByCode);
+        return (object)array(
+            'rates' => $rates,
+            'allVendorsMethod' => $allVendorsMethod,
+            'vendors' => $vendors,
+            'methods' => $methodsByCode,
+            'cost' => $cost
+        );
 
     }
 
     /**
-     * Shipping cost by vendor
-     * [[vendor_1] => cost_1, [vendor_2] => cost_2]
      * @return array
      */
     public function getItemsShippingCost()
@@ -73,6 +80,7 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment_Shipping
         $data = array();
         $qRates = $this->getRates();
 
+        $cost = array();
         foreach ($qRates as $cCode => $cRates) {
             foreach ($cRates as $rate) {
 
@@ -80,10 +88,15 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment_Shipping
                 if (!$vId) {
                     continue;
                 }
-                $data[$vId] = $rate->getPrice();
+                $data[$vId][] = $rate->getPrice();
             }
         }
-        return $data;
+        if (!empty($data)) {
+            foreach ($data as $vId => $dataItem) {
+                $cost[$vId] = array_sum($dataItem);
+            }
+        }
+        return $cost;
     }
     /**
      * @return mixed

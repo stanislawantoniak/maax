@@ -8,9 +8,8 @@ $allVendorsMethod = $items->allVendorsMethod;
 $methods = $items->methods;
 $rates = $items->rates;
 $cost = $this->getItemsShippingCost();
-$cost = array_sum($cost);
-$formattedCost = Mage::helper('core')->currency($cost, true, false);
 
+$cost = $items->cost;
 ?>
 
 
@@ -21,6 +20,12 @@ $formattedCost = Mage::helper('core')->currency($cost, true, false);
     </script>
     <div class="shipping-collect"></div>
 <?php foreach($methods as $method): ?>
+    <?php
+    $formattedCost = '';
+    if (isset($cost[$method['code']])) {
+        $costSum = array_sum($cost[$method['code']]);
+        $formattedCost = Mage::helper('core')->currency($costSum, true, false);
+    }?>
     <div class="panel panel-default panel-color">
         <div class="panel-body">
             <dl class="pull-left">
