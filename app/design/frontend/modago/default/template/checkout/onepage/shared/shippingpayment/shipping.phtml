@@ -1,6 +1,7 @@
 <?php $items = $this->getItems();
-
 $vendors = $items->vendors;
+
+$vendorsJ = Mage::helper('core')->jsonEncode($vendors);
 
 $allVendorsMethod = $items->allVendorsMethod;
 
@@ -11,16 +12,19 @@ $cost = array_sum($cost);
 $formattedCost = Mage::helper('core')->currency($cost, true, false);
 
 ?>
+
+
 <?php if(!empty($rates)): ?>
-<?php foreach($vendors as $vendor): ?>
-    <input type="hidden" value="<?php echo $allVendorsMethod; ?>" name="shipping_method[<?php echo $vendor; ?>]">
-<?php endforeach; ?>
-
-
+<div id="shipping-methods">
+    <script type="text/javascript">
+        var vendors = <?php echo $vendorsJ; ?>;
+    </script>
+    <div class="shipping-collect"></div>
 <?php foreach($methods as $method): ?>
     <div class="panel panel-default panel-color">
         <div class="panel-body">
             <dl class="pull-left">
+                <input type="radio" value="<?php echo $method['code']; ?>" name="shipping">
                 <dt><?php echo $method['carrier_title']?></dt>
                 <dd><?php echo $method['method_title']?></dd>
                 <dd class="separator large">Koszt przesyłki: <strong><?php echo $formattedCost; ?> </strong></dd>
@@ -42,5 +46,6 @@ $formattedCost = Mage::helper('core')->currency($cost, true, false);
         </div>
     </div>
 <?php endif; ?>
+</div>
 
 

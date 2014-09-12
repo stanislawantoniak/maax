@@ -275,6 +275,7 @@
             doSave: true,
 			onPrepare: function(checkoutObject){
 				var self = this;
+
 				this.content.find("form").submit(function(){
 					self.submit();
 					return false;
@@ -284,7 +285,20 @@
 				});
 			},
             collect: function () {
-                return this.content.find("form").serializeArray();
+                var shipping = this.content.find("form input[name=shipping]:checked").val();
+                if (jQuery.type(shipping) !== "undefined") {
+                    var inputs = '';
+                    jQuery.each(vendors, function (i, vendor) {
+                        inputs += '<input type="hidden" name="shipping_method[' + vendor + ']" value="' + shipping + '" />';
+                    })
+                    this.content.find("form .shipping-collect").html(inputs);
+
+                    return this.content.find("form").serializeArray();
+                } else {
+                    alert('Select shipping method');
+                }
+                return false;
+
             }
         },
 		
