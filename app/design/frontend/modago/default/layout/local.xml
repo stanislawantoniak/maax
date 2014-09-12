@@ -723,6 +723,9 @@
                 <template>page/1column.phtml</template>
             </action>
         </reference>
+        <reference name="content">
+            <block type="checkout/onepage_success" name="checkout.success" template="checkout/success.phtml"/>
+        </reference>
     </checkout_singlepage_success>
 
     <checkout_guest_success>
@@ -730,6 +733,9 @@
             <action method="setTemplate">
                 <template>page/1column.phtml</template>
             </action>
+        </reference>
+        <reference name="content">
+            <block type="checkout/onepage_success" name="checkout.success" template="checkout/success.phtml"/>
         </reference>
     </checkout_guest_success>
 
