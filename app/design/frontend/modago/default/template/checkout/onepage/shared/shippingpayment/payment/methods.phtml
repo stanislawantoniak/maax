@@ -9,25 +9,28 @@
     foreach ($methods as $_method):
         $_code = $_method->getCode();
 ?>
-        <div class="panel panel-default" id="payment-methods">
+        <div class="panel panel-default">
         <div class="panel-body">
                 <div class="form-group form-radio">
                     <?php if(!$oneMethod): ?>
-                        <input id="p_method_<?php echo $_code ?>" value="<?php echo $_code ?>" type="radio" name="payment[method]" title="<?php echo $this->escapeHtml($_method->getTitle()) ?>" <?php if($this->getSelectedMethodCode()==$_code): ?> checked="checked"<?php endif; ?> class="radio" />
+                        <input id="p_method_<?php echo $_code ?>" value="<?php echo $_code ?>" type="radio" name="payment[method]" title="<?php echo $this->escapeHtml($_method->getTitle()) ?>" <?php if($this->getSelectedMethodCode()==$_code): ?> checked="checked"<?php endif; ?> class="css-radio" />
                     <?php else: ?>
                         <span class="no-display"><input id="p_method_<?php echo $_code ?>" value="<?php echo $_code ?>" type="radio" name="payment[method]" checked="checked" class="radio" /></span>
                         <?php $oneMethod = $_code; ?>
                     <?php endif; ?>
                     <label class="css-label clearfix" for="p_method_<?php echo $_code ?>">
-                        <span class="pull-left"><strong><?php echo $this->escapeHtml($this->getMethodTitle($_method)) ?></strong><br>
+                        <span class="pull-left"><strong><?php echo $this->escapeHtml($this->getMethodTitle($_method)) ?></strong>
+                            <br>
+                            Płatne przy odbiorze przesyłki
                             <?php echo $this->getMethodLabelAfterHtml($_method) ?>
                         </span>
+                        <img alt="" src="/skin/frontend/modago/default/images/payment_methods/payment_methods.png" class="pull-right flag_pay_method">
                     </label>
-                    <img alt="" src="/skin/frontend/modago/default/images/payment_methods/payment_methods.png" class="pull-right flag_pay_method">
+
                     <?php if ($html = $this->getPaymentMethodFormHtml($_method)): ?>
-                        <dd>
-                            <?php echo $html; ?>
-                        </dd>
+                    <div class="selected_bank">
+                        <?php echo $html; ?>
+                    </div>
                     <?php endif; ?>
                 </div>
         </div>
@@ -39,14 +42,14 @@
 <?php echo $this->getChildChildHtml('additional'); ?>
 <script type="text/javascript">
     //<![CDATA[
-    jQuery('[name="payment[method]"]:checked').parents('.form-group').find('dd ul').show();
+    jQuery('[name="payment[method]"]:checked').parents('.form-group').find('.selected_bank ul').show();
 
     jQuery('[name="payment[method]"]').click(function () {
         if (jQuery(this).is(':checked')) {
-            jQuery('#payment-methods .form-group dd ul').hide();
-            jQuery(this).parents('.form-group').find('dd ul').show();
+            jQuery('.default_pay .form-group .selected_bank ul').hide();
+            jQuery(this).parents('.form-group').find('.selected_bank ul').show();
         } else {
-            jQuery(this).parents('.form-group').find('dd ul').hide();
+            jQuery(this).parents('.form-group').find('.selected_bank ul').hide();
         }
     })
 
