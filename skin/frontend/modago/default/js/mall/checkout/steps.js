@@ -251,7 +251,7 @@
 
                         rules: {
                             'account[password]': {
-                                "password": {
+                                "passwordbackend": {
                                     minLength: 5
                                 }
                             },
