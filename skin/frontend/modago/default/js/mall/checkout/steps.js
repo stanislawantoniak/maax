@@ -10,14 +10,12 @@
 		////////////////////////////////////////////////////////////////////////
 		address: {
 
-            _self_form_id: "co-address",
-
 			id: "step-0",
-
 			code: "address",
-
 			doSave: true,
-
+			
+            _self_form_id: "co-address",
+			
 			_invoice_copy_shipping_fields: [
 				"#billing_company",
 				"#billing_street",
