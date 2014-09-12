@@ -11,6 +11,7 @@ Mall.validate.validators = {
      */
     emailbackend: function (value, elem, params) {
         "use strict";
+
         if(value.length < 3) { return false;}
         if(params.form_key === undefined) {return false;}
         if(!params.url.length) {return false;}
@@ -41,7 +42,7 @@ Mall.validate.validators = {
     telephone: function(value, elem, params) {
         "use strict";
 
-        return (/^((\+)?[1-9]{1,2})?([-\s\.])?([0-9\-\ ]{9,12})$/.test(value));
+        return this.optional(element) || (/^((\+)?[1-9]{1,2})?([-\s\.])?([0-9\-\ ]{9,12})$/.test(value));
     },
 
     postcode: function(value, elem, params){
@@ -56,6 +57,10 @@ Mall.validate.validators = {
 
     passwordbackend: function(value, elem, params){
         "use strict";
+        if(!params.hasOwnProperty('minLength')) {
+            params = { minLength: 5};
+        }
+
         if(value.length >= params.minLength || value.length == 0) {
             return true;
         } else {
