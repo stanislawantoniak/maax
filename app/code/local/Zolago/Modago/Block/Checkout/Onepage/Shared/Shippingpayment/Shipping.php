@@ -10,6 +10,7 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment_Shipping
         $q = Mage::getSingleton('checkout/session')->getQuote();
         $a = $q->getShippingAddress();
         $methods = array();
+        $rates = array();
 
         $details = $a->getUdropshipShippingDetails();
         if ($details) {

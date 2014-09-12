@@ -6,7 +6,7 @@ $allVendorsMethod = $items->allVendorsMethod;
 
 $methods = $items->methods;
 ?>
-
+<?php if(!empty($methods)): ?>
 <?php foreach($vendors as $vendor): ?>
     <input type="hidden" value="<?php echo $allVendorsMethod; ?>" name="shipping_method[<?php echo $vendor; ?>]">
 <?php endforeach; ?>
@@ -21,10 +21,15 @@ $methods = $items->methods;
                 <dd class="separator large">Koszt przesyłki: <strong><?php echo $method['price']?> zł</strong></dd>
             </dl>
             <figure class="logo-courier pull-right">
-                <img alt="" src="skin/frontend/modago/default/images/def-logo-kurier.png">
+                <img alt="" src="/skin/frontend/modago/default/images/def-logo-kurier.png">
             </figure>
         </div>
     </div>
 <?php endforeach; ?>
+
+
+<?php else: ?>
+    <?php echo $this->__('No shipping method available'); ?>
+<?php endif; ?>
 
 
