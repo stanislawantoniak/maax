@@ -5,8 +5,10 @@ $vendors = $items->vendors;
 $allVendorsMethod = $items->allVendorsMethod;
 
 $methods = $items->methods;
+$rates = $items->rates;
+
 ?>
-<?php if(!empty($methods)): ?>
+<?php if(!empty($rates)): ?>
 <?php foreach($vendors as $vendor): ?>
     <input type="hidden" value="<?php echo $allVendorsMethod; ?>" name="shipping_method[<?php echo $vendor; ?>]">
 <?php endforeach; ?>
@@ -29,7 +31,13 @@ $methods = $items->methods;
 
 
 <?php else: ?>
-    <?php echo $this->__('No shipping method available'); ?>
+    <div class="panel panel-default panel-color">
+        <div class="panel-body">
+            <dl class="pull-left">
+                <?php echo $this->__('No delivery method available'); ?>
+            </dl>
+        </div>
+    </div>
 <?php endif; ?>
 
 
