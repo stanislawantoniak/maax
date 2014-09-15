@@ -78,7 +78,7 @@ Mall.validate = {
             jQuery('html, body').animate({
                 scrollTop: jQuery(validator.errorList[0].element).offset().top
                     - Mall.getMallHeaderHeight()
-            }, 1000);
+            }, "slow");
         }
     },
 
