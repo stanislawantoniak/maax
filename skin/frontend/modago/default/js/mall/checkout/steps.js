@@ -43,6 +43,14 @@
                 // add validation to form
                 this.validate.init();
 			},
+			
+			onDisable: function(){
+				jQuery("#step-0-submit").prop("disabled", true);
+			},
+			
+			onEnable: function(){
+				jQuery("#step-0-submit").prop("disabled", false);
+			},
 
             toggleInvoiceData: function (state) {
                 jQuery('#invoice_data').css({

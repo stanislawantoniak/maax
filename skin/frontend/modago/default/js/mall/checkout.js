@@ -120,11 +120,13 @@
 			if(i==self._activeIndex){
 				this.onLeave.apply(this, [self]);
 			}
-			if(i<=stepIndex && !this.enabled){
+			
+			/*if(i<=stepIndex && !this.enabled){
 				self.setEnabled(this);
 			}else if(i>stepIndex && this.enabled){
 				self.setDisabled(this);
-			}
+			}*/
+			
 			this.active = 0;
 			this.content.addClass("hidden");
 		});
@@ -362,7 +364,7 @@
 		
 		var proto = {
 			index: this.getSteps().length,
-			enabled: false,
+			enabled: true,
 			active: false,
 			doSave: false,
 			checkout: self,
@@ -381,11 +383,29 @@
 			onEnter: function(checkoutObject){},
 			// after step leave; this = step
 			onLeave: function(checkoutObject){},
-			// when step is enabled (possible to enter); this = step [DEV]
+			// when step is ready to submit; this = step [DEV]
 			onEnable: function(){},
-			// when step is disabled (inpossible to enter); this = step [DEV]
+			// when step isnt ready to submit; this = step [DEV]
 			onDisable: function(){}	
 		};
+		
+		// Disable action
+		proto.disable = function(){
+			// Is valdidated
+			if(proto.onDisable.apply(self)===false){
+				return;
+			}
+			self.setDisabled(proto);
+		}
+		
+		// Disable action
+		proto.enable = function(){
+			// Is valdidated
+			if(proto.onEnable.apply(self)===false){
+				return;
+			}
+			self.setEnabled(proto);
+		}
 		
 		// Submit action - call from 
 		proto.submit = function(){
@@ -414,6 +434,7 @@
 		
 		// Trigger on prepare
 		proto.onPrepare.apply(proto, [self, config]);
+		proto.content.addClass("enabled");
 		
 		return proto;
 	}

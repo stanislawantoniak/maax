@@ -2,8 +2,28 @@
 class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepage
 {
 	protected $_customerForm;
-
 	
+    /**
+     * Create order based on checkout type. Create customer if necessary.
+     *
+     * @return Zolago_Checkout_Model_Type_Onepage
+     */
+	public function saveOrder() {
+		try{
+			$return = parent::saveOrder();
+			// Update customer data
+			if(Mage::getSingleton('customer/session')->isLoggedIn() && 
+				$this->getQuote()->getCustomerId()){
+				
+				$this->getQuote()->getCustomer()->save();
+			}
+			
+		} catch (Exception $ex) {
+			throw $ex;
+		}
+		
+		return $return;
+	}
 	/**
      * Initialize quote state to be valid for one page checkout
 	 * Modificaton: do not handle presisten data if not logged in
@@ -365,6 +385,23 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
         $form = $this->_getCustomerForm();
         $form->setEntity($customer);
 		
+		// check email exists
+		$websiteId = null;
+		if(Mage::getStoreConfig("customer/account_share/scope")==1){
+			$websiteId = Mage::app()->getWebsite()->getId();
+		}
+		if(isset($accountData['email']) && $this->_customerEmailExists($accountData['email'], $websiteId)){
+			if($this->_customerEmailExists($customer->getEmail(), $websiteId)){
+				throw new Mage_Core_Exception("Email already exists");
+			}
+		}
+		
+		// Cannot change email durgin checout within registered customer
+		if($quote->getCheckoutMethod(true) == self::METHOD_CUSTOMER){
+			if(isset($accountData['email'])){
+				unset($accountData['email']);
+			}
+		}
 
         // emulate request
         $request = $form->prepareRequest($accountData);
@@ -372,6 +409,7 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
 
         $form->restoreData($data);		
         $data = array();
+		
 		
 		// Add all form attributes - There is no password
         foreach ($form->getAttributes() as $attribute) {
@@ -385,13 +423,6 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
         }
 		
         if ($quote->getCheckoutMethod(true) == self::METHOD_REGISTER) {
-			$websiteId = null;
-			if(Mage::getStoreConfig("customer/account_share/scope")==1){
-				$websiteId = Mage::app()->getWebsite()->getId();
-			}
-			if($this->_customerEmailExists($customer->getEmail(), $websiteId)){
-				throw new Mage_Core_Exception("Email already exists");
-			}
             // save customer encrypted password in quote
 			$password = isset($accountData['password']) ? $accountData['password'] : "";
 			if(empty($password)){
