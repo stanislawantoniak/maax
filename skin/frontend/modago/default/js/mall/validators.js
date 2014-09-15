@@ -1,5 +1,10 @@
 Mall.validate.validators = {
 
+
+    email: function (value, elem, params) {
+        return (/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/.test(value));
+    },
+
     /**
      *
      * @param value
@@ -12,13 +17,18 @@ Mall.validate.validators = {
     emailbackend: function (value, elem, params) {
         "use strict";
 
-        if(value.length < 3) { return false;}
+        var respone = {status: false, content: ''},
+            promise;
+
+        if (!this.email(value, elem, params)) {
+            return false;
+        }
+
         if(params.form_key === undefined) {return false;}
         if(!params.url.length) {return false;}
 
-        var respone = {status: false, content: ''};
 
-        jQuery.ajax({
+        promise = jQuery.ajax({
             url: params.url,
             data: {
                 form_key: params.form_key,
@@ -26,17 +36,11 @@ Mall.validate.validators = {
             },
             dataType: 'json',
             cache: false,
-            async: false,
+            async: true,
             type: "POST"
-        }).done(function(data){
-            respone = data;
         });
 
-        if(respone.status){
-            return true;
-        } else {
-            return false;
-        }
+        return promise;
     },
 
     telephone: function(value, elem, params) {
