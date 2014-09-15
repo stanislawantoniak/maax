@@ -62,9 +62,7 @@
 
                 // add validation to form
                 this.validate.init();
-
-                jQuery("#account_email").change(
-                    Mall.Checkout.steps.address.afterEmailValidationAction() );
+                this.enableBillingPostcodeMask();
 			},
 			
 			onDisable: function(){
@@ -74,6 +72,12 @@
 			onEnable: function(){
 				jQuery("#step-0-submit").prop("disabled", false);
 			},
+
+            enableBillingPostcodeMask: function () {
+                jQuery("#billing_postcode").mask("99-999");
+
+                return this;
+            },
 
             /**
              * Toggle visibility state of invoice data form.
