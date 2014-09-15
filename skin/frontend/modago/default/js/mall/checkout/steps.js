@@ -216,7 +216,7 @@
 					stepData = [],
                     telephone;
 
-                if (parseInt(jQuery("#customer_logged_in").val(), 10)) {
+                if (!parseInt(jQuery("#customer_logged_in").val(), 10)) {
                     password = form.find("#account_password").val();
                     // set password confirmation
                     if (password.length > 0) {
