@@ -62,9 +62,7 @@
 
                 // add validation to form
                 this.validate.init();
-
-                jQuery("#account_email").change(
-                    Mall.Checkout.steps.address.afterEmailValidationAction() );
+                this.enableBillingPostcodeMask();
 			},
 			
 			onDisable: function(){
@@ -74,6 +72,12 @@
 			onEnable: function(){
 				jQuery("#step-0-submit").prop("disabled", false);
 			},
+
+            enableBillingPostcodeMask: function () {
+                jQuery("#billing_postcode").mask("99-999");
+
+                return this;
+            },
 
             /**
              * Toggle visibility state of invoice data form.
@@ -410,8 +414,6 @@
                     this.content.find("form .shipping-collect").html(inputs);
 
                     return this.content.find("form").serializeArray();
-                } else {
-                    alert('Select shipping method');
                 }
                 return false;
 
@@ -440,6 +442,15 @@
                                 "payment[method]": {
                                     required: "Please select payment"
                                 }
+                            },
+                            invalidHandler: function (form, validator) {
+                                if (!validator.numberOfInvalids()) {
+                                    return true;
+                                }
+
+                                jQuery('html, body').animate({
+                                    scrollTop: 50
+                                }, "slow");
                             }
                         }));
                 }
