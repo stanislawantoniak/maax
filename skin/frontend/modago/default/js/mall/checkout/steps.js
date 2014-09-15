@@ -253,7 +253,7 @@
 //                            'agreement[1]': {
 //                                required: true
 //                            },
-//                            'agreement[2]': {
+//                            "agreement[2]": {
 //                                required: true
 //                            },
                             "shipping[company]": {
