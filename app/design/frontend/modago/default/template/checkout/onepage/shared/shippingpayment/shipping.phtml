@@ -40,7 +40,24 @@ $cost = $items->cost;
         </div>
     </div>
 <?php endforeach; ?>
-
+    <script type="text/javascript">
+        jQuery('#shipping-methods .panel-color').click(function () {
+            jQuery('#shipping-methods .panel-color').removeClass('selected-shipping');
+            jQuery(this).addClass('selected-shipping');
+            jQuery(this).find('input[name=shipping]')
+                .attr("checked", "checked")
+                .prop("checked", true);
+        })
+        //And auto select the FIRST method, if any checked before for quote
+        var countMethods = jQuery('#shipping-methods .panel-color').size();
+        console.log(countMethods);
+        if(parseInt(countMethods) == 1){
+            jQuery('#shipping-methods .panel-color').addClass('selected-shipping');
+            jQuery('#shipping-methods .panel-color').find('input[name=shipping]')
+                .attr("checked", "checked")
+                .prop("checked", true);
+        }
+    </script>
 
 <?php else: ?>
     <div class="panel panel-default panel-color">
@@ -52,5 +69,6 @@ $cost = $items->cost;
     </div>
 <?php endif; ?>
 </div>
+
 
 
