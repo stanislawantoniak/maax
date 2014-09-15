@@ -412,7 +412,7 @@
 
             validate: {
                 init: function () {
-console.log("Hello");
+
                     jQuery('#' + Mall.Checkout.steps.shippingpayment._self_form_id)
                         .validate(Mall.validate.getOptions({
                             errorLabelContainer: "#containererreurtotal",
@@ -420,8 +420,10 @@ console.log("Hello");
 
                             rules: {
                                 shipping: {
-                                    required: true,
-                                    "payment[method]" : true
+                                    required: true
+                                },
+                                'payment[method]': {
+                                    required: true
                                 }
                             },
                             messages: {
