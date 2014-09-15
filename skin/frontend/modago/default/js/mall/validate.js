@@ -43,6 +43,10 @@ Mall.validate = {
             if (jQuery(element).attr('id') === 'pass') {
                 we -= 14;
             }
+            if (jQuery(element).attr('name') === 'payment[method]') {
+                we += 150;
+            }
+
             jQuery(element).closest("div").removeClass('has-error')
                 .addClass('has-success has-feedback');
             jQuery(element).closest("div").find('.form-ico-checked').remove();
