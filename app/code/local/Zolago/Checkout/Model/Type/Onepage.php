@@ -385,21 +385,21 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
         $form = $this->_getCustomerForm();
         $form->setEntity($customer);
 		
-		// check email exists
-		$websiteId = null;
-		if(Mage::getStoreConfig("customer/account_share/scope")==1){
-			$websiteId = Mage::app()->getWebsite()->getId();
-		}
-		if(isset($accountData['email']) && $this->_customerEmailExists($accountData['email'], $websiteId)){
-			if($this->_customerEmailExists($customer->getEmail(), $websiteId)){
-				throw new Mage_Core_Exception("Email already exists");
-			}
-		}
-		
 		// Cannot change email durgin checout within registered customer
 		if($quote->getCheckoutMethod(true) == self::METHOD_CUSTOMER){
 			if(isset($accountData['email'])){
 				unset($accountData['email']);
+			}
+		}
+		
+		// check email exists if transfered
+		if(isset($accountData['email'])){
+			$websiteId = null;
+			if(Mage::getStoreConfig("customer/account_share/scope")==1){
+				$websiteId = Mage::app()->getWebsite()->getId();
+			}
+			if( $this->_customerEmailExists($accountData['email'], $websiteId)){
+				throw new Mage_Core_Exception("Email already exists");
 			}
 		}
 
