@@ -41,12 +41,6 @@ Mall.validate.validators = {
         });
 
         return promise;
-
-        if(respone.status){
-            return true;
-        } else {
-            return false;
-        }
     },
 
     telephone: function(value, elem, params) {
