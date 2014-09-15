@@ -14,7 +14,7 @@ $cost = $items->cost;
 
 
 <?php if(!empty($rates)): ?>
-<div id="shipping-methods">
+<fieldset id="shipping-methods">
     <script type="text/javascript">
         var vendors = <?php echo $vendorsJ; ?>;
     </script>
@@ -29,7 +29,10 @@ $cost = $items->cost;
     <div class="panel panel-default panel-color">
         <div class="panel-body">
             <dl class="pull-left">
-                <input type="radio" value="<?php echo $method['code']; ?>" name="shipping" required="required">
+                <div style="visibility: hidden; height: 0;">
+                    <input type="radio" value="<?php echo $method['code']; ?>" name="shipping" required="required">
+                </div>
+
                 <dt><?php echo $method['carrier_title']?></dt>
                 <dd><?php echo $method['method_title']?></dd>
                 <dd class="separator large">Koszt przesyłki: <strong><?php echo $formattedCost; ?> </strong></dd>
@@ -68,7 +71,7 @@ $cost = $items->cost;
         </div>
     </div>
 <?php endif; ?>
-</div>
+</fieldset>
 
 
 

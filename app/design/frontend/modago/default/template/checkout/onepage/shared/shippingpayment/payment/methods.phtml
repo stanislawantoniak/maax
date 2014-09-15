@@ -12,6 +12,7 @@
         <div class="panel panel-default">
         <div class="panel-body">
                 <div class="form-group form-radio">
+                    <div>
                     <?php if(!$oneMethod): ?>
                         <input id="p_method_<?php echo $_code ?>" value="<?php echo $_code ?>" type="radio" name="payment[method]" title="<?php echo $this->escapeHtml($_method->getTitle()) ?>" <?php if($this->getSelectedMethodCode()==$_code): ?> checked="checked"<?php endif; ?> class="css-radio" required="required" />
                     <?php else: ?>
@@ -26,6 +27,7 @@
                         </span>
                         <img alt="" src="/skin/frontend/modago/default/images/payment_methods/payment_methods.png" class="pull-right flag_pay_method">
                     </label>
+                        </div>
 
                     <?php if ($html = $this->getPaymentMethodFormHtml($_method)): ?>
                     <div class="selected_bank">
