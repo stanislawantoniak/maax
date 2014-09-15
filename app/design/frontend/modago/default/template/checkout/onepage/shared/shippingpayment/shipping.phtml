@@ -29,7 +29,7 @@ $cost = $items->cost;
     <div class="panel panel-default panel-color">
         <div class="panel-body">
             <dl class="pull-left">
-                <input type="radio" value="<?php echo $method['code']; ?>" name="shipping">
+                <input type="radio" value="<?php echo $method['code']; ?>" name="shipping" required="required">
                 <dt><?php echo $method['carrier_title']?></dt>
                 <dd><?php echo $method['method_title']?></dd>
                 <dd class="separator large">Koszt przesyłki: <strong><?php echo $formattedCost; ?> </strong></dd>
