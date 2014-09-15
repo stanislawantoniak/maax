@@ -25,6 +25,9 @@ Mall.validate = {
             if (jQuery(element).attr('id') === 'pass') {
                 we -= 14;
             }
+            if (jQuery(element).attr('name') === 'payment[method]') {
+                we += 150;
+            }
 
             jQuery(element).closest("div").addClass('has-error has-feedback')
                 .removeClass('has-success');
