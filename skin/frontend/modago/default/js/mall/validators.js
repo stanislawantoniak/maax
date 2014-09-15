@@ -17,17 +17,18 @@ Mall.validate.validators = {
     emailbackend: function (value, elem, params) {
         "use strict";
 
+        var respone = {status: false, content: ''},
+            promise;
+
         if (!this.email(value, elem, params)) {
             return false;
         }
 
-        if(value.length < 3) { return false;}
         if(params.form_key === undefined) {return false;}
         if(!params.url.length) {return false;}
 
-        var respone = {status: false, content: ''};
 
-        jQuery.ajax({
+        promise = jQuery.ajax({
             url: params.url,
             data: {
                 form_key: params.form_key,
@@ -35,11 +36,11 @@ Mall.validate.validators = {
             },
             dataType: 'json',
             cache: false,
-            async: false,
+            async: true,
             type: "POST"
-        }).done(function(data){
-            respone = data;
         });
+
+        return promise;
 
         if(respone.status){
             return true;

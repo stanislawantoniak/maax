@@ -108,24 +108,6 @@ Mall.validate = {
         jQuery.validator.addMethod('email', function () {
             return Mall.validate.validators.email.apply(this, arguments);
         }, jQuery.validator.format(Mall.translate.__("email", "Please enter a valid email address.")));
-
-        jQuery("input[name='account[email]']").change( function() {
-
-            var r = Mall.validate.validators.emailbackend(
-                jQuery("input[name='account[email]']").val(),
-                jQuery("input[name='account[email]']"),
-                {
-                    url: window.location.protocol+"//"+window.location.host + '/checkout/singlepage/checkExistingAccount',
-                    form_key: jQuery("input[name='form_key']").val()
-                }
-            );
-            if(r) {
-                alert(Mall.translate.__("emailbackend-exits", "Typed address email exists on the site. Want to login?"));
-            } else {
-                console.log('Wpisany adres email nie istnieje u nas w serwisie');
-            }
-        });
-
     },
 
     /**
