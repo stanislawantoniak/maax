@@ -386,7 +386,7 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
         $form->setEntity($customer);
 		
 		// Cannot change email durgin checout within registered customer
-		if($quote->getCheckoutMethod(true) == self::METHOD_CUSTOMER){
+		if($this->getCheckoutMethod() == self::METHOD_CUSTOMER){
 			if(isset($accountData['email'])){
 				unset($accountData['email']);
 			}
@@ -473,7 +473,6 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
         Mage::helper('core')->copyFieldset('checkout_onepage_quote', 'to_customer', $quote, $customer);
         $customer->setPassword($customer->decryptPassword($quote->getPasswordHash()));
         $customer->setPasswordHash($customer->hashPassword($customer->getPassword()));
-		Mage::log("Customer with password saved: " . $customer->getPassword());
         $quote->setCustomer($customer)
             ->setCustomerId(true);
     }
