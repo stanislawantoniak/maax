@@ -414,8 +414,6 @@
                     this.content.find("form .shipping-collect").html(inputs);
 
                     return this.content.find("form").serializeArray();
-                } else {
-                    alert('Select shipping method');
                 }
                 return false;
 
@@ -444,6 +442,15 @@
                                 "payment[method]": {
                                     required: "Please select payment"
                                 }
+                            },
+                            invalidHandler: function (form, validator) {
+                                if (!validator.numberOfInvalids()) {
+                                    return true;
+                                }
+
+                                jQuery('html, body').animate({
+                                    scrollTop: 50
+                                }, "slow");
                             }
                         }));
                 }
