@@ -9,13 +9,23 @@
 		// Address step for all cases
 		////////////////////////////////////////////////////////////////////////
 		address: {
-
+            /**
+             * Step id
+             */
 			id: "step-0",
+
 			code: "address",
+
 			doSave: true,
-			
+
+            /**
+             * HTML id of address form
+             */
             _self_form_id: "co-address",
-			
+
+            /**
+             * Which fields copy to invoice from shipping.
+             */
 			_invoice_copy_shipping_fields: [
 				"#billing_company",
 				"#billing_street",
@@ -23,6 +33,9 @@
 				"#billing_city"
 			],
 
+            /**
+             * Which fields are in billing section.
+             */
 			_billing_names: [
 				"billing[firstname]",
 				"billing[lastname]",
@@ -34,6 +47,11 @@
 				"billing[city]"
 			],
 
+            /**
+             * Init this step + validation for form fields.
+             *
+             * @return void
+             */
 			init: function () {
 				this.attachInvoiceCopyShippingDataEvent();
 				this.attachInvoiceEvent();
@@ -44,6 +62,12 @@
                 this.validate.init();
 			},
 
+            /**
+             * Toggle visibility state of invoice data form.
+             *
+             * @param state
+             * @returns {Mall.Checkout.steps}
+             */
             toggleInvoiceData: function (state) {
                 jQuery('#invoice_data').css({
                     display: state ? "block" : "none"
@@ -153,12 +177,14 @@
 					return false;
 				});
 			},
+
 			isPasswordNotEmpty: function(){
 				if(this.content.find("[name='account[password]']").length){
 					return this.content.find("[name='account[password]']").val().length>0;
 				}
 				return false;
 			},
+
 			getBillingFromShipping: function () {
 				var self = this,
 					billingData = [],
@@ -173,6 +199,7 @@
 
 				return billingData;
 			},
+
 			collect: function () {
 				var form = jQuery("#co-address"),
 					password,
@@ -242,25 +269,12 @@
 
             validate: {
                 init: function () {
-//                    return;
 
                     jQuery('#' + Mall.Checkout.steps.address._self_form_id)
                         .validate(Mall.validate.getOptions({
                         ignore: ":hidden",
 
-                        rules: {
-
-//                            'agreement[1]': {
-//                                required: true
-//                            },
-//                            "agreement[2]": {
-//                                required: true
-//                            },
-                            "shipping[company]": {
-
-                            }
-
-                        }
+                        rules: { }
                     }));
                 }
             }
