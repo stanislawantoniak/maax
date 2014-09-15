@@ -727,12 +727,17 @@ class Mage_Checkout_Model_Type_Onepage
             $shipping->setCustomerAddress($customerShipping);
         }
 
+		Mage::log($customer->getDefaultBilling() ." / ". $customer->getDefaultShipping());
+		
         if (isset($customerBilling) && !$customer->getDefaultBilling()) {
+			Mage::log("Setting defult biling");
             $customerBilling->setIsDefaultBilling(true);
         }
         if ($shipping && isset($customerShipping) && !$customer->getDefaultShipping()) {
+			Mage::log("Setting defult shiping 1");
             $customerShipping->setIsDefaultShipping(true);
         } else if (isset($customerBilling) && !$customer->getDefaultShipping()) {
+			Mage::log("Setting defult shiping 2");
             $customerBilling->setIsDefaultShipping(true);
         }
         $quote->setCustomer($customer);
