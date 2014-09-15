@@ -246,6 +246,18 @@
                     form.find("#shipping_telephone").val(telephone);
                 }
 
+                //use_for_shipping
+                if(!form.find('label[for=invoice_data_address]').is(":visible")){ // if is not visible
+                    form.find("[name='billing[use_for_shipping]']").val(1);
+                } else { // is visible
+                    if(form.find('input[name=invoice_data_address]').is(':checked')) { // and checked
+                        form.find("[name='billing[use_for_shipping]']").val(1);
+                    } else {// is not checked
+                        form.find("[name='billing[use_for_shipping]']").val(0);
+                    }
+                }
+
+
 				stepData = form.serializeArray();
 				// fill billing data with shipping
 				if (!this.getIsNeedInvoice()) {
