@@ -440,15 +440,12 @@
                                 }
                             },
                             invalidHandler: function (form, validator) {
-                                "use strict";
-
                                 if (!validator.numberOfInvalids()) {
                                     return true;
                                 }
 
                                 jQuery('html, body').animate({
-                                    scrollTop: jQuery(validator.errorList[0].element).offset().top
-                                        - Mall.getMallHeaderHeight() + 50
+                                    scrollTop: 50
                                 }, "slow");
                             }
                         }));
