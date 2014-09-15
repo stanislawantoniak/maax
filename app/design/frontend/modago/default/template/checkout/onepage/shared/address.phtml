@@ -43,7 +43,7 @@ $_billingAddress = $_quote->getBillingAddress();
 					<div class="row">
 						<label class="col-sm-3" for="account_email"><?php echo $this->__("Email"); ?></label>
 						<div class="col-sm-5">
-							<input type="email" value="<?php echo $this->escapeHtml($_quote->getCustomerEmail()); ?>" <?php if ($this->isCustomerLoggedIn()) : ?>readonly<?php endif; ?> class="form-control email hint email" required="true" id="account_email" title="" name="account[email]" data-original-title="<?php echo $this->__("Email address."); ?>">
+							<input type="email" value="<?php echo $this->escapeHtml($_quote->getCustomerEmail()); ?>" <?php if ($this->isCustomerLoggedIn()) : ?>readonly<?php endif; ?> class="form-control email hint" required="true" id="account_email" title="" name="account[email]" data-original-title="<?php echo $this->__("Email address."); ?>">
 						</div>
 					</div>
 				</div>
@@ -106,5 +106,12 @@ $_billingAddress = $_quote->getBillingAddress();
 		</form>
 	</section>
 
-</div>  
+</div>
+
+<script type="text/javascript">
+    Mall.translate.add("not-correct-postcode", "<?php echo $this->__("Post code is not correct"); ?>");
+    Mall.translate.add("passwordbackend-need-to-have-x-letters", "<?php echo $this->__("Password need to have 5 letters"); ?>");
+    Mall.translate.add("telephone-need-to-have-9-digit", "<?php echo $this->__("telephone-number-need-to-have-9-digit"); ?>");
+    Mall.translate.add("emailbackend-exits", "<?php echo $this->__("Typed address email exists on the site. Want to login?"); ?>");
+</script>
 

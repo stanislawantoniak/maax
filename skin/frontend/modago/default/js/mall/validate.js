@@ -84,19 +84,43 @@ Mall.validate = {
         // add customer methods
 		jQuery.validator.addMethod('validate-postcode', function () {
 				return Mall.validate.validators.postcode.apply(this, arguments);
-		}, jQuery.validator.format("Kod pocztowy nie jest poprawny"));
+		}, jQuery.validator.format(Mall.translate.__("not-correct-postcode", "Post code is not correct")));
 
         jQuery.validator.addMethod('validate-passwordbackend', function () {
             return Mall.validate.validators.passwordbackend.apply(this, arguments);
-        }, jQuery.validator.format("Hasło musi być przynajmniej 5 literowe"));
+        }, jQuery.validator.format(Mall.translate.__("passwordbackend-need-to-have-x-letters", "Password need to have 5 letters")));
 
         jQuery.validator.addMethod('validate-telephone', function () {
             return Mall.validate.validators.telephone.apply(this, arguments);
-        }, jQuery.validator.format("Numer telefonu musi być dziewięciocyfrowy"));
+        }, jQuery.validator.format(Mall.translate.__("telephone-number-need-to-have-9-digit", "Telephone number need to have 9 digit")));
 
         jQuery.validator.addMethod('validate-emailbackend', function () {
             return Mall.validate.validators.emailbackend.apply(this, arguments);
-        }, jQuery.validator.format("Nie ma jeszcze takiego konta"));
+        }, jQuery.validator.format(Mall.translate.__("emailbackend-exits", "Typed address email exists on the site. Want to login?")));
+
+        /*
+        override default jquery validator because it can pass email like : name@host
+         */
+        jQuery.validator.addMethod('email', function () {
+            return Mall.validate.validators.email.apply(this, arguments);
+        }, jQuery.validator.format(Mall.translate.__("email", "Please enter a valid email address.")));
+
+        jQuery("input[name='account[email]']").change( function() {
+
+            var r = Mall.validate.validators.emailbackend(
+                jQuery("input[name='account[email]']").val(),
+                jQuery("input[name='account[email]']"),
+                {
+                    url: window.location.protocol+"//"+window.location.host + '/checkout/singlepage/checkExistingAccount',
+                    form_key: jQuery("input[name='form_key']").val()
+                }
+            );
+            if(r) {
+                alert(Mall.translate.__("emailbackend-exits", "Typed address email exists on the site. Want to login?"));
+            } else {
+                console.log('Wpisany adres email nie istnieje u nas w serwisie');
+            }
+        });
 
     },
 

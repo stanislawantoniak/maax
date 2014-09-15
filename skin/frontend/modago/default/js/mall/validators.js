@@ -1,5 +1,10 @@
 Mall.validate.validators = {
 
+
+    email: function (value, elem, params) {
+        return (/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/.test(value));
+    },
+
     /**
      *
      * @param value
@@ -11,6 +16,10 @@ Mall.validate.validators = {
      */
     emailbackend: function (value, elem, params) {
         "use strict";
+
+        if (!this.email(value, elem, params)) {
+            return false;
+        }
 
         if(value.length < 3) { return false;}
         if(params.form_key === undefined) {return false;}
