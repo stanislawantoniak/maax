@@ -258,7 +258,6 @@
                     }
                 }
 
-
 				stepData = form.serializeArray();
 				// fill billing data with shipping
 				if (!this.getIsNeedInvoice()) {
@@ -292,6 +291,60 @@
                 return parseInt(jQuery("#customer_logged_in").val(), 10);
             },
 
+            afterEmailValidationAction: function () {
+
+                    var promise = Mall.validate.validators.emailbackend(
+                        jQuery("input[name='account[email]']").val(),
+                        jQuery("input[name='account[email]']"),
+                        {
+                            url: Config.url.customer_email_exists,
+                            form_key: jQuery("input[name='form_key']").val()
+                        }
+                        ),
+                        self = this;
+
+                    if (promise.done === undefined
+                        || promise.fail === undefined
+                        || promise.always === undefined) {
+                        return false;
+                    }
+
+                    promise.done(function (data) {
+                        if (data !== undefined && data.status !== undefined) {
+                            if (data.status) {
+                                // email exists
+                                jQuery('#' + Mall.Checkout.steps.address._self_form_id)
+                                    .validate()
+                                    .showErrors({
+                                        "account[email]":
+                                            Mall.translate.__("emailbackend-exits-log-in"
+                                                , "Typed address email exists on the site. Please log in to proceed.")
+                                    });
+
+                                self.validate._checkout.getActiveStep().disable();
+                                jQuery('html, body').animate({
+                                    scrollTop: jQuery(
+                                        jQuery('#'
+                                            + Mall.Checkout.steps.address._self_form_id)
+                                            .validate().errorList[0].element).offset().top
+                                        - Mall.getMallHeaderHeight()
+                                }, "slow");
+
+                                return false;
+                            }
+                        }
+                        self.checkout.getActiveStep().enable();
+
+                        return true;
+                    }).fail(function () {
+                        /**
+                         * @todo implementation. At the moment we do nothing.
+                         */
+                    }).always(function () {
+                        // do nothing or implement
+                    });
+            },
+
             validate: {
                 _checkout: null,
 
@@ -307,57 +360,8 @@
 
                     // validate email address
                     if (!Mall.Checkout.steps.address.getCustomerIsLoggedIn()) {
-                        jQuery("input[name='account[email]']").change( function() {
-
-                            var promise = Mall.validate.validators.emailbackend(
-                                jQuery("input[name='account[email]']").val(),
-                                jQuery("input[name='account[email]']"),
-                                {
-                                    url: Config.url.customer_email_exists,
-                                    form_key: jQuery("input[name='form_key']").val()
-                                }
-                            );
-                            if (promise.done === undefined
-                                || promise.fail === undefined
-                                || promise.always === undefined) {
-                                return false;
-                            }
-
-                            promise.done(function (data) {
-                                if (data !== undefined && data.status !== undefined) {
-                                    if (data.status) {
-                                        // email exists
-                                        jQuery('#' + Mall.Checkout.steps.address._self_form_id)
-                                            .validate()
-                                            .showErrors({
-                                                "account[email]":
-                                                    Mall.translate.__("emailbackend-exits-log-in"
-                            , "Typed address email exists on the site. Please log in to proceed.")
-                                            });
-
-                                        self._checkout.getActiveStep().disable();
-                                        jQuery('html, body').animate({
-                                            scrollTop: jQuery(
-                                                jQuery('#'
-                                                    + Mall.Checkout.steps.address._self_form_id)
-                                                    .validate().errorList[0].element).offset().top
-                                                - Mall.getMallHeaderHeight()
-                                        }, "slow");
-
-                                        return false;
-                                    }
-                                }
-                                self._checkout.getActiveStep().enable();
-
-                                return true;
-                            }).fail(function () {
-                                /**
-                                 * @todo implementation. At the moment we do nothing.
-                                 */
-                            }).always(function () {
-                                // do nothing or implement
-                            });
-                        });
+                        jQuery("input[name='account[email]']").change(
+                            Mall.Checkout.steps.address.afterEmailValidationAction() );
                     }
                 }
             }
