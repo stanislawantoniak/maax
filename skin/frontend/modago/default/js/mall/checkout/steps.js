@@ -372,7 +372,7 @@
                     }));
 
                     // validate email address
-                    jQuery("#account_email").change(
+                    jQuery("#account_email").blur(
                         function () {Mall.Checkout.steps.address.afterEmailValidationAction();});
                 }
             }
