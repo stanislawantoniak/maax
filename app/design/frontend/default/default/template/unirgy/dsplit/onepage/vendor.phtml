@@ -49,6 +49,7 @@ if (!$_error && $this->getErrorsOnly()) {
             <?php foreach ($_shippingRateGroups as $code => $_rates): ?>
                 <optgroup label="<?php echo $this->getCarrierName($code) ?>">
                 <?php foreach ($_rates as $_rate): ?>
+                    <?php Mage::log($_rate->getCode());?>
                 <?php if ($_rate->getErrorMessage()): ?>
                     <?php //echo $_rate->getErrorMessage() ?>
                 <?php else:

@@ -10,4 +10,18 @@ class Zolago_Modago_Block_Checkout_Address extends Zolago_Modago_Block_Checkout_
     {
         return Mage::getUrl("checkout/onepage/saveAddress");
     }
+
+    public function getPreviousStepUrl()
+    {
+        return Mage::getUrl("checkout/cart");
+    }
+
+    /**
+     * @todo Add country id fetching
+     * @return string
+     */
+    public function getCountryId()
+    {
+        return "PL";
+    }
 } 

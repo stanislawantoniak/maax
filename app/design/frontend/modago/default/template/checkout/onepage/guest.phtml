@@ -4,14 +4,10 @@
 			<?php echo $this->getChildHtml("checkout.onepage.guest.address");?>
 		</div>
 		<div class="step step-1 hidden" id="step-1">
-			Step 2
-			<button class="btn" id="step-1-prev">Prev</button>
-			<button class="btn" id="step-1-submit">Next</button>
+            <?php echo $this->getChildHtml("checkout.onepage.guest.shippingpayment");?>
 		</div>
 		<div class="step step-2 hidden" id="step-2">
-			Step 3
-			<button class="btn" id="step-2-prev">Prev</button>
-			<button class="btn" id="step-2-submit">Next</button>
+			<?php echo $this->getChildHtml("checkout.onepage.guest.review");?>
 		</div>
 	</div>
 </div>
@@ -21,43 +17,10 @@
 		var checkout = new Mall.CheckoutGuest();
 		
 		checkout.setProgressObject(jQuery("#step ol"));
-		
-		checkout.addStep({
-			id: "step-0",
-			onPrepare: function(checkoutObject){
-				var self = this;
-				this.content.find("#step-0-submit").click(function(){
-					self.submit();
-				})
-			}
-		});
-		
-		checkout.addStep({
-			id: "step-1",
-			onPrepare: function(checkoutObject){
-				var self = this;
-				this.content.find("#step-1-submit").click(function(){
-					self.submit();
-				})
-				this.content.find("#step-1-prev").click(function(){
-					checkoutObject.prev();
-				})
-			}
-		});
-		
-		checkout.addStep({
-			id: "step-2",
-			onPrepare: function(checkoutObject){
-				var self = this;
-				this.content.find("#step-2-submit").click(function(){
-					// Add validation
-					checkoutObject.placeOrder()
-				});
-				this.content.find("#step-2-prev").click(function(){
-					checkoutObject.prev();
-				})
-			}
-		});
+		checkout.set("placeUrl", '<?php echo $this->getPlaceUrl();?>');
+		checkout.addStep(Mall.Checkout.steps.address);
+		checkout.addStep(Mall.Checkout.steps.shippingpayment);
+		checkout.addStep(Mall.Checkout.steps.review);
 		
 		checkout.init(0);
 	})();

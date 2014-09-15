@@ -108,7 +108,8 @@ $numColumns = sizeof($this->getColumns());
         float:left;
     }
     .grid .table .tbody .cell{
-        height:50px
+        height:50px;
+        position:relative;
     }
     #grid-body .table .tbody .cell:hover,
     #grid-body .table .tbody .cell.active{
@@ -176,6 +177,24 @@ $numColumns = sizeof($this->getColumns());
     }
     .actions label{
         margin-bottom:0;
+    }
+    .images-count{
+        padding:2px;
+        background:#666;
+        color:white;
+        position:absolute;
+        bottom:3px;
+        right:3px;
+    }
+    .status-enabled{
+        color:green;
+    }
+    .status-disabled{
+        color:red;
+    }
+    .sku{
+        font-size:10px;
+        color:#999;
     }
 </style>
 
@@ -327,7 +346,7 @@ $numColumns = sizeof($this->getColumns());
     <?php endif ?>
 
     <?php $columns = $this->getColumns(); ?>
-    <?php $leftColumnsCount = 3; ?>
+    <?php $leftColumnsCount = 6; ?>
     <?php $leftColumns = array_splice($columns, 0, $leftColumnsCount); ?>
     <?php $bodyColumns = $columns; ?>
 
@@ -341,7 +360,9 @@ $numColumns = sizeof($this->getColumns());
 
                                 <?php foreach ($leftColumns as $_column): ?>
 
-                                    <div<?php echo $_column->getHeaderHtmlProperty() ?> <?php echo $this->getColumnWidthStyle($_column); ?>><span class="nobr"><?php echo $_column->getHeaderHtml() ?></span></div>
+                                    <?php if($this->isColumnVisible($_column)): ?>
+                                        <div<?php echo $_column->getHeaderHtmlProperty() ?> <?php echo $this->getColumnWidthStyle($_column); ?>><span class="nobr"><?php echo $_column->getHeaderHtml() ?></span></div>
+                                    <?php endif; ?>
 
                                 <?php endforeach; ?>
 
@@ -351,7 +372,9 @@ $numColumns = sizeof($this->getColumns());
                             <div class="filter clearfix">
                                 <?php $i=0; foreach ($leftColumns as $_column): ?>
 
-                                    <div<?php echo $_column->getHeaderHtmlProperty() ?> <?php echo $this->getColumnWidthStyle($_column); ?>><?php echo $_column->getFilterHtml() ?></div>
+                                    <?php if($this->isColumnVisible($_column)): ?>
+                                        <div<?php echo $_column->getHeaderHtmlProperty() ?> <?php echo $this->getColumnWidthStyle($_column); ?>><?php echo $_column->getFilterHtml() ?></div>
+                                    <?php endif; ?>
 
                                 <?php endforeach; ?>
                             </div>
@@ -365,10 +388,11 @@ $numColumns = sizeof($this->getColumns());
                             <div title="<?php echo $this->getRowUrl($_item) ?>" class="clearfix <?php if ($_class = $this->getRowClass($_item)) echo $_class; ?>" >
                                 <?php foreach ($leftColumns as $_column): ?>
 
-                                    <?php if ($this->shouldRenderCell($_item, $_column)):?>
-                                        <div class="cell <?php echo $_column->getCssProperty() ?> <?php echo $this->getCellClass($_column, $_item);?>" <?php echo $this->getColumnWidthStyle($_column); ?>>
+                                    <?php if ($this->shouldRenderCell($_item, $_column) && $this->isColumnVisible($_column)):?>
+                                        <div class="cell <?php echo $_column->getCssProperty() ?> <?php echo $this->getCellClass($_item, $_column);?>" <?php echo $this->getColumnWidthStyle($_column); ?>>
                                             <div>
                                                 <?php echo (($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?>
+                                                <?php echo $this->getAdditionalHtml($_item, $_column); ?>
                                             </div>
                                         </div>
                                     <?php endif;?>
@@ -395,7 +419,9 @@ $numColumns = sizeof($this->getColumns());
                         <div class="headings clearfix">
                             <?php foreach ($bodyColumns as $_column): ?>
 
-                                <div<?php echo $_column->getHeaderHtmlProperty() ?> <?php echo $this->getColumnWidthStyle($_column); ?>><span class="nobr"><?php echo $_column->getHeaderHtml() ?></span></div>
+                                <?php if($this->isColumnVisible($_column)): ?>
+                                    <div<?php echo $_column->getHeaderHtmlProperty() ?> <?php echo $this->getColumnWidthStyle($_column); ?>><span class="nobr"><?php echo $_column->getHeaderHtml() ?></span></div>
+                                <?php endif; ?>
 
                             <?php endforeach; ?>
                         </div>
@@ -403,7 +429,11 @@ $numColumns = sizeof($this->getColumns());
                     <?php if ($this->getFilterVisibility()): ?>
                         <div class="filter clearfix">
                             <?php foreach ($bodyColumns as $_column): ?>
-                                <div <?php echo $this->getColumnWidthStyle($_column); ?>><?php echo $_column->getFilterHtml() ?></div>
+
+                                <?php if($this->isColumnVisible($_column)): ?>
+                                    <div <?php echo $this->getColumnWidthStyle($_column); ?>><?php echo $_column->getFilterHtml() ?></div>
+                                <?php endif; ?>
+
                             <?php endforeach; ?>
                         </div>
                     <?php endif ?>
@@ -416,9 +446,9 @@ $numColumns = sizeof($this->getColumns());
                         <div title="<?php echo $this->getRowUrl($_item) ?>" class="clearfix <?php if ($_class = $this->getRowClass($_item)) echo $_class; ?>" >
                             <?php foreach($bodyColumns as $_column): ?>
 
-                                <?php if ($this->shouldRenderCell($_item, $_column)):?>
+                                <?php if ($this->shouldRenderCell($_item, $_column)  && $this->isColumnVisible($_column)):?>
                                     <?php $_rowspan = $this->getRowspan($_item, $_column);?>
-                                    <div class="cell <?php echo $_column->getCssProperty() ?> <?php echo $this->getCellClass($_column, $_item);?>" <?php echo $this->getColumnWidthStyle($_column); ?>>
+                                    <div class="cell <?php echo $_column->getCssProperty() ?> <?php echo $this->getCellClass($_item, $_column);?>" <?php echo $this->getColumnWidthStyle($_column); ?>>
                                         <div>
                                             <?php echo (($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?>
                                         </div>
