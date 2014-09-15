@@ -43,7 +43,7 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment_Shipping
         }
         $methodToFind = array();
         $cost = array();
-//krumo($allMethodsByCode);
+
         foreach ($allMethodsByCode as $code => $methodDataArr) {
             foreach ($methodDataArr as $methodData) {
                 $vendorId = $methodData['vendor_id'];

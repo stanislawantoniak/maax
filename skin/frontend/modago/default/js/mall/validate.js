@@ -48,6 +48,9 @@ Mall.validate = {
             jQuery(element).closest("div").find('.form-ico-checked').remove();
             jQuery(element).closest("div").find('#pass-error').remove();
 
+            if (jQuery(element).prop("type") === "checkbox") {
+                we = jQuery(element).closest("div").find("label").innerWidth() - 10;
+            }
             jQuery(element).closest("div").append('<i style="left:'+
                 we+'px; right:auto" class="form-ico-checked form-control-feedback"></i>');
             jQuery(element).closest("div").find('.form-ico-times').remove();
@@ -55,6 +58,7 @@ Mall.validate = {
 
         errorPlacement: function(error, element) {
             if (element.attr("type") === "checkbox" ){
+                jQuery(element).closest("div").find("span.error").remove();
                 jQuery(element).closest('div').append(error);
             } else if (element.attr("type") === "radio") {
                 jQuery(element).closest('div').append(error);
@@ -74,7 +78,7 @@ Mall.validate = {
             jQuery('html, body').animate({
                 scrollTop: jQuery(validator.errorList[0].element).offset().top
                     - Mall.getMallHeaderHeight()
-            }, 1000);
+            }, "slow");
         }
     },
 
