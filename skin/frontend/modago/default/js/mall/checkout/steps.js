@@ -248,7 +248,7 @@
                 }
 
                 //use_for_shipping
-                if(!form.find('label[for=invoice_data_address]').is(":visible")){ // if is not visible
+                if(!form.find("input[name='billing[need_invoice]']").is(":checked")){ // if is not visible
                     form.find("[name='billing[use_for_shipping]']").val(1);
                 } else { // is visible
                     if(form.find('input[name=invoice_data_address]').is(':checked')) { // and checked
@@ -374,23 +374,31 @@
             id: "step-1",
             code: "shippingpayment",
             doSave: true,
+            _self_form_id: "co-shippingpayment",
+            init: function () {
+                this.validate.init();
+            },
 			onPrepare: function(checkoutObject){
+                this.init();
 				var self = this;
 
 				this.content.find("form").submit(function(){
-					self.submit();
+                    if (jQuery(this).valid()) {
+                        self.submit();
+                    }
 					return false;
                 });
 				this.content.find("[id^=step-1-prev]").click(function(){
 					checkoutObject.prev();
 				});
 			},
+
             collect: function () {
                 var shipping = this.content.find("form input[name=shipping]:checked").val();
                 if (jQuery.type(shipping) !== "undefined") {
                     var inputs = '';
                     jQuery.each(vendors, function (i, vendor) {
-                        inputs += '<input type="hidden" name="shipping_method[' + vendor + ']" value="' + shipping + '" />';
+                        inputs += '<input type="hidden" name="shipping_method[' + vendor + ']" value="' + shipping + '" required="required" />';
                     })
                     this.content.find("form .shipping-collect").html(inputs);
 
@@ -400,8 +408,36 @@
                 }
                 return false;
 
+            },
+
+            validate: {
+                init: function () {
+console.log("Hello");
+                    jQuery('#' + Mall.Checkout.steps.shippingpayment._self_form_id)
+                        .validate(Mall.validate.getOptions({
+                            errorLabelContainer: "#containererreurtotal",
+                            ignore: "",
+
+                            rules: {
+                                shipping: {
+                                    required: true,
+                                    "payment[method]" : true
+                                }
+                            },
+                            messages: {
+                                shipping: {
+                                    required: "Please select shipping"
+                                },
+                                "payment[method]": {
+                                    required: "Please select payment"
+                                }
+                            }
+                        }));
+                }
             }
+
         },
+
 		
 		////////////////////////////////////////////////////////////////////////
 		// review step
