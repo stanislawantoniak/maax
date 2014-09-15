@@ -43,11 +43,18 @@ Mall.validate = {
             if (jQuery(element).attr('id') === 'pass') {
                 we -= 14;
             }
+            if (jQuery(element).attr('name') === 'payment[method]') {
+                we += 150;
+            }
+
             jQuery(element).closest("div").removeClass('has-error')
                 .addClass('has-success has-feedback');
             jQuery(element).closest("div").find('.form-ico-checked').remove();
             jQuery(element).closest("div").find('#pass-error').remove();
 
+            if (jQuery(element).prop("type") === "checkbox") {
+                we = jQuery(element).closest("div").find("label").innerWidth() - 10;
+            }
             jQuery(element).closest("div").append('<i style="left:'+
                 we+'px; right:auto" class="form-ico-checked form-control-feedback"></i>');
             jQuery(element).closest("div").find('.form-ico-times').remove();
@@ -55,6 +62,7 @@ Mall.validate = {
 
         errorPlacement: function(error, element) {
             if (element.attr("type") === "checkbox" ){
+                jQuery(element).closest("div").find("span.error").remove();
                 jQuery(element).closest('div').append(error);
             } else if (element.attr("type") === "radio") {
                 jQuery(element).closest('div').append(error);
@@ -74,7 +82,7 @@ Mall.validate = {
             jQuery('html, body').animate({
                 scrollTop: jQuery(validator.errorList[0].element).offset().top
                     - Mall.getMallHeaderHeight()
-            }, 1000);
+            }, "slow");
         }
     },
 
@@ -84,20 +92,26 @@ Mall.validate = {
         // add customer methods
 		jQuery.validator.addMethod('validate-postcode', function () {
 				return Mall.validate.validators.postcode.apply(this, arguments);
-		}, jQuery.validator.format("Kod pocztowy nie jest poprawny"));
+		}, jQuery.validator.format(Mall.translate.__("not-correct-postcode", "Post code is not correct")));
 
         jQuery.validator.addMethod('validate-passwordbackend', function () {
             return Mall.validate.validators.passwordbackend.apply(this, arguments);
-        }, jQuery.validator.format("Hasło musi być przynajmniej 5 literowe"));
+        }, jQuery.validator.format(Mall.translate.__("passwordbackend-need-to-have-x-letters", "Password need to have 5 letters")));
 
         jQuery.validator.addMethod('validate-telephone', function () {
             return Mall.validate.validators.telephone.apply(this, arguments);
-        }, jQuery.validator.format("Numer telefonu musi być dziewięciocyfrowy"));
+        }, jQuery.validator.format(Mall.translate.__("telephone-number-need-to-have-9-digit", "Telephone number need to have 9 digit")));
 
         jQuery.validator.addMethod('validate-emailbackend', function () {
             return Mall.validate.validators.emailbackend.apply(this, arguments);
-        }, jQuery.validator.format("Nie ma jeszcze takiego konta"));
+        }, jQuery.validator.format(Mall.translate.__("emailbackend-exits", "Typed address email exists on the site. Want to login?")));
 
+        /*
+        override default jquery validator because it can pass email like : name@host
+         */
+        jQuery.validator.addMethod('email', function () {
+            return Mall.validate.validators.email.apply(this, arguments);
+        }, jQuery.validator.format(Mall.translate.__("email", "Please enter a valid email address.")));
     },
 
     /**

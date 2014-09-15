@@ -9,13 +9,23 @@
 		// Address step for all cases
 		////////////////////////////////////////////////////////////////////////
 		address: {
-
+            /**
+             * Step id
+             */
 			id: "step-0",
+
 			code: "address",
+
 			doSave: true,
-			
+
+            /**
+             * HTML id of address form
+             */
             _self_form_id: "co-address",
-			
+
+            /**
+             * Which fields copy to invoice from shipping.
+             */
 			_invoice_copy_shipping_fields: [
 				"#billing_company",
 				"#billing_street",
@@ -23,6 +33,9 @@
 				"#billing_city"
 			],
 
+            /**
+             * Which fields are in billing section.
+             */
 			_billing_names: [
 				"billing[firstname]",
 				"billing[lastname]",
@@ -34,16 +47,36 @@
 				"billing[city]"
 			],
 
+            /**
+             * Init this step + validation for form fields.
+             *
+             * @return void
+             */
 			init: function () {
 				this.attachInvoiceCopyShippingDataEvent();
 				this.attachInvoiceEvent();
                 this.setInvoiceDataVisiblity();
                 this.onLoadDisableInvoiceFields();
+                this.validate._checkout = this.checkout;
 
                 // add validation to form
                 this.validate.init();
 			},
+			
+			onDisable: function(){
+				jQuery("#step-0-submit").prop("disabled", true);
+			},
+			
+			onEnable: function(){
+				jQuery("#step-0-submit").prop("disabled", false);
+			},
 
+            /**
+             * Toggle visibility state of invoice data form.
+             *
+             * @param state
+             * @returns {Mall.Checkout.steps}
+             */
             toggleInvoiceData: function (state) {
                 jQuery('#invoice_data').css({
                     display: state ? "block" : "none"
@@ -153,12 +186,14 @@
 					return false;
 				});
 			},
+
 			isPasswordNotEmpty: function(){
 				if(this.content.find("[name='account[password]']").length){
 					return this.content.find("[name='account[password]']").val().length>0;
 				}
 				return false;
 			},
+
 			getBillingFromShipping: function () {
 				var self = this,
 					billingData = [],
@@ -173,6 +208,7 @@
 
 				return billingData;
 			},
+
 			collect: function () {
 				var form = jQuery("#co-address"),
 					password,
@@ -180,7 +216,7 @@
 					stepData = [],
                     telephone;
 
-                if (parseInt(jQuery("#customer_logged_in").val(), 10)) {
+                if (!parseInt(jQuery("#customer_logged_in").val(), 10)) {
                     password = form.find("#account_password").val();
                     // set password confirmation
                     if (password.length > 0) {
@@ -209,6 +245,17 @@
 				form.find("#billing_telephone").val(telephone);
                 if (!form.find("#orders_someone_else").is(":checked")) {
                     form.find("#shipping_telephone").val(telephone);
+                }
+
+                //use_for_shipping
+                if(!form.find("input[name='billing[need_invoice]']").is(":checked")){ // if is not visible
+                    form.find("[name='billing[use_for_shipping]']").val(1);
+                } else { // is visible
+                    if(form.find('input[name=invoice_data_address]').is(':checked')) { // and checked
+                        form.find("[name='billing[use_for_shipping]']").val(1);
+                    } else {// is not checked
+                        form.find("[name='billing[use_for_shipping]']").val(0);
+                    }
                 }
 
 				stepData = form.serializeArray();
@@ -240,28 +287,82 @@
                 return jQuery("#orders_someone_else").is(":checked");
             },
 
+            getCustomerIsLoggedIn: function () {
+                return parseInt(jQuery("#customer_logged_in").val(), 10);
+            },
+
+            afterEmailValidationAction: function () {
+
+                    var promise = Mall.validate.validators.emailbackend(
+                        jQuery("input[name='account[email]']").val(),
+                        jQuery("input[name='account[email]']"),
+                        {
+                            url: Config.url.customer_email_exists,
+                            form_key: jQuery("input[name='form_key']").val()
+                        }
+                        ),
+                        self = this;
+
+                    if (promise.done === undefined
+                        || promise.fail === undefined
+                        || promise.always === undefined) {
+                        return false;
+                    }
+
+                    promise.done(function (data) {
+                        if (data !== undefined && data.status !== undefined) {
+                            if (data.status) {
+                                // email exists
+                                jQuery('#' + Mall.Checkout.steps.address._self_form_id)
+                                    .validate()
+                                    .showErrors({
+                                        "account[email]":
+                                            Mall.translate.__("emailbackend-exits-log-in"
+                                                , "Typed address email exists on the site. Please log in to proceed.")
+                                    });
+
+                                self.validate._checkout.getActiveStep().disable();
+                                jQuery('html, body').animate({
+                                    scrollTop: jQuery(
+                                        jQuery('#'
+                                            + Mall.Checkout.steps.address._self_form_id)
+                                            .validate().errorList[0].element).offset().top
+                                        - Mall.getMallHeaderHeight()
+                                }, "slow");
+
+                                return false;
+                            }
+                        }
+                        self.checkout.getActiveStep().enable();
+
+                        return true;
+                    }).fail(function () {
+                        /**
+                         * @todo implementation. At the moment we do nothing.
+                         */
+                    }).always(function () {
+                        // do nothing or implement
+                    });
+            },
+
             validate: {
+                _checkout: null,
+
                 init: function () {
-//                    return;
+                    var self = this;
 
                     jQuery('#' + Mall.Checkout.steps.address._self_form_id)
                         .validate(Mall.validate.getOptions({
                         ignore: ":hidden",
 
-                        rules: {
-
-//                            'agreement[1]': {
-//                                required: true
-//                            },
-//                            'agreement[2]': {
-//                                required: true
-//                            },
-                            "shipping[company]": {
-
-                            }
-
-                        }
+                        rules: { }
                     }));
+
+                    // validate email address
+                    if (!Mall.Checkout.steps.address.getCustomerIsLoggedIn()) {
+                        jQuery("input[name='account[email]']").change(
+                            Mall.Checkout.steps.address.afterEmailValidationAction() );
+                    }
                 }
             }
 		},
@@ -273,20 +374,72 @@
             id: "step-1",
             code: "shippingpayment",
             doSave: true,
+            _self_form_id: "co-shippingpayment",
+            init: function () {
+                this.validate.init();
+            },
 			onPrepare: function(checkoutObject){
+                this.init();
 				var self = this;
+
 				this.content.find("form").submit(function(){
-					self.submit();
+                    if (jQuery(this).valid()) {
+                        self.submit();
+                    }
 					return false;
                 });
 				this.content.find("[id^=step-1-prev]").click(function(){
 					checkoutObject.prev();
 				});
 			},
+
             collect: function () {
-                return this.content.find("form").serializeArray();
+                var shipping = this.content.find("form input[name=shipping]:checked").val();
+                if (jQuery.type(shipping) !== "undefined") {
+                    var inputs = '';
+                    jQuery.each(vendors, function (i, vendor) {
+                        inputs += '<input type="hidden" name="shipping_method[' + vendor + ']" value="' + shipping + '" required="required" />';
+                    })
+                    this.content.find("form .shipping-collect").html(inputs);
+
+                    return this.content.find("form").serializeArray();
+                } else {
+                    alert('Select shipping method');
+                }
+                return false;
+
+            },
+
+            validate: {
+                init: function () {
+
+                    jQuery('#' + Mall.Checkout.steps.shippingpayment._self_form_id)
+                        .validate(Mall.validate.getOptions({
+                            errorLabelContainer: "#containererreurtotal",
+                            ignore: "",
+
+                            rules: {
+                                shipping: {
+                                    required: true
+                                },
+                                'payment[method]': {
+                                    required: true
+                                }
+                            },
+                            messages: {
+                                shipping: {
+                                    required: "Please select shipping"
+                                },
+                                "payment[method]": {
+                                    required: "Please select payment"
+                                }
+                            }
+                        }));
+                }
             }
+
         },
+
 		
 		////////////////////////////////////////////////////////////////////////
 		// review step

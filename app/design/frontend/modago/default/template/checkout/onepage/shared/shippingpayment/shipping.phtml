@@ -1,26 +1,38 @@
 <?php $items = $this->getItems();
-
 $vendors = $items->vendors;
+
+$vendorsJ = Mage::helper('core')->jsonEncode($vendors);
 
 $allVendorsMethod = $items->allVendorsMethod;
 
 $methods = $items->methods;
 $rates = $items->rates;
 $cost = $this->getItemsShippingCost();
-$cost = array_sum($cost);
-$formattedCost = Mage::helper('core')->currency($cost, true, false);
 
+$cost = $items->cost;
 ?>
+
+
 <?php if(!empty($rates)): ?>
-<?php foreach($vendors as $vendor): ?>
-    <input type="hidden" value="<?php echo $allVendorsMethod; ?>" name="shipping_method[<?php echo $vendor; ?>]">
-<?php endforeach; ?>
-
-
+<fieldset id="shipping-methods">
+    <script type="text/javascript">
+        var vendors = <?php echo $vendorsJ; ?>;
+    </script>
+    <div class="shipping-collect"></div>
 <?php foreach($methods as $method): ?>
+    <?php
+    $formattedCost = '';
+    if (isset($cost[$method['code']])) {
+        $costSum = array_sum($cost[$method['code']]);
+        $formattedCost = Mage::helper('core')->currency($costSum, true, false);
+    }?>
     <div class="panel panel-default panel-color">
         <div class="panel-body">
             <dl class="pull-left">
+                <div style="visibility: hidden; height: 0;">
+                    <input type="radio" value="<?php echo $method['code']; ?>" name="shipping" required="required">
+                </div>
+
                 <dt><?php echo $method['carrier_title']?></dt>
                 <dd><?php echo $method['method_title']?></dd>
                 <dd class="separator large">Koszt przesyłki: <strong><?php echo $formattedCost; ?> </strong></dd>
@@ -31,7 +43,23 @@ $formattedCost = Mage::helper('core')->currency($cost, true, false);
         </div>
     </div>
 <?php endforeach; ?>
-
+    <script type="text/javascript">
+        jQuery('#shipping-methods .panel-color').click(function () {
+            jQuery('#shipping-methods .panel-color').removeClass('selected-shipping');
+            jQuery(this).addClass('selected-shipping');
+            jQuery(this).find('input[name=shipping]')
+                .attr("checked", "checked")
+                .prop("checked", true);
+        })
+        //And auto select the FIRST method, if any checked before for quote
+        var countMethods = jQuery('#shipping-methods .panel-color').size();
+        if(parseInt(countMethods) == 1){
+            jQuery('#shipping-methods .panel-color').addClass('selected-shipping');
+            jQuery('#shipping-methods .panel-color').find('input[name=shipping]')
+                .attr("checked", "checked")
+                .prop("checked", true);
+        }
+    </script>
 
 <?php else: ?>
     <div class="panel panel-default panel-color">
@@ -42,5 +70,7 @@ $formattedCost = Mage::helper('core')->currency($cost, true, false);
         </div>
     </div>
 <?php endif; ?>
+</fieldset>
+
 
 
