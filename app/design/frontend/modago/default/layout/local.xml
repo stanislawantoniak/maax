@@ -684,7 +684,7 @@
 		<reference name="content">
 			<!-- Remove previous blocks -->
 			<block type="zolagomodago/checkout_onepage_logged" name="checkout.onepage" template="checkout/onepage/logged.phtml">
-				<block type="core/template" name="checkout.onepage.logged.address" template="checkout/onepage/logged/addressbook.phtml"/>
+				<block type="zolagomodago/checkout_onepage_logged_addressbook" name="checkout.onepage.logged.addressbook" template="checkout/onepage/logged/addressbook.phtml"/>
                 <block type="zolagomodago/checkout_onepage_shared_address" name="checkout.onepage.logged.address" template="checkout/onepage/shared/address.phtml">
                     <block type="zolagomodago/checkout_onepage_shared_address_shipping" as="shipping" name="checkout.onepage.logged.address.shipping" template="checkout/onepage/shared/address/shipping.phtml"/>
                     <block type="zolagomodago/checkout_onepage_shared_address_billing" as="billing" name="checkout.onepage.logged.address.billing" template="checkout/onepage/shared/address/billing.phtml"/>

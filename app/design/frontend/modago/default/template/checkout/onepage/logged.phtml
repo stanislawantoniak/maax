@@ -2,7 +2,11 @@
 <div id="content" class="container-fluid">
 	<div id="checkout" class="row">
 		<div class="step step-0 hidden" id="step-0">
+			<?php if($this->customerHasAddresses()):?>
+			<?php echo $this->getChildHtml("checkout.onepage.logged.addressbook");?>
+			<?php else:?>
 			<?php echo $this->getChildHtml("checkout.onepage.logged.address");?>
+			<?php endif?>
 		</div>
 		<div class="step step-1 hidden" id="step-1">
             <?php echo $this->getChildHtml("checkout.onepage.logged.shippingpayment");?>
@@ -20,8 +24,11 @@
 		checkout.setProgressObject(jQuery("#step ol"));
 		checkout.set("placeUrl", '<?php echo $this->getPlaceUrl();?>');
 		
-		<?php /* has addresses in address book? */?>
+		<?php if($this->customerHasAddresses()):?>
+		checkout.addStep(Mall.Checkout.steps.addressbook);
+		<?php else:?>
 		checkout.addStep(Mall.Checkout.steps.address);
+		<?php endif?>
 		checkout.addStep(Mall.Checkout.steps.shippingpayment);
 		checkout.addStep(Mall.Checkout.steps.review);
 		

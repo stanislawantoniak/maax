@@ -6,16 +6,29 @@
     "use strict";
     Mall.Checkout.steps = {
 		////////////////////////////////////////////////////////////////////////
+		// Addressbook
+		////////////////////////////////////////////////////////////////////////
+		addressbook: {
+			id: "step-0",
+			code: "addressbook",
+			doSave: true,
+			onPrepare: function(){
+				var self = this;
+				this.content.find("form").submit(function(){
+                    if (jQuery(this).valid()) {
+                        self.submit();
+                    }
+					return false;
+				});
+			}
+		},
+		////////////////////////////////////////////////////////////////////////
 		// Address step for all cases
 		////////////////////////////////////////////////////////////////////////
 		address: {
-            /**
-             * Step id
-             */
+			
 			id: "step-0",
-
 			code: "address",
-
 			doSave: true,
 
             /**
