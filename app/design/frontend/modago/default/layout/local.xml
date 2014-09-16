@@ -593,7 +593,7 @@
         <reference name="head">
             <action method="addItem">
                 <type>skin_js</type>
-                <script>js/mall/customer.js</script>
+                <script>js/mall/account.js</script>
             </action>
         </reference>
     </zolago_modago_customer_handle>
@@ -642,6 +642,18 @@
 			<action method="addItem">
 			   <type>skin_js</type>
 			   <script>js/mall/checkout/steps.js</script>
+		   </action>
+			<action method="addItem">
+			   <type>skin_js</type>
+			   <script>js/mall/customer.js</script>
+		   </action>
+			<action method="addItem">
+			   <type>skin_js</type>
+			   <script>js/mall/customer/AddressBook.js</script>
+		   </action>
+			<action method="addItem">
+			   <type>skin_js</type>
+			   <script>js/mall/customer/Address.js</script>
 		   </action>
 		</reference>
 		<reference name="header">
