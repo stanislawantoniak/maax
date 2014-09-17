@@ -164,7 +164,8 @@
                 || id === this.getDefaultShipping()
                 || (this.getSelectedBilling() !== null && id === this.getSelectedBilling().getId())
                 || (this.getSelectedShipping() !== null
-                    && id === this.getSelectedShipping().getId())) {
+                    && id === this.getSelectedShipping().getId())
+                || this.getAddressBook().length < 2) {
                 return false;
             }
 
