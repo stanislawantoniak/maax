@@ -12,9 +12,12 @@
 			id: "step-0",
 			code: "addressbook",
 			doSave: true,
-			selectedTemplate: jQuery("#selected-address-template").html(),
-			normalTemplate: jQuery("#normal-address-template").html(),
-			
+			getSelectedTemplate: function(){
+				return jQuery("#selected-address-template").html();
+			},
+			getNormalTemplate: function(){
+				return jQuery("#normal-address-template").html();
+			},
 			setAddressBook: function(addressBook){
 				this._addressBook = addressBook;
 				return this;
@@ -23,17 +26,15 @@
 				return this._addressBook;
 			},
 			renderSelectedAddress: function(type){
-				var template = this.selectedTemplate,
+				var template = this.getSelectedTemplate(),
 					addressBook = this.getAddressBook(),
 					target = jQuery(".current-addres."+type, this.content),
 					addressObject = addressBook.getSelected(type) || 
 						addressBook.getDefault(type) ||
 						addressBook.getAddressBook()[0];
 				
-				console.log(template);
-				
 				if(addressObject){
-					target.html("TAK");
+					target.html(Mall.replace(template, addressObject.getData()));
 				}else{
 					target.html(Mall.translate("No addresses"));
 				}	
