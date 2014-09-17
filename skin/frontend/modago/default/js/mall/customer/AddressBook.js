@@ -500,14 +500,12 @@
          * @returns {?jQuery.Deffered}
          */
         saveDefault: function (type) {
-            var id      = this.getDefault(type),
-                address,
+            var address = this.getDefault(type),
                 deffered,
                 self    = this;
-            if (id === null) {
+            if (address === null) {
                 return null;
             }
-            address = this.get(id);
             this.beforeSaveDefault(address);
             deffered = address.save();
             deffered.done(function () {
