@@ -248,6 +248,10 @@
         },
 
         setSelectedShipping: function (address) {
+            if (!isNaN(parseInt(address, 10))) {
+                address = this.get(address);
+            }
+
             this.beforeSelectShipping(address);
             jQuery.each(this.getAddressBook(), function (idx, item) {
                 if (item.getId() !== address.getId()) {
@@ -274,6 +278,10 @@
         },
 
         setSelectedBilling: function (address) {
+            if (!isNaN(parseInt(address, 10))) {
+                address = this.get(address);
+            }
+
             this.beforeSelectBilling(address);
             jQuery.each(this.getAddressBook(), function (idx, item) {
                 if (item.getId() !== address.getId()) {
