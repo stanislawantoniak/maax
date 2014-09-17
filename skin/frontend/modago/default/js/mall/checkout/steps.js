@@ -12,6 +12,13 @@
 			id: "step-0",
 			code: "addressbook",
 			doSave: true,
+			setAddressBook: function(addressBook){
+				this._addressBook = addressBook;
+				return this;
+			},
+			getAddressBook: function(){
+				return this._addressBook;
+			},
 			onPrepare: function(){
 				var self = this;
 				this.content.find("form").submit(function(){
@@ -20,7 +27,8 @@
                     }
 					return false;
 				});
-			}
+			},
+			
 		},
 		////////////////////////////////////////////////////////////////////////
 		// Address step for all cases

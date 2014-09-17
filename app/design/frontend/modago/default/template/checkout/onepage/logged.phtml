@@ -1,4 +1,5 @@
 <?php /* @var $this Zolago_Modago_Block_Checkout_Onepage_Abstract */ ?>
+<?php $_customer = $this->getCustomer();?>
 <div id="content" class="container-fluid">
 	<div id="checkout" class="row">
 		<div class="step step-0 hidden" id="step-0">
@@ -25,6 +26,14 @@
 		checkout.set("placeUrl", '<?php echo $this->getPlaceUrl();?>');
 		
 		<?php if($this->customerHasAddresses()):?>
+		var addressBook = new Mall.customer.AddressBook();
+		
+		addressBook.setAddressBook(<?php echo $this->getCustomerAddressesJson(); ?>);
+		addressBook.setDefaultShipping(<?php echo $this->asJson($_customer->getDefaultShipping())?>);
+		addressBook.setDefaultBilling(<?php echo $this->asJson($_customer->getDefaultBilling())?>);
+			
+		Mall.Checkout.steps.addressbook.setAddressBook(addressBook);
+			
 		checkout.addStep(Mall.Checkout.steps.addressbook);
 		<?php else:?>
 		checkout.addStep(Mall.Checkout.steps.address);

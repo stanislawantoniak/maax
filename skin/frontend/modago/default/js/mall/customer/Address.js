@@ -99,20 +99,6 @@
             return this;
         },
 
-        setDefaultShipping: function () {
-            this.setData("is_default_shipping", true);
-            this.save();
-
-            return this;
-        },
-
-        setDefaultBilling: function () {
-            this.setData("is_default_billing", true);
-            this.save();
-
-            return this;
-        },
-
         getIsSelectedShippping: function () {
             return Boolean(this.getData("is_selected_shipping"));
         },
