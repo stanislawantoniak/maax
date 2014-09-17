@@ -78,8 +78,9 @@
             });
 
             if (this.getIsObjectNew()) {
-                deffered = deffered.done(function (data) {
+                deffered.done(function (data) {
                     if (Boolean(data.status) === true) {
+                        console.log(self);
                         self.setData(data.content);
                         self.setIsObjectNew(false);
                     }

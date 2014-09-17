@@ -138,14 +138,19 @@
             var address,
                 deffered,
                 self = this;
+
             // check if object exists
-            if (! this.getIsAddressExists(obj[this.ENTITY_ID_KEY])) {
+            if (! obj instanceof Mall.customer.Address && ! this.getIsAddressExists(obj[this.ENTITY_ID_KEY])) {
                 return [null, null];
             }
 
-            address = this.get(obj[this.ENTITY_ID_KEY]);
+            address = obj instanceof Mall.customer.Address ? obj : this.get(obj[this.ENTITY_ID_KEY]);
             this.beforeEdit.call(this, address);
-            deffered = address.setData(obj).save();
+            if (! obj instanceof Mall.customer.Address) {
+                address.setData(obj);
+            }
+
+            deffered = address.save();
             deffered.always(function () {
                 self.afterEdit.call(self, deffered, address);
             });
@@ -167,11 +172,17 @@
         },
 
         save: function (obj) {
-            var id = obj[this.ENTITY_ID_KEY] === undefined ? null : obj[this.ENTITY_ID_KEY],
+            var id,
                 deffered,
                 address,
                 _result,
                 self = this;
+
+            if (obj instanceof Mall.customer.Address) {
+                id = obj.getId();
+            } else if (obj instanceof Object) {
+                id = obj[this.ENTITY_ID_KEY] === undefined ? null : obj[this.ENTITY_ID_KEY];
+            }
 
             this.beforeSave.call(this, obj);
             if (id) {
