@@ -708,6 +708,7 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 			if(!is_array($attributeVal)){
 				$attributeValFacets[] = trim($attributeVal);
 			}else{
+				//array_walk($attributeVal, "trim");
 				$attributeValFacets = array_merge($attributeValFacets, $attributeVal);
 			}
 			
