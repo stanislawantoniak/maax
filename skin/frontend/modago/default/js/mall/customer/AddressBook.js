@@ -11,6 +11,9 @@
 
         this._customer = null;
 
+		this._default_billing = null;
+		this._default_shipping = null;
+
         this.ENTITY_ID_KEY = "entity_id";
     };
 
@@ -32,8 +35,8 @@
         setAddressBook: function (addresses) {
 			var self = this;
 			jQuery.each(addresses, function(){
-				self._book.push(new Mall.customer.Address(this))
-			})
+				self._book.push(new Mall.customer.Address(this));
+			});
             return this;
         },
 
@@ -132,7 +135,8 @@
 
         _edit: function (obj) {
             var address,
-                deffered;
+                deffered,
+                self = this;
             // check if object exists
             if (! this.getIsAddressExists(obj[this.ENTITY_ID_KEY])) {
                 return [null, null];
@@ -141,15 +145,22 @@
             address = this.get(obj[this.ENTITY_ID_KEY]);
             this.beforeEdit(address);
             deffered = address.setData(obj).save();
-            deffered.done(function (done) {
-
+            deffered.always(function () {
+                self.afterEdit(deffered, address);
             });
 
             return [deffered, address];
         },
 
         isRemoveable: function (id) {
-            // @todo implement
+
+            if (id === this.getDefaultBilling()
+                || id === this.getDefaultShipping()
+                || (this.getSelectedBilling() !== null && id === this.getSelectedBilling().getId())
+                || (this.getSelectedShipping() !== null
+                    && id === this.getSelectedShipping().getId())) {
+                return false;
+            }
 
             return true;
         },
@@ -181,52 +192,47 @@
         },
 
 		_setDefault: function(address, type){
-			if(typeof address == "object"){
+			if(typeof address === "object" && address){
 				address = address.getId();
 			}
-           this["_default" + type] = address;
-		   return this;
+            this["_default_" + type] = address;
+
+            return this;
 		},
 		
 		_getDefault: function(type){
-			if(this["_default" + type]){
-				return this.get(this["_default" + type]);
+			if(this["_default_" + type]){
+				return this.get(this["_default_" + type]);
 			}
 			return null;
 		},
 		
         setDefaultShipping: function (address) {
-			return this._setDefault(address, "shipping");
+            var id;
+            this.beforeDefaultShipping(address);
+			id = this._setDefault(address, "shipping");
+            this.afterDefaultShipping(address);
+
+            return id;
         },
 		
         setDefaultBilling: function (address) {
-			return this._setDefault(address, "billing");
+            var id;
+
+            this.beforeDefaultBilling(address);
+			id = this._setDefault(address, "billing");
+            this.afterDefaultBilling(address);
+
+            return id;
         },
-		
-		
-		
 
         getDefaultBilling: function () {
-           return this._getDefault("billing")
+           return this._getDefault("billing");
         },
 		
         getDefaultShipping: function () {
-           return this._getDefault("shipping")
+           return this._getDefault("shipping");
         },
-
-		/*
-        getDefaultBilling: function () {
-            var defaultBilling = null;
-            jQuery.each(this.getAddressBook(), function (idx, item) {
-                if (item.getIsDefaultBilling()) {
-                    defaultBilling = item;
-                    return true;
-                }
-            });
-
-            return defaultBilling;
-        },
-		*/
 
         getSelectedShipping: function () {
             var selectedShipping = null;
@@ -239,8 +245,23 @@
 
             return selectedShipping;
         },
+
         setSelectedShipping: function (address) {
-            this.get(address.getId()).setSelectedShipping();
+            if (!isNaN(parseInt(address, 10))) {
+                address = this.get(address);
+            }
+
+            this.beforeSelectShipping(address);
+            jQuery.each(this.getAddressBook(), function (idx, item) {
+                if (item.getId() !== address.getId()) {
+                    item.setUnselectShipping();
+                }
+            });
+
+            address.setSelectedShipping();
+            this.afterSelectShipping(address);
+
+            return address;
         },
 
         getSelectedBilling: function () {
@@ -256,75 +277,103 @@
         },
 
         setSelectedBilling: function (address) {
-            this.get(address.getId()).setSelectedBilling();
+            if (!isNaN(parseInt(address, 10))) {
+                address = this.get(address);
+            }
+
+            this.beforeSelectBilling(address);
+            jQuery.each(this.getAddressBook(), function (idx, item) {
+                if (item.getId() !== address.getId()) {
+                    item.setUnselectBilling();
+                }
+            });
+            address.setSelectedBilling();
+            this.afterSelectBilling(address);
+
+            return address;
+        },
+
+        getSelected: function (type) {
+            var address = null;
+            switch (type) {
+                case "billing" :
+                    address = this.getSelectedBilling();
+                    break;
+
+                case "shipping" :
+                    address = this.getSelectedShipping();
+                    break;
+
+                default:
+                    address = this.getSelectedShipping();
+                    break;
+            }
+
+            return address;
         },
 
         beforeAdd: function (address) {
-            console.log("before add");
-            console.log(arguments);
+            return this;
         },
 
         afterAdd: function (deffered, address) {
-            console.log("after add");
-            console.log(arguments);
+            return this;
         },
 
         beforeEdit: function (address) {
-
+            return this;
         },
 
         afterEdit: function (deffered, address) {
-
+            return this;
         },
 
         beforeSave: function (address) {
-            console.log("before save");
-            console.log(arguments);
+            return this;
         },
 
         afterSave: function (deffered, address) {
-            console.log("after save");
-            console.log(arguments);
+            return this;
         },
 
         beforeRemove: function (address) {
-
+            return this;
         },
 
         afterRemove: function (deffered, address) {
-
+            return this;
         },
 
         beforeDefaultShipping: function (address) {
-
+            return this;
         },
 
         afterDefaultShipping: function (address) {
-
+            return this;
         },
 
         beforeDefaultBilling: function (address) {
-
+            return this;
         },
 
         afterDefaultBilling: function (address) {
-
+            return this;
         },
 
         beforeSelectShipping: function (address) {
-
+            return this;
         },
 
         afterSelectShipping: function (address) {
-
+            return this;
         },
 
         beforeSelectBilling: function (address) {
-
+            return this;
         },
 
         afterSelectBilling: function (address) {
-
+            return this;
         },
 
         _remove: function (id) {

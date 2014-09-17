@@ -25,13 +25,15 @@
 			renderSelectedAddress: function(type){
 				var template = this.selectedTemplate,
 					addressBook = this.getAddressBook(),
-					target = jQuery(".current-addres."+type),
+					target = jQuery(".current-addres."+type, this.content),
 					addressObject = addressBook.getSelected(type) || 
 						addressBook.getDefault(type) ||
 						addressBook.getAddressBook()[0];
 				
+				console.log(template);
+				
 				if(addressObject){
-					target.html(template);
+					target.html("TAK");
 				}else{
 					target.html(Mall.translate("No addresses"));
 				}	
@@ -44,6 +46,7 @@
                     }
 					return false;
 				});
+				this.renderSelectedAddress("shipping");
 			},
 			
 		},
