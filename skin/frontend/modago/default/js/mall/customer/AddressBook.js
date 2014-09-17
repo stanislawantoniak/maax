@@ -10,6 +10,8 @@
         this._book = [];
 
         this._customer = null;
+		this._defaultBilling = null;
+		this._defaultShipping = null;
 
         this.ENTITY_ID_KEY = "entity_id";
     };
@@ -27,6 +29,14 @@
 
         getAddressBook: function () {
             return this._book;
+        },
+		
+        setAddressBook: function (addresses) {
+			var self = this;
+			jQuery.each(addresses, function(){
+				self._book.push(new Mall.customer.Address(this))
+			})
+            return this;
         },
 
         _add: function (obj) {
@@ -172,26 +182,41 @@
             return deffered;
         },
 
+		_setDefault: function(address, type){
+			if(typeof address == "object"){
+				address = address.getId();
+			}
+           this["_default" + type] = address;
+		   return this;
+		},
+		
+		_getDefault: function(type){
+			if(this["_default" + type]){
+				return this.get(this["_default" + type]);
+			}
+			return null;
+		},
+		
         setDefaultShipping: function (address) {
-            this.get(address.getId()).setDefaultShipping();
+			return this._setDefault(address, "shipping");
         },
-
-        getDefaultShipping: function () {
-            var defaultShipping = null;
-            jQuery.each(this.getAddressBook(), function (idx, item) {
-                if (item.getIsDefaultShippping()) {
-                    defaultShipping = item;
-                    return true;
-                }
-            });
-
-            return defaultShipping;
-        },
-
+		
         setDefaultBilling: function (address) {
-            this.get(address.getId()).setDefaultBilling();
+			return this._setDefault(address, "billing");
+        },
+		
+		
+		
+
+        getDefaultBilling: function () {
+           return this._getDefault("billing")
+        },
+		
+        getDefaultShipping: function () {
+           return this._getDefault("shipping")
         },
 
+		/*
         getDefaultBilling: function () {
             var defaultBilling = null;
             jQuery.each(this.getAddressBook(), function (idx, item) {
@@ -203,6 +228,7 @@
 
             return defaultBilling;
         },
+		*/
 
         getSelectedShipping: function () {
             var selectedShipping = null;
@@ -215,7 +241,6 @@
 
             return selectedShipping;
         },
-
         setSelectedShipping: function (address) {
             this.get(address.getId()).setSelectedShipping();
         },
