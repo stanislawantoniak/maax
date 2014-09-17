@@ -89,6 +89,10 @@
             return deffered;
         },
 
+        remove: function () {
+
+        },
+
         getIsObjectNew: function () {
             return this._is_object_new;
         },

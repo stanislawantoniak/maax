@@ -154,7 +154,14 @@
         },
 
         isRemoveable: function (id) {
-            // @todo implement
+
+            if (id === this.getDefaultBilling()
+                || id === this.getDefaultShipping()
+                || (this.getSelectedBilling() !== null && id === this.getSelectedBilling().getId())
+                || (this.getSelectedShipping() !== null
+                    && id === this.getSelectedShipping().getId())) {
+                return false;
+            }
 
             return true;
         },
@@ -275,6 +282,25 @@
             });
             address.setSelectedBilling();
             this.afterSelectBilling(address);
+
+            return address;
+        },
+
+        getSelected: function (type) {
+            var address = null;
+            switch (type) {
+                case "billing" :
+                    address = this.getSelectedBilling();
+                    break;
+
+                case "shipping" :
+                    address = this.getSelectedShipping();
+                    break;
+
+                default:
+                    address = this.getSelectedShipping();
+                    break;
+            }
 
             return address;
         },
