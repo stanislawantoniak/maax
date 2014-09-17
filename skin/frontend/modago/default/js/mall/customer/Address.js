@@ -269,10 +269,6 @@
                 this.setData("form_key", Mall.getFormKey());
             }
 
-            if (this.getData("street")) {
-                this.setData("street", [this.getData("street")]);
-            }
-
             return this;
         }
     };
