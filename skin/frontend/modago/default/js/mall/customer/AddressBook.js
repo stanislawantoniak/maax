@@ -252,13 +252,15 @@
             }
 
             this.beforeSelectShipping(address);
-            jQuery.each(this.getAddressBook(), function (idx, item) {
-                if (item.getId() !== address.getId()) {
-                    item.setUnselectShipping();
-                }
-            });
+            if (address !== null) {
+                jQuery.each(this.getAddressBook(), function (idx, item) {
+                    if (item.getId() !== address.getId()) {
+                        item.setUnselectShipping();
+                    }
+                });
 
-            address.setSelectedShipping();
+                address.setSelectedShipping();
+            }
             this.afterSelectShipping(address);
 
             return address;
@@ -282,12 +284,14 @@
             }
 
             this.beforeSelectBilling(address);
-            jQuery.each(this.getAddressBook(), function (idx, item) {
-                if (item.getId() !== address.getId()) {
-                    item.setUnselectBilling();
-                }
-            });
-            address.setSelectedBilling();
+            if (address !== null) {
+                jQuery.each(this.getAddressBook(), function (idx, item) {
+                    if (item.getId() !== address.getId()) {
+                        item.setUnselectBilling();
+                    }
+                });
+                address.setSelectedBilling();
+            }
             this.afterSelectBilling(address);
 
             return address;
