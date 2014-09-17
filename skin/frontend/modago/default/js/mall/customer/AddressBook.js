@@ -200,7 +200,7 @@
             return this;
 		},
 		
-		_getDefault: function(type){
+		getDefault: function(type){
 			if(this["_default_" + type]){
 				return this.get(this["_default_" + type]);
 			}
@@ -227,11 +227,11 @@
         },
 
         getDefaultBilling: function () {
-           return this._getDefault("billing");
+           return this.getDefault("billing");
         },
 		
         getDefaultShipping: function () {
-           return this._getDefault("shipping");
+           return this.getDefault("shipping");
         },
 
         getSelectedShipping: function () {
