@@ -36,8 +36,8 @@
         setAddressBook: function (addresses) {
 			var self = this;
 			jQuery.each(addresses, function(){
-				self._book.push(new Mall.customer.Address(this))
-			})
+				self._book.push(new Mall.customer.Address(this));
+			});
             return this;
         },
 
