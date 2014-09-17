@@ -47,7 +47,7 @@
                 self = this;
 
             address = new Mall.customer.Address(obj);
-            this.beforeAdd(address);
+            this.beforeAdd.call(this, address);
             deffered = address.save();
             deffered.done(function (data) {
                 if (Boolean(data.status) === false) {
@@ -60,7 +60,7 @@
             if (!error) {
                 this._book.push(address);
                 deffered.always(function () {
-                    self.afterAdd(deffered, address);
+                    self.afterAdd.call(self, deffered, address);
                 });
             }
 
@@ -79,13 +79,15 @@
         remove: function (id) {
             var deffered = null,
                 error = false,
+                removedAddress,
                 self = this;
 
-            if (!this.getIsAddressExists(id)) {
+            if (!this.getIsAddressExists(id) && this.isRemoveable(id)) {
                 return null;
             }
 
             this.beforeRemove(this.get(id));
+            removedAddress = this.get(id);
             deffered = this.get(id).remove();
             deffered.done(function (data) {
                 if (data.status === undefined || Boolean(data.status) === false) {
@@ -96,12 +98,11 @@
             });
 
             deffered.always(function () {
-                self.afterRemove(deffered, self.get(id));
+                if (!error) {
+                    self._remove(id);
+                }
+                self.afterRemove.call(self, deffered, removedAddress);
             });
-
-            if (!error) {
-                this._remove(id);
-            }
 
             return deffered;
 
@@ -143,10 +144,10 @@
             }
 
             address = this.get(obj[this.ENTITY_ID_KEY]);
-            this.beforeEdit(address);
+            this.beforeEdit.call(this, address);
             deffered = address.setData(obj).save();
             deffered.always(function () {
-                self.afterEdit(deffered, address);
+                self.afterEdit.call(self, deffered, address);
             });
 
             return [deffered, address];
@@ -172,7 +173,7 @@
                 _result,
                 self = this;
 
-            this.beforeSave(obj);
+            this.beforeSave.call(this, obj);
             if (id) {
                 // perform update action
                 _result = this._edit(obj);
@@ -185,7 +186,7 @@
             address = _result[1];
 
             deffered = deffered.always(function () {
-                self.afterSave(deffered, address);
+                self.afterSave.call(this, deffered, address);
             });
 
             return deffered;
@@ -209,9 +210,9 @@
 		
         setDefaultShipping: function (address) {
             var id;
-            this.beforeDefaultShipping(address);
+            this.beforeDefaultShipping.call(this, address);
 			id = this._setDefault(address, "shipping");
-            this.afterDefaultShipping(address);
+            this.afterDefaultShipping.call(this, address);
 
             return id;
         },
@@ -219,9 +220,9 @@
         setDefaultBilling: function (address) {
             var id;
 
-            this.beforeDefaultBilling(address);
+            this.beforeDefaultBilling.call(this, address);
 			id = this._setDefault(address, "billing");
-            this.afterDefaultBilling(address);
+            this.afterDefaultBilling.call(this, address);
 
             return id;
         },
@@ -251,7 +252,7 @@
                 address = this.get(address);
             }
 
-            this.beforeSelectShipping(address);
+            this.beforeSelectShipping.call(this, address);
             if (address !== null) {
                 jQuery.each(this.getAddressBook(), function (idx, item) {
                     if (item.getId() !== address.getId()) {
@@ -261,7 +262,7 @@
 
                 address.setSelectedShipping();
             }
-            this.afterSelectShipping(address);
+            this.afterSelectShipping.call(this, address);
 
             return address;
         },
@@ -283,7 +284,7 @@
                 address = this.get(address);
             }
 
-            this.beforeSelectBilling(address);
+            this.beforeSelectBilling.call(this, address);
             if (address !== null) {
                 jQuery.each(this.getAddressBook(), function (idx, item) {
                     if (item.getId() !== address.getId()) {
@@ -292,7 +293,7 @@
                 });
                 address.setSelectedBilling();
             }
-            this.afterSelectBilling(address);
+            this.afterSelectBilling.call(this, address);
 
             return address;
         },
