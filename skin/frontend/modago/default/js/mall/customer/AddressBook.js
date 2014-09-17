@@ -124,7 +124,8 @@
 
         _edit: function (obj) {
             var address,
-                deffered;
+                deffered,
+                self = this;
             // check if object exists
             if (! this.getIsAddressExists(obj[this.ENTITY_ID_KEY])) {
                 return [null, null];
@@ -133,8 +134,8 @@
             address = this.get(obj[this.ENTITY_ID_KEY]);
             this.beforeEdit(address);
             deffered = address.setData(obj).save();
-            deffered.done(function (done) {
-
+            deffered.always(function () {
+                self.afterEdit(deffered, address);
             });
 
             return [deffered, address];
@@ -173,7 +174,7 @@
         },
 
         setDefaultShipping: function (address) {
-            this.get(address.getId()).setDefaultShipping();
+            return address.setDefaultShipping();
         },
 
         getDefaultShipping: function () {
@@ -189,7 +190,7 @@
         },
 
         setDefaultBilling: function (address) {
-            this.get(address.getId()).setDefaultBilling();
+            return address.setDefaultBilling();
         },
 
         getDefaultBilling: function () {
@@ -217,6 +218,11 @@
         },
 
         setSelectedShipping: function (address) {
+            jQuery.each(this.getAddressBook(), function (idx, item) {
+                if (item.getId() !== address.getId()) {
+                    item.setUnselectShipping();
+                }
+            });
             this.get(address.getId()).setSelectedShipping();
         },
 
@@ -237,13 +243,11 @@
         },
 
         beforeAdd: function (address) {
-            console.log("before add");
-            console.log(arguments);
+
         },
 
         afterAdd: function (deffered, address) {
-            console.log("after add");
-            console.log(arguments);
+
         },
 
         beforeEdit: function (address) {
@@ -255,13 +259,11 @@
         },
 
         beforeSave: function (address) {
-            console.log("before save");
-            console.log(arguments);
+
         },
 
         afterSave: function (deffered, address) {
-            console.log("after save");
-            console.log(arguments);
+
         },
 
         beforeRemove: function (address) {

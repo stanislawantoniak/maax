@@ -80,10 +80,9 @@
             if (this.getIsObjectNew()) {
                 deffered = deffered.done(function (data) {
                     if (Boolean(data.status) === true) {
-                        self.setData("entity_id", data.content.entity_id);
+                        self.setData(data.content);
                         self.setIsObjectNew(false);
                     }
-                    console.log("deffered w save modelu");
                 });
             }
 
@@ -96,6 +95,36 @@
 
         setIsObjectNew: function (state) {
             this._is_object_new = state;
+
+            return this;
+        },
+
+        setDefaultShipping: function () {
+            this.setData("is_default_shipping", true);
+            this.save();
+
+            return this;
+        },
+
+        setDefaultBilling: function () {
+            this.setData("is_default_billing", true);
+            this.save();
+
+            return this;
+        },
+
+        getIsSelectedShippping: function () {
+            return Boolean(this.getData("is_selected_shipping"));
+        },
+
+        setSelectedShipping: function () {
+            this.setData("is_selected_shipping", true);
+
+            return this;
+        },
+
+        setUnselectShipping: function () {
+            this.setData("is_selected_shipping", false);
 
             return this;
         },
