@@ -1,39 +1,7 @@
 <?php /* @var $this Zolago_Modago_Block_Checkout_Onepage_Logged_Addressbook */ ?>
 <?php $formKey = Mage::getSingleton('core/session')->getFormKey(); ?>
-<div class="sidebar-secound col-lg-3 col-md-4 col-sm-12 col-xs-12 col-lg-push-9 col-md-push-8">
-	<section class="p main bg-w hidden-sm hidden-xs">
-		<header>
-			<h2 class="open">Cms blok</h2>
-		</header>
-		<div class="clearfix border-top">
-			<ul>
-				<li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
-				<li>Pellentesque ultrices lectus ut felis tempor, eget rutrum nulla sodales.</li>
-				<li>Nullam vel nunc eu enim hendrerit hendrerit eget non leo.</li>
-				<li>Quisque sit amet diam elementum, aliquet risus non, dignissim tortor.</li>
-			</ul>
-			<figure>
-				<img src="skin/frontend/modago/default/images/home_main_callout.jpg" alt="">
-			</figure>
-		</div>
-		<div class="clearfix border-top">
-			<ol>
-				<li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
-				<li>Pellentesque oltrices lectus ut felis tempor, eget rutrum nulla sodales.</li>
-				<li>Nullam vel nunc eu enim hendrerit hendrerit eget non leo.</li>
-				<li>Quisque sit amet diam elementum, aliquet risus non, dignissim tortor.</li>
 
-			</ol></div>
-		<div class="clearfix border-top">
-			<dl>
-				<dt>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</dt>
-				<dd class="separator">Pellentesque ultrices lectus ut fedds tempor, eget rutrum nulla sodales.</dd>
-				<dd>Nullam vel nunc eu enim hendrerit hendrerit eget non leo.</dd>
-				<dd class="separator">Quisque sit amet diam elementum, addquet risus non, dignissim tortor.</dd>
-			</dl>
-		</div>
-	</section>
-</div>
+<?php echo $this->getStep1Sidebar(); ?>
 
 <div id="content-main" class="col-lg-9 col-md-8 col-sm-12 col-xs-12 col-lg-pull-3 col-md-pull-4 section">
 	<section class="main bg-w">
@@ -47,15 +15,19 @@
 			<h4>Adres dostawy:</h4>
 			<div class="panel panel-default">
 				<div class="panel-body">
-					<div class="current-addres clearfix">
-						<p class="pull-right default_delivery small-no-float">DOMYŚLNY ADRES DOSTAWY</p>
-						<dl class="pull-left">
-							<dt>Jan Kowalski</dt>
-							<dd>ul. Nowakowa 1a/3</dd>
-							<dd>03-221 Warszawa</dd>
-							<dd class="separator phone">Telefon kontaktowy: <span>+48 58 666 66 66</span></dd>
+					
+					<div class="hidden" id="selected-address-template">
+						<p class="pull-right default_delivery small-no-float">{{default_caption}}</p>
+						<dl class="pull-left" >
+							<dt>{{firstname}} {{lastname}}</dt>
+							<dd>{{street}}</dd>
+							<dd>{{postcode}} {{city}}</dd>
+							<dd class="separator phone">{{phone_caption}}: <span>{{telephone}}}</span></dd>
 						</dl>
-
+					</div>
+					
+					<div class="current-addres clearfix shipping">
+						
 					</div>
 					<!-- PANEL -->
 					<div class="panel panel-default ">

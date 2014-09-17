@@ -12,12 +12,29 @@
 			id: "step-0",
 			code: "addressbook",
 			doSave: true,
+			selectedTemplate: jQuery("#selected-address-template").html(),
+			normalTemplate: jQuery("#normal-address-template").html(),
+			
 			setAddressBook: function(addressBook){
 				this._addressBook = addressBook;
 				return this;
 			},
 			getAddressBook: function(){
 				return this._addressBook;
+			},
+			renderSelectedAddress: function(type){
+				var template = this.selectedTemplate,
+					addressBook = this.getAddressBook(),
+					target = jQuery(".current-addres."+type),
+					addressObject = addressBook.getSelected(type) || 
+						addressBook.getDefault(type) ||
+						addressBook.getAddressBook()[0];
+				
+				if(addressObject){
+					target.html(template);
+				}else{
+					target.html(Mall.translate("No addresses"));
+				}	
 			},
 			onPrepare: function(){
 				var self = this;

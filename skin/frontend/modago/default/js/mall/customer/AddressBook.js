@@ -10,8 +10,6 @@
         this._book = [];
 
         this._customer = null;
-		this._defaultBilling = null;
-		this._defaultShipping = null;
 
         this.ENTITY_ID_KEY = "entity_id";
     };

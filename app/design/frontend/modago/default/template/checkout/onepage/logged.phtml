@@ -31,6 +31,8 @@
 		addressBook.setAddressBook(<?php echo $this->getCustomerAddressesJson(); ?>);
 		addressBook.setDefaultShipping(<?php echo $this->asJson($_customer->getDefaultShipping())?>);
 		addressBook.setDefaultBilling(<?php echo $this->asJson($_customer->getDefaultBilling())?>);
+		addressBook.setSelectedShipping(<?php echo $this->asJson($this->getQuote()->getShippingAddress()->getCustomerAddressId())?>);
+		addressBook.setSelectedBilling(<?php echo $this->asJson($this->getQuote()->getBillingAddress()->getCustomerAddressId())?>);
 			
 		Mall.Checkout.steps.addressbook.setAddressBook(addressBook);
 			
