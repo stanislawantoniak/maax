@@ -85,6 +85,9 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
             $width = 40;
         }
         else{
+            if(isset($data['width'])){
+                $width = $data['width'];
+            }
             if(isset($data['attribute'])){
                 $width = $data['attribute']->getColumnWidth();
             }
@@ -270,7 +273,7 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 				"attribute" => $thumbnail,
 				"clickable" => true,
 				"header"	=> $this->_getColumnLabel($thumbnail),
-				"width"		=> "100px",
+				"width"		=> "80",
 				"filter"	=> false,
 				"sortable"	=> false
 			);
@@ -281,7 +284,7 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 			$columnStart[$name->getAttributeCode()] = array(
 				"index"		=> $name->getAttributeCode(),
 				"type"		=> "text",
-				"width"		=> "200px",
+				"width"		=> "200",
 				"attribute" => $name,
 				"clickable" => true,
 				"header"	=> $this->_getColumnLabel($name),
@@ -297,7 +300,7 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 				"type"		=>"options",
 				"attribute" => $status,
 				"clickable" => true,
-				"width"		=> "30px",
+				"width"		=> "30",
 				"header"	=> $this->_getColumnLabel($status),
 			);
 
@@ -306,7 +309,7 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 				"index"		=> "images_count",
 				"type"		=> "text",
 				"header"	=> $this->__("Im."),
-				"width"		=> "30px",
+				"width"		=> "30",
 				"filter"	=> false
 			);
 
@@ -317,7 +320,7 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 			$columnStart[$sku->getAttributeCode()] = array(
 				"index"		=> $sku->getAttributeCode(),
 				"type"		=>"text",
-				"width"		=> "50px",
+				"width"		=> "80",
 				"clickable" => true,
 				"header"	=> $this->_getColumnLabel($sku),
 			);
@@ -332,7 +335,7 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 //				'link_param'	=> 'id',
 //				'link_label'	=> Mage::helper("zolagocatalog")->__("Edit form"),
 //				"header"		=> Mage::helper("zolagocatalog")->__("Edit"),
-//				"width"			=> "100px",
+//				"width"			=> "100",
 //				"filter"		=> false,
 //				"sortable"		=> false
 //			);
@@ -657,7 +660,7 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 	}
 
 
-	public function getCellClass(Mage_Adminhtml_Block_Widget_Grid_Column $column, Varien_Object $row) {
+	public function getCellClass(Varien_Object $item, Mage_Adminhtml_Block_Widget_Grid_Column $column) {
 		$classes = array();
 
         $data = $column->getData();
@@ -666,24 +669,24 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
         }
         elseif($data['index'] == 'name'){
             $classes[] = 'product-name';
+
+            $status_column = $this->getColumn('status');
+            if($status_column){
+                $status_data = $item->getData($status_column->getIndex());
+                switch($status_data){
+                    case Mage_Catalog_Model_Product_Status::STATUS_ENABLED:
+                        $classes[] = "status-enabled";
+                        break;
+                    case Mage_Catalog_Model_Product_Status::STATUS_DISABLED:
+                        $classes[] = "status-disabled";
+                        break;
+                    default:
+                        $classes[] = "status-other";
+                        break;
+                }
+            }
         }
 		if($column->getAttribute() instanceof Mage_Catalog_Model_Resource_Eav_Attribute){
-			$data = $row->getData($column->getIndex());
-			if($column->getAttribute()->getAttributeCode()=="status"){
-				$classes[] = "status";
-				switch($data){
-					case Mage_Catalog_Model_Product_Status::STATUS_ENABLED:
-						$classes[] = "status-enabled";
-					break;
-					case Mage_Catalog_Model_Product_Status::STATUS_DISABLED:
-						$classes[] = "status-disabled";
-					break;
-					default:
-						$classes[] = "status-other";
-					break;
-				}
-			}
-
 			if($column->getAttribute()->getIsRequired() && $data==""){
 				$classes[] = "required-cell";
 			}
@@ -693,5 +696,45 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 		}
 		return null;
 	}
+
+    public function getAdditionalHTML(Varien_Object $item, Mage_Adminhtml_Block_Widget_Grid_Column $column)
+    {
+        $html = '';
+        $data = $column->getData();
+        switch($data['index']){
+
+            case 'thumbnail':
+                $images_count_column = $this->getColumn('images_count');
+                if($images_count_column){
+                    $html .= "<span class='images-count'>" . $images_count_column->getRowField($item) . "</span>";
+                }
+                break;
+
+            case 'name':
+                $sku_column = $this->getColumn('sku');
+                if($sku_column){
+                    $html .= "<div class='sku'>(" . $sku_column->getRowField($item) . ")</div>";
+                }
+                break;
+        }
+
+        return $html;
+    }
+
+    public function isColumnVisible(Mage_Adminhtml_Block_Widget_Grid_Column $column)
+    {
+        $show = true;
+        $data = $column->getData();
+        switch($data['index']){
+
+            case 'sku':
+            case 'status':
+            case 'images_count':
+                $show = false;
+                break;
+        }
+
+        return $show;
+    }
 
 }

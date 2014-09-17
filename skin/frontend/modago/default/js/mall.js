@@ -330,6 +330,16 @@ var Mall = {
         }
 
         return currency;
+    },
+
+    getMallHeaderHeight: function () {
+        "use strict";
+
+        if (jQuery("#header")) {
+            return jQuery("#header").outerHeight();
+        }
+
+        return 0;
     }
 
 

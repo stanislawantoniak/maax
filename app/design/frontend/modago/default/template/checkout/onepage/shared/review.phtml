@@ -1,0 +1,61 @@
+<?php /* @var $this Zolago_Modago_Block_Checkout_Onepage_Shared_Review */ ?>
+
+<?php echo $this->getStep3Sidebar(); ?>
+<?php $_items = $this->getItems(); ?>
+<?php $cost = $this->getItemsShippingCost(); ?>
+<?php $total_shipping = array_sum($cost); ?>
+<div class="checkout-shared-review">
+<div class="col-lg-9 col-md-8 col-sm-12 col-xs-12 col-lg-pull-3 col-md-pull-4 section " id="content-main">
+	<section class="main bg-w">
+		<header class="title-section">
+			<h2><?php echo $this->__("Your order"); ?></h2>
+		</header>
+						<?php $total = 0; ?>
+                        <?php foreach($_items as $_item) : ?>
+                            <?php echo $this->getItemHtml($_item); ?>
+							<?php $total +=  $_item->getData('row_total_incl_tax'); ?>
+                        <?php endforeach; ?>
+
+
+		<div class="panel panel-default panel-color">
+            <div class="panel-body">
+	        <div class="tableWrapper table-cart" style="border-top:0px">
+			    <div class="table-footer-group hidden-xs">
+
+		        <div class="table-row clearfix">
+
+	    	        <div class="table-cell cell-01 td">
+    	    	        <a class="button button-third large pull-left" id="back" href="<?php echo $this->getBasketUrl(); ?>"><?php echo $this->__('Change basket'); ?></a>
+					</div>
+		            <div class="table-cell cell-03 label_value td">
+						<div><?php echo $this->__('Summary value');?>:</div>
+						<div><?php echo $this->__('Shipping cost');?>:</div>
+						<div><span style="font-family:latoblack"><?php echo $this->__('To pay');?>:</span></div>
+					</div>
+		            <div class="table-cell cell-04 label_value td">
+						<div><?php echo Mage::helper('core')->formatPrice($total);?></div>
+						<div><?php echo Mage::helper('core')->formatPrice($total_shipping);?></div>
+						<div><?php echo Mage::helper('core')->formatPrice($total+$total_shipping);?></div>
+					</div>
+		            <div class="table-cell cell-05 td"></div>
+				</div>
+				</div>
+            </div>			
+			</div>
+		</div>
+        <div class="row">
+            <div class="col-sm-3">
+                <a class="button button-third large pull-left" id="step-2-prev">Wróć</a>
+            </div>
+			<div class="col-sm-6">
+				<?php echo $this->getCheckoutReviewInfo(); ?>
+			</div>
+            <div class="col-sm-3">
+                <button class="button button-primary large link pull-right" id="step-2-submit">Zamawiam</button>
+            </div>
+        </div>   
+
+</div>
+</section>
+</div>
+</div>

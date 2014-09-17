@@ -34,6 +34,10 @@ var Config = {
 		},
         heartLike: "/skin/frontend/modago/default/images/heart.png",
         heartLiked: "/skin/frontend/modago/default/images/heart-like.png"
-	}
-}
+	},
+    url: {
+        customer_email_exists: window.location.protocol + "//"
+            + window.location.host + '/checkout/singlepage/checkExistingAccount'
+    }
+};
 
