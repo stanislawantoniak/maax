@@ -32,12 +32,13 @@
         _add: function (obj) {
             var deffered,
                 address,
-                error;
+                error,
+                self = this;
 
             address = new Mall.customer.Address(obj);
             this.beforeAdd(address);
             deffered = address.save();
-            deffered = deffered.done(function (data) {
+            deffered.done(function (data) {
                 if (Boolean(data.status) === false) {
                     error = true;
                 }
@@ -47,9 +48,10 @@
 
             if (!error) {
                 this._book.push(address);
+                deffered.always(function () {
+                    self.afterAdd(deffered, address);
+                });
             }
-
-            this.afterAdd(deffered, address);
 
             return [deffered, address];
         },
@@ -65,7 +67,8 @@
 
         remove: function (id) {
             var deffered = null,
-                error = false;
+                error = false,
+                self = this;
 
             if (!this.getIsAddressExists(id)) {
                 return null;
@@ -73,15 +76,19 @@
 
             this.beforeRemove(this.get(id));
             deffered = this.get(id).remove();
-            deffered = deffered.done(function (data) {
+            deffered.done(function (data) {
                 if (data.status === undefined || Boolean(data.status) === false) {
                     error = true;
                 }
             }).fail(function () {
                 error = true;
             });
+
+            deffered.always(function () {
+                self.afterRemove(deffered, self.get(id));
+            });
+
             if (!error) {
-                this.afterRemove(deffered, this.get(id));
                 this._remove(id);
             }
 
@@ -124,7 +131,11 @@
             }
 
             address = this.get(obj[this.ENTITY_ID_KEY]);
+            this.beforeEdit(address);
             deffered = address.setData(obj).save();
+            deffered.done(function (done) {
+
+            });
 
             return [deffered, address];
         },
@@ -139,7 +150,8 @@
             var id = obj[this.ENTITY_ID_KEY] === undefined ? null : obj[this.ENTITY_ID_KEY],
                 deffered,
                 address,
-                _result;
+                _result,
+                self = this;
 
             this.beforeSave(obj);
             if (id) {
@@ -152,7 +164,12 @@
 
             deffered = _result[0];
             address = _result[1];
-            this.afterSave(deffered, address);
+
+            deffered = deffered.always(function () {
+                self.afterSave(deffered, address);
+            });
+
+            return deffered;
         },
 
         setDefaultShipping: function (address) {
@@ -221,10 +238,12 @@
 
         beforeAdd: function (address) {
             console.log("before add");
+            console.log(arguments);
         },
 
         afterAdd: function (deffered, address) {
             console.log("after add");
+            console.log(arguments);
         },
 
         beforeEdit: function (address) {
@@ -236,11 +255,13 @@
         },
 
         beforeSave: function (address) {
-
+            console.log("before save");
+            console.log(arguments);
         },
 
         afterSave: function (deffered, address) {
-
+            console.log("after save");
+            console.log(arguments);
         },
 
         beforeRemove: function (address) {
@@ -296,6 +317,35 @@
             delete this._book[_id];
 
             return this;
+        },
+
+        /**
+         * TEST FUNCTIONS
+         */
+
+        simulateSaveNewAddress: function (obj) {
+            var result;
+
+            if (obj === undefined) {
+                obj = {
+                    firstname: "Pawcio",
+                    lastname: "Chyl",
+                    company: "ORBA",
+                    street: [
+                        "Bukowińska 1",
+                        "20-262"
+                    ],
+                    city: "Lublin",
+                    country_id: "PL",
+                    region_id: 487,
+                    postcode: "20-262",
+                    vat_id: "9462619603",
+                    need_invoice: true,
+                    telephone: "531 338 668"
+                };
+            }
+
+            console.log(this.save(obj));
         }
 
     };

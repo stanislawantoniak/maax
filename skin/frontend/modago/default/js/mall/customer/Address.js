@@ -8,19 +8,25 @@
     Mall.customer.Address = function (data) {
         this._is_object_new = false;
 
-        this._data = function (data) {
+        this._data = {};
+
+        this._create = function (data) {
             this.setIsObjectNew(false);
             if (data === undefined) {
                 this.setIsObjectNew(true);
-                return {entity_id: null, id: null};
+                this._data = {entity_id: null, id: null};
+
+                return this;
             }
 
             if (data.entity_id === undefined || data.entity_id === null) {
                 this.setIsObjectNew(true);
             }
-
-            return data;
+            this._data = data;
+            return this;
         };
+
+        this._create(data);
     };
 
     Mall.customer.Address.prototype = {
@@ -57,7 +63,31 @@
         },
 
         save: function () {
+            var deffered,
+                self = this;
 
+            // validate object before save
+            this._validateBeforeSave();
+            deffered = jQuery.ajax({
+                url: Config.url.address.save,
+                cache: false,
+                crossDomain: true,
+                dataType: "json",
+                data: this.getData(),
+                type: "POST"
+            });
+
+            if (this.getIsObjectNew()) {
+                deffered = deffered.done(function (data) {
+                    if (Boolean(data.status) === true) {
+                        self.setData("entity_id", data.content.entity_id);
+                        self.setIsObjectNew(false);
+                    }
+                    console.log("deffered w save modelu");
+                });
+            }
+
+            return deffered;
         },
 
         getIsObjectNew: function () {
@@ -66,6 +96,18 @@
 
         setIsObjectNew: function (state) {
             this._is_object_new = state;
+
+            return this;
+        },
+
+        _validateBeforeSave: function () {
+            if (this.getData("id") === null || this.getData("entity_id") !== this.getData("id")) {
+                this.setData("id", this.getId());
+            }
+
+            if (this.getData("form_key") === null) {
+                this.setData("form_key", Mall.getFormKey());
+            }
 
             return this;
         }
