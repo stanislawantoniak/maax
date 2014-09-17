@@ -19,7 +19,12 @@
 </div>
 
 <script type="text/javascript">
+	Mall.translate.add("default-shipping-address", "<?php echo $this->__("Default shipping address");?>");
+	Mall.translate.add("default-billing-address", "<?php echo $this->__("Default billing address");?>");
+</script>
+<script type="text/javascript">
 	(function(){
+		
 		var checkout = new Mall.CheckoutLogged();
 		
 		checkout.setProgressObject(jQuery("#step ol"));
@@ -43,6 +48,11 @@
 		checkout.addStep(Mall.Checkout.steps.shippingpayment);
 		checkout.addStep(Mall.Checkout.steps.review);
 		
+
+		
 		checkout.init(0);
+		
+		
+		
 	})();
 </script>

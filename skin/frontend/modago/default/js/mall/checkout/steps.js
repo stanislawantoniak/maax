@@ -34,10 +34,97 @@
 						addressBook.getAddressBook()[0];
 				
 				if(addressObject){
-					target.html(Mall.replace(template, addressObject.getData()));
+					var data = jQuery.extend(
+						this.processAddressToDisplay(addressObject), 
+						{"default_caption": Mall.translate.__("default-"+type+"-address")}
+					);
+					target.html(Mall.replace(template, data));
 				}else{
-					target.html(Mall.translate("No addresses"));
+					target.html(Mall.translate.__("No addresses"));
 				}	
+			},
+			renderAddressList: function(type){
+				var template = this.getNormalTemplate(),
+					addressBook = this.getAddressBook(),
+					target = jQuery(".panel-adresses."+type, this.content),
+					selectedAddress = addressBook.getSelected(type),
+					self = this;
+					
+				var addressCollection = addressBook.getAddressBook();
+				
+				target.html('');
+				
+				if(addressCollection.length){
+					jQuery.each(addressCollection, function(){
+						// Do not allow sleected address
+						if(this.getId()==selectedAddress.getId()){
+						//	return;
+						}
+						
+						var data = self.processAddressToDisplay(this);
+						var node = jQuery(Mall.replace(template, data));
+						self.processAddressNode(node, this, addressBook, type);
+						target.append(node);
+					})
+				}else{
+					target.html(Mall.translate.__("No addresses"));
+				}
+			},
+			processAddressNode: function(node, address, addressBook, type){
+				var settableDefault = true,
+					removeable = addressBook.isRemoveable(address.getId()),
+					defaultAddress = addressBook.getDefault(type),
+					remove = node.find(".remove"),
+					setDefault = node.find(".set-default"),
+					choose = node.find(".choose"),
+					edit = node.find(".edit");
+			
+				if(defaultAddress && defaultAddress.getId()==address.getId()){
+					settableDefault = false;
+				}
+				
+				var eventData = {
+					addressBook: addressBook, 
+					step: this, 
+					address: address, 
+					type: type
+				};
+				
+				remove.click(eventData, this.removeAddress);
+				edit.click(eventData, this.editAddress);
+				setDefault.click(eventData, this.setDefaultAddress);
+				choose.click(eventData, this.chooseAddress);
+				
+				remove[removeable ? "show" : "hide"]();
+				setDefault[settableDefault ? "show" : "hide"]();
+				
+				return node;
+			},
+			removeAddress: function(event){
+				console.log("Remove clicked", event.data);
+				return false;
+			},
+			editAddress: function(event){
+				console.log("Edit clicked", event.data);
+				return false;
+			},
+			setDefaultAddress: function(event){
+				console.log("Set default clicked", event.data);
+				return false;
+			},
+			chooseAddress: function(event){
+				console.log("Choose clicked", event.data);
+				return false;
+			},
+			processAddressToDisplay: function(address){
+				var addressData = jQuery.extend({}, address.getData());
+				if(addressData.street){
+					addressData.street = addressData.street[0]
+				}
+				return addressData;
+			},
+			formatStreet: function(streetArray){
+				return streetArray.length ? streetArray[0] : "";
 			},
 			onPrepare: function(){
 				var self = this;
@@ -48,6 +135,9 @@
 					return false;
 				});
 				this.renderSelectedAddress("shipping");
+				this.renderSelectedAddress("billing");
+				this.renderAddressList("shipping");
+				this.renderAddressList("billing");
 			},
 			
 		},

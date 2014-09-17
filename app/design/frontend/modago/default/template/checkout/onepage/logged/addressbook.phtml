@@ -6,84 +6,53 @@
 <div id="content-main" class="col-lg-9 col-md-8 col-sm-12 col-xs-12 col-lg-pull-3 col-md-pull-4 section">
 	<section class="main bg-w">
 		<header class="title-section">
-			<h2>Potwierdź dane do wysyłki</h2>
+			<h2><?php echo $this->__("Confirm shipping data")?></h2>
 		</header>
-
-
+		
+		<!-- selected address tmplate -->
+		<div class="hidden" id="selected-address-template">
+			<p class="pull-right default_delivery small-no-float">{{default_caption}}</p>
+			<dl class="pull-left" >
+				<dt>{{firstname}} {{lastname}}</dt>
+				<dd>{{street}}</dd>
+				<dd>{{postcode}} {{city}}</dd>
+				<dd class="separator phone"><?php echo $this->__("Contact phone")?>: <span>{{telephone}}</span></dd>
+			</dl>
+		</div>
+		
+		<!-- normal address tmplate -->
+		<div class="panel panel-default hidden" id="normal-address-template">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<dl class="pull-left small-no-float">
+						<dt>{{firstname}} {{lastname}}</dt>
+						<dd>{{street}}</dd>
+						<dd>{{postcode}} {{city}}</dd>
+						<dd class="action separator">
+							<a href="#" class="underline edit"><?php echo $this->__("edit");?></a> 
+							<a href="#" class="underline remove"><?php echo $this->__("remove");?></a> 
+							<a href="#" class="underline set-default"><?php echo $this->__("set as default");?></a>
+						</dd>
+					</dl> 
+					<button class="btn-select button button-third large choose"><?php echo $this->__("Choose")?></button>
+				</div>
+			</div>
+		</div>
+		
 		<form action="<?php echo $this->getSaveUrl();?>" class="form">
 			<input type="hidden" name="form_key" value="<?php echo $formKey; ?>">
-			<h4>Adres dostawy:</h4>
+			<h4><?php echo $this->__("Shipping address")?>:</h4>
 			<div class="panel panel-default">
 				<div class="panel-body">
 					
-					<div class="hidden" id="selected-address-template">
-						<p class="pull-right default_delivery small-no-float">{{default_caption}}</p>
-						<dl class="pull-left" >
-							<dt>{{firstname}} {{lastname}}</dt>
-							<dd>{{street}}</dd>
-							<dd>{{postcode}} {{city}}</dd>
-							<dd class="separator phone"><?php echo $this->__("Contact phone")?>: <span>{{telephone}}</span></dd>
-						</dl>
+					<div class="current-addres clearfix shipping">
+						<!-- content from js -->
 					</div>
 					
-					<div class="current-addres clearfix shipping">
-						
+					<div class="panel-adresses shipping">
+						<!-- content from js -->
 					</div>
-					<!-- PANEL -->
-					<div class="panel panel-default ">
-						<div class="panel-body">
-							<dl class="pull-left small-no-float">
-								<dt>Jan Kowalski</dt>
-								<dd>ul. Nowakowa 1a/3</dd>
-								<dd>03-221 Warszawa</dd>
-								<dd class="action separator"><a href="#" class="underline">edytuj</a> <a href="#" class="underline">usuń</a> <a href="#" class="underline">ustaw jako domyślny</a></dd>
-							</dl> 
-							<button class="btn-select button button-third large">Wybierz</button>
-						</div>
-					</div>
-					<!-- END PANEL -->
-					<!-- PANEL -->
-					<div class="panel panel-default ">
-						<div class="panel-body">
-							<dl class="pull-left small-no-float">
-								<dt>Fajna Firma Sp. z.o.o.</dt>
-								<dt>Nip: 321 321 321</dt>
-								<dt>Jan Nowak</dt>
-								<dd>ul. Nowakowa 1a/3</dd>
-								<dd>03-221 Warszawa</dd>
-								<dd class="action separator"><a href="#" class="underline">edytuj</a> <a href="#" class="underline">usuń</a> <a href="#" class="underline">ustaw jako domyślny</a></dd>
-							</dl> 
-							<button class="btn-select button button-third large">Wybierz</button>
-						</div>
-					</div>
-					<!-- END PANEL -->
-					<!-- PANEL -->
-					<div class="panel panel-default ">
-						<div class="panel-body">
-							<dl class="pull-left small-no-float">
-								<dt>Jan Kowalski</dt>
-								<dd>ul. Nowakowa 1a/3</dd>
-								<dd>03-221 Warszawa</dd>
-								<dd class="action separator"><a href="#" class="underline">edytuj</a> <a href="#" class="underline">usuń</a> <a href="#" class="underline">ustaw jako domyślny</a></dd>
-							</dl> 
-							<button class="btn-select button button-third large">Wybierz</button>
-						</div>
-					</div>
-					<!-- END PANEL -->
-					<!-- PANEL -->
-					<div class="panel panel-default current  ">
-						<div class="panel-body">
-
-							<dl class="pull-left small-no-float">
-								<dt>Jan Kowalski</dt>
-								<dd>ul. Nowakowa 1a/3</dd>
-								<dd>03-221 Warszawa</dd>
-								<dd class="action separator"><a href="#" class="underline">edytuj</a> <a href="#" class="underline">usuń</a></dd>
-							</dl> 
-							<p class="staining_delivery_address">Wybrany adres dostawy</p>
-						</div>
-					</div>
-					<!-- END PANEL -->
+					
 					<!-- PANEL -->
 					<div class="panel panel-default  ">
 						<div class="panel-body">
@@ -185,68 +154,11 @@
 				<h4>Dane do faktury:</h4>
 				<div class="panel panel-default">
 					<div class="panel-body">
-						<div class="current-addres clearfix">
-							<p class="pull-right default_delivery small-no-float">DOMYŚLNY DANE DO FAKTURY</p>
-							<dl class="pull-left small-no-float">
-								<dt>Jan Kowalski</dt>
-								<dd>ul. Nowakowa 1a/3</dd>
-								<dd>03-221 Warszawa</dd>
-								<dd class="separator phone">Telefon kontaktowy: <span>+48 58 666 66 66</span></dd>
-							</dl>
-
+						<div class="current-addres billing clearfix">
+							<!-- content from js -->
 						</div>
-						<!-- PANEL -->
-						<div class="panel panel-default">
-							<div class="panel-body">
-								<dl class="pull-left small-no-float">
-									<dt>Jan Kowalski</dt>
-									<dd>ul. Nowakowa 1a/3</dd>
-									<dd>03-221 Warszawa</dd>
-									<dd class="action separator"><a href="#" class="underline">edytuj</a> <a href="#" class="underline">usuń</a> <a href="#" class="underline">ustaw jako domyślny</a></dd>
-								</dl> 
-								<button class="btn-select button button-third large">Wybierz</button>
-							</div>
-						</div>
-						<!-- END PANEL -->
-						<!-- PANEL -->
-						<div class="panel panel-default">
-							<div class="panel-body">
-								<dl class="pull-left small-no-float">
-									<dt>Fajna Firma Sp. z.o.o.</dt>
-									<dt>Nip: 321 321 321</dt>
-									<dt>Jan Nowak</dt>
-									<dd>ul. Nowakowa 1a/3</dd>
-									<dd>03-221 Warszawa</dd>
-									<dd class="action separator"><a href="#" class="underline">edytuj</a> <a href="#" class="underline">usuń</a> <a href="#" class="underline">ustaw jako domyślny</a></dd>
-								</dl> 
-								<button class="btn-select button button-third large">Wybierz</button>
-							</div>
-						</div>
-						<!-- END PANEL -->
-						<!-- PANEL -->
-						<div class="panel panel-default">
-							<div class="panel-body">
-								<dl class="pull-left small-no-float">
-									<dt>Jan Kowalski</dt>
-									<dd>ul. Nowakowa 1a/3</dd>
-									<dd>03-221 Warszawa</dd>
-									<dd class="action separator"><a href="#" class="underline">edytuj</a> <a href="#" class="underline">usuń</a> <a href="#" class="underline">ustaw jako domyślny</a></dd>
-								</dl> 
-								<button class="btn-select button button-third large">Wybierz</button>
-							</div>
-						</div>
-						<!-- END PANEL -->
-						<!-- PANEL -->
-						<div class="panel panel-default current">
-							<div class="panel-body"> 
-								<dl class="pull-left small-no-float">
-									<dt>Jan Kowalski</dt>
-									<dd>ul. Nowakowa 1a/3</dd>
-									<dd>03-221 Warszawa</dd>
-									<dd class="action separator"><a href="#" class="underline">edytuj</a> <a href="#" class="underline">usuń</a></dd>
-								</dl> 
-								<p class="staining_delivery_address">Wybrane DANE DO FAKTURY</p>
-							</div>
+						<div class="panel-adresses billing">
+							<!-- content from js -->
 						</div>
 						<!-- END PANEL -->
 						<!-- PANEL -->

@@ -28,7 +28,10 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract
 		$addresses = array();
 		$collection = $this->getQuote()->getCustomer()->getAddressesCollection();
 		foreach($collection as $address){
-			$addresses[] = $address->getData();
+			/* @var $address Mage_Customer_Model_Address */
+			$arr = $address->getData();
+			$arr['street'] = $address->getStreet();
+			$addresses[] = $arr;
 		}
 		return Mage::helper("core")->jsonEncode($addresses);
 	}
