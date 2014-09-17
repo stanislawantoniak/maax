@@ -115,6 +115,22 @@
             return this;
         },
 
+        getIsSelectedBilling: function () {
+            return Boolean(this.getData("is_selected_billing"));
+        },
+
+        setSelectedBilling: function () {
+            this.setData("is_selected_billing", true);
+
+            return this;
+        },
+
+        setUnselectBilling: function () {
+            this.setData("is_selected_billing", false);
+
+            return this;
+        },
+
         _validateBeforeSave: function () {
             if (this.getData("id") === null || this.getData("entity_id") !== this.getData("id")) {
                 this.setData("id", this.getId());
