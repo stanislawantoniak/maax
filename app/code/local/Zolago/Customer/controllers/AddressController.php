@@ -51,7 +51,11 @@ class Zolago_Customer_AddressController extends Mage_Customer_AddressController
 	 */
 	public function saveAjaxAction() {
 		if(!$this->_validateFormKey()) {
-            return $this->_redirect('*/*/');
+            $this->_prepareJsonResponse(array(
+				"status"=>0, 
+				"content"=>array($this->__('No form key'))
+			));
+			return;
         }
         // Save data
         if($this->getRequest()->isPost()) {
@@ -95,7 +99,6 @@ class Zolago_Customer_AddressController extends Mage_Customer_AddressController
 						"status"=>1, 
 						"content"=>$address->getData())
 					);
-                    return;
                 } else {
 					$this->_prepareJsonResponse(array(
 						"status"=>0, 
