@@ -7,31 +7,83 @@
 
     Mall.customer.AddressBook = function () {
 
+        /**
+         * Addressbook
+         *
+         * @type {Array}
+         * @private
+         */
         this._book = [];
 
+        /**
+         * Customer instance
+         *
+         * @type {null}
+         * @private
+         */
         this._customer = null;
 
+        /**
+         * Default billing address id.
+         *
+         * @type {null}
+         * @private
+         */
 		this._default_billing = null;
+
+        /**
+         * Default shipping address id.
+         *
+         * @type {null}
+         * @private
+         */
 		this._default_shipping = null;
 
+        /**
+         * Data key for ID.
+         *
+         * @type {string}
+         */
         this.ENTITY_ID_KEY = "entity_id";
     };
 
     Mall.customer.AddressBook.prototype = {
+        /**
+         * Sets customer instance.
+         *
+         * @param {Mall.customer} customer
+         * @returns {Mall.customer.AddressBook}
+         */
         setCustomer: function (customer) {
             this._customer = customer;
 
             return this;
         },
 
+        /**
+         * Returns customer instance.
+         *
+         * @returns {?Mall.customer}
+         */
         getCustomer: function () {
             return this._customer;
         },
 
+        /**
+         * Return current addressbook.
+         *
+         * @returns {Array}
+         */
         getAddressBook: function () {
             return this._book;
         },
-		
+
+        /**
+         * Sets addressbook to given array value.
+         *
+         * @param {Array} addresses
+         * @returns {Mall.customer.AddressBook}
+         */
         setAddressBook: function (addresses) {
 			var self = this;
 			jQuery.each(addresses, function(){
@@ -40,6 +92,13 @@
             return this;
         },
 
+        /**
+         * Adds new address to addressbook. This performs ajax request.
+         *
+         * @param obj
+         * @returns {*[]}
+         * @private
+         */
         _add: function (obj) {
             var deffered,
                 address,
@@ -76,6 +135,12 @@
             return this.get(id);
         },
 
+        /**
+         * Removes address from addressbook and performs ajax request.
+         *
+         * @param {Number} id
+         * @returns {?jQuery.Deffered}
+         */
         remove: function (id) {
             var deffered = null,
                 error = false,
@@ -105,9 +170,14 @@
             });
 
             return deffered;
-
         },
 
+        /**
+         * Returns if address exists.
+         *
+         * @param {Number} id
+         * @returns {boolean}
+         */
         getIsAddressExists: function (id) {
             if (this.get(id) === null) {
                 return false;
@@ -134,6 +204,13 @@
             return address;
         },
 
+        /**
+         * Edits address. This will return array: deffered and address object.
+         *
+         * @param obj
+         * @returns {Array}
+         * @private
+         */
         _edit: function (obj) {
             var address,
                 deffered,
@@ -158,6 +235,12 @@
             return [deffered, address];
         },
 
+        /**
+         * Returns whether address can be removed.
+         *
+         * @param {Number} id
+         * @returns {boolean}
+         */
         isRemoveable: function (id) {
 
             if (id === this.getDefaultBilling()
@@ -172,6 +255,12 @@
             return true;
         },
 
+        /**
+         * Saves address to backend. This function will work both on update and new address.
+         *
+         * @param {(Object|Mall.customer.Address)} obj
+         * @returns {jQuery.Deffered}
+         */
         save: function (obj) {
             var id,
                 deffered,
@@ -204,6 +293,14 @@
             return deffered;
         },
 
+        /**
+         * Sets address as default address for customer.
+         *
+         * @param address
+         * @param type
+         * @returns {Mall.customer.AddressBook}
+         * @private
+         */
 		_setDefault: function(address, type){
 			if(typeof address === "object" && address){
 				address = address.getId();
@@ -212,14 +309,26 @@
 
             return this;
 		},
-		
+
+        /**
+         * Returns default address for customer.
+         *
+         * @param type
+         * @returns {?Mall.customer.Address}
+         */
 		getDefault: function(type){
 			if(this["_default_" + type]){
 				return this.get(this["_default_" + type]);
 			}
 			return null;
 		},
-		
+
+        /**
+         * Sets default shipping address.
+         *
+         * @param {Mall.customer.Address} address
+         * @returns {Mall.customer.AddressBook}
+         */
         setDefaultShipping: function (address) {
             var id;
             this.beforeDefaultShipping.call(this, address);
@@ -228,7 +337,13 @@
 
             return id;
         },
-		
+
+        /**
+         * Sets default billing address in customer scope.
+         *
+         * @param {Mall.customer.Address} address
+         * @returns {Mall.customer.AddressBook}
+         */
         setDefaultBilling: function (address) {
             var id;
 
@@ -239,14 +354,29 @@
             return id;
         },
 
+        /**
+         * Return default billing address.
+         *
+         * @returns {?Mall.customer.Address}
+         */
         getDefaultBilling: function () {
            return this.getDefault("billing");
         },
-		
+
+        /**
+         * Return default shipping address.
+         *
+         * @returns {?Mall.customer.Address}
+         */
         getDefaultShipping: function () {
            return this.getDefault("shipping");
         },
 
+        /**
+         * Returns selected shipping address.
+         *
+         * @returns {?Mall.customer.Address}
+         */
         getSelectedShipping: function () {
             var selectedShipping = null;
             jQuery.each(this.getAddressBook(), function (idx, item) {
@@ -259,6 +389,12 @@
             return selectedShipping;
         },
 
+        /**
+         * Sets selected shipping address.
+         *
+         * @param {(Mall.customer.Address|Number)} address
+         * @returns {?Mall.customer.Address}
+         */
         setSelectedShipping: function (address) {
             if (!isNaN(parseInt(address, 10))) {
                 address = this.get(address);
@@ -279,6 +415,11 @@
             return address;
         },
 
+        /**
+         * Returns selected billing address.
+         *
+         * @returns {?Mall.customer.Address}
+         */
         getSelectedBilling: function () {
             var selectedBilling = null;
             jQuery.each(this.getAddressBook(), function (idx, item) {
@@ -291,6 +432,12 @@
             return selectedBilling;
         },
 
+        /**
+         * Sets seleted shipping address.
+         *
+         * @param {(Mall.customer.Address|Number)} address
+         * @returns {?Mall.customer.Address}
+         */
         setSelectedBilling: function (address) {
             if (!isNaN(parseInt(address, 10))) {
                 address = this.get(address);
@@ -310,6 +457,11 @@
             return address;
         },
 
+        /**
+         * Return seleteced address basen on given type
+         * @param {String} type
+         * @returns {?Mall.customer.Address}
+         */
         getSelected: function (type) {
             var address = null;
             switch (type) {
@@ -328,6 +480,32 @@
 
             return address;
         },
+
+        /**
+         * Removes address from current addressbook object.
+         *
+         * @param {Number} id
+         * @returns {Mall.customer.AddressBook}
+         * @private
+         */
+        _remove: function (id) {
+            var _id = null;
+            jQuery.each(this.getAddressBook(), function (idx, item) {
+                if (id === item.getId()) {
+                    _id = idx;
+
+                    return true;
+                }
+            });
+
+            delete this._book[_id];
+
+            return this;
+        },
+
+        /**
+         * Events
+         */
 
         beforeAdd: function (address) {
             return this;
@@ -390,21 +568,6 @@
         },
 
         afterSelectBilling: function (address) {
-            return this;
-        },
-
-        _remove: function (id) {
-            var _id = null;
-            jQuery.each(this.getAddressBook(), function (idx, item) {
-                if (id === item.getId()) {
-                    _id = idx;
-
-                    return true;
-                }
-            });
-
-            delete this._book[_id];
-
             return this;
         },
 
