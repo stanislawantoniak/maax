@@ -30,15 +30,19 @@ class Zolago_Customer_AddressController extends Mage_Customer_AddressController
 					"status"=>1, 
 					"content"=>$address->getData())
 				);
-                $this->_getSession()->addSuccess($this->__('The address has been deleted.'));
+				return;
             } catch (Exception $e){
 				$this->_prepareJsonResponse(array(
 					"status"=>0, 
 					"content"=>$this->__('An error occurred while deleting the address.'))
 				);
+				return;
             }
         }
-        $this->getResponse()->setRedirect(Mage::getUrl('*/*/index'));
+		$this->_prepareJsonResponse(array(
+			"status"=>0, 
+			"content"=>$this->__('No address specified'))
+		);
 	}
 	
 	/**
