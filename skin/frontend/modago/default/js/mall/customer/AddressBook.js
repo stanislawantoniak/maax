@@ -302,7 +302,19 @@
          * @private
          */
 		_setDefault: function(address, type){
-			if(typeof address === "object" && address){
+			if(typeof address === "object" && address) {
+                if (!isNaN(parseInt(address, 10))) {
+                    address = this.get(address);
+                }
+
+                // sets default state
+                jQuery.each(this.getAddressBook(), function () {
+                    if (this.getId() === address.getId()) {
+                        address.setDefaultState(type, 1);
+                    } else {
+                        this.setDefaultState(type, 0);
+                    }
+                });
 				address = address.getId();
 			}
             this["_default_" + type] = address;
@@ -482,6 +494,30 @@
         },
 
         /**
+         * Saves default state of address to backend.
+         *
+         * @param {String} type
+         * @returns {?jQuery.Deffered}
+         */
+        saveDefault: function (type) {
+            var id      = this.getDefault(type),
+                address,
+                deffered,
+                self    = this;
+            if (id === null) {
+                return null;
+            }
+            address = this.get(id);
+            this.beforeSaveDefault(address);
+            deffered = address.save();
+            deffered.done(function () {
+                self.afterSaveDefault.call(self, deffered, address);
+            });
+
+            return deffered;
+        },
+
+        /**
          * Removes address from current addressbook object.
          *
          * @param {Number} id
@@ -570,6 +606,15 @@
         afterSelectBilling: function (address) {
             return this;
         },
+
+        beforeSaveDefault: function (address) {
+            return this;
+        },
+
+        afterSaveDefault: function (deffered, address) {
+            return this;
+        },
+
 
         /**
          * TEST FUNCTIONS
