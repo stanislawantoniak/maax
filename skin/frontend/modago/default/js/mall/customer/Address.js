@@ -90,7 +90,19 @@
         },
 
         remove: function () {
+            var deffered;
 
+            this._validateBeforeSave();
+            deffered = jQuery.ajax({
+                url: Config.url.address.remove,
+                cache: false,
+                crossDomain: true,
+                dataType: "json",
+                data: this.getData(),
+                type: "POST"
+            });
+
+            return deffered;
         },
 
         getIsObjectNew: function () {
