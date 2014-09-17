@@ -1,6 +1,10 @@
 (function(){
 	
 	Mall.Checkout = function(){
+	  this.METHOD_GUEST    = 'guest';
+      this.METHOD_REGISTER = 'register';
+	  this.METHOD_CUSTOMER = 'customer'
+	  
       this._steps = [];
 	  this._activeIndex = 0;
 	  this._progressObject = null;
@@ -62,6 +66,16 @@
 	}
 	
 	
+	/**
+	 * @returns string
+	 */
+    Mall.Checkout.prototype.getMethod = function(){
+		 throw new Error("Need to be overriden");
+	}
+	
+	
+	
+	
 	Mall.Checkout.prototype.go = function(step){
 		var self = this;
 		jQuery.each(this.getSteps(), function(i){
@@ -100,12 +114,19 @@
 	Mall.Checkout.prototype.setActive = function(stepIndex){
 		var steps = this.getSteps();
 		var currentStep = steps[stepIndex];
-		var self= this;
+		var self= this
 		
 		jQuery.each(steps, function(i){
-			if(i==this._activeIndex){
+			if(i==self._activeIndex){
 				this.onLeave.apply(this, [self]);
 			}
+			
+			/*if(i<=stepIndex && !this.enabled){
+				self.setEnabled(this);
+			}else if(i>stepIndex && this.enabled){
+				self.setDisabled(this);
+			}*/
+			
 			this.active = 0;
 			this.content.addClass("hidden");
 		});
@@ -133,13 +154,16 @@
 		progress.attr("class", "");
 		// Enable card
 		progress.addClass("step_01");
-		progress.children().removeClass("current-checkout");
-		progress.children(":first").addClass("current-checkout");
+		progress.children().removeClass("current-checkout executed");
+		progress.children(":first").addClass("current-checkout executed");
 		
 		for(var i=0; i<=this._activeIndex; i++){
 			progress.addClass("step_0" + this._mapProgressIndex(i));
-			progress.children("#step_0" + this._mapProgressIndex(i)).
+			var child = progress.children("#step_0" + this._mapProgressIndex(i)).
 					addClass("current-checkout");
+			if(i<this._activeIndex){
+				child.addClass("executed");
+			}
 		}
 	}
 	
@@ -165,7 +189,7 @@
 	 * @param int|object step
 	 * @returns Mall.Checkout
 	 */
-	Mall.Checkout.prototype.setDisable = function(step){
+	Mall.Checkout.prototype.setDisabled = function(step){
 		if(typeof step != 'object'){
 			step = this.getStep(step);
 		}
@@ -203,7 +227,8 @@
 	 */
 	Mall.Checkout.prototype.getStepByCode = function(code){
 		var steps = this.getSteps();
-		for(var i=0; steps.length < i; i++){
+		for(var i=0; i<steps.length; i++){
+			console.log(steps[i].code, code);
 			if(steps[i].code == code){
 				return steps[i];
 			}
@@ -234,11 +259,64 @@
 	}
 	
 	/**
-	 * @param int step
 	 * @returns Boolean
 	 */
 	Mall.Checkout.prototype.placeOrder = function(){
-		alert("Placing order...");
+		this._savePlaceOrder();
+	}
+	
+	/**
+	 * 
+	 */
+	Mall.Checkout.prototype.beforePlaceOrder = function(xhr){
+		console.log("Before data send");
+	}
+	
+	/**
+	 * @param object response
+	 */
+	Mall.Checkout.prototype.successPlaceOrder = function(response){
+		console.log("Sucess data send", response);
+		if(response.status==1){
+			console.log(response.content)
+			if(response.content.redirect){
+				window.location.replace(response.content.redirect);
+			}
+		}else{
+			alert(response.message);
+		}
+	}
+	
+	/**
+	 * @param object response
+	 */
+	Mall.Checkout.prototype.errorPlaceOrder = function(response){
+		console.log("Error data send");
+	}
+	
+	/**
+	 * @param object response
+	 */
+	Mall.Checkout.prototype.completePlaceOrder = function(xhr){
+		console.log("After data send");
+	}
+	
+
+	
+	/**
+	 * @returns Deffered
+	 */
+	Mall.Checkout.prototype._savePlaceOrder = function(){
+		var self = this;
+		var url = this.get("placeUrl");
+		return jQuery.ajax(url, {
+			method:		"post",
+			data:		this.collect(),
+			beforeSend:	function(){self.beforePlaceOrder.apply(self, arguments)}, 
+			success:	function(){self.successPlaceOrder.apply(self, arguments)}, 
+			error:		function(){self.errorPlaceOrder.apply(self, arguments)}, 
+			complete:	function(){self.completePlaceOrder.apply(self, arguments)}, 
+		});
 	}
 	
 	/**
@@ -246,7 +324,29 @@
 	 * @returns array [{name: "", value: ""},...]
 	 */
 	Mall.Checkout.prototype.collect = function(){
-		return [];
+		var data = [];
+		jQuery.each(this.getSteps(), function(){
+			if(typeof this.collect == "function"){
+				jQuery.each(this.collect(), function(){
+					data.push(this);
+				})
+			}
+		});
+		return data;
+	}
+	
+	/**
+	 * 
+	 * @param {type} url
+	 * @param {type} data
+	 * @returns defered
+	 */
+	Mall.Checkout.prototype.saveStepData = function(url, data){
+		return jQuery.ajax({
+			"method": "POST",
+			"url": url,
+			"data": data
+		});
 	}
 	
 	/**
@@ -258,43 +358,85 @@
 		
 		var self = this;
 		
-		var object = {
-			id: config.id,
+		if(typeof config.id == "undefined" || typeof config.code == "undefined" ){
+			throw new Error("Id or code of step undefinded!");
+		}
+		
+		var proto = {
 			index: this.getSteps().length,
-			enabled: config.enabled || false,
-			active: config.active || false,
+			enabled: true,
+			active: false,
+			doSave: false,
+			checkout: self,
 			content: jQuery('#'+config.id),
 			// step.collect() - this = set. 
 			// Should returns the serialized values. this = step
-			collect: config.collect || function(){return {}},
+			collect: function(){
+				return this.content.find("form").serializeArray();
+			},
 			// before add to checkout object, this = step
-			onPrepare: config.onPrepare || function(checkoutObject, config){},
+			onPrepare: function(checkoutObject, config){},
 			// before submit - validation here. this = step
 			// if returns false - stop process
-			onSubmit: config.onSubmit || function(checkoutObject){},
+			onSubmit: function(checkoutObject){},
 			// before step shown; this = step 
-			onEnter: config.onEnter || function(checkoutObject){},
+			onEnter: function(checkoutObject){},
 			// after step leave; this = step
-			onLeave: config.onLeave || function(checkoutObject){},
-			// when step is enabled (possible to enter); this = step [DEV]
-			onEnable: config.onEnable || function(){},
-			// when step is disabled (inpossible to enter); this = step [DEV]
-			onDisable: config.onDisable || function(){}	
+			onLeave: function(checkoutObject){},
+			// when step is ready to submit; this = step [DEV]
+			onEnable: function(){},
+			// when step isnt ready to submit; this = step [DEV]
+			onDisable: function(){}	
 		};
 		
-		// Submit action - call from 
-		object.submit = function(){
+		// Disable action
+		proto.disable = function(){
 			// Is valdidated
-			if(object.onSubmit.apply(self)===false){
+			if(proto.onDisable.apply(self)===false){
 				return;
 			}
-			self.next();
+			self.setDisabled(proto);
 		}
 		
-		// Trigger on prepare
-		object.onPrepare.apply(object, [self, config]);
+		// Disable action
+		proto.enable = function(){
+			// Is valdidated
+			if(proto.onEnable.apply(self)===false){
+				return;
+			}
+			self.setEnabled(proto);
+		}
 		
-		return object;
+		// Submit action - call from 
+		proto.submit = function(){
+			// Is valdidated
+			if(proto.onSubmit.apply(self)===false){
+				return;
+			}
+			
+			if(proto.content.find("form").length && proto.doSave){
+				var saveUrl = proto.content.find("form").attr("action");
+				self.saveStepData(saveUrl, proto.collect()).then(function(response){
+					if(response.status==1){
+						console.log(response);
+						self.next();
+					}else{
+						alert(response.content);
+					}
+				})
+			}else{
+				self.next();
+			}
+			
+		}
+		
+		jQuery.extend(proto, config);
+		
+		// Trigger on prepare
+		proto.onPrepare.apply(proto, [self, config]);
+		proto.content.addClass("enabled");
+		
+		return proto;
 	}
 
 })();

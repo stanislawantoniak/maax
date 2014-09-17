@@ -1,4 +1,4 @@
-@charset "US-ASCII";
+@charset "UTF-8";
                                    /*$icoMapDesktop: sprite-map("desktop/ico/*.png");
 $icoMapMobile: sprite-map("mobile/ico/*.png");
 $bulletMap: sprite-map("sprites/bullet/*.png");
@@ -5882,6 +5882,10 @@ body.modal-open #sb-site {
 .modal {
   overflow-y: hidden !important; }
 
+/* line 115, ../sass/layout/override/_global.scss */
+span.valid {
+  padding-top: 0 !important; }
+
 /* line 62, ../sass/other/_variable.scss */
 #header a:link, #header a:visited, #header a:hover, #header a:focus {
   margin: 0px;
@@ -6028,6 +6032,35 @@ ol.breadcrumb li:not(:first-child):before {
 /* line 21, ../sass/layout/override/_shopping-cart.scss */
 .node-type-shopping-cart #content-main .panel .panel-body {
   padding: 0 0 15px 0; }
+
+/* line 4, ../sass/layout/override/_review-cart.scss */
+.checkout-shared-review #content-main .panel.panel-default {
+  -webkit-border-radius: 1px;
+  -moz-border-radius: 1px;
+  -ms-border-radius: 1px;
+  -o-border-radius: 1px;
+  border-radius: 1px; }
+/* line 7, ../sass/layout/override/_review-cart.scss */
+.checkout-shared-review #content-main .panel .panel-heading {
+  padding: 14.86px 0 0 29.41px;
+  position: relative;
+  margin-bottom: 13px; }
+@media (max-width: 767px) {
+  /* line 7, ../sass/layout/override/_review-cart.scss */
+  .checkout-shared-review #content-main .panel .panel-heading {
+    padding: 14.86px 0 0px 29.41px; } }
+/* line 14, ../sass/layout/override/_review-cart.scss */
+.checkout-shared-review #content-main .panel .panel-heading:before {
+  content: ' ';
+  display: block;
+  width: 18px;
+  height: 18px;
+  position: absolute;
+  left: 0px;
+  top: 18px; }
+/* line 24, ../sass/layout/override/_review-cart.scss */
+.checkout-shared-review #content-main .panel .panel-body {
+  padding: 0 0 0 0; }
 
 /* line 4, ../sass/layout/override/_summary-delivery-payment.scss */
 #checkout .panel.panel-custom .panel-heading {
@@ -8350,6 +8383,179 @@ i.flag.hit, i.flag.bestseller {
 #trigger_conditions_shipping .modal-dialog .panel-body {
   padding: 0 29.41px 0 29.41px !important; }
 
+/* line 5, ../sass/layout/style/_review-cart.scss */
+.checkout-shared-review #content-main section > header h1 {
+  margin: 22px 0 25px 0px;
+  padding: 0px; }
+@media (max-width: 767px) {
+  /* line 5, ../sass/layout/style/_review-cart.scss */
+  .checkout-shared-review #content-main section > header h1 {
+    margin: 10px 0; } }
+/* line 13, ../sass/layout/style/_review-cart.scss */
+.checkout-shared-review #content-main section > footer {
+  padding-bottom: 15px; }
+/* line 16, ../sass/layout/style/_review-cart.scss */
+.checkout-shared-review #content-main section > footer a#clearAllShopping i {
+  position: relative;
+  top: 2px;
+  margin-right: 1.267427122940431%; }
+/* line 22, ../sass/layout/style/_review-cart.scss */
+.checkout-shared-review #content-main section > footer #btn_continue_shopping {
+  float: right;
+  height: 28px;
+  position: relative;
+  top: -5px; }
+/* line 33, ../sass/layout/style/_review-cart.scss */
+.checkout-shared-review #content-main .tableWrapper .table-row .table-cell.td {
+  padding: 15px 0 15px 0; }
+@media (max-width: 767px) {
+  /* line 33, ../sass/layout/style/_review-cart.scss */
+  .checkout-shared-review #content-main .tableWrapper .table-row .table-cell.td {
+    padding: 0 0 15px 0; } }
+/* line 39, ../sass/layout/style/_review-cart.scss */
+.checkout-shared-review #content-main .tableWrapper .table-row .table-cell.cell-01.td {
+  padding-left: 3.422053231939163%; }
+@media (max-width: 767px) {
+  /* line 39, ../sass/layout/style/_review-cart.scss */
+  .checkout-shared-review #content-main .tableWrapper .table-row .table-cell.cell-01.td {
+    padding-left: 12px; } }
+@media (max-width: 767px) {
+  /* line 45, ../sass/layout/style/_review-cart.scss */
+  .checkout-shared-review #content-main .tableWrapper .table-row .table-cell.cell-02 {
+    padding-left: 12px; } }
+/* line 50, ../sass/layout/style/_review-cart.scss */
+.checkout-shared-review #content-main .tableWrapper .table-row .table-cell.cell-04.td {
+  padding-right: 2.534854245880862%; }
+@media (max-width: 767px) {
+  /* line 50, ../sass/layout/style/_review-cart.scss */
+  .checkout-shared-review #content-main .tableWrapper .table-row .table-cell.cell-04.td {
+    padding-top: 23px; } }
+/* line 57, ../sass/layout/style/_review-cart.scss */
+.checkout-shared-review #content-main .tableWrapper .table-row .table-cell.cell-05 .delet_product {
+  display: inline-block;
+  margin-top: 5px; }
+@media (max-width: 767px) {
+  /* line 57, ../sass/layout/style/_review-cart.scss */
+  .checkout-shared-review #content-main .tableWrapper .table-row .table-cell.cell-05 .delet_product {
+    display: -moz-inline-stack;
+    display: inline-block;
+    vertical-align: middle;
+    *vertical-align: auto;
+    zoom: 1;
+    *display: inline;
+    position: relative;
+    top: 22px;
+    margin-top: 0px; } }
+/* line 68, ../sass/layout/style/_review-cart.scss */
+.checkout-shared-review #content-main .tableWrapper .table-row .table-cell figure {
+  float: left;
+  width: 55px;
+  margin-right: 3.168567807351077%; }
+@media (max-width: 767px) {
+  /* line 68, ../sass/layout/style/_review-cart.scss */
+  .checkout-shared-review #content-main .tableWrapper .table-row .table-cell figure {
+    margin-right: 12px; } }
+/* line 76, ../sass/layout/style/_review-cart.scss */
+.checkout-shared-review #content-main .tableWrapper .table-row .table-cell .description_checked_product {
+  float: left;
+  position: relative;
+  padding-top: 3px;
+  min-height: 69px; }
+/* line 81, ../sass/layout/style/_review-cart.scss */
+.checkout-shared-review #content-main .tableWrapper .table-row .table-cell .description_checked_product .product_name {
+  margin-bottom: 5px; }
+/* line 84, ../sass/layout/style/_review-cart.scss */
+.checkout-shared-review #content-main .tableWrapper .table-row .table-cell .description_checked_product .product_availability {
+  position: absolute;
+  bottom: -8px;
+  left: 0px; }
+/* line 89, ../sass/layout/style/_review-cart.scss */
+.checkout-shared-review #content-main .tableWrapper .table-row .table-cell .description_checked_product .product_availability .icons-checked, .checkout-shared-review #content-main .tableWrapper .table-row .table-cell .description_checked_product .product_availability .icons-interjection {
+  display: inline-block;
+  width: 250px;
+  padding-left: 15px; }
+/* line 97, ../sass/layout/style/_review-cart.scss */
+.checkout-shared-review #content-main .tableWrapper .table-row .table-cell .product_price {
+  position: relative; }
+/* line 99, ../sass/layout/style/_review-cart.scss */
+.checkout-shared-review #content-main .tableWrapper .table-row .table-cell .product_price span {
+  margin-right: 10px; }
+@media (max-width: 767px) {
+  /* line 99, ../sass/layout/style/_review-cart.scss */
+  .checkout-shared-review #content-main .tableWrapper .table-row .table-cell .product_price span {
+    display: -moz-inline-stack;
+    display: inline-block;
+    vertical-align: middle;
+    *vertical-align: auto;
+    zoom: 1;
+    *display: inline;
+    margin-left: 0px !important;
+    width: 80px !important; } }
+/* line 108, ../sass/layout/style/_review-cart.scss */
+.checkout-shared-review #content-main .tableWrapper .table-row .table-cell .amount_product {
+  width: 22px;
+  height: 22px;
+  text-align: center; }
+/* line 113, ../sass/layout/style/_review-cart.scss */
+.checkout-shared-review #content-main .tableWrapper .table-row .table-cell.cell-03 {
+  padding-left: 12px; }
+/* line 115, ../sass/layout/style/_review-cart.scss */
+.checkout-shared-review #content-main .tableWrapper .table-row .table-cell.cell-03 .styledSelected {
+  top: 12px;
+  width: 60px; }
+/* line 119, ../sass/layout/style/_review-cart.scss */
+.checkout-shared-review #content-main .tableWrapper .table-row .table-cell.cell-03 .select-group.medium {
+  width: 60px;
+  margin-top: 13px; }
+/* line 122, ../sass/layout/style/_review-cart.scss */
+.checkout-shared-review #content-main .tableWrapper .table-row .table-cell.cell-03 .select-group.medium .button-select {
+  min-width: 60px; }
+/* line 131, ../sass/layout/style/_review-cart.scss */
+.checkout-shared-review #content-main .tableWrapper .table-footer-group {
+  display: block; }
+/* line 134, ../sass/layout/style/_review-cart.scss */
+.checkout-shared-review #content-main .tableWrapper .table-footer-group .table-row .table-cell {
+  display: block; }
+/* line 137, ../sass/layout/style/_review-cart.scss */
+.checkout-shared-review #content-main .tableWrapper .table-footer-group .table-row .table-cell.cell-01 {
+  width: 31.93916349809886%; }
+@media (max-width: 767px) {
+  /* line 137, ../sass/layout/style/_review-cart.scss */
+  .checkout-shared-review #content-main .tableWrapper .table-footer-group .table-row .table-cell.cell-01 {
+    width: 100%; } }
+/* line 142, ../sass/layout/style/_review-cart.scss */
+.checkout-shared-review #content-main .tableWrapper .table-footer-group .table-row .table-cell.cell-01 p {
+  margin-bottom: 0px; }
+/* line 144, ../sass/layout/style/_review-cart.scss */
+.checkout-shared-review #content-main .tableWrapper .table-footer-group .table-row .table-cell.cell-01 p + a {
+  position: relative; }
+/* line 149, ../sass/layout/style/_review-cart.scss */
+.checkout-shared-review #content-main .tableWrapper .table-footer-group .table-row .table-cell.cell-02 {
+  width: 1px;
+  float: left;
+  display: inline-block; }
+/* line 154, ../sass/layout/style/_review-cart.scss */
+.checkout-shared-review #content-main .tableWrapper .table-footer-group .table-row .table-cell.cell-03 {
+  width: 47.52851711026616%; }
+@media (max-width: 767px) {
+  /* line 154, ../sass/layout/style/_review-cart.scss */
+  .checkout-shared-review #content-main .tableWrapper .table-footer-group .table-row .table-cell.cell-03 {
+    width: 50%; } }
+/* line 160, ../sass/layout/style/_review-cart.scss */
+.checkout-shared-review #content-main .tableWrapper .table-footer-group .table-row .table-cell.cell-04 {
+  width: 17.11026615969582%; }
+@media (max-width: 767px) {
+  /* line 160, ../sass/layout/style/_review-cart.scss */
+  .checkout-shared-review #content-main .tableWrapper .table-footer-group .table-row .table-cell.cell-04 {
+    width: 50%;
+    padding-top: 6px !important; } }
+/* line 167, ../sass/layout/style/_review-cart.scss */
+.checkout-shared-review #content-main .tableWrapper .table-footer-group .table-row .table-cell.cell-05 {
+  width: 3.29531051964512%; }
+/* line 170, ../sass/layout/style/_review-cart.scss */
+.checkout-shared-review #content-main .tableWrapper .table-footer-group .table-row .table-cell.cell-04 {
+  padding-right: 2.534854245880862%; }
+
 /* line 3, ../sass/layout/style/_checkout.scss */
 #checkout #content-main > .main {
   padding: 30px 30px; }
@@ -9730,7 +9936,7 @@ form .form-group .nip {
 /* line 694, ../sass/override/_override-layout.scss */
 form .form-group input:disabled {
   border-color: #d9d9d9;
-  color: #f0f0f0;
+  color: gray;
   box-shadow: none; }
 /* line 699, ../sass/override/_override-layout.scss */
 form .form-group textarea {

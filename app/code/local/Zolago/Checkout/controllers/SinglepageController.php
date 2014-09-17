@@ -1,6 +1,6 @@
 <?php
 
-class Zolago_Checkout_OnepageController extends Zolago_Checkout_Controller_Abstract {
+class Zolago_Checkout_SinglepageController extends Zolago_Checkout_Controller_Abstract {
 	
 	/**
 	 * Index action for logged users
@@ -16,5 +16,6 @@ class Zolago_Checkout_OnepageController extends Zolago_Checkout_Controller_Abstr
 		// Display checkout page for loged in
 		parent::indexAction();
 	}
-	
+
+
 }

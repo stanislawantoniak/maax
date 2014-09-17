@@ -2,7 +2,17 @@
 
 class Zolago_DropshipSplit_Block_Cart extends Unirgy_DropshipSplit_Block_Cart
 {
-	
+    protected $_htmlBlock = 'udsplit/cart_vendor';	
+    
+    //{{{ 
+    /**
+     * change name html block for getItemHtml
+     * @param string $name
+     */
+    public function setHtmlBlock($name) {
+        $this->_htmlBlock = $name;
+    }
+    //}}}
     public function getItems()
     {
 		if(!$this->hasData("items")){
@@ -28,7 +38,7 @@ class Zolago_DropshipSplit_Block_Cart extends Unirgy_DropshipSplit_Block_Cart
     {
         if ($item instanceof Unirgy_DropshipSplit_Model_Cart_Vendor) {
             $blockName = "vendor_{$item->getVendor()->getId()}_{$item->getPart()}";
-            $block = $this->getLayout()->createBlock('udsplit/cart_vendor', $blockName)
+            $block = $this->getLayout()->createBlock($this->_htmlBlock, $blockName)
                 ->addData($item->getData())
                 ->setQuote($item->getQuote1());
 			

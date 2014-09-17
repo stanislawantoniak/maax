@@ -1,58 +1,66 @@
-<?php /* @var $this Zolago_Modago_Block_Checkout_Address */ ?>
+<?php /* @var $this Zolago_Modago_Block_Checkout_Onepage_Shared_Address */ ?>
+
 
 <?php echo $this->getStep1Sidebar(); ?>
 <?php
-
-$formKey = Mage::getSingleton('core/session')->getFormKey();?>
+$method = "guest";
+if ($this->isCustomerLoggedIn()) {
+    $method = "";
+}
+$formKey = Mage::getSingleton('core/session')->getFormKey();
+$_quote = $this->getQuote();
+$_billingAddress = $_quote->getBillingAddress();
+?>
 <div id="content-main" class="col-lg-9 col-md-8 col-sm-12 col-xs-12 col-lg-pull-3 col-md-pull-4 section">
 	<section class="main bg-w">
 		<header class="title-section">
 			<h2><?php echo $this->__("User data"); ?></h2>
 		</header>
-		<form action="<?php echo $this->getSaveUrl(); ?>" class="form" id="co-address">
-        <input type="hidden" name="form_key" value="<?php echo $formKey; ?>" />
+		<form autocomplete="off" action="<?php echo $this->getSaveUrl(); ?>" class="form" id="co-address">
+        <input type="hidden" name="form_key" value="<?php echo $formKey; ?>">
+            <input type="hidden" id="customer_logged_in" name="customer_logged_in" value="<?php echo (int) $this->isCustomerLoggedIn(); ?>">
 			<fieldset>
 				<legend class="first"><?php echo $this->__("Information about you:"); ?></legend>
 
 				<div class="form-group clearfix">
 					<div class="row">
-						<label class="col-sm-3" for="for_first_name"><?php echo $this->__("First name"); ?></label>
+						<label class="col-sm-3" for="account_firstname"><?php echo $this->__("First name"); ?></label>
 						<div class="col-sm-5">
-							<input type="text" class="form-control firstName hint" id="for_first_name" title="" name="account[firstname]" data-rule-required="true" data-original-title="<?php echo $this->__("Enter your name."); ?>">
+							<input type="text" value="<?php echo $this->escapeHtml($_quote->getCustomerFirstname()); ?>" class="form-control firstName hint" required="true" id="account_firstname" title="" name="account[firstname]" data-original-title="<?php echo $this->__("Enter your name."); ?>">
 						</div>
 					</div>
 
 				</div>
 				<div class="form-group clearfix border-top">
 					<div class="row">
-						<label class="col-sm-3" for="for_last_name"><?php echo $this->__("Last name"); ?></label>
+						<label class="col-sm-3" for="account_lastname"><?php echo $this->__("Last name"); ?></label>
 						<div class="col-sm-5">
-							<input type="text" class="form-control lastName hint" id="for_last_name" title="" name="account[lastname]" data-rule-required="true" data-original-title="<?php echo $this->__("Enter your lastname."); ?>">
+							<input type="text" value="<?php echo $this->escapeHtml($_quote->getCustomerLastname()); ?>" class="form-control lastName hint" required="true" id="account_lastname" title="" name="account[lastname]" data-original-title="<?php echo $this->__("Enter your lastname."); ?>">
 						</div>
 					</div>
 				</div>
 				<div class="form-group clearfix border-top">
 					<div class="row">
-						<label class="col-sm-3" for="email"><?php echo $this->__("Email"); ?></label>
+						<label class="col-sm-3" for="account_email"><?php echo $this->__("Email"); ?></label>
 						<div class="col-sm-5">
-							<input type="email" class="form-control email hint" id="email" title="" name="account[email]" data-original-title="<?php echo $this->__("Email address."); ?>">
+							<input type="email" value="<?php echo $this->escapeHtml($_quote->getCustomerEmail()); ?>" <?php if ($this->isCustomerLoggedIn()) : ?>readonly<?php endif; ?> class="form-control email hint" required="true" id="account_email" title="" name="account[email]" data-original-title="<?php echo $this->__("Email address."); ?>">
 						</div>
 					</div>
 				</div>
 				<div class="form-group clearfix border-top">
 					<div class="row">
-						<label class="col-sm-3" for="phone_number"><?php echo $this->__("Telephone number"); ?></label>
+						<label class="col-sm-3" for="account_telephone"><?php echo $this->__("Telephone number"); ?></label>
 						<div class="col-sm-5">
-							<input type="text" class="form-control phone hint" id="phone_number" title="" name="account[phone]" data-original-title="<?php echo $this->__("We need your telephone number only to complete the order."); ?>">
+							<input type="text" value="<?php echo $this->escapeHtml($_billingAddress->getTelephone()); ?>" class="form-control phone hint validate-telephone" required="true" id="account_telephone" title="" name="account[telephone]" data-original-title="<?php echo $this->__("We need your telephone number only to complete the order."); ?>">
 						</div>
 					</div>
 				</div>
 			</fieldset>
 
-            <?php echo $this->getChildHtml("checkout.onepage.guest.shipping"); ?>
+            <?php echo $this->getChildHtml("shipping"); ?>
+            <?php echo $this->getChildHtml("billing"); ?>
 
-            <?php echo $this->getChildHtml("checkout.onepage.guest.billing"); ?>
-
+            <?php if (!$this->isCustomerLoggedIn()) : ?>
 			<fieldset id="remember_data">
 				<legend><?php echo $this->__("Remember me(optional):"); ?></legend>
 				<div class="row">
@@ -67,20 +75,21 @@ $formKey = Mage::getSingleton('core/session')->getFormKey();?>
 				<div class="row">
 					<div id="add_pass" class="col-sm-6">
 
-                        <?php echo $this->getChildHtml("checkout.onepage.guest.password"); ?>
+                        <?php echo $this->getChildHtml("password"); ?>
 
 					</div>
 				</div>
 			</fieldset>
+            <?php endif; ?>
 			<div class="row">
 				<div class="form-group form-checkbox small text-align-left">
-					<input type="checkbox" id="agreement:2" class="css-checkbox invoice_vat" name="agreement[2]" required="">
-					<label for="agreement:2" class="css-label"><?php echo $this->__("Agreement for marketing works"); ?></label>
+					<input type="checkbox" id="agreement_2" class="css-checkbox invoice_vat" name="agreement[2]" required="true" style="opacity: 0; visibility: visible;">
+					<label for="agreement_2" class="css-label"><?php echo $this->__("Agreement for marketing works"); ?></label>
 				</div>
 
 				<div class="form-group form-checkbox small text-align-left">
-					<input type="checkbox" id="agreement:1" class="css-checkbox invoice_vat" name="agreement[1]" required="">
-					<label for="agreement:1" class="css-label"><?php echo $this->__("TOS Agreement"); ?></label>
+					<input type="checkbox" id="agreement_1" class="css-checkbox invoice_vat" name="agreement[1]" required="true"  style="opacity: 0; visibility: visible;">
+					<label for="agreement_1" class="css-label"><?php echo $this->__("TOS Agreement"); ?></label>
 				</div>
 			</div>
 			<div class="row action">
@@ -97,5 +106,13 @@ $formKey = Mage::getSingleton('core/session')->getFormKey();?>
 		</form>
 	</section>
 
-</div>  
+</div>
+
+<script type="text/javascript">
+    Mall.translate.add("not-correct-postcode", "<?php echo $this->__("Post code is not correct"); ?>");
+    Mall.translate.add("passwordbackend-need-to-have-x-letters", "<?php echo $this->__("Password need to have 5 letters"); ?>");
+    Mall.translate.add("telephone-need-to-have-9-digit", "<?php echo $this->__("telephone-number-need-to-have-9-digit"); ?>");
+    Mall.translate.add("emailbackend-exits", "<?php echo $this->__("Typed address email exists on the site. Want to login?"); ?>");
+    Mall.translate.add("emailbackend-exits-log-in", "<?php echo $this->__("Typed address email exists on the site. Please log in to proceed."); ?>");
+</script>
 

@@ -1,0 +1,62 @@
+<?php
+    $methods = $this->getMethods();
+    $oneMethod = count($methods) <= 1;
+?>
+
+<?php if (empty($methods)): ?>
+        <?php echo $this->__('No Payment Methods') ?>
+<?php else:
+    foreach ($methods as $_method):
+        $_code = $_method->getCode();
+?>
+        <div class="panel panel-default">
+        <div class="panel-body">
+                <div class="form-group form-radio">
+                    <div>
+                    <?php if(!$oneMethod): ?>
+                        <input id="p_method_<?php echo $_code ?>" value="<?php echo $_code ?>" type="radio" name="payment[method]" title="<?php echo $this->escapeHtml($_method->getTitle()) ?>" <?php if($this->getSelectedMethodCode()==$_code): ?> checked="checked"<?php endif; ?> class="css-radio" required="required" />
+                    <?php else: ?>
+                        <span class="no-display"><input id="p_method_<?php echo $_code ?>" value="<?php echo $_code ?>" type="radio" name="payment[method]" checked="checked" class="radio" /></span>
+                        <?php $oneMethod = $_code; ?>
+                    <?php endif; ?>
+                    <label class="css-label clearfix" for="p_method_<?php echo $_code ?>">
+                        <span class="pull-left"><strong><?php echo $this->escapeHtml($this->getMethodTitle($_method)) ?></strong>
+                            <br>
+                            Payment description here
+                            <?php echo $this->getMethodLabelAfterHtml($_method) ?>
+                        </span>
+                        <img alt="" src="/skin/frontend/modago/default/images/payment_methods/payment_methods.png" class="pull-right flag_pay_method">
+                    </label>
+                        </div>
+
+                    <?php if ($html = $this->getPaymentMethodFormHtml($_method)): ?>
+                    <div class="selected_bank">
+                        <?php echo $html; ?>
+                    </div>
+                    <?php endif; ?>
+                </div>
+        </div>
+        </div>
+
+<?php endforeach; ?>
+
+<?php    endif; ?>
+<?php echo $this->getChildChildHtml('additional'); ?>
+<script type="text/javascript">
+    //<![CDATA[
+    jQuery('[name="payment[method]"]:checked').parents('.form-group').find('.selected_bank ul').show();
+
+    jQuery('[name="payment[method]"]').click(function () {
+        if (jQuery(this).is(':checked')) {
+            jQuery('.default_pay .form-group .selected_bank ul').hide();
+            jQuery('.default_pay .form-group').find('.selected_bank ul input[type="radio"]').attr("disabled", "disabled").prop("disabled",true);
+            jQuery(this).parents('.form-group').find('.selected_bank ul input[type="radio"]').attr("disabled", "").prop("disabled",false);
+            jQuery(this).parents('.form-group').find('.selected_bank ul').show();
+
+        } else {
+            jQuery(this).parents('.form-group').find('.selected_bank ul').hide();
+        }
+    })
+
+    //]]>
+</script>

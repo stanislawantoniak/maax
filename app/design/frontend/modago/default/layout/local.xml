@@ -142,6 +142,14 @@
             </action>
             <action method="addItem">
                 <type>skin_js</type>
+                <script>js/mall/validate.js</script>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <script>js/mall/validators.js</script>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
                 <script>js/mall/plural.js</script>
             </action>
             <action method="addItem">
@@ -631,6 +639,10 @@
                 <type>skin_js</type>
                 <script>js/mall/checkout.js</script>
             </action>
+			<action method="addItem">
+			   <type>skin_js</type>
+			   <script>js/mall/checkout/steps.js</script>
+		   </action>
 		</reference>
 		<reference name="header">
 			<remove name="header_menu"/>
@@ -649,22 +661,33 @@
 		</reference>
 	</checkout_updater>
 	
-	<checkout_onepage_index>
+	<checkout_singlepage_index>
         <update handle="checkout_updater" />
 		<reference name="head">
 			<action method="addItem">
 			   <type>skin_js</type>
 			   <script>js/mall/checkout/logged.js</script>
-		   </action>
+		    </action>
 		</reference>
 		<reference name="content">
 			<!-- Remove previous blocks -->
-            <action method="unsetChildren"></action>
 			<block type="zolagomodago/checkout_onepage_logged" name="checkout.onepage" template="checkout/onepage/logged.phtml">
-				<block type="zolagomodago/checkout_onepage_shared_address" name="checkout.onepage.logged.address" template="checkout/onepage/shared/address.phtml"/>
-			</block>
+				<block type="core/template" name="checkout.onepage.logged.address" template="checkout/onepage/logged/addressbook.phtml"/>
+                <block type="zolagomodago/checkout_onepage_shared_address" name="checkout.onepage.logged.address" template="checkout/onepage/shared/address.phtml">
+                    <block type="zolagomodago/checkout_onepage_shared_address_shipping" as="shipping" name="checkout.onepage.logged.address.shipping" template="checkout/onepage/shared/address/shipping.phtml"/>
+                    <block type="zolagomodago/checkout_onepage_shared_address_billing" as="billing" name="checkout.onepage.logged.address.billing" template="checkout/onepage/shared/address/billing.phtml"/>
+                </block>
+                <block type="zolagomodago/checkout_onepage_shared_shippingpayment" name="checkout.onepage.logged.shippingpayment" template="checkout/onepage/shared/shippingpayment.phtml" >
+                    <block type="zolagomodago/checkout_onepage_shared_shippingpayment_shipping" as="shipping" name="checkout.onepage.logged.shippingpayment.shipping" template="checkout/onepage/shared/shippingpayment/shipping.phtml" />
+                    <block type="zolagomodago/checkout_onepage_shared_shippingpayment_payment" as="payment" name="checkout.onepage.logged.shippingpayment.payment" template="checkout/onepage/shared/shippingpayment/payment.phtml">
+                        <block type="zolagomodago/checkout_onepage_shared_shippingpayment_payment_methods" name="checkout.onepage.logged.shippingpayment.payment.methods" as="methods" template="checkout/onepage/shared/shippingpayment/payment/methods.phtml" />
+                    </block>
+                </block>
+				
+                <block type="zolagomodago/checkout_onepage_shared_review" name="checkout.onepage.logged.review" template="checkout/onepage/shared/review.phtml"/>
+            </block>
 		</reference>
-	</checkout_onepage_index>
+	</checkout_singlepage_index>
 	
 	<checkout_guest_index>
         <update handle="checkout_updater" />
@@ -672,13 +695,50 @@
 			<action method="addItem">
 			   <type>skin_js</type>
 			   <script>js/mall/checkout/guest.js</script>
-		   </action>
+		    </action>
 		</reference>
 		<reference name="content">
             <block type="zolagomodago/checkout_onepage_guest" name="checkout.onepage" template="checkout/onepage/guest.phtml">
-                <block type="zolagomodago/checkout_onepage_shared_address" name="checkout.onepage.guest.address" template="checkout/onepage/shared/address.phtml"/>
+                <block type="zolagomodago/checkout_onepage_shared_address" name="checkout.onepage.guest.address" template="checkout/onepage/shared/address.phtml">
+                    <block type="zolagomodago/checkout_onepage_shared_address_shipping" as="shipping" name="checkout.onepage.guest.address.shipping" template="checkout/onepage/shared/address/shipping.phtml"/>
+                    <block type="zolagomodago/checkout_onepage_shared_address_billing" as="billing" name="checkout.onepage.guest.address.billing" template="checkout/onepage/shared/address/billing.phtml"/>
+                    <block type="core/template" name="checkout.onepage.guest.password" as="password" template="checkout/onepage/shared/address/password.phtml"/>
+                </block>
+                <block type="zolagomodago/checkout_onepage_shared_shippingpayment" name="checkout.onepage.guest.shippingpayment" template="checkout/onepage/shared/shippingpayment.phtml" >
+                    <block type="zolagomodago/checkout_onepage_shared_shippingpayment_shipping" name="checkout.onepage.guest.shippingpayment.shipping" as="shipping" template="checkout/onepage/shared/shippingpayment/shipping.phtml" />
+                    <block type="zolagomodago/checkout_onepage_shared_shippingpayment_payment" name="checkout.onepage.guest.shippingpayment.payment" as="payment" template="checkout/onepage/shared/shippingpayment/payment.phtml">
+                        <block type="zolagomodago/checkout_onepage_shared_shippingpayment_payment_methods" name="checkout.onepage.guest.shippingpayment.payment.methods" as="methods" template="checkout/onepage/shared/shippingpayment/payment/methods.phtml" />
+                    </block>
+                </block>
+                <block type="zolagomodago/checkout_onepage_shared_review" name="checkout.onepage.guest.review" template="checkout/onepage/shared/review.phtml">
+                    <block type="core/text_list" name="additional.product.info"/>
+                </block>
             </block>
 		</reference>
 	</checkout_guest_index>
 
+    <checkout_singlepage_success>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/1column.phtml</template>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="checkout/onepage_success" name="checkout.success" template="checkout/success.phtml"/>
+        </reference>
+    </checkout_singlepage_success>
+
+    <checkout_guest_success>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/1column.phtml</template>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="checkout/onepage_success" name="checkout.success" template="checkout/success.phtml"/>
+        </reference>
+    </checkout_guest_success>
+
+
+    
 </layout>
