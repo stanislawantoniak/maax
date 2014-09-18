@@ -2630,26 +2630,31 @@ jQuery.noConflict();
         function filterList(){
             $('#filter_manufacturer_search').keyup(function(){
                 var valThis = $(this).val().toLowerCase();
+                var manufacturerList = $(this).parents('.filter-enum').find('.manufacturerList');
+                var manufacturerListLi = $(this).parents('.filter-enum').find('.manufacturerList li');
                 var noresult = 0;
+                console.log($('.no-results-found'));
+                console.log($(manufacturerList).find('li.no-results-found'));
                 if(valThis == ""){
-                    $('.manufacturerList > li').show();
+                    manufacturerListLi.show();
                     noresult = 1;
-                    $('.no-results-found').remove();
+
+                    $(manufacturerList).find('li.no-results-found').remove();
                 } else {
-                    $('.manufacturerList > li').each(function(){
+                    manufacturerListLi.each(function(){
                         var text = $(this).text().toLowerCase();
                         var match = text.indexOf(valThis);
                         if (match >= 0) {
                             $(this).show();
                             noresult = 1;
-                            $('.no-results-found').remove();
+                            $(manufacturerList).find('li.no-results-found').remove();
                         } else {
                             $(this).hide();
                         }
                     });
                 };
                 if (noresult == 0) {
-                    $(".manufacturerList").append('<li class="no-results-found">Brak wyników.</li>');
+                    manufacturerList.append('<li class="no-results-found">Brak wyników.</li>');
                 }
 
             });
