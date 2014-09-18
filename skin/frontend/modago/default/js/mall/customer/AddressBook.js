@@ -147,7 +147,7 @@
                 removedAddress,
                 self = this;
 
-            if (!this.getIsAddressExists(id) && this.isRemoveable(id)) {
+            if (!this.getIsAddressExists(id) || !this.isRemoveable(id)) {
                 return null;
             }
 
