@@ -84,15 +84,26 @@
 				}
 				
 			},
+			
 			handleChangeAddressClick: function(e){
-				var addressBook = this.getAddressBook(),
+				var type = e.data.type,
 					element = jQuery(e.target),
-					block = this.content.find(".panel-adresses." + e.data.type);
+					block = this.content.find(".panel-adresses." + type),
+					relatedType = type=="billing" ? "shipping" : "billing",
+					relatedElement = this.content.find(".change_address." + relatedType),
+					relatedBlock = this.content.find(".panel-adresses." + relatedType);
 			
 				element.toggleClass("open");
+				relatedElement.removeClass("open");
 				
+				this._rollAddressList(relatedElement, relatedBlock, relatedElement.hasClass("open"));
+				this._rollAddressList(element, block, element.hasClass("open"));
+			},
+			
+			_rollAddressList: function(element, block, doOpen){
+				console.log(element, block, doOpen);
 				// Need move to one tag
-				if(element.hasClass("open")){
+				if(doOpen){
 					block.show();
 					block.find('.panel').show();
 					element.text(Mall.translate.__("roll-up"))
@@ -100,8 +111,7 @@
 					block.hide();
 					block.find('.panel').hide();
 					element.text(Mall.translate.__("change-address"));
-				}
-				
+				}	
 			},
 			processAddressNode: function(node, address, addressBook, type){
 				var settableDefault = true,
