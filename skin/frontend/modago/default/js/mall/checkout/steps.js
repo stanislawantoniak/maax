@@ -37,7 +37,8 @@
 					if(defaultAdderssObject && defaultAdderssObject.getId()==addressObject.getId()){
 						defaultCaption = Mall.translate.__("default-"+type+"-address");
 					}else{
-						// add set ass default checkbox
+						// @todo default checkbox
+						defaultCaption = "[v] set as default";
 					}
 					var data = jQuery.extend(
 						this.processAddressToDisplay(addressObject), 
