@@ -71,15 +71,18 @@
 			handleNeedInvoiceClick: function(e){
 				var addressBook = this.getAddressBook(),
 					state = jQuery(e.target).is(":checked"),
+					curState = this.getAddressBook().getNeedInvoice(),
 					invoiceBlock = this.content.find("#block_invoice");
-				
-				addressBook.setNeedInvoice(state);
-				
+				// Only if is change neetween adressbook and widget
+				if(curState!=state){
+					addressBook.setNeedInvoice(state);
+				}
 				if(addressBook.getNeedInvoice()){
 					invoiceBlock.show();
 				}else{
 					invoiceBlock.hide()
 				}
+				
 			},
 			handleChangeAddressClick: function(e){
 				var addressBook = this.getAddressBook(),
@@ -170,7 +173,11 @@
 				this.renderAddressList("billing");
 				
 				// Handle need invoice
-				this.content.find(".need_invoice").change(function(e){
+				var invoice = this.content.find(".need_invoice");
+				if(this.getAddressBook().getNeedInvoice()){
+					invoice.prop("checked", true);
+				}
+				invoice.change(function(e){
 					self.handleNeedInvoiceClick(e);
 				}).change();
 				
