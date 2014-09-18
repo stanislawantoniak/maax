@@ -38,6 +38,15 @@
 				</div>
 			</div>
 		</div>
+
+        <div class="panel add-new hidden" id="addressbook-add-new-template" data-toggle="modal" data-target="#addressbook-modal">
+            <div class="panel-body">
+                <h4 class="addressbook-add-new"><i class="fa fa-plus-circle fa-lg"></i>&nbsp;<strong><?php echo $this->__("ADD NEW ADDRESS"); ?></strong></h4>
+                <div class="panel-body-content">
+
+                </div>
+            </div>
+        </div>
 		
 		<form action="<?php echo $this->getSaveUrl();?>" class="form">
 			<input type="hidden" name="form_key" value="<?php echo $formKey; ?>">
@@ -51,7 +60,9 @@
 					
 					<div class="panel-adresses shipping">
 						<!-- content from js -->
+
 					</div>
+
 					
 					<!-- PANEL -->
 					<div class="panel panel-default  ">
@@ -266,4 +277,20 @@
 		</form>  
 	</section>
 
-</div>     
+</div>
+
+
+<div class="modal fade bs-example-modal-lg" id="addressbook-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"></button>
+                <h2 class="title_section" id="modal-title"></h2>
+            </div>
+            <div class="modal-body" id="modal-body">
+
+
+            </div>
+        </div>
+    </div>
+</div>

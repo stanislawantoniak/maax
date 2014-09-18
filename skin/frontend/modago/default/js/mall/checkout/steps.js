@@ -65,11 +65,221 @@
 						var node = jQuery(Mall.replace(template, data));
 						self.processAddressNode(node, this, addressBook, type);
 						target.append(node);
-					})
-				}else{
-					target.html(Mall.translate.__("No addresses"));
-				}
-			},
+					});
+                }else{
+                    target.html(Mall.translate.__("No addresses"));
+                }
+                target.append(this.getAddNewButton(type));
+            },
+
+            getAddNewButton: function (type) {
+                var templateHandle = jQuery("#addressbook-add-new-template").clone(),
+                    self = this;
+
+                templateHandle.click(function () {
+                    self.showAddNewModal(jQuery("#addressbook-modal"), type);
+                });
+
+                return templateHandle;
+            },
+
+            attachNewAddressInputsMask: function (modal, type) {
+                console.log(modal.find(type + "_postcode"));
+                modal.find("#" + type + "_postcode").mask("99-999");
+                modal.find("#" + type + "_vat_id").mask("999-999-99-99");
+            },
+
+            showAddNewModal: function (modal, type) {
+                modal = jQuery(modal);
+                modal.find(".modal-body")
+                    .html("")
+                    .append(this.getAddNewForm(type));
+                modal.find("#modal-title").html("DODAJ NOWY ADRES");
+                this.attachNewAddressInputsMask(modal, type);
+            },
+
+            getAddNewForm: function (type) {
+                var form = this.getNewAddressForm(),
+                    panelBody = form.find(".panel-body"),
+                    element,
+                    formGroup,
+                    self = this;
+
+                element = this.getInput(type + "[firstname]"
+                    , type + "_firstname"
+                    , "text"
+                    , "Imię"
+                    , "col-sm-3"
+                    , "form-control firstName hint"
+                    , "");
+
+                formGroup = this.getFormGroup(true);
+                formGroup.find(".row").append(element.label).append(element.input);
+                panelBody.append(formGroup);
+
+                jQuery.each(this.getNewAddressConfig(type), function (idx, item) {
+                    formGroup = self.getFormGroup();
+                    element = self.getInput(
+                        item.name
+                        , item.id
+                        , item.type
+                        , item.label
+                        , item.labelClass
+                        , item.inputClass
+                        , ""
+                    );
+                    formGroup.find(".row").append(element.label).append(element.input);
+                    panelBody.append(formGroup);
+                });
+
+                return form;
+            },
+
+            getNewAddressConfig: function (type) {
+                return [
+                    //{
+                    //    name:       type + "[firstname]",
+                    //    id:         type + "_firstname",
+                    //    type:       "text",
+                    //    label:      "Imię",
+                    //    labelClass: "col-sm-3",
+                    //    inputClass: "form-control firstName hint"
+                    //},
+                    {
+                        name:       type + "[lastname]",
+                        id:         type + "_lastname",
+                        type:       "text",
+                        label:      "Nazwisko",
+                        labelClass: "col-sm-3",
+                        inputClass: "form-control lastName hint"
+                    },
+                    {
+                        name:       type + "[company]",
+                        id:         type + "_company",
+                        type:       "text",
+                        label:      "Nazwa firmy<br>(opcjonalnie)",
+                        labelClass: "col-sm-3 double-line",
+                        inputClass: "form-control firm hint"
+                    },
+                    {
+                        name:       type + "[vat_id]",
+                        id:         type + "_vat_id",
+                        type:       "text",
+                        label:      "NIP<br>(opcjonalnie)",
+                        labelClass: "col-sm-3 double-line",
+                        inputClass: "form-control vat_id city hint"
+                    },
+                    {
+                        name:       type + "[street][]",
+                        id:         type + "_street_1",
+                        type:       "text",
+                        label:      "Ulica i numer",
+                        labelClass: "col-sm-3 ",
+                        inputClass: "form-control street hint"
+                    },
+                    {
+                        name:       type + "[postcode]",
+                        id:         type + "_postcode",
+                        type:       "text",
+                        label:      "Kod pocztowy",
+                        labelClass: "col-sm-3",
+                        inputClass: "form-control postcode zipcode hint"
+                    },
+                    {
+                        name:       type + "[city]",
+                        id:         type + "_city",
+                        type:       "text",
+                        label:      "Miejscowość",
+                        labelClass: "col-sm-3",
+                        inputClass: "form-control city hint"
+                    },
+                    {
+                        name:       type + "[telephone]",
+                        id:         type + "_telephone",
+                        type:       "text",
+                        label:      "Numer telefonu",
+                        labelClass: "col-sm-3",
+                        inputClass: "form-control telephone hint"
+                    }
+                ];
+            },
+
+            getInput: function (name, id, type, label, labelClass, inputClass, value) {
+                var result = {
+                    label: "",
+                    input: ""
+                },
+                    inputWrapper;
+
+                result.label = jQuery("<label/>", {
+                    "class": labelClass,
+                    "for": id,
+                    html: label
+                });
+
+                inputWrapper = jQuery("<div/>", {
+                    "class": "col-sm-9"
+                });
+
+                jQuery("<input/>", {
+                    type: type,
+                    class: inputClass,
+                    value: value,
+                    name: name,
+                    id: id
+                }).appendTo(inputWrapper);
+
+                result.input = inputWrapper;
+
+                return result;
+            },
+
+            getFormGroup: function (first) {
+                var group,
+                    className;
+
+                if (first === undefined) {
+                    first = false;
+                }
+
+                className = "form-group clearfix" + (!first ? " border-top" : "");
+
+                group = jQuery("<div/>", {
+                    "class": className
+                });
+
+                jQuery("<div/>", {
+                    "class": "row"
+                }).appendTo(group);
+
+                return group;
+            },
+
+            getNewAddressForm: function () {
+                var form, panel;
+                form = jQuery("<form/>", {
+                    "class": "form clearfix",
+                    method: "POST",
+                    action: Config.url.address.save
+                });
+
+                jQuery("<input/>", {
+                    type: "hidden",
+                    name: "form_key",
+                    value: Mall.getFormKey()
+                });
+
+                panel = jQuery("<div/>", {
+                    "class": "panel panel-default"
+                }).appendTo(form);
+
+                jQuery("<div/>", {
+                    "class": "panel-body"
+                }).appendTo(panel);
+
+                return form;
+            },
+
 			handleNeedInvoiceClick: function(e){
 				var addressBook = this.getAddressBook(),
 					state = jQuery(e.target).is(":checked"),
@@ -94,13 +304,14 @@
 				if(element.hasClass("open")){
 					block.show();
 					block.find('.panel').show();
-					element.text(Mall.translate.__("roll-up"))
+					element.text(Mall.translate.__("roll-up"));
 				}else{
 					block.hide();
 					block.find('.panel').hide();
 					element.text(Mall.translate.__("change-address"));
 				}
-				
+				// show add new address button
+                block.find(".add-new").toggleClass("hidden");
 			},
 			processAddressNode: function(node, address, addressBook, type){
 				var settableDefault = true,
