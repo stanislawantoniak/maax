@@ -82,7 +82,7 @@
 
 
 
-#filter_type {
+.filter-type {
   .form-group {
     margin-bottom: 10px;
   }
@@ -114,12 +114,14 @@
         position:absolute;
         left:0px;
         top:-4px;
+		width:31px;
+		height:31px;
       }
     }
   }
 }      
   
-#filter_style, .filter-droplist, .filter-enum {
+#filter_style, .filter-droplist, .filter-enum, .filter-icon {
   padding-left: 0px;
 }
 

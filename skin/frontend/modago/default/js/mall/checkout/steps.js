@@ -29,9 +29,7 @@
 				var template = this.getSelectedTemplate(),
 					addressBook = this.getAddressBook(),
 					target = jQuery(".current-addres."+type, this.content),
-					addressObject = addressBook.getSelected(type) || 
-						addressBook.getDefault(type) ||
-						addressBook.getAddressBook()[0];
+					addressObject = addressBook.getSelected(type);
 				
 				if(addressObject){
 					var data = jQuery.extend(
@@ -58,7 +56,7 @@
 					jQuery.each(addressCollection, function(){
 						// Do not allow sleected address
 						if(selectedAddress && this.getId()==selectedAddress.getId()){
-						//	return;
+							return;
 						}
 						
 						var data = self.processAddressToDisplay(this);
@@ -283,25 +281,39 @@
 			handleNeedInvoiceClick: function(e){
 				var addressBook = this.getAddressBook(),
 					state = jQuery(e.target).is(":checked"),
+					curState = this.getAddressBook().getNeedInvoice(),
 					invoiceBlock = this.content.find("#block_invoice");
-				
-				addressBook.setNeedInvoice(state);
-				
+				// Only if is change neetween adressbook and widget
+				if(curState!=state){
+					addressBook.setNeedInvoice(state);
+				}
 				if(addressBook.getNeedInvoice()){
 					invoiceBlock.show();
 				}else{
 					invoiceBlock.hide()
 				}
+				
 			},
+			
 			handleChangeAddressClick: function(e){
-				var addressBook = this.getAddressBook(),
+				var type = e.data.type,
 					element = jQuery(e.target),
-					block = this.content.find(".panel-adresses." + e.data.type);
+					block = this.content.find(".panel-adresses." + type),
+					relatedType = type=="billing" ? "shipping" : "billing",
+					relatedElement = this.content.find(".change_address." + relatedType),
+					relatedBlock = this.content.find(".panel-adresses." + relatedType);
 			
 				element.toggleClass("open");
+				relatedElement.removeClass("open");
 				
+				this._rollAddressList(relatedElement, relatedBlock, relatedElement.hasClass("open"));
+				this._rollAddressList(element, block, element.hasClass("open"));
+			},
+			
+			_rollAddressList: function(element, block, doOpen){
+				console.log(element, block, doOpen);
 				// Need move to one tag
-				if(element.hasClass("open")){
+				if(doOpen){
 					block.show();
 					block.find('.panel').show();
 					element.text(Mall.translate.__("roll-up"));
@@ -383,7 +395,11 @@
 				this.renderAddressList("billing");
 				
 				// Handle need invoice
-				this.content.find(".need_invoice").change(function(e){
+				var invoice = this.content.find(".need_invoice");
+				if(this.getAddressBook().getNeedInvoice()){
+					invoice.prop("checked", true);
+				}
+				invoice.change(function(e){
 					self.handleNeedInvoiceClick(e);
 				}).change();
 				

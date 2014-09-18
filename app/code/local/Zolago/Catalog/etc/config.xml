@@ -18,6 +18,12 @@
 				<include_not_salable>1</include_not_salable>
             </options>
 		</cataloginventory>
+
+        <catalog>
+            <frontend>
+                <size_max_number>5</size_max_number>
+            </frontend>
+        </catalog>
     </default>
     <global>
         <models>

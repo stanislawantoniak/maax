@@ -79,18 +79,21 @@
 		
 		/**
 		 * @param {type} flag
-		 * @returns {Mall.customer.AddressBook.prototype}
+		 * @returns Deffered
 		 */
 		setNeedInvoice: function(flag){
-			this._needInvoice = flag;
-			return this;
+			var billing = this.getSelectedBilling();
+			
+			billing.setData('need_invoice', flag ? "1" : "0");
+			
+			return this._edit(billing);
 		},
 		
 		/**
 		 * @returns {bool}
 		 */
 		getNeedInvoice: function(){
-			return this._needInvoice;
+			return this.getSelectedBilling().getData('need_invoice')=="1";
 		},
 
         /**
@@ -132,20 +135,21 @@
             address = new Mall.customer.Address(obj);
             this.beforeAdd.call(this, address);
             deffered = address.save();
+			
+			this.beforeRequest(deffered, address);
+			
             deffered.done(function (data) {
-                if (Boolean(data.status) === false) {
-                    error = true;
-                }
-            }).fail( function () {
-                error = true;
+                if (Boolean(data.status)){
+					this._book.push(address);
+				}else{
+					//...
+				}
             });
 
-            if (!error) {
-                this._book.push(address);
-                deffered.always(function () {
-                    self.afterAdd.call(self, deffered, address);
-                });
-            }
+			deffered.always(function () {
+				self.afterRequest(deffered, address);
+				self.afterAdd.call(self, deffered, address);
+			});
 
             return [deffered, address];
         },
@@ -178,18 +182,19 @@
             this.beforeRemove(this.get(id));
             removedAddress = this.get(id);
             deffered = this.get(id).remove();
+			
+			this.beforeRequest(deffered, address);
+			
             deffered.done(function (data) {
                 if (data.status === undefined || Boolean(data.status) === false) {
                     error = true;
-                }
-            }).fail(function () {
-                error = true;
+                }else{
+					self._remove(id);
+				}
             });
 
             deffered.always(function () {
-                if (!error) {
-                    self._remove(id);
-                }
+				self.afterRequest(deffered, removedAddress);
                 self.afterRemove.call(self, deffered, removedAddress);
             });
 
@@ -252,7 +257,10 @@
             }
 
             deffered = address.save();
+			self.beforeRequest(deffered, address);
+			
             deffered.always(function () {
+				self.afterRequest(deffered, address);
                 self.afterEdit.call(self, deffered, address);
             });
 
@@ -422,7 +430,13 @@
                 }
             });
 
-            return selectedShipping;
+			// Selected found
+			if(selectedShipping){
+				return selectedShipping;
+			}
+			
+			// Return by fallback
+			return this.getDefaultShipping() || this.getAddressBook()[0];
         },
 
         /**
@@ -464,8 +478,14 @@
                     return true;
                 }
             });
-
-            return selectedBilling;
+			
+			// Selected found
+			if(selectedBilling){
+				return selectedBilling;
+			}
+			
+			// Return by fallback
+			return this.getDefaultBilling() || this.getAddressBook()[0];
         },
 
         /**
@@ -637,7 +657,13 @@
             return this;
         },
 
-
+		beforeRequest: function(deffered, data){
+			console.log("Loading start");
+		},
+		afterRequest: function(deffered, data){
+			console.log("Loading stop");
+		},
+		
         /**
          * TEST FUNCTIONS
          */
