@@ -2628,13 +2628,13 @@ jQuery.noConflict();
 
 // FILTROWANIE LISTY PO WPISANIU WYRAZU/LITERY
         function filterList(){
-            $('#filter_manufacturer_search').keyup(function(){
+            $('.filter_manufacturer_search').keyup(function(){
+                console.log($(this));
                 var valThis = $(this).val().toLowerCase();
                 var manufacturerList = $(this).parents('.filter-enum').find('.manufacturerList');
                 var manufacturerListLi = $(this).parents('.filter-enum').find('.manufacturerList li');
                 var noresult = 0;
-                console.log($('.no-results-found'));
-                console.log($(manufacturerList).find('li.no-results-found'));
+
                 if(valThis == ""){
                     manufacturerListLi.show();
                     noresult = 1;
