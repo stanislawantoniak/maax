@@ -57,7 +57,7 @@
 				if(addressCollection.length){
 					jQuery.each(addressCollection, function(){
 						// Do not allow sleected address
-						if(this.getId()==selectedAddress.getId()){
+						if(selectedAddress && this.getId()==selectedAddress.getId()){
 						//	return;
 						}
 						
