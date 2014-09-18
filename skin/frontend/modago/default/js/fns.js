@@ -2281,7 +2281,7 @@ jQuery.noConflict();
         }
 
         function filterType() {
-            var filterType = $('#filter_type');
+            var filterType = $('.filter-type');
             filterType.on('click', ':checkbox', function(event) {
                 filterType.find('.clear').removeClass('hidden');
 
