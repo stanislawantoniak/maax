@@ -73,6 +73,10 @@
 					float: none!important;
 				}
 			}
+
+            h4.addressbook-add-new>strong {
+                padding-left: 10px;
+            }
 		}
 		.panel-heading {
 				padding-top: 25px;
@@ -99,6 +103,16 @@
 			
 		}
 	}
+
+    .add-new {
+        .panel-body {
+            padding: 10px;
+            cursor: pointer;
+            h4 {
+                margin-bottom: 10px;
+            }
+        }
+    }
 
 	
 	dd.separator {
