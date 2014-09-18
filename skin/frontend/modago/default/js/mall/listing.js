@@ -97,6 +97,7 @@ Mall.listing = {
     init: function () {
         this.attachShowMoreEvent();
         this.attachFilterColorEvents();
+        this.attachFilterIconEvents();
         this.attachFilterEnumEvents();
         this.attachFilterDroplistEvents();
         this.attachFilterFlagEvents();
@@ -645,6 +646,7 @@ Mall.listing = {
             this.setCurrentMobileFilterState(1);
             this.attachShowMoreEvent();
             this.attachFilterColorEvents();
+            this.attachFilterIconEvents();
             this.attachFilterEnumEvents();
             this.attachFilterDroplistEvents();
             this.attachFilterFlagEvents();
@@ -700,6 +702,7 @@ Mall.listing = {
             this.setCurrentMobileFilterState(0);
             this.attachShowMoreEvent();
             this.attachFilterColorEvents();
+            this.attachFilterIconEvents();
             this.attachFilterEnumEvents();
             this.attachFilterDroplistEvents();
             this.attachFilterFlagEvents();
@@ -746,6 +749,19 @@ Mall.listing = {
      */
     attachFilterColorEvents: function() {
         jQuery(".filter-color").find("[data-url]").on("click", function(e) {
+            // @todo ajax logic
+            location.href = jQuery(this).attr("data-url");
+        });
+
+        return this;
+    },
+    /**
+     * Attaches events to icon filter.
+     *
+     * @returns {Mall.listing}
+     */
+    attachFilterIconEvents: function() {
+        jQuery(".filter-type").find("[data-url]").on("click", function(e) {
             // @todo ajax logic
             location.href = jQuery(this).attr("data-url");
         });

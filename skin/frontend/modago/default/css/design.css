@@ -3482,10 +3482,16 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
 /* line 152, ../sass/design/style/_sidebar.scss */
 .filter-type table td.first-td label img {
   border: 3px solid #fff; }
-/* line 157, ../sass/design/style/_sidebar.scss */
+/* line 156, ../sass/design/style/_sidebar.scss */
+.filter-type table td.first-td [type=checkbox] {
+  outline: none !important; }
+/* line 159, ../sass/design/style/_sidebar.scss */
+.filter-type table td.first-td [type=checkbox] + label img {
+  border: 1px solid #afafaf; }
+/* line 165, ../sass/design/style/_sidebar.scss */
 .filter-type table td.first-td [type=checkbox]:checked {
   outline: none !important; }
-/* line 160, ../sass/design/style/_sidebar.scss */
+/* line 168, ../sass/design/style/_sidebar.scss */
 .filter-type table td.first-td [type=checkbox]:checked + label img {
   border: 3px solid #000;
   -webkit-border-radius: 5px;
@@ -3493,22 +3499,22 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
   -ms-border-radius: 5px;
   -o-border-radius: 5px;
   border-radius: 5px; }
-/* line 167, ../sass/design/style/_sidebar.scss */
+/* line 175, ../sass/design/style/_sidebar.scss */
 .filter-type table td label {
   font-weight: normal;
   cursor: pointer;
   font-size: 12px; }
-/* line 171, ../sass/design/style/_sidebar.scss */
+/* line 179, ../sass/design/style/_sidebar.scss */
 .filter-type table td label .suffix {
   color: #b0b0b0;
   font-size: 12px; }
-/* line 180, ../sass/design/style/_sidebar.scss */
+/* line 188, ../sass/design/style/_sidebar.scss */
 .filter-type table tr:hover td label {
   color: #000; }
-/* line 182, ../sass/design/style/_sidebar.scss */
+/* line 190, ../sass/design/style/_sidebar.scss */
 .filter-type table tr:hover td label .suffix {
   color: #b0b0b0; }
-/* line 185, ../sass/design/style/_sidebar.scss */
+/* line 193, ../sass/design/style/_sidebar.scss */
 .filter-type table tr:hover td label img {
   border: 3px solid #999;
   -webkit-border-radius: 5px;
@@ -3516,18 +3522,18 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
   -ms-border-radius: 5px;
   -o-border-radius: 5px;
   border-radius: 5px; }
-/* line 197, ../sass/design/style/_sidebar.scss */
+/* line 205, ../sass/design/style/_sidebar.scss */
 .filter-type table tr:hover td label span {
   color: #000;
   text-decoration: underline; }
-/* line 200, ../sass/design/style/_sidebar.scss */
+/* line 208, ../sass/design/style/_sidebar.scss */
 .filter-type table tr:hover td label span + span {
   text-decoration: none; }
-/* line 202, ../sass/design/style/_sidebar.scss */
+/* line 210, ../sass/design/style/_sidebar.scss */
 .filter-type table tr:hover td label span + span.suffix {
   color: #b0b0b0; }
 
-/* line 219, ../sass/design/style/_sidebar.scss */
+/* line 227, ../sass/design/style/_sidebar.scss */
 .block-filter form .form-group input[type=checkbox].css-checkbox + label.css-label, .block-filter form .form-group input[type=radio].css-radio + label.css-label {
   line-height: 17px;
   background-repeat: no-repeat;
@@ -3538,31 +3544,31 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
   font-weight: normal;
   color: #1e1e1e;
   letter-spacing: -.5px; }
-/* line 229, ../sass/design/style/_sidebar.scss */
+/* line 237, ../sass/design/style/_sidebar.scss */
 .block-filter form .form-group input[type=checkbox].css-checkbox + label.css-label .suffix, .block-filter form .form-group input[type=radio].css-radio + label.css-label .suffix {
   color: #b0b0b0;
   font-size: 12px; }
-/* line 235, ../sass/design/style/_sidebar.scss */
+/* line 243, ../sass/design/style/_sidebar.scss */
 .block-filter form input[type=checkbox].css-checkbox + label.css-label {
   background-image: url("../images/checkbox_filter.png"); }
-/* line 239, ../sass/design/style/_sidebar.scss */
+/* line 247, ../sass/design/style/_sidebar.scss */
 .block-filter form input[type=radio].css-radio + label.css-label {
   background-image: url("../images/radio.png"); }
-/* line 243, ../sass/design/style/_sidebar.scss */
+/* line 251, ../sass/design/style/_sidebar.scss */
 .block-filter form input[type=checkbox].css-checkbox + label.css-label:hover, .block-filter form input[type=radio].css-radio + label.css-label:hover {
   background-position: 0 -50px; }
-/* line 245, ../sass/design/style/_sidebar.scss */
+/* line 253, ../sass/design/style/_sidebar.scss */
 .block-filter form input[type=checkbox].css-checkbox + label.css-label:hover span, .block-filter form input[type=radio].css-radio + label.css-label:hover span {
   text-decoration: underline; }
-/* line 247, ../sass/design/style/_sidebar.scss */
+/* line 255, ../sass/design/style/_sidebar.scss */
 .block-filter form input[type=checkbox].css-checkbox + label.css-label:hover span + span, .block-filter form input[type=radio].css-radio + label.css-label:hover span + span {
   text-decoration: none; }
-/* line 253, ../sass/design/style/_sidebar.scss */
+/* line 261, ../sass/design/style/_sidebar.scss */
 .block-filter form input[type=checkbox].css-checkbox:checked + label.css-label, .block-filter form input[type=radio].css-radio:checked + label.css-label {
   background-position: 0 -100px;
   color: #1e1e1e; }
 
-/* line 262, ../sass/design/style/_sidebar.scss */
+/* line 270, ../sass/design/style/_sidebar.scss */
 .wrapper-filter_manufacturerScrollbar {
   border: 1px solid #d0cfcf;
   -webkit-border-radius: 1px;
@@ -3571,40 +3577,40 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
   -o-border-radius: 1px;
   border-radius: 1px; }
 
-/* line 269, ../sass/design/style/_sidebar.scss */
+/* line 277, ../sass/design/style/_sidebar.scss */
 #filter_manufacturer .mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
   background: url("../images/scrollbar/scrollbar_filter.png") 0 0 no-repeat;
   border-radius: 0; }
-/* line 275, ../sass/design/style/_sidebar.scss */
+/* line 283, ../sass/design/style/_sidebar.scss */
 #filter_manufacturer .mCSB_scrollTools .mCSB_buttonUp {
   background: url("../images/scrollbar/arrow_up_filter.png") 0 0 no-repeat; }
-/* line 278, ../sass/design/style/_sidebar.scss */
+/* line 286, ../sass/design/style/_sidebar.scss */
 #filter_manufacturer .mCSB_scrollTools .mCSB_buttonDown {
   background: url("../images/scrollbar/arrow_down_filter.png") 0 0 no-repeat; }
-/* line 281, ../sass/design/style/_sidebar.scss */
+/* line 289, ../sass/design/style/_sidebar.scss */
 #filter_manufacturer .mCSB_scrollTools .mCSB_draggerRail {
   background: none !important; }
 
-/* line 289, ../sass/design/style/_sidebar.scss */
+/* line 297, ../sass/design/style/_sidebar.scss */
 #sidebar .list-group {
   border-radius: 0;
   border-color: #ebebeb; }
-/* line 292, ../sass/design/style/_sidebar.scss */
+/* line 300, ../sass/design/style/_sidebar.scss */
 #sidebar .list-group li {
   border-color: #ebebeb; }
-/* line 294, ../sass/design/style/_sidebar.scss */
+/* line 302, ../sass/design/style/_sidebar.scss */
 #sidebar .list-group li:first-child {
   border-radius: 0; }
-/* line 297, ../sass/design/style/_sidebar.scss */
+/* line 305, ../sass/design/style/_sidebar.scss */
 #sidebar .list-group li:last-child {
   border-radius: 0; }
 
-/* line 308, ../sass/design/style/_sidebar.scss */
+/* line 316, ../sass/design/style/_sidebar.scss */
 #note_client input[type=checkbox].css-checkbox + label.css-label:hover span, #note_client input[type=radio].css-radio + label.css-label:hover span, #filter_recommended_products input[type=checkbox].css-checkbox + label.css-label:hover span, #filter_recommended_products input[type=radio].css-radio + label.css-label:hover span {
   text-decoration: none; }
 
 @media (max-width: 767px) {
-  /* line 316, ../sass/design/style/_sidebar.scss */
+  /* line 324, ../sass/design/style/_sidebar.scss */
   .fb-slidebar-inner .current-filter {
     line-height: 24px; } }
 
