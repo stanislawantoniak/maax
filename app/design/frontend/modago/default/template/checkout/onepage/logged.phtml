@@ -1,5 +1,7 @@
 <?php /* @var $this Zolago_Modago_Block_Checkout_Onepage_Abstract */ ?>
 <?php $_customer = $this->getCustomer();?>
+<?php $_quoteBilling = $this->getQuote()->getBillingAddress();?>
+<?php $_quoteShipping = $this->getQuote()->getShippingAddress();?>
 <div id="content" class="container-fluid">
 	<div id="checkout" class="row">
 		<div class="step step-0 hidden" id="step-0">
@@ -21,6 +23,8 @@
 <script type="text/javascript">
 	Mall.translate.add("default-shipping-address", "<?php echo $this->__("Default shipping address");?>");
 	Mall.translate.add("default-billing-address", "<?php echo $this->__("Default billing address");?>");
+	Mall.translate.add("change-address", "<?php echo $this->__("Change address");?>");
+	Mall.translate.add("roll-up", "<?php echo $this->__("Roll up");?>");
 </script>
 <script type="text/javascript">
 	(function(){
@@ -36,8 +40,9 @@
 		addressBook.setAddressBook(<?php echo $this->getCustomerAddressesJson(); ?>);
 		addressBook.setDefaultShipping(<?php echo $this->asJson($_customer->getDefaultShipping())?>);
 		addressBook.setDefaultBilling(<?php echo $this->asJson($_customer->getDefaultBilling())?>);
-		addressBook.setSelectedShipping(<?php echo $this->asJson($this->getQuote()->getShippingAddress()->getCustomerAddressId())?>);
-		addressBook.setSelectedBilling(<?php echo $this->asJson($this->getQuote()->getBillingAddress()->getCustomerAddressId())?>);
+		addressBook.setSelectedShipping(<?php echo $this->asJson($_quoteShipping->getCustomerAddressId())?>);
+		addressBook.setSelectedBilling(<?php echo $this->asJson($_quoteBilling->getCustomerAddressId())?>);
+		addressBook.setNeedInvoice(<?php echo $this->asJson($_quoteBilling->getNeedInvoice())?>);
 			
 		Mall.Checkout.steps.addressbook.setAddressBook(addressBook);
 			

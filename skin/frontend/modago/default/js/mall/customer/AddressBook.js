@@ -22,6 +22,14 @@
          * @private
          */
         this._customer = null;
+		
+        /**
+         * Is invoice needed
+         *
+         * @type {null}
+         * @private
+         */
+		this._needInvoice = false;
 
         /**
          * Default billing address id.
@@ -68,6 +76,22 @@
         getCustomer: function () {
             return this._customer;
         },
+		
+		/**
+		 * @param {type} flag
+		 * @returns {Mall.customer.AddressBook.prototype}
+		 */
+		setNeedInvoice: function(flag){
+			this._needInvoice = flag;
+			return this;
+		},
+		
+		/**
+		 * @returns {bool}
+		 */
+		getNeedInvoice: function(){
+			return this._needInvoice;
+		},
 
         /**
          * Return current addressbook.

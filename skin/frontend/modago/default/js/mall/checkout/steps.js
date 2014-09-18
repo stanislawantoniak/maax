@@ -70,6 +70,38 @@
 					target.html(Mall.translate.__("No addresses"));
 				}
 			},
+			handleNeedInvoiceClick: function(e){
+				var addressBook = this.getAddressBook(),
+					state = jQuery(e.target).is(":checked"),
+					invoiceBlock = this.content.find("#block_invoice");
+				
+				addressBook.setNeedInvoice(state);
+				
+				if(addressBook.getNeedInvoice()){
+					invoiceBlock.show();
+				}else{
+					invoiceBlock.hide()
+				}
+			},
+			handleChangeAddressClick: function(e){
+				var addressBook = this.getAddressBook(),
+					element = jQuery(e.target),
+					block = this.content.find(".panel-adresses." + e.data.type);
+			
+				element.toggleClass("open");
+				
+				// Need move to one tag
+				if(element.hasClass("open")){
+					block.show();
+					block.find('.panel').show();
+					element.text(Mall.translate.__("roll-up"))
+				}else{
+					block.hide();
+					block.find('.panel').hide();
+					element.text(Mall.translate.__("change-address"));
+				}
+				
+			},
 			processAddressNode: function(node, address, addressBook, type){
 				var settableDefault = true,
 					removeable = addressBook.isRemoveable(address.getId()),
@@ -138,6 +170,20 @@
 				this.renderSelectedAddress("billing");
 				this.renderAddressList("shipping");
 				this.renderAddressList("billing");
+				
+				// Handle need invoice
+				this.content.find(".need_invoice").change(function(e){
+					self.handleNeedInvoiceClick(e);
+				}).change();
+				
+				// Handle open list
+				this.content.find(".change_address").each(function(){
+					var type = jQuery(this).hasClass("billing") ? "billing" : "shipping";
+					jQuery(this).click({type: type}, function(e){
+						self.handleChangeAddressClick(e);
+						return false;
+					})
+				})
 			},
 			
 		},

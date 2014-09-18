@@ -433,21 +433,21 @@ $('.podziekowanie_nieudane_view_summary').on('click', function(e){
 
 
 
-var invoice = $('#invoice input[type=checkbox]');
-var block_invoice = $('#block_invoice');
-if ($('#invoice_this').is(':checked')) {
-  block_invoice.show(50);
-};
+//var invoice = $('#invoice input[type=checkbox]');
+//var block_invoice = $('#block_invoice');
+//if ($('#invoice_this').is(':checked')) {
+//  block_invoice.show(50);
+//};
 
-var change_address = $('.change_address');
-change_address.on('click', function(e){
-  e.preventDefault();
-  $(this).closest('.panel').find('.panel-body').find('.panel').each(function(key, value){
-      $(this).toggle(50);
-  });
-  var txt = $(this).is('.open') ? 'zmień adres' : ' zwiń listę adresów';
-  $(this).text(txt).toggleClass('open');
-});
+//var change_address = $('.change_address');
+//change_address.on('click', function(e){
+//  e.preventDefault();
+//  $(this).closest('.panel').find('.panel-body').find('.panel').each(function(key, value){
+//      $(this).toggle(50);
+//  });
+//  var txt = $(this).is('.open') ? 'zmień adres' : ' zwiń listę adresów';
+//  $(this).text(txt).toggleClass('open');
+//});
 
 
 
@@ -468,9 +468,9 @@ $(devault_pay_bank).on('change', function(){
   $('.selected_bank').hide();
   $(this).closest('.form-group').next('.selected_bank').show();
 });
-$('#invoice').on('change', 'input', function(){
-  block_invoice.toggle();
-});
+//$('#invoice').on('change', 'input', function(){
+//  block_invoice.toggle();
+//});
 
 var view_default_pay = $('#view_default_pay');
 var view_block_default_pay = $('.default_pay > .panel > .panel-body > .panel');
