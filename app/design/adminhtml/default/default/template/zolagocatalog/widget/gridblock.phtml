@@ -186,101 +186,94 @@ $numColumns = sizeof($this->getColumns());
         bottom:3px;
         right:3px;
     }
-    .status-enabled{
-        color:green;
-    }
-    .status-disabled{
-        color:red;
-    }
-    .sku{
-        font-size:10px;
-        color:#999;
+    .table .meta{
+        color: #AAA;
     }
 </style>
 
 <?php if($this->getCollection()): ?>
-    <?php if($this->canDisplayContainer()): ?>
-        <?php if($this->getGridHeader()): ?>
-            <div class="content-header">
-                <table cellspacing="0">
-                    <tr>
-                        <td style="width:50%;"><h2><?php echo $this->getGridHeader(); ?></h2></td>
-                    </tr>
-                </table>
+<?php if($this->canDisplayContainer()): ?>
+<?php if($this->getGridHeader()): ?>
+    <div class="content-header">
+        <table cellspacing="0">
+            <tr>
+                <td style="width:50%;"><h2><?php echo $this->getGridHeader(); ?></h2></td>
+            </tr>
+        </table>
+    </div>
+<?php endif ?>
+
+<div id="grid-loader"></div>
+<div id="mass-grid-container" class="<?php echo $this->getGridClass();?>">
+<?php else: ?>
+    <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+<?php endif; ?>
+<?php if($this->getPagerVisibility() || $this->getExportTypes() || $this->getFilterVisibility()): ?>
+
+    <?php if($this->getPagerVisibility()): ?>
+        <div class="actions">
+
+            <div class="pull-left form-horizontal">
+                <div class="attribute-switcher">
+                    <?php echo $this->getAttributeSetSwitcherHtml(); ?>
+                </div>
             </div>
-        <?php endif ?>
 
-        <div id="grid-loader"></div>
-        <div id="mass-grid-container" class="<?php echo $this->getGridClass();?>">
-    <?php else: ?>
-        <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
-    <?php endif; ?>
-    <?php if($this->getPagerVisibility() || $this->getExportTypes() || $this->getFilterVisibility()): ?>
+            <?php if($this->isLazyLoad()): ?>
 
-        <?php if($this->getPagerVisibility()): ?>
-            <div class="actions">
+                <div class="pull-left form-inline">
 
-                <div class="pull-left form-horizontal">
-                    <div class="attribute-switcher">
-                        <?php echo $this->getAttributeSetSwitcherHtml(); ?>
+
+                    <div class="text-holder">
+                        <label>
+                            <span><?php echo $this->__('Loaded'); ?>: <strong><span class="loaded-records-count"><?php echo $this->getCollection()->getPageSize(); ?></span>/<span class='total-records-count'><?php echo $this->getCollection()->getSize(); ?></span></strong> <small class="percent-loaded"></small></span>
+                        </label>
+                    </div>
+                    <div class="loader-indicator"></div>
+                </div>
+
+            <?php else: ?>
+
+                <div class="pull-left form-inline">
+                    <div class="text-holder">
+                        <label>
+                            <?php echo $this->__('Total %d records found.', $this->getCollection()->getSize()) ?>
+                            <span id="<?php echo $this->getHtmlId() ?>-total-count" class="hidden"><?php echo $this->getCollection()->getSize() ?></span>
+                        </label>
+                    </div>
+                    <div class="text-holder">
+                        <label><?php echo $this->__('View') ?></label>
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control" name="<?php echo $this->getVarNameLimit() ?>" onchange="<?php echo $this->getJsObjectName() ?>.loadByElement(this)">
+                            <option value="20"<?php if($this->getCollection()->getPageSize()==20): ?> selected="selected"<?php endif; ?>>20</option>
+                            <option value="30"<?php if($this->getCollection()->getPageSize()==30): ?> selected="selected"<?php endif; ?>>30</option>
+                            <option value="50"<?php if($this->getCollection()->getPageSize()==50): ?> selected="selected"<?php endif; ?>>50</option>
+                            <option value="100"<?php if($this->getCollection()->getPageSize()==100): ?> selected="selected"<?php endif; ?>>100</option>
+                            <option value="200"<?php if($this->getCollection()->getPageSize()==200): ?> selected="selected"<?php endif; ?>>200</option>
+                        </select>
+                    </div>
+                    <div class="text-holder">
+                        <label><?php echo $this->__('per page.') ?></label>
                     </div>
                 </div>
 
-                <?php if($this->isLazyLoad()): ?>
+            <?php endif; ?>
 
-                    <div class="pull-left form-inline">
+            <?php if($this->getMainButtonsHtml()):?>
+                <div class="pull-right  form-inline main-buttons">
 
+                    <button class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm">Show/Hide columns</button>
 
-                        <div class="text-holder">
-                            <label>
-                                <span><?php echo $this->__('Loaded'); ?>: <strong><span class="loaded-records-count"><?php echo $this->getCollection()->getPageSize(); ?></span>/<span class='total-records-count'><?php echo $this->getCollection()->getSize(); ?></span></strong> <small class="percent-loaded"></small></span>
-                            </label>
-                        </div>
-                        <div class="loader-indicator"></div>
-                    </div>
+                    <?php //echo $this->getMainButtonsHtml() ?>
 
-                <?php else: ?>
+                    <button id="filter-btn" class="btn btn-secondary" title="Filters">Filters</button>
+                    <button id="reset-filter-btn" title="<?php echo $this->__('Reset Filter') ?>" class="btn btn-danger"><span><span><?php echo $this->__('Reset Filter') ?></span></span></button>
 
-                    <div class="pull-left form-inline">
-                        <div class="text-holder">
-                            <label>
-                                <?php echo $this->__('Total %d records found.', $this->getCollection()->getSize()) ?>
-                                <span id="<?php echo $this->getHtmlId() ?>-total-count" class="hidden"><?php echo $this->getCollection()->getSize() ?></span>
-                            </label>
-                        </div>
-                        <div class="text-holder">
-                            <label><?php echo $this->__('View') ?></label>
-                        </div>
-                        <div class="form-group">
-                            <select class="form-control" name="<?php echo $this->getVarNameLimit() ?>" onchange="<?php echo $this->getJsObjectName() ?>.loadByElement(this)">
-                                <option value="20"<?php if($this->getCollection()->getPageSize()==20): ?> selected="selected"<?php endif; ?>>20</option>
-                                <option value="30"<?php if($this->getCollection()->getPageSize()==30): ?> selected="selected"<?php endif; ?>>30</option>
-                                <option value="50"<?php if($this->getCollection()->getPageSize()==50): ?> selected="selected"<?php endif; ?>>50</option>
-                                <option value="100"<?php if($this->getCollection()->getPageSize()==100): ?> selected="selected"<?php endif; ?>>100</option>
-                                <option value="200"<?php if($this->getCollection()->getPageSize()==200): ?> selected="selected"<?php endif; ?>>200</option>
-                            </select>
-                        </div>
-                        <div class="text-holder">
-                            <label><?php echo $this->__('per page.') ?></label>
-                        </div>
-                    </div>
+                </div>
+            <?php endif;?>
 
-                <?php endif; ?>
-
-                <?php if($this->getMainButtonsHtml()):?>
-                    <div class="pull-right  form-inline main-buttons">
-
-                        <button class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-sm">Show/Hide columns</button>
-
-                        <?php //echo $this->getMainButtonsHtml() ?>
-
-                        <button id="filter-btn" class="btn btn-secondary" title="Filters">Filters</button>
-                        <button id="reset-filter-btn" title="<?php echo $this->__('Reset Filter') ?>" class="btn btn-danger"><span><span><?php echo $this->__('Reset Filter') ?></span></span></button>
-
-                    </div>
-                <?php endif;?>
-
-                <?php if(!$this->isLazyLoad()): ?>
+            <?php if(!$this->isLazyLoad()): ?>
 
                 <div class="pull-right form-inline">
                     <?php $_curPage  = $this->getCollection()->getCurPage() ?>
@@ -302,10 +295,10 @@ $numColumns = sizeof($this->getColumns());
                             <?php endif; ?>
 
                             <?php if($_curPage < $_lastPage): ?>
-                            <button  class="btn btn-default"  title="<?php echo $this->__('Next page') ?>" onclick="<?php echo $this->getJsObjectName() ?>.setPage('<?php echo ($_curPage+1) ?>');return false;"><i class="glyphicon glyphicon-chevron-right arrow"></i></button>
-                                <?php else: ?>
-                                    <button class="btn btn-default" disabled="disabled"><i class="glyphicon glyphicon-chevron-right arrow"></i></button>
-                                <?php endif; ?>
+                                <button  class="btn btn-default"  title="<?php echo $this->__('Next page') ?>" onclick="<?php echo $this->getJsObjectName() ?>.setPage('<?php echo ($_curPage+1) ?>');return false;"><i class="glyphicon glyphicon-chevron-right arrow"></i></button>
+                            <?php else: ?>
+                                <button class="btn btn-default" disabled="disabled"><i class="glyphicon glyphicon-chevron-right arrow"></i></button>
+                            <?php endif; ?>
                         </div>
                     </div>
                     <div class="text-holder">
@@ -319,102 +312,102 @@ $numColumns = sizeof($this->getColumns());
                     </div>
                 </div>
 
-                <?php endif; ?>
+            <?php endif; ?>
 
-                <div class="clearfix"></div>
-            </div>
-            <hr/>
-        <?php endif ?>
-        <?php if($this->getExportTypes()): ?>
-            <div class="next-row">
-                <div class="col-md-4">
-                    <img src="<?php echo $this->getSkinUrl('images/icon_export.gif') ?>" alt="" class="v-middle"/>&nbsp; <?php echo $this->__('Export to:') ?>
-                    <select name="<?php echo $this->getId() ?>_export" id="<?php echo $this->getId() ?>_export" style="width:8em;" class="form-control">
-                        <?php foreach ($this->getExportTypes() as $_type): ?>
-                            <option value="<?php echo $_type->getUrl() ?>"><?php echo $_type->getLabel() ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                    <?php echo $this->getExportButtonHtml() ?>
-                </div>
-            </div>
-        <?php endif; ?>
-
-
-    <?php endif; ?>
-    <?php if($this->getMassactionBlock()->isAvailable()): ?>
-        <?php echo $this->getMassactionBlockHtml() ?>
+            <div class="clearfix"></div>
+        </div>
+        <hr/>
     <?php endif ?>
-
-    <?php $columns = $this->getColumns(); ?>
-    <?php $leftColumnsCount = 6; ?>
-    <?php $leftColumns = array_splice($columns, 0, $leftColumnsCount); ?>
-    <?php $bodyColumns = $columns; ?>
-
-    <div id="mass-grid" class="grid clearfix">
-        <div id="grid-left-columns">
-            <div class="table">
-                <?php if ($this->getHeadersVisibility() || $this->getFilterVisibility()): ?>
-                    <div class="thead">
-                        <?php if ($this->getHeadersVisibility()): ?>
-                            <div class="headings clearfix">
-
-                                <?php foreach ($leftColumns as $_column): ?>
-
-                                    <?php if($this->isColumnVisible($_column)): ?>
-                                        <div<?php echo $_column->getHeaderHtmlProperty() ?> <?php echo $this->getColumnWidthStyle($_column); ?>><span class="nobr"><?php echo $_column->getHeaderHtml() ?></span></div>
-                                    <?php endif; ?>
-
-                                <?php endforeach; ?>
-
-                            </div>
-                        <?php endif; ?>
-                        <?php if ($this->getFilterVisibility()): ?>
-                            <div class="filter clearfix">
-                                <?php $i=0; foreach ($leftColumns as $_column): ?>
-
-                                    <?php if($this->isColumnVisible($_column)): ?>
-                                        <div<?php echo $_column->getHeaderHtmlProperty() ?> <?php echo $this->getColumnWidthStyle($_column); ?>><?php echo $_column->getFilterHtml() ?></div>
-                                    <?php endif; ?>
-
-                                <?php endforeach; ?>
-                            </div>
-                        <?php endif ?>
-                    </div>
-                <?php endif; ?>
-
-                <div class="tbody">
-                    <?php if (($this->getCollection()->getSize()>0) && (!$this->getIsCollapsed())): ?>
-                        <?php foreach ($this->getCollection() as $_index=>$_item): ?>
-                            <div title="<?php echo $this->getRowUrl($_item) ?>" class="clearfix <?php if ($_class = $this->getRowClass($_item)) echo $_class; ?>" >
-                                <?php foreach ($leftColumns as $_column): ?>
-
-                                    <?php if ($this->shouldRenderCell($_item, $_column) && $this->isColumnVisible($_column)):?>
-                                        <div class="cell <?php echo $_column->getCssProperty() ?> <?php echo $this->getCellClass($_item, $_column);?>" <?php echo $this->getColumnWidthStyle($_column); ?>>
-                                            <div>
-                                                <?php echo (($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?>
-                                                <?php echo $this->getAdditionalHtml($_item, $_column); ?>
-                                            </div>
-                                        </div>
-                                    <?php endif;?>
-
-                                <?php endforeach; ?>
-                            </div>
-
-                        <?php endforeach; ?>
-                    <?php elseif ($this->getEmptyText()): ?>
-                        <div>
-                            <div class="empty-text <?php echo $this->getEmptyTextClass() ?>" colspan="<?php echo $numColumns ?>"><?php echo $this->getEmptyText() ?></div>
-                        </div>
-                    <?php endif; ?>
-                </div>
-
+    <?php if($this->getExportTypes()): ?>
+        <div class="next-row">
+            <div class="col-md-4">
+                <img src="<?php echo $this->getSkinUrl('images/icon_export.gif') ?>" alt="" class="v-middle"/>&nbsp; <?php echo $this->__('Export to:') ?>
+                <select name="<?php echo $this->getId() ?>_export" id="<?php echo $this->getId() ?>_export" style="width:8em;" class="form-control">
+                    <?php foreach ($this->getExportTypes() as $_type): ?>
+                        <option value="<?php echo $_type->getUrl() ?>"><?php echo $_type->getLabel() ?></option>
+                    <?php endforeach; ?>
+                </select>
+                <?php echo $this->getExportButtonHtml() ?>
             </div>
         </div>
+    <?php endif; ?>
 
-        <div id="grid-body">
-            <div class="table">
-                <?php if ($this->getHeadersVisibility() || $this->getFilterVisibility()): ?>
-                    <div class="thead">
+
+<?php endif; ?>
+<?php if($this->getMassactionBlock()->isAvailable()): ?>
+    <?php echo $this->getMassactionBlockHtml() ?>
+<?php endif ?>
+
+<?php $columns = $this->getColumns(); ?>
+<?php $leftColumnsCount = 6; ?>
+<?php $leftColumns = array_splice($columns, 0, $leftColumnsCount); ?>
+<?php $bodyColumns = $columns; ?>
+
+<div id="mass-grid" class="grid clearfix">
+    <div id="grid-left-columns">
+        <div class="table">
+            <?php if ($this->getHeadersVisibility() || $this->getFilterVisibility()): ?>
+                <div class="thead">
+                    <?php if ($this->getHeadersVisibility()): ?>
+                        <div class="headings clearfix">
+
+                            <?php foreach ($leftColumns as $_column): ?>
+
+                                <?php if($this->isColumnVisible($_column)): ?>
+                                    <div<?php echo $_column->getHeaderHtmlProperty() ?> <?php echo $this->getColumnWidthStyle($_column); ?>><span class="nobr"><?php echo $this->getHeaderHtml($_column); ?></span></div>
+                                <?php endif; ?>
+
+                            <?php endforeach; ?>
+
+                        </div>
+                    <?php endif; ?>
+                    <?php if ($this->getFilterVisibility()): ?>
+                        <div class="filter clearfix">
+                            <?php $i=0; foreach ($leftColumns as $_column): ?>
+
+                                <?php if($this->isColumnVisible($_column)): ?>
+                                    <div<?php echo $_column->getHeaderHtmlProperty() ?> <?php echo $this->getColumnWidthStyle($_column); ?>><?php echo $_column->getFilterHtml() ?></div>
+                                <?php endif; ?>
+
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif ?>
+                </div>
+            <?php endif; ?>
+
+            <div class="tbody">
+                <?php if (($this->getCollection()->getSize()>0) && (!$this->getIsCollapsed())): ?>
+                    <?php foreach ($this->getCollection() as $_index=>$_item): ?>
+                        <div title="<?php echo $this->getRowUrl($_item) ?>" class="clearfix <?php if ($_class = $this->getRowClass($_item)) echo $_class; ?>" >
+                            <?php foreach ($leftColumns as $_column): ?>
+
+                                <?php if ($this->shouldRenderCell($_item, $_column) && $this->isColumnVisible($_column)):?>
+                                    <div class="cell <?php echo $_column->getCssProperty() ?> <?php echo $this->getCellClass($_item, $_column);?>" <?php echo $this->getColumnWidthStyle($_column); ?>>
+                                        <div>
+                                            <?php echo (($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?>
+                                            <?php echo $this->getAdditionalHtml($_item, $_column); ?>
+                                        </div>
+                                    </div>
+                                <?php endif;?>
+
+                            <?php endforeach; ?>
+                        </div>
+
+                    <?php endforeach; ?>
+                <?php elseif ($this->getEmptyText()): ?>
+                    <div>
+                        <div class="empty-text <?php echo $this->getEmptyTextClass() ?>" colspan="<?php echo $numColumns ?>"><?php echo $this->getEmptyText() ?></div>
+                    </div>
+                <?php endif; ?>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="grid-body">
+        <div class="table">
+            <?php if ($this->getHeadersVisibility() || $this->getFilterVisibility()): ?>
+                <div class="thead">
                     <?php if ($this->getHeadersVisibility()): ?>
                         <div class="headings clearfix">
                             <?php foreach ($bodyColumns as $_column): ?>
@@ -437,10 +430,10 @@ $numColumns = sizeof($this->getColumns());
                             <?php endforeach; ?>
                         </div>
                     <?php endif ?>
-                    </div>
-                <?php endif; ?>
+                </div>
+            <?php endif; ?>
 
-                <div class="tbody">
+            <div class="tbody">
                 <?php if (($this->getCollection()->getSize()>0) && (!$this->getIsCollapsed())): ?>
                     <?php foreach ($this->getCollection() as $_index=>$_item): ?>
                         <div title="<?php echo $this->getRowUrl($_item) ?>" class="clearfix <?php if ($_class = $this->getRowClass($_item)) echo $_class; ?>" >
@@ -451,6 +444,7 @@ $numColumns = sizeof($this->getColumns());
                                     <div class="cell <?php echo $_column->getCssProperty() ?> <?php echo $this->getCellClass($_item, $_column);?>" <?php echo $this->getColumnWidthStyle($_column); ?>>
                                         <div>
                                             <?php echo (($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?>
+                                            <?php echo $this->getAdditionalHtml($_item, $_column); ?>
                                         </div>
                                     </div>
                                 <?php endif;?>
@@ -464,68 +458,68 @@ $numColumns = sizeof($this->getColumns());
                         <div class="empty-text <?php echo $this->getEmptyTextClass() ?>" colspan="<?php echo $numColumns ?>"><?php echo $this->getEmptyText() ?></div>
                     </div>
                 <?php endif; ?>
-                </div>
-
             </div>
-        </div>
 
-        <div id="scrollbar-container-y"><div id="scroll-handle-y"></div></div>
-        <div id="scrollbar-container-x"><div id="scroll-handle-x"></div></div>
-
-        <div id="editor-popover"><h4></h4><div class="content"></div><a class="close-btn" href="#">x</a></div>
-        <div id="image-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="ImageLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                        <h4 class="modal-title" id="ImageLabel"></h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="image">
-                            <img src="" height="100%"/>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
-    <script type="text/javascript">
-        <?php if($this->canDisplayContainer()): ?>
 
-            //<![CDATA[
-            var totalPages = <?php echo $this->getCollection()->getLastPageNumber(); ?>;
-            var totalRecords = <?php echo $this->getCollection()->getSize(); ?>;
-            var nextToLoadCount = <?php echo $this->getCollection()->getPageSize(); ?>;
-            var varNameSort = '<?php echo $this->getVarNameSort() ?>';
-            var varNameDir = '<?php echo $this->getVarNameDir() ?>';
-            //]]>
+    <div id="scrollbar-container-y"><div id="scroll-handle-y"></div></div>
+    <div id="scrollbar-container-x"><div id="scroll-handle-x"></div></div>
 
-        <?php endif; ?>
-    </script>
-<?php endif ?>
-    <!-- modal -->
-
-    <div class="modal fade bs-example-modal-sm" id="saveColumnsModal" tabindex="-1" role="dialog"
-         aria-labelledby="mySmallModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-sm">
+    <div id="editor-popover"><h4></h4><div class="content"></div><a class="close-btn" href="#">x</a></div>
+    <div id="image-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="ImageLabel" aria-hidden="true">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myModalLabel"><?php echo $this->__('Show/Hide columns'); ?></h4>
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="ImageLabel"></h4>
                 </div>
                 <div class="modal-body">
-                    <?php echo $this->getPopupContent() ?>
+                    <div class="image">
+                        <img src="" height="100%"/>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default"
-                            data-dismiss="modal"><?php echo $this->__('Cancel'); ?></button>
-                    <button type="button" class="btn btn-primary"
-                            name="saveColumns"><?php echo $this->__('Save'); ?></button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
     </div>
+</div>
+<script type="text/javascript">
+    <?php if($this->canDisplayContainer()): ?>
+
+    //<![CDATA[
+    var totalPages = <?php echo $this->getCollection()->getLastPageNumber(); ?>;
+    var totalRecords = <?php echo $this->getCollection()->getSize(); ?>;
+    var nextToLoadCount = <?php echo $this->getCollection()->getPageSize(); ?>;
+    var varNameSort = '<?php echo $this->getVarNameSort() ?>';
+    var varNameDir = '<?php echo $this->getVarNameDir() ?>';
+    //]]>
+
+    <?php endif; ?>
+</script>
+<?php endif ?>
+<!-- modal -->
+
+<div class="modal fade bs-example-modal-sm" id="saveColumnsModal" tabindex="-1" role="dialog"
+     aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel"><?php echo $this->__('Show/Hide columns'); ?></h4>
+            </div>
+            <div class="modal-body">
+                <?php echo $this->getPopupContent() ?>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal"><?php echo $this->__('Cancel'); ?></button>
+                <button type="button" class="btn btn-primary"
+                        name="saveColumns"><?php echo $this->__('Save'); ?></button>
+            </div>
         </div>
+    </div>
+</div>
+</div>

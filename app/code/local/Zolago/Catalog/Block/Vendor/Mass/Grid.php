@@ -697,6 +697,19 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 		return null;
 	}
 
+    public function getHeaderHtml(Mage_Adminhtml_Block_Widget_Grid_Column $column)
+    {
+        $data = $column->getData();
+        switch($data['index']){
+
+            case 'thumbnail':
+                $column = $this->getColumn('images_count');
+                break;
+        }
+
+        return $column->getHeaderHtml();
+    }
+
     public function getAdditionalHTML(Varien_Object $item, Mage_Adminhtml_Block_Widget_Grid_Column $column)
     {
         $html = '';
@@ -712,8 +725,12 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
 
             case 'name':
                 $sku_column = $this->getColumn('sku');
+                $status_column = $this->getColumn('status');
                 if($sku_column){
-                    $html .= "<div class='sku'>(" . $sku_column->getRowField($item) . ")</div>";
+                    $html .= "<div class='row meta'>";
+                    $html .= "<div class='col-sm-8 sku'>(" . $sku_column->getRowField($item) . ")</div>";
+                    $html .= "<div class='col-sm-4 status'>(" . $status_column->getRowField($item) . ")</div>";
+                    $html .= "</div>";
                 }
                 break;
         }

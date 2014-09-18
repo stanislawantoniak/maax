@@ -186,12 +186,6 @@ $numColumns = sizeof($this->getColumns());
         bottom:3px;
         right:3px;
     }
-    .status-enabled{
-        color:green;
-    }
-    .status-disabled{
-        color:red;
-    }
 </style>
 
 <?php if($this->getCollection()): ?>
@@ -357,7 +351,7 @@ $numColumns = sizeof($this->getColumns());
                             <?php foreach ($leftColumns as $_column): ?>
 
                                 <?php if($this->isColumnVisible($_column)): ?>
-                                    <div<?php echo $_column->getHeaderHtmlProperty() ?> <?php echo $this->getColumnWidthStyle($_column); ?>><span class="nobr"><?php echo $_column->getHeaderHtml() ?></span></div>
+                                    <div<?php echo $_column->getHeaderHtmlProperty() ?> <?php echo $this->getColumnWidthStyle($_column); ?>><span class="nobr"><?php echo $this->getHeaderHtml($_column); ?></span></div>
                                 <?php endif; ?>
 
                             <?php endforeach; ?>

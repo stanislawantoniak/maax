@@ -139,7 +139,7 @@
 
 
 
-#filter_type {
+.filter-type {
 
   table {
   
@@ -150,7 +150,10 @@
         vertical-align: middle;
         label {
           img {
-            border:3px solid #fff;
+            border:1px solid #afafaf;
+			margin:2px;
+			width:27px;
+			height:27px;
           }
         }
         
@@ -160,6 +163,9 @@
             img {
               border:3px solid #000;
               @include border-radius(5px);
+			  margin:0px;
+			  width:31px;
+		      height:31px;
             }
           }
         }
@@ -185,10 +191,14 @@
           img {
             border:3px solid #999;
             @include border-radius(5px);
+			margin:0px;
+	    	width:31px;
+		    height:31px;
           }
         }
         }
       }
+
     }
     tr {
       &:hover {
