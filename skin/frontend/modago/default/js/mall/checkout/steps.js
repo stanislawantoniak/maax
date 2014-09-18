@@ -29,12 +29,19 @@
 				var template = this.getSelectedTemplate(),
 					addressBook = this.getAddressBook(),
 					target = jQuery(".current-addres."+type, this.content),
-					addressObject = addressBook.getSelected(type);
+					addressObject = addressBook.getSelected(type),
+					defaultAdderssObject = addressBook.getDefault(type);
 				
 				if(addressObject){
+					var defaultCaption = "";
+					if(defaultAdderssObject && defaultAdderssObject.getId()==addressObject.getId()){
+						defaultCaption = Mall.translate.__("default-"+type+"-address");
+					}else{
+						// add set ass default checkbox
+					}
 					var data = jQuery.extend(
 						this.processAddressToDisplay(addressObject), 
-						{"default_caption": Mall.translate.__("default-"+type+"-address")}
+						{"default_caption": defaultCaption}
 					);
 					target.html(Mall.replace(template, data));
 				}else{

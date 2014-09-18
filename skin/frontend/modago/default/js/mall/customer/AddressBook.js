@@ -140,7 +140,7 @@
 			
             deffered.done(function (data) {
                 if (Boolean(data.status)){
-					this._book.push(address);
+					self._book.push(address);
 				}else{
 					//...
 				}
