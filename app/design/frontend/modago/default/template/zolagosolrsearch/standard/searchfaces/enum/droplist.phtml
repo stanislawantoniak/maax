@@ -9,56 +9,34 @@
     ?>
     <div class="section clearfix">
         <h3 class="<?php echo $sectionClass; ?>"><?php echo $this->getFacetLabel(); ?> <i class="fa <?php echo $iconClass; ?>"></i></h3>
-        <div class="content filter-enum"  id="filter_manufacturer">
-            <div class="form-group clearfix ">
-                <input type="text" name="filter_manufacturer" id="filter_manufacturer_search" class="filter_manufacturer_search" />
-                <input type="image" src="<?php echo $this->getSkinUrl('images/btn-search-filter.png'); ?>" alt="Szukaj">
-            </div>
-            <div class="wrapper-filter_manufacturerScrollbar">
-                <div class="manufacturerListChecked"></div>
-                <div class="filter_manufacturerScrollbar">
-                    <ul class="manufacturerList">
-                        <?php foreach ($this->getItems() as $item => $count): ?>
-                            <?php if ($this->getCanShowItem($item, $count)): ?>
-                                <?php
-                                if(!$isOptionSelected && $this->isItemActive($item)) {
-                                    $isOptionSelected = true;
-                                }
-                                ?>
-                                <li>
-                                    <div class="form-group form-checkbox">
-                                        <input data-url="<?php echo $this->getItemUrl($item) ?>" data-params="<?php echo $this->getItemJson($item);?>" type="checkbox" name="check_<?php echo $item; ?>" id="check_<?php echo $item; ?>" class="css-checkbox" <?php if($this->isItemActive($item)): ?>checked="checked" <?php endif; ?>>
-                                        <label for="check_<?php echo $item; ?>" class="css-label"><span><?php echo $item ?></span>&nbsp;<span class="suffix">(<?php echo $count ?>)</span></label>
-                                    </div>
-                                </li>
-
-                            <?php endif; ?>
-                        <?php endforeach; ?>
-                        <?php if ($this->getCanShowHidden()): ?>
-                            <?php foreach ($this->getHiddenItems() as $item => $count): ?>
-                                <div class="form-group form-checkbox" data-state="hidden" style="display: none;">
-                                    <input data-url="<?php echo $this->getItemUrl($item) ?>" data-params="<?php echo $this->getItemJson($item);?>" type="checkbox" name="check_<?php echo $item; ?>" id="check_<?php echo $item; ?>" class="css-checkbox" <?php if($this->isItemActive($item)): ?>checked="checked" <?php endif; ?>>
-                                    <label for="check_<?php echo $item; ?>" class="css-label"><span><?php echo $item ?></span>&nbsp;<span class="suffix">(<?php echo $count ?>)</span></label>
-                                </div>
-                                <li data-state="hidden" style="display: none;">
-                                    <div class="form-group form-checkbox">
-                                        <input data-url="<?php echo $this->getItemUrl($item) ?>" data-params="<?php echo $this->getItemJson($item);?>" type="checkbox" name="check_<?php echo $item; ?>" id="check_<?php echo $item; ?>" class="css-checkbox" <?php if($this->isItemActive($item)): ?>checked="checked" <?php endif; ?>>
-                                        <label for="check_<?php echo $item; ?>" class="css-label"><span><?php echo $item ?></span>&nbsp;<span class="suffix">(<?php echo $count ?>)</span></label>
-                                    </div>
-                                </li>
-                            <?php endforeach; ?>
-                            <div class="action clearfix">
-                                <a href="#" class="go_read_filter underline showmore-filters" data-state="0"><?php echo $this->__("Show more"); ?></a>
-                            </div>
-                        <?php endif; ?>
-                    </ul>
+        <div id="filter_<?php echo $key ?>" class="content checkbox filter-enum">
+            <?php foreach ($this->getItems() as $item => $count): ?>
+                <?php if ($this->getCanShowItem($item, $count)): ?>
+                    <?php
+                    if(!$isOptionSelected && $this->isItemActive($item)) {
+                        $isOptionSelected = true;
+                    }
+                    ?>
+                    <div class="form-group form-checkbox">
+                        <input data-url="<?php echo $this->getItemUrl($item) ?>" data-params="<?php echo $this->getItemJson($item);?>" type="checkbox" name="check_<?php echo $item; ?>" id="check_<?php echo $item; ?>" class="css-checkbox" <?php if($this->isItemActive($item)): ?>checked="checked" <?php endif; ?>>
+                        <label for="check_<?php echo $item; ?>" class="css-label"><span><?php echo $item ?></span>&nbsp;<span class="suffix">(<?php echo $count ?>)</span></label>
+                    </div>
+                <?php endif; ?>
+            <?php endforeach; ?>
+            <?php if ($this->getCanShowHidden()): ?>
+                <?php foreach ($this->getHiddenItems() as $item => $count): ?>
+                    <div class="form-group form-checkbox" data-state="hidden" style="display: none;">
+                        <input data-url="<?php echo $this->getItemUrl($item) ?>" data-params="<?php echo $this->getItemJson($item);?>" type="checkbox" name="check_<?php echo $item; ?>" id="check_<?php echo $item; ?>" class="css-checkbox" <?php if($this->isItemActive($item)): ?>checked="checked" <?php endif; ?>>
+                        <label for="check_<?php echo $item; ?>" class="css-label"><span><?php echo $item ?></span>&nbsp;<span class="suffix">(<?php echo $count ?>)</span></label>
+                    </div>
+                <?php endforeach; ?>
+                <div class="action clearfix">
+                    <a href="#" class="go_read_filter underline showmore-filters" data-state="0"><?php echo $this->__("Show more"); ?></a>
                 </div>
-            </div>
+            <?php endif; ?>
             <div class="action clear clearfix <?php if(!$isOptionSelected) : ?>hidden<?php endif; ?>">
                 <a href="#" data-filter-type="<?php echo implode("_", $key_withoutFacet); ?>" onclick="Mall.listing.removeSingleFilterType(this);Mall.listing.reloadListing();return false;" class="button button-third clear"><?php echo $this->__("Clear"); ?></a>
             </div>
         </div>
-
     </div>
-
 <?php endif; ?>
