@@ -3473,20 +3473,20 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
   background: #ec4920; }
 
 /* line 146, ../sass/design/style/_sidebar.scss */
-#filter_type table td {
+.filter-type table td {
   vertical-align: middle;
   line-height: 1.0; }
 /* line 149, ../sass/design/style/_sidebar.scss */
-#filter_type table td.first-td {
+.filter-type table td.first-td {
   vertical-align: middle; }
 /* line 152, ../sass/design/style/_sidebar.scss */
-#filter_type table td.first-td label img {
+.filter-type table td.first-td label img {
   border: 3px solid #fff; }
 /* line 157, ../sass/design/style/_sidebar.scss */
-#filter_type table td.first-td [type=checkbox]:checked {
+.filter-type table td.first-td [type=checkbox]:checked {
   outline: none !important; }
 /* line 160, ../sass/design/style/_sidebar.scss */
-#filter_type table td.first-td [type=checkbox]:checked + label img {
+.filter-type table td.first-td [type=checkbox]:checked + label img {
   border: 3px solid #000;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
@@ -3494,22 +3494,22 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
   -o-border-radius: 5px;
   border-radius: 5px; }
 /* line 167, ../sass/design/style/_sidebar.scss */
-#filter_type table td label {
+.filter-type table td label {
   font-weight: normal;
   cursor: pointer;
   font-size: 12px; }
 /* line 171, ../sass/design/style/_sidebar.scss */
-#filter_type table td label .suffix {
+.filter-type table td label .suffix {
   color: #b0b0b0;
   font-size: 12px; }
 /* line 180, ../sass/design/style/_sidebar.scss */
-#filter_type table tr:hover td label {
+.filter-type table tr:hover td label {
   color: #000; }
 /* line 182, ../sass/design/style/_sidebar.scss */
-#filter_type table tr:hover td label .suffix {
+.filter-type table tr:hover td label .suffix {
   color: #b0b0b0; }
 /* line 185, ../sass/design/style/_sidebar.scss */
-#filter_type table tr:hover td label img {
+.filter-type table tr:hover td label img {
   border: 3px solid #999;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
@@ -3517,14 +3517,14 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
   -o-border-radius: 5px;
   border-radius: 5px; }
 /* line 197, ../sass/design/style/_sidebar.scss */
-#filter_type table tr:hover td label span {
+.filter-type table tr:hover td label span {
   color: #000;
   text-decoration: underline; }
 /* line 200, ../sass/design/style/_sidebar.scss */
-#filter_type table tr:hover td label span + span {
+.filter-type table tr:hover td label span + span {
   text-decoration: none; }
 /* line 202, ../sass/design/style/_sidebar.scss */
-#filter_type table tr:hover td label span + span.suffix {
+.filter-type table tr:hover td label span + span.suffix {
   color: #b0b0b0; }
 
 /* line 219, ../sass/design/style/_sidebar.scss */
