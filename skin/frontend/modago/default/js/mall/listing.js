@@ -97,6 +97,7 @@ Mall.listing = {
     init: function () {
         this.attachShowMoreEvent();
         this.attachFilterColorEvents();
+        this.attachFilterIconEvents();
         this.attachFilterEnumEvents();
         this.attachFilterDroplistEvents();
         this.attachFilterFlagEvents();
@@ -152,11 +153,11 @@ Mall.listing = {
             Mall.listing.setSort(sortArray[0] === undefined ? "" : sortArray[0]);
             Mall.listing.setDir(sortArray[1] === undefined ? "" : sortArray[1]);
             items = Mall.listing.appendToList(data.content.products);
-            container.imagesLoaded(function () {
+            //container.imagesLoaded(function () {
                 container.masonry("reloadItems");
                 container.masonry();
                 setTimeout(function () {Mall.listing.placeListingFadeContainer();}, 1000);
-            });
+            //});
             // set current items count
             Mall.listing.addToVisibleItems(data.content.rows);
             Mall.listing.setTotal(data.content.total);
@@ -449,6 +450,7 @@ Mall.listing = {
         jQuery("<img/>", {
             src: product.listing_resized_image_url,
             alt: product.name,
+            style: "max-height: " + product.listing_resized_image_info.height,
             "class": "img-responsive"
         }).appendTo(figure);
 
@@ -645,6 +647,7 @@ Mall.listing = {
             this.setCurrentMobileFilterState(1);
             this.attachShowMoreEvent();
             this.attachFilterColorEvents();
+            this.attachFilterIconEvents();
             this.attachFilterEnumEvents();
             this.attachFilterDroplistEvents();
             this.attachFilterFlagEvents();
@@ -700,6 +703,7 @@ Mall.listing = {
             this.setCurrentMobileFilterState(0);
             this.attachShowMoreEvent();
             this.attachFilterColorEvents();
+            this.attachFilterIconEvents();
             this.attachFilterEnumEvents();
             this.attachFilterDroplistEvents();
             this.attachFilterFlagEvents();
@@ -746,6 +750,19 @@ Mall.listing = {
      */
     attachFilterColorEvents: function() {
         jQuery(".filter-color").find("[data-url]").on("click", function(e) {
+            // @todo ajax logic
+            location.href = jQuery(this).attr("data-url");
+        });
+
+        return this;
+    },
+    /**
+     * Attaches events to icon filter.
+     *
+     * @returns {Mall.listing}
+     */
+    attachFilterIconEvents: function() {
+        jQuery(".filter-type").find("[data-url]").on("click", function(e) {
             // @todo ajax logic
             location.href = jQuery(this).attr("data-url");
         });

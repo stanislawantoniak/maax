@@ -2240,20 +2240,27 @@ html.fb-static .fb-slidebar, .fb-slidebar.fb-static {
   min-width: 35px;
   padding: 0px; }
 
-/* line 128, ../sass/layout/modules/_sidebar.scss */
+/* line 129, ../sass/layout/modules/_sidebar.scss */
+.filter-icon label span.filter-icon-image {
+  display: inline-block;
+  width: 27px;
+  height: 27px;
+  border: 1px solid #afafaf; }
+
+/* line 140, ../sass/layout/modules/_sidebar.scss */
 .filter-color [type="checkbox"] {
   margin: 3px 0 0 3px; }
-/* line 131, ../sass/layout/modules/_sidebar.scss */
+/* line 143, ../sass/layout/modules/_sidebar.scss */
 .filter-color label {
   display: inline-block;
   width: 34px;
   height: 34px;
   margin: 5px 7px;
   position: relative; }
-/* line 137, ../sass/layout/modules/_sidebar.scss */
+/* line 149, ../sass/layout/modules/_sidebar.scss */
 .filter-color label:nth-child(3n+1) {
   margin-left: 0; }
-/* line 140, ../sass/layout/modules/_sidebar.scss */
+/* line 152, ../sass/layout/modules/_sidebar.scss */
 .filter-color label > span {
   display: block;
   width: 33px;
@@ -2262,33 +2269,33 @@ html.fb-static .fb-slidebar, .fb-slidebar.fb-static {
   position: absolute;
   top: 0px;
   left: 0px; }
-/* line 148, ../sass/layout/modules/_sidebar.scss */
+/* line 160, ../sass/layout/modules/_sidebar.scss */
 .filter-color label > span span {
   display: inline-block;
   width: 27px;
   height: 27px; }
 
-/* line 158, ../sass/layout/modules/_sidebar.scss */
+/* line 170, ../sass/layout/modules/_sidebar.scss */
 .manufacturerList {
   margin: 0px !important;
   padding: 5px 0 5px 0;
   margin-bottom: 10px; }
-/* line 164, ../sass/layout/modules/_sidebar.scss */
+/* line 176, ../sass/layout/modules/_sidebar.scss */
 .manufacturerList li {
   padding-left: 5px;
   padding-right: 19px; }
-/* line 167, ../sass/layout/modules/_sidebar.scss */
+/* line 179, ../sass/layout/modules/_sidebar.scss */
 .manufacturerList li .form-group {
   margin-bottom: 5px; }
-/* line 170, ../sass/layout/modules/_sidebar.scss */
+/* line 182, ../sass/layout/modules/_sidebar.scss */
 .manufacturerList li.lastChecked {
   margin-bottom: 5px; }
 
-/* line 180, ../sass/layout/modules/_sidebar.scss */
+/* line 192, ../sass/layout/modules/_sidebar.scss */
 #filter_style .select-group.medium, .filter-droplist .select-group.medium, .filter-enum .select-group.medium {
   width: 140px;
   max-width: 140px; }
-/* line 183, ../sass/layout/modules/_sidebar.scss */
+/* line 195, ../sass/layout/modules/_sidebar.scss */
 #filter_style .select-group.medium .button-select, .filter-droplist .select-group.medium .button-select, .filter-enum .select-group.medium .button-select {
   width: 140px;
   min-width: 140px; }
@@ -6308,102 +6315,104 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
   margin-top: 10px; }
 
 /* line 86, ../sass/layout/style/_sidebar.scss */
-#filter_type .form-group {
+.filter-type .form-group {
   margin-bottom: 10px; }
 /* line 91, ../sass/layout/style/_sidebar.scss */
-#filter_type table td {
+.filter-type table td {
   margin: 0px;
   padding: 5px 0; }
 /* line 94, ../sass/layout/style/_sidebar.scss */
-#filter_type table td > div {
+.filter-type table td > div {
   position: relative;
   width: 31px;
   height: 31px; }
 /* line 99, ../sass/layout/style/_sidebar.scss */
-#filter_type table td.first-td {
+.filter-type table td.first-td {
   width: 31px;
   height: 31px; }
 /* line 103, ../sass/layout/style/_sidebar.scss */
-#filter_type table td.last-td {
+.filter-type table td.last-td {
   padding-left: 10px;
   min-height: 31px; }
 /* line 107, ../sass/layout/style/_sidebar.scss */
-#filter_type table td label {
+.filter-type table td label {
   cursor: pointer;
   position: static;
   float: none;
   display: inline; }
 /* line 113, ../sass/layout/style/_sidebar.scss */
-#filter_type table td img {
+.filter-type table td img {
   position: absolute;
   left: 0px;
-  top: -4px; }
+  top: -4px;
+  width: 31px;
+  height: 31px; }
 
-/* line 122, ../sass/layout/style/_sidebar.scss */
-#filter_style, .filter-droplist, .filter-enum {
+/* line 124, ../sass/layout/style/_sidebar.scss */
+#filter_style, .filter-droplist, .filter-enum, .filter-icon {
   padding-left: 0px; }
 
-/* line 129, ../sass/layout/style/_sidebar.scss */
+/* line 131, ../sass/layout/style/_sidebar.scss */
 .block-filter form #filter_price #slider-range {
   margin-bottom: 10px;
   margin-left: -16px;
   width: 147px; }
-/* line 134, ../sass/layout/style/_sidebar.scss */
+/* line 136, ../sass/layout/style/_sidebar.scss */
 .block-filter form #filter_price #od_do {
   margin-top: 10px; }
-/* line 138, ../sass/layout/style/_sidebar.scss */
+/* line 140, ../sass/layout/style/_sidebar.scss */
 .block-filter form .form-group {
   margin-bottom: 0px; }
-/* line 140, ../sass/layout/style/_sidebar.scss */
+/* line 143, ../sass/layout/style/_sidebar.scss */
 .block-filter form .form-group input[type=checkbox].css-checkbox + label.css-label, .block-filter form .form-group input[type=radio].css-radio + label.css-label {
   padding-left: 23px;
   height: auto;
   min-height: 17px;
   display: inline-block; }
-/* line 146, ../sass/layout/style/_sidebar.scss */
+/* line 148, ../sass/layout/style/_sidebar.scss */
 .block-filter form .form-group input[type=checkbox].css-checkbox + label.css-label img, .block-filter form .form-group input[type=radio].css-radio + label.css-label img {
   float: left;
   position: relative;
   top: 2px;
   margin-right: 5px; }
 
-/* line 157, ../sass/layout/style/_sidebar.scss */
+/* line 159, ../sass/layout/style/_sidebar.scss */
 .wrapper-filter_manufacturerScrollbar {
   max-height: 151px;
   margin-bottom: 10px; }
 
-/* line 161, ../sass/layout/style/_sidebar.scss */
+/* line 163, ../sass/layout/style/_sidebar.scss */
 .filter_manufacturerScrollbar {
   max-height: 145px;
   padding: 5px 0 5px 0; }
 
-/* line 167, ../sass/layout/style/_sidebar.scss */
+/* line 169, ../sass/layout/style/_sidebar.scss */
 #filter_manufacturer .mCSB_scrollTools {
   width: 12px; }
-/* line 169, ../sass/layout/style/_sidebar.scss */
+/* line 171, ../sass/layout/style/_sidebar.scss */
 #filter_manufacturer .mCSB_scrollTools .mCSB_dragger {
   height: 39px !important;
   max-height: 39px !important;
   min-height: 39px !important; }
-/* line 173, ../sass/layout/style/_sidebar.scss */
+/* line 175, ../sass/layout/style/_sidebar.scss */
 #filter_manufacturer .mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
   width: 12px;
   border-radius: 0; }
-/* line 180, ../sass/layout/style/_sidebar.scss */
+/* line 182, ../sass/layout/style/_sidebar.scss */
 #filter_manufacturer .mCSB_scrollTools .mCSB_buttonDown {
   bottom: -5px; }
-/* line 184, ../sass/layout/style/_sidebar.scss */
+/* line 186, ../sass/layout/style/_sidebar.scss */
 #filter_manufacturer .mCSB_scrollTools a + .mCSB_draggerContainer {
   margin: 18px 0 20px; }
-/* line 188, ../sass/layout/style/_sidebar.scss */
+/* line 190, ../sass/layout/style/_sidebar.scss */
 #filter_manufacturer .mCSB_scrollTools .mCSB_draggerRail {
   width: 12px; }
-/* line 193, ../sass/layout/style/_sidebar.scss */
+/* line 195, ../sass/layout/style/_sidebar.scss */
 #filter_manufacturer .mCSB_inside > .mCSB_container {
   margin-right: 0; }
 
 @media (max-width: 767px) {
-  /* line 202, ../sass/layout/style/_sidebar.scss */
+  /* line 204, ../sass/layout/style/_sidebar.scss */
   .fb-slidebar-inner .current-filter {
     padding-top: 3px;
     line-height: 24px; } }
