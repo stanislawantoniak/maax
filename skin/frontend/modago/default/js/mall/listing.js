@@ -450,7 +450,7 @@ Mall.listing = {
         jQuery("<img/>", {
             src: product.listing_resized_image_url,
             alt: product.name,
-            height:product.listing_resized_image_info.height,
+//            height:product.listing_resized_image_info.height,
             "class": "img-responsive"
         }).appendTo(figure);
 
