@@ -148,10 +148,25 @@
                 panelBody.find(".select-address").click(function (e) {
                     e.preventDefault();
                     var data = jQuery(this).parents(".new-address-form").serializeArray();
-                    self.getAddressBook().save(data);
+                    self.lockButton(this);
+                    self.getAddressBook().save(data).done(function (data) {
+                        if (Boolean(data.status) === false) {
+                            alert(data.content.join("\n"));
+                        }
+                    }).always(function () {
+                        self.unlockButton(e.target);
+                    });
                 });
 
                 return form;
+            },
+
+            lockButton: function (button) {
+                jQuery(button).prop("disabled", true);
+            },
+
+            unlockButton: function (button) {
+                jQuery(button).prop("disabled", false);
             },
 
             getNewAddressConfig: function (type) {
