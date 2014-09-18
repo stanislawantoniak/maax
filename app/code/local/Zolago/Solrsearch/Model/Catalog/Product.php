@@ -4,22 +4,6 @@
  */
 class Zolago_Solrsearch_Model_Catalog_Product extends Mage_Catalog_Model_Product {
 
-    /**
-     * @return null | array
-     */
-    public function getListingResizedImageInfo() {
-        $urlPath = $this->getListingResizedImageUrl();
-        // Extract cached image URI
-        if($urlPath){
-            $filePath = substr($urlPath, strpos($urlPath, "//")+2);
-            $filePath = substr($filePath, strpos($filePath, "/")+1);
-            $filePath = str_replace("/", DS, $filePath);
-            if($info=@getimagesize($filePath)){
-                return array("width"=>$info[0], "height"=>$info[1]);
-            }
-        }
-        return null;
-    }
 	/**
 	 * @return null | array
 	 */
