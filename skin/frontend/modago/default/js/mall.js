@@ -443,7 +443,8 @@ Mall.product = {
         // set prices
         this.setPrices(jsonOptions.basePrice, jsonOptions.oldPrice, jsonOptions.template);
         if(typeof jsonOptions.attributes != "undefined") {
-            this.setAttributes(jsonOptions.attributes);
+
+            this.setAttributes(jsonOptions.attributes, jsonOptions.size_max_number);
         }
     },
 
@@ -465,11 +466,11 @@ Mall.product = {
         price_selector.html(template.replace("#{price}", number_format(price, "2", ",", " ")));
     },
 
-    setAttributes: function(attributes) {
+    setAttributes: function(attributes, size_max_number) {
         this.clearAttributesContainer();
 
         jQuery.each(attributes, function(index, e) {
-            Mall.product.createOptionGroup(e);
+            Mall.product.createOptionGroup(e, size_max_number);
         });
     },
 
@@ -484,28 +485,65 @@ Mall.product = {
         }
     },
 
-    createOptionGroup: function(group) {
-        // insert option group
-        var groupElement = jQuery("<div/>", {
-            "class": "size"
-        }).appendTo(".size-box");
-        jQuery(".size-box").append(this._options_group_template);
-        // create label group
-        jQuery("<span/>", {
-            "class": "size-label",
-            "html": (group.label + ":")
-        }).appendTo(groupElement);
+    createOptionGroup: function(group, size_max_number) {
+        var group_size_number = group.options.length;
 
-        // create form group for options
-        var formGroupElement = jQuery("<div/>", {
-            class: "form-group form-radio"
-        }).appendTo(groupElement);
+        if(group_size_number <= size_max_number) {
 
-        jQuery.each(group.options, function(index, option) {
-            Mall.product.createOption(group.id, option, formGroupElement);
-        });
+            // insert option group
+            var groupElement = jQuery("<div/>", {
+                "class": "size"
+            }).appendTo(".size-box");
+            jQuery(".size-box").append(this._options_group_template);
+            // create label group
+            jQuery("<span/>", {
+                "class": "size-label",
+                "html": (group.label + ":")
+            }).appendTo(groupElement);
 
-        this.applyAdditionalRules(group, formGroupElement);
+            // create form group for options
+            var formGroupElement = jQuery("<div/>", {
+                class: "form-group form-radio"
+            }).appendTo(groupElement);
+
+            jQuery.each(group.options, function(index, option) {
+                Mall.product.createOption(group.id, option, formGroupElement);
+            });
+
+            this.applyAdditionalRules(group, formGroupElement);
+        } else { //selectbox
+
+            // insert option group
+            var groupElement = jQuery("<div/>", {
+                "class": "size"
+            }).appendTo(".size-box");
+            jQuery(".size-box").append(this._options_group_template);
+            // create label group
+            jQuery("<span/>", {
+                "class": "size-label",
+                "html": (group.label + ":")
+            }).appendTo(groupElement);
+
+            // create form group for selectbox options
+            var formGroupElement = jQuery("<div/>", {
+                class: "form-group styledSelected scrollbar"
+            }).appendTo(groupElement);
+
+            //create select part
+            var formGroupElementSelect = jQuery("<select/>", {
+                id: "select-data-id-"+group.id,
+                class: "form-control select-styled"
+            }).appendTo(formGroupElement);
+
+            jQuery.each(group.options, function(index, option) {
+                Mall.product.createOptionSelectbox(group.id, option, formGroupElementSelect);
+            });
+
+            this.applyAdditionalRules(group, jQuery('div.size-box div.size'));
+
+        }
+
+
     },
 
     createOption: function(id, option, groupElement) {
@@ -528,6 +566,19 @@ Mall.product = {
         jQuery("<span/>", {
             "html": option.label
         }).appendTo(label);
+    },
+
+    createOptionSelectbox: function(id, option, groupElement){
+        if(!option.is_salable){
+            return;
+        }
+        var option = jQuery("<option/>", {
+            value: option.id,
+            html: option.label,
+            id: ("size_" + option.id),
+            "data-id": id,
+            name: ("super_attribute["+ id +"]")
+        }).appendTo(groupElement);
     },
 
     getLabelById: function(id, superId) {
@@ -646,6 +697,23 @@ jQuery(document).ready(function() {
 
         onChange: function(value, inst) {
             location.href = value;
+        }
+    });
+
+    jQuery(".size-box select").selectbox({
+        onOpen: function (inst) {
+            var uid = jQuery(this).attr('sb');
+            var height4select = parseFloat(jQuery(".size-box li").first().css('line-height'));
+            height4select += parseInt(jQuery(".size-box li a").first().css('padding-top'));
+            height4select += parseInt(jQuery(".size-box li a").first().css('padding-bottom'));
+            height4select = 4 * height4select;
+
+            jQuery('#sbOptionsWrapper_' + uid).css('max-height', height4select);
+
+        },
+
+        onChange: function(value, inst) {
+            Mall.setSuperAttribute(jQuery("#size_" + value));
         }
     });
 });
