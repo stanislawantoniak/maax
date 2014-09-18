@@ -96,6 +96,19 @@
                 this.attachNewAddressInputsMask(modal, type);
             },
 
+            getSelectButton: function () {
+                var buttonWrapper = jQuery("<div/>", {
+                    "class": "form-group clearfix"
+                });
+
+                jQuery("<button/>", {
+                    "class": "button button-primary large pull-right select-address",
+                    html: "Wybierz"
+                }).appendTo(buttonWrapper);
+
+                return buttonWrapper;
+            },
+
             getAddNewForm: function (type) {
                 var form = this.getNewAddressForm(),
                     panelBody = form.find(".panel-body"),
@@ -103,7 +116,7 @@
                     formGroup,
                     self = this;
 
-                element = this.getInput(type + "[firstname]"
+                element = this.getInput("firstname"
                     , type + "_firstname"
                     , "text"
                     , "Imię"
@@ -130,6 +143,14 @@
                     panelBody.append(formGroup);
                 });
 
+                panelBody.append(this.getSelectButton());
+
+                panelBody.find(".select-address").click(function (e) {
+                    e.preventDefault();
+                    var data = jQuery(this).parents(".new-address-form").serializeArray();
+                    self.getAddressBook().save(data);
+                });
+
                 return form;
             },
 
@@ -144,7 +165,7 @@
                     //    inputClass: "form-control firstName hint"
                     //},
                     {
-                        name:       type + "[lastname]",
+                        name:       "lastname",
                         id:         type + "_lastname",
                         type:       "text",
                         label:      "Nazwisko",
@@ -152,7 +173,7 @@
                         inputClass: "form-control lastName hint"
                     },
                     {
-                        name:       type + "[company]",
+                        name:       "company",
                         id:         type + "_company",
                         type:       "text",
                         label:      "Nazwa firmy<br>(opcjonalnie)",
@@ -160,7 +181,7 @@
                         inputClass: "form-control firm hint"
                     },
                     {
-                        name:       type + "[vat_id]",
+                        name:       "vat_id",
                         id:         type + "_vat_id",
                         type:       "text",
                         label:      "NIP<br>(opcjonalnie)",
@@ -168,7 +189,7 @@
                         inputClass: "form-control vat_id city hint"
                     },
                     {
-                        name:       type + "[street][]",
+                        name:       "street[]",
                         id:         type + "_street_1",
                         type:       "text",
                         label:      "Ulica i numer",
@@ -176,7 +197,7 @@
                         inputClass: "form-control street hint"
                     },
                     {
-                        name:       type + "[postcode]",
+                        name:       "postcode",
                         id:         type + "_postcode",
                         type:       "text",
                         label:      "Kod pocztowy",
@@ -184,7 +205,7 @@
                         inputClass: "form-control postcode zipcode hint"
                     },
                     {
-                        name:       type + "[city]",
+                        name:       "city",
                         id:         type + "_city",
                         type:       "text",
                         label:      "Miejscowość",
@@ -192,12 +213,12 @@
                         inputClass: "form-control city hint"
                     },
                     {
-                        name:       type + "[telephone]",
+                        name:       "telephone",
                         id:         type + "_telephone",
                         type:       "text",
                         label:      "Numer telefonu",
                         labelClass: "col-sm-3",
-                        inputClass: "form-control telephone hint"
+                        inputClass: "form-control telephone city hint"
                     }
                 ];
             },
@@ -256,7 +277,7 @@
             getNewAddressForm: function () {
                 var form, panel;
                 form = jQuery("<form/>", {
-                    "class": "form clearfix",
+                    "class": "form clearfix new-address-form",
                     method: "POST",
                     action: Config.url.address.save
                 });
@@ -265,7 +286,13 @@
                     type: "hidden",
                     name: "form_key",
                     value: Mall.getFormKey()
-                });
+                }).appendTo(form);
+
+                jQuery("<input/>", {
+                    type: "hidden",
+                    name: "country_id",
+                    value: jQuery("#country_id").val()
+                }).appendTo(form);
 
                 panel = jQuery("<div/>", {
                     "class": "panel panel-default"

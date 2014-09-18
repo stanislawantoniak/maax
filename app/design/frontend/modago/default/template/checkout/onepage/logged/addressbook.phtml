@@ -2,6 +2,7 @@
 <?php $formKey = Mage::getSingleton('core/session')->getFormKey(); ?>
 
 <?php echo $this->getStep1Sidebar(); ?>
+<input type="hidden" name="shipping[country_id]" id="country_id" value="<?php echo $this->getStoreDefaultCountryId();?>">
 
 <div id="content-main" class="col-lg-9 col-md-8 col-sm-12 col-xs-12 col-lg-pull-3 col-md-pull-4 section">
 	<section class="main bg-w">
@@ -280,7 +281,7 @@
 </div>
 
 
-<div class="modal fade bs-example-modal-lg" id="addressbook-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+<div class="modal fade bs-example-modal-lg" id="addressbook-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="overflow-y: scroll !important">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
