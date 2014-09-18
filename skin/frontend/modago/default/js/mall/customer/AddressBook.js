@@ -82,7 +82,7 @@
 		 * @returns {Mall.customer.AddressBook.prototype}
 		 */
 		setNeedInvoice: function(flag){
-			this._needInvoice = flag;
+			this.getSelectedBilling().setData('need_invoice', flag);
 			return this;
 		},
 		
@@ -90,7 +90,7 @@
 		 * @returns {bool}
 		 */
 		getNeedInvoice: function(){
-			return this._needInvoice;
+			return this.getSelectedBilling().getData('need_invoice');
 		},
 
         /**
@@ -422,7 +422,13 @@
                 }
             });
 
-            return selectedShipping;
+			// Selected found
+			if(selectedShipping){
+				return selectedShipping;
+			}
+			
+			// Return by fallback
+			return this.getDefaultShipping() || this.getAddressBook()[0];
         },
 
         /**
@@ -464,8 +470,14 @@
                     return true;
                 }
             });
-
-            return selectedBilling;
+			
+			// Selected found
+			if(selectedBilling){
+				return selectedBilling;
+			}
+			
+			// Return by fallback
+			return this.getDefaultBilling() || this.getAddressBook()[0];
         },
 
         /**

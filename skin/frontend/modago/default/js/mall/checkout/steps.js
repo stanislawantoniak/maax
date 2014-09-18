@@ -29,9 +29,7 @@
 				var template = this.getSelectedTemplate(),
 					addressBook = this.getAddressBook(),
 					target = jQuery(".current-addres."+type, this.content),
-					addressObject = addressBook.getSelected(type) || 
-						addressBook.getDefault(type) ||
-						addressBook.getAddressBook()[0];
+					addressObject = addressBook.getSelected(type);
 				
 				if(addressObject){
 					var data = jQuery.extend(
@@ -58,7 +56,7 @@
 					jQuery.each(addressCollection, function(){
 						// Do not allow sleected address
 						if(selectedAddress && this.getId()==selectedAddress.getId()){
-						//	return;
+							return;
 						}
 						
 						var data = self.processAddressToDisplay(this);
