@@ -2727,6 +2727,9 @@ jQuery.noConflict();
             });
 
         }
+        jQuery(".filter-enum input[type=image]").click(function(){
+            return false;
+        })
 
         function clearFilterManufacturerCheked() {
             var blockList = $("#filter_manufacturer")
