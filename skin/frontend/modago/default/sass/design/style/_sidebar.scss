@@ -151,7 +151,9 @@
         label {
           img {
             border:1px solid #afafaf;
-			padding:2px;
+			margin:2px;
+			width:27px;
+			height:27px;
           }
         }
         
@@ -161,7 +163,9 @@
             img {
               border:3px solid #000;
               @include border-radius(5px);
-			  padding:0px;
+			  margin:0px;
+			  width:31px;
+		      height:31px;
             }
           }
         }
@@ -187,7 +191,9 @@
           img {
             border:3px solid #999;
             @include border-radius(5px);
-			padding:0px;
+			margin:0px;
+	    	width:31px;
+		    height:31px;
           }
         }
         }
