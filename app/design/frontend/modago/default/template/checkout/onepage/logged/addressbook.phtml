@@ -12,12 +12,19 @@
 		
 		<!-- selected address tmplate -->
 		<div class="hidden" id="selected-address-template">
-			<p class="pull-right default_delivery small-no-float">{{default_caption}}</p>
+			<p class="pull-right default_delivery small-no-float">{{selected_caption}}</p>
 			<dl class="pull-left" >
 				<dt>{{firstname}} {{lastname}}</dt>
 				<dd>{{street}}</dd>
 				<dd>{{postcode}} {{city}}</dd>
 				<dd class="separator phone"><?php echo $this->__("Contact phone")?>: <span>{{telephone}}</span></dd>
+				<dd class="action separator hidden">
+					<a href="#" class="underline edit"><?php echo $this->__("edit");?></a> 
+					<a href="#" class="underline set-default">
+						<?php echo $this->__("set as default");?>
+						<span>(<?php echo $this->__("the address will be auto selected in future");?>)</span>
+					</a> 
+				</dd>
 			</dl>
 		</div>
 		
@@ -56,7 +63,7 @@
 			<div class="panel panel-default">
 				<div class="panel-body">
 					
-					<div class="current-addres clearfix shipping">
+					<div class="current-address current-addres clearfix shipping">
 						<!-- content from js -->
 					</div>
 					
@@ -78,7 +85,7 @@
 				<h4>Dane do faktury:</h4>
 				<div class="panel panel-default">
 					<div class="panel-body">
-						<div class="current-addres billing clearfix">
+						<div class="current-address current-addres billing clearfix">
 							<!-- content from js -->
 						</div>
 						<div class="panel-adresses billing">

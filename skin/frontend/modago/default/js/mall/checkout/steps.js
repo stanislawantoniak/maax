@@ -28,24 +28,30 @@
 			renderSelectedAddress: function(type){
 				var template = this.getSelectedTemplate(),
 					addressBook = this.getAddressBook(),
-					target = jQuery(".current-addres."+type, this.content),
+					target = jQuery(".current-address."+type, this.content),
                     defaultAdderssObject,
 					addressObject = addressBook.getSelected(type);
 					defaultAdderssObject = addressBook.getDefault(type);
 
 				if(addressObject){
-					var defaultCaption = "";
+					var isDefault = false,
+						selectedCaption = Mall.translate.__("selected-" + type + "-address");
+				
 					if(defaultAdderssObject && defaultAdderssObject.getId()==addressObject.getId()){
-						defaultCaption = Mall.translate.__("default-"+type+"-address");
-					}else{
-						// @todo default checkbox
-						defaultCaption = "[v] set as default";
+						isDefault = true;
 					}
-					var data = jQuery.extend(
-						this.processAddressToDisplay(addressObject), 
-						{"default_caption": defaultCaption}
-					);
-					target.html(Mall.replace(template, data));
+					
+					var node = jQuery(Mall.replace(
+						template, 
+						jQuery.extend(this.processAddressToDisplay(addressObject), {
+							"selected_caption": selectedCaption
+						})
+					));
+					
+					this.processSelectedAddressNode(node, addressObject, addressBook, type);
+					
+					target.html(node);
+					
 				}else{
 					target.html(Mall.translate.__("No addresses"));
 				}	
@@ -407,16 +413,53 @@
 			_rollAddressList: function(element, block, doOpen){
 				// Need move to one tag
 				
+				var contextActions = block.siblings(".current-address").find(".action");
+				
 				if(doOpen){
 					block.show();
+					contextActions.removeClass("hidden");
 					element.addClass("open");
 					element.text(Mall.translate.__("roll-up"));
 				}else{
 					block.hide();
+					contextActions.addClass("hidden");
 					element.removeClass("open");
 					element.text(Mall.translate.__("change-address"));
 				}
 			},
+			processSelectedAddressNode: function(node, address, addressBook, type){
+				var settableDefault = true,
+					defaultAddress = addressBook.getDefault(type),
+					setDefault = node.find(".set-default"),
+					edit = node.find(".edit"),
+					actions = node.find(".action"),
+					changeTrigger = this.content.find(".change_address."+type);
+			
+				if(defaultAddress && defaultAddress.getId()==address.getId()){
+					settableDefault = false;
+				}
+				
+				var eventData = {
+					addressBook: addressBook, 
+					step: this, 
+					address: address, 
+					type: type
+				};
+				
+				if(changeTrigger.hasClass("open")){
+					actions.removeClass("hidden");
+				}else{
+					actions.addClass("hidden");
+				}
+			
+				edit.click(eventData, this.editAddress);
+				setDefault.click(eventData, this.setDefaultAddress);
+				
+				setDefault[settableDefault ? "show" : "hide"]();
+				
+				return node;
+			},
+			
 			processAddressNode: function(node, address, addressBook, type){
 				var settableDefault = true,
 					removeable = addressBook.isRemoveable(address.getId()),
@@ -493,39 +536,33 @@
 				return false;
 			},
 
-
-            injectEntityIdToEditForm: function (form, id, addressBook) {
-                jQuery("<input/>", {
-                    type: "hidden",
-                    name: addressBook.getEntityIdKey(),
-                    value: id
-                }).appendTo(form);
-            },
-
-            injectNeedInvoiceToEditForm: function (form) {
-                jQuery("<input/>", {
-                    type: "hidden",
-                    name: "need_invoice",
-                    value: 1
-                }).appendTo(form);
-            },
-
-            fillEditForm: function (address, form) {
-                form = jQuery(form);
-
-                jQuery.each(address.getData(), function (idx, item) {
-                    if (idx.indexOf("street") !== -1) {
-                        idx += "[]";
-                        item = item.join(" ");
-                    }
-                    if (form.find("[name='"+ idx +"']").length > 0) {
-                        form.find("[name='"+ idx +"']").val(item);
-                    }
-                });
-            },
-
+			/**
+			 * S
+			 * @param {type} event
+			 * @returns {Boolean}et address as default
+			 */
 			setDefaultAddress: function(event){
-				console.log("Set default clicked", event.data);
+				var addressBook = event.data.addressBook,
+					address = event.data.address,
+					type = event.data.type,
+					self = event.data.step;
+			
+				switch(type){
+					case "billing":
+						addressBook.setDefaultBilling(address);
+					break;
+					case "shipping":
+						addressBook.setDefaultShipping(address);
+					break;
+				}
+				
+				addressBook.saveDefault(type).then(function(){
+					self.renderSelectedAddress("billing");
+					self.renderSelectedAddress("shipping");
+					self.renderAddressList("shipping");
+					self.renderAddressList("billing");
+				})
+			
 				return false;
 			},
 			
@@ -572,6 +609,37 @@
 				
 				return false;
 			},
+
+            injectEntityIdToEditForm: function (form, id, addressBook) {
+                jQuery("<input/>", {
+                    type: "hidden",
+                    name: addressBook.getEntityIdKey(),
+                    value: id
+                }).appendTo(form);
+            },
+
+            injectNeedInvoiceToEditForm: function (form) {
+                jQuery("<input/>", {
+                    type: "hidden",
+                    name: "need_invoice",
+                    value: 1
+                }).appendTo(form);
+            },
+
+            fillEditForm: function (address, form) {
+                form = jQuery(form);
+
+                jQuery.each(address.getData(), function (idx, item) {
+                    if (idx.indexOf("street") !== -1) {
+                        idx += "[]";
+                        item = item.join(" ");
+                    }
+                    if (form.find("[name='"+ idx +"']").length > 0) {
+                        form.find("[name='"+ idx +"']").val(item);
+                    }
+                });
+            },
+
 			processAddressToDisplay: function(address){
 				var addressData = jQuery.extend({}, address.getData());
 				if(addressData.street){
