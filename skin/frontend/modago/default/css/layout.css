@@ -8951,48 +8951,47 @@ i.flag.hit, i.flag.bestseller {
     width: 100%; } }
 /* line 607, ../sass/layout/style/_checkout.scss */
 #checkout .panel-body .panel {
-  display: none;
   margin-bottom: 15px; }
-/* line 611, ../sass/layout/style/_checkout.scss */
+/* line 610, ../sass/layout/style/_checkout.scss */
 #checkout .panel-body .panel.selected .selected_bank {
   display: block;
   margin-top: 21px; }
-/* line 618, ../sass/layout/style/_checkout.scss */
+/* line 617, ../sass/layout/style/_checkout.scss */
 #checkout #block_invoice {
   display: none; }
-/* line 621, ../sass/layout/style/_checkout.scss */
+/* line 620, ../sass/layout/style/_checkout.scss */
 #checkout .button-primary {
   min-width: 130px; }
-/* line 627, ../sass/layout/style/_checkout.scss */
+/* line 626, ../sass/layout/style/_checkout.scss */
 #checkout .default_pay > .panel > .panel-body > .panel {
   display: block; }
-/* line 629, ../sass/layout/style/_checkout.scss */
+/* line 628, ../sass/layout/style/_checkout.scss */
 #checkout .default_pay > .panel > .panel-body > .panel:last-child {
   margin-bottom: 0px; }
-/* line 635, ../sass/layout/style/_checkout.scss */
+/* line 634, ../sass/layout/style/_checkout.scss */
 #checkout .default_pay .selected_bank {
   display: none; }
 @media (max-width: 767px) {
-  /* line 638, ../sass/layout/style/_checkout.scss */
+  /* line 637, ../sass/layout/style/_checkout.scss */
   #checkout .default_pay .flag_pay_method {
     display: none; } }
 
-/* line 651, ../sass/layout/style/_checkout.scss */
+/* line 650, ../sass/layout/style/_checkout.scss */
 .logged #checkout .default_pay > .panel > .panel-heading {
   padding-bottom: 0px; }
-/* line 655, ../sass/layout/style/_checkout.scss */
+/* line 654, ../sass/layout/style/_checkout.scss */
 .logged #checkout .default_pay > .panel > .panel-heading + .panel-body .default_pay_selected_bank figure {
   position: relative;
   top: -35px;
   margin-bottom: -20px; }
-/* line 665, ../sass/layout/style/_checkout.scss */
+/* line 664, ../sass/layout/style/_checkout.scss */
 .logged #checkout .default_pay > .panel > .panel-body > .panel {
   display: none; }
-/* line 668, ../sass/layout/style/_checkout.scss */
+/* line 667, ../sass/layout/style/_checkout.scss */
 .logged #checkout .default_pay > .panel > .panel-body .form-checkbox.default_pay {
   margin-bottom: 0px; }
 
-/* line 677, ../sass/layout/style/_checkout.scss */
+/* line 676, ../sass/layout/style/_checkout.scss */
 #invoice_data {
   display: none; }
 
