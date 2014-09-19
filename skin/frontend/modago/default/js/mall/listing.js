@@ -1078,7 +1078,7 @@ Mall.listing = {
      * @returns {Mall.listing}
      */
     reloadListingItemsAfterPageLoad: function() {
-        jQuery("#items-product").masonry().imagesLoaded(function() {
+        //jQuery("#items-product").masonry().imagesLoaded(function() {
             var container = jQuery("#items-product").masonry();
             container.masonry("reloadItems");
             container.masonry();
@@ -1090,7 +1090,7 @@ Mall.listing = {
                     .hideShapesListing();
             }
 
-        });
+        //});
 
         return this;
     },
