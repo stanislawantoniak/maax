@@ -77,6 +77,8 @@
                     target.html(Mall.translate.__("No addresses"));
                 }
                 target.append(this.getAddNewButton(type));
+                console.log(this.getAddNewButton(type));
+                console.log(target);
             },
 
             getAddNewButton: function (type) {
@@ -394,7 +396,6 @@
 			},
 			
 			_rollAddressList: function(element, block, doOpen){
-				console.log(element, block, doOpen);
 				// Need move to one tag
 				if(doOpen){
 					block.show();
