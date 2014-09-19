@@ -548,7 +548,8 @@ Mall.product = {
 
     createOption: function(id, option, groupElement) {
         var label = jQuery("<label/>", {
-            "for": ("size_" + option.id)
+            "for": ("size_" + option.id),
+            "class": option.is_salable == false ? "no-size" : ""
         }).appendTo(groupElement);
         var _options = {
             type: "radio",
@@ -592,7 +593,39 @@ Mall.product = {
         }
 
         return label;
+    },
+
+    setDiagonalsOnSizeSquare: function(){
+        var elFilterSize = jQuery('.size-box-bundle .form-group label');
+        elFilterSize.each(function(){
+            elFilterSizeWidth = jQuery(this).width();
+            elFilterSizeHeight = jQuery(this).height();
+            obliczaniePrzekatnej = Math.pow(elFilterSizeWidth, 2) + Math.pow(elFilterSizeHeight, 2);
+            przekatna = Math.sqrt(obliczaniePrzekatnej);
+            przekatna = przekatna;
+            obliczenieWyrownania = (przekatna - elFilterSizeWidth)/2;
+            obliczenieWyrownaniaOryginal = obliczenieWyrownania + 2;
+            var angle = Math.tan(elFilterSizeHeight/elFilterSizeWidth);
+
+            if (elFilterSizeWidth > 31) {
+                var angle = -(angle * (180 / Math.PI));
+            } else {
+                var angle = 135;
+            }
+
+            if (jQuery(this).hasClass('no-size')) {
+                jQuery(this).find('span').append('<canvas class="diagonal" width="'+elFilterSizeWidth+'" height="'+elFilterSizeHeight+'"></canvas>');
+            }
+
+            jQuery(this).find('canvas').drawLine({
+                strokeStyle: '#afafaf',
+                strokeWidth: 1.5,
+                x1: -1, y1: elFilterSizeHeight-1,
+                x2: elFilterSizeWidth, y2: -1
+            });
+        });
     }
+
 };
 
 // callbacks
@@ -716,4 +749,8 @@ jQuery(document).ready(function() {
             Mall.setSuperAttribute(jQuery("#size_" + value));
         }
     });
+
+    Mall.product.setDiagonalsOnSizeSquare();
+
+
 });
