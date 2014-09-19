@@ -398,11 +398,11 @@
 				// Need move to one tag
 				if(doOpen){
 					block.show();
-					block.find('.panel').show();
+					//block.find('.panel').show();
 					element.text(Mall.translate.__("roll-up"));
 				}else{
 					block.hide();
-					block.find('.panel').hide();
+					//block.find('.panel').hide();
 					element.text(Mall.translate.__("change-address"));
 				}
 				// show add new address button
@@ -491,12 +491,16 @@
 					break;
 				}
 				
-				
 				self.renderSelectedAddress("shipping");
 				self.renderSelectedAddress("billing");
-				
 				self.renderAddressList("shipping");
 				self.renderAddressList("billing");
+				
+				
+				var listBlock = self.content.find(".panel-adresses." + type),
+					element =  self.content.find(".change_address." + type);
+			
+				self._rollAddressList(element, listBlock, false);
 				
 				return false;
 			},
@@ -560,6 +564,10 @@
 				});
 				this.renderSelectedAddress("shipping");
 				this.renderSelectedAddress("billing");
+				
+				// hide lists
+				this.content.find(".panel-adresses").hide();
+				
 				this.renderAddressList("shipping");
 				this.renderAddressList("billing");
 				
