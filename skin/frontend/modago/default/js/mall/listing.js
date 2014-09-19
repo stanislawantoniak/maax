@@ -1101,7 +1101,7 @@ Mall.listing = {
 
         container.masonry("reloadItems");
         container.masonry();
-        
+
         setTimeout(function() {
                 Mall.listing.placeListingFadeContainer();
             }, 200);
@@ -1136,8 +1136,8 @@ Mall.listing = {
                 newHeight = (columnWidth - 2) / proportions;
                 newWidth = columnWidth - 2;
                 jQuery(this).find(".img_product > img")
-                    .attr("width", newWidth)
-                    .attr("height", newHeight);
+                    .attr("width", parseInt(newWidth, 10))
+                    .attr("height", parseInt(newHeight, 10));
 
                 console.log(jQuery(this).height());
             }
