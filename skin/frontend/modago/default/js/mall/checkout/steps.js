@@ -495,6 +495,7 @@
 				return false;
 			},
 
+
             injectEntityIdToEditForm: function (form, id, addressBook) {
                 jQuery("<input/>", {
                     type: "hidden",
@@ -529,31 +530,47 @@
 				console.log("Set default clicked", event.data);
 				return false;
 			},
+			
+			/**
+			 * Make choose of adderss. Save need invoice if needed.
+			 * @param {type} object
+			 * @returns {Boolean}
+			 */
 			chooseAddress: function(event){
 				var addressBook = event.data.addressBook,
 					address = event.data.address,
 					type = event.data.type,
 					self = event.data.step;
 				
-				switch(type){
-					case "billing":
-						addressBook.setSelectedBilling(address);
-					break;
-					case "shipping":
-						addressBook.setSelectedShipping(address);
-					break;
+				var success = function(){
+					switch(type){
+						case "billing":
+							addressBook.setSelectedBilling(address);
+						break;
+						case "shipping":
+							addressBook.setSelectedShipping(address);
+						break;
+					}
+
+					self.renderSelectedAddress("shipping");
+					self.renderSelectedAddress("billing");
+					self.renderAddressList("shipping");
+					self.renderAddressList("billing");
+
+					// Roll up list
+					var listBlock = self.content.find(".panel-adresses." + type),
+						element =  self.content.find(".change_address." + type);
+
+					self._rollAddressList(element, listBlock, false);
 				}
 				
-				self.renderSelectedAddress("shipping");
-				self.renderSelectedAddress("billing");
-				self.renderAddressList("shipping");
-				self.renderAddressList("billing");
-				
-				// Roll up list
-				var listBlock = self.content.find(".panel-adresses." + type),
-					element =  self.content.find(".change_address." + type);
-			
-				self._rollAddressList(element, listBlock, false);
+				// If address has no invoice and is choosed as billing - set need invoice
+				if(type=="billing" && address.getData("need_invoice")!="1"){
+					address.setData("need_invoice", "1");
+					addressBook.save(address).then(success);
+				}else{
+					success();
+				}
 				
 				return false;
 			},
