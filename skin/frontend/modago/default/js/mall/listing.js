@@ -1128,6 +1128,9 @@ Mall.listing = {
 
         });
 
+        Mall.listing.setQueueLoadLock();
+        Mall.listing.appendFromQueue();
+
         return this;
     },
 
