@@ -99,6 +99,7 @@ Mall.listing = {
         this.attachFilterColorEvents();
         this.attachFilterIconEvents();
         this.attachFilterEnumEvents();
+        this.attachFilterPriceEvents();
         this.attachFilterDroplistEvents();
         this.attachFilterFlagEvents();
         this.attachFilterPriceSliderEvents();
@@ -653,6 +654,7 @@ Mall.listing = {
             this.attachFilterColorEvents();
             this.attachFilterIconEvents();
             this.attachFilterEnumEvents();
+            this.attachFilterPriceEvents();
             this.attachFilterDroplistEvents();
             this.attachFilterFlagEvents();
             this.attachFilterPriceSliderEvents();
@@ -709,6 +711,7 @@ Mall.listing = {
             this.attachFilterColorEvents();
             this.attachFilterIconEvents();
             this.attachFilterEnumEvents();
+            this.attachFilterPriceEvents();
             this.attachFilterDroplistEvents();
             this.attachFilterFlagEvents();
             this.attachFilterPriceSliderEvents();
@@ -794,6 +797,18 @@ Mall.listing = {
      */
     attachFilterEnumEvents: function() {
         jQuery(".filter-enum").find("[data-url]").on("click", function(e) {
+            // @todo ajax logic
+            location.href = jQuery(this).attr("data-url");
+        });
+
+        return this;
+    },
+    /**
+     * Attaches events to Price range filters.
+     * @returns {Mall.listing}
+     */
+    attachFilterPriceEvents: function() {
+        jQuery("#filter_price").find("[data-url]").on("click", function(e) {
             // @todo ajax logic
             location.href = jQuery(this).attr("data-url");
         });

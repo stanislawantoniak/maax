@@ -29,6 +29,7 @@ class Zolago_Solrsearch_Block_Faces_Price extends Zolago_Solrsearch_Block_Faces_
 
     /**
      * Calculate price ranges
+     * @todo automatic price ranges and max interval
      * @param array $priceRanges
      * @param decimal $min
      * @param decimal $max
@@ -44,16 +45,9 @@ class Zolago_Solrsearch_Block_Faces_Price extends Zolago_Solrsearch_Block_Faces_
 
         $priceRanges = array();
 
-
         // category
         $category = Mage::registry('current_category');
         $range = 0;
-        if ($category) {
-            $data = $category->getData();
-            if (!empty($data['filter_price_range'])) {
-                $range = $data['filter_price_range'];
-            }
-        }
         $min = 0.0;
         if (isset($solrData['stats']['stats_fields'][$priceFieldName]['min'])) {
             $min = $solrData['stats']['stats_fields'][$priceFieldName]['min'];
@@ -62,6 +56,24 @@ class Zolago_Solrsearch_Block_Faces_Price extends Zolago_Solrsearch_Block_Faces_
         $max = 0.0;
         if (isset($solrData['stats']['stats_fields'][$priceFieldName]['max'])) {
             $max = $solrData['stats']['stats_fields'][$priceFieldName]['max'];
+        }
+        if ($category) {
+            $data = $category->getData();
+            if (!empty($data['filter_price_range'])) {
+                $range = $data['filter_price_range'];
+            } else {
+                $calculation = Mage::app()->getStore()->getConfig(Mage_Catalog_Model_Layer_Filter_Price::XML_PATH_RANGE_CALCULATION);
+                switch ($calculation) {
+                    case Mage_Catalog_Model_Layer_Filter_Price::RANGE_CALCULATION_AUTO:
+                        break;
+                    case Mage_Catalog_Model_Layer_Filter_Price::RANGE_CALCULATION_IMPROVED:
+                        break;
+                    case Mage_Catalog_Model_Layer_Filter_Price::RANGE_CALCULATION_MANUAL:
+                        $range = Mage::app()->getStore()->getConfig(Mage_Catalog_Model_Layer_Filter_Price::XML_PATH_RANGE_STEP);
+                        break;
+                }
+                
+            }            
         }
         if ($range) {
             $returnPriceRanges = array();
@@ -81,7 +93,6 @@ class Zolago_Solrsearch_Block_Faces_Price extends Zolago_Solrsearch_Block_Faces_
         if ( isset($solrData['facet_counts']['facet_ranges'][$priceFieldName]['counts']) && is_array($solrData['facet_counts']['facet_ranges'][$priceFieldName]['counts'])) {
             $priceRanges = $solrData['facet_counts']['facet_ranges'][$priceFieldName]['counts'];
         }
-
 
         $tempPriceRanges = array();
         $tempPriceRanges[] = $min;
@@ -129,17 +140,17 @@ class Zolago_Solrsearch_Block_Faces_Price extends Zolago_Solrsearch_Block_Faces_
         if ( isset($solrData['facet_counts']['facet_fields'][$priceFieldName]) && is_array($solrData['facet_counts']['facet_fields'][$priceFieldName])) {
             $priceFacets = $solrData['facet_counts']['facet_fields'][$priceFieldName];
         }
-
         $currencySign = Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol();
 
         $currencyPositionSetting = $this->helper('solrsearch')->getSetting('currency_position');
-
+        $counter = 0;
+        $limit = count($priceRanges);
         foreach ($priceRanges as $range) {
             $start = floor(floatval($range['start']));
             $end = ceil(floatval($range['end']));
 
-            $formattedStart = Mage::app()->getStore()->getCurrentCurrency()->format($start, null, false);
-            $formattedEnd = Mage::app()->getStore()->getCurrentCurrency()->format($end, null, false);
+            $formattedStart = $this->getPriceFormat($start);//Mage::app()->getStore()->getCurrentCurrency()->format($start, null, false);
+            $formattedEnd = $this->getPriceFormat($end);//Mage::app()->getStore()->getCurrentCurrency()->format($end, null, false);
 
 //			if ($currencyPositionSetting > 0)
 //			{
@@ -147,8 +158,14 @@ class Zolago_Solrsearch_Block_Faces_Price extends Zolago_Solrsearch_Block_Faces_
 //			}else {
 //				$formatted = $start.'&nbsp;'.$currencySign.' - '.$end.'&nbsp;'.$currencySign;
 //			}
-
-            $formatted = $formattedStart . " - " . $formattedEnd;
+            $counter++;
+            if ($counter == 1) {
+                $formatted = 'poniżej '.$formattedEnd;
+            } elseif ($counter == $limit) {
+                $formatted = 'powyżej '.$formattedStart;
+            } else {
+                $formatted = 'od '.$formattedStart . " do " . $formattedEnd;
+            }
 
             $rangeItemArray = array(
                                   'start' => $start,
