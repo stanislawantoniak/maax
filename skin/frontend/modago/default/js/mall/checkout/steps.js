@@ -478,8 +478,6 @@
 				return false;
 			},
 			editAddress: function(event){
-				console.log("Edit clicked", event.data);
-
                 var step = event.data.step,
                     address = event.data.address,
                     addressBook = event.data.addressBook;

@@ -15,6 +15,8 @@ class Zolago_Customer_AddressController extends Mage_Customer_AddressController
         if ($addressId) {
             $address = Mage::getModel('customer/address')->load($addressId);
 
+            /* @var $address Mage_Customer_Model_Address */
+			
             // Validate address_id <=> customer_id
             if ($address->getCustomerId() != $this->_getSession()->getCustomerId()) {
 				$this->_prepareJsonResponse(array(
@@ -28,10 +30,11 @@ class Zolago_Customer_AddressController extends Mage_Customer_AddressController
                 $address->delete();
 				$this->_prepareJsonResponse(array(
 					"status"=>1, 
-					"content"=>$address->getData())
-				);
+					"content"=>$this->_getAddressData($address)
+				));
 				return;
             } catch (Exception $e){
+				Mage::logException($e);
 				$this->_prepareJsonResponse(array(
 					"status"=>0, 
 					"content"=>$this->__('An error occurred while deleting the address.'))
@@ -97,8 +100,8 @@ class Zolago_Customer_AddressController extends Mage_Customer_AddressController
                     $address->save();
 					$this->_prepareJsonResponse(array(
 						"status"=>1, 
-						"content"=>$address->getData())
-					);
+						"content"=>$this->_getAddressData($address)
+					));
                 } else {
 					$this->_prepareJsonResponse(array(
 						"status"=>0, 
@@ -120,6 +123,12 @@ class Zolago_Customer_AddressController extends Mage_Customer_AddressController
 		}
 	}
 	
+	
+	protected function _getAddressData(Mage_Customer_Model_Address $address){
+		$data = $address->getData();
+		$data['street'] = $address->getStreet();
+		return $data;
+	}
 	
 	/**
 	 * @param mixed $response
