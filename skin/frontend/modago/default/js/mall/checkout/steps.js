@@ -78,6 +78,8 @@
                     target.html(Mall.translate.__("No addresses"));
                 }
                 target.append(this.getAddNewButton(type));
+                console.log(this.getAddNewButton(type));
+                console.log(target);
             },
 
             getAddNewButton: function (type) {
