@@ -1078,11 +1078,17 @@ Mall.listing = {
      * @returns {Mall.listing}
      */
     reloadListingItemsAfterPageLoad: function() {
+
+
         //jQuery("#items-product").masonry().imagesLoaded(function() {
             var container = jQuery("#items-product").masonry();
-            container.masonry("reloadItems");
-            container.masonry();
-            setTimeout(function() {Mall.listing.placeListingFadeContainer();}, 1000);
+        this.setItemsImageDimensions(container);
+
+            setTimeout(function() {
+                container.masonry("reloadItems");
+                container.masonry();
+                Mall.listing.placeListingFadeContainer();
+            }, 200);
 
             // hide load more button
             if (Mall.listing.getTotal() > Mall.listing.getCurrentVisibleItems()) {
@@ -1093,6 +1099,41 @@ Mall.listing = {
         //});
 
         return this;
+    },
+
+    setItemsImageDimensions: function (container) {
+        "use strict";
+        var columnWidth = this.getFirstItemWidth(container),
+            items = container.find(".item"),
+            width,
+            height,
+            proportions,
+            newWidth,
+            newHeight;
+
+        jQuery.each(items, function () {
+            // read attrs
+            width = jQuery(this).find(".img_product > img").data("width");
+            height = jQuery(this).find(".img_product > img").data("height");
+            if (width !== undefined && height !== undefined) {
+                proportions = width / height;
+                newHeight = (columnWidth - 2) / proportions;
+                newWidth = columnWidth - 2;
+                jQuery(this).find(".img_product > img")
+                    .attr("width", newWidth)
+                    .attr("height", newHeight);
+            }
+        });
+    },
+
+    calculateSize: function (item, columnWidth) {
+        "use strict";
+
+    },
+
+    getFirstItemWidth: function (container) {
+        "use strict";
+        return container.find(".item").first().width();
     },
 
     /**
