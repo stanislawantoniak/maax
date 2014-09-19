@@ -667,37 +667,7 @@
 		},
 		afterRequest: function(deffered, data){
 			console.log("Loading stop");
-		},
-		
-        /**
-         * TEST FUNCTIONS
-         */
-
-        simulateSaveNewAddress: function (obj) {
-            var result;
-
-            if (obj === undefined) {
-                obj = {
-                    firstname: "Pawcio",
-                    lastname: "Chyl",
-                    company: "ORBA",
-                    street: [
-                        "Bukowińska 1",
-                        "20-262"
-                    ],
-                    city: "Lublin",
-                    country_id: "PL",
-                    region_id: 487,
-                    postcode: "20-262",
-                    vat_id: "9462619603",
-                    need_invoice: true,
-                    telephone: "531 338 668"
-                };
-            }
-
-            console.log(this.save(obj));
-        }
-
+		}
     };
 
 })();

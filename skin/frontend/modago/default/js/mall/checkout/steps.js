@@ -124,7 +124,7 @@
 
                 jQuery("<button/>", {
                     "class": "button button-primary large pull-right select-address",
-                    html: "Wybierz"
+                    html: "Zapisz"
                 }).appendTo(buttonWrapper);
 
                 return buttonWrapper;
@@ -186,7 +186,8 @@
                             } else {
                                 self.getAddressBook().setSelectedShipping(address);
                             }
-                            self.renderSelectedAddress(type);
+                            self.renderSelectedAddress("billing");
+                            self.renderSelectedAddress("shipping");
                             self.renderAddressList("billing");
                             self.renderAddressList("shipping");
                             self.getModal().modal("hide");
@@ -262,7 +263,7 @@
                         inputClass: "form-control vat_id city hint"
                     },
                     {
-                        name:       "street[]",
+                        name:       "street",
                         id:         type + "_street_1",
                         type:       "text",
                         label:      "Ulica i numer",
@@ -521,6 +522,7 @@
 				return false;
 			},
 			editAddress: function(event){
+                event.preventDefault();
                 var step = event.data.step,
                     address = event.data.address,
                     addressBook = event.data.addressBook;
@@ -628,11 +630,11 @@
 
             fillEditForm: function (address, form) {
                 form = jQuery(form);
-
                 jQuery.each(address.getData(), function (idx, item) {
-                    if (idx.indexOf("street") !== -1) {
-                        idx += "[]";
-                        item = item.join(" ");
+                    if (idx.indexOf("street") !== -1 && item) {
+                        if (jQuery.isArray(item)) {
+                            item = item.shift();
+                        }
                     }
                     if (form.find("[name='"+ idx +"']").length > 0) {
                         form.find("[name='"+ idx +"']").val(item);

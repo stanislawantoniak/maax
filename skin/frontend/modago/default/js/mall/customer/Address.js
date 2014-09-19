@@ -254,6 +254,12 @@
             return this;
         },
 
+        unsetStreet: function () {
+            this.setData("street", []);
+
+            return this;
+        },
+
         /**
          * Prepares object for saving to backend.
          *
@@ -269,7 +275,12 @@
                 this.setData("form_key", Mall.getFormKey());
             }
 
+            if (!jQuery.isArray(this.getData("street"))) {
+                this.setData("street", [this.getData("street")]);
+            }
+
             return this;
         }
+
     };
 })();
