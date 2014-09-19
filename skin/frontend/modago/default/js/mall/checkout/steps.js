@@ -83,7 +83,9 @@
             },
 
             getAddNewButton: function (type) {
-                var templateHandle = jQuery("#addressbook-add-new-template").clone().removeClass("hidden"),
+                var templateHandle = jQuery("#addressbook-add-new-template")
+                        .clone()
+                        .removeClass("hidden"),
                     self = this;
 
                 templateHandle.click(function () {
@@ -98,12 +100,14 @@
                 modal.find("#" + type + "_vat_id").mask("999-999-99-99");
             },
 
-            showAddNewModal: function (modal, type) {
+            showAddNewModal: function (modal, type, edit) {
+                edit = edit === undefined ? false : edit;
+
                 modal = jQuery(modal);
                 modal.find(".modal-body")
                     .html("")
                     .append(this.getAddNewForm(type));
-                modal.find("#modal-title").html("DODAJ NOWY ADRES");
+                modal.find("#modal-title").html(edit ? "EDYCJA ADRESU" : "DODAJ NOWY ADRES");
                 this.attachNewAddressInputsMask(modal, type);
             },
 
@@ -471,8 +475,44 @@
 			},
 			editAddress: function(event){
 				console.log("Edit clicked", event.data);
+
+                var step = event.data.step,
+                    address = event.data.address,
+                    addressBook = event.data.addressBook;
+
+                // show modal
+                step.showAddNewModal(step.getModal(), event.data.type, true);
+                step.getModal().modal("show");
+                step.injectEntityIdToEditForm(
+                    step.getModal().find("form"), address.getId(), addressBook
+                );
+                step.fillEditForm(address, step.getModal().find("form"));
+
 				return false;
 			},
+
+            injectEntityIdToEditForm: function (form, id, addressBook) {
+                jQuery("<input/>", {
+                    type: "hidden",
+                    name: addressBook.getEntityIdKey(),
+                    value: id
+                }).appendTo(form);
+            },
+
+            fillEditForm: function (address, form) {
+                form = jQuery(form);
+
+                jQuery.each(address.getData(), function (idx, item) {
+                    if (idx.indexOf("street") !== -1) {
+                        idx += "[]";
+                        item = item.join(" ");
+                    }
+                    if (form.find("[name='"+ idx +"']").length > 0) {
+                        form.find("[name='"+ idx +"']").val(item);
+                    }
+                });
+            },
+
 			setDefaultAddress: function(event){
 				console.log("Set default clicked", event.data);
 				return false;
