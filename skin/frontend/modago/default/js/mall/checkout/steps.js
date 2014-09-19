@@ -29,13 +29,23 @@
 				var template = this.getSelectedTemplate(),
 					addressBook = this.getAddressBook(),
 					target = jQuery(".current-addres."+type, this.content),
+                    defaultAdderssObject,
 					addressObject = addressBook.getSelected(type);
 				    console.log("adress orig");
 				    console.log(addressObject);
+					defaultAdderssObject = addressBook.getDefault(type);
+
 				if(addressObject){
+					var defaultCaption = "";
+					if(defaultAdderssObject && defaultAdderssObject.getId()==addressObject.getId()){
+						defaultCaption = Mall.translate.__("default-"+type+"-address");
+					}else{
+						// @todo default checkbox
+						defaultCaption = "[v] set as default";
+					}
 					var data = jQuery.extend(
 						this.processAddressToDisplay(addressObject), 
-						{"default_caption": Mall.translate.__("default-"+type+"-address")}
+						{"default_caption": defaultCaption}
 					);
                     console.log(data);
                     console.log(addressObject);
