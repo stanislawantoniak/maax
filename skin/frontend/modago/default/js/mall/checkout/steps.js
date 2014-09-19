@@ -55,9 +55,9 @@
 					addressBook = this.getAddressBook(),
 					target = jQuery(".panel-adresses."+type, this.content),
 					selectedAddress = addressBook.getSelected(type),
-					self = this;
-					
-				var addressCollection = addressBook.getAddressBook();
+					self = this,
+                    addNewButton,
+                    addressCollection = addressBook.getAddressBook();
 				
 				target.html('');
 				
@@ -77,9 +77,9 @@
                 }else{
                     target.html(Mall.translate.__("No addresses"));
                 }
-                target.append(this.getAddNewButton(type));
-                console.log(this.getAddNewButton(type));
-                console.log(target);
+                addNewButton = this.getAddNewButton(type);
+                addNewButton.show();
+                target.append(addNewButton);
             },
 
             getAddNewButton: function (type) {
