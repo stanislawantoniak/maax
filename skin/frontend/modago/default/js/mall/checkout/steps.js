@@ -61,6 +61,7 @@
 				
 				target.html('');
 				
+				
 				if(addressCollection.length){
 					jQuery.each(addressCollection, function(){
 						// Do not allow sleected address
@@ -394,7 +395,6 @@
 			},
 			
 			_rollAddressList: function(element, block, doOpen){
-				console.log(element, block, doOpen);
 				// Need move to one tag
 				if(doOpen){
 					block.show();
