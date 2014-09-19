@@ -83,7 +83,7 @@
             },
 
             getAddNewButton: function (type) {
-                var templateHandle = jQuery("#addressbook-add-new-template").clone(),
+                var templateHandle = jQuery("#addressbook-add-new-template").clone().removeClass("hidden"),
                     self = this;
 
                 templateHandle.click(function () {
@@ -398,17 +398,16 @@
 			
 			_rollAddressList: function(element, block, doOpen){
 				// Need move to one tag
+				
 				if(doOpen){
 					block.show();
-					//block.find('.panel').show();
+					element.addClass("open");
 					element.text(Mall.translate.__("roll-up"));
 				}else{
 					block.hide();
-					//block.find('.panel').hide();
+					element.removeClass("open");
 					element.text(Mall.translate.__("change-address"));
 				}
-				// show add new address button
-                block.find(".add-new").toggleClass("hidden");
 			},
 			processAddressNode: function(node, address, addressBook, type){
 				var settableDefault = true,
@@ -498,7 +497,7 @@
 				self.renderAddressList("shipping");
 				self.renderAddressList("billing");
 				
-				
+				// Roll up list
 				var listBlock = self.content.find(".panel-adresses." + type),
 					element =  self.content.find(".change_address." + type);
 			
