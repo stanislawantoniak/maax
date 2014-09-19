@@ -191,6 +191,10 @@
                     });
                 });
 
+                if (type === "billing") {
+                    this.injectNeedInvoiceToEditForm(form, null, null);
+                }
+
                 return form;
             },
 
@@ -496,6 +500,14 @@
                     type: "hidden",
                     name: addressBook.getEntityIdKey(),
                     value: id
+                }).appendTo(form);
+            },
+
+            injectNeedInvoiceToEditForm: function (form) {
+                jQuery("<input/>", {
+                    type: "hidden",
+                    name: "need_invoice",
+                    value: 1
                 }).appendTo(form);
             },
 
