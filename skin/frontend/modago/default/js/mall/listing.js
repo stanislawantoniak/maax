@@ -59,7 +59,7 @@ Mall.listing = {
     /**
      * How many items will be appended to listing when scrolling.
      */
-    _scroll_load_offset: 20,
+    _scroll_load_offset: 28,
 
     /**
      * How many items will be loaded when load more action is performed.
@@ -74,7 +74,7 @@ Mall.listing = {
     /**
      * When to start showing new products - from bottom of the page.
      */
-    _scroll_load_bottom_offset: 2000,
+    _scroll_load_bottom_offset: 3000,
 
     /**
      * Queue for preloaded products.
@@ -430,7 +430,8 @@ Mall.listing = {
             likeClass,
             likeText,
             like,
-            likeIco;
+            likeIco,
+            style;
 
         container = jQuery("<div/>", {
             "class": "item col-phone col-xs-4 col-sm-4 col-md-3 col-lg-3 size14"
@@ -447,10 +448,13 @@ Mall.listing = {
             "class": "img_product"
         }).appendTo(link);
 
+        if (product.listing_resized_image_info !== null) {
+            style = "max-height: " + product.listing_resized_image_info.height;
+        }
         jQuery("<img/>", {
             src: product.listing_resized_image_url,
             alt: product.name,
-            style: "max-height: " + product.listing_resized_image_info.height,
+            style: style,
             "class": "img-responsive"
         }).appendTo(figure);
 
