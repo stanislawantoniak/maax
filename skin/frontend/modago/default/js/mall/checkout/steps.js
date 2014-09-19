@@ -438,8 +438,34 @@
 				
 				return node;
 			},
+
 			removeAddress: function(event){
 				console.log("Remove clicked", event.data);
+                var deffered,
+                    self = this;
+
+                if (!confirm("Are you sure?")) {
+                    return false;
+                }
+
+                deffered = event.data.addressBook.remove(event.data.address.getId());
+                if (deffered === null) {
+                    alert("Address can't be removed.");
+                } else {
+                    deffered.done(function (data) {
+                        if (data.status !== undefined) {
+                            if (Boolean(data.status) === false) {
+                                alert("Address can't be removed.");
+                            } else {
+                                event.data.step.renderSelectedAddress(event.data.type);
+                                event.data.step.renderAddressList("billing");
+                                event.data.step.renderAddressList("shipping");
+                                event.data.step.toggleOpenAddressList(event.data.type);
+                            }
+                        }
+                    });
+                }
+
 				return false;
 			},
 			editAddress: function(event){

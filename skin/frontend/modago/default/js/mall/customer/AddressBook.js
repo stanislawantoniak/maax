@@ -577,6 +577,7 @@
             });
 
             delete this._book[_id];
+            this._book.splice(_id, 1);
 
             return this;
         },
