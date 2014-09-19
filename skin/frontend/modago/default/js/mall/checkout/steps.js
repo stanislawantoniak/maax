@@ -29,9 +29,12 @@
 				var template = this.getSelectedTemplate(),
 					addressBook = this.getAddressBook(),
 					target = jQuery(".current-addres."+type, this.content),
-					addressObject = addressBook.getSelected(type),
+                    defaultAdderssObject,
+					addressObject = addressBook.getSelected(type);
+				    console.log("adress orig");
+				    console.log(addressObject);
 					defaultAdderssObject = addressBook.getDefault(type);
-				
+
 				if(addressObject){
 					var defaultCaption = "";
 					if(defaultAdderssObject && defaultAdderssObject.getId()==addressObject.getId()){
@@ -44,6 +47,8 @@
 						this.processAddressToDisplay(addressObject), 
 						{"default_caption": defaultCaption}
 					);
+                    console.log(data);
+                    console.log(addressObject);
 					target.html(Mall.replace(template, data));
 				}else{
 					target.html(Mall.translate.__("No addresses"));
@@ -122,7 +127,8 @@
                     panelBody = form.find(".panel-body"),
                     element,
                     formGroup,
-                    self = this;
+                    self = this,
+                    address;
 
                 element = this.getInput("firstname"
                     , type + "_firstname"
@@ -155,11 +161,22 @@
 
                 panelBody.find(".select-address").click(function (e) {
                     e.preventDefault();
-                    var data = jQuery(this).parents(".new-address-form").serializeArray();
+                    var data = jQuery(this).parents(".new-address-form").serializeArray(),
+                        self2 = self;
                     self.lockButton(this);
                     self.getAddressBook().save(data).done(function (data) {
                         if (Boolean(data.status) === false) {
                             alert(data.content.join("\n"));
+                        } else {
+                            address = self.getAddressBook().get(data.content.entity_id);
+                            if (type === "billing") {
+                                self.getAddressBook().setSelectedBilling(address);
+                            } else {
+                                self.getAddressBook().setSelectedShipping(address);
+                            }
+                            self.renderSelectedAddress(type);
+                            self.renderAddressList("billing");
+                            self.renderAddressList("shipping");
                         }
                     }).always(function () {
                         self.unlockButton(e.target);
