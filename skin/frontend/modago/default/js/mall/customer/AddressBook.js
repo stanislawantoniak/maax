@@ -56,6 +56,10 @@
     };
 
     Mall.customer.AddressBook.prototype = {
+
+        getEntityIdKey: function () {
+            return this.ENTITY_ID_KEY;
+        },
         /**
          * Sets customer instance.
          *
@@ -252,7 +256,7 @@
 
             address = obj instanceof Mall.customer.Address ? obj : this.get(obj[this.ENTITY_ID_KEY]);
             this.beforeEdit.call(this, address);
-            if (! obj instanceof Mall.customer.Address) {
+            if (obj instanceof Mall.customer.Address === false) {
                 address.setData(obj);
             }
 
