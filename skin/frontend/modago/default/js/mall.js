@@ -444,7 +444,7 @@ Mall.product = {
         this.setPrices(jsonOptions.basePrice, jsonOptions.oldPrice, jsonOptions.template);
         if(typeof jsonOptions.attributes != "undefined") {
 
-            this.setAttributes(jsonOptions.attributes, jsonOptions.size_max_number);
+            this.setAttributes(jsonOptions.attributes, jsonOptions.useSizeboxList);
         }
     },
 
@@ -466,11 +466,11 @@ Mall.product = {
         price_selector.html(template.replace("#{price}", number_format(price, "2", ",", " ")));
     },
 
-    setAttributes: function(attributes, size_max_number) {
+    setAttributes: function(attributes, useSizeboxList) {
         this.clearAttributesContainer();
 
         jQuery.each(attributes, function(index, e) {
-            Mall.product.createOptionGroup(e, size_max_number);
+            Mall.product.createOptionGroup(e, useSizeboxList);
         });
     },
 
@@ -485,10 +485,9 @@ Mall.product = {
         }
     },
 
-    createOptionGroup: function(group, size_max_number) {
-        var group_size_number = group.options.length;
+    createOptionGroup: function(group, useSizeboxList) {
 
-        if(group_size_number <= size_max_number) {
+        if(!useSizeboxList) {
 
             // insert option group
             var groupElement = jQuery("<div/>", {
@@ -736,12 +735,19 @@ jQuery(document).ready(function() {
     jQuery(".size-box select").selectbox({
         onOpen: function (inst) {
             var uid = jQuery(this).attr('sb');
-            var height4select = parseFloat(jQuery(".size-box li").first().css('line-height'));
-            height4select += parseInt(jQuery(".size-box li a").first().css('padding-top'));
-            height4select += parseInt(jQuery(".size-box li a").first().css('padding-bottom'));
-            height4select = 4 * height4select;
+            var height = parseFloat(jQuery(".size-box li").first().css('line-height'));
+            height += parseInt(jQuery(".size-box li a").first().css('padding-top'));
+            height += parseInt(jQuery(".size-box li a").first().css('padding-bottom'));
 
-            jQuery('#sbOptionsWrapper_' + uid).css('max-height', height4select);
+            var n = jQuery(".size-box li").length;
+            if( n < 4 ) {
+                height = n * height;
+                jQuery('.size-box .mCSB_scrollTools, .size-box .mCSB_1_scrollbar').css("visibility", "hidden");
+            } else {
+                height = 4 * height;
+            }
+
+            jQuery('#sbOptionsWrapper_' + uid).css('max-height', height);
 
         },
 
