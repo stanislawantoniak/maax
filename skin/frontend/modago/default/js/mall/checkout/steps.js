@@ -435,7 +435,27 @@
 				return false;
 			},
 			chooseAddress: function(event){
-				console.log("Choose clicked", event.data);
+				var addressBook = event.data.addressBook,
+					address = event.data.address,
+					type = event.data.type,
+					self = event.data.step;
+				
+				switch(type){
+					case "billing":
+						addressBook.setSelectedBilling(address);
+					break;
+					case "shipping":
+						addressBook.setSelectedShipping(address);
+					break;
+				}
+				
+				
+				self.renderSelectedAddress("shipping");
+				self.renderSelectedAddress("billing");
+				
+				self.renderAddressList("shipping");
+				self.renderAddressList("billing");
+				
 				return false;
 			},
 			processAddressToDisplay: function(address){

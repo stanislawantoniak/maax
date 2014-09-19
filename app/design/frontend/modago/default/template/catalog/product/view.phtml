@@ -74,7 +74,7 @@ $avg = $_reviewBlock->getAvarageRating();
 <div id="block-bundle" class="col-lg-7 col-xs-12">
 
 <!-- PRODUCT SHOP -->
-<div id="product-shop" class="col-lg-8 col-md-12 clearfix">
+<div id="product-shop" class="col-lg-8 col-md-12 clearfix overflow-x-fix">
 
     <form action="<?php echo $this->getSubmitUrl($_product) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
         <?php echo $this->getBlockHtml('formkey') ?>
@@ -107,25 +107,24 @@ $avg = $_reviewBlock->getAvarageRating();
 
         <div class="size-box-bundle" id="product-options">
             <?php if($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) : ?>
-            <?php if (!empty($productAttrs)) : ?>
-                <?php foreach($productAttrs as $_attribute) : ?>
-                <?php if(array_key_exists('attribute_code', $_attribute) && $_attribute['attribute_code'] == 'size') : ?>
-                <div class="size-box clearfix clr">
-                    <div class="size">
-                        <span class="size-label"><?php echo $this->__("Select size"); ?>:</span>
+                <?php if (!empty($productAttrs)) : ?>
+                    <?php foreach($productAttrs as $_attribute) : ?>
+                        <?php if(array_key_exists('attribute_code', $_attribute) && $_attribute['attribute_code'] == 'size') : ?>
+                            <div class="size-box clearfix clr">
+                                <div class="size">
+                                    <span class="size-label"><?php echo $this->__("Select size"); ?>:</span>
 
-                        <div class="form-group form-radio">
+                                    <div class="form-group form-radio">
 
-                            <br />
-                            <a href="#" class="view-sizing underline pull-left" data-toggle="modal"
-                               data-target="#tabelaRozmiarow"><?php echo $this->__("Sizes"); ?> </a>
-                        </div>
-                    </div>
-
-                </div>
+                                        <br />
+                                        <a href="#" class="view-sizing underline pull-left" data-toggle="modal"
+                                           data-target="#tabelaRozmiarow"><?php echo $this->__("Sizes"); ?> </a>
+                                    </div>
+                                </div>
+                            </div>
                         <?php endif; ?>
                     <?php endforeach; ?>
-            <?php endif; ?>
+                <?php endif; ?>
             <?php endif; ?>
 
             <div class="row">
@@ -164,6 +163,7 @@ $avg = $_reviewBlock->getAvarageRating();
     </form>
 
 </div>
+
 <!-- END:/ PRODUCT SHOP -->
 <!-- SELLER BOX BUNDLE -->
 <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 pull-right clearfix">
@@ -345,8 +345,15 @@ $avg = $_reviewBlock->getAvarageRating();
 <?php echo $this->getChildHtml('zolago_modago_home_sliderlastseen'); ?>
 <?php if($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) : ?>
 <script type="text/javascript">
-    Mall.product.productOptions(<?php echo Mage::getBlockSingleton('zolagocatalog/product_view_type_configurable')->getJsonConfig(); ?>);
+    var jsonConfig = <?php echo Mage::getBlockSingleton('zolagocatalog/product_view_type_configurable')->getJsonConfig(); ?>;
+    var size_max_number = <?php echo Mage::getStoreConfig('catalog/frontend/size_max_number'); ?>; //value when selectbox apear
+    jsonConfig.size_max_number = size_max_number;
+
+    Mall.product.productOptions(jsonConfig);
     Mall.product._current_product_type = "<?php echo Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE; ?>";
+
+
+
 </script>
 <?php endif; ?>
 <script type="text/javascript">
