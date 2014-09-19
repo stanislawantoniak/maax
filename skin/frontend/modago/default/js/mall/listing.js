@@ -1099,7 +1099,10 @@ Mall.listing = {
             var container = jQuery("#items-product").masonry();
         this.setItemsImageDimensions(container);
 
-        container.masonry("reloadItems");
+        container.masonry({
+            itemSelector: ".item",
+            isInitLayout: false
+        });
         container.masonry();
 
         setTimeout(function() {
