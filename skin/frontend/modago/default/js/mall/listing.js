@@ -59,7 +59,7 @@ Mall.listing = {
     /**
      * How many items will be appended to listing when scrolling.
      */
-    _scroll_load_offset: 20,
+    _scroll_load_offset: 28,
 
     /**
      * How many items will be loaded when load more action is performed.
@@ -74,7 +74,7 @@ Mall.listing = {
     /**
      * When to start showing new products - from bottom of the page.
      */
-    _scroll_load_bottom_offset: 2000,
+    _scroll_load_bottom_offset: 3000,
 
     /**
      * Queue for preloaded products.
@@ -99,6 +99,7 @@ Mall.listing = {
         this.attachFilterColorEvents();
         this.attachFilterIconEvents();
         this.attachFilterEnumEvents();
+        this.attachFilterPriceEvents();
         this.attachFilterDroplistEvents();
         this.attachFilterFlagEvents();
         this.attachFilterPriceSliderEvents();
@@ -430,7 +431,8 @@ Mall.listing = {
             likeClass,
             likeText,
             like,
-            likeIco;
+            likeIco,
+            style;
 
         container = jQuery("<div/>", {
             "class": "item col-phone col-xs-4 col-sm-4 col-md-3 col-lg-3 size14"
@@ -447,10 +449,13 @@ Mall.listing = {
             "class": "img_product"
         }).appendTo(link);
 
+        if (product.listing_resized_image_info !== null) {
+            style = "max-height: " + product.listing_resized_image_info.height;
+        }
         jQuery("<img/>", {
             src: product.listing_resized_image_url,
             alt: product.name,
-            style: "max-height: " + product.listing_resized_image_info.height,
+            style: style,
             "class": "img-responsive"
         }).appendTo(figure);
 
@@ -649,6 +654,7 @@ Mall.listing = {
             this.attachFilterColorEvents();
             this.attachFilterIconEvents();
             this.attachFilterEnumEvents();
+            this.attachFilterPriceEvents();
             this.attachFilterDroplistEvents();
             this.attachFilterFlagEvents();
             this.attachFilterPriceSliderEvents();
@@ -705,6 +711,7 @@ Mall.listing = {
             this.attachFilterColorEvents();
             this.attachFilterIconEvents();
             this.attachFilterEnumEvents();
+            this.attachFilterPriceEvents();
             this.attachFilterDroplistEvents();
             this.attachFilterFlagEvents();
             this.attachFilterPriceSliderEvents();
@@ -790,6 +797,18 @@ Mall.listing = {
      */
     attachFilterEnumEvents: function() {
         jQuery(".filter-enum").find("[data-url]").on("click", function(e) {
+            // @todo ajax logic
+            location.href = jQuery(this).attr("data-url");
+        });
+
+        return this;
+    },
+    /**
+     * Attaches events to Price range filters.
+     * @returns {Mall.listing}
+     */
+    attachFilterPriceEvents: function() {
+        jQuery("#filter_price").find("[data-url]").on("click", function(e) {
             // @todo ajax logic
             location.href = jQuery(this).attr("data-url");
         });
@@ -1074,21 +1093,77 @@ Mall.listing = {
      * @returns {Mall.listing}
      */
     reloadListingItemsAfterPageLoad: function() {
-        jQuery("#items-product").masonry().imagesLoaded(function() {
-            var container = jQuery("#items-product").masonry();
+
+        var container = jQuery("#items-product").masonry();
+        this.setItemsImageDimensions(container);
+
+        container.masonry("reloadItems");
+        container.masonry();
+
+        setTimeout(function() {
             container.masonry("reloadItems");
             container.masonry();
-            setTimeout(function() {Mall.listing.placeListingFadeContainer();}, 1000);
+            Mall.listing.placeListingFadeContainer();
+        }, 1000);
 
-            // hide load more button
-            if (Mall.listing.getTotal() > Mall.listing.getCurrentVisibleItems()) {
-                Mall.listing.hideLoadMoreButton()
-                    .hideShapesListing();
-            }
+        // hide load more button
+        if (Mall.listing.getTotal() > Mall.listing.getCurrentVisibleItems()) {
+            Mall.listing.hideLoadMoreButton()
+                .hideShapesListing();
+        }
+
+        jQuery("#items-product").masonry().imagesLoaded(function() {
+            container.masonry("reloadItems");
+            container.masonry();
+
+            setTimeout(function() {
+                    Mall.listing.placeListingFadeContainer();
+                }, 1000);
+
+                // hide load more button
+                if (Mall.listing.getTotal() > Mall.listing.getCurrentVisibleItems()) {
+                    Mall.listing.hideLoadMoreButton()
+                        .hideShapesListing();
+                }
 
         });
 
         return this;
+    },
+
+    setItemsImageDimensions: function (container) {
+        "use strict";
+        var columnWidth = this.getFirstItemWidth(container),
+            items = container.find(".item"),
+            width,
+            height,
+            proportions,
+            newWidth,
+            newHeight;
+
+        jQuery.each(items, function () {
+            // read attrs
+            width = jQuery(this).find(".img_product > img").data("width");
+            height = jQuery(this).find(".img_product > img").data("height");
+            if (width !== undefined && height !== undefined) {
+                proportions = width / height;
+                newHeight = (columnWidth - 2) / proportions;
+                newWidth = columnWidth - 2;
+                jQuery(this).find(".img_product")
+                    .attr("width", parseInt(newWidth, 10))
+                    .attr("height", parseInt(newHeight, 10));
+            }
+        });
+    },
+
+    calculateSize: function (item, columnWidth) {
+        "use strict";
+
+    },
+
+    getFirstItemWidth: function (container) {
+        "use strict";
+        return container.find(".item").first().width();
     },
 
     /**

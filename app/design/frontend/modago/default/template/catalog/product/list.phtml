@@ -24,7 +24,10 @@ $_productImageUrl = '';
                     <a href="<?php echo $product->getCurrentUrl(); ?>">
                         <figure class="img_product"><img
                                 src="<?php echo $_productImageUrl; ?>"
-                                <?php if($_productImageInfo):?>style="max-height:<?php echo $_productImageInfo['height'];?>"<?php endif;?>
+                                <?php if($_productImageInfo):?>
+                                    data-height="<?php echo $_productImageInfo['height'];?>"
+                                    data-width="<?php echo $_productImageInfo['width'];?>"
+                                <?php endif;?>
                                 alt="<?php $this->escapeHtml($product->getName()); ?>"
                                 class="img-responsive"/></figure>
                         <div class="logo_manufacturer"><img class="img-responsive" src="<?php echo $product->getManufacturerLogoUrl(); ?>"
