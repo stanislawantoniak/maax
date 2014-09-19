@@ -1099,9 +1099,10 @@ Mall.listing = {
             var container = jQuery("#items-product").masonry();
         this.setItemsImageDimensions(container);
 
-            setTimeout(function() {
-                container.masonry("reloadItems");
-                container.masonry();
+        container.masonry("reloadItems");
+        container.masonry();
+        
+        setTimeout(function() {
                 Mall.listing.placeListingFadeContainer();
             }, 200);
 
@@ -1137,6 +1138,8 @@ Mall.listing = {
                 jQuery(this).find(".img_product > img")
                     .attr("width", newWidth)
                     .attr("height", newHeight);
+
+                console.log(jQuery(this).height());
             }
         });
     },
