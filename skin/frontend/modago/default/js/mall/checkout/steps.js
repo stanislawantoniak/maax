@@ -414,27 +414,44 @@
 			_rollAddressList: function(element, block, doOpen){
 				// Need move to one tag
 				
-				var contextActions = block.siblings(".current-address").find(".action");
+				var contextActions = block.
+						siblings(".current-address").
+						find(".action");
 				
 				if(doOpen){
 					block.show();
-					contextActions.removeClass("hidden");
+					contextActions.find(".edit").show().addClass("displayed")
 					element.addClass("open");
 					element.text(Mall.translate.__("roll-up"));
 				}else{
 					block.hide();
-					contextActions.addClass("hidden");
+					contextActions.find(".edit").hide().removeClass("displayed")
 					element.removeClass("open");
 					element.text(Mall.translate.__("change-address"));
 				}
+				
+				this._processActionSelectedAddress(contextActions);
 			},
+			
+			_processActionSelectedAddress: function(block){
+				var show = false;
+				
+				if(block.find(".edit").is(".displayed")){
+					show = true;
+				}
+				if(block.find(".set-default").is(".displayed")){
+					show = true;
+				}
+				
+				block[show ? "show" : "hide"]();
+			},
+			
 			processSelectedAddressNode: function(node, address, addressBook, type){
 				var settableDefault = true,
 					defaultAddress = addressBook.getDefault(type),
 					setDefault = node.find(".set-default"),
 					edit = node.find(".edit"),
-					actions = node.find(".action"),
-					changeTrigger = this.content.find(".change_address."+type);
+					editable = this.content.find(".change_address."+type).hasClass("open");
 			
 				if(defaultAddress && defaultAddress.getId()==address.getId()){
 					settableDefault = false;
@@ -446,17 +463,16 @@
 					address: address, 
 					type: type
 				};
-				
-				if(changeTrigger.hasClass("open")){
-					actions.removeClass("hidden");
-				}else{
-					actions.addClass("hidden");
-				}
-			
+
 				edit.click(eventData, this.editAddress);
 				setDefault.click(eventData, this.setDefaultAddress);
 				
 				setDefault[settableDefault ? "show" : "hide"]();
+				setDefault[settableDefault ? "addClass" : "removeClass"]("displayed");
+				edit[editable ? "show" : "hide"]();
+				edit[editable ? "addClass" : "removeClass"]("displayed");
+				
+				this._processActionSelectedAddress(node.find(".action"));
 				
 				return node;
 			},

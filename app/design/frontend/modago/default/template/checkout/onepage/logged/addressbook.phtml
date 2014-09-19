@@ -18,12 +18,13 @@
 				<dd>{{street}}</dd>
 				<dd>{{postcode}} {{city}}</dd>
 				<dd class="separator phone"><?php echo $this->__("Contact phone")?>: <span>{{telephone}}</span></dd>
-				<dd class="action separator hidden">
+				<dd class="action separator">
 					<a href="#" class="underline edit"><?php echo $this->__("edit");?></a> 
-					<a href="#" class="underline set-default" style="margin-right: 0px;">
-						<?php echo $this->__("set as default");?>
-					</a>
-                    <span style="color: #5A5A5A;">(<?php echo $this->__("the address will be auto selected in future");?>)</span>
+					<span class="set-default">
+						<a href="#" class="underline" style="margin-right: 0px;"><?php echo $this->__("set as default");?></a>
+						<span style="color: #5A5A5A;">(<?php echo $this->__("the address will be auto selected in future");?>)</span>
+					</span>
+					
 				</dd>
 			</dl>
 		</div>
