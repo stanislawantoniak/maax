@@ -1099,15 +1099,14 @@ Mall.listing = {
             var container = jQuery("#items-product").masonry();
         this.setItemsImageDimensions(container);
 
-        container.masonry({
-            itemSelector: ".item",
-            isInitLayout: false
-        });
+        container.masonry("reloadItems");
         container.masonry();
 
         setTimeout(function() {
+                container.masonry("reloadItems");
+                container.masonry();
                 Mall.listing.placeListingFadeContainer();
-            }, 200);
+            }, 1000);
 
             // hide load more button
             if (Mall.listing.getTotal() > Mall.listing.getCurrentVisibleItems()) {
