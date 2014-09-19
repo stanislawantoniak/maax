@@ -1351,8 +1351,8 @@ jQuery.noConflict();
             });
             var min = Math.min.apply( Math, heights );
             var con = $('#items-product').innerHeight();
-            //$('#items-product').not('.list-shop-product').css('height', 'auto');
-            //$('#items-product').not('.list-shop-product').css('height', con-min);
+            $('#items-product').not('.list-shop-product').css('height', 'auto');
+            $('#items-product').not('.list-shop-product').css('height', con-min);
         }
 
 

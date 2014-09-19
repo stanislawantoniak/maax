@@ -1094,27 +1094,39 @@ Mall.listing = {
      */
     reloadListingItemsAfterPageLoad: function() {
 
-
-        //jQuery("#items-product").masonry().imagesLoaded(function() {
-            var container = jQuery("#items-product").masonry();
+        var container = jQuery("#items-product").masonry();
         this.setItemsImageDimensions(container);
 
         container.masonry("reloadItems");
         container.masonry();
 
         setTimeout(function() {
-                container.masonry("reloadItems");
-                container.masonry();
-                Mall.listing.placeListingFadeContainer();
-            }, 1000);
+            container.masonry("reloadItems");
+            container.masonry();
+            Mall.listing.placeListingFadeContainer();
+        }, 1000);
 
-            // hide load more button
-            if (Mall.listing.getTotal() > Mall.listing.getCurrentVisibleItems()) {
-                Mall.listing.hideLoadMoreButton()
-                    .hideShapesListing();
-            }
+        // hide load more button
+        if (Mall.listing.getTotal() > Mall.listing.getCurrentVisibleItems()) {
+            Mall.listing.hideLoadMoreButton()
+                .hideShapesListing();
+        }
 
-        //});
+        jQuery("#items-product").masonry().imagesLoaded(function() {
+            container.masonry("reloadItems");
+            container.masonry();
+
+            setTimeout(function() {
+                    Mall.listing.placeListingFadeContainer();
+                }, 1000);
+
+                // hide load more button
+                if (Mall.listing.getTotal() > Mall.listing.getCurrentVisibleItems()) {
+                    Mall.listing.hideLoadMoreButton()
+                        .hideShapesListing();
+                }
+
+        });
 
         return this;
     },
@@ -1140,8 +1152,6 @@ Mall.listing = {
                 jQuery(this).find(".img_product")
                     .attr("width", parseInt(newWidth, 10))
                     .attr("height", parseInt(newHeight, 10));
-
-                console.log(jQuery(this).height());
             }
         });
     },
