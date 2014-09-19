@@ -139,8 +139,8 @@
 			this.beforeRequest(deffered, address);
 			
             deffered.done(function (data) {
-                if (Boolean(data.status)){
-					this._book.push(address);
+                if (Boolean(data.status) === true){
+					self._book.push(address);
 				}else{
 					//...
 				}
@@ -183,7 +183,7 @@
             removedAddress = this.get(id);
             deffered = this.get(id).remove();
 			
-			this.beforeRequest(deffered, address);
+			this.beforeRequest(deffered, removedAddress);
 			
             deffered.done(function (data) {
                 if (data.status === undefined || Boolean(data.status) === false) {
