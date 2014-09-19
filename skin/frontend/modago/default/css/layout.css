@@ -6363,7 +6363,7 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
 /* line 140, ../sass/layout/style/_sidebar.scss */
 .block-filter form .form-group {
   margin-bottom: 0px; }
-/* line 143, ../sass/layout/style/_sidebar.scss */
+/* line 142, ../sass/layout/style/_sidebar.scss */
 .block-filter form .form-group input[type=checkbox].css-checkbox + label.css-label, .block-filter form .form-group input[type=radio].css-radio + label.css-label {
   padding-left: 23px;
   height: auto;
@@ -6948,6 +6948,20 @@ i.flag.hit, i.flag.bestseller {
 #question-form button {
   min-width: 133px;
   font-size: 14px; }
+
+/* line 434, ../sass/layout/style/_shop_product.scss */
+.no-size {
+  overflow: hidden; }
+/* line 436, ../sass/layout/style/_shop_product.scss */
+.no-size span {
+  position: relative; }
+/* line 438, ../sass/layout/style/_shop_product.scss */
+.no-size span .diagonal {
+  position: absolute;
+  display: block;
+  top: 0;
+  left: 0px;
+  overflow: hidden; }
 
 /* line 3, ../sass/layout/style/_seller-box-bundle.scss */
 #seller-box-bundle, .descripionProduct-box-bundle {

@@ -56,7 +56,7 @@
                     <fields>
                         <size_max_number translate="label comment">
                             <label>Max number of size squares</label>
-                            <comment>Integer number</comment>
+                            <comment>Integer number from 4 to 100</comment>
                             <frontend_type>text</frontend_type>
                             <!--<validate>validate-number</validate>-->
                             <sort_order>210</sort_order>
