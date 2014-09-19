@@ -31,8 +31,6 @@
 					target = jQuery(".current-addres."+type, this.content),
                     defaultAdderssObject,
 					addressObject = addressBook.getSelected(type);
-				    console.log("adress orig");
-				    console.log(addressObject);
 					defaultAdderssObject = addressBook.getDefault(type);
 
 				if(addressObject){
@@ -47,8 +45,6 @@
 						this.processAddressToDisplay(addressObject), 
 						{"default_caption": defaultCaption}
 					);
-                    console.log(data);
-                    console.log(addressObject);
 					target.html(Mall.replace(template, data));
 				}else{
 					target.html(Mall.translate.__("No addresses"));
@@ -95,7 +91,6 @@
             },
 
             attachNewAddressInputsMask: function (modal, type) {
-                console.log(modal.find(type + "_postcode"));
                 modal.find("#" + type + "_postcode").mask("99-999");
                 modal.find("#" + type + "_vat_id").mask("999-999-99-99");
             },
@@ -120,6 +115,10 @@
                 }).appendTo(buttonWrapper);
 
                 return buttonWrapper;
+            },
+
+            toggleOpenAddressList: function (type) {
+                jQuery(".panel-footer").find("." + type).click();
             },
 
             getAddNewForm: function (type) {
@@ -161,8 +160,8 @@
 
                 panelBody.find(".select-address").click(function (e) {
                     e.preventDefault();
-                    var data = jQuery(this).parents(".new-address-form").serializeArray(),
-                        self2 = self;
+                    var data = self.getModalData();
+
                     self.lockButton(this);
                     self.getAddressBook().save(data).done(function (data) {
                         if (Boolean(data.status) === false) {
@@ -177,6 +176,8 @@
                             self.renderSelectedAddress(type);
                             self.renderAddressList("billing");
                             self.renderAddressList("shipping");
+                            self.getModal().modal("hide");
+                            self.toggleOpenAddressList(type);
                         }
                     }).always(function () {
                         self.unlockButton(e.target);
@@ -184,6 +185,21 @@
                 });
 
                 return form;
+            },
+
+            getModalData: function () {
+                var data = {},
+                    form = this.getModal().find(".new-address-form");
+
+                jQuery.each(form.serializeArray(), function () {
+                    data[this.name] = this.value;
+                });
+
+                return data;
+            },
+
+            getModal: function () {
+                return jQuery("#addressbook-modal");
             },
 
             lockButton: function (button) {
