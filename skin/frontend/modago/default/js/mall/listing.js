@@ -110,7 +110,7 @@ Mall.listing = {
         this.loadProductsOnScroll();
 
         // load additional products to queue after page is loaded
-        this.setAutoappend(true);
+        //this.setAutoappend(true);
         this.loadToQueue();
         this.setLoadMoreLabel();
     },
