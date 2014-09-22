@@ -229,6 +229,7 @@ Mall.listing = {
 
 
         imagesLoaded("#items-product", function () {
+            console.log("loaded");
             container = container.masonry({
                 transitionDuration: 0,
                 isAnimated: false
@@ -1114,13 +1115,14 @@ Mall.listing = {
      */
     reloadListingItemsAfterPageLoad: function() {
 
-        var container = jQuery("#items-product").masonry({
-            transitionDuration: 0
-        });
+        var container = jQuery("#items-product");
+        //    .masonry({
+        //    transitionDuration: 0
+        //});
 
         this.setItemsImageDimensions(container);
-        container.masonry("reloadItems");
-        container.masonry();
+        //container.masonry("reloadItems");
+        //container.masonry();
 
         setTimeout(function() {
             //container.masonry("reloadItems");
@@ -1137,8 +1139,8 @@ Mall.listing = {
         imagesLoaded("#items-product", function() {
             jQuery("#listing-load-toplayer").remove();
             jQuery("#items-product").children(".item").show();
-            //container.masonry("reloadItems");
-            //container.masonry();
+            container.masonry("reloadItems");
+            container.masonry();
 
             setTimeout(function() {
                     Mall.listing.placeListingFadeContainer();
