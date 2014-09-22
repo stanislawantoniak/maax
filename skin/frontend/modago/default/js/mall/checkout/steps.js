@@ -63,10 +63,12 @@
 					selectedAddress = addressBook.getSelected(type),
 					self = this,
                     addNewButton,
-                    addressCollection = addressBook.getAddressBook();
+                    addressCollection = addressBook.getAddressBook(),
+					caption = jQuery("<div>").css({"margin-top": "15px", "text-transform": "uppercase"});
 				
 				target.html('');
 				
+				target.append(caption.text(Mall.translate.__("your-additional-addresses") + ":"));
 				
 				if(addressCollection.length){
 					jQuery.each(addressCollection, function(){
@@ -410,16 +412,18 @@
 				element.toggleClass("open");
 				relatedElement.removeClass("open");
 				
-				this._rollAddressList(relatedElement, relatedBlock, relatedElement.hasClass("open"));
-				this._rollAddressList(element, block, element.hasClass("open"));
+				this._rollAddressList(relatedType, relatedBlock, relatedElement.hasClass("open"));
+				this._rollAddressList(type, block, element.hasClass("open"));
 			},
 			
-			_rollAddressList: function(element, block, doOpen){
+			_rollAddressList: function(type, block, doOpen){
 				// Need move to one tag
 				
 				var contextActions = block.
 						siblings(".current-address").
 						find(".action");
+				
+				var element = this.content.find(".change_address." + type);
 				
 				if(doOpen){
 					block.show();
@@ -614,10 +618,9 @@
 					self.renderAddressList("billing");
 
 					// Roll up list
-					var listBlock = self.content.find(".panel-adresses." + type),
-						element =  self.content.find(".change_address." + type);
+					var listBlock = self.content.find(".panel-adresses." + type);
 
-					self._rollAddressList(element, listBlock, false);
+					self._rollAddressList(type, listBlock, false);
 				}
 				
 				// If address has no invoice and is choosed as billing - set need invoice
