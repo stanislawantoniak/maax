@@ -236,7 +236,7 @@ Mall.listing = {
             });
 
             //container.masonry("layout", allItems, true).masonry();
-            container.masonry("reloadItems").masonry();
+            container.masonry().masonry("reloadItems").masonry();
             setTimeout(function () {Mall.listing.placeListingFadeContainer();}, 1000);
         });
         Mall.listing.addToVisibleItems(products.length);
