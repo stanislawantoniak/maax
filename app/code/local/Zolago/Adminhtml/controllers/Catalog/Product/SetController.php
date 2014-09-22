@@ -91,7 +91,7 @@ class Zolago_Adminhtml_Catalog_Product_SetController extends Mage_Adminhtml_Cata
 				$response['error']   = 0;
 				$response['url']     = $this->getUrl('*/*/edit', array('id' => $model->getId()));
 			} else {
-				$this->getSession()->addException(Mage::helper('catalog')->__('An error occurred while saving the attribute set.'));
+                $this->_getSession()->addError(Mage::helper('catalog')->__('An error occurred while saving the attribute set.'));
                 $response['error']   = 0;
                 $response['url']     = $this->getUrl('*/*/');				
 			}

@@ -766,6 +766,8 @@ jQuery(document).ready(function() {
             Mall.setSuperAttribute(jQuery("#size_" + value));
         }
     });
+    if(jQuery(".size-box li").length) {
+        Mall.setSuperAttribute(jQuery("#size_" + jQuery(".size-box li a").first().attr('rel'))); }
 
     Mall.product.setDiagonalsOnSizeSquare();
 
