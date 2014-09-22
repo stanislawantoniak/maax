@@ -53,7 +53,7 @@
 					target.html(node);
 					
 				}else{
-					target.html(Mall.translate.__("No addresses"));
+					target.html(Mall.translate.__("no-addresses"));
 				}	
 			},
 			renderAddressList: function(type){
@@ -81,7 +81,7 @@
 						target.append(node);
 					});
                 }else{
-                    target.html(Mall.translate.__("No addresses"));
+                    target.html(Mall.translate.__("no-addresses"));
                 }
                 addNewButton = this.getAddNewButton(type);
                 addNewButton.show();
@@ -113,7 +113,8 @@
                 modal.find(".modal-body")
                     .html("")
                     .append(this.getAddNewForm(type));
-                modal.find("#modal-title").html(edit ? "EDYCJA ADRESU" : "DODAJ NOWY ADRES");
+                modal.find("#modal-title").html(edit ? 
+					Mall.translate.__("edit-address") : Mall.translate.__("add-new-address"));
                 this.attachNewAddressInputsMask(modal, type);
             },
 
@@ -124,7 +125,7 @@
 
                 jQuery("<button/>", {
                     "class": "button button-primary large pull-right select-address",
-                    html: "Zapisz"
+                    html: Mall.translate.__("save")
                 }).appendTo(buttonWrapper);
 
                 return buttonWrapper;
@@ -145,7 +146,7 @@
                 element = this.getInput("firstname"
                     , type + "_firstname"
                     , "text"
-                    , "Imię"
+                    , Mall.translate.__("firstname")
                     , "col-sm-3"
                     , "form-control firstName hint"
                     , "");
@@ -242,7 +243,7 @@
                         name:       "lastname",
                         id:         type + "_lastname",
                         type:       "text",
-                        label:      "Nazwisko",
+                        label:      Mall.translate.__("lastname"),
                         labelClass: "col-sm-3",
                         inputClass: "form-control lastName hint"
                     },
@@ -250,7 +251,8 @@
                         name:       "company",
                         id:         type + "_company",
                         type:       "text",
-                        label:      "Nazwa firmy<br>(opcjonalnie)",
+                        label:      Mall.translate.__("company-name") + 
+							"<br/>(" + Mall.translate.__("optional") + ")",
                         labelClass: "col-sm-3 double-line",
                         inputClass: "form-control firm hint"
                     },
@@ -258,7 +260,8 @@
                         name:       "vat_id",
                         id:         type + "_vat_id",
                         type:       "text",
-                        label:      "NIP<br>(opcjonalnie)",
+                        label:      Mall.translate.__("nip") + 
+							"<br>(" + Mall.translate.__("optional") + ")",
                         labelClass: "col-sm-3 double-line",
                         inputClass: "form-control vat_id city hint"
                     },
@@ -266,7 +269,7 @@
                         name:       "street",
                         id:         type + "_street_1",
                         type:       "text",
-                        label:      "Ulica i numer",
+                        label:      Mall.translate.__("street-and-number"),
                         labelClass: "col-sm-3 ",
                         inputClass: "form-control street hint"
                     },
@@ -274,7 +277,7 @@
                         name:       "postcode",
                         id:         type + "_postcode",
                         type:       "text",
-                        label:      "Kod pocztowy",
+                        label:      Mall.translate.__("postcode"),
                         labelClass: "col-sm-3",
                         inputClass: "form-control postcode zipcode hint"
                     },
@@ -282,7 +285,7 @@
                         name:       "city",
                         id:         type + "_city",
                         type:       "text",
-                        label:      "Miejscowość",
+                        label:      Mall.translate.__("city"),
                         labelClass: "col-sm-3",
                         inputClass: "form-control city hint"
                     },
@@ -290,7 +293,7 @@
                         name:       "telephone",
                         id:         type + "_telephone",
                         type:       "text",
-                        label:      "Numer telefonu",
+                        label:      Mall.translate.__("phone"),
                         labelClass: "col-sm-3",
                         inputClass: "form-control telephone city hint"
                     }
@@ -519,12 +522,12 @@
 
                 deffered = event.data.addressBook.remove(event.data.address.getId());
                 if (deffered === null) {
-                    alert("Address can't be removed.");
+                    alert(Mall.translate.__("address-cant-be-removed"));
                 } else {
                     deffered.done(function (data) {
                         if (data.status !== undefined) {
                             if (Boolean(data.status) === false) {
-                                alert("Address can't be removed.");
+                                alert(Mall.translate.__("address-cant-be-removed"));
                             } else {
                                 event.data.step.renderSelectedAddress(event.data.type);
                                 event.data.step.renderAddressList("billing");
@@ -1173,10 +1176,10 @@
                             },
                             messages: {
                                 shipping: {
-                                    required: "Please select shipping"
+                                    required: Mall.translate.__("please-select-shipping")
                                 },
                                 "payment[method]": {
-                                    required: "Please select payment"
+                                    required: Mall.translate.__("please-select-payment")
                                 }
                             },
                             invalidHandler: function (form, validator) {

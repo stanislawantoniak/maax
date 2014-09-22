@@ -2,6 +2,7 @@
 <?php $_customer = $this->getCustomer();?>
 <?php $_quoteBilling = $this->getQuote()->getBillingAddress();?>
 <?php $_quoteShipping = $this->getQuote()->getShippingAddress();?>
+<?php $_helper = Mage::helper("zolagocheckout");?>
 <div id="content" class="container-fluid">
 	<div id="checkout" class="row">
 		<div class="step step-0 hidden" id="step-0">
@@ -21,10 +22,27 @@
 </div>
 
 <script type="text/javascript">
-	Mall.translate.add("selected-shipping-address", "<?php echo $this->__("Selected shipping address");?>");
-	Mall.translate.add("selected-billing-address", "<?php echo $this->__("Selected billing address");?>");
-	Mall.translate.add("change-address", "<?php echo $this->__("Change address");?>");
-	Mall.translate.add("roll-up", "<?php echo $this->__("Roll up");?>");
+	Mall.translate.add("no-addresses", "<?php echo $_helper->__("No addresses");?>");
+	Mall.translate.add("edit-address", "<?php echo $_helper->__("Edit address");?>");
+	Mall.translate.add("add-new-address", "<?php echo $_helper->__("Add new address");?>");
+	Mall.translate.add("save", "<?php echo $_helper->__("Save");?>");
+	Mall.translate.add("firstname", "<?php echo $_helper->__("Firstname");?>");
+	Mall.translate.add("lastname", "<?php echo $_helper->__("Lastname");?>");
+	Mall.translate.add("company-name", "<?php echo $_helper->__("Company name");?>");
+	Mall.translate.add("optional", "<?php echo $_helper->__("optional");?>");
+	Mall.translate.add("nip", "<?php echo $_helper->__("NIP");?>");
+	Mall.translate.add("street-and-number", "<?php echo $_helper->__("Street and number");?>");
+	Mall.translate.add("postcode", "<?php echo $_helper->__("Postcode");?>");
+	Mall.translate.add("city", "<?php echo $_helper->__("City");?>");
+	Mall.translate.add("phone", "<?php echo $_helper->__("Phone");?>");
+	Mall.translate.add("address-cant-be-removed", "<?php echo $_helper->__("Address can't be removed.");?>");
+	Mall.translate.add("emailbackend-exits-log-in", "<?php echo $_helper->__("Email already exists. Please log in.");?>");
+	Mall.translate.add("please-select-payment", "<?php echo $_helper->__("Please select payment");?>");
+	Mall.translate.add("please-select-shipping", "<?php echo $_helper->__("Please select shipping");?>");
+	Mall.translate.add("selected-shipping-address", "<?php echo $_helper->__("Selected shipping address");?>");
+	Mall.translate.add("selected-billing-address", "<?php echo $_helper->__("Selected billing address");?>");
+	Mall.translate.add("change-address", "<?php echo $_helper->__("Change address");?>");
+	Mall.translate.add("roll-up", "<?php echo $_helper->__("Roll up");?>");
 </script>
 <script type="text/javascript">
 	(function(){
