@@ -340,6 +340,17 @@ var Mall = {
         }
 
         return 0;
+    },
+
+    getFormKey: function () {
+        "use strict";
+
+        var key = jQuery("input[name='form_key']").first();
+        if (key.length > 0) {
+            return key.val();
+        }
+
+        return "";
     }
 
 

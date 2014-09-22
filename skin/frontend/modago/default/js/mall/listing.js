@@ -74,7 +74,7 @@ Mall.listing = {
     /**
      * When to start showing new products - from bottom of the page.
      */
-    _scroll_load_bottom_offset: 3000,
+    _scroll_load_bottom_offset: 2500,
 
     /**
      * Queue for preloaded products.
@@ -110,6 +110,7 @@ Mall.listing = {
         this.loadProductsOnScroll();
 
         // load additional products to queue after page is loaded
+        //this.setAutoappend(true);
         this.loadToQueue();
         this.setLoadMoreLabel();
     },
@@ -224,9 +225,17 @@ Mall.listing = {
         var products = Mall.listing.getProductQueue().slice(
                 0, Mall.listing.getScrollLoadOffset()),
             items = Mall.listing.appendToList(products),
-            container = jQuery("#items-product").masonry();
-        container.imagesLoaded(function () {
-            container.masonry("appended", items).masonry("reloadItems").masonry();
+            container = jQuery("#items-product");
+
+
+        imagesLoaded("#items-product", function () {
+            container = container.masonry({
+                transitionDuration: 0,
+                isAnimated: false
+            });
+
+            //container.masonry("layout", allItems, true).masonry();
+            container.masonry().masonry("reloadItems").masonry();
             setTimeout(function () {Mall.listing.placeListingFadeContainer();}, 1000);
         });
         Mall.listing.addToVisibleItems(products.length);
@@ -1105,15 +1114,18 @@ Mall.listing = {
      */
     reloadListingItemsAfterPageLoad: function() {
 
-        var container = jQuery("#items-product").masonry();
-        this.setItemsImageDimensions(container);
+        var container = jQuery("#items-product");
+        //    .masonry({
+        //    transitionDuration: 0
+        //});
 
-        container.masonry("reloadItems");
-        container.masonry();
+        this.setItemsImageDimensions(container);
+        //container.masonry("reloadItems");
+        //container.masonry();
 
         setTimeout(function() {
-            container.masonry("reloadItems");
-            container.masonry();
+            //container.masonry("reloadItems");
+            //container.masonry();
             Mall.listing.placeListingFadeContainer();
         }, 1000);
 
@@ -1123,8 +1135,10 @@ Mall.listing = {
                 .hideShapesListing();
         }
 
-        jQuery("#items-product").masonry().imagesLoaded(function() {
-            container.masonry("reloadItems");
+        imagesLoaded("#items-product", function() {
+            jQuery("#listing-load-toplayer").remove();
+            jQuery("#items-product").children(".item").show();
+            container.masonry().masonry("reloadItems");
             container.masonry();
 
             setTimeout(function() {
@@ -1136,7 +1150,6 @@ Mall.listing = {
                     Mall.listing.hideLoadMoreButton()
                         .hideShapesListing();
                 }
-
         });
 
         return this;
