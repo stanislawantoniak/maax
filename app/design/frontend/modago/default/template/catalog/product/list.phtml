@@ -94,6 +94,7 @@ $_productImageUrl = '';
 <div class="addNewPositionListProductWrapper">
     <a href="javascript:;" onclick="Mall.listing.loadMoreProducts();" class="addNewPositionListProduct"><?php echo $this->__("Load next <span>%s</span> products", $this->getLoadLimit()); ?></a>
 </div>
+<div id="listing-load-toplayer"><img src="<?php echo $this->getSkinUrl("images/modago-ajax-loader.gif"); ?>"</div>
 <script type="text/javascript">
     Mall.listing.setScat(<?php echo $this->getLayer()->getCurrentCategory()->getId(); ?>);
     Mall.listing.addToVisibleItems(<?php echo count($this->getCollection()); ?>);
@@ -114,4 +115,21 @@ $_productImageUrl = '';
         in_your_wishlist: <?php echo $product->getInMyWishlist() ? "true" : "false"; ?>
     });
     <?php endforeach; ?>
+    var listingHeight = jQuery("#items-product").outerHeight();
+    var listingWidth = jQuery("#items-product").outerWidth();
+    jQuery("#items-product").children(".item").hide();
+    jQuery("#listing-load-toplayer").width(listingWidth).height(listingHeight).prependTo("#items-product");
 </script>
+
+<style type="text/css">
+    #listing-load-toplayer {
+        position:absolute;
+        z-index: 10000;
+    }
+    #listing-load-toplayer > img {
+        position: relative;
+        margin: 0 auto;
+        top: 50px;
+        left: 50%;
+    }
+</style>

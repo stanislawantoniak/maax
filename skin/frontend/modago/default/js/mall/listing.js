@@ -74,7 +74,7 @@ Mall.listing = {
     /**
      * When to start showing new products - from bottom of the page.
      */
-    _scroll_load_bottom_offset: 3000,
+    _scroll_load_bottom_offset: 2500,
 
     /**
      * Queue for preloaded products.
@@ -224,7 +224,9 @@ Mall.listing = {
         var products = Mall.listing.getProductQueue().slice(
                 0, Mall.listing.getScrollLoadOffset()),
             items = Mall.listing.appendToList(products),
-            container = jQuery("#items-product").masonry();
+            container = jQuery("#items-product").masonry({
+                transitionDuration: 250
+            });
         container.imagesLoaded(function () {
             container.masonry("appended", items).masonry("reloadItems").masonry();
             setTimeout(function () {Mall.listing.placeListingFadeContainer();}, 1000);
@@ -1105,9 +1107,11 @@ Mall.listing = {
      */
     reloadListingItemsAfterPageLoad: function() {
 
-        var container = jQuery("#items-product").masonry();
-        this.setItemsImageDimensions(container);
+        var container = jQuery("#items-product").masonry({
+            transitionDuration: 0
+        });
 
+        this.setItemsImageDimensions(container);
         container.masonry("reloadItems");
         container.masonry();
 
@@ -1124,6 +1128,8 @@ Mall.listing = {
         }
 
         jQuery("#items-product").masonry().imagesLoaded(function() {
+            jQuery("#listing-load-toplayer").remove();
+            jQuery("#items-product").children(".item").show();
             container.masonry("reloadItems");
             container.masonry();
 
@@ -1136,7 +1142,6 @@ Mall.listing = {
                     Mall.listing.hideLoadMoreButton()
                         .hideShapesListing();
                 }
-
         });
 
         return this;
