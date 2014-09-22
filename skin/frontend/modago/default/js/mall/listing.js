@@ -225,11 +225,10 @@ Mall.listing = {
         var products = Mall.listing.getProductQueue().slice(
                 0, Mall.listing.getScrollLoadOffset()),
             items = Mall.listing.appendToList(products),
-            container = jQuery("#items-product"),
-            allItems = container.children(".item");
+            container = jQuery("#items-product");
 
 
-        container.imagesLoaded(function () {
+        imagesLoaded("#items-product", function () {
             container = container.masonry({
                 transitionDuration: 0,
                 isAnimated: false
@@ -1124,8 +1123,8 @@ Mall.listing = {
         container.masonry();
 
         setTimeout(function() {
-            container.masonry("reloadItems");
-            container.masonry();
+            //container.masonry("reloadItems");
+            //container.masonry();
             Mall.listing.placeListingFadeContainer();
         }, 1000);
 
@@ -1135,7 +1134,7 @@ Mall.listing = {
                 .hideShapesListing();
         }
 
-        jQuery("#items-product").masonry().imagesLoaded(function() {
+        imagesLoaded("#items-product", function() {
             jQuery("#listing-load-toplayer").remove();
             jQuery("#items-product").children(".item").show();
             //container.masonry("reloadItems");
