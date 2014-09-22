@@ -7,7 +7,6 @@ class Zolago_Catalog_AuthController extends Mage_Core_Controller_Front_Action
 {
 
     public function indexAction(){
-
         $apiModel = new Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1();
 
 

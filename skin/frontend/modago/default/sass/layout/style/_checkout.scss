@@ -73,6 +73,10 @@
 					float: none!important;
 				}
 			}
+
+            h4.addressbook-add-new>strong {
+                padding-left: 10px;
+            }
 		}
 		.panel-heading {
 				padding-top: 25px;
@@ -99,6 +103,17 @@
 			
 		}
 	}
+
+    .add-new {
+        display: block;
+        .panel-body {
+            padding: 10px;
+            cursor: pointer;
+            h4 {
+                margin-bottom: 10px;
+            }
+        }
+    }
 
 	
 	dd.separator {
@@ -591,7 +606,6 @@
 				}
 			}
 			.panel {
-				display:none;
 				margin-bottom:15px;
 				&.selected {
 					.selected_bank {
