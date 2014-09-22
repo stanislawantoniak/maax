@@ -103,7 +103,7 @@ class Zolago_Adminhtml_Catalog_Product_SetController extends Mage_Adminhtml_Cata
                 $response['error']   = 1;
                 $response['message'] = $this->getLayout()->getMessagesBlock()->getGroupedHtml();
             } else {
-                $response['error']   = 0;s
+                $response['error']   = 0;
                 $response['url']     = $this->getUrl('*/*/');
             }
             $this->getResponse()->setBody(Mage::helper('core')->jsonEncode($response));
