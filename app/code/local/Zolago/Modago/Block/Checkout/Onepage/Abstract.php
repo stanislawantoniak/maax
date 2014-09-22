@@ -6,18 +6,41 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract
 	extends Mage_Checkout_Block_Onepage_Abstract
 {
 	/**
+	 * @param mixed $data
+	 * @return string
+	 */
+	public function asJson($data) {
+		return Mage::helper('core')->jsonEncode($data);
+	}
+	/**
 	 * Has customer any address?
 	 * @return type
 	 */
 	public function hasCustomerAddress() {
-		return (bool)$this->getQuote()->getCustomer()->getAddressCollection()->count();
+		return (bool)$this->getQuote()->getCustomer()->getAddressesCollection()->count();
+	}
+	
+	/**
+	 * Has customer any address?
+	 * @return type
+	 */
+	public function getCustomerAddressesJson() {
+		$addresses = array();
+		$collection = $this->getQuote()->getCustomer()->getAddressesCollection();
+		foreach($collection as $address){
+			/* @var $address Mage_Customer_Model_Address */
+			$arr = $address->getData();
+			$arr['street'] = $address->getStreet();
+			$addresses[] = $arr;
+		}
+		return Mage::helper("core")->jsonEncode($addresses);
 	}
 	
 	/**
 	 * @return type
 	 */
 	public function getStoreDefaultCountryId() {
-		return "PL";Mage::app()->getStore()->getConfig("general/country/default");
+		return "PL";//Mage::app()->getStore()->getConfig("general/country/default");
 	}
 	
 	/**
