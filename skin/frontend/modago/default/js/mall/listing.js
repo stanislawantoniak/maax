@@ -1171,8 +1171,8 @@ Mall.listing = {
             height = jQuery(this).find(".img_product > img").data("height");
             if (width !== undefined && height !== undefined) {
                 proportions = width / height;
-                newHeight = (columnWidth - 2) / proportions;
-                newWidth = columnWidth - 2;
+                newHeight = (columnWidth) / proportions;
+                newWidth = columnWidth;
                 jQuery(this).find(".img_product")
                     .attr("width", parseInt(newWidth, 10))
                     .attr("height", parseInt(newHeight, 10));
