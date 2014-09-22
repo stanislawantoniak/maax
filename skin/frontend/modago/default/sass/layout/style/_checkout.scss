@@ -614,6 +614,9 @@
 					}
 				}
 			}
+            .panel:first-child {
+                margin-top: 15px;
+            }
 		}
 		#block_invoice {
 			display:none;
