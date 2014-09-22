@@ -6,7 +6,7 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object{
 	
 	const DEFAULT_DIR = "desc";
 	const DEFAULT_ORDER = "wishlist_count";
-	const DEFAULT_LIMIT = 16;
+	const DEFAULT_LIMIT = 32;
 	
 	const DEFAULT_START = 0;
 	const DEFAULT_PAGE = 1;

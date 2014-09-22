@@ -8618,121 +8618,122 @@ i.flag.hit, i.flag.bestseller {
 /* line 43, ../sass/layout/style/_checkout.scss */
 #checkout .panel .panel-body .current-addres, #checkout .panel .panel-body .top-panel {
   margin: -15px -15px 0 -15px;
-  padding: 15px; }
-/* line 48, ../sass/layout/style/_checkout.scss */
+  padding: 15px;
+  -webkit-backface-visibility: hidden; }
+/* line 49, ../sass/layout/style/_checkout.scss */
 #checkout .panel .panel-body .top-panel h4 {
   margin-top: 0px;
   margin-bottom: 15px; }
-/* line 51, ../sass/layout/style/_checkout.scss */
+/* line 52, ../sass/layout/style/_checkout.scss */
 #checkout .panel .panel-body .top-panel h4.default {
   margin-top: 10px; }
-/* line 55, ../sass/layout/style/_checkout.scss */
+/* line 56, ../sass/layout/style/_checkout.scss */
 #checkout .panel .panel-body .top-panel + .panel-default {
   margin-top: 15px; }
-/* line 57, ../sass/layout/style/_checkout.scss */
+/* line 58, ../sass/layout/style/_checkout.scss */
 #checkout .panel .panel-body .top-panel + .panel-default + .panel-default {
   margin-top: 0px; }
-/* line 65, ../sass/layout/style/_checkout.scss */
+/* line 66, ../sass/layout/style/_checkout.scss */
 #checkout .panel .panel-body .btn-select {
   position: absolute;
   right: 15px;
   bottom: 15px; }
 @media (max-width: 360px) {
-  /* line 65, ../sass/layout/style/_checkout.scss */
+  /* line 66, ../sass/layout/style/_checkout.scss */
   #checkout .panel .panel-body .btn-select {
     position: static;
     margin-top: 15px;
     clear: both;
     float: none !important; } }
-/* line 77, ../sass/layout/style/_checkout.scss */
+/* line 78, ../sass/layout/style/_checkout.scss */
 #checkout .panel .panel-body h4.addressbook-add-new > strong {
   padding-left: 10px; }
-/* line 81, ../sass/layout/style/_checkout.scss */
+/* line 82, ../sass/layout/style/_checkout.scss */
 #checkout .panel .panel-heading {
   padding-top: 25px; }
-/* line 84, ../sass/layout/style/_checkout.scss */
+/* line 85, ../sass/layout/style/_checkout.scss */
 #checkout .panel .panel-footer {
   padding: 0 15px 15px; }
-/* line 89, ../sass/layout/style/_checkout.scss */
+/* line 90, ../sass/layout/style/_checkout.scss */
 #checkout .panel .panel .form-group .form-group {
   margin-bottom: 0px;
   padding-right: 5px; }
 @media (min-width: 730px) and (max-width: 767px) {
-  /* line 92, ../sass/layout/style/_checkout.scss */
+  /* line 93, ../sass/layout/style/_checkout.scss */
   #checkout .panel .panel .form-group .form-group.col-xs-6 {
     max-width: 264px !important; } }
-/* line 97, ../sass/layout/style/_checkout.scss */
+/* line 98, ../sass/layout/style/_checkout.scss */
 #checkout .panel .panel .form-group .form-group + .form-group {
   padding-right: 15px;
   padding-left: 5px; }
-/* line 107, ../sass/layout/style/_checkout.scss */
+/* line 108, ../sass/layout/style/_checkout.scss */
 #checkout .add-new {
   display: block; }
-/* line 109, ../sass/layout/style/_checkout.scss */
+/* line 110, ../sass/layout/style/_checkout.scss */
 #checkout .add-new .panel-body {
   padding: 10px;
   cursor: pointer; }
-/* line 112, ../sass/layout/style/_checkout.scss */
+/* line 113, ../sass/layout/style/_checkout.scss */
 #checkout .add-new .panel-body h4 {
   margin-bottom: 10px; }
-/* line 119, ../sass/layout/style/_checkout.scss */
+/* line 120, ../sass/layout/style/_checkout.scss */
 #checkout dd.separator {
   margin-top: 15px; }
 @media (min-width: 481px) {
-  /* line 121, ../sass/layout/style/_checkout.scss */
+  /* line 122, ../sass/layout/style/_checkout.scss */
   #checkout dd.separator.large {
     margin-top: 25px; } }
-/* line 129, ../sass/layout/style/_checkout.scss */
+/* line 130, ../sass/layout/style/_checkout.scss */
 #checkout dd.action a {
   margin-right: 15px; }
-/* line 133, ../sass/layout/style/_checkout.scss */
+/* line 134, ../sass/layout/style/_checkout.scss */
 #checkout #invoice {
   margin-bottom: 15px; }
-/* line 136, ../sass/layout/style/_checkout.scss */
+/* line 137, ../sass/layout/style/_checkout.scss */
 #checkout .staining_delivery_address {
   position: absolute;
   right: 15px;
   bottom: -7px;
   margin-top: -10px; }
 @media (max-width: 640px) {
-  /* line 136, ../sass/layout/style/_checkout.scss */
+  /* line 137, ../sass/layout/style/_checkout.scss */
   #checkout .staining_delivery_address {
     position: static;
     padding-top: 15px;
     display: block;
     clear: both;
     margin-bottom: 0px; } }
-/* line 149, ../sass/layout/style/_checkout.scss */
+/* line 150, ../sass/layout/style/_checkout.scss */
 #checkout .border-top {
   padding-top: 15px; }
 @media (max-width: 767px) {
-  /* line 149, ../sass/layout/style/_checkout.scss */
+  /* line 150, ../sass/layout/style/_checkout.scss */
   #checkout .border-top {
     padding-top: 6px; } }
-/* line 156, ../sass/layout/style/_checkout.scss */
+/* line 157, ../sass/layout/style/_checkout.scss */
 #checkout .sidebar-secound .main {
   padding: 30px 30px;
   margin-bottom: 15px; }
 @media (max-width: 480px) {
-  /* line 156, ../sass/layout/style/_checkout.scss */
+  /* line 157, ../sass/layout/style/_checkout.scss */
   #checkout .sidebar-secound .main {
     padding: 15px 15px; } }
-/* line 165, ../sass/layout/style/_checkout.scss */
+/* line 166, ../sass/layout/style/_checkout.scss */
 #checkout .sidebar-secound .main.p h2 {
   padding-left: 25px; }
-/* line 170, ../sass/layout/style/_checkout.scss */
+/* line 171, ../sass/layout/style/_checkout.scss */
 #checkout .sidebar-secound header {
   margin-left: -30px;
   margin-bottom: 15px; }
 @media (max-width: 481px) and (max-width: 767px) {
-  /* line 170, ../sass/layout/style/_checkout.scss */
+  /* line 171, ../sass/layout/style/_checkout.scss */
   #checkout .sidebar-secound header {
     margin-left: -15px; } }
 @media (max-width: 480px) {
-  /* line 170, ../sass/layout/style/_checkout.scss */
+  /* line 171, ../sass/layout/style/_checkout.scss */
   #checkout .sidebar-secound header {
     margin-left: -30px; } }
-/* line 180, ../sass/layout/style/_checkout.scss */
+/* line 181, ../sass/layout/style/_checkout.scss */
 #checkout .sidebar-secound h2 {
   padding: 0px;
   position: relative;
@@ -8743,10 +8744,10 @@ i.flag.hit, i.flag.bestseller {
   margin-bottom: 8px;
   margin-top: 0px; }
 @media (max-width: 480px) {
-  /* line 180, ../sass/layout/style/_checkout.scss */
+  /* line 181, ../sass/layout/style/_checkout.scss */
   #checkout .sidebar-secound h2 {
     padding-left: 45px; } }
-/* line 192, ../sass/layout/style/_checkout.scss */
+/* line 193, ../sass/layout/style/_checkout.scss */
 #checkout .sidebar-secound h2:before {
   content: ' ';
   display: block;
@@ -8756,26 +8757,26 @@ i.flag.hit, i.flag.bestseller {
   left: 0px;
   top: 0px; }
 @media (max-width: 480px) {
-  /* line 192, ../sass/layout/style/_checkout.scss */
+  /* line 193, ../sass/layout/style/_checkout.scss */
   #checkout .sidebar-secound h2:before {
     left: 14px; } }
-/* line 205, ../sass/layout/style/_checkout.scss */
+/* line 206, ../sass/layout/style/_checkout.scss */
 #checkout .sidebar-secound ul, #checkout .sidebar-secound ol {
   margin-left: 0px;
   padding-left: 25px; }
-/* line 211, ../sass/layout/style/_checkout.scss */
+/* line 212, ../sass/layout/style/_checkout.scss */
 #checkout #sidebar .main {
   padding: 15px 30px;
   margin-bottom: 15px; }
 @media (max-width: 480px) {
-  /* line 211, ../sass/layout/style/_checkout.scss */
+  /* line 212, ../sass/layout/style/_checkout.scss */
   #checkout #sidebar .main {
     padding: 15px 15px; } }
-/* line 218, ../sass/layout/style/_checkout.scss */
+/* line 219, ../sass/layout/style/_checkout.scss */
 #checkout #sidebar header {
   margin-left: -30px;
   margin-bottom: 15px; }
-/* line 223, ../sass/layout/style/_checkout.scss */
+/* line 224, ../sass/layout/style/_checkout.scss */
 #checkout #sidebar h2 {
   padding: 0px;
   position: relative;
@@ -8786,10 +8787,10 @@ i.flag.hit, i.flag.bestseller {
   margin-bottom: 8px;
   margin-top: 0px; }
 @media (max-width: 480px) {
-  /* line 223, ../sass/layout/style/_checkout.scss */
+  /* line 224, ../sass/layout/style/_checkout.scss */
   #checkout #sidebar h2 {
     padding-left: 45px; } }
-/* line 235, ../sass/layout/style/_checkout.scss */
+/* line 236, ../sass/layout/style/_checkout.scss */
 #checkout #sidebar h2:before {
   content: ' ';
   display: block;
@@ -8799,141 +8800,141 @@ i.flag.hit, i.flag.bestseller {
   left: 0px;
   top: 0px; }
 @media (max-width: 480px) {
-  /* line 235, ../sass/layout/style/_checkout.scss */
+  /* line 236, ../sass/layout/style/_checkout.scss */
   #checkout #sidebar h2:before {
     left: 14px; } }
-/* line 249, ../sass/layout/style/_checkout.scss */
+/* line 250, ../sass/layout/style/_checkout.scss */
 #checkout #sidebar ul, #checkout #sidebar ol {
   margin-left: -15px;
   margin-right: -15px;
   padding-left: 0; }
-/* line 255, ../sass/layout/style/_checkout.scss */
+/* line 256, ../sass/layout/style/_checkout.scss */
 #checkout #sidebar .list-group li {
   border: none; }
-/* line 257, ../sass/layout/style/_checkout.scss */
+/* line 258, ../sass/layout/style/_checkout.scss */
 #checkout #sidebar .list-group li.list-group-item {
   padding: 5px 0px 5px 5px; }
-/* line 264, ../sass/layout/style/_checkout.scss */
+/* line 265, ../sass/layout/style/_checkout.scss */
 #checkout form .form-group {
   margin-bottom: 10px; }
 @media (max-width: 767px) {
-  /* line 264, ../sass/layout/style/_checkout.scss */
+  /* line 265, ../sass/layout/style/_checkout.scss */
   #checkout form .form-group {
     margin-bottom: 15px; } }
-/* line 269, ../sass/layout/style/_checkout.scss */
+/* line 270, ../sass/layout/style/_checkout.scss */
 #checkout form .form-group .form-group {
   margin-bottom: 0px; }
-/* line 274, ../sass/layout/style/_checkout.scss */
+/* line 275, ../sass/layout/style/_checkout.scss */
 #checkout form fieldset {
   margin-bottom: 15px; }
-/* line 276, ../sass/layout/style/_checkout.scss */
+/* line 277, ../sass/layout/style/_checkout.scss */
 #checkout form fieldset.no-border {
   margin-bottom: 20px; }
-/* line 280, ../sass/layout/style/_checkout.scss */
+/* line 281, ../sass/layout/style/_checkout.scss */
 #checkout form fieldset.default_pay .form-radio {
   margin-top: 15px; }
 @media (min-width: 361px) and (max-width: 767px) {
-  /* line 285, ../sass/layout/style/_checkout.scss */
+  /* line 286, ../sass/layout/style/_checkout.scss */
   #checkout form fieldset#doc_pay .form-radio {
     width: 150px !important; } }
-/* line 293, ../sass/layout/style/_checkout.scss */
+/* line 294, ../sass/layout/style/_checkout.scss */
 #checkout form fieldset legend {
   padding-bottom: 15px;
   margin-bottom: 15px; }
 @media (max-width: 760px) {
-  /* line 296, ../sass/layout/style/_checkout.scss */
+  /* line 297, ../sass/layout/style/_checkout.scss */
   #checkout form fieldset legend.first {
     margin-bottom: 6px; } }
-/* line 305, ../sass/layout/style/_checkout.scss */
+/* line 306, ../sass/layout/style/_checkout.scss */
 #checkout form label {
   padding-right: 20px; }
-/* line 309, ../sass/layout/style/_checkout.scss */
+/* line 310, ../sass/layout/style/_checkout.scss */
 #checkout form .form-checkbox {
   margin-bottom: 15px;
   margin-left: 20px; }
 @media (max-width: 767px) {
-  /* line 309, ../sass/layout/style/_checkout.scss */
+  /* line 310, ../sass/layout/style/_checkout.scss */
   #checkout form .form-checkbox {
     margin-bottom: 10px; } }
 @media (max-width: 480px) {
-  /* line 319, ../sass/layout/style/_checkout.scss */
+  /* line 320, ../sass/layout/style/_checkout.scss */
   #checkout form .form-checkbox.default_pay {
     margin-left: 15px; } }
-/* line 325, ../sass/layout/style/_checkout.scss */
+/* line 326, ../sass/layout/style/_checkout.scss */
 #checkout form .form-checkbox label {
   height: auto; }
-/* line 331, ../sass/layout/style/_checkout.scss */
+/* line 332, ../sass/layout/style/_checkout.scss */
 #checkout form .form-radio label {
   padding-left: 30px;
   width: 100%; }
-/* line 334, ../sass/layout/style/_checkout.scss */
+/* line 335, ../sass/layout/style/_checkout.scss */
 #checkout form .form-radio label span {
   position: relative;
   top: -6px;
   margin-bottom: -6px; }
 @media (max-width: 360px) {
-  /* line 334, ../sass/layout/style/_checkout.scss */
+  /* line 335, ../sass/layout/style/_checkout.scss */
   #checkout form .form-radio label span {
     top: -15px; } }
 @media (max-width: 640px) {
-  /* line 344, ../sass/layout/style/_checkout.scss */
+  /* line 345, ../sass/layout/style/_checkout.scss */
   #checkout form #default_pay_selected_bank {
     margin-bottom: 18px; } }
 @media (max-width: 360px) {
-  /* line 353, ../sass/layout/style/_checkout.scss */
+  /* line 354, ../sass/layout/style/_checkout.scss */
   #checkout form #pay_01 .form-radio label span {
     top: -6px; } }
-/* line 363, ../sass/layout/style/_checkout.scss */
+/* line 364, ../sass/layout/style/_checkout.scss */
 #checkout form #pay_02 .selected_bank {
   padding-top: 12px; }
-/* line 372, ../sass/layout/style/_checkout.scss */
+/* line 373, ../sass/layout/style/_checkout.scss */
 #checkout form input[type="text"], #checkout form input[type="email"], #checkout form input[type="password"], #checkout form input[type="tel"] {
   height: 29px;
   padding: 0 15px 0 15px; }
-/* line 377, ../sass/layout/style/_checkout.scss */
+/* line 378, ../sass/layout/style/_checkout.scss */
 #checkout form #remember_data > .row {
   margin-bottom: 20px; }
-/* line 379, ../sass/layout/style/_checkout.scss */
+/* line 380, ../sass/layout/style/_checkout.scss */
 #checkout form #remember_data > .row + .row {
   margin-bottom: 0; }
-/* line 387, ../sass/layout/style/_checkout.scss */
+/* line 388, ../sass/layout/style/_checkout.scss */
 #checkout form #login_social {
   position: relative; }
 @media (min-width: 768px) {
-  /* line 387, ../sass/layout/style/_checkout.scss */
+  /* line 388, ../sass/layout/style/_checkout.scss */
   #checkout form #login_social {
     top: -32px;
     margin-bottom: -30px; } }
-/* line 393, ../sass/layout/style/_checkout.scss */
+/* line 394, ../sass/layout/style/_checkout.scss */
 #checkout form #login_social p {
   margin-bottom: 10px; }
-/* line 396, ../sass/layout/style/_checkout.scss */
+/* line 397, ../sass/layout/style/_checkout.scss */
 #checkout form #login_social a {
   margin-right: 10px; }
 @media (min-width: 768px) and (max-width: 1199px) {
-  /* line 398, ../sass/layout/style/_checkout.scss */
+  /* line 399, ../sass/layout/style/_checkout.scss */
   #checkout form #login_social a.g-plus {
     margin-bottom: 5px; } }
 @media (max-width: 339px) {
-  /* line 398, ../sass/layout/style/_checkout.scss */
+  /* line 399, ../sass/layout/style/_checkout.scss */
   #checkout form #login_social a.g-plus {
     margin-left: -10px; } }
-/* line 406, ../sass/layout/style/_checkout.scss */
+/* line 407, ../sass/layout/style/_checkout.scss */
 #checkout form #login_social a.fb {
   margin-right: 0px; }
 @media (min-width: 768px) and (max-width: 1199px) {
-  /* line 406, ../sass/layout/style/_checkout.scss */
+  /* line 407, ../sass/layout/style/_checkout.scss */
   #checkout form #login_social a.fb {
     margin-bottom: 5px; } }
 @media (max-width: 339px) {
-  /* line 406, ../sass/layout/style/_checkout.scss */
+  /* line 407, ../sass/layout/style/_checkout.scss */
   #checkout form #login_social a.fb {
     margin-right: -10px; } }
-/* line 417, ../sass/layout/style/_checkout.scss */
+/* line 418, ../sass/layout/style/_checkout.scss */
 #checkout form #selected_bank {
   margin: 0px;
   padding: 0px; }
-/* line 420, ../sass/layout/style/_checkout.scss */
+/* line 421, ../sass/layout/style/_checkout.scss */
 #checkout form #selected_bank li {
   display: inline-block;
   width: 132px;
@@ -8941,59 +8942,59 @@ i.flag.hit, i.flag.bestseller {
   margin-right: 10px;
   margin-bottom: 15px; }
 @media (max-width: 380px) {
-  /* line 420, ../sass/layout/style/_checkout.scss */
+  /* line 421, ../sass/layout/style/_checkout.scss */
   #checkout form #selected_bank li {
     width: 47%;
     height: 89px; } }
 @media (min-width: 380px) and (max-width: 400px) {
-  /* line 420, ../sass/layout/style/_checkout.scss */
+  /* line 421, ../sass/layout/style/_checkout.scss */
   #checkout form #selected_bank li {
     width: 47%;
     height: 100px; } }
 @media (min-width: 401px) and (max-width: 640px) {
-  /* line 420, ../sass/layout/style/_checkout.scss */
+  /* line 421, ../sass/layout/style/_checkout.scss */
   #checkout form #selected_bank li {
     width: 30.333%;
     height: 100px; } }
 @media (min-width: 641px) and (max-width: 767px) {
-  /* line 420, ../sass/layout/style/_checkout.scss */
+  /* line 421, ../sass/layout/style/_checkout.scss */
   #checkout form #selected_bank li {
     width: 23%;
     height: 110px; } }
 @media (min-width: 768px) and (max-width: 992px) {
-  /* line 420, ../sass/layout/style/_checkout.scss */
+  /* line 421, ../sass/layout/style/_checkout.scss */
   #checkout form #selected_bank li {
     width: 17.666%;
     height: 110px; } }
 @media (min-width: 993px) {
-  /* line 420, ../sass/layout/style/_checkout.scss */
+  /* line 421, ../sass/layout/style/_checkout.scss */
   #checkout form #selected_bank li {
     width: 17.666%;
     height: 110px; } }
 @media (max-width: 400px) {
-  /* line 451, ../sass/layout/style/_checkout.scss */
+  /* line 452, ../sass/layout/style/_checkout.scss */
   #checkout form #selected_bank li:nth-child(even) {
     margin-right: 0px; } }
 @media (min-width: 401px) and (max-width: 640px) {
-  /* line 456, ../sass/layout/style/_checkout.scss */
+  /* line 457, ../sass/layout/style/_checkout.scss */
   #checkout form #selected_bank li:nth-child(3n) {
     margin-right: 0px; } }
 @media (min-width: 641px) and (max-width: 767px) {
-  /* line 462, ../sass/layout/style/_checkout.scss */
+  /* line 463, ../sass/layout/style/_checkout.scss */
   #checkout form #selected_bank li:nth-child(4n) {
     margin-right: 0px; } }
 @media (min-width: 768px) and (max-width: 992px) {
-  /* line 468, ../sass/layout/style/_checkout.scss */
+  /* line 469, ../sass/layout/style/_checkout.scss */
   #checkout form #selected_bank li:nth-child(5n) {
     margin-right: 0px; } }
 @media (min-width: 993px) {
-  /* line 468, ../sass/layout/style/_checkout.scss */
+  /* line 469, ../sass/layout/style/_checkout.scss */
   #checkout form #selected_bank li:nth-child(5n) {
     margin-right: 0px; } }
-/* line 476, ../sass/layout/style/_checkout.scss */
+/* line 477, ../sass/layout/style/_checkout.scss */
 #checkout form #selected_bank .form-group {
   position: relative; }
-/* line 479, ../sass/layout/style/_checkout.scss */
+/* line 480, ../sass/layout/style/_checkout.scss */
 #checkout form #selected_bank label {
   position: absolute;
   top: 0px;
@@ -9002,141 +9003,141 @@ i.flag.hit, i.flag.bestseller {
   width: auto;
   min-height: 67px;
   padding-right: 0px; }
-/* line 487, ../sass/layout/style/_checkout.scss */
+/* line 488, ../sass/layout/style/_checkout.scss */
 #checkout form #selected_bank label img {
   margin-bottom: 5px;
   padding: 5px;
   width: 100%;
   height: auto; }
-/* line 493, ../sass/layout/style/_checkout.scss */
+/* line 494, ../sass/layout/style/_checkout.scss */
 #checkout form #selected_bank label span {
   position: static; }
-/* line 500, ../sass/layout/style/_checkout.scss */
+/* line 501, ../sass/layout/style/_checkout.scss */
 #checkout form .action a {
   position: relative; }
-/* line 504, ../sass/layout/style/_checkout.scss */
+/* line 505, ../sass/layout/style/_checkout.scss */
 #checkout form .action button {
   min-width: 120px; }
-/* line 509, ../sass/layout/style/_checkout.scss */
+/* line 510, ../sass/layout/style/_checkout.scss */
 #checkout form #remember_data .row {
   margin-bottom: 0px; }
-/* line 511, ../sass/layout/style/_checkout.scss */
+/* line 512, ../sass/layout/style/_checkout.scss */
 #checkout form #remember_data .row p {
   margin-bottom: 15px; }
-/* line 516, ../sass/layout/style/_checkout.scss */
+/* line 517, ../sass/layout/style/_checkout.scss */
 #checkout form .default_delivery {
   margin-bottom: 0px; }
 @media (max-width: 530px) {
-  /* line 518, ../sass/layout/style/_checkout.scss */
+  /* line 519, ../sass/layout/style/_checkout.scss */
   #checkout form .default_delivery.small-no-float {
     float: none !important;
     margin-bottom: 10px;
     clear: both; } }
 @media (max-width: 525px) {
-  /* line 527, ../sass/layout/style/_checkout.scss */
+  /* line 528, ../sass/layout/style/_checkout.scss */
   #checkout form .phone {
     display: inline-block;
     margin-bottom: 15px; } }
 @media (max-width: 359px) {
-  /* line 527, ../sass/layout/style/_checkout.scss */
+  /* line 528, ../sass/layout/style/_checkout.scss */
   #checkout form .phone {
     display: block;
     margin-bottom: 15px; } }
 @media (max-width: 359px) {
-  /* line 536, ../sass/layout/style/_checkout.scss */
+  /* line 537, ../sass/layout/style/_checkout.scss */
   #checkout form .phone span {
     display: block; } }
-/* line 544, ../sass/layout/style/_checkout.scss */
+/* line 545, ../sass/layout/style/_checkout.scss */
 #checkout form #back {
   position: relative;
   top: 12px; }
 
 @media (max-width: 767px) {
-  /* line 553, ../sass/layout/style/_checkout.scss */
+  /* line 554, ../sass/layout/style/_checkout.scss */
   #checkout #content-main {
     padding-left: 0px;
     padding-right: 0px; } }
 @media (min-width: 768px) and (max-width: 991px) {
-  /* line 560, ../sass/layout/style/_checkout.scss */
+  /* line 561, ../sass/layout/style/_checkout.scss */
   #checkout .sidebar-secound {
     margin-top: -15px; } }
 @media (max-width: 991px) {
-  /* line 560, ../sass/layout/style/_checkout.scss */
+  /* line 561, ../sass/layout/style/_checkout.scss */
   #checkout .sidebar-secound {
     padding-left: 15px;
     padding-right: 15px; } }
 @media (max-width: 767px) {
-  /* line 560, ../sass/layout/style/_checkout.scss */
+  /* line 561, ../sass/layout/style/_checkout.scss */
   #checkout .sidebar-secound {
     padding-left: 0px;
     padding-right: 0px; } }
-/* line 574, ../sass/layout/style/_checkout.scss */
+/* line 575, ../sass/layout/style/_checkout.scss */
 #checkout .current-addres + .panel {
   margin-top: 15px; }
-/* line 582, ../sass/layout/style/_checkout.scss */
+/* line 583, ../sass/layout/style/_checkout.scss */
 #checkout .toggle {
   display: none; }
-/* line 587, ../sass/layout/style/_checkout.scss */
+/* line 588, ../sass/layout/style/_checkout.scss */
 #checkout .panel-body dl {
   margin-bottom: 0px; }
 @media (max-width: 360px) {
-  /* line 590, ../sass/layout/style/_checkout.scss */
+  /* line 591, ../sass/layout/style/_checkout.scss */
   #checkout .panel-body dl.pull-left.small-no-float {
     float: none !important; } }
 @media (max-width: 480px) {
-  /* line 597, ../sass/layout/style/_checkout.scss */
+  /* line 598, ../sass/layout/style/_checkout.scss */
   #checkout .panel-body dl + figure {
     width: 115px; } }
 @media (max-width: 480px) {
-  /* line 601, ../sass/layout/style/_checkout.scss */
+  /* line 602, ../sass/layout/style/_checkout.scss */
   #checkout .panel-body dl + figure img {
     width: 100%; } }
-/* line 608, ../sass/layout/style/_checkout.scss */
+/* line 609, ../sass/layout/style/_checkout.scss */
 #checkout .panel-body .panel {
   margin-bottom: 15px; }
-/* line 611, ../sass/layout/style/_checkout.scss */
+/* line 612, ../sass/layout/style/_checkout.scss */
 #checkout .panel-body .panel.selected .selected_bank {
   display: block;
   margin-top: 21px; }
-/* line 617, ../sass/layout/style/_checkout.scss */
+/* line 618, ../sass/layout/style/_checkout.scss */
 #checkout .panel-body .panel:first-child {
   margin-top: 15px; }
-/* line 621, ../sass/layout/style/_checkout.scss */
+/* line 622, ../sass/layout/style/_checkout.scss */
 #checkout #block_invoice {
   display: none; }
-/* line 624, ../sass/layout/style/_checkout.scss */
+/* line 625, ../sass/layout/style/_checkout.scss */
 #checkout .button-primary {
   min-width: 130px; }
-/* line 630, ../sass/layout/style/_checkout.scss */
+/* line 631, ../sass/layout/style/_checkout.scss */
 #checkout .default_pay > .panel > .panel-body > .panel {
   display: block; }
-/* line 632, ../sass/layout/style/_checkout.scss */
+/* line 633, ../sass/layout/style/_checkout.scss */
 #checkout .default_pay > .panel > .panel-body > .panel:last-child {
   margin-bottom: 0px; }
-/* line 638, ../sass/layout/style/_checkout.scss */
+/* line 639, ../sass/layout/style/_checkout.scss */
 #checkout .default_pay .selected_bank {
   display: none; }
 @media (max-width: 767px) {
-  /* line 641, ../sass/layout/style/_checkout.scss */
+  /* line 642, ../sass/layout/style/_checkout.scss */
   #checkout .default_pay .flag_pay_method {
     display: none; } }
 
-/* line 654, ../sass/layout/style/_checkout.scss */
+/* line 655, ../sass/layout/style/_checkout.scss */
 .logged #checkout .default_pay > .panel > .panel-heading {
   padding-bottom: 0px; }
-/* line 658, ../sass/layout/style/_checkout.scss */
+/* line 659, ../sass/layout/style/_checkout.scss */
 .logged #checkout .default_pay > .panel > .panel-heading + .panel-body .default_pay_selected_bank figure {
   position: relative;
   top: -35px;
   margin-bottom: -20px; }
-/* line 668, ../sass/layout/style/_checkout.scss */
+/* line 669, ../sass/layout/style/_checkout.scss */
 .logged #checkout .default_pay > .panel > .panel-body > .panel {
   display: none; }
-/* line 671, ../sass/layout/style/_checkout.scss */
+/* line 672, ../sass/layout/style/_checkout.scss */
 .logged #checkout .default_pay > .panel > .panel-body .form-checkbox.default_pay {
   margin-bottom: 0px; }
 
-/* line 680, ../sass/layout/style/_checkout.scss */
+/* line 681, ../sass/layout/style/_checkout.scss */
 #invoice_data {
   display: none; }
 
