@@ -964,6 +964,12 @@ Mall.listing = {
         jQuery("#zakres_min, #zakres_max").on("keyup keypress", function (e) {
             "use strict";
             var code = e.keyCode || e.which;
+			Mall.listing.unmarkPrice();
+                var checkSlider = jQuery('#checkSlider').find('input');
+                if (!checkSlider.is(':checked')) {
+                    checkSlider.prop('checked', true);
+                    jQuery('#filter_price').find('.action').removeClass('hidden');
+                }
             if (code === 13) {
                 e.preventDefault();
                 return false;
@@ -973,7 +979,12 @@ Mall.listing = {
 
         return this;
     },
-
+	markPrice: function (name) {
+		alert(jQuery(name).html());
+	},
+	unmarkPrice: function () {
+//		jQuery("#filter_price").find("input:checkbox").attr('checked',false);
+	},
     /**
      * Toggles show more / hide more state link in filter section.
      *
