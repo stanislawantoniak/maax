@@ -50,23 +50,5 @@
 				</options>
 			</groups>
 		</cataloginventory>
-        <catalog>
-            <groups>
-                <frontend>
-                    <fields>
-                        <size_max_number translate="label comment">
-                            <label>Max number of size squares</label>
-                            <comment>Integer number from 4 to 100</comment>
-                            <frontend_type>text</frontend_type>
-                            <!--<validate>validate-number</validate>-->
-                            <sort_order>210</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </size_max_number>
-                    </fields>
-                </frontend>
-            </groups>
-        </catalog>
     </sections>
 </config>

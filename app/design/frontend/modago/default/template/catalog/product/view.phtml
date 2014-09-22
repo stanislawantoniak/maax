@@ -44,7 +44,7 @@ $avg = $_reviewBlock->getAvarageRating();
 
 <?php $_helper = $this->helper('catalog/output'); ?>
 <?php /** @var $_product Mage_Catalog_Model_Product */ ?>
-<?php $_product = $this->getProduct(); ?>
+<?php $_product = $this->getProduct();?>
 <?php
     // prices
     $price = $_product->getPrice();
@@ -346,13 +346,12 @@ $avg = $_reviewBlock->getAvarageRating();
 <?php if($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) : ?>
 <script type="text/javascript">
     var jsonConfig = <?php echo Mage::getBlockSingleton('zolagocatalog/product_view_type_configurable')->getJsonConfig(); ?>;
-    var size_max_number = <?php echo Mage::getStoreConfig('catalog/frontend/size_max_number'); ?>; //value when selectbox apear
-    jsonConfig.size_max_number = size_max_number;
+    var useSizeboxList =  <?php echo Mage::getModel('eav/entity_attribute_set')->load($_product->getAttributeSetId())->getUseSizeboxList(); ?>;
+    
+    jsonConfig.useSizeboxList = useSizeboxList;
 
     Mall.product.productOptions(jsonConfig);
     Mall.product._current_product_type = "<?php echo Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE; ?>";
-
-
 
 </script>
 <?php endif; ?>
