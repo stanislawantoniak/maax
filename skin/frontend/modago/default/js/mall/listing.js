@@ -229,7 +229,6 @@ Mall.listing = {
 
 
         imagesLoaded("#items-product", function () {
-            console.log("loaded");
             container = container.masonry({
                 transitionDuration: 0,
                 isAnimated: false
@@ -1139,7 +1138,7 @@ Mall.listing = {
         imagesLoaded("#items-product", function() {
             jQuery("#listing-load-toplayer").remove();
             jQuery("#items-product").children(".item").show();
-            container.masonry("reloadItems");
+            container.masonry().masonry("reloadItems");
             container.masonry();
 
             setTimeout(function() {
