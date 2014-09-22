@@ -388,12 +388,18 @@ Mall.i18nValidation = {
 Mall.translate = {};
 jQuery.extend(Mall.translate, Mall.i18nValidation);
 Mall.translate.ext = {
-    __: function (key, defaultMsg) {
+    __: function (key) {
         "use strict";
 
-        return Mall.translate.__(key, defaultMsg);
+        if (this._translate_messages[key] === undefined) {
+            return key;
+        }
+
+        return this._translate_messages[key];
     }
 };
+
+Mall.translate.__ = Mall.translate.ext.__;
 
 // function that extends rwdCarousel
 Mall.rwdCarousel = {
