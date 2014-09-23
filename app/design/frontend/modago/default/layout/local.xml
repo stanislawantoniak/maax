@@ -636,6 +636,7 @@
 				<block type="core/text_list" name="sales.order.history.info" as="info" translate="label">
                     <label>Order History Info</label>
                 </block>
+				<!-- CMS USE: <block type="cms/block" block_id="block-id-in-magento" name="sales.order.history.empty" as="empty"/> -->
 				<block type="core/template" name="sales.order.history.empty" as="empty" template="sales/order/empty.phtml"/>
             </block>
         </reference>
@@ -802,9 +803,7 @@
             <action method="unsetChild"><name>my.account.wrapper</name></action>
             <block type="core/template" name="account.wrapper" template="customer/account/wrapper.phtml">
                 <action method="insert"><child>left</child></action>
-                <block type="core/template" name="account.content" template="customer/account/content.phtml">
-                    <action method="insert"><child>my.account.wrapper</child></action>
-                </block>
+                <action method="insert"><child>my.account.wrapper</child></action>
             </block>
 
         </reference>
