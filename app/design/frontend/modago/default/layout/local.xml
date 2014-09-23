@@ -622,6 +622,25 @@
         <update handle="zolago_modago_customer_handle" />
     </customer_account_resetpassword>
 	
+	<sales_order_history>
+        <reference name="my.account.wrapper">
+			<!-- remove old history -->
+			<action method="unsetChild">
+				<name>sales.order.history</name>
+			</action>
+			<action method="unsetChild">
+				<name>customer.account.link.back</name>
+			</action>
+			<!-- add custom modago history -->
+            <block type="zolagomodago/sales_order_history" name="sales.order.history">
+				<block type="core/text_list" name="sales.order.history.info" as="info" translate="label">
+                    <label>Order History Info</label>
+                </block>
+				<block type="core/template" name="sales.order.history.empty" as="empty" template="sales/order/empty.phtml"/>
+            </block>
+        </reference>
+    </sales_order_history>
+	
 	<!-- ################################################################### -->
 	<!-- Checkout section													 -->
 	<!-- ################################################################### -->
