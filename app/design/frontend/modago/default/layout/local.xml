@@ -802,9 +802,7 @@
             <action method="unsetChild"><name>my.account.wrapper</name></action>
             <block type="core/template" name="account.wrapper" template="customer/account/wrapper.phtml">
                 <action method="insert"><child>left</child></action>
-                <block type="core/template" name="account.content" template="customer/account/content.phtml">
-                    <action method="insert"><child>my.account.wrapper</child></action>
-                </block>
+                <action method="insert"><child>my.account.wrapper</child></action>
             </block>
 
         </reference>
