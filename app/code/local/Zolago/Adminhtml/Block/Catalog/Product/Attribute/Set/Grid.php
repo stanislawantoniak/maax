@@ -54,6 +54,17 @@ class Zolago_Adminhtml_Block_Catalog_Product_Attribute_Set_Grid extends Mage_Adm
                  'options'  => array(0 => Mage::helper('catalog')->__('No'), 1 => Mage::helper('catalog')->__('Yes'))
             )
         );
+        $this->addColumn(
+            'use_sizebox_list',
+            array(
+                'header' => Mage::helper('catalog')->__('Use sizebox list'),
+                'align'    => 'left',
+                'sortable' => true,
+                'index'    => 'use_sizebox_list',
+                'type'     => 'options',
+                'options'  => array(0 => Mage::helper('catalog')->__('No'), 1 => Mage::helper('catalog')->__('Yes'))
+            )
+        );
     }
 
     public function getRowUrl($row)

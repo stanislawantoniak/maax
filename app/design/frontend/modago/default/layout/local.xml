@@ -593,7 +593,7 @@
         <reference name="head">
             <action method="addItem">
                 <type>skin_js</type>
-                <script>js/mall/customer.js</script>
+                <script>js/mall/account.js</script>
             </action>
         </reference>
     </zolago_modago_customer_handle>
@@ -643,6 +643,18 @@
 			   <type>skin_js</type>
 			   <script>js/mall/checkout/steps.js</script>
 		   </action>
+			<action method="addItem">
+			   <type>skin_js</type>
+			   <script>js/mall/customer.js</script>
+		   </action>
+			<action method="addItem">
+			   <type>skin_js</type>
+			   <script>js/mall/customer/AddressBook.js</script>
+		   </action>
+			<action method="addItem">
+			   <type>skin_js</type>
+			   <script>js/mall/customer/Address.js</script>
+		   </action>
 		</reference>
 		<reference name="header">
 			<remove name="header_menu"/>
@@ -672,7 +684,7 @@
 		<reference name="content">
 			<!-- Remove previous blocks -->
 			<block type="zolagomodago/checkout_onepage_logged" name="checkout.onepage" template="checkout/onepage/logged.phtml">
-				<block type="core/template" name="checkout.onepage.logged.address" template="checkout/onepage/logged/addressbook.phtml"/>
+				<block type="zolagomodago/checkout_onepage_logged_addressbook" name="checkout.onepage.logged.addressbook" template="checkout/onepage/logged/addressbook.phtml"/>
                 <block type="zolagomodago/checkout_onepage_shared_address" name="checkout.onepage.logged.address" template="checkout/onepage/shared/address.phtml">
                     <block type="zolagomodago/checkout_onepage_shared_address_shipping" as="shipping" name="checkout.onepage.logged.address.shipping" template="checkout/onepage/shared/address/shipping.phtml"/>
                     <block type="zolagomodago/checkout_onepage_shared_address_billing" as="billing" name="checkout.onepage.logged.address.billing" template="checkout/onepage/shared/address/billing.phtml"/>

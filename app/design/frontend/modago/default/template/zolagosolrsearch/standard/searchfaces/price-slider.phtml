@@ -44,6 +44,8 @@ if (isset($_GET['fq']['price'])) {
 $fromValue = intval($fromValue);
 $toValue = intval($toValue);
 
+// step count
+$ranges = $this->getFacetPriceRanges();
 
 /*
  * Holds state of initial price position
@@ -115,10 +117,14 @@ $name = '';
     <div class="section clearfix">
         <h3 class="<?php echo $sectionClass; ?>"><?php echo $this->__("Price"); ?> <i class="fa <?php echo $iconClass; ?>"></i></h3>
         <div class="content"  id="filter_price">
-<!--            <div class="form-group form-checkbox">-->
-<!--                <input type="checkbox" name="filter_price_200_500" id="filter_price_200_500" class="css-checkbox"/>-->
-<!--                <label for="filter_price_200_500" class="css-label"><span>od --><?php //echo $this->getPriceFormat($min) ?><!-- do --><?php //echo $this->getPriceFormat($max) ?><!--</span></label>-->
-<!--            </div>-->
+			<?php foreach($ranges as $range) : ?>
+			<?php $url = $this->getFacesUrl(array('fq'=>array('price' => $range['value']))); ?>	
+            <div class="form-group form-checkbox" data-url="<?php echo $url;?>">
+                <input type="checkbox" value="<?php echo $range['value'];?>" name="<?php echo $key; ?>" id="filter_price_<?php echo $range['start'];?>_<?php echo $range['end'];?>" class="css-checkbox"/>
+                <label for="filter_price_<?php echo $range['start'];?>_<?php echo $range['end'];?>" class="css-label">
+		<span><?php echo $range['formatted'] ?></span></label>
+            </div>
+			<?php endforeach; ?>
             <div id="od_do" class="clearfix">
                 <div class="clearfix">
                     <div id="checkSlider" class="form-group form-checkbox">

@@ -33,6 +33,10 @@ class Zolago_Adminhtml_Catalog_Product_SetController extends Mage_Adminhtml_Cata
 
                 $useToCreateProduct = $this->getRequest()->getParam('attribute_set_use_to_create_product');
                 $model->setData('use_to_create_product',$useToCreateProduct);
+
+                $useSizeboxList = $this->getRequest()->getParam('attribute_set_use_sizebox_list');
+                $model->setData('use_sizebox_list',$useSizeboxList);
+
                 Mage::log('New ');
             } else {
                 if ($attributeSetId) {
@@ -50,6 +54,10 @@ class Zolago_Adminhtml_Catalog_Product_SetController extends Mage_Adminhtml_Cata
                 $useToCreateProduct = isset($data['attribute_set_use_to_create_product'])
                     ? (int)$data['attribute_set_use_to_create_product'] : 0;
                 $model->setData('use_to_create_product', $useToCreateProduct);
+
+                $useSizeboxList = isset($data['attribute_set_use_sizebox_list'])
+                    ? (int)$data['attribute_set_use_sizebox_list'] : 0;
+                $model->setData('use_sizebox_list', $useSizeboxList);
             }
 
             $model->validate();
@@ -83,7 +91,7 @@ class Zolago_Adminhtml_Catalog_Product_SetController extends Mage_Adminhtml_Cata
 				$response['error']   = 0;
 				$response['url']     = $this->getUrl('*/*/edit', array('id' => $model->getId()));
 			} else {
-				$this->_getSession()->addException(Mage::helper('catalog')->__('An error occurred while saving the attribute set.'));
+                $this->_getSession()->addError(Mage::helper('catalog')->__('An error occurred while saving the attribute set.'));
                 $response['error']   = 0;
                 $response['url']     = $this->getUrl('*/*/');				
 			}

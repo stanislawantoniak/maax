@@ -34,11 +34,11 @@
  *  getPagerVisibility()
  *  getVarNamePage()
  */
+$columns = $this->getColumns();
+$leftColumnsCount = 6;
+$leftColumns = array_splice($columns, 0, $leftColumnsCount);
+$bodyColumns = $columns;
 ?>
-<?php $columns = $this->getColumns(); ?>
-<?php $leftColumnsCount = 6; ?>
-<?php $leftColumns = array_splice($columns, 0, $leftColumnsCount); ?>
-<?php $bodyColumns = $columns; ?>
 
 <?php if($this->getCollection()): ?>
 
@@ -50,11 +50,12 @@
                         <div title="<?php echo $this->getRowUrl($_item) ?>" class="clearfix <?php if ($_class = $this->getRowClass($_item)) echo $_class; ?>" >
                             <?php foreach ($leftColumns as $_column): ?>
 
-                                <?php if ($this->shouldRenderCell($_item, $_column)):?>
+                                <?php if ($this->shouldRenderCell($_item, $_column)  && $this->isColumnVisible($_column)):?>
                                     <?php $_rowspan = $this->getRowspan($_item, $_column);?>
-                                    <div class="cell <?php echo $_column->getCssProperty() ?> <?php echo $this->getCellClass($_column, $_item);?>" <?php echo $this->getColumnWidthStyle($_column); ?>>
+                                    <div class="cell <?php echo $_column->getCssProperty() ?> <?php echo $this->getCellClass($_item, $_column);?>" <?php echo $this->getColumnWidthStyle($_column); ?>>
                                         <div>
                                             <?php echo (($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?>
+                                            <?php echo $this->getAdditionalHtml($_item, $_column); ?>
                                         </div>
                                     </div>
                                 <?php endif;?>
@@ -75,11 +76,12 @@
                         <div title="<?php echo $this->getRowUrl($_item) ?>" class="clearfix <?php if ($_class = $this->getRowClass($_item)) echo $_class; ?>" >
                             <?php foreach($bodyColumns as $_column): ?>
 
-                                <?php if ($this->shouldRenderCell($_item, $_column)):?>
+                                <?php if ($this->shouldRenderCell($_item, $_column)  && $this->isColumnVisible($_column)):?>
                                     <?php $_rowspan = $this->getRowspan($_item, $_column);?>
-                                    <div class="cell <?php echo $_column->getCssProperty() ?> <?php echo $this->getCellClass($_column, $_item);?>" <?php echo $this->getColumnWidthStyle($_column); ?>>
+                                    <div class="cell <?php echo $_column->getCssProperty() ?> <?php echo $this->getCellClass($_item, $_column);?>" <?php echo $this->getColumnWidthStyle($_column); ?>>
                                         <div>
                                             <?php echo (($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?>
+                                            <?php echo $this->getAdditionalHtml($_item, $_column); ?>
                                         </div>
                                     </div>
                                 <?php endif;?>

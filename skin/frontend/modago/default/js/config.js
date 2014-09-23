@@ -37,7 +37,12 @@ var Config = {
 	},
     url: {
         customer_email_exists: window.location.protocol + "//"
-            + window.location.host + '/checkout/singlepage/checkExistingAccount'
+            + window.location.host + '/checkout/singlepage/checkExistingAccount',
+        address: {
+            remove: "/customer/address/deleteAjax",
+            save: "/customer/address/saveAjax",
+            get: ""
+        }
     }
 };
 
