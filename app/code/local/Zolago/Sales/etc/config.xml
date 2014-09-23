@@ -6,6 +6,11 @@
         </Zolago_Sales>
     </modules>
     <global>
+        <blocks>
+			<zolagosales>
+				<class>Zolago_Sales_Block</class>
+			</zolagosales>
+        </blocks>
         <models>
 			<sales>
 				<rewrite>
@@ -14,4 +19,16 @@
 			</sales>
         </models>
     </global>
+	<frontend>
+		
+		<routers>
+			<sales>
+                <args>
+                    <modules>
+                        <Zolago_Sales before="Unirgy_Rma">Zolago_Sales</Zolago_Sales>
+                    </modules>
+                </args>
+            </sales>
+		</routers>
+	</frontend>
 </config>
