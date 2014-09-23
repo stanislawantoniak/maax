@@ -5,6 +5,8 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
     const MODE_SEARCH = 2;
 	
 	const FLAGS_FACET = "flags_facet";
+	const PRICE_FACET = "PLN_1_price_decimal";
+	const PRICE_FACET_TRANSLATED = "price_facet";
 
     const DEFAULT_RNDERER = "zolagosolrsearch/faces_enum";
 
@@ -597,13 +599,24 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         if($this->getMode()==self::MODE_CATEGORY&& !$this->getCurrentCategory()->getUsePriceFilter()) {
             return null;
         }
-        $block = $this->getLayout()->createBlock($this->_getPriceRenderer());
-        $block->setParentBlock($this);
-        return $block;
+        $facetFileds = array();
+        if (isset($solrData['facet_counts']['facet_fields']) && is_array($solrData['facet_counts']['facet_fields'])) {
+            $facetFileds = $solrData['facet_counts']['facet_fields'];
+        }
+        if(isset($facetFileds[self::PRICE_FACET])) {
+            $data = $facetFileds[self::PRICE_FACET];
+            $data = $this->_prepareMultiValues(self::PRICE_FACET,$data);
+            $block = $this->getLayout()->createBlock($this->_getPriceRenderer());
+            $block->setParentBlock($this);
+            $block->setAllItems($data);
+            $block->setFacetKey(self::PRICE_FACET);
+            $block->setAttributeCode("prices");
+            return $block;
+        }
     }
 
     public function getFlagBlock($solrData) {
-		
+
 		// Only in category ?
         if($this->getMode()==self::MODE_CATEGORY&& !$this->getCurrentCategory()->getUseFlagFilter()) {
             return null;
@@ -614,14 +627,11 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         if (isset($solrData['facet_counts']['facet_fields']) && is_array($solrData['facet_counts']['facet_fields'])) {
             $facetFileds = $solrData['facet_counts']['facet_fields'];
         }
-       
         if(isset($facetFileds[self::FLAGS_FACET])) {
             $data = $facetFileds[self::FLAGS_FACET];
-            
             if($this->getSpecialMultiple()) {
                 $data = $this->_prepareMultiValues(self::FLAGS_FACET, $data);
             }
-			
 			ksort($data);
             $block = $this->getLayout()->createBlock($this->_getFlagRenderer());
             $block->setParentBlock($this);
@@ -860,6 +870,9 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
     }
 
     protected function _extractAttributeCode($facet) {
+        if ($facet == self::PRICE_FACET) {
+            return 'price';
+        } 
         return preg_replace("/_facet$/", "", $facet);
     }
 
@@ -969,16 +982,12 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         $req = Mage::app()->getRequest();
 
         $oldParams = $req->getParams();
-        $params = $oldParams;
-
+        $params = $oldParams;        
         $paramKey = $this->_extractAttributeCode($facetkey);
-		
         if(isset($params['fq'][$paramKey])) {
             unset($params['fq'][$paramKey]);
         }
-
         $filters = $this->getFilterQuery();
-
         // Force unset category id
         if($paramKey=="category_path") {
             if(!isset($filters['category_id'])) {
@@ -991,17 +1000,17 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
                 unset($params['fq']['category']);
             }
             // No data changed
-        } 
-        elseif(!isset($filters[$facetkey])) {
+        } elseif ($facetkey == self::PRICE_FACET) {
+            // no changes
+        } elseif(!isset($filters[$facetkey])) {
             return $fallbackData;
         }
         try {
             $model = $this->_getHelpedSolrModel();
             $queryText = Mage::helper('solrsearch')->getParam('q');
-
             $req->setParams($params);
             $result = $model->query($queryText);
-            $req->setParams($oldParams);
+            $req->setParams($oldParams);            
             if(isset($result['facet_counts']['facet_fields'][$facetkey])) {
                 return $result['facet_counts']['facet_fields'][$facetkey];
             }
