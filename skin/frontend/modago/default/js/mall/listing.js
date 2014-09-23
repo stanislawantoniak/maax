@@ -110,7 +110,7 @@ Mall.listing = {
         this.loadProductsOnScroll();
 
         // load additional products to queue after page is loaded
-        //this.setAutoappend(true);
+        this.setAutoappend(true);
         this.loadToQueue();
         this.setLoadMoreLabel();
     },
@@ -225,19 +225,16 @@ Mall.listing = {
         var products = Mall.listing.getProductQueue().slice(
                 0, Mall.listing.getScrollLoadOffset()),
             items = Mall.listing.appendToList(products),
-            container = jQuery("#items-product");
+            container = jQuery("#items-product"),
+            inst = imagesLoaded(jQuery(items));
 
-
-        imagesLoaded("#items-product", function () {
-            container = container.masonry({
-                transitionDuration: 0,
-                isAnimated: false
-            });
-
-            //container.masonry("layout", allItems, true).masonry();
-            container.masonry().masonry("reloadItems").masonry();
+        jQuery(items).hide();
+        inst.on("always", function () {
+            container.masonry({isAnimated: false, transitionDuration: 0}).masonry("reloadItems").masonry();
+            jQuery(items).show();
             setTimeout(function () {Mall.listing.placeListingFadeContainer();}, 1000);
         });
+
         Mall.listing.addToVisibleItems(products.length);
 
         Mall.listing.setProductQueue(
@@ -1114,7 +1111,8 @@ Mall.listing = {
      */
     reloadListingItemsAfterPageLoad: function() {
 
-        var container = jQuery("#items-product");
+        var container = jQuery("#items-product"),
+            imgLoadedInst = imagesLoaded(container);
         //    .masonry({
         //    transitionDuration: 0
         //});
@@ -1135,22 +1133,38 @@ Mall.listing = {
                 .hideShapesListing();
         }
 
-        imagesLoaded("#items-product", function() {
+        imgLoadedInst.on("always", function () {
+            "use strict";
+
             jQuery("#listing-load-toplayer").remove();
             jQuery("#items-product").children(".item").show();
-            container.masonry().masonry("reloadItems");
-            container.masonry();
+            container.masonry().masonry("reloadItems").masonry();
 
             setTimeout(function() {
-                    Mall.listing.placeListingFadeContainer();
-                }, 1000);
+                Mall.listing.placeListingFadeContainer();
+            }, 1000);
 
-                // hide load more button
-                if (Mall.listing.getTotal() > Mall.listing.getCurrentVisibleItems()) {
-                    Mall.listing.hideLoadMoreButton()
-                        .hideShapesListing();
-                }
+            // hide load more button
+            if (Mall.listing.getTotal() > Mall.listing.getCurrentVisibleItems()) {
+                Mall.listing.hideLoadMoreButton()
+                    .hideShapesListing();
+            }
         });
+
+        //imagesLoaded("#items-product", function() {
+        //
+        //    container.masonry();
+        //
+        //    setTimeout(function() {
+        //            Mall.listing.placeListingFadeContainer();
+        //        }, 1000);
+        //
+        //        // hide load more button
+        //        if (Mall.listing.getTotal() > Mall.listing.getCurrentVisibleItems()) {
+        //            Mall.listing.hideLoadMoreButton()
+        //                .hideShapesListing();
+        //        }
+        //});
 
         return this;
     },
@@ -1171,8 +1185,8 @@ Mall.listing = {
             height = jQuery(this).find(".img_product > img").data("height");
             if (width !== undefined && height !== undefined) {
                 proportions = width / height;
-                newHeight = (columnWidth - 2) / proportions;
-                newWidth = columnWidth - 2;
+                newHeight = (columnWidth) / proportions;
+                newWidth = columnWidth;
                 jQuery(this).find(".img_product")
                     .attr("width", parseInt(newWidth, 10))
                     .attr("height", parseInt(newHeight, 10));
