@@ -329,7 +329,6 @@ jQuery(function ($) {
     var compaigns = '<?php echo $campaigns; ?>';
     var compaignsObj = jQuery.parseJSON(compaigns);
     var isLocalVendor = '<?php echo $isLocalVendor; ?>';
-    console.log(compaignsObj);
 
     $(document).on('change', '#basicModal select[name=campaign]', function () {
         var campaign = $(this).val();
@@ -675,6 +674,7 @@ jQuery(function ($) {
         modal.find('[name=creation_type]').remove();
         modal.find('.alert.alert-warning').remove();
         modal.find('[data-val="campaign-status"]').html('');
+        $('[data-targ="add"]').remove();
 
     }
 
@@ -684,6 +684,7 @@ jQuery(function ($) {
         modal.find('[data-edit-val="banner_name"]').html('');
         modal.find('[data-edit-val="dates"]').html('');
         modal.find('img.image-preview-big').attr("src",'');
+        $('[data-targ="add"]').remove();
 
     }
 
