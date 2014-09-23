@@ -331,7 +331,7 @@ class Zolago_Modago_Block_Dropshipmicrositepro_Vendor_Banner extends Mage_Core_B
 
 
             $campaignModel = Mage::getResourceModel('zolagocampaign/campaign');
-            $placements = $campaignModel->getCategoryPlacements($rootCatId, $vendorId,
+            $placements = $campaignModel->getCategoryPlacements($rootCatId, $localVendorId,
                 array(Zolago_Banner_Model_Banner_Type::TYPE_INSPIRATION),
                 TRUE
             );
