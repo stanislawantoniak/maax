@@ -20,14 +20,15 @@
         </models>
     </global>
 	<frontend>
+		
 		<routers>
 			<sales>
-				<args>
-					<modules>
-						<Zolago_Sales before="Mage_Sales">Zolago_Sales</Zolago_Sales>
-					</modules>
-				</args>
-			</sales>
+                <args>
+                    <modules>
+                        <Zolago_Sales before="Unirgy_Rma">Zolago_Sales</Zolago_Sales>
+                    </modules>
+                </args>
+            </sales>
 		</routers>
 	</frontend>
 </config>
