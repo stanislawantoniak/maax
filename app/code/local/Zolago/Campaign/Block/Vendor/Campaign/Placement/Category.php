@@ -17,6 +17,8 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement_Category extends Mage_Core
     }
 
     public function getCampaigns(){
+        $vendor = Mage::getSingleton('udropship/session')->getVendor();
+        $vendorId = $vendor->getId();
 
         /* @var $vendor Unirgy_Dropship_Model_Vendor */
         $campaign = Mage::getResourceModel("zolagocampaign/campaign");
@@ -24,23 +26,53 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement_Category extends Mage_Core
         $result = array();
 
         $campaigns = array();
-        //prepare campaigns group by type
-        foreach($campaignBank as $campaign){
-            $campaigns[$campaign["banner_type"]][$campaign['campaign_id']] = array(
-                'campaign_id' => $campaign['campaign_id'],
-                'name' => $campaign['name'],
-                'date_from' => !empty($campaign['date_from']) ? date("d.m.Y H:i:s",strtotime($campaign['date_from'])) : '',
-                'date_to' => !empty($campaign['date_to']) ? date("d.m.Y H:i:s",strtotime($campaign['date_to'])) : ''
-            );
-        }
+
 
         //reformat result
-        if (!empty($campaigns)) {
-            foreach ($campaigns as $type => $_) {
-                $result[$type] = array_values($_);
+        if ($vendorId == Mage::helper('udropship')->getLocalVendorId()) {
+            //prepare campaigns group by type and vendor
+            foreach($campaignBank as $campaign){
+                $campaigns[$campaign["banner_type"]][$campaign['vendor_id']][$campaign['campaign_id']] = array(
+                    'campaign_id' => $campaign['campaign_id'],
+                    'vendor_id' => $campaign['vendor_id'],
+                    'name' => $campaign['name'],
+                    'date_from' => !empty($campaign['date_from']) ? date("d.m.Y H:i:s",strtotime($campaign['date_from'])) : '',
+                    'date_to' => !empty($campaign['date_to']) ? date("d.m.Y H:i:s",strtotime($campaign['date_to'])) : ''
+                );
+            }
+            $vendorModel = Mage::getModel('udropship/vendor');
+            $vendorCollection = $vendorModel->getCollection();
+            $vendorsList = array();
+            foreach($vendorCollection as $vendorObj){
+                $vendorsList[$vendorObj->getId()] = $vendorObj->getVendorName();
+            }
+
+            //group by vendor
+            if (!empty($campaigns)) {
+                foreach ($campaigns as $type => $vendorItems) {
+                    foreach ($vendorItems as $vendor => $_) {
+                        $result[$type][$vendorsList[$vendor]] = array_values($_);
+                    }
+                }
+            }
+        } else {
+            //prepare campaigns group by type
+            foreach($campaignBank as $campaign){
+                $campaigns[$campaign["banner_type"]][$campaign['campaign_id']] = array(
+                    'campaign_id' => $campaign['campaign_id'],
+                    'vendor_id' => $campaign['vendor_id'],
+                    'name' => $campaign['name'],
+                    'date_from' => !empty($campaign['date_from']) ? date("d.m.Y H:i:s",strtotime($campaign['date_from'])) : '',
+                    'date_to' => !empty($campaign['date_to']) ? date("d.m.Y H:i:s",strtotime($campaign['date_to'])) : ''
+                );
+            }
+
+            if (!empty($campaigns)) {
+                foreach ($campaigns as $type => $_) {
+                    $result[$type] = array_values($_);
+                }
             }
         }
-
         return $result;
     }
 

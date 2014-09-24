@@ -9,7 +9,7 @@ $campaigns = Mage::helper('core')->jsonEncode($this->getCampaigns());
 
 $placements = $this->getCategoryPlacements();
 
-
+$isLocalVendor = ($vendor->getId() == Mage::helper('udropship')->getLocalVendorId());
 ?>
 <script type="text/javascript" src="/skin/frontend/modago/default/js/imagesloaded.pkgd.min.js"></script>
 <div class="container">
@@ -328,6 +328,7 @@ jQuery(function ($) {
     })
     var compaigns = '<?php echo $campaigns; ?>';
     var compaignsObj = jQuery.parseJSON(compaigns);
+    var isLocalVendor = '<?php echo $isLocalVendor; ?>';
 
     $(document).on('change', '#basicModal select[name=campaign]', function () {
         var campaign = $(this).val();
@@ -355,14 +356,11 @@ jQuery(function ($) {
         console.log(placement);
         if (parseInt(placement) > 0) {
             //remove from db
-            console.log('remove from db');
             $('form').append('<input type="hidden" name="remove[]" value="' + placement + '" />');
             console.log($('form [data-placement="' + placement + '"]').closest('.banner-item'));
             $('form').find('[data-placement="' + placement + '"]').closest('.banner-item').remove();
         } else {
             //remove added html
-            console.log('remove added html');
-
             $('form').find('[name="status"]').parents('.banner-item').remove();
         }
         $('#confirm-delete [name="placement_id"]').remove();
@@ -417,9 +415,20 @@ jQuery(function ($) {
 
         var options = '<option value="0">      </option>';
         if ($.type(compaignsObj[bannerTypeCode]) !== "undefined") {
-            compaignsObj[bannerTypeCode].each(function (i, val) {
-                options += '<option value="' + i.campaign_id + '">' + i.name + '</option>';
-            })
+            if(isLocalVendor){
+                $.each(compaignsObj[bannerTypeCode], function (vendor, campaigns) {
+                    options += '<optgroup label="  ' + vendor + '">';
+                    campaigns.each(function (i, campaign) {
+                        options += '<option value="' + i.campaign_id + '">' + i.name + '</option>';
+                    })
+                    options += '</optgroup>';
+                })
+            } else {
+                compaignsObj[bannerTypeCode].each(function (i, val) {
+                    options += '<option value="' + i.campaign_id + '">' + i.name + '</option>';
+                })
+            }
+
         }
 
         $(this).find('[name=campaign]').html(options);
@@ -665,6 +674,7 @@ jQuery(function ($) {
         modal.find('[name=creation_type]').remove();
         modal.find('.alert.alert-warning').remove();
         modal.find('[data-val="campaign-status"]').html('');
+        $('[data-targ="add"]').remove();
 
     }
 
@@ -674,6 +684,7 @@ jQuery(function ($) {
         modal.find('[data-edit-val="banner_name"]').html('');
         modal.find('[data-edit-val="dates"]').html('');
         modal.find('img.image-preview-big').attr("src",'');
+        $('[data-targ="add"]').remove();
 
     }
 
