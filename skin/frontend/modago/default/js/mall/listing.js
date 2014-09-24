@@ -237,24 +237,26 @@ Mall.listing = {
 
         // loading
         inst.on("always", function () {
-            container.masonry({isAnimated: false, transitionDuration: 0})
-                .masonry("reloadItems").masonry();
-            jQuery(items).show();
-            self.hideLoading();
+            //setTimeout(function () {
+                container.masonry({isAnimated: false, transitionDuration: 0})
+                    .masonry("reloadItems").masonry();
+                jQuery(items).show();
+                self.hideLoading();
 
-            // show load more button
-            if (Mall.listing.canShowLoadMoreButton()) {
-                Mall.listing.showLoadMoreButton();
-                Mall.listing.showShapesListing();
-                Mall.listing.placeListingFadeContainer();
-            }
+                // show load more button
+                if (Mall.listing.canShowLoadMoreButton()) {
+                    Mall.listing.showLoadMoreButton();
+                    Mall.listing.showShapesListing();
+                    Mall.listing.placeListingFadeContainer();
+                }
 
-            // reload if queue is empty
-            if (self.getProductQueue().length === 0) {
-                container.masonry();
-            }
+                // reload if queue is empty
+                if (self.getProductQueue().length === 0) {
+                    container.masonry();
+                }
 
-            self.placeListingFadeContainer();
+                self.placeListingFadeContainer();
+            //}, 3000);
         });
 
         Mall.listing.addToVisibleItems(products.length);
