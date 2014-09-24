@@ -32,7 +32,7 @@ $_helper = Mage::helper("zolagocataloginventory");
 
 
 
-            <?php if ($canApplyMsrp): ?>
+            <?php if (!empty($canApplyMsrp)): ?>
                 <div class="cena"<?php if ($this->helper('tax')->displayCartBothPrices()): ?> <?php endif; ?>>
             <span class="cart-price">
                 <span class="cart-msrp-unit"><?php echo $this->__('See price before order confirmation.'); ?></span>
@@ -147,7 +147,7 @@ $_helper = Mage::helper("zolagocataloginventory");
                         <?php $_incl = $this->helper('checkout')->getSubtotalInclTax($_item); ?>
 							
                             <span class="cart-price">
-                                <?php if ($canApplyMsrp): ?>
+                                <?php if (!empty($canApplyMsrp)): ?>
                                     <span class="cart-msrp-subtotal">--</span>
                                 <?php else: ?>
                                     <?php if (Mage::helper('weee')->typeOfDisplay($_item, array(0, 1, 4), 'sales') && $_item->getWeeeTaxAppliedAmount()): ?>
