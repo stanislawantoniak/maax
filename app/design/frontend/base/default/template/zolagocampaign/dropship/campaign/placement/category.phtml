@@ -240,6 +240,7 @@ $isLocalVendor = ($vendor->getId() == Mage::helper('udropship')->getLocalVendorI
                         <span data-val="campaign-date-from"></span>
                         <span data-val="campaign-date-to"></span>
                         <span data-val="campaign-vendorname"></span>
+                        <span data-val="campaign-showedit"></span>
                     </div>
                 </div>
 
@@ -365,8 +366,8 @@ jQuery(function ($) {
         if (parseInt(placement) > 0) {
             //remove from db
             $('form').append('<input type="hidden" name="remove[]" value="' + placement + '" />');
-            console.log($('form [data-placement="' + placement + '"]').closest('.banner-item'));
-            $('form').find('[data-placement="' + placement + '"]').closest('.banner-item').remove();
+            console.log($('form').find('[name="placement_id[]"][value=' + placement + ']'));
+            $('form').find('[name="placement_id[]"][value=' + placement + ']').closest('.banner-item').remove();
         } else {
             //remove added html
             $('form').find('[name="status"]').parents('.banner-item').remove();
@@ -575,6 +576,8 @@ jQuery(function ($) {
         var banner = modal.find('[name=banner] option:selected').val();
         var bannerName = modal.find('[name=banner] option:selected').text();
         var priority = modal.find('[name=priority] option:selected').val();
+        var showEditLink = modal.find('[data-val="campaign-showedit"]').text();
+        console.log(showEditLink);
         var previewImage = modal.find('[data-banner="preview"] img').attr("src");
 
 
@@ -621,21 +624,14 @@ jQuery(function ($) {
                 '<i class="'+status+'" data-edit-val="link-edit-status"></i>'+
                  dates +
                 '</div>' +
+                '<input type="hidden" value="'+showEditLink+'" name="show_edit_link" />' +
                 '</li>';
 
             changePlacementItemPriority($('[data-targ="add"]'), priority);
             $('[data-targ="add"]').replaceWith(campaignBlock);
 
             clearOptions();
-            //        $placements[] = array(
-//            'vendor_id' => $vendorId,
-//            'category_id' => $data['category'],
-//            'campaign_id' => $data['campaign_id'][$i],
-//            'banner_id' => $data['banner_id'][$i],
-//            'type' => $data['type'][$i],
-//            'position' => $data['position'][$i],
-//            'priority' => $data['priority'][$i],
-//    );
+
             saveNewPresentation(campaign, banner, bannerType, pos, priority);
             //savePresentation();
             $('#basicModal').modal('hide');
@@ -689,7 +685,7 @@ jQuery(function ($) {
         modal.find('[data-edit-val="campaign_status"]').html(status);
 
         modal.find('[name=priority]').val(priority);
-
+console.log(campaignShowEditLink);
         if(campaignShowEditLink == 0){
             modal.find('[data-edit-val="link-delete"]').hide();
         }
@@ -725,6 +721,7 @@ jQuery(function ($) {
         modal.find('.alert.alert-warning').remove();
         modal.find('[data-val="campaign-status"]').html('');
         modal.find('[data-val="campaign-vendorname"]').html('');
+        modal.find('[data-val="campaign-showedit"]').html('');
         modal.find('[name="show_edit_link"]').val(0);
         $('[data-targ="add"]').remove();
         modal.find('[data-edit-val="link-delete"]').show();
@@ -738,6 +735,7 @@ jQuery(function ($) {
         modal.find('[data-edit-val="dates"]').html('');
         modal.find('img.image-preview-big').attr("src",'');
         modal.find('[name="show_edit_link"]').val(0);
+        modal.find('[data-val="campaign-showedit"]').html('');
         $('[data-targ="add"]').remove();
         modal.find('[data-edit-val="link-delete"]').show();
 
@@ -815,6 +813,7 @@ jQuery(function ($) {
                     $("#basicModal").find('[data-val="campaign-status"]').html(data.status.icon);
 
                     $("#basicModal").find('[data-val="campaign-vendorname"]').html(data.campaign_vendor);
+                    $("#basicModal").find('[data-val="campaign-showedit"]').html(data.showedit);
                 }
             })
         }
