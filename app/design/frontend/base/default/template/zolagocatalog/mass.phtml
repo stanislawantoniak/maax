@@ -283,20 +283,46 @@ table.table{
             // Key press
             $(document).keydown(function(e){
 
-                var speed = $("#scroll-handle-y").height() / 5,
+                var speedY = $("#scroll-handle-y").height() / 5,
+                    speedX = $("#scroll-handle-x").width() / 5,
                     editorVisible = ($("#editor-popover").css("visibility") == 'visible') ? true : false;
 
                 // Move up
                 if (e.keyCode == 38 && !editorVisible) {
 
-                    scrollTableY(speed, scrollYFactor, 'up');
+                    scrollTableY(speedY, scrollYFactor, 'up');
 
                     return false;
                 }
                 // Move down
                 else if(e.keyCode == 40 && !editorVisible){
 
-                    scrollTableY(speed, scrollYFactor, 'down');
+                    scrollTableY(speedY, scrollYFactor, 'down');
+
+                    return false;
+                }
+
+                // Move left
+                else if (e.keyCode == 37 && !editorVisible) {
+
+                    scrollTableX(speedX, scrollXFactor, 'right');
+
+                    return false;
+                }
+                // Move right
+                else if(e.keyCode == 39 && !editorVisible){
+
+                    scrollTableX(speedX, scrollXFactor, 'left');
+
+                    return false;
+                }
+
+                // Escape
+                else if(e.keyCode == 27 && editorVisible){
+
+                    hideEditorPopover();
+
+                    $("#grid-body .cell").removeClass('active');
 
                     return false;
                 }
@@ -400,14 +426,15 @@ table.table{
 
             });
 
-//            $("body").on('change', '.popover .staticFilter', function(){
-//
-//                var id = $(this).attr('id'),
-//                    index = $(this).find('option:selected').index();
-//
-//                $("#attr-filters #" + id + " option[selected='selected']").removeAttr('selected');
-//                $("#attr-filters #" + id + " option:eq(" + index + ")").attr('selected', 'selected');
-//            });
+            // Persist popover filters
+            $("body").on('change', '.popover .staticFilter', function(){
+
+                var id = $(this).attr('id'),
+                    index = $(this).find('option:selected').index();
+
+                $("#attr-filters #" + id + " option[selected='selected']").removeAttr('selected');
+                $("#attr-filters #" + id + " option:eq(" + index + ")").attr('selected', 'selected');
+            });
 
             // Inline Editor
             var $activeCell;
@@ -710,7 +737,6 @@ table.table{
                     scrollTableY(speed, scrollYFactor, 'up');
                 }
 
-                return false;
             });
 
             // Page up/Page down clicks
@@ -788,7 +814,7 @@ table.table{
                 }
 
                 var currHandleTop = $scrollHandleY.position().top;
-                var newHandleTop = currHandleTop + speed;
+                var newHandleTop = currHandleTop;
 
                 if (direction == 'down') {
                     newHandleTop = currHandleTop + speed;
@@ -811,6 +837,42 @@ table.table{
                 $('#mass-grid .tbody').scrollTop((newHandleTop * scrollYFactor));
 
                 return newHandleTop;
+            }
+
+            function scrollTableX(speed, scrollXFactor, direction){
+
+                var $scrollHandleX = $('#mass-grid').find('#scroll-handle-x'),
+                    $scrollbarContainerX = $scrollHandleX.parent(),
+                    newHandleLeft;
+
+                if(!$scrollbarContainerX.length){
+                    return false;
+                }
+
+                var currHandleLeft = $scrollHandleX.position().left;
+                var newHandleLeft = currHandleLeft;
+
+                if (direction == 'left') {
+                    newHandleLeft = newHandleLeft + speed;
+                } else {
+                    newHandleLeft = newHandleLeft - speed;
+                }
+
+                if(newHandleLeft < 0 && direction == 'right'){
+                    $scrollHandleX.css('left', 0 + 'px');
+                    $('#grid-body').scrollLeft(0);
+                    return false;
+                }
+                else if(newHandleLeft >= ($scrollbarContainerX.width() - $scrollHandleX.width()) && direction == 'left'){
+                    $scrollHandleX.css('left', ($scrollbarContainerX.width() - $scrollHandleX.width()) + 'px');
+                    $('#grid-body').scrollLeft($('#grid-body')[0].scrollWidth);
+                    return false;
+                }
+
+                $scrollHandleX.css('left', (newHandleLeft) + 'px');
+                $('#grid-body').scrollLeft((newHandleLeft * scrollXFactor));
+
+                return newHandleLeft;
             }
 
             function removeValueFromArray(arr) {
@@ -1142,8 +1204,9 @@ table.table{
                     $container = $lastColumn.closest("#grid-body"),
                     containerOffsetL = $container.offset().left,
                     offsetL = $lastColumn.offset().left,
+                    scrollL = $container.scrollLeft(),
                     w = $lastColumn.outerWidth(),
-                    boxW = offsetL + w - containerOffsetL;
+                    boxW = offsetL + w - containerOffsetL + scrollL;
 
                 $("#grid-body .thead").width(boxW);
                 $("#grid-body .tbody").width(boxW);
