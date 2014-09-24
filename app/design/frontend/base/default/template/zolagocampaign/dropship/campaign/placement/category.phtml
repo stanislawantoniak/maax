@@ -8,6 +8,7 @@ $vendorName = $vendor->getVendorName();
 $campaigns = Mage::helper('core')->jsonEncode($this->getCampaigns());
 
 $placements = $this->getCategoryPlacements();
+krumo($placements);
 
 $isLocalVendor = ($vendor->getId() == Mage::helper('udropship')->getLocalVendorId());
 ?>
@@ -102,7 +103,7 @@ $isLocalVendor = ($vendor->getId() == Mage::helper('udropship')->getLocalVendorI
                                                                             <?php echo $placement['banner_name']; ?>
                                                                         </span>
                                                                     </h5>
-                                                                    <h5><?php echo $vendorName; ?></h5>
+                                                                    <h5><?php echo $placement['campaign_vendor']; ?></h5>
                                                                 </div>
                                                                 <div class="col-md-4">
                                                                     <a href="#" data-placementid="<?php echo $placement['placement_id']; ?>"
@@ -233,6 +234,7 @@ $isLocalVendor = ($vendor->getId() == Mage::helper('udropship')->getLocalVendorI
                         <span data-val="campaign-status"></span>
                         <span data-val="campaign-date-from"></span>
                         <span data-val="campaign-date-to"></span>
+                        <span data-val="campaign-vendorname"></span>
                     </div>
                 </div>
 
@@ -550,10 +552,10 @@ jQuery(function ($) {
         var dateTo = modal.find('[data-val="campaign-date-to"]').text();
 
         var status = modal.find('[data-val="campaign-status"]').text();
+        var vendorName = modal.find('[data-val="campaign-vendorname"]').text();
 
         //set data
         if (parseInt(banner) > 0) {
-            var vendorName = '<?php echo $vendorName; ?>';
             var dates = '';
             if (dateFrom.length > 0 && dateTo.length > 0) {
                 dates = '<span data-edit-source="campaign_date_from">'+dateFrom
@@ -674,6 +676,7 @@ jQuery(function ($) {
         modal.find('[name=creation_type]').remove();
         modal.find('.alert.alert-warning').remove();
         modal.find('[data-val="campaign-status"]').html('');
+        modal.find('[data-val="campaign-vendorname"]').html('');
         $('[data-targ="add"]').remove();
 
     }
@@ -758,6 +761,8 @@ jQuery(function ($) {
                     $("#basicModal").find('[data-val="campaign-date-to"]').html(data.date_to);
 
                     $("#basicModal").find('[data-val="campaign-status"]').html(data.status.icon);
+
+                    $("#basicModal").find('[data-val="campaign-vendorname"]').html(data.campaign_vendor);
                 }
             })
         }
