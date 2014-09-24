@@ -8,7 +8,7 @@
 	    float:left;
 	    margin-right:20px;
 	    display:block;
-        @media (max-width: $screen-md-max) {
+        @media (max-width: $screen-sm-max) {
             display: none;
         }
    	}	
@@ -17,7 +17,7 @@
 .sidebar-first {
   #content-main {
     margin-left: 205px;
-    @media (max-width: $screen-md-max) {
+    @media (max-width: $screen-sm-max) {
       margin-left: 0;
     }
   }

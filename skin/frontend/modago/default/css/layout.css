@@ -647,7 +647,7 @@ section.section h2.title_section i {
   float: left;
   margin-right: 20px;
   display: block; }
-@media (max-width: 1199px) {
+@media (max-width: 991px) {
   /* line 6, ../sass/layout/dimensions/_sidebar.scss */
   .sidebar-first #sidebar {
     display: none; } }
@@ -655,7 +655,7 @@ section.section h2.title_section i {
 /* line 18, ../sass/layout/dimensions/_sidebar.scss */
 .sidebar-first #content-main {
   margin-left: 205px; }
-@media (max-width: 1199px) {
+@media (max-width: 991px) {
   /* line 18, ../sass/layout/dimensions/_sidebar.scss */
   .sidebar-first #content-main {
     margin-left: 0; } }
@@ -5728,7 +5728,13 @@ yx-axis
 @media (max-width: 767px) {
   /* line 9, ../sass/layout/modules/_sales-order-history-empty.scss */
   #account-order-history-empty #back {
-    margin-top: 80px; } }
+    margin-top: 80px;
+    margin-bottom: 30px; } }
+@media (max-width: 767px) {
+  /* line 9, ../sass/layout/modules/_sales-order-history-empty.scss */
+  #account-order-history-empty #back {
+    margin-top: 80px;
+    margin-bottom: 30px; } }
 @media (min-width: 768px) {
   /* line 9, ../sass/layout/modules/_sales-order-history-empty.scss */
   #account-order-history-empty #back {
