@@ -7167,100 +7167,104 @@ i.flag.hit, i.flag.bestseller {
   #logIn .form-horizontal .form-group {
     margin-left: -10px;
     margin-right: -10px; } }
-/* line 58, ../sass/layout/style/_customer-account-login.scss */
+@media (max-width: 991px) {
+  /* line 58, ../sass/layout/style/_customer-account-login.scss */
+  #logIn .form-horizontal span {
+    text-align: left; } }
+/* line 63, ../sass/layout/style/_customer-account-login.scss */
 #logIn .form-list {
   margin: 0px 0px 10px 0px;
   padding: 0px; }
-/* line 61, ../sass/layout/style/_customer-account-login.scss */
+/* line 66, ../sass/layout/style/_customer-account-login.scss */
 #logIn .form-list label {
   margin-bottom: 5px; }
-/* line 64, ../sass/layout/style/_customer-account-login.scss */
+/* line 69, ../sass/layout/style/_customer-account-login.scss */
 #logIn .form-list input[type="text"], #logIn .form-list input[type="email"], #logIn .form-list input[type="password"] {
   height: 29px;
   padding: 0 15px 0 15px; }
-/* line 70, ../sass/layout/style/_customer-account-login.scss */
+/* line 75, ../sass/layout/style/_customer-account-login.scss */
 #logIn .form-list label[for="pass"] {
   position: relative; }
 @media (max-width: 991px) {
-  /* line 70, ../sass/layout/style/_customer-account-login.scss */
+  /* line 75, ../sass/layout/style/_customer-account-login.scss */
   #logIn .form-list label[for="pass"] {
     position: static; } }
-/* line 76, ../sass/layout/style/_customer-account-login.scss */
+/* line 81, ../sass/layout/style/_customer-account-login.scss */
 #logIn .form-list .inner-form-group {
   position: relative;
   width: 100%; }
 @media (min-width: 768px) {
-  /* line 76, ../sass/layout/style/_customer-account-login.scss */
+  /* line 81, ../sass/layout/style/_customer-account-login.scss */
   #logIn .form-list .inner-form-group {
     padding-bottom: 15px; } }
-/* line 84, ../sass/layout/style/_customer-account-login.scss */
+/* line 89, ../sass/layout/style/_customer-account-login.scss */
 #logIn .form-list .forgot-password {
   position: absolute; }
 @media (max-width: 991px) {
-  /* line 84, ../sass/layout/style/_customer-account-login.scss */
+  /* line 89, ../sass/layout/style/_customer-account-login.scss */
   #logIn .form-list .forgot-password {
     top: -20px; } }
-/* line 92, ../sass/layout/style/_customer-account-login.scss */
+/* line 97, ../sass/layout/style/_customer-account-login.scss */
 #logIn .form-list #pass + .forgot-password {
   top: auto;
   bottom: -8px; }
-/* line 97, ../sass/layout/style/_customer-account-login.scss */
+/* line 102, ../sass/layout/style/_customer-account-login.scss */
 #logIn .form-list .form-checkbox {
   margin-left: 5px !important; }
-/* line 99, ../sass/layout/style/_customer-account-login.scss */
+/* line 104, ../sass/layout/style/_customer-account-login.scss */
 #logIn .form-list .form-checkbox .badge {
   margin-left: 4px; }
-/* line 103, ../sass/layout/style/_customer-account-login.scss */
+/* line 108, ../sass/layout/style/_customer-account-login.scss */
 #logIn .form-list .col-sm-offset-3 {
   padding-left: 25px; }
-/* line 107, ../sass/layout/style/_customer-account-login.scss */
+/* line 112, ../sass/layout/style/_customer-account-login.scss */
 #logIn footer {
   padding-top: 19px; }
-/* line 109, ../sass/layout/style/_customer-account-login.scss */
+/* line 114, ../sass/layout/style/_customer-account-login.scss */
 #logIn footer .button {
   margin: 0 9px 0 0; }
 @media (max-width: 767px) {
-  /* line 109, ../sass/layout/style/_customer-account-login.scss */
+  /* line 114, ../sass/layout/style/_customer-account-login.scss */
   #logIn footer .button {
     margin-bottom: 5px; } }
-/* line 122, ../sass/layout/style/_customer-account-login.scss */
+/* line 127, ../sass/layout/style/_customer-account-login.scss */
 #logIn .benefits {
   margin-left: 10px;
   margin-bottom: 10px; }
 @media (min-width: 1200px) {
-  /* line 122, ../sass/layout/style/_customer-account-login.scss */
+  /* line 127, ../sass/layout/style/_customer-account-login.scss */
   #logIn .benefits {
     height: 102px; } }
 @media (min-width: 889px) and (max-width: 991px) {
-  /* line 122, ../sass/layout/style/_customer-account-login.scss */
+  /* line 127, ../sass/layout/style/_customer-account-login.scss */
   #logIn .benefits {
     height: 147px !important; } }
 @media (max-width: 1199px) {
-  /* line 122, ../sass/layout/style/_customer-account-login.scss */
+  /* line 127, ../sass/layout/style/_customer-account-login.scss */
   #logIn .benefits {
     height: 102px; } }
 @media (max-width: 991px) {
-  /* line 122, ../sass/layout/style/_customer-account-login.scss */
+  /* line 127, ../sass/layout/style/_customer-account-login.scss */
   #logIn .benefits {
     height: 161px; } }
 @media (max-width: 767px) {
-  /* line 122, ../sass/layout/style/_customer-account-login.scss */
+  /* line 127, ../sass/layout/style/_customer-account-login.scss */
   #logIn .benefits {
     height: auto; } }
 
-/* line 145, ../sass/layout/style/_customer-account-login.scss */
+/* line 150, ../sass/layout/style/_customer-account-login.scss */
 #logIn .column-block .col-01, #logIn .column-block .col-02 {
   position: relative;
   padding-bottom: 175px; }
 @media (min-width: 768px) and (max-width: 991px) {
-  /* line 145, ../sass/layout/style/_customer-account-login.scss */
+  /* line 150, ../sass/layout/style/_customer-account-login.scss */
   #logIn .column-block .col-01, #logIn .column-block .col-02 {
     padding-bottom: 143px; } }
 @media (max-width: 767px) {
-  /* line 145, ../sass/layout/style/_customer-account-login.scss */
+  /* line 150, ../sass/layout/style/_customer-account-login.scss */
   #logIn .column-block .col-01, #logIn .column-block .col-02 {
     padding-bottom: 146px; } }
-/* line 156, ../sass/layout/style/_customer-account-login.scss */
+/* line 161, ../sass/layout/style/_customer-account-login.scss */
 #logIn .column-block .footer-section {
   position: absolute;
   bottom: 0px;
@@ -7270,14 +7274,14 @@ i.flag.hit, i.flag.bestseller {
   margin: 0 35px;
   padding-bottom: 27px;
   height: 85px; }
-/* line 165, ../sass/layout/style/_customer-account-login.scss */
+/* line 170, ../sass/layout/style/_customer-account-login.scss */
 #logIn .column-block .footer-section .button + .button + .button {
   margin-right: -5px !important; }
 @media (max-width: 340px) {
-  /* line 165, ../sass/layout/style/_customer-account-login.scss */
+  /* line 170, ../sass/layout/style/_customer-account-login.scss */
   #logIn .column-block .footer-section .button + .button + .button {
     margin-right: -18px !important; } }
-/* line 171, ../sass/layout/style/_customer-account-login.scss */
+/* line 176, ../sass/layout/style/_customer-account-login.scss */
 #logIn .column-block .footer-section .button-primary {
   position: relative;
   top: -78px;
@@ -7285,49 +7289,49 @@ i.flag.hit, i.flag.bestseller {
   margin-right: 0px !important;
   min-width: 150px; }
 @media (min-width: 768px) and (max-width: 991px) {
-  /* line 171, ../sass/layout/style/_customer-account-login.scss */
+  /* line 176, ../sass/layout/style/_customer-account-login.scss */
   #logIn .column-block .footer-section .button-primary {
     top: -78px;
     margin-bottom: -78px !important; } }
 @media (max-width: 767px) {
-  /* line 171, ../sass/layout/style/_customer-account-login.scss */
+  /* line 176, ../sass/layout/style/_customer-account-login.scss */
   #logIn .column-block .footer-section .button-primary {
     top: -78px;
     margin-bottom: -78px !important; } }
 @media (max-width: 340px) {
-  /* line 186, ../sass/layout/style/_customer-account-login.scss */
+  /* line 191, ../sass/layout/style/_customer-account-login.scss */
   #logIn .column-block .footer-section .g-plus {
     margin-left: -10px !important; } }
 @media (max-width: 340px) {
-  /* line 191, ../sass/layout/style/_customer-account-login.scss */
+  /* line 196, ../sass/layout/style/_customer-account-login.scss */
   #logIn .column-block .footer-section .fb {
     margin-right: -18px !important; } }
-/* line 197, ../sass/layout/style/_customer-account-login.scss */
+/* line 202, ../sass/layout/style/_customer-account-login.scss */
 #logIn .column-block .col-01 {
   margin-bottom: 30px; }
 @media (max-width: 767px) {
-  /* line 200, ../sass/layout/style/_customer-account-login.scss */
+  /* line 205, ../sass/layout/style/_customer-account-login.scss */
   #logIn .column-block .col-02 {
     padding-bottom: 83px !important;
     margin-bottom: 5px; } }
-/* line 206, ../sass/layout/style/_customer-account-login.scss */
+/* line 211, ../sass/layout/style/_customer-account-login.scss */
 #logIn .column-block .col-02 .footer-section {
   border: none !important; }
 @media (max-width: 767px) {
-  /* line 206, ../sass/layout/style/_customer-account-login.scss */
+  /* line 211, ../sass/layout/style/_customer-account-login.scss */
   #logIn .column-block .col-02 .footer-section {
     height: auto;
     padding-bottom: 30px;
     overflow: hidden; } }
-/* line 214, ../sass/layout/style/_customer-account-login.scss */
+/* line 219, ../sass/layout/style/_customer-account-login.scss */
 #logIn .column-block .col-02 .footer-section .button-primary {
   top: -80px; }
 @media (min-width: 768px) and (max-width: 991px) {
-  /* line 214, ../sass/layout/style/_customer-account-login.scss */
+  /* line 219, ../sass/layout/style/_customer-account-login.scss */
   #logIn .column-block .col-02 .footer-section .button-primary {
     top: -80px; } }
 @media (max-width: 767px) {
-  /* line 214, ../sass/layout/style/_customer-account-login.scss */
+  /* line 219, ../sass/layout/style/_customer-account-login.scss */
   #logIn .column-block .col-02 .footer-section .button-primary {
     position: static;
     margin-bottom: 0px !important; } }
