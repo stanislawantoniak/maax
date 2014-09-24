@@ -1,207 +1,83 @@
+<?php /* @var $this Zolago_Modago_Block_Checkout_Onepage_Logged_Addressbook */ ?>
+<?php $formKey = Mage::getSingleton('core/session')->getFormKey(); ?>
 
-<div class="sidebar-secound col-lg-3 col-md-4 col-sm-12 col-xs-12 col-lg-push-9 col-md-push-8">
-	<section class="p main bg-w hidden-sm hidden-xs">
-		<header>
-			<h2 class="open">Blok CMS</h2>
-		</header>
-		<div class="clearfix border-top">
-			<ul>
-				<li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
-				<li>Pellentesque ultrices lectus ut felis tempor, eget rutrum nulla sodales.</li>
-				<li>Nullam vel nunc eu enim hendrerit hendrerit eget non leo.</li>
-				<li>Quisque sit amet diam elementum, aliquet risus non, dignissim tortor.</li>
-			</ul>
-			<figure>
-				<img src="skin/frontend/modago/default/images/home_main_callout.jpg" alt="">
-			</figure>
-		</div>
-		<div class="clearfix border-top">
-			<ol>
-				<li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
-				<li>Pellentesque oltrices lectus ut felis tempor, eget rutrum nulla sodales.</li>
-				<li>Nullam vel nunc eu enim hendrerit hendrerit eget non leo.</li>
-				<li>Quisque sit amet diam elementum, aliquet risus non, dignissim tortor.</li>
-
-			</ol></div>
-		<div class="clearfix border-top">
-			<dl>
-				<dt>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</dt>
-				<dd class="separator">Pellentesque ultrices lectus ut fedds tempor, eget rutrum nulla sodales.</dd>
-				<dd>Nullam vel nunc eu enim hendrerit hendrerit eget non leo.</dd>
-				<dd class="separator">Quisque sit amet diam elementum, addquet risus non, dignissim tortor.</dd>
-			</dl>
-		</div>
-	</section>
-</div>
+<?php echo $this->getStep1Sidebar(); ?>
+<input type="hidden" name="shipping[country_id]" id="country_id" value="<?php echo $this->getStoreDefaultCountryId();?>">
 
 <div id="content-main" class="col-lg-9 col-md-8 col-sm-12 col-xs-12 col-lg-pull-3 col-md-pull-4 section">
 	<section class="main bg-w">
 		<header class="title-section">
-			<h2>Potwierdź dane do wysyłki</h2>
+			<h2><?php echo $this->__("Confirm shipping data")?></h2>
 		</header>
-
-
-		<form action="" class="form">
-			<h4>Adres dostawy:</h4>
+		
+		<!-- selected address tmplate -->
+		<div class="hidden" id="selected-address-template">
+			<p class="pull-right default_delivery small-no-float">{{selected_caption}}</p>
+			<dl class="pull-left" >
+				<dt>{{firstname}} {{lastname}}</dt>
+				<dd>{{street}}</dd>
+				<dd>{{postcode}} {{city}}</dd>
+				<dd class="separator phone"><?php echo $this->__("Contact phone")?>: <span>{{telephone}}</span></dd>
+				<dd class="action separator">
+					<a href="#" class="underline edit"><?php echo $this->__("edit");?></a> 
+					<span class="set-default">
+						<a href="#" class="underline" style="margin-right: 0px;"><?php echo $this->__("set as default");?></a>
+						<span style="color: #5A5A5A;">(<?php echo $this->__("the address will be auto selected in future");?>)</span>
+					</span>
+					
+				</dd>
+			</dl>
+		</div>
+		
+		<!-- normal address tmplate -->
+		<div class="panel panel-default hidden" id="normal-address-template">
 			<div class="panel panel-default">
 				<div class="panel-body">
-					<div class="current-addres clearfix">
-						<p class="pull-right default_delivery small-no-float">DOMYŚLNY ADRES DOSTAWY</p>
-						<dl class="pull-left">
-							<dt>Jan Kowalski</dt>
-							<dd>ul. Nowakowa 1a/3</dd>
-							<dd>03-221 Warszawa</dd>
-							<dd class="separator phone">Telefon kontaktowy: <span>+48 58 666 66 66</span></dd>
-						</dl>
-
-					</div>
-					<!-- PANEL -->
-					<div class="panel panel-default ">
-						<div class="panel-body">
-							<dl class="pull-left small-no-float">
-								<dt>Jan Kowalski</dt>
-								<dd>ul. Nowakowa 1a/3</dd>
-								<dd>03-221 Warszawa</dd>
-								<dd class="action separator"><a href="#" class="underline">edytuj</a> <a href="#" class="underline">usuń</a> <a href="#" class="underline">ustaw jako domyślny</a></dd>
-							</dl> 
-							<button class="btn-select button button-third large">Wybierz</button>
-						</div>
-					</div>
-					<!-- END PANEL -->
-					<!-- PANEL -->
-					<div class="panel panel-default ">
-						<div class="panel-body">
-							<dl class="pull-left small-no-float">
-								<dt>Fajna Firma Sp. z.o.o.</dt>
-								<dt>Nip: 321 321 321</dt>
-								<dt>Jan Nowak</dt>
-								<dd>ul. Nowakowa 1a/3</dd>
-								<dd>03-221 Warszawa</dd>
-								<dd class="action separator"><a href="#" class="underline">edytuj</a> <a href="#" class="underline">usuń</a> <a href="#" class="underline">ustaw jako domyślny</a></dd>
-							</dl> 
-							<button class="btn-select button button-third large">Wybierz</button>
-						</div>
-					</div>
-					<!-- END PANEL -->
-					<!-- PANEL -->
-					<div class="panel panel-default ">
-						<div class="panel-body">
-							<dl class="pull-left small-no-float">
-								<dt>Jan Kowalski</dt>
-								<dd>ul. Nowakowa 1a/3</dd>
-								<dd>03-221 Warszawa</dd>
-								<dd class="action separator"><a href="#" class="underline">edytuj</a> <a href="#" class="underline">usuń</a> <a href="#" class="underline">ustaw jako domyślny</a></dd>
-							</dl> 
-							<button class="btn-select button button-third large">Wybierz</button>
-						</div>
-					</div>
-					<!-- END PANEL -->
-					<!-- PANEL -->
-					<div class="panel panel-default current  ">
-						<div class="panel-body">
-
-							<dl class="pull-left small-no-float">
-								<dt>Jan Kowalski</dt>
-								<dd>ul. Nowakowa 1a/3</dd>
-								<dd>03-221 Warszawa</dd>
-								<dd class="action separator"><a href="#" class="underline">edytuj</a> <a href="#" class="underline">usuń</a></dd>
-							</dl> 
-							<p class="staining_delivery_address">Wybrany adres dostawy</p>
-						</div>
-					</div>
-					<!-- END PANEL -->
-					<!-- PANEL -->
-					<div class="panel panel-default  ">
-						<div class="panel-body">
-							<h4><strong>INNY ADRES DOSTAWY:</strong></h4>
-							<div class="form-group clearfix">
-								<div class="row">
-									<label class="col-sm-3" for="for_first_name">Imię i Nazwisko</label>
-									<div class="col-sm-9">
-										<div class="row">
-											<div class="col-lg-6 col-xs-6 form-group "><input type="text" class="form-control firstName hint" id="for_first_name" title="" data-original-title="Wprowadź imię"></div>
-											<div class="col-lg-6 col-xs-6 form-group "><input type="text" class="form-control lastName hint" id="for_last_name" title="" data-original-title="Wprowadź nazwisko"></div>
-										</div>
-
-									</div>        
-								</div>
-							</div>
-
-							<div class="form-group clearfix border-top">
-								<div class="row">
-									<label class="col-sm-3 double-line" for="firm_name">Nazwa firmy<br>(opcjonalnie)</label>
-									<div class="col-sm-9">
-
-										<input type="text" class="form-control firm hint" id="firm_name" data-original-title="" title="">
-
-									</div>
-								</div>
-							</div>
-
-							<div class="form-group clearfix border-top">
-								<div class="row">
-									<label class="col-sm-3 double-line" for="nip">NIP<br>(opcjonalnie)</label>
-									<div class="col-sm-9">
-
-										<input type="tel" class="form-control nip hint" id="nip">
-
-									</div>
-								</div>
-							</div>
-
-							<div class="form-group clearfix border-top">
-								<div class="row">
-									<label class="col-sm-3" for="street">Ulica i Numer</label>
-									<div class="col-sm-9">
-
-										<input type="text" class="form-control street hint" id="street" data-original-title="" title="">
-
-									</div>
-								</div>
-							</div>
-
-							<div class="form-group clearfix border-top">
-								<div class="row">
-									<label class="col-sm-3" for="zip_code">Kod pocztowy</label>
-									<div class="col-sm-9">
-
-										<input type="tel" class="form-control zipcode hint" id="zip_code" maxlength="6">
-
-									</div>
-								</div>
-							</div>
-
-							<div class="form-group clearfix border-top">
-								<div class="row">
-									<label class="col-sm-3" for="city">Miejscowość</label>
-									<div class="col-sm-9">
-
-										<input type="text" class="form-control city hint" id="city" data-original-title="" title="">
-
-									</div>
-								</div>
-							</div>
-
-							<div class="form-group clearfix border-top">
-								<div class="row">
-									<label class="col-sm-3" for="phone_number">Numer telefonu</label>
-									<div class="col-sm-9">
-
-										<input type="text" class="form-control phone hint" id="phone_number" title="" data-original-title="Numer telefonu potrzebujemy tylko do kontaktu dotyczącego zamówienia np. dla kuriera dostarczającego przesyłkę.">
-
-									</div>
-								</div>
-							</div>
-							<div class="form-group clearfix"><button class="button button-third large pull-right">Wybierz</button></div>
-
-						</div>
-					</div>
-					<!-- END PANEL -->
+					<dl class="pull-left small-no-float">
+						<dt>{{firstname}} {{lastname}}</dt>
+						<dd>{{street}}</dd>
+						<dd>{{postcode}} {{city}}</dd>
+						<dd class="action separator">
+							<a href="#" class="underline edit"><?php echo $this->__("edit");?></a> 
+							<a href="#" class="underline remove"><?php echo $this->__("remove");?></a> 
+							<a href="#" class="underline set-default"><?php echo $this->__("set as default");?></a>
+						</dd>
+					</dl> 
+					<button class="btn-select button button-third large choose"><?php echo $this->__("Choose")?></button>
 				</div>
-				<div class="panel-footer clearfix"><a href="#" class="underline pull-right change_address">zmień adres</a></div>
+			</div>
+		</div>
+
+		<!-- add new template -->
+        <div class="panel add-new hidden" id="addressbook-add-new-template" data-toggle="modal" data-target="#addressbook-modal">
+            <div class="panel-body">
+                <h4 class="addressbook-add-new"><i class="fa fa-plus-circle fa-lg"></i>&nbsp;<strong><?php echo $this->__("ADD NEW ADDRESS"); ?></strong></h4>
+                <div class="panel-body-content">
+
+                </div>
+            </div>
+        </div>
+		
+		<form action="<?php echo $this->getSaveUrl();?>" class="form">
+			<input type="hidden" name="form_key" value="<?php echo $formKey; ?>">
+			<h4><?php echo $this->__("Shipping address")?>:</h4>
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<div class="current-address current-addres clearfix shipping">
+						<!-- content from js -->
+					</div>
+					<div class="panel-adresses shipping">
+						<!-- content from js -->
+					</div>
+				</div>
+				<div class="panel-footer clearfix">
+					<a href="#" class="underline pull-right change_address shipping">
+						<?php echo $this->__("Change address");?>
+					</a>
+				</div>
 			</div>
 			<div id="invoice" class="form-group form-checkbox small">
-				<input type="checkbox" name="rodzaj" id="invoice_this" class="css-checkbox ">
+				<input type="checkbox" name="rodzaj" id="invoice_this" class="css-checkbox need_invoice">
 				<label for="invoice_this" class="css-label invoice_this">Chcę otrzymać fakturę VAT </label>
 			</div>
 
@@ -211,173 +87,47 @@
 				<h4>Dane do faktury:</h4>
 				<div class="panel panel-default">
 					<div class="panel-body">
-						<div class="current-addres clearfix">
-							<p class="pull-right default_delivery small-no-float">DOMYŚLNY DANE DO FAKTURY</p>
-							<dl class="pull-left small-no-float">
-								<dt>Jan Kowalski</dt>
-								<dd>ul. Nowakowa 1a/3</dd>
-								<dd>03-221 Warszawa</dd>
-								<dd class="separator phone">Telefon kontaktowy: <span>+48 58 666 66 66</span></dd>
-							</dl>
-
+						<div class="current-address current-addres billing clearfix">
+							<!-- content from js -->
 						</div>
-						<!-- PANEL -->
-						<div class="panel panel-default">
-							<div class="panel-body">
-								<dl class="pull-left small-no-float">
-									<dt>Jan Kowalski</dt>
-									<dd>ul. Nowakowa 1a/3</dd>
-									<dd>03-221 Warszawa</dd>
-									<dd class="action separator"><a href="#" class="underline">edytuj</a> <a href="#" class="underline">usuń</a> <a href="#" class="underline">ustaw jako domyślny</a></dd>
-								</dl> 
-								<button class="btn-select button button-third large">Wybierz</button>
-							</div>
-						</div>
-						<!-- END PANEL -->
-						<!-- PANEL -->
-						<div class="panel panel-default">
-							<div class="panel-body">
-								<dl class="pull-left small-no-float">
-									<dt>Fajna Firma Sp. z.o.o.</dt>
-									<dt>Nip: 321 321 321</dt>
-									<dt>Jan Nowak</dt>
-									<dd>ul. Nowakowa 1a/3</dd>
-									<dd>03-221 Warszawa</dd>
-									<dd class="action separator"><a href="#" class="underline">edytuj</a> <a href="#" class="underline">usuń</a> <a href="#" class="underline">ustaw jako domyślny</a></dd>
-								</dl> 
-								<button class="btn-select button button-third large">Wybierz</button>
-							</div>
-						</div>
-						<!-- END PANEL -->
-						<!-- PANEL -->
-						<div class="panel panel-default">
-							<div class="panel-body">
-								<dl class="pull-left small-no-float">
-									<dt>Jan Kowalski</dt>
-									<dd>ul. Nowakowa 1a/3</dd>
-									<dd>03-221 Warszawa</dd>
-									<dd class="action separator"><a href="#" class="underline">edytuj</a> <a href="#" class="underline">usuń</a> <a href="#" class="underline">ustaw jako domyślny</a></dd>
-								</dl> 
-								<button class="btn-select button button-third large">Wybierz</button>
-							</div>
-						</div>
-						<!-- END PANEL -->
-						<!-- PANEL -->
-						<div class="panel panel-default current">
-							<div class="panel-body"> 
-								<dl class="pull-left small-no-float">
-									<dt>Jan Kowalski</dt>
-									<dd>ul. Nowakowa 1a/3</dd>
-									<dd>03-221 Warszawa</dd>
-									<dd class="action separator"><a href="#" class="underline">edytuj</a> <a href="#" class="underline">usuń</a></dd>
-								</dl> 
-								<p class="staining_delivery_address">Wybrane DANE DO FAKTURY</p>
-							</div>
-						</div>
-						<!-- END PANEL -->
-						<!-- PANEL -->
-						<div class="panel panel-default">
-							<div class="panel-body">
-								<h4><strong>INNY ADRES DO FAKTURY:</strong></h4>
-								<div class="form-group clearfix">
-									<div class="row">
-										<label class="col-sm-3" for="invoice_data_for_first_name">Imię i Nazwisko</label>
-										<div class="col-sm-9">
-											<div class="row">
-
-												<div class="col-lg-6 col-xs-6 form-group "><input type="text" class="form-control firstName hint" id="invoice_data_for_first_name" data-original-title="" title=""></div>
-												<div class="col-lg-6 col-xs-6 form-group "><input type="text" class="form-control lastName hint" id="invoice_data_for_last_name" data-original-title="" title=""></div>
-
-											</div>
-
-										</div>        
-									</div>
-								</div>
-
-								<div class="form-group clearfix border-top">
-									<div class="row">
-										<label class="col-sm-3 double-line" for="firm_name">Nazwa firmy<br>(opcjonalnie)</label>
-										<div class="col-sm-9">
-
-											<input type="text" class="form-control firm hint" id="firm_name" data-original-title="" title="">
-
-										</div>
-									</div>
-								</div>
-
-								<div class="form-group clearfix border-top">
-									<div class="row">
-										<label class="col-sm-3 double-line" for="nip">NIP<br>(opcjonalnie)</label>
-										<div class="col-sm-9">
-
-											<input type="tel" class="form-control nip hint" id="nip">
-
-										</div>
-									</div>
-								</div>
-
-								<div class="form-group clearfix border-top">
-									<div class="row">
-										<label class="col-sm-3" for="street">Ulica i Numer</label>
-										<div class="col-sm-9">
-
-											<input type="text" class="form-control street hint" id="street" data-original-title="" title="">
-
-										</div>
-									</div>
-								</div>
-
-								<div class="form-group clearfix border-top">
-									<div class="row">
-										<label class="col-sm-3" for="vat_zip_code">Kod pocztowy</label>
-										<div class="col-sm-9">
-
-											<input type="tel" class="form-control zipcode hint" id="vat_zip_code" maxlength="6">
-
-										</div>
-									</div>
-								</div>
-
-								<div class="form-group clearfix border-top">
-									<div class="row">
-										<label class="col-sm-3" for="city">Miejscowość</label>
-										<div class="col-sm-9">
-
-											<input type="text" class="form-control city hint" id="city" data-original-title="" title="">
-
-										</div>
-									</div>
-								</div>
-
-								<div class="form-group clearfix border-top">
-									<div class="row">
-										<label class="col-sm-3" for="phone_number">Numer telefonu</label>
-										<div class="col-sm-9">
-
-											<input type="text" class="form-control phone hint" id="phone_number" title="" data-original-title="Numer telefonu potrzebujemy tylko do kontaktu dotyczącego zamówienia np. dla kuriera dostarczającego przesyłkę">
-
-										</div>
-									</div>
-								</div>
-								<div class="form-group clearfix"><button class="button button-third large pull-right">Wybierz</button></div>
-
-							</div>
+						<div class="panel-adresses billing">
+							<!-- content from js -->
 						</div>
 						<!-- END PANEL -->
 					</div>
-					<div class="panel-footer clearfix"><a href="#" class="underline pull-right change_address">zmień adres</a></div>
+					<div class="panel-footer clearfix">
+						<a href="#" class="underline pull-right change_address billing">
+							<?php echo $this->__("Change address");?>
+						</a>
+					</div>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-sm-6">
-					<a id="back" class="button button-third large pull-left">Wróć</a>
+					<a id="back" href="<?php echo $this->getPreviousStepUrl(); ?>" class="button button-third large pull-left"><?php echo $this->__("Back"); ?></a>
 				</div>
 				<div class="col-sm-6">
-					<button class="button button-primary large link pull-right">Dalej</button>
+					<button class="button button-primary large link pull-right"><?php echo $this->__("Next"); ?></button>
 				</div>
 			</div>
 
 		</form>  
 	</section>
 
-</div>     
+</div>
+
+
+<div class="modal fade bs-example-modal-lg" id="addressbook-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="overflow-y: scroll !important">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"></button>
+                <h2 class="title_section" id="modal-title"></h2>
+            </div>
+            <div class="modal-body" id="modal-body">
+
+
+            </div>
+        </div>
+    </div>
+</div>

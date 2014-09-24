@@ -1,12 +1,12 @@
 <?php
 
-include_once '../app/Mage.php';
+include_once 'app/Mage.php';
 
 Mage::app();
 
  
 
-$updates_file="/var/www/modago/dev/01/var/import/sku2sku.csv";
+$updates_file="/var/www/modago/var/import/sku2sku.csv";
 
  
 

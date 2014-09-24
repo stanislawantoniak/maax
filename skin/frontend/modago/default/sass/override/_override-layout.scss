@@ -362,9 +362,11 @@
     .size {
         .form-group {
             input[type="radio"] {
-                margin-left: 30%;
-                margin-top: 30%;
+                margin-left: 0;
+                margin-top: 0;
                 float: left;
+                outline: none !important;
+                visibility: hidden;
             }
         }
     }

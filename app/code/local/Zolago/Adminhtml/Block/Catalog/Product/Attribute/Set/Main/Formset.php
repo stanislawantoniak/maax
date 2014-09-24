@@ -77,6 +77,22 @@ Mage::log($data->getData());
             )
         );
 
+        $fieldset = $form->addFieldset(
+            'set_use_sizebox_list', array('legend' => Mage::helper('catalog')->__('Set use sizebox list'))
+        );
+        $fieldset->addField(
+            'attribute_set_use_sizebox_list', 'select',
+            array(
+                'label'    => Mage::helper('catalog')->__('Set use sizebox list'),
+                'name'     => 'attribute_set_use_sizebox_list',
+                'required' => true,
+                'class'    => 'required-entry',
+                'values'   => array(0 => Mage::helper('catalog')->__('No'), 1 => Mage::helper('catalog')->__('Yes')),
+                'value'    => $data->getUseSizeboxList()
+            )
+        );
+
+
         if( !$this->getRequest()->getParam('id', false) ) {
             $fieldset->addField('gotoEdit', 'hidden', array(
                 'name' => 'gotoEdit',

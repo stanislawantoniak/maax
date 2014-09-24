@@ -430,3 +430,17 @@
 		font-size: 14px;
 	}
 }
+
+.no-size {
+    overflow: hidden;
+    span {
+        position: relative;
+        .diagonal {
+            position: absolute;
+            display: block;
+            top: 0;
+            left: 0px;
+            overflow: hidden;
+        }
+    }
+}

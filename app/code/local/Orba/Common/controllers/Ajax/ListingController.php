@@ -85,6 +85,7 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 			/* @var $product Zolago_Solrsearch_Model_Catalog_Product */
 			$_product = $product->getData();
 			$_product['listing_resized_image_url'] = (string)$product->getListingResizedImageUrl();
+			$_product['listing_resized_image_info'] = $product->getListingResizedImageInfo();
 			$_product['udropship_vendor_logo_url'] = (string)$product->getUdropshipVendorLogoUrl();
 			$_product['manufacturer_logo_url'] = (string)$product->getManufacturerLogoUrl();
 			$_product['is_discounted'] = (int)$product->isDiscounted();

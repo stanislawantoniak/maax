@@ -124,6 +124,18 @@
         }
       }
     }
+.filter-icon {
+      label {
+          span.filter-icon-image {
+            display:inline-block;
+            width:27px;
+            height:27px;
+			border:1px solid #afafaf;
+          }
+          
+        }
+    }
+
 .filter-color {
       [type="checkbox"] {
         margin:3px 0 0 3px;
