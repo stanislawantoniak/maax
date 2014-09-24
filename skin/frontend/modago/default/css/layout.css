@@ -5696,6 +5696,13 @@ yx-axis
     padding-right: 0px;
     padding-left: 0px; } }
 
+/* line 2, ../sass/layout/modules/_account_navigation.scss */
+.account-nav li {
+  padding-bottom: 10px; }
+/* line 5, ../sass/layout/modules/_account_navigation.scss */
+.account-nav .active {
+  font-weight: bold; }
+
 /* line 1, ../sass/layout/override/_global.scss */
 .clr {
   clear: both; }
