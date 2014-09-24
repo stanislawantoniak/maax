@@ -401,9 +401,12 @@ jQuery(function ($) {
             success: function(id){
                 $('[data-current="1"]').find('input[name="placement_id[]"]').val(id);
                 $('[data-current="1"]').data("current",0);
+
+                savePresentation();
             }
 
         })
+
     }
 
     function savePresentation() {
