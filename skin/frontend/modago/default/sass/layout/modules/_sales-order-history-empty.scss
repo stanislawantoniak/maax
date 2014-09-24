@@ -1,0 +1,19 @@
+#account-order-history-empty{
+  padding: 30px;
+  .row {
+    margin: 0;
+    @media (min-width: $screen-sm-min) {
+      position: relative;
+    }
+  }
+  #back {
+    @media (max-width: $screen-xs-max) {
+      margin-top: 80px;
+    }
+    @media (min-width: $screen-sm-min) {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+    }
+  }
+}
