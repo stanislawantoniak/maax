@@ -4246,6 +4246,11 @@ i.flag.hit, i.flag.bestseller {
   .my-account .data-table .status {
     display: none; } }
 
+@media (max-width: 1199px) {
+  /* line 124, ../sass/design/style/_customer-account-registered.scss */
+  .my-account .data-table .total {
+    display: none; } }
+
 /* line 1, ../sass/design/style/_shopping-cart.scss */
 .tableWrapper {
   border-top: 1px solid #d9d9d9; }
