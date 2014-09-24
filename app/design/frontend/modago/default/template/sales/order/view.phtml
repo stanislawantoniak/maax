@@ -1,8 +1,7 @@
-<?php /* @var $this Zolago_Modago_Block_Checkout_Onepage_Shared_Review */ ?>
-
-<?php echo $this->getStep3Sidebar(); ?>
+<?php /* @var $this Zolago_Modago_Block_Sales_Order_View */ ?>
 <?php $_items = $this->getItems(); ?>
-<?php $this->preparePresentation(); ?>
+<?php $cost = $this->getItemsShippingCost(); ?>
+<?php $total_shipping = array_sum($cost); ?>
 <div class="checkout-shared-review">
 <div class="col-lg-9 col-md-8 col-sm-12 col-xs-12 col-lg-pull-3 col-md-pull-4 section " id="content-main">
 	<section class="main bg-w">
@@ -14,6 +13,7 @@
                             <?php echo $this->getItemHtml($_item); ?>
 							<?php $total +=  $_item->getData('row_total_incl_tax'); ?>
                         <?php endforeach; ?>
+
 
 		<div class="panel panel-default panel-color">
             <div class="panel-body">
@@ -27,13 +27,13 @@
 					</div>
 		            <div class="table-cell cell-03 label_value td">
 						<div><?php echo $this->__('Summary value');?>:</div>
-						<div><?php echo $this->__('Shipping cos');?>:</div>
+						<div><?php echo $this->__('Shipping cost');?>:</div>
 						<div><span style="font-family:latoblack"><?php echo $this->__('To pay');?>:</span></div>
 					</div>
 		            <div class="table-cell cell-04 label_value td">
 						<div><?php echo Mage::helper('core')->formatPrice($total);?></div>
-						<div><span id="total_shipping"></span></div>
-						<div><span id="total_value"></span></div>
+						<div><?php echo Mage::helper('core')->formatPrice($total_shipping);?></div>
+						<div><?php echo Mage::helper('core')->formatPrice($total+$total_shipping);?></div>
 					</div>
 		            <div class="table-cell cell-05 td"></div>
 				</div>

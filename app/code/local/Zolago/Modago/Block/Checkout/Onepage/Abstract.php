@@ -2,8 +2,8 @@
 /**
  * Abstract for all steps
  */
-abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract 
-	extends Mage_Checkout_Block_Onepage_Abstract
+abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract
+    extends Mage_Checkout_Block_Onepage_Abstract
 {
 	/**
 	 * @param mixed $data
@@ -36,19 +36,21 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract
 		return Mage::helper("core")->jsonEncode($addresses);
 	}
 	
-	/**
-	 * @return type
-	 */
-	public function getStoreDefaultCountryId() {
-		return "PL";//Mage::app()->getStore()->getConfig("general/country/default");
-	}
-	
-	/**
-	 * @return string
-	 */
-	public function getPlaceUrl() {
-		return $this->getUrl("*/*/saveOrder");
-	}
+
+    /**
+     * @return type
+     */
+    public function getStoreDefaultCountryId() {
+        return "PL";
+        Mage::app()->getStore()->getConfig("general/country/default");
+    }
+
+    /**
+     * @return string
+     */
+    public function getPlaceUrl() {
+        return $this->getUrl("*/*/saveOrder");
+    }
     /**
      * Shipping cost by vendor
      * [[vendor_1] => cost_1, [vendor_2] => cost_2]
@@ -74,7 +76,7 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract
     /**
      * @return mixed
      */
-    public function getRates(){
+    public function getRates() {
         $q = Mage::getSingleton('checkout/session')->getQuote();
         $a = $q->getShippingAddress();
 
@@ -82,7 +84,7 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract
         /**
          * Fix rate quto query
          */
-        if(!$qRates){
+        if(!$qRates) {
             $a->setCountryId(Mage::app()->getStore()->getConfig("general/country/default"));
             $a->setCollectShippingRates(true);
             $a->collectShippingRates();
@@ -91,6 +93,4 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract
 
         return $qRates;
     }
-
-	
-} 
+}
