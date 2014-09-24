@@ -144,6 +144,7 @@ $isLocalVendor = ($vendor->getId() == Mage::helper('udropship')->getLocalVendorI
                                                                 <span data-edit-source="campaign_date_from">
                                                                     <?php echo $placement['campaign_date_from']; ?>
                                                                 </span>
+                                                                <input type="hidden" name="show_edit_link" value="<?php echo (int)$placement['show_edit_link']; ?>" />
                                                                 <span data-edit-source="campaign_date_dash">
                                                                     <?php if (!empty($placement['campaign_date_from']) && !empty($placement['campaign_date_to'])): ?>-<?php endif; ?>
                                                                 </span>
@@ -178,14 +179,14 @@ $isLocalVendor = ($vendor->getId() == Mage::helper('udropship')->getLocalVendorI
         <div class="modal-content">
             <div class="modal-header">
                 <a href="#" data-dismiss="modal" aria-hidden="true" class="close">×</a>
-                <h3>Are you sure</h3>
+                <h3><?php echo $_helper->__('Are you sure'); ?></h3>
             </div>
             <div class="modal-body">
-                <p>Do you want to delete placement?</p>
+                <p><?php echo $_helper->__('Do you want to delete placement?'); ?></p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <a href="" class="btn btn-danger danger" id="delete-placement">Delete</a>
+                <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $this->__("Cancel"); ?></button>
+                <a href="" class="btn btn-danger danger" id="delete-placement"><?php echo $this->__("Delete"); ?></a>
             </div>
         </div>
     </div>
@@ -631,6 +632,8 @@ jQuery(function ($) {
         var campaignDateDash = nameSpace.find('[data-edit-source="campaign_date_dash"]').text();
         var campaignDateTo = nameSpace.find('[data-edit-source="campaign_date_to"]').text();
 
+        var campaignShowEditLink = nameSpace.find('[name="show_edit_link"]').val();
+
         var status = nameSpace.find('[data-edit-source="campaign_status"]').html();
 
         var placementId = nameSpace.find('[name="placement_id[]"]').val();
@@ -649,6 +652,9 @@ jQuery(function ($) {
 
         modal.find('[name=priority]').val(priority);
 
+        if(campaignShowEditLink == 0){
+            modal.find('[data-edit-val="link-delete"]').hide();
+        }
 
         modal.find('[data-edit-val="link-edit"]').attr("href", "/campaign/vendor/edit/id/" + campaign);
 
@@ -681,7 +687,9 @@ jQuery(function ($) {
         modal.find('.alert.alert-warning').remove();
         modal.find('[data-val="campaign-status"]').html('');
         modal.find('[data-val="campaign-vendorname"]').html('');
+        modal.find('[name="show_edit_link"]').val(0);
         $('[data-targ="add"]').remove();
+        modal.find('[data-edit-val="link-delete"]').show();
 
     }
 
@@ -691,7 +699,9 @@ jQuery(function ($) {
         modal.find('[data-edit-val="banner_name"]').html('');
         modal.find('[data-edit-val="dates"]').html('');
         modal.find('img.image-preview-big').attr("src",'');
+        modal.find('[name="show_edit_link"]').val(0);
         $('[data-targ="add"]').remove();
+        modal.find('[data-edit-val="link-delete"]').show();
 
     }
 
