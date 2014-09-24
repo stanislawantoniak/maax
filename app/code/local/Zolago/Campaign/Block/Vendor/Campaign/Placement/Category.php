@@ -93,7 +93,10 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement_Category extends Mage_Core
             $bannersConfiguration = Mage::helper('zolagobanner')->getBannersConfiguration();
 
             foreach ($placements as $placement) {
+                $placement['campaign_vendor_id'] = $placement['campaign_vendor'];
+                $placement['show_edit_link'] = ($placement['campaign_vendor'] == $vendorId);
                 $placement['campaign_vendor'] = $vendorsList[$placement['campaign_vendor']];
+
 
                 $dateFrom = $placement['campaign_date_from'];
                 $dateTo = $placement['campaign_date_to'];

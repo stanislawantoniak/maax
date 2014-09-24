@@ -4,6 +4,9 @@
         <Zolago_Sales>
             <active>true</active>
             <codePool>local</codePool>
+			<depends>
+				<Unirgy_Rma/>
+			</depends>
         </Zolago_Sales>
     </modules>
 </config>
