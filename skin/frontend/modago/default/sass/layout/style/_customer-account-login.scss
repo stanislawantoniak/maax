@@ -54,6 +54,11 @@
 			}
 			
 		}
+        @media (max-width: $screen-sm-max) {
+            span {
+              text-align: left;
+            }
+        }
 	}
 	.form-list {
 		margin:0px 0px 10px 0px;
