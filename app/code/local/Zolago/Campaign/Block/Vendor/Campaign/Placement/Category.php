@@ -16,6 +16,9 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement_Category extends Mage_Core
         return Mage::getSingleton('udropship/session');
     }
 
+
+
+
     public function getCampaigns(){
         $vendor = Mage::getSingleton('udropship/session')->getVendor();
         $vendorId = $vendor->getId();
@@ -40,12 +43,7 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement_Category extends Mage_Core
                     'date_to' => !empty($campaign['date_to']) ? date("d.m.Y H:i:s",strtotime($campaign['date_to'])) : ''
                 );
             }
-            $vendorModel = Mage::getModel('udropship/vendor');
-            $vendorCollection = $vendorModel->getCollection();
-            $vendorsList = array();
-            foreach($vendorCollection as $vendorObj){
-                $vendorsList[$vendorObj->getId()] = $vendorObj->getVendorName();
-            }
+            $vendorsList = Mage::helper('zolagocampaign')->getAllVendorsList();
 
             //group by vendor
             if (!empty($campaigns)) {
@@ -90,9 +88,13 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement_Category extends Mage_Core
 
         $placementsByType = array();
         if (!empty($placements)) {
+            $vendorsList = Mage::helper('zolagocampaign')->getAllVendorsList();
+
             $bannersConfiguration = Mage::helper('zolagobanner')->getBannersConfiguration();
 
             foreach ($placements as $placement) {
+                $placement['campaign_vendor'] = $vendorsList[$placement['campaign_vendor']];
+
                 $dateFrom = $placement['campaign_date_from'];
                 $dateTo = $placement['campaign_date_to'];
                 $placement['campaign_date_from'] = !empty($dateFrom) ? date("d.m.Y H:i:s", strtotime($dateFrom)) : '';
