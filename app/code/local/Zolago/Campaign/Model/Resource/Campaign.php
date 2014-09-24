@@ -110,6 +110,7 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
                 'campaign_date_from' => 'campaign.date_from',
                 'campaign_date_to' => 'campaign.date_to',
                 'campaign_status' => 'campaign.status',
+                'campaign_vendor' => 'campaign.vendor_id',
             )
         );
         $select->joinLeft(
@@ -359,7 +360,8 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
                 "campaign.campaign_id",
                 "campaign.name",
                 "campaign.date_from",
-                "campaign.date_to"
+                "campaign.date_to",
+                "campaign.vendor_id"
             )
         );
         $select->join(
@@ -367,7 +369,10 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
             'banner.campaign_id = campaign.campaign_id',
             array("banner.type as banner_type")
         );
-        $select->where('campaign.vendor_id=?', $vendor);
+        if($vendor !== Mage::helper('udropship')->getLocalVendorId()){
+            $select->where('campaign.vendor_id=?', $vendor);
+        }
+
         $select->order("campaign.date_from DESC");
 
         try {

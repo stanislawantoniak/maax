@@ -9,7 +9,7 @@ $campaigns = Mage::helper('core')->jsonEncode($this->getCampaigns());
 
 $placements = $this->getCategoryPlacements();
 
-
+$isLocalVendor = ($vendor->getId() == Mage::helper('udropship')->getLocalVendorId());
 ?>
 <script type="text/javascript" src="/skin/frontend/modago/default/js/imagesloaded.pkgd.min.js"></script>
 <div class="container">
@@ -102,7 +102,7 @@ $placements = $this->getCategoryPlacements();
                                                                             <?php echo $placement['banner_name']; ?>
                                                                         </span>
                                                                     </h5>
-                                                                    <h5><?php echo $vendorName; ?></h5>
+                                                                    <h5><?php echo $placement['campaign_vendor']; ?></h5>
                                                                 </div>
                                                                 <div class="col-md-4">
                                                                     <a href="#" data-placementid="<?php echo $placement['placement_id']; ?>"
@@ -125,15 +125,20 @@ $placements = $this->getCategoryPlacements();
                                                                     <?php if(!empty($placement['status'])): ?>
                                                                     <i class="<?php echo $placement['status']['icon']; ?>"></i>
                                                                     <?php echo $placement['status']['message']; ?>
+
+                                                                    <?php if($placement['show_edit_link']): ?>
                                                                     To edit <a data-edit-val="link-edit" href=""
                                                                        target="_blank">
                                                                         <?php echo $_helper->__('go to campaign'); ?>
                                                                     </a>.
+                                                                     <?php endif; ?>
                                                                         <?php else:?>
+                                                                        <?php if($placement['show_edit_link']): ?>
                                                                         To edit <a data-edit-val="link-edit" href=""
                                                                                    target="_blank">
                                                                             <?php echo $_helper->__('go to campaign'); ?>
                                                                         </a>.
+                                                                        <?php endif; ?>
                                                                     <?php endif; ?>
                                                                 </span>
                                                                 <span data-edit-source="campaign_date_from">
@@ -233,6 +238,7 @@ $placements = $this->getCategoryPlacements();
                         <span data-val="campaign-status"></span>
                         <span data-val="campaign-date-from"></span>
                         <span data-val="campaign-date-to"></span>
+                        <span data-val="campaign-vendorname"></span>
                     </div>
                 </div>
 
@@ -328,6 +334,7 @@ jQuery(function ($) {
     })
     var compaigns = '<?php echo $campaigns; ?>';
     var compaignsObj = jQuery.parseJSON(compaigns);
+    var isLocalVendor = '<?php echo $isLocalVendor; ?>';
 
     $(document).on('change', '#basicModal select[name=campaign]', function () {
         var campaign = $(this).val();
@@ -355,14 +362,11 @@ jQuery(function ($) {
         console.log(placement);
         if (parseInt(placement) > 0) {
             //remove from db
-            console.log('remove from db');
             $('form').append('<input type="hidden" name="remove[]" value="' + placement + '" />');
             console.log($('form [data-placement="' + placement + '"]').closest('.banner-item'));
             $('form').find('[data-placement="' + placement + '"]').closest('.banner-item').remove();
         } else {
             //remove added html
-            console.log('remove added html');
-
             $('form').find('[name="status"]').parents('.banner-item').remove();
         }
         $('#confirm-delete [name="placement_id"]').remove();
@@ -417,9 +421,20 @@ jQuery(function ($) {
 
         var options = '<option value="0">      </option>';
         if ($.type(compaignsObj[bannerTypeCode]) !== "undefined") {
-            compaignsObj[bannerTypeCode].each(function (i, val) {
-                options += '<option value="' + i.campaign_id + '">' + i.name + '</option>';
-            })
+            if(isLocalVendor){
+                $.each(compaignsObj[bannerTypeCode], function (vendor, campaigns) {
+                    options += '<optgroup label="  ' + vendor + '">';
+                    campaigns.each(function (i, campaign) {
+                        options += '<option value="' + i.campaign_id + '">' + i.name + '</option>';
+                    })
+                    options += '</optgroup>';
+                })
+            } else {
+                compaignsObj[bannerTypeCode].each(function (i, val) {
+                    options += '<option value="' + i.campaign_id + '">' + i.name + '</option>';
+                })
+            }
+
         }
 
         $(this).find('[name=campaign]').html(options);
@@ -541,10 +556,10 @@ jQuery(function ($) {
         var dateTo = modal.find('[data-val="campaign-date-to"]').text();
 
         var status = modal.find('[data-val="campaign-status"]').text();
+        var vendorName = modal.find('[data-val="campaign-vendorname"]').text();
 
         //set data
         if (parseInt(banner) > 0) {
-            var vendorName = '<?php echo $vendorName; ?>';
             var dates = '';
             if (dateFrom.length > 0 && dateTo.length > 0) {
                 dates = '<span data-edit-source="campaign_date_from">'+dateFrom
@@ -665,6 +680,8 @@ jQuery(function ($) {
         modal.find('[name=creation_type]').remove();
         modal.find('.alert.alert-warning').remove();
         modal.find('[data-val="campaign-status"]').html('');
+        modal.find('[data-val="campaign-vendorname"]').html('');
+        $('[data-targ="add"]').remove();
 
     }
 
@@ -674,6 +691,7 @@ jQuery(function ($) {
         modal.find('[data-edit-val="banner_name"]').html('');
         modal.find('[data-edit-val="dates"]').html('');
         modal.find('img.image-preview-big').attr("src",'');
+        $('[data-targ="add"]').remove();
 
     }
 
@@ -747,6 +765,8 @@ jQuery(function ($) {
                     $("#basicModal").find('[data-val="campaign-date-to"]').html(data.date_to);
 
                     $("#basicModal").find('[data-val="campaign-status"]').html(data.status.icon);
+
+                    $("#basicModal").find('[data-val="campaign-vendorname"]').html(data.campaign_vendor);
                 }
             })
         }
