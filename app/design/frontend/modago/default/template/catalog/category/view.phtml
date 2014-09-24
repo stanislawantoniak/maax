@@ -11,6 +11,8 @@
             </div>
         </div>
     </div>
+
+    <?php if(strlen($this->getChildHtml('vendor.banner.inspiration')) > 5): ?>
     <section id="bottom" class="bg-w">
         <div class="container-fluid">
             <div class="col-sm-12">
@@ -18,6 +20,7 @@
             </div>
         </div>
     </section>
+    <?php endif; ?>
     </section>
 <?php elseif($this->isMixedMode()): ?>
     <?php echo $this->getCmsBlockHtml() ?>

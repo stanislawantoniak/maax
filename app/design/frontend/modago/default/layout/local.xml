@@ -636,8 +636,9 @@
 				<block type="core/text_list" name="sales.order.history.info" as="info" translate="label">
                     <label>Order History Info</label>
                 </block>
-				<!-- CMS USE: <block type="cms/block" block_id="block-id-in-magento" name="sales.order.history.empty" as="empty"/> -->
-				<block type="core/template" name="sales.order.history.empty" as="empty" template="sales/order/empty.phtml"/>
+                <block type="cms/block" name="sales.order.history.empty" as="empty">
+                    <action method="setBlockId"><block_id>account-order-history-empty</block_id></action>
+                </block>
             </block>
         </reference>
     </sales_order_history>
@@ -817,6 +818,27 @@
                 <name>left</name>
             </action>
         </reference>
+
+		<reference name="customer_account_navigation">
+
+            <!--<action method="removeLinkByName"><name>recurring_profiles</name></action>-->
+            <!--<action method="removeLinkByName"><name>billing_agreements</name></action>-->
+            <!--<action method="removeLinkByName"><name>reviews</name></action>-->
+            <!--<action method="removeLinkByName"><name>downloadable_products</name></action>-->
+            <!--<action method="removeLinkByName"><name>OAuth Customer Tokens</name></action>-->
+            <!--<action method="removeLinkByName"><name>account</name></action>-->
+            <!--<action method="removeLinkByName"><name>account_edit</name></action>-->
+            <!--<action method="removeLinkByName"><name>address_book</name></action>-->
+            <!--<action method="removeLinkByName"><name>orders</name></action>-->
+            <action method="removeLinkByName"><name>tags</name></action>
+            <action method="removeLinkByName"><name>wishlist</name></action>
+            <!--<action method="removeLinkByName"><name>newsletter</name></action>-->
+            <!--<action method="removeLinkByName"><name>udqa</name></action>-->
+            <!--<action method="removeLinkByName"><name>udpreviews</name></action>-->
+            <!--<action method="removeLinkByName"><name>udratings</name></action>-->
+            <!--<action method="removeLinkByName"><name>rma</name></action>-->
+
+		</reference>
 
         <reference name="content">
             <action method="unsetChild"><name>my.account.wrapper</name></action>
