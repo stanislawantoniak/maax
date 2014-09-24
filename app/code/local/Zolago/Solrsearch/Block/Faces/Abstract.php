@@ -36,14 +36,13 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 		if(!$this->hasData("items")){
 			$hiddenItems = array();
 			$items = $this->getAllItems();
-			
 			if($this->getFilterModel()){
 				$items =  $this->filterAndSortOptions(
 						$this->getAllItems(), 
 						$this->getFilterModel(), 
 						$hiddenItems
 				);
-			}
+			} 
 			
 			//ksort($items);
 			//ksort($hiddenItems);
@@ -156,7 +155,6 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 		if(!$this->getAllOptions()){
 			return $allItems;
 		}
-		
 		$out = array();
 		$allSourceOptions = $this->getAllOptions();
 		$extraAdded = array();
@@ -173,14 +171,13 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 				$specifiedIds = $filter->getSpecifiedOptions();
 				
 				// Active single mode filter
-				if(!$filter->getShowMultiple() && $this->isFilterActive()){
+				if(!$filter->getShowMultiple() && $this->isFilterActive()){				    
 					if($this->isItemActive ($option['label'])){
 						$out[$option['label']] = $allItems[$option['label']];
 						break;
 					}
 					continue;
 				}
-				
 				if(in_array($option['value'], $specifiedIds)){
 					// Option specified - move to items
 					$out[$option['label']] = $allItems[$option['label']];
