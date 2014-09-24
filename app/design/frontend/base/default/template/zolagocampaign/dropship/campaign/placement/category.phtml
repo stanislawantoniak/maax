@@ -8,7 +8,6 @@ $vendorName = $vendor->getVendorName();
 $campaigns = Mage::helper('core')->jsonEncode($this->getCampaigns());
 
 $placements = $this->getCategoryPlacements();
-krumo($placements);
 
 $isLocalVendor = ($vendor->getId() == Mage::helper('udropship')->getLocalVendorId());
 ?>
