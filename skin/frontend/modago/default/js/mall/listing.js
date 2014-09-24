@@ -1123,17 +1123,8 @@ Mall.listing = {
 
         var container = jQuery("#items-product"),
             imgLoadedInst = imagesLoaded(container);
-        //    .masonry({
-        //    transitionDuration: 0
-        //});
-
-        //this.setItemsImageDimensions(container);
-        //container.masonry("reloadItems");
-        //container.masonry();
 
         setTimeout(function() {
-            //container.masonry("reloadItems");
-            //container.masonry();
             Mall.listing.placeListingFadeContainer();
         }, 1000);
 
@@ -1160,21 +1151,6 @@ Mall.listing = {
                     .hideShapesListing();
             }
         });
-
-        //imagesLoaded("#items-product", function() {
-        //
-        //    container.masonry();
-        //
-        //    setTimeout(function() {
-        //            Mall.listing.placeListingFadeContainer();
-        //        }, 1000);
-        //
-        //        // hide load more button
-        //        if (Mall.listing.getTotal() > Mall.listing.getCurrentVisibleItems()) {
-        //            Mall.listing.hideLoadMoreButton()
-        //                .hideShapesListing();
-        //        }
-        //});
 
         return this;
     },
