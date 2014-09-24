@@ -1,10 +1,10 @@
 <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
 <?php $_orders = $this->getOrders(); ?>
 <?php $_helper = Mage::helper("sales");?>
+<div class="page-title box-wrapper">
+	<h1><?php echo $this->__('Order history') ?></h1>
+</div>
 <?php if(/*0 && */$_orders->getSize()): ?>
-	<div class="page-title box-wrapper">
-		<h1><?php echo $this->__('Order history') ?></h1>
-	</div>
 	<div class="background-wrapper box-wrapper">
 		<table class="data-table table-top" id="my-orders-table">
 			<col width="120px" />

@@ -9,10 +9,15 @@
   #back {
     @media (max-width: $screen-xs-max) {
       margin-top: 80px;
+      margin-bottom: 30px;
+    }
+    @media (max-width: $screen-xs-max) {
+      margin-top: 80px;
+      margin-bottom: 30px;
     }
     @media (min-width: $screen-sm-min) {
       position: absolute;
-      bottom: 0;
+      bottom: 30px;
       left: 0;
     }
   }
