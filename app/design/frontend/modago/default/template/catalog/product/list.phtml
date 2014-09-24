@@ -87,6 +87,7 @@ $_productImageUrl = '';
 
 </div>
 
+<div id="listing-loading" style="text-align: center;"><img src="<?php echo $this->getSkinUrl("images/modago-ajax-loader.gif"); ?>" alt=""></div>
 <!-- END jsMasonryContent -->
 <div class="addNewPositionListProductWrapper">
     <a href="javascript:;" onclick="Mall.listing.loadMoreProducts();" class="addNewPositionListProduct"><?php echo $this->__("Load next <span>%s</span> products", $this->getLoadLimit()); ?></a>
@@ -129,5 +130,14 @@ $_productImageUrl = '';
         margin: 0 auto;
         top: 50px;
         left: 50%;
+    }
+
+    #listing-loading {
+        width: 100%;
+        text-align: center !important;
+    }
+    #listing-loading > img {
+        display: block;
+        margin: 0 auto;
     }
 </style>

@@ -221,6 +221,10 @@ Mall.listing = {
     appendFromQueue: function () {
         "use strict";
 
+        this.showLoading();
+        this.placeListingFadeContainer();
+        this.showShapesListing();
+
         // append products to list
         var products = Mall.listing.getProductQueue().slice(
                 0, Mall.listing.getScrollLoadOffset()),
@@ -230,10 +234,13 @@ Mall.listing = {
             self = this;
 
         jQuery(items).hide();
+
+        // loading
         inst.on("always", function () {
             container.masonry({isAnimated: false, transitionDuration: 0})
                 .masonry("reloadItems").masonry();
             jQuery(items).show();
+            self.hideLoading();
 
             // show load more button
             if (Mall.listing.canShowLoadMoreButton()) {
@@ -243,12 +250,11 @@ Mall.listing = {
             }
 
             // reload if queue is empty
-            if (self.getProductQueue().length === 0
-                && self.getCurrentVisibleItems() >= self.getTotal()) {
+            if (self.getProductQueue().length === 0) {
                 container.masonry();
             }
 
-            setTimeout(function () {Mall.listing.placeListingFadeContainer();}, 1000);
+            self.placeListingFadeContainer();
         });
 
         Mall.listing.addToVisibleItems(products.length);
@@ -267,12 +273,41 @@ Mall.listing = {
     },
 
     /**
+     * Shows listing loading.
+     *
+     * @returns {Mall.listing}
+     */
+    showLoading: function () {
+        "use strict";
+
+        jQuery("#listing-loading").show();
+
+        return this;
+    },
+
+    /**
+     * Hides listing loading.
+     *
+     * @returns {Mall.listing}
+     */
+    hideLoading: function () {
+        "use strict";
+
+        jQuery("#listing-loading").hide();
+
+        return this;
+    },
+
+    /**
      * Loads products to queue and auto append first part of them to listing.
      *
      * @returns {Mall.listing}
      */
     loadMoreProducts: function () {
         "use strict";
+
+        this.hideLoadMoreButton();
+        this.showLoading();
         this.setAutoappend(true);
         this.loadToQueue();
 
@@ -1120,6 +1155,7 @@ Mall.listing = {
      * @returns {Mall.listing}
      */
     reloadListingItemsAfterPageLoad: function() {
+        this.hideLoading();
 
         var container = jQuery("#items-product"),
             imgLoadedInst = imagesLoaded(container);
