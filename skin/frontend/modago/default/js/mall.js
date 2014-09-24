@@ -616,18 +616,14 @@ Mall.product = {
         fakeElem.text(text || elem.val() || elem.text()).css('font', font || elem.css('font'));
         var width = fakeElem.width();
         fakeElem.remove();
-        console.log('getTextWidth():'+ width);
         return width;
     },
 
-    setWidthSizeSquares: function(){
-        console.log('setWidthSizeSquares()');
+    setWidthSizeSquares: function(){;
         jQuery('.size-box label').each(function(){
 
             var wSizeLabel = jQuery(this).find('span').text().length;
             var wLabel = Mall.product.getTextWidth(jQuery(this).find('span')) + 10;
-            console.log(wSizeLabel);
-            console.log(wLabel);
             if(wSizeLabel >= 4) {
                 jQuery(this).closest('label').css({width:wLabel+ 'px'})
                 jQuery(this).closest('label').children('span').css({width:wLabel+ 'px'})
@@ -640,34 +636,16 @@ Mall.product = {
         Mall.product.setWidthSizeSquares();
 
         var elFilterSize = jQuery('.size-box-bundle .form-group label');
-        console.log(elFilterSize);
         elFilterSize.each(function(){
 
             elFilterSizeWidth = jQuery(this).width();
-            console.log(elFilterSizeWidth);
-
-            elFilterSizeHeight = jQuery(this).height();
-            console.log(elFilterSizeHeight);
-
+            elFilterSizeHeight = jQuery(this).height();;
             obliczaniePrzekatnej = Math.pow(elFilterSizeWidth, 2) + Math.pow(elFilterSizeHeight, 2);
-            console.log(obliczaniePrzekatnej);
-
             przekatna = Math.sqrt(obliczaniePrzekatnej);
-            console.log(przekatna);
-
             obliczenieWyrownania = (przekatna - elFilterSizeWidth)/2;
-            console.log(obliczenieWyrownania);
-
             obliczenieWyrownaniaOryginal = obliczenieWyrownania + 2;
-            console.log(obliczenieWyrownaniaOryginal);
+
             var angle = Math.tan(elFilterSizeHeight/elFilterSizeWidth);
-            console.log(angle);
-
-
-
-
-
-
 
             if (elFilterSizeWidth > 31) {
                 var angle = -(angle * (180 / Math.PI));

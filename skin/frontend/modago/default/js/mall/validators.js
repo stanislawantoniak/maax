@@ -62,7 +62,7 @@ Mall.validate.validators = {
     passwordbackend: function(value, elem, params){
         "use strict";
         if(!params.hasOwnProperty('minLength')) {
-            params = { minLength: 5};
+            params = { minLength: 6};
         }
 
         if(value.length >= params.minLength || value.length == 0) {
