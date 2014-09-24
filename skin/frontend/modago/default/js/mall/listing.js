@@ -226,12 +226,28 @@ Mall.listing = {
                 0, Mall.listing.getScrollLoadOffset()),
             items = Mall.listing.appendToList(products),
             container = jQuery("#items-product"),
-            inst = imagesLoaded(jQuery(items));
+            inst = imagesLoaded(jQuery(items)),
+            self = this;
 
         jQuery(items).hide();
         inst.on("always", function () {
-            container.masonry({isAnimated: false, transitionDuration: 0}).masonry("reloadItems").masonry();
+            container.masonry({isAnimated: false, transitionDuration: 0})
+                .masonry("reloadItems").masonry();
             jQuery(items).show();
+
+            // show load more button
+            if (Mall.listing.canShowLoadMoreButton()) {
+                Mall.listing.showLoadMoreButton();
+                Mall.listing.showShapesListing();
+                Mall.listing.placeListingFadeContainer();
+            }
+
+            // reload if queue is empty
+            if (self.getProductQueue().length === 0
+                && self.getCurrentVisibleItems() >= self.getTotal()) {
+                container.masonry();
+            }
+
             setTimeout(function () {Mall.listing.placeListingFadeContainer();}, 1000);
         });
 
@@ -246,12 +262,6 @@ Mall.listing = {
         Mall.listing.removeLockFromQueue();
         // load next part of images
         Mall.listing.loadPartImagesFromQueue();
-        // show load more button
-        if (Mall.listing.canShowLoadMoreButton()) {
-            Mall.listing.showLoadMoreButton();
-            Mall.listing.showShapesListing();
-            Mall.listing.placeListingFadeContainer();
-        }
 
         return this;
     },
@@ -1117,7 +1127,7 @@ Mall.listing = {
         //    transitionDuration: 0
         //});
 
-        this.setItemsImageDimensions(container);
+        //this.setItemsImageDimensions(container);
         //container.masonry("reloadItems");
         //container.masonry();
 
