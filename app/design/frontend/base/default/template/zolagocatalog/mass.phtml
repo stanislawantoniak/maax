@@ -222,6 +222,8 @@ table.table{
 
             calculateScrollBars();
 
+            initializeScrollBars();
+
             calculateTotalLoaded();
 
             calculateTablePageHeight();
@@ -1174,6 +1176,29 @@ table.table{
                 scrollHandleHeight = (($('#mass-grid').outerHeight() - headerH) * $scrollbarContainerY.height()) / tableContentH;
                 $scrollHandleY.height(scrollHandleHeight);
                 scrollYFactor = (tableContentH)  / $scrollbarContainerY.outerHeight();
+            }
+
+            function initializeScrollBars(){
+
+                var $scrollHandleY = $('#mass-grid').find('#scroll-handle-y'),
+                    $scrollHandleX = $('#mass-grid').find('#scroll-handle-x'),
+                    $scrollbarContainerX = $scrollHandleX.parent(),
+                    $scrollbarContainerY = $scrollHandleY.parent(),
+                    currentPositionLeft = $('#grid-body').scrollLeft(),
+                    currentScrollTop = $('#mass-grid .tbody').scrollTop(),
+                    scrollPositionLeft = currentPositionLeft / scrollXFactor,
+                    scrollPositionTop = currentScrollTop / scrollYFactor;
+
+                if(!$scrollbarContainerY.length){
+                    return false;
+                }
+
+                if(!$scrollbarContainerX.length){
+                    return false;
+                }
+
+                $scrollHandleY.css('top', scrollPositionTop + 'px');
+                $scrollHandleX.css('left', scrollPositionLeft + "px");
             }
 
             function calculateTotalLoaded(){
