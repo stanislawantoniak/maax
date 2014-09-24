@@ -20,7 +20,15 @@
         </models>
     </global>
 	<frontend>
-		
+		<translate>
+			<modules>
+				<Zolago_Sales>
+					<files>
+						<default>Zolago_Sales.csv</default>
+					</files>
+				</Zolago_Sales>
+			</modules>
+		</translate>
 		<routers>
 			<sales>
                 <args>

@@ -2,7 +2,7 @@
 /**
  * @method Mage_Sales_Model_Resource_Order_Collection getOrders() 
  */
-class Zolago_Modago_Block_Sales_Order_History extends Mage_Core_Block_Template
+class Zolago_Modago_Block_Sales_Order_History extends Zolago_Modago_Block_Sales_Order_Abstract
 {
 
     public function __construct()
