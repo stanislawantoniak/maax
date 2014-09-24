@@ -799,6 +799,14 @@
                 <name>left</name>
             </action>
         </reference>
+		
+		<reference name="customer_account_navigation">
+			<!-- 
+			<action method="removeLinkByName">
+				<name>address_book</name>
+			</action>
+			-->
+		</reference>
 
         <reference name="content">
             <action method="unsetChild"><name>my.account.wrapper</name></action>

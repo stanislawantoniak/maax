@@ -46,7 +46,7 @@ class Zolago_Solrsearch_Block_Faces_Price extends Zolago_Solrsearch_Block_Faces_
 
         $category = Mage::registry('current_category');
 
-
+        $range = null;
         if ($category) {
             $data = $category->getData();
             if (!empty($data['filter_price_range'])) {

@@ -11,6 +11,7 @@
 			<col class="order-no" width="120px" />
 			<col />
 			<col  class="products"/>
+			<col  class="total" width="90px" />
 			<col  class="status" width="90px" />
 			<col width="90px" />
 			<thead>
@@ -19,6 +20,7 @@
 					<th class="order-no"><?php echo $_helper->__('Order no') ?></th>
 					<th><?php echo $_helper->__('Shops') ?></th>
 					<th class="products"><?php echo $_helper->__('Products') ?></th>
+					<th class="total"><?php echo $_helper->__('Value') ?></th>
 					<th class="status"><?php echo $_helper->__('Status') ?></th>
 					<th><?php echo $_helper->__('Order details') ?></th>
 				</tr>
@@ -48,6 +50,9 @@
 							</li>
 							<?php endforeach;?>
 						</ul>
+					</td>
+					<td class="total">
+						<?php echo $_order->formatPrice($_order->getGrandTotal()) ?>
 					</td>
 					<td class="status">
 						<?php echo $this->getOrderStatus($_order);?>
