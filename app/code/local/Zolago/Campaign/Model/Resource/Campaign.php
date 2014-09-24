@@ -63,6 +63,26 @@ class Zolago_Campaign_Model_Resource_Campaign extends Mage_Core_Model_Resource_D
     }
 
 
+    public function setNewCampaignPlacement($placement){
+        $table = $this->getTable("zolagocampaign/campaign_placement");
+
+        $vendor_id = $placement['vendor_id'];
+        $category_id = $placement['category_id'];
+        $campaign_id = $placement['campaign_id'];
+        $banner_id = $placement['banner_id'];
+        $type = $placement['type'];
+        $position = $placement['position'];
+        $priority = $placement['priority'];
+
+        $write = Mage::getSingleton('core/resource')->getConnection('core_write');
+        $sql = "INSERT INTO {$table} (vendor_id,category_id,campaign_id,banner_id,type,position,priority)
+        VALUES ({$vendor_id},{$category_id},{$campaign_id},{$banner_id},'{$type}',{$position},{$priority})";
+
+        $this->_getWriteAdapter()->query($sql);
+        $lastInsertId = $this->_getWriteAdapter()->lastInsertId();
+
+        return $lastInsertId;
+    }
     /**
      * @param $categoryId
      * @param array $placements

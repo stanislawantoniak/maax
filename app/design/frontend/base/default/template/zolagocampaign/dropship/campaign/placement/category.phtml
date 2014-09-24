@@ -336,6 +336,7 @@ jQuery(function ($) {
     var compaigns = '<?php echo $campaigns; ?>';
     var compaignsObj = jQuery.parseJSON(compaigns);
     var isLocalVendor = '<?php echo $isLocalVendor; ?>';
+    var vendorId = '<?php echo $vendor->getId(); ?>';
 
     $(document).on('change', '#basicModal select[name=campaign]', function () {
         var campaign = $(this).val();
@@ -375,9 +376,36 @@ jQuery(function ($) {
         $("#confirm-delete").modal('hide');
     })
 
+    function saveNewPresentation(campaignId, bannerId, type, position, priority) {
+        setPriority();
+        recountHeight();
+        var dataToSave = {};
+        //collect data
+        var category = $('[name=category]').val();
+
+        //assign data
+        dataToSave.vendor_id = vendorId;
+        dataToSave.category_id = category;
+
+        dataToSave.campaign_id = campaignId;
+        dataToSave.banner_id = bannerId;
+        dataToSave.type = type;
+        dataToSave.position = position;
+        dataToSave.priority = priority;
+
+        $.ajax({
+            url: '/campaign/placement_category/saveNew',
+            method: 'POST',
+            data: dataToSave,
+            success: function(id){
+                $('[data-current="1"]').find('input[name="placement_id[]"]').val(id);
+                $('[data-current="1"]').data("current",0);
+            }
+
+        })
+    }
 
     function savePresentation() {
-
         setPriority();
         recountHeight();
         $.ajax({
@@ -571,7 +599,7 @@ jQuery(function ($) {
             if($.type(previewImage) !== "undefined"){
                 campaignBlock += '<img src="'+previewImage+'" class="banner-preview-image" style="height: 120px;" />' ;
             }
-            campaignBlock +=    '<div class="row">' +
+            campaignBlock +=    '<div class="row" data-current="1">' +
                 '<div class= "col-md-8" >' +
                 '<input type="hidden" name="placement_id[]" value="0">' +
                 '<input type="hidden" name="campaign_id[]" value="'+campaign+'">' +
@@ -599,7 +627,17 @@ jQuery(function ($) {
             $('[data-targ="add"]').replaceWith(campaignBlock);
 
             clearOptions();
-            savePresentation();
+            //        $placements[] = array(
+//            'vendor_id' => $vendorId,
+//            'category_id' => $data['category'],
+//            'campaign_id' => $data['campaign_id'][$i],
+//            'banner_id' => $data['banner_id'][$i],
+//            'type' => $data['type'][$i],
+//            'position' => $data['position'][$i],
+//            'priority' => $data['priority'][$i],
+//    );
+            saveNewPresentation(campaign, banner, bannerType, pos, priority);
+            //savePresentation();
             $('#basicModal').modal('hide');
 
         } else {
