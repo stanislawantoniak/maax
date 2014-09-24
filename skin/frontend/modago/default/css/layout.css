@@ -5722,7 +5722,7 @@ yx-axis
   /* line 9, ../sass/layout/modules/_sales-order-history-empty.scss */
   #account-order-history-empty #back {
     position: absolute;
-    bottom: 0;
+    bottom: 30px;
     left: 0; } }
 
 /* line 1, ../sass/layout/override/_global.scss */
