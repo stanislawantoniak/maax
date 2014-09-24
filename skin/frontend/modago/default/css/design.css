@@ -3150,6 +3150,9 @@ div.noscroll {
   font-family: "latoblack";
   background: #fcfcfc;
   letter-spacing: -1px; }
+/* line 60, ../sass/design/style/_global.scss */
+.data-table.table-top td, .data-table.table-top th {
+  vertical-align: top; }
 
 /* line 4, ../sass/design/style/_carousel.scss */
 .carousel .carousel-inner .item .carousel-caption {
@@ -4219,14 +4222,29 @@ i.flag.hit, i.flag.bestseller {
   padding: 20px 30px !important;
   text-transform: uppercase; }
 
-/* line 97, ../sass/design/style/_customer-account-registered.scss */
+/* line 99, ../sass/design/style/_customer-account-registered.scss */
 .my-account .box-wrapper {
   border-right: 1px solid #ebebeb; }
 
-/* line 100, ../sass/design/style/_customer-account-registered.scss */
+/* line 103, ../sass/design/style/_customer-account-registered.scss */
 .my-account .background-wrapper {
   background: #fff;
   padding: 30px 15px; }
+
+@media (max-width: 768px) {
+  /* line 107, ../sass/design/style/_customer-account-registered.scss */
+  .my-account .data-table .products {
+    display: none; } }
+
+@media (max-width: 560px) {
+  /* line 112, ../sass/design/style/_customer-account-registered.scss */
+  .my-account .data-table .order-no {
+    display: none; } }
+
+@media (max-width: 480px) {
+  /* line 118, ../sass/design/style/_customer-account-registered.scss */
+  .my-account .data-table .status {
+    display: none; } }
 
 /* line 1, ../sass/design/style/_shopping-cart.scss */
 .tableWrapper {

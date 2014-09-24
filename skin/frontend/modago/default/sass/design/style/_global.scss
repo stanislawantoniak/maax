@@ -56,5 +56,10 @@ border-radius: 2px;
 		background: #fcfcfc;
 		letter-spacing: -1px;
 	}
-	
+	&.table-top{
+		td,th{
+			vertical-align: top;
+		}
+	}
 }
+

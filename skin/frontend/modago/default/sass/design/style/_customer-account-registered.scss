@@ -93,11 +93,30 @@
 			text-transform: uppercase;
 		}
 	}
+	
 }
+
 .my-account .box-wrapper{
 	border-right: 1px solid #ebebeb;
 }
+
 .my-account .background-wrapper{
 	background: $body-bg;
 	padding: 30px 15px;
+}
+.my-account .data-table .products{
+	@media (max-width: $screen-sm-min){
+		display:none;
+	}
+}
+.my-account .data-table .order-no{
+	@media (max-width: 560px){
+		display:none;
+	}
+}
+
+.my-account .data-table .status{
+	@media (max-width: 480px){
+		display:none;
+	}
 }
