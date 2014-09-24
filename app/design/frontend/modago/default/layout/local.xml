@@ -636,8 +636,9 @@
 				<block type="core/text_list" name="sales.order.history.info" as="info" translate="label">
                     <label>Order History Info</label>
                 </block>
-				<!-- CMS USE: <block type="cms/block" block_id="block-id-in-magento" name="sales.order.history.empty" as="empty"/> -->
-				<block type="core/template" name="sales.order.history.empty" as="empty" template="sales/order/empty.phtml"/>
+                <block type="cms/block" name="sales.order.history.empty" as="empty">
+                    <action method="setBlockId"><block_id>account-order-history-empty</block_id></action>
+                </block>
             </block>
         </reference>
     </sales_order_history>
