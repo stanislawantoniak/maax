@@ -52,7 +52,7 @@
 						</ul>
 					</td>
 					<td class="total">
-						<?php echo $_order->formatPrice($_order->getGrandTotal()) ?>
+						<?php echo $_order->formatPrice($this->getTotal($_order)); ?>
 					</td>
 					<td class="status">
 						<?php echo $this->getOrderStatus($_order);?>
