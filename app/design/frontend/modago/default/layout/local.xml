@@ -353,7 +353,7 @@
 				</crumbInfo>
 			</action>
 			<action method="addCrumb">
-				<crumbName>Shopping Cart</crumbName>
+				<crumbName>cart</crumbName>
 				<crumbInfo>
 					<label>Shopping Cart</label>
 					<title>Shopping Cart</title>
