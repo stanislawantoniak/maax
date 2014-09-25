@@ -5713,7 +5713,11 @@ yx-axis
   padding-bottom: 10px; }
 /* line 5, ../sass/layout/modules/_account_navigation.scss */
 .account-nav .active {
-  font-weight: bold; }
+  font-family: "latoblack"; }
+
+/* line 13, ../sass/layout/modules/_account_navigation.scss */
+.sidebar .account-nav .nav-pills li a:link, .sidebar .account-nav .nav-pills li a:visited {
+  padding: 0px 0px 0px 0px; }
 
 /* line 1, ../sass/layout/modules/_sales-order-history-empty.scss */
 #account-order-history-empty {
@@ -5885,9 +5889,6 @@ ol.breadcrumb li:not(:first-child):before {
 /* line 6, ../sass/layout/override/_sidebar-menu-category.scss */
 .sidebar .nav-pills li a:link, .sidebar .nav-pills li a:visited {
   padding: 0px 5px 0px 18px; }
-/* line 15, ../sass/layout/override/_sidebar-menu-category.scss */
-.sidebar .account-nav .nav-pills li a:link, .sidebar .account-nav .nav-pills li a:visited {
-  padding: 0px 0px 0px 0px; }
 
 /* line 2, ../sass/layout/override/_badge.scss */
 .user-navigation a {
