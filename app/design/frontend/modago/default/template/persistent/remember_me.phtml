@@ -14,6 +14,6 @@ $_checked = $_sessChecked!==null ? $_sessChecked : $this->isRememberMeChecked();
 		<input type="hidden" name="persistent_remember_me" value="0"/>
 		<input type="checkbox" <?php if ($_checked): ?> checked="checked"<?php endif; ?> name="persistent_remember_me" id="remember_this" class="css-checkbox"/>
 		<label for="remember_this" class="css-label remember_this"><?php echo Mage::helper("zolagocustomer")->__('Remember Me') ?></label>
-		<span class="badge hint" title="<?php echo Mage::helper("zolagocustomer")->__("Access favourites without login");?>">?</span>
+		<!-- <span class="badge hint" title="<?php echo Mage::helper("zolagocustomer")->__("Access favourites without login");?>">?</span> -->
 	</div>
 </li>

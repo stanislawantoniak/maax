@@ -1,5 +1,8 @@
 Mall.validate.validators = {
 
+    config: {
+        passwordEmailMinLength: undefined
+    },
 
     email: function (value, elem, params) {
         return (/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/i.test(value));
@@ -62,7 +65,12 @@ Mall.validate.validators = {
     passwordbackend: function(value, elem, params){
         "use strict";
         if(!params.hasOwnProperty('minLength')) {
-            params = { minLength: 6};
+
+            params =  { minLength : parseInt(Mall.validate.validators.config.passwordEmailMinLength) };
+
+            if(isNaN(params.minLength)) {
+                return true;
+            }
         }
 
         if(value.length >= params.minLength || value.length == 0) {

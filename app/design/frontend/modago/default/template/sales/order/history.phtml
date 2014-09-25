@@ -1,26 +1,28 @@
 <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
 <?php $_orders = $this->getOrders(); ?>
 <?php $_helper = Mage::helper("sales");?>
+<div class="page-title box-wrapper">
+	<h1><?php echo $this->__('Order history') ?></h1>
+</div>
 <?php if(/*0 && */$_orders->getSize()): ?>
-	<div class="page-title box-wrapper">
-		<h1><?php echo $this->__('Order history') ?></h1>
-	</div>
 	<div class="background-wrapper box-wrapper">
-		<table class="data-table" id="my-orders-table">
+		<table class="data-table table-top" id="my-orders-table">
 			<col width="120px" />
-			<col width="120px" />
-			<col width="120px" />
+			<col class="order-no" width="120px" />
 			<col />
-			<col width="1" />
-			<col width="120px" />
+			<col  class="products"/>
+			<col  class="total" width="90px" />
+			<col  class="status" width="90px" />
+			<col width="90px" />
 			<thead>
 				<tr>
 					<th><?php echo $_helper->__('Date placed') ?></th>
-					<th><?php echo $_helper->__('Order no') ?></th>
+					<th class="order-no"><?php echo $_helper->__('Order no') ?></th>
 					<th><?php echo $_helper->__('Shops') ?></th>
-					<th><?php echo $_helper->__('Products') ?></th>
-					<th><?php echo $_helper->__('Status') ?></th>
-					<th><?php echo $_helper->__('Details') ?></th>
+					<th class="products"><?php echo $_helper->__('Products') ?></th>
+					<th class="total"><?php echo $_helper->__('Value') ?></th>
+					<th class="status"><?php echo $_helper->__('Status') ?></th>
+					<th><?php echo $_helper->__('Order details') ?></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -28,16 +30,41 @@
 				<?php foreach ($_orders as $_order): ?>
 				<tr>
 					<td><span class="nobr"><?php echo $this->formatDate($_order->getCreatedAtStoreDate()) ?></span></td>
-					<td><?php echo $_order->getRealOrderId() ?></td>
+					<td class="order-no"><?php echo $_order->getRealOrderId() ?></td>
 					<td>
+						<ul class="list-unstyled">
 						<?php foreach($this->getVendors($_order) as $_vendor):?>
-							<?php echo $this->escapeHtml($_vendor->getVendorName());?><br/>
+							<li class="uppercase"><?php echo $this->escapeHtml($_vendor->getVendorName());?></li>
 						<?php endforeach;?>
+						</ul>
 					</td>
-					<td><?php echo $_order->formatPrice($_order->getGrandTotal()) ?></td>
-					<td><em><?php echo $_order->getStatusLabel() ?></em></td>
+					<td class="products">
+						<ul class="list-unstyled">
+							<?php foreach($this->getSortedPoItemsByOrder($_order) as $_itemArray):?>
+							<li>
+								<span class="uppercase"><?php echo $this->escapeHtml($_itemArray['vendor']->getVendorName());?></span>
+								<?php echo $this->escapeHtml($_itemArray['item']->getName());?><br/>
+								<?php foreach($this->extractProductOptions($_itemArray['options']) as $_option): ?>
+									<?php echo $this->escapeHtml($_option['label']); ?>: <?php echo $this->escapeHtml($_option['value']); ?>
+								<?php endforeach;?>
+							</li>
+							<?php endforeach;?>
+						</ul>
+					</td>
+					<td class="total">
+						<?php echo $_order->formatPrice($this->getTotal($_order)); ?>
+					</td>
+					<td class="status">
+						<?php echo $this->getOrderStatus($_order);?>
+						<?php $_icon = $this->getStatusIcon($_order);?>
+						<?php if($_icon):?>
+							<img src="<?php echo $_icon;?>"/>
+						<?php endif;?>
+					</td>
 					<td class="a-center">
-						<span class="nobr"><a href="<?php echo $this->getViewUrl($_order) ?>"><?php echo $this->__('View Order') ?></a></span>
+						<a class="underline" href="<?php echo $this->getViewUrl($_order) ?>">
+							<?php echo $_helper->__('view') ?> &gt;
+						</a>
 					</td>
 				</tr>
 				<?php endforeach; ?>

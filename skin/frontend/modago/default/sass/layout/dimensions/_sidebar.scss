@@ -8,8 +8,21 @@
 	    float:left;
 	    margin-right:20px;
 	    display:block;
+        @media (max-width: $screen-sm-max) {
+            display: none;
+        }
    	}	
 }
+
+.sidebar-first {
+  #content-main {
+    margin-left: 205px;
+    @media (max-width: $screen-sm-max) {
+      margin-left: 0;
+    }
+  }
+}
+
 	    .sidebar {
      		width:185px;
      		position:relative;
@@ -90,7 +103,7 @@
 		#content-main {
 		margin-left: 205px; 
 		overflow: hidden;
-			@media (max-width: $screen-xs-max) { 
+			@media (max-width: $screen-xs-max) {
 				margin-left: 0; 
 			}
 		}
@@ -101,11 +114,11 @@
 		#sidebar {
 
 	
-			@media (max-width: $screen-xs-max) { 
+			@media (max-width: $screen-xs-max) {
 				width:100%;
 			 }
 			 .sidebar {
-			 	@media (max-width: $screen-xs-max) { 
+			 	@media (max-width: $screen-xs-max) {
 				display: none;
 				width:100%;
 				
