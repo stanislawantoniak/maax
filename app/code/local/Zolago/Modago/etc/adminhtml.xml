@@ -1,0 +1,21 @@
+<config>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <zolagomodago_catalog translate="title" module="zolagomodago">
+                                        <title>ACL for Zolago Modago Catalog</title>
+                                    </zolagomodago_catalog>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>
