@@ -865,14 +865,29 @@
 			},
 
 			invoiceDisableFields: function (fields) {
+				var self = this;
 				jQuery.each(fields,  function (idx, item) {
 					jQuery(item).prop("readonly", true);
+					jQuery(item.replace("billing", "shipping")).
+						bind('change', self.copyHandler).
+						bind('keyup', self.copyHandler);
 				});
+				
 
 				return this;
 			},
+			
+			copyHandler: function(){
+				var el = jQuery(this),
+					dest = jQuery("#" + el.attr("id").replace("shipping", "billing"));
+				
+				if(dest.length){
+					dest.val(el.val());
+				}
+			},
 
 			invoiceClearCopiedFields: function (fields) {
+				
 				jQuery.each(fields,  function (idx, item) {
 					jQuery(item).val("");
 				});
@@ -881,10 +896,15 @@
 			},
 
 			invoiceEnableFields: function (fields) {
+				var self = this;
 				jQuery.each(fields,  function (idx, item) {
 					jQuery(item).prop("readonly", false);
+					console.log(item.replace("billing", "shipping"), "UNREGISTER CHNAGE");
+					jQuery(item.replace("billing", "shipping")).
+						unbind('change', self.copyHandler).
+						unbind('keyup', self.copyHandler);
 				});
-
+		
 				return this;
 			},
 
@@ -896,7 +916,7 @@
 						self.invoiceDisableFields(self._invoice_copy_shipping_fields);
                         self.setSameAsBilling(1);
 					} else {
-						self.invoiceClearCopiedFields(self._invoice_copy_shipping_fields);
+						//self.invoiceClearCopiedFields(self._invoice_copy_shipping_fields);
 						self.invoiceEnableFields(self._invoice_copy_shipping_fields);
                         self.setSameAsBilling(0);
 					}

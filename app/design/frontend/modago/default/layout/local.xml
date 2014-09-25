@@ -638,11 +638,31 @@
 				<block type="core/text_list" name="sales.order.history.info" as="info" translate="label">
                     <label>Order History Info</label>
                 </block>
-				<!-- CMS USE: <block type="cms/block" block_id="block-id-in-magento" name="sales.order.history.empty" as="empty"/> -->
-				<block type="core/template" name="sales.order.history.empty" as="empty" template="sales/order/empty.phtml"/>
+                <block type="cms/block" name="sales.order.history.empty" as="empty">
+                    <action method="setBlockId"><block_id>account-order-history-empty</block_id></action>
+                </block>
             </block>
         </reference>
     </sales_order_history>
+	<sales_order_view>
+        <reference name="my.account.wrapper">
+			<!-- remove old view -->
+			<action method="unsetChild">
+				<name>sales.order.view</name>
+			</action>
+			<action method="unsetChild">
+				<name>sales.order.item.default</name>
+			</action>
+			<!-- add custom modago view -->
+            <block type="zolagomodago/sales_order_view" name="sales.order.view">
+                <block type="zolagomodago/sales_order_shipment" name="sales.order.shipment" template="sales/order/shipment.phtml"/>
+                <block type="zolagomodago/sales_order_info" name="sales.order.info" template="sales/order/info.phtml"/>
+                <block type="zolagomodago/sales_order_item" name="sales.order.item">
+                    <block type="zolagomodago/sales_order_item_renderer_default" name="sales.order.item.default"/>
+                </block>
+            </block>
+        </reference>
+    </sales_order_view>
 	
 	<!-- ################################################################### -->
 	<!-- Checkout section													 -->
@@ -799,6 +819,42 @@
             <action method="unsetChild">
                 <name>left</name>
             </action>
+        </reference>
+
+		<reference name="customer_account_navigation">
+
+            <action method="removeLinkByName"><name>recurring_profiles</name></action>
+            <action method="removeLinkByName"><name>billing_agreements</name></action>
+            <action method="removeLinkByName"><name>reviews</name></action>
+            <action method="removeLinkByName"><name>downloadable_products</name></action>
+            <action method="removeLinkByName"><name>OAuth Customer Tokens</name></action>
+            <action method="removeLinkByName"><name>account</name></action>
+            <action method="removeLinkByName"><name>account_edit</name></action>
+            <action method="removeLinkByName"><name>address_book</name></action>
+            <action method="removeLinkByName"><name>orders</name></action>
+            <action method="removeLinkByName"><name>tags</name></action>
+            <action method="removeLinkByName"><name>wishlist</name></action>
+            <action method="removeLinkByName"><name>newsletter</name></action>
+            <action method="removeLinkByName"><name>udqa</name></action>
+            <action method="removeLinkByName"><name>udpreviews</name></action>
+            <action method="removeLinkByName"><name>udratings</name></action>
+            <action method="removeLinkByName"><name>rma</name></action>
+
+
+            <!--Zamówienia w realizacji-->
+            <action method="addLink" translate="label"><name>sales_order_process</name><path>sales/order/process</path><label>Orders in the realization</label></action>
+            <!--Historia zamówień-->
+            <action method="addLink" translate="label"><name>orders</name><path>sales/order/history/</path><label>Orders history</label></action>
+            <!--RMA-->
+            <action method="addLink" translate="label"><name>rma</name><path>sales/rma/history/</path><label>Returns and complaints</label></action>
+            <!--dane kontaktowe-->
+            <action method="addLink" translate="label"><name>account_edit</name><path>customer/account/edit/</path><label>Contact details</label></action>
+            <!--zmiana hasla-->
+            <action method="addLink" translate="label"><name>account_edit_password</name><path>customer/account/editPassword/</path><label>Change password</label></action>
+            <!--SUBSKRYPCJA NEWSLETTERA-->
+            <action method="addLink" translate="label"><name>newsletter</name><path>newsletter/manage/</path><label>Settings mailing and sms</label></action>
+
+
         </reference>
 
         <reference name="content">
