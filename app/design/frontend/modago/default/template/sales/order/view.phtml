@@ -1,40 +1,52 @@
-<?php
-$_v = $this->getVendor();
-?>
+<?php /* @var $this Zolago_Modago_Block_Sales_Order_View */ ?>
+<?php $_items = $this->getItems(); ?>
+<div class="checkout-shared-review">
+<div class="col-lg-9 col-md-8 col-sm-12 col-xs-12 col-lg-pull-3 col-md-pull-4 section " id="content-main">
+	<section class="main bg-w">
+		<header class="title-section">
+			<h2><?php echo $this->__("Order number"); ?>:</h2>
+		</header>
+						<?php $total = 1; ?>
+                        <?php foreach($_items as $nr => $_item) : ?>
+							<div class="panel panel-default">
+							<?php $_v = $_item->getVendor(); ?>
+	    					<?php if ($_v->getId()): ?>
+						    	<div class="panel-heading"><?php echo $this->__("Shop"); ?>: <strong><?php echo $_v->getVendorName() ?></strong>
+						    <?php else: ?>
+							    <div class="panel-heading"><?php echo $this->__("Unknown vendor"); ?>
+						    <?php endif ?>
+							<?php if (count($_items) >1) : ?>
+							(<?php printf($this->__('Shipment %d of %d'),($total++),count($_items));?>)
+							<?php endif; ?>
+							</div>
+			    <div class="panel-body">
 
-<?php switch ($this->getPart()): case 'header': ?>
-
-<div class="panel panel-default">
-    <?php if ($_v->getId()): ?>
-    <div class="panel-heading"><?php echo $this->__("Shop"); ?>: <strong><?php echo $_v->getVendorName() ?></strong></div>
-    <?php else: ?>
-    <div class="panel-heading"><?php echo $this->__("Unknown vendor"); ?></div>
-    <?php endif ?>
-    <div class="panel-body">
-
-
-        <div class="tableWrapper table-cart">
-            <!-- Thead -->
-
-
-<?php break; case 'footer': ?>
+		        <div class="table-row clearfix">
+					<?php echo $this->getShipmentBlock($_item); ?>
+					<?php echo $this->getInfoBlock($_item);?>
+				</div>
+		        <div class="tableWrapper table-cart">
+		            <!-- Thead -->
+							<?php foreach ($_item->getAllItems() as $_product) : ?>
+	                            <?php echo $this->getItemHtml($_product); ?>
+							<?php endforeach; ?>
     <!-- TFoot -->
     <div class="table-footer-group hidden-xs">
         <div class="table-row clearfix">
             <div class="table-cell cell-01 td">
-				<div id="shipping_method_name_<?php echo $_v->getVendorId();?>"></div>
-				<div>Darmowy zwrot do 30 dni [dev]</div>
             </div>
 
             <div class="table-cell cell-03 label_value td">
-                <div class="value_quality_price"><?php echo $this->__('Sum:')?></div>
                 <div class="value_quality_delivery">
                     <?php echo $this->__("Shipping cost"); ?>:
 
                 </div>
+                <div class="value_quality_price"><?php echo $this->__('Sum:')?></div>
             </div>
-            <div class="table-cell cell-04 td"><div class="quality_price"><?php echo Mage::helper('core')->formatPrice($this->getSubtotal()) ?></div>
-			<div class="quality_delivery" id="shipping_method_price_<?php echo $_v->getVendorId();?>"></div></div>
+            <div class="table-cell cell-04 td">
+				<div class="quality_delivery"><?php echo Mage::helper('core')->formatPrice($_item->getData('shipping_amount_incl'));?></div>
+				<div class="quality_price"><?php echo Mage::helper('core')->formatPrice($_item->getData('grand_total_incl_tax')) ?></div>
+			</div>
             <div class="table-cell cell-05 td"></div>
         </div>
 
@@ -50,16 +62,6 @@ $_v = $this->getVendor();
         </div>
         <div class="table-row clearfix">
 
-            <?php if($this->isHintAvailable()):?>
-                <div class="bubble visible-lg">
-                    <div>
-                        <p><?php echo $this->__("Free shippign from");?>: <strong><?php echo Mage::helper('core')->formatPrice($this->getNominalPrice()); ?> </strong></p>
-                    </div>
-                </div>
-                <div class="udsplit-vendor-subtotal" style="float:right; margin-right: 10px; display: none;">
-
-                </div>
-            <?php endif;?>
         </div>
         <div class="table-row clearfix">
             <div class="table-cell cell-01 td  no-border">
@@ -84,6 +86,20 @@ $_v = $this->getVendor();
 </div>
 
 
+                        <?php endforeach; ?>
 
 
-<?php endswitch ?>
+        <div class="row">
+            <div class="col-sm-3">
+                <a class="button button-third large pull-left" id="step-2-prev">Wróć</a>
+            </div>
+			<div class="col-sm-6">
+			</div>
+            <div class="col-sm-3">
+            </div>
+        </div>   
+
+</div>
+</section>
+</div>
+</div>

@@ -642,6 +642,25 @@
             </block>
         </reference>
     </sales_order_history>
+	<sales_order_view>
+        <reference name="my.account.wrapper">
+			<!-- remove old view -->
+			<action method="unsetChild">
+				<name>sales.order.view</name>
+			</action>
+			<action method="unsetChild">
+				<name>sales.order.item.default</name>
+			</action>
+			<!-- add custom modago view -->
+            <block type="zolagomodago/sales_order_view" name="sales.order.view">
+                <block type="zolagomodago/sales_order_shipment" name="sales.order.shipment" template="sales/order/shipment.phtml"/>
+                <block type="zolagomodago/sales_order_info" name="sales.order.info" template="sales/order/info.phtml"/>
+                <block type="zolagomodago/sales_order_item" name="sales.order.item">
+                    <block type="zolagomodago/sales_order_item_renderer_default" name="sales.order.item.default"/>
+                </block>
+            </block>
+        </reference>
+    </sales_order_view>
 	
 	<!-- ################################################################### -->
 	<!-- Checkout section													 -->

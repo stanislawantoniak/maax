@@ -4,7 +4,6 @@ class Zolago_Modago_Block_Sales_Order_Abstract extends Mage_Core_Block_Template
 {
 
 	protected $_cache = array();
-	
 	/**
 	 * @param Mage_Sales_Model_Order $order
 	 * @return array - vendor names sorretd vendro objects

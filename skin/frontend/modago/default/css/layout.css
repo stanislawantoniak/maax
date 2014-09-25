@@ -5717,17 +5717,31 @@ yx-axis
 
 /* line 1, ../sass/layout/modules/_sales-order-history-empty.scss */
 #account-order-history-empty {
-  padding: 30px; }
-/* line 3, ../sass/layout/modules/_sales-order-history-empty.scss */
-#account-order-history-empty .row {
-  margin: 0; }
-@media (min-width: 768px) {
-  /* line 3, ../sass/layout/modules/_sales-order-history-empty.scss */
-  #account-order-history-empty .row {
-    position: relative; } }
+  border: 1px solid #ebebeb; }
+@media (min-width: 992px) {
+  /* line 1, ../sass/layout/modules/_sales-order-history-empty.scss */
+  #account-order-history-empty {
+    height: 360px;
+    padding: 30px; } }
+@media (min-width: 768px) and (max-width: 991px) {
+  /* line 1, ../sass/layout/modules/_sales-order-history-empty.scss */
+  #account-order-history-empty {
+    height: 355px;
+    padding: 35px 40px; } }
 @media (max-width: 767px) {
-  /* line 9, ../sass/layout/modules/_sales-order-history-empty.scss */
+  /* line 1, ../sass/layout/modules/_sales-order-history-empty.scss */
+  #account-order-history-empty {
+    height: 290px;
+    padding: 20px;
+    margin: 20px 10px; } }
+@media (min-width: 992px) {
+  /* line 16, ../sass/layout/modules/_sales-order-history-empty.scss */
   #account-order-history-empty #back {
+<<<<<<< HEAD
+    margin-top: 175px; } }
+@media (min-width: 768px) and (max-width: 991px) {
+  /* line 16, ../sass/layout/modules/_sales-order-history-empty.scss */
+=======
     margin-top: 80px;
     margin-bottom: 30px; } }
 @media (max-width: 767px) {
@@ -5737,10 +5751,13 @@ yx-axis
     margin-bottom: 30px; } }
 @media (min-width: 768px) {
   /* line 9, ../sass/layout/modules/_sales-order-history-empty.scss */
+>>>>>>> e5cede17b3355790de6966cb3e10b5cccbd4a3ce
   #account-order-history-empty #back {
-    position: absolute;
-    bottom: 30px;
-    left: 0; } }
+    margin-top: 175px; } }
+@media (max-width: 767px) {
+  /* line 16, ../sass/layout/modules/_sales-order-history-empty.scss */
+  #account-order-history-empty #back {
+    margin-top: 125px; } }
 
 /* line 1, ../sass/layout/override/_global.scss */
 .clr {
