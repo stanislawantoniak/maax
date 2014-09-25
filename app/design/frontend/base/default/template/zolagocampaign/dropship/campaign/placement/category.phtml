@@ -362,11 +362,11 @@ jQuery(function ($) {
     $(document).on('click', '#delete-placement', function (e) {
         e.preventDefault();
         var placement = $(this).closest('#confirm-delete').find('[name="placement_id"]').val();
-        console.log(placement);
+
         if (parseInt(placement) > 0) {
             //remove from db
             $('form').append('<input type="hidden" name="remove[]" value="' + placement + '" />');
-            console.log($('form').find('[name="placement_id[]"][value=' + placement + ']'));
+
             $('form').find('[name="placement_id[]"][value=' + placement + ']').closest('.banner-item').remove();
         } else {
             //remove added html
@@ -551,11 +551,11 @@ jQuery(function ($) {
             //move placement after
 
             if ($(placementItem).closest('.campaign-list').find('.banner-item:eq(' + (priority) + ')').length > 0) {
-                console.log('index found');
+
                 $(placementItem).closest('.campaign-list').find('.banner-item:eq(' + (priority) + ')')
                     .before(placementItemHtml);
             } else {
-                console.log('index not found - get last');
+
                 if($(placementItem).closest('.campaign-list').find('.banner-item').last().length > 0){
                     $(placementItem).closest('.campaign-list').find('.banner-item').last()
                         .after(placementItemHtml);
@@ -580,7 +580,7 @@ jQuery(function ($) {
         var bannerName = modal.find('[name=banner] option:selected').text();
         var priority = modal.find('[name=priority] option:selected').val();
         var showEditLink = modal.find('[data-val="campaign-showedit"]').text();
-        console.log(showEditLink);
+
         var previewImage = modal.find('[data-banner="preview"] img').attr("src");
 
 
@@ -674,7 +674,6 @@ jQuery(function ($) {
         var status = nameSpace.find('[data-edit-source="campaign_status"]').html();
 
         var placementId = nameSpace.find('[name="placement_id[]"]').val();
-        console.log(placementId);
 
         var dates = [campaignDateFrom, campaignDateDash, campaignDateTo].join(" ");
         //set data to modal
@@ -689,12 +688,12 @@ jQuery(function ($) {
 
         modal.find('[name=priority]').val(priority);
 
-        if(campaignShowEditLink == 0){
-            modal.find('[data-edit-val="link-delete"]').hide();
-        }
-        if(campaignShowEditLink == 1){
-            modal.find('[data-edit-val="link-delete"]').show();
-        }
+//        if(campaignShowEditLink == 0){
+//            modal.find('[data-edit-val="link-delete"]').hide();
+//        }
+//        if(campaignShowEditLink == 1){
+//            modal.find('[data-edit-val="link-delete"]').show();
+//        }
 
         modal.find('[data-edit-val="link-edit"]').attr("href", "/campaign/vendor/edit/id/" + campaign);
 
