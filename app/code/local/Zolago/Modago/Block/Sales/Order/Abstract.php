@@ -5,6 +5,18 @@ class Zolago_Modago_Block_Sales_Order_Abstract extends Mage_Core_Block_Template
 
 	protected $_cache = array();
 
+	/**
+	 * @param Mage_Sales_Model_Order $order
+	 * @return bool
+	 */
+	public function hasPo(Mage_Sales_Model_Order $order) {
+		return $this->getPoCollection($order)->getSize()>0;
+	}
+	
+	/**
+	 * @param Mage_Sales_Model_Order $order
+	 * @return float
+	 */
 	public function getTotal(Mage_Sales_Model_Order $order) {
 		$price = 0;
 		foreach($this->getPoCollection($order) as $po){
