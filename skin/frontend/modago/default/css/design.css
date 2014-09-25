@@ -4587,73 +4587,76 @@ i.flag.hit, i.flag.bestseller {
 .table-cart .colgroup-01 .description_checked_product .product_name {
   font-size: 16px;
   color: #000; }
-/* line 319, ../sass/design/style/_shopping-cart.scss */
+/* line 318, ../sass/design/style/_shopping-cart.scss */
+.table-cart .colgroup-01 .description_checked_product .product_name a:hover {
+  text-decoration: underline; }
+/* line 322, ../sass/design/style/_shopping-cart.scss */
 .table-cart .colgroup-01 .description_checked_product .product_size {
   font-size: 12px; }
-/* line 324, ../sass/design/style/_shopping-cart.scss */
+/* line 327, ../sass/design/style/_shopping-cart.scss */
 .table-cart .colgroup-01 .description_checked_product .product_availability .icons-checked, .table-cart .colgroup-01 .description_checked_product .product_availability .icons-interjection {
   font-size: 12px;
   text-transform: none; }
-/* line 333, ../sass/design/style/_shopping-cart.scss */
+/* line 336, ../sass/design/style/_shopping-cart.scss */
 .table-cart .colgroup-02 .colgroup > div {
   text-align: center; }
 @media (max-width: 768px) {
-  /* line 333, ../sass/design/style/_shopping-cart.scss */
+  /* line 336, ../sass/design/style/_shopping-cart.scss */
   .table-cart .colgroup-02 .colgroup > div {
     text-align: left; } }
-/* line 341, ../sass/design/style/_shopping-cart.scss */
+/* line 344, ../sass/design/style/_shopping-cart.scss */
 .table-cart .colgroup-02 .colgroup .cena .stara_cena {
   vertical-align: middle;
   font-size: 11px;
   color: #565655;
   text-decoration: line-through; }
 @media (max-width: 767px) {
-  /* line 351, ../sass/design/style/_shopping-cart.scss */
+  /* line 354, ../sass/design/style/_shopping-cart.scss */
   .table-cart .colgroup-02 .colgroup .ilosc .select-group.medium .button-select {
     font-size: 11px;
     text-align: center; } }
-/* line 358, ../sass/design/style/_shopping-cart.scss */
+/* line 361, ../sass/design/style/_shopping-cart.scss */
 .table-cart .colgroup-02 .colgroup .ilosc .amount_product {
   text-align: center;
   font-size: 11px;
   border: 1px solid #afafaf;
   line-height: 22px; }
-/* line 365, ../sass/design/style/_shopping-cart.scss */
+/* line 368, ../sass/design/style/_shopping-cart.scss */
 .table-cart .colgroup-02 .colgroup .wartosc {
   font-weight: bold; }
-/* line 368, ../sass/design/style/_shopping-cart.scss */
+/* line 371, ../sass/design/style/_shopping-cart.scss */
 .table-cart .colgroup-02 .colgroup .usun {
   text-align: center; }
-/* line 375, ../sass/design/style/_shopping-cart.scss */
+/* line 378, ../sass/design/style/_shopping-cart.scss */
 .table-cart .colgroup-02 .colgroup.naglowek .cena, .table-cart .colgroup-02 .colgroup.naglowek .ilosc, .table-cart .colgroup-02 .colgroup.naglowek .wartosc, .table-cart .colgroup-02 .colgroup.naglowek .usun {
   font-weight: normal; }
-/* line 382, ../sass/design/style/_shopping-cart.scss */
+/* line 385, ../sass/design/style/_shopping-cart.scss */
 .table-cart .colgroup-02 .stara_cena, .table-cart .colgroup-02 .cena_zakupu {
   white-space: nowrap; }
 @media (min-width: 768px) {
-  /* line 382, ../sass/design/style/_shopping-cart.scss */
+  /* line 385, ../sass/design/style/_shopping-cart.scss */
   .table-cart .colgroup-02 .stara_cena, .table-cart .colgroup-02 .cena_zakupu {
     white-space: nowrap; } }
 
-/* line 395, ../sass/design/style/_shopping-cart.scss */
+/* line 398, ../sass/design/style/_shopping-cart.scss */
 .node-type-shopping-cart #content-main .conditions_shipping .panel-heading h2 {
   font-size: 18px; }
 
-/* line 405, ../sass/design/style/_shopping-cart.scss */
+/* line 408, ../sass/design/style/_shopping-cart.scss */
 #trigger_conditions_shipping .modal-dialog * {
   border: none;
   box-shadow: none; }
-/* line 409, ../sass/design/style/_shopping-cart.scss */
+/* line 412, ../sass/design/style/_shopping-cart.scss */
 #trigger_conditions_shipping .modal-dialog .panel {
   border: none !important; }
-/* line 414, ../sass/design/style/_shopping-cart.scss */
+/* line 417, ../sass/design/style/_shopping-cart.scss */
 #trigger_conditions_shipping .modal-dialog .panel-heading h2 {
   font-size: 18px; }
-/* line 418, ../sass/design/style/_shopping-cart.scss */
+/* line 421, ../sass/design/style/_shopping-cart.scss */
 #trigger_conditions_shipping .modal-dialog .panel-body {
   font-size: 14px; }
 
-/* line 427, ../sass/design/style/_shopping-cart.scss */
+/* line 430, ../sass/design/style/_shopping-cart.scss */
 .modal.learn_more h2.title_section {
   font-size: 18px !important; }
 
