@@ -23,7 +23,9 @@ class Zolago_Modago_Block_Sales_Order_Abstract extends Mage_Core_Block_Template
 		$vendors = array();
 		foreach($this->getPoCollection($order) as $po){
 			/* @var $po Zolago_Po_Model_Po */
-			$vendors[] = Mage::helper("udropship")->getVendor($po->getUdropshipVendor());
+			if(!isset($vendors[$po->getUdropshipVendor()] )){
+				$vendors[$po->getUdropshipVendor()] = Mage::helper("udropship")->getVendor($po->getUdropshipVendor());
+			}
 		}
 		usort($vendors, array($this, "_sortByVendor"));
 		return $vendors;
