@@ -819,6 +819,9 @@
             <action method="unsetChild">
                 <name>left</name>
             </action>
+            <action method="addBodyClass">
+                <value>not-menu-mobile</value>
+            </action>
         </reference>
 
 		<reference name="customer_account_navigation">
