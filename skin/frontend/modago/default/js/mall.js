@@ -611,16 +611,40 @@ Mall.product = {
         return label;
     },
 
+    getTextWidth: function(elem, text, font){
+        fakeElem = jQuery('<span>').hide().appendTo(document.body);
+        fakeElem.text(text || elem.val() || elem.text()).css('font', font || elem.css('font'));
+        var width = fakeElem.width();
+        fakeElem.remove();
+        return width;
+    },
+
+    setWidthSizeSquares: function(){;
+        jQuery('.size-box label').each(function(){
+
+            var wSizeLabel = jQuery(this).find('span').text().length;
+            var wLabel = Mall.product.getTextWidth(jQuery(this).find('span')) + 10;
+            if(wSizeLabel >= 4) {
+                jQuery(this).closest('label').css({width:wLabel+ 'px'})
+                jQuery(this).closest('label').children('span').css({width:wLabel+ 'px'})
+            }
+        })
+    },
+
     setDiagonalsOnSizeSquare: function(){
+
+        Mall.product.setWidthSizeSquares();
+
         var elFilterSize = jQuery('.size-box-bundle .form-group label');
         elFilterSize.each(function(){
+
             elFilterSizeWidth = jQuery(this).width();
-            elFilterSizeHeight = jQuery(this).height();
+            elFilterSizeHeight = jQuery(this).height();;
             obliczaniePrzekatnej = Math.pow(elFilterSizeWidth, 2) + Math.pow(elFilterSizeHeight, 2);
             przekatna = Math.sqrt(obliczaniePrzekatnej);
-            przekatna = przekatna;
             obliczenieWyrownania = (przekatna - elFilterSizeWidth)/2;
             obliczenieWyrownaniaOryginal = obliczenieWyrownania + 2;
+
             var angle = Math.tan(elFilterSizeHeight/elFilterSizeWidth);
 
             if (elFilterSizeWidth > 31) {
@@ -773,7 +797,8 @@ jQuery(document).ready(function() {
         }
     });
     if(jQuery(".size-box li").length) {
-        Mall.setSuperAttribute(jQuery("#size_" + jQuery(".size-box li a").first().attr('rel'))); }
+        Mall.setSuperAttribute(jQuery("#size_" + jQuery(".size-box li a").first().attr('rel')));
+    }
 
     Mall.product.setDiagonalsOnSizeSquare();
 

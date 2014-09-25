@@ -13,7 +13,6 @@ if (isset ( $solrData ['stats'] ['stats_fields'] [$priceFieldName] ['min'] )) {
 	$min = $solrData ['stats'] ['stats_fields'] [$priceFieldName] ['min'];
 	$min = number_format ( $min, 0, '', '');
 	$fromValue = $min;
-	
 	if (isset ( $_GET ['min'] ) && is_numeric ( $_GET ['min'] )) {
 		$min = $_GET ['min'];
 	}
@@ -60,9 +59,6 @@ if (!is_numeric ( $fromValue )) {
 /*
  * User changed price in text boxes
  */
-if ($fromValue <= $min) {
-	$initialState = true;
-}
 
 if (!is_numeric ( $toValue )) {
 	$toValue = $max;
@@ -112,17 +108,15 @@ array_pop($key_withoutFacet);
 $name = '';
 ?>
 <?php if ($max > 0):?>
-
-
     <div class="section clearfix">
         <h3 class="<?php echo $sectionClass; ?>"><?php echo $this->__("Price"); ?> <i class="fa <?php echo $iconClass; ?>"></i></h3>
         <div class="content"  id="filter_price">
 			<?php foreach($ranges as $range) : ?>
-			<?php $url = $this->getFacesUrl(array('fq'=>array('price' => $range['value']))); ?>	
+			<?php $url = $this->getFacesUrl(array('fq'=>array('price' => $range['value']),'price_facet'=>array('price'=>$range['value']))); ?>	
             <div class="form-group form-checkbox" data-url="<?php echo $url;?>">
-                <input type="checkbox" value="<?php echo $range['value'];?>" name="<?php echo $key; ?>" id="filter_price_<?php echo $range['start'];?>_<?php echo $range['end'];?>" class="css-checkbox"/>
+                <input type="checkbox" value="<?php echo $range['value'];?>" name="<?php echo $key; ?>" id="filter_price_<?php echo $range['start'];?>_<?php echo $range['end'];?>" class="css-checkbox"<?php if ($this->isRangeActive($range['value'])):?> checked="checked"<?php endif;?>/>
                 <label for="filter_price_<?php echo $range['start'];?>_<?php echo $range['end'];?>" class="css-label">
-		<span><?php echo $range['formatted'] ?></span></label>
+		<span><?php echo $range['formatted'] ?></span> <span class="suffix">(<?php echo $range['count']; ?>)</span></label>
             </div>
 			<?php endforeach; ?>
             <div id="od_do" class="clearfix">

@@ -387,6 +387,8 @@
                     <block type="zolagocms/component_slider" name="slider" before="-"/>
                     <block type="zolagocms/component_boxes" name="boxes" before="-"/>
                 </block>
+                <block type="zolagomodago/dropshipmicrositepro_vendor_banner" name="vendor.banner" template="unirgy/microsite/home/vendor/banner.phtml"/>
+                <block type="zolagomodago/dropshipmicrositepro_vendor_category_banner" name="vendor.banner.inspiration" template="unirgy/microsite/home/vendor/category/banner.phtml"/>
 
                 <block type="zolagomodago/home_inspirations" name="zolago_modago_home_inspirations" template="home/banner/inspirations.phtml"/>
                 <block type="zolagocms/component_inspirations" name="inspirations" before="-"/>
@@ -622,6 +624,26 @@
         <update handle="zolago_modago_customer_handle" />
     </customer_account_resetpassword>
 	
+	<sales_order_history>
+        <reference name="my.account.wrapper">
+			<!-- remove old history -->
+			<action method="unsetChild">
+				<name>sales.order.history</name>
+			</action>
+			<action method="unsetChild">
+				<name>customer.account.link.back</name>
+			</action>
+			<!-- add custom modago history -->
+            <block type="zolagomodago/sales_order_history" name="sales.order.history">
+				<block type="core/text_list" name="sales.order.history.info" as="info" translate="label">
+                    <label>Order History Info</label>
+                </block>
+				<!-- CMS USE: <block type="cms/block" block_id="block-id-in-magento" name="sales.order.history.empty" as="empty"/> -->
+				<block type="core/template" name="sales.order.history.empty" as="empty" template="sales/order/empty.phtml"/>
+            </block>
+        </reference>
+    </sales_order_history>
+	
 	<!-- ################################################################### -->
 	<!-- Checkout section													 -->
 	<!-- ################################################################### -->
@@ -751,6 +773,55 @@
         </reference>
     </checkout_guest_success>
 
+    <!--CUSTOMER ACCOUNT SECTION-->
 
+    <customer_account translate="label">
+        <label>Customer My Account (All Pages)</label>
+        <!--remove name="catalog.compare.sidebar"/>
+        <remove name="sale.reorder.sidebar"/-->
+        <!-- Mage_Customer -->
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/1column.phtml</template>
+            </action>
+            <action method="addBodyClass">
+                <value>catalog-category-view</value>
+            </action>
+            <action method="addBodyClass">
+                <value>node-type-main_categories</value>
+            </action>
+            <action method="addBodyClass">
+                <value>sidebar-first</value>
+            </action>
+            <action method="addBodyClass">
+                <value>view-menu-category</value>
+            </action>
+            <action method="unsetChild">
+                <name>left</name>
+            </action>
+        </reference>
+
+        <reference name="content">
+            <action method="unsetChild"><name>my.account.wrapper</name></action>
+            <block type="core/template" name="account.wrapper" template="customer/account/wrapper.phtml">
+                <action method="insert"><child>left</child></action>
+                <action method="insert"><child>my.account.wrapper</child></action>
+            </block>
+
+        </reference>
+
+        <reference name="left">
+            <action method="setTemplate"><template>customer/account/left.phtml</template></action>
+            <remove name="tags_popular"/>
+            <remove name="cart_sidebar"/>
+            <remove name="catalog.compare.sidebar"/>
+            <remove name="sale.reorder.sidebar"/>
+        </reference>
+    </customer_account>
+
+    <customer_account_index translate="label">
+        <label>Customer My Account Dashboard</label>
+        <!-- Mage_Customer -->
+    </customer_account_index>
     
 </layout>

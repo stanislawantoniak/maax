@@ -50,5 +50,19 @@ class Zolago_Campaign_Helper_Data extends Mage_Core_Helper_Abstract
         return Mage::getSingleton('zolagobanner/banner_type')->toOptionHash();
     }
 
+    /**
+     * @return array
+     */
+    public function getAllVendorsList()
+    {
+        $vendorModel = Mage::getModel('udropship/vendor');
+        $vendorCollection = $vendorModel->getCollection();
+        $vendorsList = array();
+        foreach ($vendorCollection as $vendorObj) {
+            $vendorsList[$vendorObj->getId()] = $vendorObj->getVendorName();
+        }
+        return $vendorsList;
+    }
+
 
 }

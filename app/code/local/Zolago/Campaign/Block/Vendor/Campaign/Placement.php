@@ -35,7 +35,9 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement extends Mage_Core_Block_Te
 
         if ($vendorRootCategory > 0) {
             //get all display_mode = page
-            $catList = $this->getCategoriesDisplayModePage($vendorRootCategory);
+            $cats = $this->getAllChildren($vendorRootCategory);
+
+            $catList = $this->getCategoriesDisplayModePage($cats);
             $cats = $vendorRootCategory . "," . trim($catList, ",");
 
             $collection = Mage::getModel("catalog/category")->getCollection()
@@ -59,15 +61,59 @@ class Zolago_Campaign_Block_Vendor_Campaign_Placement extends Mage_Core_Block_Te
         return $categories;
     }
 
+    /**
+     * @param $catId
+     * @return array
+     */
+    public function getAllChildren($catId)
+    {
+        $cats = array($catId);
+        $categoryV = Mage::getModel('catalog/category')->load($catId);
+        $children = $categoryV->getChildren();
 
-    public function getCategoriesDisplayModePage($parentId)
+        if (!empty($children)) {
+            foreach (explode(",", $children) as $childrenId) {
+                array_push($cats, $childrenId);
+                $categoryCh = Mage::getModel('catalog/category')->load($childrenId);
+                $children2 = $categoryCh->getChildren();
+
+                if (!empty($children2)) {
+                    foreach (explode(",", $children2) as $children2Id) {
+                        array_push($cats, $children2Id);
+                        $categoryCh2 = Mage::getModel('catalog/category')->load($children2Id);
+                        $children3 = $categoryCh2->getChildren();
+
+                        if (!empty($children3)) {
+                            foreach (explode(",", $children3) as $children3Id) {
+                                array_push($cats, $children3Id);
+                                $categoryCh3 = Mage::getModel('catalog/category')->load($children3Id);
+                                $children4 = $categoryCh3->getChildren();
+
+                                if (!empty($children4)) {
+                                    foreach (explode(",", $children4) as $children4Id) {
+                                        array_push($cats, $children4Id);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+
+        return $cats;
+    }
+
+
+    public function getCategoriesDisplayModePage($cats)
     {
         $allCats = Mage::getModel('catalog/category')->getCollection()
             ->addAttributeToSelect('*')
             ->addAttributeToFilter('is_active', '1')
             ->addAttributeToFilter('display_mode', Mage_Catalog_Model_Category::DM_PAGE)
             ->addAttributeToFilter('include_in_menu', '1')
-            ->addAttributeToFilter('parent_id', array('eq' => $parentId))
+            ->addAttributeToFilter('parent_id', array('in' => $cats))
             ->addAttributeToSort('position', 'asc');
 
 

@@ -1,0 +1,49 @@
+<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+<?php $_orders = $this->getOrders(); ?>
+<?php $_helper = Mage::helper("sales");?>
+<?php if(/*0 && */$_orders->getSize()): ?>
+	<div class="page-title box-wrapper">
+		<h1><?php echo $this->__('Order history') ?></h1>
+	</div>
+	<div class="background-wrapper box-wrapper">
+		<table class="data-table" id="my-orders-table">
+			<col width="120px" />
+			<col width="120px" />
+			<col width="120px" />
+			<col />
+			<col width="1" />
+			<col width="120px" />
+			<thead>
+				<tr>
+					<th><?php echo $_helper->__('Date placed') ?></th>
+					<th><?php echo $_helper->__('Order no') ?></th>
+					<th><?php echo $_helper->__('Shops') ?></th>
+					<th><?php echo $_helper->__('Products') ?></th>
+					<th><?php echo $_helper->__('Status') ?></th>
+					<th><?php echo $_helper->__('Details') ?></th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php $_odd = ''; ?>
+				<?php foreach ($_orders as $_order): ?>
+				<tr>
+					<td><span class="nobr"><?php echo $this->formatDate($_order->getCreatedAtStoreDate()) ?></span></td>
+					<td><?php echo $_order->getRealOrderId() ?></td>
+					<td>
+						<?php foreach($this->getVendors($_order) as $_vendor):?>
+							<?php echo $this->escapeHtml($_vendor->getVendorName());?><br/>
+						<?php endforeach;?>
+					</td>
+					<td><?php echo $_order->formatPrice($_order->getGrandTotal()) ?></td>
+					<td><em><?php echo $_order->getStatusLabel() ?></em></td>
+					<td class="a-center">
+						<span class="nobr"><a href="<?php echo $this->getViewUrl($_order) ?>"><?php echo $this->__('View Order') ?></a></span>
+					</td>
+				</tr>
+				<?php endforeach; ?>
+			</tbody>
+		</table>
+	</div>
+<?php else: ?>
+	<?php echo $this->getChildHtml("empty"); ?>
+<?php endif ?>

@@ -126,27 +126,6 @@ jQuery.noConflict();
             });
         });
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-// OBLICZANIE DŁUGOŚCI POLA
-        $.fn.textWidth = function(text, font) {
-            if (!$.fn.textWidth.fakeEl) $.fn.textWidth.fakeEl = $('<span>').hide().appendTo(document.body);
-            $.fn.textWidth.fakeEl.text(text || this.val() || this.text()).css('font', font || this.css('font'));
-            return $.fn.textWidth.fakeEl.width();
-        };
-
-        $('.size').find('label').each(function(){
-            var wSizeLabel = $(this).find('span').text().length;
-            var wLabel = $(this).find('span').textWidth()+10;
-            if(wSizeLabel >= 4) {
-                $(this).closest('label').css({width:wLabel+ 'px'})
-                $(this).closest('label').children('span').css({width:wLabel+ 'px'})
-            }
-
-        })
-
-// KONIEC OBLICZANIA DŁUGOŚCI POLA
-
         $('.table-footer-group').on('click', '.deliver_info', function(e){
             var _w = $(window).innerWidth();
             if (_w <=767) {
