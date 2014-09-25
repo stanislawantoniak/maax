@@ -221,18 +221,40 @@ Mall.listing = {
     appendFromQueue: function () {
         "use strict";
 
+        this.showLoading();
+        this.placeListingFadeContainer();
+        this.showShapesListing();
+
         // append products to list
         var products = Mall.listing.getProductQueue().slice(
                 0, Mall.listing.getScrollLoadOffset()),
             items = Mall.listing.appendToList(products),
             container = jQuery("#items-product"),
-            inst = imagesLoaded(jQuery(items));
+            inst = imagesLoaded(jQuery(items)),
+            self = this;
 
         jQuery(items).hide();
+
+        // loading
         inst.on("always", function () {
-            container.masonry({isAnimated: false, transitionDuration: 0}).masonry("reloadItems").masonry();
+            //setTimeout(function () {
             jQuery(items).show();
-            setTimeout(function () {Mall.listing.placeListingFadeContainer();}, 1000);
+            self.hideLoading();
+                container.masonry({isAnimated: false, transitionDuration: 0})
+                    .masonry("reloadItems").masonry();
+
+                // show load more button
+                if (Mall.listing.canShowLoadMoreButton()) {
+                    Mall.listing.showLoadMoreButton();
+                    Mall.listing.showShapesListing();
+                    Mall.listing.placeListingFadeContainer();
+                }
+
+                // reload if queue is empty
+                //container.masonry();
+
+                self.placeListingFadeContainer();
+            //}, 3000);
         });
 
         Mall.listing.addToVisibleItems(products.length);
@@ -246,12 +268,32 @@ Mall.listing = {
         Mall.listing.removeLockFromQueue();
         // load next part of images
         Mall.listing.loadPartImagesFromQueue();
-        // show load more button
-        if (Mall.listing.canShowLoadMoreButton()) {
-            Mall.listing.showLoadMoreButton();
-            Mall.listing.showShapesListing();
-            Mall.listing.placeListingFadeContainer();
-        }
+
+        return this;
+    },
+
+    /**
+     * Shows listing loading.
+     *
+     * @returns {Mall.listing}
+     */
+    showLoading: function () {
+        "use strict";
+
+        jQuery("#listing-loading").show();
+
+        return this;
+    },
+
+    /**
+     * Hides listing loading.
+     *
+     * @returns {Mall.listing}
+     */
+    hideLoading: function () {
+        "use strict";
+
+        jQuery("#listing-loading").hide();
 
         return this;
     },
@@ -263,6 +305,9 @@ Mall.listing = {
      */
     loadMoreProducts: function () {
         "use strict";
+
+        this.hideLoadMoreButton();
+        this.showLoading();
         this.setAutoappend(true);
         this.loadToQueue();
 
@@ -1110,20 +1155,12 @@ Mall.listing = {
      * @returns {Mall.listing}
      */
     reloadListingItemsAfterPageLoad: function() {
+        this.hideLoading();
 
         var container = jQuery("#items-product"),
             imgLoadedInst = imagesLoaded(container);
-        //    .masonry({
-        //    transitionDuration: 0
-        //});
-
-        this.setItemsImageDimensions(container);
-        //container.masonry("reloadItems");
-        //container.masonry();
 
         setTimeout(function() {
-            //container.masonry("reloadItems");
-            //container.masonry();
             Mall.listing.placeListingFadeContainer();
         }, 1000);
 
@@ -1150,21 +1187,6 @@ Mall.listing = {
                     .hideShapesListing();
             }
         });
-
-        //imagesLoaded("#items-product", function() {
-        //
-        //    container.masonry();
-        //
-        //    setTimeout(function() {
-        //            Mall.listing.placeListingFadeContainer();
-        //        }, 1000);
-        //
-        //        // hide load more button
-        //        if (Mall.listing.getTotal() > Mall.listing.getCurrentVisibleItems()) {
-        //            Mall.listing.hideLoadMoreButton()
-        //                .hideShapesListing();
-        //        }
-        //});
 
         return this;
     },
