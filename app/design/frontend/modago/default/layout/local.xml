@@ -625,6 +625,12 @@
 	</customer_account_resetpassword>
 	
 	<sales_order_history>
+        <reference name="root">
+            <action method="addBodyClass">
+                <value>lower-breadcrumbs</value>
+            </action>
+        </reference>
+
 		<reference name="breadcrumbs">
 			<action method="addCrumb">
 				<crumbName>history</crumbName>
