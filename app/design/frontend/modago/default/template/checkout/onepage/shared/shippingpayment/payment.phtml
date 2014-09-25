@@ -1,5 +1,5 @@
 <fieldset class="default_pay">
-    <h4>Sposób płatności:</h4>
+    <h4><?php echo Mage::helper("zolagocheckout")->__("Payment method");?>:</h4>
     <!-- PANEL -->
     <div class="panel panel-default">
         <div class="panel-body">
@@ -7,8 +7,13 @@
                 <h4>Wybierz sposób płatonści</h4>
                 <div class="row" style="margin-bottom: 15px;">
                     <div class="form-group form-checkbox small default_pay">
-                        <input type="checkbox" class="css-checkbox " id="default_pay" name="default_pay">
-                        <label class="css-label remember_this" for="default_pay">wybierz jako domyślną opcję płatności (podpowiada przy kolejnych zakupach)</label>
+						<?php if($this->getHasDefaultPayment()):?>
+							<input type="hidden" value="0" name="default_pay">
+							<input type="checkbox" class="css-checkbox " id="default_pay" value="1" name="default_pay">
+							<label class="css-label remember_this" for="default_pay">
+								<?php echo Mage::helper("zolagocheckout")->__("Set as default payment");?>
+							</label>
+						<?php endif;?>
                     </div>
                 </div>
             </div>

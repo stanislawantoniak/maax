@@ -1,8 +1,13 @@
 <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
 <?php $_orders = $this->getOrders(); ?>
 <?php $_helper = Mage::helper("sales");?>
+<?php $baseUrl = Mage::helper("core/url")->getHomeUrl(); ?>
 <div class="page-title box-wrapper">
-	<h1><?php echo $this->__('Order history') ?></h1>
+	<h1>
+		<span><?php echo $this->__('Order history') ?></span>
+		<span class="back-sm"><a href="<?php echo $baseUrl ?>customer/account/index/" class="underline">wróć do: Moje konto ></a></span>
+		<span class="back-xs"><a href="<?php echo $baseUrl ?>customer/account/index/" class="underline">wróć ></a></span>
+	</h1>
 </div>
 <?php if(/*0 && */$_orders->getSize()): ?>
 	<div class="background-wrapper box-wrapper">

@@ -5,6 +5,14 @@
 abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract
     extends Mage_Checkout_Block_Onepage_Abstract
 {
+	
+	/**
+	 * @return bool
+	 */
+	public function getHasDefaultPayment() {
+		return is_array($this->getQuote()->getCustomer()->getLastUsedPayment());
+	}
+	
 	/**
 	 * @param mixed $data
 	 * @return string
