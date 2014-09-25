@@ -802,25 +802,32 @@
 
 		<reference name="customer_account_navigation">
 
-            <!--<action method="removeLinkByName"><name>rma</name></action>-->
-            <!--<action method="removeLinkByName"><name>orders</name></action>-->
+            <!--RMA-->
+            <action method="addLink" translate="label"><name>rma</name><path>sales/rma/history/</path><label>Returns and complaints</label></action>
+            <!--Historia zamówień-->
+            <action method="addLink" translate="label"><name>orders</name><path>sales/order/history/</path><label>Orders history</label></action>
+            <!--Dane konta-->
+            <action method="addLink" translate="label"><name>account_edit</name><path>customer/account/edit/</path><label>Change password</label></action>
+            <!--SUBSKRYPCJA NEWSLETTERA-->
+            <action method="addLink" translate="label"><name>newsletter</name><path>newsletter/manage/</path><label>Settings mailing and sms</label></action>
+            <!--KSIĄŻKA ADRESOWA-->
+            <action method="addLink" translate="label"><name>address_book</name><path>customer/address/</path><label>Contact details</label></action>
+            <!--Panel konta-->
+            <action method="addLink" translate="label"><name>account</name><path>customer/account/</path><label>Orders in the realization</label></action>
 
-            <!--<action method="removeLinkByName"><name>recurring_profiles</name></action>-->
-            <!--<action method="removeLinkByName"><name>billing_agreements</name></action>-->
-            <!--<action method="removeLinkByName"><name>reviews</name></action>-->
-            <!--<action method="removeLinkByName"><name>downloadable_products</name></action>-->
+
+            <action method="removeLinkByName"><name>recurring_profiles</name></action>
+            <action method="removeLinkByName"><name>billing_agreements</name></action>
+            <action method="removeLinkByName"><name>reviews</name></action>
+            <action method="removeLinkByName"><name>downloadable_products</name></action>
             <action method="removeLinkByName"><name>OAuth Customer Tokens</name></action>
-            <!--<action method="removeLinkByName"><name>account</name></action>-->
-            <!--<action method="removeLinkByName"><name>account_edit</name></action>-->
-            <!--<action method="removeLinkByName"><name>address_book</name></action>-->
             <action method="removeLinkByName"><name>tags</name></action>
             <action method="removeLinkByName"><name>wishlist</name></action>
-            <!--<action method="removeLinkByName"><name>newsletter</name></action>-->
-            <!--<action method="removeLinkByName"><name>udqa</name></action>-->
-            <!--<action method="removeLinkByName"><name>udpreviews</name></action>-->
-            <!--<action method="removeLinkByName"><name>udratings</name></action>-->
+            <action method="removeLinkByName"><name>udqa</name></action>
+            <action method="removeLinkByName"><name>udpreviews</name></action>
+            <action method="removeLinkByName"><name>udratings</name></action>
 
-		</reference>
+        </reference>
 
         <reference name="content">
             <action method="unsetChild"><name>my.account.wrapper</name></action>
