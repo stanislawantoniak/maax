@@ -4,7 +4,19 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Review
 	extends Zolago_Modago_Block_Checkout_Onepage_Abstract
 {
 
+    protected $_total;
+    protected $_total_sum;
+    protected $_total_shipping;
+    protected $_shipping;
     protected $_block;
+    
+    public function getTotalSum() {
+        return $this->_total_sum;
+    }
+        
+    public function getShipping() {
+        return $this->_shipping;
+    }
     protected function _getCartBlock($type) {
         if (empty($this->_block[$type])) {
             $block = $this->_assignBlock($type);
@@ -45,13 +57,32 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Review
     
     //{{{ 
     /**
+     * count total order value
+     * @param array $items
+     * @return 
+     */
+    protected function _calculateTotal($items) {
+        $sum = 0;
+        if (!empty($items)) {
+            foreach ($items as $item) {
+                $sum += $item->getData('row_total_incl_tax');
+            }
+            
+        }
+        $this->_total = $sum;
+    }
+    //}}}
+    //{{{ 
+    /**
      * @return array
      */
 
     //}}}
     public function getItems() {
         $block = $this->_getCartBlock('cart');
-        return $block->getItems();
+        $items = $block->getItems();        
+        $this->_calculateTotal($items);
+        return $items;
     }
     
     
@@ -91,4 +122,60 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Review
          return $this->getUrl('checkout/cart');
      }
     //}}}
+    public function getFormattedShippingMethods() {
+        $qRates = $this->getRates();
+        $allMethodsByCode = array();
+        foreach ($qRates as $cCode => $cRates) {
+            foreach ($cRates as $rate) {
+
+                $vId = $rate->getUdropshipVendor();
+                if (!$vId) {
+                    continue;
+                }
+                $rates[$vId][$cCode][] = $rate;
+                $vendors[$vId] = $vId;
+                $methodsByCode[$rate->getCode()] = array(
+                                                       'vendor_id' => $vId,
+                                                       'code' => $rate->getCode(),
+                                                       'carrier_title' => $rate->getData('carrier_title'),
+                                                       'method_title' => $rate->getData('method_title')
+                                                   );
+                $allMethodsByCode[$rate->getCode()][] = array(
+                        'vendor_id' => $vId,
+                        'code' => $rate->getCode(),
+                        'carrier_title' => $rate->getData('carrier_title'),
+                        'method_title' => $rate->getData('method_title'),
+                        'cost' => $rate->getPrice()
+                                                        );
+
+            }
+            unset($cRates);
+            unset($rate);
+        }
+        return $allMethodsByCode;
+    }
+
+    public function preparePresentation() {
+        $total_shipping = array();
+        $list = array();
+        $methods = $this->getFormattedShippingMethods();
+        foreach ($methods as $method) {	
+            foreach ($method as $vendor) {
+                $list[$vendor['code']][$vendor['vendor_id']] = array (
+                    'name' => $vendor['method_title'],
+                    'value' =>  Mage::helper('core')->formatPrice($vendor['cost']),
+                );
+                if (empty($total_shipping[$vendor['code']])) {
+                    $total_shipping[$vendor['code']] = 0;
+                }
+                $total_shipping[$vendor['code']] += $vendor['cost'];
+            }
+        }
+        $this->_shipping = $list;
+        foreach ($total_shipping as $key=>$val) {
+            $this->_total_sum[$key] = Mage::helper('core')->formatPrice($val+$this->_total);
+            $this->_total_shipping[$key] = Mage::helper('core')->formatPrice($val);
+        }
+    }
+
 } 

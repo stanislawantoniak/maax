@@ -4,7 +4,7 @@ class Zolago_Modago_Block_Sales_Order_Abstract extends Mage_Core_Block_Template
 {
 
 	protected $_cache = array();
-	
+
 	public function getTotal(Mage_Sales_Model_Order $order) {
 		$price = 0;
 		foreach($this->getPoCollection($order) as $po){
@@ -14,7 +14,7 @@ class Zolago_Modago_Block_Sales_Order_Abstract extends Mage_Core_Block_Template
 		return $price;
 		
 	}
-	
+
 	/**
 	 * @param Mage_Sales_Model_Order $order
 	 * @return array - vendor names sorretd vendro objects
