@@ -5721,7 +5721,7 @@ yx-axis
 
 /* line 1, ../sass/layout/modules/_account-content.scss */
 .account-content {
-  margin-top: 30px; }
+  margin-top: 0px; }
 @media (max-width: 767px) {
   /* line 1, ../sass/layout/modules/_account-content.scss */
   .account-content {
