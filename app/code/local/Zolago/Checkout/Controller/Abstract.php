@@ -181,8 +181,16 @@ abstract class Zolago_Checkout_Controller_Abstract
 			if(isset($paymentResponse['error']) && $paymentResponse['error']==1){
 				throw new Mage_Core_Exception($paymentResponse['message']);
 			}
+			// Set default payment?
+			$defaultPayment = $request->getParam("default_pay");
+			if($defaultPayment===null || $defaultPayment=="1"){
+				$this->_getCustomerSession()->setTransferPayment(true);
+			}else{
+				$this->_getCustomerSession()->setTransferPayment(null);
+			}
 		}
 		
+
 		// Override collect totals - make final collect totals
 		$onepage->getQuote()->
 			setTotalsCollectedFlag(false)->

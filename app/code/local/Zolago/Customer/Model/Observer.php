@@ -24,13 +24,12 @@ class Zolago_Customer_Model_Observer {
 			if($order->getCustomerId()){
 				$customer->load($order->getCustomerId());
 			}
-			if($customer->getId()){
+			if($customer->getId() && Mage::getSingleton('customer/session')->getTransferPayment(true)){
 				$data = array(
 					"method"			=> $payment->getMethod(),
 					"additional_information"	=> $payment->getAdditionalInformation()
 				);
-				$customer->setLastUsedPayment($data);
-				$customer->save();
+				$customer->setLastUsedPayment($data)->save();
 			}
 		}
 	

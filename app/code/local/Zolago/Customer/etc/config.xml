@@ -34,6 +34,11 @@
             <zolagocustomer>
                 <class>Zolago_Customer_Block</class>
             </zolagocustomer>
+			<customer>
+				<rewrite>
+					<account_navigation>Zolago_Customer_Block_Account_Navigation</account_navigation>
+				</rewrite>
+			</customer>
         </blocks>
         <resources>
             <zolagocustomer_setup>

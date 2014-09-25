@@ -99,7 +99,7 @@ Mall.validate = {
 
         jQuery.validator.addMethod('validate-passwordbackend', function () {
             return Mall.validate.validators.passwordbackend.apply(this, arguments);
-        }, jQuery.validator.format(Mall.translate.__("password-needs-to-have-at-least-x-characters", "Password needs to have at least 6 characters")));
+        }, jQuery.validator.format(Mall.translate.__("Password needs to have at least %s characters", "Password needs to have at least 6 characters")));
 
         jQuery.validator.addMethod('validate-telephone', function () {
             return Mall.validate.validators.telephone.apply(this, arguments);

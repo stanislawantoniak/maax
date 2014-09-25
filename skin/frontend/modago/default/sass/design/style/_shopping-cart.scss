@@ -183,6 +183,7 @@
 	}
 #sidebar-secondary {
 	#cart-summary {
+        border: 4px #c6a662 solid;
 		> header {
 			h2 {
 				font-size: 18px;
@@ -314,6 +315,9 @@
 			.product_name {
 				font-size: 16px;
 				color:#000;
+                a:hover {
+                    text-decoration: underline;
+                }
 			}
 			.product_size {
 				font-size: 12px;
