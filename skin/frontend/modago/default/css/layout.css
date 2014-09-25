@@ -5816,14 +5816,29 @@ yx-axis
 
 /* line 2, ../sass/layout/modules/_account_navigation.scss */
 .account-nav li {
-  padding-bottom: 10px; }
-/* line 5, ../sass/layout/modules/_account_navigation.scss */
+  padding-bottom: 7px;
+  padding-top: 7px; }
+/* line 6, ../sass/layout/modules/_account_navigation.scss */
 .account-nav .active {
   font-family: "latoblack"; }
 
 /* line 14, ../sass/layout/modules/_account_navigation.scss */
 .sidebar .account-nav .nav-pills li a:link, .sidebar .account-nav .nav-pills li a:visited {
   padding: 0px 0px 0px 0px; }
+
+/* line 1, ../sass/layout/modules/_account-content.scss */
+.account-content {
+  margin-top: 0px; }
+@media (max-width: 767px) {
+  /* line 1, ../sass/layout/modules/_account-content.scss */
+  .account-content {
+    margin-top: -51px; } }
+
+@media (min-width: 767px) {
+  /* line 9, ../sass/layout/modules/_account-content.scss */
+  .lower-breadcrumbs #header-main {
+    padding-top: 0px;
+    padding-bottom: 0px; } }
 
 /* line 1, ../sass/layout/modules/_sales-order-history-empty.scss */
 #account-order-history-empty {
