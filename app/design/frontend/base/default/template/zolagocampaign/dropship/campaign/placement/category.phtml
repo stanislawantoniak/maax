@@ -240,6 +240,7 @@ $isLocalVendor = ($vendor->getId() == Mage::helper('udropship')->getLocalVendorI
                         <span data-val="campaign-date-from"></span>
                         <span data-val="campaign-date-to"></span>
                         <span data-val="campaign-vendorname"></span>
+                        <span data-val="campaign-showedit"></span>
                     </div>
                 </div>
 
@@ -336,6 +337,7 @@ jQuery(function ($) {
     var compaigns = '<?php echo $campaigns; ?>';
     var compaignsObj = jQuery.parseJSON(compaigns);
     var isLocalVendor = '<?php echo $isLocalVendor; ?>';
+    var vendorId = '<?php echo $vendor->getId(); ?>';
 
     $(document).on('change', '#basicModal select[name=campaign]', function () {
         var campaign = $(this).val();
@@ -364,8 +366,8 @@ jQuery(function ($) {
         if (parseInt(placement) > 0) {
             //remove from db
             $('form').append('<input type="hidden" name="remove[]" value="' + placement + '" />');
-            console.log($('form [data-placement="' + placement + '"]').closest('.banner-item'));
-            $('form').find('[data-placement="' + placement + '"]').closest('.banner-item').remove();
+            console.log($('form').find('[name="placement_id[]"][value=' + placement + ']'));
+            $('form').find('[name="placement_id[]"][value=' + placement + ']').closest('.banner-item').remove();
         } else {
             //remove added html
             $('form').find('[name="status"]').parents('.banner-item').remove();
@@ -375,9 +377,39 @@ jQuery(function ($) {
         $("#confirm-delete").modal('hide');
     })
 
+    function saveNewPresentation(campaignId, bannerId, type, position, priority) {
+        setPriority();
+        recountHeight();
+        var dataToSave = {};
+        //collect data
+        var category = $('[name=category]').val();
+
+        //assign data
+        dataToSave.vendor_id = vendorId;
+        dataToSave.category_id = category;
+
+        dataToSave.campaign_id = campaignId;
+        dataToSave.banner_id = bannerId;
+        dataToSave.type = type;
+        dataToSave.position = position;
+        dataToSave.priority = priority;
+
+        $.ajax({
+            url: '/campaign/placement_category/saveNew',
+            method: 'POST',
+            data: dataToSave,
+            success: function(id){
+                $('[data-current="1"]').find('input[name="placement_id[]"]').val(id);
+                $('[data-current="1"]').data("current",0);
+
+                savePresentation();
+            }
+
+        })
+
+    }
 
     function savePresentation() {
-
         setPriority();
         recountHeight();
         $.ajax({
@@ -547,6 +579,8 @@ jQuery(function ($) {
         var banner = modal.find('[name=banner] option:selected').val();
         var bannerName = modal.find('[name=banner] option:selected').text();
         var priority = modal.find('[name=priority] option:selected').val();
+        var showEditLink = modal.find('[data-val="campaign-showedit"]').text();
+        console.log(showEditLink);
         var previewImage = modal.find('[data-banner="preview"] img').attr("src");
 
 
@@ -571,7 +605,7 @@ jQuery(function ($) {
             if($.type(previewImage) !== "undefined"){
                 campaignBlock += '<img src="'+previewImage+'" class="banner-preview-image" style="height: 120px;" />' ;
             }
-            campaignBlock +=    '<div class="row">' +
+            campaignBlock +=    '<div class="row" data-current="1">' +
                 '<div class= "col-md-8" >' +
                 '<input type="hidden" name="placement_id[]" value="0">' +
                 '<input type="hidden" name="campaign_id[]" value="'+campaign+'">' +
@@ -593,13 +627,16 @@ jQuery(function ($) {
                 '<i class="'+status+'" data-edit-val="link-edit-status"></i>'+
                  dates +
                 '</div>' +
+                '<input type="hidden" value="'+showEditLink+'" name="show_edit_link" />' +
                 '</li>';
 
             changePlacementItemPriority($('[data-targ="add"]'), priority);
             $('[data-targ="add"]').replaceWith(campaignBlock);
 
             clearOptions();
-            savePresentation();
+
+            saveNewPresentation(campaign, banner, bannerType, pos, priority);
+            //savePresentation();
             $('#basicModal').modal('hide');
 
         } else {
@@ -655,6 +692,9 @@ jQuery(function ($) {
         if(campaignShowEditLink == 0){
             modal.find('[data-edit-val="link-delete"]').hide();
         }
+        if(campaignShowEditLink == 1){
+            modal.find('[data-edit-val="link-delete"]').show();
+        }
 
         modal.find('[data-edit-val="link-edit"]').attr("href", "/campaign/vendor/edit/id/" + campaign);
 
@@ -687,6 +727,7 @@ jQuery(function ($) {
         modal.find('.alert.alert-warning').remove();
         modal.find('[data-val="campaign-status"]').html('');
         modal.find('[data-val="campaign-vendorname"]').html('');
+        modal.find('[data-val="campaign-showedit"]').html('');
         modal.find('[name="show_edit_link"]').val(0);
         $('[data-targ="add"]').remove();
         modal.find('[data-edit-val="link-delete"]').show();
@@ -700,6 +741,7 @@ jQuery(function ($) {
         modal.find('[data-edit-val="dates"]').html('');
         modal.find('img.image-preview-big').attr("src",'');
         modal.find('[name="show_edit_link"]').val(0);
+        modal.find('[data-val="campaign-showedit"]').html('');
         $('[data-targ="add"]').remove();
         modal.find('[data-edit-val="link-delete"]').show();
 
@@ -777,6 +819,7 @@ jQuery(function ($) {
                     $("#basicModal").find('[data-val="campaign-status"]').html(data.status.icon);
 
                     $("#basicModal").find('[data-val="campaign-vendorname"]').html(data.campaign_vendor);
+                    $("#basicModal").find('[data-val="campaign-showedit"]').html(data.showedit);
                 }
             })
         }

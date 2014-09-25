@@ -11,7 +11,30 @@ class Zolago_Campaign_Placement_CategoryController extends Zolago_Dropship_Contr
         Mage::register('as_frontend', true);
         $this->_renderPage(null, 'zolagocampaign');
     }
+    public function saveNewAction() {
+        $helper = Mage::helper('zolagocampaign');
+        if (!$this->getRequest()->isPost()) {
+            return $this->_redirectReferer();
+        }
+        $data = $this->getRequest()->getParams();
 
+        $placement = array(
+            'vendor_id' => $data['vendor_id'],
+            'category_id' => $data['category_id'],
+            'campaign_id' => $data['campaign_id'],
+            'banner_id' => $data['banner_id'],
+            'type' => $data['type'],
+            'position' => $data['position'],
+            'priority' => $data['priority'],
+        );
+        $campaign = Mage::getResourceModel('zolagocampaign/campaign');
+        try {
+            $id = $campaign->setNewCampaignPlacement($placement);
+            echo $id;
+        } catch (Exception $e) {
+            echo $helper->__("Some error occure");
+        }
+    }
     public function saveAction()
     {
         $helper = Mage::helper('zolagocampaign');
@@ -22,8 +45,6 @@ class Zolago_Campaign_Placement_CategoryController extends Zolago_Dropship_Contr
         $data = $this->getRequest()->getParams();
 
         $categoryId = (int)$data['category'];
-
-        echo $categoryId;
         $campaign = Mage::getResourceModel('zolagocampaign/campaign');
         //remove items
         if(isset($data['remove'])){

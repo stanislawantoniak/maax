@@ -238,10 +238,10 @@ Mall.listing = {
         // loading
         inst.on("always", function () {
             //setTimeout(function () {
+            jQuery(items).show();
+            self.hideLoading();
                 container.masonry({isAnimated: false, transitionDuration: 0})
                     .masonry("reloadItems").masonry();
-                jQuery(items).show();
-                self.hideLoading();
 
                 // show load more button
                 if (Mall.listing.canShowLoadMoreButton()) {
@@ -251,9 +251,7 @@ Mall.listing = {
                 }
 
                 // reload if queue is empty
-                if (self.getProductQueue().length === 0) {
-                    container.masonry();
-                }
+                //container.masonry();
 
                 self.placeListingFadeContainer();
             //}, 3000);
