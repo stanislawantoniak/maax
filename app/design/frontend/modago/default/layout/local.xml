@@ -587,7 +587,7 @@
 
 		</reference>
 	</umicrosite_index_landingpage>
-    
+
 	<sales_order_history>
         <reference name="root">
             <action method="addBodyClass">
