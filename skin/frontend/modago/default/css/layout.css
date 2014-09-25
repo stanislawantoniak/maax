@@ -5710,12 +5710,13 @@ yx-axis
 
 /* line 2, ../sass/layout/modules/_account_navigation.scss */
 .account-nav li {
-  padding-bottom: 10px; }
-/* line 5, ../sass/layout/modules/_account_navigation.scss */
+  padding-bottom: 7px;
+  padding-top: 7px; }
+/* line 6, ../sass/layout/modules/_account_navigation.scss */
 .account-nav .active {
   font-family: "latoblack"; }
 
-/* line 13, ../sass/layout/modules/_account_navigation.scss */
+/* line 14, ../sass/layout/modules/_account_navigation.scss */
 .sidebar .account-nav .nav-pills li a:link, .sidebar .account-nav .nav-pills li a:visited {
   padding: 0px 0px 0px 0px; }
 
