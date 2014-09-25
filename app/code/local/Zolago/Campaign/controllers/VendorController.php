@@ -227,13 +227,19 @@ class Zolago_Campaign_VendorController extends Zolago_Dropship_Controller_Vendor
         $campaign = $model->load($modelId);
 
         if (!empty($campaign)) {
+            $vendorsList = Mage::helper('zolagocampaign')->getAllVendorsList();
             $format = "d.m.Y H:i:s";
             $dateFrom = $campaign->getData('date_from');
             $dateTo = $campaign->getData('date_to');
 
+            $vendor = Mage::getSingleton('udropship/session')->getVendor();
+            $vendorId = $vendor->getId();
+
             $campaignData = array(
                 'campaign_id' => $campaign->getId(),
                 'vendor_id' => $campaign->getVendorId(),
+                'showedit' => (int)($campaign->getVendorId() == $vendorId),
+                'campaign_vendor' => $vendorsList[$campaign->getVendorId()],
                 'date_from' => !empty($dateFrom) ? date($format, strtotime($dateFrom)) : '',
                 'date_to' => !empty($dateTo) ? date($format, strtotime($dateTo)) : ''
             );

@@ -8,11 +8,13 @@
 				 <path>sales/rma/history</path>
 				 <label>Rma History</label>
 			 </action>
+			 <!-- 
 			 <action method="addLink" translate="label" module="zolagopo">
 				 <name>orders</name>
 				 <path>sales/po/history</path>
 				 <label>Purchase Order History</label>
 			 </action>
+			 -->
 		</reference>
 	</customer_account>
 	<sales_po_view>
