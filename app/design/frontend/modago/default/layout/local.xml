@@ -587,43 +587,7 @@
 
 		</reference>
 	</umicrosite_index_landingpage>
-	
-	<!-- ################################################################### -->
-	<!-- Customer section													 -->
-	<!-- ################################################################### -->
-	<zolago_modago_customer_handle>
-		<reference name="head">
-			<action method="addItem">
-				<type>skin_js</type>
-				<script>js/mall/account.js</script>
-			</action>
-		</reference>
-	</zolago_modago_customer_handle>
-
-	<customer_account_login>
-		<reference name="customer_form_login">
-			<block type="zolagomodago/customer_form_login_continue" name="form.register.continue"></block>
-		</reference>
-
-		<update handle="zolago_modago_customer_handle" />
-	</customer_account_login>
-	<customer_account_forgotpassword>
-		<update handle="zolago_modago_customer_handle" />
-	</customer_account_forgotpassword>
-
-	<customer_account_forgotpasswordmessage>
-		<update handle="zolago_modago_customer_handle" />
-		<reference name="forgot.password.message">
-			<action method="setTemplate">
-				<template>customer/forgotpasswordmessage.phtml</template>
-			</action>
-		</reference>
-	</customer_account_forgotpasswordmessage>
     
-	<customer_account_resetpassword>
-		<update handle="zolago_modago_customer_handle" />
-	</customer_account_resetpassword>
-	
 	<sales_order_history>
         <reference name="root">
             <action method="addBodyClass">
@@ -810,8 +774,11 @@
         </reference>
     </checkout_guest_success>
 
-    <!--CUSTOMER ACCOUNT SECTION-->
 
+	<!-- ################################################################### -->
+	<!-- Customer section													 -->
+	<!-- ################################################################### -->
+	
     <customer_account translate="label">
         <label>Customer My Account (All Pages)</label>
         <!--remove name="catalog.compare.sidebar"/>
@@ -978,6 +945,101 @@
 	<customer_account_index translate="label">
 		<label>Customer My Account Dashboard</label>
 		<!-- Mage_Customer -->
+		<reference name="root">
+            <action method="setTemplate">
+                <template>page/1column.phtml</template>
+            </action>
+		</reference>
 	</customer_account_index>
+	
+	<zolago_modago_customer_handle>
+		<reference name="head">
+			<action method="addItem">
+				<type>skin_js</type>
+				<script>js/mall/account.js</script>
+			</action>
+		</reference>
+	</zolago_modago_customer_handle>
+
+	<customer_account_login>
+		<reference name="customer_form_login">
+			<block type="zolagomodago/customer_form_login_continue" name="form.register.continue"></block>
+		</reference>
+
+		<update handle="zolago_modago_customer_handle" />
+	</customer_account_login>
+	<customer_account_forgotpassword>
+		<update handle="zolago_modago_customer_handle" />
+	</customer_account_forgotpassword>
+
+	<customer_account_forgotpasswordmessage>
+		<update handle="zolago_modago_customer_handle" />
+		<reference name="forgot.password.message">
+			<action method="setTemplate">
+				<template>customer/forgotpasswordmessage.phtml</template>
+			</action>
+		</reference>
+	</customer_account_forgotpasswordmessage>
+    
+	<customer_account_resetpassword>
+		<update handle="zolago_modago_customer_handle" />
+	</customer_account_resetpassword>
+	
+	
+	<!-- ################################################################### -->
+	<!-- Sales												 -->
+	<!-- ################################################################### -->
+	
+	<sales_order_history>
+		<reference name="breadcrumbs">
+			<action method="addCrumb">
+				<crumbName>history</crumbName>
+				<crumbInfo>
+					<label>Order history</label>
+					<title>Order history</title>
+				</crumbInfo>
+			</action>
+		</reference>
+		<reference name="my.account.wrapper">
+			<!-- remove old history -->
+			<action method="unsetChild">
+				<name>sales.order.history</name>
+			</action>
+			<action method="unsetChild">
+				<name>customer.account.link.back</name>
+			</action>
+			<!-- add custom modago history -->
+			<block type="zolagomodago/sales_order_history" name="sales.order.history">
+				<block type="core/text_list" name="sales.order.history.info" as="info" translate="label">
+					<label>Order History Info</label>
+				</block>
+				<block type="cms/block" name="sales.order.history.empty" as="empty">
+					<action method="setBlockId">
+						<block_id>account-order-history-empty</block_id>
+					</action>
+				</block>
+			</block>
+		</reference>
+	</sales_order_history>
+	
+	<sales_order_view>
+		<reference name="my.account.wrapper">
+			<!-- remove old view -->
+			<action method="unsetChild">
+				<name>sales.order.view</name>
+			</action>
+			<action method="unsetChild">
+				<name>sales.order.item.default</name>
+			</action>
+			<!-- add custom modago view -->
+			<block type="zolagomodago/sales_order_view" name="sales.order.view">
+				<block type="zolagomodago/sales_order_shipment" name="sales.order.shipment" template="sales/order/shipment.phtml"/>
+				<block type="zolagomodago/sales_order_info" name="sales.order.info" template="sales/order/info.phtml"/>
+				<block type="zolagomodago/sales_order_item" name="sales.order.item">
+					<block type="zolagomodago/sales_order_item_renderer_default" name="sales.order.item.default"/>
+				</block>
+			</block>
+		</reference>
+	</sales_order_view>
     
 </layout>
