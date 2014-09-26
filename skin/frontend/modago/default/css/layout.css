@@ -1,4 +1,3 @@
-@charset "UTF-8";
 /*$icoMapDesktop: sprite-map("desktop/ico/*.png");
 $icoMapMobile: sprite-map("mobile/ico/*.png");
 $bulletMap: sprite-map("sprites/bullet/*.png");
@@ -8995,12 +8994,12 @@ i.flag.hit, i.flag.bestseller {
   /* line 528, ../sass/layout/style/_checkout.scss */
   #checkout form .phone {
     display: inline-block;
-    margin-bottom: 15px; } }
+    margin-bottom: 0px; } }
 @media (max-width: 359px) {
   /* line 528, ../sass/layout/style/_checkout.scss */
   #checkout form .phone {
     display: block;
-    margin-bottom: 15px; } }
+    margin-bottom: 0px; } }
 @media (max-width: 359px) {
   /* line 537, ../sass/layout/style/_checkout.scss */
   #checkout form .phone span {
@@ -9883,22 +9882,22 @@ form .has-error label.error, form .has-error span.error {
   font-size: 12px;
   font-weight: normal;
   line-height: 1 !important;
-  padding: 10px 0 0px 15px !important;
+  padding: 10px 0 0px 0px !important;
   clear: both;
   display: block;
   text-align: left !important; }
-/* line 666, ../sass/override/_override-layout.scss */
+/* line 667, ../sass/override/_override-layout.scss */
 form .has-error.form-checkbox label.error, form .has-error.form-checkbox span.error {
-  padding: 0 0 0 0;
+  padding: 2px 0 20px 20px !important;
   height: 0px; }
-/* line 673, ../sass/override/_override-layout.scss */
+/* line 674, ../sass/override/_override-layout.scss */
 form .has-error [type="text"], form .has-error [type="email"], form .has-error [type="password"] {
   border-color: #ec695d; }
-/* line 679, ../sass/override/_override-layout.scss */
+/* line 680, ../sass/override/_override-layout.scss */
 form .form-group {
   position: relative;
   margin-bottom: 15px; }
-/* line 682, ../sass/override/_override-layout.scss */
+/* line 683, ../sass/override/_override-layout.scss */
 form .form-group [type="text"], form .form-group [type="email"], form .form-group [type="password"], form .form-group [type="tel"] {
   border: 1px solid #bcbcbc;
   border-radius: 1px;
@@ -9910,42 +9909,42 @@ form .form-group [type="text"], form .form-group [type="email"], form .form-grou
   font-family: "latoregular";
   height: 42px;
   outline: none !important; }
-/* line 698, ../sass/override/_override-layout.scss */
+/* line 699, ../sass/override/_override-layout.scss */
 form .form-group .firstName {
   max-width: 296px; }
-/* line 699, ../sass/override/_override-layout.scss */
+/* line 700, ../sass/override/_override-layout.scss */
 form .form-group .lastName {
   max-width: 296px; }
-/* line 700, ../sass/override/_override-layout.scss */
-form .form-group .firm {
-  max-width: 415px; }
 /* line 701, ../sass/override/_override-layout.scss */
-form .form-group .city {
+form .form-group .firm {
   max-width: 314px; }
 /* line 702, ../sass/override/_override-layout.scss */
-form .form-group .street {
-  max-width: 415px; }
+form .form-group .city {
+  max-width: 314px; }
 /* line 703, ../sass/override/_override-layout.scss */
+form .form-group .street {
+  max-width: 314px; }
+/* line 704, ../sass/override/_override-layout.scss */
 form .form-group .zipcode {
   max-width: 72px; }
-/* line 704, ../sass/override/_override-layout.scss */
+/* line 705, ../sass/override/_override-layout.scss */
 form .form-group .phone {
   max-width: 115px; }
-/* line 705, ../sass/override/_override-layout.scss */
+/* line 706, ../sass/override/_override-layout.scss */
 form .form-group .email, form .form-group .login-text-field {
   max-width: 296px !important; }
-/* line 706, ../sass/override/_override-layout.scss */
+/* line 707, ../sass/override/_override-layout.scss */
 form .form-group .password {
   max-width: 235px; }
-/* line 707, ../sass/override/_override-layout.scss */
+/* line 708, ../sass/override/_override-layout.scss */
 form .form-group .nip {
   max-width: 115px; }
-/* line 711, ../sass/override/_override-layout.scss */
+/* line 712, ../sass/override/_override-layout.scss */
 form .form-group input:disabled {
   border-color: #d9d9d9;
   color: gray;
   box-shadow: none; }
-/* line 716, ../sass/override/_override-layout.scss */
+/* line 717, ../sass/override/_override-layout.scss */
 form .form-group textarea {
   border: 1px solid #bcbcbc;
   border-radius: 1px;
@@ -9958,13 +9957,13 @@ form .form-group textarea {
   font-family: "latoregular";
   resize: vertical;
   outline: none !important; }
-/* line 729, ../sass/override/_override-layout.scss */
+/* line 730, ../sass/override/_override-layout.scss */
 form .form-group input[type=checkbox].css-checkbox, form .form-group input[type=radio].css-radio {
   visibility: hidden;
   position: absolute;
   top: -200px;
   left: -200px; }
-/* line 738, ../sass/override/_override-layout.scss */
+/* line 739, ../sass/override/_override-layout.scss */
 form .form-group input[type=checkbox].css-checkbox + label.css-label, form .form-group input[type=checkbox].css-checkbox:active + label.css-label, form .form-group input[type=radio].css-radio + label.css-label {
   padding-left: 23px;
   height: 17px;
@@ -9977,7 +9976,7 @@ form .form-group input[type=checkbox].css-checkbox + label.css-label, form .form
   cursor: pointer;
   font-weight: normal;
   touch-action: none; }
-/* line 755, ../sass/override/_override-layout.scss */
+/* line 756, ../sass/override/_override-layout.scss */
 form .form-group label.css-label {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -9985,32 +9984,32 @@ form .form-group label.css-label {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none; }
-/* line 764, ../sass/override/_override-layout.scss */
+/* line 765, ../sass/override/_override-layout.scss */
 form .form-group input[type=checkbox].css-checkbox + label.css-label {
   background-image: url("../images/checkbox.png"); }
-/* line 767, ../sass/override/_override-layout.scss */
+/* line 768, ../sass/override/_override-layout.scss */
 form .form-group input[type=radio].css-radio + label.css-label {
   background-image: url("../images/radio.png"); }
-/* line 770, ../sass/override/_override-layout.scss */
+/* line 771, ../sass/override/_override-layout.scss */
 form .form-group input[type=checkbox].css-checkbox + label.css-label:hover, form .form-group input[type=radio].css-radio + label.css-label:hover {
   background-position: 0 -28px;
   color: #1e1e1e; }
-/* line 776, ../sass/override/_override-layout.scss */
+/* line 777, ../sass/override/_override-layout.scss */
 form .form-group input[type=checkbox].css-checkbox:checked + label.css-label, form .form-group input[type=radio].css-radio:checked + label.css-label {
   background-position: 0 -55px;
   color: #1e1e1e; }
-/* line 781, ../sass/override/_override-layout.scss */
+/* line 782, ../sass/override/_override-layout.scss */
 form .form-group input[type=checkbox].css-checkbox:disabled + label.css-label, form .form-group input[type=radio].css-radio:disabled + label.css-label {
   background-position: 0 -82px;
   color: #bcbcbc; }
-/* line 786, ../sass/override/_override-layout.scss */
+/* line 787, ../sass/override/_override-layout.scss */
 form .form-group input[type=checkbox].css-checkbox:checked:disabled + label.css-label, form .form-group input[type=radio].css-radio:checked:disabled + label.css-label {
   background-position: 0 -110px;
   color: #bcbcbc; }
-/* line 794, ../sass/override/_override-layout.scss */
+/* line 795, ../sass/override/_override-layout.scss */
 form .form-group .action {
   padding: 10px; }
-/* line 798, ../sass/override/_override-layout.scss */
+/* line 799, ../sass/override/_override-layout.scss */
 form .form-group .topHint {
   background: #f0f0f0;
   height: 29px;
@@ -10021,7 +10020,7 @@ form .form-group .topHint {
   right: 0px;
   top: 0px;
   z-index: 800; }
-/* line 808, ../sass/override/_override-layout.scss */
+/* line 809, ../sass/override/_override-layout.scss */
 form .form-group .topHint:after {
   right: 100%;
   top: 50%;
@@ -10035,18 +10034,18 @@ form .form-group .topHint:after {
   border-right-color: #f0f0f0;
   border-width: 5px;
   margin-top: -5px; }
-/* line 827, ../sass/override/_override-layout.scss */
+/* line 828, ../sass/override/_override-layout.scss */
 form .form-control {
   -moz-border-radius: 1px;
   -webkit-border-radius: 1px;
   border-radius: 1px; }
-/* line 830, ../sass/override/_override-layout.scss */
+/* line 831, ../sass/override/_override-layout.scss */
 form .hidden {
   display: none; }
-/* line 838, ../sass/override/_override-layout.scss */
+/* line 839, ../sass/override/_override-layout.scss */
 form .form-group.form-checkbox.small {
   margin-bottom: 0px; }
-/* line 840, ../sass/override/_override-layout.scss */
+/* line 841, ../sass/override/_override-layout.scss */
 form .form-group.form-checkbox.small input[type=checkbox].css-checkbox + label.css-label, form .form-group.form-checkbox.small input[type=radio].css-radio + label.css-label {
   padding-left: 20px;
   height: 17px;
@@ -10060,27 +10059,27 @@ form .form-group.form-checkbox.small input[type=checkbox].css-checkbox + label.c
   cursor: pointer;
   font-weight: normal;
   color: #1e1e1e; }
-/* line 854, ../sass/override/_override-layout.scss */
+/* line 855, ../sass/override/_override-layout.scss */
 form .form-group.form-checkbox.small input[type=checkbox].css-checkbox + label.css-label img, form .form-group.form-checkbox.small input[type=radio].css-radio + label.css-label img {
   float: left;
   position: relative;
   top: 2px;
   margin-right: 5px; }
-/* line 860, ../sass/override/_override-layout.scss */
+/* line 861, ../sass/override/_override-layout.scss */
 form .form-group.form-checkbox.small input[type=checkbox].css-checkbox + label.css-label .suffix, form .form-group.form-checkbox.small input[type=radio].css-radio + label.css-label .suffix {
   color: #b0b0b0;
   font-size: 12px; }
-/* line 866, ../sass/override/_override-layout.scss */
+/* line 867, ../sass/override/_override-layout.scss */
 form .form-group.form-checkbox.small input[type=checkbox].css-checkbox + label.css-label {
   background-position: 0 0; }
-/* line 872, ../sass/override/_override-layout.scss */
+/* line 873, ../sass/override/_override-layout.scss */
 form .form-group.form-checkbox.small input[type=radio].css-radio + label.css-label {
   background-image: url("../images/radio.png"); }
-/* line 876, ../sass/override/_override-layout.scss */
+/* line 877, ../sass/override/_override-layout.scss */
 form .form-group.form-checkbox.small input[type=checkbox].css-checkbox + label.css-label:hover, form .form-group.form-checkbox.small input[type=radio].css-radio + label.css-label:hover {
   background-position: 0 -1075px;
   color: #999999; }
-/* line 882, ../sass/override/_override-layout.scss */
+/* line 883, ../sass/override/_override-layout.scss */
 form .form-group.form-checkbox.small input[type=checkbox].css-checkbox:checked + label.css-label, form .form-group.form-checkbox.small input[type=radio].css-radio:checked + label.css-label {
   background-position: 0 -860px;
   color: #1e1e1e; }

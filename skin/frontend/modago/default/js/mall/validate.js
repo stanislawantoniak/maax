@@ -146,4 +146,15 @@ Mall.validate = {
 jQuery(document).ready(function () {
     "use strict";
     Mall.validate.init();
+
+    jQuery( window ).resize(function() {
+
+        jQuery('.has-error input').each(function() {
+            Mall.validate._default_validation_options.highlight(jQuery(this));
+        });
+        jQuery('.has-success input').each(function() {
+            Mall.validate._default_validation_options.unhighlight(jQuery(this));
+        });
+
+    });
 });
