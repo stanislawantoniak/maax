@@ -1215,7 +1215,7 @@
                                         jQuery('#'
                                             + Mall.Checkout.steps.shippingpayment._self_form_id)
                                             .validate().errorList[0].element).offset().top
-                                        - Mall.getMallHeaderHeight()
+                                        - Mall.getMallHeaderHeight() + 10
                                 }, "slow");
                             },
                             errorPlacement: function(error, element) {
