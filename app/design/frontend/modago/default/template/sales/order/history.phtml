@@ -5,8 +5,8 @@
 <div class="page-title box-wrapper">
 	<h1>
 		<span><?php echo $this->__('Order history') ?></span>
-		<span class="back-sm"><a href="<?php echo $baseUrl ?>customer/account/index/" class="underline">wróć do: Moje konto ></a></span>
-		<span class="back-xs"><a href="<?php echo $baseUrl ?>customer/account/index/" class="underline">wróć ></a></span>
+		<span class="back-sm"><a href="<?php echo $baseUrl ?>customer/account/index/" class="underline"><?php echo $this->__('back to: My account') ?> ></a></span>
+		<span class="back-xs"><a href="<?php echo $baseUrl ?>customer/account/index/" class="underline"><?php echo $this->__('back') ?> ></a></span>
 	</h1>
 </div>
 <?php if(/*0 && */$_orders->getSize()): ?>
