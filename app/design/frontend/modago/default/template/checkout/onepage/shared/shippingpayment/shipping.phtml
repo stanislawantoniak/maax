@@ -15,7 +15,8 @@ $cost = $items->cost;
 
 <?php if(!empty($rates)): ?>
 <fieldset id="shipping-methods">
-    <h4><?php echo $this->__('Rodzaj dostawy'); ?>:</h4>
+    <h4 class="fieldset-title"><?php echo $this->__('Rodzaj dostawy'); ?>:</h4>
+    <div class="data-validate"></div>
     <script type="text/javascript">
         var vendors = <?php echo $vendorsJ; ?>;
     </script>

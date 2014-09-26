@@ -1186,23 +1186,20 @@
 
                     jQuery('#' + Mall.Checkout.steps.shippingpayment._self_form_id)
                         .validate(Mall.validate.getOptions({
-                            errorLabelContainer: "#containererreurtotal",
+                            //errorLabelContainer: "#containererreurtotal",
                             ignore: "",
 
                             rules: {
                                 shipping: {
                                     required: true
-                                },
-                                'payment[method]': {
-                                    required: true
                                 }
                             },
                             messages: {
                                 shipping: {
-                                    required: Mall.translate.__("please-select-shipping")
+                                    required: Mall.translate.__("Please select shipping")
                                 },
                                 "payment[method]": {
-                                    required: Mall.translate.__("please-select-payment")
+                                    required: Mall.translate.__("Please select payment")
                                 }
                             },
                             invalidHandler: function (form, validator) {
@@ -1210,9 +1207,19 @@
                                     return true;
                                 }
 
+//                                jQuery('html, body').animate({
+//                                    scrollTop: 50
+//                                }, "slow");
                                 jQuery('html, body').animate({
-                                    scrollTop: 50
+                                    scrollTop: jQuery(
+                                        jQuery('#'
+                                            + Mall.Checkout.steps.shippingpayment._self_form_id)
+                                            .validate().errorList[0].element).offset().top
+                                        - Mall.getMallHeaderHeight() + 10
                                 }, "slow");
+                            },
+                            errorPlacement: function(error, element) {
+                                jQuery(element).closest("fieldset").find('.data-validate').html(error);
                             }
                         }));
                 }
