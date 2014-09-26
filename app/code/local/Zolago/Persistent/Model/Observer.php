@@ -28,6 +28,8 @@ class Zolago_Persistent_Model_Observer extends Mage_Persistent_Model_Observer
         $checkoutSession = Mage::getSingleton('checkout/session');
         if ($this->_isShoppingCartPersist()) {
 			$customer = $this->_getPersistentCustomer();
+			// By setting this flag quote object knows should do not import 
+			// personal data of customer
 			$customer->setSkipCopyPersonalData(true);
             $checkoutSession->setCustomer($customer);
             if (!$checkoutSession->hasQuote()) {
