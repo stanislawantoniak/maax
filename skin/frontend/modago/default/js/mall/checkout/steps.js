@@ -1219,8 +1219,6 @@
                                 }, "slow");
                             },
                             errorPlacement: function(error, element) {
-                                //console.log(error, element);
-                                console.log(jQuery(element).closest("fieldset"));
                                 jQuery(element).closest("fieldset").find('.data-validate').html(error);
                             }
                         }));
