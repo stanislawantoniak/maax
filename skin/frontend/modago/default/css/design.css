@@ -3142,15 +3142,18 @@ div.noscroll {
 /* line 48, ../sass/design/style/_global.scss */
 .data-table td, .data-table th {
   border: 1px #d7d7d7 solid;
-  padding: 20px 10px;
   color: #333; }
-/* line 53, ../sass/design/style/_global.scss */
+/* line 52, ../sass/design/style/_global.scss */
+.data-table td {
+  padding: 20px 10px; }
+/* line 55, ../sass/design/style/_global.scss */
 .data-table th {
+  padding: 15px 10px;
   font-weight: normal;
   font-family: "latoblack";
   background: #fcfcfc;
   letter-spacing: -0.5px; }
-/* line 60, ../sass/design/style/_global.scss */
+/* line 63, ../sass/design/style/_global.scss */
 .data-table.table-top td, .data-table.table-top th {
   vertical-align: top; }
 

@@ -48,9 +48,8 @@ class Zolago_Modago_Block_Sales_Order_Abstract extends Mage_Core_Block_Template
 	 * @return array
 	 */
 	public function getSortedPoItemsByOrder(Mage_Sales_Model_Order $order) {
-		$vendors = $this->getVendors($order);
-		$items = array();
-		
+
+		$items = array();		
 		foreach($this->getPoCollection($order) as $po){
 			/* @var $po Zolago_Po_Model_Po */	
 			foreach($po->getAllItems() as $item){
@@ -63,6 +62,10 @@ class Zolago_Modago_Block_Sales_Order_Abstract extends Mage_Core_Block_Template
 				}
 			}
 		}
+		
+		
+		usort($items, array($this, "_sortByVendor"));
+		
 		return $items;
 	}
 	
