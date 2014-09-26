@@ -1,11 +1,12 @@
 <?php
 $_item = $this->getItem();
 $_helper = Mage::helper("zolagocataloginventory");
+$canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getOrderItem()->getProduct(), Mage_Catalog_Model_Product_Attribute_Source_Msrp_Type::TYPE_BEFORE_ORDER_CONFIRM);
 ?>
 <div class="table-row clearfix">
     <div class="colgroup-01 clearfix">
         <div class="clearfix">
-            <figure><img src="<?php // echo $this->getProductThumbnail()->resize(53, 69); ?>" alt="<?php echo $this->escapeHtml($this->getProductName()) ?>" /></figure>
+            <figure><img src="<?php echo $this->getProductThumbnail()->resize(53, 69); ?>" alt="<?php echo $this->escapeHtml($this->getProductName()) ?>" /></figure>
             <div class="description_checked_product">
                 <div class="product_name"><?php echo $this->escapeHtml($this->getProductName()) ?></div>
                 <?php if ($_options = $this->getOptionList()):?>
@@ -34,7 +35,7 @@ $_helper = Mage::helper("zolagocataloginventory");
 
             <?php if (!empty($canApplyMsrp)): ?>
                 <div class="cena"<?php if ($this->helper('tax')->displayCartBothPrices()): ?> <?php endif; ?>>
-            <span class="cart-price">
+	            <span class="cart-price">
                 <span class="cart-msrp-unit"><?php echo $this->__('See price before order confirmation.'); ?></span>
                 <?php $helpLinkId = 'cart-msrp-help-' . $_item->getId(); ?>
                 <a id="<?php echo $helpLinkId ?>" href="#" class="map-help-link"><?php echo $this->__("What's this?"); ?></a>
@@ -44,7 +45,6 @@ $_helper = Mage::helper("zolagocataloginventory");
             </span>
                 </div>
             <?php else: ?>
-
                 <?php if ($this->helper('tax')->displayCartPriceExclTax() || $this->helper('tax')->displayCartBothPrices()): ?>
                     <div class="cena">
                         <?php if (Mage::helper('weee')->typeOfDisplay($_item, array(1, 4), 'sales') && $_item->getWeeeTaxAppliedAmount()): ?>
@@ -88,7 +88,6 @@ $_helper = Mage::helper("zolagocataloginventory");
                 <?php endif; ?><!-- inclusive price starts here -->
                 <?php if ($this->helper('tax')->displayCartPriceInclTax() || $this->helper('tax')->displayCartBothPrices()): ?>
                     <div class="cena">
-						<?php //if($_item->getProduct()->getPrice() != $_item->getProduct()->getFinalPrice()) : ?><span class="stara_cena" style="padding-top: 5px;"><?php //echo Mage::helper('core')->currency($_item->getProduct()->getPrice(), true, false); ?></span><?php //endif; ?>
                         <?php $_incl = $this->helper('checkout')->getPriceInclTax($_item); ?>
                         <?php if (Mage::helper('weee')->typeOfDisplay($_item, array(1, 4), 'sales') && $_item->getWeeeTaxAppliedAmount()): ?>
                         <span class="cart-tax-total" onclick="taxToggle('unit-item-tax-details<?php echo $_item->getId(); ?>', this, 'cart-tax-total-expanded');">
@@ -133,7 +132,7 @@ $_helper = Mage::helper("zolagocataloginventory");
                 <div class="ilosc">
 
                     <div>
-						<?php echo $this->getQty($_item); ?>
+						<?php echo round($_item->getQty()); ?>
                     </div>
                 </div>
 <style type="text/css">

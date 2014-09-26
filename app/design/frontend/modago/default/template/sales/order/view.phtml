@@ -1,10 +1,29 @@
 <?php /* @var $this Zolago_Modago_Block_Sales_Order_View */ ?>
 <?php $_items = $this->getItems(); ?>
-<div class="checkout-shared-review">
-<div class="col-lg-9 col-md-8 col-sm-12 col-xs-12 col-lg-pull-3 col-md-pull-4 section " id="content-main">
+<div class="page-title box-wrapper">
+	<h1><span><?php echo $this->__('Order history'); ?></span></h1>
+</div>
+<div class="order-view box-wrapper" id="checkout">
+<div class="section " id="content-main">
 	<section class="main bg-w">
 		<header class="title-section">
-			<h2><?php echo $this->__("Order number"); ?>:</h2>
+			<table class="table-cart">
+			<tbody>
+				<tr>
+				<td>		
+				<h2><?php echo $this->__("Order number"); ?>:<?php echo $this->getOrder()->getIncrementId();?></h2>
+				</td>
+				<td>
+				<div class="table-cell td pull-right small cell-02">
+					<?php echo $this->__('Order date').': '.date('Y-m-d',strtotime($this->getOrder()->getCreatedAt()));?>	
+				</div>
+				</td>
+				</tr>
+			</tbody>
+			</table>
+			<p><?php echo $this->__('Status').': '.$this->getOrder()->getStatusLabel();?> </p>
+			<p><?php echo $this->__('Total order value').': '.Mage::helper('core')->formatPrice($this->getOrder()->getGrandTotal());?> </p>
+			<p><?php echo $this->__('Payment').': '.$this->getPaymentHtml();?> </p>
 		</header>
 						<?php $total = 1; ?>
                         <?php foreach($_items as $nr => $_item) : ?>
@@ -28,7 +47,9 @@
 		        <div class="tableWrapper table-cart">
 		            <!-- Thead -->
 							<?php foreach ($_item->getAllItems() as $_product) : ?>
-	                            <?php echo $this->getItemHtml($_product); ?>
+								<?php if(!$_product->getOrderItem()->getParentItemId()): ?>
+		                            <?php echo $this->getItemHtml($_product); ?>
+								<?php endif; ?>
 							<?php endforeach; ?>
     <!-- TFoot -->
     <div class="table-footer-group hidden-xs">
