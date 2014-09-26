@@ -28,11 +28,6 @@
 	}
 	.shipment-top {
 		width: 90%;
-		.shipment-title {
-			font-weight: 700;
-			font-size: 14px;
-			text-transform: uppercase;
-		}
 	}
 	.shipment-icon {
 		width: 8%;
@@ -65,5 +60,22 @@
 .sales-order-hide {
 	@media (max-width: $screen-xs-max) {
 		display: none;
+	}
+}
+span.order-top-txt, span.order-top-title {
+	display: block;
+}
+span.order-top-title {
+	font-weight: 700;
+	font-size: 14px;
+	text-transform: uppercase;
+}
+.sales-order-info {
+	font-size: 0;
+	div {
+		display: inline-block;
+		font-size: 14px;
+		width: 50%;
+		vertical-align: top;
 	}
 }
