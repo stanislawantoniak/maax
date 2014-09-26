@@ -2,8 +2,13 @@
 	#content-main {
 		width:100%;
 		margin-left:0px;
+		> .main {
+			padding:30px;
+		}
 		section {
 			> header {
+				margin-bottom:30px;
+				margin-left: -30px;
 				h1 {
 					margin:22px 0 25px 0px;
 					padding:0px;
@@ -11,12 +16,19 @@
 						margin: 10px 0
 					}
 				}
+				h2 {
+					  font-weight: bold;
+					  font-family: "latoregular"; 
+	
+				}
 				.table-cart {
 					width:100%;
 					margin-bottom:10px;
 				}
 				p {
 					margin-bottom:0px;
+                    margin-left:35px;
+
 				}
 			}
 			> footer {
@@ -142,7 +154,9 @@
 				.table-row {
 					.table-cell {
 						display:block;
-						
+						@media (max-width: $screen-xs-max) {
+							padding-bottom:0px;
+						}						
 						&.cell-01 {
 							width:31.93916349809886%;
 							@media (max-width: $screen-xs-max) {
@@ -163,14 +177,20 @@
 						&.cell-03 {
 							width:47.52851711026616%;
 							@media (max-width: $screen-xs-max) {
-								width:50%;
+								width:70%;
 							}
 						}
 						&.cell-04 {
 							width:17.11026615969582%;
 							@media (max-width: $screen-xs-max) {
-								width:50%;
+								width:30%;
 								padding-top: 6px!important;
+								padding-left:6px;
+								.quality_price {
+									padding-top:5px;
+									margin-top:0px;
+									margin-bottom:0px;
+								}
 							}
 						}
 						&.cell-05{
