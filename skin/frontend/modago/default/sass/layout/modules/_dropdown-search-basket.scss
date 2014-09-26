@@ -78,6 +78,8 @@
     @include max-screen($screen-sm) {
        right:0px !important;
     }
+	
+	a{color: #fff; }
     .dropdown-panel {
         width:370px;
         max-width: 370px;
