@@ -3,7 +3,9 @@
 		<div class="shipment-top">
 			<span class="shipment-title"><?php echo $this->__('delivery'); ?></span>
 			<?php
+
 			$shipment = $this->getItem();
+			var_dump($shipment);
 			$status = (int)$shipment->getUdropshipStatus();
 			switch($status) {
 			case 1:

@@ -5803,40 +5803,41 @@ yx-axis
 /* line 31, ../sass/layout/modules/_sales-order-top.scss */
 .sales-order-shipment .shipment-top .shipment-title {
   font-weight: 700;
-  font-size: 14px; }
-/* line 36, ../sass/layout/modules/_sales-order-top.scss */
+  font-size: 14px;
+  text-transform: uppercase; }
+/* line 37, ../sass/layout/modules/_sales-order-top.scss */
 .sales-order-shipment .shipment-icon {
   width: 8%;
   position: relative;
   height: 37px;
   font-size: 19px; }
-/* line 41, ../sass/layout/modules/_sales-order-top.scss */
+/* line 42, ../sass/layout/modules/_sales-order-top.scss */
 .sales-order-shipment .shipment-icon > .fa-stack, .sales-order-shipment .shipment-icon > .fa-truck {
   position: absolute;
   right: 0; }
-/* line 46, ../sass/layout/modules/_sales-order-top.scss */
+/* line 47, ../sass/layout/modules/_sales-order-top.scss */
 .sales-order-shipment .shipment-bottom {
   margin-top: 20px; }
 
-/* line 50, ../sass/layout/modules/_sales-order-top.scss */
+/* line 51, ../sass/layout/modules/_sales-order-top.scss */
 .sales-order-more {
   text-align: right;
   display: none; }
-/* line 53, ../sass/layout/modules/_sales-order-top.scss */
+/* line 54, ../sass/layout/modules/_sales-order-top.scss */
 .sales-order-more span {
   text-decoration: underline;
   cursor: pointer; }
-/* line 56, ../sass/layout/modules/_sales-order-top.scss */
+/* line 57, ../sass/layout/modules/_sales-order-top.scss */
 .sales-order-more span i {
   margin-left: 10px; }
 @media (max-width: 767px) {
-  /* line 50, ../sass/layout/modules/_sales-order-top.scss */
+  /* line 51, ../sass/layout/modules/_sales-order-top.scss */
   .sales-order-more {
     display: block; } }
 
 @media (max-width: 767px) {
-  /* line 64, ../sass/layout/modules/_sales-order-top.scss */
-  .sales-order-info {
+  /* line 65, ../sass/layout/modules/_sales-order-top.scss */
+  .sales-order-hide {
     display: none; } }
 
 /* line 1, ../sass/layout/override/_global.scss */
