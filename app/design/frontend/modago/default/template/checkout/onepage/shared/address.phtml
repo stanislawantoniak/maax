@@ -114,5 +114,10 @@ $_billingAddress = $_quote->getBillingAddress();
     Mall.translate.add("telephone-need-to-have-9-digit", "<?php echo $this->__("telephone-number-need-to-have-9-digit"); ?>");
     Mall.translate.add("emailbackend-exits", "<?php echo $this->__("Typed address email exists on the site. Want to login?"); ?>");
     Mall.translate.add("emailbackend-exits-log-in", "<?php echo $this->__("Typed address email exists on the site. Please log in to proceed."); ?>");
+    Mall.translate.add("email", "<?php echo $this->__('Valid email is required.') ?>");
+    Mall.translate.add("Password needs to have at least %s characters", "<?php echo $this->__("Password needs to have at least %s characters", Mage::helper("zolagocustomer")->getPasswordMinLength()); ?>");
+
+    Mall.validate.validators.config.passwordMinLength = <?php echo Mage::helper("zolagocustomer")->getPasswordMinLength(); ?>;
+
 </script>
 
