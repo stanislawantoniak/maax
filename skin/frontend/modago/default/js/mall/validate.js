@@ -32,7 +32,7 @@ Mall.validate = {
             jQuery(element).closest("div").find('.form-ico-times').remove();
 
 
-            if(jQuery(element).attr('name') !== 'payment[method]'){
+            if(jQuery(element).attr('name') !== 'payment[method]' && jQuery(element).attr('name') !== 'payment[additional_information][provider]'){
                 jQuery(element).closest("div").not( ".form-checkbox" ).not( ".form-radio" )
                     .append(
                         '<i style="left:'+we
@@ -58,7 +58,7 @@ Mall.validate = {
             if (jQuery(element).prop("type") === "checkbox") {
                 we = jQuery(element).closest("div").find("label").innerWidth() - 10;
             }
-            if(jQuery(element).attr('name') !== 'payment[method]'){
+            if(jQuery(element).attr('name') !== 'payment[method]' && jQuery(element).attr('name') !== 'payment[additional_information][provider]'){
                 jQuery(element).closest("div").append('<i style="left:'+
                     we+'px; right:auto" class="form-ico-checked form-control-feedback"></i>');
             }
