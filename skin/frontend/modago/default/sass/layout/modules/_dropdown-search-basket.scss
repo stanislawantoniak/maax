@@ -91,6 +91,11 @@
             box-sizing:border-box;
             width:350px;
             margin:0 auto;
+            #product-list {
+                .desc {
+                    max-width: 160px;
+                }
+            }
         }
     }
 

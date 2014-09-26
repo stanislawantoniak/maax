@@ -1186,23 +1186,20 @@
 
                     jQuery('#' + Mall.Checkout.steps.shippingpayment._self_form_id)
                         .validate(Mall.validate.getOptions({
-                            errorLabelContainer: "#containererreurtotal",
+                            //errorLabelContainer: "#containererreurtotal",
                             ignore: "",
 
                             rules: {
                                 shipping: {
                                     required: true
-                                },
-                                'payment[method]': {
-                                    required: true
                                 }
                             },
                             messages: {
                                 shipping: {
-                                    required: Mall.translate.__("please-select-shipping")
+                                    required: Mall.translate.__("Please select shipping")
                                 },
                                 "payment[method]": {
-                                    required: Mall.translate.__("please-select-payment")
+                                    required: Mall.translate.__("Please select payment")
                                 }
                             },
                             invalidHandler: function (form, validator) {
@@ -1210,9 +1207,15 @@
                                     return true;
                                 }
 
+                                var firstErrorElement = jQuery('#'  + Mall.Checkout.steps.shippingpayment._self_form_id).validate().errorList[0].element;
+                                var scroll = jQuery(firstErrorElement).closest("fieldset").find('.data-validate').offset().top - 100;
+
                                 jQuery('html, body').animate({
-                                    scrollTop: 50
+                                    scrollTop: scroll
                                 }, "slow");
+                            },
+                            errorPlacement: function(error, element) {
+                                jQuery(element).closest("fieldset").find('.data-validate').html(error);
                             }
                         }));
                 }

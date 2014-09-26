@@ -25,18 +25,20 @@ Mall.validate = {
             if (jQuery(element).attr('id') === 'pass') {
                 we -= 14;
             }
-            if (jQuery(element).attr('name') === 'payment[method]') {
-                we += 150;
-            }
+
 
             jQuery(element).closest("div").addClass('has-error has-feedback')
                 .removeClass('has-success');
             jQuery(element).closest("div").find('.form-ico-times').remove();
 
-            jQuery(element).closest("div").not( ".form-checkbox" ).not( ".form-radio" )
-                .append(
-                    '<i style="left:'+we
-                        +'px; right:auto" class="form-ico-times form-control-feedback "></i>');
+
+            if(jQuery(element).attr('name') !== 'payment[method]' && jQuery(element).attr('name') !== 'payment[additional_information][provider]'){
+                jQuery(element).closest("div").not( ".form-checkbox" ).not( ".form-radio" )
+                    .append(
+                        '<i style="left:'+we
+                            +'px; right:auto" class="form-ico-times form-control-feedback "></i>');
+            }
+
 
             jQuery(element).closest("div").find('.form-ico-checked').remove();
         },
@@ -46,9 +48,7 @@ Mall.validate = {
             if (jQuery(element).attr('id') === 'pass') {
                 we -= 14;
             }
-            if (jQuery(element).attr('name') === 'payment[method]') {
-                we += 150;
-            }
+
 
             jQuery(element).closest("div").removeClass('has-error')
                 .addClass('has-success has-feedback');
@@ -58,8 +58,11 @@ Mall.validate = {
             if (jQuery(element).prop("type") === "checkbox") {
                 we = jQuery(element).closest("div").find("label").innerWidth() - 10;
             }
-            jQuery(element).closest("div").append('<i style="left:'+
-                we+'px; right:auto" class="form-ico-checked form-control-feedback"></i>');
+            if(jQuery(element).attr('name') !== 'payment[method]' && jQuery(element).attr('name') !== 'payment[additional_information][provider]'){
+                jQuery(element).closest("div").append('<i style="left:'+
+                    we+'px; right:auto" class="form-ico-checked form-control-feedback"></i>');
+            }
+
             jQuery(element).closest("div").find('.form-ico-times').remove();
         },
 
@@ -146,4 +149,15 @@ Mall.validate = {
 jQuery(document).ready(function () {
     "use strict";
     Mall.validate.init();
+
+    jQuery( window ).resize(function() {
+
+        jQuery('.has-error input').each(function() {
+            Mall.validate._default_validation_options.highlight(jQuery(this));
+        });
+        jQuery('.has-success input').each(function() {
+            Mall.validate._default_validation_options.unhighlight(jQuery(this));
+        });
+
+    });
 });

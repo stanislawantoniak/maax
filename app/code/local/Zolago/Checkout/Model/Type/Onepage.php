@@ -56,30 +56,39 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
 		* assign only if logged in!
         */
         $customer = $customerSession->getCustomer();
+		
         /* @var $customer Mage_Customer_Model_Customer */
-		if ($customer ) {
-			// Logged in
-			if(Mage::getSingleton('customer/session')->isLoggedIn()){
-				$defaultBilling = $customer->getDefaultBillingAddress();
-				$defaultShipping = $customer->getDefaultBillingAddress();
 
-
-				// Import defualt billing
-				if($defaultBilling && $this->_isAddressNotFilled($billing)){
-					$billing = null;
-				}
-
-				// Import defualt shipping
-				if($defaultShipping && $this->_isAddressNotFilled($shipping)){
-					$shipping = null;
-				}
+		if($customer && Mage::getSingleton('customer/session')->isLoggedIn()){
 			
-				$this->getQuote()->assignCustomerWithAddressChange($customer, $billing, $shipping);
 			
-				if(is_null($billing) || is_null($shipping)){
-					$quote->save();
-				}
+
+			$defaultBilling = $customer->getDefaultBillingAddress();
+			$defaultShipping = $customer->getDefaultBillingAddress();
+
+
+			// Import defualt billing
+			if($defaultBilling && $this->_isAddressNotFilled($billing)){
+				$billing = null;
 			}
+
+			// Import defualt shipping
+			if($defaultShipping && $this->_isAddressNotFilled($shipping)){
+				$shipping = null;
+			}
+			
+			
+			if(is_null($billing) || is_null($shipping)){
+				// Funciton setting the customer
+				$quote->assignCustomerWithAddressChange($customer, $billing, $shipping);
+			}else{
+				// If not set only customer
+				$quote->setCustomer($customer);
+			}
+			
+			// Do save 
+			$quote->save();
+
 			
         }
         return $this;

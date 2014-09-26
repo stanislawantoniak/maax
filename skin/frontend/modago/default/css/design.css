@@ -3167,24 +3167,6 @@ div.noscroll {
 .node-type-page-shop .top_bottom.bg-w {
   border-top: none; }
 
-/* line 46, ../sass/design/style/_global.scss */
-.data-table {
-  width: 100%; }
-/* line 48, ../sass/design/style/_global.scss */
-.data-table td, .data-table th {
-  border: 1px #d7d7d7 solid;
-  padding: 20px 10px;
-  color: #333; }
-/* line 53, ../sass/design/style/_global.scss */
-.data-table th {
-  font-weight: normal;
-  font-family: "latoblack";
-  background: #fcfcfc;
-  letter-spacing: -0.5px; }
-/* line 60, ../sass/design/style/_global.scss */
-.data-table.table-top td, .data-table.table-top th {
-  vertical-align: top; }
-
 /* line 4, ../sass/design/style/_carousel.scss */
 .carousel .carousel-inner .item .carousel-caption {
   text-align: left; }
@@ -5221,6 +5203,27 @@ i.flag.hit, i.flag.bestseller {
   /* line 145, ../sass/design/style/_footer.scss */
   #footer .copy {
     text-align: center; } }
+/* line 2, ../sass/design/style/_table.scss */
+.data-table {
+  width: 100%; }
+/* line 4, ../sass/design/style/_table.scss */
+.data-table td, .data-table th {
+  border: 1px #d7d7d7 solid;
+  color: #333; }
+/* line 8, ../sass/design/style/_table.scss */
+.data-table td {
+  padding: 20px 10px; }
+/* line 11, ../sass/design/style/_table.scss */
+.data-table th {
+  padding: 15px 10px;
+  font-weight: normal;
+  font-family: "latoblack";
+  background: #fcfcfc;
+  letter-spacing: -0.5px; }
+/* line 19, ../sass/design/style/_table.scss */
+.data-table.table-top td, .data-table.table-top th {
+  vertical-align: top; }
+
 /* line 1, ../sass/override/_override-design.scss */
 .clr {
   clear: both; }
