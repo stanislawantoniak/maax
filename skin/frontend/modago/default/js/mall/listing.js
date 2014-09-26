@@ -1555,6 +1555,48 @@ Mall.listing = {
         this._scroll_load_lock = true;
 
         return this;
+    },
+
+    /**
+     * Sets how many products will be added to listing on scrolling.
+     *
+     * @param offset
+     * @returns {Mall.listing}
+     */
+    setScrollLoadOffset: function (offset) {
+        "use strict";
+
+        this._scroll_load_offset = offset;
+
+        return this;
+    },
+
+    /**
+     * Sets offset in pixels when products will be appended.
+     *
+     * @param px
+     * @returns {Mall.listing}
+     */
+    setPixelsBeforeAppend: function (px) {
+        "use strict";
+
+        this._scroll_load_bottom_offset = px;
+
+        return this;
+    },
+
+    /**
+     * Sets how many products will be loaded when load is clicked.
+     *
+     * @param offset
+     * @returns {Mall.listing}
+     */
+    setLoadNextOffset: function (offset) {
+        "use strict";
+
+        this._load_next_offset = offset;
+
+        return this;
     }
 };
 
