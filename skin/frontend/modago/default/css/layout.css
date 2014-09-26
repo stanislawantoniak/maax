@@ -5908,45 +5908,60 @@ yx-axis
 /* line 29, ../sass/layout/modules/_sales-order-top.scss */
 .sales-order-shipment .shipment-top {
   width: 90%; }
-/* line 31, ../sass/layout/modules/_sales-order-top.scss */
-.sales-order-shipment .shipment-top .shipment-title {
-  font-weight: 700;
-  font-size: 14px;
-  text-transform: uppercase; }
-/* line 37, ../sass/layout/modules/_sales-order-top.scss */
+/* line 32, ../sass/layout/modules/_sales-order-top.scss */
 .sales-order-shipment .shipment-icon {
   width: 8%;
   position: relative;
   height: 37px;
   font-size: 19px; }
-/* line 42, ../sass/layout/modules/_sales-order-top.scss */
+/* line 37, ../sass/layout/modules/_sales-order-top.scss */
 .sales-order-shipment .shipment-icon > .fa-stack, .sales-order-shipment .shipment-icon > .fa-truck {
   position: absolute;
   right: 0; }
-/* line 47, ../sass/layout/modules/_sales-order-top.scss */
+/* line 42, ../sass/layout/modules/_sales-order-top.scss */
 .sales-order-shipment .shipment-bottom {
   margin-top: 20px; }
 
-/* line 51, ../sass/layout/modules/_sales-order-top.scss */
+/* line 46, ../sass/layout/modules/_sales-order-top.scss */
 .sales-order-more {
   text-align: right;
   display: none; }
-/* line 54, ../sass/layout/modules/_sales-order-top.scss */
+/* line 49, ../sass/layout/modules/_sales-order-top.scss */
 .sales-order-more span {
   text-decoration: underline;
   cursor: pointer; }
-/* line 57, ../sass/layout/modules/_sales-order-top.scss */
+/* line 52, ../sass/layout/modules/_sales-order-top.scss */
 .sales-order-more span i {
   margin-left: 10px; }
 @media (max-width: 767px) {
-  /* line 51, ../sass/layout/modules/_sales-order-top.scss */
+  /* line 46, ../sass/layout/modules/_sales-order-top.scss */
   .sales-order-more {
     display: block; } }
 
 @media (max-width: 767px) {
-  /* line 65, ../sass/layout/modules/_sales-order-top.scss */
-  .sales-order-info {
+  /* line 60, ../sass/layout/modules/_sales-order-top.scss */
+  .sales-order-hide {
     display: none; } }
+
+/* line 65, ../sass/layout/modules/_sales-order-top.scss */
+span.order-top-txt, span.order-top-title {
+  display: block; }
+
+/* line 68, ../sass/layout/modules/_sales-order-top.scss */
+span.order-top-title {
+  font-weight: 700;
+  font-size: 14px;
+  text-transform: uppercase; }
+
+/* line 73, ../sass/layout/modules/_sales-order-top.scss */
+.sales-order-info {
+  font-size: 0; }
+/* line 75, ../sass/layout/modules/_sales-order-top.scss */
+.sales-order-info div {
+  display: inline-block;
+  font-size: 14px;
+  width: 50%;
+  vertical-align: top; }
 
 /* line 1, ../sass/layout/override/_global.scss */
 .clr {

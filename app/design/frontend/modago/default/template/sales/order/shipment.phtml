@@ -1,9 +1,11 @@
 <div class="sales-order-top col-md-6 col-sm-6 col-xs-12">
 	<div class="sales-order-shipment">
 		<div class="shipment-top">
-			<span class="shipment-title"><?php echo $this->__('delivery'); ?></span>
+			<span class="order-top-title"><?php echo $this->__('delivery'); ?></span>
 			<?php
+
 			$shipment = $this->getItem();
+			$carrier = $this->getCarrierTitle($shipment->getData('current_carrier'));
 			$status = (int)$shipment->getUdropshipStatus();
 			switch($status) {
 			case 1:
@@ -18,7 +20,7 @@
 			</span>
 		</div>
 		<div class="shipment-bottom">
-			<span><?php echo $this->__('Delivery by'); ?>: kurier DPD</span>
+			<span><?php echo $this->__('Delivery by'); ?>: <?php echo $carrier ?></span>
 			<span><?php echo $this->__('Send date'); ?>: <?php echo $shipment->getMaxShippingDate(); ?></span>
 			<span><?php echo $this->__('Tracking number'); ?>: 325554365465477 [dev]</span>
 			<span><a href="#track" class="underline"><?php echo $this->__('track package'); ?></a> [dev]</span>
@@ -36,7 +38,7 @@
 			<i class="fa fa-truck fa-2x"></i>
 		</div>
 		<div class="shipment-bottom">
-			<span><?php echo $this->__('Delivery by'); ?>: kurier DPD</span>
+			<span><?php echo $this->__('Delivery by'); ?>: <?php echo $carrier ?></span>
 			<?php
 			break;
 
@@ -51,7 +53,7 @@
 			</span>
 		</div>
 		<div class="shipment-bottom">
-			<span><?php echo $this->__('Delivered by'); ?>: kurier DPD</span>
+			<span><?php echo $this->__('Delivered by'); ?>: <?php echo $carrier ?></span>
 			<span><?php echo $this->__('Send date'); ?>: <?php echo $shipment->getMaxShippingDate(); ?></span>
 			<span><?php echo $this->__('Tracking number'); ?>: 325554365465477 [dev]</span>
 			<span><a href="#track" class="underline"><?php echo $this->__('track package'); ?></a> [dev]</span>
@@ -65,7 +67,7 @@
 			<i class="fa fa-truck fa-2x"></i>
 		</div>
 		<div class="shipment-bottom">
-			<span><?php echo $this->__('Delivery by'); ?>: kurier DPD</span>
+			<span><?php echo $this->__('Delivery by'); ?>: <?php echo $carrier ?></span>
 			<?php
 			}
 			?>
