@@ -90,10 +90,14 @@ $_productImageUrl = '';
 <div id="listing-loading" style="text-align: center;"><img src="<?php echo $this->getSkinUrl("images/modago-ajax-loader.gif"); ?>" alt=""></div>
 <!-- END jsMasonryContent -->
 <div class="addNewPositionListProductWrapper">
-    <a href="javascript:;" onclick="Mall.listing.loadMoreProducts();" class="addNewPositionListProduct"><?php echo $this->__("Load next <span>%s</span> products", $this->getLoadLimit()); ?></a>
+    <a href="javascript:;" onclick="Mall.listing.loadMoreProducts();" class="addNewPositionListProduct"><?php echo $this->__("Load next <span>%s</span> products", $this->getLoadMoreOffset()); ?></a>
 </div>
 <div id="listing-load-toplayer"><img src="<?php echo $this->getSkinUrl("images/modago-ajax-loader.gif"); ?>"</div>
 <script type="text/javascript">
+    Mall.listing.setLoadNextOffset(<?php echo (int) $this->getLoadMoreOffset(); ?>);
+    Mall.listing.setScrollLoadOffset(<?php echo (int) $this->getAppendWhenScroll(); ?>);
+    Mall.listing.setPixelsBeforeAppend(<?php echo (int) $this->getPixelsBeforeAppend(); ?>);
+
     Mall.listing.setScat(<?php echo $this->getLayer()->getCurrentCategory()->getId(); ?>);
     Mall.listing.addToVisibleItems(<?php echo count($this->getCollection()); ?>);
     Mall.translate.add("you-like-this", "<?php echo $this->__("You like this"); ?>");

@@ -92,6 +92,7 @@
     top:56px !important;
     right:5px !important;
     left:auto !important;
+	a{color: #fff; }
     @include max-screen($screen-sm-max) {
         top:40px !important;
     }
@@ -114,7 +115,6 @@
 
     table {
         width:100%;
-        
             td {
                 padding: 8px 0;
                 vertical-align: top;
