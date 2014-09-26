@@ -1,7 +1,7 @@
 Mall.validate.validators = {
 
     config: {
-        passwordEmailMinLength: undefined
+        passwordMinLength: undefined
     },
 
     email: function (value, elem, params) {
@@ -66,7 +66,7 @@ Mall.validate.validators = {
         "use strict";
         if(!params.hasOwnProperty('minLength')) {
 
-            params =  { minLength : parseInt(Mall.validate.validators.config.passwordEmailMinLength) };
+            params =  { minLength : parseInt(Mall.validate.validators.config.passwordMinLength) };
 
             if(isNaN(params.minLength)) {
                 return true;
