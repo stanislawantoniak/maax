@@ -6133,6 +6133,10 @@ div.noscroll {
     margin-left: auto;
     margin-right: auto; } }
 
+/* line 69, ../sass/layout/style/_global.scss */
+.bottom-links {
+  margin-top: 25px; }
+
 @media (max-width: 767px) {
   /* line 1, ../sass/layout/style/_carousel.scss */
   .carousel {
