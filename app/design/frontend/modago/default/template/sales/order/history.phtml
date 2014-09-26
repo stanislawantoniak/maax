@@ -5,8 +5,8 @@
 <div class="page-title box-wrapper">
 	<h1>
 		<span><?php echo $this->__('Order history') ?></span>
-		<span class="back-sm"><a href="<?php echo $baseUrl ?>customer/account/index/" class="underline">wróć do: Moje konto ></a></span>
-		<span class="back-xs"><a href="<?php echo $baseUrl ?>customer/account/index/" class="underline">wróć ></a></span>
+		<span class="back-sm"><a href="<?php echo $baseUrl ?>customer/account/index/" class="underline"><?php echo $_helper->__('back: my account'); ?> &gt;</a></span>
+		<span class="back-xs"><a href="<?php echo $baseUrl ?>customer/account/index/" class="underline"><?php echo $_helper->__('back'); ?> &gt;</a></span>
 	</h1>
 </div>
 <?php if(/*0 && */$_orders->getSize()): ?>
@@ -85,6 +85,12 @@
 				<?php endforeach; ?>
 			</tbody>
 		</table>
+		<div class="bottom-links">
+			<a class="button button-third large" href="<?php echo Mage::getUrl("customer/account");?>">
+				<i class="glyphicon glyphicon-chevron-left"></i>
+				<?php echo $_helper->__('back') ?>
+			</a>
+		</div>
 	</div>
 <?php else: ?>
 	<?php echo $this->getChildHtml("empty"); ?>

@@ -23,5 +23,7 @@
 		checkout.addStep(Mall.Checkout.steps.review);
 		
 		checkout.init(0);
+
+        Mall.i18nValidation.add("email", "<?php echo $this->__('Valid email is required.') ?>");
 	})();
 </script>
