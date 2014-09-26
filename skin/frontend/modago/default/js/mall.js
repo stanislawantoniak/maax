@@ -4,7 +4,7 @@
 
 var Mall = {
     _data: {},
-    _product_template: '<tr><td class="thumb"><img src="{{image_url}}" alt=""></td><td class="desc"><p class="name_product">{{name}}</p><p class="size">{{attr_label}}:<span>{{attr_value}}</span></p><p class="quantity">ilość:<span>{{qty}}</span></p></td><td class="price">{{unit_price}} {{currency_symbol}}</td></tr>',
+    _product_template: '<tr><td class="thumb"><a href="{{url}}"><img src="{{image_url}}" alt=""></a></td><td class="desc"><p class="name_product"><a href="{{url}}">{{name}}</a></p><p class="size">{{attr_label}}:<span>{{attr_value}}</span></p><p class="quantity">ilość:<span>{{qty}}</span></p></td><td class="price">{{unit_price}} {{currency_symbol}}</td></tr>',
     _recently_viewed_item_template: '<div class="item"><a href="{{redirect_url}}" class="simple"><div class="box_listing_product"><figure class="img_product"><img src="{{image_url}}" alt="" /></figure><div class="name_product hidden-xs">{{title}}</div></div></a></div>',
     _summary_basket: '<ul><li>{{products_count_msg}}: {{all_products_count}}</li><li>{{products_worth_msg}}: {{total_amount}} {{currency_symbol}}</li><li>{{shipping_cost_msg}}: {{shipping_cost}}</li></ul><a href="{{show_cart_url}}" class="view_basket button button-primary medium link">{{see_your_cart_msg}}</a>',
     _delete_coupon_template: '<i class="fa-delete-coupon"></i>',
@@ -168,17 +168,17 @@ var Mall = {
 
     setProductsCountBadge : function(count) {
         if(count == 0) {
-            jQuery("#link_basket>a.dropdown-toggle>span.badge").remove();
+            jQuery("#link_basket>a>span.badge").remove();
             jQuery("#link_basket").removeClass();
             jQuery("#link_basket").addClass("no-badge");
         } else {
             jQuery("#link_basket").removeClass();
             // check if badge exists
-            if(jQuery("#link_basket>a.dropdown-toggle>span.badge").length > 0) {
+            if(jQuery("#link_basket>a>span.badge").length > 0) {
                 // change only number in badge
-                jQuery("#link_basket>a.dropdown-toggle>span.badge").text(count);
+                jQuery("#link_basket>a>span.badge").text(count);
             } else {
-                jQuery("#link_basket>a.dropdown-toggle>i").before('<span class="badge pull-right">'+ count + '</span>');
+                jQuery("#link_basket>a>i").before('<span class="badge pull-right">'+ count + '</span>');
             }
         }
     },
@@ -799,6 +799,7 @@ jQuery(document).ready(function() {
     if(jQuery(".size-box li").length) {
         Mall.setSuperAttribute(jQuery("#size_" + jQuery(".size-box li a").first().attr('rel')));
     }
+
 
     Mall.product.setDiagonalsOnSizeSquare();
 
