@@ -77,6 +77,10 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
 				$shipping = null;
 			}
 			
+			// Do import of personal data
+			$quote->setCustomerEmail(null);
+			$quote->setCustomerFirstname(null);
+			$quote->setCustomerLastname(null);
 			
 			if(is_null($billing) || is_null($shipping)){
 				// Funciton setting the customer
@@ -494,9 +498,8 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
     public function getCheckoutMethod()
     {
         if ($this->getCustomerSession()->isLoggedIn()) {
-            return self::METHOD_CUSTOMER;
-        }
-        if (!$this->getQuote()->getCheckoutMethod(true)) {
+            $this->getQuote()->setCheckoutMethod(self::METHOD_CUSTOMER);
+        }else{
             if ($this->_helper->isAllowedGuestCheckout($this->getQuote())) {
                 $this->getQuote()->setCheckoutMethod(self::METHOD_GUEST);
             } else {

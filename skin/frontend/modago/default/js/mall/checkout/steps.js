@@ -712,6 +712,9 @@
 					});
 				}
 				
+				
+				data.push({name: "method", value: this.checkout.getMethod()});
+				
 				return data;
 			},
 			onPrepare: function(){

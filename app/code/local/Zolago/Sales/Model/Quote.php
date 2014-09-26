@@ -14,7 +14,7 @@ class Zolago_Sales_Model_Quote  extends Mage_Sales_Model_Quote
         $this->setCustomerId($customer->getId());
 		
 		// Fix prevent copy personal data from presistant
-		if(!$customer->getSkipCopyPersonalData()){
+		if($customer->getSkipCopyPersonalData()){
 			return $this;
 		}
 		
