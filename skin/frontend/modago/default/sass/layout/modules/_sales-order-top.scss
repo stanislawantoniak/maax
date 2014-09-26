@@ -1,0 +1,69 @@
+.sales-order-top {
+	@media (min-width: $screen-sm-min) {
+		&:nth-child(1) {
+			padding-right: 7px;
+		}
+		&:nth-child(2) {
+			padding-left: 8px;
+		}
+	}
+	@media (max-width: $screen-xs-max) {
+		padding: 10px 5px;
+		&:nth-child(1) {
+			padding-top: 0;
+		}
+	}
+}
+.sales-order-shipment,.sales-order-info {
+	padding: 15px 10px 25px 20px;
+	border: solid 1px #ebebeb;
+}
+.sales-order-shipment {
+	span {
+		display: block;
+	}
+	.shipment-top,.shipment-icon {
+		display:inline-block;
+		vertical-align: middle;
+	}
+	.shipment-top {
+		width: 90%;
+		.shipment-title {
+			font-weight: 700;
+			font-size: 14px;
+			text-transform: uppercase;
+		}
+	}
+	.shipment-icon {
+		width: 8%;
+		position: relative;
+		height: 37px;
+		font-size: 19px;
+		> .fa-stack, > .fa-truck {
+			position: absolute;
+			right: 0;
+		}
+	}
+	.shipment-bottom {
+		margin-top: 20px;
+	}
+}
+.sales-order-more {
+	text-align: right;
+	display: none;
+	span {
+		text-decoration: underline;
+		cursor: pointer;
+		i {
+			margin-left: 10px;
+		}
+	}
+	@media (max-width: $screen-xs-max) {
+		display: block;
+	}
+}
+.sales-order-info {
+	@media (max-width: $screen-xs-max) {
+		display: none;
+	}
+}
