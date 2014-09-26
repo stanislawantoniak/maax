@@ -1209,7 +1209,7 @@
 
                                 var firstErrorElement = jQuery('#'  + Mall.Checkout.steps.shippingpayment._self_form_id).validate().errorList[0].element;
                                 var scroll = jQuery(firstErrorElement).closest("fieldset").find('.data-validate').offset().top - 100;
-                                console.log(scroll);
+
                                 jQuery('html, body').animate({
                                     scrollTop: scroll
                                 }, "slow");
