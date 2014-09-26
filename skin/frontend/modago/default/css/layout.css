@@ -8867,7 +8867,6 @@ i.flag.hit, i.flag.bestseller {
 @media (max-width: 767px) {
   /* line 169, ../sass/layout/style/_order-view.scss */
   .order-view #content-main .tableWrapper .table-footer-group .table-row .table-cell.cell-04 {
-    width: 50%;
     padding-top: 6px !important; } }
 /* line 176, ../sass/layout/style/_order-view.scss */
 .order-view #content-main .tableWrapper .table-footer-group .table-row .table-cell.cell-05 {
