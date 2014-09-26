@@ -42,27 +42,3 @@ border-radius: 2px;
 
 	}
 }
-
-.data-table{
-	width: 100%;
-	td,th{
-		border: 1px #d7d7d7 solid;
-		color: #333;
-	}
-	td{
-		padding: 20px 10px;
-	}
-	th{
-		padding: 15px 10px;
-		font-weight: normal;
-		font-family: "latoblack";
-		background: #fcfcfc;
-		letter-spacing: -0.5px;
-	}
-	&.table-top{
-		td,th{
-			vertical-align: top;
-		}
-	}
-}
-
