@@ -1,10 +1,9 @@
-<?php
-$sliderType = Zolago_Banner_Model_Banner_Type::TYPE_SLIDER;
-$boxType = Zolago_Banner_Model_Banner_Type::TYPE_BOX;
-?>
-<?php $sliders = $this->getSliders(); ?>
+<?php $sliders = $this->getSliders();
+if($sliders):
+    $sliderType = Zolago_Banner_Model_Banner_Type::TYPE_SLIDER;
+    $boxType = Zolago_Banner_Model_Banner_Type::TYPE_BOX;
 
-            <?php if($sliders): ?>
+    ?>
 <div class="row">
     <section class="blockCarouselTop">
         <div id="carousel-top-generic" class="carousel slide border-gray-1x" data-ride="carousel">
