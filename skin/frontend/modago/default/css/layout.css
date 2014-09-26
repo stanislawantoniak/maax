@@ -1401,9 +1401,6 @@ section.section h2.title_section i {
   top: 56px !important;
   right: 5px !important;
   left: auto !important; }
-/* line 74, ../sass/layout/modules/_dropdown-search-basket.scss */
-#dropdown-basket a {
-  color: #fff; }
 @media screen and (max-width: 991px) {
   /* line 70, ../sass/layout/modules/_dropdown-search-basket.scss */
   #dropdown-basket {
@@ -1413,42 +1410,45 @@ section.section h2.title_section i {
   #dropdown-basket {
     right: 0px !important; } }
 /* line 82, ../sass/layout/modules/_dropdown-search-basket.scss */
+#dropdown-basket a {
+  color: #fff; }
+/* line 83, ../sass/layout/modules/_dropdown-search-basket.scss */
 #dropdown-basket .dropdown-panel {
   width: 370px;
   max-width: 370px; }
 @media screen and (max-width: 991px) {
-  /* line 82, ../sass/layout/modules/_dropdown-search-basket.scss */
+  /* line 83, ../sass/layout/modules/_dropdown-search-basket.scss */
   #dropdown-basket .dropdown-panel {
     width: 360px;
     max-width: 360px; } }
-/* line 89, ../sass/layout/modules/_dropdown-search-basket.scss */
+/* line 90, ../sass/layout/modules/_dropdown-search-basket.scss */
 #dropdown-basket .dropdown-panel .dropdown-panel-inner {
   box-sizing: border-box;
   width: 350px;
   margin: 0 auto; }
-/* line 96, ../sass/layout/modules/_dropdown-search-basket.scss */
+/* line 97, ../sass/layout/modules/_dropdown-search-basket.scss */
 #dropdown-basket table {
   width: 100%; }
-/* line 99, ../sass/layout/modules/_dropdown-search-basket.scss */
+/* line 100, ../sass/layout/modules/_dropdown-search-basket.scss */
 #dropdown-basket table td {
   padding: 8px 0; }
-/* line 102, ../sass/layout/modules/_dropdown-search-basket.scss */
+/* line 103, ../sass/layout/modules/_dropdown-search-basket.scss */
 #dropdown-basket table td + td {
   padding-left: 5px; }
-/* line 105, ../sass/layout/modules/_dropdown-search-basket.scss */
+/* line 106, ../sass/layout/modules/_dropdown-search-basket.scss */
 #dropdown-basket table td p {
   margin: 0px;
   padding: 0px; }
-/* line 111, ../sass/layout/modules/_dropdown-search-basket.scss */
+/* line 112, ../sass/layout/modules/_dropdown-search-basket.scss */
 #dropdown-basket .summary_basket {
   overflow: hidden;
   *zoom: 1;
   padding: 25px 15px;
   margin: 25px 0 0 0; }
-/* line 115, ../sass/layout/modules/_dropdown-search-basket.scss */
+/* line 116, ../sass/layout/modules/_dropdown-search-basket.scss */
 #dropdown-basket .summary_basket ul {
   float: left; }
-/* line 118, ../sass/layout/modules/_dropdown-search-basket.scss */
+/* line 119, ../sass/layout/modules/_dropdown-search-basket.scss */
 #dropdown-basket .summary_basket ul, #dropdown-basket .summary_basket li {
   margin: 0;
   padding: 0; }
@@ -9326,7 +9326,7 @@ i.flag.hit, i.flag.bestseller {
 
 /* line 49, ../sass/override/_override-layout.scss */
 .value_quality_price {
-  margin-bottom: 7px; }
+  margin-bottom: 15px; }
 
 /* line 53, ../sass/override/_override-layout.scss */
 .cart-qty-field {

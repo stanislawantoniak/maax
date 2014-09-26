@@ -24,7 +24,7 @@ $inspirations = $this->getInspirations(); ?>
                                         <?php if(!empty($insp['url'])): ?>
                                         <a href="<?php echo $insp['url']; ?>">
                                             <?php endif; ?>
-                                            <img src="<?php echo Mage::getBaseUrl('media') . DS . $this->getImageResizePath($inspirationType).$insp['path']; ?>" alt="">
+                                            <img src="<?php echo Mage::getBaseUrl('media')  . $this->getImageResizePath($inspirationType).$insp['path']; ?>" alt="">
                                             <?php if(!empty($insp['url'])): ?>
 
 
