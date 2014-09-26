@@ -587,15 +587,9 @@
 
 		</reference>
 	</umicrosite_index_landingpage>
-    
-	<sales_order_history>
-        <reference name="root">
-            <action method="addBodyClass">
-                <value>lower-breadcrumbs</value>
-            </action>
-        </reference>
 
-		<reference name="breadcrumbs">
+	<sales_order_history>
+       	<reference name="breadcrumbs">
 			<action method="addCrumb">
 				<crumbName>history</crumbName>
 				<crumbInfo>
@@ -805,6 +799,9 @@
             </action>
             <action method="addBodyClass">
                 <value>not-menu-mobile</value>
+            </action>
+            <action method="addBodyClass">
+                <value>lower-breadcrumbs</value>
             </action>
         </reference>
 
