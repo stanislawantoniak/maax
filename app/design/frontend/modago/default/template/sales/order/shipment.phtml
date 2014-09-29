@@ -10,7 +10,8 @@
 			$date = Mage::helper('core')->formatDate($shipment->getMaxShippingDate(), 'medium', false);
 			?>
 			<?php if ($status == Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_SHIPPED ||
-			$status == Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_PARTIAL): ?>
+			$status == Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_PARTIAL ||
+			$status == Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_READY): ?>
 			<span><?php echo $this->__('Package sent'); ?></span>
 		</div>
 		<div class="shipment-icon">
@@ -22,10 +23,11 @@
 		<div class="shipment-bottom">
 			<?php echo $carrier ? '<span>'.$this->__('Delivery by').': '.$carrier.'</span>' : '' ?>
 			<span><?php echo $this->__('Send date'); ?>: <?php echo $date; ?></span>
-			<span><?php echo $this->__('Tracking number').': '.$this->getCurrentTracking(); ?></span>
+			<?php if($tracking): ?>
+				<span><?php echo $this->__('Tracking number').': '.$tracking ?></span>
+			<?php endif; ?>
 			<span><a href="#track" class="underline"><?php echo $this->__('track package'); ?></a> [dev]</span>
-			<?php elseif($status == Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_READY ||
-			$status == Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_PENDPICKUP ||
+			<?php elseif($status == Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_PENDPICKUP ||
 			$status == Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_PENDING): ?>
 			<span><?php echo $this->__('Package ready to send'); ?></span>
 			<span><?php echo $this->__('Estimated send date'); ?> - <?php echo $date; ?></span>
@@ -47,7 +49,10 @@
 		<div class="shipment-bottom">
 			<span><?php echo $this->__('Delivered by'); ?>: <?php echo $carrier ?></span>
 			<span><?php echo $this->__('Send date'); ?>: <?php echo $date; ?></span>
-			<span><?php echo $this->__('Tracking number').': '.$this->getCurrentTracking(); ?></span>
+			<?php $tracking = $this->getCurrentTracking(); ?>
+			<?php if($tracking): ?>
+				<span><?php echo $this->__('Tracking number').': '.$tracking ?></span>
+			<?php endif; ?>
 			<span><a href="#track" class="underline"><?php echo $this->__('track package'); ?></a> [dev]</span>
 			<?php else: ?>
 			<span><?php echo $this->__('Estimated send date'); ?>: <?php echo $date; ?></span>
