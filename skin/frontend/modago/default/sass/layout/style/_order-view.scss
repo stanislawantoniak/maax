@@ -48,6 +48,16 @@
 				}
 			}
 		}		
+		.headerTop {
+			display: block;
+			#order_header {
+				height:26px;
+			}
+			.order-date {
+				float:right;
+				font-size:85%;
+			}
+		}
 		.tableWrapper {
 			.table-row {
 				.table-cell {

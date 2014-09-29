@@ -8825,37 +8825,47 @@ i.flag.hit, i.flag.bestseller {
   height: 28px;
   position: relative;
   top: -5px; }
-/* line 54, ../sass/layout/style/_order-view.scss */
+/* line 51, ../sass/layout/style/_order-view.scss */
+.order-view #content-main .headerTop {
+  display: block; }
+/* line 53, ../sass/layout/style/_order-view.scss */
+.order-view #content-main .headerTop #order_header {
+  height: 26px; }
+/* line 56, ../sass/layout/style/_order-view.scss */
+.order-view #content-main .headerTop .order-date {
+  float: right;
+  font-size: 85%; }
+/* line 64, ../sass/layout/style/_order-view.scss */
 .order-view #content-main .tableWrapper .table-row .table-cell.td {
   padding: 15px 0 15px 0; }
 @media (max-width: 767px) {
-  /* line 54, ../sass/layout/style/_order-view.scss */
+  /* line 64, ../sass/layout/style/_order-view.scss */
   .order-view #content-main .tableWrapper .table-row .table-cell.td {
     padding: 0 0 15px 0; } }
-/* line 60, ../sass/layout/style/_order-view.scss */
+/* line 70, ../sass/layout/style/_order-view.scss */
 .order-view #content-main .tableWrapper .table-row .table-cell.cell-01.td {
   padding-left: 3.422053231939163%; }
 @media (max-width: 767px) {
-  /* line 60, ../sass/layout/style/_order-view.scss */
+  /* line 70, ../sass/layout/style/_order-view.scss */
   .order-view #content-main .tableWrapper .table-row .table-cell.cell-01.td {
     padding-left: 12px; } }
 @media (max-width: 767px) {
-  /* line 66, ../sass/layout/style/_order-view.scss */
+  /* line 76, ../sass/layout/style/_order-view.scss */
   .order-view #content-main .tableWrapper .table-row .table-cell.cell-02 {
     padding-left: 12px; } }
-/* line 71, ../sass/layout/style/_order-view.scss */
+/* line 81, ../sass/layout/style/_order-view.scss */
 .order-view #content-main .tableWrapper .table-row .table-cell.cell-04.td {
   padding-right: 2.534854245880862%; }
 @media (max-width: 767px) {
-  /* line 71, ../sass/layout/style/_order-view.scss */
+  /* line 81, ../sass/layout/style/_order-view.scss */
   .order-view #content-main .tableWrapper .table-row .table-cell.cell-04.td {
     padding-top: 23px; } }
-/* line 78, ../sass/layout/style/_order-view.scss */
+/* line 88, ../sass/layout/style/_order-view.scss */
 .order-view #content-main .tableWrapper .table-row .table-cell.cell-05 .delet_product {
   display: inline-block;
   margin-top: 5px; }
 @media (max-width: 767px) {
-  /* line 78, ../sass/layout/style/_order-view.scss */
+  /* line 88, ../sass/layout/style/_order-view.scss */
   .order-view #content-main .tableWrapper .table-row .table-cell.cell-05 .delet_product {
     display: -moz-inline-stack;
     display: inline-block;
@@ -8866,42 +8876,42 @@ i.flag.hit, i.flag.bestseller {
     position: relative;
     top: 22px;
     margin-top: 0px; } }
-/* line 89, ../sass/layout/style/_order-view.scss */
+/* line 99, ../sass/layout/style/_order-view.scss */
 .order-view #content-main .tableWrapper .table-row .table-cell figure {
   float: left;
   width: 55px;
   margin-right: 3.168567807351077%; }
 @media (max-width: 767px) {
-  /* line 89, ../sass/layout/style/_order-view.scss */
+  /* line 99, ../sass/layout/style/_order-view.scss */
   .order-view #content-main .tableWrapper .table-row .table-cell figure {
     margin-right: 12px; } }
-/* line 97, ../sass/layout/style/_order-view.scss */
+/* line 107, ../sass/layout/style/_order-view.scss */
 .order-view #content-main .tableWrapper .table-row .table-cell .description_checked_product {
   float: left;
   position: relative;
   padding-top: 3px;
   min-height: 69px; }
-/* line 102, ../sass/layout/style/_order-view.scss */
+/* line 112, ../sass/layout/style/_order-view.scss */
 .order-view #content-main .tableWrapper .table-row .table-cell .description_checked_product .product_name {
   margin-bottom: 5px; }
-/* line 105, ../sass/layout/style/_order-view.scss */
+/* line 115, ../sass/layout/style/_order-view.scss */
 .order-view #content-main .tableWrapper .table-row .table-cell .description_checked_product .product_availability {
   position: absolute;
   bottom: -8px;
   left: 0px; }
-/* line 110, ../sass/layout/style/_order-view.scss */
+/* line 120, ../sass/layout/style/_order-view.scss */
 .order-view #content-main .tableWrapper .table-row .table-cell .description_checked_product .product_availability .icons-checked, .order-view #content-main .tableWrapper .table-row .table-cell .description_checked_product .product_availability .icons-interjection {
   display: inline-block;
   width: 250px;
   padding-left: 15px; }
-/* line 118, ../sass/layout/style/_order-view.scss */
+/* line 128, ../sass/layout/style/_order-view.scss */
 .order-view #content-main .tableWrapper .table-row .table-cell .product_price {
   position: relative; }
-/* line 120, ../sass/layout/style/_order-view.scss */
+/* line 130, ../sass/layout/style/_order-view.scss */
 .order-view #content-main .tableWrapper .table-row .table-cell .product_price span {
   margin-right: 10px; }
 @media (max-width: 767px) {
-  /* line 120, ../sass/layout/style/_order-view.scss */
+  /* line 130, ../sass/layout/style/_order-view.scss */
   .order-view #content-main .tableWrapper .table-row .table-cell .product_price span {
     display: -moz-inline-stack;
     display: inline-block;
@@ -8911,78 +8921,78 @@ i.flag.hit, i.flag.bestseller {
     *display: inline;
     margin-left: 0px !important;
     width: 80px !important; } }
-/* line 129, ../sass/layout/style/_order-view.scss */
+/* line 139, ../sass/layout/style/_order-view.scss */
 .order-view #content-main .tableWrapper .table-row .table-cell .amount_product {
   width: 22px;
   height: 22px;
   text-align: center; }
-/* line 134, ../sass/layout/style/_order-view.scss */
+/* line 144, ../sass/layout/style/_order-view.scss */
 .order-view #content-main .tableWrapper .table-row .table-cell.cell-03 {
   padding-left: 12px; }
-/* line 136, ../sass/layout/style/_order-view.scss */
+/* line 146, ../sass/layout/style/_order-view.scss */
 .order-view #content-main .tableWrapper .table-row .table-cell.cell-03 .styledSelected {
   top: 12px;
   width: 60px; }
-/* line 140, ../sass/layout/style/_order-view.scss */
+/* line 150, ../sass/layout/style/_order-view.scss */
 .order-view #content-main .tableWrapper .table-row .table-cell.cell-03 .select-group.medium {
   width: 60px;
   margin-top: 13px; }
-/* line 143, ../sass/layout/style/_order-view.scss */
+/* line 153, ../sass/layout/style/_order-view.scss */
 .order-view #content-main .tableWrapper .table-row .table-cell.cell-03 .select-group.medium .button-select {
   min-width: 60px; }
-/* line 152, ../sass/layout/style/_order-view.scss */
+/* line 162, ../sass/layout/style/_order-view.scss */
 .order-view #content-main .tableWrapper .table-footer-group {
   display: block; }
-/* line 155, ../sass/layout/style/_order-view.scss */
+/* line 165, ../sass/layout/style/_order-view.scss */
 .order-view #content-main .tableWrapper .table-footer-group .table-row .table-cell {
   display: block; }
 @media (max-width: 767px) {
-  /* line 155, ../sass/layout/style/_order-view.scss */
+  /* line 165, ../sass/layout/style/_order-view.scss */
   .order-view #content-main .tableWrapper .table-footer-group .table-row .table-cell {
     padding-bottom: 0px; } }
-/* line 160, ../sass/layout/style/_order-view.scss */
+/* line 170, ../sass/layout/style/_order-view.scss */
 .order-view #content-main .tableWrapper .table-footer-group .table-row .table-cell.cell-01 {
   width: 31.93916349809886%; }
 @media (max-width: 767px) {
-  /* line 160, ../sass/layout/style/_order-view.scss */
+  /* line 170, ../sass/layout/style/_order-view.scss */
   .order-view #content-main .tableWrapper .table-footer-group .table-row .table-cell.cell-01 {
     width: 100%; } }
-/* line 165, ../sass/layout/style/_order-view.scss */
+/* line 175, ../sass/layout/style/_order-view.scss */
 .order-view #content-main .tableWrapper .table-footer-group .table-row .table-cell.cell-01 p {
   margin-bottom: 0px; }
-/* line 167, ../sass/layout/style/_order-view.scss */
+/* line 177, ../sass/layout/style/_order-view.scss */
 .order-view #content-main .tableWrapper .table-footer-group .table-row .table-cell.cell-01 p + a {
   position: relative; }
-/* line 172, ../sass/layout/style/_order-view.scss */
+/* line 182, ../sass/layout/style/_order-view.scss */
 .order-view #content-main .tableWrapper .table-footer-group .table-row .table-cell.cell-02 {
   width: 1px;
   float: left;
   display: inline-block; }
-/* line 177, ../sass/layout/style/_order-view.scss */
+/* line 187, ../sass/layout/style/_order-view.scss */
 .order-view #content-main .tableWrapper .table-footer-group .table-row .table-cell.cell-03 {
   width: 47.52851711026616%; }
 @media (max-width: 767px) {
-  /* line 177, ../sass/layout/style/_order-view.scss */
+  /* line 187, ../sass/layout/style/_order-view.scss */
   .order-view #content-main .tableWrapper .table-footer-group .table-row .table-cell.cell-03 {
     width: 70%; } }
-/* line 183, ../sass/layout/style/_order-view.scss */
+/* line 193, ../sass/layout/style/_order-view.scss */
 .order-view #content-main .tableWrapper .table-footer-group .table-row .table-cell.cell-04 {
   width: 17.11026615969582%; }
 @media (max-width: 767px) {
-  /* line 183, ../sass/layout/style/_order-view.scss */
+  /* line 193, ../sass/layout/style/_order-view.scss */
   .order-view #content-main .tableWrapper .table-footer-group .table-row .table-cell.cell-04 {
     width: 30%;
     padding-top: 6px !important;
     padding-left: 6px; }
-  /* line 189, ../sass/layout/style/_order-view.scss */
+  /* line 199, ../sass/layout/style/_order-view.scss */
   .order-view #content-main .tableWrapper .table-footer-group .table-row .table-cell.cell-04 .quality_price {
     padding-top: 5px;
     margin-top: 0px;
     margin-bottom: 0px; } }
-/* line 196, ../sass/layout/style/_order-view.scss */
+/* line 206, ../sass/layout/style/_order-view.scss */
 .order-view #content-main .tableWrapper .table-footer-group .table-row .table-cell.cell-05 {
   width: 3.29531051964512%; }
-/* line 199, ../sass/layout/style/_order-view.scss */
+/* line 209, ../sass/layout/style/_order-view.scss */
 .order-view #content-main .tableWrapper .table-footer-group .table-row .table-cell.cell-04 {
   padding-right: 2.534854245880862%; }
 
