@@ -1,34 +1,56 @@
 <?php /* @var $this Zolago_Modago_Block_Sales_Order_View */ ?>
 <?php $_items = $this->getItems(); ?>
-<div class="checkout-shared-review">
-<div class="col-lg-9 col-md-8 col-sm-12 col-xs-12 col-lg-pull-3 col-md-pull-4 section " id="content-main">
+<div class="page-title box-wrapper">
+	<h1><span><?php echo $this->__('Order history'); ?></span></h1>
+</div>
+<div class="order-view box-wrapper">
+<div class="section " id="content-main">
 	<section class="main bg-w">
 		<header class="title-section">
-			<h2><?php echo $this->__("Order number"); ?>:</h2>
+			<div class="headerTop">
+				<div class="table-row clearfix" id="order_header">
+					<div class="pull-left">
+						<h2><?php echo $this->__("Order number"); ?>:<?php echo $this->getOrder()->getIncrementId();?></h2>
+					</div>
+					<div class="order-date hidden-xs">
+						<?php echo $this->__('Order date').': '.date('Y-m-d',strtotime($this->getOrder()->getCreatedAt()));?>
+					</div>
+				</div>
+			</div>
+			<p class="visible-xs"><?php echo $this->__('Order date').': '.date('Y-m-d',strtotime($this->getOrder()->getCreatedAt()));?></p>
+			<p><?php echo $this->__('Status').': '.$this->getOrder()->getStatusLabel();?> <b class="fa-question-circle"></b></p>
+			<p><?php echo $this->__('Total order value').': '.Mage::helper('core')->formatPrice($this->getOrder()->getGrandTotal());?> </p>
+			<p><?php echo $this->__('Payment').': '.$this->getPaymentHtml();?> </p>
 		</header>
-						<?php $total = 1; ?>
-                        <?php foreach($_items as $nr => $_item) : ?>
-							<div class="panel panel-default">
+			<?php $total = 1; ?>
+            <?php foreach($_items as $nr => $_item) : ?>
+				<div class="panel panel-default">
+						<div class="tableWrapper">
+							<div class="table-row clearfix">
 							<?php $_v = $_item->getVendor(); ?>
 	    					<?php if ($_v->getId()): ?>
-						    	<div class="panel-heading"><?php echo $this->__("Shop"); ?>: <strong><?php echo $_v->getVendorName() ?></strong>
+						    	<div class="panel-heading pull-left col-md-6 col-xs-12"><?php echo $this->__("Shop"); ?>: <strong><?php echo $_v->getVendorName() ?></strong>
 						    <?php else: ?>
 							    <div class="panel-heading"><?php echo $this->__("Unknown vendor"); ?>
 						    <?php endif ?>
 							<?php if (count($_items) >1) : ?>
 							(<?php printf($this->__('Shipment %d of %d'),($total++),count($_items));?>)
-							<?php endif; ?>
+							<?php endif; ?>							
+							</div>		
+							<div class="pull-right panel-heading col-md-6 col-xs-12"><a class="small underline" href="#"><?php echo $this->__('Contact with vendor');?></a></div>					
 							</div>
-			    <div class="panel-body">
-
-		        <div class="table-row clearfix">
-					<?php echo $this->getShipmentBlock($_item); ?>
-					<?php echo $this->getInfoBlock($_item);?>
 				</div>
+			    <div class="panel-body">
+					<div class="table-row clearfix sales-order-top-row">
+						<?php echo $this->getShipmentBlock($_item); ?>
+						<?php echo $this->getInfoBlock($_item);?>
+					</div>
 		        <div class="tableWrapper table-cart">
 		            <!-- Thead -->
 							<?php foreach ($_item->getAllItems() as $_product) : ?>
-	                            <?php echo $this->getItemHtml($_product); ?>
+								<?php if(!$_product->getOrderItem()->getParentItemId()): ?>
+		                            <?php echo $this->getItemHtml($_product); ?>
+								<?php endif; ?>
 							<?php endforeach; ?>
     <!-- TFoot -->
     <div class="table-footer-group hidden-xs">
@@ -54,30 +76,18 @@
     <!-- TFoot mobile-->
     <div class="table-footer-group visible-xs">
         <div class="table-row clearfix">
+            <div class="table-cell cell-01 td">
+            </div>
             <div class="table-cell cell-03 label_value td">
-                <div class="value_quality_price"><?php echo $this->__("Product total"); ?>:</div>
-                <div class="value_quality_delivery"><?php echo $this->__("Minimal shipping cost"); ?>:</div>
+                <div class="value_quality_price"><?php echo $this->__("Sum:"); ?></div>
+                <div class="value_quality_delivery"><?php echo $this->__("Shipping"); ?>:</div>
             </div>
-            <div class="table-cell cell-04 td"><div class="quality_price"><?php echo Mage::helper('core')->formatPrice($this->getSubtotal()) ?></div><div class="quality_delivery">[dev]<?php echo Mage::helper('core')->formatPrice(9.99) ?></div></div>
-        </div>
-        <div class="table-row clearfix">
-
-        </div>
-        <div class="table-row clearfix">
-            <div class="table-cell cell-01 td  no-border">
-                <?php if($_v->getStoreDeliveryHeadline() || $_v->getStoreReturnHeadline()): ?>
-                    <p><?php echo $_v->getStoreDeliveryHeadline(); ?><br><?php echo $_v->getStoreReturnHeadline(); ?></p>
-                <?php endif; ?>
-                <a class="trigger_conditions_shipping ff_os fz_11 underline" href="#" data-toggle="modal" data-target="#trigger_conditions_shipping" ><?php echo $this->__("Shipping rules and cost"); ?></a>
-
-            </div>
-        </div>
-        <div class="conditions_shipping panel panel-default">
-            <div class="panel-heading"><h2><?php echo $this->__("Shipping rules and cost"); ?>: <?php echo $_v->getVendorName() ?></h2></div>
-            <div class="panel-body">
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis accusantium voluptate, autem hic sunt vero placeat rerum, tenetur illum vel esse, accusamus atque similique. Magnam voluptas alias laboriosam ea soluta?</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis accusantium voluptate, autem hic sunt vero placeat rerum, tenetur illum vel esse, accusamus atque similique. Magnam voluptas alias laboriosam ea soluta?</p>
-            </div>
+            <div class="table-cell cell-04 td">
+				<div class="quality_price"><?php echo Mage::helper('core')->formatPrice($_item->getData('grand_total_incl_tax')) ?></div>
+				<div class="quality_delivery"><?php echo Mage::helper('core')->formatPrice($_item->getData('shipping_amount_incl')); ?></div>
+			</div>
+            <div class="table-cell cell-05 td">
+			</div>
         </div>
     </div>
 
@@ -89,15 +99,12 @@
                         <?php endforeach; ?>
 
 
-        <div class="row">
-            <div class="col-sm-3">
-                <a class="button button-third large pull-left" id="step-2-prev">Wróć</a>
-            </div>
-			<div class="col-sm-6">
-			</div>
-            <div class="col-sm-3">
-            </div>
-        </div>   
+		<div class="bottom-links">
+			<a class="button button-third large" href="<?php echo Mage::getUrl("sales/order/history");?>">
+				<i class="glyphicon glyphicon-chevron-left"></i>
+				<?php echo $this->__('back') ?>
+			</a>
+		</div>
 
 </div>
 </section>

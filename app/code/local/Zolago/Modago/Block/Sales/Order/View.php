@@ -33,7 +33,21 @@ class Zolago_Modago_Block_Sales_Order_View extends Mage_Sales_Block_Order_View {
         return $collection;
     }
     //}}}
-    
+
+    //{{{ 
+    /**
+     * formatted payment method
+     * @return 
+     */
+    public function getPaymentHtml() {
+         return  $this->escapeHtml(
+             $this->getOrder()
+                  ->getPayment()
+                  ->getMethodInstance()
+                  ->getTitle()
+            );   
+    }
+    //}}}    
     //{{{ 
     /**
      * create block for rendering
