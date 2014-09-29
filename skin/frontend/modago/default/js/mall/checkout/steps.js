@@ -1192,6 +1192,16 @@
                             rules: {
                                 shipping: {
                                     required: true
+                                },
+                                'payment[additional_information][provider]' : {
+                                    required: function(){
+                                        var res = false;
+                                        if(jQuery("[name='payment[method]']").is(":checked") &&
+                                            jQuery("[name='payment[method]']:checked").val() == "zolagopayment"){
+                                            res = true;
+                                        }
+                                        return res;
+                                    }
                                 }
                             },
                             messages: {
@@ -1200,6 +1210,9 @@
                                 },
                                 "payment[method]": {
                                     required: Mall.translate.__("Please select payment")
+                                },
+                                'payment[additional_information][provider]' : {
+                                    required: Mall.translate.__("Please select payment provider")
                                 }
                             },
                             invalidHandler: function (form, validator) {
@@ -1215,7 +1228,7 @@
                                 }, "slow");
                             },
                             errorPlacement: function(error, element) {
-                                jQuery(element).closest("fieldset").find('.data-validate').html(error);
+                                jQuery(element).closest("fieldset").find('.data-validate').append(error);
                             }
                         }));
                 }
