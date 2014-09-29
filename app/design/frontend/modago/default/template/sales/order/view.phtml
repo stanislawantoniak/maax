@@ -18,7 +18,7 @@
 				</div>
 			</div>
 			<p class="visible-xs"><?php echo $this->__('Order date').': '.date('Y-m-d',strtotime($this->getOrder()->getCreatedAt()));?></p>
-			<p><?php echo $this->__('Status').': '.$this->getOrder()->getStatusLabel();?> </p>
+			<p><?php echo $this->__('Status').': '.$this->getOrder()->getStatusLabel();?> <b class="fa-question-circle"></b></p>
 			<p><?php echo $this->__('Total order value').': '.Mage::helper('core')->formatPrice($this->getOrder()->getGrandTotal());?> </p>
 			<p><?php echo $this->__('Payment').': '.$this->getPaymentHtml();?> </p>
 		</header>
@@ -29,15 +29,15 @@
 							<div class="table-row clearfix">
 							<?php $_v = $_item->getVendor(); ?>
 	    					<?php if ($_v->getId()): ?>
-						    	<div class="panel-heading pull-left"><?php echo $this->__("Shop"); ?>: <strong><?php echo $_v->getVendorName() ?></strong>
+						    	<div class="panel-heading pull-left col-md-6 col-xs-12"><?php echo $this->__("Shop"); ?>: <strong><?php echo $_v->getVendorName() ?></strong>
 						    <?php else: ?>
 							    <div class="panel-heading"><?php echo $this->__("Unknown vendor"); ?>
 						    <?php endif ?>
 							<?php if (count($_items) >1) : ?>
 							(<?php printf($this->__('Shipment %d of %d'),($total++),count($_items));?>)
-							<?php endif; ?>
-							</div>
-							<div class="pull-right panel-heading"><?php echo $this->__('Contact with vendor');?></div>
+							<?php endif; ?>							
+							</div>		
+							<div class="pull-right panel-heading col-md-6 col-xs-12"><a class="small underline" href="#"><?php echo $this->__('Contact with vendor');?></a></div>					
 							</div>
 				</div>
 			    <div class="panel-body">
