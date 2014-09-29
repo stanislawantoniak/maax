@@ -19,7 +19,7 @@ Mall.validate = {
         messages: { },
 
         highlight: function(element, errorClass, validClass) {
-            var we = jQuery(element).innerWidth() + 25,
+            var we = jQuery(element).actual( 'innerWidth' ) + 25,
                 el = jQuery(element).attr('type');
 
             if (jQuery(element).attr('id') === 'pass') {
@@ -44,7 +44,7 @@ Mall.validate = {
         },
 
         unhighlight: function(element, errorClass, validClass) {
-            var we = jQuery(element).innerWidth() + 25;
+            var we = jQuery(element).actual( 'innerWidth' ) + 25;
             if (jQuery(element).attr('id') === 'pass') {
                 we -= 14;
             }
@@ -56,7 +56,7 @@ Mall.validate = {
             jQuery(element).closest("div").find('#pass-error').remove();
 
             if (jQuery(element).prop("type") === "checkbox") {
-                we = jQuery(element).closest("div").find("label").innerWidth() - 10;
+                we = jQuery(element).closest("div").find("label").actual( 'innerWidth' ) - 10;
             }
             if(jQuery(element).attr('name') !== 'payment[method]' && jQuery(element).attr('name') !== 'payment[additional_information][provider]'){
                 jQuery(element).closest("div").append('<i style="left:'+
@@ -160,4 +160,5 @@ jQuery(document).ready(function () {
         });
 
     });
+    
 });
