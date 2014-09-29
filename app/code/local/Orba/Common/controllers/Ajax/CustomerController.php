@@ -10,36 +10,7 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
 
 
         /*shipping_cost*/
-        $a = $q->getShippingAddress();
-
-        $qRates = $a->getGroupedAllShippingRates();
-        /**
-         * Fix rate quote query
-         */
-        if (!$qRates) {
-            $a->setCountryId(Mage::app()->getStore()->getConfig("general/country/default"));
-            $a->setCollectShippingRates(true);
-            $a->collectShippingRates();
-            $qRates = $a->getGroupedAllShippingRates();
-        }
-        $cost = array();
-        foreach ($qRates as $cRates) {
-            foreach ($cRates as $rate) {
-
-                $vId = $rate->getUdropshipVendor();
-                if (!$vId) {
-                    continue;
-                }
-                $data[$vId][] = $rate->getPrice();
-            }
-            unset($rate);
-        }
-        unset($cRates);
-        if (!empty($data)) {
-            foreach ($data as $vId => $dataItem) {
-                $cost[$vId] = array_sum($dataItem);
-            }
-        }
+        $cost = Mage::helper('zolagomodago/checkout')->getShippingCostSummary();
         $formattedCost = '';
         if (!empty($cost)) {
             $costSum = array_sum($cost);
