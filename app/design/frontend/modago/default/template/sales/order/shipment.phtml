@@ -61,7 +61,7 @@
 			default:
 			?>
 			<span><?php echo $this->__('Estimated send date'); ?>: <?php echo $shipment->getMaxShippingDate(); ?></span>
-			<span>(<?php echo $this->__('may change if no payment'); ?>) [dev]</span> <?php //todo: show this span only if order is not payed for ?>
+			<span>(<?php echo $this->__('may change if no payment received'); ?>) [dev]</span> <?php //todo: show this span only if order is not payed for ?>
 		</div>
 		<div class="shipment-icon">
 			<i class="fa fa-truck fa-2x"></i>
