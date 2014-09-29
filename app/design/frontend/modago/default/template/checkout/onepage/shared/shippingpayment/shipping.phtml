@@ -7,7 +7,7 @@ $allVendorsMethod = $items->allVendorsMethod;
 
 $methods = $items->methods;
 $rates = $items->rates;
-$cost = $this->getItemsShippingCost();
+$costSumm = $this->getItemsShippingCost();
 
 $cost = $items->cost;
 ?>
@@ -25,7 +25,7 @@ $cost = $items->cost;
     <?php
     $formattedCost = '';
     if (isset($cost[$method['code']])) {
-        $costSum = array_sum($cost[$method['code']]);
+        $costSum = array_sum($costSumm);
         $formattedCost = Mage::helper('core')->currency($costSum, true, false);
     }?>
     <div class="panel panel-default panel-color">
