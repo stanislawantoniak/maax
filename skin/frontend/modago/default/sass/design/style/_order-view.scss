@@ -24,6 +24,11 @@
 		}
 		.tableWrapper {
 			.table-row {
+                .panel-heading {
+                    padding-bottom: 13px;
+                    margin-bottom: 0px;
+                }
+
 				.table-cell {
 					text-align: center;
 					@media (max-width: $screen-xs-max) {
@@ -140,4 +145,14 @@
 			}
 		}
 	}
+}
+
+@media (min-width: $screen-lg-min) {
+    .ilosc {
+        padding-top: 7px;
+    }
+}
+
+.panel-header {
+    border-bottom: 1px solid #ebebeb;
 }
