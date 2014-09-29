@@ -1908,7 +1908,8 @@ jQuery.noConflict();
 // END 
 
 
-        $("#link_basket .dropdown-toggle").on('click', function(event) {
+
+/*        $("#link_basket .dropdown-toggle").on('click', function(event) {
             var intFrameWidth = window.innerWidth;
             if(intFrameWidth > 768) {
                 // event.stopPropagation();
@@ -1934,7 +1935,7 @@ jQuery.noConflict();
                 $('#user_menu').find('.open').removeClass('open');
                 $('#dropdown-basket').hide();
             };
-        });
+        });*/
 
         $("#toggleSearch .dropdown-toggle").on('click', function(event) {
             event.stopPropagation();
