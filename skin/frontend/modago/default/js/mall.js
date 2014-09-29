@@ -730,6 +730,21 @@ function cart_remove_coupon_callback(response) {
     location.reload();
 }
 
+function basket_dropdown() {
+    jQuery(".basket-dropdown").hover(function() {
+        var intFrameWidth = window.innerWidth;
+        if(intFrameWidth > 991) {
+            jQuery("#link_basket").addClass('open');
+            jQuery("#dropdown-basket").show();
+        }
+    },function() {
+        if (!jQuery(".basket-dropdown").is(":hover")) {
+            jQuery("#link_basket").removeClass('open');
+            jQuery("#dropdown-basket").hide();
+        }
+    });
+}
+
 jQuery(document).ready(function() {
     Mall.dispatch();
     Mall.i18nValidation.apply();
@@ -803,5 +818,5 @@ jQuery(document).ready(function() {
 
     Mall.product.setDiagonalsOnSizeSquare();
 
-
+    basket_dropdown();
 });

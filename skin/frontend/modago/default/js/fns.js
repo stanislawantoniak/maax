@@ -1908,15 +1908,6 @@ jQuery.noConflict();
 // END 
 
 
-        $(".basket-dropdown").hover(function() {
-            $("#link_basket").addClass('open');
-            $("#dropdown-basket").show();
-        },function() {
-            if(!$(".basket-dropdown").is(":hover")) {
-                $("#link_basket").removeClass('open');
-                $("#dropdown-basket").hide();
-            }
-        });
 
 /*        $("#link_basket .dropdown-toggle").on('click', function(event) {
             var intFrameWidth = window.innerWidth;
