@@ -20,6 +20,11 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
         $formattedCost = Mage::helper('core')->currency($costSum, true, false);
         /*shipping_cost*/
 
+		$quote = Mage::helper('checkout/cart')->getQuote();
+		/* @var $quote Mage_Sales_Model_Quote */
+		$totals = $quote->getTotals();
+		
+		
         $content = array(
             'user_account_url' => Mage::getUrl('customer/account'),
             'logged_in' => Mage::helper('customer')->isLoggedIn(),
@@ -28,7 +33,7 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
             'cart' => array(
                 'all_products_count' => Mage::helper('checkout/cart')->getSummaryCount(),
                 'products' => $this->_getShoppingCartProducts(),
-                'total_amount' => round(Mage::helper('checkout/cart')->getQuote()->getSubtotal(), 2),
+                'total_amount' => round(isset($totals["subtotal"]) ? $totals["subtotal"]->getValue() : 0, 2),
                 'shipping_cost' => $formattedCost,
                 'show_cart_url' => Mage::getUrl('checkout/cart'),
                 'currency_code' => Mage::app()->getStore()->getCurrentCurrencyCode(),
