@@ -1242,8 +1242,9 @@
                     }
 					return false;
                 });
-				this.content.find("[id^=step-1-prev]").click(function(){
+				this.content.find("#step-1-prev,#step-1-prev-right").click(function(){
 					checkoutObject.prev();
+					return false;
 				});
 			},
 

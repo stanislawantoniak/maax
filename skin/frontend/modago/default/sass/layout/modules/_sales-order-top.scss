@@ -75,13 +75,13 @@
 		}
 	}
 	@media (max-width: $screen-xs-max) {
-		display: block;
+		display: none;
 	}
 }
 .sales-order-hide {
-	@media (max-width: $screen-xs-max) {
-		display: none;
-	}
+//	@media (max-width: $screen-xs-max) {
+//		display: none;
+//	}
 }
 .sales-order-top-row {
 	padding-bottom: 15px;

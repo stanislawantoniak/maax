@@ -5955,11 +5955,6 @@ yx-axis
 @media (max-width: 767px) {
   /* line 66, ../sass/layout/modules/_sales-order-top.scss */
   .sales-order-more {
-    display: block; } }
-
-@media (max-width: 767px) {
-  /* line 81, ../sass/layout/modules/_sales-order-top.scss */
-  .sales-order-hide {
     display: none; } }
 
 /* line 86, ../sass/layout/modules/_sales-order-top.scss */
@@ -8997,7 +8992,56 @@ i.flag.hit, i.flag.bestseller {
   width: 3.29531051964512%; }
 /* line 209, ../sass/layout/style/_order-view.scss */
 .order-view #content-main .tableWrapper .table-footer-group .table-row .table-cell.cell-04 {
-  padding-right: 2.534854245880862%; }
+  padding-right: 4.5%; }
+
+/* line 220, ../sass/layout/style/_order-view.scss */
+.panel-header {
+  height: 50px;
+  margin-bottom: 25px; }
+
+@media (max-width: 767px) {
+  /* line 226, ../sass/layout/style/_order-view.scss */
+  .colgroup-01 {
+    width: 75% !important; }
+
+  /* line 230, ../sass/layout/style/_order-view.scss */
+  .colgroup-02 {
+    width: 25% !important; }
+
+  /* line 234, ../sass/layout/style/_order-view.scss */
+  .ilosc {
+    padding-top: 5px; } }
+/* line 238, ../sass/layout/style/_order-view.scss */
+.show-in-595 {
+  display: none; }
+
+@media (max-width: 595px) {
+  /* line 246, ../sass/layout/style/_order-view.scss */
+  .table-cart .colgroup-02 .colgroup .ilosc {
+    width: auto !important;
+    margin-bottom: 7px;
+    margin-right: 0px; } }
+@media (max-width: 767px) {
+  /* line 257, ../sass/layout/style/_order-view.scss */
+  .show-in-595 {
+    display: inline; }
+
+  /* line 264, ../sass/layout/style/_order-view.scss */
+  .table-cart .colgroup-02 .colgroup .ilosc {
+    width: auto !important;
+    margin-bottom: 7px;
+    margin-right: 20px; } }
+@media (max-width: 711px) {
+  /* line 278, ../sass/layout/style/_order-view.scss */
+  .table-cart .colgroup-02 .colgroup .col, .table-cart .colgroup-02 .colgroup .ilosc {
+    float: right; } }
+@media (min-width: 1200px) {
+  /* line 287, ../sass/layout/style/_order-view.scss */
+  .ilosc {
+    padding-top: 7px; } }
+/* line 292, ../sass/layout/style/_order-view.scss */
+.table-footer-group .visible-xs {
+  margin-top: 15px; }
 
 /* line 3, ../sass/layout/style/_checkout.scss */
 #checkout #content-main > .main {
