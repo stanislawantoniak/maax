@@ -934,14 +934,23 @@
 
 			attachInvoiceEvent: function () {
 				var self = this;
-				jQuery("#invoice_vat").click(function () {
-					if (jQuery("#invoice_data_address").is(":checked")) {
+				var needInvoice = jQuery("#invoice_vat");
+				var sameData = jQuery("#invoice_data_address");
+		
+				needInvoice.click(function () {
+					if (sameData.is(":checked")) {
 						self.invoiceCopyShippingData();
 						self.invoiceDisableFields(self._invoice_copy_shipping_fields);
                         self.setSameAsBilling(1);
 					}
 				});
-
+				
+				// Need invoice and same data
+				//jQuery("#shipping_company").change(function(){
+				//	if(needInvoice.is(":checked") && sameData.is(":checked")){
+				//		jQuery("#billing_company").valid();
+				//	}
+				//})
 				return this;
 			},
 
