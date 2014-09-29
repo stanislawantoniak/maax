@@ -7,6 +7,9 @@
 			$shipment = $this->getItem();
 			$carrier = $this->getCarrierTitle($shipment->getData('current_carrier'));
 			$status = (int)$shipment->getUdropshipStatus();
+			$date = Mage::helper('core')->formatDate($shipment->getMaxShippingDate(), 'medium', false);
+			$tracking = $this->getCurrentTracking($shipment);
+
 			switch($status) {
 			case 1:
 			case 2:
@@ -21,7 +24,7 @@
 		</div>
 		<div class="shipment-bottom">
 			<span><?php echo $this->__('Delivery by'); ?>: <?php echo $carrier ?></span>
-			<span><?php echo $this->__('Send date'); ?>: <?php echo $shipment->getMaxShippingDate(); ?></span>
+			<span><?php echo $this->__('Send date'); ?>: <?php echo $date; ?></span>
 			<span><?php echo $this->__('Tracking number'); ?>: 325554365465477 [dev]</span>
 			<span><a href="#track" class="underline"><?php echo $this->__('track package'); ?></a> [dev]</span>
 			<?php
@@ -32,7 +35,7 @@
 			case 0:
 			?>
 			<span><?php echo $this->__('Package ready to send'); ?></span>
-			<span><?php echo $this->__('Estimated send date'); ?> - <?php echo $shipment->getMaxShippingDate(); ?></span>
+			<span><?php echo $this->__('Estimated send date'); ?> - <?php echo $date; ?></span>
 		</div>
 		<div class="shipment-icon">
 			<i class="fa fa-truck fa-2x"></i>
@@ -54,13 +57,13 @@
 		</div>
 		<div class="shipment-bottom">
 			<span><?php echo $this->__('Delivered by'); ?>: <?php echo $carrier ?></span>
-			<span><?php echo $this->__('Send date'); ?>: <?php echo $shipment->getMaxShippingDate(); ?></span>
+			<span><?php echo $this->__('Send date'); ?>: <?php echo $date; ?></span>
 			<span><?php echo $this->__('Tracking number'); ?>: 325554365465477 [dev]</span>
 			<span><a href="#track" class="underline"><?php echo $this->__('track package'); ?></a> [dev]</span>
 			<?php
 			default:
 			?>
-			<span><?php echo $this->__('Estimated send date'); ?>: <?php echo $shipment->getMaxShippingDate(); ?></span>
+			<span><?php echo $this->__('Estimated send date'); ?>: <?php echo $date; ?></span>
 			<span>(<?php echo $this->__('may change if no payment received'); ?>) [dev]</span> <?php //todo: show this span only if order is not payed for ?>
 		</div>
 		<div class="shipment-icon">

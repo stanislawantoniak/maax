@@ -3175,6 +3175,10 @@ div.noscroll {
 .rght-margin-30 {
   margin-right: 30px; }
 
+/* line 54, ../sass/design/style/_global.scss */
+.latoblack {
+  font-family: "latoblack"; }
+
 /* line 4, ../sass/design/style/_carousel.scss */
 .carousel .carousel-inner .item .carousel-caption {
   text-align: left; }
