@@ -29,7 +29,7 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
             'cart' => array(
                 'all_products_count' => Mage::helper('checkout/cart')->getSummaryCount(),
                 'products' => $this->_getShoppingCartProducts(),
-                'total_amount' => round(Mage::helper('checkout/cart')->getQuote()->getGrandTotal(), 2),
+                'total_amount' => round(Mage::helper('checkout/cart')->getQuote()->getSubtotal(), 2),
                 'shipping_cost' => $formattedCost,
                 'show_cart_url' => Mage::getUrl('checkout/cart'),
                 'currency_code' => Mage::app()->getStore()->getCurrentCurrencyCode(),
