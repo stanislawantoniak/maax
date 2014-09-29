@@ -3168,6 +3168,14 @@ div.noscroll {
   border-top: none; }
 
 /* line 46, ../sass/design/style/_global.scss */
+.no-border-top {
+  border-top: none; }
+
+/* line 50, ../sass/design/style/_global.scss */
+.rght-margin-30 {
+  margin-right: 30px; }
+
+/* line 54, ../sass/design/style/_global.scss */
 .latoblack {
   font-family: "latoblack"; }
 
@@ -4756,111 +4764,6 @@ i.flag.hit, i.flag.bestseller {
 .checkout-shared-review #content-main .tableWrapper .table-footer-group .table-row .table-cell.cell-04 {
   text-align: right; }
 
-/* line 1, ../sass/design/style/_order-view.scss */
-.order-view {
-  color: #000; }
-/* line 6, ../sass/design/style/_order-view.scss */
-.order-view #content-main section > header h1 {
-  font-size: 24px;
-  font-weight: normal;
-  font-family: "latolight";
-  text-transform: uppercase; }
-@media (max-width: 767px) {
-  /* line 6, ../sass/design/style/_order-view.scss */
-  .order-view #content-main section > header h1 {
-    font-size: 18px;
-    text-align: center; } }
-/* line 18, ../sass/design/style/_order-view.scss */
-.order-view #content-main section > footer a#clearAllShopping {
-  line-height: 13px;
-  font-size: 10px;
-  text-transform: uppercase; }
-/* line 27, ../sass/design/style/_order-view.scss */
-.order-view #content-main .tableWrapper .table-row .table-cell {
-  text-align: center; }
-@media (max-width: 767px) {
-  /* line 27, ../sass/design/style/_order-view.scss */
-  .order-view #content-main .tableWrapper .table-row .table-cell {
-    text-align: left; } }
-/* line 32, ../sass/design/style/_order-view.scss */
-.order-view #content-main .tableWrapper .table-row .table-cell.cell-01.td {
-  text-align: left; }
-@media (max-width: 767px) {
-  /* line 35, ../sass/design/style/_order-view.scss */
-  .order-view #content-main .tableWrapper .table-row .table-cell.cell-02 {
-    text-align: left; } }
-/* line 40, ../sass/design/style/_order-view.scss */
-.order-view #content-main .tableWrapper .table-row .table-cell.cell-04.td {
-  text-align: right; }
-/* line 43, ../sass/design/style/_order-view.scss */
-.order-view #content-main .tableWrapper .table-row .table-cell.cell-05 {
-  text-align: left; }
-/* line 46, ../sass/design/style/_order-view.scss */
-.order-view #content-main .tableWrapper .table-row .table-cell figure {
-  border: 1px solid #f1f1f1; }
-/* line 50, ../sass/design/style/_order-view.scss */
-.order-view #content-main .tableWrapper .table-row .table-cell .description_checked_product .product_name {
-  font-size: 16px;
-  color: #000; }
-/* line 54, ../sass/design/style/_order-view.scss */
-.order-view #content-main .tableWrapper .table-row .table-cell .description_checked_product .product_size {
-  font-size: 12px; }
-/* line 59, ../sass/design/style/_order-view.scss */
-.order-view #content-main .tableWrapper .table-row .table-cell .description_checked_product .product_availability .icons-checked, .order-view #content-main .tableWrapper .table-row .table-cell .description_checked_product .product_availability .icons-interjection {
-  font-size: 12px;
-  text-transform: none; }
-/* line 66, ../sass/design/style/_order-view.scss */
-.order-view #content-main .tableWrapper .table-row .table-cell .product_price {
-  font-size: 16px;
-  font-family: "latoregular"; }
-/* line 69, ../sass/design/style/_order-view.scss */
-.order-view #content-main .tableWrapper .table-row .table-cell .product_price span {
-  font-size: 11px;
-  color: #565655;
-  text-decoration: line-through; }
-/* line 75, ../sass/design/style/_order-view.scss */
-.order-view #content-main .tableWrapper .table-row .table-cell .amount_product {
-  text-align: center;
-  font-size: 11px;
-  border: 1px solid #afafaf;
-  line-height: 22px; }
-/* line 84, ../sass/design/style/_order-view.scss */
-.order-view #content-main .tableWrapper .table-row .table-cell.cell-03 .styledSelected .sbSelector, .order-view #content-main .tableWrapper .table-row .table-cell.cell-03 .styledSelected .sbOptions {
-  text-align: left; }
-/* line 89, ../sass/design/style/_order-view.scss */
-.order-view #content-main .tableWrapper .table-row .table-cell.cell-03 .select-group.medium .button-select {
-  font-size: 11px;
-  text-align: center; }
-/* line 96, ../sass/design/style/_order-view.scss */
-.order-view #content-main .tableWrapper .table-row .table-cell.cell-04.td {
-  font-size: 16px;
-  font-family: "latoblack"; }
-/* line 110, ../sass/design/style/_order-view.scss */
-.order-view #content-main .tableWrapper .table-footer-group .table-row .table-cell.td {
-  border-top: 1px solid #ebeaed; }
-/* line 114, ../sass/design/style/_order-view.scss */
-.order-view #content-main .tableWrapper .table-footer-group .table-row .table-cell.cell-01 p {
-  font-size: 14px;
-  white-space: nowrap; }
-@media (max-width: 767px) {
-  /* line 114, ../sass/design/style/_order-view.scss */
-  .order-view #content-main .tableWrapper .table-footer-group .table-row .table-cell.cell-01 p {
-    font-size: 11px; } }
-/* line 122, ../sass/design/style/_order-view.scss */
-.order-view #content-main .tableWrapper .table-footer-group .table-row .table-cell.label_value {
-  text-align: right;
-  font-size: 16px; }
-@media (max-width: 767px) {
-  /* line 126, ../sass/design/style/_order-view.scss */
-  .order-view #content-main .tableWrapper .table-footer-group .table-row .table-cell.label_value .value_quality_price {
-    margin-bottom: 0px; }
-  /* line 129, ../sass/design/style/_order-view.scss */
-  .order-view #content-main .tableWrapper .table-footer-group .table-row .table-cell.label_value .quality_price {
-    margin-bottom: 0px; } }
-/* line 134, ../sass/design/style/_order-view.scss */
-.order-view #content-main .tableWrapper .table-footer-group .table-row .table-cell.cell-04 {
-  text-align: right; }
-
 /* line 4, ../sass/design/style/_checkout.scss */
 #checkout section header h2 {
   font-weight: bold;
@@ -5227,6 +5130,123 @@ i.flag.hit, i.flag.bestseller {
 /* line 19, ../sass/design/style/_table.scss */
 .data-table.table-top td, .data-table.table-top th {
   vertical-align: top; }
+
+/* line 1, ../sass/design/style/_order-view.scss */
+.order-view {
+  color: #000; }
+/* line 6, ../sass/design/style/_order-view.scss */
+.order-view #content-main section > header h1 {
+  font-size: 24px;
+  font-weight: normal;
+  font-family: "latolight";
+  text-transform: uppercase; }
+@media (max-width: 767px) {
+  /* line 6, ../sass/design/style/_order-view.scss */
+  .order-view #content-main section > header h1 {
+    font-size: 18px;
+    text-align: center; } }
+/* line 18, ../sass/design/style/_order-view.scss */
+.order-view #content-main section > footer a#clearAllShopping {
+  line-height: 13px;
+  font-size: 10px;
+  text-transform: uppercase; }
+/* line 27, ../sass/design/style/_order-view.scss */
+.order-view #content-main .tableWrapper .table-row .panel-heading {
+  padding-bottom: 13px;
+  margin-bottom: 0px; }
+/* line 32, ../sass/design/style/_order-view.scss */
+.order-view #content-main .tableWrapper .table-row .table-cell {
+  text-align: center; }
+@media (max-width: 767px) {
+  /* line 32, ../sass/design/style/_order-view.scss */
+  .order-view #content-main .tableWrapper .table-row .table-cell {
+    text-align: left; } }
+/* line 37, ../sass/design/style/_order-view.scss */
+.order-view #content-main .tableWrapper .table-row .table-cell.cell-01.td {
+  text-align: left; }
+@media (max-width: 767px) {
+  /* line 40, ../sass/design/style/_order-view.scss */
+  .order-view #content-main .tableWrapper .table-row .table-cell.cell-02 {
+    text-align: left; } }
+/* line 45, ../sass/design/style/_order-view.scss */
+.order-view #content-main .tableWrapper .table-row .table-cell.cell-04.td {
+  text-align: right; }
+/* line 48, ../sass/design/style/_order-view.scss */
+.order-view #content-main .tableWrapper .table-row .table-cell.cell-05 {
+  text-align: left; }
+/* line 51, ../sass/design/style/_order-view.scss */
+.order-view #content-main .tableWrapper .table-row .table-cell figure {
+  border: 1px solid #f1f1f1; }
+/* line 55, ../sass/design/style/_order-view.scss */
+.order-view #content-main .tableWrapper .table-row .table-cell .description_checked_product .product_name {
+  font-size: 16px;
+  color: #000; }
+/* line 59, ../sass/design/style/_order-view.scss */
+.order-view #content-main .tableWrapper .table-row .table-cell .description_checked_product .product_size {
+  font-size: 12px; }
+/* line 64, ../sass/design/style/_order-view.scss */
+.order-view #content-main .tableWrapper .table-row .table-cell .description_checked_product .product_availability .icons-checked, .order-view #content-main .tableWrapper .table-row .table-cell .description_checked_product .product_availability .icons-interjection {
+  font-size: 12px;
+  text-transform: none; }
+/* line 71, ../sass/design/style/_order-view.scss */
+.order-view #content-main .tableWrapper .table-row .table-cell .product_price {
+  font-size: 16px;
+  font-family: "latoregular"; }
+/* line 74, ../sass/design/style/_order-view.scss */
+.order-view #content-main .tableWrapper .table-row .table-cell .product_price span {
+  font-size: 11px;
+  color: #565655;
+  text-decoration: line-through; }
+/* line 80, ../sass/design/style/_order-view.scss */
+.order-view #content-main .tableWrapper .table-row .table-cell .amount_product {
+  text-align: center;
+  font-size: 11px;
+  border: 1px solid #afafaf;
+  line-height: 22px; }
+/* line 89, ../sass/design/style/_order-view.scss */
+.order-view #content-main .tableWrapper .table-row .table-cell.cell-03 .styledSelected .sbSelector, .order-view #content-main .tableWrapper .table-row .table-cell.cell-03 .styledSelected .sbOptions {
+  text-align: left; }
+/* line 94, ../sass/design/style/_order-view.scss */
+.order-view #content-main .tableWrapper .table-row .table-cell.cell-03 .select-group.medium .button-select {
+  font-size: 11px;
+  text-align: center; }
+/* line 101, ../sass/design/style/_order-view.scss */
+.order-view #content-main .tableWrapper .table-row .table-cell.cell-04.td {
+  font-size: 16px;
+  font-family: "latoblack"; }
+/* line 115, ../sass/design/style/_order-view.scss */
+.order-view #content-main .tableWrapper .table-footer-group .table-row .table-cell.td {
+  border-top: 1px solid #ebeaed; }
+/* line 119, ../sass/design/style/_order-view.scss */
+.order-view #content-main .tableWrapper .table-footer-group .table-row .table-cell.cell-01 p {
+  font-size: 14px;
+  white-space: nowrap; }
+@media (max-width: 767px) {
+  /* line 119, ../sass/design/style/_order-view.scss */
+  .order-view #content-main .tableWrapper .table-footer-group .table-row .table-cell.cell-01 p {
+    font-size: 11px; } }
+/* line 127, ../sass/design/style/_order-view.scss */
+.order-view #content-main .tableWrapper .table-footer-group .table-row .table-cell.label_value {
+  text-align: right;
+  font-size: 16px; }
+@media (max-width: 767px) {
+  /* line 131, ../sass/design/style/_order-view.scss */
+  .order-view #content-main .tableWrapper .table-footer-group .table-row .table-cell.label_value .value_quality_price {
+    margin-bottom: 0px; }
+  /* line 134, ../sass/design/style/_order-view.scss */
+  .order-view #content-main .tableWrapper .table-footer-group .table-row .table-cell.label_value .quality_price {
+    margin-bottom: 0px; } }
+/* line 139, ../sass/design/style/_order-view.scss */
+.order-view #content-main .tableWrapper .table-footer-group .table-row .table-cell.cell-04 {
+  text-align: right; }
+
+@media (min-width: 1200px) {
+  /* line 151, ../sass/design/style/_order-view.scss */
+  .ilosc {
+    padding-top: 7px; } }
+/* line 156, ../sass/design/style/_order-view.scss */
+.panel-header {
+  border-bottom: 1px solid #ebebeb; }
 
 /* line 1, ../sass/override/_override-design.scss */
 .clr {
