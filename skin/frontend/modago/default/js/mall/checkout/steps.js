@@ -1273,6 +1273,16 @@
                             rules: {
                                 shipping: {
                                     required: true
+                                },
+                                'payment[additional_information][provider]' : {
+                                    required: function(){
+                                        var res = false;
+                                        if(jQuery("[name='payment[method]']").is(":checked") &&
+                                            jQuery("[name='payment[method]']:checked").val() == "zolagopayment"){
+                                            res = true;
+                                        }
+                                        return res;
+                                    }
                                 }
                             },
                             messages: {
@@ -1281,6 +1291,9 @@
                                 },
                                 "payment[method]": {
                                     required: Mall.translate.__("Please select payment")
+                                },
+                                'payment[additional_information][provider]' : {
+                                    required: Mall.translate.__("Please select payment provider")
                                 }
                             },
                             invalidHandler: function (form, validator) {
@@ -1288,19 +1301,15 @@
                                     return true;
                                 }
 
-//                                jQuery('html, body').animate({
-//                                    scrollTop: 50
-//                                }, "slow");
+                                var firstErrorElement = jQuery('#'  + Mall.Checkout.steps.shippingpayment._self_form_id).validate().errorList[0].element;
+                                var scroll = jQuery(firstErrorElement).closest("fieldset").find('.data-validate').offset().top - 100;
+
                                 jQuery('html, body').animate({
-                                    scrollTop: jQuery(
-                                        jQuery('#'
-                                            + Mall.Checkout.steps.shippingpayment._self_form_id)
-                                            .validate().errorList[0].element).offset().top
-                                        - Mall.getMallHeaderHeight() + 10
+                                    scrollTop: scroll
                                 }, "slow");
                             },
                             errorPlacement: function(error, element) {
-                                jQuery(element).closest("fieldset").find('.data-validate').html(error);
+                                jQuery(element).closest("fieldset").find('.data-validate').append(error);
                             }
                         }));
                 }
