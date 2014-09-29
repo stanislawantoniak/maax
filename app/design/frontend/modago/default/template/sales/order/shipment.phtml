@@ -21,7 +21,7 @@
 			</span>
 		</div>
 		<div class="shipment-bottom">
-			<span><?php echo $this->__('Delivery by'); ?>: <?php echo $carrier ?></span>
+			<?php echo $carrier ? '<span>'.$this->__('Delivery by').': '.$carrier.'</span>' : '' ?>
 			<span><?php echo $this->__('Send date'); ?>: <?php echo $date; ?></span>
 			<?php if($tracking): ?>
 				<span><?php echo $this->__('Tracking number').': '.$tracking ?></span>
