@@ -9036,10 +9036,10 @@ i.flag.hit, i.flag.bestseller {
   .table-cart .colgroup-02 .colgroup .col, .table-cart .colgroup-02 .colgroup .ilosc {
     float: right; } }
 @media (min-width: 1200px) {
-  /* line 286, ../sass/layout/style/_order-view.scss */
+  /* line 287, ../sass/layout/style/_order-view.scss */
   .ilosc {
     padding-top: 7px; } }
-/* line 291, ../sass/layout/style/_order-view.scss */
+/* line 292, ../sass/layout/style/_order-view.scss */
 .table-footer-group .visible-xs {
   margin-top: 15px; }
 
