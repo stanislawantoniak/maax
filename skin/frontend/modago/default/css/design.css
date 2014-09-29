@@ -5201,14 +5201,6 @@ i.flag.hit, i.flag.bestseller {
 .order-view #content-main .tableWrapper .table-footer-group .table-row .table-cell.cell-04 {
   text-align: right; }
 
-@media (max-width: 711px) {
-  /* line 154, ../sass/design/style/_order-view.scss */
-  .table-cart .colgroup-02 .colgroup .col, .table-cart .colgroup-02 .colgroup .ilosc {
-    text-align: right; } }
-/* line 162, ../sass/design/style/_order-view.scss */
-.panel-header {
-  border-bottom: 1px solid #ebebeb; }
-
 /* line 1, ../sass/override/_override-design.scss */
 .clr {
   clear: both; }
