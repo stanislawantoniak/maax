@@ -14,4 +14,13 @@
     background: none repeat scroll 0 0 #d3d3d3;
 }
 
+#co-shippingpayment .fieldset-title {
+    margin-bottom: 0px;
+}
+#co-shippingpayment .data-validate {
+    margin-bottom: 15px;
+}
+#co-shippingpayment .data-validate span {
+    padding-left: 0px !important;
+}
 

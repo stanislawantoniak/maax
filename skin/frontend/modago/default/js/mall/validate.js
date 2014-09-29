@@ -19,36 +19,36 @@ Mall.validate = {
         messages: { },
 
         highlight: function(element, errorClass, validClass) {
-            var we = jQuery(element).innerWidth() + 25,
+            var we = jQuery(element).actual( 'innerWidth' ) + 25,
                 el = jQuery(element).attr('type');
 
             if (jQuery(element).attr('id') === 'pass') {
                 we -= 14;
             }
-            if (jQuery(element).attr('name') === 'payment[method]') {
-                we += 150;
-            }
+
 
             jQuery(element).closest("div").addClass('has-error has-feedback')
                 .removeClass('has-success');
             jQuery(element).closest("div").find('.form-ico-times').remove();
 
-            jQuery(element).closest("div").not( ".form-checkbox" ).not( ".form-radio" )
-                .append(
-                    '<i style="left:'+we
-                        +'px; right:auto" class="form-ico-times form-control-feedback "></i>');
+
+            if(jQuery(element).attr('name') !== 'payment[method]' && jQuery(element).attr('name') !== 'payment[additional_information][provider]'){
+                jQuery(element).closest("div").not( ".form-checkbox" ).not( ".form-radio" )
+                    .append(
+                        '<i style="left:'+we
+                            +'px; right:auto" class="form-ico-times form-control-feedback "></i>');
+            }
+
 
             jQuery(element).closest("div").find('.form-ico-checked').remove();
         },
 
         unhighlight: function(element, errorClass, validClass) {
-            var we = jQuery(element).innerWidth() + 25;
+            var we = jQuery(element).actual( 'innerWidth' ) + 25;
             if (jQuery(element).attr('id') === 'pass') {
                 we -= 14;
             }
-            if (jQuery(element).attr('name') === 'payment[method]') {
-                we += 150;
-            }
+
 
             jQuery(element).closest("div").removeClass('has-error')
                 .addClass('has-success has-feedback');
@@ -56,10 +56,13 @@ Mall.validate = {
             jQuery(element).closest("div").find('#pass-error').remove();
 
             if (jQuery(element).prop("type") === "checkbox") {
-                we = jQuery(element).closest("div").find("label").innerWidth() - 10;
+                we = jQuery(element).closest("div").find("label").actual( 'innerWidth' ) - 10;
             }
-            jQuery(element).closest("div").append('<i style="left:'+
-                we+'px; right:auto" class="form-ico-checked form-control-feedback"></i>');
+            if(jQuery(element).attr('name') !== 'payment[method]' && jQuery(element).attr('name') !== 'payment[additional_information][provider]'){
+                jQuery(element).closest("div").append('<i style="left:'+
+                    we+'px; right:auto" class="form-ico-checked form-control-feedback"></i>');
+            }
+
             jQuery(element).closest("div").find('.form-ico-times').remove();
         },
 
@@ -99,7 +102,7 @@ Mall.validate = {
 
         jQuery.validator.addMethod('validate-passwordbackend', function () {
             return Mall.validate.validators.passwordbackend.apply(this, arguments);
-        }, jQuery.validator.format(Mall.translate.__("password-needs-to-have-at-least-x-characters", "Password needs to have at least 6 characters")));
+        }, jQuery.validator.format(Mall.translate.__("Password needs to have at least %s characters", "Password needs to have at least 6 characters")));
 
         jQuery.validator.addMethod('validate-telephone', function () {
             return Mall.validate.validators.telephone.apply(this, arguments);
@@ -146,4 +149,16 @@ Mall.validate = {
 jQuery(document).ready(function () {
     "use strict";
     Mall.validate.init();
+
+    jQuery( window ).resize(function() {
+
+        jQuery('.has-error input').each(function() {
+            Mall.validate._default_validation_options.highlight(jQuery(this));
+        });
+        jQuery('.has-success input').each(function() {
+            Mall.validate._default_validation_options.unhighlight(jQuery(this));
+        });
+
+    });
+
 });

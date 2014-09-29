@@ -27,7 +27,7 @@ $boxType = Zolago_Banner_Model_Banner_Type::TYPE_BOX;
                                         <a href="<?php echo $slide['url']; ?>">
                                         <?php endif; ?>
 
-                                            <img src="<?php if($i == 1): ?><?php echo Mage::getBaseUrl('media') . DS . $this->getImageResizePath($sliderType).$slide['path']; ?><?php else: ?><?php echo Mage::getBaseUrl('media') . DS . $this->getImageResizeMobilePath($sliderType).$slide['path']; ?><?php endif; ?>" alt="" class="<?php if($i == 1): ?>hidden-xs<?php else: ?>visible-xs<?php endif; ?>" >
+                                            <img src="<?php if($i == 1): ?><?php echo Mage::getBaseUrl('media')  . $this->getImageResizePath($sliderType).$slide['path']; ?><?php else: ?><?php echo Mage::getBaseUrl('media')  . $this->getImageResizeMobilePath($sliderType).$slide['path']; ?><?php endif; ?>" alt="" class="<?php if($i == 1): ?>hidden-xs<?php else: ?>visible-xs<?php endif; ?>" >
                                         <?php if(!empty($slide['url'])): ?>
                                         </a>
                                         <?php endif; ?>
@@ -72,7 +72,7 @@ $boxType = Zolago_Banner_Model_Banner_Type::TYPE_BOX;
                                 <?php if(!empty($b['url'])): ?>
                                 <a href="<?php echo $b['url']; ?>">
                                     <?php endif; ?>
-                                    <img src="<?php echo Mage::getBaseUrl('media') . DS . $this->getImageResizePath($boxType).$b['path']; ?>" alt="">
+                                    <img src="<?php echo Mage::getBaseUrl('media')  . $this->getImageResizePath($boxType).$b['path']; ?>" alt="">
                                     <?php if(!empty($b['url'])): ?>
                                 </a>
                             <?php endif; ?>
