@@ -30,6 +30,9 @@
 							<?php $_v = $_item->getVendor(); ?>
 	    					<?php if ($_v->getId()): ?>
 						    	<div class="panel-heading pull-left col-sm-6 col-xs-12"><?php echo $this->__("Shop"); ?>: <strong><?php echo $_v->getVendorName() ?></strong>
+                                    <br/>
+                                    <a class="small underline visible-xs" href="#" style="margin-bottom: 10px;"><?php echo $this->__('Contact with vendor');?></a>
+
 						    <?php else: ?>
 							    <div class="panel-heading"><?php echo $this->__("Unknown vendor"); ?>
 						    <?php endif ?>
@@ -37,7 +40,7 @@
 							(<?php printf($this->__('Shipment %d of %d'),($total++),count($_items));?>)
 							<?php endif; ?>							
 							</div>		
-							<div class="pull-right panel-heading col-sm-6 col-xs-12"><a class="small underline pull-right rght-margin-30" href="#"><?php echo $this->__('Contact with vendor');?></a></div>
+							<div class="pull-right panel-heading col-sm-6 col-xs-12 hidden-xs"><a class="small underline pull-right rght-margin-30" href="#"><?php echo $this->__('Contact with vendor');?></a></div>
 							</div>
 				</div>
 			    <div class="panel-body">
@@ -118,6 +121,13 @@
         height: 50px;
         margin-bottom: 25px;
     }
+
+    @media (max-width: 767px) {
+        .panel-header {
+            height: 65px;
+        }
+    }
+
 
     @media (max-width: 767px) {
         .colgroup-01 {
