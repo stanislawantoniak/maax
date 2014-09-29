@@ -13,7 +13,7 @@
 						<h2><?php echo $this->__("Order number"); ?>:<?php echo $this->getOrder()->getIncrementId();?></h2>
 					</div>
 					<div class="order-date hidden-xs">
-						<?php echo $this->__('Order date').': '.date('Y-m-d',strtotime($this->getOrder()->getCreatedAt()));?>
+						<?php echo $this->__('Order date').': '.Mage::helper('core')->formatDate($this->getOrder()->getCreatedAt(), 'medium', false);?>
 					</div>
 				</div>
 			</div>
