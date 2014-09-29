@@ -12,13 +12,12 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
 
         /*shipping_cost*/
         $cost = Mage::helper('zolagomodago/checkout')->getShippingCostSummary();
-        $formattedCost = '';
+
+        $costSum = 0;
         if (!empty($cost)) {
             $costSum = array_sum($cost);
-            $formattedCost = Mage::helper('core')->currency($costSum, true, false);
-        } else {
-            $formattedCost = Mage::helper('core')->currency(0, true, false);
         }
+        $formattedCost = Mage::helper('core')->currency($costSum, true, false);
         /*shipping_cost*/
 
         $content = array(
