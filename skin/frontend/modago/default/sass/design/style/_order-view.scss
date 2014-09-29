@@ -147,9 +147,15 @@
 	}
 }
 
-@media (min-width: $screen-lg-min) {
-    .ilosc {
-        padding-top: 7px;
+@media (max-width: 711px) {
+    .table-cart {
+        .colgroup-02 {
+            .colgroup {
+                .col, .ilosc {
+                    text-align: right;
+                }
+            }
+        }
     }
 }
 
