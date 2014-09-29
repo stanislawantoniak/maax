@@ -2,7 +2,6 @@
 
 class Zolago_Modago_Helper_Checkout extends Mage_Core_Helper_Abstract
 {
-
     /**
      * @return array
      */
@@ -28,21 +27,22 @@ class Zolago_Modago_Helper_Checkout extends Mage_Core_Helper_Abstract
         $cost = array();
         foreach ($qRates as $cRates) {
             foreach ($cRates as $rate) {
-
                 $vId = $rate->getUdropshipVendor();
                 if (!$vId) {
                     continue;
                 }
-                $data[$vId][] = $rate->getPrice();
+                $data[$vId][$rate->getCode()] = $rate->getPrice();
             }
             unset($rate);
         }
+
         unset($cRates);
         if (!empty($data)) {
             foreach ($data as $vId => $dataItem) {
                 $cost[$vId] = array_sum($dataItem);
             }
         }
+
         return $cost;
     }
 
