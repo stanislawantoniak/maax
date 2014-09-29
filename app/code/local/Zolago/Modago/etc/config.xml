@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Modago>
-            <version>0.2.9</version>
+            <version>0.3.4</version>
         </Zolago_Modago>
     </modules>
 	<frontend>
@@ -40,4 +40,14 @@
             </zolagomodago_setup>
         </resources>
     </global>
+	<default>
+		<zolagomodago_catalog>
+			<zolagomodago_cataloglisting>
+				<load_on_start>24</load_on_start>
+				<appended_when_scroll>28</appended_when_scroll>
+				<load_more_offset>100</load_more_offset>
+				<pixels_before_append>3000</pixels_before_append>
+			</zolagomodago_cataloglisting>
+		</zolagomodago_catalog>
+	</default>
 </config>

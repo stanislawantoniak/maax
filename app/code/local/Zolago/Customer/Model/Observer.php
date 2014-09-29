@@ -11,6 +11,49 @@ class Zolago_Customer_Model_Observer {
     }
 	
 	/**
+	 * Clear quote presonal data when customer logout
+	 * @param type $observer
+	 */
+	public function customerLogout($observer) {
+		$customer = $observer->getEvent()->getCustomer();
+		$checkout = Mage::getModel("checkout/session");
+		/* @var $checkout Mage_Checkout_Model_Session */
+		$quote = $checkout->getQuote();
+		
+		/**
+		 * Quotes match
+		 */
+		if($quote->getCustomerId()==$customer->getId()){
+			
+			// 1. Clear customer data from quote
+			$allowedFields = array("customer_id", "customer_is_guest", 
+				"customer_group_id", "customer_note", "customer_note_notify");
+			
+			foreach($quote->getData() as $key=>$value){
+				if(preg_match('/^customer_/', $key) && !in_array($key, $allowedFields)){
+					$quote->setData($key, null);
+				}
+			}
+			$quote->save();
+			
+			// 2. Remove addresses
+			foreach($quote->getAddressesCollection() as $address){
+				$address->delete();
+			}
+			
+			// 3. Remove payments
+			foreach($quote->getPaymentsCollection() as $payment){
+				$payment->delete();
+			}
+			
+			/**
+			 * @todo - add customer is inited to prevent override bys setCustomer method
+			 */
+
+		}
+	}
+	
+	/**
 	 * Save last used payment method and additional data
 	 * @param type $observer
 	 */
@@ -24,13 +67,12 @@ class Zolago_Customer_Model_Observer {
 			if($order->getCustomerId()){
 				$customer->load($order->getCustomerId());
 			}
-			if($customer->getId()){
+			if($customer->getId() && Mage::getSingleton('customer/session')->getTransferPayment(true)){
 				$data = array(
 					"method"			=> $payment->getMethod(),
 					"additional_information"	=> $payment->getAdditionalInformation()
 				);
-				$customer->setLastUsedPayment($data);
-				$customer->save();
+				$customer->setLastUsedPayment($data)->save();
 			}
 		}
 	

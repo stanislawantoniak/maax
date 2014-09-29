@@ -712,6 +712,9 @@
 					});
 				}
 				
+				
+				data.push({name: "method", value: this.checkout.getMethod()});
+				
 				return data;
 			},
 			onPrepare: function(){
@@ -769,10 +772,12 @@
              * Which fields copy to invoice from shipping.
              */
 			_invoice_copy_shipping_fields: [
-				"#billing_company",
-				"#billing_street",
-				"#billing_postcode",
-				"#billing_city"
+				"#shipping_company",
+				"#shipping_lastname",
+				"#shipping_firstname",
+				"#shipping_street",
+				"#shipping_postcode",
+				"#shipping_city"
 			],
 
             /**
@@ -801,7 +806,7 @@
                 this.onLoadDisableInvoiceFields();
                 this.validate._checkout = this.checkout;
                 this.afterEmailValidationAction();
-
+				this.attachCompanyTriggers();
                 // add validation to form
                 this.validate.init();
                 this.enableBillingPostcodeMask();
@@ -813,6 +818,24 @@
 			
 			onEnable: function(){
 				jQuery("#step-0-submit").prop("disabled", false);
+			},
+
+			attachCompanyTriggers: function(){
+				var self = this;
+				jQuery("#orders_someone_else").change(function(){
+					self.handleCompany();
+				});
+				jQuery("#invoice_vat").change(function(){
+					self.handleCompany();
+				});
+				jQuery("#account_firstname,#account_lastname").
+					change(function(){
+						self.handleCompany();
+					}).
+					keyup(function(){
+						self.handleCompany();
+					})
+					
 			},
 
             enableBillingPostcodeMask: function () {
@@ -856,7 +879,8 @@
             },
 
 			invoiceCopyShippingData: function () {
-				jQuery("#billing_company").val(jQuery("#shipping_company").val());
+				
+				Mall.Checkout.steps.address.handleCompany();
 				jQuery("#billing_street").val(jQuery("#shipping_street").val());
 				jQuery("#billing_postcode").val(jQuery("#shipping_postcode").val());
 				jQuery("#billing_city").val(jQuery("#shipping_city").val());
@@ -865,28 +889,96 @@
 			},
 
 			invoiceDisableFields: function (fields) {
+				var self = this,
+					el;
+			
 				jQuery.each(fields,  function (idx, item) {
-					jQuery(item).prop("readonly", true);
+					el = jQuery(item);
+					if(el.length){
+						jQuery(item.replace("shipping", "billing")).
+							prop("readonly", true);
+						el.
+							bind('change', self.copyHandler).
+							bind('keyup', self.copyHandler);
+					}
 				});
+				
 
 				return this;
 			},
-
-			invoiceClearCopiedFields: function (fields) {
-				jQuery.each(fields,  function (idx, item) {
-					jQuery(item).val("");
-				});
-
-				return this;
-			},
+			
 
 			invoiceEnableFields: function (fields) {
+				var self = this,
+					el;
 				jQuery.each(fields,  function (idx, item) {
-					jQuery(item).prop("readonly", false);
+					el = jQuery(item);
+					if(el.length){
+						jQuery(item.replace("shipping", "billing")).
+							prop("readonly", false);
+						el.
+							unbind('change', self.copyHandler).
+							unbind('keyup', self.copyHandler);
+					}
+				});
+		
+				return this;
+			},
+			
+			
+			invoiceClearCopiedFields: function (fields) {
+				
+				jQuery.each(fields,  function (idx, item) {
+					item.replace("shipping", "billing").val("");
 				});
 
 				return this;
 			},
+			
+			copyHandler: function(){
+				var el = jQuery(this),
+					dest = jQuery("#" + el.attr("id").replace("shipping", "billing"));
+				
+				if(el.is("#shipping_company") || el.is("#shipping_firstname") || el.is("#shipping_lastname")){
+					Mall.Checkout.steps.address.handleCompany();
+				}else if(dest.length){
+					dest.val(el.val());
+				}
+			},
+			
+			handleCompany: function(){
+				var shippingCompany = jQuery("#shipping_company"),
+					billingCompany = jQuery("#billing_company"),
+					needInvoice = jQuery("#invoice_vat"),
+					invoideDataAddress = jQuery("#invoice_data_address");
+			
+				if(!needInvoice.is(":checked") || !invoideDataAddress.is(":checked")){
+					return;
+				}
+			
+				// Case 1 - company data inserted
+				if(shippingCompany.val()){
+					billingCompany.val(shippingCompany.val());
+				// Case 2 - buy for someone else checked
+				}else if(jQuery("#orders_someone_else").is(":checked")){
+					billingCompany.val(
+						jQuery("#shipping_firstname").val() + 
+						' ' + 
+						jQuery("#shipping_lastname").val()
+					);
+				// Case 3- buy for someone else not checked
+				}else{
+					billingCompany.val(
+						jQuery("#account_firstname").val() + 
+						' ' + 
+						jQuery("#account_lastname").val()
+					);
+				}
+				
+				// Finally validate
+				billingCompany.valid();
+			},
+
 
 			attachInvoiceCopyShippingDataEvent: function () {
 				var self = this;
@@ -896,7 +988,7 @@
 						self.invoiceDisableFields(self._invoice_copy_shipping_fields);
                         self.setSameAsBilling(1);
 					} else {
-						self.invoiceClearCopiedFields(self._invoice_copy_shipping_fields);
+						//self.invoiceClearCopiedFields(self._invoice_copy_shipping_fields);
 						self.invoiceEnableFields(self._invoice_copy_shipping_fields);
                         self.setSameAsBilling(0);
 					}
@@ -911,14 +1003,23 @@
 
 			attachInvoiceEvent: function () {
 				var self = this;
-				jQuery("#invoice_vat").click(function () {
-					if (jQuery("#invoice_data_address").is(":checked")) {
+				var needInvoice = jQuery("#invoice_vat");
+				var sameData = jQuery("#invoice_data_address");
+		
+				needInvoice.click(function () {
+					if (sameData.is(":checked")) {
 						self.invoiceCopyShippingData();
 						self.invoiceDisableFields(self._invoice_copy_shipping_fields);
                         self.setSameAsBilling(1);
 					}
 				});
-
+				
+				// Need invoice and same data
+				//jQuery("#shipping_company").change(function(){
+				//	if(needInvoice.is(":checked") && sameData.is(":checked")){
+				//		jQuery("#billing_company").valid();
+				//	}
+				//})
 				return this;
 			},
 
@@ -1141,8 +1242,9 @@
                     }
 					return false;
                 });
-				this.content.find("[id^=step-1-prev]").click(function(){
+				this.content.find("#step-1-prev,#step-1-prev-right").click(function(){
 					checkoutObject.prev();
+					return false;
 				});
 			},
 
@@ -1166,23 +1268,33 @@
 
                     jQuery('#' + Mall.Checkout.steps.shippingpayment._self_form_id)
                         .validate(Mall.validate.getOptions({
-                            errorLabelContainer: "#containererreurtotal",
+                            //errorLabelContainer: "#containererreurtotal",
                             ignore: "",
 
                             rules: {
                                 shipping: {
                                     required: true
                                 },
-                                'payment[method]': {
-                                    required: true
+                                'payment[additional_information][provider]' : {
+                                    required: function(){
+                                        var res = false;
+                                        if(jQuery("[name='payment[method]']").is(":checked") &&
+                                            jQuery("[name='payment[method]']:checked").val() == "zolagopayment"){
+                                            res = true;
+                                        }
+                                        return res;
+                                    }
                                 }
                             },
                             messages: {
                                 shipping: {
-                                    required: Mall.translate.__("please-select-shipping")
+                                    required: Mall.translate.__("Please select shipping")
                                 },
                                 "payment[method]": {
-                                    required: Mall.translate.__("please-select-payment")
+                                    required: Mall.translate.__("Please select payment")
+                                },
+                                'payment[additional_information][provider]' : {
+                                    required: Mall.translate.__("Please select payment provider")
                                 }
                             },
                             invalidHandler: function (form, validator) {
@@ -1190,9 +1302,15 @@
                                     return true;
                                 }
 
+                                var firstErrorElement = jQuery('#'  + Mall.Checkout.steps.shippingpayment._self_form_id).validate().errorList[0].element;
+                                var scroll = jQuery(firstErrorElement).closest("fieldset").find('.data-validate').offset().top - 100;
+
                                 jQuery('html, body').animate({
-                                    scrollTop: 50
+                                    scrollTop: scroll
                                 }, "slow");
+                            },
+                            errorPlacement: function(error, element) {
+                                jQuery(element).closest("fieldset").find('.data-validate').append(error);
                             }
                         }));
                 }

@@ -3,8 +3,6 @@ $sliderType = Zolago_Banner_Model_Banner_Type::TYPE_SLIDER;
 $boxType = Zolago_Banner_Model_Banner_Type::TYPE_BOX;
 $inspirationType = Zolago_Banner_Model_Banner_Type::TYPE_INSPIRATION;
 $inspirations = $this->getInspirations(); ?>
-
-
 <?php if ($inspirations) : ?>
 <div class="row">
     <section class="block-inspiration">
@@ -23,7 +21,7 @@ $inspirations = $this->getInspirations(); ?>
                                 <?php if(!empty($insp['url'])): ?>
                                 <a href="<?php echo $insp['url']; ?>">
                                     <?php endif; ?>
-                                    <img src="<?php echo Mage::getBaseUrl('media') . DS . $this->getImageResizePath($inspirationType).$insp['path']; ?>" alt="">
+                                    <img src="<?php echo Mage::getBaseUrl('media')  . $this->getImageResizePath($inspirationType).$insp['path']; ?>" alt="">
                                     <?php if(!empty($insp['url'])): ?>
 
 

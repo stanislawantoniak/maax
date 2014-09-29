@@ -7,7 +7,7 @@ $allVendorsMethod = $items->allVendorsMethod;
 
 $methods = $items->methods;
 $rates = $items->rates;
-$cost = $this->getItemsShippingCost();
+$costSumm = $this->getItemsShippingCost();
 
 $cost = $items->cost;
 ?>
@@ -15,6 +15,8 @@ $cost = $items->cost;
 
 <?php if(!empty($rates)): ?>
 <fieldset id="shipping-methods">
+    <h4 class="fieldset-title"><?php echo $this->__('Rodzaj dostawy'); ?>:</h4>
+    <div class="data-validate"></div>
     <script type="text/javascript">
         var vendors = <?php echo $vendorsJ; ?>;
     </script>
@@ -23,7 +25,7 @@ $cost = $items->cost;
     <?php
     $formattedCost = '';
     if (isset($cost[$method['code']])) {
-        $costSum = array_sum($cost[$method['code']]);
+        $costSum = array_sum($costSumm);
         $formattedCost = Mage::helper('core')->currency($costSum, true, false);
     }?>
     <div class="panel panel-default panel-color">
@@ -35,7 +37,7 @@ $cost = $items->cost;
 
                 <dt><?php echo $method['carrier_title']?></dt>
                 <dd><?php echo $method['method_title']?></dd>
-                <dd class="separator large">Koszt przesyłki: <strong><?php echo $formattedCost; ?> </strong></dd>
+                <dd class="separator large"><?php echo $this->__('Shipping cost'); ?>: <strong><?php echo $formattedCost; ?> </strong></dd>
             </dl>
             <figure class="logo-courier pull-right">
                 <img alt="" src="/skin/frontend/modago/default/images/def-logo-kurier.png">

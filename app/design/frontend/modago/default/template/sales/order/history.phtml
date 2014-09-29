@@ -1,8 +1,13 @@
 <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
 <?php $_orders = $this->getOrders(); ?>
 <?php $_helper = Mage::helper("sales");?>
+<?php $baseUrl = Mage::helper("core/url")->getHomeUrl(); ?>
 <div class="page-title box-wrapper">
-	<h1><?php echo $this->__('Order history') ?></h1>
+	<h1>
+		<span><?php echo $this->__('Order history') ?></span>
+		<span class="back-sm"><a href="<?php echo $baseUrl ?>customer/account/index/" class="underline"><?php echo $_helper->__('back: my account'); ?> &gt;</a></span>
+		<span class="back-xs"><a href="<?php echo $baseUrl ?>customer/account/index/" class="underline"><?php echo $_helper->__('back'); ?> &gt;</a></span>
+	</h1>
 </div>
 <?php if(/*0 && */$_orders->getSize()): ?>
 	<div class="background-wrapper box-wrapper">
@@ -26,8 +31,8 @@
 				</tr>
 			</thead>
 			<tbody>
-				<?php $_odd = ''; ?>
 				<?php foreach ($_orders as $_order): ?>
+				<?php $_hasPo = $this->hasPo($_order);?>
 				<tr>
 					<td><span class="nobr"><?php echo $this->formatDate($_order->getCreatedAtStoreDate()) ?></span></td>
 					<td class="order-no"><?php echo $_order->getRealOrderId() ?></td>
@@ -39,6 +44,7 @@
 						</ul>
 					</td>
 					<td class="products">
+						<?php if($_hasPo):?>
 						<ul class="list-unstyled">
 							<?php foreach($this->getSortedPoItemsByOrder($_order) as $_itemArray):?>
 							<li>
@@ -50,26 +56,41 @@
 							</li>
 							<?php endforeach;?>
 						</ul>
+						<?php endif;?>
 					</td>
 					<td class="total">
-						<?php echo $_order->formatPrice($this->getTotal($_order)); ?>
+						<?php if($_hasPo):?>
+							<?php echo $_order->formatPrice($this->getTotal($_order)); ?>
+						<?php endif;?>
 					</td>
 					<td class="status">
-						<?php echo $this->getOrderStatus($_order);?>
-						<?php $_icon = $this->getStatusIcon($_order);?>
-						<?php if($_icon):?>
-							<img src="<?php echo $_icon;?>"/>
+						<?php if($_hasPo):?>
+							<?php echo $this->getOrderStatus($_order);?>
+							<?php $_icon = $this->getStatusIcon($_order);?>
+							<?php if($_icon):?>
+								<img src="<?php echo $_icon;?>"/>
+							<?php endif;?>
+						<?php else:?>
+							<?php echo $_helper->__("Processing");?>
 						<?php endif;?>
 					</td>
 					<td class="a-center">
+						<?php if($_hasPo):?>
 						<a class="underline" href="<?php echo $this->getViewUrl($_order) ?>">
 							<?php echo $_helper->__('view') ?> &gt;
 						</a>
+						<?php endif;?>
 					</td>
 				</tr>
 				<?php endforeach; ?>
 			</tbody>
 		</table>
+		<div class="bottom-links">
+			<a class="button button-third large" href="<?php echo Mage::getUrl("customer/account");?>">
+				<i class="glyphicon glyphicon-chevron-left"></i>
+				<?php echo $_helper->__('back') ?>
+			</a>
+		</div>
 	</div>
 <?php else: ?>
 	<?php echo $this->getChildHtml("empty"); ?>

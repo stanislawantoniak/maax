@@ -81,19 +81,24 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment_Shipping
         $qRates = $this->getRates();
 
         $cost = array();
-        foreach ($qRates as $cCode => $cRates) {
-            foreach ($cRates as $rate) {
-
-                $vId = $rate->getUdropshipVendor();
-                if (!$vId) {
-                    continue;
+        if(!empty($qRates)){
+            foreach ($qRates as $cRates) {
+                foreach ($cRates as $rate) {
+                    $vId = $rate->getUdropshipVendor();
+                    if (!$vId) {
+                        continue;
+                    }
+                    $data[$vId][$rate->getCode()] = $rate->getPrice();
                 }
-                $data[$vId][] = $rate->getPrice();
+                unset($rate);
             }
-        }
-        if (!empty($data)) {
-            foreach ($data as $vId => $dataItem) {
-                $cost[$vId] = array_sum($dataItem);
+
+            unset($cRates);
+
+            if (!empty($data)) {
+                foreach ($data as $vId => $dataItem) {
+                    $cost[$vId] = array_sum($dataItem);
+                }
             }
         }
         return $cost;

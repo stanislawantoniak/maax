@@ -1,0 +1,65 @@
+<config>
+    <sections>
+        <zolagomodago_catalog translate="label" module="zolagomodago">
+            <tab>catalog</tab>
+            <label>Listing</label>
+            <frontend_type>text</frontend_type>
+            <sort_order>50</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <zolagomodago_cataloglisting translate="label">
+                    <label>Frontend</label>
+                    <frontend_type>text</frontend_type>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <sort_order>0</sort_order>
+                    <fields>
+                        <load_on_start translate="label">
+                            <label>Load on start</label>
+                            <frontend_type>text</frontend_type>
+                            <comment>How many products are shown when page is loaded.</comment>
+                            <sort_order>0</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <validate>validate-number</validate>
+                        </load_on_start>
+                        <appended_when_scroll translate="label">
+                            <label>Append when scroll</label>
+                            <comment>How many products will be appended to listing when user is scrolling.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <validate>validate-number</validate>
+                        </appended_when_scroll>
+                        <load_more_offset translate="label">
+                            <label>Load more offset</label>
+                            <comment>How many products will be loaded after pressing Load more button.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <validate>validate-number</validate>
+                        </load_more_offset>
+                        <pixels_before_append translate="label">
+                            <label>Pixels before append</label>
+                            <comment>Pixels from bottom when products append to listing starts.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <validate>validate-number</validate>
+                        </pixels_before_append>
+                    </fields>
+                </zolagomodago_cataloglisting>
+            </groups>
+        </zolagomodago_catalog>
+    </sections>
+</config>

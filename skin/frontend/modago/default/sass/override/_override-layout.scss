@@ -47,7 +47,7 @@
 }
 
 .value_quality_price {
-    margin-bottom: 7px;
+    margin-bottom: 15px;
 }
 
 .cart-qty-field {
@@ -630,7 +630,7 @@ form {
 			.form-control:focus{
 				-webkit-box-shadow: inset 2px 2px 7px rgba(1, 1, 1, 0.1); 
 				box-shadow: inset 2px 2px 7px rgba(1, 1, 1, 0.1); 
-				border: 1px solid #bcbcbc;
+				border: 1px solid #bcbcbc; 
 			}
 			i{display: none;}
 		}
@@ -656,7 +656,8 @@ form {
             font-size: 12px;
             font-weight: normal;
             line-height: 1.0!important;
-            padding:10px 0 0px 15px!important;
+//            padding:10px 0 0px 15px!important;
+            padding:10px 0 0px 0px!important;
             clear:both;
             display:block;
             text-align: left!important;
@@ -665,7 +666,7 @@ form {
         &.form-checkbox {
             label.error,
             span.error {
-                padding:0 0 0 0;
+                padding: 2px 0 20px 20px!important;
                 height:0px;
             }
         }
@@ -697,9 +698,9 @@ form {
 
         .firstName 	{max-width: 296px;}
         .lastName 	{max-width: 296px;}
-        .firm 		{max-width: 415px;}
+        .firm 		{max-width: 314px;}
         .city 		{max-width: 314px;}
-        .street 	{max-width: 415px;}
+        .street 	{max-width: 314px;}
         .zipcode 	{max-width: 72px;}
         .phone 		{max-width: 115px;}
         .email,.login-text-field 		{max-width: 296px !important;}

@@ -4,6 +4,9 @@
         <Zolago_Modago>
             <active>true</active>
             <codePool>local</codePool>
+            <depends>
+                <Mage_Catalog />
+            </depends>
         </Zolago_Modago>
     </modules>
 </config>

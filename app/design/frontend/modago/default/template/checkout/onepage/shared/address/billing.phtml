@@ -40,7 +40,7 @@ $_cutomerAddressId = $_billingAddress->getCustomerAddressId();
 
     <div class="form-group clearfix border-top">
         <div class="row">
-            <label class="col-sm-3" for="billing_company"><?php echo $this->__("Company"); ?></label>
+            <label class="col-sm-3" for="billing_company"><?php echo $this->__("Company"); ?> / <?php echo $this->__("Fullname"); ?></label>
             <div class="col-lg-7 col-md-5 col-sm-5">
                 <input type="text" value="<?php echo $this->escapeHtml($_billingAddress->getCompany()); ?>" class="form-control firm hint" id="billing_company" title="" name="billing[company]" required="true" data-original-title="<?php echo $this->__("Company"); ?>">
             </div>
