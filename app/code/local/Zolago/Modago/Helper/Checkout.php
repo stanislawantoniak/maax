@@ -7,41 +7,50 @@ class Zolago_Modago_Helper_Checkout extends Mage_Core_Helper_Abstract
      */
     public function getShippingCostSummary()
     {
-        $q = Mage::getSingleton('checkout/cart')->getQuote();
-        $q->getTotals();
+        $cost = array();
 
+        $q = Mage::getSingleton('checkout/cart')->getQuote();
+        $totalItemsInCart = Mage::helper('checkout/cart')->getItemsCount();
 
         /*shipping_cost*/
-        $a = $q->getShippingAddress();
+        if($totalItemsInCart > 0){
+            $a = $q->getShippingAddress();
 
-        $qRates = $a->getGroupedAllShippingRates();
-        /**
-         * Fix rate quote query
-         */
-        if (!$qRates) {
-            $a->setCountryId(Mage::app()->getStore()->getConfig("general/country/default"));
-            $a->setCollectShippingRates(true);
-            $a->collectShippingRates();
             $qRates = $a->getGroupedAllShippingRates();
-        }
-        $cost = array();
-        foreach ($qRates as $cRates) {
-            foreach ($cRates as $rate) {
-                $vId = $rate->getUdropshipVendor();
-                if (!$vId) {
-                    continue;
-                }
-                $data[$vId][$rate->getCode()] = $rate->getPrice();
+
+            /**
+             * Fix rate quote query
+             */
+            if (!$qRates) {
+                $a->setCountryId(Mage::app()->getStore()->getConfig("general/country/default"));
+                $a->setCollectShippingRates(true);
+                $a->collectShippingRates();
+                $qRates = $a->getGroupedAllShippingRates();
             }
-            unset($rate);
+
+            if(!empty($qRates)){
+                foreach ($qRates as $cRates) {
+                    foreach ($cRates as $rate) {
+                        $vId = $rate->getUdropshipVendor();
+                        if (!$vId) {
+                            continue;
+                        }
+                        $data[$vId][$rate->getCode()] = $rate->getPrice();
+                    }
+                    unset($rate);
+                }
+
+                unset($cRates);
+                if (!empty($data)) {
+                    foreach ($data as $vId => $dataItem) {
+                        $cost[$vId] = array_sum($dataItem);
+                    }
+                }
+            }
         }
 
-        unset($cRates);
-        if (!empty($data)) {
-            foreach ($data as $vId => $dataItem) {
-                $cost[$vId] = array_sum($dataItem);
-            }
-        }
+
+
 
         return $cost;
     }

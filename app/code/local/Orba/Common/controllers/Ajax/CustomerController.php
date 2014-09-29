@@ -3,8 +3,9 @@
 class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
 	
 	const MAX_CART_ITEMS_COUNT = 5;
-	
-	public function get_account_informationAction(){
+
+    public function get_account_informationAction()
+    {
         $q = Mage::getSingleton('checkout/cart')->getQuote();
         $q->getTotals();
 
@@ -18,25 +19,25 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
         }
         /*shipping_cost*/
 
-		$content = array(
-			'user_account_url' => Mage::getUrl('customer/account'),
-			'logged_in' => Mage::helper('customer')->isLoggedIn(),
-			'favorites_count' => $this->_getFavorites(),
+        $content = array(
+            'user_account_url' => Mage::getUrl('customer/account'),
+            'logged_in' => Mage::helper('customer')->isLoggedIn(),
+            'favorites_count' => $this->_getFavorites(),
             'favorites_url' => Mage::getUrl("wishlist"),
-			'cart' => array(
-				'all_products_count' =>	Mage::helper('checkout/cart')->getSummaryCount(),
-				'products' => $this->_getShoppingCartProducts(),
-				'total_amount' => round(Mage::helper('checkout/cart')->getQuote()->getGrandTotal(), 2),
-				'shipping_cost' => $formattedCost,
-				'show_cart_url' => Mage::getUrl('checkout/cart'),
-				'currency_code' => Mage::app()->getStore()->getCurrentCurrencyCode(),
-				'currency_symbol' => Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol()
-			)
-		);
-		
-		$result = $this->_formatSuccessContentForResponse($content);
-		$this->_setSuccessResponse($result);
-	}
+            'cart' => array(
+                'all_products_count' => Mage::helper('checkout/cart')->getSummaryCount(),
+                'products' => $this->_getShoppingCartProducts(),
+                'total_amount' => round(Mage::helper('checkout/cart')->getQuote()->getGrandTotal(), 2),
+                'shipping_cost' => $formattedCost,
+                'show_cart_url' => Mage::getUrl('checkout/cart'),
+                'currency_code' => Mage::app()->getStore()->getCurrentCurrencyCode(),
+                'currency_symbol' => Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol()
+            )
+        );
+
+        $result = $this->_formatSuccessContentForResponse($content);
+        $this->_setSuccessResponse($result);
+    }
 	
 	public function _getShoppingCartProducts(){
 		

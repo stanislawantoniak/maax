@@ -77,7 +77,26 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment_Shipping
      */
     public function getItemsShippingCost()
     {
-        return Mage::helper('zolagomodago/checkout')->getShippingCostSummary();
+        $data = array();
+        $qRates = $this->getRates();
+
+        $cost = array();
+        foreach ($qRates as $cCode => $cRates) {
+            foreach ($cRates as $rate) {
+
+                $vId = $rate->getUdropshipVendor();
+                if (!$vId) {
+                    continue;
+                }
+                $data[$vId][$rate->getCode()] = $rate->getPrice();
+            }
+        }
+        if (!empty($data)) {
+            foreach ($data as $vId => $dataItem) {
+                $cost[$vId] = array_sum($dataItem);
+            }
+        }
+        return $cost;
     }
     /**
      * @return mixed
