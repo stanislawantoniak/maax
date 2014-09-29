@@ -21,9 +21,6 @@
 		font-size: 14px;
 		text-transform: uppercase;
 	}
-	span.order-top-address {
-		white-space: nowrap;
-	}
 	.sales-order-info {
 		font-size: 0;
 		div {
@@ -51,8 +48,8 @@
 		.shipment-icon {
 			width: 8%;
 			position: relative;
-			height: 37px;
-			font-size: 19px;
+			height: 28px;
+			font-size: 14px;
 			> .fa-stack, > .fa-truck {
 				position: absolute;
 				right: 0;

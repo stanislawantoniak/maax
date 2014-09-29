@@ -5796,63 +5796,60 @@ yx-axis
   font-size: 14px;
   text-transform: uppercase; }
 /* line 24, ../sass/layout/modules/_sales-order-top.scss */
-.sales-order-top span.order-top-address {
-  white-space: nowrap; }
-/* line 27, ../sass/layout/modules/_sales-order-top.scss */
 .sales-order-top .sales-order-info {
   font-size: 0; }
-/* line 29, ../sass/layout/modules/_sales-order-top.scss */
+/* line 26, ../sass/layout/modules/_sales-order-top.scss */
 .sales-order-top .sales-order-info div {
   display: inline-block;
   font-size: 14px;
   width: 50%;
   vertical-align: top; }
-/* line 36, ../sass/layout/modules/_sales-order-top.scss */
+/* line 33, ../sass/layout/modules/_sales-order-top.scss */
 .sales-order-top .sales-order-shipment, .sales-order-top .sales-order-info {
   padding: 15px 10px 25px 20px;
   border: solid 1px #ebebeb; }
-/* line 41, ../sass/layout/modules/_sales-order-top.scss */
+/* line 38, ../sass/layout/modules/_sales-order-top.scss */
 .sales-order-top .sales-order-shipment span {
   display: block; }
-/* line 44, ../sass/layout/modules/_sales-order-top.scss */
+/* line 41, ../sass/layout/modules/_sales-order-top.scss */
 .sales-order-top .sales-order-shipment .shipment-top, .sales-order-top .sales-order-shipment .shipment-icon {
   display: inline-block;
   vertical-align: middle; }
-/* line 48, ../sass/layout/modules/_sales-order-top.scss */
+/* line 45, ../sass/layout/modules/_sales-order-top.scss */
 .sales-order-top .sales-order-shipment .shipment-top {
   width: 90%; }
-/* line 51, ../sass/layout/modules/_sales-order-top.scss */
+/* line 48, ../sass/layout/modules/_sales-order-top.scss */
 .sales-order-top .sales-order-shipment .shipment-icon {
   width: 8%;
   position: relative;
-  height: 37px;
-  font-size: 19px; }
-/* line 56, ../sass/layout/modules/_sales-order-top.scss */
+  height: 28px;
+  font-size: 14px; }
+/* line 53, ../sass/layout/modules/_sales-order-top.scss */
 .sales-order-top .sales-order-shipment .shipment-icon > .fa-stack, .sales-order-top .sales-order-shipment .shipment-icon > .fa-truck {
   position: absolute;
   right: 0; }
-/* line 61, ../sass/layout/modules/_sales-order-top.scss */
+/* line 58, ../sass/layout/modules/_sales-order-top.scss */
 .sales-order-top .sales-order-shipment .shipment-bottom {
   margin-top: 20px; }
 
-/* line 66, ../sass/layout/modules/_sales-order-top.scss */
+/* line 63, ../sass/layout/modules/_sales-order-top.scss */
 .sales-order-more {
   text-align: right;
   display: none;
   padding-top: 5px; }
-/* line 70, ../sass/layout/modules/_sales-order-top.scss */
+/* line 67, ../sass/layout/modules/_sales-order-top.scss */
 .sales-order-more span {
   text-decoration: underline;
   cursor: pointer; }
-/* line 73, ../sass/layout/modules/_sales-order-top.scss */
+/* line 70, ../sass/layout/modules/_sales-order-top.scss */
 .sales-order-more span i {
   margin-left: 10px; }
 @media (max-width: 767px) {
-  /* line 66, ../sass/layout/modules/_sales-order-top.scss */
+  /* line 63, ../sass/layout/modules/_sales-order-top.scss */
   .sales-order-more {
     display: none; } }
 
-/* line 86, ../sass/layout/modules/_sales-order-top.scss */
+/* line 83, ../sass/layout/modules/_sales-order-top.scss */
 .sales-order-top-row {
   padding-bottom: 15px; }
 

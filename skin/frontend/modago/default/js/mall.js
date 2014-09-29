@@ -745,6 +745,24 @@ function basket_dropdown() {
     });
 }
 
+function sales_order_details_top_resize() {
+    jQuery('.sales-order-top-row').each(function() {
+        var block1 = jQuery(this).find('.sales-order-shipment');
+        var block2 = jQuery(this).find('.sales-order-info');
+        block1.css('height','');
+        block2.css('height','');
+        var intFrameWidth = window.innerWidth;
+        if(intFrameWidth > 767) {
+            var height = jQuery(this).height();
+            block1.css('height', height + 'px');
+            block2.css('height', height + 'px');
+        }
+    });
+}
+jQuery(window).resize(function() {
+    sales_order_details_top_resize();
+});
+
 jQuery(document).ready(function() {
     Mall.dispatch();
     Mall.i18nValidation.apply();
@@ -819,4 +837,5 @@ jQuery(document).ready(function() {
     Mall.product.setDiagonalsOnSizeSquare();
 
     basket_dropdown();
+    sales_order_details_top_resize();
 });
