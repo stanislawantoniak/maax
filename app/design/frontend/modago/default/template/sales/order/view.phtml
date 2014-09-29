@@ -9,11 +9,11 @@
 		<header class="title-section">
 			<div class="headerTop">
 				<div class="table-row clearfix" id="order_header">
-					<div class="pull-left">	
+					<div class="pull-left">
 						<h2><?php echo $this->__("Order number"); ?>:<?php echo $this->getOrder()->getIncrementId();?></h2>
 					</div>
-					<div class="order-date hidden-xs">	
-						<?php echo $this->__('Order date').': '.date('Y-m-d',strtotime($this->getOrder()->getCreatedAt()));?>	
+					<div class="order-date hidden-xs">
+						<?php echo $this->__('Order date').': '.date('Y-m-d',strtotime($this->getOrder()->getCreatedAt()));?>
 					</div>
 				</div>
 			</div>
@@ -35,16 +35,16 @@
 						    <?php endif ?>
 							<?php if (count($_items) >1) : ?>
 							(<?php printf($this->__('Shipment %d of %d'),($total++),count($_items));?>)
-							<?php endif; ?>							
-							</div>		
-							<div class="pull-right panel-heading"><?php echo $this->__('Contact with vendor');?></div>					
+							<?php endif; ?>
+							</div>
+							<div class="pull-right panel-heading"><?php echo $this->__('Contact with vendor');?></div>
 							</div>
 				</div>
 			    <div class="panel-body">
-		        <div class="table-row clearfix sales-order-top-row">
-					<?php echo $this->getShipmentBlock($_item); ?>
-					<?php echo $this->getInfoBlock($_item);?>
-				</div>
+					<div class="table-row clearfix sales-order-top-row">
+						<?php echo $this->getShipmentBlock($_item); ?>
+						<?php echo $this->getInfoBlock($_item);?>
+					</div>
 		        <div class="tableWrapper table-cart">
 		            <!-- Thead -->
 							<?php foreach ($_item->getAllItems() as $_product) : ?>

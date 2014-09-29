@@ -4,7 +4,7 @@
 		<div class="order-info-address">
 			<span class="order-top-title"><?php echo $this->__("Shipping address"); ?></span>
 			<span class="order-top-txt"><?php echo $address->getFirstname().' '.$address->getMiddlename().' '.$address->getLastname(); ?></span>
-			<span class="order-top-txt"><?php echo implode('<br />',$address->getStreet()); ?></span>
+			<span class="order-top-txt order-top-address"><?php echo $address->getStreetFull();/*implode('<br />',$address->getStreet());*/ ?></span>
 			<span class="order-top-txt"><?php echo $address->getPostcode().' '.$address->getCity(); ?></span>
 			<span class="order-top-txt"><?php echo $this->__('tel').': '.$address->getTelephone(); ?></span>
 		</div>
