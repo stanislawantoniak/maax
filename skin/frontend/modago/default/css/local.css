@@ -20,4 +20,7 @@
 #co-shippingpayment .data-validate {
     margin-bottom: 15px;
 }
+#co-shippingpayment .data-validate span {
+    padding-left: 0px !important;
+}
 
