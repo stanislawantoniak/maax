@@ -9034,9 +9034,12 @@ i.flag.hit, i.flag.bestseller {
 @media (max-width: 711px) {
   /* line 278, ../sass/layout/style/_order-view.scss */
   .table-cart .colgroup-02 .colgroup .col, .table-cart .colgroup-02 .colgroup .ilosc {
-    text-align: right;
     float: right; } }
-/* line 287, ../sass/layout/style/_order-view.scss */
+@media (min-width: 1200px) {
+  /* line 286, ../sass/layout/style/_order-view.scss */
+  .ilosc {
+    padding-top: 7px; } }
+/* line 291, ../sass/layout/style/_order-view.scss */
 .table-footer-group .visible-xs {
   margin-top: 15px; }
 

@@ -276,11 +276,16 @@
         .colgroup-02 {
             .colgroup {
                 .col, .ilosc {
-                    text-align: right;
                     float: right;
                 }
             }
         }
+    }
+}
+
+@media (min-width: $screen-lg-min) {
+    .ilosc {
+        padding-top: 7px;
     }
 }
 
