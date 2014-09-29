@@ -1,4 +1,4 @@
-/*$icoMapDesktop: sprite-map("desktop/ico/*.png");
+                                   /*$icoMapDesktop: sprite-map("desktop/ico/*.png");
 $icoMapMobile: sprite-map("mobile/ico/*.png");
 $bulletMap: sprite-map("sprites/bullet/*.png");
 $arrowMap: sprite-map("sprites/arrow/*.png");
@@ -47,7 +47,7 @@ section.section .main {
   border-bottom: none; }
 
 /* HEADER BOTTOM */
-/* line 5, ../sass/design/dimensions/_header.scss */
+/* line 6, ../sass/design/dimensions/_header.scss */
 .header_bottom #nav_mobile > li > a:link, .header_bottom #nav_mobile > li > a:visited {
   text-decoration: none; }
 /* line 9, ../sass/design/dimensions/_header.scss */
@@ -60,7 +60,7 @@ section.section .main {
 .header_bottom #nav_mobile > li li a:hover {
   text-decoration: underline; }
 
-/* line 27, ../sass/design/dimensions/_header.scss */
+/* line 28, ../sass/design/dimensions/_header.scss */
 .top_bottom #shop_nav_mobile > li > a:link, .top_bottom #shop_nav_mobile > li > a:visited {
   text-decoration: none; }
 /* line 31, ../sass/design/dimensions/_header.scss */
@@ -171,7 +171,7 @@ section.section .main {
   .recently-viewed .customNavigation a.next:hover {
     background-position: -76px 0; } }
 
-/* line 70, ../sass/design/dimensions/_rv.scss */
+/* line 71, ../sass/design/dimensions/_rv.scss */
 .recently-viewed .rwd-controls .rwd-buttons .rwd-prev, .recently-viewed .rwd-controls .rwd-buttons .rwd-next {
   font-size: 48px;
   background: url('../images/sprites/all-s6d50839671.png'); }
@@ -218,7 +218,7 @@ section.section .main {
 /* line 16, ../sass/design/dimensions/_summary-delivery-payment.scss */
 .table-summary-product .table-heading div {
   text-align: center; }
-/* line 18, ../sass/design/dimensions/_summary-delivery-payment.scss */
+/* line 19, ../sass/design/dimensions/_summary-delivery-payment.scss */
 .table-summary-product .table-heading div.hcena, .table-summary-product .table-heading div.hwartosc {
   text-align: right; }
 /* line 27, ../sass/design/dimensions/_summary-delivery-payment.scss */
@@ -248,8 +248,10 @@ section.section .main {
 /* line 11, ../sass/design/modules/_dropdown-search-basket.scss */
 #dropdown-search .searchDropdown {
   background: #2a2a2a;
-  -moz-border-radius: 0px;
   -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  -ms-border-radius: 0px;
+  -o-border-radius: 0px;
   border-radius: 0px; }
 /* line 16, ../sass/design/modules/_dropdown-search-basket.scss */
 #dropdown-search .searchDropdown .form-group input[type="text"] {
@@ -259,8 +261,10 @@ section.section .main {
   font-size: 12px;
   border: 1px solid #e2e1e1;
   border-right: 1px solid #e2e1e1;
-  -moz-border-radius: 0px;
   -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  -ms-border-radius: 0px;
+  -o-border-radius: 0px;
   border-radius: 0px;
   box-shadow: none; }
 /* line 27, ../sass/design/modules/_dropdown-search-basket.scss */
@@ -270,8 +274,10 @@ section.section .main {
   font-size: 12px;
   border: 1px solid #e2e1e1;
   border-right: 1px solid #e2e1e1;
-  -moz-border-radius: 0px;
   -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  -ms-border-radius: 0px;
+  -o-border-radius: 0px;
   border-radius: 0px; }
 
 /* line 43, ../sass/design/modules/_dropdown-search-basket.scss */
@@ -312,8 +318,10 @@ section.section .main {
   color: #000;
   font-size: 12px;
   border-right: none;
-  -moz-border-radius: 0px;
   -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  -ms-border-radius: 0px;
+  -o-border-radius: 0px;
   border-radius: 0px;
   box-shadow: none;
   background: url("../images/bg-search.png") 0 0 repeat-x;
@@ -347,11 +355,11 @@ section.section .main {
 /* line 43, ../sass/design/modules/_header-block-search.scss */
 #header [role="search"] .sbOptionsWrapper a {
   border-bottom: dotted 1px #515151; }
-/* line 45, ../sass/design/modules/_header-block-search.scss */
+/* line 46, ../sass/design/modules/_header-block-search.scss */
 #header [role="search"] .sbOptionsWrapper a:link, #header [role="search"] .sbOptionsWrapper a:visited {
   color: #000;
   text-decoration: none; }
-/* line 50, ../sass/design/modules/_header-block-search.scss */
+/* line 52, ../sass/design/modules/_header-block-search.scss */
 #header [role="search"] .sbOptionsWrapper a:hover, #header [role="search"] .sbOptionsWrapper a:focus, #header [role="search"] .sbOptionsWrapper a.sbFocus {
   color: #000; }
 /* line 58, ../sass/design/modules/_header-block-search.scss */
@@ -390,8 +398,8 @@ section.section .main {
 /* line 102, ../sass/design/modules/_header-block-search.scss */
 #header [role="search"] .sbOptionsWrapper {
   background: #fff;
-  -moz-box-shadow: rgba(1, 1, 1, 0.12) 0 3px 5px;
   -webkit-box-shadow: rgba(1, 1, 1, 0.12) 0 3px 5px;
+  -moz-box-shadow: rgba(1, 1, 1, 0.12) 0 3px 5px;
   box-shadow: rgba(1, 1, 1, 0.12) 0 3px 5px; }
 /* line 105, ../sass/design/modules/_header-block-search.scss */
 #header [role="search"] .sbOptionsWrapper li {
@@ -430,7 +438,7 @@ section.section .main {
 /* line 27, ../sass/design/modules/_clone-menu.scss */
 #clone_submenu ul dl dt {
   color: #000; }
-/* line 29, ../sass/design/modules/_clone-menu.scss */
+/* line 30, ../sass/design/modules/_clone-menu.scss */
 #clone_submenu ul dl dt a:link, #clone_submenu ul dl dt a:visited {
   font-size: 14px;
   font-weight: 900;
@@ -441,7 +449,7 @@ section.section .main {
 /* line 39, ../sass/design/modules/_clone-menu.scss */
 #clone_submenu ul dl dd {
   color: #000; }
-/* line 41, ../sass/design/modules/_clone-menu.scss */
+/* line 42, ../sass/design/modules/_clone-menu.scss */
 #clone_submenu ul dl dd a:link, #clone_submenu ul dl dd a:visited {
   font-size: 12px;
   font-weight: 400;
@@ -457,7 +465,7 @@ section.section .main {
   text-decoration: underline; }
 
 /* CLONE MENU */
-/* line 72, ../sass/design/modules/_clone-menu.scss */
+/* line 73, ../sass/design/modules/_clone-menu.scss */
 #clone_submenu ul a.closeSubMenu:link, #clone_submenu ul a.closeSubMenu:visited {
   border-radius: 0;
   cursor: pointer;
@@ -498,14 +506,14 @@ section.section .main {
 /* line 15, ../sass/design/modules/_sliding-menu.scss */
 .sb-slidebar > header {
   background: #2d2d2d; }
-/* line 18, ../sass/design/modules/_sliding-menu.scss */
+/* line 19, ../sass/design/modules/_sliding-menu.scss */
 .sb-slidebar > header a:link, .sb-slidebar > header a:visited {
   line-height: 53px;
   color: #fff;
   font-size: 14px;
   text-transform: uppercase; }
 @media screen and (max-width: 991px) {
-  /* line 18, ../sass/design/modules/_sliding-menu.scss */
+  /* line 19, ../sass/design/modules/_sliding-menu.scss */
   .sb-slidebar > header a:link, .sb-slidebar > header a:visited {
     line-height: 41px; } }
 /* line 27, ../sass/design/modules/_sliding-menu.scss */
@@ -579,9 +587,9 @@ section.section .main {
 .sb-menu li ul a.sb-submenu-active {
   background: url("../images/arrow-menu-sliding-active.png") 223px 50% no-repeat; }
 
-/* line 90, ../sass/design/modules/_sliding-menu.scss */
+/* line 91, ../sass/design/modules/_sliding-menu.scss */
 .sb-menu > li.separator, .sb-menu li.separator {
-  background: #2E2E2E; }
+  background: #2e2e2e; }
 
 /* ----------
  * 002 - Site
@@ -596,14 +604,14 @@ section.section .main {
 /* line 106, ../sass/design/modules/_sliding-menu.scss */
 .fb-slidebar-header {
   background: #000; }
-/* line 110, ../sass/design/modules/_sliding-menu.scss */
+/* line 111, ../sass/design/modules/_sliding-menu.scss */
 .fb-slidebar-header a:link, .fb-slidebar-header a:visited {
   line-height: 53px;
   color: #fff;
   font-size: 14px;
   text-transform: uppercase; }
 @media screen and (max-width: 991px) {
-  /* line 110, ../sass/design/modules/_sliding-menu.scss */
+  /* line 111, ../sass/design/modules/_sliding-menu.scss */
   .fb-slidebar-header a:link, .fb-slidebar-header a:visited {
     height: 41px;
     line-height: 41px; } }
@@ -624,7 +632,7 @@ section.section .main {
 /* line 133, ../sass/design/modules/_sliding-menu.scss */
 .fb-slidebar > header {
   background: #2d2d2d; }
-/* line 135, ../sass/design/modules/_sliding-menu.scss */
+/* line 136, ../sass/design/modules/_sliding-menu.scss */
 .fb-slidebar > header a:link, .fb-slidebar > header a:visited {
   line-height: 53px;
   color: #fff;
@@ -660,7 +668,7 @@ section.section .main {
 /* line 27, ../sass/design/modules/_sidebar.scss */
 #filter_size label input[type=checkbox]:checked, .filter-size label input[type=checkbox]:checked {
   outline: none !important; }
-/* line 30, ../sass/design/modules/_sidebar.scss */
+/* line 31, ../sass/design/modules/_sidebar.scss */
 #filter_size label input[type=checkbox]:checked + span, #filter_size label input.checked + span, .filter-size label input[type=checkbox]:checked + span, .filter-size label input.checked + span {
   background: #000;
   border-color: #000;
@@ -696,8 +704,10 @@ section.section .main {
 /* line 90, ../sass/design/modules/_sidebar.scss */
 .filter-color label > span {
   background: #fff;
-  -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
   border-radius: 5px; }
 /* line 93, ../sass/design/modules/_sidebar.scss */
 .filter-color label > span span {
@@ -706,7 +716,7 @@ section.section .main {
 .filter-color label [type="checkbox"]:hover + span {
   background: #999;
   cursor: pointer; }
-/* line 102, ../sass/design/modules/_sidebar.scss */
+/* line 103, ../sass/design/modules/_sidebar.scss */
 .filter-color label [type="checkbox"]:checked + span, .filter-color label span.checked {
   background: #000; }
 /* line 106, ../sass/design/modules/_sidebar.scss */
@@ -758,8 +768,10 @@ span.checked {
   cursor: pointer; }
 /* line 37, ../sass/design/modules/_current-filter.scss */
 #view-current-filter dl dd.action {
-  -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
   border-radius: 3px; }
 /* line 42, ../sass/design/modules/_current-filter.scss */
 #view-current-filter .actionViewFilter {
@@ -798,7 +810,7 @@ span.checked {
   line-height: 30px;
   outline: none;
   text-indent: 10px; }
-/* line 18, ../sass/design/modules/_selected-styled.scss */
+/* line 20, ../sass/design/modules/_selected-styled.scss */
 .sbSelector:link, .sbSelector:visited, .sbSelector:hover {
   color: #1e1e1e;
   outline: none;
@@ -806,27 +818,27 @@ span.checked {
 
 /* line 26, ../sass/design/modules/_selected-styled.scss */
 .sbToggle {
-  background: url('../images/sprites/select-sbfa0a5a9cb.png');
-  background-position: 0 -18px;
+  background: url('../images/sprites/select-sb1f58e57ff.png');
+  background-position: 0 -27px;
   line-height: 27px; }
-/* line 59, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
-.sbToggle:hover, .sbToggle.select_styled-hover {
-  background-position: 0 -72px; }
+/* line 43, ../../../../../../../../../../../usr/share/compass/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+.sbToggle:hover, .sbToggle.select_styled_hover, .sbToggle.select_styled-hover {
+  background-position: 0 -54px; }
 /* line 31, ../sass/design/modules/_selected-styled.scss */
 .sbToggle:link {
-  background-position: 0 -18px; }
-/* line 59, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
-.sbToggle:link:hover, .sbToggle:link.select_styled-hover {
-  background-position: 0 -72px; }
+  background-position: 0 -27px; }
+/* line 43, ../../../../../../../../../../../usr/share/compass/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+.sbToggle:link:hover, .sbToggle:link.select_styled_hover, .sbToggle:link.select_styled-hover {
+  background-position: 0 -54px; }
 /* line 34, ../sass/design/modules/_selected-styled.scss */
 .sbToggle:visited {
-  background-position: 0 -18px; }
-/* line 59, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
-.sbToggle:visited:hover, .sbToggle:visited.select_styled-hover {
-  background-position: 0 -72px; }
+  background-position: 0 -27px; }
+/* line 43, ../../../../../../../../../../../usr/share/compass/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+.sbToggle:visited:hover, .sbToggle:visited.select_styled_hover, .sbToggle:visited.select_styled-hover {
+  background-position: 0 -54px; }
 /* line 37, ../sass/design/modules/_selected-styled.scss */
 .sbToggle:hover {
-  background-position: 0 -72px; }
+  background-position: 0 -54px; }
 
 /* line 41, ../sass/design/modules/_selected-styled.scss */
 .sbHolderDisabled {
@@ -834,7 +846,7 @@ span.checked {
   border: solid 1px #e2e2e2; }
 /* line 44, ../sass/design/modules/_selected-styled.scss */
 .sbHolderDisabled .sbToggle {
-  background-position: 0 -45px; }
+  background-position: 0 0; }
 
 /* line 48, ../sass/design/modules/_selected-styled.scss */
 .sbOptionsWrapper {
@@ -844,11 +856,11 @@ span.checked {
 /* line 55, ../sass/design/modules/_selected-styled.scss */
 .sbOptionsWrapper .sbOptions a {
   outline: none; }
-/* line 57, ../sass/design/modules/_selected-styled.scss */
+/* line 58, ../sass/design/modules/_selected-styled.scss */
 .sbOptionsWrapper .sbOptions a:link, .sbOptionsWrapper .sbOptions a:visited {
   color: #1e1e1e;
   text-decoration: none; }
-/* line 62, ../sass/design/modules/_selected-styled.scss */
+/* line 64, ../sass/design/modules/_selected-styled.scss */
 .sbOptionsWrapper .sbOptions a:hover, .sbOptionsWrapper .sbOptions a:focus, .sbOptionsWrapper .sbOptions a.sbFocus {
   color: #1e1e1e;
   background: #f2f1f0; }
@@ -872,7 +884,7 @@ span.checked {
 #sort-criteria ul li {
   line-height: 27px;
   color: #000; }
-/* line 7, ../sass/design/modules/_sort-criteria.scss */
+/* line 9, ../sass/design/modules/_sort-criteria.scss */
 #sort-criteria ul li label, #sort-criteria ul li .label, #sort-criteria ul li .value {
   font-size: 12px !important;
   font-family: "latoregular";
@@ -947,7 +959,7 @@ span.checked {
   line-height: 0; }
 
 /* display none until init */
-/* line 7, ../sass/design/modules/_rwdCarousel.scss */
+/* line 8, ../sass/design/modules/_rwdCarousel.scss */
 .rwd-carousel .rwd-page, .rwd-carousel .rwd-buttons div {
   cursor: pointer; }
 
@@ -958,25 +970,25 @@ span.checked {
   cursor: pointer; }
 /* line 17, ../sass/design/modules/_rwdCarousel.scss */
 .customNavigation a:hover {
-  color: #808080; }
+  color: gray; }
 
-/* line 25, ../sass/design/modules/_rwdCarousel.scss */
+/* line 26, ../sass/design/modules/_rwdCarousel.scss */
 .block-promoted-banners .rwd-controls .rwd-buttons .rwd-prev, .block-promoted-banners .rwd-controls .rwd-buttons .rwd-next {
   font-size: 30px;
   color: #ccc;
   cursor: pointer; }
 /* line 31, ../sass/design/modules/_rwdCarousel.scss */
 .block-promoted-banners .rwd-controls .rwd-buttons .rwd-prev:hover, .block-promoted-banners .rwd-controls .rwd-buttons .rwd-next:hover {
-  color: #808080; }
+  color: gray; }
 
-/* line 41, ../sass/design/modules/_rwdCarousel.scss */
+/* line 42, ../sass/design/modules/_rwdCarousel.scss */
 .block-inspiration .rwd-controls .rwd-buttons .rwd-prev, .block-inspiration .rwd-controls .rwd-buttons .rwd-next {
   font-size: 30px;
   color: #ccc;
   cursor: pointer; }
 /* line 46, ../sass/design/modules/_rwdCarousel.scss */
 .block-inspiration .rwd-controls .rwd-buttons .rwd-prev:hover, .block-inspiration .rwd-controls .rwd-buttons .rwd-next:hover {
-  color: #808080; }
+  color: gray; }
 
 /* mouse grab icon */
 /* line 56, ../sass/design/modules/_rwdCarousel.scss */
@@ -1059,7 +1071,7 @@ span.checked {
 /* line 12, ../sass/design/modules/_navCategoryMenu.scss */
 #navCategory .backToCategory:hover {
   text-decoration: underline; }
-/* line 18, ../sass/design/modules/_navCategoryMenu.scss */
+/* line 19, ../sass/design/modules/_navCategoryMenu.scss */
 #navCategory #nav_category_mobile > li > a:link, #navCategory #nav_category_mobile > li > a:visited {
   border-top: 1px solid #dedce1;
   line-height: 29px; }
@@ -1111,7 +1123,7 @@ span.checked {
   background-position: -127px -20px; }
 
 /** Navigation carousel controls **/
-/* line 74, ../sass/design/modules/_gallery_product.scss */
+/* line 75, ../sass/design/modules/_gallery_product.scss */
 .connected-carousels .prev-navigation, .connected-carousels .next-navigation {
   background: #fff;
   background: url('../images/sprites/all-s6d50839671.png'); }
@@ -1133,8 +1145,10 @@ span.checked {
 /* line 96, ../sass/design/modules/_gallery_product.scss */
 .jcarousel-pagination a {
   background: #626262;
-  -moz-border-radius: 50px;
   -webkit-border-radius: 50px;
+  -moz-border-radius: 50px;
+  -ms-border-radius: 50px;
+  -o-border-radius: 50px;
   border-radius: 50px;
   text-indent: -999em;
   outline: none !important; }
@@ -1162,13 +1176,12 @@ span.checked {
 #product-gallery #sync2 .rwd-item.synced img, #product-gallery #sync2 .rwd-item:hover img, #product-gallery #sync4 .rwd-item.synced img, #product-gallery #sync4 .rwd-item:hover img {
   border: 1px solid #999; }
 
-/* line 138, ../sass/design/modules/_gallery_product.scss */
+/* line 139, ../sass/design/modules/_gallery_product.scss */
 #product-gallery .rwd-controls .rwd-buttons .rwd-prev, #product-gallery .rwd-controls .rwd-buttons .rwd-next {
   font-size: 0px;
   text-indent: -119988px;
   overflow: hidden;
-  text-align: left;
-  text-transform: capitalize; }
+  text-align: left; }
 /* line 142, ../sass/design/modules/_gallery_product.scss */
 #product-gallery .rwd-controls .rwd-buttons .rwd-prev:before, #product-gallery .rwd-controls .rwd-buttons .rwd-next:before {
   background: url('../images/sprites/all-s6d50839671.png'); }
@@ -1185,7 +1198,7 @@ span.checked {
 #product-gallery .rwd-controls .rwd-buttons .rwd-next:before {
   background-position: -127px -20px; }
 
-/* line 164, ../sass/design/modules/_gallery_product.scss */
+/* line 165, ../sass/design/modules/_gallery_product.scss */
 #product-gallery .up, #product-gallery .down {
   background: #fff;
   background: url('../images/sprites/all-s6d50839671.png');
@@ -1206,8 +1219,10 @@ span.checked {
 /* line 187, ../sass/design/modules/_gallery_product.scss */
 #product-gallery .rwd-page span {
   background: #626262;
-  -moz-border-radius: 50px;
   -webkit-border-radius: 50px;
+  -moz-border-radius: 50px;
+  -ms-border-radius: 50px;
+  -o-border-radius: 50px;
   border-radius: 50px;
   text-indent: -999em;
   outline: none !important; }
@@ -1222,7 +1237,7 @@ body.lightbox {
   /* Prevent site from scrolling when a Slidebar is open, except when static Slidebars are only available. */
   position: fixed; }
 
-/* line 205, ../sass/design/modules/_gallery_product.scss */
+/* line 206, ../sass/design/modules/_gallery_product.scss */
 #lightbox, #inner-lightbox {
   background: #fff; }
 
@@ -1248,14 +1263,13 @@ body.lightbox {
 #lightbox #sync2 .rwd-item.synced img, #lightbox #sync2 .rwd-item:hover img, #lightbox #sync4 .rwd-item.synced img, #lightbox #sync4 .rwd-item:hover img {
   border: 1px solid #999; }
 
-/* line 248, ../sass/design/modules/_gallery_product.scss */
+/* line 249, ../sass/design/modules/_gallery_product.scss */
 #lightbox .rwd-controls .rwd-buttons .rwd-prev, #lightbox .rwd-controls .rwd-buttons .rwd-next {
   font-size: 0px;
   z-index: 10000;
   text-indent: -119988px;
   overflow: hidden;
-  text-align: left;
-  text-transform: capitalize; }
+  text-align: left; }
 /* line 253, ../sass/design/modules/_gallery_product.scss */
 #lightbox .rwd-controls .rwd-buttons .rwd-prev:before, #lightbox .rwd-controls .rwd-buttons .rwd-next:before {
   background: url('../images/sprites/all-s6d50839671.png'); }
@@ -1272,7 +1286,7 @@ body.lightbox {
 #lightbox .rwd-controls .rwd-buttons .rwd-next:before {
   background-position: -127px -20px; }
 
-/* line 276, ../sass/design/modules/_gallery_product.scss */
+/* line 277, ../sass/design/modules/_gallery_product.scss */
 #lightbox .up, #lightbox .down {
   background: #fff;
   text-indent: -999em;
@@ -1295,8 +1309,10 @@ body.lightbox {
 /* line 309, ../sass/design/modules/_gallery_product.scss */
 #lightbox .rwd-page span {
   background: #626262;
-  -moz-border-radius: 50px;
   -webkit-border-radius: 50px;
+  -moz-border-radius: 50px;
+  -ms-border-radius: 50px;
+  -o-border-radius: 50px;
   border-radius: 50px;
   text-indent: -999em;
   outline: none !important; }
@@ -1394,7 +1410,7 @@ body.lightbox {
   .block-complementary-product .rwdCarousel .customNavigation a.next:hover {
     background-position: -76px 0; } }
 
-/* line 109, ../sass/design/modules/_block-complementary-product.scss */
+/* line 110, ../sass/design/modules/_block-complementary-product.scss */
 .block-complementary-product .rwd-controls .rwd-buttons .rwd-prev, .block-complementary-product .rwd-controls .rwd-buttons .rwd-next {
   font-size: 48px;
   background: url('../images/sprites/all-s6d50839671.png'); }
@@ -1501,7 +1517,7 @@ body.lightbox {
 /* line 34, ../sass/design/modules/_block-comments.scss */
 #comments .pag > li {
   border: none; }
-/* line 36, ../sass/design/modules/_block-comments.scss */
+/* line 37, ../sass/design/modules/_block-comments.scss */
 #comments .pag > li > a, #comments .pag > li > span {
   border: none;
   line-height: 27px;
@@ -1545,7 +1561,7 @@ body.lightbox {
 /* line 10, ../sass/design/modules/_modal.scss */
 .modal-content ul {
   list-style: none; }
-/* line 11, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/typography/lists/_bullets.scss */
+/* line 11, ../../../../../../../../../../../usr/share/compass/frameworks/compass/stylesheets/compass/typography/lists/_bullets.scss */
 .modal-content ul li {
   list-style-image: none;
   list-style-type: none;
@@ -1599,7 +1615,7 @@ body.lightbox {
   box-shadow: inset 0 0 0 3px #e5621b; }
 
 /** Stage carousel controls **/
-/* line 30, ../sass/design/modules/_modal-gallery-product.scss */
+/* line 31, ../sass/design/modules/_modal-gallery-product.scss */
 .connected-carousels-modd .prev-stage-modd, .connected-carousels-modd .next-stage-modd {
   background: url('../images/sprites/all-s6d50839671.png'); }
 /* line 34, ../sass/design/modules/_modal-gallery-product.scss */
@@ -1616,7 +1632,7 @@ body.lightbox {
   background-position: -160px -435px; }
 
 /** Navigation carousel controls **/
-/* line 52, ../sass/design/modules/_modal-gallery-product.scss */
+/* line 53, ../sass/design/modules/_modal-gallery-product.scss */
 .connected-carousels-modd .prev-navigation-modd, .connected-carousels-modd .next-navigation-modd {
   background: #fff;
   background: url('../images/sprites/all-s6d50839671.png'); }
@@ -2628,7 +2644,7 @@ x-axis
 /* line 27, ../sass/design/modules/_zoom_gallery.scss */
 #zoom_gallery .connected-carousels .carousel-navigation li:hover img {
   border: 1px solid #999; }
-/* line 37, ../sass/design/modules/_zoom_gallery.scss */
+/* line 38, ../sass/design/modules/_zoom_gallery.scss */
 #zoom_gallery .connected-carousels .prev-stage, #zoom_gallery .connected-carousels .next-stage {
   background: url('../images/sprites/all-s6d50839671.png'); }
 /* line 41, ../sass/design/modules/_zoom_gallery.scss */
@@ -2649,7 +2665,7 @@ x-axis
 /* line 3, ../sass/design/modules/_form_add_comment.scss */
 #review-form h4 strong {
   text-transform: uppercase; }
-/* line 7, ../sass/design/modules/_form_add_comment.scss */
+/* line 9, ../sass/design/modules/_form_add_comment.scss */
 #review-form input[type="text"], #review-form input[type="email"], #review-form input[type="password"] {
   line-height: 29px; }
 /* line 12, ../sass/design/modules/_form_add_comment.scss */
@@ -2692,8 +2708,10 @@ x-axis
   font-size: 13px;
   white-space: nowrap;
   background: #6c6c6c;
-  -moz-border-radius: 50px;
   -webkit-border-radius: 50px;
+  -moz-border-radius: 50px;
+  -ms-border-radius: 50px;
+  -o-border-radius: 50px;
   border-radius: 50px; }
 @media (min-width: 768px) and (max-width: 991px) {
   /* line 23, ../sass/design/modules/_header-checkout.scss */
@@ -2786,7 +2804,7 @@ x-axis
 /* line 102, ../sass/design/modules/_summary-delivery-payment.scss */
 .table-summary-product .table-group .nazwa_rozmiar .rozmiar_produktu {
   font-size: 11px; }
-/* line 110, ../sass/design/modules/_summary-delivery-payment.scss */
+/* line 112, ../sass/design/modules/_summary-delivery-payment.scss */
 .table-summary-product .table-group .tabcol-2 .cena, .table-summary-product .table-group .tabcol-2 .losc, .table-summary-product .table-group .tabcol-2 .wartosc {
   text-align: right;
   font-size: 12px; }
@@ -2875,7 +2893,7 @@ x-axis
 /* line 42, ../sass/design/modules/_helpful-vote.scss */
 .block_info_order .summary-order .popover-dismiss.badge {
   border: 1px solid #d9d9d9;
-  background: #fff !important;
+  background: white !important;
   border-radius: 50%;
   box-shadow: none;
   text-shadow: none; }
@@ -2886,7 +2904,7 @@ x-axis
 /* line 64, ../sass/design/modules/_helpful-vote.scss */
 .summary-order .popover-dismiss.badge {
   border: 1px solid #d9d9d9;
-  background: #fff !important;
+  background: white !important;
   border-radius: 50%;
   box-shadow: none;
   text-shadow: none;
@@ -2953,7 +2971,7 @@ ol.breadcrumb li:not(:first-child):before {
   font-size: 11px;
   text-align: right;
   color: #000; }
-/* line 13, ../sass/design/override/_breadcrumb.scss */
+/* line 14, ../sass/design/override/_breadcrumb.scss */
 ol.breadcrumb li a:link, ol.breadcrumb li a:visited {
   color: #000;
   font-family: 'OpenSansRegular';
@@ -2965,7 +2983,7 @@ ol.breadcrumb li a:hover {
 ol.breadcrumb li.active {
   color: #000; }
 
-/* line 4, ../sass/design/override/_sidebar-menu-category.scss */
+/* line 5, ../sass/design/override/_sidebar-menu-category.scss */
 .sidebar .nav-pills li a:link, .sidebar .nav-pills li a:visited {
   background: none; }
 /* line 8, ../sass/design/override/_sidebar-menu-category.scss */
@@ -2978,8 +2996,10 @@ ol.breadcrumb li.active {
 /* line 3, ../sass/design/override/_badge.scss */
 .user-navigation a .badge {
   background: #fe002b;
-  -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
   border-radius: 3px;
   color: #fff;
   font-size: 11px;
@@ -2988,8 +3008,10 @@ ol.breadcrumb li.active {
 @media screen and (max-width: 991px) {
   /* line 3, ../sass/design/override/_badge.scss */
   .user-navigation a .badge {
-    -moz-border-radius: 2px;
     -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    -ms-border-radius: 2px;
+    -o-border-radius: 2px;
     border-radius: 2px;
     font-size: 10px;
     font-style: normal; } }
@@ -3035,8 +3057,10 @@ ol.breadcrumb li.active {
 
 /* line 4, ../sass/design/override/_shopping-cart.scss */
 .node-type-shopping-cart #content-main .panel.panel-default {
-  -moz-border-radius: 1px;
   -webkit-border-radius: 1px;
+  -moz-border-radius: 1px;
+  -ms-border-radius: 1px;
+  -o-border-radius: 1px;
   border-radius: 1px;
   border-color: #bfbfbf; }
 /* line 8, ../sass/design/override/_shopping-cart.scss */
@@ -3113,7 +3137,7 @@ div.noscroll {
   background: #fff;
   border-top: 1px solid #ebebeb;
   border-bottom: 1px solid #ebebeb; }
-/* line 14, ../sass/design/style/_global.scss */
+/* line 16, ../sass/design/style/_global.scss */
 .bg-w#complementary_product, .bg-w#description_product, .bg-w#note_product {
   border-top: 1px solid #eeedf0; }
 /* line 19, ../sass/design/style/_global.scss */
@@ -3150,7 +3174,7 @@ div.noscroll {
 /* line 4, ../sass/design/style/_carousel.scss */
 .carousel .carousel-inner .item .carousel-caption {
   text-align: left; }
-/* line 6, ../sass/design/style/_carousel.scss */
+/* line 7, ../sass/design/style/_carousel.scss */
 .carousel .carousel-inner .item .carousel-caption a:link, .carousel .carousel-inner .item .carousel-caption a:visited {
   text-transform: uppercase;
   font-weight: bold;
@@ -3163,7 +3187,7 @@ div.noscroll {
 .carousel .carousel-inner .item .carousel-caption .fa-caret-right {
   color: #73f2ba; }
 
-/* line 25, ../sass/design/style/_carousel.scss */
+/* line 26, ../sass/design/style/_carousel.scss */
 #carousel-top-indicators, #carousel-top-mobile-indicators {
   background-color: #2a2a2a;
   line-height: 30px; }
@@ -3181,7 +3205,7 @@ div.noscroll {
 .carousel-control.right {
   background: none; }
 
-/*$icoMapDesktop: sprite-map("desktop/ico/*.png");
+                                   /*$icoMapDesktop: sprite-map("desktop/ico/*.png");
 $icoMapMobile: sprite-map("mobile/ico/*.png");
 $bulletMap: sprite-map("sprites/bullet/*.png");
 $arrowMap: sprite-map("sprites/arrow/*.png");
@@ -3233,16 +3257,18 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
   background: #2a2a2a !important; }
 /* line 49, ../sass/design/style/_header.scss */
 .user-navigation .dropdown ul.searchDropdown {
-  -moz-border-radius: 0;
   -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  -ms-border-radius: 0;
+  -o-border-radius: 0;
   border-radius: 0; }
 
 /* HEADER BOTTOM */
 /* line 55, ../sass/design/style/_header.scss */
 .header_bottom {
-  background: #fff url("../images/bg-menu.png") 0 0 repeat-x;
+  background: white url("../images/bg-menu.png") 0 0 repeat-x;
   border-bottom: 1px solid #dddce1; }
-/* line 59, ../sass/design/style/_header.scss */
+/* line 60, ../sass/design/style/_header.scss */
 .header_bottom #nav_desc.navigation > li > a:hover, .header_bottom #nav_desc.navigation > li > a.active {
   background: none; }
 /* line 62, ../sass/design/style/_header.scss */
@@ -3251,7 +3277,7 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
 /* line 72, ../sass/design/style/_header.scss */
 .header_bottom .navigation li {
   /* === SUBMENU === */ }
-/* line 73, ../sass/design/style/_header.scss */
+/* line 74, ../sass/design/style/_header.scss */
 .header_bottom .navigation li a:link, .header_bottom .navigation li a:visited {
   font-size: 18px;
   color: #000;
@@ -3261,23 +3287,23 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
   text-transform: uppercase;
   line-height: 49px; }
 @media screen and (min-width: 769px) and (max-width: 800px) {
-  /* line 73, ../sass/design/style/_header.scss */
+  /* line 74, ../sass/design/style/_header.scss */
   .header_bottom .navigation li a:link, .header_bottom .navigation li a:visited {
     font-size: 16px; } }
 @media screen and (max-width: 768px) {
-  /* line 73, ../sass/design/style/_header.scss */
+  /* line 74, ../sass/design/style/_header.scss */
   .header_bottom .navigation li a:link, .header_bottom .navigation li a:visited {
     font-size: 16px; } }
 /* line 89, ../sass/design/style/_header.scss */
 .header_bottom .navigation li a:hover {
   background: none; }
-/* line 95, ../sass/design/style/_header.scss */
+/* line 96, ../sass/design/style/_header.scss */
 .header_bottom .navigation li ul li a:link, .header_bottom .navigation li ul li a:visited {
   font-size: 14px; }
-/* line 108, ../sass/design/style/_header.scss */
+/* line 109, ../sass/design/style/_header.scss */
 .header_bottom #nav_mobile .nav li a:link, .header_bottom #nav_mobile .nav li a:visited {
   line-height: 29px !important; }
-/* line 117, ../sass/design/style/_header.scss */
+/* line 118, ../sass/design/style/_header.scss */
 .header_bottom #nav_mobile > li > a:link, .header_bottom #nav_mobile > li > a:visited {
   border-top: 1px solid #dedce1;
   position: relative;
@@ -3299,7 +3325,7 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
 /* line 154, ../sass/design/style/_header.scss */
 .top_bottom .navigation li {
   /* === SUBMENU === */ }
-/* line 155, ../sass/design/style/_header.scss */
+/* line 156, ../sass/design/style/_header.scss */
 .top_bottom .navigation li a:link, .top_bottom .navigation li a:visited {
   font-size: 18px;
   color: #000;
@@ -3309,26 +3335,26 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
   text-transform: uppercase;
   line-height: 49px; }
 @media screen and (min-width: 769px) and (max-width: 800px) {
-  /* line 155, ../sass/design/style/_header.scss */
+  /* line 156, ../sass/design/style/_header.scss */
   .top_bottom .navigation li a:link, .top_bottom .navigation li a:visited {
     font-size: 16px; } }
 @media screen and (max-width: 768px) {
-  /* line 155, ../sass/design/style/_header.scss */
+  /* line 156, ../sass/design/style/_header.scss */
   .top_bottom .navigation li a:link, .top_bottom .navigation li a:visited {
     font-size: 16px; } }
 /* line 171, ../sass/design/style/_header.scss */
 .top_bottom .navigation li a:hover {
   background: none; }
-/* line 177, ../sass/design/style/_header.scss */
+/* line 178, ../sass/design/style/_header.scss */
 .top_bottom .navigation li ul li a:link, .top_bottom .navigation li ul li a:visited {
   font-size: 14px; }
-/* line 188, ../sass/design/style/_header.scss */
+/* line 189, ../sass/design/style/_header.scss */
 .top_bottom #shop_nav_mobile .nav li a:link, .top_bottom #shop_nav_mobile .nav li a:visited {
   line-height: 29px !important; }
 /* line 195, ../sass/design/style/_header.scss */
 .top_bottom #shop_nav_mobile {
   list-style: none; }
-/* line 198, ../sass/design/style/_header.scss */
+/* line 199, ../sass/design/style/_header.scss */
 .top_bottom #shop_nav_mobile > li > a:link, .top_bottom #shop_nav_mobile > li > a:visited {
   border-top: 1px solid #dedce1;
   line-height: 29px; }
@@ -3423,8 +3449,10 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
   cursor: pointer; }
 /* line 85, ../sass/design/style/_sidebar.scss */
 .current-filter dd.action {
-  -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
   border-radius: 3px; }
 
 /* line 93, ../sass/design/style/_sidebar.scss */
@@ -3474,8 +3502,10 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
 /* line 163, ../sass/design/style/_sidebar.scss */
 .filter-type table td.first-td [type=checkbox]:checked + label img {
   border: 3px solid #000;
-  -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
   border-radius: 5px;
   margin: 0px;
   width: 31px;
@@ -3498,8 +3528,10 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
 /* line 191, ../sass/design/style/_sidebar.scss */
 .filter-type table tr:hover td label img {
   border: 3px solid #999;
-  -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
   border-radius: 5px;
   margin: 0px;
   width: 31px;
@@ -3515,7 +3547,7 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
 .filter-type table tr:hover td label span + span.suffix {
   color: #b0b0b0; }
 
-/* line 228, ../sass/design/style/_sidebar.scss */
+/* line 229, ../sass/design/style/_sidebar.scss */
 .block-filter form .form-group input[type=checkbox].css-checkbox + label.css-label, .block-filter form .form-group input[type=radio].css-radio + label.css-label {
   line-height: 17px;
   background-repeat: no-repeat;
@@ -3536,7 +3568,7 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
 /* line 249, ../sass/design/style/_sidebar.scss */
 .block-filter form input[type=radio].css-radio + label.css-label {
   background-image: url("../images/radio.png"); }
-/* line 252, ../sass/design/style/_sidebar.scss */
+/* line 253, ../sass/design/style/_sidebar.scss */
 .block-filter form input[type=checkbox].css-checkbox + label.css-label:hover, .block-filter form input[type=radio].css-radio + label.css-label:hover {
   background-position: 0 -50px; }
 /* line 255, ../sass/design/style/_sidebar.scss */
@@ -3545,7 +3577,7 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
 /* line 257, ../sass/design/style/_sidebar.scss */
 .block-filter form input[type=checkbox].css-checkbox + label.css-label:hover span + span, .block-filter form input[type=radio].css-radio + label.css-label:hover span + span {
   text-decoration: none; }
-/* line 262, ../sass/design/style/_sidebar.scss */
+/* line 263, ../sass/design/style/_sidebar.scss */
 .block-filter form input[type=checkbox].css-checkbox:checked + label.css-label, .block-filter form input[type=radio].css-radio:checked + label.css-label {
   background-position: 0 -100px;
   color: #1e1e1e; }
@@ -3553,8 +3585,10 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
 /* line 272, ../sass/design/style/_sidebar.scss */
 .wrapper-filter_manufacturerScrollbar {
   border: 1px solid #d0cfcf;
-  -moz-border-radius: 1px;
   -webkit-border-radius: 1px;
+  -moz-border-radius: 1px;
+  -ms-border-radius: 1px;
+  -o-border-radius: 1px;
   border-radius: 1px; }
 
 /* line 279, ../sass/design/style/_sidebar.scss */
@@ -3649,19 +3683,19 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
 #items-product .item .box_listing_product {
   border: 1px solid #ebebeb;
   background: #fff;
+  -webkit-transition-property: box-shadow;
   -moz-transition-property: box-shadow;
   -o-transition-property: box-shadow;
-  -webkit-transition-property: box-shadow;
   transition-property: box-shadow;
+  -webkit-transition-duration: 0.1s;
   -moz-transition-duration: 0.1s;
   -o-transition-duration: 0.1s;
-  -webkit-transition-duration: 0.1s;
   transition-duration: 0.1s;
+  -webkit-transition-timing-function: ease-in;
   -moz-transition-timing-function: ease-in;
   -o-transition-timing-function: ease-in;
-  -webkit-transition-timing-function: ease-in;
   transition-timing-function: ease-in; }
-/* line 11, ../sass/design/style/_list-product.scss */
+/* line 12, ../sass/design/style/_list-product.scss */
 #items-product .item .box_listing_product:hover, #items-product .item .box_listing_product.hover {
   box-shadow: 0 0 3px 2px #bcbaba; }
 
@@ -3695,7 +3729,7 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
   box-shadow: 0 0px 2px rgba(0, 0, 0, 0.5);
   border: 1px solid #bcbaba;
   border: 1px solid rgba(0, 0, 0, 0.5); }
-/* line 44, ../sass/design/style/_list-product.scss */
+/* line 45, ../sass/design/style/_list-product.scss */
 .box_listing_product .price .like .toolLike:before, .box_listing_product .price .like .toolLike:after {
   border-left: 10px solid transparent;
   border-right: 10px solid transparent; }
@@ -3735,7 +3769,7 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
   /* IE10+ */
   background: linear-gradient(to bottom, rgba(242, 241, 240, 0.01) 0%, #f2f1f0 42%, #f2f1f0 100%);
   /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#03f2f1f0', endColorstr='#f2f1f0',GradientType=0 );
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#03f2f1f0', endColorstr='#f2f1f0',GradientType=0 );
   /* IE6-8 */
   text-align: center; }
 
@@ -3743,7 +3777,7 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
 .addNewPositionListProductWrapper {
   text-align: center; }
 
-/* line 91, ../sass/design/style/_list-product.scss */
+/* line 92, ../sass/design/style/_list-product.scss */
 .addNewPositionListProduct:link, .addNewPositionListProduct:visited {
   background: #000;
   text-align: center;
@@ -3754,7 +3788,7 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
 /* line 101, ../sass/design/style/_list-product.scss */
 .addNewPositionListProduct:hover {
   color: #fff; }
-/* line 104, ../sass/design/style/_list-product.scss */
+/* line 105, ../sass/design/style/_list-product.scss */
 .addNewPositionListProduct:hover, .addNewPositionListProduct.hover {
   background: #b08944;
   /* Old browsers */
@@ -3772,9 +3806,9 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
   /* IE10+ */
   background: linear-gradient(135deg, #b08944 0%, #705e29 100%);
   /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b08944', endColorstr='#705e29',GradientType=1 );
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#b08944', endColorstr='#705e29',GradientType=1 );
   /* IE6-8 fallback on horizontal gradient */ }
-/* line 118, ../sass/design/style/_list-product.scss */
+/* line 120, ../sass/design/style/_list-product.scss */
 .addNewPositionListProduct:active, .addNewPositionListProduct:focus, .addNewPositionListProduct.active {
   background: #6d5920;
   /* Old browsers */
@@ -3790,7 +3824,7 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
   /* IE10+ */
   background: linear-gradient(135deg, #6d5920 0%, #af8438 100%);
   /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6d5920', endColorstr='#af8438',GradientType=1 );
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#6d5920', endColorstr='#af8438',GradientType=1 );
   /* IE6-9 fallback on horizontal gradient */ }
 
 /* line 140, ../sass/design/style/_list-product.scss */
@@ -3816,7 +3850,7 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
 /* line 15, ../sass/design/style/_shop_product.scss */
 #product-shop .short-description a span {
   color: #1dd8a0; }
-/* line 21, ../sass/design/style/_shop_product.scss */
+/* line 22, ../sass/design/style/_shop_product.scss */
 #product-shop .price-box-bundle .price-label, #product-shop .price-box-bundle .old-price {
   font-size: 24px;
   color: #000;
@@ -3847,7 +3881,7 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
   font-size: 12px;
   color: #4f4f4f;
   line-height: 1.5; }
-/* line 53, ../sass/design/style/_shop_product.scss */
+/* line 54, ../sass/design/style/_shop_product.scss */
 #product-shop .color-box-bundle .color-label, #product-shop .color-box-bundle .size-label, #product-shop .size-box-bundle .color-label, #product-shop .size-box-bundle .size-label {
   line-height: 47px;
   text-transform: uppercase;
@@ -3855,11 +3889,11 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
   color: #020202;
   font-weight: bold; }
 @media (min-width: 768px) and (max-width: 814px) {
-  /* line 53, ../sass/design/style/_shop_product.scss */
+  /* line 54, ../sass/design/style/_shop_product.scss */
   #product-shop .color-box-bundle .color-label, #product-shop .color-box-bundle .size-label, #product-shop .size-box-bundle .color-label, #product-shop .size-box-bundle .size-label {
     line-height: 29px; } }
 @media (max-width: 767px) {
-  /* line 53, ../sass/design/style/_shop_product.scss */
+  /* line 54, ../sass/design/style/_shop_product.scss */
   #product-shop .color-box-bundle .color-label, #product-shop .color-box-bundle .size-label, #product-shop .size-box-bundle .color-label, #product-shop .size-box-bundle .size-label {
     line-height: 29px; } }
 /* line 68, ../sass/design/style/_shop_product.scss */
@@ -3867,8 +3901,10 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
   cursor: pointer; }
 /* line 70, ../sass/design/style/_shop_product.scss */
 #product-shop .color-box-bundle .form-group label img, #product-shop .size-box-bundle .form-group label img {
-  -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
   border-radius: 3px;
   border: 1px solid #fff; }
 /* line 75, ../sass/design/style/_shop_product.scss */
@@ -3929,30 +3965,32 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
 /* line 149, ../sass/design/style/_shop_product.scss */
 #product-shop .action-box-bundle .addLike {
   border: 2px solid #a6a6a6;
-  -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
   border-radius: 5px;
   line-height: 1.2;
   font-size: 11px;
   color: #4f4f4f;
   text-transform: uppercase;
   font-family: "latoregular";
-  background: #fff url("../images/heart.png") 8px 11px no-repeat; }
+  background: white url("../images/heart.png") 8px 11px no-repeat; }
 /* line 158, ../sass/design/style/_shop_product.scss */
 #product-shop .action-box-bundle .addLike:hover {
   text-decoration: none;
-  background: #fff url("../images/heart-like.png") 8px 11px no-repeat; }
+  background: white url("../images/heart-like.png") 8px 11px no-repeat; }
 /* line 163, ../sass/design/style/_shop_product.scss */
 #product-shop .action-box-bundle .likeAdded {
   color: #4f4f4f;
-  background: #fff url("../images/heart-like.png") 8px 11px no-repeat; }
+  background: white url("../images/heart-like.png") 8px 11px no-repeat; }
 /* line 166, ../sass/design/style/_shop_product.scss */
 #product-shop .action-box-bundle .likeAdded span {
   color: #dcdcdc; }
 /* line 169, ../sass/design/style/_shop_product.scss */
 #product-shop .action-box-bundle .likeAdded:hover {
   text-decoration: none;
-  background: #fff url("../images/heart.png") 8px 11px no-repeat; }
+  background: white url("../images/heart.png") 8px 11px no-repeat; }
 /* line 172, ../sass/design/style/_shop_product.scss */
 #product-shop .action-box-bundle .likeAdded:hover span {
   color: #4f4f4f; }
@@ -3962,7 +4000,7 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
     font-size: 11px;
     font-weight: normal; } }
 
-/* line 186, ../sass/design/style/_shop_product.scss */
+/* line 187, ../sass/design/style/_shop_product.scss */
 #rwd-color .rwd-prev, #rwd-color .rwd-next {
   background: url('../images/sprites/all-s6d50839671.png'); }
 /* line 190, ../sass/design/style/_shop_product.scss */
@@ -3997,20 +4035,20 @@ i.flag {
 /* line 228, ../sass/design/style/_shop_product.scss */
 i.flag.sale {
   background-position: -132px -590px; }
-/* line 231, ../sass/design/style/_shop_product.scss */
+/* line 232, ../sass/design/style/_shop_product.scss */
 i.flag.percent, i.flag.promotion {
   background-position: -132px -536px; }
 /* line 235, ../sass/design/style/_shop_product.scss */
 i.flag.new {
   background-position: -132px -482px; }
-/* line 238, ../sass/design/style/_shop_product.scss */
+/* line 239, ../sass/design/style/_shop_product.scss */
 i.flag.hit, i.flag.bestseller {
   background-position: -132px -644px; }
 
 /* line 246, ../sass/design/style/_shop_product.scss */
 #question-form h4 strong {
   text-transform: uppercase; }
-/* line 250, ../sass/design/style/_shop_product.scss */
+/* line 252, ../sass/design/style/_shop_product.scss */
 #question-form input[type="text"], #question-form input[type="email"], #question-form input[type="password"] {
   line-height: 29px; }
 /* line 255, ../sass/design/style/_shop_product.scss */
@@ -4020,7 +4058,7 @@ i.flag.hit, i.flag.bestseller {
 #question-form .nickname_field label {
   line-height: 29px; }
 
-/* line 1, ../sass/design/style/_seller-box-bundle.scss */
+/* line 2, ../sass/design/style/_seller-box-bundle.scss */
 #seller-box-bundle, .descripionProduct-box-bundle {
   border: 1px solid #d9d9d9;
   padding: 9px 9px 0px;
@@ -4113,10 +4151,10 @@ i.flag.hit, i.flag.bestseller {
   /* line 14, ../sass/design/style/_customer-account-login.scss */
   #logIn .form-list label {
     text-align: left; } }
-/* line 22, ../sass/design/style/_customer-account-login.scss */
+/* line 24, ../sass/design/style/_customer-account-login.scss */
 #logIn .form-list input[type="text"], #logIn .form-list input[type="email"], #logIn .form-list input[type="password"] {
   line-height: 29px; }
-/* line 27, ../sass/design/style/_customer-account-login.scss */
+/* line 29, ../sass/design/style/_customer-account-login.scss */
 #logIn .form-list input[type="text"]:focus, #logIn .form-list input[type="email"]:focus, #logIn .form-list input[type="password"]:focus {
   background: #fff; }
 /* line 32, ../sass/design/style/_customer-account-login.scss */
@@ -4160,10 +4198,10 @@ i.flag.hit, i.flag.bestseller {
   /* line 15, ../sass/design/style/_customer-account-registered.scss */
   #form-registration label {
     text-align: left; } }
-/* line 27, ../sass/design/style/_customer-account-registered.scss */
+/* line 29, ../sass/design/style/_customer-account-registered.scss */
 #form-registration input[type="text"], #form-registration input[type="email"], #form-registration input[type="password"] {
   line-height: 29px; }
-/* line 32, ../sass/design/style/_customer-account-registered.scss */
+/* line 34, ../sass/design/style/_customer-account-registered.scss */
 #form-registration input[type="text"]:focus, #form-registration input[type="email"]:focus, #form-registration input[type="password"]:focus {
   background: #fff; }
 @media (max-width: 767px) {
@@ -4210,7 +4248,7 @@ i.flag.hit, i.flag.bestseller {
 /* line 88, ../sass/design/style/_customer-account-registered.scss */
 .my-account .page-title h1 {
   color: #333;
-  background: #fff;
+  background: white;
   padding: 20px 30px !important;
   text-transform: uppercase;
   font-size: 0; }
@@ -4234,7 +4272,7 @@ i.flag.hit, i.flag.bestseller {
   width: 24%;
   height: 100%;
   text-align: right;
-  background: #fff;
+  background: white;
   font-size: 14px; }
 @media (min-width: 768px) and (max-width: 991px) {
   /* line 114, ../sass/design/style/_customer-account-registered.scss */
@@ -4251,7 +4289,7 @@ i.flag.hit, i.flag.bestseller {
 
 /* line 133, ../sass/design/style/_customer-account-registered.scss */
 .my-account .background-wrapper {
-  background: #fff;
+  background: white;
   padding: 30px 15px; }
 @media (max-width: 768px) {
   /* line 133, ../sass/design/style/_customer-account-registered.scss */
@@ -4350,7 +4388,7 @@ i.flag.hit, i.flag.bestseller {
 /* line 77, ../sass/design/style/_shopping-cart.scss */
 .node-type-shopping-cart #content-main .tableWrapper .table-row .table-cell .description_checked_product .product_size {
   font-size: 12px; }
-/* line 81, ../sass/design/style/_shopping-cart.scss */
+/* line 82, ../sass/design/style/_shopping-cart.scss */
 .node-type-shopping-cart #content-main .tableWrapper .table-row .table-cell .description_checked_product .product_availability .icons-checked, .node-type-shopping-cart #content-main .tableWrapper .table-row .table-cell .description_checked_product .product_availability .icons-interjection {
   font-size: 12px;
   text-transform: none; }
@@ -4369,7 +4407,7 @@ i.flag.hit, i.flag.bestseller {
   font-size: 11px;
   border: 1px solid #afafaf;
   line-height: 22px; }
-/* line 106, ../sass/design/style/_shopping-cart.scss */
+/* line 107, ../sass/design/style/_shopping-cart.scss */
 .node-type-shopping-cart #content-main .tableWrapper .table-row .table-cell.cell-03 .styledSelected .sbSelector, .node-type-shopping-cart #content-main .tableWrapper .table-row .table-cell.cell-03 .styledSelected .sbOptions {
   text-align: left; }
 /* line 112, ../sass/design/style/_shopping-cart.scss */
@@ -4412,8 +4450,10 @@ i.flag.hit, i.flag.bestseller {
 /* line 169, ../sass/design/style/_shopping-cart.scss */
 .bubble {
   background: #e5e5e5;
-  -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
   border-radius: 5px;
   text-align: center; }
 /* line 173, ../sass/design/style/_shopping-cart.scss */
@@ -4546,7 +4586,7 @@ i.flag.hit, i.flag.bestseller {
 /* line 322, ../sass/design/style/_shopping-cart.scss */
 .table-cart .colgroup-01 .description_checked_product .product_size {
   font-size: 12px; }
-/* line 326, ../sass/design/style/_shopping-cart.scss */
+/* line 327, ../sass/design/style/_shopping-cart.scss */
 .table-cart .colgroup-01 .description_checked_product .product_availability .icons-checked, .table-cart .colgroup-01 .description_checked_product .product_availability .icons-interjection {
   font-size: 12px;
   text-transform: none; }
@@ -4580,14 +4620,14 @@ i.flag.hit, i.flag.bestseller {
 /* line 371, ../sass/design/style/_shopping-cart.scss */
 .table-cart .colgroup-02 .colgroup .usun {
   text-align: center; }
-/* line 375, ../sass/design/style/_shopping-cart.scss */
+/* line 378, ../sass/design/style/_shopping-cart.scss */
 .table-cart .colgroup-02 .colgroup.naglowek .cena, .table-cart .colgroup-02 .colgroup.naglowek .ilosc, .table-cart .colgroup-02 .colgroup.naglowek .wartosc, .table-cart .colgroup-02 .colgroup.naglowek .usun {
   font-weight: normal; }
-/* line 384, ../sass/design/style/_shopping-cart.scss */
+/* line 385, ../sass/design/style/_shopping-cart.scss */
 .table-cart .colgroup-02 .stara_cena, .table-cart .colgroup-02 .cena_zakupu {
   white-space: nowrap; }
 @media (min-width: 768px) {
-  /* line 384, ../sass/design/style/_shopping-cart.scss */
+  /* line 385, ../sass/design/style/_shopping-cart.scss */
   .table-cart .colgroup-02 .stara_cena, .table-cart .colgroup-02 .cena_zakupu {
     white-space: nowrap; } }
 
@@ -4662,7 +4702,7 @@ i.flag.hit, i.flag.bestseller {
 /* line 54, ../sass/design/style/_review-cart.scss */
 .checkout-shared-review #content-main .tableWrapper .table-row .table-cell .description_checked_product .product_size {
   font-size: 12px; }
-/* line 58, ../sass/design/style/_review-cart.scss */
+/* line 59, ../sass/design/style/_review-cart.scss */
 .checkout-shared-review #content-main .tableWrapper .table-row .table-cell .description_checked_product .product_availability .icons-checked, .checkout-shared-review #content-main .tableWrapper .table-row .table-cell .description_checked_product .product_availability .icons-interjection {
   font-size: 12px;
   text-transform: none; }
@@ -4681,7 +4721,7 @@ i.flag.hit, i.flag.bestseller {
   font-size: 11px;
   border: 1px solid #afafaf;
   line-height: 22px; }
-/* line 83, ../sass/design/style/_review-cart.scss */
+/* line 84, ../sass/design/style/_review-cart.scss */
 .checkout-shared-review #content-main .tableWrapper .table-row .table-cell.cell-03 .styledSelected .sbSelector, .checkout-shared-review #content-main .tableWrapper .table-row .table-cell.cell-03 .styledSelected .sbOptions {
   text-align: left; }
 /* line 89, ../sass/design/style/_review-cart.scss */
@@ -4765,7 +4805,7 @@ i.flag.hit, i.flag.bestseller {
 /* line 54, ../sass/design/style/_order-view.scss */
 .order-view #content-main .tableWrapper .table-row .table-cell .description_checked_product .product_size {
   font-size: 12px; }
-/* line 58, ../sass/design/style/_order-view.scss */
+/* line 59, ../sass/design/style/_order-view.scss */
 .order-view #content-main .tableWrapper .table-row .table-cell .description_checked_product .product_availability .icons-checked, .order-view #content-main .tableWrapper .table-row .table-cell .description_checked_product .product_availability .icons-interjection {
   font-size: 12px;
   text-transform: none; }
@@ -4784,7 +4824,7 @@ i.flag.hit, i.flag.bestseller {
   font-size: 11px;
   border: 1px solid #afafaf;
   line-height: 22px; }
-/* line 83, ../sass/design/style/_order-view.scss */
+/* line 84, ../sass/design/style/_order-view.scss */
 .order-view #content-main .tableWrapper .table-row .table-cell.cell-03 .styledSelected .sbSelector, .order-view #content-main .tableWrapper .table-row .table-cell.cell-03 .styledSelected .sbOptions {
   text-align: left; }
 /* line 89, ../sass/design/style/_order-view.scss */
@@ -4831,17 +4871,19 @@ i.flag.hit, i.flag.bestseller {
     font-size: 16px; } }
 /* line 13, ../sass/design/style/_checkout.scss */
 #checkout .panel {
-  -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  -ms-border-radius: 2px;
+  -o-border-radius: 2px;
   border-radius: 2px;
   border-color: #eeedf0; }
 /* line 16, ../sass/design/style/_checkout.scss */
 #checkout .panel.panel-color {
-  background: #FCFCFC; }
-/* line 20, ../sass/design/style/_checkout.scss */
+  background: #fcfcfc; }
+/* line 21, ../sass/design/style/_checkout.scss */
 #checkout .panel .panel-body .current-addres, #checkout .panel .panel-body .top-panel {
   border-bottom: 1px solid #eeedf0;
-  background: #FCFCFC; }
+  background: #fcfcfc; }
 /* line 26, ../sass/design/style/_checkout.scss */
 #checkout .panel .panel-body .top-panel h4 {
   font-family: "latoregular";
@@ -4959,7 +5001,7 @@ i.flag.hit, i.flag.bestseller {
 #checkout form .form-radio label {
   text-align: left;
   line-height: 15px; }
-/* line 169, ../sass/design/style/_checkout.scss */
+/* line 172, ../sass/design/style/_checkout.scss */
 #checkout form input[type="text"], #checkout form input[type="email"], #checkout form input[type="password"], #checkout form input[type="tel"] {
   line-height: 29px; }
 /* line 175, ../sass/design/style/_checkout.scss */
@@ -4993,7 +5035,7 @@ i.flag.hit, i.flag.bestseller {
 /* line 211, ../sass/design/style/_checkout.scss */
 #checkout .panel {
   box-shadow: none;
-  background: #FEFEFE; }
+  background: #fefefe; }
 /* line 216, ../sass/design/style/_checkout.scss */
 #checkout .panel-body .panel {
   background: #fff; }
@@ -5020,14 +5062,14 @@ i.flag.hit, i.flag.bestseller {
 .footer-black {
   background-color: #000000;
   color: #ffffff; }
-/* line 8, ../sass/design/style/_footer.scss */
+/* line 9, ../sass/design/style/_footer.scss */
 .footer-black a:link, .footer-black a:visited {
   color: #ffffff;
   text-transform: uppercase; }
 /* line 13, ../sass/design/style/_footer.scss */
 .footer-black .footer-logo {
   text-align: left; }
-/* line 18, ../sass/design/style/_footer.scss */
+/* line 19, ../sass/design/style/_footer.scss */
 .footer-black .footer-about li a:link, .footer-black .footer-about li a:visited {
   font-size: 12px; }
 /* line 22, ../sass/design/style/_footer.scss */
@@ -5048,20 +5090,20 @@ i.flag.hit, i.flag.bestseller {
 /* line 41, ../sass/design/style/_footer.scss */
 #footer .ico_social_twitter {
   background-position: 0 -145px; }
-/* line 59, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
-#footer .ico_social_twitter:hover, #footer .ico_social_twitter.ico_social_twitter-hover {
+/* line 43, ../../../../../../../../../../../usr/share/compass/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+#footer .ico_social_twitter:hover, #footer .ico_social_twitter.ico_social_twitter_hover, #footer .ico_social_twitter.ico_social_twitter-hover {
   background-position: -27px -145px; }
 /* line 43, ../sass/design/style/_footer.scss */
 #footer .ico_social_twitter:hover {
   background-position: 0 -145px; }
-/* line 59, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
-#footer .ico_social_twitter:hover:hover, #footer .ico_social_twitter:hover.ico_social_twitter-hover {
+/* line 43, ../../../../../../../../../../../usr/share/compass/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+#footer .ico_social_twitter:hover:hover, #footer .ico_social_twitter:hover.ico_social_twitter_hover, #footer .ico_social_twitter:hover.ico_social_twitter-hover {
   background-position: -27px -145px; }
 /* line 47, ../sass/design/style/_footer.scss */
 #footer .ico_social_fb {
   background-position: -127px -44px; }
-/* line 59, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
-#footer .ico_social_fb:hover, #footer .ico_social_fb.ico_social_fb-hover {
+/* line 43, ../../../../../../../../../../../usr/share/compass/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+#footer .ico_social_fb:hover, #footer .ico_social_fb.ico_social_fb_hover, #footer .ico_social_fb.ico_social_fb-hover {
   background-position: -181px -44px; }
 /* line 49, ../sass/design/style/_footer.scss */
 #footer .ico_social_fb:hover {
@@ -5069,38 +5111,38 @@ i.flag.hit, i.flag.bestseller {
 /* line 54, ../sass/design/style/_footer.scss */
 #footer .ico_social_instagram {
   background-position: -54px -145px; }
-/* line 59, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
-#footer .ico_social_instagram:hover, #footer .ico_social_instagram.ico_social_instagram-hover {
+/* line 43, ../../../../../../../../../../../usr/share/compass/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+#footer .ico_social_instagram:hover, #footer .ico_social_instagram.ico_social_instagram_hover, #footer .ico_social_instagram.ico_social_instagram-hover {
   background-position: -106px -145px; }
 /* line 56, ../sass/design/style/_footer.scss */
 #footer .ico_social_instagram:hover {
   background-position: -54px -145px; }
-/* line 59, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
-#footer .ico_social_instagram:hover:hover, #footer .ico_social_instagram:hover.ico_social_instagram-hover {
+/* line 43, ../../../../../../../../../../../usr/share/compass/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+#footer .ico_social_instagram:hover:hover, #footer .ico_social_instagram:hover.ico_social_instagram_hover, #footer .ico_social_instagram:hover.ico_social_instagram-hover {
   background-position: -106px -145px; }
 /* line 60, ../sass/design/style/_footer.scss */
 #footer .ico_social_gplus {
   background-position: -80px -145px; }
-/* line 59, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
-#footer .ico_social_gplus:hover, #footer .ico_social_gplus.ico_social_gplus-hover {
+/* line 43, ../../../../../../../../../../../usr/share/compass/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+#footer .ico_social_gplus:hover, #footer .ico_social_gplus.ico_social_gplus_hover, #footer .ico_social_gplus.ico_social_gplus-hover {
   background-position: 0 -98px; }
 /* line 62, ../sass/design/style/_footer.scss */
 #footer .ico_social_gplus:hover {
   background-position: -80px -145px; }
-/* line 59, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
-#footer .ico_social_gplus:hover:hover, #footer .ico_social_gplus:hover.ico_social_gplus-hover {
+/* line 43, ../../../../../../../../../../../usr/share/compass/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+#footer .ico_social_gplus:hover:hover, #footer .ico_social_gplus:hover.ico_social_gplus_hover, #footer .ico_social_gplus:hover.ico_social_gplus-hover {
   background-position: 0 -98px; }
 /* line 66, ../sass/design/style/_footer.scss */
 #footer .ico_social_pinterest {
   background-position: -154px -44px; }
-/* line 59, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
-#footer .ico_social_pinterest:hover, #footer .ico_social_pinterest.ico_social_pinterest-hover {
+/* line 43, ../../../../../../../../../../../usr/share/compass/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+#footer .ico_social_pinterest:hover, #footer .ico_social_pinterest.ico_social_pinterest_hover, #footer .ico_social_pinterest.ico_social_pinterest-hover {
   background-position: -181px -71px; }
 /* line 68, ../sass/design/style/_footer.scss */
 #footer .ico_social_pinterest:hover {
   background-position: -154px -44px; }
-/* line 59, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
-#footer .ico_social_pinterest:hover:hover, #footer .ico_social_pinterest:hover.ico_social_pinterest-hover {
+/* line 43, ../../../../../../../../../../../usr/share/compass/frameworks/compass/stylesheets/compass/utilities/sprites/_base.scss */
+#footer .ico_social_pinterest:hover:hover, #footer .ico_social_pinterest:hover.ico_social_pinterest_hover, #footer .ico_social_pinterest:hover.ico_social_pinterest-hover {
   background-position: -181px -71px; }
 
 /* line 77, ../sass/design/style/_footer.scss */
