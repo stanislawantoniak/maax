@@ -11,13 +11,11 @@ class Zolago_Modago_Block_Sales_Order_Shipment extends Mage_Core_Block_Template 
 		if ($carrier = Mage::getSingleton('shipping/config')->getCarrierInstance($code)) {
 			return $carrier->getConfigData('title');
 		}
-
-		return false;
-	}
-	public function getCurrentTracking(Mage_Sales_Model_Order_Shipment $shipment = null) {
-		if($shipment instanceof  Mage_Sales_Model_Order_Shipment && $shipment->getId()){
-			return $shipment->getTracksCollection()->setOrder("created_at", "DESC")->getFirstItem();
-		}
 		return null;
+	}
+	public function getCurrentTracking() {
+		$shipment = $this->getItem()->getLastNotCanceledShipment();
+		$collection = $shipment->getTracksCollection()->setOrder("created_at", "DESC");
+		return $collection->getFirstItem()->getTrackNumber();
 	}
 }
