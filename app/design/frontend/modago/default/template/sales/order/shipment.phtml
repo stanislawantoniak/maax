@@ -20,7 +20,7 @@
 			</span>
 		</div>
 		<div class="shipment-bottom">
-			<span><?php echo $this->__('Delivery by'); ?>: <?php echo $carrier ?></span>
+			<?php echo $carrier ? '<span>'.$this->__('Delivery by').': '.$carrier.'</span>' : '' ?>
 			<span><?php echo $this->__('Send date'); ?>: <?php echo $date; ?></span>
 			<span><?php echo $this->__('Tracking number').': '.$this->getCurrentTracking(); ?></span>
 			<span><a href="#track" class="underline"><?php echo $this->__('track package'); ?></a> [dev]</span>
