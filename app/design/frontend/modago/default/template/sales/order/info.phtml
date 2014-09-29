@@ -1,1 +1,16 @@
-order info
+<?php $address = $this->getAddress(); ?>
+<div class="sales-order-top col-md-6 col-sm-6 col-xs-12 sales-order-hide">
+	<div class="sales-order-info">
+		<div class="order-info-address">
+			<span class="order-top-title"><?php echo $this->__("Shipping address"); ?></span>
+			<span class="order-top-txt"><?php echo $address->getFirstname().' '.$address->getMiddlename().' '.$address->getLastname(); ?></span>
+			<span class="order-top-txt order-top-address"><?php echo $address->getStreetFull();/*implode('<br />',$address->getStreet());*/ ?></span>
+			<span class="order-top-txt"><?php echo $address->getPostcode().' '.$address->getCity(); ?></span>
+			<span class="order-top-txt"><?php echo $this->__('tel').': '.$address->getTelephone(); ?></span>
+		</div>
+		<div class="order-info-document">
+			<span class="order-top-title"><?php echo $this->__("Sale document"); ?></span>
+			<span class="order-top-txt"><?php echo $this->__($this->getSaleDocument()); ?></span>
+		</div>
+	</div>
+</div>

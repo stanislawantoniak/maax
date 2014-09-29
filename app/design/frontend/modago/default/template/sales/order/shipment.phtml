@@ -1,1 +1,79 @@
-shipment
+<div class="sales-order-top col-md-6 col-sm-6 col-xs-12">
+	<div class="sales-order-shipment">
+		<div class="shipment-top">
+			<span class="order-top-title"><?php echo $this->__('delivery'); ?></span>
+			<?php
+
+			$shipment = $this->getItem();
+			$carrier = $this->getCarrierTitle($shipment->getData('current_carrier'));
+			$status = (int)$shipment->getUdropshipStatus();
+			switch($status) {
+			case 1:
+			case 2:
+			?>
+			<span><?php echo $this->__('Package sent'); ?></span>
+		</div>
+		<div class="shipment-icon">
+			<span class="fa-stack fa-lg">
+				<i class="fa fa-truck fa-stack-2x"></i>
+				<i class="fa fa-check-square fa-stack-1x" style="color:#FFF;margin-left:6px;margin-top:-2px;"></i>
+			</span>
+		</div>
+		<div class="shipment-bottom">
+			<span><?php echo $this->__('Delivery by'); ?>: <?php echo $carrier ?></span>
+			<span><?php echo $this->__('Send date'); ?>: <?php echo $shipment->getMaxShippingDate(); ?></span>
+			<span><?php echo $this->__('Tracking number'); ?>: 325554365465477 [dev]</span>
+			<span><a href="#track" class="underline"><?php echo $this->__('track package'); ?></a> [dev]</span>
+			<?php
+			break;
+
+			case 3:
+			case 8:
+			case 0:
+			?>
+			<span><?php echo $this->__('Package ready to send'); ?></span>
+			<span><?php echo $this->__('Estimated send date'); ?> - <?php echo $shipment->getMaxShippingDate(); ?></span>
+		</div>
+		<div class="shipment-icon">
+			<i class="fa fa-truck fa-2x"></i>
+		</div>
+		<div class="shipment-bottom">
+			<span><?php echo $this->__('Delivery by'); ?>: <?php echo $carrier ?></span>
+			<?php
+			break;
+
+			case 7:
+			?>
+			<span><?php echo $this->__('Package received'); ?></span>
+		</div>
+		<div class="shipment-icon">
+			<span class="fa-stack fa-2x">
+				<i class="fa fa-truck fa-stack-2x"></i>
+				<i class="fa fa-check-square fa-stack-1x" style="color:#FFF;margin-left:6px;margin-top:-2px;"></i>
+			</span>
+		</div>
+		<div class="shipment-bottom">
+			<span><?php echo $this->__('Delivered by'); ?>: <?php echo $carrier ?></span>
+			<span><?php echo $this->__('Send date'); ?>: <?php echo $shipment->getMaxShippingDate(); ?></span>
+			<span><?php echo $this->__('Tracking number'); ?>: 325554365465477 [dev]</span>
+			<span><a href="#track" class="underline"><?php echo $this->__('track package'); ?></a> [dev]</span>
+			<?php
+			default:
+			?>
+			<span><?php echo $this->__('Estimated send date'); ?>: <?php echo $shipment->getMaxShippingDate(); ?></span>
+			<span>(<?php echo $this->__('may change if no payment received'); ?>) [dev]</span> <?php //todo: show this span only if order is not payed for ?>
+		</div>
+		<div class="shipment-icon">
+			<i class="fa fa-truck fa-2x"></i>
+		</div>
+		<div class="shipment-bottom">
+			<span><?php echo $this->__('Delivery by'); ?>: <?php echo $carrier ?></span>
+			<?php
+			}
+			?>
+		</div>
+	</div>
+</div>
+<div class="col-xs-12 sales-order-more">
+	<span><?php echo $this->__('expand details'); ?><i class="fa fa-chevron-down fa-lg"></i></span>
+</div>
