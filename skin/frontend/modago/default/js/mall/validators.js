@@ -64,8 +64,9 @@ Mall.validate.validators = {
 
     passwordbackend: function(value, elem, params){
         "use strict";
-        if(!params.hasOwnProperty('minLength')) {
 
+        if(!params.hasOwnProperty('minLength')) {
+            console.log(params);
             params =  { minLength : parseInt(Mall.validate.validators.config.passwordMinLength) };
 
             if(isNaN(params.minLength)) {
