@@ -738,7 +738,7 @@ function basket_dropdown() {
             jQuery("#dropdown-basket").show();
         }
     },function() {
-        if (!jQuery(".basket-dropdown").is(":hover")) {
+        if (!jQuery(".basket-dropdown").is(":hover") || !jQuery("#link_basket").is(":hover") || !jQuery("#dropdown_basket").is(":hover")) {
             jQuery("#link_basket").removeClass('open');
             jQuery("#dropdown-basket").hide();
         }
