@@ -6,6 +6,7 @@
     $isOptionSelected = false;
     $key_withoutFacet = explode("_", $key);
     array_pop($key_withoutFacet);
+	$pureKey = implode("_", $key_withoutFacet);
     ?>
     <div class="section clearfix">
         <h3 class="<?php echo $sectionClass; ?>"><?php echo $this->getFacetLabel(); ?> <i class="fa <?php echo $iconClass; ?>"></i></h3>
@@ -18,7 +19,14 @@
                     }
                     ?>
                     <div class="form-group form-checkbox">
-                        <input data-url="<?php echo $this->getItemUrl($item) ?>" data-params="<?php echo $this->getItemJson($item);?>" type="checkbox" name="check_<?php echo $item; ?>" id="check_<?php echo $item; ?>" class="css-checkbox" <?php if($this->isItemActive($item)): ?>checked="checked" <?php endif; ?>>
+                        <input data-url="<?php echo $this->getItemUrl($item) ?>" 
+							   data-params='<?php echo $this->getItemJson($item);?>' 
+							   type="checkbox" 
+							   name="fq[<?php echo $pureKey; ?>][]"
+							   value="<?php echo $this->escapeHtml($item);?>" 
+							   id="check_<?php echo $item; ?>" 
+							   class="css-checkbox" 
+							   <?php if($this->isItemActive($item)): ?>checked="checked" <?php endif; ?>>
                         <label for="check_<?php echo $item; ?>" class="css-label"><span><?php echo $item ?></span>&nbsp;<span class="suffix">(<?php echo $count ?>)</span></label>
                     </div>
                 <?php endif; ?>
@@ -26,7 +34,12 @@
             <?php if ($this->getCanShowHidden()): ?>
                 <?php foreach ($this->getHiddenItems() as $item => $count): ?>
                     <div class="form-group form-checkbox" data-state="hidden" style="display: none;">
-                        <input data-url="<?php echo $this->getItemUrl($item) ?>" data-params="<?php echo $this->getItemJson($item);?>" type="checkbox" name="check_<?php echo $item; ?>" id="check_<?php echo $item; ?>" class="css-checkbox" <?php if($this->isItemActive($item)): ?>checked="checked" <?php endif; ?>>
+                        <input data-url="<?php echo $this->getItemUrl($item) ?>"  
+							   type="checkbox" 
+							   name="fq[<?php echo $pureKey; ?>][]"  
+							   value="<?php echo $this->escapeHtml($item);?>" 
+							   id="check_<?php echo $item; ?>" class="css-checkbox" 
+							   <?php if($this->isItemActive($item)): ?>checked="checked" <?php endif; ?>>
                         <label for="check_<?php echo $item; ?>" class="css-label"><span><?php echo $item ?></span>&nbsp;<span class="suffix">(<?php echo $count ?>)</span></label>
                     </div>
                 <?php endforeach; ?>
@@ -35,7 +48,7 @@
                 </div>
             <?php endif; ?>
             <div class="action clear clearfix <?php if(!$isOptionSelected) : ?>hidden<?php endif; ?>">
-                <a href="#" data-filter-type="<?php echo implode("_", $key_withoutFacet); ?>" onclick="Mall.listing.removeSingleFilterType(this);Mall.listing.reloadListing();return false;" class="button button-third clear"><?php echo $this->__("Clear"); ?></a>
+                <a href="#" data-filter-type="<?php echo $pureKey; ?>" onclick="Mall.listing.removeSingleFilterType(this);Mall.listing.reloadListing();return false;" class="button button-third clear"><?php echo $this->__("Clear"); ?></a>
             </div>
         </div>
     </div>

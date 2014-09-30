@@ -20,14 +20,14 @@
             }
             ?>
             <label for="<?php echo $key ?>_<?php echo $item; ?>">
-                <input data-url="<?php echo $this->getItemUrl($item) ?>" data-params="<?php echo $this->getItemJson($item);?>"  type="checkbox" id="<?php echo $key ?>_<?php echo $item; ?>" name="<?php echo $key ?>_<?php echo $item; ?>" <?php if($this->isItemActive($item)): ?>checked="checked" <?php endif; ?> /><span><?php echo $item ?></span>
+                <input data-url="<?php echo $this->getItemUrl($item) ?>" data-params='<?php echo $this->getItemJson($item);?>'  type="checkbox" id="<?php echo $key ?>_<?php echo $item; ?>" name="<?php echo $key ?>_<?php echo $item; ?>" <?php if($this->isItemActive($item)): ?>checked="checked" <?php endif; ?> /><span><?php echo $item ?></span>
             </label>
         <?php endif; ?>
     <?php endforeach; ?>
     <?php if ($this->getCanShowHidden()): ?>
         <?php foreach ($this->getHiddenItems() as $item => $count): ?>
             <label for="<?php echo $key ?>_<?php echo $item; ?>s">
-                <input data-url="<?php echo $this->getItemUrl($item) ?>" data-params="<?php echo $this->getItemJson($item);?>"  type="checkbox" id="<?php echo $key ?>_<?php echo $item; ?>" name="<?php echo $key ?>_<?php echo $item; ?>" <?php if($this->isItemActive($item)): ?>checked="checked" <?php endif; ?> /><span><?php echo $item ?></span>
+                <input data-url="<?php echo $this->getItemUrl($item) ?>" data-params='<?php echo $this->getItemJson($item);?>'  type="checkbox" id="<?php echo $key ?>_<?php echo $item; ?>" name="<?php echo $key ?>_<?php echo $item; ?>" <?php if($this->isItemActive($item)): ?>checked="checked" <?php endif; ?> /><span><?php echo $item ?></span>
             </label>
         <?php endforeach; ?>
             <div class="action clearfix">

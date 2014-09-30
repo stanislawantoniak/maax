@@ -14,7 +14,7 @@
                         $selectedFacetValue = $this->formatFacetPrice($v);
                     }
                     ?>
-                    <span class="label"><?php echo $this->__($this->getFacetLabel($key)); ?>: <span class="value"><?php echo $this->facetFormat($selectedFacetValue) ?></span><i data-params="<?php echo $this->getRemoveFacesUrl($face_key, $v);?>" class="fa fa-times"></i></span>
+                    <span class="label"><?php echo $this->__($this->getFacetLabel($key)); ?>: <span class="value"><?php echo $this->facetFormat($selectedFacetValue) ?></span><i data-url="<?php echo $this->getRemoveFacesUrl($face_key, $v);?>" data-params="<?php echo $this->getRemoveFacesUrl($face_key, $v);?>"  class="fa fa-times"></i></span>
 
                     <?php if ($face_key != 'price'):?>
                     <input type="hidden" name="fq[<?php echo $face_key ?>]" value="<?php echo $v?>" />
@@ -23,7 +23,7 @@
 			<?php endforeach; ?>
 		<?php endforeach; ?>
     </dd>
-    <dd class="action"><a data-params="<?php echo $this->getRemoveAllJson();?>" href="<?php echo $this->getRemoveAllUrl()?>" class="button button-third"><?php echo $this->__('Clear all filters') ?></a></dd>
+    <dd class="action"><a data-params='<?php echo $this->getRemoveAllJson();?>' href="<?php echo $this->getRemoveAllUrl()?>" class="button button-third"><?php echo $this->__('Clear all filters') ?></a></dd>
 </dl>
 <?php else: ?>
 <div style="margin-bottom: 15px;"></div>

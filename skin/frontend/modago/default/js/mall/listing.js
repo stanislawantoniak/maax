@@ -772,6 +772,80 @@ Mall.listing = {
         return this;
     },
 
+	/**
+	 * @param {Object} params
+	 * @returns {Mall.listing}
+	 */
+	changeListingParams: function(param, url){
+		
+		if(typeof param == "string"){
+			param = jQuery.parseJSON(param);
+		}
+	
+		//this._setFiltersArray();
+		this._doAjaxRequest();
+		return this;
+	},
+	
+	_ajaxTimeout: 500, 
+	_ajaxTimer: null, 
+	
+	/**
+	 * @param {type} time
+	 * @returns {Mall.listing}
+	 */
+	setAjaxTimeout: function(time){
+		this._ajaxTimeout = time;
+		return this;
+	},
+	
+	/**
+	 * @returns {type|Number}
+	 */
+	getAjaxTimeout: function(){
+		return this._ajaxTimeout;
+	},
+	
+	/**
+	 * @returns {void}
+	 */
+	_doAjaxRequest: function(){
+		this._ajaxStop();
+		this._ajaxStart();
+	},
+	
+	/**
+	 * @returns {void}
+	 */
+	_ajaxStart: function(){
+		var self = this;
+		this._ajaxTimer = setTimeout(
+			function(){self._ajaxSend.apply(self)}, 
+			this.getAjaxTimeout()
+		);
+	},
+	
+	/**
+	 * @returns {void}
+	 */
+	_ajaxStop: function(){
+		if(this._ajaxTimer){
+			clearTimeout(this._ajaxTimer);
+		}
+	},
+	
+	/**
+	 * @returns {void}
+	 */
+	_ajaxSend: function(){
+		
+		var data = this.getQueryParamsAsArray();
+		
+		
+		console.log(data);
+		
+	},
+	
     /**
      * Return current mobile filters state. Is mobile or not.
      *
@@ -807,9 +881,12 @@ Mall.listing = {
      * @returns {Mall.listing}
      */
     attachFilterColorEvents: function() {
+		var self = this;
         jQuery(".filter-color").find("[data-url]").on("click", function(e) {
-            // @todo ajax logic
-            location.href = jQuery(this).attr("data-url");
+			self.changeListingParams(
+				jQuery(this).attr("data-params"), 
+				jQuery(this).attr("data-url")
+			);
         });
 
         return this;
@@ -820,9 +897,12 @@ Mall.listing = {
      * @returns {Mall.listing}
      */
     attachFilterIconEvents: function() {
+		var self = this;
         jQuery(".filter-type").find("[data-url]").on("click", function(e) {
-            // @todo ajax logic
-            location.href = jQuery(this).attr("data-url");
+            self.changeListingParams(
+				jQuery(this).attr("data-params"), 
+				jQuery(this).attr("data-url")
+			);
         });
 
         return this;
@@ -834,9 +914,12 @@ Mall.listing = {
      * @returns {Mall.listing}
      */
     attachFilterFlagEvents: function() {
+		var self = this;
         jQuery(".filter-flags").find("[data-url]").on("click", function(e) {
-            // @todo ajax logic
-            location.href = jQuery(this).attr("data-url");
+            self.changeListingParams(
+				jQuery(this).attr("data-params"), 
+				jQuery(this).attr("data-url")
+			);
         });
 
         return this;
@@ -847,21 +930,27 @@ Mall.listing = {
      * @returns {Mall.listing}
      */
     attachFilterEnumEvents: function() {
+		var self = this;
         jQuery(".filter-enum").find("[data-url]").on("click", function(e) {
-            // @todo ajax logic
-            location.href = jQuery(this).attr("data-url");
+            self.changeListingParams(
+				jQuery(this).attr("data-params"), 
+				jQuery(this).attr("data-url")
+			);
         });
-
         return this;
     },
+	
     /**
      * Attaches events to Price range filters.
      * @returns {Mall.listing}
      */
     attachFilterPriceEvents: function() {
+		var self = this;
         jQuery("#filter_price").find("[data-url]").on("click", function(e) {
-            // @todo ajax logic
-            location.href = jQuery(this).attr("data-url");
+            self.changeListingParams(
+				jQuery(this).attr("data-params"), 
+				jQuery(this).attr("data-url")
+			);
         });
 
         return this;
@@ -869,17 +958,19 @@ Mall.listing = {
 
     /**
      * Attaches events to size filters.
-     *
      * @returns {Mall.listing}
      */
     attachFilterSizeEvents: function() {
         var filterSize = jQuery('.filter-size'),
             btnClear = jQuery('.action.clear'),
             filterSizeLength;
+		var self = this;
 
         jQuery(".filter-size").find("[data-url]").on("click", function(e) {
-            // @todo ajax logic
-            location.href = jQuery(this).attr("data-url");
+            self.changeListingParams(
+				jQuery(this).attr("data-params"), 
+				jQuery(this).attr("data-url")
+			);
         });
 
         filterSize.on('click', ':checkbox', function(e) {
@@ -909,7 +1000,9 @@ Mall.listing = {
         var headList = jQuery('.button-select.ajax'),
             listSelect = jQuery('.dropdown-select ul'),
             thisVal,
-            thisUrl;
+            thisUrl,
+			self = this;
+	
         headList.on('click', function(event) {
             event.preventDefault();
             jQuery(this).next('.dropdown-select').stop(true).slideToggle(200);
@@ -921,7 +1014,10 @@ Mall.listing = {
             jQuery(this).closest('.select-group').find('.button-select')
                 .html(thisVal+'<span class="down"></span>');
             jQuery(this).closest('.dropdown-select').slideUp(200);
-            window.location.href = thisUrl;
+            self.changeListingParams(
+				jQuery(this).attr("data-params"), 
+				thisUrl
+			);
         });
         jQuery(document).click(function(e) {
             if (!jQuery(e.target).parents().andSelf().is('.select-group')) {
@@ -987,7 +1083,8 @@ Mall.listing = {
                     + " TO "
                     + Mall.listing.getMaxPriceFromSlider();
                 Mall.listing.setFiltersArray(fq);
-                Mall.listing.reloadListing();
+				// @todo make via ajax
+                //Mall.listing.reloadListing();
             }
         });
 
@@ -1089,6 +1186,23 @@ Mall.listing = {
 
         return q;
     },
+	
+	getQueryParamsAsArray: function(){
+		var out = [
+			{name: "q", value: this.getQuery()},
+			{name: "page", value: this.getPage()},
+			{name: "sort", value: this.getSort()},
+			{name: "dir", value: this.getDir()},
+			{name: "scat", value: this.getScat()},
+			{name: "rows", value: this.getScrollLoadOffset()},
+			{name: "start", value: 0}
+		];
+		
+		jQuery.each(this.getFqByInterface(), function(index){
+			out.push({name: this.name, value: this.value});
+		});
+		return out;
+	},
 
     /**
      * Removes single filter from filters array.
@@ -1307,6 +1421,16 @@ Mall.listing = {
     getFiltersArray: function() {
         return this._current_filters;
     },
+	
+	
+	
+	/**
+	 * @returns {array} [{name: "", value:""},...]
+	 */
+	getFqByInterface: function(scope){
+		scope = scope || jQuery("#solr_search_facets");
+		return scope.find(':checkbox:checked').serializeArray();
+	},
 
     /**
      * Returns currently visible items on listing.

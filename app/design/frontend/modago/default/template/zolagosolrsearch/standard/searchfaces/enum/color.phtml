@@ -6,6 +6,7 @@
     $isOptionSelected = false;
     $key_withoutFacet = explode("_", $key);
     array_pop($key_withoutFacet);
+	$pureKey = implode("_", $key_withoutFacet);
     ?>
     <div class="section clearfix">
         <h3 class="<?php echo $sectionClass; ?>"><?php echo $this->getFacetLabel(); ?> <i class="fa <?php echo $iconClass; ?>"></i></h3>
@@ -21,8 +22,12 @@
                 $isOptionSelected = true;
             }
             ?>
-            <label title="<?php echo $item ?>" for="color_<?php echo $item ?>" <?php if($_image): ?>data-img="<?php echo Mage::getBaseUrl("media") . "/m-image/" . $_image;?>"<?php endif; ?> data-param="<?php echo $this->getItemJson($item);?>" data-color="<?php echo $_color?>" data-url="<?php echo $this->getItemUrl($item) ?>" <?php if($_imageHover) : ?>data-imghover="<?php echo Mage::getBaseUrl("media") . "/m-image/" . $_imageHover;?>"<?php endif; ?>>
-                <input type="checkbox" id="color_<?php echo $item ?>" name="color[]" <?php if($this->isItemActive($item)): ?>checked="checked"<?php endif; ?> /><span><span></span></span>
+            <label title="<?php echo $item ?>" for="color_<?php echo $item ?>" <?php if($_image): ?>data-img="<?php echo Mage::getBaseUrl("media") . "/m-image/" . $_image;?>"<?php endif; ?> data-param='<?php echo $this->getItemJson($item);?>' data-color="<?php echo $_color?>" data-url="<?php echo $this->getItemUrl($item) ?>" <?php if($_imageHover) : ?>data-imghover="<?php echo Mage::getBaseUrl("media") . "/m-image/" . $_imageHover;?>"<?php endif; ?>>
+                <input type="checkbox" 
+					   id="<?php echo $pureKey;?>_<?php echo $item ?>" 
+					   value="<?php echo $this->escapeHtml($item);?>"
+					   name="fq[<?php echo $pureKey;?>][]" 
+					<?php if($this->isItemActive($item)): ?>checked="checked"<?php endif; ?> /><span><span></span></span>
             </label>
         <?php endif; ?>
     <?php endforeach; ?>
@@ -39,8 +44,12 @@
                     $isOptionSelected = true;
                 }
                 ?>
-                <label title="<?php echo $item ?>" data-state="hidden" for="color_<?php echo $item ?>" <?php if($_image): ?>data-img="<?php echo Mage::getBaseUrl("media") . "/m-image/" . $_image;?>"<?php endif; ?> data-param="<?php echo $this->getItemJson($item);?>" data-color="<?php echo $_color?>" data-url="<?php echo $this->getItemUrl($item) ?>" <?php if($_imageHover) : ?>data-imghover="<?php echo Mage::getBaseUrl("media") . "/m-image/" . $_imageHover;?>"<?php endif; ?> style="display: none;">
-                    <input type="checkbox" id="color_<?php echo $item ?>" name="color[]" <?php if($this->isItemActive($item)): ?>checked="checked"<?php endif; ?> /><span><span></span></span>
+                <label title="<?php echo $item ?>" data-state="hidden" for="color_<?php echo $item ?>" <?php if($_image): ?>data-img="<?php echo Mage::getBaseUrl("media") . "/m-image/" . $_image;?>"<?php endif; ?> data-param='<?php echo $this->getItemJson($item);?>' data-color="<?php echo $_color?>" data-url="<?php echo $this->getItemUrl($item) ?>" <?php if($_imageHover) : ?>data-imghover="<?php echo Mage::getBaseUrl("media") . "/m-image/" . $_imageHover;?>"<?php endif; ?> style="display: none;">
+                    <input type="checkbox" 
+					   id="<?php echo $pureKey;?>_<?php echo $item ?>" 
+					   value="<?php echo $this->escapeHtml($item);?>"
+					   name="fq[<?php echo $pureKey;?>][]" 
+					<?php if($this->isItemActive($item)): ?>checked="checked"<?php endif; ?> /><span><span></span></span>
                 </label>
             <?php endif; ?>
         <?php endforeach; ?>
