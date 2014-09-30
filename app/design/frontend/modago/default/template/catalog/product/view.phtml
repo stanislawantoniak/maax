@@ -74,7 +74,7 @@ $avg = $_reviewBlock->getAvarageRating();
 <div id="block-bundle" class="col-lg-7 col-xs-12">
 
 <!-- PRODUCT SHOP -->
-<div id="product-shop" class="col-lg-8 col-md-12 clearfix overflow-x-fix">
+<div id="product-shop" class="col-lg-8 col-md-12 clearfix">
 
     <form action="<?php echo $this->getSubmitUrl($_product) ?>" method="post" id="product_addtocart_form"<?php if($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
         <?php echo $this->getBlockHtml('formkey') ?>
