@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Zolago_Persistent>
+            <version>0.0.1</version>
+        </Zolago_Persistent>
+    </modules>
+
+    <global>
+        <models>
+            <persistent>
+				<rewrite>
+					<observer>Zolago_Persistent_Model_Observer</observer>
+				</rewrite>
+            </persistent>
+        </models>
+    </global>
+</config>
