@@ -103,7 +103,9 @@ $avg = $_reviewBlock->getAvarageRating();
                 </ul>
             </div>
         <?php endif; ?>
+<!--        catalog.product.related-->
         <?php echo $this->getChildHtml('catalog.product.related'); ?>
+<!--        catalog.product.related end-->
 
         <div class="size-box-bundle" id="product-options">
             <?php if($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) : ?>

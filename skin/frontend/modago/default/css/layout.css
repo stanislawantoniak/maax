@@ -1,4 +1,3 @@
-@charset "UTF-8";
 /*$icoMapDesktop: sprite-map("desktop/ico/*.png");
 $icoMapMobile: sprite-map("mobile/ico/*.png");
 $bulletMap: sprite-map("sprites/bullet/*.png");
@@ -10051,7 +10050,7 @@ i.flag.hit, i.flag.bestseller {
     position: static; } }
 /* line 482, ../sass/override/_override-layout.scss */
 #product-shop .size-box-bundle .size-box {
-  margin-bottom: 25px; }
+  margin-bottom: 30px; }
 /* line 484, ../sass/override/_override-layout.scss */
 #product-shop .size-box-bundle .size-box .sbHolder {
   width: 167px; }
