@@ -203,7 +203,55 @@ var Mall = {
     setUserBlockData : function(content) {
         var userBlock = jQuery("#header_top_block_right");
         // set customer account url
-        jQuery("#link_your_account>a").attr("href", content.user_account_url);
+
+        var desktopW = 992;
+        var windowW = jQuery(window).width();
+        if(content.logged_in){
+            //on load
+
+            if(windowW < desktopW){
+                //Tablet
+                jQuery("#link_your_account>a, a#link_your_account_br").attr("href", content.user_account_url);
+            } else {
+                //Desktop
+                jQuery("#link_your_account>a,a#link_your_account_br").attr("href", content.user_account_url_orders);
+            }
+            //on window resize
+            jQuery( window ).resize(function() {
+                var windowWidth = jQuery(this).width();
+                if(windowWidth < desktopW){
+                    //Tablet
+                    jQuery("#link_your_account>a,a#link_your_account_br").attr("href", content.user_account_url);
+                } else {
+                    //Desktop
+                    jQuery("#link_your_account>a,a#link_your_account_br").attr("href", content.user_account_url_orders);
+                }
+            });
+        } else {
+            jQuery("#link_your_account>a,a#link_your_account_br").attr("href", content.user_account_url);
+
+
+            if(windowW < desktopW){
+                //Tablet
+                jQuery("[name=mobile_device_type]").val(1);
+            } else {
+                //Desktop
+                jQuery("[name=mobile_device_type]").val(0);
+            }
+            //on window resize
+            jQuery( window ).resize(function() {
+                var windowWidth = jQuery(this).width();
+                if(windowWidth < desktopW){
+                    //Tablet
+                    jQuery("[name=mobile_device_type]").val(1);
+                } else {
+                    //Desktop
+                    jQuery("[name=mobile_device_type]").val(0);
+                }
+            });
+        }
+
+
         // set basket url
         jQuery("#link_basket>a").attr("href", content.cart.show_cart_url);
         userBlock.show();
