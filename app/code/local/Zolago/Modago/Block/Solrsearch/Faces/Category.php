@@ -30,7 +30,7 @@ class Zolago_Modago_Block_Solrsearch_Faces_Category extends Zolago_Solrsearch_Bl
             $parentCategoryUrl = Mage::getUrl('',
                 array(
                     '_direct' => Mage::getModel('core/url_rewrite')->loadByIdPath('category/' . $category->getId())->getRequestPath(),
-                    '_query' => $params
+// refs #440                    '_query' => $params   
                 )
             );
         }
