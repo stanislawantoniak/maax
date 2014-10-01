@@ -34,11 +34,16 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
 		);
 		
 		// Add success if login sucessful (by core session - visable in both customer / checkout)
-		if($this->_getSession()->isLoggedIn()){
-			Mage::getSingleton('core/session')->addSuccess(
-				Mage::helper("zolagocustomer")->__("You have been logged in")
-			);
-		}
+        if ($this->_getSession()->isLoggedIn()) {
+            Mage::getSingleton('core/session')->addSuccess(
+                Mage::helper("zolagocustomer")->__("You have been logged in")
+            );
+
+            if ($this->getRequest()->getParams('is_checkout') == 0) {
+                $this->_redirect("customer/account");
+            }
+
+        }
 	}
 
     /**
