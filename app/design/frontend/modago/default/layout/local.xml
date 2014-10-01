@@ -1043,5 +1043,21 @@
 			</block>
 		</reference>
 	</sales_order_view>
+
+    <help_index_index>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/1column.phtml</template>
+            </action>
+        </reference>
+
+        <reference name="content">
+
+            <block type="cms/block" name="yyy">
+                <action method="setBlockId"><block_id>yyy</block_id></action>
+            </block>
+
+        </reference>
+    </help_index_index>
     
 </layout>
