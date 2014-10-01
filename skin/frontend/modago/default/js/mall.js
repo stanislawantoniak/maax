@@ -805,7 +805,9 @@ jQuery(document).ready(function() {
             location.href = value;
         }
     });
-
+    //#######################
+    //## SIZE-BOX -> SELECTBOX
+    //#######################
     jQuery(".size-box select").selectbox({
         onOpen: function (inst) {
             var uid = jQuery(this).attr('sb');
@@ -829,10 +831,15 @@ jQuery(document).ready(function() {
             Mall.setSuperAttribute(jQuery("#size_" + value));
         }
     });
-    if(jQuery(".size-box li").length) {
+    if(jQuery(".size-box option").length == 1) {
         Mall.setSuperAttribute(jQuery("#size_" + jQuery(".size-box li a").first().attr('rel')));
     }
-
+    if (jQuery('.size-box option').length >= 2) {
+        jQuery('.size-box a.sbSelector').text(Mall.translate.__('Select size'));
+    }
+    //#######################
+    //## END SIZE-BOX -> SELECTBOX
+    //#######################
 
     Mall.product.setDiagonalsOnSizeSquare();
 
