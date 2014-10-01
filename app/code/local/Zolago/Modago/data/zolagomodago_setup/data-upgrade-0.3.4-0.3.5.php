@@ -30,7 +30,7 @@ EOD
 );
 
 foreach ($cms as $data) {
-    $block = Mage::getModel('cms/page')->load($data['identifier']);
+    $block = Mage::getModel('cms/block')->load($data['identifier']);
     if ($block->getBlockId()) {
         $oldData = $block->getData();
         $data = array_merge($oldData,$data);

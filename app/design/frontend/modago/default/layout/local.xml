@@ -1169,8 +1169,8 @@
 
         <reference name="content">
 
-            <block type="cms/block" name="yyy">
-                <action method="setBlockId"><block_id>yyy</block_id></action>
+            <block type="cms/block" name="help-page">
+                <action method="setBlockId"><block_id>help-page</block_id></action>
             </block>
 
         </reference>
