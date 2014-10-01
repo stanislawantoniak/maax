@@ -203,7 +203,55 @@ var Mall = {
     setUserBlockData : function(content) {
         var userBlock = jQuery("#header_top_block_right");
         // set customer account url
-        jQuery("#link_your_account>a").attr("href", content.user_account_url);
+
+        var desktopW = 992;
+        var windowW = jQuery(window).width();
+        if(content.logged_in){
+            //on load
+
+            if(windowW < desktopW){
+                //Tablet
+                jQuery("#link_your_account>a, a#link_your_account_br").attr("href", content.user_account_url);
+            } else {
+                //Desktop
+                jQuery("#link_your_account>a,a#link_your_account_br").attr("href", content.user_account_url_orders);
+            }
+            //on window resize
+            jQuery( window ).resize(function() {
+                var windowWidth = jQuery(this).width();
+                if(windowWidth < desktopW){
+                    //Tablet
+                    jQuery("#link_your_account>a,a#link_your_account_br").attr("href", content.user_account_url);
+                } else {
+                    //Desktop
+                    jQuery("#link_your_account>a,a#link_your_account_br").attr("href", content.user_account_url_orders);
+                }
+            });
+        } else {
+            jQuery("#link_your_account>a,a#link_your_account_br").attr("href", content.user_account_url);
+
+
+            if(windowW < desktopW){
+                //Tablet
+                jQuery("[name=mobile_device_type]").val(1);
+            } else {
+                //Desktop
+                jQuery("[name=mobile_device_type]").val(0);
+            }
+            //on window resize
+            jQuery( window ).resize(function() {
+                var windowWidth = jQuery(this).width();
+                if(windowWidth < desktopW){
+                    //Tablet
+                    jQuery("[name=mobile_device_type]").val(1);
+                } else {
+                    //Desktop
+                    jQuery("[name=mobile_device_type]").val(0);
+                }
+            });
+        }
+
+
         // set basket url
         jQuery("#link_basket>a").attr("href", content.cart.show_cart_url);
         userBlock.show();
@@ -738,7 +786,7 @@ function basket_dropdown() {
             jQuery("#dropdown-basket").show();
         }
     },function() {
-        if (!jQuery(".basket-dropdown").is(":hover")) {
+        if (!jQuery(".basket-dropdown").is(":hover") || !jQuery("#link_basket").is(":hover") || !jQuery("#dropdown_basket").is(":hover")) {
             jQuery("#link_basket").removeClass('open');
             jQuery("#dropdown-basket").hide();
         }
@@ -805,7 +853,9 @@ jQuery(document).ready(function() {
             location.href = value;
         }
     });
-
+    //#######################
+    //## SIZE-BOX -> SELECTBOX
+    //#######################
     jQuery(".size-box select").selectbox({
         onOpen: function (inst) {
             var uid = jQuery(this).attr('sb');
@@ -829,10 +879,15 @@ jQuery(document).ready(function() {
             Mall.setSuperAttribute(jQuery("#size_" + value));
         }
     });
-    if(jQuery(".size-box li").length) {
+    if(jQuery(".size-box option").length == 1) {
         Mall.setSuperAttribute(jQuery("#size_" + jQuery(".size-box li a").first().attr('rel')));
     }
-
+    if (jQuery('.size-box option').length >= 2) {
+        jQuery('.size-box a.sbSelector').text(Mall.translate.__('Select size'));
+    }
+    //#######################
+    //## END SIZE-BOX -> SELECTBOX
+    //#######################
 
     Mall.product.setDiagonalsOnSizeSquare();
 
