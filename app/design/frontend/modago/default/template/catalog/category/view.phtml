@@ -26,27 +26,22 @@
     <?php echo $this->getProductListHtml() ?>
 
 <?php else: ?>
-
+	<section id="main" class="<?php echo $this->getElementClass(); ?>">
         <?php echo $this->getChildHtml('solrsearch_result_title'); ?>
+        <?php echo $this->getChildHtml('solrsearch_product_list_activefaces'); ?>
         <?php echo $this->getChildHtml('solrsearch_product_list_toolbar'); ?>
-
         <div id="content" class="container-fluid">
             <div class="row">
                 <div class="col-sm-12">
                     <div id="sidebar" class="hidden-xs">
-
                         <?php echo $this->getChildHtml('searchFaces'); ?>
-
                     </div>
                     <div id="content-main">
-
                         <?php echo $this->getProductListHtml() ?>
-
                     </div>
                 </div>
             </div>
         </div>
-
     </section>
 
 <style type="text/css">

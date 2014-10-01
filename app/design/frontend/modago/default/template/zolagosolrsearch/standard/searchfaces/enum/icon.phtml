@@ -24,19 +24,26 @@
 
             ?>
             <div class="form-group form-checkbox">
-				<table data-url='<?php echo $this->getItemUrl($item) ?>' data-params='<?php echo $this->getItemJson($item);?>'>
+				<table>
 					<tbody>
 						<tr>
 							<td class="first-td">
-								<div >
-				 	               <input   type="checkbox" name="type_<?php echo $item; ?>" id="type_filter_<?php echo $item; ?>" class="css-checkbox" <?php if($this->isItemActive($item)): ?>checked="checked" <?php endif; ?>>
-					                <label for="type_<?php echo $item; ?>">		
-										<img alt="" <?php if (!empty($_image)): ?>src="<?php echo Mage::getBaseUrl("media") . "/m-image/" . $_image;?>"<?php endif; ?>>
+								<div>
+				 	               <input type="checkbox" 
+										data-url='<?php echo $this->getItemUrl($item) ?>' 
+										data-params='<?php echo $this->getItemJson($item);?>'
+										name="<?php echo $this->getItemName($item);?>"
+										value="<?php echo $this->getItemValue($item)?>"
+										id="<?php echo $this->getItemId($item)?>" 
+										class="css-checkbox" 
+										<?php if($this->isItemActive($item)): ?>checked="checked" <?php endif; ?>/>
+					                <label for="<?php echo $this->getItemId($item)?>">	
+										<img alt="" <?php if (!empty($_image)): ?>src="<?php echo Mage::getBaseUrl("media") . "/m-image/" . $_image;?>"<?php endif; ?>/>
 									</label>
 								</div>
 							</td>
 							<td class="last-td">
-								<label for="filter_type_<?php echo $item; ?>">
+								<label for="<?php echo $this->getItemId($item)?>">
 									<span><?php echo $item ?></span>&nbsp;<span class="suffix">(<?php echo $count ?>)</span></label>									
 								</label>
 							</td>
@@ -49,8 +56,15 @@
     <?php if ($this->getCanShowHidden()): ?>
         <?php foreach ($this->getHiddenItems() as $item => $count): ?>
             <div class="form-group form-checkbox" data-state="hidden" style="display: none;">
-                <input data-url="<?php echo $this->getItemUrl($item) ?>" data-params='<?php echo $this->getItemJson($item);?>' type="checkbox" name="type_<?php echo $item; ?>" id="type_<?php echo $item; ?>" class="css-checkbox" <?php if($this->isItemActive($item)): ?>checked="checked" <?php endif; ?>>
-                <label for="type_<?php echo $item; ?>" class="css-label"><span><?php echo $item ?></span>&nbsp;<span class="suffix">(<?php echo $count ?>)</span></label>
+                <input 
+					data-url="<?php echo $this->getItemUrl($item) ?>" 
+					data-params='<?php echo $this->getItemJson($item);?>' 
+					type="checkbox" 
+					name="<?php echo $this->getItemName($item);?>"
+					value="<?php echo $this->getItemValue($item)?>"
+					id="<?php echo $this->getItemId($item)?>"
+					class="css-checkbox" <?php if($this->isItemActive($item)): ?>checked="checked" <?php endif; ?>/>
+                <label for="<?php echo $this->getItemId($item)?>" class="css-label"><span><?php echo $item ?></span>&nbsp;<span class="suffix">(<?php echo $count ?>)</span></label>
             </div>
         <?php endforeach; ?>
         <div class="action clearfix">
@@ -58,7 +72,7 @@
         </div>
     <?php endif; ?>
             <div class="action clear clearfix <?php if(!$isOptionSelected) : ?>hidden<?php endif; ?>">
-                <a href="#" data-filter-type="<?php echo implode("_", $key_withoutFacet); ?>" onclick="Mall.listing.removeSingleFilterType(this);Mall.listing.reloadListing();return false;" class="button button-third clear"><?php echo $this->__("Clear"); ?></a>
+                <a href="#" data-filter-type="<?php echo implode("_", $key_withoutFacet); ?>" onclick="Mall.listing.removeSingleFilterType(this);return false;" class="button button-third clear"><?php echo $this->__("Clear"); ?></a>
             </div>
         </div>
     </div>

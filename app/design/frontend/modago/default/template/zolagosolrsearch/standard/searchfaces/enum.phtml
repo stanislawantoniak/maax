@@ -22,12 +22,12 @@
                         <input data-url="<?php echo $this->getItemUrl($item) ?>" 
 							   data-params='<?php echo $this->getItemJson($item);?>' 
 							   type="checkbox" 
-							   name="fq[<?php echo $pureKey; ?>][]"
-							   value="<?php echo $this->escapeHtml($item);?>" 
-							   id="check_<?php echo $item; ?>" 
+							   name="<?php echo $this->getItemName($item);?>"
+							   value="<?php echo $this->getItemValue($item)?>"
+							   id="<?php echo $this->getItemId($item)?>"
 							   class="css-checkbox" 
 							   <?php if($this->isItemActive($item)): ?>checked="checked" <?php endif; ?>>
-                        <label for="check_<?php echo $item; ?>" class="css-label"><span><?php echo $item ?></span>&nbsp;<span class="suffix">(<?php echo $count ?>)</span></label>
+                        <label for="<?php echo $this->getItemId($item)?>" class="css-label"><span><?php echo $item ?></span>&nbsp;<span class="suffix">(<?php echo $count ?>)</span></label>
                     </div>
                 <?php endif; ?>
             <?php endforeach; ?>
@@ -36,11 +36,11 @@
                     <div class="form-group form-checkbox" data-state="hidden" style="display: none;">
                         <input data-url="<?php echo $this->getItemUrl($item) ?>"  
 							   type="checkbox" 
-							   name="fq[<?php echo $pureKey; ?>][]"  
-							   value="<?php echo $this->escapeHtml($item);?>" 
-							   id="check_<?php echo $item; ?>" class="css-checkbox" 
+							   name="<?php echo $this->getItemName($item);?>"
+							   value="<?php echo $this->getItemValue($item)?>"
+							   id="<?php echo $this->getItemId($item)?>"
 							   <?php if($this->isItemActive($item)): ?>checked="checked" <?php endif; ?>>
-                        <label for="check_<?php echo $item; ?>" class="css-label"><span><?php echo $item ?></span>&nbsp;<span class="suffix">(<?php echo $count ?>)</span></label>
+                        <label for="<?php echo $this->getItemId($item)?>" class="css-label"><span><?php echo $item ?></span>&nbsp;<span class="suffix">(<?php echo $count ?>)</span></label>
                     </div>
                 <?php endforeach; ?>
                 <div class="action clearfix">
@@ -48,7 +48,7 @@
                 </div>
             <?php endif; ?>
             <div class="action clear clearfix <?php if(!$isOptionSelected) : ?>hidden<?php endif; ?>">
-                <a href="#" data-filter-type="<?php echo $pureKey; ?>" onclick="Mall.listing.removeSingleFilterType(this);Mall.listing.reloadListing();return false;" class="button button-third clear"><?php echo $this->__("Clear"); ?></a>
+                <a href="#" data-filter-type="<?php echo $pureKey; ?>" onclick="Mall.listing.removeSingleFilterType(this);return false;" class="button button-third clear"><?php echo $this->__("Clear"); ?></a>
             </div>
         </div>
     </div>

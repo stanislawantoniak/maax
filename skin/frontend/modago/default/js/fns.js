@@ -1289,9 +1289,10 @@ jQuery.noConflict();
 //////////////////////////////////////////////////////////////////
 
 
-        $("label img").on("click", function() {
-            $("#" + $(this).parents("label").attr("for")).click();
-        });
+//        $("label img").on("click", function() {
+//            $("#" + $(this).parents("label").attr("for")).click();
+//			return;
+//        });
 //equalizeHeights();
         var flags_container = $('.carousel-stage');
         if (flags_container.length > 0 ) {

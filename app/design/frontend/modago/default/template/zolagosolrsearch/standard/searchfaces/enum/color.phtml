@@ -22,12 +22,13 @@
                 $isOptionSelected = true;
             }
             ?>
-            <label title="<?php echo $item ?>" for="color_<?php echo $item ?>" <?php if($_image): ?>data-img="<?php echo Mage::getBaseUrl("media") . "/m-image/" . $_image;?>"<?php endif; ?> data-param='<?php echo $this->getItemJson($item);?>' data-color="<?php echo $_color?>" data-url="<?php echo $this->getItemUrl($item) ?>" <?php if($_imageHover) : ?>data-imghover="<?php echo Mage::getBaseUrl("media") . "/m-image/" . $_imageHover;?>"<?php endif; ?>>
+            <label title="<?php echo $item ?>" for="<?php echo $this->getItemId($item)?>" <?php if($_image): ?>data-img="<?php echo Mage::getBaseUrl("media") . "/m-image/" . $_image;?>"<?php endif; ?> data-param='<?php echo $this->getItemJson($item);?>' data-color="<?php echo $_color?>" data-url="<?php echo $this->getItemUrl($item) ?>" <?php if($_imageHover) : ?>data-imghover="<?php echo Mage::getBaseUrl("media") . "/m-image/" . $_imageHover;?>"<?php endif; ?>>
                 <input type="checkbox" 
-					   id="<?php echo $pureKey;?>_<?php echo $item ?>" 
-					   value="<?php echo $this->escapeHtml($item);?>"
-					   name="fq[<?php echo $pureKey;?>][]" 
-					<?php if($this->isItemActive($item)): ?>checked="checked"<?php endif; ?> /><span><span></span></span>
+					name="<?php echo $this->getItemName($item);?>"
+					value="<?php echo $this->getItemValue($item)?>"
+					id="<?php echo $this->getItemId($item)?>" 
+					<?php if($this->isItemActive($item)): ?>checked="checked"<?php endif; ?> />
+				<span><span></span></span>
             </label>
         <?php endif; ?>
     <?php endforeach; ?>
@@ -44,12 +45,12 @@
                     $isOptionSelected = true;
                 }
                 ?>
-                <label title="<?php echo $item ?>" data-state="hidden" for="color_<?php echo $item ?>" <?php if($_image): ?>data-img="<?php echo Mage::getBaseUrl("media") . "/m-image/" . $_image;?>"<?php endif; ?> data-param='<?php echo $this->getItemJson($item);?>' data-color="<?php echo $_color?>" data-url="<?php echo $this->getItemUrl($item) ?>" <?php if($_imageHover) : ?>data-imghover="<?php echo Mage::getBaseUrl("media") . "/m-image/" . $_imageHover;?>"<?php endif; ?> style="display: none;">
+                <label title="<?php echo $item ?>" data-state="hidden" for="<?php echo $this->getItemId($item)?>" <?php if($_image): ?>data-img="<?php echo Mage::getBaseUrl("media") . "/m-image/" . $_image;?>"<?php endif; ?> data-param='<?php echo $this->getItemJson($item);?>' data-color="<?php echo $_color?>" data-url="<?php echo $this->getItemUrl($item) ?>" <?php if($_imageHover) : ?>data-imghover="<?php echo Mage::getBaseUrl("media") . "/m-image/" . $_imageHover;?>"<?php endif; ?> style="display: none;">
                     <input type="checkbox" 
-					   id="<?php echo $pureKey;?>_<?php echo $item ?>" 
-					   value="<?php echo $this->escapeHtml($item);?>"
-					   name="fq[<?php echo $pureKey;?>][]" 
-					<?php if($this->isItemActive($item)): ?>checked="checked"<?php endif; ?> /><span><span></span></span>
+						name="<?php echo $this->getItemName($item);?>"
+						value="<?php echo $this->getItemValue($item)?>"
+						id="<?php echo $this->getItemId($item)?>" 
+						<?php if($this->isItemActive($item)): ?>checked="checked"<?php endif; ?> /><span><span></span></span>
                 </label>
             <?php endif; ?>
         <?php endforeach; ?>
@@ -58,7 +59,7 @@
             </div>
     <?php endif; ?>
             <div class="action clear clearfix <?php if(!$isOptionSelected) : ?>hidden<?php endif; ?>">
-                <a href="#" data-filter-type="<?php echo implode("_", $key_withoutFacet); ?>" onclick="Mall.listing.removeSingleFilterType(this);Mall.listing.reloadListing();return false;" class="button button-third clear clearfilter-color"><?php echo $this->__("Clear"); ?></a>
+                <a href="#" data-filter-type="<?php echo implode("_", $key_withoutFacet); ?>" onclick="Mall.listing.removeSingleFilterType(this);return false;" class="button button-third clear clearfilter-color"><?php echo $this->__("Clear"); ?></a>
             </div>
 
         </div>

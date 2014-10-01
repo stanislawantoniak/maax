@@ -1,5 +1,6 @@
 <?php $q = array(); ?>
 <?php $filterQuery = $this->getFilterQuery(); ?>
+<div id="active-filters">
 <?php if(sizeof($filterQuery) > 0 && $this->isSelectedFacetActive()) : ?>
 <dl class="clearfix">
     <dt><?php echo $this->__('Currently Shopping:') ?></dt>
@@ -25,9 +26,5 @@
     </dd>
     <dd class="action"><a data-params='<?php echo $this->getRemoveAllJson();?>' href="<?php echo $this->getRemoveAllUrl()?>" class="button button-third"><?php echo $this->__('Clear all filters') ?></a></dd>
 </dl>
-<?php else: ?>
-<div style="margin-bottom: 15px;"></div>
 <?php endif; ?>
-<script type="text/javascript">
-    Mall.listing.setFiltersArray(<?php echo $this->getFacesJson(); ?>);
-</script>
+</div>
