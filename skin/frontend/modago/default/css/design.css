@@ -763,6 +763,7 @@ span.checked {
   border-radius: 3px; }
 /* line 42, ../sass/design/modules/_current-filter.scss */
 #active-filters .actionViewFilter, #view-current-filter .actionViewFilter {
+  margin-bottom: 10px;
   white-space: nowrap;
   -webkit-border-top-right-radius: 5px !important;
   -webkit-border-bottom-right-radius: 5px !important;
@@ -776,16 +777,16 @@ span.checked {
   -moz-border-radius-bottomleft: 0px !important;
   border-top-left-radius: 0px !important;
   border-bottom-left-radius: 0px !important; }
-/* line 58, ../sass/design/modules/_current-filter.scss */
+/* line 60, ../sass/design/modules/_current-filter.scss */
 #active-filters .backToCategory, #view-current-filter .backToCategory {
   text-decoration: underline;
   font-size: 12px; }
 
-/* line 65, ../sass/design/modules/_current-filter.scss */
+/* line 67, ../sass/design/modules/_current-filter.scss */
 #header-main .wrapp-section {
   border: none; }
 
-/* line 71, ../sass/design/modules/_current-filter.scss */
+/* line 73, ../sass/design/modules/_current-filter.scss */
 .catalog-category-view .breadcrumb {
   background-attachment: scroll;
   background-clip: border-box;
