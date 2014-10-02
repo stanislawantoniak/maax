@@ -1,30 +1,52 @@
 <?php $q = array(); ?>
 <?php $filterQuery = $this->getFilterQuery(); ?>
 <div id="active-filters">
-<?php if(sizeof($filterQuery) > 0 && $this->isSelectedFacetActive()) : ?>
-<dl class="clearfix">
-    <dt><?php echo $this->__('Currently Shopping:') ?></dt>
-    <dd>
-		<?php foreach($filterQuery as $key=>$values): ?>
-			<?php foreach($values as $v): ?>
-				<?php if ($key != 'category_id'):?>
-                    <?php $face_key = substr($key, 0, strrpos($key, '_'))?>
-                    <?php
-                    $selectedFacetValue = $v;
-                    if ($face_key == 'price'){
-                        $selectedFacetValue = $this->formatFacetPrice($v);
-                    }
-                    ?>
-                    <span class="label"><?php echo $this->__($this->getFacetLabel($key)); ?>: <span class="value"><?php echo $this->facetFormat($selectedFacetValue) ?></span><i data-url="<?php echo $this->getRemoveFacesUrl($face_key, $v);?>" data-params="<?php echo $this->getRemoveFacesUrl($face_key, $v);?>"  class="fa fa-times"></i></span>
+    <div class="wrapp-section bg-w">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <?php if(sizeof($filterQuery) > 0 && $this->isSelectedFacetActive()) : ?>
+                        <dl class="clearfix">
+                            <dt><?php echo $this->__('Currently Shopping:') ?></dt>
+                            <dd>
+                                <?php foreach ($filterQuery as $key => $values): ?>
+                                    <?php foreach ($values as $v): ?>
+                                        <?php if($key != 'category_id'): ?>
+                                            <?php $face_key = substr($key, 0, strrpos($key, '_')) ?>
+                                            <?php
+                                            $selectedFacetValue = $v;
+                                            if($face_key == 'price') {
+                                                $selectedFacetValue = $this->formatFacetPrice($v);
+                                            }
+                                            ?>
+                                            <span class="label">
+                                                <?php echo $this->__($this->getFacetLabel($key)); ?>:
+                                                <span class="value">
+                                                    <?php echo $this->facetFormat($selectedFacetValue) ?>
+                                                </span>
+                                                <i data-url="<?php echo $this->getRemoveFacesUrl($face_key, $v); ?>"
+                                                   data-params="<?php echo $this->getRemoveFacesUrl($face_key, $v); ?>"
+                                                   class="fa fa-times">
+                                                </i>
+                                            </span>
 
-                    <?php if ($face_key != 'price'):?>
-                    <input type="hidden" name="fq[<?php echo $face_key ?>]" value="<?php echo $v?>" />
-                    <?php endif;?>
-				<?php endif;?>
-			<?php endforeach; ?>
-		<?php endforeach; ?>
-    </dd>
-    <dd class="action"><a data-params='<?php echo $this->getRemoveAllJson();?>' href="<?php echo $this->getRemoveAllUrl()?>" class="button button-third"><?php echo $this->__('Clear all filters') ?></a></dd>
-</dl>
-<?php endif; ?>
+                                            <?php if($face_key != 'price'): ?>
+                                                <input type="hidden" name="fq[<?php echo $face_key ?>]"
+                                                       value="<?php echo $v ?>"/>
+                                            <?php endif; ?>
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
+                                <?php endforeach; ?>
+                            </dd>
+                            <dd class="action">
+                                <a data-params='<?php echo $this->getRemoveAllJson(); ?>'
+                                   href="<?php echo $this->getRemoveAllUrl() ?>"
+                                   class="button button-third"><?php echo $this->__('Clear all filters') ?></a>
+                            </dd>
+                        </dl>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

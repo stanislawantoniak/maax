@@ -445,7 +445,9 @@
 		</reference>
 		
 		<reference name="content">
-			<block type="zolagocatalog/breadcrumbs" before="solrsearch_product_list_header" name="zolago_breadcrumbs" />
+            <block type="core/template" before="solrsearch_product_list_header" name="zolago_breadcrumb_fix" template="catalog/breadcrumbsfix.phtml">
+			    <block type="zolagocatalog/breadcrumbs"  name="zolago_breadcrumbs" />
+            </block>
 		</reference>
 		<reference name="zolagosolrsearch_category_view">
 			<remove name="zolagocatalog_breadcrumbs"/>
