@@ -109,9 +109,9 @@ Mall.listing = {
     },
 
 	initFilterEvents: function(scope){
-		scope = scope || jQuery("html");
-		
-		this.attachShowMoreEvent(scope);
+		scope = scope || jQuery("#solr_search_facets");
+		this.initDroplists(scope);
+        this.attachMiscActions(scope);
         this.attachFilterColorEvents(scope);
         this.attachFilterIconEvents(scope);
         this.attachFilterEnumEvents(scope);
@@ -689,7 +689,6 @@ Mall.listing = {
             jQuery(".fb-slidebar-inner").find('.sidebar').remove();
             jQuery(".fb-slidebar-inner").html(currentSidebar.html());
             this.setCurrentMobileFilterState(1);
-            this.attachShowMoreEvent();
             this.attachFilterColorEvents();
             this.attachFilterIconEvents();
             this.attachFilterEnumEvents();
@@ -746,7 +745,6 @@ Mall.listing = {
             jQuery("#sidebar").find(".sidebar").remove();
             jQuery("#sidebar").append(currentSidebar);
             this.setCurrentMobileFilterState(0);
-            this.attachShowMoreEvent();
             this.attachFilterColorEvents();
             this.attachFilterIconEvents();
             this.attachFilterEnumEvents();
@@ -765,17 +763,37 @@ Mall.listing = {
 	 * @returns {void}
 	 */
 	nodeChanged: function (node){
-		this.changeListingParams();
+		this.reloadListing();
+		return this;
 	},
 
 	/**
 	 * @returns {Mall.listing}
 	 */
-	changeListingParams: function(){
-		var forceObject = {
-			start: 0
-		}
+	reloadListing: function(){
 		this._doAjaxRequest();
+		return this;
+	},
+	
+	/**
+	 * @returns {Mall.listing}
+	 */
+	changeListingParams: function(params){
+		params = params || {};
+		
+		if(typeof params.sort != "undefined"){
+			this.setSort(params.sort);
+		}
+		
+		if(typeof params.dir != "undefined"){
+			this.setDir(params.dir);
+		}
+		
+		/**
+		 * @todo add more params
+		 */
+		
+		this.reloadListing();
 		return this;
 	},
 	
@@ -801,18 +819,18 @@ Mall.listing = {
 	/**
 	 * @returns {void}
 	 */
-	_doAjaxRequest: function(forceObject){
+	_doAjaxRequest: function(){
 		this._ajaxStop();
-		this._ajaxStart(forceObject);
+		this._ajaxStart();
 	},
 	
 	/**
 	 * @returns {void}
 	 */
-	_ajaxStart: function(forceObject){
+	_ajaxStart: function(){
 		var self = this;
 		this._ajaxTimer = setTimeout(
-			function(){self._ajaxSend.apply(self, forceObject)}, 
+			function(){self._ajaxSend.apply(self)}, 
 			this.getAjaxTimeout()
 		);
 	},
@@ -915,51 +933,87 @@ Mall.listing = {
     },
 
 
+	initDroplists: function(scope){
+		var headList = jQuery('.button-select', scope),
+			listSelect = jQuery('.dropdown-select ul', scope);
+	
+		headList.on('click', function(event) {
+            event.preventDefault();
+            jQuery(this).next('.dropdown-select').stop(true).slideToggle(200);
+        });
+		
+        jQuery(document).click(function(e) {
+            if (!jQuery(e.target).parents().andSelf().is('.select-group')) {
+                jQuery(".dropdown-select").slideUp(200);
+            }
+        });
+		
+        listSelect.on('click', 'a', function(event) {
+            var thisVal = jQuery(this).html();
+            jQuery(this).closest('.select-group').find('.button-select')
+                .html(thisVal+'<span class="down"></span>');
+            jQuery(this).closest('.dropdown-select').slideUp(200);
+        });
+	},
+	
+
 	/**
 	 * 
 	 * @param {type} scope
 	 * @returns {undefined}
 	 */
 	initSortEvents: function(scope){
-		var scope = scope || jQuery("html");
-		var headList = jQuery('.button-select.no-ajax', scope);
+		var scope = scope || jQuery("#sort-criteria");
+		this.initDroplists(scope);
+		var self = this;
 		var listSelect = jQuery('.dropdown-select ul', scope);
-		headList.on('click', function(event) {
-			event.preventDefault();
-			jQuery(this).next('.dropdown-select').stop(true).slideToggle(200);
-		});
 		listSelect.on('click', 'a', function(event) {
-			event.preventDefault();
-			var thisVal =jQuery(this).html();
-			jQuery(this).closest('.select-group').find('.button-select').html(thisVal+'<span class="down"></span>');
-			jQuery(this).closest('.dropdown-select').slideUp(200);
-		});
-		jQuery(document).click(function(e) {
-			if (!jQuery(e.target).parents().andSelf().is('.select-group')) {
-				jQuery(".dropdown-select", scope).slideUp(200);
-			}
+			self.changeListingParams({
+				sort: jQuery(this).data('sort'),
+				dir: jQuery(this).data('dir')
+			});
 		});
 	},
-
-    /**
-     * Attaches event for show more button in filter section.
-     *
-     * @returns {Mall.listing}
-     */
-    attachShowMoreEvent: function(scope) {
-        scope.find(".showmore-filters").on("click", function(e) {
-            var target = e.target;
-            e.preventDefault();
-            if(jQuery(this).attr("data-state") == "0") {
-                jQuery(this).parents(".content").find("[data-state='hidden']").show(500);
-            } else {
-                jQuery(this).parents(".content").find("[data-state='hidden']").hide(500);
-            }
-            Mall.listing.toggleShowMoreState(this);
+	
+	attachMiscActions: function(scope){
+		var filters = jQuery(".section", scope),
+			self = this;
+		
+		filters.each(function(){
+			var filter = jQuery(this),
+				clearWrapper = filter.find(".action.clear"),
+				clearButton = clearWrapper.find("a");
+			
+			jQuery(".showmore-filters", filter).on("click", function(e) {
+				var target = e.target;
+				e.preventDefault();
+				if(jQuery(this).attr("data-state") == "0") {
+					jQuery(this).parents(".content").find("[data-state='hidden']").show(500);
+				} else {
+					jQuery(this).parents(".content").find("[data-state='hidden']").hide(500);
+				}
+				Mall.listing.toggleShowMoreState(this);
+			});
+			
+			// Handle clear button
+			
+			filter.on('change', ':checkbox', function(e) {
+				if (filter.find(":checkbox:checked").length) {
+					clearWrapper.removeClass("hidden");
+				} else {
+					clearWrapper.addClass("hidden");
+				}
+			});
+			
+			clearButton.on('click', function(event) {
+				event.preventDefault();
+				clearWrapper.addClass('hidden');
+			});
         });
+		
+	},
 
-        return this;
-    },
+ 
 
     /**
      * Attaches events to color filter.
@@ -1012,21 +1066,6 @@ Mall.listing = {
 				};
 
 			})
-
-			var filterColor = el.parents(".filter-color");
-			var btn = filterColor.find('.action');
-			
-			filterColor.on('click', ':checkbox', function(event) {
-				
-				btn.addClass('hidden');
-				
-				if (jQuery(':checkbox:checked', filterColor).length) {
-					btn.removeClass('hidden');
-				}
-			});
-			filterColor.on('click', '.clear', function(event) {
-				btn.addClass('hidden');
-			});
 		});
 
         return this;
@@ -1089,28 +1128,11 @@ Mall.listing = {
      * @returns {Mall.listing}
      */
     attachFilterSizeEvents: function(scope) {
-        var filterSize = jQuery('.filter-size', scope),
-            btnClear = jQuery('.action.clear', scope),
-            filterSizeLength;
+        var filterSize = jQuery('.filter-size', scope);
 		var self = this;
 
         jQuery(".filter-size", scope).find(":checkbox").on("change", function(e) {
 			self.nodeChanged(jQuery(this));
-        });
-
-        filterSize.on('change', ':checkbox', function(e) {
-            filterSizeLength = jQuery(this).parents(".filter-size").find(':checked').length;
-            if (filterSizeLength > 0) {
-                jQuery(this).parents(".filter-size").find("div.action.clear").removeClass("hidden");
-            } else {
-                jQuery(this).parents(".filter-size").find("div.action.clear").addClass("hidden");
-            }
-        });
-
-        filterSize.on('click', '.clear', function(event) {
-            event.preventDefault();
-            jQuery(this).closest('div.action.clear').addClass('hidden');
-
         });
 
         return this;
@@ -1122,29 +1144,11 @@ Mall.listing = {
      * @returns {Mall.listing}
      */
     attachFilterDroplistEvents: function(scope) {
-        var headList = jQuery('.button-select.ajax', scope),
-            listSelect = jQuery('.dropdown-select ul', scope),
-            thisVal,
-            thisUrl,
+        var listSelect = jQuery('.dropdown-select ul', scope),
 			self = this;
 	
-        headList.on('click', function(event) {
-            event.preventDefault();
-            jQuery(this).next('.dropdown-select').stop(true).slideToggle(200);
-        });
         listSelect.on('click', 'a', function(event) {
-            event.preventDefault();
-            thisVal = jQuery(this).html();
-            thisUrl = jQuery(this).attr("data-url");
-            jQuery(this).closest('.select-group').find('.button-select')
-                .html(thisVal+'<span class="down"></span>');
-            jQuery(this).closest('.dropdown-select').slideUp(200);
 			self.nodeChanged(jQuery(this));
-        });
-        jQuery(document).click(function(e) {
-            if (!jQuery(e.target).parents().andSelf().is('.select-group')) {
-                jQuery(".dropdown-select").slideUp(200);
-            }
         });
 
         return this;
@@ -1272,19 +1276,6 @@ Mall.listing = {
         }
 
         return this;
-    },
-
-    /**
-     * Reloads listing - takes current params in count.
-     *
-     */
-    reloadListing: function() {
-        var protocol  = window.location.protocol,
-            host = window.location.host,
-            pathname = window.location.pathname;
-
-        window.location.href = protocol + "//" + host + pathname + "?"
-            + jQuery.param(this.getQueryParams());
     },
 
     /**
@@ -1550,7 +1541,7 @@ Mall.listing = {
 
     /**
      * Returns current filters.
-     *
+     * @deprecated since getFqByInterface
      * @returns {*}
      */
     getFiltersArray: function() {
@@ -1746,6 +1737,8 @@ Mall.listing = {
     /**
      * Sets current filters.
      *
+	 * @deprecated
+	 * 
      * @param filters
      * @returns {Mall.listing}
      */
