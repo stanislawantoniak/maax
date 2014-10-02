@@ -2342,7 +2342,7 @@ html.fb-static .fb-slidebar, .fb-slidebar.fb-static {
 #active-filters dl dd .label, #view-current-filter dl dd .label {
   display: block;
   float: left;
-  padding: 0px 20px 0 6px;
+  padding: 0px 6px 0 6px;
   min-width: 60px;
   display: inline-block;
   float: left;
@@ -2351,7 +2351,6 @@ html.fb-static .fb-slidebar, .fb-slidebar.fb-static {
   position: relative; }
 /* line 40, ../sass/layout/modules/_current-filter.scss */
 #active-filters dl dd .fa, #view-current-filter dl dd .fa {
-  position: absolute;
   right: 5px;
   top: 4px;
   margin-left: 5px; }
@@ -2363,28 +2362,34 @@ html.fb-static .fb-slidebar, .fb-slidebar.fb-static {
   /* line 48, ../sass/layout/modules/_current-filter.scss */
   #active-filters dl dd.action, #view-current-filter dl dd.action {
     position: absolute;
-    top: auto;
-    right: 0px;
-    bottom: 11px; } }
+    top: 1px;
+    right: 0px; } }
 /* line 66, ../sass/layout/modules/_current-filter.scss */
 #active-filters .actionViewFilter, #view-current-filter .actionViewFilter {
-  position: absolute;
-  left: 0px;
-  bottom: 10px;
-  width: 40%;
-  min-width: 168px; }
+  min-width: 205px;
+  margin-left: -15px; }
 @media (min-width: 768px) and (max-width: 768px) {
   /* line 73, ../sass/layout/modules/_current-filter.scss */
   #active-filters .actionViewFilter.visible-xs, #view-current-filter .actionViewFilter.visible-xs {
     display: block !important; } }
-/* line 80, ../sass/layout/modules/_current-filter.scss */
+/* line 78, ../sass/layout/modules/_current-filter.scss */
+#active-filters .actionViewFilter .fa, #view-current-filter .actionViewFilter .fa {
+  color: white; }
+/* line 83, ../sass/layout/modules/_current-filter.scss */
 #active-filters .backToCategory, #view-current-filter .backToCategory {
   position: absolute;
   right: 15px;
   top: 10px; }
-/* line 86, ../sass/layout/modules/_current-filter.scss */
+/* line 89, ../sass/layout/modules/_current-filter.scss */
 #active-filters .breadcrumb, #view-current-filter .breadcrumb {
   margin-bottom: 0; }
+/* line 93, ../sass/layout/modules/_current-filter.scss */
+#active-filters .clearfix, #view-current-filter .clearfix {
+  margin-bottom: 0px; }
+@media (max-width: 768px) {
+  /* line 97, ../sass/layout/modules/_current-filter.scss */
+  #active-filters #filters-btn dl, #view-current-filter #filters-btn dl {
+    margin-bottom: 0px; } }
 
 /* line 2, ../sass/layout/modules/_selected-styled.scss */
 .sbHolder {
