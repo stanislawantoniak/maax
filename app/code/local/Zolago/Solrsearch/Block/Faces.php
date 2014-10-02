@@ -363,22 +363,36 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         $solrData = $this->getSolrData();
         $outBlock = $this->_getRegularFilterBlocks($solrData);
         $additionalBlocks = array(
-                                $this->getCategoryBlock($solrData),
-                                $this->getPriceBlock($solrData),
-                                $this->getFlagBlock($solrData),
-                                $this->getRatingBlock($solrData),
+                               'category' => $this->getCategoryBlock($solrData),
+                                'price' =>$this->getPriceBlock($solrData),
+                                'flag' => $this->getFlagBlock($solrData),
+                                'rating' => $this->getRatingBlock($solrData),
                             );
-        $additionalBlocks = array_reverse($additionalBlocks);
-        foreach($additionalBlocks as $block) {
-            if($block) {
-                array_unshift($outBlock, $block);
-            }
+        // block order #484
+        $finishBlock = array ();
+        if ($additionalBlocks['category']) {        
+            $finishBlock[] = $additionalBlocks['category'];
         }
         foreach($outBlock as $block) {
+            if($block) {
+                $finishBlock[] = $block;
+            }
+        }
+        if ($additionalBlocks['flag']) {
+            $finishBlock[] = $additionalBlocks['flag'];
+        }
+        if ($additionalBlocks['rating']) {
+            $finishBlock[] = $additionalBlocks['rating'];
+        }
+        if ($additionalBlocks['price']) {
+            echo 'piceprice';
+            $finishBlock[] = $additionalBlocks['price'];
+        }
+        foreach($finishBlock as $block) {
             $block->setFilterContainer($this);
             $block->setSolrModel($this->solrModel);
         }
-        return $outBlock;
+        return $finishBlock;
     }
 	
 	/**
