@@ -40,6 +40,7 @@
                 <?php $_value = $this->getValueObject($item);?>
                 <?php $_color = $_value->getColor();?>
                 <?php $_image = $_value->getNormalImage();?>
+				<?php $_imageHover = $_value->getNormalHoveredImage();?>
                 <?php
                 if(!$isOptionSelected && $this->isItemActive($item)) {
                     $isOptionSelected = true;

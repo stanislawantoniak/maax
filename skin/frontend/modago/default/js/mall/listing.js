@@ -99,12 +99,13 @@ Mall.listing = {
 	/**
 	 * Currently show more
 	 */
-	_currend_show_more: {},
+	_current_show_more: {},
 
     /**
      * Performs initialization for listing object.
      */
     init: function () {
+		this.resetForm();
         this.initFilterEvents();
         this.initSortEvents();
         this.initActiveEvents();
@@ -119,6 +120,10 @@ Mall.listing = {
         this.loadToQueue();
         this.setLoadMoreLabel();
     },
+	
+	resetForm: function(){
+		this.getFilters().find("form").get(0).reset();
+	},
 
 	initFilterEvents: function(scope){
 		scope = scope || jQuery("#solr_search_facets");
@@ -138,50 +143,44 @@ Mall.listing = {
 	// Do remember roll downs & showmors
 	preprocessFilterContent: function(content){
 		var self = this;
-		jQuery.each(this._current_opened, function(idx){
-			var el = jQuery("#" + idx);
-			if(this){
-				
-			}else{
-				
+		jQuery.each(this._current_opened, function(idx, value){
+			var el = jQuery("#" + idx, content);
+			if(!el.length){
+				return;
 			}
+			self._doRollSection(el.parent(), value, false);
 		});
 	},
 	
 	_doRollSection: function(section, state, animate){
 		var title = section.find("h3"),
-			content = section.find(".content");
-		title.children('i').toggleClass('fa-chevron-down');
-		
+			content = section.find(".content"),
+			i = title.find('i');
+	
 		if(animate){
 			if(state){
-				content.
-					stop(true,true).
-					slideDown(200, function(){
-						title.removeClass("closed").addClass("open");
-					});
-				title.find('i').
-					removeClass('fa-chevron-up').
-					addClass('fa-chevron-down');
+				content.stop(true,true).slideDown(200, function(){
+					title.removeClass("closed").addClass("open");
+				});
+				
 			}else{
 				content.stop(true,true).slideUp(100, function(){
-					title.children('i').
-						removeClass('fa-chevron-down').
-						addClass('fa-chevron-up');
 					title.removeClass("open").addClass("closed");
-				})
+				});
 			}
 		}else{
-			content.toggle(function(){
-				content.show();
-			},function(){
-				content.hide();
-			});
 			if(state){
+				content.show();
 				title.removeClass("closed").addClass("open");
 			}else{
+				content.hide();
 				title.removeClass("open").addClass("closed");
 			}
+		}
+		if(state){
+			i.removeClass('fa-chevron-down').addClass('fa-chevron-up');
+		}else{
+			i.removeClass('fa-chevron-up').addClass('fa-chevron-down');
 		}
 	},
 	
@@ -875,8 +874,8 @@ Mall.listing = {
 		// Collect 
 		var filters = this.getFilters().find(".section"),
 			self = this;
-		this._current_opened = {};
-		this._current_show_more = {};
+	
+		// Overrride existing fields - remember inactive diel
 		filters.each(function(){
 			var el = jQuery(this),
 				id = el.find(".content").attr("id"),
@@ -913,7 +912,7 @@ Mall.listing = {
 		return this;
 	},
 	
-	_ajaxTimeout: 100, 
+	_ajaxTimeout: 50, 
 	_ajaxTimer: null, 
 	
 	/**
@@ -984,7 +983,7 @@ Mall.listing = {
 	showAjaxLoading: function(){
 		if(!this._loading){
 			var overlay = jQuery("<div>").css({
-				"background":	"rgba(0,0,0,0.6)",
+				"background":	"rgba(255,255,255,0.8) url('/skin/frontend/modago/default/images/modago-ajax-loader.gif') center center no-repeat",
 				"position":		"fixed",
 				"width":		"100%",
 				"height":		"100%",
@@ -992,7 +991,7 @@ Mall.listing = {
 				"top":			"0",
 				"z-index":		"1000000",
 				"color":		"#fff"
-			}).text("Loading...")
+			});
 			this._loading = jQuery(overlay);
 			jQuery("body").append(this._loading);
 		}
@@ -1143,12 +1142,9 @@ Mall.listing = {
             });
 			
 			// Handle showmore
-			sm.on("click", function(e) {
-				console.log("Click");
-				self._doShowMore(filter, !jQuery(this).attr("data-state"), true);
-				
-				console.log("Click after");
-				return false;
+			sm.on("click", function(event) {
+				self._doShowMore(filter, !(jQuery(this).attr("data-state")=="1"), true);
+                event.preventDefault();
 			});
 			
 			// Handle clear button

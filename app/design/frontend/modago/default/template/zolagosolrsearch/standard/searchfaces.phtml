@@ -3,6 +3,7 @@
     <div class="sidebar" id="solr_search_facets">
         <div class=" block-filter" >
                 <form name="searchFacets" method="get"
+					  autocomplete="false"
                       action="<?php echo $this->helper('solrsearch')->getResultUrl() ?>">
                     <input type="hidden" name="q" value="<?php echo $this->getData('querytext') ?>"/>
                     <?php if ($this->isShoppingOptionsActive()): ?>
