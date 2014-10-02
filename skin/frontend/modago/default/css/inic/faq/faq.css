@@ -128,7 +128,8 @@ color: #2F2F2F;
     float: left;
     height: 25px;
     margin: 0px;
-    width: 25px;
+    width: 29px;
+    padding-left: 0px;
 }
 .faq-content .bg-w {
     background: none repeat scroll 0 0 #fff;
