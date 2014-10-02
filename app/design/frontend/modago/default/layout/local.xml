@@ -1168,12 +1168,37 @@
         </reference>
 
         <reference name="content">
-
             <block type="cms/block" name="help-page">
                 <action method="setBlockId"><block_id>help-page</block_id></action>
             </block>
-
         </reference>
     </help_index_index>
-    
+
+    <help_contact_vendor>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/1column.phtml</template>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="cms/block" name="help-contact-vendor">
+                <action method="setBlockId"><block_id>help-contact-vendor</block_id></action>
+            </block>
+        </reference>
+    </help_contact_vendor>
+
+    <help_contact_gallery>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/1column.phtml</template>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="cms/block" name="help-contact-gallery">
+                <action method="setBlockId"><block_id>help-contact-gallery</block_id></action>
+            </block>
+        </reference>
+    </help_contact_gallery>
+
+
 </layout>
