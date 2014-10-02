@@ -1501,27 +1501,7 @@ jQuery.noConflict();
             });
 
         }
-        dropDownSelectListNoAjax();
-        function dropDownSelectListNoAjax() {
-            var headList = $('.button-select.no-ajax');
-            var listSelect = $('.dropdown-select ul');
-            headList.on('click', function(event) {
-                event.preventDefault();
-                $(this).next('.dropdown-select').stop(true).slideToggle(200);
-            });
-            listSelect.on('click', 'a', function(event) {
-                event.preventDefault();
-                var thisVal = $(this).html();
-                $(this).closest('.select-group').find('.button-select').html(thisVal+'<span class="down"></span>');
-                $(this).closest('.dropdown-select').slideUp(200);
-            });
-            $(document).click(function(e) {
-                if (!$(e.target).parents().andSelf().is('.select-group')) {
-                    $(".dropdown-select").slideUp(200);
-                }
-            });
-
-        }
+        
 
         var scroll = $('body').find('.mCustomScrollbar');
         if (scroll.length >= 1) {

@@ -96,6 +96,7 @@ Mall.listing = {
      */
     init: function () {
         this.initFilterEvents();
+        this.initSortEvents();
         // set next load start
         this.setLoadNextStart(this.getCurrentVisibleItems());
         this.reloadListingItemsAfterPageLoad();
@@ -120,28 +121,18 @@ Mall.listing = {
         this.attachFilterPriceSliderEvents(scope);
         this.attachFilterSizeEvents(scope);
 	},
+	
 
     /**
      * Loads products after clicking on Load more button.
      *
      * @deprecated since loadMoreProducts method intruduced.
      */
-    getMoreProducts: function () {
-        var query = this.getQuery(),
-            page = this.getPage(),
-            sort = this.getSort(),
-            dir = this.getDir(),
-            scat = this.getScat(),
-            filtersArray = this.getFiltersArray();
-
-        OrbaLib.Listing.getProducts({
-            q: query,
-            page: page,
-            sort: sort,
-            dir: dir,
-            scat: scat,
-            fq: filtersArray === [] ? [] : filtersArray.fq
-        }, Mall.listing.getMoreProductsCallback);
+    getMoreProducts: function (){
+        OrbaLib.Listing.getProducts(
+			this.getQueryParamsAsArray(), 
+			Mall.listing.getMoreProductsCallback
+		);
     },
 
     /**
@@ -324,27 +315,18 @@ Mall.listing = {
      * Loads products to queue.
      */
     loadToQueue: function () {
-        // ajax load
-        var query = this.getQuery(),
-            page = this.getPage(),
-            sort = this.getSort(),
-            dir = this.getDir(),
-            scat = this.getScat(),
-            start = this.getLoadNextStart(),
-            offset = this.getLoadNextOffset(),
-            filtersArray = this.getFiltersArray();
+		var forceObject = {
+			start: this.getLoadNextStart(),
+			rows: this.getLoadNextOffset()
+		}
 
         this.setQueueLoadLock();
-        OrbaLib.Listing.getProducts({
-            q: query,
-            page: page,
-            sort: sort,
-            dir: dir,
-            scat: scat,
-            start: start,
-            rows: offset,
-            fq: filtersArray === [] ? [] : filtersArray.fq
-        }, Mall.listing.appendToQueueCallback);
+		
+		// Ajax load
+        OrbaLib.Listing.getProducts(
+			this.getQueryParamsAsArray(forceObject), 
+			Mall.listing.appendToQueueCallback
+		);
     },
 
     /**
@@ -790,11 +772,14 @@ Mall.listing = {
 	 * @returns {Mall.listing}
 	 */
 	changeListingParams: function(){
+		var forceObject = {
+			start: 0
+		}
 		this._doAjaxRequest();
 		return this;
 	},
 	
-	_ajaxTimeout: 500, 
+	_ajaxTimeout: 100, 
 	_ajaxTimer: null, 
 	
 	/**
@@ -816,18 +801,18 @@ Mall.listing = {
 	/**
 	 * @returns {void}
 	 */
-	_doAjaxRequest: function(){
+	_doAjaxRequest: function(forceObject){
 		this._ajaxStop();
-		this._ajaxStart();
+		this._ajaxStart(forceObject);
 	},
 	
 	/**
 	 * @returns {void}
 	 */
-	_ajaxStart: function(){
+	_ajaxStart: function(forceObject){
 		var self = this;
 		this._ajaxTimer = setTimeout(
-			function(){self._ajaxSend.apply(self)}, 
+			function(){self._ajaxSend.apply(self, forceObject)}, 
 			this.getAjaxTimeout()
 		);
 	},
@@ -844,11 +829,11 @@ Mall.listing = {
 	/**
 	 * @returns {void}
 	 */
-	_ajaxSend: function(){
+	_ajaxSend: function(forceObject){
 		var self = this;
 		this.showAjaxLoading();
 		OrbaLib.Listing.getBlocks(
-			this.getQueryParamsAsArray(), 
+			this.getQueryParamsAsArray(forceObject), 
 			function(response){self._handleAjaxRepsonse(response)}
 		);
 	},
@@ -894,9 +879,13 @@ Mall.listing = {
 		this.initFilterEvents(filters);
 		this.getFilters().replaceWith(filters);
 		
+		// Init toolbar
+		var toolbar = jQuery(content.toolbar);
+        this.initSortEvents(toolbar);
+		this.getToolbar().replaceWith(toolbar);
+		
 		this.getHeader().replaceWith(jQuery(content.header));
 		this.getActive().replaceWith(jQuery(content.active));
-		this.getToolbar().replaceWith(jQuery(content.toolbar));
 	},
 	
 	
@@ -924,6 +913,33 @@ Mall.listing = {
     getCurrentMobileFilterState: function() {
         return this._current_mobile_filter_state;
     },
+
+
+	/**
+	 * 
+	 * @param {type} scope
+	 * @returns {undefined}
+	 */
+	initSortEvents: function(scope){
+		var scope = scope || jQuery("html");
+		var headList = jQuery('.button-select.no-ajax', scope);
+		var listSelect = jQuery('.dropdown-select ul', scope);
+		headList.on('click', function(event) {
+			event.preventDefault();
+			jQuery(this).next('.dropdown-select').stop(true).slideToggle(200);
+		});
+		listSelect.on('click', 'a', function(event) {
+			event.preventDefault();
+			var thisVal =jQuery(this).html();
+			jQuery(this).closest('.select-group').find('.button-select').html(thisVal+'<span class="down"></span>');
+			jQuery(this).closest('.dropdown-select').slideUp(200);
+		});
+		jQuery(document).click(function(e) {
+			if (!jQuery(e.target).parents().andSelf().is('.select-group')) {
+				jQuery(".dropdown-select", scope).slideUp(200);
+			}
+		});
+	},
 
     /**
      * Attaches event for show more button in filter section.
@@ -1293,17 +1309,27 @@ Mall.listing = {
         return q;
     },
 	
-	getQueryParamsAsArray: function(){
-		var out = [
-			{name: "q", value: this.getQuery()},
-			{name: "page", value: this.getPage()},
-			{name: "sort", value: this.getSort()},
-			{name: "dir", value: this.getDir()},
-			{name: "scat", value: this.getScat()},
-			{name: "rows", value: this.getScrollLoadOffset()},
-			{name: "start", value: 0}
-		];
+	getQueryParamsAsArray: function(forceObject){
+		var forceObject = forceObject || {};
+		var defaults = {
+			q: this.getQuery(),
+            page: this.getPage(),
+            sort: this.getSort(),
+            dir: this.getDir(),
+            scat: this.getScat(),
+            rows: this.getScrollLoadOffset(),
+            start: 0
+		};
+		var out = [];
+	
+		jQuery.extend(defaults, forceObject);
 		
+		// Collect defualt params
+		jQuery.each(defaults, function(index){
+			out.push({name: index, value: this});
+		});
+		
+		// Collect fq's
 		jQuery.each(this.getFqByInterface(), function(index){
 			out.push({name: this.name, value: this.value});
 		});
