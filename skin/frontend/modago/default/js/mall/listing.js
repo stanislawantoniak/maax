@@ -1007,6 +1007,7 @@ Mall.listing = {
 			
 			clearButton.on('click', function(event) {
 				event.preventDefault();
+				self.removeSingleFilterType(this);
 				clearWrapper.addClass('hidden');
 			});
         });
@@ -1337,10 +1338,10 @@ Mall.listing = {
 		var filter = jQuery(filter);
 		
 		filter.parents(".section").
-				find(":checkbox").
-				prop("checked", false);
+			find(":checkbox").
+			prop("checked", false);
 		
-		this.changeListingParams();
+		this.reloadListing();
 
         return this;
     },
