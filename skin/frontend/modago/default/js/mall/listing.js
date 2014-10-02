@@ -90,6 +90,16 @@ Mall.listing = {
      * Current filters state - mobile / desktop.
      */
     _current_mobile_filter_state: 0,
+	
+	/**
+	 * Currently opened sections
+	 */
+	_current_opened: {},
+	
+	/**
+	 * Currently show more
+	 */
+	_currend_show_more: {},
 
     /**
      * Performs initialization for listing object.
@@ -110,6 +120,7 @@ Mall.listing = {
 
 	initFilterEvents: function(scope){
 		scope = scope || jQuery("#solr_search_facets");
+		this.preprocessFilterContent(scope);
 		this.initDroplists(scope);
         this.attachMiscActions(scope);
         this.attachFilterColorEvents(scope);
@@ -120,6 +131,85 @@ Mall.listing = {
         this.attachFilterFlagEvents(scope);
         this.attachFilterPriceSliderEvents(scope);
         this.attachFilterSizeEvents(scope);
+	},
+	
+	// Do remember roll downs & showmors
+	preprocessFilterContent: function(content){
+		var self = this;
+		jQuery.each(this._current_opened, function(idx){
+			var el = jQuery("#" + idx);
+			if(this){
+				
+			}else{
+				
+			}
+		});
+	},
+	
+	_doRollSection: function(section, state, animate){
+		var title = section.find("h3"),
+			content = section.find(".content");
+		title.children('i').toggleClass('fa-chevron-down');
+		
+		if(animate){
+			if(state){
+				content.
+					stop(true,true).
+					slideDown(200, function(){
+						title.removeClass("closed").addClass("open");
+					});
+				title.find('i').
+					removeClass('fa-chevron-up').
+					addClass('fa-chevron-down');
+			}else{
+				content.stop(true,true).slideUp(100, function(){
+					title.children('i').
+						removeClass('fa-chevron-down').
+						addClass('fa-chevron-up');
+					title.removeClass("open").addClass("closed");
+				})
+			}
+		}else{
+			content.toggle(function(){
+				content.show();
+			},function(){
+				content.hide();
+			});
+			if(state){
+				title.removeClass("closed").addClass("open");
+			}else{
+				title.removeClass("open").addClass("closed");
+			}
+		}
+	},
+	
+	_doShowMore: function(section, state, animate){
+		var link = section.find(".showmore-filters"),
+			content = section.find("[data-state='hidden']");
+		
+		if(animate){
+				if(state) {
+					content.show(500, function(){
+						link.text("Pokaż mniej");
+						link.attr("data-state", "1");	
+					});
+				} else {
+					content.hide(500, function(){
+						link.text("Pokaż więcej");
+						link.attr("data-state", "0");
+					});
+				}
+		}else{
+			if(state){
+				content.show();
+				link.text("Pokaż mniej");
+				link.attr("data-state", "1");
+			}else{
+				content.hide();
+				link.text("Pokaż więcej");
+				link.attr("data-state", "0");
+			}
+		}
 	},
 	
 
@@ -771,8 +861,32 @@ Mall.listing = {
 	 * @returns {Mall.listing}
 	 */
 	reloadListing: function(){
+		this._captureListingMeta();
 		this._doAjaxRequest();
 		return this;
+	},
+	
+	/**
+	 * 
+	 */
+	_captureListingMeta: function(){
+		// Collect 
+		var filters = this.getFilters().find(".section"),
+			self = this;
+		this._current_opened = {};
+		this._current_show_more = {};
+		filters.each(function(){
+			var el = jQuery(this),
+				id = el.find(".content").attr("id"),
+				sm = el.find(".showmore-filters");
+				
+			self._current_opened[id] = el.find("h3").hasClass("open");
+			
+			// Show more is optional
+			if(sm.length){
+				self._current_show_more[id] = sm.attr("data-state")=="1";
+			}
+		});
 	},
 	
 	/**
@@ -892,6 +1006,11 @@ Mall.listing = {
 	
 	
 	rebuildContents: function(content){
+		
+		/**
+		 * @todo handle error
+		 */
+		
 		// All filters
 		var filters = jQuery(content.filters);
 		this.initFilterEvents(filters);
@@ -982,21 +1101,30 @@ Mall.listing = {
 		filters.each(function(){
 			var filter = jQuery(this),
 				clearWrapper = filter.find(".action.clear"),
-				clearButton = clearWrapper.find("a");
+				clearButton = clearWrapper.find("a"),
+				title = filter.find("h3"),
+				sm = filter.find(".showmore-filters");
 			
-			jQuery(".showmore-filters", filter).on("click", function(e) {
-				var target = e.target;
-				e.preventDefault();
-				if(jQuery(this).attr("data-state") == "0") {
-					jQuery(this).parents(".content").find("[data-state='hidden']").show(500);
-				} else {
-					jQuery(this).parents(".content").find("[data-state='hidden']").hide(500);
-				}
-				Mall.listing.toggleShowMoreState(this);
+			// Handle roll up / down
+			title.on('click', function(event) {
+                self._doRollSection(
+					filter, 
+					!title.hasClass("open"), 
+					true
+				);
+                event.preventDefault();
+            });
+			
+			// Handle showmore
+			sm.on("click", function(e) {
+				console.log("Click");
+				self._doShowMore(filter, !jQuery(this).attr("data-state"), true);
+				
+				console.log("Click after");
+				return false;
 			});
 			
 			// Handle clear button
-			
 			filter.on('change', ':checkbox', function(e) {
 				if (filter.find(":checkbox:checked").length) {
 					clearWrapper.removeClass("hidden");
@@ -1004,12 +1132,12 @@ Mall.listing = {
 					clearWrapper.addClass("hidden");
 				}
 			});
-			
 			clearButton.on('click', function(event) {
 				event.preventDefault();
 				self.removeSingleFilterType(this);
 				clearWrapper.addClass('hidden');
 			});
+			
         });
 		
 	},
@@ -1260,24 +1388,7 @@ Mall.listing = {
 	unmarkPrice: function () {
 //		jQuery("#filter_price").find("input:checkbox").attr('checked',false);
 	},
-    /**
-     * Toggles show more / hide more state link in filter section.
-     *
-     * @param item
-     * @returns {Mall.listing}
-     */
-    toggleShowMoreState: function(item) {
-        var state = jQuery(item).attr("data-state");
-        if(state == "0") {
-            jQuery(item).text("Pokaż mniej");
-            jQuery(item).attr("data-state", "1");
-        } else {
-            jQuery(item).text("Pokaż więcej");
-            jQuery(item).attr("data-state", "0");
-        }
 
-        return this;
-    },
 
     /**
      * Returns complete array of params for querying solr.
