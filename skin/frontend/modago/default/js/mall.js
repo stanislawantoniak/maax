@@ -867,11 +867,13 @@ jQuery(document).ready(function() {
             if( n < 4 ) {
                 height = n * height;
                 jQuery('.size-box .mCSB_scrollTools, .size-box .mCSB_1_scrollbar').css("visibility", "hidden");
+                jQuery('.size-box .mCSB_container').css("margin-right", "0px");
             } else {
                 height = 4 * height;
             }
 
-            jQuery('#sbOptionsWrapper_' + uid).css('max-height', height);
+            jQuery('.size-box #sbOptionsWrapper_' + uid).css('max-height', height);
+            jQuery('.size-box #sbOptionsWrapper_' + uid).css('width', jQuery('.size-box .sbHolder').outerWidth());
 
         },
 
