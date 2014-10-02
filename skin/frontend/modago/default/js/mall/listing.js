@@ -107,6 +107,8 @@ Mall.listing = {
     init: function () {
         this.initFilterEvents();
         this.initSortEvents();
+        this.initActiveEvents();
+
         // set next load start
         this.setLoadNextStart(this.getCurrentVisibleItems());
         this.reloadListingItemsAfterPageLoad();
@@ -1023,7 +1025,24 @@ Mall.listing = {
 		
 		this.getHeader().replaceWith(jQuery(content.header));
 		this.getActive().replaceWith(jQuery(content.active));
+
+        this.initActiveEvents();
 	},
+
+    initActiveEvents: function() {
+        var active = Mall.listing.getActiveLabel();
+        var remove = Mall.listing.getActiveRemove();
+
+        active.on("click", function() {
+            console.log("you cliked "+jQuery(this).attr("for"));
+        });
+        remove.on("click", function(e) {
+            active.each(function() {
+                jQuery(this).trigger("click");
+            });
+            return false;
+        });
+    },
 	
 	
 	getHeader: function(){
@@ -1033,6 +1052,14 @@ Mall.listing = {
 	getActive: function(){
 		return jQuery("#active-filters");
 	},
+
+    getActiveLabel: function() {
+        return jQuery(".active-filter-label");
+    },
+
+    getActiveRemove: function() {
+        return jQuery(".active-filters-remove");
+    },
 	
 	getFilters: function(){
 		return jQuery("#solr_search_facets");
