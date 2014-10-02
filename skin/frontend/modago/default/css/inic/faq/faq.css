@@ -88,6 +88,7 @@ color: #2F2F2F;
 /*Search Area*/
 .faq #searchform {
     margin-bottom: 0px;
+    margin-left: 0px;
 }
 
 .faq #searchform label {
