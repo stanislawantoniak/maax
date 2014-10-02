@@ -946,6 +946,9 @@
 
 	<customer_account_index translate="label">
 		<label>Customer My Account Dashboard</label>
+        <action method="addBodyClass">
+            <value>customer-account-index</value>
+        </action>
 		<!-- Mage_Customer -->
 		<reference name="root">
             <action method="setTemplate">
