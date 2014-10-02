@@ -140,6 +140,7 @@ color: #2F2F2F;
 .faq-content .bg-w.main {
     padding: 0 20px 50px 20px;
     height: 100%;
+    min-height: 500px;
 }
 .faq-content .bg-w h1 {
     font-size: 18px;

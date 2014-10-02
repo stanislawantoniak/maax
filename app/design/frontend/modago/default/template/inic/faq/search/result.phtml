@@ -1,7 +1,8 @@
 <?php $_faqResult = $this->getSearch(); ?>
 <?php 
 	$flg=false;
-	$keyword=$this->getRequest()->getParam('keyword'); 
+	$keyword=$this->getRequest()->getParam('keyword');
+
 	$category="";
     $id = "";
 	if($this->getRequest()->getParam('cat_id')){
@@ -10,51 +11,80 @@
 		$flg=true;
 	}
 ?>
-<div class="calegory-faq-list">
-<?php if ($_faqResult): ?>
-<div class="page-title" style="overflow: visible;">
-	<?php if($id!== "" && $keyword!==""&& $category!==""): ?>
-		<h1><?php echo $this->__('Search Result For - "%s" from category "%s"',$keyword,$category->getName()); ?></h1>
-	<?php elseif($id="" && $keyword!= ""): ?>
-		<h1><?php echo $this->__('Search Result For : "%s"',$keyword); ?></h1>
-	<?php elseif($category!==""): ?>
-		<h1><?php echo $this->__('Search Result From category : "%s"',$category->getName()); ?></h1>
-	<?php endif; ?>
+<div id="content" class="container-fluid faq-content account-content">
+    <div class="">
+        <div class="col-sm-12">
+            <div id="content-main">
+                <div class="my-account">
+                    <div class="wrapp-section bg-w visible-xs">
+                        <h1><?php echo $this->__('Help'); ?></h1>
+                    </div>
+
+                    <div class="bg-w main">
+                        <?php if ($id !== "" && $keyword !== "" && $category !== ""): ?>
+                            <h3><?php echo $this->__('Search Result For - "%s" from category "%s"', $keyword, $category->getName()); ?></h3>
+                        <?php elseif ($id == "" && $keyword !== ""): ?>
+                            <h3>
+                                <?php echo $this->__('Search Result For : "%s"', $keyword); ?>
+
+                            </h3>
+                        <?php
+                        elseif ($category !== ""): ?>
+                            <h3><?php echo $this->__('Search Result From category : "%s"', $category->getName()); ?></h3>
+                        <?php
+                        else: ?>
+                            <h3>
+                                <span><?php echo $this->__('Answers to frequently asked questions'); ?></span>
+                            </h3>
+                        <?php endif; ?>
+
+                        <div class="faq-container">
+                            <?php if (count($_faqResult)): ?>
+
+                                <?php foreach ($_faqResult as $item) : ?>
+                                    <div class="panel-group">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading faq-question">
+                                                <h4 class="panel-title">
+                                                    <?php echo $this->htmlEscape($item->getQuestion()); ?>
+                                                    <i class="fa fa-chevron-down"></i>
+                                                </h4>
+
+                                            </div>
+                                        </div>
+                                        <div class="panel-collapse collapse">
+                                            <div class="panel-body">
+                                                <?php echo Mage::helper('faq')->filter($item->getAnswer()); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <p><?php echo $this->__('There is no FAQ item found for search string!') ?></p>
+                            <?php endif; ?>
+
+                        </div>
+
+                        <a style="margin-top: 50px;" href="<?php if ($flg): ?><?php echo $this->getUrl('faq/index/categoryshow', array('_secure' => true, 'cat_id' => $id)) ?><?php else: ?><?php echo Mage :: app()->getStore()->getUrl('faq') ?><?php endif; ?>" class="button button-third large pull-left" id="back">
+                            <?php echo $this->__('Back') ?>
+                        </a>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
 </div>
-<div class="expand" id="expand-collaps"><a href="javascript:void(0)" onclick="expand(this)"><?php echo $this->__('Expand All'); ?></a></div>
-<div class="faq-detail">
-<?php if(count($_faqResult)): ?>
-		<?php foreach ($_faqResult as $item) : ?>
-		    <table class="faq-listdata-table">
-				<tbody>
-					<tr class="faq-question">
-						<td width="5%"><span class="label important"><?php echo $this->__('Q') ?></span></td>
-						<td>
-							<strong> <?php echo $this->htmlEscape($item->getQuestion()); ?><strong>
-						</td>
-					</tr> 
-					<tr class="faq-answer" style="display:none;">
-						<td><span class="label success"><?php echo $this->__('A') ?></span></td>
-						<td>
-							<?php echo Mage::helper('faq')->filter($item->getAnswer()); ?>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		<?php endforeach; ?>
-<?php else: ?>
-	<p><?php echo $this->__('There is no FAQ item found for search string!') ?></p>
-<?php endif; ?>
-</div>
-	<p>
-		<a href="<?php if($flg): ?><?php echo $this->getUrl('faq/index/categoryshow',array('_secure'=>true,'cat_id'=>$id)) ?><?php else: ?><?php echo Mage :: app()->getStore()->getUrl('faq') ?><?php endif; ?>" title="<?php echo $this->__('Back') ?>"><?php echo $this->__('Back') ?></a>
-	</p>
-</div>
-<?php else: ?>
-<div class="page-title">
-	<h1><?php echo $this->__('Error') ?></h1>
-</div>
-<?php endif; ?>
+
+
+
+
+
+
+
+
 <script type="text/javascript">
     jQuery('.panel').click(function(){
         jQuery(this).next(".panel-collapse").toggleClass("in");
