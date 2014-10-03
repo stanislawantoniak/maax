@@ -100,6 +100,11 @@ Mall.listing = {
 	 * Currently show more
 	 */
 	_current_show_more: {},
+	
+	/**
+	 * Cache for ajax request
+	 */
+	_ajaxCache: {},
 
     /**
      * Performs initialization for listing object.
@@ -970,14 +975,57 @@ Mall.listing = {
 	},
 	
 	/**
+	 * @param {array} data
+	 * @returns {String}
+	 */
+	_buildPushStateKey: function(data){
+		return this._buildKey(data);
+	},
+	
+	/**
+	 * @param {array} data
+	 * @returns {String}
+	 */
+	_buildAjaxKey: function(data){
+		return this._buildKey(data);
+	},
+	
+	/**
+	 * @param {array} data
+	 * @returns {String}
+	 */
+	_buildKey: function(data){
+		var out = [];
+		/**
+		 * @todo Ordering params
+		 */
+		jQuery.each(data, function(){
+			out.push(encodeURIComponent(this.name) + "=" + encodeURIComponent(this.value));
+		});
+		
+		return out.join("&");
+	},
+	
+	/**
 	 * @returns {void}
 	 */
 	_ajaxSend: function(forceObject){
-		var self = this;
+		var self = this,
+			data = this.getQueryParamsAsArray(forceObject),
+			ajaxKey = this._buildAjaxKey(data);
+	
+		if(this._ajaxCache[ajaxKey]){
+			this._handleAjaxRepsonse(this._ajaxCache[ajaxKey]);
+			return;
+		}
+		
 		this.showAjaxLoading();
 		OrbaLib.Listing.getBlocks(
-			this.getQueryParamsAsArray(forceObject), 
-			function(response){self._handleAjaxRepsonse(response)}
+			data, 
+			function(response){
+				self._ajaxCache[ajaxKey] = response;
+				self._handleAjaxRepsonse(response)
+			}
 		);
 	},
 	
