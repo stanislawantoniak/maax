@@ -1172,16 +1172,17 @@ Mall.listing = {
 		
 	},
 
-    initActiveEvents: function() {
+    initActiveEvents: function(scope) {
+        scope = scope || Mall.listing.getActiveId();
         function unCheckbox(id) {
             jQuery("input[type=checkbox]#"+id).prop('checked',false);
         }
         function detachActive() {
-            Mall.listing.getActive().find('dl').detach();
+            Mall.listing.getActive(scope).find('dl *').detach();
         }
 
-        var active = Mall.listing.getActiveLabel();
-        var remove = Mall.listing.getActiveRemove();
+        var active = Mall.listing.getActiveLabel(scope);
+        var remove = Mall.listing.getActiveRemove(scope);
 
         active.on("click", function() {
             jQuery(this).parent().detach();
@@ -1226,17 +1227,24 @@ Mall.listing = {
 	getHeader: function(){
 		return jQuery("#header-main");
 	},
-	
-	getActive: function(){
-		return jQuery("#active-filters");
+
+	getActive: function(scope){
+        scope = scope || Mall.listing.getActiveId();
+		return jQuery(scope);
 	},
 
-    getActiveLabel: function() {
-        return jQuery(".active-filter-label");
+    getActiveId: function(){
+        return "#active-filters";
     },
 
-    getActiveRemove: function() {
-        return jQuery(".active-filters-remove");
+    getActiveLabel: function(scope) {
+        scope = scope || Mall.listing.getActiveId();
+        return jQuery(scope+" .active-filter-label");
+    },
+
+    getActiveRemove: function(scope) {
+        scope = scope || Mall.listing.getActiveId();
+        return jQuery(scope+" .active-filters-remove");
     },
 	
 	getFilters: function(){
