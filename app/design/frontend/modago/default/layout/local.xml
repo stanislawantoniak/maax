@@ -1184,6 +1184,7 @@
             </action>
         </reference>
         <reference name="content">
+            <block type="core/messages" name="global_messages" as="global_messages"/>
             <block type="cms/block" name="help-contact-vendor">
                 <action method="setBlockId"><block_id>help-contact-vendor</block_id></action>
             </block>
@@ -1197,6 +1198,7 @@
             </action>
         </reference>
         <reference name="content">
+            <block type="core/messages" name="global_messages" as="global_messages"/>
             <block type="cms/block" name="help-contact-gallery">
                 <action method="setBlockId"><block_id>help-contact-gallery</block_id></action>
             </block>
