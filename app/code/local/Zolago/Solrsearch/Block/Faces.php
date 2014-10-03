@@ -385,7 +385,6 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
             $finishBlock[] = $additionalBlocks['rating'];
         }
         if ($additionalBlocks['price']) {
-            echo 'piceprice';
             $finishBlock[] = $additionalBlocks['price'];
         }
         foreach($finishBlock as $block) {
