@@ -1039,16 +1039,30 @@ Mall.listing = {
 	},
 
     initActiveEvents: function() {
+        function unCheckbox(id) {
+            jQuery("input[type=checkbox]#"+id).prop('checked',false);
+        }
+        function detachActive() {
+            Mall.listing.getActive().find('dl').detach();
+        }
+
         var active = Mall.listing.getActiveLabel();
         var remove = Mall.listing.getActiveRemove();
 
         active.on("click", function() {
-            console.log("you cliked "+jQuery(this).attr("for"));
+            jQuery(this).parent().detach();
+            unCheckbox(jQuery(this).data('input'));
+            if(active.length == 1) {
+                detachActive();
+            }
+            Mall.listing.reloadListing();
         });
-        remove.on("click", function(e) {
+        remove.on("click", function() {
             active.each(function() {
-                jQuery(this).trigger("click");
+                unCheckbox(jQuery(this).data('input'));
             });
+            detachActive();
+            Mall.listing.reloadListing();
             return false;
         });
     },
