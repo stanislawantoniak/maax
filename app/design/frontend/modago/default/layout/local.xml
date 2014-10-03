@@ -1186,6 +1186,9 @@
             <action method="setTemplate">
                 <template>page/1column.phtml</template>
             </action>
+            <action method="addBodyClass">
+                <value>lower-breadcrumbs</value>
+            </action>
         </reference>
 
         <reference name="content">
@@ -1225,6 +1228,9 @@
             <action method="setTemplate">
                 <template>page/1column.phtml</template>
             </action>
+            <action method="addBodyClass">
+                <value>lower-breadcrumbs</value>
+            </action>
         </reference>
         <reference name="content">
             <block type="core/messages" name="global_messages" as="global_messages"/>
@@ -1263,6 +1269,9 @@
         <reference name="root">
             <action method="setTemplate">
                 <template>page/1column.phtml</template>
+            </action>
+            <action method="addBodyClass">
+                <value>lower-breadcrumbs</value>
             </action>
         </reference>
         <reference name="content">
