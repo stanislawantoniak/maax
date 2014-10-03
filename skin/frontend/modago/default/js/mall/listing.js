@@ -1065,9 +1065,27 @@ Mall.listing = {
             Mall.listing.reloadListing();
             return false;
         });
+
+        var mobileFilterBtn = Mall.listing.getMobileFilterBtn();
+
+        mobileFilterBtn.on('click', function(event) {
+            event.preventDefault();
+            Mall.listing.insertMobileSidebar();
+            jQuery('#sb-site').toggleClass('open');
+            jQuery('.fb-slidebar').toggleClass('open');
+            //var screenWidth = jQuery(window).width();
+            var screenHeight = jQuery(window).height();
+            jQuery('body').addClass('noscroll').append('<div class="noscroll" style="width:100%; height:' + screenHeight + 'px"></div>');
+        });
+
+
+
     },
 	
-	
+	getMobileFilterBtn: function() {
+        return jQuery("#filters-btn .actionViewFilter");
+    },
+
 	getHeader: function(){
 		return jQuery("#header-main");
 	},
