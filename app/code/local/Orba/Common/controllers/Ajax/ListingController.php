@@ -82,26 +82,12 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 	 * @return array
 	 */
 	protected function _getProducts(Zolago_Solrsearch_Model_Catalog_Product_List $listModel) {
-		// Create product list 
-		$products = array();
 		
-		$profiler = Mage::helper("zolagocommon/profiler");
+		
+		//$profiler = Mage::helper("zolagocommon/profiler");
 		/* @var $profiler Zolago_Common_Helper_Profiler */
-		$profiler->start();
+		//$profiler->start();
 		
-		foreach ($listModel->getCollection() as $product){
-			/* @var $product Zolago_Solrsearch_Model_Catalog_Product */
-			$_product = $product->getData();
-			$_product['listing_resized_image_url'] = (string)$product->getListingResizedImageUrl();
-			$_product['listing_resized_image_info'] = $product->getListingResizedImageInfo();
-			$_product['udropship_vendor_logo_url'] = (string)$product->getUdropshipVendorLogoUrl();
-			$_product['manufacturer_logo_url'] = (string)$product->getManufacturerLogoUrl();
-			$_product['is_discounted'] = (int)$product->isDiscounted();
-			$_product['price'] = (float)$product->getPrice();
-		    $_product['final_price'] = (float)$product->getFinalPrice();
-			$_product['currency'] = (string)$product->getCurrency();
-			$products[] = $_product;
-		}
 		
 		return array(
 			"total"			=> (int)$listModel->getCollection()->getSize(),
@@ -110,7 +96,7 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 			"query"			=> $this->_getSolrParam($listModel, 'q'),
 			"sort"			=> $listModel->getCurrentOrder(),
 			"dir"			=> $listModel->getCurrentDir(),
-			"products"		=> $products,
+			"products"		=> Mage::helper("zolagosolrsearch")->prepareAjaxProducts($listModel),
 		);
 	}
 	

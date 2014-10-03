@@ -116,6 +116,16 @@ Mall.listing = {
 	 * Cache for ajax request
 	 */
 	_ajaxCache: {},
+	
+	/**
+	 * Cache for ajax request
+	 */
+	_ajaxQueueCache: {},
+	
+	/**
+	 * @type Array
+	 */
+	_init_products: [],
 
     /**
      * Performs initialization for listing object.
@@ -138,7 +148,50 @@ Mall.listing = {
         this.setAutoappend(true);
         this.loadToQueue();
         this.setLoadMoreLabel();
+		
+		// fill cache from static contents
+		this._rediscoverCache();
     },
+	
+	setInitProducts: function(products){
+		this._init_products = products;
+		return this;
+	},
+	
+	getInitProducts: function(products){
+		return this._init_products
+	},
+	
+	/**
+	 * Preparce response object based on static html data
+	 * @returns {undefined}
+	 */
+	_rediscoverCache: function(){
+		var content = {
+				filters: this.getFilters().prop("outerHTML"),
+				active: this.getActive().prop("outerHTML"),
+				toolbar: this.getToolbar().prop("outerHTML"),
+				header: this.getHeader().prop("outerHTML"),
+				total: this.getTotal(),
+				rows: this.getCurrentVisibleItems(),
+				query: this.getQuery(),
+				sort: this.getSort(),
+				dir: this.getDir(),
+				products: this.getInitProducts(),
+			},
+			ajaxKey = this._buildAjaxKey(this.getQueryParamsAsArray());
+		
+		// products - append json
+		// totals,rows,page,sort,dir - from this
+		
+		
+		console.log(ajaxKey, content);
+		// Bind to cache
+		this._ajaxCache[ajaxKey] = {
+			status: 1,
+			content: content
+		};
+	},
 	
 	resetForm: function(){
 		this.getFilters().find("form").get(0).reset();
@@ -450,6 +503,7 @@ Mall.listing = {
 
     /**
      * Loads products to queue.
+	 * @todo add cache
      */
     loadToQueue: function () {
 		var forceObject = {
@@ -997,7 +1051,6 @@ Mall.listing = {
 			}
 			return;
 		}
-		console.log("Ajax cleared");
 		this._ajaxCache = {};
 	},
 	

@@ -55,6 +55,31 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 	protected $_availableStoreIds;
 	
 	/**
+	 * @param Zolago_Solrsearch_Model_Catalog_Product_List $listModel
+	 * @return array
+	 */
+	public function prepareAjaxProducts(Zolago_Solrsearch_Model_Catalog_Product_List $listModel) {
+		// Create product list 
+		$products = array();
+		
+		foreach ($listModel->getCollection() as $product){
+			/* @var $product Zolago_Solrsearch_Model_Catalog_Product */
+			$_product = $product->getData();
+			$_product['listing_resized_image_url'] = (string)$product->getListingResizedImageUrl();
+			$_product['listing_resized_image_info'] = $product->getListingResizedImageInfo();
+			$_product['udropship_vendor_logo_url'] = (string)$product->getUdropshipVendorLogoUrl();
+			$_product['manufacturer_logo_url'] = (string)$product->getManufacturerLogoUrl();
+			$_product['is_discounted'] = (int)$product->isDiscounted();
+			$_product['price'] = (float)$product->getPrice();
+		    $_product['final_price'] = (float)$product->getFinalPrice();
+			$_product['currency'] = (string)$product->getCurrency();
+			$products[] = $_product;
+		}
+		
+		return $products;
+	}
+	
+	/**
 	 * @param array $params
 	 * @return array
 	 */

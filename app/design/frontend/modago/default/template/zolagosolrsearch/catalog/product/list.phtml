@@ -94,6 +94,7 @@ $_productImageUrl = '';
 </div>
 <div id="listing-load-toplayer"><img src="<?php echo $this->getSkinUrl("images/modago-ajax-loader.gif"); ?>"</div>
 <script type="text/javascript">
+    Mall.listing.setInitProducts(<?php echo $this->getJsonProducts(); ?>);
     Mall.listing.setLoadNextOffset(<?php echo (int) $this->getLoadMoreOffset(); ?>);
     Mall.listing.setScrollLoadOffset(<?php echo (int) $this->getAppendWhenScroll(); ?>);
     Mall.listing.setPixelsBeforeAppend(<?php echo (int) $this->getPixelsBeforeAppend(); ?>);
