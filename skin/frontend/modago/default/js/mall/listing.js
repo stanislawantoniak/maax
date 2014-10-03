@@ -1114,16 +1114,17 @@ Mall.listing = {
 		this.reloadListingItemsAfterPageLoad();
 	},
 
-    initActiveEvents: function() {
+    initActiveEvents: function(scope) {
+        scope = scope || Mall.listing.getActive();
         function unCheckbox(id) {
             jQuery("input[type=checkbox]#"+id).prop('checked',false);
         }
         function detachActive() {
-            Mall.listing.getActive().find('dl').detach();
+            scope.find('dl *').detach();
         }
 
-        var active = Mall.listing.getActiveLabel();
-        var remove = Mall.listing.getActiveRemove();
+        var active = Mall.listing.getActiveLabel(scope);
+        var remove = Mall.listing.getActiveRemove(scope);
 
         active.on("click", function() {
             jQuery(this).parent().detach();
@@ -1173,12 +1174,14 @@ Mall.listing = {
 		return jQuery("#active-filters");
 	},
 
-    getActiveLabel: function() {
-        return jQuery(".active-filter-label");
+    getActiveLabel: function(scope) {
+        scope = scope || Mall.listing.getActive();
+        return jQuery(scope+" .active-filter-label");
     },
 
-    getActiveRemove: function() {
-        return jQuery(".active-filters-remove");
+    getActiveRemove: function(scope) {
+        scope = scope || Mall.listing.getActive();
+        return jQuery(scope+" .active-filters-remove");
     },
 	
 	getFilters: function(){
