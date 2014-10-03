@@ -1178,7 +1178,6 @@
                 <crumbInfo>
                     <label>Help</label>
                     <title>Help</title>
-                    <link>/help</link>
                 </crumbInfo>
             </action>
         </reference>
@@ -1186,6 +1185,12 @@
         <reference name="root">
             <action method="setTemplate">
                 <template>page/1column.phtml</template>
+            </action>
+            <action method="addBodyClass">
+                <value>not-menu-mobile</value>
+            </action>
+            <action method="addBodyClass">
+                <value>lower-breadcrumbs</value>
             </action>
         </reference>
 
