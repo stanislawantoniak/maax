@@ -146,7 +146,9 @@ color: #2F2F2F;
     min-height: 500px;
 }
 .faq #searchform .col-md-8.faq-search-keyword,
-.faq #searchform .col-md-6.faq-search-keyword{
+.faq #searchform .col-md-5.faq-search-keyword,
+.faq #searchform .col-xs-12.faq-search-keyword
+{
     padding-left: 0px;
 }
 
