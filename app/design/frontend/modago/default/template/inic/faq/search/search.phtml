@@ -4,16 +4,16 @@
 <div class="faq">
 	<form name="faqsearch" action="<?php echo $this->getSearchUrl() ?>" method="get">
 		<div id="searchform" class="form-group row">
-            <div class="col-md-12">
+            <div class="col-md-12 col-sm-12">
                 <div class="row">
                     <label for="keyword"><?php echo $this->__('Search questions and answers'); ?>:</label>
-                    <div class="col-md-8">
-                        <input type="text"  id="keyword" name="keyword" class=form-control tabindex=99>
+                    <div class="col-md-8 col-sm-8 col-xs-8 faq-search-keyword">
+                        <input type="text"  id="keyword" name="keyword" class=form-control>
                         <?php if ($id): ?>
                             <input type="hidden" name="cat_id" id="cat_id" value="<?php echo $id; ?>"/>
                         <?php endif; ?>
 
-                       <button type="submit" tabindex=100 class="btnSearch" title="<?php echo $this->__('Search'); ?>">
+                       <button type="submit"  class="btnSearch" title="<?php echo $this->__('Search'); ?>">
                                                    <img src="<?php echo $this->getSkinUrl('images/ico_search.gif'); ?>" alt="<?php echo $this->__('Search'); ?>"/>
                     </div>                        </button>
                 </div>
