@@ -7,7 +7,6 @@ if(!$this->isGallery()) {
 }
 
 $session = Mage::getSingleton('customer/session');
-/* @var $session Mage_Customer_Model_Session */
 ?>
 
 <form action="<?php echo $this->getFormAction(); ?>" id="question-form" method="post" novalidate="novalidate" class="form clearfix">
@@ -22,15 +21,15 @@ $session = Mage::getSingleton('customer/session');
         <fieldset class="fieldset col-xs-11">
             <ul class="form-list">
 				<?php if(!is_array($vendors)): ?>
-					<input type="hidden" name="question[vendor_id]" value="<?php echo $vendors ?>" />
+					<input type="hidden" name="question[vendor_id]" value="<?php echo $vendors; ?>" />
 				<?php else: ?>
 					<li class="wide">
 						<div class="form-group select-container">
 							<select name="question[vendor_id]" id="vendor_id" class="form-control required-entry" required>
-									<option value=""><?php echo $this->__("Choose shop") ?></option>
+									<option value=""><?php echo $this->__("Choose shop"); ?></option>
 								<?php foreach($vendors as $id=>$name): ?>
-									<option value="<?php echo $id; ?>"><?php echo $name ?></option>
-								<? endforeach; ?>
+									<option value="<?php echo $id; ?>"><?php echo $name; ?></option>
+								<?php endforeach; ?>gi
 							</select>
 						</div>
 					</li>
