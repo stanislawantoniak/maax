@@ -5855,6 +5855,18 @@ yx-axis
 .sales-order-top-row {
   padding-bottom: 15px; }
 
+@media (max-width: 768px) {
+  /* line 1, ../sass/layout/modules/_help-page.scss */
+  #help-mobile-menu {
+    margin-top: -54px; } }
+/* line 7, ../sass/layout/modules/_help-page.scss */
+#help-mobile-menu h1 {
+  font-size: 18px;
+  padding-bottom: 12px;
+  padding-top: 12px;
+  text-align: center;
+  text-transform: uppercase; }
+
 /* line 1, ../sass/layout/override/_global.scss */
 .clr {
   clear: both; }
