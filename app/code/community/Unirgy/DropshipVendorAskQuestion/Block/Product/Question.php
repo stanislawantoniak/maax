@@ -51,7 +51,8 @@ class Unirgy_DropshipVendorAskQuestion_Block_Product_Question extends Mage_Catal
 		return Mage::helper('udropship/data')->getLocalVendorId();
 	}
 
-	public function isGallery() {
-		return in_array('help_contact_gallery',$this->getLayout()->getUpdate()->getHandles());
+	public function isGallery()
+	{
+		return in_array('help_contact_gallery', $this->getLayout()->getUpdate()->getHandles());
 	}
 }

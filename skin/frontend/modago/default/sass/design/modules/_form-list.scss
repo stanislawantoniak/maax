@@ -9,13 +9,9 @@ ul.form-list {
 		}
 	}
 }
-dl {
-	dt {
-		margin-bottom: 11px;
-	}
-	dd {
-		&.separator {
-			margin-bottom: 25px;
-		}
-	}
+form#question-form{
+	margin: 25px 0;
+}
+div#contact-container{
+	padding: 30px;
 }
