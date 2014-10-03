@@ -1164,6 +1164,24 @@
 	</sales_order_view>
 
     <help_index_index>
+        <reference name="breadcrumbs">
+            <action method="addCrumb">
+                <crumbName>Home</crumbName>
+                <crumbInfo>
+                    <label>Home</label>
+                    <title>Home</title>
+                    <link>/</link>
+                </crumbInfo>
+            </action>
+            <action method="addCrumb">
+                <crumbName>Pomoc</crumbName>
+                <crumbInfo>
+                    <label>Help</label>
+                    <title>Help</title>
+                </crumbInfo>
+            </action>
+        </reference>
+
         <reference name="root">
             <action method="setTemplate">
                 <template>page/1column.phtml</template>
@@ -1178,6 +1196,31 @@
     </help_index_index>
 
     <help_contact_vendor>
+        <reference name="breadcrumbs">
+            <action method="addCrumb">
+                <crumbName>Home</crumbName>
+                <crumbInfo>
+                    <label>Home</label>
+                    <title>Home</title>
+                    <link>/</link>
+                </crumbInfo>
+            </action>
+            <action method="addCrumb">
+                <crumbName>Pomoc</crumbName>
+                <crumbInfo>
+                    <label>Help</label>
+                    <title>Help</title>
+                    <link>/help</link>
+                </crumbInfo>
+            </action>
+            <action method="addCrumb">
+                <crumbName>Kontakt ze sklepem</crumbName>
+                <crumbInfo>
+                    <label>Kontakt ze sklepem</label>
+                    <title>Kontakt ze sklepem</title>
+                </crumbInfo>
+            </action>
+        </reference>
         <reference name="root">
             <action method="setTemplate">
                 <template>page/1column.phtml</template>
@@ -1192,6 +1235,31 @@
     </help_contact_vendor>
 
     <help_contact_gallery>
+        <reference name="breadcrumbs">
+            <action method="addCrumb">
+                <crumbName>Home</crumbName>
+                <crumbInfo>
+                    <label>Home</label>
+                    <title>Home</title>
+                    <link>/</link>
+                </crumbInfo>
+            </action>
+            <action method="addCrumb">
+                <crumbName>Pomoc</crumbName>
+                <crumbInfo>
+                    <label>Help</label>
+                    <title>Help</title>
+                    <link>/help</link>
+                </crumbInfo>
+            </action>
+            <action method="addCrumb">
+                <crumbName>Kontakt z Modago</crumbName>
+                <crumbInfo>
+                    <label>Kontakt z Modago</label>
+                    <title>Kontakt z Modago</title>
+                </crumbInfo>
+            </action>
+        </reference>
         <reference name="root">
             <action method="setTemplate">
                 <template>page/1column.phtml</template>

@@ -8,13 +8,11 @@ if(!$this->isGallery()) {
 
 $session = Mage::getSingleton('customer/session');
 ?>
-
 <form action="<?php echo $this->getFormAction(); ?>" id="question-form" method="post" novalidate="novalidate" class="form clearfix">
 	<?php if(isset($product)): ?>
 	    <input type="hidden" name="question[product_id]" value="<?php echo $product->getId()?>" />
 	<?php endif; ?>
 
-	<?php //todo: check if it's needed ?>
     <input type="hidden" name="question[visibility]" value="0" />
 
     <div class="row">
