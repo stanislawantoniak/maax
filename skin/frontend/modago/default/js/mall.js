@@ -866,6 +866,9 @@ jQuery(document).ready(function() {
             var n = jQuery(".size-box li").length;
             if( n < 4 ) {
                 height = n * height;
+                if (isNaN(height)) {
+                    height = 29;//px
+                }
                 jQuery('.size-box .mCSB_scrollTools, .size-box .mCSB_1_scrollbar').css("visibility", "hidden");
                 jQuery('.size-box .mCSB_container').css("margin-right", "0px");
             } else {
