@@ -1174,7 +1174,7 @@
                 </crumbInfo>
             </action>
             <action method="addCrumb">
-                <crumbName>Pomoc</crumbName>
+                <crumbName>Help</crumbName>
                 <crumbInfo>
                     <label>Help</label>
                     <title>Help</title>
@@ -1209,7 +1209,7 @@
                 </crumbInfo>
             </action>
             <action method="addCrumb">
-                <crumbName>Pomoc</crumbName>
+                <crumbName>Help</crumbName>
                 <crumbInfo>
                     <label>Help</label>
                     <title>Help</title>
@@ -1217,10 +1217,10 @@
                 </crumbInfo>
             </action>
             <action method="addCrumb">
-                <crumbName>Kontakt ze sklepem</crumbName>
+                <crumbName>Contact shop</crumbName>
                 <crumbInfo>
-                    <label>Kontakt ze sklepem</label>
-                    <title>Kontakt ze sklepem</title>
+                    <label>Contact shop</label>
+                    <title>Contact shop</title>
                 </crumbInfo>
             </action>
         </reference>
@@ -1251,7 +1251,7 @@
                 </crumbInfo>
             </action>
             <action method="addCrumb">
-                <crumbName>Pomoc</crumbName>
+                <crumbName>Help</crumbName>
                 <crumbInfo>
                     <label>Help</label>
                     <title>Help</title>
@@ -1259,10 +1259,10 @@
                 </crumbInfo>
             </action>
             <action method="addCrumb">
-                <crumbName>Kontakt z Modago</crumbName>
+                <crumbName>Contact Modago gallery</crumbName>
                 <crumbInfo>
-                    <label>Kontakt z Modago</label>
-                    <title>Kontakt z Modago</title>
+                    <label>Contact Modago gallery</label>
+                    <title>Contact Modago gallery</title>
                 </crumbInfo>
             </action>
         </reference>
