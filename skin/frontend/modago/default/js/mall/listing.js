@@ -143,14 +143,24 @@ Mall.listing = {
 	// Do remember roll downs & showmors
 	preprocessFilterContent: function(content){
 		var self = this;
-		jQuery.each(this._current_opened, function(idx, value){
+		// Restore state of rolling
+		jQuery.each(this.getCurrentOpened(), function(idx, value){
 			var el = jQuery("#" + idx, content);
 			if(!el.length){
 				return;
 			}
 			self._doRollSection(el.parent(), value, false);
 		});
+		// Restore state of show more
+		jQuery.each(this.getCurrentShowMore(), function(idx, value){
+			var el = jQuery("#" + idx, content);
+			if(!el.length){
+				return;
+			}
+			self._doShowMore(el.parent(), value, false);
+		});
 	},
+
 	
 	_doRollSection: function(section, state, animate){
 		var title = section.find("h3"),
@@ -1644,9 +1654,23 @@ Mall.listing = {
     getPage: function() {
         // for now it's turned off
         return "";
-//        return this._current_page;
     },
 
+
+	/**
+	 * @returns {object}
+	 */
+	getCurrentShowMore: function(){
+		return this._current_show_more;
+	},
+	
+	/**
+	 * @returns {object}
+	 */
+	getCurrentOpened: function(){
+		return this._current_opened;
+	},
+	
     /**
      * Returns current sort type.
      *
