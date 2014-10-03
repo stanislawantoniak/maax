@@ -2,18 +2,18 @@
 <?php $filterQuery = $this->getFilterQuery(); ?>
     <div class="sidebar" id="solr_search_facets">
         <div class=" block-filter" >
-                <form name="searchFacets" method="get"
-					  autocomplete="false"
-                      action="<?php echo $this->helper('solrsearch')->getResultUrl() ?>">
-                    <input type="hidden" name="q" value="<?php echo $this->getData('querytext') ?>"/>
-                    <?php if ($this->isShoppingOptionsActive()): ?>
-                            <?php foreach ($this->getFilterBlocks() as $filterBlock): ?>
-                                <!-- Blocks here -->
-                                <?php echo $filterBlock->toHtml(); ?>
-                            <?php endforeach; ?>
-                            <?php /* echo $this->getPriceFacets()*/ ?>
-                    <?php endif; ?>
-                </form>
+			<form name="searchFacets" method="get"
+				  autocomplete="false"
+				  action="<?php echo $this->helper('solrsearch')->getResultUrl() ?>">
+				<input type="hidden" name="q" value="<?php echo $this->getData('querytext') ?>"/>
+				<?php if ($this->isShoppingOptionsActive()): ?>
+						<?php foreach ($this->getFilterBlocks() as $filterBlock): ?>
+							<!-- Blocks here -->
+							<?php echo $filterBlock->toHtml(); ?>
+						<?php endforeach; ?>
+						<?php /* echo $this->getPriceFacets()*/ ?>
+				<?php endif; ?>
+			</form>
         </div>
     </div>
 <?php endif;?>

@@ -558,6 +558,7 @@ Mall.listing = {
 
         return items;
     },
+	
 
     /**
      * Creates single product container for listing.
@@ -1023,15 +1024,22 @@ Mall.listing = {
 		OrbaLib.Listing.getBlocks(
 			data, 
 			function(response){
-				self._ajaxCache[ajaxKey] = response;
+				if(response.status){
+					// Cache only success respons
+					self._ajaxCache[ajaxKey] = response;
+				}
 				self._handleAjaxRepsonse(response)
 			}
 		);
 	},
 	
+	_handleResponseError: function(response){
+		console.log(response);
+	},
+	
 	_handleAjaxRepsonse: function(response){
 		if(!response.status){
-			alert("Sth wrong");
+			this._handleResponseError(response);
 		}else{
 			this.rebuildContents(response.content);
 		}
@@ -1082,8 +1090,28 @@ Mall.listing = {
 		
 		this.getHeader().replaceWith(jQuery(content.header));
 		this.getActive().replaceWith(jQuery(content.active));
+		
+		// Finally product
+		this.replaceProducts(content);
 
         this.initActiveEvents();
+	},
+	
+	replaceProducts: function(data){
+		// 1. Clear the contents
+		this.getProducts().find(".item").remove();
+		// 2. Prepare parsed data
+		var container = this.getProducts().masonry();
+		// 3. Reset the page
+		this.setPage(0);
+		// 4. Update Total
+		this.setTotal(data.total);
+			
+		this.appendToList(data.products);
+		container.masonry("reloadItems");
+		container.masonry();
+		this.placeListingFadeContainer();
+		this.reloadListingItemsAfterPageLoad();
 	},
 
     initActiveEvents: function() {
@@ -1101,7 +1129,9 @@ Mall.listing = {
         });
     },
 	
-	
+	getProducts: function(){
+		return jQuery("#items-product");
+	},
 	getHeader: function(){
 		return jQuery("#header-main");
 	},
@@ -1883,13 +1913,21 @@ Mall.listing = {
     },
 
     /**
+     * Set current page.
+     * @returns {Mall.listing}
+     */
+    setPage: function(page) {
+        this._current_page = page;
+        return this;
+    },
+	
+    /**
      * Increments current page.
      *
      * @returns {Mall.listing}
      */
     setPageIncrement: function() {
         this._current_page += 1;
-
         return this;
     },
 
