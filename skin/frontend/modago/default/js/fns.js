@@ -1975,14 +1975,14 @@ jQuery.noConflict();
 
 
 
-        $('.actionViewFilter').on('click', function(event){
-            event.preventDefault();
-            Mall.listing.insertMobileSidebar();
-            $('#sb-site').toggleClass('open');
-            $('.fb-slidebar').toggleClass('open');
-            var screenWidth = $(window).width();
-            var screenHeight = $(window).height();
-            $('body').addClass('noscroll').append('<div class="noscroll" style="width:100%; height:'+screenHeight+'px"></div>');
+        //$('.actionViewFilter').on('click', function(event){
+        //    event.preventDefault();
+        //    Mall.listing.insertMobileSidebar();
+        //    $('#sb-site').toggleClass('open');
+        //    $('.fb-slidebar').toggleClass('open');
+        //    var screenWidth = $(window).width();
+        //    var screenHeight = $(window).height();
+        //    $('body').addClass('noscroll').append('<div class="noscroll" style="width:100%; height:'+screenHeight+'px"></div>');
 //
 //                });
 
@@ -2027,7 +2027,7 @@ jQuery.noConflict();
 //                });
 
 //            $("#sidebar").slideToggle();
-        });
+//        });
 
 
 

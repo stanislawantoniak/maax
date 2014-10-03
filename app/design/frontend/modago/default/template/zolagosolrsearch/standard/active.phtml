@@ -24,12 +24,12 @@
                                                 <span class="value">
                                                     <?php echo $this->facetFormat($selectedFacetValue) ?>
                                                 </span>
-												<label for="<?php echo str_replace('facet',$v,$key) ?>" class="active-filter-label">
+												<span class="active-filter-label" data-input="<?php echo $face_key.'_'.$v ?>">
 													<i data-url="<?php echo $this->getRemoveFacesUrl($face_key, $v); ?>"
 													   data-params="<?php echo $this->getRemoveFacesUrl($face_key, $v); ?>"
 													   class="fa fa-times">
 													</i>
-												</label>
+												</span>
                                             </span>
 
                                             <?php if($face_key != 'price'): ?>
@@ -62,7 +62,7 @@
                             <dd class="action visible-xs">
                                 <a data-params='<?php echo $this->getRemoveAllJson(); ?>'
                                    href="<?php echo $this->getRemoveAllUrl() ?>"
-                                   class="button button-third"><?php echo $this->__('Clear all filters') ?></a>
+                                   class="active-filters-remove button button-third"><?php echo $this->__('Clear all filters') ?></a>
                             </dd>
                         <?php endif; ?>
                     </dl>
