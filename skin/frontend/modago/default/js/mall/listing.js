@@ -277,9 +277,9 @@ Mall.listing = {
 
     setLoadMoreLabel: function () {
         "use strict";
-
-        jQuery(".addNewPositionListProduct").find("span").text(this.getLoadNextOffset());
-
+        jQuery(".addNewPositionListProduct").
+			find("span").
+			text(this.getLoadNextOffset());
         return this;
     },
 
@@ -323,7 +323,6 @@ Mall.listing = {
      */
     appendFromQueue: function () {
         "use strict";
-
         this.showLoading();
         this.placeListingFadeContainer();
         this.showShapesListing();
@@ -340,23 +339,27 @@ Mall.listing = {
 
         // loading
         inst.on("always", function () {
+			
             //setTimeout(function () {
             jQuery(items).show();
             self.hideLoading();
-                container.masonry({isAnimated: false, transitionDuration: 0})
-                    .masonry("reloadItems").masonry();
+			
+			container.masonry({isAnimated: false, transitionDuration: 0})
+				.masonry("reloadItems").masonry();
 
-                // show load more button
-                if (Mall.listing.canShowLoadMoreButton()) {
-                    Mall.listing.showLoadMoreButton();
-                    Mall.listing.showShapesListing();
-                    Mall.listing.placeListingFadeContainer();
-                }
+			// show load more button
+			
+			if (Mall.listing.canShowLoadMoreButton()) {
+				Mall.listing.showLoadMoreButton();
+				Mall.listing.showShapesListing();
+				Mall.listing.showLoadMoreButton();
+			}
 
-                // reload if queue is empty
-                //container.masonry();
+			// reload if queue is empty
+			//container.masonry();
 
-                self.placeListingFadeContainer();
+			self.placeListingFadeContainer();
+			
             //}, 3000);
         });
 
@@ -1098,20 +1101,26 @@ Mall.listing = {
 	},
 	
 	replaceProducts: function(data){
-		// 1. Clear the contents
+		// 1. Reset the content
 		this.getProducts().find(".item").remove();
 		// 2. Prepare parsed data
 		var container = this.getProducts().masonry();
-		// 3. Reset the page
+		// 3. Reset the page and values
 		this.setPage(0);
-		// 4. Update Total
 		this.setTotal(data.total);
+		this.setCurrentVisibleItems(data.rows);
 			
 		this.appendToList(data.products);
 		container.masonry("reloadItems");
 		container.masonry();
 		this.placeListingFadeContainer();
 		this.reloadListingItemsAfterPageLoad();
+		
+		// Init list
+		this.setAutoappend(true);
+        this.loadToQueue();
+        this.setLoadMoreLabel();
+		
 	},
 
     initActiveEvents: function() {
@@ -1612,7 +1621,7 @@ Mall.listing = {
             con;
         // check if body has proper class
         if(jQuery("body").hasClass("node-type-list")
-            && this.getTotal() > 20
+            && this.getTotal() > 20 /* @todo by config */
             && this.canLoadMoreProducts()
             && this.canShowLoadMoreButton()) {
 
@@ -2034,7 +2043,17 @@ Mall.listing = {
      */
     addToVisibleItems: function(itemsCount) {
         this._current_visible_items += parseInt(itemsCount);
-
+        return this;
+    },
+	
+    /**
+     * Set given items
+     *
+     * @param itemsCount
+     * @returns {Mall.listing}
+     */
+    setCurrentVisibleItems: function(itemsCount) {
+        this._current_visible_items = itemsCount;
         return this;
     },
 

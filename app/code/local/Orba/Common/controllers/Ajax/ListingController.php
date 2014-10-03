@@ -104,9 +104,9 @@ class Orba_Common_Ajax_ListingController extends Orba_Common_Controller_Ajax {
 		}
 		
 		return array(
-			"total"			=> $listModel->getCollection()->getSize(),
-			"start"			=> $this->_getSolrParam($listModel, 'start'),
-			"rows"			=> $this->_getSolrParam($listModel, 'rows'),
+			"total"			=> (int)$listModel->getCollection()->getSize(),
+			"start"			=> (int)$this->_getSolrParam($listModel, 'start'),
+			"rows"			=> (int)$this->_getSolrParam($listModel, 'rows'),
 			"query"			=> $this->_getSolrParam($listModel, 'q'),
 			"sort"			=> $listModel->getCurrentOrder(),
 			"dir"			=> $listModel->getCurrentDir(),
