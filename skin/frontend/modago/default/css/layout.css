@@ -1435,22 +1435,25 @@ section.section h2.title_section i {
 #dropdown-basket table td {
   padding: 8px 0; }
 /* line 108, ../sass/layout/modules/_dropdown-search-basket.scss */
+#dropdown-basket table td.price {
+  text-align: right; }
+/* line 111, ../sass/layout/modules/_dropdown-search-basket.scss */
 #dropdown-basket table td + td {
   padding-left: 5px; }
-/* line 111, ../sass/layout/modules/_dropdown-search-basket.scss */
+/* line 114, ../sass/layout/modules/_dropdown-search-basket.scss */
 #dropdown-basket table td p {
   margin: 0px;
   padding: 0px; }
-/* line 117, ../sass/layout/modules/_dropdown-search-basket.scss */
+/* line 120, ../sass/layout/modules/_dropdown-search-basket.scss */
 #dropdown-basket .summary_basket {
   overflow: hidden;
   *zoom: 1;
   padding: 25px 15px;
   margin: 25px 0 0 0; }
-/* line 121, ../sass/layout/modules/_dropdown-search-basket.scss */
+/* line 124, ../sass/layout/modules/_dropdown-search-basket.scss */
 #dropdown-basket .summary_basket ul {
   float: left; }
-/* line 124, ../sass/layout/modules/_dropdown-search-basket.scss */
+/* line 127, ../sass/layout/modules/_dropdown-search-basket.scss */
 #dropdown-basket .summary_basket ul, #dropdown-basket .summary_basket li {
   margin: 0;
   padding: 0; }
@@ -10047,7 +10050,7 @@ i.flag.hit, i.flag.bestseller {
     position: static; } }
 /* line 482, ../sass/override/_override-layout.scss */
 #product-shop .size-box-bundle .size-box {
-  margin-bottom: 25px; }
+  margin-bottom: 30px; }
 /* line 484, ../sass/override/_override-layout.scss */
 #product-shop .size-box-bundle .size-box .sbHolder {
   width: 167px; }
