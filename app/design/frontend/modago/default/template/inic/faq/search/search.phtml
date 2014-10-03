@@ -8,13 +8,13 @@
                 <div class="row">
                     <label for="keyword"><?php echo $this->__('Search questions and answers'); ?>:</label>
                     <div class="col-md-8">
-                        <input type="text" onfocus="this.value='';"  id="keyword" name="keyword" class=form-control>
+                        <input type="text"  id="keyword" name="keyword" class=form-control>
                         <?php if ($id): ?>
                             <input type="hidden" name="cat_id" id="cat_id" value="<?php echo $id; ?>"/>
                         <?php endif; ?>
-                        <button type="submit" class="btnSearch" title="<?php echo $this->__('Search'); ?>">
-                            <img src="<?php echo $this->getSkinUrl('images/ico_search.gif'); ?>" alt="<?php echo $this->__('Search'); ?>"/>
-                        </button>
+
+                        <input type="image" id="faq-search" alt="<?php echo $this->__('Search'); ?>" name="<?php echo $this->__('Search'); ?>"
+                               src="<?php echo $this->getSkinUrl('images/ico_search.gif'); ?>">
                     </div>
                 </div>
             </div>
@@ -24,3 +24,8 @@
 	</form>
 </div>
 <?php endif; ?>
+<script type="text/javascript">
+    jQuery("faq-search").click(function(){
+        jQuery("form[name=faqsearch]").submit();
+    })
+</script>
