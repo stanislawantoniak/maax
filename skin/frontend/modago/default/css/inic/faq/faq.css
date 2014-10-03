@@ -114,7 +114,8 @@ color: #2F2F2F;
     box-shadow: none;
     color: #000;
     font-size: 12px;
-    width: 300px;
+    /*width: 300px;*/
+    width: 60%;
     float: left;
     height: 26px;
     padding: 0px;
@@ -144,16 +145,11 @@ color: #2F2F2F;
     height: 100%;
     min-height: 500px;
 }
-@media  (min-width: 578px) and (max-width: 635px) {
-    form[name="faqsearch"] .form-group input[type="text"] {
-        width: 320px;
-    }
+.faq #searchform .col-md-8.faq-search-keyword,
+.faq #searchform .col-md-6.faq-search-keyword{
+    padding-left: 0px;
 }
-@media  (min-width: 636px) and (max-width: 645px) {
-    form[name="faqsearch"] .form-group input[type="text"] {
-        width: 330px;
-    }
-}
+
 .faq-content .bg-w h1 {
     font-size: 18px;
     padding-bottom: 12px;
