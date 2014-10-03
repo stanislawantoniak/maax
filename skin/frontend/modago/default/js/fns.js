@@ -1426,7 +1426,7 @@ jQuery.noConflict();
             .scroll(positionFooter)
             .resize(positionFooter)
 
-        $('.panel').click(function(){
+        $('.faq-content .panel').click(function(){
             positionFooter();
         })
 
