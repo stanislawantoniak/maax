@@ -1426,7 +1426,9 @@ jQuery.noConflict();
             .scroll(positionFooter)
             .resize(positionFooter)
 
-
+        $('.panel').click(function(){
+            positionFooter();
+        })
 
         var intFrameWidth = window.innerWidth;
         if (intFrameWidth <= 767) {
