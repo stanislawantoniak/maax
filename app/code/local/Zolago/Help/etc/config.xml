@@ -15,5 +15,14 @@
                 </args>
             </help>
         </routers>
+        <translate>
+            <modules>
+                <Zolago_Help>
+                    <files>
+                        <default>Zolago_Help.csv</default>
+                    </files>
+                </Zolago_Help>
+            </modules>
+        </translate>
     </frontend>
 </config>
