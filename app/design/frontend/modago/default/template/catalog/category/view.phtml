@@ -1,5 +1,5 @@
 <?php if($this->isContentMode()): ?>
-            <?php echo $this->getChildHtml('banner_result_title'); ?>
+            <?php //echo $this->getChildHtml('banner_result_title'); ?>
             <div id="content" class="container-fluid">
                 <div class="row">
                     <div class="col-sm-12">
@@ -22,6 +22,9 @@
                 </div>
             </section>
             <?php endif; ?>
+    <script type="text/javascript">
+        jQuery(".wrapp-section").removeClass("bg-w");
+    </script>
     </section>
 <?php elseif($this->isMixedMode()): ?>
     <?php echo $this->getCmsBlockHtml() ?>
