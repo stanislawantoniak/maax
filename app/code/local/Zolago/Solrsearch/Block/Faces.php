@@ -277,6 +277,12 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         return $urlParams;
     }
 
+    public function getItemId($attributeCode, $item) {
+        $item = base64_encode($item);
+        $item = str_replace('=','',$item);
+        return  $attributeCode . "_" . $item;
+    }
+
     public function getRemoveFacesUrl($key,$value)
     {
 		return Mage::getUrl('*/*/*', $this->_parseRemoveFacesUrl($key, $value));
