@@ -27,6 +27,7 @@ class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
 		
         $content = array(
             'user_account_url' => Mage::getUrl('customer/account'),
+            'user_account_url_orders' => Mage::getUrl('sales/order/process'),
             'logged_in' => Mage::helper('customer')->isLoggedIn(),
             'favorites_count' => $this->_getFavorites(),
             'favorites_url' => Mage::getUrl("wishlist"),

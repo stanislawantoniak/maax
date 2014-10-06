@@ -1,18 +1,37 @@
 <?php
-$vendors = $this->getVendors();
-$visibility = Mage::getSingleton('udqa/source')->setPath('visibility')->toOptionHash();
+if(!$this->isGallery()) {
+	$product = $this->getProduct();
+	$vendors = $product ? $product->getUdropshipVendor() : $this->getVendorsList();
+} else {
+	$vendors = $this->getLocalVendorId();
+}
+
 $session = Mage::getSingleton('customer/session');
-/* @var $session Mage_Customer_Model_Session */
 ?>
-<?php if($this->getProduct()->getUdropshipVendor()):?>
 <form action="<?php echo $this->getFormAction(); ?>" id="question-form" method="post" novalidate="novalidate" class="form clearfix">
-    <input type="hidden" name="question[product_id]" value="<?php echo $this->getProduct()->getId()?>" />
-    <input type="hidden" name="question[vendor_id]" value="<?php echo $this->getProduct()->getUdropshipVendor()?>" />
+	<?php if(isset($product)): ?>
+	    <input type="hidden" name="question[product_id]" value="<?php echo $product->getId()?>" />
+	<?php endif; ?>
+
     <input type="hidden" name="question[visibility]" value="0" />
 
     <div class="row">
         <fieldset class="fieldset col-xs-11">
             <ul class="form-list">
+				<?php if(!is_array($vendors)): ?>
+					<input type="hidden" name="question[vendor_id]" value="<?php echo $vendors; ?>" />
+				<?php else: ?>
+					<li class="wide">
+						<div class="form-group select-container">
+							<select name="question[vendor_id]" id="vendor_id" class="form-control required-entry" required>
+									<option value=""><?php echo $this->__("Choose shop"); ?></option>
+								<?php foreach($vendors as $id=>$name): ?>
+									<option value="<?php echo $id; ?>"><?php echo $name; ?></option>
+								<?php endforeach; ?>
+							</select>
+						</div>
+					</li>
+				<?php endif; ?>
                 <?php if(!$session->isLoggedIn()):?>
                 <li class="wide">
                     <div class="form-group">
@@ -54,8 +73,7 @@ $session = Mage::getSingleton('customer/session');
         </div>
     </div>
 </form>
-    <script type="text/javascript">
-        Mall.i18nValidation.add("required", "<?php echo $this->__('This field is required') ?>");
-        Mall.i18nValidation.add("email", "<?php echo $this->__('Valid email is required.') ?>");
-    </script>
-<?php endif;?>
+<script type="text/javascript">
+	Mall.i18nValidation.add("required", "<?php echo $this->__('This field is required') ?>");
+	Mall.i18nValidation.add("email", "<?php echo $this->__('Valid email is required.') ?>");
+</script>
