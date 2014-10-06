@@ -277,6 +277,12 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         return $urlParams;
     }
 
+    public function getItemId($attributeCode, $item) {
+        $item = base64_encode($item);
+        $item = str_replace('=','',$item);
+        return  $attributeCode . "_" . $item;
+    }
+
     public function getRemoveFacesUrl($key,$value)
     {
 		return Mage::getUrl('*/*/*', $this->_parseRemoveFacesUrl($key, $value));
@@ -655,50 +661,6 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         }
     }
 	
-//    public function getFlagBlock($solrData) {
-//        if($this->getMode()==self::MODE_CATEGORY&& !$this->getCurrentCategory()->getUseFlagFilter()) {
-//            return null;
-//        }
-//		
-//		//Emulate Multi-Filter Behavior - Start
-//		$cleanSolrData = $this->getCleanFlagFacetData();
-//		//Emulate Multi-Filter Behavior - End
-//		
-//        $facetFileds		= array();
-//        $bestsellerFacet	= array();
-//        $isNewFacet			= array();
-//        if (isset($solrData['facet_counts']['facet_fields']) && is_array($solrData['facet_counts']['facet_fields'])) {
-//            $facetFileds = $solrData['facet_counts']['facet_fields'];
-//        }
-//        if (isset($facetFileds['is_bestseller_facet'][Mage::helper('core')->__('Yes')])) {
-//            $bestsellerFacet	= array(Mage::helper('zolagosolrsearch')->__('Bestseller') => $facetFileds['is_bestseller_facet'][Mage::helper('core')->__('Yes')]);
-//        }
-//
-//        if (isset($facetFileds['is_new_facet'][Mage::helper('core')->__('Yes')])) {
-//            $isNewFacet			= array(Mage::helper('zolagosolrsearch')->__('New') => $facetFileds['is_new_facet'][Mage::helper('core')->__('Yes')]);
-//        }
-//        if(isset($facetFileds['product_flag_facet'])) {
-//            $data = $facetFileds['product_flag_facet'];
-//            
-//            if($this->getSpecialMultiple()) {
-//                $data = $this->_prepareMultiValues('product_flag_facet', $data);
-//            }
-//            $out = array();
-//			$data = array_merge($data, $bestsellerFacet, $isNewFacet);
-//            foreach ($cleanSolrData as $key=>$val) {
-//                if (!empty($data[$key])) {
-//                    $out[$key] = $data[$key];
-//                }
-//            }
-//			ksort($out);
-//            $block = $this->getLayout()->createBlock($this->_getFlagRenderer());
-//            $block->setParentBlock($this);
-//            $block->setAllItems($out);
-//            $block->setAttributeCode("product_flag");
-//            $block->setFacetKey("product_flag_facet");
-//            return $block;
-//        }
-//    }
 
     public function getRatingBlock($solrData) {
         if($this->getMode()==self::MODE_CATEGORY&& !$this->getCurrentCategory()->getUseReviewFilter()) {

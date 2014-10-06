@@ -726,23 +726,23 @@ span.checked {
   background: #000; }
 
 /* line 3, ../sass/design/modules/_current-filter.scss */
-#view-current-filter h1 {
+#active-filters h1, #view-current-filter h1 {
   text-transform: uppercase; }
 @media (max-width: 768px) {
   /* line 3, ../sass/design/modules/_current-filter.scss */
-  #view-current-filter h1 {
+  #active-filters h1, #view-current-filter h1 {
     font-size: 18px; } }
 /* line 10, ../sass/design/modules/_current-filter.scss */
-#view-current-filter dl dt {
+#active-filters dl dt, #view-current-filter dl dt {
   text-transform: uppercase;
   line-height: 20px;
   font-weight: normal; }
 @media (max-width: 768px) {
   /* line 10, ../sass/design/modules/_current-filter.scss */
-  #view-current-filter dl dt {
+  #active-filters dl dt, #view-current-filter dl dt {
     font-weight: normal; } }
 /* line 19, ../sass/design/modules/_current-filter.scss */
-#view-current-filter dl dd .label {
+#active-filters dl dd .label, #view-current-filter dl dd .label {
   color: #000;
   font-size: 12px;
   text-align: left;
@@ -750,19 +750,20 @@ span.checked {
   border: 1px solid #ededed;
   font-weight: normal; }
 /* line 27, ../sass/design/modules/_current-filter.scss */
-#view-current-filter dl dd .fa {
+#active-filters dl dd .fa, #view-current-filter dl dd .fa {
   color: #949494;
   font-size: 11px; }
 /* line 32, ../sass/design/modules/_current-filter.scss */
-#view-current-filter dl dd:hover .fa {
+#active-filters dl dd:hover .fa, #view-current-filter dl dd:hover .fa {
   cursor: pointer; }
 /* line 37, ../sass/design/modules/_current-filter.scss */
-#view-current-filter dl dd.action {
+#active-filters dl dd.action, #view-current-filter dl dd.action {
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px;
   border-radius: 3px; }
 /* line 42, ../sass/design/modules/_current-filter.scss */
-#view-current-filter .actionViewFilter {
+#active-filters .actionViewFilter, #view-current-filter .actionViewFilter {
+  margin-bottom: 10px;
   white-space: nowrap;
   -webkit-border-top-right-radius: 5px !important;
   -webkit-border-bottom-right-radius: 5px !important;
@@ -776,10 +777,34 @@ span.checked {
   -moz-border-radius-bottomleft: 0px !important;
   border-top-left-radius: 0px !important;
   border-bottom-left-radius: 0px !important; }
-/* line 58, ../sass/design/modules/_current-filter.scss */
-#view-current-filter .backToCategory {
+/* line 60, ../sass/design/modules/_current-filter.scss */
+#active-filters .backToCategory, #view-current-filter .backToCategory {
   text-decoration: underline;
   font-size: 12px; }
+
+/* line 67, ../sass/design/modules/_current-filter.scss */
+#header-main .wrapp-section {
+  border: none; }
+
+/* line 73, ../sass/design/modules/_current-filter.scss */
+.catalog-category-view .breadcrumb {
+  background-attachment: scroll;
+  background-clip: border-box;
+  background-color: transparent;
+  background-image: none;
+  background-origin: padding-box;
+  background-size: auto;
+  color: #1e1e1e;
+  font-family: OpenSansRegular;
+  font-size: 11px;
+  margin-bottom: 0px;
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-top: 20px;
+  padding-bottom: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-top: 0px; }
 
 /* line 2, ../sass/design/modules/_selected-styled.scss */
 .sbHolder {
@@ -809,19 +834,19 @@ span.checked {
   background: url('../images/sprites/select-sbfa0a5a9cb.png');
   background-position: 0 -18px;
   line-height: 27px; }
-/* line 59, ../../../../../../../../../var/lib/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 59, ../../../../../../../../../../usr/lib64/ruby/gems/1.8/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
 .sbToggle:hover, .sbToggle.select_styled-hover {
   background-position: 0 -72px; }
 /* line 31, ../sass/design/modules/_selected-styled.scss */
 .sbToggle:link {
   background-position: 0 -18px; }
-/* line 59, ../../../../../../../../../var/lib/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 59, ../../../../../../../../../../usr/lib64/ruby/gems/1.8/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
 .sbToggle:link:hover, .sbToggle:link.select_styled-hover {
   background-position: 0 -72px; }
 /* line 34, ../sass/design/modules/_selected-styled.scss */
 .sbToggle:visited {
   background-position: 0 -18px; }
-/* line 59, ../../../../../../../../../var/lib/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 59, ../../../../../../../../../../usr/lib64/ruby/gems/1.8/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
 .sbToggle:visited:hover, .sbToggle:visited.select_styled-hover {
   background-position: 0 -72px; }
 /* line 37, ../sass/design/modules/_selected-styled.scss */
@@ -1545,7 +1570,7 @@ body.lightbox {
 /* line 10, ../sass/design/modules/_modal.scss */
 .modal-content ul {
   list-style: none; }
-/* line 11, ../../../../../../../../../var/lib/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/typography/lists/_bullets.scss */
+/* line 11, ../../../../../../../../../../usr/lib64/ruby/gems/1.8/gems/compass-core-1.0.1/stylesheets/compass/typography/lists/_bullets.scss */
 .modal-content ul li {
   list-style-image: none;
   list-style-type: none;
@@ -4980,19 +5005,19 @@ i.flag.hit, i.flag.bestseller {
 /* line 41, ../sass/design/style/_footer.scss */
 #footer .ico_social_twitter {
   background-position: 0 -145px; }
-/* line 59, ../../../../../../../../../var/lib/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 59, ../../../../../../../../../../usr/lib64/ruby/gems/1.8/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
 #footer .ico_social_twitter:hover, #footer .ico_social_twitter.ico_social_twitter-hover {
   background-position: -27px -145px; }
 /* line 43, ../sass/design/style/_footer.scss */
 #footer .ico_social_twitter:hover {
   background-position: 0 -145px; }
-/* line 59, ../../../../../../../../../var/lib/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 59, ../../../../../../../../../../usr/lib64/ruby/gems/1.8/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
 #footer .ico_social_twitter:hover:hover, #footer .ico_social_twitter:hover.ico_social_twitter-hover {
   background-position: -27px -145px; }
 /* line 47, ../sass/design/style/_footer.scss */
 #footer .ico_social_fb {
   background-position: -127px -44px; }
-/* line 59, ../../../../../../../../../var/lib/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 59, ../../../../../../../../../../usr/lib64/ruby/gems/1.8/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
 #footer .ico_social_fb:hover, #footer .ico_social_fb.ico_social_fb-hover {
   background-position: -181px -44px; }
 /* line 49, ../sass/design/style/_footer.scss */
@@ -5001,37 +5026,37 @@ i.flag.hit, i.flag.bestseller {
 /* line 54, ../sass/design/style/_footer.scss */
 #footer .ico_social_instagram {
   background-position: -54px -145px; }
-/* line 59, ../../../../../../../../../var/lib/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 59, ../../../../../../../../../../usr/lib64/ruby/gems/1.8/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
 #footer .ico_social_instagram:hover, #footer .ico_social_instagram.ico_social_instagram-hover {
   background-position: -106px -145px; }
 /* line 56, ../sass/design/style/_footer.scss */
 #footer .ico_social_instagram:hover {
   background-position: -54px -145px; }
-/* line 59, ../../../../../../../../../var/lib/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 59, ../../../../../../../../../../usr/lib64/ruby/gems/1.8/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
 #footer .ico_social_instagram:hover:hover, #footer .ico_social_instagram:hover.ico_social_instagram-hover {
   background-position: -106px -145px; }
 /* line 60, ../sass/design/style/_footer.scss */
 #footer .ico_social_gplus {
   background-position: -80px -145px; }
-/* line 59, ../../../../../../../../../var/lib/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 59, ../../../../../../../../../../usr/lib64/ruby/gems/1.8/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
 #footer .ico_social_gplus:hover, #footer .ico_social_gplus.ico_social_gplus-hover {
   background-position: 0 -98px; }
 /* line 62, ../sass/design/style/_footer.scss */
 #footer .ico_social_gplus:hover {
   background-position: -80px -145px; }
-/* line 59, ../../../../../../../../../var/lib/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 59, ../../../../../../../../../../usr/lib64/ruby/gems/1.8/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
 #footer .ico_social_gplus:hover:hover, #footer .ico_social_gplus:hover.ico_social_gplus-hover {
   background-position: 0 -98px; }
 /* line 66, ../sass/design/style/_footer.scss */
 #footer .ico_social_pinterest {
   background-position: -154px -44px; }
-/* line 59, ../../../../../../../../../var/lib/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 59, ../../../../../../../../../../usr/lib64/ruby/gems/1.8/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
 #footer .ico_social_pinterest:hover, #footer .ico_social_pinterest.ico_social_pinterest-hover {
   background-position: -181px -71px; }
 /* line 68, ../sass/design/style/_footer.scss */
 #footer .ico_social_pinterest:hover {
   background-position: -154px -44px; }
-/* line 59, ../../../../../../../../../var/lib/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 59, ../../../../../../../../../../usr/lib64/ruby/gems/1.8/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
 #footer .ico_social_pinterest:hover:hover, #footer .ico_social_pinterest:hover.ico_social_pinterest-hover {
   background-position: -181px -71px; }
 

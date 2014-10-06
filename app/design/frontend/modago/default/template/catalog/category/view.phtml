@@ -1,5 +1,5 @@
 <?php if($this->isContentMode()): ?>
-            <?php echo $this->getChildHtml('banner_result_title'); ?>
+            <?php //echo $this->getChildHtml('banner_result_title'); ?>
             <div id="content" class="container-fluid">
                 <div class="row">
                     <div class="col-sm-12">
@@ -22,33 +22,31 @@
                 </div>
             </section>
             <?php endif; ?>
+    <script type="text/javascript">
+        jQuery(".wrapp-section").removeClass("bg-w");
+    </script>
     </section>
 <?php elseif($this->isMixedMode()): ?>
     <?php echo $this->getCmsBlockHtml() ?>
     <?php echo $this->getProductListHtml() ?>
 
 <?php else: ?>
-
+	<section id="main" class="<?php echo $this->getElementClass(); ?>">
         <?php echo $this->getChildHtml('solrsearch_result_title'); ?>
+        <?php echo $this->getChildHtml('solrsearch_product_list_activefaces'); ?>
         <?php echo $this->getChildHtml('solrsearch_product_list_toolbar'); ?>
-
         <div id="content" class="container-fluid">
             <div class="row">
                 <div class="col-sm-12">
                     <div id="sidebar" class="hidden-xs">
-
                         <?php echo $this->getChildHtml('searchFaces'); ?>
-
                     </div>
                     <div id="content-main">
-
                         <?php echo $this->getProductListHtml() ?>
-
                     </div>
                 </div>
             </div>
         </div>
-
     </section>
 
 <style type="text/css">
