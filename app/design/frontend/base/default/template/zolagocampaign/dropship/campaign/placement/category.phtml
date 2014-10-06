@@ -143,7 +143,7 @@ $isLocalVendor = ($vendor->getId() == Mage::helper('udropship')->getLocalVendorI
                                                                 </span>
 
                                                                 <span data-edit-source="campaign_date_from">
-                                                                    <?php if (empty($placement['campaign_date_to'])):?>
+                                                                    <?php if (empty($placement['campaign_date_to']) && !empty($placement['campaign_date_from'])):?>
                                                                         <?php echo $this->__('From'); ?>
                                                                     <?php endif; ?>
                                                                     <?php echo $placement['campaign_date_from']; ?>
@@ -153,7 +153,7 @@ $isLocalVendor = ($vendor->getId() == Mage::helper('udropship')->getLocalVendorI
                                                                     <?php if (!empty($placement['campaign_date_from']) && !empty($placement['campaign_date_to'])): ?>-<?php endif; ?>
                                                                 </span>
                                                                 <span data-edit-source="campaign_date_to">
-                                                                    <?php if (empty($placement['campaign_date_from'])):?>
+                                                                    <?php if (empty($placement['campaign_date_from'])&& !empty($placement['campaign_date_to'])):?>
                                                                         <?php echo $this->__('To'); ?>
                                                                     <?php endif; ?>
                                                                     <?php echo $placement['campaign_date_to']; ?>
