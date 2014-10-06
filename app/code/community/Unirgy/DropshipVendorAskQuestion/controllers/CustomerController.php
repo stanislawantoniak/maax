@@ -152,7 +152,7 @@ class Unirgy_DropshipVendorAskQuestion_CustomerController extends Mage_Core_Cont
 //        empty($question['product_id'])
 //            ? $this->_redirect('*/*/index')
 //            : $this->_redirectReferer();
-		
+
 		$this->_redirectReferer();
         return $this;
 
