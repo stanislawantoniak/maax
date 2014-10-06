@@ -449,15 +449,12 @@
 			    <block type="zolagocatalog/breadcrumbs"  name="zolago_breadcrumbs" />
             </block>
 		</reference>
+		
 		<reference name="zolagosolrsearch_category_view">
 			<remove name="zolagocatalog_breadcrumbs"/>
 			<action method="setTemplate">
 				<template>catalog/category/view.phtml</template>
 			</action>
-            <block type="zolagosolrsearch/catalog_product_list_header_category" name="banner_result_title" template="catalog/category/header/category.phtml" as="banner_result_title">
-                <block type="page/html_breadcrumbs" name="breadcrumbs" as="breadcrumbs"/>
-                <block type="zolagocatalog/breadcrumbs" name="zolagocatalog_breadcrumbs" as="zolagocatalog_breadcrumbs"/>
-            </block>
 			<block type="zolagomodago/dropshipmicrositepro_vendor_banner" name="vendor.banner" template="unirgy/microsite/vendor/banner.phtml"/>
 			<block type="zolagomodago/dropshipmicrositepro_vendor_category_banner" name="vendor.banner.inspiration" template="unirgy/microsite/vendor/category/banner.phtml"/>
 			<block type="zolagomodago/solrsearch_faces" name="searchfaces" as="searchFaces" before="-">
@@ -466,17 +463,6 @@
 			</block>
 		</reference>
 
-		<reference name="solrsearch_product_list_header">
-			<action method="setTemplate">
-				<template>catalog/product/list/header/category.phtml</template>
-			</action>
-			<block type="page/html_breadcrumbs" name="breadcrumbs" as="breadcrumbs"/>
-		</reference>
-		<reference name="solrsearch_product_list_toolbar">
-			<action method="setTemplate">
-				<template>catalog/product/list/toolbar.phtml</template>
-			</action>
-		</reference>
 
 		<reference name="left">
 			<action method="unsetChild">
