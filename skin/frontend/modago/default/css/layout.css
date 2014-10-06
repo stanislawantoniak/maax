@@ -5867,6 +5867,12 @@ yx-axis
   text-align: center;
   text-transform: uppercase; }
 
+/* line 18, ../sass/layout/modules/_help-page.scss */
+#help-contact-msg-fix .visible-xs {
+  padding-bottom: 10px !important;
+  margin-left: 10px;
+  margin-right: 10px; }
+
 /* line 1, ../sass/layout/override/_global.scss */
 .clr {
   clear: both; }

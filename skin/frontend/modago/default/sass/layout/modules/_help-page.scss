@@ -12,7 +12,13 @@
     text-transform: uppercase;
   }
 
-
-
 }
 
+#help-contact-msg-fix{
+  .visible-xs {
+    padding-bottom: 10px!important;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
+}

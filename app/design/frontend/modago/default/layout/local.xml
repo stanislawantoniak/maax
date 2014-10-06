@@ -1239,10 +1239,10 @@
             </action>
         </reference>
         <reference name="content">
-            <block type="core/messages" name="global_messages" as="global_messages"/>
-            <block type="cms/block" name="help-contact-vendor">
-                <action method="setBlockId"><block_id>help-contact-vendor</block_id></action>
-            </block>
+
+            <block type="core/template" name="contact.vendor" template="help/contact-vendor.phtml" />
+            <block type="core/template" name="messages.fix" template="help/messagesfix.phtml" />
+
         </reference>
     </help_contact_vendor>
 
@@ -1284,10 +1284,12 @@
             </action>
         </reference>
         <reference name="content">
-            <block type="core/messages" name="global_messages" as="global_messages"/>
-            <block type="cms/block" name="help-contact-gallery">
-                <action method="setBlockId"><block_id>help-contact-gallery</block_id></action>
-            </block>
+
+
+
+            <block type="core/template" name="contact.gallery" template="help/contact-gallery.phtml" />
+            <block type="core/template" name="messages.fix" template="help/messagesfix.phtml" />
+
         </reference>
     </help_contact_gallery>
 
