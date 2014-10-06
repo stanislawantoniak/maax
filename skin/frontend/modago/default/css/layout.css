@@ -5869,9 +5869,17 @@ yx-axis
 
 /* line 18, ../sass/layout/modules/_help-page.scss */
 #help-contact-msg-fix .visible-xs {
-  padding-bottom: 10px !important;
   margin-left: 10px;
-  margin-right: 10px; }
+  margin-right: 10px;
+  margin-bottom: 0px;
+  min-height: 0px; }
+/* line 24, ../sass/layout/modules/_help-page.scss */
+#help-contact-msg-fix .visible-xs ul.messages {
+  margin-bottom: 10px !important; }
+
+/* line 31, ../sass/layout/modules/_help-page.scss */
+#contact-container {
+  border-top-width: 0px; }
 
 /* line 1, ../sass/layout/override/_global.scss */
 .clr {

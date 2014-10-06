@@ -16,9 +16,18 @@
 
 #help-contact-msg-fix{
   .visible-xs {
-    padding-bottom: 10px!important;
+
     margin-left: 10px;
     margin-right: 10px;
+    margin-bottom: 0px;
+    min-height: 0px;
+    ul.messages {
+      margin-bottom: 10px!important;
+    }
   }
 
+}
+
+#contact-container {
+  border-top-width: 0px;
 }
