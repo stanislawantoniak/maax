@@ -464,7 +464,14 @@
 				<block type="solrsearch/faces_price" name="solr_price_facets" as="solr_price_facets"/>
 				<block type="solrsearch/faces_range" name="solr_range_facets" as="solr_range_facets"/>
 			</block>
+            <block type="zolagosolrsearch/catalog_product_list_header_category" name="banner_result_title" template="catalog/category/header/category.phtml" as="banner_result_title"/>
 		</reference>
+        <reference name="banner_result_title">
+            <action method="setTemplate">
+                <template>catalog/category/header/category.phtml</template>
+            </action>
+            <block type="page/html_breadcrumbs" name="breadcrumbs" as="breadcrumbs"/>
+        </reference>
 		<reference name="solrsearch_product_list_header">
 			<action method="setTemplate">
 				<template>catalog/product/list/header/category.phtml</template>
