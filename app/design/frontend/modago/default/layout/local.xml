@@ -412,8 +412,6 @@
 	<solrbridge_solrsearch_category_view>
 		<remove name="mana.catalog.leftnav"/>
 		<remove name="solrsearch_category_view"/>
-		<remove name="solrsearch_product_list_active"/>
-
 		<reference name="root">
 			<action method="setTemplate">
 				<template>page/2columns-left.phtml</template>
@@ -445,15 +443,14 @@
 				<script>js/mall/listing.js</script>
 			</action>
 		</reference>
-		<reference name="solrsearch_product_list_header">
-			<block type="zolagosolrsearch/active" name="solrsearch_product_list_activefaces"/>
-		</reference>
-		<reference name="solrsearch_product_list">
-			<action method="setTemplate">
-				<template>catalog/product/list.phtml</template>
-			</action>
+		
+		<reference name="content">
+            <block type="core/template" before="solrsearch_product_list_header" name="zolago_breadcrumb_fix" template="catalog/breadcrumbsfix.phtml">
+			    <block type="zolagocatalog/breadcrumbs"  name="zolago_breadcrumbs" />
+            </block>
 		</reference>
 		<reference name="zolagosolrsearch_category_view">
+			<remove name="zolagocatalog_breadcrumbs"/>
 			<action method="setTemplate">
 				<template>catalog/category/view.phtml</template>
 			</action>
@@ -464,7 +461,6 @@
 			<block type="zolagomodago/dropshipmicrositepro_vendor_banner" name="vendor.banner" template="unirgy/microsite/vendor/banner.phtml"/>
 			<block type="zolagomodago/dropshipmicrositepro_vendor_category_banner" name="vendor.banner.inspiration" template="unirgy/microsite/vendor/category/banner.phtml"/>
 			<block type="zolagomodago/solrsearch_faces" name="searchfaces" as="searchFaces" before="-">
-				<block type="zolagosolrsearch/active" name="solrsearch_product_list_activefaces"/>
 				<block type="solrsearch/faces_price" name="solr_price_facets" as="solr_price_facets"/>
 				<block type="solrsearch/faces_range" name="solr_range_facets" as="solr_range_facets"/>
 			</block>
@@ -487,6 +483,8 @@
 				<name>searchfaces</name>
 			</action>
 		</reference>
+		
+		
 	</solrbridge_solrsearch_category_view>
 
 	<catalog_product_view>

@@ -6,6 +6,17 @@
  * Object for processing product listing.
  */
 Mall.listing = {
+	
+	/**
+	 * @type Number
+	 */
+	_ajaxTimeout: 500, 
+	
+	/**
+	 * @type Number
+	 */
+	_ajaxTimer: null, 
+	
     /**
      * Current listing page.
      */
@@ -90,20 +101,44 @@ Mall.listing = {
      * Current filters state - mobile / desktop.
      */
     _current_mobile_filter_state: 0,
+	
+	/**
+	 * Currently opened sections
+	 */
+	_current_opened: {},
+	
+	/**
+	 * Currently show more
+	 */
+	_current_show_more: {},
+	
+	/**
+	 * Cache for ajax request
+	 */
+	_ajaxCache: {},
+	
+	/**
+	 * Cache for ajax request
+	 */
+	_ajaxQueueCache: {},
+	
+	/**
+	 * @type Array
+	 */
+	_init_products: [],
 
     /**
      * Performs initialization for listing object.
      */
     init: function () {
-        this.attachShowMoreEvent();
-        this.attachFilterColorEvents();
-        this.attachFilterIconEvents();
-        this.attachFilterEnumEvents();
-        this.attachFilterPriceEvents();
-        this.attachFilterDroplistEvents();
-        this.attachFilterFlagEvents();
-        this.attachFilterPriceSliderEvents();
-        this.attachFilterSizeEvents();
+		this.resetForm();
+        this.initFilterEvents();
+        this.initSortEvents();
+        this.initActiveEvents();
+		
+		// Add custom events to prodcuts
+		this.preprocessProducts();
+		
         // set next load start
         this.setLoadNextStart(this.getCurrentVisibleItems());
         this.reloadListingItemsAfterPageLoad();
@@ -113,29 +148,178 @@ Mall.listing = {
         this.setAutoappend(true);
         this.loadToQueue();
         this.setLoadMoreLabel();
+		
+		// fill cache from static contents
+		this._rediscoverCache();
     },
+	
+	setInitProducts: function(products){
+		this._init_products = products;
+		return this;
+	},
+	
+	getInitProducts: function(products){
+		return this._init_products
+	},
+	
+	/**
+	 * Preparce response object based on static html data
+	 * @returns {undefined}
+	 */
+	_rediscoverCache: function(){
+		var content = {
+				filters: this.getFilters().prop("outerHTML"),
+				active: this.getActive().prop("outerHTML"),
+				toolbar: this.getToolbar().prop("outerHTML"),
+				header: this.getHeader().prop("outerHTML"),
+				total: this.getTotal(),
+				rows: this.getCurrentVisibleItems(),
+				query: this.getQuery(),
+				sort: this.getSort(),
+				dir: this.getDir(),
+				products: this.getInitProducts(),
+			},
+			ajaxKey = this._buildAjaxKey(this.getQueryParamsAsArray());
+		
+		// products - append json
+		// totals,rows,page,sort,dir - from this
+		
+		
+		console.log(ajaxKey, content);
+		// Bind to cache
+		this._ajaxCache[ajaxKey] = {
+			status: 1,
+			content: content
+		};
+	},
+	
+	resetForm: function(){
+		this.getFilters().find("form").get(0).reset();
+	},
+
+	initFilterEvents: function(scope){
+		scope = scope || jQuery("#solr_search_facets");
+		this.preprocessFilterContent(scope);
+		this.initDroplists(scope);
+        this.attachMiscActions(scope);
+        this.attachFilterColorEvents(scope);
+        this.attachFilterIconEvents(scope);
+        this.attachFilterEnumEvents(scope);
+        this.attachFilterPriceEvents(scope);
+        this.attachFilterDroplistEvents(scope);
+        this.attachFilterFlagEvents(scope);
+        this.attachFilterPriceSliderEvents(scope);
+        this.attachFilterSizeEvents(scope);
+	},
+	
+	// Do remember roll downs & showmors
+	preprocessFilterContent: function(content){
+		var self = this;
+		// Restore state of rolling
+		jQuery.each(this.getCurrentOpened(), function(idx, value){
+			var el = jQuery("#" + idx, content);
+			if(!el.length){
+				return;
+			}
+			self._doRollSection(el.parent(), value, false);
+		});
+		// Restore state of show more
+		jQuery.each(this.getCurrentShowMore(), function(idx, value){
+			var el = jQuery("#" + idx, content);
+			if(!el.length){
+				return;
+			}
+			self._doShowMore(el.parent(), value, false);
+		});
+	},
+	
+	/**
+	 * Handle clear handle after add/rem favoirites
+	 */
+	preprocessProducts: function(){
+		var self = this;
+		this.getProducts().find(".item:not(.processed)").each(function(){
+			var el = jQuery(this); 
+			el.find(".like").click(function(){
+				self._clearAjaxCache();
+			})
+			el.addClass("processed");
+		});
+	},
+
+	
+	_doRollSection: function(section, state, animate){
+		var title = section.find("h3"),
+			content = section.find(".content"),
+			i = title.find('i');
+	
+		if(animate){
+			if(state){
+				content.stop(true,true).slideDown(200, function(){
+					title.removeClass("closed").addClass("open");
+				});
+				
+			}else{
+				content.stop(true,true).slideUp(100, function(){
+					title.removeClass("open").addClass("closed");
+				});
+			}
+		}else{
+			if(state){
+				content.show();
+				title.removeClass("closed").addClass("open");
+			}else{
+				content.hide();
+				title.removeClass("open").addClass("closed");
+			}
+		}
+		if(state){
+			i.removeClass('fa-chevron-down').addClass('fa-chevron-up');
+		}else{
+			i.removeClass('fa-chevron-up').addClass('fa-chevron-down');
+		}
+	},
+	
+	_doShowMore: function(section, state, animate){
+		var link = section.find(".showmore-filters"),
+			content = section.find("[data-state='hidden']");
+		
+		if(animate){
+				if(state) {
+					content.show(500, function(){
+						link.text("Pokaż mniej");
+						link.attr("data-state", "1");	
+					});
+				} else {
+					content.hide(500, function(){
+						link.text("Pokaż więcej");
+						link.attr("data-state", "0");
+					});
+				}
+		}else{
+			if(state){
+				content.show();
+				link.text("Pokaż mniej");
+				link.attr("data-state", "1");
+			}else{
+				content.hide();
+				link.text("Pokaż więcej");
+				link.attr("data-state", "0");
+			}
+		}
+	},
+	
 
     /**
      * Loads products after clicking on Load more button.
      *
      * @deprecated since loadMoreProducts method intruduced.
      */
-    getMoreProducts: function () {
-        var query = this.getQuery(),
-            page = this.getPage(),
-            sort = this.getSort(),
-            dir = this.getDir(),
-            scat = this.getScat(),
-            filtersArray = this.getFiltersArray();
-
-        OrbaLib.Listing.getProducts({
-            q: query,
-            page: page,
-            sort: sort,
-            dir: dir,
-            scat: scat,
-            fq: filtersArray === [] ? [] : filtersArray.fq
-        }, Mall.listing.getMoreProductsCallback);
+    getMoreProducts: function (){
+        OrbaLib.Listing.getProducts(
+			this.getQueryParamsAsArray(), 
+			Mall.listing.getMoreProductsCallback
+		);
     },
 
     /**
@@ -174,9 +358,9 @@ Mall.listing = {
 
     setLoadMoreLabel: function () {
         "use strict";
-
-        jQuery(".addNewPositionListProduct").find("span").text(this.getLoadNextOffset());
-
+        jQuery(".addNewPositionListProduct").
+			find("span").
+			text(this.getLoadNextOffset());
         return this;
     },
 
@@ -220,7 +404,6 @@ Mall.listing = {
      */
     appendFromQueue: function () {
         "use strict";
-
         this.showLoading();
         this.placeListingFadeContainer();
         this.showShapesListing();
@@ -237,23 +420,27 @@ Mall.listing = {
 
         // loading
         inst.on("always", function () {
+			
             //setTimeout(function () {
             jQuery(items).show();
             self.hideLoading();
-                container.masonry({isAnimated: false, transitionDuration: 0})
-                    .masonry("reloadItems").masonry();
+			
+			container.masonry({isAnimated: false, transitionDuration: 0})
+				.masonry("reloadItems").masonry();
 
-                // show load more button
-                if (Mall.listing.canShowLoadMoreButton()) {
-                    Mall.listing.showLoadMoreButton();
-                    Mall.listing.showShapesListing();
-                    Mall.listing.placeListingFadeContainer();
-                }
+			// show load more button
+			
+			if (Mall.listing.canShowLoadMoreButton()) {
+				Mall.listing.showLoadMoreButton();
+				Mall.listing.showShapesListing();
+				Mall.listing.showLoadMoreButton();
+			}
 
-                // reload if queue is empty
-                //container.masonry();
+			// reload if queue is empty
+			//container.masonry();
 
-                self.placeListingFadeContainer();
+			self.placeListingFadeContainer();
+			
             //}, 3000);
         });
 
@@ -316,29 +503,21 @@ Mall.listing = {
 
     /**
      * Loads products to queue.
+	 * @todo add cache
      */
     loadToQueue: function () {
-        // ajax load
-        var query = this.getQuery(),
-            page = this.getPage(),
-            sort = this.getSort(),
-            dir = this.getDir(),
-            scat = this.getScat(),
-            start = this.getLoadNextStart(),
-            offset = this.getLoadNextOffset(),
-            filtersArray = this.getFiltersArray();
+		var forceObject = {
+			start: this.getLoadNextStart(),
+			rows: this.getLoadNextOffset()
+		}
 
         this.setQueueLoadLock();
-        OrbaLib.Listing.getProducts({
-            q: query,
-            page: page,
-            sort: sort,
-            dir: dir,
-            scat: scat,
-            start: start,
-            rows: offset,
-            fq: filtersArray === [] ? [] : filtersArray.fq
-        }, Mall.listing.appendToQueueCallback);
+		
+		// Ajax load
+        OrbaLib.Listing.getProducts(
+			this.getQueryParamsAsArray(forceObject), 
+			Mall.listing.appendToQueueCallback
+		);
     },
 
     /**
@@ -414,7 +593,7 @@ Mall.listing = {
                 Mall.listing.setProductQueue(
                     Mall.listing.getProductQueue().concat(data.content.products)
                 );
-                Mall.listing.setLoadNextStart(data.content.rows);
+                Mall.listing.addLoadNextStart(data.content.rows);
                 // load images in background
                 if (Mall.listing.canPrependFromQueue()) {
                     Mall.listing.loadPartImagesFromQueue();
@@ -460,10 +639,12 @@ Mall.listing = {
         });
 
         // attach events
+		this.preprocessProducts();
         this.attachEventsToProducts();
-
+		
         return items;
     },
+	
 
     /**
      * Creates single product container for listing.
@@ -597,6 +778,7 @@ Mall.listing = {
         var itemProduct = jQuery('.box_listing_product'),
             textLike,
             itemProductId;
+	
         itemProduct.on('click', '.like', function(event) {
             event.preventDefault();
             /* Act on the event */
@@ -701,7 +883,6 @@ Mall.listing = {
             jQuery(".fb-slidebar-inner").find('.sidebar').remove();
             jQuery(".fb-slidebar-inner").html(currentSidebar.html());
             this.setCurrentMobileFilterState(1);
-            this.attachShowMoreEvent();
             this.attachFilterColorEvents();
             this.attachFilterIconEvents();
             this.attachFilterEnumEvents();
@@ -758,7 +939,6 @@ Mall.listing = {
             jQuery("#sidebar").find(".sidebar").remove();
             jQuery("#sidebar").append(currentSidebar);
             this.setCurrentMobileFilterState(0);
-            this.attachShowMoreEvent();
             this.attachFilterColorEvents();
             this.attachFilterIconEvents();
             this.attachFilterEnumEvents();
@@ -771,7 +951,363 @@ Mall.listing = {
 
         return this;
     },
+	
+	/**
+	 * @param {object} node
+	 * @returns {void}
+	 */
+	nodeChanged: function (node){
+		this.reloadListing();
+		return this;
+	},
 
+	/**
+	 * @returns {Mall.listing}
+	 */
+	reloadListing: function(){
+		this._captureListingMeta();
+		this._doAjaxRequest();
+		return this;
+	},
+	
+	/**
+	 * 
+	 */
+	_captureListingMeta: function(){
+		// Collect 
+		var filters = this.getFilters().find(".section"),
+			self = this;
+	
+		// Overrride existing fields - remember inactive diel
+		filters.each(function(){
+			var el = jQuery(this),
+				id = el.find(".content").attr("id"),
+				sm = el.find(".showmore-filters");
+				
+			self._current_opened[id] = el.find("h3").hasClass("open");
+			
+			// Show more is optional
+			if(sm.length){
+				self._current_show_more[id] = sm.attr("data-state")=="1";
+			}
+		});
+	},
+	
+	/**
+	 * @returns {Mall.listing}
+	 */
+	changeListingParams: function(params){
+		params = params || {};
+		
+		if(typeof params.sort != "undefined"){
+			this.setSort(params.sort);
+		}
+		
+		if(typeof params.dir != "undefined"){
+			this.setDir(params.dir);
+		}
+		
+		/**
+		 * @todo add more params
+		 */
+		
+		this.reloadListing();
+		return this;
+	},
+	
+	/**
+	 * @param {type} time
+	 * @returns {Mall.listing}
+	 */
+	setAjaxTimeout: function(time){
+		this._ajaxTimeout = time;
+		return this;
+	},
+	
+	/**
+	 * @returns {type|Number}
+	 */
+	getAjaxTimeout: function(){
+		return this._ajaxTimeout;
+	},
+	
+	/**
+	 * @returns {void}
+	 */
+	_doAjaxRequest: function(){
+		this._ajaxStop();
+		this._ajaxStart();
+	},
+	
+	/**
+	 * Clear ajax cache to prevent 
+	 * @param {bool} onlyCurrentUrl
+	 */
+	_clearAjaxCache: function(onlyCurrentUrl){
+		if(onlyCurrentUrl){
+			var key = this._buildAjaxKey(this.getQueryParamsAsArray());
+			if(this._ajaxCache[key]){
+				delete this._ajaxCache[key];
+			}
+			return;
+		}
+		this._ajaxCache = {};
+	},
+	
+	/**
+	 * @returns {void}
+	 */
+	_ajaxStart: function(){
+		var self = this;
+		this._ajaxTimer = setTimeout(
+			function(){self._ajaxSend.apply(self)}, 
+			this.getAjaxTimeout()
+		);
+	},
+	
+	/**
+	 * @returns {void}
+	 */
+	_ajaxStop: function(){
+		if(this._ajaxTimer){
+			clearTimeout(this._ajaxTimer);
+		}
+	},
+	
+	/**
+	 * @param {array} data
+	 * @returns {String}
+	 */
+	_buildPushStateKey: function(data){
+		return this._buildKey(data);
+	},
+	
+	/**
+	 * @param {array} data
+	 * @returns {String}
+	 */
+	_buildAjaxKey: function(data){
+		return this._buildKey(data);
+	},
+	
+	/**
+	 * @param {array} data
+	 * @returns {String}
+	 */
+	_buildKey: function(data){
+		var out = [];
+		/**
+		 * @todo Ordering params
+		 */
+		jQuery.each(data, function(){
+			out.push(encodeURIComponent(this.name) + "=" + encodeURIComponent(this.value));
+		});
+		
+		return out.join("&");
+	},
+	
+	/**
+	 * @returns {void}
+	 */
+	_ajaxSend: function(forceObject){
+		var self = this,
+			data = this.getQueryParamsAsArray(forceObject),
+			ajaxKey = this._buildAjaxKey(data);
+	
+		if(this._ajaxCache[ajaxKey]){
+			this._handleAjaxRepsonse(this._ajaxCache[ajaxKey]);
+			return;
+		}
+		
+		this.showAjaxLoading();
+		OrbaLib.Listing.getBlocks(
+			data, 
+			function(response){
+				if(response.status){
+					// Cache only success respons
+					self._ajaxCache[ajaxKey] = response;
+				}
+				self._handleAjaxRepsonse(response)
+			}
+		);
+	},
+	
+	_handleResponseError: function(response){
+		console.log(response);
+	},
+	
+	_handleAjaxRepsonse: function(response){
+		if(!response.status){
+			this._handleResponseError(response);
+		}else{
+			this.rebuildContents(response.content);
+		}
+		this.hideAjaxLoading();
+	},
+	
+	showAjaxLoading: function(){
+		this.getAjaxLoader().show();
+	},
+	
+	hideAjaxLoading: function(){
+		this.getAjaxLoader().hide();
+	},
+	
+	getAjaxLoader: function(){
+		if(!jQuery("#ajax-filter-loader").length){
+			var overlay = jQuery("<div>").css({
+				"background":	"rgba(255,255,255,0.8) \
+					url('/skin/frontend/modago/default/images/modago-ajax-loader.gif') \
+					center center no-repeat",
+				"position":		"fixed",
+				"width":		"100%",
+				"height":		"100%",
+				"left":			"0",
+				"top":			"0",
+				"z-index":		"1000000",
+				"color":		"#fff",
+			}).attr("id", "ajax-filter-loader");
+			jQuery("body").append(jQuery(overlay));
+		}
+		return jQuery("#ajax-filter-loader");
+	},
+	
+	rebuildContents: function(content){
+		
+		/**
+		 * @todo handle error
+		 */
+		
+		// All filters
+		var filters = jQuery(content.filters);
+		this.initFilterEvents(filters);
+		this.getFilters().replaceWith(filters);
+		
+		// Init toolbar
+		var toolbar = jQuery(content.toolbar);
+        this.initSortEvents(toolbar);
+		this.getToolbar().replaceWith(toolbar);
+		
+		this.getHeader().replaceWith(jQuery(content.header));
+		this.getActive().replaceWith(jQuery(content.active));
+		
+		// Finally product
+		this.replaceProducts(content);
+
+        this.initActiveEvents();
+	},
+	
+	replaceProducts: function(data){
+		// 1. Reset the content
+		this.getProducts().find(".item").remove();
+		this.setProductQueue([]);
+		
+		// 2. Prepare parsed data
+		var container = this.getProducts().masonry();
+		// 3. Reset the page and values
+		this.setPage(0);
+		this.setTotal(data.total);
+		this.setCurrentVisibleItems(data.rows);
+			
+		this.appendToList(data.products);
+		container.masonry("reloadItems");
+		container.masonry();
+		
+        this.setLoadNextStart(this.getCurrentVisibleItems());
+        this.reloadListingItemsAfterPageLoad();
+        this.loadProductsOnScroll();
+		
+		// Init list
+		this.setAutoappend(true);
+        this.loadToQueue();
+        this.setLoadMoreLabel();
+		
+		
+	},
+
+    initActiveEvents: function(scope) {
+        scope = scope || Mall.listing.getActiveId();
+        function unCheckbox(id) {
+            jQuery("input[type=checkbox]#"+id).prop('checked',false);
+        }
+        function detachActive() {
+            Mall.listing.getActive(scope).find('dl *').detach();
+        }
+
+        var active = Mall.listing.getActiveLabel(scope);
+        var remove = Mall.listing.getActiveRemove(scope);
+
+        active.on("click", function() {
+            jQuery(this).parent().detach();
+            unCheckbox(jQuery(this).data('input'));
+            if(active.length == 1) {
+                detachActive();
+            }
+            Mall.listing.reloadListing();
+        });
+        remove.on("click", function() {
+            active.each(function() {
+                unCheckbox(jQuery(this).data('input'));
+            });
+            detachActive();
+            Mall.listing.reloadListing();
+            return false;
+        });
+
+        var mobileFilterBtn = Mall.listing.getMobileFilterBtn();
+
+        mobileFilterBtn.on('click', function(event) {
+            event.preventDefault();
+            Mall.listing.insertMobileSidebar();
+            jQuery('#sb-site').toggleClass('open');
+            jQuery('.fb-slidebar').toggleClass('open');
+            //var screenWidth = jQuery(window).width();
+            var screenHeight = jQuery(window).height();
+            jQuery('body').addClass('noscroll').append('<div class="noscroll" style="width:100%; height:' + screenHeight + 'px"></div>');
+        });
+
+
+
+    },
+	
+	getMobileFilterBtn: function() {
+        return jQuery("#filters-btn .actionViewFilter");
+    },
+
+	getProducts: function(){
+		return jQuery("#items-product");
+	},
+	getHeader: function(){
+		return jQuery("#header-main");
+	},
+
+	getActive: function(scope){
+        scope = scope || Mall.listing.getActiveId();
+		return jQuery(scope);
+	},
+
+    getActiveId: function(){
+        return "#active-filters";
+    },
+
+    getActiveLabel: function(scope) {
+        scope = scope || Mall.listing.getActiveId();
+        return jQuery(scope+" .active-filter-label");
+    },
+
+    getActiveRemove: function(scope) {
+        scope = scope || Mall.listing.getActiveId();
+        return jQuery(scope+" .active-filters-remove");
+    },
+	
+	getFilters: function(){
+		return jQuery("#solr_search_facets");
+	},
+	
+	getToolbar: function(){
+		return jQuery("#sort-criteria");
+	},
+	
     /**
      * Return current mobile filters state. Is mobile or not.
      *
@@ -781,36 +1317,148 @@ Mall.listing = {
         return this._current_mobile_filter_state;
     },
 
-    /**
-     * Attaches event for show more button in filter section.
-     *
-     * @returns {Mall.listing}
-     */
-    attachShowMoreEvent: function() {
-        jQuery(".showmore-filters").on("click", function(e) {
-            var target = e.target;
-            e.preventDefault();
-            if(jQuery(this).attr("data-state") == "0") {
-                jQuery(this).parents(".content").find("[data-state='hidden']").show(500);
-            } else {
-                jQuery(this).parents(".content").find("[data-state='hidden']").hide(500);
-            }
-            Mall.listing.toggleShowMoreState(this);
-        });
 
-        return this;
-    },
+	initDroplists: function(scope){
+		var headList = jQuery('.button-select', scope),
+			listSelect = jQuery('.dropdown-select ul', scope);
+	
+		headList.on('click', function(event) {
+            event.preventDefault();
+            jQuery(this).next('.dropdown-select').stop(true).slideToggle(200);
+        });
+		
+        jQuery(document).click(function(e) {
+            if (!jQuery(e.target).parents().andSelf().is('.select-group')) {
+                jQuery(".dropdown-select").slideUp(200);
+            }
+        });
+		
+        listSelect.on('click', 'a', function(event) {
+            var thisVal = jQuery(this).html();
+            jQuery(this).closest('.select-group').find('.button-select')
+                .html(thisVal+'<span class="down"></span>');
+            jQuery(this).closest('.dropdown-select').slideUp(200);
+        });
+	},
+	
+
+	/**
+	 * 
+	 * @param {type} scope
+	 * @returns {undefined}
+	 */
+	initSortEvents: function(scope){
+		var scope = scope || jQuery("#sort-criteria");
+		this.initDroplists(scope);
+		var self = this;
+		var listSelect = jQuery('.dropdown-select ul', scope);
+		listSelect.on('click', 'a', function(event) {
+			self.changeListingParams({
+				sort: jQuery(this).data('sort'),
+				dir: jQuery(this).data('dir')
+			});
+		});
+	},
+	
+	attachMiscActions: function(scope){
+		var filters = jQuery(".section", scope),
+			self = this;
+		
+		filters.each(function(){
+			var filter = jQuery(this),
+				clearWrapper = filter.find(".action.clear"),
+				clearButton = clearWrapper.find("a"),
+				title = filter.find("h3"),
+				sm = filter.find(".showmore-filters");
+			
+			// Handle roll up / down
+			title.on('click', function(event) {
+                self._doRollSection(
+					filter, 
+					!title.hasClass("open"), 
+					true
+				);
+                event.preventDefault();
+            });
+			
+			// Handle showmore
+			sm.on("click", function(event) {
+				self._doShowMore(filter, !(jQuery(this).attr("data-state")=="1"), true);
+                event.preventDefault();
+			});
+			
+			// Handle clear button
+			filter.on('change', ':checkbox', function(e) {
+				if (filter.find(":checkbox:checked").length) {
+					clearWrapper.removeClass("hidden");
+				} else {
+					clearWrapper.addClass("hidden");
+				}
+			});
+			clearButton.on('click', function(event) {
+				event.preventDefault();
+				self.removeSingleFilterType(this);
+				clearWrapper.addClass('hidden');
+			});
+			
+        });
+		
+	},
+
+ 
 
     /**
      * Attaches events to color filter.
      *
      * @returns {Mall.listing}
      */
-    attachFilterColorEvents: function() {
-        jQuery(".filter-color").find("[data-url]").on("click", function(e) {
-            // @todo ajax logic
-            location.href = jQuery(this).attr("data-url");
+    attachFilterColorEvents: function(scope) {
+		var self = this;
+        jQuery(".filter-color", scope).find("[data-url]").on("click", function(e) {
+			self.nodeChanged(jQuery(this));
         });
+		
+		jQuery('.filter-color label', scope).each(function() {
+			var el = jQuery(this);
+			var colorFilter = el.data('color');
+			var srcImg = el.data('img');
+			var srcImgHover = el.data('imghover');
+			
+			el.find('span').children('span').css({
+				'background-color': colorFilter
+			});
+			
+			if (el.attr("data-img")) {
+				el.find('span').children('span').css({
+					'background-image': 'url('+srcImg+')'
+				});
+			};
+
+			el.on('mouseenter', function(){
+
+				if (colorFilter && !el.attr("data-img")) {
+
+					el.find('span').children('span').css({
+						'background-image': 'none'
+					})
+				};
+
+				if (el.attr("data-imgHover")) {
+					el.find('span').children('span').css({
+						'background-image': 'url('+srcImgHover+')'
+					})
+				};
+
+			});
+			el.on('mouseleave', function(){
+				if (srcImg) {
+					el.find('span').children('span').css({
+						'background-image':  'url('+srcImg+')'
+					})
+				};
+
+			})
+		});
 
         return this;
     },
@@ -819,10 +1467,10 @@ Mall.listing = {
      *
      * @returns {Mall.listing}
      */
-    attachFilterIconEvents: function() {
-        jQuery(".filter-type").find("[data-url]").on("click", function(e) {
-            // @todo ajax logic
-            location.href = jQuery(this).attr("data-url");
+    attachFilterIconEvents: function(scope) {
+		var self = this;
+        jQuery(".filter-type", scope).find(":checkbox").on("change", function(e) {
+            self.nodeChanged(jQuery(this));
         });
 
         return this;
@@ -833,10 +1481,10 @@ Mall.listing = {
      *
      * @returns {Mall.listing}
      */
-    attachFilterFlagEvents: function() {
-        jQuery(".filter-flags").find("[data-url]").on("click", function(e) {
-            // @todo ajax logic
-            location.href = jQuery(this).attr("data-url");
+    attachFilterFlagEvents: function(scope) {
+		var self = this;
+        jQuery(".filter-flags", scope).find(":checkbox").on("change", function(e) {
+            self.nodeChanged(jQuery(this));
         });
 
         return this;
@@ -846,22 +1494,22 @@ Mall.listing = {
      * Attaches events to Enum filters.
      * @returns {Mall.listing}
      */
-    attachFilterEnumEvents: function() {
-        jQuery(".filter-enum").find("[data-url]").on("click", function(e) {
-            // @todo ajax logic
-            location.href = jQuery(this).attr("data-url");
+    attachFilterEnumEvents: function(scope) {
+		var self = this;
+        jQuery(".filter-enum", scope).find(":checkbox").on("change", function(e) {
+            self.nodeChanged(jQuery(this));
         });
-
         return this;
     },
+	
     /**
      * Attaches events to Price range filters.
      * @returns {Mall.listing}
      */
-    attachFilterPriceEvents: function() {
-        jQuery("#filter_price").find("[data-url]").on("click", function(e) {
-            // @todo ajax logic
-            location.href = jQuery(this).attr("data-url");
+    attachFilterPriceEvents: function(scope) {
+		var self = this;
+        jQuery("#filter_price", scope).find(":checkbox").on("change", function(e) {
+           self.nodeChanged(jQuery(this));
         });
 
         return this;
@@ -869,32 +1517,14 @@ Mall.listing = {
 
     /**
      * Attaches events to size filters.
-     *
      * @returns {Mall.listing}
      */
-    attachFilterSizeEvents: function() {
-        var filterSize = jQuery('.filter-size'),
-            btnClear = jQuery('.action.clear'),
-            filterSizeLength;
+    attachFilterSizeEvents: function(scope) {
+        var filterSize = jQuery('.filter-size', scope);
+		var self = this;
 
-        jQuery(".filter-size").find("[data-url]").on("click", function(e) {
-            // @todo ajax logic
-            location.href = jQuery(this).attr("data-url");
-        });
-
-        filterSize.on('click', ':checkbox', function(e) {
-            filterSizeLength = jQuery(this).parents(".filter-size").find(':checked').length;
-            if (filterSizeLength > 0) {
-                jQuery(this).parents(".filter-size").find("div.action.clear").removeClass("hidden");
-            } else {
-                jQuery(this).parents(".filter-size").find("div.action.clear").addClass("hidden");
-            }
-        });
-
-        filterSize.on('click', '.clear', function(event) {
-            event.preventDefault();
-            jQuery(this).closest('div.action.clear').addClass('hidden');
-
+        jQuery(".filter-size", scope).find(":checkbox").on("change", function(e) {
+			self.nodeChanged(jQuery(this));
         });
 
         return this;
@@ -905,28 +1535,12 @@ Mall.listing = {
      *
      * @returns {Mall.listing}
      */
-    attachFilterDroplistEvents: function() {
-        var headList = jQuery('.button-select.ajax'),
-            listSelect = jQuery('.dropdown-select ul'),
-            thisVal,
-            thisUrl;
-        headList.on('click', function(event) {
-            event.preventDefault();
-            jQuery(this).next('.dropdown-select').stop(true).slideToggle(200);
-        });
+    attachFilterDroplistEvents: function(scope) {
+        var listSelect = jQuery('.dropdown-select ul', scope),
+			self = this;
+	
         listSelect.on('click', 'a', function(event) {
-            event.preventDefault();
-            thisVal = jQuery(this).html();
-            thisUrl = jQuery(this).attr("data-url");
-            jQuery(this).closest('.select-group').find('.button-select')
-                .html(thisVal+'<span class="down"></span>');
-            jQuery(this).closest('.dropdown-select').slideUp(200);
-            window.location.href = thisUrl;
-        });
-        jQuery(document).click(function(e) {
-            if (!jQuery(e.target).parents().andSelf().is('.select-group')) {
-                jQuery(".dropdown-select").slideUp(200);
-            }
+			self.nodeChanged(jQuery(this));
         });
 
         return this;
@@ -937,12 +1551,12 @@ Mall.listing = {
      *
      * @returns {Mall.listing}
      */
-    attachFilterPriceSliderEvents: function() {
-        var sliderRange = jQuery( "#slider-range"),
+    attachFilterPriceSliderEvents: function(scope) {
+        var sliderRange = jQuery( "#slider-range", scope),
             minPrice,
             maxPrice;
         if (sliderRange.length >= 1) {
-            jQuery( "#slider-range" ).slider({
+            sliderRange.slider({
                 range: true,
                 min: Mall.listing.getCurrentPriceRange()[0],
                 max: Mall.listing.getCurrentPriceRange()[1],
@@ -953,10 +1567,10 @@ Mall.listing = {
                 }
             });
 
-            jQuery("#zakres_min").val(jQuery("#slider-range").slider("values", 0));
-            jQuery("#zakres_max").val(jQuery("#slider-range").slider("values", 1));
-            jQuery('#slider-range').on('click', 'a', function(event) {
-                var checkSlider = jQuery('#checkSlider').find('input');
+            jQuery("#zakres_min",scope).val(jQuery("#slider-range").slider("values", 0));
+            jQuery("#zakres_max",scope).val(jQuery("#slider-range").slider("values", 1));
+            jQuery('#slider-range',scope).on('click', 'a', function(event) {
+                var checkSlider = jQuery('#checkSlider',scope).find('input');
                 if (!checkSlider.is(':checked')) {
                     checkSlider.prop('checked', true);
                     jQuery('#filter_price').find('.action').removeClass('hidden');
@@ -964,7 +1578,7 @@ Mall.listing = {
             });
         }
 
-        jQuery("#filter_price").find("input.filter-price-range-submit").on("click", function(e) {
+        jQuery("#filter_price", scope).find("input.filter-price-range-submit").on("click", function(e) {
             e.preventDefault();
             // validate prices
             minPrice = Mall.listing.getMinPriceFromSlider();
@@ -987,11 +1601,12 @@ Mall.listing = {
                     + " TO "
                     + Mall.listing.getMaxPriceFromSlider();
                 Mall.listing.setFiltersArray(fq);
-                Mall.listing.reloadListing();
+				// @todo make via ajax
+                //Mall.listing.reloadListing();
             }
         });
 
-        jQuery("#filter_price").find("input.filter-price-range-submit").on("mouseover"
+        jQuery("#filter_price", scope).find("input.filter-price-range-submit").on("mouseover"
             , function(e) {
             "use strict";
             minPrice = Mall.listing.getMinPriceFromSlider();
@@ -1012,7 +1627,7 @@ Mall.listing = {
             }
         });
 
-        jQuery("#zakres_min, #zakres_max").on("keyup keypress", function (e) {
+        jQuery("#zakres_min, #zakres_max", scope).on("keyup keypress", function (e) {
             "use strict";
             var code = e.keyCode || e.which;
 			Mall.listing.unmarkPrice();
@@ -1036,37 +1651,7 @@ Mall.listing = {
 	unmarkPrice: function () {
 //		jQuery("#filter_price").find("input:checkbox").attr('checked',false);
 	},
-    /**
-     * Toggles show more / hide more state link in filter section.
-     *
-     * @param item
-     * @returns {Mall.listing}
-     */
-    toggleShowMoreState: function(item) {
-        var state = jQuery(item).attr("data-state");
-        if(state == "0") {
-            jQuery(item).text("Pokaż mniej");
-            jQuery(item).attr("data-state", "1");
-        } else {
-            jQuery(item).text("Pokaż więcej");
-            jQuery(item).attr("data-state", "0");
-        }
 
-        return this;
-    },
-
-    /**
-     * Reloads listing - takes current params in count.
-     *
-     */
-    reloadListing: function() {
-        var protocol  = window.location.protocol,
-            host = window.location.host,
-            pathname = window.location.pathname;
-
-        window.location.href = protocol + "//" + host + pathname + "?"
-            + jQuery.param(this.getQueryParams());
-    },
 
     /**
      * Returns complete array of params for querying solr.
@@ -1089,6 +1674,33 @@ Mall.listing = {
 
         return q;
     },
+	
+	getQueryParamsAsArray: function(forceObject){
+		var forceObject = forceObject || {};
+		var defaults = {
+			q: this.getQuery(),
+            page: this.getPage(),
+            sort: this.getSort(),
+            dir: this.getDir(),
+            scat: this.getScat(),
+            rows: this.getScrollLoadOffset(),
+            start: 0
+		};
+		var out = [];
+	
+		jQuery.extend(defaults, forceObject);
+		
+		// Collect defualt params
+		jQuery.each(defaults, function(index){
+			out.push({name: index, value: this});
+		});
+		
+		// Collect fq's
+		jQuery.each(this.getFqByInterface(), function(index){
+			out.push({name: this.name, value: this.value});
+		});
+		return out;
+	},
 
     /**
      * Removes single filter from filters array.
@@ -1097,10 +1709,13 @@ Mall.listing = {
      * @returns {Mall.listing}
      */
     removeSingleFilterType: function(filter) {
-        var filterType = jQuery(filter).attr("data-filter-type"),
-            filters = jQuery.isEmptyObject(this.getFiltersArray())
-                || jQuery.isEmptyObject(this.getFiltersArray().fq) ? [] : this.getFiltersArray().fq;
-        delete filters[filterType];
+		var filter = jQuery(filter);
+		
+		filter.parents(".section").
+			find(":checkbox").
+			prop("checked", false);
+		
+		this.reloadListing();
 
         return this;
     },
@@ -1116,7 +1731,7 @@ Mall.listing = {
             con;
         // check if body has proper class
         if(jQuery("body").hasClass("node-type-list")
-            && this.getTotal() > 20
+            && this.getTotal() > 20 /* @todo by config */
             && this.canLoadMoreProducts()
             && this.canShowLoadMoreButton()) {
 
@@ -1143,8 +1758,20 @@ Mall.listing = {
      * @param count
      * @returns {Mall.listing}
      */
+    addLoadNextStart: function (count) {
+        this._load_next_start += parseInt(count);
+
+        return this;
+    },
+	
+    /**
+     * Sets load next start attribute.
+     *
+     * @param count
+     * @returns {Mall.listing}
+     */
     setLoadNextStart: function (count) {
-        this._load_next_start += parseInt(Math.abs(count), 10);
+        this._load_next_start = count;
 
         return this;
     },
@@ -1269,9 +1896,23 @@ Mall.listing = {
     getPage: function() {
         // for now it's turned off
         return "";
-//        return this._current_page;
     },
 
+
+	/**
+	 * @returns {object}
+	 */
+	getCurrentShowMore: function(){
+		return this._current_show_more;
+	},
+	
+	/**
+	 * @returns {object}
+	 */
+	getCurrentOpened: function(){
+		return this._current_opened;
+	},
+	
     /**
      * Returns current sort type.
      *
@@ -1301,12 +1942,22 @@ Mall.listing = {
 
     /**
      * Returns current filters.
-     *
+     * @deprecated since getFqByInterface
      * @returns {*}
      */
     getFiltersArray: function() {
         return this._current_filters;
     },
+	
+	
+	
+	/**
+	 * @returns {array} [{name: "", value:""},...]
+	 */
+	getFqByInterface: function(scope){
+		scope = scope || jQuery("#solr_search_facets");
+		return scope.find(':checkbox:checked').serializeArray();
+	},
 
     /**
      * Returns currently visible items on listing.
@@ -1426,13 +2077,21 @@ Mall.listing = {
     },
 
     /**
+     * Set current page.
+     * @returns {Mall.listing}
+     */
+    setPage: function(page) {
+        this._current_page = page;
+        return this;
+    },
+	
+    /**
      * Increments current page.
      *
      * @returns {Mall.listing}
      */
     setPageIncrement: function() {
         this._current_page += 1;
-
         return this;
     },
 
@@ -1487,6 +2146,8 @@ Mall.listing = {
     /**
      * Sets current filters.
      *
+	 * @deprecated
+	 * 
      * @param filters
      * @returns {Mall.listing}
      */
@@ -1504,7 +2165,17 @@ Mall.listing = {
      */
     addToVisibleItems: function(itemsCount) {
         this._current_visible_items += parseInt(itemsCount);
-
+        return this;
+    },
+	
+    /**
+     * Set given items
+     *
+     * @param itemsCount
+     * @returns {Mall.listing}
+     */
+    setCurrentVisibleItems: function(itemsCount) {
+        this._current_visible_items = itemsCount;
         return this;
     },
 
