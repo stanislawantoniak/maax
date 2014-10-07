@@ -1300,7 +1300,7 @@ Mall.listing = {
 			
 		this.appendToList(data.products);
 		container.masonry("reloadItems");
-		container.masonry();
+		//container.masonry({isAnimated:false});
 		
         this.setLoadNextStart(this.getCurrentVisibleItems());
         this.reloadListingItemsAfterPageLoad();

@@ -1427,7 +1427,9 @@ jQuery.noConflict();
             .scroll(positionFooter)
             .resize(positionFooter)
 
-
+        $('.faq-content .panel, #navigation').click(function(){
+            positionFooter();
+        })
 
         var intFrameWidth = window.innerWidth;
         if (intFrameWidth <= 767) {

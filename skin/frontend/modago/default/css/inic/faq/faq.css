@@ -114,7 +114,8 @@ color: #2F2F2F;
     box-shadow: none;
     color: #000;
     font-size: 12px;
-    width: 300px;
+    /*width: 300px;*/
+    width: 60%;
     float: left;
     height: 26px;
     padding: 0px;
@@ -144,6 +145,13 @@ color: #2F2F2F;
     height: 100%;
     min-height: 500px;
 }
+.faq #searchform .col-md-8.faq-search-keyword,
+.faq #searchform .col-md-5.faq-search-keyword,
+.faq #searchform .col-xs-12.faq-search-keyword
+{
+    padding-left: 0px;
+}
+
 .faq-content .bg-w h1 {
     font-size: 18px;
     padding-bottom: 12px;
@@ -178,5 +186,9 @@ color: #2F2F2F;
     position: absolute;
     right: 7px;
     top: 50%;
+}
+.faq-container .panel-group .panel-heading h4.panel-title span {
+    display: block;
+    width: 97%;
 }
 /*Search Ends*/
