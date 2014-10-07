@@ -187,4 +187,8 @@ color: #2F2F2F;
     right: 7px;
     top: 50%;
 }
+.faq-container .panel-group .panel-heading h4.panel-title span {
+    display: block;
+    width: 97%;
+}
 /*Search Ends*/
