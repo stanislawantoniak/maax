@@ -107,6 +107,11 @@ Mall.listing = {
 	_ajaxCache: {},
 
     /**
+     * Determines if history state should not be pushed
+     */
+    _noPushState: false,
+
+    /**
      * Performs initialization for listing object.
      */
     init: function () {
@@ -982,7 +987,7 @@ Mall.listing = {
 	_buildPushStateKey: function(data){
 		return this._buildKey(data);
 	},
-	
+
 	/**
 	 * @param {array} data
 	 * @returns {String}
@@ -1006,15 +1011,99 @@ Mall.listing = {
 		
 		return out.join("&");
 	},
+
+	/**
+     * @returns {string}
+     */
+    _getUrlNoParams: function() {
+        return location.protocol + '//' + location.host + location.pathname;
+    },
+
+    /**
+     * @returns {object}
+     */
+    _getUrlObjects: function() {
+        var url = decodeURI(window.location.href.replace(Mall.listing._getUrlNoParams(),"")),
+            result = {};
+
+        var tmpObj = url.split("&");
+
+        //return tmpObj;
+
+        for(var key in tmpObj) {
+            var tmp = tmpObj[key].split("=");
+            result[key] = {};
+            result[key][tmp[0]] = tmp[1];
+        }
+
+        return result;
+
+        /*        JSON.parse('{"' + url.replace(/&/g, '","').replace(/=/g,'":"') + '"}',
+         function(key, value) {
+         if(value && key) {
+         urlObject[i] = {};
+         urlObject[i][decodeURIComponent(key)] = decodeURIComponent(value);
+         i++;
+         }
+         }
+         );*/
+
+        return urlObject;
+    },
+
+    /**
+	 * @returns {void}
+	 */
+    initOnpopstateEvent: function() {
+        window.onpopstate = function() {
+            //uncheck all filters
+            jQuery("input[type=checkbox]").prop('checked',false);
+            //check url for selected filters
+            var filters = Mall.listing._getUrlObjects();
+            if(Object.keys(filters).length) {
+                for(var filter in filters) {
+                    for(var key in filters[filter]) {
+                        if(key.substring(0,2) == 'fq') {
+                            jQuery("input[type=checkbox][name='" + key + "'][value=" + filters[filter][key] + "]").prop("checked", true);
+                        }
+                    }
+                }
+            }
+            //reload listing
+            Mall.listing._noPushState = true;
+            Mall.listing.reloadListing();
+
+        }
+    },
+
+    /**
+     * @param {string} url
+     * @returns {void}
+     */
+    _pushHistoryState: function(url) {
+        if(!this._noPushState) {
+            var url = this._getUrlNoParams() + '?' + url,
+                title = document.title;
+            window.history.pushState({page: title}, title, url);
+            if (!window.onpopstate)
+                this.initOnpopstateEvent();
+        } else {
+            this._noPushState = false;
+        }
+    },
 	
 	/**
 	 * @returns {void}
 	 */
 	_ajaxSend: function(forceObject){
+
 		var self = this,
 			data = this.getQueryParamsAsArray(forceObject),
 			ajaxKey = this._buildAjaxKey(data);
-	
+            url = this._buildPushStateKey(data);
+
+        this._pushHistoryState(url);
+
 		if(this._ajaxCache[ajaxKey]){
 			this._handleAjaxRepsonse(this._ajaxCache[ajaxKey]);
 			return;
