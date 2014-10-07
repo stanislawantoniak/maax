@@ -1226,11 +1226,11 @@ Mall.listing = {
 
 		var self = this,
 			data = this.getQueryParamsAsArray(forceObject),
-			ajaxKey = this._buildAjaxKey(data);
+			ajaxKey = this._buildAjaxKey(data),
             url = this._buildPushStateKey(data);
 
         this._pushHistoryState(url);
-
+		
 		if(this._ajaxCache[ajaxKey]){
 			this._handleAjaxRepsonse(this._ajaxCache[ajaxKey]);
 			return;
@@ -1496,6 +1496,7 @@ Mall.listing = {
 				sort: jQuery(this).data('sort'),
 				dir: jQuery(this).data('dir')
 			});
+			return false;
 		});
 	},
 	
