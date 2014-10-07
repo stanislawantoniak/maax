@@ -269,11 +269,16 @@
     
   }
 
-.wrapper-filter_manufacturerScrollbar {
+.longListWrapper,.longListChecked{
   border:1px solid #d0cfcf;
   @include border-radius(1px);
 }
-#filter_manufacturer {
+.longListChecked{
+	border-bottom:0;
+	padding-bottom:0 !important;
+}
+
+.longListWrapper {
   .mCSB_scrollTools {
     .mCSB_dragger {
       .mCSB_dragger_bar {

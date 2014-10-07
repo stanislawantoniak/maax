@@ -113,6 +113,12 @@ Mall.listing = {
 	_current_show_more: {},
 	
 	/**
+	 * Currently searches
+	 */
+	_current_search: {},
+	
+	
+	/**
 	 * Cache for ajax request
 	 */
 	_ajaxCache: {},
@@ -131,7 +137,16 @@ Mall.listing = {
      * Performs initialization for listing object.
      */
     init: function () {
+		
+		
+		// Reset form
 		this.resetForm();
+		
+		
+		// fill cache from static contents - not modified by js
+		this._rediscoverCache();
+		
+		// Init thinks
         this.initFilterEvents();
         this.initSortEvents();
         this.initActiveEvents();
@@ -149,8 +164,6 @@ Mall.listing = {
         this.loadToQueue();
         this.setLoadMoreLabel();
 		
-		// fill cache from static contents
-		this._rediscoverCache();
     },
 	
 	setInitProducts: function(products){
@@ -159,7 +172,7 @@ Mall.listing = {
 	},
 	
 	getInitProducts: function(products){
-		return this._init_products
+		return this._init_products;
 	},
 	
 	/**
@@ -181,11 +194,6 @@ Mall.listing = {
 			},
 			ajaxKey = this._buildAjaxKey(this.getQueryParamsAsArray());
 		
-		// products - append json
-		// totals,rows,page,sort,dir - from this
-		
-		
-		console.log(ajaxKey, content);
 		// Bind to cache
 		this._ajaxCache[ajaxKey] = {
 			status: 1,
@@ -201,16 +209,19 @@ Mall.listing = {
 		scope = scope || jQuery("#solr_search_facets");
 		this.preprocessFilterContent(scope);
 		this.initDroplists(scope);
+		this.initScrolls(scope);
         this.attachMiscActions(scope);
         this.attachFilterColorEvents(scope);
         this.attachFilterIconEvents(scope);
         this.attachFilterEnumEvents(scope);
         this.attachFilterPriceEvents(scope);
         this.attachFilterDroplistEvents(scope);
+        this.attachFilterLongListEvents(scope);
         this.attachFilterFlagEvents(scope);
         this.attachFilterPriceSliderEvents(scope);
         this.attachFilterSizeEvents(scope);
 	},
+
 	
 	// Do remember roll downs & showmors
 	preprocessFilterContent: function(content){
@@ -223,6 +234,7 @@ Mall.listing = {
 			}
 			self._doRollSection(el.parent(), value, false);
 		});
+		
 		// Restore state of show more
 		jQuery.each(this.getCurrentShowMore(), function(idx, value){
 			var el = jQuery("#" + idx, content);
@@ -230,6 +242,15 @@ Mall.listing = {
 				return;
 			}
 			self._doShowMore(el.parent(), value, false);
+		});
+		
+		// Restore saerch texts
+		jQuery.each(this.getCurrentSearch(), function(idx, value){
+			var el = jQuery("#" + idx, content);
+			if(!el.length || value===""){
+				return;
+			}
+			el.find(".longListSearch").val(value);
 		});
 	},
 	
@@ -888,6 +909,7 @@ Mall.listing = {
             this.attachFilterEnumEvents();
             this.attachFilterPriceEvents();
             this.attachFilterDroplistEvents();
+            this.attachFilterLongListEvents();
             this.attachFilterFlagEvents();
             this.attachFilterPriceSliderEvents();
             this.attachFilterSizeEvents();
@@ -982,13 +1004,19 @@ Mall.listing = {
 		filters.each(function(){
 			var el = jQuery(this),
 				id = el.find(".content").attr("id"),
-				sm = el.find(".showmore-filters");
+				sm = el.find(".showmore-filters"),
+				sr = el.find(".longListSearch");
 				
 			self._current_opened[id] = el.find("h3").hasClass("open");
 			
 			// Show more is optional
 			if(sm.length){
 				self._current_show_more[id] = sm.attr("data-state")=="1";
+			}
+			
+			// Search strings
+			if(sr.length){
+				self._current_search[id] = sr.val();
 			}
 		});
 	},
@@ -1180,13 +1208,13 @@ Mall.listing = {
 		
 		// All filters
 		var filters = jQuery(content.filters);
-		this.initFilterEvents(filters);
 		this.getFilters().replaceWith(filters);
+		this.initFilterEvents(filters);
 		
 		// Init toolbar
 		var toolbar = jQuery(content.toolbar);
-        this.initSortEvents(toolbar);
 		this.getToolbar().replaceWith(toolbar);
+        this.initSortEvents(toolbar);
 		
 		this.getHeader().replaceWith(jQuery(content.header));
 		this.getActive().replaceWith(jQuery(content.active));
@@ -1317,8 +1345,30 @@ Mall.listing = {
         return this._current_mobile_filter_state;
     },
 
+	
+	initScrolls: function(scope, opts){
+		
+		opts = opts || {};
+		
+		// Destroy scrolls if exists;
+		jQuery(".scrollable.mCustomScrollbar".scope)
+				.mCustomScrollbar("destroy");
+		
+		var fm = jQuery(".scrollable", scope);
+		if (fm.length >= 1) {
+			fm.mCustomScrollbar(jQuery.extend({}, {
+				scrollButtons:{
+					enable:true
+				},
+				advanced:{
+					updateOnBrowserResize:true
+				} // removed extra commas
+			}, opts));
+		};
+	},
 
 	initDroplists: function(scope){
+		
 		var headList = jQuery('.button-select', scope),
 			listSelect = jQuery('.dropdown-select ul', scope);
 	
@@ -1520,16 +1570,124 @@ Mall.listing = {
      * @returns {Mall.listing}
      */
     attachFilterSizeEvents: function(scope) {
-        var filterSize = jQuery('.filter-size', scope);
 		var self = this;
-
-        jQuery(".filter-size", scope).find(":checkbox").on("change", function(e) {
+        jQuery('.filter-size', scope).find(":checkbox").on("change", function(e) {
 			self.nodeChanged(jQuery(this));
         });
-
         return this;
     },
 
+    /**
+     * Attaches events for long list filters.
+     *
+     * @returns {Mall.listing}
+     */
+    attachFilterLongListEvents: function(scope) {
+        // Handle long list
+		
+		var filters = jQuery('.filter-longlist', scope);
+		var self = this;
+
+        filters.find(":checkbox").on("change", function(e) {
+			self._rebuildLongListContent(jQuery(this).parents(".content"));
+			self.nodeChanged(jQuery(this));
+        });
+		
+		filters.find(".action .clear").click(function(){
+			self._rebuildLongListContent(jQuery(this).parents(".content"));
+		});
+		
+		filters.find(".longListSearch").keyup(function(){
+			self._searchLongList(jQuery(this).parents(".content"));
+		});
+		
+		filters.find("input[type='image']").click(function(){
+			self._searchLongList(jQuery(this).parents(".content"));
+			return false;
+		});
+		
+		// Rebuild selected filters
+		filters.each(function(){
+			var el = jQuery(this);
+			jQuery(":checkbox", this).each(function(idx){
+				jQuery(this).prop('sort', idx);
+			});
+			self._rebuildLongListContent(el);
+			self._searchLongList(el);
+		});
+		
+		
+
+        return this;
+    },
+	
+	_searchLongList: function(scope){
+		var term = jQuery(".longListSearch", scope).val().trim(),
+			items = jQuery(".longListItems li", scope),
+			noResult = jQuery(".no-result", scope),
+			list = jQuery(".scrollable", scope),
+			matches = 0;
+	
+		if(!items.length){
+			// No avaialble items to search
+			noResult.addClass("hidden");
+			list.addClass("hidden");
+		}else if(!term.length){
+			// No term entered
+			items.removeClass("hidden");
+			list.removeClass("hidden");
+			noResult.addClass("hidden");
+		}else{
+			// Term entered
+			items.each(function(){
+				var el = jQuery(this),
+					text = el.find("label > span:eq(0)").text();
+				if(text.toLowerCase().search(term.toLowerCase())>-1){
+					el.removeClass("hidden");
+					matches++;
+				}else{
+					el.addClass("hidden");
+				}
+			});
+			if(!matches){
+				noResult.removeClass("hidden");
+				list.addClass("hidden");
+			}else{
+				noResult.addClass("hidden");
+				list.removeClass("hidden");
+			}
+		}
+		
+	},
+	
+	_rebuildLongListContent: function(scope){
+		
+		var noSelectedcontianer = jQuery(".longListItems", scope),
+			selectedContianer = jQuery(".longListChecked", scope),
+			items = jQuery(":checkbox", scope);
+			
+		items.sort(function(a,b){
+			return a.sort-b.sort;
+		});
+		
+		
+		items.each(function(){
+			var el = jQuery(this),
+				parent = el.parents('li');
+			if(el.is(":checked")){
+				selectedContianer.append(parent);
+			}else{
+				noSelectedcontianer.append(parent);
+			}
+		});
+		
+		if(jQuery(":checkbox:checked", scope).length){
+			selectedContianer.show();
+		}else{
+			selectedContianer.hide();
+		}
+	},
+	
     /**
      * Attaches events for droplist filters.
      *
@@ -1904,6 +2062,13 @@ Mall.listing = {
 	 */
 	getCurrentShowMore: function(){
 		return this._current_show_more;
+	},
+	
+	/**
+	 * @returns {object}
+	 */
+	getCurrentSearch: function(){
+		return this._current_search;
 	},
 	
 	/**
