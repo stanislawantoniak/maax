@@ -2948,6 +2948,32 @@ x-axis
   #breadcrumbs_checkout_helpful_votes h1 {
     font-size: 18px; } }
 
+/* line 1, ../sass/design/modules/_form-list.scss */
+ul.form-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  margin: 0 auto 25px; }
+/* line 11, ../../../../../../../../../var/lib/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/typography/lists/_bullets.scss */
+ul.form-list li {
+  list-style-image: none;
+  list-style-type: none;
+  margin-left: 0; }
+/* line 5, ../sass/design/modules/_form-list.scss */
+ul.form-list li {
+  line-height: 1.7; }
+/* line 7, ../sass/design/modules/_form-list.scss */
+ul.form-list li select {
+  color: #000; }
+
+/* line 12, ../sass/design/modules/_form-list.scss */
+form#question-form {
+  margin: 25px 0; }
+
+/* line 15, ../sass/design/modules/_form-list.scss */
+div#contact-container {
+  padding: 30px; }
+
 /* line 1, ../sass/design/override/_global.scss */
 .browsehappy {
   background: #fff;

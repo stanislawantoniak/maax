@@ -6,6 +6,17 @@
  * Object for processing product listing.
  */
 Mall.listing = {
+	
+	/**
+	 * @type Number
+	 */
+	_ajaxTimeout: 500, 
+	
+	/**
+	 * @type Number
+	 */
+	_ajaxTimer: null, 
+	
     /**
      * Current listing page.
      */
@@ -105,6 +116,16 @@ Mall.listing = {
 	 * Cache for ajax request
 	 */
 	_ajaxCache: {},
+	
+	/**
+	 * Cache for ajax request
+	 */
+	_ajaxQueueCache: {},
+	
+	/**
+	 * @type Array
+	 */
+	_init_products: [],
 
     /**
      * Determines if history state should not be pushed
@@ -119,7 +140,10 @@ Mall.listing = {
         this.initFilterEvents();
         this.initSortEvents();
         this.initActiveEvents();
-
+		
+		// Add custom events to prodcuts
+		this.preprocessProducts();
+		
         // set next load start
         this.setLoadNextStart(this.getCurrentVisibleItems());
         this.reloadListingItemsAfterPageLoad();
@@ -129,7 +153,50 @@ Mall.listing = {
         this.setAutoappend(true);
         this.loadToQueue();
         this.setLoadMoreLabel();
+		
+		// fill cache from static contents
+		this._rediscoverCache();
     },
+	
+	setInitProducts: function(products){
+		this._init_products = products;
+		return this;
+	},
+	
+	getInitProducts: function(products){
+		return this._init_products
+	},
+	
+	/**
+	 * Preparce response object based on static html data
+	 * @returns {undefined}
+	 */
+	_rediscoverCache: function(){
+		var content = {
+				filters: this.getFilters().prop("outerHTML"),
+				active: this.getActive().prop("outerHTML"),
+				toolbar: this.getToolbar().prop("outerHTML"),
+				header: this.getHeader().prop("outerHTML"),
+				total: this.getTotal(),
+				rows: this.getCurrentVisibleItems(),
+				query: this.getQuery(),
+				sort: this.getSort(),
+				dir: this.getDir(),
+				products: this.getInitProducts(),
+			},
+			ajaxKey = this._buildAjaxKey(this.getQueryParamsAsArray());
+		
+		// products - append json
+		// totals,rows,page,sort,dir - from this
+		
+		
+		console.log(ajaxKey, content);
+		// Bind to cache
+		this._ajaxCache[ajaxKey] = {
+			status: 1,
+			content: content
+		};
+	},
 	
 	resetForm: function(){
 		this.getFilters().find("form").get(0).reset();
@@ -168,6 +235,20 @@ Mall.listing = {
 				return;
 			}
 			self._doShowMore(el.parent(), value, false);
+		});
+	},
+	
+	/**
+	 * Handle clear handle after add/rem favoirites
+	 */
+	preprocessProducts: function(){
+		var self = this;
+		this.getProducts().find(".item:not(.processed)").each(function(){
+			var el = jQuery(this); 
+			el.find(".like").click(function(){
+				self._clearAjaxCache();
+			})
+			el.addClass("processed");
 		});
 	},
 
@@ -282,9 +363,9 @@ Mall.listing = {
 
     setLoadMoreLabel: function () {
         "use strict";
-
-        jQuery(".addNewPositionListProduct").find("span").text(this.getLoadNextOffset());
-
+        jQuery(".addNewPositionListProduct").
+			find("span").
+			text(this.getLoadNextOffset());
         return this;
     },
 
@@ -328,7 +409,6 @@ Mall.listing = {
      */
     appendFromQueue: function () {
         "use strict";
-
         this.showLoading();
         this.placeListingFadeContainer();
         this.showShapesListing();
@@ -345,23 +425,27 @@ Mall.listing = {
 
         // loading
         inst.on("always", function () {
+			
             //setTimeout(function () {
             jQuery(items).show();
             self.hideLoading();
-                container.masonry({isAnimated: false, transitionDuration: 0})
-                    .masonry("reloadItems").masonry();
+			
+			container.masonry({isAnimated: false, transitionDuration: 0})
+				.masonry("reloadItems").masonry();
 
-                // show load more button
-                if (Mall.listing.canShowLoadMoreButton()) {
-                    Mall.listing.showLoadMoreButton();
-                    Mall.listing.showShapesListing();
-                    Mall.listing.placeListingFadeContainer();
-                }
+			// show load more button
+			
+			if (Mall.listing.canShowLoadMoreButton()) {
+				Mall.listing.showLoadMoreButton();
+				Mall.listing.showShapesListing();
+				Mall.listing.showLoadMoreButton();
+			}
 
-                // reload if queue is empty
-                //container.masonry();
+			// reload if queue is empty
+			//container.masonry();
 
-                self.placeListingFadeContainer();
+			self.placeListingFadeContainer();
+			
             //}, 3000);
         });
 
@@ -424,6 +508,7 @@ Mall.listing = {
 
     /**
      * Loads products to queue.
+	 * @todo add cache
      */
     loadToQueue: function () {
 		var forceObject = {
@@ -513,7 +598,7 @@ Mall.listing = {
                 Mall.listing.setProductQueue(
                     Mall.listing.getProductQueue().concat(data.content.products)
                 );
-                Mall.listing.setLoadNextStart(data.content.rows);
+                Mall.listing.addLoadNextStart(data.content.rows);
                 // load images in background
                 if (Mall.listing.canPrependFromQueue()) {
                     Mall.listing.loadPartImagesFromQueue();
@@ -559,8 +644,9 @@ Mall.listing = {
         });
 
         // attach events
+		this.preprocessProducts();
         this.attachEventsToProducts();
-
+		
         return items;
     },
 	
@@ -697,6 +783,7 @@ Mall.listing = {
         var itemProduct = jQuery('.box_listing_product'),
             textLike,
             itemProductId;
+	
         itemProduct.on('click', '.like', function(event) {
             event.preventDefault();
             /* Act on the event */
@@ -933,9 +1020,6 @@ Mall.listing = {
 		return this;
 	},
 	
-	_ajaxTimeout: 50, 
-	_ajaxTimer: null, 
-	
 	/**
 	 * @param {type} time
 	 * @returns {Mall.listing}
@@ -958,6 +1042,21 @@ Mall.listing = {
 	_doAjaxRequest: function(){
 		this._ajaxStop();
 		this._ajaxStart();
+	},
+	
+	/**
+	 * Clear ajax cache to prevent 
+	 * @param {bool} onlyCurrentUrl
+	 */
+	_clearAjaxCache: function(onlyCurrentUrl){
+		if(onlyCurrentUrl){
+			var key = this._buildAjaxKey(this.getQueryParamsAsArray());
+			if(this._ajaxCache[key]){
+				delete this._ajaxCache[key];
+			}
+			return;
+		}
+		this._ajaxCache = {};
 	},
 	
 	/**
@@ -1136,30 +1235,31 @@ Mall.listing = {
 	},
 	
 	showAjaxLoading: function(){
-		if(!this._loading){
+		this.getAjaxLoader().show();
+	},
+	
+	hideAjaxLoading: function(){
+		this.getAjaxLoader().hide();
+	},
+	
+	getAjaxLoader: function(){
+		if(!jQuery("#ajax-filter-loader").length){
 			var overlay = jQuery("<div>").css({
-				"background":	"rgba(255,255,255,0.8) url('/skin/frontend/modago/default/images/modago-ajax-loader.gif') center center no-repeat",
+				"background":	"rgba(255,255,255,0.8) \
+					url('/skin/frontend/modago/default/images/modago-ajax-loader.gif') \
+					center center no-repeat",
 				"position":		"fixed",
 				"width":		"100%",
 				"height":		"100%",
 				"left":			"0",
 				"top":			"0",
 				"z-index":		"1000000",
-				"color":		"#fff"
-			});
-			this._loading = jQuery(overlay);
-			jQuery("body").append(this._loading);
+				"color":		"#fff",
+			}).attr("id", "ajax-filter-loader");
+			jQuery("body").append(jQuery(overlay));
 		}
-		this._loading.show();
+		return jQuery("#ajax-filter-loader");
 	},
-	
-	hideAjaxLoading: function(){
-		console.log("stop loading")
-		if(this._loading){
-			this._loading.hide();
-		}
-	},
-	
 	
 	rebuildContents: function(content){
 		
@@ -1187,20 +1287,31 @@ Mall.listing = {
 	},
 	
 	replaceProducts: function(data){
-		// 1. Clear the contents
+		// 1. Reset the content
 		this.getProducts().find(".item").remove();
+		this.setProductQueue([]);
+		
 		// 2. Prepare parsed data
 		var container = this.getProducts().masonry();
-		// 3. Reset the page
+		// 3. Reset the page and values
 		this.setPage(0);
-		// 4. Update Total
 		this.setTotal(data.total);
+		this.setCurrentVisibleItems(data.rows);
 			
 		this.appendToList(data.products);
 		container.masonry("reloadItems");
 		container.masonry();
-		this.placeListingFadeContainer();
-		this.reloadListingItemsAfterPageLoad();
+		
+        this.setLoadNextStart(this.getCurrentVisibleItems());
+        this.reloadListingItemsAfterPageLoad();
+        this.loadProductsOnScroll();
+		
+		// Init list
+		this.setAutoappend(true);
+        this.loadToQueue();
+        this.setLoadMoreLabel();
+		
+		
 	},
 
     initActiveEvents: function(scope) {
@@ -1709,7 +1820,7 @@ Mall.listing = {
             con;
         // check if body has proper class
         if(jQuery("body").hasClass("node-type-list")
-            && this.getTotal() > 20
+            && this.getTotal() > 20 /* @todo by config */
             && this.canLoadMoreProducts()
             && this.canShowLoadMoreButton()) {
 
@@ -1736,8 +1847,20 @@ Mall.listing = {
      * @param count
      * @returns {Mall.listing}
      */
+    addLoadNextStart: function (count) {
+        this._load_next_start += parseInt(count);
+
+        return this;
+    },
+	
+    /**
+     * Sets load next start attribute.
+     *
+     * @param count
+     * @returns {Mall.listing}
+     */
     setLoadNextStart: function (count) {
-        this._load_next_start += parseInt(Math.abs(count), 10);
+        this._load_next_start = count;
 
         return this;
     },
@@ -2131,7 +2254,17 @@ Mall.listing = {
      */
     addToVisibleItems: function(itemsCount) {
         this._current_visible_items += parseInt(itemsCount);
-
+        return this;
+    },
+	
+    /**
+     * Set given items
+     *
+     * @param itemsCount
+     * @returns {Mall.listing}
+     */
+    setCurrentVisibleItems: function(itemsCount) {
+        this._current_visible_items = itemsCount;
         return this;
     },
 

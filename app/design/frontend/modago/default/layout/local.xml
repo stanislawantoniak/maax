@@ -933,12 +933,131 @@
 
 	<customer_account_index translate="label">
 		<label>Customer My Account Dashboard</label>
+        <action method="addBodyClass">
+            <value>customer-account-index</value>
+        </action>
 		<!-- Mage_Customer -->
 		<reference name="root">
             <action method="setTemplate">
                 <template>page/1column.phtml</template>
             </action>
 		</reference>
+        <reference name="breadcrumbs">
+            <action method="addCrumb">
+                <crumbName>Home</crumbName>
+                <crumbInfo>
+                    <label>Home</label>
+                    <title>Home</title>
+                    <link>/</link>
+                </crumbInfo>
+            </action>
+            <action method="addCrumb">
+                <crumbName>account</crumbName>
+                <crumbInfo>
+                    <label>My account</label>
+                    <title>My account</title>
+                    <id>link_your_account_br</id>
+                    <link>/customer/account/index</link>
+                </crumbInfo>
+            </action>
+        </reference>
+        <reference name="my.account.wrapper">
+            <action method="unsetChild">
+                <name>customer_account_dashboard</name>
+            </action>
+
+
+            <!-- add custom modago mobile navigation -->
+            <block type="customer/account_navigation" name="customer_account_navigation_mobile"  template="customer/account/navigation-mobile.phtml">
+                <action method="removeLinkByName">
+                    <name>recurring_profiles</name>
+                </action>
+                <action method="removeLinkByName">
+                    <name>billing_agreements</name>
+                </action>
+                <action method="removeLinkByName">
+                    <name>reviews</name>
+                </action>
+                <action method="removeLinkByName">
+                    <name>downloadable_products</name>
+                </action>
+                <action method="removeLinkByName">
+                    <name>OAuth Customer Tokens</name>
+                </action>
+                <action method="removeLinkByName">
+                    <name>account</name>
+                </action>
+                <action method="removeLinkByName">
+                    <name>account_edit</name>
+                </action>
+                <action method="removeLinkByName">
+                    <name>address_book</name>
+                </action>
+                <action method="removeLinkByName">
+                    <name>orders</name>
+                </action>
+                <action method="removeLinkByName">
+                    <name>tags</name>
+                </action>
+                <action method="removeLinkByName">
+                    <name>wishlist</name>
+                </action>
+                <action method="removeLinkByName">
+                    <name>newsletter</name>
+                </action>
+                <action method="removeLinkByName">
+                    <name>udqa</name>
+                </action>
+                <action method="removeLinkByName">
+                    <name>udpreviews</name>
+                </action>
+                <action method="removeLinkByName">
+                    <name>udratings</name>
+                </action>
+                <action method="removeLinkByName">
+                    <name>rma</name>
+                </action>
+
+
+                <!--Zamówienia w realizacji-->
+                <action method="addLink" translate="label">
+                    <name>sales_order_process</name>
+                    <path>sales/order/process</path>
+                    <label>Orders in the realization</label>
+                </action>
+                <!--Historia zamówień-->
+                <action method="addLink" translate="label">
+                    <name>orders</name>
+                    <path>sales/order/history/</path>
+                    <label>Orders history</label>
+                </action>
+                <!--RMA-->
+                <action method="addLink" translate="label">
+                    <name>rma</name>
+                    <path>sales/rma/history/</path>
+                    <label>Returns and complaints</label>
+                </action>
+                <!--dane kontaktowe-->
+                <action method="addLink" translate="label">
+                    <name>account_edit</name>
+                    <path>customer/account/edit/</path>
+                    <label>Contact details</label>
+                </action>
+                <!--zmiana hasla-->
+                <action method="addLink" translate="label">
+                    <name>account_edit_password</name>
+                    <path>customer/account/editPassword/</path>
+                    <label>Change password</label>
+                </action>
+                <!--SUBSKRYPCJA NEWSLETTERA-->
+                <action method="addLink" translate="label">
+                    <name>newsletter</name>
+                    <path>newsletter/manage/</path>
+                    <label>Settings mailing and sms</label>
+                </action>
+            </block>
+        </reference>
+
 	</customer_account_index>
 	
 	<zolago_modago_customer_handle>
@@ -1030,5 +1149,48 @@
 			</block>
 		</reference>
 	</sales_order_view>
-    
+
+    <help_index_index>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/1column.phtml</template>
+            </action>
+        </reference>
+
+        <reference name="content">
+            <block type="cms/block" name="help-page">
+                <action method="setBlockId"><block_id>help-page</block_id></action>
+            </block>
+        </reference>
+    </help_index_index>
+
+    <help_contact_vendor>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/1column.phtml</template>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="core/messages" name="global_messages" as="global_messages"/>
+            <block type="cms/block" name="help-contact-vendor">
+                <action method="setBlockId"><block_id>help-contact-vendor</block_id></action>
+            </block>
+        </reference>
+    </help_contact_vendor>
+
+    <help_contact_gallery>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/1column.phtml</template>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="core/messages" name="global_messages" as="global_messages"/>
+            <block type="cms/block" name="help-contact-gallery">
+                <action method="setBlockId"><block_id>help-contact-gallery</block_id></action>
+            </block>
+        </reference>
+    </help_contact_gallery>
+
+
 </layout>

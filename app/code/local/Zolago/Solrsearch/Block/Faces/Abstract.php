@@ -99,9 +99,9 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 	 * @param string $item
 	 * @return string
 	 */
-	public function getItemId($item) {
-		return  $this->getAttributeCode() . "_" . $item;
-	}
+    public function getItemId($item) {
+        return  $this->getFilterContainer()->getItemId($this->getAttributeCode(), $item);
+    }
 	
 	/**
 	 * 

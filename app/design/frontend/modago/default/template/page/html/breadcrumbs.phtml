@@ -29,7 +29,7 @@
         <?php foreach($crumbs as $_crumbName=>$_crumbInfo): ?>
             <li class="<?php echo $_crumbName ?>">
             <?php if($_crumbInfo['link']): ?>
-                <a href="<?php echo $_crumbInfo['link'] ?>" title="<?php echo $this->escapeHtml($this->__($_crumbInfo['title'])) ?>"><?php echo $this->escapeHtml($this->__($_crumbInfo['label'])) ?></a>
+                <a href="<?php echo $_crumbInfo['link'] ?>" title="<?php echo $this->escapeHtml($this->__($_crumbInfo['title'])) ?>" <?php if(isset($_crumbInfo['id']) && !empty($_crumbInfo['id'])): ?>id="<?php echo $this->escapeHtml($this->__($_crumbInfo['id'])) ?>"  <?php endif; ?>  ><?php echo $this->escapeHtml($this->__($_crumbInfo['label'])) ?></a>
             <?php elseif($_crumbInfo['last']): ?>
                 <?php echo $this->escapeHtml($this->__($_crumbInfo['label'])) ?>
             <?php else: ?>
