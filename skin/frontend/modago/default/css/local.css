@@ -70,12 +70,25 @@
     text-align: center;
 }
 /*Customer account menu mobile*/
-@media screen and (min-width: 980px) {
+#clone_submenu .column-left {
+    width: 78.2312925170068%;
+    float: left; }
+@media screen and (max-width: 1199px) {
+    /* line 36, ../sass/layout/modules/_clone-menu.scss */
+    #clone_submenu .column-left {
+        width: 100%; } }
+@media screen and (max-width: 991px) {
+    /* line 36, ../sass/layout/modules/_clone-menu.scss */
+    #clone_submenu .column-left {
+        width: 99.231293%; } }
+
+
+@media screen and (min-width: 976px) and (max-width: 989px) {
     #clone_submenu .box {
         margin-right: 0;
     }
 }
-@media screen and (min-width: 990px) {
+@media screen and (min-width: 993px) {
     #clone_submenu .box {
         margin-right: 2%;
     }

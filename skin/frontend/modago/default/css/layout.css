@@ -1575,16 +1575,16 @@ section.section h2.title_section i {
 /* CLONE MENU */
 /* line 36, ../sass/layout/modules/_clone-menu.scss */
 #clone_submenu .col-left {
-  width: 78.2312925170068%;
-  float: left; }
+    width: 78.2312925170068%;
+    float: left; }
 @media screen and (max-width: 1199px) {
-  /* line 36, ../sass/layout/modules/_clone-menu.scss */
-  #clone_submenu .col-left {
-    width: 100%; } }
+    /* line 36, ../sass/layout/modules/_clone-menu.scss */
+    #clone_submenu .col-left {
+        width: 72.231293%; } }
 @media screen and (max-width: 991px) {
-  /* line 36, ../sass/layout/modules/_clone-menu.scss */
-  #clone_submenu .col-left {
-    width: 99.231293%; } }
+    /* line 36, ../sass/layout/modules/_clone-menu.scss */
+    #clone_submenu .col-left {
+        width: 65.231293%; } }
 /* line 46, ../sass/layout/modules/_clone-menu.scss */
 #clone_submenu .col-righ {
   width: 22.02380952380952%;
