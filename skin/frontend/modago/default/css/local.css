@@ -70,9 +70,15 @@
     text-align: center;
 }
 /*Customer account menu mobile*/
-@media screen and (min-width: 1200px) {
+
+@media screen and (min-width: 1000px) {
     #clone_submenu .box {
         margin-right: 3%;
+    }
+}
+@media screen and (min-width: 990px) {
+    #clone_submenu .box {
+        margin-right: 2%;
     }
 }
 #clone_submenu .box [rel=category] {
