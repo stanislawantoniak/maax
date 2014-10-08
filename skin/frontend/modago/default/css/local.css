@@ -70,4 +70,20 @@
     text-align: center;
 }
 /*Customer account menu mobile*/
+@media screen and (min-width: 1200px) {
+    #clone_submenu .box {
+        margin-right: 3%;
+    }
+}
+#clone_submenu .box [rel=category] {
+    color: #000;
+    font-size: 14px;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+#clone_submenu .box .long-wrap {
+    display: block;
+    width: 90%;
+    word-wrap: break-word;
+}
 

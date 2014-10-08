@@ -1503,7 +1503,7 @@ jQuery.noConflict();
             });
 
         }
-        
+
 
         var scroll = $('body').find('.mCustomScrollbar');
         if (scroll.length >= 1) {
