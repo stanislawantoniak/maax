@@ -70,10 +70,9 @@
     text-align: center;
 }
 /*Customer account menu mobile*/
-
-@media screen and (min-width: 1000px) {
+@media screen and (min-width: 980px) {
     #clone_submenu .box {
-        margin-right: 3%;
+        margin-right: 0;
     }
 }
 @media screen and (min-width: 990px) {
@@ -81,6 +80,13 @@
         margin-right: 2%;
     }
 }
+@media screen and (min-width: 1000px) {
+    #clone_submenu .box {
+        margin-right: 3%;
+    }
+}
+
+
 #clone_submenu .box [rel=category] {
     color: #000;
     font-size: 14px;
