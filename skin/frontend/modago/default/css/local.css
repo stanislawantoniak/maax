@@ -100,7 +100,7 @@
         margin-right: 6%;
     }
 }
-@media screen and (min-width: 998px) {
+@media screen and (min-width: 996px) {
     #clone_submenu .box:nth-child(1),
     #clone_submenu .box:nth-child(2),
     #clone_submenu .box:nth-child(3){

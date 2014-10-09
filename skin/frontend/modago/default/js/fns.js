@@ -1503,6 +1503,14 @@ jQuery.noConflict();
             });
 
         }
+        $(document).ready(function(){
+            $(".menu-5columns dt a, .menu-5columns dt span,.menu-5columns dd a").each(function(i, item){
+                console.log($(item).html().length);
+                if(parseInt($(item).html().length, 10) >= 17){
+                    $(item).addClass("long-wrap");
+                }
+            })
+        })
 
 
         var scroll = $('body').find('.mCustomScrollbar');
