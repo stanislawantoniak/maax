@@ -1296,7 +1296,6 @@ Mall.listing = {
 		this.getFilters().replaceWith(filters);
 
 		this.initFilterEvents(filters);
-		//this.initFilterEvents();
 
 		// Init toolbar
 		var toolbar = jQuery(content.toolbar);
