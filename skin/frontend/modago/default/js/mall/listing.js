@@ -133,7 +133,7 @@ Mall.listing = {
 	 * @type Boolean
 	 * Determines if ajax loading should not be delayed
 	 */
-	_noReloadDelay: false,
+	_noDelay: false,
 
 	/**
 	 * Performs initialization for listing object.
@@ -988,8 +988,16 @@ Mall.listing = {
 	 * @returns {Mall.listing}
 	 */
 	reloadListingNow: function(){
-		this._noPushState = true;
-		this._noReloadDelay = true;
+		this.setNoDelay(true);
+		return this.reloadListing();
+	},
+
+	/**
+	 * @returns {Mall.listing}
+	 */
+	reloadListingNoPushState: function(){
+		this.setNoDelay(true);
+		this.setNoPushstate(true);
 		return this.reloadListing();
 	},
 
@@ -1066,8 +1074,8 @@ Mall.listing = {
 	 */
 	_ajaxStart: function(){
 		var self = this;
-		if(this._noReloadDelay) {
-			this._noReloadDelay = false;
+		if(this.getNoDelay()) {
+			this.setNoDelay(false);
 			self._ajaxSend.apply(self);
 		} else {
 			this._ajaxTimer = setTimeout(
@@ -1180,13 +1188,14 @@ Mall.listing = {
 						}
 					}
 					if(sort && dir) {
-						self.getSortSelect().find('option[value="'+sort+'_'+dir+'"]').prop('selected',true)
+						console.log('option[value="'+sort+'"][data-dir="'+dir+'"]');
+						self.getSortSelect().find('option[value="'+sort+'"][data-dir="'+dir+'"]').prop('selected',true)
 					} else {
 						self.getSortSelect().find('option:first-child').prop('selected',true);
 					}
 				}
 				//reload listing
-				self.reloadListingNow();
+				self.reloadListingNoPushState();
 			}
 		}
 	},
@@ -1196,12 +1205,12 @@ Mall.listing = {
 	 * @returns {void}
 	 */
 	_pushHistoryState: function(data) {
-		if(!this._noPushState) {
+		if(!this.getNoPushstate()) {
 			var url = this._getUrlNoParams() + '?' + this._buildPushStateKey(data);
 			var title = document.title;
 			window.history.pushState({page: title}, title, url);
 		} else {
-			this._noPushState = false;
+			this.setNoPushstate(false);
 		}
 	},
 
@@ -1461,7 +1470,13 @@ Mall.listing = {
 		sortingSelect.selectbox();
 
 		sortingSelect.change(function() {
-			self.reloadListing();
+			var e = document.getElementById("sort-by");
+			var strUser = e.options[e.selectedIndex];
+			console.log(strUser);
+			sortingSelect.find(":selected").each(function() {
+				console.log('selected shit');
+			});
+			//self.reloadListing();
 		});
 	},
 
@@ -2108,6 +2123,24 @@ Mall.listing = {
 	 *
 	 */
 
+	getNoPushstate: function() {
+		return this._noPushState;
+	},
+	
+	setNoPushstate: function(bool) {
+		this._noPushState = bool;
+		return this;
+	},
+	
+	getNoDelay: function() {
+		return this._noDelay;
+	},
+	
+	setNoDelay: function(bool) {
+		this._noDelay = bool;
+		return this;
+	},
+	
 	/**
 	 * Returns min price which is set in price slider
 	 *
@@ -2175,7 +2208,7 @@ Mall.listing = {
 	 * @returns {string}
 	 */
 	getSort: function() {
-		return this.getSortSelect().find(":selected").data("sort");
+		return this.getSortSelect().val();
 	},
 
 	/**
