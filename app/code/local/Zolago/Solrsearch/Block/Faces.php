@@ -5,7 +5,6 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
     const MODE_SEARCH = 2;
 	
 	const FLAGS_FACET = "flags_facet";
-	const PRICE_FACET = "PLN_1_price_decimal";
 	const PRICE_FACET_TRANSLATED = "price_facet";
 
     const DEFAULT_RNDERER = "zolagosolrsearch/faces_enum";
@@ -16,6 +15,22 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         // Override tmpalte
         $this->setTemplate('zolagosolrsearch/standard/searchfaces.phtml');
     }
+
+    
+    //{{{ 
+    /**
+     * 
+     * @param 
+     * @return 
+     */
+     protected function _getPriceFacet() {
+         $app = Mage::app()->getStore();
+         $code = $app->getCurrentCurrencyCode();
+         $id = Mage::getSingleton('customer/session')->getCustomerGroupId();
+         $prefix = SolrBridge_Base::getPriceFieldPrefix($code,$id);
+         return $prefix.'_price_decimal';
+     }
+    //}}}
 	
 	/**
 	 * @param stirng $facetCode
@@ -622,13 +637,14 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         if (isset($solrData['facet_counts']['facet_fields']) && is_array($solrData['facet_counts']['facet_fields'])) {
             $facetFileds = $solrData['facet_counts']['facet_fields'];
         }
-        if(isset($facetFileds[self::PRICE_FACET])) {
-            $data = $facetFileds[self::PRICE_FACET];
-            $data = $this->_prepareMultiValues(self::PRICE_FACET,$data);
+        $priceFacet = $this->_getPriceFacet();
+        if(isset($facetFileds[$priceFacet])) {
+            $data = $facetFileds[$priceFacet];
+            $data = $this->_prepareMultiValues($priceFacet,$data);
             $block = $this->getLayout()->createBlock($this->_getPriceRenderer());
             $block->setParentBlock($this);
             $block->setAllItems($data);
-            $block->setFacetKey(self::PRICE_FACET);
+            $block->setFacetKey($priceFacet);
             $block->setAttributeCode("prices");
             return $block;
         }
@@ -845,7 +861,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
     }
 
     protected function _extractAttributeCode($facet) {
-        if ($facet == self::PRICE_FACET) {
+        if ($facet == $this->_getPriceFacet()) {
             return 'price';
         } 
         return preg_replace("/_facet$/", "", $facet);
@@ -964,6 +980,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         }
         $filters = $this->getFilterQuery();
         // Force unset category id
+        $priceFacet = $this->_getPriceFacet();
         if($paramKey=="category_path") {
             if(!isset($filters['category_id'])) {
                 return $fallbackData;
@@ -975,7 +992,8 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
                 unset($params['fq']['category']);
             }
             // No data changed
-        } elseif ($facetkey == self::PRICE_FACET) {
+            
+        } elseif ($facetkey == $priceFacet) {
             // no changes
         } elseif(!isset($filters[$facetkey])) {
             return $fallbackData;
