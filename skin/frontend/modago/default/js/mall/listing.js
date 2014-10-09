@@ -23,16 +23,6 @@ Mall.listing = {
 	_current_page: 1,
 
 	/**
-	 * Selected sorting direction.
-	 */
-	_current_dir: "asc",
-
-	/**
-	 * Selected sorting type.
-	 */
-	_current_sort: "",
-
-	/**
 	 * Current query string - search listing.
 	 */
 	_current_query: "",
@@ -362,12 +352,8 @@ Mall.listing = {
 	getMoreProductsCallback: function (data) {
 		if (data.status === true) {
 			var container = jQuery("#items-product").masonry(),
-				sortArray = typeof data.content.sort === "string"
-				|| data.content.sort instanceof String ? data.content.sort.split(" ") : [],
 				items;
 			Mall.listing.setPageIncrement();
-			Mall.listing.setSort(sortArray[0] === undefined ? "" : sortArray[0]);
-			Mall.listing.setDir(sortArray[1] === undefined ? "" : sortArray[1]);
 			items = Mall.listing.appendToList(data.content.products);
 			//container.imagesLoaded(function () {
 			container.masonry("reloadItems");
@@ -613,11 +599,6 @@ Mall.listing = {
 	 */
 	appendToQueueCallback: function (data) {
 		if (!jQuery.isEmptyObject(data) && data.status !== undefined && data.status === true) {
-			var sortArray = typeof data.content.sort === "string"
-			|| data.content.sort instanceof String ? data.content.sort.split(" ") : [];
-			Mall.listing.setSort(sortArray[0] === undefined ? "" : sortArray[0]);
-			Mall.listing.setDir(data.content.dir === undefined ? "" : data.content.dir);
-
 			if (data.content !== undefined && data.content.products !== undefined
 				&& !jQuery.isEmptyObject(data.content.products)) {
 				Mall.listing.setProductQueue(
@@ -1042,28 +1023,6 @@ Mall.listing = {
 	},
 
 	/**
-	 * @returns {Mall.listing}
-	 */
-	changeListingParams: function(params){
-		params = params || {};
-
-		if(typeof params.sort != "undefined"){
-			this.setSort(params.sort);
-		}
-
-		if(typeof params.dir != "undefined"){
-			this.setDir(params.dir);
-		}
-
-		/**
-		 * @todo add more params
-		 */
-
-		this.reloadListing();
-		return this;
-	},
-
-	/**
 	 * @param {type} time
 	 * @returns {Mall.listing}
 	 */
@@ -1213,17 +1172,8 @@ Mall.listing = {
 							var value = filters[filter][key];
 							if (key.substring(0, 2) == 'fq') {
 								jQuery("input[type=checkbox][name='" + key + "'][value='" + value + "']").prop("checked", true);
-							} else if (key == 'sort') {
-								sort = value;
-							} else if (key == 'dir') {
-								dir = value;
 							}
-							console.log(key);
 						}
-					}
-					if(sort && dir) {
-						self.setSort(sort);
-						self.setDir(dir);
 					}
 				}
 				//reload listing
@@ -1498,12 +1448,7 @@ Mall.listing = {
 		sortingSelect.selectbox();
 
 		sortingSelect.change(function() {
-			var values = jQuery(this).val().split("||");
-
-			self.changeListingParams({
-				sort: values[0],
-				dir: values[1]
-			});
+			self.reloadListing();
 		});
 	},
 
@@ -2181,7 +2126,7 @@ Mall.listing = {
 	 * @returns {string}
 	 */
 	getSort: function() {
-		return this._current_sort;
+		return this.getSortSelect().val();
 	},
 
 	/**
@@ -2190,7 +2135,7 @@ Mall.listing = {
 	 * @returns {string}
 	 */
 	getDir: function() {
-		return this._current_dir;
+		return this.getSortSelect().find(":selected").data("dir");
 	},
 
 	/**
@@ -2354,30 +2299,6 @@ Mall.listing = {
 	 */
 	setPageIncrement: function() {
 		this._current_page += 1;
-		return this;
-	},
-
-	/**
-	 * Sets sort direction.
-	 *
-	 * @param dir
-	 * @returns {Mall.listing}
-	 */
-	setDir: function(dir) {
-		this._current_dir = dir;
-
-		return this;
-	},
-
-	/**
-	 * Sets sort type.
-	 *
-	 * @param sort
-	 * @returns {Mall.listing}
-	 */
-	setSort: function(sort) {
-		this._current_sort = sort;
-
 		return this;
 	},
 
