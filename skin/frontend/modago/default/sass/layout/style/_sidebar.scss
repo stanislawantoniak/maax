@@ -156,16 +156,16 @@
     }   
 }
 
-.wrapper-filter_manufacturerScrollbar {
+.longListWrapper {
   max-height:151px;
   margin-bottom: 10px;
 }
-.filter_manufacturerScrollbar {
+.longListWrapper .scrollable {
   max-height:145px;
   padding:5px 0 5px 0;
 
 }
-#filter_manufacturer {
+.filter-longlist{
   .mCSB_scrollTools {
     width:12px;
     .mCSB_dragger {
