@@ -258,13 +258,13 @@ Mall.listing = {
 		});
 
 		// Restore saerch texts
-		jQuery.each(this.getCurrentSearch(), function(idx, value){
-			var el = jQuery("#" + idx, content);
-			if(!el.length || value===""){
-				return;
-			}
-			el.find(".longListSearch").val(value);
-		});
+		//jQuery.each(this.getCurrentSearch(), function(idx, value){
+		//	var el = jQuery("#" + idx, content);
+		//	if(!el.length || value===""){
+		//		return;
+		//	}
+		//	el.find(".longListSearch").val(value);
+		//});
 	},
 
 	/**
