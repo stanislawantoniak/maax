@@ -206,7 +206,7 @@ Mall.listing = {
 	},
 
 	initFilterEvents: function(scope){
-		scope = scope || jQuery("#solr_search_facets");
+		scope = scope || jQuery(".solr_search_facets");
 		this.preprocessFilterContent(scope);
 		this.initScrolls(scope);
 		this.attachMiscActions(scope);
@@ -889,7 +889,7 @@ Mall.listing = {
 	 */
 	insertMobileSidebar: function() {
 		if(this.getCurrentMobileFilterState() == 0) {
-			var currentSidebar = jQuery("#sidebar").clone(true, true);
+			var currentSidebar = jQuery("#sidebar").first().clone(true, true);
 			jQuery("#sidebar").find(".sidebar").remove();
 			jQuery(".fb-slidebar-inner").find('.sidebar').remove();
 			jQuery(".fb-slidebar-inner").html(currentSidebar.html());
@@ -904,6 +904,7 @@ Mall.listing = {
 			this.attachFilterPriceSliderEvents();
 			this.attachFilterSizeEvents();
 			this.attachDeleteCurrentFilter();
+            this.attachMiscActions();
 		}
 
 		return this;
@@ -946,10 +947,10 @@ Mall.listing = {
 	 */
 	insertDesktopSidebar: function() {
 		if(this.getCurrentMobileFilterState() == 1) {
-			var currentSidebar = jQuery(".fb-slidebar-inner").clone(true, true);
+			var currentSidebar = jQuery(".fb-slidebar-inner").first().clone(true, true);
 			jQuery(".fb-slidebar-inner").find('.sidebar').remove();
 			jQuery("#sidebar").find(".sidebar").remove();
-			jQuery("#sidebar").append(currentSidebar);
+			jQuery("#sidebar").html(currentSidebar.html());
 			this.setCurrentMobileFilterState(0);
 			this.attachFilterColorEvents();
 			this.attachFilterIconEvents();
@@ -959,6 +960,7 @@ Mall.listing = {
 			this.attachFilterFlagEvents();
 			this.attachFilterPriceSliderEvents();
 			this.attachFilterSizeEvents();
+            this.attachMiscActions();
 		}
 
 		return this;
@@ -1281,7 +1283,9 @@ Mall.listing = {
 		// All filters
 		var filters = jQuery(content.filters);
 		this.getFilters().replaceWith(filters);
-		this.initFilterEvents(filters);
+
+		//this.initFilterEvents(filters);
+		this.initFilterEvents();
 
 		// Init toolbar
 		var toolbar = jQuery(content.toolbar);
@@ -1401,7 +1405,7 @@ Mall.listing = {
 	},
 
 	getFilters: function(){
-		return jQuery("#solr_search_facets");
+		return jQuery(".solr_search_facets");
 	},
 
 	getToolbar: function(){
@@ -2182,7 +2186,7 @@ Mall.listing = {
 	 * @returns {array} [{name: "", value:""},...]
 	 */
 	getFqByInterface: function(scope){
-		scope = scope || jQuery("#solr_search_facets");
+		scope = scope || jQuery(".solr_search_facets").first();
 		return scope.find(':checkbox:checked').serializeArray();
 	},
 
@@ -2477,4 +2481,24 @@ Mall.listing = {
 jQuery(document).ready(function () {
 	"use strict";
 	Mall.listing.init();
+
+    jQuery( window ).resize(function() {
+        if (jQuery(window).width() >= 768 ) {
+            Mall.listing.insertDesktopSidebar();
+        } else {
+            Mall.listing.insertMobileSidebar();
+        }
+    });
+    jQuery( window ).resize(function() {
+        if (jQuery(window).width() < 768 ) {
+            if(jQuery('.fb-slidebar.open').length){
+                jQuery('.closeSlidebar').click();
+                jQuery('#sb-site').removeClass('open');
+                jQuery('.fb-slidebar').removeClass('open');
+                jQuery('body').removeClass('noscroll');
+                jQuery('body').find('.noscroll').remove();
+            }
+        }
+
+    });
 });
