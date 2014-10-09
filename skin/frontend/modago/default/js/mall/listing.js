@@ -1728,30 +1728,41 @@ Mall.listing = {
 
 	_rebuildLongListContent: function(scope){
 
-		var noSelectedcontianer = jQuery(".longListItems", scope),
+		var noSelectedContianer = jQuery(".longListItems", scope),
 			selectedContianer = jQuery(".longListChecked", scope),
+			wrapper = jQuery(".longListWrapper", scope),
+			scrollable = jQuery(".scrollable", scope),
 			items = jQuery(":checkbox", scope);
 
 		items.sort(function(a,b){
 			return a.sort-b.sort;
 		});
-
-
+		
 		items.each(function(){
 			var el = jQuery(this),
 				parent = el.parents('li');
 			if(el.is(":checked")){
 				selectedContianer.append(parent);
 			}else{
-				noSelectedcontianer.append(parent);
+				noSelectedContianer.append(parent);
 			}
 		});
 
-		if(jQuery(":checkbox:checked", scope).length){
+		if(selectedContianer.children().length){
 			selectedContianer.show();
 		}else{
 			selectedContianer.hide();
 		}
+		
+		if(noSelectedContianer.children().length){
+			wrapper.show();
+			scrollable.removeClass('hidden');
+			selectedContianer.removeClass('noChooseFields');
+		}else{
+			wrapper.hide();
+			selectedContianer.addClass('noChooseFields');
+		}
+		
 	},
 
 	/**
