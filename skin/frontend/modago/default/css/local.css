@@ -95,7 +95,7 @@
         margin-right: 0;
     }
 }
-@media screen and (min-width: 993px) {
+@media screen and (min-width: 996px) {
     #clone_submenu .box {
         margin-right: 6%;
     }
@@ -104,10 +104,10 @@
     #clone_submenu .box:nth-child(1),
     #clone_submenu .box:nth-child(2),
     #clone_submenu .box:nth-child(3){
-        margin-right: 5%;
+        margin-right: 0%;
     }
     #clone_submenu .box:nth-child(4) {
-        margin-right: 1%;
+        margin-right: 0%;
     }
     #clone_submenu .box .long-wrap {
         width: 85%;
