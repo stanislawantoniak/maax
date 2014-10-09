@@ -225,7 +225,7 @@ Mall.listing = {
 		this.attachFilterEnumEvents(scope);
 		this.attachFilterPriceEvents(scope);
 		this.attachFilterDroplistEvents(scope);
-        this.attachFilterLongListEvents(scope);
+		this.attachFilterLongListEvents(scope);
 		this.attachFilterFlagEvents(scope);
 		this.attachFilterPriceSliderEvents(scope);
 		this.attachFilterSizeEvents(scope);
@@ -918,7 +918,7 @@ Mall.listing = {
 			this.attachFilterEnumEvents();
 			this.attachFilterPriceEvents();
 			this.attachFilterDroplistEvents();
-            this.attachFilterLongListEvents();
+			this.attachFilterLongListEvents();
 			this.attachFilterFlagEvents();
 			this.attachFilterPriceSliderEvents();
 			this.attachFilterSizeEvents();
@@ -996,6 +996,17 @@ Mall.listing = {
 	 * @returns {Mall.listing}
 	 */
 	reloadListing: function(){
+		this._captureListingMeta();
+		this._doAjaxRequest();
+		return this;
+	},
+
+	/**
+	 * @returns {Mall.listing}
+	 */
+	reloadListingNow: function(){
+		this._noPushState = true;
+		this._noReloadDelay = true;
 		this._captureListingMeta();
 		this._doAjaxRequest();
 		return this;
@@ -1101,7 +1112,7 @@ Mall.listing = {
 			self._ajaxSend.apply(self);
 		} else {
 			this._ajaxTimer = setTimeout(
-				function(){self._ajaxSend.apply(self);},
+				function(){self._ajaxSend.apply(self)},
 				this.getAjaxTimeout()
 			);
 		}
@@ -1121,7 +1132,17 @@ Mall.listing = {
 	 * @returns {String}
 	 */
 	_buildPushStateKey: function(data){
-		return this._buildKey(data);
+		var tmp = jQuery.extend({},data);
+		jQuery.each(tmp, function(index){
+			if(this.value.length < 1 ||
+				(this.name == 'scat' ||
+				this.name == 'page' ||
+				this.name == 'rows' ||
+				this.name == 'start')) {
+				delete tmp[index];
+			}
+		});
+		return this._buildKey(tmp);
 	},
 
 	/**
@@ -1141,14 +1162,8 @@ Mall.listing = {
 		/**
 		 * @todo Ordering params
 		 */
-		jQuery.each(data, function(){
-			if(this.value.length > 1 &&
-				(this.name != 'scat' &&
-				this.name != 'page' &&
-				this.name != 'rows' &&
-				this.name != 'start')) {
-				out.push(encodeURIComponent(this.name) + "=" + encodeURIComponent(this.value));
-			}
+		jQuery.each(data, function(index){
+			out.push(encodeURIComponent(this.name) + "=" + encodeURIComponent(this.value));
 		});
 
 		return out.join("&");
@@ -1212,10 +1227,7 @@ Mall.listing = {
 					}
 				}
 				//reload listing
-				Mall.listing._noPushState = true;
-				Mall.listing._noReloadDelay = true;
-				Mall.listing.reloadListing();
-
+				self.reloadListingNow();
 			}
 		}
 	},
@@ -1224,9 +1236,9 @@ Mall.listing = {
 	 * @param {string} url
 	 * @returns {void}
 	 */
-	_pushHistoryState: function(url) {
+	_pushHistoryState: function(data) {
 		if(!this._noPushState) {
-			url = this._getUrlNoParams() + '?' + url;
+			var url = this._getUrlNoParams() + '?' + this._buildPushStateKey(data);
 			var title = document.title;
 			window.history.pushState({page: title}, title, url);
 		} else {
@@ -1241,10 +1253,9 @@ Mall.listing = {
 
 		var self = this,
 			data = this.getQueryParamsAsArray(forceObject),
-			ajaxKey = this._buildAjaxKey(data),
-			url = this._buildPushStateKey(data);
-	
-		this._pushHistoryState(url);
+			ajaxKey = this._buildAjaxKey(data);
+
+		this._pushHistoryState(data);
 
 		if(this._ajaxCache[ajaxKey]){
 			this._handleAjaxRepsonse(this._ajaxCache[ajaxKey]);
@@ -1461,7 +1472,7 @@ Mall.listing = {
 
 		// Destroy scrolls if exists;
 		jQuery(".scrollable.mCustomScrollbar".scope)
-				.mCustomScrollbar("destroy");
+			.mCustomScrollbar("destroy");
 
 		var fm = jQuery(".scrollable", scope);
 		if (fm.length >= 1) {
@@ -1657,24 +1668,24 @@ Mall.listing = {
 	 */
 	attachFilterSizeEvents: function(scope) {
 		var self = this;
-        jQuery('.filter-size', scope).find(":checkbox").on("change", function(e) {
+		jQuery('.filter-size', scope).find(":checkbox").on("change", function(e) {
 			self.nodeChanged(jQuery(this));
-        });
-        return this;
-    },
+		});
+		return this;
+	},
 
-    /**
-     * Attaches events for long list filters.
-     *
-     * @returns {Mall.listing}
-     */
-    attachFilterLongListEvents: function(scope) {
-        // Handle long list
+	/**
+	 * Attaches events for long list filters.
+	 *
+	 * @returns {Mall.listing}
+	 */
+	attachFilterLongListEvents: function(scope) {
+		// Handle long list
 
 		var filters = jQuery('.filter-longlist', scope);
 		var self = this;
 
-        filters.find(":checkbox").on("change", function(e) {
+		filters.find(":checkbox").on("change", function(e) {
 			self._rebuildLongListContent(jQuery(this).parents(".content"));
 			self.nodeChanged(jQuery(this));
 		});
