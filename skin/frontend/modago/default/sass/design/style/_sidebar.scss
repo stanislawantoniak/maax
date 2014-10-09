@@ -90,24 +90,24 @@
 }
 
 .sidebar {
-	.go_read_filter {
-		font-size: 12px;
-	}
-	#filter_recommended_products, #filter_product_flag_facet, #filter_flags_facet {
-		label {
-			span {
-				color:#fff;
-				text-transform: uppercase;
-				text-align: center;
-				&+.suffix {
-					font-weight: normal;
-					background-color:transparent !important;
-					color: #b0b0b0;
-					font-size: 12px;
-					text-align: left;
-				}
-			}
-		}
+  .go_read_filter {
+    font-size: 12px;
+  }
+  #filter_recommended_products, #filter_product_flag_facet, #filter_flags_facet {
+    label {
+      span,a {
+      color:#fff;
+      text-transform: uppercase;
+      text-align: center;
+      &+.suffix {
+        font-weight: normal;
+        background-color:transparent !important;
+        color: #b0b0b0;
+        font-size: 12px;
+        text-align: left;
+      }
+    }
+}
 
 
 		label[for="filter_recommended_products_news"], .new {

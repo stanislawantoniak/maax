@@ -149,11 +149,8 @@ Mall.listing = {
 	 * Performs initialization for listing object.
 	 */
 	init: function () {
-
-
 		// Reset form
 		this.resetForm();
-
 
 		// fill cache from static contents - not modified by js
 		this._rediscoverCache();
@@ -221,7 +218,6 @@ Mall.listing = {
 	initFilterEvents: function(scope){
 		scope = scope || jQuery("#solr_search_facets");
 		this.preprocessFilterContent(scope);
-		this.initDroplists(scope);
 		this.initScrolls(scope);
 		this.attachMiscActions(scope);
 		this.attachFilterColorEvents(scope);
@@ -1105,7 +1101,7 @@ Mall.listing = {
 			self._ajaxSend.apply(self);
 		} else {
 			this._ajaxTimer = setTimeout(
-				function(){self._ajaxSend.apply(self)},
+				function(){self._ajaxSend.apply(self);},
 				this.getAjaxTimeout()
 			);
 		}
@@ -1169,7 +1165,7 @@ Mall.listing = {
 	 * @returns {object} - all parameters as object of objects
 	 */
 	_getUrlObjects: function() {
-		var url = decodeURI(window.location.href.replace(Mall.listing._getUrlNoParams(),"")),
+		var url = decodeURI(window.location.href.replace(Mall.listing._getUrlNoParams()+"?","")),
 			result = {};
 
 		var tmpObj = url.split("&");
@@ -1188,18 +1184,31 @@ Mall.listing = {
 	 */
 	initOnpopstateEvent: function() {
 		if(!window.onpopstate) {
-        window.onpopstate = function() {
+			var self = this;
+			window.onpopstate = function() {
 				//uncheck all filters
 				jQuery("input[type=checkbox]").prop('checked', false);
 				//check url for selected filters
-				var filters = Mall.listing._getUrlObjects();
+				var filters = self._getUrlObjects(),
+					sort = false,
+					dir = false;
 				if (Object.keys(filters).length) {
 					for (var filter in filters) {
 						for (var key in filters[filter]) {
+							var value = filters[filter][key];
 							if (key.substring(0, 2) == 'fq') {
-								jQuery("input[type=checkbox][name='" + key + "'][value='" + filters[filter][key] + "']").prop("checked", true);
+								jQuery("input[type=checkbox][name='" + key + "'][value='" + value + "']").prop("checked", true);
+							} else if (key == 'sort') {
+								sort = value;
+							} else if (key == 'dir') {
+								dir = value;
 							}
+							console.log(key);
 						}
+					}
+					if(sort && dir) {
+						self.setSort(sort);
+						self.setDir(dir);
 					}
 				}
 				//reload listing
@@ -1234,7 +1243,7 @@ Mall.listing = {
 			data = this.getQueryParamsAsArray(forceObject),
 			ajaxKey = this._buildAjaxKey(data),
 			url = this._buildPushStateKey(data);
-
+	
 		this._pushHistoryState(url);
 
 		if(this._ajaxCache[ajaxKey]){
@@ -1431,6 +1440,11 @@ Mall.listing = {
 		return jQuery("#sort-criteria");
 	},
 
+	getSortSelect: function(scope) {
+		var scope = scope || this.getToolbar();
+		return jQuery('#sort-by',scope);
+	},
+
 	/**
 	 * Return current mobile filters state. Is mobile or not.
 	 *
@@ -1462,47 +1476,23 @@ Mall.listing = {
 		};
 	},
 
-	initDroplists: function(scope){
-
-		var headList = jQuery('.button-select', scope),
-			listSelect = jQuery('.dropdown-select ul', scope);
-
-		headList.on('click', function(event) {
-			event.preventDefault();
-			jQuery(this).next('.dropdown-select').stop(true).slideToggle(200);
-		});
-
-		jQuery(document).click(function(e) {
-			if (!jQuery(e.target).parents().andSelf().is('.select-group')) {
-				jQuery(".dropdown-select").slideUp(200);
-			}
-		});
-
-		listSelect.on('click', 'a', function(event) {
-			var thisVal = jQuery(this).html();
-			jQuery(this).closest('.select-group').find('.button-select')
-				.html(thisVal+'<span class="down"></span>');
-			jQuery(this).closest('.dropdown-select').slideUp(200);
-		});
-	},
-
-
 	/**
 	 *
 	 * @param {type} scope
 	 * @returns {undefined}
 	 */
 	initSortEvents: function(scope){
-		var scope = scope || jQuery("#sort-criteria");
-		this.initDroplists(scope);
-		var self = this;
-		var listSelect = jQuery('.dropdown-select ul', scope);
-		listSelect.on('click', 'a', function(event) {
+		var sortingSelect = this.getSortSelect(scope),
+			self = this;
+		sortingSelect.selectbox();
+
+		sortingSelect.change(function() {
+			var values = jQuery(this).val().split("||");
+
 			self.changeListingParams({
-				sort: jQuery(this).data('sort'),
-				dir: jQuery(this).data('dir')
+				sort: values[0],
+				dir: values[1]
 			});
-			return false;
 		});
 	},
 
