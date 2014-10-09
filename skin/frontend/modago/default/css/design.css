@@ -903,19 +903,12 @@ span.checked {
   font-family: "latoregular";
   font-weight: normal;
   color: #000; }
-/* line 18, ../sass/design/modules/_sort-criteria.scss */
-#sort-criteria .select-group.small {
-  width: 180px; }
-/* line 20, ../sass/design/modules/_sort-criteria.scss */
-#sort-criteria .select-group.small .button-select {
-  font-size: 12px; }
-/* line 26, ../sass/design/modules/_sort-criteria.scss */
-#sort-criteria .styledSelected label[for^=sort-by] {
-  line-height: 27px;
-  font-size: 12px; }
-/* line 30, ../sass/design/modules/_sort-criteria.scss */
-#sort-criteria .styledSelected .sbHolder {
-  font-size: 12px; }
+/* line 15, ../sass/design/modules/_sort-criteria.scss */
+#sort-criteria ul li .sort-by-container {
+  width: 150px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 5px; }
 
 /** Carousel **/
 /* line 3, ../sass/design/modules/_rv-jcarousel.scss */
@@ -3490,12 +3483,12 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
 .sidebar .go_read_filter {
   font-size: 12px; }
 /* line 98, ../sass/design/style/_sidebar.scss */
-.sidebar #filter_recommended_products label span, .sidebar #filter_product_flag_facet label span, .sidebar #filter_flags_facet label span {
+.sidebar #filter_recommended_products label span, .sidebar #filter_recommended_products label a, .sidebar #filter_product_flag_facet label span, .sidebar #filter_product_flag_facet label a, .sidebar #filter_flags_facet label span, .sidebar #filter_flags_facet label a {
   color: #fff;
   text-transform: uppercase;
   text-align: center; }
 /* line 102, ../sass/design/style/_sidebar.scss */
-.sidebar #filter_recommended_products label span + .suffix, .sidebar #filter_product_flag_facet label span + .suffix, .sidebar #filter_flags_facet label span + .suffix {
+.sidebar #filter_recommended_products label span + .suffix, .sidebar #filter_recommended_products label a + .suffix, .sidebar #filter_product_flag_facet label span + .suffix, .sidebar #filter_product_flag_facet label a + .suffix, .sidebar #filter_flags_facet label span + .suffix, .sidebar #filter_flags_facet label a + .suffix {
   font-weight: normal;
   background-color: transparent !important;
   color: #b0b0b0;
@@ -3610,16 +3603,15 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
   color: #1e1e1e; }
 
 /* line 272, ../sass/design/style/_sidebar.scss */
-.longListWrapper, .longListChecked {
+.longListChecked, .longListWrapper {
   border: 1px solid #d0cfcf;
   -moz-border-radius: 1px;
   -webkit-border-radius: 1px;
   border-radius: 1px; }
 
-/* line 276, ../sass/design/style/_sidebar.scss */
-.longListChecked {
-  border-bottom: 0;
-  padding-bottom: 0 !important; }
+/* line 277, ../sass/design/style/_sidebar.scss */
+.longListWrapper {
+  margin-top: -1px; }
 
 /* line 284, ../sass/design/style/_sidebar.scss */
 .longListWrapper .mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
@@ -3634,27 +3626,32 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
 /* line 296, ../sass/design/style/_sidebar.scss */
 .longListWrapper .mCSB_scrollTools .mCSB_draggerRail {
   background: none !important; }
+/* line 300, ../sass/design/style/_sidebar.scss */
+.longListWrapper .no-result {
+  padding: 10px;
+  color: #aaa;
+  font-style: italic; }
 
-/* line 304, ../sass/design/style/_sidebar.scss */
+/* line 309, ../sass/design/style/_sidebar.scss */
 #sidebar .list-group {
   border-radius: 0;
   border-color: #ebebeb; }
-/* line 307, ../sass/design/style/_sidebar.scss */
+/* line 312, ../sass/design/style/_sidebar.scss */
 #sidebar .list-group li {
   border-color: #ebebeb; }
-/* line 309, ../sass/design/style/_sidebar.scss */
+/* line 314, ../sass/design/style/_sidebar.scss */
 #sidebar .list-group li:first-child {
   border-radius: 0; }
-/* line 312, ../sass/design/style/_sidebar.scss */
+/* line 317, ../sass/design/style/_sidebar.scss */
 #sidebar .list-group li:last-child {
   border-radius: 0; }
 
-/* line 323, ../sass/design/style/_sidebar.scss */
+/* line 328, ../sass/design/style/_sidebar.scss */
 #note_client input[type=checkbox].css-checkbox + label.css-label:hover span, #note_client input[type=radio].css-radio + label.css-label:hover span, #filter_recommended_products input[type=checkbox].css-checkbox + label.css-label:hover span, #filter_recommended_products input[type=radio].css-radio + label.css-label:hover span {
   text-decoration: none; }
 
 @media (max-width: 767px) {
-  /* line 331, ../sass/design/style/_sidebar.scss */
+  /* line 336, ../sass/design/style/_sidebar.scss */
   .fb-slidebar-inner .current-filter {
     line-height: 24px; } }
 

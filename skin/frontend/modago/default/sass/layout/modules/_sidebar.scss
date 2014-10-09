@@ -159,6 +159,11 @@
             display:inline-block;
             width:27px;
             height:27px;
+			  a{
+				  display:block;
+				  width: 25px;
+				  height: 25px;
+			  }
           }
           
         }
@@ -167,7 +172,7 @@
 
 .longListItems, .longListChecked {
   margin:0px !important;
-  padding:5px 0 5px 0;
+  padding:5px 0 0 0;
   //max-height:126px;
   //overflow-y:auto;
   margin-bottom: 10px;

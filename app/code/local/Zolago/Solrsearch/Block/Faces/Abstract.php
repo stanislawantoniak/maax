@@ -64,7 +64,7 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 		$filterQuery = $this->getFilterQuery();
 		if (isset($filterQuery[$this->getFacetKey()])) {
 			if(is_array($filterQuery[$this->getFacetKey()])){
-				return in_array($item, $filterQuery[$this->getFacetKey()]);
+				return in_array((string)$item, $filterQuery[$this->getFacetKey()]);
 			}
 			return trim($filterQuery[$this->getFacetKey()])==trim($item);
 		}
