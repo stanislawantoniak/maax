@@ -912,7 +912,7 @@ Mall.listing = {
 	 */
 	insertMobileSidebar: function() {
 		if(this.getCurrentMobileFilterState() == 0) {
-			var currentSidebar = jQuery("#sidebar").clone(true, true);
+			var currentSidebar = jQuery("#sidebar").first().clone(true, true);
 			jQuery("#sidebar").find(".sidebar").remove();
 			jQuery(".fb-slidebar-inner").find('.sidebar').remove();
 			jQuery(".fb-slidebar-inner").html(currentSidebar.html());
@@ -969,10 +969,10 @@ Mall.listing = {
 	 */
 	insertDesktopSidebar: function() {
 		if(this.getCurrentMobileFilterState() == 1) {
-			var currentSidebar = jQuery(".fb-slidebar-inner").clone(true, true);
+			var currentSidebar = jQuery(".fb-slidebar-inner").first().clone(true, true);
 			jQuery(".fb-slidebar-inner").find('.sidebar').remove();
 			jQuery("#sidebar").find(".sidebar").remove();
-			jQuery("#sidebar").append(currentSidebar);
+			jQuery("#sidebar").html(currentSidebar.html());
 			this.setCurrentMobileFilterState(0);
 			this.attachFilterColorEvents();
 			this.attachFilterIconEvents();
@@ -1305,7 +1305,8 @@ Mall.listing = {
 		var filters = jQuery(content.filters);
 		this.getFilters().replaceWith(filters);
 
-		this.initFilterEvents(filters);
+		//this.initFilterEvents(filters);
+		this.initFilterEvents();
 
 		// Init toolbar
 		var toolbar = jQuery(content.toolbar);
@@ -2536,4 +2537,12 @@ Mall.listing = {
 jQuery(document).ready(function () {
 	"use strict";
 	Mall.listing.init();
+
+    jQuery( window ).resize(function() {
+        if (jQuery(window).width() >= 768 ) {
+            Mall.listing.insertDesktopSidebar();
+        } else {
+            Mall.listing.insertMobileSidebar();
+        }
+    });
 });
