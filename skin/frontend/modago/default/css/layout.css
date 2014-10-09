@@ -2305,7 +2305,7 @@ html.fb-static .fb-slidebar, .fb-slidebar.fb-static {
 /* line 173, ../sass/layout/modules/_sidebar.scss */
 .longListItems, .longListChecked {
   margin: 0px !important;
-  padding: 5px 0 5px 0;
+  padding: 5px 0 0 0;
   margin-bottom: 10px; }
 /* line 179, ../sass/layout/modules/_sidebar.scss */
 .longListItems li, .longListChecked li {
@@ -6559,41 +6559,42 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
 
 /* line 159, ../sass/layout/style/_sidebar.scss */
 .longListWrapper {
-  max-height: 151px;
-  margin-bottom: 10px; }
+  max-height: 151px; }
 
 /* line 163, ../sass/layout/style/_sidebar.scss */
 .longListWrapper .scrollable {
-  max-height: 145px;
-  padding: 5px 0 5px 0; }
+  max-height: 145px; }
 
-/* line 169, ../sass/layout/style/_sidebar.scss */
+/* line 168, ../sass/layout/style/_sidebar.scss */
 .filter-longlist .mCSB_scrollTools {
   width: 12px; }
-/* line 171, ../sass/layout/style/_sidebar.scss */
+/* line 170, ../sass/layout/style/_sidebar.scss */
 .filter-longlist .mCSB_scrollTools .mCSB_dragger {
   height: 39px !important;
   max-height: 39px !important;
   min-height: 39px !important; }
-/* line 175, ../sass/layout/style/_sidebar.scss */
+/* line 174, ../sass/layout/style/_sidebar.scss */
 .filter-longlist .mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
   width: 12px;
   border-radius: 0; }
-/* line 182, ../sass/layout/style/_sidebar.scss */
+/* line 181, ../sass/layout/style/_sidebar.scss */
 .filter-longlist .mCSB_scrollTools .mCSB_buttonDown {
   bottom: -5px; }
-/* line 186, ../sass/layout/style/_sidebar.scss */
+/* line 185, ../sass/layout/style/_sidebar.scss */
 .filter-longlist .mCSB_scrollTools a + .mCSB_draggerContainer {
   margin: 18px 0 20px; }
-/* line 190, ../sass/layout/style/_sidebar.scss */
+/* line 189, ../sass/layout/style/_sidebar.scss */
 .filter-longlist .mCSB_scrollTools .mCSB_draggerRail {
   width: 12px; }
-/* line 195, ../sass/layout/style/_sidebar.scss */
+/* line 194, ../sass/layout/style/_sidebar.scss */
 .filter-longlist .mCSB_inside > .mCSB_container {
   margin-right: 0; }
+/* line 198, ../sass/layout/style/_sidebar.scss */
+.filter-longlist .action.clear {
+  margin-top: 15px; }
 
 @media (max-width: 767px) {
-  /* line 204, ../sass/layout/style/_sidebar.scss */
+  /* line 206, ../sass/layout/style/_sidebar.scss */
   .fb-slidebar-inner .current-filter {
     padding-top: 3px;
     line-height: 24px; } }
