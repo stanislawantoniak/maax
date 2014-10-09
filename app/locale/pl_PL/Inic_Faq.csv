@@ -11,10 +11,9 @@ Expand All,Expand All
 The requested FAQ Category item could not be found!,The requested FAQ Category item could not be found!
 Search FAQ,Search FAQ
 GO,GO
-"Search Result For - ""%s"" from category ""%s""","Search Result For - ""%s"" from category ""%s"""
-"Search Result For : ""%s""","Search Result For : ""%s"""
+"Search Result For - ""%s"" from category ""%s""","Wynik wyszukiwania dla - ""%s"" kategoria ""%s"""
+"Search Result For : ""%s""","Wynik wyszukiwania dla : ""%s"""
 There is no FAQ item found for search string!,There is no FAQ item found for search string!
-Back,Back
 Faq Item is not active,Faq Item is not active
 Catagory is not active,Catagory is not active
 Please Select Category,Please Select Category
