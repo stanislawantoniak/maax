@@ -132,5 +132,12 @@
     font-weight: 900;
     text-transform: uppercase;
 }
+#clone_submenu .menu-5columns .menu-5columns-bottom {
+    padding-bottom: 25px;
+}
+#clone_submenu .menu-5columns .menu-5columns-bottom {
+    padding-top: 25px;
+    border-top: 1px solid #dbdbdb;
+}
 
 
