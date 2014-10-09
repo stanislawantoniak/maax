@@ -3634,27 +3634,32 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
 /* line 296, ../sass/design/style/_sidebar.scss */
 .longListWrapper .mCSB_scrollTools .mCSB_draggerRail {
   background: none !important; }
+/* line 300, ../sass/design/style/_sidebar.scss */
+.longListWrapper .no-result {
+  padding: 10px;
+  color: #aaa;
+  font-style: italic; }
 
-/* line 304, ../sass/design/style/_sidebar.scss */
+/* line 309, ../sass/design/style/_sidebar.scss */
 #sidebar .list-group {
   border-radius: 0;
   border-color: #ebebeb; }
-/* line 307, ../sass/design/style/_sidebar.scss */
+/* line 312, ../sass/design/style/_sidebar.scss */
 #sidebar .list-group li {
   border-color: #ebebeb; }
-/* line 309, ../sass/design/style/_sidebar.scss */
+/* line 314, ../sass/design/style/_sidebar.scss */
 #sidebar .list-group li:first-child {
   border-radius: 0; }
-/* line 312, ../sass/design/style/_sidebar.scss */
+/* line 317, ../sass/design/style/_sidebar.scss */
 #sidebar .list-group li:last-child {
   border-radius: 0; }
 
-/* line 323, ../sass/design/style/_sidebar.scss */
+/* line 328, ../sass/design/style/_sidebar.scss */
 #note_client input[type=checkbox].css-checkbox + label.css-label:hover span, #note_client input[type=radio].css-radio + label.css-label:hover span, #filter_recommended_products input[type=checkbox].css-checkbox + label.css-label:hover span, #filter_recommended_products input[type=radio].css-radio + label.css-label:hover span {
   text-decoration: none; }
 
 @media (max-width: 767px) {
-  /* line 331, ../sass/design/style/_sidebar.scss */
+  /* line 336, ../sass/design/style/_sidebar.scss */
   .fb-slidebar-inner .current-filter {
     line-height: 24px; } }
 
