@@ -182,6 +182,7 @@ color: #2F2F2F;
     padding: 5px;
     position: relative;
     font-size: 14px;
+    color: #000;
 }
 .panel-group i.fa {
     margin-top: -8px;
