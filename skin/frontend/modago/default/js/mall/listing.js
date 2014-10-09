@@ -198,7 +198,7 @@ Mall.listing = {
 	},
 
 	initFilterEvents: function(scope){
-		scope = scope || jQuery("#solr_search_facets");
+		scope = scope || jQuery(".solr_search_facets");
 		this.preprocessFilterContent(scope);
 		this.initDroplists(scope);
         this.attachMiscActions(scope);
@@ -1173,7 +1173,7 @@ Mall.listing = {
 	},
 	
 	rebuildContents: function(content){
-		
+		console.log(content);
 		/**
 		 * @todo handle error
 		 */
@@ -1182,7 +1182,7 @@ Mall.listing = {
 		var filters = jQuery(content.filters);
 		this.initFilterEvents(filters);
 		this.getFilters().replaceWith(filters);
-		
+
 		// Init toolbar
 		var toolbar = jQuery(content.toolbar);
         this.initSortEvents(toolbar);
@@ -1301,7 +1301,7 @@ Mall.listing = {
     },
 	
 	getFilters: function(){
-		return jQuery("#solr_search_facets");
+		return jQuery(".solr_search_facets");
 	},
 	
 	getToolbar: function(){
@@ -1955,7 +1955,7 @@ Mall.listing = {
 	 * @returns {array} [{name: "", value:""},...]
 	 */
 	getFqByInterface: function(scope){
-		scope = scope || jQuery("#solr_search_facets");
+		scope = scope || jQuery(".solr_search_facets").first();
 		return scope.find(':checkbox:checked').serializeArray();
 	},
 
