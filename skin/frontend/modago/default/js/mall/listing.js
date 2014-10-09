@@ -927,6 +927,7 @@ Mall.listing = {
 			this.attachFilterPriceSliderEvents();
 			this.attachFilterSizeEvents();
 			this.attachDeleteCurrentFilter();
+            this.attachMiscActions();
 		}
 
 		return this;
@@ -982,6 +983,7 @@ Mall.listing = {
 			this.attachFilterFlagEvents();
 			this.attachFilterPriceSliderEvents();
 			this.attachFilterSizeEvents();
+            this.attachMiscActions();
 		}
 
 		return this;
