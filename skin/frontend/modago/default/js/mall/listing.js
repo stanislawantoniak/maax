@@ -952,14 +952,16 @@ Mall.listing = {
 			jQuery("#sidebar").find(".sidebar").remove();
 			jQuery("#sidebar").html(currentSidebar.html());
 			this.setCurrentMobileFilterState(0);
-			this.attachFilterColorEvents();
-			this.attachFilterIconEvents();
-			this.attachFilterEnumEvents();
-			this.attachFilterPriceEvents();
-			this.attachFilterDroplistEvents();
-			this.attachFilterFlagEvents();
-			this.attachFilterPriceSliderEvents();
-			this.attachFilterSizeEvents();
+            this.attachFilterColorEvents();
+            this.attachFilterIconEvents();
+            this.attachFilterEnumEvents();
+            this.attachFilterPriceEvents();
+            this.attachFilterDroplistEvents();
+            this.attachFilterLongListEvents();
+            this.attachFilterFlagEvents();
+            this.attachFilterPriceSliderEvents();
+            this.attachFilterSizeEvents();
+            this.attachDeleteCurrentFilter();
             this.attachMiscActions();
 		}
 
@@ -1293,8 +1295,7 @@ Mall.listing = {
 		var filters = jQuery(content.filters);
 		this.getFilters().replaceWith(filters);
 
-		//this.initFilterEvents(filters);
-		this.initFilterEvents();
+		this.initFilterEvents(filters);
 
 		// Init toolbar
 		var toolbar = jQuery(content.toolbar);
