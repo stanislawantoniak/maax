@@ -988,9 +988,7 @@ Mall.listing = {
 	reloadListingNow: function(){
 		this._noPushState = true;
 		this._noReloadDelay = true;
-		this._captureListingMeta();
-		this._doAjaxRequest();
-		return this;
+		return this.reloadListing();
 	},
 
 	/**
@@ -1172,8 +1170,17 @@ Mall.listing = {
 							var value = filters[filter][key];
 							if (key.substring(0, 2) == 'fq') {
 								jQuery("input[type=checkbox][name='" + key + "'][value='" + value + "']").prop("checked", true);
+							} else if (key == 'sort') {
+								sort = value;
+							} else if (key == 'dir') {
+								dir = value;
 							}
 						}
+					}
+					if(sort && dir) {
+						self.getSortSelect().find('option[value="'+sort+'_'+dir+'"]').prop('selected',true)
+					} else {
+						self.getSortSelect().find('option:first-child').prop('selected',true);
 					}
 				}
 				//reload listing
@@ -1442,6 +1449,8 @@ Mall.listing = {
 	 * @param {type} scope
 	 * @returns {undefined}
 	 */
+		_shit: '',
+
 	initSortEvents: function(scope){
 		var sortingSelect = this.getSortSelect(scope),
 			self = this;
@@ -2126,7 +2135,7 @@ Mall.listing = {
 	 * @returns {string}
 	 */
 	getSort: function() {
-		return this.getSortSelect().val();
+		return this.getSortSelect().find(":selected").data("sort");
 	},
 
 	/**

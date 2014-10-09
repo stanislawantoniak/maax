@@ -12,7 +12,9 @@
 	            <div class="sort-by-container">
 		            <select id="sort-by" class="form-control">
 			            <?php foreach($this->getSortOptions() as $option): ?>
-				            <option value="<?php echo $option['value']."||".$option['dir']; ?>"
+				            <option value="<?php echo $option['value'].'_'.$option['dir']; ?>"
+				                    data-sort="<?php echo $option['value']; ?>"
+				                    data-dir="<?php echo $option['dir']; ?>"
 				                    <?php if ($option['value'] === $this->getCurrentOrder() && $option['dir'] == $this->getCurrentDir()): ?>
 					                selected
 					                <?php endif; ?>>
@@ -27,7 +29,5 @@
 </aside>
 
 <script type="text/javascript">
-	Mall.listing.setDir("<?php echo $this->getCurrentDir(); ?>");
-	Mall.listing.setSort("<?php echo $this->getCurrentOrder(); ?>");
 	Mall.listing.setTotal(<?php echo $_total; ?>);
 </script>
