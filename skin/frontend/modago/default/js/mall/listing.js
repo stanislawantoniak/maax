@@ -1701,15 +1701,6 @@ Mall.listing = {
 			listUl = jQuery(".longListItems", scope),
 			matches = 0;
 
-
-		this._sortLongListContent(checkboxes);
-		
-		checkboxes.each(function(){
-			var el = jQuery(this);
-			listUl.append(el.parents("li"));
-		});
-			
-
 		if(!items.length){
 			// No avaialble items to search
 			noResult.addClass("hidden");
@@ -1740,14 +1731,24 @@ Mall.listing = {
 				noResult.removeClass("hidden");
 				list.addClass("hidden");
 			}else{
-				
-				// Perfect match - move as first
-				items.filter(".perfectMatch").each(function(){
-					jQuery(this).prependTo(listUl);
-				});
 				noResult.addClass("hidden");
 				list.removeClass("hidden");
 			}
+		}
+		
+		if(list.find("li").not(".hidden").length){
+			// Make sort
+			this._sortLongListContent(checkboxes);
+			checkboxes.each(function(){
+				var el = jQuery(this).parents("li");
+				if(!el.is(".hidden")){
+					listUl.append(el);
+				}
+			});
+			// Perfect match - move as first
+			items.filter(".perfectMatch").each(function(){
+				jQuery(this).prependTo(listUl);
+			});
 		}
 
 	},
