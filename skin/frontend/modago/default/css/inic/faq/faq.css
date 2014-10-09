@@ -94,7 +94,7 @@ color: #2F2F2F;
 .faq #searchform label {
     float: left;
     font-size: 18px;
-    font-weight: bold;
+    font-family: "latolight",sans-serif;
 }
 
 .faq #searchform #keyword {
@@ -121,6 +121,7 @@ color: #2F2F2F;
     padding: 0px;
     padding-left: 15px;
     border-left: 1px solid #dddce1;
+    border-right: 1px solid #dddce1;
 }
 
 .faq #searchform .btnSearch {
@@ -180,6 +181,7 @@ color: #2F2F2F;
 .faq-container .panel-group .panel-heading h4.panel-title {
     padding: 5px;
     position: relative;
+    font-size: 14px;
 }
 .panel-group i.fa {
     margin-top: -8px;
@@ -192,3 +194,35 @@ color: #2F2F2F;
     width: 97%;
 }
 /*Search Ends*/
+.faq-list > div {
+    padding-top: 25px;
+}
+
+.faq-list h3:before {
+    content: " ";
+    display: block;
+    height: 18px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 18px;
+    background: none repeat scroll 0 0 #6fffcf;
+}
+.faq-list h3 {
+    display: block;
+    height: 18px;
+    margin: 0 -18px 10px;
+    overflow: hidden;
+    padding: 0 0 0 30px;
+    position: relative;
+    font-family: "latoregular";
+    font-size: 18px;
+    line-height: 18px;
+    text-align: left;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+.faq-content h3 span {
+    text-transform: uppercase;
+    font-family: "latolight";
+}
