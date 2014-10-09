@@ -6567,34 +6567,35 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
 
 /* line 168, ../sass/layout/style/_sidebar.scss */
 .filter-longlist .mCSB_scrollTools {
-  width: 12px; }
-/* line 170, ../sass/layout/style/_sidebar.scss */
+  width: 12px;
+  margin: 6px 2px 4px 0; }
+/* line 171, ../sass/layout/style/_sidebar.scss */
 .filter-longlist .mCSB_scrollTools .mCSB_dragger {
   height: 39px !important;
   max-height: 39px !important;
   min-height: 39px !important; }
-/* line 174, ../sass/layout/style/_sidebar.scss */
+/* line 175, ../sass/layout/style/_sidebar.scss */
 .filter-longlist .mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
   width: 12px;
   border-radius: 0; }
-/* line 181, ../sass/layout/style/_sidebar.scss */
+/* line 182, ../sass/layout/style/_sidebar.scss */
 .filter-longlist .mCSB_scrollTools .mCSB_buttonDown {
   bottom: -5px; }
-/* line 185, ../sass/layout/style/_sidebar.scss */
+/* line 186, ../sass/layout/style/_sidebar.scss */
 .filter-longlist .mCSB_scrollTools a + .mCSB_draggerContainer {
   margin: 18px 0 20px; }
-/* line 189, ../sass/layout/style/_sidebar.scss */
+/* line 190, ../sass/layout/style/_sidebar.scss */
 .filter-longlist .mCSB_scrollTools .mCSB_draggerRail {
   width: 12px; }
-/* line 194, ../sass/layout/style/_sidebar.scss */
+/* line 195, ../sass/layout/style/_sidebar.scss */
 .filter-longlist .mCSB_inside > .mCSB_container {
   margin-right: 0; }
-/* line 198, ../sass/layout/style/_sidebar.scss */
+/* line 199, ../sass/layout/style/_sidebar.scss */
 .filter-longlist .action.clear {
   margin-top: 15px; }
 
 @media (max-width: 767px) {
-  /* line 206, ../sass/layout/style/_sidebar.scss */
+  /* line 207, ../sass/layout/style/_sidebar.scss */
   .fb-slidebar-inner .current-filter {
     padding-top: 3px;
     line-height: 24px; } }

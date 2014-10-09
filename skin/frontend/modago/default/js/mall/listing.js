@@ -1677,11 +1677,22 @@ Mall.listing = {
 	},
 
 	_searchLongList: function(scope){
-		var term = jQuery(".longListSearch", scope).val().trim(),
+		var term = jQuery(".longListSearch", scope).val().trim().toLowerCase(),
 			items = jQuery(".longListItems li", scope),
+			checkboxes = jQuery(":checkbox", items),
 			noResult = jQuery(".no-result", scope),
 			list = jQuery(".scrollable", scope),
+			listUl = jQuery(".longListItems", scope),
 			matches = 0;
+
+
+		this._sortLongListContent(checkboxes);
+		
+		checkboxes.each(function(){
+			var el = jQuery(this);
+			listUl.append(el.parents("li"));
+		});
+			
 
 		if(!items.length){
 			// No avaialble items to search
@@ -1696,23 +1707,39 @@ Mall.listing = {
 			// Term entered
 			items.each(function(){
 				var el = jQuery(this),
-					text = el.find("label > span:eq(0)").text();
-				if(text.toLowerCase().search(term.toLowerCase())>-1){
+					text = el.find("label > span:eq(0)").text().trim().toLowerCase();
+					el.removeClass("perfectMatch");
+				if(text.search(term)>-1){
 					el.removeClass("hidden");
 					matches++;
+					if(text==term){
+						el.addClass("perfectMatch");
+					}
 				}else{
 					el.addClass("hidden");
 				}
 			});
+			
 			if(!matches){
 				noResult.removeClass("hidden");
 				list.addClass("hidden");
 			}else{
+				
+				// Perfect match - move as first
+				items.filter(".perfectMatch").each(function(){
+					jQuery(this).prependTo(listUl);
+				});
 				noResult.addClass("hidden");
 				list.removeClass("hidden");
 			}
 		}
 
+	},
+
+	_sortLongListContent: function(items){
+		items.sort(function(a,b){
+			return a.sort-b.sort;
+		});
 	},
 
 	_rebuildLongListContent: function(scope){
@@ -1723,9 +1750,7 @@ Mall.listing = {
 			scrollable = jQuery(".scrollable", scope),
 			items = jQuery(":checkbox", scope);
 
-		items.sort(function(a,b){
-			return a.sort-b.sort;
-		});
+		this._sortLongListContent(items);
 		
 		items.each(function(){
 			var el = jQuery(this),
