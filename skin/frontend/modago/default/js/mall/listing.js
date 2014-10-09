@@ -986,7 +986,7 @@ Mall.listing = {
 	 * @returns {Mall.listing}
 	 */
 	reloadListingNow: function(){
-		this._noDelay = true;
+		this.setNoDelay(true);
 		return this.reloadListing();
 	},
 
