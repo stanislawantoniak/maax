@@ -1664,6 +1664,13 @@ Mall.listing = {
 	attachFilterPriceEvents: function(scope) {
 		var self = this;
 		jQuery("#filter_price", scope).find(":checkbox").on("change", function(e) {
+			// Remove all other selections
+			jQuery(this).
+					parents(".section").
+					find(":checkbox:checked").
+					not(this).
+					prop("checked", false);
+			// Trigger listing
 			self.nodeChanged(jQuery(this));
 		});
 
@@ -1884,7 +1891,9 @@ Mall.listing = {
 	attachFilterPriceSliderEvents: function(scope) {
 		var sliderRange = jQuery( "#slider-range", scope),
 			minPrice,
-			maxPrice;
+			maxPrice,
+			self = this;
+			
 		if (sliderRange.length >= 1) {
 			sliderRange.slider({
 				range: true,
@@ -1894,6 +1903,7 @@ Mall.listing = {
 				slide: function(event, ui) {
 					jQuery("#zakres_min").val(ui.values[0]);
 					jQuery("#zakres_max").val(ui.values[1]);
+					self._transferValuesToCheckbox(ui.values[0], ui.values[1]);
 				}
 			});
 
@@ -1902,7 +1912,7 @@ Mall.listing = {
 			jQuery('#slider-range',scope).on('click', 'a', function(event) {
 				var checkSlider = jQuery('#checkSlider',scope).find('input');
 				if (!checkSlider.is(':checked')) {
-					checkSlider.prop('checked', true);
+					checkSlider.prop('checked', true).change();
 					jQuery('#filter_price').find('.action').removeClass('hidden');
 				}
 			});
@@ -1913,27 +1923,11 @@ Mall.listing = {
 			// validate prices
 			minPrice = Mall.listing.getMinPriceFromSlider();
 			maxPrice = Mall.listing.getMaxPriceFromSlider();
-			if(isNaN(parseInt(minPrice, 10))
-				|| isNaN(parseInt(maxPrice, 10))
-				|| parseInt(minPrice, 10) < 0
-				|| parseInt(maxPrice, 10) < 0
-				|| parseInt(minPrice, 10) >= parseInt(maxPrice, 10)) {
-
-			} else {
-				// pop price from fq
-				Mall.listing.removeSingleFilterType(this);
-				var fq = Mall.listing.getFiltersArray();
-				if(jQuery.isEmptyObject(fq) || jQuery.isEmptyObject(fq.fq)) {
-					fq = {fq: {}};
-				}
-
-				fq.fq.price = Mall.listing.getMinPriceFromSlider()
-				+ " TO "
-				+ Mall.listing.getMaxPriceFromSlider();
-				Mall.listing.setFiltersArray(fq);
-				// @todo make via ajax
-				//Mall.listing.reloadListing();
-			}
+			
+			// Validate here
+			self._transferValuesToCheckbox(scope, minPrice, maxPrice);
+			self._triggerRefresh(scope, 1);
+			
 		});
 
 		jQuery("#filter_price", scope).find("input.filter-price-range-submit").on("mouseover"
@@ -1972,8 +1966,46 @@ Mall.listing = {
 			}
 		});
 
+		this.getSliderCheckbox(scope).change(function(){
+			self.setIsSliderActive(jQuery(this).is(":checked") ? "1" : "0");
+		});
 
 		return this;
+	},
+	_triggerRefresh: function(scope, force, triggerChange){
+		var checkbox = jQuery('#checkSlider',scope),
+			action = jQuery('#filter_price', scope).find('.action'),
+			triggerChange = triggerChange || true;
+		
+		if(force!==undefined){
+			checkbox.prop('checked', force);
+		}
+		
+		if(!checkbox.is(':checked')){
+			action.removeClass('hidden');
+		}else{
+			action.addClass('hidden');
+		}
+		
+		if(triggerChange){
+			checkbox.change();
+		}
+		
+	},
+	_transferValuesToCheckbox: function(min,max,scope){
+		this.getSliderCheckbox(scope).attr('value', parseInt(min) + " TO " + parseInt(max));
+	},
+	getSliderCheckbox: function(scope){
+		return jQuery('#filter_slider',scope);
+	},
+	getSliderActive: function(scope){
+		return jQuery("[name='slider']", scope);
+	},
+	getIsSliderActive: function(){
+		return this.getSliderActive().val()=="1";
+	},
+	setIsSliderActive: function(val){
+		return this.getSliderActive().val(val);
 	},
 	markPrice: function (name) {
 		alert(jQuery(name).html());
@@ -2001,6 +2033,10 @@ Mall.listing = {
 			rows: this.getScrollLoadOffset(),
 			start: 0
 		};
+		
+		if(this.getIsSliderActive()){
+			q.slider = 1;
+		}
 
 		return q;
 	},
@@ -2016,6 +2052,11 @@ Mall.listing = {
 			rows: this.getScrollLoadOffset(),
 			start: 0
 		};
+		
+		if(this.getIsSliderActive()){
+			defaults.slider = 1;
+		}
+		
 		var out = [];
 
 		jQuery.extend(defaults, forceObject);

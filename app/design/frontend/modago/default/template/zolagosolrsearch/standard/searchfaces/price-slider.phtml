@@ -1,4 +1,5 @@
 <?php
+/* @var $this Zolago_Solrsearch_Block_Faces_Price */
 $solrData = $this->getSolrData ();
 $priceFieldName = Mage::helper ( 'solrsearch' )->getPriceFieldName ();
 
@@ -6,26 +7,28 @@ $prefix = 'solrbridge-price';
 
 $ranges = $this->getFacetPriceRanges();
 
-$min = $this->getMinPriceRange();
-$max = $this->getMaxPriceRange();
-$fromValue = $min;
-$toValue = $max;
 
-// step count
-
-/*
- * Holds state of initial price position
- */
-$initialState = false;
-?>
-
-<?php
 $key = "fq[price]";
 $sectionClass = $this->isFilterRolled() ? 'closed' : 'open';
 $iconClass = $this->isFilterRolled() ? "fa-chevron-down" : "fa-chevron-up";
-$isOptionSelected = $initialState;
-$key_withoutFacet = explode("_", $key);
-array_pop($key_withoutFacet);
+$isOptionSelected = $this->getIsRangeActive();
+
+$min = $this->getMinPriceRange();
+$max = $this->getMaxPriceRange();
+
+if($isOptionSelected){
+	$fromValue = $this->getCurrentStartPrice();
+	$toValue = $this->getCurrentEndPrice();
+}else{
+	$fromValue = $min;
+	$toValue = $max;
+}
+
+
+if($toValue==0){
+	$toValue = $max;
+}
+
 $name = '';
 ?>
 <?php if ($max > 0):?>
@@ -33,7 +36,7 @@ $name = '';
         <h3 class="<?php echo $sectionClass; ?>"><?php echo $this->__("Price"); ?> <i class="fa <?php echo $iconClass; ?>"></i></h3>
         <div class="content"  id="filter_price">
 			<?php foreach($ranges as $range) : ?>
-			<?php $url = $this->getFacesUrl(array('fq'=>array('price' => $range['value']),'price_facet'=>array('price'=>$range['value']))); ?>	
+			<?php $url = $this->getFacesUrl(array('fq'=>array('price' => $range['value']))); ?>	
             <div class="form-group form-checkbox">
 
                 <input 
@@ -43,7 +46,7 @@ $name = '';
 					name="<?php echo $key; ?>" 
 					id="filter_price_<?php echo $range['start'];?>_<?php echo $range['end'];?>" 
 					class="css-checkbox"
-					<?php if ($this->isRangeActive($range['value'])):?> checked="checked"<?php endif;?>
+					<?php if ($this->isItemActive($range['value'])):?> checked="checked"<?php endif;?>
 				/>
                 <label for="filter_price_<?php echo $range['start'];?>_<?php echo $range['end'];?>" class="css-label">
 	                <span>
@@ -59,11 +62,13 @@ $name = '';
             </div>
 			<?php endforeach; ?>
             <div id="od_do" class="clearfix">
+				<input type="hidden" name="slider" value="<?php echo ($isOptionSelected) ? "1" : "0";?>"/>
                 <div class="clearfix">
                     <div id="checkSlider" class="form-group form-checkbox">
                         <input 
 							type="checkbox" 
-							name="fq[filter_slider]" 
+							name="<?php echo $key; ?>" 
+							value=""
 							id="filter_slider" 
 							class="css-checkbox" 
 							<?php if($isOptionSelected) : ?>checked="checked"<?php endif; ?>
@@ -89,8 +94,8 @@ $name = '';
                 <div id="slider-range"></div>
 
             </div><br />
-            <div class="action clear clearfix <?php if(!$isOptionSelected): ?>hidden<?php endif; ?>">
-                <a href="#" class="button button-third clear"  data-filter-type="<?php echo implode("_", $key_withoutFacet); ?>" onclick="Mall.listing.removeSingleFilterType(this);Mall.listing.reloadListing();return false;" ><?php echo $this->__("Clear"); ?></a>
+            <div class="action clear clearfix <?php if(!$this->isFilterActive() && !$isOptionSelected): ?>hidden<?php endif; ?>">
+                <a href="#" class="button button-third clear"  onclick="Mall.listing.removeSingleFilterType(this); Mall.listing.reloadListing();return false;" ><?php echo $this->__("Clear"); ?></a>
             </div>
         </div>
     </div>

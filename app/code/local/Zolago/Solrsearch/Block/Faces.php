@@ -16,6 +16,10 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         $this->setTemplate('zolagosolrsearch/standard/searchfaces.phtml');
     }
 
+	public function isShoppingOptionsActive() {
+		return true;
+	}
+	
     
     //{{{ 
     /**
@@ -401,11 +405,11 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         $solrData = $this->getSolrData();
         $outBlock = $this->_getRegularFilterBlocks($solrData);
         $additionalBlocks = array(
-                               'category' => $this->getCategoryBlock($solrData),
-                                'price' =>$this->getPriceBlock($solrData),
-                                'flag' => $this->getFlagBlock($solrData),
-                                'rating' => $this->getRatingBlock($solrData),
-                            );
+			'category' => $this->getCategoryBlock($solrData),
+			'price' =>$this->getPriceBlock($solrData),
+			'flag' => $this->getFlagBlock($solrData),
+			'rating' => $this->getRatingBlock($solrData),
+		);
         // block order #484
         $finishBlock = array ();
         if ($additionalBlocks['category']) {        
@@ -661,8 +665,8 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
             $block = $this->getLayout()->createBlock($this->_getPriceRenderer());
             $block->setParentBlock($this);
             $block->setAllItems($data);
-            $block->setFacetKey($priceFacet);
-            $block->setAttributeCode("prices");
+            $block->setFacetKey("price_facet");
+            $block->setAttributeCode("price");
             return $block;
         }
     }
@@ -1128,7 +1132,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 		
         if (sizeof($finalParams) > 0) {
 
-            if (Mage::app()->getRequest()->getRouteName() == 'catalog') {
+            if ($this->getListModel()->isCategoryMode()) {
                 if (isset($finalParams['q'])) {
                     unset($finalParams['q']);
                 }
@@ -1219,5 +1223,35 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 	 */
 	protected function _rewriteBlockType($block) {
 		return $block;
+	}
+	
+	
+	/**
+	 * reformat price filter
+	 * @param string $facetPriceRange
+	 * @return string
+	 */
+	public function formatFacetPrice($facetPriceRange){
+		$priceArray = explode('TO', $facetPriceRange);
+
+		$formattedPriceRange = $facetPriceRange;
+
+		if (isset($priceArray[0]) && isset($priceArray[1])) {
+			$currencySymboy = Mage::app()->getLocale()->currency(
+					Mage::app()->getStore()->getCurrentCurrencyCode()
+			)->getSymbol();
+			$currencyPositionSetting = Mage::helper('solrsearch')->getSetting('currency_position');
+			if ($currencyPositionSetting > 0) {
+				$formattedPriceRange = $currencySymboy.'&nbsp;'.
+						trim($priceArray[0]).'&nbsp;'.$this->__("to").'&nbsp;'
+						.$currencySymboy.'&nbsp;'.trim($priceArray[1]);
+			}else{
+				$formattedPriceRange = trim($priceArray[0]).'&nbsp;'.
+						$currencySymboy.'&nbsp;'.$this->__("to").'&nbsp;'.
+						trim($priceArray[1]).'&nbsp;'.$currencySymboy;
+			}
+
+		}
+		return $formattedPriceRange;
 	}
 }
