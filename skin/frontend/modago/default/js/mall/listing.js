@@ -1354,14 +1354,14 @@ Mall.listing = {
 			if(active.length == 1) {
 				detachActive();
 			}
-			Mall.listing.reloadListing();
+			Mall.listing.reloadListingNow();
 		});
 		remove.on("click", function() {
 			active.each(function() {
 				unCheckbox(jQuery(this).data('input'));
 			});
 			detachActive();
-			Mall.listing.reloadListing();
+			Mall.listing.reloadListingNow();
 			return false;
 		});
 
@@ -1724,8 +1724,6 @@ Mall.listing = {
 					text = el.find("label > span:eq(0)").text().trim().toLowerCase(),
 					serchPosition = text.search(term);
 					
-				el.removeClass("perfectMatch almostPerfect");
-					
 				if(serchPosition>-1){
 					el.removeClass("hidden");
 					matches++;
@@ -1757,21 +1755,37 @@ Mall.listing = {
 					listUl.append(el);
 				}
 			});
+			
+			// Almost perfect match - move as first
+			var almostPerfect = checkboxes.parents("li.almostPerfect").removeClass("almostPerfect").find(":checkbox");
+			if(almostPerfect.length){
+				this._sortLongListContent(almostPerfect, true);
+				almostPerfect.each(function(){
+					console.log(this.sort, jQuery(this).val());
+					jQuery(this).parents('li').prependTo(listUl);
+				});
+			}
+			
+			
 			// Perfect match - move as first
-			items.filter(".almostPerfect").each(function(){
-				jQuery(this).prependTo(listUl);
-			});
-			// Perfect match - move as first
-			items.filter(".perfectMatch").each(function(){
-				jQuery(this).prependTo(listUl);
-			});
+			var perfectMatch = items.filter(".perfectMatch").find(":checkbox");
+			if(perfectMatch.length){
+				this._sortLongListContent(perfectMatch, true);
+				perfectMatch.each(function(){
+					jQuery(this).parents('li').removeClass("perfectMatch").prependTo(listUl);
+				});
+			}
+			
+			// Move scroll top
+			list.mCustomScrollbar("scrollTo", "top");
 		}
 
 	},
 
-	_sortLongListContent: function(items){
+	_sortLongListContent: function(items, desc){
+		desc = desc ? -1 : 1; 
 		items.sort(function(a,b){
-			return a.sort-b.sort;
+			return (a.sort-b.sort)*desc;
 		});
 	},
 
