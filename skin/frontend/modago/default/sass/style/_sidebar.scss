@@ -352,7 +352,7 @@
     
   }
 
-.wrapper-filter_manufacturerScrollbar {
+.longListWrapper .scrollable {
   max-height:151px;
   border:1px solid #d0cfcf;
   @include border-radius(1px);
@@ -370,7 +370,7 @@
   padding:5px 0 5px 0;
 
 }
-#filter_manufacturer {
+.filter-longlist{
   .mCSB_scrollTools {
     width:12px;
     .mCSB_dragger {

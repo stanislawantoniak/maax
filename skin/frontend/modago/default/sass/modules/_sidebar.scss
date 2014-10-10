@@ -1,5 +1,4 @@
-#filter_size
-, .filter-size {
+.filter-size {
      
       label {
         width:38px;
@@ -52,7 +51,7 @@
         }
       }
     }
-#filter_manufacturer {
+.filter-longlist {
 
       input[type="text"] {
         padding:0 23px 0 5px;
@@ -77,7 +76,7 @@
       > .form-group {
         margin-bottom: 15px;
       }
-      #filter_manufacturer_search {
+      .longListSearch {
         &+label {
           position:absolute;
           right:0px;
@@ -211,7 +210,7 @@
       }
     }
 
-.manufacturerList {
+.longListItemst {
   margin:0px !important;
   padding:5px 0 5px 0;
   list-style: none;

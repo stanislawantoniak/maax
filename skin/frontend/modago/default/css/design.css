@@ -636,47 +636,47 @@ section.section .main {
   float: left;
   line-height: 53px; }
 
-/* line 4, ../sass/design/modules/_sidebar.scss */
-#filter_size label, .filter-size label {
+/* line 3, ../sass/design/modules/_sidebar.scss */
+.filter-size label {
   cursor: pointer; }
-/* line 6, ../sass/design/modules/_sidebar.scss */
-#filter_size label span, .filter-size label span {
+/* line 5, ../sass/design/modules/_sidebar.scss */
+.filter-size label span {
   border: 1px solid #afafaf;
   text-align: center;
   line-height: 38px;
   font-size: 14px;
   color: #313131;
   background: #fff; }
-/* line 15, ../sass/design/modules/_sidebar.scss */
-#filter_size label:hover span, .filter-size label:hover span {
+/* line 14, ../sass/design/modules/_sidebar.scss */
+.filter-size label:hover span {
   background-color: #999;
   border-color: #999;
   color: #fff; }
-/* line 22, ../sass/design/modules/_sidebar.scss */
-#filter_size label input[type=checkbox]:hover + span, .filter-size label input[type=checkbox]:hover + span {
+/* line 21, ../sass/design/modules/_sidebar.scss */
+.filter-size label input[type=checkbox]:hover + span {
   background-color: #999;
   border-color: #999;
   color: #fff; }
-/* line 27, ../sass/design/modules/_sidebar.scss */
-#filter_size label input[type=checkbox]:checked, .filter-size label input[type=checkbox]:checked {
+/* line 26, ../sass/design/modules/_sidebar.scss */
+.filter-size label input[type=checkbox]:checked {
   outline: none !important; }
-/* line 30, ../sass/design/modules/_sidebar.scss */
-#filter_size label input[type=checkbox]:checked + span, #filter_size label input.checked + span, .filter-size label input[type=checkbox]:checked + span, .filter-size label input.checked + span {
+/* line 29, ../sass/design/modules/_sidebar.scss */
+.filter-size label input[type=checkbox]:checked + span, .filter-size label input.checked + span {
   background: #000;
   border-color: #000;
   color: #fff; }
 
-/* line 41, ../sass/design/modules/_sidebar.scss */
-#filter_manufacturer input[type="text"] {
+/* line 40, ../sass/design/modules/_sidebar.scss */
+.filter-longlist input[type="text"] {
   border: 1px solid #d6d6d6; }
-/* line 43, ../sass/design/modules/_sidebar.scss */
-#filter_manufacturer input[type="text"]:focus {
+/* line 42, ../sass/design/modules/_sidebar.scss */
+.filter-longlist input[type="text"]:focus {
   outline: none; }
-/* line 47, ../sass/design/modules/_sidebar.scss */
-#filter_manufacturer input[type="image"] {
+/* line 46, ../sass/design/modules/_sidebar.scss */
+.filter-longlist input[type="image"] {
   outline: none; }
-/* line 52, ../sass/design/modules/_sidebar.scss */
-#filter_manufacturer #filter_manufacturer_search + label i {
+/* line 51, ../sass/design/modules/_sidebar.scss */
+.filter-longlist #longListSearch + label i {
   color: #000; }
 
 /* line 64, ../sass/design/modules/_sidebar.scss */
@@ -715,10 +715,10 @@ section.section .main {
   cursor: pointer; }
 
 /* line 113, ../sass/design/modules/_sidebar.scss */
-.manufacturerList {
+.longListItems {
   list-style: none; }
 /* line 117, ../sass/design/modules/_sidebar.scss */
-.manufacturerList li.lastChecked {
+.longListItems li.lastChecked {
   border-bottom: 1px solid #d0cfcf; }
 
 /* line 123, ../sass/design/modules/_sidebar.scss */
@@ -834,19 +834,19 @@ span.checked {
   background: url('../images/sprites/select-sbfa0a5a9cb.png');
   background-position: 0 -18px;
   line-height: 27px; }
-/* line 59, ../../../../../../../../../../usr/lib64/ruby/gems/1.8/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 59, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
 .sbToggle:hover, .sbToggle.select_styled-hover {
   background-position: 0 -72px; }
 /* line 31, ../sass/design/modules/_selected-styled.scss */
 .sbToggle:link {
   background-position: 0 -18px; }
-/* line 59, ../../../../../../../../../../usr/lib64/ruby/gems/1.8/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 59, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
 .sbToggle:link:hover, .sbToggle:link.select_styled-hover {
   background-position: 0 -72px; }
 /* line 34, ../sass/design/modules/_selected-styled.scss */
 .sbToggle:visited {
   background-position: 0 -18px; }
-/* line 59, ../../../../../../../../../../usr/lib64/ruby/gems/1.8/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 59, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
 .sbToggle:visited:hover, .sbToggle:visited.select_styled-hover {
   background-position: 0 -72px; }
 /* line 37, ../sass/design/modules/_selected-styled.scss */
@@ -903,19 +903,12 @@ span.checked {
   font-family: "latoregular";
   font-weight: normal;
   color: #000; }
-/* line 18, ../sass/design/modules/_sort-criteria.scss */
-#sort-criteria .select-group.small {
-  width: 180px; }
-/* line 20, ../sass/design/modules/_sort-criteria.scss */
-#sort-criteria .select-group.small .button-select {
-  font-size: 12px; }
-/* line 26, ../sass/design/modules/_sort-criteria.scss */
-#sort-criteria .styledSelected label[for^=sort-by] {
-  line-height: 27px;
-  font-size: 12px; }
-/* line 30, ../sass/design/modules/_sort-criteria.scss */
-#sort-criteria .styledSelected .sbHolder {
-  font-size: 12px; }
+/* line 15, ../sass/design/modules/_sort-criteria.scss */
+#sort-criteria ul li .sort-by-container {
+  width: 150px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 5px; }
 
 /** Carousel **/
 /* line 3, ../sass/design/modules/_rv-jcarousel.scss */
@@ -1570,7 +1563,7 @@ body.lightbox {
 /* line 10, ../sass/design/modules/_modal.scss */
 .modal-content ul {
   list-style: none; }
-/* line 11, ../../../../../../../../../../usr/lib64/ruby/gems/1.8/gems/compass-core-1.0.1/stylesheets/compass/typography/lists/_bullets.scss */
+/* line 11, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/typography/lists/_bullets.scss */
 .modal-content ul li {
   list-style-image: none;
   list-style-type: none;
@@ -2954,7 +2947,7 @@ ul.form-list {
   margin: 0;
   padding: 0;
   margin: 0 auto 25px; }
-/* line 11, ../../../../../../../../../var/lib/gems/2.1.0/gems/compass-core-1.0.1/stylesheets/compass/typography/lists/_bullets.scss */
+/* line 11, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/typography/lists/_bullets.scss */
 ul.form-list li {
   list-style-image: none;
   list-style-type: none;
@@ -3490,12 +3483,12 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
 .sidebar .go_read_filter {
   font-size: 12px; }
 /* line 98, ../sass/design/style/_sidebar.scss */
-.sidebar #filter_recommended_products label span, .sidebar #filter_product_flag_facet label span, .sidebar #filter_flags_facet label span {
+.sidebar #filter_recommended_products label span, .sidebar #filter_recommended_products label a, .sidebar #filter_product_flag_facet label span, .sidebar #filter_product_flag_facet label a, .sidebar #filter_flags_facet label span, .sidebar #filter_flags_facet label a {
   color: #fff;
   text-transform: uppercase;
   text-align: center; }
 /* line 102, ../sass/design/style/_sidebar.scss */
-.sidebar #filter_recommended_products label span + .suffix, .sidebar #filter_product_flag_facet label span + .suffix, .sidebar #filter_flags_facet label span + .suffix {
+.sidebar #filter_recommended_products label span + .suffix, .sidebar #filter_recommended_products label a + .suffix, .sidebar #filter_product_flag_facet label span + .suffix, .sidebar #filter_product_flag_facet label a + .suffix, .sidebar #filter_flags_facet label span + .suffix, .sidebar #filter_flags_facet label a + .suffix {
   font-weight: normal;
   background-color: transparent !important;
   color: #b0b0b0;
@@ -3610,46 +3603,55 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
   color: #1e1e1e; }
 
 /* line 272, ../sass/design/style/_sidebar.scss */
-.wrapper-filter_manufacturerScrollbar {
+.longListChecked, .longListWrapper {
   border: 1px solid #d0cfcf;
   -moz-border-radius: 1px;
   -webkit-border-radius: 1px;
   border-radius: 1px; }
 
-/* line 279, ../sass/design/style/_sidebar.scss */
-#filter_manufacturer .mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
+/* line 277, ../sass/design/style/_sidebar.scss */
+.longListWrapper {
+  margin-top: -1px; }
+
+/* line 284, ../sass/design/style/_sidebar.scss */
+.longListWrapper .mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {
   background: url("../images/scrollbar/scrollbar_filter.png") 0 0 no-repeat;
   border-radius: 0; }
-/* line 285, ../sass/design/style/_sidebar.scss */
-#filter_manufacturer .mCSB_scrollTools .mCSB_buttonUp {
+/* line 290, ../sass/design/style/_sidebar.scss */
+.longListWrapper .mCSB_scrollTools .mCSB_buttonUp {
   background: url("../images/scrollbar/arrow_up_filter.png") 0 0 no-repeat; }
-/* line 288, ../sass/design/style/_sidebar.scss */
-#filter_manufacturer .mCSB_scrollTools .mCSB_buttonDown {
+/* line 293, ../sass/design/style/_sidebar.scss */
+.longListWrapper .mCSB_scrollTools .mCSB_buttonDown {
   background: url("../images/scrollbar/arrow_down_filter.png") 0 0 no-repeat; }
-/* line 291, ../sass/design/style/_sidebar.scss */
-#filter_manufacturer .mCSB_scrollTools .mCSB_draggerRail {
+/* line 296, ../sass/design/style/_sidebar.scss */
+.longListWrapper .mCSB_scrollTools .mCSB_draggerRail {
   background: none !important; }
+/* line 300, ../sass/design/style/_sidebar.scss */
+.longListWrapper .no-result {
+  padding: 10px;
+  color: #aaa;
+  font-style: italic; }
 
-/* line 299, ../sass/design/style/_sidebar.scss */
+/* line 309, ../sass/design/style/_sidebar.scss */
 #sidebar .list-group {
   border-radius: 0;
   border-color: #ebebeb; }
-/* line 302, ../sass/design/style/_sidebar.scss */
+/* line 312, ../sass/design/style/_sidebar.scss */
 #sidebar .list-group li {
   border-color: #ebebeb; }
-/* line 304, ../sass/design/style/_sidebar.scss */
+/* line 314, ../sass/design/style/_sidebar.scss */
 #sidebar .list-group li:first-child {
   border-radius: 0; }
-/* line 307, ../sass/design/style/_sidebar.scss */
+/* line 317, ../sass/design/style/_sidebar.scss */
 #sidebar .list-group li:last-child {
   border-radius: 0; }
 
-/* line 318, ../sass/design/style/_sidebar.scss */
+/* line 328, ../sass/design/style/_sidebar.scss */
 #note_client input[type=checkbox].css-checkbox + label.css-label:hover span, #note_client input[type=radio].css-radio + label.css-label:hover span, #filter_recommended_products input[type=checkbox].css-checkbox + label.css-label:hover span, #filter_recommended_products input[type=radio].css-radio + label.css-label:hover span {
   text-decoration: none; }
 
 @media (max-width: 767px) {
-  /* line 326, ../sass/design/style/_sidebar.scss */
+  /* line 336, ../sass/design/style/_sidebar.scss */
   .fb-slidebar-inner .current-filter {
     line-height: 24px; } }
 
@@ -5005,19 +5007,19 @@ i.flag.hit, i.flag.bestseller {
 /* line 41, ../sass/design/style/_footer.scss */
 #footer .ico_social_twitter {
   background-position: 0 -145px; }
-/* line 59, ../../../../../../../../../../usr/lib64/ruby/gems/1.8/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 59, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
 #footer .ico_social_twitter:hover, #footer .ico_social_twitter.ico_social_twitter-hover {
   background-position: -27px -145px; }
 /* line 43, ../sass/design/style/_footer.scss */
 #footer .ico_social_twitter:hover {
   background-position: 0 -145px; }
-/* line 59, ../../../../../../../../../../usr/lib64/ruby/gems/1.8/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 59, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
 #footer .ico_social_twitter:hover:hover, #footer .ico_social_twitter:hover.ico_social_twitter-hover {
   background-position: -27px -145px; }
 /* line 47, ../sass/design/style/_footer.scss */
 #footer .ico_social_fb {
   background-position: -127px -44px; }
-/* line 59, ../../../../../../../../../../usr/lib64/ruby/gems/1.8/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 59, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
 #footer .ico_social_fb:hover, #footer .ico_social_fb.ico_social_fb-hover {
   background-position: -181px -44px; }
 /* line 49, ../sass/design/style/_footer.scss */
@@ -5026,37 +5028,37 @@ i.flag.hit, i.flag.bestseller {
 /* line 54, ../sass/design/style/_footer.scss */
 #footer .ico_social_instagram {
   background-position: -54px -145px; }
-/* line 59, ../../../../../../../../../../usr/lib64/ruby/gems/1.8/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 59, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
 #footer .ico_social_instagram:hover, #footer .ico_social_instagram.ico_social_instagram-hover {
   background-position: -106px -145px; }
 /* line 56, ../sass/design/style/_footer.scss */
 #footer .ico_social_instagram:hover {
   background-position: -54px -145px; }
-/* line 59, ../../../../../../../../../../usr/lib64/ruby/gems/1.8/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 59, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
 #footer .ico_social_instagram:hover:hover, #footer .ico_social_instagram:hover.ico_social_instagram-hover {
   background-position: -106px -145px; }
 /* line 60, ../sass/design/style/_footer.scss */
 #footer .ico_social_gplus {
   background-position: -80px -145px; }
-/* line 59, ../../../../../../../../../../usr/lib64/ruby/gems/1.8/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 59, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
 #footer .ico_social_gplus:hover, #footer .ico_social_gplus.ico_social_gplus-hover {
   background-position: 0 -98px; }
 /* line 62, ../sass/design/style/_footer.scss */
 #footer .ico_social_gplus:hover {
   background-position: -80px -145px; }
-/* line 59, ../../../../../../../../../../usr/lib64/ruby/gems/1.8/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 59, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
 #footer .ico_social_gplus:hover:hover, #footer .ico_social_gplus:hover.ico_social_gplus-hover {
   background-position: 0 -98px; }
 /* line 66, ../sass/design/style/_footer.scss */
 #footer .ico_social_pinterest {
   background-position: -154px -44px; }
-/* line 59, ../../../../../../../../../../usr/lib64/ruby/gems/1.8/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 59, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
 #footer .ico_social_pinterest:hover, #footer .ico_social_pinterest.ico_social_pinterest-hover {
   background-position: -181px -71px; }
 /* line 68, ../sass/design/style/_footer.scss */
 #footer .ico_social_pinterest:hover {
   background-position: -154px -44px; }
-/* line 59, ../../../../../../../../../../usr/lib64/ruby/gems/1.8/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
+/* line 59, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
 #footer .ico_social_pinterest:hover:hover, #footer .ico_social_pinterest:hover.ico_social_pinterest-hover {
   background-position: -181px -71px; }
 

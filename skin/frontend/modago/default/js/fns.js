@@ -206,16 +206,16 @@ jQuery.noConflict();
         $(document).ajaxComplete(function(event, xhr, settings) {
             dropDownSelectListAjax();
 
-            var scroll = $('body').find('.mCustomScrollbar');
-            if (scroll.length >= 1) {
-                scroll.mCustomScrollbar({
-                    setHeight:100,
-                    theme:"dark-thick",
-                    scrollButtons:{
-                        enable:true
-                    }
-                });
-            };
+//            var scroll = $('body').find('.mCustomScrollbar');
+//            if (scroll.length >= 1) {
+//                scroll.mCustomScrollbar({
+//                    setHeight:100,
+//                    theme:"dark-thick",
+//                    scrollButtons:{
+//                        enable:true
+//                    }
+//                });
+//            };
 //          var sliderRange = $( "#slider-range" );
 //          if (sliderRange.length >= 1) {
 //          $( "#slider-range" ).slider({
@@ -1484,23 +1484,23 @@ jQuery.noConflict();
         });
 
         function dropDownSelectListAjax() {
-            var headList = $('.button-select.ajax').not(".filter-droplist");
-            var listSelect = $('.dropdown-select ul').not(".filter-droplist");
-            headList.on('click', function(event) {
-                event.preventDefault();
-                $(this).next('.dropdown-select').stop(true).slideToggle(200);
-            });
-            listSelect.on('click', 'a', function(event) {
-                event.preventDefault();
-                var thisVal = $(this).html();
-                $(this).closest('.select-group').find('.button-select').html(thisVal+'<span class="down"></span>');
-                $(this).closest('.dropdown-select').slideUp(200);
-            });
-            $(document).click(function(e) {
-                if (!$(e.target).parents().andSelf().is('.select-group')) {
-                    $(".dropdown-select").slideUp(200);
-                }
-            });
+//            var headList = $('.button-select.ajax').not(".filter-droplist");
+//            var listSelect = $('.dropdown-select ul').not(".filter-droplist");
+//            headList.on('click', function(event) {
+//                event.preventDefault();
+//                $(this).next('.dropdown-select').stop(true).slideToggle(200);
+//            });
+//            listSelect.on('click', 'a', function(event) {
+//                event.preventDefault();
+//                var thisVal = $(this).html();
+//                $(this).closest('.select-group').find('.button-select').html(thisVal+'<span class="down"></span>');
+//                $(this).closest('.dropdown-select').slideUp(200);
+//            });
+//            $(document).click(function(e) {
+//                if (!$(e.target).parents().andSelf().is('.select-group')) {
+//                    $(".dropdown-select").slideUp(200);
+//                }
+//            });
 
         }
         $(document).ready(function(){
@@ -1513,16 +1513,16 @@ jQuery.noConflict();
         })
 
 
-        var scroll = $('body').find('.mCustomScrollbar');
-        if (scroll.length >= 1) {
-            scroll.mCustomScrollbar({
-//          setHeight:100,
-                theme:"dark-thick",
-                scrollButtons:{
-                    enable:true
-                }
-            });
-        };
+//        var scroll = $('body').find('.mCustomScrollbar');
+//        if (scroll.length >= 1) {
+//            scroll.mCustomScrollbar({
+////          setHeight:100,
+//                theme:"dark-thick",
+//                scrollButtons:{
+//                    enable:true
+//                }
+//            });
+//        };
 
 
         function listinghelper() {
@@ -2393,34 +2393,34 @@ jQuery.noConflict();
 
 //SCROLLBAR 
         function initScrollBarFilterMarka() {
-            var fm = $('body').find(".filter_manufacturerScrollbar");
-
-            if (fm.length >= 1) {
-                fm.mCustomScrollbar({
-                    scrollButtons:{
-                        enable:true
-                    },
-                    advanced:{
-                        updateOnBrowserResize:true
-                    } // removed extra commas
-                });
-            };
+//            var fm = $('body').find(".filter_manufacturerScrollbar");
+//
+//            if (fm.length >= 1) {
+//                fm.mCustomScrollbar({
+//                    scrollButtons:{
+//                        enable:true
+//                    },
+//                    advanced:{
+//                        updateOnBrowserResize:true
+//                    } // removed extra commas
+//                });
+//            };
 
 
 
         }
         function initScrollBarFilterStyle() {
-            var fs = $(".styledSelected.scrollbar .sbOptionsWrapper");
-            if (fs.length >= 1) {
-                $(".styledSelected.scrollbar .sbOptionsWrapper").mCustomScrollbar({
-
-                    setHeight: '200px',
-                    scrollButtons:{
-                        enable:true
-                    },
-                    theme:"dark-thick"
-                });
-            };
+//            var fs = $(".styledSelected.scrollbar .sbOptionsWrapper");
+//            if (fs.length >= 1) {
+//                $(".styledSelected.scrollbar .sbOptionsWrapper").mCustomScrollbar({
+//
+//                    setHeight: '200px',
+//                    scrollButtons:{
+//                        enable:true
+//                    },
+//                    theme:"dark-thick"
+//                });
+//            };
         }
 
 // MENU MOBILE
@@ -2599,103 +2599,103 @@ jQuery.noConflict();
 
 // FILTROWANIE LISTY PO WPISANIU WYRAZU/LITERY
         function filterList(){
-            $('.filter_manufacturer_search').keyup(function(){
-                console.log($(this));
-                var valThis = $(this).val().toLowerCase();
-                var manufacturerList = $(this).parents('.filter-enum').find('.manufacturerList');
-                var manufacturerListLi = $(this).parents('.filter-enum').find('.manufacturerList li');
-                var noresult = 0;
-
-                if(valThis == ""){
-                    manufacturerListLi.show();
-                    noresult = 1;
-
-                    $(manufacturerList).find('li.no-results-found').remove();
-                } else {
-                    manufacturerListLi.each(function(){
-                        var text = $(this).text().toLowerCase();
-                        var match = text.indexOf(valThis);
-                        if (match >= 0) {
-                            $(this).show();
-                            noresult = 1;
-                            $(manufacturerList).find('li.no-results-found').remove();
-                        } else {
-                            $(this).hide();
-                        }
-                    });
-                };
-                if (noresult == 0) {
-                    manufacturerList.append('<li class="no-results-found">Brak wyników.</li>');
-                }
-
-            });
-
-            $('.manufacturerList').on('click', ':checkbox', function(event) {
-                $('#filter_manufacturer_search').val('');
-                $('.manufacturerList').find('li').css('display', 'list-item');
-            });
-
-
-            $('.block-filter').on('click', '.clear', function(event) {
-                event.preventDefault();
-                /* Act on the event */
-                $(this).closest('.content').find('input[type="text"]').val('');
-                $('.manufacturerList > li').each(function(){
-                    $(this).show();
-                });
-            });
+//            $('.filter_manufacturer_search').keyup(function(){
+//                console.log($(this));
+//                var valThis = $(this).val().toLowerCase();
+//                var manufacturerList = $(this).parents('.filter-longlist').find('.manufacturerList');
+//                var manufacturerListLi = $(this).parents('.filter-longlist').find('.manufacturerList li');
+//                var noresult = 0;
+//
+//                if(valThis == ""){
+//                    manufacturerListLi.show();
+//                    noresult = 1;
+//
+//                    $(manufacturerList).find('li.no-results-found').remove();
+//                } else {
+//                    manufacturerListLi.each(function(){
+//                        var text = $(this).text().toLowerCase();
+//                        var match = text.indexOf(valThis);
+//                        if (match >= 0) {
+//                            $(this).show();
+//                            noresult = 1;
+//                            $(manufacturerList).find('li.no-results-found').remove();
+//                        } else {
+//                            $(this).hide();
+//                        }
+//                    });
+//                };
+//                if (noresult == 0) {
+//                    manufacturerList.append('<li class="no-results-found">Brak wyników.</li>');
+//                }
+//
+//            });
+//
+//            $('.manufacturerList').on('click', ':checkbox', function(event) {
+//                $('#filter_manufacturer_search').val('');
+//                $('.manufacturerList').find('li').css('display', 'list-item');
+//            });
+//
+//
+//            $('.block-filter').on('click', '.clear', function(event) {
+//                event.preventDefault();
+//                /* Act on the event */
+//                $(this).closest('.content').find('input[type="text"]').val('');
+//                $('.manufacturerList > li').each(function(){
+//                    $(this).show();
+//                });
+//            });
         }
 
 // KOLEJKOWANIE WYBRANYCH PÓL
         function filterManufacturerCheked() {
-
-
-            var list = $(".manufacturerList")
-//              ,
-//              origOrder = list.children()
-                ;
-            var fm = $(".filter_manufacturerScrollbar");
-            list.on("click", ":checkbox", function () {
-                var listD = $(this).parents(".manufacturerList");
-                var wrapper = $(this).parents(".filter-enum");
-
-                var origOrder = listD.children();
-
-                var i, checked = document.createDocumentFragment(),
-                    unchecked = document.createDocumentFragment();
-                for (i = 0; i < origOrder.length; i++) {
-                    if (origOrder[i].getElementsByTagName("input")[0].checked) {
-                        checked.appendChild(origOrder[i]);
-                    } else {
-                        unchecked.appendChild(origOrder[i]);
-                    }
-                }
-                listD.append(checked).append(unchecked).children('li');
-
-                var listChek = listD.find(':checked');
-                var listChekLastName = listChek.last();
-                var btnClearMark = listD.parents('#filter_manufacturer').find('.action.clear');
-                listD.find('.lastChecked').removeClass('lastChecked');
-                listChekLastName.closest('li').addClass('lastChecked');
-
-
-                fm.mCustomScrollbar("scrollTo", 0);
-
-                var checkEl = listD.find(':checked').length;
-
-                if (checkEl >= 1) {
-                    wrapper.find('.action.clear').removeClass('hidden');
-                } else {
-                    wrapper.find('.action.clear').addClass('hidden');
-                }
-                ;
-
-            });
-            var btnClearMark = $('#filter_manufacturer')
-            btnClearMark.on('click', '.clear', function (event) {
-
-                $(this).closest('.action.clear').addClass('hidden');
-            });
+//
+//
+//            var list = $(".manufacturerList")
+////              ,
+////              origOrder = list.children()
+//                ;
+//            var fm = $(".filter_manufacturerScrollbar");
+//            list.on("click", ":checkbox", function () {
+//                var listD = $(this).parents(".manufacturerList");
+//                var wrapper = $(this).parents(".filter-longlist");
+//
+//                var origOrder = listD.children();
+//
+//                var i, checked = document.createDocumentFragment(),
+//                    unchecked = document.createDocumentFragment();
+//                for (i = 0; i < origOrder.length; i++) {
+//                    if (origOrder[i].getElementsByTagName("input")[0].checked) {
+//                        checked.appendChild(origOrder[i]);
+//                    } else {
+//                        unchecked.appendChild(origOrder[i]);
+//                    }
+//                }
+//                listD.append(checked).append(unchecked).children('li');
+//
+//                var listChek = listD.find(':checked');
+//                var listChekLastName = listChek.last();
+//                var btnClearMark = listD.parents('section').find('.action.clear');
+//                listD.find('.lastChecked').removeClass('lastChecked');
+//                listChekLastName.closest('li').addClass('lastChecked');
+//
+//
+//                fm.mCustomScrollbar("scrollTo", 0);
+//
+//                var checkEl = listD.find(':checked').length;
+//
+//                if (checkEl >= 1) {
+//                    wrapper.find('.action.clear').removeClass('hidden');
+//                } else {
+//                    wrapper.find('.action.clear').addClass('hidden');
+//                }
+//                ;
+//
+//            });
+//            var btnClearMark = $('#filter_manufacturer')
+//            btnClearMark.on('click', '.clear', function (event) {
+//
+//                $(this).closest('.action.clear').addClass('hidden');
+//            });
 
         }
         jQuery(".filter-enum input[type=image]").click(function(){
