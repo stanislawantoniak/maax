@@ -227,3 +227,7 @@ color: #2F2F2F;
     text-transform: uppercase;
     font-family: "latolight";
 }
+
+.faq-index-index #breadcrumbs {
+    margin-bottom: 4px;
+}
