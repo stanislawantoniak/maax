@@ -1,105 +1,26 @@
 <?php
 $solrData = $this->getSolrData ();
-
 $priceFieldName = Mage::helper ( 'solrsearch' )->getPriceFieldName ();
 
 $prefix = 'solrbridge-price';
 
-$fromValue = 0;
-$toValue = 0;
+$ranges = $this->getFacetPriceRanges();
 
-$min = 0;
-if (isset ( $solrData ['stats'] ['stats_fields'] [$priceFieldName] ['min'] )) {
-	$min = $solrData ['stats'] ['stats_fields'] [$priceFieldName] ['min'];
-	$min = number_format ( $min, 0, '', '');
-	$fromValue = $min;
-	if (isset ( $_GET ['min'] ) && is_numeric ( $_GET ['min'] )) {
-		$min = $_GET ['min'];
-	}
-}
-
-$max = 0;
-if (isset ( $solrData ['stats'] ['stats_fields'] [$priceFieldName] ['max'] )) {
-	$max = $solrData ['stats'] ['stats_fields'] [$priceFieldName] ['max'];
-	$max = number_format ( $max, 0, '', '');
-	$toValue = $max;
-	if (isset ( $_GET ['max'] ) && is_numeric ( $_GET ['max'] )) {
-		$max = $_GET ['max'];
-	}
-}
-
-$min = intval($min);
-$max = intval($max);
-
-if (isset($_GET['fq']['price'])) {
-	if(!empty($_GET['fq']['price'])){
-		$priceValue = explode('TO', $_GET['fq']['price']);
-		if (isset($priceValue[0]) && isset($priceValue[1]) && is_numeric(trim($priceValue[0])) && is_numeric(trim($priceValue[1]))) {
-			$fromValue = trim($priceValue[0]);
-			$toValue = trim($priceValue[1]);
-		}
-	}
-}
-$fromValue = intval($fromValue);
-$toValue = intval($toValue);
+$min = $this->getMinPriceRange();
+$max = $this->getMaxPriceRange();
+$fromValue = $min;
+$toValue = $max;
 
 // step count
-$ranges = $this->getFacetPriceRanges();
 
 /*
  * Holds state of initial price position
  */
 $initialState = false;
-
-if (!is_numeric ( $fromValue )) {
-	$fromValue = $min;
-	$initialState = true;
-}
-
-/*
- * User changed price in text boxes
- */
-
-if (!is_numeric ( $toValue )) {
-	$toValue = $max;
-}
-
-$from = min ( $fromValue, $min );
-$to = max ( $toValue, $max );
-
-if ($from < 0.01 && $to < 0.01) {
-	$to = sprintf ( '%.00f', $to );
-}
-
-$width = 170;
-
-$ratePP = ($to - $from) / $width;
-
-$firstOffset = ($max > 0.01 && ! $initialState) ? ($fromValue - $min) / $ratePP : 0;
-$secondOffset = ($to && $max > 0.01 && $toValue < $max) ? ($toValue - $min) / $ratePP : $width;
-
-$params = implode ( ':', array (
-		$width,
-		$firstOffset,
-		$secondOffset,
-		$to,
-		$prefix,
-		$from,
-		$ratePP 
-) );
-
-$priceFilter = array (
-				'fq' => array (
-						'price' => $from.'TO'.$to
-				),
-				'min' => 'MINPRICE',
-				'max' => 'MAXPRICE',
-				);
-
 ?>
 
 <?php
-$key = "price_facet";
+$key = "fq[price]";
 $sectionClass = $this->isFilterRolled() ? 'closed' : 'open';
 $iconClass = $this->isFilterRolled() ? "fa-chevron-down" : "fa-chevron-up";
 $isOptionSelected = $initialState;
@@ -113,8 +34,17 @@ $name = '';
         <div class="content"  id="filter_price">
 			<?php foreach($ranges as $range) : ?>
 			<?php $url = $this->getFacesUrl(array('fq'=>array('price' => $range['value']),'price_facet'=>array('price'=>$range['value']))); ?>	
-            <div class="form-group form-checkbox" data-url="<?php echo $url;?>">
-                <input type="checkbox" value="<?php echo $range['value'];?>" name="<?php echo $key; ?>" id="filter_price_<?php echo $range['start'];?>_<?php echo $range['end'];?>" class="css-checkbox"<?php if ($this->isRangeActive($range['value'])):?> checked="checked"<?php endif;?>/>
+            <div class="form-group form-checkbox">
+
+                <input 
+					type="checkbox" 
+					data-url="<?php echo $url;?>"
+					value="<?php echo $range['value'];?>" 
+					name="<?php echo $key; ?>" 
+					id="filter_price_<?php echo $range['start'];?>_<?php echo $range['end'];?>" 
+					class="css-checkbox"
+					<?php if ($this->isRangeActive($range['value'])):?> checked="checked"<?php endif;?>
+				/>
                 <label for="filter_price_<?php echo $range['start'];?>_<?php echo $range['end'];?>" class="css-label">
 		<span><?php echo $range['formatted'] ?></span> <span class="suffix">(<?php echo $range['count']; ?>)</span></label>
             </div>
@@ -122,7 +52,13 @@ $name = '';
             <div id="od_do" class="clearfix">
                 <div class="clearfix">
                     <div id="checkSlider" class="form-group form-checkbox">
-                        <input type="checkbox" name="filter_slider" id="filter_slider" class="css-checkbox" <?php if($isOptionSelected) : ?>checked="checked"<?php endif; ?>/>
+                        <input 
+							type="checkbox" 
+							name="fq[filter_slider]" 
+							id="filter_slider" 
+							class="css-checkbox" 
+							<?php if($isOptionSelected) : ?>checked="checked"<?php endif; ?>
+						/>
                         <label for="filter_slider" class="css-label"></label>
                     </div>
                     <div class="form-horizontal">
