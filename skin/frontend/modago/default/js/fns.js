@@ -1506,7 +1506,7 @@ jQuery.noConflict();
 
         $(document).ready(function () {
             $(".menu-5columns dt a, .menu-5columns dt span,.menu-5columns dd a").each(function (i, item) {
-                console.log($(item).textWidth());
+
                 if ($(item).textWidth() >= 152) {
                     $(item).addClass("long-wrap");
                 }
