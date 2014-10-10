@@ -2,12 +2,30 @@
 
 class Zolago_Solrsearch_Block_Faces_Price extends Zolago_Solrsearch_Block_Faces_Abstract
 {
+    protected $_max;
+    protected $_min;
     public function __construct()
     {
         $this->setTemplate('zolagosolrsearch/standard/searchfaces/price.phtml');
     }
 
-
+    
+    //{{{ 
+    /**
+     * @return int
+     */
+    public function getMinPriceRange() {
+        return $this->_min;
+    }
+    //}}}
+    //{{{ 
+    /**
+     * @return int
+     */
+    public function getMaxPriceRange() {
+        return $this->_max;
+    }
+    //}}}
     public function _prepareLayout()
     {
         //Load js for price slider
@@ -43,7 +61,8 @@ class Zolago_Solrsearch_Block_Faces_Price extends Zolago_Solrsearch_Block_Faces_
         reset($keys);
         $min = (float)current($keys);
         $max = (float)array_pop($keys);
-
+        $this->setMin(floor($min));
+        $this->setMax($max);
         $category = Mage::registry('current_category');
 
         $range = null;
@@ -217,6 +236,33 @@ class Zolago_Solrsearch_Block_Faces_Price extends Zolago_Solrsearch_Block_Faces_
         */
     }
 
+    //{{{ 
+    /**
+     * setting minimal price
+     * @param float $price
+     * @return 
+     */
+    public function setMin($price) {
+        if ($this->_min === null) {
+            $this->_min = $price;
+        }
+        if ($price < $this->_min) {
+            $this->_min = $price;
+        }
+    }
+    //}}}
+    //{{{ 
+    /**
+     * setting maximal price
+     * @param float $price
+     * @return 
+     */
+    public function setMax($price) {
+        if ($price > $this->_max) {
+            $this->_max = $price;
+        }
+    }
+    //}}}
     protected function applyPriceRangeProductCount() {
         $priceFieldName = Mage::helper('solrsearch')->getPriceFieldName();
         $priceRanges = $this->calculatePriceRanges();
@@ -230,7 +276,6 @@ class Zolago_Solrsearch_Block_Faces_Price extends Zolago_Solrsearch_Block_Faces_
         foreach ($priceRanges as $range) {
             $start = floor(floatval($range['start']));
             $end = ceil(floatval($range['end']));
-
             $formattedStart = $this->getPriceFormat($start);//Mage::app()->getStore()->getCurrentCurrency()->format($start, null, false);
             $formattedEnd = $this->getPriceFormat($end);//Mage::app()->getStore()->getCurrentCurrency()->format($end, null, false);
 
