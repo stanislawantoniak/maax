@@ -148,3 +148,14 @@
 		}
 	}
 }
+
+.catalog-category-view {
+  #sidebar{
+    &.hidden-xs {
+      display: block;
+      @media (min-width: $screen-sm-min) {
+        display: block;
+      }
+    }
+  }
+}
