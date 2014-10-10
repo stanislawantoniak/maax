@@ -2205,7 +2205,7 @@ Mall.listing = {
 	 * @returns {string}
 	 */
 	getSort: function() {
-		return this.getSortSelect().val();
+		return this.getSortSelect().find(":selected").data("sort");
 	},
 
 	/**
