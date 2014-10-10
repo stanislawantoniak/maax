@@ -62,7 +62,13 @@
 						name="<?php echo $this->getItemName($item);?>"
 						value="<?php echo $this->getItemValue($item)?>"
 						id="<?php echo $this->getItemId($item)?>" 
-						<?php if($this->isItemActive($item)): ?>checked="checked"<?php endif; ?> /><span><span></span></span>
+						<?php if($this->isItemActive($item)): ?>checked="checked"<?php endif; ?> />
+	                <span>
+		                <span>
+			                <a href="<?php echo $this->getItemUrl($item) ?>"
+			                   class="listing-link"></a>
+		                </span>
+	                </span>
                 </label>
             <?php endif; ?>
         <?php endforeach; ?>
@@ -71,7 +77,11 @@
             </div>
     <?php endif; ?>
             <div class="action clear clearfix <?php if(!$isOptionSelected) : ?>hidden<?php endif; ?>">
-                <a href="#" data-filter-type="<?php echo implode("_", $key_withoutFacet); ?>" class="button button-third clear clearfilter-color"><?php echo $this->__("Clear"); ?></a>
+
+                <a href="<?php echo $this->getRemoveAllUrl($pureKey) ?>"
+                   data-filter-type="<?php echo $pureKey; ?>"
+                   class="button button-third clear clearfilter-color">
+	                <?php echo $this->__("Clear"); ?></a>
             </div>
 
         </div>

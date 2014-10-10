@@ -1343,13 +1343,19 @@ Mall.listing = {
 	initListingLinksEvents: function() {
 		var links = jQuery('.listing-link'),
 			self = this;
+
+		function labelClick(obj) {
+			jQuery(obj).closest("label").trigger("click");
+		}
+
 		if(this.getPushStateSupport()) {
 			links.off("click").on("click",function() {
-				jQuery(this).closest("label").trigger("click");
+				labelClick(this);
 				return false;
 			});
 		} else {
 			links.off("click").on("click",function() {
+				labelClick(this);
 				self.showAjaxLoading();
 			});
 			jQuery('input[type="checkbox"]').off("click").on("click",function() {
@@ -1550,11 +1556,18 @@ Mall.listing = {
 					clearWrapper.addClass("hidden");
 				}
 			});
-			clearButton.on('click', function(event) {
-				event.preventDefault();
-				self.removeSingleFilterType(this);
-				clearWrapper.addClass('hidden');
-			});
+			if(self.getPushStateSupport()) {
+				clearButton.on('click', function (event) {
+					event.preventDefault();
+					self.removeSingleFilterType(this);
+					clearWrapper.addClass('hidden');
+				});
+			} else {
+				clearButton.on('click',function () {
+					self.showAjaxLoading();
+					window.location = jQuery(this).prop('href');
+				});
+			}
 
 		});
 

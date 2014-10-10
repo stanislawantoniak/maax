@@ -154,7 +154,8 @@ $name = '';
 
             </div><br />
             <div class="action clear clearfix <?php if(!$isOptionSelected): ?>hidden<?php endif; ?>">
-                <a href="#" class="button button-third clear"  data-filter-type="<?php echo implode("_", $key_withoutFacet); ?>" onclick="Mall.listing.removeSingleFilterType(this);Mall.listing.reloadListing();return false;" ><?php echo $this->__("Clear"); ?></a>
+	            <?php $pureKey = implode("_", $key_withoutFacet); ?>
+                <a href="<?php echo $this->getRemoveAllUrl($pureKey) ?>" class="button button-third clear"  data-filter-type="<?php echo $pureKey; ?>"><?php echo $this->__("Clear"); ?></a>
             </div>
         </div>
     </div>

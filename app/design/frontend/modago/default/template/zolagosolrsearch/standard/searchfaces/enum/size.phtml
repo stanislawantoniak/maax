@@ -59,7 +59,8 @@
             </div>
     <?php endif; ?>
             <div class="action clear <?php if(!$isOptionSelected) : ?>hidden<?php endif; ?> clearfix">
-                <a href="#" class="btn clear" data-filter-type="<?php echo implode("_", $key_withoutFacet); ?>" ><?php echo $this->__("Clear"); ?></a>
+	            <?php $pureKey = implode("_", $key_withoutFacet); ?>
+                <a href="<?php echo $this->getRemoveAllUrl($pureKey) ?>" class="btn clear" data-filter-type="<?php echo $pureKey; ?>" ><?php echo $this->__("Clear"); ?></a>
             </div>
 
         </div>
