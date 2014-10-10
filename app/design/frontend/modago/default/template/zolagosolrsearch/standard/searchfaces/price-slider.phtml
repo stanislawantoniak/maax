@@ -94,9 +94,15 @@ $name = '';
                 <div id="slider-range"></div>
 
             </div><br />
+
             <div class="action clear clearfix <?php if(!$this->isFilterActive() && !$isOptionSelected): ?>hidden<?php endif; ?>">
                 <a href="#" class="button button-third clear"  onclick="Mall.listing.removeSingleFilterType(this); Mall.listing.reloadListing();return false;" ><?php echo $this->__("Clear"); ?></a>
-            </div>
+			</div>
+			<?php /*
+            <div class="action clear clearfix <?php if(!$isOptionSelected): ?>hidden<?php endif; ?>">
+	            <?php $pureKey = implode("_", $key_withoutFacet); ?>
+                <a href="<?php echo $this->getRemoveAllUrl($pureKey) ?>" class="button button-third clear"  data-filter-type="<?php echo $pureKey; ?>"><?php echo $this->__("Clear"); ?></a>
+            </div> */ ?>
         </div>
     </div>
     <script type="text/javascript">
