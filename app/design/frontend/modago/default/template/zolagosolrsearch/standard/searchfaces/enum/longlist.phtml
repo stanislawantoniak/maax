@@ -35,8 +35,18 @@
 											   id="<?php echo $this->getItemId($item)?>"
 											   type="checkbox" 
 											   class="css-checkbox" <?php if($this->isItemActive($item)): ?>checked="checked" <?php endif; ?>>
-                                        <label for="<?php echo $this->getItemId($item)?>" 
-											   class="css-label"><span><?php echo $item ?></span>&nbsp;<span class="suffix">(<?php echo $count ?>)</span></label>
+	                                    <label for="<?php echo $this->getItemId($item); ?>" class="css-label">
+					                        <span>
+						                        <a href="<?php echo $this->getItemUrl($item); ?>"
+						                           class="listing-link">
+							                        <?php echo $item; ?>
+						                        </a>
+					                        </span>
+		                                    &nbsp;
+					                        <span class="suffix">
+						                        (<?php echo $count; ?>)
+					                        </span>
+	                                    </label>
                                     </div>
                                 </li>
 
@@ -52,7 +62,18 @@
 										   value="<?php echo $this->getItemValue($item)?>"
 										   id="check_<?php echo $this->getItemId($item)?>" 
 										   class="css-checkbox" <?php if($this->isItemActive($item)): ?>checked="checked" <?php endif; ?>>
-                                    <label for="check_<?php echo $item; ?>" class="css-label"><span><?php echo $item ?></span>&nbsp;<span class="suffix">(<?php echo $count ?>)</span></label>
+                                    <label for="check_<?php echo $item; ?>" class="css-label">
+	                                    <span>
+					                        <a href="<?php echo $this->getItemUrl($item); ?>"
+					                           class="listing-link">
+						                        <?php echo $item; ?>
+					                        </a>
+	                                    </span>
+	                                    &nbsp;
+	                                    <span class="suffix">
+		                                    (<?php echo $count ?>)
+	                                    </span>
+                                    </label>
                                 </div>
                                 <li data-state="hidden" style="display: none;">
                                     <div class="form-group form-checkbox">
@@ -64,7 +85,18 @@
 											   id="<?php echo $this->getItemId($item)?>"
 											   class="css-checkbox" 
 											   <?php if($this->isItemActive($item)): ?>checked="checked" <?php endif; ?>>
-                                        <label for="<?php echo $this->getItemId($item)?>" class="css-label"><span><?php echo $item ?></span>&nbsp;<span class="suffix">(<?php echo $count ?>)</span></label>
+	                                    <label for="<?php echo $this->getItemId($item); ?>" class="css-label">
+					                        <span>
+						                        <a href="<?php echo $this->getItemUrl($item); ?>"
+						                           class="listing-link">
+							                        <?php echo $item; ?>
+						                        </a>
+					                        </span>
+		                                    &nbsp;
+					                        <span class="suffix">
+						                        (<?php echo $count; ?>)
+					                        </span>
+	                                    </label>
                                     </div>
                                 </li>
                             <?php endforeach; ?>

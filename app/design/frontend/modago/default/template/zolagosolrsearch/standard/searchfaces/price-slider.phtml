@@ -46,7 +46,16 @@ $name = '';
 					<?php if ($this->isRangeActive($range['value'])):?> checked="checked"<?php endif;?>
 				/>
                 <label for="filter_price_<?php echo $range['start'];?>_<?php echo $range['end'];?>" class="css-label">
-		<span><?php echo $range['formatted'] ?></span> <span class="suffix">(<?php echo $range['count']; ?>)</span></label>
+	                <span>
+		                <a href="<?php echo $url; ?>"
+		                   class="listing-link">
+			                <?php echo $range['formatted'] ?>
+		                </a>
+	                </span>
+	                <span class="suffix">
+		                (<?php echo $range['count']; ?>)
+	                </span>
+                </label>
             </div>
 			<?php endforeach; ?>
             <div id="od_do" class="clearfix">
