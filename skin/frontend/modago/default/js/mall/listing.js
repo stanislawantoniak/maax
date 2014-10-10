@@ -1183,16 +1183,14 @@ Mall.listing = {
 							if (key.substring(0, 2) == 'fq') {
 								jQuery("input[type=checkbox][name='" + key + "'][value='" + value + "']").prop("checked", true);
 							} else if (key == 'sort') {
-								sort = value;
+								self.setSort(value);
 							} else if (key == 'dir') {
-								dir = value;
+								self.setDir(value);
 							}
 						}
 					}
 					if(sort && dir) {
-						self.getSortSelect().find('option[value="'+sort+'_'+dir+'"]').prop('selected',true)
-					} else {
-						self.getSortSelect().find('option:first-child').prop('selected',true);
+						self.setSortSelect();
 					}
 				}
 				//reload listing
@@ -1426,6 +1424,16 @@ Mall.listing = {
 		return jQuery('#sort-by',scope);
 	},
 
+	getDirInput: function(scope) {
+		var scope = scope || this.getToolbar();
+		return jQuery('#sort-dir',scope);
+	},
+
+	getSortInput: function(scope) {
+		var scope = scope || this.getToolbar();
+		return jQuery('#sort-val',scope);
+	},
+
 	/**
 	 * Return current mobile filters state. Is mobile or not.
 	 *
@@ -1463,10 +1471,14 @@ Mall.listing = {
 	 * @returns {undefined}
 	 */
 	initSortEvents: function(scope){
-		var sortingSelect = this.getSortSelect(scope);
+		var sortingSelect = this.getSortSelect(scope),
+			self = this;
 		sortingSelect.selectbox();
 		sortingSelect.change(function() {
-			Mall.listing.reloadListing();
+			var selected = jQuery(this).find(":selected");
+			self.setSort(selected.data('sort'));
+			self.setDir(selected.data('dir'));
+			self.reloadListing();
 		});
 	},
 
@@ -2205,7 +2217,7 @@ Mall.listing = {
 	 * @returns {string}
 	 */
 	getSort: function() {
-		return this.getSortSelect().find(":selected").data("sort");
+		return this.getSortInput().val();
 	},
 
 	/**
@@ -2214,9 +2226,42 @@ Mall.listing = {
 	 * @returns {string}
 	 */
 	getDir: function() {
-		return this.getSortSelect().find(":selected").data("dir");
+		return this.getDirInput().val();
 	},
 
+	/**
+	 * Returns current sort type.
+	 *
+	 * @returns {Mall.listing}
+	 */
+	setSort: function(sort) {
+		this.getSortInput().val(sort);
+		this.setSortSelect();
+		return this;
+	},
+
+	/**
+	 * Returns current sort direction.
+	 *
+	 * @returns {Mall.listing}
+	 */
+	setDir: function(dir) {
+		this.getDirInput().val(dir);
+		this.setSortSelect();
+		return this;
+	},
+
+	setSortSelect: function() {
+		var select = this.getSortSelect(),
+			sort = this.getSort(),
+			dir = this.getDir();
+		if(select.find("option[value='"+sort+"||"+dir+"']")) {
+			select.val(this.getSort() + '||' + this.getDir());
+			select.selectbox('detach');
+			select.selectbox('attach');
+		}
+		return this;
+	},
 	/**
 	 * Returns current category.
 	 *
