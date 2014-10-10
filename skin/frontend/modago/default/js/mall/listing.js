@@ -1747,6 +1747,11 @@ Mall.listing = {
 		}
 		
 		if(list.find("li").not(".hidden").length){
+			
+			/**
+			 * @todo improve performance
+			 */
+			
 			// Make sort
 			this._sortLongListContent(checkboxes);
 			checkboxes.each(function(){
