@@ -3603,16 +3603,15 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
   color: #1e1e1e; }
 
 /* line 272, ../sass/design/style/_sidebar.scss */
-.longListWrapper, .longListChecked {
+.longListChecked, .longListWrapper {
   border: 1px solid #d0cfcf;
   -moz-border-radius: 1px;
   -webkit-border-radius: 1px;
   border-radius: 1px; }
 
-/* line 276, ../sass/design/style/_sidebar.scss */
-.longListChecked {
-  border-bottom: 0;
-  padding-bottom: 0 !important; }
+/* line 277, ../sass/design/style/_sidebar.scss */
+.longListWrapper {
+  margin-top: -1px; }
 
 /* line 284, ../sass/design/style/_sidebar.scss */
 .longListWrapper .mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar {

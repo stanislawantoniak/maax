@@ -158,16 +158,16 @@
 
 .longListWrapper {
   max-height:151px;
-  margin-bottom: 10px;
 }
+
 .longListWrapper .scrollable {
   max-height:145px;
-  padding:5px 0 5px 0;
 
 }
 .filter-longlist{
   .mCSB_scrollTools {
     width:12px;
+	margin:  6px 2px 4px 0;
     .mCSB_dragger {
       height:39px!important;
       max-height: 39px!important;
@@ -195,6 +195,9 @@
     > .mCSB_container {
       margin-right: 0;
       }
+  }
+  .action.clear{
+	  margin-top: 15px;
   }
 }
 

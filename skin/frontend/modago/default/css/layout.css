@@ -1576,16 +1576,16 @@ section.section h2.title_section i {
 /* CLONE MENU */
 /* line 36, ../sass/layout/modules/_clone-menu.scss */
 #clone_submenu .col-left {
-  width: 78.2312925170068%;
-  float: left; }
+    width: 78.2312925170068%;
+    float: left; }
 @media screen and (max-width: 1199px) {
-  /* line 36, ../sass/layout/modules/_clone-menu.scss */
-  #clone_submenu .col-left {
-    width: 72.231293%; } }
+    /* line 36, ../sass/layout/modules/_clone-menu.scss */
+    #clone_submenu .col-left {
+        width: 72.231293%; } }
 @media screen and (max-width: 991px) {
-  /* line 36, ../sass/layout/modules/_clone-menu.scss */
-  #clone_submenu .col-left {
-    width: 65.231293%; } }
+    /* line 36, ../sass/layout/modules/_clone-menu.scss */
+    #clone_submenu .col-left {
+        width: 65.231293%; } }
 /* line 46, ../sass/layout/modules/_clone-menu.scss */
 #clone_submenu .col-righ {
   width: 22.02380952380952%;
@@ -2305,7 +2305,7 @@ html.fb-static .fb-slidebar, .fb-slidebar.fb-static {
 /* line 173, ../sass/layout/modules/_sidebar.scss */
 .longListItems, .longListChecked {
   margin: 0px !important;
-  padding: 5px 0 5px 0;
+  padding: 5px 0 0 0;
   margin-bottom: 10px; }
 /* line 179, ../sass/layout/modules/_sidebar.scss */
 .longListItems li, .longListChecked li {
@@ -6559,17 +6559,16 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
 
 /* line 159, ../sass/layout/style/_sidebar.scss */
 .longListWrapper {
-  max-height: 151px;
-  margin-bottom: 10px; }
+  max-height: 151px; }
 
 /* line 163, ../sass/layout/style/_sidebar.scss */
 .longListWrapper .scrollable {
-  max-height: 145px;
-  padding: 5px 0 5px 0; }
+  max-height: 145px; }
 
-/* line 169, ../sass/layout/style/_sidebar.scss */
+/* line 168, ../sass/layout/style/_sidebar.scss */
 .filter-longlist .mCSB_scrollTools {
-  width: 12px; }
+  width: 12px;
+  margin: 6px 2px 4px 0; }
 /* line 171, ../sass/layout/style/_sidebar.scss */
 .filter-longlist .mCSB_scrollTools .mCSB_dragger {
   height: 39px !important;
@@ -6591,9 +6590,12 @@ $flagMap: sprite-map("sprites/flags/*.png");*/
 /* line 195, ../sass/layout/style/_sidebar.scss */
 .filter-longlist .mCSB_inside > .mCSB_container {
   margin-right: 0; }
+/* line 199, ../sass/layout/style/_sidebar.scss */
+.filter-longlist .action.clear {
+  margin-top: 15px; }
 
 @media (max-width: 767px) {
-  /* line 204, ../sass/layout/style/_sidebar.scss */
+  /* line 207, ../sass/layout/style/_sidebar.scss */
   .fb-slidebar-inner .current-filter {
     padding-top: 3px;
     line-height: 24px; } }

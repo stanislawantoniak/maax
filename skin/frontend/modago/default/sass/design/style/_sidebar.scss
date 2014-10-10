@@ -269,13 +269,13 @@
 
 }
 
-.longListWrapper,.longListChecked{
+.longListChecked,.longListWrapper{
 	border:1px solid #d0cfcf;
 	@include border-radius(1px);
 }
-.longListChecked{
-	border-bottom:0;
-	padding-bottom:0 !important;
+
+.longListWrapper{
+	margin-top: -1px; // Hack for hide double borders
 }
 
 .longListWrapper {
