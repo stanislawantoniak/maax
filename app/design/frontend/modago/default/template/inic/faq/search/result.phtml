@@ -18,7 +18,7 @@
                 <div class="my-account">
                     <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('help-page-mobile-menu')->toHtml() ?>
 
-                    <div class="bg-w main">
+                    <div class="bg-w main faq-content">
                         <?php if ($id !== "" && $keyword !== "" && $category !== ""): ?>
                             <h3><?php echo $this->__('Search Result For - "%s" from category "%s"', $keyword, $category->getName()); ?></h3>
                         <?php elseif ($id == "" && $keyword !== ""): ?>

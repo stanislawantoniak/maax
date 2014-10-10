@@ -33,8 +33,9 @@ $_productImageUrl = '';
                         <div class="price clearfix">
                             <div class="col-price">
                                 <?php if ($product->getPrice() != $product->getFinalPrice()) : ?>
-                                    <span
-                                        class="old"><?php echo $this->helper('core')->currency($product->getPrice(), true, false); ?></span>
+                                    <span class="old"><?php echo $this->helper('core')->currency($product->getPrice(), true, false); ?></span>
+                                    <?php else: ?>
+                                    <span>&nbsp;&nbsp;</span>
                                 <?php endif; ?>
                                 <span><?php echo $this->helper('core')->currency($product->getFinalPrice(), true, false); ?></span>
                             </div>
