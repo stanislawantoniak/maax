@@ -1757,7 +1757,9 @@ Mall.listing = {
 			});
 			
 			// Almost perfect match - move as first
-			var almostPerfect = checkboxes.parents("li.almostPerfect").removeClass("almostPerfect").find(":checkbox");
+			var almostPerfect = checkboxes.parents("li.almostPerfect").
+					removeClass("almostPerfect").
+					find(":checkbox");
 			if(almostPerfect.length){
 				this._sortLongListContent(almostPerfect, true);
 				almostPerfect.each(function(){
@@ -1765,13 +1767,14 @@ Mall.listing = {
 				});
 			}
 			
-			
 			// Perfect match - move as first
-			var perfectMatch = items.filter(".perfectMatch").find(":checkbox");
+			var perfectMatch = checkboxes.parents("li.perfectMatch").
+					removeClass("perfectMatch").
+					find(":checkbox");
 			if(perfectMatch.length){
 				this._sortLongListContent(perfectMatch, true);
 				perfectMatch.each(function(){
-					jQuery(this).parents('li').removeClass("perfectMatch").prependTo(listUl);
+					jQuery(this).parents('li').prependTo(listUl);
 				});
 			}
 			
