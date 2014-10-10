@@ -150,6 +150,7 @@ Mall.listing = {
 		this.initOnpopstateEvent();
 		this.initSortEvents();
 		this.initActiveEvents();
+		this.initListingLinksEvents();
 
 		// Add custom events to prodcuts
 		this.preprocessProducts();
@@ -190,7 +191,7 @@ Mall.listing = {
 				query: this.getQuery(),
 				sort: this.getSort(),
 				dir: this.getDir(),
-				products: this.getInitProducts(),
+				products: this.getInitProducts()
 			},
 			ajaxKey = this._buildAjaxKey(this.getQueryParamsAsArray());
 
@@ -905,6 +906,7 @@ Mall.listing = {
 			this.attachFilterSizeEvents();
 			this.attachDeleteCurrentFilter();
             this.attachMiscActions();
+			this.initListingLinksEvents();
 		}
 
 		return this;
@@ -963,6 +965,7 @@ Mall.listing = {
             this.attachFilterSizeEvents();
             this.attachDeleteCurrentFilter();
             this.attachMiscActions();
+			this.initListingLinksEvents();
 		}
 
 		return this;
@@ -981,8 +984,10 @@ Mall.listing = {
 	 * @returns {Mall.listing}
 	 */
 	reloadListing: function(){
-		this._captureListingMeta();
-		this._doAjaxRequest();
+		if(this.getPushStateSupport()) {
+			this._captureListingMeta();
+			this._doAjaxRequest();
+		}
 		return this;
 	},
 
@@ -1306,6 +1311,7 @@ Mall.listing = {
 		this.replaceProducts(content);
 
 		this.initActiveEvents();
+		this.initListingLinksEvents();
 	},
 
 	replaceProducts: function(data){
@@ -1332,53 +1338,80 @@ Mall.listing = {
 		this.setAutoappend(true);
 		this.loadToQueue();
 		this.setLoadMoreLabel();
+	},
 
-
+	initListingLinksEvents: function() {
+		var links = jQuery('.listing-link'),
+			self = this;
+		if(this.getPushStateSupport()) {
+			links.off("click").on("click",function() {
+				jQuery(this).closest("label").trigger("click");
+				return false;
+			});
+		} else {
+			links.off("click").on("click",function() {
+				self.showAjaxLoading();
+			});
+			jQuery('input[type="checkbox"]').off("click").on("click",function() {
+				self.showAjaxLoading();
+				window.location = jQuery('label[for="'+jQuery(this).prop('id')+'"]').find('.listing-link').prop('href');
+			});
+		}
 	},
 
 	initActiveEvents: function(scope) {
 		scope = scope || Mall.listing.getActiveId();
-		function unCheckbox(id) {
-			jQuery("input[type=checkbox]#"+id).prop('checked',false);
-		}
-		function detachActive() {
-			Mall.listing.getActive(scope).find('dl *').detach();
-		}
+		var self = this,
+			active = this.getActiveLabel(scope),
+			remove = this.getActiveRemove(scope);
+		if(this.getPushStateSupport()) {
 
-		var active = Mall.listing.getActiveLabel(scope);
-		var remove = Mall.listing.getActiveRemove(scope);
-
-		active.on("click", function() {
-			jQuery(this).parent().detach();
-			unCheckbox(jQuery(this).data('input'));
-			if(active.length == 1) {
-				detachActive();
+			function unCheckbox(id) {
+				jQuery("input[type=checkbox]#"+id).prop('checked',false);
 			}
-			Mall.listing.reloadListing();
-		});
-		remove.on("click", function() {
-			active.each(function() {
+
+			function detachActive() {
+				self.getActive(scope).find('dl *').detach();
+			}
+
+			active.click(function() {
+				jQuery(this).parent().parent().detach();
 				unCheckbox(jQuery(this).data('input'));
+				if (active.length == 1) {
+					detachActive();
+				}
+				self.reloadListing();
+				return false;
 			});
-			detachActive();
-			Mall.listing.reloadListing();
-			return false;
-		});
+
+			remove.click(function() {
+				active.each(function() {
+					unCheckbox(jQuery(this).data('input'));
+				});
+				detachActive();
+				self.reloadListing();
+				return false;
+			});
+		} else {
+			active.click(function() {
+				self.showAjaxLoading();
+			});
+			remove.click(function() {
+				self.showAjaxLoading();
+			});
+		}
 
 		var mobileFilterBtn = Mall.listing.getMobileFilterBtn();
 
-		mobileFilterBtn.on('click', function(event) {
+		mobileFilterBtn.click(function(event) {
 			event.preventDefault();
-			Mall.listing.insertMobileSidebar();
+			self.insertMobileSidebar();
 			jQuery('#sb-site').toggleClass('open');
 			jQuery('.fb-slidebar').toggleClass('open');
 			//var screenWidth = jQuery(window).width();
 			var screenHeight = jQuery(window).height();
 			jQuery('body').addClass('noscroll').append('<div class="noscroll" style="width:100%; height:' + screenHeight + 'px"></div>');
 		});
-
-
-
 	},
 
 	getMobileFilterBtn: function() {
@@ -1484,13 +1517,7 @@ Mall.listing = {
 
 	attachMiscActions: function(scope){
 		var filters = jQuery(".section", scope),
-			links = jQuery('.listing-link'),
 			self = this;
-
-		links.click(function() {
-			jQuery(this).closest("label").trigger("click");
-			return false;
-		});
 
 		filters.each(function(){
 			var filter = jQuery(this),
@@ -2271,6 +2298,15 @@ Mall.listing = {
 		}
 		return this;
 	},
+	/**
+	 * @returns Boolean
+	 * Determines if browser supports history.pushState
+	 */
+	getPushStateSupport: function() {
+		//return false;
+		return window.history.pushState ? true : false;
+	},
+
 	/**
 	 * Returns current category.
 	 *

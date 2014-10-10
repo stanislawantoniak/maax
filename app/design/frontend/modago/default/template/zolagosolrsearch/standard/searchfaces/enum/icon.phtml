@@ -37,14 +37,26 @@
 										id="<?php echo $this->getItemId($item)?>" 
 										class="css-checkbox" 
 										<?php if($this->isItemActive($item)): ?>checked="checked" <?php endif; ?>/>
-					                <label for="<?php echo $this->getItemId($item)?>">	
-										<img alt="" <?php if (!empty($_image)): ?>src="<?php echo Mage::getBaseUrl("media") . "/m-image/" . $_image;?>"<?php endif; ?>/>
+					                <label for="<?php echo $this->getItemId($item)?>">
+						                <a href="<?php echo $this->getItemUrl($item); ?>"
+						                   class="listing-link">
+							                <img alt="" <?php if (!empty($_image)): ?>src="<?php echo Mage::getBaseUrl("media") . "/m-image/" . $_image;?>"<?php endif; ?>/>
+						                </a>
 									</label>
 								</div>
 							</td>
 							<td class="last-td">
-								<label for="<?php echo $this->getItemId($item)?>">
-									<span><?php echo $item ?></span>&nbsp;<span class="suffix">(<?php echo $count ?>)</span></label>									
+								<label for="<?php echo $this->getItemId($item); ?>" class="css-label">
+			                        <span>
+				                        <a href="<?php echo $this->getItemUrl($item); ?>"
+				                           class="listing-link">
+					                        <?php echo $item; ?>
+				                        </a>
+			                        </span>
+									&nbsp;
+			                        <span class="suffix">
+				                        (<?php echo $count; ?>)
+			                        </span>
 								</label>
 							</td>
 						</tr>
@@ -64,7 +76,18 @@
 					value="<?php echo $this->getItemValue($item)?>"
 					id="<?php echo $this->getItemId($item)?>"
 					class="css-checkbox" <?php if($this->isItemActive($item)): ?>checked="checked" <?php endif; ?>/>
-                <label for="<?php echo $this->getItemId($item)?>" class="css-label"><span><?php echo $item ?></span>&nbsp;<span class="suffix">(<?php echo $count ?>)</span></label>
+	            <label for="<?php echo $this->getItemId($item); ?>" class="css-label">
+	                        <span>
+		                        <a href="<?php echo $this->getItemUrl($item); ?>"
+		                           class="listing-link">
+			                        <?php echo $item; ?>
+		                        </a>
+	                        </span>
+		            &nbsp;
+	                        <span class="suffix">
+		                        (<?php echo $count; ?>)
+	                        </span>
+	            </label>
             </div>
         <?php endforeach; ?>
         <div class="action clearfix">

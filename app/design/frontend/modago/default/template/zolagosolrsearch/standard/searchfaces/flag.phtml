@@ -30,7 +30,18 @@
 					   class="css-checkbox" 
 					   data-params='<?php echo $this->getItemJson($item);?>' 
 					   data-url="<?php echo $this->getItemUrl($item) ?>" <?php if ($this->isItemActive($item)): ?>checked<?php endif; ?>>
-                <label for="<?php echo $this->getItemId($item)?>" class="css-label <?php echo $class; ?>"><span><?php echo $item; ?></span> <span class="suffix">(<?php echo $count; ?>)</span></label>
+	            <label for="<?php echo $this->getItemId($item); ?>" class="css-label">
+                    <span>
+                        <a href="<?php echo $this->getItemUrl($item); ?>"
+                           class="listing-link">
+	                        <?php echo $item; ?>
+                        </a>
+                    </span>
+		            &nbsp;
+                    <span class="suffix">
+                        (<?php echo $count; ?>)
+                    </span>
+	            </label>
             </div>
 
         <?php endif; ?>
