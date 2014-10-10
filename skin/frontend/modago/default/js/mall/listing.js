@@ -1190,8 +1190,7 @@ Mall.listing = {
 						}
 					}
 					if(sort && dir) {
-						console.log('option[value="'+sort+'"][data-dir="'+dir+'"]');
-						self.getSortSelect().find('option[value="'+sort+'"][data-dir="'+dir+'"]').prop('selected',true)
+						self.getSortSelect().find('option[value="'+sort+'_'+dir+'"]').prop('selected',true)
 					} else {
 						self.getSortSelect().find('option:first-child').prop('selected',true);
 					}
@@ -1463,27 +1462,23 @@ Mall.listing = {
 	 * @param {type} scope
 	 * @returns {undefined}
 	 */
-		_shit: '',
-
 	initSortEvents: function(scope){
-		var sortingSelect = this.getSortSelect(scope),
-			self = this;
+		var sortingSelect = this.getSortSelect(scope);
 		sortingSelect.selectbox();
-
 		sortingSelect.change(function() {
-			var e = document.getElementById("sort-by");
-			var strUser = e.options[e.selectedIndex];
-			console.log(strUser);
-			sortingSelect.find(":selected").each(function() {
-				console.log('selected shit');
-			});
-			//self.reloadListing();
+			Mall.listing.reloadListing();
 		});
 	},
 
 	attachMiscActions: function(scope){
 		var filters = jQuery(".section", scope),
+			links = jQuery('.listing-link'),
 			self = this;
+
+		links.click(function() {
+			jQuery(this).closest("label").trigger("click");
+			return false;
+		});
 
 		filters.each(function(){
 			var filter = jQuery(this),
@@ -2210,7 +2205,7 @@ Mall.listing = {
 	 * @returns {string}
 	 */
 	getSort: function() {
-		return this.getSortSelect().val();
+		return this.getSortSelect().find(":selected").data("sort");
 	},
 
 	/**
