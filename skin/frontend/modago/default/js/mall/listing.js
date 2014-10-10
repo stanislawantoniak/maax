@@ -1761,7 +1761,6 @@ Mall.listing = {
 			if(almostPerfect.length){
 				this._sortLongListContent(almostPerfect, true);
 				almostPerfect.each(function(){
-					console.log(this.sort, jQuery(this).val());
 					jQuery(this).parents('li').prependTo(listUl);
 				});
 			}
