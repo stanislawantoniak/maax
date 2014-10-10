@@ -1721,13 +1721,18 @@ Mall.listing = {
 			// Term entered
 			items.each(function(){
 				var el = jQuery(this),
-					text = el.find("label > span:eq(0)").text().trim().toLowerCase();
-					el.removeClass("perfectMatch");
-				if(text.search(term)>-1){
+					text = el.find("label > span:eq(0)").text().trim().toLowerCase(),
+					serchPosition = text.search(term);
+					
+				el.removeClass("perfectMatch almostPerfect");
+					
+				if(serchPosition>-1){
 					el.removeClass("hidden");
 					matches++;
-					if(text==term){
+					if(text==term){ // Same terms
 						el.addClass("perfectMatch");
+					}else if(serchPosition==0){ // result start with the term
+						el.addClass("almostPerfect");
 					}
 				}else{
 					el.addClass("hidden");
@@ -1751,6 +1756,10 @@ Mall.listing = {
 				if(!el.is(".hidden")){
 					listUl.append(el);
 				}
+			});
+			// Perfect match - move as first
+			items.filter(".almostPerfect").each(function(){
+				jQuery(this).prependTo(listUl);
 			});
 			// Perfect match - move as first
 			items.filter(".perfectMatch").each(function(){
