@@ -1380,7 +1380,7 @@ Mall.listing = {
 				if (active.length == 1) {
 					detachActive();
 				}
-				self.reloadListing();
+				self.reloadListingNow();
 				return false;
 			});
 
@@ -1389,7 +1389,7 @@ Mall.listing = {
 					unCheckbox(jQuery(this).data('input'));
 				});
 				detachActive();
-				self.reloadListing();
+				self.reloadListingNow();
 				return false;
 			});
 		} else {
@@ -1403,7 +1403,7 @@ Mall.listing = {
 
 		var mobileFilterBtn = Mall.listing.getMobileFilterBtn();
 
-		mobileFilterBtn.click(function(event) {
+		mobileFilterBtn.on('click', function(event) {
 			event.preventDefault();
 			self.insertMobileSidebar();
 			jQuery('#sb-site').toggleClass('open');
@@ -1751,8 +1751,6 @@ Mall.listing = {
 					text = el.find("label > span:eq(0)").text().trim().toLowerCase(),
 					serchPosition = text.search(term);
 					
-				el.removeClass("perfectMatch almostPerfect");
-					
 				if(serchPosition>-1){
 					el.removeClass("hidden");
 					matches++;
@@ -1776,6 +1774,11 @@ Mall.listing = {
 		}
 		
 		if(list.find("li").not(".hidden").length){
+			
+			/**
+			 * @todo improve performance
+			 */
+			
 			// Make sort
 			this._sortLongListContent(checkboxes);
 			checkboxes.each(function(){
@@ -1784,21 +1787,39 @@ Mall.listing = {
 					listUl.append(el);
 				}
 			});
+			
+			// Almost perfect match - move as first
+			var almostPerfect = checkboxes.parents("li.almostPerfect").
+					removeClass("almostPerfect").
+					find(":checkbox");
+			if(almostPerfect.length){
+				this._sortLongListContent(almostPerfect, true);
+				almostPerfect.each(function(){
+					jQuery(this).parents('li').prependTo(listUl);
+				});
+			}
+			
 			// Perfect match - move as first
-			items.filter(".almostPerfect").each(function(){
-				jQuery(this).prependTo(listUl);
-			});
-			// Perfect match - move as first
-			items.filter(".perfectMatch").each(function(){
-				jQuery(this).prependTo(listUl);
-			});
+			var perfectMatch = checkboxes.parents("li.perfectMatch").
+					removeClass("perfectMatch").
+					find(":checkbox");
+			if(perfectMatch.length){
+				this._sortLongListContent(perfectMatch, true);
+				perfectMatch.each(function(){
+					jQuery(this).parents('li').prependTo(listUl);
+				});
+			}
+			
+			// Move scroll top
+			list.mCustomScrollbar("scrollTo", "top");
 		}
 
 	},
 
-	_sortLongListContent: function(items){
+	_sortLongListContent: function(items, desc){
+		desc = desc ? -1 : 1; 
 		items.sort(function(a,b){
-			return a.sort-b.sort;
+			return (a.sort-b.sort)*desc;
 		});
 	},
 
