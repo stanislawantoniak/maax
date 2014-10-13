@@ -269,6 +269,7 @@ Mall.listing = {
 	},
 
     likePriceView: function(){
+
         var listProducts = jQuery('#items-product');
         var listItemsProducts = listProducts.children('.item');
         listItemsProducts.each(function(index, el) {
@@ -285,19 +286,21 @@ Mall.listing = {
             if (widthBlock < widthThis) {
 
             };
+            if(widthBlock > 0){
+                if (widthBlock > widthThis) {
+                    if (childrenPrice > widthThisHalf) {
+                        jQuery(this).find('.price').addClass('price-two-line');
+                    } else {
+                        jQuery(this).find('.price').removeClass('price-two-line');
+                    };
+                    if (childrenLike > widthThisHalf) {
+                        jQuery(this).find('.price').addClass('like-two-line');
+                    } else {
+                        jQuery(this).find('.price').removeClass('like-two-line');
+                    };
+                };
+            }
 
-            if (widthBlock > widthThis) {
-                if (childrenPrice > widthThisHalf) {
-                    jQuery(this).find('.price').addClass('price-two-line');
-                } else {
-                    jQuery(this).find('.price').removeClass('price-two-line');
-                };
-                if (childrenLike > widthThisHalf) {
-                    jQuery(this).find('.price').addClass('like-two-line');
-                } else {
-                    jQuery(this).find('.price').removeClass('like-two-line');
-                };
-            };
         });
     },
 
@@ -1976,6 +1979,11 @@ Mall.listing = {
 				slide: function(event, ui) {
 					jQuery("#zakres_min").val(ui.values[0]);
 					jQuery("#zakres_max").val(ui.values[1]);
+					var checkSlider = jQuery('#checkSlider').find('input');
+					if (!checkSlider.is(':checked')) {
+						checkSlider.prop('checked', true);
+						jQuery('#filter_price').find('.action').removeClass('hidden');
+					}
 					self._transferValuesToCheckbox(ui.values[0], ui.values[1]);
 				}
 			});
