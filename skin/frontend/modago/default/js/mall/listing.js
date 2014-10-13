@@ -1976,6 +1976,11 @@ Mall.listing = {
 				slide: function(event, ui) {
 					jQuery("#zakres_min").val(ui.values[0]);
 					jQuery("#zakres_max").val(ui.values[1]);
+					var checkSlider = jQuery('#checkSlider').find('input');
+					if (!checkSlider.is(':checked')) {
+						checkSlider.prop('checked', true);
+						jQuery('#filter_price').find('.action').removeClass('hidden');
+					}
 					self._transferValuesToCheckbox(ui.values[0], ui.values[1]);
 				}
 			});
