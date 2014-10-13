@@ -30,13 +30,24 @@
 					   class="css-checkbox" 
 					   data-params='<?php echo $this->getItemJson($item);?>' 
 					   data-url="<?php echo $this->getItemUrl($item) ?>" <?php if ($this->isItemActive($item)): ?>checked<?php endif; ?>>
-                <label for="<?php echo $this->getItemId($item)?>" class="css-label <?php echo $class; ?>"><span><?php echo $item; ?></span> <span class="suffix">(<?php echo $count; ?>)</span></label>
+	            <label for="<?php echo $this->getItemId($item); ?>" class="css-label <?php echo $class; ?>">
+                    <span>
+                        <a href="<?php echo $this->getItemUrl($item); ?>"
+                           class="listing-link">
+	                        <?php echo $item; ?>
+                        </a>
+                    </span>
+		            &nbsp;
+                    <span class="suffix">
+                        (<?php echo $count; ?>)
+                    </span>
+	            </label>
             </div>
 
         <?php endif; ?>
     <?php endforeach; ?>
             <div class="action clear clearfix <?php if(!$isOptionSelected) : ?>hidden<?php endif; ?>">
-                <a href="#" data-filter-type="<?php echo $pureKey; ?>"  class="button button-third clear"><?php echo $this->__("Clear"); ?></a>
+                <a href="<?php echo $this->getRemoveAllUrl($pureKey) ?>" data-filter-type="<?php echo $pureKey; ?>"  class="button button-third clear"><?php echo $this->__("Clear"); ?></a>
             </div>
         </div>
 

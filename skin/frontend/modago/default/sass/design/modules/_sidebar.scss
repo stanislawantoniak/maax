@@ -30,8 +30,9 @@
          input.checked + span  {
             background:#000;
             border-color:#000;
-            color:#fff;
-
+			a:link, a:visited {
+				color:#fff;
+			}
         }
       }
     }

@@ -1,6 +1,7 @@
 <?php
 /**
  * @method Zolago_Catalog_Model_Category_Filter getFilterModel() Description
+ * @method Zolago_Solrsearch_Block_Faces getFilterContainer() Description
  */
 abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Template
 {
@@ -15,6 +16,12 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 	
 	public function getAllItems() {
 		$data = parent::getAllItems();
+		
+		// Do not add active ranges to items
+		if($this instanceof Zolago_Solrsearch_Block_Faces_Price){
+			return $data;
+		}
+		
 		foreach($this->getActiveItems() as $item){
 			if(!isset($data[$item])){
 				$data[$item] = 0;
@@ -44,8 +51,6 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 				);
 			} 
 			
-			//ksort($items);
-			//ksort($hiddenItems);
 			$this->setData("items", $items);
 			$this->setData("hidden_items", $hiddenItems);
 		}
@@ -66,6 +71,7 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 			if(is_array($filterQuery[$this->getFacetKey()])){
 				return in_array((string)$item, $filterQuery[$this->getFacetKey()]);
 			}
+			
 			return trim($filterQuery[$this->getFacetKey()])==trim($item);
 		}
 		return false;
@@ -103,6 +109,7 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
         return  $this->getFilterContainer()->getItemId($this->getAttributeCode(), $item);
     }
 	
+	
 	/**
 	 * 
 	 * @param type $key
@@ -113,6 +120,10 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
     {
 		return $this->getFilterContainer()->getRemoveFacesUrl($key, $value);
     }
+
+	public function getRemoveAllFacesUrl($key) {
+		return $this->getFilterContainer()->getRemoveAllFacesUrl($key);
+	}
 	
 	public function processFinalParams(array $params) {
 		return $this->getFilterContainer()->processFinalParams($params);
@@ -141,7 +152,12 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 		}
 		return $facetUrl;
 	}
-	
+
+	public function getRemoveAllUrl($key) {
+		$facetUrl = $this->getRemoveAllFacesUrl($key);
+		return $facetUrl;
+	}
+
 	public function getItemJson($item) {
 		$face_key = $this->getAttributeCode();
 		if($this->isItemActive($item)){
@@ -151,7 +167,7 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 		}
 		return $json;
 	}
-	
+
 	public function isFilterActive() {
 		return $this->getFilterContainer()->isFilterActive($this->getAttributeCode());
 	}

@@ -150,6 +150,7 @@ Mall.listing = {
 		this.initOnpopstateEvent();
 		this.initSortEvents();
 		this.initActiveEvents();
+		this.initListingLinksEvents();
 
 		// Add custom events to prodcuts
 		this.preprocessProducts();
@@ -190,7 +191,7 @@ Mall.listing = {
 				query: this.getQuery(),
 				sort: this.getSort(),
 				dir: this.getDir(),
-				products: this.getInitProducts(),
+				products: this.getInitProducts()
 			},
 			ajaxKey = this._buildAjaxKey(this.getQueryParamsAsArray());
 
@@ -939,6 +940,7 @@ Mall.listing = {
 			this.attachFilterSizeEvents();
 			this.attachDeleteCurrentFilter();
             this.attachMiscActions();
+			this.initListingLinksEvents();
 		}
 
 		return this;
@@ -997,6 +999,7 @@ Mall.listing = {
             this.attachFilterSizeEvents();
             this.attachDeleteCurrentFilter();
             this.attachMiscActions();
+			this.initListingLinksEvents();
 		}
 
 		return this;
@@ -1015,8 +1018,10 @@ Mall.listing = {
 	 * @returns {Mall.listing}
 	 */
 	reloadListing: function(){
-		this._captureListingMeta();
-		this._doAjaxRequest();
+		if(this.getPushStateSupport()) {
+			this._captureListingMeta();
+			this._doAjaxRequest();
+		}
 		return this;
 	},
 
@@ -1217,17 +1222,14 @@ Mall.listing = {
 							if (key.substring(0, 2) == 'fq') {
 								jQuery("input[type=checkbox][name='" + key + "'][value='" + value + "']").prop("checked", true);
 							} else if (key == 'sort') {
-								sort = value;
+								self.setSort(value);
 							} else if (key == 'dir') {
-								dir = value;
+								self.setDir(value);
 							}
 						}
 					}
 					if(sort && dir) {
-						console.log('option[value="'+sort+'"][data-dir="'+dir+'"]');
-						self.getSortSelect().find('option[value="'+sort+'"][data-dir="'+dir+'"]').prop('selected',true)
-					} else {
-						self.getSortSelect().find('option:first-child').prop('selected',true);
+						self.setSortSelect();
 					}
 				}
 				//reload listing
@@ -1343,6 +1345,7 @@ Mall.listing = {
 		this.replaceProducts(content);
 
 		this.initActiveEvents();
+		this.initListingLinksEvents();
 	},
 
 	replaceProducts: function(data){
@@ -1369,53 +1372,86 @@ Mall.listing = {
 		this.setAutoappend(true);
 		this.loadToQueue();
 		this.setLoadMoreLabel();
+	},
 
+	initListingLinksEvents: function() {
+		var links = jQuery('.listing-link'),
+			self = this;
 
+		function labelClick(obj) {
+			jQuery(obj).closest("label").trigger("click");
+		}
+
+		if(this.getPushStateSupport()) {
+			links.off("click").on("click",function() {
+				labelClick(this);
+				return false;
+			});
+		} else {
+			links.off("click").on("click",function() {
+				labelClick(this);
+				self.showAjaxLoading();
+			});
+			jQuery('input[type="checkbox"]').off("click").on("click",function() {
+				self.showAjaxLoading();
+				window.location = jQuery('label[for="'+jQuery(this).prop('id')+'"]').find('.listing-link').prop('href');
+			});
+		}
 	},
 
 	initActiveEvents: function(scope) {
 		scope = scope || Mall.listing.getActiveId();
-		function unCheckbox(id) {
-			jQuery("input[type=checkbox]#"+id).prop('checked',false);
-		}
-		function detachActive() {
-			Mall.listing.getActive(scope).find('dl *').detach();
-		}
+		var self = this,
+			active = this.getActiveLabel(scope),
+			remove = this.getActiveRemove(scope);
+		if(this.getPushStateSupport()) {
 
-		var active = Mall.listing.getActiveLabel(scope);
-		var remove = Mall.listing.getActiveRemove(scope);
-
-		active.on("click", function() {
-			jQuery(this).parent().detach();
-			unCheckbox(jQuery(this).data('input'));
-			if(active.length == 1) {
-				detachActive();
+			function unCheckbox(id) {
+				jQuery("input[type=checkbox]#"+id).prop('checked',false);
 			}
-			Mall.listing.reloadListing();
-		});
-		remove.on("click", function() {
-			active.each(function() {
+
+			function detachActive() {
+				self.getActive(scope).find('dl *').detach();
+			}
+
+			active.click(function() {
+				jQuery(this).parent().parent().detach();
 				unCheckbox(jQuery(this).data('input'));
+				if (active.length == 1) {
+					detachActive();
+				}
+				self.reloadListingNow();
+				return false;
 			});
-			detachActive();
-			Mall.listing.reloadListing();
-			return false;
-		});
+
+			remove.click(function() {
+				active.each(function() {
+					unCheckbox(jQuery(this).data('input'));
+				});
+				detachActive();
+				self.reloadListingNow();
+				return false;
+			});
+		} else {
+			active.click(function() {
+				self.showAjaxLoading();
+			});
+			remove.click(function() {
+				self.showAjaxLoading();
+			});
+		}
 
 		var mobileFilterBtn = Mall.listing.getMobileFilterBtn();
 
 		mobileFilterBtn.on('click', function(event) {
 			event.preventDefault();
-			Mall.listing.insertMobileSidebar();
+			self.insertMobileSidebar();
 			jQuery('#sb-site').toggleClass('open');
 			jQuery('.fb-slidebar').toggleClass('open');
 			//var screenWidth = jQuery(window).width();
 			var screenHeight = jQuery(window).height();
 			jQuery('body').addClass('noscroll').append('<div class="noscroll" style="width:100%; height:' + screenHeight + 'px"></div>');
 		});
-
-
-
 	},
 
 	getMobileFilterBtn: function() {
@@ -1461,6 +1497,16 @@ Mall.listing = {
 		return jQuery('#sort-by',scope);
 	},
 
+	getDirInput: function(scope) {
+		var scope = scope || this.getToolbar();
+		return jQuery('#sort-dir',scope);
+	},
+
+	getSortInput: function(scope) {
+		var scope = scope || this.getToolbar();
+		return jQuery('#sort-val',scope);
+	},
+
 	/**
 	 * Return current mobile filters state. Is mobile or not.
 	 *
@@ -1497,22 +1543,24 @@ Mall.listing = {
 	 * @param {type} scope
 	 * @returns {undefined}
 	 */
-		_shit: '',
-
 	initSortEvents: function(scope){
 		var sortingSelect = this.getSortSelect(scope),
 			self = this;
 		sortingSelect.selectbox();
-
-		sortingSelect.change(function() {
-			var e = document.getElementById("sort-by");
-			var strUser = e.options[e.selectedIndex];
-			console.log(strUser);
-			sortingSelect.find(":selected").each(function() {
-				console.log('selected shit');
+		if(this.getPushStateSupport()) {
+			sortingSelect.change(function () {
+				var selected = jQuery(this).find(":selected");
+				self.setSort(selected.data('sort'));
+				self.setDir(selected.data('dir'));
+				self.reloadListing();
 			});
-			//self.reloadListing();
-		});
+		} else {
+			sortingSelect.change(function () {
+				var url = jQuery(this).find(":selected").data("url");
+				self.showAjaxLoading();
+				window.location = url;
+			});
+		}
 	},
 
 	attachMiscActions: function(scope){
@@ -1550,11 +1598,18 @@ Mall.listing = {
 					clearWrapper.addClass("hidden");
 				}
 			});
-			clearButton.on('click', function(event) {
-				event.preventDefault();
-				self.removeSingleFilterType(this);
-				clearWrapper.addClass('hidden');
-			});
+			if(self.getPushStateSupport()) {
+				clearButton.on('click', function (event) {
+					event.preventDefault();
+					self.removeSingleFilterType(this);
+					clearWrapper.addClass('hidden');
+				});
+			} else {
+				clearButton.on('click',function () {
+					self.showAjaxLoading();
+					window.location = jQuery(this).prop('href');
+				});
+			}
 
 		});
 
@@ -1664,6 +1719,13 @@ Mall.listing = {
 	attachFilterPriceEvents: function(scope) {
 		var self = this;
 		jQuery("#filter_price", scope).find(":checkbox").on("change", function(e) {
+			// Remove all other selections
+			jQuery(this).
+					parents(".section").
+					find(":checkbox:checked").
+					not(this).
+					prop("checked", false);
+			// Trigger listing
 			self.nodeChanged(jQuery(this));
 		});
 
@@ -1727,10 +1789,12 @@ Mall.listing = {
 	},
 
 	_searchLongList: function(scope){
-		var term = jQuery(".longListSearch", scope).val().trim(),
+		var term = jQuery(".longListSearch", scope).val().trim().toLowerCase(),
 			items = jQuery(".longListItems li", scope),
+			checkboxes = jQuery(":checkbox", items),
 			noResult = jQuery(".no-result", scope),
 			list = jQuery(".scrollable", scope),
+			listUl = jQuery(".longListItems", scope),
 			matches = 0;
 
 		if(!items.length){
@@ -1746,14 +1810,22 @@ Mall.listing = {
 			// Term entered
 			items.each(function(){
 				var el = jQuery(this),
-					text = el.find("label > span:eq(0)").text();
-				if(text.toLowerCase().search(term.toLowerCase())>-1){
+					text = el.find("label > span:eq(0)").text().trim().toLowerCase(),
+					serchPosition = text.search(term);
+					
+				if(serchPosition>-1){
 					el.removeClass("hidden");
 					matches++;
+					if(text==term){ // Same terms
+						el.addClass("perfectMatch");
+					}else if(serchPosition==0){ // result start with the term
+						el.addClass("almostPerfect");
+					}
 				}else{
 					el.addClass("hidden");
 				}
 			});
+			
 			if(!matches){
 				noResult.removeClass("hidden");
 				list.addClass("hidden");
@@ -1762,7 +1834,55 @@ Mall.listing = {
 				list.removeClass("hidden");
 			}
 		}
+		
+		if(list.find("li").not(".hidden").length){
+			
+			/**
+			 * @todo improve performance
+			 */
+			
+			// Make sort
+			this._sortLongListContent(checkboxes);
+			checkboxes.each(function(){
+				var el = jQuery(this).parents("li");
+				if(!el.is(".hidden")){
+					listUl.append(el);
+				}
+			});
+			
+			// Almost perfect match - move as first
+			var almostPerfect = checkboxes.parents("li.almostPerfect").
+					removeClass("almostPerfect").
+					find(":checkbox");
+			if(almostPerfect.length){
+				this._sortLongListContent(almostPerfect, true);
+				almostPerfect.each(function(){
+					jQuery(this).parents('li').prependTo(listUl);
+				});
+			}
+			
+			// Perfect match - move as first
+			var perfectMatch = checkboxes.parents("li.perfectMatch").
+					removeClass("perfectMatch").
+					find(":checkbox");
+			if(perfectMatch.length){
+				this._sortLongListContent(perfectMatch, true);
+				perfectMatch.each(function(){
+					jQuery(this).parents('li').prependTo(listUl);
+				});
+			}
+			
+			// Move scroll top
+			list.mCustomScrollbar("scrollTo", "top");
+		}
 
+	},
+
+	_sortLongListContent: function(items, desc){
+		desc = desc ? -1 : 1; 
+		items.sort(function(a,b){
+			return (a.sort-b.sort)*desc;
+		});
 	},
 
 	_rebuildLongListContent: function(scope){
@@ -1773,9 +1893,7 @@ Mall.listing = {
 			scrollable = jQuery(".scrollable", scope),
 			items = jQuery(":checkbox", scope);
 
-		items.sort(function(a,b){
-			return a.sort-b.sort;
-		});
+		this._sortLongListContent(items);
 		
 		items.each(function(){
 			var el = jQuery(this),
@@ -1828,16 +1946,22 @@ Mall.listing = {
 	attachFilterPriceSliderEvents: function(scope) {
 		var sliderRange = jQuery( "#slider-range", scope),
 			minPrice,
-			maxPrice;
+			maxPrice,
+			self = this;
+			
 		if (sliderRange.length >= 1) {
 			sliderRange.slider({
 				range: true,
-				min: Mall.listing.getCurrentPriceRange()[0],
-				max: Mall.listing.getCurrentPriceRange()[1],
+				/*min: Mall.listing.getCurrentPriceRange()[0],
+				max: Mall.listing.setCurrentPriceRangegetCurrentPriceRange()[1],*/
+				min: parseInt(sliderRange.data("min"),10),
+				max: parseInt(sliderRange.data("max"),10),
 				values: Mall.listing.getCurrentPriceRange(),
 				slide: function(event, ui) {
 					jQuery("#zakres_min").val(ui.values[0]);
 					jQuery("#zakres_max").val(ui.values[1]);
+					self._transferValuesToCheckbox(ui.values[0], ui.values[1]);
+					self._triggerRefresh(scope, 1, true);
 				}
 			});
 
@@ -1846,7 +1970,7 @@ Mall.listing = {
 			jQuery('#slider-range',scope).on('click', 'a', function(event) {
 				var checkSlider = jQuery('#checkSlider',scope).find('input');
 				if (!checkSlider.is(':checked')) {
-					checkSlider.prop('checked', true);
+					checkSlider.prop('checked', true).change();
 					jQuery('#filter_price').find('.action').removeClass('hidden');
 				}
 			});
@@ -1857,27 +1981,13 @@ Mall.listing = {
 			// validate prices
 			minPrice = Mall.listing.getMinPriceFromSlider();
 			maxPrice = Mall.listing.getMaxPriceFromSlider();
-			if(isNaN(parseInt(minPrice, 10))
-				|| isNaN(parseInt(maxPrice, 10))
-				|| parseInt(minPrice, 10) < 0
-				|| parseInt(maxPrice, 10) < 0
-				|| parseInt(minPrice, 10) >= parseInt(maxPrice, 10)) {
-
-			} else {
-				// pop price from fq
-				Mall.listing.removeSingleFilterType(this);
-				var fq = Mall.listing.getFiltersArray();
-				if(jQuery.isEmptyObject(fq) || jQuery.isEmptyObject(fq.fq)) {
-					fq = {fq: {}};
-				}
-
-				fq.fq.price = Mall.listing.getMinPriceFromSlider()
-				+ " TO "
-				+ Mall.listing.getMaxPriceFromSlider();
-				Mall.listing.setFiltersArray(fq);
-				// @todo make via ajax
-				//Mall.listing.reloadListing();
+			if(!self._validateRange(minPrice, maxPrice)) {
+				return false;
 			}
+			// Validate here
+			self._transferValuesToCheckbox(minPrice, maxPrice, scope);
+			self._triggerRefresh(scope, 1, true);
+			
 		});
 
 		jQuery("#filter_price", scope).find("input.filter-price-range-submit").on("mouseover"
@@ -1888,11 +1998,7 @@ Mall.listing = {
 				jQuery(this).tooltip({
 					title: Mall.translate.__("price-filter-not-valid", "Prices in filter are not valid.")
 				});
-				if(isNaN(parseInt(minPrice, 10))
-					|| isNaN(parseInt(maxPrice, 10))
-					|| parseInt(minPrice, 10) < 0
-					|| parseInt(maxPrice, 10) < 0
-					|| parseInt(minPrice, 10) >= parseInt(maxPrice, 10)) {
+				if(!self._validateRange(minPrice, maxPrice)) {
 					jQuery(this).tooltip("enable");
 					jQuery(this).tooltip("show");
 				} else {
@@ -1916,8 +2022,65 @@ Mall.listing = {
 			}
 		});
 
+		this.getSliderCheckbox(scope).change(function(){
+			self._transferValuesToCheckbox(
+				Mall.listing.getMinPriceFromSlider(),
+				Mall.listing.getMaxPriceFromSlider(),
+				scope
+			);
+		});
 
 		return this;
+	},
+	_validateRange: function(minPrice,maxPrice){
+		
+		var reg = /^\d+$/;
+		
+		if(!reg.test(minPrice) || !reg.test(maxPrice)){
+			return false;
+		}
+		
+		var min = parseInt(minPrice, 10);
+		var max = parseInt(maxPrice, 10);
+		
+		if(isNaN(min) || isNaN(max)){
+			return false;
+		}
+		return min>0 && max>0 && min<max;
+	},
+	
+	_triggerRefresh: function(scope, force, triggerChange){
+		var checkbox = jQuery('#checkSlider',scope),
+			action = jQuery('#filter_price', scope).find('.action'),
+			triggerChange = triggerChange || true,
+			self = this;
+		
+		if(force!==undefined){
+			checkbox.prop('checked', force);
+		}
+		
+		if(!checkbox.is(':checked')){
+			action.removeClass('hidden');
+		}else{
+			action.addClass('hidden');
+		}
+		
+		if(triggerChange){
+			self.reloadListing();
+		}
+		
+	},
+	_transferValuesToCheckbox: function(min,max,scope){
+		this.getSliderCheckbox(scope).attr('value', parseInt(min) + " TO " + parseInt(max));
+	},
+	getSliderCheckbox: function(scope){
+		return jQuery('#filter_slider',scope);
+	},
+	getIsSliderActive: function(){
+		return this.getSliderCheckbox().prop("checked")
+	},
+	setIsSliderActive: function(val){
+		return this.getSliderCheckbox().prop("checked", val);
 	},
 	markPrice: function (name) {
 		alert(jQuery(name).html());
@@ -1945,6 +2108,11 @@ Mall.listing = {
 			rows: this.getScrollLoadOffset(),
 			start: 0
 		};
+		
+		if(this.getIsSliderActive()){
+			console.log("Slide active");
+			q.slider = 1;
+		}
 
 		return q;
 	},
@@ -1960,6 +2128,11 @@ Mall.listing = {
 			rows: this.getScrollLoadOffset(),
 			start: 0
 		};
+		if(this.getIsSliderActive()){
+			console.log("Slide active");
+			defaults.slider = 1;
+		}
+		
 		var out = [];
 
 		jQuery.extend(defaults, forceObject);
@@ -2218,7 +2391,7 @@ Mall.listing = {
 	 * @returns {string}
 	 */
 	getSort: function() {
-		return this.getSortSelect().val();
+		return this.getSortInput().val();
 	},
 
 	/**
@@ -2227,7 +2400,49 @@ Mall.listing = {
 	 * @returns {string}
 	 */
 	getDir: function() {
-		return this.getSortSelect().find(":selected").data("dir");
+		return this.getDirInput().val();
+	},
+
+	/**
+	 * Returns current sort type.
+	 *
+	 * @returns {Mall.listing}
+	 */
+	setSort: function(sort) {
+		this.getSortInput().val(sort);
+		this.setSortSelect();
+		return this;
+	},
+
+	/**
+	 * Returns current sort direction.
+	 *
+	 * @returns {Mall.listing}
+	 */
+	setDir: function(dir) {
+		this.getDirInput().val(dir);
+		this.setSortSelect();
+		return this;
+	},
+
+	setSortSelect: function() {
+		var select = this.getSortSelect(),
+			sort = this.getSort(),
+			dir = this.getDir();
+		if(select.find("option[value='"+sort+"||"+dir+"']")) {
+			select.val(this.getSort() + '||' + this.getDir());
+			select.selectbox('detach');
+			select.selectbox('attach');
+		}
+		return this;
+	},
+	/**
+	 * @returns Boolean
+	 * Determines if browser supports history.pushState
+	 */
+	getPushStateSupport: function() {
+		//return false;
+		return window.history.pushState ? true : false;
 	},
 
 	/**

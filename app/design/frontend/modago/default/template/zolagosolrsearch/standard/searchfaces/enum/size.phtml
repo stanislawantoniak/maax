@@ -27,7 +27,12 @@
 					   value="<?php echo $this->getItemValue($item)?>"
 					   id="<?php echo $this->getItemId($item)?>"
 						<?php if($this->isItemActive($item)): ?>checked="checked" <?php endif; ?> />
-				<span><?php echo $item ?></span>
+				<span>
+					<a href="<?php echo $this->getItemUrl($item); ?>"
+					   class="listing-link">
+						<?php echo $item; ?>
+					</a>
+				</span>
             </label>
         <?php endif; ?>
     <?php endforeach; ?>
@@ -41,7 +46,12 @@
 					   value="<?php echo $this->getItemValue($item)?>"
 					   id="<?php echo $this->getItemId($item)?>"
 					   <?php if($this->isItemActive($item)): ?>checked="checked" <?php endif; ?> />
-					<span><?php echo $item ?></span>
+					<span>
+						<a href="<?php echo $this->getItemUrl($item); ?>"
+						   class="listing-link">
+							<?php echo $item; ?>
+						</a>
+					</span>
             </label>
         <?php endforeach; ?>
             <div class="action clearfix">
@@ -49,7 +59,8 @@
             </div>
     <?php endif; ?>
             <div class="action clear <?php if(!$isOptionSelected) : ?>hidden<?php endif; ?> clearfix">
-                <a href="#" class="btn clear" data-filter-type="<?php echo implode("_", $key_withoutFacet); ?>" ><?php echo $this->__("Clear"); ?></a>
+	            <?php $pureKey = implode("_", $key_withoutFacet); ?>
+                <a href="<?php echo $this->getRemoveAllUrl($pureKey) ?>" class="btn clear" data-filter-type="<?php echo $pureKey; ?>" ><?php echo $this->__("Clear"); ?></a>
             </div>
 
         </div>
