@@ -212,7 +212,7 @@ color: #2F2F2F;
 .faq-list h3 {
     display: block;
     /*height: 18px;*/
-    margin: 0 -18px 10px;
+    margin: 0 -20px 10px;
     /*overflow: hidden;*/
     padding: 0 0 0 30px;
     position: relative;
@@ -221,6 +221,7 @@ color: #2F2F2F;
     line-height: 18px;
     text-align: left;
     text-transform: uppercase;
+    width: 100%;
     /*white-space: nowrap;*/
 }
 .faq-content h3 span {
