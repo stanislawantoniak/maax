@@ -31,7 +31,7 @@ if($toValue==0){
 
 $name = '';
 ?>
-<?php if ($max > 0):?>
+<?php if ($max > 0 && (int)$max > (int)$min):?>
     <div class="section clearfix">
         <h3 class="<?php echo $sectionClass; ?>"><?php echo $this->__("Price"); ?> <i class="fa <?php echo $iconClass; ?>"></i></h3>
         <div class="content"  id="filter_price">
