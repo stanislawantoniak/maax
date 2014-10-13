@@ -2407,7 +2407,7 @@ Mall.listing = {
 	 * Determines if browser supports history.pushState
 	 */
 	getPushStateSupport: function() {
-		return false;
+		//return false;
 		return window.history.pushState ? true : false;
 	},
 
