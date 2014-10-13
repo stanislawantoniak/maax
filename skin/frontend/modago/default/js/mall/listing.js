@@ -2017,6 +2017,13 @@ Mall.listing = {
 			if(!self._validateRange(minPrice, maxPrice)) {
 				return false;
 			}
+			
+			var checkSlider = jQuery('#checkSlider',scope).find('input');
+			if (!checkSlider.is(':checked')) {
+				checkSlider.prop('checked', true).change();
+				jQuery('#filter_price').find('.action').removeClass('hidden');
+			}
+			
 			self._transferValuesToCheckbox(minPrice, maxPrice, scope);
 			self._triggerRefresh(scope, 1, true);
 			
