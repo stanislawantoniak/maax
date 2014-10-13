@@ -338,10 +338,15 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         if (!is_array($value)) {
             $value = array($value);
         }
-
+		
+		
+		
 
         foreach ($key as $item)
         {
+			if($item=="price" && $this->getRequest()->getParam('slider')){
+				$finalParams['slider']=null;
+			}
             if (isset($finalParams['fq'][$item]) && !is_array($finalParams['fq'][$item]) && !empty($finalParams['fq'][$item])) {
                 unset($finalParams['fq'][$item]);
                 if ($item == 'category' && isset($finalParams['fq'][$item.'_id'])) {
@@ -369,6 +374,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
                 }
             }
         }
+		
 
         $urlParams = array();
         $urlParams['_current']  = true;

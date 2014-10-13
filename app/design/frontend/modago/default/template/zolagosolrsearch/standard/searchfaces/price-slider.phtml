@@ -44,11 +44,11 @@ $name = '';
 					data-url="<?php echo $url;?>"
 					value="<?php echo $range['value'];?>" 
 					name="<?php echo $key; ?>" 
-					id="filter_price_<?php echo $range['start'];?>_<?php echo $range['end'];?>" 
+					id="<?php echo $this->getItemId($range['value']);?>" 
 					class="css-checkbox"
 					<?php if ($this->isItemActive($range['value'])):?> checked="checked"<?php endif;?>
 				/>
-                <label for="filter_price_<?php echo $range['start'];?>_<?php echo $range['end'];?>" class="css-label">
+                <label for="<?php echo $this->getItemId($range['value']);?>" class="css-label">
 	                <span>
 		                <a href="<?php echo $url; ?>"
 		                   class="listing-link">
@@ -62,13 +62,12 @@ $name = '';
             </div>
 			<?php endforeach; ?>
             <div id="od_do" class="clearfix">
-				<input type="hidden" name="slider" value="<?php echo ($isOptionSelected) ? "1" : "0";?>"/>
                 <div class="clearfix">
                     <div id="checkSlider" class="form-group form-checkbox">
                         <input 
 							type="checkbox" 
 							name="<?php echo $key; ?>" 
-							value=""
+							value="<?php echo ($isOptionSelected) ? $fromValue . " TO " . $toValue  : "";?>"
 							id="filter_slider" 
 							class="css-checkbox" 
 							<?php if($isOptionSelected) : ?>checked="checked"<?php endif; ?>
@@ -77,7 +76,7 @@ $name = '';
                     </div>
                     <div class="form-horizontal">
                         <div class="form-group">
-                            <input type="text" id="zakres_min" value="<?php echo $fromValue; ?>" /><label for="zakres_od">-</label>
+                            <input type="text" id="zakres_min" value="<?php echo $fromValue; ?>" /><label for="zakres_od"> - </label>
                         </div>
                     </div>
                     <div class=" form-horizontal">
@@ -91,7 +90,7 @@ $name = '';
                         </div>
                     </div>
                 </div>
-                <div id="slider-range"></div>
+                <div id="slider-range" data-min="<?php echo $min;?>" data-max="<?php echo $max;?>"></div>
 
             </div><br />
 

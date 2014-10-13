@@ -186,7 +186,7 @@ class Zolago_Solrsearch_Block_Faces_Price extends Zolago_Solrsearch_Block_Faces_
 				$value = current($value);
 			}
 			if(is_string($value)){
-				return explode("TO", $value);
+				return array_map("trim", explode("TO", $value));
 			}
 		}
 		return array();

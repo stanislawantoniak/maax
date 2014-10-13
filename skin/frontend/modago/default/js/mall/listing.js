@@ -1910,13 +1910,16 @@ Mall.listing = {
 		if (sliderRange.length >= 1) {
 			sliderRange.slider({
 				range: true,
-				min: Mall.listing.getCurrentPriceRange()[0],
-				max: Mall.listing.getCurrentPriceRange()[1],
+				/*min: Mall.listing.getCurrentPriceRange()[0],
+				max: Mall.listing.setCurrentPriceRangegetCurrentPriceRange()[1],*/
+				min: parseInt(sliderRange.data("min"),10),
+				max: parseInt(sliderRange.data("max"),10),
 				values: Mall.listing.getCurrentPriceRange(),
 				slide: function(event, ui) {
 					jQuery("#zakres_min").val(ui.values[0]);
 					jQuery("#zakres_max").val(ui.values[1]);
 					self._transferValuesToCheckbox(ui.values[0], ui.values[1]);
+					self._triggerRefresh(scope, 1, true);
 				}
 			});
 
@@ -1936,10 +1939,12 @@ Mall.listing = {
 			// validate prices
 			minPrice = Mall.listing.getMinPriceFromSlider();
 			maxPrice = Mall.listing.getMaxPriceFromSlider();
-			
+			if(!self._validateRange(minPrice, maxPrice)) {
+				return false;
+			}
 			// Validate here
-			self._transferValuesToCheckbox(scope, minPrice, maxPrice);
-			self._triggerRefresh(scope, 1);
+			self._transferValuesToCheckbox(minPrice, maxPrice, scope);
+			self._triggerRefresh(scope, 1, true);
 			
 		});
 
@@ -1951,11 +1956,7 @@ Mall.listing = {
 				jQuery(this).tooltip({
 					title: Mall.translate.__("price-filter-not-valid", "Prices in filter are not valid.")
 				});
-				if(isNaN(parseInt(minPrice, 10))
-					|| isNaN(parseInt(maxPrice, 10))
-					|| parseInt(minPrice, 10) < 0
-					|| parseInt(maxPrice, 10) < 0
-					|| parseInt(minPrice, 10) >= parseInt(maxPrice, 10)) {
+				if(!self._validateRange(minPrice, maxPrice)) {
 					jQuery(this).tooltip("enable");
 					jQuery(this).tooltip("show");
 				} else {
@@ -1980,15 +1981,37 @@ Mall.listing = {
 		});
 
 		this.getSliderCheckbox(scope).change(function(){
-			self.setIsSliderActive(jQuery(this).is(":checked") ? "1" : "0");
+			self._transferValuesToCheckbox(
+				Mall.listing.getMinPriceFromSlider(),
+				Mall.listing.getMaxPriceFromSlider(),
+				scope
+			);
 		});
 
 		return this;
 	},
+	_validateRange: function(minPrice,maxPrice){
+		
+		var reg = /^\d+$/;
+		
+		if(!reg.test(minPrice) || !reg.test(maxPrice)){
+			return false;
+		}
+		
+		var min = parseInt(minPrice, 10);
+		var max = parseInt(maxPrice, 10);
+		
+		if(isNaN(min) || isNaN(max)){
+			return false;
+		}
+		return min>0 && max>0 && min<max;
+	},
+	
 	_triggerRefresh: function(scope, force, triggerChange){
 		var checkbox = jQuery('#checkSlider',scope),
 			action = jQuery('#filter_price', scope).find('.action'),
-			triggerChange = triggerChange || true;
+			triggerChange = triggerChange || true,
+			self = this;
 		
 		if(force!==undefined){
 			checkbox.prop('checked', force);
@@ -2001,7 +2024,7 @@ Mall.listing = {
 		}
 		
 		if(triggerChange){
-			checkbox.change();
+			self.reloadListing();
 		}
 		
 	},
@@ -2011,14 +2034,11 @@ Mall.listing = {
 	getSliderCheckbox: function(scope){
 		return jQuery('#filter_slider',scope);
 	},
-	getSliderActive: function(scope){
-		return jQuery("[name='slider']", scope);
-	},
 	getIsSliderActive: function(){
-		return this.getSliderActive().val()=="1";
+		return this.getSliderCheckbox().prop("checked")
 	},
 	setIsSliderActive: function(val){
-		return this.getSliderActive().val(val);
+		return this.getSliderCheckbox().prop("checked", val);
 	},
 	markPrice: function (name) {
 		alert(jQuery(name).html());
@@ -2048,6 +2068,7 @@ Mall.listing = {
 		};
 		
 		if(this.getIsSliderActive()){
+			console.log("Slide active");
 			q.slider = 1;
 		}
 
@@ -2065,8 +2086,8 @@ Mall.listing = {
 			rows: this.getScrollLoadOffset(),
 			start: 0
 		};
-		
 		if(this.getIsSliderActive()){
+			console.log("Slide active");
 			defaults.slider = 1;
 		}
 		
