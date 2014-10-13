@@ -18,7 +18,7 @@
                 <div class="my-account">
                     <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('help-page-mobile-menu')->toHtml() ?>
 
-                    <div class="bg-w main">
+                    <div class="bg-w main faq-content">
                         <?php if ($id !== "" && $keyword !== "" && $category !== ""): ?>
                             <h3><?php echo $this->__('Search Result For - "%s" from category "%s"', $keyword, $category->getName()); ?></h3>
                         <?php elseif ($id == "" && $keyword !== ""): ?>
@@ -44,7 +44,7 @@
                                         <div class="panel panel-default">
                                             <div class="panel-heading faq-question">
                                                 <h4 class="panel-title">
-                                                    <?php echo $this->htmlEscape($item->getQuestion()); ?>
+                                                    <span><?php echo $this->htmlEscape($item->getQuestion()); ?></span>
                                                     <i class="fa fa-chevron-down"></i>
                                                 </h4>
 
@@ -60,6 +60,10 @@
                                 <?php endforeach; ?>
                             <?php else: ?>
                                 <p><?php echo $this->__('There is no FAQ item found for search string!') ?></p>
+                                <p>
+                                    <?php echo $this->__('Please read the following help topics, or use') ?>
+                                    <a href="#"><?php echo $this->__(' the Contact Us page') ?></a>
+                                </p>
                             <?php endif; ?>
 
                         </div>

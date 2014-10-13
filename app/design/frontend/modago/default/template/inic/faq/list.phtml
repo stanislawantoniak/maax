@@ -8,7 +8,7 @@
                 <div class="my-account">
                     <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('help-page-mobile-menu')->toHtml() ?>
 
-                    <div class="bg-w main">
+                    <div class="bg-w main faq-content">
                             <h3>
                                 <span><?php echo $this->__('Answers to frequently asked questions'); ?></span>
                             </h3>
@@ -24,12 +24,7 @@
                                             <?php if(count($catQues) > 0): ?>
                                                 <div>
                                                     <dt>
-                                                        <h4>
-<!--                                                            <a class="catname"-->
-<!--                                                               href="--><?php //echo $this->getCategoryUrl($category) ?><!--">-->
-                                                                <?php echo $this->htmlEscape($category->getName()); ?>
-<!--                                                            </a>-->
-                                                        </h4>
+                                                        <h3><?php echo $this->htmlEscape($category->getName()); ?></h3>
                                                     </dt>
                                                     <dd>
                                                         <?php //If List View ?>
@@ -39,7 +34,7 @@
                                                                     <div class="panel panel-default">
                                                                         <div class="panel-heading faq-question">
                                                                             <h4 class="panel-title">
-                                                                                <?php echo $this->htmlEscape($item->getQuestion()); ?>
+                                                                                <span><?php echo $this->htmlEscape($item->getQuestion()); ?></span>
                                                                                 <i class="fa fa-chevron-down"></i>
                                                                             </h4>
 

@@ -1,5 +1,4 @@
-#filter_size
-, .filter-size {
+.filter-size {
      
       label {
         cursor:pointer;
@@ -31,12 +30,13 @@
          input.checked + span  {
             background:#000;
             border-color:#000;
-            color:#fff;
-
+			a:link, a:visited {
+				color:#fff;
+			}
         }
       }
     }
-#filter_manufacturer {
+.filter-longlist {
 
       input[type="text"] {
         border:1px solid #d6d6d6;
@@ -47,7 +47,7 @@
       input[type="image"] {
         outline:none;
       }
-      #filter_manufacturer_search {
+      #longListSearch {
         &+label {
           i {
             color:#000;
@@ -55,6 +55,7 @@
         }
       }    
     }
+	
 #filter_price {
       
       .form-horizontal {
@@ -110,7 +111,7 @@
       }
     }
 
-.manufacturerList {
+.longListItems {
   list-style: none;
   li {
     

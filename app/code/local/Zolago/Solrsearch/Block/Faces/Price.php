@@ -1,301 +1,264 @@
 <?php
 
-class Zolago_Solrsearch_Block_Faces_Price extends Zolago_Solrsearch_Block_Faces_Abstract
-{
-    public function __construct()
-    {
-        $this->setTemplate('zolagosolrsearch/standard/searchfaces/price.phtml');
-    }
+class Zolago_Solrsearch_Block_Faces_Price extends Zolago_Solrsearch_Block_Faces_Abstract {
+
+	protected $_max;
+	protected $_min;
+
+	public function __construct() {
+		$this->setTemplate('zolagosolrsearch/standard/searchfaces/price.phtml');
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getMinPriceRange() {
+		return $this->_min;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getMaxPriceRange() {
+		return $this->_max;
+	}
+
+	public function getSolrData() {
+		return $this->getParentBlock()->getSolrData();
+	}
+	
+	/**
+	 * @return array
+	 */
+	public function calculatePriceRanges() {
+		if(!$this->hasData("calculated_ranges")){
+			$this->setData("calculated_ranges", $this->_calculatePriceRanges());
+		}
+		return $this->getData("calculated_ranges");
+	}
+
+	/**
+	 * Calculate price ranges
+	 * @todo automatic price ranges and max interval
+	 * @param array $priceRanges
+	 * @param decimal $min
+	 * @param decimal $max
+	 * @return array:
+	 */
+	protected function _calculatePriceRanges() {
+		$items = $this->getItems();
+		$keys = array_keys($items);
+		/**
+		 * @todo bug with item from query stirng like 100 TO 200 in items array
+		 */
+		$keys = array_filter($keys, "is_numeric");
+		
+		sort($keys);
+		reset($keys);
+		$min = (float) current($keys);
+		$max = (float) array_pop($keys);
+		$this->setMin(floor($min));
+		$this->setMax($max);
+		
+		$category = Mage::registry('current_category');
+
+		$range = null;
+		if ($category) {
+			$data = $category->getData();
+			if (!empty($data['filter_price_range'])) {
+				$range = $data['filter_price_range'];
+			} else {
+				$calculation = Mage::app()->getStore()->getConfig(Mage_Catalog_Model_Layer_Filter_Price::XML_PATH_RANGE_CALCULATION);
+				switch ($calculation) {
+					case Mage_Catalog_Model_Layer_Filter_Price::RANGE_CALCULATION_AUTO:
+						break;
+					case Mage_Catalog_Model_Layer_Filter_Price::RANGE_CALCULATION_IMPROVED:
+						break;
+					case Mage_Catalog_Model_Layer_Filter_Price::RANGE_CALCULATION_MANUAL:
+						$range = Mage::app()->getStore()->getConfig(Mage_Catalog_Model_Layer_Filter_Price::XML_PATH_RANGE_STEP);
+						break;
+				}
+			}
+		}
+		if ($range) {
+			$returnPriceRanges = array();
+			$start = floor($min / $range) * $range;
+			$elem = array();
+			while ($start < $max) {
+				$elem['start'] = floor($start);
+				$elem['end'] = floor($start + $range);
+				if ($elem['end'] > $max) {
+					$elem['end'] = ceil($max);
+				}
+				$start += $range;
+				$returnPriceRanges[] = $elem;
+			}
+			return (count($returnPriceRanges) > 1) ? $returnPriceRanges : array();
+		}
+		// there is no range        
+		$solrData = $this->getSolrData();
+
+		$priceFieldName = Mage::helper('solrsearch')->getPriceFieldName();
+
+		$priceRanges = array();
 
 
-    public function _prepareLayout()
-    {
-        //Load js for price slider
-        $usePriceSilder = (int)Mage::helper('solrsearch')->getSetting('use_price_slider');
-        if ($usePriceSilder > 0) {
-            $this->setTemplate('solrsearch/standard/searchfaces/price-slider.phtml');
-            $head = $this->getLayout()->getBlock('head');
-            if ($head) {
-               // $head->addJs('solrsearch/slider.js');
-            }
-        }
+		if (isset($solrData['facet_counts']['facet_ranges'][$priceFieldName]['counts']) && is_array($solrData['facet_counts']['facet_ranges'][$priceFieldName]['counts'])) {
+			$priceRanges = $solrData['facet_counts']['facet_ranges'][$priceFieldName]['counts'];
+		}
 
-        return parent::_prepareLayout();
-    }
+		$tempPriceRanges = array();
+		$tempPriceRanges[] = $min;
+		if (is_array($priceRanges)) {
+			$index = 0;
+			foreach ($priceRanges as $key => $value) {
+				if ($index > 0) {
+					$tempPriceRanges[] = $key;
+				}
+				$index++;
+			}
+		}
+		//$tempPriceRanges[] = $max;
 
-    public function getSolrData() {
-        return $this->getParentBlock()->getSolrData();
-    }
+		$returnPriceRanges = array();
+		$index = 0;
+		foreach ($tempPriceRanges as $item) {
+			$start = $item;
+			$end = $item;
 
-    /**
-     * Calculate price ranges
-     * @todo automatic price ranges and max interval
-     * @param array $priceRanges
-     * @param decimal $min
-     * @param decimal $max
-     * @return array:
-     */
-    protected function calculatePriceRanges()
-    {
-        $items = $this->getItems();
-        $keys = array_keys($items);
-        sort($keys);
-        reset($keys);
-        $min = (float)current($keys);
-        $max = (float)array_pop($keys);
+			if (isset($tempPriceRanges[($index + 1)])) {
+				$end = ($tempPriceRanges[($index + 1)] - 1);
+				if (($index + 1) == (count($priceRanges) - 1)) {
+					$end = $max;
+				}
+			}
+			if ($index < (count($tempPriceRanges) - 1)) {
+				$returnPriceRanges[] = array('start' => $start, 'end' => $end);
+			}
 
-        $category = Mage::registry('current_category');
+			$index++;
+		}
+		return (count($returnPriceRanges) > 1) ? $returnPriceRanges : array();
 
-        $range = null;
-        if ($category) {
-            $data = $category->getData();
-            if (!empty($data['filter_price_range'])) {
-                $range = $data['filter_price_range'];
-            } else {
-                $calculation = Mage::app()->getStore()->getConfig(Mage_Catalog_Model_Layer_Filter_Price::XML_PATH_RANGE_CALCULATION);
-                switch ($calculation) {
-                    case Mage_Catalog_Model_Layer_Filter_Price::RANGE_CALCULATION_AUTO:
-                        break;
-                    case Mage_Catalog_Model_Layer_Filter_Price::RANGE_CALCULATION_IMPROVED:
-                        break;
-                    case Mage_Catalog_Model_Layer_Filter_Price::RANGE_CALCULATION_MANUAL:
-                        $range = Mage::app()->getStore()->getConfig(Mage_Catalog_Model_Layer_Filter_Price::XML_PATH_RANGE_STEP);
-                        break;
-                }
-                
-            }            
-        }
-        if ($range) {
-            $returnPriceRanges = array();
-            $start = floor($min/$range)*$range;
-            $elem = array();
-            while ($start < $max) {
-                $elem['start'] = floor($start);
-                $elem['end'] = floor($start+$range);
-                if ($elem['end'] > $max) {
-                    $elem['end'] = ceil($max);
-                }
-                $start += $range;
-                $returnPriceRanges[] = $elem;
-            }
-            return (count($returnPriceRanges)>1)? $returnPriceRanges:array();
-        }
-        // there is no range        
-        $solrData = $this->getSolrData();
 
-        $priceFieldName = Mage::helper('solrsearch')->getPriceFieldName();
+	}
 
-        $priceRanges = array();
-        
-        
-        if ( isset($solrData['facet_counts']['facet_ranges'][$priceFieldName]['counts']) && is_array($solrData['facet_counts']['facet_ranges'][$priceFieldName]['counts'])) {
-            $priceRanges = $solrData['facet_counts']['facet_ranges'][$priceFieldName]['counts'];
-        }
+	/**
+	 * setting minimal price
+	 * @param float $price
+	 * @return 
+	 */
+	public function setMin($price) {
+		if ($this->_min === null) {
+			$this->_min = $price;
+		}
+		if ($price < $this->_min) {
+			$this->_min = $price;
+		}
+	}
 
-        $tempPriceRanges = array();
-        $tempPriceRanges[] = $min;
-        if (is_array($priceRanges)) {
-            $index = 0;
-            foreach ($priceRanges as $key=>$value) {
-                if ($index > 0) {
-                    $tempPriceRanges[] = $key;
-                }
-                $index++;
-            }
-        }
-        //$tempPriceRanges[] = $max;
+	/**
+	 * setting maximal price
+	 * @param float $price
+	 * @return 
+	 */
+	public function setMax($price) {
+		if ($price > $this->_max) {
+			$this->_max = $price;
+		}
+	}
 
-        $returnPriceRanges = array();
-        $index = 0;
-        foreach ($tempPriceRanges as $item) {
-            $start = $item;
-            $end = $item;
+	public function getCurrentStartPrice() {
+		$range = $this->getCurrentPriceRange();
+		return isset($range[0]) ? $range[0] : 0;
+	}
+	
+	public function getCurrentEndPrice() {
+		$range = $this->getCurrentPriceRange();
+		return isset($range[1]) ? $range[1] : 0;
+	}
+	
+	public function getCurrentPriceRange() {
+		$filterQuery = $this->getFilterQuery();
+		if(isset($filterQuery[$this->getFacetKey()])){
+			$value = $filterQuery[$this->getFacetKey()];
+			if(is_array($value) && count($value)){
+				$value = current($value);
+			}
+			if(is_string($value)){
+				return array_map("trim", explode("TO", $value));
+			}
+		}
+		return array();
+	}
+	
+	protected function applyPriceRangeProductCount() {
+		$priceRanges = $this->calculatePriceRanges();
+		$appliedPriceRanges = array();
+		
+		
+		foreach ($priceRanges as $range) {
+			$start = floor(floatval($range['start']));
+			$end = ceil(floatval($range['end']));
+			$value = $start . ' TO ' . $end;
 
-            if (isset($tempPriceRanges[($index + 1)])) {
-                $end = ($tempPriceRanges[($index + 1)] - 1);
-                if (($index + 1) == (count($priceRanges) - 1)) {
-                    $end = $max;
-                }
-            }
-            if ($index < (count($tempPriceRanges) - 1)) {
-                $returnPriceRanges[] = array('start' => $start, 'end' => $end);
-            }
+			$rangeItemArray = array(
+				'start' => $start,
+				'end' => $end,
+				'count' => 0,
+				'formatted' => $this->getFilterContainer()->formatFacetPrice($value),
+				'value' => $value,
+			);
+			$items = $this->getItems();
+			foreach ($items as $price => $count) {
+				$price = floor($price);
+				if (floatval($price) >= floatval($start) && floatval($price) <= floatval($end)) {
+					$rangeItemArray['count'] = ($rangeItemArray['count'] + $count);
+				}
+			}
+			$appliedPriceRanges[] = $rangeItemArray;
+		}
 
-            $index++;
-        }
-        return (count($returnPriceRanges)>1)? $returnPriceRanges:array();
-        
+		return $appliedPriceRanges;
+	}
 
-        /*
-        $solrData = $this->getSolrData();
+	public function getPriceFormat($price) {
+		$formattedPrice = $price;
+		$currencySign = Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol();
+		$currencyPositionSetting = Mage::helper('solrsearch')->getSetting('currency_position');
 
-        $priceFieldName = Mage::helper('solrsearch')->getPriceFieldName();
+		if ($currencyPositionSetting < 1) {
+			//After
+			$formattedPrice = $price . '&nbsp;' . $currencySign;
+		} else {
+			$formattedPrice = $currencySign . '&nbsp;' . $price;
+		}
+		return $formattedPrice;
+	}
 
-        $priceRanges = array();
+	public function getFacetPriceRanges() {
+		return $this->applyPriceRangeProductCount();
+	}
 
-        // category
-        $category = Mage::registry('current_category');
-        $range = 0;
-        $min = 0.0;
-        if (isset($solrData['stats']['stats_fields'][$priceFieldName]['min'])) {
-            $min = $solrData['stats']['stats_fields'][$priceFieldName]['min'];
-        }
-
-        $max = 0.0;
-        if (isset($solrData['stats']['stats_fields'][$priceFieldName]['max'])) {
-            $max = $solrData['stats']['stats_fields'][$priceFieldName]['max'];
-        }
-        if ($category) {
-            $data = $category->getData();
-            if (!empty($data['filter_price_range'])) {
-                $range = $data['filter_price_range'];
-            } else {
-                $calculation = Mage::app()->getStore()->getConfig(Mage_Catalog_Model_Layer_Filter_Price::XML_PATH_RANGE_CALCULATION);
-                switch ($calculation) {
-                    case Mage_Catalog_Model_Layer_Filter_Price::RANGE_CALCULATION_AUTO:
-                        break;
-                    case Mage_Catalog_Model_Layer_Filter_Price::RANGE_CALCULATION_IMPROVED:
-                        break;
-                    case Mage_Catalog_Model_Layer_Filter_Price::RANGE_CALCULATION_MANUAL:
-                        $range = Mage::app()->getStore()->getConfig(Mage_Catalog_Model_Layer_Filter_Price::XML_PATH_RANGE_STEP);
-                        break;
-                }
-                
-            }            
-        }
-        if ($range) {
-            $returnPriceRanges = array();
-            $start = $min;
-            $elem = array();
-            while ($start < $max) {
-                $elem['start'] = floor($start);
-                $elem['end'] = floor($start+$range);
-                if ($elem['end'] > $max) {
-                    $elem['end'] = ceil($max);
-                }
-                $start += $range;
-                $returnPriceRanges[] = $elem;
-            }
-            return (count($returnPriceRanges)>1)? $returnPriceRanges:array();
-        }
-        if ( isset($solrData['facet_counts']['facet_ranges'][$priceFieldName]['counts']) && is_array($solrData['facet_counts']['facet_ranges'][$priceFieldName]['counts'])) {
-            $priceRanges = $solrData['facet_counts']['facet_ranges'][$priceFieldName]['counts'];
-        }
-
-        $tempPriceRanges = array();
-        $tempPriceRanges[] = $min;
-        if (is_array($priceRanges)) {
-            $index = 0;
-            foreach ($priceRanges as $key=>$value) {
-                if ($index > 0) {
-                    $tempPriceRanges[] = $key;
-                }
-                $index++;
-            }
-        }
-        //$tempPriceRanges[] = $max;
-
-        $returnPriceRanges = array();
-        $index = 0;
-        foreach ($tempPriceRanges as $item) {
-            $start = $item;
-            $end = $item;
-
-            if (isset($tempPriceRanges[($index + 1)])) {
-                $end = ($tempPriceRanges[($index + 1)] - 1);
-                if (($index + 1) == (count($priceRanges) - 1)) {
-                    $end = $max;
-                }
-            }
-            if ($index < (count($tempPriceRanges) - 1)) {
-                $returnPriceRanges[] = array('start' => $start, 'end' => $end);
-            }
-
-            $index++;
-        }
-        return (count($returnPriceRanges)>1)? $returnPriceRanges:array();
-        */
-    }
-
-    protected function applyPriceRangeProductCount() {
-        $priceFieldName = Mage::helper('solrsearch')->getPriceFieldName();
-        $priceRanges = $this->calculatePriceRanges();
-
-        $appliedPriceRanges = array();
-        $currencySign = Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol();
-
-        $currencyPositionSetting = $this->helper('solrsearch')->getSetting('currency_position');
-        $counter = 0;
-        $limit = count($priceRanges);
-        foreach ($priceRanges as $range) {
-            $start = floor(floatval($range['start']));
-            $end = ceil(floatval($range['end']));
-
-            $formattedStart = $this->getPriceFormat($start);//Mage::app()->getStore()->getCurrentCurrency()->format($start, null, false);
-            $formattedEnd = $this->getPriceFormat($end);//Mage::app()->getStore()->getCurrentCurrency()->format($end, null, false);
-
-//			if ($currencyPositionSetting > 0)
-//			{
-//				$formatted = $currencySign.'&nbsp;'.$start.' - '.$currencySign.'&nbsp;'.$end;
-//			}else {
-//				$formatted = $start.'&nbsp;'.$currencySign.' - '.$end.'&nbsp;'.$currencySign;
-//			}
-            $counter++;
-            if ($counter == 1) {
-                $formatted = 'poniżej '.$formattedEnd;
-            } elseif ($counter == $limit) {
-                $formatted = 'powyżej '.$formattedStart;
-            } else {
-                $formatted = 'od '.$formattedStart . " do " . $formattedEnd;
-            }
-
-            $rangeItemArray = array(
-                                  'start' => $start,
-                                  'end' => $end,
-                                  'count' => 0,
-                                  'formatted' => $formatted,
-                                  'value' => $start.' TO '.$end,
-                              );
-            $items = $this->getItems();
-            foreach ($items as $price => $count) {
-                $price = floor($price);
-                if (floatval($price) >= floatval($start) && floatval($price) <= floatval($end)) {
-                    $rangeItemArray['count'] = ($rangeItemArray['count'] + $count);
-                }
-            }
-
-            $appliedPriceRanges[] = $rangeItemArray;
-        }
-
-        return $appliedPriceRanges;
-    }
-
-    public function getPriceFormat($price)
-    {
-        $formattedPrice = $price;
-        $currencySign = Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol();
-        $currencyPositionSetting = Mage::helper('solrsearch')->getSetting('currency_position');
-
-        if ($currencyPositionSetting < 1) {
-            //After
-            $formattedPrice = $price.'&nbsp;'.$currencySign;
-        } else {
-            $formattedPrice = $currencySign.'&nbsp;'.$price;
-        }
-        return $formattedPrice;
-    }
-
-    public function getFacetPriceRanges()
-    {
-        return $this->applyPriceRangeProductCount();
-    }
-
-    public function getFacesUrl($params = array(), $paramss = NULL)
-    {
-        return $this->getParentBlock()->getFacesUrl($params, $paramss);
-    }
-    public function isRangeActive($value) {
-        $request = $this->getRequest()->getParam('price_facet');
-        return false;
-    }
+	public function getFacesUrl($params = array(), $paramss = NULL) {
+		return $this->getParentBlock()->getFacesUrl($params, $paramss);
+	}
+	
+	public function isItemActive($item) {
+		$filterQuery = $this->getFilterQuery();
+		if (isset($filterQuery[$this->getFacetKey()])) {
+			if(is_array($filterQuery[$this->getFacetKey()])){
+				return in_array((string)$item, $filterQuery[$this->getFacetKey()]);
+			}
+			
+			return trim($filterQuery[$this->getFacetKey()])==trim($item);
+		}
+		return false;
+	}
+	
+	public function getIsRangeActive() {
+		return $this->getRequest()->getParam("slider")=="1" && $this->getCurrentPriceRange();
+	}
+	
+	
 }

@@ -13,9 +13,10 @@
                             <input type="hidden" name="cat_id" id="cat_id" value="<?php echo $id; ?>"/>
                         <?php endif; ?>
 
-                       <button type="submit"  class="btnSearch" title="<?php echo $this->__('Search'); ?>">
-                                                   <img src="<?php echo $this->getSkinUrl('images/ico_search.gif'); ?>" alt="<?php echo $this->__('Search'); ?>"/>
-                    </div>                        </button>
+                    <a id="faq-search"  class="button button-third large pull-left" href="" style="margin-left: 20px;">
+                        <?php echo $this->__('Search'); ?>
+                    </a>
+
                 </div>
             </div>
 
@@ -25,7 +26,8 @@
 </div>
 <?php endif; ?>
 <script type="text/javascript">
-    jQuery("faq-search").click(function(){
+    jQuery("#faq-search").click(function(e){
+        e.preventDefault();
         jQuery("form[name=faqsearch]").submit();
     })
 </script>

@@ -147,7 +147,6 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
         $filterQueryArray = array();
 		$extendedFilterQueryArray = array();
         $rangeFields = $this->rangeFields;
-
         foreach($filterQuery as $key=>$filterItem){
             //Ignore cateory facet - using category instead
             if ($key == 'category_facet') {
@@ -163,7 +162,9 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
                         $query .= $this->priceFieldName.':['.urlencode(trim($value).'.99999').']+OR+';
                     }else if($key == 'price'){
                         $query .= $this->priceFieldName.':['.urlencode(trim($value).'.99999').']+OR+';
-					}
+					} else if ($key == 'filter_slider_facet') {
+                        $query .= $this->priceFieldName.':['.urlencode(trim($value).'.99999').']+OR+';
+                    }
 					/*else if(in_array($key, $this->_specialKeys, true)) {
 						$extendedQuery .= $key.':%22'.urlencode(trim(addslashes($value))).'%22+OR+';
 					}*/
@@ -199,7 +200,6 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 				}				
             }
         }
-
 		//Add Vendor Facet to Filter Microsite Products - Start
 		$_vendor = Mage::helper('umicrosite')->getCurrentVendor();
 		if ($_vendor && $_vendor->getId()) {

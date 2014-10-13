@@ -1,6 +1,6 @@
 <?php if ($this->isLayerNavigationActive()):?>
 <?php $filterQuery = $this->getFilterQuery(); ?>
-    <div class="sidebar" id="solr_search_facets">
+    <div class="sidebar solr_search_facets" id="solr_search_facets">
         <div class=" block-filter" >
 			<form name="searchFacets" method="get"
 				  autocomplete="false"
@@ -11,7 +11,6 @@
 							<!-- Blocks here -->
 							<?php echo $filterBlock->toHtml(); ?>
 						<?php endforeach; ?>
-						<?php /* echo $this->getPriceFacets()*/ ?>
 				<?php endif; ?>
 			</form>
         </div>
