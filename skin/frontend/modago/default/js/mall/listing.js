@@ -2724,14 +2724,14 @@ jQuery(document).ready(function () {
 	Mall.listing.init();
 
     jQuery( window ).resize(function() {
-        if (jQuery(window).width() >= 768 ) {
+        if (window.innerWidth >= 768 ) {
             Mall.listing.insertDesktopSidebar();
         } else {
             Mall.listing.insertMobileSidebar();
         }
     });
     jQuery( window ).resize(function() {
-        if (jQuery(window).width() < 768 ) {
+        if (window.innerWidth < 768 ) {
             if(jQuery('.fb-slidebar.open').length){
                 jQuery('.closeSlidebar').click();
                 jQuery('#sb-site').removeClass('open');

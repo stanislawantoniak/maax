@@ -77,8 +77,8 @@
             <action method="addCrumb">
                 <crumbName>faq</crumbName>
                 <crumbInfo>
-                    <label>Answers to frequently asked questions</label>
-                    <title>Answers to frequently asked questions</title>
+                    <label>Frequently Asked Questions</label>
+                    <title>Frequently Asked Questions</title>
                     <!--<link>/faq</link>-->
                 </crumbInfo>
             </action>
@@ -164,8 +164,8 @@
             <action method="addCrumb">
                 <crumbName>faq</crumbName>
                 <crumbInfo>
-                    <label>Answers to frequently asked questions</label>
-                    <title>Answers to frequently asked questions</title>
+                    <label>Frequently Asked Questions</label>
+                    <title>Frequently Asked Questions</title>
                     <!--<link>/faq</link>-->
                 </crumbInfo>
             </action>
