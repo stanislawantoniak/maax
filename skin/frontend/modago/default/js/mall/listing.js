@@ -1236,17 +1236,22 @@ Mall.listing = {
 									self._transferValuesToCheckbox(start,stop);
 								}
 							} else if (key == 'sort') {
-								self.setSort(value);
+								sort = value;
 							} else if (key == 'dir') {
-								self.setDir(value);
+								dir = value;
 							}else if(key=="slider" && value=="1"){
 								jQuery("input[type=checkbox]#filter_slider").prop("checked", true);
 							}
 						}
 					}
 					if(sort && dir) {
-						self.setSortSelect();
+						self.setSort(sort);
+						self.setDir(dir);
+					} else {
+						self.setSort('');
+						self.setDir('');
 					}
+					self.setSortSelect();
 				}
 				//reload listing
 				self.reloadListingNoPushState();
@@ -2452,9 +2457,11 @@ Mall.listing = {
 			dir = this.getDir();
 		if(select.find("option[value='"+sort+"||"+dir+"']")) {
 			select.val(this.getSort() + '||' + this.getDir());
-			select.selectbox('detach');
-			select.selectbox('attach');
+		} else {
+			select.val(select.find(":first-child").val());
 		}
+		select.selectbox('detach');
+		select.selectbox('attach');
 		return this;
 	},
 	/**
