@@ -1323,6 +1323,10 @@ Mall.listing = {
 		this.getAjaxLoader().hide();
 	},
 
+	isLoading: function(){
+		this.getAjaxLoader().is(":visisble");
+	},
+
 	getAjaxLoader: function(){
 		if(!jQuery("#ajax-filter-loader").length){
 			var overlay = jQuery("<div>").css({
@@ -1986,7 +1990,7 @@ Mall.listing = {
 					jQuery("#zakres_max").val(ui.values[1]);
 					var checkSlider = jQuery('#checkSlider').find('input');
 					if (!checkSlider.is(':checked')) {
-						checkSlider.prop('checked', true);
+						checkSlider.prop('checked', true).change();
 						jQuery('#filter_price').find('.action').removeClass('hidden');
 					}
 					self._transferValuesToCheckbox(ui.values[0], ui.values[1]);
@@ -2007,12 +2011,19 @@ Mall.listing = {
 		jQuery("#filter_price", scope).find("input.filter-price-range-submit").on("click", function(e) {
 			e.preventDefault();
 			// validate prices
+			
 			minPrice = Mall.listing.getMinPriceFromSlider();
 			maxPrice = Mall.listing.getMaxPriceFromSlider();
 			if(!self._validateRange(minPrice, maxPrice)) {
 				return false;
 			}
-			// Validate here
+			
+			var checkSlider = self.getSliderCheckbox(scope);
+			if (!checkSlider.is(':checked')) {
+				checkSlider.prop('checked', true).change();
+				jQuery('#filter_price').find('.action').removeClass('hidden');
+			}
+			
 			self._transferValuesToCheckbox(minPrice, maxPrice, scope);
 			self._triggerRefresh(scope, 1, true);
 			
@@ -2094,12 +2105,23 @@ Mall.listing = {
 		}
 		
 		if(triggerChange){
-			self.reloadListing();
+			if(self.getPushStateSupport()){
+				self.reloadListing();
+			}else{
+				self.showAjaxLoading();
+				document.location = checkbox.parent().find("a").attr('href');
+			}
 		}
 		
 	},
 	_transferValuesToCheckbox: function(min,max,scope){
-		this.getSliderCheckbox(scope).attr('value', parseInt(min) + " TO " + parseInt(max));
+		this.getSliderCheckbox(scope).attr('value', 
+			parseInt(min) + " TO " + parseInt(max));
+		
+		var url = this._getUrlNoParams() + '?' + 
+				this._buildPushStateKey(this.getQueryParamsAsArray());
+		this.getSliderCheckbox(scope).parent().find("a").attr("href", url);
+		this.getSliderCheckbox(scope).data('url', url);
 	},
 	getSliderCheckbox: function(scope){
 		return jQuery('#filter_slider',scope);
@@ -2469,7 +2491,6 @@ Mall.listing = {
 	 * Determines if browser supports history.pushState
 	 */
 	getPushStateSupport: function() {
-		//return false;
 		return window.history.pushState ? true : false;
 	},
 
