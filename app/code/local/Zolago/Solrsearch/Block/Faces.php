@@ -420,6 +420,9 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 
 		foreach ($key as $item)
 		{
+			if($item=="price" && $this->getRequest()->getParam('slider')){
+				$finalParams['slider']=null;
+			}
 			if (isset($finalParams['fq'][$item])) {
 				unset($finalParams['fq'][$item]);
 			}
