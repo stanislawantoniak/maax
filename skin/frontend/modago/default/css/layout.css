@@ -758,6 +758,14 @@ section.section h2.title_section i {
   top: -2px;
   position: relative; }
 
+/* line 154, ../sass/layout/dimensions/_sidebar.scss */
+.catalog-category-view #sidebar.hidden-xs {
+  display: block; }
+@media (min-width: 768px) {
+  /* line 154, ../sass/layout/dimensions/_sidebar.scss */
+  .catalog-category-view #sidebar.hidden-xs {
+    display: block; } }
+
 /* line 3, ../sass/layout/dimensions/_mainpage.scss */
 .small-banners .row {
   margin: 0 -20px; }
