@@ -267,6 +267,39 @@ Mall.listing = {
 		});
 	},
 
+    likePriceView: function(){
+        var listProducts = jQuery('#items-product');
+        var listItemsProducts = listProducts.children('.item');
+        listItemsProducts.each(function(index, el) {
+            var children = jQuery(this).children('.box_listing_product');
+            var widthThis = children.innerWidth()-15;
+
+            var childrenPrice = children.find('.col-price').innerWidth();
+            var childrenLike = children.find('.like').innerWidth();
+
+            var widthBlock = parseInt(childrenPrice + childrenLike);
+
+            var widthThisHalf = parseInt(widthThis/2);
+
+            if (widthBlock < widthThis) {
+
+            };
+
+            if (widthBlock > widthThis) {
+                if (childrenPrice > widthThisHalf) {
+                    jQuery(this).find('.price').addClass('price-two-line');
+                } else {
+                    jQuery(this).find('.price').removeClass('price-two-line');
+                };
+                if (childrenLike > widthThisHalf) {
+                    jQuery(this).find('.price').addClass('like-two-line');
+                } else {
+                    jQuery(this).find('.price').removeClass('like-two-line');
+                };
+            };
+        });
+    },
+
 
 	_doRollSection: function(section, state, animate){
 		var title = section.find("h3"),
@@ -650,6 +683,7 @@ Mall.listing = {
 		});
 
 		// attach events
+        this.likePriceView();
 		this.preprocessProducts();
 		this.attachEventsToProducts();
 
