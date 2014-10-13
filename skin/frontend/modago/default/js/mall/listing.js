@@ -269,6 +269,7 @@ Mall.listing = {
 	},
 
     likePriceView: function(){
+
         var listProducts = jQuery('#items-product');
         var listItemsProducts = listProducts.children('.item');
         listItemsProducts.each(function(index, el) {
@@ -285,19 +286,21 @@ Mall.listing = {
             if (widthBlock < widthThis) {
 
             };
+            if(widthBlock > 0){
+                if (widthBlock > widthThis) {
+                    if (childrenPrice > widthThisHalf) {
+                        jQuery(this).find('.price').addClass('price-two-line');
+                    } else {
+                        jQuery(this).find('.price').removeClass('price-two-line');
+                    };
+                    if (childrenLike > widthThisHalf) {
+                        jQuery(this).find('.price').addClass('like-two-line');
+                    } else {
+                        jQuery(this).find('.price').removeClass('like-two-line');
+                    };
+                };
+            }
 
-            if (widthBlock > widthThis) {
-                if (childrenPrice > widthThisHalf) {
-                    jQuery(this).find('.price').addClass('price-two-line');
-                } else {
-                    jQuery(this).find('.price').removeClass('price-two-line');
-                };
-                if (childrenLike > widthThisHalf) {
-                    jQuery(this).find('.price').addClass('like-two-line');
-                } else {
-                    jQuery(this).find('.price').removeClass('like-two-line');
-                };
-            };
         });
     },
 
