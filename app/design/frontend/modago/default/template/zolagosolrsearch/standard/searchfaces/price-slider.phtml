@@ -36,7 +36,7 @@ $name = '';
         <h3 class="<?php echo $sectionClass; ?>"><?php echo $this->__("Price"); ?> <i class="fa <?php echo $iconClass; ?>"></i></h3>
         <div class="content"  id="filter_price">
 			<?php foreach($ranges as $range) : ?>
-			<?php $url = $this->getFacesUrl(array('fq'=>array('price' => $range['value']))); ?>	
+			<?php $url = $this->getFacesUrl(array('slider'=>null, 'fq'=>array('price' => $range['value']))); ?>	
             <div class="form-group form-checkbox">
 
                 <input 
@@ -46,7 +46,7 @@ $name = '';
 					name="<?php echo $key; ?>" 
 					id="<?php echo $this->getItemId($range['value']);?>" 
 					class="css-checkbox"
-					<?php if ($this->isItemActive($range['value'])):?> checked="checked"<?php endif;?>
+					<?php if ($this->isItemActive($range['value']) && !$isOptionSelected):?> checked="checked"<?php endif;?>
 				/>
                 <label for="<?php echo $this->getItemId($range['value']);?>" class="css-label">
 	                <span>
@@ -64,6 +64,7 @@ $name = '';
             <div id="od_do" class="clearfix">
                 <div class="clearfix">
                     <div id="checkSlider" class="form-group form-checkbox">
+						<?php $url = $this->getFacesUrl(array('slider'=>1, 'fq'=>array('price' => $fromValue . " TO " . $toValue))); ?>
                         <input 
 							type="checkbox" 
 							name="<?php echo $key; ?>" 
@@ -72,7 +73,7 @@ $name = '';
 							class="css-checkbox" 
 							<?php if($isOptionSelected) : ?>checked="checked"<?php endif; ?>
 						/>
-                        <label for="filter_slider" class="css-label"></label>
+                        <label for="filter_slider" class="css-label"><a class="listing-link" href="<?php echo $url; ?>"></a></label>
                     </div>
                     <div class="form-horizontal">
                         <div class="form-group">
