@@ -1552,7 +1552,8 @@ jQuery.noConflict();
                 if (widthBlock < widthThis) {
 
                 };
-                if (widthBlock > widthThis) {
+                if (widthBlock > 0 && //To prevent using this script before products loaded
+                    widthBlock > widthThis) {
                     if (childrenPrice > widthThisHalf) {
                         $(this).find('.price').addClass('price-two-line');
                     } else {
