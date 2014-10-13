@@ -2018,7 +2018,7 @@ Mall.listing = {
 				return false;
 			}
 			
-			var checkSlider = jQuery('#checkSlider',scope).find('input');
+			var checkSlider = self.getSliderCheckbox(scope);
 			if (!checkSlider.is(':checked')) {
 				checkSlider.prop('checked', true).change();
 				jQuery('#filter_price').find('.action').removeClass('hidden');
