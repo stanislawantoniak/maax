@@ -1224,10 +1224,23 @@ Mall.listing = {
 							var value = filters[filter][key];
 							if (key.substring(0, 2) == 'fq') {
 								jQuery("input[type=checkbox][name='" + key + "'][value='" + value + "']").prop("checked", true);
+								if(key=="fq[price]"){
+									// Set values of range
+									var slider = jQuery( "#slider-range");
+									var values = value.split(" TO ");
+									var start = parseInt(values[0],10);
+									var stop = parseInt(values[1],10);
+									slider.slider("option", "values", [start, stop]);
+									jQuery("#zakres_min").val(start);
+									jQuery("#zakres_max").val(stop);
+									self._transferValuesToCheckbox(start,stop);
+								}
 							} else if (key == 'sort') {
 								self.setSort(value);
 							} else if (key == 'dir') {
 								self.setDir(value);
+							}else if(key=="slider" && value=="1"){
+								jQuery("input[type=checkbox]#filter_slider").prop("checked", true);
 							}
 						}
 					}
@@ -1263,7 +1276,7 @@ Mall.listing = {
 		var self = this,
 			data = this.getQueryParamsAsArray(forceObject),
 			ajaxKey = this._buildAjaxKey(data);
-
+	
 		this._pushHistoryState(data);
 
 		if(this._ajaxCache[ajaxKey]){
@@ -1960,11 +1973,13 @@ Mall.listing = {
 				min: parseInt(sliderRange.data("min"),10),
 				max: parseInt(sliderRange.data("max"),10),
 				values: Mall.listing.getCurrentPriceRange(),
+				stop: function(event, ui) {
+					self._triggerRefresh(scope, 1, true);
+				},
 				slide: function(event, ui) {
 					jQuery("#zakres_min").val(ui.values[0]);
 					jQuery("#zakres_max").val(ui.values[1]);
 					self._transferValuesToCheckbox(ui.values[0], ui.values[1]);
-					self._triggerRefresh(scope, 1, true);
 				}
 			});
 
@@ -2049,7 +2064,7 @@ Mall.listing = {
 		if(isNaN(min) || isNaN(max)){
 			return false;
 		}
-		return min>0 && max>0 && min<max;
+		return min>=0 && max>=0 && min<=max;
 	},
 	
 	_triggerRefresh: function(scope, force, triggerChange){
@@ -2113,7 +2128,6 @@ Mall.listing = {
 		};
 		
 		if(this.getIsSliderActive()){
-			console.log("Slide active");
 			q.slider = 1;
 		}
 
@@ -2132,7 +2146,6 @@ Mall.listing = {
 			start: 0
 		};
 		if(this.getIsSliderActive()){
-			console.log("Slide active");
 			defaults.slider = 1;
 		}
 		
