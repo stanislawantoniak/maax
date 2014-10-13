@@ -1513,12 +1513,20 @@ Mall.listing = {
 		var sortingSelect = this.getSortSelect(scope),
 			self = this;
 		sortingSelect.selectbox();
-		sortingSelect.change(function() {
-			var selected = jQuery(this).find(":selected");
-			self.setSort(selected.data('sort'));
-			self.setDir(selected.data('dir'));
-			self.reloadListing();
-		});
+		if(this.getPushStateSupport()) {
+			sortingSelect.change(function () {
+				var selected = jQuery(this).find(":selected");
+				self.setSort(selected.data('sort'));
+				self.setDir(selected.data('dir'));
+				self.reloadListing();
+			});
+		} else {
+			sortingSelect.change(function () {
+				var url = jQuery(this).find(":selected").data("url");
+				self.showAjaxLoading();
+				window.location = url;
+			});
+		}
 	},
 
 	attachMiscActions: function(scope){
@@ -2399,7 +2407,7 @@ Mall.listing = {
 	 * Determines if browser supports history.pushState
 	 */
 	getPushStateSupport: function() {
-		//return false;
+		return false;
 		return window.history.pushState ? true : false;
 	},
 
