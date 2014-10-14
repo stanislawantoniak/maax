@@ -1,0 +1,55 @@
+<?php $_helper = Mage::helper("zolagorma"); ?>
+<?php $_po = $this->getPo(); ?>
+<?php $_rma = $this->getRma();?>
+<?php $_shippingAddress = $_po->getShippingAddress(); ?>
+<?php $_itemsSingle = $_rma->getItemsSingle(); ?>
+<?php $_itemsConditionSingle = $_rma->getItemsConditionSingle(); ?>
+<?php $items = $this->getItemList();?>
+
+<div class="steps step-3" id="step-3">
+	<h5 id="overview-message" class="flow-return"><?php echo $_helper->__("Check again inserted data. Note carrier pickup date."); ?></h5>
+	<div class="fieldset">
+		<h2 class="legend"><?php echo $_helper->__("RMA Items"); ?></h2>
+		<ul class="form-list">
+			<li class="wide">
+				<table class="data-table">
+					<thead>
+						<tr>
+							<th><?php echo $_helper->__("Lp."); ?></th>
+							<th><?php echo $_helper->__("Product"); ?></th>
+							<th><?php echo $_helper->__("Reason"); ?></th>
+						</tr>
+					</thead>
+					<tbody id="review-items"></tbody>
+				</table>
+				<p id="review-comment-text"></p>
+			</li>
+		</ul>
+	</div>
+	<div id="pickup-address-overview" class="fieldset flow-return">
+		<h2 class="legend"><?php echo $_helper->__("Your address"); ?></h2>
+		<ul class="form-list">
+			<li class="wide">
+				<address id="review-shipping-address"></address>
+			</li>
+		</ul>
+	</div>
+	<div id="pickup-date-overview" class="fieldset flow-return">
+		<h2 class="legend"><?php echo $_helper->__("Pickup date"); ?></h2>
+		<ul class="form-list">
+			<li class="wide" id="pickup-date-review">
+			</li>
+		</ul>
+	</div>
+	<div class="fieldset">
+		<h2 class="legend"><?php echo $_helper->__("Bank account for return"); ?></h2>
+		<ul class="form-list">
+			<li class="wide" id="customer-account-review">
+			</li>
+		</ul>
+	</div>
+	<div>
+		<button type="button"  class="button" id="step-2-back"><span><span><?php echo $_helper->__("Prev"); ?></span></span></button>
+		<button type="submit" class="button"  id="step-3-submit"><span><span><?php echo $_helper->__("Place RMA"); ?></span></span></button>
+	</div>
+</div>
