@@ -1977,6 +1977,9 @@ Mall.listing = {
 					self._triggerRefresh(scope, 1, true);
 				},
 				slide: function(event, ui) {
+                    if(ui.values[0] == ui.values[1]){
+                        return false;
+                    }
 					jQuery("#zakres_min").val(ui.values[0]);
 					jQuery("#zakres_max").val(ui.values[1]);
 					self._transferValuesToCheckbox(ui.values[0], ui.values[1]);
@@ -2035,7 +2038,8 @@ Mall.listing = {
 				jQuery('#filter_price').find('.action').removeClass('hidden');
 			}
 			if (code === 13) {
-				e.preventDefault();
+				//e.preventDefault();
+                jQuery('#filter_price input[data-filter-type="price"]').click();
 				return false;
 			}
 		});

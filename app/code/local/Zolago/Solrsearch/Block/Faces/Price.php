@@ -216,9 +216,16 @@ class Zolago_Solrsearch_Block_Faces_Price extends Zolago_Solrsearch_Block_Faces_
 					$rangeItemArray['count'] = ($rangeItemArray['count'] + $count);
 				}
 			}
+
 			$appliedPriceRanges[] = $rangeItemArray;
 		}
-
+        if(!empty($appliedPriceRanges)){
+            foreach($appliedPriceRanges as $k => $appliedPriceRange){
+                if($appliedPriceRange['count'] == 0){
+                    unset($appliedPriceRanges[$k]);
+                }
+            }
+        }
 		return $appliedPriceRanges;
 	}
 
