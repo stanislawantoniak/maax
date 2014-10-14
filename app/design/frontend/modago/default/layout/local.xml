@@ -1156,6 +1156,12 @@
 	<!-- Rma																 -->
 	<!-- ################################################################### -->
 	<sales_po_newrma>
+		<reference name="head">
+			<action method="addItem">
+				<type>skin_js</type>
+				<script>js/mall/rma/new.js</script>
+			</action>
+		</reference>
 		<reference name="breadcrumbs">
             <action method="addCrumb">
                 <crumbName>rma</crumbName>

@@ -19,6 +19,9 @@ class Zolago_Po_Model_Po_Item extends Unirgy_DropshipPo_Model_Po_Item
 		return parent::getQtyToShip();
 	}
 	
+	/**
+	 * @return Mage_Sales_Model_Order_Item
+	 */
 	public function getOrderItem() {
 		 if (is_null($this->_orderItem)) {
             if ($this->getPo()
@@ -124,13 +127,42 @@ class Zolago_Po_Model_Po_Item extends Unirgy_DropshipPo_Model_Po_Item
 	   return $this->getData('vendor_sku');
    }
    
+   
+   /**
+    * @todo not tested
+    * @return Zolago_Po_Model_Po_Item
+    */
+   public function getParentOrderItem() {
+	   if(!$this->hasData("parent_order_item")){
+			$parent = Mage::getResourceModel('sales/order_item_collection')->
+				 addFieldToFilter("item_id", $this->getParentItemId())->
+					getFirstItem();
+			$this->setData("parent_order_item", $parent);
+	   }
+	   return $this->getData("parent_order_item");
+   }
+   
+   /**
+    * @todo not tested
+    * @return Zolago_Po_Model_Po_Item
+    */
+   public function getParentItem() {
+	   if(!$this->hasData("parent_item")){
+			$parent = Mage::getResourceModel('zolagopo/po_item_collection')->
+				 addFieldToFilter("order_item_id", $this->getParentItemId())->
+					getFirstItem();
+			$this->setData("parent_item", $parent);
+	   }
+	   return $this->getData("parent_item");
+   }
+   
    /**
     * @return Zolago_Po_Model_Po_Item
     */
    public function getChildItem() {
 	   if(!$this->hasData("child_item")){
 			$parent = Mage::getResourceModel('zolagopo/po_item_collection')->
-				 addFieldToFilter("parent_item_id", $this->getOrderItem()->getId())->
+				 addFieldToFilter("parent_item_id", $this->getOrderItem()->getId())-> // Order item id ? @todo
 					getFirstItem();
 			$this->setData("child_item", $parent);
 	   }
