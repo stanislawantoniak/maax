@@ -1,0 +1,26 @@
+.condition-wrapper .sbHolder{
+	width: 50%;
+}
+.rma-bordered{
+	border: 1px #bfbfbf solid;
+	margin-bottom: 30px;
+	h5{
+		font-family: "latoblack";
+		border-bottom: #ebebeb 1px solid;
+		padding: 10px 12px 10px 10px;
+	}
+	.table-wrapper{
+		margin: 20px 25px;
+	}
+	table td{
+		padding:7px 5px 8px 5px;
+		label{
+			font-weight: normal;
+		}
+	}
+	textarea{
+		box-sizing: border-box;
+		height: 100px;
+		-moz-box-sizing: border-box;
+	}
+}

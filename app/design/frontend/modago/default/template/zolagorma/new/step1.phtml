@@ -7,68 +7,78 @@
 <?php $items = $this->getItemList();?>
 <?php $_complaint = $this->getIsCompleint();?>
 <div class="steps step-1 background-wrapper box-wrapper" id="step-1" >
-	<div class="fieldset">
-		<p><?php echo $_helper->__("Choose RMA items You want return"); ?></p>
-		<ul class="form-list">
-			<li class="wide">
-				<div class="input-box">
-					<table class="data-table" style="width: 100%;">
-						<colgroup>
-							<col width="30px"/>
-							<col width="50px"/>
-							<col/>
-							<col width="150px"/>
-						</colgroup>
-						<thead>
-							<tr>
-								<th>&nbsp;<label class="required"><em>*</em></label></th>
-								<th></th>
-								<th><?php echo $_helper->__("Product"); ?></th>
-								<th><label class="required"><?php echo $_helper->__("Reason"); ?><em>*</em></label></th>
-							</tr>
-						</thead>
-						<tbody>
-							<?php
-							foreach ($items as $item_pack):
-								foreach ($item_pack as $key => $item):
-									?>
-									<tr data-name="<?php echo $this->escapeHtml($item['name']); ?>">
-										<td style="vertical-align: middle;">
-											<input <?php if(isset($_itemsSingle[$item['entityId']][$key])):?>checked="checked"<?php endif;?> type="checkbox" class="rma-checkbox" name="rma[items_single][<?php echo $item['entityId'] ?>][<?php echo $key ?>]" value="true"/>
-										</td>
-										<td>
-											
-										</td>
-										<td>
-											<?php echo $this->escapeHtml($item['name']); ?>
-											<?php if($_attributes = $this->getConfigurableAttributesByItem($item['entityId'])):?>
-												<br/>
-												<?php foreach($_attributes as $_attribute):?>
-													<?php echo $this->escapeHtml($_attribute['label']);?>:
-													<?php echo $this->escapeHtml($_attribute['value']);?>
-												<?php endforeach;?>
-											<?php endif;?>
-										</td>
-										<td style="vertical-align: middle;">
-											<div class="condition-wrapper" >
-												<select style="width: auto;" class="required-entry" id="condition-<?php echo $key; ?>-<?php echo $item['entityId']; ?>" name="rma[items_condition_single][<?php echo $item['entityId'] . '][' . $key . ']' ?>">
-													<option value=""><?php echo $_helper->__('Select a reason...') ?></option>
-													<?php foreach($_helper->getItemConditionTitles() as $_key=>$_label):?>
-													<option <?php if(isset($_itemsConditionSingle[$item['entityId']][$key]) && $_itemsConditionSingle[$item['entityId']][$key]==$_key):?>selected="selected"<?php endif;?> value="<?php echo $this->escapeHtml($_key);?>"><?php echo $this->escapeHtml($_label); ?></option>
-													<?php endforeach;?>
-												</select>
-											</div>
-										</td>
-									</tr>
-									<?php
-								endforeach;
-							endforeach;
-							?>
-						</tbody>
-					</table>
-					<input type="hidden" name="rma[has_items]" value="" class="required-entry" id="rma-has-items"/>
-				</div>
-			</li>
-		</ul>
+	<p><?php echo $_helper->__("Choose RMA items You want return"); ?></p>
+	<div class="rma-bordered">
+		<h5 class="uppercase bold">Zamówienie</h5>
+		<div class="table-wrapper">
+			<table class="data-table no-border fixed" >
+			<colgroup>
+				<col width="30px"/>
+				<col width=70px"/>
+				<col/>
+				<col/>
+			</colgroup>
+			<tbody>
+				<?php
+				foreach ($items as $item_pack):
+					foreach ($item_pack as $key => $item):
+						?>
+						<tr data-name="<?php echo $this->escapeHtml($item['name']); ?>">
+							<td style="vertical-align: middle;" class="form-group form-checkbox">
+								<input <?php if(isset($_itemsSingle[$item['entityId']][$key])):?>checked="checked"<?php endif;?> type="checkbox" class="css-checkbox rma-checkbox" id="rma_item_<?php echo $item['entityId'] ?>" name="rma[items_single][<?php echo $item['entityId'] ?>][<?php echo $key ?>]" value="true"/>
+								<label class="css-label" for="rma_item_<?php echo $item['entityId'] ?>"></label>
+							</td>
+							<td>
+								<?php if($thumbHelper=$this->getPoItemThumb($item['entityId'])):?>
+								<img src="<?php echo $thumbHelper;?>" alt="<?php echo $this->escapeHtml($item['name']);?>"/>
+								<?php endif;?>
+							</td>
+							<td class="top">
+								<span class="uppercase"><?php echo $this->escapeHtml($this->getVendorName()); ?></span>
+								<?php echo $this->escapeHtml($item['name']); ?>
+								<?php if($_attributes = $this->getConfigurableAttributesByItem($item['entityId'])):?>
+									<br/>
+									<small>
+									<?php foreach($_attributes as $_attribute):?>
+										<?php echo $this->escapeHtml($_attribute['label']);?>:
+										<?php echo $this->escapeHtml($_attribute['value']);?>
+									<?php endforeach;?>
+									</small>
+								<?php endif;?>
+							</td>
+							<td class="top">
+								<div class="condition-wrapper" >
+									<select class="required-entry" required="true" id="condition-<?php echo $key; ?>-<?php echo $item['entityId']; ?>" name="rma[items_condition_single][<?php echo $item['entityId'] . '][' . $key . ']' ?>">
+										<option value=""><?php echo $_helper->__('Select a reason...') ?></option>
+										<?php foreach($_helper->getItemConditionTitles() as $_key=>$_label):?>
+										<option <?php if(isset($_itemsConditionSingle[$item['entityId']][$key]) && $_itemsConditionSingle[$item['entityId']][$key]==$_key):?>selected="selected"<?php endif;?> value="<?php echo $this->escapeHtml($_key);?>"><?php echo $this->escapeHtml($_label); ?></option>
+										<?php endforeach;?>
+									</select>
+								</div>
+							</td>
+						</tr>
+						<?php
+					endforeach;
+				endforeach;
+				?>
+				<tr>
+					<td colspan="4">
+						<label for="rma-text"><?php echo $_helper->__("Additional informations (optional)");?>:</label>
+						<textarea class="form-control" id="rma-text" name="rma[text]"></textarea>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		</div>
+	</div>
+	<input type="hidden" name="rma[has_items]" value="" class="required-entry" id="rma-has-items"/>
+	<div>
+		<a href="<?php echo $this->getUrl("sales/po/rmalist");?>"  class="button button-third large back pull-left">
+			<?php echo $_helper->__("Move back"); ?>
+		</a>
+		<button type="button" class="btn button button-primary next pull-right hidden">
+			<?php echo $_helper->__("Next"); ?>
+		</button>
+		<div class="clearfix"></div>
 	</div>
 </div>

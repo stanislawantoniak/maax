@@ -4,9 +4,14 @@ jQuery(function($){
 		step2: $("#step-2"),
 		step3: $("#step-3"),
 		newRma: $("#new-rma"),
+		validation: null,
 		steps: [],
 		currentStep: -1, // init value
+		returnReasons: [],
 		
+		////////////////////////////////////////////////////////////////////////
+		// Init steps and general
+		////////////////////////////////////////////////////////////////////////
 		init: function () {
 			"use strict";
 			this._init();
@@ -15,17 +20,71 @@ jQuery(function($){
 			jQuery(window).resize();
 		},
 		
-		////////////////////////////////////////////////////////////////////////
-		// Navigation
-		////////////////////////////////////////////////////////////////////////
+		// Internal init
 		_init: function(){
 			this.steps = [this.step1, this.step2, this.step3];
+			this.validation = this.newRma.validate();
+			this._initStep1();
 		},
+		
+		// Step 1 init
+		_initStep1: function(){
+			var s = this.step1,
+				self = this,
+				next = s.find("button.next");
+		
+			var checkboxHandler = function(){
+				var el = $(this);
+				next[s.find(":checkbox:checked").length ? "removeClass" : "addClass"]('hidden');
+				el.parents("tr").find(".condition-wrapper")[el.is(":checked") ? "removeClass" : "addClass"]('hidden');
+			};
+			s.find(":checkbox").change(checkboxHandler).change();
+			
+			// Make validation of select (various methods)
+			var selectHandler = function(){
+				var el = $(this),
+					value = el.val(),
+					ruleName = "required",
+					rules = {},
+					settings = self.newRma.validate().settings;
+			
+				if(value){
+					ruleName = 'must-be-available-' + value;
+				}
+				rules[el.attr('name')] = ruleName;
+				$.extend(settings.rules, rules);
+				
+				// Validate is needed
+				if(el.val()){
+					el.valid();
+				}
+			}
+			s.find("select").change(selectHandler).change();
+			
+			// Handle next click
+			s.find(".next").click(function(){
+				var valid = true;
+				s.find(":checkbox:checked").each(function(){
+					var el = $(this),
+						select = el.parents("tr").find("select");
+					if(!select.valid()){
+						valid = false;
+					}
+				});
+				if(valid){
+					self.next();
+				}
+				return false;
+			});
+			
+			// Style selects
+			s.find("select").selectbox('attach');
+		},
+		
 		
 		////////////////////////////////////////////////////////////////////////
 		// Navigation
 		////////////////////////////////////////////////////////////////////////
-		
 		next: function(){
 			if(this.currentStep<this.steps.length-1){
 				this.go(this.currentStep+1);
@@ -48,6 +107,7 @@ jQuery(function($){
 					self._hideStep(this);
 				}
 			});
+			this.currentStep = step;
 			return this;
 		},
 		_getStep: function(step){
@@ -61,7 +121,19 @@ jQuery(function($){
 		},
 		_showStep: function(step){
 			this._getStep(step).show().addClass("active");
-		}
+		},
+		
+		
+		////////////////////////////////////////////////////////////////////////
+		// Misc
+		////////////////////////////////////////////////////////////////////////
+		addValidator: function(name, message, fn){
+			jQuery.validator.addMethod(name, fn, message);
+		},
+		
+		setReturnReasons: function(data){
+			this.returnReasons = data;
+		},
 /*(function() {
 			var newRma = $("new-rma");
 			var form = new VarienForm("new-rma");
