@@ -1,6 +1,34 @@
 <?php
 class Zolago_Po_Model_Po_Item extends Unirgy_DropshipPo_Model_Po_Item
 {
+	
+	/**
+	 * @return Mage_Catalog_Model_Product
+	 */
+	public function getProduct() {
+		if (!$this->getData('product')) {
+            $product = Mage::getModel('catalog/product')->load($this->getProductId());
+            $this->setData('product', $product);
+        }
+		return $this->getData('product');
+	}
+	
+	/**
+	 * @return Mage_Catalog_Helper_Image
+	 */
+	public function getProductThumbHelper() {
+		$thumb = Mage::getResourceModel("catalog/product")->getAttributeRawValue(
+				$this->getProductId(),
+				'thumbnail',
+				$this->getPo()->getStoreId()
+		);
+		$product = Mage::getModel("catalog/product")->
+			setId($this->getProductId())->
+			setThumbnail($thumb);
+		
+		return Mage::helper("catalog/image")->init($product, 'thumbnail');
+	}
+	
 	/**
 	 * @return float
 	 */

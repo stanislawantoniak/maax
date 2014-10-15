@@ -32,16 +32,55 @@ class Zolago_Rma_Block_New extends Mage_Core_Block_Template
 	}
 	
 	/**
-	 * @param Zolago_Po_Model_Po_Item | int $item
-	 * @return array()
+	 * @return Zolago_Dropship_Model_Vendor
 	 */
-	public function getConfigurableAttributesByItem($item) {
+	public function getVendor() {
+		return $this->getPo()->getVendor();
+	}
+	
+	/**
+	 * @return string
+	 */
+	public function getVendorName() {
+		return $this->getVendor()->getVendorName();
+	}
+	
+	/**
+	 * @param int $item
+	 * @param int|null $width
+	 * @param int|null $height
+	 * @return string
+	 */
+	public function getPoItemThumb($item, $width=60, $height=null) {
+		return $this->_getPoItem($item)->getProductThumbHelper()->
+			resize($width, $height)->
+			keepFrame(false);
+	}
+	
+	/**
+	 * @param @param Zolago_Po_Model_Po_Item | int $item $item
+	 * @return Zolago_Po_Model_Po_Item
+	 */
+	protected function _getPoItem($item) {
+		if($item instanceof Zolago_Po_Model_Po_Item){
+			return $item;
+		}
 		if(!($item instanceof Zolago_Po_Model_Po_Item)){
 			$item = $this->getPo()->getItemById($item);
 		}
 		if(!($item instanceof Zolago_Po_Model_Po_Item)){
 			$item = Mage::getModel("udpo/po_item")->load($item);
 		}
+		return $item;
+	}
+	
+	/**
+	 * @param Zolago_Po_Model_Po_Item | int $item
+	 * @return array()
+	 */
+	public function getConfigurableAttributesByItem($item) {
+		
+		$item = $this->_getPoItem($item);
 		
 		if(!$item->getId()){
 			return array();
