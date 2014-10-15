@@ -54,8 +54,8 @@ jQuery(function($){
 				var el = $(this);
 				next[s.find(":checkbox:checked").length ? "removeClass" : "addClass"]('hidden');
 				el.parents("tr").find(".condition-wrapper")
-						[s.find(":checkbox:checked").length ? "addClass" : "removeClass"]('active')
-						[s.find(":checkbox:checked").length ? "removeClass" : "addClass"]('inactive');
+						[el.is(":checked") ? "addClass" : "removeClass"]('active')
+						[el.is(":checked") ? "removeClass" : "addClass"]('inactive');
 				el.parents("tr").find(".condition-wrapper select").
 						selectbox(el.is(":checked") ? "enable" : "disable");
 			};
