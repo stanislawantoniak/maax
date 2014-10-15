@@ -2950,39 +2950,44 @@ x-axis
   #breadcrumbs_checkout_helpful_votes h1 {
     font-size: 18px; } }
 
-/* line 1, ../sass/design/modules/_rma.scss */
-.condition-wrapper .sbHolder {
-  width: 50%; }
-
-/* line 4, ../sass/design/modules/_rma.scss */
-.rma-bordered {
+/* line 2, ../sass/design/modules/_rma.scss */
+#new-rma .rma-bordered {
   border: 1px #bfbfbf solid;
   margin-bottom: 30px; }
-/* line 7, ../sass/design/modules/_rma.scss */
-.rma-bordered h5 {
+/* line 6, ../sass/design/modules/_rma.scss */
+#new-rma .condition-wrapper .sbHolder {
+  width: 50%; }
+/* line 10, ../sass/design/modules/_rma.scss */
+#new-rma .step-1 h5 {
   font-family: "latoblack";
   border-bottom: #ebebeb 1px solid;
-  padding: 10px 12px 10px 10px; }
-/* line 12, ../sass/design/modules/_rma.scss */
-.rma-bordered .table-wrapper {
-  margin: 20px 25px; }
+  padding: 12px 12px 11px 10px; }
 /* line 15, ../sass/design/modules/_rma.scss */
-.rma-bordered table td {
+#new-rma .step-1 .table-wrapper {
+  margin: 20px 25px; }
+/* line 18, ../sass/design/modules/_rma.scss */
+#new-rma .step-1 table td {
   padding: 7px 5px 8px 5px; }
-/* line 17, ../sass/design/modules/_rma.scss */
-.rma-bordered table td label {
+/* line 20, ../sass/design/modules/_rma.scss */
+#new-rma .step-1 table td label {
   font-weight: normal; }
-/* line 21, ../sass/design/modules/_rma.scss */
-.rma-bordered textarea {
+/* line 24, ../sass/design/modules/_rma.scss */
+#new-rma .step-1 textarea {
   box-sizing: border-box;
   height: 100px;
   -moz-box-sizing: border-box; }
-/* line 26, ../sass/design/modules/_rma.scss */
-.rma-bordered .error {
-  padding-left: 0 !important; }
 /* line 29, ../sass/design/modules/_rma.scss */
-.rma-bordered .form-ico-times {
+#new-rma .step-1 .error {
+  padding-left: 0 !important; }
+/* line 32, ../sass/design/modules/_rma.scss */
+#new-rma .step-1 .form-ico-times {
   display: none; }
+/* line 35, ../sass/design/modules/_rma.scss */
+#new-rma .step-1 .comment_text {
+  margin-bottom: 5px; }
+/* line 38, ../sass/design/modules/_rma.scss */
+#new-rma .step-1 .form-group {
+  margin-bottom: 0; }
 
 /* line 1, ../sass/design/override/_global.scss */
 .browsehappy {
