@@ -49,7 +49,7 @@ Mall.validate.validators = {
     telephone: function(value, elem, params) {
         "use strict";
 
-        return this.optional(elem) || (/^((\+)?[1-9]{1,2})?([-\s\.])?([0-9\-\ ]{9,12})$/.test(value));
+        return this.optional(elem) || value.replace(/\D/g,"").length >= 9; //9 digits
     },
 
     postcode: function(value, elem, params){

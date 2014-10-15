@@ -1172,7 +1172,7 @@
                                 .showErrors({
                                     "account[email]":
                                         Mall.translate.__("emailbackend-exits-log-in"
-                                            , "Typed address email exists on the site. Please log in to proceed.")
+                                            , "We already have an account with this address. Please <a href='customer/account/login/'>log in</a> to your account.")
                                 });
 
                             self.validate._checkout.getActiveStep().disable();

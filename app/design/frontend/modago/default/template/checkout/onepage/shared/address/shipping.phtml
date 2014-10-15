@@ -47,7 +47,7 @@ $_cutomerAddressId = $_shippingAddress->getCustomerAddressId();
         <div class="row">
             <label class="col-sm-3" for="shipping_telephone"><?php echo $this->__("Telephone number"); ?></label>
             <div class="col-sm-5">
-                <input type="text" value="<?php echo $this->escapeHtml($_shippingAddress->getTelephone()); ?>" class="form-control validate-telephone" id="shipping_telephone" title="" name="shipping[telephone]" required="true" data-original-title="<?php echo $this->__("We need your telephone number only to complete the order."); ?>">
+                <input type="text" value="<?php echo $this->escapeHtml($_shippingAddress->getTelephone()); ?>" class="form-control validate-telephone" id="shipping_telephone" title="" name="shipping[telephone]" required="true" data-original-title="<?php echo $this->__("Phone number we need only to contact concerning orders for example courier delivering the shipment."); ?>">
             </div>
         </div>
     </div>

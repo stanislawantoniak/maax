@@ -51,7 +51,7 @@ $_billingAddress = $_quote->getBillingAddress();
 					<div class="row">
 						<label class="col-sm-3" for="account_telephone"><?php echo $this->__("Telephone number"); ?></label>
 						<div class="col-sm-5">
-							<input type="text" value="<?php echo $this->escapeHtml($_billingAddress->getTelephone()); ?>" class="form-control phone hint validate-telephone" required="true" id="account_telephone" title="" name="account[telephone]" data-original-title="<?php echo $this->__("We need your telephone number only to complete the order."); ?>">
+							<input type="text" value="<?php echo $this->escapeHtml($_billingAddress->getTelephone()); ?>" class="form-control phone hint validate-telephone" required="true" id="account_telephone" title="" name="account[telephone]" data-original-title="<?php echo $this->__("Phone number we need only to contact concerning orders for example courier delivering the shipment."); ?>">
 						</div>
 					</div>
 				</div>
@@ -112,10 +112,13 @@ $_billingAddress = $_quote->getBillingAddress();
     Mall.translate.add("not-correct-postcode", "<?php echo $this->__("Post code is not correct"); ?>");
     Mall.translate.add("passwordbackend-need-to-have-x-letters", "<?php echo $this->__("Password need to have 5 letters"); ?>");
     Mall.translate.add("telephone-need-to-have-9-digit", "<?php echo $this->__("telephone-number-need-to-have-9-digit"); ?>");
-    Mall.translate.add("emailbackend-exits", "<?php echo $this->__("Typed address email exists on the site. Want to login?"); ?>");
-    Mall.translate.add("emailbackend-exits-log-in", "<?php echo $this->__("Typed address email exists on the site. Please log in to proceed."); ?>");
+    Mall.translate.add("emailbackend-exits-log-in", "<?php echo $this->__("We already have an account with this address. Please <a href='customer/account/login/'>log in</a> to your account."); ?>");
     Mall.translate.add("email", "<?php echo $this->__('Valid email is required.') ?>");
     Mall.translate.add("Password needs to have at least %s characters", "<?php echo $this->__("Password needs to have at least %s characters", Mage::helper("zolagocustomer")->getPasswordMinLength()); ?>");
+
+    Mall.translate.add("required", "<?php echo $this->__("This is a required field."); ?>");
+    Mall.translate.add("email", "<?php echo $this->__("E-mail address is in invalid format or contains invalid characters. Please enter correct address."); ?>");
+    Mall.translate.add("emailbackend-exits", "<?php echo $this->__("We already have an account with this address. Please log in to your account."); ?>");
 
     Mall.validate.validators.config.passwordMinLength = <?php echo Mage::helper("zolagocustomer")->getPasswordMinLength(); ?>;
 

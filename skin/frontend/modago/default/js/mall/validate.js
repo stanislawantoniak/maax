@@ -106,18 +106,18 @@ Mall.validate = {
 
         jQuery.validator.addMethod('validate-telephone', function () {
             return Mall.validate.validators.telephone.apply(this, arguments);
-        }, jQuery.validator.format(Mall.translate.__("telephone-number-need-to-have-9-digit", "Telephone number need to have 9 digit")));
+        }, jQuery.validator.format(Mall.translate.__("Telephone numer is too short. Number must contain 9 digits, without spacing.")));
 
         jQuery.validator.addMethod('validate-emailbackend', function () {
             return Mall.validate.validators.emailbackend.apply(this, arguments);
-        }, jQuery.validator.format(Mall.translate.__("emailbackend-exits", "Typed address email exists on the site. Want to login?")));
+        }, jQuery.validator.format(Mall.translate.__("emailbackend-exits", "We already have an account with this address. Please log in to your account.")));
 
         /*
         override default jquery validator because it can pass email like : name@host
          */
         jQuery.validator.addMethod('email', function () {
             return Mall.validate.validators.email.apply(this, arguments);
-        }, jQuery.validator.format(Mall.translate.__("email", "Please enter a valid email address.")));
+        }, jQuery.validator.format(Mall.translate.__("email", "E-mail address is in invalid format or contains invalid characters. Please enter correct address.")));
     },
 
     /**
