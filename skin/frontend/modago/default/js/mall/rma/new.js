@@ -24,13 +24,13 @@ jQuery(function($){
 		_init: function(){
 			this.steps = [this.step1, this.step2, this.step3];
 			var _validSettings = {
-				  errorPlacement: function(error, element) {
+				errorPlacement: function(error, element) {
 					if(element.next().is(".sbHolder")){
 						error.insertAfter(element.next());
 					}else {
 						error.insertAfter(element);
 					}
-				},
+				}
 			};
 			
 			this.validation = this.newRma.validate(
@@ -68,9 +68,10 @@ jQuery(function($){
 				$.extend(settings.rules, rules);
 				
 				// Validate is needed
-				if(el.val()){
+				if(el.val() || el.data("inited")){
 					el.valid();
 				}
+				el.data('inited', 1);
 			}
 			s.find("select").change(selectHandler).change();
 			
