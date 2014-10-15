@@ -8,6 +8,8 @@ jQuery(function($){
 		steps: [],
 		currentStep: -1, // init value
 		returnReasons: [],
+		unloadMessage: 'Do You really want to leave RMA process?',
+		ignoreUnload: 0,
 		
 		////////////////////////////////////////////////////////////////////////
 		// Init steps and general
@@ -22,6 +24,7 @@ jQuery(function($){
 		
 		// Internal init
 		_init: function(){
+			var self = this;
 			this.steps = [this.step1, this.step2, this.step3];
 			var _validSettings = {
 				errorPlacement: function(error, element) {
@@ -36,6 +39,12 @@ jQuery(function($){
 			this.validation = this.newRma.validate(
 				Mall.validate.getOptions(_validSettings)
 			);
+	
+			$(window).bind('beforeunload', function() {
+				if (self.currentStep>0 && !self.ignoreUnload) {
+					return self.unloadMessage;
+				}
+			}); 
 	
 			this._initStep1();
 		},
@@ -152,6 +161,10 @@ jQuery(function($){
 		
 		setReturnReasons: function(data){
 			this.returnReasons = data;
+		},
+		
+		setUnloadMessage: function(msg){
+			this.unloadMessage = msg;
 		},
 /*(function() {
 			var newRma = $("new-rma");
