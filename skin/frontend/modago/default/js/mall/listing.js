@@ -1982,6 +1982,7 @@ Mall.listing = {
 				min: parseInt(sliderRange.data("min"),10),
 				max: parseInt(sliderRange.data("max"),10),
 				values: Mall.listing.getCurrentPriceRange(),
+                step: 1,
 				stop: function(event, ui) {
                     var checkSlider = jQuery('#checkSlider').find('input');
                     if (!checkSlider.is(':checked')) {
