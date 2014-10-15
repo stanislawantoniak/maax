@@ -46,10 +46,18 @@ jQuery(function($){
 				self = this,
 				next = s.find("button.next");
 		
+			// Style selects
+			s.find("select").selectbox('attach');
+		
+			// Chexboxes
 			var checkboxHandler = function(){
 				var el = $(this);
 				next[s.find(":checkbox:checked").length ? "removeClass" : "addClass"]('hidden');
-				el.parents("tr").find(".condition-wrapper")[el.is(":checked") ? "removeClass" : "addClass"]('hidden');
+				el.parents("tr").find(".condition-wrapper")
+						[s.find(":checkbox:checked").length ? "addClass" : "removeClass"]('active')
+						[s.find(":checkbox:checked").length ? "removeClass" : "addClass"]('inactive');
+				el.parents("tr").find(".condition-wrapper select").
+						selectbox(el.is(":checked") ? "enable" : "disable");
 			};
 			s.find(":checkbox").change(checkboxHandler).change();
 			
@@ -90,9 +98,6 @@ jQuery(function($){
 				}
 				return false;
 			});
-			
-			// Style selects
-			s.find("select").selectbox('attach');
 		},
 		
 		

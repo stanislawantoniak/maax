@@ -3,8 +3,71 @@
 		border: 1px #bfbfbf solid;
 		margin-bottom: 30px;
 	}
-	.condition-wrapper .sbHolder{
-		width: 50%;
+
+	.desc-holder{
+		width: 49%;
+		float: left;
+		@media (max-width: $screen-xs-max) {
+           width: auto;
+           float: none;
+		   margin:0;
+        }
+	}
+	.reason-holder{
+		width: 49%;
+		float:right;
+		margin-left: 2%;
+		@media (max-width: $screen-xs-max) {
+           width: auto;
+           float: none;
+		   margin: 20px 0 0 0;
+        }
+		@media (max-width: $screen-xs-min) {
+		   margin: 5px 0 0 0;
+		}
+	}
+	
+	
+	
+	.condition-wrapper {
+		
+		margin-top: -6px;
+		.sbHolder{
+			display: block;
+			width: auto;
+			margin-left: 110px;
+			@media (max-width: $screen-xs-min) {
+				margin-left:0;
+			}
+		}
+		&.has-error, &.has-success{
+			.sbHolder{
+				border-color: #e2e2e2;
+			}
+		}
+		label{
+			width: 110px;
+			float: left;
+			margin-top: 6px;
+			@media (max-width: $screen-xs-min) {
+				float:none;
+				margin-bottom:0;
+			 }
+		}
+		.error{
+			display: none;
+		}
+		&.active{
+			.error{
+				display: block;
+			}
+			&.has-success .sbHolder{
+				border-color: #3c763d;
+			}
+			&.has-error .sbHolder{
+				border-color: #e84c3d;
+			}
+		}
 	}
 	.step-1{
 		h5{
