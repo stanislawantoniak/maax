@@ -23,5 +23,12 @@
 		checkout.addStep(Mall.Checkout.steps.review);
 		
 		checkout.init(0);
+
+        //visual fix for hints
+        jQuery('input[type=text],input[type=email],input[type=password],textarea ').tooltip({
+            placement: "right",
+            trigger: "focus"
+        });
+        //end visual fix for hints
 	})();
 </script>
