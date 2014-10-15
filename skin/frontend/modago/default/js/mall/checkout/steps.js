@@ -108,6 +108,39 @@
                 modal.find("#" + type + "_vat_id").mask("999-999-99-99");
             },
 
+            attachNewAddressBootstrapTooltip: function(modal, type) {
+                //hint data
+                jQuery('#shipping_firstname').attr('data-original-title', Mall.translate.__("Enter your name."));
+                jQuery('#shipping_lastname').attr('data-original-title', Mall.translate.__("Enter your last name"));
+                jQuery('#shipping_company').attr('data-original-title', Mall.translate.__("Company"));
+                jQuery('#shipping_vat_id').attr('data-original-title', Mall.translate.__("VAT ID"));
+                jQuery('#shipping_street_1').attr('data-original-title', Mall.translate.__("Street and number"));
+                jQuery('#shipping_postcode').attr('data-original-title', Mall.translate.__("Zip code"));
+                jQuery('#shipping_city').attr('data-original-title', Mall.translate.__("City"));
+                jQuery('#shipping_telephone').attr('data-original-title', Mall.translate.__("We need your telephone number only to complete the order."));
+                //end hint data
+
+                //visual fix for hints
+                jQuery('input[type=text],input[type=email],input[type=password],textarea ').tooltip({
+                    placement: function(a, element) {
+                        var viewport = window.innerWidth;
+                        var placement = "right";
+                        if (viewport <= 991) {
+                            placement = "top"
+                        }
+                        if (viewport <= 767) {
+                            placement = "right"
+                        }
+                        if (viewport <= 675) {
+                            placement = "top"
+                        }
+                        return placement;
+                    },
+                    trigger: "focus"
+                });
+                //end visual fix for hints
+            },
+
             showAddNewModal: function (modal, type, edit) {
                 edit = edit === undefined ? false : edit;
 
@@ -118,6 +151,7 @@
                 modal.find("#modal-title").html(edit ? 
 					Mall.translate.__("edit-address") : Mall.translate.__("add-new-address"));
                 this.attachNewAddressInputsMask(modal, type);
+                this.attachNewAddressBootstrapTooltip(modal, type);
             },
 
             getSelectButton: function () {
@@ -149,7 +183,7 @@
                     , type + "_firstname"
                     , "text"
                     , Mall.translate.__("firstname")
-                    , "col-sm-3"
+                    , "col-lg-3 col-md-3 col-sm-3 col-xs-12"
                     , "form-control firstName hint"
                     , "");
 
@@ -316,7 +350,7 @@
                 });
 
                 inputWrapper = jQuery("<div/>", {
-                    "class": "col-sm-9"
+                    "class": "col-lg-9 col-md-9 col-sm-9 col-xs-12"
                 });
 
                 jQuery("<input/>", {
