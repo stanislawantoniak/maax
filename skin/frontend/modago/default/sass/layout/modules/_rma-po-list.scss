@@ -1,0 +1,65 @@
+.rma .rma-po-list {
+	p {
+		font-size: 15px;
+	}
+	table.po-list-table {
+		border: 1px solid #bfbfbf;
+		thead tr th, tbody tr td {
+			background-color: #FFFFFF;
+			border: none;
+			vertical-align: top;
+		}
+		thead tr th {
+			text-transform: uppercase;
+		}
+		tbody tr td {
+			border-top: 1px solid #ebebeb;
+			&:last-child {
+				text-align: right;
+				padding-right: 25px;
+			}
+			&:first-child {
+				padding-left: 20px;
+			}
+			&:nth-child(4) {
+				padding: 0;
+			}
+		}
+		table.po-items-table {
+			tbody tr {
+				td {
+					border-top: none;
+					padding: 10px;
+					&:last-child {
+						text-align: inherit;
+					}
+					.po-attribute {
+						font-size: 12px;
+					}
+					&:first-child {
+						padding-left: 5px;
+						padding-right: 5px;
+						img {
+							border: 1px solid #cccccc;
+						}
+					}
+					&:last-child {
+						padding-left: 5px;
+					}
+				}
+				&:last-child td {
+					padding-bottom: 20px;
+				}
+				&:first-child td {
+					padding-top: 20px;
+				}
+			}
+		}
+	}
+}
+.product-attribute {
+	font-size: 12px;
+}
+.nowrap {
+	white-space: nowrap;
+}
