@@ -23,7 +23,20 @@ jQuery(function($){
 		// Internal init
 		_init: function(){
 			this.steps = [this.step1, this.step2, this.step3];
-			this.validation = this.newRma.validate();
+			var _validSettings = {
+				  errorPlacement: function(error, element) {
+					if(element.next().is(".sbHolder")){
+						error.insertAfter(element.next());
+					}else {
+						error.insertAfter(element);
+					}
+				},
+			};
+			
+			this.validation = this.newRma.validate(
+				Mall.validate.getOptions(_validSettings)
+			);
+	
 			this._initStep1();
 		},
 		

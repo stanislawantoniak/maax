@@ -819,18 +819,26 @@ span.checked {
 .sbHolder:hover {
   border-color: #4f4f4f; }
 
-/* line 14, ../sass/design/modules/_selected-styled.scss */
+/* line 13, ../sass/design/modules/_selected-styled.scss */
+.has-success .sbHolder {
+  border-color: #3c763d; }
+
+/* line 16, ../sass/design/modules/_selected-styled.scss */
+.has-error .sbHolder {
+  border-color: #e84c3d; }
+
+/* line 19, ../sass/design/modules/_selected-styled.scss */
 .sbSelector {
   line-height: 29px;
   outline: none;
   text-indent: 10px; }
-/* line 18, ../sass/design/modules/_selected-styled.scss */
+/* line 23, ../sass/design/modules/_selected-styled.scss */
 .sbSelector:link, .sbSelector:visited, .sbSelector:hover {
   color: #1e1e1e;
   outline: none;
   text-decoration: none; }
 
-/* line 26, ../sass/design/modules/_selected-styled.scss */
+/* line 31, ../sass/design/modules/_selected-styled.scss */
 .sbToggle {
   background: url('../images/sprites/select-sbfa0a5a9cb.png');
   background-position: 0 -18px;
@@ -838,54 +846,54 @@ span.checked {
 /* line 59, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
 .sbToggle:hover, .sbToggle.select_styled-hover {
   background-position: 0 -72px; }
-/* line 31, ../sass/design/modules/_selected-styled.scss */
+/* line 36, ../sass/design/modules/_selected-styled.scss */
 .sbToggle:link {
   background-position: 0 -18px; }
 /* line 59, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
 .sbToggle:link:hover, .sbToggle:link.select_styled-hover {
   background-position: 0 -72px; }
-/* line 34, ../sass/design/modules/_selected-styled.scss */
+/* line 39, ../sass/design/modules/_selected-styled.scss */
 .sbToggle:visited {
   background-position: 0 -18px; }
 /* line 59, ../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/compass-core-1.0.1/stylesheets/compass/utilities/sprites/_base.scss */
 .sbToggle:visited:hover, .sbToggle:visited.select_styled-hover {
   background-position: 0 -72px; }
-/* line 37, ../sass/design/modules/_selected-styled.scss */
+/* line 42, ../sass/design/modules/_selected-styled.scss */
 .sbToggle:hover {
   background-position: 0 -72px; }
 
-/* line 41, ../sass/design/modules/_selected-styled.scss */
+/* line 46, ../sass/design/modules/_selected-styled.scss */
 .sbHolderDisabled {
   background-color: #f5f5f5;
   border: solid 1px #e2e2e2; }
-/* line 44, ../sass/design/modules/_selected-styled.scss */
+/* line 49, ../sass/design/modules/_selected-styled.scss */
 .sbHolderDisabled .sbToggle {
   background-position: 0 -45px; }
 
-/* line 48, ../sass/design/modules/_selected-styled.scss */
+/* line 53, ../sass/design/modules/_selected-styled.scss */
 .sbOptionsWrapper {
   background-color: #fff;
   border: solid 1px #afafaf;
   list-style: none; }
-/* line 55, ../sass/design/modules/_selected-styled.scss */
+/* line 60, ../sass/design/modules/_selected-styled.scss */
 .sbOptionsWrapper .sbOptions a {
   outline: none; }
-/* line 57, ../sass/design/modules/_selected-styled.scss */
+/* line 62, ../sass/design/modules/_selected-styled.scss */
 .sbOptionsWrapper .sbOptions a:link, .sbOptionsWrapper .sbOptions a:visited {
   color: #1e1e1e;
   text-decoration: none; }
-/* line 62, ../sass/design/modules/_selected-styled.scss */
+/* line 67, ../sass/design/modules/_selected-styled.scss */
 .sbOptionsWrapper .sbOptions a:hover, .sbOptionsWrapper .sbOptions a:focus, .sbOptionsWrapper .sbOptions a.sbFocus {
   color: #1e1e1e;
   background: #f2f1f0; }
-/* line 71, ../sass/design/modules/_selected-styled.scss */
+/* line 76, ../sass/design/modules/_selected-styled.scss */
 .sbOptionsWrapper .sbOptions li.last a {
   border-bottom: none; }
-/* line 76, ../sass/design/modules/_selected-styled.scss */
+/* line 81, ../sass/design/modules/_selected-styled.scss */
 .sbOptionsWrapper .sbOptions .sbDisabled {
   border-bottom: dotted 1px #515151;
   color: #999; }
-/* line 80, ../sass/design/modules/_selected-styled.scss */
+/* line 85, ../sass/design/modules/_selected-styled.scss */
 .sbOptionsWrapper .sbOptions .sbGroup {
   border-bottom: dotted 1px #515151;
   color: #EBB52D;
@@ -2969,6 +2977,12 @@ x-axis
   box-sizing: border-box;
   height: 100px;
   -moz-box-sizing: border-box; }
+/* line 26, ../sass/design/modules/_rma.scss */
+.rma-bordered .error {
+  padding-left: 0 !important; }
+/* line 29, ../sass/design/modules/_rma.scss */
+.rma-bordered .form-ico-times {
+  display: none; }
 
 /* line 1, ../sass/design/override/_global.scss */
 .browsehappy {
