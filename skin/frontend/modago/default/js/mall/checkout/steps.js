@@ -110,6 +110,8 @@
 
             attachNewAddressBootstrapTooltip: function(modal, type) {
                 //hint data
+
+                //shoping
                 jQuery('#shipping_firstname').attr('data-original-title', Mall.translate.__("Enter your name."));
                 jQuery('#shipping_lastname').attr('data-original-title', Mall.translate.__("Enter your last name"));
                 jQuery('#shipping_company').attr('data-original-title', Mall.translate.__("Company"));
@@ -118,10 +120,20 @@
                 jQuery('#shipping_postcode').attr('data-original-title', Mall.translate.__("Zip code"));
                 jQuery('#shipping_city').attr('data-original-title', Mall.translate.__("City"));
                 jQuery('#shipping_telephone').attr('data-original-title', Mall.translate.__("We need your telephone number only to complete the order."));
+
+                //billing
+                jQuery('#billing_firstname').attr('data-original-title', Mall.translate.__("Enter your name."));
+                jQuery('#billing_lastname').attr('data-original-title', Mall.translate.__("Enter your last name"));
+                jQuery('#billing_company').attr('data-original-title', Mall.translate.__("Company"));
+                jQuery('#billing_vat_id').attr('data-original-title', Mall.translate.__("VAT ID"));
+                jQuery('#billing_street_1').attr('data-original-title', Mall.translate.__("Street and number"));
+                jQuery('#billing_postcode').attr('data-original-title', Mall.translate.__("Zip code"));
+                jQuery('#billing_city').attr('data-original-title', Mall.translate.__("City"));
+                jQuery('#billing_telephone').attr('data-original-title', Mall.translate.__("We need your telephone number only to complete the order."));
                 //end hint data
 
                 //visual fix for hints
-                jQuery('input[type=text],input[type=email],input[type=password],textarea ').tooltip({
+                jQuery('input[type=text],input[type=email],input[type=password],textarea ').not('.zipcode').tooltip({
                     placement: function(a, element) {
                         var viewport = window.innerWidth;
                         var placement = "right";
@@ -136,6 +148,10 @@
                         }
                         return placement;
                     },
+                    trigger: "focus"
+                });
+                jQuery('.zipcode').tooltip({
+                    placement: "right",
                     trigger: "focus"
                 });
                 //end visual fix for hints
