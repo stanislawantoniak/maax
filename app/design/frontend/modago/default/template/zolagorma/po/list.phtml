@@ -51,11 +51,12 @@
 							<table class="po-items-table">
 								<tbody>
 									<?php foreach($po->getItemsCollection() as $item):?>
+										<?php $thumbUrl = $this->getPoItemThumb($item,40); ?>
 										<?php $item = $item->getOrderItem(); ?>
 										<?php if(!$item->getParentItem()): ?>
 											<?php $name = $this->escapeHtml($item->getName()); ?>
 											<tr>
-												<td><img src="<?php echo $this->getThumbnailUrl($item); ?>" alt="<?php echo $name; ?>" /></td>
+												<td><img src="<?php echo $thumbUrl; ?>" alt="<?php echo $name; ?>" /></td>
 												<td>
 												<?php echo $name; ?><br/>
 												<?php foreach($this->getProductAttributes($item->getProductOptions()) as $_option): ?>
