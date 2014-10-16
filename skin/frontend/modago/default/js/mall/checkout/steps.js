@@ -104,7 +104,6 @@
             },
 
             attachNewAddressInputsMask: function (modal, type) {
-                modal.find("#" + type + "_postcode").mask("99-999");
                 modal.find("#" + type + "_vat_id").mask("999-999-99-99");
             },
 
@@ -809,7 +808,7 @@
 				this.attachCompanyTriggers();
                 // add validation to form
                 this.validate.init();
-                this.enableBillingPostcodeMask();
+
 			},
 			
 			onDisable: function(){
@@ -838,11 +837,7 @@
 					
 			},
 
-            enableBillingPostcodeMask: function () {
-                jQuery("#billing_postcode").mask("99-999");
 
-                return this;
-            },
 
             /**
              * Toggle visibility state of invoice data form.
@@ -1048,17 +1043,34 @@
 			getBillingFromShipping: function () {
 				var self = this,
 					billingData = [],
-					selector;
+					selector,
+                    value;
 				jQuery.each(this._billing_names, function (idx, item) {
 					selector = item.replace("billing", "shipping");
+                    value = jQuery("[name='"+ selector +"']").val();
+                    if (item == "billing[postcode]") {
+                        value = self.postcodeTransform(value);
+                    }
 					billingData.push({
 						name: item,
-						value: jQuery("[name='"+ selector +"']").val()
+						value: value
 					});
+
 				});
 
 				return billingData;
 			},
+
+            //transform postcode like: 99999, 99 999, 99/999, 99-999, 99_999
+            //to our format: 99-999
+            postcodeTransform: function(str) {
+                var strTrans = str.match(/.*?([0-9]{2}).([0-9]{3}.*?)/i);
+                if (strTrans.length >= 1) {
+                    return strTrans[1]
+                } else {
+                    return str;
+                }
+            },
 
 			collect: function () {
 				var form = jQuery("#co-address"),

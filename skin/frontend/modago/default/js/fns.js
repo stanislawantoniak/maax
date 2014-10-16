@@ -247,16 +247,7 @@ jQuery.noConflict();
         });
 
 
-        /* ===================== MASK INPUT ================== */
-        var ua = navigator.userAgent.toLowerCase();
-        var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
-        if(!isAndroid) {
-            $(".zipcode").mask("99-999");
-            $(".nip").mask("999-999-99-99");
-        } else {
-            $(".zipcode").mask("99-999");
-            $(".nip").mask("999-999-99-99");
-        }
+
 
 
 
