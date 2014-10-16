@@ -197,7 +197,7 @@ class Zolago_Solrsearch_Block_Faces_Price extends Zolago_Solrsearch_Block_Faces_
 		$appliedPriceRanges = array();
 		
 		
-		foreach ($priceRanges as $range) {
+		foreach ($priceRanges as $l => $range) {
 			$start = floor(floatval($range['start']));
 			$end = ceil(floatval($range['end']));
 			$value = $start . ' TO ' . $end;
@@ -216,9 +216,22 @@ class Zolago_Solrsearch_Block_Faces_Price extends Zolago_Solrsearch_Block_Faces_
 					$rangeItemArray['count'] = ($rangeItemArray['count'] + $count);
 				}
 			}
-			$appliedPriceRanges[] = $rangeItemArray;
+
+            if($rangeItemArray['count'] > 0){
+                $appliedPriceRanges[] = $rangeItemArray;
+            }
 		}
 
+        if (!empty($appliedPriceRanges)) {
+            $appliedPriceRanges = array_values($appliedPriceRanges);
+            for ($i = 0; $i < count($appliedPriceRanges); $i++) {
+                if (isset($appliedPriceRanges[$i + 1]) && $appliedPriceRanges[$i]['end'] !== $appliedPriceRanges[$i + 1]['start']) {
+                    $appliedPriceRanges[$i]['end'] = $appliedPriceRanges[$i + 1]['start'];
+                    $appliedPriceRanges[$i]['value'] = $appliedPriceRanges[$i]['start'] . ' TO ' . $appliedPriceRanges[$i + 1]['start'];
+                    $appliedPriceRanges[$i]['formatted'] = $this->getFilterContainer()->formatFacetPrice($appliedPriceRanges[$i]['start'] . ' TO ' . $appliedPriceRanges[$i + 1]['start']);
+                };
+            }
+        }
 		return $appliedPriceRanges;
 	}
 
