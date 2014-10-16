@@ -2430,7 +2430,7 @@ html.fb-static .fb-slidebar, .fb-slidebar.fb-static {
   overflow: hidden;
   position: absolute;
   top: 0;
-  width: 88%; }
+  right: 30px; }
 
 /* line 29, ../sass/layout/modules/_selected-styled.scss */
 .sbToggle {
