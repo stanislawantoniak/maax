@@ -9,6 +9,7 @@
      *
      * http://docs.jquery.com/UI/Slider
      *
+     *
      * Depends:
      *	jquery.ui.core.js
      *	jquery.ui.mouse.js
