@@ -1,24 +1,18 @@
 <?php if ($this->isLayerNavigationActive()):?>
 <?php $filterQuery = $this->getFilterQuery(); ?>
-    <div class="current-filter visible-xs">
-        <dl class="clearfix">
-            <?php echo $this->getChildHtml('solrsearch_product_list_activefaces'); ?>
-        </dl>
-    </div>
-    <div class="sidebar">
-
-        <div class=" block-filter" id="solr_search_facets">
-                <form name="searchFacets" method="get"
-                      action="<?php echo $this->helper('solrsearch')->getResultUrl() ?>">
-                    <input type="hidden" name="q" value="<?php echo $this->getData('querytext') ?>"/>
-                    <?php if ($this->isShoppingOptionsActive()): ?>
-                            <?php foreach ($this->getFilterBlocks() as $filterBlock): ?>
-                                <!-- Blocks here -->
-                                <?php echo $filterBlock->toHtml(); ?>
-                            <?php endforeach; ?>
-                            <?php /* echo $this->getPriceFacets()*/ ?>
-                    <?php endif; ?>
-                </form>
+    <div class="sidebar solr_search_facets" id="solr_search_facets">
+        <div class=" block-filter" >
+			<form name="searchFacets" method="get"
+				  autocomplete="false"
+				  action="<?php echo $this->helper('solrsearch')->getResultUrl() ?>">
+				<input type="hidden" name="q" value="<?php echo $this->getData('querytext') ?>"/>
+				<?php if ($this->isShoppingOptionsActive()): ?>
+						<?php foreach ($this->getFilterBlocks() as $filterBlock): ?>
+							<!-- Blocks here -->
+							<?php echo $filterBlock->toHtml(); ?>
+						<?php endforeach; ?>
+				<?php endif; ?>
+			</form>
         </div>
     </div>
 <?php endif;?>
