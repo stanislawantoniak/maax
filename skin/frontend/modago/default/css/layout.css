@@ -5854,6 +5854,118 @@ yx-axis
 #contact-container {
   border-top-width: 0px; }
 
+/* line 2, ../sass/layout/modules/_rma-po-list.scss */
+.rma .po-list-sm {
+  display: none; }
+@media (max-width: 767px) {
+  /* line 2, ../sass/layout/modules/_rma-po-list.scss */
+  .rma .po-list-sm {
+    display: table; } }
+/* line 8, ../sass/layout/modules/_rma-po-list.scss */
+.rma .po-list-md {
+  display: none; }
+@media (min-width: 768px) {
+  /* line 8, ../sass/layout/modules/_rma-po-list.scss */
+  .rma .po-list-md {
+    display: table; } }
+/* line 15, ../sass/layout/modules/_rma-po-list.scss */
+.rma .rma-po-list p {
+  font-size: 15px; }
+/* line 18, ../sass/layout/modules/_rma-po-list.scss */
+.rma .rma-po-list table.po-list-table {
+  border: 1px solid #bfbfbf; }
+/* line 20, ../sass/layout/modules/_rma-po-list.scss */
+.rma .rma-po-list table.po-list-table thead tr th, .rma .rma-po-list table.po-list-table tbody tr td {
+  background-color: #FFFFFF;
+  border: none;
+  vertical-align: top; }
+/* line 25, ../sass/layout/modules/_rma-po-list.scss */
+.rma .rma-po-list table.po-list-table thead tr th {
+  text-transform: uppercase; }
+/* line 28, ../sass/layout/modules/_rma-po-list.scss */
+.rma .rma-po-list table.po-list-table tbody tr td {
+  border-top: 1px solid #ebebeb; }
+/* line 30, ../sass/layout/modules/_rma-po-list.scss */
+.rma .rma-po-list table.po-list-table tbody tr td:last-child {
+  text-align: right;
+  padding-right: 20px; }
+/* line 34, ../sass/layout/modules/_rma-po-list.scss */
+.rma .rma-po-list table.po-list-table tbody tr td:first-child {
+  padding-left: 15px; }
+/* line 37, ../sass/layout/modules/_rma-po-list.scss */
+.rma .rma-po-list table.po-list-table tbody tr td:nth-child(4) {
+  padding: 0; }
+/* line 43, ../sass/layout/modules/_rma-po-list.scss */
+.rma .rma-po-list table.po-list-table table.po-items-table tbody tr td {
+  border-top: none;
+  padding: 10px; }
+/* line 46, ../sass/layout/modules/_rma-po-list.scss */
+.rma .rma-po-list table.po-list-table table.po-items-table tbody tr td:last-child {
+  text-align: inherit; }
+/* line 49, ../sass/layout/modules/_rma-po-list.scss */
+.rma .rma-po-list table.po-list-table table.po-items-table tbody tr td:first-child {
+  padding-left: 5px;
+  padding-right: 5px; }
+/* line 52, ../sass/layout/modules/_rma-po-list.scss */
+.rma .rma-po-list table.po-list-table table.po-items-table tbody tr td:first-child img {
+  border: 1px solid #cccccc; }
+/* line 56, ../sass/layout/modules/_rma-po-list.scss */
+.rma .rma-po-list table.po-list-table table.po-items-table tbody tr td:last-child {
+  padding-left: 5px; }
+/* line 60, ../sass/layout/modules/_rma-po-list.scss */
+.rma .rma-po-list table.po-list-table table.po-items-table tbody tr:last-child td {
+  padding-bottom: 20px; }
+/* line 63, ../sass/layout/modules/_rma-po-list.scss */
+.rma .rma-po-list table.po-list-table table.po-items-table tbody tr:first-child td {
+  padding-top: 20px; }
+/* line 70, ../sass/layout/modules/_rma-po-list.scss */
+.rma .po-list-table-mobile {
+  width: 100%;
+  border: 1px solid #bfbfbf; }
+/* line 73, ../sass/layout/modules/_rma-po-list.scss */
+.rma .po-list-table-mobile tr:first-child td {
+  border-top: none; }
+/* line 76, ../sass/layout/modules/_rma-po-list.scss */
+.rma .po-list-table-mobile td {
+  border-top: 1px solid #ebebeb;
+  padding: 15px 10px; }
+/* line 79, ../sass/layout/modules/_rma-po-list.scss */
+.rma .po-list-table-mobile td table {
+  width: 100%; }
+/* line 83, ../sass/layout/modules/_rma-po-list.scss */
+.rma .po-list-table-mobile td table tr:first-child td {
+  padding: 0; }
+/* line 85, ../sass/layout/modules/_rma-po-list.scss */
+.rma .po-list-table-mobile td table tr:first-child td:nth-child(2) {
+  text-align: right; }
+/* line 90, ../sass/layout/modules/_rma-po-list.scss */
+.rma .po-list-table-mobile td table tr td {
+  border-top: none;
+  padding: 20px 0 0 0;
+  vertical-align: middle; }
+/* line 94, ../sass/layout/modules/_rma-po-list.scss */
+.rma .po-list-table-mobile td table tr td span {
+  display: block; }
+/* line 97, ../sass/layout/modules/_rma-po-list.scss */
+.rma .po-list-table-mobile td table tr td span.product-attribute {
+  margin-top: -3px;
+  margin-bottom: 4px; }
+/* line 106, ../sass/layout/modules/_rma-po-list.scss */
+.rma .rma-po-empty {
+  padding-bottom: 100px; }
+
+/* line 110, ../sass/layout/modules/_rma-po-list.scss */
+.product-attribute {
+  font-size: 12px; }
+
+/* line 113, ../sass/layout/modules/_rma-po-list.scss */
+.nowrap {
+  white-space: nowrap; }
+
+/* line 116, ../sass/layout/modules/_rma-po-list.scss */
+.bold {
+  font-weight: 700; }
+
 /* line 1, ../sass/layout/override/_global.scss */
 .clr {
   clear: both; }

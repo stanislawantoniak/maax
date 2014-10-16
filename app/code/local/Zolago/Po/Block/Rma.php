@@ -43,4 +43,10 @@ class Zolago_Po_Block_Rma extends Mage_Core_Block_Template
         $out = Mage::helper('zolagorma')->getItemList($items);
         return $out;
     }
+	public function getProductAttributes($options = array()) {
+		return isset($options['attributes_info']) ? $options['attributes_info'] : $options;
+	}
+	public function getThumbnailUrl($item) {
+		return Mage::getModel('catalog/product')->load($item->getProductId())->getThumbnailUrl();
+	}
 }
