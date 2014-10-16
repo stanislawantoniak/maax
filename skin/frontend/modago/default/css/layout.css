@@ -5966,6 +5966,20 @@ yx-axis
 .bold {
   font-weight: 700; }
 
+/* line 1, ../sass/layout/modules/_rma-summary.scss */
+.rma-summary-container {
+  border: 1px solid #bfbfbf;
+  padding: 20px; }
+/* line 5, ../sass/layout/modules/_rma-summary.scss */
+.rma-summary-container table#review-items td {
+  border: none; }
+/* line 9, ../sass/layout/modules/_rma-summary.scss */
+.rma-summary-container p, .rma-summary-container address#review-shipping-address {
+  margin-bottom: 0; }
+/* line 12, ../sass/layout/modules/_rma-summary.scss */
+.rma-summary-container .customer-account-fieldset {
+  display: none; }
+
 /* line 1, ../sass/layout/override/_global.scss */
 .clr {
   clear: both; }

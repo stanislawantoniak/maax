@@ -1,0 +1,15 @@
+.rma-summary-container {
+	border: 1px solid #bfbfbf;
+	padding: 20px;
+	table#review-items {
+		td {
+			border: none;
+		}
+	}
+	p, address#review-shipping-address {
+		margin-bottom: 0;
+	}
+	.customer-account-fieldset {
+		display: none;
+	}
+}

@@ -1,53 +1,87 @@
 <?php $_helper = Mage::helper("zolagorma"); ?>
 <?php $_po = $this->getPo(); ?>
 <?php $_rma = $this->getRma();?>
-<?php $_shippingAddress = $_po->getShippingAddress(); ?>
+<?php $_shippingAddress = $_po->getShippingAddress()->format('html'); ?>
 <?php $_itemsSingle = $_rma->getItemsSingle(); ?>
 <?php $_itemsConditionSingle = $_rma->getItemsConditionSingle(); ?>
 <?php $items = $this->getItemList();?>
-
+<script type="application/javascript">
+	rmaDaysOfWeek = [
+		"<?php echo $_helper->__("Sunday"); ?>",
+		"<?php echo $_helper->__("Monday"); ?>",
+		"<?php echo $_helper->__("Tuesday"); ?>",
+		"<?php echo $_helper->__("Wednesday"); ?>",
+		"<?php echo $_helper->__("Thursday"); ?>",
+		"<?php echo $_helper->__("Friday"); ?>",
+		"<?php echo $_helper->__("Saturday"); ?>"
+	];
+</script>
 <div class="steps step-3 background-wrapper box-wrapper" id="step-3">
 	<p id="overview-message" class="flow-return">
 		<?php echo $_helper->__("Check again inserted data. Note carrier pickup date."); ?>
-	</a>
-	
+
 	<div class="row">
-		<div class="col-md-8">
+		<div class="col-md-8 col-sm-12 col-xs-12">
 			<div class="fieldset">
 				<h5 class="legend"><?php echo $_helper->__("RMA Content"); ?></h5>
-				<ul class="form-list">
-					<li class="wide">
-						<table class="data-table">
-							<thead>
-								<tr>
-									<th><?php echo $_helper->__("Lp."); ?></th>
-									<th><?php echo $_helper->__("Product"); ?></th>
-									<th><?php echo $_helper->__("Reason"); ?></th>
-								</tr>
-							</thead>
-							<tbody id="review-items"></tbody>
-						</table>
-						<p id="review-comment-text"></p>
-					</li>
-				</ul>
+				<div class="rma-summary-container">
+					<table id="review-items" class="data-table">
+						<tbody>
+							<tr>
+								<td rowspan="2">foto</td>
+								<td>details</td>
+							</tr>
+							<tr>
+								<td>reason</td>
+							</tr>
+							<tr>
+								<td rowspan="2">foto</td>
+								<td>details</td>
+							</tr>
+							<tr>
+								<td>reason</td>
+							</tr>
+							<tr>
+								<td rowspan="2">foto</td>
+								<td>details</td>
+							</tr>
+							<tr>
+								<td>reason</td>
+							</tr>
+							<tr>
+								<td colspan="2" class="comment">
+									<p id="review-comment-text"></p>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
 			</div>
 		</div>
-		<div class="col-md-4">
+		<div class="col-md-4 col-sm-12 col-xs-12">
 			<div id="pickup-address-overview" class="fieldset flow-return">
 				<h5 class="legend"><?php echo $_helper->__("Your address"); ?></h5>
-				<ul class="form-list">
-					<li class="wide">
-						<address id="review-shipping-address"></address>
-					</li>
-				</ul>
+				<div class="rma-summary-container">
+					<address id="review-shipping-address">
+						<?php echo $_shippingAddress; ?>
+					</address>
+				</div>
 			</div>
 			<div id="pickup-date-overview" class="fieldset flow-return">
 				<h5 class="legend"><?php echo $_helper->__("Pickup date"); ?></h5>
-				<p id="pickup-date-review"></p>
+				<div class="rma-summary-container">
+					<p id="pickup-date-review">
+						<span><?php echo $_helper->__("Courier"); ?>,</span> <span class="pickup-day"></span><br />
+						<span><?php echo $_helper->__("between"); ?></span>
+						<span class="pickup-from"></span> <span><?php echo $_helper->__("and"); ?></span> <span class="pickup-to"></span>
+					</p>
+				</div>
 			</div>
-			<div class="fieldset">
+			<div class="fieldset customer-account-fieldset">
 				<h5 class="legend"><?php echo $_helper->__("Bank account for return"); ?></h5>
-				<p id="customer-account-review"></p>
+				<div class="rma-summary-container">
+					<p id="customer-account-review"></p>
+				</div>
 			</div>
 		</div>
 	</div>
