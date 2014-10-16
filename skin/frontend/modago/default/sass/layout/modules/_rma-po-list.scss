@@ -30,21 +30,26 @@
 				&:last-child {
 					text-align: right;
 					padding-right: 20px;
+					width: 100px;
 				}
 				&:first-child {
 					padding-left: 15px;
 				}
 				&:nth-child(4) {
 					padding: 0;
+					width: 330px;
 				}
 			}
 			table.po-items-table {
+				max-width: 300px;
 				tbody tr {
 					td {
 						border-top: none;
 						padding: 10px;
 						&:last-child {
 							text-align: inherit;
+							padding-left: 5px;
+							width: auto;
 						}
 						&:first-child {
 							padding-left: 5px;
@@ -52,9 +57,6 @@
 							img {
 								border: 1px solid #cccccc;
 							}
-						}
-						&:last-child {
-							padding-left: 5px;
 						}
 					}
 					&:last-child td {

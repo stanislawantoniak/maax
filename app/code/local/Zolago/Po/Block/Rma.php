@@ -49,4 +49,31 @@ class Zolago_Po_Block_Rma extends Mage_Core_Block_Template
 	public function getThumbnailUrl($item) {
 		return Mage::getModel('catalog/product')->load($item->getProductId())->getThumbnailUrl();
 	}
+	/**
+	 * @param @param Zolago_Po_Model_Po_Item | int $item $item
+	 * @return Zolago_Po_Model_Po_Item
+	 */
+	protected function _getPoItem($item) {
+		if($item instanceof Zolago_Po_Model_Po_Item){
+			return $item;
+		}
+		if(!($item instanceof Zolago_Po_Model_Po_Item)){
+			$item = $this->getPo()->getItemById($item);
+		}
+		if(!($item instanceof Zolago_Po_Model_Po_Item)){
+			$item = Mage::getModel("udpo/po_item")->load($item);
+		}
+		return $item;
+	}
+	/**
+	 * @param int $item
+	 * @param int|null $width
+	 * @param int|null $height
+	 * @return string
+	 */
+	public function getPoItemThumb($item, $width=60, $height=null) {
+		return $this->_getPoItem($item)->getProductThumbHelper()->
+		resize($width, $height)->
+		keepFrame(false);
+	}
 }
