@@ -40,8 +40,8 @@ $_cutomerAddressId = $_billingAddress->getCustomerAddressId();
 
     <div class="form-group clearfix border-top">
         <div class="row">
-            <label class="col-sm-3" for="billing_company"><?php echo $this->__("Company"); ?> / <?php echo $this->__("Fullname"); ?></label>
-            <div class="col-lg-7 col-md-5 col-sm-5">
+            <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="billing_company"><?php echo $this->__("Company"); ?> / <?php echo $this->__("Fullname"); ?></label>
+            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
                 <input type="text" value="<?php echo $this->escapeHtml($_billingAddress->getCompany()); ?>" class="form-control firm hint" id="billing_company" title="" name="billing[company]" required="true" data-original-title="<?php echo $this->__("Company"); ?>">
             </div>
         </div>
@@ -49,8 +49,8 @@ $_cutomerAddressId = $_billingAddress->getCustomerAddressId();
 
     <div class="form-group clearfix border-top">
         <div class="row">
-            <label class="col-sm-3" for="billing_vat_id"><?php echo $this->__("VAT ID"); ?></label>
-            <div class="col-lg-3 col-md-5 col-sm-5">
+            <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="billing_vat_id"><?php echo $this->__("VAT ID"); ?></label>
+            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
                 <input type="text" value="<?php echo $this->escapeHtml($_billingAddress->getVatId()); ?>" class="form-control nip hint" name="billing[vat_id]" required="true" id="billing_vat_id" title="" data-original-title="<?php echo $this->__("VAT ID"); ?>">
             </div>
         </div>
@@ -58,8 +58,8 @@ $_cutomerAddressId = $_billingAddress->getCustomerAddressId();
 
     <div class="form-group border-top clearfix">
         <div class="row">
-            <label class="col-sm-3" for="billing_street"><?php echo $this->__("Street and number"); ?></label>
-            <div class="col-lg-7 col-md-5 col-sm-5">
+            <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="billing_street"><?php echo $this->__("Street and number"); ?></label>
+            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
                 <input type="text" value="<?php echo $this->escapeHtml($street); ?>" class="form-control street" id="billing_street" title="" name="billing[street][]" required="true" data-original-title="<?php echo $this->__("Street and number"); ?>">
             </div>
         </div>
@@ -67,8 +67,8 @@ $_cutomerAddressId = $_billingAddress->getCustomerAddressId();
 
     <div class="form-group clearfix border-top">
         <div class="row">
-            <label class="col-sm-3" for="billing_postcode"><?php echo $this->__("Zip code"); ?></label>
-            <div class="col-sm-5">
+            <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="billing_postcode"><?php echo $this->__("Zip code"); ?></label>
+            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
                 <input type="text" value="<?php echo $this->escapeHtml($_billingAddress->getPostcode()); ?>" class="form-control zipcode" id="billing_postcode" title="" name="billing[postcode]" required="true" data-original-title="<?php echo $this->__("Zip code"); ?>">
             </div>
         </div>
@@ -76,8 +76,8 @@ $_cutomerAddressId = $_billingAddress->getCustomerAddressId();
 
     <div class="form-group clearfix border-top">
         <div class="row">
-            <label class="col-sm-3" for="billing_city"><?php echo $this->__("City"); ?></label>
-            <div class="col-sm-5">
+            <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="billing_city"><?php echo $this->__("City"); ?></label>
+            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
                 <input type="text" value="<?php echo $this->escapeHtml($_billingAddress->getCity()); ?>" class="form-control city hint" id="billing_city" title="" name="billing[city]" required="true" data-original-title="<?php echo $this->__("City"); ?>">
             </div>
         </div>
