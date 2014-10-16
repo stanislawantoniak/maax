@@ -1,0 +1,25 @@
+<?php if($this->getItems()->getSize()): ?>
+<div class="color-box-bundle">
+    <div class="color-box">
+        <div class="color">
+            <span class="color-label"><?php echo $this->__("Other colors"); ?>:</span>
+
+            <div id="wrapper-rwd-color">
+                <div id="rwd-color" class="rwd-carousel">
+                    <?php /** @var $_item Mage_Catalog_Model_Product */ ?>
+                    <?php foreach($this->getItems() as $_item) : ?>
+                    <div class="item">
+                        <div class="form-group form-radio">
+                            <label for="color_<?php echo $_item->getId(); ?>">
+                                <input type="radio" name="color" id="color_<?php echo $_item->getId(); ?>">
+                                <a href="<?php echo $_item->getProductUrl(); ?>"><img src="<?php echo $this->helper('catalog/image')->init($_item, 'thumbnail')->resize(43, 54); ?>" alt="<?php echo $this->escapeHtml($_item->getName()); ?>"></a>
+                            </label>
+                        </div>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<?php endif ?>
