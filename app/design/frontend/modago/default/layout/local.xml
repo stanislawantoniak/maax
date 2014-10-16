@@ -427,6 +427,10 @@
 			</action>
 		</reference>
 		<reference name="head">
+            <action method="addItem">
+                <type>skin_js</type>
+                <script>js/jquery.ui.slider-p.js</script>
+            </action>
 			<action method="addJs">
 				<script>jquery/jquery.jcarousel.min.js</script>
 			</action>

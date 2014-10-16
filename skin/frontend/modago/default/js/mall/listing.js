@@ -1992,7 +1992,7 @@ Mall.listing = {
 					self._triggerRefresh(scope, 1, true);
 				},
 				slide: function(event, ui) {
-                    if(ui.values[0] == ui.values[1]){
+                    if ( ( ui.values[ 0 ] + 22 ) >= ui.values[ 1 ] ) {
                         return false;
                     }
 					jQuery("#zakres_min").val(ui.values[0]);
