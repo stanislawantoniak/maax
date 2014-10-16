@@ -13,9 +13,9 @@
 		</h1>
 	</div>
 	<div class="background-wrapper box-wrapper rma-po-list">
-		<p><?php echo $this->__("Choose package which contained products that you want to return or complaint"); ?>:</p>
 		<?php if($list): ?>
-			<table class="po-list-table data-table">
+			<p><?php echo $this->__("Choose package which contained products that you want to return or complaint"); ?>:</p>
+			<table class="po-list-table data-table po-list-md">
 				<thead>
 				<tr>
 					<th>
@@ -45,7 +45,7 @@
 							<span class="nowrap"><?php echo Mage::helper('core')->formatDate($po->getCreatedAt(), 'medium', false); ?></span>
 						</td>
 						<td>
-							<span class="uppercase"><?php echo $po->getVendorName(); ?></span>
+							<?php echo $po->getVendorName(); ?>
 						</td>
 						<td>
 							<table class="po-items-table">
@@ -59,7 +59,7 @@
 												<td>
 												<?php echo $name; ?><br/>
 												<?php foreach($this->getProductAttributes($item->getProductOptions()) as $_option): ?>
-													<span class="po-attribute"><?php echo $this->escapeHtml($_option['label']); ?>: <?php echo $this->escapeHtml($_option['value']); ?></span><br/>
+													<span class="product-attribute"><?php echo $this->escapeHtml($_option['label']); ?>: <?php echo $this->escapeHtml($_option['value']); ?></span><br/>
 												<?php endforeach;?>
 												</td>
 											</tr>
@@ -75,14 +75,65 @@
 				<?php endforeach; ?>
 				</tbody>
 			</table>
-			<div class="bottom-links">
-				<a class="button button-third large" href="<?php echo Mage::getUrl("customer/account");?>">
-					<i class="glyphicon glyphicon-chevron-left"></i>
-					<?php echo $_helper->__('back') ?>
-				</a>
-			</div>
+			<table class="po-list-table-mobile po-list-sm">
+				<tbody>
+				<?php foreach($list as $po): ?>
+					<?php /* @var $po Zolago_Po_Model_Po */ ?>
+					<tr>
+						<td>
+							<table>
+								<tbody>
+									<tr>
+										<td>
+											<span class="bold uppercase"><?php echo $this->__("Order number"); ?></span>
+											<span class="nowrap"><?php echo $po->getIncrementId(); ?></span>
+										</td>
+										<td>
+											<a class="button button-third large" href="<?php echo $this->getUrl('sales/po/newrma/',array('po_id'=>$po->getId()));?>"><?php echo $this->__("Select"); ?></a>
+										</td>
+									</tr>
+									<tr>
+										<td colspan="2">
+											<span class="bold uppercase"><?php echo $this->__("Date"); ?></span>
+											<span class="nowrap"><?php echo Mage::helper('core')->formatDate($po->getCreatedAt(), 'medium', false); ?></span>
+										</td>
+									</tr>
+									<tr>
+										<td colspan="2">
+											<span class="bold uppercase"><?php echo $this->__("Shop"); ?></span>
+											<span class="uppercase"><?php echo $po->getVendorName(); ?></span>
+										</td>
+									</tr>
+									<tr>
+										<td colspan="2">
+											<span class="bold uppercase"><?php echo $this->__("Products"); ?></span>
+											<?php foreach($po->getItemsCollection() as $item):?>
+												<?php $item = $item->getOrderItem(); ?>
+												<?php if(!$item->getParentItem()): ?>
+													<?php $name = $this->escapeHtml($item->getName()); ?>
+													<span><?php echo $name; ?></span>
+													<?php foreach($this->getProductAttributes($item->getProductOptions()) as $_option): ?>
+														<span class="product-attribute"><?php echo $this->escapeHtml($_option['label']); ?>: <?php echo $this->escapeHtml($_option['value']); ?></span>
+													<?php endforeach;?>
+												<?php endif; ?>
+											<?php endforeach;?>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</td>
+					</tr>
+				<?php endforeach; ?>
+				</tbody>
+			</table>
 		<?php else: ?>
-			<p><?php echo $this->__("No delivered orders"); ?></p>
+			<p class="rma-po-empty"><?php echo $this->__("No delivered orders"); ?></p>
 		<?php endif; ?>
+		<div class="bottom-links">
+			<a class="button button-third large" href="<?php echo Mage::getUrl("customer/account");?>">
+				<i class="glyphicon glyphicon-chevron-left"></i>
+				<?php echo $_helper->__('back') ?>
+			</a>
+		</div>
 	</div>
 </div>
