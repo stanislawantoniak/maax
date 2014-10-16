@@ -25,6 +25,7 @@ jQuery(function($){
 			this.steps = [this.step1, this.step2, this.step3];
 			this.validation = this.newRma.validate();
 			this._initStep1();
+            this._initStep2();
 		},
 		
 		// Step 1 init
@@ -80,7 +81,30 @@ jQuery(function($){
 			// Style selects
 			s.find("select").selectbox('attach');
 		},
-		
+        // Step 2 init
+        _initStep2: function(){
+            var s = this.step2,
+                self = this,
+                next = s.find("button.next");
+
+            // Handle back click
+            s.find(".back").click(function () {
+                self.prev();
+                return false;
+            });
+
+            // Handle next click
+            s.find(".next").click(function(){
+                var valid = true;
+                //validation
+
+                //--validation
+                if(valid){
+                    self.next();
+                }
+                return false;
+            });
+        },
 		
 		////////////////////////////////////////////////////////////////////////
 		// Navigation
