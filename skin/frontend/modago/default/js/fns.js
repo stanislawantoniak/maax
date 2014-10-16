@@ -1584,28 +1584,28 @@ jQuery.noConflict();
 
 
         }
-        $('input[type=text],input[type=email],input[type=password],textarea ').tooltip({
-            placement: function(a, element) {
-                var position = $(element).parent().position();
-                var viewport = $(window).innerWidth();
-
-                if (viewport > 768) {
-                    return "right";
-                }
-                if (viewport <= 767) {
-                    return "top";
-                }
-                return "right";
-            },
-            trigger: "focus"
-            //container: 'body'
-        });
-        $('input[type=text],input[type=email],input[type=password],textarea ').focus(function(){
-            $('.tooltip.top').css({
-                right:0+'px',
-                left:'auto'
-            })
-        })
+        //$('input[type=text],input[type=email],input[type=password],textarea ').tooltip({
+        //    placement: function(a, element) {
+        //        var position = $(element).parent().position();
+        //        var viewport = $(window).innerWidth();
+        //
+        //        if (viewport > 768) {
+        //            return "right";
+        //        }
+        //        if (viewport <= 767) {
+        //            return "top";
+        //        }
+        //        return "right";
+        //    },
+        //    trigger: "focus"
+        //    //container: 'body'
+        //});
+        //$('input[type=text],input[type=email],input[type=password],textarea ').focus(function(){
+        //    $('.tooltip.top').css({
+        //        right:0+'px',
+        //        left:'auto'
+        //    })
+        //})
 
 
         /*function formHint() {
