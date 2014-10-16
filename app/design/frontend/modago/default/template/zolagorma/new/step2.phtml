@@ -6,70 +6,149 @@
 <?php $_itemsConditionSingle = $_rma->getItemsConditionSingle(); ?>
 <?php $items = $this->getItemList();?>
 <div class="steps step-2 background-wrapper box-wrapper" id="step-2" >
-	<input type="hidden" name="rma[shipping_address_id]" value="<?php $_shippingAddress->getId(); ?>"/>
-	<input type="hidden" name="rma[override_address]" value="0"/>
+    <div id="pickup-address-form" class="fieldset flow-return">
+        <div class="rma-container">
+            <input type="hidden" name="rma[shipping_address_id]" value="<?php $_shippingAddress->getId(); ?>"/>
+            <input type="hidden" name="rma[override_address]" value="0"/>
 
-	<div id="pickup-address-form" class="fieldset flow-return">
-		<h2 class="legend"><?php echo $_helper->__("Confirm or change pickup address for the courier"); ?></h2>
-		<ul class="form-list">
-			<li class="wide">
-				<address  id="shipping-address" class="left">
-					<?php echo Mage::helper('udropship')->formatCustomerAddress($_shippingAddress, 'html', $_po->getVendor()); ?>
-				</address>
-				<a href="#" class="right"><?php echo $_helper->__("Change address"); ?> [dev]</a>
-				<div class="clearer"></div>
-			</li>
+            <h3 class="legend"><?php echo $_helper->__("Confirm or change pickup address for the courier"); ?></h3>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="current-rma-address current-addres clearfix">
 
-		</ul>
+                        <dl class="pull-left">
+                            <dt><?php echo $_shippingAddress->getFirstname(); ?> <?php echo $_shippingAddress->getLastname(); ?></dt>
+                            <dd><?php echo $_shippingAddress->getData("street"); ?></dd>
+                            <dd><?php echo $_shippingAddress->getPostcode(); ?> <?php echo $_shippingAddress->getCity(); ?></dd>
+                            <dd class="separator phone">
+                                <?php echo $this->__('Contact phone'); ?>: <span><?php echo $_shippingAddress->getTelephone(); ?>
+                        </span>
+                            </dd>
+                        </dl>
+                    </div>
+
+                </div>
+                <div class="panel-footer clearfix">
+                    <a class="underline pull-right change_address shipping" href="#">
+                        <?php echo $_helper->__("Change address"); ?> [dev]
+                    </a>
+                </div>
+            </div>
+            <h3 class="legend"><?php echo $_helper->__("Schedule pickup date that is convenient for you"); ?></h3>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="current-rma-date clearfix">
+                        <div id="pickup-date-form" class="fieldset flow-return">
+
+                            <label class="required" for="carrier-date"><?php echo $_helper->__("Choose the date"); ?> <em>*</em></label>
+                            <div class="input-box">
+                                <input type="text" value="<?php echo $_rma->getCarrierDate();?>" name="rma[carrier_date]" value="<?php echo $this->formatDate();?>" id="carrier-date" title="<?php echo $_helper->__("Choose the date"); ?>" value="" class="input-text required-entry ">
+                            </div>
+
+                            <label class="required" for="carrier-time-from"><?php echo $_helper->__("Select the time interval (min. 3h)"); ?> <em>*</em></label>
+                            <div class="field">
+                                <div class="input-box">
+                                    <input type="hidden" name="rma[carrier_time_from]" id="carrier-time-from" value="<?php echo $_rma->getCarrierTimeFrom(); ?>" title="<?php echo $_helper->__("Choose time-from of the day"); ?>" />
+                                    <input type="hidden" name="rma[carrier_time_to]" id="carrier-time-to" value="<?php echo $_rma->getCarrierTimeTo(); ?>" title="<?php echo $_helper->__("Choose time-to of the day"); ?>" />
+                                </div>
+                            </div>
+
+
+                            <span id="time"></span><br/>
+                            <span id="SlideMax">&nbsp;&nbsp;</span>
+                            <div id="slider-range"></div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="fieldset">
+                <h3 class="legend"><?php echo $_helper->__("Enter your account number for your order refund"); ?></h3>
+                <input type="text" value="<?php echo $this->escapeHtml($_rma->getCustomerAccount());?>" name="rma[customer_account]" value="" id="customer-account" title="<?php echo $_helper->__("Bank account"); ?>" value="" class="input-text">
+            </div>
+        </div>
+
+
+        <div class="rma-container">
+            <a href="#step-1"  class="button button-third large back pull-left">
+                <?php echo $_helper->__("Back"); ?>
+            </a>
+
+            <button class="btn button button-primary next pull-right" type="button"><?php echo $_helper->__("Next"); ?></button>
+
+        </div>
 	</div>
-	<div id="pickup-date-form" class="fieldset flow-return">
-		<h2 class="legend"><?php echo $_helper->__("Schedule pickup date that is convenient for you"); ?></h2>
-		<ul class="form-list">
-			<li class="wide">
-				<label class="required" for="carrier-date"><?php echo $_helper->__("Choose the day"); ?> <em>*</em></label>
-				<div class="input-box">
-					<input type="text" value="<?php echo $_rma->getCarrierDate();?>" name="rma[carrier_date]" value="<?php echo $this->formatDate();?>" id="carrier-date" title="<?php echo $_helper->__("Choose the day"); ?>" value="" class="input-text required-entry ">
-				</div>
-			</li>
-			<li class="fields">
-				<div class="field">
-					<label class="required" for="carrier-time-from"><?php echo $_helper->__("Choose time-from of the day"); ?> <em>*</em></label>
-					<div class="input-box">
-						<select class="required-entry" name="rma[carrier_time_from]" id="carrier-time-from" title="<?php echo $_helper->__("Choose time-from of the day"); ?>">
-							<option value=""></option>
-							<?php foreach($this->getHours() as $value=>$label):?>
-							<option <?php if($_rma->getCarrierTimeFrom()==$label):?>selected="selected"<?php endif;?> value="<?php echo $label;?>"><?php echo $label;?></option>
-							<?php endforeach;?>
-						</select>
-					</div>
-				</div>
-				<div class="field">
-					<label class="required" for="carrier-time-to"><?php echo $_helper->__("Choose time-to of the day"); ?> <em>*</em></label>
-					<div class="input-box">
-						<select class="required-entry" name="rma[carrier_time_to]" id="carrier-time-to" title="<?php echo $_helper->__("Choose time-to of the day"); ?>">
-							<option value=""></option>
-							<?php foreach($this->getHours() as $value=>$label):?>
-							<option <?php if($_rma->getCarrierTimeTo()==$label):?>selected="selected"<?php endif;?> value="<?php echo $label;?>"><?php echo $label;?></option>
-							<?php endforeach;?>
-						</select>
-					</div>
-				</div>
-			</li>
-		</ul>
-	</div>
-	<div class="fieldset">
-		<h2 class="legend"><?php echo $_helper->__("Enter your account number for your order refund"); ?></h2>
-		<ul class="form-list">
-			<li class="wide">
-				<label class="required" for="customer-account"><?php echo $_helper->__("Bank account"); ?></label>
-				<div class="input-box">
-					<input type="text" value="<?php echo $this->escapeHtml($_rma->getCustomerAccount());?>" name="rma[customer_account]" value="" id="customer-account" title="<?php echo $_helper->__("Bank account"); ?>" value="" class="input-text">
-				</div>
-			</li>
-		</ul>
-	</div>
-	<div>
-		<button type="button"  class="button" id="step-1-back"><span><span><?php echo $_helper->__("Prev"); ?></span></span></button>
-		<button type="button" class="button back-button"  id="step-2-submit"><span><span><?php echo $_helper->__("Next"); ?></span></span></button>
-	</div>
+
 </div>
+
+<script type="text/javascript">
+    jQuery("#slider-range").slider({
+        range: true,
+        min: 540,
+        max: 1260,
+        step: 60,
+        values: [660, 840],
+        slide: slideTime
+    });
+    function slideTime(event, ui){
+        var val0 = ui.values[0],
+            val1 = ui.values[1];
+
+        if( ui.values[0] == ui.values[1]) {
+            return false;
+        }
+
+        formatTimeRange(val0, val1);
+
+    }
+    function formatTimeRange(from, to){
+        var minutes0 = parseInt(from % 60, 10),
+            hours0 = parseInt(from / 60 % 24, 10),
+            minutes1 = parseInt(to % 60, 10),
+            hours1 = parseInt(to / 60 % 24, 10);
+
+        /**
+         * @todo check if more then 3 hours
+         */
+//                                        if( size <= 180) {
+//                                            jQuery("#slider-range div")
+//                                                .addClass("ui-state-error")
+//                                                .removeClass("ui-widget-header");
+//                                            jQuery("#step-2-submit")
+//                                                .attr("disabled","disabled")
+//                                                .addClass("ui-state-disabled")
+//                                                .removeClass("ui-state-default");
+//                                            jQuery("#SlideMax").text("Cannot be less than 3 hours");
+//                                        }
+//                                        else {
+//                                            jQuery("#slider-range div")
+//                                                .addClass("ui-widget-header")
+//                                                .removeClass("ui-state-error");
+//                                            jQuery("#step-2-submit")
+//                                                .removeAttr("disabled")
+//                                                .addClass("ui-state-default")
+//                                                .removeClass("ui-state-disabled");
+//                                            jQuery("#SlideMax").html("&nbsp;&nbsp;");
+//                                        }
+
+        var startTime = getTime(hours0, minutes0);
+        var endTime = getTime(hours1, minutes1);
+        var message = 'Selected time: '+ startTime + ' - ' + endTime;
+        jQuery("#time").html(message);
+
+        jQuery('[name="rma[carrier_time_from]"]').val(startTime);
+        jQuery('[name="rma[carrier_time_to]"]').val(endTime);
+    }
+    function getTime(hours, minutes) {
+        minutes = minutes + "";
+        if (minutes.length == 1) {minutes = "0" + minutes;}
+        return hours + ":" + minutes;
+    }
+    formatTimeRange(jQuery("#slider-range").slider("values", 0), jQuery("#slider-range").slider("values", 1));
+
+    jQuery("[name='rma[carrier_date]']").datepicker();
+
+
+</script>
