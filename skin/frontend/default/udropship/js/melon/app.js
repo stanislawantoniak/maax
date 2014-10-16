@@ -130,7 +130,7 @@ var App = function($) {
 		$(window).on("keyup", function(e){
 			if(e.keyCode==27){
 				$(".modal").modal("hide");
-				$.noty.closeAll();
+//				$.noty.closeAll();
 			}
 		})
 		
