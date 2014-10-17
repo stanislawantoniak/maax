@@ -5,9 +5,11 @@
 <?php $_itemsSingle = $_rma->getItemsSingle(); ?>
 <?php $_itemsConditionSingle = $_rma->getItemsConditionSingle(); ?>
 <?php $items = $this->getItemList();?>
+<?php $dateList = $this->getDateList();?>
+<?php $weekdays = Mage::app()->getLocale()->getOptionWeekdays();?>
 <div class="steps step-2 background-wrapper box-wrapper" id="step-2">
     <div class="rma-container">
-
+		<?php if (($this->isDhlEnabled()) && count($dateList)) : ?>
         <div id="pickup-address-form" class="fieldset flow-return">
             <input type="hidden" name="rma[shipping_address_id]" value="<?php $_shippingAddress->getId(); ?>"/>
             <input type="hidden" name="rma[override_address]" value="0"/>
@@ -41,7 +43,6 @@
         </div>
         <div id="pickup-date-form">
             <h3 class="legend"><?php echo $_helper->__("Schedule pickup date that is convenient for you"); ?></h3>
-
             <div class="panel panel-default">
                 <div class="panel-body">
                     <div class="current-rma-date clearfix">
@@ -51,10 +52,26 @@
                                 <em>*</em></label>
 
                             <div class="input-box">
+								<?php foreach ($dateList as $date=>$item): ?>
+									<label for="carrier_date_<?php echo $date;?>">
+									<input 
+										type="radio" 
+										name="rma[carrier_date]" 
+										id="carrier_date_<?php echo $date;?>"
+										value="<?php echo date('Y-m-d',$date);?>"
+									/>
+									<span>										
+										<span class="rma-dayname"><?php echo $weekdays[date('w',$date)]['label'];?></span>	
+										<span class="rma-date"><?php echo $this->getFormattedDate($date);?></span>
+									</span>
+									</label>
+								<?php endforeach; ?>
+<?php /*
                                 <input type="text" value="<?php echo $_rma->getCarrierDate(); ?>"
                                        name="rma[carrier_date]" value="<?php echo $this->formatDate(); ?>"
                                        id="carrier-date" title="<?php echo $_helper->__("Choose the date"); ?>" value=""
                                        class="input-text required-entry ">
+*/?>
                             </div>
 
                             <label class="required"
@@ -86,7 +103,7 @@
             </div>
         </div>
 
-
+		<?php endif;?>
         <div class="fieldset">
             <h3 class="legend"><?php echo $_helper->__("Enter your account number for your order refund"); ?></h3>
             <input type="text" value="<?php echo $this->escapeHtml($_rma->getCustomerAccount()); ?>"
@@ -109,9 +126,6 @@
     var isAcknowledged = false;
 </script>
 <?php  $vendor = $_po->getVendor();?>
-<?php  if (!Mage::helper('orbashipping/carrier_dhl')->isEnabledForVendor($vendor)): ?>
-    isAcknowledged = true;
-<?php endif; ?>
 
 <script type="text/javascript">
     //applyFlow
@@ -204,8 +218,6 @@
         return hours + ":" + minutes;
     }
     formatTimeRange(jQuery("#slider-range").slider("values", 0), jQuery("#slider-range").slider("values", 1));
-
-    jQuery("[name='rma[carrier_date]']").datepicker();
 
 
 </script>
