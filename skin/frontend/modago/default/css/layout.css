@@ -5970,6 +5970,52 @@ yx-axis
 .bold {
   font-weight: 700; }
 
+/* line 2, ../sass/layout/modules/_rma-summary.scss */
+div.steps.step-3 .rma-summary-container {
+  border: 1px solid #bfbfbf;
+  padding: 12px 10px; }
+/* line 6, ../sass/layout/modules/_rma-summary.scss */
+div.steps.step-3 .rma-summary-container table#review-items td {
+  border: none;
+  padding: 0; }
+/* line 10, ../sass/layout/modules/_rma-summary.scss */
+div.steps.step-3 .rma-summary-container table#review-items .summary-image {
+  width: 60px;
+  padding: 0 15px 20px 0; }
+/* line 13, ../sass/layout/modules/_rma-summary.scss */
+div.steps.step-3 .rma-summary-container table#review-items .summary-image img {
+  border: 1px solid #cccccc; }
+/* line 17, ../sass/layout/modules/_rma-summary.scss */
+div.steps.step-3 .rma-summary-container table#review-items .summary-item-desc {
+  vertical-align: top; }
+/* line 20, ../sass/layout/modules/_rma-summary.scss */
+div.steps.step-3 .rma-summary-container table#review-items .summary-reason {
+  padding-bottom: 20px;
+  vertical-align: bottom; }
+/* line 24, ../sass/layout/modules/_rma-summary.scss */
+div.steps.step-3 .rma-summary-container table#review-items .summary-comment {
+  padding-bottom: 20px; }
+/* line 28, ../sass/layout/modules/_rma-summary.scss */
+div.steps.step-3 .rma-summary-container p, div.steps.step-3 .rma-summary-container address#review-shipping-address {
+  margin-bottom: 0; }
+/* line 31, ../sass/layout/modules/_rma-summary.scss */
+div.steps.step-3 .rma-summary-container .customer-account-fieldset {
+  display: none; }
+/* line 35, ../sass/layout/modules/_rma-summary.scss */
+div.steps.step-3 .rma-summary-table-container {
+  padding: 20px 20px 0; }
+/* line 38, ../sass/layout/modules/_rma-summary.scss */
+div.steps.step-3 h5.legend {
+  font-weight: 700;
+  padding: 15px 0 10px; }
+/* line 42, ../sass/layout/modules/_rma-summary.scss */
+div.steps.step-3 div.summary-bottom {
+  padding-top: 40px; }
+/* line 45, ../sass/layout/modules/_rma-summary.scss */
+div.steps.step-3 p#overview-message {
+  font-size: 15px;
+  margin-bottom: 10px; }
+
 /* line 1, ../sass/layout/override/_global.scss */
 .clr {
   clear: both; }
