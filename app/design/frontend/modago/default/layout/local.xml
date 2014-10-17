@@ -1184,6 +1184,24 @@
             </block>
         </reference>
 	</sales_po_newrma>
+	
+	<sales_rma_success>
+		<update handle="customer_account" />
+		<update handle="zolago_modago_customer_handle" />
+		<reference name="breadcrumbs">
+            <action method="addCrumb">
+                <crumbName>rma</crumbName>
+                <crumbInfo>
+                    <label>Returns and complaints</label>
+                    <title>Returns and complaints</title>
+                </crumbInfo>
+            </action>
+		</reference>
+        <reference name="my.account.wrapper">
+            <block type="zolagorma/success" name="zolagorma.success" template="zolagorma/success.phtml">
+			</block>
+        </reference>
+	</sales_rma_success>
 
     <help_index_index>
         <reference name="breadcrumbs">

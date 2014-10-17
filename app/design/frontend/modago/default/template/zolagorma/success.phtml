@@ -1,0 +1,11 @@
+<?php /* @var $this Zolago_Rma_Block_Success */ ?>
+<?php $_helper = Mage::helper("zolagorma"); ?>
+<?php $_rma = $this->getRma();?>
+<div class="page-title box-wrapper">
+	<h1>
+		<span class="hidden-md hidden-lg"><?php echo $_helper->__("Returns and complaints"); ?></span>
+		<span class="visible-md visible-lg"><?php echo $_helper->__("RMA no. %s", $_rma->getIncrementId()); ?></span>
+		<span class="back-sm"><a href="<?php echo $this->getUrl('customer/account/index/');?>" class="underline"><?php echo $_helper->__('back: my account'); ?> &gt;</a></span>
+		<span class="back-xs"><a href="<?php echo $this->getUrl('customer/account/index/');?>" class="underline"><?php echo $_helper->__('back'); ?> &gt;</a></span>
+	</h1>
+</div>
