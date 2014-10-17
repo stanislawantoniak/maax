@@ -1318,4 +1318,28 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 		}
 		return $formattedPriceRange;
 	}
+
+    /**
+     * reformat price filter
+     * @param string $facetPrice
+     * @return string
+     */
+    public function formatFacetPriceItem($facetPrice, $prefix = ''){
+
+
+            $currencySymboy = Mage::app()->getLocale()->currency(
+                Mage::app()->getStore()->getCurrentCurrencyCode()
+            )->getSymbol();
+            $currencyPositionSetting = Mage::helper('solrsearch')->getSetting('currency_position');
+            if ($currencyPositionSetting > 0) {
+                $formattedPrice = $prefix.'&nbsp;' . $currencySymboy.'&nbsp;'.
+                    trim($facetPrice);
+            }else{
+                $formattedPrice = $prefix.'&nbsp;' . trim($facetPrice).'&nbsp;'.
+                    $currencySymboy.'&nbsp;';
+            }
+
+
+        return $formattedPrice;
+    }
 }
