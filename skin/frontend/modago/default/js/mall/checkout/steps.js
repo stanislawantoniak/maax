@@ -199,7 +199,7 @@
                     , type + "_firstname"
                     , "text"
                     , Mall.translate.__("firstname")
-                    , "col-lg-3 col-md-3 col-sm-3 col-xs-12"
+                    , "col-sm-3"
                     , "form-control firstName hint"
                     , "");
 
@@ -315,7 +315,7 @@
                         label:      Mall.translate.__("nip") + 
 							"<br>(" + Mall.translate.__("optional") + ")",
                         labelClass: "col-sm-3 double-line",
-                        inputClass: "form-control vat_id city hint"
+                        inputClass: "form-control vat_id nip city hint"
                     },
                     {
                         name:       "street",
@@ -347,7 +347,7 @@
                         type:       "text",
                         label:      Mall.translate.__("phone"),
                         labelClass: "col-sm-3",
-                        inputClass: "form-control telephone city hint"
+                        inputClass: "form-control telephone phone city hint"
                     }
                 ];
             },
