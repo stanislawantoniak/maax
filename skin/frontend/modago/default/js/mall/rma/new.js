@@ -45,6 +45,8 @@ jQuery(function($){
 			}); 
 	
 			this._initStep1();
+            this._initStep2();
+            this._initStep3();
 		},
 		
 		// Step 1 init
@@ -107,6 +109,49 @@ jQuery(function($){
 			});
 		},
 		
+        // Step 2 init
+        _initStep2: function(){
+            var s = this.step2,
+                self = this,
+                next = s.find("button.next");
+
+            // Handle back click
+            s.find(".back").click(function () {
+                self.prev();
+                return false;
+            });
+
+            // Handle next click
+            s.find(".next").click(function(){
+                var valid = true;
+                //validation
+
+                //--validation
+                if(valid){
+                    self.next();
+                }
+                return false;
+            });
+        },
+		
+        // Step 3 init
+        _initStep3: function(){
+            var s = this.step3,
+                self = this,
+                next = s.find("button.next");
+
+            // Handle back click
+            s.find(".back").click(function () {
+                self.prev();
+                return false;
+            });
+
+            // Handle next click
+            s.find(".next").click(function(){
+				// Submit form
+                return false;
+            });
+        },
 		
 		////////////////////////////////////////////////////////////////////////
 		// Navigation

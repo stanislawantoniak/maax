@@ -7,7 +7,6 @@ $prefix = 'solrbridge-price';
 
 $ranges = $this->getFacetPriceRanges();
 
-
 $key = "fq[price]";
 $sectionClass = $this->isFilterRolled() ? 'closed' : 'open';
 $iconClass = $this->isFilterRolled() ? "fa-chevron-down" : "fa-chevron-up";
@@ -91,7 +90,7 @@ $name = '';
                         </div>
                     </div>
                 </div>
-                <div id="slider-range" data-min="<?php echo $min;?>" data-max="<?php echo $max;?>"></div>
+                <div id="slider-range" data-min="<?php echo $min;?>" data-max="<?php echo ceil($max);?>"></div>
 
             </div><br />
 
