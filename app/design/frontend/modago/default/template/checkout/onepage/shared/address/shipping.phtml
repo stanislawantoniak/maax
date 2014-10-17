@@ -65,7 +65,7 @@ $_cutomerAddressId = $_shippingAddress->getCustomerAddressId();
         <div class="row">
             <label class="col-sm-3" for="shipping_postcode"><?php echo $this->__("Zip code"); ?></label>
             <div class="col-sm-5">
-                <input type="text" value="<?php echo $this->escapeHtml($_shippingAddress->getPostcode()); ?>" class="form-control zipcode validate-postcode" required="true" id="shipping_postcode" title="" name="shipping[postcode]" data-original-title="<?php echo $this->__("Enter zip-code."); ?>">
+                <input type="text" value="<?php echo $this->escapeHtml($_shippingAddress->getPostcode()); ?>" class="form-control zipcode validate-postcode" required="true" id="shipping_postcode" title="" name="shipping[postcode]" data-original-title="<?php echo $this->__("Postal code should be entered in the format xx-xxx."); ?>">
             </div>
         </div>
     </div>

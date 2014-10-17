@@ -90,7 +90,6 @@ Mall.validate.validators = {
 
     nip: function(value, elem, params){
 
-        value = value.replace(/\D/g, "");
         if (value.length == 0) {
             return true;
         }

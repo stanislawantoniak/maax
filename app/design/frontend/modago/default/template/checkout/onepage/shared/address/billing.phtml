@@ -69,7 +69,7 @@ $_cutomerAddressId = $_billingAddress->getCustomerAddressId();
         <div class="row">
             <label class="col-sm-3" for="billing_postcode"><?php echo $this->__("Zip code"); ?></label>
             <div class="col-sm-5">
-                <input type="text" value="<?php echo $this->escapeHtml($_billingAddress->getPostcode()); ?>" class="form-control validate-postcode" id="billing_postcode" title="" name="billing[postcode]" required="true" data-original-title="<?php echo $this->__("Enter zip-code."); ?>">
+                <input type="text" value="<?php echo $this->escapeHtml($_billingAddress->getPostcode()); ?>" class="form-control validate-postcode" id="billing_postcode" title="" name="billing[postcode]" required="true" data-original-title="<?php echo $this->__("Postal code should be entered in the format xx-xxx."); ?>">
             </div>
         </div>
     </div>
@@ -86,9 +86,10 @@ $_cutomerAddressId = $_billingAddress->getCustomerAddressId();
 </fieldset>
 
 <script type="text/javascript">
-    jQuery( document ).ready(function() {
-        jQuery('#billing_vat_id').on('change fucus click keydown', function() {
+    Mall.translate.add("Tax numer is incorrect. Enter as a string of digits e.g. 1234567890.", "<?php echo $this->__('Tax numer is incorrect. Enter as a string of digits e.g. 1234567890.') ?>");
 
+    jQuery( document ).ready(function() {
+        jQuery('#billing_vat_id').on('change fucus click keydown keyup', function() {
             if (jQuery(this).val().length) {
                 jQuery(this).parents('.form-group').removeClass('hide-success-vaild');
             } else {

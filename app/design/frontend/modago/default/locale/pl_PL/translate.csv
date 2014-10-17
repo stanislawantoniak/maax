@@ -234,7 +234,7 @@
 "Enter lastname.","Wprowadź nazwisko."
 "Enter email address.","Wprowadź adres email."
 "Street and number","Ulica oraz numer"
-"Enter zip-code.","Wprowadź kod pocztowy"
+"Postal code should be entered in the format xx-xxx.","Kod pocztowy należy wpisać w formacie xx-xxx."
 "Enter street and number.","Wprowadź nazwę ulicy oraz jej numer."
 "Enter company name.","Wprowadź nazwę firmy."
 "Enter city name.","Wprowadź nazwę miasta."
