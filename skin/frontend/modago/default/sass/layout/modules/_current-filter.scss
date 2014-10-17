@@ -1,14 +1,14 @@
 
-#view-current-filter {
-	@media (max-width: $screen-sm-min) { 
-	padding-bottom: 25px;
-	margin-top: 2px;
+#active-filters, #view-current-filter {
+	@media (max-width: $screen-sm-min) {
+//	padding-bottom: 25px;
+//	margin-top: 2px;
 	}
 	h1 {
 		padding-bottom: 0px;
 		padding-top:12px;
 		margin-bottom: 10px;
-		@media (max-width: $screen-sm-min) { 
+		@media (max-width: $screen-sm-min) {
 			padding-bottom: 0px;
 			padding-top:12px;
 		 }
@@ -24,11 +24,11 @@
 	    }
 	    dd {
 	        margin-right:20px;
-	        
+
 	        .label {
 	            display:block;
 	            float:left;
-	            padding:0px 20px 0 6px;
+	            padding:0px 6px 0 6px;
 	            min-width: 60px;
 	            display:inline-block;
 	            float:left;
@@ -37,54 +37,68 @@
 	            position:relative;
 
 	        }
-	            .fa {
-	                position:absolute;
-	                right:5px;
-	                top:4px;
-	                margin-left:5px;
-	            }
-	             
-	        
+	        .fa {
+//	            position:absolute;
+	            right:5px;
+	            top:4px;
+	            margin-left:5px;
+	        }
+
+
 	        &.action {
 	        	position:relative;
 	        	top:-4px;
-    	        @media (max-width: $screen-sm-min) { 
+    	        @media (max-width: $screen-sm-min) {
 	    			position: absolute;
-	    			top:auto;
+	    			top:1px;
 		        	right: 0px;
-		        	bottom: 11px;
+//		        	bottom: 11px;
 	    		 }
-	        	
+
 	            a {
 
 	            }
 	        }
 
 	    }
-	    
+
 	}
 	.actionViewFilter {
-		position:absolute;
-		left: 0px;
-		bottom: 10px;
-		width:40%;	
-		min-width: 168px;
-		
+//		position:absolute;
+//		left: 0px;
+//		bottom: 10px;
+//		width:40%;
+		min-width: 205px;
+		margin-left: -15px;
 		&.visible-xs {
 			@media (min-width:768px) and (max-width: 768px) {
 				display:block!important;
 			}
 		}
-		
+        .fa {
+            color: white;
+        }
+
 	}
 	.backToCategory {
 	    position:absolute;
 		right: 15px;
-		top:10px;  
-		
+		top:10px;
+
 	        }
 	.breadcrumb {
 		margin-bottom: 0;
 	}
+
+    .clearfix {
+        margin-bottom: 0px;
+    }
+    #filters-btn {
+        dl {
+            @media (max-width: $screen-sm-min) {
+                margin-bottom: 0px;
+            }
+        }
+    }
 }
 

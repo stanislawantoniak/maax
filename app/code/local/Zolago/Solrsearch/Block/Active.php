@@ -11,5 +11,12 @@ class Zolago_Solrsearch_Block_Active extends Zolago_Solrsearch_Block_Faces
 		$this->setSkip(1);
 		return parent::_prepareLayout();
 	}
+
+	public function getItemId($attributeCode, $item) {
+		if($attributeCode=="price" && $this->getRequest()->getParam('slider')){
+			return "filter_slider";
+		}
+		return parent::getItemId($attributeCode, $item);
+	}
 	
 }

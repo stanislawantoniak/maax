@@ -1,48 +1,96 @@
 <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
 <?php $_orders = $this->getOrders(); ?>
 <?php $_helper = Mage::helper("sales");?>
+<?php $baseUrl = Mage::helper("core/url")->getHomeUrl(); ?>
+<div class="page-title box-wrapper">
+	<h1>
+		<span><?php echo $this->__('Order history') ?></span>
+		<span class="back-sm"><a href="<?php echo $baseUrl ?>customer/account/index/" class="underline"><?php echo $_helper->__('back: my account'); ?> &gt;</a></span>
+		<span class="back-xs"><a href="<?php echo $baseUrl ?>customer/account/index/" class="underline"><?php echo $_helper->__('back'); ?> &gt;</a></span>
+	</h1>
+</div>
 <?php if(/*0 && */$_orders->getSize()): ?>
-	<div class="page-title box-wrapper">
-		<h1><?php echo $this->__('Order history') ?></h1>
-	</div>
 	<div class="background-wrapper box-wrapper">
-		<table class="data-table" id="my-orders-table">
+		<table class="data-table table-top" id="my-orders-table">
 			<col width="120px" />
-			<col width="120px" />
-			<col width="120px" />
+			<col class="order-no" width="120px" />
 			<col />
-			<col width="1" />
-			<col width="120px" />
+			<col  class="products"/>
+			<col  class="total" width="90px" />
+			<col  class="status" width="90px" />
+			<col width="90px" />
 			<thead>
 				<tr>
 					<th><?php echo $_helper->__('Date placed') ?></th>
-					<th><?php echo $_helper->__('Order no') ?></th>
+					<th class="order-no"><?php echo $_helper->__('Order no') ?></th>
 					<th><?php echo $_helper->__('Shops') ?></th>
-					<th><?php echo $_helper->__('Products') ?></th>
-					<th><?php echo $_helper->__('Status') ?></th>
-					<th><?php echo $_helper->__('Details') ?></th>
+					<th class="products"><?php echo $_helper->__('Products') ?></th>
+					<th class="total"><?php echo $_helper->__('Value') ?></th>
+					<th class="status"><?php echo $_helper->__('Status') ?></th>
+					<th><?php echo $_helper->__('Order details') ?></th>
 				</tr>
 			</thead>
 			<tbody>
-				<?php $_odd = ''; ?>
 				<?php foreach ($_orders as $_order): ?>
+				<?php $_hasPo = $this->hasPo($_order);?>
 				<tr>
 					<td><span class="nobr"><?php echo $this->formatDate($_order->getCreatedAtStoreDate()) ?></span></td>
-					<td><?php echo $_order->getRealOrderId() ?></td>
+					<td class="order-no"><?php echo $_order->getRealOrderId() ?></td>
 					<td>
+						<ul class="list-unstyled">
 						<?php foreach($this->getVendors($_order) as $_vendor):?>
-							<?php echo $this->escapeHtml($_vendor->getVendorName());?><br/>
+							<li class="uppercase"><?php echo $this->escapeHtml($_vendor->getVendorName());?></li>
 						<?php endforeach;?>
+						</ul>
 					</td>
-					<td><?php echo $_order->formatPrice($_order->getGrandTotal()) ?></td>
-					<td><em><?php echo $_order->getStatusLabel() ?></em></td>
+					<td class="products">
+						<?php if($_hasPo):?>
+						<ul class="list-unstyled">
+							<?php foreach($this->getSortedPoItemsByOrder($_order) as $_itemArray):?>
+							<li>
+								<span class="uppercase"><?php echo $this->escapeHtml($_itemArray['vendor']->getVendorName());?></span>
+								<?php echo $this->escapeHtml($_itemArray['item']->getName());?><br/>
+								<?php foreach($this->extractProductOptions($_itemArray['options']) as $_option): ?>
+									<?php echo $this->escapeHtml($_option['label']); ?>: <?php echo $this->escapeHtml($_option['value']); ?>
+								<?php endforeach;?>
+							</li>
+							<?php endforeach;?>
+						</ul>
+						<?php endif;?>
+					</td>
+					<td class="total">
+						<?php if($_hasPo):?>
+							<?php echo $_order->formatPrice($this->getTotal($_order)); ?>
+						<?php endif;?>
+					</td>
+					<td class="status">
+						<?php if($_hasPo):?>
+							<?php echo $this->getOrderStatus($_order);?>
+							<?php $_icon = $this->getStatusIcon($_order);?>
+							<?php if($_icon):?>
+								<img src="<?php echo $_icon;?>"/>
+							<?php endif;?>
+						<?php else:?>
+							<?php echo $_helper->__("Processing");?>
+						<?php endif;?>
+					</td>
 					<td class="a-center">
-						<span class="nobr"><a href="<?php echo $this->getViewUrl($_order) ?>"><?php echo $this->__('View Order') ?></a></span>
+						<?php if($_hasPo):?>
+						<a class="underline" href="<?php echo $this->getViewUrl($_order) ?>">
+							<?php echo $_helper->__('view') ?> &gt;
+						</a>
+						<?php endif;?>
 					</td>
 				</tr>
 				<?php endforeach; ?>
 			</tbody>
 		</table>
+		<div class="bottom-links">
+			<a class="button button-third large" href="<?php echo Mage::getUrl("customer/account");?>">
+				<i class="glyphicon glyphicon-chevron-left"></i>
+				<?php echo $_helper->__('back') ?>
+			</a>
+		</div>
 	</div>
 <?php else: ?>
 	<?php echo $this->getChildHtml("empty"); ?>

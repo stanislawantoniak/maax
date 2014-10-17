@@ -754,4 +754,13 @@ class Zolago_Catalog_Block_Vendor_Mass_Grid extends Mage_Adminhtml_Block_Widget_
         return $show;
     }
 
+    public function getCollectionIdsString()
+    {
+        $gridIds = $this->getCollection()->getAllIds();
+
+        if(!empty($gridIds)) {
+            return join(",", $gridIds);
+        }
+        return '';
+    }
 }

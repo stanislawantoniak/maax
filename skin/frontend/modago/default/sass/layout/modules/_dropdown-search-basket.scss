@@ -78,6 +78,8 @@
     @include max-screen($screen-sm) {
        right:0px !important;
     }
+	
+	a{color: #fff; }
     .dropdown-panel {
         width:370px;
         max-width: 370px;
@@ -89,6 +91,11 @@
             box-sizing:border-box;
             width:350px;
             margin:0 auto;
+            #product-list {
+                .desc {
+                    max-width: 160px;
+                }
+            }
         }
     }
 
@@ -97,7 +104,10 @@
         
             td {
                 padding: 8px 0;
-                
+
+				&.price {
+					text-align: right;
+				}
                 &+td {
                     padding-left: 5px;
                 }

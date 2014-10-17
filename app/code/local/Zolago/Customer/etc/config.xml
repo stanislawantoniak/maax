@@ -34,6 +34,11 @@
             <zolagocustomer>
                 <class>Zolago_Customer_Block</class>
             </zolagocustomer>
+			<customer>
+				<rewrite>
+					<account_navigation>Zolago_Customer_Block_Account_Navigation</account_navigation>
+				</rewrite>
+			</customer>
         </blocks>
         <resources>
             <zolagocustomer_setup>
@@ -61,6 +66,15 @@
                     </zolagocustomer>
                 </observers>
             </sales_order_payment_save_after>
+			<customer_logout>
+				 <observers>
+                    <zolagocustomer>
+                        <type>singleton</type>
+                        <class>zolagocustomer/observer</class>
+                        <method>customerLogout</method>
+                    </zolagocustomer>
+                </observers>
+			</customer_logout>
 		</events>
     </global>
     <frontend>
