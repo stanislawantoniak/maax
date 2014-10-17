@@ -230,8 +230,10 @@ jQuery(function($){
 			return "" +
 			"<tr>" +
 			"   <td colspan='2' class='summary-comment'>" +
-			"       <span class='bold'>" + this.txtComment + "</span>" +
-			"       <span id='review-comment-text'>" + comment + "</span>" +
+			"       <p id='review-comment-text'>" +
+			"           <span class='bold'>" + this.txtComment + "</span> " +
+						$("<div/>").text(comment).html() +
+					"</p>" +
 			"   </td>" +
 			"</tr>";
 		},
