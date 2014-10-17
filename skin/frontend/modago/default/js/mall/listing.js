@@ -1982,7 +1982,7 @@ Mall.listing = {
 				min: parseInt(sliderRange.data("min"),10),
 				max: parseInt(sliderRange.data("max"),10),
 				values: Mall.listing.getCurrentPriceRange(),
-                step: 1,
+
 				stop: function(event, ui) {
                     var checkSlider = jQuery('#checkSlider').find('input');
                     if (!checkSlider.is(':checked')) {
@@ -1992,12 +1992,9 @@ Mall.listing = {
 					self._triggerRefresh(scope, 1, true);
 				},
 				slide: function(event, ui) {
-                    if ( ( ui.values[ 0 ] + 22 ) >= ui.values[ 1 ] ) {
-                        return false;
-                    }
 					jQuery("#zakres_min").val(ui.values[0]);
 					jQuery("#zakres_max").val(ui.values[1]);
-					var checkSlider = jQuery('#checkSlider').find('input');
+//					var checkSlider = jQuery('#checkSlider').find('input');
 //					if (!checkSlider.is(':checked')) {
 //						checkSlider.prop('checked', true).change();
 //						jQuery('#filter_price').find('.action').removeClass('hidden');
@@ -2059,6 +2056,9 @@ Mall.listing = {
 			"use strict";
 			var code = e.keyCode || e.which;
 			Mall.listing.unmarkPrice();
+
+            jQuery("#filter_price").find('input[name="fq[price]"]').prop('checked', false);
+
 			var checkSlider = jQuery('#checkSlider').find('input');
 			if (!checkSlider.is(':checked')) {
 				checkSlider.prop('checked', true);
