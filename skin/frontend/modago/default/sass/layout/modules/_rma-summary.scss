@@ -1,15 +1,49 @@
-.rma-summary-container {
-	border: 1px solid #bfbfbf;
-	padding: 20px;
-	table#review-items {
-		td {
-			border: none;
+div.steps.step-3 {
+	.rma-summary-container {
+		border: 1px solid #bfbfbf;
+		padding: 12px 10px;
+		table#review-items {
+			td {
+				border: none;
+				padding: 0;
+			}
+			.summary-image {
+				width: 60px;
+				padding: 0 15px 20px 0;
+				img {
+					border: 1px solid #cccccc;
+				}
+			}
+			.summary-item-desc {
+				vertical-align: top;
+			}
+			.summary-reason {
+				padding-bottom: 20px;
+				vertical-align: bottom;
+			}
+			.summary-comment {
+				padding-bottom: 20px;
+			}
+		}
+		p, address#review-shipping-address {
+			margin-bottom: 0;
+		}
+		.customer-account-fieldset {
+			display: none;
 		}
 	}
-	p, address#review-shipping-address {
-		margin-bottom: 0;
+	.rma-summary-table-container {
+		padding: 20px 20px 0;
 	}
-	.customer-account-fieldset {
-		display: none;
+	h5.legend {
+		font-weight: 700;
+		padding: 15px 0 10px;
+	}
+	div.summary-bottom {
+		padding-top: 40px;
+	}
+	p#overview-message {
+		font-size: 15px;
+		margin-bottom: 10px;
 	}
 }

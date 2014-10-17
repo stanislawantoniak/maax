@@ -11,6 +11,8 @@ jQuery(function($){
 		unloadMessage: 'Do You really want to leave RMA process?',
 		ignoreUnload: 0,
 		daysOfWeek: [],
+		txtReason: "",
+		txtComment: "",
 		
 		////////////////////////////////////////////////////////////////////////
 		// Init steps and general
@@ -90,7 +92,8 @@ jQuery(function($){
 					el.valid();
 				}
 				el.data('inited', 1);
-			}
+			};
+
 			s.find("select").change(selectHandler).change();
 			
 			// Handle next click
@@ -129,7 +132,7 @@ jQuery(function($){
 
                 //--validation
                 if(valid){
-	                self.fillRmaSummary(self._getRmaSummaryData());
+	                self.fillRmaSummary();
                     self.next();
                 }
                 return false;
@@ -200,15 +203,16 @@ jQuery(function($){
 		_getItemHtml: function(item) {
 			return "" +
 			"<tr>" +
-			"   <td rowspan=\"2\">" +
-			"       <img src=\"" + item.img + "\" />" +
+			"   <td rowspan='2' class='summary-image'>" +
+			"       <img src='" + item.img + "' />" +
 			"   </td>" +
-			"   <td>" +
+			"   <td class='summary-item-desc'>" +
 			"       " + item.desc +
 			"   </td>" +
 			"</tr>" +
 			"<tr>" +
-			"   <td>" +
+			"   <td class='summary-reason'>" +
+			"       <span class=\"bold\">" + this.txtReason + "</span><br />" +
 			"       " + item.reason +
 			"   </td>" +
 			"</tr>";
@@ -217,16 +221,18 @@ jQuery(function($){
 		_getCommentHtml: function(comment) {
 			return "" +
 			"<tr>" +
-			"   <td colspan=\"2\" class=\"comment\">" +
-			"       " + comment +
+			"   <td colspan='2' class='summary-comment'>" +
+			"       <span class='bold'>" + this.txtComment + "</span>" +
+			"       <span id='review-comment-text'>" + comment + "</span>" +
 			"   </td>" +
 			"</tr>";
 		},
 
-		fillRmaSummary: function(data) {
-			var day = rmaDaysOfWeek[(new Date(data.pickup.carrier_date)).getDay()]+" "+data.pickup.carrier_date,
+		fillRmaSummary: function() {
+			var data = this._getRmaSummaryData();
+			var day = this.daysOfWeek[(new Date(data.pickup.carrier_date)).getDay()]+" "+data.pickup.carrier_date,
 				pickup = $("#pickup-date-review"),
-				accountFieldset = $("#customer-account-fieldset"),
+				accountFieldset = $(".customer-account-fieldset"),
 				account = $("#customer-account-review"),
 				items = $("#review-items").find("tbody");
 
@@ -237,6 +243,9 @@ jQuery(function($){
 			if(data.account) {
 				account.html(data.account);
 				accountFieldset.show();
+			} else {
+				account.html("");
+				accountFieldset.hide();
 			}
 
 			items.html("");

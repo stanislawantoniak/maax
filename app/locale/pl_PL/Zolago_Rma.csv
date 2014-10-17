@@ -32,4 +32,8 @@
 "Select the time interval (min. 3h)","Wybierz przedział czasowy (min. 3h)"
 "Enter your account number for your order refund","Podaj numer konta bankowego, na które chcesz otrzymać zwrot zapłaty"
 "Check again inserted data. Note carrier pickup date.", "Sprawdź jeszcze raz poprawność wszystkich danych. Zapisz sobie termin odbioru przesyłki przez kuriera"
-"RMA Content", "Treść zgłoszenia"
+"RMA Content", "Treść zgłoszenia",
+"Your address","Twój adres",
+"Pickup date","Termin odbioru"
+"Bank account for return","Numer konta do zwrotu"
+"Additional informations","Dodatkowe informacje"
