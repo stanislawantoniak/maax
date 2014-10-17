@@ -191,7 +191,9 @@ class Zolago_Solrsearch_Block_Faces_Price extends Zolago_Solrsearch_Block_Faces_
 		}
 		return array();
 	}
-	
+	public function buildValue($min, $max) {
+		
+	}
 	protected function applyPriceRangeProductCount() {
 		$priceRanges = $this->calculatePriceRanges();
 		$appliedPriceRanges = array();
@@ -224,24 +226,32 @@ class Zolago_Solrsearch_Block_Faces_Price extends Zolago_Solrsearch_Block_Faces_
 
         if (!empty($appliedPriceRanges)) {
             $appliedPriceRanges = array_values($appliedPriceRanges);
-            for ($i = 0; $i < count($appliedPriceRanges); $i++) {
+			$count = count($appliedPriceRanges);
+            for ($i = 0; $i < $count; $i++) {
                 if (isset($appliedPriceRanges[$i + 1]) && $appliedPriceRanges[$i]['end'] !== $appliedPriceRanges[$i + 1]['start']) {
-                    $appliedPriceRanges[$i]['end'] = $appliedPriceRanges[$i + 1]['start'];
-                    $appliedPriceRanges[$i]['value'] = $appliedPriceRanges[$i]['start'] . ' TO ' . $appliedPriceRanges[$i + 1]['start'];
-                    $appliedPriceRanges[$i]['formatted'] = $this->getFilterContainer()->formatFacetPrice($appliedPriceRanges[$i]['start'] . ' TO ' . $appliedPriceRanges[$i + 1]['start']);
-                };
+					$appliedPriceRanges[$i]['end'] = $appliedPriceRanges[$i + 1]['start'];
+					$appliedPriceRanges[$i]['value'] = $appliedPriceRanges[$i]['start'] . ' TO ' . $appliedPriceRanges[$i + 1]['start'];
+					$appliedPriceRanges[$i]['formatted'] = $this->getFilterContainer()->formatFacetPrice(
+							$appliedPriceRanges[$i]['value']
+					);
+					
+				};
             }
         }
-        if (!empty($appliedPriceRanges)) {
-            for ($i = 0; $i < count($appliedPriceRanges); $i++) {
-                if ($i == 0) {
-                    $appliedPriceRanges[$i]['formatted'] = $this->getFilterContainer()->formatFacetPriceItem($appliedPriceRanges[$i]['end'],Mage::helper('zolagosolrsearch')->__('less than'));
-                }
-                if ($i == count($appliedPriceRanges) - 1) {
-                    $appliedPriceRanges[$i]['formatted'] = $this->getFilterContainer()->formatFacetPriceItem($appliedPriceRanges[$i]['start'],Mage::helper('zolagosolrsearch')->__('greater than'));
-                }
-            }
-        }
+		
+		foreach($appliedPriceRanges as $i=>$range){
+			if($i==0){
+				$appliedPriceRanges[0]['value'] =  'TO ' . $appliedPriceRanges[0]['end'];
+			}elseif($i==$count-1){
+				$appliedPriceRanges[$count-1]['value'] = $appliedPriceRanges[$count-1]['start'] . ' TO';
+			}else{
+				continue;
+			}
+			$appliedPriceRanges[$i]['formatted'] = $this->getFilterContainer()->formatFacetPrice(
+					$appliedPriceRanges[$i]['value']
+			);
+		}
+		
 		return $appliedPriceRanges;
 	}
 
