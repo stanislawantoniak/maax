@@ -54,11 +54,19 @@ Mall.validate.validators = {
 
     postcode: function(value, elem, params){
         "use strict";
-        var r = /^\d{2}-\d{3}$/.test(value);
-        if(/^00-000$/.test(value)) {
-            r = false;
+        value = value.replace(/\D/g, "");
+        if (value.length > 5) { //if there is more then 5 digit
+            return false;
         }
-        return r;
+        if (value.length == 5) {
+            if (value == "00000") {
+                return false;
+            }
+            return true;
+        } else {
+            return false;
+        }
+
     },
 	
 
@@ -78,5 +86,20 @@ Mall.validate.validators = {
         } else {
             return false;
         }
+    },
+
+    nip: function(value, elem, params){
+
+        value = value.replace(/\D/g, "");
+        if (value.length == 0) {
+            return true;
+        }
+        if (value.length < 10) {
+            return this.optional(elem) | false;
+        }
+        if (value.length > 16) {
+            return this.optional(elem) | false;
+        }
+        return true;
     }
 };

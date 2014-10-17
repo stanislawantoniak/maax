@@ -1049,7 +1049,7 @@
 					selector = item.replace("billing", "shipping");
                     value = jQuery("[name='"+ selector +"']").val();
                     if (item == "billing[postcode]") {
-                        value = self.postcodeTransform(value);
+                        value = Mall.postcodeTransform(value);
                     }
 					billingData.push({
 						name: item,
@@ -1061,16 +1061,7 @@
 				return billingData;
 			},
 
-            //transform postcode like: 99999, 99 999, 99/999, 99-999, 99_999
-            //to our format: 99-999
-            postcodeTransform: function(str) {
-                var strTrans = str.match(/.*?([0-9]{2}).([0-9]{3}.*?)/i);
-                if (strTrans.length >= 1) {
-                    return strTrans[1]
-                } else {
-                    return str;
-                }
-            },
+
 
 			collect: function () {
 				var form = jQuery("#co-address"),
