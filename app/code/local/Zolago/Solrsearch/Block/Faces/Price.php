@@ -232,6 +232,16 @@ class Zolago_Solrsearch_Block_Faces_Price extends Zolago_Solrsearch_Block_Faces_
                 };
             }
         }
+        if (!empty($appliedPriceRanges)) {
+            for ($i = 0; $i < count($appliedPriceRanges); $i++) {
+                if ($i == 0) {
+                    $appliedPriceRanges[$i]['formatted'] = $this->getFilterContainer()->formatFacetPriceItem($appliedPriceRanges[$i]['end'],Mage::helper('zolagosolrsearch')->__('less than'));
+                }
+                if ($i == count($appliedPriceRanges) - 1) {
+                    $appliedPriceRanges[$i]['formatted'] = $this->getFilterContainer()->formatFacetPriceItem($appliedPriceRanges[$i]['start'],Mage::helper('zolagosolrsearch')->__('greater than'));
+                }
+            }
+        }
 		return $appliedPriceRanges;
 	}
 
