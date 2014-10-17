@@ -13,6 +13,9 @@ jQuery(function($){
 		daysOfWeek: [],
 		txtReason: "",
 		txtComment: "",
+		txtCarrierTime: "",
+		_txtCarrierTimeFrom: "carrier_time_from",
+		_txtCarrierTimeTo: "carrier_time_to",
 		
 		////////////////////////////////////////////////////////////////////////
 		// Init steps and general
@@ -159,6 +162,10 @@ jQuery(function($){
         },
 
 		// Step 3 functions
+		_getRmaAddress: function() {
+			return this.step2.find('.current-rma-address').html();
+		},
+
 		_getPickup: function() {
 			var s = this.step2,
 				out = {};
@@ -193,6 +200,7 @@ jQuery(function($){
 
 		_getRmaSummaryData: function() {
 			var out = {};
+			out.address = this._getRmaAddress();
 			out.pickup = this._getPickup();
 			out.account = this._getAccount();
 			out.items = this._getRmaItems();
@@ -234,11 +242,15 @@ jQuery(function($){
 				pickup = $("#pickup-date-review"),
 				accountFieldset = $(".customer-account-fieldset"),
 				account = $("#customer-account-review"),
-				items = $("#review-items").find("tbody");
+				items = $("#review-items").find("tbody"),
+				address = $("#review-shipping-address");
 
 			pickup.find('.pickup-day').html(day);
-			pickup.find('.pickup-from').html(data.pickup.carrier_time_from);
-			pickup.find('.pickup-to').html(data.pickup.carrier_time_to);
+			pickup.find('.pickup-time').html(
+				this.txtCarrierTime
+					.replace(this._txtCarrierTimeFrom, data.pickup.carrier_time_from)
+					.replace(this._txtCarrierTimeTo, data.pickup.carrier_time_to)
+			);
 
 			if(data.account) {
 				account.html(data.account);
@@ -257,6 +269,8 @@ jQuery(function($){
 			if(data.comment) {
 				items.append(this._getCommentHtml(data.comment));
 			}
+
+			address.html(data.address);
 
 			return false;
 		},

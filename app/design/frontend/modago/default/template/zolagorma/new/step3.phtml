@@ -1,7 +1,6 @@
 <?php $_helper = Mage::helper("zolagorma"); ?>
 <?php $_po = $this->getPo(); ?>
 <?php $_rma = $this->getRma();?>
-<?php $_shippingAddress = $_po->getShippingAddress()->format('html'); ?>
 <?php $_itemsSingle = $_rma->getItemsSingle(); ?>
 <?php $_itemsConditionSingle = $_rma->getItemsConditionSingle(); ?>
 <?php $items = $this->getItemList();?>
@@ -18,6 +17,7 @@ jQuery(document).ready(function() {
 	];
 	Mall.rma.new.txtReason = "<?php echo $this->__("Return reason");?>:";
 	Mall.rma.new.txtComment = "<?php echo $_helper->__("Additional informations");?>:";
+	Mall.rma.new.txtCarrierTime = "<?php echo $_helper->__("between %s and %s","carrier_time_from","carrier_time_to") ?>";
 });
 </script>
 <div class="steps step-3 background-wrapper box-wrapper" id="step-3">
@@ -41,9 +41,7 @@ jQuery(document).ready(function() {
 			<div id="pickup-address-overview" class="fieldset flow-return">
 				<h5 class="legend"><?php echo $_helper->__("Your address"); ?></h5>
 				<div class="rma-summary-container">
-					<address id="review-shipping-address">
-						<?php echo $_shippingAddress; ?>
-					</address>
+					<address id="review-shipping-address"></address>
 				</div>
 			</div>
 			<div id="pickup-date-overview" class="fieldset flow-return">
@@ -51,8 +49,7 @@ jQuery(document).ready(function() {
 				<div class="rma-summary-container">
 					<p id="pickup-date-review">
 						<span><?php echo $_helper->__("Courier"); ?>,</span> <span class="pickup-day"></span><br />
-						<span><?php echo $_helper->__("between"); ?></span>
-						<span class="pickup-from"></span> <span><?php echo $_helper->__("and"); ?></span> <span class="pickup-to"></span>
+						<span class="pickup-time"></span>
 					</p>
 				</div>
 			</div>
