@@ -9,7 +9,7 @@
 		<span class="back-xs"><a href="<?php echo $baseUrl ?>customer/account/index/" class="underline"><?php echo $_helper->__('back'); ?> &gt;</a></span>
 	</h1>
 </div>
-<?php if(/*0 && */$_orders->getSize()): ?>
+<?php if($_orders->getSize()): ?>
 	<div class="background-wrapper box-wrapper">
 		<table class="data-table table-top" id="my-orders-table">
 			<col width="120px" />
@@ -45,13 +45,12 @@
 					</td>
 					<td class="products">
 						<?php if($_hasPo):?>
-						<ul class="list-unstyled">
+						<ul class="list-unstyled product-list">
 							<?php foreach($this->getSortedPoItemsByOrder($_order) as $_itemArray):?>
 							<li>
-								<span class="uppercase"><?php echo $this->escapeHtml($_itemArray['vendor']->getVendorName());?></span>
 								<?php echo $this->escapeHtml($_itemArray['item']->getName());?><br/>
 								<?php foreach($this->extractProductOptions($_itemArray['options']) as $_option): ?>
-									<?php echo $this->escapeHtml($_option['label']); ?>: <?php echo $this->escapeHtml($_option['value']); ?>
+									<span class="product-attribute"><?php echo $this->escapeHtml($_option['label']); ?>: <?php echo $this->escapeHtml($_option['value']); ?></span><br/>
 								<?php endforeach;?>
 							</li>
 							<?php endforeach;?>

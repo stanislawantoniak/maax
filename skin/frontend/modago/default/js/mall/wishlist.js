@@ -498,16 +498,20 @@ Mall.wishlist = {
         "use strict";
 
         jQuery(".like").each(function (index, item) {
+
             var wrapperWidth = jQuery(item).parent().outerWidth(true),
                 priceWidth = jQuery(item).parent().find(".col-price").outerWidth(true),
                 icoWidth = jQuery(item).find(".icoLike").outerWidth(true),
                 likeCountWidth = jQuery(item).find(".like_count").outerWidth(true);
 
-            if (icoWidth + likeCountWidth + priceWidth + 10 < wrapperWidth) {
-                jQuery(item).parent().removeClass("like-two-line");
-            } else {
-                jQuery(item).parent().addClass("like-two-line");
-            }
+                if(wrapperWidth > 0){ //To prevent using this script before products loaded
+                    if (icoWidth + likeCountWidth + priceWidth + 10 < wrapperWidth) {
+                        jQuery(item).parent().removeClass("like-two-line");
+                    } else {
+                        jQuery(item).parent().addClass("like-two-line");
+                    }
+                }
+
         });
 
         return this;

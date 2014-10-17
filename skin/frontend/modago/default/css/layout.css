@@ -2430,7 +2430,7 @@ html.fb-static .fb-slidebar, .fb-slidebar.fb-static {
   overflow: hidden;
   position: absolute;
   top: 0;
-  width: 88%; }
+  right: 30px; }
 
 /* line 29, ../sass/layout/modules/_selected-styled.scss */
 .sbToggle {
@@ -5853,6 +5853,122 @@ yx-axis
 /* line 31, ../sass/layout/modules/_help-page.scss */
 #contact-container {
   border-top-width: 0px; }
+
+/* line 2, ../sass/layout/modules/_rma-po-list.scss */
+.rma .po-list-sm {
+  display: none; }
+@media (max-width: 767px) {
+  /* line 2, ../sass/layout/modules/_rma-po-list.scss */
+  .rma .po-list-sm {
+    display: table; } }
+/* line 8, ../sass/layout/modules/_rma-po-list.scss */
+.rma .po-list-md {
+  display: none; }
+@media (min-width: 768px) {
+  /* line 8, ../sass/layout/modules/_rma-po-list.scss */
+  .rma .po-list-md {
+    display: table; } }
+/* line 15, ../sass/layout/modules/_rma-po-list.scss */
+.rma .rma-po-list p {
+  font-size: 15px; }
+/* line 18, ../sass/layout/modules/_rma-po-list.scss */
+.rma .rma-po-list table.po-list-table {
+  border: 1px solid #bfbfbf; }
+/* line 20, ../sass/layout/modules/_rma-po-list.scss */
+.rma .rma-po-list table.po-list-table thead tr th, .rma .rma-po-list table.po-list-table tbody tr td {
+  background-color: #FFFFFF;
+  border: none;
+  vertical-align: top; }
+/* line 25, ../sass/layout/modules/_rma-po-list.scss */
+.rma .rma-po-list table.po-list-table thead tr th {
+  text-transform: uppercase; }
+/* line 28, ../sass/layout/modules/_rma-po-list.scss */
+.rma .rma-po-list table.po-list-table tbody tr td {
+  border-top: 1px solid #ebebeb; }
+/* line 30, ../sass/layout/modules/_rma-po-list.scss */
+.rma .rma-po-list table.po-list-table tbody tr td:last-child {
+  text-align: right;
+  padding-right: 20px;
+  width: 100px; }
+/* line 35, ../sass/layout/modules/_rma-po-list.scss */
+.rma .rma-po-list table.po-list-table tbody tr td:first-child {
+  padding-left: 15px; }
+/* line 38, ../sass/layout/modules/_rma-po-list.scss */
+.rma .rma-po-list table.po-list-table tbody tr td:nth-child(4) {
+  padding: 0;
+  width: 330px; }
+/* line 43, ../sass/layout/modules/_rma-po-list.scss */
+.rma .rma-po-list table.po-list-table table.po-items-table {
+  max-width: 300px; }
+/* line 46, ../sass/layout/modules/_rma-po-list.scss */
+.rma .rma-po-list table.po-list-table table.po-items-table tbody tr td {
+  border-top: none;
+  padding: 10px; }
+/* line 49, ../sass/layout/modules/_rma-po-list.scss */
+.rma .rma-po-list table.po-list-table table.po-items-table tbody tr td:last-child {
+  text-align: inherit;
+  padding-left: 5px;
+  width: auto; }
+/* line 54, ../sass/layout/modules/_rma-po-list.scss */
+.rma .rma-po-list table.po-list-table table.po-items-table tbody tr td:first-child {
+  padding-left: 5px;
+  padding-right: 5px; }
+/* line 57, ../sass/layout/modules/_rma-po-list.scss */
+.rma .rma-po-list table.po-list-table table.po-items-table tbody tr td:first-child img {
+  border: 1px solid #cccccc; }
+/* line 62, ../sass/layout/modules/_rma-po-list.scss */
+.rma .rma-po-list table.po-list-table table.po-items-table tbody tr:last-child td {
+  padding-bottom: 20px; }
+/* line 65, ../sass/layout/modules/_rma-po-list.scss */
+.rma .rma-po-list table.po-list-table table.po-items-table tbody tr:first-child td {
+  padding-top: 20px; }
+/* line 72, ../sass/layout/modules/_rma-po-list.scss */
+.rma .po-list-table-mobile {
+  width: 100%;
+  border: 1px solid #bfbfbf; }
+/* line 75, ../sass/layout/modules/_rma-po-list.scss */
+.rma .po-list-table-mobile tr:first-child td {
+  border-top: none; }
+/* line 78, ../sass/layout/modules/_rma-po-list.scss */
+.rma .po-list-table-mobile td {
+  border-top: 1px solid #ebebeb;
+  padding: 15px 10px; }
+/* line 81, ../sass/layout/modules/_rma-po-list.scss */
+.rma .po-list-table-mobile td table {
+  width: 100%; }
+/* line 85, ../sass/layout/modules/_rma-po-list.scss */
+.rma .po-list-table-mobile td table tr:first-child td {
+  padding: 0; }
+/* line 87, ../sass/layout/modules/_rma-po-list.scss */
+.rma .po-list-table-mobile td table tr:first-child td:nth-child(2) {
+  text-align: right; }
+/* line 92, ../sass/layout/modules/_rma-po-list.scss */
+.rma .po-list-table-mobile td table tr td {
+  border-top: none;
+  padding: 20px 0 0 0;
+  vertical-align: middle; }
+/* line 96, ../sass/layout/modules/_rma-po-list.scss */
+.rma .po-list-table-mobile td table tr td span {
+  display: block; }
+/* line 99, ../sass/layout/modules/_rma-po-list.scss */
+.rma .po-list-table-mobile td table tr td span.product-attribute {
+  margin-top: -3px;
+  margin-bottom: 4px; }
+/* line 108, ../sass/layout/modules/_rma-po-list.scss */
+.rma .rma-po-empty {
+  padding-bottom: 100px; }
+
+/* line 112, ../sass/layout/modules/_rma-po-list.scss */
+.product-attribute {
+  font-size: 12px; }
+
+/* line 115, ../sass/layout/modules/_rma-po-list.scss */
+.nowrap {
+  white-space: nowrap; }
+
+/* line 118, ../sass/layout/modules/_rma-po-list.scss */
+.bold {
+  font-weight: 700; }
 
 /* line 1, ../sass/layout/override/_global.scss */
 .clr {

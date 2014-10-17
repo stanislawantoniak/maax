@@ -1,0 +1,65 @@
+<?php $_helper = Mage::helper("zolagorma"); ?>
+<?php $_po = $this->getPo(); ?>
+<?php $_rma = $this->getRma();?>
+<?php $_shippingAddress = $_po->getShippingAddress(); ?>
+<?php $_itemsSingle = $_rma->getItemsSingle(); ?>
+<?php $_itemsConditionSingle = $_rma->getItemsConditionSingle(); ?>
+<?php $items = $this->getItemList();?>
+
+<div class="steps step-3 background-wrapper box-wrapper" id="step-3">
+	<p id="overview-message" class="flow-return">
+		<?php echo $_helper->__("Check again inserted data. Note carrier pickup date."); ?>
+	</a>
+	
+	<div class="row">
+		<div class="col-md-8">
+			<div class="fieldset">
+				<h5 class="legend"><?php echo $_helper->__("RMA Content"); ?></h5>
+				<ul class="form-list">
+					<li class="wide">
+						<table class="data-table">
+							<thead>
+								<tr>
+									<th><?php echo $_helper->__("Lp."); ?></th>
+									<th><?php echo $_helper->__("Product"); ?></th>
+									<th><?php echo $_helper->__("Reason"); ?></th>
+								</tr>
+							</thead>
+							<tbody id="review-items"></tbody>
+						</table>
+						<p id="review-comment-text"></p>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div id="pickup-address-overview" class="fieldset flow-return">
+				<h5 class="legend"><?php echo $_helper->__("Your address"); ?></h5>
+				<ul class="form-list">
+					<li class="wide">
+						<address id="review-shipping-address"></address>
+					</li>
+				</ul>
+			</div>
+			<div id="pickup-date-overview" class="fieldset flow-return">
+				<h5 class="legend"><?php echo $_helper->__("Pickup date"); ?></h5>
+				<p id="pickup-date-review"></p>
+			</div>
+			<div class="fieldset">
+				<h5 class="legend"><?php echo $_helper->__("Bank account for return"); ?></h5>
+				<p id="customer-account-review"></p>
+			</div>
+		</div>
+	</div>
+
+	
+	<div>
+		<a href="<?php echo $this->getUrl("sales/po/rmalist");?>"  class="button button-third large back pull-left">
+			<?php echo $_helper->__("Move back"); ?>
+		</a>
+		<button type="submit" class="btn button button-primary next pull-right">
+			<?php echo $_helper->__("Place RMA"); ?>
+		</button>
+		<div class="clearfix"></div>
+	</div>
+</div>
