@@ -22,7 +22,7 @@
 "Exceeded","Przekroczona"
 "Response deadline","Maksymalna data reakcji"
 "Move back", "Wstecz"
-"Choose RMA items You want return", "Wybierz produkty które chesz zwrócić lub zareklamować"
+"Choose items that you want to return or complaint", "Wybierz produkty które chesz zwrócić lub zareklamować"
 "Additional informations (optional)", "Dodatkowe informacje dotyczące zgłoszenia (opcjonalnie)"
 "Select a reason...", "Wybierz powód..."
 "Order: #%s", "Zamówienie: %s"
@@ -57,3 +57,4 @@
 "Your address", "Twój adres"
 "Cancel RMA", "Anuluj zgłoszenie"
 "Download a document", "Pobierz dokument"
+"Return reason","Powód zwrotu"
