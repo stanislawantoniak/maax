@@ -239,7 +239,6 @@
 
                 panelBody.find(".select-address").click(function (e) {
                     e.preventDefault();
-                    console.log(jQuery(this).parents('form'));
                     if (!jQuery(this).parents('form').valid()) {
                         //visual validation fix
                         if (jQuery('#billing_vat_id, #shipping_vat_id').first().val().length) {
