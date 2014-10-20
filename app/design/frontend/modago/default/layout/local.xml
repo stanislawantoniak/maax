@@ -427,6 +427,10 @@
 			</action>
 		</reference>
 		<reference name="head">
+            <action method="addItem">
+                <type>skin_js</type>
+                <script>js/jquery.ui.slider-p.js</script>
+            </action>
 			<action method="addJs">
 				<script>jquery/jquery.jcarousel.min.js</script>
 			</action>
@@ -1151,6 +1155,35 @@
 			</block>
 		</reference>
 	</sales_order_view>
+	
+	<!-- ################################################################### -->
+	<!-- Rma																 -->
+	<!-- ################################################################### -->
+	<sales_po_newrma>
+		<reference name="head">
+			<action method="addItem">
+				<type>skin_js</type>
+				<script>js/mall/rma/new.js</script>
+			</action>
+		</reference>
+		<reference name="breadcrumbs">
+            <action method="addCrumb">
+                <crumbName>rma</crumbName>
+                <crumbInfo>
+                    <label>Returns and complaints</label>
+                    <title>Returns and complaints</title>
+                </crumbInfo>
+            </action>
+		</reference>
+        <reference name="my.account.wrapper">
+			<remove name="sales.po.info"/>
+            <block type="zolagorma/new" name="zolagorma.new" template="zolagorma/new.phtml">
+				<block type="zolagorma/new_step1" name="zolagorma.new.step1" template="zolagorma/new/step1.phtml"/>
+				<block type="zolagorma/new_step2" name="zolagorma.new.step2" template="zolagorma/new/step2.phtml"/>
+				<block type="zolagorma/new_step3" name="zolagorma.new.step3" template="zolagorma/new/step3.phtml"/>
+            </block>
+        </reference>
+	</sales_po_newrma>
 
     <help_index_index>
         <reference name="breadcrumbs">
