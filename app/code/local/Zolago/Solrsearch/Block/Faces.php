@@ -1301,21 +1301,42 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 		$formattedPriceRange = $facetPriceRange;
 
 		if (isset($priceArray[0]) && isset($priceArray[1])) {
-			$currencySymboy = Mage::app()->getLocale()->currency(
+			$currencySymbol = Mage::app()->getLocale()->currency(
 					Mage::app()->getStore()->getCurrentCurrencyCode()
 			)->getSymbol();
 			$currencyPositionSetting = Mage::helper('solrsearch')->getSetting('currency_position');
-			if ($currencyPositionSetting > 0) {
-				$formattedPriceRange = $currencySymboy.'&nbsp;'.
-						trim($priceArray[0]).'&nbsp;'.$this->__("to").'&nbsp;'
-						.$currencySymboy.'&nbsp;'.trim($priceArray[1]);
-			}else{
-				$formattedPriceRange = trim($priceArray[0]).'&nbsp;'.
-						$currencySymboy.'&nbsp;'.$this->__("to").'&nbsp;'.
-						trim($priceArray[1]).'&nbsp;'.$currencySymboy;
+			
+			
+			if($priceArray[0]==="" && $priceArray[1]!==""){
+				if($currencyPositionSetting > 0){
+					$value = $currencySymbol.' '.trim($priceArray[1]);
+				}else{
+					$value = trim($priceArray[1]) . ' ' .$currencySymbol;
+				}
+				return  Mage::helper("zolagosolrsearch")->__("less than") . ' ' . $value;
+			}elseif($priceArray[1]===""){
+				if($currencyPositionSetting > 0){
+					$value = $currencySymbol.' '.trim($priceArray[0]);
+				}else{
+					$value = trim($priceArray[0]) . ' ' .$currencySymbol;
+				}
+				return  Mage::helper("zolagosolrsearch")->__("greater than") . ' ' . $value;
 			}
-
+				
+				
+			if($currencyPositionSetting > 0){
+				$fromValue = $currencySymbol.' '.trim($priceArray[0]);
+				$toValue = $currencySymbol.' '.trim($priceArray[1]);
+			}else{
+				$fromValue = trim($priceArray[0]) . ' ' .$currencySymbol;
+				$toValue = trim($priceArray[1]) . ' ' .$currencySymbol;
+			}
+			
+			$formattedPriceRange = $fromValue . ' ' . 
+					Mage::helper("zolagosolrsearch")->__("to")  . ' ' . $toValue;
+			
 		}
 		return $formattedPriceRange;
 	}
+
 }

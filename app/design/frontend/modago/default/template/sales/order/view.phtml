@@ -16,7 +16,7 @@
 			<div class="headerTop">
 				<div class="table-row clearfix" id="order_header">
 					<div class="pull-left">
-						<h2><?php echo $this->__("Order number:"); ?><?php echo $this->getOrder()->getIncrementId();?></h2>
+						<h2><?php echo $this->__("Order number").': '.$this->getOrder()->getIncrementId();?></h2>
 					</div>
 					<div class="order-date hidden-xs">
 						<?php echo $this->__('Order date').': ' . $this->helper('core')->formatDate(($this->getOrder()->getCreatedAt()), Mage_Core_Model_Locale::FORMAT_TYPE_SHORT); ;?>
