@@ -132,8 +132,28 @@ jQuery(function($){
 
             // Handle next click
             s.find(".next").click(function(){
-                var valid = true;
-                //validation
+                var valid = true,
+	                from = s.find('input[name="rma[carrier_time_from]"]').val().split(":")[0],
+		            to = s.find('input[name="rma[carrier_time_to]"]').val().split(":")[0],
+	                account = s.find('input[name="rma[customer_account]"]').val().replace(new RegExp('pl','gi'),"").replace(new RegExp(' ','g'),"");
+
+	            //validate if user has chosen pickup date
+	            if(!s.find('input[name="rma[carrier_date]"]:checked').length) {
+		            valid = false;
+		            console.log("date");
+	            }
+
+	            //validate if chosen timespan is minimum 3 hours
+	            if(to - from < 3) {
+		            console.log("hour");
+		            valid = false;
+	            }
+
+	            //validate if entered account number is correct (optional field)
+	            if(account && (account.length != 26 || !$.isNumeric(account))) {
+		            console.log("account");
+		            valid = false
+	            }
 
                 //--validation
                 if(valid){
@@ -159,7 +179,8 @@ jQuery(function($){
             // Handle next click
             s.find(".next").click(function(){
 				// Submit form
-                return false;
+	            $(window).unbind('beforeunload');
+                $('#new-rma').submit();
             });
         },
 

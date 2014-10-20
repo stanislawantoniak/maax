@@ -15,7 +15,7 @@ jQuery(document).ready(function() {
 		"<?php echo $_helper->__("Friday"); ?>",
 		"<?php echo $_helper->__("Saturday"); ?>"
 	];
-	Mall.rma.new.txtReason = "<?php echo $this->__("Return reason");?>:";
+	Mall.rma.new.txtReason = "<?php echo $_helper->__("Return reason");?>:";
 	Mall.rma.new.txtComment = "<?php echo $_helper->__("Additional informations");?>:";
 	Mall.rma.new.txtCarrierTime = "<?php echo $_helper->__("between %s and %s","carrier_time_from","carrier_time_to") ?>";
 });
@@ -63,7 +63,7 @@ jQuery(document).ready(function() {
 	</div>
 
 	<div class="summary-bottom">
-		<a href="<?php echo $this->getUrl("sales/po/rmalist");?>"  class="button button-third large back pull-left">
+		<a href="#step-2"  class="button button-third large back pull-left">
 			<?php echo $_helper->__("Move back"); ?>
 		</a>
 		<button type="submit" class="btn button button-primary next pull-right">

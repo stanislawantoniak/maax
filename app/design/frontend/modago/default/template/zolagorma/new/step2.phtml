@@ -11,7 +11,7 @@
     <div class="rma-container">
 		<?php if (($this->isDhlEnabled()) && count($dateList)) : ?>
         <div id="pickup-address-form" class="fieldset flow-return">
-            <input type="hidden" name="rma[shipping_address_id]" value="<?php $_shippingAddress->getId(); ?>"/>
+            <input type="hidden" name="rma[shipping_address_id]" value="<?php echo $_shippingAddress->getId(); ?>"/>
             <input type="hidden" name="rma[override_address]" value="0"/>
 
             <h3 class="legend"><?php echo $_helper->__("Confirm or change pickup address for the courier"); ?></h3>
@@ -61,7 +61,7 @@
 										value="<?php echo date('Y-m-d',$date);?>"
 									/>
 									<span>										
-										<span class="rma-dayname"><?php echo $weekdays[date('w',$date)]['label'];?></span>	
+										<span class="rma-dayname"><?php echo $weekdays[date('w',$date)]['label'];?></span>
 										<span class="rma-date"><?php echo $this->getFormattedDate($date);?></span>
 									</span>
 									</label>
