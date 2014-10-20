@@ -89,12 +89,8 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
              * @todo Add processing carrier and insert tracking
              */
             $this->_saveRma();
-
-            /*Mage::getSingleton('core/session')->addSuccess(
-                Mage::getStoreConfig('urma/message/customer_success')
-            );*/
 			
-			$rma = Mage::registry('current_session');
+			$rma = Mage::registry('current_rma');
 			
 			if($rma && $rma->getId()){
 				$session->setLastRmaId($rma->getId());

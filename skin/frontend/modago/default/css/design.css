@@ -3040,6 +3040,87 @@ x-axis
 #new-rma .step-1 .form-group {
   margin-bottom: 0; }
 
+/* line 106, ../sass/design/modules/_rma.scss */
+.rma-section {
+  margin-bottom: 15px;
+  border: 1px #bfbfbf solid;
+  padding: 15px; }
+/* line 110, ../sass/design/modules/_rma.scss */
+.rma-section p {
+  margin: 0; }
+
+/* line 114, ../sass/design/modules/_rma.scss */
+.rma-caption {
+  padding: 0;
+  border: 0; }
+
+/* line 118, ../sass/design/modules/_rma.scss */
+.rma-monit {
+  min-height: 70px;
+  padding: 0;
+  border: 1px #c6a662 solid;
+  background: url("../images/rma_monit.png") 16px 13px no-repeat;
+  -moz-box-shadow: rgba(0, 0, 0, 0.2) 0 3px 5px;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.2) 0 3px 5px;
+  box-shadow: rgba(0, 0, 0, 0.2) 0 3px 5px; }
+/* line 124, ../sass/design/modules/_rma.scss */
+.rma-monit p {
+  margin: 16px 16px 16px 82px;
+  padding: 0; }
+/* line 125, ../sass/design/modules/_rma.scss */
+.rma-monit .download-doc {
+  display: inline-block;
+  margin-top: 15px; }
+
+/* line 131, ../sass/design/modules/_rma.scss */
+.rma-status span.uppercase {
+  display: inline-block;
+  margin-right: 20px; }
+
+/* line 137, ../sass/design/modules/_rma.scss */
+.rma-content p {
+  margin-bottom: 15px; }
+/* line 141, ../sass/design/modules/_rma.scss */
+.rma-content table td {
+  vertical-align: top; }
+/* line 144, ../sass/design/modules/_rma.scss */
+.rma-content .img {
+  width: 60px; }
+/* line 147, ../sass/design/modules/_rma.scss */
+.rma-content .desc {
+  padding-left: 10px; }
+/* line 150, ../sass/design/modules/_rma.scss */
+.rma-content .comment-text {
+  margin-top: 15px; }
+
+/* line 155, ../sass/design/modules/_rma.scss */
+.rma-comments p {
+  margin-bottom: 15px; }
+/* line 158, ../sass/design/modules/_rma.scss */
+.rma-comments table td {
+  padding-top: 2px;
+  padding-bottom: 2px; }
+/* line 162, ../sass/design/modules/_rma.scss */
+.rma-comments td.author {
+  width: 130px;
+  vertical-align: top; }
+/* line 166, ../sass/design/modules/_rma.scss */
+.rma-comments td.desc {
+  padding-left: 10px; }
+@media (max-width: 480px) {
+  /* line 170, ../sass/design/modules/_rma.scss */
+  .rma-comments table, .rma-comments tr, .rma-comments td {
+    display: block;
+    padding-left: 0 !important; } }
+
+/* line 176, ../sass/design/modules/_rma.scss */
+.rma-cancel {
+  text-align: right; }
+/* line 178, ../sass/design/modules/_rma.scss */
+.rma-cancel a {
+  color: #bbb;
+  text-decoration: underline; }
+
 /* line 1, ../sass/design/override/_global.scss */
 .browsehappy {
   background: #fff;

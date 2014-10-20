@@ -9,3 +9,140 @@
 		<span class="back-xs"><a href="<?php echo $this->getUrl('customer/account/index/');?>" class="underline"><?php echo $_helper->__('back'); ?> &gt;</a></span>
 	</h1>
 </div>
+
+
+<div class="background-wrapper box-wrapper rma-po-list">
+	<div class="rma-section rma-caption">
+		<span class="bold"><?php echo $_helper->__("RMA Date"); ?></span>: <?php echo Mage::helper("core")->formatDate($_rma->getCreatedAt());?><br/>
+		<span class="bold"><?php echo $_helper->__("Vendor"); ?></span>: <?php echo $this->escapeHtml($_rma->getVendor()->getVendorName());?>
+	</div>
+	<?php if($_message=$this->getSuccessMessage($_rma)):?>
+	<div class="rma-monit rma-section">
+		<?php if(!$this->getIsCompleint()):?>
+		<p>
+			<!-- Message from config -->
+			<?php echo $_message?><br/>
+			<a href="#" class="button button-primary download-doc"><?php echo $_helper->__("Download a document"); ?></a>
+		</p>
+		<?php else:?>
+		<p>
+			<!-- Message from config -->
+			<?php echo $_message?>
+		</p>
+		<?php endif;?>
+	</div>
+	<?php endif;?>
+	<div class="rma-status rma-section">
+		<p>
+			<i class="glyphicon glyphicon-info-sign"></i>
+			<span class="uppercase"><?php echo $_helper->__("Progress status"); ?></span>
+			<?php echo $this->escapeHtml($_rma->getRmaStatusName());?>
+		</p>
+	</div>
+	<div class="row">
+		<div class="col-sm-8">
+			<div class="rma-section">
+				<p>
+					<i class="glyphicon glyphicon-comment"></i>
+					<span class="uppercase"><?php echo $_helper->__("Vednor contact"); ?> [DEV]</span>
+				</p>
+			</div> 
+			<div class="rma-section rma-comments">
+				<p>
+					<i class="glyphicon glyphicon-align-left"></i>
+					<span class="uppercase"><?php echo $_helper->__("History"); ?></span>
+				</p>
+				<?php $_comments = $this->getCommentCollection($_rma)?>
+				<?php if($_comments->getSize()):?>
+					<table>
+						<tbody>
+							<?php foreach($_comments as $_comment):?>
+							<?php /* @var $_comment Unirgy_Rma_Model_Rma_Comment */ ?>
+							<tr>
+								<td class="author">
+									<?php echo Mage::helper('core')->formatDate($_comment->getCreatedAt(), "short", true);?>
+								</td>
+								<td class="desc">
+									<?php echo $this->escapeHtml($_comment->getComment());?>
+								</td>
+							</tr>
+							<?php endforeach;?>
+						</tbody>
+					</table>
+				<?php else:?>
+					<p><?php echo $_helper->__("There is no RAM comments"); ?></p>
+				<?php endif;?>
+			</div> 
+		</div>
+		<div class="col-sm-4">
+			<?php if(!$this->getIsCompleint()):?>
+				<div class="rma-section rma-content">
+					<p>
+						<i class="glyphicon glyphicon-time"></i>
+						<span class="uppercase"><?php echo $_helper->__("Carrier date"); ?></span>
+					</p>
+					<div>
+						<?php echo $this->getDayOfWeek($_rma);?> <?php echo Mage::helper("core")->formatDate($_rma->getCarrierDate(), "short");?><br/>
+						<?php echo $_helper->__("between %s and %s", $_rma->getCarrierTimeFrom(),$_rma->getCarrierTimeTo());?>
+					</div>
+				</div>
+				<?php if($_address=$_rma->getShippingAddress()):?>
+					<div class="rma-section rma-content">
+						<p>
+							<i class="glyphicon glyphicon-envelope"></i>
+							<span class="uppercase"><?php echo $_helper->__("Your address"); ?></span>
+						</p>
+						<div>
+							<?php echo $_address->format("html");?>
+						</div>
+					</div>
+				<?php endif;?>
+			<?php endif;?>
+			<div class="rma-section rma-content">
+				<p>
+					<i class="glyphicon glyphicon-list-alt"></i>
+					<span class="uppercase"><?php echo $_helper->__("RMA Content"); ?></span>
+				</p>
+				<table>
+					<tbody>
+						<?php foreach($_rma->getItemsCollection() as $item):?>
+						<tr>
+							<td class="img">
+								<img src="<?php echo $this->getRmaItemThumb($item);?>" alt=""/>
+							</td>
+							<td class="desc">
+								<p>
+									<span><?php echo $this->escapeHtml($item->getName());?></span>
+									<?php if($_attributes = $this->getConfigurableAttributesByItem($item)):?>
+										<br/>
+										<small>
+										<?php foreach($_attributes as $value):?>
+											<?php echo $this->escapeHtml($value['label']);?>: <?php echo $this->escapeHtml($value['value']);?>
+										<?php endforeach;?>
+										</small>
+									<?php endif;?>
+								</p>
+								<div>
+									<span class="bold"><?php echo $_helper->__("Return reason");?>:</span></br>
+									<?php echo $this->getItemCondition($item);?>
+								</div>
+							</td>
+						</tr>
+						<?php endforeach;?>
+					</tbody>
+				</table>
+				<?php if($_rma->getCommentText()):?>
+				<div class="comment-text">
+					<?php echo $this->escapeHtml($_rma->getCommentText());?>
+				</div>
+				<?php endif;?>
+			</div>
+			<?php if(!$this->getIsCompleint()):?>
+			<div class="rma-cancel">
+				<a href="#"><?php echo $_helper->__("Cancel RMA");?> [DEV]</a>
+			</div>
+			<?php endif;?>
+		</div>
+	</div>
+</div>
+	

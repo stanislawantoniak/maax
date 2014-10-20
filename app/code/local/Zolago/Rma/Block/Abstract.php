@@ -47,6 +47,43 @@ class Zolago_Rma_Block_Abstract extends Mage_Core_Block_Template
 	}
 	
 	/**
+	 * @param Zolago_Rma_Model_Rma $rma
+	 * @return Zolago_Rma_Model_Resource_Rma_Comment_Collection
+	 */
+	public function getCommentCollection(Zolago_Rma_Model_Rma $rma) {
+		$collection = $rma->getCommentsCollection(true);
+		$collection->addFieldToFilter("is_visible_on_front", 1); /* @todo check rma dataflow */
+		return $collection;
+	}
+	
+	/**
+	 * @param Zolago_Rma_Model_Rma $rma
+	 * @return string
+	 */
+	public function getDayOfWeek(Zolago_Rma_Model_Rma $rma) {
+		$date = new Zend_Date($rma->getCarrierDate());
+		return $date->get(Zend_Date::WEEKDAY);
+	}
+	
+	/**
+	 * @param Zolago_Rma_Model_Rma_Item $item
+	 * @return string
+	 */
+	public function getItemCondition(Zolago_Rma_Model_Rma_Item $item) {
+		return $item->getItemConditionName();
+	}
+	
+	/**
+	 * @param Unirgy_Rma_Model_Rma_Item $rmaItem
+	 * @return string
+	 */
+	public function getRmaItemThumb(Unirgy_Rma_Model_Rma_Item $rmaItem, $width=60, $height=null) {
+		return $rmaItem->getProductThumbHelper()->
+			resize($width, $height)->
+			keepFrame(false);
+	}
+	
+	/**
 	 * @param int $item
 	 * @param int|null $width
 	 * @param int|null $height
@@ -63,6 +100,9 @@ class Zolago_Rma_Block_Abstract extends Mage_Core_Block_Template
 	 * @return Zolago_Po_Model_Po_Item
 	 */
 	protected function _getPoItem($item) {
+		if($item instanceof Zolago_Rma_Model_Rma_Item){
+			return $item->getPoItem();
+		}
 		if($item instanceof Zolago_Po_Model_Po_Item){
 			return $item;
 		}
@@ -75,12 +115,13 @@ class Zolago_Rma_Block_Abstract extends Mage_Core_Block_Template
 		return $item;
 	}
 	
+	
 	/**
-	 * @param Zolago_Po_Model_Po_Item | int $item
+	 * @param Zolago_Po_Model_Po_Item | Zolago_Rma_Model_Rma_Item | int $item
 	 * @return array()
 	 */
 	public function getConfigurableAttributesByItem($item) {
-		
+
 		$item = $this->_getPoItem($item);
 		
 		if(!$item->getId()){

@@ -2,6 +2,22 @@
 
 class Zolago_Rma_Model_Rma_Item extends Unirgy_Rma_Model_Rma_Item
 {
+
+	/**
+	 * @return Mage_Catalog_Helper_Image
+	 */
+	public function getProductThumbHelper() {
+		$thumb = Mage::getResourceModel("catalog/product")->getAttributeRawValue(
+				$this->getProductId(),
+				'thumbnail',
+				$this->getRma()->getStoreId()
+		);
+		$product = Mage::getModel("catalog/product")->
+			setId($this->getProductId())->
+			setThumbnail($thumb);
+		
+		return Mage::helper("catalog/image")->init($product, 'thumbnail');
+	}
 	/**
 	 * @return Zolago_Po_Model_Po_Item
 	 */
@@ -30,6 +46,7 @@ class Zolago_Rma_Model_Rma_Item extends Unirgy_Rma_Model_Rma_Item
             foreach ($itemConditionsA as $idD => $dataD) {
                 if ($id == $idD) {
                     $code = $dataD;
+					break;
                 }
             }
         }
