@@ -153,6 +153,7 @@
 	} 
 	.comment-text{
 		margin-top: 15px;
+		word-wrap: break-word; 
 	}
 }
 .rma-comments{
@@ -169,6 +170,7 @@
 	}
 	td.desc{
 		padding-left: 10px;
+		word-wrap: break-word; 
 	}
 	@media (max-width: $screen-xs-min) {
 		table,tr,td{
