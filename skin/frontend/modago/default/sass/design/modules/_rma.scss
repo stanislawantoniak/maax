@@ -136,6 +136,15 @@
 		display: inline-block;
 		margin-right: 20px;
 	}
+	
+	@media (max-width: $screen-xs-max) {
+			span.caption{
+				display: block;
+			}
+			span.uppercase{
+				margin-right:0;
+			}
+	}
 }
 .rma-content{
 	p{

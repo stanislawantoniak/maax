@@ -34,8 +34,10 @@
 	<?php endif;?>
 	<div class="rma-status rma-section">
 		<p>
-			<i class="glyphicon glyphicon-info-sign"></i>
-			<span class="uppercase"><?php echo $_helper->__("Progress status"); ?></span>
+			<span class="caption">
+				<i class="glyphicon glyphicon-info-sign"></i>
+				<span class="uppercase"><?php echo $_helper->__("Progress status"); ?></span>
+			</span>
 			<?php echo $this->escapeHtml($_rma->getRmaStatusName());?>
 		</p>
 	</div>
