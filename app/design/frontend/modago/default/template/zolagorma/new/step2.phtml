@@ -5,23 +5,28 @@
 <?php $_itemsSingle = $_rma->getItemsSingle(); ?>
 <?php $_itemsConditionSingle = $_rma->getItemsConditionSingle(); ?>
 <?php $items = $this->getItemList();?>
-<div class="steps step-2 background-wrapper box-wrapper" id="step-2" >
-    <div id="pickup-address-form" class="fieldset flow-return">
-        <div class="rma-container">
+<?php $dateList = $this->getDateList();?>
+<?php $weekdays = Mage::app()->getLocale()->getOptionWeekdays();?>
+<div class="steps step-2 background-wrapper box-wrapper" id="step-2">
+    <div class="rma-container">
+		<?php if (($this->isDhlEnabled()) && count($dateList)) : ?>
+        <div id="pickup-address-form" class="fieldset flow-return">
             <input type="hidden" name="rma[shipping_address_id]" value="<?php $_shippingAddress->getId(); ?>"/>
             <input type="hidden" name="rma[override_address]" value="0"/>
 
             <h3 class="legend"><?php echo $_helper->__("Confirm or change pickup address for the courier"); ?></h3>
+
             <div class="panel panel-default">
                 <div class="panel-body">
                     <div class="current-rma-address current-addres clearfix">
 
-                        <dl class="pull-left">
+                        <dl class="pull-left" id="shipping-address">
                             <dt><?php echo $_shippingAddress->getFirstname(); ?> <?php echo $_shippingAddress->getLastname(); ?></dt>
                             <dd><?php echo $_shippingAddress->getData("street"); ?></dd>
                             <dd><?php echo $_shippingAddress->getPostcode(); ?> <?php echo $_shippingAddress->getCity(); ?></dd>
                             <dd class="separator phone">
-                                <?php echo $this->__('Contact phone'); ?>: <span><?php echo $_shippingAddress->getTelephone(); ?>
+                                <?php echo $this->__('Contact phone'); ?>
+                                : <span><?php echo $_shippingAddress->getTelephone(); ?>
                         </span>
                             </dd>
                         </dl>
@@ -34,28 +39,60 @@
                     </a>
                 </div>
             </div>
+
+        </div>
+        <div id="pickup-date-form">
             <h3 class="legend"><?php echo $_helper->__("Schedule pickup date that is convenient for you"); ?></h3>
             <div class="panel panel-default">
                 <div class="panel-body">
                     <div class="current-rma-date clearfix">
                         <div id="pickup-date-form" class="fieldset flow-return">
 
-                            <label class="required" for="carrier-date"><?php echo $_helper->__("Choose the date"); ?> <em>*</em></label>
+                            <label class="required" for="carrier-date"><?php echo $_helper->__("Choose the date"); ?>
+                                <em>*</em></label>
+
                             <div class="input-box">
-                                <input type="text" value="<?php echo $_rma->getCarrierDate();?>" name="rma[carrier_date]" value="<?php echo $this->formatDate();?>" id="carrier-date" title="<?php echo $_helper->__("Choose the date"); ?>" value="" class="input-text required-entry ">
+								<?php foreach ($dateList as $date=>$item): ?>
+									<label for="carrier_date_<?php echo $date;?>">
+									<input 
+										type="radio" 
+										name="rma[carrier_date]" 
+										id="carrier_date_<?php echo $date;?>"
+										value="<?php echo date('Y-m-d',$date);?>"
+									/>
+									<span>										
+										<span class="rma-dayname"><?php echo $weekdays[date('w',$date)]['label'];?></span>	
+										<span class="rma-date"><?php echo $this->getFormattedDate($date);?></span>
+									</span>
+									</label>
+								<?php endforeach; ?>
+<?php /*
+                                <input type="text" value="<?php echo $_rma->getCarrierDate(); ?>"
+                                       name="rma[carrier_date]" value="<?php echo $this->formatDate(); ?>"
+                                       id="carrier-date" title="<?php echo $_helper->__("Choose the date"); ?>" value=""
+                                       class="input-text required-entry ">
+*/?>
                             </div>
 
-                            <label class="required" for="carrier-time-from"><?php echo $_helper->__("Select the time interval (min. 3h)"); ?> <em>*</em></label>
+                            <label class="required"
+                                   for="carrier-time-from"><?php echo $_helper->__("Select the time interval (min. 3h)"); ?>
+                                <em>*</em></label>
+
                             <div class="field">
                                 <div class="input-box">
-                                    <input type="hidden" name="rma[carrier_time_from]" id="carrier-time-from" value="<?php echo $_rma->getCarrierTimeFrom(); ?>" title="<?php echo $_helper->__("Choose time-from of the day"); ?>" />
-                                    <input type="hidden" name="rma[carrier_time_to]" id="carrier-time-to" value="<?php echo $_rma->getCarrierTimeTo(); ?>" title="<?php echo $_helper->__("Choose time-to of the day"); ?>" />
+                                    <input type="hidden" name="rma[carrier_time_from]" id="carrier-time-from"
+                                           value="<?php echo $_rma->getCarrierTimeFrom(); ?>"
+                                           title="<?php echo $_helper->__("Choose time-from of the day"); ?>"/>
+                                    <input type="hidden" name="rma[carrier_time_to]" id="carrier-time-to"
+                                           value="<?php echo $_rma->getCarrierTimeTo(); ?>"
+                                           title="<?php echo $_helper->__("Choose time-to of the day"); ?>"/>
                                 </div>
                             </div>
 
 
                             <span id="time"></span><br/>
                             <span id="SlideMax">&nbsp;&nbsp;</span>
+
                             <div id="slider-range"></div>
 
                         </div>
@@ -64,26 +101,60 @@
                 </div>
 
             </div>
-            <div class="fieldset">
-                <h3 class="legend"><?php echo $_helper->__("Enter your account number for your order refund"); ?></h3>
-                <input type="text" value="<?php echo $this->escapeHtml($_rma->getCustomerAccount());?>" name="rma[customer_account]" value="" id="customer-account" title="<?php echo $_helper->__("Bank account"); ?>" value="" class="input-text">
-            </div>
         </div>
 
-
-        <div class="rma-container">
-            <a href="#step-1"  class="button button-third large back pull-left">
-                <?php echo $_helper->__("Back"); ?>
-            </a>
-
-            <button class="btn button button-primary next pull-right" type="button"><?php echo $_helper->__("Next"); ?></button>
-
+		<?php endif;?>
+        <div class="fieldset">
+            <h3 class="legend"><?php echo $_helper->__("Enter your account number for your order refund"); ?></h3>
+            <input type="text" value="<?php echo $this->escapeHtml($_rma->getCustomerAccount()); ?>"
+                   name="rma[customer_account]" value="" id="customer-account"
+                   title="<?php echo $_helper->__("Bank account"); ?>" value="" class="input-text">
         </div>
-	</div>
-
+    </div>
+    <div class="rma-container">
+        <a href="#step-1" class="button button-third large back pull-left">
+            <?php echo $_helper->__("Back"); ?>
+        </a>
+        <button class="btn button button-primary next pull-right"
+                type="button"><?php echo $_helper->__("Next"); ?></button>
+    </div>
 </div>
 
+
+
 <script type="text/javascript">
+    var isAcknowledged = false;
+</script>
+<?php  $vendor = $_po->getVendor();?>
+
+<script type="text/javascript">
+    //applyFlow
+    var returnReasons = '<?php echo Mage::helper("zolagorma")->getReturnReasons($_po, true); ?>';
+    var flowAcknowledged = '<?php echo Zolago_Rma_Model_Rma::FLOW_ACKNOWLEDGED; ?>';
+
+    jQuery("select[name^='rma[items_condition_single]']").each(function(item){
+        if(item.value){
+            if(returnReasons[item.value].flow == flowAcknowledged){
+                isAcknowledged = true;
+            }
+        }
+    })
+
+    if(isAcknowledged){
+        jQuery('#pickup-address-form').hide();
+        jQuery('#pickup-date-form').hide();
+        jQuery('#pickup-address-overview').hide();
+        jQuery('#pickup-date-overview').hide();
+        jQuery('#overview-message').hide();
+    }
+    else{
+        jQuery('#pickup-address-form').show();
+        jQuery('#pickup-date-form').show();
+        jQuery('#pickup-address-overview').show();
+        jQuery('#pickup-date-overview').show();
+        jQuery('#overview-message').show();
+    }
+
     jQuery("#slider-range").slider({
         range: true,
         min: 540,
@@ -147,8 +218,6 @@
         return hours + ":" + minutes;
     }
     formatTimeRange(jQuery("#slider-range").slider("values", 0), jQuery("#slider-range").slider("values", 1));
-
-    jQuery("[name='rma[carrier_date]']").datepicker();
 
 
 </script>
