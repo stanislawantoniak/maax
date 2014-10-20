@@ -69,7 +69,7 @@ $_cutomerAddressId = $_billingAddress->getCustomerAddressId();
         <div class="row">
             <label class="col-sm-3" for="billing_postcode"><?php echo $this->__("Zip code"); ?></label>
             <div class="col-sm-5">
-                <input type="text" value="<?php echo $this->escapeHtml($_billingAddress->getPostcode()); ?>" class="form-control validate-postcode" id="billing_postcode" title="" name="billing[postcode]" required="true" data-original-title="<?php echo $this->__("Zip-code should be entered in the format xx-xxx."); ?>">
+                <input type="text" value="<?php echo $this->escapeHtml($_billingAddress->getPostcode()); ?>" class="form-control zipcode validate-postcode" id="billing_postcode" title="" name="billing[postcode]" required="true" data-original-title="<?php echo $this->__("Zip-code should be entered in the format xx-xxx."); ?>">
             </div>
         </div>
     </div>
