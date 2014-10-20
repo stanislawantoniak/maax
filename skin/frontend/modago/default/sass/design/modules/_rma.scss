@@ -122,6 +122,10 @@
 	background: url('../images/rma_monit.png') 16px 13px no-repeat;
 	@include box-shadow(rgba(0,0,0,0.2) 0 3px 5px);
 	p{margin: 16px 16px 16px 82px;padding:0;}
+	p>span:first-child{
+		margin-bottom: 10px;
+		display: inline-block;
+	}
 	.download-doc{
 		display: inline-block;
 		margin-top: 15px;

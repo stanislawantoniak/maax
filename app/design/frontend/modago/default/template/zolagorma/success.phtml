@@ -22,7 +22,7 @@
 		<p>
 			<!-- Message from config -->
 			<?php echo $_message?><br/>
-			<a href="#" class="button button-primary download-doc"><?php echo $_helper->__("Download a document"); ?></a>
+			<a href="#" class="button button-primary download-doc"><?php echo $_helper->__("Download a document"); ?> [DEV]</a>
 		</p>
 		<?php else:?>
 		<p>
@@ -84,7 +84,11 @@
 					</p>
 					<div>
 						<?php echo $this->getDayOfWeek($_rma);?> <?php echo Mage::helper("core")->formatDate($_rma->getCarrierDate(), "short");?><br/>
-						<?php echo $_helper->__("between %s and %s", $_rma->getCarrierTimeFrom(),$_rma->getCarrierTimeTo());?>
+						<?php echo $_helper->__(
+							"between %s and %s", 
+							$_rma->getCarrierTimeFrom() ? $_rma->getCarrierTimeFrom() : $_helper->__("N/A"), 
+							$_rma->getCarrierTimeTo() ? $_rma->getCarrierTimeTo() : $_helper->__("N/A")); 
+						?>
 					</div>
 				</div>
 				<?php if($_address=$_rma->getShippingAddress()):?>
