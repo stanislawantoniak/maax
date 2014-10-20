@@ -24,6 +24,8 @@ jQuery(function($){
 			"use strict";
 			this._init();
 			this.go(0);
+			// Fix footer
+			jQuery(window).resize();
 		},
 		
 		// Internal init
