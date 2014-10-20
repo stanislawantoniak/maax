@@ -10,6 +10,12 @@ jQuery(function($){
 		returnReasons: [],
 		unloadMessage: 'Do You really want to leave RMA process?',
 		ignoreUnload: 0,
+		daysOfWeek: [],
+		txtReason: "",
+		txtComment: "",
+		txtCarrierTime: "",
+		_txtCarrierTimeFrom: "carrier_time_from",
+		_txtCarrierTimeTo: "carrier_time_to",
 		
 		////////////////////////////////////////////////////////////////////////
 		// Init steps and general
@@ -89,7 +95,8 @@ jQuery(function($){
 					el.valid();
 				}
 				el.data('inited', 1);
-			}
+			};
+
 			s.find("select").change(selectHandler).change();
 			
 			// Handle next click
@@ -128,6 +135,7 @@ jQuery(function($){
 
                 //--validation
                 if(valid){
+	                self.fillRmaSummary();
                     self.next();
                 }
                 return false;
@@ -152,7 +160,125 @@ jQuery(function($){
                 return false;
             });
         },
-		
+
+		// Step 3 functions
+		_getRmaAddress: function() {
+			return this.step2.find('.current-rma-address').html();
+		},
+
+		_getPickup: function() {
+			var s = this.step2,
+				out = {};
+			out.carrier_date = s.find('input[name="rma[carrier_date]"]').val();
+			out.carrier_time_from = s.find('input[name="rma[carrier_time_from]"]').val();
+			out.carrier_time_to = s.find('input[name="rma[carrier_time_to]"]').val();
+			return out;
+		},
+
+		_getAccount: function() {
+			return this.step2.find('input[name="rma[customer_account]"]').val();
+		},
+
+		_getRmaItems: function() {
+			var s = this.step1,
+				out = [];
+			s.find('input[type=checkbox][name^="rma[items_single]"]:checked').each(function() {
+				var item = jQuery(this);
+				var tmp = {},
+					id = item.prop('id').split("_")[2];
+				tmp.img = item.parent('td').next('td').find('img').prop('src');
+				tmp.desc = item.parent('td').next('td').next('td').find('.desc-holder').html();
+				tmp.reason = s.find('select[name="rma[items_condition_single]['+id+'][0]"]').find(':selected').html();
+				out.push(tmp);
+			});
+			return out;
+		},
+
+		_getRmaComment: function() {
+			return this.step1.find('textarea[name="rma[comment_text]"]').val();
+		},
+
+		_getRmaSummaryData: function() {
+			var out = {};
+			out.address = this._getRmaAddress();
+			out.pickup = this._getPickup();
+			out.account = this._getAccount();
+			out.items = this._getRmaItems();
+			out.comment = this._getRmaComment();
+			return out;
+		},
+
+		_getItemHtml: function(item) {
+			return "" +
+			"<tr>" +
+			"   <td rowspan='2' class='summary-image'>" +
+			"       <img src='" + item.img + "' />" +
+			"   </td>" +
+			"   <td class='summary-item-desc'>" +
+			"       " + item.desc +
+			"   </td>" +
+			"</tr>" +
+			"<tr>" +
+			"   <td class='summary-reason'>" +
+			"       <span class=\"bold\">" + this.txtReason + "</span><br />" +
+			"       " + item.reason +
+			"   </td>" +
+			"</tr>";
+		},
+
+		_getCommentHtml: function(comment) {
+			return "" +
+			"<tr>" +
+			"   <td colspan='2' class='summary-comment'>" +
+			"       <p id='review-comment-text'>" +
+			"           <span class='bold'>" + this.txtComment + "</span> " +
+						$("<div/>").text(comment).html() +
+					"</p>" +
+			"   </td>" +
+			"</tr>";
+		},
+
+		fillRmaSummary: function() {
+			var data = this._getRmaSummaryData();
+			var day = this.daysOfWeek[(new Date(data.pickup.carrier_date)).getDay()]+" "+data.pickup.carrier_date,
+				pickup = $("#pickup-date-review"),
+				accountFieldset = $(".customer-account-fieldset"),
+				account = $("#customer-account-review"),
+				items = $("#review-items").find("tbody"),
+				address = $("#review-shipping-address");
+
+			pickup.find('.pickup-day').html(day);
+			pickup.find('.pickup-time').html(
+				this.txtCarrierTime
+					.replace(this._txtCarrierTimeFrom, data.pickup.carrier_time_from)
+					.replace(this._txtCarrierTimeTo, data.pickup.carrier_time_to)
+			);
+
+			if(data.account) {
+				account.html(data.account);
+				accountFieldset.show();
+			} else {
+				account.html("");
+				accountFieldset.hide();
+			}
+
+			items.html("");
+
+			for(var i = 0; i < data.items.length; i++) {
+				items.append(this._getItemHtml(data.items[i]));
+			}
+
+			if(data.comment) {
+				items.append(this._getCommentHtml(data.comment));
+			}
+
+			address.html(data.address);
+
+			return false;
+		},
+
+
+
 		////////////////////////////////////////////////////////////////////////
 		// Navigation
 		////////////////////////////////////////////////////////////////////////
@@ -210,7 +336,7 @@ jQuery(function($){
 		
 		setUnloadMessage: function(msg){
 			this.unloadMessage = msg;
-		},
+		}
 /*(function() {
 			var newRma = $("new-rma");
 			var form = new VarienForm("new-rma");
