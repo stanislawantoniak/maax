@@ -60,7 +60,8 @@
 							<?php /* @var $_comment Unirgy_Rma_Model_Rma_Comment */ ?>
 							<tr>
 								<td class="author">
-									<?php echo Mage::helper('core')->formatDate($_comment->getCreatedAt(), "short", true);?>
+									<?php echo Mage::helper('core')->formatDate($_comment->getCreatedAt(), "short", true);?><br/>
+									<?php echo $this->getCommentAuthor($_comment); ?>
 								</td>
 								<td class="desc">
 									<?php echo $this->escapeHtml($_comment->getComment());?>

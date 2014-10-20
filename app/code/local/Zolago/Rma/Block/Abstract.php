@@ -51,9 +51,15 @@ class Zolago_Rma_Block_Abstract extends Mage_Core_Block_Template
 	 * @return Zolago_Rma_Model_Resource_Rma_Comment_Collection
 	 */
 	public function getCommentCollection(Zolago_Rma_Model_Rma $rma) {
-		$collection = $rma->getCommentsCollection(true);
+		$collection = Mage::getResourceModel('urma/rma_comment_collection')
+			->setRmaFilter($rma->getId())
+			->setCreatedAtOrder();
 		$collection->addFieldToFilter("is_visible_on_front", 1); /* @todo check rma dataflow */
 		return $collection;
+	}
+	
+	public function getCommentAuthor(Zolago_Rma_Model_Rma_Comment $comment) {
+		return $comment->getAuthorTypeText();
 	}
 	
 	/**

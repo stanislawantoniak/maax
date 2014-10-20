@@ -14,6 +14,9 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
 
 
 	public function successAction() {
+		if(!Mage::getSingleton('customer/session')->isLoggedIn()){
+			return $this->_redirect('customer/account/login');
+		}
 		$this->_getLastRma();
 		$this->loadLayout();
         $this->_initLayoutMessages('catalog/session');

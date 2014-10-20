@@ -92,10 +92,15 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
 			
 			$rma = Mage::registry('current_rma');
 			
-			if($rma && $rma->getId()){
-				$session->setLastRmaId($rma->getId());
+			if(is_array($rma)){
+				$rma = current($rma);
 			}
-            $this->_redirect('sales/rma/success');
+			if($rma && $rma instanceof Zolago_Rma_Model_Rma && $rma->getId()){
+				$session->setLastRmaId($rma->getId());
+				$this->_redirect('sales/rma/success');
+			}else{
+				Mage::throwException("No rma created");
+			}
         } catch (Exception $e) {
             $session->
 				addError($e->getMessage())->
