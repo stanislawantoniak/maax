@@ -9593,23 +9593,26 @@ i.flag.hit, i.flag.bestseller {
   /* line 642, ../sass/layout/style/_checkout.scss */
   #checkout .default_pay .flag_pay_method {
     display: none; } }
+/* line 649, ../sass/layout/style/_checkout.scss */
+#checkout .tooltip {
+  z-index: 999; }
 
-/* line 655, ../sass/layout/style/_checkout.scss */
+/* line 659, ../sass/layout/style/_checkout.scss */
 .logged #checkout .default_pay > .panel > .panel-heading {
   padding-bottom: 0px; }
-/* line 659, ../sass/layout/style/_checkout.scss */
+/* line 663, ../sass/layout/style/_checkout.scss */
 .logged #checkout .default_pay > .panel > .panel-heading + .panel-body .default_pay_selected_bank figure {
   position: relative;
   top: -35px;
   margin-bottom: -20px; }
-/* line 669, ../sass/layout/style/_checkout.scss */
+/* line 673, ../sass/layout/style/_checkout.scss */
 .logged #checkout .default_pay > .panel > .panel-body > .panel {
   display: none; }
-/* line 672, ../sass/layout/style/_checkout.scss */
+/* line 676, ../sass/layout/style/_checkout.scss */
 .logged #checkout .default_pay > .panel > .panel-body .form-checkbox.default_pay {
   margin-bottom: 0px; }
 
-/* line 681, ../sass/layout/style/_checkout.scss */
+/* line 685, ../sass/layout/style/_checkout.scss */
 #invoice_data {
   display: none; }
 

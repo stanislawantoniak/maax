@@ -140,16 +140,18 @@ jQuery(function($){
 		            to = s.find('input[name="rma[carrier_time_to]"]').val().split(":")[0],
 	                account = s.find('input[name="rma[customer_account]"]').val().replace(new RegExp('pl','gi'),"").replace(new RegExp(' ','g'),"");
 
-	            //validate if user has chosen pickup date
-	            if(!s.find('input[name="rma[carrier_date]"]:checked').length) {
-		            valid = false;
-		            console.log("date");
-	            }
-
-	            //validate if chosen timespan is minimum 3 hours
-	            if(to - from < 3) {
-		            console.log("hour");
-		            valid = false;
+	            //check if those blocks are displayed
+	            if($('#pickup-address-form') && $('#pickup-date-form')) {
+		            //validate if user has chosen pickup date
+		            if (!s.find('input[name="rma[carrier_date]"]:checked').length) {
+			            valid = false;
+			            console.log("date");
+		            }
+		            //validate if chosen timespan is minimum 3 hours
+		            if (to - from < 3) {
+			            console.log("hour");
+			            valid = false;
+		            }
 	            }
 
 	            //validate if entered account number is correct (optional field)
@@ -160,6 +162,27 @@ jQuery(function($){
 
                 //--validation
                 if(valid){
+
+                    // Address
+                    jQuery("#review-shipping-address").html(jQuery("#shipping-address").html());
+
+                    // Pickup date
+                    var dateText = "Carrier",
+                        carrierDate = jQuery("#carrier-date").val();
+
+                    dateText += " " + carrierDate + "<br/>";
+                    dateText += "Between";
+                    dateText += " " + jQuery('#carrier-time-from').val();
+                    dateText += " and";
+                    dateText += " " + jQuery('#carrier-time-to').val();
+
+                    jQuery("#pickup-date-review").html(dateText);
+
+                    // Account
+                    var accountReview = jQuery("#customer-account").val() ?
+                        jQuery("#customer-account").val() : "N/A";
+                    jQuery("#customer-account-review").html(accountReview);
+
 	                self.fillRmaSummary();
                     self.next();
                 }
