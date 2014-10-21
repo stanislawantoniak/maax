@@ -64,7 +64,9 @@ jQuery(function($){
 				next = s.find("button.next");
 		
 			// Style selects
-			s.find("select").selectbox('attach');
+			s.find("select").selectbox({
+                onChange: changeCorrespondedCheckbox
+            });
 		
 			// Chexboxes
 			var checkboxHandler = function(){
@@ -73,10 +75,33 @@ jQuery(function($){
 				el.parents("tr").find(".condition-wrapper")
 						[el.is(":checked") ? "addClass" : "removeClass"]('active')
 						[el.is(":checked") ? "removeClass" : "addClass"]('inactive');
-				el.parents("tr").find(".condition-wrapper select").
-						selectbox(el.is(":checked") ? "enable" : "disable");
+//				el.parents("tr").find(".condition-wrapper select").
+//						selectbox(el.is(":checked") ? "enable" : "disable");
+
+
 			};
 			s.find(":checkbox").change(checkboxHandler).change();
+            s.find(":checkbox").change(function(){
+                var el = $(this);
+                if(!el.is(":checked")){
+                    var select = el.parents("tr").find("select");
+
+                    select.val("").prop('selected', true);
+                    select.selectbox("detach").selectbox({
+                        onChange: changeCorrespondedCheckbox
+                    });
+
+                }
+            })
+
+            function changeCorrespondedCheckbox(val){
+                var checkbox = $(this).closest("tr").find("input[type=checkbox]");
+                if(val.length > 0){
+                    checkbox.prop("checked", true).change();
+                } else {
+                    checkbox.prop("checked", false).change();
+                }
+            }
 			
 			// Make validation of select (various methods)
 			var selectHandler = function(){
@@ -100,6 +125,7 @@ jQuery(function($){
 			};
 
 			s.find("select").change(selectHandler).change();
+
 			
 			// Handle next click
 			s.find(".next").click(function(){
