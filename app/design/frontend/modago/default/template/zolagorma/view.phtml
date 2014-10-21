@@ -32,52 +32,17 @@
 		<?php endif;?>
 	</div>
 	<?php endif;?>
-	<div class="rma-status rma-section">
-		<p>
-			<span class="caption">
-				<i class="glyphicon glyphicon-info-sign"></i>
-				<span class="uppercase"><?php echo $_helper->__("Progress status"); ?></span>
-			</span>
-			<?php echo $this->escapeHtml($_rma->getRmaStatusName());?>
-		</p>
-	</div>
 	<div class="row">
-		<div class="col-sm-8">
-			<div class="rma-section">
-				<p>
-					<i class="glyphicon glyphicon-comment"></i>
-					<span class="uppercase"><?php echo $_helper->__("Vednor contact"); ?> [DEV]</span>
-				</p>
-			</div> 
-			<div class="rma-section rma-comments">
-				<p>
-					<i class="glyphicon glyphicon-align-left"></i>
-					<span class="uppercase"><?php echo $_helper->__("History"); ?></span>
-				</p>
-				<?php $_comments = $this->getCommentCollection($_rma)?>
-				<?php if($_comments->getSize()):?>
-					<table>
-						<tbody>
-							<?php foreach($_comments as $_comment):?>
-							<?php /* @var $_comment Unirgy_Rma_Model_Rma_Comment */ ?>
-							<tr>
-								<td class="author">
-									<?php echo Mage::helper('core')->formatDate($_comment->getCreatedAt(), "short", true);?><br/>
-									<?php echo $this->getCommentAuthor($_comment); ?>
-								</td>
-								<td class="desc">
-									<?php echo $this->escapeHtml($_comment->getComment());?>
-								</td>
-							</tr>
-							<?php endforeach;?>
-						</tbody>
-					</table>
-				<?php else:?>
-					<p><?php echo $_helper->__("There is no RAM comments"); ?></p>
-				<?php endif;?>
-			</div> 
-		</div>
 		<div class="col-sm-4">
+			<div class="rma-status rma-section">
+				<p>
+					<span class="caption">
+						<i class="glyphicon glyphicon-info-sign"></i>
+						<span class="uppercase"><?php echo $_helper->__("Progress status"); ?></span>
+					</span>
+					<?php echo $this->escapeHtml($_rma->getRmaStatusName());?>
+				</p>
+			</div>
 			<?php if(!$this->getIsCompleint()):?>
 				<div class="rma-section rma-content">
 					<p>
@@ -150,6 +115,42 @@
 			</div>
 			<?php endif;?>
 		</div>
+		<div class="col-sm-8">
+			<div class="rma-section">
+				<p>
+					<i class="glyphicon glyphicon-comment"></i>
+					<span class="uppercase"><?php echo $_helper->__("Vednor contact"); ?> [DEV]</span>
+				</p>
+			</div> 
+			<div class="rma-section rma-comments">
+				<p>
+					<i class="glyphicon glyphicon-align-left"></i>
+					<span class="uppercase"><?php echo $_helper->__("History"); ?></span>
+				</p>
+				<?php $_comments = $this->getCommentCollection($_rma)?>
+				<?php if($_comments->getSize()):?>
+					<table>
+						<tbody>
+							<?php foreach($_comments as $_comment):?>
+							<?php /* @var $_comment Unirgy_Rma_Model_Rma_Comment */ ?>
+							<tr>
+								<td class="author">
+									<?php echo Mage::helper('core')->formatDate($_comment->getCreatedAt(), "short", true);?><br/>
+									<?php echo $this->getCommentAuthor($_comment); ?>
+								</td>
+								<td class="desc">
+									<?php echo $this->escapeHtml($_comment->getComment());?>
+								</td>
+							</tr>
+							<?php endforeach;?>
+						</tbody>
+					</table>
+				<?php else:?>
+					<p><?php echo $_helper->__("There is no RAM comments"); ?></p>
+				<?php endif;?>
+			</div> 
+		</div>
+		
 	</div>
 </div>
 	
