@@ -93,13 +93,16 @@ jQuery(function($){
 				$.extend(settings.rules, rules);
 				
 				// Validate is needed
-				if(el.val() || el.data("inited")){
+                if (el.data("inited") == undefined) {
+                    return;
+                }
+				if(el.val().length){
 					el.valid();
 				}
-				el.data('inited', 1);
 			};
-
-			s.find("select").change(selectHandler).change();
+            
+            s.find("select").data('inited', 1);
+			s.find("select").change(selectHandler);
 			
 			// Handle next click
 			s.find(".next").click(function(){
