@@ -4,7 +4,7 @@ check_run() {
 	echo "$changed_files" | grep  "$1"
 }
 
-a=`check_run '\.scss'`
+a=`check_run '\.scss'``check_run 'skin/frontend/modago/default/images/sprites/'`
 if [ -n "$a" ]
 then
 	oldpwd=`pwd`
