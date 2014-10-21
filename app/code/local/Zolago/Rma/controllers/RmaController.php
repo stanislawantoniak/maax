@@ -2,16 +2,31 @@
 
 class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
 {
-	
+	/**
+	 * History action
+	 * @return void 
+	 */
 	public function historyAction() {
         $this->loadLayout();
         $this->_initLayoutMessages('catalog/session');
-
 		$this->_setNavigation();
         $this->renderLayout();
 
 	}
+	
+	/**
+	 * download pdf action
+	 * @todo imlement
+	 * @return boolean
+	 */
+	 public function pdfAction() {
+         return false;
+     }
 
+	 /**
+	  * View action
+	  * @return type
+	  */
 	public function viewAction() {
 		$session = Mage::getSingleton('customer/session');
 		/* @var $session Mage_Customer_Model_Session */
@@ -35,6 +50,10 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
 		$this->renderLayout();
 	}
 
+	/**
+	 * Success action
+	 * @return void
+	 */
 	public function successAction() {
 		$session = Mage::getSingleton('customer/session');
 		if(!$session->isLoggedIn()){
@@ -72,6 +91,9 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
 		return Mage::registry("current_rma");
 	}
 	
+	/**
+	 * Navigation helper
+	 */
 	protected function _setNavigation() {
 		$navigationBlock = $this->getLayout()->getBlock('customer_account_navigation');
         if ($navigationBlock) {
