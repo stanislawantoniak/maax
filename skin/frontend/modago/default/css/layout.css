@@ -5968,7 +5968,78 @@ yx-axis
 
 /* line 118, ../sass/layout/modules/_rma-po-list.scss */
 .bold {
-  font-weight: 700; }
+  font-family: latoblack;
+  font-weight: normal; }
+
+/* line 2, ../sass/layout/modules/_rma-summary.scss */
+div.steps.step-3 .rma-summary-container {
+  border: 1px solid #bfbfbf;
+  padding: 12px 10px; }
+/* line 6, ../sass/layout/modules/_rma-summary.scss */
+div.steps.step-3 .rma-summary-container table#review-items td {
+  border: none;
+  padding: 0; }
+/* line 10, ../sass/layout/modules/_rma-summary.scss */
+div.steps.step-3 .rma-summary-container table#review-items .summary-image {
+  width: 60px;
+  padding: 0 15px 20px 0; }
+/* line 13, ../sass/layout/modules/_rma-summary.scss */
+div.steps.step-3 .rma-summary-container table#review-items .summary-image img {
+  border: 1px solid #cccccc; }
+/* line 17, ../sass/layout/modules/_rma-summary.scss */
+div.steps.step-3 .rma-summary-container table#review-items .summary-item-desc {
+  vertical-align: top; }
+/* line 20, ../sass/layout/modules/_rma-summary.scss */
+div.steps.step-3 .rma-summary-container table#review-items .summary-reason {
+  padding-bottom: 20px;
+  vertical-align: bottom; }
+/* line 24, ../sass/layout/modules/_rma-summary.scss */
+div.steps.step-3 .rma-summary-container table#review-items .summary-comment {
+  padding-bottom: 20px; }
+/* line 28, ../sass/layout/modules/_rma-summary.scss */
+div.steps.step-3 .rma-summary-container p#review-comment-text {
+  white-space: pre;
+  /* CSS 2.0 */
+  white-space: pre-wrap;
+  /* CSS 2.1 */
+  white-space: pre-line;
+  /* CSS 3.0 */
+  white-space: -pre-wrap;
+  /* Opera 4-6 */
+  white-space: -o-pre-wrap;
+  /* Opera 7 */
+  white-space: -moz-pre-wrap;
+  /* Mozilla */
+  white-space: -hp-pre-wrap;
+  /* HP Printers */
+  word-wrap: break-word;
+  /* IE 5+ */
+  width: 320px;
+  min-width: 100%; }
+/* line 40, ../sass/layout/modules/_rma-summary.scss */
+div.steps.step-3 .rma-summary-container p, div.steps.step-3 .rma-summary-container address#review-shipping-address, div.steps.step-3 .rma-summary-container address#review-shipping-address dl {
+  margin-bottom: 0; }
+/* line 43, ../sass/layout/modules/_rma-summary.scss */
+div.steps.step-3 .rma-summary-container address#review-shipping-address dl.pull-left {
+  float: none !important; }
+/* line 46, ../sass/layout/modules/_rma-summary.scss */
+div.steps.step-3 .rma-summary-container .customer-account-fieldset {
+  display: none; }
+/* line 51, ../sass/layout/modules/_rma-summary.scss */
+div.steps.step-3 .rma-summary-table-container {
+  padding: 20px 20px 0; }
+/* line 54, ../sass/layout/modules/_rma-summary.scss */
+div.steps.step-3 h5.legend {
+  font-family: latoblack;
+  font-weight: normal;
+  padding: 15px 0 10px; }
+/* line 59, ../sass/layout/modules/_rma-summary.scss */
+div.steps.step-3 div.summary-bottom {
+  padding-top: 40px; }
+/* line 62, ../sass/layout/modules/_rma-summary.scss */
+div.steps.step-3 p#overview-message {
+  font-size: 15px;
+  margin-bottom: 10px; }
 
 /* line 1, ../sass/layout/override/_global.scss */
 .clr {
@@ -9522,23 +9593,26 @@ i.flag.hit, i.flag.bestseller {
   /* line 642, ../sass/layout/style/_checkout.scss */
   #checkout .default_pay .flag_pay_method {
     display: none; } }
+/* line 649, ../sass/layout/style/_checkout.scss */
+#checkout .tooltip {
+  z-index: 999; }
 
-/* line 655, ../sass/layout/style/_checkout.scss */
+/* line 659, ../sass/layout/style/_checkout.scss */
 .logged #checkout .default_pay > .panel > .panel-heading {
   padding-bottom: 0px; }
-/* line 659, ../sass/layout/style/_checkout.scss */
+/* line 663, ../sass/layout/style/_checkout.scss */
 .logged #checkout .default_pay > .panel > .panel-heading + .panel-body .default_pay_selected_bank figure {
   position: relative;
   top: -35px;
   margin-bottom: -20px; }
-/* line 669, ../sass/layout/style/_checkout.scss */
+/* line 673, ../sass/layout/style/_checkout.scss */
 .logged #checkout .default_pay > .panel > .panel-body > .panel {
   display: none; }
-/* line 672, ../sass/layout/style/_checkout.scss */
+/* line 676, ../sass/layout/style/_checkout.scss */
 .logged #checkout .default_pay > .panel > .panel-body .form-checkbox.default_pay {
   margin-bottom: 0px; }
 
-/* line 681, ../sass/layout/style/_checkout.scss */
+/* line 685, ../sass/layout/style/_checkout.scss */
 #invoice_data {
   display: none; }
 
