@@ -68,6 +68,18 @@ Mall.validate.validators = {
         }
 
     },
+
+    postcodeWithReplace: function(value, elem, params){
+        "use strict";
+        var test = Mall.validate.validators.postcode(value, elem, params);
+        value = value.replace(/\D/g, "");
+        if (test) {
+            var matched = value.match(/([0-9]{2})([0-9]{3})/);
+            jQuery(elem).val(matched[1] + "-" + matched[2]);
+        }
+        return test;
+
+    },
 	
 
     passwordbackend: function(value, elem, params){

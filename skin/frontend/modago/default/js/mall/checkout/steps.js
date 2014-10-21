@@ -362,7 +362,7 @@
                         type:       "text",
                         label:      Mall.translate.__("postcode"),
                         labelClass: "col-sm-3",
-                        inputClass: "form-control postcode zipcode hint validate-postcode required"
+                        inputClass: "form-control postcode zipcode hint validate-postcodeWithReplace required"
                     },
                     {
                         name:       "city",

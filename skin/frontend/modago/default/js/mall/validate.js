@@ -100,6 +100,10 @@ Mall.validate = {
 				return Mall.validate.validators.postcode.apply(this, arguments);
 		}, jQuery.validator.format(Mall.translate.__("Invalid zip-cod. Zip-code should include 5 numbers in XX-XXX format.")));
 
+        jQuery.validator.addMethod('validate-postcodeWithReplace', function () {
+            return Mall.validate.validators.postcodeWithReplace.apply(this, arguments);
+        }, jQuery.validator.format(Mall.translate.__("Invalid zip-cod. Zip-code should include 5 numbers in XX-XXX format.")));
+
         jQuery.validator.addMethod('validate-passwordbackend', function () {
             return Mall.validate.validators.passwordbackend.apply(this, arguments);
         }, jQuery.validator.format(Mall.translate.__("Password needs to have at least %s characters")));
