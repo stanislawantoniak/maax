@@ -1,4 +1,4 @@
-<?php /* @var $this Zolago_Rma_Block_Success */ ?>
+<?php /* @var $this Zolago_Rma_Block_View */ ?>
 <?php $_helper = Mage::helper("zolagorma"); ?>
 <?php $_rma = $this->getRma();?>
 <div class="page-title box-wrapper">
@@ -11,24 +11,16 @@
 </div>
 
 
-<div class="background-wrapper box-wrapper rma-po-list">
+<div class="background-wrapper box-wrapper rma-po-list <?php echo $this->getIsClaim($_rma) ? "rma-claim" : "rma-return";?>">
 	<div class="rma-section rma-caption">
 		<span class="bold"><?php echo $_helper->__("RMA Date"); ?></span>: <?php echo Mage::helper("core")->formatDate($_rma->getCreatedAt());?><br/>
 		<span class="bold"><?php echo $_helper->__("Vendor"); ?></span>: <?php echo $this->escapeHtml($_rma->getVendor()->getVendorName());?>
 	</div>
-	<?php if($_message=$this->getSuccessMessage($_rma)):?>
+	<?php if($this->isPendingPickup($_rma) && $_message=$this->getMonitMessage($_rma)):?>
 	<div class="rma-monit rma-section">
-		<?php if(!$this->getIsCompleint()):?>
-		<p>
-			<!-- Message from config -->
-			<?php echo $_message?><br/>
-			<a href="#" class="button button-primary download-doc"><?php echo $_helper->__("Download a document"); ?> [DEV]</a>
-		</p>
-		<?php else:?>
-		<p>
-			<!-- Message from config -->
-			<?php echo $_message?>
-		</p>
+		<?php echo $_message?>
+		<?php if($_pdfUrl=$this->getPdfUrl($_rma)):?>
+			<a href="<?php echo $_pdfUrl;?>" class="button button-primary download-doc"><?php echo $_helper->__("Download a document"); ?> [DEV]</a>
 		<?php endif;?>
 	</div>
 	<?php endif;?>
@@ -36,14 +28,14 @@
 		<div class="col-sm-4">
 			<div class="rma-status rma-section">
 				<p>
-					<span class="caption">
-						<i class="glyphicon glyphicon-info-sign"></i>
-						<span class="uppercase"><?php echo $_helper->__("Progress status"); ?></span>
-					</span>
-					<?php echo $this->escapeHtml($_rma->getRmaStatusName());?>
+					<i class="glyphicon glyphicon-info-sign"></i>
+					<span class="uppercase"><?php echo $_helper->__("Progress status"); ?></span>
 				</p>
+					<div>
+						<?php echo $this->escapeHtml($_rma->getRmaStatusName());?>
+					</div>
 			</div>
-			<?php if(!$this->getIsCompleint()):?>
+			<?php if($this->isPendingPickup($_rma)):?>
 				<div class="rma-section rma-content">
 					<p>
 						<i class="glyphicon glyphicon-time"></i>
@@ -109,11 +101,6 @@
 				</div>
 				<?php endif;?>
 			</div>
-			<?php if(!$this->getIsCompleint()):?>
-			<div class="rma-cancel">
-				<a href="#"><?php echo $_helper->__("Cancel RMA");?> [DEV]</a>
-			</div>
-			<?php endif;?>
 		</div>
 		<div class="col-sm-8">
             <div class="rma-connect-vendor">
@@ -172,6 +159,11 @@
 					<p><?php echo $_helper->__("There is no RAM comments"); ?></p>
 				<?php endif;?>
 			</div> 
+			<?php if($this->getIsReturn($_rma)):?>
+			<div class="rma-cancel">
+				<a href="#"><?php echo $_helper->__("Cancel RMA");?> [DEV]</a>
+			</div>
+			<?php endif;?>
 		</div>
 		
 	</div>

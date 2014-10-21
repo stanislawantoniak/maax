@@ -24,12 +24,21 @@ class Zolago_Rma_Block_Abstract extends Mage_Core_Block_Template
 		return Mage::registry('current_track');
 	}
 	
+
 	/**
-	 * @todo Impelemnt with logic
-	 * @return boolean
+	 * @param Zolago_Rma_Model_Rma $rma
+	 * @return bool
 	 */
-	public function getIsCompleint() {
-		return false;
+	public function getIsClaim(Zolago_Rma_Model_Rma $rma) {
+		return $rma->getIsClaim();
+	}
+	
+	/**
+	 * @param Zolago_Rma_Model_Rma $rma
+	 * @return bool
+	 */
+	public function getIsReturn(Zolago_Rma_Model_Rma $rma) {
+		return $rma->getIsReturn();
 	}
 	
 	/**

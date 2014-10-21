@@ -117,35 +117,23 @@
 }
 .rma-monit{
 	min-height: 70px;
-	padding:0;
+	padding: 16px 16px 16px 82px;
 	border: 1px #c6a662 solid;
 	background: url('../images/rma_monit.png') 16px 13px no-repeat;
 	@include box-shadow(rgba(0,0,0,0.2) 0 3px 5px);
-	p{margin: 16px 16px 16px 82px;padding:0;}
-	p>span:first-child{
-		margin-bottom: 10px;
-		display: inline-block;
-	}
+	p{padding:0; margin-bottom: 15px;}
+	p:last-child{margin:0;}
 	.download-doc{
 		display: inline-block;
-		margin-top: 15px;
 	}
 }
+
 .rma-status{
-	span.uppercase{
-		display: inline-block;
-		margin-right: 20px;
-	}
-	
-	@media (max-width: $screen-xs-max) {
-			span.caption{
-				display: block;
-			}
-			span.uppercase{
-				margin-right:0;
-			}
+	p{
+		margin-bottom: 15px;
 	}
 }
+
 .rma-content{
 	p{
 		margin-bottom: 15px;
