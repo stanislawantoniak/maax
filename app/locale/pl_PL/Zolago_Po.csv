@@ -1,4 +1,4 @@
-"Lack of DHL Settings", "Brak konfiguracji DHL"
+﻿"Lack of DHL Settings", "Brak konfiguracji DHL"
 "Custom dim.", "Paczka NST"
 "I have no Track ID", "Chcę utworzyć list przewozowy"
 "DHL Service Error", "Błąd serwisu DHL"
@@ -164,4 +164,10 @@
 "Sender signature", "Podpis klienta"
 "Tracking no.","Nr listu przewozowego"
 "Comment added","Komentarz dodany"
+"Add shipping label","Utwórz list przewozowy"
+"Phone","Telefon"
+"Carrier","Kurier"
+"Shipping","Przesyłka"
+"Product","Produkt"
+
 "Please enter valid DHL zip code","Proszę podać poprawny kod pocztowy DHL"
