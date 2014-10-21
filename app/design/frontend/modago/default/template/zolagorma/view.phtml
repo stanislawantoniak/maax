@@ -116,12 +116,35 @@
 			<?php endif;?>
 		</div>
 		<div class="col-sm-8">
-			<div class="rma-section">
-				<p>
-					<i class="glyphicon glyphicon-comment"></i>
-					<span class="uppercase"><?php echo $_helper->__("Vednor contact"); ?> [DEV]</span>
-				</p>
-			</div> 
+            <div class="rma-connect-vendor">
+                <div class="rma-connect-vendor-pannel rma-section">
+                    <p>
+					<span class="caption">
+                        <span class="glyphicon glyphicon-comment"></span>
+						<span class="uppercase"><?php echo $_helper->__("Contact with vendor"); ?></span>
+					</span>
+                        <i class="fa fa-chevron-down"></i>
+                    </p>
+                </div>
+                <div class="rma-connect-vendor-form rma-section">
+                    <form id="rma-connect-vendor-form">
+                        <div class="form-group">
+                            <label class="control-label" for="rma-connect-vendor-message">
+                                <?php echo $_helper->__("Compose message"); ?>
+                            </label>
+                            <textarea class="form-control required-entry textarea" name="rma-connect-vendor-message" cols="8" rows="6" title="<?php echo $_helper->__("Compose message"); ?>" required="required">
+
+                            </textarea>
+                        </div>
+                        <div class="form-group text-right">
+                            <button class="button button-primary rma-connect-vendor-form-send" type="submit" href="#" title="<?php echo $_helper->__("Send"); ?>">
+                                <?php echo $_helper->__("Send"); ?>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
 			<div class="rma-section rma-comments">
 				<p>
 					<i class="glyphicon glyphicon-align-left"></i>

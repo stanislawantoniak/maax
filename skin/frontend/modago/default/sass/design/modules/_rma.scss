@@ -195,3 +195,30 @@
 		text-decoration: underline;
 	}
 }
+
+.rma-connect-vendor {
+  margin-bottom: 15px;
+}
+
+.rma-connect-vendor-pannel {
+  margin-bottom: 0px;
+  p {
+    cursor: pointer;
+  }
+  .caption {
+    display: block;
+    float: left;
+    width: 95%;
+  }
+}
+
+.rma-connect-vendor-form {
+  display: none;
+  border-top: none;
+  #rma-connect-vendor-form {
+    label.error {
+      padding-left: 0px !important;
+    }
+  }
+}
+
