@@ -96,7 +96,6 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Mage_Core_Model_Abstract {
      */
     protected function _sendMessage($method, $message = null)
     {
-        //var_dump($message);
 	    try {
             $wsdl = Mage::getStoreConfig('carriers/orbadhl/gateway');
             $soap = new SoapClient($wsdl, array('trace'=>1));
