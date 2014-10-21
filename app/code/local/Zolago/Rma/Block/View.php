@@ -1,5 +1,5 @@
 <?php
-class Zolago_Rma_Block_Success extends Zolago_Rma_Block_Abstract
+class Zolago_Rma_Block_View extends Zolago_Rma_Block_Abstract
 {
 	/**
 	 * @param Zolago_Rma_Model_Rma $rma
@@ -7,5 +7,13 @@ class Zolago_Rma_Block_Success extends Zolago_Rma_Block_Abstract
 	 */
 	public function getSuccessMessage(Zolago_Rma_Model_Rma $rma) {
 		return Mage::getStoreConfig('urma/message/customer_success');
+	}
+	
+	/**
+	 * Is 'success' emulation
+	 * @return type
+	 */
+	public function getIsSuccessPage() {
+		return $this->getJustCreated();
 	}
 }

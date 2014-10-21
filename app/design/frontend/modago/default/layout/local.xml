@@ -1185,7 +1185,7 @@
         </reference>
 	</sales_po_newrma>
 	
-	<sales_rma_success>
+	<sales_rma_view>
 		<update handle="customer_account" />
 		<update handle="zolago_modago_customer_handle" />
 		<reference name="breadcrumbs">
@@ -1198,10 +1198,10 @@
             </action>
 		</reference>
         <reference name="my.account.wrapper">
-            <block type="zolagorma/success" name="zolagorma.success" template="zolagorma/success.phtml">
+            <block type="zolagorma/view" name="zolagorma.view" template="zolagorma/view.phtml">
 			</block>
         </reference>
-	</sales_rma_success>
+	</sales_rma_view>
 
     <help_index_index>
         <reference name="breadcrumbs">

@@ -12,16 +12,37 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
 
 	}
 
-
-	public function successAction() {
-		if(!Mage::getSingleton('customer/session')->isLoggedIn()){
+	public function viewAction() {
+		$session = Mage::getSingleton('customer/session');
+		/* @var $session Mage_Customer_Model_Session */
+		if(!$session->isLoggedIn()){
 			return $this->_redirect('customer/account/login');
 		}
-		$this->_getLastRma();
+		if(!Mage::registry("current_rma")){
+			$rmaId = $this->getRequest()->getParam("id");
+			$rma = Mage::getModel("urma/rma")->load($rmaId);
+			/* @var $rma Zolago_Rma_Model_Rma */
+			if($rma->getId() && $rma->getCustomerId()==$session->getCustomerId()){
+				Mage::register("current_rma", $rma);
+			}else{
+				$session->addError(Mage::helper("zolagorma")->__("RMA is not available"));
+				return $this->_redirect('sales/rma/history');
+			}
+		}
 		$this->loadLayout();
         $this->_initLayoutMessages('catalog/session');
 		$this->_setNavigation();
 		$this->renderLayout();
+	}
+
+	public function successAction() {
+		$session = Mage::getSingleton('customer/session');
+		if(!$session->isLoggedIn()){
+			$session->addError(Mage::helper("zolagorma")->__("You need to login"));
+			return $this->_redirect('customer/account/login');
+		}
+		$this->_getLastRma();
+		$this->_forward('view');
 	}
 	
 	/**
@@ -40,6 +61,7 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
 
 				$item = $collection->getFirstItem();
 			}
+			$item->setJustCreated(true);
 			Mage::register("current_rma", $item);
 		}
 		return Mage::registry("current_rma");
