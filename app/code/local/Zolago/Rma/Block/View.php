@@ -14,6 +14,6 @@ class Zolago_Rma_Block_View extends Zolago_Rma_Block_Abstract
 	 * @return type
 	 */
 	public function getIsSuccessPage() {
-		return $this->getJustCreated();
+		return $this->getRma()->getJustCreated();
 	}
 }

@@ -51,15 +51,20 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
 	protected function _getLastRma() {
 		if(!Mage::registry("current_rma")){
 			$lastRmaId = Mage::getSingleton('core/session')->getLastRmaId();
+			// Last id from session (set by PoController when created
+			$item = Mage::getModel("urma/rma");
 			if($lastRmaId){
-				$item = Mage::getModel("urma/rma")->load($lastRmaId);
+				$item->load($lastRmaId);
+			// If not use latest rma
 			}else{
 				$collection = Mage::getResourceModel('urma/rma_collection');
 				/* @var $collection Unirgy_Rma_Model_Mysql4_Rma_Collection */
 				$collection->addFieldToFilter("customer_id", Mage::getSingleton('customer/session')->getCustomerId());
 				$collection->setOrder("created_at", "desc")->getSelect()->limit(1);
 
-				$item = $collection->getFirstItem();
+				if($collection->getFirstItem()){
+					$item = $collection->getFirstItem();
+				}
 			}
 			$item->setJustCreated(true);
 			Mage::register("current_rma", $item);
