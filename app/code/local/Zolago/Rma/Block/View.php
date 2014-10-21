@@ -5,6 +5,15 @@ class Zolago_Rma_Block_View extends Zolago_Rma_Block_Abstract
 	const CMS_PENDING = "rma_status_pending_currier_message";
 	
 	/**
+	 * 
+	 * @param Zolago_Rma_Model_Rma $rma
+	 * @return bool
+	 */
+	public function isPendingPickup(Zolago_Rma_Model_Rma $rma) {
+		return $rma->getRmaStatus()==Zolago_Rma_Model_Rma_Status::STATUS_PENDING_PICKUP;
+	}
+	
+	/**
 	 * @todo implement
 	 * @param Zolago_Rma_Model_Rma $rma
 	 * @return string | null
@@ -22,7 +31,7 @@ class Zolago_Rma_Block_View extends Zolago_Rma_Block_Abstract
 		$message = null;
 		if($this->getIsSuccessPage($rma)){
 			$message = $this->getSuccessMessage($rma);
-		}else if($rma->getRmaStatus()==Zolago_Rma_Model_Rma_Status::STATUS_PENDING_PICKUP){
+		}else if($this->isPendingPickup($rma)){
 			$message = Mage::getModel("cms/block")->
 				load(self::CMS_PENDING)->getContent();
 		}
