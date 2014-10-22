@@ -14,12 +14,10 @@ class Zolago_Rma_Block_List extends Mage_Core_Block_Template
     public function getRmaList() {
         $customerId = Mage::getSingleton('customer/session')->getCustomerId();
         if (!$customerId) {
-            return false;
+            return array();
         }
 
-        $collection = Mage::getModel('zolagorma/rma')->getCollection()->addFieldToFilter('customer_id',$customerId);
-
-        return count($collection) ? $collection : false;
+        return Mage::getModel('zolagorma/rma')->getCollection()->addFieldToFilter('customer_id',$customerId);
     }
 
 	/**
