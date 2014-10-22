@@ -5,10 +5,13 @@
 Mage::app()->getLayout()
     ->getMessagesBlock()
     ->setMessages(Mage::getSingleton('udqa/session')->getMessages(true));
-echo $this->getMessagesBlock()->getGroupedHtml();
 
 
 ?>
+<div class="messages-box">
+    <?php echo $this->getMessagesBlock()->getGroupedHtml(); ?>
+</div>
+
 <div class="page-title box-wrapper">
 	<h1>
 		<span class="hidden-md hidden-lg"><?php echo $_helper->__("Returns and complaints"); ?></span>
@@ -163,8 +166,15 @@ echo $this->getMessagesBlock()->getGroupedHtml();
 </div>
 <script type="text/javascript">
     jQuery(document).ready(function(){
-        if(jQuery(window).innerWidth() <= 754){
-            jQuery("ul.messages").addClass("fix");
+        fixMessage();
+        jQuery(window).resize(fixMessage);
+
+        function fixMessage (){
+            if(jQuery(window).innerWidth() <= 754){
+                jQuery(".messages-box").addClass("fix");
+            } else {
+                jQuery(".messages-box").removeClass("fix");
+            }
         }
     })
 </script>
