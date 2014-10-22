@@ -185,4 +185,14 @@
 "Save","Zapisz"
 "Shipping creation fail","Tworzenie listu przewozowego i przesyłki nie udało się."
 "Label(s) printed","List wygenerowany"
+"Split","Podziel"
+"The following items will be split out to another order","Te produkty zostaną wydzielone do osobnego zamówienia"
+"Edit shipping cost","Edycja kosztów wysyłki"
+"Items of %s","Produkty zamówienia %s"
+"You are about to confirm order realisation. Are you sure?","Potwierdź akceptację zamówienia do realizacji."
+"Order release confirmed","Zamówienie zaakceptowane do realizacji"
+"Tracking ID has been added","Wygenerowano przesyłkę i list przewozowy"
+"PO status changed from %s to %s","Zmieniono status zamówienia z %s na %s"
+
+
 
