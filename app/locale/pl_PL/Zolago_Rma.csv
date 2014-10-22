@@ -87,5 +87,13 @@
 "Country","Kraj"
 "Carrier","Kurier"
 "Shipping label added","Dodano list przewozowy"
+"No changes (empty comment and same status)","Nie wprowadzono zmian (nie było komentarza ani zmiany statusu"
+"Package","Paczka"
+"Envelope","Koperta"
+"Status changed","Status zmieniono"
+"Sent date","Utworzono dnia"
+"Details of RMA no. %s","Szczegóły RMA numer %s"
+"Customer notified by email","Informacja wysłana do klienta"
+"Reset","Wyczyść filtr"
 
 
