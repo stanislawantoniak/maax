@@ -1,4 +1,4 @@
-"Vendors", "Sprzedawcy"
+﻿"Vendors", "Sprzedawcy"
 "Pending","Oczekujące"
 "Exported","Wyeksportowane"
 "Acknowledged","Potwierdzone"
@@ -16,3 +16,16 @@
 "Totals", "Do zapłaty"
 "Please enter valid email address", "Proszę podać poprawny adres e-mail"
 "Vendor portal", "Panel zarządzania sklepem"
+"Orders","Zamówienia"
+"Settings","Ustawienia"
+"Order","Zamówienie"
+"Action","Akcja"
+"Customer name","Nazwa klienta"
+"Question date","Data pytania"
+"Answer date","Data odpowiedzi"
+"Product","Produkt"
+"Questions","Obsługa zapytań klientów"
+"Browse customer questions","Lista zapytań klientów"
+"View","Przeglądaj"
+
+
