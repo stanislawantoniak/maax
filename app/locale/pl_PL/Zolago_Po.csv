@@ -174,7 +174,7 @@
 "Shipped","Wysłane"
 "Delivered","Dostarczone"
 "Canceled","Anulowane"
-"Reset","Wyczyść"
+"Reset","Wyczyść filtr"
 "View","Przeglądaj"
 "Zip code in shipment address is not valid. There will be a problem when shipping to that address.","Kod pocztowy w adresie wysyłki nie jest poprawny. Wysyłka na ten adres może okazać się niemożliwa."
 "Action","Akcja"
@@ -183,6 +183,9 @@
 "Package","Paczka"
 "Envelope","Koperta"
 "Save","Zapisz"
+"Actions","Akcje"
+"From", "Od"
+"To","Do"
 "Shipping creation fail","Tworzenie listu przewozowego i przesyłki nie udało się."
 "Label(s) printed","List wygenerowany"
 "Split","Podziel"
@@ -193,6 +196,9 @@
 "Order release confirmed","Zamówienie zaakceptowane do realizacji"
 "Tracking ID has been added","Wygenerowano przesyłkę i list przewozowy"
 "PO status changed from %s to %s","Zmieniono status zamówienia z %s na %s"
+"PO status changed from '%s' to '%s'","Zmieniono status zamówienia z '%s' na '%s'"
+"Name","Nazwa"
+"Order %s has invaild status","Zamówienie nr %s ma nieprawidłowy status"
 
 
 

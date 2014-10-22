@@ -399,9 +399,23 @@ var Mall = {
         }
 
         return "";
+    },
+
+    //transform postcode like: 99999, 99 999, 99/999, 99-999, 99_999
+    //to our format: 99-999
+    postcodeTransform: function(str) {
+        var strTrans = str.replace(/\D/g,"");//remove spaces
+        strTrans = strTrans.match(/.*?([0-9]{2}).?([0-9]{3}).*?/i);
+        if (strTrans == null) {
+            return str;
+        } else {
+            if (strTrans.length >= 1) {
+                return strTrans[1] + "-" + strTrans[2];
+            } else {
+                return str;
+            }
+        }
     }
-
-
 
 }
 
