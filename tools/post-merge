@@ -1,0 +1,15 @@
+changed_files="$(git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD)"
+ 
+check_run() {
+	echo "$changed_files" | grep  "$1"
+}
+
+a=`check_run '\.scss'``check_run 'skin/frontend/modago/default/images/sprites/'`
+if [ -n "$a" ]
+then
+	oldpwd=`pwd`
+	root=`git rev-parse --show-toplevel`
+	cd $root/skin/frontend/modago/default
+	compass compile
+	cd $oldpwd
+fi

@@ -64,9 +64,7 @@ jQuery(function($){
 				next = s.find("button.next");
 		
 			// Style selects
-			s.find("select").selectbox({
-                onChange: changeCorrespondedCheckbox
-            });
+			s.find("select").selectbox('attach');
 		
 			// Chexboxes
 			var checkboxHandler = function(){
@@ -75,33 +73,10 @@ jQuery(function($){
 				el.parents("tr").find(".condition-wrapper")
 						[el.is(":checked") ? "addClass" : "removeClass"]('active')
 						[el.is(":checked") ? "removeClass" : "addClass"]('inactive');
-//				el.parents("tr").find(".condition-wrapper select").
-//						selectbox(el.is(":checked") ? "enable" : "disable");
-
-
+				el.parents("tr").find(".condition-wrapper select").
+						selectbox(el.is(":checked") ? "enable" : "disable");
 			};
 			s.find(":checkbox").change(checkboxHandler).change();
-            s.find(":checkbox").change(function(){
-                var el = $(this);
-                if(!el.is(":checked")){
-                    var select = el.parents("tr").find("select");
-
-                    select.val("").prop('selected', true);
-                    select.selectbox("detach").selectbox({
-                        onChange: changeCorrespondedCheckbox
-                    });
-
-                }
-            })
-
-            function changeCorrespondedCheckbox(val){
-                var checkbox = $(this).closest("tr").find("input[type=checkbox]");
-                if(val.length > 0){
-                    checkbox.prop("checked", true).change();
-                } else {
-                    checkbox.prop("checked", false).change();
-                }
-            }
 			
 			// Make validation of select (various methods)
 			var selectHandler = function(){
@@ -118,19 +93,13 @@ jQuery(function($){
 				$.extend(settings.rules, rules);
 				
 				// Validate is needed
-                if (el.data("inited") == undefined) {
-                    return;
-                }
-				if(el.val().length){
+				if(el.val() || el.data("inited")){
 					el.valid();
 				}
+				el.data('inited', 1);
 			};
 
 			s.find("select").change(selectHandler).change();
-
-            
-            s.find("select").data('inited', 1);
-			s.find("select").change(selectHandler);
 			
 			// Handle next click
 			s.find(".next").click(function(){
@@ -170,15 +139,15 @@ jQuery(function($){
 
 	            //check if those blocks are displayed
 	            if($('#pickup-address-form') && $('#pickup-date-form')) {
-		            //validate if user has chosen pickup date
+	            //validate if user has chosen pickup date
 		            if (!s.find('input[name="rma[carrier_date]"]:checked').length) {
-			            valid = false;
-			            console.log("date");
-		            }
-		            //validate if chosen timespan is minimum 3 hours
+		                valid = false;
+		                console.log("date");
+	                }
+	            //validate if chosen timespan is minimum 3 hours
 		            if (to - from < 3) {
-			            console.log("hour");
-			            valid = false;
+		                console.log("hour");
+		                valid = false;
 		            }
 	            }
 
