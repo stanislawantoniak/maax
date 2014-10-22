@@ -1,16 +1,6 @@
 <?php /* @var $this Zolago_Rma_Block_View */ ?>
 <?php $_helper = Mage::helper("zolagorma"); ?>
 <?php $_rma = $this->getRma();?>
-<?php
-Mage::app()->getLayout()
-    ->getMessagesBlock()
-    ->setMessages(Mage::getSingleton('udqa/session')->getMessages(true));
-
-
-?>
-<div class="messages-box">
-    <?php echo $this->getMessagesBlock()->getGroupedHtml(); ?>
-</div>
 
 <div class="page-title box-wrapper">
 	<h1>
@@ -26,11 +16,13 @@ Mage::app()->getLayout()
 		<span class="bold"><?php echo $_helper->__("RMA Date"); ?></span>: <?php echo Mage::helper("core")->formatDate($_rma->getCreatedAt());?><br/>
 		<span class="bold"><?php echo $_helper->__("Vendor"); ?></span>: <?php echo $this->escapeHtml($_rma->getVendor()->getVendorName());?>
 	</div>
-	<?php if($this->isPendingPickup($_rma) && $_message=$this->getMonitMessage($_rma)):?>
+	<?php if($_monits = $this->getMonits($_rma)):?>
 	<div class="rma-monit rma-section">
-		<?php echo $_message?>
-		<?php if($_pdfUrl=$this->getPdfUrl($_rma)):?>
-			<a href="<?php echo $_pdfUrl;?>" class="button button-primary download-doc"><?php echo $_helper->__("Download a document"); ?> [DEV]</a>
+		<?php foreach($_monits as $monit):?>
+			<?php echo $monit;?>
+		<?php endforeach;?>
+		<?php if($_pdfUrl=$this->getPdfUrl($_rma) && $this->isPendingPickup($_rma)):?>
+			<a href="<?php echo $_pdfUrl;?>" class="button button-primary download-doc"><?php echo $_helper->__("Download a document"); ?></a>
 		<?php endif;?>
 	</div>
 	<?php endif;?>
@@ -41,9 +33,9 @@ Mage::app()->getLayout()
 					<i class="glyphicon glyphicon-info-sign"></i>
 					<span class="uppercase"><?php echo $_helper->__("Progress status"); ?></span>
 				</p>
-					<div>
-						<?php echo $this->escapeHtml($_rma->getRmaStatusName());?>
-					</div>
+				<div>
+					<?php echo $this->escapeHtml($_rma->getRmaStatusName());?>
+				</div>
 			</div>
 			<?php if($this->isPendingPickup($_rma)):?>
 				<div class="rma-section rma-content">
