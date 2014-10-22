@@ -16,10 +16,12 @@
 		<span class="bold"><?php echo $_helper->__("RMA Date"); ?></span>: <?php echo Mage::helper("core")->formatDate($_rma->getCreatedAt());?><br/>
 		<span class="bold"><?php echo $_helper->__("Vendor"); ?></span>: <?php echo $this->escapeHtml($_rma->getVendor()->getVendorName());?>
 	</div>
-	<?php if($this->isPendingPickup($_rma) && $_message=$this->getMonitMessage($_rma)):?>
+	<?php if($_monits = $this->getMonits($_rma)):?>
 	<div class="rma-monit rma-section">
-		<?php echo $_message?>
-		<?php if($_pdfUrl=$this->getPdfUrl($_rma)):?>
+		<?php foreach($_monits as $monit):?>
+			<?php echo $monit;?>
+		<?php endforeach;?>
+		<?php if($_pdfUrl=$this->getPdfUrl($_rma) && $this->isPendingPickup($_rma)):?>
 			<a href="<?php echo $_pdfUrl;?>" class="button button-primary download-doc"><?php echo $_helper->__("Download a document"); ?></a>
 		<?php endif;?>
 	</div>
@@ -31,9 +33,9 @@
 					<i class="glyphicon glyphicon-info-sign"></i>
 					<span class="uppercase"><?php echo $_helper->__("Progress status"); ?></span>
 				</p>
-					<div>
-						<?php echo $this->escapeHtml($_rma->getRmaStatusName());?>
-					</div>
+				<div>
+					<?php echo $this->escapeHtml($_rma->getRmaStatusName());?>
+				</div>
 			</div>
 			<?php if($this->isPendingPickup($_rma)):?>
 				<div class="rma-section rma-content">

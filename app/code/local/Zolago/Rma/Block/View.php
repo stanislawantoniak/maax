@@ -36,17 +36,18 @@ class Zolago_Rma_Block_View extends Zolago_Rma_Block_Abstract
 	
 	/**
 	 * @param Zolago_Rma_Model_Rma $rma
-	 * @return string | null
+	 * @return array
 	 */
-	public function getMonitMessage(Zolago_Rma_Model_Rma $rma) {
-		$message = null;
+	public function getMonits(Zolago_Rma_Model_Rma $rma) {
+		$out = array();
 		if($this->getIsSuccessPage($rma)){
-			$message = $this->getSuccessMessage($rma);
-		}else if($this->isPendingPickup($rma)){
-			$message = Mage::getModel("cms/block")->
+			$out[] = $message = $this->getSuccessMessage($rma);
+		}
+		if($this->isPendingPickup($rma)){
+			$out[] = Mage::getModel("cms/block")->
 				load(self::CMS_PENDING)->getContent();
 		}
-		return $message;
+		return $out;
 	}
 	
 	/**
