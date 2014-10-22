@@ -4,7 +4,7 @@
 "DHL Service Error", "Błąd serwisu DHL"
 "DHL API Service Error", "Błąd API serwisu DHL"
 "Please contact Shop Administrator", "Proszę skontaktowaę się z administratorem sklepu"
-"DHL Service Error. Shipment Canceled. Please try again later.", "Błąd serwisu DHL. Wysyłka anulowana. Proszę sprróbować później."
+"DHL Service Error. Shipment Canceled. Please try again later.", "Błąd serwisu DHL. Wysyłka anulowana. Proszę spróbować później."
 "DHL Waybill", "List przewozowy"
 "Price Incl. Tax", "Cena brutto"
 "Shipping date", "Data nadania"
@@ -182,5 +182,7 @@
 "Dimensions","Wymiary (cm)"
 "Package","Paczka"
 "Envelope","Koperta"
-"",""
+"Save","Zapisz"
+"Shipping creation fail","Tworzenie listu przewozowego i przesyłki nie udało się."
+"Label(s) printed","List wygenerowany"
 
