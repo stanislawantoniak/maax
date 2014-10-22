@@ -66,7 +66,7 @@
 "RMA Reason","Przyczyna RMA"
 "View","Przeglądaj"
 "Save","Zapisz"
-"From", "Od"
+"From", "Odddd"
 "To","Do"
 "RMA No.","Numer RMA"
 "RMA Items","Produkty w RMA"
@@ -95,5 +95,7 @@
 "Details of RMA no. %s","Szczegóły RMA numer %s"
 "Customer notified by email","Informacja wysłana do klienta"
 "Reset","Wyczyść filtr"
+"Browse your RMA","Przeglądanie listy RMA zgłoszonych przez klientów"
+"Obsługa RMA"
 
 
