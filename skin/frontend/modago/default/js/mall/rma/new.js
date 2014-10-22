@@ -179,6 +179,7 @@ jQuery(function($){
 		            if (to - from < 3) {
 			            console.log("hour");
 			            valid = false;
+
 		            }
 	            }
 
@@ -190,27 +191,6 @@ jQuery(function($){
 
                 //--validation
                 if(valid){
-
-                    // Address
-                    jQuery("#review-shipping-address").html(jQuery("#shipping-address").html());
-
-                    // Pickup date
-                    var dateText = "Carrier",
-                        carrierDate = jQuery("#carrier-date").val();
-
-                    dateText += " " + carrierDate + "<br/>";
-                    dateText += "Between";
-                    dateText += " " + jQuery('#carrier-time-from').val();
-                    dateText += " and";
-                    dateText += " " + jQuery('#carrier-time-to').val();
-
-                    jQuery("#pickup-date-review").html(dateText);
-
-                    // Account
-                    var accountReview = jQuery("#customer-account").val() ?
-                        jQuery("#customer-account").val() : "N/A";
-                    jQuery("#customer-account-review").html(accountReview);
-
 	                self.fillRmaSummary();
                     self.next();
                 }
