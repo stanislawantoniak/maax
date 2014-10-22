@@ -133,24 +133,24 @@
                 //end hint data
 
                 //visual fix for hints
-                jQuery('input[type=text],input[type=email],input[type=password],textarea ').not('.zipcode').tooltip({
+                jQuery('input[type=text],input[type=email],input[type=password],textarea').not('.phone, .zipcode, .nip').tooltip({
                     placement: function(a, element) {
                         var viewport = window.innerWidth;
                         var placement = "right";
-                        if (viewport <= 991) {
-                            placement = "top"
+                        if (viewport < 991) {
+                            placement = "top";
                         }
-                        if (viewport <= 767) {
-                            placement = "right"
+                        if (viewport < 768) {
+                            placement = "right";
                         }
-                        if (viewport <= 675) {
-                            placement = "top"
+                        if (viewport < 600) {
+                            placement = "top";
                         }
                         return placement;
                     },
                     trigger: "focus"
                 });
-                jQuery('.zipcode').tooltip({
+                jQuery('.phone, .zipcode, .nip').tooltip({
                     placement: "right",
                     trigger: "focus"
                 });
@@ -300,6 +300,14 @@
                         inputClass: "form-control lastName hint"
                     },
                     {
+                        name:       "telephone",
+                        id:         type + "_telephone",
+                        type:       "text",
+                        label:      Mall.translate.__("phone"),
+                        labelClass: "col-sm-3",
+                        inputClass: "form-control telephone phone city hint"
+                    },
+                    {
                         name:       "company",
                         id:         type + "_company",
                         type:       "text",
@@ -340,15 +348,8 @@
                         label:      Mall.translate.__("city"),
                         labelClass: "col-sm-3",
                         inputClass: "form-control city hint"
-                    },
-                    {
-                        name:       "telephone",
-                        id:         type + "_telephone",
-                        type:       "text",
-                        label:      Mall.translate.__("phone"),
-                        labelClass: "col-sm-3",
-                        inputClass: "form-control telephone phone city hint"
                     }
+
                 ];
             },
 
