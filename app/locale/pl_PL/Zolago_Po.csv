@@ -196,6 +196,7 @@
 "Order release confirmed","Zamówienie zaakceptowane do realizacji"
 "Tracking ID has been added","Wygenerowano przesyłkę i list przewozowy"
 "PO status changed from %s to %s","Zmieniono status zamówienia z %s na %s"
+"PO status changed from '%s' to '%s'","Zmieniono status zamówienia z '%s' na '%s'"
 "Name","Nazwa"
 "Order %s has invaild status","Zamówienie nr %s ma nieprawidłowy status"
 
