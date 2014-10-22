@@ -35,6 +35,9 @@
 			&:nth-child(2) {
 				white-space: nowrap;
 			}
+			&:nth-child(3) {
+				text-transform: uppercase;
+			}
 			&:last-child {
 				a {
 					white-space: nowrap;
