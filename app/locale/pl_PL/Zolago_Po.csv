@@ -183,6 +183,9 @@
 "Package","Paczka"
 "Envelope","Koperta"
 "Save","Zapisz"
+"Actions","Akcje"
+"From", "Od"
+"To","Do"
 "Shipping creation fail","Tworzenie listu przewozowego i przesyłki nie udało się."
 "Label(s) printed","List wygenerowany"
 "Split","Podziel"
@@ -195,9 +198,6 @@
 "PO status changed from %s to %s","Zmieniono status zamówienia z %s na %s"
 "Name","Nazwa"
 "Order %s has invaild status","Zamówienie nr %s ma nieprawidłowy status"
-"Actions","Akcje"
-"From", "Od"
-"To","Do"
 
 
 
