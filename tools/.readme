@@ -1,4 +1,0 @@
-Git hooks howto
- 1. Copy file 'post-merge' to '.git/hooks/'
- 2. chmod a+x .git/hooks/post-merge
-

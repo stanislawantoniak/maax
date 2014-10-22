@@ -98,20 +98,27 @@ Mall.validate = {
         // add customer methods
 		jQuery.validator.addMethod('validate-postcode', function () {
 				return Mall.validate.validators.postcode.apply(this, arguments);
-		}, jQuery.validator.format(Mall.translate.__("not-correct-postcode", "Post code is not correct")));
+		}, jQuery.validator.format(Mall.translate.__("Invalid zip-cod. Zip-code should include 5 numbers in XX-XXX format.")));
+
+        jQuery.validator.addMethod('validate-postcodeWithReplace', function () {
+            return Mall.validate.validators.postcodeWithReplace.apply(this, arguments);
+        }, jQuery.validator.format(Mall.translate.__("Invalid zip-cod. Zip-code should include 5 numbers in XX-XXX format.")));
 
         jQuery.validator.addMethod('validate-passwordbackend', function () {
             return Mall.validate.validators.passwordbackend.apply(this, arguments);
-        }, jQuery.validator.format(Mall.translate.__("Password needs to have at least %s characters", "Password needs to have at least 6 characters")));
+        }, jQuery.validator.format(Mall.translate.__("Password needs to have at least %s characters")));
 
         jQuery.validator.addMethod('validate-telephone', function () {
             return Mall.validate.validators.telephone.apply(this, arguments);
-        }, jQuery.validator.format(Mall.translate.__("telephone-number-need-to-have-9-digit", "Telephone number need to have 9 digit")));
+        }, jQuery.validator.format(Mall.translate.__("Telephone numer is too short. Number must contain 9 digits, without spacing.")));
 
         jQuery.validator.addMethod('validate-emailbackend', function () {
             return Mall.validate.validators.emailbackend.apply(this, arguments);
-        }, jQuery.validator.format(Mall.translate.__("emailbackend-exits", "Typed address email exists on the site. Want to login?")));
+        }, jQuery.validator.format(Mall.translate.__("We already have an account with this address. Please <a href='customer/account/login/'>log in</a> to your account.")));
 
+        jQuery.validator.addMethod('validate-nip', function () {
+            return Mall.validate.validators.nip.apply(this, arguments);
+        }, jQuery.validator.format(Mall.translate.__("Tax numer is incorrect. Enter as a string of digits e.g. 1234567890.")));
         /*
         override default jquery validator because it can pass email like : name@host
          */
