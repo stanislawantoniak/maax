@@ -233,7 +233,7 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 		if(preg_match("/^TO/", $value)){
 			$value = "0 " . $value;
 		}elseif(preg_match("/TO$/", $value)){
-			$value = $value . " " . "2147483647"; // Ma xinteger on 32bit
+			$value = $value . " " . "2147483647"; // Max integer on 32bit
 		}
 		return $value;
 	}
