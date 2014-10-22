@@ -1197,6 +1197,11 @@
                 </crumbInfo>
             </action>
 		</reference>
+        <reference name="my.account.wrapper">
+            <block type="zolagorma/view" name="zolagorma.view" template="zolagorma/view.phtml">
+                <block type="udqa/product_question" name="zolagorma.vendor.question" as="zolagorma_vendor_question" template="zolagorma/view/question.phtml" />
+			</block>
+        </reference>
 	</sales_rma_view>
 
 	<sales_rma_history>
@@ -1228,9 +1233,6 @@
 					<title>Choose package</title>
 				</crumbInfo>
 			</action>
-		</reference>
-		<reference name="my.account.wrapper">
-			<block type="zolagorma/rmalist" name="zolagorma.po.list" template="zolagorma/po/list.phtml" />
 		</reference>
 	</sales_po_rmalist>
 
