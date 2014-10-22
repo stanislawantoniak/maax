@@ -287,7 +287,12 @@ jQuery(function($){
 
 		fillRmaSummary: function() {
 			var data = this._getRmaSummaryData();
-			var day = this.daysOfWeek[(new Date(data.pickup.carrier_date)).getDay()]+" "+data.pickup.carrier_date,
+			var date = new Date(data.pickup.carrier_date);
+			var month = date.getMonth() + 1;
+			var day = this.daysOfWeek[date.getDay()] + " " +
+					date.getDate() + "-" +
+					(month < 10 ? "0" + month : month) + "-" +
+					date.getFullYear(),
 				pickup = $("#pickup-date-review"),
 				accountFieldset = $(".customer-account-fieldset"),
 				account = $("#customer-account-review"),
@@ -354,6 +359,9 @@ jQuery(function($){
 			this.currentStep = step;
 			// Fix footer
 			jQuery(window).resize();
+
+			// scroll to top
+			jQuery(window).scrollTop(0);
 			return this;
 		},
 		_getStep: function(step){
