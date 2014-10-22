@@ -1,6 +1,9 @@
 <?php /* @var $this Zolago_Rma_Block_View */ ?>
 <?php $_helper = Mage::helper("zolagorma"); ?>
 <?php $_rma = $this->getRma();?>
+
+
+
 <div class="page-title box-wrapper">
 	<h1>
 		<span class="hidden-md hidden-lg"><?php echo $_helper->__("Returns and complaints"); ?></span>
@@ -20,7 +23,7 @@
 	<div class="rma-monit rma-section">
 		<?php echo $_message?>
 		<?php if($_pdfUrl=$this->getPdfUrl($_rma)):?>
-			<a href="<?php echo $_pdfUrl;?>" class="button button-primary download-doc"><?php echo $_helper->__("Download a document"); ?> [DEV]</a>
+			<a href="<?php echo $_pdfUrl;?>" class="button button-primary download-doc"><?php echo $_helper->__("Download a document"); ?></a>
 		<?php endif;?>
 	</div>
 	<?php endif;?>

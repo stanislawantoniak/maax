@@ -28,12 +28,36 @@ class Zolago_Dhl_Helper_Data extends Mage_Core_Helper_Abstract {
 	const DHL_CARRIER_CODE		= 'zolagodhl';
 	const USER_NAME_COMMENT		= 'API';
     const ALERT_DHL_ZIP_ERROR = 1;
+	
+	/**
+	 * @param Zolago_Rma_Model_Rma_Track $track
+	 * @return string
+	 */
+	public function getRmaDocument(Zolago_Rma_Model_Rma_Track $track) {
+		return $this->getDhlFileDir() . $track->getTrackNumber() . '.pdf';
+	}
+	
+	/**
+	 * @param Unirgy_Dropship_Model_Vendor $vendor
+	 * @return bool
+	 */
     public function isDhlEnabledForVendor(Unirgy_Dropship_Model_Vendor $vendor) {
 		return (bool)(int)$vendor->getUseDhl();
 	}
+	
+	/**
+	 * @param Unirgy_Dropship_Model_Vendor $vendor
+	 * @return bool
+	 */
     public function isDhlEnabledForRma(Unirgy_Dropship_Model_Vendor $vendor) {
 		return (bool)(int)$vendor->getDhlRma();
 	}
+	
+	/**
+	 * 
+	 * @param Zolago_Pos_Model_Pos $pos
+	 * @return type
+	 */
     public function isDhlEnabledForPos(Zolago_Pos_Model_Pos $pos) {
 		return (bool)(int)$pos->getUseDhl();
 	}

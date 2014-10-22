@@ -19,7 +19,18 @@ class Zolago_Rma_Block_View extends Zolago_Rma_Block_Abstract
 	 * @return string | null
 	 */
 	public function getPdfUrl(Zolago_Rma_Model_Rma $rma) {
-		//return $this->getUrl("*/*/pdf", array("id"=>$rma->getId()));
+		$helperTrack = Mage::helper('zolagorma/tracking');
+		$helperDhl = Mage::helper('zolagodhl');
+		$customer = Mage::getSingleton('customer/session')->getCustomer();
+		
+		$track = $helperTrack->getRmaTrackingForCustomer($rma, $customer);
+		if($track && $track->getId()){
+			$dhlFile = $helperDhl->getRmaDocument($track);
+			if(file_exists($dhlFile)){
+				return $this->getUrl("*/*/pdf", array("id"=>$rma->getId()));
+			}
+		}
+		
 		return null;
 	}
 	
