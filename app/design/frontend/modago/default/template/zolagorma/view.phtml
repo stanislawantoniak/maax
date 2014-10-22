@@ -1,6 +1,14 @@
 <?php /* @var $this Zolago_Rma_Block_View */ ?>
 <?php $_helper = Mage::helper("zolagorma"); ?>
 <?php $_rma = $this->getRma();?>
+<?php
+Mage::app()->getLayout()
+    ->getMessagesBlock()
+    ->setMessages(Mage::getSingleton('udqa/session')->getMessages(true));
+echo $this->getMessagesBlock()->getGroupedHtml();
+
+
+?>
 <div class="page-title box-wrapper">
 	<h1>
 		<span class="hidden-md hidden-lg"><?php echo $_helper->__("Returns and complaints"); ?></span>
@@ -9,7 +17,6 @@
 		<span class="back-xs"><a href="<?php echo $this->getUrl('customer/account/index/');?>" class="underline"><?php echo $_helper->__('back'); ?> &gt;</a></span>
 	</h1>
 </div>
-
 
 <div class="background-wrapper box-wrapper rma-po-list <?php echo $this->getIsClaim($_rma) ? "rma-claim" : "rma-return";?>">
 	<div class="rma-section rma-caption">
@@ -114,21 +121,7 @@
                     </p>
                 </div>
                 <div class="rma-connect-vendor-form rma-section">
-                    <form id="rma-connect-vendor-form">
-                        <div class="form-group">
-                            <label class="control-label" for="rma-connect-vendor-message">
-                                <?php echo $_helper->__("Compose message"); ?>
-                            </label>
-                            <textarea class="form-control required-entry textarea" name="rma-connect-vendor-message" cols="8" rows="6" title="<?php echo $_helper->__("Compose message"); ?>" required="required">
-
-                            </textarea>
-                        </div>
-                        <div class="form-group text-right">
-                            <button class="button button-primary rma-connect-vendor-form-send" type="submit" href="#" title="<?php echo $_helper->__("Send"); ?>">
-                                <?php echo $_helper->__("Send"); ?>
-                            </button>
-                        </div>
-                    </form>
+                    <?php echo $this->getChildHtml("zolagorma_vendor_question"); ?>
                 </div>
             </div>
 
@@ -168,4 +161,11 @@
 		
 	</div>
 </div>
+<script type="text/javascript">
+    jQuery(document).ready(function(){
+        if(jQuery(window).innerWidth() <= 754){
+            jQuery("ul.messages").addClass("fix");
+        }
+    })
+</script>
 	

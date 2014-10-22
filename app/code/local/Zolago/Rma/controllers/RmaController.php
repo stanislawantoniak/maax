@@ -55,6 +55,7 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
 	 * @return void
 	 */
 	public function successAction() {
+
 		$session = Mage::getSingleton('customer/session');
 		if(!$session->isLoggedIn()){
 			$session->addError(Mage::helper("zolagorma")->__("You need to login"));

@@ -3124,29 +3124,34 @@ x-axis
   color: #bbb;
   text-decoration: underline; }
 
-/* line 199, ../sass/design/modules/_rma.scss */
+/* line 187, ../sass/design/modules/_rma.scss */
 .rma-connect-vendor {
   margin-bottom: 15px; }
 
-/* line 203, ../sass/design/modules/_rma.scss */
+/* line 191, ../sass/design/modules/_rma.scss */
 .rma-connect-vendor-pannel {
   margin-bottom: 0px; }
-/* line 205, ../sass/design/modules/_rma.scss */
+/* line 193, ../sass/design/modules/_rma.scss */
 .rma-connect-vendor-pannel p {
   cursor: pointer; }
-/* line 208, ../sass/design/modules/_rma.scss */
+/* line 196, ../sass/design/modules/_rma.scss */
 .rma-connect-vendor-pannel .caption {
   display: block;
   float: left;
   width: 95%; }
 
-/* line 215, ../sass/design/modules/_rma.scss */
+/* line 203, ../sass/design/modules/_rma.scss */
 .rma-connect-vendor-form {
   display: none;
   border-top: none; }
-/* line 219, ../sass/design/modules/_rma.scss */
+/* line 207, ../sass/design/modules/_rma.scss */
 .rma-connect-vendor-form #rma-connect-vendor-form label.error {
   padding-left: 0px !important; }
+
+/* line 213, ../sass/design/modules/_rma.scss */
+.sales-rma-view .messages.fixed {
+  margin-top: -13px;
+  margin-bottom: 45px; }
 
 /* line 1, ../sass/design/override/_global.scss */
 .browsehappy {

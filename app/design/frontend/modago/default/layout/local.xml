@@ -1199,6 +1199,7 @@
 		</reference>
         <reference name="my.account.wrapper">
             <block type="zolagorma/view" name="zolagorma.view" template="zolagorma/view.phtml">
+                <block type="udqa/product_question" name="zolagorma.vendor.question" as="zolagorma_vendor_question" template="zolagorma/view/question.phtml" />
 			</block>
         </reference>
 	</sales_rma_view>
