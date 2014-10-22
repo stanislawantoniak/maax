@@ -216,7 +216,7 @@ jQuery(function($){
 		_getPickup: function() {
 			var s = this.step2,
 				out = {};
-			out.carrier_date = s.find('input[name="rma[carrier_date]"]').val();
+			out.carrier_date = s.find('input[name="rma[carrier_date]"]:checked').val();
 			out.carrier_time_from = s.find('input[name="rma[carrier_time_from]"]').val();
 			out.carrier_time_to = s.find('input[name="rma[carrier_time_to]"]').val();
 			return out;
