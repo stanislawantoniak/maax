@@ -2,8 +2,6 @@
 <?php $_helper = Mage::helper("zolagorma"); ?>
 <?php $_rma = $this->getRma();?>
 
-
-
 <div class="page-title box-wrapper">
 	<h1>
 		<span class="hidden-md hidden-lg"><?php echo $_helper->__("Returns and complaints"); ?></span>
@@ -12,7 +10,6 @@
 		<span class="back-xs"><a href="<?php echo $this->getUrl('customer/account/index/');?>" class="underline"><?php echo $_helper->__('back'); ?> &gt;</a></span>
 	</h1>
 </div>
-
 
 <div class="background-wrapper box-wrapper rma-po-list <?php echo $this->getIsClaim($_rma) ? "rma-claim" : "rma-return";?>">
 	<div class="rma-section rma-caption">
@@ -106,12 +103,21 @@
 			</div>
 		</div>
 		<div class="col-sm-8">
-			<div class="rma-section">
-				<p>
-					<i class="glyphicon glyphicon-comment"></i>
-					<span class="uppercase"><?php echo $_helper->__("Vednor contact"); ?> [DEV]</span>
-				</p>
-			</div> 
+            <div class="rma-connect-vendor">
+                <div class="rma-connect-vendor-pannel rma-section">
+                    <p>
+					<span class="caption">
+                        <span class="glyphicon glyphicon-comment"></span>
+						<span class="uppercase"><?php echo $_helper->__("Contact with vendor"); ?></span>
+					</span>
+                        <i class="fa fa-chevron-down"></i>
+                    </p>
+                </div>
+                <div class="rma-connect-vendor-form rma-section">
+                    <?php echo $this->getChildHtml("zolagorma_vendor_question"); ?>
+                </div>
+            </div>
+
 			<div class="rma-section rma-comments">
 				<p>
 					<i class="glyphicon glyphicon-align-left"></i>
@@ -148,4 +154,18 @@
 		
 	</div>
 </div>
+<script type="text/javascript">
+    jQuery(document).ready(function(){
+        fixMessage();
+        jQuery(window).resize(fixMessage);
+
+        function fixMessage (){
+            if(jQuery(window).innerWidth() <= 754){
+                jQuery(".messages-box").addClass("fix");
+            } else {
+                jQuery(".messages-box").removeClass("fix");
+            }
+        }
+    })
+</script>
 	

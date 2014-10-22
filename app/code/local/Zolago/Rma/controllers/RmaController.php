@@ -2,7 +2,7 @@
 
 class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
 {
-	protected $_msgStores = array('catalog/session', 'customer/session', 'core/session');
+	protected $_msgStores = array('catalog/session', 'customer/session', 'core/session', 'udqa/session');
 	/**
 	 * History action
 	 * @return void 
@@ -12,7 +12,6 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
         $this->_initLayoutMessages($this->_msgStores);
 		$this->_setNavigation();
         $this->renderLayout();
-
 	}
 	
 	/**
@@ -93,6 +92,7 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
 	 * @return void
 	 */
 	public function successAction() {
+
 		$session = Mage::getSingleton('customer/session');
 		if(!$session->isLoggedIn()){
 			$session->addError(Mage::helper("zolagorma")->__("You need to login"));

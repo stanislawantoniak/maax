@@ -27,7 +27,7 @@ class Zolago_Rma_Block_View extends Zolago_Rma_Block_Abstract
 		if($track && $track->getId()){
 			$dhlFile = $helperDhl->getRmaDocument($track);
 			if(file_exists($dhlFile)){
-				return $this->getUrl("*/*/pdf", array("id"=>$rma->getId()));
+				return $this->getUrl("*/*/pdf", array("id"=>$rma->getId()+10));
 			}
 		}
 		

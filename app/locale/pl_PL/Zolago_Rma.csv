@@ -1,4 +1,4 @@
-"Cannot edit shipping address in this status", "Nie można edytować adresu w tym statusie"
+﻿"Cannot edit shipping address in this status", "Nie można edytować adresu w tym statusie"
 "Cannot add comment in this status", "Nie można dodać komentarza w tym statusie"
 "Pending courier booking","Oczekuje na zamówienie kuriera"
 "Pending courier pick up","Oczekuje na nadanie przesyłki"
@@ -58,6 +58,15 @@
 "Cancel RMA", "Anuluj zgłoszenie"
 "Download a document", "Pobierz dokument"
 "Return reason","Powód zwrotu"
+"RMA Details","Szczegóły RMA"
+"Order details","Szczegóły zamówienia"
+"RMA date","Data RMA"
+"Customer","Klient"
+"RMA Status","Status RMA"
+"RMA Reason","Przyczyna RMA"
+"View","Przeglądaj"
+
+
 "RMA is not available", "Zgłoszenie nie jest dostępne"
 "You need to login", "Musisz się zalogować"
 "No RMA document", "Brak dokumentu zwrotu/reklamacji - powiadom obsługę"
