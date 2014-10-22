@@ -46,25 +46,29 @@
             <div class="panel panel-default">
                 <div class="panel-body">
                     <div class="current-rma-date clearfix">
-                        <div id="pickup-date-form" class="fieldset flow-return">
+                        <div id="pickup-date-form-panel" class="fieldset flow-return">
 
-                            <label class="required" for="carrier-date"><?php echo $_helper->__("Choose the date"); ?>
-                                <em>*</em></label>
+                            <label class="required choose-date" for="carrier-date"><?php echo $_helper->__("Choose the date"); ?>
+                                <em>:</em></label>
 
                             <div class="input-box">
 								<?php foreach ($dateList as $date=>$item): ?>
+                                    <input
+                                        type="radio"
+                                        name="rma[carrier_date]"
+                                        id="carrier_date_<?php echo $date;?>"
+                                        value="<?php echo date('Y-m-d',$date);?>"
+                                        />
 									<label for="carrier_date_<?php echo $date;?>">
-									<input 
-										type="radio" 
-										name="rma[carrier_date]" 
-										id="carrier_date_<?php echo $date;?>"
-										value="<?php echo date('Y-m-d',$date);?>"
-									/>
-									<span>										
-										<span class="rma-dayname"><?php echo $weekdays[date('w',$date)]['label'];?></span>
-										<span class="rma-date"><?php echo $this->getFormattedDate($date);?></span>
-									</span>
+                                        <span>
+										    <span class="rma-dayname"><?php echo $weekdays[date('w',$date)]['label'];?></span>
+                                            <br/>
+										    <span class="rma-date"><?php echo $this->getFormattedDate($date);?></span>
+									    </span>
 									</label>
+
+
+
 								<?php endforeach; ?>
 <?php /*
                                 <input type="text" value="<?php echo $_rma->getCarrierDate(); ?>"
@@ -74,27 +78,26 @@
 */?>
                             </div>
 
-                            <label class="required"
+                            <label class="required carrier-time-from"
                                    for="carrier-time-from"><?php echo $_helper->__("Select the time interval (min. 3h)"); ?>
-                                <em>*</em></label>
+                                <em>:</em></label>
+                            <div class="choose-time">
+                                <div class="field">
+                                    <div class="input-box">
+                                        <input type="hidden" name="rma[carrier_time_from]" id="carrier-time-from"
+                                               value="<?php echo $_rma->getCarrierTimeFrom(); ?>"
+                                               title="<?php echo $_helper->__("Choose time-from of the day"); ?>"/>
+                                        <input type="hidden" name="rma[carrier_time_to]" id="carrier-time-to"
+                                               value="<?php echo $_rma->getCarrierTimeTo(); ?>"
+                                               title="<?php echo $_helper->__("Choose time-to of the day"); ?>"/>
+                                    </div>
+                                    <div id="pickup-time"></div>
+                                    <br/>
+                                    <div id="time"></<div>
 
-                            <div class="field">
-                                <div class="input-box">
-                                    <input type="hidden" name="rma[carrier_time_from]" id="carrier-time-from"
-                                           value="<?php echo $_rma->getCarrierTimeFrom(); ?>"
-                                           title="<?php echo $_helper->__("Choose time-from of the day"); ?>"/>
-                                    <input type="hidden" name="rma[carrier_time_to]" id="carrier-time-to"
-                                           value="<?php echo $_rma->getCarrierTimeTo(); ?>"
-                                           title="<?php echo $_helper->__("Choose time-to of the day"); ?>"/>
                                 </div>
+                                <div id="slider-range"></div>
                             </div>
-
-
-                            <span id="time"></span><br/>
-                            <span id="SlideMax">&nbsp;&nbsp;</span>
-
-                            <div id="slider-range"></div>
-
                         </div>
 
                     </div>
@@ -128,6 +131,33 @@
 <?php  $vendor = $_po->getVendor();?>
 
 <script type="text/javascript">
+    Mall.translate.add("Selected time", "<?php echo $_helper->__('Selected time') ?>");
+
+    jQuery('#pickup-date-form-panel input').click(function() {
+        var from = parseInt(jQuery(this).attr('data-PickupFrom'))*60;
+        var to = parseInt(jQuery(this).attr('data-Pickupto'))*60;
+
+        jQuery("#slider-range").noUiSlider({
+            start: [ from, from + (3*60) ],
+            range: {
+                'min':  from,
+                'max':  to
+            }
+        }, true);
+        setPickupTime(jQuery(this).attr('data-PickupFrom'), jQuery(this).attr('data-PickupTo'))
+    });
+
+
+
+    //
+    <?php $js_array = json_encode($dateList); ?>
+    var dataList = <?php echo $js_array; ?>;
+    for(var day in dataList) {
+        jQuery('#carrier_date_' + day).attr('data-PickupFrom', dataList[day].getPostalCodeServicesResult.drPickupFrom );
+        jQuery('#carrier_date_' + day).attr('data-PickupTo', dataList[day].getPostalCodeServicesResult.drPickupTo );
+    }
+
+
     //applyFlow
     var returnReasons = '<?php echo Mage::helper("zolagorma")->getReturnReasons($_po, true); ?>';
     var flowAcknowledged = '<?php echo Zolago_Rma_Model_Rma::FLOW_ACKNOWLEDGED; ?>';
@@ -155,69 +185,228 @@
         jQuery('#overview-message').show();
     }
 
-    jQuery("#slider-range").slider({
-        range: true,
-        min: 540,
-        max: 1260,
+    jQuery("#slider-range").noUiSlider({
+        start: [ 660, 840 ],
         step: 60,
-        values: [660, 840],
-        slide: slideTime
-    });
-    function slideTime(event, ui){
-        var val0 = ui.values[0],
-            val1 = ui.values[1];
-
-        if( ui.values[0] == ui.values[1]) {
-            return false;
+        behaviour: 'drag-fixed',
+        connect: true,
+        range: {
+            'min':  540,
+            'max':  1200
         }
+    });
 
-        formatTimeRange(val0, val1);
+    jQuery("#slider-range").on({
+        slide: function() {
+            var values = jQuery(this).val();
+            var from = values[0];
+            var to = values[1];
+            formatTimeRange(from, to);
+        }
+    });
 
-    }
     function formatTimeRange(from, to){
         var minutes0 = parseInt(from % 60, 10),
             hours0 = parseInt(from / 60 % 24, 10),
             minutes1 = parseInt(to % 60, 10),
             hours1 = parseInt(to / 60 % 24, 10);
 
-        /**
-         * @todo check if more then 3 hours
-         */
-//                                        if( size <= 180) {
-//                                            jQuery("#slider-range div")
-//                                                .addClass("ui-state-error")
-//                                                .removeClass("ui-widget-header");
-//                                            jQuery("#step-2-submit")
-//                                                .attr("disabled","disabled")
-//                                                .addClass("ui-state-disabled")
-//                                                .removeClass("ui-state-default");
-//                                            jQuery("#SlideMax").text("Cannot be less than 3 hours");
-//                                        }
-//                                        else {
-//                                            jQuery("#slider-range div")
-//                                                .addClass("ui-widget-header")
-//                                                .removeClass("ui-state-error");
-//                                            jQuery("#step-2-submit")
-//                                                .removeAttr("disabled")
-//                                                .addClass("ui-state-default")
-//                                                .removeClass("ui-state-disabled");
-//                                            jQuery("#SlideMax").html("&nbsp;&nbsp;");
-//                                        }
 
         var startTime = getTime(hours0, minutes0);
         var endTime = getTime(hours1, minutes1);
-        var message = 'Selected time: '+ startTime + ' - ' + endTime;
+        var message =   Mall.translate.__("Selected time") + ': '+ startTime + ' - ' + endTime;
         jQuery("#time").html(message);
 
         jQuery('[name="rma[carrier_time_from]"]').val(startTime);
         jQuery('[name="rma[carrier_time_to]"]').val(endTime);
+
     }
+
     function getTime(hours, minutes) {
         minutes = minutes + "";
         if (minutes.length == 1) {minutes = "0" + minutes;}
         return hours + ":" + minutes;
     }
-    formatTimeRange(jQuery("#slider-range").slider("values", 0), jQuery("#slider-range").slider("values", 1));
 
+    var values = jQuery("#slider-range").val();
+    formatTimeRange(values[0], values[1]);
+
+    function setPickupTime(from, to) {
+        jQuery('#pickup-time').text('Dla Twojego adresu, dostępne są terminy od ' + from + ' do ' + to);
+    }
+
+    jQuery(document).ready( function() {
+        jQuery('#pickup-date-form-panel input').first().click();//default set the first day
+
+//        var from =
+//        setPickupTime()
+    });
 
 </script>
+
+<style>
+
+    /* Functional styling;
+     * These styles are required for noUiSlider to function.
+     * You don't need to change these rules to apply your design.
+     */
+    .noUi-target,
+    .noUi-target * {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -ms-touch-action: none;
+        -ms-user-select: none;
+        -moz-user-select: none;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+    .noUi-target {
+        position: relative;
+    }
+    .noUi-base {
+        width: 100%;
+        height: 100%;
+        position: relative;
+    }
+    .noUi-origin {
+        position: absolute;
+        right: 0;
+        top: 0;
+        left: 0;
+        bottom: 0;
+    }
+    .noUi-handle {
+        position: relative;
+        z-index: 1;
+    }
+    .noUi-stacking .noUi-handle {
+        /* This class is applied to the lower origin when
+           its values is > 50%. */
+        z-index: 10;
+    }
+    .noUi-stacking + .noUi-origin {
+        /* Fix stacking order in IE7, which incorrectly
+           creates a new context for the origins. */
+        *z-index: -1;
+    }
+    .noUi-state-tap .noUi-origin {
+        -webkit-transition: left 0.3s, top 0.3s;
+        transition: left 0.3s, top 0.3s;
+    }
+    .noUi-state-drag * {
+        cursor: inherit !important;
+    }
+
+    /* Painting and performance;
+     * Browsers can paint handles in their own layer.
+     */
+    .noUi-base {
+        -webkit-transform: translate3d(0,0,0);
+        transform: translate3d(0,0,0);
+    }
+
+    /* Slider size and handle placement;
+     */
+    .noUi-horizontal {
+        height: 18px;
+    }
+    .noUi-horizontal .noUi-handle {
+        width: 34px;
+        height: 28px;
+        left: -17px;
+        top: -6px;
+    }
+    .noUi-vertical {
+        width: 18px;
+    }
+    .noUi-vertical .noUi-handle {
+        width: 28px;
+        height: 34px;
+        left: -6px;
+        top: -17px;
+    }
+
+    /* Styling;
+     */
+    .noUi-background {
+        background: #FAFAFA;
+        box-shadow: inset 0 1px 1px #f0f0f0;
+    }
+    .noUi-connect {
+        background: #6fffcf;
+        box-shadow: inset 0 0 3px rgba(51,51,51,0.45);
+        -webkit-transition: background 450ms;
+        transition: background 450ms;
+    }
+    .noUi-origin {
+        border-radius: 2px;
+    }
+    .noUi-target {
+        border-radius: 4px;
+        border: 1px solid #D3D3D3;
+        box-shadow: inset 0 1px 1px #F0F0F0, 0 3px 6px -5px #BBB;
+    }
+    .noUi-target.noUi-connect {
+        box-shadow: inset 0 0 3px rgba(51,51,51,0.45), 0 3px 6px -5px #BBB;
+    }
+
+    /* Handles and cursors;
+     */
+    .noUi-dragable {
+        cursor: w-resize;
+    }
+    .noUi-vertical .noUi-dragable {
+        cursor: n-resize;
+    }
+    .noUi-handle {
+        border: 1px solid #D9D9D9;
+        border-radius: 3px;
+        background: #FFF;
+        cursor: default;
+        box-shadow: inset 0 0 1px #FFF,
+        inset 0 1px 7px #EBEBEB,
+        0 3px 6px -3px #BBB;
+    }
+    .noUi-active {
+        box-shadow: inset 0 0 1px #FFF,
+        inset 0 1px 7px #DDD,
+        0 3px 6px -3px #BBB;
+    }
+
+    /* Handle stripes;
+     */
+    .noUi-handle:before,
+    .noUi-handle:after {
+        content: "";
+        display: block;
+        position: absolute;
+        height: 14px;
+        width: 1px;
+        background: #E8E7E6;
+        left: 14px;
+        top: 6px;
+    }
+    .noUi-handle:after {
+        left: 17px;
+    }
+    .noUi-vertical .noUi-handle:before,
+    .noUi-vertical .noUi-handle:after {
+        width: 14px;
+        height: 1px;
+        left: 6px;
+        top: 14px;
+    }
+    .noUi-vertical .noUi-handle:after {
+        top: 17px;
+    }
+
+    /* Disabled state;
+     */
+    [disabled].noUi-connect,
+    [disabled] .noUi-connect {
+        background: #B8B8B8;
+    }
+    [disabled] .noUi-handle {
+        cursor: not-allowed;
+    }
+</style>
