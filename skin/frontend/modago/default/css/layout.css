@@ -10649,12 +10649,17 @@ form .form-control {
   -webkit-border-radius: 1px;
   border-radius: 1px; }
 /* line 831, ../sass/override/_override-layout.scss */
+form select.form-control {
+  -webkit-appearance: none;
+  -webkit-border-radius: 0px;
+  border-radius: 0px; }
+/* line 836, ../sass/override/_override-layout.scss */
 form .hidden {
   display: none; }
-/* line 839, ../sass/override/_override-layout.scss */
+/* line 844, ../sass/override/_override-layout.scss */
 form .form-group.form-checkbox.small {
   margin-bottom: 0px; }
-/* line 841, ../sass/override/_override-layout.scss */
+/* line 846, ../sass/override/_override-layout.scss */
 form .form-group.form-checkbox.small input[type=checkbox].css-checkbox + label.css-label, form .form-group.form-checkbox.small input[type=radio].css-radio + label.css-label {
   padding-left: 20px;
   height: 17px;
@@ -10668,27 +10673,27 @@ form .form-group.form-checkbox.small input[type=checkbox].css-checkbox + label.c
   cursor: pointer;
   font-weight: normal;
   color: #1e1e1e; }
-/* line 855, ../sass/override/_override-layout.scss */
+/* line 860, ../sass/override/_override-layout.scss */
 form .form-group.form-checkbox.small input[type=checkbox].css-checkbox + label.css-label img, form .form-group.form-checkbox.small input[type=radio].css-radio + label.css-label img {
   float: left;
   position: relative;
   top: 2px;
   margin-right: 5px; }
-/* line 861, ../sass/override/_override-layout.scss */
+/* line 866, ../sass/override/_override-layout.scss */
 form .form-group.form-checkbox.small input[type=checkbox].css-checkbox + label.css-label .suffix, form .form-group.form-checkbox.small input[type=radio].css-radio + label.css-label .suffix {
   color: #b0b0b0;
   font-size: 12px; }
-/* line 867, ../sass/override/_override-layout.scss */
+/* line 872, ../sass/override/_override-layout.scss */
 form .form-group.form-checkbox.small input[type=checkbox].css-checkbox + label.css-label {
   background-position: 0 0; }
-/* line 873, ../sass/override/_override-layout.scss */
+/* line 878, ../sass/override/_override-layout.scss */
 form .form-group.form-checkbox.small input[type=radio].css-radio + label.css-label {
   background-image: url("../images/radio.png"); }
-/* line 877, ../sass/override/_override-layout.scss */
+/* line 882, ../sass/override/_override-layout.scss */
 form .form-group.form-checkbox.small input[type=checkbox].css-checkbox + label.css-label:hover, form .form-group.form-checkbox.small input[type=radio].css-radio + label.css-label:hover {
   background-position: 0 -1075px;
   color: #999999; }
-/* line 883, ../sass/override/_override-layout.scss */
+/* line 888, ../sass/override/_override-layout.scss */
 form .form-group.form-checkbox.small input[type=checkbox].css-checkbox:checked + label.css-label, form .form-group.form-checkbox.small input[type=radio].css-radio:checked + label.css-label {
   background-position: 0 -860px;
   color: #1e1e1e; }

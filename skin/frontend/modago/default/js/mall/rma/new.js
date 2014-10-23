@@ -56,13 +56,20 @@ jQuery(function($){
                 self = this,
                 next = s.find("button.next"),
 				selects = s.find("select");
-            // Style selects
-            //s.find("select").selectbox('attach');
 
             // Chexboxes
             var checkboxHandler = function(){
-                var el = $(this);
+                var el = $(this),
+					select = el.closest("tr").find("select");
+			
                 next[s.find(":checkbox:checked").length ? "removeClass" : "addClass"]('hidden');
+				
+				if(!el.is(":checked")){
+					select.val("");
+				}
+				select.data('checkboxTrigger', true);
+				select.change();
+				select.data('checkboxTrigger', false);
             };
             s.find(":checkbox").change(checkboxHandler).change();
 
@@ -70,27 +77,41 @@ jQuery(function($){
             var selectHandler = function(){
                 var el = $(this),
                     value = el.val(),
-                    ruleName = "required",
                     rules = {},
-                    settings = self.newRma.validate().settings;
-
-                if(value){
+					ruleName = null,
+                    settings = self.newRma.validate().settings,
+					checkbox = el.closest("tr").find(":checkbox");
+			
+				// Event not triggered by checkbox
+				if(!el.data('checkboxTrigger') && checkbox.is(":checked")!=!!value.length){
+					checkbox.prop("checked", !!value.length > 0);
+				}
+			
+				// Option selected apply validatop
+				if(value){
                     ruleName = 'must-be-available-' + value;
-                }
-                rules[el.attr('name')] = ruleName;
-                $.extend(settings.rules, rules);
+				// No option and selected chebox required validataion
+                }else if(checkbox.is(":checked")){
+                    ruleName = "required";
+				}
+				
+				
+				// No rule matched - add empty rule
+				rules[el.attr('name')] = ruleName;
+				$.extend(settings.rules, rules);
+				console.log(ruleName);
 				
                 // Validate is needed
-                if(el.val() || el.data("inited")){
-                    el.valid();
-                }
-                el.data('inited', 1);
-
-				el.closest("tr").find(":checkbox").
-					prop("checked", value.length > 0).
-					change();
-               
-            };
+				if(!el.data('checkboxTrigger') && value){
+					el.valid();
+				}
+				
+				// Clear border if no validation needed
+				if(ruleName===null){
+					el.valid();
+					el.parents(".form-group").removeClass("has-feedback has-success has-error");
+				}
+			}
 			
 			// Rewrite options labels 
 			selects.find('option').each(function(item){
@@ -100,7 +121,6 @@ jQuery(function($){
 				
 				if(value && value != ""){
 					currentReason = self.getReturnReasons(value);
-					console.log(currentReason);
 					if(currentReason && !currentReason.isAvailable){
 						el.text(el.text() + ' (Not available)');
 					}
@@ -108,7 +128,7 @@ jQuery(function($){
 			});
 			
             selects.select2({minimumResultsForSearch: -1});
-			selects.change(selectHandler).change();
+			selects.change(selectHandler);
 
             // Handle next click
             s.find(".next").click(function(){
@@ -151,18 +171,15 @@ jQuery(function($){
 	            //validate if user has chosen pickup date
 		            if (!s.find('input[name="rma[carrier_date]"]:checked').length) {
 		                valid = false;
-		                console.log("date");
 	                }
 	            //validate if chosen timespan is minimum 3 hours
 		            if (to - from < 3) {
-		                console.log("hour");
 		                valid = false;
 		            }
 	            }
 
 	            //validate if entered account number is correct (optional field)
 	            if(account && (account.length != 26 || !$.isNumeric(account))) {
-		            console.log("account");
 		            valid = false
 	            }
 
@@ -649,6 +666,7 @@ jQuery(function($){
 			showStep(1);
 		})();*/
 	};
+	
 	jQuery.extend(true, Mall, {rma: {"new": _rma}});
-	Mall.rma.new.init();
+	// Mall.rma.new.init(); moved to phtml after setting options
 });
