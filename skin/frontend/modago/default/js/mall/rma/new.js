@@ -9,6 +9,7 @@ jQuery(function($){
 		currentStep: -1, // init value
 		returnReasons: [],
 		unloadMessage: 'Do You really want to leave RMA process?',
+        selectReturnReasonMessage: "Select return reason",
 		ignoreUnload: 0,
 		daysOfWeek: [],
 		txtReason: "",
@@ -42,9 +43,9 @@ jQuery(function($){
 				}
 			};
 			
-			this.validation = this.newRma.validate(
-				Mall.validate.getOptions(_validSettings)
-			);
+//			this.validation = this.newRma.validate(
+//				Mall.validate.getOptions(_validSettings)
+//			);
 	
 			$(window).bind('beforeunload', function() {
 				if (self.currentStep>0 && !self.ignoreUnload) {
@@ -61,11 +62,13 @@ jQuery(function($){
 		_initStep1: function(){
 			var s = this.step1,
 				self = this,
+                returnMessage = this.selectReturnReasonMessage,
 				next = s.find("button.next");
-		
+
+
 			// Style selects
             s.find("select").selectbox({
-                onChange: changeCorrespondedCheckbox
+                onChange: changeCorrespondedItems
             });
 		
 			// Chexboxes
@@ -82,60 +85,76 @@ jQuery(function($){
             s.find(":checkbox").change(function(){
                 var el = $(this);
                 if(!el.is(":checked")){
-                    var select = el.parents("tr").find("select");
+                    var tr = el.closest("tr");
+                    var select = tr.find("select");
 
                     select.val("").prop('selected', true);
+
+                    //clear indicator of validation
+                    tr.data("reasonselected" , 0);
                     select.selectbox("detach").selectbox({
-                        onChange: changeCorrespondedCheckbox
+                        onChange: changeCorrespondedItems
                     });
 
                 }
             });
-            function changeCorrespondedCheckbox(val){
-                var checkbox = $(this).closest("tr").find("input[type=checkbox]");
+            function changeCorrespondedItems(val){
+                var el = $(this);
+                var tr = $(this).closest("tr");
+
+                var checkbox = tr.find("input[type=checkbox]");
                 if(val.length > 0){
+                    //checkbox handler
                     checkbox.prop("checked", true).change();
+
+                    //selectbox validation
+                    el.closest("tr").data("reasonselected" , 1);
+
+                    //clear errors
+                    tr.find("span.error").fadeOut().remove();
                 } else {
                     checkbox.prop("checked", false).change();
-                }
-            }
-			
-			// Make validation of select (various methods)
-			var selectHandler = function(){
-				var el = $(this),
-					value = el.val(),
-					ruleName = "required",
-					rules = {},
-					settings = self.newRma.validate().settings;
-			
-				if(value){
-					ruleName = 'must-be-available-' + value;
-				}
-				rules[el.attr('name')] = ruleName;
-				$.extend(settings.rules, rules);
-				
-				// Validate is needed
-				if(el.val() || el.data("inited")){
-					el.valid();
-				}
-				el.data('inited', 1);
-			};
 
-			s.find("select").change(selectHandler).change();
+                    //selectbox validation
+                    el.closest("tr").data("reasonselected" , 0);
+                }
+
+            }
+
 			
 			// Handle next click
 			s.find(".next").click(function(){
-				var valid = true;
-				s.find(":checkbox:checked").each(function(){
-					var el = $(this),
-						select = el.parents("tr").find("select");
-					if(!select.valid()){
-						valid = false;
-					}
-				});
-				if(valid){
+                var valid = {};
+                valid.result = false;
+                valid.items = [];
+                s.find("tr[target=list]").each(function (i, item) {
+
+                    if ($(item).data("reasonselected") === 1) {
+                        valid.result = true;
+                    } else {
+                        if($(item).find("input[type=checkbox]").is(":checked")){
+                            valid.items.push(i);
+                            valid.result = false;
+                        }
+                    }
+                });
+
+
+				if(valid.result){
 					self.next();
-				}
+				} else {
+                    $.each(valid.items,function (i, index) {
+                        var item = s.find("tr[target=list]").eq(index);
+                        if(item.find(".error").length > 0){
+                            item.find(".sbHolder .error")
+                                .html(returnMessage);
+                        } else {
+                            item.find(".sbHolder")
+                                .after("<span class='error'>" + returnMessage + "</span>");
+                        }
+
+                    });
+                }
 				return false;
 			});
 		},
