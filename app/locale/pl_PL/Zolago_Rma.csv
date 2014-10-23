@@ -31,7 +31,8 @@
 "Choose the date","Wybierz datę"
 "Select the time interval (min. 3h)","Wybierz przedział czasowy (min. 3h)"
 "Enter your account number for your order refund","Podaj numer konta bankowego, na które chcesz otrzymać zwrot zapłaty"
-"Check again inserted data. Note carrier pickup date.", "Sprawdź jeszcze raz poprawność wszystkich danych. Zapisz sobie termin odbioru przesyłki przez kuriera"
+"Check again inserted data.","Sprawdź jeszcze raz poprawność wszystkich danych."
+"Note carrier pickup date.","Zapisz sobie termin odbioru przesyłki przez kuriera"
 "RMA Content", "Treść zgłoszenia",
 "Your address","Twój adres",
 "Pickup date","Termin odbioru"
@@ -39,13 +40,6 @@
 "Additional informations","Dodatkowe informacje"
 "No delivered orders","Brak dostarczonych zamówień"
 "between %s and %s","między %s a %s"
-"Sunday","niedziela"
-"Monday","poniedziałek"
-"Tuesday","wtorek"
-"Wednesday","środa"
-"Thursday","czwartek"
-"Friday","piątek"
-"Saturday","sobota"
 "Courier","Kurier"
 "Return reason","Powód zwrotu"
 "Create new RMA","Zgłoś zwrot lub reklamację"
@@ -113,3 +107,4 @@
 "Vendor","Sklep"
 "Products","Produkty"
 "Status","Status"
+"Place RMA","Wyślij zgłoszenie"
