@@ -83,14 +83,14 @@ class Zolago_Rma_Block_Vendor_Rma extends Mage_Core_Block_Template
 		}else{
 			$values = $this->getDefaultStatuses();
 		}
-		
+		$helper = Mage::helper('urma');
 		$allFilters = Mage::helper('urma')->getVendorRmaStatuses();
 		$out = array();
 		
 		foreach($allFilters as $key=>$label){
 			$item = array(
 				"value" => $key,
-				"label" => $label
+				"label" => $helper->__($label),
 			);
 			if(is_array($values) && in_array($key, $values)){
 				$item['checked'] = true;
