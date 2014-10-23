@@ -143,6 +143,10 @@
 	
 	table td{
 		vertical-align: top;
+		padding-bottom: 15px;
+	}
+	table tbody tr:last-child td{
+		padding-bottom: 0;
 	}
 	.img{
 		width: 60px;
@@ -211,6 +215,17 @@
     }
   }
 }
+
+.sales-rma-view .messages-box:not(:empty) {
+  margin-top: -10px;
+  margin-bottom: 15px;
+}
+.sales-rma-view .messages-box.fix:not(:empty) {
+  margin-top: 10px;
+  margin-bottom: 15px;
+}
+
+
 
 #step-2 {
   #pickup-date-form {
