@@ -163,6 +163,9 @@
 	p{
 		margin-bottom: 15px;
 	}
+	table{
+		table-layout: fixed;
+	}
 	table td{
 		padding-top: 2px; 
 		vertical-align: top;
@@ -173,7 +176,11 @@
 	}
 	td.desc{
 		padding-left: 10px;
-		word-wrap: break-word; 
+		p{
+			margin:0;
+			word-wrap: break-word;
+			word-break:break-all;
+		}
 	}
 	@media (max-width: $screen-xs-min) {
 		table,tr,td{
