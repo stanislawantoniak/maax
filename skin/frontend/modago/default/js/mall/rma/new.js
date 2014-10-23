@@ -122,7 +122,7 @@ jQuery(function($){
 				if(value && value != ""){
 					currentReason = self.getReturnReasons(value);
 					if(currentReason && !currentReason.isAvailable){
-						el.text(el.text() + ' ( ' + self.getNotAvailableText() + ')');
+						el.text(el.text() + ' (' + self.getNotAvailableText() + ')');
 					}
 				}
 			});

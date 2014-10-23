@@ -32,7 +32,7 @@
 	.condition-wrapper {
 		
 		margin-top: -6px;
-		.sbHolder{
+		.select2-container{
 			display: block;
 			width: auto;
 			margin-left: 110px;
@@ -41,7 +41,7 @@
 			}
 		}
 		&.has-error, &.has-success{
-			.sbHolder{
+			.select2-container{
 				border-color: #e2e2e2;
 			}
 		}
