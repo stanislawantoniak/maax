@@ -8,16 +8,16 @@
 <?php $dateList = $this->getDateList();?>
 <?php $weekdays = Mage::app()->getLocale()->getOptionWeekdays();?>
 <div class="steps step-2 background-wrapper box-wrapper" id="step-2">
-    <div class="rma-container">
+    <div class="rma-container ">
 		<?php if (($this->isDhlEnabled()) && count($dateList)) : ?>
         <div id="pickup-address-form" class="fieldset flow-return">
             <input type="hidden" name="rma[shipping_address_id]" value="<?php echo $_shippingAddress->getId(); ?>"/>
             <input type="hidden" name="rma[override_address]" value="0"/>
-
-            <h3 class="legend"><?php echo $_helper->__("Confirm or change pickup address for the courier"); ?></h3>
+            <h3 class="legend-big"><?php echo $_helper->__("Report a return or claim"); ?></h3>
+            <h3 class="legend"><?php echo $_helper->__("Confirm or change pickup address for the courier"); ?>:</h3>
 
             <div class="panel panel-default">
-                <div class="panel-body">
+                <div class="panel-body panel-body-with-footer">
                     <div class="current-rma-address current-addres clearfix">
 
                         <dl class="pull-left" id="shipping-address">
@@ -25,9 +25,8 @@
                             <dd><?php echo $_shippingAddress->getData("street"); ?></dd>
                             <dd><?php echo $_shippingAddress->getPostcode(); ?> <?php echo $_shippingAddress->getCity(); ?></dd>
                             <dd class="separator phone">
-                                <?php echo $this->__('Contact phone'); ?>
-                                : <span><?php echo $_shippingAddress->getTelephone(); ?>
-                        </span>
+                                <?php echo $this->__('Contact phone'); ?>:
+                                <span><?php echo $_shippingAddress->getTelephone(); ?></span>
                             </dd>
                         </dl>
                     </div>
@@ -42,7 +41,7 @@
 
         </div>
         <div id="pickup-date-form">
-            <h3 class="legend"><?php echo $_helper->__("Schedule pickup date that is convenient for you"); ?></h3>
+            <h3 class="legend"><?php echo $_helper->__("Schedule pickup date that is convenient for you"); ?>trololo</h3>
             <div class="panel panel-default">
                 <div class="panel-body">
                     <div class="current-rma-date clearfix">
@@ -79,7 +78,7 @@
                             </div>
 
                             <label class="required carrier-time-from"
-                                   for="carrier-time-from"><?php echo $_helper->__("Select the time interval (min. 3h)"); ?>
+                                   for="carrier-time-from"><?php echo $_helper->__("Select the time interval"); ?>
                                 <em>:</em></label>
                             <div class="choose-time">
                                 <div class="field">
@@ -104,11 +103,13 @@
         </div>
 
 		<?php endif;?>
-        <div class="fieldset">
-            <h3 class="legend"><?php echo $_helper->__("Enter your account number for your order refund"); ?></h3>
-            <input type="text" value="<?php echo $this->escapeHtml($_rma->getCustomerAccount()); ?>"
+        <div class="fieldset hide-success-vaild ">
+            <div>
+                <h3 class="legend"><?php echo $_helper->__("Enter your account number for your order refund"); ?></h3>
+                <input type="text" value="<?php echo $this->escapeHtml($_rma->getCustomerAccount()); ?>"
                    name="rma[customer_account]" value="" id="customer-account"
-                   title="<?php echo $_helper->__("Bank account"); ?>" value="" class="input-text">
+                   title="<?php echo $_helper->__("Bank account"); ?>" value="" class="form-control bank-account-rma">
+            </div>
         </div>
     </div>
     <div class="rma-container">
