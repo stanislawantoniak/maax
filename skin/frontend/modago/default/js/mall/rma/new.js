@@ -43,9 +43,9 @@ jQuery(function($){
 				}
 			};
 			
-//			this.validation = this.newRma.validate(
-//				Mall.validate.getOptions(_validSettings)
-//			);
+			this.validation = this.newRma.validate(
+				Mall.validate.getOptions(_validSettings)
+			);
 	
 			$(window).bind('beforeunload', function() {
 				if (self.currentStep>0 && !self.ignoreUnload) {
@@ -57,115 +57,74 @@ jQuery(function($){
             this._initStep2();
             this._initStep3();
 		},
-		
-		// Step 1 init
-		_initStep1: function(){
-			var s = this.step1,
-				self = this,
-                returnMessage = this.selectReturnReasonMessage,
-				next = s.find("button.next");
 
+        // Step 1 init
+        _initStep1: function(){
+            var s = this.step1,
+                self = this,
+                next = s.find("button.next");
 
-			// Style selects
-            s.find("select").selectbox({
-                onChange: changeCorrespondedItems
-            });
-		
-			// Chexboxes
-			var checkboxHandler = function(){
-				var el = $(this);
-				next[s.find(":checkbox:checked").length ? "removeClass" : "addClass"]('hidden');
-				el.parents("tr").find(".condition-wrapper")
-						[el.is(":checked") ? "addClass" : "removeClass"]('active')
-						[el.is(":checked") ? "removeClass" : "addClass"]('inactive');
-//				el.parents("tr").find(".condition-wrapper select").
-//						selectbox(el.is(":checked") ? "enable" : "disable");
-			};
-			s.find(":checkbox").change(checkboxHandler).change();
-            s.find(":checkbox").change(function(){
+            // Style selects
+            //s.find("select").selectbox('attach');
+
+            // Chexboxes
+            var checkboxHandler = function(){
                 var el = $(this);
-                var tr = el.closest("tr");
-                var select = tr.find("select");
-                if(!el.is(":checked")){
+                next[s.find(":checkbox:checked").length ? "removeClass" : "addClass"]('hidden');
+//                el.parents("tr").find(".condition-wrapper")
+//                    [el.is(":checked") ? "addClass" : "removeClass"]('active')
+//                    [el.is(":checked") ? "removeClass" : "addClass"]('inactive');
+//                el.parents("tr").find(".condition-wrapper select").
+//                    selectbox(el.is(":checked") ? "enable" : "disable");
+            };
+            s.find(":checkbox").change(checkboxHandler).change();
 
-                    select.val("").prop('selected', true);
+            // Make validation of select (various methods)
+            var selectHandler = function(){
+                var el = $(this),
+                    value = el.val(),
+                    ruleName = "required",
+                    rules = {},
+                    settings = self.newRma.validate().settings;
 
-                    //clear indicator of validation
-                    tr.data("reasonselected" , 0);
-                    select.selectbox("detach").selectbox({
-                        onChange: changeCorrespondedItems
-                    });
-
+                if(value){
+                    ruleName = 'must-be-available-' + value;
                 }
-            });
-            function changeCorrespondedItems(val){
-                var el = $(this);
-                var tr = $(this).closest("tr");
+                rules[el.attr('name')] = ruleName;
+                $.extend(settings.rules, rules);
 
-                var checkbox = tr.find("input[type=checkbox]");
-                if(val.length > 0){
-                    //checkbox handler
-                    checkbox.prop("checked", true).change();
+                // Validate is needed
+                if(el.val() || el.data("inited")){
+                    el.valid();
+                }
+                el.data('inited', 1);
 
-                    //selectbox validation
-                    el.closest("tr").data("reasonselected" , 1);
-
-                    //clear errors
-                    tr.find("span.error").fadeOut().remove();
+console.log(value);
+                if(value.length > 0){
+                    el.closest("tr").find("input[type=checkbox]").prop("checked", true).change();
                 } else {
-                    checkbox.prop("checked", false).change();
-
-                    //selectbox validation
-                    el.closest("tr").data("reasonselected" , 0);
+                    el.closest("tr").find("input[type=checkbox]").prop("checked", false).change();
                 }
+            };
 
-            }
+            s.find("select").change(selectHandler).change();
 
-			
-			// Handle next click
-			s.find(".next").click(function(){
-                var valid = {};
-                valid.result = [];
-                valid.invalidItems = [];
-                s.find("tr[target=list]").each(function (i, item) {
-                    var CheckedAndSelected = $(item).data("reasonselected") === 1 &&
-                        $(item).find("input[type=checkbox]").is(":checked");
-
-                    var NotCheckedNotSelected = $(item).data("reasonselected") === 0 &&
-                        !$(item).find("input[type=checkbox]").is(":checked");
-
-                    if (CheckedAndSelected || NotCheckedNotSelected) {
-                        //console.log("Valid item");
-                        valid.result.push(1);
-                    } else {
-                        if($(item).find("input[type=checkbox]").is(":checked")){
-                            //console.log("Invalid item: Checked and NOT Selected");
-                            valid.invalidItems.push(i);
-                            valid.result.push(0);
-                        }
+            // Handle next click
+            s.find(".next").click(function(){
+                var valid = true;
+                s.find(":checkbox:checked").each(function(){
+                    var el = $(this),
+                        select = el.parents("tr").find("select");
+                    if(!select.valid()){
+                        valid = false;
                     }
                 });
-
-                var res = valid.result;
-
-				if(jQuery.inArray( 0, res) === -1){
-					self.next();
-				} else {
-                    $.each(valid.invalidItems,function (i, index) {
-                        var invalidItem = s.find("tr[target=list]").eq(index);
-                        if(invalidItem.find(".error").length > 0){
-                            invalidItem.find(".sbHolder .error")
-                                .html(returnMessage);
-                        } else {
-                            invalidItem.find(".sbHolder")
-                                .after("<span class='error'>" + returnMessage + "</span>");
-                        }
-
-                    });
+                if(valid){
+                    self.next();
                 }
-				return false;
-			});
-		},
+                return false;
+            });
+        },
 		
         // Step 2 init
         _initStep2: function(){
