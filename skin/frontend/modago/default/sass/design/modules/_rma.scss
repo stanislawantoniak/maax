@@ -143,6 +143,10 @@
 	
 	table td{
 		vertical-align: top;
+		padding-bottom: 15px;
+	}
+	table tbody tr:last-child td{
+		padding-bottom: 0;
 	}
 	.img{
 		width: 60px;

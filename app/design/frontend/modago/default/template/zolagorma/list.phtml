@@ -13,25 +13,25 @@
 
 	</div>
 	<div class="background-wrapper box-wrapper rma-list">
-		<?php if($list): ?>
+		<?php if($list->getSize()): ?>
 			<p><?php echo $this->__("Your returns and complaints"); ?>:</p>
 			<table class="data-table rma-table">
 				<thead>
 				<tr>
 					<th>
-						Numer RMA
+						<?php echo $this->__("RMA number"); ?>
 					</th>
 					<th>
-						Data
+						<?php echo $this->__("Date"); ?>
 					</th>
 					<th>
-						Sklep
+						<?php echo $this->__("Vendor"); ?>
 					</th>
 					<th>
-						Produkty
+						<?php echo $this->__("Products"); ?>
 					</th>
 					<th>
-						Status
+						<?php echo $this->__("Status"); ?>
 					</th>
 				</tr>
 				</thead>
@@ -77,7 +77,7 @@
 							<p>
 								<?php echo $this->escapeHtml($this->__($rma->getRmaStatusName())); ?>
 							</p>
-							<a class="button button-third large" href="<?php echo $this->getUrl('sales/rma/details/',array('rma_id'=>$rma->getId()));?>"><?php echo $this->__("VIEW DETAILS"); ?></a>
+							<a class="button button-third large" href="<?php echo $this->getUrl('sales/rma/view/',array('id'=>$rma->getId()));?>"><?php echo $this->__("VIEW DETAILS"); ?></a>
 						</td>
 					</tr>
 				<?php endforeach; ?>

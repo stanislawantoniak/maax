@@ -5,9 +5,14 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
 	protected $_msgStores = array('catalog/session', 'customer/session', 'core/session', 'udqa/session');
 	/**
 	 * History action
-	 * @return void 
+	 * @return boolean
 	 */
 	public function historyAction() {
+		$session = Mage::getSingleton('customer/session');
+		/* @var $session Mage_Customer_Model_Session */
+		if(!$session->isLoggedIn()){
+			return $this->_redirect('customer/account/login');
+		}
         $this->loadLayout();
         $this->_initLayoutMessages($this->_msgStores);
 		$this->_setNavigation();
