@@ -5894,79 +5894,82 @@ yx-axis
 .rma .rma-po-list table.po-list-table tbody tr td:first-child {
   padding-left: 15px; }
 /* line 38, ../sass/layout/modules/_rma-po-list.scss */
+.rma .rma-po-list table.po-list-table tbody tr td:nth-child(3) {
+  text-transform: uppercase; }
+/* line 41, ../sass/layout/modules/_rma-po-list.scss */
 .rma .rma-po-list table.po-list-table tbody tr td:nth-child(4) {
   padding: 0;
   width: 330px; }
-/* line 43, ../sass/layout/modules/_rma-po-list.scss */
+/* line 46, ../sass/layout/modules/_rma-po-list.scss */
 .rma .rma-po-list table.po-list-table table.po-items-table {
   max-width: 300px; }
-/* line 46, ../sass/layout/modules/_rma-po-list.scss */
+/* line 49, ../sass/layout/modules/_rma-po-list.scss */
 .rma .rma-po-list table.po-list-table table.po-items-table tbody tr td {
   border-top: none;
   padding: 10px; }
-/* line 49, ../sass/layout/modules/_rma-po-list.scss */
+/* line 52, ../sass/layout/modules/_rma-po-list.scss */
 .rma .rma-po-list table.po-list-table table.po-items-table tbody tr td:last-child {
   text-align: inherit;
   padding-left: 5px;
   width: auto; }
-/* line 54, ../sass/layout/modules/_rma-po-list.scss */
+/* line 57, ../sass/layout/modules/_rma-po-list.scss */
 .rma .rma-po-list table.po-list-table table.po-items-table tbody tr td:first-child {
   padding-left: 5px;
   padding-right: 5px; }
-/* line 57, ../sass/layout/modules/_rma-po-list.scss */
+/* line 60, ../sass/layout/modules/_rma-po-list.scss */
 .rma .rma-po-list table.po-list-table table.po-items-table tbody tr td:first-child img {
   border: 1px solid #cccccc; }
-/* line 62, ../sass/layout/modules/_rma-po-list.scss */
+/* line 65, ../sass/layout/modules/_rma-po-list.scss */
 .rma .rma-po-list table.po-list-table table.po-items-table tbody tr:last-child td {
   padding-bottom: 20px; }
-/* line 65, ../sass/layout/modules/_rma-po-list.scss */
+/* line 68, ../sass/layout/modules/_rma-po-list.scss */
 .rma .rma-po-list table.po-list-table table.po-items-table tbody tr:first-child td {
   padding-top: 20px; }
-/* line 72, ../sass/layout/modules/_rma-po-list.scss */
+/* line 75, ../sass/layout/modules/_rma-po-list.scss */
 .rma .po-list-table-mobile {
   width: 100%;
   border: 1px solid #bfbfbf; }
-/* line 75, ../sass/layout/modules/_rma-po-list.scss */
+/* line 78, ../sass/layout/modules/_rma-po-list.scss */
 .rma .po-list-table-mobile tr:first-child td {
   border-top: none; }
-/* line 78, ../sass/layout/modules/_rma-po-list.scss */
+/* line 81, ../sass/layout/modules/_rma-po-list.scss */
 .rma .po-list-table-mobile td {
   border-top: 1px solid #ebebeb;
   padding: 15px 10px; }
-/* line 81, ../sass/layout/modules/_rma-po-list.scss */
+/* line 84, ../sass/layout/modules/_rma-po-list.scss */
 .rma .po-list-table-mobile td table {
   width: 100%; }
-/* line 85, ../sass/layout/modules/_rma-po-list.scss */
+/* line 88, ../sass/layout/modules/_rma-po-list.scss */
 .rma .po-list-table-mobile td table tr:first-child td {
   padding: 0; }
-/* line 87, ../sass/layout/modules/_rma-po-list.scss */
+/* line 90, ../sass/layout/modules/_rma-po-list.scss */
 .rma .po-list-table-mobile td table tr:first-child td:nth-child(2) {
   text-align: right; }
-/* line 92, ../sass/layout/modules/_rma-po-list.scss */
+/* line 95, ../sass/layout/modules/_rma-po-list.scss */
 .rma .po-list-table-mobile td table tr td {
   border-top: none;
   padding: 20px 0 0 0;
   vertical-align: middle; }
-/* line 96, ../sass/layout/modules/_rma-po-list.scss */
+/* line 99, ../sass/layout/modules/_rma-po-list.scss */
 .rma .po-list-table-mobile td table tr td span {
   display: block; }
-/* line 99, ../sass/layout/modules/_rma-po-list.scss */
+/* line 102, ../sass/layout/modules/_rma-po-list.scss */
 .rma .po-list-table-mobile td table tr td span.product-attribute {
   margin-top: -3px;
   margin-bottom: 4px; }
-/* line 108, ../sass/layout/modules/_rma-po-list.scss */
+/* line 111, ../sass/layout/modules/_rma-po-list.scss */
 .rma .rma-po-empty {
   padding-bottom: 100px; }
 
-/* line 112, ../sass/layout/modules/_rma-po-list.scss */
+/* line 115, ../sass/layout/modules/_rma-po-list.scss */
 .product-attribute {
   font-size: 12px; }
 
-/* line 115, ../sass/layout/modules/_rma-po-list.scss */
+/* line 118, ../sass/layout/modules/_rma-po-list.scss */
 .nowrap {
   white-space: nowrap; }
 
-/* line 118, ../sass/layout/modules/_rma-po-list.scss */
+/* line 121, ../sass/layout/modules/_rma-po-list.scss */
 .bold {
   font-family: latoblack;
   font-weight: normal; }
@@ -6014,7 +6017,7 @@ div.steps.step-3 .rma-summary-container p#review-comment-text {
   /* HP Printers */
   word-wrap: break-word;
   /* IE 5+ */
-  width: 320px;
+  width: 100px;
   min-width: 100%; }
 /* line 40, ../sass/layout/modules/_rma-summary.scss */
 div.steps.step-3 .rma-summary-container p, div.steps.step-3 .rma-summary-container address#review-shipping-address, div.steps.step-3 .rma-summary-container address#review-shipping-address dl {
@@ -6040,6 +6043,94 @@ div.steps.step-3 div.summary-bottom {
 div.steps.step-3 p#overview-message {
   font-size: 15px;
   margin-bottom: 10px; }
+
+/* line 2, ../sass/layout/modules/_rma-list.scss */
+.rma .rma-new-button {
+  font-size: 14px !important; }
+@media (max-width: 991px) {
+  /* line 2, ../sass/layout/modules/_rma-list.scss */
+  .rma .rma-new-button {
+    float: none;
+    display: block;
+    margin-top: 15px; } }
+@media (min-width: 992px) {
+  /* line 2, ../sass/layout/modules/_rma-list.scss */
+  .rma .rma-new-button {
+    display: inline-block;
+    float: right; }
+  /* line 12, ../sass/layout/modules/_rma-list.scss */
+  .rma .rma-new-button a {
+    margin-top: -1px; } }
+/* line 17, ../sass/layout/modules/_rma-list.scss */
+.rma .rma-table {
+  border: 1px solid #bfbfbf; }
+/* line 19, ../sass/layout/modules/_rma-list.scss */
+.rma .rma-table thead tr th, .rma .rma-table tbody tr td {
+  background-color: #FFFFFF;
+  border: none;
+  vertical-align: top; }
+/* line 24, ../sass/layout/modules/_rma-list.scss */
+.rma .rma-table thead tr th {
+  white-space: nowrap;
+  text-transform: uppercase; }
+/* line 28, ../sass/layout/modules/_rma-list.scss */
+.rma .rma-table tbody tr td {
+  border-top: 1px solid #ebebeb; }
+/* line 30, ../sass/layout/modules/_rma-list.scss */
+.rma .rma-table tbody tr td:nth-child(4) {
+  padding: 0;
+  max-width: 240px;
+  width: 240px; }
+/* line 35, ../sass/layout/modules/_rma-list.scss */
+.rma .rma-table tbody tr td:nth-child(2) {
+  white-space: nowrap; }
+/* line 38, ../sass/layout/modules/_rma-list.scss */
+.rma .rma-table tbody tr td:nth-child(3) {
+  text-transform: uppercase; }
+/* line 42, ../sass/layout/modules/_rma-list.scss */
+.rma .rma-table tbody tr td:last-child a {
+  white-space: nowrap;
+  float: right; }
+@media (max-width: 480px) {
+  /* line 50, ../sass/layout/modules/_rma-list.scss */
+  .rma .rma-table tbody tr td:nth-child(2), .rma .rma-table tbody tr td:nth-child(3), .rma .rma-table tbody tr td:nth-child(4), .rma .rma-table thead tr th:nth-child(2), .rma .rma-table thead tr th:nth-child(3), .rma .rma-table thead tr th:nth-child(4) {
+    display: none; } }
+@media (min-width: 481px) and (max-width: 620px) {
+  /* line 55, ../sass/layout/modules/_rma-list.scss */
+  .rma .rma-table tbody tr td:nth-child(2), .rma .rma-table tbody tr td:nth-child(4), .rma .rma-table thead tr th:nth-child(2), .rma .rma-table thead tr th:nth-child(4) {
+    display: none; } }
+@media (min-width: 621px) and (max-width: 768px) {
+  /* line 60, ../sass/layout/modules/_rma-list.scss */
+  .rma .rma-table tbody tr td:nth-child(4), .rma .rma-table thead tr th:nth-child(4) {
+    display: none; } }
+/* line 65, ../sass/layout/modules/_rma-list.scss */
+.rma .rma-table table.rma-items-table {
+  max-width: 240px;
+  min-width: 240px; }
+/* line 69, ../sass/layout/modules/_rma-list.scss */
+.rma .rma-table table.rma-items-table tbody tr td {
+  border-top: none;
+  padding: 10px; }
+/* line 72, ../sass/layout/modules/_rma-list.scss */
+.rma .rma-table table.rma-items-table tbody tr td:last-child {
+  text-align: inherit;
+  padding-left: 5px;
+  width: auto;
+  white-space: normal; }
+/* line 78, ../sass/layout/modules/_rma-list.scss */
+.rma .rma-table table.rma-items-table tbody tr td:first-child {
+  padding-left: 5px;
+  padding-right: 5px;
+  width: 42px; }
+/* line 81, ../sass/layout/modules/_rma-list.scss */
+.rma .rma-table table.rma-items-table tbody tr td:first-child img {
+  border: 1px solid #cccccc; }
+/* line 87, ../sass/layout/modules/_rma-list.scss */
+.rma .rma-table table.rma-items-table tbody tr:last-child td {
+  padding-bottom: 20px; }
+/* line 90, ../sass/layout/modules/_rma-list.scss */
+.rma .rma-table table.rma-items-table tbody tr:first-child td {
+  padding-top: 20px; }
 
 /* line 1, ../sass/layout/override/_global.scss */
 .clr {
