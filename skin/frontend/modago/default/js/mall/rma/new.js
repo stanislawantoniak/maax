@@ -325,13 +325,17 @@ jQuery(function($){
 				account = $("#customer-account-review"),
 				items = $("#review-items").find("tbody"),
 				address = $("#review-shipping-address");
-
-			pickup.find('.pickup-day').html(day);
-			pickup.find('.pickup-time').html(
-				this.txtCarrierTime
-					.replace(this._txtCarrierTimeFrom, data.pickup.carrier_time_from)
-					.replace(this._txtCarrierTimeTo, data.pickup.carrier_time_to)
-			);
+			if(data.pickup) {
+				pickup.show();
+				pickup.find('.pickup-day').html(day);
+				pickup.find('.pickup-time').html(
+					this.txtCarrierTime
+						.replace(this._txtCarrierTimeFrom, data.pickup.carrier_time_from)
+						.replace(this._txtCarrierTimeTo, data.pickup.carrier_time_to)
+				);
+			} else {
+				pickup.hide();
+			}
 
 			if(data.account) {
 				account.html(data.account);
