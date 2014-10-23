@@ -10,6 +10,7 @@ jQuery(function($){
 		returnReasons: [],
 		unloadMessage: 'Do You really want to leave RMA process?',
         selectReturnReasonMessage: "Select return reason",
+		notAvailableText: "Not available",
 		ignoreUnload: 0,
 		daysOfWeek: [],
 		txtReason: "",
@@ -99,14 +100,13 @@ jQuery(function($){
 				// No rule matched - add empty rule
 				rules[el.attr('name')] = ruleName;
 				$.extend(settings.rules, rules);
-				console.log(ruleName);
 				
-                // Validate is needed
+                // Validate is needed?
 				if(!el.data('checkboxTrigger') && value){
 					el.valid();
 				}
 				
-				// Clear border if no validation needed
+				// Clear border if validation rules are empty remove error if needed
 				if(ruleName===null){
 					el.valid();
 					el.parents(".form-group").removeClass("has-feedback has-success has-error");
@@ -122,7 +122,7 @@ jQuery(function($){
 				if(value && value != ""){
 					currentReason = self.getReturnReasons(value);
 					if(currentReason && !currentReason.isAvailable){
-						el.text(el.text() + ' (Not available)');
+						el.text(el.text() + ' ( ' + self.getNotAvailableText() + ')');
 					}
 				}
 			});
@@ -402,6 +402,15 @@ jQuery(function($){
 		
 		setReturnReasons: function(data){
 			this.returnReasons = data;
+		},
+		
+		setNotAvailableText: function(text){
+			 this.notAvailableText = text;
+			 return this;
+		},
+		
+		getNotAvailableText: function(){
+			return this.notAvailableText;
 		},
 		
 		setUnloadMessage: function(msg){
