@@ -119,51 +119,60 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
             return $this->_redirect('customer/account/login');
         }
         $session = Mage::getSingleton('customer/session');
-//        Zend_Debug::dump($_POST);
+
+        $request = $this->getRequest();
+        $rmaId = (int)($request->getParam("rma_id", 0));
         try {
-            $rma = $this->_initLastRma();
 
-            $request = $this->getRequest();
-            $customerId = trim($request->getParam("customer_id", 0));
+            $rma = Mage::getModel('urma/rma')->load($rmaId);
 
-            $vendorId = trim($request->getParam("vendor_id", 0));
+            if($rma){
+                $customerId = $rma->getCustomerId();
 
-            if ($customerId > 0) {
-                $author = Mage::getModel("customer/customer")->load($customerId);
-                $commentText = trim($request->getParam("question_text", ""));
+                $vendorId = trim($request->getParam("vendor_id", 0));
 
-                if(!empty($commentText)){
-                    //construct comment object
+                if ($customerId > 0) {
+                    $author = Mage::getModel("customer/customer")->load($customerId);
+                    $commentText = trim($request->getParam("question_text", ""));
 
-                    //comment
-                    $notify = true;
-                    $visibleOnFront = true;
-                    $notifyVendor = false;
-                    $visibleToVendor = true;
-                    $comment = Mage::getModel('urma/rma_comment')
-                        ->setComment($commentText)
-                        ->setIsCustomerNotified($notify)
-                        ->setIsVisibleOnFront($visibleOnFront)
-                        ->setIsVendorNotified($notifyVendor)
-                        ->setIsVendorId($vendorId)
-                        ->setIsVisibleToVendor($visibleToVendor);
-                    //comment
+                    if(!empty($commentText)){
+                        //construct comment object
 
-                    $ob = new Zolago_Rma_Model_Observer();
-                    $ob->rmaCustomerSendDetail($rma, $comment, $sendEmail = null, $author);
+                        //comment
+                        $notify = true;
+                        $visibleOnFront = true;
+                        $notifyVendor = false;
+                        $visibleToVendor = true;
+                        $comment = Mage::getModel('urma/rma_comment')
+                            ->setComment($commentText)
+                            ->setIsCustomerNotified($notify)
+                            ->setIsVisibleOnFront($visibleOnFront)
+                            ->setIsVendorNotified($notifyVendor)
+                            ->setIsVendorId($vendorId)
+                            ->setIsVisibleToVendor($visibleToVendor);
+                        //comment
+
+                        $ob = new Zolago_Rma_Model_Observer();
+                        $ob->rmaCustomerSendDetail($rma, $comment, $sendEmail = null, $author);
 
 
-                    //After add new customer-author comment set RMA flag new customer comment to true
-                    $rmaModel = Mage::getModel('urma/rma')->load($rma->getId());
-                    $rmaModel->setnewCustomerQuestion(1);
-                    $rmaModel->save();
+                        //After add new customer-author comment set RMA flag new customer comment to true
 
-                    $session->addSuccess(Mage::helper("zolagorma")->__("Your message sent"));
+                        $rma->setnewCustomerQuestion(1);
+                        $rma->save();
+
+                        $session->addSuccess(Mage::helper("zolagorma")->__("Your message sent"));
+                    } else {
+                        $session->addError($this->__('Unable to find a data to save'));
+                        return $this->_redirect('sales/rma/view' , array("id" => $rmaId));
+
+                    }
                 }
-
-
-
+            } else {
+                $session->addError($this->__('Unable to find RMA'));
+                return $this->_redirect('sales/rma/history');
             }
+
 
 
         } catch (Mage_Core_Exception $e) {
@@ -173,7 +182,7 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
             $session->addError(Mage::helper("zolagorma")->__("Other error. Check logs."));
         }
 
-        return $this->_redirectReferer();
+        return $this->_redirect('sales/rma/view' , array("id" => $rmaId));
 
     }
 	
