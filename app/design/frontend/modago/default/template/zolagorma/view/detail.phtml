@@ -1,24 +1,18 @@
 <?php
 $_helper = Mage::helper("zolagorma");
-$_rma = Mage::registry('current_rma');
+$_rma = $this->getRma();
 
 $vendors = $_rma->getVendor()->getId();
 
-
-$session = Mage::getSingleton('customer/session');
-
-$dataPopulate = Mage::getSingleton('udqa/session')->getDataPopulate(true);
-
-$visibility = isset($dataPopulate['visibility']) ? $dataPopulate['visibility'] : false;
-$vendor_id = isset($dataPopulate['vendor_id']) ? $dataPopulate['vendor_id'] : false;
-
-$question_text = isset($dataPopulate['question_text']) ? $dataPopulate['question_text'] : false;
+$customerSession = Mage::getSingleton('customer/session');
+Mage::log($customerSession->getData());
 
 
 ?>
 <form id="rma-connect-vendor-form" class="form clearfix" novalidate="novalidate" method="post" action="<?php echo $this->getFormAction(); ?>">
 
-    <input type="hidden" name="question[visibility]" value="0" />
+    <input type="hidden" name="customer_id" value="<?php echo $customerSession->getId(); ?>" />
+    <input type="hidden" name="rma_id" value="<?php echo $_rma->getId(); ?>" />
 
     <div class="form-group">
         <label class="control-label" for="rma-connect-vendor-message">
@@ -29,13 +23,13 @@ $question_text = isset($dataPopulate['question_text']) ? $dataPopulate['question
 
         <textarea class="form-control required-entry textarea"
                   id="question_text"
-                  name="question[question_text]"
+                  name="question_text"
                   cols="8"
                   rows="8"
                   title="<?php echo $_helper->__("Compose message"); ?>"
                   data-original-title="<?php echo $_helper->__("Compose message"); ?>"
                   required="required">
-            <?php echo $question_text; ?>
+
         </textarea>
     </div>
 

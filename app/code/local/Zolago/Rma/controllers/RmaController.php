@@ -106,6 +106,76 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
 		$this->_initLastRma();
 		$this->_forward('view');
 	}
+
+    /**
+     * Send Rma Detail Action
+     * @return void
+     */
+    public function sendRmaDetailAction() {
+
+        $session = Mage::getSingleton('customer/session');
+        if(!$session->isLoggedIn()){
+            $session->addError(Mage::helper("zolagorma")->__("You need to login"));
+            return $this->_redirect('customer/account/login');
+        }
+        $session = Mage::getSingleton('customer/session');
+//        Zend_Debug::dump($_POST);
+        try {
+            $rma = $this->_initLastRma();
+
+            $request = $this->getRequest();
+            $customerId = trim($request->getParam("customer_id", 0));
+
+            $vendorId = trim($request->getParam("vendor_id", 0));
+
+            if ($customerId > 0) {
+                $author = Mage::getModel("customer/customer")->load($customerId);
+                $commentText = trim($request->getParam("question_text", ""));
+
+                if(!empty($commentText)){
+                    //construct comment object
+
+                    //comment
+                    $notify = true;
+                    $visibleOnFront = true;
+                    $notifyVendor = false;
+                    $visibleToVendor = true;
+                    $comment = Mage::getModel('urma/rma_comment')
+                        ->setComment($commentText)
+                        ->setIsCustomerNotified($notify)
+                        ->setIsVisibleOnFront($visibleOnFront)
+                        ->setIsVendorNotified($notifyVendor)
+                        ->setIsVendorId($vendorId)
+                        ->setIsVisibleToVendor($visibleToVendor);
+                    //comment
+
+                    $ob = new Zolago_Rma_Model_Observer();
+                    $ob->rmaCustomerSendDetail($rma, $comment, $sendEmail = null, $author);
+
+
+                    //After add new customer-author comment set RMA flag new customer comment to true
+                    $rmaModel = Mage::getModel('urma/rma')->load($rma->getId());
+                    $rmaModel->setnewCustomerQuestion(1);
+                    $rmaModel->save();
+
+                    $session->addSuccess(Mage::helper("zolagorma")->__("Your message sent"));
+                }
+
+
+
+            }
+
+
+        } catch (Mage_Core_Exception $e) {
+            $session->addError($e->getMessage());
+        } catch (Exception $e) {
+            Mage::logException($e);
+            $session->addError(Mage::helper("zolagorma")->__("Other error. Check logs."));
+        }
+
+        return $this->_redirectReferer();
+
+    }
 	
 	/**
 	 * @param int $rmaId
