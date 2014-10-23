@@ -119,11 +119,12 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
             return $this->_redirect('customer/account/login');
         }
         $session = Mage::getSingleton('customer/session');
-//        Zend_Debug::dump($_POST);
-        try {
-            $rma = $this->_initLastRma();
 
+        try {
             $request = $this->getRequest();
+            $rmaId = trim($request->getParam("rma_id", 0));
+            $rma = Mage::getModel('urma/rma')->load($rmaId);
+
             $customerId = trim($request->getParam("customer_id", 0));
 
             $vendorId = trim($request->getParam("vendor_id", 0));
@@ -154,15 +155,15 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
 
 
                     //After add new customer-author comment set RMA flag new customer comment to true
-                    $rmaModel = Mage::getModel('urma/rma')->load($rma->getId());
-                    $rmaModel->setnewCustomerQuestion(1);
-                    $rmaModel->save();
+
+                    $rma->setnewCustomerQuestion(1);
+                    $rma->save();
 
                     $session->addSuccess(Mage::helper("zolagorma")->__("Your message sent"));
+                } else {
+                    $session->addError($this->__('Unable to find a data to save'));
+                    return $this->_redirect('sales/rma/view' , array("id" => $rmaId));
                 }
-
-
-
             }
 
 
@@ -173,7 +174,7 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
             $session->addError(Mage::helper("zolagorma")->__("Other error. Check logs."));
         }
 
-        return $this->_redirectReferer();
+        return $this->_redirect('sales/rma/view' , array("id" => $rmaId));
 
     }
 	
