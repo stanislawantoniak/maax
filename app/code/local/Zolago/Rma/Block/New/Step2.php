@@ -18,8 +18,10 @@ class Zolago_Rma_Block_New_Step2 extends  Zolago_Rma_Block_New_Abstract{
              $timestamp = time()+$count*3600*24;
              if ($holidaysHelper->isPickupDay($timestamp)) {
                  if ($params = $helper->getDhlPickupParamsForDay($timestamp,$zip)) {
-                     $dateList[$timestamp] = $params;
-                 }                 
+                     if($params->getPostalCodeServicesResult->drPickupFrom !== "brak"){
+                         $dateList[$timestamp] = $params;
+                     }
+                 }
              }
          }
          return $dateList;
