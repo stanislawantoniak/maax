@@ -369,11 +369,11 @@
 		</layout>
 		<translate>
 			<modules>
-				<zolagodropship>
+				<Zolago_Dropship>
 					<files>
 						<default>Zolago_Dropship.csv</default>
 					</files>
-				</zolagodropship>
+				</Zolago_Dropship>
 			</modules>
 		</translate>		
 	</frontend>
@@ -391,11 +391,11 @@
 	<adminhtml>
 		<translate>
 			<modules>
-				<zolagodropship>
+				<Zolago_Dropship>
 					<files>
 						<default>Zolago_Dropship.csv</default>
 					</files>
-				</zolagodropship>
+				</Zolago_Dropship>
 			</modules>
 		</translate>
 	</adminhtml>
