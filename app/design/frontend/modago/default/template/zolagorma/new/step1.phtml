@@ -22,7 +22,7 @@
 				foreach ($items as $item_pack):
 					foreach ($item_pack as $key => $item):
 						?>
-						<tr data-name="<?php echo $this->escapeHtml($item['name']); ?>">
+						<tr data-name="<?php echo $this->escapeHtml($item['name']); ?>" target="list" data-reasonselected="0">
 							<td style="vertical-align: middle;" class="form-group form-checkbox">
 								<input <?php if(isset($_itemsSingle[$item['entityId']][$key])):?>checked="checked"<?php endif;?> type="checkbox" class="css-checkbox rma-checkbox" id="rma_item_<?php echo $item['entityId'];?>_<?php echo $key;?>" name="rma[items_single][<?php echo $item['entityId'] ?>][<?php echo $key ?>]" value="true"/>
 								<label class="css-label"  for="rma_item_<?php echo $item['entityId'];?>_<?php echo $key;?>"></label>

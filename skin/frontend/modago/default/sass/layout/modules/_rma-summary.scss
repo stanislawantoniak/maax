@@ -17,12 +17,12 @@ div.steps.step-3 {
 			.summary-item-desc {
 				vertical-align: top;
 			}
+			.summary-comment {
+				padding-bottom: 20px;
+			}
 			.summary-reason {
 				padding-bottom: 20px;
 				vertical-align: bottom;
-			}
-			.summary-comment {
-				padding-bottom: 20px;
 			}
 		}
 		p#review-comment-text {
@@ -34,7 +34,7 @@ div.steps.step-3 {
 			white-space: -moz-pre-wrap; /* Mozilla */
 			white-space: -hp-pre-wrap;  /* HP Printers */
 			word-wrap: break-word;      /* IE 5+ */
-			width: 320px;
+			width: 100px;
 			min-width: 100%;
 		}
 		p, address#review-shipping-address, address#review-shipping-address dl {
