@@ -84,9 +84,9 @@ jQuery(function($){
 			s.find(":checkbox").change(checkboxHandler).change();
             s.find(":checkbox").change(function(){
                 var el = $(this);
+                var tr = el.closest("tr");
+                var select = tr.find("select");
                 if(!el.is(":checked")){
-                    var tr = el.closest("tr");
-                    var select = tr.find("select");
 
                     select.val("").prop('selected', true);
 
@@ -125,31 +125,39 @@ jQuery(function($){
 			// Handle next click
 			s.find(".next").click(function(){
                 var valid = {};
-                valid.result = false;
-                valid.items = [];
+                valid.result = [];
+                valid.invalidItems = [];
                 s.find("tr[target=list]").each(function (i, item) {
+                    var CheckedAndSelected = $(item).data("reasonselected") === 1 &&
+                        $(item).find("input[type=checkbox]").is(":checked");
 
-                    if ($(item).data("reasonselected") === 1) {
-                        valid.result = true;
+                    var NotCheckedNotSelected = $(item).data("reasonselected") === 0 &&
+                        !$(item).find("input[type=checkbox]").is(":checked");
+
+                    if (CheckedAndSelected || NotCheckedNotSelected) {
+                        //console.log("Valid item");
+                        valid.result.push(1);
                     } else {
                         if($(item).find("input[type=checkbox]").is(":checked")){
-                            valid.items.push(i);
-                            valid.result = false;
+                            //console.log("Invalid item: Checked and NOT Selected");
+                            valid.invalidItems.push(i);
+                            valid.result.push(0);
                         }
                     }
                 });
 
+                var res = valid.result;
 
-				if(valid.result){
+				if(jQuery.inArray( 0, res) === -1){
 					self.next();
 				} else {
-                    $.each(valid.items,function (i, index) {
-                        var item = s.find("tr[target=list]").eq(index);
-                        if(item.find(".error").length > 0){
-                            item.find(".sbHolder .error")
+                    $.each(valid.invalidItems,function (i, index) {
+                        var invalidItem = s.find("tr[target=list]").eq(index);
+                        if(invalidItem.find(".error").length > 0){
+                            invalidItem.find(".sbHolder .error")
                                 .html(returnMessage);
                         } else {
-                            item.find(".sbHolder")
+                            invalidItem.find(".sbHolder")
                                 .after("<span class='error'>" + returnMessage + "</span>");
                         }
 
