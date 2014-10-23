@@ -33,37 +33,29 @@ jQuery(function($){
 		_init: function(){
 			var self = this;
 			this.steps = [this.step1, this.step2, this.step3];
-			var _validSettings = {
-				errorPlacement: function(error, element) {
-					if(element.next().is(".sbHolder")){
-						error.insertAfter(element.next());
-					}else {
-						error.insertAfter(element);
-					}
-				}
-			};
-			
+
 			this.validation = this.newRma.validate(
-				Mall.validate.getOptions(_validSettings)
+				Mall.validate.getOptions()
 			);
+			
+			this._initStep1();
+            this._initStep2();
+            this._initStep3();
+			
 	
 			$(window).bind('beforeunload', function() {
 				if (self.currentStep>0 && !self.ignoreUnload) {
 					return self.unloadMessage;
 				}
 			}); 
-	
-			this._initStep1();
-            this._initStep2();
-            this._initStep3();
 		},
 
         // Step 1 init
         _initStep1: function(){
             var s = this.step1,
                 self = this,
-                next = s.find("button.next");
-
+                next = s.find("button.next"),
+				selects = s.find("select");
             // Style selects
             //s.find("select").selectbox('attach');
 
@@ -71,11 +63,6 @@ jQuery(function($){
             var checkboxHandler = function(){
                 var el = $(this);
                 next[s.find(":checkbox:checked").length ? "removeClass" : "addClass"]('hidden');
-//                el.parents("tr").find(".condition-wrapper")
-//                    [el.is(":checked") ? "addClass" : "removeClass"]('active')
-//                    [el.is(":checked") ? "removeClass" : "addClass"]('inactive');
-//                el.parents("tr").find(".condition-wrapper select").
-//                    selectbox(el.is(":checked") ? "enable" : "disable");
             };
             s.find(":checkbox").change(checkboxHandler).change();
 
@@ -92,22 +79,36 @@ jQuery(function($){
                 }
                 rules[el.attr('name')] = ruleName;
                 $.extend(settings.rules, rules);
-
+				
                 // Validate is needed
                 if(el.val() || el.data("inited")){
                     el.valid();
                 }
                 el.data('inited', 1);
 
-console.log(value);
-                if(value.length > 0){
-                    el.closest("tr").find("input[type=checkbox]").prop("checked", true).change();
-                } else {
-                    el.closest("tr").find("input[type=checkbox]").prop("checked", false).change();
-                }
+				el.closest("tr").find(":checkbox").
+					prop("checked", value.length > 0).
+					change();
+               
             };
-
-            s.find("select").change(selectHandler).change();
+			
+			// Rewrite options labels 
+			selects.find('option').each(function(item){
+				var el = jQuery(this),
+					value = el.attr('value'),
+					currentReason;
+				
+				if(value && value != ""){
+					currentReason = self.getReturnReasons(value);
+					console.log(currentReason);
+					if(currentReason && !currentReason.isAvailable){
+						el.text(el.text() + ' (Not available)');
+					}
+				}
+			});
+			
+            selects.select2({minimumResultsForSearch: -1});
+			selects.change(selectHandler).change();
 
             // Handle next click
             s.find(".next").click(function(){
@@ -373,6 +374,13 @@ console.log(value);
 		////////////////////////////////////////////////////////////////////////
 		addValidator: function(name, message, fn){
 			jQuery.validator.addMethod(name, fn, message);
+		},
+		
+		getReturnReasons: function(index){
+			if(typeof index != "undefined"){
+				return this.returnReasons[index];
+			}
+			return this.returnReasons;
 		},
 		
 		setReturnReasons: function(data){
