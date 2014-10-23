@@ -90,7 +90,7 @@ class Zolago_Rma_Block_Vendor_Rma extends Mage_Core_Block_Template
 		foreach($allFilters as $key=>$label){
 			$item = array(
 				"value" => $key,
-				"label" => $label
+				"label" => $this->__($label)
 			);
 			if(is_array($values) && in_array($key, $values)){
 				$item['checked'] = true;
