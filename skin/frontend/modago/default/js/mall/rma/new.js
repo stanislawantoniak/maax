@@ -82,6 +82,8 @@ jQuery(function($){
 //						selectbox(el.is(":checked") ? "enable" : "disable");
 			};
 			s.find(":checkbox").change(checkboxHandler).change();
+
+
             s.find(":checkbox").change(function(){
                 var el = $(this);
                 var tr = el.closest("tr");
@@ -98,6 +100,13 @@ jQuery(function($){
 
                 }
             });
+
+            jQuery("select").each(function (i, select) {
+                if (jQuery(select).find("option:selected").val().length > 0) {
+                    jQuery(select).closest("tr").data("reasonselected", 1);
+                }
+            });
+
             function changeCorrespondedItems(val){
                 var el = $(this);
                 var tr = $(this).closest("tr");
