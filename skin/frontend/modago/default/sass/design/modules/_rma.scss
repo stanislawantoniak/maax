@@ -196,13 +196,17 @@
 
 .rma-connect-vendor-pannel {
   margin-bottom: 0px;
+
   p {
     cursor: pointer;
   }
   .caption {
-    display: block;
-    float: left;
-    width: 95%;
+    display: inline-flex;
+    width: 90%;
+    @media (max-width: $screen-xs-min) {
+      width: 83%;
+    }
+
   }
 }
 
@@ -216,13 +220,9 @@
   }
 }
 
-.sales-rma-view .messages-box:not(:empty) {
+.sales-rma-view .messages.fix {
   margin-top: -10px;
-  margin-bottom: 15px;
-}
-.sales-rma-view .messages-box.fix:not(:empty) {
-  margin-top: 10px;
-  margin-bottom: 15px;
+  margin-bottom: 40px;
 }
 
 

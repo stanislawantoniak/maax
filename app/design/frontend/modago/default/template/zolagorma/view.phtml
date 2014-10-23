@@ -108,10 +108,10 @@
             <div class="rma-connect-vendor">
                 <div class="rma-connect-vendor-pannel rma-section">
                     <p>
-					<span class="caption">
-                        <span class="glyphicon glyphicon-comment"></span>
-						<span class="uppercase"><?php echo $_helper->__("Contact with vendor"); ?></span>
-					</span>
+                        <i class="glyphicon glyphicon-comment"></i>
+                        <span class="caption uppercase">
+                            <?php echo $_helper->__("Contact with vendor"); ?>
+                        </span>
                         <i class="fa fa-chevron-down"></i>
                     </p>
                 </div>
@@ -163,9 +163,9 @@
 
         function fixMessage (){
             if(jQuery(window).innerWidth() <= 754){
-                jQuery(".messages-box").addClass("fix");
+                jQuery(".messages").addClass("fix");
             } else {
-                jQuery(".messages-box").removeClass("fix");
+                jQuery(".messages").removeClass("fix");
             }
         }
     })
