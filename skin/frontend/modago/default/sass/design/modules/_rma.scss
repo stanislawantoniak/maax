@@ -220,9 +220,11 @@
   }
 }
 
-.sales-rma-view .messages.fix {
-  margin-top: -10px;
-  margin-bottom: 40px;
+.sales-rma-view .messages {
+  @media (max-width: $screen-sm) {
+    margin-top: -10px;
+    margin-bottom: 40px;
+  }
 }
 
 
