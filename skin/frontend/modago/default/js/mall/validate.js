@@ -84,10 +84,15 @@ Mall.validate = {
             if (!validator.numberOfInvalids()) {
                 return true;
             }
+	        console.log(jQuery(validator.errorList[0].element));
+			var modal = jQuery('.modal:visible');
+			var scrollTo = modal
+							? jQuery(validator.errorList[0].element).offset().top - modal.find('.modal-body').offset().top
+							: jQuery(validator.errorList[0].element).offset().top - Mall.getMallHeaderHeight(),
+				scrollMe = modal ? modal : jQuery('html, body');
 
-            jQuery('html, body').animate({
-                scrollTop: jQuery(validator.errorList[0].element).offset().top
-                    - Mall.getMallHeaderHeight()
+            scrollMe.animate({
+                scrollTop: scrollTo
             }, "slow");
         }
     },

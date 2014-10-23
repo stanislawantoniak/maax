@@ -912,4 +912,12 @@ jQuery(document).ready(function() {
 
     basket_dropdown();
     sales_order_details_top_resize();
+
+	jQuery(document)
+		.on('show.bs.modal', '.modal', function () {
+			jQuery('html,body').addClass('modal-open');
+		})
+		.on('hidden.bs.modal', '.modal', function () {
+			jQuery('html,body').removeClass('modal-open');
+		});
 });
