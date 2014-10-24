@@ -125,9 +125,9 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
         $rmaId = (int)($request->getParam("rma_id", 0));
         if (!empty($commentText)) {
             try {
-                $rma = Mage::getModel('urma/rma')->load($rmaId);
+                $rma = Mage::getModel("urma/rma")->load($rmaId);
+                if($rma->getId() && $rma->getCustomerId()==Mage::getSingleton('customer/session')->getCustomerId()){
 
-                if ($rma) {
                     $customerId = $rma->getCustomerId();
                     $vendorId = $rma->getUdropshipVendor();
 
