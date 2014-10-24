@@ -153,15 +153,22 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
                         //comment
 
                         $ob = new Zolago_Rma_Model_Observer();
-                        $ob->rmaCustomerSendDetail($rma, $comment, $sendEmail = null, $author);
+                        $ob->rmaCustomerSendDetail($rma, $comment, null, $author);
 
 
                         //After add new customer-author comment set RMA flag new customer comment to true
 
-                        $rma->setnewCustomerQuestion(1);
-                        $rma->save();
+                        $rma->setNewCustomerQuestion(1);
+                        try {
+                            $rma->save();
+                            $session->addSuccess(Mage::helper("zolagorma")->__("Your message sent"));
+                        }
+                        catch (Exception $e) {
+                            $session->addError($this->__('Unable to post the question.'));
+                        }
 
-                        $session->addSuccess(Mage::helper("zolagorma")->__("Your message sent"));
+
+
                     } else {
                         $session->addError($this->__('Unable to find a data to save'));
                         return $this->_redirect('sales/rma/view' , array("id" => $rmaId));
