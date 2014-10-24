@@ -48,7 +48,15 @@ jQuery(function($){
 				if (self.currentStep>0 && !self.ignoreUnload) {
 					return self.unloadMessage;
 				}
-			}); 
+			});
+
+            //visual fix for message - can't be done by css
+            if ($('.messages i').length) {
+                $('#content').css('margin-top', '0px');
+                $('.messages i').click(function () {
+                    $('#content').css('margin-top', '');
+                });
+            }
 		},
 
         // Step 1 init
