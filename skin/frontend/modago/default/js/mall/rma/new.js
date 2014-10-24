@@ -10,6 +10,7 @@ jQuery(function($){
 		returnReasons: [],
 		unloadMessage: 'Do You really want to leave RMA process?',
         selectReturnReasonMessage: "Select return reason",
+		notAvailableText: "Not available",
 		ignoreUnload: 0,
 		daysOfWeek: [],
 		txtReason: "",
@@ -33,49 +34,43 @@ jQuery(function($){
 		_init: function(){
 			var self = this;
 			this.steps = [this.step1, this.step2, this.step3];
-			var _validSettings = {
-				errorPlacement: function(error, element) {
-					if(element.next().is(".sbHolder")){
-						error.insertAfter(element.next());
-					}else {
-						error.insertAfter(element);
-					}
-				}
-			};
-			
+
 			this.validation = this.newRma.validate(
-				Mall.validate.getOptions(_validSettings)
+				Mall.validate.getOptions()
 			);
+			
+			this._initStep1();
+            this._initStep2();
+            this._initStep3();
+			
 	
 			$(window).bind('beforeunload', function() {
 				if (self.currentStep>0 && !self.ignoreUnload) {
 					return self.unloadMessage;
 				}
 			}); 
-	
-			this._initStep1();
-            this._initStep2();
-            this._initStep3();
 		},
 
         // Step 1 init
         _initStep1: function(){
             var s = this.step1,
                 self = this,
-                next = s.find("button.next");
-
-            // Style selects
-            //s.find("select").selectbox('attach');
+                next = s.find("button.next"),
+				selects = s.find("select");
 
             // Chexboxes
             var checkboxHandler = function(){
-                var el = $(this);
+                var el = $(this),
+					select = el.closest("tr").find("select");
+			
                 next[s.find(":checkbox:checked").length ? "removeClass" : "addClass"]('hidden');
-//                el.parents("tr").find(".condition-wrapper")
-//                    [el.is(":checked") ? "addClass" : "removeClass"]('active')
-//                    [el.is(":checked") ? "removeClass" : "addClass"]('inactive');
-//                el.parents("tr").find(".condition-wrapper select").
-//                    selectbox(el.is(":checked") ? "enable" : "disable");
+				
+				if(!el.is(":checked")){
+					select.val("");
+				}
+				select.data('checkboxTrigger', true);
+				select.change();
+				select.data('checkboxTrigger', false);
             };
             s.find(":checkbox").change(checkboxHandler).change();
 
@@ -83,31 +78,57 @@ jQuery(function($){
             var selectHandler = function(){
                 var el = $(this),
                     value = el.val(),
-                    ruleName = "required",
                     rules = {},
-                    settings = self.newRma.validate().settings;
-
-                if(value){
+					ruleName = null,
+                    settings = self.newRma.validate().settings,
+					checkbox = el.closest("tr").find(":checkbox");
+			
+				// Event not triggered by checkbox
+				if(!el.data('checkboxTrigger') && checkbox.is(":checked")!=!!value.length){
+					checkbox.prop("checked", !!value.length > 0);
+				}
+			
+				// Option selected apply validatop
+				if(value){
                     ruleName = 'must-be-available-' + value;
-                }
-                rules[el.attr('name')] = ruleName;
-                $.extend(settings.rules, rules);
-
-                // Validate is needed
-                if(el.val() || el.data("inited")){
-                    el.valid();
-                }
-                el.data('inited', 1);
-
-console.log(value);
-                if(value.length > 0){
-                    el.closest("tr").find("input[type=checkbox]").prop("checked", true).change();
-                } else {
-                    el.closest("tr").find("input[type=checkbox]").prop("checked", false).change();
-                }
-            };
-
-            s.find("select").change(selectHandler).change();
+				// No option and selected chebox required validataion
+                }else if(checkbox.is(":checked")){
+                    ruleName = "required";
+				}
+				
+				
+				// No rule matched - add empty rule
+				rules[el.attr('name')] = ruleName;
+				$.extend(settings.rules, rules);
+				
+                // Validate is needed?
+				if(!el.data('checkboxTrigger') && value){
+					el.valid();
+				}
+				
+				// Clear border if validation rules are empty remove error if needed
+				if(ruleName===null){
+					el.valid();
+					el.parents(".form-group").removeClass("has-feedback has-success has-error");
+				}
+			}
+			
+			// Rewrite options labels 
+			selects.find('option').each(function(item){
+				var el = jQuery(this),
+					value = el.attr('value'),
+					currentReason;
+				
+				if(value && value != ""){
+					currentReason = self.getReturnReasons(value);
+					if(currentReason && !currentReason.isAvailable){
+						el.text(el.text() + ' (' + self.getNotAvailableText() + ')');
+					}
+				}
+			});
+			
+            selects.select2({minimumResultsForSearch: -1});
+			selects.change(selectHandler);
 
             // Handle next click
             s.find(".next").click(function(){
@@ -150,18 +171,15 @@ console.log(value);
 	            //validate if user has chosen pickup date
 		            if (!s.find('input[name="rma[carrier_date]"]:checked').length) {
 		                valid = false;
-		                console.log("date");
 	                }
 	            //validate if chosen timespan is minimum 3 hours
 		            if (to - from < 3) {
-		                console.log("hour");
 		                valid = false;
 		            }
 	            }
 
 	            //validate if entered account number is correct (optional field)
 	            if(account && (account.length != 26 || !$.isNumeric(account))) {
-		            console.log("account");
 		            valid = false
 	            }
 
@@ -375,8 +393,24 @@ console.log(value);
 			jQuery.validator.addMethod(name, fn, message);
 		},
 		
+		getReturnReasons: function(index){
+			if(typeof index != "undefined"){
+				return this.returnReasons[index];
+			}
+			return this.returnReasons;
+		},
+		
 		setReturnReasons: function(data){
 			this.returnReasons = data;
+		},
+		
+		setNotAvailableText: function(text){
+			 this.notAvailableText = text;
+			 return this;
+		},
+		
+		getNotAvailableText: function(){
+			return this.notAvailableText;
 		},
 		
 		setUnloadMessage: function(msg){
@@ -641,6 +675,7 @@ console.log(value);
 			showStep(1);
 		})();*/
 	};
+	
 	jQuery.extend(true, Mall, {rma: {"new": _rma}});
-	Mall.rma.new.init();
+	// Mall.rma.new.init(); moved to phtml after setting options
 });

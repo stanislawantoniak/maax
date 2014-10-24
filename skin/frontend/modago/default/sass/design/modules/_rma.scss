@@ -32,7 +32,7 @@
 	.condition-wrapper {
 		
 		margin-top: -6px;
-		.sbHolder{
+		.select2-container{
 			display: block;
 			width: auto;
 			margin-left: 110px;
@@ -41,8 +41,8 @@
 			}
 		}
 		&.has-error, &.has-success{
-			.sbHolder{
-				border-color: #e2e2e2;
+			.select2-container{
+				//border-color: #e2e2e2; 
 			}
 		}
 		label{
@@ -163,17 +163,24 @@
 	p{
 		margin-bottom: 15px;
 	}
+	table{
+		table-layout: fixed;
+	}
 	table td{
-		padding-top: 2px; 
+		padding-top: 6px; 
 		vertical-align: top;
-		padding-bottom: 2px;
+		padding-bottom: 6px;
 	}
 	td.author{
 		width: 130px;
 	}
 	td.desc{
 		padding-left: 10px;
-		word-wrap: break-word; 
+		p{
+			margin:0;
+			word-wrap: break-word;
+			word-break:break-all;
+		}
 	}
 	@media (max-width: $screen-xs-min) {
 		table,tr,td{
@@ -196,13 +203,17 @@
 
 .rma-connect-vendor-pannel {
   margin-bottom: 0px;
+
   p {
     cursor: pointer;
   }
   .caption {
-    display: block;
-    float: left;
-    width: 95%;
+    display: inline-flex;
+    width: 90%;
+    @media (max-width: $screen-xs-min) {
+      width: 83%;
+    }
+
   }
 }
 
@@ -216,13 +227,11 @@
   }
 }
 
-.sales-rma-view .messages-box:not(:empty) {
-  margin-top: -10px;
-  margin-bottom: 15px;
-}
-.sales-rma-view .messages-box.fix:not(:empty) {
-  margin-top: 10px;
-  margin-bottom: 15px;
+.sales-rma-view .messages {
+  @media (max-width: $screen-sm) {
+    margin-top: -10px;
+    margin-bottom: 40px;
+  }
 }
 
 
