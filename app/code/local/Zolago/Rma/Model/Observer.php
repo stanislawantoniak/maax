@@ -241,6 +241,10 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 			$doSendEmail = $sendEmail;
 		}
 		
+		// Set visiblity
+		$data['is_customer_notified'] = $doSendEmail;
+		$data['is_visible_on_front'] = $doSendEmail;
+		
 		/* @var $commentModel Zolago_Rma_Model_Rma_Comment */
 		$commentModel->setRma($rma);
 		$commentModel->addData($data);
