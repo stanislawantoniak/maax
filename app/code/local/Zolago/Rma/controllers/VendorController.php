@@ -108,7 +108,7 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
                          save();
                 $vendorSession = Mage::getSingleton('udropship/session');
                 /* @var $vendorSession  Zolago_Dropship_Model_Session*/
-                if($vendorSession->getVendorId()){
+                if($vendorSession->getVendorId() && $notify){
                     Mage::getModel("urma/rma")
                         ->load($rma->getId())
                         ->setnewCustomerQuestion(0)
