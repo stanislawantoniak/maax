@@ -118,9 +118,8 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 
                 $messages[] = Mage::helper("zolagorma")->__("Comment added");
             }
-            $vendorSession = Mage::getSingleton('udropship/session');
-            /* @var $vendorSession  Zolago_Dropship_Model_Session*/
-            if($vendorSession->getVendorId() && $notify){
+
+            if($notify){
                 Mage::getModel("urma/rma")
                     ->load($rma->getId())
                     ->setnewCustomerQuestion(0)
