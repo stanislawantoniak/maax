@@ -62,8 +62,8 @@ jQuery(function($){
             var checkboxHandler = function(){
                 var el = $(this),
 					select = el.closest("tr").find("select");
-			
-                next[s.find(":checkbox:checked").length ? "removeClass" : "addClass"]('hidden');
+
+//                next[s.find(":checkbox:checked").length ? "removeClass" : "addClass"]('hidden');
 				
 				if(!el.is(":checked")){
 					select.val("");
@@ -100,13 +100,25 @@ jQuery(function($){
 				// No rule matched - add empty rule
 				rules[el.attr('name')] = ruleName;
 				$.extend(settings.rules, rules);
-				
+
                 // Validate is needed?
 				if(!el.data('checkboxTrigger') && value){
 					el.valid();
 				}
-				
-				// Clear border if validation rules are empty remove error if needed
+
+                var selected = false;
+                jQuery("select option:selected").each(function(i,item){
+                    if(jQuery(item).val() > 0){
+                        selected = true;
+                    }
+                });
+                if(selected){
+                    next.removeClass("hidden");
+                } else {
+                    next.addClass("hidden");
+                }
+
+                // Clear border if validation rules are empty remove error if needed
 				if(ruleName===null){
 					el.valid();
 					el.parents(".form-group").removeClass("has-feedback has-success has-error");
