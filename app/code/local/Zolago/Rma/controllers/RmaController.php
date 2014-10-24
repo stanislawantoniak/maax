@@ -156,14 +156,10 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
                         //After add new customer-author comment set RMA flag new customer comment to true
 
                         $rma->setNewCustomerQuestion(1);
-                        try {
-                            $rma->save();
-                            $session->addSuccess(Mage::helper("zolagorma")->__("Your message sent"));
-                            return $this->_redirect('sales/rma/view', array("id" => $rmaId));
-                        } catch (Exception $e) {
-                            $session->addError($this->__('Unable to post the question.'));
-                            return $this->_redirect('sales/rma/view', array("id" => $rmaId));
-                        }
+                        $rma->save();
+                        $session->addSuccess(Mage::helper("zolagorma")->__("Your message sent"));
+                        return $this->_redirect('sales/rma/view', array("id" => $rmaId));
+
 
                     }
                 } else {
