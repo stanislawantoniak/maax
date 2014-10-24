@@ -128,8 +128,7 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
 
             if($rma){
                 $customerId = $rma->getCustomerId();
-
-                $vendorId = trim($request->getParam("vendor_id", 0));
+                $vendorId = $rma->getUdropshipVendor();
 
                 if ($customerId > 0) {
                     $author = Mage::getModel("customer/customer")->load($customerId);
