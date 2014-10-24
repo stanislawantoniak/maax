@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Zolago_Rma>
-			<version>0.0.14</version>
+			<version>0.0.18</version>
 		</Zolago_Rma>
 	</modules>
 	<global>
@@ -203,11 +203,11 @@
     <adminhtml>
     	<translate>
             <modules>
-                <zolagorma>
+                <Zolago_Rma>
                     <files>
                         <default>Zolago_Rma.csv</default>
                     </files>
-                </zolagorma>
+                </Zolago_Rma>
             </modules>
         </translate>
         <layout>

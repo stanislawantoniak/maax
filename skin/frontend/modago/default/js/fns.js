@@ -647,7 +647,7 @@ jQuery.noConflict();
                     //$('#zmien_produkty').show(50);
                 }
                 if(widthWindow <=480) {
-                    if(!isAndroid) {}
+                    //if(!isAndroid) {}
                     //$('#order-show-products').show(50).off();
                     //$('.title-section:not(.hide_panel_group)').next('.panel-group').one().hide(50);
                     //$('.title-section.hide_panel_group').next('.panel-group').show(50);

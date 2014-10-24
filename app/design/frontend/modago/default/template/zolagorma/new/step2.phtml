@@ -46,25 +46,29 @@
             <div class="panel panel-default">
                 <div class="panel-body">
                     <div class="current-rma-date clearfix">
-                        <div id="pickup-date-form" class="fieldset flow-return">
+                        <div id="pickup-date-form-panel" class="fieldset flow-return">
 
-                            <label class="required" for="carrier-date"><?php echo $_helper->__("Choose the date"); ?>
-                                <em>*</em></label>
+                            <label class="required choose-date" for="carrier-date"><?php echo $_helper->__("Choose the date"); ?>
+                                <em>:</em></label>
 
                             <div class="input-box">
 								<?php foreach ($dateList as $date=>$item): ?>
+                                    <input
+                                        type="radio"
+                                        name="rma[carrier_date]"
+                                        id="carrier_date_<?php echo $date;?>"
+                                        value="<?php echo date('Y-m-d',$date);?>"
+                                        />
 									<label for="carrier_date_<?php echo $date;?>">
-									<input 
-										type="radio" 
-										name="rma[carrier_date]" 
-										id="carrier_date_<?php echo $date;?>"
-										value="<?php echo date('Y-m-d',$date);?>"
-									/>
-									<span>										
-										<span class="rma-dayname"><?php echo $weekdays[date('w',$date)]['label'];?></span>
-										<span class="rma-date"><?php echo $this->getFormattedDate($date);?></span>
-									</span>
+                                        <span>
+										    <span class="rma-dayname"><?php echo $weekdays[date('w',$date)]['label'];?></span>
+                                            <br/>
+										    <span class="rma-date"><?php echo $this->getFormattedDate($date);?></span>
+									    </span>
 									</label>
+
+
+
 								<?php endforeach; ?>
 <?php /*
                                 <input type="text" value="<?php echo $_rma->getCarrierDate(); ?>"
@@ -74,27 +78,23 @@
 */?>
                             </div>
 
-                            <label class="required"
+                            <label class="required carrier-time-from"
                                    for="carrier-time-from"><?php echo $_helper->__("Select the time interval (min. 3h)"); ?>
-                                <em>*</em></label>
-
-                            <div class="field">
-                                <div class="input-box">
-                                    <input type="hidden" name="rma[carrier_time_from]" id="carrier-time-from"
-                                           value="<?php echo $_rma->getCarrierTimeFrom(); ?>"
-                                           title="<?php echo $_helper->__("Choose time-from of the day"); ?>"/>
-                                    <input type="hidden" name="rma[carrier_time_to]" id="carrier-time-to"
-                                           value="<?php echo $_rma->getCarrierTimeTo(); ?>"
-                                           title="<?php echo $_helper->__("Choose time-to of the day"); ?>"/>
+                                <em>:</em></label>
+                            <div class="choose-time">
+                                <div class="field">
+                                    <div class="input-box">
+                                        <input type="hidden" name="rma[carrier_time_from]" id="carrier-time-from"
+                                               value="<?php echo $_rma->getCarrierTimeFrom(); ?>"
+                                               title="<?php echo $_helper->__("Choose time-from of the day"); ?>"/>
+                                        <input type="hidden" name="rma[carrier_time_to]" id="carrier-time-to"
+                                               value="<?php echo $_rma->getCarrierTimeTo(); ?>"
+                                               title="<?php echo $_helper->__("Choose time-to of the day"); ?>"/>
+                                    </div>
+                                    <div id="pickup-time"></div>
                                 </div>
+                                <div id="slider-range"></div>
                             </div>
-
-
-                            <span id="time"></span><br/>
-                            <span id="SlideMax">&nbsp;&nbsp;</span>
-
-                            <div id="slider-range"></div>
-
                         </div>
 
                     </div>
@@ -128,6 +128,101 @@
 <?php  $vendor = $_po->getVendor();?>
 
 <script type="text/javascript">
+    //TRANSLATIONS
+    Mall.translate.add("Selected time", "<?php echo $_helper->__('Selected time') ?>");
+    //TRANSLATIONS END
+
+    //INIT DATE LIST
+    <?php $js_array = json_encode($dateList); ?>
+    var dataList = <?php echo $js_array; ?>;
+    for(var day in dataList) {
+        jQuery('#carrier_date_' + day).attr('data-PickupFrom', dataList[day].getPostalCodeServicesResult.drPickupFrom );
+        jQuery('#carrier_date_' + day).attr('data-PickupTo', dataList[day].getPostalCodeServicesResult.drPickupTo );
+    }
+    //INIT DATE LIST END
+
+    //INIT SLIDER DEFAULT VALUES AND PARAMS
+    jQuery("#slider-range").noUiSlider({
+        start: [ 660, 840 ],
+        step: 60,
+        behaviour: 'drag-fixed',
+        connect: true,
+        range: {
+            'min':  540,
+            'max':  1200
+        }
+    });
+    //INIT SLIDER DEFAULT VALUES AND PARAMS END
+
+    //CHANGE DESCRIPTIONS ON SLIDER SLIDE
+    jQuery("#slider-range").on({
+        slide: function() {
+            var values = jQuery(this).val();
+            var from = values[0];
+            var to = values[1];
+            formatTimeRange(from, to);
+
+            var minutes0 = parseInt(from % 60, 10),
+                hours0 = parseInt(from / 60 % 24, 10),
+                minutes1 = parseInt(to % 60, 10),
+                hours1 = parseInt(to / 60 % 24, 10);
+
+            var startTime = getTime(hours0, minutes0);
+            var endTime = getTime(hours1, minutes1);
+
+            jQuery('#pickup-time-from').text(startTime);
+            jQuery('#pickup-time-to').text(endTime);
+        }
+    });
+    //CHANGE DESCRIPTIONS ON SLIDER SLIDE END
+
+    jQuery('#pickup-date-form-panel input').click(function() {
+        var _from =  jQuery(this).attr('data-PickupFrom');
+        var _to =  jQuery(this).attr('data-PickupTo');
+
+        var from = parseInt(jQuery(this).attr('data-PickupFrom'))*60;
+        var to = parseInt(jQuery(this).attr('data-Pickupto'))*60;
+
+        if( (to - from) <= (3*60) ) {
+
+            jQuery("#slider-range").noUiSlider({
+                start: [from, to],
+                range: {
+                    'min': from,
+                    'max': to
+                }
+            }, true);
+            var values = jQuery("#slider-range").val();
+            formatTimeRange(values[0], values[1]);
+            jQuery('#pickup-time').html('Dla Twojego adresu dostępny jest tylko przedział czasowy: <br>między godziną: ' +
+            '<span id=pickup-time-from>' + _from + '</span>' + ' a godziną ' +
+            '<span id=pickup-time-to>' + _to + '</span>');
+
+            jQuery('#time').hide();
+            jQuery("#slider-range").hide();
+            jQuery('.carrier-time-from').hide();
+        } else {
+            jQuery('#time').hide();
+            jQuery("#slider-range").show()
+            jQuery('.carrier-time-from').show();
+            jQuery("#slider-range").noUiSlider({
+                start: [from, from + (3 * 60)],
+                range: {
+                    'min': from,
+                    'max': to
+                }
+            }, true);
+
+            var values = jQuery("#slider-range").val();
+            jQuery('#pickup-time').html('Dla Twojego adresu, dostępne są terminy od ' +
+            _from + ' do ' + _to + '<br/><span id="wrapper-choosen-pickup-time">' + formatTimeRange(values[0], values[1]) + '</span>');
+        }
+    });
+
+
+
+
+
     //applyFlow
     var returnReasons = '<?php echo Mage::helper("zolagorma")->getReturnReasons($_po, true); ?>';
     var flowAcknowledged = '<?php echo Zolago_Rma_Model_Rma::FLOW_ACKNOWLEDGED; ?>';
@@ -155,69 +250,43 @@
         jQuery('#overview-message').show();
     }
 
-    jQuery("#slider-range").slider({
-        range: true,
-        min: 540,
-        max: 1260,
-        step: 60,
-        values: [660, 840],
-        slide: slideTime
-    });
-    function slideTime(event, ui){
-        var val0 = ui.values[0],
-            val1 = ui.values[1];
 
-        if( ui.values[0] == ui.values[1]) {
-            return false;
-        }
 
-        formatTimeRange(val0, val1);
-
-    }
     function formatTimeRange(from, to){
         var minutes0 = parseInt(from % 60, 10),
             hours0 = parseInt(from / 60 % 24, 10),
             minutes1 = parseInt(to % 60, 10),
             hours1 = parseInt(to / 60 % 24, 10);
 
-        /**
-         * @todo check if more then 3 hours
-         */
-//                                        if( size <= 180) {
-//                                            jQuery("#slider-range div")
-//                                                .addClass("ui-state-error")
-//                                                .removeClass("ui-widget-header");
-//                                            jQuery("#step-2-submit")
-//                                                .attr("disabled","disabled")
-//                                                .addClass("ui-state-disabled")
-//                                                .removeClass("ui-state-default");
-//                                            jQuery("#SlideMax").text("Cannot be less than 3 hours");
-//                                        }
-//                                        else {
-//                                            jQuery("#slider-range div")
-//                                                .addClass("ui-widget-header")
-//                                                .removeClass("ui-state-error");
-//                                            jQuery("#step-2-submit")
-//                                                .removeAttr("disabled")
-//                                                .addClass("ui-state-default")
-//                                                .removeClass("ui-state-disabled");
-//                                            jQuery("#SlideMax").html("&nbsp;&nbsp;");
-//                                        }
 
         var startTime = getTime(hours0, minutes0);
         var endTime = getTime(hours1, minutes1);
-        var message = 'Selected time: '+ startTime + ' - ' + endTime;
-        jQuery("#time").html(message);
+
+        var message = Mall.translate.__("Selected time") + ': <span id=pickup-time-from>' + startTime +  '</span> - ' + '<span id=pickup-time-to>' + endTime + '</span>';
+//        jQuery("#time span").html(message);
 
         jQuery('[name="rma[carrier_time_from]"]').val(startTime);
         jQuery('[name="rma[carrier_time_to]"]').val(endTime);
+
+        return message;
+
     }
+
     function getTime(hours, minutes) {
         minutes = minutes + "";
         if (minutes.length == 1) {minutes = "0" + minutes;}
         return hours + ":" + minutes;
     }
-    formatTimeRange(jQuery("#slider-range").slider("values", 0), jQuery("#slider-range").slider("values", 1));
 
+    var values = jQuery("#slider-range").val();
+    formatTimeRange(values[0], values[1]);
+
+    function setPickupTime(from, to, txtPrefix, txtBetween) {
+        jQuery('#pickup-time').html(txtPrefix + from + txtBetween + to);
+    }
+
+    jQuery(document).ready( function() {
+        jQuery('#pickup-date-form-panel input').first().click();//default set the first day
+    });
 
 </script>
