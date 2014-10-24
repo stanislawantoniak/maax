@@ -118,8 +118,6 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 
                 $messages[] = Mage::helper("zolagorma")->__("Comment added");
             }
-
-            $connection->commit();
             $vendorSession = Mage::getSingleton('udropship/session');
             /* @var $vendorSession  Zolago_Dropship_Model_Session*/
             if($vendorSession->getVendorId() && $notify){
@@ -128,6 +126,9 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
                     ->setnewCustomerQuestion(0)
                     ->save();
             }
+
+            $connection->commit();
+
             if($messages) {
                 if($notify) {
                     $messages[] =  Mage::helper("zolagorma")->__("Customer notified by email");
