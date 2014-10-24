@@ -68,6 +68,7 @@ class Zolago_Rma_Block_Abstract extends Mage_Core_Block_Template
 	}
 	
 	public function getCommentAuthor(Zolago_Rma_Model_Rma_Comment $comment) {
+		//return $comment->getAuthorName();
 		return $comment->getAuthorTypeText();
 	}
 	
