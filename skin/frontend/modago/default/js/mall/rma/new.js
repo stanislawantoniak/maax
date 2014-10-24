@@ -63,7 +63,7 @@ jQuery(function($){
                 var el = $(this),
 					select = el.closest("tr").find("select");
 
-//                next[s.find(":checkbox:checked").length ? "removeClass" : "addClass"]('hidden');
+                next[s.find(":checkbox:checked").length ? "removeClass" : "addClass"]('hidden');
 				
 				if(!el.is(":checked")){
 					select.val("");
@@ -112,11 +112,6 @@ jQuery(function($){
                         selected = true;
                     }
                 });
-                if(selected){
-                    next.removeClass("hidden");
-                } else {
-                    next.addClass("hidden");
-                }
 
                 // Clear border if validation rules are empty remove error if needed
 				if(ruleName===null){
@@ -154,7 +149,11 @@ jQuery(function($){
                 });
                 if(valid){
                     self.next();
-                }
+                }else if(s.find(".has-error").length){
+					jQuery('html, body').animate({
+						scrollTop: s.find(".has-error").offset().top - 70
+					}, 500);
+				}
                 return false;
             });
         },
