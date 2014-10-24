@@ -415,6 +415,10 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
    public function isGatewayPayment() {
 	   return $this->getOrder()->getPayment()->getMethod() == Zolago_Payment_Model_Method::PAYMENT_METHOD_CODE;
    }
+
+   public function isPaymentCheckOnDelivery() {
+       return $this->getOrder()->getPayment()->getMethod() == Mage::getSingleton("payment/method_cashondelivery")->getCode();
+   }
    
    /**
     * @return boolean
