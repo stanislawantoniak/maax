@@ -190,6 +190,151 @@ jQuery(function($){
                 }
                 return false;
             });
+
+            //PICKUP DATE AND HOURS START
+            Object.size = function(obj) {
+                var size = 0, key;
+                for (key in obj) {
+                    if (obj.hasOwnProperty(key)) size++;
+                }
+                return size;
+            };
+
+            jQuery(document).ready( function() {
+                //INIT DATE LIST
+                if (Object.size(dataList) == 0) {
+                    jQuery('#btn-next-step-2').hide();
+                } else {
+                    for(var day in dataList) {
+                        jQuery('#carrier_date_' + day).attr('data-PickupFrom', _rma.round(dataList[day].getPostalCodeServicesResult.drPickupFrom, 'up') );
+                        jQuery('#carrier_date_' + day).attr('data-PickupTo', _rma.round(dataList[day].getPostalCodeServicesResult.drPickupTo, 'down') );
+                    }
+                }
+                //INIT DATE LIST END
+
+                //INIT SLIDER DEFAULT VALUES AND PARAMS
+                if (Object.size(dataList) != 0) {
+                    jQuery("#slider-range").noUiSlider({
+                        start: [660, 840],
+                        step: 60,
+                        behaviour: 'drag-fixed',
+                        connect: true,
+                        range: {
+                            'min': 540,
+                            'max': 1200
+                        }
+                    });
+                }
+                //INIT SLIDER DEFAULT VALUES AND PARAMS END
+
+                //CHANGE DESCRIPTIONS ON SLIDER SLIDE
+                jQuery("#slider-range").on({
+                    slide: function() {
+                        var values = jQuery(this).val();
+                        var from = values[0];
+                        var to = values[1];
+                        _rma.formatTimeRange(from, to);
+
+                        var minutes0 = parseInt(from % 60, 10),
+                            hours0 = parseInt(from / 60 % 24, 10),
+                            minutes1 = parseInt(to % 60, 10),
+                            hours1 = parseInt(to / 60 % 24, 10);
+
+                        var startTime = _rma.getTime(hours0, minutes0);
+                        var endTime = _rma.getTime(hours1, minutes1);
+
+                        jQuery('#pickup-time-from').text(startTime);
+                        jQuery('#pickup-time-to').text(endTime);
+                    }
+                });
+                //CHANGE DESCRIPTIONS ON SLIDER SLIDE END
+
+                //SET SLIDER, SAVE PICKUP TIME, WRITE MESSAGES
+                jQuery('#pickup-date-form-panel input').click(function() {
+                    var _from =  jQuery(this).attr('data-PickupFrom');
+                    var _to =  jQuery(this).attr('data-PickupTo');
+
+                    var from = parseInt(jQuery(this).attr('data-PickupFrom'))*60;
+                    var to = parseInt(jQuery(this).attr('data-Pickupto'))*60;
+
+                    if( (to - from) <= (3*60) ) {
+
+                        jQuery("#slider-range").noUiSlider({
+                            start: [from, to],
+                            range: {
+                                'min': from,
+                                'max': to
+                            }
+                        }, true);
+                        var values = jQuery("#slider-range").val();
+                        formatTimeRange(values[0], values[1]);
+                        jQuery('#pickup-time').html(Mall.translate.__("For your address is only available time interval") +
+                        ': <br>' + Mall.translate.__("between the hours") +
+                        '<span id=pickup-time-from>' + _from + '</span> ' + Mall.translate.__("and") +
+                        ' <span id=pickup-time-to>' + _to + '</span>');
+
+                        jQuery('#time').hide();
+                        jQuery("#slider-range").hide();
+                        jQuery('.carrier-time-from').hide();
+                    } else {
+                        jQuery('#time').hide();
+                        jQuery("#slider-range").show()
+                        jQuery('.carrier-time-from').show();
+                        jQuery("#slider-range").noUiSlider({
+                            start: [from, from + (3 * 60)],
+                            range: {
+                                'min': from,
+                                'max': to
+                            }
+                        }, true);
+
+                        var values = jQuery("#slider-range").val();
+                        jQuery('#pickup-time').html(Mall.translate.__("For your address, there are dates from ") +
+                        _from + Mall.translate.__(" to ") + _to + '<br/><span id="wrapper-choosen-pickup-time">' + _rma.formatTimeRange(values[0], values[1]) + '</span>');
+                    }
+                });
+                //SET SLIDER, SAVE PICKUP TIME, WRITE MESSAGES END
+
+                //IF PAYMENT METHOD IS CHECKONDELIVERY THEN SHOW FIELD BANK ACCOUNT
+                jQuery('#customer-account-wrapper').hide();
+                if (showBankAcc) {
+                    jQuery('#customer-account-wrapper').show();
+                }
+                //IF PAYMENT METHOD IS CHECKONDELIVERY THEN SHOW FIELD BANK ACCOUNT END
+
+                if (Object.size(dataList)) {
+                    var values = jQuery("#slider-range").val();
+                    _rma.formatTimeRange(values[0], values[1]);
+                }
+
+                jQuery('#pickup-date-form-panel input').first().click();//default set the first day
+                //PICKUP DATE AND HOURS START END
+
+                //##############################
+
+                jQuery("select[name^='rma[items_condition_single]']").each(function(item){
+                    if(item.value){
+                        if(returnReasons[item.value].flow == flowAcknowledged){
+                            isAcknowledged = true;
+                        }
+                    }
+                })
+
+                if(isAcknowledged){
+                    jQuery('#pickup-address-form').hide();
+                    jQuery('#pickup-date-form').hide();
+                    jQuery('#pickup-address-overview').hide();
+                    jQuery('#pickup-date-overview').hide();
+                    jQuery('#overview-message').hide();
+                }
+                else{
+                    jQuery('#pickup-address-form').show();
+                    jQuery('#pickup-date-form').show();
+                    jQuery('#pickup-address-overview').show();
+                    jQuery('#pickup-date-overview').show();
+                    jQuery('#overview-message').show();
+                }
+            });
         },
 		
         // Step 3 init
@@ -211,6 +356,44 @@ jQuery(function($){
                 $('#new-rma').submit();
             });
         },
+
+        // Step 2 functions
+        getTime: function(hours, minutes) {
+            minutes = minutes + "";
+            if (minutes.length == 1) {minutes = "0" + minutes;}
+            return hours + ":" + minutes;
+        },
+
+        formatTimeRange: function (from, to) {
+            var minutes0 = parseInt(from % 60, 10),
+                hours0 = parseInt(from / 60 % 24, 10),
+                minutes1 = parseInt(to % 60, 10),
+                hours1 = parseInt(to / 60 % 24, 10);
+
+
+            var startTime = _rma.getTime(hours0, minutes0);
+            var endTime = _rma.getTime(hours1, minutes1);
+
+            var message = Mall.translate.__("Selected time") + ': <span id=pickup-time-from>' + startTime + '</span> - ' + '<span id=pickup-time-to>' + endTime + '</span>';
+
+            jQuery('[name="rma[carrier_time_from]"]').val(startTime);
+            jQuery('[name="rma[carrier_time_to]"]').val(endTime);
+
+            return message;
+        },
+
+        round: function(val, type){
+            var h = parseInt(val.substring(0, 2));
+            var m = parseInt(val.substring(3, 5));
+            if (type == 'up') {
+                if (m) {
+                    h = h + 1;
+                }
+            }
+            return h + ':00';
+        },
+
+        // Step 2 functions END
 
 		// Step 3 functions
 		_getRmaAddress: function() {
