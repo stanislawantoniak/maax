@@ -165,7 +165,9 @@
 		margin-bottom: 15px;
 	}
 	table{
+		border-collapse: collapse;
 		table-layout: fixed;
+		width: 100%;
 	}
 	table td{
 		padding-top: 6px; 
@@ -177,10 +179,10 @@
 	}
 	td.desc{
 		padding-left: 10px;
+		word-wrap: break-word;
 		p{
 			margin:0;
 			word-wrap: break-word;
-			word-break:break-all;
 		}
 	}
 	@media (max-width: $screen-xs-min) {
