@@ -100,7 +100,7 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
                             "username"				=> null,
                             "rma_status"			=> $rma->getUdropshipStatus()
                         );
-
+	
                 $model = Mage::getModel("urma/rma_comment")->
                          setRma($rma)->
                          addData($data)->
