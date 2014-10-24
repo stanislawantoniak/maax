@@ -393,7 +393,7 @@ jQuery(function($){
             var startTime = _rma.getTime(hours0, minutes0);
             var endTime = _rma.getTime(hours1, minutes1);
 
-            var message = Mall.translate.__("Selected time") + ': <span id=pickup-time-from>' + startTime + '</span> - ' + '<span id=pickup-time-to>' + endTime + '</span>';
+            var message = Mall.translate.__("Selected time") + ': <span id=pickup-time-from>' + startTime + '</span>&nbsp;-&nbsp;' + '<span id=pickup-time-to>' + endTime + '</span>';
 
             jQuery('[name="rma[carrier_time_from]"]').val(startTime);
             jQuery('[name="rma[carrier_time_to]"]').val(endTime);
