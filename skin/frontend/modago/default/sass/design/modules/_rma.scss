@@ -206,14 +206,20 @@
 
   p {
     cursor: pointer;
+    display: block;
+    padding-bottom: 23px;
+  }
+  .glyphicon-comment {
+    float: left;
+    margin-right: 5px;
+    margin-top: 3px;
   }
   .caption {
-    display: inline-flex;
-    width: 90%;
-    @media (max-width: $screen-xs-min) {
-      width: 83%;
-    }
-
+    display: block;
+    float: left;
+  }
+  .fa {
+    float: right;
   }
 }
 
