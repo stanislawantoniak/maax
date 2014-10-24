@@ -106,14 +106,7 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
                          addData($data)->
                          setSkipSettingName(true)->
                          save();
-                $vendorSession = Mage::getSingleton('udropship/session');
-                /* @var $vendorSession  Zolago_Dropship_Model_Session*/
-                if($vendorSession->getVendorId() && $notify){
-                    Mage::getModel("urma/rma")
-                        ->load($rma->getId())
-                        ->setnewCustomerQuestion(0)
-                        ->save();
-                }
+
 
                 /* @var $model Unirgy_Rma_Model_Rma_Comment */
 
@@ -127,7 +120,14 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
             }
 
             $connection->commit();
-
+            $vendorSession = Mage::getSingleton('udropship/session');
+            /* @var $vendorSession  Zolago_Dropship_Model_Session*/
+            if($vendorSession->getVendorId() && $notify){
+                Mage::getModel("urma/rma")
+                    ->load($rma->getId())
+                    ->setnewCustomerQuestion(0)
+                    ->save();
+            }
             if($messages) {
                 if($notify) {
                     $messages[] =  Mage::helper("zolagorma")->__("Customer notified by email");
