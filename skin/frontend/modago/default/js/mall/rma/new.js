@@ -85,7 +85,7 @@ jQuery(function($){
 			
 				// Event not triggered by checkbox
 				if(!el.data('checkboxTrigger') && checkbox.is(":checked")!=!!value.length){
-					checkbox.prop("checked", !!value.length > 0);
+					checkbox.prop("checked", !!value.length > 0).change();
 				}
 			
 				// Option selected apply validatop
