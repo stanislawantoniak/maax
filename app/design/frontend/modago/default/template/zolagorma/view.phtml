@@ -34,7 +34,7 @@
 					<span class="uppercase"><?php echo $_helper->__("Progress status"); ?></span>
 				</p>
 				<div>
-					<?php echo $this->escapeHtml($_rma->getRmaStatusName());?>
+					<?php echo $this->escapeHtml($_helper->__($_rma->getRmaStatusName()));?>
 				</div>
 			</div>
 			<?php if($this->isPendingPickup($_rma)):?>
