@@ -366,7 +366,7 @@ jQuery(function($){
 					&& el.children("[selected]").attr('value') != el.val();
 		notify.prop("checked", doNotify);
 		notify.prop("disabled", doNotify);
-		hidden.val(doNotify);
+		hidden.val(doNotify ? "1" : "0");
 	});
 	
 	$(".download-letter").click(function(){
