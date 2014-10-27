@@ -279,15 +279,15 @@
     input[type=radio]{
       display:none;
     }
-    input[type=radio] + label{
-      /*display:inline-block;*/
+    label[for^="carrier_date"]{
+      display:inline-block;
       width: 20%;
-      min-width: 140px;
+//      min-width: 140px;
       font-weight: normal;
-      margin-left: -2px;
-      margin-right: -2px;
-      margin-top: -1px;
-      margin-bottom: 0;
+//      margin-left: -2px;
+//      margin-right: -2px;
+//      margin-top: -1px;
+//      margin-bottom: 0;
       padding: 15px 0px;
       font-size: 12px;
       line-height: 20px;
@@ -297,12 +297,126 @@
       cursor: pointer;
       background-color: #FFFFFF;
       border: 1px solid #ccc;
+
     }
 
-    @media (max-width: $screen-xs-max) {
+    .label-1 {
+      margin-left: 0px;
+      margin-right: -2px;
+      margin-bottom: 0px;
+      margin-top: 0px;
+    }
+    .label-2 {
+      margin-left: -2px;
+      margin-right: -2px;
+      margin-bottom: 0px;
+      margin-top: 0px;
+    }
+
+    .label-3 {
+      margin-left: -2px;
+      margin-right: -2px;
+      margin-top: 0px;
+      margin-bottom: 0px;
+    }
+    .label-4 {
+      margin-left: -2px;
+      margin-right: -2px;
+      margin-top: 0px;
+      margin-bottom: 0px;
+    }
+    .label-5 {
+      margin-left: -2px;
+      margin-right: -2px;
+      margin-top: 0px;
+      margin-bottom: 0px;
+    }
+
+    @media (max-width: $screen-xs-max) {//767px
       input[type=radio] + label{
-        width: 33.3%;
+        width: 33.333%;
         min-width: 140px;
+      }
+
+      .label-1 {
+        margin-left: 0px;
+        margin-right: -2px;
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      .label-2 {
+        margin-left: -2px;
+        margin-right: -2px;
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+
+      .label-3 {
+        margin-left: -2px;
+        margin-right: 0px;
+        margin-top: 0px;
+        margin-bottom: 0px;
+      }
+      .label-4 {
+        margin-left: 0px;
+        margin-right: -2px;
+        margin-top: -1px;
+        margin-bottom: 0px;
+      }
+      .label-5 {
+        margin-top: -1px;
+        margin-left: -2px;
+        margin-right: -2px;
+        margin-bottom: 0px;
+      }
+    }
+
+    @media (max-width: 515px) {
+      input[type=radio] + label{
+        width: 50%;
+      }
+
+      .label-1 {
+        margin-left: 0px;
+        margin-right: 0px;
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      .label-2 {
+        margin-left: -4px;
+        margin-right: -2px;
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+
+      .label-3 {
+        margin-left: 0px;
+        margin-right: 0px;
+        margin-bottom: 0px;
+        margin-top: -1px;
+      }
+      .label-4 {
+        margin-left: -4px;
+        margin-right: -2px;
+        margin-bottom: 0px;
+        margin-top: -1px;
+      }
+      .label-5 {
+        margin-left: 0px;
+        margin-right: 0px;
+        margin-bottom: 0px;
+        margin-top: -1px;
+      }
+
+    }
+
+    @media (max-width: 380px) {
+      input[type=radio] + label{
+        width: 100%;
+        margin-left: 0px;
+        margin-right: 0px;
+        margin-top: -1px;
+        margin-bottom: 0px;
       }
     }
 
@@ -325,6 +439,13 @@
       padding: 20px;
       padding-top: 0px;
       padding-bottom: 10px;
+      margin-right: 4px;
+      @media (max-width: 515px) {
+        margin-right: 2px;
+      }
+      @media (max-width: 380px) {
+        margin-right: 0px;
+      }
     }
 
   }
@@ -360,8 +481,10 @@
     margin-bottom: 10px;
   }
   #pickup-date-form-panel {
+
     .choose-time {
       background-color: #FFFFFF;
+
     }
   }
 

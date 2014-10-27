@@ -53,21 +53,25 @@
                                     <em>:</em></label>
 
                                 <div class="input-box" id="dateList">
-
+                                    <?php $isEven = true; ?>
+                                    <?php $number = 1; ?>
                                     <?php foreach ($dateList as $date=>$item): ?>
+
                                         <input
                                             type="radio"
                                             name="rma[carrier_date]"
                                             id="carrier_date_<?php echo $date;?>"
                                             value="<?php echo date('Y-m-d',$date);?>"
                                             />
-                                        <label for="carrier_date_<?php echo $date;?>">
+                                        <label for="carrier_date_<?php echo $date;?>" class="<?php echo $isEven ? 'label-even' : 'label-odd'; ?> <?php echo "label-$number";?>">
                                             <span>
                                                 <span class="rma-dayname"><?php echo $weekdays[date('w',$date)]['label'];?></span>
                                                 <br/>
                                                 <span class="rma-date"><?php echo $this->getFormattedDate($date);?></span>
                                             </span>
                                         </label>
+                                        <?php $isEven = !$isEven; ?>
+                                        <?php $number++; ?>
                                     <?php endforeach; ?>
                                 </div>
 
