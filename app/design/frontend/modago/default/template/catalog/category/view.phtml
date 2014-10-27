@@ -54,6 +54,9 @@
     #navCategory {display: none !important;}
 </style>
     <script type="text/javascript">
-        jQuery("#navCategory").removeClass("visible-xs");
+        jQuery(document).ready(function() {
+	        jQuery("#navCategory").removeClass("visible-xs");
+	        Mall.translate.add("You","<?php echo $this->__("You"); ?>");
+        });
     </script>
 <?php endif; ?>
