@@ -14,7 +14,21 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 				true
 		);
 	}
-	
+
+    /**
+     * RMA Customer Send Detail
+     * @param type $observer
+     */
+    public function rmaCustomerSendDetail($rma, $comment, $sendEmail=null, Mage_Customer_Model_Customer $author) {
+        /* @var $rma Zolago_Rma_Model_Rma */
+        $this->_logEvent(
+            $rma,
+            $comment,
+            $sendEmail,
+            $author
+        );
+    }
+
 	/**
 	 * RMA track status chnge
 	 * @param type $observer

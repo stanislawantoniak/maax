@@ -828,6 +828,11 @@ form {
     .form-control {
         @include border-radius(1px);
     }
+	select.form-control{
+		 -webkit-appearance: none;
+		 -webkit-border-radius: 0px;
+		 border-radius: 0px;
+	}
     .hidden {
         display:none;
     }

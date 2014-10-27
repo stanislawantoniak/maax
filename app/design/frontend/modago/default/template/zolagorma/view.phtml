@@ -108,15 +108,15 @@
             <div class="rma-connect-vendor">
                 <div class="rma-connect-vendor-pannel rma-section">
                     <p>
-					<span class="caption">
-                        <span class="glyphicon glyphicon-comment"></span>
-						<span class="uppercase"><?php echo $_helper->__("Contact with vendor"); ?></span>
-					</span>
+                        <i class="glyphicon glyphicon-comment"></i>
+                        <span class="caption uppercase">
+                            <?php echo $_helper->__("Contact with vendor"); ?>
+                        </span>
                         <i class="fa fa-chevron-down"></i>
                     </p>
                 </div>
                 <div class="rma-connect-vendor-form rma-section">
-                    <?php echo $this->getChildHtml("zolagorma_vendor_question"); ?>
+                    <?php echo $this->getChildHtml("zolagorma_vendor_detail"); ?>
                 </div>
             </div>
 
@@ -137,14 +137,14 @@
 									<?php echo $this->getCommentAuthor($_comment); ?>
 								</td>
 								<td class="desc">
-									<?php echo $this->escapeHtml($_comment->getComment());?>
+									<p><?php echo $this->escapeHtml($_comment->getComment());?></p>
 								</td>
 							</tr>
 							<?php endforeach;?>
 						</tbody>
 					</table>
 				<?php else:?>
-					<p><?php echo $_helper->__("There is no RAM comments"); ?></p>
+					<p><?php echo $_helper->__("There is no RMA comments"); ?></p>
 				<?php endif;?>
 			</div> 
 			<?php if($this->getIsReturn($_rma)):?>
@@ -156,18 +156,3 @@
 		
 	</div>
 </div>
-<script type="text/javascript">
-    jQuery(document).ready(function(){
-        fixMessage();
-        jQuery(window).resize(fixMessage);
-
-        function fixMessage (){
-            if(jQuery(window).innerWidth() <= 754){
-                jQuery(".messages-box").addClass("fix");
-            } else {
-                jQuery(".messages-box").removeClass("fix");
-            }
-        }
-    })
-</script>
-	

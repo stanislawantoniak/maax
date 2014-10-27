@@ -5,9 +5,8 @@ Mall.validate = {
      */
     _default_validation_options: {
         success: "valid",
-
         focusInvalid: false,
-
+		ignoreTitle: true,
         errorElement: "span",
 
         onfocusout: function (element) {
