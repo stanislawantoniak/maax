@@ -5,16 +5,20 @@ class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
 	/**
 	 * @param Zolago_Rma_Model_Rma $rma
 	 * @param string $status
+	 * @param bool | null $notify
 	 * @return Zolago_Rma_Model_Rma
 	 */
-	public function processSaveStatus(Zolago_Rma_Model_Rma $rma, $status) {
+	public function processSaveStatus(Zolago_Rma_Model_Rma $rma, $status, $notify=null) {
 		$oldStatus = $rma->getRmaStatus();
 		if ($status != $oldStatus) {
 			$rma->setRmaStatus($status);
 			$rma->getResource()->saveAttribute($rma, 'rma_status');
 			// Trigger event
+			
+			Mage::log("Status logged helper: " . var_export($notify, true));
 			Mage::dispatchEvent("zolagorma_rma_status_changed", array(
 				"rma" => $rma,
+				"notify" => $notify,
 				"new_status" => $status,
 				"old_status" => $oldStatus
 			));

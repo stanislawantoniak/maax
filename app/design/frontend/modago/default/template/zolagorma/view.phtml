@@ -14,7 +14,7 @@
 <div class="background-wrapper box-wrapper rma-po-list <?php echo $this->getIsClaim($_rma) ? "rma-claim" : "rma-return";?>">
 	<div class="rma-section rma-caption">
 		<span class="bold"><?php echo $_helper->__("RMA Date"); ?></span>: <?php echo Mage::helper("core")->formatDate($_rma->getCreatedAt());?><br/>
-		<span class="bold"><?php echo $_helper->__("Vendor"); ?></span>: <?php echo $this->escapeHtml($_rma->getVendor()->getVendorName());?>
+		<span class="bold"><?php echo $_helper->__("Vendor"); ?></span>: <span class="uppercase"><?php echo $this->escapeHtml($_rma->getVendor()->getVendorName());?></span>
 	</div>
 	<?php if($_monits = $this->getMonits($_rma)):?>
 	<div class="rma-monit rma-section">
@@ -34,7 +34,7 @@
 					<span class="uppercase"><?php echo $_helper->__("Progress status"); ?></span>
 				</p>
 				<div>
-					<?php echo $this->escapeHtml($_rma->getRmaStatusName());?>
+					<?php echo $this->escapeHtml($this->getStatusCustomerText($_rma));?>
 				</div>
 			</div>
 			<?php if($this->isPendingPickup($_rma)):?>

@@ -75,7 +75,7 @@
 						</td>
 						<td>
 							<p>
-								<?php echo $this->escapeHtml($this->__($rma->getRmaStatusName())); ?>
+								<?php echo $this->escapeHtml($this->__($this->getStatusCustomerText($rma))); ?>
 							</p>
 							<a class="button button-third large" href="<?php echo $this->getUrl('sales/rma/view/',array('id'=>$rma->getId()));?>"><?php echo $this->__("VIEW DETAILS"); ?></a>
 						</td>

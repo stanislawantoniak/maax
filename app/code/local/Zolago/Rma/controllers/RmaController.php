@@ -125,9 +125,9 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
         $rmaId = (int)($request->getParam("rma_id", 0));
         if (!empty($commentText)) {
             try {
-                $rma = Mage::getModel('urma/rma')->load($rmaId);
+                $rma = Mage::getModel("urma/rma")->load($rmaId);
+                if($rma->getId() && $rma->getCustomerId()== $session->getCustomerId()){
 
-                if ($rma) {
                     $customerId = $rma->getCustomerId();
                     $vendorId = $rma->getUdropshipVendor();
 
@@ -156,14 +156,10 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
                         //After add new customer-author comment set RMA flag new customer comment to true
 
                         $rma->setNewCustomerQuestion(1);
-                        try {
-                            $rma->save();
-                            $session->addSuccess(Mage::helper("zolagorma")->__("Your message sent"));
-                            return $this->_redirect('sales/rma/view', array("id" => $rmaId));
-                        } catch (Exception $e) {
-                            $session->addError($this->__('Unable to post the question.'));
-                            return $this->_redirect('sales/rma/view', array("id" => $rmaId));
-                        }
+                        $rma->save();
+                        $session->addSuccess(Mage::helper("zolagorma")->__("Your message sent"));
+                        return $this->_redirect('sales/rma/view', array("id" => $rmaId));
+
 
                     }
                 } else {

@@ -5,6 +5,14 @@ class Zolago_Rma_Block_View extends Zolago_Rma_Block_Abstract
 	const CMS_PENDING = "rma_status_pending_currier_message";
 	
 	/**
+	 * @param Zolago_Rma_Model_Rma $rma
+	 * @return string
+	 */
+	public function getStatusCustomerText(Zolago_Rma_Model_Rma $rma) {
+		return $this->__($rma->getStatusCustomerNotes() ? $rma->getStatusCustomerNotes() : $rma->getRmaStatusName());
+	}
+	
+	/**
 	 * 
 	 * @param Zolago_Rma_Model_Rma $rma
 	 * @return bool

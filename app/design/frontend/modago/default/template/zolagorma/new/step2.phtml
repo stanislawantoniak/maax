@@ -100,12 +100,14 @@
         </div>
 
 		<?php endif;?>
-        <div class="fieldset hide-success-vaild " id="customer-account-wrapper">
+        <div class="fieldset row" id="customer-account-wrapper">
             <div>
-                <h3 class="legend"><?php echo $_helper->__("Enter your account number for your order refund"); ?></h3>
-                <input type="text" autocomplete="off" value="<?php echo $this->escapeHtml($_rma->getCustomerAccount()); ?>"
-                   name="rma[customer_account]" value="" id="customer-account"
-                   title="<?php echo $_helper->__("Bank account"); ?>" value="" class="form-control bank-account-rma">
+                <h3 class="legend col-sm-12"><?php echo $_helper->__("Enter your account number for your order refund"); ?></h3>
+                <div class="col-sm-5">
+                    <input type="text" autocomplete="off" value="<?php echo $this->escapeHtml($_rma->getCustomerAccount()); ?>"
+                       name="rma[customer_account]" value="" id="customer-account"
+                       title="<?php echo $_helper->__("Bank account"); ?>" value="" class="form-control bank-account-rma validate-bankAccountWithReplace">
+                </div>
             </div>
         </div>
     </div>
@@ -126,6 +128,7 @@
     Mall.translate.add("and", "<?php echo $_helper->__("and") ?>");
     Mall.translate.add("For your address, there are dates from ", "<?php echo $_helper->__("For your address, there are dates from ") ?>");
     Mall.translate.add(" to ", "<?php echo $_helper->__(" to ") ?>");
+    Mall.translate.add("Bank account number must contain 26 digits.", "<?php echo $_helper->__("Bank account number must contain 26 digits.") ?>");
     //TRANSLATIONS END
 
     //INIT DATA

@@ -48,7 +48,15 @@ jQuery(function($){
 				if (self.currentStep>0 && !self.ignoreUnload) {
 					return self.unloadMessage;
 				}
-			}); 
+			});
+
+            //visual fix for message - can't be done by css
+            if ($('.messages i').length) {
+                $('#content').css('margin-top', '0px');
+                $('.messages i').click(function () {
+                    $('#content').css('margin-top', '');
+                });
+            }
 		},
 
         // Step 1 init
@@ -63,7 +71,7 @@ jQuery(function($){
                 var el = $(this),
 					select = el.closest("tr").find("select");
 
-//                next[s.find(":checkbox:checked").length ? "removeClass" : "addClass"]('hidden');
+                next[s.find(":checkbox:checked").length ? "removeClass" : "addClass"]('hidden');
 				
 				if(!el.is(":checked")){
 					select.val("");
@@ -112,11 +120,6 @@ jQuery(function($){
                         selected = true;
                     }
                 });
-                if(selected){
-                    next.removeClass("hidden");
-                } else {
-                    next.addClass("hidden");
-                }
 
                 // Clear border if validation rules are empty remove error if needed
 				if(ruleName===null){
@@ -154,7 +157,11 @@ jQuery(function($){
                 });
                 if(valid){
                     self.next();
-                }
+                }else if(s.find(".has-error").length){
+					jQuery('html, body').animate({
+						scrollTop: s.find(".has-error").offset().top - 70
+					}, 500);
+				}
                 return false;
             });
         },
@@ -279,9 +286,9 @@ jQuery(function($){
                             }
                         }, true);
                         var values = jQuery("#slider-range").val();
-                        formatTimeRange(values[0], values[1]);
+                        _rma.formatTimeRange(values[0], values[1]);
                         jQuery('#pickup-time').html(Mall.translate.__("For your address is only available time interval") +
-                        ': <br>' + Mall.translate.__("between the hours") +
+                        ': <br>&nbsp;<br>' + Mall.translate.__("between the hours") +
                         '<span id=pickup-time-from>' + _from + '</span> ' + Mall.translate.__("and") +
                         ' <span id=pickup-time-to>' + _to + '</span>');
 
@@ -302,7 +309,7 @@ jQuery(function($){
 
                         var values = jQuery("#slider-range").val();
                         jQuery('#pickup-time').html(Mall.translate.__("For your address, there are dates from ") +
-                        _from + Mall.translate.__(" to ") + _to + '<br/><span id="wrapper-choosen-pickup-time">' + _rma.formatTimeRange(values[0], values[1]) + '</span>');
+                        _from + Mall.translate.__(" to ") + _to + '<br>&nbsp;<br><span id="wrapper-choosen-pickup-time">' + _rma.formatTimeRange(values[0], values[1]) + '</span>');
                     }
                 });
                 //SET SLIDER, SAVE PICKUP TIME, WRITE MESSAGES END
@@ -386,7 +393,7 @@ jQuery(function($){
             var startTime = _rma.getTime(hours0, minutes0);
             var endTime = _rma.getTime(hours1, minutes1);
 
-            var message = Mall.translate.__("Selected time") + ': <span id=pickup-time-from>' + startTime + '</span> - ' + '<span id=pickup-time-to>' + endTime + '</span>';
+            var message = Mall.translate.__("Selected time") + ': <span id=pickup-time-from>' + startTime + '</span>&nbsp;-&nbsp;' + '<span id=pickup-time-to>' + endTime + '</span>';
 
             jQuery('[name="rma[carrier_time_from]"]').val(startTime);
             jQuery('[name="rma[carrier_time_to]"]').val(endTime);
