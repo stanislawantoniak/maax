@@ -3,7 +3,7 @@
 class Unirgy_DropshipMicrosite_Model_Url extends Mage_Core_Model_Url
 {
     public function getUrl($routePath = null, $routeParams = null)
-    { //if $routeParams has _vendor then useVendor(false)
+    {
 	    $forceVendorUrl = null;
 		$_vendor = isset($routeParams['_vendor']);
 
