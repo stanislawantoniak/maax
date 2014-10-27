@@ -286,9 +286,9 @@ jQuery(function($){
                             }
                         }, true);
                         var values = jQuery("#slider-range").val();
-                        formatTimeRange(values[0], values[1]);
+                        _rma.formatTimeRange(values[0], values[1]);
                         jQuery('#pickup-time').html(Mall.translate.__("For your address is only available time interval") +
-                        ': <br>' + Mall.translate.__("between the hours") +
+                        ': <br>&nbsp;<br>' + Mall.translate.__("between the hours") +
                         '<span id=pickup-time-from>' + _from + '</span> ' + Mall.translate.__("and") +
                         ' <span id=pickup-time-to>' + _to + '</span>');
 
@@ -309,7 +309,7 @@ jQuery(function($){
 
                         var values = jQuery("#slider-range").val();
                         jQuery('#pickup-time').html(Mall.translate.__("For your address, there are dates from ") +
-                        _from + Mall.translate.__(" to ") + _to + '<br/><span id="wrapper-choosen-pickup-time">' + _rma.formatTimeRange(values[0], values[1]) + '</span>');
+                        _from + Mall.translate.__(" to ") + _to + '<br>&nbsp;<br><span id="wrapper-choosen-pickup-time">' + _rma.formatTimeRange(values[0], values[1]) + '</span>');
                     }
                 });
                 //SET SLIDER, SAVE PICKUP TIME, WRITE MESSAGES END

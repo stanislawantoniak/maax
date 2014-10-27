@@ -350,7 +350,11 @@
   #wrapper-choosen-pickup-time {
     background-color: #f5f5f5;
     padding: 7px;
-    line-height: 55px;
+    line-height: 25px;
+
+    @media (max-width: 370px) {
+      line-height: 25px;
+    }
   }
   #slider-range{
     margin-bottom: 10px;
