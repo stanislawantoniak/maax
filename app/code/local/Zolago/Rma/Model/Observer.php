@@ -38,14 +38,17 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 		/* @var $rma Zolago_Rma_Model_Rma */
 		$track = $observer->getEvent()->getData('track');
 		/* @var $rma Zolago_Rma_Model_Rma_Track */
+		$notify = $observer->getEvent()->getData('notify');
 		$newStatus = $observer->getEvent()->getData("new_status");
 		$oldStatus = $observer->getEvent()->getData("old_status");		
-		$this->_logEvent($rma, Mage::helper('zolagorma')->
-			__("Tracking %s status changed (%s&rarr;%s)", 
-					$track->getTrackNumber(),
-					$oldStatus,
-					$newStatus
-			)
+		$this->_logEvent(
+			$rma, 
+			Mage::helper('zolagorma')->__(
+				"Tracking %s status changed (%s&rarr;%s)", 
+				$track->getTrackNumber(),
+				$oldStatus,
+				$newStatus),
+			$notify 
 		);
 	}
 	
@@ -102,6 +105,7 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 		$rma = $observer->getEvent()->getData('rma');
 		$newStatus = $observer->getEvent()->getData("new_status");
 		$oldStatus = $observer->getEvent()->getData("old_status");
+		$notify = $observer->getEvent()->getData("notify");
 
 
 		$helper = Mage::helper("zolagorma");
@@ -118,12 +122,14 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
                 Mage::logException($e);
             }
         }
-
-		$this->_logEvent($rma, Mage::helper('zolagorma')->
-			__("Status changed (%s&rarr;%s)", 
-					$helper->__($statusModel->getStatusObject($oldStatus)->getTitle()), 
-					$helper->__($statusModel->getStatusObject($newStatus)->getTitle())
-			)
+		
+		Mage::log("Status logged obserever: " . var_export($notify, true));
+		$this->_logEvent(
+			$rma, 
+			Mage::helper('zolagorma')->__("Status changed (%s&rarr;%s)", 
+				$helper->__($statusModel->getStatusObject($oldStatus)->getTitle()), 
+				$helper->__($statusModel->getStatusObject($newStatus)->getTitle())),
+			$notify
 		);
 	}
 	
@@ -226,6 +232,8 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 		}elseif($author instanceof Mage_Customer_Model_Customer){
 			$data['customer_id'] = $author->getId();
 		}
+		
+		
 		// default - author id system user
 		
 		if($comment instanceof Zolago_Rma_Model_Rma_Comment){
@@ -241,9 +249,13 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 			$doSendEmail = $sendEmail;
 		}
 		
-		// Set visiblity
-		$data['is_customer_notified'] = $doSendEmail;
-		$data['is_visible_on_front'] = $doSendEmail;
+		// Set visiblity on front always if author is cutomer
+		// Or when customer was notified
+		if($author instanceof Mage_Customer_Model_Customer || $doSendEmail){
+			$data['is_customer_notified'] = 1;
+			$data['is_visible_on_front'] = 1;
+		}
+		
 		
 		/* @var $commentModel Zolago_Rma_Model_Rma_Comment */
 		$commentModel->setRma($rma);
