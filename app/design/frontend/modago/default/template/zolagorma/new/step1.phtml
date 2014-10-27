@@ -7,7 +7,7 @@
 <?php $items = $this->getItemList();?>
 <?php $_complaint = $this->getIsCompleint();?>
 <div class="steps step-1 background-wrapper box-wrapper" id="step-1" >
-	<p><?php echo $_helper->__("Choose RMA items You want return"); ?></p>
+	<p><?php echo $_helper->__("Choose items that you want to return or complaint"); ?></p>
 	<div class="rma-bordered">
 		<h5 class="uppercase"><?php echo $_helper->__("Order: #%s", $_po->getIncrementId()); ?></h5>
 		<div class="table-wrapper">
@@ -22,10 +22,10 @@
 				foreach ($items as $item_pack):
 					foreach ($item_pack as $key => $item):
 						?>
-						<tr data-name="<?php echo $this->escapeHtml($item['name']); ?>">
+						<tr data-name="<?php echo $this->escapeHtml($item['name']); ?>" target="list" data-reasonselected="0">
 							<td style="vertical-align: middle;" class="form-group form-checkbox">
-								<input <?php if(isset($_itemsSingle[$item['entityId']][$key])):?>checked="checked"<?php endif;?> type="checkbox" class="css-checkbox rma-checkbox" id="rma_item_<?php echo $item['entityId'] ?>" name="rma[items_single][<?php echo $item['entityId'] ?>][<?php echo $key ?>]" value="true"/>
-								<label class="css-label" for="rma_item_<?php echo $item['entityId'] ?>"></label>
+								<input <?php if(isset($_itemsSingle[$item['entityId']][$key])):?>checked="checked"<?php endif;?> type="checkbox" class="css-checkbox rma-checkbox" id="rma_item_<?php echo $item['entityId'];?>_<?php echo $key;?>" name="rma[items_single][<?php echo $item['entityId'] ?>][<?php echo $key ?>]" value="true"/>
+								<label class="css-label"  for="rma_item_<?php echo $item['entityId'];?>_<?php echo $key;?>"></label>
 							</td>
 							<td class="top">
 								<?php if($thumbHelper=$this->getPoItemThumb($item['entityId'])):?>
