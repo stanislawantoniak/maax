@@ -44,12 +44,12 @@ jQuery.noConflict();
 
 
         /////////////////////////////////////////
-        jQuery.validator.addMethod("zipcode", function(value, element) {
-            return this.optional(element) || /^[0-9]{2}(-[0-9]{3})?$/.test(value);
-        }, "Please provide a valid zipcode.");
-        jQuery.validator.addMethod("nip", function(value, element) {
-            return this.optional(element) || /^((\d{3}[- ]\d{3}[- ]\d{2}[- ]\d{2})|(\d{3}[- ]\d{2}[- ]\d{2}[- ]\d{3}))$/.test(value);
-        }, "Please provide a valid nip.");
+        //jQuery.validator.addMethod("zipcode", function(value, element) {
+        //    return this.optional(element) || /^[0-9]{2}(-[0-9]{3})?$/.test(value);
+        //}, "Please provide a valid zipcode.");
+        //jQuery.validator.addMethod("nip", function(value, element) {
+        //    return this.optional(element) || /^((\d{3}[- ]\d{3}[- ]\d{2}[- ]\d{2})|(\d{3}[- ]\d{2}[- ]\d{2}[- ]\d{3}))$/.test(value);
+        //}, "Please provide a valid nip.");
         jQuery.validator.addMethod("stars", function(value, element) {
             var valid = false;
             $(".review-summary-table").find('input[type="hidden"]').each(function(){
@@ -247,16 +247,7 @@ jQuery.noConflict();
         });
 
 
-        /* ===================== MASK INPUT ================== */
-        var ua = navigator.userAgent.toLowerCase();
-        var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
-        if(!isAndroid) {
-            $(".zipcode").mask("99-999");
-            $(".nip").mask("999-999-99-99");
-        } else {
-            $(".zipcode").mask("99-999");
-            $(".nip").mask("999-999-99-99");
-        }
+
 
 
 
@@ -656,7 +647,7 @@ jQuery.noConflict();
                     //$('#zmien_produkty').show(50);
                 }
                 if(widthWindow <=480) {
-                    if(!isAndroid) {}
+                    //if(!isAndroid) {}
                     //$('#order-show-products').show(50).off();
                     //$('.title-section:not(.hide_panel_group)').next('.panel-group').one().hide(50);
                     //$('.title-section.hide_panel_group').next('.panel-group').show(50);

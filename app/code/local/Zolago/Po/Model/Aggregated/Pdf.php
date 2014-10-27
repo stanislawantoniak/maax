@@ -199,7 +199,7 @@ class Zolago_Po_Model_Aggregated_Pdf extends Varien_Object {
         $page->setLineWidth(1);
         $page->setLineDashingPattern(array(2, 1, 2, 1), 1.6);
         $page->drawLine(45,$rel-98,210,$rel-98);
-        $page->drawText(Mage::helper('zolagopo')->__('Customer signature'),305,$rel-110,'UTF-8');
+//        $page->drawText(Mage::helper('zolagopo')->__('Customer signature'),305,$rel-110,'UTF-8');
         $page->drawText(Mage::helper('zolagopo')->__('DHL signature'),45,$rel-110,'UTF-8');
         $page->drawLine(305,$rel-98,500,$rel-98);
         $page->drawText(Mage::helper('zolagopo')->__('Sender signature'),305,$rel-110,'UTF-8');
@@ -390,7 +390,7 @@ class Zolago_Po_Model_Aggregated_Pdf extends Varien_Object {
         $page->drawLine(35,478,810,478);
         $this->_drawCells($page,495,475);
 
-        $page->drawText(Mage::helper('zolagopo')->__('Tracking number'),75,480,'UTF-8');
+        $page->drawText(Mage::helper('zolagopo')->__('Tracking number'),70,480,'UTF-8');
         $page->drawText(Mage::helper('zolagopo')->__('Shipment items'),235,480,'UTF-8');
         $page->drawText(Mage::helper('zolagopo')->__('Europalets'),385,480,'UTF-8');
         $page->drawText(Mage::helper('zolagopo')->__('Receiver | Additional services | Value'),485,480,'UTF-8');

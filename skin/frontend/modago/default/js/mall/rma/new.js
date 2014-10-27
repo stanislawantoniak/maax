@@ -9,6 +9,7 @@ jQuery(function($){
 		currentStep: -1, // init value
 		returnReasons: [],
 		unloadMessage: 'Do You really want to leave RMA process?',
+        selectReturnReasonMessage: "Select return reason",
 		ignoreUnload: 0,
 		daysOfWeek: [],
 		txtReason: "",
@@ -42,9 +43,9 @@ jQuery(function($){
 				}
 			};
 			
-			this.validation = this.newRma.validate(
-				Mall.validate.getOptions(_validSettings)
-			);
+//			this.validation = this.newRma.validate(
+//				Mall.validate.getOptions(_validSettings)
+//			);
 	
 			$(window).bind('beforeunload', function() {
 				if (self.currentStep>0 && !self.ignoreUnload) {
@@ -61,10 +62,14 @@ jQuery(function($){
 		_initStep1: function(){
 			var s = this.step1,
 				self = this,
+                returnMessage = this.selectReturnReasonMessage,
 				next = s.find("button.next");
-		
+
+
 			// Style selects
-			s.find("select").selectbox('attach');
+            s.find("select").selectbox({
+                onChange: changeCorrespondedItems
+            });
 		
 			// Chexboxes
 			var checkboxHandler = function(){
@@ -73,47 +78,91 @@ jQuery(function($){
 				el.parents("tr").find(".condition-wrapper")
 						[el.is(":checked") ? "addClass" : "removeClass"]('active')
 						[el.is(":checked") ? "removeClass" : "addClass"]('inactive');
-				el.parents("tr").find(".condition-wrapper select").
-						selectbox(el.is(":checked") ? "enable" : "disable");
+//				el.parents("tr").find(".condition-wrapper select").
+//						selectbox(el.is(":checked") ? "enable" : "disable");
 			};
 			s.find(":checkbox").change(checkboxHandler).change();
-			
-			// Make validation of select (various methods)
-			var selectHandler = function(){
-				var el = $(this),
-					value = el.val(),
-					ruleName = "required",
-					rules = {},
-					settings = self.newRma.validate().settings;
-			
-				if(value){
-					ruleName = 'must-be-available-' + value;
-				}
-				rules[el.attr('name')] = ruleName;
-				$.extend(settings.rules, rules);
-				
-				// Validate is needed
-				if(el.val() || el.data("inited")){
-					el.valid();
-				}
-				el.data('inited', 1);
-			};
+            s.find(":checkbox").change(function(){
+                var el = $(this);
+                var tr = el.closest("tr");
+                var select = tr.find("select");
+                if(!el.is(":checked")){
 
-			s.find("select").change(selectHandler).change();
+                    select.val("").prop('selected', true);
+
+                    //clear indicator of validation
+                    tr.data("reasonselected" , 0);
+                    select.selectbox("detach").selectbox({
+                        onChange: changeCorrespondedItems
+                    });
+
+                }
+            });
+            function changeCorrespondedItems(val){
+                var el = $(this);
+                var tr = $(this).closest("tr");
+
+                var checkbox = tr.find("input[type=checkbox]");
+                if(val.length > 0){
+                    //checkbox handler
+                    checkbox.prop("checked", true).change();
+
+                    //selectbox validation
+                    el.closest("tr").data("reasonselected" , 1);
+
+                    //clear errors
+                    tr.find("span.error").fadeOut().remove();
+                } else {
+                    checkbox.prop("checked", false).change();
+
+                    //selectbox validation
+                    el.closest("tr").data("reasonselected" , 0);
+                }
+
+            }
+
 			
 			// Handle next click
 			s.find(".next").click(function(){
-				var valid = true;
-				s.find(":checkbox:checked").each(function(){
-					var el = $(this),
-						select = el.parents("tr").find("select");
-					if(!select.valid()){
-						valid = false;
-					}
-				});
-				if(valid){
+                var valid = {};
+                valid.result = [];
+                valid.invalidItems = [];
+                s.find("tr[target=list]").each(function (i, item) {
+                    var CheckedAndSelected = $(item).data("reasonselected") === 1 &&
+                        $(item).find("input[type=checkbox]").is(":checked");
+
+                    var NotCheckedNotSelected = $(item).data("reasonselected") === 0 &&
+                        !$(item).find("input[type=checkbox]").is(":checked");
+
+                    if (CheckedAndSelected || NotCheckedNotSelected) {
+                        //console.log("Valid item");
+                        valid.result.push(1);
+                    } else {
+                        if($(item).find("input[type=checkbox]").is(":checked")){
+                            //console.log("Invalid item: Checked and NOT Selected");
+                            valid.invalidItems.push(i);
+                            valid.result.push(0);
+                        }
+                    }
+                });
+
+                var res = valid.result;
+
+				if(jQuery.inArray( 0, res) === -1){
 					self.next();
-				}
+				} else {
+                    $.each(valid.invalidItems,function (i, index) {
+                        var invalidItem = s.find("tr[target=list]").eq(index);
+                        if(invalidItem.find(".error").length > 0){
+                            invalidItem.find(".sbHolder .error")
+                                .html(returnMessage);
+                        } else {
+                            invalidItem.find(".sbHolder")
+                                .after("<span class='error'>" + returnMessage + "</span>");
+                        }
+
+                    });
+                }
 				return false;
 			});
 		},
@@ -137,16 +186,18 @@ jQuery(function($){
 		            to = s.find('input[name="rma[carrier_time_to]"]').val().split(":")[0],
 	                account = s.find('input[name="rma[customer_account]"]').val().replace(new RegExp('pl','gi'),"").replace(new RegExp(' ','g'),"");
 
+	            //check if those blocks are displayed
+	            if($('#pickup-address-form') && $('#pickup-date-form')) {
 	            //validate if user has chosen pickup date
-	            if(!s.find('input[name="rma[carrier_date]"]:checked').length) {
-		            valid = false;
-		            console.log("date");
-	            }
-
+		            if (!s.find('input[name="rma[carrier_date]"]:checked').length) {
+		                valid = false;
+		                console.log("date");
+	                }
 	            //validate if chosen timespan is minimum 3 hours
-	            if(to - from < 3) {
-		            console.log("hour");
-		            valid = false;
+		            if (to - from < 3) {
+		                console.log("hour");
+		                valid = false;
+		            }
 	            }
 
 	            //validate if entered account number is correct (optional field)
@@ -157,27 +208,6 @@ jQuery(function($){
 
                 //--validation
                 if(valid){
-
-                    // Address
-                    jQuery("#review-shipping-address").html(jQuery("#shipping-address").html());
-
-                    // Pickup date
-                    var dateText = "Carrier",
-                        carrierDate = jQuery("#carrier-date").val();
-
-                    dateText += " " + carrierDate + "<br/>";
-                    dateText += "Between";
-                    dateText += " " + jQuery('#carrier-time-from').val();
-                    dateText += " and";
-                    dateText += " " + jQuery('#carrier-time-to').val();
-
-                    jQuery("#pickup-date-review").html(dateText);
-
-                    // Account
-                    var accountReview = jQuery("#customer-account").val() ?
-                        jQuery("#customer-account").val() : "N/A";
-                    jQuery("#customer-account-review").html(accountReview);
-
 	                self.fillRmaSummary();
                     self.next();
                 }
@@ -213,7 +243,7 @@ jQuery(function($){
 		_getPickup: function() {
 			var s = this.step2,
 				out = {};
-			out.carrier_date = s.find('input[name="rma[carrier_date]"]').val();
+			out.carrier_date = s.find('input[name="rma[carrier_date]"]:checked').val();
 			out.carrier_time_from = s.find('input[name="rma[carrier_time_from]"]').val();
 			out.carrier_time_to = s.find('input[name="rma[carrier_time_to]"]').val();
 			return out;
@@ -284,19 +314,28 @@ jQuery(function($){
 
 		fillRmaSummary: function() {
 			var data = this._getRmaSummaryData();
-			var day = this.daysOfWeek[(new Date(data.pickup.carrier_date)).getDay()]+" "+data.pickup.carrier_date,
+			var date = new Date(data.pickup.carrier_date);
+			var month = date.getMonth() + 1;
+			var day = this.daysOfWeek[date.getDay()] + " " +
+					date.getDate() + "-" +
+					(month < 10 ? "0" + month : month) + "-" +
+					date.getFullYear(),
 				pickup = $("#pickup-date-review"),
 				accountFieldset = $(".customer-account-fieldset"),
 				account = $("#customer-account-review"),
 				items = $("#review-items").find("tbody"),
 				address = $("#review-shipping-address");
-
-			pickup.find('.pickup-day').html(day);
-			pickup.find('.pickup-time').html(
-				this.txtCarrierTime
-					.replace(this._txtCarrierTimeFrom, data.pickup.carrier_time_from)
-					.replace(this._txtCarrierTimeTo, data.pickup.carrier_time_to)
-			);
+			if(data.pickup) {
+				pickup.show();
+				pickup.find('.pickup-day').html(day);
+				pickup.find('.pickup-time').html(
+					this.txtCarrierTime
+						.replace(this._txtCarrierTimeFrom, data.pickup.carrier_time_from)
+						.replace(this._txtCarrierTimeTo, data.pickup.carrier_time_to)
+				);
+			} else {
+				pickup.hide();
+			}
 
 			if(data.account) {
 				account.html(data.account);
@@ -351,6 +390,9 @@ jQuery(function($){
 			this.currentStep = step;
 			// Fix footer
 			jQuery(window).resize();
+
+			// scroll to top
+			jQuery(window).scrollTop(0);
 			return this;
 		},
 		_getStep: function(step){
