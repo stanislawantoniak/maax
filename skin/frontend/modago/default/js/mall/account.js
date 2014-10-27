@@ -11,6 +11,9 @@ Mall.account = {
         this.attachForgotPasswordValidation();
         this.attachLoginValidation();
         this.attachResetPasswordValidation();
+
+        //rma
+        this.attachContactVendorRmaForm();
     },
 
     getValidate: function () {
@@ -102,6 +105,35 @@ Mall.account = {
                 }
             }));
         }
+
+        return this;
+    },
+
+    /**
+     *
+     * @returns {Mall.account}
+     */
+    attachContactVendorRmaForm: function () {
+        "use strict";
+
+        jQuery(".rma-connect-vendor-pannel p").click(function () {
+            var contactVendorForm = jQuery(".rma-connect-vendor .rma-connect-vendor-form");
+            if(contactVendorForm.is(":hidden")){
+                contactVendorForm.slideDown();
+                jQuery(this).find("i.fa")
+                    .removeClass("fa-chevron-down")
+                    .addClass("fa-chevron-up");
+            } else {
+                contactVendorForm.slideUp();
+                jQuery(this).find("i.fa")
+                    .removeClass("fa-chevron-up")
+                    .addClass("fa-chevron-down");
+            }
+        });
+        if (jQuery("#rma-connect-vendor-form")) {
+            jQuery("#rma-connect-vendor-form").validate();
+        }
+
 
         return this;
     }

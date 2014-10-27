@@ -104,8 +104,70 @@
             },
 
             attachNewAddressInputsMask: function (modal, type) {
-                modal.find("#" + type + "_postcode").mask("99-999");
-                modal.find("#" + type + "_vat_id").mask("999-999-99-99");
+
+            },
+
+            attachNewAddressBootstrapTooltip: function(modal, type) {
+
+                jQuery('#modal-body form').attr('autocomplete', "off");//no autocomplete
+
+                //hint data
+                //shoping and billing
+                jQuery('#shipping_firstname, #billing_firstname').attr('data-original-title', Mall.translate.__("Enter name."));
+                jQuery('#shipping_lastname, #billing_lastname').attr('data-original-title', Mall.translate.__("Enter last name."));
+                jQuery('#shipping_company, #billing_company').attr('data-original-title', Mall.translate.__("Enter company name."));
+                jQuery('#shipping_street_1, #billing_street_1').attr('data-original-title', Mall.translate.__("Enter street and number."));
+                jQuery('#shipping_postcode, #billing_postcode').attr('data-original-title', Mall.translate.__("Zip-code should be entered in the format xx-xxx."));
+                jQuery('#shipping_city, #billing_city').attr('data-original-title', Mall.translate.__("Enter city name."));
+                jQuery('#shipping_telephone, #billing_telephone').attr('data-original-title', Mall.translate.__("Phone number we need only to contact concerning orders for example courier delivering the shipment."));
+                //end hint data
+
+                //visual fix for hints
+                jQuery('input[type=text],input[type=email],input[type=password],textarea').not('.phone, .zipcode, .nip').tooltip({
+                    placement: function(a, element) {
+                        var viewport = window.innerWidth;
+                        var placement = "right";
+                        if (viewport < 991) {
+                            placement = "top";
+                        }
+                        if (viewport < 768) {
+                            placement = "right";
+                        }
+                        if (viewport < 600) {
+                            placement = "top";
+                        }
+                        return placement;
+                    },
+                    trigger: "focus"
+                });
+                jQuery('.phone, .zipcode, .nip').tooltip({
+                    placement: "right",
+                    trigger: "focus"
+                });
+
+                jQuery('input[type=text],input[type=email],input[type=password],textarea ').off('shown.bs.tooltip').on('shown.bs.tooltip', function () {
+                    if(jQuery(this).parent(':has(i)').length && jQuery(this).parent().find('i').is(":visible")) {
+                        jQuery(this).next('div.tooltip.right').animate({left: "+=25"}, 100, function () {
+                        });
+                    }
+                });
+                //end visual fix for hints
+
+                //validate
+                Mall.validate.init();
+                jQuery('#modal-body form').validate(Mall.validate._default_validation_options);
+
+                jQuery("div.form-group:has('#shipping_company'), div.form-group:has('#billing_company')").addClass('hide-success-vaild');
+
+                jQuery('#billing_vat_id, #shipping_vat_id').on('change fucus click keydown keyup', function() {
+                    if (jQuery(this).val().length) {
+                        jQuery(this).parents('.form-group').removeClass('hide-success-vaild');
+                    } else {
+                        jQuery(this).parents('.form-group').addClass('hide-success-vaild');
+                    }
+                });
+
+                //end validate
             },
 
             showAddNewModal: function (modal, type, edit) {
@@ -118,6 +180,7 @@
                 modal.find("#modal-title").html(edit ? 
 					Mall.translate.__("edit-address") : Mall.translate.__("add-new-address"));
                 this.attachNewAddressInputsMask(modal, type);
+                this.attachNewAddressBootstrapTooltip(modal, type);
             },
 
             getSelectButton: function () {
@@ -150,7 +213,7 @@
                     , "text"
                     , Mall.translate.__("firstname")
                     , "col-sm-3"
-                    , "form-control firstName hint"
+                    , "form-control firstName required hint"
                     , "");
 
                 formGroup = this.getFormGroup(true);
@@ -176,6 +239,16 @@
 
                 panelBody.find(".select-address").click(function (e) {
                     e.preventDefault();
+                    if (!jQuery(this).parents('form').valid()) {
+                        //visual validation fix
+                        if (jQuery('#billing_vat_id, #shipping_vat_id').first().val().length) {
+                            jQuery('#billing_vat_id, #shipping_vat_id').parents('.form-group').removeClass('hide-success-vaild');
+                        } else {
+                            jQuery('#billing_vat_id, #shipping_vat_id').parents('.form-group').addClass('hide-success-vaild');
+                        }
+                        //end fix
+                        return;
+                    }
                     var data = self.getModalData();
 
                     self.lockButton(this);
@@ -247,7 +320,15 @@
                         type:       "text",
                         label:      Mall.translate.__("lastname"),
                         labelClass: "col-sm-3",
-                        inputClass: "form-control lastName hint"
+                        inputClass: "form-control lastName required hint"
+                    },
+                    {
+                        name:       "telephone",
+                        id:         type + "_telephone",
+                        type:       "text",
+                        label:      Mall.translate.__("phone"),
+                        labelClass: "col-sm-3",
+                        inputClass: "form-control telephone phone required validate-telephone hint"
                     },
                     {
                         name:       "company",
@@ -265,7 +346,7 @@
                         label:      Mall.translate.__("nip") + 
 							"<br>(" + Mall.translate.__("optional") + ")",
                         labelClass: "col-sm-3 double-line",
-                        inputClass: "form-control vat_id city hint"
+                        inputClass: "form-control vat_id nip validate-nip hint"
                     },
                     {
                         name:       "street",
@@ -273,7 +354,7 @@
                         type:       "text",
                         label:      Mall.translate.__("street-and-number"),
                         labelClass: "col-sm-3 ",
-                        inputClass: "form-control street hint"
+                        inputClass: "form-control street hint required"
                     },
                     {
                         name:       "postcode",
@@ -281,7 +362,7 @@
                         type:       "text",
                         label:      Mall.translate.__("postcode"),
                         labelClass: "col-sm-3",
-                        inputClass: "form-control postcode zipcode hint"
+                        inputClass: "form-control postcode zipcode hint validate-postcodeWithReplace required"
                     },
                     {
                         name:       "city",
@@ -289,16 +370,9 @@
                         type:       "text",
                         label:      Mall.translate.__("city"),
                         labelClass: "col-sm-3",
-                        inputClass: "form-control city hint"
-                    },
-                    {
-                        name:       "telephone",
-                        id:         type + "_telephone",
-                        type:       "text",
-                        label:      Mall.translate.__("phone"),
-                        labelClass: "col-sm-3",
-                        inputClass: "form-control telephone city hint"
+                        inputClass: "form-control city hint required"
                     }
+
                 ];
             },
 
@@ -316,7 +390,7 @@
                 });
 
                 inputWrapper = jQuery("<div/>", {
-                    "class": "col-sm-9"
+                    "class": "col-lg-9 col-md-9 col-sm-9 col-xs-11"
                 });
 
                 jQuery("<input/>", {
@@ -809,7 +883,7 @@
 				this.attachCompanyTriggers();
                 // add validation to form
                 this.validate.init();
-                this.enableBillingPostcodeMask();
+
 			},
 			
 			onDisable: function(){
@@ -838,11 +912,7 @@
 					
 			},
 
-            enableBillingPostcodeMask: function () {
-                jQuery("#billing_postcode").mask("99-999");
 
-                return this;
-            },
 
             /**
              * Toggle visibility state of invoice data form.
@@ -1048,17 +1118,25 @@
 			getBillingFromShipping: function () {
 				var self = this,
 					billingData = [],
-					selector;
+					selector,
+                    value;
 				jQuery.each(this._billing_names, function (idx, item) {
 					selector = item.replace("billing", "shipping");
+                    value = jQuery("[name='"+ selector +"']").val();
+                    if (item == "billing[postcode]") {
+                        value = Mall.postcodeTransform(value);
+                    }
 					billingData.push({
 						name: item,
-						value: jQuery("[name='"+ selector +"']").val()
+						value: value
 					});
+
 				});
 
 				return billingData;
 			},
+
+
 
 			collect: function () {
 				var form = jQuery("#co-address"),
@@ -1172,7 +1250,7 @@
                                 .showErrors({
                                     "account[email]":
                                         Mall.translate.__("emailbackend-exits-log-in"
-                                            , "Typed address email exists on the site. Please log in to proceed.")
+                                            , "We already have an account with this address. Please <a href='customer/account/login/'>log in</a> to your account.")
                                 });
 
                             self.validate._checkout.getActiveStep().disable();

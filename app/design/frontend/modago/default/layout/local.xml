@@ -427,6 +427,10 @@
 			</action>
 		</reference>
 		<reference name="head">
+            <action method="addItem">
+                <type>skin_js</type>
+                <script>js/jquery.ui.slider-p.js</script>
+            </action>
 			<action method="addJs">
 				<script>jquery/jquery.jcarousel.min.js</script>
 			</action>
@@ -469,9 +473,16 @@
 				<name>searchfaces</name>
 			</action>
 		</reference>
-		
-		
 	</solrbridge_solrsearch_category_view>
+
+	<_udprod_product_configurable>
+		<reference name="head">
+			<action method="removeItem">
+				<type>js</type>
+				<script>unirgy/product_default.js</script>
+			</action>
+		</reference>
+	</_udprod_product_configurable>
 
 	<catalog_product_view>
 		<reference name="root">
@@ -1151,6 +1162,86 @@
 			</block>
 		</reference>
 	</sales_order_view>
+	
+	<!-- ################################################################### -->
+	<!-- Rma																 -->
+	<!-- ################################################################### -->
+	<sales_po_newrma>
+		<reference name="head">
+			<action method="addItem">
+				<type>skin_js</type>
+				<script>js/mall/rma/new.js</script>
+			</action>
+		</reference>
+		<reference name="breadcrumbs">
+            <action method="addCrumb">
+                <crumbName>rma</crumbName>
+                <crumbInfo>
+                    <label>Returns and complaints</label>
+                    <title>Returns and complaints</title>
+                </crumbInfo>
+            </action>
+		</reference>
+        <reference name="my.account.wrapper">
+			<remove name="sales.po.info"/>
+            <block type="zolagorma/new" name="zolagorma.new" template="zolagorma/new.phtml">
+				<block type="zolagorma/new_step1" name="zolagorma.new.step1" template="zolagorma/new/step1.phtml"/>
+				<block type="zolagorma/new_step2" name="zolagorma.new.step2" template="zolagorma/new/step2.phtml"/>
+				<block type="zolagorma/new_step3" name="zolagorma.new.step3" template="zolagorma/new/step3.phtml"/>
+            </block>
+        </reference>
+	</sales_po_newrma>
+	
+	<sales_rma_view>
+		<update handle="customer_account" />
+		<update handle="zolago_modago_customer_handle" />
+		<reference name="breadcrumbs">
+            <action method="addCrumb">
+                <crumbName>rma</crumbName>
+                <crumbInfo>
+                    <label>Returns and complaints</label>
+                    <title>Returns and complaints</title>
+                </crumbInfo>
+            </action>
+		</reference>
+        <reference name="my.account.wrapper">
+            <block type="zolagorma/view" name="zolagorma.view" template="zolagorma/view.phtml">
+                <block type="udqa/product_question" name="zolagorma.vendor.question" as="zolagorma_vendor_question" template="zolagorma/view/question.phtml" />
+			</block>
+        </reference>
+	</sales_rma_view>
+
+	<sales_rma_history>
+		<reference name="breadcrumbs">
+			<action method="addCrumb">
+				<crumbName>rma</crumbName>
+				<crumbInfo>
+					<label>Returns and complaints</label>
+					<title>Returns and complaints</title>
+				</crumbInfo>
+			</action>
+		</reference>
+	</sales_rma_history>
+
+	<sales_po_rmalist>
+		<reference name="breadcrumbs">
+			<action method="addCrumb">
+				<crumbName>rma</crumbName>
+				<crumbInfo>
+					<label>Returns and complaints</label>
+					<title>Returns and complaints</title>
+					<link>/sales/rma/history/</link>
+				</crumbInfo>
+			</action>
+			<action method="addCrumb">
+				<crumbName>rma-po-list</crumbName>
+				<crumbInfo>
+					<label>Choose package</label>
+					<title>Choose package</title>
+				</crumbInfo>
+			</action>
+		</reference>
+	</sales_po_rmalist>
 
     <help_index_index>
         <reference name="breadcrumbs">

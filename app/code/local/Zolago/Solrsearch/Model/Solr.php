@@ -174,6 +174,7 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 					else{
                         $face_key = substr($key, 0, strrpos($key, '_'));
                         if ($key == 'price_facet') {
+							$value = $this->_paresPriceValue($value);
                             $query .= $this->priceFieldName.':['.urlencode(trim($value).'.99999').']+OR+';
                         }
                         else if(array_key_exists($face_key, $rangeFields))
@@ -226,6 +227,16 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 
         $this->filterQuery = $filterQueryString;
     }
+	
+	protected function _paresPriceValue($value) {
+		$value = trim($value);
+		if(preg_match("/^TO/", $value)){
+			$value = "0 " . $value;
+		}elseif(preg_match("/TO$/", $value)){
+			$value = $value . " " . "2147483647"; // Max integer on 32bit
+		}
+		return $value;
+	}
 	
     /**
      * Prepare solr filter query paprams

@@ -399,9 +399,23 @@ var Mall = {
         }
 
         return "";
+    },
+
+    //transform postcode like: 99999, 99 999, 99/999, 99-999, 99_999
+    //to our format: 99-999
+    postcodeTransform: function(str) {
+        var strTrans = str.replace(/\D/g,"");//remove spaces
+        strTrans = strTrans.match(/.*?([0-9]{2}).?([0-9]{3}).*?/i);
+        if (strTrans == null) {
+            return str;
+        } else {
+            if (strTrans.length >= 1) {
+                return strTrans[1] + "-" + strTrans[2];
+            } else {
+                return str;
+            }
+        }
     }
-
-
 
 }
 
@@ -438,7 +452,7 @@ jQuery.extend(Mall.translate, Mall.i18nValidation);
 Mall.translate.ext = {
     __: function (key) {
         "use strict";
-
+		
         if (this._translate_messages[key] === undefined) {
             return key;
         }
@@ -898,4 +912,12 @@ jQuery(document).ready(function() {
 
     basket_dropdown();
     sales_order_details_top_resize();
+
+	jQuery(document)
+		.on('show.bs.modal', '.modal', function () {
+			jQuery('html,body').addClass('modal-open');
+		})
+		.on('hidden.bs.modal', '.modal', function () {
+			jQuery('html,body').removeClass('modal-open');
+		});
 });

@@ -83,21 +83,28 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
     public function saveRmaAction()
     {
         $request = $this->getRequest();
-
+		$session = Mage::getSingleton('core/session');
         try {
             /**
              * @todo Add processing carrier and insert tracking
              */
             $this->_saveRma();
-
-            Mage::getSingleton('core/session')->addSuccess(
-                Mage::getStoreConfig('urma/message/customer_success')
-            );
-            $this->_redirect('*/*/view', array('po_id'=>$this->getRequest()->getParam('po_id')));
+			
+			$rma = Mage::registry('current_rma');
+			
+			if(is_array($rma)){
+				$rma = current($rma);
+			}
+			if($rma && $rma instanceof Zolago_Rma_Model_Rma && $rma->getId()){
+				$session->setLastRmaId($rma->getId());
+				$this->_redirect('sales/rma/success');
+			}else{
+				Mage::throwException("No rma created");
+			}
         } catch (Exception $e) {
-            Mage::getSingleton('core/session')->
-            addError($e->getMessage())->
-            setData("rma", $request->getParam('rma'));
+            $session->
+				addError($e->getMessage())->
+				setData("rma", $request->getParam('rma'));
 
             $this->_redirect('*/*/newrma', array('po_id'=>$this->getRequest()->getParam('po_id')));
         }
