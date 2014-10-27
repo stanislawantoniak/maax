@@ -125,6 +125,12 @@
 			</action>
 			<!--<action method="addCss"><stylesheet>css/stylesheet.css</stylesheet></action>-->
 			<action method="addCss">
+				<stylesheet>js/vendor/select2/select2.css</stylesheet>
+			</action>
+			<action method="addCss">
+				<stylesheet>js/vendor/select2/select2-bootstrap.css</stylesheet>
+			</action>
+			<action method="addCss">
 				<stylesheet>css/local.css</stylesheet>
 			</action>
 
@@ -175,6 +181,10 @@
 			<action method="addItem">
 				<type>skin_js</type>
 				<script>js/jquery.selectbox-0.2.js</script>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<script>js/vendor/select2/select2.js</script>
 			</action>
 			<action method="addItem">
 				<type>skin_js</type>
@@ -1206,7 +1216,7 @@
 		</reference>
         <reference name="my.account.wrapper">
             <block type="zolagorma/view" name="zolagorma.view" template="zolagorma/view.phtml">
-                <block type="udqa/product_question" name="zolagorma.vendor.question" as="zolagorma_vendor_question" template="zolagorma/view/question.phtml" />
+                <block type="zolagorma/view_detail" name="zolagorma.vendor.detail" as="zolagorma_vendor_detail" template="zolagorma/view/detail.phtml" />
 			</block>
         </reference>
 	</sales_rma_view>

@@ -112,5 +112,21 @@ Mall.validate.validators = {
             return this.optional(elem) | false;
         }
         return true;
+    },
+
+    bankAccount: function(value, elem, params){
+        value = value.replace(/\D/g, "");
+        return this.optional(elem) || value.replace(/\D/g,"").length == 26; //26 digits
+    },
+
+    bankAccountWithReplace: function(value, elem, params){
+        value = value.replace(/\D/g, "");
+        jQuery(elem).val(value);
+
+        var test1 = this.optional(elem);
+        var test2 = value.replace(/\D/g,"").length == 26; //26 digits
+
+        return test1 || test2;
+
     }
 };

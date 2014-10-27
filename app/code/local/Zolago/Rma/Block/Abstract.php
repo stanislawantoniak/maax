@@ -68,6 +68,7 @@ class Zolago_Rma_Block_Abstract extends Mage_Core_Block_Template
 	}
 	
 	public function getCommentAuthor(Zolago_Rma_Model_Rma_Comment $comment) {
+		//return $comment->getAuthorName();
 		return $comment->getAuthorTypeText();
 	}
 	
@@ -77,6 +78,7 @@ class Zolago_Rma_Block_Abstract extends Mage_Core_Block_Template
 	 */
 	public function getDayOfWeek(Zolago_Rma_Model_Rma $rma) {
 		$date = new Zend_Date($rma->getCarrierDate());
+		$date->setLocale(Mage::app()->getLocale()->getLocaleCode());
 		return $date->get(Zend_Date::WEEKDAY);
 	}
 	

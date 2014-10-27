@@ -6,9 +6,13 @@
           border:1px solid #afafaf;
           text-align:center;
           line-height: 38px;
-          font-size:14px;
+          font-size:12px;
           color:#313131;
-          background:#fff;          
+          background:#fff;
+          font-weight: normal;
+          a {
+            margin-left: 2px;
+          }
         }
         &:hover {
           span {

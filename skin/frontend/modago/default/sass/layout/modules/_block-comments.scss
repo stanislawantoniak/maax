@@ -15,12 +15,13 @@
 			.comment_rating {
 				@include inline-block;
 				float:left;
+				margin-right: 10px;
 			}
 			h3 {
 				@include inline-block;
 				padding:0px;
 				float:left;
-				margin-top: 5px;
+				margin-top: 4px;
 				margin-bottom: 5px;
 			}
 		}
