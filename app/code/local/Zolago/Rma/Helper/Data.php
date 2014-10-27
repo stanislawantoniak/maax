@@ -15,7 +15,6 @@ class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
 			$rma->getResource()->saveAttribute($rma, 'rma_status');
 			// Trigger event
 			
-			Mage::log("Status logged helper: " . var_export($notify, true));
 			Mage::dispatchEvent("zolagorma_rma_status_changed", array(
 				"rma" => $rma,
 				"notify" => $notify,
