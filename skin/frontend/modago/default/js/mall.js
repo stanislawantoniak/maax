@@ -452,7 +452,7 @@ jQuery.extend(Mall.translate, Mall.i18nValidation);
 Mall.translate.ext = {
     __: function (key) {
         "use strict";
-
+		
         if (this._translate_messages[key] === undefined) {
             return key;
         }
