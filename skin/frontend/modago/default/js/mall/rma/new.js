@@ -192,9 +192,9 @@ jQuery(function($){
 		                valid = false;
 	                }
 	            //validate if chosen timespan is minimum 3 hours
-		            if (to - from < 3) {
-		                valid = false;
-		            }
+		         //   if (to - from < 3) {
+		         //       valid = false;
+		         //   }
 	            }
 
 	            //validate if entered account number is correct (optional field)
