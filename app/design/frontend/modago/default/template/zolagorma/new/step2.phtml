@@ -103,7 +103,7 @@
         <div class="fieldset row" id="customer-account-wrapper">
             <div>
                 <h3 class="legend col-sm-12"><?php echo $_helper->__("Enter your account number for your order refund"); ?></h3>
-                <div class="col-sm-12">
+                <div class="col-sm-5">
                     <input type="text" autocomplete="off" value="<?php echo $this->escapeHtml($_rma->getCustomerAccount()); ?>"
                        name="rma[customer_account]" value="" id="customer-account"
                        title="<?php echo $_helper->__("Bank account"); ?>" value="" class="form-control bank-account-rma validate-bankAccountWithReplace">
