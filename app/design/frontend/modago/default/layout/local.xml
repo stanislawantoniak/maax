@@ -1182,6 +1182,14 @@
 				<type>skin_js</type>
 				<script>js/mall/rma/new.js</script>
 			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<script>js/mall/customer/AddressBook.js</script>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<script>js/mall/customer/Address.js</script>
+			</action>
 		</reference>
 		<reference name="breadcrumbs">
             <action method="addCrumb">

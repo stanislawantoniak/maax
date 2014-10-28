@@ -1,3 +1,4 @@
+<?php /* @var $this Zolago_Rma_Block_New_Step2  */ ?>
 <?php $_helper = Mage::helper("zolagorma"); ?>
 <?php $_po = $this->getPo(); ?>
 <?php $_rma = $this->getRma();?>
@@ -9,6 +10,8 @@
 <?php $weekdays = Mage::app()->getLocale()->getOptionWeekdays();?>
 <?php $vendor = $_po->getVendor();?>
 <div class="steps step-2 background-wrapper box-wrapper" id="step-2">
+	<input type="hidden" name="form_key" value="<?php echo $this->getFormKey();?>"/>
+	<input type="hidden" name="country_id" id="country_id" value="<?php echo $this->getDefaultCountryId();?>"/>
     <div class="rma-container">
 		<?php if (($this->isDhlEnabled()) && count($dateList)) : ?>
         <div id="pickup-address-form" class="fieldset flow-return">
@@ -17,27 +20,77 @@
             <h3 class="legend-big"><?php echo $_helper->__("Report a return or claim"); ?></h3>
             <h3 class="legend"><?php echo $_helper->__("Confirm or change pickup address for the courier"); ?>:</h3>
 
+			<!-- selected address tmplate -->
+			<div class="hidden" id="selected-address-template">
+				<p class="pull-right small-no-float"><?php echo $_helper->__("Selected carrier address");?></p>
+				<dl class="pull-left" >
+					<dt>{{firstname}} {{lastname}}</dt>
+					<dd>{{street}}</dd>
+					<dd>{{postcode}} {{city}}</dd>
+					<dd class="phone"><?php echo $this->__("Contact phone")?>: <span>{{telephone}}</span></dd>
+					<dd class="action separator">
+						<a href="#" class="underline edit"><?php echo $this->__("edit");?></a> 
+					</dd>
+				</dl>
+			</div>
+
+			<!-- normal address tmplate -->
+			<div class="panel panel-default hidden" id="normal-address-template">
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<dl class="pull-left small-no-float">
+							<dt>{{firstname}} {{lastname}}</dt>
+							<dd>{{street}}</dd>
+							<dd>{{postcode}} {{city}}</dd>
+							<dd class="action separator">
+								<a href="#" class="underline edit"><?php echo $this->__("edit");?></a> 
+								<a href="#" class="underline remove"><?php echo $this->__("remove");?></a> 
+							</dd>
+						</dl> 
+						<button class="btn-select button button-third large choose"><?php echo $this->__("Choose")?></button>
+					</div>
+				</div>
+			</div>
+
+			<!-- add new template -->
+			<div class="panel add-new hidden" id="addressbook-add-new-template" data-toggle="modal" data-target="#addressbook-modal">
+				<div class="panel-body">
+					<h4 class="addressbook-add-new"><i class="fa fa-plus-circle fa-lg"></i>&nbsp;<strong><?php echo $this->__("ADD NEW ADDRESS"); ?></strong></h4>
+					<div class="panel-body-content">
+
+					</div>
+				</div>
+			</div>
+			
+			<!-- Edit / add mdoal -->
+			<div class="modal fade bs-example-modal-lg" id="addressbook-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="overflow-y: scroll !important">
+				<div class="modal-dialog modal-lg">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"></button>
+							<h2 class="title_section" id="modal-title"></h2>
+						</div>
+						<div class="modal-body" id="modal-body">
+						</div>
+					</div>
+				</div>
+			</div>
+
+			
             <div class="panel panel-default">
                 <div class="panel-body panel-body-with-footer">
-                    <div class="current-rma-address current-addres clearfix">
-
-                        <dl class="pull-left" id="shipping-address">
-                            <dt><?php echo $_shippingAddress->getFirstname(); ?> <?php echo $_shippingAddress->getLastname(); ?></dt>
-                            <dd><?php echo $_shippingAddress->getData("street"); ?></dd>
-                            <dd><?php echo $_shippingAddress->getPostcode(); ?> <?php echo $_shippingAddress->getCity(); ?></dd>
-                            <dd class="separator phone">
-                                <?php echo $this->__('Contact phone'); ?>:
-                                <span><?php echo $_shippingAddress->getTelephone(); ?></span>
-                            </dd>
-                        </dl>
+                    <div class="current-rma-address current-address shipping clearfix">
+						<!-- content from js -->
                     </div>
-
+					<div class="panel-adresses shipping">
+						<!-- content from js -->
+					</div>
                 </div>
-                <div class="panel-footer clearfix">
-                    <a class="underline pull-right change_address shipping" href="#">
-                        <?php echo $_helper->__("Change address"); ?> [dev]
-                    </a>
-                </div>
+				<div class="panel-footer clearfix">
+					<a href="#" class="underline pull-right change_address shipping">
+						<?php echo $this->__("Change address");?>
+					</a>
+				</div>
             </div>
 
         </div>
@@ -133,7 +186,44 @@
     Mall.translate.add("For your address, there are dates from ", "<?php echo $_helper->__("For your address, there are dates from ") ?>");
     Mall.translate.add(" to ", "<?php echo $_helper->__(" to ") ?>");
     Mall.translate.add("Bank account number must contain 26 digits.", "<?php echo $_helper->__("Bank account number must contain 26 digits.") ?>");
-    //TRANSLATIONS END
+    // Addressbook transaltion
+	Mall.translate.add("no-addresses", "<?php echo $_helper->__("No addresses");?>");
+	Mall.translate.add("edit-address", "<?php echo $_helper->__("Edit address");?>");
+	Mall.translate.add("add-new-address", "<?php echo $_helper->__("Add new address");?>");
+	Mall.translate.add("save", "<?php echo $_helper->__("Save");?>");
+	Mall.translate.add("firstname", "<?php echo $_helper->__("Firstname");?>");
+	Mall.translate.add("lastname", "<?php echo $_helper->__("Lastname");?>");
+	Mall.translate.add("company-name", "<?php echo $_helper->__("Company name");?>");
+	Mall.translate.add("optional", "<?php echo $_helper->__("optional");?>");
+	Mall.translate.add("nip", "<?php echo $_helper->__("NIP");?>");
+	Mall.translate.add("street-and-number", "<?php echo $_helper->__("Street and number");?>");
+	Mall.translate.add("postcode", "<?php echo $_helper->__("Postcode");?>");
+	Mall.translate.add("city", "<?php echo $_helper->__("City");?>");
+	Mall.translate.add("phone", "<?php echo $_helper->__("Phone");?>");
+	Mall.translate.add("address-cant-be-removed", "<?php echo $_helper->__("Address can't be removed.");?>");
+	Mall.translate.add("selected-carrier-address", "<?php echo $_helper->__("Selected carrier address") ?>");
+   	Mall.translate.add("change-address", "<?php echo $_helper->__("Change address");?>");
+	Mall.translate.add("your-additional-addresses", "<?php echo $_helper->__("Your additional addresses");?>");
+	Mall.translate.add("roll-up", "<?php echo $_helper->__("Roll up");?>");
+	// Messages
+	Mall.translate.add("Invalid zip-cod. Zip-code should include 5 numbers in XX-XXX format.", "<?php echo $this->__("Invalid zip-cod. Zip-code should include 5 numbers in XX-XXX format."); ?>");
+    Mall.translate.add("Telephone numer is too short. Number must contain 9 digits, without spacing.", "<?php echo $this->__("Telephone numer is too short. Number must contain 9 digits, without spacing."); ?>");
+    Mall.translate.add("email", "<?php echo $this->__('Valid email is required.') ?>");
+    Mall.translate.add("Password needs to have at least %s characters", "<?php echo $this->__("Password needs to have at least %s characters", Mage::helper("zolagocustomer")->getPasswordMinLength()); ?>");
+    Mall.translate.add("Zip code should be entered in the format xx-xxx.", "<?php echo $this->__("Zip code should be entered in the format xx-xxx."); ?>");
+    Mall.translate.add("required", "<?php echo $this->__("This is a required field."); ?>");
+    Mall.translate.add("email", "<?php echo $this->__("E-mail address is in invalid format or contains invalid characters. Please enter correct address."); ?>");
+    Mall.translate.add("Tax numer is incorrect. Enter as a string of digits e.g. 1234567890.", "<?php echo $this->__('Tax numer is incorrect. Enter as a string of digits e.g. 1234567890.') ?>");
+    Mall.translate.add("Enter name.", "<?php echo $this->__('Enter name.') ?>");
+    Mall.translate.add("Enter last name.", "<?php echo $this->__('Enter last name.') ?>");
+    Mall.translate.add("Enter email address.", "<?php echo $this->__('Enter email address.') ?>");
+    Mall.translate.add("Enter street and number.", "<?php echo $this->__('Enter street and number.') ?>");
+    Mall.translate.add("Enter company name.", "<?php echo $this->__('Enter company name.') ?>");
+    Mall.translate.add("Enter city name.", "<?php echo $this->__('Enter city name.') ?>");
+    Mall.translate.add("Zip-code should be entered in the format xx-xxx.", "<?php echo $this->__('Zip-code should be entered in the format xx-xxx.') ?>");
+    Mall.translate.add("Phone number we need only to contact concerning orders for example courier delivering the shipment.", "<?php echo $this->__('Phone number we need only to contact concerning orders for example courier delivering the shipment.') ?>");
+
+	//TRANSLATIONS END
 
     //INIT DATA
     <?php $js_array = json_encode($dateList); ?>
@@ -145,5 +235,17 @@
     var returnReasons = '<?php echo Mage::helper("zolagorma")->getReturnReasons($_po, true); ?>';
     var flowAcknowledged = '<?php echo Zolago_Rma_Model_Rma::FLOW_ACKNOWLEDGED; ?>';
     //INIT DATE END
+
+	jQuery(function(){
+		// Address book handling
+		var addressBook = new Mall.customer.AddressBook();
+
+		addressBook.setAddressBook(<?php echo $this->getCustomerAddressesJson(); ?>);
+		addressBook.setDefaultShipping(<?php echo $this->asJson($this->getDefaultShipping())?>);
+		addressBook.setSelectedShipping(<?php echo $this->asJson($this->getSelectedShipping())?>);
+
+		Mall.rma.new.addressbook.setAddressBook(addressBook);
+	});
+		
 
 </script>

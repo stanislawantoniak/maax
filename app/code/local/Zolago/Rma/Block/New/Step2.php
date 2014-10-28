@@ -1,6 +1,54 @@
 <?php
 class Zolago_Rma_Block_New_Step2 extends  Zolago_Rma_Block_New_Abstract{
     protected $_monthList = array();
+	
+	/**
+	 * @return bool
+	 */
+	public function getHasDefaultPayment() {
+		return is_array($this->getQuote()->getCustomer()->getLastUsedPayment());
+	}
+	
+	/**
+	 * @return string
+	 */
+	public function getDefaultCountryId() {
+		return Mage::app()->getStore()->getConfig("general/country/default");
+	}
+	
+	/**
+	 * Get customer collecition
+	 * @return type
+	 */
+	public function getCustomerAddressesJson() {
+		$addresses = array();
+		$collection = $this->getCustomer()->getAddressesCollection();
+		foreach($collection as $address){
+			/* @var $address Mage_Customer_Model_Address */
+			$arr = $address->getData();
+			$arr['street'] = $address->getStreet();
+			$addresses[] = $arr;
+		}
+		return $this->asJson($addresses);
+	}
+	
+	/**
+	 * @return int | null
+	 */
+	public function getDefaultShipping() {
+		return $this->getCustomer()->getDefaultShipping();
+	}
+	
+	/**
+	 * @return int | null
+	 */
+	public function getSelectedShipping() {
+		if($this->getRma()->getCustomerAddressId()){
+			return $this->getRma()->getCustomerAddressId();
+		}
+		return $this->getDefaultShipping();
+	}
+	
     /**
      * list of possible pickup data
      * @return array

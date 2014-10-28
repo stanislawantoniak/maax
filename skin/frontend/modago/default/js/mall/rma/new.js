@@ -18,6 +18,7 @@ jQuery(function($){
 		txtCarrierTime: "",
 		_txtCarrierTimeFrom: "carrier_time_from",
 		_txtCarrierTimeTo: "carrier_time_to",
+	
 		
 		////////////////////////////////////////////////////////////////////////
 		// Init steps and general
@@ -354,6 +355,7 @@ jQuery(function($){
                     jQuery('#overview-message').show();
                 }
             });
+			this.addressbook.init();
         },
 		
         // Step 3 init
@@ -377,6 +379,7 @@ jQuery(function($){
         },
 
         // Step 2 functions
+		
         getTime: function(hours, minutes) {
             minutes = minutes + "";
             if (minutes.length == 1) {minutes = "0" + minutes;}
@@ -412,11 +415,12 @@ jQuery(function($){
             return h + ':00';
         },
 
-        // Step 2 functions END
 
 		// Step 3 functions
 		_getRmaAddress: function() {
-			return this.step2.find('.current-rma-address').html();
+			var cloned = this.step2.find('.current-rma-address dl').clone();
+			cloned.find(".action").remove();
+			return cloned;
 		},
 
 		_getPickup: function() {
@@ -540,7 +544,506 @@ jQuery(function($){
 		},
 
 
+		////////////////////////////////////////////////////////////////////////
+		// Addressbook
+		////////////////////////////////////////////////////////////////////////
+		addressbook: {
+			_book: null,
+			_content: jQuery("#pickup-address-form"),
+			/**
+			 * Init addressbook
+			 * @returns {void}
+			 */
+			init: function(){
+				var self = this;
+				
+				// Render selected and list
+				this.renderSelectedAddress("shipping");
+				this.renderAddressList("shipping");
+				
+				// Hide address lists
+				this._rollAddressList(
+					"shipping", 
+					this._content.find(".panel-adresses.shipping"), 
+					false
+				);
+				
+				// Handle clicks
+				this._content.find(".change_address").each(function(){
+					var type = jQuery(this).hasClass("billing") ? "billing" : "shipping";
+					jQuery(this).click({type: type}, function(e){
+						self.handleChangeAddressClick(e);
+						return false;
+					})
+				})
+			},
+			renderSelectedAddress: function(type){
+				var template = this.getSelectedTemplate(),
+					addressBook = this.getAddressBook(),
+					target = jQuery(".current-address."+type, this._content),
+					addressObject = addressBook.getSelected(type);
+			
+				if(addressObject){
+					var node = jQuery(Mall.replace(
+						template, 
+						this.processAddressToDisplay(addressObject)
+					));
+					this.processSelectedAddressNode(node, addressObject, addressBook, type);
+					target.html(node);
+					
+				}else{
+					target.html(Mall.translate.__("no-addresses"));
+				}	
+			},
+			renderAddressList: function(type){
+				var template = this.getNormalTemplate(),
+					addressBook = this.getAddressBook(),
+					target = jQuery(".panel-adresses."+type, this._content),
+					selectedAddress = addressBook.getSelected(type),
+					self = this,
+                    addNewButton,
+                    addressCollection = addressBook.getAddressBook(),
+					caption = jQuery("<div>").addClass("additional");
+				
+				target.html('');
+				
+				target.append(caption.text(Mall.translate.__("your-additional-addresses") + ":"));
+				
+				if(addressCollection.length){
+					jQuery.each(addressCollection, function(){
+						// Do not allow sleected address
+						if(selectedAddress && this.getId()==selectedAddress.getId()){
+							return;
+						}
+						
+						var data = self.processAddressToDisplay(this);
+						var node = jQuery(Mall.replace(template, data));
+						self.processAddressNode(node, this, addressBook, type);
+						target.append(node);
+					});
+                }else{
+                    target.html(Mall.translate.__("no-addresses"));
+                }
+                addNewButton = this.getAddNewButton(type);
+                addNewButton.show();
+                target.append(addNewButton);
+            },
+			
+			processAddressNode: function(node, address, addressBook, type){
+				var removeable = addressBook.isRemoveable(address.getId()),
+					remove = node.find(".remove"),
+					choose = node.find(".choose"),
+					edit = node.find(".edit");
+			
+			
+				var eventData = {
+					addressBook: addressBook, 
+					step: this, 
+					address: address, 
+					type: type
+				};
+				
+				remove.click(eventData, this.removeAddress);
+				edit.click(eventData, this.editAddress);
+				choose.click(eventData, this.chooseAddress);
+				remove[removeable ? "show" : "hide"]();		
+				
+				return node;
+			},
+			
+			processSelectedAddressNode: function(node, address, addressBook, type){
+				var edit = node.find(".edit"),
+					editable = this._content.find(".change_address."+type).hasClass("open");
+				
+				var eventData = {
+					addressBook: addressBook, 
+					step: this, 
+					address: address, 
+					type: type
+				};
+				edit.click(eventData, this.editAddress);
+				//edit[editable ? "show" : "hide"]();
+				
+				return node;
+			},
+			processAddressToDisplay: function(address){
+				var addressData = jQuery.extend({}, address.getData());
+				if(addressData.street){
+					addressData.street = addressData.street[0]
+				}
+				return addressData;
+			},
+			
+			getAddNewButton: function (type) {
+                var templateHandle = jQuery("#addressbook-add-new-template")
+                        .clone()
+                        .removeClass("hidden"),
+                    self = this;
 
+                templateHandle.click(function () {
+                    self.showAddNewModal(jQuery("#addressbook-modal"), type);
+                });
+
+                return templateHandle;
+            },
+			showAddNewModal: function (modal, type, edit) {
+                edit = edit === undefined ? false : edit;
+
+                modal = jQuery(modal);
+                modal.find(".modal-body")
+                    .html("")
+                    .append(this.getAddNewForm(type));
+                modal.find("#modal-title").html(edit ? 
+					Mall.translate.__("edit-address") : Mall.translate.__("add-new-address"));
+                //this.attachNewAddressInputsMask(modal, type);
+                //his.attachNewAddressBootstrapTooltip(modal, type);
+            },
+			 getAddNewForm: function (type) {
+                var form = this.getNewAddressForm(),
+                    panelBody = form.find(".panel-body"),
+                    element,
+                    formGroup,
+                    self = this,
+                    address;
+
+                element = this.getInput("firstname"
+                    , type + "_firstname"
+                    , "text"
+                    , Mall.translate.__("firstname")
+                    , "col-sm-3"
+                    , "form-control firstName required hint"
+                    , "");
+
+                formGroup = this.getFormGroup(true);
+                formGroup.find(".row").append(element.label).append(element.input);
+                panelBody.append(formGroup);
+
+                jQuery.each(this.getNewAddressConfig(type), function (idx, item) {
+                    formGroup = self.getFormGroup();
+                    element = self.getInput(
+                        item.name
+                        , item.id
+                        , item.type
+                        , item.label
+                        , item.labelClass
+                        , item.inputClass
+                        , ""
+                    );
+                    formGroup.find(".row").append(element.label).append(element.input);
+                    panelBody.append(formGroup);
+                });
+
+                panelBody.append(this.getSelectButton());
+
+                panelBody.find(".select-address").click(function (e) {
+                    e.preventDefault();
+                    if (!jQuery(this).parents('form').valid()) {
+                        //visual validation fix
+                        if (jQuery('#shipping_vat_id').first().val().length) {
+                            jQuery('#shipping_vat_id').parents('.form-group').removeClass('hide-success-vaild');
+                        } else {
+                            jQuery('#shipping_vat_id').parents('.form-group').addClass('hide-success-vaild');
+                        }
+                        //end fix
+                        return;
+                    }
+                    var data = self.getModalData();
+
+                    self.lockButton(this);
+                    self.getAddressBook().save(data).done(function (data) {
+                        if (Boolean(data.status) === false) {
+                            alert(data.content.join("\n"));
+                        } else {
+                            address = self.getAddressBook().get(data.content.entity_id);
+                            if (type === "shipping") {
+                                self.getAddressBook().setSelectedShipping(address);
+                            }
+                            self.renderSelectedAddress("shipping");
+                            self.renderAddressList("shipping");
+                            self.getModal().modal("hide");
+                            self.toggleOpenAddressList(type);
+                        }
+                    }).always(function () {
+                        self.unlockButton(e.target);
+                    });
+                });
+
+                return form;
+            },
+			getSelectButton: function () {
+                var buttonWrapper = jQuery("<div/>", {
+                    "class": "form-group clearfix"
+                });
+
+                jQuery("<button/>", {
+                    "class": "button button-primary large pull-right select-address",
+                    html: Mall.translate.__("save")
+                }).appendTo(buttonWrapper);
+
+                return buttonWrapper;
+            },
+            getNewAddressConfig: function (type) {
+                return [
+                    //{
+                    //    name:       type + "[firstname]",
+                    //    id:         type + "_firstname",
+                    //    type:       "text",
+                    //    label:      "Imię",
+                    //    labelClass: "col-sm-3",
+                    //    inputClass: "form-control firstName hint"
+                    //},
+                    {
+                        name:       "lastname",
+                        id:         type + "_lastname",
+                        type:       "text",
+                        label:      Mall.translate.__("lastname"),
+                        labelClass: "col-sm-3",
+                        inputClass: "form-control lastName required hint"
+                    },
+                    {
+                        name:       "telephone",
+                        id:         type + "_telephone",
+                        type:       "text",
+                        label:      Mall.translate.__("phone"),
+                        labelClass: "col-sm-3",
+                        inputClass: "form-control telephone phone required validate-telephone hint"
+                    },
+                    {
+                        name:       "company",
+                        id:         type + "_company",
+                        type:       "text",
+                        label:      Mall.translate.__("company-name") + 
+							"<br/>(" + Mall.translate.__("optional") + ")",
+                        labelClass: "col-sm-3 double-line",
+                        inputClass: "form-control firm hint"
+                    },
+                    {
+                        name:       "vat_id",
+                        id:         type + "_vat_id",
+                        type:       "text",
+                        label:      Mall.translate.__("nip") + 
+							"<br>(" + Mall.translate.__("optional") + ")",
+                        labelClass: "col-sm-3 double-line",
+                        inputClass: "form-control vat_id nip validate-nip hint"
+                    },
+                    {
+                        name:       "street",
+                        id:         type + "_street_1",
+                        type:       "text",
+                        label:      Mall.translate.__("street-and-number"),
+                        labelClass: "col-sm-3 ",
+                        inputClass: "form-control street hint required"
+                    },
+                    {
+                        name:       "postcode",
+                        id:         type + "_postcode",
+                        type:       "text",
+                        label:      Mall.translate.__("postcode"),
+                        labelClass: "col-sm-3",
+                        inputClass: "form-control postcode zipcode hint validate-postcodeWithReplace required"
+                    },
+                    {
+                        name:       "city",
+                        id:         type + "_city",
+                        type:       "text",
+                        label:      Mall.translate.__("city"),
+                        labelClass: "col-sm-3",
+                        inputClass: "form-control city hint required"
+                    }
+
+                ];
+            },
+
+            getInput: function (name, id, type, label, labelClass, inputClass, value) {
+                var result = {
+                    label: "",
+                    input: ""
+                },
+                    inputWrapper;
+
+                result.label = jQuery("<label/>", {
+                    "class": labelClass,
+                    "for": id,
+                    html: label
+                });
+
+                inputWrapper = jQuery("<div/>", {
+                    "class": "col-lg-9 col-md-9 col-sm-9 col-xs-11"
+                });
+
+                jQuery("<input/>", {
+                    type: type,
+                    class: inputClass,
+                    value: value,
+                    name: name,
+                    id: id
+                }).appendTo(inputWrapper);
+
+                result.input = inputWrapper;
+
+                return result;
+            },
+
+            getFormGroup: function (first) {
+                var group,
+                    className;
+
+                if (first === undefined) {
+                    first = false;
+                }
+
+                className = "form-group clearfix" + (!first ? " border-top" : "");
+
+                group = jQuery("<div/>", {
+                    "class": className
+                });
+
+                jQuery("<div/>", {
+                    "class": "row"
+                }).appendTo(group);
+
+                return group;
+            },
+			getNewAddressForm: function () {
+                var form, panel;
+                form = jQuery("<form/>", {
+                    "class": "form clearfix new-address-form",
+                    method: "POST",
+                    action: Config.url.address.save
+                });
+
+                jQuery("<input/>", {
+                    type: "hidden",
+                    name: "form_key",
+                    value: Mall.getFormKey()
+                }).appendTo(form);
+
+                jQuery("<input/>", {
+                    type: "hidden",
+                    name: "country_id",
+                    value: jQuery("#country_id").val()
+                }).appendTo(form);
+
+                panel = jQuery("<div/>", {
+                    "class": "panel panel-default"
+                }).appendTo(form);
+
+                jQuery("<div/>", {
+                    "class": "panel-body"
+                }).appendTo(panel);
+
+                return form;
+            },
+			handleChangeAddressClick: function(e){
+				var type = e.data.type,
+					element = jQuery(e.target),
+					block = this._content.find(".panel-adresses." + type);
+			
+				element.toggleClass("open");
+				
+				this._rollAddressList(type, block, element.hasClass("open"));
+			},
+			toggleOpenAddressList: function (type) {
+                jQuery(".panel-footer").find("." + type).click();
+            },
+			////////////////////////////////////////////////////////////////////
+			// Handlers
+			////////////////////////////////////////////////////////////////////
+			editAddress: function(event){
+                event.preventDefault();
+                var step = event.data.step,
+                    address = event.data.address,
+                    addressBook = event.data.addressBook;
+
+                // show modal
+                step.showAddNewModal(step.getModal(), event.data.type, true);
+                step.getModal().modal("show");
+                step.injectEntityIdToEditForm(
+                    step.getModal().find("form"), address.getId(), addressBook
+                );
+                step.fillEditForm(address, step.getModal().find("form"));
+				return false;
+			},
+			injectEntityIdToEditForm: function (form, id, addressBook) {
+                jQuery("<input/>", {
+                    type: "hidden",
+                    name: addressBook.getEntityIdKey(),
+                    value: id
+                }).appendTo(form);
+            },
+			fillEditForm: function (address, form) {
+                form = jQuery(form);
+                jQuery.each(address.getData(), function (idx, item) {
+                    if (idx.indexOf("street") !== -1 && item) {
+                        if (jQuery.isArray(item)) {
+                            item = item.shift();
+                        }
+                    }
+                    if (form.find("[name='"+ idx +"']").length > 0) {
+                        form.find("[name='"+ idx +"']").val(item);
+                    }
+                });
+            },
+			lockButton: function (button) {
+                jQuery(button).prop("disabled", true);
+            },
+
+            unlockButton: function (button) {
+                jQuery(button).prop("disabled", false);
+            },
+			////////////////////////////////////////////////////////////////////
+			// Setters/getters
+			////////////////////////////////////////////////////////////////////
+			getSelectedTemplate: function(){
+				return jQuery("#selected-address-template").html();
+			},
+			getNormalTemplate: function(){
+				return jQuery("#normal-address-template").html();
+			},
+            getModalData: function () {
+                var data = {},
+                    form = this.getModal().find(".new-address-form");
+
+                jQuery.each(form.serializeArray(), function () {
+                    data[this.name] = this.value;
+                });
+
+                return data;
+            },
+            getModal: function () {
+                return jQuery("#addressbook-modal");
+            },
+			setAddressBook: function(addressBook){
+				this._book = addressBook;
+				return this;
+			},
+			getAddressBook: function(){
+				return this._book;
+			},
+			
+			_rollAddressList: function(type, block, doOpen){
+				var contextActions = block.
+						siblings(".current-address").
+						find(".action");
+				
+				var element = this._content.find(".change_address." + type);
+
+				if(doOpen){
+					block.show();
+					contextActions.show();
+					element.addClass("open");
+					element.text(Mall.translate.__("roll-up"));
+				}else{
+					block.hide();
+					contextActions.hide();
+					element.removeClass("open");
+					element.text(Mall.translate.__("change-address"));
+				}
+				
+				//this._processActionSelectedAddress(contextActions);
+			},
+		},
+		
 		////////////////////////////////////////////////////////////////////////
 		// Navigation
 		////////////////////////////////////////////////////////////////////////
@@ -618,264 +1121,6 @@ jQuery(function($){
 		setUnloadMessage: function(msg){
 			this.unloadMessage = msg;
 		}
-/*(function() {
-			var newRma = $("new-rma");
-			var form = new VarienForm("new-rma");
-			var oldOldSubmit = form.submit;
-			var step1 = $("step-1");
-			var step2 = $("step-2");
-			var step3 = $("step-3");
-			var steps = [step1, step2, step3];
-			var currentStep = 1;
-			var returnReasons = <?php echo Mage::helper('zolagorma')->getReturnReasons($_po, true); ?>;
-			
-			var showStep = function(step) {
-				steps.each(function(el) {
-					el.style.display = 'none';
-				});
-				currentStep = step;
-				collectData();
-				steps[currentStep - 1].style.display = 'block';
-			}
-			
-			var collectData = function(){
-				// Rma items
-				var items = [];
-				newRma.select(".rma-checkbox").each(function(item) {
-					if ($(item).checked) {
-						var tr = $(item).up('tr');
-						items.push({
-							name: tr.getAttribute('data-name'),
-							reasonText: tr.select('option[selected]')[0].innerHTML
-						});
-					}
-				});
-				
-				var reviewItems = $("review-items");
-				
-				reviewItems.innerHTML = "";
-				var lp = 1;
-				items.each(function(item){
-					reviewItems.insert("<tr><td>"+(lp++)+"</td><td>"+item.name+"</td><td>"+item.reasonText+"</td></tr>");
-				})
-				
-				// Comment 
-				var comment = $("comment-text");
-				var commentReview = $("review-comment-text");
-				
-				commentReview.innerHTML = "";
-				if(comment.value){
-					commentReview.innerHTML = "<strong><?php echo $_helper->__("Additional information");?>:</strong> " +
-						comment.value;
-				}
-				
-				// Address
-				$("review-shipping-address").innerHTML = $("shipping-address").innerHTML;
-				
-				// Pickup date
-				var dateText = "<?php echo $_helper->__("Carrier");?>",
-					carrierDate = $("carrier-date");
-			
-					dateText += " " + escape(carrierDate.value) + "<br/>";
-					dateText += "<?php echo $_helper->__("Between");?>";
-					dateText += " " + $F('carrier-time-from');
-					dateText += " <?php echo $_helper->__("and");?>"
-					dateText += " " + $F('carrier-time-to');
-					
-				$("pickup-date-review").innerHTML = dateText;
-				
-				// Account
-				$("customer-account-review").innerHTML = $F("customer-account") ? 
-					$F("customer-account") : "<?php echo $_helper->__('N/A');?>";
-			}
-
-			var checkHandler = function() {
-				var el = $(this);
-				el.up("tr").down(".condition-wrapper").style.display = el.checked ? "block" : "none";
-				validateItems();
-			}
-			
-			var selectHandler = function() {
-				var el = $(this),
-					value = el.value,
-					initialClass = el.className,
-					initialId = el.id,
-					advice,
-					initialAdviceId,
-					newClass,
-					newAdviceId;
-				
-				
-				if(value){
-					newClass = 'must-be-available-' + value;
-				}
-				else{
-					newClass = 'required-entry';
-				}		
-				
-				el.removeClassName(initialClass).addClassName(newClass);
-				
-				//find advice
-				initialClass = initialClass.replace('validation-passed', '');
-				initialClass = initialClass.replace('validation-failed', '');
-				initialClass = initialClass.replace(' ', '');
-				initialAdviceId = 'advice-' + initialClass + '-' + initialId;
-				
-				advice = $(initialAdviceId);
-				
-				if(advice){
-					advice.remove();				
-				}
-			}
-
-			//custom validator
-		    
-		    <?php foreach($_helper->getItemConditionTitles() as $_key=>$_label):?>
-		    
-		    Validation.add('must-be-available-<?php echo $_key; ?>',returnReasons[<?php echo $_key; ?>].message,function(value){
-		    	
-		    	var currentReason = returnReasons[value];
-		    	
-		    	if(!currentReason){
-		    		return false;
-		    	}
-		    	
-		        return currentReason.isAvailable;
-		    });
-			
-			<?php endforeach;?>
-		        
-			// Validate conditions
-			var validateItems = function(e) {
-				var checked = false;
-				var hasItems = $("rma-has-items");
-				newRma.select(".rma-checkbox").each(function(item) {
-					if ($(item).checked) {
-						checked = true;
-					}
-				});
-
-				hasItems.value = "";
-				if (checked) {
-					hasItems.value = 1;
-				}
-			};
-
-			// Register click
-			newRma.select(".rma-checkbox").each(function(item) {
-				$(item).observe('click', checkHandler);
-			});
-			
-			newRma.select(".condition-wrapper > select option").each(function(item) {
-				
-				var value = item.value,
-					currentReason;
-				
-				if(value && value != ""){
-					
-					currentReason = returnReasons[value];
-					if(currentReason && !currentReason.isAvailable){
-						
-						item.text += ' (Not available)';
-					}
-				}
-			});
-			
-			newRma.select(".condition-wrapper > select").each(function(item) {
-				
-				$(item).observe('change', selectHandler);
-			});
-			
-			$("step-1-submit").observe("click", function() {
-				if (form.validator.validate()) {
-					showStep(2);
-					
-					//check which flow is selected
-					applyFlow();
-					
-				}
-			});
-
-			var applyFlow = function(){
-				
-				var isAcknowledged = false,
-					selects;
-				
-				selects = $$('.step-1 .form-list select');
-				
-				// Loop through all selects and find selected ones
-				selects.each(function(item){
-					
-					if(item.value){
-						
-						if(returnReasons[item.value].flow == <?php echo Zolago_Rma_Model_Rma::FLOW_ACKNOWLEDGED; ?>){
-							isAcknowledged = true;
-						}
-					}
-						
-				});
-				<?php  $vendor = $_po->getVendor();?>				
-				<?php  if (!Mage::helper('orbashipping/carrier_dhl')->isEnabledForVendor($vendor)): ?>
-					isAcknowledged = true;
-				<?php endif; ?>
-
-				if(isAcknowledged){
-			  		$('pickup-address-form').hide();
-			  		$('pickup-date-form').hide();
-			  		$('pickup-address-overview').hide();
-			  		$('pickup-date-overview').hide();
-			  		$('overview-message').hide();
-				}
-				else{
-					$('pickup-address-form').show();
-			  		$('pickup-date-form').show();
-			  		$('pickup-address-overview').show();
-			  		$('pickup-date-overview').show();
-			  		$('overview-message').show();
-				}
-		  		
-		  		return true;
-			};
-			
-			$("step-2-submit").observe("click", function() {
-				if (form.validator.validate()) {
-					showStep(3);
-				}
-			});
-			
-			$("step-1-back").observe("click", function() {
-				showStep(1)
-			})
-			
-			$("step-2-back").observe("click", function() {
-				showStep(2)
-			})
-
-			// Calendar setup
-			Calendar.setup({
-				inputField : 'carrier-date',
-				ifFormat : '%d-%m-%Y',
-				button : false,
-				align : 'Bl',
-				singleClick : true
-			});
-
-			// trigger chaneg
-			newRma.select(".rma-checkbox").each(function(item) {
-				checkHandler.bind(item)();
-			});
-			
-			// check submit possible
-			newRma.observe('submit', function(e){
-				if(currentStep!=steps.length){
-					Event.stop(e);
-				}
-			})
-			
-			// Check on beginig
-			validateItems();
-			showStep(1);
-		})();*/
 	};
 	
 	jQuery.extend(true, Mall, {rma: {"new": _rma}});
