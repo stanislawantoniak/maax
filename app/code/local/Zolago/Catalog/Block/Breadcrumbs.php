@@ -51,9 +51,18 @@ class Zolago_Catalog_Block_Breadcrumbs extends Mage_Catalog_Block_Breadcrumbs
 			$product = Mage::registry('current_product');
 			/* @var $product Mage_Catalog_Model_Product */
 			$catIds = $product->getCategoryIds();
+			$rootId = Mage::app()->getStore()->getRootCategoryId();
+			
+			$collection = Mage::getResourceModel('catalog/category_collection');
+			/* @var $collection Mage_Catalog_Model_Resource_Category_Collection */
+			
+			$collection->addAttributeToFilter("entity_id", array("in"=>$catIds));
+			$collection->addAttributeToFilter("is_active", 1);
+			$collection->addPathFilter("/$rootId/");
+			
 			// Get first category
-			if(count($catIds) && isset($catIds[0])){
-				$category = Mage::getModel("catalog/category")->load($catIds[0]);
+			if($collection->count()){
+				$category = $collection->getFirstItem();
 				/* @var $category Mage_Catalog_Model_Category */
 				if($category->getId() && ($parents = $category->getParentCategories())){
 					$pathIds = array_reverse($category->getPathIds());
