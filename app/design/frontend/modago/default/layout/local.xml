@@ -483,9 +483,16 @@
 				<name>searchfaces</name>
 			</action>
 		</reference>
-		
-		
 	</solrbridge_solrsearch_category_view>
+
+	<_udprod_product_configurable>
+		<reference name="head">
+			<action method="removeItem">
+				<type>js</type>
+				<script>unirgy/product_default.js</script>
+			</action>
+		</reference>
+	</_udprod_product_configurable>
 
 	<catalog_product_view>
 		<reference name="root">
