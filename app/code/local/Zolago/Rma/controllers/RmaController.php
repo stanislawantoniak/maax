@@ -33,13 +33,13 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
 		$customer = $session->getCustomer();
 		$helperRma = Mage::helper('zolagorma');
 		$helperTrack = Mage::helper('zolagorma/tracking');
-		$helperDhl = Mage::helper('zolagodhl');
+		$helperDhl = Mage::helper('orbashipping/carrier_dhl');
 		
 		try{
 			$rma = $this->_initRma();
 			$track = $helperTrack->getRmaTrackingForCustomer($rma, $customer);
 			if($track && $track->getId()){
-				$dhlFile = $helperDhl->getRmaDocument($track);
+				$dhlFile = $helperRma->getRmaDocumentForCustomer($track);
 				if(!file_exists($dhlFile)){
 					Mage::throwException($helperRma->__("No RMA document"));
 				}

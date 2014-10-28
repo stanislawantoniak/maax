@@ -1,4 +1,4 @@
-"Cannot edit shipping address in this status", "Nie można edytować adresu w tym statusie"
+﻿"Cannot edit shipping address in this status", "Nie można edytować adresu w tym statusie"
 "Cannot add comment in this status", "Nie można dodać komentarza w tym statusie"
 "Pending courier booking","Oczekuje na zamówienie kuriera"
 "Pending courier pick up","Oczekuje na nadanie przesyłki"
@@ -124,3 +124,4 @@
 "For the given address is not possible to order a courier","Dla podanego adresu nie ma możliwości zamówienia kuriera"
 "Bank account number must contain 26 digits.","Numer konta bankowego musi zawierać 26 cyfr."
 "Selected carrier address", "Wybrany adres pod który ma się zgłosić kurier"
+"New customer question","Nowe pytanie klienta"
