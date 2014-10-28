@@ -203,11 +203,11 @@
     <adminhtml>
     	<translate>
             <modules>
-                <zolagorma>
+                <Zolago_Rma>
                     <files>
                         <default>Zolago_Rma.csv</default>
                     </files>
-                </zolagorma>
+                </Zolago_Rma>
             </modules>
         </translate>
         <layout>
