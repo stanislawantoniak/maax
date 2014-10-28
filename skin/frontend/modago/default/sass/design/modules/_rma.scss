@@ -32,17 +32,18 @@
 	.condition-wrapper {
 		
 		margin-top: -6px;
-		.sbHolder{
+		.select2-container{
 			display: block;
 			width: auto;
 			margin-left: 110px;
+			margin-bottom: 5px;
 			@media (max-width: $screen-xs-min) {
 				margin-left:0;
 			}
 		}
 		&.has-error, &.has-success{
-			.sbHolder{
-				border-color: #e2e2e2;
+			.select2-container{
+				//border-color: #e2e2e2; 
 			}
 		}
 		label{
@@ -163,17 +164,26 @@
 	p{
 		margin-bottom: 15px;
 	}
+	table{
+		border-collapse: collapse;
+		table-layout: fixed;
+		width: 100%;
+	}
 	table td{
-		padding-top: 2px; 
+		padding-top: 6px; 
 		vertical-align: top;
-		padding-bottom: 2px;
+		padding-bottom: 6px;
 	}
 	td.author{
 		width: 130px;
 	}
 	td.desc{
 		padding-left: 10px;
-		word-wrap: break-word; 
+		word-wrap: break-word;
+		p{
+			margin:0;
+			word-wrap: break-word;
+		}
 	}
 	@media (max-width: $screen-xs-min) {
 		table,tr,td{
@@ -199,14 +209,20 @@
 
   p {
     cursor: pointer;
+    display: block;
+    padding-bottom: 23px;
+  }
+  .glyphicon-comment {
+    float: left;
+    margin-right: 5px;
+    margin-top: 3px;
   }
   .caption {
-    display: inline-flex;
-    width: 90%;
-    @media (max-width: $screen-xs-min) {
-      width: 83%;
-    }
-
+    display: block;
+    float: left;
+  }
+  .fa {
+    float: right;
   }
 }
 
@@ -218,16 +234,43 @@
       padding-left: 0px !important;
     }
   }
+  #question_text {
+    font-size: 14px;
+  }
 }
 
-.sales-rma-view .messages.fix {
-  margin-top: -10px;
-  margin-bottom: 40px;
+.sales-rma-view .messages {
+  @media (max-width: $screen-sm) {
+    margin-top: -10px;
+    margin-bottom: 40px;
+  }
 }
 
 
 
 #step-2 {
+  .panel-body{
+    padding: 15px;
+  }
+  .panel-body-with-footer {
+    padding-bottom: 0px;
+  }
+  .panel-footer {
+    background-color: #FEFEFE;
+    padding: 5px;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  .bank-account-rma, .bank-account-rma:focus {
+    width: 270px;
+    padding-right: 3px;
+    -webkit-box-shadow: inset 2px 2px 7px rgba(1, 1, 1, 0.1);
+    box-shadow: inset 2px 2px 7px rgba(1, 1, 1, 0.1);
+    border: 1px solid #bcbcbc;
+    color: #000000;
+  }
+
   #pickup-date-form {
     .field {
       margin-bottom: 15px;
@@ -236,14 +279,15 @@
     input[type=radio]{
       display:none;
     }
-    input[type=radio] + label{
-      /*display:inline-block;*/
+    label[for^="carrier_date"]{
+      display:inline-block;
       width: 20%;
+//      min-width: 140px;
       font-weight: normal;
-      margin-left: -2px;
-      margin-right: -2px;
-      margin-top: -1px;
-      margin-bottom: 0;
+//      margin-left: -2px;
+//      margin-right: -2px;
+//      margin-top: -1px;
+//      margin-bottom: 0;
       padding: 15px 0px;
       font-size: 12px;
       line-height: 20px;
@@ -251,19 +295,134 @@
       text-align: center;
       vertical-align: middle;
       cursor: pointer;
-      background-color: #f5f5f5;
+      background-color: #FFFFFF;
       border: 1px solid #ccc;
+
     }
 
-    @media (max-width: $screen-xs-max) {
+    .label-1 {
+      margin-left: 0px;
+      margin-right: -2px;
+      margin-bottom: 0px;
+      margin-top: 0px;
+    }
+    .label-2 {
+      margin-left: -2px;
+      margin-right: -2px;
+      margin-bottom: 0px;
+      margin-top: 0px;
+    }
+
+    .label-3 {
+      margin-left: -2px;
+      margin-right: -2px;
+      margin-top: 0px;
+      margin-bottom: 0px;
+    }
+    .label-4 {
+      margin-left: -2px;
+      margin-right: -2px;
+      margin-top: 0px;
+      margin-bottom: 0px;
+    }
+    .label-5 {
+      margin-left: -2px;
+      margin-right: -2px;
+      margin-top: 0px;
+      margin-bottom: 0px;
+    }
+
+    @media (max-width: $screen-xs-max) {//767px
       input[type=radio] + label{
-        width: 33.3%;
+        width: 33.333%;
+        min-width: 140px;
+      }
+
+      .label-1 {
+        margin-left: 0px;
+        margin-right: -2px;
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      .label-2 {
+        margin-left: -2px;
+        margin-right: -2px;
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+
+      .label-3 {
+        margin-left: -2px;
+        margin-right: 0px;
+        margin-top: 0px;
+        margin-bottom: 0px;
+      }
+      .label-4 {
+        margin-left: 0px;
+        margin-right: -2px;
+        margin-top: -1px;
+        margin-bottom: 0px;
+      }
+      .label-5 {
+        margin-top: -1px;
+        margin-left: -2px;
+        margin-right: -2px;
+        margin-bottom: 0px;
+      }
+    }
+
+    @media (max-width: 515px) {
+      input[type=radio] + label{
+        width: 50%;
+      }
+
+      .label-1 {
+        margin-left: 0px;
+        margin-right: 0px;
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      .label-2 {
+        margin-left: -4px;
+        margin-right: -2px;
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+
+      .label-3 {
+        margin-left: 0px;
+        margin-right: 0px;
+        margin-bottom: 0px;
+        margin-top: -1px;
+      }
+      .label-4 {
+        margin-left: -4px;
+        margin-right: -2px;
+        margin-bottom: 0px;
+        margin-top: -1px;
+      }
+      .label-5 {
+        margin-left: 0px;
+        margin-right: 0px;
+        margin-bottom: 0px;
+        margin-top: -1px;
+      }
+
+    }
+
+    @media (max-width: 380px) {
+      input[type=radio] + label{
+        width: 100%;
+        margin-left: 0px;
+        margin-right: 0px;
+        margin-top: -1px;
+        margin-bottom: 0px;
       }
     }
 
     input[type=radio]:checked + label{
       outline: 0;
-      background-color:#6fffcf;
+      background-color: #6fffcf;
       font-family: latoblack;
     }
     .rma-dayname {
@@ -280,6 +439,13 @@
       padding: 20px;
       padding-top: 0px;
       padding-bottom: 10px;
+      margin-right: 4px;
+      @media (max-width: 515px) {
+        margin-right: 2px;
+      }
+      @media (max-width: 380px) {
+        margin-right: 0px;
+      }
     }
 
   }
@@ -298,15 +464,53 @@
     font-family: latoblack;
     font-size: 14px;
   }
+  #pickup-time-from {
+    margin-left: 7px;
+  }
 
   #wrapper-choosen-pickup-time {
     background-color: #f5f5f5;
-    padding: 5px;
-    line-height: 35px;
+    padding: 7px;
+    line-height: 25px;
+
+    @media (max-width: 370px) {
+      line-height: 25px;
+    }
   }
   #slider-range{
     margin-bottom: 10px;
   }
+  #pickup-date-form-panel {
+
+    .choose-time {
+      background-color: #FFFFFF;
+
+    }
+  }
+
+  .legend {
+    font-size: 15px;
+    padding: 15px 0px;
+  }
+
+  .legend-big {
+    text-transform: uppercase;
+    font-size: 20px;
+    padding-top: 0px;
+    padding-bottom: 5px;
+  }
+  #customer-account-wrapper {
+    .legend {
+      padding: 15px;
+    }
+    #customer-account{
+      @media (max-width: 335px) {
+        width: 90%;
+      }
+    }
+
+  }
+
 }
 
 /* noUiSlider plugin
@@ -393,7 +597,7 @@
 /* Styling;
  */
 .noUi-background {
-  background: #FAFAFA;
+  background: #FFFFFF;
   box-shadow: inset 0 1px 1px #f0f0f0;
 }
 .noUi-connect {

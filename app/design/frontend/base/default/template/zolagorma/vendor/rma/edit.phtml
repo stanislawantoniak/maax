@@ -267,7 +267,7 @@ jQuery(document).ready(function() {
 							</label>
 							<div class="col-md-9">
 								<label class="checkbox"> 
-									<input type="hidden" name="notify_customer" value=""> 
+									<input type="hidden" name="notify_customer" id="rma-notify-customer-hidden" value=""> 
 									<input type="checkbox" id="rma-notify-customer" name="notify_customer" value="1"> 
 								</label>
 							</div>
@@ -360,11 +360,13 @@ jQuery(function($){
 	
 	status.change(function(){
 		var el = $(this),
+		hidden = $("#rma-notify-customer-hidden"),
 			// Isnt't currentylu selected & force notify
 			doNotify = !!parseInt(el.children(":selected").attr('data-notify-customer')) 
 					&& el.children("[selected]").attr('value') != el.val();
 		notify.prop("checked", doNotify);
 		notify.prop("disabled", doNotify);
+		hidden.val(doNotify ? "1" : "0");
 	});
 	
 	$(".download-letter").click(function(){

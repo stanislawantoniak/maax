@@ -114,30 +114,27 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
     public function sendRmaDetailAction() {
 
         $session = Mage::getSingleton('customer/session');
-        if(!$session->isLoggedIn()){
+        if (!$session->isLoggedIn()) {
             $session->addError(Mage::helper("zolagorma")->__("You need to login"));
             return $this->_redirect('customer/account/login');
         }
-        $session = Mage::getSingleton('customer/session');
 
         $request = $this->getRequest();
+
+        $commentText = trim($request->getParam("question_text", ""));
         $rmaId = (int)($request->getParam("rma_id", 0));
-        try {
+        if (!empty($commentText)) {
+            try {
+                $rma = Mage::getModel("urma/rma")->load($rmaId);
+                if($rma->getId() && $rma->getCustomerId()== $session->getCustomerId()){
 
-            $rma = Mage::getModel('urma/rma')->load($rmaId);
+                    $customerId = $rma->getCustomerId();
+                    $vendorId = $rma->getUdropshipVendor();
 
-            if($rma){
-                $customerId = $rma->getCustomerId();
+                    if ($customerId > 0) {
+                        $author = Mage::getModel("customer/customer")->load($customerId);
 
-                $vendorId = trim($request->getParam("vendor_id", 0));
-
-                if ($customerId > 0) {
-                    $author = Mage::getModel("customer/customer")->load($customerId);
-                    $commentText = trim($request->getParam("question_text", ""));
-
-                    if(!empty($commentText)){
                         //construct comment object
-
                         //comment
                         $notify = true;
                         $visibleOnFront = true;
@@ -153,36 +150,33 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
                         //comment
 
                         $ob = new Zolago_Rma_Model_Observer();
-                        $ob->rmaCustomerSendDetail($rma, $comment, $sendEmail = null, $author);
+                        $ob->rmaCustomerSendDetail($rma, $comment, null, $author);
 
 
                         //After add new customer-author comment set RMA flag new customer comment to true
 
-                        $rma->setnewCustomerQuestion(1);
+                        $rma->setNewCustomerQuestion(1);
                         $rma->save();
-
                         $session->addSuccess(Mage::helper("zolagorma")->__("Your message sent"));
-                    } else {
-                        $session->addError($this->__('Unable to find a data to save'));
-                        return $this->_redirect('sales/rma/view' , array("id" => $rmaId));
+                        return $this->_redirect('sales/rma/view', array("id" => $rmaId));
+
 
                     }
+                } else {
+                    $session->addError($this->__('Unable to find RMA'));
+                    return $this->_redirect('sales/rma/history');
                 }
-            } else {
-                $session->addError($this->__('Unable to find RMA'));
-                return $this->_redirect('sales/rma/history');
+
+
+            } catch (Mage_Core_Exception $e) {
+                $session->addError($e->getMessage());
+            } catch (Exception $e) {
+                Mage::logException($e);
+                $session->addError(Mage::helper("zolagorma")->__("Other error. Check logs."));
             }
-
-
-
-        } catch (Mage_Core_Exception $e) {
-            $session->addError($e->getMessage());
-        } catch (Exception $e) {
-            Mage::logException($e);
-            $session->addError(Mage::helper("zolagorma")->__("Other error. Check logs."));
         }
-
-        return $this->_redirect('sales/rma/view' , array("id" => $rmaId));
+        $session->addError($this->__('Unable to find a data to save'));
+        return $this->_redirect('sales/rma/view', array("id" => $rmaId));
 
     }
 	

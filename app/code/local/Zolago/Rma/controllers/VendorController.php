@@ -77,7 +77,9 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
                     throw new Mage_Core_Exception(Mage::helper("zolagorma")->
                                                   __("Status code %s is not valid.", $status));
                 }
-                Mage::helper('zolagorma')->processSaveStatus($rma, $status);
+				Mage::log("Status logged req: " . var_export($request->getParam("notify_customer"), true));
+				Mage::log("Status logged cont: " . var_export((bool)$notify, true));
+                Mage::helper('zolagorma')->processSaveStatus($rma, $status, (bool)$notify);
                 $messages[] = Mage::helper("zolagorma")->__("Status changed");
             }
 
@@ -100,20 +102,13 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
                             "username"				=> null,
                             "rma_status"			=> $rma->getUdropshipStatus()
                         );
-
+	
                 $model = Mage::getModel("urma/rma_comment")->
                          setRma($rma)->
                          addData($data)->
                          setSkipSettingName(true)->
                          save();
-                $vendorSession = Mage::getSingleton('udropship/session');
-                /* @var $vendorSession  Zolago_Dropship_Model_Session*/
-                if($vendorSession->getVendorId()){
-                    Mage::getModel("urma/rma")
-                        ->load($rma->getId())
-                        ->setnewCustomerQuestion(0)
-                        ->save();
-                }
+
 
                 /* @var $model Unirgy_Rma_Model_Rma_Comment */
 
@@ -124,6 +119,13 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
                                     ));
 
                 $messages[] = Mage::helper("zolagorma")->__("Comment added");
+            }
+
+            if($notify){
+                Mage::getModel("urma/rma")
+                    ->load($rma->getId())
+                    ->setnewCustomerQuestion(0)
+                    ->save();
             }
 
             $connection->commit();
