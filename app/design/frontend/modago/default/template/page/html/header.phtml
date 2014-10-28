@@ -4,6 +4,7 @@
  * Date: 29.04.14
  */
 $_isCheckout = $this->getLayout()->getBlock("root")->getIsCheckout();
+$_baseUrl = Mage::helper("zolagodropshipmicrosite")->getBaseUrl();
 /** @var $this Zolago_Modago_Block_Page_Header_Bottommenu */
 ?>
 
@@ -27,7 +28,7 @@ $_isCheckout = $this->getLayout()->getBlock("root")->getIsCheckout();
 			<!-- LOGO -->
 			<div id="header_top_block_center">
 				<div id="logo">
-					<a href="<?php echo $this->getUrl('/'); ?>" class="logo">
+					<a href="<?php echo $_baseUrl; ?>" class="logo">
 						<img src="<?php echo $this->getLogoSrc(); ?>" alt="<?php echo $this->getLogoAlt(); ?>">
 					</a>
 				</div>

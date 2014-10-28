@@ -7,7 +7,7 @@
         $iconClass = $this->isFilterRolled() ? "fa-chevron-down" : "fa-chevron-up";
     ?>
 	<div class="section clearfix">
-		<h3 class="<?php echo $sectionClass; ?>"><?php echo $this->getFacetLabel(); ?> <i class="fa <?php echo $iconClass; ?>"></i></h3>
+		<h3 class="<?php echo $sectionClass; ?>"><span><?php echo $this->getFacetLabel(); ?></span> <i class="fa <?php echo $iconClass; ?>"></i></h3>
 		<div class="content" id="filter_category">
 			<dl>
 			<?php foreach ($this->getAllItems() as $item=>$count):?>

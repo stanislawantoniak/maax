@@ -32,7 +32,7 @@ $name = '';
 ?>
 <?php if ($max > 0 && (int)$max > (int)$min):?>
     <div class="section clearfix">
-        <h3 class="<?php echo $sectionClass; ?>"><?php echo $this->__("Price"); ?> <i class="fa <?php echo $iconClass; ?>"></i></h3>
+        <h3 class="<?php echo $sectionClass; ?>"><span><?php echo $this->__("Price"); ?></span> <i class="fa <?php echo $iconClass; ?>"></i></h3>
         <div class="content"  id="filter_price">
 			<?php foreach($ranges as $range) : ?>
 			<?php $url = $this->getFacesUrl(array('slider'=>null, 'fq'=>array('price' => $range['value']))); ?>	
