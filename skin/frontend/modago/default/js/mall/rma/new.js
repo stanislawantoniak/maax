@@ -731,7 +731,7 @@ jQuery(function($){
 			/**
 			 * Content object
 			 */
-			content: jQuery("#pickup-address-form"),
+			content: jQuery("#step-2"),
 			
 			/**
 			 * Init addressbook
@@ -739,6 +739,11 @@ jQuery(function($){
 			 */
 			init: function(){
 				var self = this;
+				
+				// No addressbook available
+				if(!this.content.find("#can_init_addressbook").length){
+					return;
+				}
 				
 				// Set selected address from input
 				this.getAddressBook().setSelectedShipping(
@@ -781,7 +786,7 @@ jQuery(function($){
 					addressBook = this.getAddressBook(),
 					target = jQuery(".current-address."+type, this.content),
 					addressObject = addressBook.getSelected(type);
-			
+			console.log(template);
 				if(addressObject){
 					var node = jQuery(Mall.replace(
 						template, 
