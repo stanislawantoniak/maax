@@ -24,12 +24,21 @@ class Zolago_Rma_Block_Abstract extends Mage_Core_Block_Template
 		return Mage::registry('current_track');
 	}
 	
+
 	/**
-	 * @todo Impelemnt with logic
-	 * @return boolean
+	 * @param Zolago_Rma_Model_Rma $rma
+	 * @return bool
 	 */
-	public function getIsCompleint() {
-		return false;
+	public function getIsClaim(Zolago_Rma_Model_Rma $rma) {
+		return $rma->getIsClaim();
+	}
+	
+	/**
+	 * @param Zolago_Rma_Model_Rma $rma
+	 * @return bool
+	 */
+	public function getIsReturn(Zolago_Rma_Model_Rma $rma) {
+		return $rma->getIsReturn();
 	}
 	
 	/**
@@ -59,6 +68,7 @@ class Zolago_Rma_Block_Abstract extends Mage_Core_Block_Template
 	}
 	
 	public function getCommentAuthor(Zolago_Rma_Model_Rma_Comment $comment) {
+		//return $comment->getAuthorName();
 		return $comment->getAuthorTypeText();
 	}
 	
@@ -68,6 +78,7 @@ class Zolago_Rma_Block_Abstract extends Mage_Core_Block_Template
 	 */
 	public function getDayOfWeek(Zolago_Rma_Model_Rma $rma) {
 		$date = new Zend_Date($rma->getCarrierDate());
+		$date->setLocale(Mage::app()->getLocale()->getLocaleCode());
 		return $date->get(Zend_Date::WEEKDAY);
 	}
 	

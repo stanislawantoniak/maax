@@ -44,11 +44,11 @@
 	<adminhtml>
 		<translate>
 			<modules>
-				<zolagoadminhtml>
+				<Zolago_Adminhtml>
 					<files>
 						<default>Zolago_Adminhtml.csv</default>
 					</files>
-				</zolagoadminhtml>
+				</Zolago_Adminhtml>
 			</modules>
 		</translate>
 		<layout>

@@ -9,6 +9,8 @@ jQuery(function($){
 		currentStep: -1, // init value
 		returnReasons: [],
 		unloadMessage: 'Do You really want to leave RMA process?',
+        selectReturnReasonMessage: "Select return reason",
+		notAvailableText: "Not available",
 		ignoreUnload: 0,
 		daysOfWeek: [],
 		txtReason: "",
@@ -32,91 +34,137 @@ jQuery(function($){
 		_init: function(){
 			var self = this;
 			this.steps = [this.step1, this.step2, this.step3];
-			var _validSettings = {
-				errorPlacement: function(error, element) {
-					if(element.next().is(".sbHolder")){
-						error.insertAfter(element.next());
-					}else {
-						error.insertAfter(element);
-					}
-				}
-			};
-			
+
 			this.validation = this.newRma.validate(
-				Mall.validate.getOptions(_validSettings)
+				Mall.validate.getOptions()
 			);
+			
+			this._initStep1();
+            this._initStep2();
+            this._initStep3();
+			
 	
 			$(window).bind('beforeunload', function() {
 				if (self.currentStep>0 && !self.ignoreUnload) {
 					return self.unloadMessage;
 				}
-			}); 
-	
-			this._initStep1();
-            this._initStep2();
-            this._initStep3();
+			});
+
+            //visual fix for message - can't be done by css
+            if ($('.messages i').length) {
+                $('#content').css('margin-top', '0px');
+                $('.messages i').click(function () {
+                    $('#content').css('margin-top', '');
+                });
+            }
 		},
-		
-		// Step 1 init
-		_initStep1: function(){
-			var s = this.step1,
-				self = this,
-				next = s.find("button.next");
-		
-			// Style selects
-			s.find("select").selectbox('attach');
-		
-			// Chexboxes
-			var checkboxHandler = function(){
-				var el = $(this);
-				next[s.find(":checkbox:checked").length ? "removeClass" : "addClass"]('hidden');
-				el.parents("tr").find(".condition-wrapper")
-						[el.is(":checked") ? "addClass" : "removeClass"]('active')
-						[el.is(":checked") ? "removeClass" : "addClass"]('inactive');
-				el.parents("tr").find(".condition-wrapper select").
-						selectbox(el.is(":checked") ? "enable" : "disable");
-			};
-			s.find(":checkbox").change(checkboxHandler).change();
-			
-			// Make validation of select (various methods)
-			var selectHandler = function(){
-				var el = $(this),
-					value = el.val(),
-					ruleName = "required",
-					rules = {},
-					settings = self.newRma.validate().settings;
-			
-				if(value){
-					ruleName = 'must-be-available-' + value;
+
+        // Step 1 init
+        _initStep1: function(){
+            var s = this.step1,
+                self = this,
+                next = s.find("button.next"),
+				selects = s.find("select");
+
+            // Chexboxes
+            var checkboxHandler = function(){
+                var el = $(this),
+					select = el.closest("tr").find("select");
+
+                next[s.find(":checkbox:checked").length ? "removeClass" : "addClass"]('hidden');
+				
+				if(!el.is(":checked")){
+					select.val("");
 				}
+				select.data('checkboxTrigger', true);
+				select.change();
+				select.data('checkboxTrigger', false);
+            };
+            s.find(":checkbox").change(checkboxHandler).change();
+
+            // Make validation of select (various methods)
+            var selectHandler = function(){
+                var el = $(this),
+                    value = el.val(),
+                    rules = {},
+					ruleName = null,
+                    settings = self.newRma.validate().settings,
+					checkbox = el.closest("tr").find(":checkbox");
+			
+				// Event not triggered by checkbox
+				if(!el.data('checkboxTrigger') && checkbox.is(":checked")!=!!value.length){
+					checkbox.prop("checked", !!value.length > 0).change();
+				}
+			
+				// Option selected apply validatop
+				if(value){
+                    ruleName = 'must-be-available-' + value;
+				// No option and selected chebox required validataion
+                }else if(checkbox.is(":checked")){
+                    ruleName = "required";
+				}
+				
+				
+				// No rule matched - add empty rule
 				rules[el.attr('name')] = ruleName;
 				$.extend(settings.rules, rules);
-				
-				// Validate is needed
-				if(el.val() || el.data("inited")){
+
+                // Validate is needed?
+				if(!el.data('checkboxTrigger') && value){
 					el.valid();
 				}
-				el.data('inited', 1);
-			};
 
-			s.find("select").change(selectHandler).change();
-			
-			// Handle next click
-			s.find(".next").click(function(){
-				var valid = true;
-				s.find(":checkbox:checked").each(function(){
-					var el = $(this),
-						select = el.parents("tr").find("select");
-					if(!select.valid()){
-						valid = false;
-					}
-				});
-				if(valid){
-					self.next();
+                var selected = false;
+                jQuery("select option:selected").each(function(i,item){
+                    if(jQuery(item).val() > 0){
+                        selected = true;
+                    }
+                });
+
+                // Clear border if validation rules are empty remove error if needed
+				if(ruleName===null){
+					el.valid();
+					el.parents(".form-group").removeClass("has-feedback has-success has-error");
 				}
-				return false;
+			}
+			
+			// Rewrite options labels 
+			selects.find('option').each(function(item){
+				var el = jQuery(this),
+					value = el.attr('value'),
+					currentReason;
+				
+				if(value && value != ""){
+					currentReason = self.getReturnReasons(value);
+					if(currentReason && !currentReason.isAvailable){
+						el.text(el.text() + ' (' + self.getNotAvailableText() + ')');
+					}
+				}
 			});
-		},
+			
+            selects.select2({minimumResultsForSearch: -1});
+			selects.change(selectHandler);
+
+            // Handle next click
+            s.find(".next").click(function(){
+                var valid = true;
+                s.find(":checkbox:checked").each(function(){
+                    var el = $(this),
+                        select = el.parents("tr").find("select");
+                    if(!select.valid()){
+                        valid = false;
+                    }
+                });
+                if(valid){
+                    self.next();
+                }else if(s.find(".has-error").length){
+					jQuery('html, body').animate({
+						scrollTop: s.find(".has-error").offset().top - 70
+					}, 500);
+				}
+                return false;
+            });
+        },
 		
         // Step 2 init
         _initStep2: function(){
@@ -142,18 +190,15 @@ jQuery(function($){
 	            //validate if user has chosen pickup date
 		            if (!s.find('input[name="rma[carrier_date]"]:checked').length) {
 		                valid = false;
-		                console.log("date");
 	                }
 	            //validate if chosen timespan is minimum 3 hours
-		            if (to - from < 3) {
-		                console.log("hour");
-		                valid = false;
-		            }
+		         //   if (to - from < 3) {
+		         //       valid = false;
+		         //   }
 	            }
 
 	            //validate if entered account number is correct (optional field)
 	            if(account && (account.length != 26 || !$.isNumeric(account))) {
-		            console.log("account");
 		            valid = false
 	            }
 
@@ -163,6 +208,151 @@ jQuery(function($){
                     self.next();
                 }
                 return false;
+            });
+
+            //PICKUP DATE AND HOURS START
+            Object.size = function(obj) {
+                var size = 0, key;
+                for (key in obj) {
+                    if (obj.hasOwnProperty(key)) size++;
+                }
+                return size;
+            };
+
+            jQuery(document).ready( function() {
+                //INIT DATE LIST
+                if (Object.size(dataList) == 0) {
+                    jQuery('#btn-next-step-2').hide();
+                } else {
+                    for(var day in dataList) {
+                        jQuery('#carrier_date_' + day).attr('data-PickupFrom', _rma.round(dataList[day].getPostalCodeServicesResult.drPickupFrom, 'up') );
+                        jQuery('#carrier_date_' + day).attr('data-PickupTo', _rma.round(dataList[day].getPostalCodeServicesResult.drPickupTo, 'down') );
+                    }
+                }
+                //INIT DATE LIST END
+
+                //INIT SLIDER DEFAULT VALUES AND PARAMS
+                if (Object.size(dataList) != 0) {
+                    jQuery("#slider-range").noUiSlider({
+                        start: [660, 840],
+                        step: 60,
+                        behaviour: 'drag-fixed',
+                        connect: true,
+                        range: {
+                            'min': 540,
+                            'max': 1200
+                        }
+                    });
+                }
+                //INIT SLIDER DEFAULT VALUES AND PARAMS END
+
+                //CHANGE DESCRIPTIONS ON SLIDER SLIDE
+                jQuery("#slider-range").on({
+                    slide: function() {
+                        var values = jQuery(this).val();
+                        var from = values[0];
+                        var to = values[1];
+                        _rma.formatTimeRange(from, to);
+
+                        var minutes0 = parseInt(from % 60, 10),
+                            hours0 = parseInt(from / 60 % 24, 10),
+                            minutes1 = parseInt(to % 60, 10),
+                            hours1 = parseInt(to / 60 % 24, 10);
+
+                        var startTime = _rma.getTime(hours0, minutes0);
+                        var endTime = _rma.getTime(hours1, minutes1);
+
+                        jQuery('#pickup-time-from').text(startTime);
+                        jQuery('#pickup-time-to').text(endTime);
+                    }
+                });
+                //CHANGE DESCRIPTIONS ON SLIDER SLIDE END
+
+                //SET SLIDER, SAVE PICKUP TIME, WRITE MESSAGES
+                jQuery('#pickup-date-form-panel input').click(function() {
+                    var _from =  jQuery(this).attr('data-PickupFrom');
+                    var _to =  jQuery(this).attr('data-PickupTo');
+
+                    var from = parseInt(jQuery(this).attr('data-PickupFrom'))*60;
+                    var to = parseInt(jQuery(this).attr('data-Pickupto'))*60;
+
+                    if( (to - from) <= (3*60) ) {
+
+                        jQuery("#slider-range").noUiSlider({
+                            start: [from, to],
+                            range: {
+                                'min': from,
+                                'max': to
+                            }
+                        }, true);
+                        var values = jQuery("#slider-range").val();
+                        _rma.formatTimeRange(values[0], values[1]);
+                        jQuery('#pickup-time').html(Mall.translate.__("For your address is only available time interval") +
+                        ': <br>&nbsp;<br>' + Mall.translate.__("between the hours") +
+                        '<span id=pickup-time-from>' + _from + '</span> ' + Mall.translate.__("and") +
+                        ' <span id=pickup-time-to>' + _to + '</span>');
+
+                        jQuery('#time').hide();
+                        jQuery("#slider-range").hide();
+                        jQuery('.carrier-time-from').hide();
+                    } else {
+                        jQuery('#time').hide();
+                        jQuery("#slider-range").show()
+                        jQuery('.carrier-time-from').show();
+                        jQuery("#slider-range").noUiSlider({
+                            start: [from, from + (3 * 60)],
+                            range: {
+                                'min': from,
+                                'max': to
+                            }
+                        }, true);
+
+                        var values = jQuery("#slider-range").val();
+                        jQuery('#pickup-time').html(Mall.translate.__("For your address, there are dates from ") +
+                        _from + Mall.translate.__(" to ") + _to + '<br>&nbsp;<br><span id="wrapper-choosen-pickup-time">' + _rma.formatTimeRange(values[0], values[1]) + '</span>');
+                    }
+                });
+                //SET SLIDER, SAVE PICKUP TIME, WRITE MESSAGES END
+
+                //IF PAYMENT METHOD IS CHECKONDELIVERY THEN SHOW FIELD BANK ACCOUNT
+                jQuery('#customer-account-wrapper').hide();
+                if (showBankAcc) {
+                    jQuery('#customer-account-wrapper').show();
+                }
+                //IF PAYMENT METHOD IS CHECKONDELIVERY THEN SHOW FIELD BANK ACCOUNT END
+
+                if (Object.size(dataList)) {
+                    var values = jQuery("#slider-range").val();
+                    _rma.formatTimeRange(values[0], values[1]);
+                }
+
+                jQuery('#pickup-date-form-panel input').first().click();//default set the first day
+                //PICKUP DATE AND HOURS START END
+
+                //##############################
+
+                jQuery("select[name^='rma[items_condition_single]']").each(function(item){
+                    if(item.value){
+                        if(returnReasons[item.value].flow == flowAcknowledged){
+                            isAcknowledged = true;
+                        }
+                    }
+                })
+
+                if(isAcknowledged){
+                    jQuery('#pickup-address-form').hide();
+                    jQuery('#pickup-date-form').hide();
+                    jQuery('#pickup-address-overview').hide();
+                    jQuery('#pickup-date-overview').hide();
+                    jQuery('#overview-message').hide();
+                }
+                else{
+                    jQuery('#pickup-address-form').show();
+                    jQuery('#pickup-date-form').show();
+                    jQuery('#pickup-address-overview').show();
+                    jQuery('#pickup-date-overview').show();
+                    jQuery('#overview-message').show();
+                }
             });
         },
 		
@@ -186,6 +376,44 @@ jQuery(function($){
             });
         },
 
+        // Step 2 functions
+        getTime: function(hours, minutes) {
+            minutes = minutes + "";
+            if (minutes.length == 1) {minutes = "0" + minutes;}
+            return hours + ":" + minutes;
+        },
+
+        formatTimeRange: function (from, to) {
+            var minutes0 = parseInt(from % 60, 10),
+                hours0 = parseInt(from / 60 % 24, 10),
+                minutes1 = parseInt(to % 60, 10),
+                hours1 = parseInt(to / 60 % 24, 10);
+
+
+            var startTime = _rma.getTime(hours0, minutes0);
+            var endTime = _rma.getTime(hours1, minutes1);
+
+            var message = Mall.translate.__("Selected time") + ': <span id=pickup-time-from>' + startTime + '</span>&nbsp;-&nbsp;' + '<span id=pickup-time-to>' + endTime + '</span>';
+
+            jQuery('[name="rma[carrier_time_from]"]').val(startTime);
+            jQuery('[name="rma[carrier_time_to]"]').val(endTime);
+
+            return message;
+        },
+
+        round: function(val, type){
+            var h = parseInt(val.substring(0, 2));
+            var m = parseInt(val.substring(3, 5));
+            if (type == 'up') {
+                if (m) {
+                    h = h + 1;
+                }
+            }
+            return h + ':00';
+        },
+
+        // Step 2 functions END
+
 		// Step 3 functions
 		_getRmaAddress: function() {
 			return this.step2.find('.current-rma-address').html();
@@ -194,7 +422,7 @@ jQuery(function($){
 		_getPickup: function() {
 			var s = this.step2,
 				out = {};
-			out.carrier_date = s.find('input[name="rma[carrier_date]"]').val();
+			out.carrier_date = s.find('input[name="rma[carrier_date]"]:checked').val();
 			out.carrier_time_from = s.find('input[name="rma[carrier_time_from]"]').val();
 			out.carrier_time_to = s.find('input[name="rma[carrier_time_to]"]').val();
 			return out;
@@ -265,19 +493,28 @@ jQuery(function($){
 
 		fillRmaSummary: function() {
 			var data = this._getRmaSummaryData();
-			var day = this.daysOfWeek[(new Date(data.pickup.carrier_date)).getDay()]+" "+data.pickup.carrier_date,
+			var date = new Date(data.pickup.carrier_date);
+			var month = date.getMonth() + 1;
+			var day = this.daysOfWeek[date.getDay()] + " " +
+					date.getDate() + "-" +
+					(month < 10 ? "0" + month : month) + "-" +
+					date.getFullYear(),
 				pickup = $("#pickup-date-review"),
 				accountFieldset = $(".customer-account-fieldset"),
 				account = $("#customer-account-review"),
 				items = $("#review-items").find("tbody"),
 				address = $("#review-shipping-address");
-
-			pickup.find('.pickup-day').html(day);
-			pickup.find('.pickup-time').html(
-				this.txtCarrierTime
-					.replace(this._txtCarrierTimeFrom, data.pickup.carrier_time_from)
-					.replace(this._txtCarrierTimeTo, data.pickup.carrier_time_to)
-			);
+			if(data.pickup) {
+				pickup.show();
+				pickup.find('.pickup-day').html(day);
+				pickup.find('.pickup-time').html(
+					this.txtCarrierTime
+						.replace(this._txtCarrierTimeFrom, data.pickup.carrier_time_from)
+						.replace(this._txtCarrierTimeTo, data.pickup.carrier_time_to)
+				);
+			} else {
+				pickup.hide();
+			}
 
 			if(data.account) {
 				account.html(data.account);
@@ -332,6 +569,9 @@ jQuery(function($){
 			this.currentStep = step;
 			// Fix footer
 			jQuery(window).resize();
+
+			// scroll to top
+			jQuery(window).scrollTop(0);
 			return this;
 		},
 		_getStep: function(step){
@@ -355,8 +595,24 @@ jQuery(function($){
 			jQuery.validator.addMethod(name, fn, message);
 		},
 		
+		getReturnReasons: function(index){
+			if(typeof index != "undefined"){
+				return this.returnReasons[index];
+			}
+			return this.returnReasons;
+		},
+		
 		setReturnReasons: function(data){
 			this.returnReasons = data;
+		},
+		
+		setNotAvailableText: function(text){
+			 this.notAvailableText = text;
+			 return this;
+		},
+		
+		getNotAvailableText: function(){
+			return this.notAvailableText;
 		},
 		
 		setUnloadMessage: function(msg){
@@ -621,6 +877,7 @@ jQuery(function($){
 			showStep(1);
 		})();*/
 	};
+	
 	jQuery.extend(true, Mall, {rma: {"new": _rma}});
-	Mall.rma.new.init();
+	// Mall.rma.new.init(); moved to phtml after setting options
 });

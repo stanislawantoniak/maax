@@ -5,9 +5,8 @@ Mall.validate = {
      */
     _default_validation_options: {
         success: "valid",
-
         focusInvalid: false,
-
+		ignoreTitle: true,
         errorElement: "span",
 
         onfocusout: function (element) {
@@ -84,10 +83,15 @@ Mall.validate = {
             if (!validator.numberOfInvalids()) {
                 return true;
             }
+	        console.log(jQuery(validator.errorList[0].element));
+			var modal = jQuery('.modal:visible');
+			var scrollTo = modal
+							? jQuery(validator.errorList[0].element).offset().top - modal.find('.modal-body').offset().top
+							: jQuery(validator.errorList[0].element).offset().top - Mall.getMallHeaderHeight(),
+				scrollMe = modal ? modal : jQuery('html, body');
 
-            jQuery('html, body').animate({
-                scrollTop: jQuery(validator.errorList[0].element).offset().top
-                    - Mall.getMallHeaderHeight()
+            scrollMe.animate({
+                scrollTop: scrollTo
             }, "slow");
         }
     },
@@ -119,6 +123,14 @@ Mall.validate = {
         jQuery.validator.addMethod('validate-nip', function () {
             return Mall.validate.validators.nip.apply(this, arguments);
         }, jQuery.validator.format(Mall.translate.__("Tax numer is incorrect. Enter as a string of digits e.g. 1234567890.")));
+
+        jQuery.validator.addMethod('validate-bankAccount', function () {
+            return Mall.validate.validators.bankAccount.apply(this, arguments);
+        }, jQuery.validator.format(Mall.translate.__("Bank account number must contain 26 digits.")));
+
+        jQuery.validator.addMethod('validate-bankAccountWithReplace', function () {
+            return Mall.validate.validators.bankAccountWithReplace.apply(this, arguments);
+        }, jQuery.validator.format(Mall.translate.__("Bank account number must contain 26 digits.")));
         /*
         override default jquery validator because it can pass email like : name@host
          */

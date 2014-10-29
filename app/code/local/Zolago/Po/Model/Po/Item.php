@@ -17,15 +17,16 @@ class Zolago_Po_Model_Po_Item extends Unirgy_DropshipPo_Model_Po_Item
 	 * @return Mage_Catalog_Helper_Image
 	 */
 	public function getProductThumbHelper() {
+		$_storeId = $this->getPo() ? $this->getPo()->getStoreId() : Mage::app()->getStore()->getStoreId();
 		$thumb = Mage::getResourceModel("catalog/product")->getAttributeRawValue(
-				$this->getProductId(),
-				'thumbnail',
-				$this->getPo()->getStoreId()
+			$this->getProductId(),
+			'thumbnail',
+			$_storeId
 		);
+
 		$product = Mage::getModel("catalog/product")->
 			setId($this->getProductId())->
 			setThumbnail($thumb);
-		
 		return Mage::helper("catalog/image")->init($product, 'thumbnail');
 	}
 	
