@@ -120,7 +120,7 @@ class Zolago_Rma_Block_Vendor_Rma_Grid extends Mage_Adminhtml_Block_Widget_Grid
 				'index'		=> 'entity_id',
 				'link_action'=> "*/*/edit",
 				'link_param'=> 'id',
-				'link_label'=> 'Edit',
+				'link_label'=> Mage::helper('zolagorma')->__('Edit'),
 				'link_target'=>'_self',
                 'filter'    => false,
                 'sortable'  => false
