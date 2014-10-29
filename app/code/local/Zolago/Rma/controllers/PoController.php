@@ -215,14 +215,16 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
 			
             $rma->save();
 			
-			// Duplicate Customer address to RMA address tored in Order Address
-			$customerAddress = $this->_getCustomer()->getAddressById(
-				$data['customer_address_id']
-			);
-			if($customerAddress && $customerAddress->getId()){
-				$orderAddress = $rma->getShippingAddress();
-				$this->_prepareShippingAddress($customerAddress, $orderAddress);
-				$rma->setOwnShippingAddress($orderAddress);
+			if(isset($data['customer_address_id'])){
+				// Duplicate Customer address to RMA address tored in Order Address
+				$customerAddress = $this->_getCustomer()->getAddressById(
+					$data['customer_address_id']
+				);
+				if($customerAddress && $customerAddress->getId()){
+					$orderAddress = $rma->getShippingAddress();
+					$this->_prepareShippingAddress($customerAddress, $orderAddress);
+					$rma->setOwnShippingAddress($orderAddress);
+				}
 			}
         }
         Mage::helper('udropship')->processQueue();
