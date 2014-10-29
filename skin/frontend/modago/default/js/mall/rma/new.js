@@ -333,16 +333,18 @@ jQuery(function($){
 
         initDefaultSlider : function(_dateList){
             if (Object.size(_dateList) != 0) {
-                jQuery("#slider-range").noUiSlider({
-                    start: [660, 840],
-                    step: 60,
-                    behaviour: 'drag-fixed',
-                    connect: true,
-                    range: {
-                        'min': 540,
-                        'max': 1200
-                    }
-                });
+                if(jQuery("#slider-range").length) {
+                    jQuery("#slider-range").noUiSlider({
+                        start: [660, 840],
+                        step: 60,
+                        behaviour: 'drag-fixed',
+                        connect: true,
+                        range: {
+                            'min': 540,
+                            'max': 1200
+                        }
+                    });
+                }
             }
         },
 
