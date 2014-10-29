@@ -1,14 +1,12 @@
 <?php $_item = $this->getItem() ?>
-<tr>
-    <td>
+<p>
         <strong>Produkt: </strong><?php echo $this->htmlEscape($_item->getName()) ?>
         <?php if ($this->getItemOptions()): ?>
             <?php foreach ($this->getItemOptions() as $option): ?>, <?php echo $option['label'] ?>: <?php echo $option['value'] ?>
             <?php endforeach; ?>
         <?php endif; ?>
         <?php echo $this->htmlEscape($_item->getDescription()) ?>
-    </td> 
-<tr>
-</tr> 
-     <td><strong>Powód zwrotu:</strong><?php echo $this->htmlEscape($_item->getItemConditionName()) ?></td>
-</tr>
+	</br>
+        <strong>Powód zwrotu:</strong><?php echo $this->htmlEscape($_item->getItemConditionName()) ?>
+</p>
+
