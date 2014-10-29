@@ -40,11 +40,22 @@ class Zolago_Rma_Block_New_Step2 extends  Zolago_Rma_Block_New_Abstract{
 	}
 	
 	/**
+	 * Return customer address 
 	 * @return int | null
 	 */
 	public function getSelectedShipping() {
+		
+		// Customer address id from last POST
 		if($this->getRma()->getCustomerAddressId()){
 			return $this->getRma()->getCustomerAddressId();
+		}
+		
+		$shippignAddress= $this->
+			getRma()->
+			getShippingAddress();
+		
+		if($shippignAddress && $shippignAddress->getCustomerAddressId()){
+			return $shippignAddress->getCustomerAddressId();
 		}
 		return $this->getDefaultShipping();
 	}

@@ -135,7 +135,7 @@ jQuery(function($){
 					el.valid();
 					el.parents(".form-group").removeClass("has-feedback has-success has-error");
 				}
-			}
+			};
 			
 			// Rewrite options labels 
 			selects.find('option').each(function(item){
@@ -740,6 +740,11 @@ jQuery(function($){
 			init: function(){
 				var self = this;
 				
+				// Set selected address from input
+				this.getAddressBook().setSelectedShipping(
+					this.content.find("#customer_address_id").val()
+				);
+				
 				// Render selected and list
 				this.renderSelectedAddress("shipping");
 				this.renderAddressList("shipping");
@@ -963,7 +968,6 @@ jQuery(function($){
 			////////////////////////////////////////////////////////////////////
 			
 			/**
-			 * 
 			 * @param {object} address
 			 * @param {string} type
 			 * @returns {void}
@@ -971,6 +975,7 @@ jQuery(function($){
 			onSelectedAddressChange: function(address, type){
 				var event = jQuery.Event("selectedAddressChange");
 				this.content.trigger(event, [address, type]);
+				this.content.find("#customer_address_id").val(address.getId());
 			},
 			
 			/**
@@ -1054,8 +1059,13 @@ jQuery(function($){
 		////////////////////////////////////////////////////////////////////////
 		// Navigation
 		////////////////////////////////////////////////////////////////////////
+		hideMsgs: function() {
+			var msgs = $('ul.messages');
+			msgs && msgs.detach();
+		},
 		next: function(){
 			if(this.currentStep<this.steps.length-1){
+				this.hideMsgs();
 				this.go(this.currentStep+1);
 			}
 		},
