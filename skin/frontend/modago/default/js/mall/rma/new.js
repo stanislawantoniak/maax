@@ -411,6 +411,8 @@ jQuery(function($){
                     jQuery('#pickup-time').html(Mall.translate.__("For your address, there are dates from ") +
                     _from + Mall.translate.__(" to ") + _to + '<br>&nbsp;<br><span id="wrapper-choosen-pickup-time">' + _rma.formatTimeRange(values[0], values[1]) + '</span>');
                 }
+
+                jQuery('#btn-next-step-2').show();//if can click then can go to next step
             });
         },
 
@@ -488,8 +490,8 @@ jQuery(function($){
             jQuery("#pickup-date-form div.panel-body").html(
                 "<div id='pickup-date-form-ajax-loading' style='text-align: center;'>" +
                 "<img src='" + ajaxLoaderSkinUrl + "'></div>"
-
             );
+            jQuery('#btn-next-step-2').hide();
 
             promise.done(function (data) {
                 if (data !== undefined && data.status !== undefined) {
@@ -555,19 +557,12 @@ jQuery(function($){
                 var date = new Date(parseInt(key) * 1000);//time in ms
                 var Y_m_d_date_format = date.getFullYear()+"-"+((date.getMonth()+1) < 10 ? "0"+(date.getMonth()+1) : date.getMonth()+1)+"-"+(date.getDate() < 10 ? "0"+date.getDate() : date.getDate());
 
-                jQuery("<input/>", {
-                    type: "radio",
-                    name: "rma[carrier_date]",
-                    id: "carrier_date_" + key,
-                    value: Y_m_d_date_format
-                }).appendTo('#dateList');
-
-                var label_tmp = jQuery("<label/>", {
-                    for: "carrier_date_" + key,
-                    class: "label-" + number
-                });
-
-                jQuery('#carrier_date_' + key).after(label_tmp);
+                jQuery('#dateList').html( jQuery('#dateList').html() + " " +
+                    "<input type='radio' name='rma[carrier_date]'" +
+                    "id='" + "carrier_date_" + key + "'" +
+                    "value='" + Y_m_d_date_format + "' /> " +
+                    "<label for='carrier_date_" + key + "' class='label-" + number + "' > "
+                );
 
                 var span_wrapper = jQuery("<span/>").html(
                     "<span class='rma-dayname'>" + weekdays[date.getDay()] + "</span>" +
