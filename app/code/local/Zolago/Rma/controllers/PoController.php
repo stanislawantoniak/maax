@@ -151,10 +151,10 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
 			&& isset($data['carrier_time_from'])  && $data['carrier_time_from'] != "" 
 			&& isset($data['carrier_time_to']) && $data['carrier_time_to'] != ""){
 	        $dhlRequest = array (
-	                          'shipmentDate' => $data['carrier_date'],
-	                          'shipmentStartHour' => $data['carrier_time_from'],
-	                          'shipmentEndHour' => $data['carrier_time_to'],
-	                      );
+				'shipmentDate' => $data['carrier_date'],
+				'shipmentStartHour' => $data['carrier_time_from'],
+				'shipmentEndHour' => $data['carrier_time_to'],
+			);
 		}
 		else{
 			$dhlRequest = NULL;
@@ -204,17 +204,60 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
 
         foreach ($rmas as $rma) {
             Mage::dispatchEvent("zolagorma_rma_created", array(
-                                    "rma" => $rma
-                                ));
+				"rma" => $rma
+			));
             if($rma->getCurrentTrack()) {                
                 Mage::dispatchEvent("zolagorma_rma_track_added", array(
-                                        "rma"		=> $rma,
-                                        "track"		=> $rma->getCurrentTrack()
-                                    ));
+					"rma"		=> $rma,
+					"track"		=> $rma->getCurrentTrack()
+				));
             }
+			
             $rma->save();
+			
+			// Duplicate Customer address to RMA address tored in Order Address
+			$customerAddress = $this->_getCustomer()->getAddressById(
+				$data['customer_address_id']
+			);
+			if($customerAddress && $customerAddress->getId()){
+				$orderAddress = $rma->getShippingAddress();
+				$this->_prepareShippingAddress($customerAddress, $orderAddress);
+				$rma->setOwnShippingAddress($orderAddress);
+			}
         }
         Mage::helper('udropship')->processQueue();
         Mage::getSingleton('core/session')->setRmaPrintId($rma->getId());
     }
+	
+	/**
+	 * Convert Customer Address to Order Addres to be bind to RMA
+	 * @param Mage_Customer_Model_Address $customerAddress
+	 * @param Mage_Sales_Model_Order_Address $orderAddress
+	 * @return Mage_Sales_Model_Order_Address
+	 */
+	protected function _prepareShippingAddress(
+			Mage_Customer_Model_Address $customerAddress,
+			Mage_Sales_Model_Order_Address $orderAddress) {
+		
+		Mage::helper('core')->copyFieldset(
+				'customer_address', 
+				'to_quote_address',
+				$customerAddress, 
+				$orderAddress
+		);
+		
+		// Clear billing data
+		$orderAddress->setVatId(null);
+		$orderAddress->setNeedInvoice(0);
+		
+		return $orderAddress;
+		
+	}
+	
+	/**
+	 * @return Mage_Customer_Model_Customer
+	 */
+	protected function _getCustomer() {
+		return Mage::getSingleton('customer/session')->getCustomer();
+	}
 }
