@@ -793,7 +793,7 @@ jQuery(function($){
 					addressBook = this.getAddressBook(),
 					target = jQuery(".current-address."+type, this.content),
 					addressObject = addressBook.getSelected(type);
-			console.log(template);
+
 				if(addressObject){
 					var node = jQuery(Mall.replace(
 						template, 
