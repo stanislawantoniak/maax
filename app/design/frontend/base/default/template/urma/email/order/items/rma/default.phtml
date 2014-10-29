@@ -3,10 +3,8 @@
     <td align="left" valign="top" style="font-size:11px; padding:3px 9px;">
         <strong>Produkt: </strong><?php echo $this->htmlEscape($_item->getName()) ?>
         <?php if ($this->getItemOptions()): ?>
-        <dl style="margin:0; padding:0;">
             <?php foreach ($this->getItemOptions() as $option): ?>, <?php echo $option['label'] ?>: <?php echo $option['value'] ?>
             <?php endforeach; ?>
-        </dl>
         <?php endif; ?>
         <?php echo $this->htmlEscape($_item->getDescription()) ?>
     </td> 
