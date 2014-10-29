@@ -92,6 +92,34 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
 		$this->renderLayout();
 	}
 
+    public function courierAction()
+    {
+
+        $session = Mage::getSingleton('customer/session');
+        /* @var $session Mage_Customer_Model_Session */
+        if(!$session->isLoggedIn()){
+            return $this->_redirect('customer/account/login');
+        }
+        // Current RMA can by set and forwarded by _initLastRma
+        if(!Mage::registry("current_rma")){
+            try{
+                $rma =$this->_initRma();
+                /* @var $rma Zolago_Rma_Model_Rma */
+
+            }  catch (Mage_Core_Exception $e){
+                $session->addError($e->getMessage());
+                return $this->_redirect('sales/rma/history');
+            }  catch (Exception $e){
+                $session->addError(Mage::helper("zolagorma")->__("An error occurred"));
+                return $this->_redirect('sales/rma/history');
+            }
+        }
+        $this->loadLayout();
+        $this->_initLayoutMessages($this->_msgStores);
+        $this->_setNavigation();
+        $this->renderLayout();
+    }
+
 	/**
 	 * Success action
 	 * @return void
@@ -233,4 +261,25 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
         }	
 	}
 
+    /**
+     * list of possible pickup data
+     * @return text as json
+     */
+    public function ajaxGetDateListAction(){
+
+        $po_id = $this->getRequest()->getParam('po_id');
+        $zip = $this->getRequest()->getParam('zip');
+
+        $dateList = Mage::helper('zolagorma')->getDateList($po_id, $zip);
+
+        $arrayDateList = (array) $dateList;//only for easy counting
+
+        $response = array(
+            "status" => count($arrayDateList),
+            "content" => $dateList
+        );
+
+        $this->getResponse()->setHeader('Content-type', 'application/x-json');
+        $this->getResponse()->setBody(Mage::helper("core")->jsonEncode($response));
+    }
 }

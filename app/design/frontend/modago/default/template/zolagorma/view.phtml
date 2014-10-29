@@ -64,6 +64,22 @@
 					</div>
 				<?php endif;?>
 			<?php endif;?>
+
+            <?php if($this->isPending($_rma)): ?>
+            <div class="rma-section rma-content">
+                <p>
+                    <i class="glyphicon glyphicon-edit"></i>
+                    <span class="uppercase">
+                        <a href="/sales/rma/courier/id/<?php echo $_rma->getId(); ?>">
+                            <?php echo $_helper->__("Book a courier"); ?>
+                        </a>
+                    </span>
+                </p>
+            </div>
+            <?php endif;?>
+
+
+
 			<div class="rma-section rma-content">
 				<p>
 					<i class="glyphicon glyphicon-list-alt"></i>

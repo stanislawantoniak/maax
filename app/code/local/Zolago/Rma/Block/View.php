@@ -20,6 +20,16 @@ class Zolago_Rma_Block_View extends Zolago_Rma_Block_Abstract
 	public function isPendingPickup(Zolago_Rma_Model_Rma $rma) {
 		return $rma->getRmaStatus()==Zolago_Rma_Model_Rma_Status::STATUS_PENDING_PICKUP;
 	}
+
+    /**
+     *
+     * @param Zolago_Rma_Model_Rma $rma
+     * @return bool
+     */
+    public function isPending(Zolago_Rma_Model_Rma $rma) {
+        Mage::log($rma->getRmaStatus());
+        return $rma->getRmaStatus()==Zolago_Rma_Model_Rma_Status::STATUS_PENDING;
+    }
 	
 	/**
 	 * @todo implement
