@@ -18,8 +18,7 @@ jQuery(function($){
 		txtCarrierTime: "",
 		_txtCarrierTimeFrom: "carrier_time_from",
 		_txtCarrierTimeTo: "carrier_time_to",
-	
-		
+
 		////////////////////////////////////////////////////////////////////////
 		// Init steps and general
 		////////////////////////////////////////////////////////////////////////
@@ -41,8 +40,11 @@ jQuery(function($){
 			);
 			
 			this._initStep1();
-            this._initStep2();
-            this._initStep3();
+
+			if(this.isReturnPath()) {
+				this._initStep2();
+				this._initStep3();
+			}
 			
 	
 			$(window).bind('beforeunload', function() {
@@ -150,7 +152,9 @@ jQuery(function($){
 					}
 				}
 			});
-			
+
+
+
             selects.select2({minimumResultsForSearch: -1});
 			selects.change(selectHandler);
 
@@ -298,6 +302,14 @@ jQuery(function($){
 				self._submitForm();
             });
         },
+
+		// check if any reason is return reason
+		isReturnPath: function() {
+			for(var key in this.getReturnReasons() )
+				if(!this.getReturnReasons()[key].isClaim)
+					return true;
+			return false;
+		},
 
         // Step 2 functions
 		
@@ -504,6 +516,7 @@ jQuery(function($){
                 return true;
             }).fail(function( jqXHR, textStatus ) {
                 //console.log( "GetDateList: Request failed: " + textStatus );
+                _rma.showInfoAboutNoPickup(); //better then gif with infinity loading
             }).always(function () {
                 jQuery("#pickup-date-form-ajax-loading").remove();
             });
@@ -726,7 +739,7 @@ jQuery(function($){
 			/**
 			 * Content object
 			 */
-			content: jQuery("#pickup-address-form"),
+			content: jQuery("#step-2"),
 			
 			/**
 			 * Init addressbook
@@ -734,6 +747,11 @@ jQuery(function($){
 			 */
 			init: function(){
 				var self = this;
+				
+				// No addressbook available
+				if(!this.content.find("#can_init_addressbook").length){
+					return;
+				}
 				
 				// Set selected address from input
 				this.getAddressBook().setSelectedShipping(
@@ -776,7 +794,7 @@ jQuery(function($){
 					addressBook = this.getAddressBook(),
 					target = jQuery(".current-address."+type, this.content),
 					addressObject = addressBook.getSelected(type);
-			
+
 				if(addressObject){
 					var node = jQuery(Mall.replace(
 						template, 

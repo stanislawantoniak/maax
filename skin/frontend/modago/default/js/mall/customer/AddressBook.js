@@ -18,7 +18,7 @@
         this._book = [];
 
         /**
-         * Customer instance
+         * Customer instancef
          *
          * @type {null}
          * @private
@@ -455,6 +455,7 @@
             if (!isNaN(parseInt(address, 10))) {
                 address = this.get(address);
             }
+			
 
             this.beforeSelectShipping.call(this, address);
             if (address !== null) {
