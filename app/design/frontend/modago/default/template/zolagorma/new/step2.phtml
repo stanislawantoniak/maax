@@ -257,6 +257,7 @@
     //applyFlow
     var isAcknowledged = false;
     var returnReasons = '<?php echo Mage::helper("zolagorma")->getReturnReasons($_po, true); ?>';
+    console.log(returnReasons);
     var flowAcknowledged = '<?php echo Zolago_Rma_Model_Rma::FLOW_ACKNOWLEDGED; ?>';
     //INIT DATE END
 
