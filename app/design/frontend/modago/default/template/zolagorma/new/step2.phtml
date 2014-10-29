@@ -2,7 +2,6 @@
 <?php $_helper = Mage::helper("zolagorma"); ?>
 <?php $_po = $this->getPo(); ?>
 <?php $_rma = $this->getRma();?>
-<?php $_shippingAddress = $_po->getShippingAddress(); ?>
 <?php $_itemsSingle = $_rma->getItemsSingle(); ?>
 <?php $_itemsConditionSingle = $_rma->getItemsConditionSingle(); ?>
 <?php $items = $this->getItemList();?>
@@ -15,7 +14,8 @@
     <div class="rma-container">
 		<?php if (($this->isDhlEnabled()) && count($dateList)) : ?>
         <div id="pickup-address-form" class="fieldset flow-return">
-            <input type="hidden" name="rma[shipping_address_id]" value="<?php echo $_shippingAddress->getId(); ?>"/>
+            <input type="hidden" name="rma[customer_address_id]" id="customer_address_id" 
+				   value="<?php echo $this->getSelectedShipping(); ?>"/>
             <input type="hidden" name="rma[override_address]" value="0"/>
             <h3 class="legend-big"><?php echo $_helper->__("Report a return or claim"); ?></h3>
             <h3 class="legend"><?php echo $_helper->__("Confirm or change pickup address for the courier"); ?>:</h3>
@@ -259,6 +259,7 @@
     var returnReasons = '<?php echo Mage::helper("zolagorma")->getReturnReasons($_po, true); ?>';
     console.log(returnReasons);
     var flowAcknowledged = '<?php echo Zolago_Rma_Model_Rma::FLOW_ACKNOWLEDGED; ?>';
+    var ajaxLoaderSkinUrl = '<?php echo $this->getSkinUrl("images/modago-ajax-loader.gif"); ?>';
     //INIT DATE END
 
 	jQuery(function(){
@@ -267,7 +268,6 @@
 
 		addressBook.setAddressBook(<?php echo $this->getCustomerAddressesJson(); ?>);
 		addressBook.setDefaultShipping(<?php echo $this->asJson($this->getDefaultShipping())?>);
-		addressBook.setSelectedShipping(<?php echo $this->asJson($this->getSelectedShipping())?>);
 
 		Mall.rma.new.addressbook.setAddressBook(addressBook);
 	});

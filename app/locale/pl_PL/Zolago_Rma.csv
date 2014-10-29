@@ -126,3 +126,4 @@
 "Selected carrier address", "Wybrany adres pod który ma się zgłosić kurier"
 "New customer question","Nowe pytanie klienta"
 "Are you sure?", "Jesteś pewien?"
+"There was an error when booking courier for you. On the date that you chose courier cannot pick up the shipment. Please try some other date or hour.","Wystąpił błąd przy zamówieniu kuriera. W zadanych godzinach realizacji przybycie kuriera jest niemożliwe. Spróbuj zamówić w innym dniu lub godzinach."

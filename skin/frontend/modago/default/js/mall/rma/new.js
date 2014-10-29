@@ -135,7 +135,7 @@ jQuery(function($){
 					el.valid();
 					el.parents(".form-group").removeClass("has-feedback has-success has-error");
 				}
-			}
+			};
 			
 			// Rewrite options labels 
 			selects.find('option').each(function(item){
@@ -235,6 +235,13 @@ jQuery(function($){
                 _rma.attachClickOnDate();//SET SLIDER, SAVE PICKUP TIME, WRITE MESSAGES
                 _rma.initDateListValues(dateList);//INIT VALUES FOR DATE LIST
                 jQuery('#pickup-date-form-panel input').first().click();//default set the first day
+
+                jQuery("#pickup-address-form").on("selectedAddressChange", function(e, address) {
+                    //console.log(address.getData());
+                    var poId = parseInt(jQuery("#new-rma input[name='po_id']").val());
+                    var zip = address.getData().postcode;
+                    _rma.getDateList(poId, zip);
+                });
 
                 //IF PAYMENT METHOD IS CHECKONDELIVERY THEN SHOW FIELD BANK ACCOUNT
                 jQuery('#customer-account-wrapper').hide();
@@ -440,6 +447,13 @@ jQuery(function($){
          */
         getDateList: function(poId, zip) {
             "use strict";
+            poId = parseInt(poId);
+
+            var matched = zip.match(/([0-9]{2})([0-9]{3})/);
+            if(matched != null) {
+                zip = matched[1] + "-" + matched[2];
+            }
+
             var promise = jQuery.ajax({
                 url: Config.url.dhl_pickup_date_list,
                 data: {
@@ -458,11 +472,18 @@ jQuery(function($){
                 return false;
             }
 
+            jQuery("#pickup-date-form div.current-rma-date").remove(); //clear all
+            jQuery("#pickup-date-form div.panel-body").html(
+                "<div id='pickup-date-form-ajax-loading' style='text-align: center;'>" +
+                "<img src='" + ajaxLoaderSkinUrl + "'></div>"
+
+            );
+
             promise.done(function (data) {
                 if (data !== undefined && data.status !== undefined) {
                     if (data.status) {
                         // is at least one day for pickup
-                        console.log('done');
+                        //console.log('done');
                         _rma.rebuildPickupDateForm(data.content);
 
                         _rma.initDateList(data.content);//INIT DATE LIST
@@ -482,7 +503,7 @@ jQuery(function($){
             }).fail(function( jqXHR, textStatus ) {
                 //console.log( "GetDateList: Request failed: " + textStatus );
             }).always(function () {
-
+                jQuery("#pickup-date-form-ajax-loading").remove();
             });
 
             return true;
@@ -563,9 +584,10 @@ jQuery(function($){
 
         showInfoAboutNoPickup: function() {
             jQuery("#pickup-date-form div.current-rma-date").remove(); //clear all
-            jQuery("#pickup-date-form").html(
+            jQuery("#pickup-date-form div.panel-body").html(
                 Mall.translate.__("For the given address is not possible to order a courier")
-            )
+            );
+            jQuery('#btn-next-step-2').hide();
         },
 
 
@@ -717,6 +739,11 @@ jQuery(function($){
 			 */
 			init: function(){
 				var self = this;
+				
+				// Set selected address from input
+				this.getAddressBook().setSelectedShipping(
+					this.content.find("#customer_address_id").val()
+				);
 				
 				// Render selected and list
 				this.renderSelectedAddress("shipping");
@@ -941,7 +968,6 @@ jQuery(function($){
 			////////////////////////////////////////////////////////////////////
 			
 			/**
-			 * 
 			 * @param {object} address
 			 * @param {string} type
 			 * @returns {void}
@@ -949,6 +975,7 @@ jQuery(function($){
 			onSelectedAddressChange: function(address, type){
 				var event = jQuery.Event("selectedAddressChange");
 				this.content.trigger(event, [address, type]);
+				this.content.find("#customer_address_id").val(address.getId());
 			},
 			
 			/**
@@ -1032,8 +1059,13 @@ jQuery(function($){
 		////////////////////////////////////////////////////////////////////////
 		// Navigation
 		////////////////////////////////////////////////////////////////////////
+		hideMsgs: function() {
+			var msgs = $('ul.messages');
+			msgs && msgs.detach();
+		},
 		next: function(){
 			if(this.currentStep<this.steps.length-1){
+				this.hideMsgs();
 				this.go(this.currentStep+1);
 			}
 		},
