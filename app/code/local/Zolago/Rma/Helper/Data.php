@@ -188,9 +188,11 @@ class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
 
 				$is_reason_available = ($days_elapsed >= $allowed_days) ? false : true;
 
+				$is_reason_claim = $days_elapsed >= $auto_days;
 
 				$reasons_array[$return_reason_id] = array(
 					'isAvailable' => $is_reason_available,
+					'isClaim' => $is_reason_claim,
 					'days_elapsed' => $days_elapsed,
 					'flow' => $this->getFlow($vendor_reason, $days_elapsed),
 					'auto_days' => $auto_days,

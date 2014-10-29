@@ -148,17 +148,23 @@ jQuery(function($){
 
             // Handle next click
             s.find(".next").click(function(){
-                var valid = true;
+                var valid = true,
+	                claim = false;
                 s.find(":checkbox:checked").each(function(){
                     var el = $(this),
                         select = el.parents("tr").find("select");
                     if(!select.valid()){
                         valid = false;
+                    } else if(self.getReturnReasons(select.val()).isClaim) {
+	                    claim = true;
                     }
                 });
-                if(valid){
+                if(valid && !claim){
                     self.next();
-                }else if(s.find(".has-error").length){
+                } else if(valid && claim) {
+	                self.step2.detach();
+	                self._submitForm();
+                } else if(s.find(".has-error").length) {
 					jQuery('html, body').animate({
 						scrollTop: s.find(".has-error").offset().top - 70
 					}, 500);
@@ -373,8 +379,7 @@ jQuery(function($){
             // Handle next click
             s.find(".next").click(function(){
 				// Submit form
-	            $(window).unbind('beforeunload');
-                $('#new-rma').submit();
+				self._submitForm();
             });
         },
 
@@ -417,6 +422,11 @@ jQuery(function($){
 
 
 		// Step 3 functions
+		_submitForm: function() {
+			$(window).unbind('beforeunload');
+			$('#new-rma').submit();
+		},
+
 		_getRmaAddress: function() {
 			var cloned = this.step2.find('.current-rma-address dl').clone();
 			cloned.find(".action").remove();
