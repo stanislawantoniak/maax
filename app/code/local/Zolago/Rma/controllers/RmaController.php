@@ -233,4 +233,25 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
         }	
 	}
 
+    /**
+     * list of possible pickup data
+     * @return text as json
+     */
+    public function ajaxGetDateListAction(){
+
+        $po_id = $this->getRequest()->getParam('po_id');
+        $zip = $this->getRequest()->getParam('zip');
+
+        $dateList = Mage::helper('zolagorma')->getDateList($po_id, $zip);
+
+        $arrayDateList = (array) $dateList;//only for easy counting
+
+        $response = array(
+            "status" => count($arrayDateList),
+            "content" => $dateList
+        );
+
+        $this->getResponse()->setHeader('Content-type', 'application/x-json');
+        $this->getResponse()->setBody(Mage::helper("core")->jsonEncode($response));
+    }
 }

@@ -280,4 +280,27 @@ class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
 		$hlp->setDesignStore();
 	}
 
+
+    public function getDateList($poId, $newZip = ''){
+        $po = Mage::getModel('zolagopo/po')->load($poId);
+//        $po = $this->getPo();
+        $shippingAddress = $po->getShippingAddress();
+        $zip = empty($newZip) ? $shippingAddress->getPostcode() : $newZip;
+        $helper = Mage::helper('orbashipping/carrier_dhl');
+        $dateList = array();
+        $holidaysHelper = Mage::helper('zolagoholidays/datecalculator');
+        $max = 20;
+        for ($count = 0;(($count <= $max) && (count($dateList)<5));$count++) {
+            // start from today
+            $timestamp = time()+$count*3600*24;
+            if ($holidaysHelper->isPickupDay($timestamp)) {
+                if ($params = $helper->getDhlPickupParamsForDay($timestamp,$zip)) {
+                    if($params->getPostalCodeServicesResult->drPickupFrom !== "brak"){
+                        $dateList[$timestamp] = $params;
+                    }
+                }
+            }
+        }
+        return $dateList;
+    }
 }
