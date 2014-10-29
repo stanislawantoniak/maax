@@ -516,6 +516,7 @@ jQuery(function($){
                 return true;
             }).fail(function( jqXHR, textStatus ) {
                 //console.log( "GetDateList: Request failed: " + textStatus );
+                _rma.showInfoAboutNoPickup(); //better then gif with infinity loading
             }).always(function () {
                 jQuery("#pickup-date-form-ajax-loading").remove();
             });
