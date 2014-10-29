@@ -135,7 +135,7 @@ jQuery(function($){
 					el.valid();
 					el.parents(".form-group").removeClass("has-feedback has-success has-error");
 				}
-			}
+			};
 			
 			// Rewrite options labels 
 			selects.find('option').each(function(item){
@@ -1047,8 +1047,13 @@ jQuery(function($){
 		////////////////////////////////////////////////////////////////////////
 		// Navigation
 		////////////////////////////////////////////////////////////////////////
+		hideMsgs: function() {
+			var msgs = $('ul.messages');
+			msgs && msgs.detach();
+		},
 		next: function(){
 			if(this.currentStep<this.steps.length-1){
+				this.hideMsgs();
 				this.go(this.currentStep+1);
 			}
 		},
