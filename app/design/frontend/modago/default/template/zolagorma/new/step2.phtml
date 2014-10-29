@@ -106,7 +106,6 @@
                                     <em>:</em></label>
 
                                 <div class="input-box" id="dateList">
-                                    <?php $isEven = true; ?>
                                     <?php $number = 1; ?>
                                     <?php foreach ($dateList as $date=>$item): ?>
 
@@ -116,14 +115,13 @@
                                             id="carrier_date_<?php echo $date;?>"
                                             value="<?php echo date('Y-m-d',$date);?>"
                                             />
-                                        <label for="carrier_date_<?php echo $date;?>" class="<?php echo $isEven ? 'label-even' : 'label-odd'; ?> <?php echo "label-$number";?>">
+                                        <label for="carrier_date_<?php echo $date;?>" class="<?php echo "label-$number";?>">
                                             <span>
                                                 <span class="rma-dayname"><?php echo $weekdays[date('w',$date)]['label'];?></span>
                                                 <br/>
                                                 <span class="rma-date"><?php echo $this->getFormattedDate($date);?></span>
                                             </span>
                                         </label>
-                                        <?php $isEven = !$isEven; ?>
                                         <?php $number++; ?>
                                     <?php endforeach; ?>
                                 </div>
@@ -186,6 +184,12 @@
     Mall.translate.add("For your address, there are dates from ", "<?php echo $_helper->__("For your address, there are dates from ") ?>");
     Mall.translate.add(" to ", "<?php echo $_helper->__(" to ") ?>");
     Mall.translate.add("Bank account number must contain 26 digits.", "<?php echo $_helper->__("Bank account number must contain 26 digits.") ?>");
+    Mall.translate.add("Choose the date", "<?php echo $_helper->__("Choose the date") ?>");
+    Mall.translate.add("Select the time interval", "<?php echo $_helper->__("Select the time interval") ?>");
+    Mall.translate.add("Choose time-from of the day", "<?php echo $_helper->__("Choose time-from of the day") ?>");
+    Mall.translate.add("Choose time-to of the day", "<?php echo $_helper->__("Choose time-to of the day") ?>");
+    Mall.translate.add("For the given address is not possible to order a courier", "<?php echo $_helper->__("For the given address is not possible to order a courier") ?>");
+
     // Addressbook transaltion
 	Mall.translate.add("no-addresses", "<?php echo $_helper->__("No addresses");?>");
 	Mall.translate.add("edit-address", "<?php echo $_helper->__("Edit address");?>");
@@ -205,6 +209,7 @@
    	Mall.translate.add("change-address", "<?php echo $_helper->__("Change address");?>");
 	Mall.translate.add("your-additional-addresses", "<?php echo $_helper->__("Your additional addresses");?>");
 	Mall.translate.add("roll-up", "<?php echo $_helper->__("Roll up");?>");
+	Mall.translate.add("address-you-sure", "<?php echo $_helper->__("Are you sure?");?>");
 	// Messages
 	Mall.translate.add("Invalid zip-cod. Zip-code should include 5 numbers in XX-XXX format.", "<?php echo $this->__("Invalid zip-cod. Zip-code should include 5 numbers in XX-XXX format."); ?>");
     Mall.translate.add("Telephone numer is too short. Number must contain 9 digits, without spacing.", "<?php echo $this->__("Telephone numer is too short. Number must contain 9 digits, without spacing."); ?>");
@@ -226,8 +231,27 @@
 	//TRANSLATIONS END
 
     //INIT DATA
-    <?php $js_array = json_encode($dateList); ?>
-    var dataList = <?php echo $js_array; ?>;
+    var rmaCarrierTimeFrom = '<?php echo $_rma->getCarrierTimeFrom(); ?>';
+    var rmaCarrierTimeTo = '<?php echo $_rma->getCarrierTimeTo(); ?>';
+    var dateList = <?php echo json_encode($dateList); ?>;
+    var dateListFormatedDate = [];
+
+    <?php // formatted date for next 20 (max) days from today
+    for($count = 0; $count < 20 ; $count++) {
+        $timestamp = time()+$count*3600*24;
+        $index = date('Y-m-d',$timestamp);
+        echo "dateListFormatedDate['$index'] = '" . $this->getFormattedDate($timestamp) . "';\n";
+    }
+    ?>
+
+    //converting weekdays to array
+    var weekdays = <?php echo json_encode($weekdays); ?>;
+    var arr = [];
+    for (var prop in weekdays) {
+        arr[prop] = (weekdays[prop].label);
+    }
+    weekdays = arr;
+    //converting weekdays to array END
 
     var showBankAcc = <?php echo $_po->isPaymentCheckOnDelivery() ? '1' : '0'; ?>;
     //applyFlow

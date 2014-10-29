@@ -166,7 +166,7 @@ class Zolago_Rma_Model_Rma_Status
 	 * @return Zolago_Rma_Model_Rma_Status
 	 */
 	public function processNewRmaStatus(Zolago_Rma_Model_Rma $rma) {
-		$status = self::STATUS_PENDING_COURIER;
+		$status = self::STATUS_PENDING;
 		if($rma->hasCustomerTracking()){
 			$status = self::STATUS_PENDING_PICKUP;
 		}

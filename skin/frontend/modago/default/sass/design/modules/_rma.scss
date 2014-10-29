@@ -249,6 +249,34 @@
 
 
 #step-2 {
+	
+	form{
+		input[type="text"]{
+			line-height: 29px;
+			height: 29px;
+			padding: 0 15px 0 15px;
+		}
+		label{
+			font-size: 12px;
+			line-height: 29px;
+			padding-right: 20px;
+			text-align: right;
+			font-weight: normal;
+			&.double-line {
+				line-height: 1.2;
+			}
+			&.error{
+				padding-left: 0px !important;
+			}
+		}
+	}
+	.border-top {
+		padding-top: 15px;
+		border-top: 1px solid #eeedf0;
+	}
+	.form-group {
+		margin-bottom: 10px;
+	}
 	.panel-default, .panel{
 		border-radius: 0;
 		-webkit-box-shadow: none;
@@ -280,6 +308,18 @@
 	.panel-body{
 		border-radius: 0;
 		padding: 15px;
+		position: relative;
+		dl{
+			margin:0;
+		}
+		.action a{
+			padding-right: 10px;
+		}
+		.btn-select {
+			position: absolute;
+			right: 15px;
+			bottom: 15px;
+		}
 	}
 	.panel-body-with-footer {
 		padding-bottom: 0px;

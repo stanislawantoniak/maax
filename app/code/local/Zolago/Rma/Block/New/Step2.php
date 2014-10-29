@@ -53,28 +53,10 @@ class Zolago_Rma_Block_New_Step2 extends  Zolago_Rma_Block_New_Abstract{
      * list of possible pickup data
      * @return array
      */         
-     public function getDateList() {
-         $po = $this->getPo();
-         $shippingAddress = $po->getShippingAddress();
-         $zip = $shippingAddress->getPostcode();
-         $helper = Mage::helper('orbashipping/carrier_dhl');
-         $dateList = array();
-         $holidaysHelper = Mage::helper('zolagoholidays/datecalculator');
-         $max = 20;
-         for ($count = 0;(($count <= $max) && (count($dateList)<5));$count++) {
-             // start from
-             $timestamp = time()+$count*3600*24;
-             if ($holidaysHelper->isPickupDay($timestamp)) {
-                 if ($params = $helper->getDhlPickupParamsForDay($timestamp,$zip)) {
-                     if($params->getPostalCodeServicesResult->drPickupFrom !== "brak"){
-                         $dateList[$timestamp] = $params;
-                     }
-                 }
-             }
-         }
-         return $dateList;
-         
+     public function getDateList($newZip = '') {
+         return Mage::helper('zolagorma')->getDateList($this->getRequest()->getParam('po_id'), $newZip);
      }
+
     /**
      * is dhl enabled for rma
      * @return bool
