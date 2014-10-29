@@ -77,8 +77,6 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
                     throw new Mage_Core_Exception(Mage::helper("zolagorma")->
                                                   __("Status code %s is not valid.", $status));
                 }
-				Mage::log("Status logged req: " . var_export($request->getParam("notify_customer"), true));
-				Mage::log("Status logged cont: " . var_export((bool)$notify, true));
                 Mage::helper('zolagorma')->processSaveStatus($rma, $status, (bool)$notify);
                 $messages[] = Mage::helper("zolagorma")->__("Status changed");
             }

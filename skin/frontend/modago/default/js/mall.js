@@ -452,7 +452,7 @@ jQuery.extend(Mall.translate, Mall.i18nValidation);
 Mall.translate.ext = {
     __: function (key) {
         "use strict";
-
+		
         if (this._translate_messages[key] === undefined) {
             return key;
         }
@@ -912,4 +912,12 @@ jQuery(document).ready(function() {
 
     basket_dropdown();
     sales_order_details_top_resize();
+
+	jQuery(document)
+		.on('show.bs.modal', '.modal', function () {
+			jQuery('html,body').addClass('modal-open');
+		})
+		.on('hidden.bs.modal', '.modal', function () {
+			jQuery('html,body').removeClass('modal-open');
+		});
 });

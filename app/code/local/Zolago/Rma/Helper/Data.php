@@ -1,7 +1,51 @@
 <?php
 
 class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
+    
+    const RMA_CUSTOMER_SUFFIX = '_customer';
 
+     /**
+     * merged pdf for customer
+     * @param Zolago_Rma_Model_Rma_Track $track
+     * @return string
+     */
+    public function getRmaDocumentForCustomer(Zolago_Rma_Model_Rma_Track $track) {
+        if (!$customerPdf = $track->getRma()->getCustomerPdf()) {	
+            return null;
+        }        
+        if (!$rmaPdf = $track->getRma()->getRmaPdf()) {	
+            return null;
+        }
+        $helperDhl = Mage::helper('orbashipping/carrier_dhl');
+        if (!$trackPdf = $helperDhl->getRmaDocument($track)) {
+            return null;
+        }
+        $pathParts = pathinfo($rmaPdf);
+        $newPath = $pathParts['dirname'].DS.$pathParts['filename'].self::RMA_CUSTOMER_SUFFIX.'.'.$pathParts['extension'];
+        if (!file_exists($newPath)) {
+            $helper = Mage::helper('zolagocommon');
+            $pdfArray = array(
+                $customerPdf,
+                $rmaPdf,
+                $trackPdf
+            );
+            $helper->mergePdfs($pdfArray,$newPath);
+        }
+        return $newPath;        
+    }
+
+    /**
+     * static customer pdf
+     * @return string
+     */
+    public function getStaticCustomerPdf() {
+        $module = Mage::getModuleDir('','Zolago_Rma');
+        $path = Mage::getConfig()->getNode('frontend/files/pdf/customer');
+        if (!file_exists($module.DS.$path)) {
+            return null;
+        }
+        return $module.DS.$path;
+    }
 	/**
 	 * @param Zolago_Rma_Model_Rma $rma
 	 * @param string $status
@@ -15,7 +59,6 @@ class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
 			$rma->getResource()->saveAttribute($rma, 'rma_status');
 			// Trigger event
 			
-			Mage::log("Status logged helper: " . var_export($notify, true));
 			Mage::dispatchEvent("zolagorma_rma_status_changed", array(
 				"rma" => $rma,
 				"notify" => $notify,
@@ -26,6 +69,20 @@ class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
 		return $rma;
 	}
 
+    /**
+     * @param $cfgField
+     * @param null $store
+     * @return mixed
+     */
+    public function getOptionsDefinition($cfgField, $store = null)
+    {
+        $optDef = Mage::getStoreConfig('urma/general/' . $cfgField, $store);
+        $optDef = Mage::helper('udropship')->unserialize($optDef);
+        foreach ($optDef as $k => $item) {
+            $optDef[$k]['title'] = $this->__($item['title']);
+        }
+        return $optDef;
+    }
 	/**
 	 *
 	 * @param type $items
@@ -131,9 +188,11 @@ class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
 
 				$is_reason_available = ($days_elapsed >= $allowed_days) ? false : true;
 
+				$is_reason_claim = $days_elapsed >= $auto_days;
 
 				$reasons_array[$return_reason_id] = array(
 					'isAvailable' => $is_reason_available,
+					'isClaim' => $is_reason_claim,
 					'days_elapsed' => $days_elapsed,
 					'flow' => $this->getFlow($vendor_reason, $days_elapsed),
 					'auto_days' => $auto_days,

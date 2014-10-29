@@ -4,7 +4,9 @@
 
 (function () {
     "use strict";
-
+	if(typeof Mall.customer != "object"){
+		Mall.customer = {};
+	}
     Mall.customer.AddressBook = function () {
 
         /**

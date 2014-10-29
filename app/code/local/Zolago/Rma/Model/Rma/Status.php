@@ -102,7 +102,7 @@ class Zolago_Rma_Model_Rma_Status
 		
 		if($asHash){
 			foreach($ret as $status=>&$value){
-				$value =  $this->getStatusObject($status)->getTitle();
+				$value =  Mage::helper("zolagorma")->__($this->getStatusObject($status)->getTitle());
 			}
 		}else{
 			$out = $ret;
@@ -110,7 +110,7 @@ class Zolago_Rma_Model_Rma_Status
 			foreach($out as $status=>$value){
 				$obj = $this->getStatusObject($status);
 				$ret[] = $obj->getData() + array(
-					"label" => $obj->getTitle(),
+					"label" => Mage::helper("zolagorma")->__($obj->getTitle()),
 					"value" => $obj->getCode()
 				);
 			}
@@ -166,7 +166,7 @@ class Zolago_Rma_Model_Rma_Status
 	 * @return Zolago_Rma_Model_Rma_Status
 	 */
 	public function processNewRmaStatus(Zolago_Rma_Model_Rma $rma) {
-		$status = self::STATUS_PENDING_COURIER;
+		$status = self::STATUS_PENDING;
 		if($rma->hasCustomerTracking()){
 			$status = self::STATUS_PENDING_PICKUP;
 		}

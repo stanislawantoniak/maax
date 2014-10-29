@@ -18,6 +18,7 @@ jQuery(function($){
 		txtCarrierTime: "",
 		_txtCarrierTimeFrom: "carrier_time_from",
 		_txtCarrierTimeTo: "carrier_time_to",
+	
 		
 		////////////////////////////////////////////////////////////////////////
 		// Init steps and general
@@ -155,17 +156,23 @@ jQuery(function($){
 
             // Handle next click
             s.find(".next").click(function(){
-                var valid = true;
+                var valid = true,
+	                claim = false;
                 s.find(":checkbox:checked").each(function(){
                     var el = $(this),
                         select = el.parents("tr").find("select");
                     if(!select.valid()){
                         valid = false;
+                    } else if(self.getReturnReasons(select.val()).isClaim) {
+	                    claim = true;
                     }
                 });
-                if(valid){
+                if(valid && !claim){
                     self.next();
-                }else if(s.find(".has-error").length){
+                } else if(valid && claim) {
+	                self.step2.detach();
+	                self._submitForm();
+                } else if(s.find(".has-error").length) {
 					jQuery('html, body').animate({
 						scrollTop: s.find(".has-error").offset().top - 70
 					}, 500);
@@ -263,6 +270,7 @@ jQuery(function($){
                     jQuery('#overview-message').show();
                 }
             });
+			this.addressbook.init();
         },
 		
         // Step 3 init
@@ -280,13 +288,12 @@ jQuery(function($){
             // Handle next click
             s.find(".next").click(function(){
 				// Submit form
-	            $(window).unbind('beforeunload');
-                $('#new-rma').submit();
+				self._submitForm();
             });
         },
 
         // Step 2 functions
-
+		
         initDateList: function(_dateList) {
             if (Object.size(_dateList) == 0) {
                 jQuery('#btn-next-step-2').hide();
@@ -561,11 +568,17 @@ jQuery(function($){
             )
         },
 
-        // Step 2 functions END
 
 		// Step 3 functions
+		_submitForm: function() {
+			$(window).unbind('beforeunload');
+			$('#new-rma').submit();
+		},
+
 		_getRmaAddress: function() {
-			return this.step2.find('.current-rma-address').html();
+			var cloned = this.step2.find('.current-rma-address dl').clone();
+			cloned.find(".action").remove();
+			return cloned;
 		},
 
 		_getPickup: function() {
@@ -689,7 +702,333 @@ jQuery(function($){
 		},
 
 
+		////////////////////////////////////////////////////////////////////////
+		// Addressbook
+		////////////////////////////////////////////////////////////////////////
+		addressbook: jQuery.extend({}, Mall.customer.AddressBook.Layout, {
+			/**
+			 * Content object
+			 */
+			content: jQuery("#pickup-address-form"),
+			
+			/**
+			 * Init addressbook
+			 * @returns {void}
+			 */
+			init: function(){
+				var self = this;
+				
+				// Render selected and list
+				this.renderSelectedAddress("shipping");
+				this.renderAddressList("shipping");
+				
+				// Hide address lists
+				this._rollAddressList(
+					"shipping", 
+					this.content.find(".panel-adresses.shipping"), 
+					false
+				);
+				
+				// Handle clicks
+				this.content.find(".change_address").each(function(){
+					var type = jQuery(this).hasClass("billing") ? "billing" : "shipping";
+					jQuery(this).click({type: type}, function(e){
+						self.handleChangeAddressClick(e);
+						return false;
+					})
+				});
+				
+				// Bind address change event
+				this.content.on("selectedAddressChange", function(e, address){
+					console.log(address);
+				});
+				
+			},
+			
+			/**
+			 * @param {string} type
+			 * @returns {void}
+			 */
+			renderSelectedAddress: function(type){
+				var template = this.getSelectedTemplate(),
+					addressBook = this.getAddressBook(),
+					target = jQuery(".current-address."+type, this.content),
+					addressObject = addressBook.getSelected(type);
+			
+				if(addressObject){
+					var node = jQuery(Mall.replace(
+						template, 
+						this.processAddressToDisplay(addressObject)
+					));
+					this.processSelectedAddressNode(node, addressObject, addressBook, type);
+					target.html(node);
+					
+				}else{
+					target.html(Mall.translate.__("no-addresses"));
+				}	
+			},
+			
+			/**
+			 * @param {string} type
+			 * @returns {void}
+			 */
+			renderAddressList: function(type){
+				var template = this.getNormalTemplate(),
+					addressBook = this.getAddressBook(),
+					target = jQuery(".panel-adresses."+type, this.content),
+					selectedAddress = addressBook.getSelected(type),
+					self = this,
+                    addNewButton,
+                    addressCollection = addressBook.getAddressBook(),
+					caption = jQuery("<div>").addClass("additional");
+				
+				target.html('');
+				
+				target.append(caption.text(Mall.translate.__("your-additional-addresses") + ":"));
+				
+				if(addressCollection.length){
+					jQuery.each(addressCollection, function(){
+						// Do not allow sleected address
+						if(selectedAddress && this.getId()==selectedAddress.getId()){
+							return;
+						}
+						
+						var data = self.processAddressToDisplay(this);
+						var node = jQuery(Mall.replace(template, data));
+						self.processAddressNode(node, this, addressBook, type);
+						target.append(node);
+					});
+                }else{
+                    target.html(Mall.translate.__("no-addresses"));
+                }
+                addNewButton = this.getAddNewButton(type);
+                addNewButton.show();
+                target.append(addNewButton);
+            },
+			
+			processAddressNode: function(node, address, addressBook, type){
+				var removeable = addressBook.isRemoveable(address.getId()),
+					remove = node.find(".remove"),
+					choose = node.find(".choose"),
+					edit = node.find(".edit");
+			
+			
+				var eventData = {
+					addressBook: addressBook, 
+					step: this, 
+					address: address, 
+					type: type
+				};
+				
+				remove.click(eventData, this.removeAddress);
+				edit.click(eventData, this.editAddress);
+				choose.click(eventData, this.chooseAddress);
+				remove[removeable ? "show" : "hide"]();		
+				
+				return node;
+			},
+			
+			processSelectedAddressNode: function(node, address, addressBook, type){
+				var edit = node.find(".edit"),
+					editable = this.content.find(".change_address."+type).hasClass("open");
+				
+				var eventData = {
+					addressBook: addressBook, 
+					step: this, 
+					address: address, 
+					type: type
+				};
+				edit.click(eventData, this.editAddress);
+				
+				return node;
+			},
+			
+			_rollAddressList: function(type, block, doOpen){
+				var contextActions = block.
+						siblings(".current-address").
+						find(".action");
+				
+				var element = this.content.find(".change_address." + type);
 
+				if(doOpen){
+					block.show();
+					contextActions.show();
+					element.addClass("open");
+					element.text(Mall.translate.__("roll-up"));
+				}else{
+					block.hide();
+					contextActions.hide();
+					element.removeClass("open");
+					element.text(Mall.translate.__("change-address"));
+				}
+			},
+			
+			 getAddNewForm: function (type) {
+                var form = this.getNewAddressForm(),
+                    panelBody = form.find(".panel-body"),
+                    element,
+                    formGroup,
+                    self = this,
+                    address;
+
+                element = this.getInput("firstname"
+                    , type + "_firstname"
+                    , "text"
+                    , Mall.translate.__("firstname")
+                    , "col-sm-3"
+                    , "form-control firstName required hint"
+                    , "");
+
+                formGroup = this.getFormGroup(true);
+                formGroup.find(".row").append(element.label).append(element.input);
+                panelBody.append(formGroup);
+
+                jQuery.each(this.getNewAddressConfig(type), function (idx, item) {
+                    formGroup = self.getFormGroup();
+                    element = self.getInput(
+                        item.name
+                        , item.id
+                        , item.type
+                        , item.label
+                        , item.labelClass
+                        , item.inputClass
+                        , ""
+                    );
+                    formGroup.find(".row").append(element.label).append(element.input);
+                    panelBody.append(formGroup);
+                });
+
+                panelBody.append(this.getSelectButton());
+
+                panelBody.find(".select-address").click(function (e) {
+                    e.preventDefault();
+                    if (!jQuery(this).parents('form').valid()) {
+                        //visual validation fix
+                        if (jQuery('#shipping_vat_id').first().val().length) {
+                            jQuery('#shipping_vat_id').parents('.form-group').removeClass('hide-success-vaild');
+                        } else {
+                            jQuery('#shipping_vat_id').parents('.form-group').addClass('hide-success-vaild');
+                        }
+                        //end fix
+                        return;
+                    }
+                    var data = self.getModalData();
+
+                    self.lockButton(this);
+                    self.getAddressBook().save(data).done(function (data) {
+                        if (Boolean(data.status) === false) {
+                            alert(data.content.join("\n"));
+                        } else {
+                            address = self.getAddressBook().get(data.content.entity_id);
+							self.getAddressBook().setSelectedShipping(address);
+							self.onSelectedAddressChange(address, type);
+                            self.renderSelectedAddress("shipping");
+                            self.renderAddressList("shipping");
+                            self.getModal().modal("hide");
+                            self.toggleOpenAddressList(type);
+                        }
+                    }).always(function () {
+                        self.unlockButton(e.target);
+                    });
+                });
+
+                return form;
+            },
+			
+			
+			////////////////////////////////////////////////////////////////////
+			// Handlers
+			////////////////////////////////////////////////////////////////////
+			
+			/**
+			 * 
+			 * @param {object} address
+			 * @param {string} type
+			 * @returns {void}
+			 */
+			onSelectedAddressChange: function(address, type){
+				var event = jQuery.Event("selectedAddressChange");
+				this.content.trigger(event, [address, type]);
+			},
+			
+			/**
+			 * @param {type} event
+			 * @returns {Boolean}
+			 */
+			removeAddress: function(event){
+                var deffered;
+
+                if (!confirm(Mall.translate.__("address-you-sure?"))) {
+                    return false;
+                }
+
+                deffered = event.data.addressBook.remove(event.data.address.getId());
+                if (deffered === null) {
+                    alert(Mall.translate.__("address-cant-be-removed"));
+                } else {
+                    deffered.done(function (data) {
+                        if (data.status !== undefined) {
+                            if (Boolean(data.status) === false) {
+                                alert(Mall.translate.__("address-cant-be-removed"));
+                            } else {
+                                event.data.step.renderSelectedAddress(event.data.type);
+                                event.data.step.renderAddressList("shipping");
+                                event.data.step.toggleOpenAddressList(event.data.type);
+                            }
+                        }
+                    });
+                }
+
+				return false;
+			},
+			
+			/**
+			 * Make choose of adderss. Save need invoice if needed.
+			 * @param {type} object
+			 * @returns {Boolean}
+			 */
+			chooseAddress: function(event){
+				var addressBook = event.data.addressBook,
+					address = event.data.address,
+					type = event.data.type,
+					self = event.data.step;
+				
+
+				addressBook.setSelectedShipping(address);
+				self.onSelectedAddressChange(address, type);
+
+				self.renderSelectedAddress("shipping");
+				self.renderAddressList("shipping");
+
+				// Roll up list
+				var listBlock = self.content.find(".panel-adresses." + type);
+
+				self._rollAddressList(type, listBlock, false);
+				
+				return false;
+			},
+			
+			/**
+			 * @param {object} event
+			 * @returns {Boolean}
+			 */
+			editAddress: function(event){
+                event.preventDefault();
+                var step = event.data.step,
+                    address = event.data.address,
+                    addressBook = event.data.addressBook;
+
+                // show modal
+                step.showAddNewModal(step.getModal(), event.data.type, true);
+                step.getModal().modal("show");
+                step.injectEntityIdToEditForm(
+                    step.getModal().find("form"), address.getId(), addressBook
+                );
+                step.fillEditForm(address, step.getModal().find("form"));
+				return false;
+			}
+		}),
+		
 		////////////////////////////////////////////////////////////////////////
 		// Navigation
 		////////////////////////////////////////////////////////////////////////
@@ -767,264 +1106,6 @@ jQuery(function($){
 		setUnloadMessage: function(msg){
 			this.unloadMessage = msg;
 		}
-/*(function() {
-			var newRma = $("new-rma");
-			var form = new VarienForm("new-rma");
-			var oldOldSubmit = form.submit;
-			var step1 = $("step-1");
-			var step2 = $("step-2");
-			var step3 = $("step-3");
-			var steps = [step1, step2, step3];
-			var currentStep = 1;
-			var returnReasons = <?php echo Mage::helper('zolagorma')->getReturnReasons($_po, true); ?>;
-			
-			var showStep = function(step) {
-				steps.each(function(el) {
-					el.style.display = 'none';
-				});
-				currentStep = step;
-				collectData();
-				steps[currentStep - 1].style.display = 'block';
-			}
-			
-			var collectData = function(){
-				// Rma items
-				var items = [];
-				newRma.select(".rma-checkbox").each(function(item) {
-					if ($(item).checked) {
-						var tr = $(item).up('tr');
-						items.push({
-							name: tr.getAttribute('data-name'),
-							reasonText: tr.select('option[selected]')[0].innerHTML
-						});
-					}
-				});
-				
-				var reviewItems = $("review-items");
-				
-				reviewItems.innerHTML = "";
-				var lp = 1;
-				items.each(function(item){
-					reviewItems.insert("<tr><td>"+(lp++)+"</td><td>"+item.name+"</td><td>"+item.reasonText+"</td></tr>");
-				})
-				
-				// Comment 
-				var comment = $("comment-text");
-				var commentReview = $("review-comment-text");
-				
-				commentReview.innerHTML = "";
-				if(comment.value){
-					commentReview.innerHTML = "<strong><?php echo $_helper->__("Additional information");?>:</strong> " +
-						comment.value;
-				}
-				
-				// Address
-				$("review-shipping-address").innerHTML = $("shipping-address").innerHTML;
-				
-				// Pickup date
-				var dateText = "<?php echo $_helper->__("Carrier");?>",
-					carrierDate = $("carrier-date");
-			
-					dateText += " " + escape(carrierDate.value) + "<br/>";
-					dateText += "<?php echo $_helper->__("Between");?>";
-					dateText += " " + $F('carrier-time-from');
-					dateText += " <?php echo $_helper->__("and");?>"
-					dateText += " " + $F('carrier-time-to');
-					
-				$("pickup-date-review").innerHTML = dateText;
-				
-				// Account
-				$("customer-account-review").innerHTML = $F("customer-account") ? 
-					$F("customer-account") : "<?php echo $_helper->__('N/A');?>";
-			}
-
-			var checkHandler = function() {
-				var el = $(this);
-				el.up("tr").down(".condition-wrapper").style.display = el.checked ? "block" : "none";
-				validateItems();
-			}
-			
-			var selectHandler = function() {
-				var el = $(this),
-					value = el.value,
-					initialClass = el.className,
-					initialId = el.id,
-					advice,
-					initialAdviceId,
-					newClass,
-					newAdviceId;
-				
-				
-				if(value){
-					newClass = 'must-be-available-' + value;
-				}
-				else{
-					newClass = 'required-entry';
-				}		
-				
-				el.removeClassName(initialClass).addClassName(newClass);
-				
-				//find advice
-				initialClass = initialClass.replace('validation-passed', '');
-				initialClass = initialClass.replace('validation-failed', '');
-				initialClass = initialClass.replace(' ', '');
-				initialAdviceId = 'advice-' + initialClass + '-' + initialId;
-				
-				advice = $(initialAdviceId);
-				
-				if(advice){
-					advice.remove();				
-				}
-			}
-
-			//custom validator
-		    
-		    <?php foreach($_helper->getItemConditionTitles() as $_key=>$_label):?>
-		    
-		    Validation.add('must-be-available-<?php echo $_key; ?>',returnReasons[<?php echo $_key; ?>].message,function(value){
-		    	
-		    	var currentReason = returnReasons[value];
-		    	
-		    	if(!currentReason){
-		    		return false;
-		    	}
-		    	
-		        return currentReason.isAvailable;
-		    });
-			
-			<?php endforeach;?>
-		        
-			// Validate conditions
-			var validateItems = function(e) {
-				var checked = false;
-				var hasItems = $("rma-has-items");
-				newRma.select(".rma-checkbox").each(function(item) {
-					if ($(item).checked) {
-						checked = true;
-					}
-				});
-
-				hasItems.value = "";
-				if (checked) {
-					hasItems.value = 1;
-				}
-			};
-
-			// Register click
-			newRma.select(".rma-checkbox").each(function(item) {
-				$(item).observe('click', checkHandler);
-			});
-			
-			newRma.select(".condition-wrapper > select option").each(function(item) {
-				
-				var value = item.value,
-					currentReason;
-				
-				if(value && value != ""){
-					
-					currentReason = returnReasons[value];
-					if(currentReason && !currentReason.isAvailable){
-						
-						item.text += ' (Not available)';
-					}
-				}
-			});
-			
-			newRma.select(".condition-wrapper > select").each(function(item) {
-				
-				$(item).observe('change', selectHandler);
-			});
-			
-			$("step-1-submit").observe("click", function() {
-				if (form.validator.validate()) {
-					showStep(2);
-					
-					//check which flow is selected
-					applyFlow();
-					
-				}
-			});
-
-			var applyFlow = function(){
-				
-				var isAcknowledged = false,
-					selects;
-				
-				selects = $$('.step-1 .form-list select');
-				
-				// Loop through all selects and find selected ones
-				selects.each(function(item){
-					
-					if(item.value){
-						
-						if(returnReasons[item.value].flow == <?php echo Zolago_Rma_Model_Rma::FLOW_ACKNOWLEDGED; ?>){
-							isAcknowledged = true;
-						}
-					}
-						
-				});
-				<?php  $vendor = $_po->getVendor();?>				
-				<?php  if (!Mage::helper('orbashipping/carrier_dhl')->isEnabledForVendor($vendor)): ?>
-					isAcknowledged = true;
-				<?php endif; ?>
-
-				if(isAcknowledged){
-			  		$('pickup-address-form').hide();
-			  		$('pickup-date-form').hide();
-			  		$('pickup-address-overview').hide();
-			  		$('pickup-date-overview').hide();
-			  		$('overview-message').hide();
-				}
-				else{
-					$('pickup-address-form').show();
-			  		$('pickup-date-form').show();
-			  		$('pickup-address-overview').show();
-			  		$('pickup-date-overview').show();
-			  		$('overview-message').show();
-				}
-		  		
-		  		return true;
-			};
-			
-			$("step-2-submit").observe("click", function() {
-				if (form.validator.validate()) {
-					showStep(3);
-				}
-			});
-			
-			$("step-1-back").observe("click", function() {
-				showStep(1)
-			})
-			
-			$("step-2-back").observe("click", function() {
-				showStep(2)
-			})
-
-			// Calendar setup
-			Calendar.setup({
-				inputField : 'carrier-date',
-				ifFormat : '%d-%m-%Y',
-				button : false,
-				align : 'Bl',
-				singleClick : true
-			});
-
-			// trigger chaneg
-			newRma.select(".rma-checkbox").each(function(item) {
-				checkHandler.bind(item)();
-			});
-			
-			// check submit possible
-			newRma.observe('submit', function(e){
-				if(currentStep!=steps.length){
-					Event.stop(e);
-				}
-			})
-			
-			// Check on beginig
-			validateItems();
-			showStep(1);
-		})();*/
 	};
 	
 	jQuery.extend(true, Mall, {rma: {"new": _rma}});
