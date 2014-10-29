@@ -10,26 +10,26 @@ class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
      * @return string
      */
     public function getRmaDocumentForCustomer(Zolago_Rma_Model_Rma_Track $track) {
-        if (!$customerPdf = $track->getRma()->getCustomerPdf()) {	
-            return null;
+        $docs = array();
+        if ($customerPdf = $track->getRma()->getCustomerPdf()) {	
+            $docs[] = $customerPdf;
         }        
-        if (!$rmaPdf = $track->getRma()->getRmaPdf()) {	
-            return null;
+        if ($rmaPdf = $track->getRma()->getRmaPdf()) {	
+            $docs[] = $rmaPdf;
+        } else {
+            $rmaPdf = Mage::getBaseDir('media').DS.Zolago_Rma_Model_Pdf::RMA_PDF_PATH.DS.Zolago_Rma_Model_Pdf::RMA_PDF_PREFIX.$track->getRma()->getId().'.pdf';
         }
         $helperDhl = Mage::helper('orbashipping/carrier_dhl');
         if (!$trackPdf = $helperDhl->getRmaDocument($track)) {
-            return null;
+            return null; // no shipping label - no document
+        } else {
+            $docs[] = $trackPdf;
         }
         $pathParts = pathinfo($rmaPdf);
         $newPath = $pathParts['dirname'].DS.$pathParts['filename'].self::RMA_CUSTOMER_SUFFIX.'.'.$pathParts['extension'];
         if (!file_exists($newPath)) {
             $helper = Mage::helper('zolagocommon');
-            $pdfArray = array(
-                $customerPdf,
-                $rmaPdf,
-                $trackPdf
-            );
-            $helper->mergePdfs($pdfArray,$newPath);
+            $helper->mergePdfs($docs,$newPath);
         }
         return $newPath;        
     }
