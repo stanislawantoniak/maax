@@ -18,8 +18,7 @@ jQuery(function($){
 		txtCarrierTime: "",
 		_txtCarrierTimeFrom: "carrier_time_from",
 		_txtCarrierTimeTo: "carrier_time_to",
-	
-		
+
 		////////////////////////////////////////////////////////////////////////
 		// Init steps and general
 		////////////////////////////////////////////////////////////////////////
@@ -41,8 +40,11 @@ jQuery(function($){
 			);
 			
 			this._initStep1();
-            this._initStep2();
-            this._initStep3();
+
+			if(this.isReturnPath()) {
+				this._initStep2();
+				this._initStep3();
+			}
 			
 	
 			$(window).bind('beforeunload', function() {
@@ -150,7 +152,9 @@ jQuery(function($){
 					}
 				}
 			});
-			
+
+
+
             selects.select2({minimumResultsForSearch: -1});
 			selects.change(selectHandler);
 
@@ -298,6 +302,14 @@ jQuery(function($){
 				self._submitForm();
             });
         },
+
+		// check if any reason is return reason
+		isReturnPath: function() {
+			for(var key in this.getReturnReasons() )
+				if(!this.getReturnReasons()[key].isClaim)
+					return true;
+			return false;
+		},
 
         // Step 2 functions
 		
