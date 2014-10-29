@@ -231,8 +231,6 @@ jQuery(function($){
 
             //PICKUP DATE AND HOURS START
 
-            jQuery(document).ready( function() {
-
                 _rma.initDateList(dateList);//INIT DATE LIST
                 _rma.initDefaultSlider(dateList);//INIT SLIDER DEFAULT VALUES AND PARAMS
                 _rma.attachSlideOnSlider();//CHANGE DESCRIPTIONS ON SLIDER SLIDE
@@ -280,7 +278,7 @@ jQuery(function($){
                     jQuery('#pickup-date-overview').show();
                     jQuery('#overview-message').show();
                 }
-            });
+
 			this.addressbook.init();
         },
 		
@@ -326,8 +324,10 @@ jQuery(function($){
 
         initDateListValues: function(_dateList) {
             if (Object.size(_dateList) == 0) {
-                var values = jQuery("#slider-range").val();
-                _rma.formatTimeRange(values[0], values[1]);
+                if (jQuery("#slider-range").length) {
+                    var values = jQuery("#slider-range").val();
+                    _rma.formatTimeRange(values[0], values[1]);
+                }
             }
         },
 
