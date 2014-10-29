@@ -26,9 +26,9 @@ class Zolago_Rma_Block_View extends Zolago_Rma_Block_Abstract
      * @param Zolago_Rma_Model_Rma $rma
      * @return bool
      */
-    public function isPending(Zolago_Rma_Model_Rma $rma) {
+    public function isAccepted(Zolago_Rma_Model_Rma $rma) {
         Mage::log($rma->getRmaStatus());
-        return $rma->getRmaStatus()==Zolago_Rma_Model_Rma_Status::STATUS_PENDING;
+        return $rma->getRmaStatus()==Zolago_Rma_Model_Rma_Status::STATUS_ACCEPTED;
     }
 	
 	/**
