@@ -472,11 +472,18 @@ jQuery(function($){
                 return false;
             }
 
+            jQuery("#pickup-date-form div.current-rma-date").remove(); //clear all
+            jQuery("#pickup-date-form div.panel-body").html(
+                "<div id='pickup-date-form-ajax-loading' style='text-align: center;'>" +
+                "<img src='" + ajaxLoaderSkinUrl + "'></div>"
+
+            );
+
             promise.done(function (data) {
                 if (data !== undefined && data.status !== undefined) {
                     if (data.status) {
                         // is at least one day for pickup
-                        console.log('done');
+                        //console.log('done');
                         _rma.rebuildPickupDateForm(data.content);
 
                         _rma.initDateList(data.content);//INIT DATE LIST
@@ -496,7 +503,7 @@ jQuery(function($){
             }).fail(function( jqXHR, textStatus ) {
                 //console.log( "GetDateList: Request failed: " + textStatus );
             }).always(function () {
-
+                jQuery("#pickup-date-form-ajax-loading").remove();
             });
 
             return true;
