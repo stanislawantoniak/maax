@@ -236,6 +236,13 @@ jQuery(function($){
                 _rma.initDateListValues(dateList);//INIT VALUES FOR DATE LIST
                 jQuery('#pickup-date-form-panel input').first().click();//default set the first day
 
+                jQuery("#pickup-address-form").on("selectedAddressChange", function(e, address) {
+                    //console.log(address.getData());
+                    var poId = parseInt(jQuery("#new-rma input[name='po_id']").val());
+                    var zip = address.getData().postcode;
+                    _rma.getDateList(poId, zip);
+                });
+
                 //IF PAYMENT METHOD IS CHECKONDELIVERY THEN SHOW FIELD BANK ACCOUNT
                 jQuery('#customer-account-wrapper').hide();
                 if (showBankAcc) {
@@ -440,6 +447,13 @@ jQuery(function($){
          */
         getDateList: function(poId, zip) {
             "use strict";
+            poId = parseInt(poId);
+
+            var matched = zip.match(/([0-9]{2})([0-9]{3})/);
+            if(matched != null) {
+                zip = matched[1] + "-" + matched[2];
+            }
+
             var promise = jQuery.ajax({
                 url: Config.url.dhl_pickup_date_list,
                 data: {
@@ -563,9 +577,10 @@ jQuery(function($){
 
         showInfoAboutNoPickup: function() {
             jQuery("#pickup-date-form div.current-rma-date").remove(); //clear all
-            jQuery("#pickup-date-form").html(
+            jQuery("#pickup-date-form div.panel-body").html(
                 Mall.translate.__("For the given address is not possible to order a courier")
-            )
+            );
+            jQuery('#btn-next-step-2').hide();
         },
 
 
