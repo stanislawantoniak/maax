@@ -33,19 +33,15 @@ class Zolago_Rma_Block_New_Step2 extends  Zolago_Rma_Block_New_Abstract{
 	}
 
 	/**
-     * Get customer collecition
+     * Get customer collections
      * @return array
      */
     public function getCustomerAddressesArray() {
-        $addresses = array();
-        $collection = $this->getCustomer()->getAddressesCollection();
-        foreach($collection as $address){
-            /* @var $address Mage_Customer_Model_Address */
-            $arr = $address->getData();
-            $arr['street'] = $address->getStreet();
-            $addresses[$arr["entity_id"]] = $arr;
-        }
-        return $addresses;
+        /**
+         * @var $helper Zolago_Rma_Helper_Data
+         */
+        $helper = Mage::helper('zolagorma');
+        return $helper->getCustomerAddressesArray();
     }
 	
 	/**
@@ -60,20 +56,11 @@ class Zolago_Rma_Block_New_Step2 extends  Zolago_Rma_Block_New_Abstract{
 	 * @return int | null
 	 */
 	public function getSelectedShipping() {
-		
-		// Customer address id from last POST
-		if($this->getRma()->getCustomerAddressId()){
-			return $this->getRma()->getCustomerAddressId();
-		}
-		
-		$shippignAddress= $this->
-			getRma()->
-			getShippingAddress();
-		
-		if($shippignAddress && $shippignAddress->getCustomerAddressId()){
-			return $shippignAddress->getCustomerAddressId();
-		}
-		return $this->getDefaultShipping();
+        /**
+         * @var $helper Zolago_Rma_Helper_Data
+         */
+        $helper = Mage::helper('zolagorma');
+        return $helper->getSelectedShipping();
 	}
 	
     /**

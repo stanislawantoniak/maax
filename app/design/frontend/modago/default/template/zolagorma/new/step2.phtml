@@ -5,9 +5,7 @@
 <?php $_itemsSingle = $_rma->getItemsSingle(); ?>
 <?php $_itemsConditionSingle = $_rma->getItemsConditionSingle(); ?>
 <?php $items = $this->getItemList();?>
-<?php $addresses = $this->getCustomerAddressesArray(); ?>
-<?php $postcode = $addresses[$this->getSelectedShipping()]["postcode"]; ?>
-<?php $dateList = $this->getDateList($postcode);?>
+<?php $dateList = $this->getDateList();?>
 <?php $weekdays = Mage::app()->getLocale()->getOptionWeekdays();?>
 <?php $vendor = $_po->getVendor();?>
 <div class="steps step-2 background-wrapper box-wrapper" id="step-2">
@@ -278,4 +276,6 @@
 		Mall.rma.new.dhlDisabled = true;
 		<?php endif; ?>
 	});
+
+    var lastData = '';
 </script>

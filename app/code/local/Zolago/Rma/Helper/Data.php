@@ -341,10 +341,21 @@ class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
 
 
     public function getDateList($poId, $newZip = ''){
+        error_reporting(E_ALL);
+        ini_set("display_errors", 1);
+        $zip = '';
+        if (!is_null($this->getSelectedShipping())) {
+            $addresses = $this->getCustomerAddressesArray();
+            if(empty($addresses)) {
+                return array();
+            }
+            $zip = $addresses[$this->getSelectedShipping()]["postcode"];
+        }
+
         $po = Mage::getModel('zolagopo/po')->load($poId);
-//        $po = $this->getPo();
         $shippingAddress = $po->getShippingAddress();
-        $zip = empty($newZip) ? $shippingAddress->getPostcode() : $newZip;
+        $zip = empty($newZip) ? ( empty($zip) ? $shippingAddress->getPostcode() : $zip ) : $newZip;
+
         $helper = Mage::helper('orbashipping/carrier_dhl');
         $dateList = array();
         $holidaysHelper = Mage::helper('zolagoholidays/datecalculator');
@@ -361,5 +372,65 @@ class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
             }
         }
         return $dateList;
+    }
+
+    public function getSelectedShipping() {
+        error_reporting(E_ALL);
+        ini_set("display_errors", 1);
+        /**
+         * @var $rma Zolago_Rma_Model_Rma
+         */
+//        $rma = $this->getRma();
+//        $rma->getcus
+        // Customer address id from last POST
+        if($this->getRma()->getCustomerAddressId()){
+            return $this->getRma()->getCustomerAddressId();
+        }
+
+        $shippignAddress= $this->
+        getRma()->
+        getShippingAddress();
+
+        if($shippignAddress && $shippignAddress->getCustomerAddressId()){
+            return $shippignAddress->getCustomerAddressId();
+        }
+        return $this->getDefaultShipping();
+    }
+
+    /**
+     * @return Zolago_Rma_Model_Rma
+     */
+    public function getRma() {
+        return Mage::registry('current_rma');
+    }
+
+    /**
+     * @return int | null
+     */
+    public function getDefaultShipping() {
+        return $this->getCustomer()->getDefaultShipping();
+    }
+
+    /**
+     * @return Mage_Customer_Model_Customer
+     */
+    public function getCustomer() {
+        return Mage::getSingleton('customer/session')->getCustomer();
+    }
+
+    /**
+     * Get customer collecition
+     * @return array
+     */
+    public function getCustomerAddressesArray() {
+        $addresses = array();
+        $collection = $this->getCustomer()->getAddressesCollection();
+        foreach($collection as $address){
+            /* @var $address Mage_Customer_Model_Address */
+            $arr = $address->getData();
+            $arr['street'] = $address->getStreet();
+            $addresses[$arr["entity_id"]] = $arr;
+        }
+        return $addresses;
     }
 }
