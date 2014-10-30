@@ -115,28 +115,95 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
         $session = Mage::getSingleton('core/session');
 
         try {
-            /**
-             * @todo Add processing carrier and insert tracking
-             */
-            $this->_saveRma(false);
-
-            $rma = Mage::registry('current_rma');
-
-            if(is_array($rma)){
-                $rma = current($rma);
-            }
-            if($rma && $rma instanceof Zolago_Rma_Model_Rma && $rma->getId()){
-                $this->_redirect('sales/rma/courier', array('po_id'=>$this->getRequest()->getParam('po_id')));
-            }else{
-                Mage::throwException("Error while editing RMA");
-            }
+            $this->_saveRmaDetails();
+            $session->addSuccess($this->__("Courier data saved"));
+            $this->_redirect('sales/rma/view', array('id'=>$this->getRequest()->getParam('rma_id')));
         } catch (Exception $e) {
             $session->
                 addError($e->getMessage())->
                 setData("rma", $request->getParam('rma'));
 
-            $this->_redirect('sales/rma/courier', array('po_id'=>$this->getRequest()->getParam('po_id')));
+            $this->_redirect('sales/rma/courier', array('id'=>$this->getRequest()->getParam('rma_id')));
         }
+    }
+    protected function _saveRmaDetails(){
+        $rma = $this->_initRma(true);
+
+        $data = $this->getRequest()->getPost('rma');
+
+        $data['send_email'] = true;
+        $comment = '';
+        if (empty($rma)) {
+            Mage::throwException('Return could not be edited');
+        }
+
+        // If pickup date and time is not set
+        // It is a RETURN flow
+        if(isset($data['carrier_date']) && $data['carrier_date'] != ""
+            && isset($data['carrier_time_from'])  && $data['carrier_time_from'] != ""
+            && isset($data['carrier_time_to']) && $data['carrier_time_to'] != ""){
+            $dhlRequest = array (
+                'shipmentDate' => $data['carrier_date'],
+                'shipmentStartHour' => $data['carrier_time_from'],
+                'shipmentEndHour' => $data['carrier_time_to'],
+            );
+        }
+        else{
+            $dhlRequest = NULL;
+        }
+        $config = Mage::getSingleton("shipping/config");
+        /* @var $config Mage_Shipping_Model_Config */
+        /* @var $rma Zolago_Rma_Model_Rma */
+        $po = $rma->getPo();
+
+
+        // set tracking
+        if ($dhlRequest && $trackingParams = $rma->sendDhlRequest($dhlRequest)) {
+            $track = Mage::getModel('urma/rma_track');
+            $track->setTrackCreator(Zolago_Rma_Model_Rma_Track::CREATOR_TYPE_CUSTOMER);
+            $track->setTrackNumber($trackingParams['trackingNumber']);
+            $track->setTitle($config->getCarrierInstance('orbadhl')->getConfigData('title'));
+            $track->setCarrierCode(Orba_Shipping_Model_Carrier_Dhl::CODE);
+            $track->setLabelPic($trackingParams['file']);
+            $rma->addTrack($track);
+            $rma->setCurrentTrack($track);
+        }
+
+        if (!empty($data['send_email'])) {
+            $rma->setEmailSent(true);
+        }
+        $po->setCustomerNoteNotify(!empty($data['send_email']));
+        $po->setIsInProcess(true);
+
+        $trans = Mage::getModel('core/resource_transaction');
+        $rma->setIsCutomer(true);
+        $trans->addObject($rma);
+        $trans->addObject($rma->getPo())->save();
+
+        if($rma->getCurrentTrack()) {
+            Mage::dispatchEvent("zolagorma_rma_track_added", array(
+                "rma"		=> $rma,
+                "track"		=> $rma->getCurrentTrack()
+            ));
+        }
+
+
+        $rma->save();
+
+        if(isset($data['customer_address_id'])){
+            // Duplicate Customer address to RMA address tored in Order Address
+            $customerAddress = $this->_getCustomer()->getAddressById(
+                $data['customer_address_id']
+            );
+            if($customerAddress && $customerAddress->getId()){
+                $orderAddress = $rma->getShippingAddress();
+                $this->_prepareShippingAddress($customerAddress, $orderAddress);
+                $rma->setOwnShippingAddress($orderAddress);
+            }
+        }
+
+
+
     }
     protected function _initRma($forSave=false)
     {
@@ -162,7 +229,7 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
         return $rma;
     }
 
-    protected function _saveRma($isNew = true)
+    protected function _saveRma()
     {
 
         $rmas = $this->_initRma(true);
@@ -220,9 +287,9 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
                 $rma->setEmailSent(true);
             }
         }
-        if($isNew){
-            $rma->setRmaReason(@$data['rma_reason']);
-        }
+
+        $rma->setRmaReason(@$data['rma_reason']);
+
 
         $po->setCustomerNoteNotify(!empty($data['send_email']));
         $po->setIsInProcess(true);
@@ -235,11 +302,11 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
         $trans->addObject($rma->getPo())->save();
 
         foreach ($rmas as $rma) {
-            if($isNew){
+
                 Mage::dispatchEvent("zolagorma_rma_created", array(
                     "rma" => $rma
                 ));
-            }
+
             if($rma->getCurrentTrack()) {                
                 Mage::dispatchEvent("zolagorma_rma_track_added", array(
 					"rma"		=> $rma,
