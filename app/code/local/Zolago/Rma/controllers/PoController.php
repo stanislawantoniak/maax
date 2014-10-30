@@ -143,7 +143,8 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
         $po = $rma->getPo();
 
         // set tracking
-        $this->_rmaSetTracking($data, $rma);
+        $dhlRequest = $this->_getTrackignRequest($data);
+        $this->_setTracking($dhlRequest, $rma);
 
         if (!empty($data['send_email'])) {
             $rma->setEmailSent(true);
@@ -293,7 +294,7 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
         Mage::getSingleton('core/session')->setRmaPrintId($rma->getId());
     }
 
-    protected function _rmaSetTracking($data, $rma)
+    protected function _getTrackignRequest($data)
     {
         // If pickup date and time is not set
         // It is a RETURN flow
@@ -309,6 +310,17 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
         } else {
             $dhlRequest = NULL;
         }
+
+        return $dhlRequest;
+    }
+
+    /**
+     * @param $dhlRequest
+     * @param $rma
+     * @return $rma Zolago_Rma_Model_Rma
+     */
+    protected function _setTracking($dhlRequest, $rma)
+    {
         $config = Mage::getSingleton("shipping/config");
         /* @var $config Mage_Shipping_Model_Config */
         if ($dhlRequest && $trackingParams = $rma->sendDhlRequest($dhlRequest)) {
@@ -323,6 +335,7 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
         }
         return $rma;
     }
+
     /**
      * @param $data
      * @param $rma Zolago_Rma_Model_Rma
