@@ -4,10 +4,9 @@
 <?php $_rma = $this->getRma();?>
 <?php $_itemsSingle = $_rma->getItemsSingle(); ?>
 <?php $_itemsConditionSingle = $_rma->getItemsConditionSingle(); ?>
+<?php $_selectedShipping = $this->getSelectedShippingAddress();?>
 <?php $items = $this->getItemList();?>
-<?php $addresses = $this->getCustomerAddressesArray(); ?>
-<?php $postcode = $addresses[$this->getSelectedShipping()]["postcode"]; ?>
-<?php $dateList = $this->getDateList($postcode);?>
+<?php $dateList = $this->getDateList($_selectedShipping);?>
 <?php $weekdays = Mage::app()->getLocale()->getOptionWeekdays();?>
 <?php $vendor = $_po->getVendor();?>
 <div class="steps step-2 background-wrapper box-wrapper" id="step-2">
@@ -17,7 +16,7 @@
 		
         <div id="pickup-address-form" class="fieldset flow-return">
 			<input type="hidden" id="can_init_addressbook" value="1"/>
-			<input type="hidden" name="rma[customer_address_id]" id="customer_address_id" value="<?php echo $this->getSelectedShipping(); ?>"/>
+			<input type="hidden" name="rma[customer_address_id]" id="customer_address_id" value="<?php echo $_selectedShipping ? $_selectedShipping->getId() : ""; ?>"/>
 			<input type="hidden" name="rma[override_address]" value="0"/>
     
             <h3 class="legend-big"><?php echo $_helper->__("Report a return or claim"); ?></h3>
@@ -176,6 +175,7 @@
             </a>
             <button class="btn button button-primary next pull-right"
                     type="button" id="btn-next-step-2"><?php echo $_helper->__("Next"); ?></button>
+			<div class="clearfix"></div>
         </div>
     </div>
 </div>
@@ -211,6 +211,7 @@
 	Mall.translate.add("address-cant-be-removed", "<?php echo $_helper->__("Address can't be removed.");?>");
 	Mall.translate.add("selected-carrier-address", "<?php echo $_helper->__("Selected carrier address") ?>");
    	Mall.translate.add("change-address", "<?php echo $_helper->__("Change address");?>");
+   	Mall.translate.add("add-address", "<?php echo $_helper->__("Add address");?>");
 	Mall.translate.add("your-additional-addresses", "<?php echo $_helper->__("Your additional addresses");?>");
 	Mall.translate.add("roll-up", "<?php echo $_helper->__("Roll up");?>");
 	Mall.translate.add("address-you-sure", "<?php echo $_helper->__("Are you sure?");?>");

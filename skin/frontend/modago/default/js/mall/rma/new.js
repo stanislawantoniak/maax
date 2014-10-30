@@ -50,7 +50,6 @@ jQuery(function($){
 				Mall.validate.getOptions()
 			);
 			
-			
 			// Inicjuamy 3 kroki zawsze
 			// Wewnątrz każdej sprawdzmy czy mozna
 			this._initStep1();
@@ -186,10 +185,6 @@ jQuery(function($){
             var s = this.step2,
                 self = this,
                 next = s.find("button.next");
-
-			if(!s.find("#can_init_carrier").length){
-				return;
-			}
 
             // Handle back click
             s.find(".back").click(function () {
@@ -761,16 +756,20 @@ jQuery(function($){
 			 */
 			init: function(){
 				var self = this;
-				
 				// No addressbook available
 				if(!this.content.find("#can_init_addressbook").length){
 					return;
 				}
 				
 				// Set selected address from input
-				this.getAddressBook().setSelectedShipping(
-					this.content.find("#customer_address_id").val()
-				);
+				// It can trigger error if address not exists or empty
+				try{
+					this.getAddressBook().setSelectedShipping(
+						this.content.find("#customer_address_id").val()
+					);
+				}catch(e){
+					// No addresses
+				}
 				
 				// Render selected and list
 				this.renderSelectedAddress("shipping");
@@ -833,12 +832,12 @@ jQuery(function($){
 					selectedAddress = addressBook.getSelected(type),
 					self = this,
                     addNewButton,
+					needCaption = false,
                     addressCollection = addressBook.getAddressBook(),
 					caption = jQuery("<div>").addClass("additional");
 				
 				target.html('');
-				
-				target.append(caption.text(Mall.translate.__("your-additional-addresses") + ":"));
+				target.css("padding-top", "0");
 				
 				if(addressCollection.length){
 					jQuery.each(addressCollection, function(){
@@ -851,10 +850,16 @@ jQuery(function($){
 						var node = jQuery(Mall.replace(template, data));
 						self.processAddressNode(node, this, addressBook, type);
 						target.append(node);
+						needCaption = true;
 					});
-                }else{
-                    target.html(Mall.translate.__("no-addresses"));
                 }
+				
+				if(needCaption){
+					target.prepend(caption.text(Mall.translate.__("your-additional-addresses") + ":"));
+				}else{
+					target.css("padding-top", "15px");
+				}
+				
                 addNewButton = this.getAddNewButton(type);
                 addNewButton.show();
                 target.append(addNewButton);
@@ -913,7 +918,10 @@ jQuery(function($){
 					block.hide();
 					contextActions.hide();
 					element.removeClass("open");
-					element.text(Mall.translate.__("change-address"));
+					element.text(Mall.translate.__(
+						this.getAddressBook().getAddressBook().length ? 
+							"change-address" : "add-address"
+					));
 				}
 			},
 			
