@@ -73,7 +73,8 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
 			return $this->_redirect('customer/account/login');
 		}
 		// Current RMA can by set and forwarded by _initLastRma
-		if(!Mage::registry("current_rma")){
+		$rma = Mage::registry("current_rma");
+		if(!$rma || !$rma->getId()){
 			try{
 				$rma =$this->_initRma();
 				/* @var $rma Zolago_Rma_Model_Rma */
