@@ -340,11 +340,22 @@ class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
 	}
 
 
-    public function getDateList($poId, $newZip = ''){
-        $po = Mage::getModel('zolagopo/po')->load($poId);
-//        $po = $this->getPo();
-        $shippingAddress = $po->getShippingAddress();
-        $zip = empty($newZip) ? $shippingAddress->getPostcode() : $newZip;
+    public function getDateList($zip = ''){
+        error_reporting(E_ALL);
+        ini_set("display_errors", 1);
+//        $zip = '';
+//        if (!is_null($this->getSelectedShipping())) {
+//            $addresses = $this->getCustomerAddressesArray();
+//            if(empty($addresses)) {
+//                return array();
+//            }
+//            $zip = $addresses[$this->getSelectedShipping()]["postcode"];
+//        }
+//
+//        $po = Mage::getModel('zolagopo/po')->load($poId);
+//        $shippingAddress = $po->getShippingAddress();
+//        $zip = empty($newZip) ? ( empty($zip) ? $shippingAddress->getPostcode() : $zip ) : $newZip;
+
         $helper = Mage::helper('orbashipping/carrier_dhl');
         $dateList = array();
         $holidaysHelper = Mage::helper('zolagoholidays/datecalculator');

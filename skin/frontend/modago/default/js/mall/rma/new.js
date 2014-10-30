@@ -273,7 +273,7 @@ jQuery(function($){
                 //console.log(address.getData());
                 var poId = parseInt(jQuery("#new-rma input[name='po_id']").val());
                 var zip = address.getData().postcode;
-                _rma.getDateList(poId, zip);
+                _rma.getDateList(zip);
             });
         },
 		
@@ -468,32 +468,49 @@ jQuery(function($){
          * @param zip
          * @returns {boolean}
          */
-        getDateList: function(poId, zip) {
+        getDateList: function(zip) {
             "use strict";
-            poId = parseInt(poId);
+            //poId = parseInt(poId);
 
             var matched = zip.match(/([0-9]{2})([0-9]{3})/);
             if(matched != null) {
                 zip = matched[1] + "-" + matched[2];
             }
 
-            var promise = jQuery.ajax({
-                url: Config.url.dhl_pickup_date_list,
-                data: {
-                    po_id: poId,
-                    zip: zip
-                },
-                dataType: 'json',
-                cache: false,
-                async: true,
-                type: "POST"
-            });
+            OrbaLib.Rma.getDateList({
+                //'poId': poId,
+                'zip': zip
+            }, {
+                'done': function (data) {
+                    if (data !== undefined && data.status !== undefined) {
+                        if (data.status) {
+                            // is at least one day for pickup
+                            //console.log('done');
+                            _rma.rebuildPickupDateForm(data.content);
 
-            if (promise.done === undefined
-                || promise.fail === undefined
-                || promise.always === undefined) {
-                return false;
-            }
+                            _rma.initDateList(data.content);//INIT DATE LIST
+                            _rma.initDefaultSlider(data.content);//INIT SLIDER DEFAULT VALUES AND PARAMS
+                            _rma.attachSlideOnSlider();//CHANGE DESCRIPTIONS ON SLIDER SLIDE
+                            _rma.attachClickOnDate();//SET SLIDER, SAVE PICKUP TIME, WRITE MESSAGES
+                            _rma.initDateListValues(data.content);//INIT VALUES FOR DATE LIST
+                            jQuery('#pickup-date-form-panel input').first().click();//default set the first day
+
+                            return false;
+                        } else {
+                            //there is no days for pickup
+                            _rma.showInfoAboutNoPickup();
+                        }
+                    }
+                    return true;
+                },
+                'fail': function( jqXHR, textStatus ) {
+                    //console.log( "GetDateList: Request failed: " + textStatus );
+                    _rma.showInfoAboutNoPickup(); //better then gif with infinity loading
+                },
+                'always': function () {
+                    jQuery("#pickup-date-form-ajax-loading").remove();
+                }
+            }, true, false);
 
             jQuery("#pickup-date-form div.current-rma-date").remove(); //clear all
             jQuery("#pickup-date-form div.panel-body").html(
@@ -501,34 +518,6 @@ jQuery(function($){
                 "<img src='" + ajaxLoaderSkinUrl + "'></div>"
             );
             jQuery('#btn-next-step-2').hide();
-
-            promise.done(function (data) {
-                if (data !== undefined && data.status !== undefined) {
-                    if (data.status) {
-                        // is at least one day for pickup
-                        //console.log('done');
-                        _rma.rebuildPickupDateForm(data.content);
-
-                        _rma.initDateList(data.content);//INIT DATE LIST
-                        _rma.initDefaultSlider(data.content);//INIT SLIDER DEFAULT VALUES AND PARAMS
-                        _rma.attachSlideOnSlider();//CHANGE DESCRIPTIONS ON SLIDER SLIDE
-                        _rma.attachClickOnDate();//SET SLIDER, SAVE PICKUP TIME, WRITE MESSAGES
-                        _rma.initDateListValues(data.content);//INIT VALUES FOR DATE LIST
-                        jQuery('#pickup-date-form-panel input').first().click();//default set the first day
-
-                        return false;
-                    } else {
-                        //there is no days for pickup
-                        _rma.showInfoAboutNoPickup();
-                    }
-                }
-                return true;
-            }).fail(function( jqXHR, textStatus ) {
-                //console.log( "GetDateList: Request failed: " + textStatus );
-                _rma.showInfoAboutNoPickup(); //better then gif with infinity loading
-            }).always(function () {
-                jQuery("#pickup-date-form-ajax-loading").remove();
-            });
 
             return true;
         },

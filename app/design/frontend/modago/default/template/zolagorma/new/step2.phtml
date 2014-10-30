@@ -5,7 +5,6 @@
 <?php $_itemsSingle = $_rma->getItemsSingle(); ?>
 <?php $_itemsConditionSingle = $_rma->getItemsConditionSingle(); ?>
 <?php $_selectedShipping = $this->getSelectedShippingAddress();?>
-<?php $items = $this->getItemList();?>
 <?php $dateList = $this->getDateList($_selectedShipping);?>
 <?php $weekdays = Mage::app()->getLocale()->getOptionWeekdays();?>
 <?php $vendor = $_po->getVendor();?>
@@ -279,4 +278,6 @@
 		Mall.rma.new.dhlDisabled = true;
 		<?php endif; ?>
 	});
+
+    var lastData = '';
 </script>
