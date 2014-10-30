@@ -237,13 +237,6 @@ jQuery(function($){
                 _rma.initDateListValues(dateList);//INIT VALUES FOR DATE LIST
                 jQuery('#pickup-date-form-panel input').first().click();//default set the first day
 
-                jQuery("#pickup-address-form").on("selectedAddressChange", function(e, address) {
-                    //console.log(address.getData());
-                    var poId = parseInt(jQuery("#new-rma input[name='po_id']").val());
-                    var zip = address.getData().postcode;
-                    _rma.getDateList(poId, zip);
-                });
-
                 //IF PAYMENT METHOD IS CHECKONDELIVERY THEN SHOW FIELD BANK ACCOUNT
                 jQuery('#customer-account-wrapper').hide();
                 if (showBankAcc) {
@@ -279,6 +272,13 @@ jQuery(function($){
                 }
 
 			this.addressbook.init();
+
+            jQuery(this.addressbook.content).on("selectedAddressChange", function(e, address) {
+                //console.log(address.getData());
+                var poId = parseInt(jQuery("#new-rma input[name='po_id']").val());
+                var zip = address.getData().postcode;
+                _rma.getDateList(poId, zip);
+            });
         },
 		
         // Step 3 init

@@ -12,7 +12,7 @@
 	<input type="hidden" name="form_key" value="<?php echo $this->getFormKey();?>"/>
 	<input type="hidden" name="country_id" id="country_id" value="<?php echo $this->getDefaultCountryId();?>"/>
 	<div class="rma-container">
-		<?php if (($this->isDhlEnabled()) && count($dateList)) : ?>
+		
         <div id="pickup-address-form" class="fieldset flow-return">
 			<input type="hidden" id="can_init_addressbook" value="1"/>
 			<input type="hidden" name="rma[customer_address_id]" id="customer_address_id" value="<?php echo $this->getSelectedShipping(); ?>"/>
@@ -99,7 +99,7 @@
             <h3 class="legend"><?php echo $_helper->__("Schedule pickup date that is convenient for you"); ?></h3>
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <?php if(count($dateList) != 0): ?>
+                    <?php if (($this->isDhlEnabled()) && count($dateList)): ?>
 						<input type="hidden" id="can_init_carrier" value="1"/>
                         <div class="current-rma-date clearfix">
                             <div id="pickup-date-form-panel" class="fieldset flow-return">
@@ -156,7 +156,7 @@
             </div>
         </div>
 
-		<?php endif;?>
+
         <div class="fieldset row" id="customer-account-wrapper">
             <div>
                 <h3 class="legend col-sm-12"><?php echo $_helper->__("Enter your account number for your order refund"); ?></h3>
@@ -167,13 +167,14 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="rma-container">
-        <a href="#step-1" class="button button-third large back pull-left">
-            <?php echo $_helper->__("Back"); ?>
-        </a>
-        <button class="btn button button-primary next pull-right"
-                type="button" id="btn-next-step-2"><?php echo $_helper->__("Next"); ?></button>
+
+        <div>
+            <a href="#step-1" class="button button-third large back pull-left">
+                <?php echo $_helper->__("Back"); ?>
+            </a>
+            <button class="btn button button-primary next pull-right"
+                    type="button" id="btn-next-step-2"><?php echo $_helper->__("Next"); ?></button>
+        </div>
     </div>
 </div>
 
