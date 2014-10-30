@@ -28,6 +28,16 @@ jQuery(function($){
 			this.go(0);
 			// Fix footer
 			jQuery(window).resize();
+
+            //visual fix for message - can't be done by css
+            if ($('.messages i').length) {
+                $('#content').css('margin-top', '0px');
+                $('.messages i').click(function () {
+                    $('#content').css('margin-top', '');
+                });
+            }
+
+            _rma.addUsefulFunctions();
 		},
 		
 		// Internal init
@@ -52,22 +62,6 @@ jQuery(function($){
 					return self.unloadMessage;
 				}
 			});
-
-            //visual fix for message - can't be done by css
-            if ($('.messages i').length) {
-                $('#content').css('margin-top', '0px');
-                $('.messages i').click(function () {
-                    $('#content').css('margin-top', '');
-                });
-            }
-
-            Object.size = function(obj) {
-                var size = 0, key;
-                for (key in obj) {
-                    if (obj.hasOwnProperty(key)) size++;
-                }
-                return size;
-            };
 		},
 
         // Step 1 init
@@ -230,7 +224,7 @@ jQuery(function($){
             });
 
             //PICKUP DATE AND HOURS START
-
+                _rma.addUsefulFunctions();
                 _rma.initDateList(dateList);//INIT DATE LIST
                 _rma.initDefaultSlider(dateList);//INIT SLIDER DEFAULT VALUES AND PARAMS
                 _rma.attachSlideOnSlider();//CHANGE DESCRIPTIONS ON SLIDER SLIDE
@@ -310,6 +304,16 @@ jQuery(function($){
 		},
 
         // Step 2 functions
+
+        addUsefulFunctions: function() {
+            Object.size = function(obj) {
+                var size = 0, key;
+                for (key in obj) {
+                    if (obj.hasOwnProperty(key)) size++;
+                }
+                return size;
+            };
+        },
 		
         initDateList: function(_dateList) {
             if (Object.size(_dateList) == 0) {
