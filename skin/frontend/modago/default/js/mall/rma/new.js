@@ -269,8 +269,9 @@ jQuery(function($){
 
 			this.addressbook.init();
 
-            //var zip = Mall.customer.Address._data.postcode;
-            //_rma.getDateList(zip);
+            var zip = jQuery(jQuery('.selectedZip')[1]).text();
+            console.log(zip);
+            _rma.getDateList(zip);
 
             jQuery(this.addressbook.content).on("selectedAddressChange", function(e, address) {
                 //console.log(address.getData());
