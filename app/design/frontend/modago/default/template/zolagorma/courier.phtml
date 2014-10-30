@@ -28,9 +28,10 @@ $_po = $this->getPo();
         <input type="hidden" name="form_key" value="<?php echo $this->getFormKey();?>"/>
         <input type="hidden" name="country_id" id="country_id" value="<?php echo $this->getDefaultCountryId();?>"/>
         <div class="rma-container">
-            <?php if (($this->isDhlEnabled()) && count($dateList)) : ?>
+            <?php //if (($this->isDhlEnabled()) && count($dateList)) : ?>
                 <div id="pickup-address-form" class="fieldset flow-return">
-                    <input type="hidden" name="rma[shipping_address_id]" value="<?php echo $_shippingAddress->getId(); ?>"/>
+                    <input type="hidden" id="can_init_addressbook" value="1"/>
+                    <input type="hidden" name="rma[customer_address_id]" id="customer_address_id" value="<?php echo $this->getSelectedShipping(); ?>"/>
                     <input type="hidden" name="rma[override_address]" value="0"/>
                     <h3 class="legend-big"><?php echo $_helper->__("Book the courier"); ?></h3>
                     <h3 class="legend"><?php echo $_helper->__("Confirm or change pickup address for the courier"); ?>:</h3>
@@ -171,7 +172,7 @@ $_po = $this->getPo();
                     </div>
                 </div>
 
-            <?php endif;?>
+            <?php //endif;?>
 
 
         </div>
@@ -235,21 +236,43 @@ $_po = $this->getPo();
     //TRANSLATIONS END
 
     //INIT DATA
-    <?php $js_array = json_encode($dateList); ?>
-    var dataList = <?php echo $js_array; ?>;
+    var rmaCarrierTimeFrom = '<?php echo $_rma->getCarrierTimeFrom(); ?>';
+    var rmaCarrierTimeTo = '<?php echo $_rma->getCarrierTimeTo(); ?>';
+    var dateList = <?php echo json_encode($dateList); ?>;
+    var dateListFormatedDate = [];
+
+    <?php // formatted date for next 20 (max) days from today
+    for($count = 0; $count < 20 ; $count++) {
+        $timestamp = time()+$count*3600*24;
+        $index = date('Y-m-d',$timestamp);
+        echo "dateListFormatedDate['$index'] = '" . $this->getFormattedDate($timestamp) . "';\n";
+    }
+    ?>
+
+
+    //converting weekdays to array
+    var weekdays = <?php echo json_encode($weekdays); ?>;
+    var arr = [];
+    for (var prop in weekdays) {
+        arr[prop] = (weekdays[prop].label);
+    }
+    weekdays = arr;
+    //converting weekdays to array END
 
     //applyFlow
     var isAcknowledged = false;
     var returnReasons = '<?php echo Mage::helper("zolagorma")->getReturnReasons($_po, true); ?>';
     var flowAcknowledged = '<?php echo Zolago_Rma_Model_Rma::FLOW_ACKNOWLEDGED; ?>';
+    var ajaxLoaderSkinUrl = '<?php echo $this->getSkinUrl("images/modago-ajax-loader.gif"); ?>';
     //INIT DATE END
 
     jQuery(function () {
         // Address book handling
         var addressBook = new Mall.customer.AddressBook();
+
         addressBook.setAddressBook(<?php echo $this->getCustomerAddressesJson(); ?>);
         addressBook.setDefaultShipping(<?php echo $this->asJson($this->getDefaultShipping())?>);
-        addressBook.setSelectedShipping(<?php echo $this->asJson($this->getSelectedShipping())?>);
+
         Mall.rma.new.addressbook.setAddressBook(addressBook);
 
         var returnReasons = <?php echo Mage::helper('zolagorma')->getReturnReasons($_po, true); ?>;
