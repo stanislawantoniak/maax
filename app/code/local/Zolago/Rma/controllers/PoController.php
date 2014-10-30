@@ -110,7 +110,7 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
         }
     }
     public function saveRmaCourierAction()
-    {
+    {Mage::log("Hello1");
         $request = $this->getRequest();
         $session = Mage::getSingleton('core/session');
 
@@ -128,7 +128,7 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
     }
 
     protected function _saveRmaDetails()
-    {
+    {Mage::log("Hello2");
         $rma = $this->_initRma(true);
 
         $data = $this->getRequest()->getPost('rma');

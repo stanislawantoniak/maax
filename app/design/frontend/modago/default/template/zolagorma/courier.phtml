@@ -236,13 +236,34 @@ $_po = $this->getPo();
     //TRANSLATIONS END
 
     //INIT DATA
-    <?php $js_array = json_encode($dateList); ?>
-    var dataList = <?php echo $js_array; ?>;
+    var rmaCarrierTimeFrom = '<?php echo $_rma->getCarrierTimeFrom(); ?>';
+    var rmaCarrierTimeTo = '<?php echo $_rma->getCarrierTimeTo(); ?>';
+    var dateList = <?php echo json_encode($dateList); ?>;
+    var dateListFormatedDate = [];
+
+    <?php // formatted date for next 20 (max) days from today
+    for($count = 0; $count < 20 ; $count++) {
+        $timestamp = time()+$count*3600*24;
+        $index = date('Y-m-d',$timestamp);
+        echo "dateListFormatedDate['$index'] = '" . $this->getFormattedDate($timestamp) . "';\n";
+    }
+    ?>
+
+
+    //converting weekdays to array
+    var weekdays = <?php echo json_encode($weekdays); ?>;
+    var arr = [];
+    for (var prop in weekdays) {
+        arr[prop] = (weekdays[prop].label);
+    }
+    weekdays = arr;
+    //converting weekdays to array END
 
     //applyFlow
     var isAcknowledged = false;
     var returnReasons = '<?php echo Mage::helper("zolagorma")->getReturnReasons($_po, true); ?>';
     var flowAcknowledged = '<?php echo Zolago_Rma_Model_Rma::FLOW_ACKNOWLEDGED; ?>';
+    var ajaxLoaderSkinUrl = '<?php echo $this->getSkinUrl("images/modago-ajax-loader.gif"); ?>';
     //INIT DATE END
 
     jQuery(function () {
