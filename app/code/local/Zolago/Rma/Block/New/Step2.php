@@ -31,6 +31,22 @@ class Zolago_Rma_Block_New_Step2 extends  Zolago_Rma_Block_New_Abstract{
 		}
 		return $this->asJson($addresses);
 	}
+
+	/**
+     * Get customer collecition
+     * @return array
+     */
+    public function getCustomerAddressesArray() {
+        $addresses = array();
+        $collection = $this->getCustomer()->getAddressesCollection();
+        foreach($collection as $address){
+            /* @var $address Mage_Customer_Model_Address */
+            $arr = $address->getData();
+            $arr['street'] = $address->getStreet();
+            $addresses[$arr["entity_id"]] = $arr;
+        }
+        return $addresses;
+    }
 	
 	/**
 	 * @return int | null
