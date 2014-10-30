@@ -33,18 +33,6 @@ class Zolago_Rma_Block_New_Step2 extends  Zolago_Rma_Block_New_Abstract{
 	}
 
 	/**
-     * Get customer collections
-     * @return array
-     */
-    public function getCustomerAddressesArray() {
-        /**
-         * @var $helper Zolago_Rma_Helper_Data
-         */
-        $helper = Mage::helper('zolagorma');
-        return $helper->getCustomerAddressesArray();
-    }
-	
-	/**
 	 * @return int | null
 	 */
 	public function getDefaultShipping() {
@@ -56,11 +44,20 @@ class Zolago_Rma_Block_New_Step2 extends  Zolago_Rma_Block_New_Abstract{
 	 * @return int | null
 	 */
 	public function getSelectedShipping() {
-        /**
-         * @var $helper Zolago_Rma_Helper_Data
-         */
-        $helper = Mage::helper('zolagorma');
-        return $helper->getSelectedShipping();
+
+		// Customer address id from last POST
+		if($this->getRma()->getCustomerAddressId()){
+			return $this->getRma()->getCustomerAddressId();
+		}
+
+		$shippignAddress= $this->
+			getRma()->
+			getShippingAddress();
+
+		if($shippignAddress && $shippignAddress->getCustomerAddressId()){
+			return $shippignAddress->getCustomerAddressId();
+		}
+		return $this->getDefaultShipping();
 	}
 	
     /**
@@ -68,7 +65,7 @@ class Zolago_Rma_Block_New_Step2 extends  Zolago_Rma_Block_New_Abstract{
      * @return array
      */         
      public function getDateList($newZip = '') {
-         return Mage::helper('zolagorma')->getDateList($this->getRequest()->getParam('po_id'), $newZip);
+         return Mage::helper('zolagorma')->getDateList($newZip);
      }
 
     /**
@@ -103,4 +100,8 @@ class Zolago_Rma_Block_New_Step2 extends  Zolago_Rma_Block_New_Abstract{
          }
          return $this->_monthList; 
      }
+
+    public function getCurrentPostcode() {
+        return "01-318";
+    }
 }

@@ -8,10 +8,10 @@ class Orba_Common_Ajax_RmaController extends Orba_Common_Controller_Ajax {
      */
     public function getDateListAction(){
 
-        $po_id = $this->getRequest()->getParam('po_id');
+
         $zip = $this->getRequest()->getParam('zip');
 
-        $dateList = Mage::helper('zolagorma')->getDateList($po_id, $zip);
+        $dateList = Mage::helper('zolagorma')->getDateList($zip);
 
         $arrayDateList = (array) $dateList;//only for easy counting
 

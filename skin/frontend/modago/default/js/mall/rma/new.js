@@ -278,7 +278,7 @@ jQuery(function($){
                 //console.log(address.getData());
                 var poId = parseInt(jQuery("#new-rma input[name='po_id']").val());
                 var zip = address.getData().postcode;
-                _rma.getDateList(poId, zip);
+                _rma.getDateList(zip);
             });
         },
 		
@@ -473,9 +473,9 @@ jQuery(function($){
          * @param zip
          * @returns {boolean}
          */
-        getDateList: function(poId, zip) {
+        getDateList: function(zip) {
             "use strict";
-            poId = parseInt(poId);
+            //poId = parseInt(poId);
 
             var matched = zip.match(/([0-9]{2})([0-9]{3})/);
             if(matched != null) {
@@ -483,7 +483,7 @@ jQuery(function($){
             }
 
             OrbaLib.Rma.getDateList({
-                'poId': poId,
+                //'poId': poId,
                 'zip': zip
             }, {
                 'done': function (data) {
