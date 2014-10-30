@@ -122,7 +122,4 @@ class Zolago_Rma_Block_New_Step2 extends  Zolago_Rma_Block_New_Abstract{
          return $this->_monthList; 
      }
 
-    public function getCurrentPostcode() {
-        return "01-318";
-    }
 }

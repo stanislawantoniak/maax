@@ -269,7 +269,7 @@ jQuery(function($){
 
 			this.addressbook.init();
 
-            var zip = Mall.customer.Address._data.postcode;
+            //var zip = Mall.customer.Address._data.postcode;
             //_rma.getDateList(zip);
 
             jQuery(this.addressbook.content).on("selectedAddressChange", function(e, address) {
