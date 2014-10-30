@@ -109,7 +109,35 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
             $this->_redirect('*/*/newrma', array('po_id'=>$this->getRequest()->getParam('po_id')));
         }
     }
+    public function saveRmaCourierAction()
+    {
+        $request = $this->getRequest();
+        $session = Mage::getSingleton('core/session');
 
+        try {
+            /**
+             * @todo Add processing carrier and insert tracking
+             */
+            $this->_saveRma();
+
+            $rma = Mage::registry('current_rma');
+
+            if(is_array($rma)){
+                $rma = current($rma);
+            }
+            if($rma && $rma instanceof Zolago_Rma_Model_Rma && $rma->getId()){
+                $this->_redirect('sales/rma/courier', array('po_id'=>$this->getRequest()->getParam('po_id')));
+            }else{
+                Mage::throwException("Error while editing RMA");
+            }
+        } catch (Exception $e) {
+            $session->
+                addError($e->getMessage())->
+                setData("rma", $request->getParam('rma'));
+
+            $this->_redirect('sales/rma/courier', array('po_id'=>$this->getRequest()->getParam('po_id')));
+        }
+    }
     protected function _initRma($forSave=false)
     {
         $rma = false;
@@ -164,6 +192,7 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
         /* @var $config Mage_Shipping_Model_Config */
 
         foreach ($rmas as $rma) {
+
             /* @var $rma Zolago_Rma_Model_Rma */
             $po = $rma->getPo();
             /* @var $po Zolago_Po_Model_Po */
