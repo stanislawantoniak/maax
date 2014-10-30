@@ -893,6 +893,22 @@ jQuery(function($){
 				return node;
 			},
 			
+			/**
+			 * Remove vat id from form
+			 * @param {string} type
+			 * @returns {Array}
+			 */
+			getNewAddressConfig: function(type){
+				var result = [];
+				jQuery.each(Mall.customer.AddressBook.Layout.getNewAddressConfig(), function(){
+					if(this.name=="vat_id"){
+						return;
+					}
+					result.push(this);
+				})
+				return result;
+				
+			},
 			_rollAddressList: function(type, block, doOpen){
 				var contextActions = block.
 						siblings(".current-address").
@@ -956,12 +972,12 @@ jQuery(function($){
                 panelBody.find(".select-address").click(function (e) {
                     e.preventDefault();
                     if (!jQuery(this).parents('form').valid()) {
-                        //visual validation fix
-                        if (jQuery('#shipping_vat_id').first().val().length) {
-                            jQuery('#shipping_vat_id').parents('.form-group').removeClass('hide-success-vaild');
-                        } else {
-                            jQuery('#shipping_vat_id').parents('.form-group').addClass('hide-success-vaild');
-                        }
+						// No vat_id in shipping
+                        //if (jQuery('#shipping_vat_id').first().val().length) {
+                        //    jQuery('#shipping_vat_id').parents('.form-group').removeClass('hide-success-vaild');
+                        //} else {
+                        //    jQuery('#shipping_vat_id').parents('.form-group').addClass('hide-success-vaild');
+                        //}*/
                         //end fix
                         return;
                     }
