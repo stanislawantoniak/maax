@@ -11,12 +11,13 @@
 <div class="steps step-2 background-wrapper box-wrapper" id="step-2">
 	<input type="hidden" name="form_key" value="<?php echo $this->getFormKey();?>"/>
 	<input type="hidden" name="country_id" id="country_id" value="<?php echo $this->getDefaultCountryId();?>"/>
-	<input type="hidden" name="rma[customer_address_id]" id="customer_address_id" value="<?php echo $this->getSelectedShipping(); ?>"/>
-	<input type="hidden" name="rma[override_address]" value="0"/>
-    <div class="rma-container">
+	<div class="rma-container">
 		<?php if (($this->isDhlEnabled()) && count($dateList)) : ?>
-		<input type="hidden" id="can_init_addressbook" value="1"/>
         <div id="pickup-address-form" class="fieldset flow-return">
+			<input type="hidden" id="can_init_addressbook" value="1"/>
+			<input type="hidden" name="rma[customer_address_id]" id="customer_address_id" value="<?php echo $this->getSelectedShipping(); ?>"/>
+			<input type="hidden" name="rma[override_address]" value="0"/>
+    
             <h3 class="legend-big"><?php echo $_helper->__("Report a return or claim"); ?></h3>
             <h3 class="legend"><?php echo $_helper->__("Confirm or change pickup address for the courier"); ?>:</h3>
 

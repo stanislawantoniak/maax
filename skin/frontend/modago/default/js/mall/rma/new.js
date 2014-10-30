@@ -750,7 +750,7 @@ jQuery(function($){
 			/**
 			 * Content object
 			 */
-			content: jQuery("#step-2"),
+			content: jQuery("#pickup-address-form"),
 			
 			/**
 			 * Init addressbook
