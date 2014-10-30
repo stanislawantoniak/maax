@@ -28,8 +28,9 @@ $_po = $this->getPo();
         <input type="hidden" name="form_key" value="<?php echo $this->getFormKey();?>"/>
         <input type="hidden" name="country_id" id="country_id" value="<?php echo $this->getDefaultCountryId();?>"/>
         <div class="rma-container">
-            <?php if (($this->isDhlEnabled()) && count($dateList)) : ?>
+            <?php //if (($this->isDhlEnabled()) && count($dateList)) : ?>
                 <div id="pickup-address-form" class="fieldset flow-return">
+                    <input type="hidden" id="can_init_addressbook" value="1"/>
                     <input type="hidden" name="rma[customer_address_id]" id="customer_address_id" value="<?php echo $this->getSelectedShipping(); ?>"/>
                     <input type="hidden" name="rma[override_address]" value="0"/>
                     <h3 class="legend-big"><?php echo $_helper->__("Book the courier"); ?></h3>
@@ -171,7 +172,7 @@ $_po = $this->getPo();
                     </div>
                 </div>
 
-            <?php endif;?>
+            <?php //endif;?>
 
 
         </div>
@@ -247,9 +248,10 @@ $_po = $this->getPo();
     jQuery(function () {
         // Address book handling
         var addressBook = new Mall.customer.AddressBook();
+
         addressBook.setAddressBook(<?php echo $this->getCustomerAddressesJson(); ?>);
         addressBook.setDefaultShipping(<?php echo $this->asJson($this->getDefaultShipping())?>);
-        addressBook.setSelectedShipping(<?php echo $this->asJson($this->getSelectedShipping())?>);
+
         Mall.rma.new.addressbook.setAddressBook(addressBook);
 
         var returnReasons = <?php echo Mage::helper('zolagorma')->getReturnReasons($_po, true); ?>;

@@ -264,83 +264,112 @@ jQuery(function($){
         },
 
 
-		////////////////////////////////////////////////////////////////////////
-		// Addressbook
-		////////////////////////////////////////////////////////////////////////
-		addressbook: {
-			_book: null,
-			_content: jQuery("#pickup-address-form"),
-			/**
-			 * Init addressbook
-			 * @returns {void}
-			 */
-			init: function(){
-				var self = this;
+        ////////////////////////////////////////////////////////////////////////
+        // Addressbook
+        ////////////////////////////////////////////////////////////////////////
+        addressbook: jQuery.extend({}, Mall.customer.AddressBook.Layout, {
+            /**
+             * Content object
+             */
+            content: jQuery("#pickup-address-form"),
 
-				// Render selected and list
-				this.renderSelectedAddress("shipping");
-				this.renderAddressList("shipping");
+            /**
+             * Init addressbook
+             * @returns {void}
+             */
+            init: function(){
+                var self = this;
 
-				// Hide address lists
-				this._rollAddressList(
-					"shipping",
-					this._content.find(".panel-adresses.shipping"),
-					false
-				);
+                // No addressbook available
+                if(!this.content.find("#can_init_addressbook").length){
+                    return;
+                }
 
-				// Handle clicks
-				this._content.find(".change_address").each(function(){
-					var type = jQuery(this).hasClass("billing") ? "billing" : "shipping";
-					jQuery(this).click({type: type}, function(e){
-						self.handleChangeAddressClick(e);
-						return false;
-					})
-				})
-			},
-			renderSelectedAddress: function(type){
-				var template = this.getSelectedTemplate(),
-					addressBook = this.getAddressBook(),
-					target = jQuery(".current-address."+type, this._content),
-					addressObject = addressBook.getSelected(type);
+                // Set selected address from input
+                this.getAddressBook().setSelectedShipping(
+                    this.content.find("#customer_address_id").val()
+                );
 
-				if(addressObject){
-					var node = jQuery(Mall.replace(
-						template,
-						this.processAddressToDisplay(addressObject)
-					));
-					this.processSelectedAddressNode(node, addressObject, addressBook, type);
-					target.html(node);
+                // Render selected and list
+                this.renderSelectedAddress("shipping");
+                this.renderAddressList("shipping");
 
-				}else{
-					target.html(Mall.translate.__("no-addresses"));
-				}
-			},
-			renderAddressList: function(type){
-				var template = this.getNormalTemplate(),
-					addressBook = this.getAddressBook(),
-					target = jQuery(".panel-adresses."+type, this._content),
-					selectedAddress = addressBook.getSelected(type),
-					self = this,
+                // Hide address lists
+                this._rollAddressList(
+                    "shipping",
+                    this.content.find(".panel-adresses.shipping"),
+                    false
+                );
+
+                // Handle clicks
+                this.content.find(".change_address").each(function(){
+                    var type = jQuery(this).hasClass("billing") ? "billing" : "shipping";
+                    jQuery(this).click({type: type}, function(e){
+                        self.handleChangeAddressClick(e);
+                        return false;
+                    })
+                });
+
+                // Bind address change event
+                this.content.on("selectedAddressChange", function(e, address){
+                    console.log(address);
+                });
+
+            },
+
+            /**
+             * @param {string} type
+             * @returns {void}
+             */
+            renderSelectedAddress: function(type){
+                var template = this.getSelectedTemplate(),
+                    addressBook = this.getAddressBook(),
+                    target = jQuery(".current-address."+type, this.content),
+                    addressObject = addressBook.getSelected(type);
+
+                if(addressObject){
+                    var node = jQuery(Mall.replace(
+                        template,
+                        this.processAddressToDisplay(addressObject)
+                    ));
+                    this.processSelectedAddressNode(node, addressObject, addressBook, type);
+                    target.html(node);
+
+                }else{
+                    target.html(Mall.translate.__("no-addresses"));
+                }
+            },
+
+            /**
+             * @param {string} type
+             * @returns {void}
+             */
+            renderAddressList: function(type){
+                var template = this.getNormalTemplate(),
+                    addressBook = this.getAddressBook(),
+                    target = jQuery(".panel-adresses."+type, this.content),
+                    selectedAddress = addressBook.getSelected(type),
+                    self = this,
                     addNewButton,
                     addressCollection = addressBook.getAddressBook(),
-					caption = jQuery("<div>").addClass("additional");
+                    caption = jQuery("<div>").addClass("additional");
 
-				target.html('');
+                target.html('');
 
-				target.append(caption.text(Mall.translate.__("your-additional-addresses") + ":"));
+                target.append(caption.text(Mall.translate.__("your-additional-addresses") + ":"));
 
-				if(addressCollection.length){
-					jQuery.each(addressCollection, function(){
-						// Do not allow sleected address
-						if(selectedAddress && this.getId()==selectedAddress.getId()){
-							return;
-						}
+                if(addressCollection.length){
+                    jQuery.each(addressCollection, function(){
+                        // Do not allow sleected address
+                        if(selectedAddress && this.getId()==selectedAddress.getId()){
+                            return;
+                        }
 
-						var data = self.processAddressToDisplay(this);
-						var node = jQuery(Mall.replace(template, data));
-						self.processAddressNode(node, this, addressBook, type);
-						target.append(node);
-					});
+                        var data = self.processAddressToDisplay(this);
+                        var node = jQuery(Mall.replace(template, data));
+                        self.processAddressNode(node, this, addressBook, type);
+                        target.append(node);
+                    });
                 }else{
                     target.html(Mall.translate.__("no-addresses"));
                 }
@@ -371,54 +400,42 @@ jQuery(function($){
                 return node;
             },
 
-			processSelectedAddressNode: function(node, address, addressBook, type){
-				var edit = node.find(".edit"),
-					editable = this._content.find(".change_address."+type).hasClass("open");
+            processSelectedAddressNode: function(node, address, addressBook, type){
+                var edit = node.find(".edit"),
+                    editable = this.content.find(".change_address."+type).hasClass("open");
 
-				var eventData = {
-					addressBook: addressBook,
-					step: this,
-					address: address,
-					type: type
-				};
-				edit.click(eventData, this.editAddress);
-				//edit[editable ? "show" : "hide"]();
+                var eventData = {
+                    addressBook: addressBook,
+                    step: this,
+                    address: address,
+                    type: type
+                };
+                edit.click(eventData, this.editAddress);
 
-				return node;
-			},
-			processAddressToDisplay: function(address){
-				var addressData = jQuery.extend({}, address.getData());
-				if(addressData.street){
-					addressData.street = addressData.street[0]
-				}
-				return addressData;
-			},
-
-			getAddNewButton: function (type) {
-                var templateHandle = jQuery("#addressbook-add-new-template")
-                        .clone()
-                        .removeClass("hidden"),
-                    self = this;
-
-                templateHandle.click(function () {
-                    self.showAddNewModal(jQuery("#addressbook-modal"), type);
-                });
-
-                return templateHandle;
+                return node;
             },
-			showAddNewModal: function (modal, type, edit) {
-                edit = edit === undefined ? false : edit;
 
-                modal = jQuery(modal);
-                modal.find(".modal-body")
-                    .html("")
-                    .append(this.getAddNewForm(type));
-                modal.find("#modal-title").html(edit ?
-					Mall.translate.__("edit-address") : Mall.translate.__("add-new-address"));
-                //this.attachNewAddressInputsMask(modal, type);
-                //his.attachNewAddressBootstrapTooltip(modal, type);
+            _rollAddressList: function(type, block, doOpen){
+                var contextActions = block.
+                    siblings(".current-address").
+                    find(".action");
+
+                var element = this.content.find(".change_address." + type);
+
+                if(doOpen){
+                    block.show();
+                    contextActions.show();
+                    element.addClass("open");
+                    element.text(Mall.translate.__("roll-up"));
+                }else{
+                    block.hide();
+                    contextActions.hide();
+                    element.removeClass("open");
+                    element.text(Mall.translate.__("change-address"));
+                }
             },
-			 getAddNewForm: function (type) {
+
+            getAddNewForm: function (type) {
                 var form = this.getNewAddressForm(),
                     panelBody = form.find(".panel-body"),
                     element,
@@ -475,9 +492,8 @@ jQuery(function($){
                             alert(data.content.join("\n"));
                         } else {
                             address = self.getAddressBook().get(data.content.entity_id);
-                            if (type === "shipping") {
-                                self.getAddressBook().setSelectedShipping(address);
-                            }
+                            self.getAddressBook().setSelectedShipping(address);
+                            self.onSelectedAddressChange(address, type);
                             self.renderSelectedAddress("shipping");
                             self.renderAddressList("shipping");
                             self.getModal().modal("hide");
@@ -490,186 +506,85 @@ jQuery(function($){
 
                 return form;
             },
-			getSelectButton: function () {
-                var buttonWrapper = jQuery("<div/>", {
-                    "class": "form-group clearfix"
-                });
 
-                jQuery("<button/>", {
-                    "class": "button button-primary large pull-right select-address",
-                    html: Mall.translate.__("save")
-                }).appendTo(buttonWrapper);
 
-                return buttonWrapper;
-            },
-            getNewAddressConfig: function (type) {
-                return [
-                    //{
-                    //    name:       type + "[firstname]",
-                    //    id:         type + "_firstname",
-                    //    type:       "text",
-                    //    label:      "Imię",
-                    //    labelClass: "col-sm-3",
-                    //    inputClass: "form-control firstName hint"
-                    //},
-                    {
-                        name:       "lastname",
-                        id:         type + "_lastname",
-                        type:       "text",
-                        label:      Mall.translate.__("lastname"),
-                        labelClass: "col-sm-3",
-                        inputClass: "form-control lastName required hint"
-                    },
-                    {
-                        name:       "telephone",
-                        id:         type + "_telephone",
-                        type:       "text",
-                        label:      Mall.translate.__("phone"),
-                        labelClass: "col-sm-3",
-                        inputClass: "form-control telephone phone required validate-telephone hint"
-                    },
-                    {
-                        name:       "company",
-                        id:         type + "_company",
-                        type:       "text",
-                        label:      Mall.translate.__("company-name") +
-							"<br/>(" + Mall.translate.__("optional") + ")",
-                        labelClass: "col-sm-3 double-line",
-                        inputClass: "form-control firm hint"
-                    },
-                    {
-                        name:       "vat_id",
-                        id:         type + "_vat_id",
-                        type:       "text",
-                        label:      Mall.translate.__("nip") +
-							"<br>(" + Mall.translate.__("optional") + ")",
-                        labelClass: "col-sm-3 double-line",
-                        inputClass: "form-control vat_id nip validate-nip hint"
-                    },
-                    {
-                        name:       "street",
-                        id:         type + "_street_1",
-                        type:       "text",
-                        label:      Mall.translate.__("street-and-number"),
-                        labelClass: "col-sm-3 ",
-                        inputClass: "form-control street hint required"
-                    },
-                    {
-                        name:       "postcode",
-                        id:         type + "_postcode",
-                        type:       "text",
-                        label:      Mall.translate.__("postcode"),
-                        labelClass: "col-sm-3",
-                        inputClass: "form-control postcode zipcode hint validate-postcodeWithReplace required"
-                    },
-                    {
-                        name:       "city",
-                        id:         type + "_city",
-                        type:       "text",
-                        label:      Mall.translate.__("city"),
-                        labelClass: "col-sm-3",
-                        inputClass: "form-control city hint required"
-                    }
+            ////////////////////////////////////////////////////////////////////
+            // Handlers
+            ////////////////////////////////////////////////////////////////////
 
-                ];
+            /**
+             * @param {object} address
+             * @param {string} type
+             * @returns {void}
+             */
+            onSelectedAddressChange: function(address, type){
+                var event = jQuery.Event("selectedAddressChange");
+                this.content.trigger(event, [address, type]);
+                this.content.find("#customer_address_id").val(address.getId());
             },
 
-            getInput: function (name, id, type, label, labelClass, inputClass, value) {
-                var result = {
-                    label: "",
-                    input: ""
-                },
-                    inputWrapper;
+            /**
+             * @param {type} event
+             * @returns {Boolean}
+             */
+            removeAddress: function(event){
+                var deffered;
 
-                result.label = jQuery("<label/>", {
-                    "class": labelClass,
-                    "for": id,
-                    html: label
-                });
-
-                inputWrapper = jQuery("<div/>", {
-                    "class": "col-lg-9 col-md-9 col-sm-9 col-xs-11"
-                });
-
-                jQuery("<input/>", {
-                    type: type,
-                    class: inputClass,
-                    value: value,
-                    name: name,
-                    id: id
-                }).appendTo(inputWrapper);
-
-                result.input = inputWrapper;
-
-                return result;
-            },
-
-            getFormGroup: function (first) {
-                var group,
-                    className;
-
-                if (first === undefined) {
-                    first = false;
+                if (!confirm(Mall.translate.__("address-you-sure?"))) {
+                    return false;
                 }
 
-                className = "form-group clearfix" + (!first ? " border-top" : "");
+                deffered = event.data.addressBook.remove(event.data.address.getId());
+                if (deffered === null) {
+                    alert(Mall.translate.__("address-cant-be-removed"));
+                } else {
+                    deffered.done(function (data) {
+                        if (data.status !== undefined) {
+                            if (Boolean(data.status) === false) {
+                                alert(Mall.translate.__("address-cant-be-removed"));
+                            } else {
+                                event.data.step.renderSelectedAddress(event.data.type);
+                                event.data.step.renderAddressList("shipping");
+                                event.data.step.toggleOpenAddressList(event.data.type);
+                            }
+                        }
+                    });
+                }
 
-                group = jQuery("<div/>", {
-                    "class": className
-                });
-
-                jQuery("<div/>", {
-                    "class": "row"
-                }).appendTo(group);
-
-                return group;
+                return false;
             },
-			getNewAddressForm: function () {
-                var form, panel;
-                form = jQuery("<form/>", {
-                    "class": "form clearfix new-address-form",
-                    method: "POST",
-                    action: Config.url.address.save
-                });
 
-                jQuery("<input/>", {
-                    type: "hidden",
-                    name: "form_key",
-                    value: Mall.getFormKey()
-                }).appendTo(form);
+            /**
+             * Make choose of adderss. Save need invoice if needed.
+             * @param {type} object
+             * @returns {Boolean}
+             */
+            chooseAddress: function(event){
+                var addressBook = event.data.addressBook,
+                    address = event.data.address,
+                    type = event.data.type,
+                    self = event.data.step;
 
-                jQuery("<input/>", {
-                    type: "hidden",
-                    name: "country_id",
-                    value: jQuery("#country_id").val()
-                }).appendTo(form);
 
-                panel = jQuery("<div/>", {
-                    "class": "panel panel-default"
-                }).appendTo(form);
+                addressBook.setSelectedShipping(address);
+                self.onSelectedAddressChange(address, type);
 
-                jQuery("<div/>", {
-                    "class": "panel-body"
-                }).appendTo(panel);
+                self.renderSelectedAddress("shipping");
+                self.renderAddressList("shipping");
 
-                return form;
+                // Roll up list
+                var listBlock = self.content.find(".panel-adresses." + type);
+
+                self._rollAddressList(type, listBlock, false);
+
+                return false;
             },
-			handleChangeAddressClick: function(e){
-				var type = e.data.type,
-					element = jQuery(e.target),
-					block = this._content.find(".panel-adresses." + type);
 
-				element.toggleClass("open");
-
-				this._rollAddressList(type, block, element.hasClass("open"));
-			},
-			toggleOpenAddressList: function (type) {
-                jQuery(".panel-footer").find("." + type).click();
-            },
-			////////////////////////////////////////////////////////////////////
-			// Handlers
-			////////////////////////////////////////////////////////////////////
-			editAddress: function(event){
+            /**
+             * @param {object} event
+             * @returns {Boolean}
+             */
+            editAddress: function(event){
                 event.preventDefault();
                 var step = event.data.step,
                     address = event.data.address,
@@ -682,87 +597,9 @@ jQuery(function($){
                     step.getModal().find("form"), address.getId(), addressBook
                 );
                 step.fillEditForm(address, step.getModal().find("form"));
-				return false;
-			},
-			injectEntityIdToEditForm: function (form, id, addressBook) {
-                jQuery("<input/>", {
-                    type: "hidden",
-                    name: addressBook.getEntityIdKey(),
-                    value: id
-                }).appendTo(form);
-            },
-			fillEditForm: function (address, form) {
-                form = jQuery(form);
-                jQuery.each(address.getData(), function (idx, item) {
-                    if (idx.indexOf("street") !== -1 && item) {
-                        if (jQuery.isArray(item)) {
-                            item = item.shift();
-                        }
-                    }
-                    if (form.find("[name='"+ idx +"']").length > 0) {
-                        form.find("[name='"+ idx +"']").val(item);
-                    }
-                });
-            },
-			lockButton: function (button) {
-                jQuery(button).prop("disabled", true);
-            },
-
-            unlockButton: function (button) {
-                jQuery(button).prop("disabled", false);
-            },
-			////////////////////////////////////////////////////////////////////
-			// Setters/getters
-			////////////////////////////////////////////////////////////////////
-			getSelectedTemplate: function(){
-				return jQuery("#selected-address-template").html();
-			},
-			getNormalTemplate: function(){
-				return jQuery("#normal-address-template").html();
-			},
-            getModalData: function () {
-                var data = {},
-                    form = this.getModal().find(".new-address-form");
-
-                jQuery.each(form.serializeArray(), function () {
-                    data[this.name] = this.value;
-                });
-
-                return data;
-            },
-            getModal: function () {
-                return jQuery("#addressbook-modal");
-            },
-			setAddressBook: function(addressBook){
-				this._book = addressBook;
-				return this;
-			},
-			getAddressBook: function(){
-				return this._book;
-			},
-
-			_rollAddressList: function(type, block, doOpen){
-				var contextActions = block.
-						siblings(".current-address").
-						find(".action");
-
-				var element = this._content.find(".change_address." + type);
-
-				if(doOpen){
-					block.show();
-					contextActions.show();
-					element.addClass("open");
-					element.text(Mall.translate.__("roll-up"));
-				}else{
-					block.hide();
-					contextActions.hide();
-					element.removeClass("open");
-					element.text(Mall.translate.__("change-address"));
-				}
-
-				//this._processActionSelectedAddress(contextActions);
-			},
-		},
+                return false;
+            }
+        }),
 
 		
 		

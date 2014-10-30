@@ -152,10 +152,7 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
         $po->setCustomerNoteNotify(!empty($data['send_email']));
         $po->setIsInProcess(true);
 
-        $trans = Mage::getModel('core/resource_transaction');
-        $rma->setIsCutomer(true);
-        $trans->addObject($rma);
-        $trans->addObject($rma->getPo())->save();
+        $rma->getPo()->save();
 
         if ($rma->getCurrentTrack()) {
             Mage::dispatchEvent("zolagorma_rma_track_added", array(
