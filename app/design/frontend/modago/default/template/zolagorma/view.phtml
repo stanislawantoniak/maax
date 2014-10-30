@@ -71,13 +71,19 @@
             <?php if($this->isAccepted($_rma)): ?>
             <div class="rma-section rma-content">
                 <p>
-                    <i class="glyphicon glyphicon-edit"></i>
-                    <span class="uppercase">
+                    <?php if(!empty($carrierDate)): ?>
+                        <i class="glyphicon glyphicon-time"></i>
+                        <span class="uppercase"><?php echo $_helper->__("Carrier date"); ?></span>
+                    <?php else: ?>
+                        <i class="glyphicon glyphicon-edit"></i>
+                        <span class="uppercase">
                         <a href="/sales/rma/courier/id/<?php echo $_rma->getId(); ?>">
                             <?php echo $_helper->__("Book a courier"); ?>
                         </a>
                     </span>
+                    <?php endif; ?>
                 </p>
+
                 <div>
                     <?php if(!empty($carrierDate)): ?>
                         <?php echo $this->getDayOfWeek($_rma);?> <?php echo Mage::helper("core")->formatDate($carrierDate, "short");?><br/>
