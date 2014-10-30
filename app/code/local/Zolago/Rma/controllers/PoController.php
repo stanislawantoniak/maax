@@ -109,7 +109,35 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
             $this->_redirect('*/*/newrma', array('po_id'=>$this->getRequest()->getParam('po_id')));
         }
     }
+    public function saveRmaCourierAction()
+    {
+        $request = $this->getRequest();
+        $session = Mage::getSingleton('core/session');
 
+        try {
+            /**
+             * @todo Add processing carrier and insert tracking
+             */
+            $this->_saveRma(false);
+
+            $rma = Mage::registry('current_rma');
+
+            if(is_array($rma)){
+                $rma = current($rma);
+            }
+            if($rma && $rma instanceof Zolago_Rma_Model_Rma && $rma->getId()){
+                $this->_redirect('sales/rma/courier', array('po_id'=>$this->getRequest()->getParam('po_id')));
+            }else{
+                Mage::throwException("Error while editing RMA");
+            }
+        } catch (Exception $e) {
+            $session->
+                addError($e->getMessage())->
+                setData("rma", $request->getParam('rma'));
+
+            $this->_redirect('sales/rma/courier', array('po_id'=>$this->getRequest()->getParam('po_id')));
+        }
+    }
     protected function _initRma($forSave=false)
     {
         $rma = false;
@@ -134,7 +162,7 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
         return $rma;
     }
 
-    protected function _saveRma()
+    protected function _saveRma($isNew = true)
     {
 
         $rmas = $this->_initRma(true);
@@ -164,6 +192,7 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
         /* @var $config Mage_Shipping_Model_Config */
 
         foreach ($rmas as $rma) {
+
             /* @var $rma Zolago_Rma_Model_Rma */
             $po = $rma->getPo();
             /* @var $po Zolago_Po_Model_Po */
@@ -191,7 +220,10 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
                 $rma->setEmailSent(true);
             }
         }
-        $rma->setRmaReason(@$data['rma_reason']);
+        if($isNew){
+            $rma->setRmaReason(@$data['rma_reason']);
+        }
+
         $po->setCustomerNoteNotify(!empty($data['send_email']));
         $po->setIsInProcess(true);
         $trans = Mage::getModel('core/resource_transaction');
@@ -203,9 +235,11 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
         $trans->addObject($rma->getPo())->save();
 
         foreach ($rmas as $rma) {
-            Mage::dispatchEvent("zolagorma_rma_created", array(
-				"rma" => $rma
-			));
+            if($isNew){
+                Mage::dispatchEvent("zolagorma_rma_created", array(
+                    "rma" => $rma
+                ));
+            }
             if($rma->getCurrentTrack()) {                
                 Mage::dispatchEvent("zolagorma_rma_track_added", array(
 					"rma"		=> $rma,

@@ -108,7 +108,18 @@ class Zolago_Rma_Block_Courier extends Zolago_Rma_Block_Abstract
         }
         return $this->_monthList;
     }
-
+    /**
+     * @return string
+     */
+    public function getFormKey() {
+        return Mage::getSingleton('core/session')->getFormKey();
+    }
+    /**
+     * @return string
+     */
+    public function getDefaultCountryId() {
+        return Mage::app()->getStore()->getConfig("general/country/default");
+    }
     /**
      * @param mixed $data
      * @return string

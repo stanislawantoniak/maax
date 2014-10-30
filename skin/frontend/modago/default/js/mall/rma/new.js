@@ -49,12 +49,12 @@ jQuery(function($){
 				Mall.validate.getOptions()
 			);
 			
+			
+			// Inicjuamy 3 kroki zawsze
+			// Wewnątrz każdej sprawdzmy czy mozna
 			this._initStep1();
-
-			if(this.isReturnPath()) {
-				this._initStep2();
-				this._initStep3();
-			}
+			this._initStep2();
+			this._initStep3();
 			
 	
 			$(window).bind('beforeunload', function() {
@@ -165,6 +165,7 @@ jQuery(function($){
 	                    claim = true;
                     }
                 });
+				
                 if(valid && !claim){
                     self.next();
                 } else if(valid && claim) {
@@ -184,6 +185,10 @@ jQuery(function($){
             var s = this.step2,
                 self = this,
                 next = s.find("button.next");
+
+			if(!s.find("#can_init_carrier").length){
+				return;
+			}
 
             // Handle back click
             s.find(".back").click(function () {
@@ -316,7 +321,7 @@ jQuery(function($){
         },
 		
         initDateList: function(_dateList) {
-            if (Object.size(_dateList) == 0) {
+            if (Object.keys(_dateList).length == 0) {
                 jQuery('#btn-next-step-2').hide();
             } else {
                 for(var day in _dateList) {
@@ -327,7 +332,7 @@ jQuery(function($){
         },
 
         initDateListValues: function(_dateList) {
-            if (Object.size(_dateList) == 0) {
+            if (Object.keys(_dateList).length == 0) {
                 if (jQuery("#slider-range").length) {
                     var values = jQuery("#slider-range").val();
                     _rma.formatTimeRange(values[0], values[1]);
@@ -336,7 +341,7 @@ jQuery(function($){
         },
 
         initDefaultSlider : function(_dateList){
-            if (Object.size(_dateList) != 0) {
+            if (Object.keys(_dateList).length != 0) {
                 if(jQuery("#slider-range").length) {
                     jQuery("#slider-range").noUiSlider({
                         start: [660, 840],
@@ -745,7 +750,7 @@ jQuery(function($){
 			/**
 			 * Content object
 			 */
-			content: jQuery("#step-2"),
+			content: jQuery("#pickup-address-form"),
 			
 			/**
 			 * Init addressbook

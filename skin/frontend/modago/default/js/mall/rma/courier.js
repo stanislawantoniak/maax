@@ -46,7 +46,10 @@ jQuery(function($){
             }
 		},
 
-
+        _submitForm: function() {
+            $(window).unbind('beforeunload');
+            $('#new-rma').submit();
+        },
 		
         // Step 2 init
         _initStep2: function(){
@@ -73,7 +76,8 @@ jQuery(function($){
 
                 //--validation
                 if(valid){
-                    console.log("Save RMA");
+                    console.log("Save RMA saveRmaCourier");
+                    self._submitForm();
                 }
                 return false;
             });
