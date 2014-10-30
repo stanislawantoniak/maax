@@ -276,18 +276,18 @@ jQuery(function($){
 			 */
 			init: function(){
 				var self = this;
-				
+
 				// Render selected and list
 				this.renderSelectedAddress("shipping");
 				this.renderAddressList("shipping");
-				
+
 				// Hide address lists
 				this._rollAddressList(
-					"shipping", 
-					this._content.find(".panel-adresses.shipping"), 
+					"shipping",
+					this._content.find(".panel-adresses.shipping"),
 					false
 				);
-				
+
 				// Handle clicks
 				this._content.find(".change_address").each(function(){
 					var type = jQuery(this).hasClass("billing") ? "billing" : "shipping";
@@ -305,15 +305,15 @@ jQuery(function($){
 
 				if(addressObject){
 					var node = jQuery(Mall.replace(
-						template, 
+						template,
 						this.processAddressToDisplay(addressObject)
 					));
 					this.processSelectedAddressNode(node, addressObject, addressBook, type);
 					target.html(node);
-					
+
 				}else{
 					target.html(Mall.translate.__("no-addresses"));
-				}	
+				}
 			},
 			renderAddressList: function(type){
 				var template = this.getNormalTemplate(),
@@ -324,18 +324,18 @@ jQuery(function($){
                     addNewButton,
                     addressCollection = addressBook.getAddressBook(),
 					caption = jQuery("<div>").addClass("additional");
-				
+
 				target.html('');
-				
+
 				target.append(caption.text(Mall.translate.__("your-additional-addresses") + ":"));
-				
+
 				if(addressCollection.length){
 					jQuery.each(addressCollection, function(){
 						// Do not allow sleected address
 						if(selectedAddress && this.getId()==selectedAddress.getId()){
 							return;
 						}
-						
+
 						var data = self.processAddressToDisplay(this);
 						var node = jQuery(Mall.replace(template, data));
 						self.processAddressNode(node, this, addressBook, type);
@@ -348,42 +348,42 @@ jQuery(function($){
                 addNewButton.show();
                 target.append(addNewButton);
             },
-			
-			processAddressNode: function(node, address, addressBook, type){
-				var removeable = addressBook.isRemoveable(address.getId()),
-					remove = node.find(".remove"),
-					choose = node.find(".choose"),
-					edit = node.find(".edit");
-			
-			
-				var eventData = {
-					addressBook: addressBook, 
-					step: this, 
-					address: address, 
-					type: type
-				};
-				
-				remove.click(eventData, this.removeAddress);
-				edit.click(eventData, this.editAddress);
-				choose.click(eventData, this.chooseAddress);
-				remove[removeable ? "show" : "hide"]();		
-				
-				return node;
-			},
-			
+
+            processAddressNode: function(node, address, addressBook, type){
+                var removeable = addressBook.isRemoveable(address.getId()),
+                    remove = node.find(".remove"),
+                    choose = node.find(".choose"),
+                    edit = node.find(".edit");
+
+
+                var eventData = {
+                    addressBook: addressBook,
+                    step: this,
+                    address: address,
+                    type: type
+                };
+
+                remove.click(eventData, this.removeAddress);
+                edit.click(eventData, this.editAddress);
+                choose.click(eventData, this.chooseAddress);
+                remove[removeable ? "show" : "hide"]();
+
+                return node;
+            },
+
 			processSelectedAddressNode: function(node, address, addressBook, type){
 				var edit = node.find(".edit"),
 					editable = this._content.find(".change_address."+type).hasClass("open");
-				
+
 				var eventData = {
-					addressBook: addressBook, 
-					step: this, 
-					address: address, 
+					addressBook: addressBook,
+					step: this,
+					address: address,
 					type: type
 				};
 				edit.click(eventData, this.editAddress);
 				//edit[editable ? "show" : "hide"]();
-				
+
 				return node;
 			},
 			processAddressToDisplay: function(address){
@@ -393,7 +393,7 @@ jQuery(function($){
 				}
 				return addressData;
 			},
-			
+
 			getAddNewButton: function (type) {
                 var templateHandle = jQuery("#addressbook-add-new-template")
                         .clone()
@@ -413,7 +413,7 @@ jQuery(function($){
                 modal.find(".modal-body")
                     .html("")
                     .append(this.getAddNewForm(type));
-                modal.find("#modal-title").html(edit ? 
+                modal.find("#modal-title").html(edit ?
 					Mall.translate.__("edit-address") : Mall.translate.__("add-new-address"));
                 //this.attachNewAddressInputsMask(modal, type);
                 //his.attachNewAddressBootstrapTooltip(modal, type);
@@ -532,7 +532,7 @@ jQuery(function($){
                         name:       "company",
                         id:         type + "_company",
                         type:       "text",
-                        label:      Mall.translate.__("company-name") + 
+                        label:      Mall.translate.__("company-name") +
 							"<br/>(" + Mall.translate.__("optional") + ")",
                         labelClass: "col-sm-3 double-line",
                         inputClass: "form-control firm hint"
@@ -541,7 +541,7 @@ jQuery(function($){
                         name:       "vat_id",
                         id:         type + "_vat_id",
                         type:       "text",
-                        label:      Mall.translate.__("nip") + 
+                        label:      Mall.translate.__("nip") +
 							"<br>(" + Mall.translate.__("optional") + ")",
                         labelClass: "col-sm-3 double-line",
                         inputClass: "form-control vat_id nip validate-nip hint"
@@ -658,9 +658,9 @@ jQuery(function($){
 				var type = e.data.type,
 					element = jQuery(e.target),
 					block = this._content.find(".panel-adresses." + type);
-			
+
 				element.toggleClass("open");
-				
+
 				this._rollAddressList(type, block, element.hasClass("open"));
 			},
 			toggleOpenAddressList: function (type) {
@@ -740,12 +740,12 @@ jQuery(function($){
 			getAddressBook: function(){
 				return this._book;
 			},
-			
+
 			_rollAddressList: function(type, block, doOpen){
 				var contextActions = block.
 						siblings(".current-address").
 						find(".action");
-				
+
 				var element = this._content.find(".change_address." + type);
 
 				if(doOpen){
@@ -759,7 +759,7 @@ jQuery(function($){
 					element.removeClass("open");
 					element.text(Mall.translate.__("change-address"));
 				}
-				
+
 				//this._processActionSelectedAddress(contextActions);
 			},
 		},

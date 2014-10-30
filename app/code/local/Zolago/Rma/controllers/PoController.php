@@ -144,7 +144,7 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
 
         // set tracking
         $dhlRequest = $this->_getTrackignRequest($data);
-        $this->_setTracking($dhlRequest, $rma);
+        $this->_setTracking($dhlRequest, $rma, $data);
 
         if (!empty($data['send_email'])) {
             $rma->setEmailSent(true);
@@ -166,6 +166,7 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
         $rma->save();
 
         $this->_rmaSetOwnShippingAddress($data, $rma);
+        Mage::helper('udropship')->processQueue();
     }
     protected function _initRma($forSave=false)
     {
@@ -319,7 +320,7 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
      * @param $rma
      * @return $rma Zolago_Rma_Model_Rma
      */
-    protected function _setTracking($dhlRequest, $rma)
+    protected function _setTracking($dhlRequest, $rma, $data)
     {
         $config = Mage::getSingleton("shipping/config");
         /* @var $config Mage_Shipping_Model_Config */
@@ -332,6 +333,11 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
             $track->setLabelPic($trackingParams['file']);
             $rma->addTrack($track);
             $rma->setCurrentTrack($track);
+
+
+            $rma->setCarrierDate($data['carrier_date']);
+            $rma->setData("carrier_time_from",$data['carrier_time_from']);
+            $rma->setData("carrier_time_to",$data['carrier_time_to']);
         }
         return $rma;
     }
