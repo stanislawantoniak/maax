@@ -28,6 +28,16 @@ jQuery(function($){
 			this.go(0);
 			// Fix footer
 			jQuery(window).resize();
+
+            //visual fix for message - can't be done by css
+            if ($('.messages i').length) {
+                $('#content').css('margin-top', '0px');
+                $('.messages i').click(function () {
+                    $('#content').css('margin-top', '');
+                });
+            }
+
+            _rma.addUsefulFunctions();
 		},
 		
 		// Internal init
@@ -39,12 +49,12 @@ jQuery(function($){
 				Mall.validate.getOptions()
 			);
 			
+			
+			// Inicjuamy 3 kroki zawsze
+			// Wewnątrz każdej sprawdzmy czy mozna
 			this._initStep1();
-
-			if(this.isReturnPath()) {
-				this._initStep2();
-				this._initStep3();
-			}
+			this._initStep2();
+			this._initStep3();
 			
 	
 			$(window).bind('beforeunload', function() {
@@ -52,22 +62,6 @@ jQuery(function($){
 					return self.unloadMessage;
 				}
 			});
-
-            //visual fix for message - can't be done by css
-            if ($('.messages i').length) {
-                $('#content').css('margin-top', '0px');
-                $('.messages i').click(function () {
-                    $('#content').css('margin-top', '');
-                });
-            }
-
-            Object.size = function(obj) {
-                var size = 0, key;
-                for (key in obj) {
-                    if (obj.hasOwnProperty(key)) size++;
-                }
-                return size;
-            };
 		},
 
         // Step 1 init
@@ -171,6 +165,7 @@ jQuery(function($){
 	                    claim = true;
                     }
                 });
+				
                 if(valid && !claim){
                     self.next();
                 } else if(valid && claim) {
@@ -190,6 +185,10 @@ jQuery(function($){
             var s = this.step2,
                 self = this,
                 next = s.find("button.next");
+
+			if(!s.find("#can_init_carrier").length){
+				return;
+			}
 
             // Handle back click
             s.find(".back").click(function () {
@@ -230,9 +229,7 @@ jQuery(function($){
             });
 
             //PICKUP DATE AND HOURS START
-
-            jQuery(document).ready( function() {
-
+                _rma.addUsefulFunctions();
                 _rma.initDateList(dateList);//INIT DATE LIST
                 _rma.initDefaultSlider(dateList);//INIT SLIDER DEFAULT VALUES AND PARAMS
                 _rma.attachSlideOnSlider();//CHANGE DESCRIPTIONS ON SLIDER SLIDE
@@ -280,7 +277,7 @@ jQuery(function($){
                     jQuery('#pickup-date-overview').show();
                     jQuery('#overview-message').show();
                 }
-            });
+
 			this.addressbook.init();
         },
 		
@@ -312,9 +309,19 @@ jQuery(function($){
 		},
 
         // Step 2 functions
+
+        addUsefulFunctions: function() {
+            Object.size = function(obj) {
+                var size = 0, key;
+                for (key in obj) {
+                    if (obj.hasOwnProperty(key)) size++;
+                }
+                return size;
+            };
+        },
 		
         initDateList: function(_dateList) {
-            if (Object.size(_dateList) == 0) {
+            if (Object.keys(_dateList).length == 0) {
                 jQuery('#btn-next-step-2').hide();
             } else {
                 for(var day in _dateList) {
@@ -325,24 +332,28 @@ jQuery(function($){
         },
 
         initDateListValues: function(_dateList) {
-            if (Object.size(_dateList) == 0) {
-                var values = jQuery("#slider-range").val();
-                _rma.formatTimeRange(values[0], values[1]);
+            if (Object.keys(_dateList).length == 0) {
+                if (jQuery("#slider-range").length) {
+                    var values = jQuery("#slider-range").val();
+                    _rma.formatTimeRange(values[0], values[1]);
+                }
             }
         },
 
         initDefaultSlider : function(_dateList){
-            if (Object.size(_dateList) != 0) {
-                jQuery("#slider-range").noUiSlider({
-                    start: [660, 840],
-                    step: 60,
-                    behaviour: 'drag-fixed',
-                    connect: true,
-                    range: {
-                        'min': 540,
-                        'max': 1200
-                    }
-                });
+            if (Object.keys(_dateList).length != 0) {
+                if(jQuery("#slider-range").length) {
+                    jQuery("#slider-range").noUiSlider({
+                        start: [660, 840],
+                        step: 60,
+                        behaviour: 'drag-fixed',
+                        connect: true,
+                        range: {
+                            'min': 540,
+                            'max': 1200
+                        }
+                    });
+                }
             }
         },
 
@@ -739,7 +750,7 @@ jQuery(function($){
 			/**
 			 * Content object
 			 */
-			content: jQuery("#step-2"),
+			content: jQuery("#pickup-address-form"),
 			
 			/**
 			 * Init addressbook
