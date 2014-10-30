@@ -18,6 +18,7 @@ jQuery(function($){
 		txtCarrierTime: "",
 		_txtCarrierTimeFrom: "carrier_time_from",
 		_txtCarrierTimeTo: "carrier_time_to",
+		dhlDisabled: false,
 
 		////////////////////////////////////////////////////////////////////////
 		// Init steps and general
@@ -166,9 +167,9 @@ jQuery(function($){
                     }
                 });
 				
-                if(valid && !claim){
+                if(valid && !claim && !self.dhlDisabled){
                     self.next();
-                } else if(valid && claim) {
+                } else if(valid && (claim || self.dhlDisabled)) {
 	                self.step2.detach();
 	                self._submitForm();
                 } else if(s.find(".has-error").length) {
@@ -302,6 +303,8 @@ jQuery(function($){
 
 		// check if any reason is return reason
 		isReturnPath: function() {
+			if(this.dhlDisabled)
+				return false;
 			for(var key in this.getReturnReasons() )
 				if(!this.getReturnReasons()[key].isClaim)
 					return true;
