@@ -1,6 +1,7 @@
 <?php /* @var $this Zolago_Rma_Block_View */ ?>
 <?php $_helper = Mage::helper("zolagorma"); ?>
 <?php $_rma = $this->getRma();?>
+<?php $carrierDate = $_rma->getCarrierDate(); ?>
 
 <div class="page-title box-wrapper">
 	<h1>
@@ -44,12 +45,14 @@
 						<span class="uppercase"><?php echo $_helper->__("Carrier date"); ?></span>
 					</p>
 					<div>
-						<?php echo $this->getDayOfWeek($_rma);?> <?php echo Mage::helper("core")->formatDate($_rma->getCarrierDate(), "short");?><br/>
+                        <?php if(!empty($carrierDate)): ?>
+						<?php echo $this->getDayOfWeek($_rma);?> <?php echo Mage::helper("core")->formatDate($carrierDate, "short");?><br/>
 						<?php echo $_helper->__(
 							"between %s and %s", 
 							$_rma->getCarrierTimeFrom() ? $_rma->getCarrierTimeFrom() : $_helper->__("N/A"), 
 							$_rma->getCarrierTimeTo() ? $_rma->getCarrierTimeTo() : $_helper->__("N/A")); 
 						?>
+                        <?php endif; ?>
 					</div>
 				</div>
 				<?php if($_address=$_rma->getShippingAddress()):?>
@@ -68,14 +71,32 @@
             <?php if($this->isAccepted($_rma)): ?>
             <div class="rma-section rma-content">
                 <p>
-                    <i class="glyphicon glyphicon-edit"></i>
-                    <span class="uppercase">
+                    <?php if(!empty($carrierDate)): ?>
+                        <i class="glyphicon glyphicon-time"></i>
+                        <span class="uppercase"><?php echo $_helper->__("Carrier date"); ?></span>
+                    <?php else: ?>
+                        <i class="glyphicon glyphicon-edit"></i>
+                        <span class="uppercase">
                         <a href="/sales/rma/courier/id/<?php echo $_rma->getId(); ?>">
                             <?php echo $_helper->__("Book a courier"); ?>
                         </a>
                     </span>
+                    <?php endif; ?>
                 </p>
+
+                <div>
+                    <?php if(!empty($carrierDate)): ?>
+                        <?php echo $this->getDayOfWeek($_rma);?> <?php echo Mage::helper("core")->formatDate($carrierDate, "short");?><br/>
+                        <?php echo $_helper->__(
+                            "between %s and %s",
+                            $_rma->getCarrierTimeFrom() ? $_rma->getCarrierTimeFrom() : $_helper->__("N/A"),
+                            $_rma->getCarrierTimeTo() ? $_rma->getCarrierTimeTo() : $_helper->__("N/A"));
+                        ?>
+                    <?php endif; ?>
+                </div>
             </div>
+
+
             <?php endif;?>
 
 
