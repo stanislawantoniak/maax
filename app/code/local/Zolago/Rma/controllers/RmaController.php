@@ -136,6 +136,12 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
 	}
 
     /**
+     * Save courier data
+     */
+    public function saveCourierAction(){
+        $this->_forward("saveRmaCourier",'po');
+    }
+    /**
      * Send Rma Detail Action
      * @return void
      */
