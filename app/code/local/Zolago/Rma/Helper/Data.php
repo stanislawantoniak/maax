@@ -1,7 +1,7 @@
 <?php
 
 class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
-    
+
     const RMA_CUSTOMER_SUFFIX = '_customer';
 
      /**
@@ -11,10 +11,10 @@ class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
      */
     public function getRmaDocumentForCustomer(Zolago_Rma_Model_Rma_Track $track) {
         $docs = array();
-        if ($customerPdf = $track->getRma()->getCustomerPdf()) {	
+        if ($customerPdf = $track->getRma()->getCustomerPdf()) {
             $docs[] = $customerPdf;
-        }        
-        if ($rmaPdf = $track->getRma()->getRmaPdf()) {	
+        }
+        if ($rmaPdf = $track->getRma()->getRmaPdf()) {
             $docs[] = $rmaPdf;
         } else {
             $rmaPdf = Mage::getBaseDir('media').DS.Zolago_Rma_Model_Pdf::RMA_PDF_PATH.DS.Zolago_Rma_Model_Pdf::RMA_PDF_PREFIX.$track->getRma()->getId().'.pdf';
@@ -31,7 +31,7 @@ class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
             $helper = Mage::helper('zolagocommon');
             $helper->mergePdfs($docs,$newPath);
         }
-        return $newPath;        
+        return $newPath;
     }
 
     /**
@@ -58,7 +58,7 @@ class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
 			$rma->setRmaStatus($status);
 			$rma->getResource()->saveAttribute($rma, 'rma_status');
 			// Trigger event
-			
+
 			Mage::dispatchEvent("zolagorma_rma_status_changed", array(
 				"rma" => $rma,
 				"notify" => $notify,
@@ -157,7 +157,7 @@ class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
 	/**
 	 * @param Zolago_Po_Model_Po $po
 	 * @param boolean $to_json
-	 * 
+	 *
 	 * @return json|array
 	 */
 	public function getReturnReasons($po, $to_json) {
@@ -208,7 +208,7 @@ class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
 	/**
 	 * @param int $return_reason_id
 	 * @param Zolago_Po_Model_Po $po
-	 * 
+	 *
 	 * @return float | boolean
 	 */
 	public function getDaysElapsed($return_reason_id, $po) {
@@ -252,10 +252,10 @@ class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
 
 	/**
 	 * Get flow number based on days elapsed
-	 * 
+	 *
 	 * @param Zolago_Rma_Model_Resource_Rma_Reason_Vendor $vendor_reason
 	 * @param int $days_elasped
-	 * 
+	 *
 	 * @return int | false
 	 */
 	public function getFlow($vendor_reason, $days_elapsed) {
@@ -372,5 +372,14 @@ class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
             }
         }
         return $dateList;
+    }
+
+    public function getPostcode(Mage_Customer_Model_Address $address) {
+        if(!$address) {
+            return '';
+        } else {
+            $data = $address->getData();
+            return $data["postcode"];
+        }
     }
 }
