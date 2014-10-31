@@ -11,7 +11,8 @@ $_po = $this->getPo();
 <?php $_itemsSingle = $_rma->getItemsSingle(); ?>
 <?php $_itemsConditionSingle = $_rma->getItemsConditionSingle(); ?>
 <?php $_selectedShipping = $this->getSelectedShippingAddress();?>
-<?php $dateList = $this->getDateList($_selectedShipping);?>
+<?php $dateList = array();?>
+<?php //$dateList = $this->getDateList($_helper->getPostcode($_selectedShipping));?>
 <?php $weekdays = Mage::app()->getLocale()->getOptionWeekdays();?>
 <?php $vendor = $_po->getVendor();?>
 
@@ -101,7 +102,7 @@ $_po = $this->getPo();
                     </div>
                 </div>
         </div>
-        <div class="rma-container">
+        <div>
             <a href="/sales/rma/view/id/<?php echo $_rma->getId(); ?>" class="button button-third large back pull-left">
                 <?php echo $_helper->__("Back"); ?>
             </a>
