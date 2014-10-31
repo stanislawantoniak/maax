@@ -759,3 +759,30 @@
     }
   }
 }
+
+.sales-po-newrma, .sales-rma-courier {
+  .panel {
+    .panel-body {
+      .current-rma-address, .current-rma-date, .top-panel {
+        background: none repeat scroll 0 0 #fcfcfc;
+        border-bottom: 1px solid #eeedf0;
+        margin: -15px -15px 0;
+        padding: 15px;
+      }
+      .current-rma-date {
+        margin: -15px -15px -15px;
+      }
+    }
+    .panel-footer {
+      background: none repeat scroll 0 0 transparent;
+      border: medium none;
+      padding: 0 15px 15px;
+    }
+  }
+  dd.separator {
+    margin-top: 15px;
+  }
+  .rma-container {
+    padding-bottom: 30px;
+  }
+}
