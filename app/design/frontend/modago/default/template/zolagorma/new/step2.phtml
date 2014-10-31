@@ -5,7 +5,8 @@
 <?php $_itemsSingle = $_rma->getItemsSingle(); ?>
 <?php $_itemsConditionSingle = $_rma->getItemsConditionSingle(); ?>
 <?php $_selectedShipping = $this->getSelectedShippingAddress();?>
-<?php $dateList = $this->getDateList($_selectedShipping);?>
+<?php //$dateList = $this->getDateList($_selectedShipping);?>
+<?php $dateList = array() ;?>
 <?php $weekdays = Mage::app()->getLocale()->getOptionWeekdays();?>
 <?php $vendor = $_po->getVendor();?>
 <div class="steps step-2 background-wrapper box-wrapper" id="step-2">
@@ -27,7 +28,7 @@
 				<dl class="pull-left" >
 					<dt>{{firstname}} {{lastname}}</dt>
 					<dd>{{street}}</dd>
-					<dd>{{postcode}} {{city}}</dd>
+					<dd><span class ="selectedZip">{{postcode}}</span> {{city}}</dd>
 					<dd class="phone"><?php echo $this->__("Contact phone")?>: <span>{{telephone}}</span></dd>
 					<dd class="action separator">
 						<a href="#" class="underline edit"><?php echo $this->__("edit");?></a> 
@@ -279,5 +280,4 @@
 		<?php endif; ?>
 	});
 
-    var lastData = '';
 </script>

@@ -269,9 +269,12 @@ jQuery(function($){
 
 			this.addressbook.init();
 
+            var zip = jQuery(jQuery('.selectedZip')[1]).text();
+            console.log(zip);
+            _rma.getDateList(zip);
+
             jQuery(this.addressbook.content).on("selectedAddressChange", function(e, address) {
                 //console.log(address.getData());
-                var poId = parseInt(jQuery("#new-rma input[name='po_id']").val());
                 var zip = address.getData().postcode;
                 _rma.getDateList(zip);
             });
