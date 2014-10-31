@@ -692,7 +692,7 @@ jQuery(function($){
 			var date = new Date(data.pickup.carrier_date);
 			var month = date.getMonth() + 1;
 			var day = this.daysOfWeek[date.getDay()] + " " +
-					date.getDate() + "-" +
+					(date.getDate() < 10 ? "0"+date.getDate() : date.getDate()) + "-" +
 					(month < 10 ? "0" + month : month) + "-" +
 					date.getFullYear(),
 				pickup = $("#pickup-date-review"),
