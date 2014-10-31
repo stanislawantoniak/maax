@@ -92,7 +92,6 @@ jQuery(function($){
 
             jQuery(this.addressbook.content).on("selectedAddressChange", function(e, address) {
                 //console.log(address.getData());
-                var poId = parseInt(jQuery("#edit-rma input[name='po_id']").val());
                 var zip = address.getData().postcode;
                 _rma.getDateList(zip);
             });
@@ -276,7 +275,6 @@ jQuery(function($){
                 'zip': zip
             }, {
                 'done': function (data) {
-                    console.log(data);
                     if (data !== undefined && data.status !== undefined) {
                         if (data.status) {
                             // is at least one day for pickup
@@ -313,6 +311,8 @@ jQuery(function($){
                     "<img src='" + ajaxLoaderSkinUrl + "'></div>"
             );
             jQuery('#btn-next-step-2').hide();
+
+            jQuery('#customer_address_postcode').val(zip);
 
             return true;
         },
