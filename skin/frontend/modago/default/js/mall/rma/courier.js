@@ -24,11 +24,6 @@ jQuery(function($){
                 self = this,
                 next = s.find("button.next");
 
-            // Handle back click
-            s.find(".back").click(function () {
-                self.prev();
-                return false;
-            });
 
             // Handle next click
             s.find(".next").click(function(){
