@@ -32,6 +32,7 @@ $_po = $this->getPo();
                 <div id="pickup-address-form" class="fieldset flow-return">
                     <input type="hidden" id="can_init_addressbook" value="1"/>
                     <input type="hidden" name="rma[customer_address_id]" id="customer_address_id" value="<?php echo $_selectedShipping ? $_selectedShipping->getId() : ""; ?>"/>
+                    <input type="hidden" name="rma[customer_postcode]" id="customer_address_postcode" value="<?php echo $_selectedShipping ? $_helper->getPostcode($_selectedShipping) : ''; ?>"/>
                     <input type="hidden" name="rma[override_address]" value="0"/>
                     <h3 class="legend-big"><?php echo $_helper->__("Book the courier"); ?></h3>
                     <h3 class="legend"><?php echo $_helper->__("Confirm or change pickup address for the courier"); ?>:</h3>

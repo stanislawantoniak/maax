@@ -88,6 +88,9 @@ jQuery(function($){
 
             this.addressbook.init();
 
+            var zip = jQuery('#customer_address_postcode').val();
+            _rma.getDateList(zip);
+
             jQuery(this.addressbook.content).on("selectedAddressChange", function(e, address) {
                 //console.log(address.getData());
                 var poId = parseInt(jQuery("#edit-rma input[name='po_id']").val());
