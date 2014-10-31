@@ -31,7 +31,7 @@ class Zolago_Rma_Block_New_Step2 extends  Zolago_Rma_Block_New_Abstract{
 		}
 		return $this->asJson($addresses);
 	}
-	
+
 	/**
 	 * @return int | null
 	 */
@@ -40,32 +40,53 @@ class Zolago_Rma_Block_New_Step2 extends  Zolago_Rma_Block_New_Abstract{
 	}
 	
 	/**
+	 * @return Mage_Customer_Model_Address | null
+	 */
+	public function getSelectedShippingAddress() {
+		return $this->getCustomer()->getAddressItemById(
+			$this->getSelectedShipping()
+		);
+	}
+	
+	/**
 	 * Return customer address 
 	 * @return int | null
 	 */
 	public function getSelectedShipping() {
-		
-		// Customer address id from last POST
-		if($this->getRma()->getCustomerAddressId()){
-			return $this->getRma()->getCustomerAddressId();
+		if(!$this->hasData("selected_shipping")){
+			// Customer address id from last POST
+			if($this->getRma()->getCustomerAddressId()){
+				$id = $this->getRma()->getCustomerAddressId();
+			}else{
+				$shippignAddress= $this->
+					getRma()->
+					getShippingAddress();
+
+				if($shippignAddress && $shippignAddress->getCustomerAddressId()){
+					$id = $shippignAddress->getCustomerAddressId();
+				}else{
+					$id = $this->getDefaultShipping();
+				}
+			}
+			$this->setData("selected_shipping", $id);
 		}
-		
-		$shippignAddress= $this->
-			getRma()->
-			getShippingAddress();
-		
-		if($shippignAddress && $shippignAddress->getCustomerAddressId()){
-			return $shippignAddress->getCustomerAddressId();
-		}
-		return $this->getDefaultShipping();
+		return $this->getData("selected_shipping");
 	}
 	
-    /**
-     * list of possible pickup data
-     * @return array
-     */         
+	/**
+	 * @param Mage_Customer_Model_Address | string | null $newZip
+	 * @return array
+	 */
      public function getDateList($newZip = '') {
-         return Mage::helper('zolagorma')->getDateList($this->getRequest()->getParam('po_id'), $newZip);
+		 if($newZip instanceof Mage_Customer_Model_Address){
+			 $newZip = $newZip->getPostcode();
+		 }
+		 // No selected zip / null - return empty array
+		 if(empty($newZip)){
+			 return array();
+		 }
+         return Mage::helper('zolagorma')->
+			getDateList($this->getRequest()->getParam('po_id'), $newZip);
      }
 
     /**
@@ -100,4 +121,5 @@ class Zolago_Rma_Block_New_Step2 extends  Zolago_Rma_Block_New_Abstract{
          }
          return $this->_monthList; 
      }
+
 }

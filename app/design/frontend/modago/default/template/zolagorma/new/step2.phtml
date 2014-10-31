@@ -4,18 +4,19 @@
 <?php $_rma = $this->getRma();?>
 <?php $_itemsSingle = $_rma->getItemsSingle(); ?>
 <?php $_itemsConditionSingle = $_rma->getItemsConditionSingle(); ?>
-<?php $items = $this->getItemList();?>
-<?php $dateList = $this->getDateList();?>
+<?php $_selectedShipping = $this->getSelectedShippingAddress();?>
+<?php //$dateList = $this->getDateList($_selectedShipping);?>
+<?php $dateList = array() ;?>
 <?php $weekdays = Mage::app()->getLocale()->getOptionWeekdays();?>
 <?php $vendor = $_po->getVendor();?>
 <div class="steps step-2 background-wrapper box-wrapper" id="step-2">
 	<input type="hidden" name="form_key" value="<?php echo $this->getFormKey();?>"/>
 	<input type="hidden" name="country_id" id="country_id" value="<?php echo $this->getDefaultCountryId();?>"/>
 	<div class="rma-container">
-		<?php if (($this->isDhlEnabled()) && count($dateList)) : ?>
+		
         <div id="pickup-address-form" class="fieldset flow-return">
 			<input type="hidden" id="can_init_addressbook" value="1"/>
-			<input type="hidden" name="rma[customer_address_id]" id="customer_address_id" value="<?php echo $this->getSelectedShipping(); ?>"/>
+			<input type="hidden" name="rma[customer_address_id]" id="customer_address_id" value="<?php echo $_selectedShipping ? $_selectedShipping->getId() : ""; ?>"/>
 			<input type="hidden" name="rma[override_address]" value="0"/>
     
             <h3 class="legend-big"><?php echo $_helper->__("Report a return or claim"); ?></h3>
@@ -27,7 +28,7 @@
 				<dl class="pull-left" >
 					<dt>{{firstname}} {{lastname}}</dt>
 					<dd>{{street}}</dd>
-					<dd>{{postcode}} {{city}}</dd>
+					<dd><span class ="selectedZip">{{postcode}}</span> {{city}}</dd>
 					<dd class="phone"><?php echo $this->__("Contact phone")?>: <span>{{telephone}}</span></dd>
 					<dd class="action separator">
 						<a href="#" class="underline edit"><?php echo $this->__("edit");?></a> 
@@ -99,7 +100,7 @@
             <h3 class="legend"><?php echo $_helper->__("Schedule pickup date that is convenient for you"); ?></h3>
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <?php if(count($dateList) != 0): ?>
+                    <?php if (($this->isDhlEnabled()) && count($dateList)): ?>
 						<input type="hidden" id="can_init_carrier" value="1"/>
                         <div class="current-rma-date clearfix">
                             <div id="pickup-date-form-panel" class="fieldset flow-return">
@@ -156,7 +157,7 @@
             </div>
         </div>
 
-		<?php endif;?>
+
         <div class="fieldset row" id="customer-account-wrapper">
             <div>
                 <h3 class="legend col-sm-12"><?php echo $_helper->__("Enter your account number for your order refund"); ?></h3>
@@ -167,16 +168,17 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="rma-container">
-        <a href="#step-1" class="button button-third large back pull-left">
-            <?php echo $_helper->__("Back"); ?>
-        </a>
-        <button class="btn button button-primary next pull-right"
-                type="button" id="btn-next-step-2"><?php echo $_helper->__("Next"); ?></button>
+
+        <div>
+            <a href="#step-1" class="button button-third large back pull-left">
+                <?php echo $_helper->__("Back"); ?>
+            </a>
+            <button class="btn button button-primary next pull-right"
+                    type="button" id="btn-next-step-2"><?php echo $_helper->__("Next"); ?></button>
+			<div class="clearfix"></div>
+        </div>
     </div>
 </div>
-
 <script type="text/javascript">
     //TRANSLATIONS
     Mall.translate.add("Selected time", "<?php echo $_helper->__('Selected time') ?>");
@@ -209,6 +211,7 @@
 	Mall.translate.add("address-cant-be-removed", "<?php echo $_helper->__("Address can't be removed.");?>");
 	Mall.translate.add("selected-carrier-address", "<?php echo $_helper->__("Selected carrier address") ?>");
    	Mall.translate.add("change-address", "<?php echo $_helper->__("Change address");?>");
+   	Mall.translate.add("add-address", "<?php echo $_helper->__("Add address");?>");
 	Mall.translate.add("your-additional-addresses", "<?php echo $_helper->__("Your additional addresses");?>");
 	Mall.translate.add("roll-up", "<?php echo $_helper->__("Roll up");?>");
 	Mall.translate.add("address-you-sure", "<?php echo $_helper->__("Are you sure?");?>");
@@ -272,7 +275,9 @@
 		addressBook.setDefaultShipping(<?php echo $this->asJson($this->getDefaultShipping())?>);
 
 		Mall.rma.new.addressbook.setAddressBook(addressBook);
+		<?php if(!$this->isDhlEnabled()): ?>
+		Mall.rma.new.dhlDisabled = true;
+		<?php endif; ?>
 	});
-		
 
 </script>

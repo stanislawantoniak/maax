@@ -76,7 +76,8 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
 			return $this->_redirect('customer/account/login');
 		}
 		// Current RMA can by set and forwarded by _initLastRma
-		if(!Mage::registry("current_rma")){
+		$rma = Mage::registry("current_rma");
+		if(!$rma || !$rma->getId()){
 			try{
 				$rma =$this->_initRma();
 				/* @var $rma Zolago_Rma_Model_Rma */
@@ -138,6 +139,13 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
 		$this->_forward('view');
 	}
 
+    /**
+     * Save courier data
+     */
+    public function saveCourierAction(){
+        Mage::log("Hello");
+        $this->_forward("saveRmaCourier",'po');
+    }
     /**
      * Send Rma Detail Action
      * @return void
@@ -264,25 +272,4 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
         }	
 	}
 
-    /**
-     * list of possible pickup data
-     * @return text as json
-     */
-    public function ajaxGetDateListAction(){
-
-        $po_id = $this->getRequest()->getParam('po_id');
-        $zip = $this->getRequest()->getParam('zip');
-
-        $dateList = Mage::helper('zolagorma')->getDateList($po_id, $zip);
-
-        $arrayDateList = (array) $dateList;//only for easy counting
-
-        $response = array(
-            "status" => count($arrayDateList),
-            "content" => $dateList
-        );
-
-        $this->getResponse()->setHeader('Content-type', 'application/x-json');
-        $this->getResponse()->setBody(Mage::helper("core")->jsonEncode($response));
-    }
 }

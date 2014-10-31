@@ -10,7 +10,8 @@ $_po = $this->getPo();
 ?>
 <?php $_itemsSingle = $_rma->getItemsSingle(); ?>
 <?php $_itemsConditionSingle = $_rma->getItemsConditionSingle(); ?>
-<?php $dateList = $this->getDateList(); ?>
+<?php $_selectedShipping = $this->getSelectedShippingAddress();?>
+<?php $dateList = $this->getDateList($_selectedShipping);?>
 <?php $weekdays = Mage::app()->getLocale()->getOptionWeekdays();?>
 <?php $vendor = $_po->getVendor();?>
 
@@ -21,15 +22,16 @@ $_po = $this->getPo();
 		<span class="back-xs"><a href="<?php echo $this->getUrl('customer/account/index/');?>" class="underline"><?php echo $_helper->__('back'); ?> &gt;</a></span>
 	</h1>
 </div>
-<form method="post" id="new-rma" action="<?php echo $this->getUrl('*/*/saveRma') ?>">
+<form method="post" id="edit-rma" action="<?php echo $this->getUrl('*/rma/saveCourier') ?>">
 	<input type="hidden" name="po_id" value="<?php echo $poId; ?>">
+    <input type="hidden" name="rma_id" value="<?php echo $_rma->getId(); ?>">
     <div class="steps step-2 background-wrapper box-wrapper" id="step-2">
         <input type="hidden" name="form_key" value="<?php echo $this->getFormKey();?>"/>
         <input type="hidden" name="country_id" id="country_id" value="<?php echo $this->getDefaultCountryId();?>"/>
         <div class="rma-container">
-            <?php if (($this->isDhlEnabled()) && count($dateList)) : ?>
                 <div id="pickup-address-form" class="fieldset flow-return">
-                    <input type="hidden" name="rma[shipping_address_id]" value="<?php echo $_shippingAddress->getId(); ?>"/>
+                    <input type="hidden" id="can_init_addressbook" value="1"/>
+                    <input type="hidden" name="rma[customer_address_id]" id="customer_address_id" value="<?php echo $_selectedShipping ? $_selectedShipping->getId() : ""; ?>"/>
                     <input type="hidden" name="rma[override_address]" value="0"/>
                     <h3 class="legend-big"><?php echo $_helper->__("Book the courier"); ?></h3>
                     <h3 class="legend"><?php echo $_helper->__("Confirm or change pickup address for the courier"); ?>:</h3>
@@ -112,10 +114,9 @@ $_po = $this->getPo();
                     <h3 class="legend"><?php echo $_helper->__("Schedule pickup date that is convenient for you"); ?></h3>
                     <div class="panel panel-default">
                         <div class="panel-body">
-                            <?php if(count($dateList) != 0): ?>
                             <div class="current-rma-date clearfix">
+                                <?php if(count($dateList) != 0): ?>
                                 <div id="pickup-date-form-panel" class="fieldset flow-return">
-
                                     <label class="required choose-date" for="carrier-date"><?php echo $_helper->__("Choose the date"); ?>
                                         <em>:</em></label>
 
@@ -169,10 +170,6 @@ $_po = $this->getPo();
 
                     </div>
                 </div>
-
-            <?php endif;?>
-
-
         </div>
         <div class="rma-container">
             <a href="/sales/rma/view/id/<?php echo $_rma->getId(); ?>" class="button button-third large back pull-left">
@@ -180,6 +177,7 @@ $_po = $this->getPo();
             </a>
             <button class="btn button button-primary next pull-right"
                     type="button" id="btn-next-step-2"><?php echo $_helper->__("Next"); ?></button>
+            <div class="clearfix"></div>
         </div>
     </div>
 </form>
@@ -205,6 +203,7 @@ $_po = $this->getPo();
     Mall.translate.add("optional", "<?php echo $_helper->__("optional");?>");
     Mall.translate.add("nip", "<?php echo $_helper->__("NIP");?>");
     Mall.translate.add("street-and-number", "<?php echo $_helper->__("Street and number");?>");
+    Mall.translate.add("add-address", "<?php echo $_helper->__("Add address");?>");
     Mall.translate.add("postcode", "<?php echo $_helper->__("Postcode");?>");
     Mall.translate.add("city", "<?php echo $_helper->__("City");?>");
     Mall.translate.add("phone", "<?php echo $_helper->__("Phone");?>");
@@ -221,7 +220,7 @@ $_po = $this->getPo();
     Mall.translate.add("Zip code should be entered in the format xx-xxx.", "<?php echo $this->__("Zip code should be entered in the format xx-xxx."); ?>");
     Mall.translate.add("required", "<?php echo $this->__("This is a required field."); ?>");
     Mall.translate.add("email", "<?php echo $this->__("E-mail address is in invalid format or contains invalid characters. Please enter correct address."); ?>");
-    Mall.translate.add("Tax numer is incorrect. Enter as a string of digits e.g. 1234567890.", "<?php echo $this->__('Tax numer is incorrect. Enter as a string of digits e.g. 1234567890.') ?>");
+    Mall.translate.add("Tax number is incorrect. Enter as a string of digits e.g. 1234567890.", "<?php echo $this->__('Tax number is incorrect. Enter as a string of digits e.g. 1234567890.') ?>");
     Mall.translate.add("Enter name.", "<?php echo $this->__('Enter name.') ?>");
     Mall.translate.add("Enter last name.", "<?php echo $this->__('Enter last name.') ?>");
     Mall.translate.add("Enter email address.", "<?php echo $this->__('Enter email address.') ?>");
@@ -234,39 +233,48 @@ $_po = $this->getPo();
     //TRANSLATIONS END
 
     //INIT DATA
-    <?php $js_array = json_encode($dateList); ?>
-    var dataList = <?php echo $js_array; ?>;
+    var rmaCarrierTimeFrom = '<?php echo $_rma->getCarrierTimeFrom(); ?>';
+    var rmaCarrierTimeTo = '<?php echo $_rma->getCarrierTimeTo(); ?>';
+    var dateList = <?php echo json_encode($dateList); ?>;
+    var dateListFormatedDate = [];
+
+    <?php // formatted date for next 20 (max) days from today
+    for($count = 0; $count < 20 ; $count++) {
+        $timestamp = time()+$count*3600*24;
+        $index = date('Y-m-d',$timestamp);
+        echo "dateListFormatedDate['$index'] = '" . $this->getFormattedDate($timestamp) . "';\n";
+    }
+    ?>
+
+
+    //converting weekdays to array
+    var weekdays = <?php echo json_encode($weekdays); ?>;
+    var arr = [];
+    for (var prop in weekdays) {
+        arr[prop] = (weekdays[prop].label);
+    }
+    weekdays = arr;
+    //converting weekdays to array END
 
     //applyFlow
     var isAcknowledged = false;
     var returnReasons = '<?php echo Mage::helper("zolagorma")->getReturnReasons($_po, true); ?>';
     var flowAcknowledged = '<?php echo Zolago_Rma_Model_Rma::FLOW_ACKNOWLEDGED; ?>';
+    var ajaxLoaderSkinUrl = '<?php echo $this->getSkinUrl("images/modago-ajax-loader.gif"); ?>';
     //INIT DATE END
 
     jQuery(function () {
         // Address book handling
         var addressBook = new Mall.customer.AddressBook();
+
         addressBook.setAddressBook(<?php echo $this->getCustomerAddressesJson(); ?>);
         addressBook.setDefaultShipping(<?php echo $this->asJson($this->getDefaultShipping())?>);
-        addressBook.setSelectedShipping(<?php echo $this->asJson($this->getSelectedShipping())?>);
+
         Mall.rma.new.addressbook.setAddressBook(addressBook);
 
         var returnReasons = <?php echo Mage::helper('zolagorma')->getReturnReasons($_po, true); ?>;
         Mall.rma.new.setReturnReasons(returnReasons);
 
-        <?php foreach($_helper->getItemConditionTitles() as $_key=>$_label):?>
-        Mall.rma.new.addValidator(
-            'must-be-available-<?php echo $_key; ?>',
-            returnReasons[<?php echo $_key; ?>].message,
-            function (value, element, params) {
-                var currentReason = returnReasons[value];
-                if (!currentReason) {
-                    return false;
-                }
-                return currentReason.isAvailable;
-            }
-        );
-        <?php endforeach;?>
 
 
         Mall.rma.new.setNotAvailableText('<?php echo $_helper->__('Not available');?>');

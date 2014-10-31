@@ -54,6 +54,11 @@ var OrbaLib = {
             }
         }
     },
+    Rma: {
+        getDateList: function(data, callback, async, cache) {
+            OrbaLib.__ajax('<?php echo Mage::getUrl('orbacommon/ajax_rma/getDateList', array('_secure' => Mage::app()->getFrontController()->getRequest()->isSecure())); ?>', data, callback, 'POST', async, cache);
+        }
+    },
     _ajax: function(url, data, callback, type) {
         jQuery.ajax({
             'url': url,
@@ -68,5 +73,16 @@ var OrbaLib = {
                 callback(response, true);
             }
         });
+    },
+    __ajax: function(url, data, callback, type, async, cache) {
+        jQuery.ajax({
+            'url': url,
+            'data': data,
+            'type': type,
+            'timeout': 30000,
+            'dataType': 'json',
+            'cache': cache,
+            'async': async
+        }).done(callback.done).fail(callback.fail).always(callback.always);
     }
 };

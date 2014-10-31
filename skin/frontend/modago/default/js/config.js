@@ -42,8 +42,7 @@ var Config = {
             remove: "/customer/address/deleteAjax",
             save: "/customer/address/saveAjax",
             get: ""
-        },
-        dhl_pickup_date_list: '/sales/rma/ajaxGetDateList'
+        }
     }
 };
 

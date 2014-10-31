@@ -26,32 +26,28 @@ class Zolago_Rma_Block_Courier extends Zolago_Rma_Block_Abstract
         return $helper->isEnabledForRma($vendor) || $helper->isEnabledForVendor($vendor);
     }
     /**
-     * list of possible pickup data
+     * @param Mage_Customer_Model_Address | string | null $newZip
      * @return array
      */
-    public function getDateList() {
-        $po = $this->getPo();
-        $shippingAddress = $po->getShippingAddress();
-        $zip = $shippingAddress->getPostcode();
-        $helper = Mage::helper('orbashipping/carrier_dhl');
-        $dateList = array();
-        $holidaysHelper = Mage::helper('zolagoholidays/datecalculator');
-        $max = 20;
-        for ($count = 0;(($count <= $max) && (count($dateList)<5));$count++) {
-            // start from
-            $timestamp = time()+$count*3600*24;
-            if ($holidaysHelper->isPickupDay($timestamp)) {
-                if ($params = $helper->getDhlPickupParamsForDay($timestamp,$zip)) {
-                    if($params->getPostalCodeServicesResult->drPickupFrom !== "brak"){
-                        $dateList[$timestamp] = $params;
-                    }
-                }
-            }
+    public function getDateList($newZip = '') {
+        if($newZip instanceof Mage_Customer_Model_Address){
+            $newZip = $newZip->getPostcode();
         }
-        return $dateList;
-
+        // No selected zip / null - return empty array
+        if(empty($newZip)){
+            return array();
+        }
+        return Mage::helper('zolagorma')->
+            getDateList($this->getRequest()->getParam('po_id'), $newZip);
     }
-
+    /**
+     * @return Mage_Customer_Model_Address | null
+     */
+    public function getSelectedShippingAddress() {
+        return $this->getCustomer()->getAddressItemById(
+            $this->getSelectedShipping()
+        );
+    }
     /**
      * Get customer collecition
      * @return type
@@ -76,13 +72,28 @@ class Zolago_Rma_Block_Courier extends Zolago_Rma_Block_Abstract
     }
 
     /**
+     * Return customer address
      * @return int | null
      */
     public function getSelectedShipping() {
-        if($this->getRma()->getCustomerAddressId()){
-            return $this->getRma()->getCustomerAddressId();
+        if(!$this->hasData("selected_shipping")){
+            // Customer address id from last POST
+            if($this->getRma()->getCustomerAddressId()){
+                $id = $this->getRma()->getCustomerAddressId();
+            }else{
+                $shippignAddress= $this->
+                    getRma()->
+                    getShippingAddress();
+
+                if($shippignAddress && $shippignAddress->getCustomerAddressId()){
+                    $id = $shippignAddress->getCustomerAddressId();
+                }else{
+                    $id = $this->getDefaultShipping();
+                }
+            }
+            $this->setData("selected_shipping", $id);
         }
-        return $this->getDefaultShipping();
+        return $this->getData("selected_shipping");
     }
 
     /**
@@ -108,7 +119,18 @@ class Zolago_Rma_Block_Courier extends Zolago_Rma_Block_Abstract
         }
         return $this->_monthList;
     }
-
+    /**
+     * @return string
+     */
+    public function getFormKey() {
+        return Mage::getSingleton('core/session')->getFormKey();
+    }
+    /**
+     * @return string
+     */
+    public function getDefaultCountryId() {
+        return Mage::app()->getStore()->getConfig("general/country/default");
+    }
     /**
      * @param mixed $data
      * @return string

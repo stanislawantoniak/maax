@@ -456,6 +456,9 @@
                 address = this.get(address);
             }
 			
+			if(typeof address != "object"){
+				throw new Error("Adress object is not vaild");
+			}
 
             this.beforeSelectShipping.call(this, address);
             if (address !== null) {
