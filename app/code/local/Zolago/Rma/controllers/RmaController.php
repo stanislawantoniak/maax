@@ -37,6 +37,9 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
 		
 		try{
 			$rma = $this->_initRma();
+			if ($rma->getRmaStatus() !== Zolago_Rma_Model_Rma_Status::STATUS_PENDING_PICKUP) {
+			    Mage::throwException($helperRma->__("Wrong RMA status"));
+			}
 			$track = $helperTrack->getRmaTrackingForCustomer($rma, $customer);
 			if($track && $track->getId()){
 				$dhlFile = $helperRma->getRmaDocumentForCustomer($track);
