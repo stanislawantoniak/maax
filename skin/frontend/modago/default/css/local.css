@@ -144,38 +144,8 @@
 }
 
 
-.sales-po-newrma .panel .panel-body .current-rma-address,
-.sales-po-newrma .panel .panel-body .current-rma-date,
-.sales-po-newrma .panel .panel-body .top-panel {
-    background: none repeat scroll 0 0 #fcfcfc;
-    border-bottom: 1px solid #eeedf0;
-}
-.sales-po-newrma .panel .panel-body .current-rma-address,
-.sales-po-newrma .panel .panel-body .current-rma-date,
-.sales-po-newrma .panel .panel-body .top-panel {
-    margin: -15px -15px 0;
-    padding: 15px;
-}
-.sales-po-newrma .panel .panel-body .current-rma-date {
-    margin: -15px -15px -15px;
-}
-.sales-po-newrma .panel .panel-footer {
-    background: none repeat scroll 0 0 transparent;
-    border: medium none;
-}
-.sales-po-newrma .panel .panel-footer {
-    padding: 0 15px 15px;
-}
-.sales-po-newrma dd.separator {
-    margin-top: 15px;
-}
-
 .rma-time {
     padding: 5px;
     color: #000000;
     background-color: #dbdbdb;
 }
-.sales-po-newrma .rma-container {
-    padding-bottom: 30px;
-}
-

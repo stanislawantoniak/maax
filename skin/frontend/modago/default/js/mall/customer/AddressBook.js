@@ -4,7 +4,9 @@
 
 (function () {
     "use strict";
-
+	if(typeof Mall.customer != "object"){
+		Mall.customer = {};
+	}
     Mall.customer.AddressBook = function () {
 
         /**
@@ -16,7 +18,7 @@
         this._book = [];
 
         /**
-         * Customer instance
+         * Customer instancef
          *
          * @type {null}
          * @private
@@ -453,6 +455,10 @@
             if (!isNaN(parseInt(address, 10))) {
                 address = this.get(address);
             }
+			
+			if(typeof address != "object"){
+				throw new Error("Adress object is not vaild");
+			}
 
             this.beforeSelectShipping.call(this, address);
             if (address !== null) {

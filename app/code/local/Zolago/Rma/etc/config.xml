@@ -188,6 +188,11 @@
 				</Zolago_Rma>
 			</modules>
 		</translate>
+		<files>
+		    <pdf>
+		        <customer>doc/customer.pdf</customer>
+            </pdf>
+		</files>
 	</frontend>
 	<admin>
         <routers>

@@ -1182,6 +1182,18 @@
 				<type>skin_js</type>
 				<script>js/mall/rma/new.js</script>
 			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<script>js/mall/customer/AddressBook.js</script>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<script>js/mall/customer/Address.js</script>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<script>js/mall/customer/AddressBook/Layout.js</script>
+			</action>
 		</reference>
 		<reference name="breadcrumbs">
             <action method="addCrumb">
@@ -1220,6 +1232,49 @@
 			</block>
         </reference>
 	</sales_rma_view>
+
+    <sales_rma_courier>
+        <update handle="customer_account" />
+        <update handle="zolago_modago_customer_handle" />
+        <reference name="head">
+            <action method="addItem">
+                <type>skin_js</type>
+                <script>js/mall/rma/new.js</script>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <script>js/mall/rma/courier.js</script>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <script>js/mall/customer/AddressBook.js</script>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <script>js/mall/customer/Address.js</script>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <script>js/mall/customer/AddressBook/Layout.js</script>
+            </action>
+        </reference>
+        <reference name="breadcrumbs">
+            <action method="addCrumb">
+                <crumbName>rma</crumbName>
+                <crumbInfo>
+                    <label>Returns and complaints</label>
+                    <title>Returns and complaints</title>
+                </crumbInfo>
+            </action>
+        </reference>
+
+        <reference name="my.account.wrapper">
+            <block type="zolagorma/courier" name="zolagorma.courier" template="zolagorma/courier.phtml">
+                <block type="zolagorma/courier" name="zolagorma.courier.jstemplates" template="zolagorma/courier/jstemplates.phtml"/>
+                <block type="zolagorma/courier" name="zolagorma.courier.js" template="zolagorma/courier/js.phtml"/>
+            </block>
+        </reference>
+    </sales_rma_courier>
 
 	<sales_rma_history>
 		<reference name="breadcrumbs">
