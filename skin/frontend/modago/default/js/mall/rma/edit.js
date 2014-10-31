@@ -30,10 +30,6 @@ jQuery(function($){
 		_init: function(){
 			var self = this;
 
-//			this.validation = this.newRma.validate(
-//				Mall.validate.getOptions()
-//			);
-
             this._initStep2();
 
 
