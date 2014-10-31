@@ -25,6 +25,11 @@
 		<?php if(($_pdfUrl=$this->getPdfUrl($_rma)) && $this->isPendingPickup($_rma)):?>
 			<a href="<?php echo $_pdfUrl;?>" class="button button-primary download-doc"><?php echo $_helper->__("Download a document"); ?></a>
 		<?php endif;?>
+        <?php if ($this->isPendingCourierBooking($_rma)): ?>
+                <a href="/sales/rma/courier/id/<?php echo $_rma->getId(); ?>" class="button button-primary download-doc">
+                    <?php echo $_helper->__("Book a courier"); ?>
+                </a>
+        <?php endif; ?>
 	</div>
 	<?php endif;?>
 	<div class="row">
@@ -68,18 +73,7 @@
 				<?php endif;?>
 			<?php endif;?>
 
-            <?php if ($this->isPendingCourierBooking($_rma)): ?>
-                <div class="rma-section rma-content">
-                    <p>
-                        <i class="glyphicon glyphicon-edit"></i>
-                        <span class="uppercase">
-                            <a href="/sales/rma/courier/id/<?php echo $_rma->getId(); ?>">
-                                <?php echo $_helper->__("Book a courier"); ?>
-                            </a>
-                        </span>
-                    </p>
-                </div>
-            <?php endif; ?>
+
 
 			<div class="rma-section rma-content">
 				<p>
