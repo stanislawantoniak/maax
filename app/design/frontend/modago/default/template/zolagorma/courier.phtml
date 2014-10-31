@@ -53,7 +53,6 @@ $_po = $this->getPo();
                                         <em>:</em></label>
 
                                     <div class="input-box" id="dateList">
-                                        <?php $isEven = true; ?>
                                         <?php $number = 1; ?>
                                         <?php foreach ($dateList as $date=>$item): ?>
 
@@ -63,14 +62,13 @@ $_po = $this->getPo();
                                                 id="carrier_date_<?php echo $date;?>"
                                                 value="<?php echo date('Y-m-d',$date);?>"
                                                 />
-                                            <label for="carrier_date_<?php echo $date;?>" class="<?php echo $isEven ? 'label-even' : 'label-odd'; ?> <?php echo "label-$number";?>">
+                                            <label for="carrier_date_<?php echo $date;?>" class="<?php echo "label-$number";?>">
                                             <span>
                                                 <span class="rma-dayname"><?php echo $weekdays[date('w',$date)]['label'];?></span>
                                                 <br/>
                                                 <span class="rma-date"><?php echo $this->getFormattedDate($date);?></span>
                                             </span>
                                             </label>
-                                            <?php $isEven = !$isEven; ?>
                                             <?php $number++; ?>
                                         <?php endforeach; ?>
                                     </div>
@@ -101,14 +99,15 @@ $_po = $this->getPo();
                         </div>
                     </div>
                 </div>
-        </div>
-        <div>
-            <a href="/sales/rma/view/id/<?php echo $_rma->getId(); ?>" class="button button-third large back pull-left">
-                <?php echo $_helper->__("Back"); ?>
-            </a>
-            <button class="btn button button-primary next pull-right"
-                    type="button" id="btn-next-step-2"><?php echo $_helper->__("Next"); ?></button>
-            <div class="clearfix"></div>
+
+                <div>
+                    <a href="/sales/rma/view/id/<?php echo $_rma->getId(); ?>" class="button button-third large back pull-left">
+                        <?php echo $_helper->__("Back"); ?>
+                    </a>
+                    <button class="btn button button-primary next pull-right"
+                            type="button" id="btn-next-step-2"><?php echo $_helper->__("Next"); ?></button>
+                    <div class="clearfix"></div>
+                </div>
         </div>
     </div>
 </form>
