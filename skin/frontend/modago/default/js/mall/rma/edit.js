@@ -1,18 +1,17 @@
 jQuery(function($){
 	var _rma = {
-		step2: $("#step-2"),
-		newRma: $("#edit-rma"),
-		validation: null,
+        step2: $("#step-2"),
+        newRma: $("#edit-rma"),
+        validation: null,
 
-		notAvailableText: "Not available",
-		ignoreUnload: 0,
-		daysOfWeek: [],
-		txtReason: "",
-		txtComment: "",
-		txtCarrierTime: "",
-		_txtCarrierTimeFrom: "carrier_time_from",
-		_txtCarrierTimeTo: "carrier_time_to",
-	
+        notAvailableText: "Not available",
+        ignoreUnload: 0,
+        daysOfWeek: [],
+        txtReason: "",
+        txtComment: "",
+        txtCarrierTime: "",
+        _txtCarrierTimeFrom: "carrier_time_from",
+        _txtCarrierTimeTo: "carrier_time_to",
 		
 		////////////////////////////////////////////////////////////////////////
 		// Init steps and general
@@ -93,7 +92,6 @@ jQuery(function($){
 
             jQuery(this.addressbook.content).on("selectedAddressChange", function(e, address) {
                 //console.log(address.getData());
-                var poId = parseInt(jQuery("#edit-rma input[name='po_id']").val());
                 var zip = address.getData().postcode;
                 _rma.getDateList(zip);
             });
@@ -114,18 +112,18 @@ jQuery(function($){
         },
 
         initDateList: function(_dateList) {
-            if (Object.keys(_dateList).length == 0) {
+            if (Object.keys(_dateList).length === 0) {
                 jQuery('#btn-next-step-2').hide();
             } else {
-                for(var day in _dateList) {
-                    jQuery('#carrier_date_' + day).attr('data-PickupFrom', _rma.round(_dateList[day].getPostalCodeServicesResult.drPickupFrom, 'up') );
-                    jQuery('#carrier_date_' + day).attr('data-PickupTo', _rma.round(_dateList[day].getPostalCodeServicesResult.drPickupTo, 'down') );
+                for (var day in _dateList) {
+                    jQuery('#carrier_date_' + day).attr('data-PickupFrom', _rma.round(_dateList[day].getPostalCodeServicesResult.drPickupFrom, 'up'));
+                    jQuery('#carrier_date_' + day).attr('data-PickupTo', _rma.round(_dateList[day].getPostalCodeServicesResult.drPickupTo, 'down'));
                 }
             }
         },
 
         initDateListValues: function(_dateList) {
-            if (Object.keys(_dateList).length == 0) {
+            if (Object.keys(_dateList).length === 0) {
                 if (jQuery("#slider-range").length) {
                     var values = jQuery("#slider-range").val();
                     _rma.formatTimeRange(values[0], values[1]);
@@ -201,7 +199,7 @@ jQuery(function($){
                     jQuery('.carrier-time-from').hide();
                 } else {
                     jQuery('#time').hide();
-                    jQuery("#slider-range").show()
+                    jQuery("#slider-range").show();
                     jQuery('.carrier-time-from').show();
                     jQuery("#slider-range").noUiSlider({
                         start: [from, from + (3 * 60)],
@@ -277,7 +275,6 @@ jQuery(function($){
                 'zip': zip
             }, {
                 'done': function (data) {
-                    console.log(data);
                     if (data !== undefined && data.status !== undefined) {
                         if (data.status) {
                             // is at least one day for pickup
@@ -314,6 +311,8 @@ jQuery(function($){
                     "<img src='" + ajaxLoaderSkinUrl + "'></div>"
             );
             jQuery('#btn-next-step-2').hide();
+
+            jQuery('#customer_address_postcode').val(zip);
 
             return true;
         },
@@ -395,6 +394,7 @@ jQuery(function($){
         _submitForm: function() {
             jQuery(window).unbind('beforeunload');
             jQuery('#edit-rma').submit();
+
         },
 
 
@@ -448,7 +448,7 @@ jQuery(function($){
                     jQuery(this).click({type: type}, function(e){
                         self.handleChangeAddressClick(e);
                         return false;
-                    })
+                    });
                 });
 
                 // Bind address change event
@@ -502,7 +502,7 @@ jQuery(function($){
                 if(addressCollection.length){
                     jQuery.each(addressCollection, function(){
                         // Do not allow sleected address
-                        if(selectedAddress && this.getId()==selectedAddress.getId()){
+                        if(selectedAddress && this.getId() === selectedAddress.getId()){
                             return;
                         }
 
@@ -573,7 +573,7 @@ jQuery(function($){
                         return;
                     }
                     result.push(this);
-                })
+                });
                 return result;
 
             },
@@ -608,13 +608,7 @@ jQuery(function($){
                     self = this,
                     address;
 
-                element = this.getInput("firstname"
-                    , type + "_firstname"
-                    , "text"
-                    , Mall.translate.__("firstname")
-                    , "col-sm-3"
-                    , "form-control firstName required hint"
-                    , "");
+                element = this.getInput("firstname", type + "_firstname", "text", Mall.translate.__("firstname"), "col-sm-3", "form-control firstName required hint", "");
 
                 formGroup = this.getFormGroup(true);
                 formGroup.find(".row").append(element.label).append(element.input);
@@ -622,15 +616,7 @@ jQuery(function($){
 
                 jQuery.each(this.getNewAddressConfig(type), function (idx, item) {
                     formGroup = self.getFormGroup();
-                    element = self.getInput(
-                        item.name
-                        , item.id
-                        , item.type
-                        , item.label
-                        , item.labelClass
-                        , item.inputClass
-                        , ""
-                    );
+                    element = self.getInput(item.name, item.id, item.type, item.label, item.labelClass, item.inputClass, "");
                     formGroup.find(".row").append(element.label).append(element.input);
                     panelBody.append(formGroup);
                 });
@@ -775,11 +761,11 @@ jQuery(function($){
 //			jQuery.validator.addMethod(name, fn, message);
 //		},
 
-		
-		setNotAvailableText: function(text){
-			 this.notAvailableText = text;
-			 return this;
-		},
+
+        setNotAvailableText: function (text) {
+            this.notAvailableText = text;
+            return this;
+        },
 		
 		getNotAvailableText: function(){
 			return this.notAvailableText;

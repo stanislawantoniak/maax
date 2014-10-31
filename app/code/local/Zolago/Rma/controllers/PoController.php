@@ -110,7 +110,7 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
         }
     }
     public function saveRmaCourierAction()
-    {Mage::log("Hello1");
+    {
         $request = $this->getRequest();
         $session = Mage::getSingleton('core/session');
 
@@ -128,7 +128,7 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
     }
 
     protected function _saveRmaDetails()
-    {Mage::log("Hello2");
+    {
         $rma = $this->_initRma(true);
 
         $data = $this->getRequest()->getPost('rma');
@@ -160,9 +160,11 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
                 "track" => $rma->getCurrentTrack()
             ));
         }
+        $rma->setRmaStatus(Zolago_Rma_Model_Rma_Status::STATUS_PENDING_PICKUP);
         $rma->save();
 
         $this->_rmaSetOwnShippingAddress($data, $rma);
+
         Mage::helper('udropship')->processQueue();
     }
     protected function _initRma($forSave=false)
