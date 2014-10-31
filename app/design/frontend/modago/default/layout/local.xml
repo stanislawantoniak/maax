@@ -1265,7 +1265,10 @@
         </reference>
 
         <reference name="my.account.wrapper">
-            <block type="zolagorma/courier" name="zolagorma.courier" template="zolagorma/courier.phtml"/>
+            <block type="zolagorma/courier" name="zolagorma.courier" template="zolagorma/courier.phtml">
+                <block type="zolagorma/courier" name="zolagorma.courier.jstemplates" template="zolagorma/courier/jstemplates.phtml"/>
+                <block type="zolagorma/courier" name="zolagorma.courier.js" template="zolagorma/courier/js.phtml"/>
+            </block>
         </reference>
     </sales_rma_courier>
 

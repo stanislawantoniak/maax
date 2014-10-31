@@ -3,7 +3,6 @@ jQuery(function($){
 		step2: $("#step-2"),
 		newRma: $("#edit-rma"),
 		validation: null,
-		returnReasons: [],
 
 		notAvailableText: "Not available",
 		ignoreUnload: 0,
@@ -53,7 +52,8 @@ jQuery(function($){
                 next = s.find("button.next");
 
             // Handle next click
-            jQuery(".next").click(function(){
+            s.find(".next").click(function(e){
+                e.preventDefault();
                 console.log("Hello");
                 var valid = true,
 	                from = s.find('input[name="rma[carrier_time_from]"]').val().split(":")[0],
@@ -64,13 +64,12 @@ jQuery(function($){
                     valid = false;
                 }
 
-                console.log(valid);
+                console.log(jQuery('form#edit-rma'));
                 //--validation
                 if(valid){
                     console.log("Save RMA saveRmaCourier");
                     self._submitForm();
                 }
-                return false;
             });
 
             //PICKUP DATE AND HOURS START
@@ -88,6 +87,9 @@ jQuery(function($){
 
 
             this.addressbook.init();
+
+            var zip = jQuery('#customer_address_postcode').val();
+            _rma.getDateList(zip);
 
             jQuery(this.addressbook.content).on("selectedAddressChange", function(e, address) {
                 //console.log(address.getData());
@@ -426,6 +428,7 @@ jQuery(function($){
                     );
                 }catch(e){
                     // No addresses
+                    console.log("No address");
                 }
 
                 // Render selected and list
@@ -638,11 +641,11 @@ jQuery(function($){
                     e.preventDefault();
                     if (!jQuery(this).parents('form').valid()) {
                         //visual validation fix
-                        if (jQuery('#shipping_vat_id').first().val().length) {
-                            jQuery('#shipping_vat_id').parents('.form-group').removeClass('hide-success-vaild');
-                        } else {
-                            jQuery('#shipping_vat_id').parents('.form-group').addClass('hide-success-vaild');
-                        }
+//                        if (jQuery('#shipping_vat_id').first().val().length) {
+//                            jQuery('#shipping_vat_id').parents('.form-group').removeClass('hide-success-vaild');
+//                        } else {
+//                            jQuery('#shipping_vat_id').parents('.form-group').addClass('hide-success-vaild');
+//                        }
                         //end fix
                         return;
                     }
@@ -768,20 +771,10 @@ jQuery(function($){
 		////////////////////////////////////////////////////////////////////////
 		// Misc
 		////////////////////////////////////////////////////////////////////////
-		addValidator: function(name, message, fn){
-			jQuery.validator.addMethod(name, fn, message);
-		},
-		
-		getReturnReasons: function(index){
-			if(typeof index != "undefined"){
-				return this.returnReasons[index];
-			}
-			return this.returnReasons;
-		},
-		
-		setReturnReasons: function(data){
-			this.returnReasons = data;
-		},
+//		addValidator: function(name, message, fn){
+//			jQuery.validator.addMethod(name, fn, message);
+//		},
+
 		
 		setNotAvailableText: function(text){
 			 this.notAvailableText = text;
