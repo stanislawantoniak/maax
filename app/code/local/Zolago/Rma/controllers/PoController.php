@@ -160,9 +160,11 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
                 "track" => $rma->getCurrentTrack()
             ));
         }
+        $rma->setRmaStatus(Zolago_Rma_Model_Rma_Status::STATUS_PENDING_PICKUP);
         $rma->save();
 
         $this->_rmaSetOwnShippingAddress($data, $rma);
+
         Mage::helper('udropship')->processQueue();
     }
     protected function _initRma($forSave=false)
