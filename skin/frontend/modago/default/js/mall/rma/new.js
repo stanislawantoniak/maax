@@ -511,6 +511,8 @@ jQuery(function($){
                 },
                 'always': function () {
                     jQuery("#pickup-date-form-ajax-loading").remove();
+                    // Fix footer
+                    jQuery(window).resize();
                 }
             }, true, false);
 
