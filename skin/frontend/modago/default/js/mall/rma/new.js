@@ -604,7 +604,7 @@ jQuery(function($){
 		// Step 3 functions
 		_submitForm: function() {
 			$(window).unbind('beforeunload');
-			$('#new-rma').submit();
+			this.newRma.submit();
 		},
 
 		_getRmaAddress: function() {
