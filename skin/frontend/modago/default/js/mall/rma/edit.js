@@ -1,19 +1,17 @@
 jQuery(function($){
 	var _rma = {
-		step2: $("#step-2"),
-		newRma: $("#new-rma"),
-		validation: null,
-		returnReasons: [],
+        step2: $("#step-2"),
+        newRma: $("#edit-rma"),
+        validation: null,
 
-		notAvailableText: "Not available",
-		ignoreUnload: 0,
-		daysOfWeek: [],
-		txtReason: "",
-		txtComment: "",
-		txtCarrierTime: "",
-		_txtCarrierTimeFrom: "carrier_time_from",
-		_txtCarrierTimeTo: "carrier_time_to",
-	
+        notAvailableText: "Not available",
+        ignoreUnload: 0,
+        daysOfWeek: [],
+        txtReason: "",
+        txtComment: "",
+        txtCarrierTime: "",
+        _txtCarrierTimeFrom: "carrier_time_from",
+        _txtCarrierTimeTo: "carrier_time_to",
 		
 		////////////////////////////////////////////////////////////////////////
 		// Init steps and general
@@ -29,10 +27,6 @@ jQuery(function($){
 		// Internal init
 		_init: function(){
 			var self = this;
-
-			this.validation = this.newRma.validate(
-				Mall.validate.getOptions()
-			);
 
             this._initStep2();
 
@@ -56,9 +50,10 @@ jQuery(function($){
                 self = this,
                 next = s.find("button.next");
 
-
             // Handle next click
-            s.find(".next").click(function(){
+            s.find(".next").click(function(e){
+                e.preventDefault();
+                console.log("Hello");
                 var valid = true,
 	                from = s.find('input[name="rma[carrier_time_from]"]').val().split(":")[0],
 		            to = s.find('input[name="rma[carrier_time_to]"]').val().split(":")[0];
@@ -68,13 +63,12 @@ jQuery(function($){
                     valid = false;
                 }
 
-                console.log(valid);
+                console.log(jQuery('form#edit-rma'));
                 //--validation
                 if(valid){
                     console.log("Save RMA saveRmaCourier");
-                    jQuery("form#new-rma").submit();
+                    self._submitForm();
                 }
-                return false;
             });
 
             //PICKUP DATE AND HOURS START
@@ -90,36 +84,16 @@ jQuery(function($){
 
             //##############################
 
-//            jQuery("select[name^='rma[items_condition_single]']").each(function (item) {
-//                if (item.value) {
-//                    if (returnReasons[item.value].flow == flowAcknowledged) {
-//                        isAcknowledged = true;
-//                    }
-//                }
-//            })
-//
-//            if (isAcknowledged) {
-//                jQuery('#pickup-address-form').hide();
-//                jQuery('#pickup-date-form').hide();
-//                jQuery('#pickup-address-overview').hide();
-//                jQuery('#pickup-date-overview').hide();
-//                jQuery('#overview-message').hide();
-//            }
-//            else {
-//                jQuery('#pickup-address-form').show();
-//                jQuery('#pickup-date-form').show();
-//                jQuery('#pickup-address-overview').show();
-//                jQuery('#pickup-date-overview').show();
-//                jQuery('#overview-message').show();
-//            }
 
             this.addressbook.init();
 
+            var zip = jQuery('#customer_address_postcode').val();
+            _rma.getDateList(zip);
+
             jQuery(this.addressbook.content).on("selectedAddressChange", function(e, address) {
                 //console.log(address.getData());
-                var poId = parseInt(jQuery("#new-rma input[name='po_id']").val());
                 var zip = address.getData().postcode;
-                _rma.getDateList(poId, zip);
+                _rma.getDateList(zip);
             });
         },
 
@@ -138,18 +112,18 @@ jQuery(function($){
         },
 
         initDateList: function(_dateList) {
-            if (Object.keys(_dateList).length == 0) {
+            if (Object.keys(_dateList).length === 0) {
                 jQuery('#btn-next-step-2').hide();
             } else {
-                for(var day in _dateList) {
-                    jQuery('#carrier_date_' + day).attr('data-PickupFrom', _rma.round(_dateList[day].getPostalCodeServicesResult.drPickupFrom, 'up') );
-                    jQuery('#carrier_date_' + day).attr('data-PickupTo', _rma.round(_dateList[day].getPostalCodeServicesResult.drPickupTo, 'down') );
+                for (var day in _dateList) {
+                    jQuery('#carrier_date_' + day).attr('data-PickupFrom', _rma.round(_dateList[day].getPostalCodeServicesResult.drPickupFrom, 'up'));
+                    jQuery('#carrier_date_' + day).attr('data-PickupTo', _rma.round(_dateList[day].getPostalCodeServicesResult.drPickupTo, 'down'));
                 }
             }
         },
 
         initDateListValues: function(_dateList) {
-            if (Object.keys(_dateList).length == 0) {
+            if (Object.keys(_dateList).length === 0) {
                 if (jQuery("#slider-range").length) {
                     var values = jQuery("#slider-range").val();
                     _rma.formatTimeRange(values[0], values[1]);
@@ -225,7 +199,7 @@ jQuery(function($){
                     jQuery('.carrier-time-from').hide();
                 } else {
                     jQuery('#time').hide();
-                    jQuery("#slider-range").show()
+                    jQuery("#slider-range").show();
                     jQuery('.carrier-time-from').show();
                     jQuery("#slider-range").noUiSlider({
                         start: [from, from + (3 * 60)],
@@ -287,32 +261,49 @@ jQuery(function($){
          * @param zip
          * @returns {boolean}
          */
-        getDateList: function(poId, zip) {
+        getDateList: function(zip) {
             "use strict";
-            poId = parseInt(poId);
+            //poId = parseInt(poId);
 
             var matched = zip.match(/([0-9]{2})([0-9]{3})/);
             if(matched != null) {
                 zip = matched[1] + "-" + matched[2];
             }
 
-            var promise = jQuery.ajax({
-                url: Config.url.dhl_pickup_date_list,
-                data: {
-                    po_id: poId,
-                    zip: zip
-                },
-                dataType: 'json',
-                cache: false,
-                async: true,
-                type: "POST"
-            });
+            OrbaLib.Rma.getDateList({
+                //'poId': poId,
+                'zip': zip
+            }, {
+                'done': function (data) {
+                    if (data !== undefined && data.status !== undefined) {
+                        if (data.status) {
+                            // is at least one day for pickup
+                            //console.log('done');
+                            _rma.rebuildPickupDateForm(data.content);
 
-            if (promise.done === undefined
-                || promise.fail === undefined
-                || promise.always === undefined) {
-                return false;
-            }
+                            _rma.initDateList(data.content);//INIT DATE LIST
+                            _rma.initDefaultSlider(data.content);//INIT SLIDER DEFAULT VALUES AND PARAMS
+                            _rma.attachSlideOnSlider();//CHANGE DESCRIPTIONS ON SLIDER SLIDE
+                            _rma.attachClickOnDate();//SET SLIDER, SAVE PICKUP TIME, WRITE MESSAGES
+                            _rma.initDateListValues(data.content);//INIT VALUES FOR DATE LIST
+                            jQuery('#pickup-date-form-panel input').first().click();//default set the first day
+
+                            return false;
+                        } else {
+                            //there is no days for pickup
+                            _rma.showInfoAboutNoPickup();
+                        }
+                    }
+                    return true;
+                },
+                'fail': function( jqXHR, textStatus ) {
+                    //console.log( "GetDateList: Request failed: " + textStatus );
+                    _rma.showInfoAboutNoPickup(); //better then gif with infinity loading
+                },
+                'always': function () {
+                    jQuery("#pickup-date-form-ajax-loading").remove();
+                }
+            }, true, false);
 
             jQuery("#pickup-date-form div.current-rma-date").remove(); //clear all
             jQuery("#pickup-date-form div.panel-body").html(
@@ -321,33 +312,7 @@ jQuery(function($){
             );
             jQuery('#btn-next-step-2').hide();
 
-            promise.done(function (data) {
-                if (data !== undefined && data.status !== undefined) {
-                    if (data.status) {
-                        // is at least one day for pickup
-                        //console.log('done');
-                        _rma.rebuildPickupDateForm(data.content);
-
-                        _rma.initDateList(data.content);//INIT DATE LIST
-                        _rma.initDefaultSlider(data.content);//INIT SLIDER DEFAULT VALUES AND PARAMS
-                        _rma.attachSlideOnSlider();//CHANGE DESCRIPTIONS ON SLIDER SLIDE
-                        _rma.attachClickOnDate();//SET SLIDER, SAVE PICKUP TIME, WRITE MESSAGES
-                        _rma.initDateListValues(data.content);//INIT VALUES FOR DATE LIST
-                        jQuery('#pickup-date-form-panel input').first().click();//default set the first day
-
-                        return false;
-                    } else {
-                        //there is no days for pickup
-                        _rma.showInfoAboutNoPickup();
-                    }
-                }
-                return true;
-            }).fail(function( jqXHR, textStatus ) {
-                //console.log( "GetDateList: Request failed: " + textStatus );
-                _rma.showInfoAboutNoPickup(); //better then gif with infinity loading
-            }).always(function () {
-                jQuery("#pickup-date-form-ajax-loading").remove();
-            });
+            jQuery('#customer_address_postcode').val(zip);
 
             return true;
         },
@@ -428,7 +393,13 @@ jQuery(function($){
 
         _submitForm: function() {
             jQuery(window).unbind('beforeunload');
-            jQuery('#new-rma').submit();
+
+            if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
+                jQuery('#edit-rma').clone().appendTo("body").submit(); // FF only
+            } else {
+                jQuery('#edit-rma').submit(); // works under IE and Chrome, but not FF
+            }
+
         },
 
 
@@ -454,9 +425,16 @@ jQuery(function($){
                 }
 
                 // Set selected address from input
-                this.getAddressBook().setSelectedShipping(
-                    this.content.find("#customer_address_id").val()
-                );
+                // Set selected address from input
+                // It can trigger error if address not exists or empty
+                try{
+                    this.getAddressBook().setSelectedShipping(
+                        this.content.find("#customer_address_id").val()
+                    );
+                }catch(e){
+                    // No addresses
+                    console.log("No address");
+                }
 
                 // Render selected and list
                 this.renderSelectedAddress("shipping");
@@ -475,7 +453,7 @@ jQuery(function($){
                     jQuery(this).click({type: type}, function(e){
                         self.handleChangeAddressClick(e);
                         return false;
-                    })
+                    });
                 });
 
                 // Bind address change event
@@ -519,17 +497,17 @@ jQuery(function($){
                     selectedAddress = addressBook.getSelected(type),
                     self = this,
                     addNewButton,
+                    needCaption = false,
                     addressCollection = addressBook.getAddressBook(),
                     caption = jQuery("<div>").addClass("additional");
 
                 target.html('');
-
-                target.append(caption.text(Mall.translate.__("your-additional-addresses") + ":"));
+                target.css("padding-top", "0");
 
                 if(addressCollection.length){
                     jQuery.each(addressCollection, function(){
                         // Do not allow sleected address
-                        if(selectedAddress && this.getId()==selectedAddress.getId()){
+                        if(selectedAddress && this.getId() === selectedAddress.getId()){
                             return;
                         }
 
@@ -537,10 +515,16 @@ jQuery(function($){
                         var node = jQuery(Mall.replace(template, data));
                         self.processAddressNode(node, this, addressBook, type);
                         target.append(node);
+                        needCaption = true;
                     });
-                }else{
-                    target.html(Mall.translate.__("no-addresses"));
                 }
+
+                if(needCaption){
+                    target.prepend(caption.text(Mall.translate.__("your-additional-addresses") + ":"));
+                }else{
+                    target.css("padding-top", "15px");
+                }
+
                 addNewButton = this.getAddNewButton(type);
                 addNewButton.show();
                 target.append(addNewButton);
@@ -582,7 +566,22 @@ jQuery(function($){
 
                 return node;
             },
+            /**
+             * Remove vat id from form
+             * @param {string} type
+             * @returns {Array}
+             */
+            getNewAddressConfig: function(type){
+                var result = [];
+                jQuery.each(Mall.customer.AddressBook.Layout.getNewAddressConfig(), function(){
+                    if(this.name=="vat_id"){
+                        return;
+                    }
+                    result.push(this);
+                });
+                return result;
 
+            },
             _rollAddressList: function(type, block, doOpen){
                 var contextActions = block.
                     siblings(".current-address").
@@ -599,7 +598,10 @@ jQuery(function($){
                     block.hide();
                     contextActions.hide();
                     element.removeClass("open");
-                    element.text(Mall.translate.__("change-address"));
+                    element.text(Mall.translate.__(
+                        this.getAddressBook().getAddressBook().length ?
+                            "change-address" : "add-address"
+                    ));
                 }
             },
 
@@ -611,13 +613,7 @@ jQuery(function($){
                     self = this,
                     address;
 
-                element = this.getInput("firstname"
-                    , type + "_firstname"
-                    , "text"
-                    , Mall.translate.__("firstname")
-                    , "col-sm-3"
-                    , "form-control firstName required hint"
-                    , "");
+                element = this.getInput("firstname", type + "_firstname", "text", Mall.translate.__("firstname"), "col-sm-3", "form-control firstName required hint", "");
 
                 formGroup = this.getFormGroup(true);
                 formGroup.find(".row").append(element.label).append(element.input);
@@ -625,15 +621,7 @@ jQuery(function($){
 
                 jQuery.each(this.getNewAddressConfig(type), function (idx, item) {
                     formGroup = self.getFormGroup();
-                    element = self.getInput(
-                        item.name
-                        , item.id
-                        , item.type
-                        , item.label
-                        , item.labelClass
-                        , item.inputClass
-                        , ""
-                    );
+                    element = self.getInput(item.name, item.id, item.type, item.label, item.labelClass, item.inputClass, "");
                     formGroup.find(".row").append(element.label).append(element.input);
                     panelBody.append(formGroup);
                 });
@@ -644,11 +632,11 @@ jQuery(function($){
                     e.preventDefault();
                     if (!jQuery(this).parents('form').valid()) {
                         //visual validation fix
-                        if (jQuery('#shipping_vat_id').first().val().length) {
-                            jQuery('#shipping_vat_id').parents('.form-group').removeClass('hide-success-vaild');
-                        } else {
-                            jQuery('#shipping_vat_id').parents('.form-group').addClass('hide-success-vaild');
-                        }
+//                        if (jQuery('#shipping_vat_id').first().val().length) {
+//                            jQuery('#shipping_vat_id').parents('.form-group').removeClass('hide-success-vaild');
+//                        } else {
+//                            jQuery('#shipping_vat_id').parents('.form-group').addClass('hide-success-vaild');
+//                        }
                         //end fix
                         return;
                     }
@@ -774,25 +762,15 @@ jQuery(function($){
 		////////////////////////////////////////////////////////////////////////
 		// Misc
 		////////////////////////////////////////////////////////////////////////
-		addValidator: function(name, message, fn){
-			jQuery.validator.addMethod(name, fn, message);
-		},
-		
-		getReturnReasons: function(index){
-			if(typeof index != "undefined"){
-				return this.returnReasons[index];
-			}
-			return this.returnReasons;
-		},
-		
-		setReturnReasons: function(data){
-			this.returnReasons = data;
-		},
-		
-		setNotAvailableText: function(text){
-			 this.notAvailableText = text;
-			 return this;
-		},
+//		addValidator: function(name, message, fn){
+//			jQuery.validator.addMethod(name, fn, message);
+//		},
+
+
+        setNotAvailableText: function (text) {
+            this.notAvailableText = text;
+            return this;
+        },
 		
 		getNotAvailableText: function(){
 			return this.notAvailableText;

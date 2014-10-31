@@ -5,7 +5,8 @@
 <?php $_itemsSingle = $_rma->getItemsSingle(); ?>
 <?php $_itemsConditionSingle = $_rma->getItemsConditionSingle(); ?>
 <?php $_selectedShipping = $this->getSelectedShippingAddress();?>
-<?php $dateList = $this->getDateList($_selectedShipping);?>
+<?php //$dateList = $this->getDateList($_helper->getPostcode($_selectedShipping));?>
+<?php $dateList = array() ;?>
 <?php $weekdays = Mage::app()->getLocale()->getOptionWeekdays();?>
 <?php $vendor = $_po->getVendor();?>
 <div class="steps step-2 background-wrapper box-wrapper" id="step-2">
@@ -16,6 +17,7 @@
         <div id="pickup-address-form" class="fieldset flow-return">
 			<input type="hidden" id="can_init_addressbook" value="1"/>
 			<input type="hidden" name="rma[customer_address_id]" id="customer_address_id" value="<?php echo $_selectedShipping ? $_selectedShipping->getId() : ""; ?>"/>
+			<input type="hidden" name="rma[customer_postcode]" id="customer_address_postcode" value="<?php echo $_selectedShipping ? $_helper->getPostcode($_selectedShipping) : ''; ?>"/>
 			<input type="hidden" name="rma[override_address]" value="0"/>
     
             <h3 class="legend-big"><?php echo $_helper->__("Report a return or claim"); ?></h3>
@@ -27,7 +29,7 @@
 				<dl class="pull-left" >
 					<dt>{{firstname}} {{lastname}}</dt>
 					<dd>{{street}}</dd>
-					<dd>{{postcode}} {{city}}</dd>
+					<dd><span class ="selectedZip">{{postcode}}</span> {{city}}</dd>
 					<dd class="phone"><?php echo $this->__("Contact phone")?>: <span>{{telephone}}</span></dd>
 					<dd class="action separator">
 						<a href="#" class="underline edit"><?php echo $this->__("edit");?></a> 
@@ -279,5 +281,4 @@
 		<?php endif; ?>
 	});
 
-    var lastData = '';
 </script>

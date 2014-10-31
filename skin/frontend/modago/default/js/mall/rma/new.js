@@ -199,17 +199,15 @@ jQuery(function($){
 		            to = s.find('input[name="rma[carrier_time_to]"]').val().split(":")[0],
 	                account = s.find('input[name="rma[customer_account]"]').val().replace(new RegExp('pl','gi'),"").replace(new RegExp(' ','g'),"");
 
-	            //check if those blocks are displayed
-	            if($('#pickup-address-form') && $('#pickup-date-form')) {
+
 	            //validate if user has chosen pickup date
-		            if (!s.find('input[name="rma[carrier_date]"]:checked').length) {
-		                valid = false;
-	                }
+                if (!s.find('input[name="rma[carrier_date]"]:checked').length) {
+                    valid = false;
+                }
 	            //validate if chosen timespan is minimum 3 hours
 		         //   if (to - from < 3) {
 		         //       valid = false;
 		         //   }
-	            }
 
 	            //validate if entered account number is correct (optional field)
 	            if(account && (account.length != 26 || !$.isNumeric(account))) {
@@ -269,9 +267,13 @@ jQuery(function($){
 
 			this.addressbook.init();
 
+            if (this.isReturnPath()) {
+                var zip = jQuery('#customer_address_postcode').val();
+                _rma.getDateList(zip);
+            }
+
             jQuery(this.addressbook.content).on("selectedAddressChange", function(e, address) {
                 //console.log(address.getData());
-                var poId = parseInt(jQuery("#new-rma input[name='po_id']").val());
                 var zip = address.getData().postcode;
                 _rma.getDateList(zip);
             });
@@ -518,6 +520,8 @@ jQuery(function($){
                 "<img src='" + ajaxLoaderSkinUrl + "'></div>"
             );
             jQuery('#btn-next-step-2').hide();
+
+            jQuery('#customer_address_postcode').val(zip);
 
             return true;
         },
