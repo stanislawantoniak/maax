@@ -393,12 +393,7 @@ jQuery(function($){
 
         _submitForm: function() {
             jQuery(window).unbind('beforeunload');
-
-            if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
-                jQuery('#edit-rma').clone().appendTo("body").submit(); // FF only
-            } else {
-                jQuery('#edit-rma').submit(); // works under IE and Chrome, but not FF
-            }
+            jQuery('#edit-rma').submit();
 
         },
 

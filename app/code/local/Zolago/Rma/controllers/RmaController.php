@@ -104,11 +104,17 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
         if(!$session->isLoggedIn()){
             return $this->_redirect('customer/account/login');
         }
+        $rma = Mage::registry("current_rma");
+
         // Current RMA can by set and forwarded by _initLastRma
-        if(!Mage::registry("current_rma")){
+        if(!$rma){
             try{
                 $rma =$this->_initRma();
                 /* @var $rma Zolago_Rma_Model_Rma */
+
+                if($rma->getRmaStatus() !== Zolago_Rma_Model_Rma_Status::STATUS_PENDING_COURIER){
+                    $this->_redirect('sales/rma/view', array('id'=>$this->getRequest()->getParam('id')));
+                }
 
             }  catch (Mage_Core_Exception $e){
                 $session->addError($e->getMessage());
@@ -143,7 +149,6 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
      * Save courier data
      */
     public function saveCourierAction(){
-        Mage::log("Hello");
         $this->_forward("saveRmaCourier",'po');
     }
     /**

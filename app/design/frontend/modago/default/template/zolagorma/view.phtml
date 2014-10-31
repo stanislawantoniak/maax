@@ -68,53 +68,18 @@
 				<?php endif;?>
 			<?php endif;?>
 
-            <?php if($this->isPendingCourierBooking($_rma)): ?>
-            <div class="rma-section rma-content">
-                <p>
-                    <i class="glyphicon glyphicon-edit"></i>
+            <?php if ($this->isPendingCourierBooking($_rma)): ?>
+                <div class="rma-section rma-content">
+                    <p>
+                        <i class="glyphicon glyphicon-edit"></i>
                         <span class="uppercase">
-                        <a href="/sales/rma/courier/id/<?php echo $_rma->getId(); ?>">
-                            <?php echo $_helper->__("Book a courier"); ?>
-                        </a>
-                    </span>
-                    <?php //endif; ?>
-                </p>
-
-                <p>
-                    <?php //if(!empty($carrierDate)): ?>
-                    <i class="glyphicon glyphicon-time"></i>
-                    <span class="uppercase"><?php echo $_helper->__("Carrier date"); ?></span>
-                    <?php //else: ?>
-
-                </p>
-
-
-                <div>
-                    <?php if(!empty($carrierDate)): ?>
-                        <?php echo $this->getDayOfWeek($_rma);?> <?php echo Mage::helper("core")->formatDate($carrierDate, "short");?><br/>
-                        <?php echo $_helper->__(
-                            "between %s and %s",
-                            $_rma->getCarrierTimeFrom() ? $_rma->getCarrierTimeFrom() : $_helper->__("N/A"),
-                            $_rma->getCarrierTimeTo() ? $_rma->getCarrierTimeTo() : $_helper->__("N/A"));
-                        ?>
-                    <?php endif; ?>
+                            <a href="/sales/rma/courier/id/<?php echo $_rma->getId(); ?>">
+                                <?php echo $_helper->__("Book a courier"); ?>
+                            </a>
+                        </span>
+                    </p>
                 </div>
-            </div>
-                <?php if($_address=$_rma->getShippingAddress()):?>
-                    <div class="rma-section rma-content">
-                        <p>
-                            <i class="glyphicon glyphicon-envelope"></i>
-                            <span class="uppercase"><?php echo $_helper->__("Your address"); ?></span>
-                        </p>
-                        <div>
-                            <?php echo $_address->format("html");?>
-                        </div>
-                    </div>
-                <?php endif;?>
-
-            <?php endif;?>
-
-
+            <?php endif; ?>
 
 			<div class="rma-section rma-content">
 				<p>

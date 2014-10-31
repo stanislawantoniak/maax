@@ -747,9 +747,15 @@
 	cursor: not-allowed;
 }
 
-
 .sales-rma-courier {
   .rma-container {
     padding-bottom: 30px;
+  }
+  #step-2 {
+    .panel-default {
+      .add-new {
+        margin-bottom: 20px;
+      }
+    }
   }
 }
