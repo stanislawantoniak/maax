@@ -102,12 +102,12 @@ $_po = $this->getPo();
         addressBook.setAddressBook(<?php echo $this->getCustomerAddressesJson(); ?>);
         addressBook.setDefaultShipping(<?php echo $this->asJson($this->getDefaultShipping())?>);
 
-        Mall.rma.new.addressbook.setAddressBook(addressBook);
+        Mall.rma.edit.addressbook.setAddressBook(addressBook);
 
 
 
 
-        Mall.rma.new.setNotAvailableText('<?php echo $_helper->__('Not available');?>');
-        Mall.rma.new.init();
+        Mall.rma.edit.setNotAvailableText('<?php echo $_helper->__('Not available');?>');
+        Mall.rma.edit.init();
     });
 </script>

@@ -108,9 +108,9 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
             $rma = $this->_initRma();
             /* @var $rma Zolago_Rma_Model_Rma */
 
-            if ($rma->getRmaStatus() !== Zolago_Rma_Model_Rma_Status::STATUS_PENDING_COURIER) {
-                $this->_redirect('sales/rma/view', array('id' => $this->getRequest()->getParam('id')));
-            }
+//            if ($rma->getRmaStatus() !== Zolago_Rma_Model_Rma_Status::STATUS_PENDING_COURIER) {
+//                $this->_redirect('sales/rma/view', array('id' => $this->getRequest()->getParam('id')));
+//            }
 
         } catch (Mage_Core_Exception $e) {
             $session->addError($e->getMessage());
