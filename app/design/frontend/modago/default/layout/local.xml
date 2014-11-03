@@ -1274,7 +1274,6 @@
         <reference name="my.account.wrapper">
             <block type="zolagorma/courier" name="zolagorma.courier" template="zolagorma/courier.phtml">
                 <block type="zolagorma/courier" name="zolagorma.new.step2" as="bookcourier" template="zolagorma/new/step2.phtml">
-                    <block type="zolagorma/courier" name="zolagorma.courier.jstemplates" template="zolagorma/courier/jstemplates.phtml"/>
                     <block type="zolagorma/courier" as="zolagormatranslate" name="zolagorma.courier.translate" template="zolagorma/translate.phtml"/>
                     <block type="zolagorma/courier" name="zolagorma.courier.js" as="zolagormajs" template="zolagorma/courier/js.phtml"/>
                 </block>
