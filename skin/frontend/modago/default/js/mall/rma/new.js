@@ -479,6 +479,11 @@ jQuery(function($){
                 zip = matched[1] + "-" + matched[2];
             }
 
+            if(!zip.length) {
+                _rma.showInfoAboutNoPickup(); //better then gif with infinity loading
+                return true;
+            }
+
             OrbaLib.Rma.getDateList({
                 //'poId': poId,
                 'zip': zip
