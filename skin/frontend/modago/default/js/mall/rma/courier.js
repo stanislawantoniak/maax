@@ -1,4 +1,4 @@
-jQuery(function($){
+jQuery(function ($) {
     Mall.rma.edit = jQuery.extend({}, Mall.rma.new, {
 
         init: function () {
@@ -10,26 +10,22 @@ jQuery(function($){
 
         },
         // Internal init
-        _init: function(){
-            var self = this;
+        _init: function () {
             this.newRma = $("#edit-rma");
             this.steps = [this.step2];
             this._initStep2();
-
-
         },
         // Step 2 init
-        _initStep2: function(){
-
+        _initStep2: function () {
             var s = this.step2,
                 self = this,
                 next = s.find("button.next"),
                 back = s.find(".back"),
                 zip = jQuery('#customer_address_postcode').val(),
-                rma_id = jQuery("input[name=rma_id]").val();
+                rmaId = jQuery("input[name=rma_id]").val();
 
             back.click(function () {
-                window.location = "/sales/rma/view/id/" + rma_id;
+                window.location = "/sales/rma/view/id/" + rmaId;
                 return false;
             });
             // Handle next click
@@ -66,10 +62,10 @@ jQuery(function($){
 
             self.getDateList(zip);
 
-            jQuery(this.addressbook.content).on("selectedAddressChange", function(e, address) {
+            jQuery(this.addressbook.content).on("selectedAddressChange", function (e, address) {
                 var zip = address.getData().postcode;
                 self.getDateList(zip);
             });
-        },
+        }
     });
 });
