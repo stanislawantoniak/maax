@@ -782,6 +782,7 @@ jQuery(function($){
 					var type = jQuery(this).hasClass("billing") ? "billing" : "shipping";
 					jQuery(this).click({type: type}, function(e){
 						self.handleChangeAddressClick(e);
+                        $(window).resize();
 						return false;
 					})
 				});
