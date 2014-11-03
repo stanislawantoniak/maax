@@ -1,7 +1,7 @@
 <?php
 class Zolago_Rma_Block_New_Step2 extends  Zolago_Rma_Block_New_Abstract{
     protected $_monthList = array();
-	
+
 	/**
 	 * @return bool
 	 */
@@ -132,5 +132,13 @@ class Zolago_Rma_Block_New_Step2 extends  Zolago_Rma_Block_New_Abstract{
          }
          return $this->_monthList; 
      }
+
+    public function showCustomerAccount(){
+        return true;
+    }
+
+    public function getLegend(){
+        return Mage::helper("zolagorma")->__("Report a return or claim");
+    }
 
 }

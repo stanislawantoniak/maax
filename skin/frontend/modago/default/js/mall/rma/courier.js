@@ -1,4 +1,4 @@
-jQuery(function($){
+jQuery(function ($) {
     Mall.rma.edit = jQuery.extend({}, Mall.rma.new, {
 
         init: function () {
@@ -10,37 +10,35 @@ jQuery(function($){
 
         },
         // Internal init
-        _init: function(){
-            var self = this;
+        _init: function () {
             this.newRma = $("#edit-rma");
             this.steps = [this.step2];
             this._initStep2();
-
-
         },
         // Step 2 init
-        _initStep2: function(){
-
+        _initStep2: function () {
             var s = this.step2,
                 self = this,
-                next = s.find("button.next");
+                next = s.find("button.next"),
+                back = s.find(".back"),
+                zip = jQuery('#customer_address_postcode').val(),
+                rmaId = jQuery("input[name=rma_id]").val();
 
-
+            back.click(function () {
+                window.location = "/sales/rma/view/id/" + rmaId;
+                return false;
+            });
             // Handle next click
-            s.find(".next").click(function(){
-                var valid = true,
-                    from = s.find('input[name="rma[carrier_time_from]"]').val().split(":")[0],
-                    to = s.find('input[name="rma[carrier_time_to]"]').val().split(":")[0];
-
+            next.click(function () {
+                var valid = true;
 
                 //validate if user has chosen pickup date
                 if (!s.find('input[name="rma[carrier_date]"]:checked').length) {
                     valid = false;
                 }
 
-
                 //--validation
-                if(valid){
+                if (valid) {
                     self._submitForm();
                 }
                 return false;
@@ -55,7 +53,6 @@ jQuery(function($){
             self.initDateListValues(dateList);//INIT VALUES FOR DATE LIST
             jQuery('#pickup-date-form-panel input').first().click();//default set the first day
 
-
             //PICKUP DATE AND HOURS START END
 
             //##############################
@@ -63,13 +60,12 @@ jQuery(function($){
 
             this.addressbook.init();
 
-            var zip = jQuery('#customer_address_postcode').val();
             self.getDateList(zip);
 
-            jQuery(this.addressbook.content).on("selectedAddressChange", function(e, address) {
+            jQuery(this.addressbook.content).on("selectedAddressChange", function (e, address) {
                 var zip = address.getData().postcode;
                 self.getDateList(zip);
             });
-        },
+        }
     });
 });

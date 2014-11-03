@@ -1210,12 +1210,13 @@
 				<block type="zolagorma/new_step1" name="zolagorma.new.step1" template="zolagorma/new/step1.phtml"/>
 				<block type="zolagorma/new_step2" name="zolagorma.new.step2" template="zolagorma/new/step2.phtml">
                     <block type="zolagorma/new_step2" name="zolagorma.new.translate" as="zolagormatranslate"  template="zolagorma/translate.phtml"/>
+                    <block type="zolagorma/new_step2" name="zolagorma.new_step2.js" as="zolagormajs" template="zolagorma/new/step2/js.phtml"/>
 				</block>
 				<block type="zolagorma/new_step3" name="zolagorma.new.step3" template="zolagorma/new/step3.phtml"/>
             </block>
         </reference>
 	</sales_po_newrma>
-	
+
 	<sales_rma_view>
 		<update handle="customer_account" />
 		<update handle="zolago_modago_customer_handle" />
@@ -1272,9 +1273,10 @@
 
         <reference name="my.account.wrapper">
             <block type="zolagorma/courier" name="zolagorma.courier" template="zolagorma/courier.phtml">
-                <block type="zolagorma/courier" name="zolagorma.courier.jstemplates" template="zolagorma/courier/jstemplates.phtml"/>
-                <block type="zolagorma/courier" as="zolagormatranslate" name="zolagorma.courier.translate" template="zolagorma/translate.phtml"/>
-                <block type="zolagorma/courier" name="zolagorma.courier.js" template="zolagorma/courier/js.phtml"/>
+                <block type="zolagorma/courier" name="zolagorma.new.step2" as="bookcourier" template="zolagorma/new/step2.phtml">
+                    <block type="zolagorma/courier" as="zolagormatranslate" name="zolagorma.courier.translate" template="zolagorma/translate.phtml"/>
+                    <block type="zolagorma/courier" name="zolagorma.courier.js" as="zolagormajs" template="zolagorma/courier/js.phtml"/>
+                </block>
             </block>
         </reference>
     </sales_rma_courier>

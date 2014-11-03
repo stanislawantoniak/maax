@@ -33,4 +33,15 @@ class Zolago_Rma_Block_Courier extends Zolago_Rma_Block_New_Step2
         return Mage::getSingleton('core/session')->getFormKey();
     }
 
+    /**
+     * @return bool
+     */
+    public function showCustomerAccount(){
+        return false;
+    }
+
+    public function getLegend(){
+        return Mage::helper("zolagorma")->__("Book a courier");
+    }
+
 }
