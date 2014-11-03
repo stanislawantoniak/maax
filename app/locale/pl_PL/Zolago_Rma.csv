@@ -13,7 +13,7 @@
 "Status changed (%s&rarr;%s)", "Zmiana statusu (%s&rarr;%s)"
 "Tracking status changed (%s&rarr;%s)", "Zmiana statusu wysyłki (%s&rarr;%s)"
 "Tracking added (Creator: %s, Carrier: %s, Number: %s)", "Numer śledzenia dodany (Twórca: %s, Przwoźnik: %s, Numer: %s)"
-"New RMA created", "Utworzono zgłoszenie RMA"
+"New RMA created", "Utworzono reklamację"
 "Origin shipping address restored", "Przywrócono adres dostawy z zamówienia"
 "Origin billing address restored", "Przywrócono adres płatnika z zamówienia"
 "Shipping address changed (%s)", "Zmiana adresu dostawy (%s)"
