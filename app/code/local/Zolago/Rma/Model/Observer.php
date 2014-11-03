@@ -361,6 +361,8 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 		$return_reason = $observer->getModel();
 		
 		$all_vendors = Mage::getModel('udropship/vendor')->getCollection();
+		$vendor_resource_resource = Mage::getResourceModel('zolagorma/rma_reason_vendor');
+		/* @var $vendor_resons_collection Zolago_Rma_Model_Resource_Rma_Reason_Vendor */
 		
 		$vendors_count = $all_vendors->count();
 		$ok_saved = 0;

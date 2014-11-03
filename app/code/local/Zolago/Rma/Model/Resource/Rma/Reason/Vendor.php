@@ -6,6 +6,27 @@ class Zolago_Rma_Model_Resource_Rma_Reason_Vendor extends Mage_Core_Model_Resour
     }
 	
 	/**
+	 * Return all vendors with no pointed reason bind
+	 * @param Zolago_Rma_Model_Rma_Reason $reason
+	 * @param Unirgy_Dropship_Model_Mysql4_Vendor_Collection $collection
+	 * @return Zolago_Rma_Model_Resource_Rma_Reason_Vendor
+	 */
+	public function addUnbindRmaReasonToVendorCollection(
+			Zolago_Rma_Model_Rma_Reason $reason, 
+			Unirgy_Dropship_Model_Mysql4_Vendor_Collection $collection) {
+		
+//		$collection->
+//				getSelect()->
+//				join(
+//					"rv" => $this->getTable('zolagorma/rma_reason_vendor'),
+//					"rv.vendor_id="
+//				)
+		
+		return $this;
+		
+	}
+	
+	/**
      * Prepare data for save
      *
      * @param Mage_Core_Model_Abstract $object

@@ -33,10 +33,10 @@ class Zolago_Rma_Block_New_Step2 extends  Zolago_Rma_Block_New_Abstract{
 	}
 
 	/**
-	 * @return int | null
+	 * @return Mage_Customer_Model_Address | false
 	 */
 	public function getDefaultShipping() {
-		return $this->getCustomer()->getDefaultShipping();
+		return $this->getCustomer()->getDefaultShippingAddress();
 	}
 	
 	/**
@@ -65,8 +65,8 @@ class Zolago_Rma_Block_New_Step2 extends  Zolago_Rma_Block_New_Abstract{
 
 				if($shippignAddress && $shippignAddress->getCustomerAddressId()){
 					$id = $shippignAddress->getCustomerAddressId();
-				}else{
-					$id = $this->getDefaultShipping();
+				}elseif($this->getDefaultShipping()){
+					$id = $this->getDefaultShipping()->getId();
 				}
 				// No deault address, but som address in addressbok
 				if(is_null($id)){
