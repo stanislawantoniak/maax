@@ -506,7 +506,8 @@ jQuery(function($){
                             _rma.attachClickOnDate();//SET SLIDER, SAVE PICKUP TIME, WRITE MESSAGES
                             _rma.initDateListValues(data.content);//INIT VALUES FOR DATE LIST
                             jQuery('#pickup-date-form-panel input').first().click();//default set the first day
-
+                            // Fix footer
+                            jQuery(window).resize();
                             return false;
                         } else {
                             //there is no days for pickup
@@ -516,7 +517,6 @@ jQuery(function($){
                     return true;
                 },
                 'fail': function( jqXHR, textStatus ) {
-                    //console.log( "GetDateList: Request failed: " + textStatus );
                     _rma.showInfoAboutNoPickup(); //better then gif with infinity loading
                 },
                 'always': function () {
