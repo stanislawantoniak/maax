@@ -19,9 +19,9 @@
 	</div>
 	<?php if($_monits = $this->getMonits($_rma)):?>
 	<div class="rma-monit rma-section">
-		<?php foreach($_monits as $monit):?>
-			<?php echo $monit;?>
-		<?php endforeach;?>
+                <?php foreach($_monits as $monit):?>
+                    <?php echo $monit;?>
+                <?php endforeach;?>
 		<?php if(($_pdfUrl=$this->getPdfUrl($_rma)) && $this->isPendingPickup($_rma)):?>
 			<a href="<?php echo $_pdfUrl;?>" class="button button-primary download-doc"><?php echo $_helper->__("Download a document"); ?></a>
 		<?php endif;?>
