@@ -83,7 +83,7 @@ Mall.validate = {
             if (!validator.numberOfInvalids()) {
                 return true;
             }
-	        console.log(jQuery(validator.errorList[0].element));
+
 			var modal = jQuery('.modal:visible');
 			var scrollTo = modal
 							? jQuery(validator.errorList[0].element).offset().top - modal.find('.modal-body').offset().top
