@@ -872,9 +872,8 @@ jQuery(function($){
             },
 			
 			_isRemoveable: function(id){
-				if(id === this.getDefaultShipping().getId()
-					|| (this.getSelectedShipping() !== null
-						&& id === parseInt(this.getSelectedShipping().getId()))
+				if( (this.getDefaultShipping() && id === this.getDefaultShipping().getId())
+					|| (this.getSelectedShipping() !== null && id === parseInt(this.getSelectedShipping().getId()))
 					|| this.getAddressBook().length < 2){
 				
 					return false;
