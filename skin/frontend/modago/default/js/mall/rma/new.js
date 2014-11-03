@@ -910,7 +910,7 @@ jQuery(function($){
 			 */
 			getNewAddressConfig: function(type){
 				var result = [];
-				jQuery.each(Mall.customer.AddressBook.Layout.getNewAddressConfig(), function(){
+				jQuery.each(Mall.customer.AddressBook.Layout.getNewAddressConfig(type), function(){
 					if(this.name=="vat_id"){
 						return;
 					}
