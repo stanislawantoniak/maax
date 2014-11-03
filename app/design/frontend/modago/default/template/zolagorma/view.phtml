@@ -149,7 +149,7 @@
 									<?php echo $this->getCommentAuthor($_comment); ?>
 								</td>
 								<td class="desc">
-									<p><?php echo $this->escapeHtml($_comment->getComment());?></p>
+									<p><?php echo $_helper->formatComment($_comment);?></p>
 								</td>
 							</tr>
 							<?php endforeach;?>
