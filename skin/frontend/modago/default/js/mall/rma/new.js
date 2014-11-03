@@ -871,6 +871,7 @@ jQuery(function($){
                 target.append(addNewButton);
             },
 			
+			//fix form shippign address removable
 			_isRemoveable: function(id){
 				if( (this.getDefaultShipping() && id === this.getDefaultShipping().getId())
 					|| (this.getSelectedShipping() !== null && id === parseInt(this.getSelectedShipping().getId()))
@@ -882,7 +883,7 @@ jQuery(function($){
 			},
 			
 			processAddressNode: function(node, address, addressBook, type){
-				var removeable = this._isRemoveable.apply(addressBook, [address.getId()]), //fi form shippign address
+				var removeable = this._isRemoveable.apply(addressBook, [address.getId()]), 
 					remove = node.find(".remove"),
 					choose = node.find(".choose"),
 					edit = node.find(".edit");
