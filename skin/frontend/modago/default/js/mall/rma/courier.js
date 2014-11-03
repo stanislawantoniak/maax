@@ -23,24 +23,26 @@ jQuery(function($){
 
             var s = this.step2,
                 self = this,
-                next = s.find("button.next");
+                next = s.find("button.next"),
+                back = s.find(".back"),
+                zip = jQuery('#customer_address_postcode').val(),
+                rma_id = jQuery("input[name=rma_id]").val();
 
-
+            back.click(function () {
+                window.location = "/sales/rma/view/id/" + rma_id;
+                return false;
+            });
             // Handle next click
-            s.find(".next").click(function(){
-                var valid = true,
-                    from = s.find('input[name="rma[carrier_time_from]"]').val().split(":")[0],
-                    to = s.find('input[name="rma[carrier_time_to]"]').val().split(":")[0];
-
+            next.click(function () {
+                var valid = true;
 
                 //validate if user has chosen pickup date
                 if (!s.find('input[name="rma[carrier_date]"]:checked').length) {
                     valid = false;
                 }
 
-
                 //--validation
-                if(valid){
+                if (valid) {
                     self._submitForm();
                 }
                 return false;
@@ -55,7 +57,6 @@ jQuery(function($){
             self.initDateListValues(dateList);//INIT VALUES FOR DATE LIST
             jQuery('#pickup-date-form-panel input').first().click();//default set the first day
 
-
             //PICKUP DATE AND HOURS START END
 
             //##############################
@@ -63,7 +64,6 @@ jQuery(function($){
 
             this.addressbook.init();
 
-            var zip = jQuery('#customer_address_postcode').val();
             self.getDateList(zip);
 
             jQuery(this.addressbook.content).on("selectedAddressChange", function(e, address) {
