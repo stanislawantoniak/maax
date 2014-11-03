@@ -31,10 +31,10 @@ jQuery(function($){
 			jQuery(window).resize();
 
             //visual fix for message - can't be done by css
-            if ($('.messages i').length) {
-                $('#content').css('margin-top', '0px');
-                $('.messages i').click(function () {
-                    $('#content').css('margin-top', '');
+            if (jQuery('.messages i').length) {
+                jQuery('#content').css('margin-top', '0px');
+                jQuery('.messages i').click(function () {
+                    jQuery('#content').css('margin-top', '');
                 });
             }
 
