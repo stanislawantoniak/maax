@@ -472,9 +472,11 @@ jQuery(function($){
          */
         getDateList: function(zip) {
             "use strict";
-            //poId = parseInt(poId);
+            if(zip === undefined) {
+                zip = '';
+            }
 
-            var matched = zip.match(/([0-9]{2})([0-9]{3})/);
+            var matched = zip.match(/([0-9]{2}).{0,3}([0-9]{3})/);
             if(matched != null) {
                 zip = matched[1] + "-" + matched[2];
             }
@@ -794,7 +796,7 @@ jQuery(function($){
 				
 				// Bind address change event
 				this.content.on("selectedAddressChange", function(e, address){
-					console.log(address);
+					//console.log(address);
 				});
 				
 			},
