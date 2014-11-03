@@ -55,6 +55,7 @@ class Zolago_Rma_Block_New_Step2 extends  Zolago_Rma_Block_New_Abstract{
 	public function getSelectedShipping() {
 		if(!$this->hasData("selected_shipping")){
 			// Customer address id from last POST
+			$id = null;
 			if($this->getRma()->getCustomerAddressId()){
 				$id = $this->getRma()->getCustomerAddressId();
 			}else{
@@ -66,6 +67,16 @@ class Zolago_Rma_Block_New_Step2 extends  Zolago_Rma_Block_New_Abstract{
 					$id = $shippignAddress->getCustomerAddressId();
 				}else{
 					$id = $this->getDefaultShipping();
+				}
+				// No deault address, but som address in addressbok
+				if(is_null($id)){
+					$firstAddress = $this->getCustomer()->
+							getAddressesCollection()->
+							getFirstItem();
+					if($firstAddress instanceof Mage_Customer_Model_Address 
+						&& $firstAddress->getId()){
+						$id = $firstAddress->getId();
+					}
 				}
 			}
 			$this->setData("selected_shipping", $id);
