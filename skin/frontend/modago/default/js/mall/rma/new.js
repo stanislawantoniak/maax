@@ -789,7 +789,7 @@ jQuery(function($){
 				
 				// Bind address change event
 				this.content.on("selectedAddressChange", function(e, address){
-					console.log(address);
+					//console.log(address);
 				});
 				
 			},
