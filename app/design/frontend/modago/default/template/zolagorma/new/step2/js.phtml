@@ -48,7 +48,9 @@
         var addressBook = new Mall.customer.AddressBook();
 
         addressBook.setAddressBook(<?php echo $this->getCustomerAddressesJson(); ?>);
-        addressBook.setDefaultShipping(<?php echo $this->asJson($this->getDefaultShipping())?>);
+		<?php if($_defaultShipping=$this->getDefaultShipping()):?>
+        addressBook.setDefaultShipping(<?php echo $this->asJson($_defaultShipping->getId())?>);
+		<?php endif;?>
 
         Mall.rma.new.addressbook.setAddressBook(addressBook);
         <?php if(!$this->isDhlEnabled()): ?>
