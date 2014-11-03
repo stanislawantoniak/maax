@@ -364,6 +364,10 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 		$vendor_resource_resource = Mage::getResourceModel('zolagorma/rma_reason_vendor');
 		/* @var $vendor_resons_collection Zolago_Rma_Model_Resource_Rma_Reason_Vendor */
 		
+		// Fix - adding filter to vendor withoout reson object
+		$vendor_resource_resource->
+				addUnbindRmaReasonFilterToVendorCollection($return_reason, $all_vendors);
+		
 		$vendors_count = $all_vendors->count();
 		$ok_saved = 0;
 		
