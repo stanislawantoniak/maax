@@ -76,7 +76,7 @@
 "Product Name","Nazwa produktu"
 "Customer comment","Komentarz klienta"
 "Reason","Przyczyna"
-"RMA change log",Historia zmian RMA"
+"RMA change log","Historia zmian RMA"
 "Change status / add comment","Zmień status / dodaj komentarz"
 "Notify customer","Wyślij do klienta"
 "Shipments","Przesyłki"
@@ -139,3 +139,4 @@
 "Do you really want to remove this address?", "Czy na pewno chesz usunąć ten adres?"
 "Courier data saved","Zapisane dane kurierskie"
 "{{author_name}} changed status of this claim. New status: %s", "{{author_name}} zmienił status tej reklamacji. Nowy status: %s"
+"There is no RMA comments","Nie ma komentarzy RMA"

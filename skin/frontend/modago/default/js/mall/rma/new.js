@@ -268,7 +268,10 @@ jQuery(function($){
 			this.addressbook.init();
 
             if (this.isReturnPath()) {
-                var zip = jQuery('#customer_address_postcode').val();
+                var zip = jQuery('.selected-postcode').filter(function( index ) {
+                    return jQuery(this).text().indexOf("{{") === -1;
+                }).first().text();
+
                 _rma.getDateList(zip);
             }
 
