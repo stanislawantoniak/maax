@@ -669,10 +669,10 @@
         },
 
 		beforeRequest: function(deffered, data){
-			console.log("Loading start");
+			//console.log("Loading start");
 		},
 		afterRequest: function(deffered, data){
-			console.log("Loading stop");
+			//console.log("Loading stop");
 		}
     };
 
