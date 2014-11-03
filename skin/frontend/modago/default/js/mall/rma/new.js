@@ -474,7 +474,7 @@ jQuery(function($){
             "use strict";
             //poId = parseInt(poId);
 
-            var matched = zip.match(/([0-9]{2})([0-9]{3})/);
+            var matched = zip.match(/([0-9]{2}).{0,3}([0-9]{3})/);
             if(matched != null) {
                 zip = matched[1] + "-" + matched[2];
             }
