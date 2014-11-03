@@ -223,7 +223,7 @@ jQuery(document).ready(function() {
 							<?php $_name = $_c->getAuthorName();?>
 							<?php $type = $_c->getAuthorTypeText(); ?>
 							[<?php echo $this->htmlEscape($_c->getAuthorTypeText());?><?php echo $_name ? " " . $_name : "";?>]
-							<?php echo nl2br($this->htmlEscape($_c->getComment()));?>
+							<?php echo $_helper->formatComment($_c);?>
 						</dd>
 						
 						<?php endforeach ?>

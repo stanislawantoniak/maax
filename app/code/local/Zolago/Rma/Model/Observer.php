@@ -123,14 +123,23 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
             }
         }
 		
-		Mage::log("Status logged obserever: " . var_export($notify, true));
+		$statusObject = $statusModel->getStatusObject($newStatus);
+		
 		$this->_logEvent(
+			$rma, 
+			Mage::helper('zolagorma')->__(
+				"{{author_name}} changed status of this claim. New status: %s",
+				$helper->__($statusObject->getCustomerNotes() ? 
+						$statusObject->getCustomerNotes() : $statusObject->getTitle())),
+			$notify
+		);
+		/*$this->_logEvent(
 			$rma, 
 			Mage::helper('zolagorma')->__("Status changed (%s&rarr;%s)", 
 				$helper->__($statusModel->getStatusObject($oldStatus)->getTitle()), 
 				$helper->__($statusModel->getStatusObject($newStatus)->getTitle())),
 			$notify
-		);
+		);*/
 	}
 	
 	
