@@ -871,8 +871,19 @@ jQuery(function($){
                 target.append(addNewButton);
             },
 			
+			//fix form shippign address removable
+			_isRemoveable: function(id){
+				if( (this.getDefaultShipping() && id === this.getDefaultShipping().getId())
+					|| (this.getSelectedShipping() !== null && id === parseInt(this.getSelectedShipping().getId()))
+					|| this.getAddressBook().length < 2){
+				
+					return false;
+				}
+				return true;
+			},
+			
 			processAddressNode: function(node, address, addressBook, type){
-				var removeable = addressBook.isRemoveable(address.getId()),
+				var removeable = this._isRemoveable.apply(addressBook, [address.getId()]), 
 					remove = node.find(".remove"),
 					choose = node.find(".choose"),
 					edit = node.find(".edit");
