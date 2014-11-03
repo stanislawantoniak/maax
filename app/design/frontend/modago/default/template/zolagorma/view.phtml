@@ -2,7 +2,7 @@
 <?php $_helper = Mage::helper("zolagorma"); ?>
 <?php $_rma = $this->getRma();?>
 <?php $carrierDate = $_rma->getCarrierDate(); ?>
-
+<?php $weekdays = Mage::app()->getLocale()->getOptionWeekdays();?>
 <div class="page-title box-wrapper">
 	<h1>
 		<span class="hidden-md hidden-lg"><?php echo $_helper->__("Returns and complaints"); ?></span>
@@ -51,7 +51,8 @@
 					</p>
 					<div>
                         <?php if(!empty($carrierDate)): ?>
-						<?php echo $this->getDayOfWeek($_rma);?> <?php echo Mage::helper("core")->formatDate($carrierDate, "short");?><br/>
+                        <?php echo $weekdays[date('w',strtotime($carrierDate))]['label'];?>
+						<?php echo Mage::helper("core")->formatDate($carrierDate, "short");?><br/>
 						<?php echo $_helper->__(
 							"between %s and %s", 
 							$_rma->getCarrierTimeFrom() ? $_rma->getCarrierTimeFrom() : $_helper->__("N/A"), 
