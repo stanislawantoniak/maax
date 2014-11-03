@@ -5,7 +5,8 @@ jQuery(function($){
             "use strict";
             this._init();
 
-
+            // Fix footer
+            jQuery(window).resize();
 
         },
         // Internal init
@@ -19,16 +20,11 @@ jQuery(function($){
         },
         // Step 2 init
         _initStep2: function(){
-            console.log(this);
+
             var s = this.step2,
                 self = this,
                 next = s.find("button.next");
 
-            // Handle back click
-            s.find(".back").click(function () {
-                self.prev();
-                return false;
-            });
 
             // Handle next click
             s.find(".next").click(function(){

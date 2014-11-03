@@ -511,6 +511,8 @@ jQuery(function($){
                 },
                 'always': function () {
                     jQuery("#pickup-date-form-ajax-loading").remove();
+                    // Fix footer
+                    jQuery(window).resize();
                 }
             }, true, false);
 
@@ -542,7 +544,7 @@ jQuery(function($){
                 //id: "",
                 class: "required choose-date",
                 for: "carrier-date",
-                html: Mall.translate.__("Choose the date") + "<em>:</em>"
+                html: Mall.translate.__("choose-the-date") + "<em>:</em>"
             });
 
             var div_input_box = jQuery("<div/>", {
@@ -580,7 +582,7 @@ jQuery(function($){
 
             jQuery('#pickup-date-form-panel').append(
                     "<label class='required carrier-time-from' for='carrier-time-from'>" +
-                    Mall.translate.__("Select the time interval") + "<em>:</em></label>" +
+                    Mall.translate.__("select-the-time-interval") + "<em>:</em></label>" +
                     "<div class='choose-time'><div class='field'><div class='input-box'>" +
                     "<input type='hidden' name='rma[carrier_time_from]' id='carrier-time-from'" +
                     "value='" + rmaCarrierTimeFrom + "'" +
@@ -690,7 +692,7 @@ jQuery(function($){
 			var date = new Date(data.pickup.carrier_date);
 			var month = date.getMonth() + 1;
 			var day = this.daysOfWeek[date.getDay()] + " " +
-					date.getDate() + "-" +
+					(date.getDate() < 10 ? "0"+date.getDate() : date.getDate()) + "-" +
 					(month < 10 ? "0" + month : month) + "-" +
 					date.getFullYear(),
 				pickup = $("#pickup-date-review"),

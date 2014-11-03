@@ -1208,7 +1208,9 @@
 			<remove name="sales.po.info"/>
             <block type="zolagorma/new" name="zolagorma.new" template="zolagorma/new.phtml">
 				<block type="zolagorma/new_step1" name="zolagorma.new.step1" template="zolagorma/new/step1.phtml"/>
-				<block type="zolagorma/new_step2" name="zolagorma.new.step2" template="zolagorma/new/step2.phtml"/>
+				<block type="zolagorma/new_step2" name="zolagorma.new.step2" template="zolagorma/new/step2.phtml">
+                    <block type="zolagorma/new_step2" name="zolagorma.new.translate" as="zolagormatranslate"  template="zolagorma/translate.phtml"/>
+				</block>
 				<block type="zolagorma/new_step3" name="zolagorma.new.step3" template="zolagorma/new/step3.phtml"/>
             </block>
         </reference>
@@ -1271,6 +1273,7 @@
         <reference name="my.account.wrapper">
             <block type="zolagorma/courier" name="zolagorma.courier" template="zolagorma/courier.phtml">
                 <block type="zolagorma/courier" name="zolagorma.courier.jstemplates" template="zolagorma/courier/jstemplates.phtml"/>
+                <block type="zolagorma/courier" as="zolagormatranslate" name="zolagorma.courier.translate" template="zolagorma/translate.phtml"/>
                 <block type="zolagorma/courier" name="zolagorma.courier.js" template="zolagorma/courier/js.phtml"/>
             </block>
         </reference>
