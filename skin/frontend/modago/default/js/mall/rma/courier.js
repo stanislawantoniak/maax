@@ -31,7 +31,7 @@ jQuery(function ($) {
                 self = this,
                 next = s.find("button.next"),
                 back = s.find(".back"),
-                zip = jQuery('#customer_address_postcode').val(),
+                zip = '',
                 rmaId = jQuery("input[name=rma_id]").val();
 
             back.click(function () {
@@ -69,6 +69,11 @@ jQuery(function ($) {
 
 
             this.addressbook.init();
+
+
+            zip = jQuery('.selected-postcode').filter(function( index ) {
+                return jQuery(this).text().indexOf("{{") === -1;
+            }).first().text();
 
             self.getDateList(zip);
 
