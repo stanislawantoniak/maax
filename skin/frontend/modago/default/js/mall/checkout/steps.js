@@ -4,7 +4,10 @@
 
 (function () {
     "use strict";
+	
+	
     Mall.Checkout.steps = {
+		
 		////////////////////////////////////////////////////////////////////////
 		// Addressbook
 		////////////////////////////////////////////////////////////////////////
@@ -25,6 +28,7 @@
 			getAddressBook: function(){
 				return this._addressBook;
 			},
+			
 			renderSelectedAddress: function(type){
 				var template = this.getSelectedTemplate(),
 					addressBook = this.getAddressBook(),
@@ -56,6 +60,7 @@
 					target.html(Mall.translate.__("no-addresses"));
 				}	
 			},
+			
 			renderAddressList: function(type){
 				var template = this.getNormalTemplate(),
 					addressBook = this.getAddressBook(),
@@ -89,7 +94,7 @@
                 addNewButton.show();
                 target.append(addNewButton);
             },
-
+			
             getAddNewButton: function (type) {
                 var templateHandle = jQuery("#addressbook-add-new-template")
                         .clone()
@@ -102,11 +107,10 @@
 
                 return templateHandle;
             },
-
+			
             attachNewAddressInputsMask: function (modal, type) {
-
             },
-
+			
             attachNewAddressBootstrapTooltip: function(modal, type) {
 
                 jQuery('#modal-body form').attr('autocomplete', "off");//no autocomplete
@@ -169,7 +173,7 @@
 
                 //end validate
             },
-
+			
             showAddNewModal: function (modal, type, edit) {
                 edit = edit === undefined ? false : edit;
 
@@ -182,7 +186,7 @@
                 this.attachNewAddressInputsMask(modal, type);
                 this.attachNewAddressBootstrapTooltip(modal, type);
             },
-
+			
             getSelectButton: function () {
                 var buttonWrapper = jQuery("<div/>", {
                     "class": "form-group clearfix"
@@ -195,11 +199,11 @@
 
                 return buttonWrapper;
             },
-
+			
             toggleOpenAddressList: function (type) {
                 jQuery(".panel-footer").find("." + type).click();
             },
-
+			
             getAddNewForm: function (type) {
                 var form = this.getNewAddressForm(),
                     panelBody = form.find(".panel-body"),
@@ -618,6 +622,7 @@
 
 				return false;
 			},
+			
 			editAddress: function(event){
                 event.preventDefault();
                 var step = event.data.step,
@@ -635,11 +640,6 @@
 				return false;
 			},
 
-			/**
-			 * S
-			 * @param {type} event
-			 * @returns {Boolean}et address as default
-			 */
 			setDefaultAddress: function(event){
 				var addressBook = event.data.addressBook,
 					address = event.data.address,
@@ -665,11 +665,6 @@
 				return false;
 			},
 			
-			/**
-			 * Make choose of adderss. Save need invoice if needed.
-			 * @param {type} object
-			 * @returns {Boolean}
-			 */
 			chooseAddress: function(event){
 				var addressBook = event.data.addressBook,
 					address = event.data.address,
@@ -745,12 +740,15 @@
 				}
 				return addressData;
 			},
+			
 			formatStreet: function(streetArray){
 				return streetArray.length ? streetArray[0] : "";
 			},
+			
 			getFormKey: function(){
 				return this.content.find("input[name='form_key']").val();
 			},
+			
 			collect: function(){
 				
 				var adressBook = this.getAddressBook(),
@@ -791,6 +789,7 @@
 				
 				return data;
 			},
+			
 			onPrepare: function(){
 				var self = this;
 				this.content.find("form").submit(function(){
@@ -828,6 +827,7 @@
 			},
 			
 		},
+		
 		////////////////////////////////////////////////////////////////////////
 		// Address step for all cases
 		////////////////////////////////////////////////////////////////////////
@@ -1107,6 +1107,7 @@
 					return false;
 				});
 			},
+			
 
 			isPasswordNotEmpty: function(){
 				if(this.content.find("[name='account[password]']").length){
@@ -1306,12 +1307,13 @@
             id: "step-1",
             code: "shippingpayment",
             doSave: true,
+			_sidebarAddressesTemplate: "",
             _self_form_id: "co-shippingpayment",
-            init: function () {
-                this.validate.init();
-            },
+			
+			
 			onPrepare: function(checkoutObject){
-                this.init();
+                this.validate.init();
+				this._sidebarAddressesTemplate = this.getSidebarAddresses().html();
 				var self = this;
 
 				this.content.find("form").submit(function(){
@@ -1320,10 +1322,21 @@
                     }
 					return false;
                 });
-				this.content.find("#step-1-prev,#step-1-prev-right").click(function(){
+				
+				this.content.find("#step-1-prev").click(function(){
 					checkoutObject.prev();
 					return false;
 				});
+			},
+			
+			onEnter: function(checkout){
+				var addresses = checkout.getBillingAndShipping();
+				checkout.prepareAddressSidebar(
+					addresses.billing, 
+					addresses.shipping, 
+					this.getSidebarAddresses(), 
+					this.getSidebarAddressesTemplate()
+				);
 			},
 
             collect: function () {
@@ -1340,6 +1353,14 @@
                 return false;
 
             },
+			
+			getSidebarAddresses: function(){
+				return this.content.find(".sidebar-addresses");
+			},
+			
+			getSidebarAddressesTemplate: function(){
+				return this._sidebarAddressesTemplate;
+			},
 
             validate: {
                 init: function () {
@@ -1396,15 +1417,16 @@
 
         },
 
-		
 		////////////////////////////////////////////////////////////////////////
 		// review step
 		////////////////////////////////////////////////////////////////////////
 		review: {
 			id: "step-2",
 			code: "review",
+			_sidebarTemplate: "",
+			
 			onPrepare: function(checkoutObject){
-				var self = this;
+				this._sidebarAddressesTemplate = this.getSidebarAddresses().html();
 				this.content.find("[id^=step-2-submit]").click(function(){
 					// Add validation
 					checkoutObject.placeOrder()
@@ -1412,7 +1434,25 @@
 				this.content.find("[id^=step-2-prev]").click(function(){
 					checkoutObject.prev();
 				});
-			}
+			},
+			
+			onEnter: function(checkout){
+				var addresses = checkout.getBillingAndShipping();
+				checkout.prepareAddressSidebar(
+					addresses.billing, 
+					addresses.shipping, 
+					this.getSidebarAddresses(), 
+					this.getSidebarAddressesTemplate()
+				);
+			},
+			
+			getSidebarAddresses: function(){
+				return this.content.find(".sidebar-addresses");
+			},
+			
+			getSidebarAddressesTemplate: function(){
+				return this._sidebarAddressesTemplate;
+			},
 		},
 
         getIsObjectKeyExistsInArray: function (key, arr) {
@@ -1438,6 +1478,8 @@
 
             return index;
         }
+		
+		
     };
 })();
 

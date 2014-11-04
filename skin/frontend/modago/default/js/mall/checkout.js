@@ -1,14 +1,22 @@
 (function(){
 	
 	Mall.Checkout = function(){
-	  this.METHOD_GUEST    = 'guest';
-      this.METHOD_REGISTER = 'register';
-	  this.METHOD_CUSTOMER = 'customer'
-	  
-      this._steps = [];
-	  this._activeIndex = 0;
-	  this._progressObject = null;
-	  this._config = {};
+		this.METHOD_GUEST    = 'guest';
+		this.METHOD_REGISTER = 'register';
+		this.METHOD_CUSTOMER = 'customer'
+
+		this._steps = [];
+		this._activeIndex = 0;
+		this._progressObject = null;
+		this._config = {};
+		
+		this._addressTemplate = '<dl>\
+			  <dd>{{firstname}} {{lastname}}</dd>\
+			  <dd>{{street}}</dd>\
+			  <dd>{{postcode}} {{city}}</dd>\
+			  <dd>{{telephone_caption}} {{telephone}}</dd>\
+		  </dl>';
+
     };
     
 	
@@ -228,7 +236,7 @@
 	Mall.Checkout.prototype.getStepByCode = function(code){
 		var steps = this.getSteps();
 		for(var i=0; i<steps.length; i++){
-			console.log(steps[i].code, code);
+			//console.log(steps[i].code, code);
 			if(steps[i].code == code){
 				return steps[i];
 			}
@@ -386,7 +394,7 @@
 			// when step is ready to submit; this = step [DEV]
 			onEnable: function(){},
 			// when step isnt ready to submit; this = step [DEV]
-			onDisable: function(){}	
+			onDisable: function(){}
 		};
 		
 		// Disable action
@@ -437,6 +445,77 @@
 		proto.content.addClass("enabled");
 		
 		return proto;
+	}
+	
+	/**
+	 * @returns {Object}
+	 */
+	Mall.Checkout.prototype.getBillingAndShipping = function(){
+		// Prepare sidebar data
+		var billing = {
+				telephone_caption: Mall.translate.__("Pho.")
+			},
+			shipping = {
+				telephone_caption: Mall.translate.__("Pho.")
+			},
+			addressBookStep = this.getStepByCode("addressbook"),
+			addressStep = this.getStepByCode("address");
+
+		if(addressBookStep){
+			var addressBook = addressBookStep.getAddressBook();
+			billing = jQuery.extend(billing, addressBook.getSelectedBilling().getData()),
+			shipping = jQuery.extend(shipping, addressBook.getSelectedShipping().getData())
+		}else if(addressStep){
+
+		}
+		
+		return {
+			billing: billing,
+			shipping: shipping
+		};
+	}
+	
+	/**
+	 * @param {Mall.Customer.Address} billing
+	 * @param {Mall.Customer.Address} shipping
+	 * @param {Mall.Customer.Address} sidebar
+	 * @param {string} template
+	 * @returns {jQuery}
+	 */
+	Mall.Checkout.prototype.prepareAddressSidebar = function(
+			billing, shipping, sidebar, template){
+
+		var addressTemplate = this._addressTemplate,
+			hasInvoide = !!parseInt(billing.need_invoice),
+			dataObject, self = this;
+
+		dataObject = {
+			billing: Mall.replace(addressTemplate, billing),
+			shipping: Mall.replace(addressTemplate, shipping),
+			sales_document: this.getSalesDocument(hasInvoide)
+		};
+
+		// Fill sidebar with data
+		sidebar.html(Mall.replace(template, dataObject));
+
+		// Show hide invoice
+		sidebar.find(".invoice-data")[hasInvoide ? "show" : "hide"]();
+		
+		// Bind click
+		sidebar.find(".prev-button-address").click(function(){
+			self.go(0); // Address is always 1st step
+			return false;
+		});
+			
+		return sidebar;
+	},
+		
+	/**
+	 * @param {bool} isInvoice
+	 * @returns {string}
+	 */
+	Mall.Checkout.prototype.getSalesDocument = function(isInvoice){
+		return Mall.translate.__(isInvoice ? "Invoice" : "Paragon");
 	}
 
 })();
