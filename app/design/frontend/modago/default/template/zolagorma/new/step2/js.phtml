@@ -1,22 +1,16 @@
+<?php /* @var $this Zolago_Rma_Block_New_Step2  */ ?>
 <?php $_helper = Mage::helper("zolagorma"); ?>
-
+<?php $_po = $this->getPo(); ?>
 <?php $_rma = $this->getRma();?>
-<?php
-$poId = $_rma->getUdpoId();
-$_po = $this->getPo();
-
-?>
-<?php $_shippingAddress = $_po->getShippingAddress(); ?>
 <?php $_itemsSingle = $_rma->getItemsSingle(); ?>
 <?php $_itemsConditionSingle = $_rma->getItemsConditionSingle(); ?>
 <?php $_selectedShipping = $this->getSelectedShippingAddress();?>
-<?php $dateList = $this->getDateList($_selectedShipping);?>
+<?php $dateList = array() ;?>
 <?php $weekdays = Mage::app()->getLocale()->getOptionWeekdays();?>
 <?php $vendor = $_po->getVendor();?>
 
-
-
 <script type="text/javascript">
+
     //INIT DATA
     var rmaCarrierTimeFrom = '<?php echo $_rma->getCarrierTimeFrom(); ?>';
     var rmaCarrierTimeTo = '<?php echo $_rma->getCarrierTimeTo(); ?>';
@@ -31,7 +25,6 @@ $_po = $this->getPo();
     }
     ?>
 
-
     //converting weekdays to array
     var weekdays = <?php echo json_encode($weekdays); ?>;
     var arr = [];
@@ -41,13 +34,16 @@ $_po = $this->getPo();
     weekdays = arr;
     //converting weekdays to array END
 
+    var showBankAcc = <?php echo $_po->isPaymentCheckOnDelivery() ? '1' : '0'; ?>;
     //applyFlow
     var isAcknowledged = false;
+    var returnReasons = '<?php echo Mage::helper("zolagorma")->getReturnReasons($_po, true); ?>';
 
+    var flowAcknowledged = '<?php echo Zolago_Rma_Model_Rma::FLOW_ACKNOWLEDGED; ?>';
     var ajaxLoaderSkinUrl = '<?php echo $this->getSkinUrl("images/modago-ajax-loader.gif"); ?>';
     //INIT DATE END
 
-    jQuery(function () {
+    jQuery(function(){
         // Address book handling
         var addressBook = new Mall.customer.AddressBook();
 
@@ -55,12 +51,11 @@ $_po = $this->getPo();
 		<?php if($_defaultShipping=$this->getDefaultShipping()):?>
         addressBook.setDefaultShipping(<?php echo $this->asJson($_defaultShipping->getId())?>);
 		<?php endif;?>
-        Mall.rma.edit.addressbook.setAddressBook(addressBook);
 
-        Mall.rma.edit.setNotAvailableText('<?php echo $_helper->__('Not available');?>');
-        Mall.rma.edit.init();
+        Mall.rma.new.addressbook.setAddressBook(addressBook);
         <?php if(!$this->isDhlEnabled()): ?>
-            Mall.rma.edit.dhlDisabled = true;
+        Mall.rma.new.dhlDisabled = true;
         <?php endif; ?>
     });
+
 </script>

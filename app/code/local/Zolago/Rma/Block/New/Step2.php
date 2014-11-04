@@ -1,7 +1,7 @@
 <?php
 class Zolago_Rma_Block_New_Step2 extends  Zolago_Rma_Block_New_Abstract{
     protected $_monthList = array();
-	
+
 	/**
 	 * @return bool
 	 */
@@ -33,10 +33,10 @@ class Zolago_Rma_Block_New_Step2 extends  Zolago_Rma_Block_New_Abstract{
 	}
 
 	/**
-	 * @return int | null
+	 * @return Mage_Customer_Model_Address | false
 	 */
 	public function getDefaultShipping() {
-		return $this->getCustomer()->getDefaultShipping();
+		return $this->getCustomer()->getDefaultShippingAddress();
 	}
 	
 	/**
@@ -55,6 +55,7 @@ class Zolago_Rma_Block_New_Step2 extends  Zolago_Rma_Block_New_Abstract{
 	public function getSelectedShipping() {
 		if(!$this->hasData("selected_shipping")){
 			// Customer address id from last POST
+			$id = null;
 			if($this->getRma()->getCustomerAddressId()){
 				$id = $this->getRma()->getCustomerAddressId();
 			}else{
@@ -64,8 +65,18 @@ class Zolago_Rma_Block_New_Step2 extends  Zolago_Rma_Block_New_Abstract{
 
 				if($shippignAddress && $shippignAddress->getCustomerAddressId()){
 					$id = $shippignAddress->getCustomerAddressId();
-				}else{
-					$id = $this->getDefaultShipping();
+				}elseif($this->getDefaultShipping()){
+					$id = $this->getDefaultShipping()->getId();
+				}
+				// No deault address, but som address in addressbok
+				if(is_null($id)){
+					$firstAddress = $this->getCustomer()->
+							getAddressesCollection()->
+							getFirstItem();
+					if($firstAddress instanceof Mage_Customer_Model_Address 
+						&& $firstAddress->getId()){
+						$id = $firstAddress->getId();
+					}
 				}
 			}
 			$this->setData("selected_shipping", $id);
@@ -121,5 +132,13 @@ class Zolago_Rma_Block_New_Step2 extends  Zolago_Rma_Block_New_Abstract{
          }
          return $this->_monthList; 
      }
+
+    public function showCustomerAccount(){
+        return true;
+    }
+
+    public function getLegend(){
+        return Mage::helper("zolagorma")->__("Report a return or claim");
+    }
 
 }
