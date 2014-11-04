@@ -330,24 +330,24 @@
     </frontend>
 	<crontab>
         <jobs>
-            <zolagosolrearch_process_queue>
+            <zolagosolrsearch_process_queue>
                 <schedule>
                     <!-- Run every 5 minutes -->
                     <cron_expr>*/5 * * * *</cron_expr>
                 </schedule>
                 <run>
-                    <model>zolagosolrsearch/cronProcessQueue</model>
+                    <model>zolagosolrsearch/observer::cronProcessQueue</model>
                 </run>
-            </zolagosolrearch_process_queue>
-            <zolagosolrearch_cleanup_queue>
+            </zolagosolrsearch_process_queue>
+            <zolagosolrsearch_cleanup_queue>
                 <schedule>
                     <!-- Run 0:00 everyday  -->
                     <cron_expr>0 0 * * *</cron_expr>
                 </schedule>
                 <run>
-                    <model>zolagosolrsearch/cronCleanupQueue</model>
+                    <model>zolagosolrsearch/observer::cronCleanupQueue</model>
                 </run>
-            </zolagosolrearch_cleanup_queue>
+            </zolagosolrsearch_cleanup_queue>
         </jobs>
     </crontab>
 </config>

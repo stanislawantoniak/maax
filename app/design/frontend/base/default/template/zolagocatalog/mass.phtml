@@ -211,7 +211,7 @@ table.table{
             $("body").css("overflow", "hidden")
                      .css('height', 'auto');
 
-            interval = setInterval(loadMoreRows, 2000);
+            interval = setInterval(loadMoreRows, 4000);
 
             //Resize columns
             calculateLeftColumnWidth();
@@ -462,6 +462,9 @@ table.table{
                     cellW = $cell.outerWidth(),
                     cellH = $cell.outerHeight(),
                     anySelected = ($('.grid .table .massaction-checkbox:checked').length) ? true : false,
+                    $row = $cell.parent(),
+                    rowIndex = $row.index(),
+                    clickedIsSelected = $("#grid-left-columns .tbody .checker:eq(" + rowIndex + ") input[type='checkbox']").is(":checked"),
                     popoverH,
                     popoverW;
 
@@ -469,7 +472,7 @@ table.table{
 
                 $("#grid-body .cell").removeClass('active');
 
-                if(!anySelected){
+                if(!anySelected || !clickedIsSelected){
                     $cell.addClass('active');
                 }
 
@@ -479,7 +482,7 @@ table.table{
                 $("#editor-popover h4").html(attributeTitle);
                 $("#editor-popover .content").html($wrapper.html());
 
-                if(!anySelected){
+                if(!anySelected || !clickedIsSelected){
                     $("#editor-popover .content .apply-all-selected").hide();
                 }
 
@@ -522,7 +525,8 @@ table.table{
                     currentValue,
                     value,
                     params,
-                    rowIndex,
+                    rowIndex = $activeCell.parent().index(),
+                    clickedIsSelected = $("#grid-left-columns .tbody .checker:eq(" + rowIndex + ") input[type='checkbox']").is(":checked"),
                     colIndex = $activeCell.index(),
                     clickedId,
                     multiValues = [];
@@ -549,7 +553,7 @@ table.table{
                     return false;
                 }
 
-                if(anySelected && $applyAllSelectedCheckbox.length && $applyAllSelectedCheckbox.is(":checked")){
+                if(anySelected && clickedIsSelected && $applyAllSelectedCheckbox.length && $applyAllSelectedCheckbox.is(":checked")){
 
                     if(allRowsSelected){
                         checkedIds = gridIds;
@@ -563,8 +567,6 @@ table.table{
 
                 }
                 else{
-
-                    rowIndex = $activeCell.parent().index();
 
                     $checkedCheckboxes = $('#grid-left-columns .table .tbody > div:eq(' + rowIndex + ') .massaction-checkbox');
                     clickedId = $checkedCheckboxes.val();
@@ -584,7 +586,7 @@ table.table{
                 $.post( url, params, function( data ) {
 
                     var status = data.status,
-                        valueA,
+                        valueA = [],
                         $cell,
                         $row,
                         i;
@@ -596,15 +598,15 @@ table.table{
                         $cell = $("#grid-body .tbody > div:eq(" + i + ") .cell:eq(" + colIndex + ") div");
 
                         currentValue = $cell.text().trim();
-
+                        valueA = [];
                         if(mode == 'add'){
-                            valueA = currentValue.split(",");
-                            valueA.push(value);
+                            if(currentValue != "") valueA = currentValue.split(",");
+                            if(value != "") valueA.push(value);
                             value = valueA.join(", ");
                         }
                         else if(mode == 'sub'){
-                            valueA = currentValue.split(",");
-                            valueA = removeValueFromArray(valueA, value);
+                            if(currentValue != "") valueA = currentValue.split(",");
+                            if(value != "") valueA = removeValueFromArray(valueA, value);
                             value = valueA.join(", ");
                         }
 
@@ -910,7 +912,8 @@ table.table{
 
                 var url = getUrl(),
                     $leftColumns,
-                    $bodyColumns;
+                    $bodyColumns,
+                    gridIdsStr;
 
                 filterAjaxFired = true;
 
@@ -933,6 +936,10 @@ table.table{
                     //Recalculate total loaded
                     totalRecords = $(data).find('#total-records').val();
                     $('.total-records-count').text(totalRecords);
+
+                    //Reinitialize gridIds
+                    gridIdsStr = $(data).find('#grid-ids').val();
+                    gridIds = gridIdsStr.split(",");
 
                     calculateViewportHeight();
 

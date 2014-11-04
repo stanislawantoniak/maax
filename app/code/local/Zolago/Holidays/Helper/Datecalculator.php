@@ -188,4 +188,27 @@ class Zolago_Holidays_Helper_Datecalculator extends Mage_Core_Helper_Abstract{
         $collection->addFieldToFilter('exclude_from_pickup', $this->exclude_from_pickup);
         return ($collection->count() > 0) ? true : false;
     }
+    /**
+     * 
+     * @param int $days
+     * @return bool
+     */
+     public function isPickupDay($date) {
+        $store = Mage::app()->getStore();
+        $storeId = $store->getStoreId();
+        $locale = Mage::getStoreConfig('general/locale/code', $store->getId());
+        $locale_array = explode("_", $locale);
+
+        $this->weekend = explode(',', Mage::getStoreConfig('general/locale/weekend', $storeId));
+        $this->country_id = (key_exists(1, $locale_array)) ? $locale_array[1] : NULL;
+        $this->exclude_from_delivery = array(1,0);
+        $this->exclude_from_pickup = 1;
+        
+        if ((!$this->_isHoliday($date))
+             && (!$this->_isWeekend($date))) {
+            return true;
+        }
+        return false;
+
+    }
 }

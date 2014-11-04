@@ -3,30 +3,48 @@
 class Orba_Common_Ajax_CustomerController extends Orba_Common_Controller_Ajax {
 	
 	const MAX_CART_ITEMS_COUNT = 5;
-	
-	public function get_account_informationAction(){
+
+    public function get_account_informationAction()
+    {
+        $q = Mage::getSingleton('checkout/cart')->getQuote();
+        $q->getTotals();
+
+
+        /*shipping_cost*/
+        $cost = Mage::helper('zolagomodago/checkout')->getShippingCostSummary();
+
+        $costSum = 0;
+        if (!empty($cost)) {
+            $costSum = array_sum($cost);
+        }
+        $formattedCost = Mage::helper('core')->currency($costSum, true, false);
+        /*shipping_cost*/
+
+		$quote = Mage::helper('checkout/cart')->getQuote();
+		/* @var $quote Mage_Sales_Model_Quote */
+		$totals = $quote->getTotals();
 		
-		Mage::getSingleton('checkout/cart')->getQuote()->getTotals();
 		
-		$content = array(
-			'user_account_url' => Mage::getUrl('customer/account'),
-			'logged_in' => Mage::helper('customer')->isLoggedIn(),
-			'favorites_count' => $this->_getFavorites(),
+        $content = array(
+            'user_account_url' => Mage::getUrl('customer/account'),
+            'user_account_url_orders' => Mage::getUrl('sales/order/process'),
+            'logged_in' => Mage::helper('customer')->isLoggedIn(),
+            'favorites_count' => $this->_getFavorites(),
             'favorites_url' => Mage::getUrl("wishlist"),
-			'cart' => array(
-				'all_products_count' =>	Mage::helper('checkout/cart')->getSummaryCount(),
-				'products' => $this->_getShoppingCartProducts(),
-				'total_amount' => round(Mage::helper('checkout/cart')->getQuote()->getGrandTotal(), 2),
-				'shipping_cost' => 'gratis [dev]',
-				'show_cart_url' => Mage::getUrl('checkout/cart'),
-				'currency_code' => Mage::app()->getStore()->getCurrentCurrencyCode(),
-				'currency_symbol' => Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol()
-			)
-		);
-		
-		$result = $this->_formatSuccessContentForResponse($content);
-		$this->_setSuccessResponse($result);
-	}
+            'cart' => array(
+                'all_products_count' => Mage::helper('checkout/cart')->getSummaryCount(),
+                'products' => $this->_getShoppingCartProducts(),
+                'total_amount' => round(isset($totals["subtotal"]) ? $totals["subtotal"]->getValue() : 0, 2),
+                'shipping_cost' => $formattedCost,
+                'show_cart_url' => Mage::getUrl('checkout/cart'),
+                'currency_code' => Mage::app()->getStore()->getCurrentCurrencyCode(),
+                'currency_symbol' => Mage::app()->getLocale()->currency(Mage::app()->getStore()->getCurrentCurrencyCode())->getSymbol()
+            )
+        );
+
+        $result = $this->_formatSuccessContentForResponse($content);
+        $this->_setSuccessResponse($result);
+    }
 	
 	public function _getShoppingCartProducts(){
 		

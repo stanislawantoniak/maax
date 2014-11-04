@@ -1,5 +1,4 @@
-#filter_size
-, .filter-size {
+.filter-size {
      
       label {
         cursor:pointer;
@@ -7,9 +6,13 @@
           border:1px solid #afafaf;
           text-align:center;
           line-height: 38px;
-          font-size:14px;
+          font-size:12px;
           color:#313131;
-          background:#fff;          
+          background:#fff;
+          font-weight: normal;
+          a {
+            margin-left: 2px;
+          }
         }
         &:hover {
           span {
@@ -31,12 +34,13 @@
          input.checked + span  {
             background:#000;
             border-color:#000;
-            color:#fff;
-
+			a:link, a:visited {
+				color:#fff;
+			}
         }
       }
     }
-#filter_manufacturer {
+.filter-longlist {
 
       input[type="text"] {
         border:1px solid #d6d6d6;
@@ -47,7 +51,7 @@
       input[type="image"] {
         outline:none;
       }
-      #filter_manufacturer_search {
+      #longListSearch {
         &+label {
           i {
             color:#000;
@@ -55,6 +59,7 @@
         }
       }    
     }
+	
 #filter_price {
       
       .form-horizontal {
@@ -110,7 +115,7 @@
       }
     }
 
-.manufacturerList {
+.longListItems {
   list-style: none;
   li {
     

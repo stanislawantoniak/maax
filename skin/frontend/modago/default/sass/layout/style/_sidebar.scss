@@ -13,6 +13,7 @@
     }
   }
   .action {
+	margin-top: 10px;
     margin-bottom: 5px;
    
   } 
@@ -103,6 +104,8 @@
       &.last-td {
         padding-left: 10px;
         min-height:31px;
+        padding-top: 0px;
+        padding-bottom: 11px;
       }
       label {
         cursor:pointer;
@@ -156,18 +159,18 @@
     }   
 }
 
-.wrapper-filter_manufacturerScrollbar {
+.longListWrapper {
   max-height:151px;
-  margin-bottom: 10px;
 }
-.filter_manufacturerScrollbar {
+
+.longListWrapper .scrollable {
   max-height:145px;
-  padding:5px 0 5px 0;
 
 }
-#filter_manufacturer {
+.filter-longlist{
   .mCSB_scrollTools {
     width:12px;
+	margin:  6px 2px 4px 0;
     .mCSB_dragger {
       height:39px!important;
       max-height: 39px!important;
@@ -195,6 +198,9 @@
     > .mCSB_container {
       margin-right: 0;
       }
+  }
+  .action.clear{
+	  margin-top: 15px;
   }
 }
 

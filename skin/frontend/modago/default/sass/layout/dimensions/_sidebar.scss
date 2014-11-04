@@ -18,7 +18,7 @@
   #content-main {
     margin-left: 205px;
     @media (max-width: $screen-sm-max) {
-      margin-left: 0;
+      margin-left: 0 !important;
     }
   }
 }
@@ -44,13 +44,20 @@
 	     	padding:0px;
 	     	  position:relative;
 	     	  display:block;
-	     	  height:18px;
-	     	  overflow:hidden;
+//	     	  height:18px;
+//	     	  overflow:hidden;
 	     	  padding-left:25px;
 	     	  margin-left:-18px;
 	     	  margin-right:-18px;
 	     	  margin-bottom: 8px;
 	     	  margin-top: 0px;
+              white-space: normal;
+              span {
+                display: block;
+                white-space: normal;
+                width: 84%;
+                word-wrap: break-word;
+              }
 	     	  i {
 	     	    position:absolute;
 	     	    right:12px;
@@ -104,7 +111,7 @@
 		margin-left: 205px; 
 		overflow: hidden;
 			@media (max-width: $screen-xs-max) {
-				margin-left: 0; 
+				margin-left: 0 !important;
 			}
 		}
 	}
@@ -147,4 +154,15 @@
 			position: relative;
 		}
 	}
+}
+
+.catalog-category-view {
+  #sidebar{
+    &.hidden-xs {
+      display: block;
+      @media (min-width: $screen-sm-min) {
+        display: block;
+      }
+    }
+  }
 }

@@ -1,5 +1,4 @@
-#filter_size
-, .filter-size {
+.filter-size {
      
       label {
         width:38px;
@@ -23,14 +22,13 @@
         }
       }
     }
-#filter_manufacturer {
-
+.filter-longlist{
       input[type="text"] {
-        padding:0 23px 0 5px;
-        float:left;
-        height:23px;
-        width:122px;
-        float:left;
+        padding:0 23px 0 5px !important;
+        float:left !important;
+        height:23px !important;
+        width:122px !important;
+        float:left !important;
       }
       input[type="image"] {
         height:23px;
@@ -41,9 +39,9 @@
         position:relative;
       }
       > .form-group {
-        margin-bottom: 15px;
+        margin-bottom: 15px !important;
       }
-      #filter_manufacturer_search {
+      .filterLongListSearch {
         &+label {
           position:absolute;
           right:0px;
@@ -161,15 +159,20 @@
             display:inline-block;
             width:27px;
             height:27px;
+			  a{
+				  display:block;
+				  width: 25px;
+				  height: 25px;
+			  }
           }
           
         }
       }
     }
 
-.manufacturerList {
+.longListItems, .longListChecked {
   margin:0px !important;
-  padding:5px 0 5px 0;
+  padding:5px 0 0 0;
   //max-height:126px;
   //overflow-y:auto;
   margin-bottom: 10px;

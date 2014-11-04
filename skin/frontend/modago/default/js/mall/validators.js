@@ -49,16 +49,36 @@ Mall.validate.validators = {
     telephone: function(value, elem, params) {
         "use strict";
 
-        return this.optional(elem) || (/^((\+)?[1-9]{1,2})?([-\s\.])?([0-9\-\ ]{9,12})$/.test(value));
+        return this.optional(elem) || value.replace(/\D/g,"").length >= 9; //9 digits
     },
 
     postcode: function(value, elem, params){
         "use strict";
-        var r = /^\d{2}-\d{3}$/.test(value);
-        if(/^00-000$/.test(value)) {
-            r = false;
+        value = value.replace(/\D/g, "");
+        if (value.length > 5) { //if there is more then 5 digit
+            return false;
         }
-        return r;
+        if (value.length == 5) {
+            if (value == "00000") {
+                return false;
+            }
+            return true;
+        } else {
+            return false;
+        }
+
+    },
+
+    postcodeWithReplace: function(value, elem, params){
+        "use strict";
+        var test = Mall.validate.validators.postcode(value, elem, params);
+        value = value.replace(/\D/g, "");
+        if (test) {
+            var matched = value.match(/([0-9]{2})([0-9]{3})/);
+            jQuery(elem).val(matched[1] + "-" + matched[2]);
+        }
+        return test;
+
     },
 	
 
@@ -78,5 +98,35 @@ Mall.validate.validators = {
         } else {
             return false;
         }
+    },
+
+    nip: function(value, elem, params){
+
+        if (value.length == 0) {
+            return true;
+        }
+        if (value.length < 10) {
+            return this.optional(elem) | false;
+        }
+        if (value.length > 16) {
+            return this.optional(elem) | false;
+        }
+        return true;
+    },
+
+    bankAccount: function(value, elem, params){
+        value = value.replace(/\D/g, "");
+        return this.optional(elem) || value.replace(/\D/g,"").length == 26; //26 digits
+    },
+
+    bankAccountWithReplace: function(value, elem, params){
+        value = value.replace(/\D/g, "");
+        jQuery(elem).val(value);
+
+        var test1 = this.optional(elem);
+        var test2 = value.replace(/\D/g,"").length == 26; //26 digits
+
+        return test1 || test2;
+
     }
 };

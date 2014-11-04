@@ -24,7 +24,7 @@
 		overflow: hidden;
 		position: absolute;
 		top: 0;
-		width: 88%;
+		right: 30px;
 	}
 	.sbToggle{
 
@@ -87,14 +87,5 @@
 		.sbOptionsWrapper{
 			width:149px;
 			max-height: 100px!important;
-		}
-	}
-	#sort-criteria {
-		.sbOptionsWrapper{
-			width:167px;
-			max-height: 200px!important;
-			ul {
-				float:none;
-			}
 		}
 	}

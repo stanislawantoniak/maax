@@ -274,9 +274,9 @@ Mall.wishlist = {
             }).wrap("<div/>").parent().html();
             likeHtml += " " + Plural.get(Mall.wishlist.getWishlistCount(id) - 1
                 , [
-                    this.__("person", "person"),
-                    this.__("people", "people"),
-                    this.__("people-polish-more-than-few", "osób")
+                    Mall.translate.__("person", "person"),
+                    Mall.translate.__("people", "people"),
+                    Mall.translate.__("people-polish-more-than-few", "osób")
                 ]) + " lubicie ten product";
             likeHtml += "<br>";
             likeHtml += jQuery("<span/>", {
@@ -324,11 +324,11 @@ Mall.wishlist = {
                 html: Mall.wishlist.getWishlistCount(id)
             }).wrap("<div/>").parent().html();
             likeHtml += " " + Plural.get(this.getWishlistCount(id), [
-                this.__("person like", "person like"),
-                this.__("people likes", "people likes"),
-                this.__("people-polish-more-than-few likes", "osób lubi")
+                 Mall.translate.__("person like", "person like"),
+                 Mall.translate.__("people likes", "people likes"),
+                 Mall.translate.__("people-polish-more-than-few likes", "osób lubi")
             ]) + " "
-                + this.__("likes-this-product", "likes this product") + " ";
+                +  Mall.translate.__("likes-this-product", "likes this product") + " ";
             likeHtml += jQuery("<a/>", {
                 href: "#",
                 onclick: "Mall.wishlist.addToWishlistFromProduct(" + id + ");return false;",
@@ -396,7 +396,7 @@ Mall.wishlist = {
                 }).appendTo(wrapper);
 
                 jQuery("<span/>", {
-                    html: Mall.wishlist.__("you", "You")
+                    html: Mall.translate.__("You")
                         + (Mall.wishlist.getWishlistCount(id) > 1
                         ? " + " + (Mall.wishlist.getWishlistCount(id) - 1) : "")
                 }).prependTo(likeCount);
@@ -498,16 +498,20 @@ Mall.wishlist = {
         "use strict";
 
         jQuery(".like").each(function (index, item) {
+
             var wrapperWidth = jQuery(item).parent().outerWidth(true),
                 priceWidth = jQuery(item).parent().find(".col-price").outerWidth(true),
                 icoWidth = jQuery(item).find(".icoLike").outerWidth(true),
                 likeCountWidth = jQuery(item).find(".like_count").outerWidth(true);
 
-            if (icoWidth + likeCountWidth + priceWidth + 10 < wrapperWidth) {
-                jQuery(item).parent().removeClass("like-two-line");
-            } else {
-                jQuery(item).parent().addClass("like-two-line");
-            }
+                if(wrapperWidth > 0){ //To prevent using this script before products loaded
+                    if (icoWidth + likeCountWidth + priceWidth + 10 < wrapperWidth) {
+                        jQuery(item).parent().removeClass("like-two-line");
+                    } else {
+                        jQuery(item).parent().addClass("like-two-line");
+                    }
+                }
+
         });
 
         return this;

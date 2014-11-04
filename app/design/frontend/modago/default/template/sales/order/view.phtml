@@ -1,5 +1,7 @@
 <?php /* @var $this Zolago_Modago_Block_Sales_Order_View */ ?>
 <?php $_items = $this->getItems(); ?>
+<?php $_helper = Mage::helper("sales");?>
+<?php $baseUrl = Mage::helper("core/url")->getHomeUrl(); ?>
 <div class="page-title box-wrapper">
 	<h1>
 		<span><?php echo $this->__('Order history'); ?></span>
@@ -14,7 +16,7 @@
 			<div class="headerTop">
 				<div class="table-row clearfix" id="order_header">
 					<div class="pull-left">
-						<h2><?php echo $this->__("Order number:"); ?><?php echo $this->getOrder()->getIncrementId();?></h2>
+						<h2><?php echo $this->__("Order number").': '.$this->getOrder()->getIncrementId();?></h2>
 					</div>
 					<div class="order-date hidden-xs">
 						<?php echo $this->__('Order date').': ' . $this->helper('core')->formatDate(($this->getOrder()->getCreatedAt()), Mage_Core_Model_Locale::FORMAT_TYPE_SHORT); ;?>
@@ -34,14 +36,18 @@
 							<?php $_v = $_item->getVendor(); ?>
 	    					<?php if ($_v->getId()): ?>
 						    	<div class="panel-heading pull-left col-sm-6 col-xs-12"><?php echo $this->__("Shop"); ?>: <strong><?php echo $_v->getVendorName() ?></strong>
+
+
 						    <?php else: ?>
 							    <div class="panel-heading"><?php echo $this->__("Unknown vendor"); ?>
 						    <?php endif ?>
 							<?php if (count($_items) >1) : ?>
 							(<?php printf($this->__('Shipment %d of %d'),($total++),count($_items));?>)
-							<?php endif; ?>							
+							<?php endif; ?>
+                                    <br/>
+                                    <a class="small underline visible-xs" href="#" ><?php echo $this->__('Contact with vendor');?></a>
 							</div>		
-							<div class="pull-right panel-heading col-sm-6 col-xs-12"><a class="small underline pull-right rght-margin-30" href="#"><?php echo $this->__('Contact with vendor');?></a></div>
+							<div class="pull-right panel-heading col-sm-6 col-xs-12 hidden-xs"><a class="small underline pull-right rght-margin-30" href="#"><?php echo $this->__('Contact with vendor');?></a></div>
 							</div>
 				</div>
 			    <div class="panel-body">
@@ -124,6 +130,13 @@
     }
 
     @media (max-width: 767px) {
+        .panel-header {
+            height: 65px;
+        }
+    }
+
+
+    @media (max-width: 767px) {
         .colgroup-01 {
             width: 75% !important;
         }
@@ -162,8 +175,13 @@
         .ilosc {
             width: auto !important;
             margin-bottom: 7px;
-            margin-right: 20px;
+            /*margin-right: 20px;*/
+            margin-right: 0px;
         }
+    }
+
+    .cart-price {
+        margin-left: 20px;
     }
 
     @media (max-width: 711px) {

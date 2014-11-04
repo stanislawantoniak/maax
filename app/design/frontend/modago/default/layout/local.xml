@@ -125,6 +125,12 @@
 			</action>
 			<!--<action method="addCss"><stylesheet>css/stylesheet.css</stylesheet></action>-->
 			<action method="addCss">
+				<stylesheet>js/vendor/select2/select2.css</stylesheet>
+			</action>
+			<action method="addCss">
+				<stylesheet>js/vendor/select2/select2-bootstrap.css</stylesheet>
+			</action>
+			<action method="addCss">
 				<stylesheet>css/local.css</stylesheet>
 			</action>
 
@@ -175,6 +181,10 @@
 			<action method="addItem">
 				<type>skin_js</type>
 				<script>js/jquery.selectbox-0.2.js</script>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<script>js/vendor/select2/select2.js</script>
 			</action>
 			<action method="addItem">
 				<type>skin_js</type>
@@ -412,8 +422,6 @@
 	<solrbridge_solrsearch_category_view>
 		<remove name="mana.catalog.leftnav"/>
 		<remove name="solrsearch_category_view"/>
-		<remove name="solrsearch_product_list_active"/>
-
 		<reference name="root">
 			<action method="setTemplate">
 				<template>page/2columns-left.phtml</template>
@@ -429,6 +437,10 @@
 			</action>
 		</reference>
 		<reference name="head">
+            <action method="addItem">
+                <type>skin_js</type>
+                <script>js/jquery.ui.slider-p.js</script>
+            </action>
 			<action method="addJs">
 				<script>jquery/jquery.jcarousel.min.js</script>
 			</action>
@@ -445,37 +457,26 @@
 				<script>js/mall/listing.js</script>
 			</action>
 		</reference>
-		<reference name="solrsearch_product_list_header">
-			<block type="zolagosolrsearch/active" name="solrsearch_product_list_activefaces"/>
+		
+		<reference name="content">
+            <block type="core/template" before="solrsearch_product_list_header" name="zolago_breadcrumb_fix" template="catalog/breadcrumbsfix.phtml">
+			    <block type="zolagocatalog/breadcrumbs"  name="zolago_breadcrumbs" />
+            </block>
 		</reference>
-		<reference name="solrsearch_product_list">
-			<action method="setTemplate">
-				<template>catalog/product/list.phtml</template>
-			</action>
-		</reference>
+		
 		<reference name="zolagosolrsearch_category_view">
+			<remove name="zolagocatalog_breadcrumbs"/>
 			<action method="setTemplate">
 				<template>catalog/category/view.phtml</template>
 			</action>
 			<block type="zolagomodago/dropshipmicrositepro_vendor_banner" name="vendor.banner" template="unirgy/microsite/vendor/banner.phtml"/>
 			<block type="zolagomodago/dropshipmicrositepro_vendor_category_banner" name="vendor.banner.inspiration" template="unirgy/microsite/vendor/category/banner.phtml"/>
 			<block type="zolagomodago/solrsearch_faces" name="searchfaces" as="searchFaces" before="-">
-				<block type="zolagosolrsearch/active" name="solrsearch_product_list_activefaces"/>
 				<block type="solrsearch/faces_price" name="solr_price_facets" as="solr_price_facets"/>
 				<block type="solrsearch/faces_range" name="solr_range_facets" as="solr_range_facets"/>
 			</block>
 		</reference>
-		<reference name="solrsearch_product_list_header">
-			<action method="setTemplate">
-				<template>catalog/product/list/header/category.phtml</template>
-			</action>
-			<block type="page/html_breadcrumbs" name="breadcrumbs" as="breadcrumbs"/>
-		</reference>
-		<reference name="solrsearch_product_list_toolbar">
-			<action method="setTemplate">
-				<template>catalog/product/list/toolbar.phtml</template>
-			</action>
-		</reference>
+
 
 		<reference name="left">
 			<action method="unsetChild">
@@ -483,6 +484,15 @@
 			</action>
 		</reference>
 	</solrbridge_solrsearch_category_view>
+
+	<_udprod_product_configurable>
+		<reference name="head">
+			<action method="removeItem">
+				<type>js</type>
+				<script>unirgy/product_default.js</script>
+			</action>
+		</reference>
+	</_udprod_product_configurable>
 
 	<catalog_product_view>
 		<reference name="root">
@@ -946,12 +956,131 @@
 
 	<customer_account_index translate="label">
 		<label>Customer My Account Dashboard</label>
+        <action method="addBodyClass">
+            <value>customer-account-index</value>
+        </action>
 		<!-- Mage_Customer -->
 		<reference name="root">
             <action method="setTemplate">
                 <template>page/1column.phtml</template>
             </action>
 		</reference>
+        <reference name="breadcrumbs">
+            <action method="addCrumb">
+                <crumbName>Home</crumbName>
+                <crumbInfo>
+                    <label>Home</label>
+                    <title>Home</title>
+                    <link>/</link>
+                </crumbInfo>
+            </action>
+            <action method="addCrumb">
+                <crumbName>account</crumbName>
+                <crumbInfo>
+                    <label>My account</label>
+                    <title>My account</title>
+                    <id>link_your_account_br</id>
+                    <link>/customer/account/index</link>
+                </crumbInfo>
+            </action>
+        </reference>
+        <reference name="my.account.wrapper">
+            <action method="unsetChild">
+                <name>customer_account_dashboard</name>
+            </action>
+
+
+            <!-- add custom modago mobile navigation -->
+            <block type="customer/account_navigation" name="customer_account_navigation_mobile"  template="customer/account/navigation-mobile.phtml">
+                <action method="removeLinkByName">
+                    <name>recurring_profiles</name>
+                </action>
+                <action method="removeLinkByName">
+                    <name>billing_agreements</name>
+                </action>
+                <action method="removeLinkByName">
+                    <name>reviews</name>
+                </action>
+                <action method="removeLinkByName">
+                    <name>downloadable_products</name>
+                </action>
+                <action method="removeLinkByName">
+                    <name>OAuth Customer Tokens</name>
+                </action>
+                <action method="removeLinkByName">
+                    <name>account</name>
+                </action>
+                <action method="removeLinkByName">
+                    <name>account_edit</name>
+                </action>
+                <action method="removeLinkByName">
+                    <name>address_book</name>
+                </action>
+                <action method="removeLinkByName">
+                    <name>orders</name>
+                </action>
+                <action method="removeLinkByName">
+                    <name>tags</name>
+                </action>
+                <action method="removeLinkByName">
+                    <name>wishlist</name>
+                </action>
+                <action method="removeLinkByName">
+                    <name>newsletter</name>
+                </action>
+                <action method="removeLinkByName">
+                    <name>udqa</name>
+                </action>
+                <action method="removeLinkByName">
+                    <name>udpreviews</name>
+                </action>
+                <action method="removeLinkByName">
+                    <name>udratings</name>
+                </action>
+                <action method="removeLinkByName">
+                    <name>rma</name>
+                </action>
+
+
+                <!--Zamówienia w realizacji-->
+                <action method="addLink" translate="label">
+                    <name>sales_order_process</name>
+                    <path>sales/order/process</path>
+                    <label>Orders in the realization</label>
+                </action>
+                <!--Historia zamówień-->
+                <action method="addLink" translate="label">
+                    <name>orders</name>
+                    <path>sales/order/history/</path>
+                    <label>Orders history</label>
+                </action>
+                <!--RMA-->
+                <action method="addLink" translate="label">
+                    <name>rma</name>
+                    <path>sales/rma/history/</path>
+                    <label>Returns and complaints</label>
+                </action>
+                <!--dane kontaktowe-->
+                <action method="addLink" translate="label">
+                    <name>account_edit</name>
+                    <path>customer/account/edit/</path>
+                    <label>Contact details</label>
+                </action>
+                <!--zmiana hasla-->
+                <action method="addLink" translate="label">
+                    <name>account_edit_password</name>
+                    <path>customer/account/editPassword/</path>
+                    <label>Change password</label>
+                </action>
+                <!--SUBSKRYPCJA NEWSLETTERA-->
+                <action method="addLink" translate="label">
+                    <name>newsletter</name>
+                    <path>newsletter/manage/</path>
+                    <label>Settings mailing and sms</label>
+                </action>
+            </block>
+        </reference>
+
 	</customer_account_index>
 	
 	<zolago_modago_customer_handle>
@@ -1043,5 +1172,276 @@
 			</block>
 		</reference>
 	</sales_order_view>
-    
+	
+	<!-- ################################################################### -->
+	<!-- Rma																 -->
+	<!-- ################################################################### -->
+	<sales_po_newrma>
+		<reference name="head">
+			<action method="addItem">
+				<type>skin_js</type>
+				<script>js/mall/rma/new.js</script>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<script>js/mall/customer/AddressBook.js</script>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<script>js/mall/customer/Address.js</script>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<script>js/mall/customer/AddressBook/Layout.js</script>
+			</action>
+		</reference>
+		<reference name="breadcrumbs">
+            <action method="addCrumb">
+                <crumbName>rma</crumbName>
+                <crumbInfo>
+                    <label>Returns and complaints</label>
+                    <title>Returns and complaints</title>
+                </crumbInfo>
+            </action>
+		</reference>
+        <reference name="my.account.wrapper">
+			<remove name="sales.po.info"/>
+            <block type="zolagorma/new" name="zolagorma.new" template="zolagorma/new.phtml">
+				<block type="zolagorma/new_step1" name="zolagorma.new.step1" template="zolagorma/new/step1.phtml"/>
+				<block type="zolagorma/new_step2" name="zolagorma.new.step2" template="zolagorma/new/step2.phtml">
+                    <block type="zolagorma/new_step2" name="zolagorma.new.translate" as="zolagormatranslate"  template="zolagorma/translate.phtml"/>
+                    <block type="zolagorma/new_step2" name="zolagorma.new_step2.js" as="zolagormajs" template="zolagorma/new/step2/js.phtml"/>
+				</block>
+				<block type="zolagorma/new_step3" name="zolagorma.new.step3" template="zolagorma/new/step3.phtml"/>
+            </block>
+        </reference>
+	</sales_po_newrma>
+
+	<sales_rma_view>
+		<update handle="customer_account" />
+		<update handle="zolago_modago_customer_handle" />
+		<reference name="breadcrumbs">
+            <action method="addCrumb">
+                <crumbName>rma</crumbName>
+                <crumbInfo>
+                    <label>Returns and complaints</label>
+                    <title>Returns and complaints</title>
+                </crumbInfo>
+            </action>
+		</reference>
+        <reference name="my.account.wrapper">
+            <block type="zolagorma/view" name="zolagorma.view" template="zolagorma/view.phtml">
+                <block type="zolagorma/view_detail" name="zolagorma.vendor.detail" as="zolagorma_vendor_detail" template="zolagorma/view/detail.phtml" />
+			</block>
+        </reference>
+	</sales_rma_view>
+
+    <sales_rma_courier>
+        <update handle="customer_account" />
+        <update handle="zolago_modago_customer_handle" />
+        <reference name="head">
+            <action method="addItem">
+                <type>skin_js</type>
+                <script>js/mall/rma/new.js</script>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <script>js/mall/rma/courier.js</script>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <script>js/mall/customer/AddressBook.js</script>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <script>js/mall/customer/Address.js</script>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <script>js/mall/customer/AddressBook/Layout.js</script>
+            </action>
+        </reference>
+        <reference name="breadcrumbs">
+            <action method="addCrumb">
+                <crumbName>rma</crumbName>
+                <crumbInfo>
+                    <label>Returns and complaints</label>
+                    <title>Returns and complaints</title>
+                </crumbInfo>
+            </action>
+        </reference>
+
+        <reference name="my.account.wrapper">
+            <block type="zolagorma/courier" name="zolagorma.courier" template="zolagorma/courier.phtml">
+                <block type="zolagorma/courier" name="zolagorma.new.step2" as="bookcourier" template="zolagorma/new/step2.phtml">
+                    <block type="zolagorma/courier" as="zolagormatranslate" name="zolagorma.courier.translate" template="zolagorma/translate.phtml"/>
+                    <block type="zolagorma/courier" name="zolagorma.courier.js" as="zolagormajs" template="zolagorma/courier/js.phtml"/>
+                </block>
+            </block>
+        </reference>
+    </sales_rma_courier>
+
+	<sales_rma_history>
+		<reference name="breadcrumbs">
+			<action method="addCrumb">
+				<crumbName>rma</crumbName>
+				<crumbInfo>
+					<label>Returns and complaints</label>
+					<title>Returns and complaints</title>
+				</crumbInfo>
+			</action>
+		</reference>
+	</sales_rma_history>
+
+	<sales_po_rmalist>
+		<reference name="breadcrumbs">
+			<action method="addCrumb">
+				<crumbName>rma</crumbName>
+				<crumbInfo>
+					<label>Returns and complaints</label>
+					<title>Returns and complaints</title>
+					<link>/sales/rma/history/</link>
+				</crumbInfo>
+			</action>
+			<action method="addCrumb">
+				<crumbName>rma-po-list</crumbName>
+				<crumbInfo>
+					<label>Choose package</label>
+					<title>Choose package</title>
+				</crumbInfo>
+			</action>
+		</reference>
+	</sales_po_rmalist>
+
+    <help_index_index>
+        <reference name="breadcrumbs">
+            <action method="addCrumb">
+                <crumbName>Home</crumbName>
+                <crumbInfo>
+                    <label>Home</label>
+                    <title>Home</title>
+                    <link>/</link>
+                </crumbInfo>
+            </action>
+            <action method="addCrumb">
+                <crumbName>Help</crumbName>
+                <crumbInfo>
+                    <label>Help</label>
+                    <title>Help</title>
+                </crumbInfo>
+            </action>
+        </reference>
+
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/1column.phtml</template>
+            </action>
+            <action method="addBodyClass">
+                <value>not-menu-mobile</value>
+            </action>
+            <action method="addBodyClass">
+                <value>lower-breadcrumbs</value>
+            </action>
+        </reference>
+
+        <reference name="content">
+            <block type="cms/block" name="help-page">
+                <action method="setBlockId"><block_id>help-page</block_id></action>
+            </block>
+        </reference>
+    </help_index_index>
+
+    <help_contact_vendor>
+        <reference name="breadcrumbs">
+            <action method="addCrumb">
+                <crumbName>Home</crumbName>
+                <crumbInfo>
+                    <label>Home</label>
+                    <title>Home</title>
+                    <link>/</link>
+                </crumbInfo>
+            </action>
+            <action method="addCrumb">
+                <crumbName>Help</crumbName>
+                <crumbInfo>
+                    <label>Help</label>
+                    <title>Help</title>
+                    <link>/help</link>
+                </crumbInfo>
+            </action>
+            <action method="addCrumb">
+                <crumbName>Contact shop</crumbName>
+                <crumbInfo>
+                    <label>Contact shop</label>
+                    <title>Contact shop</title>
+                </crumbInfo>
+            </action>
+        </reference>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/1column.phtml</template>
+            </action>
+            <action method="addBodyClass">
+                <value>not-menu-mobile</value>
+            </action>
+            <action method="addBodyClass">
+                <value>lower-breadcrumbs</value>
+            </action>
+        </reference>
+        <reference name="content">
+
+            <block type="core/template" name="contact.vendor" template="help/contact-vendor.phtml" />
+            <block type="core/template" name="messages.fix" template="help/messagesfix.phtml" />
+
+        </reference>
+    </help_contact_vendor>
+
+    <help_contact_gallery>
+        <reference name="breadcrumbs">
+            <action method="addCrumb">
+                <crumbName>Home</crumbName>
+                <crumbInfo>
+                    <label>Home</label>
+                    <title>Home</title>
+                    <link>/</link>
+                </crumbInfo>
+            </action>
+            <action method="addCrumb">
+                <crumbName>Help</crumbName>
+                <crumbInfo>
+                    <label>Help</label>
+                    <title>Help</title>
+                    <link>/help</link>
+                </crumbInfo>
+            </action>
+            <action method="addCrumb">
+                <crumbName>Contact Modago gallery</crumbName>
+                <crumbInfo>
+                    <label>Contact Modago gallery</label>
+                    <title>Contact Modago gallery</title>
+                </crumbInfo>
+            </action>
+        </reference>
+        <reference name="root">
+            <action method="setTemplate">
+                <template>page/1column.phtml</template>
+            </action>
+            <action method="addBodyClass">
+                <value>not-menu-mobile</value>
+            </action>
+            <action method="addBodyClass">
+                <value>lower-breadcrumbs</value>
+            </action>
+        </reference>
+        <reference name="content">
+
+
+
+            <block type="core/template" name="contact.gallery" template="help/contact-gallery.phtml" />
+            <block type="core/template" name="messages.fix" template="help/messagesfix.phtml" />
+
+        </reference>
+    </help_contact_gallery>
+
+
 </layout>

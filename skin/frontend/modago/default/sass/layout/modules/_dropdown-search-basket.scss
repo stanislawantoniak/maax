@@ -104,7 +104,10 @@
         
             td {
                 padding: 8px 0;
-                
+
+				&.price {
+					text-align: right;
+				}
                 &+td {
                     padding-left: 5px;
                 }

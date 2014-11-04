@@ -69,11 +69,11 @@
 		</layout>
 		<translate>
 			<modules>
-				<zolagocampaign>
+				<Zolago_Campaign>
 					<files>
 						<default>Zolago_Campaign.csv</default>
 					</files>
-				</zolagocampaign>
+				</Zolago_Campaign>
 			</modules>
 		</translate>
 	</frontend>
