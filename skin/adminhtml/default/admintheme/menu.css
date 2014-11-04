@@ -1,0 +1,111 @@
+.nav-bar1 { 
+	width:25%;
+	 border-bottom:1px solid #2d444f; /*background:url(images/nav1_bg.gif) repeat-x 0 100% #666e73;*/background: #303030;  
+	position: absolute; z-index: 9999;top:60px;
+	}
+	.nav-bar {background:#303030;padding: 0 30px;}
+#nbclick1, #nbclick{background:url("images/cmsmart/menu.png") no-repeat scroll center center #191919; 
+    overflow:hidden; text-indent:999em; width: 50px; float:left; height:60px; }
+#nav { float:left; }
+.nb-navbar1, .nav-bar1, #nbclick1{display:none;}
+
+.nb-navbar1{width:100%;  position: absolute; z-index: 9999;top:60px; border-bottom:1px solid #2d444f;background: #303030; }
+.nb-navbar1 li {text-align: left; background: #666666; cursor: pointer; list-style-type: none; padding: 0; margin: 0; float: left; display: block; width: 100%;}
+.nb-navbar1 a { text-decoration: none; border-bottom: 1px solid #303030; font: bold 1.1em/2em Arial, sans-serif; color: #fff; padding: 5px 10px; display: block; cursor: pointer; }
+/**/
+#accordion { list-style-type: none; padding: 0; margin: 0 0 30px; border: 1px solid #17a; border-top: none; border-left: none; }
+	#accordion ul { padding: 0; margin: 0; float: left; display: block; width: 100%; }
+	#accordion li {text-align: left; background: #666666; cursor: pointer; list-style-type: none; padding: 0; margin: 0; float: left; display: block; width: 100%;}
+	
+	#accordion li div { padding: 20px; background: #aef; display: block; clear: both; float: left; width: 360px;}
+	#accordion a { text-decoration: none; border-bottom: 1px solid #303030; font: 14px Arial, sans-serif; color: #c1c1c1; padding: 10px; display: block; cursor: pointer; }
+	#accordion li.parent > a{background: url("images/cmsmart/ac1.png") no-repeat 96% center ;}
+	#accordion li.active.parent >a { background: url("images/cmsmart/ac2.png") no-repeat 96% center ; }
+	/* Level 2 */
+	#accordion li ul li { background: #303030; font-size: 0.9em; }
+	#accordion li ul li >a {padding-left:10%; font-weight: normal;}
+	#accordion li ul li ul li >a{padding-left:18%;}
+	#accordion li.level1:hover >a{background:#666;}
+	  #accordion li.level2:hover >a{background:#666;}
+	#accordion li.level1:hover.parent >a{background: url("images/cmsmart/ac1.png") no-repeat 96% center #666;}
+	#accordion li.level1:hover.parent.active >a{background: url("images/cmsmart/ac2.png") no-repeat 96% center #666;}
+	
+	#accordion li.level0.active >a{background: #4a8bc3;}
+	#accordion li.level0.active.parent >a{background: url("images/cmsmart/ac2.png") no-repeat 96% center #4a8bc3;}
+	#accordion li.active >a span{color:#fff!important;}
+#accordion li.level1 a span{font-size:12px;}
+/************** ALL LEVELS  *************/ /* Style consistent throughout all nav levels */
+#nav li { position:relative; text-align:left; }
+#nav li.over { z-index:99; }
+#nav li.active { z-index:100; } /* to prevent the li separator from showing through on mouseover on li */
+#nav a,
+#nav a:hover { display:block; text-decoration:none; }
+#nav span { display:block; /*cursor:pointer;*/ }
+#nav a { line-height:1.3em; }
+
+
+/************ 1ST LEVEL  ***************/
+#nav li { float:left; background:url(images/cmsmart/nav1_sep.png) no-repeat 100% 0;  }
+#nav li.active { margin-left:-1px; background:url("images/cmsmart/nav1_sep.png") no-repeat 100% 0 #666; color:#fff; }
+#nav li.active em { display:block; position:absolute; top:0; right:-1px; width:3px; height:40px; background:url(images/nav1_active.gif) no-repeat 100% 0; }
+#nav a { float:left; padding:0 14px; color:#fff; line-height:40px; }
+#nav li.over a { color:#d6e2e5; }
+#nav li.level0 > a{font-size: 14px;}
+
+/************ 1ST LEVEL RESET ************/
+#nav ul li,
+#nav ul li.active { float:none; height:auto; background:none; margin:0; }
+#nav ul a,
+#nav ul a:hover { float:none; padding:0; line-height:1.8em; }
+#nav ul li.over a,
+#nav ul li.over a:hover,
+#nav ul a,
+#nav li.active li { font-weight:normal; }
+
+
+/************ 2ND LEVEL ************/
+#nav ul { position:absolute; width:189px; top:40px; left:-10000px; /*padding-bottom:3px; */ }
+#nav ul ul  { border-top:0; background:url(images/nav3_bg.png) 0 0 no-repeat; padding-top:2px; left:100px; top:10px; }
+
+/* Show menu */
+#nav li.over ul { left:-2px; }
+#nav li.over ul ul { left:-10000px; }
+#nav li.over ul li.over ul { left:175px; }
+#nav li.active.level0 > a > span{color:#dedede !important;}
+#nav ul li{padding:0 0 0 2px;background:url(images/nav2_li_bg.png) repeat-y ;}
+#nav ul li a{  /* -webkit-box-shadow: -5px 0 5px -5px rgba(50, 50, 50, 0.6);
+-moz-box-shadow:    -5px 0 5px -5px rgba(50, 50, 50, 0.6);
+box-shadow:         -5px 0 5px -5px rgba(50, 50, 50, 0.6); */}
+#nav ul li a {/* background:#e3ecee;*/background:#666; color:#fff; }
+#nav ul li a:hover { background:#4A8BC3; }
+#nav li.over ul a,
+#nav ul li.active a,
+#nav ul li a,
+#nav ul li a:hover { /*color:#2f2f2f;*/ }
+#nav ul span,
+#nav ul li.last li span { padding:5px 15px; background:url(images/nav2_link_bg.gif) repeat-x 0 100%; color:#fff; }
+#nav ul li.last span,
+#nav ul li.last li.last span { background:none; }
+#nav ul li.last { background:url(images/nav2_last_li_bg.png) no-repeat 0 100%; padding-bottom:3px; }
+
+#nav ul li.parent a,
+#nav ul li.parent li.parent a { background-image:url(images/cmsmart/ac1.png); background-position:97% center; background-repeat:no-repeat; }
+#nav ul li.parent li a,
+#nav ul li.parent li.parent li a { background-image:none; }
+
+/************ 3RD+ LEVEL ************/
+/* Cursors */
+#nav li.parent a,
+#nav li.parent li.parent a,
+#nav li.parent li.parent li.parent a { cursor:default; }
+
+#nav li.parent li a,
+#nav li.parent li.parent li a,
+#nav li.parent li.parent li.parent li a { cursor:pointer; }
+
+/* Show menu */
+#nav ul ul ul { left:-10000px; }
+#nav li.over ul li.over ul ul { left:-10000px;}
+#nav li.over ul li.over ul li.over ul { left:100px; }
+
+.nav-bar:after { content:"."; display:block; clear:both; font-size:0; line-height:0; height:0; overflow:hidden;  }
