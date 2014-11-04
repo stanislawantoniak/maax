@@ -138,3 +138,4 @@
 "Courier data saved","Kurier został pomyślnie zamówiony"
 "{{author_name}} changed status of this claim. New status: %s", "{{author_name}} zmienił status tej reklamacji. Nowy status: %s"
 "There is no RMA comments","Brak komentarzy"
+"You must enter a comment containing at least 5 words","Musisz wpisać komentarz zawierający przynajmniej 5 słów"
