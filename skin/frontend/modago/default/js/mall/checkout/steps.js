@@ -1360,10 +1360,10 @@
 			},
 
             collect: function () {
-                var shipping = this.content.find("form input[name=shipping]:checked").val();
+                var shipping = this.content.find("form input[name=_shipping_method]:checked").val();
                 if (jQuery.type(shipping) !== "undefined") {
                     var inputs = '';
-                    jQuery.each(vendors, function (i, vendor) {
+                    jQuery.each(this.getVendors(), function (i, vendor) {
                         inputs += '<input type="hidden" name="shipping_method[' + vendor + ']" value="' + shipping + '" required="required" />';
                     })
                     this.content.find("form .shipping-collect").html(inputs);
@@ -1373,7 +1373,12 @@
                 return false;
 
             },
-			
+			getVendors: function(){
+				return Mall.reg.get("vendors");
+			},
+			getVendorCosts: function(){
+				return Mall.reg.get("vendor_costs");
+			},
 			getSidebarAddresses: function(){
 				return this.content.find(".sidebar-addresses");
 			},
@@ -1402,8 +1407,25 @@
 				return this.getSelectedShipping().data("carrierMethod");
 			},
 			
+			getMethodCode: function(){
+				return this.getSelectedShipping().val();
+			},
+			getMethodCost: function(){
+				return this.getSelectedShipping().data("methodCost");
+			},
+			
 			getPaymentMethod: function(){
 				return this.getSelectedPayment().data("paymentMethod");
+			},
+			
+			getCostForVendor: function(vendorId, methodCode){
+				var costs = this.getVendorCosts();
+				if(typeof costs == "object" && 
+					typeof costs[vendorId] == "object" && 
+					typeof costs[vendorId][methodCode] != "undefined"){
+					return costs[vendorId][methodCode];
+				}
+				return null;
 			},
 			
 			getOnlineData: function(){
@@ -1423,14 +1445,13 @@
 
             validate: {
                 init: function () {
-
                     jQuery('#' + Mall.Checkout.steps.shippingpayment._self_form_id)
                         .validate(Mall.validate.getOptions({
                             //errorLabelContainer: "#containererreurtotal",
                             ignore: "",
 
                             rules: {
-                                shipping: {
+                                _shipping_method: {
                                     required: true
                                 },
                                 'payment[additional_information][provider]' : {
@@ -1445,7 +1466,7 @@
                                 }
                             },
                             messages: {
-                                shipping: {
+                                _shipping_method: {
                                     required: Mall.translate.__("Please select shipping")
                                 },
                                 "payment[method]": {
@@ -1498,6 +1519,7 @@
 			},
 			
 			onEnter: function(checkout){
+				// Prepare address sidebar
 				var addresses = checkout.getBillingAndShipping();
 				checkout.prepareAddressSidebar(
 					addresses.billing, 
@@ -1506,12 +1528,43 @@
 					this.getSidebarAddressesTemplate()
 				);
 		
+				// Prepare delivery payment sidebar
 				var deliverypayment = checkout.getDeliveryAndPayment();
 				checkout.prepareDeliverypaymentSidebar(
 					deliverypayment,
 					this.getSidebarDeliverypayment(), 
 					this.getSidebarDeliverypaymentTemplate()
 				);
+				
+				this._prepareTotals(checkout);
+			},
+			
+			_prepareTotals: function(checkout){
+				var subTotal = 0,
+					shippingTotal  = 0,
+					deliverypayment = checkout.getStepByCode("shippingpayment"),
+					selectedMethod = deliverypayment.getMethodCode();
+				// Prepare costs for vendors and totals
+				this.content.find(".panel-vendor .table-footer-group.hidden-xs").each(function(){
+					var el = jQuery(this),
+						elXs= el.siblings(".visible-xs");
+						
+					var vendorId = el.data("vendorId");
+					var vendorSubtotal = parseFloat(el.find(".quality_price").data("price"));
+					var vendorShipping = deliverypayment.getCostForVendor(vendorId, selectedMethod);
+				
+					if(vendorShipping!==null){
+						shippingTotal += vendorShipping;
+					}
+					subTotal += vendorSubtotal;
+					
+					el.find(".quality_delivery").html(vendorShipping!==null ? Mall.currency(vendorShipping) : "N/A");
+					elXs.find(".quality_delivery").html(Mall.currency(vendorShipping));
+					
+				});
+				
+				this.content.find("#total_shipping").html(Mall.currency(shippingTotal));
+				this.content.find("#total_value").html(Mall.currency(shippingTotal + subTotal));
 			},
 			
 			getSidebarAddresses: function(){
