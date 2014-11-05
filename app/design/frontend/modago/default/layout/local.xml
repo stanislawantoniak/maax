@@ -1473,6 +1473,9 @@
                 <action method="setBlockId">
                     <block_id>notification-settings-general-subscription</block_id>
                 </action>
+                <!--<action method="setBlockId">-->
+                    <!--<block_id>notification-settings-sms</block_id>-->
+                <!--</action>-->
             </block>
         </reference>
     </newsletter_manage_index>

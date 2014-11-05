@@ -20,7 +20,6 @@
                                class="css-checkbox"/>
                         <label for="subscription"
                                class="css-label css-label-bold">
-
                         </label>
                         <div class="pseudo-label label-bold">
                             <?php echo $this->__('I want to benefit from using special discounts on shopping and delivery, and to receive information about special offers by email!'); ?>
@@ -30,8 +29,33 @@
                 <div class="col-sm-12">
                     <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('notification-settings-general-subscription')->toHtml(); ?>
                 </div>
+                <div class="col-sm-12">
+                    <?php /* Extensions placeholder */ ?>
+                    <?php echo $this->getChildHtml('customer.form.newsletter.extra') ?>
+                </div>
             </div>
         </div>
+
+<!--        <div class="fieldset newsletter-border">-->
+<!--            <div id="general-subscription" class="row bigger-padding">-->
+<!--                <div class="col-sm-12">-->
+<!--                    <div class="form-group form-checkbox">-->
+<!--                        <input type="checkbox" name="" id=""-->
+<!--                               value="1" --><?php //if ( ? ): ?><!-- checked="checked"--><?php //endif; ?>
+<!--                               class="css-checkbox"/>-->
+<!--                        <label for="subscription"-->
+<!--                               class="css-label css-label-bold">-->
+<!--                        </label>-->
+<!--                        <div class="pseudo-label label-bold">-->
+<!--                            --><?php //echo $this->__('?'); ?>
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="col-sm-12">-->
+<!--                    --><?php //echo $this->getLayout()->createBlock('cms/block')->setBlockId('notification-settings-sms')->toHtml(); ?>
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
 
         <div class="bottom-links">
             <a class="button button-third large" href="<?php echo Mage::getUrl("customer/account");?>">
@@ -45,13 +69,8 @@
         </div>
     </form>
     <?php /* Extensions placeholder */ ?>
-    <?php echo $this->getChildHtml('customer.form.newsletter.extra') ?>
-
-
-    <?php /* Extensions placeholder */ ?>
     <?php echo $this->getChildHtml('customer.form.newsletter.extra2') ?>
 </div>
-
 
 <script>
     jQuery(document).ready(function() {
