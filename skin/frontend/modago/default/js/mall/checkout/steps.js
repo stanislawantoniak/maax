@@ -1545,12 +1545,10 @@
 					deliverypayment = checkout.getStepByCode("shippingpayment"),
 					selectedMethod = deliverypayment.getMethodCode();
 				// Prepare costs for vendors and totals
-				this.content.find(".panel-vendor .table-footer-group.hidden-xs").each(function(){
-					var el = jQuery(this),
-						elXs= el.siblings(".visible-xs");
-						
+				this.content.find(".panel-vendor.panel-footer").each(function(){
+					var el = jQuery(this);
 					var vendorId = el.data("vendorId");
-					var vendorSubtotal = parseFloat(el.find(".quality_price").data("price"));
+					var vendorSubtotal = parseFloat(el.find(".vendor_subtotal").data("price"));
 					var vendorShipping = deliverypayment.getCostForVendor(vendorId, selectedMethod);
 				
 					if(vendorShipping!==null){
@@ -1558,8 +1556,7 @@
 					}
 					subTotal += vendorSubtotal;
 					
-					el.find(".quality_delivery").html(vendorShipping!==null ? Mall.currency(vendorShipping) : "N/A");
-					elXs.find(".quality_delivery").html(Mall.currency(vendorShipping));
+					el.find(".vendor_delivery").html(vendorShipping!==null ? Mall.currency(vendorShipping) : "N/A");
 					
 				});
 				
