@@ -1200,6 +1200,27 @@
 
 				return stepData;
 			},
+			
+			_extractAddressObject: function(type){
+				var obj = {},
+					reg = new RegExp("^" + type + "\\[([a-z_]+)\\]"),
+					res;
+				jQuery.each(this.collect(), function(){
+					res = reg.exec(this.name);
+					if(res){
+						obj[res[1]] = this.value;
+					}
+				});
+				return obj;
+			},
+			
+			getBillingAddress: function(){
+				return this._extractAddressObject("billing");
+			},
+			
+			getShippingAddress: function(){
+				return this._extractAddressObject("shipping");
+			},
 
             mergeArraysOfObjects: function (arr1, arr2) {
                 var self = this,

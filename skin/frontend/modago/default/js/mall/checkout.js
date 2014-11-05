@@ -11,7 +11,9 @@
 		this._config = {};
 		
 		this._addressTemplate = '<dl>\
-			  <dd>{{firstname}} {{lastname}}</dd>\
+			  <dd class="shipping">{{firstname}} {{lastname}}</dd>\
+			  <dd class="comapny">{{company}}</dd>\
+			  <dd class="billing vat_id">{{vat_id_caption}} {{vat_id}}</dd>\
 			  <dd>{{street}}</dd>\
 			  <dd>{{postcode}} {{city}}</dd>\
 			  <dd>{{telephone_caption}} {{telephone}}</dd>\
@@ -426,7 +428,6 @@
 				var saveUrl = proto.content.find("form").attr("action");
 				self.saveStepData(saveUrl, proto.collect()).then(function(response){
 					if(response.status==1){
-						console.log(response);
 						self.next();
 					}else{
 						alert(response.content);
@@ -453,10 +454,12 @@
 	Mall.Checkout.prototype.getBillingAndShipping = function(){
 		// Prepare sidebar data
 		var billing = {
-				telephone_caption: Mall.translate.__("Pho.")
+				telephone_caption: Mall.translate.__("Pho."),
+				vat_id_caption: Mall.translate.__("VAT Id")
 			},
 			shipping = {
-				telephone_caption: Mall.translate.__("Pho.")
+				telephone_caption: Mall.translate.__("Pho."),
+				vat_id_caption: Mall.translate.__("VAT Id"),
 			},
 			addressBookStep = this.getStepByCode("addressbook"),
 			addressStep = this.getStepByCode("address");
@@ -468,7 +471,8 @@
 			shipping = jQuery.extend(shipping, addressBook.getSelectedShipping().getData());
 		// Regular address form used
 		}else if(addressStep){
-
+			billing = jQuery.extend(billing, addressStep.getBillingAddress());
+			shipping = jQuery.extend(shipping, addressStep.getShippingAddress());
 		}
 		
 		return {
@@ -503,13 +507,12 @@
 	Mall.Checkout.prototype.prepareAddressSidebar = function(
 			billing, shipping, sidebar, template){
 
-		var addressTemplate = this._addressTemplate,
-			hasInvoide = !!parseInt(billing.need_invoice),
+		var hasInvoide = !!parseInt(billing.need_invoice),
 			dataObject, self = this;
 
 		dataObject = {
-			billing: Mall.replace(addressTemplate, billing),
-			shipping: Mall.replace(addressTemplate, shipping),
+			billing: this._processAddressTemplate(billing, "billing"),
+			shipping: this._processAddressTemplate(shipping, "shipping"),
 			sales_document: this.getSalesDocument(hasInvoide)
 		};
 
@@ -526,7 +529,7 @@
 		});
 			
 		return sidebar;
-	},
+	};
 	
 	/**
 	 * @param {Object} dataObject
@@ -554,7 +557,7 @@
 		});
 			
 		return sidebar;
-	},
+	};
 		
 	/**
 	 * @param {bool} isInvoice
@@ -562,6 +565,30 @@
 	 */
 	Mall.Checkout.prototype.getSalesDocument = function(isInvoice){
 		return Mall.translate.__(isInvoice ? "Invoice" : "Paragon");
-	}
+	};
+	
+	/**
+	 * @param {Object} object
+	 * @param {string} type
+	 * @returns {string}
+	 */
+	Mall.Checkout.prototype._processAddressTemplate = function(object, type){
+		var typeBilling = type=="billing",
+			typeShipping = type=="shipping",
+			address = jQuery(Mall.replace(this._addressTemplate, object)),
+			vat_id = address.find(".vat_id"),
+			company = address.find(".company"),
+			billing = address.find(".billing"), 
+			shipping = address.find(".shipping"); 
+	
+		billing[typeBilling ? "show" : "hide"]();
+		shipping[typeShipping ? "show" : "hide"]();
+		company[object.company ? "show" : "hide"]();
+		vat_id[object.vat_id ? "show" : "hide"]();
+		
+		return address.get(0).outerHTML;
+	};
+	
+	
 
 })();
