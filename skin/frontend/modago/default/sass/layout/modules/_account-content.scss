@@ -26,8 +26,11 @@
 
 
 .newsletter-manage-index {
-  .row {
-    display: table-cell;
+  .more-info-txt {
+    display: none;
+  }
+  #general-subscription {
+    display: table-cell!important;
   }
 
   .label-bold {
@@ -54,6 +57,7 @@
       padding-top: 20px;
       padding-bottom: 20px;
       margin: 0;
+      margin-bottom: 10px;
     }
   }
   .bigger-padding {

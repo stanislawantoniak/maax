@@ -1456,5 +1456,25 @@
         </reference>
     </help_contact_gallery>
 
+    <newsletter_manage_index>
+
+        <reference name="breadcrumbs">
+            <action method="addCrumb">
+                <crumbName>newsletter</crumbName>
+                <crumbInfo>
+                    <label>Settings mailing and sms</label>
+                    <title>Settings mailing and sms</title>
+                </crumbInfo>
+            </action>
+        </reference>
+
+        <reference name="my.account.wrapper">
+            <block type="customer/newsletter" name="customer_newsletter">
+                <action method="setBlockId">
+                    <block_id>notification-settings-general-subscription</block_id>
+                </action>
+            </block>
+        </reference>
+    </newsletter_manage_index>
 
 </layout>

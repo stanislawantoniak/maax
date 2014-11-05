@@ -1,19 +1,18 @@
 <?php $_helper = Mage::helper("customer");?>
-
+<?php $baseUrl = Mage::helper("core/url")->getHomeUrl(); ?>
 
 <div class="page-title box-wrapper">
     <h1>
         <span><?php echo $this->__('Notification settings') ?></span>
-        <span class="back-sm"><a href="http://modago.dev/customer/account/index/" class="underline">powrót do: moje
-                konto &gt;</a></span>
-        <span class="back-xs"><a href="http://modago.dev/customer/account/index/" class="underline">wróć &gt;</a></span>
+        <span class="back-sm"><a href="<?php echo $baseUrl ?>customer/account/index/" class="underline"><?php echo $_helper->__('back: my account'); ?> &gt;</a></span>
+        <span class="back-xs"><a href="<?php echo $baseUrl ?>customer/account/index/" class="underline"><?php echo $_helper->__('back'); ?> &gt;</a></span>
     </h1>
 </div>
 <div class="background-wrapper box-wrapper">
     <form action="<?php echo $this->getAction() ?>" method="post" id="form-validate">
         <?php echo $this->getBlockHtml('formkey'); ?>
         <div class="fieldset newsletter-border">
-            <div class="row bigger-padding">
+            <div id="general-subscription" class="row bigger-padding">
                 <div class="col-sm-12">
                     <div class="form-group form-checkbox">
                         <input type="checkbox" name="is_subscribed" id="subscription"
@@ -28,12 +27,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-12">Wyrażam zgodę na przetwarzanie moich danych osobowych, w
-                    szczególności imienia, nazwiska,
-                    adresu zamieszkania, adresu poczty elektronicznej w celu przetwarzania ofert
-                    marketingowych i
-                    informacji handlowych przez Modago<span class="three-dots">... </span>
-                    <a href="#" class="more-info"> więcej</a>
+                <div class="col-sm-12">
+                    <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('notification-settings-general-subscription')->toHtml(); ?>
                 </div>
             </div>
         </div>
@@ -58,6 +53,16 @@
 </div>
 
 
-<script type="text/javascript">
-
+<script>
+    jQuery(document).ready(function() {
+        jQuery('.more-info').on("click", function() {
+            event.preventDefault();
+            console.log(this);
+            var field = jQuery(this).parents('.fieldset');
+            console.log(field);
+            field.find('.three-dots').hide();
+            field.find('.more-info').hide();
+            field.find('.more-info-txt').show();
+        });
+    });
 </script>
