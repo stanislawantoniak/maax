@@ -1307,9 +1307,8 @@
             id: "step-1",
             code: "shippingpayment",
             doSave: true,
-			_sidebarAddressesTemplate: "",
             _self_form_id: "co-shippingpayment",
-			
+			_sidebarAddressesTemplate: "",
 			
 			onPrepare: function(checkoutObject){
                 this.validate.init();
@@ -1361,6 +1360,45 @@
 			getSidebarAddressesTemplate: function(){
 				return this._sidebarAddressesTemplate;
 			},
+			
+			getSelectedShipping: function(){
+				return this.content.find(".selected-shipping :radio:checked");
+			},
+			
+			getSelectedPayment: function(){
+				return this.content.find(".selected-payment :radio:checked");
+			},
+			
+			getSelectedBank: function(){
+				return this.content.find("#payment_form_zolagopayment :radio:checked");
+			},
+			
+			getCarrierName: function(){
+				return this.getSelectedShipping().data("carrierName");
+			},
+			
+			getCarrierMethod: function(){
+				return this.getSelectedShipping().data("carrierMethod");
+			},
+			
+			getPaymentMethod: function(){
+				return this.getSelectedPayment().data("paymentMethod");
+			},
+			
+			getOnlineData: function(){
+				if(this.isOnlinePayment()){
+					var bank = this.getSelectedBank();
+					if(bank.length){
+						return bank.data("bankName");
+					}
+				}
+				return null;
+			},
+			
+			isOnlinePayment: function(){
+				return this.getSelectedPayment().data('online')=="1";
+			},
+			
 
             validate: {
                 init: function () {
@@ -1423,10 +1461,12 @@
 		review: {
 			id: "step-2",
 			code: "review",
-			_sidebarTemplate: "",
+			_sidebarAddressesTemplate: "",
+			_sidebarDeliverypaymentTemplate: "",
 			
 			onPrepare: function(checkoutObject){
 				this._sidebarAddressesTemplate = this.getSidebarAddresses().html();
+				this._sidebarDeliverypaymentTemplate = this.getSidebarDeliverypayment().html();
 				this.content.find("[id^=step-2-submit]").click(function(){
 					// Add validation
 					checkoutObject.placeOrder()
@@ -1444,6 +1484,13 @@
 					this.getSidebarAddresses(), 
 					this.getSidebarAddressesTemplate()
 				);
+		
+				var deliverypayment = checkout.getDeliveryAndPayment();
+				checkout.prepareDeliverypaymentSidebar(
+					deliverypayment,
+					this.getSidebarDeliverypayment(), 
+					this.getSidebarDeliverypaymentTemplate()
+				);
 			},
 			
 			getSidebarAddresses: function(){
@@ -1452,6 +1499,14 @@
 			
 			getSidebarAddressesTemplate: function(){
 				return this._sidebarAddressesTemplate;
+			},
+			
+			getSidebarDeliverypayment: function(){
+				return this.content.find(".sidebar-deliverypayment");
+			},
+			
+			getSidebarDeliverypaymentTemplate: function(){
+				return this._sidebarDeliverypaymentTemplate;
 			},
 		},
 

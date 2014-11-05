@@ -461,10 +461,12 @@
 			addressBookStep = this.getStepByCode("addressbook"),
 			addressStep = this.getStepByCode("address");
 
+		// Addressbook used
 		if(addressBookStep){
 			var addressBook = addressBookStep.getAddressBook();
-			billing = jQuery.extend(billing, addressBook.getSelectedBilling().getData()),
-			shipping = jQuery.extend(shipping, addressBook.getSelectedShipping().getData())
+			billing = jQuery.extend(billing, addressBook.getSelectedBilling().getData());
+			shipping = jQuery.extend(shipping, addressBook.getSelectedShipping().getData());
+		// Regular address form used
 		}else if(addressStep){
 
 		}
@@ -476,9 +478,25 @@
 	}
 	
 	/**
+	 * @returns {Object}
+	 */
+	Mall.Checkout.prototype.getDeliveryAndPayment = function(){
+		// Prepare sidebar data
+		var step = this.getStepByCode("shippingpayment");
+		
+		return {
+			carrier_name: step.getCarrierName(),
+			carrier_method: step.getCarrierMethod(),
+			payment_method: step.getPaymentMethod(),
+			online: step.isOnlinePayment(),
+			online_data: step.getOnlineData(),
+		};
+	}
+	
+	/**
 	 * @param {Mall.Customer.Address} billing
 	 * @param {Mall.Customer.Address} shipping
-	 * @param {Mall.Customer.Address} sidebar
+	 * @param {Object} sidebar
 	 * @param {string} template
 	 * @returns {jQuery}
 	 */
@@ -504,6 +522,34 @@
 		// Bind click
 		sidebar.find(".prev-button-address").click(function(){
 			self.go(0); // Address is always 1st step
+			return false;
+		});
+			
+		return sidebar;
+	},
+	
+	/**
+	 * @param {Object} dataObject
+	 * @param {Object} sidebar
+	 * @param {string} template
+	 * @returns {jQuery}
+	 */
+	Mall.Checkout.prototype.prepareDeliverypaymentSidebar = function(
+			dataObject, sidebar, template){
+
+		var self = this,
+			online = dataObject.online;
+			
+		
+		// Fill sidebar with data
+		sidebar.html(Mall.replace(template, dataObject));
+
+		// Show hide bank field
+		sidebar.find(".online-data")[online ? "show" : "hide"]();
+		
+		// Bind click
+		sidebar.find(".prev-button-deliverypaymnet").click(function(){
+			self.go(1);
 			return false;
 		});
 			

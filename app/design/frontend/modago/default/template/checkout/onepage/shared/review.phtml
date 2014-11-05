@@ -27,6 +27,30 @@
         </div>
     </section>
     <section class="p main bg-w hidden-sm hidden-xs sidebar-deliverypayment">
+        <header>
+            <h2 class="open"><?php echo $_helper->__('Delivery and payment'); ?></h2>
+        </header>
+
+        <div class="row">
+            <div class="col-md-12  col-sm-4">
+                <h4><?php echo $_helper->__('Delivery type'); ?>:</h4>
+                <dl>
+                    <dd>{{carrier_name}} - {{carrier_method}}</dd>
+                </dl>
+            </div>
+            <div class="col-md-12  col-sm-4">
+                <h4><?php echo $_helper->__('Payment type'); ?>:</h4>
+                <dl>
+                    <dd>{{payment_method}}</dd>
+                    <dd class="online-data">{{online_data}}</dd>
+                </dl>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <button class="button button-third large pull-right  prev-button-deliverypaymnet"><?php echo $_helper->__('Change'); ?></button>
+            </div>
+        </div>
 
     </section>
 </div>
