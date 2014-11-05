@@ -100,6 +100,9 @@
                         </action>
                     </block>
                 </block>
+                <block type="core/template" template="unirgy/dropship/vendor/login/footer.phtml" name="bottom">
+                    <block type="core/template" template="unirgy/dropship/vendor/login/footer/poig.phtml" name="poig" as="poig" />
+                </block>
             </block>
         </reference>
     </udropship_vendor_login>

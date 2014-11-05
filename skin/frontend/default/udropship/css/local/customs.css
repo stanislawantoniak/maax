@@ -330,3 +330,10 @@ table.foot-empty-cells tfoot td:empty {
     margin-left: 110px;
   }
 }
+
+
+/*POIG*/
+.udropship-vendor-login #poig  {
+    float: right;
+    margin: 380px -5px 50px -5px;
+}

@@ -28,7 +28,9 @@
 			<action method="setTemplate">
 				<template>page/page_boot.phtml</template>
 			</action>
-			<block type="zolagodropship/vendor_menu_sidebar" template="unirgy/dropship/vendor/menu/sidebar.phtml" name="sidebar" />
+			<block type="zolagodropship/vendor_menu_sidebar" template="unirgy/dropship/vendor/menu/sidebar.phtml" name="sidebar">
+                <block type="core/template" template="unirgy/dropship/vendor/login/footer/poig.phtml" name="poig" as="poig" />
+			</block>
 		</reference>
 		<reference name="head">
 			<!-- frontend css -->
