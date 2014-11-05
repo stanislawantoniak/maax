@@ -1,0 +1,63 @@
+<?php $_helper = Mage::helper("customer");?>
+
+
+<div class="page-title box-wrapper">
+    <h1>
+        <span><?php echo $this->__('Notification settings') ?></span>
+        <span class="back-sm"><a href="http://modago.dev/customer/account/index/" class="underline">powrót do: moje
+                konto &gt;</a></span>
+        <span class="back-xs"><a href="http://modago.dev/customer/account/index/" class="underline">wróć &gt;</a></span>
+    </h1>
+</div>
+<div class="background-wrapper box-wrapper">
+    <form action="<?php echo $this->getAction() ?>" method="post" id="form-validate">
+        <?php echo $this->getBlockHtml('formkey'); ?>
+        <div class="fieldset newsletter-border">
+            <div class="row bigger-padding">
+                <div class="col-sm-12">
+                    <div class="form-group form-checkbox">
+                        <input type="checkbox" name="is_subscribed" id="subscription"
+                               value="1" <?php if ($this->getIsSubscribed()): ?> checked="checked"<?php endif; ?>
+                               class="css-checkbox"/>
+                        <label for="subscription"
+                               class="css-label css-label-bold">
+
+                        </label>
+                        <div class="pseudo-label label-bold">
+                            <?php echo $this->__('I want to benefit from using special discounts on shopping and delivery, and to receive information about special offers by email!'); ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12">Wyrażam zgodę na przetwarzanie moich danych osobowych, w
+                    szczególności imienia, nazwiska,
+                    adresu zamieszkania, adresu poczty elektronicznej w celu przetwarzania ofert
+                    marketingowych i
+                    informacji handlowych przez Modago<span class="three-dots">... </span>
+                    <a href="#" class="more-info"> więcej</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-links">
+            <a class="button button-third large" href="<?php echo Mage::getUrl("customer/account");?>">
+                <i class="glyphicon glyphicon-chevron-left"></i>
+                <?php echo $_helper->__('back') ?>
+            </a>
+            <button type="submit" class="btn button button-primary pull-right">
+                <?php echo $_helper->__("Save"); ?>
+            </button>
+            <div class="clearfix"></div>
+        </div>
+    </form>
+    <?php /* Extensions placeholder */ ?>
+    <?php echo $this->getChildHtml('customer.form.newsletter.extra') ?>
+
+
+    <?php /* Extensions placeholder */ ?>
+    <?php echo $this->getChildHtml('customer.form.newsletter.extra2') ?>
+</div>
+
+
+<script type="text/javascript">
+
+</script>
