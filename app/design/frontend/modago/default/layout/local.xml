@@ -898,8 +898,8 @@
 			</action>
 			<!--zmiana hasla-->
 			<action method="addLink" translate="label">
-				<name>account_edit_password</name>
-				<path>customer/account/editPassword/</path>
+				<name>account_password</name>
+				<path>customer/account/password/</path>
 				<label>Change password</label>
 			</action>
 			<!--SUBSKRYPCJA NEWSLETTERA-->
@@ -1068,8 +1068,8 @@
                 </action>
                 <!--zmiana hasla-->
                 <action method="addLink" translate="label">
-                    <name>account_edit_password</name>
-                    <path>customer/account/editPassword/</path>
+                    <name>account_password</name>
+                    <path>customer/account/password/</path>
                     <label>Change password</label>
                 </action>
                 <!--SUBSKRYPCJA NEWSLETTERA-->
@@ -1104,6 +1104,23 @@
 			</action>
 		</reference>
 	</customer_account_edit>
+
+	<customer_account_password>
+		<update handle="customer_account" />
+		<update handle="zolago_modago_customer_handle" />
+		<reference name="breadcrumbs">
+			<action method="addCrumb">
+				<crumbName>account_password</crumbName>
+				<crumbInfo>
+					<label>Change password</label>
+					<title>Change password</title>
+				</crumbInfo>
+			</action>
+		</reference>
+		<reference name="my.account.wrapper">
+			<block type="customer/form_edit" name="customer.account.password" template="zolagocustomer/form/editpassword.phtml"/>
+		</reference>
+	</customer_account_password>
 
 	<customer_account_login>
 		<reference name="customer_form_login">

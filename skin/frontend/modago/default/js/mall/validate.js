@@ -114,7 +114,7 @@ Mall.validate = {
 
         jQuery.validator.addMethod('validate-telephone', function () {
             return Mall.validate.validators.telephone.apply(this, arguments);
-        }, jQuery.validator.format(Mall.translate.__("Telephone numer is too short. Number must contain 9 digits, without spacing.")));
+        }, jQuery.validator.format(Mall.translate.__("Telephone number is too short. Number must contain 9 digits, without spacing.")));
 
         jQuery.validator.addMethod('validate-emailbackend', function () {
             return Mall.validate.validators.emailbackend.apply(this, arguments);
