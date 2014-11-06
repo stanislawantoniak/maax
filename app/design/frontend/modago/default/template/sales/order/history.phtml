@@ -1,6 +1,7 @@
 <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
 <?php $_orders = $this->getOrders(); ?>
-<?php $_helper = Mage::helper("sales");?>
+<?php $_openedOrders = $this->getOpenedOrders(); ?>
+<?php $_helper = Mage::helper("zolagosales");?>
 <?php $baseUrl = Mage::helper("core/url")->getHomeUrl(); ?>
 <div class="page-title box-wrapper">
 	<h1>
@@ -11,6 +12,11 @@
 </div>
 <?php if($_orders->getSize()): ?>
 	<div class="background-wrapper box-wrapper">
+	<?php if ($_openedOrders): ?>
+	<div>
+		<a class="underline" href="<?php echo Mage::getUrl("sales/order/process") ?>"><?php echo $_helper->__('You have %d open orders. Click to browse your open orders.',$_openedOrders); ?> > </a>
+	</div>
+	<?php endif; ?>
 		<table class="data-table table-top" id="my-orders-table">
 			<col width="120px" />
 			<col class="order-no" width="120px" />
