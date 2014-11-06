@@ -477,11 +477,37 @@ class Unirgy_Rma_Model_Rma extends Mage_Sales_Model_Abstract
                 $data['_ATTACHMENTS'][] = $labelModel->renderBatchContent($lblBatch);
             } catch (Exception $e) {}
         }
+        $dateRmaCreate = $this->getCteateAt();
+        $dateTimestamp = Mage::getModel('core/date')->timestamp(strtotime($dateRmaCreate));
+        $dateRmaCreateFormated = date('d.m.Y H:i', $dateTimestamp);
+
+        //courier
+        $shippingAddress = $this->getShippingAddress();
+        $shippingAddressStreet = Mage::helper('core')->escapeHtml(is_array($shippingAddress->getStreet(-1)) ? explode(" ", $shippingAddress->getStreet(-1)) : $shippingAddress->getStreet(-1));
+        $weekdays = Mage::app()->getLocale()->getOptionWeekdays();
+        $carrierDate = $this->getCarrierDate();
+        $showCourier = false;
+        if(!empty($carrierDate)){
+            $showCourier = true;
+            $courierDateF = Mage::helper("core")->formatDate($carrierDate, "short");
+        }
 
         $data = array_merge($data, array(
+            "rma_creation_date" => $dateRmaCreateFormated,
             'order'       => $order,
             'rma'         => $this,
+            "rma_status_pending" => ($this->getRmaStatus() == Zolago_Rma_Model_Rma_Status::STATUS_PENDING) ? true : false,
+            "rma_status_pending_pickup" => ($this->getRmaStatus() == Zolago_Rma_Model_Rma_Status::STATUS_PENDING_PICKUP) ? true : false,
+            'po'         => $this->getPo(),
+            'vendor'         => $this->getVendor(),
+            'show_comment'     => !empty($comment) ? true : false,
             'comment'     => $comment,
+            "show_courier" => $showCourier,
+            "courier_week_day" => $weekdays[date('w',strtotime($carrierDate))]['label'],
+            "courier_date" => $courierDateF,
+            "courier_shipping" => $shippingAddress,
+            "courier_shipping_street" => $shippingAddressStreet,
+            'courier_pdf_url' => Mage::getUrl('sales/rma/pdf', array('id' => $this->getId())),
             'billing'     => $order->getBillingAddress(),
             'payment_html'=> $paymentBlock->toHtml(),
             'show_order_info'=>!Mage::getStoreConfigFlag('urma/general/customer_new_hide_order_info'),
@@ -490,7 +516,9 @@ class Unirgy_Rma_Model_Rma extends Mage_Sales_Model_Abstract
             'show_both_notes'=>$this->getStatusCustomerNotes()&&($this->isAllowedResolutionNotes()&&$this->getResolutionNotes()),
             'customer_notes'=>$this->getStatusCustomerNotes(),
             'show_resolution_notes'=>$this->isAllowedResolutionNotes()&&$this->getResolutionNotes(),
-            'resolution_notes'=>$this->getResolutionNotes()
+            "store_name" => 'MODAGO',
+            'resolution_notes'=>$this->getResolutionNotes(),
+            'rma_url' => Mage::getUrl('sales/rma/view', array('id' => $this->getId())),
         ));
 
         foreach ($sendTo as $recipient) {
