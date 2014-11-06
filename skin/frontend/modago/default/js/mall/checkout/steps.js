@@ -1541,9 +1541,15 @@
 			
 			_prepareTotals: function(checkout){
 				var subTotal = 0,
-					shippingTotal  = 0,
+					shippingTotal = 0,
+					discountTotal = 0,
 					deliverypayment = checkout.getStepByCode("shippingpayment"),
-					selectedMethod = deliverypayment.getMethodCode();
+					selectedMethod = deliverypayment.getMethodCode(),
+					discountObject = this.content.find(".total_discount");
+			
+				discountTotal = discountObject.length ? 
+					parseFloat(discountObject.data('price')) * -1 : 0;
+			
 				// Prepare costs for vendors and totals
 				this.content.find(".panel-vendor.panel-footer").each(function(){
 					var el = jQuery(this);
@@ -1560,8 +1566,10 @@
 					
 				});
 				
-				this.content.find("#total_shipping").html(Mall.currency(shippingTotal));
-				this.content.find("#total_value").html(Mall.currency(shippingTotal + subTotal));
+				this.content.find(".total_shipping").html(Mall.currency(shippingTotal));
+				this.content.find(".total_value").html(
+						Mall.currency(shippingTotal + subTotal + discountTotal)
+				);
 			},
 			
 			getSidebarAddresses: function(){

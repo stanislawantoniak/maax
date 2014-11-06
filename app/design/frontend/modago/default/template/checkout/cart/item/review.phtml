@@ -1,5 +1,20 @@
 <?php
 $_item = $this->getItem();
+/* @var $_item Mage_Sales_Model_Quote_Item */
+
+$_itemPriceInclTax = (float)$_item->getPriceInclTax();
+$_rowPriceInclTax = (float)$_item->getRowTotalInclTax();
+$_discountPercent = (float)$_item->getDiscountPercent();
+$_discountAmount = (float)$_item->getDiscountAmount();
+
+$_productMsrpPrice = $_itemPriceInclTax;
+
+if($_item->getProduct()){
+	$_productMsrpPrice = $_item->getProduct()->getPrice();
+}
+
+$_qty = $this->getQty($_item);
+
 $_helper = Mage::helper("zolagocataloginventory");
 $isVisibleProduct = $_item->getProduct()->isVisibleInSiteVisibility();
 $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage_Catalog_Model_Product_Attribute_Source_Msrp_Type::TYPE_BEFORE_ORDER_CONFIRM);
@@ -11,8 +26,6 @@ $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage
 		<div class="hwartosc"><?php echo $this->__("Value");?></div>
 	</div>
 
-
-
 	<div class="table-group clearfix">
 		<div class="tabcol-2">
 			<div class="ilosc">
@@ -20,10 +33,19 @@ $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage
 				<span><?php echo $this->getQty($_item); ?></span>
 			</div>
 			<div class="cena">
-				<?php echo Mage::helper("core")->formatPrice($_item->getPriceInclTax());?>
+				<?php if($_productMsrpPrice>$_itemPriceInclTax):?>
+				<span class="stara_cena">
+					<?php echo Mage::helper("core")->formatPrice($_productMsrpPrice, false);?>
+				</span>
+				<?php endif;?>
+				<span class="cena_zakupu">
+					<?php echo Mage::helper("core")->formatPrice($_itemPriceInclTax, false);?>
+				</span>
 			</div>
 			<div class="wartosc hidden-xs">
-				<span class="wartosc_zakupu"><?php echo Mage::helper("core")->formatPrice($_item->getPriceInclTax() * $this->getQty($_item));?></span>
+				<span class="wartosc_zakupu">
+					<?php echo Mage::helper("core")->formatPrice($_itemPriceInclTax * $_qty, false);?>
+				</span>
 			</div>
 		</div>
 		<div class="tabcol-1">
