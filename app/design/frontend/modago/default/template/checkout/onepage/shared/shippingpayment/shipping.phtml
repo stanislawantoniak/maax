@@ -42,6 +42,7 @@ $cost = $items->cost;
 						   value="<?php echo $method['code']; ?>" 
 						   name="_shipping_method" 
 						   required="required"
+						   class="shipping-method"
 						   data-carrier-name="<?php echo $this->escapeHtml($method['carrier_title']);?>"
 						   data-carrier-method="<?php echo $this->escapeHtml($method['method_title']);?>"
 						   data-method-cost="<?php echo $costSum;?>"/>

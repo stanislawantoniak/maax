@@ -12,7 +12,7 @@
 		
 		this._addressTemplate = '<dl>\
 			  <dd class="shipping">{{firstname}} {{lastname}}</dd>\
-			  <dd class="comapny">{{company}}</dd>\
+			  <dd class="company">{{company}}</dd>\
 			  <dd class="billing vat_id">{{vat_id_caption}} {{vat_id}}</dd>\
 			  <dd>{{street}}</dd>\
 			  <dd>{{postcode}} {{city}}</dd>\
@@ -574,17 +574,25 @@
 	 */
 	Mall.Checkout.prototype._processAddressTemplate = function(object, type){
 		var typeBilling = type=="billing",
-			typeShipping = type=="shipping",
-			address = jQuery(Mall.replace(this._addressTemplate, object)),
+			typeShipping = type=="shipping";
+
+		// No company name in bilingaddress - use firstname and lastname
+		if(typeBilling && !object.company){
+			object.company = object.firstname + " " + object.lastname;
+		}
+		
+		var	address = jQuery(Mall.replace(this._addressTemplate, object)),
 			vat_id = address.find(".vat_id"),
 			company = address.find(".company"),
 			billing = address.find(".billing"), 
-			shipping = address.find(".shipping"); 
+			shipping = address.find(".shipping"),
+			address;
 	
 		billing[typeBilling ? "show" : "hide"]();
 		shipping[typeShipping ? "show" : "hide"]();
 		company[object.company ? "show" : "hide"]();
 		vat_id[object.vat_id ? "show" : "hide"]();
+		
 		
 		return address.get(0).outerHTML;
 	};

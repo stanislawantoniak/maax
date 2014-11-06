@@ -1388,11 +1388,11 @@
 			},
 			
 			getSelectedShipping: function(){
-				return this.content.find(".selected-shipping :radio:checked");
+				return this.content.find(".shipping-method:radio:checked");
 			},
 			
 			getSelectedPayment: function(){
-				return this.content.find(".selected-payment :radio:checked");
+				return this.content.find(".payment-method:radio:checked");
 			},
 			
 			getSelectedBank: function(){
