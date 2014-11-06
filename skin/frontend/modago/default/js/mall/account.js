@@ -190,6 +190,12 @@ Mall.account = {
 		jQuery('input[type=text].hint,input[type=email].hint,input[type=password].hint,textarea.hint').off('shown.bs.tooltip').on('shown.bs.tooltip', function () {
 			if(jQuery(this).parent(':has(i)').length && jQuery(this).parent().find('i').is(":visible")) {
 				jQuery(this).next('div.tooltip.right').animate({left: "+=25"}, 100, function () {
+
+				});
+			}
+			if(jQuery(this).next('div.tooltip.bottom').offset().left == 0) {
+				jQuery(this).next('div.tooltip.bottom').animate({left: "+=13",width: "+=13"}, 100, function () {
+
 				});
 			}
 		});

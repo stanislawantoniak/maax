@@ -17,7 +17,7 @@
 			<div class="clearfix accountfix"></div>
 			<div class="form-container col-md-12">
 				<div class="account_name_container account_data_container row">
-					<?php if(!$isNew): ?>
+					<?php if($isNew): ?>
 						<label class="col-lg-2 col-md-3 col-sm-12 col-xs-12 control-label" for="customer_firstname"><?php echo $this->__("Firstname"); ?>:</label>
 						<div class="col-lg-9 col-md-8 col-sm-11 col-xs-11">
 							<input type="text"
@@ -59,7 +59,7 @@
 						       class="form-control phone hint"
 						       required="true"
 						       id="customer_phone"
-						       data-original-title="<div style='text-align: left !important'><?php echo $this->__("Enter mobile or landline phone number."); ?><br /><?php echo $this->__("For landline remember about area code."); ?></div>"
+						       data-original-title="<div style='text-align: left !important;line-height: 1.4 !important;'><?php echo $this->__("Enter mobile or landline phone number."); ?><br /><?php echo $this->__("For landline remember about area code."); ?></div>"
 						       value="<?php echo $this->escapeHtml($customer->getPhone()); ?>"
 						/>
 					</div>
