@@ -70,11 +70,18 @@
 					</td>
 					<td class="status">
 						<?php if($_hasPo):?>
+							<nobr>
 							<?php echo $this->getOrderStatus($_order);?>
+							<?php /**  todo make icon configurable
 							<?php $_icon = $this->getStatusIcon($_order);?>
 							<?php if($_icon):?>
 								<img src="<?php echo $_icon;?>"/>
 							<?php endif;?>
+							<?php */ ?>
+							<?php if ($_order->getStatus() == 'complete') : ?>							
+								&nbsp;&nbsp;<i class="fa fa-check-square"> </i>
+							<?php endif; ?>
+							</nobr>
 						<?php else:?>
 							<?php echo $_helper->__("Processing");?>
 						<?php endif;?>
