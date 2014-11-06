@@ -378,9 +378,18 @@ class Unirgy_Rma_Model_Rma extends Mage_Sales_Model_Abstract
 
         $hlp->setDesignStore($this->getOrder()->getStore());
 
+        $dateRmaCreate = $this->getCteateAt();
+        $dateTimestamp = Mage::getModel('core/date')->timestamp(strtotime($dateRmaCreate));
+        $dateRmaCreateFormated = date('d.m.Y H:i', $dateTimestamp);
+
         $data = array_merge($data, array(
+            "rma_creation_date" => $dateRmaCreateFormated,
             'order'       => $order,
             'rma'         => $this,
+            "rma_status" => Mage::helper("zolagorma")->__($this->getStatusCustomerNotes() ? $this->getStatusCustomerNotes() : $this->getRmaStatusName()),
+            'po'         => $this->getPo(),
+            'vendor'         => $this->getVendor(),
+            "store_name" => 'MODAGO',
             'comment'     => $comment,
             'billing'     => $order->getBillingAddress(),
             'payment_html'=> $paymentBlock->toHtml(),
