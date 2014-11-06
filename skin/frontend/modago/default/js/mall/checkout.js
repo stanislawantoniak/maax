@@ -93,6 +93,7 @@
 				self.setActive(i);
 			}
 		});
+		jQuery("html,body").scrollTop(0);
 	}
 	
 	/**
