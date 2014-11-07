@@ -908,6 +908,7 @@ class Mage_Customer_AccountController extends Mage_Core_Controller_Front_Action
                 $errors = array();
 
                 // If password change was requested then add it to common validation scheme
+	            Mage::log(print_r($this->getRequest()->getParam('change_password'),true));
                 if ($this->getRequest()->getParam('change_password')) {
                     $currPass   = $this->getRequest()->getPost('current_password');
                     $newPass    = $this->getRequest()->getPost('password');

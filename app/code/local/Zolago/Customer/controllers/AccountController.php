@@ -94,11 +94,13 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
             }
             
             if($origEmail==$postEmail){
-                return parent::editPostAction();
+                parent::editPostAction();
+	            return $this->_redirectReferer();
             }
             
             if(!Zend_Validate::is($postEmail, 'EmailAddress')){
-                return parent::editPostAction();
+                parent::editPostAction();
+	            return $this->_redirectReferer();
             }
             
             // Email validated & changed
@@ -120,7 +122,8 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
             }
         }
         
-        return parent::editPostAction();
+        parent::editPostAction();
+	    return $this->_redirectReferer();
     }
 
     /**
@@ -232,6 +235,29 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
 			}
 		}
 		return parent::_loginPostRedirect();
+	}
+
+	public function passwordAction() {
+		$this->loadLayout();
+		$this->_initLayoutMessages('customer/session');
+		$this->_initLayoutMessages('catalog/session');
+
+		$block = $this->getLayout()->getBlock('customer_edit');
+		if ($block) {
+			$block->setRefererUrl($this->_getRefererUrl());
+		}
+		$data = $this->_getSession()->getCustomerFormData(true);
+		$customer = $this->_getSession()->getCustomer();
+		if (!empty($data)) {
+			$customer->addData($data);
+		}
+		if ($this->getRequest()->getParam('changepass') == 1) {
+			$customer->setChangePassword(1);
+		}
+
+		$this->getLayout()->getBlock('head')->setTitle($this->__('Account Information'));
+		$this->getLayout()->getBlock('messages')->setEscapeMessageFlag(true);
+		$this->renderLayout();
 	}
 
 }
