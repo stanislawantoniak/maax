@@ -523,7 +523,13 @@ jQuery.noConflict();
             $(this).closest('.main').toggleClass('opened-panel-group');
             var txt = $(this).closest('.main').hasClass('opened-panel-group') ? 'bullet-strzalka-up' : 'bullet-strzalka-down';
             $(this).find('i').toggleClass('bullet-strzalka-down bullet-strzalka-up');
-            $('#checkout.podsumowanie').find('#order-show-products').removeClass('hidden')
+			
+			if(!$(this).closest('.main').hasClass('opened-panel-group')){
+				  $('#order-show-products').removeClass('hidden').addClass("visible-xs");
+			}else{
+				  $('#order-show-products').addClass('hidden').removeClass("visible-xs");
+			}
+          
             /*if ($('#order-show-products').is(':visible')) {
              $('#order-show-products').hide();
              $('#zmien_produkty').show(50);
@@ -535,19 +541,19 @@ jQuery.noConflict();
 
         $('#zwin_produkty').on('click',function(){
             $(this).closest('.main').removeClass('opened-panel-group');
-            $('#checkout.podsumowanie').find('#order-show-products').removeClass('hidden')
+            $('#order-show-products').removeClass('hidden').addClass("visible-xs");
             //$(this).closest('.panel-group').hide(50);
-            //$('#zmien_produkty').hide();
             //$('#order-show-products').show();
+			//console.log("Pokaz pozak");
             hide_panel.find('i').removeClass('bullet-strzalka-up').addClass('bullet-strzalka-down');
         });
 
         $('#pokaz_produkty').on('click',function(){
             $(this).closest('.main').toggleClass('opened-panel-group');
-            $('#checkout.podsumowanie').find('#order-show-products').addClass('hidden')
+            $('#order-show-products').addClass('hidden').removeClass("visible-xs");
             //$('#summary-panel-product').show(50);
-            //$('#zmien_produkty').show(50);
             //$('#order-show-products').hide();
+			//console.log("Pokaz schowaj");
             hide_panel.find('i').removeClass('bullet-strzalka-down').addClass('bullet-strzalka-up');
         });
 
