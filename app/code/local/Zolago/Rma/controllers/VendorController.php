@@ -69,11 +69,6 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
             $comment = trim($request->getParam("comment", ''));
             $status = $request->getParam("status");
             $notify = $request->getParam("notify_customer", 0);
-            $vendor_comment = $statusModel->isVendorCommentAvailable($status);
-
-            if($vendor_comment) {
-                $notify = 1;
-            }
 
             $messages = array();
 
@@ -84,16 +79,8 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
                                                   __("Status code %s is not valid.", $status));
                 }
 
-                if($comment) {
-                    $notify_status = 0;
-                } else {
-                    $notify_status = $notify;
-                }
-
-                Mage::helper('zolagorma')->processSaveStatus($rma, $status, (bool)$notify_status);//and trigger event zolagorma_rma_status_changed
-                if($notify_status) {
-                    $messages[] = Mage::helper("zolagorma")->__("Status changed");
-                }
+                Mage::helper('zolagorma')->processSaveStatus($rma, $status, (bool)$notify);
+                $messages[] = Mage::helper("zolagorma")->__("Status changed");
             }
 
             // Process comment
