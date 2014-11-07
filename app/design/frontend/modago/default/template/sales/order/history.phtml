@@ -14,7 +14,7 @@
 	<div class="background-wrapper box-wrapper">
 	<?php if ($_openedOrders): ?>
 	<div>
-		<a class="underline" href="<?php echo Mage::getUrl("sales/order/process") ?>"><?php echo $_helper->__('You have %d open orders. Click to browse your open orders.',$_openedOrders); ?> > </a>
+		<p><a class="underline" href="<?php echo Mage::getUrl("sales/order/process") ?>"><?php echo $_helper->__('You have %s. Click to browse your open orders.',Mage::helper('orbacommon')->formatOrdersText($_openedOrders)); ?> > </a></p>
 	</div>
 	<?php endif; ?>
 		<table class="data-table table-top" id="my-orders-table">
