@@ -603,37 +603,6 @@
 		</reference>
 	</umicrosite_index_landingpage>
 
-	<sales_order_history>
-       	<reference name="breadcrumbs">
-			<action method="addCrumb">
-				<crumbName>history</crumbName>
-				<crumbInfo>
-					<label>Order history</label>
-					<title>Order history</title>
-				</crumbInfo>
-			</action>
-		</reference>
-		<reference name="my.account.wrapper">
-			<!-- remove old history -->
-			<action method="unsetChild">
-				<name>sales.order.history</name>
-			</action>
-			<action method="unsetChild">
-				<name>customer.account.link.back</name>
-			</action>
-			<!-- add custom modago history -->
-			<block type="zolagomodago/sales_order_history" name="sales.order.history">
-				<block type="core/text_list" name="sales.order.history.info" as="info" translate="label">
-					<label>Order History Info</label>
-				</block>
-				<block type="cms/block" name="sales.order.history.empty" as="empty">
-					<action method="setBlockId">
-						<block_id>account-order-history-empty</block_id>
-					</action>
-				</block>
-			</block>
-		</reference>
-	</sales_order_history>
 	<sales_order_view>
 		<reference name="my.account.wrapper">
 			<!-- remove old view -->
@@ -1152,7 +1121,7 @@
 	<!-- ################################################################### -->
 	
 	<sales_order_history>
-		<reference name="breadcrumbs">
+       	<reference name="breadcrumbs">
 			<action method="addCrumb">
 				<crumbName>history</crumbName>
 				<crumbInfo>
@@ -1174,11 +1143,7 @@
 				<block type="core/text_list" name="sales.order.history.info" as="info" translate="label">
 					<label>Order History Info</label>
 				</block>
-				<block type="cms/block" name="sales.order.history.empty" as="empty">
-					<action method="setBlockId">
-						<block_id>account-order-history-empty</block_id>
-					</action>
-				</block>
+				<block type="zolagomodago/sales_order_history_empty" name="sales.order.history.empty" as="empty"/>
 			</block>
 		</reference>
 	</sales_order_history>
