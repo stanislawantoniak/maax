@@ -141,9 +141,6 @@ Mall.account = {
 			addPasswordEditTranslations();
 			editPasswordForm.validate(this.getValidate().getOptions({
 				rules: {
-					current_password: {
-						required: true
-					},
 					password: {
 						required: true,
 						minlength: 6
@@ -155,9 +152,6 @@ Mall.account = {
 					}
 				},
 				messages: {
-					current_password: {
-						required: Mall.translate.__("Please enter current password.")
-					},
 					password: {
 						required: Mall.translate.__("Please enter new password."),
 						minlength: Mall.translate.__("Password needs to have at least 6 characters")
