@@ -1,4 +1,4 @@
-<!--@subject {{var store_name}}: – Twoja reklamacja (nr. RMA-{{var rma.increment_id}}) została przekazana do sklepu  @-->
+<!--@subject {{var store_name}} – Twoja reklamacja (nr. RMA-{{var rma.increment_id}}) została przekazana do sklepu  @-->
 <!--@vars
 {"store url=\"\"":"Store Url",
 "skin url=\"images/logo_email.gif\" _area='frontend'":"Email Logo Image",
@@ -28,7 +28,7 @@ body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif;
             <tr>
                 <td valign="top">
                     <a href="{{store url=""}}" >
-                    <img src="{{skin url='images/logo.gif' _area='frontend'}}" alt="{{var store.getFrontendName()}}" border="0"  style="margin-bottom:10px;" />
+                    <img src="{{skin url='images/logo_black.png' _area='frontend'}}" alt="{{var store_name}}" border="0"  style="margin-bottom:10px;" />
                     </a>
                 </td>
             </tr>
@@ -61,10 +61,7 @@ body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif;
                                 między {{var rma.carrier_time_from}} a {{var rma.carrier_time_to}}</p>
                         </div>
                         <div style="margin:0 0 30px 0;">
-                            <p><b>Adres odbioru zwrotu:</b></p>
-                            <p>{{var courier_shipping.firstname}} {{var courier_shipping.lastname}}</p>
-                            <p>{{var courier_shipping_street}}</p>
-                            <p>{{var courier_shipping.postcode}} {{var courier_shipping.city}}</p>
+                            {{var courier_shipping.format('html')}}
                         </div>
                         {{/depend}}
 
@@ -99,7 +96,7 @@ body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif;
             <tr>
                 <td>
                     <p>Pozdrawiamy serdecznie,</p>
-                    <p>Zespól Modago.pl</p>
+                    <p>Zespół {{var store.getName()}}</p>
                 </td>
             </tr>
         </table>

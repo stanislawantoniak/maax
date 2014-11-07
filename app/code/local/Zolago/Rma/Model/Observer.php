@@ -275,11 +275,11 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 		// Send email
 		if($doSendEmail){
 			if($rma->getIsNewFlag()){
-				$rma->sendEmail(true, $rma->getCommentText());
-				Mage::helper('urma')->sendNewRmaNotificationEmail($rma, $rma->getCommentText());
+				$rma->sendEmail(true, $commentModel);
+				Mage::helper('urma')->sendNewRmaNotificationEmail($rma, $commentModel);
 				$rma->setIsNewFlag(false);
 			}else{
-				$rma->sendUpdateEmail(true, $commentModel->getComment());
+				$rma->sendUpdateEmail(true, $commentModel);
 			}
 		}
 	}

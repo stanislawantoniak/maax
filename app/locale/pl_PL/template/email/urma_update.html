@@ -24,8 +24,8 @@ body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif;
                     <tr>
                         <td valign="top">
                             <a href="{{store url=""}}">
-                            <img src="{{skin url='images/logo.gif' _area='frontend'}}"
-                                 alt="{{var store.getFrontendName()}}" style="margin-bottom:10px;" border="0"/>
+                            <img src="{{skin url='images/logo_black.png' _area='frontend'}}"
+                                 alt="{{var store_name}}" style="margin-bottom:10px;" border="0"/>
                             </a>
                         </td>
                     </tr>
@@ -70,10 +70,6 @@ body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif;
                                     <p>{{var resolution_notes}}</p>
                                 </div>
                                 {{/depend}}
-
-                                <p>Pozdrawiam serdecznie,</p>
-
-                                <p>{{var vendor.vendor_name}}</p>
                             </div>
                         </td>
                     </tr>
@@ -89,7 +85,7 @@ body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif;
 
                             <p>Pozdrawiamy serdecznie,</p>
 
-                            <p>Zespól Modago.pl</p>
+                            <p>Zespól {{var store.getName()}}</p>
                         </td>
                     </tr>
                 </table>
