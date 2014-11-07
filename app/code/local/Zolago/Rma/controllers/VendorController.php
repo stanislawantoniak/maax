@@ -70,6 +70,20 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
             $status = $request->getParam("status");
             $notify = $request->getParam("notify_customer", 0);
 
+            $notify_email = $statusModel->isNotifyEmailAvailable($status);
+
+            //Email with info about status changed:
+            //if flag notify by email is YES
+            //then send email and notify
+            //else
+            //don't send email
+
+            //Email with comment:
+            //if flag notify by email is YES
+            //then no meter
+            //else
+            //no meter
+
             $messages = array();
 
             // Process status
@@ -79,8 +93,15 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
                                                   __("Status code %s is not valid.", $status));
                 }
 
-                Mage::helper('zolagorma')->processSaveStatus($rma, $status, (bool)$notify);
-                $messages[] = Mage::helper("zolagorma")->__("Status changed");
+                if($notify_email) {
+                    $notify_status = 1;
+                    $messages[] = Mage::helper("zolagorma")->__("Status changed");
+                } else {
+                    $notify_status = 0;
+                }
+
+                Mage::helper('zolagorma')->processSaveStatus($rma, $status, (bool)$notify_status);
+
             }
 
             // Process comment
