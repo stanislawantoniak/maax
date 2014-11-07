@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+	<modules>
+		<Zolago_Newsletter>
+			<version>0.0.1</version>
+		</Zolago_Newsletter>
+	</modules>
+	<frontend>
+		<routers>
+			<zolagonewsletter>
+				<use>standard</use>
+				<args>
+					<module>Zolago_Newsletter</module>
+					<frontName>zolagonewsletter</frontName>
+				</args>
+			</zolagonewsletter>
+		</routers>
+	</frontend>
+	<global>
+		<rewrite>
+			<zolagonewsletter>
+				<from><![CDATA[#^/newsletter/manage/#]]></from>
+				<to>/zolagonewsletter/manage/</to>
+			</zolagonewsletter>
+		</rewrite>
+	</global>
+</config> 
