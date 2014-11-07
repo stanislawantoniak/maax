@@ -5,6 +5,7 @@
 			<?php
 
 			$shipment = $this->getItem();
+			$tracking = "";
 			$carrier = $this->getCarrierTitle($shipment->getData('current_carrier'));
 			$status = (int)$shipment->getUdropshipStatus();
 			$date = Mage::helper('core')->formatDate($shipment->getMaxShippingDate(), 'medium', false);

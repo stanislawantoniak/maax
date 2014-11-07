@@ -1,0 +1,42 @@
+<?php /* @var $this Zolago_Modago_Block_Sales_Order_View */ ?>
+<?php $_items = $this->getItems(); ?>
+<?php $_helper = Mage::helper("zolagosales");?>
+<?php $baseUrl = Mage::helper("core/url")->getHomeUrl(); ?>
+<?php $_order = $this->getOrder();?>
+<?php $_hasPo = $this->getHasAnyPo(); ?>
+<?php $_grandTotal = $this->getGrandTotal();?>
+<section class="main bg-w">
+	<header class="title-section">
+		<div class="headerTop">
+			<div class="table-row clearfix" id="order_header">
+				<div class="pull-left">
+					<h2>
+					<?php echo $_helper->__("Order number");?>: 
+					<?php echo $_order->getIncrementId();?>
+					</h2>
+				</div>
+				<div class="order-date hidden-xs">
+					<?php echo $_helper->__('Order date') ?>:
+					<?php echo $_helper->formatDate($_order->getCreatedAt());?>
+				</div>
+			</div>
+		</div>
+		<?php if($_hasPo):?>
+		<p>
+			<?php echo $_helper->__('Total order value')?>: 
+			<?php echo Mage::helper('core')->formatPrice($_grandTotal);?> 
+		</p>
+		<p>
+			<?php echo $_helper->__('Payment');?>: 
+			<?php echo $this->getPaymentHtml();?> 
+		</p>
+		<?php endif;?>
+	</header>
+	<?php if($_hasPo):?>
+		
+	<?php else:?>
+		<p class="alert alert-info has-no-po">
+			<?php echo $_helper->__('Your order should be visible in few minutes. Pleas visit site again later.');?>
+		</p>
+	<?php endif;?>
+</section>
