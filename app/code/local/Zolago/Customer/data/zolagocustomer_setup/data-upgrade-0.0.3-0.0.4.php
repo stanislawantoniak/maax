@@ -9,7 +9,6 @@ $entityTypeId     = $setup->getEntityTypeId('customer');
 $attributeSetId   = $setup->getDefaultAttributeSetId($entityTypeId);
 $attributeGroupId = $setup->getDefaultAttributeGroupId($entityTypeId, $attributeSetId);
 
-
 // Customer Phone Attribute
 $setup->addAttribute('customer', 'phone', array(
 	'input'         => 'text',
@@ -47,10 +46,6 @@ $setup->addAttributeToGroup(
 	'999'  //sort_order
 );
 
-$oAttribute = Mage::getSingleton('eav/config')->getAttribute('customer', 'sms_agreement');
-$oAttribute->setData('used_in_forms', array('adminhtml_customer'));
-$oAttribute->save();
-
 $aAttribute = Mage::getSingleton('eav/config')->getAttribute('customer', 'phone');
 $aAttribute->setData('used_in_forms', array('customer_account_edit'));
 $aAttribute->save();
@@ -59,8 +54,12 @@ $bAttribute = Mage::getSingleton('eav/config')->getAttribute('customer', 'sms_ag
 $bAttribute->setData('used_in_forms', array('customer_account_edit'));
 $bAttribute->save();
 
-$oAttribute = Mage::getSingleton('eav/config')->getAttribute('customer', 'phone');
-$oAttribute->setData('used_in_forms', array('adminhtml_customer'));
-$oAttribute->save();
+$cAttribute = Mage::getSingleton('eav/config')->getAttribute('customer', 'phone');
+$cAttribute->setData('used_in_forms', array('adminhtml_customer'));
+$cAttribute->save();
+
+$dAttribute = Mage::getSingleton('eav/config')->getAttribute('customer', 'sms_agreement');
+$dAttribute->setData('used_in_forms', array('adminhtml_customer'));
+$dAttribute->save();
 
 $setup->endSetup();
