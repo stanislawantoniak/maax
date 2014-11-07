@@ -1148,6 +1148,27 @@
 		</reference>
 	</sales_order_history>
 	
+	<sales_order_process>
+		<update handle="customer_account"/>
+       	<reference name="breadcrumbs">
+			<action method="addCrumb">
+				<crumbName>process</crumbName>
+				<crumbInfo>
+					<label>Orders in the realization</label>
+					<title>Orders in the realization</title>
+				</crumbInfo>
+			</action>
+		</reference>
+		<reference name="my.account.wrapper">
+			<block type="zolagomodago/sales_order_process" name="sales.order.process">
+				<block type="core/text_list" name="sales.order.history.info" as="info" translate="label">
+					<label>Orders in the realization</label>
+				</block>
+				<block type="zolagomodago/sales_order_history_empty" name="sales.order.history.empty" as="empty"/>
+			</block>
+		</reference>
+	</sales_order_process>
+	
 	<sales_order_view>
 		<reference name="my.account.wrapper">
 			<!-- remove old view -->
