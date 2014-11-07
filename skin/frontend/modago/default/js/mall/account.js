@@ -187,10 +187,9 @@ Mall.account = {
 
 				});
 			}
-			if(jQuery(this).next('div.tooltip.bottom').offset().left == 0) {
-				jQuery(this).next('div.tooltip.bottom').animate({left: "+=13",width: "+=13"}, 100, function () {
-
-				});
+			var nextbottom = jQuery(this).next('div.tooltip.bottom');
+			if(typeof nextbottom !== 'undefined' && nextbottom.offset().left <= 5) {
+				nextbottom.animate({left: "+=13"}, 100);
 			}
 		});
 	},
