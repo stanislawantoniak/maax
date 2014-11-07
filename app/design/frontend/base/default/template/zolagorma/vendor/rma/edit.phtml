@@ -399,7 +399,7 @@ jQuery(function($) {
 
     var commentRecuired = function(value, elem, params){
         if($("#rma-notify-customer").is(':checked')) {
-            if (value.trim().split(/\r\n|\r|\n| /g).length >= 5) { //if there is 5 words in comment ( explain )
+            if (value.trim().replace(/(\r\n|\n|\r)/gm," ").replace(/\s+/gm," ").split(' ').length >= 5) { //if there is 5 words in comment ( explain )
                 return true;
             } else {
                 return false;
