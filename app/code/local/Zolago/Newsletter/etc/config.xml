@@ -7,21 +7,13 @@
 	</modules>
 	<frontend>
 		<routers>
-			<zolagonewsletter>
-				<use>standard</use>
+			<newsletter>
 				<args>
-					<module>Zolago_Newsletter</module>
-					<frontName>zolagonewsletter</frontName>
+					<modules>
+						<Zolago_Newsletter before="Mage_Newsletter">Zolago_Newsletter</Zolago_Newsletter>
+					</modules>
 				</args>
-			</zolagonewsletter>
+			</newsletter>
 		</routers>
 	</frontend>
-	<global>
-		<rewrite>
-			<zolagonewsletter>
-				<from><![CDATA[#^/newsletter/manage/#]]></from>
-				<to>/zolagonewsletter/manage/</to>
-			</zolagonewsletter>
-		</rewrite>
-	</global>
 </config> 
