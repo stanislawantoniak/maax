@@ -10,7 +10,12 @@
 				<label for="<?php echo $_id;?>"><img src="<?php echo $this->getProviderLogoUrl($_provider);?>" alt="<?php echo $this->escapeHtml($_provider->getName());?>"/></label>
 			</p>
 			<p>
-				<input type="radio" <?php if($this->isChecked($_provider)):?>checked="checked" <?php endif;?>id="<?php echo $_id;?>" name="payment[additional_information][provider]" value="<?php echo $this->escapeHtml($_code);?>"/>
+				<input type="radio" 
+					<?php if($this->isChecked($_provider)):?>checked="checked" <?php endif;?>
+					id="<?php echo $_id;?>" name="payment[additional_information][provider]" 
+					value="<?php echo $this->escapeHtml($_code);?>"
+					data-bank-name="<?php echo $this->escapeHtml($_provider->getName());?>"
+					/>
 				<label for="<?php echo $_id;?>"><?php echo $this->escapeHtml($_provider->getName());?></label>
 			</p>
         </li>

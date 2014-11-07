@@ -4,7 +4,10 @@
 
 (function () {
     "use strict";
+	
+	
     Mall.Checkout.steps = {
+		
 		////////////////////////////////////////////////////////////////////////
 		// Addressbook
 		////////////////////////////////////////////////////////////////////////
@@ -25,6 +28,7 @@
 			getAddressBook: function(){
 				return this._addressBook;
 			},
+			
 			renderSelectedAddress: function(type){
 				var template = this.getSelectedTemplate(),
 					addressBook = this.getAddressBook(),
@@ -56,6 +60,7 @@
 					target.html(Mall.translate.__("no-addresses"));
 				}	
 			},
+			
 			renderAddressList: function(type){
 				var template = this.getNormalTemplate(),
 					addressBook = this.getAddressBook(),
@@ -89,7 +94,7 @@
                 addNewButton.show();
                 target.append(addNewButton);
             },
-
+			
             getAddNewButton: function (type) {
                 var templateHandle = jQuery("#addressbook-add-new-template")
                         .clone()
@@ -102,11 +107,10 @@
 
                 return templateHandle;
             },
-
+			
             attachNewAddressInputsMask: function (modal, type) {
-
             },
-
+			
             attachNewAddressBootstrapTooltip: function(modal, type) {
 
                 jQuery('#modal-body form').attr('autocomplete', "off");//no autocomplete
@@ -169,7 +173,7 @@
 
                 //end validate
             },
-
+			
             showAddNewModal: function (modal, type, edit) {
                 edit = edit === undefined ? false : edit;
 
@@ -182,7 +186,7 @@
                 this.attachNewAddressInputsMask(modal, type);
                 this.attachNewAddressBootstrapTooltip(modal, type);
             },
-
+			
             getSelectButton: function () {
                 var buttonWrapper = jQuery("<div/>", {
                     "class": "form-group clearfix"
@@ -195,11 +199,11 @@
 
                 return buttonWrapper;
             },
-
+			
             toggleOpenAddressList: function (type) {
                 jQuery(".panel-footer").find("." + type).click();
             },
-
+			
             getAddNewForm: function (type) {
                 var form = this.getNewAddressForm(),
                     panelBody = form.find(".panel-body"),
@@ -618,6 +622,7 @@
 
 				return false;
 			},
+			
 			editAddress: function(event){
                 event.preventDefault();
                 var step = event.data.step,
@@ -635,11 +640,6 @@
 				return false;
 			},
 
-			/**
-			 * S
-			 * @param {type} event
-			 * @returns {Boolean}et address as default
-			 */
 			setDefaultAddress: function(event){
 				var addressBook = event.data.addressBook,
 					address = event.data.address,
@@ -665,11 +665,6 @@
 				return false;
 			},
 			
-			/**
-			 * Make choose of adderss. Save need invoice if needed.
-			 * @param {type} object
-			 * @returns {Boolean}
-			 */
 			chooseAddress: function(event){
 				var addressBook = event.data.addressBook,
 					address = event.data.address,
@@ -745,12 +740,15 @@
 				}
 				return addressData;
 			},
+			
 			formatStreet: function(streetArray){
 				return streetArray.length ? streetArray[0] : "";
 			},
+			
 			getFormKey: function(){
 				return this.content.find("input[name='form_key']").val();
 			},
+			
 			collect: function(){
 				
 				var adressBook = this.getAddressBook(),
@@ -791,6 +789,7 @@
 				
 				return data;
 			},
+			
 			onPrepare: function(){
 				var self = this;
 				this.content.find("form").submit(function(){
@@ -828,6 +827,7 @@
 			},
 			
 		},
+		
 		////////////////////////////////////////////////////////////////////////
 		// Address step for all cases
 		////////////////////////////////////////////////////////////////////////
@@ -1107,6 +1107,7 @@
 					return false;
 				});
 			},
+			
 
 			isPasswordNotEmpty: function(){
 				if(this.content.find("[name='account[password]']").length){
@@ -1198,6 +1199,27 @@
 				stepData.push({name: "method", value: this.checkout.getMethod()});
 
 				return stepData;
+			},
+			
+			_extractAddressObject: function(type){
+				var obj = {},
+					reg = new RegExp("^" + type + "\\[([a-z_]+)\\]"),
+					res;
+				jQuery.each(this.collect(), function(){
+					res = reg.exec(this.name);
+					if(res){
+						obj[res[1]] = this.value;
+					}
+				});
+				return obj;
+			},
+			
+			getBillingAddress: function(){
+				return this._extractAddressObject("billing");
+			},
+			
+			getShippingAddress: function(){
+				return this._extractAddressObject("shipping");
 			},
 
             mergeArraysOfObjects: function (arr1, arr2) {
@@ -1307,11 +1329,11 @@
             code: "shippingpayment",
             doSave: true,
             _self_form_id: "co-shippingpayment",
-            init: function () {
-                this.validate.init();
-            },
+			_sidebarAddressesTemplate: "",
+			
 			onPrepare: function(checkoutObject){
-                this.init();
+                this.validate.init();
+				this._sidebarAddressesTemplate = this.getSidebarAddresses().html();
 				var self = this;
 
 				this.content.find("form").submit(function(){
@@ -1320,17 +1342,28 @@
                     }
 					return false;
                 });
-				this.content.find("#step-1-prev,#step-1-prev-right").click(function(){
+				
+				this.content.find("#step-1-prev").click(function(){
 					checkoutObject.prev();
 					return false;
 				});
 			},
+			
+			onEnter: function(checkout){
+				var addresses = checkout.getBillingAndShipping();
+				checkout.prepareAddressSidebar(
+					addresses.billing, 
+					addresses.shipping, 
+					this.getSidebarAddresses(), 
+					this.getSidebarAddressesTemplate()
+				);
+			},
 
             collect: function () {
-                var shipping = this.content.find("form input[name=shipping]:checked").val();
+                var shipping = this.content.find("form input[name=_shipping_method]:checked").val();
                 if (jQuery.type(shipping) !== "undefined") {
                     var inputs = '';
-                    jQuery.each(vendors, function (i, vendor) {
+                    jQuery.each(this.getVendors(), function (i, vendor) {
                         inputs += '<input type="hidden" name="shipping_method[' + vendor + ']" value="' + shipping + '" required="required" />';
                     })
                     this.content.find("form .shipping-collect").html(inputs);
@@ -1340,17 +1373,85 @@
                 return false;
 
             },
+			getVendors: function(){
+				return Mall.reg.get("vendors");
+			},
+			getVendorCosts: function(){
+				return Mall.reg.get("vendor_costs");
+			},
+			getSidebarAddresses: function(){
+				return this.content.find(".sidebar-addresses");
+			},
+			
+			getSidebarAddressesTemplate: function(){
+				return this._sidebarAddressesTemplate;
+			},
+			
+			getSelectedShipping: function(){
+				return this.content.find(".shipping-method:radio:checked");
+			},
+			
+			getSelectedPayment: function(){
+				return this.content.find(".payment-method:radio:checked");
+			},
+			
+			getSelectedBank: function(){
+				return this.content.find("#payment_form_zolagopayment :radio:checked");
+			},
+			
+			getCarrierName: function(){
+				return this.getSelectedShipping().data("carrierName");
+			},
+			
+			getCarrierMethod: function(){
+				return this.getSelectedShipping().data("carrierMethod");
+			},
+			
+			getMethodCode: function(){
+				return this.getSelectedShipping().val();
+			},
+			getMethodCost: function(){
+				return this.getSelectedShipping().data("methodCost");
+			},
+			
+			getPaymentMethod: function(){
+				return this.getSelectedPayment().data("paymentMethod");
+			},
+			
+			getCostForVendor: function(vendorId, methodCode){
+				var costs = this.getVendorCosts();
+				if(typeof costs == "object" && 
+					typeof costs[vendorId] == "object" && 
+					typeof costs[vendorId][methodCode] != "undefined"){
+					return costs[vendorId][methodCode];
+				}
+				return null;
+			},
+			
+			getOnlineData: function(){
+				if(this.isOnlinePayment()){
+					var bank = this.getSelectedBank();
+					if(bank.length){
+						return bank.data("bankName");
+					}
+				}
+				return null;
+			},
+			
+			isOnlinePayment: function(){
+				return this.getSelectedPayment().data('online')=="1";
+			},
+			
 
             validate: {
                 init: function () {
-
                     jQuery('#' + Mall.Checkout.steps.shippingpayment._self_form_id)
                         .validate(Mall.validate.getOptions({
                             //errorLabelContainer: "#containererreurtotal",
                             ignore: "",
 
                             rules: {
-                                shipping: {
+                                _shipping_method: {
                                     required: true
                                 },
                                 'payment[additional_information][provider]' : {
@@ -1365,7 +1466,7 @@
                                 }
                             },
                             messages: {
-                                shipping: {
+                                _shipping_method: {
                                     required: Mall.translate.__("Please select shipping")
                                 },
                                 "payment[method]": {
@@ -1396,15 +1497,18 @@
 
         },
 
-		
 		////////////////////////////////////////////////////////////////////////
 		// review step
 		////////////////////////////////////////////////////////////////////////
 		review: {
 			id: "step-2",
 			code: "review",
+			_sidebarAddressesTemplate: "",
+			_sidebarDeliverypaymentTemplate: "",
+			
 			onPrepare: function(checkoutObject){
-				var self = this;
+				this._sidebarAddressesTemplate = this.getSidebarAddresses().html();
+				this._sidebarDeliverypaymentTemplate = this.getSidebarDeliverypayment().html();
 				this.content.find("[id^=step-2-submit]").click(function(){
 					// Add validation
 					checkoutObject.placeOrder()
@@ -1412,7 +1516,77 @@
 				this.content.find("[id^=step-2-prev]").click(function(){
 					checkoutObject.prev();
 				});
-			}
+			},
+			
+			onEnter: function(checkout){
+				// Prepare address sidebar
+				var addresses = checkout.getBillingAndShipping();
+				checkout.prepareAddressSidebar(
+					addresses.billing, 
+					addresses.shipping, 
+					this.getSidebarAddresses(), 
+					this.getSidebarAddressesTemplate()
+				);
+		
+				// Prepare delivery payment sidebar
+				var deliverypayment = checkout.getDeliveryAndPayment();
+				checkout.prepareDeliverypaymentSidebar(
+					deliverypayment,
+					this.getSidebarDeliverypayment(), 
+					this.getSidebarDeliverypaymentTemplate()
+				);
+				
+				this._prepareTotals(checkout);
+			},
+			
+			_prepareTotals: function(checkout){
+				var subTotal = 0,
+					shippingTotal = 0,
+					discountTotal = 0,
+					deliverypayment = checkout.getStepByCode("shippingpayment"),
+					selectedMethod = deliverypayment.getMethodCode(),
+					discountObject = this.content.find(".total_discount");
+			
+				discountTotal = discountObject.length ? 
+					parseFloat(discountObject.data('price')) * -1 : 0;
+			
+				// Prepare costs for vendors and totals
+				this.content.find(".panel-vendor.panel-footer").each(function(){
+					var el = jQuery(this);
+					var vendorId = el.data("vendorId");
+					var vendorSubtotal = parseFloat(el.find(".vendor_subtotal").data("price"));
+					var vendorShipping = deliverypayment.getCostForVendor(vendorId, selectedMethod);
+				
+					if(vendorShipping!==null){
+						shippingTotal += vendorShipping;
+					}
+					subTotal += vendorSubtotal;
+					
+					el.find(".vendor_delivery").html(vendorShipping!==null ? Mall.currency(vendorShipping) : "N/A");
+					
+				});
+				
+				this.content.find(".total_shipping").html(Mall.currency(shippingTotal));
+				this.content.find(".total_value").html(
+						Mall.currency(shippingTotal + subTotal + discountTotal)
+				);
+			},
+			
+			getSidebarAddresses: function(){
+				return this.content.find(".sidebar-addresses");
+			},
+			
+			getSidebarAddressesTemplate: function(){
+				return this._sidebarAddressesTemplate;
+			},
+			
+			getSidebarDeliverypayment: function(){
+				return this.content.find(".sidebar-deliverypayment");
+			},
+			
+			getSidebarDeliverypaymentTemplate: function(){
+				return this._sidebarDeliverypaymentTemplate;
+			},
 		},
 
         getIsObjectKeyExistsInArray: function (key, arr) {
@@ -1438,6 +1612,8 @@
 
             return index;
         }
+		
+		
     };
 })();
 
