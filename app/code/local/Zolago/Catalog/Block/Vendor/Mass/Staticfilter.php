@@ -23,7 +23,7 @@ class Zolago_Catalog_Block_Vendor_Mass_Staticfilter extends Mage_Core_Block_Temp
                 );
 
             $arrayDropdown = Mage::getResourceSingleton('zolagocatalog/vendor_mass')
-                ->getStaticDropdownFiltersForVendor(
+                ->getStaticDropdownFiltersForVendorProductAssoc(
                     $this->getVendor(),
                     $this->getCurrentAttributeSetId(),
                     $this->getStore()->getId()
