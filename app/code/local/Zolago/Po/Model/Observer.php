@@ -335,7 +335,7 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
     			$collection = Mage::getResourceModel("udpo/po_collection");
 		    	/* @var $collection Unirgy_DropshipPo_Model_Mysql4_Po_Collection */
 	    		$collection->addFieldToFilter("order_id", $order->getId());
-                $collection->addFieldToFilter("updated_at",array('gt'=>date('Y-m-d H:i:s',time()-24*3600)));
+                $collection->addFieldToFilter("updated_at",array('lt'=>date('Y-m-d H:i:s',time()-24*3600)));
                 if (!count($collection)) {
                     $cancel[] = $order;
                 }
