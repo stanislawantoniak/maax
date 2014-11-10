@@ -22,7 +22,7 @@
 			this._formTemplateId = id;
 		},
 		
-		handlerResize: function(){
+		handleResize: function(){
 			var self = _vendorContact;
 			if(!self._currentVendor || !self._currentOrder){
 				return;
@@ -87,12 +87,19 @@
 			var inlineForm = jQuery("#contact-vendor-" + vId + "-" + oId);
 			if(inlineForm.length){
 				if(inlineForm.is(":empty")){
-					inlineForm.html(this._getTemplate(obj));
+					var content = jQuery(this._getTemplate(obj));
+					this._prepareValidation(content);
+					inlineForm.html(content);
 					inlineForm.hide();
 				}
 			}
 			
 			return inlineForm;
+		},
+		
+		_prepareValidation: function(obj){
+			Mall.validate.init();
+			obj.validate(Mall.validate._default_validation_options);
 		},
 
 		_preparePopup: function(){
@@ -106,7 +113,9 @@
 					" " + 
 					this._currentVendorName
 			);
-			this._currentPopup.find('.modal-body').html(this._getTemplate(obj));
+			var content = jQuery(this._getTemplate(obj));
+			this._prepareValidation(content);
+			this._currentPopup.find('.modal-body').html(content);
 			
 		}
 	};

@@ -1,3 +1,15 @@
+body{
+	// Hard hack for shitty bootsrap usage
+	&.sales-order-view,
+	&.sales-order-process{
+		.modal-backdrop.in{
+			display: block !important;
+		}
+		.modal form .has-feedback .form-control-feedback{
+			display: none !important;
+		}
+	}
+}
 .order-view {
 	#content-main {
 		.panel {			

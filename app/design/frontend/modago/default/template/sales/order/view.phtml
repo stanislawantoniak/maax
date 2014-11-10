@@ -147,6 +147,7 @@
 
 <script type="text/javascript">
 	jQuery(function(){
+		Mall.translate.add("required", '<?php echo $_helper->__("This field is required.");?>');
 		Mall.translate.add("Contact Vendor", '<?php echo $_helper->__("Contact Vendor");?>');
 		Mall.sales.vendorContact.setFormTemplateId("vendor_contact_form_template");
 		jQuery("a.contact-vendor").click(Mall.sales.vendorContact.handleClick);
