@@ -26,9 +26,8 @@ class Zolago_Sales_OrderController extends Unirgy_Rma_OrderController
      */
     public function processAction() {
         $this->loadLayout();
-        $this->_initLayoutMessages('catalog/session');
-
-        $this->getLayout()->getBlock('head')->setTitle($this->__('My orders'));
+        $this->_initLayoutMessages(array('catalog/session', 'udqa/session'));
+        $this->getLayout()->getBlock('head')->setTitle($this->__('Orders in the realization'));
         $this->renderLayout();
     }
     //}}}

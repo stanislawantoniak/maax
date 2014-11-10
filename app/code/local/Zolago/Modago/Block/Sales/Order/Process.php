@@ -20,11 +20,18 @@ class Zolago_Modago_Block_Sales_Order_Process
         $this->setOrders($orders);
     }
 	
+	/**
+	 * @return string
+	 */
 	public function getBackUrl()
     {
         return $this->getUrl('customer/account/');
     }
 	
+	/**
+	 * @param Mage_Sales_Model_Order $order
+	 * @return string
+	 */
 	public function getOrderHtml(Mage_Sales_Model_Order $order) {
 		return $this->getLayout()->
 			createBlock('zolagomodago/sales_order_process_view')->

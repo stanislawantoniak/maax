@@ -1150,6 +1150,12 @@
 	
 	<sales_order_process>
 		<update handle="customer_account"/>
+		<reference name="head">
+			 <action method="addItem">
+                <type>skin_js</type>
+                <script>js/mall/sales.js</script>
+            </action>
+		</reference>
        	<reference name="breadcrumbs">
 			<action method="addCrumb">
 				<crumbName>process</crumbName>
@@ -1164,7 +1170,12 @@
 				<block type="core/text_list" name="sales.order.history.info" as="info" translate="label">
 					<label>Orders in the realization</label>
 				</block>
-				<block type="zolagomodago/sales_order_history_empty" name="sales.order.history.empty" as="empty"/>
+				<block type="core/template" template="sales/order/process/empty.phtml" name="sales.order.process.empty" as="empty">
+					<block type="cms/block" name="sales.order.process.empty.cms" as="cms">
+						<action method="setBlockId"><block_id>account-order-process-empty</block_id></action>
+					</block>
+				</block>
+				<block type="zolagoudqa/contact_question" template="unirgy/udqa/contact/question.phtml" name="zolagoudqa.contact.question" as="question"/>
 			</block>
 		</reference>
 	</sales_order_process>

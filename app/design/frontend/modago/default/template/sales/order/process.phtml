@@ -1,4 +1,3 @@
-<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
 <?php $_orders = $this->getOrders(); ?>
 <?php $_helper = Mage::helper("zolagosales");?>
 <?php $baseUrl = Mage::helper("core/url")->getHomeUrl(); ?>
@@ -17,7 +16,43 @@
 			<?php echo $this->getOrderHtml($_order); ?>
 		<?php endforeach;?>
 	<?php else: ?>
-		Empty list info
+		<?php echo $this->getChildHtml("empty");?>
 	<?php endif ?>
 	</div>
 </div>
+
+<div class="hidden" id="vendor_contact_form_template">
+	<?php echo $this->getChild("question")->
+		setVendorId("{{vendor_id}}")->
+		setOrderId("{{order_id}}")->
+		setShipmentId("{{shipment_id}}")->
+		toHtml(); ?>
+</div>
+
+<script type="text/javascript">
+	jQuery(function(){
+		Mall.sales.vendorContact.setFormTemplateId("vendor_contact_form_template");
+		jQuery("a.contact-vendor").click(Mall.sales.vendorContact.handleClick);
+		jQuery(window).resize(Mall.sales.vendorContact.handleResize);
+		jQuery(".mobile-toggler a").click(function(){
+			var el = jQuery(this),
+				text = el.data(el.parent().hasClass("open") ? "close" : "open");
+			el.
+				find('span').
+					text(text).
+					end().
+				find("i").
+					toggleClass("fa-chevron-down").
+					toggleClass("fa-chevron-up").
+					end().
+				parent().
+					toggleClass("open").
+					end().
+				parents(".panel").
+				find(".mobile-toggle").
+					toggleClass("visisble-xs").
+					toggleClass("hidden-xs");
+			return false;
+		})
+	});
+</script>
