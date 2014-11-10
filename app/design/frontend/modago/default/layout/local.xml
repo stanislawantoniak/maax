@@ -1181,6 +1181,12 @@
 	</sales_order_process>
 	
 	<sales_order_view>
+		<reference name="head">
+			<action method="addItem">
+			   <type>skin_js</type>
+			   <script>js/mall/sales.js</script>
+		   </action>
+	   </reference>
 		<reference name="my.account.wrapper">
 			<!-- remove old view -->
 			<action method="unsetChild">
@@ -1196,7 +1202,9 @@
 				<block type="zolagomodago/sales_order_item" name="sales.order.item">
 					<block type="zolagomodago/sales_order_item_renderer_default" name="sales.order.item.default"/>
 				</block>
+				<block type="zolagoudqa/contact_question" template="unirgy/udqa/contact/question.phtml" name="zolagoudqa.contact.question" as="question"/>
 			</block>
+			
 		</reference>
 	</sales_order_view>
 	

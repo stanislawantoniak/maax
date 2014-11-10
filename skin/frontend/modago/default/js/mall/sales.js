@@ -39,6 +39,7 @@
 			self._currentVendor = el.data('vendorId');
 			self._currentOrder = el.data('orderId');
 			self._currentShipment = el.data('shipmentId') || "";
+			self._currentVendorName = el.data('vendorName') || "";
 
 			var inlineForm = self._prepareInlineForm(
 				self._currentVendor, 
@@ -101,7 +102,10 @@
 				"shipment_id": this._currentShipment
 			};
 			this._currentPopup.find('.title_section').text(
-					"Vendor contact " + this._currentVendor + " / " + this._currentOrder);
+					Mall.translate.__("Contact Vendor") + 
+					" " + 
+					this._currentVendorName
+			);
 			this._currentPopup.find('.modal-body').html(this._getTemplate(obj));
 			
 		}
