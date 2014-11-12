@@ -183,8 +183,6 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
             return;
         }
 
-		$affectedProducts = array();
-		
         if(!empty($availableStockByMerchant)){
             foreach($availableStockByMerchant as $id => $qty){
                 $is_in_stock = ($qty > 0) ? 1 : 0;
@@ -199,8 +197,6 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 					"is_in_stock"	=> $is_in_stock,
 					"stock_id"		=> $stockId
 				));
-				
-				$affectedProducts[] = $id;
             }
         }
 
@@ -223,21 +219,15 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         //website_id=1
         $zcSDStatusModel->saveCatalogInventoryStockStatus($insertB);
 
-		// Run indexer if nessesery
-		if($affectedProducts){
-			//Mage::log(microtime() . ' Start reindex ', 0, 'product_stock_update.log');
-			$process = Mage::getSingleton('index/indexer')
-				->getProcessByCode('cataloginventory_stock');
-			/* @var $process Mage_Index_Model_Process */
-			$indexer = $process->getIndexer()->getResource();
-			/* @var $indexer Mage_CatalogInventory_Model_Resource_Indexer_Stock */
-			$indexer->reindexProducts($affectedProducts);
-			Mage::log("After reindex stock");
 
-			Mage::dispatchEvent("zolagocatalog_converter_stock_complete", array());
-		}
+
+        //Mage::log(microtime() . ' Start reindex ', 0, 'product_stock_update.log');
+        Mage::getSingleton('index/indexer')
+            ->getProcessByCode('cataloginventory_stock');
+
+        Mage::log(microtime() . ' End ', 0, 'product_stock_update.log');
 		
-		Mage::log(microtime() . ' End ', 0, 'product_stock_update.log');
+		Mage::dispatchEvent("zolagocatalog_converter_stock_complete", array());
         //Mage::log(microtime() . ' End ', 0, 'product_stock_update.log');
 
         echo 'Done';
