@@ -52,7 +52,7 @@ class Zolago_Solrsearch_Model_Observer {
 		
 		Mage::log("Into observer method after change");
 		
-		$this->_pushProduct($observer->getEvent()->getProductId());
+		$this->collectProduct($observer->getEvent()->getProductId());
 	}
 	
 	/**
@@ -343,7 +343,9 @@ class Zolago_Solrsearch_Model_Observer {
 	 * @param int|Mage_Catalog_Model_Product $product
 	 * @param type $storeId
 	 */
-	public function collectProduct($product, $storeId=Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID, $checkParents=false) {
+	public function collectProduct($product, 
+		$storeId=Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID, 
+		$checkParents=false) {
 		
 		if($product instanceof Mage_Catalog_Model_Product){
 			$productId = $product->getId();
