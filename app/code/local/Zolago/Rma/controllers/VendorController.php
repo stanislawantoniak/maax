@@ -95,11 +95,10 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
 
                 if($notify_email) {
                     $notify_status = 1;
-                    $messages[] = Mage::helper("zolagorma")->__("Status changed");
                 } else {
-                    $notify_status = 0;
+                    $notify_status = 0;                    
                 }
-
+                $messages[] = Mage::helper("zolagorma")->__("Status changed");
                 Mage::helper('zolagorma')->processSaveStatus($rma, $status, (bool)$notify_status);
 
             }
