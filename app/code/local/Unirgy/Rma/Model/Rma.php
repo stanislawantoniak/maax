@@ -509,6 +509,8 @@ class Unirgy_Rma_Model_Rma extends Mage_Sales_Model_Abstract
         if(!empty($carrierDate)){
             $showCourier = true;
             $courierDateF = Mage::helper("core")->formatDate($carrierDate, "short");
+        } else {
+	        $courierDateF = false;
         }
 
 	    if($comment !== null) {
