@@ -2,7 +2,7 @@
 
 class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
 
-    const RMA_CUSTOMER_SUFFIX = '_customer';
+    const RMA_CUSTOMER_SUFFIX = '_for_customer';
 
 	
 	/**
@@ -41,7 +41,7 @@ class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
             $docs[] = $trackPdf;
         }
         $pathParts = pathinfo($rmaPdf);
-        $newPath = $pathParts['dirname'].DS.$pathParts['filename'].self::RMA_CUSTOMER_SUFFIX.'.'.$pathParts['extension'];
+        $newPath = $pathParts['dirname'].DS.Zolago_Rma_Model_Pdf::RMA_PDF_PREFIX.$track->getRma()->getIncrementId().self::RMA_CUSTOMER_SUFFIX.'.'.$pathParts['extension'];
         if (!file_exists($newPath)) {
             $helper = Mage::helper('zolagocommon');
             $helper->mergePdfs($docs,$newPath);
