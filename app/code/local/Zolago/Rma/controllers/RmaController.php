@@ -189,7 +189,7 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
                         //comment
 
                         $ob = new Zolago_Rma_Model_Observer();
-                        $ob->rmaCustomerSendDetail($rma, $comment, null, $author);
+                        $ob->rmaCustomerSendDetail($rma, $comment, false, $author);
 
 
                         //After add new customer-author comment set RMA flag new customer comment to true

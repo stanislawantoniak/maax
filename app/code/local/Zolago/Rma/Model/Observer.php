@@ -10,7 +10,7 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 		/* @var $rma Zolago_Rma_Model_Rma */
 		$this->_logEvent(
 				$rma,
-				Mage::helper('zolagorma')->__("New RMA created"), 
+                $rma->getData('comment_text'),
 				true
 		);
 	}
