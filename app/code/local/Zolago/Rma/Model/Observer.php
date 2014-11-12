@@ -10,7 +10,7 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 		/* @var $rma Zolago_Rma_Model_Rma */
 		$this->_logEvent(
 				$rma,
-				Mage::helper('zolagorma')->__("New RMA created"), 
+                $rma->getData('comment_text'),
 				true
 		);
 	}
@@ -123,14 +123,23 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
             }
         }
 		
-		Mage::log("Status logged obserever: " . var_export($notify, true));
+		$statusObject = $statusModel->getStatusObject($newStatus);
+		
 		$this->_logEvent(
+			$rma, 
+			Mage::helper('zolagorma')->__(
+				"{{author_name}} changed status of this claim. New status: %s",
+				$helper->__($statusObject->getCustomerNotes() ? 
+						$statusObject->getCustomerNotes() : $statusObject->getTitle())),
+			$notify
+		);
+		/*$this->_logEvent(
 			$rma, 
 			Mage::helper('zolagorma')->__("Status changed (%s&rarr;%s)", 
 				$helper->__($statusModel->getStatusObject($oldStatus)->getTitle()), 
 				$helper->__($statusModel->getStatusObject($newStatus)->getTitle())),
 			$notify
-		);
+		);*/
 	}
 	
 	
@@ -266,11 +275,11 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 		// Send email
 		if($doSendEmail){
 			if($rma->getIsNewFlag()){
-				$rma->sendEmail(true, $rma->getCommentText());
-				Mage::helper('urma')->sendNewRmaNotificationEmail($rma, $rma->getCommentText());
+				$rma->sendEmail(true, $commentModel);
+				Mage::helper('urma')->sendNewRmaNotificationEmail($rma, $commentModel);
 				$rma->setIsNewFlag(false);
 			}else{
-				$rma->sendUpdateEmail(true, $commentModel->getComment());
+				$rma->sendUpdateEmail(true, $commentModel);
 			}
 		}
 	}
@@ -361,6 +370,12 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 		$return_reason = $observer->getModel();
 		
 		$all_vendors = Mage::getModel('udropship/vendor')->getCollection();
+		$vendor_resource_resource = Mage::getResourceModel('zolagorma/rma_reason_vendor');
+		/* @var $vendor_resons_collection Zolago_Rma_Model_Resource_Rma_Reason_Vendor */
+		
+		// Fix - adding filter to vendor withoout reson object
+		$vendor_resource_resource->
+				addUnbindRmaReasonFilterToVendorCollection($return_reason, $all_vendors);
 		
 		$vendors_count = $all_vendors->count();
 		$ok_saved = 0;

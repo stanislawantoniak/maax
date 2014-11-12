@@ -580,7 +580,7 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
 				$adapter->quoteInto("stock_item.website_id=?", $websiteId),
 			);
 			$select->joinLeft(
-					array("stock_item"=>$this->getTable("cataloginventory/stock_status_indexer_idx")), 
+					array("stock_item"=>$this->getTable("cataloginventory/stock_status")), 
 					implode(" AND ", $joinCond),
 					array("qty", "stock_status")
 			);

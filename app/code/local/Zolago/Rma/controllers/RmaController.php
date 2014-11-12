@@ -33,13 +33,16 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
 		$customer = $session->getCustomer();
 		$helperRma = Mage::helper('zolagorma');
 		$helperTrack = Mage::helper('zolagorma/tracking');
-		$helperDhl = Mage::helper('zolagodhl');
+		$helperDhl = Mage::helper('orbashipping/carrier_dhl');
 		
 		try{
 			$rma = $this->_initRma();
+			if ($rma->getRmaStatus() !== Zolago_Rma_Model_Rma_Status::STATUS_PENDING_PICKUP) {
+			    Mage::throwException($helperRma->__("Wrong RMA status"));
+			}
 			$track = $helperTrack->getRmaTrackingForCustomer($rma, $customer);
 			if($track && $track->getId()){
-				$dhlFile = $helperDhl->getRmaDocument($track);
+				$dhlFile = $helperRma->getRmaDocumentForCustomer($track);
 				if(!file_exists($dhlFile)){
 					Mage::throwException($helperRma->__("No RMA document"));
 				}
@@ -73,7 +76,8 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
 			return $this->_redirect('customer/account/login');
 		}
 		// Current RMA can by set and forwarded by _initLastRma
-		if(!Mage::registry("current_rma")){
+		$rma = Mage::registry("current_rma");
+		if(!$rma || !$rma->getId()){
 			try{
 				$rma =$this->_initRma();
 				/* @var $rma Zolago_Rma_Model_Rma */
@@ -92,6 +96,35 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
 		$this->renderLayout();
 	}
 
+    public function courierAction()
+    {
+
+        $session = Mage::getSingleton('customer/session');
+        /* @var $session Mage_Customer_Model_Session */
+        if (!$session->isLoggedIn()) {
+            return $this->_redirect('customer/account/login');
+        }
+        try {
+            $rma = $this->_initRma();
+            /* @var $rma Zolago_Rma_Model_Rma */
+
+            if ($rma->getRmaStatus() !== Zolago_Rma_Model_Rma_Status::STATUS_PENDING_COURIER) {
+                $this->_redirect('sales/rma/view', array('id' => $this->getRequest()->getParam('id')));
+            }
+
+        } catch (Mage_Core_Exception $e) {
+            $session->addError($e->getMessage());
+            return $this->_redirect('sales/rma/history');
+        } catch (Exception $e) {
+            $session->addError(Mage::helper("zolagorma")->__("An error occurred"));
+            return $this->_redirect('sales/rma/history');
+        }
+        $this->loadLayout();
+        $this->_initLayoutMessages($this->_msgStores);
+        $this->_setNavigation();
+        $this->renderLayout();
+    }
+
 	/**
 	 * Success action
 	 * @return void
@@ -107,6 +140,12 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
 		$this->_forward('view');
 	}
 
+    /**
+     * Save courier data
+     */
+    public function saveCourierAction(){
+        $this->_forward("saveRmaCourier",'po');
+    }
     /**
      * Send Rma Detail Action
      * @return void
@@ -150,7 +189,7 @@ class Zolago_Rma_RmaController extends Mage_Core_Controller_Front_Action
                         //comment
 
                         $ob = new Zolago_Rma_Model_Observer();
-                        $ob->rmaCustomerSendDetail($rma, $comment, null, $author);
+                        $ob->rmaCustomerSendDetail($rma, $comment, false, $author);
 
 
                         //After add new customer-author comment set RMA flag new customer comment to true

@@ -66,4 +66,10 @@ class ZolagoDb_TestCase extends Zolago_TestCase{
 	}
 	
 }
+class ZolagoSelenium_TestCase extends PHPUnit_Extensions_SeleniumTestCase {
+    public function __construct() {
+        Mage::app('default');
+        return parent::__construct();
+    }    
+}
 ?>

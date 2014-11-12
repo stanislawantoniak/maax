@@ -1,6 +1,7 @@
 <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
 <?php $_orders = $this->getOrders(); ?>
-<?php $_helper = Mage::helper("sales");?>
+<?php $_openedOrders = $this->getOpenedOrders(); ?>
+<?php $_helper = Mage::helper("zolagosales");?>
 <?php $baseUrl = Mage::helper("core/url")->getHomeUrl(); ?>
 <div class="page-title box-wrapper">
 	<h1>
@@ -11,6 +12,11 @@
 </div>
 <?php if($_orders->getSize()): ?>
 	<div class="background-wrapper box-wrapper">
+	<?php if ($_openedOrders): ?>
+	<div>
+		<p><a class="underline" href="<?php echo Mage::getUrl("sales/order/process") ?>"><?php echo $_helper->__('You have %s. Click to browse your open orders.',Mage::helper('orbacommon')->formatOrdersText($_openedOrders)); ?> > </a></p>
+	</div>
+	<?php endif; ?>
 		<table class="data-table table-top" id="my-orders-table">
 			<col width="120px" />
 			<col class="order-no" width="120px" />
@@ -32,13 +38,13 @@
 			</thead>
 			<tbody>
 				<?php foreach ($_orders as $_order): ?>
-				<?php $_hasPo = $this->hasPo($_order);?>
+				<?php $_hasPo = $this->hasPo($_order,true);?>
 				<tr>
 					<td><span class="nobr"><?php echo $this->formatDate($_order->getCreatedAtStoreDate()) ?></span></td>
 					<td class="order-no"><?php echo $_order->getRealOrderId() ?></td>
 					<td>
 						<ul class="list-unstyled">
-						<?php foreach($this->getVendors($_order) as $_vendor):?>
+						<?php foreach($this->getVendors($_order,true) as $_vendor):?>
 							<li class="uppercase"><?php echo $this->escapeHtml($_vendor->getVendorName());?></li>
 						<?php endforeach;?>
 						</ul>
@@ -46,7 +52,7 @@
 					<td class="products">
 						<?php if($_hasPo):?>
 						<ul class="list-unstyled product-list">
-							<?php foreach($this->getSortedPoItemsByOrder($_order) as $_itemArray):?>
+							<?php foreach($this->getSortedPoItemsByOrder($_order,true) as $_itemArray):?>
 							<li>
 								<?php echo $this->escapeHtml($_itemArray['item']->getName());?><br/>
 								<?php foreach($this->extractProductOptions($_itemArray['options']) as $_option): ?>
@@ -59,16 +65,23 @@
 					</td>
 					<td class="total">
 						<?php if($_hasPo):?>
-							<?php echo $_order->formatPrice($this->getTotal($_order)); ?>
+							<?php echo $_order->formatPrice($this->getTotal($_order,true)); ?>
 						<?php endif;?>
 					</td>
 					<td class="status">
 						<?php if($_hasPo):?>
+							<nobr>
 							<?php echo $this->getOrderStatus($_order);?>
+							<?php /**  todo make icon configurable
 							<?php $_icon = $this->getStatusIcon($_order);?>
 							<?php if($_icon):?>
 								<img src="<?php echo $_icon;?>"/>
 							<?php endif;?>
+							<?php */ ?>
+							<?php if ($_order->getStatus() == 'complete') : ?>							
+								&nbsp;&nbsp;<i class="fa fa-check-square"> </i>
+							<?php endif; ?>
+							</nobr>
 						<?php else:?>
 							<?php echo $_helper->__("Processing");?>
 						<?php endif;?>

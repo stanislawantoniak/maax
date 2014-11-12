@@ -64,6 +64,27 @@
 			</solrsearch>
         </blocks>
 		<events>
+			
+			<!-- Converter stock save -->
+			<zolagocatalog_converter_stock_save_before>
+				<observers>
+					<zolagosolrsearch>
+						<class>zolagosolrsearch/observer</class>
+						<method>zolagoCatalogConverterStockSaveBefore</method>
+					</zolagosolrsearch>
+				</observers>
+			</zolagocatalog_converter_stock_save_before>
+			
+			<!-- Converter stock save -->
+			<zolagocatalog_converter_stock_complete>
+				<observers>
+					<zolagosolrsearch>
+						<class>zolagosolrsearch/observer</class>
+						<method>zolagoCatalogConverterStockComplete</method>
+					</zolagosolrsearch>
+				</observers>
+			</zolagocatalog_converter_stock_complete>
+			
 			<!-- Delete anywhere -->
 			<catalog_product_delete_before>
 				<observers>
@@ -260,6 +281,17 @@
 					</solr_search>
 				</observers>
 			</model_save_after>
+			<catalog_converter_price_update_after>
+				<observers>
+					<solr_search>
+						<type>disabled</type>
+					</solr_search>
+					<zolagosolrsearch>
+						<class>zolagosolrsearch/observer</class>
+						<method>catalogConverterPriceUpdateAfter</method>
+					</zolagosolrsearch>
+				</observers>
+			</catalog_converter_price_update_after>
 		</events>
 		<layout>
 			<updates>
@@ -336,7 +368,7 @@
                     <cron_expr>*/5 * * * *</cron_expr>
                 </schedule>
                 <run>
-                    <model>zolagosolrsearch/cronProcessQueue</model>
+                    <model>zolagosolrsearch/observer::cronProcessQueue</model>
                 </run>
             </zolagosolrsearch_process_queue>
             <zolagosolrsearch_cleanup_queue>
@@ -345,7 +377,7 @@
                     <cron_expr>0 0 * * *</cron_expr>
                 </schedule>
                 <run>
-                    <model>zolagosolrsearch/cronCleanupQueue</model>
+                    <model>zolagosolrsearch/observer::cronCleanupQueue</model>
                 </run>
             </zolagosolrsearch_cleanup_queue>
         </jobs>

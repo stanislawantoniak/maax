@@ -188,10 +188,12 @@ class Orba_Shipping_Helper_Carrier_Tracking extends Mage_Core_Helper_Abstract {
 	protected function _setOrderCompleteState($shipment)
 	{
 		$order = $shipment->getOrder();
+		$order->setData('state',Mage_Sales_Model_Order::STATE_COMPLETE);
 		$order->setStatus(Mage_Sales_Model_Order::STATE_COMPLETE)
 			->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED);					
 		$poOrderId = $shipment->getUdpoId();
 		$poOrder = Mage::getModel('udpo/po')->load($poOrderId);
+		$poOrder->setData('state',Mage_Sales_Model_Order::STATE_COMPLETE);
 		$poOrder->setStatus(Mage_Sales_Model_Order::STATE_COMPLETE)
 			->setUdropshipStatus(Unirgy_Dropship_Model_Source::SHIPMENT_STATUS_DELIVERED);
 		
