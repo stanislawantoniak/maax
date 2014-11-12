@@ -13,6 +13,8 @@
 body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif; }
 @-->
 
+
+
 <body style="background:#F6F6F6; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; margin:0; padding:0;">
 <div style="background:#F6F6F6; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; margin:0; padding:0;">
     <table cellspacing="0" cellpadding="0" border="0" height="100%" width="100%">
@@ -33,43 +35,43 @@ body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif;
                     <tr>
                         <td valign="top">
                             <div style="margin:0 0 30px 0;">
-                                <p>
+                                <p style="margin: 0;">
                                     Sklep <span style="text-transform:uppercase;">{{var vendor.vendor_name}}</span>
-                                    wprowadził zmianę w reklamacji nr. (RMA-{{var rma.increment_id}}).
+                                    wprowadził zmianę w reklamacji nr. (RMA-{{var rma.increment_id}})
                                 </p>
                             </div>
 
-                            <p>Data zgłoszenia : {{var rma_creation_date}}</p>
+                            <p style="margin: 0;"><b>Data zgłoszenia:</b> {{var rma_creation_date}}</p>
 
-                            <p>Zgłoszenie dotyczy zamówienia numer: {{var po.increment_id}}</p>
+                            <p style="margin: 0;"><b>Zgłoszenie dotyczy zamówienia numer:</b> {{var po.increment_id}}</p>
                             {{layout handle="sales_email_order_rma_items" rma=$rma order=$order}}
                             <br/>
 
-                            <p>Status: {{var rma_status}}</p>
+                            <p style="margin: 0;"><b>Status:</b> {{var rma_status}}</p>
 
                             <div style="background-color:#f1f1f1;margin:10px 0;padding:20px 10px;border:1px solid #d3d3d3;">
                                 <p><b>Data:</b> {{var rma_creation_date}}</p>
 
                                 <div style="margin:0 0 30px 0;">
-                                    <p><b>Wiadomość od obsługi sklepu {{var vendor.vendor_name}}:</b></p>
+                                    <p><b>Wiadomość od obsługi sklepu <span style="text-transform:uppercase;">{{var vendor.vendor_name}}</span>:</b></p>
                                 </div>
                                 <div style="margin:0 0 30px 0;">
                                     <p>{{var comment}}</p>
                                 </div>
 
 
-                                {{depend customer_notes}}
-                                <div style="background-color:#f1f1f1;margin:10px 0;padding:20px 10px;border:1px solid #d3d3d3;">
-                                    <p>{{var customer_notes}}</p>
-                                </div>
-                                {{/depend}}
+                                <!--{{depend customer_notes}}-->
+                                <!--<div style="background-color:#f1f1f1;margin:10px 0;padding:20px 10px;border:1px solid #d3d3d3;">-->
+                                    <!--<p>{{var customer_notes}}</p>-->
+                                <!--</div>-->
+                                <!--{{/depend}}-->
 
 
-                                {{depend show_resolution_notes}}
-                                <div style="background-color:#f1f1f1;margin:10px 0;padding:20px 10px;border:1px solid #d3d3d3;">
-                                    <p>{{var resolution_notes}}</p>
-                                </div>
-                                {{/depend}}
+                                <!--{{depend show_resolution_notes}}-->
+                                <!--<div style="background-color:#f1f1f1;margin:10px 0;padding:20px 10px;border:1px solid #d3d3d3;">-->
+                                    <!--<p>{{var resolution_notes}}</p>-->
+                                <!--</div>-->
+                                <!--{{/depend}}-->
                             </div>
                         </td>
                     </tr>
