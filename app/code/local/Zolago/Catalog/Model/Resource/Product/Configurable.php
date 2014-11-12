@@ -21,8 +21,8 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
      */
     public function getConfigurableMinPrice($configurableProductsIds = array(), $storeId = 0, $hash = '')
     {
-        Mage::log('configurableProductsIds', 0, "configurable_update_{$hash}_getConfigurableMinPrice.log");
-        Mage::log($configurableProductsIds, 0, "configurable_update_{$hash}_getConfigurableMinPrice.log");
+        //Mage::log('configurableProductsIds', 0, "configurable_update_{$hash}_getConfigurableMinPrice.log");
+        //Mage::log($configurableProductsIds, 0, "configurable_update_{$hash}_getConfigurableMinPrice.log");
         $result = array();
 
 
@@ -69,8 +69,8 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         $select->group('product_relation.parent_id');
 
         $result = $adapter->fetchAssoc($select);
-        Mage::log('getConfigurableMinPrice result', 0, "configurable_update_{$hash}_getConfigurableMinPrice.log");
-        Mage::log($result, 0, "configurable_update_{$hash}_getConfigurableMinPrice.log");
+        //Mage::log('getConfigurableMinPrice result', 0, "configurable_update_{$hash}_getConfigurableMinPrice.log");
+        //Mage::log($result, 0, "configurable_update_{$hash}_getConfigurableMinPrice.log");
 
         return $result;
     }
