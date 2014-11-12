@@ -1,19 +1,10 @@
 <?php $_helper = Mage::helper("zolagorma"); ?>
 
 <?php $_rma = $this->getRma();?>
-<?php
-$poId = $_rma->getUdpoId();
-$_po = $this->getPo();
 
-?>
-<?php $_shippingAddress = $_po->getShippingAddress(); ?>
-<?php $_itemsSingle = $_rma->getItemsSingle(); ?>
-<?php $_itemsConditionSingle = $_rma->getItemsConditionSingle(); ?>
 <?php $_selectedShipping = $this->getSelectedShippingAddress();?>
 <?php $dateList = $this->getDateList($_selectedShipping);?>
 <?php $weekdays = Mage::app()->getLocale()->getOptionWeekdays();?>
-<?php $vendor = $_po->getVendor();?>
-
 
 
 <script type="text/javascript">
@@ -52,14 +43,15 @@ $_po = $this->getPo();
         var addressBook = new Mall.customer.AddressBook();
 
         addressBook.setAddressBook(<?php echo $this->getCustomerAddressesJson(); ?>);
-        addressBook.setDefaultShipping(<?php echo $this->asJson($this->getDefaultShipping())?>);
-
+		<?php if($_defaultShipping=$this->getDefaultShipping()):?>
+        addressBook.setDefaultShipping(<?php echo $this->asJson($_defaultShipping->getId())?>);
+		<?php endif;?>
         Mall.rma.edit.addressbook.setAddressBook(addressBook);
-
-
-
 
         Mall.rma.edit.setNotAvailableText('<?php echo $_helper->__('Not available');?>');
         Mall.rma.edit.init();
+        <?php if(!$this->isDhlEnabled()): ?>
+            Mall.rma.edit.dhlDisabled = true;
+        <?php endif; ?>
     });
 </script>

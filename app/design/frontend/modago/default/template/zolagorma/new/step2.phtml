@@ -10,7 +10,7 @@
 <?php $weekdays = Mage::app()->getLocale()->getOptionWeekdays();?>
 <?php $vendor = $_po->getVendor();?>
 
-<?php echo $this->getChildHtml("zolagorma.new.translate"); ?>
+<?php echo $this->getChildHtml("zolagormatranslate"); ?>
 
 <div class="steps step-2 background-wrapper box-wrapper" id="step-2">
 	<input type="hidden" name="form_key" value="<?php echo $this->getFormKey();?>"/>
@@ -23,7 +23,7 @@
 			<input type="hidden" name="rma[customer_postcode]" id="customer_address_postcode" value="<?php echo $_selectedShipping ? $_helper->getPostcode($_selectedShipping) : ''; ?>"/>
 			<input type="hidden" name="rma[override_address]" value="0"/>
     
-            <h3 class="legend-big"><?php echo $_helper->__("Report a return or claim"); ?></h3>
+            <h3 class="legend-big"><?php echo $this->getLegend(); ?></h3>
             <h3 class="legend"><?php echo $_helper->__("Confirm or change pickup address for the courier"); ?>:</h3>
 
 			<!-- selected address tmplate -->
@@ -32,7 +32,7 @@
 				<dl class="pull-left" >
 					<dt>{{firstname}} {{lastname}}</dt>
 					<dd>{{street}}</dd>
-					<dd>{{postcode}} {{city}}</dd>
+					<dd><span class="selected-postcode">{{postcode}}</span> {{city}}</dd>
 					<dd class="phone"><?php echo $this->__("Contact phone")?>: <span>{{telephone}}</span></dd>
 					<dd class="action separator">
 						<a href="#" class="underline edit"><?php echo $this->__("edit");?></a> 
@@ -69,7 +69,7 @@
 			</div>
 			
 			<!-- Edit / add mdoal -->
-			<div class="modal fade bs-example-modal-lg" id="addressbook-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" style="overflow-y: scroll !important">
+			<div class="modal fade bs-example-modal-lg" id="addressbook-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
 				<div class="modal-dialog modal-lg">
 					<div class="modal-content">
 						<div class="modal-header">
@@ -160,8 +160,8 @@
             </div>
         </div>
 
-
-        <div class="fieldset row" id="customer-account-wrapper">
+        <?php if($this->showCustomerAccount()): ?>
+            <div class="fieldset row" id="customer-account-wrapper">
             <div>
                 <h3 class="legend col-sm-12"><?php echo $_helper->__("Enter your account number for your order refund"); ?></h3>
                 <div class="col-sm-5">
@@ -171,62 +171,18 @@
                 </div>
             </div>
         </div>
+        <?php endif; ?>
 
         <div>
             <a href="#step-1" class="button button-third large back pull-left">
                 <?php echo $_helper->__("Back"); ?>
             </a>
             <button class="btn button button-primary next pull-right"
-                    type="button" id="btn-next-step-2"><?php echo $_helper->__("Next"); ?></button>
+                    id="btn-next-step-2"><?php echo $_helper->__("Next"); ?></button>
 			<div class="clearfix"></div>
         </div>
     </div>
 </div>
-<script type="text/javascript">
 
-    //INIT DATA
-    var rmaCarrierTimeFrom = '<?php echo $_rma->getCarrierTimeFrom(); ?>';
-    var rmaCarrierTimeTo = '<?php echo $_rma->getCarrierTimeTo(); ?>';
-    var dateList = <?php echo json_encode($dateList); ?>;
-    var dateListFormatedDate = [];
+<?php echo $this->getChildHtml("zolagormajs"); ?>
 
-    <?php // formatted date for next 20 (max) days from today
-    for($count = 0; $count < 20 ; $count++) {
-        $timestamp = time()+$count*3600*24;
-        $index = date('Y-m-d',$timestamp);
-        echo "dateListFormatedDate['$index'] = '" . $this->getFormattedDate($timestamp) . "';\n";
-    }
-    ?>
-
-    //converting weekdays to array
-    var weekdays = <?php echo json_encode($weekdays); ?>;
-    var arr = [];
-    for (var prop in weekdays) {
-        arr[prop] = (weekdays[prop].label);
-    }
-    weekdays = arr;
-    //converting weekdays to array END
-
-    var showBankAcc = <?php echo $_po->isPaymentCheckOnDelivery() ? '1' : '0'; ?>;
-    //applyFlow
-    var isAcknowledged = false;
-    var returnReasons = '<?php echo Mage::helper("zolagorma")->getReturnReasons($_po, true); ?>';
-
-    var flowAcknowledged = '<?php echo Zolago_Rma_Model_Rma::FLOW_ACKNOWLEDGED; ?>';
-    var ajaxLoaderSkinUrl = '<?php echo $this->getSkinUrl("images/modago-ajax-loader.gif"); ?>';
-    //INIT DATE END
-
-	jQuery(function(){
-		// Address book handling
-		var addressBook = new Mall.customer.AddressBook();
-
-		addressBook.setAddressBook(<?php echo $this->getCustomerAddressesJson(); ?>);
-		addressBook.setDefaultShipping(<?php echo $this->asJson($this->getDefaultShipping())?>);
-
-		Mall.rma.new.addressbook.setAddressBook(addressBook);
-		<?php if(!$this->isDhlEnabled()): ?>
-		Mall.rma.new.dhlDisabled = true;
-		<?php endif; ?>
-	});
-
-</script>

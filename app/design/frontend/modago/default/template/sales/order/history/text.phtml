@@ -1,0 +1,6 @@
+<?php $_orders = $this->getOpenedOrders(); ?>
+<?php if ($_orders) : ?>
+<p><a href="<?php echo Mage::getUrl("sales/order/process") ?>" class="underline"><?php echo Mage::helper('zolagosales')->__('You have %d open orders. Click to browse your open orders.',$_orders); ?> > </a></p>
+<?php else : ?>
+<?php echo $this->getEmptyText(); ?>
+<?php endif; ?>

@@ -31,10 +31,10 @@ jQuery(function($){
 			jQuery(window).resize();
 
             //visual fix for message - can't be done by css
-            if ($('.messages i').length) {
-                $('#content').css('margin-top', '0px');
-                $('.messages i').click(function () {
-                    $('#content').css('margin-top', '');
+            if (jQuery('.messages i').length) {
+                jQuery('#content').css('margin-top', '0px');
+                jQuery('.messages i').click(function () {
+                    jQuery('#content').css('margin-top', '');
                 });
             }
 
@@ -268,7 +268,10 @@ jQuery(function($){
 			this.addressbook.init();
 
             if (this.isReturnPath()) {
-                var zip = jQuery('#customer_address_postcode').val();
+                var zip = jQuery('.selected-postcode').filter(function( index ) {
+                    return jQuery(this).text().indexOf("{{") === -1;
+                }).first().text();
+
                 _rma.getDateList(zip);
             }
 
@@ -472,11 +475,18 @@ jQuery(function($){
          */
         getDateList: function(zip) {
             "use strict";
-            //poId = parseInt(poId);
+            if(zip === undefined) {
+                zip = '';
+            }
 
-            var matched = zip.match(/([0-9]{2})([0-9]{3})/);
+            var matched = zip.match(/([0-9]{2}).{0,3}([0-9]{3})/);
             if(matched != null) {
                 zip = matched[1] + "-" + matched[2];
+            }
+
+            if(!zip.length) {
+                _rma.showInfoAboutNoPickup(); //better then gif with infinity loading
+                return true;
             }
 
             OrbaLib.Rma.getDateList({
@@ -496,7 +506,8 @@ jQuery(function($){
                             _rma.attachClickOnDate();//SET SLIDER, SAVE PICKUP TIME, WRITE MESSAGES
                             _rma.initDateListValues(data.content);//INIT VALUES FOR DATE LIST
                             jQuery('#pickup-date-form-panel input').first().click();//default set the first day
-
+                            // Fix footer
+                            jQuery(window).resize();
                             return false;
                         } else {
                             //there is no days for pickup
@@ -506,7 +517,6 @@ jQuery(function($){
                     return true;
                 },
                 'fail': function( jqXHR, textStatus ) {
-                    //console.log( "GetDateList: Request failed: " + textStatus );
                     _rma.showInfoAboutNoPickup(); //better then gif with infinity loading
                 },
                 'always': function () {
@@ -544,7 +554,7 @@ jQuery(function($){
                 //id: "",
                 class: "required choose-date",
                 for: "carrier-date",
-                html: Mall.translate.__("Choose the date") + "<em>:</em>"
+                html: Mall.translate.__("choose-the-date") + "<em>:</em>"
             });
 
             var div_input_box = jQuery("<div/>", {
@@ -582,7 +592,7 @@ jQuery(function($){
 
             jQuery('#pickup-date-form-panel').append(
                     "<label class='required carrier-time-from' for='carrier-time-from'>" +
-                    Mall.translate.__("Select the time interval") + "<em>:</em></label>" +
+                    Mall.translate.__("select-the-time-interval") + "<em>:</em></label>" +
                     "<div class='choose-time'><div class='field'><div class='input-box'>" +
                     "<input type='hidden' name='rma[carrier_time_from]' id='carrier-time-from'" +
                     "value='" + rmaCarrierTimeFrom + "'" +
@@ -692,7 +702,7 @@ jQuery(function($){
 			var date = new Date(data.pickup.carrier_date);
 			var month = date.getMonth() + 1;
 			var day = this.daysOfWeek[date.getDay()] + " " +
-					date.getDate() + "-" +
+					(date.getDate() < 10 ? "0"+date.getDate() : date.getDate()) + "-" +
 					(month < 10 ? "0" + month : month) + "-" +
 					date.getFullYear(),
 				pickup = $("#pickup-date-review"),
@@ -782,13 +792,14 @@ jQuery(function($){
 					var type = jQuery(this).hasClass("billing") ? "billing" : "shipping";
 					jQuery(this).click({type: type}, function(e){
 						self.handleChangeAddressClick(e);
+                        $(window).resize();
 						return false;
 					})
 				});
 				
 				// Bind address change event
 				this.content.on("selectedAddressChange", function(e, address){
-					console.log(address);
+					//console.log(address);
 				});
 				
 			},
@@ -861,7 +872,7 @@ jQuery(function($){
             },
 			
 			processAddressNode: function(node, address, addressBook, type){
-				var removeable = addressBook.isRemoveable(address.getId()),
+				var removeable = addressBook.isRemoveable(address),//this._isRemoveable.apply(addressBook, [address.getId()]), 
 					remove = node.find(".remove"),
 					choose = node.find(".choose"),
 					edit = node.find(".edit");
@@ -904,7 +915,7 @@ jQuery(function($){
 			 */
 			getNewAddressConfig: function(type){
 				var result = [];
-				jQuery.each(Mall.customer.AddressBook.Layout.getNewAddressConfig(), function(){
+				jQuery.each(Mall.customer.AddressBook.Layout.getNewAddressConfig(type), function(){
 					if(this.name=="vat_id"){
 						return;
 					}

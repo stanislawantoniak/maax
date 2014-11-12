@@ -4,6 +4,21 @@ class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
 
     const RMA_CUSTOMER_SUFFIX = '_for_customer';
 
+	
+	/**
+	 * Fill comment text with comment properties
+	 * @param Zolago_Rma_Model_Rma_Comment $comment
+	 * @return string
+	 */
+	public function formatComment(Zolago_Rma_Model_Rma_Comment $comment) {
+		$text = $comment->getComment();
+		foreach($comment->getData() as $key=>$value){
+			$text = str_replace("{{{$key}}}", is_string($value) ? $value : "", $text);
+		}
+		$text = Mage::helper("core")->escapeHtml($text);
+		return nl2br($text);
+	}
+	
      /**
      * merged pdf for customer
      * @param Zolago_Rma_Model_Rma_Track $track
@@ -272,7 +287,7 @@ class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
 		}
 	}
 
-	public function sendNewRmaNotificationEmail($rma, $comment = '') {
+	public function sendNewRmaNotificationEmail($rma, Zolago_Rma_Model_Rma_Comment $comment = null) {
 		$order = $rma->getOrder();
 		$store = $order->getStore();
 
@@ -286,6 +301,15 @@ class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
 		if (!$shippingAddress) {
 			$shippingAddress = $order->getBillingAddress();
 		}
+
+		if($comment !== null) {
+			/** @var $_commentHelper Zolago_Rma_Helper_Data */
+			$_commentHelper = Mage::helper("zolagorma");
+			$comment = $_commentHelper->formatComment($comment);
+		} else {
+			$comment = '';
+		}
+
 		$data += array(
 			'rma' => $rma,
 			'order' => $order,

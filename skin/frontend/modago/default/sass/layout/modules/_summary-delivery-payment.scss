@@ -55,16 +55,6 @@
 			min-height:54px;
 			position:relative;
 		}
-		
-		.nazwa_rozmiar {
-			.rozmiar_produktu {
-				@media(max-width: 479px) {
-					position:absolute;
-					bottom:0px;
-					left:0px;
-				}
-			}
-		}
 
 		.ilosc_cena {
 			min-height:54px;
