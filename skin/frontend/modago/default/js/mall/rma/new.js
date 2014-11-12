@@ -30,14 +30,6 @@ jQuery(function($){
 			// Fix footer
 			jQuery(window).resize();
 
-            //visual fix for message - can't be done by css
-            if (jQuery('.messages i').length) {
-                jQuery('#content').css('margin-top', '0px');
-                jQuery('.messages i').click(function () {
-                    jQuery('#content').css('margin-top', '');
-                });
-            }
-
             _rma.addUsefulFunctions();
 		},
 		
