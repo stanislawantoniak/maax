@@ -140,6 +140,10 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
     }
 
     /**
+	 * @todo The funciton need to be refactored!
+	 * 1. Table item_status is genereted from indexer!
+	 * 2. Run indexer
+	 * 3. Move to solr que
      * @param $stockBatch
      */
     public static function updateStockConverter($stockBatch){
@@ -186,6 +190,13 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                 $cataloginventoryStockStatus1 []= "({$id},{$qty},{$is_in_stock},{$stockId},{$websiteFront})";
 
                 $cataloginventoryStockItem []= "({$id},{$qty},{$is_in_stock},{$stockId})";
+				
+				Mage::dispatchEvent("zolagocatalog_converter_stock_save_before", array(
+					"product_id"	=> $id,
+					"qty"			=> $qty,
+					"is_in_stock"	=> $is_in_stock,
+					"stock_id"		=> $stockId
+				));
             }
         }
 
@@ -215,6 +226,9 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
             ->getProcessByCode('cataloginventory_stock');
 
         Mage::log(microtime() . ' End ', 0, 'product_stock_update.log');
+		
+		Mage::dispatchEvent("zolagocatalog_converter_stock_complete", array());
+		
         echo 'Done';
     }
 
