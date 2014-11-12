@@ -311,7 +311,7 @@ class Unirgy_Rma_Model_Rma extends Mage_Sales_Model_Abstract
         return $this->getOrder()->getStore();
     }
 
-    public function sendUpdateEmail($notifyCustomer = true, $comment='')
+    public function sendUpdateEmail($notifyCustomer = true, Zolago_Rma_Model_Rma_Comment $comment = null)
     {
         if (!Mage::helper('sales')->canSendShipmentCommentEmail($this->getOrder()->getStore()->getId())) {
             return $this;
@@ -320,6 +320,7 @@ class Unirgy_Rma_Model_Rma extends Mage_Sales_Model_Abstract
         $hlp = Mage::helper('udropship');
 
         $order  = $this->getOrder();
+	    $store = Mage::app()->getStore();
 
         $copyTo = $this->_getEmails(self::XML_PATH_UPDATE_EMAIL_COPY_TO);
         $copyMethod = Mage::getStoreConfig(self::XML_PATH_UPDATE_EMAIL_COPY_METHOD, $this->getStoreId());
@@ -378,19 +379,36 @@ class Unirgy_Rma_Model_Rma extends Mage_Sales_Model_Abstract
 
         $hlp->setDesignStore($this->getOrder()->getStore());
 
+        $dateRmaCreate = $this->getCteateAt();
+        $dateTimestamp = Mage::getModel('core/date')->timestamp(strtotime($dateRmaCreate));
+        $dateRmaCreateFormated = date('d.m.Y H:i', $dateTimestamp);
+
+	    if($comment !== null) {
+		    /** @var $_commentHelper Zolago_Rma_Helper_Data */
+		    $_commentHelper = Mage::helper("zolagorma");
+		    $comment = $_commentHelper->formatComment($comment);
+	    } else {
+		    $comment = '';
+	    }
+
         $data = array_merge($data, array(
-            'order'       => $order,
-            'rma'         => $this,
-            'comment'     => $comment,
-            'billing'     => $order->getBillingAddress(),
-            'payment_html'=> $paymentBlock->toHtml(),
-            'show_order_info'=>!Mage::getStoreConfigFlag('urma/general/customer_hide_order_info'),
-            'show_receiver' => $this->isReceiverVisible(),
-            'show_notes'=>$this->getStatusCustomerNotes()||($this->isAllowedResolutionNotes()&&$this->getResolutionNotes()),
-            'show_both_notes'=>$this->getStatusCustomerNotes()&&($this->isAllowedResolutionNotes()&&$this->getResolutionNotes()),
-            'customer_notes'=>$this->getStatusCustomerNotes(),
-            'show_resolution_notes'=>$this->isAllowedResolutionNotes()&&$this->getResolutionNotes(),
-            'resolution_notes'=>$this->getResolutionNotes()
+            'rma_creation_date'     => $dateRmaCreateFormated,
+            'order'                 => $order,
+            'rma'                   => $this,
+            'rma_status'            => Mage::helper("zolagorma")->__($this->getStatusCustomerNotes() ? $this->getStatusCustomerNotes() : $this->getRmaStatusName()),
+            'po'                    => $this->getPo(),
+            'vendor'                => $this->getVendor(),
+            'store_name'            => $store->getFrontendName(),
+            'comment'               => $comment,
+            'billing'               => $order->getBillingAddress(),
+            'payment_html'          => $paymentBlock->toHtml(),
+            'show_order_info'       =>!Mage::getStoreConfigFlag('urma/general/customer_hide_order_info'),
+            'show_receiver'         => $this->isReceiverVisible(),
+            'show_notes'            =>$this->getStatusCustomerNotes()||($this->isAllowedResolutionNotes()&&$this->getResolutionNotes()),
+            'show_both_notes'       =>$this->getStatusCustomerNotes()&&($this->isAllowedResolutionNotes()&&$this->getResolutionNotes()),
+            'customer_notes'        =>$this->getStatusCustomerNotes(),
+            'show_resolution_notes' =>$this->isAllowedResolutionNotes()&&$this->getResolutionNotes(),
+            'resolution_notes'      =>$this->getResolutionNotes()
         ));
 
         foreach ($sendTo as $recipient) {
@@ -411,12 +429,13 @@ class Unirgy_Rma_Model_Rma extends Mage_Sales_Model_Abstract
         return $this;
     }
 
-    public function sendEmail($notifyCustomer=true, $comment='')
+    public function sendEmail($notifyCustomer=true, Zolago_Rma_Model_Rma_Comment $comment = null)
     {
         $translate = Mage::getSingleton('core/translate');
         /* @var $translate Mage_Core_Model_Translate */
         $translate->setTranslateInline(false);
-
+	    
+	    $store = Mage::app()->getStore();
         $order  = $this->getOrder();
         $copyTo = $this->_getEmails(self::XML_PATH_EMAIL_COPY_TO);
         $copyMethod = Mage::getStoreConfig(self::XML_PATH_EMAIL_COPY_METHOD, $this->getStoreId());
@@ -477,20 +496,58 @@ class Unirgy_Rma_Model_Rma extends Mage_Sales_Model_Abstract
                 $data['_ATTACHMENTS'][] = $labelModel->renderBatchContent($lblBatch);
             } catch (Exception $e) {}
         }
+        $dateRmaCreate = $this->getCteateAt();
+        $dateTimestamp = Mage::getModel('core/date')->timestamp(strtotime($dateRmaCreate));
+        $dateRmaCreateFormated = date('d.m.Y H:i', $dateTimestamp);
+
+        //courier
+        $shippingAddress = $this->getShippingAddress();
+        $shippingAddressStreet = Mage::helper('core')->escapeHtml(is_array($shippingAddress->getStreet(-1)) ? explode(" ", $shippingAddress->getStreet(-1)) : $shippingAddress->getStreet(-1));
+        $weekdays = Mage::app()->getLocale()->getOptionWeekdays();
+        $carrierDate = $this->getCarrierDate();
+        $showCourier = false;
+        if(!empty($carrierDate)){
+            $showCourier = true;
+            $courierDateF = Mage::helper("core")->formatDate($carrierDate, "short");
+        } else {
+	        $courierDateF = false;
+        }
+
+	    if($comment !== null) {
+		    /** @var $_commentHelper Zolago_Rma_Helper_Data */
+		    $_commentHelper = Mage::helper("zolagorma");
+		    $comment = $_commentHelper->formatComment($comment);
+	    } else {
+		    $comment = '';
+	    }
 
         $data = array_merge($data, array(
-            'order'       => $order,
-            'rma'         => $this,
-            'comment'     => $comment,
-            'billing'     => $order->getBillingAddress(),
-            'payment_html'=> $paymentBlock->toHtml(),
-            'show_order_info'=>!Mage::getStoreConfigFlag('urma/general/customer_new_hide_order_info'),
-            'show_receiver' => $this->isReceiverVisible(),
-            'show_notes'=>$this->getStatusCustomerNotes()||($this->isAllowedResolutionNotes()&&$this->getResolutionNotes()),
-            'show_both_notes'=>$this->getStatusCustomerNotes()&&($this->isAllowedResolutionNotes()&&$this->getResolutionNotes()),
-            'customer_notes'=>$this->getStatusCustomerNotes(),
-            'show_resolution_notes'=>$this->isAllowedResolutionNotes()&&$this->getResolutionNotes(),
-            'resolution_notes'=>$this->getResolutionNotes()
+            'rma_creation_date'         => $dateRmaCreateFormated,
+            'order'                     => $order,
+            'rma'                       => $this,
+            'rma_status_pending'        => ($this->getRmaStatus() == Zolago_Rma_Model_Rma_Status::STATUS_PENDING) ? true : false,
+            'rma_status_pending_pickup' => ($this->getRmaStatus() == Zolago_Rma_Model_Rma_Status::STATUS_PENDING_PICKUP) ? true : false,
+            'po'                        => $this->getPo(),
+            'vendor'                    => $this->getVendor(),
+            'show_comment'              => !empty($comment) ? true : false,
+            'comment'                   => $comment,
+            'show_courier'              => $showCourier,
+            'courier_week_day'          => $weekdays[date('w',strtotime($carrierDate))]['label'],
+            'courier_date'              => $courierDateF,
+            'courier_shipping'          => $shippingAddress,
+            'courier_shipping_street'   => $shippingAddressStreet,
+            'courier_pdf_url'           => Mage::getUrl('sales/rma/pdf', array('id' => $this->getId())),
+            'billing'                   => $order->getBillingAddress(),
+            'payment_html'              => $paymentBlock->toHtml(),
+            'show_order_info'           => !Mage::getStoreConfigFlag('urma/general/customer_new_hide_order_info'),
+            'show_receiver'             => $this->isReceiverVisible(),
+            'show_notes'                =>$this->getStatusCustomerNotes()||($this->isAllowedResolutionNotes()&&$this->getResolutionNotes()),
+            'show_both_notes'           =>$this->getStatusCustomerNotes()&&($this->isAllowedResolutionNotes()&&$this->getResolutionNotes()),
+            'customer_notes'            =>$this->getStatusCustomerNotes(),
+            'show_resolution_notes'     =>$this->isAllowedResolutionNotes()&&$this->getResolutionNotes(),
+            'store_name'                => $store->getFrontendName(),
+            'resolution_notes'          =>$this->getResolutionNotes(),
+            'rma_url'                   => Mage::getUrl('sales/rma/view', array('id' => $this->getId())),
         ));
 
         foreach ($sendTo as $recipient) {
