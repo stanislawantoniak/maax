@@ -33,9 +33,11 @@ $_yesnoOpts = Mage::getSingleton('udropship/source')->setPath('yesno')->toOption
                 <th><?php echo Mage::helper('udropship')->__('Customer Notes') ?></th>
                 <th><?php echo Mage::helper('udropship')->__('Allow resolution notes') ?></th>
                 <th><?php echo Mage::helper('udropship')->__('Show Receiver To Customer') ?></th>
+                <th><?php echo Mage::helper('udropship')->__('Notify status by Email') ?></th>
             <?php endif ?>
             <th><?php echo Mage::helper('udropship')->__('Max. Response days') ?></th>
             <th><?php echo Mage::helper('udropship')->__('Sort Order') ?></th>
+
             <!-- <th><?php //echo Mage::helper('udropship')->__('Action') ?></th> -->
         </tr>
         <tr id="<?php echo $this->suffixId('rowTpl')?>" style="display:none">
@@ -104,6 +106,13 @@ $_yesnoOpts = Mage::getSingleton('udropship/source')->setPath('yesno')->toOption
                         <?php endforeach ?>
                     </select>
                 </td>
+                <td>
+                    <select name="<?php echo $this->getFieldName()?>[$ROW][notify_email]" style="width:50px">
+                        <?php foreach ($_yesnoOpts as $_id=>$_name): ?>
+                            <option alt="notify_email" value="<?php echo $_id ?>"><?php echo $this->htmlEscape($_name) ?></option>
+                        <?php endforeach ?>
+                    </select>
+                </td>
             <?php endif ?>
             <td>
                 <input type="text" class="input-text" name="<?php echo $this->getFieldName()?>[$ROW][max_response_days]" value="$MAX_RESPONSE_DAYS" style="width:50px" />
@@ -146,7 +155,8 @@ $_yesnoOpts = Mage::getSingleton('udropship/source')->setPath('yesno')->toOption
             allow_resolution_notes: '0',
             show_receiver: '0',
             max_response_days: '',
-            sort_order: '0'
+            sort_order: '0',
+            notify_email: '0'
         }
         Object.extend(data, inData);
         data.row = ++lastRowNum;
@@ -157,8 +167,8 @@ $_yesnoOpts = Mage::getSingleton('udropship/source')->setPath('yesno')->toOption
         var keys = $H(data).keys().sortBy(function(s){return (''+s).length}).reverse();
         for (j=0; j<keys.length; j++) {
             var i=keys[j];
-            value = data[i] || ''
-console.log(keys);
+            value = data[i] || '';
+//console.log(keys);
             if (-1 != numericVars.indexOf(i) && data[i]
                 || -1 != forcedNumericVars.indexOf(i)
                 ) {
@@ -175,7 +185,7 @@ console.log(keys);
             new Template('<input (([^>]*(alt="?#{key}"?|value="?#{value}"?(?=[\\s>])|type="?checkbox"?)){3})'),
             new Template('<input $1 checked="checked"')
         ];
-        var selectFields = ['allow_resolution_notes','show_receiver', "print_shipping_label", "customer_comment", "notify_customer", "vendor_comment", "edit_address"];
+        var selectFields = ['allow_resolution_notes','show_receiver', "print_shipping_label", "customer_comment", "notify_customer", "vendor_comment", "edit_address", "notify_email"];
         selectFields.each(function(key){
             for (var rxIdx=0; rxIdx<regExTpl.length; rxIdx+=2) {
                 var varForEval = {key: key, value: data[key]};

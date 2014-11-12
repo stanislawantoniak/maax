@@ -457,9 +457,9 @@ jQuery.noConflict();
         var stara_cena = jQuery('.table-summary-product .cena .stara_cena');
         var stara_cena_szer = stara_cena.innerWidth();
 
-        stara_cena.css({
-            marginLeft:-stara_cena_szer+20
-        });
+//        stara_cena.css({
+//            marginLeft:-stara_cena_szer+20
+//        });
 
 
 // panels
