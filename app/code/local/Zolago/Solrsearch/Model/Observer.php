@@ -299,7 +299,21 @@ class Zolago_Solrsearch_Model_Observer {
 			$this->processCollectedProducts();
 		}
 	}
-	
+
+	/**
+	 * Process prices after catalog update via converter
+	 * @param Varien_Event_Observer $observer
+	 */
+	public function catalogConverterPriceUpdateAfter(Varien_Event_Observer $observer) {
+		$productIds = $observer->getEvent()->getProductIds();
+
+		foreach ($productIds as $productId) {
+			$this->collectProduct($productId);
+		}
+
+		$this->processCollectedProducts();
+	}
+
 	
 	/**
 	 * @param int|Mage_Catalog_Model_Product $product
