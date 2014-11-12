@@ -58,12 +58,13 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
         /* @var $connection Varien_Db_Adapter_Interface */
         $connection->beginTransaction();
 
-        $session = $this->_getSession();
+//        $session = $this->_getSession();
 
         try {
             $rma = $this->_registerRma();
             $statusModel = $rma->getStatusModel();
             $request = $this->getRequest();
+            $oldStatus = $rma->getRmaStatus();
 
             $comment = trim($request->getParam("comment", ''));
             $status = $request->getParam("status");
@@ -72,18 +73,19 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
             $messages = array();
 
             // Process status
-            if($status!=$rma->getRmaStatus()) {
+            if($status!=$oldStatus) {
                 if(!$this->_isValidRmaStatus($rma, $status)) {
                     throw new Mage_Core_Exception(Mage::helper("zolagorma")->
                                                   __("Status code %s is not valid.", $status));
                 }
+
                 Mage::helper('zolagorma')->processSaveStatus($rma, $status, (bool)$notify);
                 $messages[] = Mage::helper("zolagorma")->__("Status changed");
             }
 
             // Process comment
             if($comment) {
-                if(!$statusModel->isVendorCommentAvailable($rma)) {
+                if(!$statusModel->isVendorCommentAvailable($oldStatus)) {
                     throw new Mage_Core_Exception(Mage::helper("zolagorma")->
                                                   __("Cannot add comment in this status"));
                 }
