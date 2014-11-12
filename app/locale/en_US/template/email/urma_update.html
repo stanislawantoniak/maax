@@ -1,4 +1,4 @@
-<!--@subject {{var store.getFrontendName()}}: RMA # {{var rma.increment_id}} update @-->
+<!--@subject {{var store_name}} – Zmiana statusu Twojej reklamacji (nr. RMA-{{var rma.increment_id}}) @-->
 <!--@vars
 {"store url=\"\"":"Store Url",
 "skin url=\"images/logo_email.gif\" _area='frontend'":"Email Logo Image",
@@ -15,74 +15,82 @@ body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif;
 
 <body style="background:#F6F6F6; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; margin:0; padding:0;">
 <div style="background:#F6F6F6; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; margin:0; padding:0;">
-<table cellspacing="0" cellpadding="0" border="0" height="100%" width="100%">
-<tr>
-    <td align="center" valign="top" style="padding:20px 0 20px 0">
-        <!-- [ header starts here] -->
-        <table bgcolor="#FFFFFF" cellspacing="0" cellpadding="10" border="0" width="650" style="border:1px solid #E0E0E0;">
-            <tr>
-                <td valign="top"><a href="{{store url=""}}"><img src="{{skin url="images/logo_email.gif" _area='frontend'}}" alt="{{var store.getFrontendName()}}"  style="margin-bottom:10px;" border="0"/></a></td>
-            </tr>
-            <!-- [ middle starts here] -->
-            <tr>
-                <td valign="top">
-                    <h1 style="font-size:22px; font-weight:normal; line-height:22px; margin:0 0 11px 0;">Dear {{htmlescape var=$order.getCustomerName()}},</h1>
-                    <p style="font-size:12px; line-height:16px; margin:0 0 10px 0;">
-                        Your RMA for order # {{var order.increment_id}} has been <br/>
-                        <strong>{{var rma.getStatusLabel()}}</strong>.
-                        <p style="font-size:12px; line-height:16px; margin:0 0 10px 0;">{{var comment}}</p>
-                    </p>
-            {{depend customer_notes}}
-                <table cellspacing="0" cellpadding="0" border="0" width="100%">
-                    <thead>
-                    <tr>
-                        <th align="left" width="325" bgcolor="#EAEAEA" style="font-size:13px; padding:5px 9px 6px 9px; line-height:1em;">General Notes:</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td valign="top" style="font-size:12px; padding:7px 9px 9px 9px; border-left:1px solid #EAEAEA; border-bottom:1px solid #EAEAEA; border-right:1px solid #EAEAEA;">
-                            {{var customer_notes}}
-                            &nbsp;
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-                <br/>
-            {{/depend}}
-            {{depend show_resolution_notes}}
-                <table cellspacing="0" cellpadding="0" border="0" width="100%">
-                    <thead>
-                    <tr>
-                        <th align="left" width="325" bgcolor="#EAEAEA" style="font-size:13px; padding:5px 9px 6px 9px; line-height:1em;">Resolution Notes:</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td valign="top" style="font-size:12px; padding:7px 9px 9px 9px; border-left:1px solid #EAEAEA; border-bottom:1px solid #EAEAEA; border-right:1px solid #EAEAEA;">
-                            {{var resolution_notes}}
-                            &nbsp;
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-                <br/>
-            {{/depend}}
+	<table cellspacing="0" cellpadding="0" border="0" height="100%" width="100%">
+		<tr>
+			<td align="center" valign="top" style="padding:20px 0 20px 0">
+				<!-- [ header starts here] -->
+				<table bgcolor="#FFFFFF" cellspacing="0" cellpadding="10" border="0" width="650"
+				       style="border:1px solid #E0E0E0;">
+					<tr>
+						<td valign="top">
+							<a href="{{store url=""}}">
+							<img src="{{skin url='images/logo_black.png' _area='frontend'}}"
+							     alt="{{var store_name}}" style="margin-bottom:10px;" border="0"/>
+							</a>
+						</td>
+					</tr>
+					<!-- [ middle starts here] -->
+					<tr>
+						<td valign="top">
+							<div style="margin:0 0 30px 0;">
+								<p>
+									Sklep <span style="text-transform:uppercase;">{{var vendor.vendor_name}}</span>
+									wprowadził zmianę w reklamacji nr. (RMA-{{var rma.increment_id}}).
+								</p>
+							</div>
 
-                    <p style="font-size:12px; line-height:16px; margin:0 0 10px 0;">You can check the status of your order by <a href="{{store url="customer/account/"}}" style="color:#1E7EC8;">logging into your account</a>.</p>
-                    <p style="font-size:12px; line-height:16px; margin:0;">
-                        If you have any questions, please feel free to contact us at
-                        <a href="mailto:{{config path='trans_email/ident_support/email'}}" style="color:#1E7EC8;">{{config path='trans_email/ident_support/email'}}</a>
-                        or by phone at {{config path='general/store_information/phone'}}.
-                    </p>
-                </td>
-            </tr>
-            <tr>
-                <td bgcolor="#EAEAEA" align="center" style="background:#EAEAEA; text-align:center;"><center><p style="font-size:12px; margin:0;">Thank you again, <strong>{{var store.getFrontendName()}}</strong></p></center></td>
-            </tr>
-        </table>
-    </td>
-</tr>
-</table>
+							<p>Data zgłoszenia : {{var rma_creation_date}}</p>
+
+							<p>Zgłoszenie dotyczy zamówienia numer: {{var po.increment_id}}</p>
+							{{layout handle="sales_email_order_rma_items" rma=$rma order=$order}}
+							<br/>
+
+							<p>Status: {{var rma_status}}</p>
+
+							<div style="background-color:#f1f1f1;margin:10px 0;padding:20px 10px;border:1px solid #d3d3d3;">
+								<p><b>Data:</b> {{var rma_creation_date}}</p>
+
+								<div style="margin:0 0 30px 0;">
+									<p><b>Wiadomość od obsługi sklepu {{var vendor.vendor_name}}:</b></p>
+								</div>
+								<div style="margin:0 0 30px 0;">
+									<p>{{var comment}}</p>
+								</div>
+
+
+								{{depend customer_notes}}
+								<div style="background-color:#f1f1f1;margin:10px 0;padding:20px 10px;border:1px solid #d3d3d3;">
+									<p>{{var customer_notes}}</p>
+								</div>
+								{{/depend}}
+
+
+								{{depend show_resolution_notes}}
+								<div style="background-color:#f1f1f1;margin:10px 0;padding:20px 10px;border:1px solid #d3d3d3;">
+									<p>{{var resolution_notes}}</p>
+								</div>
+								{{/depend}}
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<p>
+								<b>Nie odpowiadaj na ten e-mail</b> gdyż został on wysłany przez automat.
+								Jeżeli chcesz zadać dodatkowe pytania w tej samej sprawie, dodaj nowy komentarz do
+								zgłoszenia, w
+								widoku zgłoszenia w Moje konto: <a href="{{store url='customer/account/'}}">kliknij
+								tutaj</a>.
+							</p>
+
+							<p>Pozdrawiamy serdecznie,</p>
+
+							<p>Zespól {{var store.getName()}}</p>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
 </div>
 </body>

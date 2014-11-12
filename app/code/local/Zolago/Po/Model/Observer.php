@@ -304,6 +304,50 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 		$po->addComment("[" . $fullname . "] " . $comment, false, true);
 		$po->saveComments();
 	}
+	
+    //{{{ 
+    /**
+     * cancel orders with all po canceled
+     */
+    public function cronCancelOrders() {
+        $order_collection = Mage::getModel('sales/order')->getCollection(); 
+        $order_collection->addFieldToFilter('state',	
+            array('in'=>array (
+                Mage_Sales_Model_Order::STATE_NEW,
+                Mage_Sales_Model_Order::STATE_PENDING_PAYMENT,
+                Mage_Sales_Model_Order::STATE_PROCESSING,
+                Mage_Sales_Model_Order::STATE_HOLDED,
+                Mage_Sales_Model_Order::STATE_PAYMENT_REVIEW,
+                )
+            )
+        );
+        $order_collection->addFieldToFilter("updated_at",array("lt"=>date('Y-m-d H:i:s',time()-24*3600)));
+        $cancel = array();
+        foreach ($order_collection as $order) {            
+			$collection = Mage::getResourceModel("udpo/po_collection");
+			/* @var $collection Unirgy_DropshipPo_Model_Mysql4_Po_Collection */
+			$collection->addFieldToFilter("order_id", $order->getId());
+    		$collection->addFieldToFilter("udropship_status", 
+					array("nin"=>Zolago_Po_Model_Po_Status::STATUS_CANCELED)
+            );
+            if (!count($collection)) {
+                // check date of canceled
+    			$collection = Mage::getResourceModel("udpo/po_collection");
+		    	/* @var $collection Unirgy_DropshipPo_Model_Mysql4_Po_Collection */
+	    		$collection->addFieldToFilter("order_id", $order->getId());
+                $collection->addFieldToFilter("updated_at",array('lt'=>date('Y-m-d H:i:s',time()-24*3600)));
+                if (!count($collection)) {
+                    $cancel[] = $order;
+                }
+            }
+        }       
+
+        foreach ($cancel as $order) {
+            $order->cancel()
+                ->save();
+        }
+    }
+    //}}}
 }
 
 ?>

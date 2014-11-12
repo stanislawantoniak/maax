@@ -36,7 +36,7 @@ var Mall = {
         return p.join(",");
     },
     currency: function(price){
-        return this.price(price) + " " + global.i18n.currency;
+        return this.price(price) + " " + this.getCurrencyBasedOnCode();
     },
     // Registry object
     reg: {

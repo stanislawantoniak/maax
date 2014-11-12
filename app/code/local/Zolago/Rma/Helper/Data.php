@@ -287,7 +287,7 @@ class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
 		}
 	}
 
-	public function sendNewRmaNotificationEmail($rma, $comment = '') {
+	public function sendNewRmaNotificationEmail($rma, Zolago_Rma_Model_Rma_Comment $comment = null) {
 		$order = $rma->getOrder();
 		$store = $order->getStore();
 
@@ -301,6 +301,15 @@ class Zolago_Rma_Helper_Data extends Unirgy_Rma_Helper_Data {
 		if (!$shippingAddress) {
 			$shippingAddress = $order->getBillingAddress();
 		}
+
+		if($comment !== null) {
+			/** @var $_commentHelper Zolago_Rma_Helper_Data */
+			$_commentHelper = Mage::helper("zolagorma");
+			$comment = $_commentHelper->formatComment($comment);
+		} else {
+			$comment = '';
+		}
+
 		$data += array(
 			'rma' => $rma,
 			'order' => $order,

@@ -1,20 +1,9 @@
 <?php $_helper = Mage::helper("zolagorma"); ?>
 
 <?php $_rma = $this->getRma();?>
-<?php
-$poId = $_rma->getUdpoId();
-$_po = $this->getPo();
+<?php $poId = $_rma->getUdpoId(); ?>
 
-?>
-<?php $_shippingAddress = $_po->getShippingAddress();
-?>
-<?php $_itemsSingle = $_rma->getItemsSingle(); ?>
-<?php $_itemsConditionSingle = $_rma->getItemsConditionSingle(); ?>
-<?php $_selectedShipping = $this->getSelectedShippingAddress();?>
-<?php $dateList = array();?>
 
-<?php $weekdays = Mage::app()->getLocale()->getOptionWeekdays();?>
-<?php $vendor = $_po->getVendor();?>
 <?php echo $this->getChildHtml("zolagormatranslate"); ?>
 <div class="page-title box-wrapper">
 	<h1>

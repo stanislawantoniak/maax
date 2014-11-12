@@ -8,7 +8,8 @@
         <span class="back-xs"><a href="<?php echo $baseUrl ?>customer/account/index/" class="underline"><?php echo $_helper->__('back'); ?> &gt;</a></span>
     </h1>
 </div>
-<div class="background-wrapper box-wrapper">
+<div class="background-wrapper box-wrapper container-fluid">
+	<div class="col-md-12">
     <form action="<?php echo $this->getAction() ?>" method="post" id="form-validate">
         <?php echo $this->getBlockHtml('formkey'); ?>
         <div class="fieldset newsletter-border">
@@ -70,6 +71,7 @@
     </form>
     <?php /* Extensions placeholder */ ?>
     <?php echo $this->getChildHtml('customer.form.newsletter.extra2') ?>
+	</div>
 </div>
 
 <script>

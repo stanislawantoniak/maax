@@ -14,7 +14,7 @@
 	<div class="background-wrapper box-wrapper">
 	<?php if ($_openedOrders): ?>
 	<div>
-		<a class="underline" href="<?php echo Mage::getUrl("sales/order/process") ?>"><?php echo $_helper->__('You have %d open orders. Click to browse your open orders.',$_openedOrders); ?> > </a>
+		<p><a class="underline" href="<?php echo Mage::getUrl("sales/order/process") ?>"><?php echo $_helper->__('You have %s. Click to browse your open orders.',Mage::helper('orbacommon')->formatOrdersText($_openedOrders)); ?> > </a></p>
 	</div>
 	<?php endif; ?>
 		<table class="data-table table-top" id="my-orders-table">
@@ -38,13 +38,13 @@
 			</thead>
 			<tbody>
 				<?php foreach ($_orders as $_order): ?>
-				<?php $_hasPo = $this->hasPo($_order);?>
+				<?php $_hasPo = $this->hasPo($_order,true);?>
 				<tr>
 					<td><span class="nobr"><?php echo $this->formatDate($_order->getCreatedAtStoreDate()) ?></span></td>
 					<td class="order-no"><?php echo $_order->getRealOrderId() ?></td>
 					<td>
 						<ul class="list-unstyled">
-						<?php foreach($this->getVendors($_order) as $_vendor):?>
+						<?php foreach($this->getVendors($_order,true) as $_vendor):?>
 							<li class="uppercase"><?php echo $this->escapeHtml($_vendor->getVendorName());?></li>
 						<?php endforeach;?>
 						</ul>
@@ -52,7 +52,7 @@
 					<td class="products">
 						<?php if($_hasPo):?>
 						<ul class="list-unstyled product-list">
-							<?php foreach($this->getSortedPoItemsByOrder($_order) as $_itemArray):?>
+							<?php foreach($this->getSortedPoItemsByOrder($_order,true) as $_itemArray):?>
 							<li>
 								<?php echo $this->escapeHtml($_itemArray['item']->getName());?><br/>
 								<?php foreach($this->extractProductOptions($_itemArray['options']) as $_option): ?>
@@ -65,7 +65,7 @@
 					</td>
 					<td class="total">
 						<?php if($_hasPo):?>
-							<?php echo $_order->formatPrice($this->getTotal($_order)); ?>
+							<?php echo $_order->formatPrice($this->getTotal($_order,true)); ?>
 						<?php endif;?>
 					</td>
 					<td class="status">
