@@ -50,8 +50,6 @@ class Zolago_Solrsearch_Model_Observer {
 	public function zolagoCatalogConverterStockSaveBefore(
 			Varien_Event_Observer $observer) {
 		
-		Mage::log("Into observer method after change");
-		
 		$this->collectProduct($observer->getEvent()->getProductId());
 	}
 	
@@ -61,8 +59,6 @@ class Zolago_Solrsearch_Model_Observer {
 	 */
 	public function zolagoCatalogConverterStockComplete(
 			Varien_Event_Observer $observer) {
-		
-		Mage::log("Into observer method stock complete");
 		
 		$this->processCollectedProducts();
 	}
@@ -379,8 +375,6 @@ class Zolago_Solrsearch_Model_Observer {
 		if(!$this->_canBeHandled){
 			return;
 		}
-		
-		Mage::log("Processing collected products");
 		
 		$resource = Mage::getResourceModel("zolagosolrsearch/improve");;
 		/* @var $resource Zolago_Solrsearch_Model_Resource_Improve */
