@@ -258,7 +258,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
             $priceTypeByStore = array();
             $priceType = $model->getConverterPriceType($skuS);
-	        Mage::log(microtime() . " usd gd fnctn ".print_r($priceType,true), 0, "converter_profilerPriceBatch_wilku.log");
+
             //reformat by store id
             if(!empty($priceType)){
                 foreach ($priceType as $priceTypeData) {
@@ -269,7 +269,6 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
             $marginByStore = array();
             $priceMarginValues = $model->getPriceMarginValues($skuS);
-	        Mage::log(microtime() . " priceMarginValues: ".print_r($priceMarginValues,true), 0, $batchFile);
             //reformat margin
             if (!empty($priceMarginValues)) {
                 foreach ($priceMarginValues as $_) {
@@ -308,6 +307,8 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                             ? $marginByStore[$productId][Mage_Core_Model_App::ADMIN_STORE_ID] : $marginSelected;
                         $marginSelected = (int)$marginDefault;
                     }
+
+	                Mage::log(microtime() . " margin: ".print_r($marginSelected,true), 0, "converter_profilerPriceBatch_wilku.log");
 
                     $pricesConverter = isset($priceBatch[$sku]) ? (array)$priceBatch[$sku] : false;
 
