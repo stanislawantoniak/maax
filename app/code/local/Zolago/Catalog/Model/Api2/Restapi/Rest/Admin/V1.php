@@ -249,12 +249,10 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
             //Mage::log(microtime() . ' Empty source', 0, $batchFile);
             return;
         }
+        $model = Mage::getModel('zolagocatalog/product');
         if(!empty($priceBatch)){
             $eav = Mage::getSingleton('eav/config');
             $productEt = $eav->getEntityType('catalog_product')->getId();
-
-
-            $model = Mage::getModel('zolagocatalog/product');
 
             $priceTypeByStore = array();
             $priceType = $model->getConverterPriceType($skuS);
