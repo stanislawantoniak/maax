@@ -258,6 +258,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
             $priceTypeByStore = array();
             $priceType = $model->getConverterPriceType($skuS);
+	        Mage::log(microtime() . " usd gd fnctn ".print_r($priceType,true), 0, "converter_profilerPriceBatch_wilku.log");
             //reformat by store id
             if(!empty($priceType)){
                 foreach ($priceType as $priceTypeData) {
