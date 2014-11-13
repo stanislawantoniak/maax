@@ -26,7 +26,7 @@ class Zolago_Catalog_Model_Queue_Pricetype extends Zolago_Common_Model_Queue_Abs
     protected function _execute()
     {
         $recalculateConfigurableIds = array();
-        Mage::helper('zolagocatalog/pricetype')->_logQueue( "Start process queue");
+        //Mage::helper('zolagocatalog/pricetype')->_logQueue( "Start process queue");
         $collection = $this->_collection;
 
         foreach ($collection as $colItem) {
@@ -65,7 +65,7 @@ class Zolago_Catalog_Model_Queue_Pricetype extends Zolago_Common_Model_Queue_Abs
             $converter = Mage::getModel('zolagoconverter/client');
         } catch (Exception $e) {
             Mage::throwException("Converter is unavailable");
-            Mage::helper('zolagocatalog/pricetype')->_logQueue("Converter is unavailable: check credentials");
+            //Mage::helper('zolagocatalog/pricetype')->_logQueue("Converter is unavailable: check credentials");
             return;
         }
         $productAction = Mage::getSingleton('catalog/product_action');
@@ -82,7 +82,7 @@ class Zolago_Catalog_Model_Queue_Pricetype extends Zolago_Common_Model_Queue_Abs
                 }
 
 
-                Mage::helper('zolagocatalog/pricetype')->_logQueue("Product {$productId}");
+                //Mage::helper('zolagocatalog/pricetype')->_logQueue("Product {$productId}");
                 $stores = array(Mage_Core_Model_App::ADMIN_STORE_ID);
                 $allStores = Mage::app()->getStores();
                 foreach ($allStores as $_eachStoreId => $val) {
@@ -102,7 +102,7 @@ class Zolago_Catalog_Model_Queue_Pricetype extends Zolago_Common_Model_Queue_Abs
 
 
                     if (!empty($newPrice)) {
-                        Mage::helper('zolagocatalog/pricetype')->_logQueue("New price {$priceType}: {$newPrice}");
+                        //Mage::helper('zolagocatalog/pricetype')->_logQueue("New price {$priceType}: {$newPrice}");
 
                         $margin = (isset($priceMarginValuesByStore[$store]) && isset($priceMarginValuesByStore[$store][$productId])) ? $priceMarginValuesByStore[$store][$productId] : 0;
                         if ($store <> Mage_Core_Model_App::ADMIN_STORE_ID
@@ -112,23 +112,21 @@ class Zolago_Catalog_Model_Queue_Pricetype extends Zolago_Common_Model_Queue_Abs
                             //Use Default Value
                             $margin = $priceMarginValuesByStore[Mage_Core_Model_App::ADMIN_STORE_ID][$productId];
                         }
-                        Mage::helper('zolagocatalog/pricetype')->_logQueue("Margin {$priceType}: {$margin}%");
+                        //Mage::helper('zolagocatalog/pricetype')->_logQueue("Margin {$priceType}: {$margin}%");
 
                         $newPriceWithMargin = $newPrice + $newPrice * ((int)$margin / 100);
 
-                        Mage::helper('zolagocatalog/pricetype')->_logQueue(
-                            "New price with margin $priceType: {$newPriceWithMargin}"
-                        );
+                        //Mage::helper('zolagocatalog/pricetype')->_logQueue("New price with margin $priceType: {$newPriceWithMargin}");
                         $productAction->updateAttributesNoIndex(array($productId), array('price' => $newPriceWithMargin), $store);
                         $recalculateConfigurableIds[$productId] = $productId;
                     } else {
-                        Mage::helper('zolagocatalog/pricetype')->_logQueue("Converter result is empty, price not changed");
+                        //Mage::helper('zolagocatalog/pricetype')->_logQueue("Converter result is empty, price not changed");
                     }
                 }
             }
         }
 
-        Mage::helper('zolagocatalog/pricetype')->_logQueue( "Reindex");
+        //Mage::helper('zolagocatalog/pricetype')->_logQueue( "Reindex");
 
         Mage::getResourceSingleton('catalog/product_indexer_price')
             ->reindexProductIds(array_keys($ids));
@@ -159,11 +157,11 @@ class Zolago_Catalog_Model_Queue_Pricetype extends Zolago_Common_Model_Queue_Abs
         );
 
         if(!empty($recalculateConfigurableIds)){
-            Mage::helper('zolagocatalog/pricetype')->_logQueue( "Add to configurable recalculation queue");
+            //Mage::helper('zolagocatalog/pricetype')->_logQueue( "Add to configurable recalculation queue");
             Zolago_Catalog_Helper_Configurable::queue(array_keys($recalculateConfigurableIds));
         }
 
-        Mage::helper('zolagocatalog/pricetype')->_logQueue( "End");
+        //Mage::helper('zolagocatalog/pricetype')->_logQueue( "End");
 
 
     }
