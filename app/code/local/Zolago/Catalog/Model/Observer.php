@@ -31,11 +31,11 @@ class Zolago_Catalog_Model_Observer
      */
     public static function processPriceTypeQueue()
     {
-        Mage::helper('zolagocatalog/pricetype')->_logQueue("Clear queue");
+        //Mage::helper('zolagocatalog/pricetype')->_logQueue("Clear queue");
         Mage::getResourceModel('zolagocatalog/queue_pricetype')->clearQueue();
-        Mage::helper('zolagocatalog/pricetype')->_logQueue("Start process");
+        //Mage::helper('zolagocatalog/pricetype')->_logQueue("Start process");
         $process = Mage::getModel('zolagocatalog/queue_pricetype')->process(2000);
-        Mage::helper('zolagocatalog/pricetype')->_logQueue("Products processed {$process}");
+        //Mage::helper('zolagocatalog/pricetype')->_logQueue("Products processed {$process}");
     }
 
     static public function clearConfigurableQueue()
