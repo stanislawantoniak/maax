@@ -306,6 +306,8 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                         $marginSelected = (int)$marginDefault;
                     }
 
+	                Mage::log(microtime() . " marginByStore: ".print_r($marginByStore,true), 0, $batchFile);
+
                     $pricesConverter = isset($priceBatch[$sku]) ? (array)$priceBatch[$sku] : false;
 
                     if ($pricesConverter) {
