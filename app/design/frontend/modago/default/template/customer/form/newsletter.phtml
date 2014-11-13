@@ -77,7 +77,7 @@
 <script>
     jQuery(document).ready(function() {
 
-        jQuery('.more-info').on("click", function() {
+        jQuery('.more-info').on("click", function(event) {
             event.preventDefault();
 
             var field = jQuery(this).parents('.fieldset');
