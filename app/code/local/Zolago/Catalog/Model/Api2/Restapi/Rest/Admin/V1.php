@@ -45,7 +45,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
     {
         //Mage::log($data, 0, 'converter_log.log');
         $json = json_encode($data);
-        Mage::log(print_r($data,true), 0, 'converter_log.log');
+        Mage::log('Got items from converter '.print_r(count($data),true), 0, 'converter_log.log');
 
 //        if (!empty($data)) {
 //            foreach ($data as $cmd => $batch) {
