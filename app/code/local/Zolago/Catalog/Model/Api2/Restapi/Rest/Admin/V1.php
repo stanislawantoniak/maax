@@ -253,9 +253,11 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
             $eav = Mage::getSingleton('eav/config');
             $productEt = $eav->getEntityType('catalog_product')->getId();
 
+
+            $model = Mage::getModel('zolagocatalog/product');
+
             $priceTypeByStore = array();
-            $zcModel = Mage::getModel('zolagocatalog/product');
-            $priceType = $zcModel->getConverterPriceType($skuS);
+            $priceType = $model->getConverterPriceType($skuS);
             //reformat by store id
             if(!empty($priceType)){
                 foreach ($priceType as $priceTypeData) {
@@ -265,7 +267,6 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
             }
 
             $marginByStore = array();
-            $model = Mage::getResourceModel('zolagocatalog/product');
             $priceMarginValues = $model->getPriceMarginValues($skuS);
 	        Mage::log(microtime() . " priceMarginValues: ".print_r($priceMarginValues,true), 0, $batchFile);
             //reformat margin
