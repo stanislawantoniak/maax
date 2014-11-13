@@ -29,6 +29,7 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
      */
     public function getPriceMarginValues($skuS)
     {
+	    Mage::log(microtime() . " usd gd fnctn ".print_r($skuS,true), 0, "converter_profilerPriceBatch.log");
         $assoc = array();
 
         if (!empty($skuS)) {
