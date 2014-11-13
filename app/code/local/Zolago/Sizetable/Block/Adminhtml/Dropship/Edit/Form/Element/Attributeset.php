@@ -1,0 +1,4 @@
+<?php
+class Zolago_Sizetable_Block_Adminhtml_Dropship_Edit_Form_Element_Attributeset extends Varien_Data_Form_Element_Abstract
+{
+}
