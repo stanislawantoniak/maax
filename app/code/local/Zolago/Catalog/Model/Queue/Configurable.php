@@ -20,7 +20,7 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
         return Mage::getModel('zolagocatalog/queue_item_configurable');
     }
 
-    protected function _execute($limit = 0)
+    protected function _execute()
     {
         $collection = $this->_collection;
 

@@ -5,6 +5,7 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
 
     public function savePriceValues($insert)
     {
+        Mage::log(microtime() . ' savePriceValues', 0, Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1::CONVERTER_PRICE_UPDATE_LOG);
         $writeAdapter = $this->_getWriteAdapter();
         $writeAdapter->beginTransaction();
         try {
@@ -12,10 +13,12 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
                 $writeAdapter->getTableName('catalog_product_entity_decimal'),
                 $insert, array('value')
             );
-
+            Mage::log(microtime() . ' Prices insert: commit', 0, Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1::CONVERTER_PRICE_UPDATE_LOG);
             $this->_getWriteAdapter()->commit();
         } catch (Exception $e) {
+            Mage::log(microtime() . ' Prices insert: rollBack', 0, Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1::CONVERTER_PRICE_UPDATE_LOG);
             $this->_getWriteAdapter()->rollBack();
+
             throw $e;
         }
 
@@ -29,6 +32,7 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
      */
     public function getPriceMarginValues($skuS)
     {
+	    Mage::log(microtime() . " usd gd fnctn ".print_r($skuS,true), 0, "converter_profilerPriceBatch_wilku.log");
         $assoc = array();
 
         if (!empty($skuS)) {

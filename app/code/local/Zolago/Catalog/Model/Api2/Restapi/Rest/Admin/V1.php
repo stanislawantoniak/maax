@@ -225,7 +225,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         Mage::getSingleton('index/indexer')
             ->getProcessByCode('cataloginventory_stock');
 
-        Mage::log(microtime() . ' End ', 0, 'product_stock_update.log');
+        //Mage::log(microtime() . ' End ', 0, 'product_stock_update.log');
 		
 		Mage::dispatchEvent("zolagocatalog_converter_stock_complete", array());
         //Mage::log(microtime() . ' End ', 0, 'product_stock_update.log');
@@ -241,7 +241,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         $skuS = array_keys($priceBatch);
         $itemsToChange = count($skuS);
         //Mage::log($priceBatch, 0, $batchFile);
-        //Mage::log(microtime() . " Got items from converter {$itemsToChange}", 0, $batchFile);
+        Mage::log(microtime() . " Got items from converter {$itemsToChange}", 0, $batchFile);
 
         //Get price types
         //Mage::log(microtime() . ' Get price types', 0, $batchFile);
@@ -249,12 +249,14 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
             //Mage::log(microtime() . ' Empty source', 0, $batchFile);
             return;
         }
+        $zcModel = Mage::getModel('zolagocatalog/product');
+        $model = Mage::getResourceModel('zolagocatalog/product');
         if(!empty($priceBatch)){
             $eav = Mage::getSingleton('eav/config');
             $productEt = $eav->getEntityType('catalog_product')->getId();
 
             $priceTypeByStore = array();
-            $zcModel = Mage::getModel('zolagocatalog/product');
+
             $priceType = $zcModel->getConverterPriceType($skuS);
             //reformat by store id
             if(!empty($priceType)){
@@ -265,8 +267,8 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
             }
 
             $marginByStore = array();
-            $model = Mage::getResourceModel('zolagocatalog/product');
             $priceMarginValues = $model->getPriceMarginValues($skuS);
+	        Mage::log(microtime() . " priceMarginValues: ".print_r($priceMarginValues,true), 0, $batchFile);
             //reformat margin
             if (!empty($priceMarginValues)) {
                 foreach ($priceMarginValues as $_) {
@@ -306,6 +308,8 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                         $marginSelected = (int)$marginDefault;
                     }
 
+	                Mage::log(microtime() . " margin: ".print_r($marginSelected,true), 0, "converter_profilerPriceBatch_wilku.log");
+
                     $pricesConverter = isset($priceBatch[$sku]) ? (array)$priceBatch[$sku] : false;
 
                     if ($pricesConverter) {
@@ -331,10 +335,12 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                 $ids[] = $productId;
             }
         }
-        //Mage::log(microtime() . ' End update', 0, $batchFile);
+
         //Mage::log($ids, 0, 'configurable_to_queue_update.log');
         if (!empty($insert)) {
+            Mage::log(microtime() . ' Inserting prices', 0, $batchFile);
             $model->savePriceValues($insert);
+            Mage::log(microtime() . ' Adding to configurable queue', 0, $batchFile);
             Zolago_Catalog_Helper_Configurable::queue($ids);
 	        Mage::dispatchEvent(
 		        "catalog_converter_price_update_after",

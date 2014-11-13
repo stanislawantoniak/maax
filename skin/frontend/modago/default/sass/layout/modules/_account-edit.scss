@@ -4,7 +4,7 @@
 	}
 	input {
 		color: inherit;
-		max-width: 200px;
+		max-width: 250px;
 	}
 	div.lastname-margin, div.confirmation-margin {
 		margin-top: 10px;
@@ -55,4 +55,7 @@
 		text-align: right;
 	}
 
+}
+.my-account .has-feedback .form-control {
+	padding-right: inherit !important;
 }
