@@ -225,7 +225,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         Mage::getSingleton('index/indexer')
             ->getProcessByCode('cataloginventory_stock');
 
-        Mage::log(microtime() . ' End ', 0, 'product_stock_update.log');
+        //Mage::log(microtime() . ' End ', 0, 'product_stock_update.log');
 		
 		Mage::dispatchEvent("zolagocatalog_converter_stock_complete", array());
         //Mage::log(microtime() . ' End ', 0, 'product_stock_update.log');
