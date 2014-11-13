@@ -264,9 +264,9 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                         = $priceTypeData['price_type'];
                 }
             }
-
+	        $margin_model = Mage::getModel('zolagocatalog/resource_product');
             $marginByStore = array();
-            $priceMarginValues = $model->getPriceMarginValues($skuS);
+            $priceMarginValues = $margin_model->getPriceMarginValues($skuS);
             //reformat margin
             if (!empty($priceMarginValues)) {
                 foreach ($priceMarginValues as $_) {
@@ -305,8 +305,6 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                             ? $marginByStore[$productId][Mage_Core_Model_App::ADMIN_STORE_ID] : $marginSelected;
                         $marginSelected = (int)$marginDefault;
                     }
-
-	                Mage::log(microtime() . " margin: ".print_r($marginSelected,true), 0, "converter_profilerPriceBatch_wilku.log");
 
                     $pricesConverter = isset($priceBatch[$sku]) ? (array)$priceBatch[$sku] : false;
 
