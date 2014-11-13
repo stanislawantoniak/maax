@@ -62,6 +62,22 @@
         </block>
 	</udprod_vendor_price_detail_stockmodal>
 	
+	<udprod_vendor_product_index>
+		<update handle="udropship_vendor" />
+        <update handle="bootstrap" />
+        <update handle="forms" />
+		<update handle="formkey" />
+		<reference name="head">
+            <action method="removeItem">
+                <type>skin_css</type>
+                <name>../../../adminhtml/default/default/boxes.css</name>
+            </action>
+        </reference>
+		<reference name="content">
+			<block name="mass" type="zolagocatalog/vendor_mass" template="zolagocatalog/product.phtml"></block>
+		</reference>
+	</udprod_vendor_product_index>
+	
 	<udprod_vendor_mass_index>
 		<update handle="udropship_vendor" />
         <update handle="adminhtml_head" />
