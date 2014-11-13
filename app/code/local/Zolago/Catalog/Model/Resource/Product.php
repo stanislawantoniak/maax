@@ -5,6 +5,7 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
 
     public function savePriceValues($insert)
     {
+        Mage::log(microtime() . ' savePriceValues', 0, Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1::CONVERTER_PRICE_UPDATE_LOG);
         $writeAdapter = $this->_getWriteAdapter();
         $writeAdapter->beginTransaction();
         try {
