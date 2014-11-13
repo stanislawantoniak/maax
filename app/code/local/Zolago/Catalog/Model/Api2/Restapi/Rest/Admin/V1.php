@@ -241,7 +241,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         $skuS = array_keys($priceBatch);
         $itemsToChange = count($skuS);
         //Mage::log($priceBatch, 0, $batchFile);
-        //Mage::log(microtime() . " Got items from converter {$itemsToChange}", 0, $batchFile);
+        Mage::log(microtime() . " Got items from converter {$itemsToChange}", 0, $batchFile);
 
         //Get price types
         //Mage::log(microtime() . ' Get price types', 0, $batchFile);
@@ -331,10 +331,12 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                 $ids[] = $productId;
             }
         }
-        //Mage::log(microtime() . ' End update', 0, $batchFile);
+
         //Mage::log($ids, 0, 'configurable_to_queue_update.log');
         if (!empty($insert)) {
+            Mage::log(microtime() . ' Inserting prices', 0, $batchFile);
             $model->savePriceValues($insert);
+            Mage::log(microtime() . ' Adding to configurable queue', 0, $batchFile);
             Zolago_Catalog_Helper_Configurable::queue($ids);
 	        Mage::dispatchEvent(
 		        "catalog_converter_price_update_after",
