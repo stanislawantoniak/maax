@@ -12,13 +12,15 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
                 $writeAdapter->getTableName('catalog_product_entity_decimal'),
                 $insert, array('value')
             );
-
+            Mage::log(microtime() . ' Prices insert: commit', 0, Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1::CONVERTER_PRICE_UPDATE_LOG);
             $this->_getWriteAdapter()->commit();
         } catch (Exception $e) {
+            Mage::log(microtime() . ' Prices insert: rollBack', 0, Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1::CONVERTER_PRICE_UPDATE_LOG);
             $this->_getWriteAdapter()->rollBack();
+
             throw $e;
         }
-        Mage::log(microtime() . ' Prices inserted', 0, Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1::CONVERTER_PRICE_UPDATE_LOG);
+
         return $this;
     }
 
