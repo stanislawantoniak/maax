@@ -309,8 +309,6 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                         $marginSelected = (int)$marginDefault;
                     }
 
-	                Mage::log(microtime() . " margin: ".print_r($marginSelected,true), 0, "converter_profilerPriceBatch_wilku.log");
-
                     $pricesConverter = isset($priceBatch[$sku]) ? (array)$priceBatch[$sku] : false;
 
                     if ($pricesConverter) {
