@@ -309,8 +309,6 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                         $marginSelected = (int)$marginDefault;
                     }
 
-	                Mage::log(microtime() . " margin: ".print_r($marginSelected,true), 0, "converter_profilerPriceBatch_wilku.log");
-
                     $pricesConverter = isset($priceBatch[$sku]) ? (array)$priceBatch[$sku] : false;
 
                     if ($pricesConverter) {
@@ -337,12 +335,13 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
             }
         }
 
-        //Mage::log($ids, 0, 'configurable_to_queue_update.log');
+
         if (!empty($insert)) {
-            Mage::log(microtime() . ' Inserting prices', 0, $batchFile);
             $model->savePriceValues($insert);
-            Mage::log(microtime() . ' Adding to configurable queue', 0, $batchFile);
+
             Zolago_Catalog_Helper_Configurable::queue($ids);
+
+            //add to solr queue
 	        Mage::dispatchEvent(
 		        "catalog_converter_price_update_after",
 		        array(
