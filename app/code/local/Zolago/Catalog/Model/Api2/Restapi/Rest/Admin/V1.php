@@ -245,6 +245,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         Mage::log(microtime() . " Got items from converter {$itemsToChange}", 0, $batchFile);
 
         $skeleton = Zolago_Catalog_Helper_Data::getSkuAssoc($skuS);
+        $productIds = array_keys($skeleton);
 
         //Get price types
         //Mage::log(microtime() . ' Get price types', 0, $batchFile);
@@ -268,7 +269,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
             }
 
             $marginByStore = array();
-            $priceMarginValues = $model->getPriceMarginValues($skuS);
+            $priceMarginValues = $model->getPriceMarginValues($productIds);
 	        Mage::log(microtime() . " priceMarginValues: ".print_r($priceMarginValues,true), 0, $batchFile);
             //reformat margin
             if (!empty($priceMarginValues)) {
