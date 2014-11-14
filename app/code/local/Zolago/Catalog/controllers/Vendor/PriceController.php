@@ -1,9 +1,6 @@
 <?php
 class Zolago_Catalog_Vendor_PriceController extends Zolago_Catalog_Controller_Vendor_Price_Abstract
 {
-	
-	protected $_collection;
-	
 	/**
 	 * Grid action
 	 */
@@ -11,25 +8,6 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Catalog_Controller_Ve
 		$this->_renderPage(null, 'udprod_price');
 	}
 	
-	
-	/**
-	 * Handle whole JOSN API
-	 */
-	public function restAction() {
-		switch ($this->getRequest()->getMethod()) {
-			case "GET":
-				$productId = null;
-				if(preg_match("/\/([0-9]+)$/", $this->getRequest()->getPathInfo(), $matches)){
-					$productId = $matches[1];
-				}
-				$this->_handleRestGet($productId);
-			break;
-			case "PUT":
-				$this->_handleRestPut();
-			break;
-		}
-		
-	}
 	
 	/**
 	 * Handle additional get action
@@ -188,12 +166,6 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Catalog_Controller_Ve
 		$this->_prepareRestResponse();
 	}
 
-	/**
-	 * Prepare headers
-	 */
-	protected function _prepareRestResponse() {
-		$this->getResponse()->setHeader('Content-type', 'application/json');
-	}
 	
 	/**
 	 * @return Zolago_Catalog_Model_Resource_Vendor_Price_Collection
@@ -210,113 +182,6 @@ class Zolago_Catalog_Vendor_PriceController extends Zolago_Catalog_Controller_Ve
 		return $this->_collection;
 	}
 	
-	
-
-	/**
-	 * @param array $inParams
-	 * @return array
-	 */
-	protected function _getRestQuery(array $inParams = array()) {
-		if(empty($inParams)){
-			$inParams = $this->getRequest()->getQuery();
-		}
-		$params = array();
-		foreach($this->_getCollection()->getAvailableQueryParams() as $key){
-			if(isset($inParams[$key])){
-				$value = $inParams[$key];
-				if(is_string($value) && trim($value)==""){
-					continue;
-				}elseif(is_array($value) && !$value){
-					continue;
-				}
-				$params[$key] = $this->_getSqlCondition($key, $value);
-			}
-		}
-		return $params;
-	}
-	
-	/**
-	 * @param string $key
-	 * @param mixed $value
-	 * @return array
-	 */
-	protected function _getSqlCondition($key, $value) {
-		if(is_array($value)){
-			
-			if(isset($value['to']) && is_numeric($value['to'])){
-				$value['to'] = (float)$value['to'];
-			}
-			if(isset($value['from']) && is_numeric($value['from'])){
-				$value['from'] = (float)$value['from'];
-			}
-			
-			if(isset($value['to']) && is_numeric($value['to']) && 
-					(!isset($value['from']) || (isset($value['from']) && $value['from']==0))){
-				$value = array($value, array("null"=>true));
-			}
-			
-			return $value;
-		}
-		switch ($key) {
-			case "is_new":
-			case "is_bestseller":
-				return $value==1 ? array("eq"=>$value) : array(array("null"=>true), array("eq"=>$value));
-			break;
-			case "product_flags":
-			case "is_in_stock":
-				return array("eq"=>$value);
-			break;
-			case "converter_price_type":
-			case "converter_msrp_type":
-				return $value!=0 ? array("eq"=>$value) : array("null"=>true);
-			break;
-			case "msrp":
-				return $value==1 ? array("notnull"=>true) : array(array("null"=>true));
-			break;
-		}
-		return array("like"=>'%'.$value.'%');
-	}
-	
-	
-	
-	/**
-	 * @return array
-	 */
-	protected function _getRestRange() {
-		$range = $this->getRequest()->getHeader("Range", 
-			$this->getRequest()->getHeader("X-Range")
-		);
-		if($range){
-			preg_match('/(\d+)-(\d+)/', $range, $matches);
-			$start = $matches[1];
-			$end = $matches[2];
-		}else{
-			$start = 0;
-			$end = 100;
-		}
-		return array("start"=>$start, "end"=>$end);
-	}
-	
-	/**
-	 * @return array
-	 */
-	protected function _getRestSort() {
-		$query = $this->getRequest()->getServer('QUERY_STRING');
-		//sort(-entity_id)
-		if(preg_match("/sort\((\-|\+)(\w+)\)/", $query, $matches)){
-			if(in_array($matches[2], $this->_getCollection()->getAvailableSortParams())){
-				return array(
-					"order"=>$matches[2], 
-					"dir"=>$matches[1]=="+" ? 
-						Varien_Db_Select::SQL_ASC : Varien_Db_Select::SQL_DESC
-				);
-			}
-		}
-		return array();
-	}
-	
-	
-
 }
 
 

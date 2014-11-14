@@ -1,7 +1,7 @@
 <?php
 
 class Zolago_Catalog_Vendor_ProductController 
-	extends Zolago_Dropship_Controller_Vendor_Abstract {
+	extends Zolago_Catalog_Controller_Vendor_Product_Abstract {
 	/**
 	 * Index
 	 */
@@ -10,6 +10,21 @@ class Zolago_Catalog_Vendor_ProductController
 		$this->_saveHiddenColumns();
 		$this->_renderPage(null, 'udprod_product');
     }
+
+	
+	/**
+	 * @return Mage_Catalog_Model_Resource_Product_Collection
+	 */
+	protected function _getCollection() {
+		if(!$this->_collection){
+			// Add extra fields
+			$this->_collection = $this->_prepareCollection();
+			
+		}
+		return $this->_collection;
+	}
+	
+	
 	
 	protected function _saveHiddenColumns() {
 		if ($this->getRequest()->isPost()) {
@@ -42,7 +57,7 @@ class Zolago_Catalog_Vendor_ProductController
 			// Attrbiute modes
 			$attributesMode = $this->getRequest()->getPost("attributes_mode");
 			// Attribure set
-			$attributeSet = $this->_getAttributeSet();
+			$attributeSet = $this->getAttributeSet();
 			// Store scope
 			$store = $this->_getStore();
 			
@@ -149,20 +164,6 @@ class Zolago_Catalog_Vendor_ProductController
 		$this->getResponse()->
 				setBody(Zend_Json::encode($response))->
 				setHeader('content-type', 'application/json');
-	}
-
-
-	public function gridAction(){
-		$design = Mage::getDesign();
-		$design->setArea("adminhtml");
-		$this->loadLayout();
-		$block = $this->getLayout()->createBlock("zolagocatalog/vendor_mass_grid");
-
-		$this->getResponse()->setBody($block->toHtml());
-	}
-	
-	public function massDeleteAction() {
-		var_export($this->getRequest()->getParams());
 	}
 	
     /**
@@ -295,26 +296,6 @@ class Zolago_Catalog_Vendor_ProductController
 	}
 	
 	
-	/**
-	 * @return Mage_Core_Model_Store
-	 */
-	protected function _getStore() {
-		$storeId = Mage::app()->getRequest()->getParam("store");
-		$candidate = Mage::app()->getStore($storeId);
-		if($candidate->getId()==$storeId){
-			return $candidate;
-		}
-		return Mage::app()->getStore(Mage_Core_Model_Store::ADMIN_CODE);
-	}
-	
-	/**
-	 * @return Mage_Eav_Model_Entity_Attribute_Set
-	 */
-	protected function _getAttributeSet() {
-		return Mage::getModel("eav/entity_attribute_set")->load(
-			Mage::app()->getRequest()->getParam("attribute_set")
-		);
-	}
 	
 	protected function _getCurrentStaticFilterValues() {
 		$staticFilters			= Mage::app()->getRequest()->getParam("staticFilters", 0);

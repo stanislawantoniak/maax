@@ -66,15 +66,13 @@
 		<update handle="udropship_vendor" />
         <update handle="bootstrap" />
         <update handle="forms" />
-		<update handle="formkey" />
-		<reference name="head">
-            <action method="removeItem">
-                <type>skin_css</type>
-                <name>../../../adminhtml/default/default/boxes.css</name>
-            </action>
-        </reference>
+        <update handle="dgrid" />
+		 
 		<reference name="content">
-			<block name="mass" type="zolagocatalog/vendor_mass" template="zolagocatalog/product.phtml"></block>
+			<block name="mass" type="zolagocatalog/vendor_product" template="zolagocatalog/product.phtml">
+				<block type="zolagocatalog/vendor_product_attributesetswitcher" name="attribute_set_switcher" template="zolagocatalog/product/attributesetswitcher.phtml"/>
+				<block type="core/template" name="mass_actions" template="zolagocatalog/product/massactions.phtml"/>
+			</block>
 		</reference>
 	</udprod_vendor_product_index>
 	

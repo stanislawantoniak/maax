@@ -2,104 +2,32 @@
 
 class Zolago_Catalog_Block_Vendor_Product extends Mage_Core_Block_Template
 {
-    public function _prepareStoreSwitcher() {
-		$design = Mage::getDesign();
-		$design->setArea("adminhtml");
-		$block = $this->getLayout()->
-				createBlock("adminhtml/store_switcher")
-            ->setTemplate('zolagocatalog/widget/grid/store/switcher.phtml');
-		$block->setWebsiteIds($this->getPossibleWebsiteIds());
-		$block->setUseConfirm(0);
-		$block->setParentBlock($this);
-		$this->setStoreSwitcherHtml($block->toHtml());
-		$this->setStoreSwitcher($block);
-		$design->setArea("frontend");
+
+	public function getCanShowGrid() {
+		return (bool)$this->getAttributeSetId();
 	}
 	
 	/**
-	 * @return null | array
+	 * @return Zolago_Catalog_Model_Vendor_Product_Grid
 	 */
-	public function getPossibleWebsiteIds() {
-		$array = $this->getVendor()->getLimitWebsites();
-		if(!is_array($array) || (count($array)==1 && $array[0]=="")){
-			return null;
-		}
-		return $array;
+	public function getGridModel() {
+		return Mage::getSingleton('zolagocatalog/vendor_product_grid');
 	}
 	
 	/**
 	 * @return Mage_Eav_Model_Entity_Attribute_Set
 	 */
-	public function getCurrentAttributeSet() {
-		if(!$this->getData("current_attribute_set")){
-			$this->setData("current_attribute_set", Mage::getModel("eav/entity_attribute_set")->load(
-				Mage::app()->getRequest()->getParam("attribute_set")
-			));
-		}
-		return $this->getData("current_attribute_set");
+	public function getAttributeSet() {
+		return $this->getGridModel()->getAttributeSet();
 	}
 	
 	/**
 	 * @return int
 	 */
-	public function getCurrentAttributeSetId() {
-		return $this->getCurrentAttributeSet()->getId();
+	public function getAttributeSetId() {
+		return $this->getAttributeSet()->getId();
 	}
 	
-	/**
-	 * @return Mage_Core_Model_Store
-	 */
-	public function getCurrentStore() {
-		if(!$this->getData("current_store")){
-			$store = Mage::getModel("core/store")->load(
-					Mage::app()->getRequest()->getParam("store", 0)
-			);
-			if(!$store->getId()){
-				$store = Mage::app()->getStore(Mage_Catalog_Model_Product::DEFAULT_STORE_ID);
-			}
-			$this->setData("current_store", $store);
-		}
-		return $this->getData("current_store");
-	}
-	
-	/**
-	 * @return int
-	 */
-	public function getCurrentStoreId() {
-		return $this->getCurrentStore()->getId();
-	}
-	
-	public function getCurrentStaticFilters() {
-		if(!$this->getData("current_static_filter")){
-			$staticFilters		= Mage::app()->getRequest()->getParam("staticFilters", 0);
-			$staticFiltersIds	= false;
-			
-			for ($i = 1; $i <= $staticFilters; $i++) {
-				if (Mage::app()->getRequest()->getParam("staticFilterId-".$i)) {
-					$staticFiltersIds[] = Mage::app()->getRequest()->getParam("staticFilterId-".$i);
-				}
-			}
-			
-			$this->setData("current_static_filter", $staticFiltersIds);
-		}
-		return $this->getData("current_static_filter");
-	}
-	
-	public function getCurrentStaticFilterValues() {
-		if(!$this->getData("current_static_filter_value")) {
-			$staticFilters			= Mage::app()->getRequest()->getParam("staticFilters", 0);
-			$staticFiltersValues	= false;
-
-			for ($i = 1; $i <= $staticFilters; $i++) {
-				if (Mage::app()->getRequest()->getParam("staticFilterId-".$i) && Mage::app()->getRequest()->getParam("staticFilterValue-".$i)) {
-					$staticFiltersValues[Mage::app()->getRequest()->getParam("staticFilterId-".$i)] = Mage::app()->getRequest()->getParam("staticFilterValue-".$i);
-				}
-			}
-
-			$this->setData("current_static_filter_value", $staticFiltersValues);
-		}
-		return $this->getData("current_static_filter_value");
-	}
 	
 	/**
 	 * @return Unirgy_Dropship_Model_Vendor

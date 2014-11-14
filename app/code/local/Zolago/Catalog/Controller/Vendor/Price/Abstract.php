@@ -2,29 +2,30 @@
 /**
  * @method Zolago_Dropship_Model_Session _getSession()
  */
-class Zolago_Catalog_Controller_Vendor_Price_Abstract extends Zolago_Dropship_Controller_Vendor_Abstract
+class Zolago_Catalog_Controller_Vendor_Price_Abstract 
+	extends Zolago_Catalog_Controller_Vendor_Abstract
 {
 
 	/**
-	 * @param string $number
-	 * @return float
+	 * @return array
 	 */
-	protected function _formatNumber($number) {
-		return (float) str_replace(",", ".", $number);
+	protected function _getAvailableSortParams() {
+		return $this->_getCollection()->getAvailableSortParams();
 	}
+	
 	/**
-	 * @param int $productId
-	 * @param int $storeId
-	 * @return Mage_Catalog_Model_Product
-	 * @throws Mage_Core_Exception
+	 * @return array
 	 */
-	protected function _getProduct($productId, $storeId) {
-		$product = Mage::getModel("catalog/product")->setStoreId($storeId)->load($productId);
-		/* @var $product Mage_Catalog_Model_Product */
-		if($product->getUdropshipVendor()==$this->_getSession()->getVendorId()){
-			return $product;
-		}
-		throw new Mage_Core_Exception("Product not allowed");
+	protected function _getAvailableQueryParams() {
+		return $this->_getCollection()->getAvailableQueryParams();
+	}
+	
+	/**
+	 * @return int
+	 */
+	protected function _getStoreId() {
+		$storeId = $this->getRequest()->getParam("store_id");
+		return Mage::app()->getStore($storeId)->getId();
 	}
 	
 	/**
@@ -32,7 +33,7 @@ class Zolago_Catalog_Controller_Vendor_Price_Abstract extends Zolago_Dropship_Co
 	 * @param Mage_Catalog_Model_Resource_Product_Collection
 	 * @return Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 	 */
-	protected function _prepareCollection(Mage_Catalog_Model_Resource_Product_Collection $collection=null) {
+	protected function _prepareCollection(Varien_Data_Collection $collection=null) {
 		$visibilityModel = Mage::getSingleton("catalog/product_visibility");
 		/* @var $visibilityModel Mage_Catalog_Model_Product_Visibility */
 		
@@ -139,42 +140,7 @@ class Zolago_Catalog_Controller_Vendor_Price_Abstract extends Zolago_Dropship_Co
 				);
 			}
 		}
-		
 	}
-	
-	/**
-	 * @return int
-	 */
-	protected function _getStoreId() {
-		$storeId = $this->getRequest()->getParam("store_id");
-		$store = Mage::app()->getStore($storeId);
-		
-		$allowedStores = $this->getAllowedStores();
-		
-		foreach($allowedStores as $_store){
-			if($_store->getId()==$store->getId()){
-				return $store->getId();
-			}
-		}
-		
-		throw new Mage_Core_Exception("Unknow store");
-	}
-	
-	/**
-	 * @return array
-	 */
-	public function getAllowedStores() {
-		return Mage::helper("zolagodropship")->getAllowedStores($this->getVendor());
-	}
-
-	/**
-	 * @return Unirgy_Dropship_Model_Vendor
-	 */
-	public function getVendor() {
-		return $this->_getSession()->getVendor();
-	}
-	
-
 }
 
 
