@@ -34,38 +34,42 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
     {
         $assoc = array();
 
-        if (!empty($skuS)) {
-            $readConnection = $this->_getReadAdapter();
-            $select = $readConnection->select();
-            $select->from(
-                array("product_text" => 'catalog_product_entity_text'),
-                array(
-                     "product_id"   => "product_text.entity_id",
-                     "price_margin" => "product_text.value",
-                     "store"        => "product_text.store_id"
-                )
-            );
-            $select->join(
-                array("attribute" => $this->getTable("eav/attribute")),
-                "attribute.attribute_id = product_text.attribute_id",
-                array()
-            );
-            $select->join(
-                array("product" => $this->getTable("catalog/product")),
-                "product_text.entity_id = product.entity_id",
-                array()
-            );
-            $select->where(
-                "attribute.attribute_code=?", Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_PRICE_MARGIN_CODE
-            );
-            $select->where("product.sku IN(?)", $skuS);
-
-            try {
-                $assoc = $readConnection->fetchAll($select);
-            } catch (Exception $e) {
-                Mage::throwException("Error fetching price_margin values");
-            }
+        if (empty($skuS)) {
+            return array();
         }
+        $readConnection = $this->_getReadAdapter();
+        $select = $readConnection->select();
+        $select->from(
+            array("products" => $this->getTable("catalog/product")),
+            array(
+                "product_id" => "products.entity_id",
+                "sku" => "products.sku"
+            )
+        );
+        $select->join(
+            array("text_attributes" => 'catalog_product_entity_text'),
+            "products.entity_id=text_attributes.entity_id",
+            array()
+        );
+        $select->join(
+            array("attributes" => $this->getTable("eav/attribute")),
+            "attributes.attribute_id=text_attributes.attribute_id",
+            array()
+        );
+        $select->where(
+            "products.type_id=?", Mage_Catalog_Model_Product_Type::TYPE_SIMPLE
+        );
+        $select->where(
+            "attributes.attribute_code=?", Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_PRICE_MARGIN_CODE
+        );
+        $select->where("product.sku IN(?)", $skuS);
+
+        try {
+            $assoc = $readConnection->fetchAll($select);
+        } catch (Exception $e) {
+            Mage::throwException("Error fetching price_margin values");
+        }
+
         return $assoc;
     }
     /**

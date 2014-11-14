@@ -71,8 +71,8 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                             }
                             unset($dataPrice);
                         }
-                        Mage::log(microtime() . ' Got items from converter ' . count($priceBatch), 0, $batchFile);
-                        //self::updatePricesConverter($merchant, $priceBatch);
+
+                        self::updatePricesConverter($priceBatch);
                         break;
                     case 'ProductStockUpdate':
                         $batchFile = self::CONVERTER_STOCK_UPDATE_LOG;
@@ -237,12 +237,14 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
     /**
      * @param $priceBatch
      */
-    public static function updatePricesConverter($merchant,$priceBatch){
+    public static function updatePricesConverter($priceBatch){
         $batchFile = self::CONVERTER_PRICE_UPDATE_LOG;
         $skuS = array_keys($priceBatch);
         $itemsToChange = count($skuS);
         //Mage::log($priceBatch, 0, $batchFile);
         Mage::log(microtime() . " Got items from converter {$itemsToChange}", 0, $batchFile);
+
+        $skeleton = Zolago_Catalog_Helper_Data::getSkuAssoc($skuS);
 
         //Get price types
         //Mage::log(microtime() . ' Get price types', 0, $batchFile);
@@ -250,15 +252,13 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
             //Mage::log(microtime() . ' Empty source', 0, $batchFile);
             return;
         }
-        $zcModel = Mage::getModel('zolagocatalog/product');
+
         $model = Mage::getResourceModel('zolagocatalog/product');
         if(!empty($priceBatch)){
-            $eav = Mage::getSingleton('eav/config');
-            $productEt = $eav->getEntityType('catalog_product')->getId();
+            $productEt = Mage::getSingleton('eav/config')->getEntityType('catalog_product')->getId();
 
             $priceTypeByStore = array();
-
-            $priceType = $zcModel->getConverterPriceType($skuS);
+            $priceType = $model->getConverterPriceType($skuS);
             //reformat by store id
             if(!empty($priceType)){
                 foreach ($priceType as $priceTypeData) {
@@ -281,7 +281,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         }
         $insert = array();
         $ids = array();
-        $skeleton = Zolago_Catalog_Helper_Data::getSkuAssoc($skuS);
+
         //Mage::log(microtime() . ' Start update', 0, $batchFile);
         if (!empty($skeleton)) {
             foreach ($skeleton as $sku => $productId) {
