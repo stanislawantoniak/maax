@@ -49,7 +49,10 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
         $select->join(
             array("text_attributes" => 'catalog_product_entity_text'),
             "products.entity_id=text_attributes.entity_id",
-            array()
+            array(
+                'store' => 'text_attributes.store_id',
+                'price_margin' => 'text_attributes.value'
+            )
         );
         $select->join(
             array("attributes" => $this->getTable("eav/attribute")),
