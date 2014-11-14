@@ -1502,4 +1502,20 @@
         </reference>
     </newsletter_manage_index>
 
+    <wishlist_index_index>
+
+        <remove name="left"/>
+
+        <action method="setTemplate">
+            <template>page/1column.phtml</template>
+        </action>
+
+        <reference name="root">
+            <action method="unsetChild">
+                <name>breadcrumbs</name>
+            </action>
+        </reference>
+
+    </wishlist_index_index>
+
 </layout>

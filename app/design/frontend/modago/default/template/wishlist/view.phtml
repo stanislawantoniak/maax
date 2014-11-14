@@ -1,0 +1,107 @@
+<?php
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
+
+/** @var $_helper Zolago_Wishlist_Helper_Data */
+$_helper = $this->helper('wishlist');
+$_helperCustomer = $this->helper('customer');
+$backUrl = $this->getUrl('customer/account');
+
+
+// dla pamięci
+// cms block dla treści nad wishlist
+// instalator do cms block'a
+// plugin zamiast masonry to ->
+//do backloga serduszka z przekreslona cena na bardzo malej rozdzielczosci sie wizualnie psuja
+//
+
+//echo var_dump($this->getItems());
+
+// if (count($this->getItems())):
+//foreach ($this->getItems() as $item):
+
+
+?>
+
+
+<?php if ($this->helper('wishlist')->isAllow()) : ?>
+    <div class="my-wishlist">
+        <div class="page-title box-wrapper">
+            <h1>
+                <span class="span-title"><?php echo $_helper->__('Your favourite'); ?></span>
+                <!--            <span class="back-sm"><a href="--><?php //echo $backUrl; ?><!--" class="underline">-->
+                <?php //echo $_helper->__('back: my account'); ?><!-- &gt;</a></span>-->
+                <!--            <span class="back-xs"><a href="--><?php //echo $backUrl; ?><!--" class="underline">-->
+                <?php //echo $_helper->__('back'); ?><!-- &gt;</a></span>-->
+            </h1>
+        </div>
+        <div class="background-wrapper box-wrapper wishlist-cms">
+            <?php if ($_helperCustomer->isLoggedIn()) : ?>
+                <?php if ($this->hasWishlistItems()): ?>
+                    Zalogowany i ma jakies ulubione
+                <?php else: ?>
+                    Zalogowany ale nie ma ulubionych
+                <?php endif ?>
+            <?php else: ?>
+                <?php if ($this->hasWishlistItems()): ?>
+                    nie zalogowany i ma jakies ulubione
+                <?php else: ?>
+                    nie zalogowany, nie ma ulubionych
+                <?php endif ?>
+            <?php endif ?>
+
+            <?php
+            //            var_dump($this->getWishlistInstance()->getId());
+//                        var_dump($this->getWishlistItems());
+            /** @var $_collection Mage_Wishlist_Model_Resource_Item_Collection */
+            $_collection = $this->getWishlistItems();
+
+
+
+
+//            $_collection->
+//            var_dump($_collection);
+//            var_dump($_collection->count());
+
+
+            ?>
+<!--            --><?php //foreach ($_collection as $product): ?>
+<!--                --><?php //$_productImageUrl = $product->getListingResizedImageUrl(); ?>
+<!--                --><?php //$_productImageInfo = $product->getListingResizedImageInfo();?>
+<!--                --><?php
+//                var_dump($_productImageInfo, $_productImageUrl);
+//                ?>
+<!--            --><?php //endforeach; ?>
+
+
+        </div>
+
+        <div class="background-wrapper box-wrapper" id="wishlist-items">
+            <?php $this->getChild('items')->setItems($this->getWishlistItems()); ?>
+            <?php echo $this->getChildHtml('items'); ?>
+        </div>
+    </div>
+
+<?php endif ?>
+
+<style>
+    #sidebar {
+        visibility: hidden;
+        display: none;
+        width: 0;
+        height: 0;
+    }
+
+    #content-main {
+        margin-left: 0px !important;
+    }
+
+    /*.page-title h1 .span-title{*/
+    /*font-size: 18px!important;*/
+    /*font-family: latoblack;*/
+    /*}*/
+
+
+</style>
+
+

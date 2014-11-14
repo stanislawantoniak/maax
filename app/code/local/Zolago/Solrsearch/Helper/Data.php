@@ -450,4 +450,48 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 	public function getSolrDocFileds() {
 		return array_keys($this->_solrToMageMap);
 	}
+
+    /**
+     * @return string | null;
+     */
+    public function getListingResizedImageUrl() {
+        $model = Mage::getModel('zolagosolrsearch/catalog_product');
+
+        if(!$model->hasData("listing_resized_image_url")){
+
+            $return = null;
+            try{
+                $return = Mage::helper('catalog/image')->
+                init($model, 'image')->
+                keepAspectRatio(true)->
+                constrainOnly(true)->
+                keepFrame(false)->
+                resize(300,null);
+            } catch (Exception $ex) {
+                Mage::logException($ex);
+            }
+            $model->setData("listing_resized_image_url", $return . ""); // Cast to string
+        }
+
+        return $model->getData("listing_resized_image_url");
+    }
+
+    /**
+     * @return null | array
+     */
+    public function getListingResizedImageInfo() {
+        $model = Mage::getModel('zolagosolrsearch/catalog_product');
+
+        $urlPath = $model->getListingResizedImageUrl();
+        // Extract cached image URI
+        if($urlPath){
+            $filePath = substr($urlPath, strpos($urlPath, "//")+2);
+            $filePath = substr($filePath, strpos($filePath, "/")+1);
+            $filePath = str_replace("/", DS, $filePath);
+            if($info=@getimagesize($filePath)){
+                return array("width"=>$info[0], "height"=>$info[1]);
+            }
+        }
+        return null;
+    }
 }
