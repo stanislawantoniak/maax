@@ -1,0 +1,98 @@
+<!--@subject {{var store_name}} – Zmiana statusu Twojej reklamacji (nr. RMA-{{var rma.increment_id}}) @-->
+<!--@vars
+{"store url=\"\"":"Store Url",
+"skin url=\"images/logo_email.gif\" _area='frontend'":"Email Logo Image",
+"htmlescape var=$order.getCustomerName()":"Customer Name",
+"var order.increment_id":"Order Id",
+"var order.getStatusLabel()":"Order Status",
+"store url=\"customer/account/\"":"Customer Account Url",
+"var comment":"Order Comment",
+"var store.getFrontendName()":"Store Name"}
+@-->
+<!--@styles
+body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif; }
+@-->
+
+
+
+<body style="background:#F6F6F6; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; margin:0; padding:0;">
+<div style="background:#F6F6F6; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; margin:0; padding:0;">
+    <table cellspacing="0" cellpadding="0" border="0" height="100%" width="100%">
+        <tr>
+            <td align="center" valign="top" style="padding:20px 0 20px 0">
+                <!-- [ header starts here] -->
+                <table bgcolor="#FFFFFF" cellspacing="0" cellpadding="10" border="0" width="650"
+                       style="border:1px solid #E0E0E0;">
+                    <tr>
+                        <td valign="top">
+                            <a href="{{store url=""}}">
+                            <img src="{{skin url='images/logo_black.png' _area='frontend'}}"
+                                 alt="{{var store_name}}" style="margin-bottom:10px;" border="0"/>
+                            </a>
+                        </td>
+                    </tr>
+                    <!-- [ middle starts here] -->
+                    <tr>
+                        <td valign="top">
+                            <div style="margin:0 0 30px 0;">
+                                <p style="margin: 0;">
+                                    Sklep <span style="text-transform:uppercase;">{{var vendor.vendor_name}}</span>
+                                    wprowadził zmianę w reklamacji nr. (RMA-{{var rma.increment_id}})
+                                </p>
+                            </div>
+
+                            <p style="margin: 0;"><b>Data zgłoszenia:</b> {{var rma_creation_date}}</p>
+
+                            <p style="margin: 0;"><b>Zgłoszenie dotyczy zamówienia numer:</b> {{var po.increment_id}}</p>
+                            {{layout handle="sales_email_order_rma_items" rma=$rma order=$order}}
+                            <br/>
+
+                            <p style="margin: 0;"><b>Status:</b> {{var rma_status}}</p>
+
+                            <div style="background-color:#f1f1f1;margin:10px 0;padding:20px 10px;border:1px solid #d3d3d3;">
+                                <p><b>Data:</b> {{var rma_creation_date}}</p>
+
+                                <div style="margin:0 0 30px 0;">
+                                    <p><b>Wiadomość od obsługi sklepu <span style="text-transform:uppercase;">{{var vendor.vendor_name}}</span>:</b></p>
+                                </div>
+                                <div style="margin:0 0 30px 0;">
+                                    <p>{{var comment}}</p>
+                                </div>
+
+
+                                <!--{{depend customer_notes}}-->
+                                <!--<div style="background-color:#f1f1f1;margin:10px 0;padding:20px 10px;border:1px solid #d3d3d3;">-->
+                                    <!--<p>{{var customer_notes}}</p>-->
+                                <!--</div>-->
+                                <!--{{/depend}}-->
+
+
+                                <!--{{depend show_resolution_notes}}-->
+                                <!--<div style="background-color:#f1f1f1;margin:10px 0;padding:20px 10px;border:1px solid #d3d3d3;">-->
+                                    <!--<p>{{var resolution_notes}}</p>-->
+                                <!--</div>-->
+                                <!--{{/depend}}-->
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p>
+                                <b>Nie odpowiadaj na ten e-mail</b> gdyż został on wysłany przez automat.
+                                Jeżeli chcesz zadać dodatkowe pytania w tej samej sprawie, dodaj nowy komentarz do
+                                zgłoszenia, w
+                                widoku zgłoszenia w Moje konto: <a href="{{store url='customer/account/'}}">kliknij
+                                tutaj</a>.
+                            </p>
+
+                            <p>Pozdrawiamy serdecznie,</p>
+
+                            <p>Zespól {{var store.getName()}}</p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>

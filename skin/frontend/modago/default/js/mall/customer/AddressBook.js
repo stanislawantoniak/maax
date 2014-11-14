@@ -276,18 +276,27 @@
         /**
          * Returns whether address can be removed.
          *
-         * @param {Number} id
+         * @param {Number|Mall.customer.Address} address
          * @returns {boolean}
          */
-        isRemoveable: function (id) {
-
-            if (id === this.getDefaultBilling()
-                || id === this.getDefaultShipping()
-                || (this.getSelectedBilling() !== null && id === this.getSelectedBilling().getId())
-                || (this.getSelectedShipping() !== null
-                    && id === this.getSelectedShipping().getId())
-                || this.getAddressBook().length < 2) {
-                return false;
+        isRemoveable: function (address) {
+			if(!(address instanceof Mall.customer.Address)){
+				address = this.get(address);
+			}
+			
+			//console.log(
+			//		address.getId(), 
+			//		this.getDefaultShipping().getId(),  
+			//		this.getSelectedShipping().getId()
+			//);
+			
+			if ((this.getDefaultBilling() && address === this.getDefaultBilling()) ||
+				(this.getDefaultShipping() && address === this.getDefaultShipping()) || 
+				(this.getSelectedShipping() !== null && address === this.getSelectedShipping()) || 
+				(this.getSelectedBilling() !== null && address === this.getSelectedBilling()) || 
+				this.getAddressBook().length < 2) {
+                
+				return false;
             }
 
             return true;

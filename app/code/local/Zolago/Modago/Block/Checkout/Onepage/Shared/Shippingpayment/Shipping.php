@@ -61,13 +61,31 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment_Shipping
                 $allVendorsMethod[] = $method;
             }
         }
+		
+		// array(
+		//		vendorId=>array(
+		//			method_code=>price, 
+		//			....
+		//		), 
+		// ...)
+		$vendorCosts = array();
+		foreach($allMethodsByCode as $rateCode=>$rateArray){
+			foreach($rateArray as $rate){
+				$vendorId = $rate['vendor_id'];
+				if(!isset($vendorCosts[$vendorId])){
+					$vendorCosts[$vendorId] = array();
+				}
+				$vendorCosts[$vendorId][$rate['code']] = (float)$rate['cost'];
+			}
+		}
 
         return (object)array(
             'rates' => $rates,
             'allVendorsMethod' => $allVendorsMethod,
             'vendors' => $vendors,
             'methods' => $methodsByCode,
-            'cost' => $cost
+            'cost' => $cost,
+			'vendorCosts'=> $vendorCosts
         );
 
     }

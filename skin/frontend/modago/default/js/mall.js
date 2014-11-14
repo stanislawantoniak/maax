@@ -36,7 +36,7 @@ var Mall = {
         return p.join(",");
     },
     currency: function(price){
-        return this.price(price) + " " + global.i18n.currency;
+        return this.price(price) + " " + this.getCurrencyBasedOnCode();
     },
     // Registry object
     reg: {
@@ -831,8 +831,20 @@ jQuery(document).ready(function() {
 
     jQuery(".messages").find('span').append('<i class="fa fa-times"></i>');
     jQuery(".messages").find("i").bind('click', function() {
-        jQuery(this).parents("li").first().hide();
+        var curentUL = jQuery(this).closest('ul');
+        jQuery(this).parents("li").first().remove();
+
+        if (jQuery(curentUL).find('li').length === 0) {
+            jQuery(curentUL).parent().remove();
+        }
+
+        if(jQuery('.messages li').length === 0) {
+            jQuery('#content').css('margin-top', '');
+        }
     });
+    if (jQuery('.messages i').length) {
+        jQuery('#content').css('margin-top', '0px');
+    }
 
     jQuery("#add-to-cart").tooltip({
         template: '<div class="tooltip top" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner" style="color: #ea687e"></div></div>'

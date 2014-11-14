@@ -19,12 +19,9 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
      *
      * @return array
      */
-    public function getConfigurableMinPrice($configurableProductsIds = array(), $storeId = 0, $hash = '')
+    public function getConfigurableMinPrice($configurableProductsIds = array(), $storeId = 0)
     {
-        Mage::log('configurableProductsIds', 0, "configurable_update_{$hash}_getConfigurableMinPrice.log");
-        Mage::log($configurableProductsIds, 0, "configurable_update_{$hash}_getConfigurableMinPrice.log");
         $result = array();
-
 
         $adapter = $this->getReadConnection();
         $select = $adapter->select();
@@ -67,10 +64,54 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         $select->order('products.entity_id');
 
         $select->group('product_relation.parent_id');
+        echo $select;
+        $result = $adapter->fetchAssoc($select);
+        Zend_Debug::dump($result);
+        return $result;
+    }
+
+    public function getConfigurableMinPriceJoin($storeId = 0)
+    {
+
+        $adapter = $this->getReadConnection();
+        $select = $adapter->select();
+
+        $select
+            ->from(
+                'zolago_catalog_queue_configurable AS queue_configurable',
+                array()
+            )
+            ->join(
+                array('product_relation' => 'catalog_product_relation'),
+                'product_relation.child_id = queue_configurable.product_id',
+                array()
+            )
+            ->join(
+                'catalog_product_entity_decimal AS prices',
+                'prices.entity_id=queue_configurable.product_id',
+                array(
+                    'configurable_product' => 'product_relation.parent_id',
+                    'min_price'            => 'MIN(prices.value)')
+            )
+
+            ->join(
+                array('attribute' => 'eav_attribute'),
+                'attribute.attribute_id=prices.attribute_id',
+                array()
+            )
+
+
+           // ->where('products.type_id=?', Mage_Catalog_Model_Product_Type::TYPE_SIMPLE) //choose from simple products
+            ->where('attribute.attribute_code=?', self::PRICE_ATTRIBUTE_CODE);
+
+
+        $select->where("prices.store_id=?", $storeId);
+
+        //$select->order('products.entity_id');
+        $select->order('product_relation.parent_id');
+        $select->group('product_relation.parent_id');
 
         $result = $adapter->fetchAssoc($select);
-        Mage::log('getConfigurableMinPrice result', 0, "configurable_update_{$hash}_getConfigurableMinPrice.log");
-        Mage::log($result, 0, "configurable_update_{$hash}_getConfigurableMinPrice.log");
 
         return $result;
     }
@@ -94,9 +135,33 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
 
                 ->where("product_relation.child_id IN ({$listUpdatedProducts})");
 
-
             $result = $adapter->fetchAssoc($select);
         }
+
+        return $result;
+    }
+
+    public function getConfigurableSimpleRelationJoin()
+    {
+        $adapter = $this->getReadConnection();
+        $select = $adapter->select();
+        $select
+            ->from(
+                'zolago_catalog_queue_configurable AS queue_configurable',
+                array()
+            )
+            ->join(
+                'catalog_product_relation AS product_relation',
+                'product_relation.child_id=queue_configurable.product_id',
+                array(
+                    'configurable_product' => 'product_relation.parent_id',
+                    'simple_product' => 'product_relation.child_id'
+                )
+            )
+            ->where('queue_configurable.status','0')
+        ;
+
+        $result = $adapter->fetchAssoc($select);
 
         return $result;
     }
@@ -196,9 +261,9 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
     public function insertProductSuperAttributePricing(
         $productConfigurableId, $superAttributeId, $productMinPrice, $store
     ) {
-        Mage::log('_getProductRelationPricesSizes', 0, 'configurable_update.log');
+
         $productRelations = $this->_getProductRelationPricesSizes($productConfigurableId, $store);
-        Mage::log($productRelations, 0, 'configurable_update.log');
+
         if (!empty($productRelations)) {
             $insert = array();
             foreach ($productRelations as $productRelation) {

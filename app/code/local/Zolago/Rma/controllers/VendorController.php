@@ -58,32 +58,54 @@ class Zolago_Rma_VendorController extends Unirgy_Rma_VendorController
         /* @var $connection Varien_Db_Adapter_Interface */
         $connection->beginTransaction();
 
-        $session = $this->_getSession();
+//        $session = $this->_getSession();
 
         try {
             $rma = $this->_registerRma();
             $statusModel = $rma->getStatusModel();
             $request = $this->getRequest();
+            $oldStatus = $rma->getRmaStatus();
 
             $comment = trim($request->getParam("comment", ''));
             $status = $request->getParam("status");
             $notify = $request->getParam("notify_customer", 0);
 
+            $notify_email = $statusModel->isNotifyEmailAvailable($status);
+
+            //Email with info about status changed:
+            //if flag notify by email is YES
+            //then send email and notify
+            //else
+            //don't send email
+
+            //Email with comment:
+            //if flag notify by email is YES
+            //then no meter
+            //else
+            //no meter
+
             $messages = array();
 
             // Process status
-            if($status!=$rma->getRmaStatus()) {
+            if($status!=$oldStatus) {
                 if(!$this->_isValidRmaStatus($rma, $status)) {
                     throw new Mage_Core_Exception(Mage::helper("zolagorma")->
                                                   __("Status code %s is not valid.", $status));
                 }
-                Mage::helper('zolagorma')->processSaveStatus($rma, $status, (bool)$notify);
+
+                if($notify_email) {
+                    $notify_status = 1;
+                } else {
+                    $notify_status = 0;                    
+                }
                 $messages[] = Mage::helper("zolagorma")->__("Status changed");
+                Mage::helper('zolagorma')->processSaveStatus($rma, $status, (bool)$notify_status);
+
             }
 
             // Process comment
             if($comment) {
-                if(!$statusModel->isVendorCommentAvailable($rma)) {
+                if(!$statusModel->isVendorCommentAvailable($oldStatus)) {
                     throw new Mage_Core_Exception(Mage::helper("zolagorma")->
                                                   __("Cannot add comment in this status"));
                 }

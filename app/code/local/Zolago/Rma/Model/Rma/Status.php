@@ -159,6 +159,14 @@ class Zolago_Rma_Model_Rma_Status
 	public function isNotifyCustomerAvailable($status) {
 		return (bool)$this->getStatusObject($status)->getNotifyCustomer();
 	}
+
+    /**
+     * @param $status|Zolago_Rma_Model_Rma $status
+     * @return bool
+     */
+    public function isNotifyEmailAvailable($status){
+        return (bool)$this->getStatusObject($status)->getNotifyEmail();
+    }
 	
 
 	/**

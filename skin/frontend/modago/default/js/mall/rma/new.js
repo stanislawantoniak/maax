@@ -30,14 +30,6 @@ jQuery(function($){
 			// Fix footer
 			jQuery(window).resize();
 
-            //visual fix for message - can't be done by css
-            if (jQuery('.messages i').length) {
-                jQuery('#content').css('margin-top', '0px');
-                jQuery('.messages i').click(function () {
-                    jQuery('#content').css('margin-top', '');
-                });
-            }
-
             _rma.addUsefulFunctions();
 		},
 		
@@ -871,19 +863,8 @@ jQuery(function($){
                 target.append(addNewButton);
             },
 			
-			//fix form shippign address removable
-			_isRemoveable: function(id){
-				if( (this.getDefaultShipping() && id === this.getDefaultShipping().getId())
-					|| (this.getSelectedShipping() !== null && id === parseInt(this.getSelectedShipping().getId()))
-					|| this.getAddressBook().length < 2){
-				
-					return false;
-				}
-				return true;
-			},
-			
 			processAddressNode: function(node, address, addressBook, type){
-				var removeable = this._isRemoveable.apply(addressBook, [address.getId()]), 
+				var removeable = addressBook.isRemoveable(address),//this._isRemoveable.apply(addressBook, [address.getId()]), 
 					remove = node.find(".remove"),
 					choose = node.find(".choose"),
 					edit = node.find(".edit");
