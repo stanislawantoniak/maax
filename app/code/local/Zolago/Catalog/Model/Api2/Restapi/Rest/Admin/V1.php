@@ -199,33 +199,16 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
             }
         }
 
-        $insert1 = implode(',',$cataloginventoryStockItem);
-        //$insertA = implode(',',$cataloginventoryStockStatus0);
-        //$insertB = implode(',',$cataloginventoryStockStatus1);
+        $insert1 = implode(',', $cataloginventoryStockItem);
 
         $zcSDItemModel = Mage::getResourceModel('zolago_cataloginventory/stock_item');
-
         $zcSDItemModel->saveCatalogInventoryStockItem($insert1);
 
-        //$zcSDStatusModel = Mage::getResourceModel('zolago_cataloginventory/stock_status');
+        Mage::getSingleton('index/indexer')
+            ->getProcessByCode('cataloginventory_stock')->reindexAll();
 
-        //website_id=0
-        //$zcSDStatusModel->saveCatalogInventoryStockStatus($insertA);
-
-
-        //website_id=1
-        //$zcSDStatusModel->saveCatalogInventoryStockStatus($insertB);
-
-
-
-        //Mage::log(microtime() . ' Start reindex ', 0, 'product_stock_update.log');
-//        Mage::getSingleton('index/indexer')
-//            ->getProcessByCode('cataloginventory_stock')->reindexAll();
-
-        //Mage::log(microtime() . ' End ', 0, 'product_stock_update.log');
 		
 		Mage::dispatchEvent("zolagocatalog_converter_stock_complete", array());
-        //Mage::log(microtime() . ' End ', 0, 'product_stock_update.log');
 
         echo 'Done';
     }
