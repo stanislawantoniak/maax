@@ -200,8 +200,8 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         }
 
         $insert1 = implode(',',$cataloginventoryStockItem);
-        $insertA = implode(',',$cataloginventoryStockStatus0);
-        $insertB = implode(',',$cataloginventoryStockStatus1);
+        //$insertA = implode(',',$cataloginventoryStockStatus0);
+        //$insertB = implode(',',$cataloginventoryStockStatus1);
 
         $zcSDItemModel = Mage::getResourceModel('zolago_cataloginventory/stock_item');
 
@@ -220,7 +220,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
         //Mage::log(microtime() . ' Start reindex ', 0, 'product_stock_update.log');
         Mage::getSingleton('index/indexer')
-            ->getProcessByCode('cataloginventory_stock');
+            ->getProcessByCode('cataloginventory_stock')->reindexAll();
 
         //Mage::log(microtime() . ' End ', 0, 'product_stock_update.log');
 		
