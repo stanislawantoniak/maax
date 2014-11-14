@@ -11,25 +11,8 @@
     </div>
 </div>
 
-<div class="container">
-	<div class="row">
-		<div class="col-lg-12">
-			<?php if($this->getCanShowGrid()):?>
-			<div id="grid-holder"></div>
-			<?php else:?>
-			<p><?php echo Mage::helper("zolagocatalog")->__("Choose the category");?></p>
-			<?php endif;?>
-		</div>
-	</div>
-</div>
-
-<script type="text/javascript">
-	
-	require(['vendor/catalog/productGrid'], function(productGrid){
-		
-		<?php if($this->getCanShowGrid()):?>
-		productGrid.setColumns({});
-		productGrid.startup("grid-holder");
-		<?php endif;?>
-	});
-</script>
+<?php if($this->getCanShowGrid()):?>
+	<?php echo $this->getChildHtml("grid");?>
+<?php else:?>
+		<p><?php echo Mage::helper("zolagocatalog")->__("Choose the category");?></p>
+<?php endif;?>

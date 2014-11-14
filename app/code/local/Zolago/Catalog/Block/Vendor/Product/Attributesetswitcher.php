@@ -7,8 +7,8 @@ class Zolago_Catalog_Block_Vendor_Product_Attributesetswitcher extends Mage_Core
 		);
 		return $array;
 	}
-	public function getCurrentAttributeSetId() {
-		return $this->getParentBlock()->getCurrentAttributeSetId();
+	public function getAttributeSetId() {
+		return $this->getParentBlock()->getAttributeSetId();
 	}
 	public function getChangeUrl() {
 		return $this->getUrl("*/*/*");

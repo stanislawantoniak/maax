@@ -35,4 +35,55 @@ class Zolago_Catalog_Block_Vendor_Product_Grid extends Mage_Core_Block_Template 
 	public function getColumns() {
 		return $this->getGridModel()->getColumns();
 	}
+	
+	/**
+	 * @see https://github.com/SitePen/dgrid/blob/master/doc/components/mixins/ColumnSet.md
+	 * @return array
+	 */
+	public function getJsonColumns() {
+		$out = array();
+		foreach($this->getColumns() as $key=>$column){
+			$out[]=$this->mapColumn($column);
+		}
+		return Mage::helper("core")->jsonEncode($out);
+	}
+	
+		
+	/**
+	 * 
+	 {
+		label: Translator.translate("Name"),
+		field: "name",
+		children: [
+			{
+				renderHeaderCell: filter("text", "name"),
+				sortable: false, 
+				field: "name",
+				className: "filterable",
+			}
+		]
+	  }
+	}
+	 */
+	
+	protected function mapColumn(Varien_Object $columnObject) {
+		$attribute = null;
+		if($columnObject->getAttribute()){
+			$attribute = $columnObject->getAttribute();
+		}
+		
+		return array(
+			"label" => $columnObject->getHeader(),
+			"field" => $columnObject->getIndex(),
+			"fixed" => $columnObject->getFixed(),
+			"children" => array(
+				array(
+					//"renderHeaderCell"  => array("text", $columnObject->getIndex()),
+					"sortable"			=> false,
+					"field"				=> $columnObject->getIndex(),
+					"className"			=> "filterable"
+				)
+			)
+		);
+	}
 }

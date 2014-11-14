@@ -12,7 +12,7 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 	 * @return array
 	 */
 	public function getColumns() {
-		if($this->_cols){
+		if(!$this->_cols){
 			$columns = array();
 			foreach($this->_getAllPossibleColumns() as $key=>$column){
 				if($this->_canShowColumn($key, $column)){
@@ -48,12 +48,14 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 			$columns = array();
 			// Build final columns
 			foreach($this->_prepareFixedStartColumns() as $key=>$column){
+				$column['fixed'] = true;
 				$columns[$key] = $column;
 			}
 			foreach($this->_prepareDynamicColumns() as $key=>$column){
 				$columns[$key] = $column;
 			}
 			foreach($this->_prepareFixedEndColumns() as $key=>$column){
+				$column['fixed'] = true;
 				$columns[$key] = $column;
 			}
 			$this->setData("all_possible_columns", $columns);
@@ -120,26 +122,12 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 				"clickable" => true,
 				"header"	=> $this->_getColumnLabel($name),
 			);
-
-
-			// Status
-			$status = Mage::getModel("eav/config")->getAttribute(Mage_Catalog_Model_Product::ENTITY, "status");
-			$status->setStoreId($this->getLabelStore()->getId());
-
-			$columnStart[$status->getAttributeCode()] = array(
-				"index"		=> $status->getAttributeCode(),
-				"type"		=>"options",
-				"attribute" => $status,
-				"clickable" => true,
-				"width"		=> "30",
-				"header"	=> $this->_getColumnLabel($status),
-			);
-
+			/*
 			// Image count
 			$columnStart["images_count"] = array(
 				"index"		=> "images_count",
 				"type"		=> "text",
-				"header"	=> $this->__("Im."),
+				"header"	=> Mage::helper("zolagocatalog")->__("Im."),
 				"width"		=> "30",
 				"filter"	=> false
 			);
@@ -155,7 +143,7 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 				"clickable" => true,
 				"header"	=> $this->_getColumnLabel($sku),
 			);
-
+			*/
 			// End columns
 			$columnEnd = array();
 
@@ -236,7 +224,7 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 				if($attribute->getAttributeCode()=="status"){
 					$extend['type']="status";
 					$extend['filter']=false;
-					$extend['header']=$this->__("St.")." <span class=\"required\">*</span>";
+					$extend['header']= Mage::helper("zolagocatalog")->__("St.")." *";
 				}
 			}elseif($frontendType=="price"){
 				$extend['type'] = "price";
@@ -248,7 +236,7 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 				$extend['filter'] = false;
 				$extend['sortable'] = false;
 			}
-			return array_merge($config, $extend);
+			return new Varien_Object(array_merge($config, $extend));
 		}
 
 		return new Varien_Object($config);
@@ -269,7 +257,7 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 	protected function _getColumnLabel(Mage_Catalog_Model_Resource_Eav_Attribute $attribute){
 		 $label = $attribute->getStoreLabel($this->getLabelStore()->getId());
 		 if($attribute->getIsRequired()){
-			 $label .= " <span class=\"required\">*</span>";
+			 $label .= " *";
 		 }
 		 return $label;
 	}
@@ -423,5 +411,6 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 			Mage::app()->getRequest()->getParam("attribute_set_id")
 		);
 	}
+
 
 }

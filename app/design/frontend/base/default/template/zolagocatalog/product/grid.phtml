@@ -1,0 +1,26 @@
+<?php /* @var $this Zolago_Catalog_Block_Vendor_Product_Grid*/?>
+
+<div class="container">
+	<div class="row">
+		<div class="col-lg-12">
+			<div id="grid-holder"></div>
+		</div>
+	</div>
+</div>
+<style type="text/css">
+	#grid-holder .filterable{
+		width: 200px;
+	}
+	#grid-holder .dgrid-column-set-0{
+		width: 500px;
+	}
+	#grid-holder .dgrid-column-set-0 .filterable{
+		width: 48%;
+	}
+</style>
+<script type="text/javascript">
+	require(['vendor/catalog/productGrid'], function(productGrid){
+		productGrid.setColumns(<?php echo $this->getJsonColumns();?>);
+		productGrid.startup("grid-holder");
+	});
+</script>

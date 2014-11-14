@@ -3,6 +3,7 @@ define([
 	"dgrid/OnDemandGrid",
 	"dgrid/extensions/Pagination",
 	"dgrid/extensions/CompoundColumns",
+	"dgrid/ColumnSet",
 	"dgrid/Selection",
 	"dgrid/Keyboard",
 	"vendor/grid/editor",
@@ -25,7 +26,7 @@ define([
 	"vendor/catalog/priceGrid/popup/mass/price",
 	"vendor/catalog/priceGrid/RowUpdater",
 	"vendor/misc"
-], function(BaseGrid, Grid, Pagination, CompoundColumns, Selection, 
+], function(BaseGrid, Grid, Pagination, CompoundColumns, ColumnSet, Selection, 
 	Keyboard, editor, declare, domConstruct, on, query, Memory, 
 	Observable, put, Cache, JsonRest, Selection, selector, 
 	lang, request, filter, singlePriceUpdater, singleStockUpdater, 
@@ -85,34 +86,80 @@ define([
 		}
 	});
 	
+	var selectorInstance = selector({label: ''});
+	
+	/**
+	 * Process column from backend
+	 * 1. Add filter - its a function
+	 * @param {type} columns
+	 * @returns {unresolved}
+	 */
+	var processColumnSets = function(columns){
+		
+		// Column set
+//		jQuery.each(columnSets, function(index){
+//			// Colun subrow
+//			jQuery.each(this, function(index1){
+//				// Single colummn
+//				jQuery.each(this, function(index2){
+//					if(index==0 && index1==0 && index1==0){
+//						columnSets[0][0][0] = selectorInstance;
+//					}
+//					var column = this;
+//					if(column.children){
+//						// Column child
+//						jQuery.each(column.children, function(index3){
+//							if(this.renderHeaderCell instanceof Array){
+//								
+//							}
+//						});
+//					}
+//				});
+//			});
+//		});
+
+		var columnSets = [
+			[
+				[
+					selector({ label: ""})
+				]
+			], [
+				[
+					
+				]
+			]
+		];
+		
+		
+		for(var i=0, column; i<columns.length; i++){
+			column = columns[i];
+			
+			if(column.children && column.children.length){
+				column.children[0].renderHeaderCell = filter.apply(null, column.children[0].renderHeaderCell);
+			}
+			
+			if(column.fixed){
+				columnSets[0][0].push(column);
+			}else{
+				columnSets[1][0].push(column);
+			}
+		};
+		
+		
+		return columnSets;
+	};
+	
 	
 	//var testStore =  Observable(Cache(storeRest, Memory()));
 	// cache crakcs edit
 	testStore =  Observable(storeRest);
 	
-	var PriceGrid = declare([/*BaseGrid, Pagination,*/Grid, Selection, Keyboard, CompoundColumns]);
+	var PriceGrid = declare([/*BaseGrid, Pagination,*/Grid, Selection, Keyboard, CompoundColumns, ColumnSet]);
 	
-	var initGrid = function(config, container){
+	var initGrid = function(columns, container){
 		
-		config = lang.mixin({
-			columns: {
-				selector: selector({ 
-					label: ''
-				}),
-				name: {
-					label: Translator.translate("Name"),
-					field: "name",
-					children: [
-						{
-							renderHeaderCell: filter("text", "name"),
-							sortable: false, 
-							field: "name",
-							className: "filterable",
-						}
-					]
-				}
-			},
-
+		var config = {
+			columnSets: processColumnSets(columns),
 			getSelectedIds: function(){
 				var selected = [];
 				jQuery.each(grid.selection, function(k){
@@ -147,16 +194,11 @@ define([
 			store: testStore,
 			getBeforePut: false,
 			sort: "entity_id"
-		}, config || {});
+		};
 		
-		return new PriceGrid(config, container);
+		return new  PriceGrid(config, container);
 	};
 	
-	switcher.on("change", function(e){
-		var target = e.target,
-			url = target.getAttribute("data-base") + "attribute_set_id/" + e.target.value;
-		document.location.href= url;
-	});
 	
 	return {
 		setColumns: function(columns){
@@ -166,7 +208,10 @@ define([
 			return this.columns;
 		},
 		startup: function(container){
-			initGrid({columns: this.getColumns() || {}}, container);
+			initGrid(
+					this.getColumns(),  
+					container
+			);
 		}
 	}; 
 });

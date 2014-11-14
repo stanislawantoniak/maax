@@ -40,6 +40,14 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract extends Zolago_Catalog_C
 	}
 	
 	
+	/**
+	 * @return int
+	 */
+	protected function _getStoreId() {
+		$storeId = $this->getRequest()->getParam("store_id");
+		return Mage::app()->getStore($storeId)->getId();
+	}
+	
 	protected function _setCollectionOrder(Mage_Catalog_Model_Resource_Eav_Attribute $attribute, $dir) {
 		if($attribute instanceof Mage_Catalog_Model_Resource_Eav_Attribute && $this->isAttributeEnumerable($attribute)){
 			$source = $column->getAttribute()->getSource();
@@ -117,14 +125,14 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract extends Zolago_Catalog_C
 		foreach($this->getColumns() as $key=>$column){
 			$columnData = $column->getData();
 			// Add regular dynamic attributes data
-			if($this->_canShowColumn($key, $columnData)){
-				if(isset($columnData['attribute']) &&
-					$columnData['attribute'] instanceof Mage_Catalog_Model_Resource_Eav_Attribute){
-					// By regular attribute
-					$collection->addAttributeToSelect($columnData['attribute']->getAttributeCode());
-				}elseif($key=="images_count"){
-					$collection->addImagesCount(false);
-				}
+			if(isset($columnData['attribute']) &&
+				$columnData['attribute'] instanceof Mage_Catalog_Model_Resource_Eav_Attribute){
+				// By regular attribute
+				$attributeCode = $columnData['attribute']->getAttributeCode();
+				$collection->joinAttribute($attributeCode, 'catalog_product/'.$attributeCode, 'entity_id', null, 'left');
+				//$collection->addAttributeToSelect($columnData['attribute']->getAttributeCode());
+			}elseif($key=="images_count"){
+				$collection->addImagesCount(false);
 			}
 		}
 		

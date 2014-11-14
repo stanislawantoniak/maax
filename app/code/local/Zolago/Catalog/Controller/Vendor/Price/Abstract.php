@@ -21,12 +21,48 @@ class Zolago_Catalog_Controller_Vendor_Price_Abstract
 	}
 	
 	/**
-	 * @return int
+	 * @param string $key
+	 * @param mixed $value
+	 * @return mixed
 	 */
-	protected function _getStoreId() {
-		$storeId = $this->getRequest()->getParam("store_id");
-		return Mage::app()->getStore($storeId)->getId();
+	protected function _getSqlCondition($key, $value) {
+		if(is_array($value)){
+			
+			if(isset($value['to']) && is_numeric($value['to'])){
+				$value['to'] = (float)$value['to'];
+			}
+			if(isset($value['from']) && is_numeric($value['from'])){
+				$value['from'] = (float)$value['from'];
+			}
+			
+			if(isset($value['to']) && is_numeric($value['to']) && 
+					(!isset($value['from']) || (isset($value['from']) && $value['from']==0))){
+				$value = array($value, array("null"=>true));
+			}
+			
+			return $value;
+		}
+		switch ($key) {
+			case "is_new":
+			case "is_bestseller":
+				return $value==1 ? array("eq"=>$value) : array(array("null"=>true), array("eq"=>$value));
+			break;
+			case "product_flags":
+			case "is_in_stock":
+				return array("eq"=>$value);
+			break;
+			case "converter_price_type":
+			case "converter_msrp_type":
+				return $value!=0 ? array("eq"=>$value) : array("null"=>true);
+			break;
+			case "msrp":
+				return $value==1 ? array("notnull"=>true) : array(array("null"=>true));
+			break;
+		}
+		return array("like"=>'%'.$value.'%');
 	}
+	
+	
 	
 	/**
 	 * collection dont use after load - just flat selects

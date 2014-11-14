@@ -72,6 +72,7 @@
 			<block name="mass" type="zolagocatalog/vendor_product" template="zolagocatalog/product.phtml">
 				<block type="zolagocatalog/vendor_product_attributesetswitcher" name="attribute_set_switcher" template="zolagocatalog/product/attributesetswitcher.phtml"/>
 				<block type="core/template" name="mass_actions" template="zolagocatalog/product/massactions.phtml"/>
+				<block type="zolagocatalog/vendor_product_grid" name="grid" template="zolagocatalog/product/grid.phtml"/>
 			</block>
 		</reference>
 	</udprod_vendor_product_index>
