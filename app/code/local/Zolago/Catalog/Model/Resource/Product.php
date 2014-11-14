@@ -26,15 +26,15 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
     }
 
     /**
-     * @param $ids
+     * @param $skuS
      *
      * @return array $assoc
      */
-    public function getPriceMarginValues($ids)
+    public function getPriceMarginValues($skuS)
     {
         $assoc = array();
 
-        if (empty($ids)) {
+        if (empty($skuS)) {
             return array();
         }
         $readConnection = $this->_getReadAdapter();
@@ -65,7 +65,7 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
         $select->where(
             "attributes.attribute_code=?", Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_PRICE_MARGIN_CODE
         );
-        $select->where("products.entity_id IN(?)", $ids);
+        $select->where("products.sku IN(?)", $skuS);
         Mage::log(microtime() . " priceMarginValues: ". $select, 0, 'converter_profilerPriceBatch.log');
         try {
             $assoc = $readConnection->fetchAll($select);

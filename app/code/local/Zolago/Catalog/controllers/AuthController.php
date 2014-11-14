@@ -28,6 +28,64 @@ class Zolago_Catalog_AuthController extends Mage_Core_Controller_Front_Action
     }
 
 
+    public function testAction(){
+
+        echo date("Y-m-d H:i:s") . " " .microtime();
+        $merchant = 5;
+        $skuS = array('5-14644-CZARNY','5-13428-CZARNY','4-32448-99X-L');
+
+
+
+        $model = Mage::getResourceModel('zolagocatalog/product');
+//
+        $productIds = $model->getSkuIdAssoc($skuS);
+//
+//        $priceType = $model->getProductsPriceData($merchant,$productIds);
+//        Zend_Debug::dump($priceType);
+
+        $collection = Mage::getResourceModel("zolagocatalog/vendor_price_collection");
+//        $collection->addAttributeToFilter('sku', array('in'=>$skuS));
+        $collection->addIdFilter($productIds);
+        $collection->addAttributeToSelect(array(
+            "price",
+            "converter_price_type",
+            "price_margin",
+            "converter_msrp_type",
+            'store_id',
+            'udropship_vendor'
+        ));
+
+        foreach ($collection as $collectionItem) {
+
+            Zend_Debug::dump($collectionItem->getData());
+        }
+
+
+//        $collection = Mage::getResourceModel("zolagocatalog/vendor_price_collection");
+//        //Zend_Debug::dump($collection->getDetails());
+//
+//        // Vaild collection
+//        $collection->addAttributeToSelect(array("price_margin", "converter_price_type"));
+//        //$collection->addAttributeToFilter('type_id', 'simple');
+//        $collection->addAttributeToFilter('udropship_vendor', 5);
+//
+//        //$collection->addIdFilter(array(25812));
+//
+//        foreach ($collection as $collectionItem) {
+//            $id = $collectionItem->getData("entity_id");
+//            $price_margin = $collectionItem->getData("price_margin");
+//            $converter_price_type = $collectionItem->getData("converter_price_type");
+//
+//            //Zend_Debug::dump($collectionItem->getData());
+//            if(!empty($price_margin) || !empty($converter_price_type)){
+//                Zend_Debug::dump($id,$price_margin, $converter_price_type,"-----------------");
+//            }
+//
+//        }
+        echo date("Y-m-d H:i:s") . " " .microtime();
+    }
+
+
 }
 
 
