@@ -203,20 +203,18 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         $insertA = implode(',',$cataloginventoryStockStatus0);
         $insertB = implode(',',$cataloginventoryStockStatus1);
 
-        //Mage::log(microtime() . ' End prepare data ', 0, 'product_stock_update.log');
         $zcSDItemModel = Mage::getResourceModel('zolago_cataloginventory/stock_item');
 
-        //Mage::log(microtime() . ' Start cataloginventory_stock_item ', 0, 'product_stock_update.log');
         $zcSDItemModel->saveCatalogInventoryStockItem($insert1);
 
-        $zcSDStatusModel = Mage::getResourceModel('zolago_cataloginventory/stock_status');
-        //Mage::log(microtime() . ' Start cataloginventory_stock_status website_id=0 ', 0, 'product_stock_update.log');
-        //website_id=0
-        $zcSDStatusModel->saveCatalogInventoryStockStatus($insertA);
+        //$zcSDStatusModel = Mage::getResourceModel('zolago_cataloginventory/stock_status');
 
-        //Mage::log(microtime() . ' Start cataloginventory_stock_status website_id=1 ', 0, 'product_stock_update.log');
+        //website_id=0
+        //$zcSDStatusModel->saveCatalogInventoryStockStatus($insertA);
+
+
         //website_id=1
-        $zcSDStatusModel->saveCatalogInventoryStockStatus($insertB);
+        //$zcSDStatusModel->saveCatalogInventoryStockStatus($insertB);
 
 
 
