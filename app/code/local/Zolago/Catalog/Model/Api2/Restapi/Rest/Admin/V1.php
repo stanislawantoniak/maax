@@ -192,9 +192,9 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         $productsIds = Mage::getResourceModel("catalog/product_collection")
             ->addAttributeToFilter('sku', array('in' => $skuS))
             ->getAllIds();
-
-        $stockIndexer = Mage::getResourceModel('catalogInventory/indexer_stock');
-        $stockIndexer->reindexProducts($productsIds);
+        Mage::log(print_r($productsIds, true), null, 'test_stock.log');
+        Mage::getResourceModel('cataloginventory/indexer_stock')
+            ->reindexProducts($productsIds);
 
         Mage::dispatchEvent("zolagocatalog_converter_stock_complete", array());
     }
