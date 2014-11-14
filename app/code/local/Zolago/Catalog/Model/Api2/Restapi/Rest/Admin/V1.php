@@ -268,6 +268,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
             }
 
             $marginByStore = array();
+            Mage::log(microtime() . " Ids: ".print_r($ids,true), 0, $batchFile);
             $priceMarginValues = $model->getPriceMarginValues($ids);
 	        Mage::log(microtime() . " priceMarginValues: ".print_r($priceMarginValues,true), 0, $batchFile);
             //reformat margin
