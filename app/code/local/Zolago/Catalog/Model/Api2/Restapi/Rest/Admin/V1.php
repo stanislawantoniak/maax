@@ -204,8 +204,8 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         $zcSDItemModel = Mage::getResourceModel('zolago_cataloginventory/stock_item');
         $zcSDItemModel->saveCatalogInventoryStockItem($insert1);
 
-        Mage::getSingleton('index/indexer')
-            ->getProcessByCode('cataloginventory_stock')->reindexAll();
+        $stockIndexer = new Mage_CatalogInventory_Model_Resource_Indexer_Stock();
+        $stockIndexer->reindexProducts(array(14755)); //test
 
 		
 		Mage::dispatchEvent("zolagocatalog_converter_stock_complete", array());
