@@ -139,19 +139,19 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
     }
 
     /**
-	 * @todo The funciton need to be refactored!
-	 * 1. Table item_status is genereted from indexer!
-	 * 2. Run indexer
-	 * 3. Move to solr que
+     * 1. Update stock item
+     * 2. Run indexer
+     * 3. Move to solr que
      * @param $stockBatch
      */
-    public static function updateStockConverter($stockBatch){
+    public static function updateStockConverter($stockBatch)
+    {
 
-        if(empty($stockBatch)){
+        if (empty($stockBatch)) {
             return;
         }
         $skuS = array();
-        foreach($stockBatch as $stockBatchItem){
+        foreach ($stockBatch as $stockBatchItem) {
             $skuS = array_merge($skuS, array_keys($stockBatchItem));
         }
 
@@ -159,45 +159,44 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
         $cataloginventoryStockItem = array();
 
-        //Mage::log(microtime() . ' Get price types', 0, $batchFile);
         $availableStockByMerchant = array();
-        foreach($stockBatch as $merchant => $stockData){
-            $s = Zolago_Catalog_Helper_Stock::getAvailableStock($stockData,$merchant);
+        foreach ($stockBatch as $merchant => $stockData) {
+            $s = Zolago_Catalog_Helper_Stock::getAvailableStock($stockData, $merchant);
             $availableStockByMerchant = $s + $availableStockByMerchant;
         }
 
         /*Prepare data to insert*/
-        if(empty($availableStockByMerchant)){
+        if (empty($availableStockByMerchant)) {
             return;
         }
 
-        if(!empty($availableStockByMerchant)){
-            foreach($availableStockByMerchant as $id => $qty){
+        if (!empty($availableStockByMerchant)) {
+            foreach ($availableStockByMerchant as $id => $qty) {
                 $is_in_stock = ($qty > 0) ? 1 : 0;
-                $cataloginventoryStockItem []= "({$id},{$qty},{$is_in_stock},{$stockId})";
-				
-				Mage::dispatchEvent("zolagocatalog_converter_stock_save_before", array(
-					"product_id"	=> $id,
-					"qty"			=> $qty,
-					"is_in_stock"	=> $is_in_stock,
-					"stock_id"		=> $stockId
-				));
+                $cataloginventoryStockItem [] = "({$id},{$qty},{$is_in_stock},{$stockId})";
+
+                Mage::dispatchEvent("zolagocatalog_converter_stock_save_before", array(
+                    "product_id" => $id,
+                    "qty" => $qty,
+                    "is_in_stock" => $is_in_stock,
+                    "stock_id" => $stockId
+                ));
             }
         }
 
-        $insert1 = implode(',', $cataloginventoryStockItem);
+        $insert = implode(',', $cataloginventoryStockItem);
 
         $zcSDItemModel = Mage::getResourceModel('zolago_cataloginventory/stock_item');
-        $zcSDItemModel->saveCatalogInventoryStockItem($insert1);
+        $zcSDItemModel->saveCatalogInventoryStockItem($insert);
 
         $productsIds = Mage::getResourceModel("catalog/product_collection")
-            ->addAttributeToFilter('sku', array('in'=>$skuS))
+            ->addAttributeToFilter('sku', array('in' => $skuS))
             ->getAllIds();
 
         $stockIndexer = Mage::getResourceModel('catalogInventory/indexer_stock');
         $stockIndexer->reindexProducts($productsIds);
-		
-		Mage::dispatchEvent("zolagocatalog_converter_stock_complete", array());
+
+        Mage::dispatchEvent("zolagocatalog_converter_stock_complete", array());
     }
 
     /**
