@@ -219,8 +219,8 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
 
         //Mage::log(microtime() . ' Start reindex ', 0, 'product_stock_update.log');
-        Mage::getSingleton('index/indexer')
-            ->getProcessByCode('cataloginventory_stock')->reindexAll();
+//        Mage::getSingleton('index/indexer')
+//            ->getProcessByCode('cataloginventory_stock')->reindexAll();
 
         //Mage::log(microtime() . ' End ', 0, 'product_stock_update.log');
 		
