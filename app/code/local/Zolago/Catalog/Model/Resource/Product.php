@@ -3,7 +3,7 @@
 class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_Product {
 
 
-    public function savePriceValues($insert)
+    public function savePriceValues($insert, $ids)
     {
         Mage::log(microtime() . ' savePriceValues', 0, Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1::CONVERTER_PRICE_UPDATE_LOG);
         $writeAdapter = $this->_getWriteAdapter();
@@ -13,10 +13,21 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
                 $writeAdapter->getTableName('catalog_product_entity_decimal'),
                 $insert, array('value')
             );
-            Mage::log(microtime() . ' Prices insert: commit', 0, Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1::CONVERTER_PRICE_UPDATE_LOG);
+            //Mage::log(microtime() . ' Prices insert: commit', 0, Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1::CONVERTER_PRICE_UPDATE_LOG);
             $this->_getWriteAdapter()->commit();
+
+            Zolago_Catalog_Helper_Configurable::queue($ids);
+
+            //add to solr queue
+            Mage::dispatchEvent(
+                "catalog_converter_price_update_after",
+                array(
+                    "product_ids" => $ids
+                )
+            );
+
         } catch (Exception $e) {
-            Mage::log(microtime() . ' Prices insert: rollBack', 0, Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1::CONVERTER_PRICE_UPDATE_LOG);
+            //Mage::log(microtime() . ' Prices insert: rollBack', 0, Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1::CONVERTER_PRICE_UPDATE_LOG);
             $this->_getWriteAdapter()->rollBack();
 
             throw $e;

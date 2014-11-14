@@ -50,8 +50,6 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
             foreach ($data as $cmd => $batch) {
                 switch ($cmd) {
                     case 'ProductPricesUpdate':
-                        $batchFile = self::CONVERTER_PRICE_UPDATE_LOG;
-
                         $priceBatch = array();
                         if(!empty($batch)){
                             $batch = (array)$batch;
@@ -337,17 +335,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
 
         if (!empty($insert)) {
-            $model->savePriceValues($insert);
-
-            Zolago_Catalog_Helper_Configurable::queue($ids);
-
-            //add to solr queue
-	        Mage::dispatchEvent(
-		        "catalog_converter_price_update_after",
-		        array(
-			        "product_ids" => $ids
-		        )
-	        );
+            $model->savePriceValues($insert, $ids);
         }
     }
 }
