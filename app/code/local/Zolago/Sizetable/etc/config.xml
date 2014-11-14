@@ -62,15 +62,15 @@
             </udropship_adminhtml_vendor_tabs_after>
         </events>
 	</adminhtml>
-	<admin>
-		<routers>
-			<adminhtml>
-				<args>
-					<modules>
-						<zolagopos before="Mage_Adminhtml">Zolago_Pos_Adminhtml</zolagopos>
-					</modules>
-				</args>
-			</adminhtml>
-		</routers>
-	</admin>
+    <admin>
+        <routers>
+            <sizetable>
+                <use>admin</use>
+                <args>
+                    <module>Zolago_Sizetable_Adminhtml</module>
+                    <frontName>sizetable</frontName>
+                </args>
+            </sizetable>
+        </routers>
+    </admin>
 </config>
