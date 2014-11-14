@@ -34,7 +34,7 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
     {
         $assoc = array();
 
-        if (empty($skuS)) {
+        if (empty($ids)) {
             return array();
         }
         $readConnection = $this->_getReadAdapter();
