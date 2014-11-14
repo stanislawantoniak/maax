@@ -248,7 +248,6 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         $ids = array_keys($skeleton);
 
         //Get price types
-        //Mage::log(microtime() . ' Get price types', 0, $batchFile);
         if(empty($priceBatch)){
             //Mage::log(microtime() . ' Empty source', 0, $batchFile);
             return;
