@@ -89,7 +89,7 @@ echo $select;
                 )
             )
             ->where('product_relation.child_id IN (?)', $listUpdatedProducts);
-
+echo $select;
         $result = $adapter->fetchAssoc($select);
 
 
