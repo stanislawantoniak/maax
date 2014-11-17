@@ -232,7 +232,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
             $marginByStore = array();
             $priceMarginValues = $model->getPriceMarginValues($skuS);
-	        Mage::log(microtime() . " priceMarginValues: ".print_r($priceMarginValues,true), 0, $batchFile);
+	        //Mage::log(microtime() . " priceMarginValues: ".print_r($priceMarginValues,true), 0, $batchFile);
             //reformat margin
             if (!empty($priceMarginValues)) {
                 foreach ($priceMarginValues as $_) {
@@ -245,10 +245,17 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         $insert = array();
         $ids = array();
 
+        $stores = array(Mage_Core_Model_App::ADMIN_STORE_ID);
+        $allStores = Mage::app()->getStores();
+        foreach ($allStores as $_eachStoreId => $val) {
+            $_storeId = Mage::app()->getStore($_eachStoreId)->getId();
+            $stores[] = $_storeId;
+        }
+
         //Mage::log(microtime() . ' Start update', 0, $batchFile);
         if (!empty($skeleton)) {
             foreach ($skeleton as $sku => $productId) {
-                $stores = array(0,1,2);
+
                 foreach ($stores as $storeId) {
 
                     //price type
