@@ -5,7 +5,7 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
 
     public function savePriceValues($insert, $ids)
     {
-        Mage::log(microtime() . ' savePriceValues', 0, Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1::CONVERTER_PRICE_UPDATE_LOG);
+        //Mage::log(microtime() . ' savePriceValues', 0, Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1::CONVERTER_PRICE_UPDATE_LOG);
         $writeAdapter = $this->_getWriteAdapter();
         $writeAdapter->beginTransaction();
         try {
@@ -15,6 +15,8 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
             );
             //Mage::log(microtime() . ' Prices insert: commit', 0, Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1::CONVERTER_PRICE_UPDATE_LOG);
             $this->_getWriteAdapter()->commit();
+
+            //Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($ids);
 
             Zolago_Catalog_Helper_Configurable::queue($ids);
 
