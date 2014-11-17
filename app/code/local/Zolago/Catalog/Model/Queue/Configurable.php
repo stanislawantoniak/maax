@@ -46,7 +46,6 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
         $zolagoCatalogModelProductConfigurableData = Mage::getResourceModel('zolagocatalog/product_configurable');
 
         //define parent products (configurable) by child (simple)
-        Zend_Debug::dump($listUpdatedProducts);
         $configurableSimpleRelation = $zolagoCatalogModelProductConfigurableData->getConfigurableSimpleRelation($listUpdatedProducts);
 
 
@@ -55,7 +54,7 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
             //return;
         }
 
-        Zend_Debug::dump($configurableSimpleRelation);
+
         $configurableProductsIds = array_keys($configurableSimpleRelation);
 
         //min prices
@@ -64,7 +63,6 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
         foreach ($storeId as $store) {
             $minPrices[$store] = $zolagoCatalogModelProductConfigurableData->getConfigurableMinPrice($configurableProductsIds, $store);
         }
-        Zend_Debug::dump($minPrices);
         //--min prices
 
 

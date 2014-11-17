@@ -63,7 +63,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         //$select->order('products.entity_id');
 
         $select->group('product_relation.parent_id');
-echo $select;
+        //echo $select;
         $result = $adapter->fetchAssoc($select);
         Zend_Debug::dump($result);
         return $result;
@@ -89,7 +89,7 @@ echo $select;
                 )
             )
             ->where("product_relation.child_id IN({$listUpdatedProducts})");
-echo $select;
+        //echo $select;
         $result = $adapter->fetchAssoc($select);
 
 
