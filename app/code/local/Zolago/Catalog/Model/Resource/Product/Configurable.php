@@ -112,7 +112,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
 
         $select->where("prices.store_id=?", $storeId);
 
-        $select->where('product_relation.parent_id IN(?)', implode(",", $ids));
+        $select->where('product_relation.child_id IN(?)', implode(",", $ids));
         $select->order('product_relation.parent_id');
         $select->group('product_relation.parent_id');
 
