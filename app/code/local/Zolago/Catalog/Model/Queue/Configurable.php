@@ -85,8 +85,13 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
         foreach ($configurableSimpleRelation as $productConfigurableId => $configurableSimpleRelationItem) {
             //update configurable product price
             foreach ($storeId as $store) {
-                $productMinPrice = isset($minPrices[Mage_Core_Model_App::ADMIN_STORE_ID][$productConfigurableId])
-                    ? $minPrices[Mage_Core_Model_App::ADMIN_STORE_ID][$productConfigurableId]['min_price'] : false;
+                $productMinPrice= false;
+                if(isset($minPrices[$store][$productConfigurableId])){
+                    $productMinPrice = $minPrices[$store][$productConfigurableId]['min_price'];
+                } elseif(isset($minPrices[Mage_Core_Model_App::ADMIN_STORE_ID][$productConfigurableId])){
+                    $productMinPrice = $minPrices[Mage_Core_Model_App::ADMIN_STORE_ID][$productConfigurableId]['min_price'];
+                }
+
 
                 if ($productMinPrice) {
                     $productAction->updateAttributesNoIndex(
