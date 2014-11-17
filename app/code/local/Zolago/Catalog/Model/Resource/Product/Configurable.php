@@ -70,7 +70,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         return $result;
     }
 
-    public function getConfigurableMinPriceJoin($storeId = 0, $ids)
+    public function getConfigurableMinPriceJoin($ids, $storeId = 0)
     {
         if(empty($ids)){
             return array();
@@ -115,7 +115,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         $select->where("'product_relation.parent_id IN(?)", implode(",", $ids));
         $select->order('product_relation.parent_id');
         $select->group('product_relation.parent_id');
-
+        echo $select;
         $result = $adapter->fetchAssoc($select);
 
         return $result;
