@@ -64,7 +64,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         $select->order('products.entity_id');
 
         $select->group('product_relation.parent_id');
-        echo $select;die('test');
+        echo $select;
         $result = $adapter->fetchAssoc($select);
 
         return $result;
