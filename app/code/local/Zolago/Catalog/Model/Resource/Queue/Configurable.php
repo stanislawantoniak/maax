@@ -118,7 +118,7 @@ class Zolago_Catalog_Model_Resource_Queue_Configurable extends Zolago_Common_Mod
         // Commit transaction
         $this->_getWriteAdapter()->commit();
         $this->_resetData();
-        Mage::log(microtime() . " End processConfigurableQueue ", 0, 'configurable_update.log');
+        //Mage::log(microtime() . " End processConfigurableQueue ", 0, 'configurable_update.log');
         return $all;
     }
 
