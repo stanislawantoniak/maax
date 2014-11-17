@@ -110,7 +110,8 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
 
 
         //test without indexing
-//        $productsToReindex = array_merge($listUpdatedProducts, $productConfigurableIds);
+        $productsToReindex = array_merge($listUpdatedProducts, $productConfigurableIds);
+        Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($productsToReindex);
 //        Mage::getResourceSingleton('catalog/product_indexer_price')
 //            ->reindexProductIds($productsToReindex);
 //        $indexers = array(
