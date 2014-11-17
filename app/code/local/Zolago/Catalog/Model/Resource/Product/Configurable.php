@@ -19,10 +19,11 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
      *
      * @return array
      */
-    public function getConfigurableMinPrice($configurableProductsIds = array(), $storeId = 0)
+    public function getConfigurableMinPrice($configurableProductsIds, $storeId = 0)
     {
-        $result = array();
-
+        if (!empty($configurableProductsIds)) {
+            return array();
+        }
         $adapter = $this->getReadConnection();
         $select = $adapter->select();
 
@@ -30,10 +31,9 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
             ->from(
                 'catalog_product_entity_decimal AS prices',
                 array(
-                     'configurable_product' => 'product_relation.parent_id',
-                     'min_price'            => 'MIN(prices.value)')
+                    'configurable_product' => 'product_relation.parent_id',
+                    'min_price' => 'MIN(prices.value)')
             )
-
             ->join(
                 array('products' => 'catalog_product_entity'),
                 'products.entity_id = prices.entity_id',
@@ -49,18 +49,16 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
                 'product_relation.child_id = prices.entity_id',
                 array()
             )
-
-            ->where('products.type_id=?', Mage_Catalog_Model_Product_Type::TYPE_SIMPLE) //choose from simple products
+            ->where('products.type_id=?', Mage_Catalog_Model_Product_Type::TYPE_SIMPLE)//choose from simple products
             ->where('attribute.attribute_code=?', self::PRICE_ATTRIBUTE_CODE);
 
 
         $select->where("prices.store_id=?", $storeId);
 
 
-        if (!empty($configurableProductsIds)) {
-            $configurableProductsIds = implode(',', $configurableProductsIds);
-            $select->where("product_relation.parent_id IN({$configurableProductsIds})");
-        }
+        $configurableProductsIds = implode(',', $configurableProductsIds);
+        $select->where("product_relation.parent_id IN({$configurableProductsIds})");
+
         $select->order('products.entity_id');
 
         $select->group('product_relation.parent_id');
