@@ -64,7 +64,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         $select->order('products.entity_id');
 
         $select->group('product_relation.parent_id');
-        echo $select;
+        echo $select;die('test');
         $result = $adapter->fetchAssoc($select);
 
         return $result;
@@ -115,7 +115,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         $select->where('product_relation.parent_id IN(?)', implode(",", $ids));
         $select->order('product_relation.parent_id');
         $select->group('product_relation.parent_id');
-        echo $select;die('test');
+
         $result = $adapter->fetchAssoc($select);
 
         return $result;
