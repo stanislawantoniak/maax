@@ -100,7 +100,7 @@ class Varien_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql implements V
      *
      * @var bool
      */
-    protected $_debug               = true;
+    protected $_debug               = false;
 
     /**
      * Minimum query duration time to be logged
@@ -114,7 +114,7 @@ class Varien_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql implements V
      *
      * @var bool
      */
-    protected $_logAllQueries       = true;
+    protected $_logAllQueries       = false;
 
     /**
      * Add to log call stack data (backtrace)
@@ -128,7 +128,7 @@ class Varien_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql implements V
      *
      * @var string
      */
-    protected $_debugFile           = 'var/debug/converterqueries.log';
+    protected $_debugFile           = 'var/debug/pdo_mysql.log';
 
     /**
      * Io File Adapter
