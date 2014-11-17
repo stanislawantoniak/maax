@@ -457,7 +457,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function getListingResizedImageUrl(Mage_Catalog_Model_Product $model) {
 //        $model = Mage::getModel('zolagosolrsearch/catalog_product');
-        var_dump($model);
+//        var_dump($model);
 //        die;
 
         if(!$model->hasData("listing_resized_image_url")){
