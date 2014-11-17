@@ -21,6 +21,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
      */
     public function getConfigurableMinPrice($configurableProductsIds, $storeId = 0)
     {
+        Zend_Debug::dump($configurableProductsIds);
         if (empty($configurableProductsIds)) {
             return array();
         }
@@ -64,7 +65,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         $select->group('product_relation.parent_id');
 
         $result = $adapter->fetchAssoc($select);
-
+        Zend_Debug::dump($result);
         return $result;
     }
 
