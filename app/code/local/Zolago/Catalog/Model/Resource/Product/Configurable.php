@@ -260,7 +260,51 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         }
     }
 
+    public function insertProductSuperAttributePricingApp($productConfigurableId, $superAttributeId, $store)
+    {
 
+        $productRelations = $this->_getProductRelationPricesSizes($productConfigurableId, $store);
+
+        if (!empty($productRelations)) {
+            $insert = array();
+            $productMinPrice = array();
+            foreach ($productRelations as $i) {
+                $productMinPrice[] = $i['child_price'];
+            }
+            $productMinimalPrice = min($productMinPrice);
+            Mage::getSingleton('catalog/product_action')->updateAttributesNoIndex(
+                array($productConfigurableId), array('price' => $productMinPrice), $store
+            );
+
+            foreach ($productRelations as $productRelation) {
+                $size = $productRelation['child_size'];
+                $price = $productRelation['child_price'];
+                $website = $productRelation['website'];
+                $productMinPrice[] = $price;
+
+                $priceIncrement = (float)$price - $productMinimalPrice;
+
+                $insert[] = "({$superAttributeId},{$size},{$priceIncrement},{$website})";
+            }
+
+            if (!empty($insert)) {
+                $lineQuery = implode(",", $insert);
+
+                $catalogProductSuperAttributePricingTable = 'catalog_product_super_attribute_pricing';
+
+                $insertQuery = sprintf(
+                    "
+                    INSERT INTO  %s (product_super_attribute_id,value_index,pricing_value,website_id)
+                    VALUES %s
+                    ON DUPLICATE KEY UPDATE catalog_product_super_attribute_pricing.pricing_value=VALUES(catalog_product_super_attribute_pricing.pricing_value)
+                    ", $catalogProductSuperAttributePricingTable, $lineQuery
+                );
+
+                $this->_getWriteAdapter()->query($insertQuery);
+
+            }
+        }
+    }
     /**
      * get super attribute ids
      *
