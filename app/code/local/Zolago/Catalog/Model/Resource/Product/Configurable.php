@@ -21,7 +21,6 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
      */
     public function getConfigurableMinPrice($configurableProductsIds, $storeId = 0)
     {
-        Zend_Debug::dump($configurableProductsIds);
         if (empty($configurableProductsIds)) {
             return array();
         }
@@ -63,62 +62,12 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         $select->order('products.entity_id');
 
         $select->group('product_relation.parent_id');
-        echo $select;
+
         $result = $adapter->fetchAssoc($select);
 
         return $result;
     }
 
-    public function getConfigurableMinPriceJoin($ids, $storeId = 0)
-    {
-        if(empty($ids)){
-            return array();
-        }
-
-        $adapter = $this->getReadConnection();
-        $select = $adapter->select();
-
-        $select
-            ->from(
-                'zolago_catalog_queue_configurable AS queue_configurable',
-                array()
-            )
-            ->join(
-                array('product_relation' => 'catalog_product_relation'),
-                'product_relation.child_id = queue_configurable.product_id',
-                array()
-            )
-            ->join(
-                array('products' => 'catalog_product_entity'),
-                'products.entity_id = product_relation.child_id',
-                array()
-            )
-            ->join(
-                'catalog_product_entity_decimal AS prices',
-                'prices.entity_id=queue_configurable.product_id',
-                array(
-                    'configurable_product' => 'product_relation.parent_id',
-                    'min_price' => 'MIN(prices.value)')
-            )
-            ->join(
-                array('attribute' => 'eav_attribute'),
-                'attribute.attribute_id=prices.attribute_id',
-                array()
-            )
-            ->where('products.type_id=?', Mage_Catalog_Model_Product_Type::TYPE_SIMPLE)//choose from simple products
-            ->where('attribute.attribute_code=?', self::PRICE_ATTRIBUTE_CODE);
-
-
-        $select->where("prices.store_id=?", $storeId);
-
-        $select->where('product_relation.parent_id IN(?)', implode(",", $ids));
-        $select->order('product_relation.parent_id');
-        $select->group('product_relation.parent_id');
-echo $select;
-        $result = $adapter->fetchAssoc($select);
-
-        return $result;
-    }
 
 
     public function getConfigurableSimpleRelation($listUpdatedProducts)
