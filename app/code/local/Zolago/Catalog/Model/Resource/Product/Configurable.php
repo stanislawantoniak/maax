@@ -70,8 +70,11 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         return $result;
     }
 
-    public function getConfigurableMinPriceJoin($storeId = 0)
+    public function getConfigurableMinPriceJoin($storeId = 0, $ids)
     {
+        if(empty($ids)){
+            return array();
+        }
 
         $adapter = $this->getReadConnection();
         $select = $adapter->select();
@@ -87,27 +90,29 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
                 array()
             )
             ->join(
+                array('products' => 'catalog_product_entity'),
+                'products.entity_id = product_relation.child_id',
+                array()
+            )
+            ->join(
                 'catalog_product_entity_decimal AS prices',
                 'prices.entity_id=queue_configurable.product_id',
                 array(
                     'configurable_product' => 'product_relation.parent_id',
-                    'min_price'            => 'MIN(prices.value)')
+                    'min_price' => 'MIN(prices.value)')
             )
-
             ->join(
                 array('attribute' => 'eav_attribute'),
                 'attribute.attribute_id=prices.attribute_id',
                 array()
             )
-
-
-           // ->where('products.type_id=?', Mage_Catalog_Model_Product_Type::TYPE_SIMPLE) //choose from simple products
+            ->where('products.type_id=?', Mage_Catalog_Model_Product_Type::TYPE_SIMPLE)//choose from simple products
             ->where('attribute.attribute_code=?', self::PRICE_ATTRIBUTE_CODE);
 
 
         $select->where("prices.store_id=?", $storeId);
 
-        //$select->order('products.entity_id');
+        $select->where("'product_relation.parent_id IN(?)", implode(",", $ids));
         $select->order('product_relation.parent_id');
         $select->group('product_relation.parent_id');
 
@@ -119,30 +124,38 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
 
     public function getConfigurableSimpleRelation($listUpdatedProducts)
     {
-        $result = array();
-        if (!empty($listUpdatedProducts)) {
-            $listUpdatedProducts = implode(',', $listUpdatedProducts);
-            $adapter = $this->getReadConnection();
-            $select = $adapter->select();
-            $select
-                ->from(
-                    'catalog_product_relation AS product_relation',
-                    array(
-                         'configurable_product' => 'product_relation.parent_id',
-                         'simple_product'       => 'product_relation.child_id'
-                    )
-                )
 
-                ->where("product_relation.child_id IN ({$listUpdatedProducts})");
-
-            $result = $adapter->fetchAssoc($select);
+        if (empty($listUpdatedProducts)) {
+            return array();
         }
+        $listUpdatedProducts = implode(',', $listUpdatedProducts);
+        $adapter = $this->getReadConnection();
+        $select = $adapter->select();
+        $select
+            ->from(
+                'catalog_product_relation AS product_relation',
+                array(
+                    'configurable_product' => 'product_relation.parent_id',
+                    'simple_product' => 'product_relation.child_id'
+                )
+            )
+            ->where('product_relation.child_id IN (?)', $listUpdatedProducts);
+
+        $result = $adapter->fetchAssoc($select);
+
 
         return $result;
     }
 
-    public function getConfigurableSimpleRelationJoin()
+    /**
+     * @param $ids
+     * @return array
+     */
+    public function getConfigurableSimpleRelationJoin($ids)
     {
+        if(empty($ids)){
+            return array();
+        }
         $adapter = $this->getReadConnection();
         $select = $adapter->select();
         $select
@@ -159,6 +172,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
                 )
             )
             ->where('queue_configurable.status','0')
+            ->where('product_relation.child_id IN (?)', implode(",",$ids))
         ;
 
         $result = $adapter->fetchAssoc($select);

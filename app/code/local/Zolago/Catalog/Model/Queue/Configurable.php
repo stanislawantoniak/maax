@@ -47,7 +47,7 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
 
         //define parent products (configurable) by child (simple)
         //$configurableSimpleRelation = $zolagoCatalogModelProductConfigurableData->getConfigurableSimpleRelation($listUpdatedProducts); old variant
-        $configurableSimpleRelation = $zolagoCatalogModelProductConfigurableData->getConfigurableSimpleRelationJoin();
+        $configurableSimpleRelation = $zolagoCatalogModelProductConfigurableData->getConfigurableSimpleRelationJoin($listUpdatedProducts);
 
 
 
@@ -69,7 +69,7 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
 
         foreach ($storeId as $store) {
             $minPrices[$store] = $zolagoCatalogModelProductConfigurableData
-                ->getConfigurableMinPriceJoin($store);
+                ->getConfigurableMinPriceJoin($store,$listUpdatedProducts);
         }
         //--min prices
 
