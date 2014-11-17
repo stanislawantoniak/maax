@@ -54,7 +54,7 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
             //return;
         }
 
-
+        Zend_Debug::dump($configurableSimpleRelation);
         $configurableProductsIds = array_keys($configurableSimpleRelation);
 
         //min prices
