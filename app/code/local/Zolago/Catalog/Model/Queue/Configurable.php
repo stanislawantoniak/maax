@@ -62,8 +62,7 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
         $minPrices = array();
         //old variant
         foreach ($storeId as $store) {
-            $minPrices[$store] = $zolagoCatalogModelProductConfigurableData
-                ->getConfigurableMinPrice($configurableProductsIds, $store);
+            $minPrices[$store] = $zolagoCatalogModelProductConfigurableData->getConfigurableMinPrice($configurableProductsIds, $store);
         }
 
 //        foreach ($storeId as $store) {

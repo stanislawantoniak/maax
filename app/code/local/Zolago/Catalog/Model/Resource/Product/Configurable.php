@@ -22,7 +22,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
     public function getConfigurableMinPrice($configurableProductsIds, $storeId = 0)
     {
         Zend_Debug::dump($configurableProductsIds);
-        if (!empty($configurableProductsIds)) {
+        if (empty($configurableProductsIds)) {
             return array();
         }
         $adapter = $this->getReadConnection();
