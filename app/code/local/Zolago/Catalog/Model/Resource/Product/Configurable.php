@@ -59,7 +59,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         $configurableProductsIds = implode(',', $configurableProductsIds);
         $select->where("product_relation.parent_id IN({$configurableProductsIds})");
 
-        $select->order('products.entity_id');
+        //$select->order('products.entity_id');
 
         $select->group('product_relation.parent_id');
 
@@ -158,7 +158,8 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
             ->where("prices.attribute_id=?", self::PRICE_ATTRIBUTE_CODE)
             ->where("products.type_id=?", Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE)
 //            ->where("prices.store_id IN (".implode(',',$storeId).")")
-            ->order('products.entity_id');
+//            ->order('products.entity_id')
+        ;
         if ($limit > 0) {
             $select->limit($limit);
         }
