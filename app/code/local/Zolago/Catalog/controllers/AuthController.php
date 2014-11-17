@@ -28,39 +28,7 @@ class Zolago_Catalog_AuthController extends Mage_Core_Controller_Front_Action
     }
 
 
-    public function testAction(){
 
-        $skuS = array('5-14644-CZARNY','5-13428-CZARNY','4-32448-99X-L');
-
-
-        $productsIds = Mage::getResourceModel("catalog/product_collection")
-            ->addAttributeToFilter('sku', array('in'=>$skuS))
-            ->getAllIds();
-
-//
-//        $productIds = $model->getSkuIdAssoc($skuS);
-////
-////        $priceType = $model->getProductsPriceData($merchant,$productIds);
-////        Zend_Debug::dump($priceType);
-//
-//        $collection = Mage::getResourceModel("zolagocatalog/vendor_price_collection");
-////        $collection->addAttributeToFilter('sku', array('in'=>$skuS));
-//        $collection->addIdFilter($productIds);
-//        $collection->addAttributeToSelect(array(
-//            "price",
-//            "converter_price_type",
-//            "price_margin",
-//            "converter_msrp_type",
-//            'store_id',
-//            'udropship_vendor'
-//        ));
-
-//        foreach ($collection as $collectionItem) {
-//
-//            Zend_Debug::dump($collectionItem->getData());
-//        }
-        Zend_Debug::dump($productsIds);
-    }
 
 
 }
