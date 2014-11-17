@@ -8,7 +8,7 @@ class Zolago_Solrsearch_Model_Catalog_Product extends Mage_Catalog_Model_Product
 	 * @return null | array
 	 */
 	public function getListingResizedImageInfo() {
-
+//
 //		$urlPath = $this->getListingResizedImageUrl();
 //		// Extract cached image URI
 //		if($urlPath){
@@ -21,11 +21,9 @@ class Zolago_Solrsearch_Model_Catalog_Product extends Mage_Catalog_Model_Product
 //		}
 //		return null;
 
-        error_reporting(E_ALL);
-        ini_set("display_errors", 1);
         /** @var Zolago_Solrsearch_Helper_Data $_helper */
         $_helper = Mage::helper("zolagosolrsearch");
-        return $_helper->getListingResizedImageInfo();
+        return $_helper->getListingResizedImageInfo($this);
 	}
 	
 	/**
@@ -71,15 +69,15 @@ class Zolago_Solrsearch_Model_Catalog_Product extends Mage_Catalog_Model_Product
 //		   } catch (Exception $ex) {
 //			   Mage::logException($ex);
 //		   }
+//
 //		   $this->setData("listing_resized_image_url", $return . ""); // Cast to string
 //		}
 //
 //        return $this->getData("listing_resized_image_url");
 
-
         /** @var Zolago_Solrsearch_Helper_Data $_helper */
         $_helper = Mage::helper("zolagosolrsearch");
-		return $_helper->getListingResizedImageUrl();
+		return $_helper->getListingResizedImageUrl($this);
 
 	}
 	
