@@ -268,16 +268,6 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                         $priceTypeSelected = $priceTypeDefault;
                     }
 
-                    //margin
-                    $marginSelected = 0;
-
-                    if (isset($marginByStore[$productId][$storeId])) {
-                        $marginSelected = (int)$marginByStore[$productId][$storeId];
-                    } else {
-                        $marginDefault = isset($marginByStore[$productId][Mage_Core_Model_App::ADMIN_STORE_ID])
-                            ? $marginByStore[$productId][Mage_Core_Model_App::ADMIN_STORE_ID] : $marginSelected;
-                        $marginSelected = (int)$marginDefault;
-                    }
 
                     $pricesConverter = isset($priceBatch[$sku]) ? (array)$priceBatch[$sku] : false;
 
@@ -287,6 +277,18 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
 
                         if($priceToInsert){
+
+                            //margin
+                            $marginSelected = 0;
+
+                            if (isset($marginByStore[$productId][$storeId])) {
+                                $marginSelected = (int)$marginByStore[$productId][$storeId];
+                            } else {
+                                $marginDefault = isset($marginByStore[$productId][Mage_Core_Model_App::ADMIN_STORE_ID])
+                                    ? $marginByStore[$productId][Mage_Core_Model_App::ADMIN_STORE_ID] : $marginSelected;
+                                $marginSelected = (int)$marginDefault;
+                            }
+
                             $insert[] = array(
                                 'entity_type_id' => $productEt,
                                 'attribute_id' => 75,
