@@ -7,7 +7,9 @@
 /** @var $_collection Zolago_Solrsearch_Model_Catalog_Product */
 
 $_collection = $this->getItems();
-$_helperSolrsearch = Mage::helper("zolagosolrsearch");
+//$_helperSolrsearch = Mage::helper("zolagosolrsearch");
+/** @var Zolago_Catalog_Helper_Product $_helper */
+$_helper = Mage::helper('zolagocatalog/product');
 
 ?>
 
@@ -17,71 +19,68 @@ $_helperSolrsearch = Mage::helper("zolagosolrsearch");
             <div class="row">
                 <div id="grid" class="shuffle--container shuffle--fluid">
 
-                    <?php if (count($_collection)): ?>
-                    <?php foreach ($_collection as $product): ?>
+                        <?php foreach ($_collection as $product): ?>
+                            <?php $_product = $product->getProduct(); ?>
+                            <?php $_productImageUrl = $_helper->getResizedImageUrl($_product); ?>
+                            <?php $_productImageInfo = $_helper->getResizedImageInfo($_product); ?>
+                            <?php
 
-                    <?php $_product = $product->getProduct();
-
+                            var_dump($product->getData());
+                            die;
 
                             ?>
 
-                    <?php $_productImageUrl = $_helperSolrsearch->getListingResizedImageUrl($_product); ?>
-                    <?php $_productImageInfo = $_helperSolrsearch->getListingResizedImageInfo($_product); ?>
+                            <div class="item col-phone col-xs-4 col-sm-4 col-md-3 col-lg-3 size14">
+                                <div class="box_listing_product">
+                                    <a href="<?php echo $_product->getProductUrl(); ?>">
 
+                                        <figure class="img_product">
+                                            <img
+                                                src="<?php echo $_productImageUrl; ?>"
+                                                alt="<?php $this->escapeHtml($_product->getName()); ?>"
+                                                class="img-responsive"/>
+                                        </figure>
+                                        <div class="logo_manufacturer">
+                                            <img class="img-responsive"
+                                                 src="<?php echo $_helper->getManufacturerLogoUrl($_product); ?>"
+                                                 alt="<?php echo $this->escapeHtml($_product->getManufacturer()); ?>"/>
+                                        </div>
+                                        <div
+                                            class="name_product"><?php echo $this->escapeHtml($_product->getName()); ?></div>
+                                        <div class="price clearfix">
+                                            <div class="col-price">
+                                                <?php if ($_product->getPrice() != $_product->getFinalPrice()) : ?>
+                                                    <span
+                                                        class="old"><?php echo $this->helper('core')->currency($product->getPrice(), true, false); ?></span>
 
-                    <div class="item col-phone col-xs-4 col-sm-4 col-md-3 col-lg-3 size14">
-                        <div class="box_listing_product">
-                            <a href="<?php echo $_product->getProductUrl(); ?>">
+                                                <?php endif; ?>
+                                                <span><?php echo $this->helper('core')->currency($product->getFinalPrice(), true, false); ?></span>
+                                            </div>
+                                            <?php
+                                            // like count
+                                            $wishlistCount = "";
+                                            $inMyWishlist = "";
+                                            $plusSign = "";
+                                            if ($product->getWishlistCount() - 1 > 0) {
+                                                $wishlistCount = $product->getWishlistCount();
+                                                if ($product->getInMyWishlist()) {
+                                                    $wishlistCount -= 1;
+                                                }
+                                            }
 
-                                <figure class="img_product">
-                                                                <img
-                                                                    src="<?php echo $_productImageUrl; ?>"
-                                                                    alt="
-                                    <?php $this->escapeHtml($product->getName()); ?>"
-                                                                    class="img-responsive"/>
-<!--                                    <img-->
-<!--                                        src="http://modago.dev/media/catalog/product/cache/1/image/300x/040ec09b1e35df139433887a97daa66f/images/catalog/product/placeholder/image.jpg"-->
-<!--                                        alt="--><?php //$this->escapeHtml($product->getName()); ?><!--"-->
-<!--                                        class="img-responsive"/>-->
-                                </figure>
-                                <div class="logo_manufacturer"><img class="img-responsive"
-                                                                    src="<?php echo $product->getManufacturerLogoUrl(); ?>"
-                                                                    alt="<?php echo $this->escapeHtml($product->getManufacturer()); ?>"/>
-                                </div>
-                                <div class="name_product"><?php echo $this->escapeHtml($product->getName()); ?></div>
-                                <div class="price clearfix">
-                                    <div class="col-price">
-                                        <?php if ($product->getPrice() != $product->getFinalPrice()) : ?>
-                                            <span
-                                                class="old"><?php echo $this->helper('core')->currency($product->getPrice(), true, false); ?></span>
+                                            if ($product->getInMyWishlist()) {
+                                                $inMyWishlist = $this->__("You");
+                                                if ($product->getWishlistCount() > 1) {
+                                                    $plusSign = " + ";
+                                                }
+                                            }
 
-                                        <?php endif; ?>
-                                        <span><?php echo $this->helper('core')->currency($product->getFinalPrice(), true, false); ?></span>
-                                    </div>
-                                    <?php
-                                    // like count
-                                    $wishlistCount = "";
-                                    $inMyWishlist = "";
-                                    $plusSign = "";
-                                    if ($product->getWishlistCount() - 1 > 0) {
-                                        $wishlistCount = $product->getWishlistCount();
-                                        if ($product->getInMyWishlist()) {
-                                            $wishlistCount -= 1;
-                                        }
-                                    }
-
-                                    if ($product->getInMyWishlist()) {
-                                        $inMyWishlist = $this->__("You");
-                                        if ($product->getWishlistCount() > 1) {
-                                            $plusSign = " + ";
-                                        }
-                                    }
-
-                                    ?>
-                                    <div class="like <?php if ($product->getInMyWishlist()): ?>liked<?php endif; ?>"
-                                         data-idproduct="<?php echo $product->getId(); ?>"
-                                         data-status="<?php echo (int)$product->getInMyWishlist(); ?>"
-                                         onclick="Mall.wishlist.<?php if ($product->getInMyWishlist()) : ?>remove<?php else: ?>add<?php endif; ?>FromSmallBlock(this);return false;">
+                                            ?>
+                                            <div
+                                                class="like <?php if ($product->getInMyWishlist()): ?>liked<?php endif; ?>"
+                                                data-idproduct="<?php echo $product->getId(); ?>"
+                                                data-status="<?php echo (int)$product->getInMyWishlist(); ?>"
+                                                onclick="Mall.wishlist.<?php if ($product->getInMyWishlist()) : ?>remove<?php else: ?>add<?php endif; ?>FromSmallBlock(this);return false;">
                                 <span class="icoLike">
                                   <img class="img-01" src="<?php echo $this->getSkinUrl('images/heart.png'); ?>"
                                        alt=""/>
@@ -91,17 +90,14 @@ $_helperSolrsearch = Mage::helper("zolagosolrsearch");
                                 <span
                                     class="like_count"><span><?php echo $inMyWishlist; ?><?php echo $plusSign; ?></span><?php echo $wishlistCount; ?></span>
 
-                                        <div class="toolLike"></div>
-                                    </div>
+                                                <div class="toolLike"></div>
+                                            </div>
+                                        </div>
+                                    </a>
                                 </div>
-                            </a>
-                        </div>
-                    </div>
+                            </div>
 
                         <?php endforeach; ?>
-                    <?php else: ?>
-
-                    <?php endif; ?>
                     <div class="col-xs-12 shuffle__sizer"></div>
                 </div>
             </div>
@@ -146,11 +142,10 @@ $_helperSolrsearch = Mage::helper("zolagosolrsearch");
 
     jQuery(grid).shuffle({});
 
-//    jQuery(grid).on('done.shuffle layout.shuffle', function() {
-//        console.log('Finished initializing shuffle!');
-//        jQuery(window).resize();
-//    });
+    jQuery(grid).on('done.shuffle layout.shuffle', function() {
+        jQuery(window).resize();
+    });
 
-    jQuery(window).resize();
+//    jQuery(window).resize();
 
 </script>

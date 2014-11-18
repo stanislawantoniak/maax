@@ -6,12 +6,14 @@ ini_set("display_errors", 1);
 $_helper = $this->helper('wishlist');
 $_helperCustomer = $this->helper('customer');
 $backUrl = $this->getUrl('customer/account');
+/** @var $_collection Mage_Wishlist_Model_Resource_Item_Collection */
+$_collection = $this->getWishlistItems();
 
 
 // dla pamięci
 // cms block dla treści nad wishlist
 // instalator do cms block'a
-// plugin zamiast masonry to ->
+// plugin zamiast masonry to -> http://vestride.github.io/Shuffle/
 //do backloga serduszka z przekreslona cena na bardzo malej rozdzielczosci sie wizualnie psuja
 //
 
@@ -26,82 +28,52 @@ $backUrl = $this->getUrl('customer/account');
 
 <?php if ($this->helper('wishlist')->isAllow()) : ?>
     <div class="my-wishlist">
-        <div class="page-title box-wrapper">
-            <h1>
-                <span class="span-title"><?php echo $_helper->__('Your favourite'); ?></span>
-                <!--            <span class="back-sm"><a href="--><?php //echo $backUrl; ?><!--" class="underline">-->
-                <?php //echo $_helper->__('back: my account'); ?><!-- &gt;</a></span>-->
-                <!--            <span class="back-xs"><a href="--><?php //echo $backUrl; ?><!--" class="underline">-->
-                <?php //echo $_helper->__('back'); ?><!-- &gt;</a></span>-->
-            </h1>
+        <div class="wishlist-cms wrapp-section bg-w">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-12 wishlist-cms-title">
+                        <h1>
+                            <span class="span-title uppercase">Twoje ulubione</span>
+                        </h1>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="wishlist-cms-content col-sm-12">
+                        <?php if ($_helperCustomer->isLoggedIn()) : ?>
+                            <?php if ($this->hasWishlistItems()): //Zalogowany i ma jakies ulubione ?>
+                                <p style="font-family: latoblack">Chcesz mieć zawsze dostęp do swoich ulubionych?</p>
+                                <p>Zaloguj się lub załóż konto żeby zostały zapamiętane zawsze jak się zalogujesz, niezależne od miejsca i urządzenia.</p>
+                            <?php else: ?>
+                                Zalogowany ale nie ma ulubionych
+                            <?php endif ?>
+                        <?php else: ?>
+                            <?php if ($this->hasWishlistItems()): //nie zalogowany i ma jakies ulubione ?>
+                                <p style="font-family: latoblack">Chcesz mieć zawsze dostęp do swoich ulubionych?</p>
+                                <p>Zaloguj się lub załóż konto żeby zostały zapamiętane zawsze jak się zalogujesz, niezależne od miejsca i urządzenia. <a href="#" class="button button-third" style="margin-left: 5px; margin-right: 5px;">ZALOGUJ&nbsp;SIĘ</a></p>
+                                <p>Nie masz jeszcze konta? Utwórz konto w zaledwie 10 sekund! <a href="/customer/account/create/" class="underline">Załóż&nbsp;konto</a></p>
+                            <?php else: ?>
+                                nie zalogowany, nie ma ulubionych
+                            <?php endif ?>
+                        <?php endif ?>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="background-wrapper box-wrapper wishlist-cms">
-            <?php if ($_helperCustomer->isLoggedIn()) : ?>
-                <?php if ($this->hasWishlistItems()): ?>
-                    Zalogowany i ma jakies ulubione
-                <?php else: ?>
-                    Zalogowany ale nie ma ulubionych
-                <?php endif ?>
-            <?php else: ?>
-                <?php if ($this->hasWishlistItems()): ?>
-                    nie zalogowany i ma jakies ulubione
-                <?php else: ?>
-                    nie zalogowany, nie ma ulubionych
-                <?php endif ?>
-            <?php endif ?>
 
-            <?php
-            //            var_dump($this->getWishlistInstance()->getId());
-//                        var_dump($this->getWishlistItems());
-            /** @var $_collection Mage_Wishlist_Model_Resource_Item_Collection */
-            $_collection = $this->getWishlistItems();
-
-
-
-
-//            $_collection->
-//            var_dump($_collection);
-//            var_dump($_collection->count());
-
-
-            ?>
-<!--            --><?php //foreach ($_collection as $product): ?>
-<!--                --><?php //$_productImageUrl = $product->getListingResizedImageUrl(); ?>
-<!--                --><?php //$_productImageInfo = $product->getListingResizedImageInfo();?>
-<!--                --><?php
-//                var_dump($_productImageInfo, $_productImageUrl);
-//                ?>
-<!--            --><?php //endforeach; ?>
-
-
-        </div>
 
         <div class="background-wrapper box-wrapper" id="wishlist-items">
-            <?php $this->getChild('items')->setItems($this->getWishlistItems()); ?>
-            <?php echo $this->getChildHtml('items'); ?>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <?php $this->getChild('items')->setItems($this->getWishlistItems()); ?>
+                        <?php echo $this->getChildHtml('items'); ?>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
 <?php endif ?>
 
-<style>
-    #sidebar {
-        visibility: hidden;
-        display: none;
-        width: 0;
-        height: 0;
-    }
-
-    #content-main {
-        margin-left: 0px !important;
-    }
-
-    /*.page-title h1 .span-title{*/
-    /*font-size: 18px!important;*/
-    /*font-family: latoblack;*/
-    /*}*/
-
-
-</style>
 
 
