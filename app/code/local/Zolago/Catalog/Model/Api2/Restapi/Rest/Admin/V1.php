@@ -292,14 +292,13 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                                 $marginSelected = (int)$marginDefault;
                             }
 
-                            $insert = array(
+                            $insert[] = array(
                                 'entity_type_id' => $productEt,
                                 'attribute_id' => 75,
                                 'store_id' => $storeId,
                                 'entity_id' => $productId,
                                 'value' => Mage::app()->getLocale()->getNumber($priceToInsert + (($priceToInsert * $marginSelected)/100))
                             );
-                            $model->savePriceValuesByOne($insert, $productId);
                         }
                     }
 
@@ -307,13 +306,13 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
                 }
 
-                //$ids[] = $productId;
+                $ids[] = $productId;
             }
         }
 
 
-//        if (!empty($insert)) {
-//            $model->savePriceValues($insert, $ids);
-//        }
+        if (!empty($insert)) {
+            $model->savePriceValues($insert, $ids);
+        }
     }
 }
