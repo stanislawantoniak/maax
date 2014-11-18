@@ -271,7 +271,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
             foreach ($productRelations as $i) {
                 $productMinPrice[] = $i['child_price'];
             }
-            Zend_Debug::dump($productMinPrice);
+            //Zend_Debug::dump($productMinPrice);
             $productMinimalPrice = min($productMinPrice);
             Mage::getSingleton('catalog/product_action')->updateAttributesNoIndex(
                 array($productConfigurableId), array('price' => $productMinimalPrice), $store
@@ -346,7 +346,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
             )
             ->where('parent=?', $productConfigurableId)
             ->where('store=?', $store);
-echo $select;
+//echo $select;
 
         try
         {
