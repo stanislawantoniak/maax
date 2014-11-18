@@ -10,19 +10,6 @@ class Zolago_Catalog_Vendor_ProductController
 		$this->_saveHiddenColumns();
 		$this->_renderPage(null, 'udprod_product');
     }
-
-	
-	/**
-	 * @return Mage_Catalog_Model_Resource_Product_Collection
-	 */
-	protected function _getCollection() {
-		if(!$this->_collection){
-			// Add extra fields
-			$this->_collection = $this->_prepareCollection();
-			
-		}
-		return $this->_collection;
-	}
 	
 	
 	

@@ -51,7 +51,7 @@ define([
 					}
 					
 					if(config.allowEmpty){
-						options.unshift({"value":null, "label": "["+Translator.translate("empty")+"]"});
+						options.unshift({"value":"-", "label": "["+Translator.translate("empty")+"]"});
 					}
 					
 					if(!config.required){
@@ -98,7 +98,7 @@ define([
 							jQuery(element).datepicker();
 						}
 						
-						var observer = new ObserverFilter(element, grid, name + '['+type+']', {valueType: valueType});
+						var observer = new ObserverFilter(element, grid, name + '['+_type+']', {valueType: valueType});
 						
 						on(element, 'focus',	lang.hitch(observer, observer.start));
 						on(element, 'keyup',	lang.hitch(observer, observer.start));

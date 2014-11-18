@@ -79,14 +79,18 @@ class Zolago_Catalog_Block_Vendor_Product_Grid extends Mage_Core_Block_Template 
 		}
 		
 		if($columnObject->getFilter()!==false){
-			$filterHeaderOptions = array();
+			
+			// Set value 
+			$filterHeaderOptions = array(
+				"valueType"		=> $columnObject->getType()
+			);
+			
 			// Filter content
 			if($columnObject->getOptions()){
-				$filterHeaderOptions = array(
-					"options"		=>	$columnObject->getOptions(),
-					"allowEmpty"	=>	true
-				);
+				$filterHeaderOptions['options'] = $columnObject->getOptions();
+				$filterHeaderOptions['allowEmpty'] = true;
 			}
+			
 			$classes[] = "filterable";
 			
 			// Filter column
@@ -107,14 +111,20 @@ class Zolago_Catalog_Block_Vendor_Product_Grid extends Mage_Core_Block_Template 
 			
 		}
 		
-		if($columnObject->getIndex()=="name"){
-			// Also add status
-			$out['statusOptions'] = $this->getGridModel()->optionsToHash(
-				$this->getGridModel()->
-					getAttribute("status")->
-					getSource()->
-					getAllOptions()
-			);
+		
+		switch ($columnObject->getIndex()) {
+			case "name":
+				$out['statusOptions'] = $this->getGridModel()->optionsToHash(
+					$this->getGridModel()->
+						getAttribute("status")->
+						getSource()->
+						getAllOptions()
+				);
+
+			break;
+			case "thumbnail":
+				$out['label'] = $this->__("Im.");
+			break;
 		}
 		
 		return $out;

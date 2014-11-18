@@ -6,6 +6,7 @@ abstract class Zolago_Catalog_Controller_Vendor_Abstract
 	extends Zolago_Dropship_Controller_Vendor_Abstract
 {
 	
+	const NULL_VALUE = "-";
 	
 	protected $_collection;
 	
@@ -26,6 +27,18 @@ abstract class Zolago_Catalog_Controller_Vendor_Abstract
 			break;
 		}
 		
+	}
+	
+	/**
+	 * @return Mage_Catalog_Model_Resource_Product_Collection
+	 */
+	protected function _getCollection() {
+		if(!$this->_collection){
+			// Add extra fields
+			$this->_collection = $this->_prepareCollection();
+			
+		}
+		return $this->_collection;
 	}
 	
 	/**
@@ -56,7 +69,10 @@ abstract class Zolago_Catalog_Controller_Vendor_Abstract
 				}elseif(is_array($value) && !$value){
 					continue;
 				}
-				$params[$key] = $this->_getSqlCondition($key, $value);
+				$processedParam = $this->_getSqlCondition($key, $value);
+				if(!is_null($processedParam)){
+					$params[$key] = $processedParam;
+				}
 			}
 		}
 		return $params;

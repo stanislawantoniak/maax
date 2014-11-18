@@ -2,9 +2,10 @@
 /**
  * @method Zolago_Dropship_Model_Session _getSession()
  */
-class Zolago_Catalog_Controller_Vendor_Product_Abstract extends Zolago_Catalog_Controller_Vendor_Abstract
+class Zolago_Catalog_Controller_Vendor_Product_Abstract 
+	extends Zolago_Catalog_Controller_Vendor_Abstract
 {
-
+	
 	/**
 	 * @return Mage_Core_Model_Store
 	 */
@@ -48,6 +49,11 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract extends Zolago_Catalog_C
 		return Mage::app()->getStore($storeId)->getId();
 	}
 	
+	/**
+	 * @param Mage_Catalog_Model_Resource_Eav_Attribute $attribute
+	 * @param type $dir
+	 * @return Zolago_Catalog_Controller_Vendor_Product_Abstract
+	 */
 	protected function _setCollectionOrder(Mage_Catalog_Model_Resource_Eav_Attribute $attribute, $dir) {
 		if($attribute instanceof Mage_Catalog_Model_Resource_Eav_Attribute && $this->isAttributeEnumerable($attribute)){
 			$source = $column->getAttribute()->getSource();
@@ -147,6 +153,92 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract extends Zolago_Catalog_C
 		return $collection;
     }
 	
+	/**
+	 * @param string $key
+	 * @param mixed $value
+	 * @return array
+	 */
+	protected function _getSqlCondition($key, $value) {
+		
+		$attribute=$this->getGridModel()->getAttribute($key);
+				
+		if(is_array($value)){
+			$isDate = in_array($attribute->getFrontendInput(), 
+					array("datetime", "date"));
+			
+			if(isset($value['to']) && is_numeric($value['to']) && !$isDate){
+				$value['to'] = (float)$value['to'];
+			}
+			if(isset($value['from']) && is_numeric($value['from']) && !$isDate){
+				$value['from'] = (float)$value['from'];
+			}
+			if($isDate){
+				$value['date'] = true;
+			}
+			
+			if(isset($value['to']) && is_numeric($value['to']) && 
+					(!isset($value['from']) || (isset($value['from']) && $value['from']==0))){
+				$value = array($value, array("null"=>true));
+			}
+			
+			return $value;
+		}
+		
+		if($attribute && $this->getGridModel()->isAttributeEnumerable($attribute)){
+			// Process null
+			if($value===self::NULL_VALUE){
+				return array("null"=>true);
+			}
+			// Process multiply select
+			if($attribute->getFrontendInput()=="multiselect"){
+				/**
+				 * Do id by MySQL RegExp expression in applaying filter in gird
+				 */
+				$collection = $this->_getCollection();
+
+				$code = $attribute->getAttributeCode();
+				$aliasCode = $code ."_filter";
+
+
+				$collection->joinAttribute($aliasCode, "catalog_product/$code", "entity_id", null, "left");
+
+
+				$valueTable1 = "at_".$aliasCode."_default";
+				$valueTable2 = "at_".$aliasCode;
+
+				if($collection->getStoreId()){
+					$valueExpr = $collection->getSelect()->getAdapter()
+						->getCheckSql("{$valueTable2}.value_id > 0", "{$valueTable2}.value", "{$valueTable1}.value");
+
+				}else{
+					$valueExpr = "$valueTable2.value";
+				}
+				// Try use regexp to match vales with boundary (like comma, ^, $)  - (123,456,678) 
+				$collection->getSelect()->where(
+						$valueExpr." REGEXP ?", "[[:<:]]".$value."[[:>:]]"
+				);
+
+				return null;
+			}
+			return array("eq"=>$value);
+		}
+		
+		// Return default
+		return array("like"=>'%'.$value.'%');
+	}
+	
+	/**
+	 * @return array
+	 */
+	protected function _getAvailableQueryParams() {
+		$out = array();
+		foreach($this->getGridModel()->getColumns() as $column){
+			if($column->getAttribute()){
+				$out[] = $column->getAttribute()->getAttributeCode();
+			}
+		}
+		return $out;
+	}
 	
 	/**
 	 * @param array $productIds

@@ -39,7 +39,6 @@ abstract class Zolago_Catalog_Model_Resource_Vendor_Collection_Abstract
 		$select->limit($end-$start, $start);
 		$items = $adapter->fetchAll($select);
 		
-		
 		foreach($items as &$item){
 			$item['can_collapse'] = true;//
 			$item['entity_id'] = (int)$item['entity_id'];

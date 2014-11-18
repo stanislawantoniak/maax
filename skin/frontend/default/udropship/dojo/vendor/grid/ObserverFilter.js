@@ -26,7 +26,7 @@ define([
 			if(value==""){
 				return value;
 			}
-			if(this.valueType=="number"){
+			if(this.valueType=="number" || this.valueType=="price"){
 				return parseFloat(value.replace(",","."))
 			}
 			return value;
