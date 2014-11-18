@@ -211,6 +211,10 @@ class Zolago_Catalog_Model_Resource_Vendor_Mass
 		Mage_Catalog_Model_Resource_Eav_Attribute $attrbiute,
 		Mage_Catalog_Model_Resource_Product_Collection $collection,
 		$dir = Varien_Db_Select::SQL_ASC) {
+		
+		/**
+		 * @todo better performance if we can recogenize isnt default values
+		 */
 	
 		$valueTable1    = $attrbiute->getAttributeCode() . '_t1';
         $valueTable2    = $attrbiute->getAttributeCode() . '_t2';
@@ -235,6 +239,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Mass
 		// Sort by comma count - separed values
 		
 		$sortAttribute = "{$attrbiute->getAttributeCode()}_count";
+		$sortAttributeValue = "{$attrbiute->getAttributeCode()}_value";
 		
 		$expressions = "ROUND ((LENGTH({$valueExpr}) - LENGTH( REPLACE ({$valueExpr}, '{$comma}', ''))) / LENGTH('{$comma}'))";
 		
@@ -242,8 +247,8 @@ class Zolago_Catalog_Model_Resource_Vendor_Mass
 			$sortAttribute => $expressions
 		));
 		
-		$collection->getSelect()
-			->order("{$sortAttribute} {$dir}");
+		// Sort by comma num first
+		$collection->getSelect()->order("{$sortAttributeValue} {$dir}");
 			
 	}
 	/**

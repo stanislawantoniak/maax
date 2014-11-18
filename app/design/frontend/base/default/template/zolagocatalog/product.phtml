@@ -2,8 +2,12 @@
 <div class="container">
     <div class="page-header row">
         <div class="col-lg-4 page-title">
-            <h3><?php echo Mage::helper("zolagocatalog")->__("Mass product");?></h3>
-			<span class="tageline"><?php echo Mage::helper("zolagocatalog")->__("Manage product descriotions");?></span>
+            <h3><?php echo Mage::helper("zolagocatalog")->__("Manage products descriptions");?></h3>
+			<span class="tageline">
+				<a href="#"><i class="icon-table"></i> <?php echo Mage::helper("zolagocatalog")->__("Customize columns");?></a>
+				&nbsp;
+				<a href="#"><i class="icon-filter"></i> <?php echo Mage::helper("zolagocatalog")->__("Show filters");?> </a>
+			</span>
         </div>
 		
 		<?php echo $this->getChildHtml("mass_actions"); ?>
@@ -14,5 +18,11 @@
 <?php if($this->getCanShowGrid()):?>
 	<?php echo $this->getChildHtml("grid");?>
 <?php else:?>
-		<p><?php echo Mage::helper("zolagocatalog")->__("Choose the category");?></p>
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<p class="alert alert-info"><?php echo Mage::helper("zolagocatalog")->__("Choose the category");?></p>
+			</div>
+		</div>
+	</div>
 <?php endif;?>
