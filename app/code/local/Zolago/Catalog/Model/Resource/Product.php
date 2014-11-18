@@ -27,6 +27,8 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
 
         } catch (Exception $e) {
             $this->_getWriteAdapter()->rollBack();
+            $batchFile = Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1::CONVERTER_PRICE_UPDATE_LOG;
+            Mage::log(microtime() . " rollBack: savePriceValues", 0, $batchFile);
 
             throw $e;
         }
