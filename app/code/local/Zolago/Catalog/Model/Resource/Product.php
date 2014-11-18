@@ -34,6 +34,38 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
         return $this;
     }
 
+    public function savePriceValuesByOne($insert, $id)
+    {
+        $writeAdapter = $this->_getWriteAdapter();
+        $writeAdapter->beginTransaction();
+        try {
+            $writeAdapter->insertOnDuplicate(
+                $writeAdapter->getTableName('catalog_product_entity_decimal'),
+                $insert, array('value')
+            );
+
+            $this->_getWriteAdapter()->commit();
+
+            Zolago_Catalog_Helper_Configurable::queueProduct($id);
+
+
+            //add to solr queue
+            Mage::dispatchEvent(
+                "catalog_converter_price_update_after",
+                array(
+                    "product_ids" => $id
+                )
+            );
+
+        } catch (Exception $e) {
+            $this->_getWriteAdapter()->rollBack();
+
+            throw $e;
+        }
+
+        return $this;
+    }
+
     /**
      * @param $skuS
      *
