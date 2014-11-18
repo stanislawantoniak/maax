@@ -49,6 +49,12 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 		return (int)Mage::app()->getStore($storeId)->getId();
 	}
 
+	/**
+	 * @return int
+	 */
+	protected function _getLabelStoreId() {
+		return $this->getGridModel()->getLabelStore()->getId();
+	}
 	
 	/**
 	 * collection dont use after load - just flat selects
@@ -235,9 +241,11 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 		// Some special sort fixes
 		if($attribute && $this->getGridModel()->isAttributeEnumerable($attribute)){
 			$source = $attribute->getSource();
+			$oldStoreId = $this->_getCollection()->getStoreId();
 			if($source instanceof Mage_Eav_Model_Entity_Attribute_Source_Boolean){
 				// Need fix 
-				Mage::getResourceSingleton('zolagocatalog/vendor_mass')->addBoolValueSortToCollection(
+				Mage::getResourceSingleton('zolagocatalog/vendor_mass')->
+					addBoolValueSortToCollection(
 						$attribute,
 						$this->_getCollection(),
 						$sort['dir']
@@ -246,18 +254,24 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 			}elseif($source instanceof Mage_Eav_Model_Entity_Attribute_Source_Table){
 				// Need fix - wrong sort - multiple values first
 				if($attribute->getFrontendInput()=="multiselect"){
-					Mage::getResourceSingleton('zolagocatalog/vendor_mass')->addMultipleValueSortToCollection(
-						$attribute,
-						$this->_getCollection(),
-						$sort['dir']
+					Mage::getResourceSingleton('zolagocatalog/vendor_mass')->
+						addMultipleValueSortToCollection(
+							$attribute,
+							$this->_getCollection(),
+							$sort['dir']
 					);
 				// Need fix - need original values tot text values from eav!
 				}else{
-					Mage::getResourceSingleton('zolagocatalog/vendor_mass')->addEavTableSortToCollection(
-						$attribute,
-						$this->_getCollection(),
-						$sort['dir']
+					$this->_getCollection()->setStoreId(
+						$this->_getLabelStoreId()
 					);
+					Mage::getResourceSingleton('zolagocatalog/vendor_mass')->
+						addEavTableSortToCollection(
+							$attribute,
+							$this->_getCollection(),
+							$sort['dir']
+					);
+					$this->_getCollection()->setStoreId($oldStoreId);
 					
 				}
 				return array();

@@ -239,7 +239,6 @@ class Zolago_Catalog_Model_Resource_Vendor_Mass
 		// Sort by comma count - separed values
 		
 		$sortAttribute = "{$attrbiute->getAttributeCode()}_count";
-		$sortAttributeValue = "{$attrbiute->getAttributeCode()}_value";
 		
 		$expressions = "ROUND ((LENGTH({$valueExpr}) - LENGTH( REPLACE ({$valueExpr}, '{$comma}', ''))) / LENGTH('{$comma}'))";
 		
@@ -248,7 +247,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Mass
 		));
 		
 		// Sort by comma num first
-		$collection->getSelect()->order("{$sortAttributeValue} {$dir}");
+		$collection->getSelect()->order("{$sortAttribute} {$dir}");
 			
 	}
 	/**
