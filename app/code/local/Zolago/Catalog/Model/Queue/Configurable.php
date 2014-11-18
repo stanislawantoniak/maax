@@ -55,60 +55,29 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
         }
 
 
-        $configurableProductsIds = array_keys($configurableSimpleRelation);
-
-//        //min prices
-//        $minPrices = array();
-//        //old variant
-//        foreach ($storeId as $store) {
-//            $minPrices[$store] = $zolagoCatalogModelProductConfigurableData->getConfigurableMinPrice($configurableProductsIds, $store);
-//        }
-//        Zend_Debug::dump($minPrices);
-        //--min prices
-
-
         //super attribute ids
         $superAttributes = $zolagoCatalogModelProductConfigurableData->getSuperAttributes();
         //--super attribute ids
 
-
-//        $productAction = Mage::getSingleton('catalog/product_action');
         $productConfigurableIds = array();
 
         foreach ($configurableSimpleRelation as $productConfigurableId => $configurableSimpleRelationItem) {
             //update configurable product price
             foreach ($storeId as $store) {
-//                $productMinPrice = false;
-//                if (isset($minPrices[$store][$productConfigurableId])) {
-//                    $productMinPrice = $minPrices[$store][$productConfigurableId]['min_price'];
-//                } elseif (isset($minPrices[Mage_Core_Model_App::ADMIN_STORE_ID][$productConfigurableId])) {
-//                    $productMinPrice = $minPrices[Mage_Core_Model_App::ADMIN_STORE_ID][$productConfigurableId]['min_price'];
-//                }
 
+                $superAttributeId = isset($superAttributes[$productConfigurableId])
+                    ? (int)$superAttributes[$productConfigurableId]['super_attribute'] : false;
 
-//                if ($productMinPrice) {
-//                    $productAction->updateAttributesNoIndex(
-//                        array($productConfigurableId), array('price' => $productMinPrice), $store
-//                    );
+                if ($superAttributeId) {
 
-                    $superAttributeId = isset($superAttributes[$productConfigurableId])
-                        ? (int)$superAttributes[$productConfigurableId]['super_attribute'] : false;
+                    $zolagoCatalogModelProductConfigurableData->insertProductSuperAttributePricingApp(
+                        $productConfigurableId, $superAttributeId, $store
+                    );
 
-                    if ($superAttributeId) {
-//                        $zolagoCatalogModelProductConfigurableData->insertProductSuperAttributePricing(
-//                            $productConfigurableId, $superAttributeId, $productMinPrice, $store
-//                        ); //old variant
-                        $zolagoCatalogModelProductConfigurableData->insertProductSuperAttributePricingApp(
-                            $productConfigurableId, $superAttributeId, $store
-                        );
-
-                        $productConfigurableIds[] = $productConfigurableId;
-                    }
-//                }
+                    $productConfigurableIds[] = $productConfigurableId;
+                }
 
             }
-
-
         }
 
 
