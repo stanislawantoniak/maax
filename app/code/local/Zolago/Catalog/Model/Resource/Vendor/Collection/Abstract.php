@@ -45,6 +45,7 @@ abstract class Zolago_Catalog_Model_Resource_Vendor_Collection_Abstract
 			$item['entity_id'] = (int)$item['entity_id'];
 			//$item['campaign_regular_id'] = "Lorem ipsum dolor sit manet"; /** @todo impelemnt **/
 			$item['store_id'] = $collection->getStoreId();
+			$item = $this->_mapItem($item);
 		}
 		
 		return array(
@@ -53,6 +54,14 @@ abstract class Zolago_Catalog_Model_Resource_Vendor_Collection_Abstract
 			"end"	=> $end,
 			"total" => $total
 		); 
+	}
+	
+	/**
+	 * @param array $item
+	 * @return array
+	 */
+	protected function _mapItem(array $item) {
+		return $item;
 	}
    
 }

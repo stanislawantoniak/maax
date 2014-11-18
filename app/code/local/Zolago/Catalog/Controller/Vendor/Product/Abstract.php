@@ -131,44 +131,21 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract extends Zolago_Catalog_C
 				$attributeCode = $columnData['attribute']->getAttributeCode();
 				$collection->joinAttribute($attributeCode, 'catalog_product/'.$attributeCode, 'entity_id', null, 'left');
 				//$collection->addAttributeToSelect($columnData['attribute']->getAttributeCode());
-			}elseif($key=="images_count"){
+			}
+			
+			if($column->getIndex()=="thumbnail"){
 				$collection->addImagesCount(false);
+			}
+			
+			if($column->getIndex()=="name"){
+				$collection->joinAttribute("status", 'catalog_product/status', 'entity_id', null, 'left');
 			}
 		}
 		
+		// Add images count 
+		
 		return $collection;
     }
-	
-	
-	
-	
-//	/**
-//	 * collection dont use after load - just flat selects
-//	 * @param Varien_Data_Collection
-//	 * @return Varien_Data_Collection
-//	 */
-//	protected function _prepareCollection(Varien_Data_Collection $collection=null) {
-//		$visibilityModel = Mage::getSingleton("catalog/product_visibility");
-//		/* @var $visibilityModel Mage_Catalog_Model_Product_Visibility */
-//		
-//		if(!($collection instanceof Mage_Catalog_Model_Resource_Product_Collection)){
-//			$collection = Mage::getResourceModel("zolagocatalog/vendor_product_collection");
-//		}
-//		/* @var $collection Zolago_Catalog_Model_Resource_Vendor_Product_Collection */
-//		
-//		$collection->setStoreId($this->_getStoreId());
-//		
-//		
-//		// Filter visible
-//		$collection->addAttributeToFilter("visibility", 
-//				array("neq"=>$visibilityModel::VISIBILITY_NOT_VISIBLE), "inner");
-//		
-//		// Filter dropship
-//		$collection->addAttributeToFilter("udropship_vendor", $this->getVendor()->getId(), "inner");
-//		
-//		
-//		return $collection;
-//	}
 	
 	
 	/**

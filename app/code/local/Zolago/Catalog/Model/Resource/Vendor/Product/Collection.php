@@ -2,6 +2,8 @@
 class Zolago_Catalog_Model_Resource_Vendor_Product_Collection 
 	extends Zolago_Catalog_Model_Resource_Vendor_Collection_Abstract
 {
+	protected $_productMockup;
+	
   /**
    * @param bool $withExcluded
    * @return Zolago_Catalog_Model_Resource_Vendor_Product_Collection
@@ -115,6 +117,46 @@ class Zolago_Catalog_Model_Resource_Vendor_Product_Collection
 	   return $select;
    }
    
+   
+   	/**
+	 * @return Zolago_Catalog_Model_Vendor_Product_Grid
+	 */
+	public function getGridModel() {
+		return Mage::getSingleton('zolagocatalog/vendor_product_grid');
+	}
+	
+	/**
+	 * Add thumbs
+	 * @param array $item
+	 * @return array
+	 */
+	protected function _mapItem(array $item) {
+		$mockup = $this->_getProductMockup();
+		$mockup->setData($item);
+		$mockup->setId($item['entity_id']);
+		
+		$thumbUrl = Mage::helper('catalog/image')->
+				   init($mockup, 'thumbnail')->
+				   keepAspectRatio(true)->
+				   constrainOnly(true)->
+				   keepFrame(true)->
+				   resize(40,40);
+		
+		$item['thumbnail_url'] = (string)$thumbUrl;
+		$item['thumbnail'] = Mage::getBaseUrl("media") . "catalog/product/" . $item['thumbnail'];
+		
+		return $item;
+	}
+	
+	/**
+	 * @return Mage_Catalog_Model_Product
+	 */
+	protected function _getProductMockup() {
+		if(!$this->_productMockup){
+			$this->_productMockup = Mage::getModel("catalog/product");
+		}
+		return $this->_productMockup;
+	}
 }
 
 

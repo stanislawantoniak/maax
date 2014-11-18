@@ -88,6 +88,125 @@ define([
 	
 	var selectorInstance = selector({label: ''});
 	
+	var thumbnailClickHandler = function(e){
+		var modal = jQuery("#product-image-popup"),
+			el = jQuery(this);
+	
+		if(!modal.length){
+			modal = jQuery('<div id="product-image-popup" class="modal fade in" role="dialog">\
+				<div class="modal-dialog">\
+					<div class="modal-content">\
+						<div class="modal-header">\
+							<button type="button" class="close" data-dismiss="modal">\n\
+								<span aria-hidden="true">×</span><span class="sr-only">Close</span></button>\
+							<h4 class="modal-title"></h4>\
+						</div>\
+						<div class="modal-body"></div>\
+						<div class="modal-footer">\
+							<button type="button" class="btn btn-default" data-dismiss="modal">' + 
+							Translator.translate("Close") + 
+							'</button>\
+						</div>\
+					</div>\
+				</div>\
+			</div>').
+			appendTo(jQuery("body")); 
+		}
+		modal.find(".modal-title").text(el.attr("title"));
+		modal.find(".modal-body").html(
+				jQuery("<img>").attr("src", el.attr("href"))
+		)
+		modal.modal("show");
+		e.preventDefault();
+	}
+		
+	/**
+	 * @param {mixed} value
+	 * @param {object} item
+	 * @param {object} node
+	 * @returns {string}
+	 */
+	var rendererThumbnail = function renderCell(item, value, node, options){
+		var content = put("a", {
+			href:  item.thumbnail, 
+			title: item.name,
+			target: "_blank"
+		});
+		put(content, "img", {
+			src: item.thumbnail_url,
+			width: 45,
+			height: 45
+		});
+		put(content, "span", {
+			innerHTML: item.images_count
+		});
+		on(content, "click", thumbnailClickHandler)
+		put(node, content);
+	};
+	
+	var rendererName = function renderCell(item, value, node, options){
+		var opts = this.parentColumn.statusOptions;
+		var content = put("div");
+		put(content, "p", {
+			innerHTML: item.name
+		});
+		put(content, "p", {
+			innerHTML: Translator.translate("St.") + ": " + opts[item.status] + 
+				" / " + Translator.translate("SKU") + ": " + escape(item.sku),
+			className: "info"
+		});
+		put(node, content);
+	};
+	
+	/**
+	 * @param {string} currency
+	 * @returns {Function}
+	 */
+	var formatterPriceFactor = function(currency){
+		/**
+		 * @param {mixed} value
+		 * @returns {string}
+		 */
+		return function(value){
+			var price = parseFloat(value);
+			if(!isNaN(price)){
+				if(price-price.toFixed(0)==0){
+					price += ".00";
+				}else if(price-price.toFixed(0)<0.1){
+					price += "0";
+				}else{
+					price = '' + price;
+				}
+				return price + " " + currency;
+			}
+			return value;
+		}
+	};
+	
+	var formatterOptionsFactor = function(options, multi){
+		/**
+		 * @param {mixed} value
+		 * @returns {string}
+		 */
+		return function(value){
+			if(value===null || value===""){
+				return "";
+			}
+			if(!multi && typeof options[value] != "undefined"){
+				return options[value];
+			}else if(multi){
+				var out = [];
+				value.split(",").forEach(function(_value){
+					if(typeof options[_value] != "undefined"){
+						out.push(options[_value]);
+					}
+				});
+				return out.join(",<br/>");
+			}
+			return "";
+		}
+	};
+	
 	/**
 	 * Process column from backend
 	 * 1. Add filter - its a function
@@ -96,28 +215,7 @@ define([
 	 */
 	var processColumnSets = function(columns){
 		
-		// Column set
-//		jQuery.each(columnSets, function(index){
-//			// Colun subrow
-//			jQuery.each(this, function(index1){
-//				// Single colummn
-//				jQuery.each(this, function(index2){
-//					if(index==0 && index1==0 && index1==0){
-//						columnSets[0][0][0] = selectorInstance;
-//					}
-//					var column = this;
-//					if(column.children){
-//						// Column child
-//						jQuery.each(column.children, function(index3){
-//							if(this.renderHeaderCell instanceof Array){
-//								
-//							}
-//						});
-//					}
-//				});
-//			});
-//		});
-
+		// Include selector
 		var columnSets = [
 			[
 				[
@@ -131,13 +229,32 @@ define([
 		];
 		
 		
-		for(var i=0, column; i<columns.length; i++){
+		for(var i=0, column, childColumn; i<columns.length; i++){
 			column = columns[i];
 			
-			if(column.children && column.children.length){
-				column.children[0].renderHeaderCell = filter.apply(null, column.children[0].renderHeaderCell);
+			// Prpare header filter 
+			// Prepare values
+			if(column.children && column.children.length && 
+					column.children[0].filterable && 
+					column.children[0].renderHeaderCell){
+				childColumn = column.children[0];
+				
+				childColumn.renderHeaderCell = filter.apply(null, childColumn.renderHeaderCell);
+				// Prepare fomratter
+				if(childColumn.options){
+					childColumn.formatter = formatterOptionsFactor(childColumn.options, column.type=="multiselect");
+				}else if(column.type=="price"){
+					childColumn.formatter = formatterPriceFactor(column.currencyCode);
+				}else if(column.field=="name"){
+					childColumn.renderCell = rendererName;
+				}
 			}
 			
+			if(column.field=="thumbnail"){
+				column.renderCell = rendererThumbnail;
+			}
+			
+			// Push to correct column set
 			if(column.fixed){
 				columnSets[0][0].push(column);
 			}else{

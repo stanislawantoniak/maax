@@ -26,13 +26,33 @@ define([
 					return element;
 				}
 			break;
+			
 			case "select":
+			case "options":
+			case "multiselect":
 				return function(){
 					var element = domConstruct.create("select", {
 						"className": "select-filter"
 					});
 							
 					var options = lang.clone(config.options || []);
+					
+					
+					// Array cast
+					if(!(options instanceof Array)){
+						var _options = options;
+						options = [];
+						jQuery.each(_options, function(index){
+							options.push({
+								"value": index,
+								"label": this
+							});
+						});
+					}
+					
+					if(config.allowEmpty){
+						options.unshift({"value":null, "label": "["+Translator.translate("empty")+"]"});
+					}
 					
 					if(!config.required){
 						options.unshift({"value":"", "label": ""});
@@ -54,19 +74,28 @@ define([
 				}
 			break;
 			case "range":
+			case "datetime":
+			case "number":
+			case "price":
 				return function(){
 					var grid = this.grid;
 					var wrapper = domConstruct.create("div");
 					var valueType = config.valueType || "number";
-					["from", "to"].forEach(function(type){
+					["from", "to"].forEach(function(_type){
 						var element = domConstruct.create("input", {
 							"type": "text",
-							"placeholder": Translator.translate(type[0].toUpperCase() + type.slice(1)),
-							"className": "range-field" + " " + "range-field-" + type + " " + "range-field-" + valueType,
+							"placeholder": Translator.translate(_type[0].toUpperCase() + _type.slice(1)),
+							"className": "range-field" + " " + "range-field-" + _type + " " + "range-field-" + valueType,
 						});
 						
-						if(jQuery && jQuery.fn.numeric){
+						// Add numeric widget
+						if(jQuery && jQuery.fn.numeric && type!="datetime"){
 							jQuery(element).numeric(config);
+						}
+						
+						// Add calendar if needed
+						if(jQuery && jQuery.fn.datepicker && type=="datetime"){
+							jQuery(element).datepicker();
 						}
 						
 						var observer = new ObserverFilter(element, grid, name + '['+type+']', {valueType: valueType});

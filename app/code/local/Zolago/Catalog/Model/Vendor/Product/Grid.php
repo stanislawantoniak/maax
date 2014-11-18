@@ -106,9 +106,9 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 				"attribute" => $thumbnail,
 				"clickable" => true,
 				"header"	=> $this->_getColumnLabel($thumbnail),
-				"width"		=> "80",
 				"filter"	=> false,
-				"sortable"	=> false
+				"sortable"	=> false,
+				"filterable "=>true
 			);
 
 			// Name
@@ -117,34 +117,12 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 			$columnStart[$name->getAttributeCode()] = array(
 				"index"		=> $name->getAttributeCode(),
 				"type"		=> "text",
-				"width"		=> "200",
 				"attribute" => $name,
 				"clickable" => true,
-				"header"	=> $this->_getColumnLabel($name),
+				"filterable "=>true,
+				"header"	=> $this->_getColumnLabel($name)
 			);
-			/*
-			// Image count
-			$columnStart["images_count"] = array(
-				"index"		=> "images_count",
-				"type"		=> "text",
-				"header"	=> Mage::helper("zolagocatalog")->__("Im."),
-				"width"		=> "30",
-				"filter"	=> false
-			);
-
-			// Sku
-			// @todo get attribute by unirgy dropship config
-			$sku = Mage::getModel("eav/config")->getAttribute(Mage_Catalog_Model_Product::ENTITY, "sku");
-			$sku->setStoreId($this->getLabelStore()->getId());
-			$columnStart[$sku->getAttributeCode()] = array(
-				"index"		=> $sku->getAttributeCode(),
-				"type"		=>"text",
-				"width"		=> "80",
-				"clickable" => true,
-				"header"	=> $this->_getColumnLabel($sku),
-			);
-			*/
-			// End columns
+			
 			$columnEnd = array();
 
 
@@ -170,7 +148,7 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 				"index"     => $code,
 				'type'		=> $this->_getColumnType($attribute),
 				"header"    => $this->_getColumnLabel($attribute),
-				"attribute"	=> $attribute,
+				"attribute"	=> $attribute
 			);
 			$columns[$code] = $data;
 		}
@@ -206,6 +184,13 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 
 		if($attribute){
 			$extend = array();
+			
+			// Editable
+			if($attribute->getGridPremission()==Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::INLINE_EDITION){
+				$extend['editable_inline'] = true;
+			}elseif($attribute->getGridPremission()==Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::EDITION){
+				$extend['editable'] = true;
+			}
 			// Process select
 			$frontendType = $attribute->getFrontendInput();
 			if($this->isAttributeEnumerable($attribute)){
@@ -236,12 +221,31 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 				$extend['filter'] = false;
 				$extend['sortable'] = false;
 			}
+			
+			
 			return new Varien_Object(array_merge($config, $extend));
 		}
 
 		return new Varien_Object($config);
 	}
 
+	/**
+	 * @param Mage_Catalog_Model_Resource_Eav_Attribute | string $attribute
+	 * @return Mage_Catalog_Model_Resource_Eav_Attribute
+	 */
+	public function getAttribute( $attribute){
+		if($attribute instanceof Mage_Catalog_Model_Resource_Eav_Attribute){
+			return $attribute;
+		}
+		return Mage::getSingleton('eav/config')->getAttribute(
+			Mage_Catalog_Model_Product::ENTITY, $attribute
+		);
+	}
+	
+	/**
+	 * @param Mage_Catalog_Model_Resource_Eav_Attribute $attribute
+	 * @return boolean
+	 */
 	public function isAttributeEnumerable(Mage_Catalog_Model_Resource_Eav_Attribute $attribute){
 		switch ($attribute->getFrontendInput()){
 			case "select":
@@ -253,7 +257,10 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 		return false;
 	}
 
-
+	/**
+	 * @param Mage_Catalog_Model_Resource_Eav_Attribute $attribute
+	 * @return string
+	 */
 	protected function _getColumnLabel(Mage_Catalog_Model_Resource_Eav_Attribute $attribute){
 		 $label = $attribute->getStoreLabel($this->getLabelStore()->getId());
 		 if($attribute->getIsRequired()){
@@ -262,7 +269,10 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 		 return $label;
 	}
 
-
+	/**
+	 * @param Mage_Catalog_Model_Resource_Eav_Attribute $attribute
+	 * @return string
+	 */
 	protected function _getColumnType(Mage_Catalog_Model_Resource_Eav_Attribute $attribute) {
 		switch ($attribute->getBackendType()) {
 			case "text":
@@ -271,6 +281,9 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 			break;
 			case "int":
 			case "decimal":
+				if($attribute->getFrontendInput()=="price"){
+					return "price";
+				}
 				return "number";
 			break;
 			case "datetime":
@@ -366,22 +379,6 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 		return $this->getData("label_store");
 	}
 
-
-    public function isColumnVisible(Mage_Adminhtml_Block_Widget_Grid_Column $column)
-    {
-        $show = true;
-        $data = $column->getData();
-        switch($data['index']){
-
-            case 'sku':
-            case 'status':
-            case 'images_count':
-                $show = false;
-                break;
-        }
-
-        return $show;
-    }
 	/**
 	 * @return Zolago_Dropship_Model_Session
 	 */
@@ -410,6 +407,18 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 		return Mage::getModel("eav/entity_attribute_set")->load(
 			Mage::app()->getRequest()->getParam("attribute_set_id")
 		);
+	}
+	
+	/**
+	 * @param array $in
+	 * @return array
+	 */
+	public function optionsToHash(array $in) {
+		$out = array();
+		foreach($in as $opt){
+			$out[$opt['value']] = $opt['label'];
+		}
+		return $out;
 	}
 
 

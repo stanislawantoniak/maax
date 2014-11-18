@@ -50,6 +50,7 @@ var App = function($) {
 
 			// Toggle class
 			$('#container').toggleClass('sidebar-closed');
+			
 		});
 
 		/**

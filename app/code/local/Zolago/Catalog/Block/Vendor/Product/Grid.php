@@ -48,42 +48,76 @@ class Zolago_Catalog_Block_Vendor_Product_Grid extends Mage_Core_Block_Template 
 		return Mage::helper("core")->jsonEncode($out);
 	}
 	
-		
-	/**
-	 * 
-	 {
-		label: Translator.translate("Name"),
-		field: "name",
-		children: [
-			{
-				renderHeaderCell: filter("text", "name"),
-				sortable: false, 
-				field: "name",
-				className: "filterable",
-			}
-		]
-	  }
-	}
-	 */
 	
 	protected function mapColumn(Varien_Object $columnObject) {
 		$attribute = null;
 		if($columnObject->getAttribute()){
 			$attribute = $columnObject->getAttribute();
 		}
+		$classes = array(
+			"type-" . $columnObject->getType()
+		);
 		
-		return array(
+		$out = array(
 			"label" => $columnObject->getHeader(),
 			"field" => $columnObject->getIndex(),
+			"type" => $columnObject->getType(), 
 			"fixed" => $columnObject->getFixed(),
-			"children" => array(
-				array(
-					//"renderHeaderCell"  => array("text", $columnObject->getIndex()),
-					"sortable"			=> false,
-					"field"				=> $columnObject->getIndex(),
-					"className"			=> "filterable"
-				)
-			)
+			"sortable" => $columnObject->getSortable(),
 		);
+		
+		if(in_array($columnObject->getType(), array("number", "price"))){
+			$classes[] = "align-right";
+		}
+		
+		if($columnObject->getIsEditable() || $columnObject->getIsEditableInline()){
+			$classes[] = "editable";
+		}
+		
+		if($columnObject->getType() == "price"){
+			$out['currencyCode'] = $columnObject->getCurrencyCode();
+		}
+		
+		if($columnObject->getFilter()!==false){
+			$filterHeaderOptions = array();
+			// Filter content
+			if($columnObject->getOptions()){
+				$filterHeaderOptions = array(
+					"options"		=>	$columnObject->getOptions(),
+					"allowEmpty"	=>	true
+				);
+			}
+			$classes[] = "filterable";
+			
+			// Filter column
+			$out["children"] = array(
+				array(
+					"renderHeaderCell"  => array(
+						$columnObject->getType(), 
+						$columnObject->getIndex(), 
+						$filterHeaderOptions
+					),
+					"filterable"		=> 1,
+					"sortable"			=> false,
+					"options"			=> $columnObject->getOptions(),
+					"field"				=> $columnObject->getIndex(),
+					"className"			=> implode(" ", $classes)
+				)
+			);
+			
+		}
+		
+		if($columnObject->getIndex()=="name"){
+			// Also add status
+			$out['statusOptions'] = $this->getGridModel()->optionsToHash(
+				$this->getGridModel()->
+					getAttribute("status")->
+					getSource()->
+					getAllOptions()
+			);
+		}
+		
+		return $out;
 	}
+	
 }
