@@ -217,6 +217,15 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 				"url"	 => $this->getUrl('udropship/pos')
 			);
 		}
+
+		if($this->isModuleActive('zolagosizetable') && $this->isAllowed("zolagosizetable")){
+			$groupOne[] = array(
+				"active" => $this->isActive("zolagosizetable"),
+				"icon"	 => "icon-table",
+				"label"	 => Mage::helper('zolagosizetable')->__('Size tables'),
+				"url"	 => $this->getUrl('udropship/sizetable')
+			);
+		}
         /*		
 		if($this->getVendor()->getAllowTiershipModify() && $this->isAllowed("udtiership")){
 			$groupOne[] = array(
