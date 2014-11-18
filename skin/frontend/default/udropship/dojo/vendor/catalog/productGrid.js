@@ -169,15 +169,9 @@ define([
 		 */
 		return function(value){
 			var price = parseFloat(value);
+			
 			if(!isNaN(price)){
-				if(price-price.toFixed(0)==0){
-					price += ".00";
-				}else if(price-price.toFixed(0)<0.1){
-					price += "0";
-				}else{
-					price = '' + price;
-				}
-				return price + " " + currency;
+				return (''+price.toFixed(2)).replace(".", ",") + " " + currency;
 			}
 			return value;
 		}

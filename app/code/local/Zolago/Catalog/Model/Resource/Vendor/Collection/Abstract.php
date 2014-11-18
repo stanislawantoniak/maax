@@ -15,6 +15,7 @@ abstract class Zolago_Catalog_Model_Resource_Vendor_Collection_Abstract
 		/* @var $select Varien_Db_Select */
 		
 		if($sort){
+			Mage::log($sort);
 			$select->order($sort['order'] . " " . $sort['dir']);
 		}
 		
@@ -38,6 +39,8 @@ abstract class Zolago_Catalog_Model_Resource_Vendor_Collection_Abstract
 		// Make limit
 		$select->limit($end-$start, $start);
 		$items = $adapter->fetchAll($select);
+		
+		Mage::log($select."");
 		
 		foreach($items as &$item){
 			$item['can_collapse'] = true;//

@@ -46,37 +46,7 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 	 */
 	protected function _getStoreId() {
 		$storeId = $this->getRequest()->getParam("store_id");
-		return Mage::app()->getStore($storeId)->getId();
-	}
-	
-	/**
-	 * @param Mage_Catalog_Model_Resource_Eav_Attribute $attribute
-	 * @param type $dir
-	 * @return Zolago_Catalog_Controller_Vendor_Product_Abstract
-	 */
-	protected function _setCollectionOrder(Mage_Catalog_Model_Resource_Eav_Attribute $attribute, $dir) {
-		if($attribute instanceof Mage_Catalog_Model_Resource_Eav_Attribute && $this->isAttributeEnumerable($attribute)){
-			$source = $column->getAttribute()->getSource();
-			if($source instanceof Mage_Eav_Model_Entity_Attribute_Source_Boolean){
-				// Need fix
-				Mage::getResourceSingleton('zolagocatalog/vendor_mass')->addBoolValueSortToCollection(
-						$attribute,
-						$this->getCollection(),
-						$column->getDir()
-				);
-				return $this;
-			}elseif($attribute->getFrontendInput()=="multiselect"){
-				// Need fix - comma
-				Mage::getResourceSingleton('zolagocatalog/vendor_mass')->addMultipleValueSortToCollection(
-						$attribute,
-						$this->getCollection(),
-						$column->getDir()
-				);
-				return $this;
-			}
-		}
-		
-		$this->getCollection()->setOrder($attribute->getCode() . " " . $dir);
+		return (int)Mage::app()->getStore($storeId)->getId();
 	}
 
 	
@@ -184,43 +154,54 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 			return $value;
 		}
 		
-		if($attribute && $this->getGridModel()->isAttributeEnumerable($attribute)){
-			// Process null
-			if($value===self::NULL_VALUE){
-				return array("null"=>true);
-			}
-			// Process multiply select
-			if($attribute->getFrontendInput()=="multiselect"){
-				/**
-				 * Do id by MySQL RegExp expression in applaying filter in gird
-				 */
-				$collection = $this->_getCollection();
-
-				$code = $attribute->getAttributeCode();
-				$aliasCode = $code ."_filter";
-
-
-				$collection->joinAttribute($aliasCode, "catalog_product/$code", "entity_id", null, "left");
-
-
-				$valueTable1 = "at_".$aliasCode."_default";
-				$valueTable2 = "at_".$aliasCode;
-
-				if($collection->getStoreId()){
-					$valueExpr = $collection->getSelect()->getAdapter()
-						->getCheckSql("{$valueTable2}.value_id > 0", "{$valueTable2}.value", "{$valueTable1}.value");
-
-				}else{
-					$valueExpr = "$valueTable2.value";
-				}
-				// Try use regexp to match vales with boundary (like comma, ^, $)  - (123,456,678) 
-				$collection->getSelect()->where(
-						$valueExpr." REGEXP ?", "[[:<:]]".$value."[[:>:]]"
-				);
-
+		if($attribute){
+			// process name
+			if($attribute->getAttributeCode()=="name"){
+				$this->_getCollection()->addFieldToFilter(array(
+						array("attribute"=>"name", "filter"=> array("like"=>"%".$value."%")),
+						array("attribute"=>"sku", "filter"=> array("like"=>"%".$value."%"))
+				));
 				return null;
 			}
-			return array("eq"=>$value);
+			// Proces enuberable attributes
+			if($this->getGridModel()->isAttributeEnumerable($attribute)){
+				// Process null
+				if($value===self::NULL_VALUE){
+					return array("null"=>true);
+				}
+				// Process multiply select
+				if($attribute->getFrontendInput()=="multiselect"){
+					/**
+					 * Do id by MySQL RegExp expression in applaying filter in gird
+					 */
+					$collection = $this->_getCollection();
+
+					$code = $attribute->getAttributeCode();
+					$aliasCode = $code ."_filter";
+
+
+					$collection->joinAttribute($aliasCode, "catalog_product/$code", "entity_id", null, "left");
+
+
+					$valueTable1 = "at_".$aliasCode."_default";
+					$valueTable2 = "at_".$aliasCode;
+
+					if($collection->getStoreId()){
+						$valueExpr = $collection->getSelect()->getAdapter()
+							->getCheckSql("{$valueTable2}.value_id > 0", "{$valueTable2}.value", "{$valueTable1}.value");
+
+					}else{
+						$valueExpr = "$valueTable2.value";
+					}
+					// Try use regexp to match vales with boundary (like comma, ^, $)  - (123,456,678) 
+					$collection->getSelect()->where(
+							$valueExpr." REGEXP ?", "[[:<:]]".$value."[[:>:]]"
+					);
+
+					return null;
+				}
+				return array("eq"=>$value);
+			}
 		}
 		
 		// Return default
@@ -233,7 +214,66 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 	protected function _getAvailableQueryParams() {
 		$out = array();
 		foreach($this->getGridModel()->getColumns() as $column){
-			if($column->getAttribute()){
+			if($column->getAttribute() && $column->getFilterable()!==false){
+				$out[] = $column->getAttribute()->getAttributeCode();
+			}
+		}
+		return $out;
+	}
+	
+	/**
+	 * @return array
+	 */
+	protected function _getRestSort() {
+		$sort = parent::_getRestSort();
+		$attribute = null;
+		
+		if(isset($sort['order']) && isset($sort['dir'])){
+			$attribute = $this->getGridModel()->getAttribute($sort['order']);
+		}
+		
+		// Some special sort fixes
+		if($attribute && $this->getGridModel()->isAttributeEnumerable($attribute)){
+			$source = $attribute->getSource();
+			if($source instanceof Mage_Eav_Model_Entity_Attribute_Source_Boolean){
+				// Need fix 
+				Mage::getResourceSingleton('zolagocatalog/vendor_mass')->addBoolValueSortToCollection(
+						$attribute,
+						$this->_getCollection(),
+						$sort['dir']
+				);
+				return array();
+			}elseif($source instanceof Mage_Eav_Model_Entity_Attribute_Source_Table){
+				// Need fix - wrong sort - multiple values first
+				if($attribute->getFrontendInput()=="multiselect"){
+					Mage::getResourceSingleton('zolagocatalog/vendor_mass')->addMultipleValueSortToCollection(
+						$attribute,
+						$this->_getCollection(),
+						$sort['dir']
+					);
+				// Need fix - need original values tot text values from eav!
+				}else{
+					Mage::getResourceSingleton('zolagocatalog/vendor_mass')->addEavTableSortToCollection(
+						$attribute,
+						$this->_getCollection(),
+						$sort['dir']
+					);
+					
+				}
+				return array();
+			}
+		}
+		
+		return $sort;
+	}
+	
+	/**
+	 * @return array
+	 */
+	protected function _getAvailableSortParams() {
+		$out = array();
+		foreach($this->getGridModel()->getColumns() as $column){
+			if($column->getAttribute() && $column->getSortable()!==false){
 				$out[] = $column->getAttribute()->getAttributeCode();
 			}
 		}

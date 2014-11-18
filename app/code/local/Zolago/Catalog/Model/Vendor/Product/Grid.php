@@ -142,7 +142,7 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 		$columns = array();
 		foreach($attributeCollection as $attribute){
 			/* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
-			$attribute->setStoreId($this->getLabelStore()->getId());
+			$attribute->setStoreId((int)$this->getLabelStore()->getId());
 			$code = $attribute->getAttributeCode();
 			$data = array(
 				"index"     => $code,

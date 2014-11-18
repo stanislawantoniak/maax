@@ -234,7 +234,7 @@ abstract class Zolago_Catalog_Controller_Vendor_Abstract
 		
 		foreach($allowedStores as $_store){
 			if($_store->getId()==$store->getId()){
-				return $store->getId();
+				return (int)$store->getId();
 			}
 		}
 		

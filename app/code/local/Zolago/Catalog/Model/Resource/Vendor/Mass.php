@@ -157,6 +157,52 @@ class Zolago_Catalog_Model_Resource_Vendor_Mass
 	}
 	
 	/**
+	 * Fixation of displaying values of attribute - wee need orign values
+	 * @param Mage_Catalog_Model_Resource_Product_Attribute_Collection $collection
+	 * @param Mage_Catalog_Model_Resource_Eav_Attribute $attrbiute
+	 * @param stinrg $dir
+	 */
+	public function addEavTableSortToCollection(
+		Mage_Catalog_Model_Resource_Eav_Attribute $attrbiute,
+		Mage_Catalog_Model_Resource_Product_Collection $collection,
+		$dir = Varien_Db_Select::SQL_ASC) {
+		
+		$valueTable1    = $attrbiute->getAttributeCode() . '_t1';
+        $valueTable2    = $attrbiute->getAttributeCode() . '_t2';
+        $collection->getSelect()
+            ->joinLeft(
+                array($valueTable1 => $attrbiute->getBackend()->getTable()),
+                "e.entity_id={$valueTable1}.entity_id"
+                . " AND {$valueTable1}.attribute_id='{$attrbiute->getId()}'"
+                . " AND {$valueTable1}.store_id=0",
+                array())
+            ->joinLeft(
+                array($valueTable2 => $attrbiute->getBackend()->getTable()),
+                "e.entity_id={$valueTable2}.entity_id"
+                . " AND {$valueTable2}.attribute_id='{$attrbiute->getId()}'"
+                . " AND {$valueTable2}.store_id='{$collection->getStoreId()}'",
+                array()
+            );
+        $valueExpr = $collection->getSelect()->getAdapter()
+            ->getCheckSql("{$valueTable2}.value_id > 0", "{$valueTable2}.value", "{$valueTable1}.value");
+
+		// the trick is swap attribute code name to do not override origin atttribute value
+		// w can keep origin value from eav no text value
+		$oldCode = $attrbiute->getAttributeCode();
+		$attrbiute->setAttributeCode($oldCode."_filter");
+			
+        Mage::getResourceModel('eav/entity_attribute_option')
+            ->addOptionValueToCollection($collection, $attrbiute, $valueExpr);
+		
+
+        $collection->getSelect()
+            ->order("{$attrbiute->getAttributeCode()} {$dir}");
+			
+		$attrbiute->setAttributeCode($oldCode);
+		
+	}
+	
+	/**
 	 * @param Mage_Catalog_Model_Resource_Product_Attribute_Collection $collection
 	 * @param Mage_Catalog_Model_Resource_Eav_Attribute $attrbiute
 	 * @param stinrg $dir
