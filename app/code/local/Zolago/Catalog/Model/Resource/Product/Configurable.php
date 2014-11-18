@@ -336,6 +336,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
     private function _getProductRelationPricesSizes($productConfigurableId, $store)
     {
         $readConnection = $this->_getReadAdapter();
+        $productRelations = array();
 
         $select = $readConnection->select()
             ->from('vw_product_relation_prices_sizes_relation')
@@ -346,7 +347,15 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
             ->where('parent=?', $productConfigurableId)
             ->where('store=?', $store);
 
-        $productRelations = $readConnection->fetchAll($select);
+
+        try
+        {
+            $productRelations = $readConnection->fetchAll($select);
+        }
+        catch(Exception $e)
+        {
+            Mage::log($e->getMessage(), Zend_Log::ERR);
+        }
 
         return $productRelations;
     }
