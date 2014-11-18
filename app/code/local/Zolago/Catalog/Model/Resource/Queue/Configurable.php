@@ -95,7 +95,7 @@ class Zolago_Catalog_Model_Resource_Queue_Configurable extends Zolago_Common_Mod
         $all = 0;
         $insert = array();
         $this->_getWriteAdapter()->beginTransaction();
-        //Mage::log($this->_dataToSave, 0, 'configurable_dataToSave.log');
+
         foreach ($this->_dataToSave as $item) {
             $insert[] = $item;
             $i--;
@@ -109,7 +109,6 @@ class Zolago_Catalog_Model_Resource_Queue_Configurable extends Zolago_Common_Mod
         }
 
         // Insert out of buffer values
-        //Mage::log($insert, 0, 'configurable_addToQueue.log');
         if (count($insert)) {
             $all += count($insert);
             $this->_getWriteAdapter()->insertOnDuplicate($this->getMainTable(), $insert, array());
@@ -118,7 +117,6 @@ class Zolago_Catalog_Model_Resource_Queue_Configurable extends Zolago_Common_Mod
         // Commit transaction
         $this->_getWriteAdapter()->commit();
         $this->_resetData();
-        //Mage::log(microtime() . " End processConfigurableQueue ", 0, 'configurable_update.log');
         return $all;
     }
 
