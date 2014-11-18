@@ -346,7 +346,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
             )
             ->where('parent=?', $productConfigurableId)
             ->where('store=?', $store);
-
+echo $select;
 
         try
         {
