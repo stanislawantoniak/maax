@@ -43,68 +43,68 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
      */
     protected function _create($data)
     {
-        //Mage::log($data, 0, 'converter_log.log');
+        Mage::log("More than 30000 file", 0, 'converter_log.log');
         $json = json_encode($data);
 
-        if (!empty($data)) {
-            foreach ($data as $cmd => $batch) {
-                switch ($cmd) {
-                    case 'ProductPricesUpdate':
-                        $priceBatch = array();
-                        if(!empty($batch)){
-                            $batch = (array)$batch;
-                            foreach($batch as $dataPrice){
-                                $merchant = $dataPrice['merchant'];
-                                $prices = $dataPrice['data'];
-
-                                if (!empty($prices)) {
-                                    foreach ($prices as $skuV => $priceByType) {
-                                        $sku = $merchant . "-" . $skuV;
-                                        $priceBatch[$sku] = $priceByType;
-                                    }
-                                }
-                                unset($sku);
-                                unset($skuV);
-                                unset($priceByType);
-                            }
-                            unset($dataPrice);
-                        }
-
-                        self::updatePricesConverter($priceBatch);
-                        break;
-                    case 'ProductStockUpdate':
-                        $batchFile = self::CONVERTER_STOCK_UPDATE_LOG;
-                        //Mage::log(microtime() . ' Start', 0, $batchFile);
-
-                        $stockBatch = array();
-
-                        if(!empty($batch)){
-                            $batch = (array)$batch;
-                            foreach($batch as $dataStock){
-                                $merchant = $dataStock['merchant'];
-                                $stock = $dataStock['data'];
-
-                                if (!empty($stock)) {
-                                    foreach ($stock as $skuV => $stockByPOS) {
-                                        $sku = $merchant . "-" . $skuV;
-                                        $stockBatch[$merchant][$sku] = $stockByPOS;
-                                    }
-                                }
-                                unset($sku);
-                                unset($skuV);
-                                unset($stockByPOS);
-                            }
-                            unset($dataStock);
-                        }
-
-                        self::updateStockConverter($stockBatch);
-                        break;
-                    default:
-                        //
-                }
-            }
-            unset($cmd);unset($batch);
-        }
+//        if (!empty($data)) {
+//            foreach ($data as $cmd => $batch) {
+//                switch ($cmd) {
+//                    case 'ProductPricesUpdate':
+//                        $priceBatch = array();
+//                        if(!empty($batch)){
+//                            $batch = (array)$batch;
+//                            foreach($batch as $dataPrice){
+//                                $merchant = $dataPrice['merchant'];
+//                                $prices = $dataPrice['data'];
+//
+//                                if (!empty($prices)) {
+//                                    foreach ($prices as $skuV => $priceByType) {
+//                                        $sku = $merchant . "-" . $skuV;
+//                                        $priceBatch[$sku] = $priceByType;
+//                                    }
+//                                }
+//                                unset($sku);
+//                                unset($skuV);
+//                                unset($priceByType);
+//                            }
+//                            unset($dataPrice);
+//                        }
+//
+//                        self::updatePricesConverter($priceBatch);
+//                        break;
+//                    case 'ProductStockUpdate':
+//                        $batchFile = self::CONVERTER_STOCK_UPDATE_LOG;
+//                        //Mage::log(microtime() . ' Start', 0, $batchFile);
+//
+//                        $stockBatch = array();
+//
+//                        if(!empty($batch)){
+//                            $batch = (array)$batch;
+//                            foreach($batch as $dataStock){
+//                                $merchant = $dataStock['merchant'];
+//                                $stock = $dataStock['data'];
+//
+//                                if (!empty($stock)) {
+//                                    foreach ($stock as $skuV => $stockByPOS) {
+//                                        $sku = $merchant . "-" . $skuV;
+//                                        $stockBatch[$merchant][$sku] = $stockByPOS;
+//                                    }
+//                                }
+//                                unset($sku);
+//                                unset($skuV);
+//                                unset($stockByPOS);
+//                            }
+//                            unset($dataStock);
+//                        }
+//
+//                        self::updateStockConverter($stockBatch);
+//                        break;
+//                    default:
+//                        //
+//                }
+//            }
+//            unset($cmd);unset($batch);
+//        }
         return $json;
     }
 
