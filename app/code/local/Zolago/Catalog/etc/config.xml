@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Catalog>
-            <version>0.0.18</version>
+            <version>0.0.19</version>
         </Zolago_Catalog>
     </modules>
     <default>
@@ -38,7 +38,7 @@
                         <table>zolago_catalog_queue_pricetype</table>
                     </queue_pricetype>
                     <pricessizes>
-                        <table>vw_product_relation_prices_sizes</table>
+                        <table>vw_product_relation_prices_sizes_relation</table>
                     </pricessizes>
                 </entities>
             </zolagocatalog_resource>

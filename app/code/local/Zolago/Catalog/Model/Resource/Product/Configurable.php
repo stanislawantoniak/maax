@@ -338,7 +338,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         $readConnection = $this->_getReadAdapter();
 
         $select = $readConnection->select()
-            ->from('vw_product_relation_prices_sizes')
+            ->from('vw_product_relation_prices_sizes_relation')
             ->reset(Zend_Db_Select::COLUMNS)
             ->columns(
                 array('DISTINCT(child)', 'parent', 'child_size', 'child_price', 'website')
