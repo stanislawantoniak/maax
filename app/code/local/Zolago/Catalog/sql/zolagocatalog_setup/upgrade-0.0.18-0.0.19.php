@@ -40,7 +40,6 @@ WHERE `prices`.`attribute_id` IN
   WHERE `eav_attribute`.`attribute_code` = '{$sizeCode}'
     AND `eav_attribute`.`entity_type_id` = {$entityTypeID}
     AND `eav_attribute`.backend_type = 'int')
-  AND `websites`.`store_id` = `sizes`.`store_id`
 ");
 
 $installer->endSetup();
