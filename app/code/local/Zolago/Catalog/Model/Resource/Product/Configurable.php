@@ -264,7 +264,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
     {
 
         $productRelations = $this->_getProductRelationPricesSizes($productConfigurableId, $store);
-//        Zend_Debug::dump($productRelations);
+
 
         if (!empty($productRelations)) {
             $insert = array();
@@ -274,7 +274,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
             }
 
             $productMinimalPrice = min($productMinPrice);
-//            Zend_Debug::dump($productMinimalPrice);
+
             Mage::getSingleton('catalog/product_action')->updateAttributesNoIndex(
                 array($productConfigurableId), array('price' => $productMinimalPrice), $store
             );
@@ -302,7 +302,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
                     ON DUPLICATE KEY UPDATE catalog_product_super_attribute_pricing.pricing_value=VALUES(catalog_product_super_attribute_pricing.pricing_value)
                     ", $catalogProductSuperAttributePricingTable, $lineQuery
                 );
-//echo $insertQuery;
+
                 $this->_getWriteAdapter()->query($insertQuery);
 
             }
