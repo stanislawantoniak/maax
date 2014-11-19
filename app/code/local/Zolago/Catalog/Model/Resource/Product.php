@@ -3,7 +3,7 @@
 class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_Product {
 
 
-    public function savePriceValues($insert)
+    public function savePriceValues($insert, $ids)
     {
         $writeAdapter = $this->_getWriteAdapter();
         $writeAdapter->beginTransaction();
@@ -14,16 +14,31 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
             );
 
             $this->_getWriteAdapter()->commit();
+
+            Zolago_Catalog_Helper_Configurable::queue($ids);
+
+            //add to solr queue
+            Mage::dispatchEvent(
+                "catalog_converter_price_update_after",
+                array(
+                    "product_ids" => $ids
+                )
+            );
+
         } catch (Exception $e) {
             $this->_getWriteAdapter()->rollBack();
+            $batchFile = Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1::CONVERTER_PRICE_UPDATE_LOG;
+            Mage::log(microtime() . " rollBack: savePriceValues", 0, $batchFile);
+
             throw $e;
         }
 
         return $this;
     }
 
+
     /**
-     * @param $ids
+     * @param $skuS
      *
      * @return array $assoc
      */
@@ -31,39 +46,106 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
     {
         $assoc = array();
 
-        if (!empty($skuS)) {
-            $readConnection = $this->_getReadAdapter();
-            $select = $readConnection->select();
-            $select->from(
-                array("product_text" => 'catalog_product_entity_text'),
-                array(
-                     "product_id"   => "product_text.entity_id",
-                     "price_margin" => "product_text.value",
-                     "store"        => "product_text.store_id"
-                )
-            );
-            $select->join(
-                array("attribute" => $this->getTable("eav/attribute")),
-                "attribute.attribute_id = product_text.attribute_id",
-                array()
-            );
-            $select->join(
-                array("product" => $this->getTable("catalog/product")),
-                "product_text.entity_id = product.entity_id",
-                array()
-            );
-            $select->where(
-                "attribute.attribute_code=?", Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_PRICE_MARGIN_CODE
-            );
-            $select->where("product.sku IN(?)", $skuS);
-
-            try {
-                $assoc = $readConnection->fetchAll($select);
-            } catch (Exception $e) {
-                Mage::throwException("Error fetching price_margin values");
-            }
+        if (empty($skuS)) {
+            return array();
         }
+        $readConnection = $this->_getReadAdapter();
+        $select = $readConnection->select();
+        $select->from(
+            array("products" => $this->getTable("catalog/product")),
+            array(
+                "product_id" => "products.entity_id",
+                "sku" => "products.sku"
+            )
+        );
+        $select->join(
+            array("text_attributes" => 'catalog_product_entity_text'),
+            "products.entity_id=text_attributes.entity_id",
+            array(
+                'store' => 'text_attributes.store_id',
+                'price_margin' => 'text_attributes.value'
+            )
+        );
+        $select->join(
+            array("attributes" => $this->getTable("eav/attribute")),
+            "attributes.attribute_id=text_attributes.attribute_id",
+            array()
+        );
+        $select->where(
+            "products.type_id=?", Mage_Catalog_Model_Product_Type::TYPE_SIMPLE
+        );
+        $select->where(
+            "attributes.attribute_code=?", Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_PRICE_MARGIN_CODE
+        );
+        $select->where("products.sku IN(?)", $skuS);
+        //Mage::log(microtime() . " priceMarginValues: ". $select, 0, 'converter_profilerPriceBatch.log');
+        try {
+            $assoc = $readConnection->fetchAll($select);
+        } catch (Exception $e) {
+            Mage::throwException("Error fetching price_margin values");
+        }
+
         return $assoc;
+    }
+
+    /**
+     * @param $skuS
+     *
+     * @return array $assoc
+     */
+    public function getPriceMarginValuesConfigurable($skuS)
+    {
+        $margins = array();
+
+        if (empty($skuS)) {
+            return array();
+        }
+        $entityTypeID = Mage::getModel('catalog/product')->getResource()->getTypeId();
+
+        $readConnection = $this->_getReadAdapter();
+        $select = $readConnection->select();
+        $select->from(
+            array("product_relation" => $this->getTable("catalog/product_relation")),
+            array(
+                "parent_id" => "product_relation.parent_id",
+                "product_id" => "product_relation.child_id"
+            )
+        );
+        $select->join(
+            array("products" =>  $this->getTable("catalog/product")),
+            "products.entity_id=product_relation.child_id",
+            array(
+                'products.sku'
+            )
+        );
+        $select->join(
+            array("margins" =>  'catalog_product_entity_text'),
+            'product_relation.parent_id=margins.entity_id',
+            array(
+                'price_margin' => 'margins.value',
+                'store' => 'margins.store_id'
+            )
+        );
+        $select->join(
+            array("attributes" => $this->getTable("eav/attribute")),
+            "attributes.attribute_id=margins.attribute_id",
+            array()
+        );
+        $select->where(
+            "attributes.entity_type_id=?", $entityTypeID
+        );
+        $select->where(
+            "attributes.attribute_code=?", Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_PRICE_MARGIN_CODE
+        );
+        $select->where("products.sku IN(?)", $skuS);
+
+        try {
+            $margins = $readConnection->fetchAll($select);
+        } catch (Exception $e) {
+            Mage::throwException("Error fetching price_margin values");
+        }
+
+        return $margins;
     }
     /**
      * Get converter price type
