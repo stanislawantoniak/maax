@@ -283,7 +283,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
                 $size = $productRelation['child_size'];
                 $price = $productRelation['child_price'];
                 $website = $productRelation['website'];
-                $productMinPrice[] = $price;
+
 
                 $priceIncrement = (float)$price - $productMinimalPrice;
 
