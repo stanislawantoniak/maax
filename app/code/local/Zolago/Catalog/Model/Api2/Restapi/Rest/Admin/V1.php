@@ -214,113 +214,111 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         $skuS = array_keys($priceBatch);
         $itemsToChange = count($skuS);
         //Mage::log($priceBatch, 0, $batchFile);
-        Mage::log(microtime() . " Got items from converter {$itemsToChange}", 0, 'no_update.log');
-        //Mage::log(microtime() . " Got items from converter {$itemsToChange}", 0, $batchFile);
 
         //Get price types
-//        if(empty($priceBatch)){
-//            return;
-//        }
-//        $skeleton = Zolago_Catalog_Helper_Data::getSkuAssoc($skuS);
-//
-//        if(empty($skeleton)){
-//            return;
-//        }
-//
-//        $model = Mage::getResourceModel('zolagocatalog/product');
-//
-//        $productEt = Mage::getSingleton('eav/config')->getEntityType('catalog_product')->getId();
-//
-//        $priceTypeByStore = array();
-//        $priceType = $model->getConverterPriceType($skuS);
-//        //reformat by store id
-//        if (!empty($priceType)) {
-//            foreach ($priceType as $priceTypeData) {
-//                $priceTypeByStore[$priceTypeData['sku']][$priceTypeData['store']]
-//                    = $priceTypeData['price_type'];
-//            }
-//        }
-//
-//        $marginByStore = array();
-//        $priceMarginValues = $model->getPriceMarginValues($skuS);
-//        //Mage::log(microtime() . " priceMarginValues: ".print_r($priceMarginValues,true), 0, $batchFile);
-//        //reformat margin
-//        if (!empty($priceMarginValues)) {
-//            foreach ($priceMarginValues as $_) {
-//                $marginByStore[$_['product_id']][$_['store']] = $_['price_margin'];
-//            }
-//            unset($_);
-//        }
-//
-//
-//        $insert = array();
-//        $ids = array();
-//
-//        $stores = array(Mage_Core_Model_App::ADMIN_STORE_ID);
-//        $allStores = Mage::app()->getStores();
-//        foreach ($allStores as $_eachStoreId => $val) {
-//            $_storeId = Mage::app()->getStore($_eachStoreId)->getId();
-//            $stores[] = $_storeId;
-//        }
-//
-//        //Mage::log(microtime() . ' Start update', 0, $batchFile);
-//        if (!empty($skeleton)) {
-//            foreach ($skeleton as $sku => $productId) {
-//
-//                foreach ($stores as $storeId) {
-//
-//                    //price type
-//                    $priceTypeSelected = "A";
-//                    if (isset($priceTypeByStore[$sku][$storeId])) {
-//                        $priceTypeSelected = $priceTypeByStore[$sku][$storeId];
-//                    } else {
-//                        $priceTypeDefault = isset($priceTypeByStore[$sku][Mage_Core_Model_App::ADMIN_STORE_ID])
-//                            ? $priceTypeByStore[$sku][Mage_Core_Model_App::ADMIN_STORE_ID] : $priceTypeSelected;
-//                        $priceTypeSelected = $priceTypeDefault;
-//                    }
-//
-//
-//                    $pricesConverter = isset($priceBatch[$sku]) ? (array)$priceBatch[$sku] : false;
-//
-//                    if ($pricesConverter) {
-//                        $priceToInsert = isset($pricesConverter[$priceTypeSelected])
-//                            ? $pricesConverter[$priceTypeSelected] : false;
-//
-//
-//                        if($priceToInsert){
-//
-//                            //margin
-//                            $marginSelected = 0;
-//
-//                            if (isset($marginByStore[$productId][$storeId])) {
-//                                $marginSelected = (int)$marginByStore[$productId][$storeId];
-//                            } else {
-//                                $marginDefault = isset($marginByStore[$productId][Mage_Core_Model_App::ADMIN_STORE_ID])
-//                                    ? $marginByStore[$productId][Mage_Core_Model_App::ADMIN_STORE_ID] : $marginSelected;
-//                                $marginSelected = (int)$marginDefault;
-//                            }
-//
-//                            $insert[] = array(
-//                                'entity_type_id' => $productEt,
-//                                'attribute_id' => 75,
-//                                'store_id' => $storeId,
-//                                'entity_id' => $productId,
-//                                'value' => Mage::app()->getLocale()->getNumber($priceToInsert + (($priceToInsert * $marginSelected)/100))
-//                            );
-//                        }
-//                    }
-//
-//
-//
-//                }
-//
-//                $ids[] = $productId;
-//            }
-//        }
-//
-//
-//        if (!empty($insert)) {
-//            $model->savePriceValues($insert, $ids);
-//        }
+        if(empty($priceBatch)){
+            return;
+        }
+        $skeleton = Zolago_Catalog_Helper_Data::getSkuAssoc($skuS);
+
+        if(empty($skeleton)){
+            return;
+        }
+
+        $model = Mage::getResourceModel('zolagocatalog/product');
+
+        $productEt = Mage::getSingleton('eav/config')->getEntityType('catalog_product')->getId();
+
+        $priceTypeByStore = array();
+        $priceType = $model->getConverterPriceType($skuS);
+        //reformat by store id
+        if (!empty($priceType)) {
+            foreach ($priceType as $priceTypeData) {
+                $priceTypeByStore[$priceTypeData['sku']][$priceTypeData['store']]
+                    = $priceTypeData['price_type'];
+            }
+        }
+
+        $marginByStore = array();
+        $priceMarginValues = $model->getPriceMarginValues($skuS);
+        //Mage::log(microtime() . " priceMarginValues: ".print_r($priceMarginValues,true), 0, $batchFile);
+        //reformat margin
+        if (!empty($priceMarginValues)) {
+            foreach ($priceMarginValues as $_) {
+                $marginByStore[$_['product_id']][$_['store']] = $_['price_margin'];
+            }
+            unset($_);
+        }
+
+
+        $insert = array();
+        $ids = array();
+
+        $stores = array(Mage_Core_Model_App::ADMIN_STORE_ID);
+        $allStores = Mage::app()->getStores();
+        foreach ($allStores as $_eachStoreId => $val) {
+            $_storeId = Mage::app()->getStore($_eachStoreId)->getId();
+            $stores[] = $_storeId;
+        }
+
+        //Mage::log(microtime() . ' Start update', 0, $batchFile);
+        if (!empty($skeleton)) {
+            foreach ($skeleton as $sku => $productId) {
+
+                foreach ($stores as $storeId) {
+
+                    //price type
+                    $priceTypeSelected = "A";
+                    if (isset($priceTypeByStore[$sku][$storeId])) {
+                        $priceTypeSelected = $priceTypeByStore[$sku][$storeId];
+                    } else {
+                        $priceTypeDefault = isset($priceTypeByStore[$sku][Mage_Core_Model_App::ADMIN_STORE_ID])
+                            ? $priceTypeByStore[$sku][Mage_Core_Model_App::ADMIN_STORE_ID] : $priceTypeSelected;
+                        $priceTypeSelected = $priceTypeDefault;
+                    }
+
+
+                    $pricesConverter = isset($priceBatch[$sku]) ? (array)$priceBatch[$sku] : false;
+
+                    if ($pricesConverter) {
+                        $priceToInsert = isset($pricesConverter[$priceTypeSelected])
+                            ? $pricesConverter[$priceTypeSelected] : false;
+
+
+                        if($priceToInsert){
+
+                            //margin
+                            $marginSelected = 0;
+
+                            if (isset($marginByStore[$productId][$storeId])) {
+                                $marginSelected = (int)$marginByStore[$productId][$storeId];
+                            } else {
+                                $marginDefault = isset($marginByStore[$productId][Mage_Core_Model_App::ADMIN_STORE_ID])
+                                    ? $marginByStore[$productId][Mage_Core_Model_App::ADMIN_STORE_ID] : $marginSelected;
+                                $marginSelected = (int)$marginDefault;
+                            }
+
+                            $insert[] = array(
+                                'entity_type_id' => $productEt,
+                                'attribute_id' => 75,
+                                'store_id' => $storeId,
+                                'entity_id' => $productId,
+                                'value' => Mage::app()->getLocale()->getNumber($priceToInsert + (($priceToInsert * $marginSelected)/100))
+                            );
+                        }
+                    }
+
+
+
+                }
+
+                $ids[] = $productId;
+            }
+        }
+
+
+        if (!empty($insert)) {
+            $model->savePriceValues($insert, $ids);
+        }
     }
 }
