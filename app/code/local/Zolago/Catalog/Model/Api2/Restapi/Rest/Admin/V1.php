@@ -291,11 +291,11 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                             $marginSelected = 0;
 
                             if (isset($marginByStore[$productId][$storeId])) {
-                                $marginSelected = (int)$marginByStore[$productId][$storeId];
+                                $marginSelected = (float)$marginByStore[$productId][$storeId];
                             } else {
                                 $marginDefault = isset($marginByStore[$productId][Mage_Core_Model_App::ADMIN_STORE_ID])
                                     ? $marginByStore[$productId][Mage_Core_Model_App::ADMIN_STORE_ID] : $marginSelected;
-                                $marginSelected = (int)$marginDefault;
+                                $marginSelected = (float)$marginDefault;
                             }
 
                             $insert[] = array(
