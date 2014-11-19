@@ -5,9 +5,15 @@
             <h3><?php echo Mage::helper("zolagocatalog")->__("Manage products descriptions");?></h3>
 			<?php if($this->getCanShowGrid()):?>
 			<span class="tageline">
-				<a href="#" data-toggle="modal" data-target="#saveColumnsModal"><i class="icon-table"></i> <?php echo Mage::helper("zolagocatalog")->__("Customize columns");?></a>
+				<a href="#" data-toggle="modal" data-target="#saveColumnsModal">
+					<i class="icon-table"></i> 
+					<?php echo Mage::helper("zolagocatalog")->__("Customize columns");?>
+				</a>
 				&nbsp;
-				<a href="#"><i class="icon-filter"></i> <?php echo Mage::helper("zolagocatalog")->__("Show filters");?> </a>
+				<a href="#" data-toggle="modal" data-target="#filtersModal">
+					<i class="icon-filter"></i> 
+					<?php echo Mage::helper("zolagocatalog")->__("Show filters");?> 
+				</a>
 			</span>
 			<?php endif;?>
         </div>

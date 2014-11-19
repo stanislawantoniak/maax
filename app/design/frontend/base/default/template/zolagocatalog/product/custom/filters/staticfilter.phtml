@@ -1,0 +1,18 @@
+<?php /* @var $this Zolago_Catalog_Block_Vendor_Product_Custom_Staticfilter */ ?>
+<?php 
+$storeId		= $this->_getLabelStore()->getId();
+$activeFilters	= $this->getCurrentStaticFilterValues();
+?>
+<?php if (!$this->getStaticFilters($this->getCurrentAttributeSetId()) || !$this->getCurrentAttributeSetId()): ?>
+	<div class="form-group">
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-8">
+					<p class="switcher">
+						<?php echo $this->__('There are no Static Filters for this Attribute Set'); ?>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+<?php endif; ?>

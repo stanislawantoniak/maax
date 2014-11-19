@@ -127,11 +127,18 @@ define([
 	 * @returns {string}
 	 */
 	var rendererThumbnail = function renderCell(item, value, node, options){
-		var content = put("a", {
-			href:  item.thumbnail, 
-			title: item.name,
-			target: "_blank"
-		});
+		var content;
+		
+		if(item.thumbnail!==null){
+			content = put("a", {
+				href:  item.thumbnail, 
+				title: item.name,
+				target: "_blank"
+			});
+			on(content, "click", thumbnailClickHandler)
+		}else{
+			content = put("p");
+		}
 		put(content, "img", {
 			src: item.thumbnail_url,
 			width: 45,
@@ -140,7 +147,6 @@ define([
 		put(content, "span", {
 			innerHTML: item.images_count
 		});
-		on(content, "click", thumbnailClickHandler)
 		put(node, content);
 	};
 	
@@ -307,7 +313,9 @@ define([
 			sort: "entity_id"
 		};
 		
-		return new  PriceGrid(config, container);
+		window.grid = grid = new PriceGrid(config, container);
+		
+		return window.grid;
 	};
 	
 	

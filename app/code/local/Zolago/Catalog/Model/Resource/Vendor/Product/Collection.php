@@ -144,7 +144,11 @@ class Zolago_Catalog_Model_Resource_Vendor_Product_Collection
 					   resize(40,40);
 
 			$item['thumbnail_url'] = (string)$thumbUrl;
-			$item['thumbnail'] = Mage::getBaseUrl("media") . "catalog/product/" . $item['thumbnail'];
+			if(!empty($item['thumbnail']) && $item['thumbnail']!="no_selection"){
+				$item['thumbnail'] = Mage::getBaseUrl("media") . "catalog/product/" . $item['thumbnail'];
+			}else{
+				$item['thumbnail'] = null;
+			}
 		}
 		return $item;
 	}

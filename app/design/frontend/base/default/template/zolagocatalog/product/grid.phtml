@@ -51,6 +51,11 @@
 		width: 160px;
 	}
 	
+	#grid-holder .dgrid-cell.type-price,
+	#grid-holder .dgrid-cell.type-number{
+		text-align: right;
+	}
+	
 	#grid-holder  .dgrid-cell.type-text{
 		overflow: hidden;
 		text-overflow: ellipsis;
@@ -58,9 +63,12 @@
 	}
 	
 	/** Thumb column **/
+	#grid-holder  .dgrid-column-set-0 .dgrid-cell.field-thumbnail p,
 	#grid-holder  .dgrid-column-set-0 .dgrid-cell.field-thumbnail a{
 		position: relative;
 		display: block;
+		margin:0;
+		padding:0;
 	}
 	
 	#grid-holder  .dgrid-column-set-0 .dgrid-cell.field-thumbnail span{
