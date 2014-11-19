@@ -301,7 +301,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
                     ON DUPLICATE KEY UPDATE catalog_product_super_attribute_pricing.pricing_value=VALUES(catalog_product_super_attribute_pricing.pricing_value)
                     ", $catalogProductSuperAttributePricingTable, $lineQuery
                 );
-
+echo $insertQuery;
                 $this->_getWriteAdapter()->query($insertQuery);
 
             }
