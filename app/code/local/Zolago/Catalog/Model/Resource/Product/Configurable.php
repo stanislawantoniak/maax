@@ -264,6 +264,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
     {
 
         $productRelations = $this->_getProductRelationPricesSizes($productConfigurableId, $store);
+        Zend_Debug::dump($productRelations);
 
         if (!empty($productRelations)) {
             $insert = array();
