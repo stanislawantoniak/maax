@@ -37,6 +37,13 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
     }
 
     /**
+     *
+     * data example
+     *
+     * {"ProductPricesUpdate":[{"merchant":"5","data":{"25768-L":{"A":31.9,"B":32.9},"25768-M":{"A":31.9,"B":32.9},
+     * "25768-XL":{"A":31.9,"B":32.9},"25767-XXL":{"A":31.9,"B":32.9},"25767-XL":{"A":31.9,"B":32.9},
+     * "25768-S":{"A":31.9,"B":32.9},"25767-S":{"A":31.9,"B":32.9}}}]}     *
+     *
      * @param array $data
      *
      * @return string
@@ -45,7 +52,6 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
     {
 
         $json = json_encode($data);
-        Mage::log($json, 0, 'converter_log.log');
 
         if (!empty($data)) {
             foreach ($data as $cmd => $batch) {
