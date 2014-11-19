@@ -1,7 +1,4 @@
 <?php
-error_reporting(E_ALL);
-ini_set("display_errors", 1);
-
 /** @var $_helper Zolago_Wishlist_Helper_Data */
 $_helper = $this->helper('wishlist');
 $_helperCustomer = $this->helper('customer');
@@ -9,62 +6,29 @@ $backUrl = $this->getUrl('customer/account');
 /** @var $_collection Mage_Wishlist_Model_Resource_Item_Collection */
 $_collection = $this->getWishlistItems();
 
-
-// dla pamięci
-// cms block dla treści nad wishlist
-// instalator do cms block'a
-// plugin zamiast masonry to -> http://vestride.github.io/Shuffle/
-//do backloga serduszka z przekreslona cena na bardzo malej rozdzielczosci sie wizualnie psuja
-//
-
-//echo var_dump($this->getItems());
-
-// if (count($this->getItems())):
-//foreach ($this->getItems() as $item):
-
-
 ?>
-
 
 <?php if ($this->helper('wishlist')->isAllow()) : ?>
     <div class="my-wishlist">
-        <div class="wishlist-cms wrapp-section bg-w">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-sm-12 wishlist-cms-title">
-                        <h1>
-                            <span class="span-title uppercase">Twoje ulubione</span>
-                        </h1>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="wishlist-cms-content col-sm-12">
-                        <?php if ($_helperCustomer->isLoggedIn()) : ?>
-                            <?php if ($this->hasWishlistItems()): //Zalogowany i ma jakies ulubione ?>
-                                <p style="font-family: latoblack">Chcesz mieć zawsze dostęp do swoich ulubionych?</p>
-                                <p>Zaloguj się lub załóż konto żeby zostały zapamiętane zawsze jak się zalogujesz, niezależne od miejsca i urządzenia.</p>
-                            <?php else: ?>
-                                Zalogowany ale nie ma ulubionych
-                            <?php endif ?>
-                        <?php else: ?>
-                            <?php if ($this->hasWishlistItems()): //nie zalogowany i ma jakies ulubione ?>
-                                <p style="font-family: latoblack">Chcesz mieć zawsze dostęp do swoich ulubionych?</p>
-                                <p>Zaloguj się lub załóż konto żeby zostały zapamiętane zawsze jak się zalogujesz, niezależne od miejsca i urządzenia. <a href="#" class="button button-third" style="margin-left: 5px; margin-right: 5px;">ZALOGUJ&nbsp;SIĘ</a></p>
-                                <p>Nie masz jeszcze konta? Utwórz konto w zaledwie 10 sekund! <a href="/customer/account/create/" class="underline">Załóż&nbsp;konto</a></p>
-                            <?php else: ?>
-                                nie zalogowany, nie ma ulubionych
-                            <?php endif ?>
-                        <?php endif ?>
-                    </div>
-                </div>
-            </div>
-        </div>
 
+        <?php if ($_helperCustomer->isLoggedIn()) : ?>
+            <?php if ($this->hasWishlistItems()): //Zalogowany i ma jakies ulubione ?>
+                <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('wishlist-logged-full')->toHtml(); ?>
+            <?php else: //Zalogowany nie ma ulubionych ?>
+                <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('wishlist-logged-empty')->toHtml(); ?>
+            <?php endif ?>
+        <?php else: ?>
+            <?php if ($this->hasWishlistItems()): //nie zalogowany i ma jakies ulubione ?>
+                <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('wishlist-not-logged-full')->toHtml(); ?>
+            <?php else: //nie zalogowany, nie ma ulubionych ?>
+                <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('wishlist-not-logged-empty')->toHtml(); ?>
+            <?php endif ?>
+        <?php endif ?>
 
         <div class="background-wrapper box-wrapper" id="wishlist-items">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-sm-12">
+                    <div class="col-sm-12" id="wishlist-items-col">
                         <?php $this->getChild('items')->setItems($this->getWishlistItems()); ?>
                         <?php echo $this->getChildHtml('items'); ?>
                     </div>
@@ -74,6 +38,5 @@ $_collection = $this->getWishlistItems();
     </div>
 
 <?php endif ?>
-
 
 

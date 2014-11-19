@@ -98,4 +98,5 @@ class Zolago_Catalog_Helper_Product extends Mage_Catalog_Helper_Product {
         }
         return null;
     }
+    
 }
