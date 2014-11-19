@@ -43,22 +43,22 @@ define([
 		testStore,
 		storeRest,
 		resetFilters = query("#remove-filters")[0],
-		switcher = query("#attribute_set_id")[0],
-		staticFilters = query("#static-filters")[0];
+		switcher = query("#attribute_set_id")[0];
 		
 	
-	var extendWithStaticFilter = function(query, form){
+	var extendWithStaticFilter = function(query){
 		var k, opt, select, name, value, fValue;
 		
 		// first reset query staic params
 		for(k in query){
 			if(query.hasOwnProperty(k) && /^static/.test(k)){
+				console.log("TAK");
 				delete query[k];
 			}
 		}
 		
 		// Set values of static filters
-		jQuery.each(jQuery(form).find("option:selected"), function(i){
+		jQuery("#static-filters").find("option:selected").each(function(i){
 			opt = jQuery(this);
 			value = opt.val();
 			fValue = opt.attr("filtervalue");
@@ -88,18 +88,23 @@ define([
 	 * Handle reset filters button
 	 */
 	if(resetFilters){
-		resetFilters.on('click', function(){
+		resetFilters.on('click', function(e){
 			var statiFilters = jQuery("#static-filters"),
 				gridFields = jQuery("#grid-holder th :text, #grid-holder th select");
-
+				
 			if(statiFilters.length){
 				statiFilters[0].reset();
 			}
+			
 			if(gridFields.length){
-				gridFields.val(""); // it triggers refresh 
-			}else{
-				grid.refresh();
+				gridFields.each(function(){
+					this.filterObserver.setValue("");
+				});
 			}
+			
+			grid.set("query", {});
+			
+			e.preventDefault();
 		});
 	}	
 	
@@ -110,11 +115,9 @@ define([
 		query: function(query, options){
 			if(switcher){
 				query.attribute_set_id = switcher.value;
-			};
-			if(staticFilters){
-				extendWithStaticFilter(query, staticFilters);
 			}
 			query.store_id = 0;
+			extendWithStaticFilter(query);
 			toogleRemoveFilter(query);
 			return JsonRest.prototype.query.call(this, query, options);
 		},
