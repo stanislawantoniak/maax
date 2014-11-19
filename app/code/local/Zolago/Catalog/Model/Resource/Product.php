@@ -87,6 +87,66 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
 
         return $assoc;
     }
+
+    /**
+     * @param $skuS
+     *
+     * @return array $assoc
+     */
+    public function getPriceMarginValuesConfigurable($skuS)
+    {
+        $margins = array();
+
+        if (empty($skuS)) {
+            return array();
+        }
+        $entityTypeID = Mage::getModel('catalog/product')->getResource()->getTypeId();
+
+        $readConnection = $this->_getReadAdapter();
+        $select = $readConnection->select();
+        $select->from(
+            array("product_relation" => $this->getTable("catalog/product_relation")),
+            array(
+                "parent_id" => "product_relation.parent_id",
+                "product_id" => "product_relation.child_id"
+            )
+        );
+        $select->join(
+            array("products" =>  $this->getTable("catalog/product")),
+            "products.entity_id=product_relation.child_id",
+            array(
+                'products.sku'
+            )
+        );
+        $select->join(
+            array("margins" =>  'catalog_product_entity_text'),
+            'product_relation.parent_id=margins.entity_id',
+            array(
+                'price_margin' => 'margins.value',
+                'store' => 'margins.store_id'
+            )
+        );
+        $select->join(
+            array("attributes" => $this->getTable("eav/attribute")),
+            "attributes.attribute_id=margins.attribute_id",
+            array()
+        );
+        $select->where(
+            "attributes.entity_type_id=?", $entityTypeID
+        );
+        $select->where(
+            "attributes.attribute_code=?", Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_PRICE_MARGIN_CODE
+        );
+        $select->where("products.sku IN(?)", $skuS);
+
+        try {
+            $margins = $readConnection->fetchAll($select);
+        } catch (Exception $e) {
+            Mage::throwException("Error fetching price_margin values");
+        }
+
+        return $margins;
+    }
     /**
      * Get converter price type
      * @param $sku
