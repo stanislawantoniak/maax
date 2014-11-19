@@ -12,7 +12,12 @@
 				&nbsp;
 				<a href="#" data-toggle="modal" data-target="#filtersModal">
 					<i class="icon-filter"></i> 
-					<?php echo Mage::helper("zolagocatalog")->__("Show filters");?> 
+					<?php echo Mage::helper("zolagocatalog")->__("Show more filters");?> 
+				</a>
+				&nbsp;
+				<a href="#" class="hidden" id="remove-filters">
+					<i class="icon-remove"></i> 
+					<?php echo Mage::helper("zolagocatalog")->__("Remove filters");?> 
 				</a>
 			</span>
 			<?php endif;?>

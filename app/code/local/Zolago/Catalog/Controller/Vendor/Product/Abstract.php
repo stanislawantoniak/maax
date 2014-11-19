@@ -88,24 +88,22 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 		)));
 
 
-//		//Add Active Static Filters to Collection - Start
-//		$staticFilters		= $this->getStaticFilters();
-//		$staticFilterValues	= $this->getStaticFilterValues();
-//		if ($staticFilters && $staticFilterValues) {
-//			foreach ($staticFilters as $staticFilter) {
-//				/* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
-//				$attribute = Mage::getModel('eav/entity_attribute')->load($staticFilter);
-//				if ($attribute->getGridPermission() == Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::USE_IN_FILTER
-//					&& array_key_exists($staticFilter, $staticFilterValues)) {
-//					$collection->addAttributeToFilter($attribute->getAttributeCode(), $staticFilterValues[$staticFilter]);
-//				}
-//			}
-//		}
-		
-
+		//Add Active Static Filters to Collection - Start
+		$staticFilters = $this->getGridModel()->getStaticFilters();
+		if (is_array($staticFilters) && count($staticFilters)) {
+			foreach ($staticFilters as $staticFilter=>$value) {
+				/* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
+				$attribute = $this->getGridModel()->getAttribute($staticFilter);
+				if ($attribute->getGridPermission() == Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::USE_IN_FILTER && !empty($value)) {
+					$collection->addAttributeToFilter($attribute->getAttributeCode(), $value);
+				}
+			}
+		}
+	
 	    // Prepare collection data
 		foreach($this->getColumns() as $key=>$column){
 			$columnData = $column->getData();
+			
 			// Add regular dynamic attributes data
 			if(isset($columnData['attribute']) &&
 				$columnData['attribute'] instanceof Mage_Catalog_Model_Resource_Eav_Attribute){
@@ -115,6 +113,7 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 				//$collection->addAttributeToSelect($columnData['attribute']->getAttributeCode());
 			}
 			
+			// Add images count
 			if($column->getIndex()=="thumbnail"){
 				$collection->addImagesCount(false);
 			}
@@ -124,7 +123,6 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 			}
 		}
 		
-		// Add images count 
 		
 		return $collection;
     }

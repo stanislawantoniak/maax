@@ -30,7 +30,8 @@
 <script type="text/javascript">
 	jQuery(function($){
 		$("#static-filters").submit(function(){
-			console.log($(this).serialize());
+			window.grid.refresh();
+			$("#filtersModal").modal("hide");
 			return false;
 		})
 	});

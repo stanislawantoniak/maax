@@ -39,14 +39,71 @@ define([
 		orig: {}
 	}
 	
-	
-	
 	var grid,
 		testStore,
 		storeRest,
-		switcher = query("#attribute_set_id")[0];
+		resetFilters = query("#remove-filters")[0],
+		switcher = query("#attribute_set_id")[0],
+		staticFilters = query("#static-filters")[0];
+		
+	
+	var extendWithStaticFilter = function(query, form){
+		var k, opt, select, name, value, fValue;
+		
+		// first reset query staic params
+		for(k in query){
+			if(query.hasOwnProperty(k) && /^static/.test(k)){
+				delete query[k];
+			}
+		}
+		
+		// Set values of static filters
+		jQuery.each(jQuery(form).find("option:selected"), function(i){
+			opt = jQuery(this);
+			value = opt.val();
+			fValue = opt.attr("filtervalue");
+			select = opt.parent();
+			name = "static[" + value + "]";
 			
-	 storeRest = new JsonRest({
+			if(value!="" && fValue!=""){
+				query[name] = fValue;
+			}
+		});
+		
+	};
+	
+	var toogleRemoveFilter = function(query){
+		var k,i = 0;
+		for(k in query){
+			if(!/(store_id|attribute_set_id)/.test(k) && query[k]!==null){
+				i++;
+			}
+		}
+		if(resetFilters){
+			resetFilters.className = i ? "remove-filters" : "hidden";
+		}
+	}
+
+	/**
+	 * Handle reset filters button
+	 */
+	if(resetFilters){
+		resetFilters.on('click', function(){
+			var statiFilters = jQuery("#static-filters"),
+				gridFields = jQuery("#grid-holder th :text, #grid-holder th select");
+
+			if(statiFilters.length){
+				statiFilters[0].reset();
+			}
+			if(gridFields.length){
+				gridFields.val(""); // it triggers refresh 
+			}else{
+				grid.refresh();
+			}
+		});
+	}	
+	
+	storeRest = new JsonRest({
 		target:"/udprod/vendor_product/rest",
 		idProperty: "entity_id",
 		
@@ -54,7 +111,11 @@ define([
 			if(switcher){
 				query.attribute_set_id = switcher.value;
 			};
-			query['store_id'] = 0;
+			if(staticFilters){
+				extendWithStaticFilter(query, staticFilters);
+			}
+			query.store_id = 0;
+			toogleRemoveFilter(query);
 			return JsonRest.prototype.query.call(this, query, options);
 		},
 		

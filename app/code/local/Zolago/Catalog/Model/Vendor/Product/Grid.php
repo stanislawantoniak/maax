@@ -8,6 +8,13 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 	protected $_cols = array();
 	
 	/**
+	 * @return array(attributeId=>"value", ...);
+	 */
+	public function getStaticFilters() {
+		return Mage::app()->getRequest()->getParam("static", array());
+	}
+	
+	/**
 	 * Get final columns
 	 * @return array
 	 */
