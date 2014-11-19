@@ -135,16 +135,17 @@ class Zolago_Catalog_Model_Resource_Vendor_Product_Collection
 		$mockup->setData($item);
 		$mockup->setId($item['entity_id']);
 		
-		$thumbUrl = Mage::helper('catalog/image')->
-				   init($mockup, 'thumbnail')->
-				   keepAspectRatio(true)->
-				   constrainOnly(true)->
-				   keepFrame(true)->
-				   resize(40,40);
-		
-		$item['thumbnail_url'] = (string)$thumbUrl;
-		$item['thumbnail'] = Mage::getBaseUrl("media") . "catalog/product/" . $item['thumbnail'];
-		
+		if(isset($item['thumbnail'])){
+			$thumbUrl = Mage::helper('catalog/image')->
+					   init($mockup, 'thumbnail')->
+					   keepAspectRatio(true)->
+					   constrainOnly(true)->
+					   keepFrame(true)->
+					   resize(40,40);
+
+			$item['thumbnail_url'] = (string)$thumbUrl;
+			$item['thumbnail'] = Mage::getBaseUrl("media") . "catalog/product/" . $item['thumbnail'];
+		}
 		return $item;
 	}
 	

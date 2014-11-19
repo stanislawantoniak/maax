@@ -18,6 +18,16 @@
 		top: 100px;
 		background: #f3f3f3;
 	}
+	#grid-holder th.header.field-required::after{
+		color: red;
+		content: '*';
+		margin-left: 4px;
+	}
+	#grid-holder .dgrid-spacer-row th.field-required::after,
+	#grid-holder th.field-required.field-thumbnail::after{
+		content: '';
+		margin-left: 0;
+	}
 	#grid-holder .filterable{
 		width: 100px;
 	}

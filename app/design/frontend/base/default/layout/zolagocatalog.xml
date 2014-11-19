@@ -73,6 +73,9 @@
 				<block type="zolagocatalog/vendor_product_attributesetswitcher" name="attribute_set_switcher" template="zolagocatalog/product/attributesetswitcher.phtml"/>
 				<block type="core/template" name="mass_actions" template="zolagocatalog/product/massactions.phtml"/>
 				<block type="zolagocatalog/vendor_product_grid" name="grid" template="zolagocatalog/product/grid.phtml"/>
+				<block type="core/text_list" name="popups">
+					<block type="zolagocatalog/vendor_product_custom_columns" name="columns" template="zolagocatalog/product/custom/columns.phtml"/>
+				</block>
 			</block>
 		</reference>
 	</udprod_vendor_product_index>

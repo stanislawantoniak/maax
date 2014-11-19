@@ -24,6 +24,34 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 		return $this->_cols;
     }
 	
+	/**
+	 * @return array
+	 */
+	public function getAllColumns() {
+		return $this->_getAllPossibleColumns();
+	}
+	
+	/**
+	 * @return array
+	 */
+	public function getDenyColumns() {
+		return $this->_getDenyColumnList();
+	}
+	
+	/**
+	 * @param string $key
+	 * @return bool
+	 */
+	public function isDenyColumn($key) {
+		if(is_object($key)){
+			$key = $key->getIndex();
+		}
+		if(is_null($this->_denyColumnList)){
+			$this->_getDenyColumnList();
+		}
+		return isset($this->_denyColumnList[$key]);
+	}
+	
     /**
      * list of not allowed columns (from session)
      */
@@ -105,6 +133,7 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 				"type"		=> "image",
 				"attribute" => $thumbnail,
 				"clickable" => true,
+				"required"  => true,
 				"header"	=> $this->_getColumnLabel($thumbnail),
 				"filter"	=> false,
 				"sortable"	=> false,
@@ -119,7 +148,8 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 				"type"		=> "text",
 				"attribute" => $name,
 				"clickable" => true,
-				"filterable "=>true,
+				"required"  => true,
+				"filterable"=>true,
 				"header"	=> $this->_getColumnLabel($name)
 			);
 			
@@ -146,6 +176,7 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 			$code = $attribute->getAttributeCode();
 			$data = array(
 				"index"     => $code,
+				"required"  => $attribute->getIsRequired(),
 				'type'		=> $this->_getColumnType($attribute),
 				"header"    => $this->_getColumnLabel($attribute),
 				"attribute"	=> $attribute
@@ -262,11 +293,7 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 	 * @return string
 	 */
 	protected function _getColumnLabel(Mage_Catalog_Model_Resource_Eav_Attribute $attribute){
-		 $label = $attribute->getStoreLabel($this->getLabelStore()->getId());
-		 if($attribute->getIsRequired()){
-			 $label .= " *";
-		 }
-		 return $label;
+		 return $attribute->getStoreLabel($this->getLabelStore()->getId());
 	}
 
 	/**

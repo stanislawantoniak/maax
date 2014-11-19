@@ -58,17 +58,25 @@ class Zolago_Catalog_Block_Vendor_Product_Grid extends Mage_Core_Block_Template 
 			"type-" . $columnObject->getType()
 		);
 		
+		$headerClass = array(
+			"header"
+		);
+		
+		if($columnObject->getRequired()){
+			$classes[] = "field-required";
+			$headerClass[] = "field-required";
+		}
+		
 		$out = array(
 			"label" => $columnObject->getHeader(),
+			"required" => $columnObject->getRequired(),
 			"field" => $columnObject->getIndex(),
 			"type" => $columnObject->getType(), 
 			"fixed" => $columnObject->getFixed(),
 			"sortable" => $columnObject->getSortable(),
+			"className" => implode(" ", $headerClass)
 		);
 		
-		if(in_array($columnObject->getType(), array("number", "price"))){
-			$classes[] = "align-right";
-		}
 		
 		if($columnObject->getIsEditable() || $columnObject->getIsEditableInline()){
 			$classes[] = "editable";

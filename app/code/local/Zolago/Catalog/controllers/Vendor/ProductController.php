@@ -2,22 +2,29 @@
 
 class Zolago_Catalog_Vendor_ProductController 
 	extends Zolago_Catalog_Controller_Vendor_Product_Abstract {
+	
 	/**
 	 * Index
 	 */
 	public function indexAction() {
-		
 		$this->_saveHiddenColumns();
 		$this->_renderPage(null, 'udprod_product');
     }
 	
 	
-	
+	/**
+	 * Save hidden columns
+	 */
 	protected function _saveHiddenColumns() {
 		if ($this->getRequest()->isPost()) {
 			$listColumns = $this->getRequest()->getParam('listColumn',array());
-  			$attributeSet = $this->getRequest()->getParam('attribute_set','');
+  			$attributeSet = $this->getRequest()->getParam('attribute_set_id');
   			$hiddenColumns = $this->getRequest()->getParam('hideColumn',array());
+			
+			if(!Mage::getModel("eav/entity_attribute_set")->load($attributeSet)->getId()){
+				return;
+			}
+			
   			foreach ($hiddenColumns as $key=>$dummy) {
   				unset($listColumns[$key]);
   			}
@@ -28,9 +35,12 @@ class Zolago_Catalog_Vendor_ProductController
   				$list = array();
   			}
   			$list[$attributeSet] = $listColumns;
+			
 			$session->setData('denyColumnList',$list);
 		}
 	}	
+	
+	
 	public function saveAjaxAction() {
 		$response = array();
 		if($this->getRequest()->isPost()){
