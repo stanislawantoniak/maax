@@ -70,13 +70,27 @@
 	</adminhtml>
 	<admin>
 		<routers>
+			<sizetableadmin>
+				<use>admin</use>
+				<args>
+					<module>Zolago_Sizetable_Adminhtml</module>
+					<frontName>sizetableadmin</frontName>
+				</args>
+			</sizetableadmin>
 			<adminhtml>
 				<args>
 					<modules>
-						<zolagosizetable before="Mage_Adminhtml">Zolago_Sizetable_Adminhtml</zolagosizetable>
+						<sizetableadmin before="Mage_Adminhtml">Zolago_Sizetable_Adminhtml</sizetableadmin>
 					</modules>
 				</args>
 			</adminhtml>
+			<udropshipadmin>
+				<args>
+					<modules>
+						<Zolago_Sizetable_Adminhtml before="Unirgy_Dropship">Zolago_Sizetable</Zolago_Sizetable_Adminhtml>
+					</modules>
+				</args>
+			</udropshipadmin>
 		</routers>
 	</admin>
 	<frontend>
