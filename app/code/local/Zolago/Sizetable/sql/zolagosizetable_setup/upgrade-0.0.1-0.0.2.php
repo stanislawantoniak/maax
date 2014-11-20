@@ -69,7 +69,7 @@ $table = $installer->getConnection()
         'nullable'  => false), 'Rule ID')
     ->addColumn('sizetable_id',    Varien_Db_Ddl_Table::TYPE_INTEGER, null, array('nullable' => false ), 'Sizetable ID')
     ->addColumn('vendor_id',       Varien_Db_Ddl_Table::TYPE_INTEGER, null, array('nullable' => false ), 'Vendor ID')
-    ->addColumn("vendor_brand_id", Varien_Db_Ddl_Table::TYPE_INTEGER, null, array('nullable'  => false ), 'Brand ID for vendor')
+    ->addColumn("brand_id", Varien_Db_Ddl_Table::TYPE_INTEGER, null, array('nullable'  => false ), 'Brand ID')
 
     ->addIndex($installer->getIdxName('zolagosizetable/sizetable_rule', array('rule_id')),
         array('rule_id'))
@@ -87,8 +87,8 @@ $table = $installer->getConnection()
 
     //brand
     ->addForeignKey(
-        $installer->getFkName('zolagosizetable/sizetable_rule', 'vendor_brand_id', 'zolagosizetable/vendor_brand', 'vendor_brand_id'),
-        'vendor_brand_id', $installer->getTable('zolagosizetable/vendor_brand'), 'vendor_brand_id',
+        $installer->getFkName('zolagosizetable/sizetable_rule', 'brand_id', 'zolagosizetable/vendor_brand', 'brand_id'),
+        'brand_id', $installer->getTable('zolagosizetable/vendor_brand'), 'brand_id',
         Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE)
     ;
 
