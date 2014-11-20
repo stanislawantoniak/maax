@@ -263,6 +263,11 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         }
 
         //Mage::log(microtime() . ' Start update', 0, $batchFile);
+
+        $priceAttributeId = Mage::getSingleton("eav/config")
+            ->getAttribute('catalog_product', 'price')
+            ->getData('attribute_id');
+
         if (!empty($skeleton)) {
             foreach ($skeleton as $sku => $productId) {
 
@@ -301,7 +306,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
                             $insert[] = array(
                                 'entity_type_id' => $productEt,
-                                'attribute_id' => 75,
+                                'attribute_id' => $priceAttributeId,
                                 'store_id' => $storeId,
                                 'entity_id' => $productId,
                                 'value' => Mage::app()->getLocale()->getNumber($priceToInsert + (($priceToInsert * $marginSelected)/100))
