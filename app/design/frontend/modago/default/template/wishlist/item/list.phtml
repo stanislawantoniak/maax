@@ -16,6 +16,16 @@ $_helper = Mage::helper('zolagocatalog/product');
                         <?php $_product = $product->getProduct(); ?>
                         <?php $_productImageUrl = $_helper->getResizedImageUrl($_product); ?>
                         <?php $_productImageInfo = $_helper->getResizedImageInfo($_product); ?>
+                        <?php
+//                        var_dump($product->getWishlistCount());
+//                        var_dump($_product->getWishlistCount());
+//                        continue;
+
+//                        var_dump($product->getInMyWishlist());
+//                        continue;
+
+                        ?>
+
 
                         <div class="item col-phone col-xs-4 col-sm-4 col-md-3 col-lg-3 size14">
                             <div class="box_listing_product">
@@ -47,17 +57,22 @@ $_helper = Mage::helper('zolagocatalog/product');
                                         </div>
                                         <?php
                                         // like count
-                                        $wishlistCount = count($_collection);
-                                        $inMyWishlist = $this->__("You");
+                                        $wishlistCount = "";
+                                        $inMyWishlist = "";
                                         $plusSign = "";
-                                        if ($wishlistCount - 1 > 0) {
-                                            $wishlistCount = count($_collection) - 1;
+                                        if ($_product->getWishlistCount() - 1 > 0) {
+                                            $wishlistCount = $_product->getWishlistCount();
+//                                            if ($_product->getInMyWishlist()) {
+                                                $wishlistCount -= 1;
+//                                            }
                                         }
 
-                                        if ($wishlistCount > 1) {
-                                            $plusSign = " + ";
-                                        }
-
+//                                        if ($product->getInMyWishlist()) {
+                                            $inMyWishlist = $this->__("You");
+                                            if ($_product->getWishlistCount() > 1) {
+                                                $plusSign = " + ";
+                                            }
+//                                        }
                                         ?>
                                         <div class="like liked"
                                              data-idproduct="<?php echo $_product->getId(); ?>"
@@ -119,7 +134,7 @@ $_helper = Mage::helper('zolagocatalog/product');
     <?php $_product = $product->getProduct(); ?>
     Mall.wishlist.addProduct({
         id: <?php echo $_product->getId(); ?>,
-        wishlist_count: <?php echo (int)count($_collection); ?>,
+        wishlist_count: <?php echo (int)$_product->getWishlistCount(); ?>,
         in_your_wishlist: "true"
     });
     <?php endforeach; ?>
