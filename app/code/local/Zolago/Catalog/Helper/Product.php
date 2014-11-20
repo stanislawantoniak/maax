@@ -39,5 +39,64 @@ class Zolago_Catalog_Helper_Product extends Mage_Catalog_Helper_Product {
 		}
 		return self::FLAG_EMPTY;
 	}
-	
+
+    /**
+     * @param Mage_Catalog_Model_Product $product
+     * @param int $width
+     * @return string|empty_string
+     */
+    public function getResizedImageUrl(Mage_Catalog_Model_Product $product, $width = 300) {
+
+        /** @var $product Zolago_Catalog_Model_Product*/
+
+        if(!$product->hasData("resized_image_url")){
+
+            $return = null;
+            try{
+                $return = Mage::helper('catalog/image')->
+                init($product, 'thumbnail')->
+                keepAspectRatio(true)->
+                constrainOnly(true)->
+                keepFrame(false)->
+                resize($width, null);
+            } catch (Exception $ex) {
+                Mage::logException($ex);
+            }
+
+            $product->setData("resized_image_url", $return . ""); // Cast to string
+        }
+
+        return $product->getData("resized_image_url");
+    }
+
+    /**
+     * @param Mage_Catalog_Model_Product $model
+     * @return array|null
+     */
+    public function getResizedImageInfo(Mage_Catalog_Model_Product $model) {
+
+        $urlPath = $this->getResizedImageUrl($model);
+        // Extract cached image URI
+        if($urlPath){
+            $filePath = substr($urlPath, strpos($urlPath, "//")+2);
+            $filePath = substr($filePath, strpos($filePath, "/")+1);
+            $filePath = str_replace("/", DS, $filePath);
+            if($info=@getimagesize($filePath)){
+                return array("width"=>$info[0], "height"=>$info[1]);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @param Mage_Catalog_Model_Product $model
+     * @return null|string
+     */
+    public function getManufacturerLogoUrl(Mage_Catalog_Model_Product $model) {
+        if($model->getData("manufacturer_logo")){
+            return Mage::getBaseUrl('media') . $model->getData("manufacturer_logo");
+        }
+        return null;
+    }
+    
 }
