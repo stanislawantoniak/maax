@@ -21,12 +21,17 @@ define([
 			this.valueType = this.options.valueType || "text";
 			this.dataField = dataField;
 			this.oldValue = this.getValue(field.value);
+			this.field.filterObserver = this;
+		},
+		setValue: function(value){
+			this.field.value = value;
+			this.oldValue = this.getValue(value);
 		},
 		getValue: function(value){
 			if(value==""){
 				return value;
 			}
-			if(this.valueType=="number"){
+			if(this.valueType=="number" || this.valueType=="price"){
 				return parseFloat(value.replace(",","."))
 			}
 			return value;

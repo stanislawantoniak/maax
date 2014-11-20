@@ -1,0 +1,41 @@
+<?php /* @var $this Zolago_Catalog_Block_Vendor_Product */ ?>
+<div class="container">
+    <div class="page-header row">
+        <div class="col-lg-4 page-title">
+            <h3><?php echo Mage::helper("zolagocatalog")->__("Manage products descriptions");?></h3>
+			<?php if($this->getCanShowGrid()):?>
+			<span class="tageline">
+				<a href="#" data-toggle="modal" data-target="#saveColumnsModal">
+					<i class="icon-table"></i> 
+					<?php echo Mage::helper("zolagocatalog")->__("Customize columns");?>
+				</a>
+				&nbsp;
+				<a href="#" data-toggle="modal" data-target="#filtersModal">
+					<i class="icon-filter"></i> 
+					<?php echo Mage::helper("zolagocatalog")->__("Show more filters");?> 
+				</a>
+				&nbsp;
+				<a href="#" class="hidden" id="remove-filters">
+					<i class="icon-remove"></i> 
+					<?php echo Mage::helper("zolagocatalog")->__("Remove filters");?> 
+				</a>
+			</span>
+			<?php endif;?>
+        </div>
+		<?php echo $this->getChildHtml("mass_actions"); ?>
+		<?php echo $this->getChildHtml("attribute_set_switcher"); ?>
+    </div>
+</div>
+
+<?php if($this->getCanShowGrid()):?>
+	<?php echo $this->getChildHtml("grid");?>
+	<?php echo $this->getChildHtml("popups");?>
+<?php else:?>
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<p class="alert alert-info"><?php echo Mage::helper("zolagocatalog")->__("Choose the category");?></p>
+			</div>
+		</div>
+	</div>
+<?php endif;?>
