@@ -230,7 +230,8 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         $productEt = Mage::getSingleton('eav/config')->getEntityType('catalog_product')->getId();
 
         $priceTypeByStore = array();
-        $priceType = $model->getConverterPriceType($skuS);
+//        $priceType = $model->getConverterPriceType($skuS);
+        $priceType = $model->getConverterPriceTypeConfigurable($skuS);
         //reformat by store id
         if (!empty($priceType)) {
             foreach ($priceType as $priceTypeData) {
