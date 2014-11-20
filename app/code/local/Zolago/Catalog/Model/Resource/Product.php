@@ -8,6 +8,8 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
         $writeAdapter = $this->_getWriteAdapter();
         $writeAdapter->beginTransaction();
         try {
+
+            //update price
             $writeAdapter->insertOnDuplicate(
                 $writeAdapter->getTableName('catalog_product_entity_decimal'),
                 $insert, array('value')
@@ -15,6 +17,7 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
 
             $this->_getWriteAdapter()->commit();
 
+            //add to configurable queue
             Zolago_Catalog_Helper_Configurable::queue($ids);
 
             //add to solr queue
@@ -89,17 +92,16 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
     }
 
     /**
-     * @param $skuS
+     * @param $ids
      *
-     * @return array $assoc
+     * @return array $margins
      */
-    public function getPriceMarginValuesConfigurable($skuS)
+    public function getPriceMarginValuesConfigurable($ids)
     {
-        $margins = array();
-
-        if (empty($skuS)) {
+        if (empty($ids)) {
             return array();
         }
+        $margins = array();
         $entityTypeID = Mage::getModel('catalog/product')->getResource()->getTypeId();
 
         $readConnection = $this->_getReadAdapter();
@@ -111,13 +113,7 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
                 "product_id" => "product_relation.child_id"
             )
         );
-        $select->join(
-            array("products" =>  $this->getTable("catalog/product")),
-            "products.entity_id=product_relation.child_id",
-            array(
-                'products.sku'
-            )
-        );
+
         $select->join(
             array("margins" =>  'catalog_product_entity_text'),
             'product_relation.parent_id=margins.entity_id',
@@ -137,7 +133,7 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
         $select->where(
             "attributes.attribute_code=?", Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_PRICE_MARGIN_CODE
         );
-        $select->where("products.sku IN(?)", $skuS);
+        $select->where("product_relation.child_id IN(?)", $ids);
 
         try {
             $margins = $readConnection->fetchAll($select);
@@ -260,5 +256,53 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
             Mage::throwException(Mage::helper('catalog')->__('Fetch converter price type: ' .$e->getMessage()));
         }
         return $priceType;
+    }
+
+    public function getConverterPriceTypeConfigurable($ids)
+    {
+        if (empty($ids)) {
+            return array();
+        }
+        $priceTypes = array();
+        $entityTypeID = Mage::getModel('catalog/product')->getResource()->getTypeId();
+
+        $readConnection = $this->_getReadAdapter();
+        $select = $readConnection->select();
+        $select->from(
+            array("product_relation" => $this->getTable("catalog/product_relation")),
+            array(
+                "parent_id" => "product_relation.parent_id",
+                "product_id" => "product_relation.child_id"
+            )
+        );
+
+        $select->join(
+            array("pricetypes" =>  'catalog_product_entity_int'),
+            'product_relation.parent_id=pricetypes.entity_id',
+            array(
+                'price_type' => 'pricetypes.value',
+                'store' => 'pricetypes.store_id'
+            )
+        );
+        $select->join(
+            array("attributes" => $this->getTable("eav/attribute")),
+            "attributes.attribute_id=pricetypes.attribute_id",
+            array()
+        );
+        $select->where(
+            "attributes.entity_type_id=?", $entityTypeID
+        );
+        $select->where(
+            "attributes.attribute_code=?", Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER_PRICE_TYPE_CODE
+        );
+        $select->where("product_relation.child_id IN(?)", $ids);
+
+        try {
+            $priceTypes = $readConnection->fetchAll($select);
+        } catch (Exception $e) {
+            Mage::throwException("Error fetching price_margin values");
+        }
+
+        return $priceTypes;
     }
 }
