@@ -1,9 +1,7 @@
 <?php /* @var $this Zolago_Catalog_Block_Vendor_Product_Grid*/?>
 
 <div class="container" id="content-wrapper">
-
 	<div id="grid-holder"></div>
-
 </div>
 <style type="text/css">
 	#content{
@@ -18,6 +16,9 @@
 		top: 100px;
 		background: #f3f3f3;
 	}
+	#grid-holder .dgrid-cell{
+		vertical-align: middle;
+	}
 	#grid-holder th.header.field-required::after{
 		color: red;
 		content: '*';
@@ -29,16 +30,22 @@
 		margin-left: 0;
 	}
 	#grid-holder .filterable{
-		width: 100px;
+		width: 90px;
+	}
+	#grid-holder .dgrid-column-set-cell{
+		padding:0;
+	}
+	#grid-holder .dgrid-column-set-1 tr .dgrid-cell{
+		border-left: none;
 	}
 	#grid-holder .dgrid-column-set-0{
-		width: 300px;
+		width: 315px;
 	}
 	#grid-holder  .dgrid-column-set-0 .dgrid-cell.field-name{
 		width: 230px;
 	}
 	#grid-holder  .dgrid-column-set-0 .dgrid-cell.field-thumbnail{
-		width: 45px;
+		width: <?php echo (int)$this->getThumbWidth();?>px;
 	}
 	#grid-holder .dgrid-column-set-0 .dgrid-cell.field-0-0-0{
 		vertical-align: middle;
@@ -48,7 +55,7 @@
 	#grid-holder .dgrid-cell.type-multiselect,
 	#grid-holder .dgrid-cell.type-options{
 		text-align: center;
-		width: 160px;
+		width: 120px;
 	}
 	
 	#grid-holder .dgrid-cell.type-price,
@@ -61,19 +68,26 @@
 		text-overflow: ellipsis;
 		white-space: nowrap;
 	}
-	
+	#grid-holder td.dgrid-cell.field-thumbnail{
+		padding:0;
+	}
 	/** Thumb column **/
-	#grid-holder  .dgrid-column-set-0 .dgrid-cell.field-thumbnail p,
-	#grid-holder  .dgrid-column-set-0 .dgrid-cell.field-thumbnail a{
+	#grid-holder .dgrid-cell.field-thumbnail p,
+	#grid-holder .dgrid-cell.field-thumbnail a{
 		position: relative;
 		display: block;
 		margin:0;
 		padding:0;
 	}
 	
-	#grid-holder  .dgrid-column-set-0 .dgrid-cell.field-thumbnail span{
+	#grid-holder dgrid-cell.field-thumbnail img{
+		width: <?php echo (int)$this->getThumbWidth();?>px;
+		height: <?php echo (int)$this->getThumbHeight();?>px;
+	}
+	
+	#grid-holder .dgrid-cell.field-thumbnail span{
 		position: absolute;
-		bottom: 6px;
+		bottom: 1px;
 		right:1px;
 		background: #666;
 		line-height: 12px;
@@ -85,17 +99,36 @@
 	}
 	
 	/** Name column **/
-	#grid-holder  .dgrid-column-set-0 .dgrid-cell.field-name p{
+	#grid-holder .dgrid-cell.field-name p{
 		margin:0;
 		padding:0;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
 	}
-	#grid-holder  .dgrid-column-set-0 .dgrid-cell.field-name p.info{
+	#grid-holder .dgrid-cell.field-name p.info{
 		color: #666;
 		font-size: 10px;
 	}
+	/** Status **/
+	#grid-holder .dgrid-cell.field-status{
+		width: 40px;
+	}
+	#grid-holder td.dgrid-cell.field-status::after{
+		content: "";
+		display: inline-block;
+		width:0;
+		height:0;
+		border-radius:5px;
+		border: 5px green solid;
+	}
+	#grid-holder td.dgrid-cell.field-status.status-off::after{
+		border-color: red;
+	}
+	#grid-holder td.dgrid-cell.field-status.status-wait::after{
+		border-color: orange;
+	}
+	
 </style>
 <script type="text/javascript">
 	require(['vendor/catalog/productGrid'], function(productGrid){

@@ -2,7 +2,8 @@
 
 class Zolago_Catalog_Block_Vendor_Product_Grid extends Mage_Core_Block_Template {
 
-	
+	const THUMB_WIDTH = 60;
+	const THUMB_HEIGHT = 60;
 
 	protected function _prepareMassaction()
     {
@@ -48,7 +49,10 @@ class Zolago_Catalog_Block_Vendor_Product_Grid extends Mage_Core_Block_Template 
 		return Mage::helper("core")->jsonEncode($out);
 	}
 	
-	
+	/**
+	 * @param Varien_Object $columnObject
+	 * @return array
+	 */
 	protected function mapColumn(Varien_Object $columnObject) {
 		$attribute = null;
 		if($columnObject->getAttribute()){
@@ -105,8 +109,8 @@ class Zolago_Catalog_Block_Vendor_Product_Grid extends Mage_Core_Block_Template 
 			$out["children"] = array(
 				array(
 					"renderHeaderCell"  => array(
-						$columnObject->getType(), 
-						$columnObject->getIndex(), 
+						$this->_getFilterType($columnObject), 
+						$this->_getFilterIndex($columnObject), 
 						$filterHeaderOptions
 					),
 					"filterable"		=> 1,
@@ -119,23 +123,54 @@ class Zolago_Catalog_Block_Vendor_Product_Grid extends Mage_Core_Block_Template 
 			
 		}
 		
-		
 		switch ($columnObject->getIndex()) {
-			case "name":
-				$out['statusOptions'] = $this->getGridModel()->optionsToHash(
-					$this->getGridModel()->
-						getAttribute("status")->
-						getSource()->
-						getAllOptions()
-				);
-
-			break;
 			case "thumbnail":
 				$out['label'] = $this->__("Im.");
+			break;
+			case "status":
+				$out['label'] = $this->__("St.");
 			break;
 		}
 		
 		return $out;
+	}
+	
+	/**
+	 * Map filter for index
+	 * @param Varien_Object $column
+	 * @return string
+	 */
+	protected function _getFilterIndex(Varien_Object $column) {
+		if($column->getIndex()=="thumbnail"){
+			return "images_count";
+		}
+		return $column->getIndex();
+	}
+	
+	/**
+	 * Map filter for filter
+	 * @param Varien_Object $column
+	 * @return string
+	 */
+	protected function _getFilterType(Varien_Object $column) {
+		if($column->getType()=="image"){
+			return "number";
+		}
+		return $column->getType();
+	}
+	
+	/**
+	 * @return int
+	 */
+	public function getThumbWidth() {
+		return self::THUMB_WIDTH;
+	}
+	
+	/**
+	 * @return int
+	 */
+	public function getThumbHeight() {
+		return self::THUMB_HEIGHT;
 	}
 	
 }

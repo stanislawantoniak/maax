@@ -142,8 +142,8 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 				"clickable" => true,
 				"required"  => true,
 				"header"	=> $this->_getColumnLabel($thumbnail),
-				"filter"	=> false,
-				"sortable"	=> false,
+				"filter"	=> true,
+				"sortable"	=> true,
 				"filterable "=>true
 			);
 
@@ -241,23 +241,14 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 				if($attribute->getSource()){
 					$extend['options']  = array();
 					foreach($attribute->getSource()->getAllOptions(false) as $option){
-						$extend['options'][$option['value']]=$option['label'];
+						if(!empty($option['value'])){
+							$extend['options'][$option['value']]=$option['label'];
+						}
 					}
-				}
-				if($attribute->getAttributeCode()=="status"){
-					$extend['type']="status";
-					$extend['filter']=false;
-					$extend['header']= Mage::helper("zolagocatalog")->__("St.")." *";
 				}
 			}elseif($frontendType=="price"){
 				$extend['type'] = "price";
 				$extend['currency_code'] = $this->getStore()->getBaseCurrency()->getCode();
-			}elseif($frontendType=="media_image"){
-				$extend['type'] = "image";
-				$extend['clickable'] = true;
-				$extend['width'] = "100px";
-				$extend['filter'] = false;
-				$extend['sortable'] = false;
 			}
 			
 			
