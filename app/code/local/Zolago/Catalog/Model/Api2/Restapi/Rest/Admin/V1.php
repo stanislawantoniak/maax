@@ -311,6 +311,8 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                                 'entity_id' => $productId,
                                 'value' => Mage::app()->getLocale()->getNumber($priceToInsert + (($priceToInsert * $marginSelected)/100))
                             );
+
+                            $ids[] = $productId;
                         }
                     }
 
@@ -318,7 +320,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
                 }
 
-                $ids[] = $productId;
+
             }
         }
 
