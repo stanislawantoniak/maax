@@ -52,7 +52,7 @@ define([
 		// first reset query staic params
 		for(k in query){
 			if(query.hasOwnProperty(k) && /^static/.test(k)){
-				delete query[k];
+				query[k] = null;
 			}
 		}
 		
@@ -400,7 +400,7 @@ define([
 			bufferRows: 20,
 
 			/* Paginatior  */
-			/* rowsPerPage: 500,
+			/*rowsPerPage: 500,
 			pagingLinks: 1,
 			pagingTextBox: true,
 			firstLastArrows: true,

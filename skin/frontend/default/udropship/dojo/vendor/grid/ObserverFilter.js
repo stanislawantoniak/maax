@@ -14,6 +14,8 @@ define([
 		dataField: null, 
 		options: null,
 		type: null,
+		tagName: null,
+		
 		constructor: function(field, grid, dataField, options){
 			this.field = field;
 			this.grid = grid;
@@ -22,6 +24,7 @@ define([
 			this.dataField = dataField;
 			this.oldValue = this.getValue(field.value);
 			this.field.filterObserver = this;
+			this.tagName = field.tagName.toLowerCase();
 		},
 		setValue: function(value){
 			this.field.value = value;
@@ -40,12 +43,18 @@ define([
 		start: function(){
 			var self = this;
 			this._clear();
+			// Trigger by select update immidietly
+			if(this.tagName=="select"){
+				self.update();
+				return;
+			}
 			this.interval = setInterval(function(){
 				self.update();
 			}, 300);
 		},
 		// Stopuje interwal
 		stop: function(){
+			this.update();
 			this._clear();
 		},
 		// Czysci interwal

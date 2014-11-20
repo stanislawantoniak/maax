@@ -124,13 +124,11 @@ class Zolago_Catalog_Block_Vendor_Product_Grid extends Mage_Core_Block_Template 
 		}
 		
 		switch ($columnObject->getIndex()) {
-			case "thumbnail":
-				$out['label'] = $this->__("Im.");
-			break;
 			case "status":
 				$out['label'] = $this->__("St.");
 			break;
 		}
+		
 		
 		return $out;
 	}

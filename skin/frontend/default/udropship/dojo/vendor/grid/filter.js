@@ -21,7 +21,7 @@ define([
 					on(element, 'focus',	lang.hitch(observer, observer.start));
 					on(element, 'keyup',	lang.hitch(observer, observer.start));
 					on(element, 'keydown',	lang.hitch(observer, observer.start));
-					on(element, 'blur',		lang.hitch(observer, observer.start));
+					on(element, 'blur',		lang.hitch(observer, observer.stop));
 					
 					return element;
 				}
@@ -65,10 +65,10 @@ define([
 						}));
 					})
 
-							
 					var observer = new ObserverFilter(element, this.grid, name);
-
-					on(element, 'change',	lang.hitch(observer, observer.start));
+					
+					// Only change - do update
+					on(element, 'change',	lang.hitch(observer, observer.update));
 					
 					return element;
 				}
@@ -103,7 +103,7 @@ define([
 						on(element, 'focus',	lang.hitch(observer, observer.start));
 						on(element, 'keyup',	lang.hitch(observer, observer.start));
 						on(element, 'keydown',	lang.hitch(observer, observer.start));
-						on(element, 'blur',		lang.hitch(observer, observer.start));
+						on(element, 'blur',		lang.hitch(observer, observer.stop));
 						
 						put(wrapper, element);
 					});
