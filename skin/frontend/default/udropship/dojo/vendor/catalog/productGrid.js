@@ -52,7 +52,6 @@ define([
 		// first reset query staic params
 		for(k in query){
 			if(query.hasOwnProperty(k) && /^static/.test(k)){
-				console.log("TAK");
 				delete query[k];
 			}
 		}
@@ -190,7 +189,7 @@ define([
 	 * @param {object} node
 	 * @returns {string}
 	 */
-	var rendererThumbnail = function renderCell(item, value, node, options){
+	var rendererThumbnail = function (item, value, node, options){
 		var content;
 		
 		if(item.thumbnail!==null){
@@ -204,9 +203,7 @@ define([
 			content = put("p");
 		}
 		put(content, "img", {
-			src: item.thumbnail_url,
-			width: 45,
-			height: 45
+			src: item.thumbnail_url
 		});
 		put(content, "span", {
 			innerHTML: item.images_count
@@ -214,18 +211,43 @@ define([
 		put(node, content);
 	};
 	
-	var rendererName = function renderCell(item, value, node, options){
-		var opts = this.parentColumn.statusOptions;
+	/**
+	 * @param {mixed} value
+	 * @param {object} item
+	 * @param {object} node
+	 * @returns {string}
+	 */
+	var rendererName = function (item, value, node, options){
 		var content = put("div");
 		put(content, "p", {
 			innerHTML: item.name
 		});
 		put(content, "p", {
-			innerHTML: Translator.translate("St.") + ": " + opts[item.status] + 
-				" / " + Translator.translate("SKU") + ": " + escape(item.sku),
+			innerHTML: Translator.translate("SKU") + ": " + escape(item.skuv),
 			className: "info"
 		});
 		put(node, content);
+	};
+	
+	/**
+	 * @param {mixed} value
+	 * @param {object} item
+	 * @param {object} node
+	 * @returns {string}
+	 */
+	var rendererStatus = function (item, value, node, options){
+		var label = "wait";
+		switch(value){
+			case "1":
+				label = "on";
+			break;
+			case "2":
+				label = "off";
+			break;
+		}
+		node.className = node.className + " " + "status-" + label;
+		//node.innerHTML = label;
+		node.title = this.options[value] || "";
 	};
 	
 	/**
@@ -304,19 +326,23 @@ define([
 				childColumn = column.children[0];
 				
 				childColumn.renderHeaderCell = filter.apply(null, childColumn.renderHeaderCell);
+				
 				// Prepare fomratter
 				if(childColumn.options){
-					childColumn.formatter = formatterOptionsFactor(childColumn.options, column.type=="multiselect");
+					if(column.field=="status"){
+						childColumn.renderCell = rendererStatus;
+					}else{
+						childColumn.formatter = formatterOptionsFactor(childColumn.options, column.type=="multiselect");
+					}
 				}else if(column.type=="price"){
 					childColumn.formatter = formatterPriceFactor(column.currencyCode);
+				}else if(column.field=="thumbnail"){
+					childColumn.renderCell = rendererThumbnail;
 				}else if(column.field=="name"){
 					childColumn.renderCell = rendererName;
 				}
 			}
 			
-			if(column.field=="thumbnail"){
-				column.renderCell = rendererThumbnail;
-			}
 			
 			// Push to correct column set
 			if(column.fixed){
@@ -329,6 +355,16 @@ define([
 		
 		return columnSets;
 	};
+	
+	var updateSelectionButtons = function(a){
+		var disabled = true;
+		for(var k in grid.selection){
+			if(grid.selection.hasOwnProperty(k)){
+				disabled = false;
+			}
+		}
+		jQuery("#massActions").prop("disabled", disabled);
+	}
 	
 	
 	//var testStore =  Observable(Cache(storeRest, Memory()));
@@ -378,6 +414,13 @@ define([
 		};
 		
 		window.grid = grid = new PriceGrid(config, container);
+		
+		// listen for selection
+		on.pausable(grid.domNode, "dgrid-select", updateSelectionButtons);
+
+		// listen for selection
+		on.pausable(grid.domNode, "dgrid-deselect", updateSelectionButtons);
+		
 		
 		return window.grid;
 	};

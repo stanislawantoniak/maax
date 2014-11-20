@@ -113,13 +113,13 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 				//$collection->addAttributeToSelect($columnData['attribute']->getAttributeCode());
 			}
 			
-			// Add images count
-			if($column->getIndex()=="thumbnail"){
-				$collection->addImagesCount(false);
-			}
-			
-			if($column->getIndex()=="name"){
-				$collection->joinAttribute("status", 'catalog_product/status', 'entity_id', null, 'left');
+			switch ($column->getIndex()) {
+				case "thumbnail":
+					$collection->addImagesCount(false);
+				break;
+				case "name":
+					$collection->joinAttribute("skuv", 'catalog_product/skuv', 'entity_id', null, 'left');
+				break;
 			}
 		}
 		
@@ -163,7 +163,7 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 			if($attribute->getAttributeCode()=="name"){
 				$this->_getCollection()->addFieldToFilter(array(
 						array("attribute"=>"name", "filter"=> array("like"=>"%".$value."%")),
-						array("attribute"=>"sku", "filter"=> array("like"=>"%".$value."%"))
+						array("attribute"=>"skuv", "filter"=> array("like"=>"%".$value."%"))
 				));
 				return null;
 			}
@@ -219,10 +219,13 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 		$out = array();
 		foreach($this->getGridModel()->getColumns() as $column){
 			if($column->getAttribute() && $column->getFilterable()!==false){
-				$out[] = $column->getAttribute()->getAttributeCode();
+				$out[$column->getAttribute()->getAttributeCode()] = true;
 			}
 		}
-		return $out;
+		if(isset($out["thumbnail"])){
+			$out["images_count"] = true;
+		}
+		return array_keys($out);
 	}
 	
 	/**

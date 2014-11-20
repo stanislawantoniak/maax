@@ -137,11 +137,14 @@ class Zolago_Catalog_Model_Resource_Vendor_Product_Collection
 		
 		if(isset($item['thumbnail'])){
 			$thumbUrl = Mage::helper('catalog/image')->
-					   init($mockup, 'thumbnail')->
-					   keepAspectRatio(true)->
-					   constrainOnly(true)->
-					   keepFrame(true)->
-					   resize(40,40);
+				init($mockup, 'thumbnail')->
+				keepAspectRatio(true)->
+				constrainOnly(true)->
+				keepFrame(true)->
+				resize(
+					Zolago_Catalog_Block_Vendor_Product_Grid::THUMB_WIDTH,
+					Zolago_Catalog_Block_Vendor_Product_Grid::THUMB_HEIGHT
+				);
 
 			$item['thumbnail_url'] = (string)$thumbUrl;
 			if(!empty($item['thumbnail']) && $item['thumbnail']!="no_selection"){
