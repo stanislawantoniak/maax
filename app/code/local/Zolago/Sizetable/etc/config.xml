@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Zolago_Sizetable>
-			<version>0.0.1</version>
+			<version>0.0.2</version>
 		</Zolago_Sizetable>
 	</modules>
 	<global>
@@ -20,6 +20,15 @@
 					<vendor_attribute_set>
 						<table>zolago_sizetable_vendor_attribute_set</table>
 					</vendor_attribute_set>
+                    <sizetable>
+                        <table>zolago_sizetable</table>
+                    </sizetable>
+                    <sizetable_scope>
+                        <table>zolago_sizetable_scope</table>
+                    </sizetable_scope>
+                    <sizetable_rule>
+                        <table>zolago_sizetable_role</table>
+                    </sizetable_rule>
 				</entities>
 			</zolagosizetable_resource>
 		</models>
