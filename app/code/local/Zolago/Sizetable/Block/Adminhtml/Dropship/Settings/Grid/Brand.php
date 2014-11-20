@@ -3,13 +3,21 @@
  * brand settings grid
  */
 class Zolago_Sizetable_Block_Adminhtml_Dropship_Settings_Grid_Brand extends Mage_Adminhtml_Block_Widget_Grid {
-    const BRAND_ATTRIBUTE_ID = 81;
     public function __construct()
     {
         parent::__construct();
         $this->setId('connect_brand');
         $this->setDefaultSort('value');
         $this->setUseAjax(true);
+    }
+    
+    /**
+     * brand id
+     * @return int
+     */
+    protected function _getBrandId() {
+        $attribute = Mage::getSingleton('eav/config')->getAttribute('catalog_product','manufacturer');
+        return $attribute->getId();
     }
     
     /**
@@ -60,7 +68,7 @@ class Zolago_Sizetable_Block_Adminhtml_Dropship_Settings_Grid_Brand extends Mage
     protected function _prepareCollection()
     {
         $collection = Mage::getResourceModel('eav/entity_attribute_option_collection')
-                      ->setAttributeFilter(self::BRAND_ATTRIBUTE_ID)
+                      ->setAttributeFilter($this->_getBrandId())
                       ->setStoreFilter(0, false);
         $this->setCollection($collection);
         return parent::_prepareCollection();
@@ -73,7 +81,7 @@ class Zolago_Sizetable_Block_Adminhtml_Dropship_Settings_Grid_Brand extends Mage
 
     public function getGridUrl()
     {
-        return $this->getUrl('sizetable/index/brand', array('_current'=>true));
+        return $this->getUrl('sizetableadmin/index/brand', array('_current'=>true));
     }
 
     /**
@@ -81,8 +89,8 @@ class Zolago_Sizetable_Block_Adminhtml_Dropship_Settings_Grid_Brand extends Mage
      * @return array
      */
     protected function _getSelectedBrand() {
-        $brands = $this->getRequest()->getPost('selected_brand');
-        if (is_null($brands)) {
+        $json = $this->getRequest()->getPost('selected_brand');
+        if (is_null($json)) {
             $vendorId = $this->getVendorId();
             $collection = Mage::getModel('zolagosizetable/vendor_brand')->getCollection();
             $collection->getSelect()
@@ -91,10 +99,10 @@ class Zolago_Sizetable_Block_Adminhtml_Dropship_Settings_Grid_Brand extends Mage
 
             $brands = array();
             foreach ($collection as $brand) {
-                var_dump($brand);
-                die();
+                $brands[] = $brand->getData('brand_id');
             }
-            return array_keys($brands);
+        } else {
+            $brands = array_keys((array)Zend_Json::decode($json));
         }
         return $brands;
 

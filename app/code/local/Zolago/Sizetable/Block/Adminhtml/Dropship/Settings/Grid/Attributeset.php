@@ -63,7 +63,7 @@ class Zolago_Sizetable_Block_Adminhtml_Dropship_Settings_Grid_Attributeset exten
 
     public function getGridUrl()
     {
-        return $this->getUrl('sizetable/index/attributeset', array('_current'=>true));
+        return $this->getUrl('sizetableadmin/index/attributeset', array('_current'=>true));
     }
 
     /**
@@ -71,21 +71,20 @@ class Zolago_Sizetable_Block_Adminhtml_Dropship_Settings_Grid_Attributeset exten
      * @return array
      */
     protected function _getSelectedAttributeSet() {	
-        return array();
-        $sets = $this->getRequest()->getPost('selected_sets');
-        if (is_null($sets)) {
+        $json = $this->getRequest()->getPost('selected_sets');
+        if (is_null($json)) {
             $vendorId = $this->getVendorId();
-            $collection = Mage::getModel('zolagosizetable/vendor_attributeset')->getCollection();
+            $collection = Mage::getModel('zolagosizetable/vendor_attribute_set')->getCollection();
             $collection->getSelect()
             ->columns(array('attribute_set_id'))
             ->where('main_table.vendor_id = '.$vendorId);
 
             $sets = array();
             foreach ($collection as $set) {
-                var_dump($set);
-                die();
+                $sets[] = $set->getData('attribute_set_id');
             }
-            return array_keys($sets);
+        } else {
+            $sets = array_keys((array)Zend_Json::decode($json));        
         }
         return $sets;
 
