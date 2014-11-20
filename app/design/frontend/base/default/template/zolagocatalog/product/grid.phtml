@@ -16,20 +16,6 @@
 		right:20px;
 		background: #f3f3f3;
 	}
-	@media (max-width: 768px){
-		#grid-holder{
-			left:0px;
-			right:0px;
-		}
-	}
-	@media (max-width: 480px){
-		#grid-holder{
-			top: 120px;
-		}
-		.page-header .page-title{
-			float: left;
-		}
-	}
 	#grid-holder .dgrid-cell{
 		vertical-align: middle;
 	}
@@ -143,6 +129,28 @@
 		border-color: orange;
 	}
 	
+	@media (max-width: 768px){
+		#grid-holder{
+			left:0px;
+			right:0px;
+		}
+		
+		#grid-holder .dgrid-column-set-0{
+			width: 215px;
+		}
+		#grid-holder  .dgrid-column-set-0 .dgrid-cell.field-name{
+			width: 130px;
+		}
+	}
+	
+	@media (max-width: 480px){
+		#grid-holder{
+			top: 120px;
+		}
+		.page-header .page-title{
+			float: left;
+		}
+	}
 </style>
 <script type="text/javascript">
 	require(['vendor/catalog/productGrid'], function(productGrid){

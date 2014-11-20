@@ -52,7 +52,6 @@ define([
 		// first reset query staic params
 		for(k in query){
 			if(query.hasOwnProperty(k) && /^static/.test(k)){
-				console.log("TAK");
 				delete query[k];
 			}
 		}
@@ -357,6 +356,16 @@ define([
 		return columnSets;
 	};
 	
+	var updateSelectionButtons = function(a){
+		var disabled = true;
+		for(var k in grid.selection){
+			if(grid.selection.hasOwnProperty(k)){
+				disabled = false;
+			}
+		}
+		jQuery("#massActions").prop("disabled", disabled);
+	}
+	
 	
 	//var testStore =  Observable(Cache(storeRest, Memory()));
 	// cache crakcs edit
@@ -405,6 +414,13 @@ define([
 		};
 		
 		window.grid = grid = new PriceGrid(config, container);
+		
+		// listen for selection
+		on.pausable(grid.domNode, "dgrid-select", updateSelectionButtons);
+
+		// listen for selection
+		on.pausable(grid.domNode, "dgrid-deselect", updateSelectionButtons);
+		
 		
 		return window.grid;
 	};
