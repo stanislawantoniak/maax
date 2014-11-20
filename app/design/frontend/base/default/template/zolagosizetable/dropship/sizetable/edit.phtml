@@ -1,7 +1,106 @@
-<?php /** @var $this Zolago_Sizetable_Block_Dropship_Sizetable_Edit */ ?>
-<?php $_helper = Mage::helper('zolagosizetable'); ?>
-<?php
-//if !isset size table id then load new header
-//echo $this->getChildHtml('sizetable_edit_header_new');
-//else load edit header
-echo $this->getChildHtml("sizetable_edit_header_edit"); ?>
+<?php /** @var $this Zolago_Sizetable_Block_Dropship_Sizetable_Edit */
+$_helper = Mage::helper('zolagosizetable');
+$_isNew = true;
+$stores = $this->getOtherStores();
+$defaultStoreId = $this->getDefaultStore()['store_id'];
+$locale = Mage::app()->getLocale()->getLocaleCode();
+
+if(!$_isNew) {
+	$sizetable = $this->getSizeTable();
+}
+?>
+<script src="<?php echo $this->getUrl('skin/frontend/default/udropship/js/plugins/tinymce'); ?>tinymce.min.js"></script>
+<script src="<?php echo $this->getUrl('skin/frontend/default/udropship/js/plugins/tinymce'); ?>jquery.tinymce.min.js"></script>
+<script>
+	jQuery(function($){
+/*		tinymce.init({
+			skin: 'light',
+			selector:'textarea.tinymce',
+			height : 300,
+			plugins: [
+				"advlist autolink lists link image charmap preview anchor textcolor",
+				"searchreplace visualblocks code",
+				"insertdatetime table contextmenu paste"
+			],
+			toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
+			<?php if($locale != 'en_US'): ?>,language: "<?php echo $locale; ?>" <?php endif; ?>
+		});*/
+
+		var form = $("#sizetableForm");
+		new Zolago.formIntegrator(form);
+		form.validate();
+	});
+</script>
+<div class="container">
+	<?php
+	if ($_isNew):
+		echo $this->getChildHtml('sizetable_edit_header_new');
+	else:
+		echo $this->getChildHtml("sizetable_edit_header_edit");
+	endif;
+	?>
+	<div class="row">
+		<form class="form-horizontal row-border" id="sizetableForm" action="<?php echo $this->getAction(); ?>" method="post">
+			<?php echo $this->getLayout()->getBlock('formkey')->toHtml();?>
+			<?php if(!$_isNew): ?>
+			<input type="hidden" name="sizetable_id" value="|=todo=|" />
+			<?php endif; ?>
+			<div class="col-md-12">
+				<div class="widget box">
+					<div class="widget-header"><h4><i class="icon-reorder"></i> <?php echo $_helper->__("Default values"); ?></h4></div>
+					<div class="widget-content">
+							<div class="form-group">
+								<label class="col-md-2 control-label" for="sizetable_name"><?php echo $_helper->__("Name"); ?> <span class="required">*</span></label>
+								<div class="col-md-10"><input type="text" name="sizetable_name" id="sizetable_name" class="form-control required-entry"></div>
+							</div>
+							<div class="form-group">
+								<label class="col-md-2 control-label" for="sizetable_<?php echo $defaultStoreId; ?>">
+										<?php echo $_helper->__("Default size table"); ?> <span class="required">*</span>
+										<br /> (<?php echo $this->getDefaultStore()['name']; ?>)&nbsp;&nbsp;&nbsp;
+								</label>
+								<div class="col-md-10">
+									<textarea name="sizetable[<?php echo $defaultStoreId; ?>]"
+									          id="sizetable_<?php echo $defaultStoreId; ?>"
+									          class="form-control required-entry tinymce"><?php if(!$_isNew) echo $sizetable['sizetable'][$defaultStoreId]; ?></textarea>
+								</div>
+							</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-12">
+				<div class="widget box widget-closed">
+					<div class="widget-header">
+						<h4><i class="icon-reorder"></i> <?php echo $_helper->__("Other size tables"); ?></h4>
+						<div class="toolbar no-padding">
+							<div class="btn-group">
+								<span class="btn btn-xs widget-collapse"><i class="icon-angle-up"></i></span>
+							</div>
+						</div>
+					</div>
+					<div class="widget-content">
+					<?php foreach($stores as $store): ?>
+						<div class="form-group">
+							<label class="col-md-2 control-label" for="sizetable_<?php echo $store['store_id']; ?>">
+								<?php echo $_helper->__("Size table for")." ".$store['name']; ?>
+							</label>
+							<div class="col-md-10">
+								<textarea name="sizetable[<?php echo $store['store_id']; ?>]"
+								          id="sizetable[<?php echo $store['store_id']; ?>]"
+								          class="form-control tinymce"><?php if(!$_isNew) echo $sizetable['sizetable'][$store['store_id']]; ?></textarea>
+							</div>
+						</div>
+					<?php endforeach; ?>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-12">
+				<div class="form-actions">
+					<input type="submit" value="<?php echo $_helper->__("Save"); ?>" class="btn btn-primary pull-right">
+					<a href="<?php echo $this->getUrl("udropship/sizetable"); ?>" class="btn pull-right">
+						<?php echo $_helper->__("Cancel"); ?>
+					</a>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>

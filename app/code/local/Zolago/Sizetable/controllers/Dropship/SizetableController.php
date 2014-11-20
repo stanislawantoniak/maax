@@ -14,7 +14,7 @@ class Zolago_Sizetable_Dropship_SizetableController extends Zolago_Dropship_Cont
 	}
 
 	public function saveAction() {
-
+		Mage::log($this->getRequest()->getPost());
 		$this->_redirectReferer();
 	}
 
