@@ -68,15 +68,49 @@
             </udropship_adminhtml_vendor_tabs_after>
         </events>
 	</adminhtml>
-    <admin>
-        <routers>
-            <sizetable>
-                <use>admin</use>
-                <args>
-                    <module>Zolago_Sizetable_Adminhtml</module>
-                    <frontName>sizetable</frontName>
-                </args>
-            </sizetable>
-        </routers>
-    </admin>
+	<admin>
+		<routers>
+			<adminhtml>
+				<args>
+					<modules>
+						<zolagosizetable before="Mage_Adminhtml">Zolago_Sizetable_Adminhtml</zolagosizetable>
+					</modules>
+				</args>
+			</adminhtml>
+		</routers>
+	</admin>
+	<frontend>
+		<routers>
+			<zolagosizetable>
+				<use>standard</use>
+				<args>
+					<module>Zolago_Sizetable</module>
+					<frontName>zolagosizetable</frontName>
+				</args>
+			</zolagosizetable>
+			<udropship>
+				<args>
+					<modules>
+						<Zolago_Sizetable before="Unirgy_Dropship">Zolago_Sizetable_Dropship</Zolago_Sizetable>
+					</modules>
+				</args>
+			</udropship>
+		</routers>
+		<layout>
+			<updates>
+				<zolagosizetable>
+					<file>zolagosizetable.xml</file>
+				</zolagosizetable>
+			</updates>
+		</layout>
+		<translate>
+			<modules>
+				<Zolago_Sizetable>
+					<files>
+						<default>Zolago_Sizetable.csv</default>
+					</files>
+				</Zolago_Sizetable>
+			</modules>
+		</translate>
+	</frontend>
 </config>
