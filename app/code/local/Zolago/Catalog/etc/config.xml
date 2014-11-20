@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Catalog>
-            <version>0.0.18</version>
+            <version>0.0.19</version>
         </Zolago_Catalog>
     </modules>
     <default>
@@ -38,7 +38,7 @@
                         <table>zolago_catalog_queue_pricetype</table>
                     </queue_pricetype>
                     <pricessizes>
-                        <table>vw_product_relation_prices_sizes</table>
+                        <table>vw_product_relation_prices_sizes_relation</table>
                     </pricessizes>
                 </entities>
             </zolagocatalog_resource>
@@ -174,7 +174,7 @@
             <zolagocatalog_process_configurable_queue>
                 <schedule>
                     <!-- Run every 5 minutes -->
-                    <cron_expr>0,5,10,15,20,25,30,35,40,45,50,55 * * * *</cron_expr>
+                    <cron_expr>*/5 * * * *</cron_expr>
                 </schedule>
                 <run>
                     <model>zolagocatalog/observer::processConfigurableQueue</model>
@@ -183,7 +183,7 @@
             <zolagocatalog_process_pricetype_queue>
                 <schedule>
                     <!-- Run every 5 minutes -->
-                    <cron_expr>0,5,10,15,20,25,30,35,40,45,50,55 * * * *</cron_expr>
+                    <cron_expr>*/5 * * * *</cron_expr>
                 </schedule>
                 <run>
                     <model>zolagocatalog/observer::processPriceTypeQueue</model>
@@ -192,7 +192,7 @@
             <zolagocatalog_clear_configurable_queue>
                 <schedule>
                     <!-- Run every 5 minutes -->
-                    <cron_expr>0,5,10,15,20,25,30,35,40,45,50,55 * * * *</cron_expr>
+                    <cron_expr>*/5 * * * *</cron_expr>
                 </schedule>
                 <run>
                     <model>zolagocatalog/observer::clearConfigurableQueue</model>
