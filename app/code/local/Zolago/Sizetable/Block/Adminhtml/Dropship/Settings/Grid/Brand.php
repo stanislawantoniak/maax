@@ -3,57 +3,101 @@
  * brand settings grid
  */
 class Zolago_Sizetable_Block_Adminhtml_Dropship_Settings_Grid_Brand extends Mage_Adminhtml_Block_Widget_Grid {
+    const BRAND_ATTRIBUTE_ID = 81;
     public function __construct()
     {
         parent::__construct();
-        $this->setId('sizetable_settings_brand');
+        $this->setId('connect_brand');
         $this->setDefaultSort('value');
         $this->setUseAjax(true);
     }
-    protected function _prepareCollection()
-    {
-        $vendorId = $this->getVendorId();
-        
-        $this->setDefaultFilter(array('vendor_id'=>$vendorId));
-        $collection = Mage::getModel('zolagosizetable/vendor_brand')->getCollection();
-        ;
-        
-        return parent::_prepareCollection();
-        
-//            ->addAttributeToSelect('name')
-//            ->addAttributeToSelect('sku')
-//            ->addAttributeToSelect('price')
-//            ->addStoreFilter($this->getRequest()->getParam('store'))
-//            ->addAttributeToFilter('udropship_vendor', $this->getVendor()->getId());
-//            ->addAttributeToFilter('type_id', array('in'=>array('simple')))
-//        ;
-        
-        $res = Mage::getSingleton('core/resource');
-        $stockTable = $res->getTableName('cataloginventory/stock_item');
-        $conn = $collection->getConnection();
-        
-        $collection->getSelect()->join(
-            array('cisi' => $stockTable), 
-            $conn->quoteInto('cisi.product_id=e.entity_id AND cisi.stock_id=?', Mage_CatalogInventory_Model_Stock::DEFAULT_STOCK_ID), 
-            array('_stock_status'=>$this->_getStockField('status'))
-        );
-        
-        if (Mage::helper('udropship')->isUdmultiAvailable()) {
-            $collection->getSelect()->joinLeft(
-                array('uvp' => $res->getTableName('udropship/vendor_product')), 
-                $conn->quoteInto('uvp.product_id=e.entity_id AND uvp.vendor_id=?', $this->getVendor()->getId()), 
-                array('*','_stock_qty'=>$this->_getStockField('qty'), 'vendor_sku'=>'uvp.vendor_sku', 'vendor_cost'=>'uvp.vendor_cost', 'backorders'=>'uvp.backorders')
-            );
-            $collection->getSelect()->columns(array('_stock_qty'=>$this->_getStockField('qty')));
-            //$collection->getSelect()->columns(array('_stock_qty'=>'IFNULL(uvp.stock_qty,cisi.qty'));
-        } else {
-            $collection->getSelect()->columns(array('stock_qty'=>$this->_getStockField('qty')));
-        }
+    
+    /**
+     * two columns: checkbox and brand name
+     */
 
-        $this->setCollection($collection);
+    protected function _prepareColumns() {
+        $this->addColumn('connect_vendor_brand', array(
+                             'header_css_class' => 'a-center',
+                             'type'      => 'checkbox',
+                             'name'		 => 'connect_vendor_brand',
+                             'values'    => $this->_getSelectedBrand(),
+                             'align'     => 'center',
+                             'width'         => '50px',
+                             'index'     => 'option_id'
+                         ));
 
+        $this->addColumn('value', array(
+                             'header'        => Mage::helper('zolagosizetable')->__('Brand'),
+                             'align'         => 'right',
+                             'index'         => 'value',
+                         ));
+
+        parent::_prepareColumns();
     }
 
+    protected function _addColumnFilterToCollection($column)
+    {
+        $id = $column->getId();
+        if ($id == 'connect_vendor_brand') {
+            $select = $this->getCollection()->getSelect();
+            if ($column->getFilter()->getValue()) {
+                $select->join(
+                    array('zvb' => Mage::getSingleton('core/resource')->getTableName('zolagosizetable/vendor_brand')),
+                    'main_table.option_id = zvb.brand_id AND zvb.vendor_id = '.$this->getVendorId());
+            } else {
+                $select->joinLeft(
+                    array('zvb' => Mage::getSingleton('core/resource')->getTableName('zolagosizetable/vendor_brand')),
+                    'main_table.option_id = zvb.brand_id AND zvb.vendor_id = '.$this->getVendorId())
+                    ->where('zvb.brand_id is null');
+            }
+            return $this;
+        }
+        parent::_addColumnFilterToCollection($column);
+        return $this;
+    }
+    
+    protected function _prepareCollection()
+    {
+        $collection = Mage::getResourceModel('eav/entity_attribute_option_collection')
+                      ->setAttributeFilter(self::BRAND_ATTRIBUTE_ID)
+                      ->setStoreFilter(0, false);
+        $this->setCollection($collection);
+        return parent::_prepareCollection();
+    }
 
+    /**
+     * 
+     * @return string
+     */
+
+    public function getGridUrl()
+    {
+        return $this->getUrl('sizetable/index/brand', array('_current'=>true));
+    }
+
+    /**
+     *
+     * @return array
+     */
+    protected function _getSelectedBrand() {
+        $brands = $this->getRequest()->getPost('selected_brand');
+        if (is_null($brands)) {
+            $vendorId = $this->getVendorId();
+            $collection = Mage::getModel('zolagosizetable/vendor_brand')->getCollection();
+            $collection->getSelect()
+            ->columns(array('brand_id'))
+            ->where('main_table.vendor_id = '.$vendorId);
+
+            $brands = array();
+            foreach ($collection as $brand) {
+                var_dump($brand);
+                die();
+            }
+            return array_keys($brands);
+        }
+        return $brands;
+
+    }
 
 }

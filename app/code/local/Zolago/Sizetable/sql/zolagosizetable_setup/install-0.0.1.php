@@ -31,11 +31,12 @@ $table = $installer->getConnection()
 
     ->addForeignKey(
         $installer->getFkName('zolagosizetable/vendor_brand', 'vendor_id', 'udropship/vendor', 'vendor_id'),
-        'vendor_id', $installer->getTable('udropship_vendor'), 'vendor_id')
+        'vendor_id', $installer->getTable('udropship_vendor'), 'vendor_id',
+         Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE)
     ->addForeignKey(
         $installer->getFkName('zolagosizetable/vendor_brand', 'brand_id', 'eav/attribute_option', 'option_id'),
         'brand_id', $installer->getTable('eav/attribute_option'), 'option_id',
-         Varien_Db_Ddl_Table::ACTION_SET_NULL, Varien_Db_Ddl_Table::ACTION_CASCADE)
+         Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE)
 ;
 $installer->getConnection()->createTable($table);
 
@@ -64,11 +65,12 @@ $table = $installer->getConnection()
  
     ->addForeignKey(
         $installer->getFkName('zolagosizetable/vendor_attribute_set', 'vendor_id', 'udropship/vendor', 'vendor_id'),
-        'vendor_id', $installer->getTable('udropship_vendor'), 'vendor_id')
+        'vendor_id', $installer->getTable('udropship_vendor'), 'vendor_id',
+         Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE)
     ->addForeignKey(
         $installer->getFkName('zolagosizetable/vendor_attribute_set', 'attribute_set_id', 'eav/attribute_set', 'attribute_set_id'),
         'attribute_set_id', $installer->getTable('eav/attribute_set'), 'attribute_set_id',
-         Varien_Db_Ddl_Table::ACTION_SET_NULL, Varien_Db_Ddl_Table::ACTION_CASCADE)
+         Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE)
 ;
 $installer->getConnection()->createTable($table);
 

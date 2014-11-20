@@ -39,6 +39,12 @@
 	        <zolagosizetable>
 	            <class>Zolago_Sizetable_Block</class>
 	        </zolagosizetable>
+	        <udropship>
+	            <rewrite>
+	                <adminhtml_vendor_edit>Zolago_Sizetable_Block_Adminhtml_Vendor_Edit</adminhtml_vendor_edit>
+	                <adminhtml_vendor_edit_tab_form>Zolago_Sizetable_Block_Adminhtml_Vendor_Edit_Tab_Form</adminhtml_vendor_edit_tab_form>
+	            </rewrite>
+	        </udropship>
 	    </blocks>
 	</global>
 	<adminhtml>
