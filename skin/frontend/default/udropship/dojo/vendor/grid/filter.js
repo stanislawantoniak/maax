@@ -103,7 +103,13 @@ define([
 						on(element, 'focus',	lang.hitch(observer, observer.start));
 						on(element, 'keyup',	lang.hitch(observer, observer.start));
 						on(element, 'keydown',	lang.hitch(observer, observer.start));
-						on(element, 'blur',		lang.hitch(observer, observer.stop));
+						
+						// add e time to observe value changed by widget
+						if(type=="datetime"){
+							on(element, 'blur',	lang.hitch(observer, observer.start));
+						}else{
+							on(element, 'blur',	lang.hitch(observer, observer.stop));
+						}
 						
 						put(wrapper, element);
 					});
