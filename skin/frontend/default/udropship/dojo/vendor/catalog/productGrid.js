@@ -394,12 +394,10 @@ define([
 			allowSelectAll: true,
 			deselectOnRefresh: true,
 
-			minRowsPerPage: 50,
-			maxRowsPerPage: 100,
+			minRowsPerPage: 20,
+			maxRowsPerPage: 50,
 			pagingDelay: 50,
 			bufferRows: 20,
-
-
 
 			/* Paginatior  */
 			/* rowsPerPage: 500,
