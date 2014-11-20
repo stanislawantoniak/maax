@@ -5,7 +5,6 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
 
     public function savePriceValues($insert, $ids)
     {
-        //Mage::log(microtime() . ' savePriceValues', 0, Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1::CONVERTER_PRICE_UPDATE_LOG);
         $writeAdapter = $this->_getWriteAdapter();
         $writeAdapter->beginTransaction();
         try {
@@ -13,10 +12,8 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
                 $writeAdapter->getTableName('catalog_product_entity_decimal'),
                 $insert, array('value')
             );
-            //Mage::log(microtime() . ' Prices insert: commit', 0, Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1::CONVERTER_PRICE_UPDATE_LOG);
+
             $this->_getWriteAdapter()->commit();
-
-
 
             Zolago_Catalog_Helper_Configurable::queue($ids);
 
@@ -29,14 +26,16 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
             );
 
         } catch (Exception $e) {
-            //Mage::log(microtime() . ' Prices insert: rollBack', 0, Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1::CONVERTER_PRICE_UPDATE_LOG);
             $this->_getWriteAdapter()->rollBack();
+            $batchFile = Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1::CONVERTER_PRICE_UPDATE_LOG;
+            Mage::log(microtime() . " rollBack: savePriceValues", 0, $batchFile);
 
             throw $e;
         }
 
         return $this;
     }
+
 
     /**
      * @param $skuS
@@ -88,6 +87,66 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
 
         return $assoc;
     }
+
+    /**
+     * @param $skuS
+     *
+     * @return array $assoc
+     */
+    public function getPriceMarginValuesConfigurable($skuS)
+    {
+        $margins = array();
+
+        if (empty($skuS)) {
+            return array();
+        }
+        $entityTypeID = Mage::getModel('catalog/product')->getResource()->getTypeId();
+
+        $readConnection = $this->_getReadAdapter();
+        $select = $readConnection->select();
+        $select->from(
+            array("product_relation" => $this->getTable("catalog/product_relation")),
+            array(
+                "parent_id" => "product_relation.parent_id",
+                "product_id" => "product_relation.child_id"
+            )
+        );
+        $select->join(
+            array("products" =>  $this->getTable("catalog/product")),
+            "products.entity_id=product_relation.child_id",
+            array(
+                'products.sku'
+            )
+        );
+        $select->join(
+            array("margins" =>  'catalog_product_entity_text'),
+            'product_relation.parent_id=margins.entity_id',
+            array(
+                'price_margin' => 'margins.value',
+                'store' => 'margins.store_id'
+            )
+        );
+        $select->join(
+            array("attributes" => $this->getTable("eav/attribute")),
+            "attributes.attribute_id=margins.attribute_id",
+            array()
+        );
+        $select->where(
+            "attributes.entity_type_id=?", $entityTypeID
+        );
+        $select->where(
+            "attributes.attribute_code=?", Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_PRICE_MARGIN_CODE
+        );
+        $select->where("products.sku IN(?)", $skuS);
+
+        try {
+            $margins = $readConnection->fetchAll($select);
+        } catch (Exception $e) {
+            Mage::throwException("Error fetching price_margin values");
+        }
+
+        return $margins;
+    }
     /**
      * Get converter price type
      * @param $sku
@@ -109,8 +168,8 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
             ->from(
                 'catalog_product_entity AS e',
                 array(
-                     'sku'        => 'e.sku',
-                     'product_id' => 'e.entity_id'
+                    'sku'        => 'e.sku',
+                    'product_id' => 'e.entity_id'
                 )
             )
             ->join(
@@ -122,15 +181,15 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
                 array('integ' => 'catalog_product_entity_int'),
                 'eav.attribute_id = integ.attribute_id',
                 array(
-                     'converter_price_type_value' => 'integ.value',
-                     //'store'                      => 'integ.store_id'
+                    'converter_price_type_value' => 'integ.value',
+                    //'store'                      => 'integ.store_id'
                 )
             )
             ->join(
                 array('option_value' => 'eav_attribute_option_value'),
                 'integ.value=option_value.option_id',
                 array(
-                     'price_type' => 'option_value.value',
+                    'price_type' => 'option_value.value',
                 )
             )
             ->where("e.type_id=?", Mage_Catalog_Model_Product_Type::TYPE_SIMPLE)
@@ -163,8 +222,8 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
             ->from(
                 'catalog_product_entity AS e',
                 array(
-                     'sku'        => 'e.sku',
-                     'product_id' => 'e.entity_id'
+                    'sku'        => 'e.sku',
+                    'product_id' => 'e.entity_id'
                 )
             )
             ->join(
@@ -176,15 +235,15 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
                 array('integ' => 'catalog_product_entity_int'),
                 'eav.attribute_id = integ.attribute_id',
                 array(
-                     'converter_price_type_value' => 'integ.value',
-                     'store'                      => 'integ.store_id'
+                    'converter_price_type_value' => 'integ.value',
+                    'store'                      => 'integ.store_id'
                 )
             )
             ->join(
                 array('option_value' => 'eav_attribute_option_value'),
                 'integ.value=option_value.option_id',
                 array(
-                     'price_type' => 'option_value.value',
+                    'price_type' => 'option_value.value',
                 )
             )
             ->where("e.type_id=?", Mage_Catalog_Model_Product_Type::TYPE_SIMPLE)

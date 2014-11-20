@@ -37,13 +37,20 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
     }
 
     /**
+     *
+     * data example
+     *
+     * {"ProductPricesUpdate":[{"merchant":"5","data":{"25768-L":{"A":31.9,"B":32.9},"25768-M":{"A":31.9,"B":32.9},
+     * "25768-XL":{"A":31.9,"B":32.9},"25767-XXL":{"A":31.9,"B":32.9},"25767-XL":{"A":31.9,"B":32.9},
+     * "25768-S":{"A":31.9,"B":32.9},"25767-S":{"A":31.9,"B":32.9}}}]}     *
+     *
      * @param array $data
      *
      * @return string
      */
     protected function _create($data)
     {
-        //Mage::log($data, 0, 'converter_log.log');
+
         $json = json_encode($data);
 
         if (!empty($data)) {
@@ -207,41 +214,43 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         $skuS = array_keys($priceBatch);
         $itemsToChange = count($skuS);
         //Mage::log($priceBatch, 0, $batchFile);
-        Mage::log(microtime() . " Got items from converter {$itemsToChange}", 0, $batchFile);
-
-        $skeleton = Zolago_Catalog_Helper_Data::getSkuAssoc($skuS);
 
         //Get price types
         if(empty($priceBatch)){
             return;
         }
+        $skeleton = Zolago_Catalog_Helper_Data::getSkuAssoc($skuS);
+
+        if(empty($skeleton)){
+            return;
+        }
 
         $model = Mage::getResourceModel('zolagocatalog/product');
-        if(!empty($priceBatch)){
-            $productEt = Mage::getSingleton('eav/config')->getEntityType('catalog_product')->getId();
 
-            $priceTypeByStore = array();
-            $priceType = $model->getConverterPriceType($skuS);
-            //reformat by store id
-            if(!empty($priceType)){
-                foreach ($priceType as $priceTypeData) {
-                    $priceTypeByStore[$priceTypeData['sku']][$priceTypeData['store']]
-                        = $priceTypeData['price_type'];
-                }
+        $productEt = Mage::getSingleton('eav/config')->getEntityType('catalog_product')->getId();
+
+        $priceTypeByStore = array();
+        $priceType = $model->getConverterPriceType($skuS);
+        //reformat by store id
+        if (!empty($priceType)) {
+            foreach ($priceType as $priceTypeData) {
+                $priceTypeByStore[$priceTypeData['sku']][$priceTypeData['store']]
+                    = $priceTypeData['price_type'];
             }
-
-            $marginByStore = array();
-            $priceMarginValues = $model->getPriceMarginValues($skuS);
-	        //Mage::log(microtime() . " priceMarginValues: ".print_r($priceMarginValues,true), 0, $batchFile);
-            //reformat margin
-            if (!empty($priceMarginValues)) {
-                foreach ($priceMarginValues as $_) {
-                    $marginByStore[$_['product_id']][$_['store']] = $_['price_margin'];
-                }
-                unset($_);
-            }
-
         }
+
+        $marginByStore = array();
+//        $priceMarginValues = $model->getPriceMarginValues($skuS);
+        $priceMarginValues = $model->getPriceMarginValuesConfigurable($skuS);
+        //reformat margin
+        if (!empty($priceMarginValues)) {
+            foreach ($priceMarginValues as $_) {
+                $marginByStore[$_['product_id']][$_['store']] = $_['price_margin'];
+            }
+            unset($_);
+        }
+
+
         $insert = array();
         $ids = array();
 
@@ -268,16 +277,6 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                         $priceTypeSelected = $priceTypeDefault;
                     }
 
-                    //margin
-                    $marginSelected = 0;
-
-                    if (isset($marginByStore[$productId][$storeId])) {
-                        $marginSelected = (int)$marginByStore[$productId][$storeId];
-                    } else {
-                        $marginDefault = isset($marginByStore[$productId][Mage_Core_Model_App::ADMIN_STORE_ID])
-                            ? $marginByStore[$productId][Mage_Core_Model_App::ADMIN_STORE_ID] : $marginSelected;
-                        $marginSelected = (int)$marginDefault;
-                    }
 
                     $pricesConverter = isset($priceBatch[$sku]) ? (array)$priceBatch[$sku] : false;
 
@@ -287,6 +286,18 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
 
                         if($priceToInsert){
+
+                            //margin
+                            $marginSelected = 0;
+
+                            if (isset($marginByStore[$productId][$storeId])) {
+                                $marginSelected = (float) str_replace(",", ".", $marginByStore[$productId][$storeId]);
+                            } else {
+                                $marginDefault = isset($marginByStore[$productId][Mage_Core_Model_App::ADMIN_STORE_ID])
+                                    ? $marginByStore[$productId][Mage_Core_Model_App::ADMIN_STORE_ID] : $marginSelected;
+                                $marginSelected = (float) str_replace(",", ".", $marginDefault);
+                            }
+
                             $insert[] = array(
                                 'entity_type_id' => $productEt,
                                 'attribute_id' => 75,
@@ -310,4 +321,6 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
             $model->savePriceValues($insert, $ids);
         }
     }
+
+
 }
