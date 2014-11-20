@@ -264,7 +264,6 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
 
         $insert = array();
-        $ids = array();
 
         $stores = array(Mage_Core_Model_App::ADMIN_STORE_ID);
         $allStores = Mage::app()->getStores();
@@ -309,7 +308,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                             $marginSelected = (float)str_replace(",", ".", $marginDefault);
                         }
 
-                        $insert[] = array(
+                        $insert[$productId] = array(
                             'entity_type_id' => $productEt,
                             'attribute_id' => 75,
                             'store_id' => $storeId,
@@ -321,7 +320,6 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                         //1. add to solr
                         //2. add to configurable queue
                         //put here only products with actual converter_price_type
-                        $ids[] = $productId;
                     }
                 }
             }
@@ -329,7 +327,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         }
 
         if (!empty($insert)) {
-            $model->savePriceValues($insert, $ids);
+            $model->savePriceValues($insert);
         }
     }
 

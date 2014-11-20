@@ -3,7 +3,7 @@
 class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_Product {
 
 
-    public function savePriceValues($insert, $ids)
+    public function savePriceValues($insert)
     {
         $writeAdapter = $this->_getWriteAdapter();
         $writeAdapter->beginTransaction();
@@ -17,6 +17,7 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
 
             $this->_getWriteAdapter()->commit();
 
+            $ids = array_keys($insert);
             //add to configurable queue
             Zolago_Catalog_Helper_Configurable::queue($ids);
 
