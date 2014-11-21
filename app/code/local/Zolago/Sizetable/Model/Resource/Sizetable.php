@@ -10,7 +10,29 @@ class Zolago_Sizetable_Model_Resource_Sizetable extends Mage_Core_Model_Resource
 
     public function getSizetableCMS($vendor_id, $store_id, $attribute)
     {
-        return 'jakis cms [dev]';
+        error_reporting(E_ALL);
+        ini_set("display_errors", 1);
+
+        $results = '[dev]';
+//        $tableName = $this->getTable('catalog/product');
+//
+//
+//        $query = "
+//        SELECT *
+//        FROM $tableName
+//
+//        ";
+//
+//
+//       $this->getReadConnection()
+//           ->query($query, array(
+//
+//           ));
+//
+
+
+        return $results;
+
     }
 
 	/**
