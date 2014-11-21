@@ -36,7 +36,8 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
             $listUpdatedProducts[$productId] = $productId;
         }
         unset($productId);
-
+        //Mage::log('Simple from queue', 0, "configurable_update.log");
+        //Mage::log(print_r($listUpdatedProducts,true), 0, "configurable_update.log");
         $storeId = array(Mage_Core_Model_App::ADMIN_STORE_ID);
         $allStores = Mage::app()->getStores();
         foreach ($allStores as $_eachStoreId => $val) {
@@ -46,10 +47,9 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
         $zolagoCatalogModelProductConfigurableData = Mage::getResourceModel('zolagocatalog/product_configurable');
 
         //define parent products (configurable) by child (simple)
-        //$configurableSimpleRelation = $zolagoCatalogModelProductConfigurableData->getConfigurableSimpleRelation($listUpdatedProducts); old variant
-        $configurableSimpleRelation = $zolagoCatalogModelProductConfigurableData->getConfigurableSimpleRelationJoin();
-
-
+        $configurableSimpleRelation = $zolagoCatalogModelProductConfigurableData->getConfigurableSimpleRelation($listUpdatedProducts);
+        //Mage::log('zolagoCatalogModelProductConfigurableData', 0, "configurable_update.log");
+        //Mage::log(print_r($configurableSimpleRelation,true), 0, "configurable_update.log");
 
         if (empty($configurableSimpleRelation)) {
             //Mage::log("Found 0 configurable products ", 0, "configurable_update.log");
@@ -57,79 +57,46 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
         }
 
 
-        $configurableProductsIds = array_keys($configurableSimpleRelation);
-
-        //min prices
-        $minPrices = array();
-        //old variant
-//        foreach ($storeId as $store) {
-//            $minPrices[$store] = $zolagoCatalogModelProductConfigurableData
-//                ->getConfigurableMinPrice($configurableProductsIds, $store);
-//        }
-
-        foreach ($storeId as $store) {
-            $minPrices[$store] = $zolagoCatalogModelProductConfigurableData
-                ->getConfigurableMinPriceJoin($store);
-        }
-        //--min prices
-
-
         //super attribute ids
         $superAttributes = $zolagoCatalogModelProductConfigurableData->getSuperAttributes();
         //--super attribute ids
 
-
-        $productAction = Mage::getSingleton('catalog/product_action');
         $productConfigurableIds = array();
 
         foreach ($configurableSimpleRelation as $productConfigurableId => $configurableSimpleRelationItem) {
             //update configurable product price
             foreach ($storeId as $store) {
-                $productMinPrice = isset($minPrices[Mage_Core_Model_App::ADMIN_STORE_ID][$productConfigurableId])
-                    ? $minPrices[Mage_Core_Model_App::ADMIN_STORE_ID][$productConfigurableId]['min_price'] : false;
 
-                if ($productMinPrice) {
-                    $productAction->updateAttributesNoIndex(
-                        array($productConfigurableId), array('price' => $productMinPrice), $store
+                $superAttributeId = isset($superAttributes[$productConfigurableId])
+                    ? (int)$superAttributes[$productConfigurableId]['super_attribute'] : false;
+
+                if ($superAttributeId) {
+
+                    $zolagoCatalogModelProductConfigurableData->insertProductSuperAttributePricingApp(
+                        $productConfigurableId, $superAttributeId, $store
                     );
 
-                    $superAttributeId = isset($superAttributes[$productConfigurableId])
-                        ? (int)$superAttributes[$productConfigurableId]['super_attribute'] : false;
-
-                    if ($superAttributeId) {
-                        $zolagoCatalogModelProductConfigurableData->insertProductSuperAttributePricing(
-                            $productConfigurableId, $superAttributeId, $productMinPrice, $store
-                        );
-
-                        $productConfigurableIds[] = $productConfigurableId;
-                    }
+                    $productConfigurableIds[] = $productConfigurableId;
                 }
 
             }
-
-
         }
 
+
+        //1. reindex prices
         $productsToReindex = array_merge($listUpdatedProducts, $productConfigurableIds);
-        Mage::getResourceSingleton('catalog/product_indexer_price')
-            ->reindexProductIds($productsToReindex);
-        $indexers = array(
-            'source'  => Mage::getResourceModel('catalog/product_indexer_eav_source'),
-            'decimal' => Mage::getResourceModel('catalog/product_indexer_eav_decimal'),
-        );
-        foreach ($indexers as $indexer) {
-            /** @var $indexer Mage_Catalog_Model_Resource_Product_Indexer_Eav_Abstract */
-            $indexer->reindexEntities($productsToReindex);
-        }
-        if (Mage::helper('catalog/category_flat')->isEnabled()) {
-            $fI = new Mage_Catalog_Model_Resource_Product_Flat_Indexer();
-            $entityTypeID = Mage::getModel('catalog/product')->getResource()->getTypeId();
-            $attribute = Mage::getModel('eav/entity_attribute')->loadByCode($entityTypeID, 'price');
-            foreach ($storeId as $storesId) {
-                $fI->updateAttribute($attribute, $storesId, $productsToReindex);
-            }
-        }
+        Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($productsToReindex);
 
+//        if (Mage::helper('catalog/category_flat')->isEnabled()) {
+//            $fI = new Mage_Catalog_Model_Resource_Product_Flat_Indexer();
+//            $entityTypeID = Mage::getModel('catalog/product')->getResource()->getTypeId();
+//            $attribute = Mage::getModel('eav/entity_attribute')->loadByCode($entityTypeID, 'price');
+//            foreach ($storeId as $storesId) {
+//                $fI->updateAttribute($attribute, $storesId, $productsToReindex);
+//            }
+//        }
+
+        //2. put products to solr queue
         //zolago_catalog_after_update_price_type
         Mage::dispatchEvent(
             "zolago_catalog_after_update_price_type",

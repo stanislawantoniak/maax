@@ -91,34 +91,16 @@ class Zolago_Catalog_Model_Resource_Queue_Configurable extends Zolago_Common_Mod
      */
     protected function _saveData()
     {
-        $i = $this->_buffer;
-        $all = 0;
-        $insert = array();
-        $this->_getWriteAdapter()->beginTransaction();
-        //Mage::log($this->_dataToSave, 0, 'configurable_dataToSave.log');
-        foreach ($this->_dataToSave as $item) {
-            $insert[] = $item;
-            $i--;
-            // Insert via buffer
-            if ($i == 0) {
-                $i = $this->_buffer;
-                $all += $this->_buffer;
-                $this->_getWriteAdapter()->insertOnDuplicate($this->getMainTable(), $insert, array());
-                $insert = array();
-            }
-        }
 
-        // Insert out of buffer values
-        //Mage::log($insert, 0, 'configurable_addToQueue.log');
-        if (count($insert)) {
-            $all += count($insert);
-            $this->_getWriteAdapter()->insertOnDuplicate($this->getMainTable(), $insert, array());
+        $this->_getWriteAdapter()->beginTransaction();
+
+        foreach ($this->_dataToSave as $item) {
+            $this->_getWriteAdapter()->insertOnDuplicate($this->getMainTable(), $item, array());
         }
 
         // Commit transaction
         $this->_getWriteAdapter()->commit();
         $this->_resetData();
-        return $all;
     }
 
     /**
