@@ -23,7 +23,6 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
     protected function _execute()
     {
         $collection = $this->_collection;
-        //$collection->setPageSize(2000);
 
         $websites = array();
         $listUpdatedProducts = array();
@@ -48,7 +47,6 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
 
         //define parent products (configurable) by child (simple)
         $configurableSimpleRelation = $zolagoCatalogModelProductConfigurableData->getConfigurableSimpleRelation($listUpdatedProducts);
-        //Zend_Debug::dump($configurableSimpleRelation);
 
         if (empty($configurableSimpleRelation)) {
             //Mage::log("Found 0 configurable products ", 0, "configurable_update.log");

@@ -28,6 +28,12 @@ class Zolago_Catalog_AuthController extends Mage_Core_Controller_Front_Action
     }
 
 
+    public function testAction()
+    {
+        Zend_debug::dump(Mage::helper('catalog/category_flat')->isEnabled());
+    }
+
+
 
 
 
