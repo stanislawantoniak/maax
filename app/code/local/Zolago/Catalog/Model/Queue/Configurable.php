@@ -82,19 +82,10 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
         }
 
 
-        //test without indexing
+        //1. reindex prices
         $productsToReindex = array_merge($listUpdatedProducts, $productConfigurableIds);
         Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($productsToReindex);
-//        Mage::getResourceSingleton('catalog/product_indexer_price')
-//            ->reindexProductIds($productsToReindex);
-//        $indexers = array(
-//            'source'  => Mage::getResourceModel('catalog/product_indexer_eav_source'),
-//            'decimal' => Mage::getResourceModel('catalog/product_indexer_eav_decimal'),
-//        );
-//        foreach ($indexers as $indexer) {
-//            /** @var $indexer Mage_Catalog_Model_Resource_Product_Indexer_Eav_Abstract */
-//            $indexer->reindexEntities($productsToReindex);
-//        }
+
 //        if (Mage::helper('catalog/category_flat')->isEnabled()) {
 //            $fI = new Mage_Catalog_Model_Resource_Product_Flat_Indexer();
 //            $entityTypeID = Mage::getModel('catalog/product')->getResource()->getTypeId();
@@ -104,6 +95,7 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
 //            }
 //        }
 
+        //2. put products to solr queue
         //zolago_catalog_after_update_price_type
         Mage::dispatchEvent(
             "zolago_catalog_after_update_price_type",
