@@ -13,7 +13,7 @@ class Zolago_Sizetable_Model_Resource_Sizetable extends Mage_Core_Model_Resource
         error_reporting(E_ALL);
         ini_set("display_errors", 1);
 
-        $results = '';
+        $results = '[dev]';
 //        $tableName = $this->getTable('catalog/product');
 //
 //
