@@ -61,6 +61,7 @@
             <block type="zolagocatalog/vendor_price_stock" template="zolagocatalog/price/stock.phtml"/>
         </block>
 	</udprod_vendor_price_detail_stockmodal>
+
 	
 	<udprod_vendor_product_index>
 		<update handle="udropship_vendor" />
