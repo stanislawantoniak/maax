@@ -13,19 +13,26 @@ class Zolago_Sizetable_Model_Resource_Sizetable extends Mage_Core_Model_Resource
         error_reporting(E_ALL);
         ini_set("display_errors", 1);
 
-
-        $resource = Mage::getSingleton('zolagosizetable/resource');
-        $read = $resource->getConnection('core_read');
-
-        $tableName = $resource->getTableName('catalog/product');
-
-
-        $query = 'SELECT * FROM ' . $tableName;
-
-        $results = $read->fetchAll($query);
+        $results = '';
+//        $tableName = $this->getTable('catalog/product');
+//
+//
+//        $query = "
+//        SELECT *
+//        FROM $tableName
+//
+//        ";
+//
+//
+//       $this->getReadConnection()
+//           ->query($query, array(
+//
+//           ));
+//
 
 
         return $results;
+
     }
 
 	/**
