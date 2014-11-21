@@ -8,6 +8,7 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
         $writeAdapter = $this->_getWriteAdapter();
         $writeAdapter->beginTransaction();
         try {
+            //1. update simple products prices
             $writeAdapter->insertOnDuplicate(
                 $writeAdapter->getTableName('catalog_product_entity_decimal'),
                 $insert, array('value')
@@ -15,15 +16,8 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
 
             $this->_getWriteAdapter()->commit();
 
+            //2. Put to configurable queue
             Zolago_Catalog_Helper_Configurable::queue($ids);
-
-            //add to solr queue
-            Mage::dispatchEvent(
-                "catalog_converter_price_update_after",
-                array(
-                    "product_ids" => $ids
-                )
-            );
 
         } catch (Exception $e) {
             $this->_getWriteAdapter()->rollBack();
