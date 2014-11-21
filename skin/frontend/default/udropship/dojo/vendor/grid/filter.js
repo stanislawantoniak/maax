@@ -51,7 +51,10 @@ define([
 					}
 					
 					if(config.allowEmpty){
-						options.unshift({"value":"-", "label": "["+Translator.translate("empty")+"]"});
+						options.unshift({
+							"value":"-", 
+							"label": "["+Translator.translate("empty")+"]"
+						});
 					}
 					
 					if(!config.required){
