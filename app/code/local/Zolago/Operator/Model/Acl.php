@@ -42,6 +42,8 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 	const RES_UDPROD_VENDOR_IMAGE					= "udprod/vendor_image";
 	// Mass editor
 	const RES_UDPROD_VENDOR_MASS					= "udprod/vendor_mass";
+	// Mass editor
+	const RES_UDPROD_VENDOR_PRODUCT					= "udprod/vendor_product";
 	// POS Manage
 	const RES_UDROPSHIP_POS							= "udropship/pos";
 	// Operator manage
@@ -77,6 +79,8 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		self::RES_UDPROD_VENDOR						=> "Product edit",
 		// Mass edit
 		self::RES_UDPROD_VENDOR_MASS				=> "Mass products",
+		// Mass images
+		self::RES_UDPROD_VENDOR_PRODUCT				=> "Mass products v2",
 		// Mass images
 		self::RES_UDPROD_VENDOR_IMAGE				=> "Mass images",
 		// POS Manage
@@ -140,6 +144,7 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		
 		// Build ACL Rules - Mass Actions
 		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MASS_OPERATOR, self::RES_UDPROD_VENDOR_MASS);
+		$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MASS_OPERATOR, self::RES_UDPROD_VENDOR_PRODUCT);
 		
 	}
 	
