@@ -2,7 +2,7 @@
 /**
  * attribute set settings grid
  */
-class Zolago_Sizetable_Block_Adminhtml_Dropship_Settings_Grid_Attributeset extends Mage_Adminhtml_Block_Widget_Grid {
+class Zolago_Sizetable_Block_Adminhtml_Dropship_Settings_Attributeset_Grid extends Mage_Adminhtml_Block_Widget_Grid {
 
     public function __construct()
     {
@@ -24,7 +24,7 @@ class Zolago_Sizetable_Block_Adminhtml_Dropship_Settings_Grid_Attributeset exten
 
         $this->addColumn('value', array(
                              'header'        => Mage::helper('zolagosizetable')->__('Attribute set'),
-                             'align'         => 'right',
+                             'align'         => 'left',
                              'index'         => 'attribute_set_name',
                          ));
 
@@ -32,6 +32,7 @@ class Zolago_Sizetable_Block_Adminhtml_Dropship_Settings_Grid_Attributeset exten
     }
     protected function _prepareCollection()
     {
+        $this->setDefaultFilter(array('connect_vendor_attributeset'=>1));
         $collection = Mage::getModel('eav/entity_attribute_set')->getCollection()
                 ->setEntityTypeFilter(Mage::getModel('catalog/product')->getResource()->getEntityType()->getId());
         $collection->getSelect()

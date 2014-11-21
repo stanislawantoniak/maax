@@ -28,7 +28,7 @@ $sizeTables = $this->getSizeTables();
 					<td>
 						<?php echo $name; ?>
 					</td>
-					<td class="align-center"><span class="btn-group"> <a href="<?php echo $this->getUrl("udropship/sizetable/edit").$id; ?>"
+					<td class="align-center"><span class="btn-group"> <a href="<?php echo $this->getUrl("udropship/sizetable/edit").'sizetable_id/'.$id; ?>"
 					                                                     class="btn btn-xs bs-tooltip" title=""
 					                                                     data-original-title="<?php echo $_helper->__("Edit"); ?>"><i
 									class="icon-pencil"></i></a> <a href="<?php echo $this->getUrl("udropship/sizetable/delete").$id; ?>"
