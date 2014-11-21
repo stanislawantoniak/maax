@@ -1,7 +1,6 @@
 <?php /** @var $this Zolago_Sizetable_Block_Dropship_Sizetable_Edit */
 $_helper = Mage::helper('zolagosizetable');
-$stores = $this->getOtherStores();
-$defaultStoreId = $this->getDefaultStore()['store_id'];
+$stores = $this->getStores();
 $locale = Mage::app()->getLocale()->getLocaleCode();
 $sizetable = $this->getSizeTable();
 ?>
@@ -29,7 +28,7 @@ $sizetable = $this->getSizeTable();
 			ignore: "",
 			rules: {
 				name: "required",
-				"sizetable[<?php echo $defaultStoreId; ?>]": "required"
+				"default_value": "required"
 			}
 		});
 		validator.focusInvalid = function() {
@@ -71,13 +70,12 @@ $sizetable = $this->getSizeTable();
 									<?php if($sizetable):?>value="<?php echo $sizetable['name']; ?>"<?php endif; ?>></div>
 							</div>
 							<div class="form-group">
-								<label class="col-md-2 control-label" for="sizetable_<?php echo $defaultStoreId; ?>">
+								<label class="col-md-2 control-label" for="default_value">
 										<?php echo $_helper->__("Default size table"); ?> <span class="required">*</span>
-										<br /> (<?php echo $this->getDefaultStore()['name']; ?>)&nbsp;&nbsp;&nbsp;
 								</label>
 								<div class="col-md-10">
 									<textarea name="default_value"
-									          id="sizetable_<?php echo $defaultStoreId; ?>"
+									          id="default_value"
 									          class="form-control required-entry tinymce"><?php if($sizetable) echo $sizetable['default_value']; ?></textarea>
 								</div>
 							</div>
@@ -87,7 +85,7 @@ $sizetable = $this->getSizeTable();
 			<div class="col-md-12">
 				<div class="widget box widget-closed">
 					<div class="widget-header">
-						<h4><i class="icon-reorder"></i> <?php echo $_helper->__("Other size tables"); ?></h4>
+						<h4><i class="icon-reorder"></i> <?php echo $_helper->__("Size tables translations"); ?> <small>(<?php echo $_helper->__("If you don't specify size table for one of the store views then default one will be presented"); ?>)</small></h4>
 						<div class="toolbar no-padding">
 							<div class="btn-group">
 								<span class="btn btn-xs widget-collapse"><i class="icon-angle-up"></i></span>
@@ -102,7 +100,7 @@ $sizetable = $this->getSizeTable();
 							</label>
 							<div class="col-md-10">
 								<textarea name="sizetable[<?php echo $store['store_id']; ?>]"
-								          id="sizetable[<?php echo $store['store_id']; ?>]"
+								          id="sizetable_<?php echo $store['store_id']; ?>"
 								          class="form-control tinymce"><?php if($sizetable) echo $sizetable['sizetable'][$store['store_id']]; ?></textarea>
 							</div>
 						</div>
