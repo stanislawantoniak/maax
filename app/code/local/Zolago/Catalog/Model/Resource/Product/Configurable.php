@@ -303,7 +303,15 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
                     ", $catalogProductSuperAttributePricingTable, $lineQuery
                 );
 
-                $this->_getWriteAdapter()->query($insertQuery);
+
+                try {
+                    $this->_getWriteAdapter()->query($insertQuery);
+
+                } catch (Exception $e) {
+                    Mage::log($e->getMessage(), 0, 'configurable_update.log');
+
+                    throw $e;
+                }
 
             }
         }

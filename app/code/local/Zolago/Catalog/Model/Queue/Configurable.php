@@ -45,10 +45,11 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
             $storeId[] = $_storeId;
         }
         $zolagoCatalogModelProductConfigurableData = Mage::getResourceModel('zolagocatalog/product_configurable');
-        Mage::log('zolagoCatalogModelProductConfigurableData', 0, "configurable_update.log");
-        Mage::log(print_r($zolagoCatalogModelProductConfigurableData,true), 0, "configurable_update.log");
+
         //define parent products (configurable) by child (simple)
         $configurableSimpleRelation = $zolagoCatalogModelProductConfigurableData->getConfigurableSimpleRelation($listUpdatedProducts);
+        Mage::log('zolagoCatalogModelProductConfigurableData', 0, "configurable_update.log");
+        Mage::log(print_r($configurableSimpleRelation,true), 0, "configurable_update.log");
 
         if (empty($configurableSimpleRelation)) {
             //Mage::log("Found 0 configurable products ", 0, "configurable_update.log");

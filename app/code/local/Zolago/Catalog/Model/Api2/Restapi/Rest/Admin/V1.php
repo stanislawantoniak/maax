@@ -210,6 +210,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
      * @param $priceBatch
      */
     public static function updatePricesConverter($priceBatch){
+        //queue inform_magento
         $batchFile = self::CONVERTER_PRICE_UPDATE_LOG;
         $skuS = array_keys($priceBatch);
         $itemsToChange = count($skuS);
