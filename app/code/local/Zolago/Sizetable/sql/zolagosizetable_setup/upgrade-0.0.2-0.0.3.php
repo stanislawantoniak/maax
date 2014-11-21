@@ -20,7 +20,6 @@ $table->dropForeignKey($sizeTableRule,
         'nullable' => true
     ));
 
-    echo get_class($table);
     $table->addForeignKey(
         $installer->getFkName('zolagosizetable/sizetable_rule', 'brand_id', 'eav/attribute_option', 'option_id'), $sizeTableRule,
         'brand_id', $installer->getTable('eav/attribute_option'), 'option_id',

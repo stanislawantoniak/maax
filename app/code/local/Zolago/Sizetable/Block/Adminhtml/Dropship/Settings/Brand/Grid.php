@@ -2,7 +2,7 @@
 /**
  * brand settings grid
  */
-class Zolago_Sizetable_Block_Adminhtml_Dropship_Settings_Grid_Brand extends Mage_Adminhtml_Block_Widget_Grid {
+class Zolago_Sizetable_Block_Adminhtml_Dropship_Settings_Brand_Grid extends Mage_Adminhtml_Block_Widget_Grid {
     public function __construct()
     {
         parent::__construct();
@@ -37,7 +37,7 @@ class Zolago_Sizetable_Block_Adminhtml_Dropship_Settings_Grid_Brand extends Mage
 
         $this->addColumn('value', array(
                              'header'        => Mage::helper('zolagosizetable')->__('Brand'),
-                             'align'         => 'right',
+                             'align'         => 'left',
                              'index'         => 'value',
                          ));
 
@@ -67,6 +67,7 @@ class Zolago_Sizetable_Block_Adminhtml_Dropship_Settings_Grid_Brand extends Mage
     
     protected function _prepareCollection()
     {
+        $this->setDefaultFilter(array('connect_vendor_brand'=>1));
         $collection = Mage::getResourceModel('eav/entity_attribute_option_collection')
                       ->setAttributeFilter($this->_getBrandId())
                       ->setStoreFilter(0, false);

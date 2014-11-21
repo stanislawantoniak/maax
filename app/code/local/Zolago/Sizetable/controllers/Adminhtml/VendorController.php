@@ -55,6 +55,9 @@ class Zolago_Sizetable_Adminhtml_VendorController extends Unirgy_Dropship_Adminh
             $items[$item->getData($key_name)] = $item;
         }
         foreach ($params as $key=>$param) {
+            if (!is_numeric($key)) {
+                continue;
+            }
             if (isset($param['on'])) {
                 if ($param['on']) { //add
                     if (!isset($items[$key])) {
