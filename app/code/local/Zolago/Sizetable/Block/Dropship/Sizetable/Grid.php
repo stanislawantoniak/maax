@@ -40,7 +40,7 @@ class Zolago_Sizetable_Block_Dropship_Sizetable_Grid extends Mage_Adminhtml_Bloc
 				'index'		=> 'sizetable_id',
 				'link_action'=> "*/*/edit",
 				'link_param'=> 'sizetable_id',
-				'link_label'=> 'Edit',
+				'link_label'=> $_helper->__('Edit'),
 				'link_target'=>'_self',
                 'filter'    => false,
                 'sortable'  => false
