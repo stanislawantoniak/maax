@@ -213,7 +213,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         $batchFile = self::CONVERTER_PRICE_UPDATE_LOG;
         $skuS = array_keys($priceBatch);
         $itemsToChange = count($skuS);
-        //Mage::log($priceBatch, 0, $batchFile);
+        Mage::log('Got items ' . $itemsToChange, 0, $batchFile);
 
         //Get price types
         if(empty($priceBatch)){
@@ -230,7 +230,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         $productEt = Mage::getSingleton('eav/config')->getEntityType('catalog_product')->getId();
 
         $priceTypeByStore = array();
-//        $priceType = $model->getConverterPriceType($skuS);
+
         $priceType = $model->getConverterPriceTypeConfigurable($skuS);
         //reformat by store id
         if (!empty($priceType)) {
@@ -241,7 +241,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         }
 
         $marginByStore = array();
-//        $priceMarginValues = $model->getPriceMarginValues($skuS);
+
         $priceMarginValues = $model->getPriceMarginValuesConfigurable($skuS);
         //reformat margin
         if (!empty($priceMarginValues)) {
@@ -261,8 +261,6 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
             $_storeId = Mage::app()->getStore($_eachStoreId)->getId();
             $stores[] = $_storeId;
         }
-
-        //Mage::log(microtime() . ' Start update', 0, $batchFile);
 
         $priceAttributeId = Mage::getSingleton("eav/config")
             ->getAttribute('catalog_product', 'price')
