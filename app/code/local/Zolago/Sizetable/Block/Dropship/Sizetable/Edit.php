@@ -15,12 +15,12 @@ class Zolago_Sizetable_Block_Dropship_Sizetable_Edit extends Mage_Core_Block_Tem
 	}
 
 	public function getSizeTable() {
-		$id = $this->getRequest()->getParam('sizetable_id');
-		if(!$id) {
+	$id = $this->getRequest()->getParam('sizetable_id');
+		if($id === null) {
 			return false;
 		} else {
-			//todo: load $sizetable and return it
-			return array('sizetable_id'=>$id,'name' => 'dupa', 'sizetable' => array(1=>'default',2=>'optional'));
+			$sizetable = Mage::getModel("zolagosizetable/sizetable")->load($id);
+			return $sizetable->getData();
 		}
 	}
 

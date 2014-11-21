@@ -32,3 +32,5 @@
 "Size table not found","Nie znaleziono tabeli rozmiarów"
 "If you don't specify size table for one of the store views then default one will be presented","Jeżeli nie ustawisz tabeli rozmiarów dla któregoś z widoków sklepów to będzie wyświetlana tabela domyślna"
 "Size tables translations","Tłumaczenia tabel rozmiarów"
+"Size table doesn't exists","Tabela rozmiarów nie istnieje"
+"You cannot edit this size table","Nie masz uprawnień do edycji tej tabeli rozmiarów"
