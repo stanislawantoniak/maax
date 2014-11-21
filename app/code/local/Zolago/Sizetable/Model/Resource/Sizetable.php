@@ -8,29 +8,42 @@ class Zolago_Sizetable_Model_Resource_Sizetable extends Mage_Core_Model_Resource
         $this->_init('zolagosizetable/sizetable','sizetable_id');
     }
 
-    public function getSizetableCMS($vendor_id, $store_id, $attribute)
+    public function getSizetableCMS($vendor_id, $store_id, $attribute_set_id, $brand_id)
     {
         error_reporting(E_ALL);
         ini_set("display_errors", 1);
 
+//        /** @var Zolago_Sizetable_Helper_Data $helper */
+//        $helper = Mage::helper('zolagosizetable');
+//        $brandID = $helper->getBrandId();
+
+
         $results = '[dev]';
-//        $tableName = $this->getTable('catalog/product');
-//
-//
-//        $query = "
-//        SELECT *
-//        FROM $tableName
-//
-//        ";
-//
-//
-//       $this->getReadConnection()
+        $sizetable = $this->getTable('zolagosizetable/sizetable');
+        $sizetableScope = $this->getTable('zolagosizetable/sizetable_scope');
+        $sizetableRule = $this->getTable('zolagosizetable/sizetable_rule');
+
+
+        //SELECT count(*) FROM `zolago_sizetable_role` WHERE `vendor_id` = 5 AND `brand_id` = NULL AND `attribute_set_id` = 59
+
+        $query = "
+        ";
+
+
+//       $results = $this->getReadConnection()
 //           ->query($query, array(
+//               'sizetable' => $sizetable,
+//               'sizetableScope' => $sizetableScope,
+//               'sizetableRule' => $sizetableRule,
+//                'vendor_id' => $vendor_id
+//           ))
+//           ->fetchAll();
+////
 //
-//           ));
 //
-
-
+//
+//        return $query .' <br/><br/> '. print_r($results, true);
+//        return $query;
         return $results;
 
     }

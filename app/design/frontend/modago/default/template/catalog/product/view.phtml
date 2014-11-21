@@ -271,7 +271,13 @@ $avg = $_reviewBlock->getAvarageRating();
 
                 $_helperSizetable = Mage::helper('zolagosizetable');
                 /** @var Zolago_Sizetable_Helper_Data $_helperSizetable */
-                echo $_helperSizetable->getSizetableCMS();
+
+                $vendor_id = $_product->getData('udropship_vendor');
+                $storeId = Mage::app()->getStore()->getStoreId();
+                $attributeSetId = $_product->getData('attribute_set_id');
+                $brandId = $_product->getData( 'manufacturer');
+
+                echo $_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attributeSetId, $brandId);
 
                 ?>
             </div>
