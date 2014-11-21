@@ -397,6 +397,8 @@ define([
 			selectionMode: 'none',
 			allowSelectAll: true,
 			deselectOnRefresh: true,
+			
+			cellNavigation: false,
 
 			minRowsPerPage: 20,
 			maxRowsPerPage: 50,
