@@ -113,7 +113,10 @@ class Zolago_Catalog_Model_Resource_Queue_Configurable extends Zolago_Common_Mod
 //            $all += count($insert);
 //            $this->_getWriteAdapter()->insertOnDuplicate($this->getMainTable(), $insert, array());
 //        }
-        $this->_getWriteAdapter()->insertOnDuplicate($this->getMainTable(), $insert, array());
+        foreach ($this->_dataToSave as $item) {
+            $this->_getWriteAdapter()->insertOnDuplicate($this->getMainTable(), $item, array());
+        }
+
         // Commit transaction
         $this->_getWriteAdapter()->commit();
         $this->_resetData();
