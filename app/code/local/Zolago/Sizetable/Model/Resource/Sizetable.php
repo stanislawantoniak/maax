@@ -10,40 +10,31 @@ class Zolago_Sizetable_Model_Resource_Sizetable extends Mage_Core_Model_Resource
 
     public function getSizetableCMS($vendor_id, $store_id, $attribute_set_id, $brand_id)
     {
-        error_reporting(E_ALL);
-        ini_set("display_errors", 1);
-
-//        /** @var Zolago_Sizetable_Helper_Data $helper */
-//        $helper = Mage::helper('zolagosizetable');
-//        $brandID = $helper->getBrandId();
 
 
-        $results = '[dev]';
-        $sizetable = $this->getTable('zolagosizetable/sizetable');
-        $sizetableScope = $this->getTable('zolagosizetable/sizetable_scope');
-        $sizetableRule = $this->getTable('zolagosizetable/sizetable_rule');
+        $res = Mage::getSingleton('core/resource');
+                
+        $sizetable = $res->getTableName('zolagosizetable/sizetable');
+        $sizetableScope = $res->getTableName('zolagosizetable/sizetable_scope');
+        $sizetableRule = $res->getTableName('zolagosizetable/sizetable_rule');
 
-
-        //SELECT count(*) FROM `zolago_sizetable_role` WHERE `vendor_id` = 5 AND `brand_id` = NULL AND `attribute_set_id` = 59
-
-        $query = "
-        ";
-
-
-//       $results = $this->getReadConnection()
-//           ->query($query, array(
-//               'sizetable' => $sizetable,
-//               'sizetableScope' => $sizetableScope,
-//               'sizetableRule' => $sizetableRule,
-//                'vendor_id' => $vendor_id
-//           ))
-//           ->fetchAll();
-////
-//
-//
-//
-//        return $query .' <br/><br/> '. print_r($results, true);
-//        return $query;
+        $query_list[] = 'SELECT IF(ISNULL(ss.value),s.default_value,ss.value) as val FROM '.$sizetableRule.' as sr '.
+            'INNER JOIN '.$sizetable.' as s on s.sizetable_id = sr.sizetable_id '.
+            'LEFT JOIN '.$sizetableScope.' as ss ON ss.sizetable_id = sr.sizetable_id AND ss.store_id = '.$store_id.
+            ' WHERE sr.vendor_id = '.$vendor_id.' AND sr.brand_id = '.$brand_id.' AND sr.attribute_set_id = '.$attribute_set_id;
+        $query_list[] = 'SELECT IF(ISNULL(ss.value),s.default_value,ss.value) as val FROM '.$sizetableRule.' as sr '.
+            'INNER JOIN '.$sizetable.' as s on s.sizetable_id = sr.sizetable_id '.
+            'LEFT JOIN '.$sizetableScope.' as ss ON ss.sizetable_id = sr.sizetable_id AND ss.store_id = '.$store_id.
+            ' WHERE sr.vendor_id = '.$vendor_id.' AND sr.brand_id = '.$brand_id.' AND sr.attribute_set_id IS NULL';
+        $query_list[] = 'SELECT IF(ISNULL(ss.value),s.default_value,ss.value) as val FROM '.$sizetableRule.' as sr '.
+            'INNER JOIN '.$sizetable.' as s on s.sizetable_id = sr.sizetable_id '.
+            'LEFT JOIN '.$sizetableScope.' as ss ON ss.sizetable_id = sr.sizetable_id AND ss.store_id = '.$store_id.
+            ' WHERE sr.vendor_id = '.$vendor_id.' AND sr.brand_id IS NULL AND sr.attribute_set_id IS NULL';
+        $conn = $res->getConnection('core_read');
+        $query = 'SELECT val FROM ('.implode(' UNION ',$query_list).') AS connect LIMIT 1';
+        
+        $results = $conn->fetchOne($query);
+        
         return $results;
 
     }
