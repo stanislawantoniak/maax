@@ -63,6 +63,11 @@ define([
 				clearInterval(this.interval);
 			}
 		},
+		updateDelayed: function(){
+			var self = this;
+			this._clear();
+			setTimeout(function(){self.update(); }, 300);
+		},
 		update: function(){
 			var value = this.getValue(this.field.value);
 			if(value!==this.oldValue){

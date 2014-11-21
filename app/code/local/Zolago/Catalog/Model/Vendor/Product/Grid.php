@@ -241,7 +241,7 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 				if($attribute->getSource()){
 					$extend['options']  = array();
 					foreach($attribute->getSource()->getAllOptions(false) as $option){
-						if(!empty($option['value'])){
+						if($option['value']!==""){
 							$extend['options'][$option['value']]=$option['label'];
 						}
 					}

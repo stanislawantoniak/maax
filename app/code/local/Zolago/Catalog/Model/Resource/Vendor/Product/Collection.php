@@ -152,7 +152,10 @@ class Zolago_Catalog_Model_Resource_Vendor_Product_Collection
 			}else{
 				$item['thumbnail'] = null;
 			}
+		}else{
+			$item['thumbnail'] = null;
 		}
+		
 		return $item;
 	}
 	
