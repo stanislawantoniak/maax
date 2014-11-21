@@ -134,25 +134,30 @@ class Zolago_Catalog_Model_Resource_Vendor_Product_Collection
 		$mockup = $this->_getProductMockup();
 		$mockup->setData($item);
 		$mockup->setId($item['entity_id']);
-	
-		$thumbUrl = Mage::helper('catalog/image')->
-			init($mockup, 'thumbnail')->
-			keepAspectRatio(true)->
-			constrainOnly(true)->
-			keepFrame(true)->
-			resize(
-				Zolago_Catalog_Block_Vendor_Product_Grid::THUMB_WIDTH,
-				Zolago_Catalog_Block_Vendor_Product_Grid::THUMB_HEIGHT
-			);
-
-		$item['thumbnail_url'] = (string)$thumbUrl;
+		
+		$thumbUrl = null;
+		$thumb = null;
 		
 		if(isset($item['thumbnail']) && !empty($item['thumbnail']) && $item['thumbnail']!="no_selection"){
-			$item['thumbnail'] = Mage::getBaseUrl("media") . "catalog/product/" . $item['thumbnail'];
-		}else{
-			$item['thumbnail'] = null;
+			try{
+				$thumbUrl = (string)Mage::helper('catalog/image')->
+					init($mockup, 'thumbnail')->
+					keepAspectRatio(true)->
+					constrainOnly(true)->
+					keepFrame(true)->
+					resize(
+						Zolago_Catalog_Block_Vendor_Product_Grid::THUMB_WIDTH,
+						Zolago_Catalog_Block_Vendor_Product_Grid::THUMB_HEIGHT
+					);
+				$thumb = Mage::getBaseUrl("media") . "catalog/product/" . $item['thumbnail'];
+			}  catch (Exception $e){
+				$thumbUrl = null;
+				$thumb = null;
+			}
 		}
 		
+		$item['thumbnail_url'] = $thumbUrl;
+		$item['thumbnail'] = $thumb;
 		
 		return $item;
 	}

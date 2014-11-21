@@ -192,22 +192,26 @@ define([
 	var rendererThumbnail = function (item, value, node, options){
 		var content;
 		
-		if(item.thumbnail!==null){
+		if(item.thumbnail){
 			content = put("a", {
 				href:  item.thumbnail, 
 				title: item.name,
 				target: "_blank"
 			});
+			put(content, "img", {
+				src: item.thumbnail_url
+			});
 			on(content, "click", thumbnailClickHandler)
 		}else{
-			content = put("p");
+			content = put("p", 
+				put("i", {className: "glyphicon glyphicon-ban-circle"})
+			);
 		}
-		put(content, "img", {
-			src: item.thumbnail_url
-		});
+		
 		put(content, "span", {
 			innerHTML: item.images_count
 		});
+		
 		put(node, content);
 	};
 	

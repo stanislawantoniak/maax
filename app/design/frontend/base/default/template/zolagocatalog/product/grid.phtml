@@ -72,20 +72,31 @@
 		padding:0;
 	}
 	/** Thumb column **/
-	#grid-holder .dgrid-cell.field-thumbnail p,
-	#grid-holder .dgrid-cell.field-thumbnail a{
+	#grid-holder td.dgrid-cell.field-thumbnail p,
+	#grid-holder td.dgrid-cell.field-thumbnail a{
 		position: relative;
 		display: block;
 		margin:0;
 		padding:0;
 	}
 	
-	#grid-holder .dgrid-cell.field-thumbnail img{
+	#grid-holder td.dgrid-cell.field-thumbnail a,
+	#grid-holder td.dgrid-cell.field-thumbnail p,
+	#grid-holder td.dgrid-cell.field-thumbnail img{
 		width: <?php echo (int)$this->getThumbWidth();?>px;
 		height: <?php echo (int)$this->getThumbHeight();?>px;
 	}
 	
-	#grid-holder .dgrid-cell.field-thumbnail span{
+	
+	#grid-holder td.dgrid-cell.field-thumbnail p{
+		text-align: center;
+		display: table-cell;
+		vertical-align: middle;
+		color: #CCC;
+	}
+	
+	
+	#grid-holder td.dgrid-cell.field-thumbnail span{
 		position: absolute;
 		bottom: 1px;
 		right:1px;
