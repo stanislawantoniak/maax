@@ -20,7 +20,7 @@ class Zolago_Sizetable_Model_Observer
         if ($block instanceof Unirgy_Dropship_Block_Adminhtml_Vendor_Edit_Tabs) {
                 $block->addTab('sizetable_brand', array(
                     'label'     => Mage::helper('zolagosizetable')->__('Size table brand settings'),
-                    'content'	=> Mage::app()->getLayout()->createBlock('zolagosizetable/adminhtml_dropship_settings_grid_brand', 'admin.sizetable.settings.brand')
+                    'content'	=> Mage::app()->getLayout()->createBlock('zolagosizetable/adminhtml_dropship_settings_brand_grid', 'admin.sizetable.settings.brand')
                         ->setVendorId(Mage::app()->getRequest()->getParam('id'))
                         ->toHtml(),
 //                    'url' 		=> $block->getUrl('sizetable/index/brand', array('_current' => true)),
@@ -28,7 +28,7 @@ class Zolago_Sizetable_Model_Observer
                 ));
                 $block->addTab('sizetable_attributeset', array(
                     'label'     => Mage::helper('zolagosizetable')->__('Size table attribute set settings'),
-                    'content'	=> Mage::app()->getLayout()->createBlock('zolagosizetable/adminhtml_dropship_settings_grid_attributeset', 'admin.sizetable.settings.attributeset')
+                    'content'	=> Mage::app()->getLayout()->createBlock('zolagosizetable/adminhtml_dropship_settings_attributeset_grid', 'admin.sizetable.settings.attributeset')
                         ->setVendorId(Mage::app()->getRequest()->getParam('id'))
                         ->toHtml(),
 //                    'url' 		=> $block->getUrl('sizetable/index/attributeset', array('_current' => true)),
