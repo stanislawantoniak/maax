@@ -241,7 +241,7 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 		if(count($grouped)){
 			return array(
 				"label"		=> $this->__("Settings"),
-				"active"	=> $this->isActive(array("preferences", "zolagooperator", "zolagopos", "tiership_rates")),
+				"active"	=> $this->isActive(array("preferences", "zolagooperator", "zolagopos", "tiership_rates","zolagosizetable")),
 				"icon"		=> "icon-wrench",
 				"url"		=> "#",
 				"children"	=> $grouped

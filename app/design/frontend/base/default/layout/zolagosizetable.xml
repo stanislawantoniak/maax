@@ -13,8 +13,8 @@
 	</udropship_sizetable_index>
 	<udropship_sizetable_edit>
 		<update handle="udropship_vendor" />
-		<update handle="adminhtml_head" />
 		<update handle="bootstrap"/>
+		<update handle="forms" />
 		<reference name="content">
 			<block name="sizetable_edit" type="zolagosizetable/dropship_sizetable_edit" template="zolagosizetable/dropship/sizetable/edit.phtml">
 				<block type="core/template" name="sizetable_edit_header_new" template="zolagosizetable/dropship/sizetable/edit/header/new.phtml" />
