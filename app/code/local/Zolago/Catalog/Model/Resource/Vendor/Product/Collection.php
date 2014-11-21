@@ -135,7 +135,6 @@ class Zolago_Catalog_Model_Resource_Vendor_Product_Collection
 		$mockup->setData($item);
 		$mockup->setId($item['entity_id']);
 		
-		$item['thumbnail_url'] = null;
 		if(isset($item['thumbnail'])){
 			$thumbUrl = Mage::helper('catalog/image')->
 				init($mockup, 'thumbnail')->
@@ -150,7 +149,11 @@ class Zolago_Catalog_Model_Resource_Vendor_Product_Collection
 			$item['thumbnail_url'] = (string)$thumbUrl;
 			if(!empty($item['thumbnail']) && $item['thumbnail']!="no_selection"){
 				$item['thumbnail'] = Mage::getBaseUrl("media") . "catalog/product/" . $item['thumbnail'];
+			}else{
+				$item['thumbnail'] = null;
 			}
+		}else{
+			$item['thumbnail'] = null;
 		}
 		
 		return $item;
