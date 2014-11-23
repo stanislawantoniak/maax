@@ -309,6 +309,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
 
                 } catch (Exception $e) {
                     Mage::log($e->getMessage(), 0, 'configurable_update.log');
+                    Mage::throwException("Error insertProductSuperAttributePricingApp");
 
                     throw $e;
                 }
