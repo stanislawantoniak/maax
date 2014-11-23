@@ -29,7 +29,7 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
 
 
         foreach ($collection as $colItem) {
-            Zend_Debug::dump($colItem->getData());
+            //Zend_Debug::dump($colItem->getData());
             $productId = $colItem->getProductId();
 
             $listUpdatedProducts[$productId] = $productId;
