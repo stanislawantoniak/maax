@@ -23,17 +23,17 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
     protected function _execute()
     {
         $collection = $this->_collection;
-        //Mage::log('Size: ' . $collection->getSize(), 0, "configurable_update_collection.log");
+        Mage::log('Size: ' . $collection->getSize(), 0, "configurable_update_collection.log");
 
         $listUpdatedProducts = array();
 
 
         foreach ($collection as $colItem) {
-//            Zend_Debug::dump($colItem->getData());
+            Zend_Debug::dump($colItem->getData());
             $productId = $colItem->getProductId();
 
             $listUpdatedProducts[$productId] = $productId;
-            //Mage::log(print_r($colItem->getData(),true), 0, "configurable_update_collection.log");
+            Mage::log(print_r($colItem->getData(),true), 0, "configurable_update_collection.log");
         }
 //        Zend_Debug::dump($listUpdatedProducts);
         unset($productId);
