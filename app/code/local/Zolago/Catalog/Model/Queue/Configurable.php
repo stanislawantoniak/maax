@@ -24,15 +24,13 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
     {
         $collection = $this->_collection;
         Mage::log('Size: ' . $collection->getSize(), 0, "configurable_update_collection.log");
-        $websites = array();
+
         $listUpdatedProducts = array();
 
 
         foreach ($collection as $colItem) {
             $productId = $colItem->getProductId();
-            $websiteId = $colItem->getWebsiteId();
 
-            $websites[$websiteId] = $websiteId;
             $listUpdatedProducts[$productId] = $productId;
             Mage::log(print_r($colItem->getData(),true), 0, "configurable_update_collection.log");
         }
