@@ -2,6 +2,11 @@
 
 class Zolago_Sizetable_Dropship_SizetableController extends Zolago_Dropship_Controller_Vendor_Abstract {
 
+	protected function _getSession()
+	{
+		return Mage::getSingleton('udropship/session');
+	}
+
 	/**
 	 * Sizetables listing action
 	 */
@@ -10,6 +15,18 @@ class Zolago_Sizetable_Dropship_SizetableController extends Zolago_Dropship_Cont
 	}
 
 	public function editAction() {
+		$sizetable = $this->_registerModel();
+		$vendor = $this->_getSession()->getVendor();
+
+		// Existing pos - has venor rights?
+		if ($sizetable->getSizetableId() && $sizetable->getVendorId() != $vendor->getVendorId()) {
+			$this->_getSession()->addError(Mage::helper('zolagosizetable')->__("You cannot edit this size table"));
+			return $this->_redirect("*/*");
+			// Sizetable id specified, but dons't exists
+		} elseif (!$sizetable->getSizetableId() && $this->getRequest()->getParam("sizetable_id", null) !== null) {
+			$this->_getSession()->addError(Mage::helper('zolagosizetable')->__("Size table doesn't exists"));
+			return $this->_redirect("*/*");
+		}
 		$this->render();
 	}
 
@@ -32,6 +49,8 @@ class Zolago_Sizetable_Dropship_SizetableController extends Zolago_Dropship_Cont
 						$model->load($modelId);
 						if (!$model->getId()) {
 							throw new Mage_Core_Exception($helper->__("Size table not found"));
+						} elseif($model->getVendorId() != $this->_getSession()->getVendor()->getVendorId()) {
+							return $this->_redirectReferer();
 						}
 					}
 					$model->updateModelData($data);
@@ -60,5 +79,21 @@ class Zolago_Sizetable_Dropship_SizetableController extends Zolago_Dropship_Cont
 
 	protected function render() {
 		$this->_renderPage(null,'zolagosizetable');
+	}
+
+	/**
+	 * Register current model to use by blocks
+	 * @return Zolago_Pos_Model_Pos
+	 */
+	protected function _registerModel() {
+		$sizetableId = $this->getRequest()->getParam("sizetable_id");
+		$sizetable = Mage::getModel("zolagosizetable/sizetable");
+		if ($sizetableId) {
+			$sizetable->load($sizetableId);
+		} else {
+			$sizetable = false;
+		}
+		Mage::register("sizetable", $sizetable);
+		return $sizetable;
 	}
 }
