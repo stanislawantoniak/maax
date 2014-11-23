@@ -23,7 +23,7 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
     protected function _execute()
     {
         $collection = $this->_collection;
-
+        Mage::log('Size: ' . $collection->getSize(), 0, "configurable_update_collection.log");
         $websites = array();
         $listUpdatedProducts = array();
 
