@@ -217,6 +217,15 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 				"url"	 => $this->getUrl('udropship/pos')
 			);
 		}
+
+		if($this->isModuleActive('zolagosizetable') && $this->isAllowed("zolagosizetable")){
+			$groupOne[] = array(
+				"active" => $this->isActive("zolagosizetable"),
+				"icon"	 => "icon-table",
+				"label"	 => Mage::helper('zolagosizetable')->__('Size tables'),
+				"url"	 => $this->getUrl('udropship/sizetable')
+			);
+		}
         /*		
 		if($this->getVendor()->getAllowTiershipModify() && $this->isAllowed("udtiership")){
 			$groupOne[] = array(
@@ -232,7 +241,7 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 		if(count($grouped)){
 			return array(
 				"label"		=> $this->__("Settings"),
-				"active"	=> $this->isActive(array("preferences", "zolagooperator", "zolagopos", "tiership_rates")),
+				"active"	=> $this->isActive(array("preferences", "zolagooperator", "zolagopos", "tiership_rates","zolagosizetable")),
 				"icon"		=> "icon-wrench",
 				"url"		=> "#",
 				"children"	=> $grouped

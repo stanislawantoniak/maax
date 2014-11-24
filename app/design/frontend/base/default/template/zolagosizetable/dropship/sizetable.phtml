@@ -1,0 +1,35 @@
+<?php /** @var $this Zolago_Sizetable_Block_Dropship_Sizetable */ ?>
+<?php $_helper = Mage::helper('zolagosizetable'); ?>
+<div class="container">
+	<div class="row">
+		<div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+			<h3><?php echo $_helper->__("Size tables"); ?></h3>
+			<span class="tageline"><?php echo $_helper->__("Size tables management"); ?></span>
+		</div>
+		<div class="main-actions align-right col-lg-6 col-md-6 col-sm-6 col-xs-6">
+			<a class="btn btn-success" href="<?php echo Mage::getUrl('udropship/sizetable/edit'); ?>">
+				<i class="icon-plus"></i>
+				<?php echo $_helper->__("New size table"); ?>
+			</a>
+		</div>
+	</div>
+	<div class="row" style="margin-top: 30px;">
+		<div class="col-md-12">
+			<div class="tabbable tabbabble-custom">
+				<ul class="nav nav-tabs" style="margin-top:6px">
+					<li class="active"><a data-toggle="tab" href="#tab_1_1"><?php echo $_helper->__('List'); ?></a></li>
+					<li><a data-toggle="tab" href="#tab_1_2"><?php echo $_helper->__('Assign'); ?></a></li>
+				</ul>
+				<div class="tab-content">
+					<div id="tab_1_1" class="tab-pane active">
+						<?php echo $this->getChildHtml("sizetable_list"); ?>
+					</div>
+					<div id="tab_1_2" class="tab-pane">
+						<?php echo $this->getChildHtml("sizetable_assign"); ?>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

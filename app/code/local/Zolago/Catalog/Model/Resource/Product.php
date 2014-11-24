@@ -8,7 +8,7 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
         $writeAdapter = $this->_getWriteAdapter();
         $writeAdapter->beginTransaction();
         try {
-            //1. update simple products prices
+            //1. update simple product price
             $writeAdapter->insertOnDuplicate(
                 $writeAdapter->getTableName('catalog_product_entity_decimal'),
                 $insert, array('value')
@@ -16,13 +16,13 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
 
             $this->_getWriteAdapter()->commit();
 
-            //2. Put to configurable queue
+            //2. put simple products to configurable queue
             Zolago_Catalog_Helper_Configurable::queue($ids);
 
         } catch (Exception $e) {
             $this->_getWriteAdapter()->rollBack();
             $batchFile = Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1::CONVERTER_PRICE_UPDATE_LOG;
-            Mage::log(microtime() . " rollBack: savePriceValues", 0, $batchFile);
+            Mage::throwException("Error savePriceValues");
 
             throw $e;
         }

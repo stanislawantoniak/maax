@@ -51,7 +51,10 @@ define([
 					}
 					
 					if(config.allowEmpty){
-						options.unshift({"value":"-", "label": "["+Translator.translate("empty")+"]"});
+						options.unshift({
+							"value":"-", 
+							"label": "["+Translator.translate("empty")+"]"
+						});
 					}
 					
 					if(!config.required){
@@ -106,7 +109,7 @@ define([
 						
 						// add e time to observe value changed by widget
 						if(type=="datetime"){
-							on(element, 'blur',	lang.hitch(observer, observer.start));
+							on(element, 'blur',	lang.hitch(observer, observer.updateDelayed));
 						}else{
 							on(element, 'blur',	lang.hitch(observer, observer.stop));
 						}
