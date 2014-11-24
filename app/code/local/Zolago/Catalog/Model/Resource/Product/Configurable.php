@@ -278,7 +278,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
             Mage::getSingleton('catalog/product_action')->updateAttributesNoIndex(
                 array($productConfigurableId), array('price' => $productMinimalPrice), $store
             );
-            Mage::log("insertProductSuperAttributePricingApp: " . $productConfigurableId . 'Store: ' .$store, 0, "configurable_update_conf.log");
+            Mage::log("insertProductSuperAttributePricingApp: " . $productConfigurableId . ' Store: ' .$store, 0, "configurable_update_conf.log");
             foreach ($productRelations as $productRelation) {
                 $size = $productRelation['child_size'];
                 $price = $productRelation['child_price'];
