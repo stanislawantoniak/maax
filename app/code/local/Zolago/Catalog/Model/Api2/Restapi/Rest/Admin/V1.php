@@ -269,6 +269,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
         if (!empty($skeleton)) {
             foreach ($skeleton as $sku => $productId) {
+                $priceUpdated = false;
 
                 foreach ($stores as $storeId) {
 
@@ -290,20 +291,20 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                             ? $pricesConverter[$priceTypeSelected] : false;
 
 
-                        if($priceToInsert){
-                            Mage::log('Insert price  ' . $sku . '(' .$productId. ')', 0, $batchFile);
+                        if ($priceToInsert) {
+                            Mage::log('Insert price  ' . $sku . '(' . $productId . ')', 0, $batchFile);
                             //margin
                             $marginSelected = 0;
 
                             if (isset($marginByStore[$productId][$storeId])) {
-                                $marginSelected = (float) str_replace(",", ".", $marginByStore[$productId][$storeId]);
+                                $marginSelected = (float)str_replace(",", ".", $marginByStore[$productId][$storeId]);
                             } else {
                                 $marginDefault = isset($marginByStore[$productId][Mage_Core_Model_App::ADMIN_STORE_ID])
                                     ? $marginByStore[$productId][Mage_Core_Model_App::ADMIN_STORE_ID] : $marginSelected;
-                                $marginSelected = (float) str_replace(",", ".", $marginDefault);
+                                $marginSelected = (float)str_replace(",", ".", $marginDefault);
                             }
                             Mage::getSingleton('catalog/product_action')->updateAttributesNoIndex(
-                                array($productId), array('price' => Mage::app()->getLocale()->getNumber($priceToInsert + (($priceToInsert * $marginSelected)/100))), $storeId
+                                array($productId), array('price' => Mage::app()->getLocale()->getNumber($priceToInsert + (($priceToInsert * $marginSelected) / 100))), $storeId
                             );
 
 //                            $insert[] = array(
@@ -315,14 +316,16 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 //                            );
 
 //                            $ids[] = $productId;
-                            Zolago_Catalog_Helper_Configurable::queueProduct($productId);
+
+                            $priceUpdated = true;
                         }
                     }
 
 
-
                 }
-
+                if ($priceUpdated) {
+                    Zolago_Catalog_Helper_Configurable::queueProduct($productId);
+                }
 
             }
         }

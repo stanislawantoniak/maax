@@ -33,6 +33,7 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
             $listUpdatedProducts[$productId] = $productId;
         }
         unset($productId);
+        Mage::log("Config collection: " . implode(',',$listUpdatedProducts), 0, "configurable_update_conf.log");
         $storeId = array(Mage_Core_Model_App::ADMIN_STORE_ID);
         $allStores = Mage::app()->getStores();
         foreach ($allStores as $_eachStoreId => $val) {
