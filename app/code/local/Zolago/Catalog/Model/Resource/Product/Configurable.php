@@ -265,7 +265,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
 
         $productRelations = $this->_getProductRelationPricesSizes($productConfigurableId, $store);
 
-
+        Mage::log("productRelations: " . implode(',', array_keys($productRelations)), 0, "configurable_update_conf.log");
         if (!empty($productRelations)) {
             $insert = array();
             $productMinPrice = array();
