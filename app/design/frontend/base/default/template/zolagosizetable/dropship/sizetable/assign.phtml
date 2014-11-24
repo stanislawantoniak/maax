@@ -2,7 +2,12 @@
 <div class="container">
 	<div class="row">
 		<form class="form-horizontal row-border" id="sizetableAssignForm" action="<?php echo $this->getAction(); ?>" method="post">
-			<input type="hidden" name="vendor_id" value="<?php echo $this->getVendorId(); ?>" />
+			<?php echo $this->getLayout()->getBlock('formkey')->toHtml(); ?>
+			<select name="sizetable_id">
+				<?php foreach($this->getSizeTables() as $value=>$label): ?>
+					<option value="<?php echo $value; ?>"><?php echo $label; ?></option>
+				<?php endforeach; ?>
+			</select>
 			<select name="brand_id">
 				<?php foreach($this->getBrands() as $value=>$label): ?>
 					<option value="<?php echo $value; ?>"><?php echo $label; ?></option>

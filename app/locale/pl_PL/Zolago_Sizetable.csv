@@ -30,7 +30,7 @@
 "Size table has not been saved","Tabela rozmiarów nie została zapisana"
 "Some error occured","Wystąpił błąd"
 "Size table not found","Nie znaleziono tabeli rozmiarów"
-"If you don't specify size table for one of the store views then default one will be presented","Jeżeli nie ustawisz tabeli rozmiarów dla któregoś z widoków sklepów to będzie wyświetlana tabela domyślna"
+"If you don't specify size table translations for one of the store views then default one will be displayed","Jeżeli nie wprowadzisz tłumaczeń tabeli rozmiarów dla któregoś z widoków sklepu to zostanie w nim wyświetlona tabela domyślna"
 "Size tables translations","Tłumaczenia tabel rozmiarów"
 "Size table doesn't exists","Tabela rozmiarów nie istnieje"
 "You cannot edit this size table","Nie masz uprawnień do edycji tej tabeli rozmiarów"
