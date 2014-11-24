@@ -42,14 +42,12 @@ class Zolago_Adminhtml_Block_Catalog_Product_Attribute_Grid extends Mage_Adminht
             'index' => 'grid_permission',
             'type' => 'options',
             'options' => $gridPermissionArray,
-            'align' => 'center',
-            'width' => '80px',
+            'align' => 'center'
         ));
 
         $this->addColumn('column_attribute_order', array(
             'header'	=> Mage::helper('zolagoeav')->__('Attribute order'),
-            'index'		=> 'column_attribute_order',
-            'width'		=> '80px',
+            'index'		=> 'column_attribute_order'
         ));
         return parent::_prepareColumns();
     }
