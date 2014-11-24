@@ -48,7 +48,7 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
             //return;
         }
         $configurableProducts = array_keys($configurableSimpleRelation);
-
+        Mage::log("configurableProducts: " . implode(',',$configurableProducts), 0, "configurable_update_conf.log");
 
         //super attribute ids
         $superAttributes = $zolagoCatalogModelProductConfigurableData->getSuperAttributes($configurableProducts);
