@@ -23,18 +23,19 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
     protected function _execute()
     {
         $collection = $this->_collection;
+        //Mage::log('Size: ' . $collection->getSize(), 0, "configurable_update_collection.log");
 
-        $websites = array();
         $listUpdatedProducts = array();
 
 
         foreach ($collection as $colItem) {
+            //Zend_Debug::dump($colItem->getData());
             $productId = $colItem->getProductId();
-            $websiteId = $colItem->getWebsiteId();
 
-            $websites[$websiteId] = $websiteId;
             $listUpdatedProducts[$productId] = $productId;
+            //Mage::log(print_r($colItem->getData(),true), 0, "configurable_update_collection.log");
         }
+//        Zend_Debug::dump($listUpdatedProducts);
         unset($productId);
         //Mage::log('Simple from queue', 0, "configurable_update.log");
         //Mage::log(print_r($listUpdatedProducts,true), 0, "configurable_update.log");
@@ -50,17 +51,18 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
         $configurableSimpleRelation = $zolagoCatalogModelProductConfigurableData->getConfigurableSimpleRelation($listUpdatedProducts);
         //Mage::log('zolagoCatalogModelProductConfigurableData', 0, "configurable_update.log");
         //Mage::log(print_r($configurableSimpleRelation,true), 0, "configurable_update.log");
-
+//        Zend_Debug::dump($configurableSimpleRelation);
         if (empty($configurableSimpleRelation)) {
             //Mage::log("Found 0 configurable products ", 0, "configurable_update.log");
             //return;
         }
+        $configurableProducts = array_keys($configurableSimpleRelation);
 
 
         //super attribute ids
-        $superAttributes = $zolagoCatalogModelProductConfigurableData->getSuperAttributes();
+        $superAttributes = $zolagoCatalogModelProductConfigurableData->getSuperAttributes($configurableProducts);
         //--super attribute ids
-
+//        Zend_Debug::dump($superAttributes);
         $productConfigurableIds = array();
 
         foreach ($configurableSimpleRelation as $productConfigurableId => $configurableSimpleRelationItem) {
@@ -85,6 +87,8 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
 
         //1. reindex prices
         $productsToReindex = array_merge($listUpdatedProducts, $productConfigurableIds);
+
+        //1. reindex products
         Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($productsToReindex);
 
 //        if (Mage::helper('catalog/category_flat')->isEnabled()) {

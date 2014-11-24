@@ -303,7 +303,16 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
                     ", $catalogProductSuperAttributePricingTable, $lineQuery
                 );
 
-                $this->_getWriteAdapter()->query($insertQuery);
+
+                try {
+                    $this->_getWriteAdapter()->query($insertQuery);
+
+                } catch (Exception $e) {
+                    Mage::log($e->getMessage(), 0, 'configurable_update.log');
+                    Mage::throwException("Error insertProductSuperAttributePricingApp");
+
+                    throw $e;
+                }
 
             }
         }
@@ -313,8 +322,12 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
      *
      * @return array
      */
-    public function getSuperAttributes()
+    public function getSuperAttributes($configurableProductsIds)
     {
+        if(empty($configurableProductsIds)){
+            return array();
+        }
+        $configurableProducts = implode(',' , $configurableProductsIds);
         $readConnection = $this->_getReadAdapter();
         $select = $readConnection->select()
             ->from(
@@ -323,6 +336,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
                       'super_attribute'      => 'product_super_attribute_id'
                 )
             );
+        $select->where("catalog_product_super_attribute.product_id IN({$configurableProducts})");
         $superAttributes = $readConnection->fetchAssoc($select);
 
         return $superAttributes;
