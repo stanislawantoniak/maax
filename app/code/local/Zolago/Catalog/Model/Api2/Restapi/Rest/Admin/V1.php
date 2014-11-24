@@ -263,9 +263,9 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
             $stores[] = $_storeId;
         }
 
-        $priceAttributeId = Mage::getSingleton("eav/config")
-            ->getAttribute('catalog_product', 'price')
-            ->getData('attribute_id');
+//        $priceAttributeId = Mage::getSingleton("eav/config")
+//            ->getAttribute('catalog_product', 'price')
+//            ->getData('attribute_id');
 
         if (!empty($skeleton)) {
             foreach ($skeleton as $sku => $productId) {
@@ -302,16 +302,20 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                                     ? $marginByStore[$productId][Mage_Core_Model_App::ADMIN_STORE_ID] : $marginSelected;
                                 $marginSelected = (float) str_replace(",", ".", $marginDefault);
                             }
-
-                            $insert[] = array(
-                                'entity_type_id' => $productEt,
-                                'attribute_id' => $priceAttributeId,
-                                'store_id' => $storeId,
-                                'entity_id' => $productId,
-                                'value' => Mage::app()->getLocale()->getNumber($priceToInsert + (($priceToInsert * $marginSelected)/100))
+                            Mage::getSingleton('catalog/product_action')->updateAttributesNoIndex(
+                                array($productId), array('price' => Mage::app()->getLocale()->getNumber($priceToInsert + (($priceToInsert * $marginSelected)/100))), $storeId
                             );
 
-                            $ids[] = $productId;
+//                            $insert[] = array(
+//                                'entity_type_id' => $productEt,
+//                                'attribute_id' => $priceAttributeId,
+//                                'store_id' => $storeId,
+//                                'entity_id' => $productId,
+//                                'value' => Mage::app()->getLocale()->getNumber($priceToInsert + (($priceToInsert * $marginSelected)/100))
+//                            );
+
+//                            $ids[] = $productId;
+                            Zolago_Catalog_Helper_Configurable::queueProduct($productId);
                         }
                     }
 
@@ -324,9 +328,9 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         }
 
 
-        if (!empty($insert)) {
-            $model->savePriceValues($insert, $ids);
-        }
+//        if (!empty($insert)) {
+//            $model->savePriceValues($insert, $ids);
+//        }
     }
 
 
