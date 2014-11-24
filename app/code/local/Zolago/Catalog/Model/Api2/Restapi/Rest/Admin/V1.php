@@ -291,7 +291,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
 
                         if($priceToInsert){
-
+                            Mage::log('Insert price  ' . $sku . '(' .$productId. ')', 0, $batchFile);
                             //margin
                             $marginSelected = 0;
 
