@@ -317,7 +317,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 //                            );
 
 //                            $ids[] = $productId;
-                            Mage::log('Insert price  ' . Mage::app()->getLocale()->getNumber($priceToInsert + (($priceToInsert * $marginSelected) / 100)) . $sku . '(' . $productId . ')', 0, $batchFile);
+                            Mage::log('Insert price  ' . Mage::app()->getLocale()->getNumber($priceToInsert + (($priceToInsert * $marginSelected) / 100)) . ' '. $sku . '(' . $productId . ')', 0, $batchFile);
                             $priceUpdated = true;
                         }
                     }
