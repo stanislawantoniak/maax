@@ -274,6 +274,8 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
             }
 
             $productMinimalPrice = min($productMinPrice);
+            Mage::log("productMinPrice: " , 0, "configurable_update_conf.log");
+            Mage::log($productMinimalPrice, 0, "configurable_update_conf.log");
 
             Mage::getSingleton('catalog/product_action')->updateAttributesNoIndex(
                 array($productConfigurableId), array('price' => $productMinimalPrice), $store
