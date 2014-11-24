@@ -269,7 +269,6 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
         if (!empty($skeleton)) {
             foreach ($skeleton as $sku => $productId) {
-                $priceUpdated = false;
 
                 foreach ($stores as $storeId) {
 
@@ -316,25 +315,23 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 //                                'value' => Mage::app()->getLocale()->getNumber($priceToInsert + (($priceToInsert * $marginSelected)/100))
 //                            );
 
-//                            $ids[] = $productId;
+                            $ids[] = $productId;
                             Mage::log('Insert price  ' . Mage::app()->getLocale()->getNumber($priceToInsert + (($priceToInsert * $marginSelected) / 100)) . ' '. $sku . '(' . $productId . ')', 0, $batchFile);
-                            $priceUpdated = true;
+
                         }
                     }
 
 
                 }
-                if ($priceUpdated) {
-                    Zolago_Catalog_Helper_Configurable::queueProduct($productId);
-                }
+
 
             }
         }
 
 
-//        if (!empty($insert)) {
-//            $model->savePriceValues($insert, $ids);
-//        }
+        if (!empty($ids)) {
+            Zolago_Catalog_Helper_Configurable::queue($ids);
+        }
     }
 
 

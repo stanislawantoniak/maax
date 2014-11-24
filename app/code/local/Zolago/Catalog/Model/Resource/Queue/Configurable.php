@@ -97,7 +97,9 @@ class Zolago_Catalog_Model_Resource_Queue_Configurable extends Zolago_Common_Mod
         foreach ($this->_dataToSave as $item) {
             $this->_getWriteAdapter()->insertOnDuplicate($this->getMainTable(), $item, array());
         }
-
+        $batchFile = Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1::CONVERTER_PRICE_UPDATE_LOG;
+        Mage::log('Insert conf queue  ', 0, $batchFile);
+        Mage::log(print_r($this->_dataToSave, true), 0, $batchFile);
         // Commit transaction
         $this->_getWriteAdapter()->commit();
         $this->_resetData();
