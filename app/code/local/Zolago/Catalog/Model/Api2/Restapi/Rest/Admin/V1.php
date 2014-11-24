@@ -292,7 +292,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
 
                         if ($priceToInsert) {
-                            Mage::log('Insert price  ' . $sku . '(' . $productId . ')', 0, $batchFile);
+
                             //margin
                             $marginSelected = 0;
 
@@ -303,6 +303,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                                     ? $marginByStore[$productId][Mage_Core_Model_App::ADMIN_STORE_ID] : $marginSelected;
                                 $marginSelected = (float)str_replace(",", ".", $marginDefault);
                             }
+
                             Mage::getSingleton('catalog/product_action')->updateAttributesNoIndex(
                                 array($productId), array('price' => Mage::app()->getLocale()->getNumber($priceToInsert + (($priceToInsert * $marginSelected) / 100))), $storeId
                             );
@@ -316,7 +317,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 //                            );
 
 //                            $ids[] = $productId;
-
+                            Mage::log('Insert price  ' . Mage::app()->getLocale()->getNumber($priceToInsert + (($priceToInsert * $marginSelected) / 100)) . $sku . '(' . $productId . ')', 0, $batchFile);
                             $priceUpdated = true;
                         }
                     }
