@@ -72,15 +72,19 @@ define([
 			var value = this.getValue(this.field.value);
 			if(value!==this.oldValue){
 				// need query factory
-				var query = this.grid.get("query");
+				var query = this.grid.get('query');
 	
 				if(value!==""){
 					query[this.dataField] = value;
 				}else{
 					query[this.dataField] = null;
+					delete query[this.dataField];
 				}
 				// Set grid query
+				//this.grid.set('query', query);
 				this.grid.set('query', query);
+//				var store  = this.grid.get("collection").get("storage");
+//				this.grid.set('collection', store.filter(query));
 				this.oldValue = value;
 			}
 		}

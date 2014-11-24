@@ -4,57 +4,48 @@ define([
 	"dgrid/extensions/Pagination",
 	"dgrid/extensions/CompoundColumns",
 	"dgrid/ColumnSet",
-	"dgrid/Selection",
+    'dgrid/Selection',
+    'dgrid/Selector',
 	"dgrid/Keyboard",
-	"vendor/grid/editor",
 	"dojo/_base/declare",
 	"dojo/dom-construct",
 	"dojo/on",
 	"dojo/query",
-	"dojo/store/Memory",
-	"dojo/store/Observable",
 	"put-selector/put",
-	//
+	"dojo/dom-class",
+	
+	// stores 
 	"dstore/Rest",
 	"dstore/Trackable",
 	"dstore/Cache",
 	
-    'dgrid/Selection',
-    'dgrid/Selector',
     "dojo/_base/lang",
-	"dojo/request",
+	
 	"vendor/grid/filter",
-	"vendor/catalog/priceGrid/popup/price",
-	"vendor/catalog/priceGrid/popup/stock",
-	"vendor/catalog/priceGrid/popup/mass/price",
-	"vendor/catalog/priceGrid/RowUpdater",
+	"vendor/grid/QueryGrid",
+	"vendor/grid/PopupEditor",
 	"vendor/misc"
-], function(BaseGrid, Grid, Pagination, CompoundColumns, ColumnSet, Selection, 
-	Keyboard, editor, declare, domConstruct, on, query, Memory, 
-	Observable, put,Rest, Trackable, Cache, Selection, Selector, 
-	lang, request, filter, singlePriceUpdater, singleStockUpdater, 
-	massPriceUpdater, RowUpdater, misc){
-		
+], function(BaseGrid, Grid, Pagination, CompoundColumns, ColumnSet, Selection, Selector,
+	Keyboard, declare, domConstruct, on, query, put, domClass,
+	Rest, Trackable, Cache, lang, 
+	filter, QueryGrid, PopupEditor, misc){
 	
-	var states = {
-		loaded: {},
-		changed: {},
-		orig: {}
-	}
-	
-	var grid,
-		store,
+	var grid,store,
 		resetFilters = query("#remove-filters")[0],
-		switcher = query("#attribute_set_id")[0];
-		
+		switcher = query("#attribute_set_id")[0],
+		baseQuery = {
+			attribute_set_id: switcher.value,
+			store_id: 0
+		}
 	
-	var extendWithStaticFilter = function(query){
-		var k, opt, select, name, value, fValue;
+	var applyExtendFilter = function(){
+		var k, opt, select, name, 
+			value, fValue, query = this.get("query");
 		
 		// first reset query staic params
 		for(k in query){
 			if(query.hasOwnProperty(k) && /^static/.test(k)){
-				query[k] = null;
+				delete query[k];
 			}
 		}
 		
@@ -71,9 +62,11 @@ define([
 			}
 		});
 		
+		this.set("query", query);
+		
 	};
 	
-	var toogleRemoveFilter = function(query){
+	var toggleRemoveFilter = function(query){
 		var k,i = 0;
 		for(k in query){
 			if(!/(store_id|attribute_set_id)/.test(k) && query[k]!==null){
@@ -111,21 +104,12 @@ define([
 	
 	var RestStore = declare([ Rest, Trackable, Cache]);
 	
-	store = new RestStore({
-		target:"/udprod/vendor_product/rest",
+	window.store = store = new RestStore({
+		target:"/udprod/vendor_product/rest/",
 		put: function(object){
 			return object;
 		},
 		useRangeHeaders: true,
-		filter: function(query, options){
-			if(switcher){
-				query.attribute_set_id = switcher.value;
-			}
-			query.store_id = 0;
-			extendWithStaticFilter(query);
-			toogleRemoveFilter(query);
-			return RestStore.prototype.filter.call(this, query, options);
-		}
 	});
 						
 	/*storeRest = new JsonRest({
@@ -292,6 +276,11 @@ define([
 		}
 	};
 	
+	/**
+	 * @param {Array} options
+	 * @param {Bool} multi
+	 * @returns {Function}
+	 */
 	var formatterOptionsFactor = function(options, multi){
 		/**
 		 * @param {mixed} value
@@ -389,9 +378,51 @@ define([
 		jQuery("#massActions").prop("disabled", disabled);
 	}
 	
+	/**
+	 * @param {Object} e
+	 * @returns {void}
+	 */
+	var handleColumnEdit = function(e){
+		var cell = grid.cell(this),
+			column = cell.column,
+			field = column.field,
+			editors = column.grid.get('editors'),
+			editor;
+
+		if(!editors[field]){
+			editors[field] = new PopupEditor(column);
+		}
+
+		for(var key in editors){
+			editor = editors[key];
+			if(editor instanceof PopupEditor && editor.isOpen()){
+				editor.close();
+			}
+		}
+
+		editors[field].open(cell, e);
+	}
 	
 	
-	var PriceGrid = declare([/*BaseGrid, Pagination,*/Grid, Selection, Selector, Keyboard, CompoundColumns, ColumnSet]);
+	on(document.body, "click", function(e){
+		var el = jQuery(e.toElement);
+		if(el.is(".editor") || el.parents(".editor").length || el.is(".editable")){
+			return;
+		}
+		
+		var editor, editors = grid.get('editors');
+		
+		for(var key in editors){
+			editor = editors[key];
+			if(editor instanceof PopupEditor && editor.isOpen()){
+				editor.close();
+			}
+		}
+	});
+	
+	
+	
+	var PriceGrid = declare([/*BaseGrid, Pagination,*/Grid, Selection, Selector, Keyboard, CompoundColumns, ColumnSet, QueryGrid]);
 	
 	var initGrid = function(columns, container){
 		
@@ -428,18 +459,38 @@ define([
 			firstLastArrows: true,
 			pageSizeOptions: [10, 15, 25],*/
 
-			collection: store.filter({}),
+			//
+			collection: store.filter(baseQuery),
+			query: lang.clone(baseQuery),
+			
 			getBeforePut: false,
-			sort: "entity_id"
+			sort: "entity_id",
+			applyExtendFilter: applyExtendFilter,
+			
+			// Editors registry
+			editors: {},
+			
+			// Needed for query grid
+			store: store,
+			// Overwrite 
+			_setQuery: function(query){
+				lang.mixin(query, baseQuery);
+				toggleRemoveFilter(query);
+				return this.inherited(arguments);
+			}
 		};
 		
-		window.grid = grid = new PriceGrid(config, container);
 		
-		// listen for selection
-		on.pausable(grid.domNode, "dgrid-select", updateSelectionButtons);
+		window.grid = grid = new PriceGrid(config, container);
 
 		// listen for selection
-		on.pausable(grid.domNode, "dgrid-deselect", updateSelectionButtons);
+		grid.on("dgrid-select", updateSelectionButtons);
+
+		// listen for selection
+		grid.on("dgrid-deselect", updateSelectionButtons);
+		
+		// listen for editable
+		grid.on("td.dgrid-cell.editable:click", handleColumnEdit);
 		
 		
 		return window.grid;

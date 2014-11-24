@@ -19,6 +19,33 @@
 	#grid-holder .dgrid-cell{
 		vertical-align: middle;
 	}
+	
+	/** Editor definition **/
+	#grid-holder .dgrid-editors{
+		position: absolute;
+		z-index: 100;
+		top:0;
+		bottom:0;
+	}
+	#grid-holder .editor{
+		background: #fff;
+		box-shadow: rgba(0,0,0,0.5) 0px 3px 5px;
+		width: 200px;
+		position: absolute;
+		z-index: 200;
+		height: 100px;
+		padding: 10px 15px;
+	}
+	#grid-holder a.close{
+		position: absolute;
+		top: 5px;
+		right: 10px;
+	}
+	#grid-holder .editor.hidden{
+		display: none;
+	}
+	
+	
 	#grid-holder th.header.field-required::after{
 		color: red;
 		content: '*';
@@ -139,6 +166,7 @@
 	#grid-holder td.dgrid-cell.field-status.status-wait::after{
 		border-color: orange;
 	}
+
 	
 	@media (max-width: 768px){
 		#grid-holder{

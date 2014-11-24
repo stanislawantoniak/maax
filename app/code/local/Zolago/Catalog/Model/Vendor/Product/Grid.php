@@ -224,9 +224,9 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 			$extend = array();
 			
 			// Editable
-			if($attribute->getGridPremission()==Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::INLINE_EDITION){
+			if($attribute->getGridPermission()==Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::INLINE_EDITION){
 				$extend['editable_inline'] = true;
-			}elseif($attribute->getGridPremission()==Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::EDITION){
+			}elseif($attribute->getGridPermission()==Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::EDITION){
 				$extend['editable'] = true;
 			}
 			// Process select

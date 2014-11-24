@@ -10,21 +10,39 @@
 		<!--</reference>-->
 	<!--</default>-->
 
-	<dgrid>
+	<!-- data grid 0.3 -->
+	<dgrid03>
 		<reference name="root">
 			<action method="addBodyClass">
 				<class>tundra</class>
 			</action>
 		</reference>
 		<reference name="head">
-			<action method="addItem"><type>skin_js</type><name>dojo/config.js</name></action>
+			<action method="addItem"><type>skin_js</type><name>dojo/config-0.3.js</name></action>
 			<action method="addItem"><type>skin_js</type><name>dojo/dojo/dojo.js</name></action>
             <action method="addItem">
                 <type>skin_css</type>
                 <name>dojo/dgrid/css/skins/tundra.css</name>
             </action>
 		</reference>
-	</dgrid>
+	</dgrid03>
+	
+	<!-- data grid 0.4 -->
+	<dgrid04>
+		<reference name="root">
+			<action method="addBodyClass">
+				<class>tundra</class>
+			</action>
+		</reference>
+		<reference name="head">
+			<action method="addItem"><type>skin_js</type><name>dojo/config-0.4.js</name></action>
+			<action method="addItem"><type>skin_js</type><name>dojo/dojo/dojo.js</name></action>
+            <action method="addItem">
+                <type>skin_css</type>
+                <name>dojo/dgrid/css/skins/tundra.css</name>
+            </action>
+		</reference>
+	</dgrid04>
 
 	<catalog_product_view>
 		<reference name="product.info">
@@ -38,7 +56,7 @@
 		<update handle="udropship_vendor" />
         <update handle="bootstrap" />
 		<update handle="forms"/>
-        <update handle="dgrid" />
+        <update handle="dgrid03" />
 		<reference name="content">
 			<block name="price" type="zolagocatalog/vendor_price" template="zolagocatalog/price.phtml"/>
 		</reference>
@@ -67,7 +85,7 @@
 		<update handle="udropship_vendor" />
         <update handle="bootstrap" />
         <update handle="forms" />
-        <update handle="dgrid" />
+        <update handle="dgrid04" />
 		 
 		<reference name="content">
 			<block name="mass" type="zolagocatalog/vendor_product" template="zolagocatalog/product.phtml">
