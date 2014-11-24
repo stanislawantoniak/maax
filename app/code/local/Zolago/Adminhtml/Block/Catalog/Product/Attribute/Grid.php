@@ -45,6 +45,7 @@ class Zolago_Adminhtml_Block_Catalog_Product_Attribute_Grid extends Mage_Adminht
             'align' => 'center'
         ));
 
+
         $this->addColumn('column_attribute_order', array(
             'header'	=> Mage::helper('zolagoeav')->__('Attribute order'),
             'index'		=> 'column_attribute_order'
