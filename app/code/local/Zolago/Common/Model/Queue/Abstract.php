@@ -19,7 +19,7 @@ abstract class Zolago_Common_Model_Queue_Abstract extends Mage_Core_Model_Abstra
           $model->save();
      }
     protected function _getCollection() {
-        $limit = $this->_limit;
+          $limit = $this->_limit;
           $model = $this->_getItem();
           $collection = $model->getCollection();
           $collection->setPageSize($limit);
@@ -34,7 +34,9 @@ abstract class Zolago_Common_Model_Queue_Abstract extends Mage_Core_Model_Abstra
      * processing queue
      */
      public function process($limit = 0) {
-          $limit = $limit? $limit:$this->_limit;
+          if ($limit) {
+              $this->_limit = $limit;
+          }
           $this->_getCollection();
           if (!count($this->_collection)) { 
               // empty queue
