@@ -84,6 +84,7 @@
       <orbadhl>
         <active>1</active>
         <gateway>https://testowy.dhl24.com.pl/webapi</gateway>
+        <tracking_url><![CDATA[http://www.dhl.com.pl/sledzenieprzesylkikrajowej/szukaj.aspx?m=0&sn=%s]]></tracking_url>
         <sallowspecific>0</sallowspecific>
         <model>orbashipping/carrier_dhl</model>
         <title>DHL</title>
@@ -94,6 +95,7 @@
       <orbaups>
         <active>1</active>
         <gateway>http://zolago01.dev/skin/adminhtml/default/default/ups/TrackTest.wsdl</gateway>
+        <tracking_url><![CDATA[http://wwwapps.ups.com/WebTracking/track?loc=pl_PL&HTMLVersion=5.0&USER_HISTORY_LIST=&trackNums=%s&track.x=Monitoruj]]></tracking_url>
         <sallowspecific>0</sallowspecific>
         <model>orbashipping/carrier_ups</model>
         <title>UPS</title>
