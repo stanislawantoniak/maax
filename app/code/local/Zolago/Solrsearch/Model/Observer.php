@@ -292,7 +292,7 @@ class Zolago_Solrsearch_Model_Observer {
     {
         $event = $observer->getEvent();
         $productIds = $event->getProductIds();
-        Mage::log(implode(',' , $productIds), 0, 'configurable_update_solr.log');
+
 		foreach ($productIds as $productId) {
 			$this->collectProduct($productId, Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID);
 		}
@@ -326,7 +326,7 @@ class Zolago_Solrsearch_Model_Observer {
 	 */
 	public function catalogConverterPriceUpdateAfter(Varien_Event_Observer $observer) {
 		$productIds = $observer->getEvent()->getProductIds();
-
+        Mage::log(implode(',' , $productIds), 0, 'configurable_update_solr.log');
 		foreach ($productIds as $productId) {
 			$this->collectProduct($productId);
 		}
