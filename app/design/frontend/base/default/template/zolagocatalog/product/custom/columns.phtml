@@ -1,0 +1,55 @@
+<div class="modal fade bs-example-modal-sm" id="saveColumnsModal" role="dialog">
+	<form method="post">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel"><?php echo $this->__('Show/Hide columns'); ?></h4>
+				</div>
+				<div class="modal-body">
+					<ul class="list-unstyled">
+					<?php $counter = 0;?>
+					<?php foreach ($this->getAllColumns() as $key => $_column):?>
+						<?php $_htmlId = $this->getHtmlId($_column);?>
+						<li>
+							<label for="<?php echo $_htmlId;?>">
+								<input type="checkbox" id="<?php echo $_htmlId;?>" 
+									class="css-checkbox<?php if(!isset($_column['fixed']) || !$_column['fixed']):?> changable<?php endif;?>" name="hideColumn[<?php echo $key;?>]" value="1"
+									<?php if($this->isChecked($_column)):?>checked="checked"<?php endif;?> />
+								<?php echo $this->escapeHtml($_column['header']);?>
+								<?php if ($_column['required']):?>
+								<span class="required">*</span>
+								<?php endif;?>
+							</label>
+							<input name="listColumn[<?php echo $key;?>]" type="hidden" value="<?php echo $key;?>"/>
+						</li>
+						<?php if($counter++==1):?>
+						<li style="margin: 10px 0;">
+							<a href="#" id="check-all"><?php echo $this->__('Check all');?></a> / 
+							<a href="#" id="uncheck-all"><?php echo $this->__('Uncheck all');?></a>
+						</li>
+						<?php endif;?>
+					<?php endforeach;?>
+					</ul>
+					<div>
+						<span class="required">*</span> <?php echo $this->__('- required columns'); ?>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $this->__('Cancel'); ?></button>
+					<button type="submit" class="btn btn-primary" ><?php echo $this->__('Save'); ?></button>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+<script type="text/javascript">
+	jQuery(function($){
+		$("#check-all,#uncheck-all").click(function(){
+			$(this).parents("ul").
+					find(":checkbox.changable").
+					prop("checked", $(this).is("#check-all"))
+			return false;
+		});
+	});
+</script>
