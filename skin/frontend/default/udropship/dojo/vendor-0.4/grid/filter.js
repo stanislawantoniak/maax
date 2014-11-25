@@ -11,6 +11,7 @@ define([
 		config = config || {};
 		switch(type){
 			case "text":
+			case "textarea":
 				return function(){
 					var element = domConstruct.create("input", {
 						"type": "text",

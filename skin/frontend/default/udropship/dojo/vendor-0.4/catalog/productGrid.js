@@ -395,7 +395,7 @@ define([
 
 		for(var key in editors){
 			editor = editors[key];
-			if(editor instanceof PopupEditor && editor.isOpen()){
+			if(editor instanceof PopupEditor){
 				editor.close();
 			}
 		}
@@ -414,7 +414,7 @@ define([
 		
 		for(var key in editors){
 			editor = editors[key];
-			if(editor instanceof PopupEditor && editor.isOpen()){
+			if(editor instanceof PopupEditor){
 				editor.close();
 			}
 		}

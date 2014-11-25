@@ -183,7 +183,7 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 			$code = $attribute->getAttributeCode();
 			$data = array(
 				"index"     => $code,
-				"required"  => $attribute->getIsRequired(),
+				"required"  => (int)$attribute->getIsRequired(),
 				'type'		=> $this->_getColumnType($attribute),
 				"header"    => $this->_getColumnLabel($attribute),
 				"attribute"	=> $attribute
@@ -301,6 +301,8 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 	protected function _getColumnType(Mage_Catalog_Model_Resource_Eav_Attribute $attribute) {
 		switch ($attribute->getBackendType()) {
 			case "text":
+				return "textarea";
+			break;
 			case "varchar":
 				return "text";
 			break;
