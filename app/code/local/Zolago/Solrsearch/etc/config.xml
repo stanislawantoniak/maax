@@ -284,7 +284,7 @@
 			<catalog_converter_price_update_after>
 				<observers>
 					<solr_search>
-						<type>disabled</type>
+						<type>enabled</type>
 					</solr_search>
 					<zolagosolrsearch>
 						<class>zolagosolrsearch/observer</class>
