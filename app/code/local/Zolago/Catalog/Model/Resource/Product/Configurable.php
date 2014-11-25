@@ -264,7 +264,8 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
     {
 
         $productRelations = $this->_getProductRelationPricesSizes($productConfigurableId, $store);
-
+        Mage::log('productRelations', 0, "configurable_update.log");
+        Mage::log(print_r($productRelations,true), 0, "configurable_update.log");
 
         if (!empty($productRelations)) {
             $insert = array();
@@ -303,6 +304,8 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
                     ", $catalogProductSuperAttributePricingTable, $lineQuery
                 );
 
+                Mage::log('insertProductSuperAttributePricingApp', 0, "configurable_update.log");
+                Mage::log($insertQuery, 0, "configurable_update.log");
 
                 try {
                     $this->_getWriteAdapter()->query($insertQuery);

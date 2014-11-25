@@ -37,8 +37,8 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
         }
 //        Zend_Debug::dump($listUpdatedProducts);
         unset($productId);
-        //Mage::log('Simple from queue', 0, "configurable_update.log");
-        //Mage::log(print_r($listUpdatedProducts,true), 0, "configurable_update.log");
+        Mage::log('Simple from queue', 0, "configurable_update.log");
+        Mage::log(print_r($listUpdatedProducts,true), 0, "configurable_update.log");
         $storeId = array(Mage_Core_Model_App::ADMIN_STORE_ID);
         $allStores = Mage::app()->getStores();
         foreach ($allStores as $_eachStoreId => $val) {
@@ -49,8 +49,8 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
 
         //define parent products (configurable) by child (simple)
         $configurableSimpleRelation = $zolagoCatalogModelProductConfigurableData->getConfigurableSimpleRelation($listUpdatedProducts);
-        //Mage::log('zolagoCatalogModelProductConfigurableData', 0, "configurable_update.log");
-        //Mage::log(print_r($configurableSimpleRelation,true), 0, "configurable_update.log");
+        Mage::log('zolagoCatalogModelProductConfigurableData', 0, "configurable_update.log");
+        Mage::log(print_r($configurableSimpleRelation,true), 0, "configurable_update.log");
 //        Zend_Debug::dump($configurableSimpleRelation);
         if (empty($configurableSimpleRelation)) {
             //Mage::log("Found 0 configurable products ", 0, "configurable_update.log");
@@ -62,7 +62,8 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
         //super attribute ids
         $superAttributes = $zolagoCatalogModelProductConfigurableData->getSuperAttributes($configurableProducts);
         //--super attribute ids
-//        Zend_Debug::dump($superAttributes);
+        Mage::log('superAttributes', 0, "configurable_update.log");
+        Mage::log(print_r($superAttributes,true), 0, "configurable_update.log");
         $productConfigurableIds = array();
 
         foreach ($configurableSimpleRelation as $productConfigurableId => $configurableSimpleRelationItem) {

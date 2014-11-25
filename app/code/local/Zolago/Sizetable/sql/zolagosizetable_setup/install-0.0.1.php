@@ -55,14 +55,14 @@ $table = $installer->getConnection()
     // Struct
     ->addColumn("attribute_set_id",       Varien_Db_Ddl_Table::TYPE_INTEGER, null, array('nullable' => false))
     ->addColumn("vendor_id",    Varien_Db_Ddl_Table::TYPE_INTEGER, null, array('nullable' => false))
-       
+
     // Indexes
     ->addIndex($installer->getIdxName('zolagosizetable/vendor_attribute_set', array('vendor_id')),
         array('vendor_id'), Varien_Db_Adapter_Interface::INDEX_TYPE_UNIQUE)
     ->addIndex($installer->getIdxName('zolagosizetable/vendor_attribute_set', array('attribute_set_id')),
         array('attribute_set_id'))
-    
- 
+
+
     ->addForeignKey(
         $installer->getFkName('zolagosizetable/vendor_attribute_set', 'vendor_id', 'udropship/vendor', 'vendor_id'),
         'vendor_id', $installer->getTable('udropship_vendor'), 'vendor_id',

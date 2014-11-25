@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Catalog>
-            <version>0.0.19</version>
+            <version>0.0.20</version>
         </Zolago_Catalog>
     </modules>
     <default>
@@ -108,6 +108,10 @@
                         <class>zolagocatalog/observer</class>
                         <method>addColumnWidthField</method>
                     </add_column_width_field>
+                    <add_column_attribute_order_field>
+                        <class>zolagocatalog/observer</class>
+                        <method>addColumnAttributeOrder</method>
+                    </add_column_attribute_order_field>
                 </observers>
             </adminhtml_catalog_product_attribute_edit_prepare_form>
         </events>
