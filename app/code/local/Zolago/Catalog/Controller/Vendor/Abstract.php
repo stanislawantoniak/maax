@@ -78,6 +78,44 @@ abstract class Zolago_Catalog_Controller_Vendor_Abstract
 		return $params;
 	}
 	
+	protected function _handleRestPut() {
+		
+		$reposnse = $this->getResponse();
+		$data = Mage::helper("core")->jsonDecode(($this->getRequest()->getRawBody()));
+				
+		try{
+			$productIds = $data['entity_id'];
+			$attributeChanged = $data['changed'];
+			$attributeData = array();
+			$storeId = $data['store_id'];
+
+			foreach($attributeChanged as $attribute){
+				if(isset($data[$attribute])){
+					$attributeData[$attribute] = $data[$attribute];
+				}
+			}
+			if($attributeData){
+				$this->_processAttributresSave(array($productIds), $attributeData, $storeId);
+			}
+
+		} catch (Mage_Core_Exception $ex) {
+			$reposnse->setHttpResponseCode(500);
+			$reposnse->setBody($ex->getMessage());
+			return;
+		} catch (Exception $ex) {
+			Mage::logException($ex);
+			$reposnse->setHttpResponseCode(500);
+			$reposnse->setBody("Some error occured");
+			return;
+		}
+
+		/** dev tool **/
+		$data['changed'] = array();
+
+		$reposnse->setBody(json_encode($data));
+		$this->_prepareRestResponse();
+	}
+	
 	/**
 	 * handle Get method
 	 */

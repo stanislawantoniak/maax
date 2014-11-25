@@ -7,13 +7,15 @@ define([
 	"dojo/dom-class",
 	"dojo/query",
 	"dojo/dom-style",
-	"dojo/NodeList-traverse"
-], function(declare, put, on, query, lang, domClass, query, domStyle, nodeList){
+	"dojo/NodeList-traverse",
+	"dojo/Evented",
+	"dojo/Deferred"
+], function(declare, put, on, query, lang, domClass, query, domStyle, nodeList, Evented, Deferred){
 	
 	var PLACEMENT_SCROLLER = "dgrid-scroller";
 	var EDITOR_CLASS = "dgrid-editors";
 	
-	return declare(null, {
+	return declare([Evented], {
 		/**
 		 * Column instance
 		 */
@@ -75,13 +77,16 @@ define([
 		 * @returns {void}
 		 */
 		open: function(cellObj){
-			domClass.remove(this.content, "use-selection");
+			this.cell = cellObj;
+					
 			if(this.canShowUseSelection()){
 				domClass.add(this.content, "use-selection");
 				this.setValue(null);
 			}else{
+				domClass.remove(this.content, "use-selection");
 				this.setValue(cellObj.row.data[this.column.field]);
 			}
+			
 			domStyle.set(
 				this.content, 
 				this._getEditorPosition(cellObj, this.content)
@@ -89,8 +94,12 @@ define([
 	
 			domClass.remove(this.content, "hidden")
 		},
+		/**
+		 * @param {mixed} value
+		 * @returns {this}
+		 */
 		setValue: function(value){
-			var field = query("[name='attribute_value']", this.content)[0],
+			var field = this.getField(),
 				parentColumn = this.parentColumn;
 			
 			try{
@@ -111,15 +120,62 @@ define([
 			
 		},
 		/**
+		 * @returns {String}
+		 */
+		getValue: function(){
+			var value = this.getField().value;
+			if(this.parentColumn.type=="multiselect"){
+				value = [];
+				query("option", this.getField()).forEach(function(el){
+					if(el.selected){
+						value.push(el.value);
+					}
+				});
+				value = value.join(",");
+			}
+			return value;
+		},
+		/**
+		 * @returns {String}
+		 */
+		getMode: function(){
+			var checked = query("[name='mode']:checked", this.content);
+			if(checked.length){
+				return checked[0].value;
+			}
+			return '';
+		},
+		/**
+		 * @returns {Object}
+		 */
+		getField: function(){
+			return query("[name='attribute_value']", this.content)[0];
+		},
+		/**
 		 * @returns {deffred}
 		 */
 		save: function(){
 			// Make save
-			this._startLoading();
 			var self = this;
-			setTimeout(function(){
+			var deferred = new Deferred();
+			
+			deferred.then(function(){
+				self.close();
 				self._stopLoading();
-			}, 3000);
+			})
+			
+			this._startLoading();
+			
+			this.emit("save", {
+				value: this.getValue(),
+				mode: this.getMode(),
+				field: this.column.field,
+				column: this.column,
+				cell: this.cell,
+				row: this.cell.row,
+				id: this.cell.row.id,
+				deferred: deferred
+			});
 		},
 		/**
 		 * @returns {void}
@@ -270,6 +326,7 @@ define([
 			put(node, put("input", {
 				type: "radio",
 				name: "mode",
+				value: mode,
 				id:	id,
 				checked: !!checked
 			}));
@@ -375,18 +432,27 @@ define([
 				domClass.add(content, "hidden");
 			}
 			
-			var ret = {
+			return  {
 				left: left + "px",
 				top: top + "px"
-			}
-			
-			
-			return ret;
+			};
 		},
+		/**
+		 * @returns {void}
+		 */
 		_startLoading: function(){
+			query("input,select,textarea", this._form).forEach(function(el){
+				el.disabled = true;
+			});
 			jQuery(this._formSubmit).button('loading');
 		},
+		/**
+		 * @returns {void}
+		 */
 		_stopLoading: function(){
+			query("input,select,textarea", this._form).forEach(function(el){
+				el.disabled = false;
+			});
 			jQuery(this._formSubmit).button('reset');
 		}
 	});

@@ -328,7 +328,21 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 		return $this->_getGridVisibleAttributes();
 	}
 
-
+	/**
+	 * @param string | Mage_Catalog_Model_Resource_Eav_Attribute $attribute
+	 * @return boolean
+	 */
+	public function isAttributeEditable($attribute) {
+		$attribute = $this->getAttribute($attribute);
+		switch($attribute->getGridPermission()){
+			case Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::INLINE_EDITION:
+			case Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::EDITION:
+				return true;
+			break;
+		}
+		return false;
+	}
+	
 	/**
 	 * @return Mage_Catalog_Model_Resource_Product_Attribute_Collection
 	 */

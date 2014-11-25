@@ -102,14 +102,18 @@ define([
 		});
 	}	
 	
-	var RestStore = declare([ Rest, Trackable, Cache]);
+	var changed = {},
+		orig = {};
+		
+	var RestStore = declare([ Rest, Trackable]);
 	
 	window.store = store = new RestStore({
 		target:"/udprod/vendor_product/rest/",
-		put: function(object){
-			return object;
+		idProperty: "entity_id",
+		put: function(obj, options){
+			return  RestStore.prototype.put.call(this, obj, options);
 		},
-		useRangeHeaders: true,
+		useRangeHeaders: true
 	});
 						
 	/*storeRest = new JsonRest({
@@ -391,6 +395,20 @@ define([
 
 		if(!editors[field]){
 			editors[field] = new PopupEditor(column);
+			editors[field].on("save", function(e){
+				var dataObject = e.row.data,
+					field = e.field,
+					id = e.id;
+				
+	
+				dataObject[field] = e.value;
+				dataObject.changed = [field];
+				
+				store.put(dataObject).then(function(){
+					e.deferred.resolve();
+				});
+				
+			});
 		}
 
 		for(var key in editors){

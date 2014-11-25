@@ -317,7 +317,7 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 		/* @var $collection Zolago_Catalog_Model_Resource_Vendor_Product_Collection */
 		
 		foreach($attributes as $attributeCode=>$value){
-			if(!in_array($attributeCode, $collection->getEditableAttributes())){
+			if(!$this->getGridModel()->isAttributeEditable($attributeCode)){
 				throw new Mage_Core_Exception("You are trying to edit not editable attribute (".htmlspecialchars($attributeCode).")");
 			}
 			
