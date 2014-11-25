@@ -324,7 +324,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         }
 
 
-        Mage::log($productConfigurableId, null, 'hello.log');
+        //Mage::log($productConfigurableId, null, 'hello.log');
     }
     /**
      * get super attribute ids
