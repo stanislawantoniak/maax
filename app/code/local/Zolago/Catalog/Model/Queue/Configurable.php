@@ -116,7 +116,7 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
         //2. put products to solr queue
         //zolago_catalog_after_update_price_type
         Mage::dispatchEvent(
-            "zolago_catalog_after_update_price_type",
+            "catalog_converter_price_update_after",
             array(
                 "product_ids" => $listUpdatedProducts
             )
