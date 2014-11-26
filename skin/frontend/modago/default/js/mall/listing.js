@@ -1225,7 +1225,7 @@ Mall.listing = {
 		var self = this,
 			data = this.getQueryParamsAsArray(forceObject),
 			ajaxKey = this._buildAjaxKey(data);
-	
+
 		this._pushHistoryState(data);
 
 		if(this._ajaxCache[ajaxKey]){
@@ -1777,7 +1777,7 @@ Mall.listing = {
 				var el = jQuery(this),
 					text = el.find("label > span:eq(0)").text().trim().toLowerCase(),
 					serchPosition = text.search(term);
-					
+
 				if(serchPosition>-1){
 					el.removeClass("hidden");
 					matches++;
@@ -1790,7 +1790,7 @@ Mall.listing = {
 					el.addClass("hidden");
 				}
 			});
-			
+
 			if(!matches){
 				noResult.removeClass("hidden");
 				list.addClass("hidden");
@@ -1799,13 +1799,13 @@ Mall.listing = {
 				list.removeClass("hidden");
 			}
 		}
-		
+
 		if(list.find("li").not(".hidden").length){
-			
+
 			/**
 			 * @todo improve performance
 			 */
-			
+
 			// Make sort
 			this._sortLongListContent(checkboxes);
 			checkboxes.each(function(){
@@ -1814,7 +1814,7 @@ Mall.listing = {
 					listUl.append(el);
 				}
 			});
-			
+
 			// Almost perfect match - move as first
 			var almostPerfect = checkboxes.parents("li.almostPerfect").
 					removeClass("almostPerfect").
@@ -1825,7 +1825,7 @@ Mall.listing = {
 					jQuery(this).parents('li').prependTo(listUl);
 				});
 			}
-			
+
 			// Perfect match - move as first
 			var perfectMatch = checkboxes.parents("li.perfectMatch").
 					removeClass("perfectMatch").
@@ -1836,7 +1836,7 @@ Mall.listing = {
 					jQuery(this).parents('li').prependTo(listUl);
 				});
 			}
-			
+
 			// Move scroll top
 			list.mCustomScrollbar("scrollTo", "top");
 		}
@@ -1844,7 +1844,7 @@ Mall.listing = {
 	},
 
 	_sortLongListContent: function(items, desc){
-		desc = desc ? -1 : 1; 
+		desc = desc ? -1 : 1;
 		items.sort(function(a,b){
 			return (a.sort-b.sort)*desc;
 		});
@@ -1859,7 +1859,7 @@ Mall.listing = {
 			items = jQuery(":checkbox", scope);
 
 		this._sortLongListContent(items);
-		
+
 		items.each(function(){
 			var el = jQuery(this),
 				parent = el.parents('li');
@@ -1875,7 +1875,7 @@ Mall.listing = {
 		}else{
 			selectedContianer.hide();
 		}
-		
+
 		if(noSelectedContianer.children().length){
 			wrapper.show();
 			scrollable.removeClass('hidden');
@@ -1884,7 +1884,7 @@ Mall.listing = {
 			wrapper.hide();
 			selectedContianer.addClass('noChooseFields');
 		}
-		
+
 	},
 
 	/**
@@ -1913,7 +1913,7 @@ Mall.listing = {
 			minPrice,
 			maxPrice,
 			self = this;
-			
+
 		if (sliderRange.length >= 1) {
 			sliderRange.slider({
 				range: true,
@@ -1957,22 +1957,22 @@ Mall.listing = {
 		jQuery("#filter_price", scope).find("input.filter-price-range-submit").on("click", function(e) {
 			e.preventDefault();
 			// validate prices
-			
+
 			minPrice = Mall.listing.getMinPriceFromSlider();
 			maxPrice = Mall.listing.getMaxPriceFromSlider();
 			if(!self._validateRange(minPrice, maxPrice)) {
 				return false;
 			}
-			
+
 			var checkSlider = self.getSliderCheckbox(scope);
 			if (!checkSlider.is(':checked')) {
 				checkSlider.prop('checked', true).change();
 				jQuery('#filter_price').find('.action').removeClass('hidden');
 			}
-			
+
 			self._transferValuesToCheckbox(minPrice, maxPrice, scope);
 			self._triggerRefresh(scope, 1, true);
-			
+
 		});
 
 		jQuery("#filter_price", scope).find("input.filter-price-range-submit").on("mouseover"
@@ -2022,38 +2022,38 @@ Mall.listing = {
 		return this;
 	},
 	_validateRange: function(minPrice,maxPrice){
-		
+
 		var reg = /^\d+$/;
-		
+
 		if(!reg.test(minPrice) || !reg.test(maxPrice)){
 			return false;
 		}
-		
+
 		var min = parseInt(minPrice, 10);
 		var max = parseInt(maxPrice, 10);
-		
+
 		if(isNaN(min) || isNaN(max)){
 			return false;
 		}
 		return min>=0 && max>=0 && min<=max;
 	},
-	
+
 	_triggerRefresh: function(scope, force, triggerChange){
 		var checkbox = jQuery('#checkSlider',scope),
 			action = jQuery('#filter_price', scope).find('.action'),
 			triggerChange = triggerChange || true,
 			self = this;
-		
+
 		if(force!==undefined){
 			checkbox.prop('checked', force);
 		}
-		
+
 		if(!checkbox.is(':checked')){
 			action.removeClass('hidden');
 		}else{
 			action.addClass('hidden');
 		}
-		
+
 		if(triggerChange){
 			if(self.getPushStateSupport()){
 				self.reloadListing();
@@ -2062,13 +2062,13 @@ Mall.listing = {
 				document.location = checkbox.parent().find("a").attr('href');
 			}
 		}
-		
+
 	},
 	_transferValuesToCheckbox: function(min,max,scope){
-		this.getSliderCheckbox(scope).attr('value', 
+		this.getSliderCheckbox(scope).attr('value',
 			parseInt(min) + " TO " + parseInt(max));
-		
-		var url = this._getUrlNoParams() + '?' + 
+
+		var url = this._getUrlNoParams() + '?' +
 				this._buildPushStateKey(this.getQueryParamsAsArray());
 		this.getSliderCheckbox(scope).parent().find("a").attr("href", url);
 		this.getSliderCheckbox(scope).data('url', url);
@@ -2108,7 +2108,7 @@ Mall.listing = {
 			rows: this.getScrollLoadOffset(),
 			start: 0
 		};
-		
+
 		if(this.getIsSliderActive()){
 			q.slider = 1;
 		}
@@ -2130,7 +2130,7 @@ Mall.listing = {
 		if(this.getIsSliderActive()){
 			defaults.slider = 1;
 		}
-		
+
 		var out = [];
 
 		jQuery.extend(defaults, forceObject);
@@ -2307,21 +2307,21 @@ Mall.listing = {
 	getNoPushstate: function() {
 		return this._noPushState;
 	},
-	
+
 	setNoPushstate: function(bool) {
 		this._noPushState = bool;
 		return this;
 	},
-	
+
 	getNoDelay: function() {
 		return this._noDelay;
 	},
-	
+
 	setNoDelay: function(bool) {
 		this._noDelay = bool;
 		return this;
 	},
-	
+
 	/**
 	 * Returns min price which is set in price slider
 	 *
