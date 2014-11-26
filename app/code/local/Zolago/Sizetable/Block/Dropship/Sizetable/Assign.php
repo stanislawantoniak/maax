@@ -1,21 +1,41 @@
 <?php
 class Zolago_Sizetable_Block_Dropship_Sizetable_Assign extends Mage_Core_Block_Template {
 	protected $mid; //manufacturer attribute id
+	protected $asid; //attribute set id
 	protected $brands;
 	protected $attributeSets;
 	protected $session;
 
 	public function __construct() {
 		$this->mid = Mage::getSingleton("eav/config")->getAttribute('catalog_product','manufacturer')->getAttributeId();
+		$this->asid = Mage::getModel('catalog/product')->getResource()->getEntityType()->getId();
 		$this->session = Mage::getSingleton('udropship/session');
 	}
 
-	public function getAssigns() {
-		return array(
-			0 => array(
+	protected function _beforeToHtml() {
+		$this->getGrid();
+		return parent::_beforeToHtml();
+	}
 
-			)
-		);
+	public function getGridJsObjectName() {
+		return $this->getGrid()->getJsObjectName();
+	}
+
+	/**
+	 * @return Zolago_Sizetable_Block_Dropship_Sizetable_Assign_Grid
+	 */
+	public function getGrid() {
+		if(!$this->getData("grid")){
+			$design = Mage::getDesign();
+			$design->setArea("adminhtml");
+			$block = $this->getLayout()->
+			createBlock("zolagosizetable/dropship_sizetable_assign_grid");
+			$block->setParentBlock($this);
+			$this->setGridHtml($block->toHtml());
+			$this->setData("grid", $block);
+			$design->setArea("frontend");
+		}
+		return $this->getData("grid");
 	}
 
 	public function getBrands() {
@@ -37,7 +57,7 @@ class Zolago_Sizetable_Block_Dropship_Sizetable_Assign extends Mage_Core_Block_T
 	public function getAttributeSets() {
 		if(!$this->attributeSets) {
 			$collection = Mage::getModel('eav/entity_attribute_set')->getCollection()
-				->setEntityTypeFilter(Mage::getModel('catalog/product')->getResource()->getEntityType()->getId())
+				->setEntityTypeFilter($this->asid)
 				->join(array('table_alias'=>'zolagosizetable/vendor_attribute_set'),'main_table.attribute_set_id = table_alias.attribute_set_id','')
 				->addFieldToFilter("table_alias.vendor_id",$this->getVendorId());
 			$attrs = array('' => '');
@@ -78,5 +98,9 @@ class Zolago_Sizetable_Block_Dropship_Sizetable_Assign extends Mage_Core_Block_T
 
 	public function getAction() {
 		return $this->getUrl("udropship/sizetable/assign");
+	}
+
+	public function getFormkey() {
+		return '<input name="form_key" type="hidden" value="'.Mage::getSingleton('core/session')->getFormKey().'">';
 	}
 }

@@ -16,7 +16,6 @@ class Zolago_Sizetable_Block_Dropship_Sizetable_Edit extends Mage_Core_Block_Tem
 
 	public function getSizeTable() {
 		$sizetable = Mage::registry("sizetable");
-		$out = $sizetable->getData();
 		return Mage::registry("sizetable");
 	}
 

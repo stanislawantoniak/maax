@@ -2,6 +2,8 @@
 
 class Zolago_Sizetable_Dropship_SizetableController extends Zolago_Dropship_Controller_Vendor_Abstract {
 
+	protected $erroroccurred = false;
+
 	protected function _getSession()
 	{
 		return Mage::getSingleton('udropship/session');
@@ -38,7 +40,7 @@ class Zolago_Sizetable_Dropship_SizetableController extends Zolago_Dropship_Cont
 						$model->load($modelId);
 						if (!$model->getId()) {
 							throw new Mage_Core_Exception($helper->__("Size table not found"));
-						} elseif($model->getVendorId() != $this->_getSession()->getVendor()->getVendorId()) {
+						} elseif($model->getVendorId() != $this->getVendorId()) {
 							return $this->_redirectReferer();
 						}
 					}
@@ -53,7 +55,7 @@ class Zolago_Sizetable_Dropship_SizetableController extends Zolago_Dropship_Cont
 			$session->setFormData($data);
 			return $this->_redirectReferer();
 		}catch(Exception $e){
-			$session->addError($helper->__("Some error occured"));
+			$session->addError($helper->__("Some error occurred"));
 			$session->setFormData($data);
 			Mage::logException($e);
 			return $this->_redirectReferer();
@@ -61,20 +63,11 @@ class Zolago_Sizetable_Dropship_SizetableController extends Zolago_Dropship_Cont
 		return $this->_redirect("*/*");
 	}
 
-
-	/*
-	 *
-	 *
-	 * TODO: !!!!
-	 *
-	 *
-	 *
-	 *
-	 */
 	public function assignAction() {
 		$session = $this->_getSession();
 		try {
 			if ($this->getRequest()->getPost()) {
+				$vid = $this->getVendorId();
 				$data = $this->getRequest()->getParams();
 				$formKey = Mage::getSingleton('core/session')->getFormKey();
 				$formKeyPost = $this->getRequest()->getParam('form_key');
@@ -83,21 +76,27 @@ class Zolago_Sizetable_Dropship_SizetableController extends Zolago_Dropship_Cont
 				} else {
 					/** @var Zolago_Sizetable_Helper_Data $helper */
 					$helper = Mage::helper('zolagosizetable');
-					/** @var Zolago_Sizetable_Model_Sizetable $model */
-					$model = Mage::getModel("zolagosizetable/sizetable");
-					$modelId = $this->getRequest()->getParam("sizetable_id");
-					if ($modelId !== null) {
-						$model->load($modelId);
+					/** @var Zolago_Sizetable_Model_Sizetable_Rule $model */
+					$model = Mage::getModel("zolagosizetable/sizetable_rule");
+					if (isset($data["rule_id"]) && !empty($data["rule_id"])) {
+						$model->load($data["rule_id"]);
 						if (!$model->getId()) {
-							throw new Mage_Core_Exception($helper->__("Size table not found"));
-						} elseif($model->getVendorId() != $this->_getSession()->getVendor()->getVendorId()) {
+							throw new Mage_Core_Exception($helper->__("Size table assignment not found"));
+						} elseif($model->getVendorId() != $vid) {
 							return $this->_redirectReferer();
 						}
 					}
+
+					$data['vendor_id'] = $vid;
+					if(!isset($data['attribute_set_id']) || empty($data['attribute_set_id']))
+						$data['attribute_set_id'] = null;
+
+					if(!isset($data['brand_id']) || empty($data['brand_id']))
+						$data['brand_id'] = null;
+
 					$model->updateModelData($data);
-					$model->setPostData($data['sizetable']);
 					$model->save();
-					$session->addSuccess($helper->__("Size table saved"));
+					$session->addSuccess($helper->__("Size table assignment saved"));
 				}
 			}
 		}catch(Mage_Core_Exception $e){
@@ -105,14 +104,60 @@ class Zolago_Sizetable_Dropship_SizetableController extends Zolago_Dropship_Cont
 			$session->setFormData($data);
 			return $this->_redirectReferer();
 		}catch(Exception $e){
-			$session->addError($helper->__("Some error occured"));
+			$session->addError($helper->__("Some error occurred"));
 			$session->setFormData($data);
 			Mage::logException($e);
 			return $this->_redirectReferer();
 		}
-		return $this->_redirect("*/*");
-		/*Mage::log($this->getRequest()->getPost());
-		$this->_redirectReferer();*/
+		return $this->_redirectReferer();
+	}
+
+	public function deleteAction() {
+		$ruleId = $this->getRequest()->getParam("rule_id");
+		$sizetableId = $this->getRequest()->getParam("sizetable_id");
+		if(!empty($ruleId)) {
+			$this->deleteRule($ruleId);
+		} elseif(!empty($sizetableId)) {
+			$this->deleteSizetable($sizetableId);
+		}
+		$this->_redirectReferer();
+	}
+
+	protected function deleteRule($ruleId) {
+		$helper = Mage::helper('zolagosizetable');
+		$this->delete(Mage::getModel("zolagosizetable/sizetable_rule"),$ruleId);
+		if(!$this->erroroccurred) $this->_getSession()->addSuccess($helper->__("Size table assignment was deleted"));
+		else $this->_getSession()->addError($helper->__("There was an error while deleting selected assignment"));
+		$this->_redirectReferer();
+	}
+
+	protected function deleteSizetable($sizetableId) {
+		$helper = Mage::helper('zolagosizetable');
+		$this->delete(Mage::getModel("zolagosizetable/sizetable"),$sizetableId);
+		if(!$this->erroroccurred) $this->_getSession()->addSuccess($helper->__("Size table was deleted"));
+		else $this->_getSession()->addError($helper->__("There was an error while deleting selected size table"));
+		$this->_redirectReferer();
+	}
+
+	public function delete($model,$modelId)
+	{
+		$helper = Mage::helper('zolagosizetable');
+		try{
+			if($modelId){
+				$model = $model->load($modelId);
+				if ($model && $model->getVendorId() == $this->_getSession()->getVendor()->getVendorId())
+					$model->delete();
+				else
+					$this->erroroccurred = true;
+			}
+		} catch (Mage_Core_Exception $e) {
+			$this->_getSession()->addError($e->getMessage());
+			return $this->_redirectReferer();
+		} catch (Exception $e) {
+			$this->_getSession()->addError($helper->__("Some error occurred"));
+			Mage::logException($e);
+			return $this->_redirectReferer();
+		}
 	}
 
 	protected function render() {
@@ -139,18 +184,21 @@ class Zolago_Sizetable_Dropship_SizetableController extends Zolago_Dropship_Cont
 
 	protected function _prepareSizetable($addScopes = false) {
 		$sizetable = $this->_registerModel($addScopes);
-
 		if($sizetable !== false) {
-			$vendor = $this->_getSession()->getVendor();
 			// Existing sizetable - has venor rights?
-			if ($sizetable->getSizetableId() && $sizetable->getVendorId() != $vendor->getVendorId()) {
+			if ($sizetable->getSizetableId() && $sizetable->getVendorId() != $this->getVendorId()) {
 				$this->_getSession()->addError(Mage::helper('zolagosizetable')->__("You cannot edit this size table"));
 				return $this->_redirect("*/*");
 				// Sizetable id specified, but dons't exists
 			} elseif (!$sizetable->getSizetableId() && $this->getRequest()->getParam("sizetable_id", null) !== null) {
+				Mage::log(4);
 				$this->_getSession()->addError(Mage::helper('zolagosizetable')->__("Size table doesn't exists"));
 				return $this->_redirect("*/*");
 			}
 		}
+	}
+
+	public function getVendorId() {
+		return $this->_getSession()->getVendor()->getVendorId();
 	}
 }

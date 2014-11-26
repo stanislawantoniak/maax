@@ -16,11 +16,11 @@ class Zolago_Sizetable_Model_Resource_Sizetable_Collection
 		if($vendor instanceof Unirgy_Dropship_Model_Vendor){
 			$vendor = $vendor->getId();
 		}
-		$this->getConnection()->quoteInto(
-				"vendor_id=?",
-				$vendor
+		$this->addFieldToFilter(
+			"main_table.vendor_id",
+			$vendor
 		);
-		return $this->getSelect();
+		return $this;
 	}
 
 }
