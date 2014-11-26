@@ -102,7 +102,17 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
         $productsToReindex = array_merge($listUpdatedProducts, $productConfigurableIds);
 
         //1. reindex products
-        Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($productsToReindex);
+        //to avoid long queries make number of queries
+        $numberQ = 20;
+        if (count($productsToReindex) > $numberQ) {
+            $productsToReindexC = array_chunk($productsToReindex, $numberQ);
+            foreach ($productsToReindexC as $productsToReindexCItem) {
+                Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($productsToReindexCItem);
+            }
+            unset($productsToReindexCItem);
+        } else {
+            Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($productsToReindex);
+        }
 
 //        if (Mage::helper('catalog/category_flat')->isEnabled()) {
 //            $fI = new Mage_Catalog_Model_Resource_Product_Flat_Indexer();
