@@ -11,6 +11,57 @@ class Zolago_Catalog_Vendor_ProductController
 		$this->_renderPage(null, 'udprod_product');
     }
 	
+	/**
+	 * Save attributes mass actions
+	 */
+	public function saveMassAction() {
+		
+		$request = $this->getRequest();
+		$productIds = $request->getParam("product_ids");
+		$data = $request->getParam("attribute");
+		$storeId = $this->_getStoreId();
+		$global = false;
+		
+		if(is_array($productIds) && count($productIds)){
+			$collection = $this->_prepareBasciCollection();
+			$collection->addIdFilter($productIds);
+		}else{
+			$collection = $this->_getCollection();
+			foreach($this->_getRestQuery() as $key=>$value){
+				$collection->addAttributeToFilter($key, $value);
+			}
+			$global = true;
+		}
+		
+		try{
+			$ids = $collection->getAllIds();
+			
+			array_walk($ids, function($value){
+				return (int)$value;
+			});
+			
+			$this->_processAttributresSave(
+					$ids, 
+					$data, 
+					$storeId, 
+					$request->getPost()
+			);
+			
+			$response = array(
+				"changed_ids"	=> $ids,
+				"data"			=> $data,
+				"global"		=> $global
+			);
+		} catch (Exception $ex) {
+			$this->getResponse()->setHttpResponseCode(500);
+			$response = $ex->getMessage();
+		}
+		
+		
+		$this->getResponse()->setBody(Mage::helper("core")->jsonEncode($response));
+		$this->_prepareRestResponse();
+	}
+	
 	
 	/**
 	 * Save hidden columns

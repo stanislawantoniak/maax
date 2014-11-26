@@ -45,8 +45,8 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 	 * @return int
 	 */
 	protected function _getStoreId() {
-		$storeId = $this->getRequest()->getParam("store_id");
-		return (int)Mage::app()->getStore($storeId)->getId();
+		//$storeId = $this->getRequest()->getParam("store_id");
+		return Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID;
 	}
 
 	/**
@@ -58,16 +58,11 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 	
 	/**
 	 * collection dont use after load - just flat selects
-	 * @param Varien_Data_Collection
 	 * @return Varien_Data_Collection
 	 */
-	protected function _prepareCollection(Varien_Data_Collection $collection = null){
+	protected function _prepareBasciCollection() {
+		$collection = Mage::getResourceModel("zolagocatalog/vendor_product_collection");
 		
-		if(!($collection instanceof Mage_Catalog_Model_Resource_Product_Collection)){
-			$collection = Mage::getResourceModel("zolagocatalog/vendor_product_collection");
-		}
-		/* @var $collection Zolago_Catalog_Model_Resource_Vendor_Product_Collection */
-
 		$collection->setFlag("skip_price_data", true);
 
 		// Set store id
@@ -86,8 +81,23 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 			Mage_Catalog_Model_Product_Visibility::VISIBILITY_IN_SEARCH,
 			Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH
 		)));
+		
+		return $collection;
+	}
+	
+	/**
+	 * collection dont use after load - just flat selects
+	 * @param Varien_Data_Collection
+	 * @return Varien_Data_Collection
+	 */
+	protected function _prepareCollection(Varien_Data_Collection $collection = null){
+		
+		if(!($collection instanceof Mage_Catalog_Model_Resource_Product_Collection)){
+			$collection = $this->_prepareBasciCollection();
+		}
+		/* @var $collection Zolago_Catalog_Model_Resource_Vendor_Product_Collection */
 
-
+		
 		//Add Active Static Filters to Collection - Start
 		$staticFilters = $this->getGridModel()->getStaticFilters();
 		if (is_array($staticFilters) && count($staticFilters)) {
@@ -340,7 +350,7 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 				$notAllowed[] = $attribute->getStoreLabel($storeId);
 			}
 			if($attribute->getIsRequired() && trim($value)==""){
-				$missings = $attribute->getStoreLabel($storeId);
+				$missings[] = $attribute->getStoreLabel($storeId);
 			}
 		}
 		// Validate grid permissions

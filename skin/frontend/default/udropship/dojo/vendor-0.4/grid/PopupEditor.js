@@ -79,12 +79,16 @@ define([
 		open: function(cellObj){
 			this.cell = cellObj;
 					
-			if(this.canShowUseSelection()){
+			if(this.canShowUseSelection() && this.grid.isSelected(cellObj.row)){
 				domClass.add(this.content, "use-selection");
-				this.setValue(null);
 			}else{
 				domClass.remove(this.content, "use-selection");
+			}
+			
+			if(this.parentColumn.type!="multiselect"){
 				this.setValue(cellObj.row.data[this.column.field]);
+			}else{
+				this.setValue(null);
 			}
 			
 			domStyle.set(
@@ -162,7 +166,9 @@ define([
 			deferred.then(function(){
 				self.close();
 				self._stopLoading();
-			})
+			}, function(){
+				self._stopLoading();
+			});
 			
 			this._startLoading();
 			
@@ -212,7 +218,9 @@ define([
 		 * @returns {Bool}
 		 */
 		getUseSelection: function(){
-			return this.canShowUseSelection() && this._useSelection.checked;
+			return this.canShowUseSelection() && 
+				domClass.contains(this.content, "use-selection") && 
+				this._useSelection.checked;
 		},
 		/**
 		 * @returns {void}

@@ -13,7 +13,7 @@ define([
 	"dojo/query",
 	"put-selector/put",
 	"dojo/dom-class",
-	
+	"dojo/request/xhr",
 	// stores 
 	"dstore/Rest",
 	"dstore/Trackable",
@@ -26,7 +26,7 @@ define([
 	"vendor/grid/PopupEditor",
 	"vendor/misc"
 ], function(BaseGrid, Grid, Pagination, CompoundColumns, ColumnSet, Selection, Selector,
-	Keyboard, declare, domConstruct, on, query, put, domClass,
+	Keyboard, declare, domConstruct, on, query, put, domClass, xhr,
 	Rest, Trackable, Cache, lang, 
 	filter, QueryGrid, PopupEditor, misc){
 	
@@ -342,6 +342,101 @@ define([
 	}
 	
 	/**
+	 * @returns {void}
+	 */
+	var hideAllEditors = function(){
+		var editor, editors = grid.get('editors');
+		
+		for(var key in editors){
+			editor = editors[key];
+			if(editor instanceof PopupEditor){
+				editor.close();
+			}
+		}
+	}
+	
+	/**
+	 * 
+	 * @param {Evented} e
+	 * @returns {void}
+	 */
+	var handleSaveEditor = function(e){
+		var dataObject = e.row.data,
+			field = e.field,
+			id = e.id,
+			value = e.value,
+			oldValue = dataObject[field];
+	
+		// Use only single row
+		if(!e.useSelection){
+			dataObject.attribute_mode = {};
+			dataObject.attribute_mode[field] = e.mode;
+			dataObject[field] = value;
+			dataObject.changed = [field];
+			store.put(dataObject).then(function(){
+				e.deferred.resolve();
+			}, function(ex){
+				alert(ex.response.text);
+				e.deferred.reject();
+			});
+			return;
+		}
+		
+		var req = [
+			{name: "attribute[" + field + "]", value: value},
+			{name: "attribute_mode[" + field + "]", value: e.mode}
+		];
+		
+		var url = "/udprod/vendor_product/saveMass",
+			urlParams = [];
+		
+		// Use selection and select all checked - move params to query string
+		if(grid.getCheckAll()){
+			var query = grid.get("query");
+			for(var k in query){
+				if(query.hasOwnProperty(k)){
+					urlParams.push(k + "=" + encodeURIComponent(query[k]));
+				}
+			}
+		// Use selection and some recoreds checked
+		}else{
+			grid.getSelectedIds().forEach(function(val){
+				req.push({name: "product_ids[]", value: val});
+			});
+			for(var k in baseQuery){
+				if(baseQuery.hasOwnProperty(k)){
+					urlParams.push(k + "=" + encodeURIComponent(baseQuery[k]));
+				}
+			}
+		}
+		
+		url = url + "?" + urlParams.join("&");
+		
+		jQuery.post(url, req).then(
+			function(response){
+				console.log(response);
+				// Make refresh grid
+				e.deferred.resolve();
+				// Restore selection
+				grid.refresh({keepScrollPosition: true});
+				
+				if(response.global){
+					grid.selectAll();
+				}else{
+					response.changed_ids.forEach(function(id){
+						grid.select(id);
+					});
+				}
+			},
+			function(response){
+				alert(response.responseText);
+				e.deferred.reject();
+			}
+		)
+
+	}
+	
+	/**
 	 * @param {Object} e
 	 * @returns {void}
 	 */
@@ -354,54 +449,25 @@ define([
 
 		if(!editors[field]){
 			editors[field] = new PopupEditor(column);
-			editors[field].on("save", function(e){
-				var dataObject = e.row.data,
-					field = e.field,
-					id = e.id,
-					value = e.value,
-					oldValue = dataObject[field];
-					
-				if(e.useSelection && grid.getCheckAll()){
-					console.log("Selection by query", grid.get("query"));
-				}else if(e.useSelection && !grid.getCheckAll()){
-					console.log("Selection by checkboxes", grid.getSelectedIds());
-				}else{
-					dataObject.attribute_mode = {};
-					dataObject.attribute_mode[field] = e.mode;
-					dataObject[field] = value;
-					dataObject.changed = [field];
-					store.put(dataObject).then(function(){
-						e.deferred.resolve();
-					});
-				}
-				
-			});
+			editors[field].on("save", handleSaveEditor);
 		}
 
-		for(var key in editors){
-			editor = editors[key];
-			if(editor instanceof PopupEditor){
-				editor.close();
-			}
-		}
+		hideAllEditors();
 
 		editors[field].open(cell, e);
 	}
-	
 	
 	on(document.body, "click", function(e){
 		var el = jQuery(e.toElement);
 		if(el.is(".editor") || el.parents(".editor").length || el.is(".editable")){
 			return;
 		}
-		
-		var editor, editors = grid.get('editors');
-		
-		for(var key in editors){
-			editor = editors[key];
-			if(editor instanceof PopupEditor){
-				editor.close();
-			}
+		hideAllEditors();
+	});
+	
+	on(document.body, "keydown", function(e){
+		if(e.keyCode==27){
+			hideAllEditors();
 		}
 	});
 	
