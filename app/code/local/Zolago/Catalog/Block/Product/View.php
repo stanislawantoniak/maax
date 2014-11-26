@@ -80,12 +80,40 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
 			if(Mage::registry('current_category') instanceof Mage_Catalog_Model_Category){
 				$model = Mage::registry('current_category');
 			}else{
-				$model = Mage::getModel('catalog/category')->load(Mage::app()->getStore()->getRootCategoryId());
+				$model = $this->getParentCategoryAnonymous();//Mage::getModel('catalog/category')->load(Mage::app()->getStore()->getRootCategoryId());
 			}
 			$this->setData("parent_category", $model);
 		}
 		
 		return $this->getData("parent_category");
+	}
+
+	public function getParentCategoryAnonymous() {
+		$path  = Mage::helper('catalog')->getBreadcrumbPath();
+
+		// Product page and has no path - prepare defualt path
+		if(is_array($path) && count($path)==1 &&
+			Mage::registry('current_product') instanceof Mage_Catalog_Model_Product){
+
+			$product = Mage::registry('current_product');
+			/* @var $product Mage_Catalog_Model_Product */
+			$catIds = $product->getCategoryIds();
+			$rootId = Mage::app()->getStore()->getRootCategoryId();
+
+			$collection = Mage::getResourceModel('catalog/category_collection');
+			/* @var $collection Mage_Catalog_Model_Resource_Category_Collection */
+
+			$collection->addAttributeToFilter("entity_id", array("in"=>$catIds));
+			$collection->addAttributeToFilter("is_active", 1);
+			$collection->addPathFilter("/$rootId/");
+
+			// Get first category
+			if($collection->count()){
+				return Mage::getModel("catalog/category")->load($collection->getFirstItem()->getId());
+			} else {
+				return false;
+			}
+		}
 	}
 
     /**
