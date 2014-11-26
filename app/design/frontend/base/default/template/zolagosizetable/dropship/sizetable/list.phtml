@@ -2,3 +2,10 @@
 <div class="container z-grid" style="margin-top: 10px; padding: 0">
 	<?php echo $this->getGridHtml(); ?>
 </div>
+<script>
+	(function(){
+		var gridObj = <?php echo $this->getGridJsObjectName();?>;
+		// create integrator
+		new Zolago.gridIntegrator(gridObj);
+	})();;
+</script>

@@ -6,7 +6,8 @@ $_helper = Mage::helper("zolagosizetable");
 		<form class="form-horizontal row-border" id="sizetableAssignForm" action="<?php echo $this->getAction(); ?>"
 		      method="post">
 			<?php echo $this->getFormkey(); ?>
-			<input type="hidden" value="" name="rule_id" disabled="disabled" />
+			<input type="hidden" value="" name="rule_id" disabled="disabled"/>
+
 			<div class="widget box widget-closed">
 				<div class="widget-header">
 					<h4><i class="icon-plus"></i> <?php echo $_helper->__("New assignment"); ?></h4>
@@ -65,8 +66,10 @@ $_helper = Mage::helper("zolagosizetable");
 						<a id="sizetableForm_submitter" class="btn btn-primary pull-right">
 							<?php echo $_helper->__("Save"); ?>
 						</a>
+
 						<div class="has-error pull-right" style="margin: 2px 10px 0 0">
-							<label id="sizetableForm_error" class="pull-right help-block" style="margin-bottom:0;display: none;">
+							<label id="sizetableForm_error" class="pull-right help-block"
+							       style="margin-bottom:0;display: none;">
 								<?php echo $_helper->__("Assignment already exists"); ?>
 							</label>
 						</div>
@@ -76,13 +79,20 @@ $_helper = Mage::helper("zolagosizetable");
 		</form>
 	</div>
 </div>
-<div class="modal fade" id="confirm-overwrite" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="confirm-overwrite" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<div class="modal-body"></div>
+			<div class="modal-body">
+				<?php echo $_helper->__("Assignment for chosen options already exists for size table"); ?>
+				"<span id="sizetable_overwrite_name"></span>". <br/>
+				<?php echo $_helper->__("Do you want to overwrite it?"); ?>
+			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_helper->__("Cancel"); ?></button>
-				<a href="#" class="btn btn-danger danger" id="sizetableForm_modalSubmitter" onclick="jQuery('#sizetableAssignForm').submit();"><?php echo $_helper->__("Overwrite"); ?></a>
+				<button type="button" class="btn btn-default"
+				        data-dismiss="modal"><?php echo $_helper->__("Cancel"); ?></button>
+				<a href="#" class="btn btn-danger danger" id="sizetableForm_modalSubmitter"
+				   onclick="jQuery('#sizetableAssignForm').submit();"><?php echo $_helper->__("Overwrite"); ?></a>
 			</div>
 		</div>
 	</div>
@@ -128,13 +138,11 @@ $_helper = Mage::helper("zolagosizetable");
 				brand = brand_id.find(":selected").text(),
 				attribute = attribute_set_id.find(":selected").text(),
 				error = $('#sizetableForm_error'),
-				overwrite_text1 = "<?php echo $_helper->__("Assignment for chosen options already exists for size table"); ?> \"",
-				overwrite_text2 = "\". <?php echo $_helper->__("Do you want to overwrite it?"); ?>",
 				confirm = $("#confirm-overwrite"),
 				canSubmit = false;
 			error.hide();
-			rule_id.attr("disabled",true);
-			if(form.valid()) {
+			rule_id.attr("disabled", true);
+			if (form.valid()) {
 				$('#zolagosizetable_sizetable_assign_grid_table').find('tbody').find('tr').each(function () {
 					var sizetable_compare = $.trim($(this).find(".sizetable_name").text()),
 						brand_compare = $.trim($(this).find(".sizetable_brand").text()),
@@ -149,7 +157,7 @@ $_helper = Mage::helper("zolagosizetable");
 						(brand == brand_compare || (!brand && !attribute && !brand_compare && !attribute_compare)) &&
 						(attribute == attribute_compare || !attribute && !attribute_compare)) {
 						overwrite_rule_id = $(this).find(".sizetable_assign_actions a.delete").data("rule_id");
-						confirm.find(".modal-body").text(overwrite_text1 + sizetable_compare + overwrite_text2);
+						confirm.find(".modal-body #sizetable_overwrite_name").text(sizetable_compare);
 						confirm.modal();
 						canSubmit = false;
 						return false;
@@ -157,17 +165,32 @@ $_helper = Mage::helper("zolagosizetable");
 						canSubmit = true;
 					}
 				});
-				if(canSubmit)
+				if (canSubmit)
 					form.submit();
 			}
 		});
 
-		$("#sizetableForm_modalSubmitter").click(function() {
-			rule_id.val(overwrite_rule_id).attr("disabled",false);
+		$("#sizetableForm_modalSubmitter").click(function () {
+			rule_id.val(overwrite_rule_id).attr("disabled", false);
 			form.submit();
 		});
+
+		// create integrator
+		new Zolago.gridIntegrator(<?php echo $this->getGridJsObjectName();?>);
 	});
 </script>
 <div class="container z-grid" style="padding: 0">
+	<div class="actions" style="margin:-25px 0 10px">
+		<div class="pull-right  form-inline main-buttons">
+			<button title="Wyczyść filtr" type="button" class="scalable  btn"
+			        onclick="<?php echo $this->getGridJsObjectName();?>.resetFilter()"><span><span><span>Wyczyść filtr</span></span></span>
+			</button>
+			<button title="Szukaj" type="button"
+			        class="scalable task btn btn-primary btn-search"
+			        onclick="<?php echo $this->getGridJsObjectName();?>.doFilter()" style="">
+				<span><span><span>Szukaj</span></span></span></button>
+		</div>
+		<div class="clearfix"></div>
+	</div>
 	<?php echo $this->getGridHtml(); ?>
 </div>

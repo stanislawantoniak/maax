@@ -36,7 +36,7 @@ class Zolago_Sizetable_Model_Resource_Sizetable_Rule_Collection
 			->joinLeft(array("brand"=>$this->getTableName('eav/attribute_option_value')),
 				"main_table.brand_id = brand.option_id",
 				array(
-					"brand_name"=>"brand.value"
+					"brand_name" => "brand.value"
 				)
 			)
 			->where("main_table.brand_id IS NULL OR (brand.store_id = $storeId OR brand.store_id = 0)");
