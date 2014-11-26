@@ -97,6 +97,7 @@ define([
 			);
 	
 			domClass.remove(this.content, "hidden")
+			this.getField().focus();
 		},
 		/**
 		 * @param {mixed} value
