@@ -137,6 +137,23 @@ jQuery.validator.addMethod("imageSize", function(value, element,param) {
     return result;
 }, "Image is too big");
 
+jQuery.validator.addMethod("validate-postcode", function(value, elem, params){
+
+    value = value.replace(/\D/g, "");
+    if (value.length > 5) { //if there is more then 5 digit
+        return false;
+    }
+    if (value.length == 5) {
+        if (value == "00000") {
+            return false;
+        }
+        return true;
+    } else {
+        return false;
+    }
+
+}, "Invalid zip-cod. Zip-code should include 5 numbers in XX-XXX format.");
+
 jQuery.validator.addMethod("imageRequired", function (value, element) {
     var F = element.files;
     var result;
