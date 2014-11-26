@@ -359,3 +359,9 @@
 	border:0 !important;
 	padding:0 15px !important;
 }
+
+
+
+#vendor_contact .control-label {
+    text-align: right;
+}
