@@ -105,11 +105,10 @@ class Zolago_Catalog_Model_Resource_Vendor_Mass
 		);
 		*/
 		
+		// Better performance
 		$indexer = Mage::getResourceModel('catalog/product_indexer_eav_source');
 		/* @var $indexer Mage_Catalog_Model_Resource_Product_Indexer_Eav_Source */
-		Mage::log("indexer start");
 		$indexer->reindexEntities($productIds);
-		Mage::log("indexer stop");
 		
 		return $this;
 	}

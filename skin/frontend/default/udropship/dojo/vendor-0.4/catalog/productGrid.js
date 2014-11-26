@@ -414,7 +414,6 @@ define([
 		
 		jQuery.post(url, req).then(
 			function(response){
-				console.log(response);
 				// Make refresh grid
 				e.deferred.resolve();
 				// Restore selection
