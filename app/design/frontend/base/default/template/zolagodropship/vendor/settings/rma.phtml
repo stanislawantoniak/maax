@@ -13,15 +13,15 @@ $_vendor = $_session->getVendor();
     </div>
     <div class="row">
         <div class="col-md-12">
-            <form id="vendor_contact" class="row-border">
+            <form id="vendor_contact" class="form-horizontal row-border">
                 <div class="widget box">
                     <div class="widget-header">
                         <h4><?php echo Mage::helper("zolagodropship")->__("Return address");?></h4>
                         <div class="toolbar no-padding"> <div class="btn-group"> <span class="btn btn-xs widget-collapse"><i class="icon-angle-down"></i></span> </div> </div>
                     </div>
                     <div class="widget-content fiters">
-                        <div class="form-group">
-                            <div class="row">
+                        <div>
+                            <div class="form-group">
                                 <label for="company_name" class="col-md-3 control-label">
                                     <?php echo Mage::helper("zolagodropship")->__("Company name");?>
                                 </label>
@@ -29,7 +29,7 @@ $_vendor = $_session->getVendor();
                                     <input id="company_name" name="company_name" value="" type="text" class="form-control" size="10">
                                 </div>
                             </div>
-                            <div class="row next-row">
+                            <div class="form-group">
                                 <label for="street" class="col-md-3 control-label">
                                     <?php echo Mage::helper("zolagodropship")->__("Street and Number");?>
                                 </label>
@@ -37,7 +37,7 @@ $_vendor = $_session->getVendor();
                                     <input id="street" name="street" value="<?php echo $_vendor->getStreet(1); ?>" type="text" class="form-control" size="10">
                                 </div>
                             </div>
-                            <div class="row next-row">
+                            <div class="form-group">
                                 <label for="city" class="col-md-3 control-label">
                                     <?php echo Mage::helper("zolagodropship")->__("City");?>
                                 </label>
@@ -45,7 +45,7 @@ $_vendor = $_session->getVendor();
                                     <input id="city" name="city" value="<?php echo $_vendor->getCity(); ?>" type="text" class="form-control" size="10">
                                 </div>
                             </div>
-                            <div class="row next-row">
+                            <div class="form-group">
                                 <label for="zip" class="col-md-3 control-label">
                                     <?php echo Mage::helper("zolagodropship")->__("Zip / Postal code");?>
                                 </label>
@@ -63,8 +63,8 @@ $_vendor = $_session->getVendor();
                         <h4><?php echo Mage::helper("zolagodropship")->__("RMA contact data");?></h4>
                         <div class="toolbar no-padding"> <div class="btn-group"> <span class="btn btn-xs widget-collapse"><i class="icon-angle-down"></i></span> </div> </div>
                     </div>
-                    <div class="widget-content fiters">
-                        <div class="row next-row">
+                    <div class="widget-content">
+                        <div class="form-group">
                             <label for="rma_email" class="col-md-3 control-label">
                                 <?php echo Mage::helper("zolagodropship")->__("Email");?>
                             </label>
@@ -72,7 +72,7 @@ $_vendor = $_session->getVendor();
                                 <input id="rma_email" name="rma_email" value="" type="text" class="form-control" size="10">
                             </div>
                         </div>
-                        <div class="row next-row">
+                        <div class="form-group">
                             <label for="rma_telephone" class="col-md-3 control-label">
                                 <?php echo Mage::helper("zolagodropship")->__("Phone");?>
                             </label>
@@ -89,7 +89,7 @@ $_vendor = $_session->getVendor();
                         <div class="toolbar no-padding"> <div class="btn-group"> <span class="btn btn-xs widget-collapse"><i class="icon-angle-down"></i></span> </div> </div>
                     </div>
                     <div class="widget-content fiters">
-                        <div class="row">
+                        <div class="form-group">
                             <label for="rma_executive_firstname" class="col-md-3 control-label">
                                 <?php echo Mage::helper("zolagodropship")->__("Name");?>
                             </label>
@@ -97,7 +97,7 @@ $_vendor = $_session->getVendor();
                                 <input id="rma_executive_firstname" name="rma_executive_firstname" value="" type="text" class="form-control" size="10">
                             </div>
                         </div>
-                        <div class="row next-row">
+                        <div class="form-group">
                             <label for="rma_executive_lastname" class="col-md-3 control-label">
                                 <?php echo Mage::helper("zolagodropship")->__("Surname");?>
                             </label>
@@ -105,7 +105,7 @@ $_vendor = $_session->getVendor();
                                 <input id="rma_executive_lastname" name="rma_executive_lastname" value="" type="text" class="form-control" size="10">
                             </div>
                         </div>
-                        <div class="row next-row">
+                        <div class="form-group">
                             <label for="rma_executive_telephone" class="col-md-3 control-label">
                                 <?php echo Mage::helper("zolagodropship")->__("Phone ");?>
                             </label>
@@ -113,7 +113,7 @@ $_vendor = $_session->getVendor();
                                 <input id="rma_executive_telephone" name="rma_executive_telephone" value="" type="text" class="form-control" size="10">
                             </div>
                         </div>
-                        <div class="row next-row">
+                        <div class="form-group">
                             <label for="rma_executive_telephone_mobile" class="col-md-3 control-label">
                                 <?php echo Mage::helper("zolagodropship")->__("Mobile");?>
                             </label>
@@ -121,7 +121,7 @@ $_vendor = $_session->getVendor();
                                 <input id="rma_executive_telephone_mobile" name="rma_executive_telephone_mobile" value="" type="text" class="form-control" size="10">
                             </div>
                         </div>
-                        <div class="row next-row">
+                        <div class="form-group">
                             <label for="rma_executive_email" class="col-md-3 control-label">
                                 <?php echo Mage::helper("zolagodropship")->__("Email");?>
                             </label>
