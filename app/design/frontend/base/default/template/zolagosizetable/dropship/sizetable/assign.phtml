@@ -130,7 +130,8 @@ $_helper = Mage::helper("zolagosizetable");
 				error = $('#sizetableForm_error'),
 				overwrite_text1 = "<?php echo $_helper->__("Assignment for chosen options already exists for size table"); ?> \"",
 				overwrite_text2 = "\". <?php echo $_helper->__("Do you want to overwrite it?"); ?>",
-				confirm = $("#confirm-overwrite");
+				confirm = $("#confirm-overwrite"),
+				canSubmit = false;
 			error.hide();
 			rule_id.attr("disabled",true);
 			if(form.valid()) {
@@ -142,6 +143,7 @@ $_helper = Mage::helper("zolagosizetable");
 						(brand == brand_compare || (!brand && !attribute && !brand_compare && !attribute_compare)) &&
 						(attribute == attribute_compare || !attribute && !attribute_compare)) {
 						error.show();
+						canSubmit = false;
 						return false;
 					} else if (sizetable != sizetable_compare &&
 						(brand == brand_compare || (!brand && !attribute && !brand_compare && !attribute_compare)) &&
@@ -149,9 +151,14 @@ $_helper = Mage::helper("zolagosizetable");
 						overwrite_rule_id = $(this).find(".sizetable_assign_actions a.delete").data("rule_id");
 						confirm.find(".modal-body").text(overwrite_text1 + sizetable_compare + overwrite_text2);
 						confirm.modal();
+						canSubmit = false;
 						return false;
+					} else {
+						canSubmit = true;
 					}
 				});
+				if(canSubmit)
+					form.submit();
 			}
 		});
 
