@@ -50,7 +50,14 @@ class Zolago_Sizetable_Block_Dropship_Sizetable_Assign extends Mage_Core_Block_T
 	}
 
 	public function getSizeTables() {
-		//$model = Mage::getModel("zolagosizetable/sizetable");
+		/** @var Zolago_Sizetable_Model_Resource_Sizetable_Collection $collection */
+		$collection = Mage::getModel("zolagosizetable/sizetable")->getResourceCollection()->addOrder("name","ASC");
+		$collection->addVendorFilter($this->getVendorId());
+		$out = array(''=>'');
+		foreach($collection as $sizetable) {
+			$out[$sizetable['sizetable_id']] = $sizetable->getName();
+		}
+		return $out;
 	}
 
 	public function getBrandName($bid) {
