@@ -98,7 +98,7 @@ class Zolago_Catalog_Controller_Vendor_Price_Abstract
 	 * @param type $storeId
 	 * @throws Mage_Core_Exception
 	 */
-	protected function _processAttributresSave(array $productIds, array $attributes, $storeId) {
+	protected function _processAttributresSave(array $productIds, array $attributes, $storeId, array $data) {
 		
 		$collection = Mage::getResourceModel("zolagocatalog/vendor_price_collection");
 		$inventoryData = array();

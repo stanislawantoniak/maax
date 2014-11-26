@@ -169,6 +169,7 @@ define([
 			this.emit("save", {
 				value: this.getValue(),
 				mode: this.getMode(),
+				useSelection: this.getUseSelection(),
 				field: this.column.field,
 				column: this.column,
 				cell: this.cell,
@@ -206,6 +207,12 @@ define([
 				typeof this.grid.getSelectedIds == "function" && 
 				this.grid.getSelectedIds().length > 0
 			);
+		},
+		/**
+		 * @returns {Bool}
+		 */
+		getUseSelection: function(){
+			return this.canShowUseSelection() && this._useSelection.checked;
 		},
 		/**
 		 * @returns {void}
@@ -367,14 +374,14 @@ define([
 				className: "checkbox selection",
 				innerHTML: "Apply to selection"
 			});
-			
-			put(label, put("input", {
+			this._useSelection = put("input", {
 				type: "checkbox", 
 				name: "selection", 
 				id: cbId,
 				value: 1,
 				checked: true
-			}));
+			});
+			put(label, this._useSelection);
 			put(selection, label);
 			put(form, selection);
 			

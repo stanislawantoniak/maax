@@ -297,89 +297,158 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 	
 	/**
 	 * @param array $productIds
-	 * @param array $attributes
+	 * @param array $attributesData
 	 * @param type $storeId
 	 * @throws Mage_Core_Exception
 	 */
-	protected function _processAttributresSave(array $productIds, array $attributes, $storeId) {
+	protected function _processAttributresSave(array $productIds, array $attributesData, $storeId, array $data) {
+
+		// Store
+		$store = $this->_getStore();
+		$helper = Mage::helper("zolagocatalog");
+		$attributesObjects = array();
+		$attributesMode = isset($data['attribute_mode']) ?
+				$data['attribute_mode'] : array() ;
 		
-		$collection = Mage::getResourceModel("zolagocatalog/vendor_product_collection");
-		$inventoryData = array();
+		$dateFormat = Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT);
 		
-		// Vaild collection
+		// Validate required data
+		if(!is_array($attributesData) || !count($attributesData) || 
+			!$store || !is_array($productIds) || !count($productIds)){
+			throw new Mage_Core_Exception(
+					$helper->__("No required data passed")
+			);
+		}
+		
+		// Validate products vendor
+		$collection = Mage::getResourceModel("catalog/product_collection");
 		$collection->addAttributeToFilter('udropship_vendor', $this->getVendor()->getId());
 		$collection->addIdFilter($productIds);
 		
 		if($collection->getSize()<count($productIds)){
-			throw new Mage_Core_Exception("You are trying to edit not your product");
+			throw new Mage_Core_Exception($helper->__("You are trying to edit not your product"));
 		}
 		
-		/* @var $collection Zolago_Catalog_Model_Resource_Vendor_Product_Collection */
-		
-		foreach($attributes as $attributeCode=>$value){
-			if(!$this->getGridModel()->isAttributeEditable($attributeCode)){
-				throw new Mage_Core_Exception("You are trying to edit not editable attribute (".htmlspecialchars($attributeCode).")");
+		// Collect validation data
+		$notAllowed = array();
+		$missings = array();
+		foreach($attributesData as $attributeCode=>$value){
+			$attribute = $this->getGridModel()->getAttribute($attributeCode);
+			$attributesObjects[$attributeCode] = $attribute;
+			/* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
+			if(!$this->getGridModel()->isAttributeEditable($attribute)){
+				$notAllowed[] = $attribute->getStoreLabel($storeId);
 			}
-			
-			// Process modified flow attributes
-			switch($attributeCode){
-				case "is_in_stock":
-					$inventoryData['is_in_stock'] = $value;
-					unset($attributes[$attributeCode]);
-				break;
-			
+			if($attribute->getIsRequired() && trim($value)==""){
+				$missings = $attribute->getStoreLabel($storeId);
 			}
 		}
-		
-		
-		$actionModel = Mage::getSingleton('catalog/product_action');
-		/* @var $actionModel Mage_Catalog_Model_Product_Action */
-		
-		if($attributes){
-			$actionModel->updateAttributes($productIds, $attributes, $storeId);
+		// Validate grid permissions
+		if($notAllowed){
+			throw new Mage_Core_Exception($helper->__("You are trying to edit not editable attribute (%s)", implode($notAllowed)));
+		}
+		// Validate required
+		if($missings){
+			throw new Mage_Core_Exception($helper->__("Cannot pass empty required attribute (%s)", implode($missings)));
 		}
 		
-		
-		// Prepare stock
-		foreach (Mage::helper('cataloginventory')->getConfigItemOptions() as $option) {
-            if (isset($inventoryData[$option]) && !isset($inventoryData['use_config_' . $option])) {
-                $inventoryData['use_config_' . $option] = 0;
-            }
-        }
-		
-		// Stock save
-		if ($inventoryData) {
-			/** @var $stockItem Mage_CatalogInventory_Model_Stock_Item */
-			$stockItem = Mage::getModel('cataloginventory/stock_item');
-			$stockItem->setProcessIndexEvents(false);
-			$stockItemSaved = false;
+		// Prepare save data
+		foreach ($attributesData as $attributeCode => $value) {
 
-			foreach ($productIds as $productId) {
-				$stockItem->setData(array());
-				$stockItem->loadByProduct($productId)
-					->setProductId($productId);
+			$attribute = $attributesObjects[$attributeCode];
 
-				$stockDataChanged = false;
-				foreach ($inventoryData as $k => $v) {
-					$stockItem->setDataUsingMethod($k, $v);
-					if ($stockItem->dataHasChangedFor($k)) {
-						$stockDataChanged = true;
+			if(!$attribute || !$attribute->getId()){
+				unset($attributesData[$attributeCode]);
+				continue;
+			}
+			
+			// Prepare date fileds
+			if ($attribute->getBackendType() == 'datetime') {
+				if (!empty($value)) {
+					$filterInput    = new Zend_Filter_LocalizedToNormalized(array(
+						'date_format' => $dateFormat
+					));
+					$filterInternal = new Zend_Filter_NormalizedToLocalized(array(
+						'date_format' => Varien_Date::DATE_INTERNAL_FORMAT
+					));
+					$value = $filterInternal->filter($filterInput->filter($value));
+				} else {
+					$value = null;
+				}
+				$attributesData[$attributeCode] = $value;
+			// Prepare multiple input
+			}elseif ($attribute->getFrontendInput() == 'multiselect') {
+				if (is_array($value)) {
+					$attributesData[$attributeCode] = implode(',', $value);
+				}
+
+				// Unset value if add mode active
+				if(isset($attributesMode[$attributeCode])){
+					switch ($attributesMode[$attributeCode]) {
+						case "add":
+						case "sub":
+							$arrayValue = is_array($value) ? 
+								$value : 
+								(is_string($value) ? explode(",", $value) : array());
+							Mage::getResourceSingleton('zolagocatalog/vendor_mass')->addValueToMultipleAttribute(
+								$productIds,
+								$attribute, 
+								$arrayValue,
+								$store,
+								$attributesMode[$attributeCode]	
+							);
+							unset($attributesData[$attributeCode]);
+						break;
 					}
 				}
-				if ($stockDataChanged) {
-					$stockItem->save();
-					$stockItemSaved = true;
-				}
-			}
-
-			if ($stockItemSaved) {
-				Mage::getSingleton('index/indexer')->indexEvents(
-					Mage_CatalogInventory_Model_Stock_Item::ENTITY,
-					Mage_Index_Model_Event::TYPE_SAVE
-				);
 			}
 		}
+
+		// Write attribs & make reindex
+		Mage::getSingleton('catalog/product_action')
+			->updateAttributes($productIds, $attributesData, $store->getId());
 		
+	}
+	
+	protected function _handleRestPut() {
+		
+		$reposnse = $this->getResponse();
+		$data = Mage::helper("core")->jsonDecode(($this->getRequest()->getRawBody()));
+		$storeId = 0;
+			
+		try{
+			$productId = $data['entity_id'];
+			$attributeChanged = $data['changed'];
+			$attributeData = array();
+			$storeId = $data['store_id'];
+
+			foreach($attributeChanged as $attribute){
+				if(isset($data[$attribute])){
+					$attributeData[$attribute] = $data[$attribute];
+				}
+			}
+			if($attributeData){
+				$this->_processAttributresSave(array($productId), $attributeData, $storeId, $data);
+			}
+
+		} catch (Mage_Core_Exception $ex) {
+			$reposnse->setHttpResponseCode(500);
+			$reposnse->setBody($ex->getMessage());
+			return;
+		} catch (Exception $ex) {
+			Mage::logException($ex);
+			$reposnse->setHttpResponseCode(500);
+			$reposnse->setBody("Some error occured");
+			return;
+		}
+
+		/** Inclue attribute set **/
+		if(!$this->getRequest()->getParam("attribute_set_id")){
+			$this->getRequest()->setParam("attribute_set_id", $data['attribute_set_id']);
+		}
+		
+		/** Get current data **/
+		$this->_handleRestGet($productId);
 	}
 }
 

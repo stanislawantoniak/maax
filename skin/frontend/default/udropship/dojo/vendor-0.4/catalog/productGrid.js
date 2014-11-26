@@ -3,8 +3,8 @@ define([
 	"dgrid/OnDemandGrid",
 	"dgrid/extensions/Pagination",
 	"dgrid/extensions/CompoundColumns",
-	"dgrid/ColumnSet",
-    'dgrid/Selection',
+	"vendor/grid/ColumnSet",
+    'vendor/grid/Selection',
     'dgrid/Selector',
 	"dgrid/Keyboard",
 	"dojo/_base/declare",
@@ -115,48 +115,7 @@ define([
 		},
 		useRangeHeaders: true
 	});
-						
-	/*storeRest = new JsonRest({
-		target:"/udprod/vendor_product/rest",
-		idProperty: "entity_id",
-		
-		query: function(query, options){
-			if(switcher){
-				query.attribute_set_id = switcher.value;
-			}
-			query.store_id = 0;
-			extendWithStaticFilter(query);
-			toogleRemoveFilter(query);
-			return JsonRest.prototype.query.call(this, query, options);
-		},
-		
-		put: function(obj){
-			obj.changed = states.changed[obj.entity_id];
-			var def = JsonRest.prototype.put.apply(this, arguments);
-			def.then(function(){
-				obj.changed = states.changed[obj.entity_id] = [];
-			}, function(evt){
-				obj.changed = states.changed[obj.entity_id] = [];
-
-				var id = obj.entity_id;
-						
-				if(states.orig[id]){
-					if (grid.dirty.hasOwnProperty(id)) {
-						delete grid.dirty[id]; // delete dirty data
-						testStore.notify(states.orig[id], obj.entity_id);
-					}
-				}else{
-					storeRest.get(obj.entity_id).then(function(result){
-						if (grid.dirty.hasOwnProperty(id)) {
-						   delete grid.dirty[id]; // delete dirty data
-						   testStore.notify(result, obj.entity_id);
-					   }
-					});
-				}
-			});
-			return def;
-		}
-	});*/
+				
 	
 	var thumbnailClickHandler = function(e){
 		var modal = jQuery("#product-image-popup"),
@@ -398,15 +357,23 @@ define([
 			editors[field].on("save", function(e){
 				var dataObject = e.row.data,
 					field = e.field,
-					id = e.id;
-				
-	
-				dataObject[field] = e.value;
-				dataObject.changed = [field];
-				
-				store.put(dataObject).then(function(){
-					e.deferred.resolve();
-				});
+					id = e.id,
+					value = e.value,
+					oldValue = dataObject[field];
+					
+				if(e.useSelection && grid.getCheckAll()){
+					console.log("Selection by query", grid.get("query"));
+				}else if(e.useSelection && !grid.getCheckAll()){
+					console.log("Selection by checkboxes", grid.getSelectedIds());
+				}else{
+					dataObject.attribute_mode = {};
+					dataObject.attribute_mode[field] = e.mode;
+					dataObject[field] = value;
+					dataObject.changed = [field];
+					store.put(dataObject).then(function(){
+						e.deferred.resolve();
+					});
+				}
 				
 			});
 		}
@@ -446,15 +413,6 @@ define([
 		
 		var config = {
 			columnSets: processColumnSets(columns),
-			getSelectedIds: function(){
-				var selected = [];
-				jQuery.each(grid.selection, function(k){
-					if(true==this){
-						selected.push(k);
-					}
-				});
-				return selected;
-			},
 
 			loadingMessage: "<span>" + Translator.translate("Loading...") + "</span>",
 			noDataMessage: "<span>" + Translator.translate("No results found") + "</span>.",

@@ -95,7 +95,7 @@ abstract class Zolago_Catalog_Controller_Vendor_Abstract
 				}
 			}
 			if($attributeData){
-				$this->_processAttributresSave(array($productIds), $attributeData, $storeId);
+				$this->_processAttributresSave(array($productIds), $attributeData, $storeId, $data);
 			}
 
 		} catch (Mage_Core_Exception $ex) {
@@ -126,11 +126,12 @@ abstract class Zolago_Catalog_Controller_Vendor_Abstract
 
 		if($productId){
 			$collection->addIdFilter($productId);
-		}
+		}else{
 
-		// Make filters
-		foreach($this->_getRestQuery() as $key=>$value){
-			$collection->addAttributeToFilter($key, $value);
+			// Make filters
+			foreach($this->_getRestQuery() as $key=>$value){
+				$collection->addAttributeToFilter($key, $value);
+			}
 		}
 		
 		// Make order and limit
@@ -138,7 +139,7 @@ abstract class Zolago_Catalog_Controller_Vendor_Abstract
 				$this->_getRestSort(), 
 				$this->_getRestRange()
 		);
-
+		
 		if($productId && $out['items']){
 			$reposnse->
 				setBody(Mage::helper("core")->jsonEncode($out['items'][0]));
@@ -306,7 +307,17 @@ abstract class Zolago_Catalog_Controller_Vendor_Abstract
 	public function getVendorId() {
 		return $this->getVendor()->getId();
 	}
-	
+
+	/**
+	 * @param array $productIds
+	 * @param array $attributeData
+	 * @param int $storeId
+	 * @param array $data
+	 * @return Zolago_Catalog_Controller_Vendor_Abstract
+	 */
+	protected function _processAttributresSave(array $productIds, array $attributeData, $storeId, array $data){
+		return $this;
+	}
 
 }
 
