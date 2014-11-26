@@ -167,7 +167,7 @@ $_collection = $this->getCollection();
     var grid = jQuery('#grid'),
         sizer = jQuery(grid).find('.shuffle__sizer');
 
-    grid.shuffle({throttleTime: 500, speed: 100 });
+    grid.shuffle({throttleTime: 500, speed: 0, supported: false });
     grid.shuffle('update');
 
     jQuery(grid).on('layout.shuffle', function() {
@@ -211,12 +211,13 @@ $_collection = $this->getCollection();
                 Mall.listing.showLoadMoreButton();
             }
         }
+	    Mall.listing.placeListingFadeContainer();
     });
 
-    jQuery(window).scroll(function() {
+/*    jQuery(window).scroll(function() {
         Mall.listing.placeListingFadeContainer();
 
-    });
+    });*/
 
     jQuery('.addNewPositionListProductWrapper a, .addNewPositionListProductWrapper').click(function( event){
         event.preventDefault();
