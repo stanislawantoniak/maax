@@ -5,7 +5,6 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 	const SEPARATOR = "separator";
 	
 	const ITEM_DASHBOARD = 'dashboard';
-    const ITEM_COMPANY = 'dashboard';
 	const ITEM_PRODUCTS	  = 'products';
 	const ITEM_ORDER	  = 'order';
 	const ITEM_HELPDESK  = 'helpdesk';
