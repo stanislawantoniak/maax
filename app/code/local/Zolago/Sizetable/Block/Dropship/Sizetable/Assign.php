@@ -1,13 +1,11 @@
 <?php
 class Zolago_Sizetable_Block_Dropship_Sizetable_Assign extends Mage_Core_Block_Template {
-	protected $mid; //manufacturer attribute id
 	protected $asid; //attribute set id
 	protected $brands;
 	protected $attributeSets;
 	protected $session;
 
 	public function __construct() {
-		$this->mid = Mage::getSingleton("eav/config")->getAttribute('catalog_product','manufacturer')->getAttributeId();
 		$this->asid = Mage::getModel('catalog/product')->getResource()->getEntityType()->getId();
 		$this->session = Mage::getSingleton('udropship/session');
 	}
@@ -39,19 +37,7 @@ class Zolago_Sizetable_Block_Dropship_Sizetable_Assign extends Mage_Core_Block_T
 	}
 
 	public function getBrands() {
-		if(!$this->brands) {
-			$collection = Mage::getResourceModel('eav/entity_attribute_option_collection')
-				->setAttributeFilter($this->mid)
-				->setStoreFilter(0, false)
-				->join(array('table_alias'=>'zolagosizetable/vendor_brand'), 'main_table.option_id = table_alias.brand_id','')
-				->addFieldToFilter("table_alias.vendor_id",$this->getVendorId());
-			$brands = array('' => '');
-			foreach($collection as $k=>$brand) {
-				$brands[$k] = $brand->getValue();
-			}
-			$this->brands = $brands;
-		}
-		return $this->brands;
+		return Mage::helper("zolagosizetable")->getBrands($this->getVendorId());
 	}
 
 	public function getAttributeSets() {
