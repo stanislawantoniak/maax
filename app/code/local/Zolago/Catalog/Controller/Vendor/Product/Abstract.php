@@ -368,6 +368,9 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 		}
 		// Validate grid permissions
 		if($notAllowed){
+			/**
+			 * @todo missing attribute data from ex. special_from_data
+			 */
 			throw new Mage_Core_Exception($helper->__("You are trying to edit not editable attribute (%s)", implode($notAllowed)));
 		}
 		// Validate required

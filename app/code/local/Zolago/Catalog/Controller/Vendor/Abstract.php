@@ -141,7 +141,6 @@ abstract class Zolago_Catalog_Controller_Vendor_Abstract
 		);
 		
 		if($productId && $out['items']){
-			Mage::log($out['items'][0]);
 			$reposnse->
 				setBody(Mage::helper("core")->jsonEncode($out['items'][0]));
 		}else{
