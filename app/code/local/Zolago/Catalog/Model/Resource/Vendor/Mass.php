@@ -323,6 +323,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Mass
 		);
 		
 		$select->order(array(
+			"additional_table.column_attribute_order ASC", /* Custom field */
 			"attribute_group.sort_order ASC", 
 			"entity_attribute.sort_order ASC"
 		));
