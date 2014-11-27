@@ -407,13 +407,13 @@ define([
 	/**
 	 * @returns {void}
 	 */
-	var hideAllEditors = function(){
+	var hideAllEditors = function(doFocus){
 		var editor, editors = grid.get('editors');
 		
 		for(var key in editors){
 			editor = editors[key];
-			if(editor instanceof PopupEditor){
-				editor.close();
+			if(editor instanceof PopupEditor && editor.isOpen()){
+				editor.close(doFocus);
 			}
 		}
 	}
@@ -482,7 +482,7 @@ define([
 				return;
 			}
 		}
-		hideAllEditors();
+		hideAllEditors(false);
 		
 		editors[field].open(cell, e);
 	}
@@ -492,7 +492,7 @@ define([
 		if(el.is(".editor") || el.parents(".editor").length || el.is(".editable")){
 			return;
 		}
-		hideAllEditors();
+		hideAllEditors(false);
 	});
 	
 	on(document.body, "keydown", function(e){
@@ -505,7 +505,7 @@ define([
 			}
 		}
 		if(e.keyCode==27 && hasOpen){
-			hideAllEditors();
+			hideAllEditors(true);
 			e.preventDefault();
 		}
 	});
@@ -588,6 +588,18 @@ define([
 		
 		window.grid = grid = new PriceGrid(config, container);
 
+		// listen for selection via space
+		grid.on(".dgrid-row:keyup", function(e){
+			if(e.keyCode==32){
+				var row  = grid.row(e);
+				if(grid.isSelected(row)){
+					grid.deselect(row);
+				}else{
+					grid.select(row);
+				}
+			}
+		});
+		
 		// listen for selection
 		grid.on("dgrid-select", updateMassButton);
 

@@ -167,7 +167,7 @@ define([
 			var deferred = new Deferred();
 			
 			deferred.then(function(){
-				self.close();
+				self.close(true);
 				self._stopLoading();
 			}, function(){
 				self._stopLoading();
@@ -191,14 +191,16 @@ define([
 		 * @returns {void}
 		 */
 		cancel: function(){
-			this.close();
+			this.close(true);
 		},
 		/**
 		 * @returns {void}
 		 */
-		close: function(){
+		close: function(doFocus){
 			domClass.add(this.content, "hidden");
-			this.grid.focus(this.cell);
+			if(doFocus){
+				this.grid.focus(this.cell);
+			}
 		},
 		/**
 		 * @returns {undefined}
@@ -233,7 +235,7 @@ define([
 			var self = this;
 			
 			on(this._close, "click", function(){
-				self.close();
+				self.close(true);
 			});
 			
 			on(this._form, "submit", function(e){
