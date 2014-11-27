@@ -6,7 +6,7 @@ class Zolago_Sizetable_Block_Dropship_Sizetable_Assign_Grid extends Mage_Adminht
 	{
 		parent::__construct();
 		$this->setId('zolagosizetable_sizetable_assign_grid');
-		$this->setDefaultSort('sizetable_name');
+		$this->setDefaultSort('name');
 		$this->setDefaultDir('ASC');
 		$this->setPagerVisibility(false);
 		$this->setDefaultLimit(false);
@@ -25,7 +25,6 @@ class Zolago_Sizetable_Block_Dropship_Sizetable_Assign_Grid extends Mage_Adminht
 			->joinSizetables()
 			->joinSizetableBrands()
 			->joinSizetableAttributes();
-		$collection->setOrder("sizetable_name", "ASC");
 
 		$this->setCollection($collection);
 		return parent::_prepareCollection();
@@ -35,17 +34,18 @@ class Zolago_Sizetable_Block_Dropship_Sizetable_Assign_Grid extends Mage_Adminht
 	{
 		$_helper = Mage::helper("zolagosizetable");
 
-		$this->addColumn("sizetable_name", array(
+		$this->addColumn("name", array(
 			"type" => "text",
-			"index" => "sizetable_name",
+			"index" => "name",
 			"filter_index" => "name",
 			"class" => "form-control",
 			"header" => $_helper->__("Size table name"),
-			"column_css_class" => "sizetable_name"
+			"column_css_class" => "sizetable_name",
+			"sortable" => true
 		));
-		$this->addColumn("brand_name", array(
+		$this->addColumn("value", array(
 			"type" => "text",
-			"index" => "brand_name",
+			"index" => "value",
 			"filter_index" => "value",
 			"class" => "form-control",
 			"header" => $_helper->__("Brand"),
@@ -54,6 +54,7 @@ class Zolago_Sizetable_Block_Dropship_Sizetable_Assign_Grid extends Mage_Adminht
 		$this->addColumn("attribute_set_name", array(
 			"type" => "text",
 			"index" => "attribute_set_name",
+			"filter_index" => "attribute_set_name",
 			"class" => "form-control",
 			"header" => $_helper->__("Attribute set"),
 			"column_css_class" => "sizetable_attribute"
