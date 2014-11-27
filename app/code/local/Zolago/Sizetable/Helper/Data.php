@@ -18,17 +18,17 @@ class Zolago_Sizetable_Helper_Data extends Mage_Core_Helper_Abstract{
         return $attribute->getId();
     }
 
-	public function getBrands($vendor,$storeId = 0) {
+	public function getBrands($vendor,$storeId = Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID,$firstEmpty = false) {
 		if($vendor instanceof Unirgy_Dropship_Model_Vendor){
 			$vendor = $vendor->getId();
 		}
-		$mid = Mage::getSingleton("eav/config")->getAttribute('catalog_product','manufacturer')->getAttributeId();
+		$mid = Mage::getSingleton("eav/config")->getAttribute(Mage_Catalog_Model_Product::ENTITY,'manufacturer')->getAttributeId();
 		$collection = Mage::getResourceModel('eav/entity_attribute_option_collection')
 			->setAttributeFilter($mid)
 			->setStoreFilter($storeId, false)
 			->join(array('table_alias'=>'zolagosizetable/vendor_brand'), 'main_table.option_id = table_alias.brand_id','')
 			->addFieldToFilter("table_alias.vendor_id",$vendor);
-		$brands = array('' => '');
+		$brands = $firstEmpty ? array('' => '') : array();
 		foreach($collection as $k=>$brand) {
 			$brands[$k] = $brand->getValue();
 		}
