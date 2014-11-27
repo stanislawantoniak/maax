@@ -317,8 +317,16 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 		$store = $this->_getStore();
 		$helper = Mage::helper("zolagocatalog");
 		$attributesObjects = array();
+		
+		// Optional add/sub form multiselects
 		$attributesMode = isset($data['attribute_mode']) ?
-				$data['attribute_mode'] : array() ;
+				$data['attribute_mode'] : array();
+		// Do check editable ?
+		$checkEditable =  isset($data['check_editable']) ?
+				$data['check_editable'] : true;
+		// Do check required ?
+		$checkRequired =  isset($data['check_required']) ?
+				$data['check_required'] : true;
 		
 		$dateFormat = Mage::app()->getLocale()->getDateFormat(Mage_Core_Model_Locale::FORMAT_TYPE_SHORT);
 		
@@ -346,10 +354,10 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 			$attribute = $this->getGridModel()->getAttribute($attributeCode);
 			$attributesObjects[$attributeCode] = $attribute;
 			/* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
-			if(!$this->getGridModel()->isAttributeEditable($attribute)){
+			if($checkEditable && !$this->getGridModel()->isAttributeEditable($attribute)){
 				$notAllowed[] = $attribute->getStoreLabel($storeId);
 			}
-			if($attribute->getIsRequired() && trim($value)==""){
+			if($checkRequired && $attribute->getIsRequired() && trim($value)==""){
 				$missings[] = $attribute->getStoreLabel($storeId);
 			}
 		}
@@ -397,8 +405,7 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 					switch ($attributesMode[$attributeCode]) {
 						case "add":
 						case "sub":
-							$arrayValue = is_array($value) ? 
-								$value : 
+							$arrayValue = is_array($value) ? $value : 
 								(is_string($value) ? explode(",", $value) : array());
 							Mage::getResourceSingleton('zolagocatalog/vendor_mass')->addValueToMultipleAttribute(
 								$productIds,

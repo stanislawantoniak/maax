@@ -8,6 +8,7 @@ define([
     'dgrid/Selector',
 	"dgrid/Keyboard",
 	"dojo/_base/declare",
+	"dojo/dom",
 	"dojo/dom-construct",
 	"dojo/on",
 	"dojo/query",
@@ -24,20 +25,27 @@ define([
 	"vendor/grid/filter",
 	"vendor/grid/QueryGrid",
 	"vendor/grid/PopupEditor",
+	'vendor/catalog/productGrid/mass/status',
+	'vendor/catalog/productGrid/mass/attribute',
 	"vendor/misc"
-], function(BaseGrid, Grid, Pagination, CompoundColumns, ColumnSet, Selection, Selector,
-	Keyboard, declare, domConstruct, on, query, put, domClass, xhr,
-	Rest, Trackable, Cache, lang, 
-	filter, QueryGrid, PopupEditor, misc){
+], function(BaseGrid, Grid, Pagination, CompoundColumns, ColumnSet, 
+	Selection, Selector, Keyboard, declare, dom, domConstruct, on, query, 
+	put, domClass, xhr, Rest, Trackable, Cache, lang, filter, QueryGrid, 
+	PopupEditor, status, attrbiute,  misc){
 	
 	var grid,store,
+		massAttribute,
+		massUrl = "/udprod/vendor_product/mass",
 		resetFilters = query("#remove-filters")[0],
 		switcher = query("#attribute_set_id")[0],
 		baseQuery = {
 			attribute_set_id: switcher.value,
 			store_id: 0
-		}
+		};
 	
+	////////////////////////////////////////////////////////////////////////////
+	// Filtering
+	////////////////////////////////////////////////////////////////////////////
 	var applyExtendFilter = function(){
 		var k, opt, select, name, 
 			value, fValue, query = this.get("query");
@@ -97,14 +105,14 @@ define([
 			}
 			
 			grid.set("query", {});
-			
 			e.preventDefault();
 		});
 	}	
-	
-	var changed = {},
-		orig = {};
 		
+	////////////////////////////////////////////////////////////////////////////
+	// The store
+	////////////////////////////////////////////////////////////////////////////
+	
 	var RestStore = declare([ Rest, Trackable]);
 	
 	window.store = store = new RestStore({
@@ -115,7 +123,10 @@ define([
 		},
 		useRangeHeaders: true
 	});
-				
+			
+	////////////////////////////////////////////////////////////////////////////
+	// Formatters & renderes
+	////////////////////////////////////////////////////////////////////////////
 	
 	var thumbnailClickHandler = function(e){
 		var modal = jQuery("#product-image-popup"),
@@ -268,6 +279,10 @@ define([
 		}
 	};
 	
+	////////////////////////////////////////////////////////////////////////////
+	// Grid struct process
+	////////////////////////////////////////////////////////////////////////////
+	
 	/**
 	 * Process column from backend
 	 * 1. Add filter - its a function
@@ -330,16 +345,10 @@ define([
 		
 		return columnSets;
 	};
-	
-	var updateSelectionButtons = function(a){
-		var disabled = true;
-		for(var k in grid.selection){
-			if(grid.selection.hasOwnProperty(k)){
-				disabled = false;
-			}
-		}
-		jQuery("#massActions").prop("disabled", disabled);
-	}
+		
+	////////////////////////////////////////////////////////////////////////////
+	// Editors
+	////////////////////////////////////////////////////////////////////////////
 	
 	/**
 	 * @returns {void}
@@ -356,7 +365,6 @@ define([
 	}
 	
 	/**
-	 * 
 	 * @param {Evented} e
 	 * @returns {void}
 	 */
@@ -382,56 +390,19 @@ define([
 			return;
 		}
 		
-		var req = [
-			{name: "attribute[" + field + "]", value: value},
-			{name: "attribute_mode[" + field + "]", value: e.mode}
-		];
+		// Handle by mass action object
+		var req = {};
 		
-		var url = "/udprod/vendor_product/saveMass",
-			urlParams = [];
+		req["attribute[" + field + "]"] = value;
+		req["attribute_mode[" + field + "]"] = e.mode;
 		
-		// Use selection and select all checked - move params to query string
-		if(grid.getCheckAll()){
-			var query = grid.get("query");
-			for(var k in query){
-				if(query.hasOwnProperty(k)){
-					urlParams.push(k + "=" + encodeURIComponent(query[k]));
-				}
-			}
-		// Use selection and some recoreds checked
-		}else{
-			grid.getSelectedIds().forEach(function(val){
-				req.push({name: "product_ids[]", value: val});
-			});
-			for(var k in baseQuery){
-				if(baseQuery.hasOwnProperty(k)){
-					urlParams.push(k + "=" + encodeURIComponent(baseQuery[k]));
-				}
-			}
-		}
+		console.log(massAttribute);
 		
-		url = url + "?" + urlParams.join("&");
-		
-		jQuery.post(url, req).then(
-			function(response){
-				// Make refresh grid
-				e.deferred.resolve();
-				// Restore selection
-				grid.refresh({keepScrollPosition: true});
-				
-				if(response.global){
-					grid.selectAll();
-				}else{
-					response.changed_ids.forEach(function(id){
-						grid.select(id);
-					});
-				}
-			},
-			function(response){
-				alert(response.responseText);
-				e.deferred.reject();
-			}
-		)
+		massAttribute.send(req).then(function(){
+			e.deferred.resolve();
+		}, function(){
+			e.deferred.reject();
+		})
 
 	}
 	
@@ -470,9 +441,34 @@ define([
 		}
 	});
 	
+	////////////////////////////////////////////////////////////////////////////
+	// Mass actions
+	////////////////////////////////////////////////////////////////////////////
 	
+	var updateMassButton = function(){
+		dom.byId("massActions").disabled = !grid.getSelectedIds().length;
+	};
 	
-	var PriceGrid = declare([/*BaseGrid, Pagination,*/Grid, Selection, Selector, Keyboard, CompoundColumns, ColumnSet, QueryGrid]);
+	var registerMassactions = function(grid){
+		massAttribute = (new status(grid, massUrl))
+		massAttribute.setMethod("attribute");
+		
+		var massConfirm = new status(grid, massUrl);
+		massConfirm.setMethod("confirm");
+		
+		var massDisable = new status(grid, massUrl)
+		massDisable.setMethod("disable");
+		
+		on(dom.byId("massConfirmProducts"), "click", function(e){massConfirm.trigger(e)});
+		on(dom.byId("massDisbaleProducts"), "click", function(e){massDisable.trigger(e)});
+	}
+	
+	////////////////////////////////////////////////////////////////////////////
+	// The grid
+	////////////////////////////////////////////////////////////////////////////
+	
+	var PriceGrid = declare([/*BaseGrid, Pagination,*/Grid, Selection, Selector, 
+		Keyboard, CompoundColumns, ColumnSet, QueryGrid]);
 	
 	var initGrid = function(columns, container){
 		
@@ -486,7 +482,7 @@ define([
 			allowSelectAll: true,
 			deselectOnRefresh: true,
 			
-			cellNavigation: true,
+			cellNavigation: true, /*false*/
 
 			minRowsPerPage: 20,
 			maxRowsPerPage: 50,
@@ -502,7 +498,7 @@ define([
 
 			//
 			collection: store.filter(baseQuery),
-			query: lang.clone(baseQuery),
+			baseQuery: lang.clone(baseQuery),
 			
 			getBeforePut: false,
 			sort: "entity_id",
@@ -515,7 +511,6 @@ define([
 			store: store,
 			// Overwrite 
 			_setQuery: function(query){
-				lang.mixin(query, baseQuery);
 				toggleRemoveFilter(query);
 				return this.inherited(arguments);
 			}
@@ -525,13 +520,18 @@ define([
 		window.grid = grid = new PriceGrid(config, container);
 
 		// listen for selection
-		grid.on("dgrid-select", updateSelectionButtons);
+		grid.on("dgrid-select", updateMassButton);
 
 		// listen for selection
-		grid.on("dgrid-deselect", updateSelectionButtons);
+		grid.on("dgrid-deselect", updateMassButton);
+		
+		// listen for refresh if selected
+		grid.on("dgrid-refresh-complete", updateMassButton);
 		
 		// listen for editable
 		grid.on("td.dgrid-cell.editable:click", handleColumnEdit);
+		
+		registerMassactions(grid);
 		
 		
 		return window.grid;

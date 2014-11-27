@@ -81,6 +81,7 @@ define([
 					
 			if(this.canShowUseSelection() && this.grid.isSelected(cellObj.row)){
 				domClass.add(this.content, "use-selection");
+				this._useSelection.checked = true;
 			}else{
 				domClass.remove(this.content, "use-selection");
 			}

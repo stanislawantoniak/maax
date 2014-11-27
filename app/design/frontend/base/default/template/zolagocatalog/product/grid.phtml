@@ -228,7 +228,7 @@
 	}
 </style>
 <script type="text/javascript">
-	require(['vendor/catalog/productGrid'], function(productGrid){
+	require(['vendor/catalog/productGrid', 'vendor/catalog/productGrid/mass/status'], function(productGrid, status){
 		productGrid.setColumns(<?php echo $this->getJsonColumns();?>);
 		productGrid.startup("grid-holder");
 	});

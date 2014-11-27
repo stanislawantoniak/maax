@@ -11,56 +11,83 @@ class Zolago_Catalog_Vendor_ProductController
 		$this->_renderPage(null, 'udprod_product');
     }
 	
+	
+	
 	/**
 	 * Save attributes mass actions
 	 */
-	public function saveMassAction() {
+	public function massAction() {
 		
-		$request = $this->getRequest();
+		$request =	$this->getRequest();
+		$method = $request->getParam("method");
 		$productIds = $request->getParam("product_ids");
-		$data = $request->getParam("attribute");
 		$storeId = $this->_getStoreId();
 		$global = false;
 		
+		if(is_string($productIds)){
+			$productIds = explode(",", $productIds);
+		}
+		
 		if(is_array($productIds) && count($productIds)){
-			$collection = $this->_prepareBasciCollection();
-			$collection->addIdFilter($productIds);
+			$ids = array_unique($productIds);
 		}else{
 			$collection = $this->_getCollection();
 			foreach($this->_getRestQuery() as $key=>$value){
 				$collection->addAttributeToFilter($key, $value);
 			}
 			$global = true;
+			$ids = $collection->getAllIds();
 		}
 		
 		try{
-			$ids = $collection->getAllIds();
-			
 			array_walk($ids, function($value){
 				return (int)$value;
 			});
 			
-			$this->_processAttributresSave(
-					$ids, 
-					$data, 
-					$storeId, 
-					$request->getPost()
-			);
+			switch ($method){
+				case "attribute":
+					$this->_processAttributresSave(
+						$ids, 
+						$request->getParam("attribute"), 
+						$storeId, 
+						array("attribute_mode"=>$request->getParam("attribute_mode"))
+					);
+				break;
+				case "disable":
+				case "confirm":
+					$status = Mage::helper('zolagodropship')->getProductStatusForVendor(
+						$this->_getSession()->getVendor()
+					);
+					$this->_validateMassStatus($ids, $status);
+					Mage::throwException("Methid $method $status");
+					$this->_processAttributresSave(
+						$ids, 
+						array("status"=>$status), 
+						$storeId, 
+						array("attribute_mode"=>$mode, "check_editable"=>false)
+					);
+				break;
+				default:
+					Mage::throwException("Invaild mass method");
 			
+			}
 			$response = array(
 				"changed_ids"	=> $ids,
-				"data"			=> $data,
 				"global"		=> $global
 			);
-		} catch (Exception $ex) {
+		} catch (Mage_Core_Exception $ex) {
 			$this->getResponse()->setHttpResponseCode(500);
 			$response = $ex->getMessage();
+		} catch (Exception $ex) {
+			$this->getResponse()->setHttpResponseCode(500);
+			$response = "Something went wrong. Contact admin.";
 		}
 		
 		
 		$this->getResponse()->setBody(Mage::helper("core")->jsonEncode($response));
 		$this->_prepareRestResponse();
 	}
+	
 	
 	
 	/**
@@ -90,69 +117,6 @@ class Zolago_Catalog_Vendor_ProductController
 			$session->setData('denyColumnList',$list);
 		}
 	}	
-	
-	
-    /**
-     * Update product(s) status action
-     *
-     */
-    public function massStatusAction()
-    {
-        $productIds			= array_unique(explode(',', $this->getRequest()->getParam('product_ids', '')));
-        $storeId			= (int)$this->getRequest()->getParam('store', 0);
-		$attributeSet		= (int)$this->getRequest()->getParam('attribute_set', null);
-        $status				= (int)$this->getRequest()->getParam('status');
-		$staticFiltersCount	= (int)$this->getRequest()->getParam('staticFilters');
-		$productReview		= (int)$this->getRequest()->getParam('review', null);
-		
-		$staticFilters		= $this->_getCurrentStaticFilterValues();
-		$postParams			= array('store'=> $storeId, 'attribute_set' => $attributeSet, 'staticFilters' => $staticFiltersCount);
-		$postParams			= array_merge($postParams, $staticFilters);
-
-        $response = array();
-
-        try {
-
-			if ($productReview) {
-				$this->_validateProductAttributes($productIds, $attributeSet, $storeId);
-                $response = array(
-                    "status"=>1,
-                    "content"=>$this->__('Total of %d record(s) have been validated.', count($productIds))
-                );
-			}
-
-            $status = Mage::helper('zolagodropship')->getProductStatusForVendor($this->_getSession()->getVendor());
-            $this->_validateMassStatus($productIds, $status);
-            Mage::getSingleton('catalog/product_action')
-                ->updateAttributes($productIds, array('status' => $status), $storeId);
-
-            $response = array(
-                "status"=>1,
-                "content"=>$this->__('Total of %d record(s) have been updated.', count($productIds))
-            );
-        }
-        catch (Mage_Core_Model_Exception $e) {
-            $response = array(
-                "status"=>0,
-                "content"=>Mage::helper("zolagocatalog")->__($e->getMessage())
-            );
-        } catch (Mage_Core_Exception $e) {
-            $response = array(
-                "status"=>0,
-                "content"=>Mage::helper("zolagocatalog")->__($e->getMessage())
-            );
-        } catch (Exception $e) {
-            $response = array(
-                "status"=>0,
-                "content"=>Mage::helper("zolagocatalog")->__($this->__('An error occurred while updating the product(s) status.'))
-            );
-        }
-
-        // Send response
-        $this->getResponse()->
-            setBody(Zend_Json::encode($response))->
-            setHeader('content-type', 'application/json');
-    }
 	
     /**
      * Validate batch of products before theirs status will be set
