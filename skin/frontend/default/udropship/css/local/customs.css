@@ -394,3 +394,41 @@ table.foot-empty-cells tfoot td:empty {
 		text-align: justify;
 	}
 }
+
+/* bootstrap centered columns */
+.row-centered {
+	text-align:center;
+}
+.col-centered {
+	display:inline-block;
+	float:none;
+	/* reset the text-align */
+	text-align:left;
+	/* inline-block space fix */
+	margin-right:-4px;
+}
+
+/* vendor register form */
+@media (min-width: 992px) {
+	#vendor-register-row {
+		margin-top: 70px;
+	}
+}
+@media (max-width: 991px) {
+	#vendor-register-row {
+		margin-top: 20px;
+	}
+}
+
+/* top blue bar fixes */
+@media (max-width: 979px) {
+	.navbar .navbar-brand {
+		font-size: 18px !important;
+	}
+}
+@media (max-width: 767px) {
+	.navbar .navbar-brand {
+		display: block !important;
+		padding: 0 20px !important;
+	}
+}
