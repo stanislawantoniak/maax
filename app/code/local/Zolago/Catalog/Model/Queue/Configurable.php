@@ -110,30 +110,10 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
             foreach ($productsToReindexC as $productsToReindexCItem) {
                 Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($productsToReindexCItem);
 
-                //2. put products to solr queue
-                //catalog_converter_price_update_after
-                Mage::log('catalog_converter_price_update_after', 0, 'configurable_update_solr.log');
-                Mage::dispatchEvent(
-                    "catalog_converter_price_update_after",
-                    array(
-                        "product_ids" => $productsToReindexCItem
-                    )
-                );
-
             }
             unset($productsToReindexCItem);
         } else {
             Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($productsToReindex);
-
-            //2. put products to solr queue
-            //catalog_converter_price_update_after
-            Mage::log('catalog_converter_price_update_after', 0, 'configurable_update_solr.log');
-            Mage::dispatchEvent(
-                "catalog_converter_price_update_after",
-                array(
-                    "product_ids" => $productsToReindex
-                )
-            );
 
         }
 
@@ -146,7 +126,15 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
 //            }
 //        }
 
-
+        //2. put products to solr queue
+        //catalog_converter_price_update_after
+        Mage::log('catalog_converter_price_update_after', 0, 'configurable_update_solr.log');
+        Mage::dispatchEvent(
+            "catalog_converter_price_update_after",
+            array(
+                "product_ids" => $productsToReindex
+            )
+        );
 
 
     }
