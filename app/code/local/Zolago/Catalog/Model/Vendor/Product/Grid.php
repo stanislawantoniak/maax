@@ -143,7 +143,7 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 				"required"  => true,
 				"header"	=> $this->_getColumnLabel($thumbnail),
 				"filter"	=> true,
-				"sortable"	=> true,
+				"sortable"	=> false,
 				"filterable "=>true
 			);
 

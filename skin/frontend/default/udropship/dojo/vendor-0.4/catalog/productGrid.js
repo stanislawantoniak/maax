@@ -395,9 +395,7 @@ define([
 		
 		req["attribute[" + field + "]"] = value;
 		req["attribute_mode[" + field + "]"] = e.mode;
-		
-		console.log(massAttribute);
-		
+	
 		massAttribute.send(req).then(function(){
 			e.deferred.resolve();
 		}, function(){

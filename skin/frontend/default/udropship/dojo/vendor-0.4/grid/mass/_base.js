@@ -81,7 +81,9 @@ define([
 		},
 		_saveSuccess: function(response){
 			var grid = this.getGrid();
-			grid.refresh({keepScrollPosition: true});
+			grid.refresh({keepScrollPosition: true}).then(function(){
+				grid._updateHeaderCheckboxes();
+			});
 			if(response.global){
 				grid.selectAll();
 			}else{
@@ -89,9 +91,10 @@ define([
 					grid.select(id);
 				});
 			}
+			grid._updateHeaderCheckboxes();
 		},
 		_saveError: function(response){
-			alert(response.responseText);
+			alert(response.responseJSON);
 		},
 		_getRequestData: function(){
 			var obj = {

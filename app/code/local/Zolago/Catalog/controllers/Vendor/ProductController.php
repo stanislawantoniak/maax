@@ -21,6 +21,7 @@ class Zolago_Catalog_Vendor_ProductController
 		$request =	$this->getRequest();
 		$method = $request->getParam("method");
 		$productIds = $request->getParam("product_ids");
+		$attributeSetId = $request->getParam("attribute_set_id");
 		$storeId = $this->_getStoreId();
 		$global = false;
 		
@@ -44,7 +45,15 @@ class Zolago_Catalog_Vendor_ProductController
 				return (int)$value;
 			});
 			
+			$response = array(
+				"changed_ids"	=> $ids,
+				"global"		=> $global
+			);
+			
 			switch ($method){
+				/**
+				 *Handle mass save
+				 */
 				case "attribute":
 					$this->_processAttributresSave(
 						$ids, 
@@ -53,34 +62,39 @@ class Zolago_Catalog_Vendor_ProductController
 						array("attribute_mode"=>$request->getParam("attribute_mode"))
 					);
 				break;
+				/**
+				 * Handle status change
+				 */
 				case "disable":
 				case "confirm":
-					$status = Mage::helper('zolagodropship')->getProductStatusForVendor(
-						$this->_getSession()->getVendor()
-					);
+					if($method=="confirm"){
+						$this->_validateProductAttributes($ids, $attributeSetId, $storeId);
+						$status = Mage::helper('zolagodropship')->getProductStatusForVendor(
+							$this->_getSession()->getVendor()
+						);
+					}else{
+						$status = Mage_Catalog_Model_Product_Status::STATUS_DISABLED;
+					}
+					
 					$this->_validateMassStatus($ids, $status);
-					Mage::throwException("Methid $method $status");
 					$this->_processAttributresSave(
 						$ids, 
 						array("status"=>$status), 
 						$storeId, 
-						array("attribute_mode"=>$mode, "check_editable"=>false)
+						array("check_editable"=>false)
 					);
 				break;
 				default:
 					Mage::throwException("Invaild mass method");
 			
 			}
-			$response = array(
-				"changed_ids"	=> $ids,
-				"global"		=> $global
-			);
 		} catch (Mage_Core_Exception $ex) {
 			$this->getResponse()->setHttpResponseCode(500);
 			$response = $ex->getMessage();
 		} catch (Exception $ex) {
 			$this->getResponse()->setHttpResponseCode(500);
-			$response = "Something went wrong. Contact admin.";
+			$response = $ex->getMessage();
+			//$response = "Something went wrong. Contact admin.";
 		}
 		
 		
@@ -135,5 +149,98 @@ class Zolago_Catalog_Vendor_ProductController
                 );
             }
         }
-    }	
+    }
+	
+	/**
+	 * @param type $productIds
+	 * @param type $attributeSetId
+	 * @param type $storeId
+	 * @throws Mage_Core_Exception
+	 */
+	protected function _validateProductAttributes($productIds, $attributeSetId, $storeId) {
+		$errorProducts	= array();
+		$collection		= Mage::getResourceModel('zolagocatalog/product_collection');
+		/* @var $collection Mage_Catalog_Model_Resource_Product_Collection */
+		$collection->setFlag("skip_price_data", true);
+		$collection->setStoreId($storeId);
+		$collection->addIdFilter($productIds);
+		$collection->addAttributeToSelect('name');
+		$collection->addAttributeToFilter("attribute_set_id", $attributeSetId);
+		$collection->addAttributeToFilter("udropship_vendor", $this->_getSession()->getVendor()->getId());
+		$collection->addAttributeToSelect('image');
+		
+		foreach ($collection as $product) {
+			$imageValidation		= $this->_validateBaseImage($product);
+			$attributeValidation	= $this->_validateRequiredAttributes($product, $storeId);
+			if (!$imageValidation || count($attributeValidation) > 0) {
+				$errorProducts[$product->getId()]['name']		= $product->getName();
+				$errorProducts[$product->getId()]['image']		= $imageValidation;
+				$errorProducts[$product->getId()]['missing']	= implode(", ", $attributeValidation);
+			}
+		}
+		
+		$logArray = array();
+		foreach($errorProducts as $error){
+			if(count($logArray)>10){
+				break;
+			}
+			$log = array();
+			if(!$error['image']){
+				$log[] = $this->__('No base image');
+			}
+			if($error['missing']){
+				$log[] = $error['missing'];
+			}
+			$logArray[] = $error['name'] . ": " . implode(",", $log);
+		}
+		
+		$errorProductCount = count($errorProducts);
+		if ($errorProductCount>0) {
+			throw new Mage_Core_Exception(
+				$this->__('%d selected product has empty required attribute(s) and/or is missing a base image:', $errorProductCount) . "\n" .
+				implode("\n", $logArray)
+			);	
+		}
+	}
+	
+	/**
+	 * @param type $product
+	 * @param type $storeId
+	 * @return int
+	 */
+	protected function _validateRequiredAttributes($product, $storeId) 
+	{
+		$missingAttributes = array();
+		$attributes = $product->getAttributes();
+		foreach ($attributes as $attribute) {
+			if(in_array($attribute->getFrontendInput(), array("gallery", "weee"))){
+				continue;
+			}
+			if ($attribute->getIsRequired()) {
+				$value = Mage::getResourceModel('catalog/product')->getAttributeRawValue(
+						$product->getId(), $attribute->getAttributeCode(), $storeId);
+				if ($attribute->isValueEmpty($value)) {
+					$missingAttributes[$attribute->getAttributeCode()] = $attribute->getStoreLabel(
+							$this->_getSession()->getVendor()->getLabelStore());
+				}
+			}
+		}
+		
+		return $missingAttributes;
+	}
+	
+	/**
+	 * @param type $product
+	 * @return boolean
+	 */
+	protected function _validateBaseImage($product) 
+	{
+		$validateImage = true;
+		$baseImage = $product->getImage();
+		if (empty($baseImage) || $baseImage == 'no_selection') {
+			$validateImage = false;
+		}
+		
+		return $validateImage;		
+	}	
 }

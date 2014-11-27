@@ -321,6 +321,9 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 		// Optional add/sub form multiselects
 		$attributesMode = isset($data['attribute_mode']) ?
 				$data['attribute_mode'] : array();
+		// Do check ower ?
+		$checkVendor =  isset($data['check_vendor']) ?
+				$data['check_vendor'] : true;
 		// Do check editable ?
 		$checkEditable =  isset($data['check_editable']) ?
 				$data['check_editable'] : true;
@@ -339,12 +342,14 @@ class Zolago_Catalog_Controller_Vendor_Product_Abstract
 		}
 		
 		// Validate products vendor
-		$collection = Mage::getResourceModel("catalog/product_collection");
-		$collection->addAttributeToFilter('udropship_vendor', $this->getVendor()->getId());
-		$collection->addIdFilter($productIds);
-		
-		if($collection->getSize()<count($productIds)){
-			throw new Mage_Core_Exception($helper->__("You are trying to edit not your product"));
+		if($checkVendor){
+			$collection = Mage::getResourceModel("catalog/product_collection");
+			$collection->addAttributeToFilter('udropship_vendor', $this->getVendor()->getId());
+			$collection->addIdFilter($productIds);
+
+			if($collection->getSize()<count($productIds)){
+				throw new Mage_Core_Exception($helper->__("You are trying to edit not your product"));
+			}
 		}
 		
 		// Collect validation data
