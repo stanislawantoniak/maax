@@ -212,7 +212,7 @@ define([
 		canShowUseSelection: function(){
 			return this.getCheckAll() || (
 				typeof this.grid.getSelectedIds == "function" && 
-				this.grid.getSelectedIds().length > 0
+				this.grid.getSelectedIds().length > 1
 			);
 		},
 		/**
