@@ -25,7 +25,7 @@ class Zolago_Sizetable_Helper_Data extends Mage_Core_Helper_Abstract{
 		$mid = Mage::getSingleton("eav/config")->getAttribute(Mage_Catalog_Model_Product::ENTITY,'manufacturer')->getAttributeId();
 		$collection = Mage::getResourceModel('eav/entity_attribute_option_collection')
 			->setAttributeFilter($mid)
-			->setStoreFilter($storeId, false)
+			->setStoreFilter($storeId)
 			->join(array('table_alias'=>'zolagosizetable/vendor_brand'), 'main_table.option_id = table_alias.brand_id','')
 			->addFieldToFilter("table_alias.vendor_id",$vendor);
 		$brands = $firstEmpty ? array('' => '') : array();
