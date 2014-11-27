@@ -1,19 +1,197 @@
 <?php /** @var $this Zolago_Sizetable_Block_Dropship_Sizetable_Assign */ ?>
-<div class="container">
+<?php
+$_helper = Mage::helper("zolagosizetable");
+?>
+<div class="container" style="margin-top: 15px; padding: 10px">
 	<div class="row">
-		<form class="form-horizontal row-border" id="sizetableAssignForm" action="<?php echo $this->getAction(); ?>" method="post">
-			<input type="hidden" name="vendor_id" value="<?php echo $this->getVendorId(); ?>" />
-			<select name="brand_id">
-				<?php foreach($this->getBrands() as $value=>$label): ?>
-					<option value="<?php echo $value; ?>"><?php echo $label; ?></option>
-				<?php endforeach; ?>
-			</select>
-			<select name="attribute_set_id">
-				<?php foreach($this->getAttributeSets() as $value=>$label): ?>
-					<option value="<?php echo $value; ?>"><?php echo $label; ?></option>
-				<?php endforeach; ?>
-			</select>
-			<input type="submit" />
+		<form class="form-horizontal row-border" id="sizetableAssignForm" action="<?php echo $this->getAction(); ?>"
+		      method="post">
+			<?php echo $this->getFormkey(); ?>
+			<input type="hidden" value="" name="rule_id" disabled="disabled"/>
+
+			<div class="widget box widget-closed">
+				<div class="widget-header">
+					<h4><i class="icon-plus"></i> <?php echo $_helper->__("New assignment"); ?></h4>
+
+					<div class="toolbar no-padding">
+						<div class="btn-group">
+							<span class="btn btn-xs widget-collapse"><i class="icon-angle-up"></i></span>
+						</div>
+					</div>
+				</div>
+				<div class="widget-content" style="padding: 10px 15px">
+					<div class="form-group">
+						<label class="col-md-2 control-label"
+						       for="sizetable_id"><?php echo $_helper->__("Size table"); ?></label>
+
+						<div class="col-md-10">
+							<div class="col-md-12">
+								<select name="sizetable_id" id="sizetable_id" class="form-control required-entry">
+									<?php foreach ($this->getSizeTables() as $value => $label): ?>
+										<option value="<?php echo $value; ?>"><?php echo $label; ?></option>
+									<?php endforeach; ?>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-2 control-label"
+						       for="brand_id"><?php echo $_helper->__("Brand"); ?></label>
+
+						<div class="col-md-10">
+							<div class="col-md-12">
+								<select name="brand_id" id="brand_id" class="form-control" disabled="disabled">
+									<?php foreach ($this->getBrands() as $value => $label): ?>
+										<option value="<?php echo $value; ?>"><?php echo $label; ?></option>
+									<?php endforeach; ?>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-md-2 control-label"
+						       for="attribute_set_id"><?php echo $_helper->__("Attribute set"); ?></label>
+
+						<div class="col-md-10">
+							<div class="col-md-12">
+								<select name="attribute_set_id" id="attribute_set_id" class="form-control"
+								        disabled="disabled">
+									<?php foreach ($this->getAttributeSets() as $value => $label): ?>
+										<option value="<?php echo $value; ?>"><?php echo $label; ?></option>
+									<?php endforeach; ?>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="form-actions">
+						<a id="sizetableForm_submitter" class="btn btn-primary pull-right">
+							<?php echo $_helper->__("Save"); ?>
+						</a>
+
+						<div class="has-error pull-right" style="margin: 2px 10px 0 0">
+							<label id="sizetableForm_error" class="pull-right help-block"
+							       style="margin-bottom:0;display: none;">
+								<?php echo $_helper->__("Assignment already exists"); ?>
+							</label>
+						</div>
+					</div>
+				</div>
+			</div>
 		</form>
 	</div>
+</div>
+<div class="modal fade" id="confirm-overwrite" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-body">
+				<?php echo $_helper->__("Assignment for chosen options already exists for size table"); ?>
+				"<span id="sizetable_overwrite_name"></span>". <br/>
+				<?php echo $_helper->__("Do you want to overwrite it?"); ?>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default"
+				        data-dismiss="modal"><?php echo $_helper->__("Cancel"); ?></button>
+				<a href="#" class="btn btn-danger danger" id="sizetableForm_modalSubmitter"
+				   onclick="jQuery('#sizetableAssignForm').submit();"><?php echo $_helper->__("Overwrite"); ?></a>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	jQuery(function ($) {
+		var form = $("#sizetableAssignForm"),
+			rule_id = $('input[name=rule_id]'),
+			overwrite_rule_id;
+		new Zolago.formIntegrator(form);
+		form.validate({
+			ignore: "",
+			rules: {
+				sizetable_id: "required"
+			}
+		});
+
+		var sizetable_id = $("#sizetable_id"),
+			brand_id = $("#brand_id"),
+			attribute_set_id = $("#attribute_set_id");
+
+		sizetable_id.change(function () {
+			var val = $(this).val();
+			if (val == '') {
+				brand_id.val("").attr('disabled', true);
+				attribute_set_id.val("").attr('disabled', true);
+			} else {
+				brand_id.attr('disabled', false);
+			}
+		});
+
+		brand_id.change(function () {
+			var val = $(this).val();
+			if (val == '') {
+				attribute_set_id.val("").attr('disabled', true);
+			} else {
+				attribute_set_id.attr('disabled', false);
+			}
+		});
+
+		$('#sizetableForm_submitter').click(function () {
+			var sizetable = sizetable_id.find(":selected").text(),
+				brand = brand_id.find(":selected").text(),
+				attribute = attribute_set_id.find(":selected").text(),
+				error = $('#sizetableForm_error'),
+				confirm = $("#confirm-overwrite"),
+				canSubmit = true;
+			error.hide();
+			rule_id.attr("disabled", true);
+			if (form.valid()) {
+				$('#zolagosizetable_sizetable_assign_grid_table').find('tbody').find('tr').each(function () {
+					if($(this).find("td.empty-text").length == 0) {
+						var sizetable_compare = $.trim($(this).find(".sizetable_name").text()),
+							brand_compare = $.trim($(this).find(".sizetable_brand").text()),
+							attribute_compare = $.trim($(this).find(".sizetable_attribute").text());
+						if (sizetable == sizetable_compare &&
+							(brand == brand_compare || (!brand && !attribute && !brand_compare && !attribute_compare)) &&
+							(attribute == attribute_compare || !attribute && !attribute_compare)) {
+							error.show();
+							canSubmit = false;
+							return false;
+						} else if (sizetable != sizetable_compare &&
+							(brand == brand_compare || (!brand && !attribute && !brand_compare && !attribute_compare)) &&
+							(attribute == attribute_compare || !attribute && !attribute_compare)) {
+							overwrite_rule_id = $(this).find(".sizetable_assign_actions a.delete").data("rule_id");
+							confirm.find(".modal-body #sizetable_overwrite_name").text(sizetable_compare);
+							confirm.modal();
+							canSubmit = false;
+							return false;
+						}
+					}
+				});
+				if (canSubmit)
+					form.submit();
+			}
+		});
+
+		$("#sizetableForm_modalSubmitter").click(function () {
+			rule_id.val(overwrite_rule_id).attr("disabled", false);
+			form.submit();
+		});
+
+		// create integrator
+		new Zolago.gridIntegrator(<?php echo $this->getGridJsObjectName();?>);
+	});
+</script>
+<div class="container z-grid" style="padding: 0">
+	<div class="actions" style="margin:-25px 0 10px">
+		<div class="pull-right  form-inline main-buttons">
+			<button title="Wyczyść filtr" type="button" class="scalable  btn"
+			        onclick="<?php echo $this->getGridJsObjectName();?>.resetFilter()"><span><span><span>Wyczyść filtr</span></span></span>
+			</button>
+			<button title="Szukaj" type="button"
+			        class="scalable task btn btn-primary btn-search"
+			        onclick="<?php echo $this->getGridJsObjectName();?>.doFilter()" style="">
+				<span><span><span>Szukaj</span></span></span></button>
+		</div>
+		<div class="clearfix"></div>
+	</div>
+	<?php echo $this->getGridHtml(); ?>
 </div>

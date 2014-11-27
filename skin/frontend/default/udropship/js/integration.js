@@ -41,7 +41,6 @@ Zolago.formIntegrator = function(form){
 	form.find(".required-entry").attr("required", "required");
 	form.find(".validate-email ").addClass("email");
 	form.find(".validate-digits ").addClass("number");
-	//form.find(".validate-tinymce").
 };
 /**
  * Grid integrator

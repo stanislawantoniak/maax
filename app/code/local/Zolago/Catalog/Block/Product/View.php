@@ -80,12 +80,40 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
 			if(Mage::registry('current_category') instanceof Mage_Catalog_Model_Category){
 				$model = Mage::registry('current_category');
 			}else{
-				$model = Mage::getModel('catalog/category')->load(Mage::app()->getStore()->getRootCategoryId());
+				$model = $this->getParentCategoryAnonymous();//Mage::getModel('catalog/category')->load(Mage::app()->getStore()->getRootCategoryId());
 			}
 			$this->setData("parent_category", $model);
 		}
 		
 		return $this->getData("parent_category");
+	}
+
+	public function getParentCategoryAnonymous() {
+		$path  = Mage::helper('catalog')->getBreadcrumbPath();
+
+		// Product page and has no path - prepare defualt path
+		if(is_array($path) && count($path)==1 &&
+			Mage::registry('current_product') instanceof Mage_Catalog_Model_Product){
+
+			$product = Mage::registry('current_product');
+			/* @var $product Mage_Catalog_Model_Product */
+			$catIds = $product->getCategoryIds();
+			$rootId = Mage::app()->getStore()->getRootCategoryId();
+
+			$collection = Mage::getResourceModel('catalog/category_collection');
+			/* @var $collection Mage_Catalog_Model_Resource_Category_Collection */
+
+			$collection->addAttributeToFilter("entity_id", array("in"=>$catIds));
+			$collection->addAttributeToFilter("is_active", 1);
+			$collection->addPathFilter("/$rootId/");
+
+			// Get first category
+			if($collection->count()){
+				return Mage::getModel("catalog/category")->load($collection->getFirstItem()->getId());
+			} else {
+				return false;
+			}
+		}
 	}
 
     /**
@@ -99,7 +127,9 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
         $data = array();
         $product = $this->getProduct();
         $attributes = $product->getAttributes();
+        //
         foreach ($attributes as $attribute) {
+
             if ($attribute->getIsVisibleOnFront()) {
                 $value = $attribute->getFrontend()->getValue($product);
 
@@ -111,11 +141,12 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
                     $value = Mage::app()->getStore()->convertPrice($value, true);
                 }
 
-                if($shortForm){
+                if ($shortForm) {
                     if (is_string($value) && strlen($value)) {
                         $data[$attribute->getAttributeCode()] = array(
                             'label' => $attribute->getStoreLabel(),
-                            'value' => ($attribute->getFrontendInput() == "multiselect") ? explode(",", $value) : $value
+                            'value' => ($attribute->getFrontendInput() == "multiselect") ? explode(",", $value) : $value,
+                            'attribute_order' => $attribute->getColumnAttributeOrder()
                         );
                     }
                 } else {
@@ -123,14 +154,21 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
                         $data[$attribute->getAttributeCode()] = array(
                             'label' => $attribute->getStoreLabel(),
                             'value' => ($attribute->getFrontendInput() == "multiselect") ? explode(",", $value) : $value,
-                            'code'  => $attribute->getAttributeCode(),
-                            'frontend_type' => $attribute->getFrontendInput()
+                            'code' => $attribute->getAttributeCode(),
+                            'frontend_type' => $attribute->getFrontendInput(),
+                            'attribute_order' => $attribute->getColumnAttributeOrder()
                         );
                     }
                 }
 
+
             }
         }
+
+        //sort by ColumnAttributeOrder
+        usort($data, function ($a, $b) {
+            return $a['attribute_order'] - $b['attribute_order'];
+        });
 
         return $data;
     }

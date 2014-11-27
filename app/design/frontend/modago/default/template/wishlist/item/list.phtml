@@ -76,8 +76,7 @@ $_helper = Mage::helper('zolagocatalog/product');
                                         ?>
                                         <div class="like liked"
                                              data-idproduct="<?php echo $_product->getId(); ?>"
-                                             data-status="1"
-                                             onclick="Mall.wishlist.removeFromSmallBlock(this);return false;">
+                                             data-status="1">
                                             <span class="icoLike">
                                                 <img class="img-01" src="<?php echo $this->getSkinUrl('images/heart.png'); ?>" alt=""/>
                                                 <img class="img-02" src="<?php echo $this->getSkinUrl('images/heart-like.png'); ?>" alt=""/>
@@ -124,6 +123,8 @@ $_helper = Mage::helper('zolagocatalog/product');
 
     jQuery(grid).on('layout.shuffle', function() {
         Mall.wishlist.likePriceView();
+        //fix for footer
+        jQuery(window).resize();
     });
 
     jQuery(grid).find('.img_product img').on('load', function(){
@@ -138,5 +139,15 @@ $_helper = Mage::helper('zolagocatalog/product');
         in_your_wishlist: "true"
     });
     <?php endforeach; ?>
+
+    jQuery('#grid .like').click(function() {
+        Mall.wishlist.removeFromSmallBlock(this);
+
+        //remove item
+        grid.shuffle('remove', jQuery(this).closest('.item'));
+
+        //fix for footer
+        jQuery(window).resize();
+    });
 </script>
 

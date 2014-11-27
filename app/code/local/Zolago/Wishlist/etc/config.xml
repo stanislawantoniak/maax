@@ -82,5 +82,8 @@
                 </zolagowishlist>
             </updates>
         </layout>
+	    <secure_url>
+		    <wishlist>wishlist_has_no_secure_url</wishlist>
+	    </secure_url>
     </frontend>
 </config>
