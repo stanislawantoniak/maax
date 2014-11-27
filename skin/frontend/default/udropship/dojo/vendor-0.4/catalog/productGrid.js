@@ -213,7 +213,7 @@ define([
 		jQuery(node).tooltip({
 			container: "body", 
 			animation: false, 
-			placement: "left",
+			placement: "top",
 			trigger: "manual"
 		});
 		
@@ -270,9 +270,17 @@ define([
 				label = "off";
 			break;
 		}
+		
 		node.className = node.className + " " + "status-" + label;
 		//node.innerHTML = label;
 		node.title = this.options[value] || "";
+		
+		jQuery(node).tooltip({
+			container: "body", 
+			animation: false, 
+			placement: "top",
+			delay: {"show": 1000, "hide": 0}
+		});
 	};
 	
 	/**
@@ -465,9 +473,17 @@ define([
 			editors[field] = new PopupEditor(column);
 			editors[field].on("save", handleSaveEditor);
 		}
-
+		
+		// Enter click
+		if(e instanceof KeyboardEvent){
+			if(e.keyCode==13){
+				e.preventDefault();
+			}else{
+				return;
+			}
+		}
 		hideAllEditors();
-
+		
 		editors[field].open(cell, e);
 	}
 	
@@ -480,8 +496,17 @@ define([
 	});
 	
 	on(document.body, "keydown", function(e){
-		if(e.keyCode==27){
+		var editors = grid.get("editors"),
+			hasOpen = false;
+		for(var k in editors){
+			if(editors.hasOwnProperty(k) && editors[k] instanceof PopupEditor && editors[k].isOpen()){
+				hasOpen = true;
+				break;
+			}
+		}
+		if(e.keyCode==27 && hasOpen){
 			hideAllEditors();
+			e.preventDefault();
 		}
 	});
 	
@@ -574,6 +599,7 @@ define([
 		
 		// listen for editable
 		grid.on("td.dgrid-cell.editable:click", handleColumnEdit);
+		grid.on("td.dgrid-cell.editable.dgrid-focus:keydown", handleColumnEdit);
 		
 		registerMassactions(grid);
 		

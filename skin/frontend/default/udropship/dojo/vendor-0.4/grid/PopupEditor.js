@@ -98,6 +98,7 @@ define([
 			);
 	
 			domClass.remove(this.content, "hidden")
+			this.grid.focus(this.cell);
 			this.getField().focus();
 		},
 		/**
@@ -197,6 +198,7 @@ define([
 		 */
 		close: function(){
 			domClass.add(this.content, "hidden");
+			this.grid.focus(this.cell);
 		},
 		/**
 		 * @returns {undefined}

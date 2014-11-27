@@ -32,8 +32,15 @@
 		margin-left: 0;
 	}
 	#grid-holder td.editable{
-		/*font-weight: normal;*/
+		font-weight: normal;
 		position: relative;
+		cursor: cell;
+	}
+	#grid-holder td.editable.dgrid-focus{
+		 border: 1px #f00 solid !important;
+	}
+	#grid-holder td.editable:active{
+		cursor: default;
 	}
 	#grid-holder td.editable:empty::after{
 		position: absolute;
