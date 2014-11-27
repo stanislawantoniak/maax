@@ -15,7 +15,7 @@ $useUps = $_vendor->getData('use_orbaups');
     </div>
     <div class="row">
         <div class="col-md-12">
-            <form id="vendor_settings_shipping" class="form-horizontal">
+            <form id="vendor_settings_shipping" class="form-horizontal"  method="post" action="/udropship/vendor_settings/shippingPost">
                 <div class="widget box">
                     <div class="widget-header">
                         <h4><?php echo Mage::helper("zolagodropship")->__("DHL Settings");?></h4>
@@ -91,7 +91,7 @@ $useUps = $_vendor->getData('use_orbaups');
                             <div class="col-md-9">
                                 <select id="use_orbaups" name="use_orbaups"  class="form-control">
                                     <option value="1" <?php if($useUps == 1): ?> selected='selected'<?php endif; ?> ><?php echo $this->__("Yes");?></option>
-                                    <option value="0" <?php if($useUps == 1): ?> selected='selected'<?php endif; ?> ><?php echo $this->__("No");?></option>
+                                    <option value="0" <?php if($useUps == 0): ?> selected='selected'<?php endif; ?> ><?php echo $this->__("No");?></option>
                                 </select>
                             </div>
                         </div>
