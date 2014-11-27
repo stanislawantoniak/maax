@@ -20,7 +20,7 @@ $_session = Mage::getSingleton('udropship/session');
 					foreach ($this->getForm()->getElements() as $element):
 						echo $element->toHtml();
 					endforeach; ?>
-					<div class="form-group">
+					<div class="form-group" style="padding-bottom: 0;">
 						<label class="col-md-12"><span
 								class="required"><?php echo $this->__('* Indicated Required Fields') ?></span></label>
 					</div>
