@@ -394,3 +394,28 @@ table.foot-empty-cells tfoot td:empty {
 		text-align: justify;
 	}
 }
+
+/* bootstrap centered columns */
+.row-centered {
+	text-align:center;
+}
+.col-centered {
+	display:inline-block;
+	float:none;
+	/* reset the text-align */
+	text-align:left;
+	/* inline-block space fix */
+	margin-right:-4px;
+}
+
+/* vendor register form */
+@media (min-width: 982px) {
+	#vendor-register-row, #login-vendor {
+		margin-top: 70px !important;
+	}
+}
+@media (max-width: 981px) {
+	#vendor-register-row, #login-vendor {
+		margin-top: 20px !important;
+	}
+}
