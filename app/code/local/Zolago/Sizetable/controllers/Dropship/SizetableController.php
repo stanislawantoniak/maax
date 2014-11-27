@@ -29,7 +29,7 @@ class Zolago_Sizetable_Dropship_SizetableController extends Zolago_Dropship_Cont
 				$formKey = Mage::getSingleton('core/session')->getFormKey();
 				$formKeyPost = $this->getRequest()->getParam('form_key');
 				if ($formKey != $formKeyPost) {
-					return $this->_redirectReferer();
+					return $this->redirectSizetable();
 				} else {
 					/** @var Zolago_Sizetable_Helper_Data $helper */
 					$helper = Mage::helper('zolagosizetable');
@@ -41,7 +41,7 @@ class Zolago_Sizetable_Dropship_SizetableController extends Zolago_Dropship_Cont
 						if (!$model->getId()) {
 							throw new Mage_Core_Exception($helper->__("Size table not found"));
 						} elseif($model->getVendorId() != $this->getVendorId()) {
-							return $this->_redirectReferer();
+							return $this->redirectSizetable();
 						}
 					}
 					$model->updateModelData($data);
@@ -53,14 +53,14 @@ class Zolago_Sizetable_Dropship_SizetableController extends Zolago_Dropship_Cont
 		}catch(Mage_Core_Exception $e){
 			$session->addError($e->getMessage());
 			$session->setFormData($data);
-			return $this->_redirectReferer();
+			return $this->redirectSizetable();
 		}catch(Exception $e){
 			$session->addError($helper->__("Some error occurred"));
 			$session->setFormData($data);
 			Mage::logException($e);
-			return $this->_redirectReferer();
+			return $this->redirectSizetable();
 		}
-		return $this->_redirect("*/*");
+		return $this->redirectSizetable();
 	}
 
 	public function assignAction() {
@@ -72,7 +72,7 @@ class Zolago_Sizetable_Dropship_SizetableController extends Zolago_Dropship_Cont
 				$formKey = Mage::getSingleton('core/session')->getFormKey();
 				$formKeyPost = $this->getRequest()->getParam('form_key');
 				if ($formKey != $formKeyPost) {
-					return $this->_redirect("*/*");
+					return $this->redirectSizetable();
 				} else {
 					/** @var Zolago_Sizetable_Helper_Data $helper */
 					$helper = Mage::helper('zolagosizetable');
@@ -101,13 +101,13 @@ class Zolago_Sizetable_Dropship_SizetableController extends Zolago_Dropship_Cont
 			}
 		}catch(Mage_Core_Exception $e){
 			$session->addError($e->getMessage());
-			return $this->_redirect("*/*");
+			return $this->redirectSizetable();
 		}catch(Exception $e){
 			$session->addError($helper->__("Some error occurred"));
 			Mage::logException($e);
-			return $this->_redirect("*/*");
+			return $this->redirectSizetable();
 		}
-		return $this->_redirect("*/*");
+		return $this->redirectSizetable();
 	}
 
 	public function deleteAction() {
@@ -118,7 +118,7 @@ class Zolago_Sizetable_Dropship_SizetableController extends Zolago_Dropship_Cont
 		} elseif(!empty($sizetableId)) {
 			$this->deleteSizetable($sizetableId);
 		}
-		$this->_redirectReferer();
+		$this->redirectSizetable();
 	}
 
 	protected function deleteRule($ruleId) {
@@ -126,7 +126,7 @@ class Zolago_Sizetable_Dropship_SizetableController extends Zolago_Dropship_Cont
 		$this->delete(Mage::getModel("zolagosizetable/sizetable_rule"),$ruleId);
 		if(!$this->erroroccurred) $this->_getSession()->addSuccess($helper->__("Size table assignment was deleted"));
 		else $this->_getSession()->addError($helper->__("There was an error while deleting selected assignment"));
-		return $this->_redirect("*/*");
+		return $this->redirectSizetable();
 	}
 
 	protected function deleteSizetable($sizetableId) {
@@ -134,7 +134,7 @@ class Zolago_Sizetable_Dropship_SizetableController extends Zolago_Dropship_Cont
 		$this->delete(Mage::getModel("zolagosizetable/sizetable"),$sizetableId);
 		if(!$this->erroroccurred) $this->_getSession()->addSuccess($helper->__("Size table was deleted"));
 		else $this->_getSession()->addError($helper->__("There was an error while deleting selected size table"));
-		return $this->_redirect("*/*");
+		return $this->redirectSizetable();
 	}
 
 	public function delete($model,$modelId)
@@ -150,11 +150,11 @@ class Zolago_Sizetable_Dropship_SizetableController extends Zolago_Dropship_Cont
 			}
 		} catch (Mage_Core_Exception $e) {
 			$this->_getSession()->addError($e->getMessage());
-			return $this->_redirect("*/*");
+			return $this->redirectSizetable();
 		} catch (Exception $e) {
 			$this->_getSession()->addError($helper->__("Some error occurred"));
 			Mage::logException($e);
-			return $this->_redirect("*/*");
+			return $this->redirectSizetable();
 		}
 	}
 
@@ -186,17 +186,21 @@ class Zolago_Sizetable_Dropship_SizetableController extends Zolago_Dropship_Cont
 			// Existing sizetable - has venor rights?
 			if ($sizetable->getSizetableId() && $sizetable->getVendorId() != $this->getVendorId()) {
 				$this->_getSession()->addError(Mage::helper('zolagosizetable')->__("You cannot edit this size table"));
-				return $this->_redirect("*/*");
+				return $this->redirectSizetable();
 				// Sizetable id specified, but dons't exists
 			} elseif (!$sizetable->getSizetableId() && $this->getRequest()->getParam("sizetable_id", null) !== null) {
 				Mage::log(4);
 				$this->_getSession()->addError(Mage::helper('zolagosizetable')->__("Size table doesn't exists"));
-				return $this->_redirect("*/*");
+				return $this->redirectSizetable();
 			}
 		}
 	}
 
 	public function getVendorId() {
 		return $this->_getSession()->getVendor()->getVendorId();
+	}
+	
+	protected function redirectSizetable() {
+		$this->_redirect("udropship/sizetable");
 	}
 }

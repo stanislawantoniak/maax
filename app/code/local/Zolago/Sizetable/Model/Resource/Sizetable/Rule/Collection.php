@@ -26,7 +26,7 @@ class Zolago_Sizetable_Model_Resource_Sizetable_Rule_Collection
 		$this->join(
 			array("sizetable"=>"sizetable"),
 			"main_table.sizetable_id = sizetable.sizetable_id",
-			"sizetable.name AS sizetable_name");
+			"sizetable.name");
 		return $this;
 	}
 
@@ -35,9 +35,7 @@ class Zolago_Sizetable_Model_Resource_Sizetable_Rule_Collection
 		$this->getSelect()
 			->joinLeft(array("brand"=>$this->getTableName('eav/attribute_option_value')),
 				"main_table.brand_id = brand.option_id",
-				array(
-					"brand_name" => "brand.value"
-				)
+				"brand.value"
 			)
 			->where("main_table.brand_id IS NULL OR (brand.store_id = $storeId OR brand.store_id = 0)");
 		return $this;
@@ -47,9 +45,7 @@ class Zolago_Sizetable_Model_Resource_Sizetable_Rule_Collection
 		$this->getSelect()
 		->joinLeft(array("attribute"=>$this->getTableName('eav/attribute_set')),
 			"main_table.attribute_set_id = attribute.attribute_set_id",
-			array(
-				"attribute_set_name"=>"attribute.attribute_set_name",
-			)
+			"attribute.attribute_set_name"
 		);
 		return $this;
 	}
