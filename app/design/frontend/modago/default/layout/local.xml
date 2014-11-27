@@ -527,34 +527,40 @@
         <reference name="content">
 
             <remove name="solrsearch_product_list_header"/>
-            <remove name="solrsearch_result_title"/>
             <remove name="solrsearch_product_list_active"/>
             <remove name="solrsearch_product_list_toolbar"/>
-            <remove name="solrsearch_product_list"/>
             <remove name="zolagosolrsearch_category_view"/>
+            <remove name="zolagocatalog_breadcrumbs"/>
+            <remove name="solrsearch_product_list"/>
+
+            <remove name="solrsearch_result_title_search" />
+            <remove name="solrsearch_product_list_active_search"/>
+            <remove name="solrsearch_product_list_toolbar_search"/>
+            <remove name="solrsearch_product_list_search"/>
+
             <remove name="zolago_breadcrumb_fix"/>
+
+            <block type="core/template" before="solrsearch_product_list_header_search" name="zolago_breadcrumb_fix_search" template="catalog/breadcrumbsfix.phtml" as="zolago_breadcrumb_fix_search">
+                <block type="zolagocatalog/breadcrumbs" name="zolago_breadcrumbs" />
+            </block>
+
+
 
             <block type="zolagosolrsearch/search_view" name="zolagosolrsearch_search_view" as="zolagosolrsearch_search_view">
 
+                <block type="zolagosolrsearch/catalog_product_list_header_search" name="solrsearch_result_title" template="zolagosolrsearch/catalog/product/list/header/search.phtml" as="solrsearch_result_title" />
+                <block type="zolagosolrsearch/active" name="solrsearch_product_list_active" as="solrsearch_product_list_active"/>
+                <block type="zolagosolrsearch/catalog_product_list_toolbar" name="solrsearch_product_list_toolbar" template="zolagosolrsearch/catalog/product/list/toolbar.phtml" as="solrsearch_product_list_toolbar"/>
+
                 <block type="zolagosolrsearch/catalog_product_list" name="solrsearch_product_list" template="zolagosolrsearch/catalog/product/list.phtml" as="solrsearch_product_list"/>
+                <block type="zolagomodago/dropshipmicrositepro_vendor_banner" name="vendor.banner" template="unirgy/microsite/vendor/banner.phtml"/>
+                <block type="zolagomodago/dropshipmicrositepro_vendor_category_banner" name="vendor.banner.inspiration" template="unirgy/microsite/vendor/category/banner.phtml"/>
+                <block type="zolagomodago/solrsearch_faces" name="searchfaces" as="searchFaces" before="-">
+                    <block type="solrsearch/faces_price" name="solr_price_facets" as="solr_price_facets"/>
+                    <block type="solrsearch/faces_range" name="solr_range_facets" as="solr_range_facets"/>
+                </block>
             </block>
 
-            <block type="core/template" before="solrsearch_product_list_header" name="zolago_breadcrumb_fix" template="catalog/breadcrumbsfix.phtml">
-                <block type="zolagocatalog/breadcrumbs" name="zolago_breadcrumbs" />
-            </block>
-        </reference>
-
-        <reference name="zolagosolrsearch_search_view">
-            <remove name="zolagocatalog_breadcrumbs"/>
-            <action method="setTemplate">
-                <template>zolagosolrsearch/catalog/category/view.phtml</template>
-            </action>
-            <block type="zolagomodago/dropshipmicrositepro_vendor_banner" name="vendor.banner" template="unirgy/microsite/vendor/banner.phtml"/>
-            <block type="zolagomodago/dropshipmicrositepro_vendor_category_banner" name="vendor.banner.inspiration" template="unirgy/microsite/vendor/category/banner.phtml"/>
-            <block type="zolagomodago/solrsearch_faces" name="searchfaces" as="searchFaces" before="-">
-                <block type="solrsearch/faces_price" name="solr_price_facets" as="solr_price_facets"/>
-                <block type="solrsearch/faces_range" name="solr_range_facets" as="solr_range_facets"/>
-            </block>
         </reference>
 
 
@@ -563,6 +569,8 @@
                 <name>searchfaces</name>
             </action>
         </reference>
+
+
     </solrsearch_index_index>
 
 	<_udprod_product_configurable>

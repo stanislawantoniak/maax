@@ -4,7 +4,7 @@
 
     public function _construct() {
         parent::_construct();
-        $this->setTemplate("zolagosolrsearch/catalog/category/view.phtml");
+        $this->setTemplate("zolagosolrsearch/search/view.phtml");
     }
 
     protected function _prepareLayout() {
@@ -72,7 +72,8 @@
     }
     public function getProductListHtml()
     {
-        return $this->getChildHtml('zolagocatalog_breadcrumbs'). $this->getChildHtml('solrsearch_product_list');
+//        echo get_class($this->getLayout()->createBlock('solrsearch_result_title_search'));
+        return $this->getChildHtml('solrsearch_product_list');
     }
 
 }
