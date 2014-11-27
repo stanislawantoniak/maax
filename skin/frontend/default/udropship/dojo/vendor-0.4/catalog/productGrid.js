@@ -198,6 +198,50 @@ define([
 	 * @param {object} node
 	 * @returns {string}
 	 */
+	var rendererTextarea = function (item, value, node, options){
+
+		var column = this;
+		var timeout;
+		
+		node.title = value;
+		node.innerHTML = value;
+		
+		if(value===null || value===""){
+			return;
+		}
+		
+		jQuery(node).tooltip({
+			container: "body", 
+			animation: false, 
+			placement: "left",
+			trigger: "manual"
+		});
+		
+		// Allow open only if editor is close
+		on(node, "mouseenter", function(){
+			var editor = grid.get("editors")[column.field];
+			if(editor instanceof PopupEditor && editor.isOpen()){
+				return;
+			}
+			clearTimeout(timeout);
+			timeout = setTimeout(function(){
+				jQuery(node).tooltip('show');
+			}, 1000);
+		});
+		
+		// Remove on click and mouse out
+		on(node, "mousedown,mouseleave", function(){
+			clearTimeout(timeout);
+			jQuery(node).tooltip('hide');
+		});
+	};
+	
+	/**
+	 * @param {mixed} value
+	 * @param {object} item
+	 * @param {object} node
+	 * @returns {string}
+	 */
 	var rendererName = function (item, value, node, options){
 		var content = put("div");
 		put(content, "p", {
@@ -326,6 +370,8 @@ define([
 					}
 				}else if(column.type=="price"){
 					childColumn.formatter = formatterPriceFactor(column.currencyCode);
+				}else if(column.type=="textarea"){
+					childColumn.renderCell = rendererTextarea;
 				}else if(column.field=="thumbnail"){
 					childColumn.renderCell = rendererThumbnail;
 				}else if(column.field=="name"){
