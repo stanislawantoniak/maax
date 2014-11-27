@@ -191,12 +191,12 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 		
 		$groupOne = array();
 		if($this->isAllowed("udropship/vendor/preferences")){
-//			$groupOne[] = array(
-//				"active" => $this->isActive("preferences"),
-//				"icon"	 => "icon-cog",
-//				"label"	 => $this->__('Preferences'),
-//				"url"	 => $this->getUrl('udropship/vendor/preferences')
-//			);
+			$groupOne[] = array(
+				"active" => $this->isActive("preferences"),
+				"icon"	 => "icon-cog",
+				"label"	 => $this->__('Preferences'),
+				"url"	 => $this->getUrl('udropship/vendor/preferences')
+			);
 
             if(!$this->isOperatorMode()){
                 $groupOne[] = array(
