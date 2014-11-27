@@ -132,13 +132,54 @@ $_collection = $this->getCollection();
     Mall.translate.add("people-polish-more-than-few", "<?php echo $this->__("people polish more than few"); ?>");
     Mall.translate.add("you", "<?php echo $this->__("You"); ?>");
 
+    var grid = jQuery('#grid'),
+        sizer = jQuery(grid).find('.shuffle__sizer');
 
+    grid.shuffle({throttleTime: 400, speed: 0, supported: false });
+    grid.shuffle('update');
 
-//    var listingHeight = jQuery("#items-product").outerHeight();
-//    var listingWidth = jQuery("#items-product").outerWidth();
-//    jQuery("#items-product").children(".item").hide();
-//    jQuery("#content-main").find(".addNewPositionListProductWrapper").hide();
-//    jQuery("#listing-load-toplayer").width(listingWidth).height(listingHeight).prependTo("#items-product");
+    jQuery(grid).on('layout.shuffle', function() {
+        Mall.listing.likePriceView();
+    });
+
+    <?php foreach ($_collection as $product): ?>
+    Mall.wishlist.addProduct({
+        id: <?php echo $product->getId(); ?>,
+        wishlist_count: <?php echo (int)$product->getWishlistCount(); ?>,
+        in_your_wishlist: <?php echo $product->getInMyWishlist() ? "true" : "false"; ?>
+    });
+    <?php endforeach; ?>
+
+    jQuery('#grid .like').click(function() {
+        var inMyWishlisy = parseInt(jQuery(this).attr('data-status'));
+        if (inMyWishlisy) {
+            Mall.wishlist.removeFromSmallBlock(this);
+        } else {
+            Mall.wishlist.addFromSmallBlock(this);
+        }
+    });
+
+    jQuery(window).on('appendToListEnd', function() {
+        grid.shuffle('update');
+
+        Mall.listing.hideLoadMoreButton();
+        if(Mall.listing.getLoadNextStart() === Mall.listing.getCurrentVisibleItems()){
+            if( Mall.listing.getTotal() > Mall.listing.getCurrentVisibleItems()){
+                Mall.listing.showLoadMoreButton();
+            }
+        }
+
+        Mall.listing.placeListingFadeContainer();
+    });
+
+    jQuery(window).resize(function() {
+        Mall.listing.placeListingFadeContainer();
+    });
+
+    jQuery('.addNewPositionListProductWrapper a, .addNewPositionListProductWrapper').click(function( event){
+        event.preventDefault();
+        Mall.listing.loadMoreProducts();
+    });
 </script>
 
 <style type="text/css">
@@ -162,63 +203,3 @@ $_collection = $this->getCollection();
         margin: 0 auto;
     }
 </style>
-
-<script>
-    var grid = jQuery('#grid'),
-        sizer = jQuery(grid).find('.shuffle__sizer');
-
-    grid.shuffle({throttleTime: 400, speed: 0, supported: false });
-    grid.shuffle('update');
-
-    jQuery(grid).on('layout.shuffle', function() {
-        Mall.listing.likePriceView();
-        //fix for footer
-//        jQuery(window).resize();
-    });
-
-//    jQuery(grid).find('.img_product img').on('load', function(){
-//        grid.shuffle('layout');
-//    });
-
-    <?php foreach ($_collection as $product): ?>
-    Mall.wishlist.addProduct({
-        id: <?php echo $product->getId(); ?>,
-        wishlist_count: <?php echo (int)$product->getWishlistCount(); ?>,
-        in_your_wishlist: <?php echo $product->getInMyWishlist() ? "true" : "false"; ?>
-    });
-    <?php endforeach; ?>
-
-    jQuery('#grid .like').click(function() {
-        var inMyWishlisy = parseInt(jQuery(this).attr('data-status'));
-        if (inMyWishlisy) {
-            Mall.wishlist.removeFromSmallBlock(this);
-        } else {
-            Mall.wishlist.addFromSmallBlock(this);
-        }
-
-        //fix for footer
-        jQuery(window).resize();
-    });
-
-    jQuery(window).on('appendToListEnd', function() {
-        grid.shuffle('update');
-
-        Mall.listing.hideLoadMoreButton();
-        if(Mall.listing.getLoadNextStart() === Mall.listing.getCurrentVisibleItems()){
-            if( Mall.listing.getTotal() > Mall.listing.getCurrentVisibleItems()){
-                Mall.listing.showLoadMoreButton();
-            }
-        }
-
-        Mall.listing.placeListingFadeContainer();
-    });
-
-    jQuery(window).resize(function() {
-        Mall.listing.placeListingFadeContainer();
-    });
-
-    jQuery('.addNewPositionListProductWrapper a, .addNewPositionListProductWrapper').click(function( event){
-        event.preventDefault();
-        Mall.listing.loadMoreProducts();
-    })
-</script>
