@@ -1,4 +1,5 @@
-<?php /** @var $this Zolago_Sizetable_Block_Dropship_Sizetable_Assign */
+<?php /** @var $this Zolago_Sizetable_Block_Dropship_Sizetable_Assign */ ?>
+<?php
 $_helper = Mage::helper("zolagosizetable");
 ?>
 <div class="container" style="margin-top: 15px; padding: 10px">
@@ -139,30 +140,30 @@ $_helper = Mage::helper("zolagosizetable");
 				attribute = attribute_set_id.find(":selected").text(),
 				error = $('#sizetableForm_error'),
 				confirm = $("#confirm-overwrite"),
-				canSubmit = false;
+				canSubmit = true;
 			error.hide();
 			rule_id.attr("disabled", true);
 			if (form.valid()) {
 				$('#zolagosizetable_sizetable_assign_grid_table').find('tbody').find('tr').each(function () {
-					var sizetable_compare = $.trim($(this).find(".sizetable_name").text()),
-						brand_compare = $.trim($(this).find(".sizetable_brand").text()),
-						attribute_compare = $.trim($(this).find(".sizetable_attribute").text());
-					if (sizetable == sizetable_compare &&
-						(brand == brand_compare || (!brand && !attribute && !brand_compare && !attribute_compare)) &&
-						(attribute == attribute_compare || !attribute && !attribute_compare)) {
-						error.show();
-						canSubmit = false;
-						return false;
-					} else if (sizetable != sizetable_compare &&
-						(brand == brand_compare || (!brand && !attribute && !brand_compare && !attribute_compare)) &&
-						(attribute == attribute_compare || !attribute && !attribute_compare)) {
-						overwrite_rule_id = $(this).find(".sizetable_assign_actions a.delete").data("rule_id");
-						confirm.find(".modal-body #sizetable_overwrite_name").text(sizetable_compare);
-						confirm.modal();
-						canSubmit = false;
-						return false;
-					} else {
-						canSubmit = true;
+					if($(this).find("td.empty-text").length == 0) {
+						var sizetable_compare = $.trim($(this).find(".sizetable_name").text()),
+							brand_compare = $.trim($(this).find(".sizetable_brand").text()),
+							attribute_compare = $.trim($(this).find(".sizetable_attribute").text());
+						if (sizetable == sizetable_compare &&
+							(brand == brand_compare || (!brand && !attribute && !brand_compare && !attribute_compare)) &&
+							(attribute == attribute_compare || !attribute && !attribute_compare)) {
+							error.show();
+							canSubmit = false;
+							return false;
+						} else if (sizetable != sizetable_compare &&
+							(brand == brand_compare || (!brand && !attribute && !brand_compare && !attribute_compare)) &&
+							(attribute == attribute_compare || !attribute && !attribute_compare)) {
+							overwrite_rule_id = $(this).find(".sizetable_assign_actions a.delete").data("rule_id");
+							confirm.find(".modal-body #sizetable_overwrite_name").text(sizetable_compare);
+							confirm.modal();
+							canSubmit = false;
+							return false;
+						}
 					}
 				});
 				if (canSubmit)
