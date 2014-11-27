@@ -1,5 +1,3 @@
-tutaj kolumna i produkty
-
 <?php if($this->isContentMode()): ?>
     <?php //echo $this->getChildHtml('banner_result_title'); ?>
     <div id="content" class="container-fluid">
@@ -36,8 +34,12 @@ tutaj kolumna i produkty
     <section id="main" class="<?php echo $this->getElementClass(); ?>">
 
         <?php echo $this->getChildHtml('solrsearch_result_title'); ?>
-        <?php echo $this->getChildHtml('solrsearch_product_list_active'); ?> //or solrsearch_product_list_activefaces?
-        <?php echo $this->getChildHtml('solrsearch_product_list_toolbar'); ?>
+
+        <?php //echo $this->getChildHtml('solrsearch_product_list_active'); ?>
+        <?php echo Mage::app()->getLayout()->createBlock('zolagosolrsearch/active')->setBlockId('solrsearch_product_list_active')->toHtml(); ?>
+
+        <?php //echo $this->getChildHtml('solrsearch_product_list_toolbar'); ?>
+        <?php echo Mage::app()->getLayout()->createBlock('zolagosolrsearch/catalog_product_list_toolbar')->setBlockId('solrsearch_product_list_toolbar')->toHtml(); ?>
         <div id="content" class="container-fluid">
             <div class="row">
                 <div class="col-sm-12">
@@ -45,7 +47,8 @@ tutaj kolumna i produkty
                         <?php echo $this->getChildHtml('searchFaces'); ?>
                     </div>
                     <div id="content-main">
-                        <?php echo $this->getProductListHtml() ?>
+                        <?php //echo $this->getProductListHtml() ?>
+                        <?php echo Mage::app()->getLayout()->createBlock('zolagosolrsearch/catalog_product_list')->setBlockId('solrsearch_product_list')->setTemplate('zolagosolrsearch/catalog/product/list.phtml')->toHtml(); ?>
                     </div>
                 </div>
             </div>

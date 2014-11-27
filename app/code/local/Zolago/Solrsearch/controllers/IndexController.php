@@ -39,12 +39,12 @@ class Zolago_Solrsearch_IndexController extends SolrBridge_Solrsearch_IndexContr
 				if(isset($params['is_search'])){
 					Mage::register('is_current_category_context', TRUE);
 				}
+                $search_category = Mage::getModel('catalog/category')->load($params['scat']);
+                Mage::register('current_category', $search_category);
+		    }
 
-			}
-            $search_category = Mage::getModel('catalog/category')->load($params['scat']);
-            Mage::register('current_category', $search_category);
 		}
-		
+
 		//Redirect to Url set for the search term
 		$query = Mage::helper('catalogsearch')->getQuery();
 		$query->setStoreId(Mage::app()->getStore()->getId());
