@@ -37,7 +37,7 @@ class Zolago_Sizetable_Block_Dropship_Sizetable_Assign extends Mage_Core_Block_T
 	}
 
 	public function getBrands() {
-		return Mage::helper("zolagosizetable")->getBrands($this->getVendorId());
+		return Mage::helper("zolagosizetable")->getBrands($this->getVendorId(),0,true);
 	}
 
 	public function getAttributeSets() {
