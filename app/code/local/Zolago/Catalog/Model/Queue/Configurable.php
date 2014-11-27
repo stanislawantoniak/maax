@@ -104,7 +104,7 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
         //1. reindex products
         //to avoid long queries make number of queries
 //        Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($productsToReindex);
-        $numberQ = 500;
+        $numberQ = 100;
         if (count($productsToReindex) > $numberQ) {
             $productsToReindexC = array_chunk($productsToReindex, $numberQ);
             foreach ($productsToReindexC as $productsToReindexCItem) {
