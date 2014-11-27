@@ -255,7 +255,7 @@ Mall.listing = {
 	},
 
 	/**
-	 * Handle clear handle after add/rem favoirites
+	 * Handle clear handle after add/rem favorites
 	 */
 	preprocessProducts: function(){
 		var self = this;
@@ -356,15 +356,8 @@ Mall.listing = {
 	 */
 	getMoreProductsCallback: function (data) {
 		if (data.status === true) {
-			var container = jQuery("#items-product").masonry(),
-				items;
 			Mall.listing.setPageIncrement();
-			items = Mall.listing.appendToList(data.content.products);
-			//container.imagesLoaded(function () {
-			container.masonry("reloadItems");
-			container.masonry();
-			setTimeout(function () {Mall.listing.placeListingFadeContainer();}, 1000);
-			//});
+			Mall.listing.appendToList(data.content.products);
 			// set current items count
 			Mall.listing.addToVisibleItems(data.content.rows);
 			Mall.listing.setTotal(data.content.total);
@@ -404,8 +397,7 @@ Mall.listing = {
 	loadProductsOnScroll: function () {
 		// detect if this is good time for showing next part of products
 		jQuery(window).scroll(function () {
-			if (jQuery(window).scrollTop() > jQuery(document).height() - jQuery(window).height() -
-				Mall.listing.getScrollBottomOffset()) {
+			if (jQuery(window).scrollTop() > jQuery(document).height() - jQuery(window).height() - Mall.listing.getScrollBottomOffset()) {
 				if (!Mall.listing.getScrollLoadLock()
 					&& Mall.listing.getProductQueue().length > 0
 					&& !Mall.listing.getScrollLoadLock()) {
@@ -433,36 +425,13 @@ Mall.listing = {
 		var products = Mall.listing.getProductQueue().slice(
 				0, Mall.listing.getScrollLoadOffset()),
 			items = Mall.listing.appendToList(products),
-			container = jQuery("#items-product"),
 			inst = imagesLoaded(jQuery(items)),
 			self = this;
 
-		jQuery(items).hide();
-
 		// loading
 		inst.on("always", function () {
-
-			//setTimeout(function () {
-			jQuery(items).show();
 			self.hideLoading();
-
-			container.masonry({isAnimated: false, transitionDuration: 0})
-				.masonry("reloadItems").masonry();
-
-			// show load more button
-
-			if (Mall.listing.canShowLoadMoreButton()) {
-				Mall.listing.showLoadMoreButton();
-				Mall.listing.showShapesListing();
-				Mall.listing.showLoadMoreButton();
-			}
-
-			// reload if queue is empty
-			//container.masonry();
-
 			self.placeListingFadeContainer();
-
-			//}, 3000);
 		});
 
 		Mall.listing.addToVisibleItems(products.length);
@@ -646,18 +615,25 @@ Mall.listing = {
 	 * @returns {Array}
 	 */
 	appendToList: function (products) {
-		var items = [];
+		var items = jQuery();
 		var _item;
+        var grid = jQuery('#grid');
 		jQuery.each(products, function(index, item) {
 			_item = Mall.listing.createProductEntity(item);
-			jQuery("#items-product").find(".shapes_listing").before(_item);
-			items.push(_item[0]);
+            grid.append(_item);
+            items = items.add(_item);
 		});
+
+        grid.shuffle('appended', items);
 
 		// attach events
         this.likePriceView();
 		this.preprocessProducts();
 		this.attachEventsToProducts();
+
+        setTimeout(function() {
+            jQuery(window).trigger('appendToListEnd');
+        }, 250);
 
 		return items;
 	},
@@ -1307,7 +1283,7 @@ Mall.listing = {
 				"left":			"0",
 				"top":			"0",
 				"z-index":		"1000000",
-				"color":		"#fff",
+				"color":		"#fff"
 			}).attr("id", "ajax-filter-loader");
 			jQuery("body").append(jQuery(overlay));
 		}
@@ -1346,16 +1322,12 @@ Mall.listing = {
 		this.getProducts().find(".item").remove();
 		this.setProductQueue([]);
 
-		// 2. Prepare parsed data
-		var container = this.getProducts().masonry();
-		// 3. Reset the page and values
+		// 2. Reset the page and values
 		this.setPage(0);
 		this.setTotal(data.total);
 		this.setCurrentVisibleItems(data.rows);
 
 		this.appendToList(data.products);
-		container.masonry("reloadItems");
-		//container.masonry({isAnimated:false});
 
 		this.setLoadNextStart(this.getCurrentVisibleItems());
 		this.reloadListingItemsAfterPageLoad();
@@ -2199,30 +2171,55 @@ Mall.listing = {
 	 * @returns {Mall.listing}
 	 */
 	placeListingFadeContainer: function() {
-		var heights = [],
-			min,
-			con;
-		// check if body has proper class
-		if(jQuery("body").hasClass("node-type-list")
-			&& this.getTotal() > 20 /* @todo by config */
-			&& this.canLoadMoreProducts()
-			&& this.canShowLoadMoreButton()) {
+        jQuery('#grid').shuffle('layout');
+        if (this.canShowLoadMoreButton()) {
+            //this.showLoadMoreButton();
+            this.showShapesListing();
 
-			jQuery('.node-type-list #items-product .item').each(function() {
-				heights.push(jQuery(this).height());
-			});
-			min = Math.min.apply( Math, heights );
-			con = jQuery('#items-product').innerHeight();
-			jQuery('#items-product').not('.list-shop-product').css('height', 'auto');
-			jQuery('#items-product').not('.list-shop-product').css('height', con-min);
-			jQuery(".shapes_listing").css("top"
-				, jQuery(".addNewPositionListProduct").position().top - 40);
-		} else {
-			this.hideLoadMoreButton();
-			this.hideShapesListing();
-		}
 
-		return this;
+            if (!this.getScrollLoadLock()) {
+                var gridHeight = jQuery('#grid').height();
+                var cutFromBottom = [];
+                var windowWidth = jQuery(window).width();
+                var sliceNumber = -4;
+
+                if (windowWidth < 992) {
+                    sliceNumber = -3;
+                }
+                if (windowWidth < 541) {
+                    sliceNumber = -2;
+                }
+
+                jQuery('#grid .item').slice(sliceNumber).each(function(index) {
+                    var top = jQuery(this).position().top;
+                    var elemHeight = jQuery(this).height();
+                    cutFromBottom.push(gridHeight - top - elemHeight);
+                });
+                cutFromBottom = parseInt(Math.max.apply(Math, cutFromBottom));
+                var newHeight = gridHeight - cutFromBottom;
+
+                if (cutFromBottom < 0) {
+                    return this;
+                }
+
+                //magic number 1500 px
+                //to prevent jumping on top of page when
+                //browser wrong calculate height
+                if (cutFromBottom > 1500) { //
+                    return this;
+                }
+
+                if( (jQuery('#grid').height() - cutFromBottom ) <= newHeight) {
+                    jQuery('#items-product #grid').not('.list-shop-product').height(newHeight);
+                }
+            }
+
+        } else {
+            this.hideLoadMoreButton();
+            this.hideShapesListing();
+        }
+
+        return this;
 	},
 
 	/**
@@ -2250,70 +2247,45 @@ Mall.listing = {
 	},
 
 	/**
-	 * Fixes wrong placement for masonry listing items adter page is loaded.
-	 *
-	 * @returns {Mall.listing}
-	 */
+	* cool thing heppens here
+	*
+	* @returns {Mall.listing}
+	*/
 	reloadListingItemsAfterPageLoad: function() {
-		this.hideLoading();
+        this.hideLoading();
+        Mall.listing.placeListingFadeContainer();
 
-		var container = jQuery("#items-product"),
-			imgLoadedInst = imagesLoaded(container);
+        if (Mall.listing.getTotal() > Mall.listing.getCurrentVisibleItems()) {
+        	Mall.listing.hideLoadMoreButton();
+            Mall.listing.hideShapesListing();
+        }
 
-		setTimeout(function() {
-			Mall.listing.placeListingFadeContainer();
-		}, 1000);
-
-		// hide load more button
-		if (Mall.listing.getTotal() > Mall.listing.getCurrentVisibleItems()) {
-			Mall.listing.hideLoadMoreButton()
-				.hideShapesListing();
-		}
-
-		imgLoadedInst.on("always", function () {
-			"use strict";
-
-			jQuery("#listing-load-toplayer").remove();
-			jQuery("#items-product").children(".item").show();
-			container.masonry().masonry("reloadItems").masonry();
-
-			setTimeout(function() {
-				Mall.listing.placeListingFadeContainer();
-			}, 1000);
-
-			// hide load more button
-			if (Mall.listing.getTotal() > Mall.listing.getCurrentVisibleItems()) {
-				Mall.listing.hideLoadMoreButton()
-					.hideShapesListing();
-			}
-		});
-
-		return this;
+        return this;
 	},
 
 	setItemsImageDimensions: function (container) {
-		"use strict";
-		var columnWidth = this.getFirstItemWidth(container),
-			items = container.find(".item"),
-			width,
-			height,
-			proportions,
-			newWidth,
-			newHeight;
-
-		jQuery.each(items, function () {
-			// read attrs
-			width = jQuery(this).find(".img_product > img").data("width");
-			height = jQuery(this).find(".img_product > img").data("height");
-			if (width !== undefined && height !== undefined) {
-				proportions = width / height;
-				newHeight = (columnWidth) / proportions;
-				newWidth = columnWidth;
-				jQuery(this).find(".img_product")
-					.attr("width", parseInt(newWidth, 10))
-					.attr("height", parseInt(newHeight, 10));
-			}
-		});
+		//"use strict";
+		//var columnWidth = this.getFirstItemWidth(container),
+		//	items = container.find(".item"),
+		//	width,
+		//	height,
+		//	proportions,
+		//	newWidth,
+		//	newHeight;
+        //
+		//jQuery.each(items, function () {
+		//	// read attrs
+		//	width = jQuery(this).find(".img_product > img").data("width");
+		//	height = jQuery(this).find(".img_product > img").data("height");
+		//	if (width !== undefined && height !== undefined) {
+		//		proportions = width / height;
+		//		newHeight = (columnWidth) / proportions;
+		//		newWidth = columnWidth;
+		//		jQuery(this).find(".img_product")
+		//			.attr("width", parseInt(newWidth, 10))
+		//			.attr("height", parseInt(newHeight, 10));
+		//	}
+		//});
 	},
 
 	calculateSize: function (item, columnWidth) {

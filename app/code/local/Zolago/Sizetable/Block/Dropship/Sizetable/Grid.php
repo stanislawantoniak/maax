@@ -32,8 +32,8 @@ class Zolago_Sizetable_Block_Dropship_Sizetable_Grid extends Mage_Adminhtml_Bloc
 			"class"		=>  "form-control",
 			"header"	=>	$_helper->__("Size table name"),
 		));
-		$this->addColumn("actions", array(
-                'header'    => $_helper->__('Actions'),
+		$this->addColumn("edits", array(
+                'header'    => $_helper->__(''),
 				'renderer'	=> Mage::getConfig()->getBlockClassName("zolagoadminhtml/widget_grid_column_renderer_link"),
                 'width'     => '50px',
                 'type'      => 'action',
@@ -42,9 +42,24 @@ class Zolago_Sizetable_Block_Dropship_Sizetable_Grid extends Mage_Adminhtml_Bloc
 				'link_param'=> 'sizetable_id',
 				'link_label'=> $_helper->__('Edit'),
 				'link_target'=>'_self',
+				'link_class' => 'sizetable_edit',
                 'filter'    => false,
                 'sortable'  => false
         ));
+		$this->addColumn("deletes", array(
+			'header'    => $_helper->__(''),
+			'renderer'	=> Mage::getConfig()->getBlockClassName("zolagoadminhtml/widget_grid_column_renderer_link"),
+			'width'     => '50px',
+			'type'      => 'action',
+			'index'		=> 'sizetable_id',
+			'link_action'=> "*/*/delete",
+			'link_param'=> 'sizetable_id',
+			'link_label'=> $_helper->__('Delete'),
+			'link_target'=>'_self',
+			'link_class'=>'delete confirm-dialog',
+			'filter'    => false,
+			'sortable'  => false
+		));
 		
 		
 		return parent::_prepareColumns();
