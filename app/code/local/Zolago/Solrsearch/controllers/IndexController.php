@@ -13,7 +13,7 @@ class Zolago_Solrsearch_IndexController extends SolrBridge_Solrsearch_IndexContr
 		$baseUrl = Mage::helper('zolagodropshipmicrosite')->getBaseUrl();
 		
     	$params = $this->getRequest()->getParams();
-		
+
 		// Set root category if in the vendor context
 		$vendor = Mage::helper('umicrosite')->getCurrentVendor();
         if ($vendor && $vendor->getId()) {
@@ -39,10 +39,10 @@ class Zolago_Solrsearch_IndexController extends SolrBridge_Solrsearch_IndexContr
 				if(isset($params['is_search'])){
 					Mage::register('is_current_category_context', TRUE);
 				}
-				$search_category = Mage::getModel('catalog/category')->load($params['scat']);
-				Mage::register('current_category', $search_category);
+
 			}
-			
+            $search_category = Mage::getModel('catalog/category')->load($params['scat']);
+            Mage::register('current_category', $search_category);
 		}
 		
 		//Redirect to Url set for the search term
