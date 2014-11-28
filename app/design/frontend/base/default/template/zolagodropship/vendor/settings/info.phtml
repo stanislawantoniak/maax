@@ -260,11 +260,10 @@ $vendorPreferences = $this->getVendorPreferences();
                         <div class="form-group">
                             <label for="password" class="col-md-3 control-label">
                                 <?php echo Mage::helper("zolagodropship")->__("New Password"); ?>
-                                <span class="required">*</span>
                             </label>
 
                             <div class="col-md-9">
-                                <input id="password" name="password" required value="<?php echo $_vendor->getPassword(); ?>" type="password" class="form-control"
+                                <input id="password" name="password" value="<?php echo $_vendor->getPassword(); ?>" type="password" class="form-control"
                                        size="10">
                             </div>
                         </div>
@@ -299,7 +298,6 @@ $vendorPreferences = $this->getVendorPreferences();
         new Zolago.formIntegrator(form);
         form.validate({
             rules: {
-                password: "required",
                 password_repeat: {
                     equalTo: "#password"
                 },
