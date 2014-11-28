@@ -33,6 +33,10 @@ define([
 		 */
 		gird: null,
 		/**
+		 * Is loading
+		 */
+		isLoading: false,
+		/**
 		 * @param {Object} column
 		 * @returns {void}
 		 */
@@ -238,7 +242,9 @@ define([
 			var self = this;
 			
 			on(this._close, "click", function(){
-				self.close(true);
+				if(!self.isLoading){
+					self.close(true);
+				}
 			});
 			
 			on(this._form, "submit", function(e){
@@ -347,6 +353,7 @@ define([
 				node = put("label.radio", {
 				"for": id
 			})
+			label = Translator.translate(label);
 			put(node, put("input", {
 				type: "radio",
 				name: "mode",
@@ -389,7 +396,7 @@ define([
 			label = put("label", {
 				"for": cbId,
 				className: "checkbox selection",
-				innerHTML: "Apply to selection"
+				innerHTML: Translator.translate("Apply to selection")
 			});
 			this._useSelection = put("input", {
 				type: "checkbox", 
@@ -405,7 +412,7 @@ define([
 			// Submit
 			this._formSubmit = put("input", {
 				"type": "submit", 
-				value: "Submit", 
+				value: Translator.translate("Submit"), 
 				"data-loading-text": "Loading...",
 				className: "btn btn-primary"
 			});
@@ -468,6 +475,8 @@ define([
 			query("input,select,textarea", this._form).forEach(function(el){
 				el.disabled = true;
 			});
+			this.isLoading = true;
+			jQuery(this._close).addClass("disabled");
 			jQuery(this._formSubmit).button('loading');
 		},
 		/**
@@ -477,6 +486,8 @@ define([
 			query("input,select,textarea", this._form).forEach(function(el){
 				el.disabled = false;
 			});
+			this.isLoading = false;
+			jQuery(this._close).removeClass("disabled");
 			jQuery(this._formSubmit).button('reset');
 		}
 	});
