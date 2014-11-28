@@ -128,9 +128,21 @@ define([
 	// Formatters & renderes
 	////////////////////////////////////////////////////////////////////////////
 	
-	var thumbnailClickHandler = function(e){
-		var modal = jQuery("#product-image-popup"),
-			el = jQuery(this);
+	var thumbnailHandler = function(e){
+		
+		var el = jQuery(this);
+		
+		// Procss enter click on thumb - redirect to a
+		if(e instanceof KeyboardEvent){
+			if(e.keyCode!=13){
+				return;
+			}
+			el = jQuery(this).find("a");
+		}
+		
+		var node = el.parents("td");
+		
+		var modal = jQuery("#product-image-popup");
 	
 		if(!modal.length){
 			modal = jQuery('<div id="product-image-popup" class="modal fade in" role="dialog">\
@@ -152,11 +164,20 @@ define([
 			</div>').
 			appendTo(jQuery("body")); 
 		}
+		
 		modal.find(".modal-title").text(el.attr("title"));
 		modal.find(".modal-body").html(
 				jQuery("<img>").attr("src", el.attr("href"))
-		)
+		);
 		modal.modal("show");
+		
+		// focus cell after close modal
+		if(node.length){
+			modal.one("hidden.bs.modal", function(){
+				grid.focus(grid.cell(node[0]));
+			});
+		}
+		
 		e.preventDefault();
 	}
 		
@@ -167,18 +188,19 @@ define([
 	 * @returns {string}
 	 */
 	var rendererThumbnail = function (item, value, node, options){
-		var content;
-		
+		var content,
+			img;
 		if(item.thumbnail){
 			content = put("a", {
 				href:  item.thumbnail, 
 				title: item.name,
 				target: "_blank"
 			});
-			put(content, "img", {
+			img = put("img", {
 				src: item.thumbnail_url
 			});
-			on(content, "click", thumbnailClickHandler)
+			on(content, "click", thumbnailHandler)
+			on(node, "keydown", thumbnailHandler)
 		}else{
 			content = put("p", 
 				put("i", {className: "glyphicon glyphicon-ban-circle"})
@@ -190,6 +212,7 @@ define([
 		});
 		
 		put(node, content);
+		put(node, img);
 	};
 	
 	/**
@@ -480,7 +503,7 @@ define([
 		// But hide other editor anyway
 		}else if (e instanceof MouseEvent){
 			hideAllEditors(false);
-			if(e.defaultPrevented){
+			if(e.defaultPrevented || e.type=="click"){
 				return;
 			}
 		}
@@ -641,6 +664,7 @@ define([
 		
 		// listen for editable
 		grid.on("td.dgrid-cell.editable:click", handleColumnEdit);
+		grid.on("td.dgrid-cell.editable:dblclick", handleColumnEdit);
 		grid.on("td.dgrid-cell.editable.dgrid-focus:keydown", handleColumnEdit);
 		
 		registerMassactions(grid);
