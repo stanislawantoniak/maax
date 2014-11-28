@@ -17,7 +17,7 @@ $upsRma = $_vendor->getData('ups_rma');
     </div>
     <div class="row">
         <div class="col-md-12">
-            <form id="vendor_contact" class="form-horizontal"  method="post" action="/udropship/vendor_settings/rmaPost">
+            <form id="vendor_rma" class="form-horizontal"  method="post" action="/udropship/vendor_settings/rmaPost">
                 <div class="widget box">
                     <div class="widget-header">
                         <h4><?php echo Mage::helper("zolagodropship")->__("Return address");?></h4>
@@ -273,5 +273,22 @@ $upsRma = $_vendor->getData('ups_rma');
                 options.hide();
             }
         }
+
+
+        var form = $("#vendor_rma");
+        new Zolago.formIntegrator(form);
+        form.validate({
+            rules: {
+                rma_email: {
+                    required: true,
+                    email: true
+                },
+                rma_executive_email: {
+                    required: true,
+                    email: true
+                },
+                zip: "validate-postcode"
+            }
+        });
     })
 </script>
