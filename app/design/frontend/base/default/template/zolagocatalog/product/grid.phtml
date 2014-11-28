@@ -20,10 +20,8 @@
 		vertical-align: middle;
 	}
 	#grid-holder td.dgrid-focus{
-		 box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+		 box-shadow: inset 0 0 5px rgba(0,0,0,0.4);
 	}
-	
-	
 	#grid-holder th.header.field-required::after{
 		color: red;
 		content: '*';
@@ -40,8 +38,14 @@
 		cursor: cell;
 	}
 	#grid-holder td.editable.dgrid-focus{
-		 box-shadow: inset 0 0 5px #53AFFF;
+		 box-shadow: inset 0 0 10px #53AFFF;
 	}
+	
+	#grid-holder .dgrid-selected td.editable.dgrid-focus,
+	#grid-holder .dgrid-row:hover td.editable.dgrid-focus{
+		 box-shadow: inset 0 0 10px #006dcc;
+	}
+	
 	#grid-holder td.editable:active{
 		cursor: default;
 	}

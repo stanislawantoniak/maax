@@ -450,6 +450,8 @@ define([
 		req["attribute[" + field + "]"] = value;
 		req["attribute_mode[" + field + "]"] = e.mode;
 	
+		massAttribute.setFocusedCell(e.cell);
+	
 		massAttribute.send(req).then(function(){
 			e.deferred.resolve();
 		}, function(){
@@ -474,16 +476,25 @@ define([
 			editors[field].on("save", handleSaveEditor);
 		}
 		
-		// Enter click
+		// Enter click - skip all keys except enter
 		if(e instanceof KeyboardEvent){
 			if(e.keyCode==13){
+				// Prevent click if editor focused before
+				// @todo investigate event flow
 				e.preventDefault();
+				hideAllEditors(false);
 			}else{
+				// Skip on other key
+				return;
+			}
+		// If mouse event was prevented (by ctrl + click) do not open an editor
+		// But hide other editor anyway
+		}else if (e instanceof MouseEvent){
+			hideAllEditors(false);
+			if(e.defaultPrevented){
 				return;
 			}
 		}
-		hideAllEditors(false);
-		
 		editors[field].open(cell, e);
 	}
 	
@@ -509,6 +520,44 @@ define([
 			e.preventDefault();
 		}
 	});
+	
+	
+	
+	////////////////////////////////////////////////////////////////////////////
+	// Selection handling @todo move to Selection mixin
+	////////////////////////////////////////////////////////////////////////////
+	/**
+	 * @param {Evented} e
+	 * @returns {void}
+	 */
+	var toggleRowSelection = function(e){
+		var row  = grid.row(e);
+		if(grid.isSelected(row)){
+			grid.deselect(row);
+		}else{
+			grid.select(row);
+		}
+	}
+	/**
+	 * @param {Evented} e
+	 * @returns {void}
+	 */
+	var handleSelection = function(e){
+		// Skip selector column focuses
+		if(e instanceof KeyboardEvent){
+			if(domClass.contains(e.target, "dgrid-selector")){
+				return;
+			}
+			if(e.keyCode==32){
+				toggleRowSelection(e);
+			}
+		}else if(e instanceof MouseEvent){
+			if(e.metaKey){
+				toggleRowSelection(e);
+				e.preventDefault();
+			}
+		}
+	}
 	
 	////////////////////////////////////////////////////////////////////////////
 	// Mass actions
@@ -588,17 +637,9 @@ define([
 		
 		window.grid = grid = new PriceGrid(config, container);
 
-		// listen for selection via space
-		grid.on(".dgrid-row:keyup", function(e){
-			if(e.keyCode==32){
-				var row  = grid.row(e);
-				if(grid.isSelected(row)){
-					grid.deselect(row);
-				}else{
-					grid.select(row);
-				}
-			}
-		});
+		// listen for selection via space, ctrl + mouse
+		grid.on(".dgrid-row:keyup", handleSelection);
+		grid.on("td.dgrid-cell:click", handleSelection);
 		
 		// listen for selection
 		grid.on("dgrid-select", updateMassButton);
