@@ -312,10 +312,15 @@ $vendorPreferences = $this->getVendorPreferences();
                 contact_email: {
                     email: true
                 },
-                billing_zip: "validate-postcode",
+                billing_zip: "postcodeWithReplace",
+                tax_no: "validate-nip"
+            },
+            messages: {
                 tax_no: {
-                    required: true,
-                    digits: true
+                    "validate-nip" : "<?php echo $this->__("Tax number is incorrect. Enter as a string of digits e.g. 1234567890.")?>"
+                },
+                billing_zip : {
+                    'postcodeWithReplace': "<?php echo $this->__("Invalid zip-cod. Zip-code should include 5 numbers in XX-XXX format."); ?>"
                 }
             }
         });

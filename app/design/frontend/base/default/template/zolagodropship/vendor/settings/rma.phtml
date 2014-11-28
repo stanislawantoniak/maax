@@ -287,7 +287,12 @@ $upsRma = $_vendor->getData('ups_rma');
                     required: true,
                     email: true
                 },
-                zip: "validate-postcode"
+                zip: "postcodeWithReplace"
+            },
+            messages: {
+                zip : {
+                    'postcodeWithReplace': "<?php echo $this->__("Invalid zip-cod. Zip-code should include 5 numbers in XX-XXX format."); ?>"
+                }
             }
         });
     })

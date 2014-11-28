@@ -136,7 +136,30 @@ jQuery.validator.addMethod("imageSize", function(value, element,param) {
 
     return result;
 }, "Image is too big");
+jQuery.validator.addMethod("postcodeWithReplace", function(value, elem, params){
 
+    var test;
+    value = value.replace(/\D/g, "");
+    if (value.length > 5) { //if there is more then 5 digit
+        test = false;
+    }
+    if (value.length == 5) {
+        if (value == "00000") {
+            test = false;
+        }
+        test = true;
+    } else {
+        test = false;
+    }
+
+
+    if (test) {
+        var matched = value.match(/([0-9]{2})([0-9]{3})/);
+        jQuery(elem).val(matched[1] + "-" + matched[2]);
+    }
+    return test;
+
+}, "Invalid zip-cod. Zip-code should include 5 numbers in XX-XXX format.");
 jQuery.validator.addMethod("validate-postcode", function(value, elem, params){
 
     value = value.replace(/\D/g, "");
@@ -153,6 +176,21 @@ jQuery.validator.addMethod("validate-postcode", function(value, elem, params){
     }
 
 }, "Invalid zip-cod. Zip-code should include 5 numbers in XX-XXX format.");
+
+jQuery.validator.addMethod("validate-nip", function (value, elem, params) {
+
+    if (value.length == 0) {
+        return true;
+    }
+    if (value.length < 10) {
+        return this.optional(elem) | false;
+    }
+    if (value.length > 16) {
+        return this.optional(elem) | false;
+    }
+    return true;
+
+}, "Tax number is incorrect. Enter as a string of digits e.g. 1234567890.");
 
 jQuery.validator.addMethod("imageRequired", function (value, element) {
     var F = element.files;
