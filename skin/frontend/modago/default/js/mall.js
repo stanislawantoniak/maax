@@ -565,9 +565,7 @@ Mall.product = {
     },
 
     createOptionGroup: function(group, useSizeboxList) {
-
         if(!useSizeboxList) {
-
             // insert option group
             var groupElement = jQuery("<div/>", {
                 "class": "size"
@@ -610,15 +608,15 @@ Mall.product = {
             //create select part
             var formGroupElementSelect = jQuery("<select/>", {
                 id: "select-data-id-"+group.id,
-                class: "form-control select-styled"
+                class: "form-control select-styled",
             }).appendTo(formGroupElement);
-
             jQuery.each(group.options, function(index, option) {
                 Mall.product.createOptionSelectbox(group.id, option, formGroupElementSelect);
             });
-
-            this.applyAdditionalRules(group, jQuery('div.size-box div.size'));
-
+			
+            this.applyAdditionalRules(group,formGroupElementSelect.parent()); // jQuery('div.size-box div.size'));
+			jQuery('div.size-box div.size a').css('position','relative');
+			jQuery('div.size-box div.size a').css('top','5px');
         }
 
 

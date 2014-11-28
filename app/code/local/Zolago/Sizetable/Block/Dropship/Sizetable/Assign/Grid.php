@@ -6,7 +6,7 @@ class Zolago_Sizetable_Block_Dropship_Sizetable_Assign_Grid extends Mage_Adminht
 	{
 		parent::__construct();
 		$this->setId('zolagosizetable_sizetable_assign_grid');
-		$this->setDefaultSort('name');
+		$this->setDefaultSort('value');
 		$this->setDefaultDir('ASC');
 		$this->setPagerVisibility(false);
 		$this->setDefaultLimit(false);
@@ -34,22 +34,13 @@ class Zolago_Sizetable_Block_Dropship_Sizetable_Assign_Grid extends Mage_Adminht
 	{
 		$_helper = Mage::helper("zolagosizetable");
 
-		$this->addColumn("name", array(
-			"type" => "text",
-			"index" => "name",
-			"filter_index" => "name",
-			"class" => "form-control",
-			"header" => $_helper->__("Size table name"),
-			"column_css_class" => "sizetable_name",
-			"sortable" => true
-		));
 		$this->addColumn("value", array(
 			"type" => "text",
 			"index" => "value",
 			"filter_index" => "value",
 			"class" => "form-control",
 			"header" => $_helper->__("Brand"),
-			"column_css_class" => "sizetable_brand"
+			"column_css_class" => "sizetable_brand",
 		));
 		$this->addColumn("attribute_set_name", array(
 			"type" => "text",
@@ -58,6 +49,14 @@ class Zolago_Sizetable_Block_Dropship_Sizetable_Assign_Grid extends Mage_Adminht
 			"class" => "form-control",
 			"header" => $_helper->__("Attribute set"),
 			"column_css_class" => "sizetable_attribute"
+		));
+		$this->addColumn("name", array(
+			"type" => "text",
+			"index" => "name",
+			"filter_index" => "name",
+			"class" => "form-control",
+			"header" => $_helper->__("Size table name"),
+			"column_css_class" => "sizetable_name",
 		));
 		$this->addColumn("actions", array(
 			'header' => $_helper->__('Actions'),
@@ -81,6 +80,21 @@ class Zolago_Sizetable_Block_Dropship_Sizetable_Assign_Grid extends Mage_Adminht
 
 		return parent::_prepareColumns();
 	}
+
+	protected function _setCollectionOrder($column)
+	{
+		$collection = $this->getCollection();
+		if ($collection) {
+			$columnIndex = $column->getFilterIndex() ?
+				$column->getFilterIndex() : $column->getIndex();
+			$collection->setOrder($columnIndex, strtoupper($column->getDir()));
+			if($columnIndex == "value") {
+				$collection->setOrder("attribute_set_name", "ASC");
+			}
+		}
+		return $this;
+	}
+
 
 
 	public function getRowUrl($item)
