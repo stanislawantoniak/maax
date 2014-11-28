@@ -1,0 +1,324 @@
+<?php
+$_vendor = $this->getVendor();
+$vendorPreferences = $this->getVendorPreferences();
+
+$dhlRma = $_vendor->getData('dhl_rma');
+$upsRma = $_vendor->getData('orbaups_rma');
+
+
+?>
+<div class="container">
+    <!--=== Page Header ===-->
+    <div class="page-header">
+        <div class="page-title">
+            <h3><?php echo Mage::helper("zolagodropship")->__("RMA settings");?></h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <form id="vendor_rma" class="form-horizontal"  method="post" action="/udropship/vendor_settings/rmaPost">
+                <div class="widget box">
+                    <div class="widget-header">
+                        <h4><?php echo Mage::helper("zolagodropship")->__("Return address");?></h4>
+                        <div class="toolbar no-padding"> <div class="btn-group"> <span class="btn btn-xs widget-collapse"><i class="icon-angle-down"></i></span> </div> </div>
+                    </div>
+                    <div class="widget-content fiters">
+                        <div>
+                            <div class="form-group">
+                                <label for="company_name" class="col-md-3 control-label">
+                                    <?php echo Mage::helper("zolagodropship")->__("Company name");?>
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-9">
+                                    <input id="company_name" name="company_name" required value="<?php echo $vendorPreferences->getData('company_name'); ?>" type="text" class="form-control" size="10">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="street" class="col-md-3 control-label">
+                                    <?php echo Mage::helper("zolagodropship")->__("Street and Number");?>
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-9">
+                                    <input id="street" name="street" required value="<?php echo $_vendor->getStreet(1); ?>" type="text" class="form-control" size="10">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="city" class="col-md-3 control-label">
+                                    <?php echo Mage::helper("zolagodropship")->__("City");?>
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-9">
+                                    <input id="city" name="city" required value="<?php echo $_vendor->getCity(); ?>" type="text" class="form-control" size="10">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="zip" class="col-md-3 control-label">
+                                    <?php echo Mage::helper("zolagodropship")->__("Zip / Postal code");?>
+                                    <span class="required">*</span>
+                                </label>
+                                <div class="col-md-9">
+                                    <input id="zip" name="zip" required value="<?php echo $_vendor->getZip(); ?>" type="text" class="form-control" size="10">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="widget box">
+                    <div class="widget-header">
+                        <h4><?php echo Mage::helper("zolagodropship")->__("RMA contact data");?></h4>
+                        <div class="toolbar no-padding"> <div class="btn-group"> <span class="btn btn-xs widget-collapse"><i class="icon-angle-down"></i></span> </div> </div>
+                    </div>
+                    <div class="widget-content">
+                        <div class="form-group">
+                            <label for="rma_email" class="col-md-3 control-label">
+                                <?php echo Mage::helper("zolagodropship")->__("Email");?>
+                                <span class="required">*</span>
+                            </label>
+                            <div class="col-md-9">
+                                <input id="rma_email" name="rma_email" required value="<?php echo $vendorPreferences->getData('rma_email'); ?>" type="text" class="form-control" size="10">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="rma_telephone" class="col-md-3 control-label">
+                                <?php echo Mage::helper("zolagodropship")->__("Phone");?>
+                                <span class="required">*</span>
+                            </label>
+                            <div class="col-md-9">
+                                <input id="rma_telephone" name="rma_telephone" required value="<?php echo $vendorPreferences->getData('rma_telephone'); ?>" type="text" class="form-control" size="10">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="widget box">
+                    <div class="widget-header">
+                        <h4><?php echo Mage::helper("zolagodropship")->__("RMA executive");?></h4>
+                        <div class="toolbar no-padding"> <div class="btn-group"> <span class="btn btn-xs widget-collapse"><i class="icon-angle-down"></i></span> </div> </div>
+                    </div>
+                    <div class="widget-content fiters">
+                        <div class="form-group">
+                            <label for="rma_executive_firstname" class="col-md-3 control-label">
+                                <?php echo Mage::helper("zolagodropship")->__("Name");?>
+                                <span class="required">*</span>
+                            </label>
+                            <div class="col-md-9">
+                                <input id="rma_executive_firstname" name="rma_executive_firstname" required value="<?php echo $vendorPreferences->getData('rma_executive_firstname'); ?>" type="text" class="form-control" size="10">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="rma_executive_lastname" class="col-md-3 control-label">
+                                <?php echo Mage::helper("zolagodropship")->__("Surname");?>
+                                <span class="required">*</span>
+                            </label>
+                            <div class="col-md-9">
+                                <input id="rma_executive_lastname" name="rma_executive_lastname" required value="<?php echo $vendorPreferences->getData('rma_executive_lastname'); ?>" type="text" class="form-control" size="10">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="rma_executive_telephone" class="col-md-3 control-label">
+                                <?php echo Mage::helper("zolagodropship")->__("Phone ");?>
+                                <span class="required">*</span>
+                            </label>
+                            <div class="col-md-9">
+                                <input id="rma_executive_telephone" name="rma_executive_telephone" required value="<?php echo $vendorPreferences->getData('rma_executive_telephone'); ?>" type="text" class="form-control" size="10">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="rma_executive_telephone_mobile" class="col-md-3 control-label">
+                                <?php echo Mage::helper("zolagodropship")->__("Mobile");?>
+                                <span class="required">*</span>
+                            </label>
+                            <div class="col-md-9">
+                                <input id="rma_executive_telephone_mobile" name="rma_executive_telephone_mobile" required value="<?php echo $vendorPreferences->getData('rma_executive_telephone_mobile'); ?>" type="text" class="form-control" size="10">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="rma_executive_email" class="col-md-3 control-label">
+                                <?php echo Mage::helper("zolagodropship")->__("Email");?>
+                                <span class="required">*</span>
+                            </label>
+                            <div class="col-md-9">
+                                <input id="rma_executive_email" name="rma_executive_email" required value="<?php echo $vendorPreferences->getData('rma_executive_email'); ?>" type="text" class="form-control" size="10">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+<!--                shipping-->
+                <div class="widget box">
+                    <div class="widget-header">
+                        <h4><?php echo Mage::helper("zolagodropship")->__("RMA Shipping Settings");?></h4>
+                        <div class="toolbar no-padding"> <div class="btn-group"> <span class="btn btn-xs widget-collapse"><i class="icon-angle-down"></i></span> </div> </div>
+                    </div>
+                    <div class="widget-content">
+                        <div class="form-group">
+                            <label for="dhl_rma" class="col-md-3 control-label">
+                                <?php echo Mage::helper("zolagodropship")->__("Use another DHL account for RMA");?>
+                            </label>
+                            <div class="col-md-2">
+                                <select name="dhl_rma" id="dhl_rma" class="form-control">
+                                    <option <?php if($dhlRma == 1): ?>selected="selected"<?php endif; ?> value="1"><?php echo Mage::helper("zolagodropship")->__("Yes");?></option>
+                                    <option <?php if($dhlRma == 0): ?>selected="selected"<?php endif; ?> value="0"><?php echo Mage::helper("zolagodropship")->__("No");?></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="dhl_rma_options">
+                            <div class="form-group">
+                                <label for="dhl_rma_account" class="col-md-3 control-label">
+                                    <?php echo Mage::helper("zolagodropship")->__("Account number");?>
+                                </label>
+                                <div class="col-md-9">
+                                    <input id="dhl_rma_account" name="dhl_rma_account" value="<?php echo $dhlRma = $_vendor->getData('dhl_rma_account'); ?>" type="text" class="form-control" size="10">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="dhl_rma_login" class="col-md-3 control-label">
+                                    <?php echo Mage::helper("zolagodropship")->__("DHL login");?>
+                                </label>
+                                <div class="col-md-9">
+                                    <input id="dhl_rma_login" name="dhl_rma_login" value="<?php echo $dhlRma = $_vendor->getData('dhl_rma_login'); ?>" type="text" class="form-control" size="10">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="dhl_rma_password" class="col-md-3 control-label">
+                                    <?php echo Mage::helper("zolagodropship")->__("DHL password");?>
+                                </label>
+                                <div class="col-md-9">
+                                    <input id="dhl_rma_password" name="dhl_rma_password" value="<?php echo $dhlRma = $_vendor->getData('dhl_rma_password'); ?>" type="text" class="form-control" size="10">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="orbaups_rma" class="col-md-3 control-label">
+                                <?php echo Mage::helper("zolagodropship")->__("Use another UPS account for RMA");?>
+                            </label>
+                            <div class="col-md-2">
+                                <select name="orbaups_rma" id="orbaups_rma" class="form-control">
+                                    <option <?php if($upsRma == 1): ?>selected="selected"<?php endif; ?> value="1"><?php echo Mage::helper("zolagodropship")->__("Yes");?></option>
+                                    <option <?php if($upsRma == 0): ?>selected="selected"<?php endif; ?> value="0"><?php echo Mage::helper("zolagodropship")->__("No");?></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="ups_rma_options">
+                            <div class="form-group">
+                                <label for="orbaups_rma_account" class="col-md-3 control-label">
+                                    <?php echo Mage::helper("zolagodropship")->__("License key");?>
+                                </label>
+                                <div class="col-md-9">
+                                    <input id="orbaups_rma_account" name="orbaups_rma_account" value="<?php echo $dhlRma = $_vendor->getData('orbaups_rma_account'); ?>" type="text" class="form-control" size="10">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="orbaups_rma_login" class="col-md-3 control-label">
+                                    <?php echo Mage::helper("zolagodropship")->__("UPS login");?>
+                                </label>
+                                <div class="col-md-9">
+                                    <input id="orbaups_rma_login" name="orbaups_rma_login" value="<?php echo $dhlRma = $_vendor->getData('orbaups_rma_login'); ?>" type="text" class="form-control" size="10">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="orbaups_rma_password" class="col-md-3 control-label">
+                                    <?php echo Mage::helper("zolagodropship")->__("UPS password");?>
+                                </label>
+                                <div class="col-md-9">
+                                    <input id="orbaups_rma_password" name="orbaups_rma_password" value="<?php echo $dhlRma = $_vendor->getData('orbaups_rma_password'); ?>" type="text" class="form-control" size="10">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="reset" id="filter_reset" class="btn pull-right">
+                        <span><span><?php echo $this->__('Cancel');?></span></span>
+                    </button>
+                    <button type="submit" id="filter_submit" class="btn btn-primary pull-right">
+                        <span><span><?php echo $this->__('Save');?></span></span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    jQuery(function ($) {
+        var dhlRma = jQuery('#dhl_rma');
+        var upsRma = jQuery('#orbaups_rma');
+
+        showOptions(dhlRma.val(), jQuery(".dhl_rma_options"));
+        showOptions(upsRma.val(), jQuery(".ups_rma_options"));
+
+
+        dhlRma.change(function () {
+            var valueDhl = $(this).val();
+            showOptions(valueDhl, jQuery(".dhl_rma_options"));
+        })
+        upsRma.change(function () {
+            var valueUps = $(this).val();
+            showOptions(valueUps, jQuery(".ups_rma_options"));
+        })
+
+        function showOptions(value, options) {
+            if (value == 1) {
+                options.show();
+            } else {
+                options.hide();
+            }
+        }
+
+
+        var form = $("#vendor_rma");
+        new Zolago.formIntegrator(form);
+        form.validate({
+            rules: {
+                rma_email: {
+                    required: true,
+                    email: true
+                },
+                rma_executive_email: {
+                    required: true,
+                    email: true
+                },
+                zip: "postcodeWithReplace",
+                rma_telephone: "validate-telephone",
+                rma_executive_telephone: "validate-telephone",
+                rma_executive_telephone_mobile: "validate-telephone",
+                rma_email: {
+                    required: true,
+                    email: true
+                },
+                rma_executive_email: {
+                    required: true,
+                    email: true
+                }
+            },
+            messages: {
+                zip : {
+                    'postcodeWithReplace': "<?php echo $this->__("Invalid zip-cod. Zip-code should include 5 numbers in XX-XXX format."); ?>"
+                },
+                rma_telephone: {
+                    "validate-telephone": "<?php echo $this->__("Telephone number is too short. Number must contain 9 digits, without spacing."); ?>"
+                },
+                rma_executive_telephone: {
+                    "validate-telephone": "<?php echo $this->__("Telephone number is too short. Number must contain 9 digits, without spacing."); ?>"
+                },
+                rma_executive_telephone_mobile: {
+                    "validate-telephone": "<?php echo $this->__("Telephone number is too short. Number must contain 9 digits, without spacing."); ?>"
+                },
+                rma_email: {
+                    "email" : "<?php echo $this->__("Please enter a valid email address. For example johndoe@domain.com.")?>"
+                },
+                rma_executive_email: {
+                    "email" : "<?php echo $this->__("Please enter a valid email address. For example johndoe@domain.com.")?>"
+                }
+            }
+        });
+    })
+</script>

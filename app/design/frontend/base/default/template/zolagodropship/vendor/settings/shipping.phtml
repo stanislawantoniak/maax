@@ -1,0 +1,170 @@
+<?php
+
+$_vendor = $this->getVendor();
+$vendorPreferences = $this->getVendorPreferences();
+
+$useDhl = $_vendor->getData('use_dhl');
+$useUps = $_vendor->getData('use_orbaups');
+?>
+<div class="container">
+    <!--=== Page Header ===-->
+    <div class="page-header">
+        <div class="page-title">
+            <h3><?php echo Mage::helper("zolagodropship")->__("Shipment settings");?></h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <form id="vendor_settings_shipping" class="form-horizontal"  method="post" action="/udropship/vendor_settings/shippingPost">
+                <div class="widget box">
+                    <div class="widget-header">
+                        <h4><?php echo Mage::helper("zolagodropship")->__("DHL Settings");?></h4>
+                        <div class="toolbar no-padding"> <div class="btn-group"> <span class="btn btn-xs widget-collapse"><i class="icon-angle-down"></i></span> </div> </div>
+                    </div>
+                    <div class="widget-content fiters">
+                        <div>
+                            <div class="form-group">
+                                <label for="use_dhl" class="col-md-3 control-label">
+                                    <?php echo Mage::helper("zolagodropship")->__("Use DHL");?>
+                                </label>
+                                <div class="col-md-9">
+                                    <select id="use_dhl" name="use_dhl"  class="form-control">
+                                        <option <?php if($useDhl == 1): ?> selected='selected'<?php endif; ?> value="1"><?php echo $this->__("Yes");?></option>
+                                        <option <?php if($useDhl == 0): ?> selected='selected'<?php endif; ?> value="0"><?php echo $this->__("No");?></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="use_dhl_options">
+                                <div class="form-group">
+                                    <label for="dhl_account" class="col-md-3 control-label">
+                                        <?php echo Mage::helper("zolagodropship")->__("DHL account");?>
+                                    </label>
+                                    <div class="col-md-9">
+                                        <input id="dhl_account" name="dhl_account" value="<?php echo $_vendor->getDhlAccount(); ?>" type="text" class="form-control" size="10">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="dhl_login" class="col-md-3 control-label">
+                                        <?php echo Mage::helper("zolagodropship")->__("DHL login");?>
+                                    </label>
+                                    <div class="col-md-9">
+                                        <input id="dhl_login" name="dhl_login" value="<?php echo $_vendor->getDhlLogin(); ?>" type="text" class="form-control" size="10">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="dhl_password" class="col-md-3 control-label">
+                                        <?php echo Mage::helper("zolagodropship")->__("DHL password");?>
+                                    </label>
+                                    <div class="col-md-9">
+                                        <input id="dhl_password" name="dhl_password" value="<?php echo $_vendor->getDhlPassword(); ?>" type="password" class="form-control" size="10">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="dhl_ecas" class="col-md-3 control-label">
+                                        <?php echo Mage::helper("zolagodropship")->__("DHL eCas id");?>
+                                    </label>
+                                    <div class="col-md-9">
+                                        <input id="dhl_ecas" name="dhl_ecas" value="<?php echo $_vendor->getDhlEcas(); ?>" type="text" class="form-control" size="10">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="dhl_terminal" class="col-md-3 control-label">
+                                        <?php echo Mage::helper("zolagodropship")->__("Terminal code");?>
+                                    </label>
+                                    <div class="col-md-9">
+                                        <input id="dhl_terminal" name="dhl_terminal" value="<?php echo $_vendor->getDhlTerminal(); ?>" type="text" class="form-control" size="10">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="widget box">
+                    <div class="widget-header">
+                        <h4><?php echo Mage::helper("zolagodropship")->__("UPS Settings");?></h4>
+                        <div class="toolbar no-padding"> <div class="btn-group"> <span class="btn btn-xs widget-collapse"><i class="icon-angle-down"></i></span> </div> </div>
+                    </div>
+                    <div class="widget-content">
+                        <div class="form-group">
+                            <label for="use_orbaups" class="col-md-3 control-label">
+                                <?php echo Mage::helper("zolagodropship")->__("Use UPS");?>
+                            </label>
+                            <div class="col-md-9">
+                                <select id="use_orbaups" name="use_orbaups"  class="form-control">
+                                    <option value="1" <?php if($useUps == 1): ?> selected='selected'<?php endif; ?> ><?php echo $this->__("Yes");?></option>
+                                    <option value="0" <?php if($useUps == 0): ?> selected='selected'<?php endif; ?> ><?php echo $this->__("No");?></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="use_orbaups_options">
+                            <div class="form-group">
+                                <label for="orbaups_account" class="col-md-3 control-label">
+                                    <?php echo Mage::helper("zolagodropship")->__("UPS license key");?>
+                                </label>
+                                <div class="col-md-9">
+                                    <input id="orbaups_account" name="orbaups_account" value="<?php echo $_vendor->getOrbaupsAccount(); ?>" type="text" class="form-control" size="10">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="orbaups_login" class="col-md-3 control-label">
+                                    <?php echo Mage::helper("zolagodropship")->__("UPS login");?>
+                                </label>
+                                <div class="col-md-9">
+                                    <input id="orbaups_login" name="orbaups_login" value="<?php echo $_vendor->getOrbaupsLogin(); ?>" type="text" class="form-control" size="10">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="orbaups_password" class="col-md-3 control-label">
+                                    <?php echo Mage::helper("zolagodropship")->__("UPS password");?>
+                                </label>
+                                <div class="col-md-9">
+                                    <input id="orbaups_password" name="orbaups_password" value="<?php echo $_vendor->getOrbaupsPassword(); ?>" type="password" class="form-control" size="10">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="reset" id="filter_reset" class="btn pull-right">
+                        <span><span><?php echo $this->__('Cancel');?></span></span>
+                    </button>
+                    <button type="submit" id="filter_submit" class="btn btn-primary pull-right">
+                        <span><span><?php echo $this->__('Save');?></span></span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    jQuery(function ($) {
+        var dhlRma = jQuery('#use_dhl');
+        var upsRma = jQuery('#use_orbaups');
+
+        showOptions(dhlRma.val(), jQuery(".use_dhl_options"));
+        showOptions(upsRma.val(), jQuery(".use_orbaups_options"));
+
+
+        dhlRma.change(function () {
+            var valueDhl = $(this).val();
+            showOptions(valueDhl, jQuery(".use_dhl_options"));
+        })
+        upsRma.change(function () {
+            var valueUps = $(this).val();
+            showOptions(valueUps, jQuery(".use_orbaups_options"));
+        })
+
+        function showOptions(value, options) {
+            if (value == 1) {
+                options.show();
+            } else {
+                options.hide();
+            }
+        }
+
+    })
+</script>

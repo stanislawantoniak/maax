@@ -439,4 +439,8 @@
 	#vendor-register-row, #login-vendor {
 		margin-top: 20px !important;
 	}
+
+}
+#vendor_contact .control-label {
+    text-align: right;
 }
