@@ -227,7 +227,7 @@ define([
 		var column = this;
 		var timeout;
 		
-		jQuery(node).text(value); // faseter escape
+		jQuery(node).text(value!==null ? value : ""); // faseter escape
 		
 		if(value===null || value===""){
 			return;
