@@ -139,6 +139,9 @@ Mall.listing = {
 	 * Performs initialization for listing object.
 	 */
 	init: function () {
+        //set query for search page
+        this.setQuery(this.getQueryFromUrl());
+
 		// Reset form
 		this.resetForm();
 
@@ -203,7 +206,9 @@ Mall.listing = {
 	},
 
 	resetForm: function(){
-		this.getFilters().find("form").get(0).reset();
+        if(this.getFilters().find("form").length) {
+            this.getFilters().find("form").get(0).reset();
+        }
 	},
 
 	initFilterEvents: function(scope){
@@ -1148,6 +1153,19 @@ Mall.listing = {
 
 		return result;
 	},
+
+    getQueryFromUrl: function() {
+        var url = decodeURI(window.location.href.replace(Mall.listing._getUrlNoParams()+"?",""));
+        var tmpObj = url.split("&");
+
+        for(var key in tmpObj) {
+            var tmp = tmpObj[key].split("=");
+            if (decodeURIComponent(tmp[0]) === 'q') {
+                return decodeURIComponent(tmp[1]);
+            }
+        }
+        return '';
+    },
 
 	/**
 	 * @returns {void} - event initialized
