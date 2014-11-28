@@ -6,6 +6,32 @@ define([
 	"vendor/grid/ObserverFilter",
 ], function(lang, domConstruct, on, put, ObserverFilter){
 
+	var doUpdatePosition = function(grid){
+		return function(e){
+			var target = jQuery(e.target).parents(".dgrid-column-set"),
+				gridNode = jQuery(grid.domNode),
+				columnSetId,
+				targetScroll;
+			
+			if(!target.length){
+				return;
+			}
+			
+			columnSetId = target[0].getAttribute("data-dgrid-column-set-id");
+			targetScroll = jQuery(
+				".dgrid-column-set-scroller.dgrid-column-set-scroller-"+columnSetId, 
+				gridNode
+			);
+			
+			// After focus browser will change te active posiotions
+			// We need timer to handle it
+			setTimeout(function(){
+				targetScroll.prop("scrollLeft", target[0].scrollLeft);
+				grid.adjustScrollLeft();
+			}, 1);
+		}
+	};
+
 	return function(type, name, config){
 		type = type || "text";
 		config = config || {};
@@ -17,8 +43,10 @@ define([
 						"type": "text",
 						"className": "text-filter"
 					}),
+					grid = this.grid,
 					observer = new ObserverFilter(element, this.grid, name);
 
+					on(element, 'focus',	doUpdatePosition(grid));
 					on(element, 'focus',	lang.hitch(observer, observer.start));
 					on(element, 'keyup',	lang.hitch(observer, observer.start));
 					on(element, 'keydown',	lang.hitch(observer, observer.start));
@@ -34,9 +62,9 @@ define([
 				return function(){
 					var element = domConstruct.create("select", {
 						"className": "select-filter"
-					});
-							
-					var options = lang.clone(config.options || []);
+					}),
+					grid = this.grid,
+					options = lang.clone(config.options || []);
 					
 					
 					// Array cast
@@ -71,6 +99,8 @@ define([
 
 					var observer = new ObserverFilter(element, this.grid, name);
 					
+					
+					on(element, 'focus',	doUpdatePosition(grid));
 					// Only change - do update
 					on(element, 'change',	lang.hitch(observer, observer.update));
 					
@@ -104,6 +134,7 @@ define([
 						
 						var observer = new ObserverFilter(element, grid, name + '['+_type+']', {valueType: valueType});
 						
+						on(element, 'focus',	doUpdatePosition(grid));
 						on(element, 'focus',	lang.hitch(observer, observer.start));
 						on(element, 'keyup',	lang.hitch(observer, observer.start));
 						on(element, 'keydown',	lang.hitch(observer, observer.start));
