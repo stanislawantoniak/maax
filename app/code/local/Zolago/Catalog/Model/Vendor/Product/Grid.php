@@ -143,7 +143,7 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 				"required"  => true,
 				"header"	=> $this->_getColumnLabel($thumbnail),
 				"filter"	=> true,
-				"sortable"	=> true,
+				"sortable"	=> false,
 				"filterable "=>true
 			);
 
@@ -183,7 +183,7 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 			$code = $attribute->getAttributeCode();
 			$data = array(
 				"index"     => $code,
-				"required"  => $attribute->getIsRequired(),
+				"required"  => (int)$attribute->getIsRequired(),
 				'type'		=> $this->_getColumnType($attribute),
 				"header"    => $this->_getColumnLabel($attribute),
 				"attribute"	=> $attribute
@@ -224,9 +224,9 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 			$extend = array();
 			
 			// Editable
-			if($attribute->getGridPremission()==Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::INLINE_EDITION){
+			if($attribute->getGridPermission()==Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::INLINE_EDITION){
 				$extend['editable_inline'] = true;
-			}elseif($attribute->getGridPremission()==Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::EDITION){
+			}elseif($attribute->getGridPermission()==Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::EDITION){
 				$extend['editable'] = true;
 			}
 			// Process select
@@ -237,13 +237,26 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 				}else{
 					$extend['type'] = "options";
 				}
-				$extend['align'] = "center";
+				// Process attribute source options
 				if($attribute->getSource()){
-					$extend['options']  = array();
-					foreach($attribute->getSource()->getAllOptions(false) as $option){
-						if($option['value']!==""){
-							$extend['options'][$option['value']]=$option['label'];
-						}
+					// Trim manufacturer options
+					switch ($attribute->getAttributeCode()) {
+						case "manufacturer":
+							/** @todo Implement with method **/
+							$extend['options'] = Mage::helper("zolagosizetable")->getBrands(
+								$this->getVendor(), 
+								$this->getLabelStore()->getId()
+							);
+						break;
+
+						default:
+							$extend['options']  = array();
+							foreach($attribute->getSource()->getAllOptions(false) as $option){
+								if($option['value']!==""){
+									$extend['options'][$option['value']]=$option['label'];
+								}
+							}
+						break;
 					}
 				}
 			}elseif($frontendType=="price"){
@@ -301,6 +314,8 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 	protected function _getColumnType(Mage_Catalog_Model_Resource_Eav_Attribute $attribute) {
 		switch ($attribute->getBackendType()) {
 			case "text":
+				return "textarea";
+			break;
 			case "varchar":
 				return "text";
 			break;
@@ -326,7 +341,21 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 		return $this->_getGridVisibleAttributes();
 	}
 
-
+	/**
+	 * @param string | Mage_Catalog_Model_Resource_Eav_Attribute $attribute
+	 * @return boolean
+	 */
+	public function isAttributeEditable($attribute) {
+		$attribute = $this->getAttribute($attribute);
+		switch($attribute->getGridPermission()){
+			case Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::INLINE_EDITION:
+			case Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::EDITION:
+				return true;
+			break;
+		}
+		return false;
+	}
+	
 	/**
 	 * @return Mage_Catalog_Model_Resource_Product_Attribute_Collection
 	 */

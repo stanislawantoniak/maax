@@ -55,6 +55,8 @@ class Zolago_Catalog_Block_Vendor_Product_Grid extends Mage_Core_Block_Template 
 	 */
 	protected function mapColumn(Varien_Object $columnObject) {
 		$attribute = null;
+		
+		
 		if($columnObject->getAttribute()){
 			$attribute = $columnObject->getAttribute();
 		}
@@ -82,7 +84,7 @@ class Zolago_Catalog_Block_Vendor_Product_Grid extends Mage_Core_Block_Template 
 		);
 		
 		
-		if($columnObject->getIsEditable() || $columnObject->getIsEditableInline()){
+		if($columnObject->getEditable() || $columnObject->getEditableInline()){
 			$classes[] = "editable";
 		}
 		

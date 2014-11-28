@@ -78,6 +78,44 @@ abstract class Zolago_Catalog_Controller_Vendor_Abstract
 		return $params;
 	}
 	
+	protected function _handleRestPut() {
+		
+		$reposnse = $this->getResponse();
+		$data = Mage::helper("core")->jsonDecode(($this->getRequest()->getRawBody()));
+				
+		try{
+			$productIds = $data['entity_id'];
+			$attributeChanged = $data['changed'];
+			$attributeData = array();
+			$storeId = $data['store_id'];
+
+			foreach($attributeChanged as $attribute){
+				if(isset($data[$attribute])){
+					$attributeData[$attribute] = $data[$attribute];
+				}
+			}
+			if($attributeData){
+				$this->_processAttributresSave(array($productIds), $attributeData, $storeId, $data);
+			}
+
+		} catch (Mage_Core_Exception $ex) {
+			$reposnse->setHttpResponseCode(500);
+			$reposnse->setBody($ex->getMessage());
+			return;
+		} catch (Exception $ex) {
+			Mage::logException($ex);
+			$reposnse->setHttpResponseCode(500);
+			$reposnse->setBody("Some error occured");
+			return;
+		}
+
+		/** dev tool **/
+		$data['changed'] = array();
+
+		$reposnse->setBody(json_encode($data));
+		$this->_prepareRestResponse();
+	}
+	
 	/**
 	 * handle Get method
 	 */
@@ -88,11 +126,12 @@ abstract class Zolago_Catalog_Controller_Vendor_Abstract
 
 		if($productId){
 			$collection->addIdFilter($productId);
-		}
+		}else{
 
-		// Make filters
-		foreach($this->_getRestQuery() as $key=>$value){
-			$collection->addAttributeToFilter($key, $value);
+			// Make filters
+			foreach($this->_getRestQuery() as $key=>$value){
+				$collection->addAttributeToFilter($key, $value);
+			}
 		}
 		
 		// Make order and limit
@@ -100,7 +139,7 @@ abstract class Zolago_Catalog_Controller_Vendor_Abstract
 				$this->_getRestSort(), 
 				$this->_getRestRange()
 		);
-
+		
 		if($productId && $out['items']){
 			$reposnse->
 				setBody(Mage::helper("core")->jsonEncode($out['items'][0]));
@@ -268,7 +307,17 @@ abstract class Zolago_Catalog_Controller_Vendor_Abstract
 	public function getVendorId() {
 		return $this->getVendor()->getId();
 	}
-	
+
+	/**
+	 * @param array $productIds
+	 * @param array $attributeData
+	 * @param int $storeId
+	 * @param array $data
+	 * @return Zolago_Catalog_Controller_Vendor_Abstract
+	 */
+	protected function _processAttributresSave(array $productIds, array $attributeData, $storeId, array $data){
+		return $this;
+	}
 
 }
 
