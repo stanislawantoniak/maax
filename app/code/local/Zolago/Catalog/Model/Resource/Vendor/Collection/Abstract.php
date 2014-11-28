@@ -38,7 +38,7 @@ abstract class Zolago_Catalog_Model_Resource_Vendor_Collection_Abstract
 		}
 		// Make limit
 		$select->limit($end-$start, $start);
-		Mage::log($select."");
+		
 		$items = $adapter->fetchAll($select);
 		
 		

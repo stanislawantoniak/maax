@@ -30,7 +30,7 @@
 <script type="text/javascript">
 	jQuery(function($){
 		$("#static-filters").submit(function(){
-			window.grid.refresh();
+			window.grid.applyExtendFilter();
 			$("#filtersModal").modal("hide");
 			return false;
 		})

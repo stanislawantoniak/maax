@@ -19,6 +19,11 @@
 	#grid-holder .dgrid-cell{
 		vertical-align: middle;
 	}
+	#grid-holder td.dgrid-focus{
+		 box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+	}
+	
+	
 	#grid-holder th.header.field-required::after{
 		color: red;
 		content: '*';
@@ -28,6 +33,29 @@
 	#grid-holder th.field-required.field-thumbnail::after{
 		content: '';
 		margin-left: 0;
+	}
+	#grid-holder td.editable{
+		font-weight: normal;
+		position: relative;
+		cursor: cell;
+	}
+	#grid-holder td.editable.dgrid-focus{
+		 box-shadow: inset 0 0 5px #53AFFF;
+	}
+	#grid-holder td.editable:active{
+		cursor: default;
+	}
+	#grid-holder td.editable:empty::after{
+		position: absolute;
+		left:50%;
+		top:50%;
+		margin-top: -7px;
+		margin-left: -7px;
+		opacity: 0.4;
+		letter-spacing: 2px;
+		font-size: 10px;
+		font-weight: normal;
+		content: '...';
 	}
 	#grid-holder .filterable{
 		width: 90px;
@@ -63,7 +91,8 @@
 		text-align: right;
 	}
 	
-	#grid-holder  .dgrid-cell.type-text{
+	#grid-holder  .dgrid-cell.type-text,
+	#grid-holder  .dgrid-cell.type-textarea{
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
@@ -140,6 +169,51 @@
 		border-color: orange;
 	}
 	
+	/** Editor definition **/
+	
+	#grid-holder .dgrid-editors{
+		position: absolute;
+		z-index: 100;
+		top:0;
+		bottom:0;
+	}
+	#grid-holder .editor{
+		background: #fff;
+		box-shadow: rgba(0,0,0,0.5) 0px 3px 5px;
+		min-width: 200px;
+		position: absolute;
+		z-index: 200;
+		padding: 15px;
+	}
+	#grid-holder a.close{
+		position: absolute;
+		top: 5px;
+		right: 10px;
+	}
+	#grid-holder .editor h4,
+	#grid-holder .editor form{
+		margin:0;
+		padding:0;
+	}
+	#grid-holder .editor h4{
+		margin-bottom: 10px;
+	}
+	#grid-holder .editor .selection{
+		display: none;
+	}
+	#grid-holder .editor.use-selection .selection{
+		display: block;
+	}
+	#grid-holder .editor textarea{
+		width: 300px;
+		height: 100px;
+	}
+	#grid-holder .editor select[multiple]{
+		max-height: 90px;
+	}
+	
+
+	
 	@media (max-width: 768px){
 		#grid-holder{
 			left:0px;
@@ -164,7 +238,7 @@
 	}
 </style>
 <script type="text/javascript">
-	require(['vendor/catalog/productGrid'], function(productGrid){
+	require(['vendor/catalog/productGrid', 'vendor/catalog/productGrid/mass/status'], function(productGrid, status){
 		productGrid.setColumns(<?php echo $this->getJsonColumns();?>);
 		productGrid.startup("grid-holder");
 	});

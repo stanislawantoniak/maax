@@ -9,90 +9,110 @@
  */
 /** @var $product Mage_Catalog_Model_Product */
 $_productImageUrl = '';
+$_collection = $this->getCollection();
+
 ?>
 
+<div class="container-fluid" id="items-product">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12">
+            <div class="row">
+                <div id="grid" class="shuffle--container shuffle--fluid">
+                    <!-- START LIST PRODUCT -->
+                    <?php foreach ($_collection as $product): ?>
+                        <?php $_productImageUrl = $product->getListingResizedImageUrl(); ?>
+                        <?php $_productImageInfo = $product->getListingResizedImageInfo(); ?>
 
-<div id="items-product" class="jsMasonryContent">
-    <!-- START LIST PRODUCT -->
-    <?php if (($_collection = $this->getCollection())): ?>
-    <?php if ($_collection->count()): ?>
-        <?php foreach ($_collection as $product): ?>
-            <?php $_productImageUrl = $product->getListingResizedImageUrl(); ?>
-			<?php $_productImageInfo = $product->getListingResizedImageInfo();?>
+                        <div class="item col-phone col-xs-4 col-sm-4 col-md-3 col-lg-3 size14">
+                            <div class="box_listing_product">
+                                <a href="<?php echo $product->getCurrentUrl(); ?>">
+                                    <figure class="img_product">
+                                        <img src="<?php echo $_productImageUrl; ?>"
+                                             alt="<?php $this->escapeHtml($product->getName()); ?>"
+                                             class="img-responsive"/>
+                                    </figure>
+                                    <div class="logo_manufacturer">
+                                        <img class="img-responsive"
+                                             src="<?php echo $product->getManufacturerLogoUrl(); ?>"
+                                             alt="<?php echo $this->escapeHtml($product->getManufacturer()); ?>"/>
+                                    </div>
+                                    <div class="name_product">
+                                        <?php echo $this->escapeHtml($product->getName()); ?>
+                                    </div>
+                                    <div class="price clearfix">
+                                        <div class="col-price">
+                                            <?php if ($product->getPrice() != $product->getFinalPrice()) : ?>
+                                                <span class="old">
+                                                    <?php echo $this->helper('core')->currency($product->getPrice(), true, false); ?>
+                                                </span>
+                                            <?php endif; ?>
+                                            <span>
+                                                <?php echo $this->helper('core')->currency($product->getFinalPrice(), true, false); ?>
+                                            </span>
+                                        </div>
+                                        <?php
+                                        // like count
+                                        $wishlistCount = "";
+                                        $inMyWishlist = "";
+                                        $plusSign = "";
+                                        if ($product->getWishlistCount() - 1 > 0) {
+                                            $wishlistCount = $product->getWishlistCount();
+                                            if ($product->getInMyWishlist()) {
+                                                $wishlistCount -= 1;
+                                            }
+                                        }
 
-            <div class="item col-phone col-xs-4 col-sm-4 col-md-3 col-lg-3 size14">
-                <div class="box_listing_product">
-                    <a href="<?php echo $product->getCurrentUrl(); ?>">
-                        <figure class="img_product"><img
-                                src="<?php echo $_productImageUrl; ?>"
-                                alt="<?php $this->escapeHtml($product->getName()); ?>"
-                                class="img-responsive"/></figure>
-                        <div class="logo_manufacturer"><img class="img-responsive" src="<?php echo $product->getManufacturerLogoUrl(); ?>"
-                                                            alt="<?php echo $this->escapeHtml($product->getManufacturer()); ?>"/></div>
-                        <div class="name_product"><?php echo $this->escapeHtml($product->getName()); ?></div>
-                        <div class="price clearfix">
-                            <div class="col-price">
-                                <?php if ($product->getPrice() != $product->getFinalPrice()) : ?>
-                                    <span class="old"><?php echo $this->helper('core')->currency($product->getPrice(), true, false); ?></span>
+                                        if ($product->getInMyWishlist()) {
+                                            $inMyWishlist = $this->__("You");
+                                            if ($product->getWishlistCount() > 1) {
+                                                $plusSign = " + ";
+                                            }
+                                        }
 
-                                <?php endif; ?>
-                                <span><?php echo $this->helper('core')->currency($product->getFinalPrice(), true, false); ?></span>
-                            </div>
-                            <?php
-                            // like count
-                            $wishlistCount = "";
-                            $inMyWishlist = "";
-                            $plusSign = "";
-                            if ($product->getWishlistCount() - 1 > 0) {
-                                $wishlistCount = $product->getWishlistCount();
-                                if ($product->getInMyWishlist()) {
-                                    $wishlistCount -= 1;
-                                }
-                            }
-
-                            if ($product->getInMyWishlist()) {
-                                $inMyWishlist = $this->__("You");
-                                if ($product->getWishlistCount() > 1) {
-                                    $plusSign = " + ";
-                                }
-                            }
-
-                            ?>
-                            <div class="like <?php if ($product->getInMyWishlist()): ?>liked<?php endif; ?>"
-                                 data-idproduct="<?php echo $product->getId(); ?>"
-                                 data-status="<?php echo (int)$product->getInMyWishlist(); ?>"
-                                 onclick="Mall.wishlist.<?php if($product->getInMyWishlist()) : ?>remove<?php else: ?>add<?php endif; ?>FromSmallBlock(this);return false;">
-                                <span class="icoLike">
-                                  <img class="img-01" src="<?php echo $this->getSkinUrl('images/heart.png'); ?>" alt=""/>
-                                  <img class="img-02" src="<?php echo $this->getSkinUrl('images/heart-like.png'); ?>" alt=""/>
-                                </span>
-                                <span
-                                    class="like_count"><span><?php echo $inMyWishlist; ?><?php echo $plusSign; ?></span><?php echo $wishlistCount; ?></span>
-
-                                <div class="toolLike"></div>
+                                        ?>
+                                        <div class="like <?php if ($product->getInMyWishlist()): ?>liked<?php endif; ?>"
+                                             data-idproduct="<?php echo $product->getId(); ?>"
+                                             data-status="<?php echo (int)$product->getInMyWishlist(); ?>">
+                                            <span class="icoLike">
+                                                <img class="img-01"
+                                                     src="<?php echo $this->getSkinUrl('images/heart.png'); ?>"
+                                                     alt=""/>
+                                                <img class="img-02"
+                                                      src="<?php echo $this->getSkinUrl('images/heart-like.png'); ?>"
+                                                      alt=""/>
+                                            </span>
+                                            <span class="like_count">
+                                                <span>
+                                                    <?php echo $inMyWishlist; ?>
+                                                    <?php echo $plusSign; ?>
+                                                </span>
+                                                <?php echo $wishlistCount; ?>
+                                            </span>
+                                            <div class="toolLike"></div>
+                                        </div>
+                                    </div>
+                                </a>
                             </div>
                         </div>
-                    </a>
+                    <?php endforeach; ?>
                 </div>
+                <div class="col-xs-12 shuffle__sizer"></div>
+                <div class="shapes_listing"></div>
             </div>
-        <?php endforeach; ?>
-    <?php else: ?>
-        No items
-    <?php endif; ?>
-    <?php endif; ?>
-
-    <div class="shapes_listing">
-
+        </div>
     </div>
-
 </div>
 
-<div id="listing-loading" style="text-align: center;"><img src="<?php echo $this->getSkinUrl("images/modago-ajax-loader.gif"); ?>" alt=""></div>
-<!-- END jsMasonryContent -->
+<div id="listing-loading" style="text-align: center;">
+    <img src="<?php echo $this->getSkinUrl("images/modago-ajax-loader.gif"); ?>" alt="">
+</div>
+
 <div class="addNewPositionListProductWrapper">
-    <a href="javascript:;" onclick="Mall.listing.loadMoreProducts();" class="addNewPositionListProduct"><?php echo $this->__("Load next <span>%s</span> products", $this->getLoadMoreOffset()); ?></a>
+    <a href="#" class="addNewPositionListProduct"><?php echo $this->__("Load next <span>%s</span> products", $this->getLoadMoreOffset()); ?></a>
 </div>
-<div id="listing-load-toplayer"><img src="<?php echo $this->getSkinUrl("images/modago-ajax-loader.gif"); ?>"</div>
+
+<!--<div id="listing-load-toplayer"><img src="--><?php //echo $this->getSkinUrl("images/modago-ajax-loader.gif"); ?><!--"</div>-->
+
 <script type="text/javascript">
     Mall.listing.setInitProducts(<?php echo $this->getJsonProducts(); ?>);
     Mall.listing.setLoadNextOffset(<?php echo (int) $this->getLoadMoreOffset(); ?>);
@@ -111,6 +131,18 @@ $_productImageUrl = '';
     Mall.translate.add("people", "<?php echo $this->__("people"); ?>");
     Mall.translate.add("people-polish-more-than-few", "<?php echo $this->__("people polish more than few"); ?>");
     Mall.translate.add("you", "<?php echo $this->__("You"); ?>");
+
+    var grid = jQuery('#grid'),
+        sizer = jQuery(grid).find('.shuffle__sizer');
+
+    grid.shuffle({throttleTime: 400, speed: 0, supported: false });
+    grid.shuffle('update');
+    setTimeout(function(){grid.shuffle('update');}, 500);//sometimes with pushstate
+
+    jQuery(grid).on('layout.shuffle', function() {
+        Mall.listing.likePriceView();
+    });
+
     <?php foreach ($_collection as $product): ?>
     Mall.wishlist.addProduct({
         id: <?php echo $product->getId(); ?>,
@@ -118,11 +150,37 @@ $_productImageUrl = '';
         in_your_wishlist: <?php echo $product->getInMyWishlist() ? "true" : "false"; ?>
     });
     <?php endforeach; ?>
-    var listingHeight = jQuery("#items-product").outerHeight();
-    var listingWidth = jQuery("#items-product").outerWidth();
-    jQuery("#items-product").children(".item").hide();
-    jQuery("#content-main").find(".addNewPositionListProductWrapper").hide();
-    jQuery("#listing-load-toplayer").width(listingWidth).height(listingHeight).prependTo("#items-product");
+
+    jQuery('#grid .like').click(function() {
+        var inMyWishlisy = parseInt(jQuery(this).attr('data-status'));
+        if (inMyWishlisy) {
+            Mall.wishlist.removeFromSmallBlock(this);
+        } else {
+            Mall.wishlist.addFromSmallBlock(this);
+        }
+    });
+
+    jQuery(window).on('appendToListEnd', function() {
+        grid.shuffle('update');
+
+        Mall.listing.hideLoadMoreButton();
+        if(Mall.listing.getLoadNextStart() === Mall.listing.getCurrentVisibleItems()){
+            if( Mall.listing.getTotal() > Mall.listing.getCurrentVisibleItems()){
+                Mall.listing.showLoadMoreButton();
+            }
+        }
+
+        Mall.listing.placeListingFadeContainer();
+    });
+
+    jQuery(window).resize(function() {
+        Mall.listing.placeListingFadeContainer();
+    });
+
+    jQuery('.addNewPositionListProductWrapper a, .addNewPositionListProductWrapper').click(function( event){
+        event.preventDefault();
+        Mall.listing.loadMoreProducts();
+    });
 </script>
 
 <style type="text/css">

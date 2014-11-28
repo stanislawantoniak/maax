@@ -139,6 +139,9 @@ Mall.listing = {
 	 * Performs initialization for listing object.
 	 */
 	init: function () {
+        //set query for search page
+        this.setQuery(this.getQueryFromUrl());
+
 		// Reset form
 		this.resetForm();
 
@@ -203,7 +206,9 @@ Mall.listing = {
 	},
 
 	resetForm: function(){
-		this.getFilters().find("form").get(0).reset();
+        if(this.getFilters().find("form").length) {
+            this.getFilters().find("form").get(0).reset();
+        }
 	},
 
 	initFilterEvents: function(scope){
@@ -255,7 +260,7 @@ Mall.listing = {
 	},
 
 	/**
-	 * Handle clear handle after add/rem favoirites
+	 * Handle clear handle after add/rem favorites
 	 */
 	preprocessProducts: function(){
 		var self = this;
@@ -356,15 +361,8 @@ Mall.listing = {
 	 */
 	getMoreProductsCallback: function (data) {
 		if (data.status === true) {
-			var container = jQuery("#items-product").masonry(),
-				items;
 			Mall.listing.setPageIncrement();
-			items = Mall.listing.appendToList(data.content.products);
-			//container.imagesLoaded(function () {
-			container.masonry("reloadItems");
-			container.masonry();
-			setTimeout(function () {Mall.listing.placeListingFadeContainer();}, 1000);
-			//});
+			Mall.listing.appendToList(data.content.products);
 			// set current items count
 			Mall.listing.addToVisibleItems(data.content.rows);
 			Mall.listing.setTotal(data.content.total);
@@ -404,8 +402,7 @@ Mall.listing = {
 	loadProductsOnScroll: function () {
 		// detect if this is good time for showing next part of products
 		jQuery(window).scroll(function () {
-			if (jQuery(window).scrollTop() > jQuery(document).height() - jQuery(window).height() -
-				Mall.listing.getScrollBottomOffset()) {
+			if (jQuery(window).scrollTop() > jQuery(document).height() - jQuery(window).height() - Mall.listing.getScrollBottomOffset()) {
 				if (!Mall.listing.getScrollLoadLock()
 					&& Mall.listing.getProductQueue().length > 0
 					&& !Mall.listing.getScrollLoadLock()) {
@@ -433,36 +430,13 @@ Mall.listing = {
 		var products = Mall.listing.getProductQueue().slice(
 				0, Mall.listing.getScrollLoadOffset()),
 			items = Mall.listing.appendToList(products),
-			container = jQuery("#items-product"),
 			inst = imagesLoaded(jQuery(items)),
 			self = this;
 
-		jQuery(items).hide();
-
 		// loading
 		inst.on("always", function () {
-
-			//setTimeout(function () {
-			jQuery(items).show();
 			self.hideLoading();
-
-			container.masonry({isAnimated: false, transitionDuration: 0})
-				.masonry("reloadItems").masonry();
-
-			// show load more button
-
-			if (Mall.listing.canShowLoadMoreButton()) {
-				Mall.listing.showLoadMoreButton();
-				Mall.listing.showShapesListing();
-				Mall.listing.showLoadMoreButton();
-			}
-
-			// reload if queue is empty
-			//container.masonry();
-
 			self.placeListingFadeContainer();
-
-			//}, 3000);
 		});
 
 		Mall.listing.addToVisibleItems(products.length);
@@ -646,18 +620,25 @@ Mall.listing = {
 	 * @returns {Array}
 	 */
 	appendToList: function (products) {
-		var items = [];
+		var items = jQuery();
 		var _item;
+        var grid = jQuery('#grid');
 		jQuery.each(products, function(index, item) {
 			_item = Mall.listing.createProductEntity(item);
-			jQuery("#items-product").find(".shapes_listing").before(_item);
-			items.push(_item[0]);
+            grid.append(_item);
+            items = items.add(_item);
 		});
+
+        grid.shuffle('appended', items);
 
 		// attach events
         this.likePriceView();
 		this.preprocessProducts();
 		this.attachEventsToProducts();
+
+        setTimeout(function() {
+            jQuery(window).trigger('appendToListEnd');
+        }, 250);
 
 		return items;
 	},
@@ -1173,6 +1154,19 @@ Mall.listing = {
 		return result;
 	},
 
+    getQueryFromUrl: function() {
+        var url = decodeURI(window.location.href.replace(Mall.listing._getUrlNoParams()+"?",""));
+        var tmpObj = url.split("&");
+
+        for(var key in tmpObj) {
+            var tmp = tmpObj[key].split("=");
+            if (decodeURIComponent(tmp[0]) === 'q') {
+                return decodeURIComponent(tmp[1]);
+            }
+        }
+        return '';
+    },
+
 	/**
 	 * @returns {void} - event initialized
 	 */
@@ -1249,7 +1243,7 @@ Mall.listing = {
 		var self = this,
 			data = this.getQueryParamsAsArray(forceObject),
 			ajaxKey = this._buildAjaxKey(data);
-	
+
 		this._pushHistoryState(data);
 
 		if(this._ajaxCache[ajaxKey]){
@@ -1307,7 +1301,7 @@ Mall.listing = {
 				"left":			"0",
 				"top":			"0",
 				"z-index":		"1000000",
-				"color":		"#fff",
+				"color":		"#fff"
 			}).attr("id", "ajax-filter-loader");
 			jQuery("body").append(jQuery(overlay));
 		}
@@ -1346,16 +1340,12 @@ Mall.listing = {
 		this.getProducts().find(".item").remove();
 		this.setProductQueue([]);
 
-		// 2. Prepare parsed data
-		var container = this.getProducts().masonry();
-		// 3. Reset the page and values
+		// 2. Reset the page and values
 		this.setPage(0);
 		this.setTotal(data.total);
 		this.setCurrentVisibleItems(data.rows);
 
 		this.appendToList(data.products);
-		container.masonry("reloadItems");
-		//container.masonry({isAnimated:false});
 
 		this.setLoadNextStart(this.getCurrentVisibleItems());
 		this.reloadListingItemsAfterPageLoad();
@@ -1805,7 +1795,7 @@ Mall.listing = {
 				var el = jQuery(this),
 					text = el.find("label > span:eq(0)").text().trim().toLowerCase(),
 					serchPosition = text.search(term);
-					
+
 				if(serchPosition>-1){
 					el.removeClass("hidden");
 					matches++;
@@ -1818,7 +1808,7 @@ Mall.listing = {
 					el.addClass("hidden");
 				}
 			});
-			
+
 			if(!matches){
 				noResult.removeClass("hidden");
 				list.addClass("hidden");
@@ -1827,13 +1817,13 @@ Mall.listing = {
 				list.removeClass("hidden");
 			}
 		}
-		
+
 		if(list.find("li").not(".hidden").length){
-			
+
 			/**
 			 * @todo improve performance
 			 */
-			
+
 			// Make sort
 			this._sortLongListContent(checkboxes);
 			checkboxes.each(function(){
@@ -1842,7 +1832,7 @@ Mall.listing = {
 					listUl.append(el);
 				}
 			});
-			
+
 			// Almost perfect match - move as first
 			var almostPerfect = checkboxes.parents("li.almostPerfect").
 					removeClass("almostPerfect").
@@ -1853,7 +1843,7 @@ Mall.listing = {
 					jQuery(this).parents('li').prependTo(listUl);
 				});
 			}
-			
+
 			// Perfect match - move as first
 			var perfectMatch = checkboxes.parents("li.perfectMatch").
 					removeClass("perfectMatch").
@@ -1864,7 +1854,7 @@ Mall.listing = {
 					jQuery(this).parents('li').prependTo(listUl);
 				});
 			}
-			
+
 			// Move scroll top
 			list.mCustomScrollbar("scrollTo", "top");
 		}
@@ -1872,7 +1862,7 @@ Mall.listing = {
 	},
 
 	_sortLongListContent: function(items, desc){
-		desc = desc ? -1 : 1; 
+		desc = desc ? -1 : 1;
 		items.sort(function(a,b){
 			return (a.sort-b.sort)*desc;
 		});
@@ -1887,7 +1877,7 @@ Mall.listing = {
 			items = jQuery(":checkbox", scope);
 
 		this._sortLongListContent(items);
-		
+
 		items.each(function(){
 			var el = jQuery(this),
 				parent = el.parents('li');
@@ -1903,7 +1893,7 @@ Mall.listing = {
 		}else{
 			selectedContianer.hide();
 		}
-		
+
 		if(noSelectedContianer.children().length){
 			wrapper.show();
 			scrollable.removeClass('hidden');
@@ -1912,7 +1902,7 @@ Mall.listing = {
 			wrapper.hide();
 			selectedContianer.addClass('noChooseFields');
 		}
-		
+
 	},
 
 	/**
@@ -1941,7 +1931,7 @@ Mall.listing = {
 			minPrice,
 			maxPrice,
 			self = this;
-			
+
 		if (sliderRange.length >= 1) {
 			sliderRange.slider({
 				range: true,
@@ -1985,22 +1975,22 @@ Mall.listing = {
 		jQuery("#filter_price", scope).find("input.filter-price-range-submit").on("click", function(e) {
 			e.preventDefault();
 			// validate prices
-			
+
 			minPrice = Mall.listing.getMinPriceFromSlider();
 			maxPrice = Mall.listing.getMaxPriceFromSlider();
 			if(!self._validateRange(minPrice, maxPrice)) {
 				return false;
 			}
-			
+
 			var checkSlider = self.getSliderCheckbox(scope);
 			if (!checkSlider.is(':checked')) {
 				checkSlider.prop('checked', true).change();
 				jQuery('#filter_price').find('.action').removeClass('hidden');
 			}
-			
+
 			self._transferValuesToCheckbox(minPrice, maxPrice, scope);
 			self._triggerRefresh(scope, 1, true);
-			
+
 		});
 
 		jQuery("#filter_price", scope).find("input.filter-price-range-submit").on("mouseover"
@@ -2050,38 +2040,38 @@ Mall.listing = {
 		return this;
 	},
 	_validateRange: function(minPrice,maxPrice){
-		
+
 		var reg = /^\d+$/;
-		
+
 		if(!reg.test(minPrice) || !reg.test(maxPrice)){
 			return false;
 		}
-		
+
 		var min = parseInt(minPrice, 10);
 		var max = parseInt(maxPrice, 10);
-		
+
 		if(isNaN(min) || isNaN(max)){
 			return false;
 		}
 		return min>=0 && max>=0 && min<=max;
 	},
-	
+
 	_triggerRefresh: function(scope, force, triggerChange){
 		var checkbox = jQuery('#checkSlider',scope),
 			action = jQuery('#filter_price', scope).find('.action'),
 			triggerChange = triggerChange || true,
 			self = this;
-		
+
 		if(force!==undefined){
 			checkbox.prop('checked', force);
 		}
-		
+
 		if(!checkbox.is(':checked')){
 			action.removeClass('hidden');
 		}else{
 			action.addClass('hidden');
 		}
-		
+
 		if(triggerChange){
 			if(self.getPushStateSupport()){
 				self.reloadListing();
@@ -2090,13 +2080,13 @@ Mall.listing = {
 				document.location = checkbox.parent().find("a").attr('href');
 			}
 		}
-		
+
 	},
 	_transferValuesToCheckbox: function(min,max,scope){
-		this.getSliderCheckbox(scope).attr('value', 
+		this.getSliderCheckbox(scope).attr('value',
 			parseInt(min) + " TO " + parseInt(max));
-		
-		var url = this._getUrlNoParams() + '?' + 
+
+		var url = this._getUrlNoParams() + '?' +
 				this._buildPushStateKey(this.getQueryParamsAsArray());
 		this.getSliderCheckbox(scope).parent().find("a").attr("href", url);
 		this.getSliderCheckbox(scope).data('url', url);
@@ -2136,7 +2126,7 @@ Mall.listing = {
 			rows: this.getScrollLoadOffset(),
 			start: 0
 		};
-		
+
 		if(this.getIsSliderActive()){
 			q.slider = 1;
 		}
@@ -2158,7 +2148,7 @@ Mall.listing = {
 		if(this.getIsSliderActive()){
 			defaults.slider = 1;
 		}
-		
+
 		var out = [];
 
 		jQuery.extend(defaults, forceObject);
@@ -2199,30 +2189,55 @@ Mall.listing = {
 	 * @returns {Mall.listing}
 	 */
 	placeListingFadeContainer: function() {
-		var heights = [],
-			min,
-			con;
-		// check if body has proper class
-		if(jQuery("body").hasClass("node-type-list")
-			&& this.getTotal() > 20 /* @todo by config */
-			&& this.canLoadMoreProducts()
-			&& this.canShowLoadMoreButton()) {
+        jQuery('#grid').shuffle('layout');
+        if (this.canShowLoadMoreButton()) {
+            //this.showLoadMoreButton();
+            this.showShapesListing();
 
-			jQuery('.node-type-list #items-product .item').each(function() {
-				heights.push(jQuery(this).height());
-			});
-			min = Math.min.apply( Math, heights );
-			con = jQuery('#items-product').innerHeight();
-			jQuery('#items-product').not('.list-shop-product').css('height', 'auto');
-			jQuery('#items-product').not('.list-shop-product').css('height', con-min);
-			jQuery(".shapes_listing").css("top"
-				, jQuery(".addNewPositionListProduct").position().top - 40);
-		} else {
-			this.hideLoadMoreButton();
-			this.hideShapesListing();
-		}
 
-		return this;
+            if (!this.getScrollLoadLock()) {
+                var gridHeight = jQuery('#grid').height();
+                var cutFromBottom = [];
+                var windowWidth = jQuery(window).width();
+                var sliceNumber = -4;
+
+                if (windowWidth < 992) {
+                    sliceNumber = -3;
+                }
+                if (windowWidth < 541) {
+                    sliceNumber = -2;
+                }
+
+                jQuery('#grid .item').slice(sliceNumber).each(function(index) {
+                    var top = jQuery(this).position().top;
+                    var elemHeight = jQuery(this).height();
+                    cutFromBottom.push(gridHeight - top - elemHeight);
+                });
+                cutFromBottom = parseInt(Math.max.apply(Math, cutFromBottom));
+                var newHeight = gridHeight - cutFromBottom;
+
+                if (cutFromBottom < 0) {
+                    return this;
+                }
+
+                //magic number 1500 px
+                //to prevent jumping on top of page when
+                //browser wrong calculate height
+                if (cutFromBottom > 1500) { //
+                    return this;
+                }
+
+                if( (jQuery('#grid').height() - cutFromBottom ) <= newHeight) {
+                    jQuery('#items-product #grid').not('.list-shop-product').height(newHeight);
+                }
+            }
+
+        } else {
+            this.hideLoadMoreButton();
+            this.hideShapesListing();
+        }
+
+        return this;
 	},
 
 	/**
@@ -2250,70 +2265,45 @@ Mall.listing = {
 	},
 
 	/**
-	 * Fixes wrong placement for masonry listing items adter page is loaded.
-	 *
-	 * @returns {Mall.listing}
-	 */
+	* cool thing heppens here
+	*
+	* @returns {Mall.listing}
+	*/
 	reloadListingItemsAfterPageLoad: function() {
-		this.hideLoading();
+        this.hideLoading();
+        Mall.listing.placeListingFadeContainer();
 
-		var container = jQuery("#items-product"),
-			imgLoadedInst = imagesLoaded(container);
+        if (Mall.listing.getTotal() > Mall.listing.getCurrentVisibleItems()) {
+        	Mall.listing.hideLoadMoreButton();
+            Mall.listing.hideShapesListing();
+        }
 
-		setTimeout(function() {
-			Mall.listing.placeListingFadeContainer();
-		}, 1000);
-
-		// hide load more button
-		if (Mall.listing.getTotal() > Mall.listing.getCurrentVisibleItems()) {
-			Mall.listing.hideLoadMoreButton()
-				.hideShapesListing();
-		}
-
-		imgLoadedInst.on("always", function () {
-			"use strict";
-
-			jQuery("#listing-load-toplayer").remove();
-			jQuery("#items-product").children(".item").show();
-			container.masonry().masonry("reloadItems").masonry();
-
-			setTimeout(function() {
-				Mall.listing.placeListingFadeContainer();
-			}, 1000);
-
-			// hide load more button
-			if (Mall.listing.getTotal() > Mall.listing.getCurrentVisibleItems()) {
-				Mall.listing.hideLoadMoreButton()
-					.hideShapesListing();
-			}
-		});
-
-		return this;
+        return this;
 	},
 
 	setItemsImageDimensions: function (container) {
-		"use strict";
-		var columnWidth = this.getFirstItemWidth(container),
-			items = container.find(".item"),
-			width,
-			height,
-			proportions,
-			newWidth,
-			newHeight;
-
-		jQuery.each(items, function () {
-			// read attrs
-			width = jQuery(this).find(".img_product > img").data("width");
-			height = jQuery(this).find(".img_product > img").data("height");
-			if (width !== undefined && height !== undefined) {
-				proportions = width / height;
-				newHeight = (columnWidth) / proportions;
-				newWidth = columnWidth;
-				jQuery(this).find(".img_product")
-					.attr("width", parseInt(newWidth, 10))
-					.attr("height", parseInt(newHeight, 10));
-			}
-		});
+		//"use strict";
+		//var columnWidth = this.getFirstItemWidth(container),
+		//	items = container.find(".item"),
+		//	width,
+		//	height,
+		//	proportions,
+		//	newWidth,
+		//	newHeight;
+        //
+		//jQuery.each(items, function () {
+		//	// read attrs
+		//	width = jQuery(this).find(".img_product > img").data("width");
+		//	height = jQuery(this).find(".img_product > img").data("height");
+		//	if (width !== undefined && height !== undefined) {
+		//		proportions = width / height;
+		//		newHeight = (columnWidth) / proportions;
+		//		newWidth = columnWidth;
+		//		jQuery(this).find(".img_product")
+		//			.attr("width", parseInt(newWidth, 10))
+		//			.attr("height", parseInt(newHeight, 10));
+		//	}
+		//});
 	},
 
 	calculateSize: function (item, columnWidth) {
@@ -2335,21 +2325,21 @@ Mall.listing = {
 	getNoPushstate: function() {
 		return this._noPushState;
 	},
-	
+
 	setNoPushstate: function(bool) {
 		this._noPushState = bool;
 		return this;
 	},
-	
+
 	getNoDelay: function() {
 		return this._noDelay;
 	},
-	
+
 	setNoDelay: function(bool) {
 		this._noDelay = bool;
 		return this;
 	},
-	
+
 	/**
 	 * Returns min price which is set in price slider
 	 *

@@ -16,6 +16,14 @@ class Zolago_Modago_Block_Sales_Order_Shipment extends Mage_Core_Block_Template 
 		}
 		return false;
 	}
+	public function getTrackingUrl() {
+		$code = $this->getItem()->getData('current_carrier');
+		if ($carrier = Mage::getSingleton('shipping/config')->getCarrierInstance($code)) {
+			$out = $carrier->getConfigData('tracking_url');
+			return $out;
+		}
+		return false;
+	}
 	public function getCurrentTracking() {
 		$shipment = !$this->shipment ? $this->getItem()->getLastNotCanceledShipment() : $this->shipment;
 		if($shipment) {

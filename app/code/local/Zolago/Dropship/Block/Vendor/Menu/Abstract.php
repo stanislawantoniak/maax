@@ -191,13 +191,37 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 		
 		$groupOne = array();
 		if($this->isAllowed("udropship/vendor/preferences")){
-			$groupOne[] = array(
-				"active" => $this->isActive("preferences"),
-				"icon"	 => "icon-cog",
-				"label"	 => $this->__('Preferences'),
-				"url"	 => $this->getUrl('udropship/vendor/preferences')
-			);
+//			$groupOne[] = array(
+//				"active" => $this->isActive("preferences"),
+//				"icon"	 => "icon-cog",
+//				"label"	 => $this->__('Preferences'),
+//				"url"	 => $this->getUrl('udropship/vendor/preferences')
+//			);
+
+            if(!$this->isOperatorMode()){
+                $groupOne[] = array(
+                    "active" => $this->isActive("preferences"),
+                    "icon"	 => "icon-briefcase",
+                    "label"	 => $this->__('Company settings'),
+                    "url"	 => $this->getUrl('udropship/vendor_settings/info')
+                );
+                $groupOne[] = array(
+                    "active" => $this->isActive("preferences"),
+                    "icon"	 => "icon-plane",
+                    "label"	 => $this->__('Shipment settings'),
+                    "url"	 => $this->getUrl('udropship/vendor_settings/shipping')
+                );
+                $groupOne[] = array(
+                    "active" => $this->isActive("preferences"),
+                    "icon"	 => "icon-retweet",
+                    "label"	 => $this->__('RMA settings'),
+                    "url"	 => $this->getUrl('udropship/vendor_settings/rma')
+                );
+            }
+
 		}
+
+
 		
 				
 		if($this->isModuleActive('zolagooperator') && $this->isAllowed("zolagooperator")){
@@ -226,6 +250,8 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 				"url"	 => $this->getUrl('udropship/sizetable')
 			);
 		}
+
+
         /*		
 		if($this->getVendor()->getAllowTiershipModify() && $this->isAllowed("udtiership")){
 			$groupOne[] = array(

@@ -260,62 +260,71 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         }
     }
 
-    public function insertProductSuperAttributePricingApp($productConfigurableId, $superAttributeId, $store)
+    public function insertProductSuperAttributePricingApp($productConfigurableId, $superAttributeId, $stores)
     {
+        foreach ($stores as $store) {
+            $productRelations[$store] = $this->_getProductRelationPricesSizes($productConfigurableId, $store);
+        }
+        unset($store);
 
-        $productRelations = $this->_getProductRelationPricesSizes($productConfigurableId, $store);
+        $insert = array();
+        foreach ($stores as $store) {
+            if (isset($productRelations[$store]) && !empty($productRelations[$store])) {
 
+                $productMinPrice = array();
+                foreach ($productRelations[$store] as $i) {
+                    $productMinPrice[] = $i['child_price'];
+                }
 
-        if (!empty($productRelations)) {
-            $insert = array();
-            $productMinPrice = array();
-            foreach ($productRelations as $i) {
-                $productMinPrice[] = $i['child_price'];
-            }
+                $productMinimalPrice = min($productMinPrice);
 
-            $productMinimalPrice = min($productMinPrice);
-
-            Mage::getSingleton('catalog/product_action')->updateAttributesNoIndex(
-                array($productConfigurableId), array('price' => $productMinimalPrice), $store
-            );
-
-            foreach ($productRelations as $productRelation) {
-                $size = $productRelation['child_size'];
-                $price = $productRelation['child_price'];
-                $website = $productRelation['website'];
-
-
-                $priceIncrement = (float)$price - $productMinimalPrice;
-
-                $insert[] = "({$superAttributeId},{$size},{$priceIncrement},{$website})";
-            }
-
-            if (!empty($insert)) {
-                $lineQuery = implode(",", $insert);
-
-                $catalogProductSuperAttributePricingTable = 'catalog_product_super_attribute_pricing';
-
-                $insertQuery = sprintf(
-                    "
-                    INSERT INTO  %s (product_super_attribute_id,value_index,pricing_value,website_id)
-                    VALUES %s
-                    ON DUPLICATE KEY UPDATE catalog_product_super_attribute_pricing.pricing_value=VALUES(catalog_product_super_attribute_pricing.pricing_value)
-                    ", $catalogProductSuperAttributePricingTable, $lineQuery
+                Mage::getSingleton('catalog/product_action')->updateAttributesNoIndex(
+                    array($productConfigurableId), array('price' => $productMinimalPrice), $store
                 );
 
+                foreach ($productRelations[$store] as $productRelation) {
+                    $size = $productRelation['child_size'];
+                    $price = $productRelation['child_price'];
+                    $website = $productRelation['website'];
 
-                try {
-                    $this->_getWriteAdapter()->query($insertQuery);
 
-                } catch (Exception $e) {
-                    Mage::log($e->getMessage(), 0, 'configurable_update.log');
-                    Mage::throwException("Error insertProductSuperAttributePricingApp");
+                    $priceIncrement = (float)$price - $productMinimalPrice;
 
-                    throw $e;
+                    $insert[] = "({$superAttributeId},{$size},{$priceIncrement},{$website})";
                 }
 
             }
         }
+
+        if (!empty($insert)) {
+            $insert = array_unique($insert);
+            $lineQuery = implode(",", $insert);
+
+            $catalogProductSuperAttributePricingTable = 'catalog_product_super_attribute_pricing';
+
+            $insertQuery = sprintf(
+                "
+                    INSERT INTO  %s (product_super_attribute_id,value_index,pricing_value,website_id)
+                    VALUES %s
+                    ON DUPLICATE KEY UPDATE catalog_product_super_attribute_pricing.pricing_value=VALUES(catalog_product_super_attribute_pricing.pricing_value)
+                    ", $catalogProductSuperAttributePricingTable, $lineQuery
+            );
+
+
+            try {
+                $this->_getWriteAdapter()->query($insertQuery);
+
+            } catch (Exception $e) {
+                Mage::log($e->getMessage(), 0, 'configurable_update.log');
+                Mage::throwException("Error insertProductSuperAttributePricingApp");
+
+                throw $e;
+            }
+
+        }
+
+
+        //Mage::log($productConfigurableId, null, 'hello.log');
     }
     /**
      * get super attribute ids
@@ -342,6 +351,24 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         return $superAttributes;
     }
 
+    /**
+     * @param $ids
+     */
+    public  function removeUpdatedRows($ids)
+    {
+        $table = 'zolago_catalog_queue_configurable';
+        $lineQuery = implode(',', $ids);
+        $delete = sprintf("DELETE FROM  %s WHERE queue_id IN (%s);", $table, $lineQuery);
+        try {
+            $this->_getWriteAdapter()->query($delete);
+
+        } catch (Exception $e) {
+            Mage::throwException("Error insertProductSuperAttributePricingApp");
+
+            throw $e;
+        }
+
+    }
 
     /**
      * @param $productConfigurableId
