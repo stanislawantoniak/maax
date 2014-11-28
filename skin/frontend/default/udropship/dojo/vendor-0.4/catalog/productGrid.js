@@ -475,7 +475,6 @@ define([
 			editors[field] = new PopupEditor(column);
 			editors[field].on("save", handleSaveEditor);
 		}
-		
 		// Enter click - skip all keys except enter
 		if(e instanceof KeyboardEvent){
 			if(e.keyCode==13){
@@ -499,7 +498,7 @@ define([
 	}
 	
 	on(document.body, "click", function(e){
-		var el = jQuery(e.toElement);
+		var el = jQuery(e.target);
 		if(el.is(".editor") || el.parents(".editor").length || el.is(".editable")){
 			return;
 		}
