@@ -312,7 +312,11 @@ $vendorPreferences = $this->getVendorPreferences();
                 contact_email: {
                     email: true
                 },
-                billing_zip: "validate-postcode"
+                billing_zip: "validate-postcode",
+                tax_no: {
+                    required: true,
+                    digits: true
+                }
             }
         });
     });
