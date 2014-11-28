@@ -203,8 +203,7 @@ define([
 		var column = this;
 		var timeout;
 		
-		node.title = value;
-		node.innerHTML = value;
+		jQuery(node).text(value); // faseter escape
 		
 		if(value===null || value===""){
 			return;
@@ -214,7 +213,8 @@ define([
 			container: "body", 
 			animation: false, 
 			placement: "top",
-			trigger: "manual"
+			trigger: "manual",
+			title: value
 		});
 		
 		// Allow open only if editor is close
