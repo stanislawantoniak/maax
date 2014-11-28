@@ -73,5 +73,4 @@
     {
         return $this->getChildHtml('solrsearch_product_list');
     }
-
 }

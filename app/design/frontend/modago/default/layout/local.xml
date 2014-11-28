@@ -501,6 +501,9 @@
             <action method="addBodyClass">
                 <value>not-menu-mobile</value>
             </action>
+            <action method="addBodyClass">
+                <value>catalog-category-view</value>
+            </action>
         </reference>
         <reference name="head">
             <action method="addItem">
@@ -549,8 +552,8 @@
             <block type="zolagosolrsearch/search_view" name="zolagosolrsearch_search_view" as="zolagosolrsearch_search_view">
 
                 <block type="zolagosolrsearch/catalog_product_list_header_search" name="solrsearch_result_title" template="zolagosolrsearch/catalog/product/list/header/search.phtml" as="solrsearch_result_title" />
-                <block type="zolagosolrsearch/active" name="solrsearch_product_list_active" as="solrsearch_product_list_active" />
-                <block type="zolagosolrsearch/catalog_product_list_toolbar" name="solrsearch_product_list_toolbar" template="zolagosolrsearch/catalog/product/list/toolbar.phtml" as="solrsearch_product_list_toolbar" />
+                <!--<block type="zolagosolrsearch/active" name="solrsearch_product_list_active" as="solrsearch_product_list_active" />-->
+                <!--<block type="zolagosolrsearch/catalog_product_list_toolbar" name="solrsearch_product_list_toolbar" template="zolagosolrsearch/catalog/product/list/toolbar.phtml" as="solrsearch_product_list_toolbar" />-->
 
                 <block type="zolagosolrsearch/catalog_product_list" name="solrsearch_product_list" template="zolagosolrsearch/catalog/product/list.phtml" as="solrsearch_product_list"/>
                 <block type="zolagomodago/dropshipmicrositepro_vendor_banner" name="vendor.banner" template="unirgy/microsite/vendor/banner.phtml"/>

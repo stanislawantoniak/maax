@@ -478,4 +478,15 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
     }
 
 
+    /**
+     * @return int
+     */
+    public function getNumFound() {
+
+        $num = Mage::getSingleton('zolagosolrsearch/catalog_product_list')->getCollection()->getSolrData("response", "numFound");
+        if(is_numeric($num)){
+            return $num;
+        }
+        return 0;
+    }
 }
