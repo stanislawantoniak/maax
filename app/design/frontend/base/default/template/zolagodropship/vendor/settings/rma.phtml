@@ -290,7 +290,15 @@ $upsRma = $_vendor->getData('ups_rma');
                 zip: "postcodeWithReplace",
                 rma_telephone: "validate-telephone",
                 rma_executive_telephone: "validate-telephone",
-                rma_executive_telephone_mobile: "validate-telephone"
+                rma_executive_telephone_mobile: "validate-telephone",
+                rma_email: {
+                    required: true,
+                    email: true
+                },
+                rma_executive_email: {
+                    required: true,
+                    email: true
+                }
             },
             messages: {
                 zip : {
@@ -304,6 +312,12 @@ $upsRma = $_vendor->getData('ups_rma');
                 },
                 rma_executive_telephone_mobile: {
                     "validate-telephone": "<?php echo $this->__("Telephone number is too short. Number must contain 9 digits, without spacing."); ?>"
+                },
+                rma_email: {
+                    "email" : "<?php echo $this->__("Please enter a valid email address. For example johndoe@domain.com.")?>"
+                },
+                rma_executive_email: {
+                    "email" : "<?php echo $this->__("Please enter a valid email address. For example johndoe@domain.com.")?>"
                 }
             }
         });

@@ -309,10 +309,7 @@ $vendorPreferences = $this->getVendorPreferences();
                     required: true,
                     email: true
                 },
-                executive_email: {
-                    required: true,
-                    email: true
-                },
+
                 contact_email: {
                     email: true
                 },
@@ -325,6 +322,17 @@ $vendorPreferences = $this->getVendorPreferences();
                 administrator_telephone_mobile: "validate-telephone"
             },
             messages: {
+                email: {
+                    "email" : "<?php echo $this->__("Please enter a valid email address. For example johndoe@domain.com.")?>"
+                },
+                billing_email: {
+                    "email" : "<?php echo $this->__("Please enter a valid email address. For example johndoe@domain.com.")?>"
+                },
+
+                contact_email: {
+                    "email" : "<?php echo $this->__("Please enter a valid email address. For example johndoe@domain.com.")?>"
+                },
+
                 tax_no: {
                     "validate-nip" : "<?php echo $this->__("Tax number is incorrect. Enter as a string of digits e.g. 1234567890.")?>"
                 },
