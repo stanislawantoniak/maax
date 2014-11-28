@@ -4,10 +4,13 @@
 		<update handle="udropship_vendor" />
 		<update handle="adminhtml_head" />
 		<update handle="bootstrap"/>
+		<update handle="forms" />
 		<reference name="content">
 			<block name="sizetable" type="zolagosizetable/dropship_sizetable" template="zolagosizetable/dropship/sizetable.phtml">
 				<block type="zolagosizetable/dropship_sizetable_list" name="sizetable_list" template="zolagosizetable/dropship/sizetable/list.phtml" />
-				<block type="zolagosizetable/dropship_sizetable_assign" name="sizetable_assign" template="zolagosizetable/dropship/sizetable/assign.phtml" />
+				<block type="zolagosizetable/dropship_sizetable_assign" name="sizetable_assign" template="zolagosizetable/dropship/sizetable/assign.phtml">
+
+				</block>
 			</block>
 		</reference>
 	</udropship_sizetable_index>

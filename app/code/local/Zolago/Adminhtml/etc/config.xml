@@ -20,8 +20,7 @@
                     <catalog_product_attribute_set_main_formset>Zolago_Adminhtml_Block_Catalog_Product_Attribute_Set_Main_Formset</catalog_product_attribute_set_main_formset>
                     <catalog_product_edit_tab_settings>Zolago_Adminhtml_Block_Catalog_Product_Edit_Tab_Settings</catalog_product_edit_tab_settings>
                     <catalog_product_attribute_set_grid>Zolago_Adminhtml_Block_Catalog_Product_Attribute_Set_Grid</catalog_product_attribute_set_grid>
-                    <catalog_product_attribute_grid>Zolago_Adminhtml_Block_Catalog_Product_Attribute_Grid
-                    </catalog_product_attribute_grid>
+                    <catalog_product_attribute_grid>Zolago_Adminhtml_Block_Catalog_Product_Attribute_Grid</catalog_product_attribute_grid>
                 </rewrite>
             </adminhtml>
         </blocks>

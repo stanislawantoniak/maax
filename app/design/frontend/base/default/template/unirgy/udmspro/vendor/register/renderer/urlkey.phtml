@@ -1,8 +1,16 @@
-<label for="<?php echo $this->getElement()->getId(); ?>">
-    <?php echo $this->__($this->getElement()->getLabel()); ?>
-    <?php if ($this->getElement()->getRequired()): ?>
-        <span class="required">*</span>
-    <?php endif; ?>
-</label> <br />
-<?php echo $this->getElementHtml() ?>
- <strong>.<?php echo Mage::helper('umicrosite')->getDomainName() ?></strong>
+<label for="<?php echo $this->getElement()->getId(); ?>" class="col-md-3 control-label">
+	<?php echo $this->__($this->getElement()->getLabel()); ?>&nbsp;<?php if ($this->getElement()->getRequired()): ?><span class="required">*</span><?php endif; ?>
+</label>
+<div class="col-md-9 ">
+	<div class="row">
+		<div class="col-md-10">
+			<?php echo $this->getElementHtml() ?>
+		</div>
+		<div class="col-md-2 hidden-sm hidden-xs" style="padding-left: 0;line-height: 32px">
+			<strong>.<?php echo Mage::helper('umicrosite')->getDomainName() ?></strong>
+		</div>
+		<div class="col-md-2 hidden-md hidden-lg" style="margin-top: 5px;">
+			<strong>.<?php echo Mage::helper('umicrosite')->getDomainName() ?></strong>
+		</div>
+	</div>
+</div>
