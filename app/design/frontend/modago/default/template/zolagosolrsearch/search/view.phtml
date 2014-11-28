@@ -1,3 +1,8 @@
+<?php
+$_helperZSS = Mage::helper('zolagosolrsearch');
+?>
+
+
 <?php if($this->isContentMode()): ?>
     <?php //echo $this->getChildHtml('banner_result_title'); ?>
     <div id="content" class="container-fluid">
@@ -39,7 +44,9 @@
         <?php echo Mage::app()->getLayout()->createBlock('zolagosolrsearch/active')->setBlockId('solrsearch_product_list_active')->toHtml(); ?>
 
         <?php //echo $this->getChildHtml('solrsearch_product_list_toolbar'); ?>
-        <?php echo Mage::app()->getLayout()->createBlock('zolagosolrsearch/catalog_product_list_toolbar')->setBlockId('solrsearch_product_list_toolbar')->toHtml(); ?>
+        <?php if($_helperZSS->getNumFound()): ?>
+            <?php echo Mage::app()->getLayout()->createBlock('zolagosolrsearch/catalog_product_list_toolbar')->setBlockId('solrsearch_product_list_toolbar')->toHtml(); ?>
+
         <div id="content" class="container-fluid">
             <div class="row">
                 <div class="col-sm-12">
@@ -53,6 +60,7 @@
                 </div>
             </div>
         </div>
+        <?php endif; ?>
     </section>
 
     <style type="text/css">
