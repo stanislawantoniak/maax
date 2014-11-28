@@ -164,8 +164,8 @@ class Zolago_Dropship_Vendor_SettingsController extends Zolago_Dropship_VendorCo
 
                 foreach (
                     array(
-                        'use_dhl', 'dhl_account','dhl_login', 'dhl_password','dhl_ecas','dhl_terminal',
-                        'use_orbaups', 'orbaups_account','orbaups_login', 'orbaups_password'
+                        'dhl_rma', 'dhl_rma_account','dhl_rma_login', 'dhl_rma_password',
+                        'orbaups_rma', 'orbaups_rma_account','orbaups_rma_login', 'orbaups_rma_password'
                     ) as $f) {
                     if (array_key_exists($f, $p)) {
                         $v->setData($f, $p[$f]);
