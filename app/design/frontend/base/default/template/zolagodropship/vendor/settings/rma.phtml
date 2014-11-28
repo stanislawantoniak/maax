@@ -1,13 +1,11 @@
 <?php
-$_hlp = Mage::helper('udropship');
-$_session = Mage::getSingleton('udropship/session');
-$_vendor = $_session->getVendor();
+$_vendor = $this->getVendor();
+$vendorPreferences = $this->getVendorPreferences();
 
 $dhlRma = $_vendor->getData('dhl_rma');
 $upsRma = $_vendor->getData('ups_rma');
 
-$vendorPreferences = Mage::getModel('zolagodropship/preferences');
-$vendorPreferences->load($_vendor->getVendorId(), 'vendor_id');
+
 
 ?>
 <div class="container">

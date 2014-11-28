@@ -1,11 +1,6 @@
 <?php
-$_hlp = Mage::helper('udropship');
-$_session = Mage::getSingleton('udropship/session');
-$_vendor = $_session->getVendor();
-//Zend_debug::dump($_vendor->getData());
-
-$vendorPreferences = Mage::getModel('zolagodropship/preferences');
-$vendorPreferences->load($_vendor->getVendorId(), 'vendor_id');
+$_vendor = $this->getVendor();
+$vendorPreferences = $this->getVendorPreferences();
 
 ?>
 <div class="container">
@@ -269,7 +264,7 @@ $vendorPreferences->load($_vendor->getVendorId(), 'vendor_id');
                             </label>
 
                             <div class="col-md-9">
-                                <input id="password" name="password" required value="<?php echo $_vendor->getPassword(); ?>" type="text" class="form-control"
+                                <input id="password" name="password" required value="<?php echo $_vendor->getPassword(); ?>" type="password" class="form-control"
                                        size="10">
                             </div>
                         </div>
@@ -279,7 +274,7 @@ $vendorPreferences->load($_vendor->getVendorId(), 'vendor_id');
                             </label>
 
                             <div class="col-md-9">
-                                <input id="password_repeat" name="password_repeat" value="" type="text"
+                                <input id="password_repeat" name="password_repeat" value="" type="password"
                                        class="form-control" size="10">
                             </div>
                         </div>

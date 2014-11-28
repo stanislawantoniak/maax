@@ -1,7 +1,7 @@
 <?php
-$_hlp = Mage::helper('udropship');
-$_session = Mage::getSingleton('udropship/session');
-$_vendor = $_session->getVendor();
+
+$_vendor = $this->getVendor();
+$vendorPreferences = $this->getVendorPreferences();
 
 $useDhl = $_vendor->getData('use_dhl');
 $useUps = $_vendor->getData('use_orbaups');
