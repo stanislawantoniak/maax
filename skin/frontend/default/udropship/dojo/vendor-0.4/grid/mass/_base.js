@@ -36,6 +36,7 @@ define([
 		_modal: null,
 		_storeId: null,
 		_currentRow: null,
+		_focusedCell: null,
 		
 		constructor: function(grid, saveUrl){
 			this._grid = grid;
@@ -49,6 +50,12 @@ define([
 		},
 		getProductIds: function(){
 			return this._productIds;
+		},
+		setFocusedCell: function(focusedCell){
+			this._focusedCell = focusedCell;
+		},
+		getFocusedCell: function(){
+			return this._focusedCell;
 		},
 		setStoreId: function(storeId){
 			this._storeId= storeId;
@@ -81,9 +88,17 @@ define([
 		},
 		_saveSuccess: function(response){
 			var grid = this.getGrid();
+			var self = this;
+			var column = self.getFocusedCell();
+			// Make a refresh
 			grid.refresh({keepScrollPosition: true}).then(function(){
+				// Make a focus
+				if(grid.focus && column){
+					grid.focus(grid.cell(column.row.id, column.column.id));
+				}
 				grid._updateHeaderCheckboxes();
 			});
+			// Restore selection
 			if(response.global){
 				grid.selectAll();
 			}else{
@@ -91,6 +106,7 @@ define([
 					grid.select(id);
 				});
 			}
+			
 			grid._updateHeaderCheckboxes();
 		},
 		_saveError: function(response){

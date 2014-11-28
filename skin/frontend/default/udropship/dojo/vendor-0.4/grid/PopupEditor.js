@@ -97,7 +97,7 @@ define([
 				this._getEditorPosition(cellObj, this.content)
 			);
 	
-			domClass.remove(this.content, "hidden")
+			domClass.remove(this.content, "hidden");
 			this.grid.focus(this.cell);
 			this.getField().focus();
 		},
@@ -208,6 +208,9 @@ define([
 		isOpen: function(){
 			return !domClass.contains(this.content, "hidden");
 		},
+		/**
+		 * @returns {Boolean}
+		 */
 		getCheckAll: function(){
 			return !!query("th.dgrid-selector input[aria-checked='true']", this.grid.domNode).length;
 		},

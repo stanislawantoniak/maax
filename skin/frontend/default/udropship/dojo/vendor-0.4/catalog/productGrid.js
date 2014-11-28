@@ -128,9 +128,21 @@ define([
 	// Formatters & renderes
 	////////////////////////////////////////////////////////////////////////////
 	
-	var thumbnailClickHandler = function(e){
-		var modal = jQuery("#product-image-popup"),
-			el = jQuery(this);
+	var thumbnailHandler = function(e){
+		
+		var el = jQuery(this);
+		
+		// Procss enter click on thumb - redirect to a
+		if(e instanceof KeyboardEvent){
+			if(e.keyCode!=13){
+				return;
+			}
+			el = jQuery(this).find("a");
+		}
+		
+		var node = el.parents("td");
+		
+		var modal = jQuery("#product-image-popup");
 	
 		if(!modal.length){
 			modal = jQuery('<div id="product-image-popup" class="modal fade in" role="dialog">\
@@ -152,11 +164,20 @@ define([
 			</div>').
 			appendTo(jQuery("body")); 
 		}
+		
 		modal.find(".modal-title").text(el.attr("title"));
 		modal.find(".modal-body").html(
 				jQuery("<img>").attr("src", el.attr("href"))
-		)
+		);
 		modal.modal("show");
+		
+		// focus cell after close modal
+		if(node.length){
+			modal.one("hidden.bs.modal", function(){
+				grid.focus(grid.cell(node[0]));
+			});
+		}
+		
 		e.preventDefault();
 	}
 		
@@ -167,18 +188,19 @@ define([
 	 * @returns {string}
 	 */
 	var rendererThumbnail = function (item, value, node, options){
-		var content;
-		
+		var content,
+			img;
 		if(item.thumbnail){
 			content = put("a", {
 				href:  item.thumbnail, 
 				title: item.name,
 				target: "_blank"
 			});
-			put(content, "img", {
+			img = put("img", {
 				src: item.thumbnail_url
 			});
-			on(content, "click", thumbnailClickHandler)
+			on(content, "click", thumbnailHandler)
+			on(node, "keydown", thumbnailHandler)
 		}else{
 			content = put("p", 
 				put("i", {className: "glyphicon glyphicon-ban-circle"})
@@ -190,6 +212,7 @@ define([
 		});
 		
 		put(node, content);
+		put(node, img);
 	};
 	
 	/**
@@ -203,8 +226,7 @@ define([
 		var column = this;
 		var timeout;
 		
-		node.title = value;
-		node.innerHTML = value;
+		jQuery(node).text(value); // faseter escape
 		
 		if(value===null || value===""){
 			return;
@@ -214,26 +236,17 @@ define([
 			container: "body", 
 			animation: false, 
 			placement: "top",
-			trigger: "manual"
-		});
-		
-		// Allow open only if editor is close
-		on(node, "mouseenter", function(){
-			var editor = grid.get("editors")[column.field];
-			if(editor instanceof PopupEditor && editor.isOpen()){
-				return;
+			delay: {"show": 1000, "hide": 0},
+			title: function(){
+				// Show only if editor closed
+				var editor = grid.get("editors")[column.field];
+				if(editor instanceof PopupEditor && editor.isOpen()){
+					return null;
+				}
+				return value;
 			}
-			clearTimeout(timeout);
-			timeout = setTimeout(function(){
-				jQuery(node).tooltip('show');
-			}, 1000);
 		});
 		
-		// Remove on click and mouse out
-		on(node, "mousedown,mouseleave", function(){
-			clearTimeout(timeout);
-			jQuery(node).tooltip('hide');
-		});
 	};
 	
 	/**
@@ -450,6 +463,8 @@ define([
 		req["attribute[" + field + "]"] = value;
 		req["attribute_mode[" + field + "]"] = e.mode;
 	
+		massAttribute.setFocusedCell(e.cell);
+	
 		massAttribute.send(req).then(function(){
 			e.deferred.resolve();
 		}, function(){
@@ -473,22 +488,30 @@ define([
 			editors[field] = new PopupEditor(column);
 			editors[field].on("save", handleSaveEditor);
 		}
-		
-		// Enter click
+		// Enter click - skip all keys except enter
 		if(e instanceof KeyboardEvent){
 			if(e.keyCode==13){
+				// Prevent click if editor focused before
+				// @todo investigate event flow
 				e.preventDefault();
+				hideAllEditors(false);
 			}else{
+				// Skip on other key
+				return;
+			}
+		// If mouse event was prevented (by ctrl + click) do not open an editor
+		// But hide other editor anyway
+		}else if (e instanceof MouseEvent){
+			hideAllEditors(false);
+			if(e.defaultPrevented || e.type=="click"){
 				return;
 			}
 		}
-		hideAllEditors(false);
-		
 		editors[field].open(cell, e);
 	}
 	
 	on(document.body, "click", function(e){
-		var el = jQuery(e.toElement);
+		var el = jQuery(e.target);
 		if(el.is(".editor") || el.parents(".editor").length || el.is(".editable")){
 			return;
 		}
@@ -509,6 +532,44 @@ define([
 			e.preventDefault();
 		}
 	});
+	
+	
+	
+	////////////////////////////////////////////////////////////////////////////
+	// Selection handling @todo move to Selection mixin
+	////////////////////////////////////////////////////////////////////////////
+	/**
+	 * @param {Evented} e
+	 * @returns {void}
+	 */
+	var toggleRowSelection = function(e){
+		var row  = grid.row(e);
+		if(grid.isSelected(row)){
+			grid.deselect(row);
+		}else{
+			grid.select(row);
+		}
+	}
+	/**
+	 * @param {Evented} e
+	 * @returns {void}
+	 */
+	var handleSelection = function(e){
+		// Skip selector column focuses
+		if(e instanceof KeyboardEvent){
+			if(domClass.contains(e.target, "dgrid-selector")){
+				return;
+			}
+			if(e.keyCode==32){
+				toggleRowSelection(e);
+			}
+		}else if(e instanceof MouseEvent){
+			if(e.metaKey){
+				toggleRowSelection(e);
+				e.preventDefault();
+			}
+		}
+	}
 	
 	////////////////////////////////////////////////////////////////////////////
 	// Mass actions
@@ -588,17 +649,9 @@ define([
 		
 		window.grid = grid = new PriceGrid(config, container);
 
-		// listen for selection via space
-		grid.on(".dgrid-row:keyup", function(e){
-			if(e.keyCode==32){
-				var row  = grid.row(e);
-				if(grid.isSelected(row)){
-					grid.deselect(row);
-				}else{
-					grid.select(row);
-				}
-			}
-		});
+		// listen for selection via space, ctrl + mouse
+		grid.on(".dgrid-row:keyup", handleSelection);
+		grid.on("td.dgrid-cell:click", handleSelection);
 		
 		// listen for selection
 		grid.on("dgrid-select", updateMassButton);
@@ -611,6 +664,7 @@ define([
 		
 		// listen for editable
 		grid.on("td.dgrid-cell.editable:click", handleColumnEdit);
+		grid.on("td.dgrid-cell.editable:dblclick", handleColumnEdit);
 		grid.on("td.dgrid-cell.editable.dgrid-focus:keydown", handleColumnEdit);
 		
 		registerMassactions(grid);
