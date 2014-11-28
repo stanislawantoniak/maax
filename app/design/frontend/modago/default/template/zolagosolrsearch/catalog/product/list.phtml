@@ -137,7 +137,7 @@ $_collection = $this->getCollection();
 
     grid.shuffle({throttleTime: 400, speed: 0, supported: false });
     grid.shuffle('update');
-    setTimeout(function(){console.log('log');grid.shuffle('update');}, 500);//sometimes with pushstate
+    setTimeout(function(){grid.shuffle('update');}, 500);//sometimes with pushstate
 
     jQuery(grid).on('layout.shuffle', function() {
         Mall.listing.likePriceView();
