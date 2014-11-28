@@ -298,6 +298,9 @@ $vendorPreferences = $this->getVendorPreferences();
         new Zolago.formIntegrator(form);
         form.validate({
             rules: {
+                password: {
+                    minlength: 6
+                },
                 password_repeat: {
                     equalTo: "#password"
                 },
@@ -322,6 +325,9 @@ $vendorPreferences = $this->getVendorPreferences();
                 administrator_telephone_mobile: "validate-telephone"
             },
             messages: {
+                password_repeat: {
+                    "equalTo" : "<?php echo $this->__("Please enter the same value again.")?>"
+                },
                 email: {
                     "email" : "<?php echo $this->__("Please enter a valid email address. For example johndoe@domain.com.")?>"
                 },
@@ -332,7 +338,9 @@ $vendorPreferences = $this->getVendorPreferences();
                 contact_email: {
                     "email" : "<?php echo $this->__("Please enter a valid email address. For example johndoe@domain.com.")?>"
                 },
-
+                password: {
+                    "minlength" : "<?php echo $this->__("Password needs to have at least %s characters", Mage::helper("zolagocustomer")->getPasswordMinLength()); ?>"
+                },
                 tax_no: {
                     "validate-nip" : "<?php echo $this->__("Tax number is incorrect. Enter as a string of digits e.g. 1234567890.")?>"
                 },
