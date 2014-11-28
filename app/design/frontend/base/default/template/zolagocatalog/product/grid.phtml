@@ -1,5 +1,5 @@
 <?php /* @var $this Zolago_Catalog_Block_Vendor_Product_Grid*/?>
-
+<?php $_hlp = Mage::helper("zolagocatalog");?>
 <div class="container" id="content-wrapper">
 	<div id="grid-holder"></div>
 </div>
@@ -238,7 +238,10 @@
 	#grid-holder .editor select[multiple]{
 		max-height: 90px;
 	}
-	
+	#grid-holder .editor .close.disabled:hover{
+		opacity: 0.2 !important;
+		cursor: default !important;
+	}
 	
 	/** Fix tooltip **/
 	.tooltip-inner{

@@ -35,6 +35,7 @@ define([
 	
 	var grid,store,
 		massAttribute,
+		editDbClick = false, // Congiure click type
 		massUrl = "/udprod/vendor_product/mass",
 		resetFilters = query("#remove-filters")[0],
 		switcher = query("#attribute_set_id")[0],
@@ -503,7 +504,7 @@ define([
 		// But hide other editor anyway
 		}else if (e instanceof MouseEvent){
 			hideAllEditors(false);
-			if(e.defaultPrevented || e.type=="click"){
+			if(e.defaultPrevented || (editDbClick && e.type=="click")){
 				return;
 			}
 		}
@@ -663,8 +664,10 @@ define([
 		grid.on("dgrid-refresh-complete", updateMassButton);
 		
 		// listen for editable
+		if(editDbClick){
+			grid.on("td.dgrid-cell.editable:dblclick", handleColumnEdit);
+		}
 		grid.on("td.dgrid-cell.editable:click", handleColumnEdit);
-		grid.on("td.dgrid-cell.editable:dblclick", handleColumnEdit);
 		grid.on("td.dgrid-cell.editable.dgrid-focus:keydown", handleColumnEdit);
 		
 		registerMassactions(grid);
