@@ -489,4 +489,41 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
         }
         return 0;
     }
+
+    public function getSolrRealQ() {
+        /** @var Zolago_Solrsearch_Model_Solr $model */
+//        $model = Mage::getModel('zolagosolrsearch/solr');
+//        $data = Mage::registry($model::REGISTER_KEY);
+//        if(empty($data)) {
+//            return '';
+//        } else {
+//            return $data['responseHeader']['params']['q'];
+//        }
+//        var_dump(Mage::helper('solrsearch')->getParam('q'));
+
+//        return Mage::helper('solrsearch')->getParam('q');
+
+        /** @var Zolago_Solrsearch_Model_Solr $model */
+        $model = Mage::getModel('zolagosolrsearch/solr');
+        $data = Mage::registry($model::REGISTER_KEY . "_search_real_q");
+        if(empty($data)) {
+            return '';
+        } else {
+            return $data;
+        }
+    }
+
+    /**
+     * @return boolean|null
+     */
+    public function getIsNoResult() {
+        /** @var Zolago_Solrsearch_Model_Solr $model */
+        $model = Mage::getModel('zolagosolrsearch/solr');
+        $data = Mage::registry($model::REGISTER_KEY . "_search_is_no_result");
+        if(empty($data)) {
+            return false;
+        } else {
+            return $data;
+        }
+    }
 }
