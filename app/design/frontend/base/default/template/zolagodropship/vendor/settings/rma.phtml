@@ -287,11 +287,23 @@ $upsRma = $_vendor->getData('ups_rma');
                     required: true,
                     email: true
                 },
-                zip: "postcodeWithReplace"
+                zip: "postcodeWithReplace",
+                rma_telephone: "validate-telephone",
+                rma_executive_telephone: "validate-telephone",
+                rma_executive_telephone_mobile: "validate-telephone"
             },
             messages: {
                 zip : {
                     'postcodeWithReplace': "<?php echo $this->__("Invalid zip-cod. Zip-code should include 5 numbers in XX-XXX format."); ?>"
+                },
+                rma_telephone: {
+                    "validate-telephone": "<?php echo $this->__("Telephone number is too short. Number must contain 9 digits, without spacing."); ?>"
+                },
+                rma_executive_telephone: {
+                    "validate-telephone": "<?php echo $this->__("Telephone number is too short. Number must contain 9 digits, without spacing."); ?>"
+                },
+                rma_executive_telephone_mobile: {
+                    "validate-telephone": "<?php echo $this->__("Telephone number is too short. Number must contain 9 digits, without spacing."); ?>"
                 }
             }
         });

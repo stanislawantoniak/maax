@@ -160,6 +160,16 @@ jQuery.validator.addMethod("postcodeWithReplace", function(value, elem, params){
     return test;
 
 }, "Invalid zip-cod. Zip-code should include 5 numbers in XX-XXX format.");
+
+
+
+jQuery.validator.addMethod("validate-telephone", function(value, elem, params){
+
+    return this.optional(elem) || value.replace(/\D/g,"").length >= 9; //9 digits
+
+}, "Telephone number is too short. Number must contain 9 digits, without spacing.");
+
+
 jQuery.validator.addMethod("validate-postcode", function(value, elem, params){
 
     value = value.replace(/\D/g, "");

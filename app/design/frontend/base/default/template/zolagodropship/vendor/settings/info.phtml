@@ -313,7 +313,12 @@ $vendorPreferences = $this->getVendorPreferences();
                     email: true
                 },
                 billing_zip: "postcodeWithReplace",
-                tax_no: "validate-nip"
+                tax_no: "validate-nip",
+                contact_telephone: "validate-telephone",
+                executive_telephone: "validate-telephone",
+                executive_telephone_mobile: "validate-telephone",
+                administrator_telephone: "validate-telephone",
+                administrator_telephone_mobile: "validate-telephone"
             },
             messages: {
                 tax_no: {
@@ -321,6 +326,21 @@ $vendorPreferences = $this->getVendorPreferences();
                 },
                 billing_zip : {
                     'postcodeWithReplace': "<?php echo $this->__("Invalid zip-cod. Zip-code should include 5 numbers in XX-XXX format."); ?>"
+                },
+                contact_telephone: {
+                    "validate-telephone": "<?php echo $this->__("Telephone number is too short. Number must contain 9 digits, without spacing."); ?>"
+                },
+                executive_telephone: {
+                    "validate-telephone": "<?php echo $this->__("Telephone number is too short. Number must contain 9 digits, without spacing."); ?>"
+                },
+                executive_telephone_mobile: {
+                    "validate-telephone": "<?php echo $this->__("Telephone number is too short. Number must contain 9 digits, without spacing."); ?>"
+                },
+                administrator_telephone: {
+                    "validate-telephone": "<?php echo $this->__("Telephone number is too short. Number must contain 9 digits, without spacing."); ?>"
+                },
+                administrator_telephone_mobile: {
+                    "validate-telephone": "<?php echo $this->__("Telephone number is too short. Number must contain 9 digits, without spacing."); ?>"
                 }
             }
         });
