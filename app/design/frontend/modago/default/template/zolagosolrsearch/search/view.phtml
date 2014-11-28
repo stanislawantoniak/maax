@@ -1,4 +1,7 @@
-<!--tutaj kolumna i produkty-->
+<?php
+$_helperZSS = Mage::helper('zolagosolrsearch');
+?>
+
 
 <?php if($this->isContentMode()): ?>
     <?php //echo $this->getChildHtml('banner_result_title'); ?>
@@ -36,20 +39,26 @@
     <section id="main" class="<?php echo $this->getElementClass(); ?>">
 
         <?php echo $this->getChildHtml('solrsearch_result_title'); ?>
-        <?php echo $this->getChildHtml('solrsearch_product_list_activefaces'); ?>
-        <?php echo $this->getChildHtml('solrsearch_product_list_toolbar'); ?>
-        <div id="content" class="container-fluid">
-            <div class="row">
-                <div class="col-sm-12">
-                    <div id="sidebar" class="hidden-xs">
-                        <?php echo $this->getChildHtml('searchFaces'); ?>
-                    </div>
-                    <div id="content-main">
-                        <?php echo $this->getProductListHtml() ?>
+
+        <?php if ($_helperZSS->getNumFound()): ?>
+
+            <?php echo Mage::app()->getLayout()->createBlock('zolagosolrsearch/active')->setBlockId('solrsearch_product_list_active')->toHtml(); ?>
+            <?php echo Mage::app()->getLayout()->createBlock('zolagosolrsearch/catalog_product_list_toolbar')->setBlockId('solrsearch_product_list_toolbar')->toHtml(); ?>
+
+            <div id="content" class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div id="sidebar" class="hidden-xs">
+                            <?php echo $this->getChildHtml('searchFaces'); ?>
+                        </div>
+                        <div id="content-main">
+                            <?php //echo $this->getProductListHtml() ?>
+                            <?php echo Mage::app()->getLayout()->createBlock('zolagosolrsearch/catalog_product_list')->setBlockId('solrsearch_product_list')->setTemplate('zolagosolrsearch/catalog/product/list.phtml')->toHtml(); ?>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        <?php endif; ?>
     </section>
 
     <style type="text/css">

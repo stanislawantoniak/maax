@@ -11,7 +11,7 @@ class Zolago_Solrsearch_IndexController extends SolrBridge_Solrsearch_IndexContr
 	public function indexAction()
 	{
 		$baseUrl = Mage::helper('zolagodropshipmicrosite')->getBaseUrl();
-		
+
     	$params = $this->getRequest()->getParams();
 
 		// Set root category if in the vendor context
@@ -39,12 +39,12 @@ class Zolago_Solrsearch_IndexController extends SolrBridge_Solrsearch_IndexContr
 				if(isset($params['is_search'])){
 					Mage::register('is_current_category_context', TRUE);
 				}
+                $search_category = Mage::getModel('catalog/category')->load($params['scat']);
+                Mage::register('current_category', $search_category);
+		    }
 
-			}
-            $search_category = Mage::getModel('catalog/category')->load($params['scat']);
-            Mage::register('current_category', $search_category);
 		}
-		
+
 		//Redirect to Url set for the search term
 		$query = Mage::helper('catalogsearch')->getQuery();
 		$query->setStoreId(Mage::app()->getStore()->getId());
@@ -54,7 +54,8 @@ class Zolago_Solrsearch_IndexController extends SolrBridge_Solrsearch_IndexContr
 				->setIsActive(1)
 				->setIsProcessed(1);
 			}
-			else {
+			else
+            {
 				if ($query->getId()) {
 					$query->setPopularity($query->getPopularity()+1);
 				}
@@ -108,18 +109,29 @@ class Zolago_Solrsearch_IndexController extends SolrBridge_Solrsearch_IndexContr
     	$solrModel = Mage::getModel('solrsearch/solr');
 
     	$solrData = $solrModel->queryRegister($queryText);
+
+//        var_dump($solrData);
+
     	Mage::register('solrbridge_loaded_solr', $solrModel);
 
 		if( isset($solrData['responseHeader']['params']['q']) && !empty($solrData['responseHeader']['params']['q']) ) {
-        	if ($queryText != $solrData['responseHeader']['params']['q']) {
-        		$queryText = $solrData['responseHeader']['params']['q'];
 
-        		//Redirect to Url set for the search term
+            Mage::register($solrModel::REGISTER_KEY . "_search_real_q", $solrData['responseHeader']['params']['q']);
+
+            $isNoResult = $solrData['response']['numFound'] ? true : false;
+            Mage::register($solrModel::REGISTER_KEY . "_search_is_no_result", $isNoResult);
+
+        	if ($queryText != $solrData['responseHeader']['params']['q']) {
+        		$queryText = $solrData['responseHeader']['params']['q']; //poniewaz moze byc ulepszone np: baleron zamieni na baleriny
+
+
+
+                //Redirect to Url set for the search term
         		$query = Mage::helper('catalogsearch')->getQuery();
         		$query->setStoreId(Mage::app()->getStore()->getId());
         		$query = $query->loadByQuery($queryText);
         		if ($query->getQueryText() != '') {
-        			if ($query->getRedirect()){
+                    if ($query->getRedirect()){
         				$this->getResponse()->setRedirect($query->getRedirect());
         				return;
         			}

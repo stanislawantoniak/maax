@@ -1,10 +1,8 @@
 <?php class Zolago_Solrsearch_Block_Search_View extends Mage_Core_Block_Template {
 
-
-
     public function _construct() {
         parent::_construct();
-        $this->setTemplate("zolagosolrsearch/catalog/category/view.phtml");
+        $this->setTemplate("zolagosolrsearch/search/view.phtml");
     }
 
     protected function _prepareLayout() {
@@ -50,7 +48,8 @@
 
     public function getCurrentCategory() {
         if (!$this->hasData('current_category')) {
-            $this->setData('current_category', Mage::registry('current_category'));
+            $curr = Mage::registry('current_category');
+            $this->setData('current_category', !empty( $curr ) ? Mage::registry('current_category') : Mage::helper("zolagodropshipmicrosite")->getVendorRootCategoryObject());
         }
         return $this->getData('current_category');
 
@@ -72,7 +71,6 @@
     }
     public function getProductListHtml()
     {
-        return $this->getChildHtml('zolagocatalog_breadcrumbs'). $this->getChildHtml('solrsearch_product_list');
+        return $this->getChildHtml('solrsearch_product_list');
     }
-
 }
