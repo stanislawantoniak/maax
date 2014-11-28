@@ -213,27 +213,17 @@ define([
 			container: "body", 
 			animation: false, 
 			placement: "top",
-			trigger: "manual",
-			title: value
-		});
-		
-		// Allow open only if editor is close
-		on(node, "mouseenter", function(){
-			var editor = grid.get("editors")[column.field];
-			if(editor instanceof PopupEditor && editor.isOpen()){
-				return;
+			delay: {"show": 1000, "hide": 0},
+			title: function(){
+				// Show only if editor closed
+				var editor = grid.get("editors")[column.field];
+				if(editor instanceof PopupEditor && editor.isOpen()){
+					return null;
+				}
+				return value;
 			}
-			clearTimeout(timeout);
-			timeout = setTimeout(function(){
-				jQuery(node).tooltip('show');
-			}, 1000);
 		});
 		
-		// Remove on click and mouse out
-		on(node, "mousedown,mouseleave", function(){
-			clearTimeout(timeout);
-			jQuery(node).tooltip('hide');
-		});
 	};
 	
 	/**
