@@ -1116,11 +1116,6 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 	 */
     public function getFacesUrl($params=array(), $paramss = NULL)
     {
-//        print_r($this->getUrlRoute());
-//        echo "\n";
-//        print_r($this->_parseQueryData($params, $paramss));
-//        echo "\n";
-
         return Mage::getUrl($this->getUrlRoute(), $this->_parseQueryData($params, $paramss));
 	}
 	
