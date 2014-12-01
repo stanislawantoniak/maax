@@ -1,6 +1,6 @@
 <?php
-$_vendor = $this->getVendor();
-$vendorPreferences = $this->getVendorPreferences();
+$_session = Mage::getSingleton('udropship/session');
+$_vendor = $_session->getVendor();
 
 $dhlRma = $_vendor->getData('dhl_rma');
 $upsRma = $_vendor->getData('orbaups_rma');
@@ -30,7 +30,7 @@ $upsRma = $_vendor->getData('orbaups_rma');
                                     <span class="required">*</span>
                                 </label>
                                 <div class="col-md-9">
-                                    <input id="company_name" name="company_name" required value="<?php echo $vendorPreferences->getData('company_name'); ?>" type="text" class="form-control" size="10">
+                                    <input id="company_name" name="company_name" required value="<?php echo $_vendor->getData('company_name'); ?>" type="text" class="form-control" size="10">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -77,7 +77,7 @@ $upsRma = $_vendor->getData('orbaups_rma');
                                 <span class="required">*</span>
                             </label>
                             <div class="col-md-9">
-                                <input id="rma_email" name="rma_email" required value="<?php echo $vendorPreferences->getData('rma_email'); ?>" type="text" class="form-control" size="10">
+                                <input id="rma_email" name="rma_email" required value="<?php echo $_vendor->getData('rma_email'); ?>" type="text" class="form-control" size="10">
                             </div>
                         </div>
                         <div class="form-group">
@@ -86,7 +86,7 @@ $upsRma = $_vendor->getData('orbaups_rma');
                                 <span class="required">*</span>
                             </label>
                             <div class="col-md-9">
-                                <input id="rma_telephone" name="rma_telephone" required value="<?php echo $vendorPreferences->getData('rma_telephone'); ?>" type="text" class="form-control" size="10">
+                                <input id="rma_telephone" name="rma_telephone" required value="<?php echo $_vendor->getData('rma_telephone'); ?>" type="text" class="form-control" size="10">
                             </div>
                         </div>
                     </div>
@@ -104,7 +104,7 @@ $upsRma = $_vendor->getData('orbaups_rma');
                                 <span class="required">*</span>
                             </label>
                             <div class="col-md-9">
-                                <input id="rma_executive_firstname" name="rma_executive_firstname" required value="<?php echo $vendorPreferences->getData('rma_executive_firstname'); ?>" type="text" class="form-control" size="10">
+                                <input id="rma_executive_firstname" name="rma_executive_firstname" required value="<?php echo $_vendor->getData('rma_executive_firstname'); ?>" type="text" class="form-control" size="10">
                             </div>
                         </div>
                         <div class="form-group">
@@ -113,7 +113,7 @@ $upsRma = $_vendor->getData('orbaups_rma');
                                 <span class="required">*</span>
                             </label>
                             <div class="col-md-9">
-                                <input id="rma_executive_lastname" name="rma_executive_lastname" required value="<?php echo $vendorPreferences->getData('rma_executive_lastname'); ?>" type="text" class="form-control" size="10">
+                                <input id="rma_executive_lastname" name="rma_executive_lastname" required value="<?php echo $_vendor->getData('rma_executive_lastname'); ?>" type="text" class="form-control" size="10">
                             </div>
                         </div>
                         <div class="form-group">
@@ -122,7 +122,7 @@ $upsRma = $_vendor->getData('orbaups_rma');
                                 <span class="required">*</span>
                             </label>
                             <div class="col-md-9">
-                                <input id="rma_executive_telephone" name="rma_executive_telephone" required value="<?php echo $vendorPreferences->getData('rma_executive_telephone'); ?>" type="text" class="form-control" size="10">
+                                <input id="rma_executive_telephone" name="rma_executive_telephone" required value="<?php echo $_vendor->getData('rma_executive_telephone'); ?>" type="text" class="form-control" size="10">
                             </div>
                         </div>
                         <div class="form-group">
@@ -131,7 +131,7 @@ $upsRma = $_vendor->getData('orbaups_rma');
                                 <span class="required">*</span>
                             </label>
                             <div class="col-md-9">
-                                <input id="rma_executive_telephone_mobile" name="rma_executive_telephone_mobile" required value="<?php echo $vendorPreferences->getData('rma_executive_telephone_mobile'); ?>" type="text" class="form-control" size="10">
+                                <input id="rma_executive_telephone_mobile" name="rma_executive_telephone_mobile" required value="<?php echo $_vendor->getData('rma_executive_telephone_mobile'); ?>" type="text" class="form-control" size="10">
                             </div>
                         </div>
                         <div class="form-group">
@@ -140,7 +140,7 @@ $upsRma = $_vendor->getData('orbaups_rma');
                                 <span class="required">*</span>
                             </label>
                             <div class="col-md-9">
-                                <input id="rma_executive_email" name="rma_executive_email" required value="<?php echo $vendorPreferences->getData('rma_executive_email'); ?>" type="text" class="form-control" size="10">
+                                <input id="rma_executive_email" name="rma_executive_email" required value="<?php echo $_vendor->getData('rma_executive_email'); ?>" type="text" class="form-control" size="10">
                             </div>
                         </div>
                     </div>

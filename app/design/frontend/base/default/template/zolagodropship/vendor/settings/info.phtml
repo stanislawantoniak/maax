@@ -1,7 +1,6 @@
 <?php
-$_vendor = $this->getVendor();
-$vendorPreferences = $this->getVendorPreferences();
-
+$_session = Mage::getSingleton('udropship/session');
+$_vendor = $_session->getVendor();
 ?>
 <div class="container">
     <!--=== Page Header ===-->
@@ -31,10 +30,11 @@ $vendorPreferences = $this->getVendorPreferences();
                             </label>
 
                             <div class="col-md-9">
-                                <input id="company_name" name="company_name" value="<?php echo $vendorPreferences->getData('company_name'); ?>" type="text" required
+                                <input id="company_name" name="company_name" value="<?php echo $_vendor->getCompanyName(); ?>" type="text" required
                                        class="form-control" size="10">
                             </div>
                         </div>
+
                         <div class="form-group">
                             <label for="billing_street" class="col-md-3 control-label">
                                 <?php echo Mage::helper("zolagodropship")->__("Street and Number"); ?>
@@ -75,7 +75,7 @@ $vendorPreferences = $this->getVendorPreferences();
                             </label>
 
                             <div class="col-md-9">
-                                <input id="tax_no" name="tax_no" value="<?php echo $vendorPreferences->getData('tax_no'); ?>" required type="text" class="form-control"
+                                <input id="tax_no" name="tax_no" value="<?php echo $_vendor->getTaxNo(); ?>" required type="text" class="form-control"
                                        size="10">
                             </div>
                         </div>
@@ -99,7 +99,7 @@ $vendorPreferences = $this->getVendorPreferences();
                             </label>
 
                             <div class="col-md-9">
-                                <input id="www" name="www" value="<?php echo $vendorPreferences->getData('www'); ?>" type="text" class="form-control" size="10">
+                                <input id="www" name="www" value="<?php echo $_vendor->getWww(); ?>" type="text" class="form-control" size="10">
                             </div>
                         </div>
                         <div class="form-group">
@@ -108,7 +108,7 @@ $vendorPreferences = $this->getVendorPreferences();
                             </label>
 
                             <div class="col-md-9">
-                                <input id="contact_email" name="contact_email" value="<?php echo $vendorPreferences->getData('contact_email'); ?>" type="text" class="form-control" size="10">
+                                <input id="contact_email" name="contact_email" value="<?php echo $_vendor->getContactEmail(); ?>" type="text" class="form-control" size="10">
                             </div>
                         </div>
                         <div class="form-group">
@@ -117,7 +117,7 @@ $vendorPreferences = $this->getVendorPreferences();
                             </label>
 
                             <div class="col-md-9">
-                                <input id="contact_telephone" name="contact_telephone" value="<?php echo $vendorPreferences->getData('contact_telephone'); ?>" type="text" class="form-control" size="10">
+                                <input id="contact_telephone" name="contact_telephone" value="<?php echo $_vendor->getData('contact_telephone'); ?>" type="text" class="form-control" size="10">
                             </div>
                         </div>
                     </div>
@@ -140,7 +140,7 @@ $vendorPreferences = $this->getVendorPreferences();
                             </label>
 
                             <div class="col-md-9">
-                                <input id="executive_firstname" name="executive_firstname" required value="<?php echo $vendorPreferences->getData('executive_firstname'); ?>" type="text"
+                                <input id="executive_firstname" name="executive_firstname" required value="<?php echo $_vendor->getData('executive_firstname'); ?>" type="text"
                                        class="form-control" size="10">
                             </div>
                         </div>
@@ -151,7 +151,7 @@ $vendorPreferences = $this->getVendorPreferences();
                             </label>
 
                             <div class="col-md-9">
-                                <input id="executive_lastname" name="executive_lastname" required value="<?php echo $vendorPreferences->getData('executive_lastname'); ?>" type="text"
+                                <input id="executive_lastname" name="executive_lastname" required value="<?php echo $_vendor->getData('executive_lastname'); ?>" type="text"
                                        class="form-control" size="10">
                             </div>
                         </div>
@@ -162,7 +162,7 @@ $vendorPreferences = $this->getVendorPreferences();
                             </label>
 
                             <div class="col-md-9">
-                                <input id="executive_telephone" name="executive_telephone" required value="<?php echo $vendorPreferences->getData('executive_telephone'); ?>" type="text"
+                                <input id="executive_telephone" name="executive_telephone" required value="<?php echo $_vendor->getData('executive_telephone'); ?>" type="text"
                                        class="form-control" size="10">
                             </div>
                         </div>
@@ -173,7 +173,7 @@ $vendorPreferences = $this->getVendorPreferences();
                             </label>
 
                             <div class="col-md-9">
-                                <input id="executive_telephone_mobile" name="executive_telephone_mobile" required value="<?php echo $vendorPreferences->getData('executive_telephone_mobile'); ?>"
+                                <input id="executive_telephone_mobile" name="executive_telephone_mobile" required value="<?php echo $_vendor->getData('executive_telephone_mobile'); ?>"
                                        type="text" class="form-control" size="10">
                             </div>
                         </div>
@@ -208,7 +208,7 @@ $vendorPreferences = $this->getVendorPreferences();
                             </label>
 
                             <div class="col-md-9">
-                                <input id="administrator_firstname" name="administrator_firstname" required value="<?php echo $vendorPreferences->getData('administrator_firstname'); ?>"
+                                <input id="administrator_firstname" name="administrator_firstname" required value="<?php echo $_vendor->getData('administrator_firstname'); ?>"
                                        type="text" class="form-control" size="10">
                             </div>
                         </div>
@@ -219,7 +219,7 @@ $vendorPreferences = $this->getVendorPreferences();
                             </label>
 
                             <div class="col-md-9">
-                                <input id="administrator_lastname" name="administrator_lastname" required value="<?php echo $vendorPreferences->getData('administrator_lastname'); ?>"
+                                <input id="administrator_lastname" name="administrator_lastname" required value="<?php echo $_vendor->getData('administrator_lastname'); ?>"
                                        type="text" class="form-control" size="10">
                             </div>
                         </div>
@@ -230,7 +230,7 @@ $vendorPreferences = $this->getVendorPreferences();
                             </label>
 
                             <div class="col-md-9">
-                                <input id="administrator_telephone" name="administrator_telephone" required value="<?php echo $vendorPreferences->getData('administrator_telephone'); ?>"
+                                <input id="administrator_telephone" name="administrator_telephone" required value="<?php echo $_vendor->getData('administrator_telephone'); ?>"
                                        type="text" class="form-control" size="10">
                             </div>
                         </div>
@@ -242,7 +242,7 @@ $vendorPreferences = $this->getVendorPreferences();
 
                             <div class="col-md-9">
                                 <input id="administrator_telephone_mobile" name="administrator_telephone_mobile" required
-                                       value="<?php echo $vendorPreferences->getData('administrator_telephone_mobile'); ?>" type="text" class="form-control" size="10">
+                                       value="<?php echo $_vendor->getData('administrator_telephone_mobile'); ?>" type="text" class="form-control" size="10">
                             </div>
                         </div>
                         <div class="form-group">
