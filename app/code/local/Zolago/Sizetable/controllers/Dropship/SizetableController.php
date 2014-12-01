@@ -31,7 +31,7 @@ class Zolago_Sizetable_Dropship_SizetableController extends Zolago_Dropship_Cont
 		$this->render();
 	}
 
-	/**
+	/**git
 	 * Create new sizetable or edit existing one action
 	 * @return Mage_Core_Controller_Varien_Action
 	 */

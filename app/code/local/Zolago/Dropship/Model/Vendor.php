@@ -8,7 +8,7 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
 
     protected function _getPreferences()
     {
-        if ($this->_preferences == 0) {
+        if (!is_null($this->_preferences)) {
             $vendorPreferences = Mage::getModel('zolagodropship/preferences');
             $vendorPreferences->load($this->getVendorId(), 'vendor_id');
 
@@ -33,7 +33,9 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
         ) {
 
             $preferences = $this->_getPreferences();
-            $this->addData($preferences->getData());
+	        if(!is_null($preferences)) {
+		        $this->addData($preferences->getData());
+	        }
         }
         return parent::getData($key, $index);
     }
