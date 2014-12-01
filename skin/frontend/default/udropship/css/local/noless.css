@@ -139,3 +139,308 @@
 #basicModal .row, #editModal .row {
     margin: 10px auto;
 }
+
+/******************************************************************************
+ * Dojo grid 
+ ******************************************************************************/
+
+#grid-holder{
+	height: 600px;
+}
+
+
+#grid-holder .field-expander,
+#grid-holder .field-selector{
+		width: 25px;
+		text-align: center;
+	}
+#grid-holder .ui-state-default {
+	border:0;
+}
+
+
+#grid-holder .collapsed .expando {
+	display: none;
+}
+#grid-holder .dgrid-sort-arrow {
+	margin:0;
+}
+#grid-holder .text-overflow,
+#grid-holder th.dgrid-cell{
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+#grid-holder td.editable {
+	font-weight: bold;
+}
+#grid-holder td.editable.popup-trigger,
+#grid-holder .expando td.editable
+{
+	font-weight: normal;
+}
+#grid-holder td.editable.popup-trigger{
+	color: #4d7496;
+}
+#grid-holder td.editable.popup-trigger:hover{
+	text-decoration: underline;
+}
+#grid-holder .dgrid-row:hover td.editable.popup-trigger{
+	color: #000
+}
+#grid-holder  .align-right {
+	text-align: right;
+}
+#grid-holder  .align-center {
+	text-align: center;
+}
+#grid-holder  .column-short {
+	width: 60px;
+}
+#grid-holder  .column-medium {
+	width: 100px;
+}
+#grid-holder  .column-long {
+	width: 150px;
+}
+#grid-holder  .field-name {
+	width: 250px;
+}
+
+#grid-holder .dgrid-no-data span,
+#grid-holder .dgrid-loading span{
+   position: absolute;
+   top: 50%;
+   width: 100%;
+   margin-top: -5px;
+   color: #aaa;
+   text-align: center;
+}
+
+#grid-holder .filterable input,
+#grid-holder .filterable select{
+	border: 1px #ddd solid;
+	background: #fff;
+	height: 20px;
+	display: block;
+	width: 100%;
+	padding: 0px !important;
+}
+
+#grid-holder .filterable .range-field{
+	display: inline-block;
+	width: 49.5%;
+}
+#grid-holder .filterable .range-field-from{
+	margin-right: 1%;
+}
+
+#grid-holder .expando {
+	/* style of area containing summary, expanded on click */
+	background: #f9f9f9;
+	border-bottom: 1px #ddd solid;
+	font-size: 11px;
+}
+
+#grid-holder .dgrid-row:hover .expando,
+#grid-holder .dgrid-selected .expando {
+	/* style of area containing summary, expanded on click */
+	background: #F1F4F9;
+	
+}
+
+#grid-holder .expando{
+	display: table;
+	width: 100%;
+}
+#grid-holder .expando > div{
+	display: table-cell;
+	width: 50%;
+}
+#grid-holder div.sub-row-left{
+	border-right: 1px #dddddd solid;
+}
+#grid-holder .table-subrow{
+	margin:  0 !important;
+	border-collapse: collapse;
+	border: none;
+	empty-cells: show;
+}
+#grid-holder .table-subrow input[type="checkbox"]{
+	margin-top: 0 !important;
+}
+
+#grid-holder .table-subrow td{
+	padding: 4px 6px 2px 6px;
+}
+#grid-holder .table-subrow tr.header-row td{
+	font-weight: bold;
+}
+#grid-holder .table-subrow tr:first-child td{
+	table-layout: fixed;
+	border-top:0;
+}
+#grid-holder .table-subrow tr td.sub-checkbox {
+	text-align: center;
+	width: 25px;
+	padding-left: 8px;
+	padding-right: 8px;
+}
+#grid-holder .sub-row-pos,
+#grid-holder .sub-row-loading
+{
+	display: block;
+	padding: 1px 2px;
+	
+}
+
+#grid-holder .sub-row-actions
+{
+	padding: 4px 6px;
+	
+}
+
+#grid-holder .sub-row-actions a{
+	display: inline-block;
+	margin-right: 10px;
+}
+
+#grid-holder .campaign-date{
+	width: 250px;
+}
+
+/******************************************************************************
+ * Modal 
+ ******************************************************************************/
+
+.price-modal table{
+	table-layout: fixed;
+}
+.price-modal tbody td{
+	text-align: right;
+	color: #999;
+}
+.price-modal .minimal-price td{
+	font-weight: bold;
+}
+.price-modal .minimal-price td.caption{
+	text-align: left;
+}
+.price-modal tbody td.effective-price{
+	color: #468847;
+	font-weight:bold;
+}
+
+.price-modal tbody td.option-text,
+.price-modal tbody td.price-deviation{
+	color: inherit;
+}
+.price-modal tbody td.option-text,
+.price-modal tbody td.price-deviation{
+	text-align: left;
+}
+.price-modal table .price-deviation{
+	padding-top:4px;
+	padding-bottom:3px;
+}
+.price-modal table .price-deviation input{
+	height: 20px;
+	padding: 0 2px !important;
+}
+.help-block{
+	color: inherit;
+}
+
+.price-modal .help-block{
+	font-weight: bold;
+}
+
+.price-modal .form-group{
+	margin:0 !important;
+	border:0 !important;
+	padding:0 15px !important;
+}
+
+/* Bootstrap responsive text-align */
+.text-xs-left {
+	text-align: left;
+}
+.text-xs-right {
+	text-align: right;
+}
+.text-xs-center {
+	text-align: center;
+}
+.text-xs-justify {
+	text-align: justify;
+}
+@media (min-width: 768px) {
+	.text-sm-left {
+		text-align: left;
+	}
+	.text-sm-right {
+		text-align: right;
+	}
+	.text-sm-center {
+		text-align: center;
+	}
+	.text-sm-justify {
+		text-align: justify;
+	}
+}
+@media (min-width: 992px) {
+	.text-md-left {
+		text-align: left;
+	}
+	.text-md-right {
+		text-align: right;
+	}
+	.text-md-center {
+		text-align: center;
+	}
+	.text-md-justify {
+		text-align: justify;
+	}
+}
+@media (min-width: 1200px) {
+	.text-lg-left {
+		text-align: left;
+	}
+	.text-lg-right {
+		text-align: right;
+	}
+	.text-lg-center {
+		text-align: center;
+	}
+	.text-lg-justify {
+		text-align: justify;
+	}
+}
+
+/* bootstrap centered columns */
+.row-centered {
+	text-align:center;
+}
+.col-centered {
+	display:inline-block;
+	float:none;
+	/* reset the text-align */
+	text-align:left;
+	/* inline-block space fix */
+	margin-right:-4px;
+}
+
+/* vendor register form */
+@media (min-width: 982px) {
+	#vendor-register-row, #login-vendor {
+		margin-top: 70px !important;
+	}
+}
+@media (max-width: 981px) {
+	#vendor-register-row, #login-vendor {
+		margin-top: 20px !important;
+	}
+
+}
+#vendor_contact .control-label {
+    text-align: right;
+}

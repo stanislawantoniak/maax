@@ -1,4 +1,4 @@
-<?php
+ <?php
 /**
  * Class Zolago_Catalog_Model_Observer
  *
@@ -15,16 +15,27 @@ class Zolago_Catalog_Model_Observer
         $fieldset->addField('column_width', 'text', array(
             'name' => 'column_width',
             'label' => Mage::helper('catalog')->__('Column width (px)'),
-            'title' => Mage::helper('catalog')->__('Column width (px)')
+            'title' => Mage::helper('catalog')->__('Column width (px)'),
+            'class' => 'validate-digits',
         ));
     }
-
+    public function addColumnAttributeOrder(Varien_Event_Observer $observer)
+    {
+        $fieldset = $observer->getForm()->getElement('front_fieldset');
+        $fieldset->addField('column_attribute_order', 'text', array(
+            'name' => 'column_attribute_order',
+            'label' => Mage::helper('catalog')->__('Attribute order'),
+            'title' => Mage::helper('catalog')->__('Attribute order'),
+            'class' => 'validate-digits',
+        ));
+    }
     static public function processConfigurableQueue()
     {
-        //Mage::log(microtime() . " Starting processConfigurableQueue ", 0, 'configurable_update.log');
-        Mage::getResourceModel('zolagocatalog/queue_configurable')->clearQueue();
-        Mage::getModel('zolagocatalog/queue_configurable')->process(2000);
+        Mage::log(microtime() . " Starting processConfigurableQueue ", 0, 'configurable_update.log');
+        //Mage::getResourceModel('zolagocatalog/queue_configurable')->clearQueue();
+        Mage::getModel('zolagocatalog/queue_configurable')->process(5000);
     }
+
 
     /**
      * Process price type queue

@@ -19,10 +19,12 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
      *
      * @return array
      */
-    public function getConfigurableMinPrice($configurableProductsIds = array(), $storeId = 0)
+    public function getConfigurableMinPrice($configurableProductsIds, $storeId = 0)
     {
-        $result = array();
-
+//        Zend_Debug::dump($configurableProductsIds);
+        if (empty($configurableProductsIds)) {
+            return array();
+        }
         $adapter = $this->getReadConnection();
         $select = $adapter->select();
 
@@ -30,10 +32,9 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
             ->from(
                 'catalog_product_entity_decimal AS prices',
                 array(
-                     'configurable_product' => 'product_relation.parent_id',
-                     'min_price'            => 'MIN(prices.value)')
+                    'configurable_product' => 'product_relation.parent_id',
+                    'min_price' => 'MIN(prices.value)')
             )
-
             ->join(
                 array('products' => 'catalog_product_entity'),
                 'products.entity_id = prices.entity_id',
@@ -49,100 +50,61 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
                 'product_relation.child_id = prices.entity_id',
                 array()
             )
-
-            ->where('products.type_id=?', Mage_Catalog_Model_Product_Type::TYPE_SIMPLE) //choose from simple products
+            ->where('products.type_id=?', Mage_Catalog_Model_Product_Type::TYPE_SIMPLE)//choose from simple products
             ->where('attribute.attribute_code=?', self::PRICE_ATTRIBUTE_CODE);
 
 
         $select->where("prices.store_id=?", $storeId);
 
 
-        if (!empty($configurableProductsIds)) {
-            $configurableProductsIds = implode(',', $configurableProductsIds);
-            $select->where("product_relation.parent_id IN({$configurableProductsIds})");
-        }
-        $select->order('products.entity_id');
-
-        $select->group('product_relation.parent_id');
-        echo $select;
-        $result = $adapter->fetchAssoc($select);
-        Zend_Debug::dump($result);
-        return $result;
-    }
-
-    public function getConfigurableMinPriceJoin($storeId = 0)
-    {
-
-        $adapter = $this->getReadConnection();
-        $select = $adapter->select();
-
-        $select
-            ->from(
-                'zolago_catalog_queue_configurable AS queue_configurable',
-                array()
-            )
-            ->join(
-                array('product_relation' => 'catalog_product_relation'),
-                'product_relation.child_id = queue_configurable.product_id',
-                array()
-            )
-            ->join(
-                'catalog_product_entity_decimal AS prices',
-                'prices.entity_id=queue_configurable.product_id',
-                array(
-                    'configurable_product' => 'product_relation.parent_id',
-                    'min_price'            => 'MIN(prices.value)')
-            )
-
-            ->join(
-                array('attribute' => 'eav_attribute'),
-                'attribute.attribute_id=prices.attribute_id',
-                array()
-            )
-
-
-           // ->where('products.type_id=?', Mage_Catalog_Model_Product_Type::TYPE_SIMPLE) //choose from simple products
-            ->where('attribute.attribute_code=?', self::PRICE_ATTRIBUTE_CODE);
-
-
-        $select->where("prices.store_id=?", $storeId);
+        $configurableProductsIds = implode(',', $configurableProductsIds);
+        $select->where("product_relation.parent_id IN({$configurableProductsIds})");
 
         //$select->order('products.entity_id');
-        $select->order('product_relation.parent_id');
+
         $select->group('product_relation.parent_id');
-
+        //echo $select;
         $result = $adapter->fetchAssoc($select);
-
+//        Zend_Debug::dump($result);
         return $result;
     }
+
 
 
     public function getConfigurableSimpleRelation($listUpdatedProducts)
     {
-        $result = array();
-        if (!empty($listUpdatedProducts)) {
-            $listUpdatedProducts = implode(',', $listUpdatedProducts);
-            $adapter = $this->getReadConnection();
-            $select = $adapter->select();
-            $select
-                ->from(
-                    'catalog_product_relation AS product_relation',
-                    array(
-                         'configurable_product' => 'product_relation.parent_id',
-                         'simple_product'       => 'product_relation.child_id'
-                    )
-                )
 
-                ->where("product_relation.child_id IN ({$listUpdatedProducts})");
-
-            $result = $adapter->fetchAssoc($select);
+        if (empty($listUpdatedProducts)) {
+            return array();
         }
+        $listUpdatedProducts = implode(',', $listUpdatedProducts);
+        $adapter = $this->getReadConnection();
+        $select = $adapter->select();
+        $select
+            ->from(
+                'catalog_product_relation AS product_relation',
+                array(
+                    'configurable_product' => 'product_relation.parent_id',
+                    'simple_product' => 'product_relation.child_id'
+                )
+            )
+            ->where("product_relation.child_id IN({$listUpdatedProducts})");
+        //echo $select;
+        $result = $adapter->fetchAssoc($select);
+
 
         return $result;
     }
 
-    public function getConfigurableSimpleRelationJoin()
+    /**
+     * @param $ids
+     * @return array
+     */
+    public function getConfigurableSimpleRelationJoin($ids)
     {
+        if(empty($ids)){
+            return array();
+        }
         $adapter = $this->getReadConnection();
         $select = $adapter->select();
         $select
@@ -159,6 +121,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
                 )
             )
             ->where('queue_configurable.status','0')
+            ->where('product_relation.child_id IN (?)', implode(",",$ids))
         ;
 
         $result = $adapter->fetchAssoc($select);
@@ -196,7 +159,8 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
             ->where("prices.attribute_id=?", self::PRICE_ATTRIBUTE_CODE)
             ->where("products.type_id=?", Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE)
 //            ->where("prices.store_id IN (".implode(',',$storeId).")")
-            ->order('products.entity_id');
+//            ->order('products.entity_id')
+        ;
         if ($limit > 0) {
             $select->limit($limit);
         }
@@ -296,14 +260,83 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         }
     }
 
+    public function insertProductSuperAttributePricingApp($productConfigurableId, $superAttributeId, $stores)
+    {
+        foreach ($stores as $store) {
+            $productRelations[$store] = $this->_getProductRelationPricesSizes($productConfigurableId, $store);
+        }
+        unset($store);
 
+        $insert = array();
+        foreach ($stores as $store) {
+            if (isset($productRelations[$store]) && !empty($productRelations[$store])) {
+
+                $productMinPrice = array();
+                foreach ($productRelations[$store] as $i) {
+                    $productMinPrice[] = $i['child_price'];
+                }
+
+                $productMinimalPrice = min($productMinPrice);
+
+                Mage::getSingleton('catalog/product_action')->updateAttributesNoIndex(
+                    array($productConfigurableId), array('price' => $productMinimalPrice), $store
+                );
+
+                foreach ($productRelations[$store] as $productRelation) {
+                    $size = $productRelation['child_size'];
+                    $price = $productRelation['child_price'];
+                    $website = $productRelation['website'];
+
+
+                    $priceIncrement = (float)$price - $productMinimalPrice;
+
+                    $insert[] = "({$superAttributeId},{$size},{$priceIncrement},{$website})";
+                }
+
+            }
+        }
+
+        if (!empty($insert)) {
+            $insert = array_unique($insert);
+            $lineQuery = implode(",", $insert);
+
+            $catalogProductSuperAttributePricingTable = 'catalog_product_super_attribute_pricing';
+
+            $insertQuery = sprintf(
+                "
+                    INSERT INTO  %s (product_super_attribute_id,value_index,pricing_value,website_id)
+                    VALUES %s
+                    ON DUPLICATE KEY UPDATE catalog_product_super_attribute_pricing.pricing_value=VALUES(catalog_product_super_attribute_pricing.pricing_value)
+                    ", $catalogProductSuperAttributePricingTable, $lineQuery
+            );
+
+
+            try {
+                $this->_getWriteAdapter()->query($insertQuery);
+
+            } catch (Exception $e) {
+                Mage::log($e->getMessage(), 0, 'configurable_update.log');
+                Mage::throwException("Error insertProductSuperAttributePricingApp");
+
+                throw $e;
+            }
+
+        }
+
+
+        //Mage::log($productConfigurableId, null, 'hello.log');
+    }
     /**
      * get super attribute ids
      *
      * @return array
      */
-    public function getSuperAttributes()
+    public function getSuperAttributes($configurableProductsIds)
     {
+        if(empty($configurableProductsIds)){
+            return array();
+        }
+        $configurableProducts = implode(',' , $configurableProductsIds);
         $readConnection = $this->_getReadAdapter();
         $select = $readConnection->select()
             ->from(
@@ -312,11 +345,30 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
                       'super_attribute'      => 'product_super_attribute_id'
                 )
             );
+        $select->where("catalog_product_super_attribute.product_id IN({$configurableProducts})");
         $superAttributes = $readConnection->fetchAssoc($select);
 
         return $superAttributes;
     }
 
+    /**
+     * @param $ids
+     */
+    public  function removeUpdatedRows($ids)
+    {
+        $table = 'zolago_catalog_queue_configurable';
+        $lineQuery = implode(',', $ids);
+        $delete = sprintf("DELETE FROM  %s WHERE queue_id IN (%s);", $table, $lineQuery);
+        try {
+            $this->_getWriteAdapter()->query($delete);
+
+        } catch (Exception $e) {
+            Mage::throwException("Error insertProductSuperAttributePricingApp");
+
+            throw $e;
+        }
+
+    }
 
     /**
      * @param $productConfigurableId
@@ -327,11 +379,26 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
     private function _getProductRelationPricesSizes($productConfigurableId, $store)
     {
         $readConnection = $this->_getReadAdapter();
+        $productRelations = array();
+
         $select = $readConnection->select()
-            ->from('vw_product_relation_prices_sizes')
+            ->from('vw_product_relation_prices_sizes_relation')
+            ->reset(Zend_Db_Select::COLUMNS)
+            ->columns(
+                array('DISTINCT(child)', 'parent', 'child_size', 'child_price', 'website')
+            )
             ->where('parent=?', $productConfigurableId)
             ->where('store=?', $store);
-        $productRelations = $readConnection->fetchAll($select);
+//echo $select;
+
+        try
+        {
+            $productRelations = $readConnection->fetchAll($select);
+        }
+        catch(Exception $e)
+        {
+            Mage::log($e->getMessage(), Zend_Log::ERR);
+        }
 
         return $productRelations;
     }

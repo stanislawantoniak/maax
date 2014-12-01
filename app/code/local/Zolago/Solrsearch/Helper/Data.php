@@ -450,4 +450,32 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 	public function getSolrDocFileds() {
 		return array_keys($this->_solrToMageMap);
 	}
+
+    /**
+     * @param Mage_Catalog_Model_Product $model
+     * @return string | empty_string
+     */
+    public function getListingResizedImageUrl(Mage_Catalog_Model_Product $model) {
+
+        if(!$model->hasData("listing_resized_image_url")){
+
+            $return = null;
+            try{
+                $return = Mage::helper('catalog/image')->
+                init($model, 'image')->
+                keepAspectRatio(true)->
+                constrainOnly(true)->
+                keepFrame(false)->
+                resize(300,null);
+            } catch (Exception $ex) {
+                Mage::logException($ex);
+            }
+
+            $model->setData("listing_resized_image_url", $return . ""); // Cast to string
+        }
+
+        return $model->getData("listing_resized_image_url");
+    }
+
+
 }
