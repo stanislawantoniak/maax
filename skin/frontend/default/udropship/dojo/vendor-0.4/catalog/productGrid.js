@@ -220,7 +220,11 @@ define([
 		});
 		
 		put(node, content);
-		put(node, img);
+		
+		// Put img if exists
+		if(img){
+			put(node, img);
+		}
 	};
 	
 	/**

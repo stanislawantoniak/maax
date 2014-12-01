@@ -27,7 +27,7 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
                 //
                 'administrator_firstname', 'administrator_lastname', 'administrator_telephone', 'administrator_telephone_mobile',
                 //rma
-                'rma_email', 'rma_telephone', 'rma_executive_firstname', 'rma_executive_lastname', 'rma_executive_telephone', 'rma_executive_telephone_mobile', 'rma_executive_email'
+                'rma_email', 'rma_telephone', 'rma_executive_telephone', 'rma_executive_telephone_mobile', 'rma_executive_email'
             )
         )
         ) {
