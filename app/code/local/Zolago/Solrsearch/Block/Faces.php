@@ -397,12 +397,10 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 
 
 		if($this->getListModel()->isCategoryMode()){
-            echo 'iscategorymode';
 			$urlParams['_direct'] = $this->getListModel()->getUrlPathForCategory();
 		}
         if($this->getListModel()->isSearchMode()){
-            echo 'issearchmode';
-            $urlParams['_direct'] = '';
+            $urlParams['_direct'] = $this->getListModel()->getUrlPathForCategory();
         }
 		
         return $urlParams;
@@ -560,12 +558,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 				}
 			}
 			else{
-			    if ($category->getId() == $root_category_id) {
-        			$category = Mage::getModel('catalog/category')->load($root_category_id);
-		        	$is_root_category = TRUE;			        
-			    } else {			    
-    				$parent_category = $category->getParentCategory();
-                }
+				$parent_category = $category->getParentCategory();
 			}
 		}
 		else{
@@ -726,7 +719,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
     }
 
     public function getPriceBlock($solrData) {
-        if(in_array($this->getMode(),array(self::MODE_CATEGORY,self::MODE_SEARCH))  && !($this->getCurrentCategory()->getUsePriceFilter())) {
+        if($this->getMode()==self::MODE_CATEGORY&& !$this->getCurrentCategory()->getUsePriceFilter()) {
             return null;
         }
         $facetFileds = array();
@@ -749,7 +742,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
     public function getFlagBlock($solrData) {
 
 		// Only in category ?
-        if(in_array($this->getMode(),array(self::MODE_CATEGORY,self::MODE_SEARCH))&& !$this->getCurrentCategory()->getUseFlagFilter()) {
+        if($this->getMode()==self::MODE_CATEGORY&& !$this->getCurrentCategory()->getUseFlagFilter()) {
             return null;
         }
 	
@@ -775,7 +768,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 	
 
     public function getRatingBlock($solrData) {
-        if(in_array($this->getMode(),array(self::MODE_CATEGORY,self::MODE_SEARCH))&& !$this->getCurrentCategory()->getUseReviewFilter()) {
+        if($this->getMode()==self::MODE_CATEGORY&& !$this->getCurrentCategory()->getUseReviewFilter()) {
             return null;
         }
         $facetFileds = array();
@@ -886,7 +879,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 				break;
             }
             // In category mode
-            if(in_array($this->getMode(),array(self::MODE_CATEGORY,self::MODE_SEARCH))) {
+            if($this->getMode()==self::MODE_CATEGORY) {
 				
                 $filter = $this->getFilterByAttribute($attrCode);
 
