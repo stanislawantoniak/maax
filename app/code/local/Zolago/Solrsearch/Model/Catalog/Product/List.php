@@ -250,9 +250,7 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object{
 			if($this->isCategoryMode()){
 				$path = $this->getCurrentCategory()->getUrlPath();
 			}elseif($this->isSearchMode()){
-//                echo ' 123 ';
-//                print_r($this->getCurrentCategory()->getUrlPath());
-                $path = false;
+                $path = $this->getUrlRoute() . '/';
 			} else {
                 $path = false;
             }

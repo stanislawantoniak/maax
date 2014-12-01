@@ -394,10 +394,16 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 
             $urlParams['_query']    = $this->processFinalParams($finalParams);
         }
-	
+
+
 		if($this->getListModel()->isCategoryMode()){
+            echo 'iscategorymode';
 			$urlParams['_direct'] = $this->getListModel()->getUrlPathForCategory();
 		}
+        if($this->getListModel()->isSearchMode()){
+            echo 'issearchmode';
+            $urlParams['_direct'] = '';
+        }
 		
         return $urlParams;
     }
@@ -1129,6 +1135,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 	 */
     protected function _parseQueryData($params=array(), $paramss = NULL)
     {
+
         $_solrDataArray = $this->getSolrData();
 
 		$paramss = Mage::app()->getRequest()->getParams();
@@ -1222,6 +1229,9 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 		if($this->getListModel()->isCategoryMode()){
 			$urlParams['_direct'] = $this->getListModel()->getUrlPathForCategory();
 		}
+        if($this->getListModel()->isSearchMode()){
+            $urlParams['_direct'] = $this->getListModel()->getUrlPathForCategory();
+        }
 		
 		
         return $urlParams;
