@@ -381,7 +381,6 @@ define([
 			]
 		];
 		
-		
 		for(var i=0, column, childColumn; i<columns.length; i++){
 			column = columns[i];
 			
@@ -399,7 +398,8 @@ define([
 					if(column.field=="status"){
 						childColumn.renderCell = rendererStatus;
 					}else{
-						childColumn.formatter = formatterOptionsFactor(childColumn.options, column.type=="multiselect");
+						childColumn.formatter = formatterOptionsFactor(
+							childColumn.options, column.type=="multiselect");
 					}
 				}else if(column.type=="price"){
 					childColumn.formatter = formatterPriceFactor(column.currencyCode);
@@ -613,7 +613,6 @@ define([
 		Keyboard, CompoundColumns, ColumnSet, QueryGrid]);
 	
 	var initGrid = function(columns, container){
-		
 		var config = {
 			columnSets: processColumnSets(columns),
 

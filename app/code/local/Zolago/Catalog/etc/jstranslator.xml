@@ -135,4 +135,7 @@
     <close translate="message" module="zolagocatalog">
         <message>Close</message>
     </close>
+    <apply-to-selection translate="message" module="zolagocatalog">
+        <message>Apply to selection</message>
+    </apply-to-selection>
 </jstranslator>
