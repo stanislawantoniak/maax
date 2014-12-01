@@ -22,4 +22,8 @@ class Zolago_Sizetable_Block_Dropship_Sizetable_Edit extends Mage_Core_Block_Tem
 	public function getAction() {
 		return $this->getUrl("udropship/sizetable/save");
 	}
+
+	public function getImageUploadAction() {
+		return $this->getUrl("udropship/sizetable/image");
+	}
 }

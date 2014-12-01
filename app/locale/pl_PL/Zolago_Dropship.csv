@@ -50,7 +50,7 @@
 "New Password","Nowe hasło"
 "Repeat New Password","Powtórz nowe hasło"
 "Shipment settings","Sposoby dostawy"
-"RMA settings","Reklamcje i zwroty"
+"RMA settings","Reklamacje i zwroty"
 "DHL Settings","Konfiguracja DHL"
 "UPS Settings","Konfiguracja UPS"
 "Return address","Adres do zwrotów"
@@ -58,3 +58,4 @@
 "RMA executive","Główna osoba odpowiedzialna za zwroty i reklamacje"
 "RMA Shipping Settings","Spedytor obsługujący zwroty"
 "Please enter the same value again.","Proszę ponownie wprowadzić wartość."
+"Name and surname","Name i nazwisko"
