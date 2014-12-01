@@ -5,38 +5,49 @@ class Zolago_Sizetable_Dropship_SizetableController extends Zolago_Dropship_Cont
 
 	protected $erroroccurred = false;
 
+	/**
+	 * Simple function to get udropship session
+	 * @return Mage_Core_Model_Abstract
+	 */
 	protected function _getSession()
 	{
 		return Mage::getSingleton('udropship/session');
 	}
 
 	/**
-	 * Sizetables listing action
+	 * Sizetables listing display
 	 */
 	public function indexAction()
 	{
 		$this->render();
 	}
 
+	/**
+	 * Sizetables edit/new form display
+	 */
 	public function editAction()
 	{
 		$this->_prepareSizetable(true);
 		$this->render();
 	}
 
+	/**
+	 * Create new sizetable or edit existing one action
+	 * @return Mage_Core_Controller_Varien_Action
+	 */
 	public function saveAction()
 	{
 		$session = $this->_getSession();
+		$data = $this->getRequest()->getParams();
+		/** @var Zolago_Sizetable_Helper_Data $helper */
+		$helper = Mage::helper('zolagosizetable');
 		try {
 			if ($this->getRequest()->getPost()) {
-				$data = $this->getRequest()->getParams();
 				$formKey = Mage::getSingleton('core/session')->getFormKey();
 				$formKeyPost = $this->getRequest()->getParam('form_key');
 				if ($formKey != $formKeyPost) {
 					return $this->redirectSizetable();
 				} else {
-					/** @var Zolago_Sizetable_Helper_Data $helper */
-					$helper = Mage::helper('zolagosizetable');
 					/** @var Zolago_Sizetable_Model_Sizetable $model */
 					$model = Mage::getModel("zolagosizetable/sizetable");
 					$modelId = $this->getRequest()->getParam("sizetable_id");
@@ -67,6 +78,11 @@ class Zolago_Sizetable_Dropship_SizetableController extends Zolago_Dropship_Cont
 		return $this->redirectSizetable();
 	}
 
+
+	/**
+	 * Action to add new/overwrite existing sizetables assignments
+	 * @return Mage_Core_Controller_Varien_Action
+	 */
 	public function assignAction()
 	{
 		$session = $this->_getSession();
@@ -115,6 +131,10 @@ class Zolago_Sizetable_Dropship_SizetableController extends Zolago_Dropship_Cont
 		return $this->redirectSizetable();
 	}
 
+	/**
+	 * Unified delete action for both sizetables and their assignments
+	 * I think that logic is self-explanatory
+	 */
 	public function deleteAction()
 	{
 		$ruleId = $this->getRequest()->getParam("rule_id");
@@ -127,43 +147,65 @@ class Zolago_Sizetable_Dropship_SizetableController extends Zolago_Dropship_Cont
 		$this->redirectSizetable();
 	}
 
+
+	/**
+	 * Function that deletes sizetables assignments
+	 * @param $ruleId
+	 * @return Mage_Core_Controller_Varien_Action
+	 */
 	protected function deleteRule($ruleId)
 	{
 		$helper = Mage::helper('zolagosizetable');
-		$this->delete(Mage::getModel("zolagosizetable/sizetable_rule"), $ruleId);
-		if (!$this->erroroccurred) $this->_getSession()->addSuccess($helper->__("Size table assignment was deleted"));
-		else $this->_getSession()->addError($helper->__("There was an error while deleting selected assignment"));
-		return $this->redirectSizetable();
+		$successMsg = $helper->__("Size table assignment was deleted");
+		$errorMsg = $helper->__("There was an error while deleting selected assignment");
+		$model = Mage::getModel("zolagosizetable/sizetable_rule");
+		return $this->delete($model,$ruleId,$successMsg,$errorMsg);
 	}
 
+	/**
+	 * Function that deletes sizetables
+	 * @param $sizetableId
+	 * @return Mage_Core_Controller_Varien_Action
+	 */
 	protected function deleteSizetable($sizetableId)
 	{
 		$helper = Mage::helper('zolagosizetable');
-		$this->delete(Mage::getModel("zolagosizetable/sizetable"), $sizetableId);
-		if (!$this->erroroccurred) $this->_getSession()->addSuccess($helper->__("Size table was deleted"));
-		else $this->_getSession()->addError($helper->__("There was an error while deleting selected size table"));
-		return $this->redirectSizetable();
+		$successMsg = $helper->__("Size table was deleted");
+		$errorMsg = $helper->__("There was an error while deleting selected size table");
+		$model = Mage::getModel("zolagosizetable/sizetable");
+		return $this->delete($model,$sizetableId,$successMsg,$errorMsg);
 	}
 
-	protected function delete($model, $modelId)
+	/**
+	 * Unified delete function
+	 * @param $model
+	 * @param $modelId
+	 * @param $successMsg
+	 * @param $errorMsg
+	 * @return Mage_Core_Controller_Varien_Action
+	 * @throws Mage_Core_Exception | Exception
+	 */
+	protected function delete($model, $modelId, $successMsg, $errorMsg)
 	{
+		$session = $this->_getSession();
 		$helper = Mage::helper('zolagosizetable');
 		try {
 			if ($modelId) {
 				$model = $model->load($modelId);
-				if ($model && $model->getVendorId() == $this->getVendorId())
+				if ($model && $model->getVendorId() == $this->getVendorId()) {
 					$model->delete();
-				else
-					$this->erroroccurred = true;
+					$session->addSuccess($successMsg);
+				} else {
+					throw new Mage_Core_Exception($errorMsg);
+				}
 			}
 		} catch (Mage_Core_Exception $e) {
-			$this->_getSession()->addError($e->getMessage());
-			return $this->redirectSizetable();
+			$session->addError($e->getMessage());
 		} catch (Exception $e) {
-			$this->_getSession()->addError($helper->__("Some error occurred"));
+			$session->addError($helper->__("Some error occurred"));
 			Mage::logException($e);
-			return $this->redirectSizetable();
 		}
+		return $this->redirectSizetable();
 	}
 
 	protected function render()
@@ -172,6 +214,9 @@ class Zolago_Sizetable_Dropship_SizetableController extends Zolago_Dropship_Cont
 	}
 
 	/**
+	 * Setting $addScopes to true results in loading sizetable
+	 * per store translations and including it in return data
+	 * By default only default sizetable value is loaded
 	 * @param bool $addScopes
 	 * @return bool|false|Mage_Core_Model_Abstract
 	 */
@@ -207,16 +252,30 @@ class Zolago_Sizetable_Dropship_SizetableController extends Zolago_Dropship_Cont
 		}
 	}
 
+	/**
+	 * Gets vendor id
+	 * @return mixed
+	 */
 	public function getVendorId()
 	{
 		return $this->_getSession()->getVendor()->getVendorId();
 	}
 
+	/**
+	 * Simple redirect function, couldn't use _redirectReferer,
+	 * because it does not work with Magento admin grid
+	 * @return Mage_Core_Controller_Varien_Action
+	 */
 	protected function redirectSizetable()
 	{
 		return $this->_redirect("udropship/sizetable");
 	}
 
+	/**
+	 * Tiny mce image upload handler,
+	 * echoes json response on finish (needed by tinymce imageupload plugin)
+	 * @return void
+	 */
 	public function imageAction()
 	{
 		if (isset($_FILES['image'])) {
@@ -231,10 +290,9 @@ class Zolago_Sizetable_Dropship_SizetableController extends Zolago_Dropship_Cont
 				try {
 					$is_image = getimagesize($tmpName);
 				} catch (Exception $e) {
-
 					Mage::logException($e);
 					echo json_encode(array("error"=>"filetype"));
-					return false;
+					return;
 				}
 				$uniqueName = uniqid() . "_" . $imageName;
 
@@ -248,11 +306,9 @@ class Zolago_Sizetable_Dropship_SizetableController extends Zolago_Dropship_Cont
 				try {
 					move_uploaded_file($tmpName, $path);
 					echo json_encode(array("error" => false, "path" => $return_path));
-					return true;
 				} catch (Exception $e) {
 					Mage::logException($e);
 					echo json_encode(array("error" => "unknown"));
-					return false;
 				}
 			}
 		}
