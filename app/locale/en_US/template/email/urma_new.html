@@ -1,4 +1,4 @@
-<!--@subject {{var store.getFrontendName()}}: RMA # {{var rma.increment_id}} for Order # {{var order.increment_id}} @-->
+<!--@subject {{var store_name}} – Twoja reklamacja (nr. RMA-{{var rma.increment_id}}) została przekazana do sklepu  @-->
 <!--@vars
 {"store url=\"\"":"Store Url",
 "skin url=\"images/logo_email.gif\" _area='frontend'":"Email Logo Image",
@@ -18,175 +18,90 @@
 body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif; }
 @-->
 
-<body style="background:#F6F6F6; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; margin:0; padding:0;">
-<div style="background:#F6F6F6; font-family:Verdana, Arial, Helvetica, sans-serif; font-size:12px; margin:0; padding:0;">
+<body style="background:#F6F6F6; font-family:"latoregular",sans-serif; font-size:14px; margin:0; padding:0;">
+<div style="background:#F6F6F6; font-family:"latoregular",sans-serif; font-size:14px; margin:0; padding:0;">
 <table cellspacing="0" cellpadding="0" border="0" height="100%" width="100%">
-<tr>
-    <td align="center" valign="top" style="padding:20px 0 20px 0">
-        <!-- [ header starts here] -->
-        <table bgcolor="#FFFFFF" cellspacing="0" cellpadding="10" border="0" width="650" style="border:1px solid #E0E0E0;">
-            <tr>
-                <td valign="top"><a href="{{store url=""}}"><img src="{{skin url="images/logo_email.gif" _area='frontend'}}" alt="{{var store.getFrontendName()}}"  style="margin-bottom:10px;" border="0"/></a></td>
-            </tr>
-        <!-- [ middle starts here] -->
-            <tr>
-                <td valign="top">
-                    <h1 style="font-size:22px; font-weight:normal; line-height:22px; margin:0 0 11px 0;"">Hello, {{htmlescape var=$order.getCustomerName()}}</h1>
-                    <p style="font-size:12px; line-height:16px; margin:0;">
-                        Thank you for your order from {{var store.getFrontendName()}}.
-                        You can check the status of your order by <a href="{{store url="customer/account/"}}" style="color:#1E7EC8;">logging into your account</a>.
-                        If you have any questions about your order please contact us at <a href="mailto:{{config path='trans_email/ident_support/email'}}" style="color:#1E7EC8;">{{config path='trans_email/ident_support/email'}}</a> or call us at <span class="nobr">{{config path='general/store_information/phone'}}</span> Monday - Friday, 8am - 5pm PST.
-                    </p>
-                    <p style="font-size:12px; line-height:16px; margin:0;">
-                        Your shipping confirmation is below. Thank you again for your business.
-                    </p>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <h2 style="font-size:18px; font-weight:normal; margin:0;">Your RMA #{{var rma.increment_id}} for Order #{{var order.increment_id}}</h2>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    {{depend show_order_info}}
-                    <table cellspacing="0" cellpadding="0" border="0" width="650">
-                        <thead>
-                        <tr>
-                            <th align="left" width="325" bgcolor="#EAEAEA" style="font-size:13px; padding:5px 9px 6px 9px; line-height:1em;">Billing Information:</th>
-                            <th width="10"></th>
-                            <th align="left" width="325" bgcolor="#EAEAEA" style="font-size:13px; padding:5px 9px 6px 9px; line-height:1em;">Payment Method:</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td valign="top" style="font-size:12px; padding:7px 9px 9px 9px; border-left:1px solid #EAEAEA; border-bottom:1px solid #EAEAEA; border-right:1px solid #EAEAEA;">
-                                {{var order.billing_address.format('html')}}
-                            </td>
-                            <td>&nbsp;</td>
-                            <td valign="top" style="font-size:12px; padding:7px 9px 9px 9px; border-left:1px solid #EAEAEA; border-bottom:1px solid #EAEAEA; border-right:1px solid #EAEAEA;">
-                                {{var payment_html}}
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    <br/>
-                    <table cellspacing="0" cellpadding="0" border="0" width="100%">
-                        <thead>
-                        <tr>
-                            <th align="left" width="325" bgcolor="#EAEAEA" style="font-size:13px; padding:5px 9px 6px 9px; line-height:1em;">Shipping Information:</th>
-                            <th width="10"></th>
-                            <th align="left" width="325" bgcolor="#EAEAEA" style="font-size:13px; padding:5px 9px 6px 9px; line-height:1em;">Shipping Method:</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td valign="top" style="font-size:12px; padding:7px 9px 9px 9px; border-left:1px solid #EAEAEA; border-bottom:1px solid #EAEAEA; border-right:1px solid #EAEAEA;">
-                                {{var order.shipping_address.format('html')}}
-                                &nbsp;
-                            </td>
-                            <td>&nbsp;</td>
-                            <td valign="top" style="font-size:12px; padding:7px 9px 9px 9px; border-left:1px solid #EAEAEA; border-bottom:1px solid #EAEAEA; border-right:1px solid #EAEAEA;">
-                                {{var order.shipping_description}}
-                                &nbsp;
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    {{/depend}}
-                    <br/>
-                    <table cellspacing="0" cellpadding="0" border="0" width="{{depend show_receiver}}100%{{/depend}}">
-                        <thead>
-                        <tr>
-                            <th align="left" width="325" bgcolor="#EAEAEA" style="font-size:13px; padding:5px 9px 6px 9px; line-height:1em;">RMA Sender:</th>
-                            {{depend show_receiver}}
-                            <th width="10"></th>
-                            <th align="left" width="325" bgcolor="#EAEAEA" style="font-size:13px; padding:5px 9px 6px 9px; line-height:1em;">RMA Receiver:</th>
-                            {{/depend}}
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td valign="top" style="font-size:12px; padding:7px 9px 9px 9px; border-left:1px solid #EAEAEA; border-bottom:1px solid #EAEAEA; border-right:1px solid #EAEAEA;">
-                                {{var order.shipping_address.format('html')}}
-                                &nbsp;
-                            </td>
-                            {{depend show_receiver}}
-                            <td>&nbsp;</td>
-                            <td valign="top" style="font-size:12px; padding:7px 9px 9px 9px; border-left:1px solid #EAEAEA; border-bottom:1px solid #EAEAEA; border-right:1px solid #EAEAEA;">
-                                {{var rma.getVendor().getFormatedAddress('html')}}
-                                &nbsp;
-                            </td>
-                            {{/depend}}
-                        </tr>
-                        </tbody>
-                    </table>
-                    <br />
+	<tr>
+		<td align="center" valign="top" style="padding:20px 0 20px 0">
+			<!-- [ header starts here] -->
+			<table bgcolor="#FFFFFF" cellspacing="0" cellpadding="10" border="0" width="650" style="border:1px solid #E0E0E0;">
+				<tr>
+					<td valign="top">
+						<a href="{{store url=""}}" >
+						<img src="{{skin url='images/logo_black.png' _area='frontend'}}" alt="{{var store_name}}" border="0"  style="margin-bottom:10px;" />
+						</a>
+					</td>
+				</tr>
+				<!-- [ middle starts here] -->
+				<tr>
+					<td valign="top">
+						<p>Twoje zgłoszenie zostało przekazane do sklepu <span style="text-transform:uppercase;">{{var vendor.vendor_name}}</span>. Poniżej treść wiadomości:</p>
 
-                <table cellspacing="0" cellpadding="0" border="0" width="100%">
-                    <thead>
-                    <tr>
-                        <th align="left" width="325" bgcolor="#EAEAEA" style="font-size:13px; padding:5px 9px 6px 9px; line-height:1em;">Reason to return:</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td valign="top" style="font-size:12px; padding:7px 9px 9px 9px; border-left:1px solid #EAEAEA; border-bottom:1px solid #EAEAEA; border-right:1px solid #EAEAEA;">
-                            {{var rma.getRmaReasonName()}}
-                            &nbsp;
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-                <br/>
+						<div style="background-color:#f1f1f1;margin:10px 0;padding:20px 10px;border:1px solid #d3d3d3;">
+							<div style="margin:0 0 30px 0;">
+								<p><b>Data zgłoszenia :</b> {{var rma_creation_date}}</p>
+								<p><b>Rodzaj zgłoszenia:</b> Reklamacja</p>
+								<p><b>Zgłoszenie dotyczy zamówienia numer:</b> {{var po.increment_id}}</p>
+								<p><b>Sklep:</b> <span style="text-transform:uppercase;">{{var vendor.vendor_name}}</span></p>
+							</div>
+							<div style="margin:0 0 30px 0;">
+								{{layout handle="sales_email_order_rma_items" rma=$rma order=$order}}
+							</div>
+
+							{{depend show_comment}}
+							<div style="margin:0 0 30px 0;">
+								<p><b>Twój komentarz:</b></p>
+								<p>{{var comment}}</p>
+							</div>
+							{{/depend}}
+
+							{{depend show_courier}}
+							<div style="margin:0 0 30px 0;">
+								<p><b>Termin odbioru przesyłki przez kuriera:</b> {{var courier_week_day}} {{var courier_date}}
+									między {{var rma.carrier_time_from}} a {{var rma.carrier_time_to}}</p>
+							</div>
+							<div style="margin:0 0 30px 0;">
+								{{var courier_shipping.format('html')}}
+							</div>
+							{{/depend}}
 
 
-            {{depend customer_notes}}
-                <table cellspacing="0" cellpadding="0" border="0" width="100%">
-                    <thead>
-                    <tr>
-                        <th align="left" width="325" bgcolor="#EAEAEA" style="font-size:13px; padding:5px 9px 6px 9px; line-height:1em;">General Notes:</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td valign="top" style="font-size:12px; padding:7px 9px 9px 9px; border-left:1px solid #EAEAEA; border-bottom:1px solid #EAEAEA; border-right:1px solid #EAEAEA;">
-                            {{var customer_notes}}
-                            &nbsp;
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-                <br/>
-            {{/depend}}
-            {{depend show_resolution_notes}}
-                <table cellspacing="0" cellpadding="0" border="0" width="100%">
-                    <thead>
-                    <tr>
-                        <th align="left" width="325" bgcolor="#EAEAEA" style="font-size:13px; padding:5px 9px 6px 9px; line-height:1em;">Resolution Notes:</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td valign="top" style="font-size:12px; padding:7px 9px 9px 9px; border-left:1px solid #EAEAEA; border-bottom:1px solid #EAEAEA; border-right:1px solid #EAEAEA;">
-                            {{var resolution_notes}}
-                            &nbsp;
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-                <br/>
-            {{/depend}}
-                    {{layout handle="sales_email_order_rma_items" rma=$rma order=$order}}
-                    <p style="font-size:12px; margin:0 10px 10px 0">{{var comment}}</p>
-                </td>
-            </tr>
-            <tr>
-                <td bgcolor="#EAEAEA" align="center" style="background:#EAEAEA; text-align:center;"><center><p style="font-size:12px; margin:0;">Thank you, <strong>{{var store.getFrontendName()}}</strong></p></center></td>
-            </tr>
-        </table>
-    </td>
-</tr>
+							{{depend rma_status_pending_pickup}}
+							<div style="margin:0 0 30px 0;">
+								<p><a href="{{var courier_pdf_url}}">Wydrukuj dokumenty zwrotu</a></p>
+							</div>
+							{{/depend}}
+						</div>
+						{{depend rma_status_pending_pickup}}
+						<div style="margin:0 0 30px 0;">
+							<p>
+								<b>WAŻNE:</b>  Zanim przyjedzie kurier, wydrukuj dokumenty zwrotu, które załączyliśmy w pliku PDF do tej wiadomości.
+								Formularz zwrotu włóż do przesyłki wraz z produktami, dokumenty nadania przekaż zaś kurierowi.
+							</p>
+						</div>
+						{{/depend}}
+
+						<div style="margin:0 0 30px 0;">
+							<p>Status zgłoszenia możesz na bieżąco śledzić w swoim koncie, w zakładce <a href="{{var rma_url}}">Zwroty i reklamacje</a>.</p>
+						</div>
+
+						{{depend rma_status_pending}}
+						<p>Gdy tylko sprzedawca potwierdzi przyjęcie reklamacji, otrzymasz maila z prośbą o uzupełnienie danych niezbędnych do odesłania produktów.</p>
+						{{/depend}}
+
+
+					</td>
+				</tr>
+
+				<tr>
+					<td>
+						<p>Pozdrawiamy serdecznie,</p>
+						<p>Zespół {{var store.getName()}}</p>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
 </table>
 </div>
 </body>

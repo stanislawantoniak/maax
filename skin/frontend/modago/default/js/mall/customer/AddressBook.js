@@ -4,7 +4,9 @@
 
 (function () {
     "use strict";
-
+	if(typeof Mall.customer != "object"){
+		Mall.customer = {};
+	}
     Mall.customer.AddressBook = function () {
 
         /**
@@ -16,7 +18,7 @@
         this._book = [];
 
         /**
-         * Customer instance
+         * Customer instancef
          *
          * @type {null}
          * @private
@@ -274,18 +276,27 @@
         /**
          * Returns whether address can be removed.
          *
-         * @param {Number} id
+         * @param {Number|Mall.customer.Address} address
          * @returns {boolean}
          */
-        isRemoveable: function (id) {
-
-            if (id === this.getDefaultBilling()
-                || id === this.getDefaultShipping()
-                || (this.getSelectedBilling() !== null && id === this.getSelectedBilling().getId())
-                || (this.getSelectedShipping() !== null
-                    && id === this.getSelectedShipping().getId())
-                || this.getAddressBook().length < 2) {
-                return false;
+        isRemoveable: function (address) {
+			if(!(address instanceof Mall.customer.Address)){
+				address = this.get(address);
+			}
+			
+			//console.log(
+			//		address.getId(), 
+			//		this.getDefaultShipping().getId(),  
+			//		this.getSelectedShipping().getId()
+			//);
+			
+			if ((this.getDefaultBilling() && address === this.getDefaultBilling()) ||
+				(this.getDefaultShipping() && address === this.getDefaultShipping()) || 
+				(this.getSelectedShipping() !== null && address === this.getSelectedShipping()) || 
+				(this.getSelectedBilling() !== null && address === this.getSelectedBilling()) || 
+				this.getAddressBook().length < 2) {
+                
+				return false;
             }
 
             return true;
@@ -453,6 +464,10 @@
             if (!isNaN(parseInt(address, 10))) {
                 address = this.get(address);
             }
+			
+			if(typeof address != "object"){
+				throw new Error("Adress object is not vaild");
+			}
 
             this.beforeSelectShipping.call(this, address);
             if (address !== null) {
@@ -663,10 +678,10 @@
         },
 
 		beforeRequest: function(deffered, data){
-			console.log("Loading start");
+			//console.log("Loading start");
 		},
 		afterRequest: function(deffered, data){
-			console.log("Loading stop");
+			//console.log("Loading stop");
 		}
     };
 

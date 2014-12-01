@@ -9,5 +9,11 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Shippingpayment extends Zolago
     {
         return Mage::getUrl("*/*/saveShippingpayment");
     }
+	
+	public function getStep2Sidebar()
+    {
+        return $this->getLayout()->createBlock("cms/block")->
+				setBlockId("checkout-right-column-step-2")->toHtml();
+    }
 
 } 

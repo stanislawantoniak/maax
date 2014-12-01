@@ -10,6 +10,13 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Review
     protected $_shipping;
     protected $_block;
     
+	/**
+	 * 
+	 */
+	public function getCoupon() {
+		return $this->getQuote()->getCouponCode();
+	}
+	
     public function getTotalSum() {
         return $this->_total_sum;
     }
@@ -155,6 +162,14 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Review
         return $allMethodsByCode;
     }
 
+	/**
+	 * @return Mage_SalesRule_Model_Quote_Nominal_Discount | null
+	 */
+	public function getTotalDiscount() {
+		$totals = $this->getQuote()->getTotals();
+		return isset($totals['discount']) ? $totals['discount'] : null;
+	}
+	
     public function preparePresentation() {
         $total_shipping = array();
         $list = array();

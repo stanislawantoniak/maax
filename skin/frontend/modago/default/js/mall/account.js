@@ -11,6 +11,9 @@ Mall.account = {
         this.attachForgotPasswordValidation();
         this.attachLoginValidation();
         this.attachResetPasswordValidation();
+	    this.attachEditCustomerValidation();
+	    this.attachEditPasswordValidation();
+	    this.attachTooltips();
 
         //rma
         this.attachContactVendorRmaForm();
@@ -41,10 +44,10 @@ Mall.account = {
      */
     attachLoginValidation: function () {
         "use strict";
+		var loginForm = jQuery("#login-form");
+        if (loginForm.length) {
 
-        if (jQuery("#login-form")) {
-
-            jQuery("#login-form").validate(this.getValidate().getOptions({
+            loginForm.validate(this.getValidate().getOptions({
                 rules: {
                     "login[username]": {
                         required: true,
@@ -67,10 +70,10 @@ Mall.account = {
      */
     attachForgotPasswordValidation: function () {
         "use strict";
+	    var forgotPasswordForm = jQuery("#forgotpassword-form");
 
-        if (jQuery("#forgotpassword-form")) {
-
-            jQuery("#forgotpassword-form").validate(this.getValidate().getOptions({
+        if (forgotPasswordForm.length) {
+            forgotPasswordForm.validate(this.getValidate().getOptions({
                 rules: {
                     "email": {
                         required: true,
@@ -83,6 +86,114 @@ Mall.account = {
         return this;
     },
 
+	attachEditCustomerValidation: function() {
+		"use strict";
+
+		var editCustomerForm = jQuery("#editCustomer-form");
+
+		if(editCustomerForm.length) {
+			addAccountEditTranslations();
+			editCustomerForm.validate(this.getValidate().getOptions({
+				rules: {
+					email: {
+						required: true,
+						email: true
+					},
+					phone: {
+						required: true,
+						"validate-telephone": true
+					},
+					firstname: {
+						required: true
+					},
+					lastname: {
+						required: true
+					}
+				},
+				messages: {
+					email: {
+						required: Mall.translate.__("Please enter email."),
+						email: Mall.translate.__("Please enter correct email.")
+					},
+					phone: {
+						required: Mall.translate.__("Please enter phone number."),
+						"validate-telephone": Mall.translate.__("Telephone number is too short. Number must contain 9 digits, without spacing.")
+					},
+					firstname: {
+						required: Mall.translate.__("This field is required")
+					},
+					lastname: {
+						required: Mall.translate.__("This field is required")
+					}
+				}
+			}));
+		}
+
+		return this;
+	},
+
+	attachEditPasswordValidation: function() {
+		"use strict";
+
+		var editPasswordForm = jQuery("#editPassword-form");
+
+		if(editPasswordForm.length) {
+			addPasswordEditTranslations();
+			editPasswordForm.validate(this.getValidate().getOptions({
+				rules: {
+					password: {
+						required: true,
+						minlength: 6
+					},
+					confirmation: {
+						required: true,
+						minlength: 6,
+						equalTo: '#customer_password'
+					}
+				},
+				messages: {
+					password: {
+						required: Mall.translate.__("Please enter new password."),
+						minlength: Mall.translate.__("Password needs to have at least 6 characters")
+					},
+					confirmation: {
+						required: Mall.translate.__("Please repeat new password."),
+						minlength: Mall.translate.__("Password needs to have at least 6 characters"),
+						equalTo: Mall.translate.__("Passwords must match")
+					}
+				}
+			}));
+		}
+
+		return this;
+	},
+
+	attachTooltips: function() {
+		jQuery('input[type=text].hint,input[type=email].hint,input[type=password].hint,textarea.hint').tooltip({
+			placement: function(a, element) {
+				var viewport = window.innerWidth;
+				var placement = "right";
+				if (viewport < 600) {
+					placement = "bottom";
+				}
+				return placement;
+			},
+			html: true,
+			trigger: "focus"
+		});
+		jQuery('input[type=text].hint,input[type=email].hint,input[type=password].hint,textarea.hint').off('shown.bs.tooltip').on('shown.bs.tooltip', function () {
+			if(jQuery(this).parent(':has(i)').length && jQuery(this).parent().find('i').is(":visible")) {
+				jQuery(this).next('div.tooltip.right').animate({left: "+=25"}, 100, function () {
+
+				});
+			}
+			var nextbottom = jQuery(this).next('div.tooltip.bottom');
+			if(typeof nextbottom !== 'undefined' && nextbottom.offset().left <= 5) {
+				nextbottom.animate({left: "+=13"}, 100);
+			}
+		});
+	},
+
     /**
      * Attaches validation for reset password form.
      *
@@ -90,10 +201,10 @@ Mall.account = {
      */
     attachResetPasswordValidation: function () {
         "use strict";
+		var resetPasswordForm = jQuery("#resetpassword-form");
+        if (resetPasswordForm.length) {
 
-        if (jQuery("#resetpassword-form")) {
-
-            jQuery("#resetpassword-form").validate(this.getValidate().getOptions({
+            resetPasswordForm.validate(this.getValidate().getOptions({
                 rules: {
                     "password": {
                         required: true

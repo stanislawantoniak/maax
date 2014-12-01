@@ -7,6 +7,10 @@ class Zolago_Holidays_Helper_Datecalculator extends Mage_Core_Helper_Abstract{
     protected $exclude_from_pickup;
     protected $exclude_from_delivery;
 
+	public function __construct() {
+		$this->weekend = explode(',', Mage::getStoreConfig('general/locale/weekend'));
+	}
+
     /**
      * Calculate maximum shipping date for PO
      *
@@ -102,9 +106,9 @@ class Zolago_Holidays_Helper_Datecalculator extends Mage_Core_Helper_Abstract{
     /**
      * @param int $max_days
      * @param mixed $max_time
-     * @param timestamp $current_timestamp
+     * @param int $current_timestamp
      *
-     * @return timestamp
+     * @return int
      */
     protected function calculateMaxDate($max_days, $max_time = NULL, $current_timestamp = NULL){
 
@@ -158,7 +162,7 @@ class Zolago_Holidays_Helper_Datecalculator extends Mage_Core_Helper_Abstract{
     }
 
     /**
-     * @param timestamp $timestamp
+     * @param int $timestamp
      *
      * @return boolean
      */
@@ -168,7 +172,7 @@ class Zolago_Holidays_Helper_Datecalculator extends Mage_Core_Helper_Abstract{
     }
 
     /**
-     * @param timestamp $timestamp
+     * @param int $timestamp
      *
      * @return boolean
      */
@@ -211,4 +215,22 @@ class Zolago_Holidays_Helper_Datecalculator extends Mage_Core_Helper_Abstract{
         return false;
 
     }
+
+	/**
+	 * @param int $timestamp
+	 * @return bool|int
+	 */
+	public function getNextWorkingDay($timestamp) {
+		$timestamp = $timestamp ? $timestamp : time();
+		$oneDay = 60 * 60 * 24;
+		while(true) {
+			$nextDay = $timestamp+$oneDay;
+			if(!$this->_isHoliday($nextDay) && !$this->_isWeekend($nextDay)) {
+				return $nextDay;
+			} else {
+				$oneDay = $oneDay + $oneDay;
+			}
+		}
+		return false;
+	}
 }

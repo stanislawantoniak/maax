@@ -3,7 +3,9 @@ class Zolago_Rma_Block_View extends Zolago_Rma_Block_Abstract
 {
 	
 	const CMS_PENDING = "rma_status_pending_currier_message";
-	
+	const CMS_PENDING_ACCEPT = "rma_status_pending_message";
+	const CMS_PENDING_BOOKING = "rma_status_pending_booking_message";
+
 	/**
 	 * @param Zolago_Rma_Model_Rma $rma
 	 * @return string
@@ -19,6 +21,24 @@ class Zolago_Rma_Block_View extends Zolago_Rma_Block_Abstract
 	 */
 	public function isPendingPickup(Zolago_Rma_Model_Rma $rma) {
 		return $rma->getRmaStatus()==Zolago_Rma_Model_Rma_Status::STATUS_PENDING_PICKUP;
+	}
+
+    /**
+     *
+     * @param Zolago_Rma_Model_Rma $rma
+     * @return bool
+     */
+    public function isPendingCourierBooking(Zolago_Rma_Model_Rma $rma) {
+        return $rma->getRmaStatus()==Zolago_Rma_Model_Rma_Status::STATUS_PENDING_COURIER;
+    }
+
+	/**
+	 *
+	 * @param Zolago_Rma_Model_Rma $rma
+	 * @return bool
+	 */
+	public function isPending(Zolago_Rma_Model_Rma $rma) {
+		return $rma->getRmaStatus()==Zolago_Rma_Model_Rma_Status::STATUS_PENDING;
 	}
 	
 	/**
@@ -54,6 +74,14 @@ class Zolago_Rma_Block_View extends Zolago_Rma_Block_Abstract
 		if($this->isPendingPickup($rma)){
 			$out[] = Mage::getModel("cms/block")->
 				load(self::CMS_PENDING)->getContent();
+		}
+		if($this->isPending($rma)){
+			$out[] = Mage::getModel("cms/block")->
+			load(self::CMS_PENDING_ACCEPT)->getContent();
+		}
+		if($this->isPendingCourierBooking($rma)) {
+			$out[] = Mage::getModel("cms/block")->
+			load(self::CMS_PENDING_BOOKING)->getContent();
 		}
 		return $out;
 	}

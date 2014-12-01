@@ -143,7 +143,6 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
         }
         $this->getQuote()->getShippingAddress()
             ->setShippingMethod($shippingMethod);
-
         return array();
     }
 	
@@ -498,13 +497,20 @@ class Zolago_Checkout_Model_Type_Onepage extends  Mage_Checkout_Model_Type_Onepa
     public function getCheckoutMethod()
     {
         if ($this->getCustomerSession()->isLoggedIn()) {
+			// Logged user - force customer method
             $this->getQuote()->setCheckoutMethod(self::METHOD_CUSTOMER);
         }else{
-            if ($this->_helper->isAllowedGuestCheckout($this->getQuote())) {
-                $this->getQuote()->setCheckoutMethod(self::METHOD_GUEST);
-            } else {
-                $this->getQuote()->setCheckoutMethod(self::METHOD_REGISTER);
-            }
+			// Metho name is not inited
+			// OR
+			// Not logged user and current method = customer
+			if(!$this->getQuote()->getCheckoutMethod(true) || 
+			   $this->getQuote()->getCheckoutMethod(true)==self::METHOD_CUSTOMER){
+				if ($this->_helper->isAllowedGuestCheckout($this->getQuote())) {
+					$this->getQuote()->setCheckoutMethod(self::METHOD_GUEST);
+				} else {
+					$this->getQuote()->setCheckoutMethod(self::METHOD_REGISTER);
+				}
+			}
         }
         return $this->getQuote()->getCheckoutMethod(true);
     }

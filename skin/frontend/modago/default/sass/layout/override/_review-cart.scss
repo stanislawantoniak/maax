@@ -1,29 +1,20 @@
 .checkout-shared-review {
-	#content-main {
+	/*#content-main {
 		.panel {			
             &.panel-default {
                 @include border-radius(1px);
             }
 			.panel-heading {
-				padding:14.86px 0 0 29.41px;
 				position:relative;
-				margin-bottom: 13px;
-				@media (max-width: $screen-xs-max) {
-					padding:14.86px 0 0px 29.41px;
-				}
-				&:before {
-					content: ' ';
-					display: block;
-					width: 18px;
-					height: 18px;
-					position: absolute;
-					left: 0px;
-					top: 18px;
-				}
+			
+		}
+	}
+}
+	margin-bottom: 13px;
 			}
 			.panel-body {
 				padding:0 0 0 0;
 			}
 		}
-	}
+	}*/
 }

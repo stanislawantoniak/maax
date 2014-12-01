@@ -78,7 +78,11 @@ class Zolago_Catalog_Model_Resource_Vendor_Mass
 		}
 		$write->insertOnDuplicate($backend, $insert, array("value"));
 		
+		
+		
+		/*
 		// Reindex changed values - each value can be different
+		// @todo Need to be reindex faster!
 		foreach($indexMixedValues as $productId=>$value){
 			$object = new Varien_Object(array(
 				'product_ids'       => array($productId),
@@ -89,16 +93,22 @@ class Zolago_Catalog_Model_Resource_Vendor_Mass
 				$object, Mage_Catalog_Model_Product::ENTITY, Mage_Index_Model_Event::TYPE_MASS_ACTION
 			);
 		}
-		
 		// Reindex new (same) values as one event
 		$object = new Varien_Object(array(
 			'product_ids'       => array_unique($indexSameValues),
 			'attributes_data'   => array($attribute->getAttributeCode()=>$valuesToAdd),
 			'store_id'          => $store->getId()
 		));
+		
 		Mage::getSingleton('index/indexer')->processEntityAction(
 			$object, Mage_Catalog_Model_Product::ENTITY, Mage_Index_Model_Event::TYPE_MASS_ACTION
 		);
+		*/
+		
+		// Better performance
+		$indexer = Mage::getResourceModel('catalog/product_indexer_eav_source');
+		/* @var $indexer Mage_Catalog_Model_Resource_Product_Indexer_Eav_Source */
+		$indexer->reindexEntities($productIds);
 		
 		return $this;
 	}
@@ -157,6 +167,52 @@ class Zolago_Catalog_Model_Resource_Vendor_Mass
 	}
 	
 	/**
+	 * Fixation of displaying values of attribute - wee need orign values
+	 * @param Mage_Catalog_Model_Resource_Product_Attribute_Collection $collection
+	 * @param Mage_Catalog_Model_Resource_Eav_Attribute $attrbiute
+	 * @param stinrg $dir
+	 */
+	public function addEavTableSortToCollection(
+		Mage_Catalog_Model_Resource_Eav_Attribute $attrbiute,
+		Mage_Catalog_Model_Resource_Product_Collection $collection,
+		$dir = Varien_Db_Select::SQL_ASC) {
+		
+		$valueTable1    = $attrbiute->getAttributeCode() . '_t1';
+        $valueTable2    = $attrbiute->getAttributeCode() . '_t2';
+        $collection->getSelect()
+            ->joinLeft(
+                array($valueTable1 => $attrbiute->getBackend()->getTable()),
+                "e.entity_id={$valueTable1}.entity_id"
+                . " AND {$valueTable1}.attribute_id='{$attrbiute->getId()}'"
+                . " AND {$valueTable1}.store_id=0",
+                array())
+            ->joinLeft(
+                array($valueTable2 => $attrbiute->getBackend()->getTable()),
+                "e.entity_id={$valueTable2}.entity_id"
+                . " AND {$valueTable2}.attribute_id='{$attrbiute->getId()}'"
+                . " AND {$valueTable2}.store_id='{$collection->getStoreId()}'",
+                array()
+            );
+        $valueExpr = $collection->getSelect()->getAdapter()
+            ->getCheckSql("{$valueTable2}.value_id > 0", "{$valueTable2}.value", "{$valueTable1}.value");
+
+		// the trick is swap attribute code name to do not override origin atttribute value
+		// w can keep origin value from eav no text value
+		$oldCode = $attrbiute->getAttributeCode();
+		$attrbiute->setAttributeCode($oldCode."_filter");
+			
+        Mage::getResourceModel('eav/entity_attribute_option')
+            ->addOptionValueToCollection($collection, $attrbiute, $valueExpr);
+		
+
+        $collection->getSelect()
+            ->order("{$attrbiute->getAttributeCode()} {$dir}");
+			
+		$attrbiute->setAttributeCode($oldCode);
+		
+	}
+	
+	/**
 	 * @param Mage_Catalog_Model_Resource_Product_Attribute_Collection $collection
 	 * @param Mage_Catalog_Model_Resource_Eav_Attribute $attrbiute
 	 * @param stinrg $dir
@@ -165,6 +221,10 @@ class Zolago_Catalog_Model_Resource_Vendor_Mass
 		Mage_Catalog_Model_Resource_Eav_Attribute $attrbiute,
 		Mage_Catalog_Model_Resource_Product_Collection $collection,
 		$dir = Varien_Db_Select::SQL_ASC) {
+		
+		/**
+		 * @todo better performance if we can recogenize isnt default values
+		 */
 	
 		$valueTable1    = $attrbiute->getAttributeCode() . '_t1';
         $valueTable2    = $attrbiute->getAttributeCode() . '_t2';
@@ -196,8 +256,8 @@ class Zolago_Catalog_Model_Resource_Vendor_Mass
 			$sortAttribute => $expressions
 		));
 		
-		$collection->getSelect()
-			->order("{$sortAttribute} {$dir}");
+		// Sort by comma num first
+		$collection->getSelect()->order("{$sortAttribute} {$dir}");
 			
 	}
 	/**
@@ -263,6 +323,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Mass
 		);
 		
 		$select->order(array(
+			"additional_table.column_attribute_order ASC", /* Custom field */
 			"attribute_group.sort_order ASC", 
 			"entity_attribute.sort_order ASC"
 		));
@@ -384,92 +445,80 @@ class Zolago_Catalog_Model_Resource_Vendor_Mass
 	 * @param Unirgy_Dropship_Model_Vendor $vendor
 	 * 
 	 * @return array
-	 */	
-	public function getStaticDropdownFiltersForVendor(Unirgy_Dropship_Model_Vendor $vendor, $attributeSetId)
-	{
-		$select = $this->getReadConnection()->select();
-		$setup = new Mage_Core_Model_Resource_Setup('core_setup');
+	 */
 
-		$select->from(
-				array("index"=>$this->getMainTable()), array()
-		);
-		$select->join(
-				array("product"=>$this->getTable('catalog/product')),
-				"product.entity_id=index.product_id",
-				array()
-		);
-		$select->join(
-				array("product_attribute"=>$setup->getTable('catalog_product_entity_int')),
-				"product_attribute.entity_id=product.entity_id",
-				array("attribute_id", "value" , "option" => "value")
-		);
+    public function getStaticDropdownFiltersForVendorProductAssoc(Unirgy_Dropship_Model_Vendor $vendor, $attributeSetId)
+    {
 
-		$select->join(
-				array("attribute"=>$setup->getTable('catalog/eav_attribute')),
-				"attribute.attribute_id=product_attribute.attribute_id",
-				array()
-		);
+        $select = $this->getReadConnection()->select();
+        $setup = new Mage_Core_Model_Resource_Setup('core_setup');
 
-		$select->join(
-				array("attribute_link"=>$setup->getTable('eav_entity_attribute')),
-				"attribute_link.attribute_id=attribute.attribute_id",
-				array("sortOrder" => "sort_order")
-		);
+        $select->from(
+            array("index"=>"udropship_vendor_product_assoc"), array()
+        );
+        $select->join(
+            array("product"=>$this->getTable('catalog/product')),
+            "product.entity_id=index.product_id",
+            array()
+        );
+        $select->join(
+            array("attribute_set"=>$this->getTable('eav/attribute_set')),
+            "attribute_set.attribute_set_id=product.attribute_set_id",
+            array()
+        );
+        $select->join(
+            array("product_attribute"=>$setup->getTable('catalog_product_entity_int')),
+            "product_attribute.entity_id=product.entity_id",
+            array("attribute_id", "value" , "option" => "value")
+        );
 
-		$select->join(
-				array("attribute_eav"=>$setup->getTable('eav_attribute')),
-				"attribute_eav.attribute_id=attribute.attribute_id",
-				array(
-					"label"	=> "frontend_label",
-					"code"	=> "attribute_code"
-				)
-		);
+        $select->join(
+            array("attribute"=>$setup->getTable('catalog/eav_attribute')),
+            "attribute.attribute_id=product_attribute.attribute_id",
+            array()
+        );
 
-		$select->join(
-				array("attribute_set"=>$this->getTable('eav/attribute_set')),
-				"attribute_set.attribute_set_id=product.attribute_set_id",
-				array()
-		);
+        $select->join(
+            array("attribute_link"=>$setup->getTable('eav_entity_attribute')),
+            "attribute_link.attribute_id=attribute.attribute_id",
+            array("sortOrder" => "sort_order")
+        );
 
-		$select->join(
-				array("attribute_group"=>$this->getTable('eav/attribute_group')),
-				"attribute_group.attribute_group_id=attribute_link.attribute_group_id",
-				array(
-					"group"			=> "attribute_group_name",
-					"groupOrder"	=> "sort_order"
-				)
-		);
+        $select->join(
+            array("attribute_eav"=>$setup->getTable('eav_attribute')),
+            "attribute_eav.attribute_id=attribute.attribute_id",
+            array(
+                "label"	=> "frontend_label",
+                "code"	=> "attribute_code"
+            )
+        );
+        $select->join(
+            array("attribute_group"=>$this->getTable('eav/attribute_group')),
+            "attribute_group.attribute_group_id=attribute_link.attribute_group_id",
+            array(
+                "group"			=> "attribute_group_name",
+                "groupOrder"	=> "sort_order"
+            )
+        );
 
-		$select->join(
-				array("eav_attribute_label"=>$setup->getTable('eav_attribute_label')),
-				"eav_attribute_label.attribute_id=product_attribute.attribute_id",
-				array()
-		);
 
-		$select->join(
-				array("eav_attribute_option"=>$setup->getTable('eav_attribute_option')),
-				"eav_attribute_option.attribute_id=product_attribute.attribute_id",
-				array()
-		);
+        $select->where("product.attribute_set_id=?", $attributeSetId);
 
-		$select->where("index.vendor_id=?", $vendor->getId());
-		$select->where("attribute.grid_permission=?", Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::USE_IN_FILTER);
-		if ($attributeSetId) {
-			$select->where("attribute_link.attribute_set_id=?", $attributeSetId);
-			$select->where("attribute_set.attribute_set_id=?", $attributeSetId);
-		}
+        $select->where("index.vendor_id=?", $vendor->getId());
+        $select->where("attribute.grid_permission=?", Zolago_Eav_Model_Entity_Attribute_Source_GridPermission::USE_IN_FILTER);
+        $select->where("attribute_link.attribute_set_id=?", $attributeSetId);
 
-		$select->distinct(true);
-		$select->order(array("attribute_group.sort_order ASC", "attribute_link.sort_order ASC"));
-		$select->group(array(
-			"attribute_id",
-			"option"
-			)
-		);
-		return $this->getReadConnection()->fetchAll($select);
-	}
-	
-	public function getOptionLabelbyId($labelId, $storeId = 0)
+        $select->distinct(true);
+        $select->order(array("attribute_group.sort_order ASC", "attribute_link.sort_order ASC"));
+        $select->group(array(
+                "attribute_id",
+                "option"
+            )
+        );
+
+        return $this->getReadConnection()->fetchAll($select);
+    }
+	public function getOptionLabelbyId($attributeId, $labelId, $storeId = 0)
 	{
 		$select = $this->getReadConnection()->select();
 		$setup = new Mage_Core_Model_Resource_Setup('core_setup');
@@ -491,19 +540,19 @@ class Zolago_Catalog_Model_Resource_Vendor_Mass
 				array("eav_attribute_option"=>$setup->getTable('eav_attribute_option')),
 				"eav_attribute_option.attribute_id=product_attribute.attribute_id",
 				array()
-		);				
-		
+		);
+
 		$select->join(
 				array("eav_attribute_option_value"=>$setup->getTable('eav_attribute_option_value')),
 				"eav_attribute_option_value.option_id=eav_attribute_option.option_id",
 				array("value")
 		);
-		
+        $select->where("eav_attribute_option.attribute_id=?", $attributeId);
 		$select->where("eav_attribute_option_value.option_id=?", $labelId);
 		$select->where("eav_attribute_option_value.store_id=?", $storeId);
 		$select->distinct(true);
 		$select->order(array("eav_attribute_option_value.option_id ASC"));
-		
+
 		return $this->getReadConnection()->fetchOne($select);
 	}
 }

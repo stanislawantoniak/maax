@@ -30,9 +30,9 @@ $activeFilters	= $this->getCurrentStaticFilterValues();
                                 <?php foreach ($singleFilter as $value): ?>
                                     <?php if (isset($value['option'])):
                                         $filterValue = $value['option'];
-                                        $displayValue = $this->getOptionLabelbyId($filterValue, $storeId);
+                                        $displayValue = $this->getOptionLabelbyId($firstFilter['attribute_id'],$filterValue, $storeId);
                                         if (!$displayValue):
-                                            $displayValue = $this->getOptionLabelbyId($filterValue, 0);
+                                            $displayValue = $this->getOptionLabelbyId($firstFilter['attribute_id'],$filterValue, 0);
                                         endif;
                                     else:
                                         $filterValue = $this->escapeHtml($value['value']);

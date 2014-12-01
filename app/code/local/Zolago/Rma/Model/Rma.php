@@ -258,4 +258,21 @@ class Zolago_Rma_Model_Rma extends Unirgy_Rma_Model_Rma
 	   }
 	   return parent::_beforeSave();
    }
+    /**
+     * generated pdf for customer
+     * @return string
+     */
+     public function getRmaPdf() {
+         $pdf = Mage::getModel('zolagorma/pdf');
+         return $pdf->getPdfFile($this->getId());
+     }
+
+    /**
+     * static pdf for customer
+     * @return string
+     */
+     public function getCustomerPdf() {
+         $helper = Mage::helper('zolagorma');
+         return $helper->getStaticCustomerPdf();
+     }
 }

@@ -83,12 +83,12 @@ Mall.validate = {
             if (!validator.numberOfInvalids()) {
                 return true;
             }
-	        console.log(jQuery(validator.errorList[0].element));
+
 			var modal = jQuery('.modal:visible');
-			var scrollTo = modal
+			var scrollTo = modal.length
 							? jQuery(validator.errorList[0].element).offset().top - modal.find('.modal-body').offset().top
 							: jQuery(validator.errorList[0].element).offset().top - Mall.getMallHeaderHeight(),
-				scrollMe = modal ? modal : jQuery('html, body');
+				scrollMe = modal.length ? modal : jQuery('html, body');
 
             scrollMe.animate({
                 scrollTop: scrollTo
@@ -114,7 +114,7 @@ Mall.validate = {
 
         jQuery.validator.addMethod('validate-telephone', function () {
             return Mall.validate.validators.telephone.apply(this, arguments);
-        }, jQuery.validator.format(Mall.translate.__("Telephone numer is too short. Number must contain 9 digits, without spacing.")));
+        }, jQuery.validator.format(Mall.translate.__("Telephone number is too short. Number must contain 9 digits, without spacing.")));
 
         jQuery.validator.addMethod('validate-emailbackend', function () {
             return Mall.validate.validators.emailbackend.apply(this, arguments);
@@ -122,7 +122,7 @@ Mall.validate = {
 
         jQuery.validator.addMethod('validate-nip', function () {
             return Mall.validate.validators.nip.apply(this, arguments);
-        }, jQuery.validator.format(Mall.translate.__("Tax numer is incorrect. Enter as a string of digits e.g. 1234567890.")));
+        }, jQuery.validator.format(Mall.translate.__("Tax number is incorrect. Enter as a string of digits e.g. 1234567890.")));
 
         jQuery.validator.addMethod('validate-bankAccount', function () {
             return Mall.validate.validators.bankAccount.apply(this, arguments);

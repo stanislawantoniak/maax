@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Solrsearch>
-            <version>0.0.6</version>
+            <version>0.0.7</version>
         </Zolago_Solrsearch>
     </modules>
 	<admin>
@@ -64,6 +64,36 @@
 			</solrsearch>
         </blocks>
 		<events>
+			
+			<!-- Converter stock save -->
+			<zolagocatalog_converter_stock_save_before>
+				<observers>
+					<zolagosolrsearch>
+						<class>zolagosolrsearch/observer</class>
+						<method>zolagoCatalogConverterStockSaveBefore</method>
+					</zolagosolrsearch>
+				</observers>
+			</zolagocatalog_converter_stock_save_before>
+
+            <catalog_converter_price_update_after>
+                <observers>
+                    <zolagosolrsearch>
+                        <class>zolagosolrsearch/observer</class>
+                        <method>catalogConverterPriceUpdateAfter</method>
+                    </zolagosolrsearch>
+                </observers>
+            </catalog_converter_price_update_after>
+			
+			<!-- Converter stock save -->
+			<zolagocatalog_converter_stock_complete>
+				<observers>
+					<zolagosolrsearch>
+						<class>zolagosolrsearch/observer</class>
+						<method>zolagoCatalogConverterStockComplete</method>
+					</zolagosolrsearch>
+				</observers>
+			</zolagocatalog_converter_stock_complete>
+			
 			<!-- Delete anywhere -->
 			<catalog_product_delete_before>
 				<observers>
@@ -336,7 +366,7 @@
                     <cron_expr>*/5 * * * *</cron_expr>
                 </schedule>
                 <run>
-                    <model>zolagosolrsearch/cronProcessQueue</model>
+                    <model>zolagosolrsearch/observer::cronProcessQueue</model>
                 </run>
             </zolagosolrsearch_process_queue>
             <zolagosolrsearch_cleanup_queue>
@@ -345,7 +375,7 @@
                     <cron_expr>0 0 * * *</cron_expr>
                 </schedule>
                 <run>
-                    <model>zolagosolrsearch/cronCleanupQueue</model>
+                    <model>zolagosolrsearch/observer::cronCleanupQueue</model>
                 </run>
             </zolagosolrsearch_cleanup_queue>
         </jobs>

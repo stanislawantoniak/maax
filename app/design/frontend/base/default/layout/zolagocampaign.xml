@@ -21,7 +21,7 @@
             </action>
         </reference>
 		<update handle="udropship_vendor" />
-        <!--<update handle="adminhtml_head" />-->
+        <update handle="adminhtml_head" />
         <update handle="bootstrap"/>
         <update handle="noty"/>
         <update handle="forms"/>

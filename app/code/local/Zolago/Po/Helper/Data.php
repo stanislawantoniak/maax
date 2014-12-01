@@ -212,6 +212,14 @@ class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 		
 		$po = $poItem->getPo();
 		/* @var $po Zolago_Po_Model_Po */
+		
+		/**
+		 * @todo Make admin way RMA creation available process
+		 */
+		if(!($po instanceof Zolago_Po_Model_Po)){
+			return $this;
+		}
+		
 		$order = $po->getOrder();
 		/* @var $order Mage_Sales_Model_Order */
 		$tmplItem = $order->getItemsCollection()->getFirstItem();

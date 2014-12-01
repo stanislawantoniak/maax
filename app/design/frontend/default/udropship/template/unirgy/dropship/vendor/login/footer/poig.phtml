@@ -1,0 +1,51 @@
+<div id="poig">
+    <img src="<?php echo $this->getSkinUrl('img/poig/POIG_s_i.png');; ?>" width="300"/>
+</div>
+
+
+<script type="text/javascript">
+    //POIG
+    setPogPosition();
+    jQuery(window).resize(function(){
+        setPogPosition();
+    })
+
+    function setPogPosition() {
+        var constantMarginLogin = 80,
+            constantMarginSidebar = 160;
+        var height = jQuery(window).height();
+        var width = jQuery(window).width();
+
+        var marginLogin = height - 680;
+        var navHeight = jQuery("#sidebar #nav").height();
+        var marginSidebar = height - navHeight - 190;
+
+        if (marginLogin > constantMarginLogin) {
+            jQuery(".udropship-vendor-login #poig").css({"margin-top": marginLogin});
+        } else {
+            jQuery(".udropship-vendor-login #poig").css({"margin-top": constantMarginLogin})
+        }
+
+        if (marginSidebar > constantMarginSidebar) {
+            jQuery("#sidebar #poig").css({"margin-top": marginSidebar});
+        } else {
+            jQuery("#sidebar #poig").css({"margin-top": constantMarginSidebar})
+        }
+
+
+        if (width < 488) {
+            jQuery(".udropship-vendor-login #poig").css({
+                "float": "none",
+                "margin-right": (width - 300) / 2 + "px",
+                "margin-left": (width - 300) / 2 + "px"
+            })
+        } else {
+            jQuery(".udropship-vendor-login #poig").css({
+                "float": "right",
+                "margin-right": "-5px",
+                "margin-left": "-5px"
+            })
+        }
+    }
+    //POIG
+</script>

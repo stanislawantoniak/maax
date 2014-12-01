@@ -8,17 +8,9 @@ class Zolago_Solrsearch_Model_Catalog_Product extends Mage_Catalog_Model_Product
 	 * @return null | array
 	 */
 	public function getListingResizedImageInfo() {
-		$urlPath = $this->getListingResizedImageUrl();
-		// Extract cached image URI
-		if($urlPath){
-			$filePath = substr($urlPath, strpos($urlPath, "//")+2);
-			$filePath = substr($filePath, strpos($filePath, "/")+1);
-			$filePath = str_replace("/", DS, $filePath);
-			if($info=@getimagesize($filePath)){
-				return array("width"=>$info[0], "height"=>$info[1]);
-			}
-		}
-		return null;
+        /** @var $_helper Zolago_Solrsearch_Helper_Data*/
+        $_helper = Mage::helper("zolagocatalog/product");
+        return $_helper->getResizedImageInfo($this);
 	}
 	
 	/**
@@ -49,36 +41,19 @@ class Zolago_Solrsearch_Model_Catalog_Product extends Mage_Catalog_Model_Product
 	 * @return string | null;
 	 */
 	public function getListingResizedImageUrl() {
-		if(!$this->hasData("listing_resized_image_url")){
-			/** 
-			* @todo move configurable values of helpert do admin conif per website
-			*/
-		   $return = null;
-		   try{
-			   $return = Mage::helper('catalog/image')->
-				   init($this, 'image')->
-				   keepAspectRatio(true)->
-				   constrainOnly(true)->
-				   keepFrame(false)->
-				   resize(300,null);
-		   } catch (Exception $ex) {
-			   Mage::logException($ex);
-		   }
-		   $this->setData("listing_resized_image_url", $return . ""); // Cast to string
-		}
-		
-		return $this->getData("listing_resized_image_url");
-		
+        /** @var Zolago_Solrsearch_Helper_Data $_helper */
+        $_helper = Mage::helper("zolagosolrsearch");
+		return $_helper->getListingResizedImageUrl($this);
+
 	}
 	
 	/**
 	 * @return string|null
 	 */
 	public function getManufacturerLogoUrl() {
-		if($this->getData("manufacturer_logo")){
-			return Mage::getBaseUrl('media') . $this->getData("manufacturer_logo");
-		}
-		return null;
+        /** @var $_helper Zolago_Solrsearch_Helper_Data*/
+        $_helper = Mage::helper("zolagocatalog/product");
+        return $_helper->getManufacturerLogoUrl($this);
 	}
 	
 	/**

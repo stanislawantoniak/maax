@@ -53,7 +53,7 @@
     Mall.translate.add("Zip code should be entered in the format xx-xxx.", "<?php echo $this->__("Zip code should be entered in the format xx-xxx."); ?>");
     Mall.translate.add("required", "<?php echo $this->__("This is a required field."); ?>");
     Mall.translate.add("email", "<?php echo $this->__("E-mail address is in invalid format or contains invalid characters. Please enter correct address."); ?>");
-    Mall.translate.add("Tax numer is incorrect. Enter as a string of digits e.g. 1234567890.", "<?php echo $this->__('Tax numer is incorrect. Enter as a string of digits e.g. 1234567890.') ?>");
+    Mall.translate.add("Tax number is incorrect. Enter as a string of digits e.g. 1234567890.", "<?php echo $this->__('Tax number is incorrect. Enter as a string of digits e.g. 1234567890.') ?>");
 
     Mall.translate.add("Enter name.", "<?php echo $this->__('Enter name.') ?>");
     Mall.translate.add("Enter last name.", "<?php echo $this->__('Enter last name.') ?>");
@@ -63,6 +63,10 @@
     Mall.translate.add("Enter city name.", "<?php echo $this->__('Enter city name.') ?>");
     Mall.translate.add("Zip-code should be entered in the format xx-xxx.", "<?php echo $this->__('Zip-code should be entered in the format xx-xxx.') ?>");
     Mall.translate.add("Phone number we need only to contact concerning orders for example courier delivering the shipment.", "<?php echo $this->__('Phone number we need only to contact concerning orders for example courier delivering the shipment.') ?>");
+    Mall.translate.add("Pho.", "<?php echo $this->__('Pho.') ?>");
+    Mall.translate.add("Invoice", "<?php echo $this->__('Invoice') ?>");
+    Mall.translate.add("VAT Id", "<?php echo $this->__('VAT Id') ?>");
+    Mall.translate.add("Delivery address", "<?php echo $this->__('Delivery address') ?>");
 
 
 
@@ -93,10 +97,9 @@
 		<?php endif?>
 		checkout.addStep(Mall.Checkout.steps.shippingpayment);
 		checkout.addStep(Mall.Checkout.steps.review);
-		
-
-		
 		checkout.init(0);
+	
+		Mall.reg.set("checkout", checkout);
 
         //visual fix for hints
         initFixHints = function() {

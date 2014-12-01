@@ -1,59 +1,174 @@
 <?php /* @var $this Zolago_Modago_Block_Checkout_Onepage_Shared_Review */ ?>
+<?php $_helper = Mage::helper("zolagocheckout"); ?>
+<?php $_totalDiscount = $this->getTotalDiscount()?>
+<?php $_coupon = $this->getCoupon();?>
+<div class="checkout-shared-review node-type-summary-delivery-payment podsumowanie">
 
-<?php echo $this->getStep3Sidebar(); ?>
-<?php $_items = $this->getItems(); ?>
-<?php $this->preparePresentation(); ?>
-<div class="checkout-shared-review">
-<div class="col-lg-9 col-md-8 col-sm-12 col-xs-12 col-lg-pull-3 col-md-pull-4 section " id="content-main">
-	<section class="main bg-w">
-		<header class="title-section">
-			<h2><?php echo $this->__("Your order"); ?></h2>
-		</header>
-						<?php $total = 0; ?>
-                        <?php foreach($_items as $_item) : ?>
-                            <?php echo $this->getItemHtml($_item); ?>
-							<?php $total +=  $_item->getData('row_total_incl_tax'); ?>
-                        <?php endforeach; ?>
+	<?php $_items = $this->getItems(); ?>
+	<?php $this->preparePresentation(); ?>
 
-		<div class="panel panel-default panel-color">
-            <div class="panel-body">
-	        <div class="tableWrapper table-cart" style="border-top:0px">
-			    <div class="table-footer-group hidden-xs">
-
-		        <div class="table-row clearfix">
-
-	    	        <div class="table-cell cell-01 td">
-    	    	        <a class="button button-third large pull-left" id="back" href="<?php echo $this->getBasketUrl(); ?>"><?php echo $this->__('Change basket'); ?></a>
+	<div class="col-lg-9 col-md-8 col-sm-12 col-xs-12 section" id="content-main">
+		<section class="main bg-w">
+			<header class="title-section">
+				<h2 id="show-table-summary-product">
+					<?php echo $this->__("Your order"); ?>
+					<i class="visible-xs bullet-strzalka-down"></i>
+				</h2>
+			</header>
+			
+			<div id="summary-panel-product">
+				<?php $total = 0; ?>
+				<?php foreach ($_items as $_item) : ?>
+					<?php echo $this->getItemHtml($_item); ?>
+					<?php $total += $_item->getData('row_total_incl_tax'); ?>
+				<?php endforeach; ?>
+				<div class="panel_action row visible-xs">
+					<div class="col-sm-6">
+						<a href="<?php echo $this->getBasketUrl(); ?>" id="zmien_produkty" class="button button-third large pull-left"><?php echo $_helper->__('Change'); ?></a>
 					</div>
-		            <div class="table-cell cell-03 label_value td">
-						<div><?php echo $this->__('Summary value');?>:</div>
-						<div><?php echo $this->__('Shipping cos');?>:</div>
-						<div><span style="font-family:latoblack"><?php echo $this->__('To pay');?>:</span></div>
+					<div class="col-sm-6">
+						<a href="#" id="zwin_produkty" class="button button-third large pull-right"><?php echo $_helper->__('Roll products'); ?></a>
 					</div>
-		            <div class="table-cell cell-04 label_value td">
-						<div><?php echo Mage::helper('core')->formatPrice($total);?></div>
-						<div><span id="total_shipping"></span></div>
-						<div><span id="total_value"></span></div>
-					</div>
-		            <div class="table-cell cell-05 td"></div>
 				</div>
-				</div>
-            </div>			
 			</div>
+			
+			<div id="sumary_total_amount" class="panel panel-custom">
+				<div class="panel-body">
+					<div class="col-sm-6 visible-lg visible-md visible-sm">
+						<div class="row">
+							<a href="<?php echo $this->getBasketUrl(); ?>" 
+							   id="zmiana_zawartosci_koszyka"
+							   class="button button-third large pull-left"><?php echo $_helper->__('Change basket'); ?></a> 
+						</div>
+					</div>
+					
+					<div class="col-sm-6 col-xs-12">
+						<div class="row">
+							<dl>
+								<dd>
+									<span class="lb"><?php echo $this->__('Summary value'); ?>:</span> 
+									<span><?php echo Mage::helper('core')->formatPrice($total); ?></span>
+								</dd>
+								<dd>
+									<span class="lb"><?php echo $this->__('Shipping cost'); ?>:</span> 
+									<span class="total_shipping"></span>
+								</dd>
+								<?php if($_totalDiscount):?>
+								<dd>
+									<span class="lb"><?php echo $_totalDiscount->getTitle(); ?>:</span> 
+									<span class="total_discount" data-price="<?php echo ($_totalDiscount->getValue() * -1);?>"><?php echo Mage::helper('core')->formatPrice($_totalDiscount->getValue()); ?></span>
+								</dd>
+								<?php endif;?>
+								<dt style="font-weight: normal; font-family: latoblack">
+									<span class="lb"><?php echo $this->__('To pay'); ?>:</span> 
+									<span class="total_value"></span>
+								</dt>
+							</dl>
+						</div>
+					</div>
+
+				</div>
+			</div>
+			
+			<div id="order-show-products" class="clearfix visible-xs">
+				<div class="panel_action row">
+					<div class="col-sm-6">
+						<a href="#" id="pokaz_produkty" class="button button-third large pull-right"><?php echo $this->__('Show products'); ?></a>
+					</div>
+				</div>
+			</div>
+
+			<div class="row hidden-xs">
+				<div class="col-md-6 col-sm-12 col-md-push-3">
+					<p class="text-potwierdzenie"><?php echo $this->getCheckoutReviewInfo(); ?></p>
+				</div>
+				<div class="col-md-3 col-sm-6 col-md-pull-6">
+					<a href="#"  id="step-2-prev"  class="button button-third large pull-left"><?php echo $this->__('Back'); ?></a>
+				</div>
+				<div class="col-md-3 col-sm-6">
+					<button class="button button-primary large link pull-right" id="step-2-submit"><?php echo $_helper->__('Order now'); ?></button>
+				</div>
+			</div>
+
+
+		</section>
+	</div>
+	
+	
+	<div class="sidebar-secound col-lg-3 col-md-4 col-sm-12 col-xs-12">
+		<section  class="main bg-w opened-panel-group sidebar-addresses">
+			<header >
+				<h2 class="open">
+					<?php echo $_helper->__('Shipping information'); ?>
+					<i class="bullet-strzalka-up visible-xs"></i>
+				</h2>
+			</header>
+			<div class="panel-group">
+				<div class="row">
+					<div class="col-md-12  col-sm-4">
+						<h4><?php echo $_helper->__('Delivery address'); ?>:</h4>
+						{{shipping}}
+					</div>
+					<div class="col-md-12  col-sm-4">
+						<h4><?php echo $_helper->__('Sales document'); ?>:</h4>
+						<dl>
+							<dd>{{sales_document}}<dd>
+						</dl>
+					</div>
+					<div class="col-md-12 col-sm-4 invoice-data">
+						<h4><?php echo $_helper->__('Invoice data'); ?>:</h4>
+						{{billing}}
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<button class="button button-third large pull-right prev-button-address"><?php echo $_helper->__('Change'); ?></button>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section class="main bg-w opened-panel-group sidebar-deliverypayment">
+			<header>
+				<h2 class="open">
+					<?php echo $_helper->__('Delivery and payment'); ?>
+					<i class="bullet-strzalka-up visible-xs"></i>
+				</h2>
+			</header>
+			<div class="panel-group">
+				<div class="row">
+					<div class="col-md-12  col-sm-4">
+						<h4><?php echo $_helper->__('Delivery type'); ?>:</h4>
+						<dl>
+							<dd>{{carrier_name}} - {{carrier_method}}</dd>
+						</dl>
+					</div>
+					<div class="col-md-12  col-sm-4">
+						<h4><?php echo $_helper->__('Payment type'); ?>:</h4>
+						<dl>
+							<dd>{{payment_method}}</dd>
+							<dd class="online-data">{{online_data}}</dd>
+						</dl>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<button class="button button-third large pull-right  prev-button-deliverypaymnet"><?php echo $_helper->__('Change'); ?></button>
+					</div>
+				</div>
+			</div>
+		</section>
+		<div class="main bg-w visible-xs opened-panel-group">  
+			<p><?php echo $this->getCheckoutReviewInfo(); ?></p>
+			<div class="row">
+				<div class="col-sm-6">
+					<a  href="#"  id="step-2-prev" class="button button-third large pull-left"><?php echo $this->__('Back'); ?></a>
+				</div>
+				<div class="col-sm-6">
+					<button class="button button-primary large link pull-right" id="step-2-submit"><?php echo $this->__('Place order'); ?></button>
+				</div>
+			</div>
+
 		</div>
-        <div class="row">
-            <div class="col-sm-3">
-                <a class="button button-third large pull-left" id="step-2-prev"><?php echo $this->__('Back');?></a>
-            </div>
-			<div class="col-sm-6">
-				<?php echo $this->getCheckoutReviewInfo(); ?>
-			</div>
-            <div class="col-sm-3">
-                <button class="button button-primary large link pull-right" id="step-2-submit"><?php echo $this->__('Place order');?></button>
-            </div>
-        </div>   
+	</div>
 
-</div>
-</section>
-</div>
 </div>

@@ -80,7 +80,7 @@ abstract class Zolago_Checkout_Controller_Abstract
 		$onepage = $this->getOnepage();
 		
 		/**
-		method:guest
+		method:guest | register | customer
 		 */
 		$method	= $request->getParam("method"); // chekcout method
 		if($method && $method!=$this->getOnepage()->getCheckoutMehod()){
@@ -164,6 +164,7 @@ abstract class Zolago_Checkout_Controller_Abstract
 		/**
 		shipping_method[4]:udtiership_1
 		 */
+		
 		if($shippingMethod = $request->getParam("shipping_method")){
 			$shippingMethodResponse = $onepage->saveShippingMethod($shippingMethod);
 			if(isset($shippingMethodResponse['error']) && $shippingMethodResponse['error']==1){

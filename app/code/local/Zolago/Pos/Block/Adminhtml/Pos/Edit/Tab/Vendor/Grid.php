@@ -27,7 +27,13 @@ class Zolago_Pos_Block_Adminhtml_Pos_Edit_Tab_Vendor_Grid extends Mage_Adminhtml
         Mage::getResourceModel('zolagopos/pos')->addPosToVendorCollection($collection);
         return $collection;
     }
-
+    
+    /**
+     * @return int
+     */
+    protected function _getPosId() {
+        return Mage::app()->getRequest()->getParam("pos_id");
+    }
     public function getGridUrl() {
         return $this->getUrl("*/*/vendorgrid", array("_current"=>true));
     }
@@ -54,6 +60,10 @@ class Zolago_Pos_Block_Adminhtml_Pos_Edit_Tab_Vendor_Grid extends Mage_Adminhtml
     {
         switch ($column->getId()) {
             case "in_pos":
+                $posId = $this->_getPosId();
+                if ($posId) {
+                    $this->getCollection()->addFieldToFilter('pos_id' , $posId);
+                }
                 $vendorIds = $this->getSelectedIds();
                 if (empty($vendorIds)) {
                     $vendorIds = 0;

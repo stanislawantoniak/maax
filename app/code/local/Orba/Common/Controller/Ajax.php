@@ -119,11 +119,12 @@ class Orba_Common_Controller_Ajax extends Mage_Core_Controller_Front_Action {
      * Formats success content for response
      * 
      * @param array $content
+     * @param bool|int $status
      * @return array
      */
-    protected function _formatSuccessContentForResponse($content) {
+    protected function _formatSuccessContentForResponse($content, $status = true) {
         return array(
-            'status' => true,
+            'status' => $status,
             'content' => $content
         );
     }

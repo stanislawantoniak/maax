@@ -6,7 +6,8 @@
 class Zolago_Catalog_AuthController extends Mage_Core_Controller_Front_Action
 {
 
-    public function indexAction(){
+    public function indexAction()
+    {
         $apiModel = new Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1();
 
 
@@ -20,7 +21,6 @@ class Zolago_Catalog_AuthController extends Mage_Core_Controller_Front_Action
     public function configurableAction()
     {
         Zolago_Catalog_Model_Observer::processConfigurableQueue();
-        echo 'Done';
     }
 
     public function configurableClearAction()
@@ -28,111 +28,35 @@ class Zolago_Catalog_AuthController extends Mage_Core_Controller_Front_Action
         Zolago_Catalog_Model_Observer::clearConfigurableQueue();
     }
 
-
-    public static function stockAction()
+    public function testAction()
     {
-        $stockId = 1;
-        $websiteAdmin = 0;
-        $websiteFront = 1;
-
-        $cataloginventoryStockItem = array();
-        $cataloginventoryStockStatus0 = array();
-        $cataloginventoryStockStatus1 = array();
-
-        /*
-         * 1. Test with file
-         */
-        //Emulate stock data
-        $dataXMLJSON= Zolago_Catalog_Helper_Stock::emulateStock();
-        //Zend_Debug::dump($dataXMLJSON);
-
-        $dataXML = json_decode($dataXMLJSON);
-
-        $merchant = $dataXML->merchant;
-        //calculate available stock
-        $stock =(array)$dataXML->data;
-
-        Mage::log(microtime() . ' Start prepare data ', 0, 'product_stock_update.log');
-        $data = Zolago_Catalog_Helper_Stock::getAvailableStock($stock,$merchant);
+        $productsToReindex = array(11189,11190,11191,11192,11193);
 
 
-        /*Prepare data to insert*/
 
-        if(empty($data)){
-            Mage::log(microtime() . ' Empty source ', 0, 'product_stock_update.log');
-            return;
-        }
+        $numberQ = 2;
+        if (count($productsToReindex) > $numberQ) {
+            $productsToReindexC = array_chunk($productsToReindex, $numberQ);
+            foreach ($productsToReindexC as $productsToReindexCItem) {
+                Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($productsToReindexCItem);
 
-
-        if(!empty($data)){
-            foreach($data as $id => $qty){
-                $is_in_stock = ($qty > 0) ? 1 : 0;
-                $cataloginventoryStockStatus0 []= "({$id},{$qty},{$is_in_stock},{$stockId},{$websiteAdmin})";
-                $cataloginventoryStockStatus1 []= "({$id},{$qty},{$is_in_stock},{$stockId},{$websiteFront})";
-
-                $cataloginventoryStockItem []= "({$id},{$qty},{$is_in_stock},{$stockId})";
             }
+            unset($productsToReindexCItem);
+        } else {
+            Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($productsToReindex);
+
         }
 
-        /**
-         * 2. Test with all products
-         */
 
-        $load = 1;
-
-//        $skuAssoc = Zolago_Catalog_Helper_Data::getIdSkuAssoc();
-//
-//
-//        $qty = 10;
-//
-//        $i = 0;
-//        if(empty($skuAssoc)){
-//            Mage::log(microtime() . ' Empty source ', 0, 'product_stock_update.log');
-//            return;
-//        }
-//
-//        foreach($skuAssoc as $id => $skuAssocItem){
-//            $cataloginventoryStockStatus0 []= "({$id},{$qty},1,{$stockId},{$websiteAdmin})";
-//            $cataloginventoryStockStatus1 []= "({$id},{$qty},1,{$stockId},{$websiteFront})";
-//
-//            $cataloginventoryStockItem []= "({$id},{$qty},1,{$stockId})";
-//
-//            $i++;
-//        }
-
-        $update1 = array_fill(0,$load, implode(',',$cataloginventoryStockItem));
-        $updateA = array_fill(0,$load, implode(',',$cataloginventoryStockStatus0));
-        $updateB = array_fill(0,$load, implode(',',$cataloginventoryStockStatus1));
-
-
-        $insert1 = implode(',',$update1);
-        $insertA = implode(',',$updateA);
-        $insertB = implode(',',$updateB);
-
-        Mage::log(microtime() . ' End prepare data ', 0, 'product_stock_update.log');
-        $zcSDItemModel = Mage::getResourceModel('zolago_cataloginventory/stock_item');
-
-        Mage::log(microtime() . ' Start cataloginventory_stock_item ', 0, 'product_stock_update.log');
-        $zcSDItemModel->saveCatalogInventoryStockItem($insert1);
-
-        $zcSDStatusModel = Mage::getResourceModel('zolago_cataloginventory/stock_status');
-        Mage::log(microtime() . ' Start cataloginventory_stock_status website_id=0 ', 0, 'product_stock_update.log');
-        //website_id=0
-        $zcSDStatusModel->saveCatalogInventoryStockStatus($insertA);
-
-        Mage::log(microtime() . ' Start cataloginventory_stock_status website_id=1 ', 0, 'product_stock_update.log');
-        //website_id=1
-        $zcSDStatusModel->saveCatalogInventoryStockStatus($insertB);
-
-
-
-        Mage::log(microtime() . ' Start reindex ', 0, 'product_stock_update.log');
-        Mage::getSingleton('index/indexer')
-            ->getProcessByCode('cataloginventory_stock');
-
-        Mage::log(microtime() . ' End ', 0, 'product_stock_update.log');
-        echo 'Done';
+        Mage::log('catalog_converter_price_update_after', 0, 'configurable_update_solr.log');
+        Mage::dispatchEvent(
+            "catalog_converter_price_update_after",
+            array(
+                "product_ids" => $productsToReindex
+            )
+        );
     }
+
 
 }
 

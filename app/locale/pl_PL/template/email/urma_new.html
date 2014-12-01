@@ -1,0 +1,108 @@
+<!--@subject {{var store_name}} – Twoja reklamacja (nr. RMA-{{var rma.increment_id}}) została przekazana do sklepu  @-->
+<!--@vars
+{"store url=\"\"":"Store Url",
+"skin url=\"images/logo_email.gif\" _area='frontend'":"Email Logo Image",
+"htmlescape var=$order.getCustomerName()":"Customer Name",
+"var store.getFrontendName()":"Store Name",
+"store url=\"customer/account/\"":"Customer Account Url",
+"var rma.increment_id":"RMA Id",
+"var order.increment_id":"Order Id",
+"var order.billing_address.format('html')":"Billing Address",
+"var payment_html":"Payment Details",
+"var order.shipping_address.format('html')":"Shipping Address",
+"var order.shipping_description":"Shipping Description",
+"layout handle=\"sales_email_order_rma_items\" rma=$rma order=$order":"RMA Items Grid",
+"var comment":"RMA Comment"}
+@-->
+<!--@styles
+body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif; }
+@-->
+
+<body style="background:#F6F6F6; font-family:"latoregular",sans-serif; font-size:14px; margin:0; padding:0;">
+<div style="background:#F6F6F6; font-family:"latoregular",sans-serif; font-size:14px; margin:0; padding:0;">
+<table cellspacing="0" cellpadding="0" border="0" height="100%" width="100%">
+<tr>
+    <td align="center" valign="top" style="padding:20px 0 20px 0">
+        <!-- [ header starts here] -->
+        <table bgcolor="#FFFFFF" cellspacing="0" cellpadding="10" border="0" width="650" style="border:1px solid #E0E0E0;">
+            <tr>
+                <td valign="top">
+                    <a href="{{store url=""}}" >
+                    <img src="{{skin url='images/logo_black.png' _area='frontend'}}" alt="{{var store_name}}" border="0"  style="margin-bottom:10px;" />
+                    </a>
+                </td>
+            </tr>
+        <!-- [ middle starts here] -->
+            <tr>
+                <td valign="top">
+                    <p>Twoje zgłoszenie zostało przekazane do sklepu <span style="text-transform:uppercase;">{{var vendor.vendor_name}}</span>. Poniżej treść wiadomości:</p>
+
+                    <div style="background-color:#f1f1f1;margin:10px 0;padding:20px 10px;border:1px solid #d3d3d3;">
+                        <div style="margin:0 0 30px 0;">
+                            <p style="margin: 0;"><b>Data zgłoszenia:</b> {{var rma_creation_date}}</p>
+                            <p style="margin: 0;"><b>Rodzaj zgłoszenia:</b> Reklamacja</p>
+                            <p style="margin: 0;"><b>Zgłoszenie dotyczy zamówienia numer:</b> {{var po.increment_id}}</p>
+                            <p style="margin: 0;"><b>Sklep:</b> <span style="text-transform:uppercase;">{{var vendor.vendor_name}}</span></p>
+                        </div>
+                        <div style="margin:0 0 30px 0;">
+                            {{layout handle="sales_email_order_rma_items" rma=$rma order=$order}}
+                        </div>
+
+                        {{depend show_comment}}
+                        <div style="margin:0 0 30px 0;">
+                            <p><b>Twój komentarz:</b></p>
+                            <p>{{var comment}}</p>
+                        </div>
+                        {{/depend}}
+
+                        {{depend show_courier}}
+                        <div style="margin:0 0 30px 0;">
+                            <p><b>Termin odbioru przesyłki przez kuriera:</b> {{var courier_week_day}} {{var courier_date}}
+                                między {{var rma.carrier_time_from}} a {{var rma.carrier_time_to}}</p>
+                        </div>
+                        <div style="margin:0 0 30px 0;">
+                            <p style="margin: 0;"><b>Adres odbioru zwrotu:</b></p>
+                            {{var courier_shipping.format('html')}}
+                        </div>
+                        {{/depend}}
+
+
+                        {{depend rma_status_pending_pickup}}
+                        <div style="margin:0 0 30px 0;">
+                            <p><a href="{{var courier_pdf_url}}">Wydrukuj dokumenty zwrotu</a></p>
+                        </div>
+                        {{/depend}}
+                    </div>
+                    {{depend rma_status_pending_pickup}}
+                    <div style="margin:0 0 30px 0;">
+                        <p>
+                            <b>WAŻNE:</b>  Zanim przyjedzie kurier, wydrukuj dokumenty zwrotu, które załączyliśmy w pliku PDF do tej wiadomości.
+                            Formularz zwrotu włóż do przesyłki wraz z produktami, dokumenty nadania przekaż zaś kurierowi.
+                        </p>
+                    </div>
+                    {{/depend}}
+
+                    <div style="margin:0 0 30px 0;">
+                        <p>Status zgłoszenia możesz na bieżąco śledzić w swoim koncie, w zakładce <a href="{{var rma_url}}">Zwroty i reklamacje</a>.</p>
+                    </div>
+
+                    {{depend rma_status_pending}}
+                        <p>Gdy tylko sprzedawca potwierdzi przyjęcie reklamacji, otrzymasz maila z prośbą o uzupełnienie danych niezbędnych do odesłania produktów.</p>
+                    {{/depend}}
+
+
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <p>Pozdrawiamy serdecznie,</p>
+                    <p>Zespół {{var store.getName()}}</p>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
+</table>
+</div>
+</body>

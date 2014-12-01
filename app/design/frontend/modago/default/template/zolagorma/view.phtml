@@ -1,7 +1,8 @@
 <?php /* @var $this Zolago_Rma_Block_View */ ?>
 <?php $_helper = Mage::helper("zolagorma"); ?>
 <?php $_rma = $this->getRma();?>
-
+<?php $carrierDate = $_rma->getCarrierDate(); ?>
+<?php $weekdays = Mage::app()->getLocale()->getOptionWeekdays();?>
 <div class="page-title box-wrapper">
 	<h1>
 		<span class="hidden-md hidden-lg"><?php echo $_helper->__("Returns and complaints"); ?></span>
@@ -18,12 +19,17 @@
 	</div>
 	<?php if($_monits = $this->getMonits($_rma)):?>
 	<div class="rma-monit rma-section">
-		<?php foreach($_monits as $monit):?>
-			<?php echo $monit;?>
-		<?php endforeach;?>
+                <?php foreach($_monits as $monit):?>
+                    <?php echo $monit;?>
+                <?php endforeach;?>
 		<?php if(($_pdfUrl=$this->getPdfUrl($_rma)) && $this->isPendingPickup($_rma)):?>
 			<a href="<?php echo $_pdfUrl;?>" class="button button-primary download-doc"><?php echo $_helper->__("Download a document"); ?></a>
 		<?php endif;?>
+        <?php if ($this->isPendingCourierBooking($_rma)): ?>
+                <a href="/sales/rma/courier/id/<?php echo $_rma->getId(); ?>" class="button button-primary download-doc">
+                    <?php echo $_helper->__("Book a courier"); ?>
+                </a>
+        <?php endif; ?>
 	</div>
 	<?php endif;?>
 	<div class="row">
@@ -44,12 +50,15 @@
 						<span class="uppercase"><?php echo $_helper->__("Carrier date"); ?></span>
 					</p>
 					<div>
-						<?php echo $this->getDayOfWeek($_rma);?> <?php echo Mage::helper("core")->formatDate($_rma->getCarrierDate(), "short");?><br/>
+                        <?php if(!empty($carrierDate)): ?>
+                        <?php echo $weekdays[date('w',strtotime($carrierDate))]['label'];?>
+						<?php echo Mage::helper("core")->formatDate($carrierDate, "short");?><br/>
 						<?php echo $_helper->__(
 							"between %s and %s", 
 							$_rma->getCarrierTimeFrom() ? $_rma->getCarrierTimeFrom() : $_helper->__("N/A"), 
 							$_rma->getCarrierTimeTo() ? $_rma->getCarrierTimeTo() : $_helper->__("N/A")); 
 						?>
+                        <?php endif; ?>
 					</div>
 				</div>
 				<?php if($_address=$_rma->getShippingAddress()):?>
@@ -64,6 +73,9 @@
 					</div>
 				<?php endif;?>
 			<?php endif;?>
+
+
+
 			<div class="rma-section rma-content">
 				<p>
 					<i class="glyphicon glyphicon-list-alt"></i>
@@ -137,7 +149,7 @@
 									<?php echo $this->getCommentAuthor($_comment); ?>
 								</td>
 								<td class="desc">
-									<p><?php echo $this->escapeHtml($_comment->getComment());?></p>
+									<p><?php echo $_helper->formatComment($_comment);?></p>
 								</td>
 							</tr>
 							<?php endforeach;?>
@@ -146,13 +158,7 @@
 				<?php else:?>
 					<p><?php echo $_helper->__("There is no RMA comments"); ?></p>
 				<?php endif;?>
-			</div> 
-			<?php if($this->getIsReturn($_rma)):?>
-			<div class="rma-cancel">
-				<a href="#"><?php echo $_helper->__("Cancel RMA");?> [DEV]</a>
 			</div>
-			<?php endif;?>
 		</div>
-		
 	</div>
 </div>

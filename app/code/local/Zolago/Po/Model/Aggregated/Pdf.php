@@ -2,9 +2,9 @@
 /**
  * pdf with aggregated orders
  */
-class Zolago_Po_Model_Aggregated_Pdf extends Varien_Object {
-    // Zend_Pdf
-    protected $_doc;
+class Zolago_Po_Model_Aggregated_Pdf extends Orba_Common_Model_Pdf {
+    const PO_AGGREGATED_PATH = 'shipping';
+    const PO_AGGREGATED_PREFIX = 'aggregate_';
     // Aggregation
     protected $_aggregated;
     protected $_line_count = 1;
@@ -30,51 +30,13 @@ class Zolago_Po_Model_Aggregated_Pdf extends Varien_Object {
     public function setAggregated($aggr) {
         $this->_aggregated = $aggr;
     }
-    protected function _getFileName($id) {
-        $sfx = $id % 100;
-        $a = floor($sfx / 10);
-        $b = $sfx % 10;
-        $path = Mage::getBaseDir('media').DS.'shipping'.DS.$b.DS.$a.DS;
-        if(!file_exists($path)) {
-            mkdir($path,0755,true);
-        }
-        $filename = $path.'aggregate_'.$id.'.pdf';
-        return $filename;
+    public function _getFilePrefix() {
+        return self::PO_AGGREGATED_PREFIX;
     }
-    public function deleteFile($id) {
-        if (file_exists($this->_getFileName($id))) {
-            @unlink($this->_getFileName($id));
-        }
-    }
-    public function getPdfFile($id) {
-        if (!file_exists($this->_getFileName($id))) {
-            $this->_preparePdf($id);
-        }
-        return $this->_getFileName($id);
-    }
-    public function getPdf($id) {
-        if (empty($this->_doc)) {
-            if (!file_exists($this->_getFileName($id))) {
-                $this->_preparePdf($id);
-            } else {
-                return file_get_contents($this->_getFileName($id));
-            }
-        }
-        return $this->_doc->render();
+    public function _getFilePath() {
+        return self::PO_AGGREGATED_PATH;
     }
 
-    /**
-     * connecting text array into one text line using keys
-     */
-    protected function _prepareText($data, $keys,$separator = ' ') {
-        $tmp = array();
-        foreach ($keys as $key) {
-            if (!empty($data[$key])) {
-                $tmp[] = $data[$key];
-            }
-        }
-        return implode($separator,$tmp);
-    }
     protected function _addShip($ship,$po,$page,$counter) {
         $this->_setFont($page,9);
         $rel = 475-30*$counter;
@@ -232,7 +194,11 @@ class Zolago_Po_Model_Aggregated_Pdf extends Varien_Object {
             $this->_totals['courier'] = $track->getTitle();
         }
     }
-    protected function _preparePages() {
+    protected function _preparePages($id) {
+        if (!$this->_aggregated) {
+            $aggr = Mage::getModel('zolagopo/aggregated')->load($id);
+            $this->setAggregated($aggr);
+        }
         $aggr = $this->_aggregated;
         $id = $aggr->getId();
         if ($id) {
@@ -247,8 +213,8 @@ class Zolago_Po_Model_Aggregated_Pdf extends Varien_Object {
                 if (!$counter) {
                     $num ++;
                     $page = $this->_doc->newPage(Zend_Pdf_Page::SIZE_A4_LANDSCAPE);
-                    $this->_prepareHeader($page,$num,$pages);
                     $this->_doc->pages[] = $page;
+                    $this->_prepareHeader($page,$num,$pages);
                 }
                 $shipmentCollection = $po->getShipmentsCollection();
                 foreach ($shipmentCollection as $ship) {
@@ -270,37 +236,6 @@ class Zolago_Po_Model_Aggregated_Pdf extends Varien_Object {
             $this->_prepareFooter($page,$counter);
         }
 
-    }
-    protected function _preparePdf($id) {
-        if (!$this->_aggregated) {
-            $aggr = Mage::getModel('zolagopo/aggregated')->load($id);
-            $this->setAggregated($aggr);
-        }
-        $pdf = new Zend_Pdf();
-        $this->_doc = $pdf;
-        $this->_preparePages();
-        $pdf->save($this->_getFileName($id));
-    }
-    protected function _setFont($page,$size = 7,$type = '') {
-        switch ($type) {
-        case 'b':
-            $font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir() . '/lib/font/Arial_Bold.ttf');
-//                $font = Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA_BOLD);
-
-//                $font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir() . '/lib/LinLibertineFont/LinLibertine_Re-4.4.1.ttf');
-            break;
-        case 'i':
-            $font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir() . '/lib/font/Arial_Italic.ttf');
-//                $font = Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA_ITALIC);
-//                $font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir() . '/lib/LinLibertineFont/LinLibertine_It-2.8.2.ttf');
-            break;
-        default:
-            $font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir() . '/lib/font/Arial.ttf');
-//                $font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir() . '/lib/LinLibertineFont/LinLibertine_Re-4.4.1.ttf');
-//                $font = Zend_Pdf_Font::fontWithName(Zend_Pdf_Font::FONT_HELVETICA);
-
-        }
-        $page->setFont($font,$size);
     }
     protected function _prepareVendorData($vendor_id) {
         $out = '';

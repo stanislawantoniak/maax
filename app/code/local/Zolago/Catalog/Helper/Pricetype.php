@@ -32,6 +32,24 @@ class Zolago_Catalog_Helper_Pricetype extends Mage_Core_Helper_Abstract
         $model->addToQueueProduct($id);
     }
 
+    /**
+     * @return array
+     */
+    public  function getPriceTypeData()
+    {
+        $priceTypesByCode = array();
+        $attribute = Mage::getSingleton('eav/config')
+            ->getAttribute('catalog_product', Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER_PRICE_TYPE_CODE);
+        if ($attribute->usesSource()) {
+            $options = $attribute->getSource()->getAllOptions(false);
+            if (!empty($options)) {
+                foreach ($options as $option) {
+                    $priceTypesByCode[$option['value']] = $option['label'];
+                }
+            }
+        }
+        return $priceTypesByCode;
+    }
 
     /**
      * Special Log Message Function

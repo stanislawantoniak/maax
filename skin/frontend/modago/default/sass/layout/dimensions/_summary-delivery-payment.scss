@@ -9,13 +9,13 @@
 		.sidebar-secound {
 			.main {
 				padding: 30px 30px;
-				@media(max-width: $screen-xs-max) {
+				@media(max-width: 768px) {
 					padding: 15px 15px 10px;
 				}
+			}
 			.col-xs-4 {
 				@media(max-width: 360px) {
 					width:100%!important;
-				}
 				}
 			}
 		}
@@ -61,12 +61,16 @@
 }
 .table-summary-product {
 	.table-heading {
+		display:none;
 		width:50%;
 		float:right;
 		padding-bottom: 30px;
 		position:relative;
 		top: -50px;
 		margin-bottom: -50px;
+		&:first-child{
+			display: block;
+		}
 		@media (min-width: $screen-md-min) {
 			width:40%;
 		}
@@ -272,30 +276,27 @@
 }
 
 .node-type-summary-delivery-payment {
-	#checkout {
-		&.podsumowanie {
-			.title-section {
-				&+#summary-panel-product {
-					@media(max-width: 767px) {
-						display:none
-					}
-					
-				}
-			}
-			#order-show-products {
-					display:block;
-				}
-			.opened-panel-group {
-				.title-section {
-					&+#summary-panel-product {
-						display:block
-					}
-				}
-				#order-show-products {
-					display:none;
-				}
+
+	.title-section {
+		&+#summary-panel-product {
+			@media(max-width: 767px) {
+				display:none;
 			}
 
 		}
 	}
+	#order-show-products {
+			display:block;
+		}
+	.opened-panel-group {
+		.title-section {
+			&+#summary-panel-product {
+				display:block
+			}
+		}
+		#order-show-products {
+			display:none;
+		}
+	}
+
 }

@@ -1,0 +1,90 @@
+<?php $_helper = Mage::helper("customer");?>
+<?php $baseUrl = Mage::helper("core/url")->getHomeUrl(); ?>
+
+<div class="page-title box-wrapper">
+    <h1>
+        <span><?php echo $this->__('Notification settings') ?></span>
+        <span class="back-sm"><a href="<?php echo $baseUrl ?>customer/account/index/" class="underline"><?php echo $_helper->__('back: my account'); ?> &gt;</a></span>
+        <span class="back-xs"><a href="<?php echo $baseUrl ?>customer/account/index/" class="underline"><?php echo $_helper->__('back'); ?> &gt;</a></span>
+    </h1>
+</div>
+<div class="background-wrapper box-wrapper container-fluid">
+	<div class="col-md-12">
+    <form action="<?php echo $this->getAction() ?>" method="post" id="form-validate">
+        <?php echo $this->getBlockHtml('formkey'); ?>
+        <div class="fieldset newsletter-border">
+            <div id="general-subscription" class="row bigger-padding">
+                <div class="col-sm-12">
+                    <div class="form-group form-checkbox">
+                        <input type="checkbox" name="is_subscribed" id="subscription"
+                               value="1" <?php if ($this->getIsSubscribed()): ?> checked="checked"<?php endif; ?>
+                               class="css-checkbox"/>
+                        <label for="subscription"
+                               class="css-label css-label-bold">
+                        </label>
+                        <div class="pseudo-label label-bold">
+                            <?php echo $this->__('I want to benefit from using special discounts on shopping and delivery, and to receive information about special offers by email!'); ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('notification-settings-general-subscription')->toHtml(); ?>
+                </div>
+                <div class="col-sm-12">
+                    <?php /* Extensions placeholder */ ?>
+                    <?php echo $this->getChildHtml('customer.form.newsletter.extra') ?>
+                </div>
+            </div>
+        </div>
+
+<!--        <div class="fieldset newsletter-border">-->
+<!--            <div id="general-subscription" class="row bigger-padding">-->
+<!--                <div class="col-sm-12">-->
+<!--                    <div class="form-group form-checkbox">-->
+<!--                        <input type="checkbox" name="" id=""-->
+<!--                               value="1" --><?php //if ( ? ): ?><!-- checked="checked"--><?php //endif; ?>
+<!--                               class="css-checkbox"/>-->
+<!--                        <label for="subscription"-->
+<!--                               class="css-label css-label-bold">-->
+<!--                        </label>-->
+<!--                        <div class="pseudo-label label-bold">-->
+<!--                            --><?php //echo $this->__('?'); ?>
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="col-sm-12">-->
+<!--                    --><?php //echo $this->getLayout()->createBlock('cms/block')->setBlockId('notification-settings-sms')->toHtml(); ?>
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+
+        <div class="bottom-links">
+            <a class="button button-third large" href="<?php echo Mage::getUrl("customer/account");?>">
+                <i class="glyphicon glyphicon-chevron-left"></i>
+                <?php echo $_helper->__('back') ?>
+            </a>
+            <button type="submit" class="btn button button-primary pull-right">
+                <?php echo $_helper->__("Save"); ?>
+            </button>
+            <div class="clearfix"></div>
+        </div>
+    </form>
+    <?php /* Extensions placeholder */ ?>
+    <?php echo $this->getChildHtml('customer.form.newsletter.extra2') ?>
+	</div>
+</div>
+
+<script>
+    jQuery(document).ready(function() {
+
+        jQuery('.more-info').on("click", function(event) {
+            event.preventDefault();
+
+            var field = jQuery(this).parents('.fieldset');
+
+            field.find('.three-dots').hide();
+            field.find('.more-info').hide();
+            field.find('.more-info-txt').show();
+        });
+    });
+</script>

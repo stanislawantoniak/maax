@@ -119,7 +119,11 @@ $_billingAddress = $_quote->getBillingAddress();
     Mall.translate.add("required", "<?php echo $this->__("This is a required field."); ?>");
     Mall.translate.add("email", "<?php echo $this->__("E-mail address is in invalid format or contains invalid characters. Please enter correct address."); ?>");
     Mall.translate.add("emailbackend-exits", "<?php echo $this->__("We already have an account with this address. Please log in to your account."); ?>");
-
+   
+	Mall.translate.add("Pho.", "<?php echo $this->__('Pho.') ?>");
+    Mall.translate.add("Invoice", "<?php echo $this->__('Invoice') ?>");
+    Mall.translate.add("VAT Id", "<?php echo $this->__('VAT Id') ?>");
+    Mall.translate.add("Delivery address", "<?php echo $this->__('Delivery address') ?>");
 
     Mall.validate.validators.config.passwordMinLength = <?php echo Mage::helper("zolagocustomer")->getPasswordMinLength(); ?>;
 

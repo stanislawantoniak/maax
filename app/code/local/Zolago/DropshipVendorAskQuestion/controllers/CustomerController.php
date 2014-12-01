@@ -19,6 +19,10 @@ class Zolago_DropshipVendorAskQuestion_CustomerController extends Unirgy_Dropshi
             $data   = $this->getRequest()->getPost();
             $question = $this->getRequest()->getParam('question', array());
         }
+		
+		if(isset($question['shipment_id']) && empty($question['shipment_id'])){
+			unset($question['shipment_id']);
+		}
 
         $cSess = Mage::getSingleton('customer/session');
 

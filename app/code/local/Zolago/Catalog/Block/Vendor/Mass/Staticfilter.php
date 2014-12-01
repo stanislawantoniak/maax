@@ -23,7 +23,7 @@ class Zolago_Catalog_Block_Vendor_Mass_Staticfilter extends Mage_Core_Block_Temp
                 );
 
             $arrayDropdown = Mage::getResourceSingleton('zolagocatalog/vendor_mass')
-                ->getStaticDropdownFiltersForVendor(
+                ->getStaticDropdownFiltersForVendorProductAssoc(
                     $this->getVendor(),
                     $this->getCurrentAttributeSetId(),
                     $this->getStore()->getId()
@@ -76,10 +76,11 @@ class Zolago_Catalog_Block_Vendor_Mass_Staticfilter extends Mage_Core_Block_Temp
         return $result;
     }
 
-    public function getOptionLabelbyId($labelId, $storeId = 0)
+    public function getOptionLabelbyId($attributeId,$labelId, $storeId = 0)
     {
         $optionValue = Mage::getResourceSingleton('zolagocatalog/vendor_mass')
                        ->getOptionLabelbyId(
+                           $attributeId,
                            $labelId,
                            $storeId
                        );
