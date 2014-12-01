@@ -279,9 +279,20 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 		if($attribute instanceof Mage_Catalog_Model_Resource_Eav_Attribute){
 			return $attribute;
 		}
-		return Mage::getSingleton('eav/config')->getAttribute(
+		
+		$object = Mage::getSingleton('eav/config')->getAttribute(
 			Mage_Catalog_Model_Product::ENTITY, $attribute
 		);
+		
+		/**
+		 * Fixing cache problem with no attrbiute full data
+		 * is_required need to be set. if null just reload attrbiute
+		 */
+		if(null===$object->getIsRequired()){
+			$object = Mage::getModel("catalog/resource_eav_attribute")->load($object->getId());
+		}
+		
+		return $object;
 	}
 	
 	/**
