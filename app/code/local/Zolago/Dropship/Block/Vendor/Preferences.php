@@ -265,21 +265,4 @@ class Zolago_Dropship_Block_Vendor_Preferences extends Unirgy_Dropship_Block_Ven
         return $fieldsets;
     }
 
-
-    public function getVendor(){
-        $_session = Mage::getSingleton('udropship/session');
-        $_vendor = $_session->getVendor();
-
-        return $_vendor;
-    }
-
-    public function getVendorPreferences()
-    {
-        $_vendor = $this->getVendor();
-
-        $vendorPreferences = Mage::getModel('zolagodropship/preferences');
-        $vendorPreferences->load($_vendor->getVendorId(), 'vendor_id');
-
-        return $vendorPreferences;
-    }
 }
