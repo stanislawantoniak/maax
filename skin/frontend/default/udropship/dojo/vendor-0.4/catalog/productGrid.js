@@ -380,7 +380,7 @@ define([
 				]
 			]
 		];
-		
+		console.log(columns);
 		
 		for(var i=0, column, childColumn; i<columns.length; i++){
 			column = columns[i];
@@ -613,7 +613,6 @@ define([
 		Keyboard, CompoundColumns, ColumnSet, QueryGrid]);
 	
 	var initGrid = function(columns, container){
-		
 		var config = {
 			columnSets: processColumnSets(columns),
 

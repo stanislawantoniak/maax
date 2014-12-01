@@ -315,7 +315,7 @@ define([
 		 * @returns {unresolved}
 		 */
 		_generateBasicSelect: function(column, parentColumn){
-			var options = column.options || {},
+			var options = column.editOptions || [],
 				select;
 			
 			select = put("select", {
@@ -330,14 +330,12 @@ define([
 				}));
 			}
 			
-			for(var key in options){
-				if(options.hasOwnProperty(key)){
-					put(select, put("option", {
-						value: key,
-						innerHTML: options[key]
-					}));
-				}
-			}
+			options.forEach(function(opt){
+				put(select, put("option", {
+					value: opt.value,
+					innerHTML: opt.label
+				}));
+			});
 			
 			return select;
 		},

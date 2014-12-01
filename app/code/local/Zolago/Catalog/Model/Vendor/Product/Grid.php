@@ -243,20 +243,31 @@ class Zolago_Catalog_Model_Vendor_Product_Grid  extends Varien_Object {
 					switch ($attribute->getAttributeCode()) {
 						case "manufacturer":
 							/** @todo Implement with method **/
+							$extend['filter_options'] = array();
 							$extend['options'] = Mage::helper("zolagosizetable")->getBrands(
 								$this->getVendor(), 
 								$this->getLabelStore()->getId()
 							);
+							foreach($extend['options'] as $value=>$label){
+								$extend['filter_options'][] = array(
+									"label" => $label,
+									"value" => $value
+								);
+							}
 						break;
 
 						default:
 							$extend['options']  = array();
-							foreach($attribute->getSource()->getAllOptions(false) as $option){
+							$extend['filter_options']  = $attribute->getSource()->getAllOptions(false);
+							foreach($extend['filter_options'] as $option){
 								if($option['value']!==""){
 									$extend['options'][$option['value']]=$option['label'];
 								}
 							}
 						break;
+					}
+					if(isset($extend['filter_options'])){
+						$extend['edit_options'] = $extend['filter_options'];
 					}
 				}
 			}elseif($frontendType=="price"){
