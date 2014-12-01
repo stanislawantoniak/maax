@@ -96,6 +96,9 @@ define([
 				if(grid.focus && column){
 					grid.focus(grid.cell(column.row.id, column.column.id));
 				}
+				if(grid._total==0){
+					grid.clearSelection();
+				}
 				grid._updateHeaderCheckboxes();
 			});
 			// Restore selection
