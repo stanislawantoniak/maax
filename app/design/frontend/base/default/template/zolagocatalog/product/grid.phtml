@@ -1,5 +1,5 @@
 <?php /* @var $this Zolago_Catalog_Block_Vendor_Product_Grid*/?>
-
+<?php $_hlp = Mage::helper("zolagocatalog");?>
 <div class="container" id="content-wrapper">
 	<div id="grid-holder"></div>
 </div>
@@ -19,10 +19,12 @@
 	#grid-holder .dgrid-cell{
 		vertical-align: middle;
 	}
-	#grid-holder td.dgrid-focus{
-		 box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+	#grid-holder td.dgrid-cell{
+		  cursor: not-allowed;
 	}
-	
+	#grid-holder td.dgrid-cell.dgrid-focus{
+		 box-shadow: inset 0 0 5px rgba(0,0,0,0.4);
+	}
 	
 	#grid-holder th.header.field-required::after{
 		color: red;
@@ -37,11 +39,27 @@
 	#grid-holder td.editable{
 		font-weight: normal;
 		position: relative;
-		cursor: cell;
+		cursor: pointer;
 	}
-	#grid-holder td.editable.dgrid-focus{
-		 box-shadow: inset 0 0 5px #53AFFF;
+	
+	#grid-holder td.editable,
+	#grid-holder td.field-thumbnail,
+	#grid-holder td.dgrid-selector{
+		cursor: pointer;
 	}
+	
+	#grid-holder td.editable.dgrid-focus,
+	#grid-holder td.field-thumbnail.dgrid-focus{
+		 box-shadow: inset 0 0 10px #53AFFF;
+	}
+	
+	#grid-holder .dgrid-selected td.editable.dgrid-focus,
+	#grid-holder .dgrid-row:hover td.editable.dgrid-focus,
+	#grid-holder .dgrid-selected td.field-thumbnail.dgrid-focus,
+	#grid-holder .dgrid-row:hover td.field-thumbnail.dgrid-focus{
+		 box-shadow: inset 0 0 10px #006dcc;
+	}
+	
 	#grid-holder td.editable:active{
 		cursor: default;
 	}
@@ -98,7 +116,9 @@
 		white-space: nowrap;
 	}
 	#grid-holder td.dgrid-cell.field-thumbnail{
+		position: relative;
 		padding:0;
+		border-left:0;
 	}
 	/** Thumb column **/
 	#grid-holder td.dgrid-cell.field-thumbnail p,
@@ -107,6 +127,13 @@
 		display: block;
 		margin:0;
 		padding:0;
+	}
+	#grid-holder td.dgrid-cell.field-thumbnail img{
+		position: absolute;
+		z-index: -1;
+		display:block;
+		top:0;
+		left:0;
 	}
 	
 	#grid-holder td.dgrid-cell.field-thumbnail a,
@@ -211,8 +238,17 @@
 	#grid-holder .editor select[multiple]{
 		max-height: 90px;
 	}
+	#grid-holder .editor .close.disabled:hover{
+		opacity: 0.2 !important;
+		cursor: default !important;
+	}
 	
-
+	/** Fix tooltip **/
+	.tooltip-inner{
+		max-width: 400px;
+		font-size: 11px;
+		text-align: left;
+	}
 	
 	@media (max-width: 768px){
 		#grid-holder{

@@ -118,3 +118,8 @@
 "Confirm products", "Zatwierdź produkty"
 "Thumbnail", "Obrazek"
 "empty", "pusty"
+"Add", "Dodaj"
+"Set", "Ustaw"
+"Substract", "Usuń"
+"Submit", "Wyślij"
+"%d selected product has empty required attribute(s) and/or is missing a base image:", "%d wybrany produkt(y) ma puste wartości atrybutów wymaganych i/lub nie ma zdjęcia głównego:"
