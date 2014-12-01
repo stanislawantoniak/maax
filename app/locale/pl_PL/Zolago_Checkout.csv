@@ -1,4 +1,4 @@
-"Cart", "Koszyk"
+﻿"Cart", "Koszyk"
 "Shipping data", "Dane dostawy"
 "Delivery and payment", "Dostawa i płatność"
 "Summary", "Podsumowanie"
@@ -43,3 +43,4 @@
 "Shipping information", "Dane do wysyłki"
 "Confirm delivery and payment method", "Potwierdź sposób dostawy i płatności"
 "Place order","Złóż zamówienie"
+"Some of the products are currently out of stock","Niektóre produkty w koszyku nie są juz dostępne na magazynie. Usuń te produkty, aby przejść dalej"
