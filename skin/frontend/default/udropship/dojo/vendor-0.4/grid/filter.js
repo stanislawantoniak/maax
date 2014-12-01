@@ -64,7 +64,7 @@ define([
 						"className": "select-filter"
 					}),
 					grid = this.grid,
-					options = lang.clone(config.options || []);
+					options = lang.clone(config.filterOptions || []);
 					
 					
 					// Array cast
