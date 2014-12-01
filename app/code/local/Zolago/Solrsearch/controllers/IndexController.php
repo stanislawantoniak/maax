@@ -33,8 +33,11 @@ class Zolago_Solrsearch_IndexController extends SolrBridge_Solrsearch_IndexContr
 		// When in the search mode
 		// Set current category to param['scat']		
 		if(isset($params['scat'])){
-			
-			if($params['scat'] != "0" && $params['scat'] != Zolago_Solrsearch_Helper_Data::ZOLAGO_SEARCH_CONTEXT_CURRENT_VENDOR){
+        // override root category
+        if ($params['scat'] == 0) {
+            $params['scat'] = Mage::app()->getStore()->getRootCategoryId();            
+        }
+		if($params['scat'] != "0" && $params['scat'] != Zolago_Solrsearch_Helper_Data::ZOLAGO_SEARCH_CONTEXT_CURRENT_VENDOR){
 				
 				if(isset($params['is_search'])){
 					Mage::register('is_current_category_context', TRUE);
@@ -117,7 +120,6 @@ class Zolago_Solrsearch_IndexController extends SolrBridge_Solrsearch_IndexContr
 		if( isset($solrData['responseHeader']['params']['q']) && !empty($solrData['responseHeader']['params']['q']) ) {
 
             Mage::register($solrModel::REGISTER_KEY . "_search_real_q", $solrData['responseHeader']['params']['q']);
-
             $isNoResult = $solrData['response']['numFound'] ? true : false;
             Mage::register($solrModel::REGISTER_KEY . "_search_is_no_result", $isNoResult);
 

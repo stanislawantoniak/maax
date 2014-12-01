@@ -554,7 +554,12 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 				}
 			}
 			else{
-				$parent_category = $category->getParentCategory();
+			    if ($category->getId() == $root_category_id) {
+        			$category = Mage::getModel('catalog/category')->load($root_category_id);
+		        	$is_root_category = TRUE;			        
+			    } else {			    
+    				$parent_category = $category->getParentCategory();
+                }
 			}
 		}
 		else{
@@ -715,7 +720,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
     }
 
     public function getPriceBlock($solrData) {
-        if($this->getMode()==self::MODE_CATEGORY&& !$this->getCurrentCategory()->getUsePriceFilter()) {
+        if(in_array($this->getMode(),array(self::MODE_CATEGORY,self::MODE_SEARCH))  && !($this->getCurrentCategory()->getUsePriceFilter())) {
             return null;
         }
         $facetFileds = array();
@@ -738,7 +743,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
     public function getFlagBlock($solrData) {
 
 		// Only in category ?
-        if($this->getMode()==self::MODE_CATEGORY&& !$this->getCurrentCategory()->getUseFlagFilter()) {
+        if(in_array($this->getMode(),array(self::MODE_CATEGORY,self::MODE_SEARCH))&& !$this->getCurrentCategory()->getUseFlagFilter()) {
             return null;
         }
 	
@@ -764,7 +769,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 	
 
     public function getRatingBlock($solrData) {
-        if($this->getMode()==self::MODE_CATEGORY&& !$this->getCurrentCategory()->getUseReviewFilter()) {
+        if(in_array($this->getMode(),array(self::MODE_CATEGORY,self::MODE_SEARCH))&& !$this->getCurrentCategory()->getUseReviewFilter()) {
             return null;
         }
         $facetFileds = array();
@@ -875,7 +880,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 				break;
             }
             // In category mode
-            if($this->getMode()==self::MODE_CATEGORY) {
+            if(in_array($this->getMode(),array(self::MODE_CATEGORY,self::MODE_SEARCH))) {
 				
                 $filter = $this->getFilterByAttribute($attrCode);
 
