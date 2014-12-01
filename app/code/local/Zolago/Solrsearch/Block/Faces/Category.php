@@ -95,13 +95,20 @@ class Zolago_Solrsearch_Block_Faces_Category extends Zolago_Solrsearch_Block_Fac
             // //Remove scat parameter in order to display siblings in layered navigation
             // if(isset($params['scat'])) unset($params['scat']);
 
-            $facetUrl = $this->getFacesUrl(
-                            array('scat' => $parent_category_id)
-                        );
+//            $facetUrl = $this->getFacesUrl(
+//                            array('scat' => $parent_category_id)
+//                        );
 
             // if($this->isItemActive($item)){
             // $facetUrl = $this->getRemoveFacesUrl("category", array($last['name']));
             // }
+            if(isset($params['scat'])) unset($params['scat']);
+            if(isset($params['id'])) unset($params['id']);
+            $tmp = array(
+                '_direct' => Mage::getModel('core/url_rewrite')->loadByIdPath('category/' . $category->getId())->getRequestPath(),
+                '_query' => $this->processFinalParams($params)
+            );
+            $facetUrl = Mage::getUrl('',$tmp);
         }
 
         return $facetUrl;
