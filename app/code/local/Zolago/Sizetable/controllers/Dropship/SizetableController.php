@@ -1,6 +1,7 @@
 <?php
 
-class Zolago_Sizetable_Dropship_SizetableController extends Zolago_Dropship_Controller_Vendor_Abstract {
+class Zolago_Sizetable_Dropship_SizetableController extends Zolago_Dropship_Controller_Vendor_Abstract
+{
 
 	protected $erroroccurred = false;
 
@@ -12,16 +13,19 @@ class Zolago_Sizetable_Dropship_SizetableController extends Zolago_Dropship_Cont
 	/**
 	 * Sizetables listing action
 	 */
-	public function indexAction() {
+	public function indexAction()
+	{
 		$this->render();
 	}
 
-	public function editAction() {
+	public function editAction()
+	{
 		$this->_prepareSizetable(true);
 		$this->render();
 	}
 
-	public function saveAction() {
+	public function saveAction()
+	{
 		$session = $this->_getSession();
 		try {
 			if ($this->getRequest()->getPost()) {
@@ -40,7 +44,7 @@ class Zolago_Sizetable_Dropship_SizetableController extends Zolago_Dropship_Cont
 						$model->load($modelId);
 						if (!$model->getId()) {
 							throw new Mage_Core_Exception($helper->__("Size table not found"));
-						} elseif($model->getVendorId() != $this->getVendorId()) {
+						} elseif ($model->getVendorId() != $this->getVendorId()) {
 							return $this->redirectSizetable();
 						}
 					}
@@ -50,11 +54,11 @@ class Zolago_Sizetable_Dropship_SizetableController extends Zolago_Dropship_Cont
 					$session->addSuccess($helper->__("Size table saved"));
 				}
 			}
-		}catch(Mage_Core_Exception $e){
+		} catch (Mage_Core_Exception $e) {
 			$session->addError($e->getMessage());
 			$session->setFormData($data);
 			return $this->redirectSizetable();
-		}catch(Exception $e){
+		} catch (Exception $e) {
 			$session->addError($helper->__("Some error occurred"));
 			$session->setFormData($data);
 			Mage::logException($e);
@@ -63,7 +67,8 @@ class Zolago_Sizetable_Dropship_SizetableController extends Zolago_Dropship_Cont
 		return $this->redirectSizetable();
 	}
 
-	public function assignAction() {
+	public function assignAction()
+	{
 		$session = $this->_getSession();
 		try {
 			if ($this->getRequest()->getPost()) {
@@ -82,16 +87,16 @@ class Zolago_Sizetable_Dropship_SizetableController extends Zolago_Dropship_Cont
 						$model->load($data["rule_id"]);
 						if (!$model->getId()) {
 							throw new Mage_Core_Exception($helper->__("Size table assignment not found"));
-						} elseif($model->getVendorId() != $vid) {
+						} elseif ($model->getVendorId() != $vid) {
 							throw new Mage_Core_Exception($helper->__("You don't have permission to edit this size table assignment"));
 						}
 					}
 
 					$data['vendor_id'] = $vid;
-					if(!isset($data['attribute_set_id']) || empty($data['attribute_set_id']))
+					if (!isset($data['attribute_set_id']) || empty($data['attribute_set_id']))
 						$data['attribute_set_id'] = null;
 
-					if(!isset($data['brand_id']) || empty($data['brand_id']))
+					if (!isset($data['brand_id']) || empty($data['brand_id']))
 						$data['brand_id'] = null;
 
 					$model->updateModelData($data);
@@ -99,10 +104,10 @@ class Zolago_Sizetable_Dropship_SizetableController extends Zolago_Dropship_Cont
 					$session->addSuccess($helper->__("Size table assignment saved"));
 				}
 			}
-		}catch(Mage_Core_Exception $e){
+		} catch (Mage_Core_Exception $e) {
 			$session->addError($e->getMessage());
 			return $this->redirectSizetable();
-		}catch(Exception $e){
+		} catch (Exception $e) {
 			$session->addError($helper->__("Some error occurred"));
 			Mage::logException($e);
 			return $this->redirectSizetable();
@@ -110,38 +115,41 @@ class Zolago_Sizetable_Dropship_SizetableController extends Zolago_Dropship_Cont
 		return $this->redirectSizetable();
 	}
 
-	public function deleteAction() {
+	public function deleteAction()
+	{
 		$ruleId = $this->getRequest()->getParam("rule_id");
 		$sizetableId = $this->getRequest()->getParam("sizetable_id");
-		if(!empty($ruleId)) {
+		if (!empty($ruleId)) {
 			$this->deleteRule($ruleId);
-		} elseif(!empty($sizetableId)) {
+		} elseif (!empty($sizetableId)) {
 			$this->deleteSizetable($sizetableId);
 		}
 		$this->redirectSizetable();
 	}
 
-	protected function deleteRule($ruleId) {
+	protected function deleteRule($ruleId)
+	{
 		$helper = Mage::helper('zolagosizetable');
-		$this->delete(Mage::getModel("zolagosizetable/sizetable_rule"),$ruleId);
-		if(!$this->erroroccurred) $this->_getSession()->addSuccess($helper->__("Size table assignment was deleted"));
+		$this->delete(Mage::getModel("zolagosizetable/sizetable_rule"), $ruleId);
+		if (!$this->erroroccurred) $this->_getSession()->addSuccess($helper->__("Size table assignment was deleted"));
 		else $this->_getSession()->addError($helper->__("There was an error while deleting selected assignment"));
 		return $this->redirectSizetable();
 	}
 
-	protected function deleteSizetable($sizetableId) {
+	protected function deleteSizetable($sizetableId)
+	{
 		$helper = Mage::helper('zolagosizetable');
-		$this->delete(Mage::getModel("zolagosizetable/sizetable"),$sizetableId);
-		if(!$this->erroroccurred) $this->_getSession()->addSuccess($helper->__("Size table was deleted"));
+		$this->delete(Mage::getModel("zolagosizetable/sizetable"), $sizetableId);
+		if (!$this->erroroccurred) $this->_getSession()->addSuccess($helper->__("Size table was deleted"));
 		else $this->_getSession()->addError($helper->__("There was an error while deleting selected size table"));
 		return $this->redirectSizetable();
 	}
 
-	public function delete($model,$modelId)
+	protected function delete($model, $modelId)
 	{
 		$helper = Mage::helper('zolagosizetable');
-		try{
-			if($modelId){
+		try {
+			if ($modelId) {
 				$model = $model->load($modelId);
 				if ($model && $model->getVendorId() == $this->getVendorId())
 					$model->delete();
@@ -158,20 +166,22 @@ class Zolago_Sizetable_Dropship_SizetableController extends Zolago_Dropship_Cont
 		}
 	}
 
-	protected function render() {
-		$this->_renderPage(null,'zolagosizetable');
+	protected function render()
+	{
+		$this->_renderPage(null, 'zolagosizetable');
 	}
 
 	/**
 	 * @param bool $addScopes
 	 * @return bool|false|Mage_Core_Model_Abstract
 	 */
-	protected function _registerModel($addScopes = false) {
+	protected function _registerModel($addScopes = false)
+	{
 		$sizetableId = $this->getRequest()->getParam("sizetable_id");
 		$sizetable = Mage::getModel("zolagosizetable/sizetable");
 		if ($sizetableId) {
 			$sizetable->load($sizetableId);
-			if($addScopes)
+			if ($addScopes)
 				$sizetable->getScopes();
 		} else {
 			$sizetable = false;
@@ -180,9 +190,10 @@ class Zolago_Sizetable_Dropship_SizetableController extends Zolago_Dropship_Cont
 		return $sizetable;
 	}
 
-	protected function _prepareSizetable($addScopes = false) {
+	protected function _prepareSizetable($addScopes = false)
+	{
 		$sizetable = $this->_registerModel($addScopes);
-		if($sizetable !== false) {
+		if ($sizetable !== false) {
 			// Existing sizetable - has venor rights?
 			if ($sizetable->getSizetableId() && $sizetable->getVendorId() != $this->getVendorId()) {
 				$this->_getSession()->addError(Mage::helper('zolagosizetable')->__("You cannot edit this size table"));
@@ -196,11 +207,54 @@ class Zolago_Sizetable_Dropship_SizetableController extends Zolago_Dropship_Cont
 		}
 	}
 
-	public function getVendorId() {
+	public function getVendorId()
+	{
 		return $this->_getSession()->getVendor()->getVendorId();
 	}
-	
-	protected function redirectSizetable() {
-		$this->_redirect("udropship/sizetable");
+
+	protected function redirectSizetable()
+	{
+		return $this->_redirect("udropship/sizetable");
+	}
+
+	public function imageAction()
+	{
+		if (isset($_FILES['image'])) {
+
+			$images = $_FILES['image'];
+
+			$tmpName = $images['tmp_name'];
+
+			$imageName = $images['name'];
+
+			if (!empty($imageName)) {
+				try {
+					$is_image = getimagesize($tmpName);
+				} catch (Exception $e) {
+
+					Mage::logException($e);
+					echo json_encode(array("error"=>"filetype"));
+					return false;
+				}
+				$uniqueName = uniqid() . "_" . $imageName;
+
+				$folder = $this->getVendorId(). "/";
+				$folder_path = Mage::getBaseDir() . "/media/sizetables/" . $folder;
+				if(!is_dir($folder_path)) {
+					mkdir($folder_path, 0777, true);
+				}
+				$return_path = Mage::getUrl("media/sizetables") . $folder . $uniqueName;
+				$path = $folder_path . $uniqueName;
+				try {
+					move_uploaded_file($tmpName, $path);
+					echo json_encode(array("error" => false, "path" => $return_path));
+					return true;
+				} catch (Exception $e) {
+					Mage::logException($e);
+					echo json_encode(array("error" => "unknown"));
+					return false;
+				}
+			}
+		}
 	}
 }
