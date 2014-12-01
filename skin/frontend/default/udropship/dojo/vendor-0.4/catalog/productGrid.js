@@ -132,10 +132,15 @@ define([
 	var thumbnailHandler = function(e){
 		
 		var el = jQuery(this);
+		var modal = jQuery("#product-image-popup");
 		
 		// Procss enter click on thumb - redirect to a
 		if(e instanceof KeyboardEvent){
 			if(e.keyCode!=13){
+				return;
+			}
+			if(modal.length && modal.is(":visible")){
+				modal.modal("hide");
 				return;
 			}
 			el = jQuery(this).find("a");
@@ -143,7 +148,6 @@ define([
 		
 		var node = el.parents("td");
 		
-		var modal = jQuery("#product-image-popup");
 	
 		if(!modal.length){
 			modal = jQuery('<div id="product-image-popup" class="modal fade in" role="dialog">\
@@ -170,15 +174,18 @@ define([
 		modal.find(".modal-body").html(
 				jQuery("<img>").attr("src", el.attr("href"))
 		);
-		modal.modal("show");
 		
 		// focus cell after close modal
 		if(node.length){
 			modal.one("hidden.bs.modal", function(){
 				grid.focus(grid.cell(node[0]));
 			});
+			modal.one("shown.bs.modal", function(){
+				modal.find("button").focus();
+			});
 		}
 		
+		modal.modal("show");
 		e.preventDefault();
 	}
 		
