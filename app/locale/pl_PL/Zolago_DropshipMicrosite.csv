@@ -137,3 +137,5 @@
 "Username / Email","Nazwa użytkownika/ email"
 "Wrong vendor account specified.","Wybrano nieprawidłowe konto sklepu"
 "You've successfully confirmed your account. Please check your mailbox for email with your account information in order to login.","Konto zostało potwierdzone, sprawdź pocztę email, aby uzyskać informacje potrzebne do logowania"
+"Failed to confirm vendor account.","Nie udało się potwierdzić konta sklepu"
+"Wrong confirmation key.","Nieprawidłowy klucz potwierdzenia"
