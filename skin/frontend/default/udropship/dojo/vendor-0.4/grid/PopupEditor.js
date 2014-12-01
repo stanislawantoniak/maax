@@ -315,7 +315,7 @@ define([
 		 * @returns {unresolved}
 		 */
 		_generateBasicSelect: function(column, parentColumn){
-			var options = column.options || {},
+			var options = column.editOptions || [],
 				select;
 			
 			select = put("select", {
@@ -330,14 +330,12 @@ define([
 				}));
 			}
 			
-			for(var key in options){
-				if(options.hasOwnProperty(key)){
-					put(select, put("option", {
-						value: key,
-						innerHTML: options[key]
-					}));
-				}
-			}
+			options.forEach(function(opt){
+				put(select, put("option", {
+					value: opt.value,
+					innerHTML: opt.label
+				}));
+			});
 			
 			return select;
 		},
@@ -449,19 +447,21 @@ define([
 			var left = cell.offsetLeft + set.offsetLeft - set.scrollLeft;
 			var top = row.offsetTop;
 			
-			if((cell.offsetLeft - set.scrollLeft) / set.offsetWidth > 0.5){
-				domClass.remove(content, "hidden");
+			domClass.remove(content, "hidden");
+			
+			if((cell.offsetLeft - set.scrollLeft) / set.offsetWidth > 0.5 || 
+				left+cell.offsetWidth>set.offsetWidth){
+			
 				left -= content.offsetWidth;
-				domClass.add(content, "hidden");
 			}else{
 				left += cell.offsetWidth;
 			}
 			
 			if((row.offsetTop - scroller.scrollTop)/scroller.offsetHeight > 0.5){
-				domClass.remove(content, "hidden");
+				
 				top -= content.offsetHeight - row.offsetHeight;
-				domClass.add(content, "hidden");
 			}
+			domClass.add(content, "hidden");
 			
 			return  {
 				left: left + "px",
