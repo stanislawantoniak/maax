@@ -447,19 +447,21 @@ define([
 			var left = cell.offsetLeft + set.offsetLeft - set.scrollLeft;
 			var top = row.offsetTop;
 			
-			if((cell.offsetLeft - set.scrollLeft) / set.offsetWidth > 0.5){
-				domClass.remove(content, "hidden");
+			domClass.remove(content, "hidden");
+			
+			if((cell.offsetLeft - set.scrollLeft) / set.offsetWidth > 0.5 || 
+				left+cell.offsetWidth>set.offsetWidth){
+			
 				left -= content.offsetWidth;
-				domClass.add(content, "hidden");
 			}else{
 				left += cell.offsetWidth;
 			}
 			
 			if((row.offsetTop - scroller.scrollTop)/scroller.offsetHeight > 0.5){
-				domClass.remove(content, "hidden");
+				
 				top -= content.offsetHeight - row.offsetHeight;
-				domClass.add(content, "hidden");
 			}
+			domClass.add(content, "hidden");
 			
 			return  {
 				left: left + "px",
