@@ -8,7 +8,7 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
 
     protected function _getPreferences()
     {
-        if (!is_null($this->_preferences)) {
+        if (is_null($this->_preferences)) {
             $vendorPreferences = Mage::getModel('zolagodropship/preferences');
             $vendorPreferences->load($this->getVendorId(), 'vendor_id');
 
