@@ -153,6 +153,20 @@
                         <fieldset>marketing</fieldset>
                         <position>70</position>
                     </product_short_information>
+                	<cart_slogan_one>
+                        <label>Basket slogan no 1</label>
+                        <type>text</type>
+                        <fieldset>marketing</fieldset>
+                        <position>80</position>
+						<only_admin>1</only_admin>
+                    </cart_slogan_one>
+                	<cart_slogan_two>
+                        <label>Basket slogan no 2</label>
+                        <type>text</type>
+                        <fieldset>marketing</fieldset>
+                        <position>90</position>
+						<only_admin>1</only_admin>
+                    </cart_slogan_two>
 					<!-- DHL -->
                 	<use_dhl>
                         <label>Use DHL</label>
