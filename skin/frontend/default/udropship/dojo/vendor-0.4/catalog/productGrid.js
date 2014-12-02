@@ -454,11 +454,11 @@ define([
 			value = e.value,
 			oldValue = dataObject[field];
 	
-		// Start overlay loading
-		misc.startLoading(false);
 		
 		// Use only single row
 		if(!e.useSelection){
+			// Start overlay loading hidden progress 
+			misc.startLoading(false);
 			dataObject.attribute_mode = {};
 			dataObject.attribute_mode[field] = e.mode;
 			dataObject[field] = value;
@@ -473,6 +473,9 @@ define([
 			})
 			return;
 		}
+		
+		// Start overlay loading visible progress 
+		misc.startLoading();
 		
 		// Handle by mass action object
 		var req = {};
@@ -608,8 +611,15 @@ define([
 		var massDisable = new status(grid, massUrl)
 		massDisable.setMethod("disable");
 		
-		on(dom.byId("massConfirmProducts"), "click", function(e){massConfirm.trigger(e)});
-		on(dom.byId("massDisbaleProducts"), "click", function(e){massDisable.trigger(e)});
+		on(dom.byId("massConfirmProducts"), "click", function(e){
+			misc.startLoading();
+			massConfirm.trigger(e).always(misc.stopLoading);
+		});
+		
+		on(dom.byId("massDisbaleProducts"), "click", function(e){
+			misc.startLoading();
+			massDisable.trigger(e).always(misc.stopLoading);
+		});
 	}
 	
 	////////////////////////////////////////////////////////////////////////////
