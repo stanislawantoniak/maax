@@ -19,7 +19,8 @@
                     }
                     ?>
                     <div class="form-group form-checkbox">
-                        <input data-url="<?php echo $this->getItemUrl($item) ?>" 
+                        <?php /** @var $this Zolago_Solrsearch_Block_Faces_Enum */ ?>
+                        <input data-url="<?php echo $this->getItemUrl($item) ?>"
 							   data-params='<?php echo $this->getItemJson($item);?>' 
 							   type="checkbox" 
 							   name="<?php echo $this->getItemName($item);?>"

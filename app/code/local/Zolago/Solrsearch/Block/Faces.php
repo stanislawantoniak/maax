@@ -394,10 +394,14 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 
             $urlParams['_query']    = $this->processFinalParams($finalParams);
         }
-	
+
+
 		if($this->getListModel()->isCategoryMode()){
 			$urlParams['_direct'] = $this->getListModel()->getUrlPathForCategory();
 		}
+        if($this->getListModel()->isSearchMode()){
+            $urlParams['_direct'] = $this->getListModel()->getUrlPathForCategory();
+        }
 		
         return $urlParams;
     }
@@ -554,7 +558,12 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 				}
 			}
 			else{
-				$parent_category = $category->getParentCategory();
+			    if ($category->getId() == $root_category_id) {
+        			$category = Mage::getModel('catalog/category')->load($root_category_id);
+		        	$is_root_category = TRUE;
+			    } else {
+    				$parent_category = $category->getParentCategory();
+                }
 			}
 		}
 		else{
@@ -715,7 +724,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
     }
 
     public function getPriceBlock($solrData) {
-        if($this->getMode()==self::MODE_CATEGORY&& !$this->getCurrentCategory()->getUsePriceFilter()) {
+        if(in_array($this->getMode(),array(self::MODE_CATEGORY,self::MODE_SEARCH))  && !($this->getCurrentCategory()->getUsePriceFilter())) {
             return null;
         }
         $facetFileds = array();
@@ -738,7 +747,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
     public function getFlagBlock($solrData) {
 
 		// Only in category ?
-        if($this->getMode()==self::MODE_CATEGORY&& !$this->getCurrentCategory()->getUseFlagFilter()) {
+        if(in_array($this->getMode(),array(self::MODE_CATEGORY,self::MODE_SEARCH))&& !$this->getCurrentCategory()->getUseFlagFilter()) {
             return null;
         }
 	
@@ -764,7 +773,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 	
 
     public function getRatingBlock($solrData) {
-        if($this->getMode()==self::MODE_CATEGORY&& !$this->getCurrentCategory()->getUseReviewFilter()) {
+        if(in_array($this->getMode(),array(self::MODE_CATEGORY,self::MODE_SEARCH))&& !$this->getCurrentCategory()->getUseReviewFilter()) {
             return null;
         }
         $facetFileds = array();
@@ -875,7 +884,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 				break;
             }
             // In category mode
-            if($this->getMode()==self::MODE_CATEGORY) {
+            if(in_array($this->getMode(),array(self::MODE_CATEGORY,self::MODE_SEARCH))) {
 				
                 $filter = $this->getFilterByAttribute($attrCode);
 
@@ -1124,6 +1133,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 	 */
     protected function _parseQueryData($params=array(), $paramss = NULL)
     {
+
         $_solrDataArray = $this->getSolrData();
 
 		$paramss = Mage::app()->getRequest()->getParams();
@@ -1188,6 +1198,12 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 		if (isset($finalParams['is_search'])) {
 			unset($finalParams['is_search']);
         }
+        if(isset($finalParams['Szukaj_x'])) {
+            unset($finalParams['Szukaj_x']);
+        }
+        if(isset($finalParams['Szukaj_y'])) {
+            unset($finalParams['Szukaj_y']);
+        }
 		
         $urlParams = array();
         $urlParams['_current']  = false;
@@ -1211,6 +1227,9 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 		if($this->getListModel()->isCategoryMode()){
 			$urlParams['_direct'] = $this->getListModel()->getUrlPathForCategory();
 		}
+        if($this->getListModel()->isSearchMode()){
+            $urlParams['_direct'] = $this->getListModel()->getUrlPathForCategory();
+        }
 		
 		
         return $urlParams;
@@ -1222,7 +1241,9 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 	 * @return array
 	 */
 	public function processFinalParams(array $params = array()) {
-		return Mage::helper("zolagosolrsearch")->processFinalParams($params);
+        /** @var $helper Zolago_Solrsearch_Helper_Data */
+        $helper =  Mage::helper("zolagosolrsearch");
+		return $helper->processFinalParams($params);
 	}
 	
 	/**
