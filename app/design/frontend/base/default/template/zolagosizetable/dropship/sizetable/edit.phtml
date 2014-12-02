@@ -5,24 +5,33 @@ $locale = Mage::app()->getLocale()->getLocaleCode();
 $sizetable = $this->getSizeTable();
 ?>
 <script src="<?php echo $this->getUrl('skin/frontend/default/udropship/js/plugins/tinymce'); ?>tinymce.min.js"></script>
-<script src="<?php echo $this->getUrl('skin/frontend/default/udropship/js/plugins/tinymce'); ?>jquery.tinymce.min.js"></script>
+<script
+	src="<?php echo $this->getUrl('skin/frontend/default/udropship/js/plugins/tinymce'); ?>jquery.tinymce.min.js"></script>
 <script>
-	jQuery(function($){
+	jQuery(function ($) {
 		tinymce.init({
+			imageupload_url: "<?php echo $this->getImageUploadAction(); ?>",
+			imageupload_translations: {
+				title: '<?php echo $this->__("Upload image"); ?>',
+				choose: '<?php echo $this->__("Select a file"); ?>',
+				upload: '<?php echo $this->__("Upload"); ?>',
+				cancel: '<?php echo $this->__("Cancel"); ?>'
+			},
 			skin: 'light',
-			selector:'textarea.tinymce',
-			height : 300,
+			selector: 'textarea.tinymce',
+			height: 300,
 			plugins: [
 				"advlist autolink lists link image charmap preview anchor textcolor",
 				"searchreplace visualblocks code",
-				"insertdatetime table contextmenu paste"
+				"insertdatetime table contextmenu paste imageupload"
 			],
-			toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
-			<?php if($locale != 'en_US'): ?>,language: "<?php echo $locale; ?>" <?php endif; ?>
+			toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image imageupload",
+			relative_urls: false
+			<?php if($locale != 'en_US'): ?>, language: "<?php echo $locale; ?>" <?php endif; ?>
 		});
 		var form = $("#sizetableForm");
 		new Zolago.formIntegrator(form);
-		var validator = form.submit(function() {
+		var validator = form.submit(function () {
 			tinymce.triggerSave();
 		}).validate({
 			ignore: "",
@@ -31,18 +40,18 @@ $sizetable = $this->getSizeTable();
 				"default_value": "required"
 			}
 		});
-		validator.focusInvalid = function() {
+		validator.focusInvalid = function () {
 			// put focus on tinymce on submit validation
-				try {
-					var toFocus = $(this.findLastActive() || this.errorList.length && this.errorList[0].element || []);
-					if (toFocus.is("textarea")) {
-						tinymce.get(toFocus.attr("id")).getBody().focus();
-					} else {
-						toFocus.filter(":visible").focus();
-					}
-				} catch (e) {
-					// ignore IE throwing errors when focusing hidden elements
+			try {
+				var toFocus = $(this.findLastActive() || this.errorList.length && this.errorList[0].element || []);
+				if (toFocus.is("textarea")) {
+					tinymce.get(toFocus.attr("id")).getBody().focus();
+				} else {
+					toFocus.filter(":visible").focus();
 				}
+			} catch (e) {
+				// ignore IE throwing errors when focusing hidden elements
+			}
 		}
 	});
 </script>
@@ -55,57 +64,70 @@ $sizetable = $this->getSizeTable();
 	endif;
 	?>
 	<div class="row">
-		<form class="form-horizontal row-border" id="sizetableForm" action="<?php echo $this->getAction(); ?>" method="post">
+		<form class="form-horizontal row-border" id="sizetableForm" action="<?php echo $this->getAction(); ?>"
+		      method="post">
 			<?php echo $this->getLayout()->getBlock('formkey')->toHtml(); ?>
-			<?php if($sizetable): ?>
-			<input type="hidden" name="sizetable_id" value="<?php echo $sizetable['sizetable_id']; ?>" />
+			<?php if ($sizetable): ?>
+				<input type="hidden" name="sizetable_id" value="<?php echo $sizetable['sizetable_id']; ?>"/>
 			<?php endif; ?>
 			<div class="col-md-12">
 				<div class="widget box">
-					<div class="widget-header"><h4><i class="icon-reorder"></i> <?php echo $_helper->__("Default values"); ?></h4></div>
+					<div class="widget-header"><h4><i
+								class="icon-reorder"></i> <?php echo $_helper->__("Default values"); ?></h4></div>
 					<div class="widget-content">
-							<div class="form-group">
-								<label class="col-md-2 control-label" for="name"><?php echo $_helper->__("Name"); ?> <span class="required">*</span></label>
-								<div class="col-md-10"><input type="text" name="name" id="name" class="form-control required-entry"
-									<?php if($sizetable):?>value="<?php echo $sizetable['name']; ?>"<?php endif; ?>></div>
+						<div class="form-group">
+							<label class="col-md-2 control-label" for="name"><?php echo $_helper->__("Name"); ?> <span
+									class="required">*</span></label>
+
+							<div class="col-md-10"><input type="text" name="name" id="name"
+							                              class="form-control required-entry"
+							                              <?php if ($sizetable): ?>value="<?php echo $sizetable['name']; ?>"<?php endif; ?>>
 							</div>
-							<div class="form-group">
-								<label class="col-md-2 control-label" for="default_value">
-										<?php echo $_helper->__("Default size table"); ?> <span class="required">*</span>
-								</label>
-								<div class="col-md-10">
-									<textarea name="default_value"
-									          id="default_value"
-									          class="form-control required-entry tinymce"><?php if($sizetable) echo $sizetable['default_value']; ?></textarea>
-								</div>
+						</div>
+						<div class="form-group">
+							<label class="col-md-2 control-label" for="default_value">
+								<?php echo $_helper->__("Default size table"); ?> <span class="required">*</span>
+							</label>
+
+							<div class="col-md-10">
+								<textarea name="default_value"
+								          id="default_value"
+								          class="form-control required-entry tinymce"><?php if ($sizetable) echo $sizetable['default_value']; ?></textarea>
 							</div>
+						</div>
 					</div>
 				</div>
 			</div>
 			<div class="col-md-12">
 				<div class="widget box widget-closed">
 					<div class="widget-header">
-						<h4><i class="icon-reorder"></i> <?php echo $_helper->__("Size tables translations"); ?> <small>(<?php echo $_helper->__("If you don't specify size table for one of the store views then default one will be presented"); ?>)</small></h4>
+						<h4><i class="icon-reorder"></i> <?php echo $_helper->__("Size tables translations"); ?></h4>
 						<div class="toolbar no-padding">
 							<div class="btn-group">
-								<span class="btn btn-xs widget-collapse"><i class="icon-angle-up"></i></span>
+								<span class="btn btn-xs widget-collapse"><i class="icon-angle-down"></i></span>
 							</div>
 						</div>
 					</div>
 					<div class="widget-content">
-					<?php foreach($stores as $store): ?>
-						<div class="form-group">
-							<label class="col-md-2 control-label" for="sizetable_<?php echo $store['store_id']; ?>">
-								<?php echo $_helper->__("Size table for")." ".$store['name']; ?>
-							</label>
-							<div class="col-md-10">
-								<textarea name="sizetable[<?php echo $store['store_id']; ?>]"
-								          id="sizetable_<?php echo $store['store_id']; ?>"
-								          class="form-control tinymce"><?php if($sizetable) echo $sizetable['sizetable'][$store['store_id']]; ?></textarea>
+						<?php foreach ($stores as $store): ?>
+							<div class="form-group">
+								<label class="col-md-2 control-label" for="sizetable_<?php echo $store['store_id']; ?>">
+									<?php echo $_helper->__("Size table for") . " " . $store['name']; ?>
+								</label>
+
+								<div class="col-md-10">
+									<textarea name="sizetable[<?php echo $store['store_id']; ?>]"
+									          id="sizetable_<?php echo $store['store_id']; ?>"
+									          class="form-control tinymce"><?php if (isset($sizetable['sizetable'][$store['store_id']])) echo $sizetable['sizetable'][$store['store_id']]; ?></textarea>
+								</div>
 							</div>
-						</div>
-					<?php endforeach; ?>
+						<?php endforeach; ?>
 					</div>
+				</div>
+			</div>
+			<div class="col-md-12">
+				<div class="alert alert-warning fade in align-center">
+					<?php echo $_helper->__("If you don't specify size table translations for one of the store views then default one will be displayed"); ?>
 				</div>
 			</div>
 			<div class="col-md-12">

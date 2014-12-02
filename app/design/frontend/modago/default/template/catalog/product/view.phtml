@@ -55,6 +55,17 @@ $avg = $_reviewBlock->getAvarageRating();
         $productAttrs = $_product->getTypeInstance(true)->getConfigurableAttributesAsArray($_product);
     }
 ?>
+<?php
+    $_helperSizetable = Mage::helper('zolagosizetable');
+    /** @var Zolago_Sizetable_Helper_Data $_helperSizetable */
+    $vendor_id = $_product->getData('udropship_vendor');
+    $storeId = Mage::app()->getStore()->getStoreId();
+    $attributeSetId = $_product->getData('attribute_set_id');
+    $brandId = $_product->getData( 'manufacturer');
+
+    $sizeTableValue = $_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attributeSetId, $brandId);
+
+?>
 
 <div id="content" class="container-fluid">
 <div class="row">
@@ -119,8 +130,9 @@ $avg = $_reviewBlock->getAvarageRating();
                                     <div class="form-group form-radio">
 
                                         <br />
+                                        
                                         <a href="#" class="view-sizing underline pull-left" data-toggle="modal"
-                                           data-target="#tabelaRozmiarow"><?php echo $this->__("Sizes"); ?> </a>
+                                           data-target="#tabelaRozmiarow"><?php if (!empty($sizeTableValue)) : ?><?php echo $this->__("Sizes"); ?> <?php endif; ?></a>                                        
                                     </div>
                                 </div>
                             </div>
@@ -205,7 +217,7 @@ $avg = $_reviewBlock->getAvarageRating();
     <header>
         <h2 class="title_section">Opis produktu <i class="bullet-strzalka-down visible-xs"></i></h2>
     </header>
-    <?php $attributesData = $this->getAdditionalDataDetailed(true); ?>
+    <?php $attributesData = $this->getAdditionalDataDetailed(true,false); ?>
     <div class="main">
         <ul class="list">
             <li>
@@ -268,17 +280,7 @@ $avg = $_reviewBlock->getAvarageRating();
 
             <div class="modal-body">
                 <?php
-
-                $_helperSizetable = Mage::helper('zolagosizetable');
-                /** @var Zolago_Sizetable_Helper_Data $_helperSizetable */
-
-                $vendor_id = $_product->getData('udropship_vendor');
-                $storeId = Mage::app()->getStore()->getStoreId();
-                $attributeSetId = $_product->getData('attribute_set_id');
-                $brandId = $_product->getData( 'manufacturer');
-
-                echo $_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attributeSetId, $brandId);
-
+                    echo $sizeTableValue;
                 ?>
             </div>
         </div>

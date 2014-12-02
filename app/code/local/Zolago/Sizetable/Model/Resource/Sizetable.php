@@ -77,16 +77,20 @@ class Zolago_Sizetable_Model_Resource_Sizetable extends Mage_Core_Model_Resource
 		return parent::_afterSave($object);
 	}
 
-	protected function _afterLoad(Mage_Core_Model_Abstract $object) {
-		$table = $this->getTable('zolagosizetable/sizetable_scope');
-		$where = $this->_getReadAdapter()->quoteInto("sizetable_id = ?", $object->getSizetableId());
-		$select = $this->_getReadAdapter()->select()->from($table)->where($where);
-		$data = $this->_getReadAdapter()->fetchAll($select);
-		$out = array();
-		foreach ($data as $sizetable) {
-			$out[$sizetable['store_id']] = $sizetable['value'];
+	/**
+	 * @return array
+	 */
+	public function getScopes($stid) {
+		if($stid) {
+			$table = $this->getTable('zolagosizetable/sizetable_scope');
+			$where = $this->_getReadAdapter()->quoteInto("sizetable_id = ?", $stid);
+			$select = $this->_getReadAdapter()->select()->from($table)->where($where);
+			$data = $this->_getReadAdapter()->fetchAll($select);
+			$out = array();
+			foreach ($data as $sizetable) {
+				$out[$sizetable['store_id']] = $sizetable['value'];
+			}
+			return $out;
 		}
-		$object->setSizetable($out);
-		parent::_afterLoad($object);
 	}
 }

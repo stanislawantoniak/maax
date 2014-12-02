@@ -55,6 +55,8 @@ class Zolago_Catalog_Block_Vendor_Product_Grid extends Mage_Core_Block_Template 
 	 */
 	protected function mapColumn(Varien_Object $columnObject) {
 		$attribute = null;
+		
+		
 		if($columnObject->getAttribute()){
 			$attribute = $columnObject->getAttribute();
 		}
@@ -82,7 +84,7 @@ class Zolago_Catalog_Block_Vendor_Product_Grid extends Mage_Core_Block_Template 
 		);
 		
 		
-		if($columnObject->getIsEditable() || $columnObject->getIsEditableInline()){
+		if($columnObject->getEditable() || $columnObject->getEditableInline()){
 			$classes[] = "editable";
 		}
 		
@@ -97,11 +99,13 @@ class Zolago_Catalog_Block_Vendor_Product_Grid extends Mage_Core_Block_Template 
 				"valueType"		=> $columnObject->getType()
 			);
 			
-			// Filter content
+			// Renderer opts - assoc
 			if($columnObject->getOptions()){
 				$filterHeaderOptions['options'] = $columnObject->getOptions();
+				$filterHeaderOptions['filterOptions'] = $columnObject->getFilterOptions();
 				$filterHeaderOptions['allowEmpty'] = true;
 			}
+
 			
 			$classes[] = "filterable";
 			
@@ -116,6 +120,7 @@ class Zolago_Catalog_Block_Vendor_Product_Grid extends Mage_Core_Block_Template 
 					"filterable"		=> 1,
 					"sortable"			=> false,
 					"options"			=> $columnObject->getOptions(),
+					"editOptions"		=> $columnObject->getEditOptions(),
 					"field"				=> $columnObject->getIndex(),
 					"className"			=> implode(" ", $classes)
 				)
@@ -126,6 +131,9 @@ class Zolago_Catalog_Block_Vendor_Product_Grid extends Mage_Core_Block_Template 
 		switch ($columnObject->getIndex()) {
 			case "status":
 				$out['label'] = $this->__("St.");
+			break;
+			case "thumbnail":
+				$out['label'] = $this->__("Img.");
 			break;
 		}
 		

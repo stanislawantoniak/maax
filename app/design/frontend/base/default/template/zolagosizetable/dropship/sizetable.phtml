@@ -6,7 +6,7 @@
 			<h3><?php echo $_helper->__("Size tables"); ?></h3>
 			<span class="tageline"><?php echo $_helper->__("Size tables management"); ?></span>
 		</div>
-		<div class="main-actions align-right col-lg-6 col-md-6 col-sm-6 col-xs-6">
+		<div class="main-actions text-xs-right col-lg-6 col-md-6 col-sm-6 col-xs-6">
 			<a class="btn btn-success" href="<?php echo Mage::getUrl('udropship/sizetable/edit'); ?>">
 				<i class="icon-plus"></i>
 				<?php echo $_helper->__("New size table"); ?>
@@ -16,7 +16,7 @@
 	<div class="row" style="margin-top: 30px;">
 		<div class="col-md-12">
 			<div class="tabbable tabbabble-custom">
-				<ul class="nav nav-tabs" style="margin-top:6px">
+				<ul class="nav nav-tabs" style="margin-top:6px" id="sizetableTabs">
 					<li class="active"><a data-toggle="tab" href="#tab_1_1"><?php echo $_helper->__('List'); ?></a></li>
 					<li><a data-toggle="tab" href="#tab_1_2"><?php echo $_helper->__('Assign'); ?></a></li>
 				</ul>
@@ -33,3 +33,54 @@
 		</div>
 	</div>
 </div>
+<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-body">
+				<?php echo $_helper->__("Do you really want to delete this item?"); ?>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_helper->__("Cancel"); ?></button>
+				<a href="#" class="btn btn-danger danger"><?php echo $_helper->__("Delete"); ?></a>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	jQuery(function() {
+		var json, tabsState;
+		jQuery('a[data-toggle="pill"], a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+			var href, json, parentId, tabsState;
+
+			tabsState = localStorage.getItem("tabs-state");
+			json = JSON.parse(tabsState || "{}");
+			parentId = jQuery(e.target).parents("ul.nav.nav-pills, ul.nav.nav-tabs").attr("id");
+			href = jQuery(e.target).attr('href');
+			json[parentId] = href;
+
+			return localStorage.setItem("tabs-state", JSON.stringify(json));
+		});
+
+		tabsState = localStorage.getItem("tabs-state");
+		json = JSON.parse(tabsState || "{}");
+
+		jQuery.each(json, function(containerId, href) {
+			return jQuery("#" + containerId + " a[href=" + href + "]").tab('show');
+		});
+
+		jQuery("ul.nav.nav-pills, ul.nav.nav-tabs").each(function() {
+			var $this = jQuery(this);
+			if (!json[$this.attr("id")]) {
+				return $this.find("a[data-toggle=tab]:first, a[data-toggle=pill]:first").tab("show");
+			}
+		});
+
+		var deleteLinks = jQuery("a.delete");
+		deleteLinks.each(function() {
+			jQuery(this).attr('data-toggle','modal').attr('data-target','#confirm-delete').attr('data-href',jQuery(this).attr('href')).attr('href','#');
+		});
+		jQuery('#confirm-delete').on('show.bs.modal', function(e) {
+			jQuery(this).find('.danger').attr('href', jQuery(e.relatedTarget).data('href'));
+		});
+	});
+</script>

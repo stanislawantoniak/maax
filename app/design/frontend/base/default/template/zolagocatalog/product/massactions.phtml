@@ -1,4 +1,5 @@
 <div class="col-xs-4 main-actions">
+	<?php if($this->getParentBlock()->getCanShowGrid()):?>
 	<div style="position: relative;">
 	<button class="btn btn-default dropdown-toggle" type="button" disabled="disabled" id="massActions" data-toggle="dropdown" aria-expanded="true">
 		<?php echo $this->__("Selected"); ?>
@@ -6,17 +7,18 @@
 	</button>
 	<ul class="dropdown-menu" role="menu" aria-labelledby="massActions">
 		<li role="presentation">
-			<a role="menuitem" tabindex="-1" href="#">
+			<a role="menuitem" tabindex="-1" href="#" id="massConfirmProducts">
 				<i class="icon icon-check"></i> 
 				<?php echo Mage::helper("zolagocatalog")->__("Confirm products"); ?>
 			</a>
 		</li>
 		<li role="presentation">
-			<a role="menuitem" tabindex="-1" href="#">
+			<a role="menuitem" tabindex="0" href="#" id="massDisbaleProducts">
 				<i class="icon icon-off"></i> 
 				<?php echo Mage::helper("zolagocatalog")->__("Disable products"); ?>
 			</a>
 		</li>
 	</ul>
-		</div>
+	</div>
+	<?php endif;?>
 </div>

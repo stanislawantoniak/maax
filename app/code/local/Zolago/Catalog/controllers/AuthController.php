@@ -28,6 +28,36 @@ class Zolago_Catalog_AuthController extends Mage_Core_Controller_Front_Action
         Zolago_Catalog_Model_Observer::clearConfigurableQueue();
     }
 
+    public function testAction()
+    {
+        $productsToReindex = array(11189,11190,11191,11192,11193);
+
+
+
+        $numberQ = 2;
+        if (count($productsToReindex) > $numberQ) {
+            $productsToReindexC = array_chunk($productsToReindex, $numberQ);
+            foreach ($productsToReindexC as $productsToReindexCItem) {
+                Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($productsToReindexCItem);
+
+            }
+            unset($productsToReindexCItem);
+        } else {
+            Mage::getResourceModel('catalog/product_indexer_price')->reindexProductIds($productsToReindex);
+
+        }
+
+
+        Mage::log('catalog_converter_price_update_after', 0, 'configurable_update_solr.log');
+        Mage::dispatchEvent(
+            "catalog_converter_price_update_after",
+            array(
+                "product_ids" => $productsToReindex
+            )
+        );
+    }
+
+
 }
 
 

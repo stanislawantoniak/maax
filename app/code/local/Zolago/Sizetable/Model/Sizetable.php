@@ -26,4 +26,9 @@ class Zolago_Sizetable_Model_Sizetable extends Mage_Core_Model_Abstract{
 		return $this;
 	}
 
+	public function getScopes() {
+		$scopes = $this->getResource()->getScopes($this->getSizetableId());
+		$this->setSizetable($scopes);
+		return $this;
+	}
 }

@@ -191,13 +191,37 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 		
 		$groupOne = array();
 		if($this->isAllowed("udropship/vendor/preferences")){
-			$groupOne[] = array(
-				"active" => $this->isActive("preferences"),
-				"icon"	 => "icon-cog",
-				"label"	 => $this->__('Preferences'),
-				"url"	 => $this->getUrl('udropship/vendor/preferences')
-			);
+//			$groupOne[] = array(
+//				"active" => $this->isActive("preferences"),
+//				"icon"	 => "icon-cog",
+//				"label"	 => $this->__('Preferences'),
+//				"url"	 => $this->getUrl('udropship/vendor/preferences')
+//			);
+
+            if(!$this->isOperatorMode()){
+                $groupOne[] = array(
+                    "active" => $this->isActive("vendorsettingsinfo"),
+                    "icon"	 => "icon-briefcase",
+                    "label"	 => $this->__('Company settings'),
+                    "url"	 => $this->getUrl('udropship/vendor_settings/info')
+                );
+                $groupOne[] = array(
+                    "active" => $this->isActive("shipping"),
+                    "icon"	 => "icon-plane",
+                    "label"	 => $this->__('Shipment settings'),
+                    "url"	 => $this->getUrl('udropship/vendor_settings/shipping')
+                );
+                $groupOne[] = array(
+                    "active" => $this->isActive("rma"),
+                    "icon"	 => "icon-retweet",
+                    "label"	 => $this->__('RMA settings'),
+                    "url"	 => $this->getUrl('udropship/vendor_settings/rma')
+                );
+            }
+
 		}
+
+
 		
 				
 		if($this->isModuleActive('zolagooperator') && $this->isAllowed("zolagooperator")){
@@ -226,6 +250,8 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 				"url"	 => $this->getUrl('udropship/sizetable')
 			);
 		}
+
+
         /*		
 		if($this->getVendor()->getAllowTiershipModify() && $this->isAllowed("udtiership")){
 			$groupOne[] = array(
@@ -237,15 +263,26 @@ abstract class Zolago_Dropship_Block_Vendor_Menu_Abstract extends Mage_Core_Bloc
 		}
 		*/
 		$grouped = $this->_processGroups($groupOne);
-		
+
 		if(count($grouped)){
-			return array(
-				"label"		=> $this->__("Settings"),
-				"active"	=> $this->isActive(array("preferences", "zolagooperator", "zolagopos", "tiership_rates","zolagosizetable")),
-				"icon"		=> "icon-wrench",
-				"url"		=> "#",
-				"children"	=> $grouped
-			);
+            return array(
+                "label" => $this->__("Settings"),
+                "active" => $this->isActive(
+                    array(
+                        "preferences",
+                        "zolagooperator",
+                        "zolagopos",
+                        "tiership_rates",
+                        "zolagosizetable",
+                        "info",
+                        "shipping",
+                        "rma"
+                    )
+                ),
+                "icon" => "icon-wrench",
+                "url" => "#",
+                "children" => $grouped
+            );
 		}
 		
 		return null;
