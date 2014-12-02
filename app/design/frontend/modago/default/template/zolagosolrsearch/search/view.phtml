@@ -1,0 +1,74 @@
+<?php
+$_helperZSS = Mage::helper('zolagosolrsearch');
+?>
+
+
+<?php if($this->isContentMode()): ?>
+    <?php //echo $this->getChildHtml('banner_result_title'); ?>
+    <div id="content" class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <div id="sidebar" class="hidden-xs clearfix">
+                    <?php echo $this->getSidebarWrapper(); ?>
+                </div>
+                <div id="content-main">
+                    <?php echo $this->getChildHtml('vendor.banner'); ?>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <?php if(strlen($this->getChildHtml('vendor.banner.inspiration')) > 5): ?>
+        <section id="bottom" class="bg-w">
+            <div class="container-fluid">
+                <div class="col-sm-12">
+                    <?php echo $this->getChildHtml('vendor.banner.inspiration'); ?>
+                </div>
+            </div>
+        </section>
+    <?php endif; ?>
+    <script type="text/javascript">
+        jQuery(".wrapp-section").removeClass("bg-w");
+    </script>
+    </section>
+<?php elseif($this->isMixedMode()): ?>
+    <?php echo $this->getCmsBlockHtml() ?>
+    <?php echo $this->getProductListHtml() ?>
+
+<?php else: ?>
+    <section id="main" class="<?php echo $this->getElementClass(); ?>">
+
+        <?php echo $this->getChildHtml('solrsearch_result_title'); ?>
+
+        <?php if ($_helperZSS->getNumFound()): ?>
+
+            <?php echo Mage::app()->getLayout()->createBlock('zolagosolrsearch/active')->setBlockId('solrsearch_product_list_active')->toHtml(); ?>
+            <?php echo Mage::app()->getLayout()->createBlock('zolagosolrsearch/catalog_product_list_toolbar')->setBlockId('solrsearch_product_list_toolbar')->toHtml(); ?>
+
+            <div id="content" class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div id="sidebar" class="hidden-xs">
+                            <?php echo $this->getChildHtml('searchFaces'); ?>
+                        </div>
+                        <div id="content-main">
+                            <?php //echo $this->getProductListHtml() ?>
+                            <?php echo Mage::app()->getLayout()->createBlock('zolagosolrsearch/catalog_product_list')->setBlockId('solrsearch_product_list')->setTemplate('zolagosolrsearch/catalog/product/list.phtml')->toHtml(); ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
+    </section>
+
+    <style type="text/css">
+        #nav_category_mobile {display: none !important;}
+        #navCategory {display: none !important;}
+    </style>
+    <script type="text/javascript">
+        jQuery(document).ready(function() {
+            jQuery("#navCategory").removeClass("visible-xs");
+            Mall.translate.add("You","<?php echo $this->__("You"); ?>");
+        });
+    </script>
+<?php endif; ?>

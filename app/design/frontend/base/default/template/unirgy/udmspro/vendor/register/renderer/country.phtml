@@ -1,7 +1,7 @@
 <label for="<?php echo $this->getElement()->getId(); ?>">
-    <?php echo $this->__($this->getElement()->getLabel()); ?>
-    <?php if ($this->getElement()->getRequired()): ?>
-        <span class="required">*</span>
-    <?php endif; ?>
-</label> <br />
+	<?php echo $this->__($this->getElement()->getLabel()); ?>
+	<?php if ($this->getElement()->getRequired()): ?>
+		<span class="required">*</span>
+	<?php endif; ?>
+</label> <br/>
 <?php echo $this->getLayout()->getBlock('udmspro_register')->getCountryHtmlSelect($this->getElement()->getValue(), $this->getElement()->getName(), $this->getElement()->getHtmlId()) ?>

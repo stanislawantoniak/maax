@@ -56,6 +56,8 @@ class Zolago_Dropship_VendorController extends Unirgy_Dropship_VendorController 
 		$this->_getSession()->setLocale($locale);
 		return $this->_redirectReferer();
 	}
+
+
 }
 
 
