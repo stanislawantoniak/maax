@@ -10,15 +10,23 @@ $sizetable = $this->getSizeTable();
 <script>
 	jQuery(function ($) {
 		tinymce.init({
+			imageupload_url: "<?php echo $this->getImageUploadAction(); ?>",
+			imageupload_translations: {
+				title: '<?php echo $this->__("Upload image"); ?>',
+				choose: '<?php echo $this->__("Select a file"); ?>',
+				upload: '<?php echo $this->__("Upload"); ?>',
+				cancel: '<?php echo $this->__("Cancel"); ?>'
+			},
 			skin: 'light',
 			selector: 'textarea.tinymce',
 			height: 300,
 			plugins: [
 				"advlist autolink lists link image charmap preview anchor textcolor",
 				"searchreplace visualblocks code",
-				"insertdatetime table contextmenu paste"
+				"insertdatetime table contextmenu paste imageupload"
 			],
-			toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
+			toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image imageupload",
+			relative_urls: false
 			<?php if($locale != 'en_US'): ?>, language: "<?php echo $locale; ?>" <?php endif; ?>
 		});
 		var form = $("#sizetableForm");
@@ -96,7 +104,7 @@ $sizetable = $this->getSizeTable();
 						<h4><i class="icon-reorder"></i> <?php echo $_helper->__("Size tables translations"); ?></h4>
 						<div class="toolbar no-padding">
 							<div class="btn-group">
-								<span class="btn btn-xs widget-collapse"><i class="icon-angle-up"></i></span>
+								<span class="btn btn-xs widget-collapse"><i class="icon-angle-down"></i></span>
 							</div>
 						</div>
 					</div>

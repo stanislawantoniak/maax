@@ -10,10 +10,10 @@ var dojoConfig;
 		// be necessary, since Dojo would automatically pick up
 		// dgrid, xstyle, and put-selector as siblings of the dojo folder.
 		packages: [
-			{ name: 'dgrid', location: baseUrl + 'dgrid' },
+			{ name: 'dgrid', location: baseUrl + 'dgrid-0.3' },
 			{ name: 'xstyle', location: baseUrl + 'xstyle' },
 			{ name: 'put-selector', location: baseUrl + 'put-selector' },
-			{ name: 'vendor', location: baseUrl + 'vendor' }
+			{ name: 'vendor', location: baseUrl + 'vendor-0.3' }
 		]
 	};
 }());

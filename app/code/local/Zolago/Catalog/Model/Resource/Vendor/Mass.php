@@ -78,7 +78,11 @@ class Zolago_Catalog_Model_Resource_Vendor_Mass
 		}
 		$write->insertOnDuplicate($backend, $insert, array("value"));
 		
+		
+		
+		/*
 		// Reindex changed values - each value can be different
+		// @todo Need to be reindex faster!
 		foreach($indexMixedValues as $productId=>$value){
 			$object = new Varien_Object(array(
 				'product_ids'       => array($productId),
@@ -89,16 +93,22 @@ class Zolago_Catalog_Model_Resource_Vendor_Mass
 				$object, Mage_Catalog_Model_Product::ENTITY, Mage_Index_Model_Event::TYPE_MASS_ACTION
 			);
 		}
-		
 		// Reindex new (same) values as one event
 		$object = new Varien_Object(array(
 			'product_ids'       => array_unique($indexSameValues),
 			'attributes_data'   => array($attribute->getAttributeCode()=>$valuesToAdd),
 			'store_id'          => $store->getId()
 		));
+		
 		Mage::getSingleton('index/indexer')->processEntityAction(
 			$object, Mage_Catalog_Model_Product::ENTITY, Mage_Index_Model_Event::TYPE_MASS_ACTION
 		);
+		*/
+		
+		// Better performance
+		$indexer = Mage::getResourceModel('catalog/product_indexer_eav_source');
+		/* @var $indexer Mage_Catalog_Model_Resource_Product_Indexer_Eav_Source */
+		$indexer->reindexEntities($productIds);
 		
 		return $this;
 	}
@@ -313,6 +323,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Mass
 		);
 		
 		$select->order(array(
+			"additional_table.column_attribute_order ASC", /* Custom field */
 			"attribute_group.sort_order ASC", 
 			"entity_attribute.sort_order ASC"
 		));

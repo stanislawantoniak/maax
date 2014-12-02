@@ -177,7 +177,7 @@ $_collection = $this->getCollection();
         Mall.listing.placeListingFadeContainer();
     });
 
-    jQuery('.addNewPositionListProductWrapper a, .addNewPositionListProductWrapper').click(function( event){
+    jQuery('a.addNewPositionListProduct').click(function( event){
         event.preventDefault();
         Mall.listing.loadMoreProducts();
     });

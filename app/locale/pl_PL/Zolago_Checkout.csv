@@ -1,4 +1,4 @@
-"Cart", "Koszyk"
+﻿"Cart", "Koszyk"
 "Shipping data", "Dane dostawy"
 "Delivery and payment", "Dostawa i płatność"
 "Summary", "Podsumowanie"
@@ -58,3 +58,4 @@
 "Roll products", "Zwiń produkty"
 "Order now", "Zamawiam"
 "Show products", "Pokaż produkty"
+"Some of the products are currently out of stock","Niektóre produkty w koszyku nie są juz dostępne na magazynie. Usuń te produkty, aby przejść dalej"

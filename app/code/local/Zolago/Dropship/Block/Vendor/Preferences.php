@@ -264,4 +264,5 @@ class Zolago_Dropship_Block_Vendor_Preferences extends Unirgy_Dropship_Block_Ven
 
         return $fieldsets;
     }
+
 }

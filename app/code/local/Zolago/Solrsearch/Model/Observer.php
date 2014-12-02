@@ -325,9 +325,8 @@ class Zolago_Solrsearch_Model_Observer {
 	 * @param Varien_Event_Observer $observer
 	 */
 	public function catalogConverterPriceUpdateAfter(Varien_Event_Observer $observer) {
-        Mage::log('catalogConverterPriceUpdateAfter', 0, 'configurable_update_solr.log');
 		$productIds = $observer->getEvent()->getProductIds();
-        Mage::log(implode(',' , $productIds), 0, 'configurable_update_solr.log');
+
 		foreach ($productIds as $productId) {
 			$this->collectProduct($productId);
 		}

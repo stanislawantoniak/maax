@@ -120,4 +120,22 @@
     <empty translate="message" module="zolagocatalog">
         <message>empty</message>
     </empty>
+    <submit translate="message" module="zolagocatalog">
+        <message>Submit</message>
+    </submit>
+    <add translate="message" module="zolagocatalog">
+        <message>Add</message>
+    </add>
+    <set translate="message" module="zolagocatalog">
+        <message>Set</message>
+    </set>
+    <substract translate="message" module="zolagocatalog">
+        <message>Substract</message>
+    </substract>
+    <close translate="message" module="zolagocatalog">
+        <message>Close</message>
+    </close>
+    <apply-to-selection translate="message" module="zolagocatalog">
+        <message>Apply to selection</message>
+    </apply-to-selection>
 </jstranslator>
