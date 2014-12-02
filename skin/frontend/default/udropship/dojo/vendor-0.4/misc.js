@@ -43,12 +43,43 @@ define([
         return markup;
 	}
 	
+	
+	var startLoading = function(showProgress){
+		
+		if(typeof showProgress === "undefined"){
+			showProgress = true;
+		}
+		
+		var loader = jQuery("#vendor-loading");
+		if(!loader.length){
+			loader = jQuery("<div>").attr({
+				"id": "vendor-loading"
+			}).click(function(){
+				return false;
+			}).hide().appendTo("body");
+		}
+		
+		if(showProgress){
+			loader.addClass("with-progress");
+		}else{
+			loader.removeClass("with-progress");
+		}
+		
+		loader.show();
+	}
+	
+	var stopLoading =  function(){
+		jQuery("#vendor-loading").fadeOut();
+	}
+	
 	return {
 		currency: formatPrice,
 		number: formatNumber,
 		numberEmpty: formatNumberEmpty,
 		percent: formatPercent,
 		replace: replace,
-		toNumber: toNumber
+		toNumber: toNumber,
+		startLoading: startLoading,
+		stopLoading: stopLoading
 	};
 })

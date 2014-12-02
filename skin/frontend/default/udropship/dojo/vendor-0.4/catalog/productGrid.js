@@ -454,6 +454,9 @@ define([
 			value = e.value,
 			oldValue = dataObject[field];
 	
+		// Start overlay loading
+		misc.startLoading(false);
+		
 		// Use only single row
 		if(!e.useSelection){
 			dataObject.attribute_mode = {};
@@ -465,7 +468,9 @@ define([
 			}, function(ex){
 				alert(ex.response.text);
 				e.deferred.reject();
-			});
+			}).always(function(){
+				misc.stopLoading();
+			})
 			return;
 		}
 		
@@ -481,7 +486,9 @@ define([
 			e.deferred.resolve();
 		}, function(){
 			e.deferred.reject();
-		})
+		}).always(function(){
+			misc.stopLoading();
+		});
 
 	}
 	
