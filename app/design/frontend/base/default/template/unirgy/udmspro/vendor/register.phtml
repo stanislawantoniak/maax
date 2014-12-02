@@ -4,38 +4,43 @@ $_hlp = Mage::helper('udropship');
 $_sHlp = Mage::helper('udmspro');
 $_session = Mage::getSingleton('udropship/session');
 ?>
-<div class="row row-centered" id="vendor-register-row">
-	<div class="col-md-10 col-lg-8 col-sm-12 col-xs-12 col-centered">
-		<div class="widget box">
-			<div class="widget-header">
-				<h4><i class="icon-reorder"></i> <?php echo $_sHlp->__('Become a Vendor') ?></h4>
-			</div>
-			<div class="widget-content">
-				<?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
-				<form action="<?php echo $this->getUrl('umicrosite/vendor/registerPost') ?>"
-				      enctype="multipart/form-data"
-				      method="post" class="form-horizontal row-border"
-				      id="registration-form" autocomplete="off">
-					<?php
-					foreach ($this->getForm()->getElements() as $element):
-						echo $element->toHtml();
-					endforeach; ?>
-					<div class="form-group" style="padding-bottom: 0;">
-						<label class="col-md-12"><span
-								class="required"><?php echo $this->__('* Indicated Required Fields') ?></span></label>
-					</div>
-					<div class="form-actions">
-						<button type="submit"
-						       class="btn btn-primary btn-lg btn-block"><?php echo $this->__('Register as a vendor') ?>&nbsp;&nbsp;&nbsp;<i class="icon-pencil"></i></button>
-						<a href="<?php echo $this->getUrl('udropship/vendor') ?>" class="btn btn-xs" style="margin-top: 10px">
-							<i class="icon-angle-left"></i>&nbsp;&nbsp;<?php echo $this->__('Return to log in') ?>
-						</a>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
+<div class="container">
+    <div class="row" id="vendor-register-row">
+        <div class="col-md-12">
+            <div class="col-md-6 col-md-offset-3">
+                <div class="page-header">
+                    <div class="page-title">
+                        <h3><?php echo $_sHlp->__('Become a Vendor') ?></h3>
+                    </div>
+                </div>
+                <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+                <form action="<?php echo $this->getUrl('umicrosite/vendor/registerPost') ?>"
+                      enctype="multipart/form-data"
+                      method="post" class="form-horizontal"
+                      id="registration-form" autocomplete="off">
+                    <?php
+                    foreach ($this->getForm()->getElements() as $element):
+                        echo $element->toHtml();
+                    endforeach; ?>
+                    <div class="form-group" style="padding-bottom: 0;">
+                        <label class="col-md-12"><span
+                                class="required"><?php echo $this->__('* Indicated Required Fields') ?></span></label>
+                    </div>
+                    <div class="">
+                        <button type="submit" class="btn btn-primary btn-lg btn-block">
+                            <?php echo $this->__('Register as a vendor') ?>
+                        </button>
+                        <a href="<?php echo $this->getUrl('udropship/vendor') ?>" class="btn btn-xs"
+                           style="margin-top: 10px">
+                            <i class="icon-angle-left"></i>&nbsp;&nbsp;<?php echo $this->__('Return to log in') ?>
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
+
 
 
 <script type="text/javascript">
