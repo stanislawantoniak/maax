@@ -378,6 +378,70 @@
                     <model>zolagosolrsearch/observer::cronCleanupQueue</model>
                 </run>
             </zolagosolrsearch_cleanup_queue>
+            <udvacation_process>
+                <schedule><cron_expr>21 0 * * *</cron_expr></schedule>
+                <run><model>udvacation/observer::processVacations</model></run>
+            </udvacation_process>
+            <udpayout_process_standard>
+                <schedule><cron_expr>8 3 * * *</cron_expr></schedule>
+                <run><model>udpayout/observer::processStandard</model></run>
+            </udpayout_process_standard>
+            <sales_clean_quotes>
+                <schedule>
+                    <cron_expr>11 3 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>sales/observer::cleanExpiredQuotes</model>
+                </run>
+            </sales_clean_quotes>
+            <aggregate_sales_report_order_data>
+                <schedule>
+                    <cron_expr>12 3 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>sales/observer::aggregateSalesReportOrderData</model>
+                </run>
+            </aggregate_sales_report_order_data>
+            <aggregate_sales_report_shipment_data>
+                <schedule>
+                    <cron_expr>13 3 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>sales/observer::aggregateSalesReportShipmentData</model>
+                </run>
+            </aggregate_sales_report_shipment_data>
+            <aggregate_sales_report_invoiced_data>
+                <schedule>
+                    <cron_expr>14 3 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>sales/observer::aggregateSalesReportInvoicedData</model>
+                </run>
+            </aggregate_sales_report_invoiced_data>
+            <aggregate_sales_report_refunded_data>
+                <schedule>
+                    <cron_expr>15 3 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>sales/observer::aggregateSalesReportRefundedData</model>
+                </run>
+            </aggregate_sales_report_refunded_data>
+            <aggregate_sales_report_bestsellers_data>
+                <schedule>
+                    <cron_expr>16 3 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>sales/observer::aggregateSalesReportBestsellersData</model>
+                </run>
+            </aggregate_sales_report_bestsellers_data>
+            <sitemap_generate>
+                <schedule>
+                    <cron_expr>25 3 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>sitemap/observer::scheduledGenerateSitemaps</model>
+                </run>
+            </sitemap_generate>
         </jobs>
     </crontab>
 </config>
