@@ -416,6 +416,26 @@
 	}
 }
 
+/******************************************************************************
+ * Loader
+ ******************************************************************************/
+#vendor-loading{
+	position: fixed;
+	top:0;
+	left:0;
+	right:0;
+	bottom:0;
+	z-index: 100000000;
+}
+#vendor-loading.with-progress{
+	opacity: 0.8;
+	background-color: #fff;
+	background-image: url(../../img/bootsrap/ajax-loading.gif);
+	background-position: center center;
+	background-repeat: no-repeat;
+}
+
+
 /* bootstrap centered columns */
 .row-centered {
 	text-align:center;
