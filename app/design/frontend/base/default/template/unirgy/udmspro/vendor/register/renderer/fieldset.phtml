@@ -7,8 +7,8 @@ $rcElements = $this->getElement()->getRightColumn();
 $_sHlp = Mage::helper('udmspro');
 ?>
 <div class="widget box">
-	<div class="widget-header">
-		<h4><i class="icon-reorder"></i> <?php echo $this->__($this->getElement()->getLegend()) ?></h4>
+	<div class="widget-header" style="cursor: pointer;">
+		<h4><?php echo $this->__($this->getElement()->getLegend()) ?></h4>
 	</div>
 	<div class="widget-content">
 		<?php if (!empty($topElements)): ?>
