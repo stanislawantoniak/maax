@@ -113,8 +113,6 @@ class Zolago_Solrsearch_IndexController extends SolrBridge_Solrsearch_IndexContr
 
     	$solrData = $solrModel->queryRegister($queryText);
 
-//        var_dump($solrData);
-
     	Mage::register('solrbridge_loaded_solr', $solrModel);
 
 		if( isset($solrData['responseHeader']['params']['q']) && !empty($solrData['responseHeader']['params']['q']) ) {

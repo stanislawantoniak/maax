@@ -1128,12 +1128,16 @@ Mall.listing = {
 		var tmp = jQuery.extend({},data);
 		jQuery.each(tmp, function(index){
 			if(this.value.length < 1 ||
-				(this.name == 'scat' ||
-				this.name == 'page' ||
+				(this.name == 'page' ||
 				this.name == 'rows' ||
 				this.name == 'start')) {
 				delete tmp[index];
 			}
+            if(this.name == 'scat'){
+                if (!jQuery('.solrsearch-index-index:eq(0)').length) {
+                    delete tmp[index];
+                }
+            }
 		});
 		return this._buildKey(tmp);
 	},
