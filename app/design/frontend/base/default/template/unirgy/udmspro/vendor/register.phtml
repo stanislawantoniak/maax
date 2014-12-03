@@ -23,6 +23,7 @@ $_session = Mage::getSingleton('udropship/session');
 
                         echo $element->toHtml();
                     endforeach; ?>
+                    <input type="hidden" value="0" name="billing_use_shipping" />
                     <div class="">
                         <button type="submit" class="btn btn-primary btn-lg btn-block">
                             <?php echo $this->__('Register as a vendor') ?>
