@@ -16,7 +16,7 @@ foreach (array('length_gte', 'length_gt', 'symlength_gte', 'symlength_gt') as $l
 }
 ?>
 	<label for="<?php echo $this->getElement()->getId(); ?>" class="col-md-3 control-label">
-		<?php echo $this->__($this->getElement()->getLabel()); ?>&nbsp;<?php if ($this->getElement()->getRequired()): ?><span class="required">*</span><?php endif; ?>
+		<?php echo Mage::helper('zolagodropship')->__($this->getElement()->getLabel()); ?>&nbsp;<?php if ($this->getElement()->getRequired()): ?><span class="required">*</span><?php endif; ?>
 	</label>
 	<div class="col-md-9">
 		<?php echo $this->getElementHtml() ?>

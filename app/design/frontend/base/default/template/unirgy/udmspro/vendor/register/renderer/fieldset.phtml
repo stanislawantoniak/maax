@@ -4,46 +4,52 @@ $topElements = $this->getElement()->getTopColumn();
 $bottomElements = $this->getElement()->getBottomColumn();
 $lcElements = $this->getElement()->getLeftColumn();
 $rcElements = $this->getElement()->getRightColumn();
+$_sHlp = Mage::helper('udmspro');
 ?>
-
-<?php if (!empty($topElements)): ?>
-	<?php foreach ($topElements as $topElement): ?>
-		<div class="form-group">
-			<?php echo $this->getChildElementJs($topElement); ?>
-			<?php echo $this->getChildElementHtml($topElement); ?>
-		</div>
-	<?php endforeach ?>
-<?php endif ?>
-
-
-<?php if (!empty($lcElements)): ?>
-	<?php foreach ($lcElements as $lcElement): ?>
-		<div class="form-group">
-			<?php echo $this->getChildElementJs($lcElement); ?>
-			<?php echo $this->getChildElementHtml($lcElement); ?>
-		</div>
-	<?php endforeach ?>
-<?php endif ?>
+<div class="widget box">
+	<div class="widget-header" style="cursor: pointer;">
+		<h4><?php echo $this->__($this->getElement()->getLegend()) ?></h4>
+	</div>
+	<div class="widget-content">
+		<?php if (!empty($topElements)): ?>
+			<?php foreach ($topElements as $topElement): ?>
+				<div class="form-group">
+					<?php echo $this->getChildElementJs($topElement); ?>
+					<?php echo $this->getChildElementHtml($topElement); ?>
+				</div>
+			<?php endforeach ?>
+		<?php endif ?>
 
 
-<?php if (!empty($rcElements)): ?>
-	<?php foreach ($rcElements as $rcElement): ?>
-		<div class="form-group">
-			<?php echo $this->getChildElementJs($rcElement); ?>
-			<?php echo $this->getChildElementHtml($rcElement); ?>
-		</div>
-	<?php endforeach ?>
-<?php endif ?>
+		<?php if (!empty($lcElements)): ?>
+			<?php foreach ($lcElements as $lcElement): ?>
+				<div class="form-group">
+					<?php echo $this->getChildElementJs($lcElement); ?>
+					<?php echo $this->getChildElementHtml($lcElement); ?>
+				</div>
+			<?php endforeach ?>
+		<?php endif ?>
 
+		<?php if (!empty($bottomElements)): ?>
+			<?php foreach ($bottomElements as $bottomElement): ?>
+				<div class="form-group">
+					<?php echo $this->getChildElementJs($bottomElement); ?>
+					<?php echo $this->getChildElementHtml($bottomElement); ?>
+				</div>
+			<?php endforeach ?>
+		<?php endif ?>
 
-<?php if (!empty($bottomElements)): ?>
-	<?php foreach ($bottomElements as $bottomElement): ?>
-		<div class="form-group">
-			<?php echo $this->getChildElementJs($bottomElement); ?>
-			<?php echo $this->getChildElementHtml($bottomElement); ?>
-		</div>
-	<?php endforeach ?>
-<?php endif ?>
+		<?php if (!empty($rcElements)): ?>
+			<?php foreach ($rcElements as $rcElement): ?>
+				<div class="form-group">
+					<?php echo $this->getChildElementJs($rcElement); ?>
+					<?php echo $this->getChildElementHtml($rcElement); ?>
+				</div>
+			<?php endforeach ?>
+		<?php endif ?>
+
+	</div>
+</div>
 
 <script type="text/javascript">
 	jQuery(document).ready(function ($) {

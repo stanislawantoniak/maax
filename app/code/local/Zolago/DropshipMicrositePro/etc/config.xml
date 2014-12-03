@@ -21,6 +21,103 @@
                 <class>Zolago_DropshipMicrositePro_Model</class>
             </zolagoudmspro>
 		</models>
+		<udropship>
+		    <vendor>
+		        <fieldsets>
+		            <vendor_preferences>
+		                <legend>Additional preferences</legend>
+		                <position>80</position>
+		            </vendor_preferences>
+		        </fieldsets>
+		        <fields>
+		            <company_name>
+		                <label>Company name</label>
+		                <fieldset>vendor_info</fieldset>
+		                <type>text</type>
+		            </company_name>
+		            <tax_no>
+		                <label>NIP</label>
+		                <fieldset>vendor_info</fieldset>
+		                <type>text</type>
+		            </tax_no>
+		            <www>
+		                <label>Vendor WWW page</label>
+		                <fieldset>vendor_preferences</fieldset>
+		                <type>text</type>
+		            </www>
+		            <contact_email>
+		                <label>Contact email</label>
+		                <fieldset>vendor_preferences</fieldset>
+		                <type>text</type>
+		            </contact_email>
+		            <contact_telephone>
+		                <label>Contact phone</label>
+		                <fieldset>vendor_preferences</fieldset>
+		                <type>text</type>
+		            </contact_telephone>
+                    <executive_firstname>
+                        <fieldset>vendor_preferences</fieldset>  
+                        <label>Executive firstname</label>
+                        <type>text</type>
+                    </executive_firstname>                                                                                                                		            
+                    <executive_lastname>
+                        <fieldset>vendor_preferences</fieldset>  
+                        <label>Executive lastname</label>
+                        <type>text</type>
+                    </executive_lastname>                                                                                                                		            
+                    <executive_telephone>
+                        <fieldset>vendor_preferences</fieldset>  
+                        <label>Executive Phone</label>
+                        <type>text</type>
+                    </executive_telephone>                                                                                                                		            
+                    <executive_telephone_mobile>
+                        <fieldset>vendor_preferences</fieldset>  
+                        <label>Executive Phone Mobile</label>
+                        <type>text</type>
+                    </executive_telephone_mobile>                                                                                                                		            
+                    <billing_email>
+                        <fieldset>vendor_preferences</fieldset>  
+                        <label>Billing person email</label>
+                        <type>text</type>
+                    </billing_email>
+                    <billing_street>
+                        <fieldset>vendor_preferences</fieldset>
+                        <label>Billing Street Address</label>
+                        <type>text</type>
+                    </billing_street>
+                    <billing_city>
+                        <fieldset>vendor_preferences</fieldset>
+                        <label>City</label>
+                        <type>text</type>
+                    </billing_city>
+                    <billing_zip>
+                        <fieldset>vendor_preferences</fieldset>
+                        <label>Zip/Postal Code</label>
+                        <type>text</type>
+                    </billing_zip>
+                    <administrator_firstname>
+                        <fieldset>vendor_preferences</fieldset>  
+                        <label>Administrator first name</label>
+                        <type>text</type>
+                    </administrator_firstname>
+                    <administrator_lastname>
+                        <fieldset>vendor_preferences</fieldset>  
+                        <label>Administrator last name</label>
+                        <type>text</type>
+                    </administrator_lastname>
+                    <administrator_telephone>
+                        <fieldset>vendor_preferences</fieldset>  
+                        <label>Administrator phone</label>
+                        <type>text</type>
+                    </administrator_telephone>
+                    <administrator_telephone_mobile>
+                        <fieldset>vendor_preferences</fieldset>  
+                        <label>Administrator phone mobile</label>
+                        <type>text</type>
+                    </administrator_telephone_mobile>
+		        </fields>
+		    </vendor>
+		</udropship>
 	</global>
 	<frontend>
 		<routers>

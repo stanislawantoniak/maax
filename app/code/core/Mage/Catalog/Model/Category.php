@@ -499,6 +499,7 @@ class Mage_Catalog_Model_Category extends Mage_Catalog_Model_Abstract
      */
     public function getUrlPath()
     {
+        /** @var $this Mage_Catalog_Model_Category */
         $path = $this->getData('url_path');
         if ($path) {
             return $path;

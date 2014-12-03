@@ -15,22 +15,17 @@ $_vendor = $_session->getVendor();
                 <div class="widget box">
                     <div class="widget-header">
                         <h4><?php echo Mage::helper("zolagodropship")->__("Company data"); ?></h4>
-
-                        <div class="toolbar no-padding">
-                            <div class="btn-group"><span class="btn btn-xs widget-collapse"><i class="icon-angle-up"></i></span>
-                            </div>
-                        </div>
                     </div>
                     <div class="widget-content">
 
                         <div class="form-group">
-                            <label for="company_name" class="col-md-3 control-label">
+                            <label for="vendor_name" class="col-md-3 control-label">
                                 <?php echo Mage::helper("zolagodropship")->__("Company name"); ?>
                                 <span class="required">*</span>
                             </label>
 
                             <div class="col-md-9">
-                                <input id="company_name" name="company_name" value="<?php echo $_vendor->getCompanyName(); ?>" type="text" required
+                                <input id="vendor_name" name="vendor_name" value="<?php echo $_vendor->getVendorName(); ?>" type="text" required
                                        class="form-control" size="10">
                             </div>
                         </div>
@@ -87,10 +82,6 @@ $_vendor = $_session->getVendor();
                     <div class="widget-header">
                         <h4><?php echo Mage::helper("zolagodropship")->__("Company contact data"); ?></h4>
 
-                        <div class="toolbar no-padding">
-                            <div class="btn-group"><span class="btn btn-xs widget-collapse"><i class="icon-angle-up"></i></span>
-                            </div>
-                        </div>
                     </div>
                     <div class="widget-content fiters">
                         <div class="form-group">
@@ -127,10 +118,6 @@ $_vendor = $_session->getVendor();
                     <div class="widget-header">
                         <h4><?php echo Mage::helper("zolagodropship")->__("Executive contact (business)"); ?></h4>
 
-                        <div class="toolbar no-padding">
-                            <div class="btn-group"><span class="btn btn-xs widget-collapse"><i class="icon-angle-up"></i></span>
-                            </div>
-                        </div>
                     </div>
                     <div class="widget-content">
                         <div class="form-group">
@@ -195,10 +182,6 @@ $_vendor = $_session->getVendor();
                     <div class="widget-header">
                         <h4><?php echo Mage::helper("zolagodropship")->__("Administrator contact (ITC or business)"); ?></h4>
 
-                        <div class="toolbar no-padding">
-                            <div class="btn-group"><span class="btn btn-xs widget-collapse"><i class="icon-angle-up"></i></span>
-                            </div>
-                        </div>
                     </div>
                     <div class="widget-content">
                         <div class="form-group">
@@ -263,7 +246,7 @@ $_vendor = $_session->getVendor();
                             </label>
 
                             <div class="col-md-9">
-                                <input id="password" name="password" value="<?php echo $_vendor->getPassword(); ?>" type="password" class="form-control"
+                                <input id="password" name="password" value="" type="password" class="form-control"
                                        size="10">
                             </div>
                         </div>
