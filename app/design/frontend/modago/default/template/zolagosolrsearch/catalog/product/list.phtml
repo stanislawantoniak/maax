@@ -116,6 +116,7 @@ $_collection = $this->getCollection();
 <!--<div id="listing-load-toplayer"><img src="--><?php //echo $this->getSkinUrl("images/modago-ajax-loader.gif"); ?><!--"</div>-->
 
 <script type="text/javascript">
+    Mall.listing.initImagesHeight();
     Mall.listing.setInitProducts(<?php echo $this->getJsonProducts(); ?>);
     Mall.listing.setLoadNextOffset(<?php echo (int) $this->getLoadMoreOffset(); ?>);
     Mall.listing.setScrollLoadOffset(<?php echo (int) $this->getAppendWhenScroll(); ?>);
