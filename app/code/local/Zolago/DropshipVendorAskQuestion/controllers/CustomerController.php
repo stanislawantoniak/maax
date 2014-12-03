@@ -48,6 +48,7 @@ class Zolago_DropshipVendorAskQuestion_CustomerController extends Unirgy_Dropshi
                 try {
                     $qModel->save();
                     $session->addSuccess($this->__('Your question has been accepted for moderation.'));
+                    Mage::log(get_class($session));
                 }
                 catch (Exception $e) {
                     $error = true;
