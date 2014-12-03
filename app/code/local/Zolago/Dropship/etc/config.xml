@@ -153,6 +153,12 @@
                         <fieldset>marketing</fieldset>
                         <position>70</position>
                     </product_short_information>
+                	<brandshop_info>
+                        <label>Product - Brand shop info</label>
+                        <type>text</type>
+                        <fieldset>marketing</fieldset>
+                        <position>75</position>
+                    </brandshop_info>
                 	<cart_slogan_one>
                         <label>Basket slogan no 1</label>
                         <type>text</type>
