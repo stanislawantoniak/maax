@@ -73,7 +73,7 @@ define([
 			if(this._hasModal){
 				// Trigger modal
 			}else{
-				this.send();
+				return this.send();
 			}
 		},
 		send: function(requestData){
