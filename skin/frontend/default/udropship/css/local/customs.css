@@ -348,3 +348,6 @@ table.foot-empty-cells tfoot td:empty {
 .umicrosite-vendor-register .widget.box .widget-header h4 {
   margin: 10px 0;
 }
+.umicrosite-vendor-register #registration-form {
+  margin-bottom: 50px;
+}

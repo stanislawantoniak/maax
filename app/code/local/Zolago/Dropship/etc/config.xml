@@ -96,34 +96,10 @@
                         <legend>UPS</legend>
                         <position>160</position>
                     </orbaups>
-                    <rma_contact>
-                        <legend>RMA contact data</legend>
-                        <position>181</position>
-                    </rma_contact>
-                    <rma_executive>
-                        <legend>RMA executive</legend>
-                        <position>182</position>
-                    </rma_executive>
                     <rma>
                         <legend>RMA Settings</legend>
                         <position>180</position>
                     </rma>
-                    <company_data>
-                        <legend>Company data</legend>
-                        <position>11</position>
-                    </company_data>
-                    <company_contact_data>
-                        <legend>Company contact data</legend>
-                        <position>11</position>
-                    </company_contact_data>
-                    <executive_contact>
-                        <legend>Executive contact (business)</legend>
-                        <position>12</position>
-                    </executive_contact>
-                    <administrator_contact>
-                        <legend>Administrator contact (ITC or business)</legend>
-                        <position>12</position>
-                    </administrator_contact>
                 </fieldsets>
 
                 <fields>
@@ -317,129 +293,7 @@
                         <fieldset>rma</fieldset>
                         <position>45</position>
                     </orbaups_rma_password>
-
-
-                    <!--Company data-->
-                    <company_name>
-                        <label>Company name</label>
-                        <type>text</type>
-                        <fieldset>company_data</fieldset>
-                        <position>65</position>
-                    </company_name>
-                    <tax_no>
-                        <label>Tax identification no</label>
-                        <type>text</type>
-                        <fieldset>company_data</fieldset>
-                        <position>66</position>
-                    </tax_no>
-                    <!--Company contact data-->
-                    <www>
-                        <label>www</label>
-                        <type>text</type>
-                        <fieldset>company_contact_data</fieldset>
-                        <position>67</position>
-                    </www>
-                    <contact_email>
-                        <label>Email</label>
-                        <type>text</type>
-                        <fieldset>company_contact_data</fieldset>
-                        <position>48</position>
-                    </contact_email>
-                    <contact_telephone>
-                        <label>Phone</label>
-                        <type>text</type>
-                        <fieldset>company_contact_data</fieldset>
-                        <position>69</position>
-                    </contact_telephone>
-                    <!--Executive contact (business)-->
-                    <executive_firstname>
-                        <label>Name</label>
-                        <type>text</type>
-                        <fieldset>executive_contact</fieldset>
-                        <position>1</position>
-                    </executive_firstname>
-                    <executive_lastname>
-                        <label>Surname</label>
-                        <type>text</type>
-                        <fieldset>executive_contact</fieldset>
-                        <position>2</position>
-                    </executive_lastname>
-                    <executive_telephone>
-                        <label>Phone</label>
-                        <type>text</type>
-                        <fieldset>executive_contact</fieldset>
-                        <position>3</position>
-                    </executive_telephone>
-                    <executive_telephone_mobile>
-                        <label>Mobile</label>
-                        <type>text</type>
-                        <fieldset>executive_contact</fieldset>
-                        <position>4</position>
-                    </executive_telephone_mobile>
-
-
-                    <!--Administrator contact (ITC or business)-->
-                    <administrator_firstname>
-                        <label>Name</label>
-                        <type>text</type>
-                        <fieldset>administrator_contact</fieldset>
-                        <position>70</position>
-                    </administrator_firstname>
-                    <administrator_lastname>
-                        <label>Surname</label>
-                        <type>text</type>
-                        <fieldset>administrator_contact</fieldset>
-                        <position>71</position>
-                    </administrator_lastname>
-                    <administrator_telephone>
-                        <label>Phone</label>
-                        <type>text</type>
-                        <fieldset>administrator_contact</fieldset>
-                        <position>72</position>
-                    </administrator_telephone>
-                    <administrator_telephone_mobile>
-                        <label>Mobile</label>
-                        <type>text</type>
-                        <fieldset>administrator_contact</fieldset>
-                        <position>73</position>
-                    </administrator_telephone_mobile>
-
-                    <!--RMA contact data-->
-                    <rma_email>
-                        <label>Email</label>
-                        <type>text</type>
-                        <fieldset>rma_contact</fieldset>
-                        <position>74</position>
-                    </rma_email>
-                    <rma_telephone>
-                        <label>Phone</label>
-                        <type>text</type>
-                        <fieldset>rma_contact</fieldset>
-                        <position>75</position>
-                    </rma_telephone>
-
-                    <!--RMA executive-->
-                    <rma_executive_telephone>
-                        <label>Phone</label>
-                        <type>text</type>
-                        <fieldset>rma_executive</fieldset>
-                        <position>76</position>
-                    </rma_executive_telephone>
-                    <rma_executive_telephone_mobile>
-                        <label>Mobile</label>
-                        <type>text</type>
-                        <fieldset>rma_executive</fieldset>
-                        <position>77</position>
-                    </rma_executive_telephone_mobile>
-                    <rma_executive_email>
-                        <label>Email</label>
-                        <type>text</type>
-                        <fieldset>rma_executive</fieldset>
-                        <position>78</position>
-                    </rma_executive_email>
-
-
-                    <!-- Product Review -->
+					<!-- Product Review -->
                 	<review_status>
                         <label>Product Review Status</label>
                         <type>select</type>
