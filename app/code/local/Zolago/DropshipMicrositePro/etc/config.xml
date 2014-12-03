@@ -28,6 +28,10 @@
 		                <legend>Additional preferences</legend>
 		                <position>80</position>
 		            </vendor_preferences>
+                    <billing_address>
+                        <legend>Billing address</legend>
+                        <position>81</position>
+                    </billing_address>
 		        </fieldsets>
 		        <fields>
 		            <company_name>
