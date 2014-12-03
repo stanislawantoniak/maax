@@ -80,11 +80,11 @@
                         <label>Billing person email</label>
                         <type>text</type>
                     </billing_email>
-                    <billing_street1>
+                    <billing_street>
                         <fieldset>vendor_preferences</fieldset>
-                        <label>Street Address</label>
+                        <label>Billing Street Address</label>
                         <type>text</type>
-                    </billing_street1>
+                    </billing_street>
                     <billing_city>
                         <fieldset>vendor_preferences</fieldset>
                         <label>City</label>
