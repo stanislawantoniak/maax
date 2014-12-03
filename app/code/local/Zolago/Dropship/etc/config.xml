@@ -2,7 +2,7 @@
 <config>
 	<modules>
 		<Zolago_Dropship>
-			<version>0.0.3</version>
+			<version>0.0.4</version>
 		</Zolago_Dropship>
 	</modules>
 	<global>
@@ -111,6 +111,14 @@
                         <fieldset>integration</fieldset>
                         <position>0</position>
                     </super_vendor_id>
+                	<vendor_type>
+                        <label>Vendor type</label>
+                        <type>select</type>
+						<source_model>zolagodropship/source</source_model>
+                        <source>vendorstype</source>
+                        <fieldset>integration</fieldset>
+                        <position>1</position>
+                    </vendor_type>
                 	<marketing_store_information>
                         <label>Main store menu - marketing store information</label>
                         <type>wysiwyg</type>
