@@ -49,6 +49,7 @@
 		                <label>Contact email</label>
 		                <fieldset>vendor_preferences</fieldset>
 		                <type>text</type>
+                        <reg_class>validate-email</reg_class>
 		            </contact_email>
 		            <contact_telephone>
 		                <label>Contact phone</label>
