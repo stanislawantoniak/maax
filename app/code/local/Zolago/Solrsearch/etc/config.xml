@@ -434,6 +434,14 @@
                     <model>sales/observer::aggregateSalesReportBestsellersData</model>
                 </run>
             </aggregate_sales_report_bestsellers_data>
+            <aggregate_sales_report_coupons_data>
+                <schedule>
+                    <cron_expr>17 3 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>salesrule/observer::aggregateSalesReportCouponsData </model>
+                </run>
+            </aggregate_sales_report_coupons_data>
             <sitemap_generate>
                 <schedule>
                     <cron_expr>25 3 * * *</cron_expr>
@@ -442,6 +450,7 @@
                     <model>sitemap/observer::scheduledGenerateSitemaps</model>
                 </run>
             </sitemap_generate>
+
         </jobs>
     </crontab>
 </config>
