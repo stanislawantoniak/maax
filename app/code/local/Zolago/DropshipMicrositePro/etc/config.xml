@@ -78,6 +78,7 @@
                     <billing_email>
                         <fieldset>vendor_preferences</fieldset>  
                         <label>Billing person email</label>
+                        <reg_class>validate-email</reg_class>
                         <type>text</type>
                     </billing_email>
                     <billing_street>
