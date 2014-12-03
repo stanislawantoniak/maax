@@ -363,7 +363,7 @@
             <zolagosolrsearch_process_queue>
                 <schedule>
                     <!-- Run every 5 minutes -->
-                    <cron_expr>*/5 * * * *</cron_expr>
+                    <cron_expr>3,8,13,18,23,28,33,38,43,48,53,58 * * * *</cron_expr>
                 </schedule>
                 <run>
                     <model>zolagosolrsearch/observer::cronProcessQueue</model>
