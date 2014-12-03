@@ -29,7 +29,9 @@ $_collection = $this->getCollection();
                                     <figure class="img_product">
                                         <img src="<?php echo $_productImageUrl; ?>"
                                              alt="<?php $this->escapeHtml($product->getName()); ?>"
-                                             class="img-responsive"/>
+                                             class="img-responsive"
+                                             data-width="<?php echo $_productImageInfo['width']; ?>"
+                                             data-height="<?php echo $_productImageInfo['height']; ?>"/>
                                     </figure>
                                     <div class="logo_manufacturer">
                                         <img class="img-responsive"

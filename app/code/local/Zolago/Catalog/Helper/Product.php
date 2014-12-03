@@ -49,7 +49,7 @@ class Zolago_Catalog_Helper_Product extends Mage_Catalog_Helper_Product {
 
         /** @var $product Zolago_Catalog_Model_Product*/
 
-        if(!$product->hasData("resized_image_url")){
+        if(!$product->hasData("listing_resized_image_url")){
 
             $return = null;
             try{
@@ -63,10 +63,10 @@ class Zolago_Catalog_Helper_Product extends Mage_Catalog_Helper_Product {
                 Mage::logException($ex);
             }
 
-            $product->setData("resized_image_url", $return . ""); // Cast to string
+            $product->setData("listing_resized_image_url", $return . ""); // Cast to string
         }
 
-        return $product->getData("resized_image_url");
+        return $product->getData("listing_resized_image_url");
     }
 
     /**

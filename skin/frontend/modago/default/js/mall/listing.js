@@ -139,6 +139,8 @@ Mall.listing = {
 	 * Performs initialization for listing object.
 	 */
 	init: function () {
+        this.initImagesHeight();
+
         //set query for search page
         this.setQuery(this.getQueryFromUrl());
 
@@ -680,7 +682,15 @@ Mall.listing = {
 		}).appendTo(link);
 
 		if (product.listing_resized_image_info !== null) {
-			style = "max-height: " + product.listing_resized_image_info.height;
+            var ratio = product.listing_resized_image_info.height / product.listing_resized_image_info.width;
+            var colWidth = jQuery('#grid .item:eq(0) figure').width();
+            var _height = parseInt(ratio * colWidth);
+            if (_height) {
+                style = "height: " + _height +'px;';
+            } else {
+                style = '';
+            }
+
 		}
 		jQuery("<img/>", {
 			src: product.listing_resized_image_url,
@@ -767,6 +777,29 @@ Mall.listing = {
 
 		return container;
 	},
+
+    initImagesHeight : function() {
+        var items = jQuery('#grid .item figure');
+        var ratio = 1.5;
+        var itemWidth = 0;
+        var itemHeight = 0;
+        var height = 0;
+        var colWidth = jQuery(items).first().width();
+
+        jQuery(jQuery(items).find('img')).each(function(index) {
+            itemHeight = parseInt(jQuery(this).attr('data-height'));
+            itemWidth = parseInt(jQuery(this).attr('data-width'));
+            if(!isNaN(itemHeight)) {
+                ratio = itemHeight / itemWidth;
+                height = parseInt(ratio * colWidth);
+                if(height) {
+                    jQuery(this).css('height', height);
+                } else {
+                    jQuery(this).css('height','');
+                }
+            }
+        });
+    },
 
 	/**
 	 * Attaches events to products inserted to listing.
@@ -1333,6 +1366,7 @@ Mall.listing = {
 
 		this.initActiveEvents();
 		this.initListingLinksEvents();
+        this.initImagesHeight();
 	},
 
 	replaceProducts: function(data){
