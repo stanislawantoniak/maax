@@ -40,7 +40,21 @@ class Zolago_Modago_Block_Solrsearch_Faces_Category extends Zolago_Solrsearch_Bl
             );
         }
         else {
-            $parentCategoryUrl = $this->getFacesUrl(array('scat' => $category->getId()));
+//            $parentCategoryUrl = $this->getFacesUrl(array('scat' => $category->getId()));
+            //because _parseQueryData(...) in app/code/local/Zolago/Solrsearch/Block/Faces.php
+            //is bugged (always take paramss from Mage::app()->getRequest()->getParams();
+            //url is need to be filter
+
+            $id = $category->getId();
+
+            $_solrDataArray = $this->getSolrData();
+            $q = Mage::app()->getRequest()->getParam('q');
+
+            if( isset($_solrDataArray['responseHeader']['params']['q']) && !empty($_solrDataArray['responseHeader']['params']['q']) ) {
+                $q = "&q=" . $_solrDataArray['responseHeader']['params']['q'];
+            }
+
+            $parentCategoryUrl = Mage::getUrl("search/index/index") . "?scat={$id}{$q}";
         }
 
         return $parentCategoryUrl;
