@@ -6,6 +6,17 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 	const TYPE_POBILLING = "pobilling";
 	
 	/**
+	 * Email template for new status
+	 */
+	const XML_PATH_UDROPSHIP_PURCHASE_ORDER_STATUS_CHANGED_SHIPPED = 
+			"udropship/purchase_order/status_changed_shipped";
+	
+	/**
+	 * Email sender
+	 */
+    const XML_PATH_EMAIL_IDENTITY = 'sales_email/order/identity';
+	
+	/**
 	 * @param Unirgy_Dropship_Model_Vendor $venndor
 	 * @param Zolago_Operator_Model_Operator $operator
 	 * @return boolean
@@ -20,6 +31,38 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 		}
 		return false;
 	}
+	
+	/**
+	 * @param string $template
+	 * @param array $templateParams
+	 * @return Zolago_Po_Model_Po
+	 */
+	public function sendEmailTemplate($template, $templateParams = array())
+    {
+		// Reciver data
+		$storeId = $this->getOrder()->getStoreId();
+		$email = "maciej.babol@orba.pl";// $this->getOrder()->getCustomerEmail();
+		$name = $this->getOrder()->getCustomerName();
+		
+		$templateParams['po'] = $this;
+		$templateParams['order'] = $this->getOrder();
+		$templateParams['vendor'] = $this->getVendor();
+		
+        $mailer = Mage::getModel('core/email_template_mailer');
+        /* @var $mailer Mage_Core_Model_Email_Template_Mailer */
+		$emailInfo = Mage::getModel('core/email_info');
+        $emailInfo->addTo($email, $name);
+        $mailer->addEmailInfo($emailInfo);
+
+        // Set all required params and send emails
+        $mailer->setSender(Mage::getStoreConfig(self::XML_PATH_EMAIL_IDENTITY, $storeId));
+        $mailer->setStoreId($storeId);
+        $mailer->setTemplateId(Mage::getStoreConfig($template, $storeId));
+        $mailer->setTemplateParams($templateParams);
+        $mailer->send();
+        
+		return $this;
+    }
 	
 	/**
 	 * @return Mage_Sales_Model_Order_Shipment | null

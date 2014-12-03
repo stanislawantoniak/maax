@@ -100,6 +100,13 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
     public function editAction() {
         try {
             $this->_registerPo();
+			/**
+			 * @todo remove email send simulation
+			 */
+			$this->_registerPo()->sendEmailTemplate(
+					Zolago_Po_Model_Po::XML_PATH_UDROPSHIP_PURCHASE_ORDER_STATUS_CHANGED_SHIPPED,
+					array()
+			);
         } catch (Mage_Core_Exception $e) {
             $this->_getSession()->addError($e->getMessage());
             return $this->_redirectReferer();
