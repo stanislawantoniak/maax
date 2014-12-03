@@ -33,6 +33,38 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 	}
 	
 	/**
+	 * @param Mage_Sales_Model_Order_Shipment $shipment | null
+	 * @return Mage_Sales_Model_Order_Shipment_Track | null
+	 */
+	public function getTracking(Mage_Sales_Model_Order_Shipment $shipment = null) {
+		if(!$shipment instanceof  Mage_Sales_Model_Order_Shipment){
+			$shipment = $this->getLastNotCanceledShipment();
+		}
+		if($shipment instanceof  Mage_Sales_Model_Order_Shipment && $shipment->getId()){
+			$collection = $shipment->getTracksCollection()->setOrder("created_at", "DESC");
+			return $collection->getFirstItem();
+		}
+		return null;
+	}
+	
+	/**
+	 * @param Mage_Sales_Model_Order_Shipment_Track $tracking
+	 * @return string
+	 */
+	public function getTrackingUrl(Mage_Sales_Model_Order_Shipment_Track $tracking=null) {
+		$carrier = $this->getCarrier();
+		if(!$tracking instanceof Mage_Sales_Model_Order_Shipment_Track){
+			$tracking = $this->getTracking();
+		}
+		
+		if($carrier && $tracking){
+			$out = $carrier->getConfigData('tracking_url');
+			return sprintf($out, $tracking->getTrackNumber());
+		}
+		return null;
+	}
+	
+	/**
 	 * @param string $template
 	 * @param array $templateParams
 	 * @return Zolago_Po_Model_Po
@@ -41,12 +73,13 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
     {
 		// Reciver data
 		$storeId = $this->getOrder()->getStoreId();
-		$email = "maciej.babol@orba.pl";// $this->getOrder()->getCustomerEmail();
+		$email = $this->getOrder()->getCustomerEmail();
 		$name = $this->getOrder()->getCustomerName();
 		
 		$templateParams['po'] = $this;
 		$templateParams['order'] = $this->getOrder();
 		$templateParams['vendor'] = $this->getVendor();
+		$templateParams['carrier'] = $this->getCarrier();
 		
         $mailer = Mage::getModel('core/email_template_mailer');
         /* @var $mailer Mage_Core_Model_Email_Template_Mailer */
@@ -281,6 +314,21 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 	}
 	
 	/**
+	 * @return Mage_Shipping_Model_Carrier_Abstract
+	 */
+	public function getCarrier() {
+		if(!$this->hasData("carrier")){
+			$config = Mage::getSingleton("shipping/config");
+			/* @var $config Mage_Shipping_Model_Config */
+			$this->setData("carrier", $config->getCarrierInstance(
+				$this->getCurrentCarrier(), 
+				$this->getStore()->getId()
+			));
+		}
+		return $this->getData("carrier");
+	}
+	
+	/**
 	 * @return Zolago_Pos_Model_Pos
 	 */
 	public function getPos() {
@@ -296,6 +344,14 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 			$total += $this->calcuateItemPrice($item) * $item->getQty() - $item->getDiscountAmount();
 		}
 		return $total;
+	}
+	
+	public function getSubtotalDiscount() {
+		$discount = 0;
+		foreach($this->getAllItems() as $item){
+			$discount += $item->getDiscountAmount();
+		}
+		return $discount;
 	}
 	
 	
@@ -419,6 +475,19 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 	   return $pos;
    }
    
+   /**
+    * @return string
+    */
+   public function getFormattedGrandTotalInclTax() {
+	   return Mage::app()->getLocale()->currency(
+			$this->getStore()->getCurrentCurrencyCode()
+		)->toCurrency($this->getGrandTotalInclTax());
+   }
+   
+   /**
+    * @param bool $force
+    * @return Zolago_Po_Model_Po
+    */
    public function updateTotals($force=false) {
 	    if($force || !$this->getGrandTotalInclTax()){
 			$this->_processTotalWeight();
@@ -459,8 +528,19 @@ class Zolago_Po_Model_Po extends Unirgy_DropshipPo_Model_Po
 	   return $this->getOrder()->getPayment()->getMethod() == Zolago_Payment_Model_Method::PAYMENT_METHOD_CODE;
    }
 
+   /**
+    * @return bool
+    */
    public function isPaymentCheckOnDelivery() {
        return $this->getOrder()->getPayment()->getMethod() == Mage::getSingleton("payment/method_cashondelivery")->getCode();
+   }
+   
+   /**
+    * @see isPaymentCheckOnDelivery()
+    * @return bool
+    */
+   public function isCod() {
+	   return $this->isPaymentCheckOnDelivery();
    }
    
    /**
