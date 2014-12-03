@@ -351,3 +351,12 @@ table.foot-empty-cells tfoot td:empty {
 .umicrosite-vendor-register #registration-form {
   margin-bottom: 50px;
 }
+.udropship-vendor_settings-info .widget.box .widget-header h4 {
+  margin: 10px 0;
+}
+.udropship-vendor_settings-shipping .widget.box .widget-header h4 {
+  margin: 10px 0;
+}
+.udropship-vendor_settings-rma .widget.box .widget-header h4 {
+  margin: 10px 0;
+}
