@@ -7,8 +7,8 @@
     </modules>
 	<admin>
 		<routers>
-			<solrbridge_admin>
-				<args>
+			<solrbridge_admin>  
+				<args>  
 					<modules>
                         <Zolago_Solrsearch before="SolrBridge_Solsearch">Zolago_Solrsearch</Zolago_Solrsearch>
                     </modules>
