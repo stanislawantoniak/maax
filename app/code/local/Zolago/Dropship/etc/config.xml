@@ -147,12 +147,6 @@
                         <fieldset>marketing</fieldset>
                         <position>60</position>
                     </store_return_headline>
-                	<product_short_information>
-                        <label>Product - short delivery and returns information</label>
-                        <type>wysiwyg</type>
-                        <fieldset>marketing</fieldset>
-                        <position>70</position>
-                    </product_short_information>
 					<!-- DHL -->
                 	<use_dhl>
                         <label>Use DHL</label>
