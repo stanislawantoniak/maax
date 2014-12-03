@@ -439,9 +439,25 @@
                     <cron_expr>17 3 * * *</cron_expr>
                 </schedule>
                 <run>
-                    <model>salesrule/observer::aggregateSalesReportCouponsData </model>
+                    <model>salesrule/observer::aggregateSalesReportCouponsData</model>
                 </run>
             </aggregate_sales_report_coupons_data>
+            <aggregate_sales_report_tax_data>
+                <schedule>
+                    <cron_expr>17 3 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>tax/observer::aggregateSalesReportTaxData</model>
+                </run>
+            </aggregate_sales_report_tax_data>
+            <catalog_product_alert>
+                <schedule>
+                    <cron_expr>17 3 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>productalert/observer::process</model>
+                </run>
+            </catalog_product_alert>
             <sitemap_generate>
                 <schedule>
                     <cron_expr>25 3 * * *</cron_expr>
