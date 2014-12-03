@@ -177,6 +177,7 @@ $_collection = $this->getCollection();
 
     jQuery(window).resize(function() {
         Mall.listing.placeListingFadeContainer();
+        Mall.listing.removeImagesHeight();
     });
 
     jQuery('a.addNewPositionListProduct').click(function( event){

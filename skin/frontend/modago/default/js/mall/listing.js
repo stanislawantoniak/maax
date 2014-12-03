@@ -2813,7 +2813,12 @@ Mall.listing = {
 		this._load_next_offset = offset;
 
 		return this;
-	}
+	},
+
+    removeImagesHeight: function() {
+        var imgs = jQuery('#grid .item figure img[style*=height]');
+        jQuery(imgs).css('height', '');
+    }
 };
 
 jQuery(document).ready(function () {
