@@ -278,14 +278,15 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function getContextSelectorArray()
     {
+        /** @var $this Zolago_Solrsearch_Helper_Data */
         $array = array();
 		
         $filterQuery = (array)Mage::getSingleton('core/session')->getSolrFilterQuery();
 
 		$_vendor = Mage::helper('umicrosite')->getCurrentVendor();
-		
+		/** @var Mage_Catalog_Helper_Data $helper */
 		$helper = Mage::helper('catalog');
-		
+
         $selectedContext = 0;
         if (isset($filterQuery['category_id']) && isset($filterQuery['category_id'][0])) {
             $selectedContext = $filterQuery['category_id'][0];
@@ -308,11 +309,11 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 		
 		$array['select_options'][0] = array(
 			'value' => 0,
-			'text' => $helper->__('Everywhere'),
+			'text' => $this->__('Everywhere'),
 			'selected' => true
 		);
 		
-		$array['input_empty_text'] = $helper->__('Search entire store here...');
+		$array['input_empty_text'] = $this->__('Search entire store here...');
 		
 		// This vendor
 		if ($_vendor && $_vendor->getId()) {
@@ -322,7 +323,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 				'selected' => true,
 			);
 			
-			$array['input_empty_text'] = $helper->__('Search in ') . $_vendor->getVendorName() . '...';
+			$array['input_empty_text'] = $this->__('Search in ') . $_vendor->getVendorName() . '...';
 			
 			// Make "Everywhere" unselected
 			$array['select_options'][0]['selected'] = false;
@@ -366,12 +367,12 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 				$selected = true;
 				
 				$array['select_options'][] = array(
-					'text' => Mage::helper('catalog')->__('This category'),
+					'text' => $this->__('This category'),
 					'value' => $currentCategory->getId(),
 					'selected' => $selected
 				);
 				
-				$array['input_empty_text'] = $helper->__('Search in ') . $currentCategory->getName() . "...";
+				$array['input_empty_text'] = $this->__('Search in ') . $currentCategory->getName() . "...";
 				
 				// Make "Everywhere" unselected
 				$array['select_options'][0]['selected'] = false;
