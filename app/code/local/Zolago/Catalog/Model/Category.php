@@ -24,16 +24,14 @@ class Zolago_Catalog_Model_Category extends Mage_Catalog_Model_Category
 			$this->_afterLoad();
 			$this->setOrigData();
 			$this->_hasDataChanges = false;
-			Mage::log("From cache");
 			Varien_Profiler::start("Loading category");
 			return $this;
 		}
 		
+		// Load origin 
 		parent::load($id, $field);
-		
+		// Do save
 		$this->_saveInCache($cacheKey, $this->getData());
-		
-		Mage::log("From DB");
 		Varien_Profiler::start("Loading category");
 		
 		return $this;
