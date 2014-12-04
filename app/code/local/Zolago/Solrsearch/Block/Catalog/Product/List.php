@@ -97,6 +97,9 @@ class Zolago_Solrsearch_Block_Catalog_Product_List extends Mage_Catalog_Block_Pr
      * @return
      */
     public function getNoAjaxLink() {
+        if (!$this->getListModel()->isGoogleBot()) {
+            return false;
+        }
         if ($this->getListModel()->isLastPage()) {
             return false;
         }

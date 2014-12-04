@@ -108,11 +108,9 @@ $_collection = $this->getCollection();
     <img src="<?php echo $this->getSkinUrl("images/modago-ajax-loader.gif"); ?>" alt="">
 </div>
 <?php $noAjaxLink = $this->getNoAjaxLink(); ?>
-<?php if ($noAjaxLink) : ?>
 <div class="addNewPositionListProductWrapper">
-    <a href="<?php echo $this->getNoAjaxLink();?>" class="addNewPositionListProduct"><?php echo $this->__("Load next <span>%s</span> products", $this->getLoadMoreOffset()); ?></a>
+    <a href="<?php echo $noAjaxLink? $noAjaxLink:'#';?>" class="addNewPositionListProduct"><?php echo $this->__("Load next <span>%s</span> products", $this->getLoadMoreOffset()); ?></a>
 </div>
-<?php endif; ?>
 <!--<div id="listing-load-toplayer"><img src="--><?php //echo $this->getSkinUrl("images/modago-ajax-loader.gif"); ?><!--"</div>-->
 
 <script type="text/javascript">
