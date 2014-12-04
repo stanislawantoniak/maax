@@ -1,8 +1,7 @@
 <?php
 class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 {
-	protected $_condJoined = false;
-	
+	protected $_condJoined = false;	
 	/**
 	 * Clear not used addresses (trashes)
 	 * @param Zolago_Po_Model_Po $po

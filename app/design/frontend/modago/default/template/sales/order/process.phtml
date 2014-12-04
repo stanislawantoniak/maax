@@ -1,7 +1,16 @@
 <?php $_orders = $this->getOrders(); ?>
 <?php $_helper = Mage::helper("zolagosales");?>
 <?php $baseUrl = Mage::helper("core/url")->getHomeUrl(); ?>
-<div class="page-title box-wrapper">
+
+<?php
+$request = Mage::app()->getRequest();
+$customerAccountPage = false;
+if ($request->getRouteName() == "customer" && $request->getControllerName() == "account" && $request->getActionName() == "index") {
+    $customerAccountPage = true;
+}
+?>
+<input type="hidden" value="<?php echo (int)$customerAccountPage; ?>" name="customer_account_page" />
+<div class="page-title box-wrapper <?php if($customerAccountPage): ?> hidden-sm hidden-xs <?php endif; ?>">
 	<h1>
 		<span><?php echo $this->__('Orders in the realization') ?></span>
 		<span class="back-sm"><a href="<?php echo $baseUrl ?>customer/account/index/" class="underline"><?php echo $_helper->__('back: my account'); ?> &gt;</a></span>
@@ -21,7 +30,7 @@
 	</div>
 </div>
 
-<div class="hidden" id="vendor_contact_form_template">
+<div class="hidden " id="vendor_contact_form_template">
 	<?php echo $this->getChild("question")->
 		setVendorId("{{vendor_id}}")->
 		setOrderId("{{order_id}}")->
@@ -58,4 +67,8 @@
 			return false;
 		})
 	});
+    var customerAccountPage = "<?php echo (int)$customerAccountPage; ?>";
+    if (customerAccountPage == 1) {
+        jQuery(".section ul.nav li:first-child a").addClass("active");
+    }
 </script>
