@@ -77,24 +77,24 @@
                         <type>text</type>
                     </executive_telephone_mobile>                                                                                                                		            
                     <billing_email>
-                        <fieldset>vendor_preferences</fieldset>  
+                        <fieldset>vendor_info</fieldset>
                         <label>Billing person email</label>
                         <reg_class>validate-email</reg_class>
                         <type>text</type>
                     </billing_email>
                     <billing_street>
-                        <fieldset>vendor_preferences</fieldset>
+                        <fieldset>vendor_info</fieldset>
                         <label>Billing Street Address</label>
                         <type>text</type>
                     </billing_street>
                     <billing_city>
-                        <fieldset>vendor_preferences</fieldset>
-                        <label>City</label>
+                        <fieldset>vendor_info</fieldset>
+                        <label>Billing City</label>
                         <type>text</type>
                     </billing_city>
                     <billing_zip>
-                        <fieldset>vendor_preferences</fieldset>
-                        <label>Zip/Postal Code</label>
+                        <fieldset>vendor_info</fieldset>
+                        <label>Billing Zip/Postal Code</label>
                         <type>text</type>
                     </billing_zip>
                     <administrator_firstname>
