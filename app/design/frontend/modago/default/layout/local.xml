@@ -1016,6 +1016,12 @@
 
 	<customer_account_index translate="label">
 		<label>Customer My Account Dashboard</label>
+        <reference name="head">
+            <action method="addItem">
+                <type>skin_js</type>
+                <script>js/mall/sales.js</script>
+            </action>
+        </reference>
         <action method="addBodyClass">
             <value>customer-account-index</value>
         </action>
@@ -1049,6 +1055,17 @@
                 <name>customer_account_dashboard</name>
             </action>
 
+            <block type="zolagomodago/sales_order_process" name="sales.order.process">
+                <block type="core/text_list" name="sales.order.history.info" as="info" translate="label">
+                    <label>Orders in the realization</label>
+                </block>
+                <block type="core/template" template="sales/order/process/empty.phtml" name="sales.order.process.empty" as="empty">
+                    <block type="cms/block" name="sales.order.process.empty.cms" as="cms">
+                        <action method="setBlockId"><block_id>account-order-process-empty</block_id></action>
+                    </block>
+                </block>
+                <block type="zolagoudqa/contact_question" template="unirgy/udqa/contact/question.phtml" name="zolagoudqa.contact.question" as="question"/>
+            </block>
 
             <!-- add custom modago mobile navigation -->
             <block type="customer/account_navigation" name="customer_account_navigation_mobile"  template="customer/account/navigation-mobile.phtml">
