@@ -98,7 +98,7 @@
 					<?php echo $_helper->__("Date and time of courier package pickup"); ?>:
 				</div>
 				<div class="rmaContent">
-					<?php echo $this->weekdays[date('w',strtotime($_rma->getCarrierDate()))]['label'];?>,
+					<?php echo $this->weekdays[date('w',strtotime($_rma->getCarrierDate()))];?>,
 					<?php echo Mage::helper("core")->formatDate($_rma->getCarrierDate(), "short");?><br />
 					<?php echo $_helper->__(
 						"between %s and %s",
