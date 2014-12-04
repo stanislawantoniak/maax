@@ -13,40 +13,37 @@ if($_item->getProduct()){
 	$_productMsrpPrice = $_item->getProduct()->getPrice();
 }
 ?>
-
 <tr>
 	<td>
-		<img src="<?php echo $this->getProductThumbnail()->resize(53, 69); ?>"
-			 alt="<?php echo $this->escapeHtml($this->getProductName()) ?>" />
+		<img src="<?php echo $this->getProductThumbnail()->resize(53, 69) ?>"
+			 alt="<?php echo $this->escapeHtml($this->getProductName()) ?>" 
+			 width="53" height="69"/>
 	</td>
-	<td>
+	<td style="padding: 5px">
 		<?php echo $this->escapeHtml($_item->getName());?>
 		<?php if ($_options = $this->getOptionList()):?>
 			<br/>
 			<small>
 			<?php foreach ($_options as $_option) : ?>
 				<?php $_formatedOptionValue = $this->getFormatedOptionValue($_option) ?>
-				
-					<?php echo $this->escapeHtml($_option['label']) ?>: <?php echo  $this->escapeHtml($_formatedOptionValue['value']); ?>
-				</div>
+				<?php echo $this->escapeHtml($_option['label']) ?>: <?php echo  $this->escapeHtml($_formatedOptionValue['value']); ?>
 			<?php endforeach; ?>
 			</small>
 		<?php endif;?>
 	</td>
-	<td class="number">
+	<td style="text-align: right; padding: 5px">
 		<?php if($_productMsrpPrice>$_itemPriceInclTax):?>
-		<em>
-			<?php echo Mage::helper("core")->formatPrice($_productMsrpPrice, false);?>
-		</em>
+		<del style="color: #ccc; font-size: 10px;">
+			<?php echo Mage::helper("core")->formatPrice($_productMsrpPrice, false);?></del>
 		<?php endif;?>
 		<span>
 			<?php echo Mage::helper("core")->formatPrice($_itemPriceInclTax, false);?>
-		</span>
+		</span> 
 	</td>
-	<td class="number">
+	<td style="text-align: right; padding: 5px">
 		<?php echo $_qty; ?>
 	</td>
-	<td class="number">
+	<td style="text-align: right; padding: 5px">
 		<?php echo Mage::helper("core")->formatPrice($_itemPriceInclTax * $_qty, false);?>
 	</td>
 </tr>
