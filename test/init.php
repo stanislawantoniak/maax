@@ -1,10 +1,7 @@
 <?php
-
-
 /**
  * Compilation includes configuration file
  */
-
 !defined('MAGENTO_ROOT') 
     && define('MAGENTO_ROOT', getenv('MAGENTO_ROOT')? getenv('MAGENTO_ROOT'):getcwd().'/..');
 
