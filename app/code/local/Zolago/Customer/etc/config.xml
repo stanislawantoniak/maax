@@ -116,7 +116,7 @@
             <zolagocustomer_clear_old_tokens>
                 <schedule>
                     <!-- Run every 2 hours -->
-                    <cron_expr>0 */2 * * *</cron_expr>
+                    <cron_expr>18 */2 * * *</cron_expr>
                 </schedule>
                 <run>
                     <model>zolagocustomer/observer::cleanOldTokens</model>
