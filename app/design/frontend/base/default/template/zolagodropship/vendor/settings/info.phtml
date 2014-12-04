@@ -248,6 +248,10 @@ $_vendor = $_session->getVendor();
                             <div class="col-md-9">
                                 <input id="password" name="password" value="" type="password" class="form-control"
                                        size="10">
+                                <p>
+                                    <span class="glyphicon glyphicon-exclamation-sign"></span>
+                                    <?php echo Mage::helper("zolagodropship")->__("Leave empty for no change"); ?>
+                                </p>
                             </div>
                         </div>
                         <div class="form-group">
