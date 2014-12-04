@@ -272,4 +272,16 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object{
 	public function isSearchMode() {
 		return $this->getMode() == self::MODE_SEARCH;
 	}
+	
+    /**
+     * check if its last page
+     * @return bool
+     */
+
+     public function isLastPage() {
+         $data = $this->getSolrData();
+         $numFound = (empty($data['response']['numFound']) ? 0:$data['response']['numFound']);
+         $start = (empty($data['response']['start']) ? 0:$data['response']['start']);
+         return (($numFound - $start) <= $this->getDefaultLimit());
+     }
 }
