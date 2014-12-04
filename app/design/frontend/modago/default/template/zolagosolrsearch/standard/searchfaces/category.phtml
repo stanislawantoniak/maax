@@ -8,6 +8,8 @@
         $backLabel = $this->escapeHtml($this->getParentCategoryLabel());
         $sectionClass = $this->isFilterRolled() ? 'closed' : 'open';
         $iconClass = $this->isFilterRolled() ? "fa-chevron-down" : "fa-chevron-up";
+        $isSearch = $this->getIsSearch();
+        $isParrentRoot = $this->getIsParentRootCategory();
     ?>
 	<div class="section clearfix">
 		<h3 class="<?php echo $sectionClass; ?>"><span><?php echo $this->getFacetLabel(); ?></span> <i class="fa <?php echo $iconClass; ?>"></i></h3>
@@ -34,7 +36,17 @@
 			</dl>
 			<div class="action clearfix">
 			<?php if($backUrl != null) : ?>
-				<a href="<?php echo $backUrl; ?>" class="go_back underline external"><?php echo $this->__("back to category"); ?> <?php echo $backLabel; ?></a>
+                <?php if(!$isSearch): ?>
+                    <?php if(!$isParrentRoot): ?>
+                        <a href="<?php echo $backUrl; ?>" class="go_back underline external"><?php echo $this->__("back to category"); ?> <?php echo $backLabel; ?></a>
+                    <?php endif; ?>
+                <?php else: ?>
+                    <?php if($isParrentRoot): ?>
+                        <a href="<?php echo $backUrl; ?>" class="go_back underline external"><?php echo $backLabel; ?></a>
+                    <?php else: ?>
+                        <a href="<?php echo $backUrl; ?>" class="go_back underline external"><?php echo $this->__("back to category"); ?> <?php echo $backLabel; ?></a>
+                    <?php endif; ?>
+                <?php endif; ?>
 			<?php endif; ?>
 			</div>
 		</div>
