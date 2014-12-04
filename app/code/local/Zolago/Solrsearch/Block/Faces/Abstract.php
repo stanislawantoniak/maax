@@ -16,7 +16,7 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 	
 	public function getAllItems() {
 		$data = parent::getAllItems();
-		
+
 		// Do not add active ranges to items
 		if($this instanceof Zolago_Solrsearch_Block_Faces_Price){
 			return $data;

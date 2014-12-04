@@ -522,7 +522,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 		
 		
 		$_vendor = Mage::helper('umicrosite')->getCurrentVendor();
-		
+
 		$params = $this->getRequest()->getParams();
 		
 		$show_siblings = TRUE;
@@ -537,7 +537,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 		// For category mode get always current category
 		// For vendor contex it is set category in admin panel or root category
         $category = $this->getCurrentCategory();
-		
+
 		$show_siblings = !$this->isCurrentCategory();
 		// Specify root and parent categories
 		$root_category_id = Mage::app()->getStore()->getRootCategoryId();
@@ -546,9 +546,9 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 			
 			// Display only children categories when in the vendor context
 			if ($_vendor && $_vendor->getId()) {
-				
+				/** @var Mage_Catalog_Model_Category $vendor_root_category */
 				$vendor_root_category = $_vendor->rootCategory();
-				
+
 				if($vendor_root_category->getId() == $category->getId()){
 					$is_root_category = TRUE;
 					$parent_category = $category;
@@ -988,6 +988,15 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 			return Mage::registry('current_category');
 		}
 		return  Mage::registry('vendor_current_category');
+
+//        if(Mage::registry('current_category')){
+//            if(Mage::registry('vendor_current_category')) {
+//                return Mage::registry('vendor_current_category');
+//            } else {
+//                return Mage::registry('current_category');
+//            }
+//        }
+//        return  Mage::registry('vendor_current_category');
     }
 	
 	public function isCurrentCategory(){
