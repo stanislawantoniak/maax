@@ -99,19 +99,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 
     public function editAction() {
         try {
-            $po = $this->_registerPo();
-			$tracking = $po->getTracking();
-				$po->sendEmailTemplate(
-					Zolago_Po_Model_Po::XML_PATH_UDROPSHIP_PURCHASE_ORDER_STATUS_CHANGED_SHIPPED,
-					array(
-						"tracking" => $tracking,
-						"track_url"=> $po->getTrackingUrl($tracking),
-						"contact_url"=> Mage::getUrl("help/contact/vendor", array(
-							"vendor"=>$po->getVendor()->getId(),
-							"po"=>$po->getId()
-						))
-					)
-				);
+            $this->_registerPo();
         } catch (Mage_Core_Exception $e) {
             $this->_getSession()->addError($e->getMessage());
             return $this->_redirectReferer();
