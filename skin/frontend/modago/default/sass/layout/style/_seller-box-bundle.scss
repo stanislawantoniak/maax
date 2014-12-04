@@ -9,8 +9,8 @@
 		padding-bottom:0px;
 	}
 	.seller-label {
-		margin-top: 9px;
-		margin-bottom: 13px;
+		margin-top: 3px;
+		margin-bottom: 0px;
 		display:block;
 		@media (max-width: $screen-xs-max) {
 			float:left;
@@ -21,7 +21,7 @@
 		}
 	}
 	figure {
-		margin-bottom:14px;
+		margin-bottom:10px;
 		@media (max-width: $screen-xs-max) {
 			position:absolute;
 			right:35px;
@@ -29,7 +29,7 @@
 		}
 	}
 	.seller {
-		margin-bottom: 17px;
+		margin-bottom: 15px;
 		a {
 			@extend .seller;
 		}
@@ -71,9 +71,9 @@
 }
 .descripionProduct-box-bundle {
 	.descripionProduct-label {
-		margin-top: 9px;
+		margin-top: 3px;
 		display:block;
-		margin-bottom:20px;
+		margin-bottom:10px;
 	}
 }
 
