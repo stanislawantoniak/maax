@@ -6,6 +6,21 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
 {
 	protected $_wasLogged;
 
+
+    public function indexAction()
+    {
+        $this->loadLayout();
+        $this->_initLayoutMessages('customer/session');
+        $this->_initLayoutMessages('catalog/session');
+        $this->_initLayoutMessages(array('catalog/session', 'udqa/session'));
+
+        $this->getLayout()->getBlock('content')->append(
+            $this->getLayout()->createBlock('customer/account_dashboard')
+        );
+        $this->getLayout()->getBlock('head')->setTitle($this->__('My Account'));
+        $this->renderLayout();
+    }
+
 	/**
 	 * Override mesagge
 	 */
