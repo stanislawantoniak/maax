@@ -42,7 +42,7 @@ class Zolago_Modago_Block_Solrsearch_Faces_Category extends Zolago_Solrsearch_Bl
         else {
             $id = $category->getId();
             $_solrDataArray = $this->getSolrData();
-            $q = "&q=" . Mage::app()->getRequest()->getParam('q');
+            $q = "&q=" . Mage::helper('catalogsearch')->getQueryText();
 
             if( isset($_solrDataArray['responseHeader']['params']['q']) && !empty($_solrDataArray['responseHeader']['params']['q']) ) {
                 $q = "&q=" . $_solrDataArray['responseHeader']['params']['q'];

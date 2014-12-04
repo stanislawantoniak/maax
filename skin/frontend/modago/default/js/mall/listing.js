@@ -141,9 +141,6 @@ Mall.listing = {
 	init: function () {
         this.initImagesHeight();
 
-        //set query for search page
-        this.setQuery(this.getQueryFromUrl());
-
 		// Reset form
 		this.resetForm();
 
@@ -1190,19 +1187,6 @@ Mall.listing = {
 
 		return result;
 	},
-
-    getQueryFromUrl: function() {
-        var url = decodeURI(window.location.href.replace(Mall.listing._getUrlNoParams()+"?",""));
-        var tmpObj = url.split("&");
-
-        for(var key in tmpObj) {
-            var tmp = tmpObj[key].split("=");
-            if (decodeURIComponent(tmp[0]) === 'q') {
-                return decodeURIComponent(tmp[1]);
-            }
-        }
-        return '';
-    },
 
 	/**
 	 * @returns {void} - event initialized

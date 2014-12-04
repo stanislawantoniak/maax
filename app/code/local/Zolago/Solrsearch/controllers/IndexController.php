@@ -13,6 +13,8 @@ class Zolago_Solrsearch_IndexController extends SolrBridge_Solrsearch_IndexContr
 		$baseUrl = Mage::helper('zolagodropshipmicrosite')->getBaseUrl();
 
     	$params = $this->getRequest()->getParams();
+    	$params['q'] = Mage::helper('solrsearch')->getParam('q');
+        $this->getRequest()->setParam('q', $params['q']);
 
 		// Set root category if in the vendor context
 		$vendor = Mage::helper('umicrosite')->getCurrentVendor();
