@@ -7,6 +7,7 @@
 
 $mageFilename = MAGENTO_ROOT . '/app/Mage.php';
 
+
 function no_coverage() {
     return true;
 }
@@ -63,6 +64,7 @@ class ZolagoDb_TestCase extends Zolago_TestCase{
 	}
 	
 }
+
 class ZolagoSelenium_TestCase extends PHPUnit_Extensions_SeleniumTestCase {
     public function __construct() {
         Mage::app('default');
