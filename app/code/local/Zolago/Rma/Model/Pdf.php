@@ -2,20 +2,32 @@
 /**
  * pdf with rma details
  */
-class Zolago_Rma_Model_Pdf extends Orba_Common_Model_Pdf {	
+class Zolago_Rma_Model_Pdf extends Zolago_Pdf_Model_Pdf {
     const RMA_PDF_PATH = 'rma';
     const RMA_PDF_PREFIX = 'rma_';
-    
+	const RMA_PDF_TEMPLATE = 'zolagorma/pdf_details.phtml';
+	const RMA_PDF_BLOCK = 'zolagorma/pdf';
+
     protected function _getFilePath() {
         return self::RMA_PDF_PATH;
     }
     protected function _getFilePrefix() {
         return self::RMA_PDF_PREFIX;
     }
-    protected function _preparePages($id) {
-        $page = $this->_newPage();
-        $this->_setFont($page,12,'b');
-        $page->setFillColor(new Zend_Pdf_Color_GrayScale(0));
-        $page->drawText('Dummy document - RMA Details',200,250,'UTF-8');
-    }
+
+	public function getPdfFile($rmaid) {
+		@$this->WriteHTML($this->getHtml());
+		$path = $this->_getFileName($rmaid);
+		$this->Output($path,'F');
+		return $path;
+	}
+
+	protected function getHtml() {
+		$content = Mage::app()->getLayout()
+			->createBlock(self::RMA_PDF_BLOCK)
+			->setTemplate(self::RMA_PDF_TEMPLATE)
+			->toHtml();
+		die($content);
+		return $content;
+	}
 }
