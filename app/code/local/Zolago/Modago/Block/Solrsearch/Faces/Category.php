@@ -27,6 +27,9 @@ class Zolago_Modago_Block_Solrsearch_Faces_Category extends Zolago_Solrsearch_Bl
         if ($rootCategory == $this->getCurrentCategory()->getId()) {
             return null;
         }
+        if($this->getCurrentCategory()->getParentCategory()->getId() == $rootCategory) {
+            return null;
+        }
         $category = $this->getCurrentCategory()->getParentCategory();
         
         $params = $this->getRequest()->getParams();
