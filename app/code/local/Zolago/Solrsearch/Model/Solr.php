@@ -204,7 +204,7 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 		//Add Vendor Facet to Filter Microsite Products - Start
 		$_vendor = Mage::helper('umicrosite')->getCurrentVendor();
 		if ($_vendor && $_vendor->getId()) {
-			$vendorQuery = 'udropship_vendor_facet'.':%22'.urlencode(trim(addslashes($_vendor->getVendorName()))).'%22+OR+';
+			$vendorQuery = 'udropship_vendor_id_int'.':%22'.urlencode(trim(addslashes($_vendor->getId()))).'%22+OR+';
 			$vendorQuery = trim($vendorQuery, '+OR+');
 			$filterQueryArray[] = $vendorQuery;
 		}
@@ -352,7 +352,7 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 		//Add Vendor Facet to Filter Microsite Products - Start
 		$_vendor = Mage::helper('umicrosite')->getCurrentVendor();
 		if ($_vendor && $_vendor->getId()) {
-			$vendorQuery = 'udropship_vendor_facet'.':%22'.urlencode(trim(addslashes($_vendor->getVendorName()))).'%22+OR+';
+			$vendorQuery = 'udropship_vendor_id_int'.':%22'.urlencode(trim(addslashes($_vendor->getId()))).'%22+OR+';
 			$vendorQuery = trim($vendorQuery, '+OR+');
 			$filterQueryArray[] = $vendorQuery;
 		}

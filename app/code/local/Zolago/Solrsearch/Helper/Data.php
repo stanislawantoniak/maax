@@ -279,6 +279,9 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
     public function getContextSelectorArray()
     {
         /** @var $this Zolago_Solrsearch_Helper_Data */
+        /** @var Zolago_Dropship_Model_Vendor $_vendor */
+        /** @var Zolago_Solrsearch_Helper_Data $helper */
+
         $array = array();
 		
         $filterQuery = (array)Mage::getSingleton('core/session')->getSolrFilterQuery();
@@ -289,8 +292,12 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
         if (isset($filterQuery['category_id']) && isset($filterQuery['category_id'][0])) {
             $selectedContext = $filterQuery['category_id'][0];
         }
-        /** @var Zolago_Dropship_Model_Vendor $_vendor */
-        $currentCategory = $_vendor->rootCategory();
+
+        $helper = Mage::helper("zolagosolrsearch");
+		$currentCategory = $helper->getCurrentCategory();
+        if($_vendor) {
+            $currentCategory = $_vendor->rootCategory();
+        }
 
         $queryText = Mage::helper('solrsearch')->getParam('q');
 		
