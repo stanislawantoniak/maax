@@ -6,7 +6,7 @@ class Zolago_Rma_Block_Pdf extends Zolago_Rma_Block_Abstract {
 
 	public function __construct() {
 		$this->rma = $this->getRma();
-		$orderStoreId = 2;//$this->getPo()->getStoreId();
+		$orderStoreId = $this->getPo()->getStoreId();
 		$orderLangCode =  Mage::app()->getStore($orderStoreId)->getConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_LOCALE);
 		Mage::getSingleton('core/translate')->setLocale($orderLangCode)->init('frontend', true);
 		$weekdays = Zend_Locale::getTranslationList("Days",$orderLangCode);
