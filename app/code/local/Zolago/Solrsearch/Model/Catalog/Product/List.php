@@ -274,14 +274,13 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object{
 	}
 	
     /**
-     * check if its last page
+     * number of pages
      * @return bool
      */
 
-     public function isLastPage() {
+     public function getPageCounter() {
          $data = $this->getSolrData();
          $numFound = (empty($data['response']['numFound']) ? 0:$data['response']['numFound']);
-         $start = (empty($data['response']['start']) ? 0:$data['response']['start']);
-         return (($numFound - $start) <= $this->getDefaultLimit());
+         return ceil($numFound/$this->getDefaultLimit());
      }
 }

@@ -98,22 +98,27 @@ class Zolago_Solrsearch_Block_Catalog_Product_List extends Mage_Catalog_Block_Pr
      */
     public function getNoAjaxLink() {
         if (!$this->getListModel()->isGoogleBot()) {
-            return false;
+            return array();
         }
-        if ($this->getListModel()->isLastPage()) {
-            return false;
+
+        if (!$pages = $this->getListModel()->getPageCounter()) {
+            return array();
         }
+        
         $request = $this->getRequest();
-        $page = $request->getParam('page',1);
         $query = $request->getQuery();
-        $query['page'] = $page+1;
-        $url = $this->getUrl('*/*/*',
+        $list = array();     
+        for ($a=1;$a<=$pages;$a++) {
+            $query['page'] = $a;
+            $url = $this->getUrl('*/*/*',
                              array(
                                  '_current'=>false,
                                  '_use_rewrite' => true,
                                  '_query' => $query,
                              )
                             );
-        return $url;
+            $list[$a] = $url;
+        }
+        return $list;
     }
 }
