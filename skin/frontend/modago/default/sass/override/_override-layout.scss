@@ -224,12 +224,10 @@
     top: 0;
     position: static;
     padding-left: 10px;
-    img {
-      max-width: 120px;
-      max-height: 60px;
-    }
+
     @media (max-width: $screen-xs-max) {
-      position:static;
+      min-height: 65px;
+//      position:relative;
       height: 100%;
       right:35px;
       text-align: left;
@@ -237,11 +235,22 @@
 
       top: 50%;
       //            top: 0;
-      transform: translateY(50%);
+//      transform: translateY(50%);
       display: inline-block;
       line-height: 60px;
       //            			top:16px;
 
+    }
+    img {
+      max-width: 120px;
+      max-height: 60px;
+      margin-left:13px;
+      @media (max-width: $screen-xs-max) {
+        left: 35%;
+        position: absolute;
+        top: 70%;
+        transform: translate(-50%, -50%);
+      }
     }
   }
   .seller {
@@ -272,7 +281,7 @@
         float:left;
         text-align: left;
         clear: left;
-        margin-left:13px;
+//        margin-left:13px;
         display: inline-block;
         margin-bottom: 10px;
       }
