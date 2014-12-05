@@ -18,27 +18,36 @@ $producer = ($this->getVendor()->getVendorId() == $this->getBrandshopVendor()->g
             <span class="seller-label  hidden-xs"><?php echo $this->__("Shop"); ?></span>
             <?php if (!$producer): ?>
                 <figure>
-                    <img src="<?php echo Mage::getBaseUrl('media') . $this->getBrandshopVendor()->getLogo(); ?>" alt="<?php echo $this->escapeHtml($this->getBrandshopVendor()->getVendorName()); ?>">
+                    <a href="<?php echo $this->getBrandshopVendorUrl(); ?>">
+                        <img src="<?php echo Mage::getBaseUrl('media') . $this->getBrandshopVendor()->getLogo(); ?>" alt="<?php echo $this->escapeHtml($this->getBrandshopVendor()->getVendorName()); ?>">
+                    </a>
                 </figure>
                 <div class="seller">
-                    <a class="visible-xs clearfix" href="<?php echo $this->getBrandshopVendor()->getVendorUrl(); ?>">
-                        <?php echo $this->__("Shop"); ?>: <?php echo $this->escapeHtml($this->getVendorName()); ?>
-                    </a>
-                    <a class="clearfix" href="<?php echo $this->getBrandshopVendor()->getVendorUrl(); ?>">
-                        <?php echo $this->__("Seller"); ?>: <?php echo $this->escapeHtml($this->getBrandshopVendor()->getVendorName()); ?>
-                    </a>
-                    <a href="<?php echo $this->getBrandshopVendor()->getVendorUrl(); ?>">
-                        <?php echo $this->escapeHtml($this->getBrandshopVendor()->getBrandshopInfo()); ?>
-                    </a>
+                    <div class="seller-info">
+                        <a class="visible-xs clearfix" href="<?php echo $this->getBrandshopVendorUrl(); ?>">
+                            <?php echo $this->__("Shop"); ?>: <?php echo $this->escapeHtml($this->getBrandshopVendor()->getVendorName()); ?>
+                        </a>
+
+
+                        <a class="clearfix" href="<?php echo $this->getVendorUrl(); ?>">
+                            <?php echo $this->__("Seller"); ?>: <?php echo $this->escapeHtml($this->getVendor()->getVendorName()); ?>
+                        </a>
+
+                        <a><?php echo $this->escapeHtml($this->getBrandshopVendor()->getBrandshopInfo()); ?></a>
+
+                    </div>
+
                 </div>
             <?php else: ?>
                 <figure>
                     <img src="<?php echo $this->getLogoUrl(); ?>" alt="<?php echo $this->escapeHtml($this->getVendorName()); ?>">
                 </figure>
                 <div class="seller">
-                    <a href="<?php echo $this->getVendorUrl(); ?>">
-                        <?php echo $this->__("Seller"); ?>: <?php echo $this->escapeHtml($this->getVendorName()); ?>
-                    </a>
+                    <div class="seller-info">
+                        <a href="<?php echo $this->getVendorUrl(); ?>">
+                            <?php echo $this->__("Seller"); ?>: <?php echo $this->escapeHtml($this->getVendorName()); ?>
+                        </a>
+                    </div>
                 </div>
             <?php endif; ?>
         </div>
@@ -159,23 +168,18 @@ $producer = ($this->getVendor()->getVendorId() == $this->getBrandshopVendor()->g
 
 <script type="text/javascript">
     jQuery(function ($) {
-
-        setSellerInfoBlockWidth($(window).width());
-
+        //fix for Chrome
         $(window).resize(function(){
             setSellerInfoBlockWidth($(this).width());
         })
 
-
-
-        function setSellerInfoBlockWidth(windowWidth){
-//            console.log(windowWidth,windowWidth <= 754);
-            if(windowWidth <= 754){
+        function setSellerInfoBlockWidth(w){
+            if( w <= 754){
                 $("#seller-box-bundle .seller").css({"width": "50%", "float": "right","margin-right": "5px"});
-                $("#seller-box-bundle figure").css({"margin-top": "15px"});
+
             } else {
                 $("#seller-box-bundle .seller").css({"width": "100%", "float": "none"});
-                $("#seller-box-bundle figure").css({"margin-top": "0px"});
+
             }
         }
     })
