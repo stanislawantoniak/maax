@@ -33,7 +33,7 @@ $producer = ($this->getVendor()->getVendorId() == $this->getBrandshopVendor()->g
                             <?php echo $this->__("Seller"); ?>: <?php echo $this->escapeHtml($this->getVendor()->getVendorName()); ?>
                         </a>
 
-                        <span><?php echo $this->escapeHtml($this->getBrandshopVendor()->getBrandshopInfo()); ?></span>
+                        <span><?php echo $this->escapeHtml($this->getVendor()->getBrandshopInfo()); ?></span>
 
                     </div>
 
@@ -174,6 +174,7 @@ $producer = ($this->getVendor()->getVendorId() == $this->getBrandshopVendor()->g
         })
 
         function setSellerInfoBlockWidth(w){
+            console.log(w);
             if( w <= 754){
                 $("#seller-box-bundle .seller").css({"width": "50%", "float": "right","margin-right": "5px"});
 
