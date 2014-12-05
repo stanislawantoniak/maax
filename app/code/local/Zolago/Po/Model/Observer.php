@@ -128,16 +128,18 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 				Mage::register('current_po', $po); 
 				// Do send email
 				$tracking = $po->getTracking();
+				$params = array(
+					"tracking" => $tracking,
+					"track_url"=> $po->getTrackingUrl($tracking),
+					"contact_url"=> Mage::getUrl("help/contact/vendor", array(
+						"vendor"=>$po->getVendor()->getId(),
+						"po"=>$po->getId()
+					)),
+					"_ATTACHMENTS" => Mage::helper("zolagopo")->getPoImagesAsAttachments($po)
+				);
 				$po->sendEmailTemplate(
 					Zolago_Po_Model_Po::XML_PATH_UDROPSHIP_PURCHASE_ORDER_STATUS_CHANGED_SHIPPED,
-					array(
-						"tracking" => $tracking,
-						"track_url"=> $po->getTrackingUrl($tracking),
-						"contact_url"=> Mage::getUrl("help/contact/vendor", array(
-							"vendor"=>$po->getVendor()->getId(),
-							"po"=>$po->getId()
-						))
-					)
+					$params
 				);
 			}
 		}

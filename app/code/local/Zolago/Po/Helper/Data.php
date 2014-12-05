@@ -1,7 +1,61 @@
 <?php
 class Zolago_Po_Helper_Data extends Unirgy_DropshipPo_Helper_Data
 {
+	const DEFAULT_PO_IMAGE_WIDTH = 53;
+	const DEFAULT_PO_IMAGE_HEIGHT = 69;
+	
 	protected $_condJoined = false;	
+	
+	/**
+	 * @param Zolago_Po_Model_Po_Item $item
+	 * @return Mage_Catalog_Helper_Image
+	 */
+	public function getItemThumbnail(Zolago_Po_Model_Po_Item $item) { 
+        return Mage::helper('catalog/image')->init($item->getProduct(), 'thumbnail');
+	}
+	
+	/**
+	 * @param Zolago_Po_Model_Po $po
+	 * @return array
+	 */
+	public function getPoImagesAsAttachments(Zolago_Po_Model_Po $po, $options=array()) {
+		$width = $this->getPoImageWidth($po);
+		$height = $this->getPoImageHeight($po);
+		$store = $po->getStore();
+		$attachments = array();
+		
+		foreach($po->getItemsCollection() as $item){
+			if(!$item->getParentItemId()){
+				$imageUrl = (string)Mage::helper("catalog/image")->
+					init($item->getProduct(), "thumbnail")->
+					resize($width, $height);
+				$attachments[] = array(
+					"filename"		=> Mage::helper("zolagocommon")->getRelativePath($imageUrl, $store),
+					"id"			=> basename($item->getId().".jpg"),
+					"disposition"	=> "inline"
+				);
+			}
+		}
+		
+		return $attachments;
+	}
+	
+	/**
+	 * @param Zolago_Po_Model_Po $po
+	 * @return int
+	 */
+	public function getPoImageWidth(Zolago_Po_Model_Po $po) {
+		return self::DEFAULT_PO_IMAGE_WIDTH;
+	}
+	
+	/**
+	 * @param Zolago_Po_Model_Po $po
+	 * @return int
+	 */
+	public function getPoImageHeight(Zolago_Po_Model_Po $po) {
+		return self::DEFAULT_PO_IMAGE_HEIGHT;
+	}
+	
 	/**
 	 * Clear not used addresses (trashes)
 	 * @param Zolago_Po_Model_Po $po

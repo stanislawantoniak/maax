@@ -35,10 +35,10 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             $collection->addFieldToFilter("type_id", Mage_Catalog_Model_Product_Type::TYPE_SIMPLE);
 
             $collection->addAttributeToFilter(array(
-                                                  array("attribute"=>$vendorSku,	"like"=>'%'.$q.'%'),
-                                                  array("attribute"=>"sku",		"like"=>'%'.$q.'%'),
-                                                  array("attribute"=>"name",		"like"=> '%'.$q.'%')
-                                              ), "left");
+				array("attribute"=>$vendorSku,	"like"=>'%'.$q.'%'),
+				array("attribute"=>"sku",		"like"=>'%'.$q.'%'),
+				array("attribute"=>"name",		"like"=> '%'.$q.'%')
+			), "left");
 
             $collection->load();
 
@@ -97,9 +97,13 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         $this->_renderPage(array('default', 'adminhtml_head'), 'udpo');
     }
 
+	/**
+	 * Edit po
+	 * @return void
+	 */
     public function editAction() {
         try {
-            $this->_registerPo();
+			$this->_registerPo();
         } catch (Mage_Core_Exception $e) {
             $this->_getSession()->addError($e->getMessage());
             return $this->_redirectReferer();
