@@ -284,19 +284,15 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
         $filterQuery = (array)Mage::getSingleton('core/session')->getSolrFilterQuery();
 
 		$_vendor = Mage::helper('umicrosite')->getCurrentVendor();
-		/** @var Mage_Catalog_Helper_Data $helper */
-		$helper = Mage::helper('catalog');
 
         $selectedContext = 0;
         if (isset($filterQuery['category_id']) && isset($filterQuery['category_id'][0])) {
             $selectedContext = $filterQuery['category_id'][0];
         }
-		
-        $rootCatId = Mage::app()->getStore()->getRootCategoryId();
-		
-		$currentCategory = Mage::registry('current_category');
-		
-		$queryText = Mage::helper('solrsearch')->getParam('q');
+        /** @var Zolago_Dropship_Model_Vendor $_vendor */
+        $currentCategory = $_vendor->rootCategory();
+
+        $queryText = Mage::helper('solrsearch')->getParam('q');
 		
 		$array['url'] = Mage::getUrl("search/index/index");
 		$array['method'] = "get";
@@ -314,7 +310,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 		);
 		
 		$array['input_empty_text'] = $this->__('Search entire store here...');
-		
+
 		// This vendor
 		if ($_vendor && $_vendor->getId()) {
 			$array['select_options'][] = array(
@@ -359,7 +355,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
 			
 			$vendor_root_category = NULL;
 			if ($_vendor && $_vendor->getId()) {
-				$vendor_root_category = $_vendor->rootCategory();
+				$vendor_root_category = $_vendor->rootCategory()->getId();
 			}
 			
 			if($currentCategory->getId() != $vendor_root_category){
@@ -527,4 +523,19 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract
             return $data;
         }
     }
+
+    /**
+     * @return Mage_Catalog_Model_Category
+     */
+    public function getCurrentCategory() {
+        if(Mage::registry('current_category')){
+            if(Mage::registry('vendor_current_category')) {
+                return Mage::registry('vendor_current_category');
+            } else {
+                return Mage::registry('current_category');
+            }
+        }
+        return  Mage::registry('vendor_current_category');
+    }
+
 }

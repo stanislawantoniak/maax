@@ -5,16 +5,16 @@ class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
 	 * Sets root category to registry and then return
 	 */
 	public function rootCategory($websiteId = NULL){
-		
+
 		if($category = Mage::registry('vendor_current_category')){
-			return $category;
+            return $category;
 		}
 		
 		$websiteId		= ($websiteId) ? $websiteId : Mage::app()->getWebsite()->getId();
 		$rootCategoryId = Mage::helper('zolagodropshipmicrosite')
 				->getVendorRootCategory($this, $websiteId);
-	
-		$category = Mage::getModel("catalog/category")->load($rootCategoryId);
+
+        $category = Mage::getModel("catalog/category")->load($rootCategoryId);
 		
 		if(!$category->getId()){
 			$category->load(Mage::app()->getStore()->getRootCategoryId());

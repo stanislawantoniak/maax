@@ -510,7 +510,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 	 * @return array
 	 */
     protected function _processCategoryData($data,$show_brothers = true) {
-    	
+
 		$category = NULL;
 		
         $out = array();
@@ -582,7 +582,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 			
 			if($children_category_ids){
 				
-				$children_total = 0;				
+				$children_total = 0;
 				
 				foreach($children_category_ids as $child_cat_id){
 					
@@ -599,8 +599,8 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
 			}
 			
         }
-		
-		// Chosen category		
+
+		// Chosen category
 		$chosen_cat_total = 0;
 		if($this->getMode()==self::MODE_CATEGORY){
 			
@@ -984,19 +984,9 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
      * @return Mage_Catalog_Model_Category
      */
     public function getCurrentCategory() {
-		if(Mage::registry('current_category')){
-			return Mage::registry('current_category');
-		}
-		return  Mage::registry('vendor_current_category');
-
-//        if(Mage::registry('current_category')){
-//            if(Mage::registry('vendor_current_category')) {
-//                return Mage::registry('vendor_current_category');
-//            } else {
-//                return Mage::registry('current_category');
-//            }
-//        }
-//        return  Mage::registry('vendor_current_category');
+        /** @var Zolago_Solrsearch_Helper_Data $helper */
+        $helper = Mage::helper("zolagosolrsearch");
+        return $helper->getCurrentCategory();
     }
 	
 	public function isCurrentCategory(){
