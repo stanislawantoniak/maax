@@ -16,11 +16,11 @@ $setup->updateAttribute (
 $setup->updateAttribute (Mage_Catalog_Model_Product::ENTITY,
                         Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_BRANDSHOP_CODE,
                         'column_attribute_order',
-                        25,25);
+                        55,55);
                         
 $setup->updateAttribute (Mage_Catalog_Model_Product::ENTITY,
                         'udropship_vendor',
                         'column_attribute_order',
-                        24,24);
+                        54,54);
 //Adding Attribute converter_price_type
 $installer->endSetup();
