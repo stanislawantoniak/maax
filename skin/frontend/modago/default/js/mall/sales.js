@@ -65,10 +65,12 @@
 		_getTemplate: function(data){
 			return Mall.replace(jQuery("#"+this._formTemplateId).html(), data);
 		},
-		
-		_shoulBePopup: function(){
-			return jQuery(window).width()>740;
-		},
+
+        _shoulBePopup: function () {
+            var customerAccountPage = jQuery("input[name=customer_account_page]").val();
+
+            return (parseInt(customerAccountPage) == 0) ? jQuery(window).width() > 740 : jQuery(window).width() > 978;
+        },
 
 
 		_removeCurrentPopup: function(){

@@ -1,6 +1,29 @@
 <?php
 class Zolago_Common_Helper_Data extends Mage_Core_Helper_Abstract {
 	
+	
+	/**
+	 * @param string $imageUrl
+	 * @param Mage_Core_Model_Store | int $storeId
+	 */
+	public function getFileBase64ByUrl($imageUrl, $storeId= Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID) {
+		$unsecure = strstr("http://", $imageUrl)==0;
+		$secure = strstr("https://", $imageUrl)==0;
+		if($unsecure || $secure){
+			$storeUrl = Mage::app()->getStore($storeId)->getBaseUrl(Mage_Core_Model_Store::URL_TYPE_LINK, $secure);
+			$imageUrl = str_replace($storeUrl, "", $imageUrl);
+		}
+		try{
+			if(file_exists($imageUrl) && is_readable($imageUrl)){
+				return base64_encode(file_get_contents($imageUrl));
+			}
+		}  catch (Exception $e){
+		
+		}
+		
+		return '';
+	}
+	
 	/**
 	 * @return boolean
 	 */

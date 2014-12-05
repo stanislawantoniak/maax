@@ -129,6 +129,14 @@
 					</zolagopo>
 				</observers>
 			</zolagopo_po_change_pos>
+			<udpo_po_status_save_after>
+				<observers>
+					<zolagopo>
+						<model>zolagopo/observer</model>
+						<method>poChangeStatus</method>
+					</zolagopo>
+				</observers>
+			</udpo_po_status_save_after>
 			<udpo_po_shipment_save_before>
 				<observers>
 					<poShipmentSaveBefore>
@@ -154,15 +162,6 @@
 				</observers>
 			</zolagopo_shipment_cancel_after>
 		</events>
-		<template>
-            <email>
-               <zolagopo_compose>
-                   <label>PO Customer Message</label>
-                   <file>zolagopo_compose.html</file>
-                   <type>html</type>
-               </zolagopo_compose>
-            </email>
-        </template>
 		<fieldsets>
 			<!-- Transfer need invoice field -->
 			<sales_copy_order_billing_address>
@@ -196,7 +195,28 @@
 				</need_invoice>
 			</checkout_onepage_billing>
 		</fieldsets>
+		<template>
+            <email>
+               <zolagopo_compose  translate="label" module="zolagopo">
+                   <label>PO Customer Message</label>
+                   <file>zolagopo_compose.html</file>
+                   <type>html</type>
+               </zolagopo_compose> 
+			   <udropship_purchase_order_status_changed_shipped translate="label" module="zolagopo">
+                   <label>PO Status changed to shipped</label>
+                   <file>zolagopo_status_changed_shipped.html</file>
+                   <type>html</type>
+               </udropship_purchase_order_status_changed_shipped>
+            </email>
+        </template>
     </global>
+	<default>
+        <udropship>
+            <purchase_order>
+                <status_changed_shipped>udropship_purchase_order_status_changed_shipped</status_changed_shipped>
+			</purchase_order>
+		</udropship>
+	</default>
 	<admin>
 		<fieldsets>
 			<customer_dataflow>

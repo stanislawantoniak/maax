@@ -1,45 +1,6 @@
 <?php
 class Zolago_Dropship_Model_Vendor extends Unirgy_Dropship_Model_Vendor
 {
-
-
-    protected $_preferences;
-
-
-    protected function _getPreferences()
-    {
-        if (is_null($this->_preferences)) {
-            $vendorPreferences = Mage::getModel('zolagodropship/preferences');
-            $vendorPreferences->load($this->getVendorId(), 'vendor_id');
-
-            $this->_preferences = $vendorPreferences;
-        }
-
-        return $this->_preferences;
-    }
-
-    public function getData($key = '', $index = null)
-    {
-        if (in_array($key, array(
-                //contact
-                'company_name', 'tax_no', 'www',
-                'contact_email', 'contact_telephone', 'executive_firstname', 'executive_lastname', 'executive_telephone', 'executive_telephone_mobile',
-                //
-                'administrator_firstname', 'administrator_lastname', 'administrator_telephone', 'administrator_telephone_mobile',
-                //rma
-                'rma_email', 'rma_telephone', 'rma_executive_telephone', 'rma_executive_telephone_mobile', 'rma_executive_email'
-            )
-        )
-        ) {
-
-            $preferences = $this->_getPreferences();
-	        if(!is_null($preferences)) {
-		        $this->addData($preferences->getData());
-	        }
-        }
-        return parent::getData($key, $index);
-    }
-
 	/**
 	 * Sets root category to registry and then return
 	 */
