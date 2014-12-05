@@ -31,12 +31,8 @@ class Amasty_Rules_Model_SalesRule_Rule_Condition_Product_Combine extends Mage_S
         if ($origProduct){
             // restore original product
             $object->setProduct($origProduct);    
-            $object->setSku($origSku);  
-			// Override the result by configurable product
-			if(false===$result){
-				$result = @Mage_Rule_Model_Condition_Combine::validate($object);
-			}
-        }
+            $object->setSku($origSku);    
+        }        
 
         return $result;       
     }
