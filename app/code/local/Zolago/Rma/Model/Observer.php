@@ -7,11 +7,20 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 	 */
 	public function rmaCreated($observer) {
 		$rma = $observer->getEvent()->getData('rma');
+		
+		$author = null;
+		$customerSession = Mage::getSingleton('customer/session');
+		if($customerSession->isLoggedIn() && $customerSession->getCustomer()->getId()){
+			$author = $customerSession->getCustomer();
+		}
+		
+		
 		/* @var $rma Zolago_Rma_Model_Rma */
 		$this->_logEvent(
 				$rma,
                 $rma->getData('comment_text'),
-				true
+				true,
+				$author
 		);
 	}
 
