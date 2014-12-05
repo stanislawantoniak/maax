@@ -6,6 +6,7 @@ class Zolago_Catalog_Block_Product_Vendor_Deliveryreturn
 	 * @return string
 	 */
 	public function getDeliveryreturnHtml() {
-		return $this->getVendor()->getProductShortInformation();
+		return $this->getVendor()->getTermsDeliveryInformation().
+    		   $this->getVendor()->getTermsReturnInformation();		
 	}
 }
