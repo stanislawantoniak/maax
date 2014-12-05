@@ -27,7 +27,6 @@ class Zolago_Rma_Model_Pdf extends Zolago_Pdf_Model_Pdf {
 			->createBlock(self::RMA_PDF_BLOCK)
 			->setTemplate(self::RMA_PDF_TEMPLATE)
 			->toHtml();
-		die($content);
 		return $content;
 	}
 }
