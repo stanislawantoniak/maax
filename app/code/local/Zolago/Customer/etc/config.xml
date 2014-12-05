@@ -124,4 +124,14 @@
             </zolagocustomer_clear_old_tokens>
         </jobs>
     </crontab>
+	<default>
+		<customer>
+			<agreements>
+				<policy>Wyrażam zgodę na przetwarzanie moich danych osobowych przez Zolago Group Sp. Z o.o. z siedzibą w Warszawie (Barkocińska 6 03-534), w celu świadczenia przez nią usług w ramach Modago.pl</policy>
+				<tos>Oświadczam, że zapoznałem(am) się z Regulaminem sklepu Modago.pl i akceptuję jego postanowienia.</tos>
+				<newsletter>Wyrażam zgodę na przetwarzanie moich danych osobowych w celach marketingowych przez Zolago Group Sp. Z o.o. z siedzibą w Warszawie (Barkocińska 6 03-534)</newsletter>
+				<sms>Wyrażam zgodę na otrzymywanie wiadomości sms zawierających aktualizację stanu zamówienia oraz informacje o dostawie</sms>
+			</agreements>
+		</customer>
+	</default>
 </config>
