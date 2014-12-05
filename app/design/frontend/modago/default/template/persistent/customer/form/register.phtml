@@ -4,16 +4,7 @@
 		<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 col-lg-push-9 col-md-push-9 sidebar-create"
 		     style="padding-left: 0">
 			<section class="p main bg-w hidden-sm hidden-xs">
-				<p>
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur eget lectus diam. In aliquam in
-					felis eu pulvinar. Vivamus finibus metus eget ipsum malesuada euismod. Fusce condimentum rhoncus
-					nulla eu lacinia. Aliquam auctor faucibus magna, a tristique arcu tempor consectetur. Phasellus
-					commodo purus ex, non rhoncus ligula tincidunt vel.</p>
-				<p>
-					Maecenas a ullamcorper urna, et imperdiet ex. Pellentesque ultricies enim quis lectus fringilla,
-					sed convallis enim lobortis. Vivamus posuere a mauris eu vehicula. Curabitur placerat nulla sed
-					elit eleifend iaculis.
-				</p>
+				<?php echo $this->getLayout()->createBlock('cms/block')->setBlockId('customer-register-right')->toHtml(); ?>
 			</section>
 		</div>
 		<div id="content-main" class="col-lg-9 col-md-9 col-sm-12 col-xs-12 col-lg-pull-3 col-md-pull-3 section">
