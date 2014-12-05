@@ -71,11 +71,11 @@
                         <label>RMA executive: Phone</label>
                         <type>text</type>
                     </rma_executive_telephone>
-                    <rma_executive_telephone>
+                    <rma_executive_telephone_mobile>
                         <fieldset>vendor_preferences</fieldset>
                         <label>RMA executive: Mobile</label>
                         <type>text</type>
-                    </rma_executive_telephone>
+                    </rma_executive_telephone_mobile>
                     <rma_executive_email>
                         <fieldset>vendor_preferences</fieldset>
                         <label>RMA executive: Email</label>
